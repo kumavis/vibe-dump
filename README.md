@@ -79,6 +79,9 @@ npm run dev -w @vibe-dump/hello-world
    gallery picks it up automatically from the `gallery` field — no central
    registry to update.
 
+For the full step-by-step procedure (including screenshot gotchas and how to
+import an app from another repo), see [`CLAUDE.md`](./CLAUDE.md).
+
 ## Deployment
 
 `.github/workflows/deploy.yml` builds everything and deploys `dist/` to GitHub
