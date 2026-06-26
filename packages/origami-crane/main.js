@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { Paper } from './origami.js'
 
 const { degToRad, lerp, clamp } = THREE.MathUtils
 
@@ -17,62 +18,74 @@ app.appendChild(renderer.domElement)
 
 const scene = new THREE.Scene()
 scene.background = makeGradientBackground('#241a2e', '#0b0a12')
-scene.fog = new THREE.Fog('#0f0b16', 6, 13)
+scene.fog = new THREE.Fog('#0f0b16', 6, 14)
 
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100)
-camera.position.set(2.9, 1.45, 2.5)
+camera.position.set(2.8, 1.5, 2.7)
 
 const controls = new OrbitControls(camera, renderer.domElement)
-controls.target.set(0, 0.42, 0)
+controls.target.set(0, 0.28, 0)
 controls.enableDamping = true
 controls.dampingFactor = 0.06
 controls.autoRotate = true // turntable
 controls.autoRotateSpeed = 0.5
 controls.minDistance = 2.2
 controls.maxDistance = 7
-controls.maxPolarAngle = Math.PI * 0.52
+controls.maxPolarAngle = Math.PI * 0.54
 controls.enablePan = false
 
 // ---------------------------------------------------------------------------
-// Lighting
+// Lighting + shadow-catcher ground
 // ---------------------------------------------------------------------------
 scene.add(new THREE.HemisphereLight('#fff4e2', '#2a2336', 0.65))
 
-const key = new THREE.DirectionalLight('#ffe9cf', 2.1)
-key.position.set(3.2, 5.0, 2.4)
-key.castShadow = true
-key.shadow.mapSize.set(2048, 2048)
-key.shadow.camera.near = 1
-key.shadow.camera.far = 16
-key.shadow.camera.left = -3
-key.shadow.camera.right = 3
-key.shadow.camera.top = 3
-key.shadow.camera.bottom = -3
-key.shadow.bias = -0.0004
-key.shadow.radius = 6
-scene.add(key)
+const keyLight = new THREE.DirectionalLight('#ffe9cf', 2.1)
+keyLight.position.set(3.2, 5.0, 2.4)
+keyLight.castShadow = true
+keyLight.shadow.mapSize.set(2048, 2048)
+keyLight.shadow.camera.near = 1
+keyLight.shadow.camera.far = 16
+keyLight.shadow.camera.left = -3
+keyLight.shadow.camera.right = 3
+keyLight.shadow.camera.top = 3
+keyLight.shadow.camera.bottom = -3
+keyLight.shadow.bias = -0.0004
+keyLight.shadow.radius = 6
+scene.add(keyLight)
 
 const rim = new THREE.DirectionalLight('#9fd0ff', 0.5)
 rim.position.set(-3, 2, -3)
 scene.add(rim)
 
-// Shadow-catcher ground: only the soft shadow shows over the gradient.
 const ground = new THREE.Mesh(
   new THREE.CircleGeometry(7, 64).rotateX(-Math.PI / 2),
-  new THREE.ShadowMaterial({ opacity: 0.32 }),
+  new THREE.ShadowMaterial({ opacity: 0.3 }),
 )
-ground.position.y = -0.02
+ground.position.y = -0.46
 ground.receiveShadow = true
 scene.add(ground)
 
 // ---------------------------------------------------------------------------
-// Paper crane rig
+// Build the crane crease pattern by SPLITTING the square plane along fold lines.
 //
-// Built from one square (a diamond in plan): corners Front(+x), Back(-x),
-// Left(+z), Right(-z). The two halves become wings (hinged on the F–B spine);
-// slim flaps on the spine become the neck (+ head) and tail. Every hinge angle
-// is 0 in the flat state, so the model starts as a true flat square.
+// Sheet axes: x = nose→tail, y = wing→wing. The spine (y = 0) folds the sheet
+// into a shallow tent (the two wings); vertical creases lift the nose into a
+// neck + head and the back into a tail. Splitting tags every cut as a crease;
+// the fan-triangulation diagonals stay flat (angle 0).
 // ---------------------------------------------------------------------------
+const NECK = 0.4
+const TAIL = -0.46
+const HEAD = 0.74
+
+const paper = new Paper(1)
+  .crease('spine', [-1, 0], [1, 0])
+  .crease('neck', [NECK, -1], [NECK, 1])
+  .crease('tail', [TAIL, -1], [TAIL, 1])
+  .crease('head', [HEAD, -1], [HEAD, 1])
+  // Root = a top-half triangle in the body band, so the wings open symmetrically.
+  .build(([cx, cy]) => (cy > 0 ? 100 : 0) - Math.abs(cx) - Math.abs(cy - 0.4))
+
+// Paper mesh (flat-shaded, both sides) + crease lines.
 const paperMat = new THREE.MeshStandardMaterial({
   color: '#efe6d4',
   roughness: 0.82,
@@ -80,89 +93,62 @@ const paperMat = new THREE.MeshStandardMaterial({
   side: THREE.DoubleSide,
   flatShading: true,
 })
-const edgeMat = new THREE.LineBasicMaterial({ color: 0x7c6b4f, transparent: true, opacity: 0.45 })
+const geo = new THREE.BufferGeometry()
+const posAttr = new THREE.BufferAttribute(new Float32Array(paper.triangleCount * 9), 3)
+posAttr.setUsage(THREE.DynamicDrawUsage)
+geo.setAttribute('position', posAttr)
+const mesh = new THREE.Mesh(geo, paperMat)
+mesh.castShadow = true
+mesh.receiveShadow = true
 
-function panel(points) {
-  // Triangle-fan from a list of [x,y,z] points.
-  const pos = []
-  for (let i = 1; i < points.length - 1; i++) {
-    pos.push(...points[0], ...points[i], ...points[i + 1])
-  }
-  const geo = new THREE.BufferGeometry()
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
-  geo.computeVertexNormals()
-  const mesh = new THREE.Mesh(geo, paperMat)
-  mesh.castShadow = true
-  mesh.receiveShadow = true
-  mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 1), edgeMat))
-  return mesh
-}
+const creaseGeo = new THREE.BufferGeometry()
+const creaseAttr = new THREE.BufferAttribute(new Float32Array(paper.creaseLineCount * 6), 3)
+creaseAttr.setUsage(THREE.DynamicDrawUsage)
+creaseGeo.setAttribute('position', creaseAttr)
+const creaseLines = new THREE.LineSegments(
+  creaseGeo,
+  new THREE.LineBasicMaterial({ color: 0x6f5f45, transparent: true, opacity: 0.5 }),
+)
+mesh.add(creaseLines)
 
-const NX = 0.3 // neck hinge along the spine
-const TX = 0.32 // tail hinge along the spine
-const Y = 0.006 // tiny lift so spine flaps never z-fight the wings
-
-const crane = new THREE.Group()
-scene.add(crane)
-
-// Wings — the two halves of the diamond, hinged on the X (F–B) spine.
-const leftWing = new THREE.Group()
-leftWing.add(panel([[1, 0, 0], [0, 0, 1], [-1, 0, 0]]))
-crane.add(leftWing)
-
-const rightWing = new THREE.Group()
-rightWing.add(panel([[1, 0, 0], [0, 0, -1], [-1, 0, 0]]))
-crane.add(rightWing)
-
-// Neck — slim flap on the front of the spine, with a reverse-folding head.
-const neck = new THREE.Group()
-neck.position.set(NX, 0, 0)
-neck.add(panel([[0, Y, 0.1], [1 - NX, Y, 0], [0, Y, -0.1]]))
-crane.add(neck)
-
-const head = new THREE.Group()
-head.position.set(1 - NX, Y, 0)
-head.add(panel([[0, 0, 0.07], [0.3, 0, 0], [0, 0, -0.07]]))
-neck.add(head)
-
-// Tail — slim flap on the back of the spine.
-const tail = new THREE.Group()
-tail.position.set(-TX, 0, 0)
-tail.add(panel([[0, Y, 0.16], [-(1 - TX), Y, 0], [0, Y, -0.16]]))
-crane.add(tail)
+const craneRoot = new THREE.Group()
+craneRoot.add(mesh)
+scene.add(craneRoot)
 
 // ---------------------------------------------------------------------------
-// Steps — each is a target set of hinge angles (degrees). Flat → crane.
+// Steps — target dihedral angles (degrees) for each fold line. Flat → crane.
 // ---------------------------------------------------------------------------
 const STEPS = [
-  { name: 'a flat square', wing: 0, neck: 0, tail: 0, head: 0 },
-  { name: 'fold it in half', wing: 84, neck: 0, tail: 0, head: 0 },
-  { name: 'open the base', wing: 60, neck: 0, tail: 0, head: 0 },
-  { name: 'raise the neck and tail', wing: 58, neck: 62, tail: 70, head: 0 },
-  { name: 'reverse-fold the head', wing: 57, neck: 63, tail: 71, head: 70 },
-  { name: 'a paper crane', wing: 58, neck: 63, tail: 72, head: 72 },
+  { name: 'a flat square', spine: 0, neck: 0, tail: 0, head: 0 },
+  { name: 'valley-fold the spine', spine: 70, neck: 0, tail: 0, head: 0 },
+  { name: 'open the wings', spine: 104, neck: 0, tail: 0, head: 0 },
+  { name: 'lift the neck and tail', spine: 104, neck: 116, tail: 108, head: 0 },
+  { name: 'reverse-fold the head', spine: 104, neck: 116, tail: 108, head: 96 },
+  { name: 'a paper crane', spine: 104, neck: 118, tail: 110, head: 98 },
 ]
 const LAST = STEPS.length - 1
+const a = { ...STEPS[LAST] } // live angles (deg); start on the finished crane
 
-// Live (animated) angles, in degrees. Start already at the finished crane so
-// the gallery thumbnail and first impression show a bird, not a blank sheet.
-const a = { ...STEPS[LAST] }
-
-function applyAngles() {
-  leftWing.rotation.x = -degToRad(a.wing)
-  rightWing.rotation.x = degToRad(a.wing)
-  neck.rotation.z = degToRad(a.neck)
-  tail.rotation.z = -degToRad(a.tail)
-  head.rotation.z = -degToRad(a.head)
+const baseMatrix = new THREE.Matrix4()
+function updatePaper() {
+  // Tilt the root by -spine/2 so both wings open symmetrically about the spine.
+  baseMatrix.makeRotationX(-degToRad(a.spine) / 2)
+  paper.solve((id) => degToRad(a[id]), baseMatrix)
+  paper.writePositions(posAttr.array)
+  posAttr.needsUpdate = true
+  paper.writeCreaseLines(creaseAttr.array)
+  creaseAttr.needsUpdate = true
+  geo.computeVertexNormals()
+  geo.computeBoundingSphere()
 }
 
 // ---------------------------------------------------------------------------
-// Step sequencing
+// Step sequencing + HUD
 // ---------------------------------------------------------------------------
-const DWELL = 2.3 // seconds the fold rests on each step before advancing
-const INTRO = 2.6 // seconds the finished crane is shown before folding begins
+const DWELL = 2.3
+const INTRO = 2.6
 let stepIndex = LAST
-let phase = 'intro' // 'intro' → hold crane, then 'play'/'paused' through the fold
+let phase = 'intro'
 let timer = 0
 let playing = true
 
@@ -170,7 +156,6 @@ const stepNum = document.getElementById('step-num')
 const stepName = document.getElementById('step-name')
 const dotsEl = document.getElementById('dots')
 document.getElementById('step-total').textContent = STEPS.length
-
 STEPS.forEach((_, i) => {
   const dot = document.createElement('span')
   dot.className = 'dot'
@@ -184,7 +169,6 @@ function refreshHud() {
   stepName.textContent = STEPS[stepIndex].name
   dots.forEach((d, i) => d.classList.toggle('active', i === stepIndex))
 }
-
 function gotoStep(i, pause) {
   phase = 'play'
   stepIndex = clamp(i, 0, LAST)
@@ -192,44 +176,29 @@ function gotoStep(i, pause) {
   if (pause) setPlaying(false)
   refreshHud()
 }
-
 function setPlaying(v) {
   playing = v
   document.getElementById('play').textContent = v ? '❚❚' : '▶'
 }
-
 document.getElementById('next').addEventListener('click', () => gotoStep(stepIndex + 1, true))
 document.getElementById('prev').addEventListener('click', () => gotoStep(stepIndex - 1, true))
 document.getElementById('play').addEventListener('click', () => {
   if (phase === 'intro') phase = 'play'
   setPlaying(!playing)
 })
-
 refreshHud()
-applyAngles()
 
 // ---------------------------------------------------------------------------
 // Loop
 // ---------------------------------------------------------------------------
 const clock = new THREE.Clock()
-
 function tick() {
   const dt = Math.min(clock.getDelta(), 0.05)
   const target = STEPS[phase === 'intro' ? LAST : stepIndex]
+  const k = 1 - Math.pow(0.0012, dt) // frame-rate-independent smoothing
+  for (const id of ['spine', 'neck', 'tail', 'head']) a[id] = lerp(a[id], target[id], k)
+  updatePaper()
 
-  // Smoothly ease every hinge toward the current step's target angle.
-  const k = 1 - Math.pow(0.0009, dt) // frame-rate-independent smoothing
-  for (const key of ['wing', 'neck', 'tail', 'head']) {
-    a[key] = lerp(a[key], target[key], k)
-  }
-
-  // A little life: once finished, let the wings breathe.
-  if (phase !== 'intro' && stepIndex === LAST) {
-    a.wing += Math.sin(clock.elapsedTime * 1.6) * 1.1
-  }
-  applyAngles()
-
-  // Advance the sequence on a timer.
   timer += dt
   if (phase === 'intro') {
     if (timer > INTRO) gotoStep(0, false)
@@ -262,7 +231,6 @@ function makeGradientBackground(top, bottom) {
   tex.colorSpace = THREE.SRGBColorSpace
   return tex
 }
-
 function resize() {
   const w = window.innerWidth
   const h = window.innerHeight
