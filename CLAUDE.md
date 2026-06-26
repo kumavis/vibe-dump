@@ -71,8 +71,8 @@ That's the whole wiring. The "N and counting" tagline updates itself.
 
 ## Two kinds of app
 
-- **Vite-bundled (default):** ordinary `index.html` + JS/CSS modules. Vite
-  bundles them. This is what `hello-world`, `bouncing-balls`, `color-clock` are.
+- **Vite-bundled (default):** ordinary `index.html` + JS/CSS modules (and npm
+  deps like `three`). Vite bundles them. This is what `origami-crane` is.
 - **Self-contained single file:** an `index.html` that inlines everything (e.g.
   an exported Three.js scene). Just drop it in as `index.html`; `vite build`
   copies it through untouched. This is what `mirror-field` is. Prefer a fully

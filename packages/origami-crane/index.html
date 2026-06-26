@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Origami Crane — step-by-step fold</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <header id="hud">
+      <h1>ORIGAMI CRANE</h1>
+      <p class="sub">drag to look · a square folds itself, one step at a time</p>
+    </header>
+
+    <footer id="steps">
+      <div class="step-label"><span id="step-num">1</span> / <span id="step-total">6</span> · <span id="step-name">a flat square</span></div>
+      <div class="dots" id="dots"></div>
+      <div class="controls">
+        <button id="prev" title="Previous step">‹</button>
+        <button id="play" title="Play / pause">❚❚</button>
+        <button id="next" title="Next step">›</button>
+      </div>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -11,9 +11,7 @@ a screenshot **gallery** that's deployed to GitHub Pages.
 ```
 vibe-dump/
 ├─ packages/
-│  ├─ hello-world/      # each package is an independent static app
-│  ├─ bouncing-balls/
-│  ├─ color-clock/
+│  ├─ origami-crane/    # each package is an independent static app (Vite + three)
 │  └─ mirror-field/     # self-contained Three.js scene (no build step needed)
 ├─ scripts/
 │  ├─ build-gallery.mjs # screenshots each app + emits the grid index

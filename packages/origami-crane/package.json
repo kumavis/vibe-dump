@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/origami-crane",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Origami Crane",
+    "description": "A square of paper folds itself into a crane, step by step, under a slow turntable camera. Three.js."
+  }
+}
