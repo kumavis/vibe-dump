@@ -60,12 +60,13 @@ window.addEventListener('resize', resize)
 resize()
 
 function buildWorld() {
-  // Three bases tucked in corners/edges, away from the water band.
-  const margin = 130
+  // Three bases placed in a balanced triangle, kept clear of the HUD panels
+  // (title top-left, scoreboard top-right, chronicle bottom-left) so every
+  // keep — including VERDANT — is fully visible, and off the water band.
   const spots = [
-    { x: margin, y: margin },
-    { x: W - margin, y: H - margin },
-    { x: W - margin, y: margin },
+    { x: W * 0.13, y: H * 0.32 },  // CRIMSON  — left, below the title
+    { x: W * 0.88, y: H * 0.66 },  // AZURE    — right, below the scoreboard
+    { x: W * 0.52, y: H * 0.86 },  // VERDANT  — bottom-centre, right of ticker
   ]
   bases = CIVS.map((c, i) => ({
     civ: c.id,
@@ -254,7 +255,7 @@ function wander(u, dt) {
 }
 
 // ------------------------------------------------------------------ ticks ----
-let diploTimer = 6
+let diploTimer = 3.5
 function update(dt) {
   // unit AI
   for (const u of units) {
@@ -400,9 +401,14 @@ function drawBase(b) {
     ctx.fillRect(b.x - 14, b.y - 14, 28, 28)
     return
   }
+  // soft outer glow so every keep (esp. VERDANT) reads on the dark ground
+  ctx.save()
+  ctx.shadowColor = c.glow
+  ctx.shadowBlur = 22
   // outer keep
   ctx.fillStyle = c.dim
   ctx.fillRect(b.x - 18, b.y - 18, 36, 36)
+  ctx.restore()
   ctx.strokeStyle = c.color
   ctx.lineWidth = 2.5
   ctx.strokeRect(b.x - 18, b.y - 18, 36, 36)
