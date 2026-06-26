@@ -1,0 +1,58 @@
+:root {
+  color-scheme: dark;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #1a1530;
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+}
+
+canvas {
+  display: block;
+  position: fixed;
+  inset: 0;
+}
+
+#hud {
+  position: fixed;
+  top: 22px;
+  left: 24px;
+  z-index: 10;
+  color: #fff;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+#hud h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #ffd166, #ff8fab, #8ec5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#hud p {
+  font-size: 14px;
+  margin-top: 6px;
+  max-width: 320px;
+  color: #d7d2f0;
+}
+
+#hud .count {
+  margin-top: 10px;
+  font-weight: 700;
+  color: #ffe7a3;
+  letter-spacing: 0.5px;
+}

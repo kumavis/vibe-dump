@@ -1,0 +1,59 @@
+:root {
+  color-scheme: dark;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #05010f;
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+/* Atmospheric heads-up display */
+#hud {
+  position: fixed;
+  left: 28px;
+  bottom: 26px;
+  z-index: 10;
+  pointer-events: none;
+  color: #d8f7ff;
+  text-shadow: 0 0 18px rgba(80, 200, 255, 0.6);
+  max-width: 360px;
+}
+
+#hud h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #8af7ff, #c89bff 60%, #ff9bf0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 14px rgba(150, 120, 255, 0.5));
+}
+
+#hud p {
+  margin-top: 8px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: rgba(190, 220, 255, 0.78);
+  letter-spacing: 0.03em;
+}

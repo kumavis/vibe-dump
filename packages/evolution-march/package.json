@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/evolution-march",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "gallery": {
+    "title": "Evolution March",
+    "description": "A cartoony auto-scrolling journey from primordial soup to a solar-punk future."
+  }
+}

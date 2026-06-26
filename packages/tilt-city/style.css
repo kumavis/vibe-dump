@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #afe3f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+#app,
+#app canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ---- Tilt-shift fake: blurred + faded bands top and bottom ---- */
+.tilt {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 26%;
+  pointer-events: none;
+  z-index: 10;
+  /* blur whatever is behind the band for the shallow-DoF look */
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.tilt-top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(175, 227, 240, 0.55),
+    rgba(175, 227, 240, 0)
+  );
+  -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+}
+
+.tilt-bottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(60, 70, 90, 0.35),
+    rgba(60, 70, 90, 0)
+  );
+  -webkit-mask-image: linear-gradient(to top, black 20%, transparent 100%);
+  mask-image: linear-gradient(to top, black 20%, transparent 100%);
+}
+
+/* Soft vignette to push the toy/miniature feel */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0) 45%,
+    rgba(0, 0, 0, 0.28) 100%
+  );
+}
+
+/* ---- HUD ---- */
+.hud {
+  position: fixed;
+  top: 22px;
+  left: 24px;
+  z-index: 20;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.hud h1 {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.hud p {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+}

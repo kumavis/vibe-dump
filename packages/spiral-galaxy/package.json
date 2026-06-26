@@ -1,0 +1,12 @@
+{
+  "name": "@vibe-dump/spiral-galaxy",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": { "three": "^0.160.0" },
+  "gallery": {
+    "title": "Spiral Galaxy",
+    "description": "A rotating particle galaxy with a hungry black hole, supernovae, and a tour of procedural worlds."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@vibe-dump/tilt-city",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": { "three": "^0.160.0" },
+  "gallery": {
+    "title": "Tilt City",
+    "description": "A tilt-shift miniature town where toy cars run errands, queue in traffic, and obey the lights."
+  }
+}
