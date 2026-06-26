@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/black-snake-swamp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Black Snake Swamp",
+    "description": "A dark-forest swamp at night: a black snake slithers across the water, evaporating it into rising steam while terrified frogs croak and tremble. Procedural canvas + Web Audio spooky ambience, fully self-contained."
+  }
+}
