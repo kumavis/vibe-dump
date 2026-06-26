@@ -24,12 +24,17 @@ renderer.setClearColor(0x000000, 0)
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 2000)
-camera.position.set(0, 95, 165)
+// High vantage point looking down onto the disk so the spiral FACE is visible
+// (not an edge-on sliver). Roughly a ~50° downward three-quarter view.
+camera.position.set(0, 175, 130)
 camera.lookAt(0, 0, 0)
 
-// The whole galaxy lives in one group so it can be tilted + spun cheaply.
+// The whole galaxy lives in one group so it can be spun cheaply. The disk sits
+// in the XZ plane; the elevated camera supplies the pleasing three-quarter tilt,
+// so the group itself needs no extra rotation (which previously cancelled the
+// camera angle and produced a near-edge-on view).
 const galaxy = new THREE.Group()
-galaxy.rotation.x = -0.62 // tilt so we see the disk at an angle
+galaxy.rotation.x = 0
 scene.add(galaxy)
 
 // --- A reusable soft radial sprite texture (used for star + halo glow) ------
@@ -554,7 +559,7 @@ function randomDesignation() {
 // PiP lifecycle: pick a galaxy point, show panel, draw connector, then hide.
 // ---------------------------------------------------------------------------
 let pipState = 'idle' // idle | showing
-let pipTimer = 4 // seconds until first appearance (early, for the screenshot)
+let pipTimer = 3 // seconds until first appearance (early, for the screenshot)
 let pipVisibleTime = 0
 const pipTargetWorld = new THREE.Vector3() // the highlighted point in the galaxy
 const pipTargetLocal = new THREE.Vector3() // its position inside the galaxy group
@@ -573,8 +578,9 @@ function hidePiP() {
   pipEl.classList.remove('show')
   connectorLine.classList.remove('show')
   pipState = 'idle'
-  // Wait a while before the next highlight.
-  pipTimer = 7 + Math.random() * 6
+  // Brief gap before the next highlight so the tour cycles through all the
+  // planet types reasonably quickly.
+  pipTimer = 3 + Math.random() * 2
 }
 
 function updateConnector() {
@@ -659,7 +665,7 @@ function animate() {
     showPiP()
   } else if (pipState === 'showing') {
     pipVisibleTime += dt
-    if (pipVisibleTime > 9) hidePiP()
+    if (pipVisibleTime > 7) hidePiP()
   }
 
   // Animate + render the PiP planet whenever the panel is visible.
