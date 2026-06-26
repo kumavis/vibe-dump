@@ -115,6 +115,10 @@ above. Keep provenance in the commit message (link the source PR).
 
 - Don't commit build output — `dist/` and `packages/*/dist/` are gitignored.
 - Keep each app self-contained in its own package; no cross-package imports.
-- Commit `package-lock.json` (CI uses `npm ci`).
+- Commit `package-lock.json` (CI uses `npm ci`). Always commit lockfile
+  changes in a **separate commit** from the code change — never mix a
+  `package-lock.json` update into a commit that also touches app code. This
+  keeps diffs readable and makes lockfile-only changes (and rebase/merge
+  conflicts in the lockfile) easy to review and resolve in isolation.
 - Develop on the assigned branch; deploy happens on push via
   `.github/workflows/deploy.yml`.
