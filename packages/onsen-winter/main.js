@@ -450,12 +450,18 @@ function skyColorAt(t, out) {
 // ── Day/night state ──────────────────────────────────────────────────────────
 const DAY_LENGTH = 48 // seconds for a full cycle
 // Start near dusk so the first frame (and screenshot) shows lit steam.
-let cycle = 0.78
+const CYCLE_START = 0.78
+let cycle = CYCLE_START
 
 const tmpVec = new THREE.Vector3()
 
-function updateDayNight(dt) {
-  cycle = (cycle + dt / DAY_LENGTH) % 1
+// Drive the cycle from wall-clock elapsed time rather than accumulating capped
+// per-frame deltas. (Capping dt keeps particles from jumping on a stutter, but
+// if we also fed that capped dt into the cycle a low/headless frame rate would
+// stretch the "48s" day to many minutes and never reach daytime.) Using real
+// elapsed time guarantees a true 48s day/night cycle at any frame rate.
+function updateDayNight(t) {
+  cycle = (CYCLE_START + t / DAY_LENGTH) % 1
 
   // sun angle: sunrise at t=0.25, sunset at t=0.75
   const sunAngle = (cycle - 0.25) * Math.PI * 2
@@ -612,7 +618,7 @@ function animate() {
   const dt = Math.min(clock.getDelta(), 0.05)
   const t = clock.elapsedTime
 
-  updateDayNight(dt)
+  updateDayNight(t)
   updateCamera(t)
   updateSteamLights()
   updateSteam(dt, t)
