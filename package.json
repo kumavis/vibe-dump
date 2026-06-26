@@ -1,0 +1,22 @@
+{
+  "name": "vibe-dump",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A monorepo of tiny static web apps, with an auto-generated screenshot gallery deployed to GitHub Pages.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build:apps": "npm run build --workspaces --if-present",
+    "build:gallery": "node scripts/build-gallery.mjs",
+    "build": "npm run build:apps && npm run build:gallery",
+    "preview": "node scripts/serve.mjs dist",
+    "clean": "node scripts/clean.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.1",
+    "vite": "^5.4.11"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/color-clock",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Color Clock",
+    "description": "The current time, rendered as a hex color. The whole screen is the clock."
+  }
+}
