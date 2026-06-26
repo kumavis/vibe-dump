@@ -165,23 +165,63 @@ const eras = [
     draw(t) {
       sky('#7ec0a4', '#cfe98a')
       sun(W * 0.78, H * 0.22, 36, '#fff6c8', 'rgba(255,246,200,0)')
+      // distant rolling hills for depth
+      hill(0.66, '#9ecf86')
       // water on left, mud bank on right
       ctx.fillStyle = '#3f9fb0'
       ctx.fillRect(0, H * 0.62, W * 0.45, H)
-      ground('#7a5a3a', 0.34)
-      // reeds
-      for (let i = 0; i < 8; i++) {
-        const x = W * 0.5 + i * 40
-        ctx.strokeStyle = '#3e8e4a'
-        ctx.lineWidth = 5
+      // gentle ripples on the water
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)'
+      ctx.lineWidth = 3
+      for (let i = 0; i < 5; i++) {
+        const ry = H * 0.7 + i * 22
         ctx.beginPath()
-        ctx.moveTo(x, H)
-        ctx.lineTo(x + Math.sin(t + i) * 10, H - 130)
+        ctx.moveTo(0, ry)
+        for (let x = 0; x <= W * 0.45; x += 30) {
+          ctx.lineTo(x, ry + Math.sin(x / 40 + t * 2 + i) * 3)
+        }
         ctx.stroke()
       }
-      // amphibian crawling out
-      const ax = lerp(W * 0.3, W * 0.6, (Math.sin(t * 0.6) + 1) / 2)
-      const ay = H * 0.68
+      // lily pads floating on the water
+      for (let i = 0; i < 4; i++) {
+        const lx = W * (0.06 + i * 0.1) + Math.sin(t + i) * 6
+        const ly = H * 0.78 + (i % 2) * 26
+        ctx.fillStyle = '#4faf6a'
+        ctx.beginPath()
+        ctx.ellipse(lx, ly, 26, 12, 0, 0, Math.PI * 2)
+        ctx.fill()
+        circle(lx, ly - 6, 5, '#f6c0e0') // tiny flower
+      }
+      ground('#7a5a3a', 0.34)
+      // reeds spanning the bank
+      for (let i = 0; i < 16; i++) {
+        const x = W * 0.42 + i * ((W * 0.58) / 16)
+        ctx.strokeStyle = i % 2 ? '#3e8e4a' : '#4ba058'
+        ctx.lineWidth = 5
+        const h = 110 + (i % 3) * 30
+        ctx.beginPath()
+        ctx.moveTo(x, H)
+        ctx.quadraticCurveTo(x + Math.sin(t + i) * 12, H - h * 0.6, x + Math.sin(t + i) * 16, H - h)
+        ctx.stroke()
+        // cattail head
+        ctx.fillStyle = '#7a5a3a'
+        roundRect(x + Math.sin(t + i) * 16 - 4, H - h - 18, 8, 22, 4)
+        ctx.fill()
+      }
+      // a tadpole still wiggling in the shallows
+      const tx = W * 0.18 + Math.sin(t * 0.8) * 40
+      const ty = H * 0.72
+      ctx.fillStyle = '#356b3a'
+      circle(tx, ty, 9, '#356b3a')
+      ctx.strokeStyle = '#356b3a'
+      ctx.lineWidth = 4
+      ctx.beginPath()
+      ctx.moveTo(tx - 8, ty)
+      ctx.quadraticCurveTo(tx - 24, ty + Math.sin(t * 6) * 8, tx - 34, ty)
+      ctx.stroke()
+      // amphibian crawling out onto the bank
+      const ax = lerp(W * 0.42, W * 0.62, (Math.sin(t * 0.6) + 1) / 2)
+      const ay = H * 0.7
       drawAmphibian(ax, ay, t)
     },
   },
