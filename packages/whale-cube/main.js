@@ -87,21 +87,45 @@ const edges = new THREE.LineSegments(
 edges.renderOrder = 11
 cube.add(edges)
 
-// A faintly rippling water surface lid.
+// The water's top surface — a subdivided sheet that ripples with travelling
+// waves. Kept translucent so it reads as a water line without hiding the pod.
+const WAVE_AMP = 0.055
+const surfaceGeo = new THREE.PlaneGeometry(2 * H, 2 * H, 56, 56).rotateX(-Math.PI / 2)
 const surface = new THREE.Mesh(
-  new THREE.PlaneGeometry(2 * H, 2 * H, 1, 1).rotateX(-Math.PI / 2),
+  surfaceGeo,
   new THREE.MeshStandardMaterial({
-    color: '#bff0ff',
+    color: '#a9e8ff',
     transparent: true,
-    opacity: 0.12,
-    roughness: 0.3,
+    opacity: 0.36,
+    roughness: 0.12,
+    metalness: 0.0,
     side: THREE.DoubleSide,
     depthWrite: false,
   }),
 )
-surface.position.y = H - 0.002
+surface.position.y = H - WAVE_AMP
 surface.renderOrder = 9
 cube.add(surface)
+
+// Precompute each vertex's horizontal position; only its height animates.
+const surfPos = surfaceGeo.attributes.position
+const surfXZ = []
+for (let i = 0; i < surfPos.count; i++) surfXZ.push([surfPos.getX(i), surfPos.getZ(i)])
+
+function updateWaves(t) {
+  for (let i = 0; i < surfPos.count; i++) {
+    const [x, z] = surfXZ[i]
+    // A few crossing sine trains → a lively but cheap water surface.
+    const h =
+      Math.sin(x * 3.0 + t * 1.5) * 0.02 +
+      Math.sin(z * 2.3 - t * 1.1) * 0.022 +
+      Math.sin((x + z) * 2.1 + t * 2.0) * 0.012 +
+      Math.sin((x - z) * 4.4 - t * 0.8) * 0.008
+    surfPos.setY(i, h)
+  }
+  surfPos.needsUpdate = true
+  surfaceGeo.computeVertexNormals()
+}
 
 // ---------------------------------------------------------------------------
 // Bubbles / plankton drifting up inside the tank
@@ -329,8 +353,8 @@ function tick() {
   }
   mp.needsUpdate = true
 
-  // Let the water surface shimmer.
-  surface.material.opacity = 0.1 + Math.sin(elapsed * 1.3) * 0.03
+  // Ripple the water's top surface.
+  updateWaves(elapsed)
 
   controls.update()
   renderer.render(scene, camera)

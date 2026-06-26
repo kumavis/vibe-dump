@@ -21,10 +21,10 @@ scene.background = makeGradientBackground('#241a2e', '#0b0a12')
 scene.fog = new THREE.Fog('#0f0b16', 6, 14)
 
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100)
-camera.position.set(2.8, 1.5, 2.7)
+camera.position.set(2.2, 2.5, 2.6)
 
 const controls = new OrbitControls(camera, renderer.domElement)
-controls.target.set(0, 0.28, 0)
+controls.target.set(0, 0.15, 0)
 controls.enableDamping = true
 controls.dampingFactor = 0.06
 controls.autoRotate = true // turntable
