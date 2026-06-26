@@ -45,10 +45,19 @@ export class Paper {
     return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])
   }
 
-  // Split every face this line passes through. The cut segment becomes a
-  // crease tagged with `id`.
-  crease(id, a, b) {
-    this.lines.push({ id, a, b })
+  // Parameter of point p projected onto the line a->b (0 at a, 1 at b).
+  static _param(a, b, p) {
+    const dx = b[0] - a[0]
+    const dy = b[1] - a[1]
+    return ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / (dx * dx + dy * dy)
+  }
+
+  // Split every face this crease passes through. The cut becomes a crease
+  // tagged with `id`. With `{ segment: true }` the crease is bounded to the
+  // span a..b: a face is only cut where the crease enters AND exits within
+  // that span (so a crease can be local to a region, e.g. the body band).
+  crease(id, a, b, { segment = false } = {}) {
+    this.lines.push({ id, a, b, segment })
     const next = []
     for (const face of this.faces) {
       const sides = face.map((vid) => Paper._side(a, b, this.pts[vid]))
@@ -60,6 +69,7 @@ export class Paper {
       }
       const left = []
       const right = []
+      const cutParams = []
       for (let i = 0; i < face.length; i++) {
         const cur = face[i]
         const nxt = face[(i + 1) % face.length]
@@ -68,14 +78,21 @@ export class Paper {
         if (sc >= -EPS) left.push(cur)
         if (sc <= EPS) right.push(cur)
         if ((sc > EPS && sn < -EPS) || (sc < -EPS && sn > EPS)) {
-          // Edge crosses the line: insert the intersection vertex in both.
           const t = sc / (sc - sn)
           const p = this.pts[cur]
           const q = this.pts[nxt]
-          const vid = this._v(p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1]))
+          const x = p[0] + t * (q[0] - p[0])
+          const y = p[1] + t * (q[1] - p[1])
+          cutParams.push(Paper._param(a, b, [x, y]))
+          const vid = this._v(x, y)
           left.push(vid)
           right.push(vid)
         }
+      }
+      // Bounded crease: skip faces the span doesn't fully reach.
+      if (segment && cutParams.some((t) => t < -EPS || t > 1 + EPS)) {
+        next.push(face)
+        continue
       }
       next.push(left, right)
     }
@@ -83,14 +100,23 @@ export class Paper {
     return this
   }
 
-  // True if the segment vid0-vid1 lies along crease line `id`.
+  // True if edge vid0-vid1 lies along crease `line` (and within its span, if
+  // the line is a bounded segment).
   _edgeOnLine(vid0, vid1, line) {
     const p = this.pts[vid0]
     const q = this.pts[vid1]
-    return (
-      Math.abs(Paper._side(line.a, line.b, p)) < 1e-4 &&
-      Math.abs(Paper._side(line.a, line.b, q)) < 1e-4
-    )
+    if (
+      Math.abs(Paper._side(line.a, line.b, p)) >= 1e-4 ||
+      Math.abs(Paper._side(line.a, line.b, q)) >= 1e-4
+    ) {
+      return false
+    }
+    if (line.segment) {
+      const tp = Paper._param(line.a, line.b, p)
+      const tq = Paper._param(line.a, line.b, q)
+      if (Math.min(tp, tq) < -EPS || Math.max(tp, tq) > 1 + EPS) return false
+    }
+    return true
   }
 
   // Triangulate (fan) and wire up the rigid-fold solver.
