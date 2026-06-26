@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/mirror-field",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Mirror Field",
+    "description": "An instanced grid of reflective mirror plates that tilt to animated heightfields, with lasers that ray-trace and bounce off the surface. Three.js + bloom, fully self-contained."
+  }
+}

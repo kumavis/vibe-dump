@@ -13,7 +13,8 @@ vibe-dump/
 ├─ packages/
 │  ├─ hello-world/      # each package is an independent static app
 │  ├─ bouncing-balls/
-│  └─ color-clock/
+│  ├─ color-clock/
+│  └─ mirror-field/     # self-contained Three.js scene (no build step needed)
 ├─ scripts/
 │  ├─ build-gallery.mjs # screenshots each app + emits the grid index
 │  ├─ static-server.mjs # dependency-free static server (preview + screenshots)
