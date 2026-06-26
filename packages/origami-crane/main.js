@@ -73,17 +73,24 @@ scene.add(ground)
 // neck + head and the back into a tail. Splitting tags every cut as a crease;
 // the fan-triangulation diagonals stay flat (angle 0).
 // ---------------------------------------------------------------------------
-const NECK = 0.4
-const TAIL = -0.46
-const HEAD = 0.74
+const BAND = 0.34 // half-width of the body band; outside it are the wings
+const NECK = 0.46
+const TAIL = -0.52
+const HEAD = 0.78
 
 const paper = new Paper(1)
+  // Spine closes the sheet almost in half so the body is a thin double layer.
   .crease('spine', [-1, 0], [1, 0])
-  .crease('neck', [NECK, -1], [NECK, 1])
-  .crease('tail', [TAIL, -1], [TAIL, 1])
-  .crease('head', [HEAD, -1], [HEAD, 1])
-  // Root = a top-half triangle in the body band, so the wings open symmetrically.
-  .build(([cx, cy]) => (cy > 0 ? 100 : 0) - Math.abs(cx) - Math.abs(cy - 0.4))
+  // The two flanks fold out to opposite sides → a left and a right wing.
+  .crease('wingT', [-1, BAND], [1, BAND])
+  .crease('wingB', [-1, -BAND], [1, -BAND])
+  // Neck / tail / head are bounded to the body band, so they stay thin and
+  // closed (a real reverse fold lifting the doubled body, not a wide sail).
+  .crease('neck', [NECK, -BAND], [NECK, BAND], { segment: true })
+  .crease('tail', [TAIL, -BAND], [TAIL, BAND], { segment: true })
+  .crease('head', [HEAD, -BAND], [HEAD, BAND], { segment: true })
+  // Root = a body-band triangle on the top layer.
+  .build(([cx, cy]) => (cy > 0 && cy < BAND ? 100 : 0) - Math.abs(cx) - (cx > NECK || cx < TAIL ? 80 : 0))
 
 // Paper mesh (flat-shaded, both sides) + crease lines.
 const paperMat = new THREE.MeshStandardMaterial({
@@ -119,20 +126,22 @@ scene.add(craneRoot)
 // Steps — target dihedral angles (degrees) for each fold line. Flat → crane.
 // ---------------------------------------------------------------------------
 const STEPS = [
-  { name: 'a flat square', spine: 0, neck: 0, tail: 0, head: 0 },
-  { name: 'valley-fold the spine', spine: 70, neck: 0, tail: 0, head: 0 },
-  { name: 'open the wings', spine: 104, neck: 0, tail: 0, head: 0 },
-  { name: 'lift the neck and tail', spine: 104, neck: 116, tail: 108, head: 0 },
-  { name: 'reverse-fold the head', spine: 104, neck: 116, tail: 108, head: 96 },
-  { name: 'a paper crane', spine: 104, neck: 118, tail: 110, head: 98 },
+  { name: 'a flat square', spine: 0, wingT: 0, wingB: 0, neck: 0, tail: 0, head: 0 },
+  { name: 'fold it in half', spine: 156, wingT: 0, wingB: 0, neck: 0, tail: 0, head: 0 },
+  { name: 'spread the wings', spine: 156, wingT: -90, wingB: 90, neck: 0, tail: 0, head: 0 },
+  { name: 'lift the neck and tail', spine: 156, wingT: -90, wingB: 90, neck: 128, tail: 116, head: 0 },
+  { name: 'reverse-fold the head', spine: 156, wingT: -90, wingB: 90, neck: 128, tail: 116, head: -120 },
+  { name: 'a paper crane', spine: 158, wingT: -92, wingB: 92, neck: 130, tail: 118, head: -122 },
 ]
 const LAST = STEPS.length - 1
 const a = { ...STEPS[LAST] } // live angles (deg); start on the finished crane
 
+// Orient the folded crane to a pleasing pose (belly down, neck up-forward).
+craneRoot.rotation.set(-Math.PI / 2, 0, 0)
+craneRoot.position.y = 0.1
+
 const baseMatrix = new THREE.Matrix4()
 function updatePaper() {
-  // Tilt the root by -spine/2 so both wings open symmetrically about the spine.
-  baseMatrix.makeRotationX(-degToRad(a.spine) / 2)
   paper.solve((id) => degToRad(a[id]), baseMatrix)
   paper.writePositions(posAttr.array)
   posAttr.needsUpdate = true

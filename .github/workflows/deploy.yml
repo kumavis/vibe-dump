@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 'claude/**'
   workflow_dispatch:
 
 # Allow the workflow to publish to GitHub Pages.
