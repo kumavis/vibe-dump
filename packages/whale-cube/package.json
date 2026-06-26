@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/whale-cube",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Whale Cube",
+    "description": "A pod of whales drifts and dives inside a glassy cube of water, under a slow turntable camera. Three.js."
+  }
+}
