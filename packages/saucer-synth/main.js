@@ -158,13 +158,18 @@ camera.position.set(0, 2.2, 9)
 camera.lookAt(0, 0.2, 0)
 
 // --- Lighting -------------------------------------------------------------
-scene.add(new THREE.AmbientLight(0x3344aa, 0.6))
-const keyLight = new THREE.DirectionalLight(0x88aaff, 0.8)
+scene.add(new THREE.AmbientLight(0x4a5ad0, 0.9))
+const keyLight = new THREE.DirectionalLight(0xbfd2ff, 1.4)
 keyLight.position.set(4, 8, 6)
 scene.add(keyLight)
-const rimLight = new THREE.PointLight(0xff66dd, 1.2, 40)
+const rimLight = new THREE.PointLight(0xff66dd, 2.2, 40)
 rimLight.position.set(-6, 3, -4)
 scene.add(rimLight)
+// Cool fill from the opposite side so the metallic hull never reads as a
+// black blob (no env-map, so the body needs direct light to show its form).
+const fillLight = new THREE.PointLight(0x66ccff, 1.6, 40)
+fillLight.position.set(7, 4, 7)
+scene.add(fillLight)
 // Glow light under the saucer that pulses with play.
 const coreLight = new THREE.PointLight(0x66ffee, 2.0, 18)
 coreLight.position.set(0, -0.5, 0)
@@ -242,9 +247,11 @@ const shared = {
 
 // Metallic hull (two stacked cones make the classic saucer silhouette).
 const hullMat = new THREE.MeshStandardMaterial({
-  color: 0x9fb4d6,
-  metalness: 0.95,
-  roughness: 0.25,
+  color: 0xb9c8e6,
+  emissive: 0x14203c, // faint self-glow so the hull never goes fully black
+  emissiveIntensity: 1.0,
+  metalness: 0.75,
+  roughness: 0.42,
   envMapIntensity: 1.0,
 })
 const bodyTop = new THREE.Mesh(new THREE.SphereGeometry(2.1, 48, 24, 0, Math.PI * 2, 0, Math.PI * 0.5), hullMat)
@@ -260,7 +267,7 @@ saucer.add(bodyBottom)
 // Rim disc (the widest part, where ports sit).
 const rim = new THREE.Mesh(
   new THREE.TorusGeometry(2.55, 0.22, 20, 64),
-  new THREE.MeshStandardMaterial({ color: 0x6a78a0, metalness: 0.9, roughness: 0.3 }),
+  new THREE.MeshStandardMaterial({ color: 0x8492bd, metalness: 0.7, roughness: 0.4 }),
 )
 rim.rotation.x = Math.PI / 2
 saucer.add(rim)
@@ -309,7 +316,7 @@ for (let i = 0; i < PORT_COUNT; i++) {
   const mat = new THREE.MeshStandardMaterial({
     color,
     emissive: color,
-    emissiveIntensity: 1.2,
+    emissiveIntensity: 1.8,
     metalness: 0.2,
     roughness: 0.4,
   })
@@ -333,7 +340,7 @@ for (let i = 0; i < PORT_COUNT; i++) {
     note: PENTATONIC[i % PENTATONIC.length],
     timbre: TIMBRES[i % TIMBRES.length],
     baseColor: color.clone(),
-    baseEmissive: 1.2,
+    baseEmissive: 1.8,
     pulse: 0, // 0..1 glow envelope
     beam,
     beamMat,
