@@ -126,7 +126,7 @@ function renderGallery(apps, captured) {
   <body>
     <header class="masthead">
       <h1 class="masthead__title">vibe&#8209;dump</h1>
-      <p class="masthead__tagline">A dump of tiny static web experiments. ${apps.length} and counting.</p>
+      <p class="masthead__tagline">A dump of tiny static web experiments.</p>
     </header>
     <main class="grid">
 ${cards}
