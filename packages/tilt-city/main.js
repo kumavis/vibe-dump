@@ -278,30 +278,43 @@ for (let n = 0; n < VEHICLE_COUNT; n++) {
     route,
     seg: 0, // index of current node in route (heading toward seg+1)
     progress: 0, // 0..1 along current segment
+    stuck: 0, // seconds spent unable to advance (drives the deadlock breaker)
     pos: lanePos(si, sj, 0, 0),
   }
   v.mesh.position.copy(v.pos)
   vehicles.push(v)
 }
 
-// Distance-along-direction helper for the "stop if blocked ahead" rule.
+// The unit travel direction of a vehicle's current segment (0 vector if it has
+// finished its route this frame).
+function heading(o) {
+  if (o.seg + 1 >= o.route.length) return new THREE.Vector3()
+  const [ai, aj] = o.route[o.seg]
+  const [bi, bj] = o.route[o.seg + 1]
+  return new THREE.Vector3(Math.sign(bi - ai), 0, Math.sign(bj - aj))
+}
+
+// "Stop if blocked ahead" rule. We only queue behind a vehicle that is in the
+// SAME lane and travelling the SAME direction — i.e. a real car in front of us.
+// Oncoming traffic (in the other lane) and crossing traffic at intersections
+// are ignored here: matching against them made two cars freeze facing each
+// other, which cascaded into the whole grid locking up. Intersection conflicts
+// are handled separately by the traffic lights.
 function isBlockedAhead(v) {
-  // Look a short distance ahead; if another vehicle is there & roughly in
-  // front and same heading, stop.
-  if (v.seg + 1 >= v.route.length) return false
-  const [ai, aj] = v.route[v.seg]
-  const [bi, bj] = v.route[v.seg + 1]
-  const dirX = Math.sign(bi - ai)
-  const dirZ = Math.sign(bj - aj)
-  const fwd = new THREE.Vector3(dirX, 0, dirZ)
+  const fwd = heading(v)
   if (fwd.lengthSq() === 0) return false
   const LOOK = v.isTruck ? 3.2 : 2.6
   for (const o of vehicles) {
     if (o === v) continue
+    const oFwd = heading(o)
+    if (oFwd.lengthSq() === 0 || fwd.dot(oFwd) < 0.5) continue // not going our way
     const to = new THREE.Vector3().subVectors(o.pos, v.pos)
-    const dist = to.length()
-    if (dist > LOOK || dist < 0.001) continue
-    if (to.dot(fwd) / dist > 0.7) return true // it's ahead of us
+    const forward = to.dot(fwd) // distance directly ahead
+    if (forward <= 0.001 || forward > LOOK) continue
+    // perpendicular (cross-lane) distance — skip cars in a different lane
+    const lateral = Math.hypot(to.x - fwd.x * forward, to.z - fwd.z * forward)
+    if (lateral > 1.1) continue
+    return true
   }
   return false
 }
@@ -334,10 +347,18 @@ function updateVehicle(v, dt) {
   // Only obey the light when we're near the end of the segment (the stop line).
   const nearEnd = v.progress > 0.78
   const redAhead = nearEnd && !canGo(bi, bj, axis)
-  const blocked = isBlockedAhead(v)
+  let blocked = isBlockedAhead(v)
+
+  // Deadlock breaker: if a car has been unable to move for a while (and isn't
+  // simply waiting at a red light), let it creep past whatever's stopping it so
+  // the grid can never permanently lock up.
+  if (blocked && !redAhead && v.stuck > 5) blocked = false
 
   if (!redAhead && !blocked && segLen > 0) {
     v.progress += (v.speed * dt) / segLen
+    v.stuck = 0
+  } else {
+    v.stuck += dt
   }
 
   if (v.progress >= 1) {

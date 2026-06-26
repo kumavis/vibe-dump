@@ -130,7 +130,9 @@ function spawnUnit(civ, type, x, y) {
   return u
 }
 
-function nearestBase(civ) { return bases.find(b => b.civ === civ) }
+// A civ's current town centre — only a LIVING one. Returns null while the civ
+// has been razed and is yet to resettle, so units never path to a ruin.
+function nearestBase(civ) { return bases.find(b => b.civ === civ && b.hp > 0) || null }
 
 function nearestResource(x, y) {
   let best = null, bd = Infinity
@@ -166,13 +168,14 @@ function steerToward(u, tx, ty, dt) {
 
 function updateWorker(u, dt) {
   const base = nearestBase(u.civ)
-  if (u.carry >= 12) {
+  if (base && u.carry >= 12) {
     // return to base to deposit
     const d = steerToward(u, base.x, base.y, dt)
     if (d < 26) { base.gold += u.carry; u.carry = 0; u.target = null }
     return
   }
-  // find / approach a resource node
+  // find / approach a resource node (keep gathering even while homeless, holding
+  // what we carry until the civ founds a new city to deposit it in)
   if (!u.target || u.target.amount <= 0) u.target = nearestResource(u.x, u.y)
   if (!u.target) { wander(u, dt); return }
   const d = steerToward(u, u.target.x, u.target.y, dt)
@@ -198,10 +201,11 @@ function updateCombatant(u, dt) {
       }
     }
   } else {
-    // patrol toward the nearest enemy base when at war, else guard home
+    // patrol toward the nearest LIVING enemy base when at war, else guard home
+    // (skip ruins — razed keeps are no longer worth marching on)
     let dest = null
     for (const b of bases) {
-      if (b.civ !== u.civ && atWar(u.civ, b.civ)) { dest = b; break }
+      if (b.civ !== u.civ && b.hp > 0 && atWar(u.civ, b.civ)) { dest = b; break }
     }
     if (dest && u.type === 'soldier') {
       const d = steerToward(u, dest.x, dest.y, dt)
@@ -246,12 +250,52 @@ function updatePoet(u, dt) {
 function wander(u, dt) {
   u.wob += dt * 1.4
   const base = nearestBase(u.civ)
+  if (!base) {
+    // homeless (city razed): drift freely until a new one is founded
+    u.x += Math.cos(u.wob) * u.speed * dt
+    u.y += Math.sin(u.wob * 0.8) * u.speed * dt
+    return
+  }
   // gentle bias back toward home so units stay on-map and grouped
   const hx = base.x - u.x, hy = base.y - u.y
   const hd = Math.hypot(hx, hy) || 1
   const pull = hd > 280 ? 0.9 : 0.12
   u.x += (Math.cos(u.wob) * (1 - pull) + (hx / hd) * pull) * u.speed * dt
   u.y += (Math.sin(u.wob * 0.8) * (1 - pull) + (hy / hd) * pull) * u.speed * dt
+}
+
+// ------------------------------------------------------------- resettlement ----
+// When a civ's keep is razed it doesn't just wither — as long as it still has
+// people, it regroups and founds a NEW city, so its units have a living town
+// centre to serve again.
+const RESETTLE_DELAY = 7 // seconds of regrouping before a new city is raised
+const resettleTimer = CIVS.map(() => RESETTLE_DELAY)
+
+function foundCity(civ) {
+  // settle near the surviving people, on land, far from living enemy keeps
+  const mine = units.filter(u => u.civ === civ && u.hp > 0)
+  let cx = 0, cy = 0
+  for (const u of mine) { cx += u.x; cy += u.y }
+  cx /= mine.length; cy /= mine.length
+  let best = { x: cx, y: cy }, bestScore = -Infinity
+  for (let i = 0; i < 30; i++) {
+    const x = i === 0 ? cx : Math.max(60, Math.min(W - 60, cx + rand(-180, 180)))
+    const y = i === 0 ? cy : Math.max(60, Math.min(H - 60, cy + rand(-180, 180)))
+    if (isWater(x, y)) continue
+    let score = 0
+    for (const b of bases) {
+      if (b.hp <= 0 || b.civ === civ) continue
+      score += Math.min(dist(x, y, b.x, b.y), 320) // prefer distance from foes
+    }
+    if (score > bestScore) { bestScore = score; best = { x, y } }
+  }
+  // clear this civ's ruins and raise a fresh (somewhat fragile) keep
+  bases = bases.filter(b => !(b.civ === civ && b.hp <= 0))
+  bases.push({
+    civ, x: best.x, y: best.y,
+    hp: 480, maxHp: 1000, gold: 60, spawnTimer: rand(0, 2),
+  })
+  log(`${CIVS[civ].name} founds a new city.`, civ)
 }
 
 // ------------------------------------------------------------------ ticks ----
@@ -281,6 +325,21 @@ function update(dt) {
       spawnUnit(b.civ, chooseSpawn(b.civ), b.x, b.y)
     }
     if (b.hp < b.maxHp) b.hp = Math.min(b.maxHp, b.hp + 6 * dt) // slow regen
+  }
+
+  // resettlement: a civ with no living city founds a new one if it still has
+  // people; otherwise it has truly fallen.
+  for (const c of CIVS) {
+    const civ = c.id
+    const hasCity = bases.some(b => b.civ === civ && b.hp > 0)
+    if (hasCity) { resettleTimer[civ] = RESETTLE_DELAY; continue }
+    const hasPeople = units.some(u => u.civ === civ && u.hp > 0)
+    if (!hasPeople) continue // no one left to rebuild
+    resettleTimer[civ] -= dt
+    if (resettleTimer[civ] <= 0) {
+      foundCity(civ)
+      resettleTimer[civ] = RESETTLE_DELAY
+    }
   }
 
   // culture ripples grow & fade
@@ -518,14 +577,18 @@ scoresEl.innerHTML = CIVS.map(c => `
 
 function updateHUD() {
   for (const c of CIVS) {
-    const b = bases[c.id]
-    const mine = units.filter(u => u.civ === c.id)
+    const b = bases.find(bb => bb.civ === c.id && bb.hp > 0)
+    const mine = units.filter(u => u.civ === c.id && u.hp > 0)
     const el = document.getElementById('stats-' + c.id)
     if (!el) continue
-    el.innerHTML = b.hp > 0
-      ? `<span class="gold">${b.gold | 0} ◈</span><br>
+    if (b) {
+      el.innerHTML = `<span class="gold">${b.gold | 0} ◈</span><br>
          <span class="small">${mine.length} units · ${(b.hp | 0)} hp</span>`
-      : `<span class="small">— fallen —</span>`
+    } else if (mine.length > 0) {
+      el.innerHTML = `<span class="small">${mine.length} units · resettling…</span>`
+    } else {
+      el.innerHTML = `<span class="small">— fallen —</span>`
+    }
   }
 }
 
