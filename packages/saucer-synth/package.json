@@ -1,0 +1,12 @@
+{
+  "name": "@vibe-dump/saucer-synth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": { "three": "^0.160.0" },
+  "gallery": {
+    "title": "Saucer Synth",
+    "description": "A hovering alien saucer you play like an instrument — its glowing ports are a pentatonic Web Audio synth."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@vibe-dump/onsen-winter",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": { "three": "^0.160.0" },
+  "gallery": {
+    "title": "Onsen Winter",
+    "description": "A low-poly winter onsen diorama where lantern light glows through rising steam as day melts into night."
+  }
+}

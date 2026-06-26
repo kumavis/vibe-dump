@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tilt City</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- WebGL canvas mounts here -->
+    <div id="app"></div>
+
+    <!-- Fake tilt-shift: blurred gradient bands at top & bottom -->
+    <div class="tilt tilt-top"></div>
+    <div class="tilt tilt-bottom"></div>
+    <div class="vignette"></div>
+
+    <!-- HUD -->
+    <div class="hud">
+      <h1>Tilt City</h1>
+      <p>A miniature town of busy little vehicles on errands.</p>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

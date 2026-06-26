@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spiral Galaxy</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Main galaxy renderer mounts here -->
+    <canvas id="scene"></canvas>
+
+    <!-- HUD -->
+    <div id="hud">
+      <h1>Spiral Galaxy</h1>
+      <p>A slow turn through dust, light, and distant worlds.</p>
+    </div>
+
+    <!-- Connector line from PiP panel to a point in the galaxy -->
+    <svg id="connector" aria-hidden="true">
+      <line id="connector-line" x1="0" y1="0" x2="0" y2="0" />
+    </svg>
+
+    <!-- Picture-in-picture panel: close-up of a procedural planet -->
+    <div id="pip" class="hidden">
+      <canvas id="pip-canvas"></canvas>
+      <div id="pip-label">
+        <span id="pip-name">—</span>
+        <span id="pip-type">—</span>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

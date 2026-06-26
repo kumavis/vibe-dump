@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/bronze-empires",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "gallery": {
+    "title": "Bronze Empires",
+    "description": "Three swords-and-ships civilizations harvest, war, sign treaties, and spread culture through wandering poets — a self-playing top-down RTS."
+  }
+}
