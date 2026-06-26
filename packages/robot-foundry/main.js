@@ -11,7 +11,7 @@ import * as THREE from 'three'
 const GRID = 18           // half-extent of the floor in world units
 const MAX_ROBOTS = 14     // population cap (recycle oldest beyond this)
 const MAX_BLOCKS = 26     // scattered blocks present at once
-const BLOCKS_PER_ROBOT = 5 // blocks a robot must deliver to forge a new one
+const BLOCKS_PER_ROBOT = 4 // blocks a robot must deliver to forge a new one
 
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x1a1530)
@@ -267,37 +267,46 @@ function depositToAssembly(mat) {
     scene.add(a.group)
     assemblies.push(a)
   }
-  // place this block as the next layer of a forming robot
+  // place this block as the next layer of a forming robot. The last block is the
+  // "head" (smaller) so the growing stack reads as a robot silhouette.
   const i = a.parts.length
+  const isHead = i === BLOCKS_PER_ROBOT - 1
   const cube = new THREE.Mesh(cubeGeo, mat)
   cube.castShadow = true
-  cube.scale.setScalar(0.6)
+  const size = isHead ? 0.5 : 0.7
+  cube.scale.setScalar(size)
   // stack with a tiny wobble so it reads as "under construction"
-  cube.position.set(rand(-0.15, 0.15), 0.6 + i * 0.62, rand(-0.15, 0.15))
+  cube.position.set(rand(-0.12, 0.12), 0.6 + i * 0.62, rand(-0.12, 0.12))
   cube.userData.born = performance.now()
+  cube.userData.size = size
   a.group.add(cube)
   a.parts.push(cube)
 
   if (a.parts.length >= BLOCKS_PER_ROBOT) {
-    // forge complete: flash, remove scaffold, spawn a real robot here
+    // forge complete: flash the pad, remove scaffold, spawn a real robot here
     scene.remove(a.group)
     assemblies.splice(assemblies.indexOf(a), 1)
+    forgeFlash = 1
     spawnRobot(PAD.clone().add(new THREE.Vector3(rand(-2, 2), 0, rand(-2, 2))))
     // keep the world stocked with blocks to gather
     for (let k = 0; k < BLOCKS_PER_ROBOT; k++) spawnBlock()
   }
 }
 
+// brief glow burst on the pad each time a robot is forged
+let forgeFlash = 0
+
 // pop-in animation for freshly placed assembly cubes
 function animateAssemblies(now) {
   for (const a of assemblies) {
     for (const c of a.parts) {
+      const sz = c.userData.size || 0.6
       const age = (now - c.userData.born) / 220
       if (age < 1) {
         const e = 1 - Math.pow(1 - age, 3) // ease-out
-        c.scale.setScalar(0.6 * (0.2 + 0.8 * e))
+        c.scale.setScalar(sz * (0.2 + 0.8 * e))
       } else {
-        c.scale.setScalar(0.6)
+        c.scale.setScalar(sz)
       }
     }
   }
@@ -337,6 +346,9 @@ function loop() {
   for (const r of robots) updateRobot(r, dt, t)
   animateBlocks(t)
   animateAssemblies(now)
+  // pad pulses gently, and flares bright when a robot is forged
+  if (forgeFlash > 0) forgeFlash = Math.max(0, forgeFlash - dt * 1.6)
+  padMat.emissiveIntensity = 0.35 + Math.sin(t * 2) * 0.08 + forgeFlash * 1.6
   updateCamera(dt)
 
   renderer.render(scene, camera)
