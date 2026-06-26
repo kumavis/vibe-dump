@@ -142,7 +142,7 @@ const STEPS = [
   { name: 'a paper crane', spine: 72, neck: 137, head: -117, tail: 130, wingL: 97, wingR: 97 },
 ]
 const LAST = STEPS.length - 1
-const a = { ...STEPS[LAST] } // live angles (deg); start on the finished crane
+const a = { ...STEPS[0] } // live angles (deg); start flat and fold from there
 
 // Orient the folded crane to a pleasing pose (belly down, neck up-forward),
 // reclined slightly toward the camera so the head and wings read on the turntable.
@@ -164,9 +164,7 @@ function updatePaper() {
 // Step sequencing + HUD
 // ---------------------------------------------------------------------------
 const DWELL = 2.3
-const INTRO = 2.6
-let stepIndex = LAST
-let phase = 'intro'
+let stepIndex = 0 // start on the first step (a flat square) and animate forward
 let timer = 0
 let playing = true
 
@@ -188,7 +186,6 @@ function refreshHud() {
   dots.forEach((d, i) => d.classList.toggle('active', i === stepIndex))
 }
 function gotoStep(i, pause) {
-  phase = 'play'
   stepIndex = clamp(i, 0, LAST)
   timer = 0
   if (pause) setPlaying(false)
@@ -201,7 +198,6 @@ function setPlaying(v) {
 document.getElementById('next').addEventListener('click', () => gotoStep(stepIndex + 1, true))
 document.getElementById('prev').addEventListener('click', () => gotoStep(stepIndex - 1, true))
 document.getElementById('play').addEventListener('click', () => {
-  if (phase === 'intro') phase = 'play'
   setPlaying(!playing)
 })
 refreshHud()
@@ -212,15 +208,13 @@ refreshHud()
 const clock = new THREE.Clock()
 function tick() {
   const dt = Math.min(clock.getDelta(), 0.05)
-  const target = STEPS[phase === 'intro' ? LAST : stepIndex]
+  const target = STEPS[stepIndex]
   const k = 1 - Math.pow(0.0012, dt) // frame-rate-independent smoothing
   for (const id of ['spine', 'neck', 'head', 'tail', 'wingL', 'wingR']) a[id] = lerp(a[id], target[id], k)
   updatePaper()
 
   timer += dt
-  if (phase === 'intro') {
-    if (timer > INTRO) gotoStep(0, false)
-  } else if (playing && timer > DWELL) {
+  if (playing && timer > DWELL) {
     timer = 0
     stepIndex = stepIndex >= LAST ? 0 : stepIndex + 1
     refreshHud()

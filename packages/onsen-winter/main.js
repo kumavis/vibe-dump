@@ -137,8 +137,11 @@ function buildBridge() {
       g.add(post)
     }
   }
+  // The deck spans the group's local X. The river runs along world X, so turn
+  // the bridge a quarter turn to lay it ACROSS the water (bank to bank), then
+  // add the river's own 0.18 skew so it lines up with the banks.
   g.position.set(0, 0, 6.5)
-  g.rotation.y = 0.18
+  g.rotation.y = 0.18 + Math.PI / 2
   g.scale.setScalar(0.9)
   return g
 }
@@ -319,21 +322,25 @@ const starMat = new THREE.PointsMaterial({
 const stars = new THREE.Points(starGeo, starMat)
 scene.add(stars)
 
-// ── Steam particles (custom shader so they tint to warm lantern light) ───────
-const STEAM = 900
+// ── Steam (custom shader so it tints to warm lantern light) ──────────────────
+// Lots of big, very faint, soft-edged puffs that overlap into a continuous
+// wispy mass — rather than a few crisp dots. They rise, billow outward into a
+// widening plume, and fade in at birth / out near the top.
+const STEAM = 1300
+const STEAM_RISE = 3.8                          // life height of a puff
 const steamPos = new Float32Array(STEAM * 3)
 const steamSeed = new Float32Array(STEAM)      // per-particle random phase
 const steamSrc = new Float32Array(STEAM * 3)   // origin of each particle
 
 for (let i = 0; i < STEAM; i++) {
   const s = steamSources[i % steamSources.length]
-  const jx = (Math.random() - 0.5) * 1.6
-  const jz = (Math.random() - 0.5) * 1.6
+  const jx = (Math.random() - 0.5) * 1.3
+  const jz = (Math.random() - 0.5) * 1.3
   steamSrc[i * 3] = s.x + jx
   steamSrc[i * 3 + 1] = s.y
   steamSrc[i * 3 + 2] = s.z + jz
   steamPos[i * 3] = steamSrc[i * 3]
-  steamPos[i * 3 + 1] = s.y + Math.random() * 3.0
+  steamPos[i * 3 + 1] = s.y + Math.random() * STEAM_RISE
   steamPos[i * 3 + 2] = steamSrc[i * 3 + 2]
   steamSeed[i] = Math.random()
 }
@@ -350,7 +357,7 @@ const lightColArr = new Float32Array(MAX_LIGHTS * 3)
 const steamMat = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
-    uSize: { value: 90 },
+    uSize: { value: 135 },
     uNight: { value: 0 },            // 0 day → 1 night (controls warm pickup)
     uLightPos: { value: lightPosArr },
     uLightCol: { value: lightColArr },
@@ -382,11 +389,13 @@ const steamMat = new THREE.ShaderMaterial({
       // base steam is cool white; at night it picks up the warm color
       vec3 cool = vec3(0.85, 0.9, 1.0);
       vTint = mix(cool, cool + warm * 2.2, uNight);
-      // fade out as the particle rises (its height encodes life)
-      float life = clamp((p.y) / 3.4, 0.0, 1.0);
-      vAlpha = (1.0 - life) * 0.5;
+      // life encoded by height above the source (~0.2). Fade IN at birth and
+      // OUT near the top so puffs are wispy at both ends, and grow as they rise.
+      float life = clamp((p.y - 0.2) / ${STEAM_RISE.toFixed(1)}, 0.0, 1.0);
+      float fade = smoothstep(0.0, 0.18, life) * (1.0 - smoothstep(0.45, 1.0, life));
+      vAlpha = fade * 0.16;
       vec4 mv = modelViewMatrix * vec4(p, 1.0);
-      gl_PointSize = uSize * (1.0 + life * 1.5) / -mv.z;
+      gl_PointSize = uSize * (0.4 + life * 2.6) / -mv.z;
       gl_Position = projectionMatrix * mv;
     }
   `,
@@ -394,10 +403,11 @@ const steamMat = new THREE.ShaderMaterial({
     varying float vAlpha;
     varying vec3 vTint;
     void main() {
-      // soft round puff
-      vec2 uv = gl_PointCoord - 0.5;
-      float r = length(uv);
-      float a = smoothstep(0.5, 0.0, r) * vAlpha;
+      // very soft round puff — squared falloff kills the hard rim so overlapping
+      // puffs read as a continuous cloud instead of distinct dots
+      float r = length(gl_PointCoord - 0.5);
+      float a = smoothstep(0.5, 0.0, r);
+      a = a * a * vAlpha;
       gl_FragColor = vec4(vTint, a);
     }
   `,
@@ -556,18 +566,19 @@ function updateSteamLights() {
 function updateSteam(dt, t) {
   const pos = steamGeo.attributes.position.array
   for (let i = 0; i < STEAM; i++) {
-    const iy = i * 3 + 1
-    pos[iy] += dt * (0.5 + steamSeed[i] * 0.4) // rise
-    // gentle swirl based on height + seed
-    const sway = Math.sin(t * 0.6 + steamSeed[i] * 6.28 + pos[iy]) * 0.004
-    pos[i * 3] += sway
-    pos[i * 3 + 2] += Math.cos(t * 0.5 + steamSeed[i] * 6.28) * 0.004
-    if (pos[iy] > 3.4) {
-      // respawn at its source
-      pos[i * 3] = steamSrc[i * 3]
-      pos[iy] = steamSrc[iy]
-      pos[i * 3 + 2] = steamSrc[i * 3 + 2]
-    }
+    const ix = i * 3
+    const iy = ix + 1
+    const iz = ix + 2
+    pos[iy] += dt * (0.3 + steamSeed[i] * 0.28) // slow, lazy rise
+    if (pos[iy] - steamSrc[iy] > STEAM_RISE) pos[iy] = steamSrc[iy] // respawn
+    // billow outward into a widening plume + a slow curl, both growing with height
+    const h = pos[iy] - steamSrc[iy]
+    const ang = steamSeed[i] * 6.2832
+    const spread = 0.15 + h * 0.26
+    const curlX = Math.sin(t * 0.4 + steamSeed[i] * 6.28 + h)
+    const curlZ = Math.cos(t * 0.33 + steamSeed[i] * 6.28 + h)
+    pos[ix] = steamSrc[ix] + Math.cos(ang) * spread + curlX * h * 0.12
+    pos[iz] = steamSrc[iz] + Math.sin(ang) * spread + curlZ * h * 0.12
   }
   steamGeo.attributes.position.needsUpdate = true
 }
