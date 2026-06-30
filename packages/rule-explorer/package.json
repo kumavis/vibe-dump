@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/rule-explorer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Rule Explorer",
+    "description": "Browse all 256 elementary cellular-automata rules and fly through the 3-D state-transition graph of each — attractors, basins, and the transient trees that feed them. Three.js."
+  }
+}
