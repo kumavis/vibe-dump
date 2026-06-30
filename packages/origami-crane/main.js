@@ -21,10 +21,12 @@ scene.background = makeGradientBackground('#241a2e', '#0b0a12')
 scene.fog = new THREE.Fog('#0f0b16', 6, 14)
 
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100)
-camera.position.set(2.2, 2.5, 2.6)
+// Low, near-profile framing — the crane's silhouette (neck, head, tail, wings)
+// reads from the side, not from above.
+camera.position.set(2.7, 1.55, 2.95)
 
 const controls = new OrbitControls(camera, renderer.domElement)
-controls.target.set(0, 0.15, 0)
+controls.target.set(0, 0.25, 0)
 controls.enableDamping = true
 controls.dampingFactor = 0.06
 controls.autoRotate = true // turntable
@@ -87,16 +89,18 @@ scene.add(ground)
 // creases, so the pattern stays a non-crossing tree.
 // ---------------------------------------------------------------------------
 const paper = new Paper(1)
-  // Spine: a shallow ridge down the body, giving the crane some depth.
+  // Spine: a ridge down the body, giving the folded crane some depth.
   .crease('spine', [-1, 0], [1, 0])
-  // Neck: fold the top-right corner up. Head: reverse-fold its very tip back.
-  .crease('neck', [0.18, 1], [1, 0.18])
-  .crease('head', [0.74, 1], [1, 0.74])
-  // Tail: fold the opposite (bottom-left) corner up to balance the neck.
-  .crease('tail', [-1, -0.18], [-0.18, -1])
+  // Neck: a deep crease across the top-right corner makes a long point that
+  // rises into the neck. Head: reverse-fold its very tip back into a beak.
+  .crease('neck', [0.05, 1], [1, 0.05])
+  .crease('head', [0.7, 1], [1, 0.7])
+  // Tail: the opposite (bottom-left) corner, cut just as deep, lifts to a
+  // matching long point — the tail.
+  .crease('tail', [-1, -0.05], [-0.05, -1])
   // The two remaining corners open out into a left and a right wing.
-  .crease('wingL', [-0.18, 1], [-1, 0.18])
-  .crease('wingR', [1, -0.18], [0.18, -1])
+  .crease('wingL', [-0.4, 1], [-1, 0.4])
+  .crease('wingR', [1, -0.4], [0.4, -1])
   // Root = the central body panel; it stays put while the four points rise.
   .build(([cx, cy]) => -(Math.abs(cx) + Math.abs(cy)))
 
@@ -135,18 +139,18 @@ scene.add(craneRoot)
 // ---------------------------------------------------------------------------
 const STEPS = [
   { name: 'a flat square', spine: 0, neck: 0, head: 0, tail: 0, wingL: 0, wingR: 0 },
-  { name: 'crease the body', spine: 70, neck: 0, head: 0, tail: 0, wingL: 0, wingR: 0 },
-  { name: 'lift the neck and tail', spine: 70, neck: 135, head: 0, tail: 128, wingL: 0, wingR: 0 },
-  { name: 'spread the wings', spine: 70, neck: 135, head: 0, tail: 128, wingL: 95, wingR: 95 },
-  { name: 'reverse-fold the head', spine: 70, neck: 135, head: -115, tail: 128, wingL: 95, wingR: 95 },
-  { name: 'a paper crane', spine: 72, neck: 137, head: -117, tail: 130, wingL: 97, wingR: 97 },
+  { name: 'fold the bird base', spine: 70, neck: 45, head: 0, tail: 45, wingL: 45, wingR: 45 },
+  { name: 'lift the neck and tail', spine: 70, neck: 150, head: 0, tail: 150, wingL: 45, wingR: 45 },
+  { name: 'reverse-fold the head', spine: 70, neck: 150, head: -125, tail: 150, wingL: 45, wingR: 45 },
+  { name: 'spread the wings', spine: 70, neck: 150, head: -125, tail: 150, wingL: 92, wingR: 92 },
+  { name: 'a paper crane', spine: 72, neck: 152, head: -127, tail: 152, wingL: 94, wingR: 94 },
 ]
 const LAST = STEPS.length - 1
 const a = { ...STEPS[0] } // live angles (deg); start flat and fold from there
 
 // Orient the folded crane to a pleasing pose (belly down, neck up-forward),
 // reclined slightly toward the camera so the head and wings read on the turntable.
-craneRoot.rotation.set(-1.05, -0.4, 0)
+craneRoot.rotation.set(-1.45, -0.15, 0)
 craneRoot.position.y = 0.05
 
 const baseMatrix = new THREE.Matrix4()
