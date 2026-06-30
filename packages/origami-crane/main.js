@@ -91,18 +91,29 @@ scene.add(ground)
 const paper = new Paper(1)
   // Spine: a ridge down the body, giving the folded crane some depth.
   .crease('spine', [-1, 0], [1, 0])
-  // Neck: a deep crease across the top-right corner makes a long point that
-  // rises into the neck. Head: reverse-fold its very tip back into a beak.
+  // Neck: a deep crease across the top-right corner lifts a long point; the two
+  // `nk` creases are a PETAL FOLD that pleats that point's sides in to the
+  // centreline, narrowing it from a wide flap into a thin neck. Head: reverse-
+  // fold the very tip back into a beak.
   .crease('neck', [0.05, 1], [1, 0.05])
-  .crease('head', [0.7, 1], [1, 0.7])
-  // Tail: the opposite (bottom-left) corner, cut just as deep, lifts to a
-  // matching long point — the tail.
+  .crease('nkA', [1, 1], [0.367, 0.683], { segment: true })
+  .crease('nkB', [1, 1], [0.683, 0.367], { segment: true })
+  .crease('head', [0.78, 1], [1, 0.78])
+  // Tail: the opposite (bottom-left) corner, petal-folded the same way into a
+  // matching thin point.
   .crease('tail', [-1, -0.05], [-0.05, -1])
+  .crease('tlA', [-1, -1], [-0.367, -0.683], { segment: true })
+  .crease('tlB', [-1, -1], [-0.683, -0.367], { segment: true })
   // The two remaining corners open out into a left and a right wing.
   .crease('wingL', [-0.4, 1], [-1, 0.4])
   .crease('wingR', [1, -0.4], [0.4, -1])
-  // Root = the central body panel; it stays put while the four points rise.
+  // Root = the central body panel; it stays put while the points rise.
   .build(([cx, cy]) => -(Math.abs(cx) + Math.abs(cy)))
+
+// The petal folds cross the neck/tail creases, so those vertices are
+// over-constrained for the exact tree solve; relaxation settles them (and
+// layer offsets give the pleated points their stacked-paper look).
+paper.relaxIters = 150
 
 // Paper mesh (flat-shaded, both sides) + crease lines.
 const paperMat = new THREE.MeshStandardMaterial({
@@ -138,12 +149,12 @@ scene.add(craneRoot)
 // Steps — target dihedral angles (degrees) for each fold line. Flat → crane.
 // ---------------------------------------------------------------------------
 const STEPS = [
-  { name: 'a flat square', spine: 0, neck: 0, head: 0, tail: 0, wingL: 0, wingR: 0 },
-  { name: 'fold the bird base', spine: 70, neck: 45, head: 0, tail: 45, wingL: 45, wingR: 45 },
-  { name: 'lift the neck and tail', spine: 70, neck: 150, head: 0, tail: 150, wingL: 45, wingR: 45 },
-  { name: 'reverse-fold the head', spine: 70, neck: 150, head: -125, tail: 150, wingL: 45, wingR: 45 },
-  { name: 'spread the wings', spine: 70, neck: 150, head: -125, tail: 150, wingL: 92, wingR: 92 },
-  { name: 'a paper crane', spine: 72, neck: 152, head: -127, tail: 152, wingL: 94, wingR: 94 },
+  { name: 'a flat square', spine: 0, neck: 0, nkA: 0, nkB: 0, head: 0, tail: 0, tlA: 0, tlB: 0, wingL: 0, wingR: 0 },
+  { name: 'fold the bird base', spine: 65, neck: 60, nkA: 0, nkB: 0, head: 0, tail: 60, tlA: 0, tlB: 0, wingL: 40, wingR: 40 },
+  { name: 'petal-fold the neck and tail', spine: 65, neck: 120, nkA: 168, nkB: -168, head: 0, tail: 135, tlA: 168, tlB: -168, wingL: 40, wingR: 40 },
+  { name: 'reverse-fold the head', spine: 65, neck: 120, nkA: 168, nkB: -168, head: -120, tail: 135, tlA: 168, tlB: -168, wingL: 40, wingR: 40 },
+  { name: 'spread the wings', spine: 65, neck: 120, nkA: 168, nkB: -168, head: -120, tail: 135, tlA: 168, tlB: -168, wingL: 72, wingR: 72 },
+  { name: 'a paper crane', spine: 66, neck: 122, nkA: 170, nkB: -170, head: -122, tail: 137, tlA: 170, tlB: -170, wingL: 74, wingR: 74 },
 ]
 const LAST = STEPS.length - 1
 const a = { ...STEPS[0] } // live angles (deg); start flat and fold from there
@@ -214,7 +225,7 @@ function tick() {
   const dt = Math.min(clock.getDelta(), 0.05)
   const target = STEPS[stepIndex]
   const k = 1 - Math.pow(0.0012, dt) // frame-rate-independent smoothing
-  for (const id of ['spine', 'neck', 'head', 'tail', 'wingL', 'wingR']) a[id] = lerp(a[id], target[id], k)
+  for (const id of ['spine', 'neck', 'nkA', 'nkB', 'head', 'tail', 'tlA', 'tlB', 'wingL', 'wingR']) a[id] = lerp(a[id], target[id], k)
   updatePaper()
 
   timer += dt

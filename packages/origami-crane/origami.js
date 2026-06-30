@@ -38,6 +38,18 @@ import * as THREE from 'three'
 const EPS = 1e-6
 const key2 = (x, y) => `${Math.round(x / EPS)}:${Math.round(y / EPS)}`
 
+// Rendered paper thickness — the gap inserted between stacked layers at a flat
+// fold. Small enough to read as folded paper, large enough to beat z-fighting.
+const THICKNESS = 0.012
+// How "flat" a fold is, 0..1, ramped smoothly between these angles so a facet
+// eases into its layer as it folds back (no pop as it crosses a threshold).
+const FLAT_LO = (95 * Math.PI) / 180
+const FLAT_HI = (150 * Math.PI) / 180
+const flatness = (angle) => {
+  const t = (Math.abs(angle) - FLAT_LO) / (FLAT_HI - FLAT_LO)
+  return t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t) // smoothstep
+}
+
 export class Paper {
   constructor(squareHalf = 1) {
     this.pts = [] // 2D rest positions, the flat sheet
@@ -310,6 +322,33 @@ export class Paper {
     })
     this.world = this.pts.map(() => new THREE.Vector3())
 
+    // Isometry relaxation. The welded tree-solve is exact for non-crossing
+    // folds, but a real petal/reverse fold has interior vertices where several
+    // creases meet; there the tree-solve only approximates and edges stretch.
+    // A few position-based passes that pull every edge back to its rest length
+    // (the paper can't stretch) settle those vertices into a consistent fold.
+    // Off by default (relaxIters = 0) so simple models keep the exact solve.
+    this.relaxIters = 0
+    const edgeSet = new Map()
+    for (const e of edgeMap.values()) {
+      const a = this.pts[e.i], b = this.pts[e.j]
+      edgeSet.set(`${e.i}:${e.j}`, { a: e.i, b: e.j, L: Math.hypot(a[0] - b[0], a[1] - b[1]) })
+    }
+    this.edges = [...edgeSet.values()].filter((e) => e.L > 1e-9)
+    this.anchor = new Set(tris[root]) // hold the root facet fixed so it doesn't drift
+    this._disp = this.pts.map(() => new THREE.Vector3())
+    this._cnt = new Array(this.pts.length).fill(0)
+    this._ed = new THREE.Vector3()
+
+    // Layering: real paper has thickness, so where the sheet folds back on
+    // itself (a flat fold) the layers must stack, not fight for the same plane.
+    // `layerOffset[ti]` is a small world-space shove that separates ti from the
+    // facets it lies on top of; it accumulates along the fold tree (see solve).
+    this.layerOffset = tris.map(() => new THREE.Vector3())
+    this._foldAngle = new Array(tris.length).fill(0)
+    this._layerN = new Array(tris.length).fill(0)
+    this._stackDir = tris.map(() => new THREE.Vector3())
+
     // Reusable scratch objects (no per-frame allocation).
     this._p0 = new THREE.Vector3()
     this._p1 = new THREE.Vector3()
@@ -317,6 +356,7 @@ export class Paper {
     this._rot = new THREE.Matrix4()
     this._tmp = new THREE.Matrix4()
     this._acc = new THREE.Vector3()
+    this._fn = new THREE.Vector3()
     return this
   }
 
@@ -331,10 +371,12 @@ export class Paper {
       const pa = this.parent[ti]
       if (pa < 0) {
         m.copy(baseMatrix)
+        this._foldAngle[ti] = 0
         continue
       }
       const edge = this.parentEdge[ti]
       const angle = edge.lineId ? angleOf(edge.lineId) : 0
+      this._foldAngle[ti] = angle
       const parentM = this.matrices[pa]
       if (angle === 0) {
         m.copy(parentM)
@@ -367,18 +409,78 @@ export class Paper {
       }
       w.multiplyScalar(1 / list.length)
     }
+
+    // Relax: pull every edge back to its rest length (Jacobi), holding the root
+    // facet fixed. Starting from the tree-solve guess, this closes the small
+    // gaps left at interior fold vertices without the sheet ever splitting —
+    // there is still only one position per shared vertex.
+    for (let it = 0; it < this.relaxIters; it++) {
+      for (let v = 0; v < this._cnt.length; v++) { this._disp[v].set(0, 0, 0); this._cnt[v] = 0 }
+      for (const e of this.edges) {
+        const wa = this.world[e.a], wb = this.world[e.b]
+        this._ed.subVectors(wb, wa)
+        const L = this._ed.length()
+        if (L < 1e-9) continue
+        this._ed.multiplyScalar((0.5 * (L - e.L)) / L)
+        this._disp[e.a].add(this._ed)
+        this._disp[e.b].sub(this._ed)
+        this._cnt[e.a]++
+        this._cnt[e.b]++
+      }
+      for (let v = 0; v < this.world.length; v++) {
+        if (this._cnt[v] === 0 || this.anchor.has(v)) continue
+        // under-relax (omega < 1): Jacobi overshoots at high-valence vertices
+        // and oscillates; damping makes it converge smoothly instead.
+        this.world[v].addScaledVector(this._disp[v], 0.6 / this._cnt[v])
+      }
+    }
+
+    // Layer offsets. Walk the fold tree from the root: each time a facet folds
+    // back flat onto its parent it climbs one step in that parent's stack, and
+    // we shove it a paper-thickness along the stack's direction (the parent's
+    // face normal, captured once and carried unchanged through the stack so the
+    // layers spread monotonically instead of fanning back and forth). Facets
+    // joined by a gentle (non-flat) fold share their parent's offset, so plain
+    // creases stay welded with no gap.
+    for (const ti of this.order) {
+      const pa = this.parent[ti]
+      const off = this.layerOffset[ti]
+      if (pa < 0) { off.set(0, 0, 0); this._layerN[ti] = 0; this._stackDir[ti].set(0, 0, 0); continue }
+      const f = flatness(this._foldAngle[ti])
+      if (f > 0) {
+        if (this._layerN[pa] > 1e-3) {
+          this._stackDir[ti].copy(this._stackDir[pa])      // continue parent's stack
+        } else {
+          this._faceNormal(pa, this._stackDir[ti])         // start a new stack
+        }
+        this._layerN[ti] = this._layerN[pa] + f
+        off.copy(this.layerOffset[pa]).addScaledVector(this._stackDir[ti], THICKNESS * f)
+      } else {
+        this._layerN[ti] = 0
+        this._stackDir[ti].set(0, 0, 0)
+        off.copy(this.layerOffset[pa])                      // same layer as parent
+      }
+    }
+  }
+
+  // World-space normal of facet ti (its flat +z normal carried through its
+  // current transform).
+  _faceNormal(ti, out) {
+    return out.set(0, 0, 1).transformDirection(this.matrices[ti])
   }
 
   // Flat-shaded, non-indexed positions for every triangle (3 verts each), read
-  // from the welded shared-vertex positions so seams are sewn shut.
+  // from the welded shared-vertex positions (so seams stay sewn) plus the
+  // facet's layer offset (so stacked folds read as separate sheets of paper).
   writePositions(array) {
     let o = 0
     for (let ti = 0; ti < this.tris.length; ti++) {
+      const off = this.layerOffset[ti]
       for (let c = 0; c < 3; c++) {
         const w = this.world[this.tris[ti][c]]
-        array[o++] = w.x
-        array[o++] = w.y
-        array[o++] = w.z
+        array[o++] = w.x + off.x
+        array[o++] = w.y + off.y
+        array[o++] = w.z + off.z
       }
     }
     return array
