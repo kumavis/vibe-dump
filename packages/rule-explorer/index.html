@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rule Explorer — 3D state-transition graphs of elementary cellular automata</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="graph"></div>
+
+    <aside id="panel">
+      <header>
+        <h1>RULE EXPLORER</h1>
+        <p class="sub">elementary cellular automata · 3-D state graphs</p>
+      </header>
+
+      <section class="rule-pick">
+        <div class="rule-num">
+          <button id="prev" title="Previous rule (←)">‹</button>
+          <label>
+            <span>RULE</span>
+            <input id="rule" type="number" min="0" max="255" step="1" value="110" />
+          </label>
+          <button id="next" title="Next rule (→)">›</button>
+        </div>
+        <div class="rule-actions">
+          <button id="random">random</button>
+          <button id="interesting" title="Cycle through rules with rich graphs">surprise me</button>
+        </div>
+        <canvas id="ruleicon" width="416" height="120"></canvas>
+      </section>
+
+      <section class="evo">
+        <div class="section-label">spacetime <span class="hint">single seed, top-down</span></div>
+        <canvas id="spacetime" width="256" height="160"></canvas>
+      </section>
+
+      <section class="controls">
+        <label class="row">
+          <span>ring size <b id="widthval">9</b> cells <span class="hint" id="statecount"></span></span>
+          <input id="width" type="range" min="4" max="10" step="1" value="9" />
+        </label>
+        <label class="row toggle">
+          <input id="autorotate" type="checkbox" checked />
+          <span>auto-orbit</span>
+        </label>
+      </section>
+
+      <section class="stats" id="stats"></section>
+
+      <footer>
+        <p>Each node is one global state of a length-<i>N</i> ring (wrap-around).
+           A deterministic rule sends every state to exactly one successor, so the
+           graph is a <b>functional graph</b>: tangled transient trees draining into
+           the bright <b>attractor</b> cycles. Drag to orbit · scroll to zoom.</p>
+      </footer>
+    </aside>
+
+    <div id="loading">building state graph…</div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
