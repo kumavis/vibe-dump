@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/abyssal-ascent",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Abyssal Ascent",
+    "description": "Start as a glimmer in the midnight zone and devour your way up the food chain — larva to eel to serpent to leviathan to kraken. Rise toward the surface for richer prey, but the fishing boats are waiting with hooks, harpoons, and nets. Evolve. Ascend. Try not to get caught."
+  }
+}
