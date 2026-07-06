@@ -1,0 +1,84 @@
+import { useMemo } from 'react'
+import { classById, currentSnapshot, resolveSelection, useStore } from './store'
+
+export function Inspector() {
+  const run = useStore((s) => s.run)
+  const round = useStore((s) => s.round)
+  const selected = useStore((s) => s.selected)
+  const source = useStore((s) => s.source)
+  const select = useStore((s) => s.select)
+
+  const snapshot = useMemo(() => currentSnapshot({ run, round }), [run, round])
+  const selId = resolveSelection(run, selected, round)
+  const cls = classById(snapshot, selId)
+
+  if (!run) {
+    return <div className="inspector-empty">Compile a program, then click any node in the graph to inspect its e-class.</div>
+  }
+  if (!cls) {
+    return (
+      <div className="inspector-empty">
+        No class selected{selected ? ' (it does not exist at this round — step forward)' : ''}. Click a
+        node in the graph, or click a term in the source.
+      </div>
+    )
+  }
+
+  const isRoot = snapshot!.rootId === cls.id
+  const prov = [...cls.provenance].sort((a, b) => a.round - b.round)
+
+  return (
+    <div className="inspector">
+      <h3>{cls.label}</h3>
+      <div className="class-id">
+        e-class #{cls.id}
+        {isRoot && ' · root (main)'} · {cls.settled ? 'settled' : 'unsettled'} · round {round}
+      </div>
+
+      <section>
+        <h4>
+          alternatives ({cls.alts.length}) — grow-only set
+        </h4>
+        <ul className="alt-list">
+          {cls.alts.map((a) => (
+            <li key={a.key} className={cls.best && a.key === cls.best.key ? 'best' : ''}>
+              {a.pretty}
+              {cls.best && a.key === cls.best.key && <span className="cost">best · cost {cls.best.cost}</span>}
+            </li>
+          ))}
+        </ul>
+        {!cls.best && <div style={{ color: 'var(--text-dim)', fontSize: 12 }}>no finite-cost form known yet</div>}
+      </section>
+
+      <section>
+        <h4>provenance — who learned what, when</h4>
+        <ul className="prov-list">
+          {prov.map((p, i) => (
+            <li key={i}>
+              <span className="round-tag">R{p.round}</span>
+              <span className="rule">{p.rule}</span> {p.detail}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h4>source spans ({cls.spans.length})</h4>
+        <ul className="span-list">
+          {cls.spans
+            .slice()
+            .sort((a, b) => a.start - b.start)
+            .map((s, i) => (
+              <li
+                key={i}
+                title="click to re-select (scrolls the editor)"
+                onClick={() => select(cls.id)}
+              >
+                [{s.start}–{s.end}] {source.slice(s.start, s.end).replace(/\s+/g, ' ').trim() || '…'}
+              </li>
+            ))}
+        </ul>
+      </section>
+    </div>
+  )
+}

@@ -116,6 +116,8 @@ export function compileProgram(program: Program, source: string): Compiled {
     round: 0,
     detail: 'interned from main',
   })
+  // The initial network already knows its best costs (literals are free).
+  egraph.recomputeBest()
   // Compilation-time allocations are round 0's topology, not round 1's.
   egraph.drainRoundChanges()
   return { egraph, rootId, defs }

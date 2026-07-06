@@ -61,7 +61,8 @@ export function prettyNode(egraph: EGraph, node: ENode, depth: number): string {
     return `if ${classLabel(egraph, c, depth - 1)} then ${classLabel(egraph, t, depth - 1)} else ${classLabel(egraph, e, depth - 1)}`
   }
   const [a, b] = node.args
-  return `${classLabel(egraph, a, depth - 1)} ${node.op} ${classLabel(egraph, b, depth - 1)}`
+  const paren = (s: string): string => (s.includes(' ') ? `(${s})` : s)
+  return `${paren(classLabel(egraph, a, depth - 1))} ${node.op} ${paren(classLabel(egraph, b, depth - 1))}`
 }
 
 /** Best-known representative label of a class. */
