@@ -3,7 +3,14 @@
  * re-running the engine; programs are small, so snapshot-per-round is fine.
  */
 import type { Span } from '../lang/span'
-import { type EClassId, EGraph, type ENode, type ProvenanceEntry, nodeKeyOf } from './egraph'
+import {
+  type EClassId,
+  EGraph,
+  type ENode,
+  type ProvenanceEntry,
+  type TighteningRecord,
+  nodeKeyOf,
+} from './egraph'
 
 export interface FiringRecord {
   rule: string
@@ -18,9 +25,11 @@ export interface RoundLog {
   newClasses: EClassId[]
   merges: { a: EClassId; b: EClassId; result: EClassId; rule: string }[]
   changedCells: EClassId[]
-  fuelRemaining: number
-  /** How many unfold instances were enabled but blocked by empty fuel. */
-  blockedByFuel: number
+  /** CO-5: classes whose best cost strictly tightened this round (label flash). */
+  tightened: TighteningRecord[]
+  /** CO-8: classes that became demanded this round (the demand wavefront). */
+  newlyDemanded: EClassId[]
+  classCount: number
 }
 
 export interface SnapNode {
@@ -38,15 +47,18 @@ export interface SnapClass {
   alts: SnapNode[]
   best: { cost: number; key: string; pretty: string } | null
   spans: Span[]
+  /** CO-2/CO-2.3: the provenance SET; presentation order is derived at render time. */
   provenance: ProvenanceEntry[]
   /** best is a literal — this cell has settled. */
   settled: boolean
+  /** CO-8: false = the program does not (yet) need this class; render ghosted. */
+  demanded: boolean
 }
 
 export interface Snapshot {
   classes: SnapClass[]
   rootId: EClassId
-  fuel: number
+  classCount: number
 }
 
 /** Pretty-print a node, rendering children by their best-known label. */
@@ -74,7 +86,11 @@ export function classLabel(egraph: EGraph, id: EClassId, depth = 3): string {
   return prettyNode(egraph, node, depth)
 }
 
-export function takeSnapshot(egraph: EGraph, rootId: EClassId, fuel: number): Snapshot {
+export function takeSnapshot(
+  egraph: EGraph,
+  rootId: EClassId,
+  demanded: ReadonlySet<EClassId> | null,
+): Snapshot {
   const classes: SnapClass[] = []
   for (const id of egraph.classIds()) {
     const cell = egraph.getCell(id)
@@ -102,11 +118,12 @@ export function takeSnapshot(egraph: EGraph, rootId: EClassId, fuel: number): Sn
       label: classLabel(egraph, id, 2),
       alts,
       best,
-      spans: egraph.getSpans(id),
-      provenance: cell.provenance,
+      spans: egraph.spansOf(id),
+      provenance: [...cell.provenance.values()],
       settled: cell.best !== null && cell.best.node.op === 'lit',
+      demanded: demanded === null ? true : demanded.has(egraph.find(id)),
     })
   }
   classes.sort((a, b) => a.id - b.id)
-  return { classes, rootId: egraph.find(rootId), fuel }
+  return { classes, rootId: egraph.find(rootId), classCount: classes.length }
 }

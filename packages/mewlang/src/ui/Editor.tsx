@@ -89,8 +89,10 @@ export function Editor() {
   const source = useStore((s) => s.source)
   const exampleId = useStore((s) => s.exampleId)
   const dirty = useStore((s) => s.dirty)
-  const fuel = useStore((s) => s.fuel)
-  const shuffle = useStore((s) => s.shuffle)
+  const budgetRounds = useStore((s) => s.budgetRounds)
+  const budgetClasses = useStore((s) => s.budgetClasses)
+  const mode = useStore((s) => s.mode)
+  const demandOn = useStore((s) => s.demandOn)
   const seed = useStore((s) => s.seed)
   const run = useStore((s) => s.run)
   const round = useStore((s) => s.round)
@@ -168,8 +170,10 @@ export function Editor() {
 
   const compile = useStore((s) => s.compile)
   const loadExample = useStore((s) => s.loadExample)
-  const setFuel = useStore((s) => s.setFuel)
-  const setShuffle = useStore((s) => s.setShuffle)
+  const setBudgetRounds = useStore((s) => s.setBudgetRounds)
+  const setBudgetClasses = useStore((s) => s.setBudgetClasses)
+  const setMode = useStore((s) => s.setMode)
+  const setDemandOn = useStore((s) => s.setDemandOn)
   const reseed = useStore((s) => s.reseed)
 
   return (
@@ -196,25 +200,43 @@ export function Editor() {
       </div>
       <div className="editor-host" ref={hostRef} />
       <div className="editor-controls">
-        <label>
-          fuel
+        <label title="Scheduler budget: max rounds (checked between rounds only, never inside one)">
+          budget: rounds
           <input
             className="fuel-input"
             type="number"
             min={1}
-            value={fuel}
-            onChange={(e) => setFuel(Number(e.target.value))}
+            value={budgetRounds}
+            onChange={(e) => setBudgetRounds(Number(e.target.value))}
           />
         </label>
-        <label title="Apply each round's updates in a seeded-random order — the result cannot change (CALM)">
-          <input type="checkbox" checked={shuffle} onChange={(e) => setShuffle(e.target.checked)} />
-          shuffle firing order
+        <label title="Scheduler budget: max classes (checked between rounds only)">
+          classes
+          <input
+            className="fuel-input"
+            type="number"
+            min={4}
+            value={budgetClasses}
+            onChange={(e) => setBudgetClasses(Number(e.target.value))}
+          />
         </label>
-        {shuffle && (
-          <button onClick={reseed} title="Pick a new shuffle seed">
+        <label title="BSP = rounds in order · shuffled = seeded-random delta order within rounds · chaos = no rounds, one random firing at a time. The answer cannot change (CALM).">
+          scheduler
+          <select value={mode} onChange={(e) => setMode(e.target.value as 'bsp' | 'shuffle' | 'chaos')}>
+            <option value="bsp">BSP</option>
+            <option value="shuffle">BSP, shuffled</option>
+            <option value="chaos">chaos (no rounds)</option>
+          </select>
+        </label>
+        {mode !== 'bsp' && (
+          <button onClick={reseed} title="Pick a new seed">
             seed {seed}
           </button>
         )}
+        <label title="Demand-driven unfolding (lesson 9): only calls the program still needs are unfolded">
+          <input type="checkbox" checked={demandOn} onChange={(e) => setDemandOn(e.target.checked)} />
+          demand
+        </label>
         {dirty && run && <span style={{ color: 'var(--amber)', fontSize: 12 }}>edited — recompile</span>}
       </div>
       <Console />
@@ -235,38 +257,47 @@ function Console() {
       {!error && !run && <div className="status-idle">Press Compile to build the network. 🐾</div>}
       {!error && run && (
         <>
+          {run.soundnessViolations.length > 0 && (
+            <div className="soundness-banner">
+              ⚠ soundness violation — engine bug: {run.soundnessViolations[0]}
+            </div>
+          )}
           <div
             className={
               run.status === 'quiescent'
                 ? 'status-quiescent'
-                : run.status === 'fuel-exhausted'
+                : run.status === 'budget-exhausted'
                   ? 'status-fuel'
                   : 'status-idle'
             }
           >
             {run.status === 'quiescent' && `QUIESCENT after ${run.rounds.length} rounds`}
-            {run.status === 'fuel-exhausted' && `FUEL-EXHAUSTED after ${run.rounds.length} rounds`}
-            {run.status === 'round-limit' && `stopped at round limit (${run.rounds.length})`}
+            {run.status === 'budget-exhausted' && `BUDGET-EXHAUSTED after ${run.rounds.length} rounds`}
             {` — viewing round ${round}/${run.rounds.length}`}
           </div>
           <div className="answer">
             main = <b>{run.extraction.pretty}</b>
-            {!run.extraction.isLiteral && ' (cheapest known form — not a literal)'}
+            {!run.extraction.isLiteral &&
+              ' (cheapest known form — not a literal; raise the budget and recompile)'}
           </div>
           <div className="prov-summary">
             extraction: cost {run.extraction.cost === Infinity ? '∞' : run.extraction.cost} · {run.classCount}{' '}
             classes · {run.altCount} alternatives
-            {run.seed !== null && ` · shuffled, seed ${run.seed}`}
+            {run.seed !== null && ` · ${run.mode}, seed ${run.seed}`}
           </div>
           <div className="confluence-report">
-            <button onClick={verifyConfluence} title="Run 10 shuffled executions and compare results">
+            <button
+              onClick={verifyConfluence}
+              title="Run 10 seeded-shuffle executions. All quiescent → compare full canonical states; any budget-exhausted → compare extracted answers only (A3.1)"
+            >
               Verify confluence ×10
             </button>
             {confluence && (
               <div className={confluence.ok ? 'confluence-ok' : 'confluence-bad'}>
-                {confluence.ok
-                  ? `✓ 10/10 runs agree: ${confluence.runs[0].answer} · ${confluence.runs[0].classes} classes · ${confluence.runs[0].alts} alts (seeds ${confluence.runs[0].seed}…${confluence.runs[confluence.runs.length - 1].seed})`
-                  : '✗ runs diverged — this would falsify CALM; please report it!'}
+                {confluence.ok ? '✓ ' : '✗ '}
+                {confluence.detail}
+                {confluence.ok &&
+                  ` (seeds ${confluence.seeds[0]}…${confluence.seeds[confluence.seeds.length - 1]})`}
               </div>
             )}
           </div>

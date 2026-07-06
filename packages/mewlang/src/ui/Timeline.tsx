@@ -34,7 +34,7 @@ export function Timeline() {
     if (!run) return ''
     if (round === 0) {
       const n = run.snapshots[0].classes.length
-      return `R0: initial network — ${n} classes interned from main, fuel ${run.snapshots[0].fuel}`
+      return `R0: initial network — ${n} classes interned from main`
     }
     const rl = currentRoundLog({ run, round })
     if (!rl) return ''
@@ -50,8 +50,9 @@ export function Timeline() {
     }
     if (rl.newClasses.length) parts.push(`+${rl.newClasses.length} classes`)
     if (rl.merges.length) parts.push(`${rl.merges.length} merge${rl.merges.length > 1 ? 's' : ''}`)
-    parts.push(`fuel ${rl.fuelRemaining}`)
-    if (rl.blockedByFuel > 0) parts.push(`⚠ ${rl.blockedByFuel} unfolds blocked by fuel`)
+    if (rl.tightened.length) parts.push(`${rl.tightened.length} cost↓`)
+    if (rl.newlyDemanded.length) parts.push(`+${rl.newlyDemanded.length} demanded`)
+    parts.push(`${rl.classCount} classes total`)
     return `R${rl.round}: ${parts.join(', ')}`
   }, [run, round])
 
