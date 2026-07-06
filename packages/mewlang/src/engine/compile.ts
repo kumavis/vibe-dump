@@ -10,7 +10,7 @@
 import type { Def, Expr, Program } from '../lang/ast'
 import type { Span } from '../lang/span'
 import { caretSnippet, lineCol } from '../lang/span'
-import { EGraph, type EClassId, type ProvenanceEntry } from './egraph'
+import { EGraph, type EClassId, type EGraphOptions, type ProvenanceEntry } from './egraph'
 
 export class CompileError extends Error {
   constructor(
@@ -104,18 +104,17 @@ export function internExpr(
   }
 }
 
-export function compileProgram(program: Program, source: string): Compiled {
+export function compileProgram(program: Program, source: string, opts: EGraphOptions = {}): Compiled {
   const defs = new Map<string, Def>()
   for (const d of program.defs) defs.set(d.name, d)
   for (const d of program.defs) checkExpr(d.body, new Set(d.params), defs, source)
   checkExpr(program.main, new Set(), defs, source)
 
-  const egraph = new EGraph()
-  const rootId = internExpr(egraph, program.main, new Map(), {
-    rule: 'compile',
-    round: 0,
-    detail: 'interned from main',
-  })
+  const egraph = new EGraph(opts)
+  // No provenance at compile time: provenance records RULE firings (CO-2),
+  // and interning main is round 0's topology, not a firing. A class with an
+  // empty provenance set has never been touched by a rule.
+  const rootId = internExpr(egraph, program.main, new Map())
   // The initial network already knows its best costs (literals are free).
   egraph.recomputeBest()
   // Compilation-time allocations are round 0's topology, not round 1's.

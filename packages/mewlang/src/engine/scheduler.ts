@@ -1,27 +1,59 @@
 /**
- * The BSP (bulk-synchronous parallel) scheduler.
+ * The scheduler. Owns WHEN work happens and when we give up (A6): rounds,
+ * shuffling, budgets, the RoundLog. It may read semantics freely; semantics
+ * (the e-graph, the lattices, the rules) never reads it back.
  *
- * Each round: read a snapshot → collect ALL enabled rule instances → apply
- * their deltas (topology phase, then merge phase, then congruence repair,
- * then monotone best-cost tightening) → log the round. Because every rule is
- * monotone, the order deltas are applied in cannot change the quiescent
- * state — "confluence mode" shuffles that order with a seeded RNG to
- * demonstrate it empirically.
+ * Modes:
+ * - 'bsp' (default): each round, ALL enabled rule instances fire against the
+ *   start-of-round snapshot; deltas apply in a fixed order.
+ * - 'shuffle': identical rounds, but delta application order within each
+ *   phase is permuted by a seeded RNG. Because every rule is monotone and
+ *   every write is an ACI join, the quiescent state cannot change — this is
+ *   the app's empirical confluence demonstration.
+ * - 'chaos' (CO-9 stretch): no rounds at all — repeatedly pick ONE enabled
+ *   firing at random and apply it immediately, until none remain. One firing
+ *   per RoundLog entry, so the timeline works unchanged. The strongest
+ *   in-app witness that the barriers between rounds are a scheduling
+ *   convenience, not the source of the guarantee (A3.3).
+ *
+ * CO-1: budget lives HERE, never in the rules. It is checked between rounds
+ * only ('chaos': between firings): maxRounds and maxClasses. Within a round,
+ * all enabled firings always fire — never a subset — so budget pressure can
+ * truncate the round sequence but never alter round contents.
  */
 import type { Program } from '../lang/ast'
 import { type Compiled, compileProgram, internExpr } from './compile'
-import { type EClassId, EGraph } from './egraph'
+import { type EClassId, EGraph, type ProvenanceEntry } from './egraph'
 import { type Extraction, extract } from './extract'
 import { type FiringRecord, type RoundLog, type Snapshot, takeSnapshot } from './roundlog'
-import { computeDemand, ruleArith, ruleIf, ruleUnfold } from './rules'
+import {
+  type ArithMutation,
+  type Delta,
+  ruleArith,
+  ruleDemand,
+  ruleIf,
+  ruleUnfold,
+} from './rules'
 
-export type RunStatus = 'running' | 'quiescent' | 'fuel-exhausted' | 'round-limit'
+export type RunStatus = 'running' | 'quiescent' | 'budget-exhausted'
+export type SchedulerMode = 'bsp' | 'shuffle' | 'chaos'
 
 export interface EvalOptions {
-  fuel?: number
-  /** Seed for shuffled delta application (confluence mode). null = in order. */
-  shuffleSeed?: number | null
+  /** CO-1: rounds budget, checked between rounds only. */
   maxRounds?: number
+  /** CO-1: class-count budget, checked between rounds only. */
+  maxClasses?: number
+  mode?: SchedulerMode
+  /** Seed for 'shuffle' and 'chaos' modes. */
+  seed?: number
+  /** CO-4: disable the unfold-dedup latch; the fixpoint must not change. */
+  dedupUnfolds?: boolean
+  /** CO-8: demand-driven unfolding (the lesson-9 engine flag). */
+  demand?: boolean
+  /** CO-7: literal-collision tripwire mode (strict throws; UI uses false). */
+  strictSoundness?: boolean
+  /** CO-7 mutation-test injection. Test-only. */
+  _mutation?: ArithMutation
 }
 
 export interface EvalResult {
@@ -33,7 +65,9 @@ export interface EvalResult {
   extraction: Extraction
   classCount: number
   altCount: number
+  mode: SchedulerMode
   seed: number | null
+  soundnessViolations: string[]
 }
 
 /** mulberry32 — tiny deterministic PRNG. */
@@ -55,111 +89,211 @@ function shuffleInPlace<T>(arr: T[], rng: () => number): void {
   }
 }
 
+const CHAOS_FIRINGS_PER_ROUND_BUDGET = 8
+
 export class Evaluator {
   readonly egraph: EGraph
   readonly rootId: EClassId
   private defs: Compiled['defs']
+  /** CO-4: grow-only latch set of unfolded call-node keys (re-canonicalized). */
   private unfolded = new Set<string>()
+  /** CO-8: the demand lattice — canonical ids, grows monotonically. */
+  private demanded: Set<EClassId> | null
   private rng: (() => number) | null
+  readonly mode: SchedulerMode
   readonly seed: number | null
+  private maxRounds: number
+  private maxClasses: number
+  private dedupUnfolds: boolean
+  private mutation?: ArithMutation
 
-  fuel: number
   status: RunStatus = 'running'
   rounds: RoundLog[] = []
   snapshots: Snapshot[] = []
-  private maxRounds: number
 
   constructor(program: Program, source: string, opts: EvalOptions = {}) {
-    const compiled = compileProgram(program, source)
+    const compiled = compileProgram(program, source, {
+      strictSoundness: opts.strictSoundness ?? true,
+    })
     this.egraph = compiled.egraph
     this.rootId = compiled.rootId
     this.defs = compiled.defs
-    this.fuel = opts.fuel ?? 256
-    this.maxRounds = opts.maxRounds ?? 2000
-    this.seed = opts.shuffleSeed ?? null
+    this.maxRounds = opts.maxRounds ?? 64
+    this.maxClasses = opts.maxClasses ?? 2000
+    this.mode = opts.mode ?? 'bsp'
+    this.seed = this.mode === 'bsp' ? null : (opts.seed ?? 1)
     this.rng = this.seed === null ? null : mulberry32(this.seed)
-    this.snapshots.push(takeSnapshot(this.egraph, this.rootId, this.fuel))
+    this.dedupUnfolds = opts.dedupUnfolds ?? true
+    this.demanded = (opts.demand ?? true) ? new Set([this.egraph.find(this.rootId)]) : null
+    this.mutation = opts._mutation
+    this.snapshots.push(takeSnapshot(this.egraph, this.rootId, this.currentDemand()))
   }
 
-  /** Execute one BSP round. Returns false once the network has stopped. */
+  /**
+   * Recompute the demand closure from the current state and assert CO-8's
+   * grow-only property: no previously demanded class may drop out (modulo
+   * canonicalization — merged ids collapse onto their survivor).
+   */
+  private currentDemand(): Set<EClassId> | null {
+    if (this.demanded === null) return null
+    const next = ruleDemand(this.egraph, this.rootId)
+    for (const old of this.demanded) {
+      if (!next.has(this.egraph.find(old))) {
+        throw new Error(`demand lattice shrank: class ${old} lost demand (CO-8 violation)`)
+      }
+    }
+    this.demanded = next
+    return next
+  }
+
+  /** Execute one BSP round (or one chaos firing). Returns false once stopped. */
   step(): boolean {
     if (this.status !== 'running') return false
-    if (this.rounds.length >= this.maxRounds) {
-      this.status = 'round-limit'
-      return false
-    }
-    const round = this.rounds.length + 1
+    return this.mode === 'chaos' ? this.stepChaos() : this.stepRound()
+  }
+
+  private gather(): { arith: Delta[]; ifs: Delta[]; unfolds: Delta[]; demanded: Set<EClassId> | null } {
     const eg = this.egraph
+    const demanded = this.currentDemand()
+    const arith = ruleArith(eg, this.mutation)
+    const ifs = ruleIf(eg)
+    const unfolds = ruleUnfold(eg, this.defs, this.dedupUnfolds ? this.unfolded : null, demanded)
+    return { arith, ifs, unfolds, demanded }
+  }
+
+  /** CO-5.2: quiescence = empty firing set AND the cost fixpoint is stable. */
+  private declareQuiescentOrKeepRunning(): boolean {
+    const extra = this.egraph.recomputeBest()
+    if (extra.length > 0) {
+      // A cost source outside the per-round fixpoint would land here. There
+      // is none today; treat any occurrence as an engine bug.
+      throw new Error('quiescence check: cost fixpoint was not stable (CO-5 violation)')
+    }
+    this.egraph.drainRoundChanges()
+    this.status = 'quiescent'
+    return false
+  }
+
+  private budgetExceeded(): boolean {
+    return this.rounds.length >= this.maxRoundsEffective() || this.egraph.classCount() > this.maxClasses
+  }
+
+  private maxRoundsEffective(): number {
+    // Chaos logs one FIRING per RoundLog entry, so scale the round budget.
+    return this.mode === 'chaos' ? this.maxRounds * CHAOS_FIRINGS_PER_ROUND_BUDGET : this.maxRounds
+  }
+
+  private stepRound(): boolean {
+    const round = this.rounds.length + 1
 
     // ---- Read phase: all enabled rule instances against the round snapshot.
-    // (Rules only read; nothing is applied until every rule has run.)
-    const arithDeltas = ruleArith(eg)
-    const ifDeltas = ruleIf(eg)
-    const demanded = computeDemand(eg, this.rootId)
-    let unfoldDeltas = ruleUnfold(eg, this.defs, this.unfolded, demanded)
-
-    // Fuel gates unfolding only.
-    let blockedByFuel = 0
-    if (unfoldDeltas.length > this.fuel) {
-      blockedByFuel = unfoldDeltas.length - this.fuel
-      unfoldDeltas = unfoldDeltas.slice(0, this.fuel)
+    const { arith, ifs, unfolds, demanded } = this.gather()
+    if (arith.length + ifs.length + unfolds.length === 0) {
+      return this.declareQuiescentOrKeepRunning()
     }
 
-    if (arithDeltas.length + ifDeltas.length + unfoldDeltas.length === 0) {
-      this.status = blockedByFuel > 0 ? 'fuel-exhausted' : 'quiescent'
+    // ---- CO-1: budget check between rounds, BEFORE firing. All-or-nothing:
+    // we either fire every enabled instance of this round or stop here.
+    if (this.budgetExceeded()) {
+      this.status = 'budget-exhausted'
       return false
     }
 
     // ---- Confluence mode: shuffle application order within each phase.
-    if (this.rng) {
-      shuffleInPlace(arithDeltas, this.rng)
-      shuffleInPlace(ifDeltas, this.rng)
-      shuffleInPlace(unfoldDeltas, this.rng)
+    if (this.rng && this.mode === 'shuffle') {
+      shuffleInPlace(arith, this.rng)
+      shuffleInPlace(ifs, this.rng)
+      shuffleInPlace(unfolds, this.rng)
     }
 
     const firings: FiringRecord[] = []
+    this.applyDeltas(round, arith, ifs, unfolds, firings)
+    this.finishRound(round, firings, demanded)
+    return true
+  }
+
+  /** CO-9 stretch: one enabled firing at a time, chosen at random, no rounds. */
+  private stepChaos(): boolean {
+    const round = this.rounds.length + 1
+    const { arith, ifs, unfolds, demanded } = this.gather()
+    const all = [...arith, ...ifs, ...unfolds]
+    if (all.length === 0) return this.declareQuiescentOrKeepRunning()
+    if (this.budgetExceeded()) {
+      this.status = 'budget-exhausted'
+      return false
+    }
+    const pick = all[Math.floor(this.rng!() * all.length)]
+    const firings: FiringRecord[] = []
+    this.applyDeltas(
+      round,
+      pick.type === 'addAlt' ? [pick] : [],
+      pick.type === 'union' ? [pick] : [],
+      pick.type === 'unfold' ? [pick] : [],
+      firings,
+    )
+    this.finishRound(round, firings, demanded)
+    return true
+  }
+
+  /** Topology phase, then merge phase (AddAlts → Unions → congruence). */
+  private applyDeltas(
+    round: number,
+    arith: Delta[],
+    ifs: Delta[],
+    unfolds: Delta[],
+    firings: FiringRecord[],
+  ): void {
+    const eg = this.egraph
 
     // ---- Topology phase: process AllocClass requests (instantiate bodies).
-    const pendingUnions: { a: EClassId; b: EClassId; rule: string; detail: string; reads: EClassId[] }[] = []
-    for (const d of unfoldDeltas) {
+    const pendingUnions: { a: EClassId; b: EClassId; prov: ProvenanceEntry }[] = []
+    for (const d of unfolds) {
       if (d.type !== 'unfold') continue
       const def = this.defs.get(d.fn)!
       const env = new Map<string, EClassId>()
       def.params.forEach((p, i) => env.set(p, d.argClasses[i]))
-      const bodyClass = internExpr(eg, def.body, env, {
+      const prov: ProvenanceEntry = {
         rule: 'R-unfold',
         round,
-        detail: `unfolded ${d.detail}`,
-      })
-      this.unfolded.add(d.nodeKey)
-      this.fuel--
-      pendingUnions.push({
-        a: d.callClass,
-        b: bodyClass,
-        rule: 'R-unfold',
+        premises: d.reads,
         detail: `unfold ${d.detail}`,
-        reads: d.reads,
-      })
-      firings.push({ rule: 'R-unfold', detail: d.detail, reads: d.reads, writes: [d.callClass] })
+      }
+      const bodyClass = internExpr(eg, def.body, env, prov)
+      this.unfolded.add(d.nodeKey)
+      pendingUnions.push({ a: d.callClass, b: bodyClass, prov })
+      firings.push({ rule: 'R-unfold', detail: d.detail, reads: d.reads, writes: [eg.find(d.callClass)] })
     }
 
-    // ---- Merge phase: all AddAlt joins, then all unions, then congruence.
-    for (const d of arithDeltas) {
+    // ---- Merge phase: all AddAlt joins, then all unions, then congruence
+    // repair to fixpoint (CO-6). Deltas canonicalize inside the EGraph
+    // methods at application time, never at emission time (A5).
+    for (const d of arith) {
       if (d.type !== 'addAlt') continue
-      eg.addAlt(d.classId, d.node, d.rule, round, d.detail)
+      eg.addAlt(d.classId, d.node, { rule: d.rule, round, premises: d.reads, detail: d.detail })
       firings.push({ rule: d.rule, detail: d.detail, reads: d.reads, writes: [eg.find(d.classId)] })
     }
-    for (const d of ifDeltas) {
+    for (const d of ifs) {
       if (d.type !== 'union') continue
-      eg.addProvenance(d.a, { rule: d.rule, round, detail: d.detail })
+      eg.addProvenance(d.a, { rule: d.rule, round, premises: d.reads, detail: d.detail })
       eg.union(d.a, d.b, d.rule, d.detail)
       firings.push({ rule: d.rule, detail: d.detail, reads: d.reads, writes: [eg.find(d.a)] })
     }
     for (const u of pendingUnions) {
-      eg.union(u.a, u.b, u.rule, u.detail)
+      eg.union(u.a, u.b, u.prov.rule, u.prov.detail)
+      eg.addProvenance(u.a, u.prov)
     }
-    const congruences = eg.rebuild(round)
+    const congruences = eg.rebuild()
     for (const c of congruences) {
+      // Premise-free provenance key: which pair merged first in a multi-way
+      // congruence is application-order-dependent, so recording the pair
+      // would leak schedule into the lattice (CO-2). The fact recorded —
+      // "a structural merge happened here in round R" — is schedule-invariant.
+      eg.addProvenance(c.result, {
+        rule: 'R-congruence',
+        round,
+        premises: [],
+        detail: 'structurally identical nodes merged',
+      })
       firings.push({
         rule: 'R-congruence',
         detail: c.detail,
@@ -167,9 +301,17 @@ export class Evaluator {
         writes: [eg.find(c.result)],
       })
     }
+  }
 
-    // ---- Monotone tightening of best costs.
-    eg.recomputeBest()
+  private finishRound(
+    round: number,
+    firings: FiringRecord[],
+    demandedBefore: Set<EClassId> | null,
+  ): void {
+    const eg = this.egraph
+
+    // ---- CO-5: monotone tightening of best costs, to fixpoint.
+    const tightened = eg.recomputeBest()
 
     // Re-canonicalize unfold marks (keys may have changed under merges).
     this.unfolded = new Set(
@@ -179,6 +321,15 @@ export class Evaluator {
       }),
     )
 
+    // ---- Demand wavefront for the UI: what became demanded this round.
+    let newlyDemanded: EClassId[] = []
+    if (demandedBefore !== null) {
+      const after = ruleDemand(eg, this.rootId)
+      const beforeCanon = new Set([...demandedBefore].map((id) => eg.find(id)))
+      newlyDemanded = [...after].filter((id) => !beforeCanon.has(id))
+      this.demanded = after
+    }
+
     const changes = eg.drainRoundChanges()
     this.rounds.push({
       round,
@@ -186,11 +337,11 @@ export class Evaluator {
       newClasses: changes.newClasses,
       merges: changes.merges.map((m) => ({ a: m.a, b: m.b, result: m.result, rule: m.rule })),
       changedCells: [...new Set(changes.dirty)],
-      fuelRemaining: this.fuel,
-      blockedByFuel,
+      tightened,
+      newlyDemanded,
+      classCount: eg.classCount(),
     })
-    this.snapshots.push(takeSnapshot(eg, this.rootId, this.fuel))
-    return true
+    this.snapshots.push(takeSnapshot(eg, this.rootId, this.demanded))
   }
 
   run(): EvalResult {
@@ -210,7 +361,9 @@ export class Evaluator {
       extraction: extract(this.egraph, this.rootId),
       classCount: this.egraph.classCount(),
       altCount: snap.classes.reduce((n, c) => n + c.alts.length, 0),
+      mode: this.mode,
       seed: this.seed,
+      soundnessViolations: this.egraph.soundnessViolations,
     }
   }
 }

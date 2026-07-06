@@ -178,14 +178,18 @@ export function Graph() {
     const born = new Set<number>()
     const merged = new Set<number>()
     const gained = new Set<number>()
+    const tightened = new Set<number>()
+    const demandedNow = new Set<number>()
     if (roundLog) {
       for (const id of roundLog.newClasses) born.add(id)
       for (const m of roundLog.merges) if (!born.has(m.result)) merged.add(m.result)
       for (const id of roundLog.changedCells) {
         if (!born.has(id) && !merged.has(id)) gained.add(id)
       }
+      for (const t of roundLog.tightened) tightened.add(t.classId)
+      for (const id of roundLog.newlyDemanded) demandedNow.add(id)
     }
-    return { born, merged, gained }
+    return { born, merged, gained, tightened, demandedNow }
   }, [roundLog])
 
   const srcHits = useMemo(() => {
@@ -499,9 +503,12 @@ export function Graph() {
               const cls = [
                 'node',
                 c.settled ? 'settled' : '',
+                !c.demanded ? 'ghost' : '',
                 nodeStates.born.has(c.id) && forward ? 'born' : '',
                 nodeStates.merged.has(c.id) && forward ? 'merged-now' : '',
                 nodeStates.gained.has(c.id) && forward ? 'gained' : '',
+                nodeStates.tightened.has(c.id) && forward ? 'tightened' : '',
+                nodeStates.demandedNow.has(c.id) && forward ? 'demanded-now' : '',
                 isRoot ? 'root' : '',
                 hoveredNode === c.id ? 'hovered' : '',
                 selectedId === c.id ? 'selected' : '',
@@ -553,6 +560,7 @@ function Legend({ degraded }: { degraded: boolean }) {
     { fill: '#4a3a63', stroke: 'var(--node-merged)', label: 'merged this round' },
     { fill: 'var(--node-settled)', stroke: 'var(--green)', label: 'settled (best is a literal)' },
     { fill: 'transparent', stroke: 'var(--accent)', label: 'root class (main)' },
+    { fill: 'transparent', stroke: '#3d4658', label: 'ghosted = not demanded' },
   ]
   return (
     <div className="legend">

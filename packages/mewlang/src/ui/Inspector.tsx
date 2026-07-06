@@ -25,7 +25,12 @@ export function Inspector() {
   }
 
   const isRoot = snapshot!.rootId === cls.id
-  const prov = [...cls.provenance].sort((a, b) => a.round - b.round)
+  // CO-2.3: presentation order is derived at render time, never stored —
+  // provenance itself is an unordered lattice set.
+  const prov = [...cls.provenance].sort(
+    (a, b) =>
+      a.round - b.round || a.rule.localeCompare(b.rule) || a.premises.join().localeCompare(b.premises.join()),
+  )
 
   return (
     <div className="inspector">
@@ -52,14 +57,24 @@ export function Inspector() {
 
       <section>
         <h4>provenance — who learned what, when</h4>
-        <ul className="prov-list">
-          {prov.map((p, i) => (
-            <li key={i}>
-              <span className="round-tag">R{p.round}</span>
-              <span className="rule">{p.rule}</span> {p.detail}
-            </li>
-          ))}
-        </ul>
+        {prov.length === 0 ? (
+          <div style={{ color: 'var(--text-dim)', fontSize: 12 }}>
+            empty — interned at compile time; no rule has ever touched this class
+            {!cls.demanded && ' (and it is not demanded)'}
+          </div>
+        ) : (
+          <ul className="prov-list">
+            {prov.map((p, i) => (
+              <li key={i}>
+                <span className="round-tag">R{p.round}</span>
+                <span className="rule">{p.rule}</span> {p.detail}
+                {p.premises.length > 0 && (
+                  <span style={{ color: 'var(--text-dim)' }}> ⟨from #{p.premises.join(', #')}⟩</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section>

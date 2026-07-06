@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { parse } from '../lang/parser'
-import { Evaluator, type EvalResult } from '../engine/scheduler'
+import { Evaluator, type EvalResult, type SchedulerMode } from '../engine/scheduler'
+import { compareRuns, type ConfluenceComparison } from '../engine/fingerprint'
 import type { RoundLog, SnapClass, Snapshot } from '../engine/roundlog'
 import { EXAMPLES, exampleById } from '../examples'
 import { LESSONS, type LessonCtx } from './lessons/lessons'
@@ -10,25 +11,20 @@ export interface Selection {
   round: number
 }
 
-export interface ConfluenceRun {
-  seed: number
-  answer: string
-  classes: number
-  alts: number
-  rounds: number
-}
-
-export interface ConfluenceReport {
-  ok: boolean
-  runs: ConfluenceRun[]
+export interface ConfluenceReport extends ConfluenceComparison {
+  runCount: number
+  answers: string[]
+  seeds: number[]
 }
 
 export interface AppState {
   source: string
   exampleId: string
   dirty: boolean
-  fuel: number
-  shuffle: boolean
+  budgetRounds: number
+  budgetClasses: number
+  mode: SchedulerMode
+  demandOn: boolean
   seed: number
   error: string | null
   run: EvalResult | null
@@ -55,8 +51,10 @@ export interface AppState {
   stepBack(): void
   setPlaying(p: boolean): void
   setSpeed(x: number): void
-  setFuel(f: number): void
-  setShuffle(b: boolean): void
+  setBudgetRounds(n: number): void
+  setBudgetClasses(n: number): void
+  setMode(m: SchedulerMode): void
+  setDemandOn(b: boolean): void
   reseed(): void
   select(id: number | null): void
   hoverNode(id: number | null): void
@@ -136,12 +134,22 @@ export function lessonCtx(s: AppState): LessonCtx {
     selectedClass: classById(snap, selId),
     confluence: s.confluence,
     source: s.source,
+    demandOn: s.demandOn,
   }
 }
 
-function runProgram(source: string, fuel: number, seed: number | null): EvalResult {
-  const program = parse(source)
-  const ev = new Evaluator(program, source, { fuel, shuffleSeed: seed, maxRounds: 1000 })
+function runProgram(s: AppState, mode: SchedulerMode, seed: number): EvalResult {
+  const program = parse(s.source)
+  const ev = new Evaluator(program, s.source, {
+    maxRounds: s.budgetRounds,
+    maxClasses: s.budgetClasses,
+    mode,
+    seed,
+    demand: s.demandOn,
+    // The UI never throws on a soundness violation — it shows the red
+    // engine-bug banner instead of corrupt results (CO-7).
+    strictSoundness: false,
+  })
   return ev.run()
 }
 
@@ -149,8 +157,10 @@ export const useStore = create<AppState>((set, get) => ({
   source: exampleById('fib').source,
   exampleId: 'fib',
   dirty: true,
-  fuel: 256,
-  shuffle: false,
+  budgetRounds: 64,
+  budgetClasses: 2000,
+  mode: 'bsp',
+  demandOn: true,
   seed: 1,
   error: null,
   run: null,
@@ -181,7 +191,7 @@ export const useStore = create<AppState>((set, get) => ({
   compile: (opts = {}) => {
     const s = get()
     try {
-      const run = runProgram(s.source, s.fuel, s.shuffle ? s.seed : null)
+      const run = runProgram(s, s.mode, s.seed)
       set({
         run,
         error: null,
@@ -211,8 +221,12 @@ export const useStore = create<AppState>((set, get) => ({
   },
   setPlaying: (playing) => set({ playing }),
   setSpeed: (speed) => set({ speed }),
-  setFuel: (fuel) => set({ fuel: Math.max(1, Math.min(100000, Math.floor(fuel) || 1)), dirty: true }),
-  setShuffle: (shuffle) => set({ shuffle, dirty: true }),
+  setBudgetRounds: (n) =>
+    set({ budgetRounds: Math.max(1, Math.min(100000, Math.floor(n) || 1)), dirty: true }),
+  setBudgetClasses: (n) =>
+    set({ budgetClasses: Math.max(4, Math.min(1000000, Math.floor(n) || 4)), dirty: true }),
+  setMode: (mode) => set({ mode, dirty: true }),
+  setDemandOn: (demandOn) => set({ demandOn, dirty: true }),
   reseed: () => set({ seed: ((get().seed * 1103515245 + 12345) % 2147483647) + 1, dirty: true }),
 
   select: (id) => {
@@ -231,22 +245,22 @@ export const useStore = create<AppState>((set, get) => ({
   verifyConfluence: () => {
     const s = get()
     try {
-      const runs: ConfluenceRun[] = []
+      const runs: EvalResult[] = []
+      const seeds: number[] = []
       for (let i = 0; i < 10; i++) {
         const seed = s.seed + i * 7919
-        const r = runProgram(s.source, s.fuel, seed)
-        runs.push({
-          seed,
-          answer: r.extraction.pretty,
-          classes: r.classCount,
-          alts: r.altCount,
-          rounds: r.rounds.length,
-        })
+        seeds.push(seed)
+        runs.push(runProgram(s, 'shuffle', seed))
       }
-      const ok = runs.every(
-        (r) => r.answer === runs[0].answer && r.classes === runs[0].classes && r.alts === runs[0].alts,
-      )
-      set({ confluence: { ok, runs } })
+      const cmp = compareRuns(runs)
+      set({
+        confluence: {
+          ...cmp,
+          runCount: runs.length,
+          answers: runs.map((r) => r.extraction.pretty),
+          seeds,
+        },
+      })
     } catch (e) {
       set({ error: e instanceof Error ? e.message : String(e) })
     }
@@ -274,6 +288,8 @@ export const useStore = create<AppState>((set, get) => ({
       dirty: true,
       selected: null,
       confluence: null,
+      demandOn: true,
+      mode: 'bsp',
     })
     get().compile({ autoplay: false })
     const run = get().run

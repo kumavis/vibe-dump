@@ -18,6 +18,7 @@ export interface LessonCtx {
   selectedClass: SnapClass | null
   confluence: ConfluenceReport | null
   source: string
+  demandOn: boolean
 }
 
 export interface Lesson {
@@ -185,7 +186,7 @@ export const LESSONS: Lesson[] = [
   },
   {
     id: 'recursion',
-    title: '6 · Recursion, unfolding & fuel',
+    title: '6 · Recursion, unfolding & budget',
     source: FIB6,
     startRound: 0,
     steps: [
@@ -196,18 +197,18 @@ export const LESSONS: Lesson[] = [
       },
       {
         prose:
-          'Each unfold costs 1 fuel (see the console). Fuel is the only guarantee of termination — the rules themselves would happily unfold forever.',
+          'Rules never count anything — that would smuggle scheduling into semantics. Termination is the SCHEDULER\'s job: a budget of rounds and classes, checked only between rounds. Within a round, everything enabled always fires.',
         spotlight: 'console',
       },
       {
         prose:
-          'Prove it: pick the "loop" example from the dropdown, compile, and let it run. It never quiesces — it stops with FUEL-EXHAUSTED, and extraction can only offer a non-literal best form.',
+          'Prove the budget matters: pick the "loop" example from the dropdown and compile. It never quiesces — the scheduler stops it with BUDGET-EXHAUSTED, and extraction can only offer a non-literal best form.',
         spotlight: 'editor',
       },
     ],
     checkpoint: {
-      text: 'Run the loop example to FUEL-EXHAUSTED (load it from the dropdown and compile).',
-      test: (ctx) => ctx.run !== null && ctx.run.status === 'fuel-exhausted',
+      text: 'Run the loop example to BUDGET-EXHAUSTED (load it from the dropdown and compile).',
+      test: (ctx) => ctx.run !== null && ctx.run.status === 'budget-exhausted',
     },
   },
   {
@@ -251,23 +252,55 @@ export const LESSONS: Lesson[] = [
     steps: [
       {
         prose:
-          'Every update was a monotone join, so the CALM theorem applies: a monotone program needs no coordination. Any firing order reaches the same quiescent state. Flip on "shuffle" and recompile — same answer, same graph.',
+          'Every rule is monotone and every write is a join — THAT is why any firing order reaches the same fixpoint. Not the rounds. Switch the scheduler to "shuffled" and recompile: same answer, same canonical graph. "Verify confluence" runs it 10 times and compares full states.',
         spotlight: 'console',
       },
       {
         prose:
-          'Don\'t take one run\'s word for it. "Verify confluence" executes the program 10 times with different shuffle seeds and compares the extracted answer, class count and alternative count.',
-        spotlight: 'console',
+          'We chose BSP rounds because they are easy to animate and reason about. The barriers between rounds are global synchronization — coordination — a scheduling convenience, NOT the source of the guarantee. Try "chaos" mode: no rounds at all, one random firing at a time. Same fixpoint.',
+        spotlight: 'timeline',
       },
       {
         prose:
-          'And the answer itself? Nothing "returns". After quiescence we EXTRACT: pick the lowest-cost representative of the root class — literals cost 0, so 55 wins. Reduction as knowledge growth, scheduling as a free variable, extraction as a choice. That\'s the whole trick. 😺',
+          'Boundaries, stated exactly: a budget-exhausted run holds a PREFIX of the knowledge — different schedules, different prefixes — but everything derived is true, and any literal extracted is THE answer. And extraction? Lowest-cost representative of the root; literals cost 0, so 55 wins. Delete the barriers, fire asynchronously, even across machines: the answer cannot change. That is CALM. 😺',
         spotlight: 'console',
       },
     ],
     checkpoint: {
-      text: 'Press "Verify confluence" and get 10/10 identical runs.',
+      text: 'Press "Verify confluence" and get 10/10 runs with identical canonical state.',
       test: (ctx) => ctx.confluence !== null && ctx.confluence.ok,
+    },
+  },
+  {
+    id: 'demand',
+    title: '9 · Demand: laziness as a lattice',
+    source: exampleById('deadcode').source,
+    exampleId: 'deadcode',
+    startRound: 'end',
+    steps: [
+      {
+        prose:
+          'This program\'s else branch can never run. Demand is a grow-only set of classes seeded at the root; R-demand spreads it through what the program needs — all positive triggers. An if demands only its CONDITION until the condition resolves; then just the taken branch. Neither branch is demanded before that, and that is the point.',
+        spotlight: 'graph',
+      },
+      {
+        prose:
+          'The run quiesced at 1. The loop(0) call sits ghosted — undemanded, untouched. Click it: its provenance log is empty. No rule ever fired at it.',
+        spotlight: 'inspector',
+      },
+      {
+        prose:
+          'Now uncheck "demand" and recompile: the answer 1 still appears (before quiescence!), but the network chases the dead loop until the budget dies. Even evaluation strategy fits inside the monotone fragment — demand is just another grow-only set.',
+        spotlight: 'editor',
+      },
+    ],
+    checkpoint: {
+      text: 'Click the ghosted loop(0) node and confirm its provenance log is empty.',
+      test: (ctx) =>
+        ctx.selectedClass !== null &&
+        ctx.selectedClass.demanded === false &&
+        ctx.selectedClass.provenance.length === 0 &&
+        ctx.selectedClass.alts.some((a) => a.op === 'call' && a.fn === 'loop'),
     },
   },
 ]

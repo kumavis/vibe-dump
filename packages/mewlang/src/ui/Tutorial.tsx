@@ -21,9 +21,9 @@ export function Tutorial() {
     return (
       <div className="tutorial-idle">
         <p>
-          <b>New here?</b> The tutorial walks through eight short lessons: e-graphs, lattice cells,
-          propagator rules, BSP rounds, branching, recursion &amp; fuel, structural memoization, and
-          confluence.
+          <b>New here?</b> The tutorial walks through nine short lessons: e-graphs, lattice cells,
+          propagator rules, BSP rounds, branching, recursion &amp; budget, structural memoization,
+          confluence, and demand-driven evaluation.
         </p>
         <p>Each lesson loads a program, drives the app, and ends with a small hands-on checkpoint.</p>
         <button className="primary" onClick={startTutorial}>
@@ -98,7 +98,7 @@ export function Tutorial() {
 
       {allDone && (
         <div className="finished">
-          🎉 All eight lessons complete. You now know why monotone joins make scheduling a free
+          🎉 All nine lessons complete. You now know why monotone joins make scheduling a free
           variable. Go edit fib(10) into fib(12) and watch 144 fall out.
         </div>
       )}

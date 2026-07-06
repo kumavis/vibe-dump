@@ -47,7 +47,8 @@ main = gcd(48, 18)
   {
     id: 'sumto',
     title: 'sum-to(100) — deep recursion',
-    source: `;; 1 + 2 + ... + n, one unfold per level
+    source: `;; 1 + 2 + ... + n, one unfold per level — needs ~250 rounds:
+;; raise the round budget and recompile to see it quiesce at 5050
 def sumto(n) = if n == 0 then 0 else n + sumto(n - 1)
 
 main = sumto(100)
@@ -55,11 +56,22 @@ main = sumto(100)
   },
   {
     id: 'loop',
-    title: 'loop — infinite unfolding (fuel!)',
-    source: `;; this never quiesces — the fuel cell is the only thing that stops it
+    title: 'loop — infinite unfolding (budget!)',
+    source: `;; this never quiesces — the scheduler's round budget is what stops it
 def loop(n) = loop(n + 1)
 
 main = loop(0)
+`,
+  },
+  {
+    id: 'deadcode',
+    title: 'dead branch — demand at work',
+    source: `;; the else branch can never run — demand-driven unfolding never
+;; touches it, so this quiesces. turn demand off and recompile to
+;; watch the network chase the dead loop until the budget runs out.
+def loop(n) = loop(n + 1)
+
+main = if true then 1 else loop(0)
 `,
   },
 ]

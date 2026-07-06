@@ -252,6 +252,16 @@ input[type='range'] {
   background: var(--bg-inset);
 }
 
+.console .soundness-banner {
+  background: rgba(247, 118, 142, 0.15);
+  border: 1px solid var(--red);
+  color: var(--red);
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
 .console .status-quiescent {
   color: var(--green);
 }
@@ -372,6 +382,37 @@ input[type='range'] {
 
 .node.pinned circle.pin {
   fill: var(--text-dim);
+}
+
+/* CO-8: undemanded classes render ghosted */
+.node.ghost {
+  opacity: 0.35;
+}
+
+.node.ghost circle.body {
+  stroke-dasharray: 3 3;
+}
+
+/* demand wavefront pulse */
+.graph:not(.degraded) .node.demanded-now circle.pulse {
+  animation: pulse 0.9s ease-out;
+  stroke: var(--cyan);
+}
+
+/* CO-5: best-cost tightening flashes the label */
+.graph:not(.degraded) .node.tightened text {
+  animation: label-flash 0.8s ease-out;
+}
+
+@keyframes label-flash {
+  0% {
+    fill: var(--amber);
+    font-size: 12px;
+  }
+  100% {
+    fill: var(--text);
+    font-size: 10px;
+  }
 }
 
 .node text {
