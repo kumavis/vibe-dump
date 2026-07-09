@@ -66,7 +66,8 @@ export function Inspector() {
           <ul className="prov-list">
             {prov.map((p, i) => (
               <li key={i}>
-                <span className="round-tag">R{p.round}</span>
+                {/* chaos mode records provenance round-free (round 0) — it has no rounds */}
+                <span className="round-tag">{p.round === 0 ? 'async' : `R${p.round}`}</span>
                 <span className="rule">{p.rule}</span> {p.detail}
                 {p.premises.length > 0 && (
                   <span style={{ color: 'var(--text-dim)' }}> ⟨from #{p.premises.join(', #')}⟩</span>
