@@ -34,10 +34,51 @@ describe('CO-4: unfold-idempotence — the dedup latch is an optimization, prova
     for (let i = 0; i < on.rounds.length; i++) {
       expect(off.rounds[i].classCount, `round ${i + 1}`).toBe(on.rounds[i].classCount)
     }
-    // State comparison excludes provenance: re-fired (no-op-on-alts) unfolds
-    // legitimately record additional provenance facts at later rounds — the
-    // A1 idempotence argument covers the JOIN-visible semantic content
-    // (alts, partition, best), which must be — and is — identical.
+    // The idempotence argument covers alts/partition/best exactly; those must
+    // be identical:
+    expect(runFingerprint(off, { includeProvenance: false })).toBe(
+      runFingerprint(on, { includeProvenance: false }),
+    )
+    // Provenance is the honest exception (see the CO-4 comment in rules.ts):
+    // a re-fire records a genuinely NEW, TRUE fact (same rule+premises,
+    // later round). The compensating assertions: per class (ids coincide —
+    // both runs perform identical allocations and only no-op extra unions),
+    // (a) non-R-unfold provenance is IDENTICAL, and (b) the latched run's
+    // R-unfold facts are a SUBSET of the unlatched run's. Nothing may be
+    // lost, reworded, or invented — only repeated firings added.
+    const classesOf = (r: typeof on) =>
+      new Map(r.snapshots[r.snapshots.length - 1].classes.map((c) => [c.id, c]))
+    const provKey = (p: { rule: string; round: number; premises: number[] }) =>
+      `${p.rule}@${p.round}|${[...p.premises].sort((x, y) => x - y).join(',')}`
+    const onClasses = classesOf(on)
+    const offClasses = classesOf(off)
+    expect(offClasses.size).toBe(onClasses.size)
+    for (const [id, cOn] of onClasses) {
+      const cOff = offClasses.get(id)!
+      const split = (c: typeof cOn) => ({
+        other: c.provenance.filter((p) => p.rule !== 'R-unfold').map(provKey).sort(),
+        unfold: new Set(c.provenance.filter((p) => p.rule === 'R-unfold').map(provKey)),
+      })
+      const a = split(cOn)
+      const b = split(cOff)
+      expect(a.other, `class ${id} non-unfold provenance`).toEqual(b.other)
+      for (const k of a.unfold) {
+        expect(b.unfold.has(k), `class ${id} lost unfold fact ${k}`).toBe(true)
+      }
+    }
+  })
+})
+
+describe('A2: the R-arith/R-if idempotence skips are optimizations, provably', () => {
+  it('fib(6) with the skips disabled: identical semantic fixpoint', () => {
+    const src = FIB(6)
+    const on = evaluate(parse(src), src)
+    expect(on.status).toBe('quiescent')
+    // With the skips off, already-satisfied instances keep "firing" (each a
+    // semantic no-op), so the run cannot detect quiescence — cap it at the
+    // reference run's length and compare fixpoints.
+    const off = evaluate(parse(src), src, { _noIdempotenceSkips: true, maxRounds: on.rounds.length })
+    expect(off.extraction.value).toBe(on.extraction.value)
     expect(runFingerprint(off, { includeProvenance: false })).toBe(
       runFingerprint(on, { includeProvenance: false }),
     )
@@ -56,12 +97,16 @@ describe('CO-7: mutation tests — tripwire liveness + differential complementar
   })
 
   it('a value-corrupting R-arith (+ computed as −) is caught by the differential suite', () => {
-    // Note: a FUNCTIONAL corruption (same inputs → same wrong output) can
-    // never trip the collision wire by itself — the corrupted system is
-    // internally consistent, i.e. sound w.r.t. the corrupted semantics — so
-    // it extracts a wrong answer confluently. That is exactly why CO-7 pairs
-    // the tripwire (catches inconsistency) with the reference interpreter
-    // (catches wrongness): the two detectors are complementary.
+    // DELIBERATE DEVIATION from Part C row 10 as written. The contract
+    // expects "+ computed as −" to trip the collision assertion on fib(4);
+    // it provably cannot: a FUNCTIONAL corruption (same inputs → same wrong
+    // output) leaves the system internally consistent — sound w.r.t. the
+    // corrupted semantics — so it extracts a wrong answer confluently and no
+    // class ever holds two distinct literals. The row's INTENT (tripwire
+    // liveness through the rule pipeline) is carried by the mis-targeting
+    // mutation above; wrongness-without-inconsistency is exactly what the
+    // reference interpreter exists to catch, as this test demonstrates. The
+    // two detectors are complementary by design.
     const src = FIB(6)
     const program = parse(src)
     const corrupted = evaluate(program, src, {

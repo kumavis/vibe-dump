@@ -28,6 +28,10 @@ export interface AppState {
   seed: number
   error: string | null
   run: EvalResult | null
+  /** The exact source `run` was compiled from — verify-confluence re-runs THIS,
+   * not the possibly-edited editor buffer, so its report always describes the
+   * run on screen. */
+  lastCompiledSource: string | null
   round: number
   playing: boolean
   speed: number
@@ -138,9 +142,9 @@ export function lessonCtx(s: AppState): LessonCtx {
   }
 }
 
-function runProgram(s: AppState, mode: SchedulerMode, seed: number): EvalResult {
-  const program = parse(s.source)
-  const ev = new Evaluator(program, s.source, {
+function runProgram(s: AppState, source: string, mode: SchedulerMode, seed: number): EvalResult {
+  const program = parse(source)
+  const ev = new Evaluator(program, source, {
     maxRounds: s.budgetRounds,
     maxClasses: s.budgetClasses,
     mode,
@@ -164,6 +168,7 @@ export const useStore = create<AppState>((set, get) => ({
   seed: 1,
   error: null,
   run: null,
+  lastCompiledSource: null,
   round: 0,
   playing: false,
   speed: 4,
@@ -191,9 +196,10 @@ export const useStore = create<AppState>((set, get) => ({
   compile: (opts = {}) => {
     const s = get()
     try {
-      const run = runProgram(s, s.mode, s.seed)
+      const run = runProgram(s, s.source, s.mode, s.seed)
       set({
         run,
+        lastCompiledSource: s.source,
         error: null,
         dirty: false,
         round: 0,
@@ -244,13 +250,17 @@ export const useStore = create<AppState>((set, get) => ({
 
   verifyConfluence: () => {
     const s = get()
+    // Verify the program the displayed run came from, never the (possibly
+    // edited, uncompiled) editor buffer.
+    const source = s.lastCompiledSource
+    if (!source || !s.run) return
     try {
       const runs: EvalResult[] = []
       const seeds: number[] = []
       for (let i = 0; i < 10; i++) {
         const seed = s.seed + i * 7919
         seeds.push(seed)
-        runs.push(runProgram(s, 'shuffle', seed))
+        runs.push(runProgram(s, source, 'shuffle', seed))
       }
       const cmp = compareRuns(runs)
       set({
@@ -290,6 +300,10 @@ export const useStore = create<AppState>((set, get) => ({
       confluence: null,
       demandOn: true,
       mode: 'bsp',
+      // Lessons assume the default budget — a user-lowered budget would make
+      // the quiescence-gated checkpoints unachievable.
+      budgetRounds: 64,
+      budgetClasses: 2000,
     })
     get().compile({ autoplay: false })
     const run = get().run

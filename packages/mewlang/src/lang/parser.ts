@@ -105,10 +105,15 @@ class Parser {
   }
 
   private parseCmp(): Expr {
+    const atCmpOp = () => this.at('op', '<') || this.at('op', '<=') || this.at('op', '==')
     const lhs = this.parseAdd()
-    if (this.at('op', '<') || this.at('op', '<=') || this.at('op', '==')) {
+    if (atCmpOp()) {
       const op = this.next().text as BinOpKind
       const rhs = this.parseAdd()
+      if (atCmpOp()) {
+        // cmpExpr := addExpr (op addExpr)? — at most one comparison.
+        this.error(`comparisons cannot be chained — parenthesize one side, e.g. (a ${op} b) == c`)
+      }
       return { kind: 'binop', op, lhs, rhs, span: { start: lhs.span.start, end: rhs.span.end } }
     }
     return lhs
@@ -165,9 +170,10 @@ class Parser {
       return { kind: 'lit', value: t.text === 'true', span: t.span }
     }
     if (t.kind === 'keyword' && t.text === 'if') {
-      // `if` nested inside arithmetic, e.g. `1 + (if …)` requires parens, but
-      // a bare `if` at atom position reads naturally — allow it.
-      return this.parseIf()
+      // Spec 2.1: `atom` has no if-production. Allowing it here would give
+      // `1 + if c then 2 else 3 + 4` a surprising right-greedy grouping, so
+      // demand parens instead.
+      this.error(`'if' cannot appear inside an arithmetic operand — parenthesize it: (if … then … else …)`)
     }
     if (t.kind === 'ident') {
       this.next()

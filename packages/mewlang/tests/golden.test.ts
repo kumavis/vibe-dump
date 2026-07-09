@@ -79,6 +79,7 @@ describe('CO-7 differential: extraction === reference interpreter', () => {
   const BUDGETS: Record<string, { maxRounds?: number }> = { sumto: { maxRounds: 400 } }
 
   it('every bundled example the interpreter can finish agrees with extraction', () => {
+    let compared = 0
     for (const ex of EXAMPLES) {
       const program = parse(ex.source)
       let expected: number | boolean
@@ -91,7 +92,11 @@ describe('CO-7 differential: extraction === reference interpreter', () => {
       const r = evaluate(program, ex.source, BUDGETS[ex.id] ?? {})
       expect(r.status, ex.id).toBe('quiescent')
       expect(r.extraction.value, ex.id).toBe(expected)
+      compared++
     }
+    // Guard against the suite going vacuous if the interpreter regresses
+    // into throwing on most examples: only `loop` may be skipped.
+    expect(compared).toBeGreaterThanOrEqual(EXAMPLES.length - 1)
   })
 
   it('fib(12) differential', () => {

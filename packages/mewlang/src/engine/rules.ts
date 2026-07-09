@@ -95,8 +95,11 @@ export interface ArithMutation {
  * same literal and re-union it into the same class — all no-ops under the
  * idempotent join — so the fixpoint is identical with the skip removed; it
  * only saves work (and lets quiescence be detected by an empty firing set).
+ * Per A2 the justification carries a disable switch and a test: pass
+ * `skips: false` to remove the guard; the semantic fixpoint must not change
+ * (tests/contract.test.ts, idempotence-skips suite).
  */
-export function ruleArith(egraph: EGraph, mutation?: ArithMutation): Delta[] {
+export function ruleArith(egraph: EGraph, mutation?: ArithMutation, skips = true): Delta[] {
   const compute = mutation?.compute ?? computeBinOp
   const deltas: Delta[] = []
   for (const { classId, node } of egraph.allNodes()) {
@@ -110,7 +113,7 @@ export function ruleArith(egraph: EGraph, mutation?: ArithMutation): Delta[] {
     if (result === undefined) continue
     const litNode: ENode = { op: 'lit', value: result }
     const target = mutation?.mistarget ? egraph.find(a) : classId
-    if (egraph.hasAlt(target, nodeKeyOf(litNode))) continue // idempotence skip (see above)
+    if (skips && egraph.hasAlt(target, nodeKeyOf(litNode))) continue // idempotence skip (see above)
     deltas.push({
       type: 'addAlt',
       classId: target,
@@ -128,9 +131,10 @@ export function ruleArith(egraph: EGraph, mutation?: ArithMutation): Delta[] {
  * if-class with the then (resp. else) class. Not a replacement — the if-node
  * stays as an alternative; the class simply absorbs the chosen branch.
  * (The find-equality skip is the same idempotence-justified optimization as
- * R-arith's: a repeated union of already-merged classes is a no-op.)
+ * R-arith's: a repeated union of already-merged classes is a no-op. Same
+ * A2 discipline: disable with `skips: false`; tested in contract.test.ts.)
  */
-export function ruleIf(egraph: EGraph): Delta[] {
+export function ruleIf(egraph: EGraph, skips = true): Delta[] {
   const deltas: Delta[] = []
   for (const { classId, node } of egraph.allNodes()) {
     if (node.op !== 'if') continue
@@ -138,7 +142,7 @@ export function ruleIf(egraph: EGraph): Delta[] {
     const v = egraph.litOf(c)
     if (typeof v !== 'boolean') continue
     const target = v ? t : e
-    if (egraph.find(classId) === egraph.find(target)) continue // idempotence skip
+    if (skips && egraph.find(classId) === egraph.find(target)) continue // idempotence skip
     deltas.push({
       type: 'union',
       a: classId,
@@ -200,11 +204,23 @@ export function ruleDemand(egraph: EGraph, rootId: EClassId): Set<EClassId> {
  * A2's idempotence escape hatch: *R-unfold is idempotent — re-firing
  * re-interns the identical body through the hashcons (returning the existing
  * classes) and re-emits the same Union, all no-ops under idempotent join —
- * so the fixpoint is identical with the guard removed; the mark only saves
- * work.* Note this argument requires CO-1: with per-firing fuel, a re-fire
+ * so the ALTS/PARTITION/BEST fixpoint is identical with the guard removed;
+ * the mark only saves work.* Two honest qualifications to that argument:
+ * (1) provenance: a re-fire at a later round records a genuinely NEW
+ *     provenance fact (keys carry the round), so the guard-off run's
+ *     provenance is a SUPERSET of the guard-on run's — every extra entry is
+ *     a true statement about a firing that happened; the semantic content
+ *     (alts, partition, best, extraction) is untouched. The CO-4 test
+ *     asserts exactly this: identical semantic fingerprint + provenance
+ *     superset with non-R-unfold provenance identical.
+ * (2) quiescence DETECTION: with the latch off, the enabled set never
+ *     empties (each re-fire is a semantic no-op but still "enabled"), so
+ *     the guard-off run never reports quiescent — the latch is also what
+ *     lets an empty firing set signal the fixpoint. Operational, not
+ *     semantic.
+ * Note the core argument requires CO-1: with per-firing fuel, a re-fire
  * would have double-spent budget and the guard WOULD have been semantic.
- * The `dedupUnfolds` engine flag disables the latch; the fixpoint must be
- * (and is tested to be) identical.
+ * The `dedupUnfolds` engine flag disables the latch for the test.
  *
  * The instantiation itself happens in the scheduler's topology phase; the
  * rule only emits the request, keeping the read phase pure.

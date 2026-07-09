@@ -97,14 +97,20 @@ export function Graph() {
   const nodeElsRef = useRef(new Map<number, SVGGElement>())
   const edgeElsRef = useRef(new Map<string, SVGPathElement>())
   const arcElsRef = useRef(new Map<string, SVGPathElement>())
-  const prevRoundRef = useRef(-1)
   const [transform, setTransform] = useState({ x: 0, y: 0, k: 1 })
   const transformRef = useRef(transform)
   transformRef.current = transform
   const [panning, setPanning] = useState(false)
 
   const degraded = (snapshot?.classes.length ?? 0) > DEGRADE_AT
-  const forward = round === prevRoundRef.current + 1
+  // `forward` must be stable for the LIFETIME of a round, not just the first
+  // render after stepping — otherwise any hover/pan re-render strips the
+  // round-entry animations mid-flight. Latch it per round value.
+  const roundStepRef = useRef({ round: -1, forward: false })
+  if (round !== roundStepRef.current.round) {
+    roundStepRef.current = { round, forward: round === roundStepRef.current.round + 1 }
+  }
+  const forward = roundStepRef.current.forward
 
   // ---- derive edges from the snapshot
   const edges = useMemo<EdgeDatum[]>(() => {
@@ -199,9 +205,19 @@ export function Graph() {
 
   const selectedId = resolveSelection(run, selected, round)
 
+  // Ghost edges and firing arcs change on hover/round without topology
+  // changing — the tick handler reads them through refs so their arrival
+  // never rebuilds or reheats the simulation (hover must not cause jiggle).
+  const edgesRef = useRef(edges)
+  edgesRef.current = edges
+  const ghostEdgesRef = useRef(ghostEdges)
+  ghostEdgesRef.current = ghostEdges
+  const arcsRef = useRef(arcs)
+  arcsRef.current = arcs
+  const drawRef = useRef<() => void>(() => {})
+
   // ---- build / update the force simulation when topology changes
   useEffect(() => {
-    prevRoundRef.current = round
     if (!snapshot || !containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
     const cx = rect.width / 2
@@ -276,8 +292,8 @@ export function Graph() {
     >
     linkForce.links(linkArr)
 
-    const posOf = (id: number) => next.get(id)
     const onTick = () => {
+      const posOf = (id: number) => nodesRef.current.get(id)
       for (const [id, el] of nodeElsRef.current) {
         const n = posOf(id)
         if (n) el.setAttribute('transform', `translate(${n.x},${n.y})`)
@@ -298,21 +314,28 @@ export function Graph() {
         }
         el.setAttribute('d', edgePath(a.x, a.y, tx, ty, bend))
       }
-      for (const e of edges) drawEdge(e.key, e.from, e.to, 0.08, true)
-      for (const e of ghostEdges) drawEdge(e.key, e.from, e.to, 0.16, true)
+      for (const e of edgesRef.current) drawEdge(e.key, e.from, e.to, 0.08, true)
+      for (const e of ghostEdgesRef.current) drawEdge(e.key, e.from, e.to, 0.16, true)
       for (const [key, el] of arcElsRef.current) {
-        const arc = arcs.find((a) => a.key === key)
+        const arc = arcsRef.current.find((a) => a.key === key)
         if (!arc) continue
         const a = posOf(arc.from)
         const b = posOf(arc.to)
         if (a && b) el.setAttribute('d', edgePath(a.x, a.y, b.x, b.y, -0.25))
       }
     }
+    drawRef.current = onTick
     sim.on('tick', onTick)
     sim.alpha(appeared > 0 ? 0.7 : 0.12).restart()
     onTick()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [snapshot, edges, ghostEdges, arcs, relayoutNonce])
+  }, [snapshot, edges, relayoutNonce])
+
+  // Newly mounted ghost/arc paths need one draw pass at current positions —
+  // WITHOUT touching the simulation.
+  useEffect(() => {
+    drawRef.current()
+  }, [ghostEdges, arcs])
 
   // Relayout: unpin everything and reheat.
   useEffect(() => {

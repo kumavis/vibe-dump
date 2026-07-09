@@ -88,4 +88,22 @@ main = fib(10)
     const p = parse('main = 1 ;; + 999')
     expect(p.main).toMatchObject({ kind: 'lit', value: 1 })
   })
+
+  it("rejects 'if' inside an arithmetic operand (spec 2.1: atom has no if)", () => {
+    expect(() => parse('main = 1 + if true then 2 else 3')).toThrow(/parenthesize/)
+    // parenthesized, it is fine — and if at expression positions is fine
+    expect(parse('main = 1 + (if true then 2 else 3)').main.kind).toBe('binop')
+    expect(parse('main = if true then 2 else 3').main.kind).toBe('if')
+  })
+
+  it('rejects chained comparisons with a dedicated diagnostic', () => {
+    expect(() => parse('main = 1 < 2 < 3')).toThrow(/chained/)
+    expect(() => parse('def f(x) = 1 < 2 == true\nmain = f(0)')).toThrow(/chained/)
+    expect(parse('main = (1 < 2) == true').main.kind).toBe('binop')
+  })
+
+  it('rejects integer literals beyond ±2^53', () => {
+    expect(() => parse('main = 9007199254740993')).toThrow(/too large/)
+    expect(parse('main = 9007199254740991').main).toMatchObject({ kind: 'lit' })
+  })
 })

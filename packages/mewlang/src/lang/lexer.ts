@@ -49,7 +49,15 @@ export function lex(source: string): Token[] {
     // integers
     if (c >= '0' && c <= '9') {
       while (i < n && source[i] >= '0' && source[i] <= '9') i++
-      tokens.push({ kind: 'int', text: source.slice(start, i), span: { start, end: i } })
+      const text = source.slice(start, i)
+      if (!Number.isSafeInteger(parseInt(text, 10))) {
+        throw new MewSyntaxError(
+          `integer literal too large — mewlang integers must stay within ±2^53`,
+          { start, end: i },
+          source,
+        )
+      }
+      tokens.push({ kind: 'int', text, span: { start, end: i } })
       continue
     }
     // identifiers / keywords

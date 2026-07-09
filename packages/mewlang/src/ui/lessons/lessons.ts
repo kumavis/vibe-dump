@@ -262,7 +262,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         prose:
-          'Boundaries, stated exactly: a budget-exhausted run holds a PREFIX of the knowledge — different schedules, different prefixes — but everything derived is true, and any literal extracted is THE answer. And extraction? Lowest-cost representative of the root; literals cost 0, so 55 wins. Delete the barriers, fire asynchronously, even across machines: the answer cannot change. That is CALM. 😺',
+          'Boundaries, stated exactly. (1) A budget-exhausted run holds a PREFIX of the knowledge — different schedules, different prefixes — but everything derived is true, and any literal extracted is THE answer. (2) Class ids are schedule-dependent: rerun shuffled and the inspector shows different #ids — only the quotient structure is invariant, so all comparisons work modulo renaming. Extraction: lowest-cost representative of the root; literals cost 0, so 55 wins. Delete the barriers, fire asynchronously, even across machines: the answer cannot change. That is CALM. 😺',
         spotlight: 'console',
       },
     ],
@@ -290,7 +290,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         prose:
-          'Now uncheck "demand" and recompile: the answer 1 still appears (before quiescence!), but the network chases the dead loop until the budget dies. Even evaluation strategy fits inside the monotone fragment — demand is just another grow-only set.',
+          'Try it: uncheck "demand", recompile — the answer 1 still appears (before quiescence!) but the network chases the dead loop until the budget dies. Then press ↻ reset to restore this lesson\'s demand-on run, and click the ghosted loop(0) node. Even evaluation strategy fits inside the monotone fragment — demand is just another grow-only set.',
         spotlight: 'editor',
       },
     ],

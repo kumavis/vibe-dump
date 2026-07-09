@@ -54,6 +54,11 @@ export interface EvalOptions {
   strictSoundness?: boolean
   /** CO-7 mutation-test injection. Test-only. */
   _mutation?: ArithMutation
+  /**
+   * A2 guard-justification test hook: disable the idempotence skips in
+   * R-arith and R-if (their re-firings become semantic no-ops). Test-only.
+   */
+  _noIdempotenceSkips?: boolean
 }
 
 export interface EvalResult {
@@ -89,7 +94,13 @@ function shuffleInPlace<T>(arr: T[], rng: () => number): void {
   }
 }
 
-const CHAOS_FIRINGS_PER_ROUND_BUDGET = 8
+/**
+ * Chaos logs one FIRING per RoundLog entry, so its budget is measured in
+ * firings, not rounds. A BSP round can hold arbitrarily many firings (a wide
+ * arithmetic program fires hundreds in round 1), so the round budget scales
+ * by this factor; maxClasses provides the hard cap either way.
+ */
+const CHAOS_FIRINGS_PER_ROUND_BUDGET = 32
 
 export class Evaluator {
   readonly egraph: EGraph
@@ -106,6 +117,7 @@ export class Evaluator {
   private maxClasses: number
   private dedupUnfolds: boolean
   private mutation?: ArithMutation
+  private idempotenceSkips: boolean
 
   status: RunStatus = 'running'
   rounds: RoundLog[] = []
@@ -126,6 +138,7 @@ export class Evaluator {
     this.dedupUnfolds = opts.dedupUnfolds ?? true
     this.demanded = (opts.demand ?? true) ? new Set([this.egraph.find(this.rootId)]) : null
     this.mutation = opts._mutation
+    this.idempotenceSkips = !(opts._noIdempotenceSkips ?? false)
     this.snapshots.push(takeSnapshot(this.egraph, this.rootId, this.currentDemand()))
   }
 
@@ -155,8 +168,8 @@ export class Evaluator {
   private gather(): { arith: Delta[]; ifs: Delta[]; unfolds: Delta[]; demanded: Set<EClassId> | null } {
     const eg = this.egraph
     const demanded = this.currentDemand()
-    const arith = ruleArith(eg, this.mutation)
-    const ifs = ruleIf(eg)
+    const arith = ruleArith(eg, this.mutation, this.idempotenceSkips)
+    const ifs = ruleIf(eg, this.idempotenceSkips)
     const unfolds = ruleUnfold(eg, this.defs, this.dedupUnfolds ? this.unfolded : null, demanded)
     return { arith, ifs, unfolds, demanded }
   }
@@ -224,8 +237,15 @@ export class Evaluator {
     }
     const pick = all[Math.floor(this.rng!() * all.length)]
     const firings: FiringRecord[] = []
+    // Chaos has no rounds, and provenance is lattice state (CO-2): stamping
+    // the firing ordinal into it would leak scheduler state into semantics
+    // (A6) and make provenance differ between chaos seeds. Chaos provenance
+    // is therefore recorded round-free (round 0) — invariant across chaos
+    // schedules; only the RoundLog (scheduler-owned, observational) numbers
+    // firings. Cross-family comparison (BSP rounds vs round-free) still
+    // excludes provenance — see fingerprint.ts.
     this.applyDeltas(
-      round,
+      0,
       pick.type === 'addAlt' ? [pick] : [],
       pick.type === 'union' ? [pick] : [],
       pick.type === 'unfold' ? [pick] : [],
