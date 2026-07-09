@@ -145,6 +145,24 @@ describe('CO-5: cost fixpoint', () => {
   })
 })
 
+describe('CO-2: provenance keys canonicalize premise order', () => {
+  it('provKeyOf sorts premises, so emission order cannot fork the key', () => {
+    const a = { rule: 'R-arith', round: 3, premises: [5, 3], detail: 'x' }
+    const b = { rule: 'R-arith', round: 3, premises: [3, 5], detail: 'x' }
+    expect(provKeyOf(a)).toBe(provKeyOf(b))
+    expect(provKeyOf(a)).toContain('3,5')
+    // and different premises DO fork it
+    expect(provKeyOf({ ...a, premises: [3, 6] })).not.toBe(provKeyOf(a))
+  })
+})
+
+// Note on scope: with the current rule set, an equal-cost tie in the BEST
+// position is unreachable from programs — literals cost 0 and are unique per
+// class (tripwire), R-if only unions an if-class with its own branch, and
+// congruence requires identical operators — so two distinct same-cost
+// non-literal alts can only meet via the direct EGraph API. That makes this
+// engine-level test the right (and only meaningful) level for matrix row 5;
+// the 25-shuffle suite covers the scheduler path on tie-free programs.
 describe('CO-3: best is min in a total order', () => {
   it('equal-cost alternatives resolve by content, independent of insertion order', () => {
     const build = (flip: boolean) => {

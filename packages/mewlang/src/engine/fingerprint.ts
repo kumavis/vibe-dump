@@ -4,10 +4,18 @@
  * Class ids are schedule-dependent (A3.2): allocation order and which id
  * survives a union vary, and only the quotient structure is invariant. So a
  * run's state is fingerprinted by CONTENT, never by id: per class we use its
- * source spans (grow-only, id-free), the pretty forms of its alternatives
- * and best (children rendered through their extracted terms, id-free), and
- * its provenance as (rule@round) facts. Two quiescent runs are equal iff
- * their sorted class-fingerprint multisets are equal.
+ * source spans (grow-only, id-free), the STRUCTURAL form of each alternative
+ * — op plus each child's complete signature (the child's best tieKey, a
+ * fully expanded extracted term, or its span set when un-costed) — the best
+ * (cost, tieKey), and its provenance as (rule@round) facts. Display-oriented
+ * depth-capped pretty strings are deliberately NOT used: their '…' elision
+ * could make genuinely different states fingerprint equal. Two quiescent
+ * runs are equal iff their sorted class-fingerprint multisets are equal.
+ * Residual limit: two distinct classes could in principle share a signature
+ * only if they have identical spans, identical alt structure and identical
+ * best terms — which at a congruence-closed fixpoint implies they would
+ * have been hashcons-merged; the bijection helper in tests asserts
+ * uniqueness loudly rather than assuming it.
  *
  * Provenance scope note (CO-2): premise ids inside provenance keys need the
  * cross-run renaming bijection to compare exactly — the test suite does that
@@ -30,11 +38,14 @@ export function classFingerprint(c: SnapClass, opts: FingerprintOptions = {}): s
     .map((s) => spanKey(s))
     .sort()
     .join(';')
-  const alts = c.alts
-    .map((a) => a.pretty)
-    .sort()
-    .join(' | ')
-  const best = c.best ? `${c.best.cost}:${c.best.pretty}` : '∞'
+  // Structural, id-free, full-depth: op + complete child signatures.
+  const altSig = (a: SnapClass['alts'][number]): string => {
+    if (a.op === 'lit') return `lit:${typeof a.value}:${a.value}`
+    const head = a.op === 'call' ? `call ${a.fn}` : a.op
+    return `${head}(${a.argKeys.join('§')})`
+  }
+  const alts = c.alts.map(altSig).sort().join(' | ')
+  const best = c.best ? `${c.best.cost}:${c.best.tieKey}` : '∞'
   const parts = [`spans[${spans}]`, `alts[${alts}]`, `best[${best}]`, `demanded[${c.demanded}]`]
   if (opts.includeProvenance ?? true) {
     const prov = c.provenance

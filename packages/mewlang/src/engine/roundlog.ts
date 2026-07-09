@@ -39,13 +39,20 @@ export interface SnapNode {
   value?: number | boolean
   args: EClassId[]
   pretty: string
+  /**
+   * Id-free structural signature per child: the child's best tieKey (a fully
+   * expanded extracted term), or a span-based fallback for un-costed
+   * children. Unlike `pretty` (depth-capped for display), these are complete
+   * — fingerprints are built from them (see fingerprint.ts).
+   */
+  argKeys: string[]
 }
 
 export interface SnapClass {
   id: EClassId
   label: string
   alts: SnapNode[]
-  best: { cost: number; key: string; pretty: string } | null
+  best: { cost: number; key: string; pretty: string; tieKey: string } | null
   spans: Span[]
   /** CO-2/CO-2.3: the provenance SET; presentation order is derived at render time. */
   provenance: ProvenanceEntry[]
@@ -92,6 +99,18 @@ export function takeSnapshot(
   demanded: ReadonlySet<EClassId> | null,
 ): Snapshot {
   const classes: SnapClass[] = []
+  // Id-free signature of a child class: its best tieKey (complete extracted
+  // term) or, for un-costed children, its sorted span set.
+  const childSig = (id: EClassId): string => {
+    const b = egraph.getCell(id).best
+    if (b) return b.tieKey
+    const spans = egraph
+      .spansOf(id)
+      .map((s) => `${s.start}:${s.end}`)
+      .sort()
+      .join(';')
+    return `?[${spans}]`
+  }
   for (const id of egraph.classIds()) {
     const cell = egraph.getCell(id)
     const alts: SnapNode[] = []
@@ -104,6 +123,7 @@ export function takeSnapshot(
         value: node.op === 'lit' ? node.value : undefined,
         args: node.op === 'lit' ? [] : node.args.map((a) => egraph.find(a)),
         pretty: prettyNode(egraph, node, 2),
+        argKeys: node.op === 'lit' ? [] : node.args.map((a) => childSig(egraph.find(a))),
       })
     }
     const best = cell.best
@@ -111,6 +131,7 @@ export function takeSnapshot(
           cost: cell.best.cost,
           key: nodeKeyOf(egraph.canonicalize(cell.best.node)),
           pretty: prettyNode(egraph, cell.best.node, 3),
+          tieKey: cell.best.tieKey,
         }
       : null
     classes.push({

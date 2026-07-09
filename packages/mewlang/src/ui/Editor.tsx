@@ -157,14 +157,20 @@ export function Editor() {
     return { hover: hoverCls?.spans ?? [], selected: selCls?.spans ?? [] }
   }, [run, round, hoveredNode, selected])
 
+  const lastScrolledRef = useRef<string>('')
   useEffect(() => {
     const view = viewRef.current
     if (!view) return
     view.dispatch({ effects: setSpanHighlights.of(highlightSpec) })
-    // Scroll the first selected span into view when selection changes.
-    const first = highlightSpec.selected[0]
-    if (first && first.start <= view.state.doc.length) {
-      view.dispatch({ effects: EditorView.scrollIntoView(first.start) })
+    // Scroll only when the SELECTED spans actually change — hover and
+    // playback re-renders must not hijack the user's scroll position.
+    const selKey = highlightSpec.selected.map((s) => `${s.start}:${s.end}`).join(',')
+    if (selKey !== lastScrolledRef.current) {
+      lastScrolledRef.current = selKey
+      const first = highlightSpec.selected[0]
+      if (first && first.start <= view.state.doc.length) {
+        view.dispatch({ effects: EditorView.scrollIntoView(first.start) })
+      }
     }
   }, [highlightSpec])
 

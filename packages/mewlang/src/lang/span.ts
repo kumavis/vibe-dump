@@ -35,5 +35,8 @@ export function caretSnippet(source: string, span: Span): string {
   const lines = source.split('\n')
   const text = lines[line - 1] ?? ''
   const width = Math.max(1, Math.min(span.end - span.start, text.length - (col - 1)))
-  return `${line} | ${text}\n${' '.repeat(String(line).length)} | ${' '.repeat(col - 1)}${'^'.repeat(width)}`
+  // Pad the caret line with the SAME whitespace shape as the source prefix
+  // (tabs stay tabs) so the caret aligns under any tab rendering width.
+  const pad = [...text.slice(0, col - 1)].map((ch) => (ch === '\t' ? '\t' : ' ')).join('')
+  return `${line} | ${text}\n${' '.repeat(String(line).length)} | ${pad}${'^'.repeat(width)}`
 }

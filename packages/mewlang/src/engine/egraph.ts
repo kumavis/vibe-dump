@@ -378,6 +378,7 @@ export class EGraph {
           alts.delete(oldKey)
           alts.set(newKey, canon)
           this.cells.set(ownerNow, { ...cell, alts })
+          this.dirty.add(ownerNow) // re-keying (or collapsing) alts IS a cell change
           this.checkLiteralCollision(ownerNow, this.cells.get(ownerNow)!)
         } else if (!cell.alts.has(newKey)) {
           this.joinInto(ownerNow, { alts: new Map([[newKey, canon]]), best: null, provenance: new Map() })
