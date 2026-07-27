@@ -1,0 +1,12 @@
+{
+  "name": "@vibe-dump/cosmic-cuties",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": { "three": "^0.160.0" },
+  "gallery": {
+    "title": "Cosmic Cuties",
+    "description": "A cartoon solar system where every planet pulls faces, a nosy UFO buzzes past, and a grinning meteor keeps faking a collision."
+  }
+}
