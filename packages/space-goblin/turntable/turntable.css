@@ -1,0 +1,119 @@
+/* Additions on top of the app's stylesheet, for the turntable's extra chrome. */
+
+#hud .back {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--glow);
+  text-decoration: none;
+  pointer-events: auto;
+  border-bottom: 1px solid transparent;
+}
+
+#hud .back:hover {
+  border-bottom-color: var(--glow);
+}
+
+#controls {
+  gap: 4px;
+  padding: 7px 10px;
+  flex-wrap: wrap;
+  max-width: min(720px, calc(100vw - 28px));
+  justify-content: center;
+}
+
+#controls .group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  border-right: 1px solid var(--border);
+}
+
+#controls .group:last-child {
+  border-right: 0;
+}
+
+#scrub {
+  appearance: none;
+  width: 130px;
+  height: 2px;
+  background: rgba(231, 240, 234, 0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+#scrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--glow);
+  box-shadow: 0 0 8px var(--glow);
+}
+
+#scrub::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--glow);
+}
+
+#views {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(9px);
+}
+
+#views button {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+#views button:hover {
+  color: var(--ink);
+  background: rgba(231, 240, 234, 0.08);
+}
+
+#views button.on {
+  color: #05131a;
+  background: var(--glow);
+}
+
+@media (max-width: 760px) {
+  #views {
+    left: 50%;
+    top: auto;
+    bottom: 96px;
+    transform: translateX(-50%);
+    flex-direction: row;
+  }
+
+  #views button {
+    padding: 6px 8px;
+    letter-spacing: 0.08em;
+  }
+}
