@@ -49,6 +49,15 @@ src/
   against the *camera's*, not each object's, so there's no such thing as a
   hero-only light rig in the standard renderer.
 
+## Docs
+
+- [`docs/RETROSPECTIVE.md`](docs/RETROSPECTIVE.md) — what worked and what went
+  wrong building this, including the bugs that renders cannot show you.
+- [`docs/PROCESS.md`](docs/PROCESS.md) — the playbook for the next one: contracts
+  and delegation, build order, and a proposed five-level validation battery
+  (geometry invariants, positional assertions, orientation solving, visual
+  contact sheets, structured aesthetic review).
+
 ## Developing
 
 ```bash
