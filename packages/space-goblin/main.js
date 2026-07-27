@@ -99,6 +99,10 @@ async function build() {
   document.getElementById('s-tris').textContent = goblin.stats.triangles.toLocaleString()
   document.getElementById('s-sim').textContent = goblin.stats.accessories
 
+  // A handle for poking at the scene from the console — this is a showcase,
+  // and half the fun is scrubbing the mixer or dumping the skin weights.
+  window.spaceGoblin = { scene, camera, renderer, world, goblin, director }
+
   await step('ready', 1)
   boot.classList.add('gone')
   setTimeout(() => boot.remove(), 700)
