@@ -139,6 +139,26 @@ body {
   border-color: var(--border);
 }
 
+#controls .link {
+  display: flex;
+  align-items: center;
+  color: var(--glow);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s;
+}
+
+#controls .link:hover {
+  color: #05131a;
+  background: var(--glow);
+}
+
 #controls button.primary:active {
   color: #05131a;
   background: var(--glow);

@@ -25,6 +25,7 @@ src/
   env.js           procedural equirect sky, PMREM'd, so the metals have something to reflect
   world.js         the alien flat: clipmap terrain, gas giant, monoliths, pylons, dust
   character.js     assembles all of the above into one SkinnedMesh + one update()
+turntable/         the rig inspector page: neutral stage, clips, skeleton, bone axes
 ```
 
 ## Notes worth knowing
@@ -61,9 +62,11 @@ src/
 ## Developing
 
 ```bash
-npm run dev -w @vibe-dump/space-goblin      # the app
+npm run dev -w @vibe-dump/space-goblin      # both pages
 ```
 
-`dev/inspect.html` is a studio turntable for iterating on the character alone —
-it is not part of the build. Query params:
-`?clip=run|idle|combo&t=0.25&view=front|left|q34|back&dist=1.8&y=0.7&rig=1`.
+Two pages ship. `/` is the run; `/turntable/` is the same character on a
+neutral stage with a skeleton overlay, bone-axis triads, per-clip playback and
+a scrub bar. It began as a dev tool and is shipped because it is the honest
+view of the character — judging a figure inside a dark, fogged, backlit
+environment judges two things at once.

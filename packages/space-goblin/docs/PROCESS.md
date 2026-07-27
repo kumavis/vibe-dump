@@ -189,8 +189,9 @@ deterministically (already true — no `Math.random()` in generation) so the dif
 is meaningful.
 
 **Neutral studio lighting for character judgement.** Judging a figure inside a
-dark, fogged, backlit environment judges two things at once. `dev/inspect.html`
-already does this; use it *first*, and only then check the in-world look.
+dark, fogged, backlit environment judges two things at once. The shipped
+`turntable/` page already does this; use it *first*, and only then check the
+in-world look.
 
 ### Level 4 — Aesthetic review, structured
 
@@ -340,10 +341,128 @@ from throwaway scripts written during this build.
 | `tools/soak.mjs` | Long run with combat bursts; NaN and console-error sweep | Playwright, ~60 s |
 | `tools/perf.mjs` | Per-stage JS budgets and allocation counts | Playwright, ~15 s |
 
-Plus two small additions to the existing inspector: `?isolate=<materialKey>` and
-`?axes=1`.
+Plus one small addition to the shipped `turntable/` page:
+`?isolate=<materialKey>`. (Bone-axis triads and per-clip scrubbing are already
+there.)
 
 The honest summary of this project is that it shipped with Level 0, 1, 2 and 5
 performed ad hoc and then discarded, and Level 3 and 4 performed by eye. The
 subsystems that were handed to agents with a required verification loop came out
 best. Building the loops first is the whole process.
+
+---
+
+## Speculative — tools that don't exist yet
+
+Everything above is buildable today from scripts already written. This section
+is the wishlist: capabilities that would have changed how this project went,
+roughly ordered by how much time each would have saved. They share one root
+cause — **almost every expensive mistake came from inferring 3D facts from a 2D
+render**, and almost every cheap fix came from asking the scene directly.
+
+### 1. A pixel probe — "what am I looking at?"
+
+The single highest-value missing tool. Given a screenshot coordinate, return the
+part name, material key, owning bone, world position and distance from camera.
+
+Implementation is not exotic: render a second pass to an integer ID buffer
+(`gl_FragColor` = part index), read back one pixel, look the index up in the
+part table. Expose it as `probe(x, y)` on the debug handle, and as a CLI wrapper
+that takes a PNG plus a coordinate.
+
+The mystery-cone hunt cost three build-render-inspect cycles and ended with a
+bounding-box query. With a probe it is one call: *"that pixel is
+`shoulderCap`, material `metalDark`, bone `clavicleR`, world (-0.12, 1.03,
+0.05)."* Every "what is that thing" question in this project — and there were
+five or six — collapses to a single tool call.
+
+### 2. A labelled filmstrip, not a still
+
+Motion quality is the thing procedural animation most needs judged, and it is
+exactly what a still cannot show. Whip, lag, follow-through, foot slip, the cape
+catching up — all invisible in one frame, all obvious in eight.
+
+Want: `filmstrip(clip, view, n=8)` → one image, n frames evenly spaced across
+the cycle, each stamped with its normalised time, laid out left to right. Same
+cost as one screenshot to look at, an order of magnitude more information.
+A GIF/WebM would be better still if it could be viewed directly.
+
+### 3. Watch-mode rendering
+
+The loop was: edit → `vite build` (1.7 s) → launch Chromium (2 s) → wait for the
+character to build (1.6 s) → screenshot (1 s) → read. Call it 8–10 seconds of
+machinery per look, issued manually every time.
+
+Want: a watcher that rebuilds the contact sheet on every source change and
+writes it to a fixed path, so looking costs exactly one read and no commands.
+The character build is the floor here (1.6 s), which argues for a persistent
+browser process kept warm between renders rather than a cold launch each time.
+
+### 4. A silhouette mode and an automatic thumbnail
+
+`?silhouette=1` renders the whole figure flat black on white. Combined with an
+automatic 64 px downsample, this makes the read/doesn't-read judgement objective
+instead of a vibe. Ears too large, armour beside the head, a blade covering the
+face — all three were unambiguous in silhouette and arguable in full colour.
+
+Cheap extension: report silhouette coverage per body region as numbers, so
+"the cleaver occupies 31% of the silhouette" is a fact rather than an impression.
+
+### 5. An interpenetration heatmap
+
+Render the character with a shader that colours any surface within *n* mm of
+another part's surface. Cape through thigh, pauldron through neck, kilt through
+knee, hand through hip — all of these are currently invisible until they look
+wrong from one specific angle. A depth-peel or an SDF pass makes them a colour.
+
+### 6. API-version linting for the renderer
+
+Two of the session's dead ends were three.js version facts:
+`scene.environmentIntensity` (r163+, used against r160) and the belief that
+light layers filter per object.
+
+Want: a lint pass that resolves every `THREE.*` property assignment against the
+pinned version's actual class definitions and flags unknown ones, plus a short
+curated list of documented-but-misleading behaviours. This is mechanical and
+would have saved two full iteration cycles.
+
+### 7. A conventions oracle for subagents
+
+Contracts worked, but they were prose copied into four prompts. A single
+queryable source — "what is the grip axis convention?", "which material keys
+exist?" — would remove the drift risk entirely and shrink each prompt. In
+practice this is `docs/FRAMES.md` plus a rule that agents must quote it back in
+their report, but a machine-checkable schema for the material-key vocabulary
+would be strictly better than prose.
+
+### 8. Perceptual diff with structural tolerance
+
+Raw pixel diffs will be useless here: everything moves. What is wanted is
+"the silhouette changed by more than 2% in the head region" — a diff over
+downsampled, structure-aware bands rather than pixels. Without it, the baseline
+comparison in Level 3 will produce noise on every frame and be ignored within a
+day.
+
+### 9. A reference board
+
+There was none. No pinned reference images, no mood board, no "here is the ear
+shape I mean". Art direction lived entirely in prose in agent prompts, which is
+why the ear needed rebuilding from scratch and the head is still the weakest
+part. Even three generated reference sketches, pinned in `docs/`, would give
+every iteration something to be measured against other than my memory of what I
+intended.
+
+### 10. Faster agent round trips
+
+Each delegation took 20–35 minutes wall-clock. That is fine for a subsystem, but
+it makes an agent a bad choice for a five-minute question. A cheap "ask a
+running agent about its module" channel — as opposed to spawning a fresh one
+with full context — would have made the fresh-eyes reviewer in Level 4 practical
+to use on every iteration rather than none.
+
+---
+
+**The honest caveat on all of the above**: the biggest lever in this project was
+not a tool. It was the discipline of writing the assertion before the art, and
+that needs no tooling at all — just the decision to spend the first ten minutes
+of a subsystem writing the check instead of the code.

@@ -83,9 +83,9 @@ Every time I stopped guessing and computed the answer, it took one attempt:
 
 ### Building the studio inspector
 
-`dev/inspect.html` — a URL-parameterised turntable that freezes the character at
-a named view and clip time under neutral studio lighting — was worth its cost
-within two uses. Judging a character against a dark, fog-heavy, backlit
+A studio turntable — a neutral stage with named views and per-clip playback,
+since promoted out of `dev/` and shipped as the `turntable/` page — was worth
+its cost within two uses. Judging a character against a dark, fog-heavy, backlit
 environment is judging two things at once.
 
 ---
