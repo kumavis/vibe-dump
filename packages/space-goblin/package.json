@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "vite", "build": "vite build" },
+  "scripts": { "dev": "vite", "build": "vite build", "verify": "node tools/verify.mjs" },
   "dependencies": {
     "three": "^0.160.0"
   },
