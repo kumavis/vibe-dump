@@ -30,23 +30,48 @@
         <div><dt>triangles</dt><dd id="s-tris">—</dd></div>
         <div><dt>sim parts</dt><dd id="s-sim">—</dd></div>
         <div><dt>build</dt><dd id="s-build">—</dd></div>
+        <div title="Lowest world y reached by the toe-tip / heel bones since the clip was last reset. Negative means the foot went through the floor.">
+          <dt>floor L</dt><dd id="s-floorL">—</dd>
+        </div>
+        <div title="Lowest world y reached by the toe-tip / heel bones since the clip was last reset. Negative means the foot went through the floor.">
+          <dt>floor R</dt><dd id="s-floorR">—</dd>
+        </div>
       </dl>
     </aside>
 
+    <!-- Filled only while SOCKETS / TRAILS are on. -->
+    <aside id="debug-readout">
+      <div id="dbg-sockets"></div>
+      <div id="dbg-trails"></div>
+    </aside>
+
+    <!-- Always-on axis compass. Baked into every screenshot on purpose. -->
+    <canvas id="compass"></canvas>
+
     <footer id="controls">
-      <div class="group" id="clips">
-        <button data-clip="run" class="on">RUN</button>
-        <button data-clip="idle">IDLE</button>
-        <button data-clip="combo">COMBO</button>
+      <div class="row">
+        <div class="group" id="clips">
+          <button data-clip="run" class="on">RUN</button>
+          <button data-clip="idle">IDLE</button>
+          <button data-clip="combo">COMBO</button>
+        </div>
+        <div class="group">
+          <button id="btn-play" title="Play / pause">❚❚</button>
+          <input id="scrub" type="range" min="0" max="1000" value="0" title="Scrub the clip" />
+        </div>
+        <div class="group">
+          <button id="btn-spin" class="on" title="Turntable">SPIN</button>
+          <button id="btn-rig" title="Skeleton overlay">RIG</button>
+          <button id="btn-axes" title="Bone axes">AXES</button>
+        </div>
       </div>
-      <div class="group">
-        <button id="btn-play" title="Play / pause">❚❚</button>
-        <input id="scrub" type="range" min="0" max="1000" value="0" title="Scrub the clip" />
-      </div>
-      <div class="group">
-        <button id="btn-spin" class="on" title="Turntable">SPIN</button>
-        <button id="btn-rig" title="Skeleton overlay">RIG</button>
-        <button id="btn-axes" title="Bone axes">AXES</button>
+      <div class="row" id="debug-row">
+        <span class="tag">DEBUG</span>
+        <div class="group">
+          <button id="btn-compass" class="on" title="Axis compass + view label, drawn into the frame">COMPASS</button>
+          <button id="btn-sockets" title="Socket and plug frames — where a weapon should sit vs where it does">SOCKETS</button>
+          <button id="btn-trails" title="2 s world-space trails for toes, heels, hips and the cleaver tip">TRAILS</button>
+        </div>
       </div>
     </footer>
 
