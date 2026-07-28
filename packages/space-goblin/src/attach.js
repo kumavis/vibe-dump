@@ -225,10 +225,16 @@ export function forearmStrapSocket(side, { along = 0.55, clearance = 0.045, rest
   const length = bone.length()
   bone.normalize()
 
-  // In the bind pose the arms are out sideways with the palms down, so "away
-  // from the arm" is the same -Y the palm faces. Stated outright rather than
-  // derived from a cross product that flips between the two sides.
-  const outward = new THREE.Vector3(0, -1, 0)
+  // A shield straps to the BACK of the forearm, not the palm side.
+  //
+  // This shipped backwards. The comment here used to say "away from the arm is
+  // the same -Y the palm faces", which quietly equates two different things:
+  // -Y is where the palm looks, and a buckler mounted there rides the inside of
+  // the wrist, where it fouls his own body and where no shield has ever been
+  // worn. The back of the forearm is +Y in the bind pose (arms out sideways,
+  // palms down), and `socket.axis . handGripSocket().normal` is the one-line
+  // test — it wants to be about -1, and it was +0.997.
+  const outward = new THREE.Vector3(0, 1, 0)
   const origin = new THREE.Vector3()
     .addScaledVector(bone, length * along)
     .addScaledVector(outward, clearance)

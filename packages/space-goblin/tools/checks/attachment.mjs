@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { socketError, formatSocketError } from '../../src/attach.js'
+import { handGripSocket, socketError, formatSocketError } from '../../src/attach.js'
 import {
   CLIPS,
   GEARS,
@@ -8,6 +8,7 @@ import {
   capsuleWorld,
   fmt,
   mounts,
+  REST,
   pointCapsuleDist,
   segCapsuleDist,
   segSegDist,
@@ -15,6 +16,7 @@ import {
   trimmed,
   weaponMatrix,
 } from '../harness.mjs'
+import { buildGearParts } from '../../src/gear.js'
 
 // ---------------------------------------------------------------------------
 // Is the kit where it says it is?
@@ -380,5 +382,73 @@ checks.push({
       }
     }
     return { pass: bad.length === 0, measured: lines.join(', '), detail: bad.join('\n') }
+  },
+})
+
+/**
+ * A shield goes on the BACK of the forearm.
+ *
+ * This shipped inside-out for the same reason the cleaver did: the socket's
+ * comment equated "away from the arm" with "the way the palm faces", and -Y is
+ * only the second of those. The buckler rode the inside of the wrist. The test
+ * is one dot product against the hand's own palm normal, and it is not a
+ * tautology — the two frames are built by different functions from different
+ * bones, and the broken version scored +0.997 where this asserts below -0.8.
+ */
+const SHIELD_BACK_OF_ARM = -0.8
+
+checks.push({
+  name: 'the buckler rides the back of the forearm',
+  run() {
+    const mount = mounts().buckler
+    const palm = handGripSocket('L').normal
+    const d = mount.socket.axis.dot(palm)
+    return {
+      pass: d < SHIELD_BACK_OF_ARM,
+      measured: `strap axis · palm normal ${d.toFixed(3)}`,
+      detail:
+        d < SHIELD_BACK_OF_ARM
+          ? ''
+          : `the buckler's outward axis agrees with the palm normal (${d.toFixed(3)}, wants < ${SHIELD_BACK_OF_ARM}), ` +
+            `which mounts it on the inside of the wrist instead of the back of the forearm.`,
+    }
+  },
+})
+
+/**
+ * The cape has no collider for the scrubber pack and never will — it is verlet
+ * cloth against capsules on the *skeleton*, and the pack is a rigid gear part.
+ * So the only thing keeping them apart is where the cape is pinned, and that
+ * has to be asserted rather than eyeballed: pinned over the shoulders, the
+ * cape's centre anchor sat 5 mm above the pack's top edge and 16 mm inside its
+ * front face, and the cloth fell straight down through all 155 mm of it.
+ */
+checks.push({
+  name: 'the cape is anchored clear of the scrubber pack',
+  run() {
+    const { parts, accessories } = buildGearParts()
+    const pack = parts.find((p) => p.rigid === 'chest' && p.material === 'metalDark')
+    if (!pack) return { pass: false, measured: 'no pack', detail: 'could not find the scrubber pack part' }
+    pack.geometry.computeBoundingBox()
+    const bb = pack.geometry.boundingBox
+    const cape = accessories.find((a) => a.name === 'cape')
+    const bad = []
+    let worst = Infinity
+    for (const pin of cape.pins) {
+      const w = new THREE.Vector3(pin.local.x, pin.local.y, pin.local.z).add(REST[pin.bone])
+      const clear = bb.min.y - w.y
+      worst = Math.min(worst, clear)
+      if (clear < 0 && w.z < bb.max.z) {
+        bad.push(
+          `cape pin at column ${pin.col} sits at y=${w.y.toFixed(3)}, ${fmt.mm(-clear)} above the pack's ` +
+            `bottom edge (${bb.min.y.toFixed(3)}) and behind its front face — the cloth starts inside the pack.`,
+        )
+      }
+    }
+    return {
+      pass: bad.length === 0,
+      measured: `lowest pack edge ${bb.min.y.toFixed(3)}, nearest pin clears by ${fmt.mm(worst, 0)}`,
+      detail: bad.join('\n'),
+    }
   },
 })
