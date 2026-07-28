@@ -15,7 +15,12 @@ import { FORWARD_Z } from './src/convention.js'
 // ---------------------------------------------------------------------------
 
 const { clamp, lerp } = THREE.MathUtils
-const RUN_SPEED = 4.8 // m/s — matched to the stride length in the run clip
+// m/s. On a treadmill the planted foot has to travel backwards at exactly the
+// speed the ground travels, or he skates. `tools/verify.mjs` measures what the
+// clip actually does — the stance carries the foot 0.351 m in 0.100 s — so this
+// is 3.51, not the 4.8 that was here when the number was guessed rather than
+// measured. At 4.8 he was sliding a quarter of the way through every stride.
+const RUN_SPEED = 3.5
 
 /**
  * Metres in front of the goblin, i.e. on the FORWARD side. Every camera in this

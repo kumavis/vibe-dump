@@ -90,27 +90,28 @@ function parseArgs(argv) {
     views: null, // null = each mode's own default
     modes: ['plain'],
     phases: 3,
-    width: 880,
-    height: 620,
+    width: 800,
+    height: 560,
     scale: 0.6,
     settle: 1,
     trailFrames: 28,
     port: 4620,
     diff: null,
     diffOnly: false,
+    fromTiles: false,
     threshold: 8,
     top: 14,
     build: true,
   }
   const num = (v, name) => {
     const n = Number(v)
-    if (!Number.isFinite(n)) throw new Error(`--${name} needs a number, got ${v}`)
+    if (!Number.isFinite(n)) throw new UsageError(`--${name} needs a number, got ${v}`)
     return n
   }
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i]
     const next = () => {
-      if (i + 1 >= argv.length) throw new Error(`${a} needs a value`)
+      if (i + 1 >= argv.length) throw new UsageError(`${a} needs a value`)
       return argv[++i]
     }
     switch (a) {
@@ -131,21 +132,30 @@ function parseArgs(argv) {
       case '--port': o.port = num(next(), 'port'); break
       case '--diff': o.diff = path.resolve(next()); break
       case '--diff-only': o.diffOnly = true; break
+      case '--from-tiles': o.fromTiles = true; break
       case '--threshold': o.threshold = num(next(), 'threshold'); break
       case '--top': o.top = num(next(), 'top'); break
       case '--no-build': o.build = false; break
-      default: throw new Error(`unknown option ${a} (try --help)`)
+      default: throw new UsageError(`unknown option ${a} (try --help)`)
     }
   }
   if (o.modes.includes('all')) o.modes = Object.keys(MODES)
-  for (const m of o.modes) if (!MODES[m]) throw new Error(`unknown mode ${m}; have ${Object.keys(MODES).join(', ')}, all`)
-  for (const c of o.clips) if (!ALL_CLIPS.includes(c)) throw new Error(`unknown clip ${c}; have ${ALL_CLIPS.join(', ')}`)
-  for (const v of o.views ?? []) if (!ALL_VIEWS.includes(v)) throw new Error(`unknown view ${v}; have ${ALL_VIEWS.join(', ')}`)
-  if (o.diffOnly && !o.diff) throw new Error('--diff-only needs --diff <baselineDir>')
+  for (const m of o.modes) if (!MODES[m]) throw new UsageError(`unknown mode ${m}; have ${Object.keys(MODES).join(', ')}, all`)
+  for (const c of o.clips) if (!ALL_CLIPS.includes(c)) throw new UsageError(`unknown clip ${c}; have ${ALL_CLIPS.join(', ')}`)
+  for (const v of o.views ?? []) if (!ALL_VIEWS.includes(v)) throw new UsageError(`unknown view ${v}; have ${ALL_VIEWS.join(', ')}`)
+  // Calibration costs one extra grab per distinct view. It is only worth
+  // paying for when a diff will actually consume it — but it is written into
+  // the manifest, so a run captured with --diff can serve as the baseline for a
+  // later one that supplies its own.
+  o.calibrate = Boolean(o.diff)
+  if (o.diffOnly && !o.diff) throw new UsageError('--diff-only needs --diff <baselineDir>')
   return o
 }
 
 const split = (s) => s.split(',').map((x) => x.trim()).filter(Boolean)
+
+/** A mistake in the command line, not in the code — printed without a stack. */
+class UsageError extends Error {}
 
 const HELP = `
 contact-sheet — every view preset x a few phases of every clip, in one PNG.
@@ -158,29 +168,40 @@ contact-sheet — every view preset x a few phases of every clip, in one PNG.
   --mode <a,b>|all       ${Object.keys(MODES).map((m) => `${m} [${MODES[m].views.join(',')}]`).join('\n                         ')}
                          (default plain)
   --phases <n>           samples per clip, evenly spaced (default 3)
-  --size <WxH>           capture size per tile (default 880x620)
+  --size <WxH>           capture size per tile (default 800x560)
   --scale <f>            tile scale inside the sheet (default 0.6)
   --settle <f>           multiplier on every settle wait (default 1)
   --trail-frames <n>     frames of playback before a trails tile (default 28)
   --diff <baselineDir>   compare every tile against a previous run's tiles and
                          print the biggest movers
-  --diff-only            compare only; do not capture
+  --diff-only            compare only; do not capture or re-lay-out
+  --from-tiles           re-lay-out the sheets from tiles already in --out,
+                         without recapturing (for iterating on the layout)
   --threshold <n>        per-channel delta that counts as a changed pixel (8)
   --top <n>              rows in the movers table (default 14)
   --no-build             reuse the existing dist/ instead of rebuilding
   --port <n>             preview server port (default 4620)
 
-Timings on this container (software rasteriser, ~350 ms a frame):
-the default run is about 90 s; --mode all --clip run is about 75 s.
+Timings on this container, which has no GPU and rasterises in software at
+roughly 300 ms a frame: the default (3 clips x 6 views x 3 phases) is about
+two minutes. --mode all --clip run is about 80 s. Halve either with
+--phases 2, or with --size 640x450 at some cost in legibility.
 `
 
 // ---- capture --------------------------------------------------------------
 
 const slug = (s) => String(s).replace(/[^a-z0-9]+/gi, '-').toLowerCase()
 
+/** Frames of real playback after a clip change, before anything is captured. */
+const SWEEP_FRAMES = 12
+
 async function capture(page, opts) {
   const tiles = []
   const floorSweep = {}
+  // One extra grab of an already-captured state, once per distinct view. See
+  // measureNoiseFloor: without it the diff table has no idea which numbers are
+  // large.
+  const repeats = new Map()
   const t0 = Date.now()
 
   for (const clip of opts.clips) {
@@ -192,7 +213,7 @@ async function capture(page, opts) {
     // foot of four frames and call it the deepest foot of the clip. Play first,
     // read the minimum, then pause and capture.
     await setPlaying(page, true)
-    await settle(page, Math.round(14 * opts.settle))
+    await settle(page, Math.round(SWEEP_FRAMES * opts.settle))
     await setPlaying(page, false)
     floorSweep[clip] = (await readState(page)).floor
 
@@ -211,7 +232,11 @@ async function capture(page, opts) {
         await settle(page, Math.round(opts.trailFrames * opts.settle))
         await setPlaying(page, false)
         for (const view of views) {
-          tiles.push(await grabTile(page, view, { clip, mode, view, phaseIndex: 0 }))
+          const tile = await grabTile(page, view, { clip, mode, view, phaseIndex: 0 })
+          tiles.push(tile)
+          if (opts.calibrate && !repeats.has(view)) {
+            repeats.set(view, { a: tile.base64, b: (await captureTile(page, null)).base64 })
+          }
         }
         continue
       }
@@ -220,14 +245,18 @@ async function capture(page, opts) {
         await setPhase(page, p / opts.phases)
         await settle(page, Math.round(4 * opts.settle))
         for (const view of views) {
-          tiles.push(await grabTile(page, view, { clip, mode, view, phaseIndex: p }))
+          const tile = await grabTile(page, view, { clip, mode, view, phaseIndex: p })
+          tiles.push(tile)
+          if (opts.calibrate && !repeats.has(view)) {
+            repeats.set(view, { a: tile.base64, b: (await captureTile(page, null)).base64 })
+          }
         }
       }
     }
     await setOverlays(page, {})
   }
 
-  return { tiles, floorSweep, captureMs: Date.now() - t0 }
+  return { tiles, floorSweep, repeats, captureMs: Date.now() - t0 }
 }
 
 async function grabTile(page, view, meta) {
@@ -252,7 +281,7 @@ const FONT = '"DejaVu Sans", "Segoe UI", system-ui, sans-serif'
 
 const PAD = 14
 const GAP = 8
-const HEADER = 62
+const HEADER = 80
 const CAPTION = 34
 
 /**
@@ -287,8 +316,8 @@ function socketSummary(state) {
   )
   const bad = state.sockets.some((s) => s.axisDeg > 1 || s.rollDeg > 1 || s.offsetMm > 1)
   const text = state.sockets
-    .map((s) => `${s.name.toUpperCase()} ${s.axisDeg.toFixed(1)}° ${s.offsetMm.toFixed(1)}mm`)
-    .join('   ')
+    .map((s) => `${s.name.toUpperCase()} ${s.axisDeg.toFixed(1)}° / ${s.offsetMm.toFixed(1)} mm`)
+    .join('  ·  ')
   return { text, bad, worst }
 }
 
@@ -313,23 +342,24 @@ async function buildSheet(canvasPage, { clip, mode, tiles, views, phases, opts, 
 
   // Header. The floor numbers ride here rather than in a tile caption because
   // they are a running minimum over the whole clip, not a property of a frame.
-  ops.push({ kind: 'rect', x: 0, y: 0, width: L.width, height: PAD + HEADER - 6, fill: '#11151c' })
+  ops.push({ kind: 'rect', x: 0, y: 0, width: L.width, height: PAD + HEADER - 8, fill: '#11151c' })
   ops.push({
     kind: 'text', x: PAD, y: PAD + 12, text: `SPACE GOBLIN · ${clip.toUpperCase()} · ${mode.toUpperCase()}`,
     font: `700 20px ${FONT}`, fill: GLOW, letterSpacing: '2px',
   })
   ops.push({
     kind: 'text', x: PAD, y: PAD + 34, text: spec.blurb,
-    font: `400 13px ${FONT}`, fill: MUTED,
+    font: `400 13px ${FONT}`, fill: MUTED, maxWidth: L.width * 0.55,
   })
   const floor = meta.floor
   const floorText =
     floor.L == null
       ? 'floor —'
-      : `deepest foot  L ${(floor.L * 1000).toFixed(1)} mm   R ${(floor.R * 1000).toFixed(1)} mm`
+      : `deepest foot over ${meta.sweepFrames} frames of playback   L ${(floor.L * 1000).toFixed(1)} mm   R ${(floor.R * 1000).toFixed(1)} mm`
   ops.push({
     kind: 'text', x: PAD, y: PAD + 51, text: floorText,
     font: `600 13px ${FONT}`, fill: floor.L != null && Math.min(floor.L, floor.R) < -0.002 ? BAD : OK,
+    maxWidth: L.width * 0.55,
   })
   ops.push({
     kind: 'text', x: L.width - PAD, y: PAD + 12, align: 'right',
@@ -340,18 +370,19 @@ async function buildSheet(canvasPage, { clip, mode, tiles, views, phases, opts, 
     kind: 'text', x: L.width - PAD, y: PAD + 32, align: 'right', text: meta.stamp,
     font: `400 12px ${FONT}`, fill: MUTED,
   })
-  // Never let a shimmed sheet pass for an unshimmed one.
+  // Never let a shimmed sheet pass for an unshimmed one. Its own line: it used
+  // to share one with the floor readout and the two overprinted each other.
   if (meta.shimmed) {
     ops.push({
-      kind: 'text', x: L.width / 2, y: PAD + 51, align: 'center',
-      text: 'PHASE SHIM ACTIVE — the shipped scrub slider does not move the pose',
-      font: `700 13px ${FONT}`, fill: BAD,
+      kind: 'text', x: PAD, y: PAD + 70,
+      text: 'PHASE SHIM ACTIVE — the shipped scrub slider does not move the pose; see CONTACT-SHEET.md',
+      font: `700 13px ${FONT}`, fill: BAD, maxWidth: L.width - PAD * 2,
     })
   }
   if (meta.legend) {
     ops.push({
       kind: 'text', x: L.width - PAD, y: PAD + 51, align: 'right', text: meta.legend,
-      font: `600 12px ${FONT}`, fill: INK,
+      font: `600 12px ${FONT}`, fill: INK, maxWidth: L.width * 0.42,
     })
   }
 
@@ -377,8 +408,13 @@ async function buildSheet(canvasPage, { clip, mode, tiles, views, phases, opts, 
       const sum = socketSummary(s)
       if (sum) {
         ops.push({
-          kind: 'text', x: x + 10, y: y + CAPTION + tileH - 13,
-          text: sum.text, font: `700 14px ${FONT}`, fill: sum.bad ? BAD : OK,
+          kind: 'rect', x, y: y + CAPTION + tileH - 24, width: tileW, height: 24,
+          fill: 'rgba(8, 11, 16, 0.78)',
+        })
+        ops.push({
+          kind: 'text', x: x + tileW / 2, y: y + CAPTION + tileH - 12, align: 'center',
+          text: sum.text, font: `700 13px ${FONT}`, fill: sum.bad ? BAD : OK,
+          maxWidth: tileW - 16,
         })
       }
     }
@@ -402,7 +438,30 @@ async function buildSheet(canvasPage, { clip, mode, tiles, views, phases, opts, 
  * a limb in a different place, an overlay gone, a texture changed — moves the
  * mean by whole units, not by tenths.
  */
-async function diffTiles(canvasPage, tiles, baselineDir, { threshold, top, outDir }) {
+/**
+ * How different two captures of the *same* state are, per view.
+ *
+ * This has to be measured rather than assumed, because it is not zero and it is
+ * not uniform. The cape and strap solver runs on wall-clock delta with a
+ * time-varying wind, so it never reaches a fixed point even with the clip
+ * paused — and the size of the resulting wobble in pixels depends entirely on
+ * how much of the frame the wobbling thing fills. Measured here: the whole-body
+ * presets sit around 0.2/255, the HEAD close-up around 3.5, because at 0.62 m
+ * a hair strand moving half a millimetre moves a sixth of the frame.
+ *
+ * Without this, a diff table flags HEAD every single time and people stop
+ * reading it. With it, "did this change" is asked against the right yardstick.
+ */
+async function measureNoiseFloor(canvasPage, repeats, { threshold }) {
+  const out = {}
+  for (const [view, pair] of repeats) {
+    const r = await comparePng(canvasPage, pair.a, pair.b, { threshold })
+    out[view] = r.mean
+  }
+  return out
+}
+
+async function diffTiles(canvasPage, tiles, baselineDir, { threshold, top, outDir, noiseFloor }) {
   const rows = []
   const missing = []
   for (const tile of tiles) {
@@ -415,7 +474,7 @@ async function diffTiles(canvasPage, tiles, baselineDir, { threshold, top, outDi
       continue
     }
     const r = await comparePng(canvasPage, base.toString('base64'), tile.base64, { threshold })
-    rows.push({ name: tile.name, ...r })
+    rows.push({ name: tile.name, view: tile.view, ...r })
   }
 
   let baselineOnly = []
@@ -426,36 +485,57 @@ async function diffTiles(canvasPage, tiles, baselineDir, { threshold, top, outDi
     )
   } catch { /* no baseline tiles dir; already reported per-tile */ }
 
-  rows.sort((a, b) => (b.mean || 0) - (a.mean || 0))
+  // Each tile is judged against its own view's measured noise, not against a
+  // single number for the sheet. 4x the floor, with an absolute lower bound so
+  // a view that happened to calibrate quiet cannot make every later tile a
+  // "mover". Views with no measurement fall back to the median.
   const means = rows.filter((r) => !r.sizeMismatch).map((r) => r.mean).sort((a, b) => a - b)
   const median = means.length ? means[Math.floor(means.length / 2)] : 0
-  const moverCut = Math.max(median * 4, 1.5)
+  const floorFor = (view) => noiseFloor?.[view] ?? median
+  const cutFor = (view) => Math.max(4 * floorFor(view), 0.8)
+  for (const r of rows) {
+    r.floor = floorFor(r.view)
+    r.cut = cutFor(r.view)
+    r.ratio = r.sizeMismatch ? Infinity : r.mean / Math.max(r.floor, 1e-6)
+    r.moved = r.sizeMismatch || r.mean > r.cut
+  }
+  // Ranked by how far above its *own* floor a tile is, so the head close-up
+  // does not permanently own the top of the table.
+  rows.sort((a, b) => b.ratio - a.ratio)
 
   console.log(`\n  DIFF vs ${path.relative(process.cwd(), baselineDir) || baselineDir}`)
   console.log(`  ${rows.length} tiles compared, ${missing.length} with no baseline, ${baselineOnly.length} in baseline only`)
-  console.log(`  noise floor (median mean delta) ${median.toFixed(3)}/255 · flagging above ${moverCut.toFixed(3)}\n`)
-  const head = `  ${'TILE'.padEnd(42)}${'MEAN Δ'.padStart(9)}${'MAX Δ'.padStart(8)}${'%PX>' + threshold}`.padEnd(72)
-  console.log(head)
-  console.log(`  ${'-'.repeat(70)}`)
+  console.log(
+    noiseFloor && Object.keys(noiseFloor).length
+      ? `  measured noise floor per view (two captures of one state): ` +
+          Object.entries(noiseFloor).map(([v, m]) => `${v} ${m.toFixed(2)}`).join('  ')
+      : `  no calibration in this run; using the median tile delta ${median.toFixed(3)} as the floor`,
+  )
+  console.log(`  a tile is flagged when it moves more than 4x its view's floor\n`)
+  console.log(
+    `  ${'TILE'.padEnd(34)}${'MEAN Δ'.padStart(9)}${'FLOOR'.padStart(8)}${'xFLOOR'.padStart(8)}${'MAX Δ'.padStart(7)}${('%PX>' + threshold).padStart(8)}`,
+  )
+  console.log(`  ${'-'.repeat(74)}`)
   let flagged = 0
   for (const r of rows.slice(0, top)) {
     if (r.sizeMismatch) {
-      console.log(`  ${r.name.padEnd(42)}   SIZE MISMATCH ${r.a.join('x')} vs ${r.b.join('x')}`)
+      console.log(`  ${r.name.padEnd(34)}   SIZE MISMATCH ${r.a.join('x')} vs ${r.b.join('x')}`)
       flagged++
       continue
     }
-    const mark = r.mean > moverCut ? ' <<' : ''
-    if (r.mean > moverCut) flagged++
+    if (r.moved) flagged++
     console.log(
-      `  ${r.name.padEnd(42)}${r.mean.toFixed(3).padStart(9)}${String(r.max).padStart(8)}${r.pctChanged.toFixed(2).padStart(9)}${mark}`,
+      `  ${r.name.padEnd(34)}${r.mean.toFixed(3).padStart(9)}${r.floor.toFixed(3).padStart(8)}` +
+        `${r.ratio.toFixed(1).padStart(8)}${String(r.max).padStart(7)}${r.pctChanged.toFixed(2).padStart(8)}` +
+        (r.moved ? '  <<' : ''),
     )
   }
-  if (rows.length > top) console.log(`  … ${rows.length - top} more, all quieter`)
-  for (const m of missing) console.log(`  ${m.padEnd(42)}   NO BASELINE`)
-  for (const m of baselineOnly) console.log(`  ${m.padEnd(42)}   DROPPED (baseline only)`)
+  if (rows.length > top) console.log(`  … ${rows.length - top} more, all closer to their floor`)
+  for (const m of missing) console.log(`  ${m.padEnd(34)}   NO BASELINE`)
+  for (const m of baselineOnly) console.log(`  ${m.padEnd(34)}   DROPPED (baseline only)`)
 
   // Heatmaps for whatever actually moved, so "which pixels" is one file away.
-  const movers = rows.filter((r) => !r.sizeMismatch && r.mean > moverCut).slice(0, 8)
+  const movers = rows.filter((r) => !r.sizeMismatch && r.moved).slice(0, 8)
   if (movers.length) {
     const dir = path.join(outDir, 'diff')
     await fs.mkdir(dir, { recursive: true })
@@ -469,20 +549,20 @@ async function diffTiles(canvasPage, tiles, baselineDir, { threshold, top, outDi
   }
   console.log(
     flagged === 0
-      ? `\n  no tile moved more than the solver's own noise floor.\n`
-      : `\n  ${flagged} tile(s) above the noise floor — look at them.\n`,
+      ? `\n  nothing moved further than the solver's own jitter.\n`
+      : `\n  ${flagged} tile(s) above their view's noise floor — look at them.\n`,
   )
-  return { rows, missing, baselineOnly, median, moverCut, flagged }
+  return { rows, missing, baselineOnly, median, noiseFloor, flagged }
 }
 
 /** Rehydrate a previous run's tiles so --diff-only needs no browser tab of its own. */
 async function loadTiles(dir) {
   const manifest = JSON.parse(await fs.readFile(path.join(dir, 'manifest.json'), 'utf8'))
-  const out = []
+  const tiles = []
   for (const t of manifest.tiles) {
-    out.push({ ...t, base64: (await fs.readFile(path.join(dir, 'tiles', t.name))).toString('base64') })
+    tiles.push({ ...t, base64: (await fs.readFile(path.join(dir, 'tiles', t.name))).toString('base64') })
   }
-  return out
+  return { manifest, tiles }
 }
 
 // ---- main -----------------------------------------------------------------
@@ -510,10 +590,21 @@ async function main() {
     let shimmed = false
     let scrub = null
     let floorSweep = {}
+    let noiseFloor = null
 
-    if (opts.diffOnly) {
+    if (opts.diffOnly || opts.fromTiles) {
       console.log(`  reusing tiles in ${opts.out}`)
-      tiles = await loadTiles(opts.out)
+      const prior = await loadTiles(opts.out)
+      tiles = prior.tiles
+      shimmed = prior.manifest.phaseShim
+      floorSweep = prior.manifest.floorSweep ?? {}
+      scrub = prior.manifest.scrubProbe ?? null
+      noiseFloor = prior.manifest.noiseFloor ?? null
+      trailLegendCache = prior.manifest.trailLegend ?? undefined
+      // Carried forward rather than reset: these describe the capture the tiles
+      // came from, and re-laying-out a sheet does not make that capture cleaner.
+      captureMs = prior.manifest.captureMs ?? 0
+      consoleErrors = prior.manifest.consoleErrors ?? []
     } else {
       if (opts.build) {
         process.stdout.write('  vite build … ')
@@ -557,6 +648,7 @@ async function main() {
       tiles = r.tiles
       floorSweep = r.floorSweep
       captureMs = r.captureMs
+      if (r.repeats.size) noiseFloor = await measureNoiseFloor(canvasPage, r.repeats, opts)
       consoleErrors = page.__consoleErrors
       console.log(`  ${tiles.length} tiles in ${(captureMs / 1000).toFixed(1)} s (${Math.round(captureMs / tiles.length)} ms each)`)
     }
@@ -578,10 +670,10 @@ async function main() {
           const phases = mode === 'trails' ? 1 : opts.phases
           const last = group[group.length - 1].state
           const legend =
-            mode === 'trails' ? await readTrailLegend(browser, opts) : null
+            mode === 'trails' ? await readTrailLegend(browser) : null
           const png = await buildSheet(canvasPage, {
             clip, mode, tiles: group, views, phases, opts,
-            meta: { stamp, floor: floorSweep[clip] ?? last.floor, legend, shimmed },
+            meta: { stamp, floor: floorSweep[clip] ?? last.floor, legend, shimmed, sweepFrames: SWEEP_FRAMES },
           })
           const file = path.join(opts.out, `${clip}-${mode}.png`)
           await fs.writeFile(file, png)
@@ -600,6 +692,8 @@ async function main() {
           captureMs,
           phaseShim: shimmed,
           floorSweep,
+          noiseFloor,
+          trailLegend: trailLegendCache ?? null,
           scrubProbe: scrub,
           consoleErrors,
           sheets: sheets.map((s) => path.basename(s.file)),
@@ -615,7 +709,14 @@ async function main() {
       for (const e of consoleErrors.slice(0, 5)) console.log(`    ${e}`)
     }
 
-    if (opts.diff) await diffTiles(canvasPage, tiles, opts.diff, opts)
+    if (opts.diff) {
+      await diffTiles(canvasPage, tiles, opts.diff, {
+        threshold: opts.threshold,
+        top: opts.top,
+        outDir: opts.out,
+        noiseFloor,
+      })
+    }
 
     console.log(`  ${(Date.now() - started) / 1000}s total → ${opts.out}`)
   } finally {
@@ -630,7 +731,7 @@ async function main() {
  * will eventually be wrong.
  */
 let trailLegendCache
-async function readTrailLegend(browser, opts) {
+async function readTrailLegend(browser) {
   if (trailLegendCache !== undefined) return trailLegendCache
   const pages = browser.contexts().flatMap((c) => c.pages())
   const page = pages.find((p) => p.url().includes('turntable'))
@@ -642,6 +743,7 @@ async function readTrailLegend(browser, opts) {
 }
 
 main().catch((e) => {
-  console.error(e)
+  if (e instanceof UsageError) console.error(`\n  ${e.message}\n  run with --help for the full list.\n`)
+  else console.error(e)
   process.exit(1)
 })

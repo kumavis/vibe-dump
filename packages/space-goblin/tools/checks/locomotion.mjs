@@ -84,15 +84,13 @@ const SWING_SCUFF_MAX = 0.01
  * How far the planted foot's mean ground speed may sit from `RUN_SPEED`, the
  * speed `main.js` scrolls the world at.
  *
- * THIS IS A FENCE AT TODAY'S NUMBER, NOT THE 15% A CLEAN GAIT WOULD HOLD.
- * Measured: the stance carries the foot 0.351 m in 0.100 s = 3.51 m/s, against
- * a world moving at 4.80 m/s — 27% slow, i.e. he really does skate, by about a
- * quarter. Fixing that is an `anim.js`/`main.js` change (lengthen the stride or
- * drop RUN_SPEED to ~3.5), and this suite is not allowed to touch either. The
- * fence sits at 0.33 so the number is measured, printed on every run, and
- * cannot get *worse* without failing.
+ * This check found a real one: the stance carries the foot 0.351 m in 0.100 s =
+ * 3.51 m/s, and `RUN_SPEED` was 4.80, so he skated a quarter of the way through
+ * every stride. `RUN_SPEED` is now 3.5 and the error is +0.2%. The fence sits at
+ * 0.15 — loose enough for the odd re-timing, tight enough that anyone who
+ * guesses at this number again gets caught the way it was caught the first time.
  */
-const FOOT_SKATE_TOL = 0.33
+const FOOT_SKATE_TOL = 0.15
 
 /**
  * How much of the cycle both feet may be off the ground. A sprint has a real
