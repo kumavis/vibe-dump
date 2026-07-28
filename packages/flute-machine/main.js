@@ -16,7 +16,7 @@ const clamp = (x, a, b) => (x < a ? a : x > b ? b : x)
 const state = {
   preset: 'ambient',
   settings: { ...DEFAULT_SETTINGS, ...PRESET_BY_ID.ambient.settings },
-  tone: { breathiness: 0.45, vibrato: 0.45, brightness: 0.5 },
+  tone: { breathiness: 0.3, vibrato: 0.45, brightness: 0.5 },
   seed: randomSeed(),
   volume: 0.75,
   droneLock: false,

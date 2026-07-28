@@ -618,7 +618,10 @@ export class JetWaveguide extends VoiceCore {
       const svHp = nb - this.svLp - this.svQ * this.svBp
       this.svBp += this.svF * svHp
       const pbs = Pb > 0 ? Pb * Math.sqrt(Pb) : 0
-      const air = this.svBp * (P.airGain * pbs + this.chiff)
+      // Scaled by outGain like the tone is. Without that the hiss enters the
+      // mix roughly six times louder than intended relative to the tone, and
+      // the instrument turns into a noise generator with a pitch hiding in it.
+      const air = this.svBp * (P.airGain * pbs + this.chiff) * P.outGain
 
       let s = (P.outGain * (0.8 * rad + 0.2 * refl) + air) * this.gain
       const o = s - this.oX + this.oR * this.oY

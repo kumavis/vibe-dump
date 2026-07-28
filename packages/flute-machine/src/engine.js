@@ -68,12 +68,14 @@ function buildGraph(ctx, { space = 0.55, gain = 0.9, seed = 12345, analyser = fa
   const input = ctx.createGain()
   // The waveguide's natural output sits around -25 dBFS: the cubic saturates
   // at a low amplitude and that is what keeps it stable, so the level has to
-  // be made up here rather than by pushing the model harder.
-  input.gain.value = 8
+  // be made up here rather than by pushing the model harder. Set for the
+  // common case of one or two notes sounding; the limiter picks up the rare
+  // moments when four breaths overlap.
+  input.gain.value = 18
 
   const dry = ctx.createGain()
   const wet = ctx.createGain()
-  const wetMix = 0.06 + 0.5 * clamp(space, 0, 1)
+  const wetMix = 0.05 + 0.38 * clamp(space, 0, 1)
   dry.gain.value = 1 - 0.45 * wetMix
   wet.gain.value = wetMix
 
@@ -94,11 +96,14 @@ function buildGraph(ctx, { space = 0.55, gain = 0.9, seed = 12345, analyser = fa
   // Not for loudness — just a backstop so a stack of overlapping breaths in a
   // big room can never clip the export.
   const limiter = ctx.createDynamicsCompressor()
-  limiter.threshold.value = -3
-  limiter.knee.value = 4
-  limiter.ratio.value = 4
-  limiter.attack.value = 0.005
-  limiter.release.value = 0.25
+  // Sits above a single note (which peaks near -11 dBFS) and only engages
+  // when several breaths overlap, so ordinary playing is untouched and a
+  // four-voice stack still cannot clip the export.
+  limiter.threshold.value = -6
+  limiter.knee.value = 3
+  limiter.ratio.value = 12
+  limiter.attack.value = 0.003
+  limiter.release.value = 0.2
 
   input.connect(tilt)
   tilt.connect(dry)
@@ -204,7 +209,7 @@ export class FluteEngine {
     if (!this.graph || Math.abs(space - this.space) < 0.01) return
     this.space = space
     this.graph.convolver.buffer = makeImpulse(this.ctx, spaceSeconds(space), this.seed)
-    const wetMix = 0.06 + 0.5 * clamp(space, 0, 1)
+    const wetMix = 0.05 + 0.38 * clamp(space, 0, 1)
     this.graph.wet.gain.value = wetMix
     this.graph.dry.gain.value = 1 - 0.45 * wetMix
   }
