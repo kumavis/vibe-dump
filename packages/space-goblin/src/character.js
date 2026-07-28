@@ -476,6 +476,7 @@ export function createGoblin({ renderer, quality = 1 } = {}) {
         gravity: spec.gravity ?? -9.8,
         wind: spec.wind ?? 0.5,
         drag: spec.drag ?? 0.03,
+        slit: spec.slit,
       })
       dynamics.addCloth(cloth)
       const clothMesh = new ClothMesh(cloth, { material: materials[spec.material] || materials.cloth })

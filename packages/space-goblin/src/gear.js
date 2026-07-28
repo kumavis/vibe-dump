@@ -926,9 +926,14 @@ function accessorySpecs() {
     name: 'cape',
     width: 0.42,
     height: 0.46,
-    cols: 13,
+    cols: 15,
     rows: 15,
     material: 'cape',
+    // Cut up the middle from half height to the hem, so the cape ends in two
+    // tails that swing on their own instead of one board that swings as a unit.
+    // 15 columns rather than 14 so there IS a middle: the cut runs between
+    // columns 7 and 8, leaving seven whole columns of cloth either side.
+    slit: { col: 7, fromRow: 7 },
     wind: 0.85,
     drag: 0.05,
     // Anchored UNDER the pack rather than over the shoulders. Pinned at the
@@ -938,8 +943,8 @@ function accessorySpecs() {
     // below PACK_Y - 0.08, which is the bottom edge of the frame.
     pins: [
       { bone: 'chest', local: localTo('chest', torsoSurface(0.805, 1.25, 0.03).p), col: 0 },
-      { bone: 'chest', local: localTo('chest', torsoSurface(0.795, Math.PI, 0.045).p), col: 6 },
-      { bone: 'chest', local: localTo('chest', torsoSurface(0.805, -1.25, 0.03).p), col: 12 },
+      { bone: 'chest', local: localTo('chest', torsoSurface(0.795, Math.PI, 0.045).p), col: 7 },
+      { bone: 'chest', local: localTo('chest', torsoSurface(0.805, -1.25, 0.03).p), col: 14 },
     ],
   })
 

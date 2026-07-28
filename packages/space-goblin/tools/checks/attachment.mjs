@@ -17,6 +17,7 @@ import {
   weaponMatrix,
 } from '../harness.mjs'
 import { buildGearParts } from '../../src/gear.js'
+import { ClothPatch, ClothMesh } from '../../src/dynamics.js'
 
 // ---------------------------------------------------------------------------
 // Is the kit where it says it is?
@@ -448,6 +449,73 @@ checks.push({
     return {
       pass: bad.length === 0,
       measured: `lowest pack edge ${bb.min.y.toFixed(3)}, nearest pin clears by ${fmt.mm(worst, 0)}`,
+      detail: bad.join('\n'),
+    }
+  },
+})
+
+/**
+ * The cape's slit has to be cut in BOTH places or it is not a slit.
+ *
+ * The solver's constraint set and the mesh's triangle list are built by two
+ * different functions from the same grid, and only the pair of them agree on
+ * what a hole is. Cut the links but keep the quads and the two tails swing
+ * through triangles that stretch across the gap; cut the quads but keep the
+ * links and you get a visible gap whose halves move as one board. Neither
+ * failure is visible in a still, and the second one is invisible even in
+ * motion until you look for it.
+ *
+ * So this asserts the cut twice, against the shipped `slit` spec, and it is not
+ * a tautology: it re-derives which links and quads *should* be absent from the
+ * declared columns and rows, and checks the built arrays against that.
+ */
+checks.push({
+  name: 'the cape slit is cut in the sim and in the mesh',
+  run() {
+    const { accessories } = buildGearParts()
+    const spec = accessories.find((a) => a.name === 'cape')
+    if (!spec?.slit) return { pass: false, measured: 'no slit', detail: 'the cape declares no slit' }
+    const cloth = new ClothPatch({
+      width: spec.width,
+      height: spec.height,
+      cols: spec.cols,
+      rows: spec.rows,
+      pins: [],
+      slit: spec.slit,
+    })
+    const { col, fromRow } = cloth.slit
+    const cols = cloth.cols
+    const crosses = (a, b) => {
+      const ca = a % cols
+      const cb = b % cols
+      const ra = (a / cols) | 0
+      const rb = (b / cols) | 0
+      return Math.min(ca, cb) <= col && Math.max(ca, cb) > col && Math.min(ra, rb) >= fromRow
+    }
+    let links = 0
+    for (const [A, B] of [
+      [cloth._ca, cloth._cb],
+      [cloth._ba, cloth._bb],
+    ]) {
+      for (let i = 0; i < A.length; i++) if (crosses(A[i], B[i])) links++
+    }
+    // The mesh is the other half of the cut. Count triangles whose three corners
+    // straddle the slit below its start.
+    const mesh = new ClothMesh(cloth, { material: new THREE.MeshBasicMaterial() })
+    const index = mesh.geometry.getIndex().array
+    let tris = 0
+    for (let i = 0; i < index.length; i += 3) {
+      const c = [0, 1, 2].map((k) => index[i + k] % cols)
+      const r = [0, 1, 2].map((k) => (index[i + k] / cols) | 0)
+      if (Math.min(...c) <= col && Math.max(...c) > col && Math.min(...r) >= fromRow) tris++
+    }
+    mesh.geometry.dispose()
+    const bad = []
+    if (links) bad.push(`${links} constraint(s) still span the slit — the two tails are tied together in the solver.`)
+    if (tris) bad.push(`${tris} triangle(s) still span the slit — the cut is closed over in the render.`)
+    return {
+      pass: bad.length === 0,
+      measured: `slit at col ${col} from row ${fromRow}: ${links} links, ${tris} triangles across`,
       detail: bad.join('\n'),
     }
   },

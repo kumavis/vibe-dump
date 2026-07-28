@@ -691,6 +691,20 @@ export class ClothPatch {
     this.tearable = !!opts.tearable
     this._gravitySet = opts.gravity !== undefined
 
+    // A slit: a vertical cut between column `col` and `col + 1`, running from
+    // row `fromRow` down to the hem. Below it the two halves share no links at
+    // all, so they swing on their own — which is the whole point of a tailed
+    // cape, and is not something a single sheet can fake. Nothing is duplicated
+    // to achieve it: the grid already has separate particles per column, so the
+    // cut is just the constraints and triangles we decline to build.
+    //
+    // Links are dropped only where BOTH endpoints are at or below `fromRow`,
+    // which leaves the shear diagonals spanning the boundary row intact. That
+    // matters: cut those too and the slit's apex is a free corner that peels
+    // open under load, and the tear runs up into the pinned edge.
+    const slit = opts.slit || null
+    this.slit = slit ? { col: slit.col | 0, fromRow: Math.max(1, slit.fromRow | 0) } : null
+
     const cols = this.cols
     const rows = this.rows
     const count = cols * rows
@@ -721,9 +735,16 @@ export class ClothPatch {
     const bb = []
     const brl = []
     const idx = (c, r) => r * cols + c
+    // Does a link from column ca to cb, spanning rows ra..rb, cross the slit?
+    const cut = (ca, cb, ra, rb) => {
+      if (!this.slit) return false
+      const lo = Math.min(ca, cb)
+      const hi = Math.max(ca, cb)
+      return lo <= this.slit.col && hi > this.slit.col && Math.min(ra, rb) >= this.slit.fromRow
+    }
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        if (c + 1 < cols) {
+        if (c + 1 < cols && !cut(c, c + 1, r, r)) {
           ia.push(idx(c, r))
           ib.push(idx(c + 1, r))
           rl.push(this._dx)
@@ -733,7 +754,7 @@ export class ClothPatch {
           ib.push(idx(c, r + 1))
           rl.push(this._dy)
         }
-        if (c + 1 < cols && r + 1 < rows) {
+        if (c + 1 < cols && r + 1 < rows && !cut(c, c + 1, r, r + 1)) {
           const diag = Math.hypot(this._dx, this._dy)
           ia.push(idx(c, r))
           ib.push(idx(c + 1, r + 1))
@@ -742,7 +763,7 @@ export class ClothPatch {
           ib.push(idx(c, r + 1))
           rl.push(diag)
         }
-        if (c + 2 < cols) {
+        if (c + 2 < cols && !cut(c, c + 2, r, r)) {
           ba.push(idx(c, r))
           bb.push(idx(c + 2, r))
           brl.push(this._dx * 2)
@@ -1530,11 +1551,20 @@ export class ClothMesh extends THREE.Mesh {
         uv[k + 1] = 1 - r / (rows - 1)
       }
     }
+    // The quads spanning the slit are simply never emitted, so the cut is a real
+    // hole in the surface rather than two halves held together by triangles the
+    // solver knows nothing about. Same predicate as the constraint set, so the
+    // render and the simulation cut in exactly the same place.
+    const slit = cloth.slit
+    const spansSlit = (c, r) => !!slit && c === slit.col && r >= slit.fromRow
+    let quads = 0
+    for (let r = 0; r < rows - 1; r++) for (let c = 0; c < cols - 1; c++) if (!spansSlit(c, r)) quads++
     const IndexArray = count > 65535 ? Uint32Array : Uint16Array
-    const index = new IndexArray((cols - 1) * (rows - 1) * 6)
+    const index = new IndexArray(quads * 6)
     let t = 0
     for (let r = 0; r < rows - 1; r++) {
       for (let c = 0; c < cols - 1; c++) {
+        if (spansSlit(c, r)) continue
         const a = r * cols + c
         const b = a + 1
         const d = a + cols
