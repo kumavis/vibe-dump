@@ -231,8 +231,14 @@ function tipGeometry(kind) {
       return xform(g, { pos: [0, -0.013, 0] })
     }
     case 'ring': {
+      // A hoop hangs in a VERTICAL plane, facing sideways off the ear — you see
+      // the circle, not its edge. TorusGeometry is born in the XY plane with its
+      // hole along +Z; rotating about X (which is what this did) lays the hoop
+      // flat into the XZ plane, so the rings read as little horizontal discs
+      // stuck to the side of his head. Rotating about Y instead swings the hole
+      // onto X and leaves the hoop standing up.
       const g = new THREE.TorusGeometry(0.014, 0.0035, 6, 14)
-      return xform(g, { pos: [0, -0.014, 0], rot: [Math.PI / 2, 0, 0] })
+      return xform(g, { pos: [0, -0.014, 0], rot: [0, Math.PI / 2, 0] })
     }
     case 'bead':
     default:

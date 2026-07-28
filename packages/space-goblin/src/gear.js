@@ -466,9 +466,21 @@ function buildBelt() {
 }
 
 /** Air-scrubber pack: a canister pair on a frame across the shoulder blades. */
+/**
+ * How high up the back the scrubber pack rides.
+ *
+ * It used to sit at 0.86, which put its top edge at y = 0.935 — 5 mm under the
+ * cape's centre pin at 0.940, and 16 mm in front of its own front face. The
+ * cape therefore hung from a point effectively inside the pack and fell straight
+ * down across all 155 mm of it. Raised so the pack clears the cape's new
+ * anchor line entirely; the cape now starts below it and hangs out from under
+ * the bottom edge, which is also how a cloak is actually worn under a pack.
+ */
+const PACK_Y = 0.9
+
 function buildScrubberPack() {
   const geos = []
-  const back = torsoSurface(0.86, Math.PI, 0.028)
+  const back = torsoSurface(PACK_Y, Math.PI, 0.028)
   const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), back.n)
 
   const frame = roundedBox(0.15, 0.15, 0.03, 0.012, 3)
@@ -520,7 +532,7 @@ function buildScrubberPack() {
 
 /** The readout screen on the regulator, and tank labels — emissive bits. */
 function buildPackGlow() {
-  const back = torsoSurface(0.86, Math.PI, 0.028)
+  const back = torsoSurface(PACK_Y, Math.PI, 0.028)
   const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), back.n)
   const screen = roundedBox(0.032, 0.02, 0.004, 0.002, 1)
   xform(screen, {
@@ -871,7 +883,7 @@ function accessorySpecs() {
     type: 'strand',
     name: 'hose',
     bone: 'chest',
-    offset: localTo('chest', torsoSurface(0.9, Math.PI - 0.5, 0.05).p),
+    offset: localTo('chest', torsoSurface(PACK_Y + 0.04, Math.PI - 0.5, 0.05).p),
     dir: new THREE.Vector3(0.3, 0.4, -0.6).normalize(),
     length: 0.36,
     segments: 12,
@@ -913,16 +925,21 @@ function accessorySpecs() {
     type: 'cloth',
     name: 'cape',
     width: 0.42,
-    height: 0.52,
+    height: 0.46,
     cols: 13,
     rows: 15,
     material: 'cape',
     wind: 0.85,
     drag: 0.05,
+    // Anchored UNDER the pack rather than over the shoulders. Pinned at the
+    // shoulders it hung from a point inside the pack's own volume and fell
+    // through it; the cloth has no collider for the pack and never will, so the
+    // fix is to start it where the pack has already ended. All three pins sit
+    // below PACK_Y - 0.08, which is the bottom edge of the frame.
     pins: [
-      { bone: 'chest', local: localTo('chest', torsoSurface(0.955, 1.5, 0.03).p), col: 0 },
-      { bone: 'chest', local: localTo('chest', torsoSurface(0.94, Math.PI, 0.04).p), col: 6 },
-      { bone: 'chest', local: localTo('chest', torsoSurface(0.955, -1.5, 0.03).p), col: 12 },
+      { bone: 'chest', local: localTo('chest', torsoSurface(0.805, 1.25, 0.03).p), col: 0 },
+      { bone: 'chest', local: localTo('chest', torsoSurface(0.795, Math.PI, 0.045).p), col: 6 },
+      { bone: 'chest', local: localTo('chest', torsoSurface(0.805, -1.25, 0.03).p), col: 12 },
     ],
   })
 
