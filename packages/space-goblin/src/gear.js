@@ -583,12 +583,20 @@ function buildGoggles() {
  * character can't afford to lose. So the rebreather is a *clamp*: a narrow
  * band over the bridge of the snout, a chin strap under the mandible, and a
  * filter cartridge on each cheek — the mouth and teeth stay visible.
+ *
+ * It comes back in two pieces because it is worn across a hinge. The bridge
+ * band and the cheek cartridges sit on the *skull*; only the chin strap goes
+ * under the mandible. Bound as one rigid piece to the jaw — which is how it
+ * shipped — the whole clamp swung down 50° with the lower jaw on the combo's
+ * roar, and the band that is supposed to sit on the bridge of his snout parted
+ * from it by 19 mm. A gear part that spans a joint has to be split at the joint.
  */
 function buildRebreather() {
   const jaw = P('jaw')
   const geos = []
 
   // Bridge band, arcing over the top of the snout.
+  const skull = []
   const bridge = []
   for (let i = 0; i <= 12; i++) {
     const a = -1.1 + (i / 12) * 2.2
@@ -598,7 +606,7 @@ function buildRebreather() {
         .add(new THREE.Vector3(Math.sin(a) * 0.042, 0.03 + Math.cos(a) * 0.022, 0.062 - Math.abs(a) * 0.006)),
     )
   }
-  geos.push(strap(bridge, 0.019, 0.006, 20))
+  skull.push(strap(bridge, 0.019, 0.006, 20))
 
   // Chin strap, under the mandible.
   const chin = []
@@ -608,7 +616,7 @@ function buildRebreather() {
       jaw.clone().add(new THREE.Vector3(Math.sin(a) * 0.04, -0.026 - Math.cos(a) * 0.012, 0.03 + Math.cos(a) * 0.02)),
     )
   }
-  geos.push(strap(chin, 0.014, 0.005, 18))
+  geos.push(strap(chin, 0.014, 0.005, 18))  // the only piece under the mandible
 
   // Filter cartridges on the cheeks, angled forward.
   for (const s of [1, -1]) {
@@ -624,16 +632,16 @@ function buildRebreather() {
       12,
     )
     xform(f, { pos: jaw.clone().add(new THREE.Vector3(s * 0.048, 0.008, 0.034)), rot: [0.3, 0, s * 1.25] })
-    geos.push(f)
+    skull.push(f)
     // A short intake stub aimed at the nostril.
     const stub = lathe(
       [new THREE.Vector2(0, 0.012), new THREE.Vector2(0.005, 0.012), new THREE.Vector2(0.005, -0.012), new THREE.Vector2(0, -0.012)],
       8,
     )
     xform(stub, { pos: jaw.clone().add(new THREE.Vector3(s * 0.032, 0.016, 0.052)), rot: [0, 0, s * 1.0] })
-    geos.push(stub)
+    skull.push(stub)
   }
-  return mergeAll(geos)
+  return { skull: mergeAll(skull), chin: mergeAll(geos) }
 }
 
 // ---------------------------------------------------------------------------
@@ -984,7 +992,9 @@ export function buildGearParts() {
   const goggles = buildGoggles()
   push(goggles.frame, 'metalDark', null, { rigid: 'head' })
   push(goggles.lenses, 'glass', null, { rigid: 'head' })
-  push(buildRebreather(), 'metal', null, { rigid: 'jaw' })
+  const rebreather = buildRebreather()
+  push(rebreather.skull, 'metal', null, { rigid: 'head' })
+  push(rebreather.chin, 'metal', null, { rigid: 'jaw' })
 
   push(buildWraps(), 'wrap', [...GROUPS.armR, ...GROUPS.legL, ...GROUPS.legR, ...GROUPS.handL], {
     falloff: 4.5,

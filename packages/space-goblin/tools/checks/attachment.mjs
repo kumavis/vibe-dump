@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { socketError, formatSocketError } from '../../src/attach.js'
 import {
   CLIPS,
+  GEARS,
   COLLIDERS,
   applyPose,
   capsuleWorld,
@@ -300,3 +301,84 @@ export const checks = [
     },
   },
 ]
+
+/**
+ * How far the cutting edge may be from the direction the tip is actually
+ * travelling, at the moments it is travelling fast enough to be a strike.
+ *
+ * This one caught a bug the whole rest of the family was blind to. The combo's
+ * wrist keys were tuned for tip speed and for keeping the blade out of his own
+ * thigh, and the comment above them claimed the edge led the strike. Measured
+ * against the tip's own velocity it was 63-86° off through both strikes: a
+ * perfectly-seated, perfectly-clear cleaver being swung flat, at 5.9 m/s. No
+ * render shows you this, because a blade at 75° still reads as a blade.
+ *
+ * 45° is the line between a cut and a slap. The shipped clip holds 25.8° worst.
+ * SPEED_FLOOR picks out the strikes: the tip idles under 1 m/s and peaks near 6.
+ *
+ * Only the attack clips are held to it, and that is a real distinction rather
+ * than a way to make the check pass. The run swings the blade at 129° off its
+ * edge, which is correct: he is *carrying* it, and a sprinting goblin holds a
+ * cleaver flat and away from his own leg, not presented edge-first at his thigh.
+ * A carry and a cut want opposite things from the same wrist, which is exactly
+ * why the roll is keyed to rise into each strike and fall back out of it.
+ */
+const EDGE_LEAD_MAX_DEG = 45
+const SPEED_FLOOR = 3
+const ATTACK_CLIPS = new Set(['combo'])
+
+checks.push({
+  name: 'the cleaver edge leads the strike',
+  run() {
+    const rig = sharedRig
+    const mount = mounts().cleaver
+    const tipLocal = new THREE.Vector3().copy(GEARS.cleaver.anchors.tip.pos)
+    const edgeLocal = mount.plug.normal.clone()
+    const m = new THREE.Matrix4()
+    const q = new THREE.Quaternion()
+
+    const bad = []
+    const lines = []
+    for (const clip of CLIPS) {
+      const N = 160
+      const tips = []
+      const edges = []
+      for (let i = 0; i <= N; i++) {
+        applyPose(rig, clip.pose(i / N))
+        weaponMatrix(rig, mount, m)
+        tips.push(tipLocal.clone().applyMatrix4(m))
+        edges.push(edgeLocal.clone().applyQuaternion(q.setFromRotationMatrix(m)))
+      }
+      let worst = 0
+      let worstT = 0
+      let sum = 0
+      let weight = 0
+      for (let i = 1; i < N; i++) {
+        const v = new THREE.Vector3().subVectors(tips[i + 1], tips[i - 1]).divideScalar((2 * clip.duration) / N)
+        const speed = v.length()
+        if (speed < SPEED_FLOOR) continue
+        const deg = Math.acos(THREE.MathUtils.clamp(edges[i].dot(v.normalize()), -1, 1)) * (180 / Math.PI)
+        sum += deg * speed
+        weight += speed
+        if (deg > worst) {
+          worst = deg
+          worstT = (i / N) * clip.duration
+        }
+      }
+      if (!weight) {
+        lines.push(`${clip.name} no strike`)
+        continue
+      }
+      const attack = ATTACK_CLIPS.has(clip.name)
+      lines.push(`${clip.name} ${(sum / weight).toFixed(0)}°/${worst.toFixed(0)}°${attack ? '' : ' (carry)'}`)
+      if (attack && worst > EDGE_LEAD_MAX_DEG) {
+        bad.push(
+          `the ${clip.name} clip swings the cleaver ${worst.toFixed(1)}° off its own edge at ` +
+            `${fmt.at(clip.name, worstT)} (limit ${EDGE_LEAD_MAX_DEG}°) — at that angle he is hitting ` +
+            `with the flat of the blade, not the edge. The dial is the wrist's \`roll\`, in anim.js.`,
+        )
+      }
+    }
+    return { pass: bad.length === 0, measured: lines.join(', '), detail: bad.join('\n') }
+  },
+})
