@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { fbm2, noise2, tileFbm2, makeRng, smoothstep } from './noise.js'
+import { scrollZ } from './convention.js'
 import * as TEX from './textures.js'
 
 // The alien flat the goblin runs across. Nothing here is an asset: the ground,
@@ -7,8 +8,17 @@ import * as TEX from './textures.js'
 // `noise.js` at load time.
 //
 // The runner never moves — he sprints in place at the origin and the WORLD
-// slides past him (endless-runner treadmill). Everything below is therefore
-// written around one number, `dist`, the total metres travelled:
+// slides past him (endless-runner treadmill).
+//
+// The world travels along BACKWARD (-Z) while he runs along FORWARD (+Z) — see
+// `convention.js`. Every sign in this file derives from that one fact; none of
+// them is independently tunable. The first version got this backwards: the
+// signs here were picked one at a time until each subsystem looked plausible on
+// its own, they all agreed with each other and all disagreed with the
+// character, and the goblin moonwalked. Hence `scrollZ()` rather than a bare
+// `-` anywhere below.
+//
+// Everything is written around one number, `dist`, the total metres travelled:
 //
 //   • the ground is a geometry clipmap — the mesh stays put and its height
 //     samples shift by whole grid rows, so per-frame cost is ~zero and the
@@ -32,7 +42,8 @@ const SX = GROUND_NX + 1 // grid row stride
 const GROUND_REPEAT = 64
 
 const BAND = 130 // props wrap over this many metres of z…
-const BAND_AHEAD = 110 // …spanning [-110, +20] so they recycle behind the camera
+const BAND_AHEAD = 110 // …spanning [-110, +20]: travelling -Z, they enter behind
+//                        the camera and recycle at the far edge, deep in the fog
 
 // The gas giant sits low and slightly right of the camera's forward azimuth.
 const PLANET_DIR = new THREE.Vector3(-0.42, 0.055, -0.9).normalize()
@@ -441,8 +452,10 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
   key.target.position.set(0, 0.9, 0)
   group.add(key, key.target)
 
-  // Cold rim from behind the runner (camera side) — this is what cuts his
-  // silhouette out of the dark ground.
+  // Cold fill from the camera side (+Z), i.e. in *front* of him — he faces
+  // FORWARD. Named "rim" from back when this file quietly assumed -Z was
+  // forward; the warm key at -Z is what actually rims the silhouette against
+  // the ground. Kept the name so callers reading `world.lights.rim` still work.
   const rim = new THREE.DirectionalLight('#7fe6ff', 0.85)
   rim.position.set(5.0, 1.9, 5.4)
   rim.target.position.set(0, 0.9, 0)
@@ -794,9 +807,17 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
   ground.frustumCulled = false
   group.add(ground)
 
-  /** Refill one grid row (row 0 is the far edge, where new terrain enters). */
+  /**
+   * Refill one grid row. Row 0 is still the far edge geometrically, but new
+   * terrain now enters at the NEAR edge (row GROUND_NZ): the ground travels -Z
+   * and rolls off the far end.
+   *
+   * The sample point inverts the scroll — a vertex whose world z is `w` has to
+   * read terrain at `w + dist`, so that a fixed terrain feature comes out at
+   * `worldZ = terrainZ - dist` and travels BACKWARD.
+   */
   function fillRow(j) {
-    const tz = GROUND_Z0 + j * DZ - rowK * DZ
+    const tz = GROUND_Z0 + j * DZ + rowK * DZ
     const base = j * SX
     for (let i = 0; i <= GROUND_NX; i++) H[base + i] = terrainH(GX0 + i * DX, tz)
   }
@@ -853,10 +874,18 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
   // Scattered props
   // -------------------------------------------------------------------------
   // Each instance stores its position in BAND space; every frame we wrap
-  // (z + dist) modulo BAND, so instances recycle from behind the camera to the
-  // far edge of the fog with no pop.
+  // (z - dist) modulo BAND, so instances recycle from the far edge of the fog
+  // back to behind the camera with no pop.
   const dummy = new THREE.Object3D()
   const scatters = []
+
+  /**
+   * World z of a prop sitting at band coordinate `z`, after scrolling `dist`.
+   * Euclidean modulo, not a bare `%`: the dividend is negative now, and JS
+   * hands back a negative remainder for that, which would march props out of
+   * the band instead of wrapping them.
+   */
+  const bandZ = (z) => (((z + scrollZ(dist)) % BAND) + BAND) % BAND - BAND_AHEAD
 
   function addScatter(mesh, items, { sit = true } = {}) {
     mesh.frustumCulled = false
@@ -873,7 +902,7 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
     const n = s.mesh.count
     for (let i = 0; i < n; i++) {
       const it = s.items[i]
-      const z = ((it.z + dist) % BAND + BAND) % BAND - BAND_AHEAD
+      const z = bandZ(it.z)
       dummy.position.set(it.x, it.y + (s.sit ? groundHeightAt(it.x, z) : 0), z)
       dummy.rotation.set(it.rx, it.ry, it.rz)
       dummy.scale.set(it.sx, it.sy, it.sz)
@@ -1174,15 +1203,20 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
 
     // --- ground: shift whole rows, carry the remainder as a mesh offset
     const k = Math.floor(dist / DZ)
-    meshZ = dist - k * DZ
+    // Keep `meshZ` and `ground.position.z` the same number — `groundHeightAt`
+    // subtracts `meshZ` to undo exactly this offset, and it is only correct
+    // while the two agree. Negating one of them and not the other puts every
+    // planted foot half a cell off the visible surface.
+    meshZ = scrollZ(dist - k * DZ)
     ground.position.z = meshZ
     if (k !== rowK) {
       const delta = k - rowK
       rowK = k
       if (delta > 0 && delta <= GROUND_NZ) {
-        // Row j inherits old row j-1; only the far edge is genuinely new.
-        H.copyWithin(delta * SX, 0)
-        for (let j = 0; j < delta; j++) fillRow(j)
+        // Row j inherits old row j+delta: the grid slides toward the far edge
+        // and rolls off it, so the genuinely new rows are at the NEAR end.
+        H.copyWithin(0, delta * SX)
+        for (let j = GROUND_NZ - delta + 1; j <= GROUND_NZ; j++) fillRow(j)
       } else {
         for (let j = 0; j <= GROUND_NZ; j++) fillRow(j)
       }
@@ -1190,7 +1224,16 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
     }
     // The mesh itself already carries `meshZ` of the scroll; the texture only
     // has to make up the whole-row remainder.
-    const off = -((k * DZ) / GROUND_D) * GROUND_REPEAT
+    //
+    // The sign is not free: the ground's uv v runs along +Z (vertex j carries
+    // v = j/GROUND_NZ at z = GROUND_Z0 + j*DZ) and three applies offset AFTER
+    // repeat, so a feature at a fixed sampled v sits at
+    //   z_local = GROUND_Z0 + (v - off)/GROUND_REPEAT * GROUND_D,
+    // i.e. +off moves the pattern -Z. Adding meshZ back, a POSITIVE off is what
+    // cancels the k*DZ the mesh offset gives back and leaves the pattern moving
+    // at exactly -dist, locked to the rows. Get it wrong and the terrain slides
+    // against its own texture at 2 * DZ per row.
+    const off = ((k * DZ) / GROUND_D) * GROUND_REPEAT
     if (rego.map) rego.map.offset.y = off
     if (rego.normalMap) rego.normalMap.offset.y = off
     if (rego.roughnessMap) rego.roughnessMap.offset.y = off
@@ -1203,20 +1246,26 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
     const n = posts.count
     for (let i = 0; i < n; i++) {
       const it = pylonItems[i]
-      const z = ((it.z + dist) % BAND + BAND) % BAND - BAND_AHEAD
+      const z = bandZ(it.z)
       hp[i * 3] = it.x
       hp[i * 3 + 1] = it.y + groundHeightAt(it.x, z) + PYLON_LAMP_Y * it.sy
       hp[i * 3 + 2] = z
     }
     haloPos.needsUpdate = true
 
-    // --- dust: streams backwards past the camera with a slow lateral wobble
+    // --- dust: drifts along BACKWARD past the runner, with a slow lateral
+    //     wobble. Each mote carries its own rate, so the field shears.
     const dp = dustPos.array
     const dn = dustGeo.drawRange.count
     for (let i = 0; i < dn; i++) {
       const sp = dustWob[i * 2 + 1]
       const ph = dustWob[i * 2]
-      let z = (dustBase[i * 3 + 2] + dist * (0.55 + sp * 0.6)) % DUST_SPAN
+      const drift = scrollZ(dist * (0.55 + sp * 0.6))
+      // Euclidean modulo, not a bare `%`. `drift` is negative now, so the
+      // dividend goes negative, and JS returns a NEGATIVE remainder for that —
+      // which marches motes out of the window and never brings them back
+      // (measured: z = -92 by dist = 100, against a window of [-48, +8]).
+      let z = (((dustBase[i * 3 + 2] + drift) % DUST_SPAN) + DUST_SPAN) % DUST_SPAN
       dp[i * 3] = dustBase[i * 3] + Math.sin(time * 0.6 * sp + ph) * 0.85
       dp[i * 3 + 1] = dustBase[i * 3 + 1] + Math.cos(time * 0.45 * sp + ph * 1.7) * 0.45
       dp[i * 3 + 2] = z - DUST_SPAN + 8
@@ -1225,9 +1274,11 @@ export function createWorld({ scene, renderer, quality = 1 } = {}) {
 
     // --- mist sheets scroll at their own rates for cheap parallax
     for (const m of mistSheets) {
-      // PlaneGeometry's +v points at -z once laid flat, so this offset has the
-      // OPPOSITE sign to the ground's — both end up drifting toward the camera.
-      m.tex.offset.y = ((dist * m.speed) / m.depth) * m.scroll
+      // PlaneGeometry's +v points at -z once laid flat (v = 1 sits at z = -75),
+      // opposite the ground's, so this offset has to carry the OPPOSITE sign to
+      // the ground's — which is exactly what makes both of them drift along
+      // BACKWARD together.
+      m.tex.offset.y = scrollZ((dist * m.speed) / m.depth) * m.scroll
       m.tex.offset.x = Math.sin(time * 0.03) * 0.05
     }
 

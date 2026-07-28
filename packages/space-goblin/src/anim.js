@@ -180,6 +180,44 @@ function headPose(pose, { pitch = 0, yaw = 0, roll = 0, jaw = 0, neck = 0.5 }) {
   pose.jaw = X(-jaw * 0.75)
 }
 
+/**
+ * The cleaver hand.
+ *
+ * `character.js` now seats the cleaver by mating its grip frame to the hand's,
+ * which is exact and therefore has no slack in it: the carry angle used to be
+ * smuggled into the attachment euler, and now it has to come from here, which
+ * is where a carry angle comes from on a real arm.
+ *
+ * Three dials, all in the forearm's frame, all named for what they do to the
+ * blade rather than for an axis. They are the wrist's three real degrees of
+ * freedom, which is why three is enough:
+ *
+ *   `rake` about Y — flexion. The blade leaves the fist on the little-finger
+ *          side, so negative rake lays it *back* along the forearm (the carry)
+ *          and positive throws it out ahead of the knuckles (a follow-through).
+ *   `cant` about Z — deviation. Swings the blade outboard, off his own leg.
+ *   `cock` about X — rotation about the forearm. Counter-rolls the arm swing so
+ *          the carry angle holds through the stride instead of windmilling.
+ *
+ * Measured over the whole run clip — blade direction against "trailing back and
+ * slightly up" = normalize(0, 0.45, -0.89), the tip's mean offset from the hand,
+ * and how far the blade gets into the right leg's *mesh* (not the fat cloth
+ * capsule; the actual thigh, which only reaches 44 mm out):
+ *
+ *   no wrist at all   0.264   (-0.161, -0.231, -0.188)   60 mm INTO the leg
+ *   rake only         0.596   (-0.182, -0.094, -0.285)   30 mm into it
+ *   rake + cant       0.610   (-0.107, -0.129, -0.295)   14 mm into it
+ *   all three         0.692   (-0.182, -0.095, -0.316)   12 mm clear of it
+ *
+ * for at most 0.62 rad (35°) of wrist, which is a carry and not a break. Do not
+ * expect more from it: the direction the blade points is set by the forearm's
+ * roll, and over one stride that roll takes it through 100°+ all by itself. The
+ * wrist trims the carry, the shoulder and elbow *are* the carry.
+ */
+function cleaverWrist(rake, cant = 0, cock = 0) {
+  return seq(X(cock), Y(rake), Z(cant))
+}
+
 // ---------------------------------------------------------------------------
 // Clips
 // ---------------------------------------------------------------------------
@@ -238,6 +276,9 @@ export function runPose(t) {
     bend: 0.92 + 0.26 * Math.max(0, -swingR),
     twist: 0.25,
     clav: 0.1 * Math.cos(TAU * (p + 0.5)),
+    // Cleaver laid back along the forearm and canted outboard of the leg, the
+    // whole thing giving a little as the arm swings through.
+    wrist: cleaverWrist(-0.5 + 0.11 * swingR, -0.52 + 0.1 * swingR, 0.2 - 0.44 * swingR),
   })
   handPose(pose, 'L', 0.78 + 0.12 * Math.cos(TAU * p))
   handPose(pose, 'R', 1)
@@ -272,7 +313,16 @@ export function idlePose(t) {
   })
 
   armPose(pose, 'L', { down: 1.22, swing: -0.28, out: 0.3, bend: 1.35 + 0.06 * b, clav: 0.06 })
-  armPose(pose, 'R', { down: 1.0, swing: -0.42, out: 0.42, bend: 1.5 + 0.05 * b, twist: 0.3, clav: 0.08 })
+  armPose(pose, 'R', {
+    down: 1.0,
+    swing: -0.42,
+    out: 0.42,
+    bend: 1.5 + 0.05 * b,
+    twist: 0.3,
+    clav: 0.08,
+    // Same carry as the run, riding the breath instead of the stride.
+    wrist: cleaverWrist(-0.5 + 0.04 * b, -0.52, 0.2),
+  })
   handPose(pose, 'L', 0.55 + 0.08 * b)
   handPose(pose, 'R', 1)
   return pose
@@ -441,6 +491,49 @@ export function comboPose(t) {
     ],
     p,
   )
+  // The wrist through the fight, starting and ending on the run's carry so the
+  // crossfades have nothing to do: cocked back at each wind-up so the blade
+  // lies over the shoulder, thrown out past the knuckles through each strike so
+  // the edge leads it. Measured over the clip: the tip travels the same 3.59 m
+  // either way, but it peaks at 5.92 m/s against 4.57 m/s with a dead wrist —
+  // the wrist puts the speed where the strikes are. More to the point, the
+  // blade stops passing through his own thigh on the way round (46 mm clear
+  // against 47 mm buried). Peaks at 0.60 rad, which is a swing, not a carry.
+  const rRake = k(
+    [
+      [0, -0.5],
+      [0.2, -0.6],
+      [0.36, 0.4],
+      [0.5, -0.4],
+      [0.62, -0.6],
+      [0.76, 0.4],
+      [0.88, -0.3],
+      [1, -0.5],
+    ],
+    p,
+  )
+  const rCant = k(
+    [
+      [0, -0.52],
+      [0.2, -0.6],
+      [0.36, -0.3],
+      [0.62, -0.6],
+      [0.76, -0.3],
+      [1, -0.52],
+    ],
+    p,
+  )
+  const rCock = k(
+    [
+      [0, 0.2],
+      [0.2, 0.45],
+      [0.36, -0.15],
+      [0.62, 0.45],
+      [0.76, -0.1],
+      [1, 0.2],
+    ],
+    p,
+  )
   armPose(pose, 'R', {
     down: rDown,
     swing: rSwing,
@@ -448,6 +541,7 @@ export function comboPose(t) {
     bend: rBend,
     twist: 0.3 + 0.35 * chop,
     clav: 0.18 * (1 - rDown),
+    wrist: cleaverWrist(rRake, rCant, rCock),
   })
 
   // ---- shield arm: braces across the body, punches out on the roar ----

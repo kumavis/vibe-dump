@@ -13,6 +13,7 @@ import {
   refresh,
 } from './geometry.js'
 import { makeRng, noise2, smoothstep } from './noise.js'
+import { frame } from './attach.js'
 
 // ---------------------------------------------------------------------------
 // The goblin's arsenal
@@ -22,12 +23,30 @@ import { makeRng, noise2, smoothstep } from './noise.js'
 // all profiles swept along paths, plus a lot of deliberate asymmetry so the kit
 // reads as *repaired* rather than manufactured.
 //
-// Everything is built in WEAPON LOCAL SPACE:
-//   • the grip axis runs along Y, grip centre at the origin
-//   • the business end (blade / barrel / boss) extends towards +Y (+Z for the
-//     buckler's spike, which is the shield's "forward")
-//   • the weapon's front / cutting edge faces +Z
-// so the caller parents a part to a hand bone and orients it with one rotation.
+// WEAPON LOCAL SPACE. This comment used to claim "the grip axis runs along Y,
+// grip centre at the origin, business end +Y, front +Z" for all three. Measured
+// against the geometry, that was true only of the cleaver, and only to 4 mm:
+//
+//   cleaver  grip centre y = -4.0 mm       blade +Y ✓   edge +Z ✓
+//   pistol   grip axis 19.9° off +Y, centre 28.2 mm from the origin
+//   buckler  grip centre 40.2 mm from the origin, out on a strap at x = +36 mm
+//
+// The other two cannot be fixed by moving geometry, because the thing they are
+// modelled around is not the grip: the pistol's bore is +Y through the origin
+// and its grip is *deliberately* raked back off it, and the buckler is built as
+// a disc about its own axis with the straps bolted to the back. Slide either
+// one so the grip lands on the origin and the feature that actually defines the
+// local frame stops being there.
+//
+// So the local origin stays the *build* origin, and each `build*()` publishes an
+// explicit `plug` frame — origin / axis / normal, in `attach.js`'s vocabulary —
+// describing where the hand really goes. The frame is written next to the
+// numbers that produce the geometry, so it cannot drift away from it, and
+// `attach.mate()` turns it into a transform with no euler triples in sight.
+//
+// What is still true of all three: the bore / blade / spike does run +Y (+Z for
+// the buckler, whose "forward" is its face normal), and the front / cutting edge
+// does face +Z.
 //
 // WINDING NOTE — read before adding geometry. geometry.js's `sweep` builds its
 // frame as T = N x B and winds quads (r0+j, r1+j, r0+j+1); working that through,
@@ -230,11 +249,33 @@ function anchor(pos, dir) {
   return { pos, dir: dir.clone().normalize() }
 }
 
+/** The point half the arc length along a polyline — where a fist centres on a
+ *  swept grip. Not `path[n/2]`: `smoothPath` does not sample evenly, and on the
+ *  pistol's grip the two differ by 4 mm. */
+function arcMidpoint(path) {
+  const seg = []
+  let total = 0
+  for (let i = 1; i < path.length; i++) {
+    const d = path[i].distanceTo(path[i - 1])
+    seg.push(d)
+    total += d
+  }
+  let s = 0
+  for (let i = 0; i < seg.length; i++) {
+    if (s + seg[i] >= total / 2) return path[i].clone().lerp(path[i + 1], (total / 2 - s) / seg[i])
+    s += seg[i]
+  }
+  return path[path.length - 1].clone()
+}
+
 function scaleGear(gear, s) {
   if (s === 1) return gear
   gear.length *= s
   gear.gripRadius *= s
   for (const a of Object.values(gear.anchors)) a.pos.multiplyScalar(s)
+  // Plug frames are points *and* directions: only the origin scales. Forgetting
+  // this is how a scaled weapon ends up correctly oriented and in the wrong place.
+  for (const p of Object.values(gear.plugs)) p.origin.multiplyScalar(s)
   if (gear.emissivePaths) for (const p of gear.emissivePaths) for (const v of p) v.multiplyScalar(s)
   return gear
 }
@@ -643,10 +684,33 @@ export function buildCleaver(opts = {}) {
   )
 
   const pommelY = gripBot - 0.042
+  // The wrapped section runs gripBot+4 mm .. gripTop-4 mm, so its centre is 4 mm
+  // *below* the local origin, not on it. Four millimetres is nothing to look at
+  // and everything to a fist: it is a third of the grip's radius.
+  const wrapCentreY = (gripBot + gripTop) / 2
   const gear = {
     parts: B.parts(scale),
     length: tipY,
-    gripRadius: gripR + strapT,
+    // Not `gripR + strapT` (12.2 + 2.0 = 14.2 mm), which is the radius half way
+    // through the leather. Sliced every 2 mm about the Y axis, the wrap's
+    // enveloping radius runs median 12.5 / p90 14.9 / max 15.3 mm — the palm
+    // rests on the outside of the strap, so publish the outside, a shade under
+    // the p90 so the odd proud turn of leather is allowed to touch skin.
+    gripRadius: 0.0145,
+    plugs: {
+      /**
+       * The fist. Origin is the centre of the leather; +Y is pommel -> blade;
+       * +Z is the cutting edge — the blade's plane normal came out of a PCA of
+       * the blade vertices as (1.0000, -0.0058, 0.0079), i.e. the flat is the
+       * YZ plane, and the sharp side is the +Z one (1.1 mm of steel there
+       * against 9-12 mm at -Z, measured at four heights up the blade).
+       *
+       * Note for whoever mates this: the guard eats the top of the wrap, so the
+       * band a fist can actually close on is y -60 .. +32, centred 10 mm lower
+       * again. That is a `slide`, not a different plug.
+       */
+      grip: frame(V(0, wrapCentreY, 0), V(0, 1, 0), V(0, 0, 1), 'cleaverGrip'),
+    },
     anchors: {
       pommel: anchor(V(0, gripBot - 0.024, 0), V(0, -1, 0)),
       lanyard: anchor(V(0, pommelY, 0), V(0, -1, 0)),
@@ -973,10 +1037,40 @@ export function buildPistol(opts = {}) {
     'cloth',
   )
 
+  // The grip is a swept rail, so its axis is the rail's chord and its centre is
+  // the rail's midpoint — both read straight off `gripPath` rather than typed in.
+  const gripChord = new THREE.Vector3().subVectors(gripPath[gripPath.length - 1], gripPath[0]).normalize()
+  const gripMid = arcMidpoint(gripPath)
+
   const gear = {
     parts: B.parts(scale),
     length: brakeTop,
-    gripRadius: 0.0135,
+    // Measured across the grip in the direction the palm closes: 31 mm deep at
+    // the ends, 38 mm at the swell, so 17.5 mm of half-depth. The old 13.5 mm
+    // parked the backstrap 4 mm inside the palm.
+    gripRadius: 0.0175,
+    plugs: {
+      /**
+       * The firing hand. The header's "grip axis +Y, centre at the origin" is
+       * false here by 19.9° and 28 mm: the grip is raked back off the bore on
+       * purpose, and the origin sits up in the receiver where the trigger is.
+       * Axis is the rail's chord, normal is the gun's front, squared against it.
+       *
+       * Anyone mating this should know the charge cell and its retaining frames
+       * pass clean through the grip and stand out to |x| = 26.5 mm over
+       * y -42.5 .. +33.4 mm, against 10.9 mm of grip cheek — the fingers foul
+       * the cell unless the fist sits above y = -17 mm.
+       */
+      grip: frame(gripMid, gripChord, V(0, 0, 1), 'pistolGrip'),
+      /**
+       * How it rides when it is not in a hand: the receiver slab lies on the
+       * thigh and the raked grip kicks out on its own, which is what a holster
+       * cant is. Origin is the centre of the receiver, axis is the bore — which
+       * really is +Y, offset +6.8 mm in Z (per-slab centroids of the barrel hold
+       * x 0.1, z 6.4-6.9 mm from y = 112 to 156) — and normal is the front.
+       */
+      holster: frame(V(0, (recvBot + recvTop) / 2, recvZ), V(0, 1, 0), V(0, 0, 1), 'pistolBody'),
+    },
     anchors: {
       muzzle: anchor(V(0, brakeTop, recvZ), V(0, 1, 0)),
       lanyard: anchor(V(0, gripBot - 0.006, -0.021), V(0, -1, -0.35)),
@@ -1221,7 +1315,34 @@ export function buildBuckler(opts = {}) {
     parts: B.parts(scale),
     // The plate's reach along +Y is just the (dented) rim radius that way.
     length: rimR(Math.PI / 2),
-    gripRadius: 0.011,
+    // Half the strap's thickness (2.2 mm) plus a little for the `noisify` and
+    // for skin. The old 0.011 lifted the shield 7 mm off the palm.
+    gripRadius: 0.004,
+    plugs: {
+      /**
+       * The arm loop. Both straps run along Y and the forearm passes *under*
+       * them along X, so this frame is stated in the vocabulary
+       * `forearmStrapSocket` uses: `axis` is the shield's outward normal (the
+       * way the boss and spike point — PCA of the plate gives its normal as
+       * (-0.0019, 0.0039, 1.0000), and the spike's own axis is 2.4° off +Z),
+       * and `normal` is the direction of the hand, +X, because the hand grip
+       * strap is bolted 36 mm that way from the arm loop.
+       *
+       * Origin is the plate's back face on the loop's centreline. The loop's
+       * own centreline hangs 21 mm behind that, so a forearm thicker than 21 mm
+       * in radius needs the plate standing further off the bone than the
+       * socket's default `clearance` — see character.js.
+       */
+      strap: frame(V(0, 0, backZ(0)), V(0, 0, 1), V(1, 0, 0), 'bucklerStrap'),
+      /**
+       * The fist, for the day he punches with it. Out on the hand strap at
+       * x = +36 mm, not at the origin: `axis` is the strap's chord (+Y) and
+       * `normal` is the way the palm faces, which is the way the plate faces.
+       * The strap is an arch, not a rod — it rises 13 mm in Z from its ends to
+       * its apex — so this frame describes the apex, where the palm sits.
+       */
+      grip: frame(V(gx + 0.004, 0, backZ(0.5) - 0.019), V(0, 1, 0), V(0, 0, 1), 'bucklerGrip'),
+    },
     anchors: {
       boss: anchor(V(0.002, 0.003, bossZ + 0.055), V(0, 0, 1)),
       strapTop: anchor(V(0, yTop, backZ(bracketU) - 0.008), V(0, 0, -1)),
