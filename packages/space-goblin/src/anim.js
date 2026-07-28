@@ -214,8 +214,19 @@ function headPose(pose, { pitch = 0, yaw = 0, roll = 0, jaw = 0, neck = 0.5 }) {
  * roll, and over one stride that roll takes it through 100°+ all by itself. The
  * wrist trims the carry, the shoulder and elbow *are* the carry.
  */
-function cleaverWrist(rake, cant = 0, cock = 0) {
-  return seq(X(cock), Y(rake), Z(cant))
+/**
+ * `roll` is the fourth dial and the only one in the hand's OWN frame, which is
+ * why it is post-multiplied rather than composed with the others: the blade
+ * leaves the fist along the hand's local +Z, so a local Z rotation spins it
+ * about its own long axis without moving it at all. That is the difference
+ * between a cut and a slap, and nothing else in the wrist can express it —
+ * a Z rotation in the *forearm's* frame (which is what `cant` is) stops being
+ * a roll the moment `rake` and `cock` are non-zero. Measured: rolling in the
+ * parent frame made the strike alignment *worse* at every angle, either sign.
+ */
+function cleaverWrist(rake, cant = 0, cock = 0, roll = 0) {
+  const q = seq(X(cock), Y(rake), Z(cant))
+  return roll ? q.multiply(Z(roll)) : q
 }
 
 // ---------------------------------------------------------------------------
@@ -534,6 +545,35 @@ export function comboPose(t) {
     ],
     p,
   )
+  // Roll the blade into each cut and back out of it.
+  //
+  // The wrist keys above were tuned for tip speed and for keeping the blade out
+  // of his own thigh, and the comment claimed the edge led the strike. It did
+  // not: measured against the tip's own velocity, the cutting edge was 63-86°
+  // off through both strikes — he was slapping with the flat of a cleaver, at
+  // 5.9 m/s. Nothing in a render shows you that, because a blade at 75° still
+  // reads as a blade.
+  //
+  // Swept over the whole clip, a constant roll of 1.20 rad about the blade axis
+  // takes the speed-weighted alignment from 72.1° to 22.9° and the worst case
+  // from 85.9° to 26.0°. It is keyed rather than constant because 0 is the run's
+  // carry, and the combo has to start and end there or the crossfades pop.
+  const rRoll = k(
+    [
+      [0, 0],
+      [0.18, 0.15],
+      [0.28, 1.05],
+      [0.34, 1.2],
+      [0.44, 0.35],
+      [0.62, 0.2],
+      [0.7, 1.0],
+      [0.76, 1.15],
+      [0.84, 0.5],
+      [0.94, 0.1],
+      [1, 0],
+    ],
+    p,
+  )
   armPose(pose, 'R', {
     down: rDown,
     swing: rSwing,
@@ -541,7 +581,7 @@ export function comboPose(t) {
     bend: rBend,
     twist: 0.3 + 0.35 * chop,
     clav: 0.18 * (1 - rDown),
-    wrist: cleaverWrist(rRake, rCant, rCock),
+    wrist: cleaverWrist(rRake, rCant, rCock, rRoll),
   })
 
   // ---- shield arm: braces across the body, punches out on the roar ----
