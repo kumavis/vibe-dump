@@ -81,7 +81,11 @@ export async function drawOverlay(page, ops) {
       g.fillStyle = op.fill
       g.textAlign = op.align ?? 'left'
       g.textBaseline = op.baseline ?? 'middle'
-      g.fillText(op.text, op.x, op.y)
+      // `maxWidth` condenses rather than clips, which is the right failure for
+      // a caption: a squashed number is still readable, a number that has run
+      // off into the next tile is a number attached to the wrong picture.
+      if (op.maxWidth) g.fillText(op.text, op.x, op.y, op.maxWidth)
+      else g.fillText(op.text, op.x, op.y)
     }
     if ('letterSpacing' in g) g.letterSpacing = '0px'
   }, ops)

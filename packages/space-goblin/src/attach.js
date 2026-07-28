@@ -1,5 +1,6 @@
 import * as THREE from 'three'
-import { restPositions } from './rig.js'
+import { buildSkeleton, restPositions } from './rig.js'
+import { handPose } from './anim.js'
 
 // ---------------------------------------------------------------------------
 // Sockets and plugs — how a held thing knows where to sit
@@ -102,13 +103,71 @@ export function mate(socket, plug, { roll = 0, slide = 0, lift = 0 } = {}) {
 // ---------------------------------------------------------------------------
 
 /**
- * How deep into the palm the held rod's centreline sits: half the hand's
- * thickness, plus whatever the grip's own radius is (passed per weapon).
+ * Where a held rod actually sits, measured off the closed fist rather than
+ * guessed.
+ *
+ * The first version of this file guessed: half a hand-thickness (6 mm) plus the
+ * grip's radius. That put the cleaver's centreline 20.5 mm off the metacarpal
+ * line, and an independent pass measuring against the *skinned* hand found 12.8
+ * mm of handle buried in the palm flesh with the fingers closing on 9–18 mm of
+ * air. Guessing an anatomical number is the same mistake as guessing an euler
+ * triple; it just hides better.
+ *
+ * So the socket asks the rig. `handPose(side, 1)` is what closes the fist, so
+ * forward-kinematic the digits under it and measure the loop they enclose: the
+ * rod's centreline is the midpoint between the metacarpal line and the curled
+ * fingertips, on both axes. That lands at 36.6 mm deep, within 5 mm of the 41.5
+ * mm the skin-space measurement independently arrived at.
  */
-const PALM_DEPTH = 0.006
+const fistCache = new Map()
 
-/** How far down the metacarpals the rod crosses, as a fraction of their length. */
-const GRIP_ALONG = 0.68
+function fistLoop(side) {
+  if (fistCache.has(side)) return fistCache.get(side)
+  const { root, byName } = buildSkeleton()
+  const pose = {}
+  handPose(pose, side, 1)
+  for (const [name, q] of Object.entries(pose)) byName[name].quaternion.copy(q)
+  root.updateMatrixWorld(true)
+
+  const hand = byName[`hand${side}`]
+  const inv = new THREE.Matrix4().copy(hand.matrixWorld).invert()
+  const posed = (name) =>
+    new THREE.Vector3().setFromMatrixPosition(byName[name].matrixWorld).applyMatrix4(inv)
+
+  const knuckles = new THREE.Vector3()
+  for (const d of ['index', 'mid', 'ring']) knuckles.add(posed(`${d}${side}0`))
+  knuckles.divideScalar(3)
+  const span = knuckles.length()
+  const fingers = knuckles.clone().normalize()
+  const axis = posed(`index${side}0`).sub(posed(`ring${side}0`)).normalize()
+  const normal = new THREE.Vector3()
+    .crossVectors(fingers, axis)
+    .multiplyScalar(side === 'L' ? 1 : -1)
+    .normalize()
+
+  // Where the curled fingertips end up, in the hand's own (fingers, normal) plane.
+  let depth = 0
+  let along = 0
+  for (const d of ['index', 'mid', 'ring']) {
+    const tip = posed(`${d}${side}2`)
+    depth += tip.dot(normal)
+    along += tip.dot(fingers)
+  }
+  const loop = {
+    span,
+    fingers,
+    axis,
+    normal,
+    /** depth of the rod's centreline below the metacarpal line */
+    depth: depth / 3 / 2,
+    /** how far along the fingers it crosses */
+    along: (span + along / 3) / 2,
+    /** the largest rod this fist can close around, in bone space */
+    enclosed: depth / 3 / 2,
+  }
+  fistCache.set(side, loop)
+  return loop
+}
 
 /**
  * The grip socket of a hand, in that hand bone's local space.
@@ -130,34 +189,21 @@ const GRIP_ALONG = 0.68
  * @param {number} [o.gripRadius=0.014] radius of the thing being held
  * @param {Record<string, THREE.Vector3>} [o.rest]
  */
-export function handGripSocket(side, { gripRadius = 0.014, rest = restPositions() } = {}) {
-  const hand = rest[`hand${side}`]
-  const rel = (name) => new THREE.Vector3().subVectors(rest[name], hand)
-
-  const index = rel(`index${side}0`)
-  const mid = rel(`mid${side}0`)
-  const ring = rel(`ring${side}0`)
-
-  const fingers = index.clone().add(mid).add(ring).divideScalar(3)
-  const span = fingers.length()
-  fingers.normalize()
-
-  // Across the knuckles, ring -> index.
-  const axis = new THREE.Vector3().subVectors(index, ring).normalize()
-
-  // Palm normal: square to both, flipped on the right so the two mirrored hands
-  // both end up facing the same way. (Mirror-image bases have opposite
-  // handedness; this is the one place that has to be said out loud.)
-  const normal = new THREE.Vector3()
-    .crossVectors(fingers, axis)
-    .multiplyScalar(side === 'L' ? 1 : -1)
-    .normalize()
+export function handGripSocket(side, { gripRadius = 0.014 } = {}) {
+  const { span, fingers, axis, normal, depth, along, enclosed } = fistLoop(side)
 
   const origin = new THREE.Vector3()
-    .addScaledVector(fingers, span * GRIP_ALONG)
-    .addScaledVector(normal, PALM_DEPTH + gripRadius)
+    .addScaledVector(fingers, along)
+    .addScaledVector(normal, depth)
 
-  return { ...frame(origin, axis, normal, `grip${side}`), fingers, span }
+  if (gripRadius > enclosed) {
+    console.warn(
+      `attach: a ${(gripRadius * 1000).toFixed(1)} mm grip does not fit the ${side} fist, ` +
+        `which closes around ${(enclosed * 1000).toFixed(1)} mm`,
+    )
+  }
+
+  return { ...frame(origin, axis, normal, `grip${side}`), fingers, span, enclosed, slack: enclosed - gripRadius }
 }
 
 /**

@@ -24,6 +24,18 @@ export const ALL_VIEWS = ['q34', 'front', 'left', 'back', 'head', 'hands']
 export const ALL_CLIPS = ['run', 'idle', 'combo']
 
 /**
+ * The one console error every run produces and nobody can fix from here.
+ *
+ * Neither page declares a favicon, so Chromium asks for `/favicon.ico` on its
+ * own and `vite preview` 404s it. That fetch is made by the browser rather than
+ * by the page, so it never appears as a Playwright request or response and
+ * cannot be matched by URL or served by a route — text is the only handle. It
+ * is filtered rather than tolerated because a tool that always prints one
+ * harmless error is a tool whose error line people learn to skip.
+ */
+const BENIGN = /Failed to load resource.*status of 404/
+
+/**
  * A frame counter injected before the page's own script runs.
  *
  * Settling has to be counted in rendered frames, not in milliseconds: the
@@ -77,7 +89,7 @@ export async function openTurntable(browser, url, { width, height }) {
     if (r.status() >= 400) consoleErrors.push(`HTTP ${r.status()} ${r.url()}`)
   })
   page.on('requestfailed', (r) => consoleErrors.push(`request failed ${r.url()}`))
-  page.on('console', (m) => m.type() === 'error' && consoleErrors.push(m.text()))
+  page.on('console', (m) => m.type() === 'error' && !BENIGN.test(m.text()) && consoleErrors.push(m.text()))
   page.on('pageerror', (e) => consoleErrors.push(String(e)))
   await page.addInitScript(FRAME_COUNTER)
   await page.goto(url, { waitUntil: 'load', timeout: 60000 })
