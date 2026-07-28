@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { createWorld } from './src/world.js'
 import { createEnvironment } from './src/env.js'
 import { createGoblin } from './src/character.js'
+import { FORWARD_Z } from './src/convention.js'
 
 // ---------------------------------------------------------------------------
 // The show
@@ -15,6 +16,15 @@ import { createGoblin } from './src/character.js'
 
 const { clamp, lerp } = THREE.MathUtils
 const RUN_SPEED = 4.8 // m/s — matched to the stride length in the run clip
+
+/**
+ * Metres in front of the goblin, i.e. on the FORWARD side. Every camera in this
+ * file and every hero light is placed relative to *him*, not to a bare z sign —
+ * the world used to scroll the wrong way precisely because a pile of z literals
+ * had drifted apart from each other with nothing tying them to a stated axis.
+ * Negative means behind him. FORWARD_Z is +1, so no number here changes value.
+ */
+const ahead = (m) => m * FORWARD_Z
 const app = document.getElementById('app')
 const boot = document.getElementById('boot')
 const bootStep = document.getElementById('boot-step')
@@ -58,8 +68,10 @@ let world
 let goblin
 let rigHelper
 
-// The world's key light comes from the gas giant, which is *behind* the runner
-// — great for the landscape, but it leaves the hero a silhouette, so the scene
+// The world's key light comes from the gas giant, which sits at -Z — behind a
+// goblin who faces FORWARD (+Z), and behind him is where it stays now that the
+// scenery travels the other way. Great for the landscape, but it leaves the
+// hero a back-lit silhouette to a camera parked in front of him, so the scene
 // gets a three-point rig on top of it.
 //
 // Note for anyone tempted by light layers here: three tests a light's layers
@@ -68,11 +80,11 @@ let rigHelper
 // scene lights, kept soft enough that the flats don't blow out.
 function lightTheHero() {
   const key = new THREE.DirectionalLight('#ffe6c8', 2.4)
-  key.position.set(2.6, 3.1, 3.4)
+  key.position.set(2.6, 3.1, ahead(3.4)) // camera side, on his face
   const fill = new THREE.DirectionalLight('#7fd4ff', 0.95)
-  fill.position.set(-3.2, 1.4, 1.8)
+  fill.position.set(-3.2, 1.4, ahead(1.8))
   const rim = new THREE.DirectionalLight('#ffb45c', 1.7)
-  rim.position.set(-1.4, 2.0, -3.6)
+  rim.position.set(-1.4, 2.0, ahead(-3.6)) // behind him, warm edge on the shoulders
 
   for (const light of [key, fill, rim]) scene.add(light)
   return { key, fill, rim }
@@ -142,11 +154,15 @@ const director = {
 
 // ---- camera work ----------------------------------------------------------
 
+// All four sit on the FORWARD side, so the camera is flying backwards in front
+// of him and the scenery he has already passed recedes into the fog behind the
+// lens. That is the right read for a +Z runner; it is also the shot that
+// changed most when the world's direction was fixed.
 const CAMERAS = [
-  { name: 'CHASE', pos: [1.62, 1.02, 1.92], target: [0, 0.76, 0], fov: 38, orbit: 0.05 },
-  { name: 'LOW', pos: [1.06, 0.34, 1.58], target: [0, 0.7, 0.04], fov: 44, orbit: 0.09 },
-  { name: 'FACE', pos: [0.5, 1.06, 0.84], target: [0.02, 0.99, 0.05], fov: 32, orbit: 0.03 },
-  { name: 'WIDE', pos: [2.9, 1.55, 3.2], target: [0, 0.82, 0], fov: 40, orbit: 0.04 },
+  { name: 'CHASE', pos: [1.62, 1.02, ahead(1.92)], target: [0, 0.76, 0], fov: 38, orbit: 0.05 },
+  { name: 'LOW', pos: [1.06, 0.34, ahead(1.58)], target: [0, 0.7, ahead(0.04)], fov: 44, orbit: 0.09 },
+  { name: 'FACE', pos: [0.5, 1.06, ahead(0.84)], target: [0.02, 0.99, ahead(0.05)], fov: 32, orbit: 0.03 },
+  { name: 'WIDE', pos: [2.9, 1.55, ahead(3.2)], target: [0, 0.82, 0], fov: 40, orbit: 0.04 },
 ]
 let camIndex = 0
 let camBlend = 1

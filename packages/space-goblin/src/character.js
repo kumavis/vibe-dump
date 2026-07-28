@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { buildSkeleton, BONE_NAMES, boneSegments } from './rig.js'
+import { buildSkeleton, BONE_NAMES, boneSegments, restPositions } from './rig.js'
 import { buildBodyParts } from './body.js'
 import { buildGearParts } from './gear.js'
 import { buildSkinnedGeometry, validateSkin } from './skinning.js'
@@ -8,6 +8,8 @@ import { buildClips } from './anim.js'
 import { buildChains } from './springbone.js'
 import { CapsuleCollider, Strand, ClothPatch, StrandMesh, ClothMesh, DynamicsWorld } from './dynamics.js'
 import { buildCleaver, buildPistol, buildBuckler } from './weapons.js'
+import { frame, mate, handGripSocket, forearmStrapSocket, socketError, formatSocketError } from './attach.js'
+import { LEFT, RIGHT, BACKWARD } from './convention.js'
 import { mergeAll, xform } from './geometry.js'
 
 // ---------------------------------------------------------------------------
@@ -18,32 +20,167 @@ import { mergeAll, xform } from './geometry.js'
 // whole thing from one `update(dt)`.
 // ---------------------------------------------------------------------------
 
-// Where each weapon sits in its holding bone's local space. Weapons are built
-// with the grip along +Y and the business end towards +Y; a hand's fingers run
-// along +X with the palm facing -Y, so the grip has to be rolled onto the
-// hand's +Z. These are the numbers that took the most staring to get right.
-const ATTACH = {
-  // Euler XYZ composes as Rx·Ry·Rz and the weapon's grip axis is its own +Y,
-  // so the Y term is a pure roll about the grip — the "which way does the edge
-  // face" dial — while X and Z aim the blade. These two came out of a search
-  // over the whole run cycle for a carry that trails back and slightly up
-  // (mean tip offset ≈ (-0.03, +0.12, -0.30) m) and never dips towards the
-  // ground; point it any further forward and the blade covers his face.
-  cleaver: {
+// ---------------------------------------------------------------------------
+// Where the kit hangs
+//
+// This was three hand-searched euler triples. They were searched against a
+// proxy — "where does the tip end up over the run cycle" — rather than against
+// the constraint that actually matters, which is that the handle passes through
+// the fist, and measured after the fact the cleaver's grip axis was 104.7° and
+// 17.8 mm away from the hand's. The goblin was gripping air.
+//
+// Now every weapon publishes a plug frame next to the geometry that defines it
+// (`weapons.js`), every bone publishes a socket derived from the rig
+// (`attach.js`), and `mate()` solves for the transform. What is left is a
+// `{ roll, slide, lift }` trim: one dial each, all of them in units a human can
+// picture. If a fourth dial starts looking necessary, the socket or the plug is
+// wrong — fix that instead of adding it here.
+// ---------------------------------------------------------------------------
+
+/**
+ * The same grip, taken the other way up: a hammer grip whose business end
+ * leaves the little-finger side of the fist instead of the thumb side.
+ *
+ * This is a *different frame*, not a roll — no rotation about the grip axis
+ * turns a blade end for end — so it is said with a frame rather than smuggled
+ * in as a 180°. It is also the only way the run reads. With his arm hanging,
+ * the thumb side of the fist points forward and up, so a blade seated that way
+ * rides across his own chest: measured over the whole run clip, blade direction
+ * against "trailing back and slightly up",
+ *
+ *   little-finger side   +0.533   nearest torso capsule 0.232 m
+ *   thumb side           -0.533   nearest torso capsule 0.110 m
+ *
+ * i.e. the other way up it fails the 0.12 m clearance on its own.
+ */
+const flipped = (f) => frame(f.origin, f.axis.clone().negate(), f.normal, `${f.label}-flipped`)
+
+/**
+ * Where a holstered sidearm rides, in the thigh bone's local space. Not a grip
+ * socket: nothing closes on it, so it is stated as a frame the same way and can
+ * be checked the same way, but the thing being seated is the gun's body.
+ *
+ *   `axis`   runs down the thigh, hip -> knee. The gun's bore mates to it, so
+ *            the muzzle points at the ground and the butt sits up by the hip.
+ *   `normal` is BACKWARD — the way the gun's front faces once it is holstered.
+ *            That leaves the slab receiver lying on its cheek against the leg,
+ *            the drum outboard where it can be seen, and — because the
+ *            Sputterhawk's grip is raked 19.9° back off its own bore — the butt
+ *            kicking forward off the thigh. The cant is the weapon's geometry
+ *            showing through, not a number anybody chose.
+ *
+ * `around` is the third thing a holster has and a hand cannot: which way round
+ * the leg it is strapped. It rotates the whole socket about the bone, so the
+ * gun stays *on* the leg instead of drifting off it, and it is what keeps the
+ * gun out of the swinging cleaver.
+ *
+ * @param {'L'|'R'} side
+ * @param {object} [o]
+ * @param {number} [o.along=0.58]      fraction of the thigh, hip -> knee
+ * @param {number} [o.clearance=0.077] metres from the bone axis to the receiver's
+ *                                     centreline. The thigh mesh only reaches
+ *                                     44 mm out there and the gun's inboard face
+ *                                     (the charging handle, not the receiver) is
+ *                                     32 mm off its centreline, so 77 mm is the
+ *                                     first value at which nothing is buried.
+ * @param {number} [o.around=1.05]     radians round the leg from straight out,
+ *                                     positive rearward. Straight out is where
+ *                                     the cleaver hand swings: with the gun
+ *                                     there the two solids touch (1 mm) on every
+ *                                     stride. Rolling it 60° onto the back of
+ *                                     the thigh opens that to 17 mm and still
+ *                                     leaves the gun sitting on the leg (6 mm
+ *                                     off the flesh, against 5 mm at 0).
+ */
+export function thighHolsterSocket(
+  side,
+  { along = 0.58, clearance = 0.077, around = 1.05, rest = restPositions() } = {},
+) {
+  const hip = rest[`thigh${side}`]
+  const knee = rest[`shin${side}`]
+  const bone = new THREE.Vector3().subVectors(knee, hip)
+  const length = bone.length()
+  bone.normalize()
+  const lateral = side === 'L' ? LEFT : RIGHT
+  const c = Math.cos(around)
+  const s = Math.sin(around)
+  const outward = new THREE.Vector3().addScaledVector(lateral, c).addScaledVector(BACKWARD, s)
+  const tangent = new THREE.Vector3().addScaledVector(BACKWARD, c).addScaledVector(lateral, -s)
+  const origin = new THREE.Vector3()
+    .addScaledVector(bone, length * along)
+    .addScaledVector(outward, clearance)
+  return { ...frame(origin, bone, tangent, `holster${side}`), length }
+}
+
+/**
+ * socket + plug + trim per weapon; `gear` is what `weapons.js` just built.
+ *
+ * Exported because everything in it is pure maths: `createGoblin` needs a WebGL
+ * context, but the mounts can be walked in plain `node` and measured against
+ * the baked clips, which is how the trims below were arrived at.
+ */
+export const MOUNTS = {
+  cleaver: (gear) => ({
     bone: 'handR',
-    pos: [-0.05, -0.002, 0.004],
-    euler: [-2.24, 0.5, -1.04],
-  },
-  buckler: {
+    socket: handGripSocket('R', { gripRadius: gear.gripRadius }),
+    plug: flipped(gear.plugs.grip),
+    trim: {
+      // Solved, not guessed. OBJECTIVE, over the whole run clip: maximise the
+      // blade's flat running parallel to the direction of travel — the mean of
+      // 1 - |flat normal · FORWARD| — with the 180° tie broken by requiring the
+      // edge to face away from his own leg, mean(edge · outboard) >= 0.
+      //
+      //   roll     0°   -60°   -88°   +92°
+      //   flat   0.606  0.640  0.725  0.725
+      //   edge  -0.474  0.351  0.662 -0.662
+      //
+      // Both peaks stand the flat up edge-on to the airstream; only one of them
+      // has the sharp side pointing away from his thigh, which is exactly what
+      // the tie-break is for. The tip constraints barely move over the sweep
+      // (0.182-0.217 m from the torso capsules, 0.399-0.434 m off the ground)
+      // because the tip sits 20 mm off the roll axis — those are the wrist's
+      // job, not roll's. Re-solve this if the run's wrist keys change: the
+      // wrist rolls the blade too, and it moved this optimum by 24°.
+      roll: -1.54,
+      // The cross-guard eats the top of the leather, so the band a fist can
+      // actually close on is 10 mm lower than the leather's centre.
+      slide: -0.01,
+    },
+  }),
+  buckler: (gear) => ({
     bone: 'forearmL',
-    pos: [0.13, -0.045, 0.01],
-    euler: [0, 0, Math.PI / 2],
-  },
-  pistol: {
+    socket: forearmStrapSocket('L', {
+      // Far down the forearm, because the hand strap is bolted 36 mm past the
+      // arm loop and this is what lands it on the fist: measured, the hand
+      // strap's apex ends up 21 mm from the wrist bone at 0.82, 33 mm at 0.72
+      // and 48 mm at 0.62.
+      along: 0.82,
+      // The arm loop's centreline hangs 21 mm behind the plate's back face, so
+      // the plate has to stand off the bone by that much plus the forearm's
+      // radius or the loop is swallowed by the arm. Sampled against the arm
+      // mesh, 58 mm clears the flesh by 2.0 mm at the worst point; 55 mm gets
+      // it down to 1.4 mm and 45 mm buries the strap 14 mm deep.
+      clearance: 0.058,
+    }),
+    plug: gear.plugs.strap,
+    trim: {},
+  }),
+  pistol: (gear) => ({
     bone: 'thighR',
-    pos: [-0.062, -0.088, 0.012],
-    euler: [0.12, 0, -0.14],
-  },
+    socket: thighHolsterSocket('R'),
+    plug: gear.plugs.holster,
+    trim: {},
+  }),
+}
+
+/** The socket a trim actually asks for — `mate` is exact about it, so the check
+ *  has to be too, or every `slide` reads as a millimetre of error. */
+function trimmed(socket, { slide = 0, lift = 0 } = {}) {
+  const origin = socket.origin
+    .clone()
+    .addScaledVector(socket.axis, slide)
+    .addScaledVector(socket.normal, lift)
+  return frame(origin, socket.axis, socket.normal, socket.label)
 }
 
 // Capsules the cape and straps collide against. Local-space segments on each
@@ -218,11 +355,19 @@ export function createGoblin({ renderer, quality = 1 } = {}) {
   // ---- weapons ----
   const weapons = {}
   const attachGear = (name, gear) => {
-    const spec = ATTACH[name]
+    const mount = MOUNTS[name](gear)
+    const placed = mate(mount.socket, mount.plug, mount.trim)
+    // The whole point of solving the mate is that it can be checked, so check
+    // it. A warning rather than a throw: a weapon in the wrong place is a bug
+    // worth shouting about, not a reason to show a blank screen.
+    const err = socketError(trimmed(mount.socket, mount.trim), mount.plug, placed)
+    if (err.axisDeg > 1 || err.offset > 0.001) {
+      console.warn(`space-goblin: ${name} misses its socket — ${formatSocketError(name, err)}`)
+    }
     const holder = new THREE.Group()
     holder.name = name
-    holder.position.fromArray(spec.pos)
-    holder.rotation.set(...spec.euler)
+    holder.position.copy(placed.position)
+    holder.quaternion.copy(placed.quaternion)
     // One mesh per material key, sharing the library.
     const byMat = new Map()
     for (const part of gear.parts) {
@@ -237,8 +382,8 @@ export function createGoblin({ renderer, quality = 1 } = {}) {
       m.receiveShadow = true
       holder.add(m)
     }
-    byName[spec.bone].add(holder)
-    weapons[name] = { gear, holder }
+    byName[mount.bone].add(holder)
+    weapons[name] = { gear, holder, mount, error: err }
     return holder
   }
   attachGear('cleaver', buildCleaver())
