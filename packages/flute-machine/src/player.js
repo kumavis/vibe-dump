@@ -113,6 +113,24 @@ export class Player {
     if (this.phrasesLeft <= 0 && now > this.cursor - 0.5) this.finish()
   }
 
+  /**
+   * Throw away the part of the plan that has not been played yet and carry on
+   * from here. Phrases are scheduled whole and can run twenty seconds, so
+   * without this a change of key would not be audible until the current one
+   * finished — which reads as the control being broken.
+   */
+  replan() {
+    if (!this.playing || !this.improviser) return
+    const now = this.engine.currentTime - this.startedAt
+    // Leave a moment so a note that is about to speak is not cut off.
+    const cut = now + 0.25
+    this.engine.cancelAfter(this.startedAt + cut)
+    this.score = this.score.filter((n) => n.t < cut)
+    this.cursor = cut
+    this.improviser.lastDegree = null
+    this.tick()
+  }
+
   finish() {
     const tail = 2.0
     clearInterval(this.timer)

@@ -30,12 +30,22 @@
 
     <main class="console">
       <div class="row row--presets">
-        <div class="chips" id="presets" role="group" aria-label="Presets"></div>
-        <label class="toggle">
-          <input type="checkbox" id="droneLock" />
-          <span class="toggle__track"><span class="toggle__dot"></span></span>
-          <span class="toggle__label">Drone lock</span>
-        </label>
+        <div class="preset-group">
+          <span class="row__label">Preset</span>
+          <div class="chips" id="presets" role="group" aria-label="Presets"></div>
+        </div>
+        <div class="switches">
+          <label class="toggle" title="Pin the register to a low bassy band">
+            <input type="checkbox" id="droneLock" />
+            <span class="toggle__track"><span class="toggle__dot"></span></span>
+            <span class="toggle__label">Drone lock</span>
+          </label>
+          <label class="toggle" title="Let the settings wander slowly on their own">
+            <input type="checkbox" id="drift" checked />
+            <span class="toggle__track"><span class="toggle__dot"></span></span>
+            <span class="toggle__label">Drift</span>
+          </label>
+        </div>
       </div>
 
       <div class="row row--main">
@@ -49,10 +59,10 @@
           </button>
         </div>
 
-        <div class="register">
-          <div class="register__head">
-            <span class="register__label">Register</span>
-            <output id="rangeOut" class="register__out">D4 — D6</output>
+        <div class="field register">
+          <div class="field__head">
+            <span class="field__label">Register</span>
+            <output id="rangeOut" class="field__value">D4 — D6</output>
           </div>
           <div class="range" id="range">
             <div class="range__track"></div>
@@ -61,8 +71,26 @@
             <input id="rangeHi" type="range" min="43" max="96" step="1" value="86" aria-label="Highest note" />
           </div>
           <div class="register__ticks" id="ticks"></div>
+          <p class="field__desc">the highest and lowest notes it may play</p>
         </div>
 
+        <div class="field key">
+          <div class="field__head">
+            <span class="field__label">Key</span>
+          </div>
+          <div class="key__selects">
+            <select id="root" aria-label="Root note"></select>
+            <select id="scale" aria-label="Scale"></select>
+          </div>
+          <div class="key__autos">
+            <label class="mini"><input type="checkbox" id="rootAuto" /> <span>drift root</span></label>
+            <label class="mini"><input type="checkbox" id="scaleAuto" /> <span>drift scale</span></label>
+          </div>
+          <p class="field__desc">which notes exist — drift lets it modulate over minutes</p>
+        </div>
+      </div>
+
+      <div class="row row--knobs">
         <div class="knobs" id="knobs"></div>
       </div>
 

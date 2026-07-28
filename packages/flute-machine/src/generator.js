@@ -20,6 +20,9 @@ const sigmoid = (x) => 1 / (1 + Math.exp(-x))
 
 export const CONTOURS = ['arch', 'sigh', 'question', 'static', 'cascade']
 
+// Every field here is a control in the UI. Presets are nothing but a set of
+// these values — there is deliberately no hidden state a preset can reach that
+// you cannot also reach by hand.
 export const DEFAULT_SETTINGS = {
   registerLow: 62,
   registerHigh: 86,
@@ -27,6 +30,8 @@ export const DEFAULT_SETTINGS = {
   breathiness: 0.32,
   motion: 0.4,
   pace: 0.4,
+  phrase: 0.42,
+  ornament: 0.5,
   vibrato: 0.5,
   space: 0.55,
   scale: 'dorian',
@@ -34,7 +39,7 @@ export const DEFAULT_SETTINGS = {
   scaleAuto: true,
   rootAuto: true,
   automation: true,
-  mode: 'endless', // 'endless' | 'burst'
+  mode: 'endless', // set by the transport, not by a preset
   burstPhrases: 1,
 }
 
@@ -161,12 +166,9 @@ export class Improviser {
       arch: 0.28 + 0.1 * e.motion,
       sigh: 0.24 - 0.05 * e.motion + 0.1 * (1 - e.pace),
       question: 0.14 + 0.06 * e.motion,
-      static: 0.1 + 0.3 * (1 - e.motion) + 0.25 * lowness,
+      static: 0.1 + 0.45 * (1 - e.motion) + 0.3 * lowness,
       cascade: 0.08 + 0.5 * e.motion * e.pace,
     }
-    const override = this.settings.contourWeights
-    if (override) for (const k of CONTOURS) if (override[k] != null) w[k] = override[k]
-
     // Say something different from last time.
     if (this.lastArchetype) w[this.lastArchetype] *= this.repeatRun >= 2 ? 0 : 0.45
     return this.rng.weighted(CONTOURS, CONTOURS.map((k) => w[k]))
@@ -204,10 +206,9 @@ export class Improviser {
       static: [2, 5],
       cascade: [7, 20],
     }
-    const override = this.settings.noteRange
-    const [nMin, nMax] = override ?? ranges[contour]
+    const [nMin, nMax] = ranges[contour]
     let n = nMin + Math.floor(Math.pow(this.rng(), 1.15) * (nMax - nMin + 1))
-    n = Math.round(n * (0.55 + 0.9 * e.pace))
+    n = Math.round(n * (0.25 + 1.15 * e.pace))
     return clamp(n, 2, 24)
   }
 
@@ -218,6 +219,15 @@ export class Improviser {
   nextPhrase() {
     const s = this.settings
     const r = this.rng
+    // A key chosen by hand wins immediately. Only Auto lets the piece wander.
+    if (!s.rootAuto && s.root !== this.root) {
+      this.root = s.root
+      this.lastDegree = null
+    }
+    if (!s.scaleAuto && s.scale !== this.scaleId) {
+      this.scaleId = s.scale
+      this.lastDegree = null
+    }
     const e = this.effective()
 
     const contour = this.pickContour(e)
@@ -227,17 +237,29 @@ export class Improviser {
     const nWanted = this.noteCount(contour, e)
     const shape = this.shape(contour, nWanted)
 
-    const loDeg = this.degreeNear(e.lo)
-    const hiDeg = this.degreeNear(e.hi)
-    const centerDeg = this.degreeNear(e.center)
+    // degreeNear rounds to the closest scale degree, which can sit just
+    // outside the window. Nudge inward so a locked register is genuinely
+    // locked rather than approximately locked.
+    let loDeg = this.degreeNear(e.lo)
+    if (this.midiOf(loDeg) < e.lo) loDeg += 1
+    let hiDeg = this.degreeNear(e.hi)
+    if (this.midiOf(hiDeg) > e.hi) hiDeg -= 1
+    if (hiDeg < loDeg) hiDeg = loDeg
+    const centerDeg = clamp(this.degreeNear(e.center), loDeg, hiDeg)
 
     let d0 = this.lastDegree ?? centerDeg
     d0 = clamp(d0, loDeg, hiDeg)
 
-    // Breath capacity in seconds. Breathier playing burns air faster, so the
-    // Breathiness knob shortens phrases without anyone asking it to.
-    const B = (s.breathCapacity ?? 7.5) * Math.exp(r.gauss(0, 0.18)) * (1 + 0.35 * (1 - s.breathiness))
-    const baseDur = (s.baseDur ?? 1.35) * Math.pow(2, -2 * e.pace)
+    // Breath capacity in seconds, straight off the Phrase knob: 2.5 s at zero
+    // (a gasp) to 26 s at full (a bass flute with a good pair of lungs).
+    // Breathier playing burns air faster, so Breath shortens phrases too.
+    const B =
+      (2.5 + 24 * Math.pow(clamp01(s.phrase ?? 0.42), 1.8)) *
+      Math.exp(r.gauss(0, 0.18)) *
+      (1 + 0.35 * (1 - s.breathiness))
+    // Pace spans the whole useful range on its own — 2.6 s notes down to
+    // 185 ms — so nothing else needs to scale it from behind.
+    const baseDur = 2.6 * Math.pow(2, -3.8 * e.pace)
 
     const notes = []
     let air = 0
@@ -309,7 +331,7 @@ export class Improviser {
     }
 
     this.lastDegree = this.degreeOf(notes[notes.length - 1])
-    const played = this.expand(notes)
+    const played = this.expand(notes, e.lo, e.hi)
 
     const restBreath = 0.55 + 0.9 * (air / B) + 0.4 * r()
     let restAfter = restBreath + 16 * Math.pow(1 - e.density, 1.8) * r.range(0.6, 1.6)
@@ -364,12 +386,20 @@ export class Improviser {
    * without re-attacking — the same thing a player does by moving fingers
    * while the air keeps flowing.
    */
-  expand(notes) {
+  expand(notes, lo = 36, hi = 96) {
     const out = []
     const step = (midi, dir) => {
-      // Move by one scale degree, not one semitone.
+      // Move by one scale degree, not one semitone — and stay inside the
+      // register window, or a grace note would quietly break the lock the
+      // rest of the generator is careful to respect.
       const d = this.degreeNear(midi)
-      return clamp(this.midiOf(d + dir), 36, 96)
+      const next = this.midiOf(d + dir)
+      if (next < lo || next > hi) {
+        const back = this.midiOf(d - dir)
+        if (back >= lo && back <= hi) return back
+        return clamp(midi, lo, hi)
+      }
+      return clamp(next, 36, 96)
     }
 
     for (const n of notes) {
@@ -402,7 +432,7 @@ export class Improviser {
       if (e.trill && left > 0.3 && left < 2.5) {
         const period = 1 / e.trill.rate
         const upper = step(n.midi, 1)
-        const maxSegments = 20
+        const maxSegments = 12
         let i = 0
         while (left > 1e-3 && i < maxSegments) {
           const d = i === maxSegments - 1 ? left : Math.min(period / 2, left)
@@ -504,7 +534,8 @@ export class Improviser {
     }
 
     const err = target - degree
-    const k = this.settings.gravity ?? 0.55
+    // Restless playing wanders; settled playing is pulled back to the centre.
+    const k = 0.95 - 0.55 * e.motion
     const pUp = 0.75 * sigmoid(1.1 * err) + 0.25 * sigmoid(-k * (degree - centerDeg))
     const dir = r.chance(pUp) ? 1 : -1
     return this.constrain(degree + dir * step, centerDeg, loDeg, hiDeg)
@@ -513,15 +544,18 @@ export class Improviser {
   /** Keep a degree inside the register window: fold, then mirror, then clamp. */
   constrain(d, centerDeg, loDeg, hiDeg) {
     const L = this.scale.steps.length
+    // Both bounds get checked on the folded degree. Checking only the near
+    // one lets a wide leap land an octave short and still finish outside the
+    // window, which is how a locked register quietly leaks.
     if (d > hiDeg) {
-      if (d - L >= loDeg) return d - L
+      if (d - L >= loDeg && d - L <= hiDeg) return d - L
       const mirrored = 2 * centerDeg - d
       if (mirrored >= loDeg && mirrored <= hiDeg) return mirrored
       this.rawClamps++
       return this.rawClamps > 1 ? ((this.rawClamps = 0), centerDeg) : hiDeg
     }
     if (d < loDeg) {
-      if (d + L <= hiDeg) return d + L
+      if (d + L >= loDeg && d + L <= hiDeg) return d + L
       const mirrored = 2 * centerDeg - d
       if (mirrored >= loDeg && mirrored <= hiDeg) return mirrored
       this.rawClamps++
@@ -566,7 +600,7 @@ export class Improviser {
   ornament(contour, u, isLast, e, midi, lastStep, repeats, duration) {
     const r = this.rng
     const s = this.settings
-    const p = s.ornamentScale ?? 1
+    const p = 2 * clamp01(s.ornament ?? 0.5)
     const expr = {}
 
     // A repeated note has to be re-articulated or it sounds like a stuck key.
@@ -578,11 +612,11 @@ export class Improviser {
     const grace = (0.1 + 0.3 * e.motion) * p
     const trill = (0.04 + 0.16 * e.motion) * p
     const mordent = (0.05 + 0.15 * e.motion) * p
-    const porta = (s.portamento ?? 0.18 + 0.2 * (1 - e.motion)) * p
-    const flutter = (s.flutter ?? 0.03 + 0.08 * s.breathiness) * p
-    const overblow = (s.overblow ?? 0.04 + 0.08 * e.motion) * p
+    const porta = (0.18 + 0.2 * (1 - e.motion)) * p
+    const flutter = (0.03 + 0.14 * s.breathiness) * p
+    const overblow = (0.04 + 0.08 * e.motion) * p
 
-    if (duration > 0.35 && duration < 2.5 && r.chance(trill)) {
+    if (duration > 0.5 && duration < 2.5 && r.chance(trill)) {
       expr.trill = { rate: 5 + 6 * e.motion + 3 * r() }
     } else if (duration > 0.22 && r.chance(mordent)) {
       expr.mordent = r.chance(0.5) ? 1 : -1
@@ -596,7 +630,7 @@ export class Improviser {
     if (duration > 0.7 && r.chance(flutter)) {
       expr.flutter = 22 + 8 * r()
     }
-    if (r.chance(overblow) && midi + 12 <= 96) {
+    if (r.chance(overblow) && midi + 12 <= Math.min(96, e.hi)) {
       expr.overblow = true
     }
     // Bending into a note from below: common on a low flute, rare up high.
@@ -639,30 +673,13 @@ export const PRESETS = [
   {
     id: 'drone',
     name: 'Drone Flute',
-    blurb: 'Low, bassy, sustained. Two or three very long notes, then a long silence.',
+    blurb: 'Low, bassy and sustained — two or three very long notes, then a long silence.',
     settings: {
-      mode: 'endless',
-      registerLow: 43,
-      registerHigh: 58,
-      density: 0.3,
-      breathiness: 0.42,
-      motion: 0.1,
-      pace: 0.08,
-      vibrato: 0.26,
-      space: 0.85,
-      scale: 'minor-pentatonic',
-      root: 9,
-      scaleAuto: false,
-      rootAuto: true,
+      registerLow: 43, registerHigh: 58,
+      density: 0.3, breathiness: 0.42, motion: 0.1, pace: 0.23,
+      phrase: 0.89, ornament: 0.55, vibrato: 0.26, space: 0.85,
+      scale: 'minor-pentatonic', root: 9, scaleAuto: false, rootAuto: true,
       automation: true,
-      gravity: 0.9,
-      baseDur: 1.6,
-      breathCapacity: 22,
-      contourWeights: { static: 0.45, sigh: 0.3, arch: 0.2, question: 0.05, cascade: 0 },
-      noteRange: [2, 4],
-      portamento: 0.55,
-      flutter: 0.25,
-      overblow: 0.02,
     },
   },
   {
@@ -670,72 +687,35 @@ export const PRESETS = [
     name: 'Long Grass',
     blurb: 'Endless background music. Everything drifts, so it never settles into a pattern.',
     settings: {
-      mode: 'endless',
-      registerLow: 62,
-      registerHigh: 86,
-      density: 0.35,
-      breathiness: 0.3,
-      motion: 0.3,
-      pace: 0.3,
-      vibrato: 0.45,
-      space: 0.7,
-      scale: 'dorian',
-      root: 2,
-      scaleAuto: true,
-      rootAuto: true,
+      registerLow: 62, registerHigh: 86,
+      density: 0.35, breathiness: 0.3, motion: 0.3, pace: 0.41,
+      phrase: 0.42, ornament: 0.5, vibrato: 0.45, space: 0.7,
+      scale: 'dorian', root: 2, scaleAuto: true, rootAuto: true,
       automation: true,
-      gravity: 0.55,
     },
   },
   {
     id: 'smatterings',
     name: 'Smatterings',
-    blurb: 'One breath, a dozen quick notes high up, and it stops. Press again for another.',
+    blurb: 'Quick high flurries. Press Puff for a single one, Breathe to keep them coming.',
     settings: {
-      mode: 'burst',
-      burstPhrases: 1,
-      registerLow: 72,
-      registerHigh: 93,
-      density: 0.85,
-      breathiness: 0.22,
-      motion: 0.85,
-      pace: 0.85,
-      vibrato: 0.22,
-      space: 0.35,
-      scale: 'major-pentatonic',
-      root: 7,
-      scaleAuto: false,
-      rootAuto: false,
+      registerLow: 72, registerHigh: 93,
+      density: 0.85, breathiness: 0.22, motion: 0.85, pace: 1,
+      phrase: 0.25, ornament: 0.65, vibrato: 0.22, space: 0.35,
+      scale: 'major-pentatonic', root: 7, scaleAuto: false, rootAuto: false,
       automation: false,
-      gravity: 0.4,
-      baseDur: 0.6,
-      breathCapacity: 4.5,
-      contourWeights: { cascade: 0.4, arch: 0.32, question: 0.28, sigh: 0, static: 0 },
-      noteRange: [9, 16],
-      ornamentScale: 1.3,
     },
   },
   {
     id: 'bamboo',
     name: 'Bamboo Rain',
-    blurb: 'Short gestures with wide gaps, mid-high — a shakuhachi practising in another room.',
+    blurb: 'Short gestures with wide gaps — a shakuhachi practising in another room.',
     settings: {
-      mode: 'endless',
-      registerLow: 67,
-      registerHigh: 88,
-      density: 0.55,
-      breathiness: 0.4,
-      motion: 0.62,
-      pace: 0.6,
-      vibrato: 0.35,
-      space: 0.55,
-      scale: 'hirajoshi',
-      root: 4,
-      scaleAuto: true,
-      rootAuto: true,
+      registerLow: 67, registerHigh: 88,
+      density: 0.55, breathiness: 0.4, motion: 0.62, pace: 0.57,
+      phrase: 0.34, ornament: 0.6, vibrato: 0.35, space: 0.55,
+      scale: 'hirajoshi', root: 4, scaleAuto: true, rootAuto: true,
       automation: true,
-      breathCapacity: 6,
-      ornamentScale: 1.2,
     },
   },
   {
@@ -743,25 +723,11 @@ export const PRESETS = [
     name: 'Cathedral Low',
     blurb: "The drone's louder sibling: same low band, denser, built on slow rising arches.",
     settings: {
-      mode: 'endless',
-      registerLow: 45,
-      registerHigh: 64,
-      density: 0.45,
-      breathiness: 0.35,
-      motion: 0.28,
-      pace: 0.2,
-      vibrato: 0.4,
-      space: 0.9,
-      scale: 'aeolian',
-      root: 0,
-      scaleAuto: true,
-      rootAuto: true,
+      registerLow: 45, registerHigh: 64,
+      density: 0.45, breathiness: 0.35, motion: 0.28, pace: 0.29,
+      phrase: 0.73, ornament: 0.5, vibrato: 0.4, space: 0.9,
+      scale: 'aeolian', root: 0, scaleAuto: true, rootAuto: true,
       automation: true,
-      baseDur: 1.6,
-      breathCapacity: 16,
-      contourWeights: { arch: 0.38, sigh: 0.28, static: 0.24, question: 0.1, cascade: 0 },
-      noteRange: [3, 6],
-      portamento: 0.42,
     },
   },
 ]

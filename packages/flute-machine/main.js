@@ -4,7 +4,7 @@ import { FluteEngine } from './src/engine.js'
 import { Player } from './src/player.js'
 import { Visualizer } from './src/visualizer.js'
 import { PRESETS, PRESET_BY_ID, DEFAULT_SETTINGS, Improviser } from './src/generator.js'
-import { midiToName, REGISTERS } from './src/theory.js'
+import { midiToName, REGISTERS, SCALES, NOTE_NAMES } from './src/theory.js'
 import { encodeWav, downloadBlob } from './src/wav.js'
 import { encodeMidi } from './src/midi.js'
 import { toSession, fromSession, stamp } from './src/session.js'
@@ -43,10 +43,10 @@ function toast(message, isError = false) {
 
 function setStatus() {
   const s = state.settings
-  const scaleName = (s.scale || '').replace(/-/g, ' ')
-  const key = `${midiToName(60 + (s.root % 12)).replace(/\d+$/, '')} ${scaleName}`
+  const scaleName = (SCALES.find((x) => x.id === s.scale)?.name ?? s.scale).toLowerCase()
+  const key = `${NOTE_NAMES[((s.root % 12) + 12) % 12]} ${scaleName}`
   const playing = player.playing
-  $('status').textContent = `${key} · ${playing ? 'breathing' : 'resting'}`
+  $('status').textContent = `${key} · seed ${state.seed.toString(16)} · ${playing ? 'breathing' : 'resting'}`
 
   const n = player.score.length
   const dur = player.scoreDuration
@@ -67,12 +67,14 @@ const formatTime = (s) => {
 // ----------------------------------------------------------------- knobs
 
 const KNOBS = [
-  { key: 'density', label: 'Density', target: 'settings', hint: 'how much of the time there is sound' },
-  { key: 'breathiness', label: 'Breath', target: 'both', hint: 'air against tone' },
-  { key: 'motion', label: 'Motion', target: 'settings', hint: 'restlessness' },
-  { key: 'pace', label: 'Pace', target: 'settings', hint: 'note length' },
-  { key: 'vibrato', label: 'Vibrato', target: 'both', hint: 'depth of the wobble' },
-  { key: 'space', label: 'Space', target: 'settings', hint: 'size of the room' },
+  { key: 'density', label: 'Density', target: 'settings', desc: 'how much silence between phrases' },
+  { key: 'pace', label: 'Pace', target: 'settings', desc: 'note length, 2.6s to 0.2s' },
+  { key: 'phrase', label: 'Phrase', target: 'settings', desc: 'how much air per breath' },
+  { key: 'motion', label: 'Motion', target: 'settings', desc: 'how far the melody wanders' },
+  { key: 'ornament', label: 'Ornament', target: 'settings', desc: 'trills, grace notes, slides' },
+  { key: 'breathiness', label: 'Breath', target: 'both', desc: 'air against tone' },
+  { key: 'vibrato', label: 'Vibrato', target: 'both', desc: 'depth of the wobble' },
+  { key: 'space', label: 'Space', target: 'settings', desc: 'size of the room' },
 ]
 
 function drawKnob(canvas, value) {
@@ -125,7 +127,7 @@ function buildKnobs() {
     btn.className = 'knob'
     btn.type = 'button'
     btn.setAttribute('role', 'slider')
-    btn.setAttribute('aria-label', `${k.label} — ${k.hint}`)
+    btn.setAttribute('aria-label', `${k.label} — ${k.desc}`)
     btn.setAttribute('aria-valuemin', '0')
     btn.setAttribute('aria-valuemax', '100')
 
@@ -137,7 +139,11 @@ function buildKnobs() {
     const value = document.createElement('span')
     value.className = 'knob__value'
 
-    btn.append(canvas, label, value)
+    const desc = document.createElement('span')
+    desc.className = 'knob__desc'
+    desc.textContent = k.desc
+
+    btn.append(canvas, label, value, desc)
     host.append(btn)
 
     const read = () => (k.target === 'settings' ? state.settings[k.key] : state.tone[k.key] ?? state.settings[k.key])
@@ -197,12 +203,25 @@ function buildKnobs() {
 
 const renderKnobs = () => KNOBS.forEach((k) => k.render && k.render())
 
+/**
+ * Hand the current settings to a running improviser.
+ *
+ * `replan` is for changes you expect to hear at once — key, register — where
+ * waiting out a twenty-second drone phrase would read as a broken control.
+ * Knobs like density or pace are gradual by nature and can wait their turn.
+ */
+function pushSettings({ replan = false } = {}) {
+  if (!player.improviser) return
+  player.improviser.settings = state.settings
+  if (replan) player.replan()
+}
+
 /** Changes that can take effect without restarting the phrase stream. */
 function applyLive(key) {
   if (!engine.ready) return
   if (key === 'breathiness' || key === 'vibrato') engine.setTone(state.tone)
   if (key === 'space') engine.setSpace(state.settings.space)
-  if (player.improviser) player.improviser.settings = state.settings
+  pushSettings()
 }
 
 // -------------------------------------------------------------- presets
@@ -230,7 +249,6 @@ function applyPreset(id, restart) {
   state.tone.breathiness = state.settings.breathiness
   state.tone.vibrato = state.settings.vibrato
   state.droneLock = state.settings.registerHigh <= 66
-  $('droneLock').checked = state.droneLock
 
   syncControls()
   buildPresets()
@@ -259,6 +277,9 @@ function syncControls() {
   span.style.width = `${Math.max(0, b - a)}%`
   viz.setRange(lo, hi)
   renderKnobs()
+  syncKey()
+  $('drift').checked = !!state.settings.automation
+  $('droneLock').checked = state.droneLock
   $('breathe').classList.toggle('is-low', hi <= 66)
 }
 
@@ -276,7 +297,35 @@ function onRangeInput() {
   state.droneLock = false
   $('droneLock').checked = false
   syncControls()
-  if (player.improviser) player.improviser.settings = state.settings
+  pushSettings({ replan: true })
+}
+
+function buildKey() {
+  const root = $('root')
+  root.innerHTML = ''
+  for (let i = 0; i < 12; i++) {
+    const o = document.createElement('option')
+    o.value = String(i)
+    o.textContent = NOTE_NAMES[i]
+    root.append(o)
+  }
+  const scale = $('scale')
+  scale.innerHTML = ''
+  for (const sc of SCALES) {
+    const o = document.createElement('option')
+    o.value = sc.id
+    o.textContent = sc.name
+    o.title = sc.mood
+    scale.append(o)
+  }
+}
+
+/** Push the current key onto the two selects and their auto checkboxes. */
+function syncKey() {
+  $('root').value = String(((state.settings.root % 12) + 12) % 12)
+  $('scale').value = state.settings.scale
+  $('rootAuto').checked = !!state.settings.rootAuto
+  $('scaleAuto').checked = !!state.settings.scaleAuto
 }
 
 function buildTicks() {
@@ -327,14 +376,17 @@ async function puff() {
   await ensureAudio()
   engine.setTone(state.tone)
   engine.setGain(state.volume)
+  // A puff is one quick flurry in whatever key and register are set — it
+  // borrows nothing from the Smatterings preset, so it works as a short low
+  // gesture just as well as a high one.
   const burst = {
     ...state.settings,
-    ...PRESET_BY_ID.smatterings.settings,
-    // A puff stays inside whatever register the user has chosen, so it works
-    // as a short low gesture too.
-    registerLow: state.settings.registerLow,
-    registerHigh: state.settings.registerHigh,
-    space: state.settings.space,
+    density: 0.85,
+    pace: Math.max(0.78, state.settings.pace),
+    phrase: Math.min(0.28, state.settings.phrase),
+    motion: Math.max(0.65, state.settings.motion),
+    ornament: Math.max(0.6, state.settings.ornament),
+    automation: false,
     mode: 'burst',
     burstPhrases: 1,
   }
@@ -442,6 +494,7 @@ async function loadSession(file) {
 
 buildPresets()
 buildKnobs()
+buildKey()
 buildTicks()
 syncControls()
 setStatus()
@@ -468,7 +521,30 @@ $('droneLock').addEventListener('change', (e) => {
     state.settings.registerHigh = state.savedRange[1]
   }
   syncControls()
-  if (player.improviser) player.improviser.settings = state.settings
+  pushSettings({ replan: true })
+})
+
+for (const [id, key] of [['root', 'root'], ['scale', 'scale']]) {
+  $(id).addEventListener('change', (e) => {
+    state.settings[key] = key === 'root' ? +e.target.value : e.target.value
+    // Choosing a key by hand means you meant it, so stop that half drifting.
+    state.settings[key === 'root' ? 'rootAuto' : 'scaleAuto'] = false
+    syncKey()
+    pushSettings({ replan: true })
+    setStatus()
+  })
+}
+
+for (const [id, key] of [['rootAuto', 'rootAuto'], ['scaleAuto', 'scaleAuto']]) {
+  $(id).addEventListener('change', (e) => {
+    state.settings[key] = e.target.checked
+    pushSettings()
+  })
+}
+
+$('drift').addEventListener('change', (e) => {
+  state.settings.automation = e.target.checked
+  pushSettings()
 })
 
 $('volume').addEventListener('input', (e) => {
@@ -497,9 +573,13 @@ player.onPhrase = (phrase, at) => {
   for (const n of phrase.notes) {
     setTimeout(() => viz.noteOn(n.midi, n.velocity), (delay + n.time) * 1000)
   }
+  // With drift on, the piece modulates by itself; the selects follow so the
+  // panel always shows what is actually being played, and switching drift off
+  // freezes it right there.
   if (phrase.info) {
-    state.settings.scale = phrase.info.scale
-    state.settings.root = phrase.info.root
+    if (state.settings.rootAuto) state.settings.root = phrase.info.root
+    if (state.settings.scaleAuto) state.settings.scale = phrase.info.scale
+    syncKey()
   }
   setStatus()
 }

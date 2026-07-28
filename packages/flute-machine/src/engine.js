@@ -231,6 +231,14 @@ export class FluteEngine {
     }
   }
 
+  /** Forget scheduled notes that have not begun yet. */
+  cancelAfter(atSeconds) {
+    if (this.usingWorklet && this.node) {
+      this.node.port.postMessage({ type: 'cancelAfter', frame: Math.round(atSeconds * this.ctx.sampleRate) })
+    }
+    if (this.fallback) this.fallback.cancelAfter(atSeconds)
+  }
+
   panic() {
     if (this.usingWorklet && this.node) this.node.port.postMessage({ type: 'panic' })
     if (this.fallback) this.fallback.panic()
@@ -376,13 +384,24 @@ class NodeVoiceBank {
     air.start(t0)
     air.stop(stop)
 
-    const rec = { osc, lfo, air, g, stop }
+    const rec = { osc, lfo, air, g, stop, t0 }
     this.active.push(rec)
     osc.onended = () => {
       const i = this.active.indexOf(rec)
       if (i >= 0) this.active.splice(i, 1)
       try {
         g.disconnect()
+      } catch {}
+    }
+  }
+
+  cancelAfter(atSeconds) {
+    for (const r of this.active.slice()) {
+      if (r.t0 <= atSeconds) continue
+      try {
+        r.osc.stop(atSeconds)
+        r.lfo.stop(atSeconds)
+        r.air.stop(atSeconds)
       } catch {}
     }
   }

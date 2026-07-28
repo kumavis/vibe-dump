@@ -39,7 +39,11 @@ class FluteProcessor extends AudioWorkletProcessor {
       const m = e.data
       if (m.type === 'schedule') this.load(m.events)
       else if (m.type === 'tone') this.tone = m.tone
-      else if (m.type === 'panic') {
+      else if (m.type === 'cancelAfter') {
+        // Keep anything already sounding — including its note-off, or the
+        // voice would hang — and drop the rest of the plan.
+        this.queue = this.queue.filter((ev) => ev.pending || ev.on <= m.frame)
+      } else if (m.type === 'panic') {
         this.queue.length = 0
         for (const v of this.voices) {
           v.noteOff()
