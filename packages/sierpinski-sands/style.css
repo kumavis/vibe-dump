@@ -1,0 +1,304 @@
+:root {
+  color-scheme: dark;
+  --bg: #e2c99e;
+  --ink: #fdf2dc;
+  --dim: #d8bd90;
+  --dimmer: #ab8f65;
+  --accent: #ffc35c;
+  --accent-deep: #b5702a;
+  --panel: rgba(48, 30, 16, 0.46);
+  --line: rgba(255, 210, 140, 0.24);
+  --line-soft: rgba(255, 210, 140, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  /* Matches the sky shader's horizon-to-zenith ramp, so the page never flashes
+     a colour the scene doesn't contain. */
+  background-image: linear-gradient(180deg, #3d7fb8 0%, #8fb1c6 38%, #efd6a4 62%, #c9a76f 100%);
+  color: var(--ink);
+  font-family: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+#app canvas {
+  display: block;
+  touch-action: none;
+}
+
+/* --- HUD ----------------------------------------------------------------- */
+
+/* The sky behind the header is the brightest thing in the frame, so pale text
+   needs a scrim of its own — a shadow alone doesn't hold it. The gradient
+   spans the full width and fades out well below the last line. */
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 18px 20px 52px;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+  background: linear-gradient(180deg, rgba(38, 22, 6, 0.5) 0%, rgba(38, 22, 6, 0) 100%);
+  text-shadow: 0 1px 12px rgba(52, 30, 8, 0.9);
+}
+
+#hud h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--ink);
+  text-shadow: 0 0 18px rgba(88, 46, 10, 0.75), 0 1px 12px rgba(52, 30, 8, 0.9);
+}
+
+#hud .sub {
+  margin: 6px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+}
+
+#hud .hint {
+  margin: 10px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--dimmer);
+}
+
+#hud .hint .dot {
+  margin: 0 6px;
+  opacity: 0.5;
+}
+
+#hud kbd {
+  display: inline-block;
+  min-width: 15px;
+  margin-right: 3px;
+  padding: 1px 5px;
+  font: inherit;
+  font-size: 9.5px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--dim);
+  background: rgba(60, 36, 14, 0.34);
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+}
+
+/* --- Status bar ---------------------------------------------------------- */
+
+#status {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 10;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100vw - 24px);
+  padding: 9px 16px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 50px rgba(40, 22, 6, 0.45), inset 0 1px 0 rgba(255, 214, 150, 0.1);
+  pointer-events: none;
+  user-select: none;
+}
+
+#status[hidden] {
+  display: none;
+}
+
+#status .cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+#status .rule {
+  flex: 0 0 1px; /* a 1px divider is the first thing flex would shrink away */
+  height: 14px;
+  background: var(--line);
+}
+
+#status .unit {
+  margin-left: 6px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--dimmer);
+}
+
+#level-label {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+#block-count {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+#phase {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+}
+
+#phase.is-hold {
+  color: var(--dim);
+}
+
+#phase.is-move {
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(255, 195, 92, 0.5);
+}
+
+#phase.is-paused {
+  color: #ffe9a8;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* --- Progress + depth pips ------------------------------------------------ */
+
+#progress {
+  display: block;
+  width: 110px;
+  height: 3px;
+  overflow: hidden;
+  background: rgba(255, 210, 140, 0.16);
+  border-radius: 2px;
+}
+
+#progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0.15); /* mirrors START_T in main.js */
+  transform-origin: left center;
+  will-change: transform;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+  box-shadow: 0 0 10px rgba(255, 195, 92, 0.55);
+}
+
+#level-pips {
+  display: flex;
+  gap: 4px;
+}
+
+#level-pips .pip {
+  width: 9px;
+  height: 3px;
+  border-radius: 1px;
+  background: rgba(255, 210, 140, 0.18);
+  transition: background 160ms linear, box-shadow 160ms linear;
+}
+
+#level-pips .pip.on {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(255, 195, 92, 0.65);
+}
+
+#level-pips .pip.next {
+  background: rgba(255, 195, 92, 0.45);
+}
+
+/* --- WebGL fallback ------------------------------------------------------- */
+
+#fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+  text-shadow: 0 1px 12px rgba(52, 30, 8, 0.9);
+}
+
+#fallback[hidden] {
+  display: none;
+}
+
+#fallback strong {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+}
+
+#fallback span {
+  max-width: 34em;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+}
+
+/* --- Small screens -------------------------------------------------------- */
+
+@media (max-width: 620px) {
+  #hud .hint {
+    display: none;
+  }
+  #status {
+    gap: 10px;
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+  #progress {
+    width: 68px;
+  }
+}
+
+/* Below this the meter no longer fits alongside the readout, and the readout is
+   the part that carries information. Drop the meter (and the divider that
+   introduces it) rather than let the whole pill overflow the viewport. */
+/* The #status prefix is load-bearing: `#status .cell` above outranks a bare
+   `#meter`, so without it the meter would stay flex and overflow the pill. */
+@media (max-width: 560px) {
+  #status #meter,
+  #status .meter-rule {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #phase.is-paused {
+    animation: none;
+  }
+  #level-pips .pip {
+    transition: none;
+  }
+}

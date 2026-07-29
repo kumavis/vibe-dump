@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/sierpinski-sands",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Sierpinski Sands",
+    "description": "An ancient stepped pyramid hauls itself out of the desert, then rumbles one level deeper into recursion each time — sheets of sand pouring off its ledges while a polygonal sphinx keeps watch through the heat haze. Three.js."
+  }
+}
