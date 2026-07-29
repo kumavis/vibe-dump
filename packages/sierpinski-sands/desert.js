@@ -190,138 +190,165 @@ export function makeDunes(segments) {
 }
 
 // --- sphinx -----------------------------------------------------------------
-// A recumbent lion with a nemes headdress, cut from the same quarry as the
-// pyramid — and, more to the point, cut into the same shapes. There isn't a box
-// anywhere in it: every mass is either a pyramid (or a frustum of one) or a
-// ridged triangular prism, so the whole animal is sloped triangular facets that
-// catch the sun the way the monument's courses do. The haunch is literally a
-// small pyramid, and so is the headdress.
+// A recumbent lion with a nemes headdress, built the way a PlayStation-era
+// character was: one continuous low-poly skin, a few hundred flat-shaded
+// triangles, silhouette doing all of the work.
 //
-// It lives or dies on silhouette, so the masses are kept few and far apart: a
-// long ridged body, the haunch pyramid at the back, forelegs thrown out well
-// past the chest, one pyramid of headdress above them.
-//
-// Everything is authored as loose triangles and wound outwards afterwards
-// (`orientOutward`), which is what makes hand-placing this many facets tractable
-// — the builders below only have to get the vertices right, never the winding.
+// The body is a single tube lofted from tail to muzzle. Every station along it
+// is a six-sided ring — a squared-off hexagon standing on its flat bottom — and
+// consecutive rings are stitched with quads. That is what gives an angular
+// animal rather than an assembly of parts: the haunch, the waist, the chest and
+// the neck are all the same skin, just different ring sizes. The headdress, the
+// forelegs and the tail are separate lofts of the same kind, and the plinth is
+// a frustum.
 function pushTri(out, a, b, c) {
   out.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2])
 }
 
-// Flip any triangle whose normal points back towards the part's own centre.
-// Every part here is convex, so "away from the centroid" is simply "outwards".
-function orientOutward(v) {
-  let cx = 0
-  let cy = 0
-  let cz = 0
-  const n = v.length / 3
-  for (let i = 0; i < v.length; i += 3) {
-    cx += v[i] / n
-    cy += v[i + 1] / n
-    cz += v[i + 2] / n
+// Push a triangle wound so its normal points away from `ref`. Every triangle
+// here is a piece of a tube's skin, so "away from the ring centre" is always
+// "outwards" — which means the builders below never have to reason about
+// winding order, only about where the vertices go.
+function pushTriAwayFrom(out, a, b, c, ref) {
+  const nx = (b[1] - a[1]) * (c[2] - a[2]) - (b[2] - a[2]) * (c[1] - a[1])
+  const ny = (b[2] - a[2]) * (c[0] - a[0]) - (b[0] - a[0]) * (c[2] - a[2])
+  const nz = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+  const dx = (a[0] + b[0] + c[0]) / 3 - ref[0]
+  const dy = (a[1] + b[1] + c[1]) / 3 - ref[1]
+  const dz = (a[2] + b[2] + c[2]) / 3 - ref[2]
+  if (nx * dx + ny * dy + nz * dz < 0) pushTri(out, a, c, b)
+  else pushTri(out, a, b, c)
+}
+
+// One ring of the skin: a hexagon in the Y-Z plane at `x`, standing on a flat
+// bottom, with the top edge pulled in so the back reads as a spine rather than
+// a slab. `z` slides the whole ring sideways, which is all a foreleg needs.
+function ring({ x, yb, yt, w, z = 0, top = 0.55, bottom = 0.72 }) {
+  const mid = yb + (yt - yb) * 0.62
+  return [
+    [x, yt, z - w * top],
+    [x, mid, z - w],
+    [x, yb, z - w * bottom],
+    [x, yb, z + w * bottom],
+    [x, mid, z + w],
+    [x, yt, z + w * top],
+  ]
+}
+
+function ringCentre(r) {
+  const c = [0, 0, 0]
+  for (const p of r) {
+    c[0] += p[0] / r.length
+    c[1] += p[1] / r.length
+    c[2] += p[2] / r.length
   }
-  for (let i = 0; i < v.length; i += 9) {
-    const ax = v[i + 3] - v[i]
-    const ay = v[i + 4] - v[i + 1]
-    const az = v[i + 5] - v[i + 2]
-    const bx = v[i + 6] - v[i]
-    const by = v[i + 7] - v[i + 1]
-    const bz = v[i + 8] - v[i + 2]
-    const nx = ay * bz - az * by
-    const ny = az * bx - ax * bz
-    const nz = ax * by - ay * bx
-    const dx = (v[i] + v[i + 3] + v[i + 6]) / 3 - cx
-    const dy = (v[i + 1] + v[i + 4] + v[i + 7]) / 3 - cy
-    const dz = (v[i + 2] + v[i + 5] + v[i + 8]) / 3 - cz
-    if (nx * dx + ny * dy + nz * dz < 0) {
-      for (let k = 0; k < 3; k++) {
-        const t = v[i + 3 + k]
-        v[i + 3 + k] = v[i + 6 + k]
-        v[i + 6 + k] = t
-      }
+  return c
+}
+
+/** Stitch a run of rings into a closed tube, capped at both ends. */
+function loft(rings) {
+  const v = []
+  const centres = rings.map(ringCentre)
+  for (let s = 0; s < rings.length - 1; s++) {
+    const A = rings[s]
+    const B = rings[s + 1]
+    const ref = [
+      (centres[s][0] + centres[s + 1][0]) / 2,
+      (centres[s][1] + centres[s + 1][1]) / 2,
+      (centres[s][2] + centres[s + 1][2]) / 2,
+    ]
+    for (let i = 0; i < A.length; i++) {
+      const j = (i + 1) % A.length
+      pushTriAwayFrom(v, A[i], A[j], B[j], ref)
+      pushTriAwayFrom(v, A[i], B[j], B[i], ref)
+    }
+  }
+  // End caps, fanned from the ring's own centre and faced away from its
+  // neighbour so they point out of the tube rather than into it.
+  for (const [end, inward] of [
+    [0, 1],
+    [rings.length - 1, rings.length - 2],
+  ]) {
+    const r = rings[end]
+    const c = ringCentre(r)
+    for (let i = 0; i < r.length; i++) {
+      pushTriAwayFrom(v, c, r[i], r[(i + 1) % r.length], centres[inward])
     }
   }
   return v
 }
 
-/**
- * A ridged triangular prism running along X: every cross-section is a triangle
- * standing on its base, apex on the centreline. Used for the body, the legs and
- * the tail — it is the pyramid's profile stretched out lengthways.
- */
-function ridge({ x0, x1, hw0, hw1, top0, top1, base = 0, z = 0 }) {
-  const L0 = [x0, base, z - hw0]
-  const R0 = [x0, base, z + hw0]
-  const T0 = [x0, top0, z]
-  const L1 = [x1, base, z - hw1]
-  const R1 = [x1, base, z + hw1]
-  const T1 = [x1, top1, z]
-  const v = []
-  pushTri(v, L0, T0, R0) // end caps
-  pushTri(v, L1, T1, R1)
-  pushTri(v, L0, L1, T1) // near slope
-  pushTri(v, L0, T1, T0)
-  pushTri(v, R0, R1, T1) // far slope
-  pushTri(v, R0, T1, T0)
-  pushTri(v, L0, L1, R1) // underside
-  pushTri(v, L0, R1, R0)
-  return orientOutward(v)
-}
-
-/**
- * A square-based pyramid, or a frustum of one when the top half-extents are
- * non-zero. The apex may be offset so a head can lean forward.
- */
-function pyr({ cx, cy, cz, hx, hz, h, topHx = 0, topHz = 0, ax = 0, az = 0 }) {
+// A rectangular frustum — used for the plinth and the little uraeus. Just a
+// two-ring loft; `loft` doesn't care that these rings are square.
+function frustum({ cx, cy, cz, hx, hz, h, topHx, topHz, ax = 0 }) {
   const y1 = cy + h
-  const b = [
-    [cx - hx, cy, cz - hz],
-    [cx + hx, cy, cz - hz],
-    [cx + hx, cy, cz + hz],
-    [cx - hx, cy, cz + hz],
-  ]
-  const v = []
-  pushTri(v, b[0], b[1], b[2]) // base
-  pushTri(v, b[0], b[2], b[3])
-  if (topHx > 0 && topHz > 0) {
-    const t = [
-      [cx + ax - topHx, y1, cz + az - topHz],
-      [cx + ax + topHx, y1, cz + az - topHz],
-      [cx + ax + topHx, y1, cz + az + topHz],
-      [cx + ax - topHx, y1, cz + az + topHz],
-    ]
-    pushTri(v, t[0], t[1], t[2])
-    pushTri(v, t[0], t[2], t[3])
-    for (let i = 0; i < 4; i++) {
-      const j = (i + 1) % 4
-      pushTri(v, b[i], b[j], t[j])
-      pushTri(v, b[i], t[j], t[i])
-    }
-  } else {
-    const apex = [cx + ax, y1, cz + az]
-    for (let i = 0; i < 4; i++) pushTri(v, b[i], b[(i + 1) % 4], apex)
-  }
-  return orientOutward(v)
+  return loft([
+    [
+      [cx - hx, cy, cz - hz],
+      [cx + hx, cy, cz - hz],
+      [cx + hx, cy, cz + hz],
+      [cx - hx, cy, cz + hz],
+    ],
+    [
+      [cx + ax - topHx, y1, cz - topHz],
+      [cx + ax + topHx, y1, cz - topHz],
+      [cx + ax + topHx, y1, cz + topHz],
+      [cx + ax - topHx, y1, cz + topHz],
+    ],
+  ])
 }
 
 export function makeSphinx() {
+  // Stations down the spine: (x, underside, back, half-width). The underside
+  // lifts and the ring narrows through the chest, then the whole thing turns
+  // upward into the neck and head — one skin the entire way.
+  const body = loft([
+    ring({ x: -1.78, yb: 0.36, yt: 0.52, w: 0.12 }), // rump tip
+    ring({ x: -1.52, yb: 0.26, yt: 0.82, w: 0.36 }),
+    ring({ x: -1.12, yb: 0.22, yt: 1.02, w: 0.55 }), // haunch — the high back
+    ring({ x: -0.62, yb: 0.22, yt: 0.82, w: 0.46 }), // waist
+    ring({ x: -0.08, yb: 0.22, yt: 0.84, w: 0.45 }),
+    ring({ x: 0.42, yb: 0.22, yt: 1.06, w: 0.5 }), // shoulder
+    ring({ x: 0.72, yb: 0.34, yt: 1.26, w: 0.44 }), // chest
+    ring({ x: 0.86, yb: 0.8, yt: 1.44, w: 0.34 }), // throat
+    ring({ x: 1.0, yb: 1.0, yt: 1.62, w: 0.34 }), // neck — short and thick
+    ring({ x: 1.16, yb: 1.02, yt: 1.76, w: 0.38 }), // jaw
+    ring({ x: 1.36, yb: 1.06, yt: 1.74, w: 0.36 }), // head
+    ring({ x: 1.54, yb: 1.16, yt: 1.62, w: 0.24 }), // flat face, no muzzle
+  ])
+
+  // The nemes: a second skin over the head, flaring wide at the temples and
+  // hanging down past the jaw in the two lappets.
+  const nemes = loft([
+    ring({ x: 0.92, yb: 1.14, yt: 1.68, w: 0.3, top: 0.8 }),
+    ring({ x: 1.04, yb: 0.7, yt: 1.9, w: 0.6, top: 0.88, bottom: 0.92 }),
+    ring({ x: 1.3, yb: 0.7, yt: 1.88, w: 0.62, top: 0.88, bottom: 0.92 }),
+    ring({ x: 1.42, yb: 1.1, yt: 1.76, w: 0.36, top: 0.85 }),
+    ring({ x: 1.47, yb: 1.32, yt: 1.6, w: 0.15 }),
+  ])
+
+  const leg = (z) =>
+    loft([
+      ring({ x: 0.5, yb: 0.2, yt: 0.66, w: 0.18, z }),
+      ring({ x: 1.15, yb: 0.2, yt: 0.5, w: 0.16, z }),
+      ring({ x: 1.72, yb: 0.2, yt: 0.44, w: 0.16, z }),
+      ring({ x: 1.98, yb: 0.2, yt: 0.36, w: 0.13, z }), // paw
+    ])
+
+  const tail = loft([
+    ring({ x: -1.62, yb: 0.3, yt: 0.46, w: 0.08, z: 0.34 }),
+    ring({ x: -1.2, yb: 0.34, yt: 0.52, w: 0.1, z: 0.46 }),
+    ring({ x: -0.78, yb: 0.36, yt: 0.54, w: 0.09, z: 0.48 }),
+  ])
+
   const tris = [
-    pyr({ cx: -0.1, cy: -0.06, cz: 0, hx: 1.78, hz: 0.86, h: 0.34, topHx: 1.6, topHz: 0.72 }), // plinth
-    pyr({ cx: -1.02, cy: 0.22, cz: 0, hx: 0.54, hz: 0.55, h: 0.78, topHx: 0.12, topHz: 0.12, ax: -0.05 }), // haunch
-    ridge({ x0: -1.34, x1: 0.52, hw0: 0.52, hw1: 0.46, top0: 0.74, top1: 0.98, base: 0.24 }), // body
-    pyr({ cx: 0.54, cy: 0.24, cz: 0, hx: 0.3, hz: 0.46, h: 1.02, topHx: 0.16, topHz: 0.22 }), // chest
-    ridge({ x0: 0.46, x1: 1.82, hw0: 0.17, hw1: 0.13, top0: 0.64, top1: 0.46, base: 0.2, z: 0.3 }),
-    ridge({ x0: 0.46, x1: 1.82, hw0: 0.17, hw1: 0.13, top0: 0.64, top1: 0.46, base: 0.2, z: -0.3 }),
-    pyr({ cx: 1.9, cy: 0.2, cz: 0.3, hx: 0.15, hz: 0.16, h: 0.34, ax: 0.06 }), // paw
-    pyr({ cx: 1.9, cy: 0.2, cz: -0.3, hx: 0.15, hz: 0.16, h: 0.34, ax: 0.06 }), // paw
-    ridge({ x0: 0.3, x1: 0.7, hw0: 0.25, hw1: 0.22, top0: 1.46, top1: 1.5, base: 1.02 }), // neck
-    pyr({ cx: 0.68, cy: 1.22, cz: 0, hx: 0.24, hz: 0.26, h: 0.46, topHx: 0.13, topHz: 0.15 }), // head
-    pyr({ cx: 0.5, cy: 1.26, cz: 0, hx: 0.44, hz: 0.52, h: 0.62, topHx: 0.16, topHz: 0.2, ax: -0.06 }), // nemes
-    pyr({ cx: 0.84, cy: 1.2, cz: 0, hx: 0.08, hz: 0.22, h: 0.46, topHx: 0.04, topHz: 0.1 }), // face
-    pyr({ cx: 0.64, cy: 0.9, cz: 0.44, hx: 0.15, hz: 0.07, h: 0.52, topHx: 0.2, topHz: 0.09 }), // lappet
-    pyr({ cx: 0.64, cy: 0.9, cz: -0.44, hx: 0.15, hz: 0.07, h: 0.52, topHx: 0.2, topHz: 0.09 }),
-    pyr({ cx: 0.7, cy: 1.72, cz: 0, hx: 0.07, hz: 0.07, h: 0.2, ax: 0.05 }), // uraeus
-    ridge({ x0: -1.52, x1: -0.86, hw0: 0.09, hw1: 0.11, top0: 0.44, top1: 0.52, base: 0.28, z: 0.46 }),
+    frustum({ cx: -0.05, cy: -0.16, cz: 0, hx: 1.86, hz: 0.8, h: 0.36, topHx: 1.7, topHz: 0.68 }),
+    body,
+    nemes,
+    leg(0.32),
+    leg(-0.32),
+    tail,
+    frustum({ cx: 1.36, cy: 1.7, cz: 0, hx: 0.08, hz: 0.07, h: 0.2, topHx: 0.03, topHz: 0.03, ax: 0.06 }), // uraeus
   ].flat()
 
   const geo = new THREE.BufferGeometry()
@@ -334,7 +361,7 @@ export function makeSphinx() {
     const x = pos.getX(i)
     const y = pos.getY(i)
     const z = pos.getZ(i)
-    const n = (a, b, cc) => (hash2(a * 13.1 + b * 7.7, cc * 5.3 + a * 2.1) - 0.5) * 0.03
+    const n = (a, b, cc) => (hash2(a * 13.1 + b * 7.7, cc * 5.3 + a * 2.1) - 0.5) * 0.02
     pos.setXYZ(i, x + n(x, y, z), y + n(y, z, x), z + n(z, x, y))
   }
   geo.computeVertexNormals()

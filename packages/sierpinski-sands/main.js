@@ -250,9 +250,9 @@ function boot() {
   // The sphinx: off the pyramid's corner, facing out into the open desert the
   // way its model does at Giza, with its plinth already half taken by the sand.
   const sphinx = makeSphinx()
-  const sx = -3.4
-  const sz = 0.8
-  sphinx.scale.setScalar(0.75)
+  const sx = -3.3
+  const sz = 1.3
+  sphinx.scale.setScalar(0.72)
   sphinx.position.set(sx, duneHeight(sx, sz) - 0.06, sz)
   // Local +X is its gaze. Pointing it down +X sets it staring across the court
   // at the monument, and — since the sun also comes from +X — puts the lit side
