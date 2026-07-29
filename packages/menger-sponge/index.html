@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menger Sponge — a mechanical lattice cycling through recursion depths</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <header id="hud">
+      <h1>MENGER SPONGE</h1>
+      <p class="sub">drag to orbit · a lattice that pistons itself between recursion depths</p>
+      <p class="hint" id="hud-hint">
+        <kbd>space</kbd> pause
+        <span class="dot">·</span>
+        <kbd>↑</kbd><kbd>↓</kbd> step depth
+        <span class="dot">·</span>
+        <kbd>drag</kbd> orbit
+      </p>
+    </header>
+
+    <!-- These defaults must mirror the render loop's initial state (START_DEPTH
+         in main.js — late in the deployment into level 3) so the first painted
+         frame and the first JS-updated frame agree; there is no fade-in to hide
+         a mismatch. -->
+    <footer id="status">
+      <span class="cell">
+        <span id="level-label">LEVEL 2 → 3</span>
+        <span id="phase" class="is-move">DEPLOYING</span>
+      </span>
+      <span class="rule"></span>
+      <span class="cell">
+        <span id="cube-count">8,000</span><span class="unit" id="cube-unit">cubes</span>
+      </span>
+      <span class="rule meter-rule"></span>
+      <span class="cell" id="meter">
+        <span id="progress"><span id="progress-fill"></span></span>
+        <span id="level-pips" aria-hidden="true">
+          <i class="pip" data-level="0"></i>
+          <i class="pip" data-level="1"></i>
+          <i class="pip on" data-level="2"></i>
+          <i class="pip next" data-level="3"></i>
+        </span>
+      </span>
+    </footer>
+
+    <div id="fallback" hidden>
+      <strong>WEBGL UNAVAILABLE</strong>
+      <span>This lattice needs a WebGL-capable browser. Try a recent Chrome, Firefox, or Safari with hardware acceleration enabled.</span>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
