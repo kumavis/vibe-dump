@@ -16,6 +16,7 @@ const SKIN = {
 
 const CLOTH = [0xc0392b, 0xe6a817, 0x189e93, 0x7d4fbe, 0xc2527f, 0x3a6ea5, 0x8a9a2a, 0xb85a30]
 const CLOTH_DARK = [0x4a3a5a, 0x3a4a3a, 0x5a3a2a, 0x2a3a5a, 0x5a2a2a]
+const HAIR = [0x241a12, 0x4a2a12, 0x8a4a1e, 0x8a8a92, 0xe8e0d0, 0x1e2a42, 0x5a2a3a]
 const EYE_GLOW = [0xffd24a, 0xff7a3a, 0xfff0a0]
 const EYE_IRIS = [0x3a2a1a, 0x2a4a6a, 0x2a5a3a, 0x5a3a1a, 0x6a2a4a]
 
@@ -55,6 +56,21 @@ export function generateAppearance(rng, species, role) {
     beard: 0,
     tailSpade: false,
     instrument: null, // buskers: 'drum' | 'flute'
+    // --- individuation: hair + accessories (assigned per species below) ---
+    hairStyle: 'none', // bob|bun|ponytail|braids|topknot|mane|crest
+    hairColor: pick(rng, HAIR),
+    earrings: false,
+    necklace: 'none', // 'pendant' | 'teeth'
+    glasses: false,
+    eyepatch: false,
+    sash: false,
+    satchel: false,
+    beltPouches: false,
+    headscarf: false,
+    cuffs: chance(rng, 0.4),
+    collar: false,
+    cape: false,
+    stripes: chance(rng, 0.3),
     // --- palette ---
     skin: pick(rng, SKIN[species]),
     cloth: pick(rng, CLOTH),
@@ -130,7 +146,43 @@ export function generateAppearance(rng, species, role) {
     a.robe = chance(rng, 0.5)
   }
 
+  // --- individuation pass: hair + accessories, weighted by species/role ----
+  if (species === 'human') {
+    if (a.hat === 'none' && chance(rng, 0.28)) a.headscarf = true
+    a.hairStyle =
+      a.hat !== 'none' || a.headscarf
+        ? pick(rng, ['ponytail', 'braids', 'none', 'none'])
+        : pick(rng, ['bob', 'bun', 'ponytail', 'braids', 'topknot', 'none'])
+    a.earrings = chance(rng, 0.35)
+    a.eyepatch = chance(rng, 0.08)
+  } else if (species === 'alien') {
+    if (!a.antennae && chance(rng, 0.55)) a.hairStyle = 'crest'
+    a.earrings = a.earStyle !== 'none' && chance(rng, 0.2)
+    a.glasses = a.eyeCount === 2 && chance(rng, 0.3)
+  } else if (species === 'monster') {
+    if (chance(rng, 0.5)) a.hairStyle = 'mane'
+    a.earrings = chance(rng, 0.3)
+    a.eyepatch = a.eyeCount === 2 && chance(rng, 0.18)
+    if (chance(rng, 0.4)) a.necklace = 'teeth'
+    if (a.hat === 'none' && chance(rng, 0.12)) a.headscarf = true
+  } else if (species === 'devil') {
+    a.hairStyle = pick(rng, ['none', 'none', 'topknot', 'bob'])
+    a.earrings = chance(rng, 0.6)
+    if (chance(rng, 0.5)) a.necklace = 'pendant'
+    a.eyepatch = chance(rng, 0.1)
+    a.cape = chance(rng, 0.35)
+  }
+  if (a.eyepatch) a.glasses = false
+  if (a.necklace === 'none' && chance(rng, role === 'vendor' ? 0.45 : 0.25)) a.necklace = 'pendant'
+  else if (a.necklace === 'none' && chance(rng, 0.35)) a.collar = true
+  a.sash = chance(rng, role === 'customer' ? 0.25 : 0.18)
+  a.satchel = !a.sash && chance(rng, role === 'customer' ? 0.45 : role === 'busker' ? 0.3 : 0.1)
+  a.beltPouches = chance(rng, role === 'vendor' ? 0.6 : 0.2)
+  if (role === 'vendor' && !a.cape && chance(rng, 0.2)) a.cape = true
+
   if (role === 'busker') {
+    a.sash = true
+    a.satchel = false
     a.instrument = chance(rng, 0.5) ? 'drum' : 'flute'
     a.cloth = pick(rng, [0xe6a817, 0xc2527f, 0x189e93]) // buskers dress loud
     a.hat = a.species === 'human' ? 'cone' : a.hat

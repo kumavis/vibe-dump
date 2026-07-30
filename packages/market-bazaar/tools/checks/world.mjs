@@ -27,7 +27,7 @@ const buildMs = performance.now() - t0
 const { group, bounds, stalls, buskerSpots, colliders, update } = world
 
 check(group && group.isGroup, 'buildWorld returns { group: THREE.Group }')
-check(bounds && bounds.r >= 24 && bounds.r <= 28, `bounds.r in [24,28] (got ${bounds?.r})`)
+check(bounds && bounds.r >= 15 && bounds.r <= 28, `bounds.r in [15,28] (got ${bounds?.r})`) // tightened to ~17 for crowd density (user direction, 2026-07)
 check(stalls.length === STALL_GOODS.length, `stalls.length === stallGoods.length (${stalls.length})`)
 check(buskerSpots.length === 2, `exactly 2 buskerSpots (got ${buskerSpots.length})`)
 check(colliders.length > 0, 'has colliders')
@@ -122,7 +122,7 @@ check(colliders.some((c) => Math.hypot(c.x, c.z) < 0.5 && c.r >= 1.5), 'central 
 // ------------------------------------------------------------ update(t) sanity
 const dynamicMeshes = []
 group.traverse((o) => { if (o.isMesh && o.userData.dynamic) dynamicMeshes.push(o) })
-check(dynamicMeshes.length > 0 && dynamicMeshes.length <= 10, `1..10 dynamic meshes (got ${dynamicMeshes.length})`)
+check(dynamicMeshes.length > 0 && dynamicMeshes.length <= 12, `1..12 dynamic meshes (got ${dynamicMeshes.length})`) // 12: +3 fountain ripples +1 wisp
 
 for (const t of [0, 0.1, 0.5, 1, 2, 3.7, 10, 60, 123.4, 1000]) {
   update(t)

@@ -29,7 +29,7 @@ const scene = new THREE.Scene()
 scene.fog = new THREE.FogExp2(0x141028, 0.0085)
 
 const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 220)
-camera.position.set(12.5, 7.2, 15.5)
+camera.position.set(8.8, 7.8, 11.4)
 
 const controls = new OrbitControls(camera, canvas)
 controls.target.set(0, 1.3, 0)
@@ -37,7 +37,7 @@ controls.enableDamping = true
 controls.dampingFactor = 0.06
 controls.maxPolarAngle = Math.PI * 0.49
 controls.minDistance = 3
-controls.maxDistance = 46
+controls.maxDistance = 34
 controls.autoRotate = true
 controls.autoRotateSpeed = 0.35
 

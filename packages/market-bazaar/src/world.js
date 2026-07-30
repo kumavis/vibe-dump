@@ -214,8 +214,10 @@ export function buildWorld({ seed, goods, stallGoods }) {
   // -------------------------------------------------------------- layout pass
   // Stall / pole / brazier placement is decided up front so the ground pass
   // can bake warm lamplight pools into its vertex colours where they'll be.
-  const R = 26 // walkable disc radius
-  const ringR = 16.5
+  // Pulled in tight: with the stalls hugging the fountain plaza the same
+  // number of souls reads as a crowd instead of stragglers on a parade ground.
+  const R = 17 // walkable disc radius
+  const ringR = 11
   const theta0 = rngLayout() * Math.PI * 2
   const brazierAngle = rngLayout() * Math.PI * 2
   const silkOffset = Math.floor(rngLayout() * 5)
@@ -231,7 +233,7 @@ export function buildWorld({ seed, goods, stallGoods }) {
   const poleLayouts = []
   for (let k = 0; k < nPoles; k++) {
     const a = theta0 + Math.PI / nStalls + (k / nPoles) * Math.PI * 2
-    poleLayouts.push({ a, px: Math.sin(a) * 11.5, pz: Math.cos(a) * 11.5 })
+    poleLayouts.push({ a, px: Math.sin(a) * 7.8, pz: Math.cos(a) * 7.8 })
   }
   const brazierPts = [0, Math.PI].map((d) => {
     const a = brazierAngle + d
@@ -253,7 +255,7 @@ export function buildWorld({ seed, goods, stallGoods }) {
 
   // -------------------------------------------------------------- ground
   {
-    const groundR = 30
+    const groundR = 24
     const rings = 28
     const segs = 88
     const positions = []
@@ -289,7 +291,7 @@ export function buildWorld({ seed, goods, stallGoods }) {
       const n = fbm2(x * 0.33 + 13.7, z * 0.33 + 4.1, 4)
       const rr = Math.hypot(x, z)
       c.copy(COL.groundA).lerp(COL.groundB, n)
-      c.multiplyScalar(1 - smoothstep(15, groundR, rr) * 0.45) // radial darkening
+      c.multiplyScalar(1 - smoothstep(11, groundR, rr) * 0.45) // radial darkening
       // cobble-ish fine speckle
       const f = fbm2(x * 1.7, z * 1.7, 2)
       c.multiplyScalar(0.92 + f * 0.16)
@@ -310,7 +312,9 @@ export function buildWorld({ seed, goods, stallGoods }) {
     const wall = new THREE.CylinderGeometry(2.25, 2.35, 0.6, 22)
     body(wall, M({ y: 0.3 }), COL.stone)
     body(new THREE.CylinderGeometry(2.35, 2.45, 0.14, 22), M({ y: 0.07 }), COL.stoneDark)
-    glow(new THREE.CircleGeometry(2.05, 22), M({ y: 0.52, rx: -Math.PI / 2 }), COL.water)
+    // 0.615: the drum below is a CLOSED cylinder whose stone top cap sits at
+    // y=0.6 — water authored below that line is invisible by construction
+    glow(new THREE.CircleGeometry(2.05, 22), M({ y: 0.615, rx: -Math.PI / 2 }), COL.water)
     body(new THREE.CylinderGeometry(0.5, 0.62, 0.95, 14), M({ y: 1.0 }), COL.stone)
     body(new THREE.CylinderGeometry(1.18, 1.0, 0.3, 16), M({ y: 1.55 }), COL.stone)
     glow(new THREE.CircleGeometry(1.02, 16), M({ y: 1.72, rx: -Math.PI / 2 }),
@@ -319,8 +323,7 @@ export function buildWorld({ seed, goods, stallGoods }) {
     body(new THREE.CylinderGeometry(0.62, 0.5, 0.24, 14), M({ y: 2.35 }), COL.stone)
     glow(new THREE.CircleGeometry(0.5, 14), M({ y: 2.49, rx: -Math.PI / 2 }),
       COL.water.clone().multiplyScalar(1.5))
-    // teal wisp finial
-    glow(new THREE.OctahedronGeometry(0.24), M({ y: 2.85 }), COL.moonTeal)
+    // (the teal wisp finial is a dynamic mesh — see the fountain dynamics below)
     colliders.push({ x: 0, z: 0, r: 2.5 })
 
     // stone slab ring around the fountain
@@ -501,13 +504,13 @@ export function buildWorld({ seed, goods, stallGoods }) {
     for (let k = 0; k < nSeg; k++) {
       if (k % 7 === 3) continue // gaps in the wall
       const a = (k / nSeg) * Math.PI * 2
-      body(new THREE.BoxGeometry(5.6, 0.85 + fbm2(k * 2.1, 0.5, 2) * 0.3, 0.5),
-        M({ x: Math.sin(a) * 27.2, y: 0.42, z: Math.cos(a) * 27.2, ry: a }),
+      body(new THREE.BoxGeometry(4.2, 0.85 + fbm2(k * 2.1, 0.5, 2) * 0.3, 0.5),
+        M({ x: Math.sin(a) * (R + 1.4), y: 0.42, z: Math.cos(a) * (R + 1.4), ry: a }),
         COL.stoneDark.clone().multiplyScalar(0.75))
     }
     for (let k = 0; k < 9; k++) {
       const a = theta0 + (k / 9) * Math.PI * 2 + 0.31
-      const rr = 29 + fbm2(k * 5.1, 3.3, 2) * 3
+      const rr = R + 3.5 + fbm2(k * 5.1, 3.3, 2) * 3
       const h = 3.4 + fbm2(k * 1.7, 9.1, 2) * 2.4
       body(new THREE.ConeGeometry(2.2, h, 6),
         M({ x: Math.sin(a) * rr, y: h / 2 - 0.2, z: Math.cos(a) * rr, ry: a }),
@@ -524,8 +527,8 @@ export function buildWorld({ seed, goods, stallGoods }) {
     buskerSpots.push({ x: bx, z: bz, yaw: Math.atan2(bx, bz) }) // faces out, over the open plaza
     // one in a gap between stalls, facing the plaza centre
     const gapTheta = theta0 + ((Math.floor(nStalls / 2) + 0.5) / nStalls) * Math.PI * 2
-    const gx = Math.sin(gapTheta) * 14.6
-    const gz = Math.cos(gapTheta) * 14.6
+    const gx = Math.sin(gapTheta) * (ringR - 1.9)
+    const gz = Math.cos(gapTheta) * (ringR - 1.9)
     buskerSpots.push({ x: gx, z: gz, yaw: Math.atan2(-gx, -gz) })
   }
 
@@ -572,16 +575,48 @@ export function buildWorld({ seed, goods, stallGoods }) {
     dynamics.push({ mesh, kind: 'banner', phase: k * 1.9, speed: 0.9 + (k % 3) * 0.25, baseRy: mesh.rotation.y })
   }
 
+  // fountain dynamics: expanding ripple rings on the two open basins plus the
+  // floating wisp finial. Rings need per-mesh transparent materials so opacity
+  // can fade without touching the shared glow material.
+  const rippleSpecs = [
+    { y: 0.625, rMax: 1.92, period: 3.4, phase: 0.0 },
+    { y: 0.625, rMax: 1.92, period: 3.4, phase: 0.5 },
+    { y: 1.745, rMax: 0.94, period: 2.7, phase: 0.25 },
+  ]
+  for (const rs of rippleSpecs) {
+    const rg = new THREE.RingGeometry(0.88, 1.0, 26)
+    rg.rotateX(-Math.PI / 2)
+    const rmat = new THREE.MeshBasicMaterial({
+      color: COL.water.clone().multiplyScalar(1.9),
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+    })
+    const rmesh = new THREE.Mesh(rg, rmat)
+    rmesh.position.y = rs.y
+    rmesh.userData.dynamic = true
+    group.add(rmesh)
+    dynamics.push({ mesh: rmesh, kind: 'ripple', period: rs.period, phase: rs.phase, rMax: rs.rMax })
+  }
+  {
+    const wg = makePart(new THREE.OctahedronGeometry(0.24), null, COL.moonTeal, false)
+    const wisp = new THREE.Mesh(wg, glowMat)
+    wisp.position.set(0, 2.85, 0)
+    wisp.userData.dynamic = true
+    group.add(wisp)
+    dynamics.push({ mesh: wisp, kind: 'wisp', phase: 0, period: 1 })
+  }
+
   // -------------------------------------------------------------- lantern point lights (≤ 3)
   const plCenter = new THREE.PointLight(0xffb066, 45, 0, 2)
   plCenter.position.set(0, 4.0, 0)
   group.add(plCenter)
   const plA = new THREE.PointLight(0xffc07a, 80, 0, 2)
-  _v.set(Math.sin(theta0 + Math.PI * 0.34) * 13.5, 4.2, Math.cos(theta0 + Math.PI * 0.34) * 13.5)
+  _v.set(Math.sin(theta0 + Math.PI * 0.34) * 9.5, 4.2, Math.cos(theta0 + Math.PI * 0.34) * 9.5)
   plA.position.copy(_v)
   group.add(plA)
   const plB = new THREE.PointLight(0xffc07a, 80, 0, 2)
-  _v.set(Math.sin(theta0 + Math.PI * 1.34) * 13.5, 4.2, Math.cos(theta0 + Math.PI * 1.34) * 13.5)
+  _v.set(Math.sin(theta0 + Math.PI * 1.34) * 9.5, 4.2, Math.cos(theta0 + Math.PI * 1.34) * 9.5)
   plB.position.copy(_v)
   group.add(plB)
 
@@ -597,6 +632,17 @@ export function buildWorld({ seed, goods, stallGoods }) {
         const sxz = 1 + 0.1 * f1 - 0.06 * f2
         m.scale.set(sxz, 0.9 + 0.18 * f1 * f1 + 0.1 * f2, sxz)
         m.rotation.y = t * 1.9 + d.phase
+      } else if (d.kind === 'ripple') {
+        // born at the spout, swelling to the basin lip while fading
+        const a = (t / d.period + d.phase) % 1
+        const s = (0.28 + 0.72 * a) * d.rMax
+        m.scale.set(s, 1, s)
+        m.material.opacity = 0.36 * (1 - a) * (1 - a) * smoothstep(0, 0.12, a)
+      } else if (d.kind === 'wisp') {
+        m.position.y = 2.85 + Math.sin(t * 1.1) * 0.06
+        m.rotation.y = t * 0.6
+        const p = 1 + Math.sin(t * 2.3) * 0.05
+        m.scale.set(p, p, p)
       } else {
         m.rotation.z = 0.14 * Math.sin(t * d.speed + d.phase)
         m.rotation.x = 0.07 * Math.sin(t * d.speed * 1.31 + d.phase * 1.7)
