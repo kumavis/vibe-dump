@@ -634,21 +634,48 @@ export function buildBodyParts(a, rest, groups) {
   }
 
   // ---- busker instruments -----------------------------------------------
-  if (a.instrument === 'drum') {
-    const dp = new THREE.Vector3(bellyC.x, bellyC.y + 0.05, bellyC.z + torsoR * 1.15)
+  // Geometry is driven by instrumentAnchors() so the pose checks measure the
+  // same points the mesh is built from (adversarial review: the old flute
+  // floated 0.24 m from the lips it claimed to touch).
+  const anchors = instrumentAnchors(a, rest)
+  if (anchors?.kind === 'drum') {
+    const dp = anchors.center
     const shell = new THREE.CylinderGeometry(0.15, 0.13, 0.17, 12)
     add(place(shell, dp, { rot: [0.15, 0, 0] }), WOOD, { rigid: 'chest' })
     const top = new THREE.CylinderGeometry(0.145, 0.145, 0.02, 12)
-    add(place(top, new THREE.Vector3(dp.x, dp.y + 0.09, dp.z + 0.012), { rot: [0.15, 0, 0] }), CREAM, {
+    add(place(top, new THREE.Vector3(anchors.top.x, anchors.top.y - 0.01, anchors.top.z), { rot: [0.15, 0, 0] }), CREAM, {
       rigid: 'chest',
     })
-  } else if (a.instrument === 'flute') {
-    // held diagonally: top end at the lips, foot swept down-right-forward
-    const mouth = new THREE.Vector3(headC.x, headC.y - headR * 0.35, headC.z + headR * 0.9)
-    const g = new THREE.CylinderGeometry(0.011, 0.015, 0.34, 6)
-    place(g, new THREE.Vector3(mouth.x + 0.09, mouth.y - 0.09, mouth.z + 0.07), { rot: [0.5, 0, -0.7] })
-    add(g, 0x3a2a18, { rigid: 'head' })
+  } else if (anchors?.kind === 'flute') {
+    // transverse: mouthpiece AT the lips, foot out past the right hand
+    add(capsuleBetween(anchors.mouth, anchors.foot, 0.013, { w: 6 }), 0x3a2a18, { rigid: 'head' })
   }
 
   return parts
+}
+
+/**
+ * Bind-space anchor points for a busker's instrument — exported so the
+ * verification battery measures the exact points the geometry is built from.
+ * Drum: rigid to 'chest'. Flute: rigid to 'head'.
+ */
+export function instrumentAnchors(a, rest) {
+  if (!a.instrument) return null
+  const torsoR = a.hipW * 1.35 + a.shoulderW * 0.45
+  const bellyC = new THREE.Vector3().lerpVectors(rest.hips, rest.chest, 0.42)
+  bellyC.z += a.belly * 0.02
+  if (a.instrument === 'drum') {
+    const center = new THREE.Vector3(bellyC.x, bellyC.y + 0.05, bellyC.z + torsoR * 1.15)
+    return {
+      kind: 'drum',
+      bone: 'chest',
+      center,
+      top: new THREE.Vector3(center.x, center.y + 0.1, center.z + 0.012),
+    }
+  }
+  const headR = a.headSize
+  const headC = new THREE.Vector3(rest.head.x, rest.head.y + headR * 0.5, rest.head.z + headR * 0.05)
+  const mouth = new THREE.Vector3(headC.x, headC.y - headR * 0.38, headC.z + headR * 0.88)
+  const foot = new THREE.Vector3(mouth.x - 0.26, mouth.y - 0.13, mouth.z + 0.09)
+  return { kind: 'flute', bone: 'head', mouth, foot }
 }

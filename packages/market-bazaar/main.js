@@ -196,13 +196,27 @@ const clock = new THREE.Clock()
 let statTimer = 0
 const _follow = new THREE.Vector3()
 
+// Substep long frames: a single clamped step silently dilates market time
+// below 20 fps (one day = 120 WALL seconds is a FRAMES.md contract). Fast
+// frames still get one exact-dt step so animation stays frame-smooth;
+// substeps are ~0.4 ms each, so the cap holds parity down to ~2.5 fps.
+const STEP = 0.05
+const MAX_STEPS = 8
+let simT = 0
+
 renderer.setAnimationLoop(() => {
-  const dt = Math.min(clock.getDelta(), 0.05)
+  const frameDt = clock.getDelta()
   const t = clock.elapsedTime
 
   if (sim) {
-    sim.update(t, dt)
-    statTimer -= dt
+    let remaining = Math.min(frameDt, STEP * MAX_STEPS)
+    while (remaining > 1e-4) {
+      const h = Math.min(remaining, STEP)
+      simT += h
+      sim.update(simT, h)
+      remaining -= h
+    }
+    statTimer -= frameDt
     if (statTimer <= 0) {
       statTimer = 0.7
       ui.setStats(economy.stats(), `${actors.length} souls`)
@@ -210,7 +224,7 @@ renderer.setAnimationLoop(() => {
     }
     if (selected) {
       _follow.set(selected.pos.x, selected.char.appearance.height * 0.62, selected.pos.z)
-      controls.target.lerp(_follow, Math.min(1, dt * 3))
+      controls.target.lerp(_follow, Math.min(1, frameDt * 3))
     }
   }
   world.update(t)

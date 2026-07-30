@@ -162,7 +162,7 @@ export function buildWorld({ seed, goods, stallGoods }) {
     const starWarm = srgb(0xffe9c8)
     for (let i = 0; i < 300; i++) {
       const az = rngSky() * Math.PI * 2
-      const el = 0.06 + Math.pow(rngSky(), 0.75) * 1.35
+      const el = 0.14 + Math.pow(rngSky(), 0.75) * 1.27 // ≥0.14: horizon-grazers render as big grey boxes
       const r = 78
       const p = new THREE.Vector3(
         Math.sin(az) * Math.cos(el) * r,

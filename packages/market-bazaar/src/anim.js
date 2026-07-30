@@ -213,12 +213,18 @@ export function createAnimator(rig, a) {
         blendRot(b.upperarmR, gw, -0.35, 0, -0.3)
         blendRot(b.upperarmL, gw, 0.25, 0, 0.4)
       } else if (g === 'drum') {
+        // hands beat INWARD over the drumhead hanging at the belly — verified
+        // by the hand-to-drumhead check in tools/checks/character.mjs
         const h1 = Math.sin(gt * 8.5)
         const h2 = Math.sin(gt * 8.5 + Math.PI)
-        blendRot(b.upperarmL, gw, -0.55, 0.3, 0.35)
-        blendRot(b.upperarmR, gw, -0.55, -0.3, -0.35)
-        blendRot(b.forearmL, gw, -1.15 + Math.max(0, h1) * 0.55)
-        blendRot(b.forearmR, gw, -1.15 + Math.max(0, h2) * 0.55)
+        // proportion-aware: broad shoulders adduct harder, big bellies (the
+        // drum hangs further out) reach further forward
+        const adduct = 0.62 + Math.max(0, a.armLen - 0.55) * 0.6
+        const reach = -0.28 - a.belly * 0.1
+        blendRot(b.upperarmL, gw, reach, 0.15, -adduct)
+        blendRot(b.upperarmR, gw, reach, -0.15, adduct)
+        blendRot(b.forearmL, gw, -1.35 + Math.max(0, h1) * 0.5)
+        blendRot(b.forearmR, gw, -1.35 + Math.max(0, h2) * 0.5)
         blendRot(b.head, gw * 0.6, 0.05 + h1 * 0.05, 0, Math.sin(gt * 2.1) * 0.12)
       } else if (g === 'flute') {
         blendRot(b.upperarmR, gw, -0.95, -0.55, -0.25)
@@ -228,9 +234,11 @@ export function createAnimator(rig, a) {
         blendRot(b.chest, gw * 0.5, baseHunch * 0.3, 0, Math.sin(gt * 1.7) * 0.08)
         blendRot(b.head, gw, 0.12, 0, Math.sin(gt * 1.9) * 0.06)
       } else if (g === 'clap') {
+        // Y-beat swings the raised arms INWARD — with the signs the other way
+        // the palms never got closer than 0.39 m (measured, adversarial review)
         const cl = Math.abs(Math.sin(gt * 6))
-        blendRot(b.upperarmL, gw, -0.85, 0.5 * cl, 0.3)
-        blendRot(b.upperarmR, gw, -0.85, -0.5 * cl, -0.3)
+        blendRot(b.upperarmL, gw, -0.85, -0.5 * cl, 0.3)
+        blendRot(b.upperarmR, gw, -0.85, 0.5 * cl, -0.3)
         blendRot(b.forearmL, gw, -1.35)
         blendRot(b.forearmR, gw, -1.35)
         blendRot(b.head, gw * 0.4, -0.05, 0, Math.sin(gt * 3) * 0.08)

@@ -73,8 +73,9 @@ key across the whole app; draw calls stay low.
 ## Time
 
 - `sim.update(dt)` takes wall seconds. One **market day** = 120 wall seconds;
-  economy `tick(dtDays)` consumes days. The sim may fast-forward the first
-  ~30 s during load (pre-roll) so the plaza is already busy at first paint.
+  economy `tick(dtDays)` consumes days. The sim fast-forwards ~80 s during
+  load (pre-roll, last few seconds with visuals live) so the plaza is
+  already busy — mid-conversation — at first paint.
 
 ## Determinism
 
