@@ -75,6 +75,34 @@ const BOOT = 0x2a2018
 const IVORY = 0xf0ead0
 const CREAM = 0xefe0c0
 const WOOD = 0x6a4a2a
+const GOLD = 0xd4a017
+const LEATHER = 0x5a3a22
+
+const _c2 = new THREE.Color()
+
+/**
+ * Horizontal stripes by world-space y — echoes the stall awning silks.
+ * `centerY` puts a band boundary-free stripe across the equator: on a
+ * low-poly sphere, boundaries near the equator (where y barely changes
+ * between rings) alias into zig-zag chevrons instead of clean bands.
+ */
+function paintStripes(g, hexA, hexB, period, centerY = 0) {
+  _c.setHex(hexA).convertSRGBToLinear()
+  _c2.setHex(hexB).convertSRGBToLinear()
+  const p = g.attributes.position
+  const n = p.count
+  const colors = new Float32Array(n * 3)
+  for (let i = 0; i < n; i++) {
+    const band = Math.floor((p.getY(i) - centerY) / period + 0.5)
+    const c = band % 2 === 0 ? _c : _c2
+    const j = 1 + ((hashU32(hexA + i * 7) / 4294967296) * 2 - 1) * 0.04
+    colors[i * 3] = Math.min(1, c.r * j)
+    colors[i * 3 + 1] = Math.min(1, c.g * j)
+    colors[i * 3 + 2] = Math.min(1, c.b * j)
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+  return g
+}
 
 /**
  * Build all SkinParts for one character.
@@ -95,11 +123,22 @@ export function buildBodyParts(a, rest, groups) {
   bellyC.z += a.belly * 0.02
 
   // ---- torso: tunic-coloured belly + chest blobs -------------------------
-  add(
-    sphereAt(bellyC, torsoR * (0.92 + a.belly * 0.3), { scale: [1, 1.18, 0.82 + a.belly * 0.22], w: 12, h: 9 }),
-    a.cloth,
-    { bones: groups.torso },
-  )
+  {
+    const belly = sphereAt(bellyC, torsoR * (0.92 + a.belly * 0.3), {
+      scale: [1, 1.18, 0.82 + a.belly * 0.22],
+      w: 12,
+      h: 9,
+    })
+    if (a.stripes) {
+      parts.push({
+        geometry: paintStripes(belly, a.cloth, 0xefe0c0, torsoR * 0.62, bellyC.y),
+        material: 'body',
+        bones: groups.torso,
+      })
+    } else {
+      add(belly, a.cloth, { bones: groups.torso })
+    }
+  }
   add(
     sphereAt(rest.chest, a.shoulderW * 0.88, { scale: [1.06, 0.95, 0.72], w: 12, h: 9 }),
     a.cloth,
@@ -112,15 +151,22 @@ export function buildBodyParts(a, rest, groups) {
     })
   }
   // belt (torus is XY-plane, hole along +Z → rotate flat). Bound to the hips
-  // ONLY — with thighs as candidates it slides down a leg mid-stride.
-  add(
-    place(new THREE.TorusGeometry(torsoR * (0.95 + a.belly * 0.25), 0.022, 6, 14), rest.hips, {
-      rot: [Math.PI / 2, 0, 0],
-      scale: [1, 1, 0.85],
-    }),
-    a.accent,
-    { bones: ['hips', 'spine01'] },
-  )
+  // ONLY — with thighs as candidates it slides down a leg mid-stride. Radius
+  // is fitted to the belly sphere's actual girth at hip height, else the band
+  // is swallowed by a big belly and only its bottom arc pokes out.
+  {
+    const bellyR = torsoR * (0.92 + a.belly * 0.3)
+    const dy = (rest.hips.y + 0.015 - bellyC.y) / (bellyR * 1.18)
+    const beltR = bellyR * Math.sqrt(Math.max(0.25, 1 - dy * dy)) + 0.012
+    add(
+      place(new THREE.TorusGeometry(beltR, 0.022, 6, 14), new THREE.Vector3(rest.hips.x, rest.hips.y + 0.015, rest.hips.z), {
+        rot: [Math.PI / 2, 0, 0],
+        scale: [1, 1, 0.85],
+      }),
+      a.accent,
+      { bones: ['hips', 'spine01'] },
+    )
+  }
   // robe skirt or apron
   if (a.robe) {
     const knee = rest.shinL.y
@@ -224,8 +270,10 @@ export function buildBodyParts(a, rest, groups) {
       : a.eyeCount === 3
         ? [[-headR * 0.42, eyeY], [headR * 0.42, eyeY], [0, eyeY + headR * 0.45]]
         : [[-headR * 0.4, eyeY], [headR * 0.4, eyeY]]
+  const eyePts = []
   for (const [ex, ey] of positions) {
     const p = new THREE.Vector3(headC.x + ex, ey, surfaceZ(ex, ey) + eyeR * 0.55 - eyeR)
+    eyePts.push(p.clone())
     if (a.eyeGlow) {
       add(sphereAt(p, eyeR, { w: 8, h: 6 }), a.eye, { rigid: 'head', material: 'glow', jitter: 0.02 })
     } else if (a.species === 'alien') {
@@ -393,6 +441,195 @@ export function buildBodyParts(a, rest, groups) {
       const g = new THREE.OctahedronGeometry(0.055)
       place(g, new THREE.Vector3(tip.x, tip.y - 0.02, tip.z - 0.04), { scale: [0.5, 1.2, 1.2] })
       add(g, a.skin, { rigid: `tail${a.tailSegs - 1}` })
+    }
+  }
+
+  // ---- hair ---------------------------------------------------------------
+  if (a.hairStyle !== 'none') {
+    const hc = a.hairColor
+    const capC = new THREE.Vector3(headC.x, headC.y + headR * 0.24, headC.z - headR * 0.26)
+    const cap = () =>
+      add(sphereAt(capC, headR * 1.02, { scale: [1.02, 0.85, 0.98], w: 12, h: 9 }), hc, { rigid: 'head' })
+    if (a.hairStyle === 'bob') {
+      cap()
+    } else if (a.hairStyle === 'bun') {
+      cap()
+      add(sphereAt(new THREE.Vector3(headC.x, headC.y + headR * 0.95, headC.z - headR * 0.5), headR * 0.34, { w: 8, h: 6 }), hc, { rigid: 'head' })
+    } else if (a.hairStyle === 'topknot') {
+      add(sphereAt(new THREE.Vector3(headC.x, headC.y + headR * 0.55, headC.z - headR * 0.15), headR * 0.72, { scale: [0.9, 0.55, 0.9], w: 10, h: 7 }), hc, { rigid: 'head' })
+      add(sphereAt(new THREE.Vector3(headC.x, headC.y + headR * 1.18, headC.z - headR * 0.28), headR * 0.3, { scale: [1, 1.4, 1], w: 7, h: 6 }), hc, { rigid: 'head' })
+    } else if (a.hairStyle === 'ponytail') {
+      if (a.hat === 'none' && !a.headscarf) cap()
+      add(
+        capsuleBetween(
+          new THREE.Vector3(headC.x, headC.y + headR * 0.5, headC.z - headR * 0.8),
+          new THREE.Vector3(headC.x, headC.y - headR * 0.9, headC.z - headR * 1.2),
+          headR * 0.2,
+        ),
+        hc,
+        { rigid: 'head' },
+      )
+    } else if (a.hairStyle === 'braids') {
+      if (a.hat === 'none' && !a.headscarf) cap()
+      for (const s of [-1, 1]) {
+        add(
+          capsuleBetween(
+            new THREE.Vector3(headC.x + s * headR * 0.78, headC.y - headR * 0.05, headC.z + headR * 0.1),
+            new THREE.Vector3(headC.x + s * headR * 0.92, headC.y - headR * 1.45, headC.z + headR * 0.28),
+            headR * 0.13,
+          ),
+          hc,
+          { rigid: 'head' },
+        )
+        add(sphereAt(new THREE.Vector3(headC.x + s * headR * 0.94, headC.y - headR * 1.55, headC.z + headR * 0.3), headR * 0.14, { w: 6, h: 5 }), a.accent, { rigid: 'head' })
+      }
+    } else if (a.hairStyle === 'mane') {
+      // spiky ridge running over the crown and down the back
+      for (let i = 0; i < 4; i++) {
+        const t = i / 3
+        add(
+          coneToward(
+            new THREE.Vector3(headC.x, headC.y + headR * (0.85 - t * 0.9), headC.z - headR * (0.1 + t * 0.85)),
+            new THREE.Vector3(0, 1 - t * 0.7, -0.35 - t * 0.5),
+            headR * (0.3 - t * 0.05),
+            headR * (0.75 - t * 0.12),
+            { w: 6 },
+          ),
+          hc,
+          { rigid: 'head' },
+        )
+      }
+    } else if (a.hairStyle === 'crest') {
+      add(
+        coneToward(
+          new THREE.Vector3(headC.x, headC.y + headR * 0.8, headC.z - headR * 0.05),
+          new THREE.Vector3(0, 1, -0.3),
+          headR * 0.55,
+          headR * 1.0,
+          { w: 7, scale: [0.28, 1, 1] },
+        ),
+        a.accent,
+        { rigid: 'head' },
+      )
+    }
+  }
+
+  // ---- headscarf ----------------------------------------------------------
+  if (a.headscarf) {
+    add(
+      sphereAt(new THREE.Vector3(headC.x, headC.y + headR * 0.42, headC.z - headR * 0.06), headR * 1.06, { scale: [1.03, 0.62, 1.05], w: 12, h: 8 }),
+      a.accent,
+      { rigid: 'head' },
+    )
+    add(sphereAt(new THREE.Vector3(headC.x, headC.y + headR * 0.32, headC.z - headR * 1.02), headR * 0.26, { w: 6, h: 5 }), a.accent, { rigid: 'head' })
+  }
+
+  // ---- face accessories ---------------------------------------------------
+  if (a.earrings && a.earStyle !== 'none') {
+    for (const s of ['L', 'R']) {
+      const ep = rest['ear' + s]
+      const ring = new THREE.TorusGeometry(headR * 0.14, headR * 0.035, 5, 10)
+      // torus is XY-plane/hole +Z → rotate Y so the hoop hangs in the YZ plane
+      place(ring, new THREE.Vector3(ep.x, ep.y - headR * 0.22, ep.z + headR * 0.02), { rot: [0, Math.PI / 2, 0] })
+      add(ring, GOLD, { rigid: 'ear' + s, jitter: 0.02 })
+    }
+  }
+  if (a.glasses && eyePts.length === 2) {
+    for (const p of eyePts) {
+      const rim = new THREE.TorusGeometry(eyeR * 1.2, eyeR * 0.14, 5, 12)
+      place(rim, new THREE.Vector3(p.x, p.y, p.z + eyeR * 0.75))
+      add(rim, GOLD, { rigid: 'head', jitter: 0.02 })
+    }
+    const bridge = new THREE.CylinderGeometry(eyeR * 0.1, eyeR * 0.1, Math.abs(eyePts[0].x - eyePts[1].x) - eyeR * 1.6, 5)
+    place(bridge, new THREE.Vector3(headC.x, eyePts[0].y + eyeR * 0.3, eyePts[0].z + eyeR * 0.75), { rot: [0, 0, Math.PI / 2] })
+    add(bridge, GOLD, { rigid: 'head', jitter: 0.02 })
+  }
+  if (a.eyepatch && eyePts.length >= 2) {
+    const p = eyePts[0]
+    add(sphereAt(new THREE.Vector3(p.x, p.y, p.z + eyeR * 0.45), eyeR * 1.25, { scale: [1, 1, 0.32], w: 8, h: 6 }), 0x1a1512, { rigid: 'head', jitter: 0.02 })
+    const strap = new THREE.TorusGeometry(headR * 1.1, headR * 0.045, 4, 16)
+    place(strap, new THREE.Vector3(headC.x, p.y + headR * 0.12, headC.z), { rot: [Math.PI / 2 - 0.18, 0, -0.22] })
+    add(strap, 0x1a1512, { rigid: 'head', jitter: 0.02 })
+  }
+
+  // ---- neckwear -----------------------------------------------------------
+  if (a.necklace !== 'none') {
+    const ny = rest.neck.y - 0.015
+    const nr = a.shoulderW * 0.55
+    const cord = new THREE.TorusGeometry(nr, 0.011, 4, 16)
+    place(cord, new THREE.Vector3(0, ny, 0.01), { rot: [Math.PI / 2 + 0.28, 0, 0] })
+    add(cord, a.necklace === 'teeth' ? LEATHER : GOLD, { bones: ['neck', 'chest'], jitter: 0.02 })
+    // hang the pendant ON the chest-blob surface (same trick as the eyes)
+    const fy = ny - nr * 0.42
+    const chestRy = a.shoulderW * 0.84
+    const chestRz = a.shoulderW * 0.63
+    const dy = (fy - rest.chest.y) / chestRy
+    const fz = rest.chest.z + chestRz * Math.sqrt(Math.max(0.1, 1 - dy * dy)) + 0.02
+    if (a.necklace === 'teeth') {
+      for (const o of [-1, 0, 1]) {
+        add(
+          coneToward(new THREE.Vector3(o * nr * 0.42, fy + 0.012, fz - Math.abs(o) * 0.012), new THREE.Vector3(0, -1, 0.12), 0.014, 0.05, { w: 5 }),
+          IVORY,
+          { bones: ['neck', 'chest'] },
+        )
+      }
+    } else {
+      const gem = new THREE.OctahedronGeometry(0.028)
+      place(gem, new THREE.Vector3(0, fy, fz), { scale: [1, 1.3, 0.7] })
+      add(gem, a.species === 'devil' ? 0xc0392b : a.accent, { bones: ['neck', 'chest'], jitter: 0.02 })
+    }
+  } else if (a.collar) {
+    const col = new THREE.TorusGeometry(a.shoulderW * 0.5, 0.02, 5, 14)
+    place(col, new THREE.Vector3(0, rest.neck.y + 0.005, 0.005), { rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.9] })
+    add(col, a.cloth2, { bones: ['neck', 'chest'] })
+  }
+
+  // ---- sash / satchel / pouches / cape ------------------------------------
+  const bandR = torsoR * (1.04 + a.belly * 0.34) // clear of the belly sphere at its widest
+  // gentle tilt: standoff from the body grows with tilt × radius, and on slim
+  // torsos a steep band reads as a loose hoop rather than a worn sash
+  if (a.sash) {
+    const sash = new THREE.TorusGeometry(bandR * 0.96, 0.028, 5, 18)
+    sash.rotateX(Math.PI / 2) // flat ring around the torso…
+    sash.rotateZ(0.42) // …tilted shoulder→hip, bandolier-style
+    sash.translate(bellyC.x, bellyC.y + torsoR * 0.3, bellyC.z)
+    add(sash, a.accent, { bones: groups.torso })
+  }
+  if (a.satchel) {
+    const strap = new THREE.TorusGeometry(bandR * 0.94, 0.016, 4, 18)
+    strap.rotateX(Math.PI / 2)
+    strap.rotateZ(-0.42)
+    strap.translate(bellyC.x, bellyC.y + torsoR * 0.32, bellyC.z)
+    add(strap, LEATHER, { bones: groups.torso })
+    const bag = new THREE.BoxGeometry(0.17, 0.15, 0.08)
+    place(bag, new THREE.Vector3(torsoR * 0.95, rest.hips.y + 0.03, -0.03), { rot: [0, 0.15, 0.08] })
+    add(bag, LEATHER, { bones: ['hips', 'spine01'] })
+    add(sphereAt(new THREE.Vector3(torsoR * 0.95, rest.hips.y + 0.1, -0.03), 0.045, { scale: [1.6, 0.5, 1.1], w: 6, h: 4 }), a.cloth2, { bones: ['hips', 'spine01'] })
+  }
+  if (a.beltPouches) {
+    for (const o of [-0.55, 0.5]) {
+      add(
+        sphereAt(new THREE.Vector3(torsoR * o, rest.hips.y - 0.02, torsoR * (0.72 + a.belly * 0.2)), 0.042, { scale: [1, 1.25, 0.8], w: 6, h: 5 }),
+        LEATHER,
+        { bones: ['hips', 'spine01'] },
+      )
+    }
+  }
+  if (a.cape) {
+    const capeLen = rest.chest.y - rest.hips.y + 0.16
+    const cone = new THREE.ConeGeometry(torsoR * 1.35, capeLen, 9, 1, true, Math.PI / 2, Math.PI)
+    cone.translate(0, -capeLen / 2, 0) // apex at origin, skirt hanging below
+    place(cone, new THREE.Vector3(0, rest.neck.y + 0.02, -0.02), { rot: [-0.12, 0, 0] })
+    add(cone, a.species === 'devil' ? 0x2a1020 : a.cloth2, { bones: ['chest', 'spine01', 'hips'] })
+  }
+
+  // ---- cuffs ---------------------------------------------------------------
+  if (a.cuffs) {
+    for (const s of ['L', 'R']) {
+      const hp = rest['hand' + s]
+      const cuff = new THREE.TorusGeometry(a.limbThick * 1.12, 0.013, 4, 10)
+      place(cuff, new THREE.Vector3(hp.x, hp.y + 0.035, hp.z), { rot: [Math.PI / 2, 0, 0] })
+      add(cuff, a.cloth2, { bones: ['hand' + s, 'forearm' + s] })
     }
   }
 
