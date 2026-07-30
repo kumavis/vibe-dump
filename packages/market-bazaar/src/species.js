@@ -187,7 +187,8 @@ export function generateAppearance(rng, species, role) {
     a.cloth = pick(rng, [0xe6a817, 0xc2527f, 0x189e93]) // buskers dress loud
     a.hat = a.species === 'human' ? 'cone' : a.hat
   }
-  if (role === 'vendor' && a.hat === 'none' && chance(rng, 0.5)) a.hat = 'fez'
+  // (no fez for three-eyed aliens — it sits through the third eye)
+  if (role === 'vendor' && a.hat === 'none' && a.eyeCount !== 3 && chance(rng, 0.5)) a.hat = 'fez'
 
   return a
 }

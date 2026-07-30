@@ -62,15 +62,16 @@ const CUSTOMER_JOB = [
   'map-seller between maps', 'chaperone of caravan cats',
 ]
 
+// Conjugated for "they" — every template splices this after a plural pronoun.
 function attrLine(attrs) {
   const bits = []
-  if (attrs.greed > 0.66) bits.push('drives a merciless bargain')
-  else if (attrs.greed < 0.33) bits.push('barely cares about the coin')
+  if (attrs.greed > 0.66) bits.push('drive a merciless bargain')
+  else if (attrs.greed < 0.33) bits.push('barely care about the coin')
   if (attrs.patience > 0.66) bits.push('will haggle until the moons set')
-  else if (attrs.patience < 0.33) bits.push('walks away fast')
+  else if (attrs.patience < 0.33) bits.push('walk away fast')
   if (attrs.charm > 0.66) bits.push('could sell fog to a cloud')
-  if (attrs.temper > 0.66) bits.push('flares up when lowballed')
-  return bits.length ? bits.join(', ') : 'is, by bazaar standards, reasonable'
+  if (attrs.temper > 0.66) bits.push('flare up when lowballed')
+  return bits.length ? bits.join(', ') : 'are, by bazaar standards, reasonable'
 }
 
 /**
@@ -113,7 +114,7 @@ export function generatePersona(rng, { species, role, goodIds = [] }) {
       ? `Now they hawk ${goodIds.map((id) => goodById(id).name.toLowerCase()).join(' and ')} and ${attrLine(attrs)}.`
       : role === 'busker'
         ? `Now they play for coins and ${attrLine(attrs)}.`
-        : `By day a ${title}; at the stalls they ${attrLine(attrs)}.`
+        : `By day ${/^[aeiou]/i.test(title) ? 'an' : 'a'} ${title}; at the stalls they ${attrLine(attrs)}.`
   const backstory = `${name} ${origin}. ${trade} ${name} ${quirk}.`
 
   return { name, title, backstory, attrs, wealth, quirk }

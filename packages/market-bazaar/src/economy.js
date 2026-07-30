@@ -189,7 +189,10 @@ export function createEconomy({ seed, goods, actors }) {
           // (drift, never teleport)
           const anchor = a.beliefs[gid] * (1 + 0.25 * a.attrs.greed)
           a.asks[gid] += (anchor - a.asks[gid]) * Math.min(1, 0.6 * dtDays)
-          if (a.asks[gid] < 1) a.asks[gid] = 1
+          // never let the advertised ask drift below the floor the vendor
+          // actually opens with — consumers (UI, hawk bubbles, chooseErrand)
+          // read asks as the real price (adversarial review)
+          if (a.asks[gid] < sellerFloor(a, gid)) a.asks[gid] = sellerFloor(a, gid)
           a.sinceSale[gid] += dtDays
           // aging unsold stock erodes the vendor's own belief (pushes asks down)
           if (a.sinceSale[gid] > 1.5 && a.stock[gid] > 0) {
@@ -209,6 +212,7 @@ export function createEconomy({ seed, goods, actors }) {
                 restockOut += cost
                 a.stock[gid] = count
                 a.costBasis[gid] = unitCost
+                if (a.asks[gid] < sellerFloor(a, gid)) a.asks[gid] = sellerFloor(a, gid) // new cost basis can raise the floor
                 a.sinceSale[gid] = 0
                 a.restockAcc[gid] = 0
                 pushEvent({ type: 'restock', vendorId: a.id, goodId: gid, count, cost })
@@ -354,7 +358,7 @@ export function createEconomy({ seed, goods, actors }) {
     b.walkaways++
     v.walkaways++
     walkawayCount++
-    v.asks[gid] = Math.max(1, v.asks[gid] * 0.97) // walkaways push asks down
+    v.asks[gid] = Math.max(sellerFloor(v, gid), v.asks[gid] * 0.97) // walkaways push asks down, floor holds
     v.beliefs[gid] = Math.max(1, v.beliefs[gid] * 0.985)
     if (s.lastSeller > 0) b.beliefs[gid] += 0.1 * (s.lastSeller - b.beliefs[gid])
     pushEvent({ type: 'walkaway', buyerId: s.buyerId, sellerId: s.vendorId, goodId: gid })

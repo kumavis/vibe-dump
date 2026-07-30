@@ -216,6 +216,75 @@ for (const species of SPECIES) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Level 2.5: prop semantics — an instrument must meet the body part that
+// plays it (the class of bug clearance checks can't see; measured, not
+// eyeballed). Drum: each hand's beat must reach the drumhead. Flute: the
+// mouthpiece is at the lips by construction (shared anchors), and the
+// holding hand must sit on the tube.
+// ---------------------------------------------------------------------------
+const { instrumentAnchors } = await import('../../src/body.js')
+const boneLocal = (bone, restPos, bindPt, out) => {
+  // rest rotations are identity, so bind→bone-local is a translation
+  out.copy(bindPt).sub(restPos)
+  return out.applyMatrix4(bone.matrixWorld)
+}
+
+let drumsChecked = 0
+let flutesChecked = 0
+for (const species of SPECIES) {
+  let drumS = 0
+  let fluteS = 0
+  for (let s = 0; s < 14 && (drumS < 2 || fluteS < 2); s++) {
+    const ch = buildCharacter({ seed: 5000 + s * 13 + SPECIES.indexOf(species), species, role: 'busker' })
+    const a = ch.appearance
+    const rest = restPositions(ch.defs)
+    const anchors = instrumentAnchors(a, rest)
+    if (!anchors) continue
+    const b = ch.rig.byName
+    const dt = 1 / 60
+    let t = 0
+    const gesture = anchors.kind === 'drum' ? 'drum' : 'flute'
+    const ctl = { speed: 0, gesture, speaking: false, lookYaw: 0, lookPitch: 0 }
+    for (let i = 0; i < 180; i++) ch.animator.update((t += dt), dt, ctl) // settle gesture weight
+    if (anchors.kind === 'drum' && drumS < 2) {
+      drumS++
+      drumsChecked++
+      let minL = Infinity
+      let minR = Infinity
+      for (let i = 0; i < 150; i++) {
+        ch.animator.update((t += dt), dt, ctl)
+        ch.rig.root.updateMatrixWorld(true)
+        boneLocal(b.chest, rest.chest, anchors.top, _a)
+        minL = Math.min(minL, _b.setFromMatrixPosition(b.handL.matrixWorld).distanceTo(_a))
+        minR = Math.min(minR, _b.setFromMatrixPosition(b.handR.matrixWorld).distanceTo(_a))
+      }
+      check(minL < 0.2, `${species} drummer: L hand never reaches drumhead (min ${minL.toFixed(3)} m)`)
+      check(minR < 0.2, `${species} drummer: R hand never reaches drumhead (min ${minR.toFixed(3)} m)`)
+    } else if (anchors.kind === 'flute' && fluteS < 2) {
+      fluteS++
+      flutesChecked++
+      let minHold = Infinity
+      let mouthGap = 0
+      for (let i = 0; i < 120; i++) {
+        ch.animator.update((t += dt), dt, ctl)
+        ch.rig.root.updateMatrixWorld(true)
+        const mw = boneLocal(b.head, rest.head, anchors.mouth, _a).clone()
+        const fw = boneLocal(b.head, rest.head, anchors.foot, _b).clone()
+        // jaw-adjacent mouthpiece: measure against the jaw bone
+        mouthGap = Math.max(mouthGap, _c.setFromMatrixPosition(b.jaw.matrixWorld).distanceTo(mw))
+        for (const hand of [b.handL, b.handR]) {
+          const hp = _c.setFromMatrixPosition(hand.matrixWorld)
+          minHold = Math.min(minHold, distToSegment(hp, mw, fw))
+        }
+      }
+      check(mouthGap < a.headSize * 1.1, `${species} flutist: mouthpiece drifts ${mouthGap.toFixed(3)} m from the jaw`)
+      check(minHold < 0.2, `${species} flutist: no hand holds the tube (min axis dist ${minHold.toFixed(3)} m)`)
+    }
+  }
+}
+console.log(`prop semantics: ${drumsChecked} drummers, ${flutesChecked} flutists measured`)
+
 console.log(`built ${built} characters, mean tris ${(totalTris / built).toFixed(0)}`)
 const walkRows = rows.filter((r) => String(r[1]).startsWith('walk'))
 const toes = walkRows.map((r) => r[2])

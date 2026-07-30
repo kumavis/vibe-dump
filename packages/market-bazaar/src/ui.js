@@ -99,7 +99,7 @@ export function createUI({ onDeselect }) {
         ${bar('temper', p.attrs.temper, 22)}
       </div>
       <div class="wallet"><img src="${iconURL('coin', 17)}"> <b>${econState.wallet}¢</b>
-        <span class="deals">${econState.deals} deals · ${econState.walkaways} walkaways</span></div>
+        <span class="deals">${econState.deals} deal${econState.deals === 1 ? '' : 's'} · ${econState.walkaways} walkaway${econState.walkaways === 1 ? '' : 's'}</span></div>
       ${stockRows ? `<div class="invhead">on the counter</div>${stockRows}` : ''}
       ${
         inv.length && a.role !== 'vendor'

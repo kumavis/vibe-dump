@@ -73,7 +73,7 @@ export function fbm2(x, y, octaves = 4, gain = 0.5) {
   return sum / norm
 }
 
-export const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v)
+export const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : Number.isNaN(v) ? lo : v)
 export const clamp01 = (v) => clamp(v, 0, 1)
 export const smoothstep = (a, b, t) => {
   const x = clamp01((t - a) / (b - a))

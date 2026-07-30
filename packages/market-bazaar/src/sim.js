@@ -133,6 +133,28 @@ export function createSim({ seed, world, economy, bubbles, actors, onTicker }) {
 
   const ticker = (line) => onTicker && onTicker(line)
 
+  /** A wander/watch target inside (or hugging) a collider is unreachable: the
+   *  push-out annulus balances the attraction ~0.5 m out, past arriveR, and
+   *  the walker jogs in place forever (adversarial review: 3-4 of 16
+   *  customers were permanently stuck). Re-roll a few times; callers also get
+   *  a walkTo timeout as the backstop for targets this can't save. */
+  function clearOfColliders(x, z) {
+    for (const c of world.colliders) {
+      if (Math.hypot(x - c.x, z - c.z) < c.r + 0.45) return false
+    }
+    return true
+  }
+  function pickWanderTarget() {
+    for (let tries = 0; tries < 8; tries++) {
+      const ang = rng() * TWO_PI
+      const r = range(rng, 3, world.bounds.r * 0.6)
+      const x = Math.sin(ang) * r
+      const z = Math.cos(ang) * r
+      if (clearOfColliders(x, z)) return { x, z, arriveR: 0.4 }
+    }
+    return null // caller stays idle and tries again shortly
+  }
+
   // ---- movement -----------------------------------------------------------
   function steer(a, dt) {
     const t = a.target
@@ -187,6 +209,18 @@ export function createSim({ seed, world, economy, bubbles, actors, onTicker }) {
     if (pr > world.bounds.r - 0.5) {
       a.pos.x *= (world.bounds.r - 0.5) / pr
       a.pos.z *= (world.bounds.r - 0.5) / pr
+    }
+    // hard-project out of colliders: the soft push above only biases direction,
+    // and a far-side goal overpowers it — walkers were wading through the
+    // fountain (adversarial review). The push still routes; this constrains.
+    for (const c of world.colliders) {
+      const cx = a.pos.x - c.x
+      const cz = a.pos.z - c.z
+      const d = Math.hypot(cx, cz)
+      if (d < c.r && d > 1e-4) {
+        a.pos.x = c.x + (cx / d) * c.r
+        a.pos.z = c.z + (cz / d) * c.r
+      }
     }
     a.speed = sp
     a.baseYaw = Math.atan2(a.vel.x, a.vel.z)
@@ -306,29 +340,48 @@ export function createSim({ seed, world, economy, bubbles, actors, onTicker }) {
           a.target = { ...spot, arriveR: 0.2 }
           a.errand = errand
           a.state = 'walkTo'
+          a.stateT = 0
         } else if (errand && errand.kind === 'watch' && actors.some((b) => b.role === 'busker')) {
           const busker = pick(rng, actors.filter((b) => b.role === 'busker'))
-          const ang = busker.buskerSpot.yaw + range(rng, -0.9, 0.9)
-          const r = range(rng, 1.5, 2.3)
-          a.target = {
-            x: busker.buskerSpot.x + Math.sin(ang) * r,
-            z: busker.buskerSpot.z + Math.cos(ang) * r,
-            yaw: wrapAngle(ang + Math.PI),
-            arriveR: 0.3,
+          let spot = null
+          for (let tries = 0; tries < 6 && !spot; tries++) {
+            const ang = busker.buskerSpot.yaw + range(rng, -0.9, 0.9)
+            const r = range(rng, 1.5, 2.3)
+            const x = busker.buskerSpot.x + Math.sin(ang) * r
+            const z = busker.buskerSpot.z + Math.cos(ang) * r
+            if (clearOfColliders(x, z)) spot = { x, z, yaw: wrapAngle(ang + Math.PI), arriveR: 0.3 }
           }
+          if (!spot) {
+            a.until = now + range(rng, 1, 3)
+            break
+          }
+          a.target = spot
           a.errand = { kind: 'watch', buskerId: busker.id }
           a.state = 'walkTo'
+          a.stateT = 0
         } else {
-          // wander
-          const ang = rng() * TWO_PI
-          const r = range(rng, 3, world.bounds.r * 0.6)
-          a.target = { x: Math.sin(ang) * r, z: Math.cos(ang) * r, arriveR: 0.4 }
+          const target = pickWanderTarget()
+          if (!target) {
+            a.until = now + range(rng, 1, 3)
+            break
+          }
+          a.target = target
           a.errand = null
           a.state = 'walkTo'
+          a.stateT = 0
         }
         break
       }
       case 'walkTo': {
+        // backstop for unreachable targets: give up rather than jog in place
+        if (a.stateT > 30) {
+          a.target = null
+          a.speed = 0
+          a.errand = null
+          a.state = 'idle'
+          a.until = now + range(rng, 1, 3)
+          break
+        }
         if (steer(a, dt)) {
           if (a.errand?.kind === 'buy') {
             a.state = 'browse'
