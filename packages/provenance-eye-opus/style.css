@@ -1,0 +1,30 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: #07060f;
+  touch-action: none;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Soft darkening at the frame edges so the gold reads as the brightest thing
+   on screen. Pure CSS — costs the GPU nothing per frame. */
+#vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 68% 62% at 50% 44%,
+    rgba(0, 0, 0, 0) 42%,
+    rgba(6, 4, 14, 0.42) 78%,
+    rgba(4, 2, 10, 0.78) 100%
+  );
+}
