@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Goblin — rig turntable</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="./turntable.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div id="boot">
+      <div class="boot-inner">
+        <div class="boot-title">RIG TURNTABLE</div>
+        <div class="boot-step" id="boot-step">sculpting…</div>
+        <div class="boot-bar"><i id="boot-fill"></i></div>
+      </div>
+    </div>
+
+    <header id="hud">
+      <h1>RIG TURNTABLE</h1>
+      <p class="sub">the same goblin, on a neutral stage · drag to orbit · scroll to zoom</p>
+      <a class="back" href="../">← back to the run</a>
+    </header>
+
+    <aside id="stats">
+      <dl>
+        <div><dt>bones</dt><dd id="s-bones">—</dd></div>
+        <div><dt>triangles</dt><dd id="s-tris">—</dd></div>
+        <div><dt>sim parts</dt><dd id="s-sim">—</dd></div>
+        <div><dt>build</dt><dd id="s-build">—</dd></div>
+        <div title="Lowest world y reached by the toe-tip / heel bones since the clip was last reset. Negative means the foot went through the floor.">
+          <dt>floor L</dt><dd id="s-floorL">—</dd>
+        </div>
+        <div title="Lowest world y reached by the toe-tip / heel bones since the clip was last reset. Negative means the foot went through the floor.">
+          <dt>floor R</dt><dd id="s-floorR">—</dd>
+        </div>
+      </dl>
+    </aside>
+
+    <!-- Filled only while SOCKETS / TRAILS are on. -->
+    <aside id="debug-readout">
+      <div id="dbg-sockets"></div>
+      <div id="dbg-trails"></div>
+    </aside>
+
+    <!-- Always-on axis compass. Baked into every screenshot on purpose. -->
+    <canvas id="compass"></canvas>
+
+    <footer id="controls">
+      <div class="row">
+        <div class="group" id="clips">
+          <button data-clip="run" class="on">RUN</button>
+          <button data-clip="idle">IDLE</button>
+          <button data-clip="combo">COMBO</button>
+        </div>
+        <div class="group">
+          <button id="btn-play" title="Play / pause">❚❚</button>
+          <input id="scrub" type="range" min="0" max="1000" value="0" title="Scrub the clip" />
+        </div>
+        <div class="group">
+          <button id="btn-spin" class="on" title="Turntable">SPIN</button>
+          <button id="btn-rig" title="Skeleton overlay">RIG</button>
+          <button id="btn-axes" title="Bone axes">AXES</button>
+        </div>
+      </div>
+      <div class="row" id="debug-row">
+        <span class="tag">DEBUG</span>
+        <div class="group">
+          <button id="btn-compass" class="on" title="Axis compass + view label, drawn into the frame">COMPASS</button>
+          <button id="btn-sockets" title="Socket and plug frames — where a weapon should sit vs where it does">SOCKETS</button>
+          <button id="btn-trails" title="2 s world-space trails for toes, heels, hips and the cleaver tip">TRAILS</button>
+        </div>
+      </div>
+    </footer>
+
+    <nav id="views">
+      <button data-view="q34" class="on">3/4</button>
+      <button data-view="front">FRONT</button>
+      <button data-view="left">LEFT</button>
+      <button data-view="back">BACK</button>
+      <button data-view="head">HEAD</button>
+      <button data-view="hands">HANDS</button>
+    </nav>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

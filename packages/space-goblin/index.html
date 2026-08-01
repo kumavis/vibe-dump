@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Goblin — a rigged sprint across the flats</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div id="boot">
+      <div class="boot-inner">
+        <div class="boot-title">SPACE GOBLIN</div>
+        <div class="boot-step" id="boot-step">sculpting…</div>
+        <div class="boot-bar"><i id="boot-fill"></i></div>
+      </div>
+    </div>
+
+    <header id="hud">
+      <h1>SPACE GOBLIN</h1>
+      <p class="sub">every bone, texture, strap and blade generated from maths · drag to look</p>
+    </header>
+
+    <aside id="stats">
+      <dl>
+        <div><dt>bones</dt><dd id="s-bones">—</dd></div>
+        <div><dt>triangles</dt><dd id="s-tris">—</dd></div>
+        <div><dt>sim parts</dt><dd id="s-sim">—</dd></div>
+        <div><dt>fps</dt><dd id="s-fps">—</dd></div>
+      </dl>
+    </aside>
+
+    <footer id="controls">
+      <button id="btn-strike" class="primary" title="Melee combo">STRIKE</button>
+      <button id="btn-cam" title="Cycle camera">CAMERA · CHASE</button>
+      <button id="btn-slow" title="Slow motion">SLOW-MO</button>
+      <button id="btn-rig" title="Show the skeleton">RIG</button>
+      <a class="link" href="./turntable/" title="Inspect the rig on a neutral stage">TURNTABLE ›</a>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

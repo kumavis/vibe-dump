@@ -1,0 +1,18 @@
+{
+  "name": "@vibe-dump/market-bazaar",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "verify": "node tools/verify.mjs"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "The Night Bazaar",
+    "description": "A living market economy: rigged, animated humans, aliens, monsters and devils haggle in emoji over eels, gems and curse scrolls — every price discovered, every coin accounted for."
+  }
+}

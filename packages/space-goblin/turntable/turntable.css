@@ -1,0 +1,229 @@
+/* Additions on top of the app's stylesheet, for the turntable's extra chrome. */
+
+#hud .back {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--glow);
+  text-decoration: none;
+  pointer-events: auto;
+  border-bottom: 1px solid transparent;
+}
+
+#hud .back:hover {
+  border-bottom-color: var(--glow);
+}
+
+#controls {
+  gap: 5px;
+  padding: 7px 10px;
+  /* Two rows now — the pill radius would look silly, so square it off a bit. */
+  flex-direction: column;
+  border-radius: 18px;
+  max-width: min(900px, calc(100vw - 28px));
+}
+
+#controls .row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+#controls .group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  border-right: 1px solid var(--border);
+}
+
+#controls .group:last-child {
+  border-right: 0;
+}
+
+#controls .tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  padding: 0 4px 0 6px;
+}
+
+#debug-row {
+  border-top: 1px solid var(--border);
+  padding-top: 5px;
+}
+
+#scrub {
+  appearance: none;
+  width: 130px;
+  height: 2px;
+  background: rgba(231, 240, 234, 0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+#scrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--glow);
+  box-shadow: 0 0 8px var(--glow);
+}
+
+#scrub::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--glow);
+}
+
+#views {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(9px);
+}
+
+#views button {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+#views button:hover {
+  color: var(--ink);
+  background: rgba(231, 240, 234, 0.08);
+}
+
+#views button.on {
+  color: #05131a;
+  background: var(--glow);
+}
+
+/* ---- debug chrome ---- */
+
+/* The compass is never hidden behind the UI: bottom-right is the one corner the
+   HUD, the stats and the control bar all leave alone. */
+#compass {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  pointer-events: none;
+  user-select: none;
+}
+
+#debug-readout {
+  position: fixed;
+  right: 20px;
+  top: 132px;
+  width: 268px;
+  pointer-events: none;
+  user-select: none;
+  text-align: right;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+#debug-readout section {
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  backdrop-filter: blur(9px);
+}
+
+#debug-readout h2 {
+  margin: 0 0 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--glow);
+}
+
+#debug-readout .line {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+
+#debug-readout .line b {
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 108px;
+  text-align: right;
+}
+
+#debug-readout .ok b {
+  color: #7dff9b;
+}
+
+#debug-readout .bad b {
+  color: #ff6b6b;
+}
+
+#debug-readout .swatch {
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  margin-bottom: 3px;
+  margin-left: 6px;
+}
+
+#stats dd.bad {
+  color: #ff6b6b;
+}
+
+@media (max-width: 1100px) {
+  #debug-readout {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  #views {
+    left: 50%;
+    top: auto;
+    bottom: 130px;
+    transform: translateX(-50%);
+    flex-direction: row;
+  }
+
+  #views button {
+    padding: 6px 8px;
+    letter-spacing: 0.08em;
+  }
+
+  #compass {
+    display: none;
+  }
+}

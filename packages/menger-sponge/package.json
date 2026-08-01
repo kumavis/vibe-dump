@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/menger-sponge",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Menger Sponge",
+    "description": "A dark-metal Menger sponge pistons itself up and down the recursion, compressing and redeploying 8,000 greebled cubes veined with sickly Borg-green light. Three.js."
+  }
+}

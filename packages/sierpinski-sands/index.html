@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sierpinski Sands — a stone pyramid recursing itself out of the desert</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <header id="hud">
+      <h1>SIERPINSKI SANDS</h1>
+      <p class="sub">drag to orbit · the monument rumbles one level deeper each time</p>
+      <p class="hint" id="hud-hint">
+        <kbd>space</kbd> pause
+        <span class="dot">·</span>
+        <kbd>drag</kbd> orbit
+        <span class="dot">·</span>
+        <kbd>scroll</kbd> zoom
+      </p>
+    </header>
+
+    <!-- These defaults mirror the render loop's opening state (START_T in
+         main.js — a third of a second into the 2 → 3 split), so the first painted
+         frame and the first JS-updated frame agree. There is no fade-in to
+         cover a mismatch. -->
+    <footer id="status">
+      <span class="cell">
+        <span id="level-label">DEPTH 2 → 3</span>
+        <span id="phase" class="is-move">SPLITTING</span>
+      </span>
+      <span class="rule"></span>
+      <span class="cell">
+        <span id="block-count">125</span><span class="unit" id="block-unit">blocks</span>
+      </span>
+      <span class="rule meter-rule"></span>
+      <span class="cell" id="meter">
+        <span id="progress"><span id="progress-fill"></span></span>
+        <span id="level-pips" aria-hidden="true">
+          <i class="pip" data-level="0"></i>
+          <i class="pip" data-level="1"></i>
+          <i class="pip on" data-level="2"></i>
+          <i class="pip next" data-level="3"></i>
+          <i class="pip" data-level="4"></i>
+        </span>
+      </span>
+    </footer>
+
+    <div id="fallback" hidden>
+      <strong>WEBGL UNAVAILABLE</strong>
+      <span
+        >This desert needs a WebGL-capable browser. Try a recent Chrome, Firefox, or Safari with
+        hardware acceleration enabled.</span
+      >
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
