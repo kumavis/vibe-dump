@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/provenance-eye-opus",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Eye of Provenance (Opus)",
+    "description": "A cast-gold triangle eye rides a cloud — it blinks into a sunburst, and sometimes something else blinks back. Click it to steer."
+  }
+}
