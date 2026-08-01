@@ -443,7 +443,7 @@ for (let i = 0; i < N_TENT; i++) {
   const angle = (i / N_TENT) * Math.PI * 2 + 0.9
   const droop = Math.sin(angle) < -0.3 // pointing down toward the cloud
   const len = droop ? rand(1.1, 1.5) : rand(1.5, 2.2)
-  const geo = new THREE.ConeGeometry(rand(0.09, 0.125), len, 10, 36)
+  const geo = new THREE.ConeGeometry(rand(0.17, 0.23), len, 12, 36)
   geo.translate(0, len / 2, 0) // base at local origin, tip at +Y
   const mat = new THREE.MeshStandardMaterial({
     color: '#6f36b8',
@@ -492,12 +492,14 @@ for (let i = 0; i < N_TENT; i++) {
 // ---------------------------------------------------------------------------
 // Animation state
 // ---------------------------------------------------------------------------
-let close = 0 // 0 open .. 1 closed — drives lids, beams, petals
+let close = 0 // 0 open .. 1 closed — drives the lids
+let bloom = 0 // deliberate held close (sun event only) — drives beams, glow, petals
 let alienAmt = 0 // 0 normal .. 1 full alien — drives tint, slit pupil, tentacles
-let beamAmt = 0 // smoothed follower of `close` (gated off while alien)
+let beamAmt = 0 // smoothed follower of `bloom`
 let petalAmt = 0 // slower smoothed follower
 let winkTilt = 0 // playful roll while the alien eye winks
 let busy = false
+let asleep = false // tap-toggled; a sleeping eye holds its sun bloom out
 
 // -- tiny promise tween pool (ticked from the render loop) -------------------
 const tweens = []
@@ -520,9 +522,9 @@ function tickTweens(dt) {
 
 // -- the two set-pieces -------------------------------------------------------
 async function sunEvent() {
-  await go(1.15, (p) => (close = p))
+  await go(1.15, (p) => (close = bloom = p))
   await hold(2.6) // beams + petals bloom via the smoothed followers
-  await go(0.95, (p) => (close = 1 - p))
+  await go(0.95, (p) => (close = bloom = 1 - p))
 }
 
 async function alienEvent() {
@@ -547,11 +549,31 @@ async function microBlink() {
   await go(0.19, (p) => (close = 1 - p))
 }
 
+// -- tapping the eye: sleep, wake — or provoke something worse ----------------
+async function fallAsleep() {
+  await go(1.0, (p) => (close = bloom = p))
+  asleep = true
+}
+async function wakeUp() {
+  asleep = false
+  await go(0.8, (p) => (close = bloom = 1 - p))
+}
+function tapEye() {
+  if (busy) return
+  busy = true
+  const done = () => (busy = false)
+  if (asleep) wakeUp().then(done)
+  else if (Math.random() < 0.25) alienEvent().then(done) // poked it — evil mode
+  else fallAsleep().then(done)
+}
+
 // -- ambient director ---------------------------------------------------------
 async function director() {
   await hold(2.2) // settle (and let the gallery screenshot catch the open eye)
   for (;;) {
     await hold(rand(4.5, 9))
+    // don't stomp a mid-flight blink; don't disturb a sleeper — reroll the wait
+    if (busy || asleep) continue
     busy = true
     if (Math.random() < 0.32) await alienEvent()
     else await sunEvent()
@@ -562,7 +584,7 @@ async function director() {
 async function blinker() {
   for (;;) {
     await hold(rand(3.2, 7))
-    if (busy) continue
+    if (busy || asleep) continue
     busy = true
     await microBlink()
     busy = false
@@ -573,8 +595,10 @@ async function blinker() {
 const pose = new URLSearchParams(location.search).get('pose')
 if (pose === 'bloom') {
   close = 1
+  bloom = 1
   beamAmt = 1
   petalAmt = 1
+  asleep = true // a frozen bloom is just a sleeper — tapping wakes it
 } else if (pose === 'alien') {
   alienAmt = 1
 } else if (pose !== 'open') {
@@ -585,6 +609,8 @@ if (pose === 'bloom') {
 window.__eye = {
   sun: () => !busy && ((busy = true), sunEvent().then(() => (busy = false))),
   alien: () => !busy && ((busy = true), alienEvent().then(() => (busy = false))),
+  blink: () => !busy && ((busy = true), microBlink().then(() => (busy = false))),
+  tap: () => tapEye(),
   now: () => elapsed, // scene clock (dt is capped, so it dilates on slow devices)
 }
 
@@ -617,6 +643,24 @@ if (
   })
 }
 
+// -- tap/click the eye: a roomy invisible hit sphere around the monument -----
+const hitProxy = new THREE.Mesh(
+  new THREE.SphereGeometry(1.7, 12, 8),
+  new THREE.MeshBasicMaterial({ visible: false })
+)
+monument.add(hitProxy)
+const raycaster = new THREE.Raycaster()
+const ndc = new THREE.Vector2()
+function overEye(e) {
+  ndc.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1)
+  raycaster.setFromCamera(ndc, camera)
+  return raycaster.intersectObject(hitProxy, false).length > 0
+}
+window.addEventListener('pointerdown', (e) => overEye(e) && tapEye())
+window.addEventListener('pointermove', (e) => {
+  renderer.domElement.style.cursor = overEye(e) ? 'pointer' : 'default'
+})
+
 // ---------------------------------------------------------------------------
 // Frame loop
 // ---------------------------------------------------------------------------
@@ -632,13 +676,15 @@ function frame() {
 
   tickTweens(dt)
 
-  // smoothed followers — beams flash even on micro-blinks, petals take longer
-  const alienGate = 1 - THREE.MathUtils.smoothstep(alienAmt, 0.2, 0.5)
-  beamAmt += (close * alienGate - beamAmt) * (1 - Math.exp(-8 * dt))
-  petalAmt += (close * alienGate - petalAmt) * (1 - Math.exp(-4 * dt))
+  // smoothed followers of the deliberate hold-closed only — plain blinks
+  // (and the alien wink) never trigger the sun
+  beamAmt += (bloom - beamAmt) * (1 - Math.exp(-8 * dt))
+  petalAmt += (bloom - petalAmt) * (1 - Math.exp(-4 * dt))
 
-  // -- eyelids: a resting hood keeps the open eye from looking googly
-  const lidAmt = 0.22 + 0.78 * close
+  // -- eyelids: a resting hood keeps the open eye from looking googly;
+  // alien mode retracts it into a wide unblinking stare (brow gone too)
+  const resting = lerp(0.22, 0.05, alienAmt)
+  const lidAmt = resting + (1 - resting) * close
   lidTop.rotation.x = lerp(TOP_OPEN, TOP_CLOSED, lidAmt)
   lidBot.rotation.x = lerp(BOT_OPEN, BOT_CLOSED, lidAmt)
 
