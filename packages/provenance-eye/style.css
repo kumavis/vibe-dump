@@ -38,3 +38,14 @@ body {
   color: rgba(255, 249, 234, 0.85);
   text-shadow: 0 1px 10px rgba(70, 40, 0, 0.45);
 }
+
+.caption .hint {
+  display: block;
+  margin-top: 0.55em;
+  font-size: 0.72em;
+  font-style: italic;
+  font-variant: normal;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  opacity: 0.55;
+}
