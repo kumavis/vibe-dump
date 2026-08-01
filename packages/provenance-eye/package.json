@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/provenance-eye",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Eye of Provenance",
+    "description": "A thick golden eye-in-triangle rides a cloud. When it closes, sunbeams and petals bloom behind it — and once in a while it goes alien, sprouts tentacles, and winks. Three.js."
+  }
+}
