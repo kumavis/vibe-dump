@@ -56,3 +56,10 @@ canvas {
   color: #ffe7a3;
   letter-spacing: 0.5px;
 }
+
+#hud .forge {
+  margin-top: 2px;
+  font-weight: 700;
+  color: #9affe6;
+  letter-spacing: 0.5px;
+}
