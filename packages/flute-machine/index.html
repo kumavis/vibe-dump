@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flute Machine</title>
+    <meta
+      name="description"
+      content="A self-improvising breath-driven flute. Lock it low for a bassy drone or let it scatter short flurries, then save the take."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305070b'/%3E%3Crect x='9' y='4' width='2' height='24' rx='1' fill='%23ffb26b'/%3E%3Crect x='15' y='4' width='2' height='24' rx='1' fill='%23bcd0e8'/%3E%3Crect x='21' y='4' width='2' height='24' rx='1' fill='%237ed6ff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <canvas id="stage"></canvas>
+
+    <header class="wordmark">
+      <h1>Air Column</h1>
+      <span class="rule"></span>
+      <p>generative flute</p>
+    </header>
+
+    <div class="air-slider">
+      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.75" aria-label="Volume" />
+      <label for="volume">Air</label>
+    </div>
+
+    <main class="console">
+      <div class="row row--presets">
+        <div class="preset-group">
+          <span class="row__label">Preset</span>
+          <div class="chips" id="presets" role="group" aria-label="Presets"></div>
+        </div>
+        <div class="switches">
+          <label class="toggle" title="Pin the register to a low bassy band">
+            <input type="checkbox" id="droneLock" />
+            <span class="toggle__track"><span class="toggle__dot"></span></span>
+            <span class="toggle__label">Drone lock</span>
+          </label>
+          <label class="toggle" title="Let the settings wander slowly on their own">
+            <input type="checkbox" id="drift" checked />
+            <span class="toggle__track"><span class="toggle__dot"></span></span>
+            <span class="toggle__label">Drift</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="row row--main">
+        <div class="transport">
+          <button id="breathe" class="breathe" aria-label="Start playing">
+            <span class="breathe__ring"></span>
+            <span class="breathe__label">Breathe</span>
+          </button>
+          <button id="puff" class="puff" title="One short flurry" aria-label="Play one short flurry">
+            Puff
+          </button>
+        </div>
+
+        <div class="field register">
+          <div class="field__head">
+            <span class="field__label">Register</span>
+            <output id="rangeOut" class="field__value">D4 — D6</output>
+          </div>
+          <div class="range" id="range">
+            <div class="range__track"></div>
+            <div class="range__span" id="rangeSpan"></div>
+            <input id="rangeLo" type="range" min="43" max="96" step="1" value="62" aria-label="Lowest note" />
+            <input id="rangeHi" type="range" min="43" max="96" step="1" value="86" aria-label="Highest note" />
+          </div>
+          <div class="register__ticks" id="ticks"></div>
+          <p class="field__desc">the highest and lowest notes it may play</p>
+        </div>
+
+        <div class="field key">
+          <div class="field__head">
+            <span class="field__label">Key</span>
+          </div>
+          <div class="key__selects">
+            <select id="root" aria-label="Root note"></select>
+            <select id="scale" aria-label="Scale"></select>
+          </div>
+          <div class="key__autos">
+            <label class="mini"><input type="checkbox" id="rootAuto" /> <span>drift root</span></label>
+            <label class="mini"><input type="checkbox" id="scaleAuto" /> <span>drift scale</span></label>
+          </div>
+          <p class="field__desc">which notes exist — drift lets it modulate over minutes</p>
+        </div>
+      </div>
+
+      <div class="row row--knobs">
+        <div class="knobs" id="knobs"></div>
+      </div>
+
+      <div class="row row--status">
+        <div class="status">
+          <span id="status">resting</span>
+          <span class="status__sep">·</span>
+          <span id="scoreInfo">nothing recorded yet</span>
+        </div>
+        <div class="actions">
+          <button id="save" class="ghost">Save</button>
+          <button id="load" class="ghost">Load</button>
+          <button id="midi" class="ghost">MIDI</button>
+          <button id="wav" class="ghost">WAV</button>
+          <button id="dice" class="ghost ghost--icon" title="New seed" aria-label="New seed">⚄</button>
+        </div>
+      </div>
+    </main>
+
+    <input type="file" id="file" accept=".json,application/json" hidden />
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
