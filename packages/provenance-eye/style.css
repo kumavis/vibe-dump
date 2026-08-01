@@ -1,0 +1,40 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #86b4e6; /* matches sky while WebGL warms up */
+}
+
+#app,
+#app canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(24, 18, 48, 0.3));
+}
+
+.caption {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 4.5%;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(11px, 1.6vmin, 15px);
+  font-variant: small-caps;
+  letter-spacing: 0.45em;
+  text-indent: 0.45em; /* re-center: letter-spacing pads the right edge */
+  color: rgba(255, 249, 234, 0.85);
+  text-shadow: 0 1px 10px rgba(70, 40, 0, 0.45);
+}
