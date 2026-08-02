@@ -10,6 +10,8 @@
 // ---------------------------------------------------------------------------
 
 import { blueprintSheetAspect, formatDuration } from './blueprint.js'
+import { orders, CREWABLE, CREW_MIN, CREW_MAX } from './orders.js'
+import { HOUSE_TYPES, PAINT } from './config.js'
 
 const $ = (id) => document.getElementById(id)
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -56,7 +58,19 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     follow: $('follow'),
     followRole: $('follow-role'),
     followDoing: $('follow-doing'),
+    followSince: $('follow-since'),
+    followHold: $('follow-hold'),
     followDrop: $('follow-drop'),
+    orders: $('orders'),
+    ordersOpen: $('orders-open'),
+    ordersClose: $('orders-close'),
+    speedSeg: $('speed-seg'),
+    crewSteps: $('crew-steps'),
+    crewSize: $('crew-size'),
+    crewNote: $('crew-note'),
+    housePick: $('house-pick'),
+    paintPick: $('paint-pick'),
+    plotNote: $('plot-note'),
   }
   const sheetCanvas = $('sheet-canvas')
 
@@ -117,6 +131,7 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
 
   function openSheet() {
     if (phase === 'open' || phase === 'unrolling' || phase === 'dropping') return
+    showOrders(false)
     sizeSheet()
     phase = 'dropping'
     t = 0
@@ -205,7 +220,9 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     closeSheet()
   })
   addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSheet()
+    if (e.key !== 'Escape') return
+    if (phase !== 'closed') closeSheet()
+    else showOrders(false)
   })
 
   // --- banner --------------------------------------------------------------
@@ -252,6 +269,7 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
 
   /** The card that rides along with whichever robot you tapped. */
   let onDropFollow = null
+  let onHoldFollow = null
   function setFollow(d) {
     if (!d) {
       el.follow.classList.remove('on')
@@ -260,11 +278,121 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     el.follow.classList.add('on')
     el.followRole.textContent = d.leaving ? `${d.role} · off shift` : d.role
     el.followDoing.textContent = d.doing
+    el.followSince.textContent = d.shiftsOn > 1
+      ? `on since shift ${d.signedOn} · ${d.shiftsOn} shifts`
+      : `signed on shift ${d.signedOn}`
+    el.followHold.classList.toggle('on', !!d.held)
+    el.followHold.textContent = d.held ? 'signed on indefinitely' : 'keep on next shift'
   }
+  el.followHold.addEventListener('click', () => onHoldFollow?.())
   el.followDrop.addEventListener('click', () => {
     el.follow.classList.remove('on')
     onDropFollow?.()
   })
+
+  // --- site orders ---------------------------------------------------------
+  // The diorama runs itself; this panel is the handful of things you can lean
+  // in and change. Everything it sets lives in orders.js — the panel only
+  // renders that state and never touches the simulation directly.
+
+  let ordersOn = false
+  function showOrders(on) {
+    ordersOn = on
+    el.orders.classList.toggle('on', on)
+    el.ordersOpen.setAttribute('aria-expanded', String(on))
+  }
+  el.ordersOpen.addEventListener('click', () => showOrders(!ordersOn))
+  el.ordersClose.addEventListener('click', () => showOrders(false))
+
+  for (const b of el.speedSeg.querySelectorAll('button')) {
+    b.addEventListener('click', () => orders.setSpeed(Number(b.dataset.speed)))
+  }
+
+  const stepEls = {}
+  for (const role of CREWABLE) {
+    const row = document.createElement('div')
+    row.className = 'step'
+    const label = document.createElement('span')
+    label.textContent = `${role}s`
+    const less = document.createElement('button')
+    less.type = 'button'
+    less.textContent = '−'
+    less.setAttribute('aria-label', `one fewer ${role}`)
+    const val = document.createElement('b')
+    const more = document.createElement('button')
+    more.type = 'button'
+    more.textContent = '+'
+    more.setAttribute('aria-label', `one more ${role}`)
+    less.addEventListener('click', () => orders.adjust(role, -1))
+    more.addEventListener('click', () => orders.adjust(role, +1))
+    row.append(label, less, val, more)
+    el.crewSteps.append(row)
+    stepEls[role] = { val, less, more }
+  }
+
+  const houseBtns = [{ label: 'AUTO', i: null }, ...HOUSE_TYPES.map((h, i) => ({ label: h.name, i }))]
+    .map(({ label, i }) => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.textContent = label
+      b.addEventListener('click', () => orders.setHouse(orders.house === i ? null : i))
+      el.housePick.append(b)
+      return { b, i }
+    })
+
+  const paintBtns = [
+    (() => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.className = 'auto'
+      b.textContent = 'AUTO'
+      b.addEventListener('click', () => orders.setPaint(null))
+      el.paintPick.append(b)
+      return { b, i: null }
+    })(),
+    ...PAINT.map((p, i) => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.title = p.name
+      b.setAttribute('aria-label', p.name)
+      b.style.background = `#${p.color.toString(16).padStart(6, '0')}`
+      b.addEventListener('click', () => orders.setPaint(orders.paint === i ? null : i))
+      el.paintPick.append(b)
+      return { b, i }
+    }),
+  ]
+
+  function renderOrders() {
+    for (const b of el.speedSeg.querySelectorAll('button')) {
+      b.classList.toggle('on', Number(b.dataset.speed) === orders.speed)
+    }
+    const counts = orders.counts
+    const size = orders.crewSize
+    for (const role of CREWABLE) {
+      const s = stepEls[role]
+      s.val.textContent = String(counts[role])
+      s.less.disabled = !(counts[role] > 1 && size > CREW_MIN)
+      s.more.disabled = !(counts[role] < 10 && size < CREW_MAX)
+    }
+    el.crewSize.textContent = `${size} strong`
+    for (const { b, i } of houseBtns) b.classList.toggle('on', orders.house === i)
+    for (const { b, i } of paintBtns) b.classList.toggle('on', orders.paint === i)
+    const house = orders.house == null ? null : HOUSE_TYPES[orders.house].name
+    const paint = orders.paint == null ? null : PAINT[orders.paint].name
+    el.plotNote.classList.toggle('live', !!(house || paint))
+    el.plotNote.textContent = house && paint ? `next up: ${house} in ${paint}`
+      : house ? `next up: ${house}`
+        : paint ? `next house painted ${paint}`
+          : 'the street carries on in order'
+  }
+  orders.onChange(renderOrders)
+  renderOrders()
+
+  /** Told by the renderer, because only it knows what the yard is up to. */
+  function setCrewNote(text, live) {
+    if (el.crewNote.textContent !== text) el.crewNote.textContent = text
+    el.crewNote.classList.toggle('live', !!live)
+  }
 
   function setLoading(fraction, subtitle) {
     if (subtitle) loadSub.textContent = subtitle
@@ -297,6 +425,8 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     tick,
     setHint,
     setFollow,
+    setCrewNote,
     onDropFollow: (fn) => (onDropFollow = fn),
+    onHoldFollow: (fn) => (onHoldFollow = fn),
   }
 }

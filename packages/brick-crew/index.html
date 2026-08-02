@@ -21,6 +21,7 @@
         <span class="chip mono" id="chip-day">DAY 1</span>
         <span class="grow"></span>
         <span class="chip" id="chip-crew">👷 <b id="on-site">0</b></span>
+        <button class="chip act" id="orders-open" type="button" aria-expanded="false">📋 ORDERS</button>
       </header>
 
       <div class="hud progress" id="progress">
@@ -33,12 +34,46 @@
         <div><span class="dot d-lay"></span>masons fetch the right material for what they are setting</div>
         <div><span class="dot d-fit"></span>then the joiners furnish it and the decorators paint it</div>
         <div><span class="dot d-shift"></span>tap a robot to follow it · crew swaps out every five minutes</div>
+        <div><span class="dot d-orders"></span><b>ORDERS</b> sets the speed, the next crew and the next house</div>
       </aside>
 
       <aside class="follow" id="follow" aria-live="polite">
         <div class="follow-role" id="follow-role">MASON</div>
         <div class="follow-doing" id="follow-doing">walking</div>
+        <div class="follow-since" id="follow-since"></div>
+        <button class="follow-hold" id="follow-hold" type="button">keep on next shift</button>
         <button class="follow-drop" id="follow-drop" type="button">stop following</button>
+      </aside>
+
+      <!-- the few dials the viewer gets: the diorama runs itself otherwise -->
+      <aside class="orders" id="orders" role="dialog" aria-label="Site orders">
+        <header class="orders-head">
+          <span>SITE ORDERS</span>
+          <button class="orders-close" id="orders-close" type="button" aria-label="Close">✕</button>
+        </header>
+
+        <section class="orders-sec">
+          <h4>SITE SPEED</h4>
+          <div class="seg" id="speed-seg">
+            <button type="button" data-speed="1" class="on">×1</button>
+            <button type="button" data-speed="2">×2</button>
+            <button type="button" data-speed="4">×4</button>
+            <button type="button" data-speed="8">×8</button>
+          </div>
+        </section>
+
+        <section class="orders-sec">
+          <h4>NEXT CREW <i id="crew-size">11 strong</i></h4>
+          <div class="steps" id="crew-steps"></div>
+          <p class="orders-note" id="crew-note">takes effect at the next changeover</p>
+        </section>
+
+        <section class="orders-sec">
+          <h4>NEXT PLOT</h4>
+          <div class="picks" id="house-pick"></div>
+          <div class="swatches" id="paint-pick"></div>
+          <p class="orders-note" id="plot-note">the street carries on in order</p>
+        </section>
       </aside>
 
       <button class="hint" id="hint" type="button">Tap the <b>site office</b> for blueprints · the <b>road arrow</b> for the yard</button>

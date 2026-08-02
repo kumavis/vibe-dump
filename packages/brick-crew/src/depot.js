@@ -522,5 +522,14 @@ export function createDepot({ origin, rng }) {
     void _v
   }
 
-  return { group, update, prepare, ready, take, get pending() { return order ? order.roles.length - queued.length : 0 } }
+  return {
+    group,
+    update,
+    prepare,
+    ready,
+    take,
+    get pending() { return order ? order.roles.length - queued.length : 0 },
+    /** How big the crew on the books is, or 0 if the line is standing idle. */
+    get building() { return order ? order.roles.length : 0 },
+  }
 }

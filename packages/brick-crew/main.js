@@ -3,8 +3,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import {
   SITE, YARD, PLOTS, DEPOT, COURSE, COLORS, SHIFT_SECONDS, PREROLL_SECONDS,
-  HOUSE_TYPES, PAINT, MATERIALS, ROSTER, KIT_LEAD_SECONDS, DAY_SECONDS, houseGeom,
+  HOUSE_TYPES, PAINT, MATERIALS, KIT_LEAD_SECONDS, DAY_SECONDS, houseGeom,
 } from './src/config.js'
+import { orders } from './src/orders.js'
 import { buildPlan } from './src/plan.js'
 import { buildSite, buildSky, buildLights } from './src/site.js'
 import {
@@ -276,8 +277,9 @@ function startPlot(first) {
     for (const g of standing.splice(0)) scene.remove(g)
   }
   const origin = PLOTS[plotIndex]
-  const geom = houseGeom(HOUSE_TYPES[(day - 1) % HOUSE_TYPES.length])
-  const paint = PAINT[(day - 1) % PAINT.length]
+  // whatever the orders panel asked for, else the next one down the street
+  const geom = houseGeom(orders.takeHouse(day))
+  const paint = orders.takePaint(day)
 
   plan = buildPlan(rng, { geom, day, plotIndex, paint })
   setGeom(geom, plan.doorway)
@@ -424,11 +426,14 @@ function refreshObstacles(origin) {
   setObstacles(boxes)
 }
 
-/** The yard works on the next shift for as long as it has to build it. */
+/**
+ * The yard works on the next shift for as long as it has to build it. The
+ * roster it builds to is whatever the orders panel is showing — but only at
+ * the moment the order goes in. Change it after that and it lands the shift
+ * after, which is what the panel's note says.
+ */
 function orderNextCrew() {
-  if (sim.secondsToShiftChange() < KIT_LEAD_SECONDS) {
-    depot.prepare(sim.nextCrew(), ROSTER.flatMap((s) => Array.from({ length: s.n }, () => s.role)))
-  }
+  if (sim.secondsToShiftChange() < KIT_LEAD_SECONDS) depot.prepare(sim.nextCrew(), orders.roles())
 }
 
 /**
@@ -542,6 +547,11 @@ canvas.addEventListener('pointerleave', () => {
  * view about.
  */
 ui.onDropFollow(() => follow(null))
+ui.onHoldFollow(() => {
+  if (!followed) return
+  sim.hold(followed)
+  ui.setFollow(sim.describe(followed))
+})
 function follow(r) {
   followed = r && !r.dead ? r : null
   controls.autoRotate = false
@@ -642,14 +652,20 @@ renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), 0.25)
   const t = clock.elapsedTime
 
-  acc += dt
+  // The site runs at whatever multiple the orders panel is set to; the camera,
+  // the paper and the banners stay on wall time so the place still feels calm
+  // when the work is racing. The step cap scales with the multiplier, or ×8
+  // would just clip back to ×2 on a busy frame.
+  const speed = orders.speed
+  acc += dt * speed
   let steps = 0
-  while (acc >= STEP && steps < 8) {
+  const maxSteps = 8 * speed
+  while (acc >= STEP && steps < maxSteps) {
     sim.update(STEP)
     acc -= STEP
     steps++
   }
-  if (steps === 8) acc = 0
+  if (steps === maxSteps) acc = 0
 
   // one turn of the sun per plot, roughly: low and warm at either end of the
   // day, high and white in the middle. It never gets dark — this is a building
@@ -665,7 +681,8 @@ renderer.setAnimationLoop(() => {
 
   site.update(t, dt)
   mixer.update(dt)
-  depot.update(dt, t)
+  // the yard is part of the site clock — it has a crew to finish in time
+  depot.update(dt * speed, t)
   ui.tick(dt)
 
   orderNextCrew()
@@ -681,7 +698,6 @@ renderer.setAnimationLoop(() => {
       const o = PLOTS[plotIndex]
       camGoal.target.set(o.x + followed.pos.x, followed.pos.y + 0.95, o.z + followed.pos.z)
       controls.target.lerp(camGoal.target, Math.min(1, dt * 3.4))
-      if (hudTimer <= 0) ui.setFollow(sim.describe(followed))
     }
   }
 
@@ -697,6 +713,7 @@ renderer.setAnimationLoop(() => {
   hudTimer -= dt
   if (hudTimer <= 0) {
     hudTimer = 0.25
+    if (followed) ui.setFollow(sim.describe(followed))
     ui.setHud({
       shiftIndex: sim.shiftIndex,
       crewName: sim.crew.name,
@@ -712,6 +729,15 @@ renderer.setAnimationLoop(() => {
       plot: plotIndex + 1,
       plots: PLOTS.length,
     })
+    // Once the yard has an order on the books the roster is fixed for that
+    // crew; say so rather than letting the panel imply otherwise.
+    const building = depot.building
+    ui.setCrewNote(
+      building
+        ? `the yard is building ${building} now · edits land the shift after`
+        : 'takes effect at the next changeover',
+      !!building,
+    )
   }
 
   if (!sheetSeen && view === 'site') {

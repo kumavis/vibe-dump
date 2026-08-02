@@ -16,8 +16,9 @@
 
 import * as THREE from 'three'
 import {
-  SITE, YARD, CREWS, ROSTER, RATE, SHIFT_SECONDS, COLORS, WORK_SPACING, MATERIALS,
+  SITE, YARD, CREWS, RATE, SHIFT_SECONDS, COLORS, WORK_SPACING, MATERIALS,
 } from './config.js'
+import { orders } from './orders.js'
 import { PHASES } from './plan.js'
 import { route, stanceOf } from './nav.js'
 import { buildRobot, buildCarryStack } from './robot.js'
@@ -180,7 +181,7 @@ export function createSim({
     let n = 0
     // Whoever the yard has finished kitting out turns up as-is; only if it has
     // nobody ready (a fast-forward, or the very first shift) do we build here.
-    const want = ROSTER.flatMap((slot) => Array.from({ length: slot.n }, () => slot.role))
+    const want = orders.roles()
     const spare = (supplied || []).slice()
     const roster = want.map((role) => {
       const i = spare.findIndex((s) => s.role === role)
@@ -191,7 +192,8 @@ export function createSim({
     for (const slot of roster) {
       for (let k = 0; k < slot.n; k++, n++) {
         const rig = slot.rig || buildRobot({ role: slot.role, accent: crewDef.accent, hatColor: crewDef.hat, rng })
-        const spread = (n - 4) * 0.55
+        // fan the arriving crew out around the gate, whatever size it is
+        const spread = (n - (roster.length - 1) / 2) * 0.55
         const start = slot.world
           ? { level: 0, x: slot.world.x - origin.x, y: 0, z: slot.world.z - origin.z }
           : L(SITE.arrival)
@@ -199,6 +201,9 @@ export function createSim({
           rig,
           role: slot.role,
           crewId: shiftIndex,
+          signedOn: shiftIndex,
+          /** Set from the follow card: this one stays when its crew goes home. */
+          held: false,
           pos: slot.world
             ? new THREE.Vector3(start.x, 0, start.z)
             : new THREE.Vector3(start.x - Math.abs(spread) * 1.4, 0, start.z + spread * 0.5),
@@ -630,14 +635,22 @@ export function createSim({
     crew = CREWS[(shiftIndex - 1) % CREWS.length]
     spawnCrew(crew, !first, first ? null : requestCrew?.())
     if (!first) {
+      let kept = 0
       for (const r of robots) {
-        if (r.crewId < shiftIndex && !r.leaving) {
-          r.leaving = true
-          if (r.state === 'wait' || r.state === 'idle' || r.state === 'inspect') restart(r)
+        if (r.crewId >= shiftIndex || r.leaving) continue
+        // Anyone signed on indefinitely just carries their old livery into the
+        // new crew rather than walking out of the gate with the rest.
+        if (r.held) {
+          r.crewId = shiftIndex
+          kept++
+          continue
         }
+        r.leaving = true
+        if (r.state === 'wait' || r.state === 'idle' || r.state === 'inspect') restart(r)
       }
       if (!quiet) {
-        onBanner('SHIFT CHANGE', `${crew.name} crew on`, `#${crew.accent.toString(16).padStart(6, '0')}`)
+        const sub = kept ? `${crew.name} crew on · ${kept} held over` : `${crew.name} crew on`
+        onBanner('SHIFT CHANGE', sub, `#${crew.accent.toString(16).padStart(6, '0')}`)
       }
     }
   }
@@ -820,7 +833,22 @@ export function createSim({
         wave: 'clocking off',
         idle: 'between jobs',
       }[r.state] || r.state
-      return { role: r.role, doing, carry: r.carry, mat: r.carryMat, leaving: r.leaving }
+      return {
+        role: r.role, doing, carry: r.carry, mat: r.carryMat, leaving: r.leaving,
+        held: r.held, signedOn: r.signedOn, shiftsOn: shiftIndex - r.signedOn + 1,
+      }
+    },
+    /** Sign the followed robot on past its own changeover, or let it go. */
+    hold(r, on) {
+      if (!r) return false
+      r.held = on ?? !r.held
+      if (r.held && r.leaving) {
+        // caught just as it was walking out — turn it round
+        r.leaving = false
+        r.crewId = shiftIndex
+        restart(r)
+      }
+      return r.held
     },
     robots,
     get placed() {
