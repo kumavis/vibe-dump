@@ -85,6 +85,50 @@ button {
   box-shadow: 0 1px 0 rgba(91, 67, 39, 0.25);
 }
 
+/* quest banner */
+#quest {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 52px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9;
+  background: #fff8e7;
+  color: #5b4327;
+  border: 2px solid #e3cfa4;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: 94vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 3px 0 rgba(91, 67, 39, 0.2);
+}
+#quest b {
+  color: #d1900c;
+  margin-right: 4px;
+}
+#quest span {
+  font-weight: 800;
+  margin-left: 5px;
+  color: #2e6b1e;
+}
+
+/* hex swatches replace emoji icons */
+.hexchip {
+  display: inline-block;
+  width: 20px;
+  height: 22px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  vertical-align: -4px;
+  flex-shrink: 0;
+}
+.big-chip {
+  width: 34px;
+  height: 38px;
+}
+
 /* ------------------------------------------------ hand */
 
 #hand {
@@ -146,8 +190,7 @@ button {
   background: #fff8e7cc;
   border: 2px solid #e3cfa4;
   border-radius: 12px;
-  padding: 3px 9px;
-  font-size: 17px;
+  padding: 4px 8px 1px;
   box-shadow: 0 3px 0 rgba(91, 67, 39, 0.2);
 }
 
@@ -217,6 +260,10 @@ button {
   padding: 13px;
   margin-top: 14px;
   box-shadow: 0 4px 0 #35793a;
+}
+.big.danger {
+  background: #d03b3b;
+  box-shadow: 0 4px 0 #8f2626;
 }
 .big:active {
   transform: translateY(3px);

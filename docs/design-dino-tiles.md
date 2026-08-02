@@ -1,64 +1,78 @@
-# Dino Tiles — the rapid hex puzzle (Plan B)
+# Dino Tiles — the endless hex park (Plan B)
 
-**Package:** `packages/dino-tiles` · **Status:** v1 playable
-**One-liner:** A 3-minute dino-park puzzle: place a fixed deck of 30 hex
-tiles for adjacency combos — build herds, fence the raptors, give the
-T-Rex space — then chase the star thresholds.
+**Package:** `packages/dino-tiles` · **Status:** v2 playable
+**One-liner:** An endless dino-park builder: tap to place tiles on an
+ever-growing hex frontier, fences rise on their own and merge into pens,
+tiny guests wander the seams, and rolling mini-quests set the goals.
 
 Where Plan A (`docs/design-dino-trails.md`) deepens the *simulation*, Plan B
-went the other way on purpose: **no money, no ledger, no menus**. One
-score, one deck, single-tap placement, instant feedback. The original
-economics-flavored sketch for this direction was cut in favor of pace.
+is the zen puzzle: **no money, no menus, no end screen**. v1 was a 30-tile
+score-attack with star ratings; v2 replaced that with an endless, persistent
+park after playtesting feedback — the deck never runs out, the board never
+fills, and the run autosaves on-device.
 
 ## Core loop
 
-1. The hand shows the **current tile** (with its one-line rule) and the
-   next two — enough information to plan, not enough to stall.
-2. **Tap an empty hex** to place it. Points burst out immediately as
-   floating popups; the tile drops in with a bounce; big combos get gold
-   text and a stronger haptic.
-3. 30 tiles, 37 cells — the board tightens as the run ends. Final screen:
-   score, 0–3 stars, best-score chase with a NEW BEST celebration.
+1. The hand shows the **current tile** (a colored hex chip + one-line rule)
+   and the next two.
+2. **Tap any frontier pad** — empty cells touching the park — to place it.
+   Points burst out as floating popups; every placement opens new frontier,
+   so the park grows outward from the founding lake forever.
+3. **Quests roll in** one at a time with live progress ("Build a pen of 7
+   same-species dinos — 4/7"). Completing one pays a rising bonus and the
+   next appears. The chain is scripted early, then generates ever-bigger
+   targets.
 
-## The deck (fixed composition — every run is fair)
+## Pens & fences (the signature rule)
 
-5× Parasaurolophus, 4× Stegosaurus, 4× Triceratops, 4× Velociraptor,
-2× T-Rex, 4× Lake, 3× Garden, 2× Snack Stand, 2× Fence — shuffled.
+Every dinosaur tile fences itself automatically — except edges shared with
+the **same species**, which stay open. Cluster five stegos and they live in
+one big pen with a single perimeter fence. Predator pens use steel posts.
+This is pure presentation logic driven by the board state; the scoring
+already rewarded clustering, and the fences make the pens *visible*.
+
+## Guests on the seams
+
+Tiles are slightly smaller than their grid cells, leaving walkable seams.
+Hex corners form a node graph (corners dedupe across neighbors — the same
+grid that placed the tiles), and mini guests random-walk the seam network.
+Guest count scales with park size. Pure ambience, zero mechanics.
 
 ## Scoring rules (each fits on the tile card)
 
 | Tile | Rule |
 |---|---|
-| 🎺🌵🦬 Herbivores | base 5–7 · **+6 per same-species neighbor** · +2 per friendly herbivore |
-| 🗡️ Velociraptor | base 8 · +6 per raptor · **scares herbivores −8** unless a fence neighbors the raptor |
-| 👑 T-Rex | base 20 · **+5 per EMPTY neighbor** · −6 per any dino neighbor |
-| 🌊 Lake | +4 per dino neighbor (and dinos placed beside it get +4) |
-| 🌳 Garden | +3 per non-empty neighbor |
-| 🌭 Snack Stand | +5 per *different* species around it |
-| ⛓️ Fence | +4 per predator neighbor · pacifies adjacent predators |
+| Herbivores (parasaur/stego/trike) | base 5–7 · **+6 per same species in the pen** · +2 per friendly herbivore · fears predators (−8) |
+| Velociraptor | base 8 · +6 per raptor in the pack · scares neighboring herbivores −8 |
+| T-Rex | base 20 · **+6 per lake or garden neighbor** · −6 per neighboring dino |
+| Lake | +4 per dino neighbor (symmetric) |
+| Garden | +3 per non-empty neighbor |
+| Snack Stand | +5 per *different* species around it |
 
-**Group bonuses:** connect 3 of a species → **HERD! +25** (raptors:
-**PACK HUNTS! +30**); each further member +10.
+**Group bonuses:** pen of 3 → **A HERD FORMS! +25** (raptors: **PACK
+HUNTS! +30**), +10 per further member. The infinite queue is weighted
+(commons frequent, T-Rex ~6%).
 
-## Stars — calibrated, not guessed
+## Quest chain
 
-Headless autoplay in node (game.js is DOM-free): random play averages
-~262, a myopic-greedy bot ~525. Thresholds: **★ 320 · ★★ 450 · ★★★ 550** —
-three stars sits above the greedy median, so it requires using the
-next-tile preview and planning herds ahead.
+Scripted opening (pen of 3 → variety 3 → lakeside 3 → pen of 5 → snack hub →
+score marks → pen of 7/9 …), then generated: alternating bigger pens and
+score targets. Rewards escalate (+50, +65, +80 …). Quests are measured live
+against the board, so progress can chain — one placement can complete two.
 
-## What carries over from the siblings
+## Presentation
 
-The procedural dino rigs (copied per package — no cross-package imports),
-the cartoon chip/modal UI language, and the flat-shaded look. The board is
-a fixed-camera diorama (tilt + pinch only) — placement is the game, not
-navigation.
+- Aligned pointy-top hexes (tile geometry, fences, and the guest path graph
+  all derive from one corner function).
+- No emoji anywhere — tiles are identified by colored hex chips.
+- Drag roams, pinch zooms, two-finger tilts; the camera gently auto-follows
+  the latest placement when idle.
+- Tile drop-bounce springs, floating score popups, gold quest banners,
+  haptics.
 
-## Ideas for a v2
+## Ideas for a v3
 
-- Daily seed (same shuffle for everyone, shareable score).
-- One "crane" per run: move a placed tile — the doc's original
-  re-arrangement idea, as a scarce power instead of a system.
-- Rare golden-dino tiles appearing mid-run (the market/scarcity idea,
-  puzzle-sized).
-- End-of-run "park tour": camera swoops the finished board.
+- Golden dino variants appearing rarely in the queue (scarcity, puzzle-sized).
+- A once-per-N-tiles "crane" to move a placed tile.
+- Park milestones that visibly upgrade the surroundings (paths pave, gates
+  appear) as quest count climbs.

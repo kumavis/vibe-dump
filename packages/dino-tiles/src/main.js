@@ -1,19 +1,59 @@
-// Dino Tiles: rapid hex-placement puzzle. game.js decides, board.js draws.
+// Dino Tiles: an endless, ever-growing park. game.js decides, board.js draws.
+// The park persists on-device; there is no end screen — only the next tile.
 
 import { Board } from './board.js'
 import * as G from './game.js'
 
-const BEST_KEY = 'dino-tiles-best'
+const SAVE_KEY = 'dino-tiles-park-v2'
 const board = new Board(document.getElementById('scene'))
-let run = G.newRun()
-let best = 0
-try {
-  best = +localStorage.getItem(BEST_KEY) || 0
-} catch {
-  /* no storage — session best only */
+const $ = (sel) => document.querySelector(sel)
+
+function loadRun() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SAVE_KEY) ?? 'null')
+    if (s?.v === 2 && s.board && Array.isArray(s.queue)) {
+      G.refill(s)
+      return s
+    }
+  } catch {
+    /* fall through to a fresh park */
+  }
+  return null
 }
 
-const $ = (sel) => document.querySelector(sel)
+const saved = loadRun()
+let run = saved ?? G.newRun()
+
+function save() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(run))
+  } catch {
+    /* no storage — the park lives for this session only */
+  }
+}
+
+// Rebuild fences for a dino cell: edges shared with the same species stay
+// open so pens merge.
+function fenceSync(key) {
+  const tileKey = run.board[key]
+  const tile = G.TILES[tileKey]
+  if (tile?.kind !== 'dino') return
+  const [q, r] = G.parseKey(key)
+  const open = new Set(G.neighborKeys(q, r).filter((nk) => G.TILES[run.board[nk]]?.species === tile.species))
+  board.updateFences(key, tileKey, open)
+}
+
+function hydrate() {
+  for (const [key, tileKey] of Object.entries(run.board)) {
+    board.placeTile(key, tileKey, { instant: true })
+  }
+  for (const key of Object.keys(run.board)) fenceSync(key)
+  board.showFrontier(G.frontierKeys(run))
+}
+
+function hexChip(tileKey, cls = 'hexchip') {
+  return `<i class="${cls}" style="background:${G.TILES[tileKey].color}"></i>`
+}
 
 function updateHUD(pop = false) {
   const score = $('#score')
@@ -23,95 +63,90 @@ function updateHUD(pop = false) {
     void score.offsetWidth
     score.classList.add('pop')
   }
-  $('#best').textContent = `best ${Math.max(best, run.score)}`
-  $('#left').textContent = `${run.deck.length - run.idx} tiles`
+  $('#placed').textContent = `${run.placed} tiles`
+  const q = G.questStatus(run)
+  $('#quest').innerHTML = `<b>Quest</b> ${q.label} <span>${q.progress}/${q.target}</span>`
   const cur = G.currentTile(run)
   if (cur) {
     const t = G.TILES[cur]
-    $('#cur-icon').textContent = t.icon
+    $('#cur-icon').innerHTML = hexChip(cur, 'hexchip big-chip')
     $('#cur-name').textContent = t.name
     $('#cur-rule').textContent = t.rule
   }
   $('#next-tiles').innerHTML = G.upcoming(run)
-    .map((k) => `<span>${G.TILES[k].icon}</span>`)
+    .map((k) => `<span>${hexChip(k)}</span>`)
     .join('')
 }
 
 function tap(x, y) {
-  if (run.done || !$('#overlay').hidden) return
-  const cell = board.pick(x, y)
-  if (!cell) {
+  if (!$('#overlay').hidden) return
+  const key = board.pick(x, y)
+  if (!key) {
     $('#current-tile').classList.remove('wiggle')
     void $('#current-tile').offsetWidth
     $('#current-tile').classList.add('wiggle')
     return
   }
-  const res = G.place(run, cell.q, cell.r)
+  const [q, r] = G.parseKey(key)
+  const res = G.place(run, q, r)
   if (!res.ok) return
-  board.placeTile(cell, res.tileKey)
-  // Stagger the score popups so combos read as a burst.
+  board.placeTile(key, res.tileKey)
+  fenceSync(key)
+  const placedTile = G.TILES[res.tileKey]
+  if (placedTile.kind === 'dino') {
+    for (const nk of G.neighborKeys(q, r)) {
+      if (G.TILES[run.board[nk]]?.species === placedTile.species) fenceSync(nk)
+    }
+  }
+  board.showFrontier(G.frontierKeys(run))
   const shown = res.events.filter((e) => e.amount)
   shown.forEach((e, i) => {
     setTimeout(() => {
       const txt = e.big ? `${e.label} +${e.amount}` : `${e.amount > 0 ? '+' : ''}${e.amount} ${e.label}`
-      board.popup(cell, txt, e.amount < 0 ? 'bad' : 'good', !!e.big)
+      board.popup(key, txt, e.amount < 0 ? 'bad' : 'good', !!e.big)
     }, 120 + i * 260)
   })
   if (navigator.vibrate) navigator.vibrate(res.delta >= 20 ? [20, 40, 20] : 12)
+  save()
   updateHUD(true)
-  if (res.done) setTimeout(showEnd, 1400)
-}
-
-function showEnd() {
-  const stars = G.starsFor(run.score)
-  const isBest = run.score > best
-  if (isBest) {
-    best = run.score
-    try {
-      localStorage.setItem(BEST_KEY, String(best))
-    } catch {
-      /* ignore */
-    }
-  }
-  const verdict =
-    stars === 3 ? 'Park of legend!' : stars === 2 ? 'A roaring success!' : stars === 1 ? 'A solid little park.' : 'The dinos forgive you.'
-  $('#overlay').innerHTML = `
-    <div class="modal">
-      <div class="modal-icon">${stars >= 2 ? '🏆' : '🦕'}</div>
-      <h2>${verdict}</h2>
-      <div class="final-score">${run.score}</div>
-      <div class="stars">${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
-      ${isBest ? '<p class="new-best">🎉 NEW BEST!</p>' : `<p>Best: ${best}</p>`}
-      <p class="muted">★ ${G.STARS[0]} · ★★ ${G.STARS[1]} · ★★★ ${G.STARS[2]}</p>
-      <button class="big" id="again">🔄 Play again</button>
-    </div>`
-  $('#overlay').hidden = false
-  $('#again').addEventListener('click', restart)
-}
-
-function restart() {
-  run = G.newRun()
-  board.reset()
-  $('#overlay').hidden = true
-  updateHUD()
 }
 
 function showHelp() {
   $('#overlay').innerHTML = `
     <div class="modal">
-      <div class="modal-icon">🧩</div>
       <h2>Dino Tiles</h2>
-      <p>Place all 30 tiles. Neighbors decide the points — build herds, keep
-      predators fenced, give the T-Rex space.</p>
-      <div class="rules">${Object.values(G.TILES)
-        .map((t) => `<div><span>${t.icon}</span><div><b>${t.name}</b> — ${t.rule}</div></div>`)
+      <p>An endless park. Tap open ground to place the next tile — every
+      placement opens more territory. Neighbors decide the points; fences
+      rise on their own, and pens of the same species merge.</p>
+      <div class="rules">${Object.entries(G.TILES)
+        .map(([k, t]) => `<div>${hexChip(k)}<div><b>${t.name}</b> — ${t.rule}</div></div>`)
         .join('')}</div>
-      <p class="muted">Herd of 3 → bonus! · Drag to tilt · pinch to zoom</p>
-      <button class="big" id="close-help">Let's build</button>
+      <p class="muted">Pen of 3 → bonus · quests roll in as you build ·
+      drag to roam, pinch to zoom, two-finger drag to tilt</p>
+      <button class="big" id="close-help">Keep building</button>
+      <button class="big danger" id="reset-park">Start a new park</button>
     </div>`
   $('#overlay').hidden = false
   $('#close-help').addEventListener('click', () => {
     $('#overlay').hidden = true
+  })
+  const resetBtn = $('#reset-park')
+  resetBtn.addEventListener('click', () => {
+    if (!resetBtn.dataset.armed) {
+      resetBtn.dataset.armed = '1'
+      resetBtn.textContent = 'Really? The whole park?'
+      setTimeout(() => {
+        resetBtn.dataset.armed = ''
+        resetBtn.textContent = 'Start a new park'
+      }, 2500)
+      return
+    }
+    run = G.newRun()
+    save()
+    board.reset()
+    hydrate()
+    $('#overlay').hidden = true
+    updateHUD()
   })
 }
 
@@ -127,9 +162,15 @@ window.__dp = {
   placeAt(q, r) {
     const res = G.place(run, q, r)
     if (res.ok) {
-      board.placeTile({ q, r, key: `${q},${r}` }, res.tileKey)
+      const key = `${q},${r}`
+      board.placeTile(key, res.tileKey)
+      fenceSync(key)
+      for (const nk of G.neighborKeys(q, r)) {
+        if (G.TILES[run.board[nk]]?.species === G.TILES[res.tileKey].species) fenceSync(nk)
+      }
+      board.showFrontier(G.frontierKeys(run))
+      save()
       updateHUD(true)
-      if (res.done) showEnd()
     }
     return res
   },
@@ -145,14 +186,16 @@ canvas.addEventListener('pointerup', (e) => {
   down = null
 })
 window.addEventListener('resize', () => board.resize())
+document.addEventListener('visibilitychange', save)
 
+hydrate()
 updateHUD()
-if (best === 0) setTimeout(showHelp, 600)
+if (!saved) setTimeout(showHelp, 600)
 
 let last = performance.now()
 board.renderer.setAnimationLoop(() => {
   const now = performance.now()
   const dt = Math.min(0.1, (now - last) / 1000)
   last = now
-  board.update(dt, now / 1000)
+  board.update(dt, now / 1000, run.placed)
 })
