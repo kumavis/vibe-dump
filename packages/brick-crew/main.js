@@ -25,8 +25,9 @@ import { drawBlueprint } from './src/blueprint.js'
 // On each plot they raise a brick house course by course, fetching the right
 // material for whatever they are setting; the joiners bring the furniture in;
 // the decorators put a coat on it; and then the whole outfit moves next door and
-// starts a different house. The arrow on the road runs you down to the yard
-// where the robots get kitted out.
+// starts a different house. At the head of the street is the builders'
+// merchant, where the crews are kitted out and the material comes from — the
+// arrow on the road runs you up to it.
 //
 // ?seed=N reseeds the street.
 // ---------------------------------------------------------------------------
@@ -98,9 +99,9 @@ scene.add(site.group)
 
 ui.setLoading(0.26, 'putting up the hoarding…')
 
-// the two arrows on the tarmac, and the yard they run between
-// the yard is up the road in -X, the site back down it in +X
-const toDepot = buildRoadArrow('OUTFITTING YARD', -1)
+// the two arrows on the tarmac, and the places they run between
+// the merchant is up the road in -X, the site back down it in +X
+const toDepot = buildRoadArrow("BUILDERS' MERCHANT", -1)
 toDepot.group.position.set(SITE.arrow.x, 0, SITE.arrow.z)
 scene.add(toDepot.group)
 
@@ -108,10 +109,10 @@ const depot = createDepot({ origin: DEPOT, rng })
 scene.add(depot.group)
 
 const toSite = buildRoadArrow('BACK TO SITE', +1)
-toSite.group.position.set(DEPOT.x + 13, 0, DEPOT.z)
+toSite.group.position.set(DEPOT.x + 10.5, 0, DEPOT.z)
 scene.add(toSite.group)
 
-ui.setLoading(0.44, 'opening the yard…')
+ui.setLoading(0.44, 'opening the merchant…')
 
 // --- the street ------------------------------------------------------------
 //
@@ -392,7 +393,13 @@ function startPlot(first) {
   })
 
   toppingFlag = topOut
-  if (first) sim.preroll(PREROLL_SECONDS)
+  if (first) {
+    sim.preroll(PREROLL_SECONDS)
+    // The site starts mid-shift, so the line has no time to build the first
+    // relief crew. It has one standing on the muster bay already — the yard
+    // was working before anyone looked at it.
+    depot.prime(sim.nextCrew(), orders.roles())
+  }
 
   // frame whichever plot the crew is actually on
   framePlot(origin)
@@ -467,10 +474,10 @@ function flyTo(next) {
   flying = 1
   controls.autoRotate = false
   if (next === 'depot') {
-    camGoal.pos.set(DEPOT.x + 2.5, 10.0, DEPOT.z + 13.5)
-    camGoal.target.set(DEPOT.x + 1.5, 1.2, DEPOT.z - 4.0)
+    camGoal.pos.set(DEPOT.x + 7.0, 16.5, DEPOT.z + 19.0)
+    camGoal.target.set(DEPOT.x - 2.0, 2.0, DEPOT.z - 10.5)
     ui.setHint(false)
-    ui.banner('OUTFITTING YARD', 'where the crew gets kitted out', '#f0b429')
+    ui.banner("BUILDERS' MERCHANT", 'the crews and the material both start here', '#f0b429')
   } else {
     framePlot(PLOTS[plotIndex])
   }
@@ -763,6 +770,7 @@ window.brickCrew = {
   get houses() { return standing.map((h) => ({ x: h.position.x, z: h.position.z, plot: h.userData.plot, w: h.userData.geom.w, d: h.userData.geom.d })) },
   get plan() { return plan },
   get view() { return view },
+  orders,
   follow,
   flyTo,
   scene,

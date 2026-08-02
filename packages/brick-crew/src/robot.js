@@ -141,7 +141,7 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
   const bodyW = 0.36 + rng() * 0.05
   const bodyD = 0.24
 
-  // Kit the outfitting yard puts on, in the order it goes on.
+  // Kit the merchant's line puts on, in the order it goes on.
   const kit = { boots: [], vest: [], hat: [] }
 
   const root = pivot(group, 0, hipY)

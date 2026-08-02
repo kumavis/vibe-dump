@@ -7,6 +7,6 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Brick Crew",
-    "description": "Robots build a street: haul the right material, raise a house, furnish it, paint it, move next door. Tap the trailer for blueprints."
+    "description": "Robots build a street: draw material from the merchant, raise a house, furnish it, paint it, move next door. Tap the trailer for blueprints."
   }
 }

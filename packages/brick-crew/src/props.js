@@ -752,10 +752,6 @@ export function buildPaintTin(color) {
 }
 
 /**
- * The arrow painted on the tarmac. Tapping it runs you down the road to the
- * outfitting yard; the same thing at the yard brings you back.
- */
-/**
  * The arrow painted on the tarmac. `dir` is -1 to send you up the road and +1
  * to send you down it — baked into the artwork rather than flipped afterwards,
  * so the post-mounted sign and the paint always point the same way.

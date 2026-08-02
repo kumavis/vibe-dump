@@ -167,14 +167,18 @@ export const SITE = {
   /** Where a crew gathers by the gate before walking back up the road. */
   muster: { x: -4.6, z: 7.6 },
   /** The yard end of the road: crews come from here and go back to it. */
-  offsite: { x: -33.0, z: 12.4 },
-  arrival: { x: -33.0, z: 12.4 },
+  offsite: { x: -30.5, z: 12.4 },
+  arrival: { x: -30.5, z: 12.4 },
   /** The arrow painted on the road that takes you down to the yard. */
   arrow: { x: 9.0, z: 12.4 },
 }
 
-/** The outfitting yard, down the road from the site. */
-export const DEPOT = { x: -46, z: 12.4 }
+/**
+ * The builders' merchant, at the head of the same street — near enough that
+ * you can see the site over its wall, which is the point. Its z sits on the
+ * kerb line so the compound's local z=0 is the road edge.
+ */
+export const DEPOT = { x: -42, z: 12.4 }
 
 /** Wall clock: a shift is five real minutes. */
 export const SHIFT_SECONDS = 300

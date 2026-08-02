@@ -108,9 +108,10 @@ function groundTexture() {
   c.fillStyle = 'rgba(230,230,220,0.5)'
   c.fillRect(0, pz(SITE.roadZ - 3.0), S, m(0.12))
   c.fillRect(0, pz(SITE.roadZ + 2.9), S, m(0.12))
-  // the outfitting yard's apron, down the road
+  // the merchant's apron and its crossover onto the road
   c.fillStyle = '#8f8a82'
-  c.fillRect(px(DEPOT.x - 15.5), pz(DEPOT.z - 14.5), m(31), m(22.5))
+  c.fillRect(px(DEPOT.x - 14.5), pz(DEPOT.z - 18.5), m(29), m(17.5))
+  c.fillRect(px(DEPOT.x + 6.2), pz(DEPOT.z - 1.2), m(7.2), m(4.0))
 
   // kerb
   c.fillStyle = '#9a958c'
@@ -382,7 +383,7 @@ function buildTreeline(rng) {
     const z = Math.sin(a) * r
     // keep the road corridor and the approach to the gate clear
     if (Math.abs(z - SITE.roadZ) < 6.5) continue
-    if (Math.abs(x - DEPOT.x) < 18 && z < SITE.roadZ) continue
+    if (Math.abs(x - DEPOT.x) < 17 && z > DEPOT.z - 21 && z < SITE.roadZ) continue
     if (Math.abs(x) < 30 && z > -14 && z < SITE.roadZ) continue
     spots.push([x, z, 2.6 + rng() * 3.8, rng()])
   }
