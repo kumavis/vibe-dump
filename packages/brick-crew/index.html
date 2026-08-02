@@ -29,10 +29,16 @@
       </div>
 
       <aside class="hud legend" id="legend">
-        <div><span class="dot d-haul"></span>haulers keep four stocks topped up: brick, cast, timber, tile</div>
+        <div><span class="dot d-haul"></span>haulers keep five stocks topped up: brick, cast, timber, tile, joinery</div>
         <div><span class="dot d-lay"></span>masons fetch the right material for what they are setting</div>
         <div><span class="dot d-fit"></span>then the joiners furnish it and the decorators paint it</div>
-        <div><span class="dot d-shift"></span>whole crew swaps out every five minutes</div>
+        <div><span class="dot d-shift"></span>tap a robot to follow it · crew swaps out every five minutes</div>
+      </aside>
+
+      <aside class="follow" id="follow" aria-live="polite">
+        <div class="follow-role" id="follow-role">MASON</div>
+        <div class="follow-doing" id="follow-doing">walking</div>
+        <button class="follow-drop" id="follow-drop" type="button">stop following</button>
       </aside>
 
       <button class="hint" id="hint" type="button">Tap the <b>site office</b> for blueprints · the <b>road arrow</b> for the yard</button>

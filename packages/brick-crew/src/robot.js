@@ -67,6 +67,7 @@ export function buildCarryStack(matKey, count, colorList = COLORS.brick) {
     cast: { size: [0.9, 0.07, 0.26], perRow: 1, gap: 0.02, color: COLORS.lintel },
     timber: { size: [1.5, 0.09, 0.14], perRow: 1, gap: 0.02, color: COLORS.timber },
     tile: { size: [0.44, 0.045, 0.38], perRow: 1, gap: 0.015, color: COLORS.tile[0] },
+    joinery: { size: [0.8, 0.06, 0.62], perRow: 1, gap: 0.02, color: 0xe6eef4 },
   }[matKey] || { size: [0.3, 0.1, 0.2], perRow: 2, gap: 0.01, color: 0x999999 }
 
   const [pl, ph, pd] = piece.size

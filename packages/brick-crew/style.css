@@ -97,6 +97,34 @@ html, body {
 .d-fit { background: #8fd14f; }
 .d-shift { background: var(--hiviz); }
 
+/* ---------- following a robot ---------- */
+.follow {
+  position: absolute; z-index: 6;
+  right: 14px; top: 56px;
+  background: var(--asphalt); border: 1px solid var(--line);
+  border-left: 4px solid var(--amber);
+  border-radius: 4px; padding: 9px 12px;
+  min-width: 168px;
+  opacity: 0; transform: translateX(10px); pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.follow.on { opacity: 1; transform: none; pointer-events: auto; }
+.follow-role {
+  font-family: var(--mono); font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.14em; color: var(--amber);
+}
+.follow-doing {
+  font-size: 0.76rem; color: var(--ink); margin-top: 3px; line-height: 1.4;
+}
+.follow-drop {
+  margin-top: 8px; width: 100%;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  background: transparent; border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px; padding: 4px; cursor: pointer;
+}
+.follow-drop:hover { color: var(--ink); border-color: var(--amber); }
+
 /* ---------- hint ---------- */
 .hint {
   position: absolute; z-index: 6;
@@ -255,6 +283,7 @@ html, body {
   .brand { font-size: 0.86rem; letter-spacing: 0.1em; }
   .chip { font-size: 0.6rem; padding: 3px 7px; }
   #chip-day, #chip-phase { display: none; }
+  .follow { top: 74px; right: 8px; min-width: 140px; padding: 7px 9px; }
   .progress { top: 74px; width: calc(100% - 24px); }
   .legend { font-size: 0.6rem; line-height: 1.6; padding: 6px 8px; }
   .hint { font-size: 0.68rem; padding: 7px 10px; }

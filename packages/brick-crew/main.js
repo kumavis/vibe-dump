@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import {
   SITE, YARD, PLOTS, DEPOT, COURSE, COLORS, SHIFT_SECONDS, PREROLL_SECONDS,
-  HOUSE_TYPES, PAINT, MATERIALS, ROSTER, KIT_LEAD_SECONDS, houseGeom,
+  HOUSE_TYPES, PAINT, MATERIALS, ROSTER, KIT_LEAD_SECONDS, DAY_SECONDS, houseGeom,
 } from './src/config.js'
 import { buildPlan } from './src/plan.js'
 import { buildSite, buildSky, buildLights } from './src/site.js'
@@ -117,10 +118,30 @@ ui.setLoading(0.44, 'opening the yard…')
 // standing once it is finished, and the working site, which packs up and
 // follows the crew next door.
 
+/** A unit window frame: four bars round an empty middle, so you can see through it. */
+function frameGeometry() {
+  const bar = 0.09
+  const parts = [
+    new THREE.BoxGeometry(1, bar, 1).translate(0, (1 - bar) / 2, 0),
+    new THREE.BoxGeometry(1, bar, 1).translate(0, -(1 - bar) / 2, 0),
+    new THREE.BoxGeometry(bar, 1 - bar * 2, 1).translate((1 - bar) / 2, 0, 0),
+    new THREE.BoxGeometry(bar, 1 - bar * 2, 1).translate(-(1 - bar) / 2, 0, 0),
+    // a glazing bar down the middle
+    new THREE.BoxGeometry(bar * 0.6, 1 - bar * 2, 0.55).translate(0, 0, 0),
+  ]
+  return mergeGeometries(parts)
+}
+const FRAME_GEO = frameGeometry()
+
 const FAMILIES = {
   masonry: { roughness: 0.94, metalness: 0 },
   timber: { roughness: 0.88, metalness: 0 },
   tile: { roughness: 0.66, metalness: 0.05 },
+  frame: { roughness: 0.6, metalness: 0.05 },
+  glass: {
+    roughness: 0.08, metalness: 0.25, transparent: true, opacity: 0.42,
+    side: THREE.DoubleSide, depthWrite: false,
+  },
 }
 
 const _m4 = new THREE.Matrix4()
@@ -145,14 +166,18 @@ let workGroup = null
 let plotIndex = -1
 let day = 0
 let toppingFlag = null
+// The robot the camera is riding along with. Declared up here because
+// startPlot() clears it, and startPlot runs during module init.
+let followed = null
 const standing = [] // finished houses left on the street
 
-function makeFamily(count, opts) {
+function makeFamily(count, opts, family) {
   const mesh = new THREE.InstancedMesh(
-    new THREE.BoxGeometry(1, 1, 1),
+    family === 'frame' ? FRAME_GEO : new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshStandardMaterial(opts),
     Math.max(1, count),
   )
+  if (family === 'glass') mesh.renderOrder = 2
   mesh.castShadow = true
   mesh.receiveShadow = true
   mesh.frustumCulled = false
@@ -239,6 +264,8 @@ function buildTopOut() {
 
 function startPlot(first) {
   const carriedClock = sim ? sim.clockT : 0
+  followed = null
+  ui.setFollow(null)
   sim?.dispose()
   if (workGroup) scene.remove(workGroup)
 
@@ -269,7 +296,7 @@ function startPlot(first) {
 
   meshes = {}
   for (const [family, opts] of Object.entries(FAMILIES)) {
-    const m = makeFamily(plan.familyCount[family], opts)
+    const m = makeFamily(plan.familyCount[family], opts, family)
     meshes[family] = m
     houseGroup.add(m)
     paintFamily(m, plan.items, family)
@@ -460,19 +487,24 @@ function pick(cx, cy) {
   pointer.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1)
   raycaster.setFromCamera(pointer, camera)
   const arrow = view === 'site' ? toDepot : toSite
-  if (raycaster.intersectObject(arrow.hit, false).length) return 'arrow'
-  if (view === 'site' && raycaster.intersectObjects(site.trailerTargets, false).length) return 'trailer'
+  if (raycaster.intersectObject(arrow.hit, false).length) return { kind: 'arrow' }
+  if (view === 'site' && raycaster.intersectObjects(site.trailerTargets, false).length) return { kind: 'trailer' }
+  if (view === 'site') {
+    const hit = raycaster.intersectObjects(sim.hitboxes, false)[0]
+    if (hit) return { kind: 'robot', robot: hit.object.userData.robot }
+  }
   return null
 }
 
 canvas.addEventListener('pointermove', (e) => {
   if (ui.isSheetOpen()) return
   const hit = pick(e.clientX, e.clientY)
-  if (hit !== hovering) {
-    hovering = hit
-    site.setTrailerHighlight(hit === 'trailer')
-    site.trailerLabel.visible = hit === 'trailer'
-    canvas.style.cursor = hit ? 'pointer' : ''
+  const kind = hit ? hit.kind : null
+  if (kind !== hovering) {
+    hovering = kind
+    site.setTrailerHighlight(kind === 'trailer')
+    site.trailerLabel.visible = kind === 'trailer'
+    canvas.style.cursor = kind ? 'pointer' : ''
   }
 })
 canvas.addEventListener('pointerdown', (e) => {
@@ -485,12 +517,17 @@ canvas.addEventListener('pointerup', (e) => {
   downAt = null
   if (moved > 6) return
   const hit = pick(e.clientX, e.clientY)
-  if (hit === 'trailer') {
+  if (!hit) {
+    follow(null)
+  } else if (hit.kind === 'trailer') {
     ui.toggleSheet()
     sheetSeen = true
     ui.setHint(false)
-  } else if (hit === 'arrow') {
+  } else if (hit.kind === 'arrow') {
+    follow(null)
     flyTo(view === 'site' ? 'depot' : 'site')
+  } else if (hit.kind === 'robot') {
+    follow(hit.robot)
   }
 })
 canvas.addEventListener('pointerleave', () => {
@@ -498,6 +535,18 @@ canvas.addEventListener('pointerleave', () => {
   site.setTrailerHighlight(false)
   site.trailerLabel.visible = false
 })
+
+/**
+ * Ride along with one robot. The camera keeps whatever angle and distance the
+ * user has orbited to and just tracks the target, so following never yanks the
+ * view about.
+ */
+ui.onDropFollow(() => follow(null))
+function follow(r) {
+  followed = r && !r.dead ? r : null
+  controls.autoRotate = false
+  ui.setFollow(followed ? sim.describe(followed) : null)
+}
 
 // --- blueprint state -------------------------------------------------------
 
@@ -550,6 +599,16 @@ function blueprintState() {
     },
     openings: plan.openings,
     chimney: g.chimney,
+    furniture: plan.furniture.map((f, i) => ({
+      name: f.name, at: f.at, size: f.size, rot: f.rot, done: sim.furnitureDone(i),
+    })),
+    decor: {
+      name: plan.paint.name,
+      css: `#${plan.paint.color.toString(16).padStart(6, '0')}`,
+      done: sim.painting.done,
+      total: sim.painting.total,
+    },
+    fitout: sim.fitout,
     phases,
     built: builtByGroup(),
     roofDone: roof ? roof.done / Math.max(1, roof.total) : 0,
@@ -592,6 +651,18 @@ renderer.setAnimationLoop(() => {
   }
   if (steps === 8) acc = 0
 
+  // one turn of the sun per plot, roughly: low and warm at either end of the
+  // day, high and white in the middle. It never gets dark — this is a building
+  // site, not a mood piece.
+  const dayPhase = (sim.clockT % DAY_SECONDS) / DAY_SECONDS
+  const arc = Math.PI * (0.12 + dayPhase * 0.76)
+  const elev = Math.sin(arc)
+  lights.sun.position.set(Math.cos(arc) * -26, 6 + elev * 20, 12 + Math.cos(arc) * 6)
+  const warmth = 1 - elev
+  lights.sun.color.setRGB(1, 0.93 - warmth * 0.12, 0.8 - warmth * 0.26)
+  lights.sun.intensity = 1.5 + elev * 0.95
+  scene.fog.color.setRGB(0.72 + warmth * 0.1, 0.83 - warmth * 0.05, 0.9 - warmth * 0.13)
+
   site.update(t, dt)
   mixer.update(dt)
   depot.update(dt, t)
@@ -604,12 +675,22 @@ renderer.setAnimationLoop(() => {
 
   if (toppingFlag && toppingFlag.visible) toppingFlag.rotation.y = Math.sin(t * 0.8) * 0.25
 
+  if (followed) {
+    if (followed.dead || !sim.robots.includes(followed)) follow(null)
+    else {
+      const o = PLOTS[plotIndex]
+      camGoal.target.set(o.x + followed.pos.x, followed.pos.y + 0.95, o.z + followed.pos.z)
+      controls.target.lerp(camGoal.target, Math.min(1, dt * 3.4))
+      if (hudTimer <= 0) ui.setFollow(sim.describe(followed))
+    }
+  }
+
   // camera easing — plot to plot, and up and down the road
   if (flying > 0) {
     camera.position.lerp(camGoal.pos, Math.min(1, dt * 2.1))
     controls.target.lerp(camGoal.target, Math.min(1, dt * 2.1))
     if (camera.position.distanceTo(camGoal.pos) < 0.6) flying = 0
-  } else if (view === 'site') {
+  } else if (view === 'site' && !followed) {
     controls.target.lerp(camGoal.target, Math.min(1, dt * 0.8))
   }
 
@@ -656,6 +737,7 @@ window.brickCrew = {
   get houses() { return standing.map((h) => ({ x: h.position.x, z: h.position.z, plot: h.userData.plot, w: h.userData.geom.w, d: h.userData.geom.d })) },
   get plan() { return plan },
   get view() { return view },
+  follow,
   flyTo,
   scene,
   camera,

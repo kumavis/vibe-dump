@@ -25,6 +25,7 @@ export const PHASES = [
   { key: 'chimney', label: 'CHIMNEY' },
   { key: 'roof', label: 'ROOF FRAME' },
   { key: 'tiles', label: 'ROOF TILES' },
+  { key: 'secondfix', label: 'SECOND FIX' },
 ]
 
 /**
@@ -92,7 +93,7 @@ export function buildPlan(rng, { geom, day = 1, plotIndex = 0, paint }) {
   const items = []
   const mortar = []
   const mortarBy = new Map()
-  const familyCount = { masonry: 0, timber: 0, tile: 0 }
+  const familyCount = { masonry: 0, timber: 0, tile: 0, glass: 0, frame: 0 }
 
   const H = geom
   const WALLS = [
@@ -466,6 +467,97 @@ export function buildPlan(rng, { geom, day = 1, plotIndex = 0, paint }) {
       family: 'tile',
       deps: [tileIdx[`1:${N_COURSE - 1}:${col}`], tileIdx[`-1:${N_COURSE - 1}:${col}`]],
       stand: standOnRoof(x, 1, H.slopeLen - 0.6),
+      mortar: -1,
+    })
+  }
+
+  // --- second fix ----------------------------------------------------------
+  // The shell is watertight, so now it gets a floor, its windows and a door.
+  // These are ordinary plan items, which means the masons fetch them from the
+  // right stock and walk them into place like everything else.
+  const iw = H.w - 2 * H.t
+  const id = H.d - 2 * H.t
+  const FLOOR_COLS = 4
+  const FLOOR_ROWS = 2
+  for (let r = 0; r < FLOOR_ROWS; r++) {
+    for (let c = 0; c < FLOOR_COLS; c++) {
+      const sw = iw / FLOOR_COLS
+      const sd = id / FLOOR_ROWS
+      const x = -iw / 2 + sw * (c + 0.5)
+      const z = -id / 2 + sd * (r + 0.5)
+      push({
+        kind: 'floor',
+        phase: 'secondfix',
+        group: 'floor',
+        course: 0,
+        pos: [x, 0.035, z],
+        euler: [0, 0, 0],
+        size: [sw - 0.02, 0.07, sd - 0.02],
+        color: 0xb9b3a6,
+        family: 'masonry',
+        deps: [],
+        // laid from inside, standing on the bay it has just come from
+        stand: { level: 'inside', x, y: 0, z: z + sd * 0.34 },
+        mortar: -1,
+      })
+    }
+  }
+
+  for (const o of openings) {
+    const w = WALLS.find((x) => x.id === o.wall)
+    const alongX = w.axis === 'x'
+    const mid = (o.u0 + o.u1) / 2
+    const openW = o.u1 - o.u0
+    const openH = (o.c1 - o.c0 + 1) * COURSE
+    const cy = o.c0 * COURSE + openH / 2
+    const yaw = alongX ? 0 : Math.PI / 2
+    const cx = alongX ? mid : w.line
+    const cz = alongX ? w.line : mid
+    const stand = standAt(cx, cz, w.nx, w.nz, o.c0 * COURSE, (o.c1 + 1) * COURSE)
+
+    if (o.kind === 'door') {
+      push({
+        kind: 'door',
+        phase: 'secondfix',
+        group: 'joinery',
+        course: 0,
+        pos: [cx + w.nx * 0.02, cy, cz + w.nz * 0.02],
+        euler: [0, yaw, 0],
+        size: [openW - 0.04, openH - 0.03, 0.08],
+        color: 0x2f5d4a,
+        family: 'timber',
+        deps: [],
+        stand,
+        mortar: -1,
+      })
+      continue
+    }
+    const frameIdx = push({
+      kind: 'frame',
+      phase: 'secondfix',
+      group: 'joinery',
+      course: 0,
+      pos: [cx, cy, cz],
+      euler: [0, yaw, 0],
+      size: [openW + 0.06, openH + 0.06, H.t + 0.04],
+      color: 0xeae2d2,
+      family: 'frame',
+      deps: [],
+      stand,
+      mortar: -1,
+    })
+    push({
+      kind: 'pane',
+      phase: 'secondfix',
+      group: 'joinery',
+      course: 0,
+      pos: [cx, cy, cz],
+      euler: [0, yaw, 0],
+      size: [openW - 0.06, openH - 0.06, 0.03],
+      color: 0xa8d4ea,
+      family: 'glass',
+      deps: [frameIdx],
+      stand,
       mortar: -1,
     })
   }

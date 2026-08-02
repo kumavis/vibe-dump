@@ -108,6 +108,7 @@ export const MATERIALS = [
   { key: 'cast', label: 'CAST', color: 0x7c7c76, cap: 12, load: { barrow: 4, carrier: 2, mason: 2 } },
   { key: 'timber', label: 'TIMBER', color: 0xb98a4e, cap: 14, load: { barrow: 4, carrier: 2, mason: 2 } },
   { key: 'tile', label: 'TILE', color: 0x4a4f57, cap: 26, load: { barrow: 6, carrier: 3, mason: 4 } },
+  { key: 'joinery', label: 'JOINERY', color: 0x9fc4dd, cap: 10, load: { barrow: 3, carrier: 2, mason: 2 } },
 ]
 /** Which stock each kind of item comes out of. */
 export const MATERIAL_OF = {
@@ -119,6 +120,10 @@ export const MATERIAL_OF = {
   ridge: 'timber',
   tile: 'tile',
   cap: 'tile',
+  floor: 'cast',
+  frame: 'joinery',
+  pane: 'joinery',
+  door: 'joinery',
 }
 
 /** Plot-relative yard layout. The whole yard follows the crew down the street. */
@@ -129,6 +134,7 @@ export const YARD = {
     cast: { x: -0.7, z: 4.6 },
     timber: { x: 1.1, z: 4.6 },
     tile: { x: 2.9, z: 4.5 },
+    joinery: { x: 4.7, z: 4.4 },
   },
   /** Where the lorry drops each material, out at the edge of the plot. */
   sources: {
@@ -136,6 +142,7 @@ export const YARD = {
     cast: { x: 8.4, z: 0.2 },
     timber: { x: 8.4, z: 2.2 },
     tile: { x: 6.6, z: 3.8 },
+    joinery: { x: 6.6, z: 1.4 },
   },
   mixer: { x: 6.4, z: 5.0 },
   dumpster: { x: -6.0, z: 4.6 },
@@ -203,7 +210,12 @@ export const RATE = {
   walkFurniture: 1.3,
   placeFurniture: 1.1,
   paintTime: 2.2,
+  /** Hanging a window is fiddlier than dropping a brick on a bed of mortar. */
+  fixTime: 2.0,
 }
+
+/** One turn of the sun. A plot takes roughly one of these to finish. */
+export const DAY_SECONDS = 840
 
 /** How far into the build the site already is when the page loads. */
 export const PREROLL_SECONDS = 260

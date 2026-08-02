@@ -37,6 +37,11 @@ const M = {
   mortar: new THREE.MeshStandardMaterial({ color: COLORS.mortar, roughness: 0.95 }),
   cast: new THREE.MeshStandardMaterial({ color: COLORS.lintel, roughness: 0.9 }),
   slate: new THREE.MeshStandardMaterial({ color: COLORS.tile[0], roughness: 0.66, metalness: 0.05 }),
+  joinery: new THREE.MeshStandardMaterial({ color: 0xe6eef4, roughness: 0.55 }),
+  glass: new THREE.MeshStandardMaterial({
+    color: 0x9fc4dd, roughness: 0.12, metalness: 0.15,
+    transparent: true, opacity: 0.55,
+  }),
 }
 
 function box(parent, material, sx, sy, sz, x = 0, y = 0, z = 0, geo = BOX) {
@@ -194,6 +199,20 @@ export function buildStock(mat, rng) {
       add(layer & 1 ? M.timber : M.timberDark, 1.9, 0.1, 0.16,
         0, 0.06 + layer * 0.11, -0.16 + col * 0.32 + (rnd(rng) - 0.5) * 0.02)
     }
+  } else if (mat.key === 'joinery') {
+    // Glazed units come pre-made, so they stand on edge in a rack and lean
+    // back against it the way they do outside a real joiner's shop.
+    for (let i = 0; i < capacity; i++) {
+      const unit = new THREE.Group()
+      const lean = 0.13 + (rnd(rng) - 0.5) * 0.03
+      box(unit, M.joinery, 0.86, 0.98, 0.05)
+      box(unit, M.glass, 0.68, 0.8, 0.02, 0, 0, 0.026)
+      unit.position.set(-0.5 + (i % 5) * 0.25, 0.52, -0.3 + Math.floor(i / 5) * 0.3)
+      unit.rotation.set(lean, (rnd(rng) - 0.5) * 0.1, 0)
+      unit.visible = false
+      group.add(unit)
+      parts.push(unit)
+    }
   } else {
     for (let i = 0; i < capacity; i++) {
       const stackN = Math.floor(i / 9)
@@ -236,8 +255,9 @@ export function buildDrop(mat, rng) {
     cast: [1.0, 0.07, 0.28],
     timber: [1.1, 0.09, 0.15],
     tile: [0.46, 0.045, 0.4],
+    joinery: [0.86, 0.06, 0.72],
   }[mat.key]
-  const matFor = { brick: null, cast: M.cast, timber: M.timber, tile: M.slate }[mat.key]
+  const matFor = { brick: null, cast: M.cast, timber: M.timber, tile: M.slate, joinery: M.joinery }[mat.key]
   const mesh = new THREE.InstancedMesh(
     new THREE.BoxGeometry(geoFor[0], geoFor[1], geoFor[2]),
     matFor || new THREE.MeshStandardMaterial({ roughness: 0.92 }),

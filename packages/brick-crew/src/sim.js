@@ -23,6 +23,9 @@ import { route, stanceOf } from './nav.js'
 import { buildRobot, buildCarryStack } from './robot.js'
 import { buildWheelbarrow, buildFurniture, buildRoller } from './props.js'
 
+const HIT_GEO = new THREE.CylinderGeometry(0.42, 0.42, 1, 8)
+const HIT_MAT = new THREE.MeshBasicMaterial({ visible: false })
+
 const TWO_PI = Math.PI * 2
 const wrap = (a) => ((a + Math.PI) % TWO_PI + TWO_PI) % TWO_PI - Math.PI
 
@@ -31,6 +34,7 @@ export function createSim({
   onPlace, onPaint, onBanner, onStage, onComplete, requestCrew, clock0 = 0,
 }) {
   const robots = []
+  const hitboxes = []
   const items = plan.items
   const placed = new Uint8Array(items.length)
   const claimed = new Int16Array(items.length).fill(-1)
@@ -55,7 +59,7 @@ export function createSim({
   let stage = 'build' // build | fitout | paint | done
   let stageT = 0
   let quiet = false
-  const layTimes = []
+  const doneLog = [] // { t, w } — every finished task, weighted by how long it takes
 
   const phaseCounts = PHASES.map((p) => items.filter((it) => it.phase === p.key).length)
 
@@ -71,6 +75,11 @@ export function createSim({
   const patches = plan.paintPatches.map((p) => ({ ...p, done: false, taken: false }))
   let furnDone = 0
   let paintDone = 0
+
+  function logDone(w) {
+    doneLog.push({ t: clockT, w })
+    if (doneLog.length > 300) doneLog.shift()
+  }
 
   // --- helpers -------------------------------------------------------------
 
@@ -127,8 +136,7 @@ export function createSim({
     placedCount++
     phaseDone++
     demand[it.mat]--
-    layTimes.push(clockT)
-    if (layTimes.length > 220) layTimes.shift()
+    logDone(1)
     onPlace(it)
     if (it.mortar >= 0 && --mortarLeft[it.mortar] === 0) onPlace(plan.mortar[it.mortar], true)
     while (firstOpen < placed.length && placed[firstOpen]) firstOpen++
@@ -213,6 +221,15 @@ export function createSim({
         r.rig.group.position.copy(r.pos)
         group.add(rig.group)
 
+        // an invisible sleeve so a tap can pick this robot out of the crowd
+        const hit = new THREE.Mesh(HIT_GEO, HIT_MAT)
+        hit.position.y = rig.height * 0.52
+        hit.scale.set(1, rig.height * 1.15, 1)
+        hit.userData.robot = r
+        rig.group.add(hit)
+        r.hit = hit
+        hitboxes.push(hit)
+
         // one carried load per material, revealed a piece at a time
         r.loads = {}
         for (const m of MATERIALS) {
@@ -294,22 +311,10 @@ export function createSim({
     if (r.leaving) return clockOff(r)
     if (stage === 'done') return celebrate(r)
     if (r.role === 'foreman') return foreman(r)
-    // the joiners work the lorry; the masons stand off until there is a wall to paint
-    if (stage === 'fitout') return r.role === 'mason' ? watchOn(r) : fitter(r)
-    if (stage === 'paint') return r.role === 'barrow' ? watchOn(r) : painter(r)
+    if (stage === 'fitout') return fitter(r)
+    if (stage === 'paint') return painter(r)
     if (r.role === 'mason') return mason(r)
     return hauler(r)
-  }
-
-  /** Nothing to do on this stage — mooch about the plot and watch. */
-  function watchOn(r) {
-    const spot = FOREMAN_SPOTS[(rng() * FOREMAN_SPOTS.length) | 0]
-    goto(r, { level: 0, x: spot.x + (rng() - 0.5) * 1.6, y: 0, z: spot.z + (rng() - 0.5) * 1.6 }, () => {
-      faceTowards(r, 0, 0)
-      r.state = 'inspect'
-      r.timer = 3 + rng() * 5
-      r.then = () => think(r)
-    })
   }
 
   function mason(r) {
@@ -349,7 +354,7 @@ export function createSim({
     goto(r, it.stand, () => {
       faceTowards(r, it.pos[0], it.pos[2])
       r.state = 'lay'
-      r.timer = RATE.layTime
+      r.timer = it.phase === 'secondfix' ? RATE.fixTime : RATE.layTime
       r.layHigh = it.pos[1] - (it.stand.y || 0) > 1.05
       r.then = () => {
         if (!placed[r.claim]) setPlaced(r.claim)
@@ -437,6 +442,7 @@ export function createSim({
           r.piece = null
           piece.done = true
           furnDone++
+          logDone(3)
           if (furnDone >= furniture.length && stage === 'fitout') enterStage('paint')
           think(r)
         }
@@ -491,6 +497,7 @@ export function createSim({
         onPaint(patch)
         patch.done = true
         paintDone++
+        logDone(2)
         r.patch = null
         if (paintDone >= patches.length && stage === 'paint') enterStage('done')
         think(r)
@@ -690,6 +697,8 @@ export function createSim({
       const r = robots[i]
       if (r.dead) {
         group.remove(r.rig.group)
+        const h = hitboxes.indexOf(r.hit)
+        if (h >= 0) hitboxes.splice(h, 1)
         robots.splice(i, 1)
         continue
       }
@@ -751,18 +760,37 @@ export function createSim({
 
   // --- readouts ------------------------------------------------------------
 
+  /** Weighted units of work getting done per minute, over the last minute or two. */
   function ratePerMin() {
     const win = 100
     const t0 = clockT - win
+    let w = 0
     let n = 0
-    for (let i = layTimes.length - 1; i >= 0 && layTimes[i] >= t0; i--) n++
-    if (n < 4) return layTimes.length > 1 ? (layTimes.length / Math.max(1, clockT)) * 60 : 0
-    return (n / Math.min(win, clockT)) * 60
+    for (let i = doneLog.length - 1; i >= 0 && doneLog[i].t >= t0; i--) {
+      w += doneLog[i].w
+      n++
+    }
+    if (n < 4) {
+      const all = doneLog.reduce((a, d) => a + d.w, 0)
+      return all > 1 ? (all / Math.max(1, clockT)) * 60 : 0
+    }
+    return (w / Math.min(win, clockT - (doneLog[0]?.t ?? 0) || win)) * 60
+  }
+
+  /**
+   * Time to hand-over, not just to topping out: the masonry still to lay, the
+   * furniture still on the lorry and the walls still to paint, all weighted by
+   * how long each takes.
+   */
+  function remainingWork() {
+    return (items.length - placedCount)
+      + (furniture.length - furnDone) * 3
+      + (patches.length - paintDone) * 2
   }
 
   function etaSeconds() {
-    if (stage !== 'build') return null
-    const remaining = items.length - placedCount
+    if (stage === 'done') return 0
+    const remaining = remainingWork()
     if (remaining <= 0) return 0
     const rate = ratePerMin()
     if (rate < 0.4) return null
@@ -777,6 +805,22 @@ export function createSim({
     dispose() {
       for (const r of robots) group.remove(r.rig.group)
       robots.length = 0
+      hitboxes.length = 0
+    },
+    hitboxes,
+    /** What a followed robot is up to, in words. */
+    describe(r) {
+      const doing = {
+        walk: r.holding ? 'carrying furniture' : r.carry > 0 ? `carrying ${r.carry} ${r.carryMat}` : 'walking',
+        lay: 'setting a piece',
+        set: 'placing furniture',
+        paint: 'painting',
+        wait: 'waiting',
+        inspect: 'looking on',
+        wave: 'clocking off',
+        idle: 'between jobs',
+      }[r.state] || r.state
+      return { role: r.role, doing, carry: r.carry, mat: r.carryMat, leaving: r.leaving }
     },
     robots,
     get placed() {
@@ -823,6 +867,7 @@ export function createSim({
         done: i < phaseIdx ? phaseCounts[i] : i === phaseIdx ? phaseDone : 0,
       })).filter((p) => p.total > 0),
     isPlaced: (i) => !!placed[i],
+    furnitureDone: (i) => !!furniture[i]?.done,
     debug: () => ({
       patches: patches.filter((p) => !p.done).map((p) => ({ key: p.key, taken: p.taken, lvl: p.stand.level })),
       robots: robots.map((r) => `${r.role}:${r.state}${r.patch ? '@' + r.patch.key : ''}${r.leaving ? '!' : ''}`),

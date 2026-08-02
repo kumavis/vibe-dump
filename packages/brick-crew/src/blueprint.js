@@ -158,8 +158,8 @@ function layout(w, h) {
       gable: { x: inner.x, y: inner.y + inner.h * 0.27, w: inner.w * 0.48, h: inner.h * 0.19 },
       plan: { x: inner.x + inner.w * 0.52, y: inner.y + inner.h * 0.27, w: inner.w * 0.48, h: inner.h * 0.19 },
       rear: null,
-      prog: row(0.47, 0.33),
-      title: row(0.81, 0.19),
+      prog: row(0.47, 0.38),
+      title: row(0.86, 0.14),
     }
   }
   const sideW = inner.w * 0.28
@@ -171,8 +171,8 @@ function layout(w, h) {
     gable: { x: inner.x + mainW * 0.64, y: inner.y + 4, w: mainW * 0.36, h: inner.h * 0.52 },
     plan: { x: inner.x, y: inner.y + inner.h * 0.56, w: mainW * 0.52, h: inner.h * 0.44 },
     rear: { x: inner.x + mainW * 0.55, y: inner.y + inner.h * 0.56, w: mainW * 0.45, h: inner.h * 0.44 },
-    prog: { x: inner.x + mainW + 12, y: inner.y + 4, w: sideW, h: inner.h * 0.58 },
-    title: { x: inner.x + mainW + 12, y: inner.y + inner.h * 0.62, w: sideW, h: inner.h * 0.38 },
+    prog: { x: inner.x + mainW + 12, y: inner.y + 4, w: sideW, h: inner.h * 0.66 },
+    title: { x: inner.x + mainW + 12, y: inner.y + inner.h * 0.7, w: sideW, h: inner.h * 0.3 },
   }
 }
 
@@ -434,20 +434,58 @@ function drawPlan(c, r, state) {
   c.lineTo(X(ck.x) - cd / 2, Z(ck.z + ck.runLen / 2))
   c.stroke()
 
-  // room division, shown light — not part of the masonry contract
+  // room division, shown light — not part of the masonry contract. Drawn
+  // before the furniture so the joinery ink sits on top of it.
+  const inX = [-H.w / 2 + H.t, H.w / 2 - H.t]
+  const inZ = [-H.d / 2 + H.t, H.d / 2 - H.t]
+  const splitX = inX[0] + (inX[1] - inX[0]) * 0.66
+  const splitZ = inZ[0] + (inZ[1] - inZ[0]) * 0.38
   c.strokeStyle = GHOST
   c.setLineDash([6, 4])
   c.lineWidth = 1
-  line(c, X(0.6), Z(-H.d / 2 + H.t), X(0.6), Z(H.d / 2 - H.t))
-  line(c, X(0.6), Z(-0.4), X(H.w / 2 - H.t), Z(-0.4))
+  line(c, X(splitX), Z(inZ[0]), X(splitX), Z(inZ[1]))
+  line(c, X(splitX), Z(splitZ), X(inX[1]), Z(splitZ))
   c.setLineDash([])
   if (r.w > 260 && r.h > 200) {
     c.fillStyle = INK_SOFT
     c.font = `10px ${MONO}`
     c.textAlign = 'center'
-    c.fillText('LIVING', X(-1.1), Z(0.2))
-    c.fillText('KITCHEN', X(1.6), Z(0.9))
-    c.fillText('STORE', X(1.6), Z(-1.3))
+    // Tucked against the walls, where no furniture is ever laid out.
+    c.fillText('LIVING', X((inX[0] + splitX) / 2), Z(inZ[0]) + 13)
+    c.fillText('STORE', X((splitX + inX[1]) / 2), Z(inZ[0]) + 13)
+    c.fillText('KITCHEN', X((splitX + inX[1]) / 2), Z(inZ[1]) - 6)
+  }
+
+  // furniture layout: ghosted while it is still on the lorry, inked once the
+  // joiners have actually set it down in the room
+  for (const f of state.furniture || []) {
+    const fw = f.size[0] * s
+    const fd = f.size[2] * s
+    c.save()
+    c.translate(X(f.at[0]), Z(f.at[2]))
+    c.rotate(-f.rot)
+    if (f.done) {
+      c.fillStyle = 'rgba(255,200,97,0.18)'
+      c.fillRect(-fw / 2, -fd / 2, fw, fd)
+      c.strokeStyle = STAMP
+      c.lineWidth = 1.1
+    } else {
+      c.strokeStyle = GHOST
+      c.lineWidth = 0.8
+      c.setLineDash([3, 3])
+    }
+    c.strokeRect(-fw / 2, -fd / 2, fw, fd)
+    c.setLineDash([])
+    // A label only earns its place if it fits inside its own outline — that
+    // is what stops a small plan turning into a pile of overlapping words.
+    c.font = `8px ${MONO}`
+    const tag = f.name.toUpperCase()
+    if (fd > 11 && c.measureText(tag).width < fw - 5) {
+      c.fillStyle = f.done ? STAMP : GHOST
+      c.textAlign = 'center'
+      c.fillText(tag, 0, 3)
+    }
+    c.restore()
   }
 
   dim(c, X(-H.w / 2), Z(H.d / 2), X(H.w / 2), Z(H.d / 2), `${H.w.toFixed(2)} m`, 30)
@@ -481,7 +519,7 @@ function drawProgress(c, r, state) {
   // narrow portrait sheet doesn't spill the title block over the bars.
   const tight = r.h < 250
   const etaH = tight ? 46 : 62
-  const rowH = tight ? 14 : 22
+  const rowH = tight ? 12 : 22
   let y = r.y + (tight ? 26 : 34)
 
   // headline: time to completion
@@ -493,7 +531,7 @@ function drawProgress(c, r, state) {
   c.fillStyle = STAMP
   c.font = `${tight ? 8 : 10}px ${MONO}`
   c.textAlign = 'left'
-  c.fillText('EST. TIME TO COMPLETION', x + 8, y + (tight ? 14 : 18))
+  c.fillText('EST. TIME TO HAND-OVER', x + 8, y + (tight ? 14 : 18))
   c.font = `bold ${Math.min(tight ? 24 : 34, w * 0.17)}px ${MONO}`
   c.fillText(formatDuration(state.etaSeconds), x + 8, y + etaH - 12)
   c.font = `${tight ? 8 : 10}px ${MONO}`
@@ -521,23 +559,71 @@ function drawProgress(c, r, state) {
   c.strokeRect(x + 0.5, y + 0.5, w - 1, 7)
   y += tight ? 20 : 26
 
-  // per-phase, as far down as there is room for
+  // Every stage of the job in one list — the masonry phases first, then the
+  // trades that follow them in. On a narrow sheet the bar slides behind the
+  // text instead of under it so the whole schedule still fits.
   const footerH = tight ? 34 : 52
-  for (const p of state.phases) {
-    if (y + rowH > bottom - footerH) break
-    const f = p.total ? p.done / p.total : 0
-    c.fillStyle = f >= 1 ? STAMP : INK_SOFT
-    c.font = `${tight ? 8 : 10}px ${MONO}`
+  const stages = state.phases.map((p) => [p.label, p.done, p.total])
+  if (state.fitout) {
+    stages.push(['FIT-OUT', state.fitout.done, state.fitout.total])
+    stages.push(['DECORATING', state.decor.done, state.decor.total])
+  }
+  if (tight) {
+    // Two columns, so the whole schedule survives on a phone.
+    const colW = (w - 10) / 2
+    const perCol = Math.ceil(stages.length / 2)
+    const top = y
+    stages.forEach(([label, done, total], i) => {
+      const cx = x + (i < perCol ? 0 : colW + 10)
+      const cy = top + (i % perCol) * rowH
+      if (cy + rowH > bottom - footerH) return
+      const f = total ? done / total : 0
+      c.fillStyle = 'rgba(255,255,255,0.08)'
+      c.fillRect(cx, cy - 8, colW, 11)
+      c.fillStyle = f >= 1 ? 'rgba(255,200,97,0.32)' : 'rgba(214,234,247,0.22)'
+      c.fillRect(cx, cy - 8, colW * f, 11)
+      c.fillStyle = f >= 1 ? STAMP : INK_SOFT
+      c.font = `8px ${MONO}`
+      c.textAlign = 'left'
+      c.fillText(label, cx + 3, cy)
+      c.textAlign = 'right'
+      c.fillText(`${done}/${total}`, cx + colW - 3, cy)
+    })
+    y = top + perCol * rowH
+  } else {
+    for (const [label, done, total] of stages) {
+      if (y + rowH > bottom - footerH) break
+      const f = total ? done / total : 0
+      c.fillStyle = f >= 1 ? STAMP : INK_SOFT
+      c.font = `10px ${MONO}`
+      c.textAlign = 'left'
+      c.fillText(label, x, y)
+      c.textAlign = 'right'
+      c.fillText(`${done}/${total}`, x + w, y)
+      y += 4
+      c.fillStyle = 'rgba(255,255,255,0.1)'
+      c.fillRect(x, y, w, 4)
+      c.fillStyle = f >= 1 ? 'rgba(255,200,97,0.85)' : 'rgba(214,234,247,0.6)'
+      c.fillRect(x, y, w * f, 4)
+      y += rowH - 4
+    }
+  }
+
+  // the colour the decorators brought
+  if (state.decor && y + 14 < bottom - footerH) {
+    c.fillStyle = INK_SOFT
+    c.font = `${tight ? 8 : 9}px ${MONO}`
     c.textAlign = 'left'
-    c.fillText(p.label, x, y)
+    c.fillText('EXTERNAL FINISH', x, y + 2)
+    c.fillStyle = state.decor.css
+    c.fillRect(x + w - 58, y - 7, 22, 11)
+    c.strokeStyle = INK_SOFT
+    c.lineWidth = 1
+    c.strokeRect(x + w - 58.5, y - 7.5, 23, 12)
+    c.fillStyle = INK
     c.textAlign = 'right'
-    c.fillText(`${p.done}/${p.total}`, x + w, y)
-    y += 4
-    c.fillStyle = 'rgba(255,255,255,0.1)'
-    c.fillRect(x, y, w, 4)
-    c.fillStyle = f >= 1 ? 'rgba(255,200,97,0.85)' : 'rgba(214,234,247,0.6)'
-    c.fillRect(x, y, w * f, 4)
-    y += rowH - 4
+    c.fillText(state.decor.name.toUpperCase(), x + w, y + 2)
+    y += 16
   }
 
   y = bottom - footerH + (tight ? 8 : 16)

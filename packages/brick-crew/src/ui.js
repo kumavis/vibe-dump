@@ -53,6 +53,10 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     clip: $('sheet-clip'),
     roll: $('sheet-roll'),
     close: $('sheet-close'),
+    follow: $('follow'),
+    followRole: $('follow-role'),
+    followDoing: $('follow-doing'),
+    followDrop: $('follow-drop'),
   }
   const sheetCanvas = $('sheet-canvas')
 
@@ -246,6 +250,22 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     el.rate.textContent = `${(d.ratePerMin || 0).toFixed(1)} /min`
   }
 
+  /** The card that rides along with whichever robot you tapped. */
+  let onDropFollow = null
+  function setFollow(d) {
+    if (!d) {
+      el.follow.classList.remove('on')
+      return
+    }
+    el.follow.classList.add('on')
+    el.followRole.textContent = d.leaving ? `${d.role} · off shift` : d.role
+    el.followDoing.textContent = d.doing
+  }
+  el.followDrop.addEventListener('click', () => {
+    el.follow.classList.remove('on')
+    onDropFollow?.()
+  })
+
   function setLoading(fraction, subtitle) {
     if (subtitle) loadSub.textContent = subtitle
     loadFill.style.width = `${Math.min(1, Math.max(0, fraction)) * 100}%`
@@ -276,5 +296,7 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     banner,
     tick,
     setHint,
+    setFollow,
+    onDropFollow: (fn) => (onDropFollow = fn),
   }
 }

@@ -6,20 +6,25 @@
 // hi-vis vest and a hard hat, with a board explaining what each kind of robot
 // on the crew actually does.
 //
-// In the middle is the yellow platform. Robots fetch coloured blocks from the
-// ground around it and stack them up. They are not careful about where they are
-// walking, so when two of them collide they both go over and drop what they were
-// carrying — and if the stack gets too tall it comes down on its own.
+// In the middle is the yellow loading platform, where the yard palletises
+// material for the site. Robots fetch blocks off the ground around it — one
+// block per material the crew uses — and stack them on the pallet. They are not
+// careful about where they are walking, so when two of them collide they both go
+// over and drop what they were carrying, and if the stack gets too tall it comes
+// down on its own and has to be gathered up again.
 // ---------------------------------------------------------------------------
 
 import * as THREE from 'three'
 import { buildRobot } from './robot.js'
 import { buildCone, buildSign } from './props.js'
+import { MATERIALS } from './config.js'
 
 const BOX = new THREE.BoxGeometry(1, 1, 1)
 const CYL = new THREE.CylinderGeometry(0.5, 0.5, 1, 20)
 
-const BLOCK_COLORS = [0xd8442f, 0x2f6fd8, 0x2f9e5a, 0xf0b429, 0x7a4bd8, 0xe06a2f, 0x2fb0b8]
+// The blocks are the site's own materials, in the site's own colours, so the
+// yard reads as feeding the build rather than playing with bricks.
+const BLOCK_COLORS = MATERIALS.map((m) => m.color)
 const PLATFORM_R = 2.1
 const BLOCK = { w: 0.62, h: 0.36, d: 0.62 }
 const TOPPLE_AT = 9
@@ -117,6 +122,17 @@ export function createDepot({ origin, rng }) {
     box(group, i % 2 ? M.dark : M.yellow, 0.5, 0.06, 0.24,
       Math.cos(a) * (PLATFORM_R + 0.06), 0.42, Math.sin(a) * (PLATFORM_R + 0.06)).rotation.y = -a
   }
+  // What the platform is for, on a board beside it and in a key of the five
+  // material colours so the loose blocks on the ground read as material.
+  const outboundSign = buildSign('OUTBOUND\nmaterial for the site')
+  outboundSign.scale.setScalar(0.8)
+  outboundSign.position.set(-6.2, 0.06, 1.4)
+  group.add(outboundSign)
+  MATERIALS.forEach((m, i) => {
+    const x = -4.3 + (i - (MATERIALS.length - 1) / 2) * 0.58
+    box(group, new THREE.MeshStandardMaterial({ color: m.color, roughness: 0.7 }),
+      0.46, 0.05, 0.46, x, 0.09, 2.1).receiveShadow = true
+  })
 
   // --- blocks --------------------------------------------------------------
   const blockMats = BLOCK_COLORS.map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.62 }))
