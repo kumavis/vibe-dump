@@ -137,13 +137,19 @@ el.btnTank.onclick = () => setTool('tank');
 el.btnBot.onclick = () => dispatch({ type: 'buyBot' });
 el.btnLane.onclick = () => dispatch({ type: 'buyLane' });
 
-/* panel toggle */
+/* panel toggle — the view keeps the factory clear of the panel */
 const panel = document.getElementById('hud');
+function updateInset() {
+  const w = panel.classList.contains('hidden') ? 0 : panel.getBoundingClientRect().width;
+  view.setInset(w);
+}
 document.getElementById('panelToggle').onclick = () => {
   panel.classList.toggle('hidden');
   document.getElementById('panelToggle').textContent =
     panel.classList.contains('hidden') ? '◂ TELEMETRY' : 'HIDE ▸';
+  updateInset();
 };
+updateInset();
 
 /* ---------------------------- input ---------------------------- */
 canvas.addEventListener('pointerdown', (e) => {
@@ -173,7 +179,7 @@ window.addEventListener('keydown', (e) => {
   else if (e.key === '3') setSpeed(16);
 });
 
-window.addEventListener('resize', () => view.resize());
+window.addEventListener('resize', () => { view.resize(); updateInset(); });
 
 /* ------------------------- main loop ------------------------- */
 let last = performance.now(), acc = 0;

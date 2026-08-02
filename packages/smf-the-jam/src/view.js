@@ -20,7 +20,7 @@ const FONT = (px, w = 600) =>
 
 export function createView(canvas) {
   const ctx = canvas.getContext('2d');
-  let dpr = 1, scale = 1, ox = 0, oy = 0;
+  let dpr = 1, scale = 1, ox = 0, oy = 0, inset = 0;
   const pt = [0, 0]; // scratch for pointOnPath
 
   function resize() {
@@ -28,10 +28,13 @@ export function createView(canvas) {
     const cw = canvas.clientWidth || 1, chh = canvas.clientHeight || 1;
     canvas.width = Math.round(cw * dpr);
     canvas.height = Math.round(chh * dpr);
-    scale = Math.min(cw / G.W, chh / G.H);
-    ox = (cw - G.W * scale) / 2;
+    /* keep the world clear of the HUD panel (right inset) */
+    const eff = Math.max(320, cw - inset);
+    scale = Math.min(eff / G.W, chh / G.H);
+    ox = (eff - G.W * scale) / 2;
     oy = (chh - G.H * scale) / 2;
   }
+  function setInset(px) { inset = px; resize(); }
 
   const clientToWorld = (cx, cy) => {
     const r = canvas.getBoundingClientRect();
@@ -427,5 +430,5 @@ export function createView(canvas) {
   }
 
   resize();
-  return { draw: drawWithHints, resize, clientToWorld, worldToClient };
+  return { draw: drawWithHints, resize, setInset, clientToWorld, worldToClient };
 }
