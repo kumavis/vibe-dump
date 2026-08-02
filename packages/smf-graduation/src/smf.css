@@ -55,8 +55,7 @@
 }
 
 /* identity block — identical in every scenario */
-/* padding-right clears the HIDE toggle that floats over the panel corner */
-.smf-h1 { font: 700 19px var(--smf-mono); letter-spacing: 0.14em; color: var(--smf-head); margin: 0 0 1px; padding-right: 58px; }
+.smf-h1 { font: 700 19px var(--smf-mono); letter-spacing: 0.14em; color: var(--smf-head); margin: 0 0 1px; }
 .smf-sub { font: 500 12px var(--smf-mono); letter-spacing: 0.18em; color: var(--smf-dim2); }
 .smf-tag { font: 500 10px var(--smf-mono); letter-spacing: 0.18em; color: var(--smf-dim); margin: 2px 0 12px; }
 

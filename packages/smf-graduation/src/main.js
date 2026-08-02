@@ -1,10 +1,15 @@
 /* =====================================================================
    SMF 00 — GRADUATION · shell
    RAF loop with fixed accumulator, HUD DOM, input -> sim.act().
+   Chrome comes from the shared scenario shell (smf.css + briefing.js);
+   this file only wires it. The briefing never touches the sim — "pause"
+   is the shell holding speed at 0.
    ===================================================================== */
 
 import { createSim, DT, MAX_DEMAND, STAMP_COST, dirName, rotN } from './sim.js'
 import { createView } from './view.js'
+import { mountBriefing } from './briefing.js'
+import './smf.css'
 import './style.css'
 
 const sim = createSim()
@@ -16,67 +21,70 @@ window.smfView = view
 
 /* ------------------------------ HUD DOM ------------------------------ */
 
+// [flag, label, playerVerb] — playerVerb milestones get the YOU: prefix
 const CHECKLIST = [
-  ['firstLine', 'First line — extractor + furnace'],
-  ['thirdLine', 'Third hand-placed line'],
-  ['echoUnlocked', 'Pattern echo earned ×3'],
-  ['firstStamp', 'First stamp'],
-  ['surge', 'Demand surge — 6/s'],
-  ['mismatchSeen', 'Echo rejected — mismatch'],
-  ['mismatchResolved', 'Pocket fixed by hand'],
-  ['contractMet', 'Contract met — 10/s × 20s'],
+  ['firstLine', 'First line — extractor + furnace', true],
+  ['thirdLine', 'Third hand-placed line', true],
+  ['echoUnlocked', 'Pattern echo earned ×3', false],
+  ['firstStamp', 'First stamp', true],
+  ['surge', 'Demand surge — 6/s', false],
+  ['mismatchSeen', 'Echo rejected — mismatch', false],
+  ['mismatchResolved', 'Pocket fixed by hand', true],
+  ['contractMet', 'Contract met — 10/s × 20s', false],
 ]
 
 const panel = document.getElementById('panel')
 panel.innerHTML = `
-  <div class="h1">SLIME MOLD FOUNDRY</div>
-  <div class="sub">SCENARIO 00 — GRADUATION</div>
-  <div class="row"><span class="k" id="hud-t">T+0.0s</span><span class="amber" id="hud-matter">MATTER 30</span></div>
-  <div id="speed" style="margin:7px 0 4px"></div>
+  <div class="smf-h1">SLIME MOLD FOUNDRY</div>
+  <div class="smf-sub">SCENARIO 00 — GRADUATION</div>
+  <div class="smf-tag">L0→L1 · HANDS TO BLUEPRINTS</div>
+  <div id="speed" style="margin:0 0 4px"></div>
+  <div class="smf-row"><span class="smf-k" id="hud-t">T+0.0s</span><span class="smf-amber" id="hud-matter">MATTER 30</span></div>
 
-  <div class="card">
-    <div class="cardh"><span>CONTRACT</span>
-      <span><span class="lamp" id="hud-lamp"></span><span id="hud-lampt">OK</span></span></div>
-    <div class="row"><span class="k">REQUIRED</span><span class="amber" id="hud-req">1.0/s</span></div>
-    <div class="row"><span class="k">ACTUAL</span><span id="hud-act">0.0/s</span></div>
-    <div class="bar"><div class="fill" id="hud-actfill" style="background:#e0973a"></div>
-      <div class="tick" id="hud-reqtick"></div></div>
-    <div class="row"><span class="k">BACKLOG</span><span id="hud-back">0</span></div>
-    <div class="bar"><div class="fill" id="hud-backfill" style="background:#e0973a"></div></div>
-    <div class="row"><span class="k">DELIVERED</span><span class="amber" id="hud-del">0</span></div>
+  <div class="smf-card">
+    <div class="smf-cardh"><span>CONTRACT</span>
+      <span><span class="smf-lamp" id="hud-lamp"></span><span id="hud-lampt">OK</span></span></div>
+    <div class="smf-row"><span class="smf-k">REQUIRED</span><span class="smf-amber" id="hud-req">1.0/s</span></div>
+    <div class="smf-row"><span class="smf-k">ACTUAL</span><span id="hud-act">0.0/s</span></div>
+    <div class="smf-bar"><div class="smf-fill" id="hud-actfill" style="background:#e0973a;transform:scaleX(0)"></div>
+      <div class="smf-tick" id="hud-reqtick"></div></div>
+    <div class="smf-row"><span class="smf-k">BACKLOG</span><span id="hud-back">0</span></div>
+    <div class="smf-bar"><div class="smf-fill" id="hud-backfill" style="background:#e0973a;transform:scaleX(0)"></div></div>
+    <div class="smf-row"><span class="smf-k">DELIVERED</span><span class="smf-amber" id="hud-del">0</span></div>
   </div>
 
-  <div class="card">
-    <div class="cardh"><span>TOIL</span><span class="dim">CLICKS / LINE</span></div>
-    <div class="toilbig" id="hud-toil"><span class="dim">—</span></div>
-    <div class="row"><span class="k">LINES</span><span id="hud-lines">0</span></div>
-    <div class="row"><span class="k">STAMPED</span><span id="hud-stamped">0 (0%)</span></div>
+  <div class="smf-card">
+    <div class="smf-cardh"><span>TOIL</span><span class="smf-dim">CLICKS / LINE</span></div>
+    <div class="toilbig" id="hud-toil"><span class="smf-dim">—</span></div>
+    <div class="smf-row"><span class="smf-k">LINES</span><span id="hud-lines">0</span></div>
+    <div class="smf-row"><span class="smf-k">STAMPED</span><span id="hud-stamped">0 (0%)</span></div>
   </div>
 
-  <div class="card">
-    <div class="cardh"><span>PALETTE</span><span class="dim" id="hud-rot"></span></div>
+  <div class="smf-card">
+    <div class="smf-cardh"><span>PALETTE</span><span class="smf-dim" id="hud-rot"></span></div>
     <div class="pal" id="pal-extractor"><span>1 · EXTRACTOR</span><span class="cost">10</span></div>
     <div class="pal" id="pal-furnace"><span>2 · FURNACE</span><span class="cost">15</span></div>
-    <div class="pal" id="pal-echo"><span>3 · PATTERN ECHO<br><span class="dim">earned ×3</span></span><span class="cost">${STAMP_COST}</span></div>
+    <div class="pal" id="pal-echo"><span>3 · PATTERN ECHO<br><span class="smf-dim">earned ×3</span></span><span class="cost">${STAMP_COST}</span></div>
   </div>
 
-  <div class="card">
-    <div class="cardh"><span>MILESTONES</span></div>
-    <ul class="check" id="checklist">
-      ${CHECKLIST.map(([k, l]) => `<li id="ck-${k}"><b>□</b> ${l}</li>`).join('')}
+  <div class="smf-card">
+    <div class="smf-cardh"><span>SHIFT CHECKLIST</span></div>
+    <ul class="smf-check" id="checklist">
+      ${CHECKLIST.map(([k, l, you]) =>
+        `<li id="ck-${k}"><b>□</b> ${you ? '<span class="you">YOU:</span> ' : ''}${l}</li>`).join('')}
     </ul>
   </div>
 
-  <div class="card">
-    <div class="cardh"><span>EVENT LOG</span></div>
-    <div class="log" id="log"></div>
+  <div class="smf-card">
+    <div class="smf-cardh"><span>EVENT LOG</span></div>
+    <div class="smf-log" id="log"></div>
   </div>
 
-  <div class="legend">
-    <span class="amber">■ matter</span> · <span class="cyan">■ signal/echo</span> ·
-    <span class="green">■ valid</span> · <span class="red">■ fault</span><br>
+  <div class="smf-legend">
+    <span class="smf-green">■ valid</span> · <span class="smf-red">■ fault</span> ·
     line = extractor + adjacent furnace · 1.0 ingot/s<br>
-    <span class="dim" id="hud-perf">sim — µs/tick · draw — ms</span>
+    <span class="smf-dim" id="hud-perf">sim — µs/tick · draw — ms</span><br>
+    <span class="smf-amber">■ matter</span> · <span class="smf-cyan">■ signal</span>
   </div>
 `
 
@@ -101,10 +109,11 @@ const els = {
 let speed = 1
 let prevSpeed = 1
 const speedBox = $('speed')
-const speedDefs = [['⏸', 0], ['×1', 1], ['×4', 4], ['×16', 16]]
+const speedDefs = [['⏸', 0], ['×1', 1], ['×8', 8], ['×32', 32]]
 const speedBtns = speedDefs.map(([label, v]) => {
   const b = document.createElement('button')
-  b.className = 'btn' + (v === speed ? ' on' : '')
+  b.type = 'button'
+  b.className = 'smf-btn' + (v === speed ? ' on' : '')
   b.textContent = label
   b.addEventListener('click', () => setSpeed(v))
   speedBox.appendChild(b)
@@ -115,6 +124,28 @@ function setSpeed(v) {
   speed = v
   speedBtns.forEach((b, i) => b.classList.toggle('on', speedDefs[i][1] === v))
 }
+
+/* ------------------------- work-order briefing ------------------------ */
+
+const root = document.getElementById('app')
+view.resize()
+view.draw(sim) // pre-warm: the world is visible behind the dimmed card
+
+const brief = mountBriefing(root, {
+  workOrder: 'FOUNDRY WORK ORDER 00',
+  title: 'GRADUATION',
+  layer: 'L0→L1 · HANDS TO BLUEPRINTS',
+  situation: 'New territory. The contract rate is climbing and your hands are the only tool on site. The foundry notices repetition — build the same line three times and it will offer to remember it for you.',
+  verbs: [
+    ['PALETTE', 'pick extractor or furnace'],
+    ['CLICK MAP', 'place it — extractors on ore, furnaces adjacent'],
+    ['R', 'rotate a remembered pattern'],
+    ['STAMP', 'place a whole remembered line at once'],
+  ],
+  objective: 'Meet the final contract rate. Let repetition earn you the stamp.',
+  onOpen()  { setSpeed(0) },   // shell holds the sim at speed 0 while the card is up
+  onBegin() { setSpeed(1) },   // BEGIN SHIFT starts at ×1
+})
 
 /* ------------------------------- input ------------------------------- */
 
@@ -133,6 +164,7 @@ canvas.addEventListener('contextmenu', (e) => {
   if (c) sim.act({ type: 'demolish', gx: c.gx, gz: c.gz })
 })
 window.addEventListener('keydown', (e) => {
+  if (brief.isOpen()) return // briefing holds speed 0; Esc is handled by the shell
   if (e.key === '1') sim.act({ type: 'select', tool: 'extractor' })
   else if (e.key === '2') sim.act({ type: 'select', tool: 'furnace' })
   else if (e.key === '3') sim.act({ type: 'select', tool: 'echo' })
@@ -149,7 +181,6 @@ toggle.addEventListener('click', () => {
 })
 
 window.addEventListener('resize', () => view.resize())
-view.resize()
 
 /* ----------------------------- main loop ----------------------------- */
 
@@ -197,7 +228,7 @@ function refreshHud() {
   els.del.textContent = s.delivered.toFixed(0)
   els.lamp.style.background = s.atRisk ? '#e0973a' : '#2c4f31'
   els.lampt.textContent = s.atRisk ? 'AT RISK' : 'OK'
-  els.lampt.className = s.atRisk ? 'amber' : 'green'
+  els.lampt.className = s.atRisk ? 'smf-amber' : 'smf-green'
   els.risk.hidden = !s.atRisk
 
   // toil
@@ -205,10 +236,10 @@ function refreshHud() {
   const before = T.lb > 0 ? (T.cb / T.lb).toFixed(1) : null
   const after = T.la > 0 ? (T.ca / T.la).toFixed(1) : null
   els.toil.innerHTML = before === null
-    ? `<span class="dim">— /line</span>`
+    ? `<span class="smf-dim">— /line</span>`
     : after === null
-      ? `<span class="amber">${before}</span> <span class="dim">/line by hand</span>`
-      : `<span class="amber">${before}</span> <span class="dim">→</span> <span class="green">${after}</span> <span class="dim">/line</span>`
+      ? `<span class="smf-amber">${before}</span> <span class="smf-dim">/line by hand</span>`
+      : `<span class="smf-amber">${before}</span> <span class="smf-dim">→</span> <span class="smf-green">${after}</span> <span class="smf-dim">/line</span>`
   els.lines.textContent = `${s.linesCompleted}`
   els.stamped.textContent = s.linesCompleted
     ? `${s.stampedLines} (${Math.round((100 * s.stampedLines) / s.linesCompleted)}%)`
@@ -241,7 +272,7 @@ function refreshHud() {
 
   if (s.done && !bannerShown) {
     bannerShown = true
-    els.banner.textContent = `CONTRACT MET — T+${(s.flagT.contractMet ?? s.t).toFixed(0)}s`
+    els.banner.textContent = 'SHIFT COMPLETE — CONTRACT SECURED'
     els.banner.hidden = false
   }
 }
