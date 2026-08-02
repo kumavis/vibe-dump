@@ -58,13 +58,29 @@ html, body {
   pointer-events: none;
 }
 
+.stage-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
 .stage-name {
   font-size: 15px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  margin-bottom: 6px;
   color: var(--ink);
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+}
+
+.effect {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #ff6a7d;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  text-shadow: 0 0 10px rgba(255, 60, 90, 0.6), 0 1px 8px #000;
 }
 
 .bar {
@@ -129,8 +145,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 50% 40%, rgba(5, 20, 45, 0.7), rgba(0, 2, 8, 0.95));
-  backdrop-filter: blur(2px);
+  background: radial-gradient(circle at 50% 40%, rgba(5, 20, 45, 0.35), rgba(0, 2, 8, 0.82));
+  backdrop-filter: blur(1.5px);
 }
 
 #start-screen.hidden { display: none; }
