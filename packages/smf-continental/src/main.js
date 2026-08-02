@@ -1,12 +1,15 @@
 /* =====================================================================
    SMF 06 · CONTINENTAL — SHELL
    RAF loop with a fixed accumulator, HUD, input → act().
-   All player verbs go through sim.act(); the headless harness dispatches
-   the exact same actions.
+   Chrome comes from the shared foundry shell (src/smf.css + src/briefing.js);
+   this file only wires it. All player verbs go through sim.act(); the
+   headless harness dispatches the exact same actions. The work-order card
+   never touches the sim — pause is the shell holding speed at 0.
    ===================================================================== */
 
 import { createSim, DT, P, DEFAULT_SEED, NCELLS } from './sim.js';
 import { createView } from './view.js';
+import { mountBriefing } from './briefing.js';
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => {
@@ -27,13 +30,15 @@ let speed = 1;
 const perf = { usPerTick: 0, tickAcc: 0, msAcc: 0, tps: 0, tpsAcc: 0, tpsT: 0 };
 
 /* ------------------------------------------------------------- inputs */
+/* One brush: plain drag pours (the work order's DRAG verb), alt/ctrl or
+   right-drag starves, [B] flips the brush to a pan hand for navigation. */
 const drag = { on: false, mode: 'pan', px: 0, py: 0, id: -1 };
-let brushArmed = false;
+let brushArmed = true;
 
 function setBrushLabel() {
   const b = $('brushBtn');
   b.classList.toggle('on', brushArmed);
-  b.textContent = brushArmed ? 'POUR BRUSH ARMED [B]' : 'POUR BRUSH [B]';
+  b.textContent = brushArmed ? 'BRUSH — POUR [B]' : 'BRUSH — PAN [B]';
   view.brush.mode = brushArmed ? 'pour' : 'pan';
 }
 
@@ -49,7 +54,7 @@ canvas.addEventListener('pointerdown', (e) => {
   drag.on = true; drag.id = e.pointerId;
   drag.px = e.clientX; drag.py = e.clientY;
   const pour = e.shiftKey || brushArmed;
-  drag.mode = e.button === 2 || e.ctrlKey ? 'starve' : pour ? 'pour' : 'pan';
+  drag.mode = e.button === 2 || e.ctrlKey || e.altKey ? 'starve' : pour ? 'pour' : 'pan';
   view.brush.mode = drag.mode === 'pan' ? (brushArmed ? 'pour' : 'pan') : drag.mode;
   view.brush.dragging = drag.mode !== 'pan';
   if (drag.mode !== 'pan') dispatchBrush(e.clientX, e.clientY, drag.mode);
@@ -75,6 +80,7 @@ canvas.addEventListener('wheel', (e) => {
 }, { passive: false });
 
 window.addEventListener('keydown', (e) => {
+  if (brief && brief.isOpen()) return; // the work order holds the shift at ⏸
   if (e.key === 'b' || e.key === 'B') { brushArmed = !brushArmed; setBrushLabel(); }
   if (e.key === '1') setSpeed(0);
   if (e.key === '2') setSpeed(1);
@@ -106,10 +112,15 @@ const CHECKLIST = [
   ['migration', '300+ structures follow the pour'],
   ['starved', '200+ resorbed in the trench'],
 ];
+/* milestones where the verb is the player's — checklist marks them YOU: */
+const PLAYER_VERB = new Set(['poured', 'starved']);
 $('checklist').innerHTML = CHECKLIST
-  .map(([k, label]) => `<li id="ck-${k}"><b>□</b> ${label}</li>`).join('');
+  .map(([k, label]) =>
+    `<li id="ck-${k}"><b>□</b> ${PLAYER_VERB.has(k) ? '<span class="you">YOU:</span> ' : ''}${label}</li>`)
+  .join('');
 $('seedLine').textContent =
   `SEED 0x${DEFAULT_SEED.toString(16).toUpperCase()} · deterministic · tick ${DT * 1000} ms`;
+const banner = $('banner');
 
 function updateHud() {
   const vs = view.stats();
@@ -164,6 +175,14 @@ function updateHud() {
   }
   $('log').innerHTML = S.events.slice(-10).reverse()
     .map((e) => `<div>T+${e.t.toFixed(0)} ${e.msg}</div>`).join('');
+
+  // shift complete — the province was pulled to the pour AND one was eaten
+  if (S.flags.migration && S.flags.starved) {
+    banner.hidden = false;
+    banner.textContent = 'SHIFT COMPLETE — PROVINCE REDIRECTED';
+  } else {
+    banner.hidden = true;
+  }
 }
 
 /* ----------------------------------------------------------- RAF loop */
@@ -209,15 +228,36 @@ function loop(now) {
   perf.usPerTick = ((performance.now() - t0) * 1000) / 24;
 }
 
+/* ---------------- WORK ORDER briefing (shared shell) ---------------- */
+/* The card holds the shift at speed 0; BEGIN SHIFT (or Esc) sets ×1.
+   The sim itself is never touched — harnesses see the same world. */
 setBrushLabel();
 setSpeed(1);
 updateHud();
+
+const brief = mountBriefing($('root'), {
+  workOrder: 'FOUNDRY WORK ORDER 06',
+  title: 'CONTINENTAL',
+  layer: 'PERFORMANCE · WIELDING THE WHOLE ORGANISM',
+  situation: 'Fifty thousand structures and one brush. The organism reads the field, not your clicks — pour value where it should live, starve what it should abandon, and watch provinces move.',
+  verbs: [
+    ['DRAG', 'pour survey field (costs income)'],
+    ['ALT-DRAG or RIGHT-DRAG', 'starve a region'],
+    ['WHEEL', 'zoom continent ↔ machine'],
+  ],
+  objective: 'Pull a province to your pour; make the mold eat one you starve.',
+  onOpen() { setSpeed(0); },
+  onBegin() { setSpeed(1); },
+});
+
+view.render(performance.now() / 1000, 0.016); // pre-warm: the continent is live behind the dimmed card
 setInterval(updateHud, 200);
 requestAnimationFrame(loop);
 
 /* ------------------------------------------------- test hooks (smoke) */
-window.smf = {
-  sim, view, act: (a) => sim.act(a), setSpeed,
+window.smf = sim; // shared-shell contract: the sim itself, untouched by chrome
+window.smfShell = {
+  view, setSpeed, brief, act: (a) => sim.act(a),
   perf: () => ({
     usPerTick: perf.usPerTick,
     drawMs: view.stats().drawMs,
