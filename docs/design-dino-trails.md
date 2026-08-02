@@ -6,10 +6,11 @@ uneven, procedurally carved park where every cell is a different shape and
 size, guests physically walk the trail network, and the money follows the
 footsteps.
 
-This is the spatial evolution of `dino-park`. Where dino-park's grid makes
-every plot interchangeable, Dino Trails makes *where* the central question:
-which dino deserves the roomy meadow on the main drag, and what happens to
-your gift stand when the crowds change course.
+This is the spatial evolution of the original `dino-park` grid prototype
+(since retired from the repo). Where a grid makes every plot
+interchangeable, Dino Trails makes *where* the central question: which dino
+deserves the roomy meadow on the main drag, and what happens to your gift
+stand when the crowds change course.
 
 ## Design pillars
 
