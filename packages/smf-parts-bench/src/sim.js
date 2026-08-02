@@ -171,33 +171,26 @@ export function createSim(opts = {}) {
       if (j === i) confusedN.push(i)
     }
     // Kahn pass 2 over non-confused leftovers (cycles broken: confused
-    // parts contribute nothing, so drop their edges).
-    const deg2 = new Uint8Array(N)
-    for (let i = 0; i < N; i++) {
-      if (!cells[i] || done[i] === 0 && cells[i].confused) continue
-      if (done[i] || !cells[i].confused) {
-        const o = outIx[i]
-        if (o >= 0 && !done[o] && !cells[o].confused) deg2[o]++
-      }
-    }
-    // (recompute cleanly: order2 over the leftover, non-confused set)
+    // parts are dropped from the graph and contribute nothing). A left
+    // node's in-degree counts only edges arriving from other left nodes —
+    // pass-1 nodes are already ordered ahead of it.
+    const inLeft = new Uint8Array(N)
     const left = []
-    for (let i = 0; i < N; i++) if (cells[i] && !done[i] && !cells[i].confused) left.push(i)
+    for (let i = 0; i < N; i++) {
+      if (cells[i] && !done[i] && !cells[i].confused) { left.push(i); inLeft[i] = 1 }
+    }
     const ldeg = new Uint8Array(N)
-    for (const i of [...order, ...left]) {
+    for (const i of left) {
       const o = outIx[i]
-      if (o >= 0 && left.includes(o)) ldeg[o]++
+      if (o >= 0 && inLeft[o]) ldeg[o]++
     }
     const q2 = left.filter((i) => ldeg[i] === 0)
     const order2 = []
-    const done2 = new Uint8Array(N)
     while (q2.length) {
       const i = q2.shift()
-      if (done2[i]) continue
-      done2[i] = 1
       order2.push(i)
       const o = outIx[i]
-      if (o >= 0 && left.includes(o) && --ldeg[o] === 0) q2.push(o)
+      if (o >= 0 && inLeft[o] && --ldeg[o] === 0) q2.push(o)
     }
     for (const i of order) if (cells[i]) cells[i].confused = false
     board.order = order.concat(order2)
@@ -238,8 +231,8 @@ export function createSim(opts = {}) {
           p.sat = p.in > TRACE_CAP + 1e-6
           p.out = p.sat ? TRACE_CAP : p.in
           if (p.sat && !wasSat) {
-            flag('firstSaturation', `TRACE SATURATED at (${i % GW},${(i / GW) | 0}) — ${p.in.toFixed(1)}/s into a 20/s trace, excess lost upstream`)
-            if (state.flags.firstSaturation) ev(`congestion: trace (${i % GW},${(i / GW) | 0}) carrying ${TRACE_CAP}/s, losing ${(p.in - TRACE_CAP).toFixed(1)}/s`)
+            if (!state.flags.firstSaturation) flag('firstSaturation', `TRACE SATURATED at (${i % GW},${(i / GW) | 0}) — ${p.in.toFixed(1)}/s into a 20/s trace, excess lost upstream`)
+            else ev(`congestion: trace (${i % GW},${(i / GW) | 0}) carrying ${TRACE_CAP}/s, losing ${(p.in - TRACE_CAP).toFixed(1)}/s`)
           }
           break
         }
@@ -275,8 +268,8 @@ export function createSim(opts = {}) {
           const wasChatter = p.chatter
           p.chatter = p.flips.length >= 3 && state.t - p.flips[p.flips.length - 3] <= 2
           if (p.chatter && !wasChatter) {
-            flag('firstChatter', `GATE CHATTER at (${i % GW},${(i / GW) | 0}) — SENSE hovering at N=${p.n.toFixed(1)}, ≥3 flips in 2s`)
-            if (state.flags.firstChatter) ev(`gate (${i % GW},${(i / GW) | 0}) chattering — SENSE ${p.sense.toFixed(2)} vs N ${p.n.toFixed(2)}`)
+            if (!state.flags.firstChatter) flag('firstChatter', `GATE CHATTER at (${i % GW},${(i / GW) | 0}) — SENSE hovering at N=${p.n.toFixed(1)}, ≥3 flips in 2s`)
+            else ev(`gate (${i % GW},${(i / GW) | 0}) chattering — SENSE ${p.sense.toFixed(2)} vs N ${p.n.toFixed(2)}`)
           }
           p.out = p.open ? p.flow : 0
           break
