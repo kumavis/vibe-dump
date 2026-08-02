@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/smf-the-seal",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "test": "node harness.mjs" },
+  "gallery": {
+    "title": "SMF 05 · The Seal",
+    "description": "Seal a module against a measured contract, watch the contract stay green while the behavior fails, then hold to preview the blast radius of breaking your own promise."
+  }
+}

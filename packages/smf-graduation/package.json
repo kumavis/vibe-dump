@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/smf-graduation",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "test": "node harness.mjs" },
+  "gallery": {
+    "title": "SMF 00 · Graduation",
+    "description": "Place lines by hand until the game notices your pattern — then stamp. Tests earning automation by repetition, and the blueprint that does not fit."
+  }
+}

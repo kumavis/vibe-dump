@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/smf-continental",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "test": "node harness.mjs" },
+  "gallery": {
+    "title": "SMF 06 · Continental",
+    "description": "Fifty thousand structures, one brush. A performance testbed for wielding the whole organism: rates not items, tile LOD, and a value-field verb that redirects provinces."
+  }
+}
