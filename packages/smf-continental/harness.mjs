@@ -128,6 +128,7 @@ const stepN = (n) => { for (let i = 0; i < n; i++) sim.step(DT); gameplayTicks +
     if (!victim || p.pAct > victim.pAct) victim = p;
   }
   console.log(`  starving ${victim.name} (${victim.pAct} active structures)`);
+  const starveActT = S.t;
   sim.act({ type: 'starve', x: victim.x, z: victim.z });
   let guard = 0;
   while (!S.flags.starved && guard++ < 1600) {
@@ -137,7 +138,7 @@ const stepN = (n) => { for (let i = 0; i < n; i++) sim.step(DT); gameplayTicks +
   if (S.flags.starved) {
     pass(`starved at T+${S.flagT.starved.toFixed(0)}s — ` +
       `${S.starveResorbs} resorbed in ${victim.name}'s trench ` +
-      `(${(S.flagT.starved - S.lastStarve.t < 0 ? 0 : S.flagT.starved - S.flagT.migration).toFixed(0)}s after starve act)`);
+      `(${(S.flagT.starved - starveActT).toFixed(0)}s after the starve act)`);
   } else fail(`starved: only ${S.starveResorbs}/${P.starveGoal} resorbed in the trench`);
 }
 

@@ -642,7 +642,7 @@ export function createSim(opts = {}) {
   /* ========================================================== stepping */
   let tick = 0;
   let birthsWin = 0, resorbsWin = 0, windowEnd = 60;
-  let incomeAcc = 0, lastPourRejectEv = -1e9;
+  let lastPourRejectEv = -1e9;
 
   function nearestProvince(x, z) {
     let best = -1, bd = Infinity;
@@ -707,7 +707,6 @@ export function createSim(opts = {}) {
       }
     }
     state.matter = Math.min(P.matterCap, state.matter + income);
-    incomeAcc += income;
     state.incomeRate += (income / DT - state.incomeRate) * 0.02;
     if (prof) { const n = pnow(); prof.econ += n - pt; pt = n; }
 
@@ -794,7 +793,6 @@ export function createSim(opts = {}) {
     }
     state.lastPour.x = x; state.lastPour.z = z; state.lastPour.t = t; state.lastPour.prov = prov;
     flag('poured', 'FIRST POUR — the player takes the brush');
-    if (fresh && state.flags.poured) { /* already logged above when province changed */ }
     return true;
   }
 
