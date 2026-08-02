@@ -117,7 +117,8 @@ function updateHud() {
   // perf card — perf IS the content
   $('usTick').textContent = perf.usPerTick.toFixed(0);
   $('usBar').style.transform = `scaleX(${Math.min(1, perf.usPerTick / 250)})`;
-  $('usBar').style.background = perf.usPerTick > 120 ? '#d96b6b' : '#55d6f0';
+  $('usBar').style.background =
+    perf.usPerTick > 250 ? '#d96b6b' : perf.usPerTick > 120 ? '#e0973a' : '#55d6f0';
   $('drawMs').textContent = vs.drawMs.toFixed(1);
   $('drawBar').style.transform = `scaleX(${Math.min(1, vs.drawMs / 16)})`;
   $('drawBar').style.background = vs.drawMs > 8 ? '#d96b6b' : '#55d6f0';
@@ -199,8 +200,10 @@ function loop(now) {
   requestAnimationFrame(loop);
 }
 
-// seed the µs/tick stat with one honest 24-tick batch before first paint
+// seed the µs/tick stat before first paint: one batch to warm the JIT,
+// a second to measure
 {
+  for (let i = 0; i < 24; i++) sim.step(DT);
   const t0 = performance.now();
   for (let i = 0; i < 24; i++) sim.step(DT);
   perf.usPerTick = ((performance.now() - t0) * 1000) / 24;

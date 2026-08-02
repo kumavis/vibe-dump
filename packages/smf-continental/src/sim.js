@@ -854,7 +854,8 @@ export function createSim(opts = {}) {
   // settle: gates commit, senescent provinces slip into dormancy, HUD opens
   // on a continent already breathing — but the first resorptions (~T+12)
   // are still ahead, so the gallery's first frame shows the full 50k
-  for (let i = 0; i < 70; i++) step();
+  // (the shell's warm/measure batches advance ~5 more seconds)
+  for (let i = 0; i < 50; i++) step();
 
   return { state, step, act };
 }
