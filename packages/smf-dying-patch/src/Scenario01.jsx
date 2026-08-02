@@ -764,7 +764,8 @@ const css = `
 .smf-panel.hidden{transform:translateX(100%);}
 .smf-toggle{position:absolute;top:10px;right:10px;z-index:5;background:#13202a;border:1px solid #2a3d49;color:#55d6f0;font:600 11px 'IBM Plex Mono';padding:5px 9px;cursor:pointer;}
 .smf-h1{font:700 19px 'Barlow Condensed';letter-spacing:.14em;color:#e6edf1;margin:0 0 1px;}
-.smf-sub{font:500 12px 'Barlow Condensed';letter-spacing:.22em;color:#5b7482;margin-bottom:12px;}
+.smf-sub{font:500 12px 'Barlow Condensed';letter-spacing:.22em;color:#5b7482;}
+.smf-tag{font:500 10px 'IBM Plex Mono';letter-spacing:.18em;color:#566068;margin:2px 0 12px;}
 .smf-row{display:flex;justify-content:space-between;align-items:baseline;margin:3px 0;}
 .smf-k{color:#5b7482;}
 .smf-amber{color:#e0973a;} .smf-cyan{color:#55d6f0;} .smf-dim{color:#566068;} .smf-green{color:#9fd65a;}
@@ -778,11 +779,13 @@ const css = `
 .smf-check li{margin:3px 0;color:#566068;}
 .smf-check li.on{color:#c2ccd2;}
 .smf-check li.on b{color:#9fd65a;}
+.smf-check li .you{color:#55d6f0;font-weight:600;}
 .smf-log{max-height:150px;overflow-y:auto;margin-top:4px;}
 .smf-log div{margin:2px 0;color:#7d8f99;line-height:1.35;}
 .smf-log div:first-child{color:#c2ccd2;}
 .smf-btn{background:#13202a;border:1px solid #2a3d49;color:#8fa8b5;font:600 11px 'IBM Plex Mono';padding:4px 9px;margin-right:5px;cursor:pointer;}
 .smf-btn.on{color:#0b0e11;background:#55d6f0;border-color:#55d6f0;}
+.smf-btn:focus-visible{outline:1px solid #55d6f0;outline-offset:1px;}
 .smf-act{display:block;width:100%;margin:5px 0;padding:8px 10px;text-align:left;color:#55d6f0;border-color:#2a5d6e;}
 .smf-act:hover{background:#17303c;}
 .smf-act.warn{color:#e0973a;border-color:#8a5a22;animation:smfpulse 1.1s ease-in-out infinite;}
@@ -790,6 +793,21 @@ const css = `
 .smf-help{position:absolute;left:12px;bottom:10px;font-size:10px;color:#495a64;z-index:4;pointer-events:none;}
 .smf-banner{position:absolute;left:50%;top:16px;transform:translateX(-50%);background:rgba(19,32,42,.95);border:1px solid #55d6f0;color:#8fe9ff;font:700 15px 'Barlow Condensed';letter-spacing:.2em;padding:8px 18px;z-index:6;}
 .smf-legend{margin-top:10px;color:#5b7482;line-height:1.6;}
+.smf-brief-overlay{position:absolute;inset:0;z-index:9;background:rgba(5,8,10,.55);display:flex;align-items:center;justify-content:center;}
+.smf-brief{width:min(460px,92vw);background:#0d1216;border:1px solid #2a3d49;box-shadow:0 30px 80px -20px #000;padding:18px 20px 16px;font-size:11px;line-height:1.55;}
+.smf-brief .wo{color:#5b7482;letter-spacing:.24em;font-size:10px;}
+.smf-brief h2{font:700 17px 'Barlow Condensed';letter-spacing:.18em;color:#e6edf1;margin:2px 0 2px;}
+.smf-brief .layer{color:#566068;letter-spacing:.16em;font-size:10px;margin-bottom:10px;}
+.smf-brief .sit{color:#c2ccd2;margin:0 0 10px;}
+.smf-brief .verbs{border-top:1px solid #1e2a32;border-bottom:1px solid #1e2a32;padding:8px 0;margin:0 0 10px;}
+.smf-brief .verbs li{list-style:none;margin:4px 0;color:#9fb2bd;}
+.smf-brief .verbs b{color:#55d6f0;font-weight:600;letter-spacing:.06em;}
+.smf-brief .obj{color:#e0973a;margin:0;}
+.smf-brief .obj b{letter-spacing:.18em;}
+.smf-begin{display:block;width:100%;margin-top:14px;padding:9px 10px;background:#13202a;border:1px solid #55d6f0;color:#55d6f0;font:700 12px 'IBM Plex Mono';letter-spacing:.22em;cursor:pointer;}
+.smf-begin:hover{background:#55d6f0;color:#0b0e11;}
+.smf-briefbtn{position:absolute;top:10px;left:10px;z-index:5;background:#13202a;border:1px solid #2a3d49;color:#8fa8b5;font:600 11px 'IBM Plex Mono';padding:5px 9px;cursor:pointer;}
+.smf-briefbtn:hover{color:#55d6f0;}
 `;
 
 export default function Scenario01DyingPatch() {
@@ -797,14 +815,27 @@ export default function Scenario01DyingPatch() {
   const simRef = useRef(null);
   const speedRef = useRef(1);
   const [hud, setHud] = useState(null);
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState(0); // briefing is open on mount — hold the shift
   const [panel, setPanel] = useState(true);
+  const [brief, setBrief] = useState(true); // WORK ORDER card, shown on mount
 
   useEffect(() => { speedRef.current = speed; }, [speed]);
+
+  // open pauses (speed 0), BEGIN SHIFT / Esc resumes at ×1 — the briefing
+  // never touches the sim; "pause" is just the shell holding speed at 0.
+  const openBrief = () => { setBrief(true); setSpeed(0); };
+  const closeBrief = () => { setBrief(false); setSpeed(1); };
+  useEffect(() => {
+    if (!brief) return;
+    const onKey = (e) => { if (e.key === "Escape") closeBrief(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [brief]);
 
   useEffect(() => {
     const sim = createSim();
     simRef.current = sim;
+    window.smf = sim;
     const view = createView(mountRef.current);
     for (const p of sim.state.patches) view.addPatch(p);
 
@@ -858,24 +889,43 @@ export default function Scenario01DyingPatch() {
     <div className="smf-root">
       <style>{css}</style>
       <div className="smf-canvas" ref={mountRef} />
-      {hud?.done && <div className="smf-banner">COLONY RELOCATED — T+{hud.t.toFixed(0)}s</div>}
+      {hud?.done && <div className="smf-banner">SHIFT COMPLETE — COLONY RELOCATED T+{hud.t.toFixed(0)}s</div>}
       <button className="smf-toggle" onClick={() => setPanel(!panel)}>
         {panel ? "HIDE ▸" : "◂ TELEMETRY"}
       </button>
-      <div className="smf-help">drag pan · wheel / pinch zoom · zoom out for tile view · your moves are in the panel</div>
+      <button className="smf-briefbtn" type="button" onClick={openBrief}>☰ BRIEF</button>
+      <div className="smf-help">your moves are in the panel · drag pan · wheel / pinch zoom · ☰ BRIEF reopens the work order</div>
+      {brief && (
+        <div className="smf-brief-overlay">
+          <div className="smf-brief" role="dialog" aria-modal="true" aria-label="DYING PATCH work order">
+            <div className="wo">FOUNDRY WORK ORDER 01</div>
+            <h2>DYING PATCH</h2>
+            <div className="layer">FIELD &amp; ORGANISM · THE BASELINE LOOP</div>
+            <p className="sit">ALPHA's patch is nearly spent. The organism handles growth, sleep and retreat on its own — you are its endocrine system, and it needs exactly two hormones from you.</p>
+            <ul className="verbs">
+              <li><b>YOUR MOVES</b> — place the survey beacon at Patch B when the signal dies</li>
+              <li><b>YOUR MOVES</b> — grant resorb authority when the mold asks</li>
+              <li><b>DRAG / WHEEL</b> — pan and zoom — far out for the tile view</li>
+            </ul>
+            <p className="obj"><b>OBJECTIVE</b> — Relocate the colony to Patch B. Retreat pays for the move.</p>
+            <button className="smf-begin" type="button" autoFocus onClick={closeBrief}>BEGIN SHIFT ▸</button>
+          </div>
+        </div>
+      )}
 
       <div className={`smf-panel ${panel ? "" : "hidden"}`}>
         <div className="smf-h1">SLIME MOLD FOUNDRY</div>
         <div className="smf-sub">SCENARIO 01 — DYING PATCH</div>
+        <div className="smf-tag">FIELD &amp; ORGANISM · THE BASELINE LOOP</div>
 
-        <div className="smf-row">
-          <span className="smf-k">T+{hud ? hud.t.toFixed(1) : "0.0"}s</span>
-          <span className="smf-amber">MATTER {hud ? hud.matter.toFixed(0) : "—"}</span>
-        </div>
-        <div style={{ margin: "7px 0 4px" }}>
+        <div style={{ margin: "0 0 4px" }}>
           {[["⏸", 0], ["×1", 1], ["×8", 8], ["×32", 32]].map(([l, v]) => (
             <button key={l} className={`smf-btn ${speed === v ? "on" : ""}`} onClick={() => setSpeed(v)}>{l}</button>
           ))}
+        </div>
+        <div className="smf-row">
+          <span className="smf-k">T+{hud ? hud.t.toFixed(1) : "0.0"}s</span>
+          <span className="smf-amber">MATTER {hud ? hud.matter.toFixed(0) : "—"}</span>
         </div>
 
         {hud && (
@@ -921,11 +971,14 @@ export default function Scenario01DyingPatch() {
         })}
 
         <div className="smf-card">
-          <div className="smf-cardh"><span>SCENARIO TIMELINE</span></div>
+          <div className="smf-cardh"><span>SHIFT CHECKLIST</span></div>
           <ul className="smf-check">
             {CHECKLIST.map(([k, label]) => (
               <li key={k} className={hud?.flags[k] ? "on" : ""}>
-                <b>{hud?.flags[k] ? "■" : "□"}</b> {label}
+                <b>{hud?.flags[k] ? "■" : "□"}</b>{" "}
+                {label.startsWith("YOU: ")
+                  ? <><span className="you">YOU:</span> {label.slice(5)}</>
+                  : label}
               </li>
             ))}
           </ul>
@@ -941,9 +994,9 @@ export default function Scenario01DyingPatch() {
         </div>
 
         <div className="smf-legend">
-          <span className="smf-amber">■ matter layer</span> · <span className="smf-cyan">■ signal layer</span> · <span style={{ color: "#3b9fd9" }}>■ value field</span><br />
           dormancy &lt; {P.dorm} · resorb &lt; {P.resorb} after {P.resorbDelay}s<br />
-          growth: field B &gt; field A + {P.growMargin} for {P.growSustain}s
+          growth: field B &gt; field A + {P.growMargin} for {P.growSustain}s<br />
+          <span className="smf-amber">■ matter</span> · <span className="smf-cyan">■ signal</span> · <span style={{ color: "#3b9fd9" }}>■ value field</span>
         </div>
       </div>
     </div>

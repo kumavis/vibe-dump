@@ -178,11 +178,17 @@ function loop(now) {
   if (steps === 64) acc = 0; // never spiral
   const ms = performance.now() - t0;
   if (steps > 0) {
-    perf.msAcc += ms; perf.tickAcc += steps;
-    if (perf.tickAcc >= 8) {
-      const inst = (perf.msAcc * 1000) / perf.tickAcc;
-      perf.usPerTick = perf.usPerTick === 0 ? inst : perf.usPerTick + (inst - perf.usPerTick) * 0.2;
-      perf.msAcc = 0; perf.tickAcc = 0;
+    // Only fold in batched frames (≥3 ticks): Chromium clamps
+    // performance.now() to ~100µs, and single-tick bursts at ×1 mostly
+    // measure the cache eviction caused by drawing, not the sim. The
+    // budget is about sustained fast-forward, which is what batches are.
+    if (steps >= 3) {
+      perf.msAcc += ms; perf.tickAcc += steps;
+      if (perf.msAcc >= 2 || perf.tickAcc >= 64) {
+        const inst = (perf.msAcc * 1000) / perf.tickAcc;
+        perf.usPerTick = perf.usPerTick === 0 ? inst : perf.usPerTick + (inst - perf.usPerTick) * 0.2;
+        perf.msAcc = 0; perf.tickAcc = 0;
+      }
     }
     perf.tpsAcc += steps;
   }
@@ -191,6 +197,13 @@ function loop(now) {
 
   view.render(now / 1000, rdt);
   requestAnimationFrame(loop);
+}
+
+// seed the µs/tick stat with one honest 24-tick batch before first paint
+{
+  const t0 = performance.now();
+  for (let i = 0; i < 24; i++) sim.step(DT);
+  perf.usPerTick = ((performance.now() - t0) * 1000) / 24;
 }
 
 setBrushLabel();

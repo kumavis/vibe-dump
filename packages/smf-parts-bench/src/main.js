@@ -2,8 +2,12 @@
    SMF 03 — PARTS BENCH · shell
    RAF loop with a fixed accumulator, HUD, input → act(). Owns UI state
    only (tool, selection, drag); all game state lives in the sim.
+   Chrome comes from the shared scenario shell (smf.css + briefing.js);
+   scenario-specific UI (palette, tabs, inspector, board) stays here.
    ===================================================================== */
+import './smf.css'
 import './style.css'
+import { mountBriefing } from './briefing.js'
 import { createSim, DT, PUZZLES, PART_NAMES, COSTS, GW, GH } from './sim.js'
 import { createView } from './view.js'
 
@@ -13,48 +17,50 @@ window.smf = sim // headless-visible handle (smoke tests poke this)
 
 /* ------------------------------- DOM ------------------------------- */
 const root = document.getElementById('app')
-root.className = 'pb-root'
+root.className = 'smf-root'
 root.innerHTML = `
-  <canvas class="pb-canvas" id="pb-canvas"></canvas>
+  <div class="smf-canvas"><canvas class="pb-canvas" id="pb-canvas"></canvas></div>
   <div class="pb-topbar">
     <div class="pb-palette" id="pb-palette"></div>
     <div class="pb-tabs" id="pb-tabs"></div>
   </div>
   <div class="pb-inspector" id="pb-inspector" style="display:none"></div>
-  <button class="pb-toggle" id="pb-toggle">HIDE ▸</button>
-  <div class="pb-panel" id="pb-panel">
-    <div class="pb-h1">SLIME MOLD FOUNDRY</div>
-    <div class="pb-sub">SMF 03 — PARTS BENCH</div>
-    <div class="pb-row"><span class="pb-k" id="pb-time">T+0.0s</span><span class="pb-amber" id="pb-spent">SPENT 0</span></div>
+  <button class="smf-toggle" id="pb-toggle" type="button">HIDE ▸</button>
+  <div class="smf-panel" id="pb-panel">
+    <div class="smf-h1">SLIME MOLD FOUNDRY</div>
+    <div class="smf-sub">SCENARIO 03 — PARTS BENCH</div>
+    <div class="smf-tag">SIGNAL PLUMBING · FIVE CONTRACTS</div>
     <div class="pb-speeds" id="pb-speeds"></div>
-    <div class="pb-card">
-      <div class="pb-cardh"><span id="pb-ckey">CONTRACT</span><span id="pb-cstat" class="pb-dim">—</span></div>
-      <div class="pb-brief pb-dim" id="pb-brief"></div>
-      <div class="pb-row"><span class="pb-k">OUTPUT</span><span class="pb-cyan" id="pb-out">0.00</span></div>
-      <div class="pb-row"><span class="pb-k">TARGET</span><span id="pb-tgt">0.00</span></div>
-      <div class="pb-bar"><div class="pb-fill" id="pb-hold" style="background:#9fd65a"></div></div>
+    <div class="smf-row"><span class="smf-k" id="pb-time">T+0.0s</span><span class="smf-amber" id="pb-spent">SPENT 0</span></div>
+    <div class="smf-card">
+      <div class="smf-cardh"><span id="pb-ckey">CONTRACT</span><span id="pb-cstat" class="smf-dim">—</span></div>
+      <div class="pb-cbrief smf-dim" id="pb-brief"></div>
+      <div class="smf-row"><span class="smf-k">OUTPUT</span><span class="smf-cyan" id="pb-out">0.00</span></div>
+      <div class="smf-row"><span class="smf-k">TARGET</span><span id="pb-tgt">0.00</span></div>
+      <div class="smf-bar"><div class="smf-fill" id="pb-hold" style="background:#9fd65a;transform:scaleX(0)"></div></div>
     </div>
-    <div class="pb-card">
-      <div class="pb-cardh"><span>BENCH</span></div>
-      <div class="pb-row"><span class="pb-k">PARTS</span><span class="pb-cyan" id="pb-parts">0</span></div>
-      <div class="pb-row"><span class="pb-k">SIM</span><span class="pb-dim" id="pb-simperf">— µs/tick</span></div>
-      <div class="pb-row"><span class="pb-k">DRAW</span><span class="pb-dim" id="pb-drawperf">— ms</span></div>
+    <div class="smf-card">
+      <div class="smf-cardh"><span>BENCH</span></div>
+      <div class="smf-row"><span class="smf-k">PARTS</span><span class="smf-cyan" id="pb-parts">0</span></div>
+      <div class="smf-row"><span class="smf-k">SIM</span><span class="smf-dim" id="pb-simperf">— µs/tick</span></div>
+      <div class="smf-row"><span class="smf-k">DRAW</span><span class="smf-dim" id="pb-drawperf">— ms</span></div>
     </div>
-    <div class="pb-card">
-      <div class="pb-cardh"><span>MILESTONES</span></div>
-      <ul class="pb-check" id="pb-check"></ul>
+    <div class="smf-card">
+      <div class="smf-cardh"><span>SHIFT CHECKLIST</span></div>
+      <ul class="smf-check" id="pb-check"></ul>
     </div>
-    <div class="pb-card">
-      <div class="pb-cardh"><span>EVENT LOG</span></div>
-      <div class="pb-log" id="pb-log"></div>
+    <div class="smf-card">
+      <div class="smf-cardh"><span>EVENT LOG</span></div>
+      <div class="smf-log" id="pb-log"></div>
     </div>
-    <div class="pb-legend">
-      <span class="pb-cyan">■ signal</span> · <span class="pb-amber">■ matter (costs)</span> · <span style="color:#d96b6b">■ fault</span> · <span style="color:#9fd65a">■ pass</span><br>
+    <div class="smf-legend">
       trace cap 20/s · tank cap 30 · pass = 12s in tolerance<br>
-      failures are visible: congestion glow · gate chatter · CONFUSED cycles
+      failures are visible: <span class="smf-red">■ congestion · chatter · CONFUSED</span> · <span class="smf-green">■ pass</span><br>
+      <span class="smf-amber">■ matter</span> · <span class="smf-cyan">■ signal</span>
     </div>
   </div>
-  <div class="pb-help">palette: click part, click cell · drag = draw trace · select + drag ↑↓ = tune · R rotate · right-click remove · 1–5 contracts</div>
+  <div class="smf-banner" id="pb-banner" style="display:none">SHIFT COMPLETE — ALL CONTRACTS HELD</div>
+  <div class="smf-help">palette + click places a part · drag = trace · drag on a part = tune · R rotate · right-click remove · 1–5 contracts · ☰ BRIEF reopens the work order</div>
 `
 
 const canvas = document.getElementById('pb-canvas')
@@ -77,7 +83,7 @@ const TOOLS = [
 const paletteEl = document.getElementById('pb-palette')
 for (const [tool, name, cost] of TOOLS) {
   const b = document.createElement('button')
-  b.className = 'pb-btn' + (tool === ui.tool ? ' on' : '')
+  b.className = 'smf-btn' + (tool === ui.tool ? ' on' : '')
   b.dataset.tool = tool
   b.innerHTML = cost === '' ? name : `${name}<i>${cost}</i>`
   b.addEventListener('click', () => setTool(tool))
@@ -92,7 +98,7 @@ function setTool(tool) {
 const tabsEl = document.getElementById('pb-tabs')
 PUZZLES.forEach((pz, i) => {
   const b = document.createElement('button')
-  b.className = 'pb-btn pb-tab' + (i === S.puzzle ? ' on' : '')
+  b.className = 'smf-btn pb-tab' + (i === S.puzzle ? ' on' : '')
   b.dataset.ix = i
   b.textContent = `${i + 1} ${pz.key}`
   b.addEventListener('click', () => { sim.act({ type: 'puzzle', ix: i }); ui.sel = null; syncTabs() })
@@ -107,35 +113,38 @@ function syncTabs() {
   }
 }
 
-/* speed buttons */
+/* speed buttons — the shared scenario set, exactly ⏸ ×1 ×8 ×32 */
 let speed = 1
 const speedsEl = document.getElementById('pb-speeds')
-for (const [lbl, v] of [['⏸', 0], ['×1', 1], ['×4', 4], ['×16', 16]]) {
+for (const [lbl, v] of [['⏸', 0], ['×1', 1], ['×8', 8], ['×32', 32]]) {
   const b = document.createElement('button')
-  b.className = 'pb-btn' + (v === speed ? ' on' : '')
+  b.className = 'smf-btn'
+  b.dataset.v = v
   b.textContent = lbl
-  b.addEventListener('click', () => {
-    speed = v
-    for (const c of speedsEl.children) c.classList.toggle('on', c === b)
-  })
+  b.addEventListener('click', () => setSpeed(v))
   speedsEl.appendChild(b)
 }
+function setSpeed(v) {
+  speed = v
+  for (const b of speedsEl.children) b.classList.toggle('on', +b.dataset.v === v)
+}
+setSpeed(1)
 
-/* milestones checklist */
+/* SHIFT CHECKLIST — contract milestones + the two felt failures */
 const MILESTONES = [
-  ['p1', 'HALF — one valve'],
-  ['p2', 'BLEND — two valves + merge'],
-  ['p3', 'STEADY — tank as averaging'],
-  ['p4', 'GUARD — SENSE/FLOW gate'],
-  ['p5', 'LATCH — the rig, from parts'],
-  ['firstSaturation', 'felt a trace saturate'],
-  ['firstChatter', 'heard a gate chatter'],
+  ['p1', 'HALF — one valve', true],
+  ['p2', 'BLEND — two valves + merge', true],
+  ['p3', 'STEADY — tank as averaging', true],
+  ['p4', 'GUARD — SENSE/FLOW gate', true],
+  ['p5', 'LATCH — the rig, from parts', true],
+  ['firstSaturation', 'felt a trace saturate', false],
+  ['firstChatter', 'heard a gate chatter', false],
 ]
 const checkEl = document.getElementById('pb-check')
-for (const [k, label] of MILESTONES) {
+for (const [k, label, you] of MILESTONES) {
   const li = document.createElement('li')
   li.id = 'pb-ms-' + k
-  li.innerHTML = `<b>□</b> ${label}`
+  li.innerHTML = `<b>□</b> ${you ? '<span class="you">YOU:</span> ' : ''}${label}`
   checkEl.appendChild(li)
 }
 
@@ -169,12 +178,12 @@ function renderInspector() {
   inspEl.style.display = 'flex'
   inspEl.innerHTML = `
     <span class="pb-iname">${PART_NAMES[p.type]}</span>
-    ${ts ? `<span class="pb-k">${ts.label}</span>
+    ${ts ? `<span class="smf-k">${ts.label}</span>
       <input type="range" id="pb-slider" min="${ts.min}" max="${ts.max}" step="${ts.step}" value="${ts.get()}">
-      <span class="pb-cyan" id="pb-sval">${ts.get().toFixed(2)}</span>` : ''}
-    ${p.type === 'gate' ? `<button class="pb-btn" id="pb-mode">${p.mode}</button>` : ''}
-    <button class="pb-btn" id="pb-rot">ROT ⟳</button>
-    <button class="pb-btn pb-danger" id="pb-del">REMOVE</button>
+      <span class="smf-cyan" id="pb-sval">${ts.get().toFixed(2)}</span>` : ''}
+    ${p.type === 'gate' ? `<button class="smf-btn" id="pb-mode">${p.mode}</button>` : ''}
+    <button class="smf-btn" id="pb-rot">ROT ⟳</button>
+    <button class="smf-btn pb-danger" id="pb-del">REMOVE</button>
   `
   const { gx, gz } = ui.sel
   const slider = document.getElementById('pb-slider')
@@ -287,7 +296,7 @@ window.addEventListener('keydown', (e) => {
 
 /* ------------------------------- loop ------------------------------- */
 let simUs = 0, drawMs = 0 // exponential rolling averages
-function doResize() { view.resize(ui.panelOpen ? Math.min(330, window.innerWidth * 0.86) : 0) }
+function doResize() { view.resize(ui.panelOpen ? Math.min(320, window.innerWidth * 0.86) : 0) }
 window.addEventListener('resize', doResize)
 doResize()
 
@@ -323,7 +332,7 @@ setInterval(() => {
   $('pb-spent').textContent = `SPENT ${board.spent ?? 0}`
   $('pb-ckey').textContent = `CONTRACT ${S.puzzle + 1} · ${pz.key}`
   $('pb-cstat').textContent = pr.passed ? 'PASSED ✓' : pr.ok ? `HOLD ${pr.hold.toFixed(1)}s` : 'OUT OF BAND'
-  $('pb-cstat').className = pr.passed || pr.ok ? 'pb-green' : 'pb-dim'
+  $('pb-cstat').className = pr.passed || pr.ok ? 'smf-green' : 'smf-dim'
   $('pb-brief').textContent = pz.brief
   $('pb-out').textContent = pr.actual.toFixed(2)
   $('pb-tgt').textContent = `${pr.target.toFixed(2)} ±${pz.tol}`
@@ -339,11 +348,33 @@ setInterval(() => {
     li.className = on ? 'on' : ''
     li.firstChild.textContent = on ? '■' : '□'
   }
+  $('pb-banner').style.display = S.prog.every((p) => p.passed) ? '' : 'none'
   const logEl = $('pb-log')
   logEl.innerHTML = S.events.slice(-9).reverse()
     .map((e) => `<div>T+${e.t.toFixed(0)} ${e.msg}</div>`).join('')
   syncTabs()
 }, 200)
+
+/* ---------------------- work order briefing ------------------------ */
+/* The shell holds speed at 0 while the card is up — the sim itself is
+   never touched, so headless harnesses see identical behavior. The
+   pre-warmed bench stays visible and animating behind the dimmed card. */
+mountBriefing(root, {
+  workOrder: 'FOUNDRY WORK ORDER 03',
+  title: 'PARTS BENCH',
+  layer: 'SIGNAL PLUMBING · FIVE CONTRACTS',
+  situation: 'Five control contracts, no code. Computation is plumbing: valves scale, tanks remember, gates decide — and all of it jams, saturates and chatters where you can see it.',
+  verbs: [
+    ['TABS', 'pick a contract'],
+    ['PALETTE + CLICK', 'place a part'],
+    ['DRAG ACROSS CELLS', 'run a trace'],
+    ['DRAG ON A PART', 'tune its valve k / gate N'],
+    ['INSPECTOR', 'flip a gate NO/NC · remove'],
+  ],
+  objective: 'Hold each contract inside its band for 12 straight seconds.',
+  onOpen() { setSpeed(0) },
+  onBegin() { setSpeed(1) },
+})
 
 /* debug hooks for the browser smoke test (not part of the player API) */
 window.smfDebug = {

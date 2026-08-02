@@ -2,9 +2,12 @@
    SMF 02 — THE JAM · shell
    RAF loop with a fixed accumulator (DT=0.1, fast-forward = more ticks),
    HUD DOM, input -> act(). The harness dispatches the same actions.
+   Chrome comes from the shared foundry shell (src/smf.css + src/briefing.js);
+   this file only wires it. Speed multiplies tick count — sim untouched.
    ===================================================================== */
 import { createSim, DT, P, G, MILESTONES, laneY, laneCost, clamp } from './sim.js';
 import { createView } from './view.js';
+import { mountBriefing } from './briefing.js';
 
 const sim = createSim();
 const canvas = document.getElementById('game');
@@ -21,30 +24,31 @@ window.smfShell = { view, ui, setSpeed: (v) => setSpeed(v) };
 const hud = document.getElementById('hud');
 hud.innerHTML = `
   <div class="smf-h1">SLIME MOLD FOUNDRY</div>
-  <div class="smf-sub">SMF 02 — THE JAM</div>
+  <div class="smf-sub">SCENARIO 02 — THE JAM</div>
+  <div class="smf-tag">L2→L3 · ALERT ROUTING</div>
+  <div style="margin:0 0 8px" id="hSpeed"></div>
   <div class="smf-row"><span class="smf-k" id="hClock">T+0.0s</span>
     <span class="smf-amber" id="hMatter">MATTER 25</span></div>
-  <div style="margin:7px 0 4px" id="hSpeed"></div>
 
   <div class="smf-card">
     <div class="smf-cardh"><span>FACTORY</span><span class="smf-dim" id="hLanes">2/8 LANES</span></div>
     <div class="smf-row"><span class="smf-k">QUOTA</span><span class="smf-amber" id="hQuota">0 / 1500</span></div>
-    <div class="smf-bar"><div class="smf-fill" id="bQuota" style="transform:scaleX(0)"></div></div>
+    <div class="smf-bar"><div class="smf-fill fill-amber" id="bQuota" style="transform:scaleX(0)"></div></div>
     <div class="smf-row"><span class="smf-k">THROUGHPUT</span><span id="hTp">4.0 /s</span></div>
-    <button class="smf-btn amber" id="btnLane">+ LANE — 40</button>
+    <button class="smf-btn btn-amber" id="btnLane">+ LANE — 40</button>
   </div>
 
   <div class="smf-card">
     <div class="smf-cardh"><span>HANDS</span><span id="hHandsN" class="smf-amber">0.0/min</span></div>
-    <div class="smf-bar"><div class="smf-fill" id="bHands" style="transform:scaleX(0)"></div>
+    <div class="smf-bar"><div class="smf-fill fill-amber" id="bHands" style="transform:scaleX(0)"></div>
       <div class="smf-tick" style="left:50%"></div></div>
     <div class="smf-row"><span class="smf-k">MANUAL / AUTO</span><span id="hClears">0 / 0</span></div>
   </div>
 
-  <div class="smf-card locked" id="cardPalette">
+  <div class="smf-card jam-locked" id="cardPalette">
     <div class="smf-cardh"><span>SIGNAL PALETTE</span><span class="smf-cyan">earned ×12</span></div>
     <button class="smf-btn" id="btnProbe">◇ PROBE — 15</button><button class="smf-btn" id="btnBot">▣ RESPONDER — 25</button>
-    <button class="smf-btn hiddenb" id="btnTank">◫ TANK — 20</button>
+    <button class="smf-btn jam-hiddenb" id="btnTank">◫ TANK — 20</button>
     <div class="smf-dim" id="hToolHint" style="margin-top:4px">probe a lane: silence trips its gate</div>
   </div>
 
@@ -56,7 +60,7 @@ hud.innerHTML = `
   </div>
 
   <div class="smf-card">
-    <div class="smf-cardh"><span>MILESTONES</span></div>
+    <div class="smf-cardh"><span>SHIFT CHECKLIST</span></div>
     <ul class="smf-check" id="hCheck"></ul>
   </div>
 
@@ -66,11 +70,11 @@ hud.innerHTML = `
   </div>
 
   <div class="smf-legend">
-    <span class="smf-amber">■ matter</span> · <span class="smf-cyan">■ signal</span> ·
-    <span class="smf-green">■ responders</span> · <span class="smf-red">■ fault</span><br>
-    gate trips after ${P.gateTrip}s of silence · tank band ${P.tankLo}–${P.tankHi} of ${P.tankCap}
+    <span class="smf-green">■ responders</span> · <span class="smf-red">■ fault</span> ·
+    gate trips after ${P.gateTrip}s of silence · tank band ${P.tankLo}–${P.tankHi} of ${P.tankCap}<br>
+    <span class="smf-amber">■ matter</span> · <span class="smf-cyan">■ signal</span>
   </div>
-  <div class="smf-perf" id="hPerf">sim —µs/tick · draw —ms</div>
+  <div class="jam-perf" id="hPerf">sim —µs/tick · draw —ms</div>
 `;
 
 const $ = (id) => document.getElementById(id);
@@ -83,16 +87,18 @@ const el = {
   btnLane: $('btnLane'), btnProbe: $('btnProbe'), btnBot: $('btnBot'), btnTank: $('btnTank'),
 };
 
+/* milestones where the verb is the player's — checklist marks them YOU: */
+const PLAYER_VERB = new Set(['firstClear', 'fluency', 'firstProbe', 'tankInstalled']);
 for (const [k, label] of MILESTONES) {
   const li = document.createElement('li');
   li.id = `ms-${k}`;
-  li.innerHTML = `<b>□</b> ${label}`;
+  li.innerHTML = `<b>□</b> ${PLAYER_VERB.has(k) ? '<span class="you">YOU:</span> ' : ''}${label}`;
   el.check.appendChild(li);
 }
 
-/* speed buttons */
+/* speed buttons — the shared shell set: ⏸ ×1 ×8 ×32 */
 const speedBtns = [];
-[['⏸', 0], ['×1', 1], ['×4', 4], ['×16', 16]].forEach(([lab, v]) => {
+[['⏸', 0], ['×1', 1], ['×8', 8], ['×32', 32]].forEach(([lab, v]) => {
   const b = document.createElement('button');
   b.className = 'smf-btn';
   b.textContent = lab;
@@ -173,10 +179,11 @@ canvas.addEventListener('pointerdown', (e) => {
 });
 
 window.addEventListener('keydown', (e) => {
+  if (brief && brief.isOpen()) return; // the work order holds the shift at ⏸
   if (e.key === ' ') { setSpeed(speed === 0 ? 1 : 0); e.preventDefault(); }
   else if (e.key === '1') setSpeed(1);
-  else if (e.key === '2') setSpeed(4);
-  else if (e.key === '3') setSpeed(16);
+  else if (e.key === '2') setSpeed(8);
+  else if (e.key === '3') setSpeed(32);
 });
 
 window.addEventListener('resize', () => { view.resize(); updateInset(); });
@@ -217,7 +224,7 @@ function refreshHud() {
   el.handsN.textContent = `${s.handsRate.toFixed(1)}/min`;
   const hf = clamp(s.handsRate / 12, 0, 1);
   el.bHands.style.transform = `scaleX(${hf})`;
-  el.bHands.className = `smf-fill${s.handsRate >= 6 ? ' red' : ''}`;
+  el.bHands.className = `smf-fill ${s.handsRate >= 6 ? 'fill-red' : 'fill-amber'}`;
   el.handsN.className = s.handsRate >= 6 ? 'smf-red' : 'smf-amber';
   el.clears.textContent = `${s.manualClears} / ${s.autoClears}`;
 
@@ -225,14 +232,14 @@ function refreshHud() {
   el.btnLane.disabled = nAct >= P.maxLanes;
 
   if (s.flags.fluency) {
-    el.palette.classList.remove('locked');
-    if (!palettePulsed) { el.palette.classList.add('pulse'); palettePulsed = true; }
+    el.palette.classList.remove('jam-locked');
+    if (!palettePulsed) { el.palette.classList.add('jam-pulse'); palettePulsed = true; }
   }
   if (s.flags.storm && !tankPulsed) {
-    el.btnTank.classList.remove('hiddenb');
-    el.palette.classList.remove('pulse');
+    el.btnTank.classList.remove('jam-hiddenb');
+    el.palette.classList.remove('jam-pulse');
     void el.palette.offsetWidth; // restart the pulse for the tank reveal
-    el.palette.classList.add('pulse');
+    el.palette.classList.add('jam-pulse');
     tankPulsed = true;
   }
 
@@ -256,15 +263,37 @@ function refreshHud() {
   el.perf.textContent = `sim ${simUs.toFixed(1)}µs/tick · draw ${drawMs.toFixed(1)}ms`;
 
   if (s.flags.quota) {
-    banner.className = 'smf-banner show';
-    banner.textContent = `QUOTA BANKED — T+${s.flagT.quota.toFixed(0)}s`;
+    banner.hidden = false;
+    banner.classList.remove('storm');
+    banner.textContent = 'SHIFT COMPLETE — QUOTA BANKED HANDS-FREE';
   } else if (s.flags.storm && !s.flags.stormQuelled) {
-    banner.className = 'smf-banner show storm';
+    banner.hidden = false;
+    banner.classList.add('storm');
     banner.textContent = 'ALERT STORM — RESPONDERS THRASHING';
   } else {
-    banner.className = 'smf-banner';
+    banner.hidden = true;
+    banner.classList.remove('storm');
   }
 }
+
+/* ---------------- WORK ORDER briefing (shared shell) ---------------- */
+/* The card holds the shift at speed 0; BEGIN SHIFT (or Esc) sets ×1.
+   The sim itself is never touched — harnesses see the same world. */
+const brief = mountBriefing(document.getElementById('root'), {
+  workOrder: 'FOUNDRY WORK ORDER 02',
+  title: 'THE JAM',
+  layer: 'L2→L3 · ALERT ROUTING',
+  situation: 'Lanes earn matter; jams stop them; your hands clear them. Buy more lanes and the jams outrun you — the foundry pays fluency in signal parts. Alerts are items here, not popups.',
+  verbs: [
+    ['CLICK JAM', 'clear it by hand'],
+    ['PANEL', 'buy lanes for income; probes, a responder and tanks once earned'],
+  ],
+  objective: 'Bank the quota with your hands in your pockets.',
+  onOpen() { setSpeed(0); },
+  onBegin() { setSpeed(1); },
+});
+
+view.draw(sim.state, ui); // pre-warm: the world is visible behind the dimmed card
 
 setInterval(refreshHud, 200);
 refreshHud();

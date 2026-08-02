@@ -258,7 +258,9 @@ export function createView(canvas) {
 
     if (hold) drawTally(st, holdT, io);
     if (rv) drawVerifyChip(st, rv);
-    if (st.banner && st.t - st.banner.t < 3.5) drawBanner(st);
+    /* transient event banners; once done, the DOM SHIFT COMPLETE banner
+       (shared shell) owns the top-center slot */
+    if (st.banner && st.t - st.banner.t < 3.5 && !st.flags.done) drawBanner(st);
     /* commit vignette */
     if (st.sealBrokenT > 0 && st.t - st.sealBrokenT < 0.7) {
       const a = 0.45 * (1 - (st.t - st.sealBrokenT) / 0.7);

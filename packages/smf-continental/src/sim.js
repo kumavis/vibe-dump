@@ -851,9 +851,10 @@ export function createSim(opts = {}) {
   flag('spawned',
     `CONTINENT SPAWNED — ${state.builtTotal} structures · ${provinces.length} provinces · seed 0x${seed.toString(16).toUpperCase()}`);
   ev('Survey beacons hold thin field over unclaimed provinces');
-  // settle: gates commit, senescent provinces begin to fail, HUD opens on a
-  // continent already breathing (100 ticks ≈ 10 sim-seconds)
-  for (let i = 0; i < 100; i++) step();
+  // settle: gates commit, senescent provinces slip into dormancy, HUD opens
+  // on a continent already breathing — but the first resorptions (~T+12)
+  // are still ahead, so the gallery's first frame shows the full 50k
+  for (let i = 0; i < 70; i++) step();
 
   return { state, step, act };
 }

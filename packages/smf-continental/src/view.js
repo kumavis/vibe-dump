@@ -128,9 +128,9 @@ export function createView(canvas, sim) {
         const d = disp[i] + (f[i] - disp[i]) * k;
         disp[i] = d;
         if (d > P.litEps) lit++;
-        let q = d * 0.55;
-        if (q > 1.12) q = 1.12;
-        else if (q < 0.012) q = 0;
+        // saturating ramp: deep pools stay rich blue instead of washing
+        // out; the 0.04 floor also hides the block-skip's frozen residue
+        const q = d < 0.04 ? 0 : (1.3 * (d - 0.04)) / (d + 1.3);
         const r = baseR[i] + ((COL.fieldR * q) | 0);
         const g = baseG[i] + ((COL.fieldG * q) | 0);
         const b = baseB[i] + ((COL.fieldB * q) | 0);
@@ -139,12 +139,27 @@ export function createView(canvas, sim) {
     }
     litCells = lit;
     fctx.putImageData(img, 0, 0);
-    ctx.imageSmoothingEnabled = cam.scale < 9;
+    ctx.imageSmoothingEnabled = true; // the field is a fluid at every zoom
     const sx = cx0, sy = cz0, sw = cx1 - cx0 + 1, sh = cz1 - cz0 + 1;
     ctx.drawImage(
       fieldCanvas, sx, sy, sw, sh,
       w2sX(sx * TS), w2sZ(sy * TS), sw * TS * cam.scale, sh * TS * cam.scale,
     );
+    // machine zoom: hairline tile grid gives the field its engineering texture
+    if (cam.scale >= 9) {
+      ctx.strokeStyle = 'rgba(11,14,17,0.35)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let gx = cx0; gx <= cx1 + 1; gx++) {
+        const X = w2sX(gx * TS);
+        ctx.moveTo(X, 0); ctx.lineTo(X, vh);
+      }
+      for (let gz = cz0; gz <= cz1 + 1; gz++) {
+        const Y = w2sZ(gz * TS);
+        ctx.moveTo(0, Y); ctx.lineTo(vw, Y);
+      }
+      ctx.stroke();
+    }
   }
 
   /* ------------------------------------------------------- aggregates */
@@ -274,9 +289,9 @@ export function createView(canvas, sim) {
         if (X < -80 || X > vw + 80 || Y < -80 || Y > vh + 80) continue;
         for (let rN = 0; rN < 2; rN++) {
           const ft = frac(now * 0.5 + rN * 0.5 + p.idx * 0.13);
-          ctx.globalAlpha = alpha * (1 - ft) * 0.6;
+          ctx.globalAlpha = alpha * (1 - ft) * 0.35;
           ctx.beginPath();
-          ctx.arc(X, Y, ft * p.r * 0.5 * s, 0, 6.2832);
+          ctx.arc(X, Y, ft * p.r * 0.4 * s, 0, 6.2832);
           ctx.stroke();
         }
       }
@@ -374,6 +389,7 @@ export function createView(canvas, sim) {
   return {
     render, resize, cam, brush, tier, zoomAt, panBy,
     screenToWorld: (mx, my) => [s2wX(mx), s2wZ(my)],
+    worldToScreen: (wx, wz) => [w2sX(wx), w2sZ(wz)],
     stats: () => ({ drawMs, litCells }),
   };
 }
