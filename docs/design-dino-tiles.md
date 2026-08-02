@@ -1,84 +1,64 @@
-# Dino Tiles — the synergy grid (Plan B)
+# Dino Tiles — the rapid hex puzzle (Plan B)
 
-**Package:** `packages/dino-tiles` (future — not started)
-**One-liner:** A cozy tile-placement puzzle wearing the dino-park skin:
-draw tiles, place them for neighbor bonuses, and keep re-arranging as
-conditions shift and rarer tiles unlock.
+**Package:** `packages/dino-tiles` · **Status:** v1 playable
+**One-liner:** A 3-minute dino-park puzzle: place a fixed deck of 30 hex
+tiles for adjacency combos — build herds, fence the raptors, give the
+T-Rex space — then chase the star thresholds.
 
 Where Plan A (`docs/design-dino-trails.md`) deepens the *simulation*, Plan B
-pivots the *genre*: Dorfromantik / Islanders-adjacent, built for short
-sessions and one-thumb play. It should be its own package — bending
-dino-park into this would lose the living-park sim without gaining the
-puzzle's clarity.
+went the other way on purpose: **no money, no ledger, no menus**. One
+score, one deck, single-tap placement, instant feedback. The original
+economics-flavored sketch for this direction was cut in favor of pace.
 
 ## Core loop
 
-1. **Acquire a tile** — from a drip-feed draw, a milestone unlock, or the
-   timed market (see below).
-2. **Place it** on the hex/square grid for maximum synergy with neighbors.
-3. **Re-adjust**: moving a placed tile is allowed but costs (money or a
-   limited "crane" resource) — the tension between a locally-good placement
-   now and the layout you'll wish you had in ten turns.
-4. **Conditions change**: seasons, guest fads, and events re-weight the
-   synergy table (heatwave: fountains spike; raptor-movie summer: predator
-   tiles double draw) — forcing periodic re-planning rather than one solved
-   layout.
+1. The hand shows the **current tile** (with its one-line rule) and the
+   next two — enough information to plan, not enough to stall.
+2. **Tap an empty hex** to place it. Points burst out immediately as
+   floating popups; the tile drops in with a bounce; big combos get gold
+   text and a stronger haptic.
+3. 30 tiles, 37 cells — the board tightens as the run ends. Final screen:
+   score, 0–3 stars, best-score chase with a NEW BEST celebration.
 
-## Tile taxonomy & synergy
+## The deck (fixed composition — every run is fair)
 
-Tile classes: **dino paddocks** (one species each), **amenities** (snack,
-gift, restroom), **flora** (garden, grove, lake), **infrastructure**
-(path plaza, generator, ranger post).
+5× Parasaurolophus, 4× Stegosaurus, 4× Triceratops, 4× Velociraptor,
+2× T-Rex, 4× Lake, 3× Garden, 2× Snack Stand, 2× Fence — shuffled.
 
-Synergy is edge-adjacency, readable at a glance before placing (ghost
-preview shows the score delta). Example rules, all thematic:
+## Scoring rules (each fits on the tile card)
 
-| Pairing | Effect |
+| Tile | Rule |
 |---|---|
-| Herd dino ⟷ same-species paddock | +happiness, +draw (the herd bonus) |
-| Predator ⟷ prey species | +draw ("drama"), −prey happiness |
-| Predator ⟷ predator | −both (territorial) unless ranger post adjacent |
-| Any dino ⟷ lake / garden | +happiness |
-| Snack ⟷ high-draw dino | +revenue (captive audience) |
-| Restroom ⟷ snack | +revenue chain |
-| Generator ⟷ electric-fence paddock | enables the fence tier |
-| Grove ⟷ grove ⟷ grove | forest set bonus, unlocks shy species |
+| 🎺🌵🦬 Herbivores | base 5–7 · **+6 per same-species neighbor** · +2 per friendly herbivore |
+| 🗡️ Velociraptor | base 8 · +6 per raptor · **scares herbivores −8** unless a fence neighbors the raptor |
+| 👑 T-Rex | base 20 · **+5 per EMPTY neighbor** · −6 per any dino neighbor |
+| 🌊 Lake | +4 per dino neighbor (and dinos placed beside it get +4) |
+| 🌳 Garden | +3 per non-empty neighbor |
+| 🌭 Snack Stand | +5 per *different* species around it |
+| ⛓️ Fence | +4 per predator neighbor · pacifies adjacent predators |
 
-Scoring surfaces as **income per day** (money remains the master resource)
-plus a **park score** that gates tile unlocks.
+**Group bonuses:** connect 3 of a species → **HERD! +25** (raptors:
+**PACK HUNTS! +30**); each further member +10.
 
-## Scarcity & the market
+## Stars — calibrated, not guessed
 
-The shared idea with Plan A, translated to tiles: rare dino tiles appear in
-a **timed shop window** (3 slots, countdown, gone when missed). Common
-tiles drip steadily; a T-Rex tile showing up is the event that reshapes the
-whole board — you clear and re-arrange a district for it. Duplicate common
-tiles can be merged (three Parasaurolophus paddocks → one "sanctuary" tile
-with a bigger footprint and aura).
+Headless autoplay in node (game.js is DOM-free): random play averages
+~262, a myopic-greedy bot ~525. Thresholds: **★ 320 · ★★ 450 · ★★★ 550** —
+three stars sits above the greedy median, so it requires using the
+next-tile preview and planning herds ahead.
 
-## What carries over from dino-park
+## What carries over from the siblings
 
-- The procedural cartoon dino rigs (copied per package — no cross-package
-  imports), rendered small and idle-animated on their tiles; the 3D board
-  is presentation, the sim is the adjacency graph.
-- UI chrome: HUD chips, bottom sheets, toasts, the validated chart palette
-  for the books panel.
-- Tone: escapes become a *puzzle* event here — an unhappy predator with a
-  bad neighborhood "rampages" and locks tiles until resolved.
+The procedural dino rigs (copied per package — no cross-package imports),
+the cartoon chip/modal UI language, and the flat-shaded look. The board is
+a fixed-camera diorama (tilt + pinch only) — placement is the game, not
+navigation.
 
-## Why a separate package
+## Ideas for a v2
 
-- Different genre, different session shape, different failure states —
-  a shared codebase would compromise both.
-- The monorepo is built for siblings: new slug, `npm install`, done; the
-  gallery picks it up automatically.
-
-## Open questions
-
-- Hex vs square: hex gives 6 neighbors (richer synergy, softer look) but
-  square matches dino-park's visual language and is easier to read on
-  small screens. Leaning hex — it differentiates the sibling.
-- Fixed board that grows by unlock rings vs infinite scroll: leaning fixed
-  rings — scarcity of frontage is part of the puzzle.
-- Whether guests exist visually at all, or are pure numbers with a crowd
-  *sound* — leaning tiny wandering guests for life, zero mechanics.
+- Daily seed (same shuffle for everyone, shareable score).
+- One "crane" per run: move a placed tile — the doc's original
+  re-arrangement idea, as a scarce power instead of a system.
+- Rare golden-dino tiles appearing mid-run (the market/scarcity idea,
+  puzzle-sized).
+- End-of-run "park tour": camera swoops the finished board.

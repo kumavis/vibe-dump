@@ -1,0 +1,246 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #a8e0f8;
+  overscroll-behavior: none;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+}
+
+#scene {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+#scene canvas {
+  display: block;
+}
+
+button {
+  font: inherit;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  background: none;
+}
+
+/* ------------------------------------------------ HUD */
+
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 6px;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 8px 4px;
+  pointer-events: none;
+  z-index: 10;
+}
+.chip {
+  pointer-events: auto;
+  background: #fff8e7;
+  color: #5b4327;
+  border: 2px solid #e3cfa4;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: 0 3px 0 rgba(91, 67, 39, 0.25);
+  white-space: nowrap;
+}
+.chip-score {
+  background: #eafbe0;
+  border-color: #b5dd9c;
+  color: #2e6b1e;
+  font-size: 18px;
+  min-width: 74px;
+  text-align: center;
+  transition: transform 0.12s;
+}
+.chip-score.pop {
+  transform: scale(1.18);
+}
+.chip-btn {
+  margin-left: auto;
+}
+.chip-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(91, 67, 39, 0.25);
+}
+
+/* ------------------------------------------------ hand */
+
+#hand {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+  max-width: 94vw;
+}
+#current-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff8e7;
+  border: 3px solid #e3cfa4;
+  border-radius: 18px;
+  padding: 10px 16px;
+  color: #5b4327;
+  text-align: left;
+  box-shadow: 0 5px 0 rgba(91, 67, 39, 0.25);
+  max-width: 74vw;
+}
+#current-tile.wiggle {
+  animation: wiggle 0.3s;
+}
+@keyframes wiggle {
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+#cur-icon {
+  font-size: 34px;
+}
+.cur-text {
+  display: flex;
+  flex-direction: column;
+}
+.cur-text b {
+  font-size: 15px;
+}
+.cur-text small {
+  font-size: 11px;
+  color: #8a6f4d;
+  line-height: 1.25;
+}
+#next-tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#next-tiles span {
+  background: #fff8e7cc;
+  border: 2px solid #e3cfa4;
+  border-radius: 12px;
+  padding: 3px 9px;
+  font-size: 17px;
+  box-shadow: 0 3px 0 rgba(91, 67, 39, 0.2);
+}
+
+/* ------------------------------------------------ overlay */
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 18, 26, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: #fff8e7;
+  color: #5b4327;
+  border-radius: 22px;
+  padding: 26px 22px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  max-height: 84vh;
+  overflow-y: auto;
+}
+.modal-icon {
+  font-size: 50px;
+}
+.modal h2 {
+  margin: 6px 0 10px;
+}
+.modal p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.stars {
+  font-size: 38px;
+  letter-spacing: 6px;
+  color: #d1900c;
+  margin: 6px 0;
+}
+.final-score {
+  font-size: 44px;
+  font-weight: 900;
+  color: #2e6b1e;
+}
+.new-best {
+  color: #d1900c;
+  font-weight: 800;
+  animation: throb 1s ease-in-out infinite;
+}
+@keyframes throb {
+  50% {
+    transform: scale(1.08);
+  }
+}
+.big {
+  display: block;
+  width: 100%;
+  background: #4caf50;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  border-radius: 14px;
+  padding: 13px;
+  margin-top: 14px;
+  box-shadow: 0 4px 0 #35793a;
+}
+.big:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #35793a;
+}
+.rules {
+  text-align: left;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.rules div {
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.rules span {
+  font-size: 19px;
+}
+.muted {
+  color: #8a6f4d;
+  font-size: 12px;
+  margin-top: 10px;
+}
