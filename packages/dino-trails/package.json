@@ -1,0 +1,18 @@
+{
+  "name": "@vibe-dump/dino-trails",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "d3-delaunay": "^6.0.4",
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Dino Trails",
+    "description": "Territory-and-footfall dinosaur tycoon on procedurally carved parkland: guests walk real trails, money follows the footsteps, and rare dinos hit the market on a countdown. Three.js."
+  }
+}
