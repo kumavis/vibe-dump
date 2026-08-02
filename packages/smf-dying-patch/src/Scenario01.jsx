@@ -676,8 +676,9 @@ function createView(container) {
     drag = [e.clientX, e.clientY];
     const k = cam.dist * 0.0016;
     const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
-    cam.tx -= (dx * cy - dy * sy) * k;
-    cam.tz -= (-dx * sy - dy * cy) * k;
+    // grab-style pan: the ground follows the cursor on both axes
+    cam.tx -= (dx * cy + dy * sy) * k;
+    cam.tz -= (-dx * sy + dy * cy) * k;
     cam.tx = clamp(cam.tx, -95, 95);
     cam.tz = clamp(cam.tz, -65, 65);
   });
