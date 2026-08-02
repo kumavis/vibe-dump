@@ -15,7 +15,7 @@ export function mulberry32(seed) {
   }
 }
 
-const R = 27 // nominal park radius; gate sits at +z (south)
+const R = 29 // nominal park radius; gate sits at +z (south)
 
 // Convex blob boundary: a 24-gon with gentle radius variation.
 function makeBoundary(rng) {
@@ -115,14 +115,14 @@ export function makePark(seed) {
   // Jittered-grid seeds with a density gradient: fine near the south gate,
   // coarse in the back country — small starter plots, big premium territory.
   const pts = []
-  for (let gx = -R; gx <= R; gx += 5.4) {
-    for (let gz = -R; gz <= R; gz += 5.4) {
+  for (let gx = -R; gx <= R; gx += 7.2) {
+    for (let gz = -R; gz <= R; gz += 7.2) {
       const south = (gz + R) / (2 * R) // 1 near gate
-      if (south > 0.55 && rng() < 0.45) {
-        // split southern cells: add a second point for finer cells
-        pts.push([gx + (rng() - 0.5) * 4.2, gz + (rng() - 0.5) * 4.2])
+      if (south > 0.62 && rng() < 0.35) {
+        // split some southern cells: finer, cheaper starter land near the gate
+        pts.push([gx + (rng() - 0.5) * 5.2, gz + (rng() - 0.5) * 5.2])
       }
-      pts.push([gx + (rng() - 0.5) * 4.2, gz + (rng() - 0.5) * 4.2])
+      pts.push([gx + (rng() - 0.5) * 5.2, gz + (rng() - 0.5) * 5.2])
     }
   }
   const inside = pts.filter(([x, z]) => pointInConvex(boundary, x * 1.12, z * 1.12))

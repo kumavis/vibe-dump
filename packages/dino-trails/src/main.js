@@ -56,7 +56,7 @@ const ui = new UI(
 
 world.syncState(s)
 ui.refresh()
-if (!s.flags.hinted) ui.hint('👆 Tap a cell to claim land · 🔥 shows the busy trails')
+if (!s.flags.hinted) ui.hint('👆 Tap a cell · drag to roam · 🔥 busy trails')
 
 // Debug/playtest hook (smoke tests + console tinkering).
 window.__dp = {

@@ -19,9 +19,10 @@ your gift stand when the crowds change course.
 2. **The economy is footfall.** Guests are simulated agents walking real
    shortest paths. Shops earn from guests passing their edges, not from a
    global visitor count. Placement *is* the economic decision.
-3. **Dinosaurs are hard to get.** No catalog. A rotating market offers a few
-   dinos at a time on a countdown; rare species appear seldom and sell out.
-   Cash you hoard is optionality for the next window.
+3. **Good dinosaurs are hard to get.** Commons are always in stock so the
+   park never stalls, but everything above them comes through a rotating
+   market: a few offers at a time on a countdown; rare species appear
+   seldom and sell out. Cash you hoard is optionality for the next window.
 
 ## Terrain generation
 
@@ -81,11 +82,13 @@ research — Dijkstra over a ~150-node graph.
 
 ## The dinosaur market
 
-- 3 offer slots, refreshing every ~5 days; each offer has a price (jittered)
-  and a hard expiry. Unbought offers vanish.
-- Rarity ladder: commons (Parasaurolophus, Stegosaurus) appear often; a
-  T-Rex or Brachiosaurus offer is an *event* — the game's "drop everything"
-  moment, and the reason to sit on cash.
+- **Ranch stock**: commons (Parasaurolophus, Stegosaurus) are always for
+  sale at list price — the park never stalls waiting for a starter dino.
+- **Traveling market**: 3 offer slots, refreshing every ~5 days; each offer
+  has a price (jittered) and a hard expiry. Unbought offers vanish.
+- Rarity ladder above the commons: mids appear regularly; a T-Rex,
+  Spinosaurus or Brachiosaurus offer is an *event* — the game's "drop
+  everything" moment, and the reason to sit on cash.
 - Roadmap: a rival park that visibly bids on the same offers; breeding pairs;
   seasonal exotic windows.
 

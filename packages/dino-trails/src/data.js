@@ -14,41 +14,68 @@ export const ECON = {
 }
 
 // minR: minimum cell inradius ("roominess") the species accepts.
-// weight: market appearance odds — rare dinos are events, not catalog items.
+// always: ranch stock, purchasable any time at list price.
+// weight: odds in the rotating traveling-market slots (always-stock excluded).
+// loves: terrain preference — neighbors of that terrain make it much happier.
 export const SPECIES = {
   parasaur: {
     name: 'Parasaurolophus', icon: '🎺', cost: 450, food: 12,
-    pop: 3, irr: 2, fer: 1, social: 'herd', minR: 1.4, weight: 0.22,
+    pop: 3, irr: 2, fer: 1, social: 'herd', minR: 1.2, always: true,
     desc: 'A cheerful honker. Fits almost anywhere and complains about nothing.',
   },
   stego: {
     name: 'Stegosaurus', icon: '🌵', cost: 900, food: 18,
-    pop: 5, irr: 3, fer: 2, social: 'herd', minR: 2.0, weight: 0.18,
+    pop: 5, irr: 3, fer: 2, social: 'herd', minR: 1.6, always: true,
     desc: 'Slow, photogenic, needs a bit of lawn to trundle.',
   },
+  pachy: {
+    name: 'Pachycephalosaurus', icon: '🪨', cost: 750, food: 14,
+    pop: 4, irr: 5, fer: 2, social: 'herd', minR: 1.2, weight: 0.18,
+    desc: 'Headbutts fences, rocks, and occasionally opinions.',
+  },
+  anky: {
+    name: 'Ankylosaurus', icon: '🛡️', cost: 1100, food: 20,
+    pop: 6, irr: 3, fer: 2, social: 'herd', minR: 1.6, weight: 0.17,
+    desc: 'A living tank with a club tail. Placid, until it is not.',
+  },
   trike: {
-    name: 'Triceratops', icon: '🛡️', cost: 1400, food: 22,
-    pop: 7, irr: 4, fer: 2, social: 'herd', minR: 2.2, weight: 0.16,
+    name: 'Triceratops', icon: '🦬', cost: 1400, food: 22,
+    pop: 7, irr: 4, fer: 2, social: 'herd', minR: 1.8, weight: 0.15,
     desc: 'Grumpy alone, majestic in a herd. Wants real acreage.',
+  },
+  ptero: {
+    name: 'Pteranodon', icon: '🪁', cost: 1600, food: 16,
+    pop: 9, irr: 4, fer: 2, social: 'herd', minR: 1.3, weight: 0.13,
+    desc: 'Circles its territory all day. Guests crane their necks; wallets open.',
   },
   dilo: {
     name: 'Dilophosaurus', icon: '🎭', cost: 2000, food: 26,
-    pop: 8, irr: 6, fer: 3, social: 'solo', minR: 2.0, weight: 0.14,
+    pop: 8, irr: 6, fer: 3, social: 'solo', minR: 1.7, weight: 0.12,
     desc: 'Dramatic, venomous, lives alone by mutual agreement.',
   },
   raptor: {
     name: 'Velociraptor', icon: '🗡️', cost: 2800, food: 30,
-    pop: 10, irr: 7, fer: 3, social: 'herd', minR: 1.8, weight: 0.13,
+    pop: 10, irr: 7, fer: 3, social: 'herd', minR: 1.5, weight: 0.1,
     desc: 'Clever girl. Tests fences daily; happier with the pack.',
+  },
+  carno: {
+    name: 'Carnotaurus', icon: '😈', cost: 3400, food: 38,
+    pop: 12, irr: 7, fer: 3, social: 'solo', minR: 1.9, weight: 0.07,
+    desc: 'The horned sprinter. Fast, furious, photogenic.',
   },
   brachio: {
     name: 'Brachiosaurus', icon: '🌴', cost: 5200, food: 48,
-    pop: 14, irr: 2, fer: 2, social: 'herd', minR: 3.2, weight: 0.09,
+    pop: 14, irr: 2, fer: 2, social: 'herd', minR: 3.5, weight: 0.05,
     desc: 'A four-story neck. Only the big back-country cells will do.',
+  },
+  spino: {
+    name: 'Spinosaurus', icon: '🌊', cost: 6000, food: 55,
+    pop: 16, irr: 6, fer: 4, social: 'solo', minR: 3.0, weight: 0.04, loves: 'water',
+    desc: 'The sailed fisher-king. Miserable without a pond next door.',
   },
   trex: {
     name: 'T-Rex', icon: '👑', cost: 9000, food: 75,
-    pop: 20, irr: 8, fer: 4, social: 'solo', minR: 3.0, weight: 0.08,
+    pop: 20, irr: 8, fer: 4, social: 'solo', minR: 3.3, weight: 0.04,
     desc: 'The main event. Demands room, solitude and electric fencing.',
   },
 }

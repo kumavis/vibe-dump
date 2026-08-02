@@ -304,6 +304,122 @@ const BUILDERS = {
     }
     return rig
   },
+
+  anky(s = 1.0) {
+    const rig = quadruped({ s, skin: 0x8a9a5b, belly: 0xd6ceb0, legH: 0.65, bodyScale: [1.05, 0.6, 1.3], neckH: 0.2, headScale: 0.5 })
+    const armorM = mat(0x5f6f3f)
+    // Armor bosses in two rows along the back.
+    for (let i = 0; i < 4; i++) {
+      for (const side of [-0.35, 0.35]) {
+        const boss = mesh(SPH, armorM, side * s, 0.55 * s, (0.85 - i * 0.55) * s)
+        boss.scale.set(0.24 * s, 0.14 * s, 0.24 * s)
+        rig.bodyPivot.add(boss)
+      }
+    }
+    // Side spikes.
+    for (let i = 0; i < 3; i++) {
+      for (const side of [-1, 1]) {
+        const spike = mesh(CONE, armorM, side * 1.0 * s, 0.1 * s, (0.7 - i * 0.7) * s)
+        spike.scale.set(0.12 * s, 0.4 * s, 0.12 * s)
+        spike.rotation.z = side * -1.35
+        rig.bodyPivot.add(spike)
+      }
+    }
+    const club = mesh(SPH, armorM, 0, 0.02 * s, -0.55 * s)
+    club.scale.set(0.34 * s, 0.28 * s, 0.4 * s)
+    rig.tail[2].add(club)
+    rig.head.position.y -= 0.3 * s
+    return rig
+  },
+
+  pachy(s = 0.75) {
+    const rig = biped({ s, skin: 0xc98850, belly: 0xf0d9b5, headScale: 0.68 })
+    const dome = mesh(SPH, mat(0xe8d3b0), 0, 0.4 * s, 0.05 * s)
+    dome.scale.set(0.4 * s, 0.34 * s, 0.42 * s)
+    rig.head.add(dome)
+    const studM = mat(0x8a5a30)
+    for (let i = 0; i < 5; i++) {
+      const a = -1.1 + i * 0.55
+      const stud = mesh(CONE, studM, Math.sin(a) * 0.42 * s, 0.42 * s, -0.15 * s + Math.cos(a) * 0.1 * s)
+      stud.scale.set(0.06 * s, 0.16 * s, 0.06 * s)
+      stud.rotation.z = -a
+      rig.head.add(stud)
+    }
+    return rig
+  },
+
+  carno(s = 1.1) {
+    const rig = biped({ s, skin: 0x8c4a3c, belly: 0xd9a986, legH: 1.25, bodyScale: [0.66, 0.75, 1.05], headScale: 0.78, headY: 1.1 })
+    const hornM = mat(0xf0e0c0)
+    for (const side of [-1, 1]) {
+      const horn = mesh(CONE, hornM, side * 0.3 * s, 0.45 * s, 0.2 * s)
+      horn.scale.set(0.1 * s, 0.34 * s, 0.1 * s)
+      horn.rotation.z = side * -0.5
+      rig.head.add(horn)
+    }
+    const tip = mesh(CONE, mat(0x6b352a), 0, 0, -0.6 * s)
+    tip.scale.set(0.11 * s, 0.32 * s, 0.11 * s)
+    tip.rotation.x = -Math.PI / 2
+    rig.tail[2].add(tip)
+    return rig
+  },
+
+  spino(s = 1.3) {
+    const rig = biped({ s, skin: 0x5b7d8c, belly: 0xd9c9a0, legH: 1.1, bodyScale: [0.78, 0.85, 1.2], headScale: 0.7, headY: 1.0, headZ: 1.45 })
+    const sailM = mat(0xd97742)
+    const heights = [0.5, 0.8, 1.0, 0.8, 0.5]
+    heights.forEach((h, i) => {
+      const fin = mesh(CONE, sailM, 0, 0.75 * s, (0.75 - i * 0.42) * s)
+      fin.scale.set(0.4 * s, h * s, 0.09 * s)
+      rig.bodyPivot.add(fin)
+    })
+    // Long crocodile snout.
+    const snout = mesh(BOX, rig.skinM, 0, -0.05 * s, 0.6 * s)
+    snout.scale.set(0.26 * s, 0.2 * s, 0.75 * s)
+    rig.head.add(snout)
+    return rig
+  },
+
+  // The flyer: no legs to animate — world.js circles it above its territory.
+  ptero(s = 0.8) {
+    const group = new THREE.Group()
+    const skinM = mat(0xd8894f)
+    const wingM = mat(0xe8b287)
+    const bodyPivot = new THREE.Group()
+    bodyPivot.position.y = 1.2 * s
+    group.add(bodyPivot)
+    const body = mesh(SPH, skinM)
+    body.scale.set(0.45 * s, 0.4 * s, 0.9 * s)
+    bodyPivot.add(body)
+    const head = new THREE.Group()
+    head.position.set(0, 0.25 * s, 0.85 * s)
+    const skull = mesh(SPH, skinM)
+    skull.scale.set(0.28 * s, 0.26 * s, 0.34 * s)
+    const beak = mesh(CONE, mat(0xe8c26a), 0, -0.04 * s, 0.55 * s)
+    beak.scale.set(0.12 * s, 0.6 * s, 0.12 * s)
+    beak.rotation.x = Math.PI / 2
+    const crest = mesh(CONE, mat(0xc0574f), 0, 0.18 * s, -0.3 * s)
+    crest.scale.set(0.1 * s, 0.5 * s, 0.1 * s)
+    crest.rotation.x = -2.2
+    head.add(skull, beak, crest)
+    addEyes(head, s * 0.9, { y: 0.12, z: 0.22, spread: 0.24 })
+    bodyPivot.add(head)
+    const wings = []
+    for (const side of [-1, 1]) {
+      const pivot = new THREE.Group()
+      pivot.position.set(side * 0.3 * s, 0.15 * s, 0.1 * s)
+      const wing = mesh(BOX, wingM, side * 0.85 * s, 0, -0.15 * s)
+      wing.scale.set(1.7 * s, 0.06 * s, 0.75 * s)
+      const tip = mesh(BOX, wingM, side * 1.9 * s, 0, -0.3 * s)
+      tip.scale.set(0.5 * s, 0.05 * s, 0.45 * s)
+      pivot.add(wing, tip)
+      bodyPivot.add(pivot)
+      wings.push(pivot)
+    }
+    const tail = makeTail(s * 0.6, -0.05 * s, -0.8 * s, [[0.14 * s, 0.5 * s]], skinM, 0)
+    bodyPivot.add(tail.root)
+    return { group, bodyPivot, legs: [], tail: tail.segs, head, wings, fly: true, skinM, bellyM: wingM, size: s }
+  },
 }
 
 export function makeDino(spKey) {

@@ -166,16 +166,24 @@ export class World {
 
     const aspect = container.clientWidth / Math.max(1, container.clientHeight)
     this.camera = new THREE.PerspectiveCamera(50, aspect, 0.5, 400)
-    const dist = aspect < 0.9 ? 64 : 48
-    this.camera.position.set(0, dist * 0.62, dist * 0.85)
+    // Start close, near the gate — roaming the plane is the primary move.
+    const dist = aspect < 0.9 ? 42 : 34
+    const startZ = park.R * 0.45
+    this.camera.position.set(0, dist * 0.62, startZ + dist * 0.85)
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-    this.controls.target.set(0, 0, 9)
+    this.controls.target.set(0, 0, startZ)
     this.controls.enableDamping = true
     this.controls.dampingFactor = 0.08
-    this.controls.enablePan = false
-    this.controls.minDistance = 12
-    this.controls.maxDistance = 85
+    // One finger / left mouse drags you across the park; pinch or wheel
+    // zooms; two-finger drag / right mouse orbits.
+    this.controls.enablePan = true
+    this.controls.screenSpacePanning = false
+    this.controls.panSpeed = 1.15
+    this.controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_ROTATE }
+    this.controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE }
+    this.controls.minDistance = 10
+    this.controls.maxDistance = 95
     this.controls.minPolarAngle = 0.25
     this.controls.maxPolarAngle = 1.35
 
@@ -329,18 +337,31 @@ export class World {
         }
       }
     }
-    // Trail ribbons.
+    // Trail ribbons. Untamed edges are faint game-trails; they become real
+    // paths once a neighboring cell is claimed (see paintRibbonBase).
     this.ribbons = new Map()
-    const trailM = () => mat(0xecdcab)
+    this.activeEdges = new Set()
     for (const e of park.edges) {
       const [ax, az] = park.verts[e.a]
       const [bx, bz] = park.verts[e.b]
-      const ribbon = mesh(BOX, trailM(), (ax + bx) / 2, TRAIL_Y - 0.05, (az + bz) / 2)
-      ribbon.scale.set(e.length + 0.3, 0.12, 0.95)
+      const ribbon = mesh(BOX, mat(0xa4c97e), (ax + bx) / 2, TRAIL_Y - 0.05, (az + bz) / 2)
+      ribbon.scale.set(e.length + 0.3, 0.12, 0.4)
       ribbon.rotation.y = Math.atan2(-(bz - az), bx - ax)
       ribbon.castShadow = false
       this.scene.add(ribbon)
       this.ribbons.set(e.key, ribbon)
+    }
+  }
+
+  paintRibbonBase(key) {
+    const ribbon = this.ribbons.get(key)
+    if (!ribbon) return
+    if (this.activeEdges.has(key)) {
+      ribbon.material.color.set(0xecdcab)
+      ribbon.scale.z = 0.95
+    } else {
+      ribbon.material.color.set(0xa4c97e) // barely-there game trail
+      ribbon.scale.z = 0.4
     }
   }
 
@@ -367,6 +388,15 @@ export class World {
   syncState(s) {
     this.state = s
     const park = this.park
+    // Trails firm up as the park expands: an edge is "active" once any
+    // adjacent cell is owned.
+    this.activeEdges = new Set()
+    for (const e of park.edges) {
+      if (e.cells.some((id) => s.cells[id].owned)) this.activeEdges.add(e.key)
+    }
+    if (!this.heatOn) {
+      for (const key of this.ribbons.keys()) this.paintRibbonBase(key)
+    }
     for (const cell of park.cells) {
       const cs = s.cells[cell.id]
       const sig = `${cs.owned}|${cs.use}|${cs.fence}`
@@ -506,7 +536,7 @@ export class World {
   setHeat(on) {
     this.heatOn = on
     if (!on) {
-      for (const ribbon of this.ribbons.values()) ribbon.material.color.set(0xecdcab)
+      for (const key of this.ribbons.keys()) this.paintRibbonBase(key)
     } else {
       this.paintHeat()
     }
@@ -522,9 +552,13 @@ export class World {
     const warm = new THREE.Color(0xf5a13d)
     const hot = new THREE.Color(0xe5382f)
     for (const [key, ribbon] of this.ribbons) {
+      if (!this.activeEdges.has(key)) {
+        this.paintRibbonBase(key) // wild trails stay subtle even in heat view
+        continue
+      }
       const t = Math.min(1, count(key) / max)
       const c = t < 0.5 ? cold.clone().lerp(warm, t * 2) : warm.clone().lerp(hot, (t - 0.5) * 2)
-      ribbon.material.color = c
+      ribbon.material.color.copy(c)
     }
   }
 
@@ -676,6 +710,12 @@ export class World {
 
   update(dt, t, spawnPerSec) {
     this.controls.update()
+    // Keep the roam target on the park; panning never strands the camera.
+    const tgt = this.controls.target
+    const lim = this.park.R + 5
+    tgt.x = Math.max(-lim, Math.min(lim, tgt.x))
+    tgt.z = Math.max(-lim, Math.min(lim + 6, tgt.z))
+    tgt.y = 0
     if (this.state) {
       this.updateDinos(dt, t)
       this.updateGuests(dt, spawnPerSec)
@@ -711,6 +751,10 @@ export class World {
     for (const view of this.dinoViews.values()) {
       const g = view.rig.group
       const cell = park.cells[view.dino.cell]
+      if (view.rig.fly) {
+        this.updateFlyer(view, dt, t, cell)
+        continue
+      }
       if (!view.target || view.idle < 0) {
         if (view.escaped) {
           const a = Math.random() * Math.PI * 2
@@ -757,6 +801,31 @@ export class World {
         const p = 1 + Math.sin(t * 6) * 0.25
         view.alertRing.scale.set(p, p, 1)
       }
+    }
+  }
+
+  // Pteranodons circle their territory; escaped ones circle the whole park.
+  updateFlyer(view, dt, t, cell) {
+    const g = view.rig.group
+    view.flyAngle = (view.flyAngle ?? Math.random() * Math.PI * 2) + dt * (view.escaped ? 1.1 : 0.55)
+    const a = view.flyAngle
+    const [cx, cz] = view.escaped ? [0, 0] : cell.centroid
+    const radius = view.escaped ? this.park.R * 0.5 : Math.max(1.2, cell.inradius * 0.55)
+    const height = (view.escaped ? 7.5 : 4.2) + Math.sin(t * 1.3 + view.t) * 0.5
+    g.position.set(cx + Math.cos(a) * radius, cell.elev + height, cz + Math.sin(a) * radius)
+    g.rotation.y = Math.atan2(-Math.sin(a), Math.cos(a)) + Math.PI / 2
+    g.rotation.z = view.escaped ? 0.25 : 0.15 // bank into the turn
+    view.t += dt
+    const flap = Math.sin(view.t * 9) * 0.45
+    view.rig.wings[0].rotation.z = flap
+    view.rig.wings[1].rotation.z = -flap
+    view.rig.tail.forEach((seg, i) => {
+      seg.rotation.y = Math.sin(view.t * 2.5 + i) * 0.1
+    })
+    if (view.emote) view.emote.position.y = 1.6
+    if (view.alertRing.visible) {
+      const p = 1 + Math.sin(t * 6) * 0.25
+      view.alertRing.scale.set(p, p, 1)
     }
   }
 

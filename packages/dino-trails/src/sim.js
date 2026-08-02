@@ -128,7 +128,8 @@ export function attractionScore(s) {
 }
 
 function rollMarket(s, rng) {
-  const entries = Object.entries(SPECIES)
+  // Ranch stock (`always`) never occupies a traveling-market slot.
+  const entries = Object.entries(SPECIES).filter(([, sp]) => !sp.always)
   const total = entries.reduce((t, [, sp]) => t + sp.weight, 0)
   s.market.offers = []
   for (let slot = 0; slot < ECON.marketSlots; slot++) {
@@ -216,6 +217,19 @@ export function buyOffer(s, park, offerIdx, cellId) {
   }
 }
 
+// Ranch stock: commons purchasable any time at list price.
+export function buyCommon(s, park, spKey, cellId) {
+  const sp = SPECIES[spKey]
+  if (!sp?.always) return { ok: false }
+  if (!eligibleCells(s, park, spKey).some((c) => c.id === cellId)) {
+    return { ok: false, msg: 'That paddock cannot take this dinosaur.' }
+  }
+  if (s.money < sp.cost) return { ok: false, msg: `Need ${fmtMoney(sp.cost)}.` }
+  s.dinos.push({ id: s.nextId++, sp: spKey, cell: cellId, hap: 65, escaped: false, escDays: 0 })
+  ledger(s, `Bought ${sp.name} from the ranch`, -sp.cost, 'dinos')
+  return { ok: true, msg: `${sp.icon} ${sp.name} settled in!` }
+}
+
 export function sellDino(s, dino) {
   const sp = SPECIES[dino.sp]
   const refund = Math.round(sp.cost * 0.4)
@@ -289,10 +303,15 @@ export function dayTick(s, park, traffic) {
     if (cell.inradius > sp.minR * 1.5) delta += 2 // roomy territory
     if (sp.social === 'herd') delta += herd.length >= 2 ? 3 : -2
     else delta += herd.length === 1 ? 2 : -4
+    let waterNear = false
     for (const nb of cell.neighbors) {
       if (s.cells[nb].use === 'garden') delta += 2
-      if (park.cells[nb].terrain === 'water') delta += 1.5 // lakeside calm
+      if (park.cells[nb].terrain === 'water') {
+        waterNear = true
+        delta += sp.loves === 'water' ? 4 : 1.5 // lakeside calm; fisher-kings crave it
+      }
     }
+    if (sp.loves === 'water' && !waterNear) delta -= 3
     if (cell.terrain === 'forest') delta += 1
     delta += Math.random() * 4 - 2
     d.hap = Math.max(0, Math.min(100, d.hap + Math.min(8, delta)))
@@ -337,7 +356,7 @@ export function dayTick(s, park, traffic) {
   if (s.market.nextRefresh <= 0) {
     rollMarket(s, Math.random)
     s.market.nextRefresh = ECON.marketRefreshDays
-    const rare = s.market.offers.find((o) => SPECIES[o.sp].weight <= 0.09)
+    const rare = s.market.offers.find((o) => SPECIES[o.sp].weight <= 0.07)
     events.push(
       rare
         ? { icon: '✨', text: `RARE at the market: ${SPECIES[rare.sp].name}! ${ECON.marketRefreshDays} days only.`, tone: 'celebrate' }

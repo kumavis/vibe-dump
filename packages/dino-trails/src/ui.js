@@ -98,7 +98,7 @@ export class UI {
     const s = this.s
     const banner = $('#banner')
     const esc = sim.escapees(s)
-    const rare = s.market.offers.find((o) => SPECIES[o.sp].weight <= 0.09)
+    const rare = s.market.offers.find((o) => SPECIES[o.sp].weight <= 0.07)
     if (esc.length) {
       const sp = SPECIES[esc[0].sp]
       banner.className = 'bad'
@@ -319,69 +319,82 @@ export class UI {
 
   // ------------------------------------------------------------ market
 
+  speciesCard(spKey, price, { rare = false, extraAct = 'pick', dataAttr = '' } = {}) {
+    const s = this.s
+    const sp = SPECIES[spKey]
+    const homes = sim.eligibleCells(s, this.park, spKey).length
+    return `
+      <button class="card ${rare ? 'active' : ''}" data-act="${extraAct}" ${dataAttr} ${s.money < price ? 'disabled' : ''}>
+        <div class="card-head"><span class="card-icon">${sp.icon}</span><b>${sp.name}</b>${rare ? ' ✨' : ''}</div>
+        <div class="card-desc">${sp.desc}</div>
+        <div class="stats">
+          <span title="Crowd draw">🌟${sp.pop}</span>
+          <span title="Irritability">🌶️${sp.irr}</span>
+          <span title="Fence needed">🦷${'⛓'.repeat(sp.fer)}</span>
+          <span title="Needs room">📐${sp.minR}+</span>
+        </div>
+        <div class="card-foot"><span>${fmtMoney(price)}</span>
+          <span class="${homes ? 'muted' : 'warn-text'}">${homes ? `${homes} paddock${homes > 1 ? 's' : ''} fit` : 'no paddock fits!'}</span></div>
+      </button>`
+  }
+
+  // Starts the shared placement flow for a ranch common or a market offer.
+  startPlacing(spKey, offerIdx) {
+    const eligible = sim.eligibleCells(this.s, this.park, spKey)
+    if (!eligible.length) {
+      this.toast('🚫', 'No paddock fits this dinosaur — build a roomier one.', 'bad')
+      return
+    }
+    const buy = (cellId) =>
+      offerIdx == null
+        ? this.h.run(sim.buyCommon, this.park, spKey, cellId)
+        : this.h.run(sim.buyOffer, this.park, offerIdx, cellId)
+    if (eligible.length === 1) {
+      buy(eligible[0].id)
+    } else {
+      this.sheet.placing = { sp: spKey, offerIdx }
+      this.renderSheet()
+    }
+  }
+
   renderMarket(body) {
     const s = this.s
     this.title('🛒 Dino Market')
     if (this.sheet.placing != null) return this.renderPlacement(body)
     const days = s.market.nextRefresh
+    const ranch = Object.entries(SPECIES).filter(([, sp]) => sp.always)
     body.innerHTML = `
-      <p class="lead">Fresh stock in <b>${days} day${days > 1 ? 's' : ''}</b> — unsold dinos leave with it.
-      Rare species show up when they feel like it.</p>
+      <h3>Ranch stock — always available</h3>
+      <div class="cards">${ranch.map(([key, sp]) => this.speciesCard(key, sp.cost, { extraAct: 'common', dataAttr: `data-sp="${key}"` })).join('')}</div>
+      <h3>Traveling market — new stock in ${days} day${days > 1 ? 's' : ''}</h3>
+      <p class="muted" style="margin:0 2px 8px">Unsold dinos leave with the refresh. Rare species (✨) show up when they feel like it.</p>
       <div class="cards">${s.market.offers
-        .map((o, i) => {
-          const sp = SPECIES[o.sp]
-          const rare = sp.weight <= 0.09
-          const homes = sim.eligibleCells(s, this.park, o.sp).length
-          return `
-          <button class="card ${rare ? 'active' : ''}" data-act="pick" data-i="${i}" ${s.money < o.price ? 'disabled' : ''}>
-            <div class="card-head"><span class="card-icon">${sp.icon}</span><b>${sp.name}</b>${rare ? ' ✨' : ''}</div>
-            <div class="card-desc">${sp.desc}</div>
-            <div class="stats">
-              <span title="Crowd draw">🌟${sp.pop}</span>
-              <span title="Irritability">🌶️${sp.irr}</span>
-              <span title="Fence needed">🦷${'⛓'.repeat(sp.fer)}</span>
-              <span title="Needs room">📐${sp.minR}+</span>
-            </div>
-            <div class="card-foot"><span>${fmtMoney(o.price)}</span>
-              <span class="${homes ? 'muted' : 'warn-text'}">${homes ? `${homes} paddock${homes > 1 ? 's' : ''} fit` : 'no paddock fits!'}</span></div>
-          </button>`
-        })
+        .map((o, i) => this.speciesCard(o.sp, o.price, { rare: SPECIES[o.sp].weight <= 0.07, extraAct: 'pick', dataAttr: `data-i="${i}"` }))
         .join('')}</div>
       ${s.market.offers.length ? '' : '<p class="muted center">Sold out. Come back after the refresh.</p>'}`
     this.wire(body, {
-      pick: (btn) => {
-        const i = +btn.dataset.i
-        const eligible = sim.eligibleCells(s, this.park, s.market.offers[i].sp)
-        if (!eligible.length) {
-          this.toast('🚫', 'No paddock fits this dinosaur — build a roomier one.', 'bad')
-          return
-        }
-        if (eligible.length === 1) {
-          this.h.run(sim.buyOffer, this.park, i, eligible[0].id)
-        } else {
-          this.sheet.placing = i
-          this.renderSheet()
-        }
-      },
+      common: (btn) => this.startPlacing(btn.dataset.sp, null),
+      pick: (btn) => this.startPlacing(s.market.offers[+btn.dataset.i].sp, +btn.dataset.i),
     })
   }
 
   renderPlacement(body) {
     const s = this.s
-    const i = this.sheet.placing
-    const offer = s.market.offers[i]
-    if (!offer) {
+    const { sp: spKey, offerIdx } = this.sheet.placing
+    const offer = offerIdx != null ? s.market.offers[offerIdx] : null
+    if (offerIdx != null && !offer) {
       this.sheet.placing = null
       return this.renderSheet()
     }
-    const sp = SPECIES[offer.sp]
-    const eligible = sim.eligibleCells(s, this.park, offer.sp)
+    const sp = SPECIES[spKey]
+    const price = offer ? offer.price : sp.cost
+    const eligible = sim.eligibleCells(s, this.park, spKey)
     body.innerHTML = `
-      <p class="lead">${sp.icon} Where does the ${sp.name} live? (${fmtMoney(offer.price)})</p>
+      <p class="lead">${sp.icon} Where does the ${sp.name} live? (${fmtMoney(price)})</p>
       <div class="rows">${eligible
         .map((cell) => {
           const herd = sim.dinosIn(s, cell.id)
-          const cap = sim.capacityFor(cell, offer.sp)
+          const cap = sim.capacityFor(cell, spKey)
           return `
           <button class="row row-btn" data-act="place" data-cell="${cell.id}">
             <span class="row-icon">🏞️</span>
@@ -395,7 +408,10 @@ export class UI {
       <button class="big danger-outline" data-act="back">← Back to market</button>`
     this.wire(body, {
       place: (btn) => {
-        const res = this.h.run(sim.buyOffer, this.park, i, +btn.dataset.cell)
+        const res =
+          offerIdx == null
+            ? this.h.run(sim.buyCommon, this.park, spKey, +btn.dataset.cell)
+            : this.h.run(sim.buyOffer, this.park, offerIdx, +btn.dataset.cell)
         if (res?.ok) {
           this.sheet.placing = null
           this.renderSheet()
@@ -498,8 +514,11 @@ export class UI {
         <p><b>🏞️ Land is unequal.</b> Cells differ in size, terrain and traffic. Prices follow
         footfall, so buy ahead of the crowd. Big species need <i>vast</i> cells — 📐 shows
         the roominess a dino demands.</p>
-        <p><b>🛒 Dinos are hard to get.</b> The market restocks every ${ECON.marketRefreshDays} days with
-        ${ECON.marketSlots} offers. Rare species (✨) show up when they please. Missed offers are gone.</p>
+        <p><b>🗺️ Getting around:</b> drag to roam the park, pinch (or scroll) to zoom,
+        two-finger drag (or right-drag) to spin the view.</p>
+        <p><b>🛒 Getting dinos.</b> Ranch commons are always for sale. The traveling market
+        restocks every ${ECON.marketRefreshDays} days with ${ECON.marketSlots} offers — rare species (✨) show up when
+        they please, and missed offers are gone.</p>
         <p><b>⛓ Fences vs teeth.</b> A dino whose bite (🦷) beats the fence will eventually
         walk out — especially when unhappy. Loose dinos empty the park until you tap them.</p>
         <p><b>😊 Happiness</b>: room to roam, herds together, loners alone, gardens and

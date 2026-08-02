@@ -665,3 +665,8 @@ button {
   transform: translateY(3px);
   box-shadow: 0 1px 0 rgba(91, 67, 39, 0.25);
 }
+
+.card-foot {
+  gap: 8px;
+  flex-wrap: wrap;
+}
