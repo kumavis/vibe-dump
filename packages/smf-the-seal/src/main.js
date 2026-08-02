@@ -30,7 +30,7 @@ const CHECKLIST = [
 const app = document.getElementById('app');
 app.className = 'smf-root';
 app.innerHTML = `
-  <canvas class="smf-canvas" id="cv"></canvas>
+  <div class="smf-canvas"><canvas id="cv"></canvas></div>
   <button class="smf-toggle" id="toggle" type="button">HIDE ▸</button>
   <div class="smf-banner" id="shiftbanner" hidden>SHIFT COMPLETE — RE-VERIFIED · CONTRACT ENRICHED</div>
   <div class="smf-help">click PLATE-A or SEAL to measure · hold BREAK — release early to cancel · ☰ BRIEF reopens the work order</div>
