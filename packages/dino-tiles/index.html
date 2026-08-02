@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#a8e0f8" />
+    <title>Dino Tiles</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene"></div>
+      <header id="hud">
+        <div class="chip chip-score" id="score">0</div>
+        <div class="chip" id="placed"></div>
+        <button class="chip chip-btn" id="help-btn">?</button>
+      </header>
+      <div id="quest"></div>
+      <div id="hand">
+        <button id="current-tile">
+          <span id="cur-icon"></span>
+          <span class="cur-text"><b id="cur-name"></b><small id="cur-rule"></small></span>
+        </button>
+        <div id="next-tiles"></div>
+      </div>
+      <div id="overlay" hidden></div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/dino-tiles",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Dino Tiles",
+    "description": "A rapid dino-park puzzle: place 30 hex tiles for adjacency combos — build herds, fence the raptors, give the T-Rex space. 3-minute runs, star ratings. Three.js."
+  }
+}
