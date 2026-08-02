@@ -42,10 +42,10 @@ export const P = {
   stagger: 10,        // policy check every Nth tick per structure
   fieldEvery: 8,      // field diffusion/decay pass every Nth tick
   growEvery: 5,       // planner growth event every Nth tick
-  bucketEvery: 30,    // spatial bucket rebuild cadence (when dirty)
+  bucketEvery: 60,    // spatial bucket rebuild cadence (when dirty)
 
   /* field dynamics (Scenario 01 lineage) */
-  diff: 0.30, decay: 0.18, blockEps: 0.012, fieldCap: 3.5, litEps: 0.045,
+  diff: 0.30, decay: 0.18, blockEps: 0.03, fieldCap: 3.5, litEps: 0.045,
 
   /* organism thresholds */
   dorm: 0.5, wakeMul: 1.15, resorb: 0.22, resorbDelay: 12, warmup: 12,
@@ -109,9 +109,14 @@ export function createSim(opts = {}) {
   /* ------------------------------------------------ field (ping-pong) */
   let cur = new Float32Array(NCELLS);
   let nxt = new Float32Array(NCELLS);
-  const blockMax = new Float32Array(NBLOCKS);   // per-block field max
-  const blockDil = new Float32Array(NBLOCKS);   // dilated (self + 8 nbrs)
-  const blockForce = new Uint8Array(NBLOCKS);   // pour landed here: run N passes
+  // Analytic per-block UPPER BOUND on the field max. Under pure diffusion a
+  // block's max cannot exceed the previous max over its 3×3 block
+  // neighborhood, so bound = dilate(bound)·DK + (pour contribution) stays
+  // sound without ever touching the 98k cells — the policy loop uses it to
+  // skip neighborhood sensing wholesale in saturated and starved regions.
+  const bound = new Float32Array(NBLOCKS);
+  const blockDil = new Float32Array(NBLOCKS);   // dilated bound (self + 8 nbrs)
+  const pourAdd = new Float32Array(NBLOCKS);    // per-block pour max since last pass
 
   /* ------------------------------------------- structures (SoA arrays) */
   const sx = new Float32Array(CAP);
@@ -143,7 +148,7 @@ export function createSim(opts = {}) {
     emitters.push({
       active: false, x: 0, z: 0, strength: 0, until: -1,
       kIdx: new Int32Array(EMIT_KCAP), kW: new Float32Array(EMIT_KCAP),
-      kBlocks: new Int16Array(24), kn: 0, kbn: 0,
+      kBlocks: new Int16Array(24), kBMaxW: new Float32Array(24), kn: 0, kbn: 0,
     });
   }
   const TRENCH_SLOTS = 32, TRENCH_KCAP = 340;
@@ -165,7 +170,7 @@ export function createSim(opts = {}) {
     bStart, bItems,
     alive: 0, dormant: 0, resorbedTotal: 0, builtTotal: 0,
     birthsMin: 0, resorbsMin: 0,   // last completed 60 s window
-    litCells: 0, activeBlocks: 0,
+    activeBlocks: 0,
     emitters, trenches,
     lastPour: { x: 0, z: 0, t: -1e9, prov: -1 },
     pourBuilds: 0,
@@ -196,25 +201,35 @@ export function createSim(opts = {}) {
   const blockOfCell = (c) => (((c % NX) / BS) | 0) + ((((c / NX) | 0) / BS) | 0) * NBX;
 
   /* ================================================== world generation */
-  function buildKernel(cxT, czT, radT, kIdx, kW, kBlocks, sharp) {
+  function buildKernel(cxT, czT, radT, kIdx, kW, kBlocks, kBMaxW, sharp) {
     // gaussian footprint kernel, clamped inside [1, N-2]; returns [n, nb]
     let n = 0;
     const g0x = Math.max(1, Math.floor(cxT - radT)), g1x = Math.min(NX - 2, Math.ceil(cxT + radT));
     const g0z = Math.max(1, Math.floor(czT - radT)), g1z = Math.min(NZ - 2, Math.ceil(czT + radT));
     const r2 = radT * radT;
-    const blocksSeen = new Set();
+    const blocksSeen = new Map(); // block -> max kernel weight in that block
     for (let gz = g0z; gz <= g1z; gz++) {
       for (let gx = g0x; gx <= g1x; gx++) {
         const d2 = (gx + 0.5 - cxT) ** 2 + (gz + 0.5 - czT) ** 2;
         if (d2 > r2 || n >= kIdx.length) continue;
         kIdx[n] = gx + gz * NX;
-        if (kW) kW[n] = Math.exp(-d2 / (r2 * sharp));
-        blocksSeen.add(((gx / BS) | 0) + ((gz / BS) | 0) * NBX);
+        const w = Math.exp(-d2 / (r2 * sharp));
+        if (kW) kW[n] = w;
+        const b = ((gx / BS) | 0) + ((gz / BS) | 0) * NBX;
+        const prev = blocksSeen.get(b);
+        if (prev === undefined || w > prev) blocksSeen.set(b, w);
         n++;
       }
     }
     let nb = 0;
-    if (kBlocks) for (const b of blocksSeen) { if (nb < kBlocks.length) kBlocks[nb++] = b; }
+    if (kBlocks) {
+      for (const [b, w] of blocksSeen) {
+        if (nb >= kBlocks.length) break;
+        kBlocks[nb] = b;
+        if (kBMaxW) kBMaxW[nb] = w;
+        nb++;
+      }
+    }
     return [n, nb];
   }
 
@@ -237,13 +252,13 @@ export function createSim(opts = {}) {
           idx: provinces.length, name: `P${String(provinces.length).padStart(3, '0')}`,
           x, z, r, area: Math.PI * r * r,
           prospect, reserveFrac, life,
-          cap: 0, init: 0, reserve: 0,
+          cap: 0, init: 0, reserve: 0, kBMaxW: null,
           tank: 0, gate: false, u: 0, rate: 0,
           scoutOn: false, everPop: false,
           pTotal: 0, pAct: 0, pDorm: 0, mAct: 0, smAct: 0, rAct: 0,
           rigs: 0, smelters: 0,
           growI: 0, lastResorbT: -1e9, lastBuildT: -1e9,
-          radT: clamp(r / TS * 0.9 + 1.5, 4, 12),
+          radT: clamp(r / TS * 0.95 + 1.5, 4, 13),
           kIdx: null, kW: null, kBlocks: null, kn: 0, kbn: 0,
           ecc: 0.8 + rng() * 0.25, rot: rng() * Math.PI,
         });
@@ -257,9 +272,12 @@ export function createSim(opts = {}) {
       p.cap = Math.max(24, Math.floor(p.area * density));
       p.init = p.cap * 0.85 * P.mine * p.life;
       p.reserve = p.init * p.reserveFrac;
-      p.kIdx = new Int32Array(520); p.kW = new Float32Array(520);
-      p.kBlocks = new Int16Array(40);
-      const [kn, kbn] = buildKernel(p.x / TS, p.z / TS, p.radT, p.kIdx, p.kW, p.kBlocks, 0.55);
+      p.kIdx = new Int32Array(620); p.kW = new Float32Array(620);
+      p.kBlocks = new Int16Array(40); p.kBMaxW = new Float32Array(40);
+      // sharp=1.0 keeps the rim of the footprint well above the dormancy
+      // threshold at equilibrium — a steeper kernel leaves the outer ring of
+      // structures flickering dormant from birth (found the hard way)
+      const [kn, kbn] = buildKernel(p.x / TS, p.z / TS, p.radT, p.kIdx, p.kW, p.kBlocks, p.kBMaxW, 1.0);
       p.kn = kn; p.kbn = kbn;
     }
   }
@@ -344,11 +362,11 @@ export function createSim(opts = {}) {
           if (v > cur[c]) cur[c] = v;
         }
       }
-      for (let k = 0; k < p.kbn; k++) blockForce[p.kBlocks[k]] = 3;
     }
+    // seed the analytic block bound exactly once from the seeded cells
     for (let i = 0; i < NCELLS; i++) {
       const v = cur[i];
-      if (v > 0) { const b = blockOfCell(i); if (v > blockMax[b]) blockMax[b] = v; }
+      if (v > 0) { const b = blockOfCell(i); if (v > bound[b]) bound[b] = v; }
     }
     computeDil();
     for (let r = 0; r < 6; r++) fieldPass();
@@ -364,12 +382,12 @@ export function createSim(opts = {}) {
     for (let bz = 0; bz < NBZ; bz++) {
       for (let bx = 0; bx < NBX; bx++) {
         const bi = bz * NBX + bx;
-        let m = blockMax[bi];
+        let m = bound[bi];
         const x0 = bx > 0 ? -1 : 0, x1 = bx < NBX - 1 ? 1 : 0;
         const z0 = bz > 0 ? -1 : 0, z1 = bz < NBZ - 1 ? 1 : 0;
         for (let dz = z0; dz <= z1; dz++) {
           for (let dx = x0; dx <= x1; dx++) {
-            const v = blockMax[bi + dz * NBX + dx];
+            const v = bound[bi + dz * NBX + dx];
             if (v > m) m = v;
           }
         }
@@ -387,57 +405,62 @@ export function createSim(opts = {}) {
       const kIdx = tr.kIdx, kn = tr.kn;
       for (let k = 0; k < kn; k++) cur[kIdx[k]] *= TR_ATTEN;
     }
-    // block-skipped sliding-window stencil; emits blockMax + lit count
+    // advance the analytic block bound: dilated previous bound decayed by DK,
+    // plus whatever the pours contributed since the last pass
+    for (let bi = 0; bi < NBLOCKS; bi++) {
+      let v = blockDil[bi] * DK + pourAdd[bi];
+      if (v > FIELD_CAP) v = FIELD_CAP;
+      bound[bi] = v;
+      pourAdd[bi] = 0;
+    }
+    computeDil();
+    // Band-row stencil: blocks are 8×8 for policy bounds and buckets, but the
+    // stencil walks each 8-row band in ONE contiguous x-span from the first
+    // live block to the last — long sliding-window rows amortize the loads,
+    // empty margins are skipped whole, and the per-cell body carries no
+    // bookkeeping at all (the block bound above replaced measured maxima).
     const src = cur, dst = nxt, kd = K_DIFF, dk = DK;
-    let lit = 0, act = 0;
+    let act = 0;
     for (let bz = 0; bz < NBZ; bz++) {
+      const bRow = bz * NBX;
+      let bxA = -1, bxB = -1;
       for (let bx = 0; bx < NBX; bx++) {
-        const bi = bz * NBX + bx;
-        const on = blockForce[bi] > 0 || blockDil[bi] > BLOCK_EPS;
-        if (blockForce[bi] > 0) blockForce[bi]--;
-        if (!on) { blockMax[bi] = 0; continue; }
-        act++;
-        let bmax = 0;
-        const z0 = bz === 0 ? 1 : bz * BS, z1 = bz === NBZ - 1 ? NZ - 1 : (bz + 1) * BS;
-        const x0 = bx === 0 ? 1 : bx * BS, x1 = bx === NBX - 1 ? NX - 1 : (bx + 1) * BS;
-        for (let gz = z0; gz < z1; gz++) {
-          const row = gz * NX;
-          let l = src[row + x0 - 1], c = src[row + x0];
-          for (let gx = x0; gx < x1; gx++) {
-            const i = row + gx;
-            const r = src[i + 1];
-            let v = (c + kd * (l + r + src[i - NX] + src[i + NX] - 4 * c)) * dk;
-            if (v > FIELD_CAP) v = FIELD_CAP;
-            dst[i] = v;
-            if (v > bmax) bmax = v;
-            l = c; c = r;
-          }
-        }
-        blockMax[bi] = bmax;
-        if (bmax > LIT_EPS) {
-          for (let gz = z0; gz < z1; gz++) {
-            const row = gz * NX;
-            for (let gx = x0; gx < x1; gx++) if (dst[row + gx] > LIT_EPS) lit++;
-          }
+        if (blockDil[bRow + bx] > BLOCK_EPS) { if (bxA < 0) bxA = bx; bxB = bx; }
+      }
+      if (bxA < 0) continue;
+      act += bxB - bxA + 1;
+      const z0 = bz === 0 ? 1 : bz * BS, z1 = bz === NBZ - 1 ? NZ - 1 : (bz + 1) * BS;
+      const x0 = bxA === 0 ? 1 : bxA * BS, x1 = bxB === NBX - 1 ? NX - 1 : (bxB + 1) * BS;
+      for (let gz = z0; gz < z1; gz++) {
+        const row = gz * NX;
+        let l = src[row + x0 - 1], c = src[row + x0];
+        for (let gx = x0; gx < x1; gx++) {
+          const i = row + gx;
+          const r = src[i + 1];
+          let v = (c + kd * (l + r + src[i - NX] + src[i + NX] - 4 * c)) * dk;
+          if (v > FIELD_CAP) v = FIELD_CAP;
+          dst[i] = v;
+          l = c; c = r;
         }
       }
     }
     const t = cur; cur = nxt; nxt = t;
     state.field = cur;
-    state.litCells = lit;
     state.activeBlocks = act;
-    computeDil();
   }
 
-  function pourKernel(kIdx, kW, kn, amt) {
-    // amt = per-cell/s at kernel center, integrated over the field cadence
+  function pourKernel(k, amt) {
+    // amt = per-cell/s at kernel centre, integrated over the field cadence
     const a = amt * DT * P.fieldEvery;
-    for (let k = 0; k < kn; k++) {
-      const c = kIdx[k];
-      let v = cur[c] + a * kW[k];
-      if (v > P.fieldCap) v = P.fieldCap;
+    const kIdx = k.kIdx, kW = k.kW, kn = k.kn;
+    for (let j = 0; j < kn; j++) {
+      const c = kIdx[j];
+      let v = cur[c] + a * kW[j];
+      if (v > FIELD_CAP) v = FIELD_CAP;
       cur[c] = v;
     }
+    const kB = k.kBlocks, kM = k.kBMaxW, kbn = k.kbn;
+    for (let j = 0; j < kbn; j++) pourAdd[kB[j]] += a * kM[j];
   }
 
   /* ================================================== policy (staggered) */
@@ -469,12 +492,15 @@ export function createSim(opts = {}) {
   }
 
   function policySlice(tick) {
-    const f = cur, phase = tick % P.stagger, stag = P.stagger;
+    // contiguous 1/stagger segment per tick — sequential over the SoA arrays,
+    // so the prefetcher does the heavy lifting instead of a stride-10 walk
+    const f = cur, phase = tick % P.stagger;
+    const seg = Math.ceil(count / P.stagger) || 1;
+    const start = phase * seg, end = Math.min(count, start + seg);
     const t = state.t, dorm = P.dorm, res = P.resorb, delay = P.resorbDelay, warm = P.warmup;
-    for (let i = phase; i < count; i += stag) {
+    for (let i = start; i < end; i++) {
       const st = sstate[i];
       if (st === ST_GONE) continue;
-      if (t - sbuiltAt[i] < warm) continue;   // commissioning grace
       const b = sblock[i], dil = blockDil[b], c = scell[i];
       if (st === ST_ACTIVE) {
         if (dil >= dorm) {
@@ -487,6 +513,10 @@ export function createSim(opts = {}) {
           v = f[c + NX - 1]; if (v > m) m = v; v = f[c + NX + 1]; if (v > m) m = v;
           if (m >= dorm) continue;
         }
+        // commissioning grace only matters on the way DOWN — dormant
+        // structures are always past grace, so this read stays off the
+        // dominant healthy-active fast path entirely
+        if (t - sbuiltAt[i] < warm) continue;
         // sleep
         sstate[i] = ST_DORMANT; slow[i] = 0;
         state.alive--; state.dormant++;
@@ -670,8 +700,8 @@ export function createSim(opts = {}) {
         p.scoutOn = p.pTotal < scoutPop && p.reserve / p.init > scoutRes;
 
         if (fieldTick) {
-          if (p.gate) pourKernel(p.kIdx, p.kW, p.kn, rigBase + rigGain * u);
-          if (p.scoutOn) pourKernel(p.kIdx, p.kW, p.kn, scoutRate);
+          if (p.gate) pourKernel(p, rigBase + rigGain * u);
+          if (p.scoutOn) pourKernel(p, scoutRate);
         }
       }
     }
@@ -686,8 +716,7 @@ export function createSim(opts = {}) {
         const e = emitters[ei];
         if (!e.active) continue;
         if (t > e.until) { e.active = false; continue; }
-        pourKernel(e.kIdx, e.kW, e.kn, P.playerPour * e.strength);
-        for (let k = 0; k < e.kbn; k++) blockForce[e.kBlocks[k]] = 2;
+        pourKernel(e, P.playerPour * e.strength);
       }
       fieldPass();
     }
@@ -748,13 +777,12 @@ export function createSim(opts = {}) {
       }
       slot = emitters[oldest];
       slot.x = x; slot.z = z; slot.strength = 0;
-      const [kn, kbn] = buildKernel(x / TS, z / TS, P.emitRadT, slot.kIdx, slot.kW, slot.kBlocks, 0.55);
+      const [kn, kbn] = buildKernel(x / TS, z / TS, P.emitRadT, slot.kIdx, slot.kW, slot.kBlocks, slot.kBMaxW, 0.6);
       slot.kn = kn; slot.kbn = kbn;
       slot.active = true;
     }
     slot.until = t + P.emitLife;
     slot.strength = Math.min(P.pourStrengthCap, slot.strength + 0.6 * s);
-    for (let k = 0; k < slot.kbn; k++) blockForce[slot.kBlocks[k]] = 2;
 
     const prov = nearestProvince(x, z);
     if (prov !== state.lastPour.prov) {
@@ -787,7 +815,7 @@ export function createSim(opts = {}) {
       }
       slot = trenches[oldest];
       slot.x = x; slot.z = z;
-      const [kn] = buildKernel(x / TS, z / TS, P.trenchRadT, slot.kIdx, null, null, 1);
+      const [kn] = buildKernel(x / TS, z / TS, P.trenchRadT, slot.kIdx, null, null, null, 1);
       slot.kn = kn;
       slot.active = true;
       const prov = nearestProvince(x, z);
@@ -798,7 +826,7 @@ export function createSim(opts = {}) {
       state.lastStarve.x = x; state.lastStarve.z = z; state.lastStarve.t = t; state.lastStarve.prov = prov;
     } else {
       slot.x = x; slot.z = z; // trench follows the drag
-      const [kn] = buildKernel(x / TS, z / TS, P.trenchRadT, slot.kIdx, null, null, 1);
+      const [kn] = buildKernel(x / TS, z / TS, P.trenchRadT, slot.kIdx, null, null, null, 1);
       slot.kn = kn;
       state.lastStarve.t = t;
     }

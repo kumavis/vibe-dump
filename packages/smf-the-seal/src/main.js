@@ -146,11 +146,15 @@ window.addEventListener('pointerup', endHold);
 actBtn.addEventListener('pointerleave', endHold);
 window.addEventListener('blur', endHold);
 
-/* canvas: click PLATE-A to seal, hold it to break */
+/* pointer tracked at window level so the blast-radius tally rides beside
+   the cursor even when the hold starts on the HUD button */
 const io = { pointer: null };
-cv.addEventListener('pointermove', (e) => {
+window.addEventListener('pointermove', (e) => {
   const r = cv.getBoundingClientRect();
   io.pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+});
+cv.addEventListener('pointermove', () => {
+  if (!io.pointer) return;
   const hit = view.hitModule(sim.state, io.pointer.x, io.pointer.y);
   cv.style.cursor = hit === 'PLATE-A' ? 'pointer' : 'default';
 });
@@ -163,7 +167,6 @@ cv.addEventListener('pointerdown', (e) => {
   if (p === 'open') sim.act({ type: 'seal' });
   else startHold();
 });
-cv.addEventListener('pointerleave', () => { io.pointer = null; });
 
 /* ------------------------------ loop -------------------------------- */
 let last = performance.now(), acc = 0;

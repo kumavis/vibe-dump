@@ -73,7 +73,10 @@ export function createView(canvas) {
   }
   function inPortY(m, ti) {
     const b = boxes.get(m.id);
-    return b.y - b.h / 2 + (b.h * (ti + 1)) / (m.ins.length + 1);
+    if (m.id === 'PLATE-A') return b.y - b.h / 2 + b.h * (b.k > 0.5 ? 0.5 : 0.3);
+    if (m.ins.length <= 1) return b.y - b.h / 2 + b.h * 0.55;
+    /* multi-input boxes: reserve the title strip at the top */
+    return b.y - b.h / 2 + 16 + ((b.h - 16) * (ti + 1)) / (m.ins.length + 1);
   }
 
   function computeGeom(e, st) {
@@ -121,7 +124,6 @@ export function createView(canvas) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.fillStyle = COL.bg;
     ctx.fillRect(0, 0, cw, ch);
-    ctx.translate(ox * dpr / dpr, 0);
     ctx.setTransform(dpr * scale, 0, 0, dpr * scale, dpr * ox, dpr * oy);
 
     /* grid */
@@ -144,7 +146,7 @@ export function createView(canvas) {
     const hold = st.hold;
     const cancel = !hold && st.lastCancel && st.t - st.lastCancel.t < 0.35 ? st.lastCancel : null;
     const preview = hold || cancel;
-    const previewAlpha = hold ? 1 : 1 - (st.t - cancel.t) / 0.35;
+    const previewAlpha = hold ? 1 : cancel ? 1 - (st.t - cancel.t) / 0.35 : 0;
     const holdT = hold ? st.t - hold.t0 : cancel ? cancel.held : 0;
     const pDepths = preview ? radiusDepths(preview.radius) : null;
     const rv = st.reverify;
@@ -161,7 +163,7 @@ export function createView(canvas) {
       strokeEdgePath(g);
       ctx.setLineDash([]);
       /* typed rate label */
-      ptAt(g, g.len / 2, scratchPt);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.font = FONT(12);
       ctx.fillStyle = ghost ? '#3a4650' : COL.amberDim;
       ctx.fillText(`${e.type} ${e.rate}/s`, g.mx, (g.y0 + g.y1) / 2 - 9);
@@ -254,7 +256,7 @@ export function createView(canvas) {
     /* ================= screen-space layer ================= */
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    if (hold && io.pointer) drawTally(st, holdT, io);
+    if (hold) drawTally(st, holdT, io);
     if (rv) drawVerifyChip(st, rv);
     if (st.banner && st.t - st.banner.t < 3.5) drawBanner(st);
     /* commit vignette */
@@ -330,18 +332,19 @@ export function createView(canvas) {
     else if (ghost) { status = 'AWAITING PLATE SUPPLY'; }
     else if (building) { status = `PLANNER BUILDING ${clamp((st.t - m.buildT0) / C.STAMP_BUILD * 100, 0, 99).toFixed(0)}%`; sc = COL.green; }
     else if (unv) { status = 'UNVERIFIED'; sc = COL.red; }
-    else if (m.ins.some((i) => i.starved)) { status = 'STARVED — hopper tripped'; sc = COL.red; }
+    else if (m.ins.some((i) => i.starved)) { status = 'STARVED · tripped'; sc = COL.red; }
     else if (m.kind !== 'raw' && m.outFlow === 0 && m.state === 'on' && st.t < m.reprimeUntil) { status = 'RE-PRIMING'; sc = COL.amber; }
     if (m.id === 'PLATE-A') status = null; // has its own interior
-    if (status) { ctx.fillStyle = sc; ctx.fillText(status, x + 8, y + b.h - 12); }
-    else if (m.kind !== 'proc' || m.id !== 'PLATE-A') {
+    const statusX = m.ins.length ? x + 42 : x + 8;
+    if (status) { ctx.fillStyle = sc; ctx.fillText(status, statusX, y + b.h - 12); }
+    else if (m.id !== 'PLATE-A') {
       ctx.fillStyle = COL.dim;
-      if (m.kind === 'sink') ctx.fillText(`${m.outFlow.toFixed(1)} crates/s`, x + 8, y + b.h - 12);
-      else if (m.id !== 'PLATE-A') ctx.fillText(`${m.outType} ${m.outFlow.toFixed(1)}/s`, x + 8, y + b.h - 12);
+      if (m.kind === 'sink') ctx.fillText(`${m.outFlow.toFixed(1)} crates/s`, statusX, y + b.h - 12);
+      else ctx.fillText(`${m.outType} ${m.outFlow.toFixed(1)}/s`, statusX, y + b.h - 12);
     }
 
-    /* input badges + mini buffer bars */
-    for (let i = 0; i < m.ins.length; i++) {
+    /* input badges + mini buffer bars (the chip face draws its own ports) */
+    for (let i = 0; i < m.ins.length && !(m.id === 'PLATE-A' && b.k > 0.5); i++) {
       const inp = m.ins[i];
       const py = inPortY(m, i);
       const bw = 30, bh = 4;
@@ -367,10 +370,10 @@ export function createView(canvas) {
     if (m.instanceOf && !ghost && !building) {
       ctx.font = FONT(10);
       ctx.fillStyle = unv ? COL.redDim : COL.cyan;
-      ctx.fillText(unv ? 'instance of BROKEN word' : 'instance of PLATE-A', x + 8, y + 26);
+      ctx.fillText(unv ? 'instance of BROKEN word' : 'instance of PLATE-A', x + 42, y + 26);
       if (st.contract && !unv) {
         ctx.fillStyle = COL.cyanDim;
-        ctx.fillText(st.contract.windowed ? 'PLATE ≥ 4/s /any 2s' : 'PLATE ≥ 4/s', x + 8, y + 38);
+        ctx.fillText(st.contract.windowed ? 'PLATE ≥ 4/s /any 2s' : 'PLATE ≥ 4/s', x + 42, y + 38);
       }
     }
 
@@ -494,7 +497,7 @@ export function createView(canvas) {
       /* sealed chip face */
       ctx.font = FONT(11);
       ctx.fillStyle = COL.cyan;
-      ctx.fillText(st.contract && st.contract.windowed ? 'PLATE ≥ 4/s per any 2s window' : 'PLATE ≥ 4/s (sustained)', x + 8, y + 28);
+      ctx.fillText(st.contract && st.contract.windowed ? 'PLATE ≥ 4/s /any 2s win' : 'PLATE ≥ 4/s (sustained)', x + 8, y + 28);
       ctx.fillStyle = COL.dim2;
       ctx.fillText(`out ${m.outFlow.toFixed(1)}/s`, x + 8, y + b.h - 12);
       /* typed port badges */
@@ -524,8 +527,10 @@ export function createView(canvas) {
     if (full) lines.push([`re-verify ≈ ${r.reverifyRounded}s`, COL.red]);
 
     const w = 196, lh = 17, h = 16 + lines.length * lh + 14;
-    let px = clamp(io.pointer.x + 18, 8, cw - reserve - w - 12);
-    let py = clamp(io.pointer.y + 14, 8, ch - h - 10);
+    const pb = boxes.get('PLATE-A');
+    const anchor = io.pointer || { x: pb.x * scale + ox + 140, y: pb.y * scale + oy };
+    const px = clamp(anchor.x + 18, 8, cw - reserve - w - 12);
+    const py = clamp(anchor.y + 14, 8, ch - h - 10);
     ctx.fillStyle = 'rgba(22,10,10,0.94)';
     ctx.strokeStyle = COL.red; ctx.lineWidth = 1.5;
     ctx.fillRect(px, py, w, h);

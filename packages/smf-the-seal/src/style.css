@@ -1,0 +1,102 @@
+/* SMF 05 — THE SEAL · HUD styles (Scenario 01 vibe, system fonts only) */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #app { width: 100%; height: 100%; }
+body {
+  background: #0b0e11;
+  color: #c2ccd2;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+  font-size: 11px;
+  overflow: hidden;
+}
+#app { position: relative; }
+.smf-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.smf-toggle {
+  position: absolute; top: 10px; right: 10px; z-index: 5;
+  background: #13202a; border: 1px solid #2a3d49; color: #55d6f0;
+  font: 600 11px ui-monospace, Menlo, Consolas, monospace;
+  padding: 5px 9px; cursor: pointer;
+}
+.smf-help {
+  position: absolute; left: 12px; bottom: 10px; font-size: 10px;
+  color: #495a64; z-index: 4; pointer-events: none; max-width: 46%;
+  line-height: 1.4;
+}
+
+.smf-panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: min(308px, 86vw);
+  background: rgba(13, 18, 22, .92); border-left: 1px solid #1e2a32;
+  overflow-y: auto; padding: 14px 14px 20px; font-size: 11px;
+  transition: transform .25s; z-index: 3;
+}
+.smf-panel.hidden { transform: translateX(100%); }
+
+.smf-h1 { font-size: 17px; font-weight: 700; letter-spacing: .14em; color: #e6edf1; }
+.smf-sub { font-size: 11px; letter-spacing: .22em; color: #5b7482; margin-bottom: 12px; }
+
+.smf-row { display: flex; justify-content: space-between; align-items: baseline; margin: 3px 0; }
+.smf-k { color: #5b7482; }
+.smf-amber { color: #e0973a; }
+.smf-cyan { color: #55d6f0; }
+.smf-green { color: #9fd65a; }
+.smf-red { color: #d96b6b; }
+.smf-dim { color: #566068; }
+
+.smf-speeds { margin: 7px 0 4px; }
+.smf-btn {
+  background: #13202a; border: 1px solid #2a3d49; color: #8fa8b5;
+  font: 600 11px ui-monospace, Menlo, Consolas, monospace;
+  padding: 4px 9px; margin-right: 5px; cursor: pointer;
+}
+.smf-btn.on { color: #0b0e11; background: #55d6f0; border-color: #55d6f0; }
+
+.smf-card {
+  border: 1px solid #1e2a32; padding: 8px 9px; margin: 10px 0;
+  background: rgba(255, 255, 255, .015);
+}
+.smf-cardh {
+  font-size: 11px; font-weight: 700; letter-spacing: .18em; color: #9fb2bd;
+  margin-bottom: 6px; display: flex; justify-content: space-between;
+}
+
+.smf-bar {
+  position: relative; height: 7px; background: #141c22;
+  border: 1px solid #22313b; margin: 3px 0 6px;
+}
+.smf-bar-s { height: 5px; margin: 2px 0 4px; }
+.smf-fill { position: absolute; inset: 0; transform-origin: left; background: #e0973a; }
+.smf-tick { position: absolute; top: -2px; bottom: -2px; width: 1px; background: #7a8b94; }
+
+.smf-act {
+  width: 100%; padding: 9px 6px; cursor: pointer;
+  background: #13202a; border: 1px solid #2a5866; color: #55d6f0;
+  font: 700 12px ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: .08em; user-select: none; touch-action: none;
+}
+.smf-act:disabled { color: #566068; border-color: #1e2a32; cursor: default; }
+.smf-act.danger { color: #d96b6b; border-color: #7a3d3d; background: #1a1214; }
+.smf-act.danger.holding { background: #d96b6b; color: #0b0e11; border-color: #d96b6b; }
+.smf-actnote { margin-top: 5px; line-height: 1.4; }
+
+.smf-paradox {
+  margin-top: 6px; padding: 5px 6px; border: 1px solid #7a3d3d;
+  background: rgba(217, 107, 107, .07); letter-spacing: .05em; font-weight: 600;
+}
+.smf-paradox .p-pass { color: #9fd65a; }
+.smf-paradox .p-fail { color: #d96b6b; animation: smf-blink 1.1s steps(2) infinite; }
+@keyframes smf-blink { 50% { opacity: .35; } }
+
+.smf-minirow { display: flex; gap: 8px; margin-top: 3px; }
+.smf-mini { flex: 1; }
+.smf-mini span { color: #566068; font-size: 10px; }
+
+.smf-check { list-style: none; margin: 4px 0 0; }
+.smf-check li { margin: 3px 0; color: #566068; }
+.smf-check li.on { color: #c2ccd2; }
+.smf-check li.on b { color: #9fd65a; }
+
+.smf-log { max-height: 140px; overflow-y: auto; margin-top: 4px; }
+.smf-log div { margin: 2px 0; color: #7d8f99; line-height: 1.35; }
+.smf-log div:first-child { color: #c2ccd2; }
+
+.smf-legend { margin-top: 10px; color: #5b7482; line-height: 1.6; }
