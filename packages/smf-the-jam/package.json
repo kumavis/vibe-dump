@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/smf-the-jam",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "test": "node harness.mjs" },
+  "gallery": {
+    "title": "SMF 02 · The Jam",
+    "description": "Clear belt jams by hand until your hands saturate — then wire alerts as physical tokens, survive the alert storm, and fix flapping with a tank."
+  }
+}

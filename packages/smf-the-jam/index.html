@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SMF 02 · The Jam</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./src/smf.css">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div class="smf-root" id="root">
+    <div class="smf-canvas"><canvas id="game"></canvas></div>
+    <button class="smf-toggle" id="panelToggle" type="button">HIDE ▸</button>
+    <div class="smf-panel" id="hud"></div>
+    <div class="smf-banner" id="banner" hidden></div>
+    <div class="jam-toast" id="toast"></div>
+    <div class="smf-help">click a jam to clear it · panel buys lanes &amp; signal parts · space/1/2/3 speed · ☰ BRIEF reopens the work order</div>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

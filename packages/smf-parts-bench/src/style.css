@@ -1,0 +1,51 @@
+/* SMF 03 — Parts Bench · scenario-specific additions ONLY.
+   All shared chrome (panel, identity block, cards, checklist, log,
+   buttons, banner, help, legend, briefing) comes from src/smf.css —
+   the canonical scenario shell. This file loads after it and may only
+   add bench-specific UI: page reset, board canvas, top bar (palette +
+   contract tabs), their modifiers, and the part inspector. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: var(--smf-bg); overflow: hidden; }
+
+/* board canvas fills the smf-canvas layer */
+.pb-canvas { width: 100%; height: 100%; }
+
+/* top bar: parts palette + contract tabs.
+   Offsets clear the ☰ BRIEF button (left) and the telemetry panel (right). */
+.pb-topbar {
+  position: absolute; top: 0; left: 84px; right: 330px;
+  display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center;
+  padding: 8px 10px;
+  pointer-events: none;
+  z-index: 4;
+}
+.pb-palette, .pb-tabs { display: flex; flex-wrap: wrap; gap: 0 2px; pointer-events: auto; }
+.pb-topbar .smf-btn:not(.on):hover { border-color: var(--smf-cyan); color: var(--smf-cyan2); }
+
+/* palette cost markers (amber = matter, per the two-color law) */
+.pb-palette .smf-btn i { font-style: normal; color: var(--smf-amber); margin-left: 4px; font-size: 9px; }
+.pb-palette .smf-btn.on i { color: #5c3d10; }
+
+/* contract tab modifiers */
+.pb-tab { letter-spacing: 0.1em; }
+.pb-tabs .smf-btn.pass { color: var(--smf-green); border-color: #3c5c2c; }
+.pb-tabs .smf-btn.pass.on { color: var(--smf-bg); background: var(--smf-green); border-color: var(--smf-green); }
+
+/* contract brief line inside the CONTRACT card */
+.pb-cbrief { margin: 2px 0 6px; line-height: 1.4; }
+
+/* part inspector (floats above the scope strip) */
+.pb-inspector {
+  position: absolute; left: 10px; bottom: 152px;
+  display: flex; gap: 8px; align-items: center;
+  background: var(--smf-panel);
+  border: 1px solid var(--smf-line);
+  padding: 7px 10px;
+  z-index: 5;
+}
+.pb-inspector input[type='range'] { width: 130px; accent-color: var(--smf-cyan); }
+.pb-inspector .smf-btn:not(.on):hover { border-color: var(--smf-cyan); color: var(--smf-cyan2); }
+.pb-iname { color: var(--smf-cyan2); font-weight: 700; letter-spacing: 0.12em; font-size: 10.5px; }
+.pb-danger { color: var(--smf-red); border-color: #5c2c2c; }

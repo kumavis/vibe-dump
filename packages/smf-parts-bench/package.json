@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/smf-parts-bench",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "test": "node harness.mjs" },
+  "gallery": {
+    "title": "SMF 03 · Parts Bench",
+    "description": "No code, no nodes: solve five control contracts with valves, tanks, and gates that jam, saturate, and chatter. A pressure test of computation-as-plumbing."
+  }
+}

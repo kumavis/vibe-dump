@@ -1,0 +1,41 @@
+/* SMF 00 — Graduation · scenario-specific additions ONLY.
+   All chrome (panel, cards, checklist, log, buttons, banner, briefing)
+   comes from smf.css — the shared shell, loaded before this file.
+   Nothing here may restyle an smf- class. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
+body { overflow: hidden; }
+
+#world { width: 100%; height: 100%; cursor: crosshair; }
+
+/* palette cards (scenario tool picker) */
+.pal {
+  border: 1px solid #2a3d49; background: #101a21;
+  padding: 7px 8px; margin: 6px 0; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: baseline;
+  letter-spacing: .06em;
+}
+.pal:hover { border-color: #3d5766; }
+.pal.sel { border-color: #e0973a; background: #1a1710; }
+.pal .cost { color: #e0973a; }
+#pal-echo { display: none; }
+#pal-echo.show { display: flex; }
+#pal-echo.sel { border-color: #55d6f0; background: #0f1d24; }
+#pal-echo.pulse { animation: echoPulse 1.5s ease-in-out 5; }
+@keyframes echoPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(85, 214, 240, 0); }
+  50% { box-shadow: 0 0 14px 2px rgba(85, 214, 240, .35); border-color: #55d6f0; }
+}
+
+/* toil headline number */
+.toilbig { font-size: 16px; font-weight: 700; margin: 2px 0 5px; }
+
+/* contract-at-risk warning (scenario alert, distinct from the shift banner) */
+#risk {
+  position: absolute; left: 50%; top: 14px; transform: translateX(-50%);
+  background: rgba(42, 28, 12, .92); border: 1px solid #e0973a; color: #e0973a;
+  font-weight: 700; letter-spacing: .2em; padding: 6px 14px; z-index: 6;
+  animation: riskBlink 1s step-end infinite;
+}
+@keyframes riskBlink { 50% { opacity: .55; } }

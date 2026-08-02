@@ -1,0 +1,26 @@
+/* SMF 06 — CONTINENTAL · scenario-specific additions only.
+   Loads AFTER src/smf.css (the shared foundry chrome) and never restyles
+   `smf-` classes — it only adds continental counters and canvas visuals. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--smf-bg);
+  overflow: hidden;
+}
+
+#world { width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+
+/* big counters on the ORGANISM / WIELD cards */
+.cont-big { font-size: 24px; font-weight: 700; letter-spacing: .04em; line-height: 1.15; }
+.cont-big2 { font-size: 16px; font-weight: 700; }
+
+/* full-width brush toggle on the WIELD card */
+.cont-wide { display: block; width: 100%; margin: 2px 0 7px; letter-spacing: .1em; }
+
+/* value-field swatch in the legend law line */
+.cont-field { color: var(--smf-field); }
+
+/* long telemetry rows: breathing room between key and value */
+.cont-gap { gap: 6px; }

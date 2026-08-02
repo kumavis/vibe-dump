@@ -1,0 +1,36 @@
+/* SMF 05 — THE SEAL · scenario-specific additions ONLY.
+   All shared chrome lives in smf.css (canonical copy:
+   docs/slime-mold-foundry/shell/smf.css), loaded before this file.
+   This file may only ADD seal-scenario styles — never restyle smf- classes. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
+#app { width: 100%; height: 100%; }
+
+/* the scenario's canvas fills the shared .smf-canvas wrapper */
+#cv { width: 100%; height: 100%; }
+
+/* speed row spacing between the identity block and the clock row */
+.seal-speeds { margin: 0 0 4px; }
+
+/* action button — hold-to-break states layered onto .smf-btn.smf-act */
+.seal-act { letter-spacing: .08em; user-select: none; touch-action: none; }
+.seal-act:disabled { color: #566068; border-color: #1e2a32; cursor: default; animation: none; }
+.seal-act.danger { color: #d96b6b; border-color: #7a3d3d; background: #1a1214; }
+.seal-act.danger.holding { background: #d96b6b; color: #0b0e11; border-color: #d96b6b; }
+.seal-actnote { margin-top: 5px; line-height: 1.4; color: #566068; }
+
+/* CONTRACT: PASS · BEHAVIOR: FAILING paradox strip */
+.seal-paradox {
+  margin-top: 6px; padding: 5px 6px; border: 1px solid #7a3d3d;
+  background: rgba(217, 107, 107, .07); letter-spacing: .05em; font-weight: 600;
+}
+.seal-paradox .p-pass { color: #9fd65a; }
+.seal-paradox .p-fail { color: #d96b6b; animation: seal-blink 1.1s steps(2) infinite; }
+@keyframes seal-blink { 50% { opacity: .35; } }
+
+/* downstream plate-hopper mini bars */
+.seal-minirow { display: flex; gap: 8px; margin-top: 3px; }
+.seal-mini { flex: 1; }
+.seal-mini span { color: #566068; font-size: 10px; }
+.seal-bar-s { height: 5px; margin: 2px 0 4px; }

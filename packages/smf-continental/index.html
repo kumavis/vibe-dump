@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SMF 06 · Continental</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230b0e11'/%3E%3Ccircle cx='8' cy='8' r='5' fill='%233b9fd9'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23e0973a'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./src/smf.css" />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div class="smf-root" id="root">
+    <div class="smf-canvas"><canvas id="world"></canvas></div>
+
+    <button id="panelToggle" class="smf-toggle" type="button">HIDE ▸</button>
+    <div class="smf-banner" id="banner" hidden></div>
+    <div class="smf-help">drag pours the field · alt/right-drag starves · [B] toggles pour↔pan · wheel zooms continent ↔ machine · ☰ BRIEF reopens the work order</div>
+
+    <div id="panel" class="smf-panel">
+      <div class="smf-h1">SLIME MOLD FOUNDRY</div>
+      <div class="smf-sub">SCENARIO 06 — CONTINENTAL</div>
+      <div class="smf-tag">PERFORMANCE · WIELDING THE WHOLE ORGANISM</div>
+
+      <div id="speedRow" style="margin:0 0 8px">
+        <button class="smf-btn" data-v="0" type="button">⏸</button>
+        <button class="smf-btn on" data-v="1" type="button">×1</button>
+        <button class="smf-btn" data-v="8" type="button">×8</button>
+        <button class="smf-btn" data-v="32" type="button">×32</button>
+      </div>
+
+      <div class="smf-row">
+        <span class="smf-k" id="clock">T+0s</span>
+        <span class="smf-amber">MATTER <span id="matter">—</span> <span class="smf-dim" id="income"></span></span>
+      </div>
+
+      <div class="smf-card">
+        <div class="smf-cardh"><span>PERF — THE CONTENT</span></div>
+        <div class="smf-row"><span class="smf-k">SIM</span><span><span class="smf-cyan" id="usTick">—</span> µs/tick <span class="smf-dim">(budget 120)</span></span></div>
+        <div class="smf-bar"><div class="smf-fill" id="usBar"></div><div class="smf-tick" style="left:48%"></div></div>
+        <div class="smf-row"><span class="smf-k">DRAW</span><span><span class="smf-cyan" id="drawMs">—</span> ms/frame <span class="smf-dim">(budget 8)</span></span></div>
+        <div class="smf-bar"><div class="smf-fill" id="drawBar"></div><div class="smf-tick" style="left:50%"></div></div>
+        <div class="smf-row"><span class="smf-k">LOD</span><span id="lod">—</span></div>
+        <div class="smf-row"><span class="smf-k">FIELD</span><span id="fieldCells">—</span></div>
+        <div class="smf-row"><span class="smf-k">THROUGHPUT</span><span id="tps">—</span></div>
+      </div>
+
+      <div class="smf-card">
+        <div class="smf-cardh"><span>ORGANISM</span></div>
+        <div class="cont-big smf-amber" id="structTotal">—</div>
+        <div class="smf-row"><span id="structBreak" class="smf-dim">—</span></div>
+        <div class="smf-row cont-gap"><span class="smf-k">CHURN</span><span id="churn">—</span></div>
+        <div class="smf-row cont-gap"><span class="smf-k">PROVINCES</span><span id="provinces">—</span></div>
+      </div>
+
+      <div class="smf-card">
+        <div class="smf-cardh"><span>WIELD</span></div>
+        <button id="brushBtn" class="smf-btn cont-wide" type="button">BRUSH — POUR [B]</button>
+        <div class="smf-row"><span class="smf-k">TOWARD LAST POUR</span><span class="cont-big2 smf-cyan" id="migCount">0</span></div>
+        <div class="smf-row"><span class="smf-k">TRENCH RESORBED</span><span class="cont-big2 smf-red" id="trenchCount">0</span></div>
+        <div class="smf-row"><span id="wieldMisc" class="smf-dim">—</span></div>
+      </div>
+
+      <div class="smf-card">
+        <div class="smf-cardh"><span>SHIFT CHECKLIST</span></div>
+        <ul id="checklist" class="smf-check"></ul>
+      </div>
+
+      <div class="smf-card">
+        <div class="smf-cardh"><span>EVENT LOG</span></div>
+        <div id="log" class="smf-log"></div>
+      </div>
+
+      <div class="smf-legend">
+        <span class="smf-red">■ resorb / trench</span> · dormancy &lt; 0.5 · resorb &lt; 0.22 after 12s · policy every 10th tick<br />
+        <span id="seedLine" class="smf-dim"></span><br />
+        <span class="smf-amber">■ matter</span> · <span class="smf-cyan">■ signal</span> · <span class="cont-field">■ value field</span>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+/* SLIME MOLD FOUNDRY — shared scenario chrome.
+   Canonical copy lives at docs/slime-mold-foundry/shell/smf.css.
+   Copy VERBATIM into each package's src/ (repo rule: no cross-package
+   imports). Package-specific styles go in a separate file layered after
+   this one and may only ADD — never restyle these classes. */
+
+:root {
+  --smf-bg: #0b0e11;
+  --smf-panel: rgba(13, 18, 22, 0.92);
+  --smf-line: #1e2a32;
+  --smf-line2: #2a3d49;
+  --smf-text: #c2ccd2;
+  --smf-head: #e6edf1;
+  --smf-dim: #566068;
+  --smf-dim2: #5b7482;
+  --smf-amber: #e0973a;
+  --smf-cyan: #55d6f0;
+  --smf-cyan2: #8fe9ff;
+  --smf-field: #3b9fd9;
+  --smf-green: #9fd65a;
+  --smf-red: #d96b6b;
+  --smf-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+}
+
+.smf-root {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 560px;
+  background: var(--smf-bg);
+  overflow: hidden;
+  font-family: var(--smf-mono);
+  color: var(--smf-text);
+}
+.smf-canvas { position: absolute; inset: 0; }
+.smf-canvas canvas { display: block; }
+
+/* right telemetry panel */
+.smf-panel {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(320px, 86vw);
+  background: var(--smf-panel);
+  border-left: 1px solid var(--smf-line);
+  overflow-y: auto;
+  padding: 14px 14px 20px;
+  font-size: 11px;
+  transition: transform 0.25s;
+}
+.smf-panel.hidden { transform: translateX(100%); }
+.smf-toggle {
+  position: absolute; top: 10px; right: 10px; z-index: 5;
+  background: #13202a; border: 1px solid var(--smf-line2);
+  color: var(--smf-cyan); font: 600 11px var(--smf-mono);
+  padding: 5px 9px; cursor: pointer;
+}
+
+/* identity block — identical in every scenario */
+/* padding-right clears the HIDE toggle that floats over the panel corner */
+.smf-h1 { font: 700 19px var(--smf-mono); letter-spacing: 0.14em; color: var(--smf-head); margin: 0 0 1px; padding-right: 58px; }
+.smf-sub { font: 500 12px var(--smf-mono); letter-spacing: 0.18em; color: var(--smf-dim2); }
+.smf-tag { font: 500 10px var(--smf-mono); letter-spacing: 0.18em; color: var(--smf-dim); margin: 2px 0 12px; }
+
+.smf-row { display: flex; justify-content: space-between; align-items: baseline; margin: 3px 0; }
+.smf-k { color: var(--smf-dim2); }
+.smf-amber { color: var(--smf-amber); }
+.smf-cyan { color: var(--smf-cyan); }
+.smf-dim { color: var(--smf-dim); }
+.smf-green { color: var(--smf-green); }
+.smf-red { color: var(--smf-red); }
+
+.smf-card {
+  border: 1px solid var(--smf-line);
+  padding: 8px 9px; margin: 10px 0;
+  background: rgba(255, 255, 255, 0.015);
+}
+.smf-cardh {
+  font: 700 13px var(--smf-mono); letter-spacing: 0.18em; color: #9fb2bd;
+  margin-bottom: 5px; display: flex; justify-content: space-between;
+}
+.smf-bar { position: relative; height: 7px; background: #141c22; border: 1px solid #22313b; margin: 3px 0 6px; }
+.smf-fill { position: absolute; inset: 0; transform-origin: left; }
+.smf-tick { position: absolute; top: -2px; bottom: -2px; width: 1px; background: #7a8b94; }
+.smf-lamp { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+
+/* SHIFT CHECKLIST */
+.smf-check { list-style: none; margin: 4px 0 0; padding: 0; }
+.smf-check li { margin: 3px 0; color: var(--smf-dim); }
+.smf-check li.on { color: var(--smf-text); }
+.smf-check li.on b { color: var(--smf-green); }
+.smf-check li .you { color: var(--smf-cyan); font-weight: 600; }
+
+.smf-log { max-height: 150px; overflow-y: auto; margin-top: 4px; }
+.smf-log div { margin: 2px 0; color: #7d8f99; line-height: 1.35; }
+.smf-log div:first-child { color: var(--smf-text); }
+
+/* buttons */
+.smf-btn {
+  background: #13202a; border: 1px solid var(--smf-line2); color: #8fa8b5;
+  font: 600 11px var(--smf-mono); padding: 4px 9px; margin-right: 5px; cursor: pointer;
+}
+.smf-btn.on { color: var(--smf-bg); background: var(--smf-cyan); border-color: var(--smf-cyan); }
+.smf-btn:focus-visible { outline: 1px solid var(--smf-cyan); outline-offset: 1px; }
+.smf-act { display: block; width: 100%; margin: 5px 0; padding: 8px 10px; text-align: left; color: var(--smf-cyan); border-color: #2a5d6e; }
+.smf-act:hover { background: #17303c; }
+.smf-act.warn { color: var(--smf-amber); border-color: #8a5a22; animation: smfpulse 1.1s ease-in-out infinite; }
+@keyframes smfpulse { 50% { background: #2a1f13; border-color: var(--smf-amber); } }
+
+/* help + banner + legend */
+.smf-help { position: absolute; left: 12px; bottom: 10px; font-size: 10px; color: #495a64; z-index: 4; pointer-events: none; }
+.smf-banner {
+  position: absolute; left: 50%; top: 16px; transform: translateX(-50%);
+  background: rgba(19, 32, 42, 0.95); border: 1px solid var(--smf-cyan); color: var(--smf-cyan2);
+  font: 700 15px var(--smf-mono); letter-spacing: 0.2em; padding: 8px 18px; z-index: 6;
+}
+.smf-legend { margin-top: 10px; color: var(--smf-dim2); line-height: 1.6; }
+
+/* ---- WORK ORDER briefing ---- */
+.smf-brief-overlay {
+  position: absolute; inset: 0; z-index: 9;
+  background: rgba(5, 8, 10, 0.55);
+  display: flex; align-items: center; justify-content: center;
+}
+.smf-brief {
+  width: min(460px, 92vw);
+  background: #0d1216; border: 1px solid var(--smf-line2);
+  box-shadow: 0 30px 80px -20px #000;
+  padding: 18px 20px 16px;
+  font-size: 11px; line-height: 1.55;
+}
+.smf-brief .wo { color: var(--smf-dim2); letter-spacing: 0.24em; font-size: 10px; }
+.smf-brief h2 { font: 700 17px var(--smf-mono); letter-spacing: 0.18em; color: var(--smf-head); margin: 2px 0 2px; }
+.smf-brief .layer { color: var(--smf-dim); letter-spacing: 0.16em; font-size: 10px; margin-bottom: 10px; }
+.smf-brief .sit { color: var(--smf-text); margin: 0 0 10px; }
+.smf-brief .verbs { border-top: 1px solid var(--smf-line); border-bottom: 1px solid var(--smf-line); padding: 8px 0; margin: 0 0 10px; }
+.smf-brief .verbs li { list-style: none; margin: 4px 0; color: #9fb2bd; }
+.smf-brief .verbs b { color: var(--smf-cyan); font-weight: 600; letter-spacing: 0.06em; }
+.smf-brief .obj { color: var(--smf-amber); margin: 0; }
+.smf-brief .obj b { letter-spacing: 0.18em; }
+.smf-begin {
+  display: block; width: 100%; margin-top: 14px; padding: 9px 10px;
+  background: #13202a; border: 1px solid var(--smf-cyan); color: var(--smf-cyan);
+  font: 700 12px var(--smf-mono); letter-spacing: 0.22em; cursor: pointer;
+}
+.smf-begin:hover { background: var(--smf-cyan); color: var(--smf-bg); }
+.smf-briefbtn {
+  position: absolute; top: 10px; left: 10px; z-index: 5;
+  background: #13202a; border: 1px solid var(--smf-line2); color: #8fa8b5;
+  font: 600 11px var(--smf-mono); padding: 5px 9px; cursor: pointer;
+}
+.smf-briefbtn:hover { color: var(--smf-cyan); }

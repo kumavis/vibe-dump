@@ -1,0 +1,12 @@
+{
+  "name": "@vibe-dump/smf-dying-patch",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "test": "node harness.mjs" },
+  "dependencies": { "react": "^18.3.1", "react-dom": "^18.3.1", "three": "^0.160.0" },
+  "gallery": {
+    "title": "SMF 01 · Dying Patch",
+    "description": "Your patch is dying. Place the survey beacon, then grant the mold permission to eat its own limbs — retreat funds the move. The original prototype, now player-driven."
+  }
+}
