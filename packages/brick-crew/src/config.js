@@ -157,9 +157,11 @@ export const SITE = {
   gate: { x: 0, z: 9.2 },
   roadZ: 12.4,
   fence: { x0: -24.5, x1: 24.5, z0: -8.4, z1: 9.2, gapX0: -2.0, gapX1: 2.0 },
-  muster: { x: -18.0, z: 7.4 },
-  offsite: { x: 34.0, z: 12.4 },
-  arrival: { x: -34.0, z: 12.4 },
+  /** Where a crew gathers by the gate before walking back up the road. */
+  muster: { x: -4.6, z: 7.6 },
+  /** The yard end of the road: crews come from here and go back to it. */
+  offsite: { x: -33.0, z: 12.4 },
+  arrival: { x: -33.0, z: 12.4 },
   /** The arrow painted on the road that takes you down to the yard. */
   arrow: { x: 9.0, z: 12.4 },
 }
@@ -187,9 +189,8 @@ export const ROSTER = [
   { role: 'mason', n: 6 },
 ]
 
-/** Units the fit-out and decorating gangs bring. */
-export const FITOUT_CREW = 4
-export const PAINT_CREW = 4
+/** How long before a changeover the yard starts building the next crew. */
+export const KIT_LEAD_SECONDS = 292
 
 /** Movement + work rates, tuned so a house tops out in roughly eleven minutes. */
 export const RATE = {

@@ -735,7 +735,12 @@ export function buildPaintTin(color) {
  * The arrow painted on the tarmac. Tapping it runs you down the road to the
  * outfitting yard; the same thing at the yard brings you back.
  */
-export function buildRoadArrow(label, flip) {
+/**
+ * The arrow painted on the tarmac. `dir` is -1 to send you up the road and +1
+ * to send you down it — baked into the artwork rather than flipped afterwards,
+ * so the post-mounted sign and the paint always point the same way.
+ */
+export function buildRoadArrow(label, dir) {
   const g = new THREE.Group()
   const cv = document.createElement('canvas')
   cv.width = 512
@@ -743,26 +748,33 @@ export function buildRoadArrow(label, flip) {
   const c = cv.getContext('2d')
   c.fillStyle = '#2b2f34'
   c.fillRect(0, 0, 512, 256)
+  c.save()
+  // the chevron below is drawn pointing left, so +1 is the one that mirrors
+  if (dir > 0) {
+    c.translate(512, 0)
+    c.scale(-1, 1)
+  }
   c.fillStyle = '#f0b429'
-  // chunky chevron
   c.beginPath()
   c.moveTo(120, 128); c.lineTo(250, 40); c.lineTo(250, 92)
   c.lineTo(400, 92); c.lineTo(400, 164); c.lineTo(250, 164)
   c.lineTo(250, 216); c.closePath()
   c.fill()
+  c.restore()
   c.fillStyle = '#f0b429'
   c.font = 'bold 40px ui-monospace, Menlo, Consolas, monospace'
   c.textAlign = 'center'
   c.fillText(label, 256, 246)
   const tex = new THREE.CanvasTexture(cv)
   tex.colorSpace = THREE.SRGBColorSpace
+  tex.anisotropy = 4
   const plate = new THREE.Mesh(
     new THREE.PlaneGeometry(4.4, 2.2),
     new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95, transparent: true }),
   )
   plate.rotation.x = -Math.PI / 2
-  plate.rotation.z = flip ? Math.PI : 0
-  plate.position.y = 0.02
+  // clear of the yard's concrete pad, which is laid over the tarmac
+  plate.position.y = 0.09
   plate.receiveShadow = true
   g.add(plate)
   // an invisible slab that is easy to hit with a finger
@@ -774,8 +786,12 @@ export function buildRoadArrow(label, flip) {
   post.position.set(0, 0, -2.0)
   g.add(post)
   box(post, M.darkSteel, 0.08, 1.5, 0.08, 0, 0.75, 0)
-  const board = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 1.0), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9, side: THREE.DoubleSide }))
+  const board = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.0, 1.0),
+    new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9, side: THREE.DoubleSide }),
+  )
   board.position.set(0, 1.75, 0)
   post.add(board)
   return { group: g, hit, plate }
 }
+

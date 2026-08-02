@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
   SITE, YARD, PLOTS, DEPOT, COURSE, COLORS, SHIFT_SECONDS, PREROLL_SECONDS,
-  HOUSE_TYPES, PAINT, MATERIALS, houseGeom,
+  HOUSE_TYPES, PAINT, MATERIALS, ROSTER, KIT_LEAD_SECONDS, houseGeom,
 } from './src/config.js'
 import { buildPlan } from './src/plan.js'
 import { buildSite, buildSky, buildLights } from './src/site.js'
@@ -10,7 +10,7 @@ import {
   buildStock, buildDrop, buildMixer, buildScaffold, buildCone, buildToolCrate,
   buildDumpster, buildPrivy, buildSpoilHeap, buildSign, buildRoadArrow,
 } from './src/props.js'
-import { setGeom } from './src/nav.js'
+import { setGeom, setObstacles } from './src/nav.js'
 import { createSim } from './src/sim.js'
 import { createTruckRig } from './src/fitout.js'
 import { createDepot } from './src/depot.js'
@@ -97,14 +97,15 @@ scene.add(site.group)
 ui.setLoading(0.26, 'putting up the hoarding…')
 
 // the two arrows on the tarmac, and the yard they run between
-const toDepot = buildRoadArrow('OUTFITTING YARD', true)
+// the yard is up the road in -X, the site back down it in +X
+const toDepot = buildRoadArrow('OUTFITTING YARD', -1)
 toDepot.group.position.set(SITE.arrow.x, 0, SITE.arrow.z)
 scene.add(toDepot.group)
 
 const depot = createDepot({ origin: DEPOT, rng })
 scene.add(depot.group)
 
-const toSite = buildRoadArrow('BACK TO SITE', false)
+const toSite = buildRoadArrow('BACK TO SITE', +1)
 toSite.group.position.set(DEPOT.x + 13, 0, DEPOT.z)
 scene.add(toSite.group)
 
@@ -237,6 +238,7 @@ function buildTopOut() {
 // --- start a plot ----------------------------------------------------------
 
 function startPlot(first) {
+  const carriedClock = sim ? sim.clockT : 0
   sim?.dispose()
   if (workGroup) scene.remove(workGroup)
 
@@ -252,9 +254,12 @@ function startPlot(first) {
 
   plan = buildPlan(rng, { geom, day, plotIndex, paint })
   setGeom(geom, plan.doorway)
+  refreshObstacles(origin)
 
   houseGroup = new THREE.Group()
   houseGroup.position.set(origin.x, 0, origin.z)
+  houseGroup.userData.plot = plotIndex
+  houseGroup.userData.geom = geom
   scene.add(houseGroup)
   standing.push(houseGroup)
 
@@ -346,9 +351,11 @@ function startPlot(first) {
     drops,
     scaffold,
     truck: truckRig,
+    clock0: carriedClock,
     onPlace: reveal,
     onPaint: paintPatch,
     onBanner: (t, s, a) => ui.banner(t, s, a),
+    requestCrew: () => depot.take(),
     onStage: (s) => {
       if (s === 'fitout') topOut.visible = true
     },
@@ -369,6 +376,48 @@ function startPlot(first) {
   }
 }
 
+/**
+ * Everything on the street the crew has to walk round: the houses already
+ * standing on the other plots, and the site office. Given to the router in the
+ * current plot's coordinates.
+ */
+function refreshObstacles(origin) {
+  const boxes = []
+  for (const h of standing) {
+    if (h.userData.plot === plotIndex) continue
+    const g = h.userData.geom
+    boxes.push({
+      x: h.position.x - origin.x,
+      z: h.position.z - origin.z,
+      hw: g.w / 2 + 0.4,
+      hd: g.d / 2 + 0.4,
+    })
+  }
+  boxes.push({ x: SITE.trailer.x - origin.x, z: SITE.trailer.z - origin.z, hw: 3.3, hd: 2.2 })
+  setObstacles(boxes)
+}
+
+/** The yard works on the next shift for as long as it has to build it. */
+function orderNextCrew() {
+  if (sim.secondsToShiftChange() < KIT_LEAD_SECONDS) {
+    depot.prepare(sim.nextCrew(), ROSTER.flatMap((s) => Array.from({ length: s.n }, () => s.role)))
+  }
+}
+
+/**
+ * Run the site and the yard forward without drawing anything. Used to check
+ * long-running behaviour without waiting out a shift in real time.
+ */
+function fastForward(seconds) {
+  const h = 1 / 20
+  for (let t = 0; t < seconds; t += h) {
+    orderNextCrew()
+    depot.update(h, t)
+    sim.update(h)
+    if (sim.finished && sim.stageT > 14) startPlot(false)
+  }
+}
+
 /** Look over the hoarding into a plot, from the road side. */
 function framePlot(origin) {
   camGoal.pos.set(origin.x + 12.4, 8.0, origin.z + 15.0)
@@ -386,8 +435,8 @@ function flyTo(next) {
   flying = 1
   controls.autoRotate = false
   if (next === 'depot') {
-    camGoal.pos.set(DEPOT.x + 0.5, 10.5, DEPOT.z + 14)
-    camGoal.target.set(DEPOT.x + 0.5, 1.2, DEPOT.z - 4.0)
+    camGoal.pos.set(DEPOT.x + 2.5, 10.0, DEPOT.z + 13.5)
+    camGoal.target.set(DEPOT.x + 1.5, 1.2, DEPOT.z - 4.0)
     ui.setHint(false)
     ui.banner('OUTFITTING YARD', 'where the crew gets kitted out', '#f0b429')
   } else {
@@ -548,6 +597,8 @@ renderer.setAnimationLoop(() => {
   depot.update(dt, t)
   ui.tick(dt)
 
+  orderNextCrew()
+
   // the plot is handed over; the whole outfit moves next door
   if (sim.finished && sim.stageT > 14) startPlot(false)
 
@@ -598,6 +649,11 @@ renderer.setAnimationLoop(() => {
 
 window.brickCrew = {
   get sim() { return sim },
+  depot,
+  fastForward,
+  look: (p, t) => { camGoal.pos.set(p[0], p[1], p[2]); camGoal.target.set(t[0], t[1], t[2]); flying = 1 },
+  get origin() { return PLOTS[plotIndex] },
+  get houses() { return standing.map((h) => ({ x: h.position.x, z: h.position.z, plot: h.userData.plot, w: h.userData.geom.w, d: h.userData.geom.d })) },
   get plan() { return plan },
   get view() { return view },
   flyTo,

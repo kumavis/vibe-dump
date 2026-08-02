@@ -203,18 +203,124 @@ export function createDepot({ origin, rng }) {
     group.add(sign)
   })
 
-  const line = []
-  for (let i = 0; i < 3; i++) {
-    const rig = buildRobot({ role: 'mason', accent: LIVERY[i].accent, hatColor: LIVERY[i].hat, rng })
-    group.add(rig.group)
-    line.push({ rig, x: LINE_X0 - i * 6.5, stage: 0, anim: {} })
-  }
+  // The line only runs when there is an order on the books: the next shift's
+  // crew, in the next shift's livery, built one at a time and lined up by the
+  // gate until it is time for them to walk down to the site.
+  const QUEUE_COLS = 6
+  const queueSlot = (i) => ({ x: 6.0 + (i % QUEUE_COLS) * 1.25, z: -1.8 + Math.floor(i / QUEUE_COLS) * 1.5 })
+
+  let order = null // { crew, roles }
+  let fed = 0
+  let feedT = 0
+  const inLine = []
+  const queued = []
+  const LINE_SPEED = 1.9
+  const FEED_GAP = 2.6
+  /** One body every twenty seconds, so the line is working all shift rather
+   *  than in a panic just before the whistle. */
+  const FEED_EVERY = 19
+
   const setKit = (rig, n) => {
     for (const m of rig.kit.boots) m.visible = n >= 1
     for (const m of rig.kit.vest) m.visible = n >= 2
     for (const m of rig.kit.hat) m.visible = n >= 3
   }
-  for (const w of line) setKit(w.rig, 0)
+
+  /** Put the next shift on the build sheet. */
+  function prepare(crew, roles) {
+    if (order) return
+    order = { crew, roles: roles.slice() }
+    fed = 0
+    feedT = FEED_EVERY // start one straight away
+  }
+
+  /** Every one of them kitted and lined up? */
+  const ready = () => !!order && queued.length >= order.roles.length
+
+  /**
+   * Hand over whoever is standing in the muster bay. They keep the bodies they
+   * were built with — the robot you watched get its hat is the one that turns
+   * up on site. If the line hasn't finished, the site makes up the numbers; the
+   * order is cleared either way so the next one can start.
+   */
+  function take() {
+    const done = queued.filter((w) => w.state === 'ready')
+    const out = done.map((w) => ({
+      rig: w.rig,
+      role: w.role,
+      world: { x: origin.x + w.rig.group.position.x, z: origin.z + w.rig.group.position.z },
+    }))
+    for (const w of done) group.remove(w.rig.group)
+    // anything still walking off the line is scrapped rather than left behind
+    for (const w of queued) if (w.state !== 'ready') group.remove(w.rig.group)
+    for (const w of inLine) group.remove(w.rig.group)
+    queued.length = 0
+    inLine.length = 0
+    order = null
+    fed = 0
+    return out
+  }
+
+  function feedLine(dt) {
+    if (!order || fed >= order.roles.length) return
+    feedT += dt
+    if (feedT < FEED_EVERY) return
+    const last = inLine[inLine.length - 1]
+    if (last && last.x < LINE_X0 + FEED_GAP) return
+    feedT = 0
+    const role = order.roles[fed++]
+    const rig = buildRobot({ role, accent: order.crew.accent, hatColor: order.crew.hat, rng })
+    setKit(rig, 0)
+    group.add(rig.group)
+    inLine.push({ rig, role, x: LINE_X0 - 1.2, stage: 0, anim: {}, state: 'line' })
+  }
+
+  function stepLine(dt) {
+    for (let i = inLine.length - 1; i >= 0; i--) {
+      const w = inLine[i]
+      w.x += dt * LINE_SPEED
+      let stage = 0
+      for (let b = 0; b < BAYS.length; b++) if (w.x > BAYS[b]) stage = b + 1
+      w.stage = stage
+      setKit(w.rig, stage)
+      w.rig.group.position.set(w.x, 0, LINE_Z)
+      w.rig.group.rotation.y = Math.PI / 2
+      w.anim.moving = true
+      w.anim.speed = LINE_SPEED
+      w.rig.update(dt, w.anim)
+      if (w.x > LINE_X1) {
+        // off the end of the line and over to the muster bay
+        inLine.splice(i, 1)
+        w.state = 'walk'
+        w.slot = queueSlot(queued.length)
+        w.pos = new THREE.Vector3(w.x, 0, LINE_Z)
+        w.yaw = Math.PI / 2
+        queued.push(w)
+      }
+    }
+  }
+
+  function stepQueue(dt) {
+    for (const w of queued) {
+      if (w.state === 'walk') {
+        setKit(w.rig, 3)
+        if (step(w, dt, w.slot, 1.9)) {
+          w.state = 'ready'
+          w.faceYaw = Math.PI / 2
+        }
+        w.anim.moving = w.state === 'walk'
+        w.anim.speed = 1.9
+      } else {
+        w.anim.moving = false
+        w.anim.speed = 0
+        w.anim.idle = 1
+      }
+      w.rig.update(dt, w.anim)
+      w.rig.group.position.copy(w.pos)
+      w.yaw += ((w.faceYaw - w.yaw + Math.PI * 3) % (Math.PI * 2) - Math.PI) * Math.min(1, dt * 8)
+      w.rig.group.rotation.y = w.yaw
+    }
+  }
 
   // --- info board ----------------------------------------------------------
   const board = new THREE.Group()
@@ -256,25 +362,11 @@ export function createDepot({ origin, rng }) {
   }
 
   function update(dt, t) {
-    // the kit line
-    for (const w of line) {
-      w.x += dt * 1.15
-      if (w.x > LINE_X1 + 3) {
-        w.x = LINE_X0 - 3
-        w.stage = 0
-      }
-      let stage = 0
-      for (let i = 0; i < BAYS.length; i++) if (w.x > BAYS[i]) stage = i + 1
-      w.stage = stage
-      setKit(w.rig, stage)
-      w.rig.group.position.set(w.x, 0, LINE_Z)
-      w.rig.group.rotation.y = Math.PI / 2
-      w.anim.moving = true
-      w.anim.speed = 1.15
-      w.rig.update(dt, w.anim)
-    }
+    feedLine(dt)
+    stepLine(dt)
+    stepQueue(dt)
     bayArms.forEach((rod, i) => {
-      const near = line.some((w) => Math.abs(w.x - BAYS[i]) < 0.7)
+      const near = inLine.some((w) => Math.abs(w.x - BAYS[i]) < 0.7)
       const want = near ? -0.55 : 0
       rod.position.y += (want - 0.25 - rod.position.y) * Math.min(1, dt * 8) + 0
       rod.position.y = THREE.MathUtils.lerp(rod.position.y, want - 0.25, Math.min(1, dt * 8))
@@ -414,5 +506,5 @@ export function createDepot({ origin, rng }) {
     void _v
   }
 
-  return { group, update }
+  return { group, update, prepare, ready, take, get pending() { return order ? order.roles.length - queued.length : 0 } }
 }

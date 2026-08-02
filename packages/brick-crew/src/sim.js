@@ -28,7 +28,7 @@ const wrap = (a) => ((a + Math.PI) % TWO_PI + TWO_PI) % TWO_PI - Math.PI
 
 export function createSim({
   plan, rng, group, origin, stocks, drops, scaffold, truck,
-  onPlace, onPaint, onBanner, onStage, onComplete,
+  onPlace, onPaint, onBanner, onStage, onComplete, requestCrew, clock0 = 0,
 }) {
   const robots = []
   const items = plan.items
@@ -41,13 +41,16 @@ export function createSim({
   const MUSTER = L(SITE.muster)
   const GATE = L(SITE.gate)
   const OFFSITE = L(SITE.offsite)
+  const ROAD = L({ x: SITE.gate.x, z: SITE.roadZ })
 
   let placedCount = 0
   let firstOpen = 0
   let phaseIdx = 0
   let phaseDone = 0
-  let clockT = 0
-  let shiftIndex = 0
+  // The shift clock runs across the whole street, not per plot — moving next
+  // door doesn't buy the crew a fresh five minutes.
+  let clockT = clock0
+  let shiftIndex = Math.floor(clock0 / SHIFT_SECONDS)
   let crew = CREWS[0]
   let stage = 'build' // build | fitout | paint | done
   let stageT = 0
@@ -164,19 +167,33 @@ export function createSim({
 
   // --- robots --------------------------------------------------------------
 
-  function spawnCrew(crewDef, atGate) {
+  function spawnCrew(crewDef, atGate, supplied) {
     const made = []
     let n = 0
-    for (const slot of ROSTER) {
+    // Whoever the yard has finished kitting out turns up as-is; only if it has
+    // nobody ready (a fast-forward, or the very first shift) do we build here.
+    const want = ROSTER.flatMap((slot) => Array.from({ length: slot.n }, () => slot.role))
+    const spare = (supplied || []).slice()
+    const roster = want.map((role) => {
+      const i = spare.findIndex((s) => s.role === role)
+      if (i < 0) return { role, n: 1 }
+      const [s] = spare.splice(i, 1)
+      return { role, n: 1, rig: s.rig, world: s.world }
+    })
+    for (const slot of roster) {
       for (let k = 0; k < slot.n; k++, n++) {
-        const rig = buildRobot({ role: slot.role, accent: crewDef.accent, hatColor: crewDef.hat, rng })
+        const rig = slot.rig || buildRobot({ role: slot.role, accent: crewDef.accent, hatColor: crewDef.hat, rng })
         const spread = (n - 4) * 0.55
-        const start = L(SITE.arrival)
+        const start = slot.world
+          ? { level: 0, x: slot.world.x - origin.x, y: 0, z: slot.world.z - origin.z }
+          : L(SITE.arrival)
         const r = {
           rig,
           role: slot.role,
           crewId: shiftIndex,
-          pos: new THREE.Vector3(start.x - Math.abs(spread) * 1.4, 0, start.z + spread * 0.5),
+          pos: slot.world
+            ? new THREE.Vector3(start.x, 0, start.z)
+            : new THREE.Vector3(start.x - Math.abs(spread) * 1.4, 0, start.z + spread * 0.5),
           yaw: Math.PI / 2,
           stance: { level: 0, x: start.x, y: 0, z: start.z },
           path: [],
@@ -229,8 +246,13 @@ export function createSim({
       }
     }
     for (const r of made) {
-      if (atGate) goto(r, { level: 0, x: GATE.x + (rng() - 0.5) * 1.8, y: 0, z: GATE.z - 0.8 }, () => think(r))
-      else think(r)
+      if (atGate) {
+        // along the road to the gate, then in — never straight through the fence
+        const lane = { level: 0, x: GATE.x + (rng() - 0.5) * 2.2, y: 0, z: ROAD.z }
+        goto(r, lane, () => {
+          goto(r, { level: 0, x: lane.x, y: 0, z: GATE.z - 0.9 }, () => think(r))
+        })
+      } else think(r)
     }
     return made
   }
@@ -526,8 +548,10 @@ export function createSim({
       r.timer = 1.4 + rng() * 1.2
       r.then = () => {
         goto(r, { level: 0, x: GATE.x + (rng() - 0.5) * 1.6, y: 0, z: GATE.z + 0.6 }, () => {
-          goto(r, OFFSITE, () => {
-            r.dead = true
+          goto(r, { level: 0, x: GATE.x + (rng() - 0.5) * 2.2, y: 0, z: ROAD.z }, () => {
+            goto(r, OFFSITE, () => {
+              r.dead = true
+            })
           })
         })
       }
@@ -597,7 +621,7 @@ export function createSim({
   function startShift(first) {
     shiftIndex++
     crew = CREWS[(shiftIndex - 1) % CREWS.length]
-    spawnCrew(crew, !first)
+    spawnCrew(crew, !first, first ? null : requestCrew?.())
     if (!first) {
       for (const r of robots) {
         if (r.crewId < shiftIndex && !r.leaving) {
@@ -764,6 +788,9 @@ export function createSim({
     get shiftIndex() {
       return shiftIndex
     },
+    get clockT() {
+      return clockT
+    },
     get crew() {
       return crew
     },
@@ -786,6 +813,8 @@ export function createSim({
       return { done: paintDone, total: patches.length }
     },
     secondsToShiftChange: () => SHIFT_SECONDS - (clockT % SHIFT_SECONDS),
+    /** Whose livery the yard should be building next. */
+    nextCrew: () => CREWS[shiftIndex % CREWS.length],
     phaseProgress: () =>
       PHASES.map((p, i) => ({
         key: p.key,

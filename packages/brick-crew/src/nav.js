@@ -14,9 +14,7 @@
 import { roofTopY, slopeZ } from './config.js'
 
 let G = null // current house geometry
-let KX = 0
-let KZ = 0
-let CORNERS = []
+let HOUSE_BOX = null
 let RX = 0
 let RZ = 0
 let LEGS = []
@@ -32,11 +30,7 @@ const mod = (v, m) => ((v % m) + m) % m
 /** Point the router at the house currently being built on this plot. */
 export function setGeom(geom, doorway) {
   G = geom
-  KX = geom.w / 2 + 0.3
-  KZ = geom.d / 2 + 0.3
-  const cx = KX + 0.35
-  const cz = KZ + 0.35
-  CORNERS = [[cx, cz], [cx, -cz], [-cx, -cz], [-cx, cz]]
+  HOUSE_BOX = { x: 0, z: 0, hw: geom.w / 2 + 0.3, hd: geom.d / 2 + 0.3 }
   RX = geom.scaffold.rx
   RZ = geom.scaffold.rz
   LEGS = [
@@ -58,13 +52,31 @@ export function setGeom(geom, doorway) {
 }
 
 // --- ground ----------------------------------------------------------------
+//
+// The plot's own house is not the only thing in the way: the finished houses
+// further down the street and the site office are solid too. They all go in as
+// axis-aligned boxes and the router works a small visibility graph over their
+// corners, which is cheap at this scale and always finds a way round.
 
-/** Segment vs. the house footprint, slab method. Grazing the edge doesn't count. */
-function segHitsHouse(ax, az, bx, bz) {
-  const hx = KX - 0.02
-  const hz = KZ - 0.02
+let EXTRA = []
+const CORNER_MARGIN = 0.55
+
+/** Obstacles other than the house on this plot, in plot-local coordinates. */
+export function setObstacles(list) {
+  EXTRA = list.map((b) => ({ x: b.x, z: b.z, hw: b.hw, hd: b.hd }))
+}
+
+const allBoxes = () => (HOUSE_BOX ? [HOUSE_BOX, ...EXTRA] : EXTRA)
+const inside = (b, x, z) => Math.abs(x - b.x) < b.hw && Math.abs(z - b.z) < b.hd
+
+/** Segment vs. one box, slab method. Grazing an edge doesn't count. */
+function segHitsBox(ax, az, bx, bz, b) {
+  const hx = b.hw - 0.02
+  const hz = b.hd - 0.02
   const dx = bx - ax
   const dz = bz - az
+  const rx = ax - b.x
+  const rz = az - b.z
   let t0 = 0
   let t1 = 1
   const clip = (p, q) => {
@@ -79,45 +91,70 @@ function segHitsHouse(ax, az, bx, bz) {
     }
     return true
   }
-  if (!clip(-dx, ax + hx)) return false
-  if (!clip(dx, hx - ax)) return false
-  if (!clip(-dz, az + hz)) return false
-  if (!clip(dz, hz - az)) return false
+  if (!clip(-dx, rx + hx)) return false
+  if (!clip(dx, hx - rx)) return false
+  if (!clip(-dz, rz + hz)) return false
+  if (!clip(dz, hz - rz)) return false
   return t0 < t1
 }
 
-/** Walk the dirt from A to B, going round the house when the straight line
- *  would cut through it. */
+function blocked(ax, az, bx, bz, skip) {
+  for (const b of allBoxes()) {
+    if (skip.has(b)) continue
+    if (segHitsBox(ax, az, bx, bz, b)) return true
+  }
+  return false
+}
+
+/**
+ * Walk the dirt from A to B, going round whatever is in the way. Boxes that
+ * already contain one of the endpoints are ignored, or a robot standing beside
+ * a wall could never set off.
+ */
 export function groundPath(ax, az, bx, bz) {
-  if (!segHitsHouse(ax, az, bx, bz)) return [{ x: bx, y: 0, z: bz }]
-  let best = null
-  for (let start = 0; start < 4; start++) {
-    for (const dir of [1, -1]) {
-      for (let n = 1; n <= 3; n++) {
-        const pts = []
-        let idx = start
-        for (let k = 0; k < n; k++) {
-          pts.push(CORNERS[idx])
-          idx = (idx + dir + 4) % 4
-        }
-        let ok = !segHitsHouse(ax, az, pts[0][0], pts[0][1])
-        for (let k = 0; ok && k < pts.length - 1; k++) {
-          ok = !segHitsHouse(pts[k][0], pts[k][1], pts[k + 1][0], pts[k + 1][1])
-        }
-        const last = pts[pts.length - 1]
-        ok = ok && !segHitsHouse(last[0], last[1], bx, bz)
-        if (!ok) continue
-        let len = Math.hypot(pts[0][0] - ax, pts[0][1] - az)
-        for (let k = 0; k < pts.length - 1; k++) {
-          len += Math.hypot(pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1])
-        }
-        len += Math.hypot(bx - last[0], bz - last[1])
-        if (!best || len < best.len) best = { len, pts }
+  const bs = allBoxes()
+  const skip = new Set(bs.filter((b) => inside(b, ax, az) || inside(b, bx, bz)))
+  if (!blocked(ax, az, bx, bz, skip)) return [{ x: bx, y: 0, z: bz }]
+
+  // nodes: start, every corner of every box still in play, then the target
+  const nodes = [{ x: ax, z: az }]
+  for (const b of bs) {
+    if (skip.has(b)) continue
+    for (const sx of [-1, 1]) {
+      for (const sz of [-1, 1]) {
+        nodes.push({ x: b.x + sx * (b.hw + CORNER_MARGIN), z: b.z + sz * (b.hd + CORNER_MARGIN) })
       }
     }
   }
-  const out = best ? best.pts.map(([x, z]) => ({ x, y: 0, z })) : []
-  out.push({ x: bx, y: 0, z: bz })
+  nodes.push({ x: bx, z: bz })
+  const goal = nodes.length - 1
+
+  const n = nodes.length
+  const dist = new Float64Array(n).fill(Infinity)
+  const prev = new Int16Array(n).fill(-1)
+  const seen = new Uint8Array(n)
+  dist[0] = 0
+  for (;;) {
+    let u = -1
+    let best = Infinity
+    for (let i = 0; i < n; i++) if (!seen[i] && dist[i] < best) (best = dist[i]), (u = i)
+    if (u < 0 || u === goal) break
+    seen[u] = 1
+    for (let v = 0; v < n; v++) {
+      if (seen[v] || v === u) continue
+      if (blocked(nodes[u].x, nodes[u].z, nodes[v].x, nodes[v].z, skip)) continue
+      const d = dist[u] + Math.hypot(nodes[v].x - nodes[u].x, nodes[v].z - nodes[u].z)
+      if (d < dist[v]) {
+        dist[v] = d
+        prev[v] = u
+      }
+    }
+  }
+
+  if (!isFinite(dist[goal])) return [{ x: bx, y: 0, z: bz }] // hemmed in; go straight
+  const out = []
+  for (let v = goal; v > 0; v = prev[v]) out.push({ x: nodes[v].x, y: 0, z: nodes[v].z })
+  out.reverse()
   return out
 }
 
