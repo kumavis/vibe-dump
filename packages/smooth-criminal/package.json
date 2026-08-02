@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/smooth-criminal",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Smooth Criminal",
+    "description": "A stick man in a white top hat runs the whole routine on a loop — hat tilt, toe spin, the anti-gravity lean, moonwalk — on a lit speakeasy diorama under a turntable camera. Three.js."
+  }
+}
