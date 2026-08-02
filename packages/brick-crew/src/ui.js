@@ -93,6 +93,11 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
   let phase = 'closed' // closed | dropping | unrolling | open | rolling
   let t = 0
   let reveal = 0
+  let openedAt = 0
+  // The unroll runs on its own wall clock. The render loop clamps its delta to
+  // keep the simulation stable on a slow frame, and borrowing that clamped
+  // value here stretched a 1.1 s animation out to four seconds.
+  let lastTick = 0
 
   const OPEN_T = REDUCED ? 0.25 : 1.1
   const DROP_T = REDUCED ? 0.05 : 0.28
@@ -111,6 +116,8 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     sizeSheet()
     phase = 'dropping'
     t = 0
+    lastTick = 0
+    openedAt = performance.now()
     el.stage.classList.add('on')
     el.backdrop.classList.add('on')
     el.wrap.style.transform = 'none'
@@ -123,13 +130,17 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     if (phase === 'closed' || phase === 'rolling') return
     phase = 'rolling'
     t = 0
+    lastTick = 0
     el.stage.classList.remove('open')
-    el.backdrop.classList.remove('on')
+    el.backdrop.classList.remove('on', 'armed')
     onSheetClose?.()
   }
 
-  function tick(dt) {
+  function tick() {
     if (phase === 'closed') return
+    const now = performance.now()
+    const dt = lastTick ? Math.min(0.5, (now - lastTick) / 1000) : 0
+    lastTick = now
     t += dt
     if (phase === 'dropping') {
       const k = Math.min(1, t / DROP_T)
@@ -152,6 +163,8 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
         reveal = 1
         applySheet(1, 0)
         el.stage.classList.add('open')
+        // Only now does the backdrop start swallowing clicks.
+        el.backdrop.classList.add('armed')
       }
       return
     }
@@ -171,11 +184,22 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     }
   }
 
+  /**
+   * A tap that opens the sheet also fires a synthesised click a moment later,
+   * and by then the backdrop is under the pointer — which used to shut the
+   * sheet the instant it appeared. Ignore anything that arrives too soon.
+   */
+  const ghostClick = () => performance.now() - openedAt < 500
+
   el.close.addEventListener('click', (e) => {
     e.stopPropagation()
+    if (ghostClick()) return
     closeSheet()
   })
-  el.backdrop.addEventListener('click', closeSheet)
+  el.backdrop.addEventListener('click', () => {
+    if (ghostClick()) return
+    closeSheet()
+  })
   addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeSheet()
   })

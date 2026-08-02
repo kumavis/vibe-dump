@@ -7,12 +7,12 @@
 // ---------------------------------------------------------------------------
 
 import * as THREE from 'three'
-import { SITE, COLORS, HOUSE } from './config.js'
+import { SITE, COLORS, PLOTS, YARD, DEPOT } from './config.js'
 
 const BOX = new THREE.BoxGeometry(1, 1, 1)
 const CYL = new THREE.CylinderGeometry(0.5, 0.5, 1, 16)
 
-const GROUND = 90
+const GROUND = 180
 
 function box(parent, material, sx, sy, sz, x = 0, y = 0, z = 0, geo = BOX) {
   const m = new THREE.Mesh(geo, material)
@@ -35,7 +35,7 @@ function hash2(x, y) {
 // --- ground ----------------------------------------------------------------
 
 function groundTexture() {
-  const S = 1024
+  const S = 2048
   const cv = document.createElement('canvas')
   cv.width = cv.height = S
   const c = cv.getContext('2d')
@@ -68,7 +68,7 @@ function groundTexture() {
     c.fillRect(x, y, 3 + t * 14, 3 + hash2(i, 14) * 10)
   }
 
-  // worn haul route: gate -> supply stack -> pallets
+  // worn haul routes: in at the gate, then out to each plot and round its yard
   c.strokeStyle = 'rgba(92,72,52,0.5)'
   c.lineCap = 'round'
   const track = (ax, az, bx, bz, w) => {
@@ -78,17 +78,21 @@ function groundTexture() {
     c.lineTo(px(bx), pz(bz))
     c.stroke()
   }
-  track(SITE.gate.x, SITE.roadZ, SITE.gate.x, SITE.stack.z, 2.6)
-  track(SITE.gate.x, SITE.stack.z, SITE.pallets[1].x, SITE.pallets[1].z, 2.2)
-  track(SITE.stack.x, SITE.stack.z, SITE.trailer.x, SITE.trailer.z, 1.6)
-  track(SITE.pallets[0].x, SITE.pallets[0].z, SITE.pallets[2].x, SITE.pallets[2].z, 1.8)
-  // tyre ruts along the main run
+  track(SITE.gate.x, SITE.roadZ, SITE.gate.x, SITE.gate.z - 1.5, 3.0)
+  for (const plot of PLOTS) {
+    track(SITE.gate.x, SITE.gate.z - 1.5, plot.x, plot.z + 6.0, 2.4)
+    track(plot.x, plot.z + 6.0, plot.x + YARD.stacks.brick.x, plot.z + YARD.stacks.brick.z, 2.0)
+    track(plot.x + YARD.stacks.tile.x, plot.z + YARD.stacks.tile.z,
+      plot.x + YARD.sources.brick.x, plot.z + YARD.sources.brick.z, 1.8)
+  }
+  track(SITE.gate.x, SITE.gate.z - 1.5, SITE.trailer.x + 2, SITE.trailer.z, 1.6)
+  // tyre ruts up the main run
   c.strokeStyle = 'rgba(70,54,38,0.34)'
   for (const off of [-0.55, 0.55]) {
     c.lineWidth = m(0.2)
     c.beginPath()
     c.moveTo(px(SITE.gate.x + off), pz(SITE.roadZ))
-    c.lineTo(px(SITE.gate.x + off), pz(SITE.stack.z - 1))
+    c.lineTo(px(SITE.gate.x + off), pz(SITE.gate.z - 2))
     c.stroke()
   }
 
@@ -104,6 +108,10 @@ function groundTexture() {
   c.fillStyle = 'rgba(230,230,220,0.5)'
   c.fillRect(0, pz(SITE.roadZ - 3.0), S, m(0.12))
   c.fillRect(0, pz(SITE.roadZ + 2.9), S, m(0.12))
+  // the outfitting yard's apron, down the road
+  c.fillStyle = '#8f8a82'
+  c.fillRect(px(DEPOT.x - 15.5), pz(DEPOT.z - 14.5), m(31), m(22.5))
+
   // kerb
   c.fillStyle = '#9a958c'
   c.fillRect(0, pz(SITE.roadZ - 3.35), S, m(0.28))
@@ -167,11 +175,12 @@ export function buildLights() {
   sun.position.set(-13, 20, 16)
   sun.castShadow = true
   sun.shadow.mapSize.set(2048, 2048)
+  sun.shadow.camera.updateProjectionMatrix?.()
   const cam = sun.shadow.camera
-  cam.left = -15
-  cam.right = 14
-  cam.top = 15
-  cam.bottom = -11
+  cam.left = -22
+  cam.right = 22
+  cam.top = 20
+  cam.bottom = -16
   cam.near = 1
   cam.far = 60
   sun.shadow.bias = -0.0006
@@ -366,13 +375,15 @@ function labelSprite(text) {
 function buildTreeline(rng) {
   const g = new THREE.Group()
   const spots = []
-  for (let i = 0; i < 220 && spots.length < 90; i++) {
+  for (let i = 0; i < 420 && spots.length < 120; i++) {
     const a = rng() * Math.PI * 2
-    const r = 34 + rng() * 52
+    const r = 40 + rng() * 62
     const x = Math.cos(a) * r
     const z = Math.sin(a) * r
     // keep the road corridor and the approach to the gate clear
-    if (Math.abs(z - SITE.roadZ) < 5.5) continue
+    if (Math.abs(z - SITE.roadZ) < 6.5) continue
+    if (Math.abs(x - DEPOT.x) < 18 && z < SITE.roadZ) continue
+    if (Math.abs(x) < 30 && z > -14 && z < SITE.roadZ) continue
     spots.push([x, z, 2.6 + rng() * 3.8, rng()])
   }
 
@@ -470,7 +481,7 @@ export function buildSite(rng = Math.random) {
   // A big plain apron underneath carries the eye out to the fog, so the
   // detailed site plane doesn't end in a hard edge against the sky.
   const apron = new THREE.Mesh(
-    new THREE.PlaneGeometry(420, 420),
+    new THREE.PlaneGeometry(600, 600),
     new THREE.MeshStandardMaterial({ color: COLORS.grass, roughness: 1 }),
   )
   apron.rotation.x = -Math.PI / 2

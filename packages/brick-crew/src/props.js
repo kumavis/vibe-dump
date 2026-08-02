@@ -8,7 +8,7 @@
 // ---------------------------------------------------------------------------
 
 import * as THREE from 'three'
-import { BRICK, MORTAR, STACK_CAP, SCAFFOLD, DECKS, COLORS } from './config.js'
+import { BRICK, MORTAR, COLORS } from './config.js'
 
 const BOX = new THREE.BoxGeometry(1, 1, 1)
 const CYL = new THREE.CylinderGeometry(0.5, 0.5, 1, 14)
@@ -35,6 +35,8 @@ const M = {
   sand: new THREE.MeshStandardMaterial({ color: 0xc7a870, roughness: 1 }),
   grit: new THREE.MeshStandardMaterial({ color: 0x8e8b86, roughness: 1 }),
   mortar: new THREE.MeshStandardMaterial({ color: COLORS.mortar, roughness: 0.95 }),
+  cast: new THREE.MeshStandardMaterial({ color: COLORS.lintel, roughness: 0.9 }),
+  slate: new THREE.MeshStandardMaterial({ color: COLORS.tile[0], roughness: 0.66, metalness: 0.05 }),
 }
 
 function box(parent, material, sx, sy, sz, x = 0, y = 0, z = 0, geo = BOX) {
@@ -61,6 +63,7 @@ function tubeZ(parent, material, len, r, x, y, z) {
 
 // --- brick piles -----------------------------------------------------------
 
+const brickMat = new THREE.MeshStandardMaterial({ color: COLORS.brick[0], roughness: 0.92 })
 const BL = BRICK.L - MORTAR
 const BH = BRICK.H - MORTAR
 const BD = BRICK.D - MORTAR
@@ -147,40 +150,67 @@ export function buildPallet(rng) {
   }
 }
 
-export function buildSupplyPile(rng) {
+/**
+ * A stock of one material, sitting by the house for the masons to draw from.
+ * Each looks like what it is — you can tell the timber stack from the tiles
+ * across the site, which is the point, since a mason has to fetch the right one.
+ */
+export function buildStock(mat, rng) {
   const group = new THREE.Group()
-  const capacity = STACK_CAP
-  box(group, M.ply, 1.7, 0.03, 1.3, 0, 0.015)
-  const perRow = 6
-  const perLayer = perRow * 2
-  // Hand-stacked, so everything is a degree or two out.
-  const jitter = []
-  for (let i = 0; i < capacity; i++) jitter.push([(rnd(rng) - 0.5) * 0.05, (rnd(rng) - 0.5) * 0.16, (rnd(rng) - 0.5) * 0.05])
-  const pile = brickPile(
-    capacity,
-    (i) => {
+  const capacity = mat.cap
+  box(group, M.ply, 1.5, 0.03, 1.15, 0, 0.015)
+  const parts = []
+
+  const add = (material, sx, sy, sz, x, y, z, ry) => {
+    const m = box(group, material, sx, sy, sz, x, y, z)
+    m.rotation.y = ry || 0
+    m.visible = false
+    parts.push(m)
+    return m
+  }
+
+  if (mat.key === 'brick') {
+    const perRow = 6
+    const perLayer = perRow * 2
+    for (let i = 0; i < capacity; i++) {
       const layer = Math.floor(i / perLayer)
       const k = i % perLayer
       const row = Math.floor(k / perRow)
       const col = k % perRow
-      const j = jitter[i]
-      return {
-        x: -0.72 + col * 0.28 + j[0],
-        y: 0.03 + layer * (BH + 0.008) + BH / 2,
-        z: -0.24 + row * 0.48 + j[2],
-        ry: j[1],
-      }
-    },
-    rng,
-  )
-  group.add(pile)
+      const b = add(brickMat, BL, BH, BD,
+        -0.66 + col * 0.26 + (rnd(rng) - 0.5) * 0.04,
+        0.03 + layer * (BH + 0.008) + BH / 2,
+        -0.22 + row * 0.44 + (rnd(rng) - 0.5) * 0.04)
+      b.rotation.y = (rnd(rng) - 0.5) * 0.14
+    }
+  } else if (mat.key === 'cast') {
+    for (let i = 0; i < capacity; i++) {
+      add(M.cast, 1.16, 0.075, 0.34, (rnd(rng) - 0.5) * 0.05, 0.05 + i * 0.085, (rnd(rng) - 0.5) * 0.06)
+    }
+  } else if (mat.key === 'timber') {
+    for (let i = 0; i < capacity; i++) {
+      const layer = Math.floor(i / 2)
+      const col = i % 2
+      add(layer & 1 ? M.timber : M.timberDark, 1.9, 0.1, 0.16,
+        0, 0.06 + layer * 0.11, -0.16 + col * 0.32 + (rnd(rng) - 0.5) * 0.02)
+    }
+  } else {
+    for (let i = 0; i < capacity; i++) {
+      const stackN = Math.floor(i / 9)
+      const k = i % 9
+      const t = add(M.slate, 0.52, 0.045, 0.44, -0.45 + stackN * 0.5, 0.04 + k * 0.05, 0)
+      t.rotation.y = (rnd(rng) - 0.5) * 0.1
+    }
+  }
+
   let shown = 0
   const api = {
     group,
     capacity,
+    key: mat.key,
     setCount(n) {
       shown = Math.max(0, Math.min(capacity, Math.round(n)))
-      pile.count = shown
+      for (let i = 0; i < parts.length; i++) parts[i].visible = i < shown
     },
     get count() {
       return shown
@@ -188,6 +218,85 @@ export function buildSupplyPile(rng) {
   }
   api.setCount(0)
   return api
+}
+
+/**
+ * The delivery drop for a material out at the edge of the plot — a big pile
+ * the haulers work down and the lorry tops back up.
+ */
+export function buildDrop(mat, rng) {
+  const group = new THREE.Group()
+  const capacity = 120
+  for (const z of [-0.44, 0, 0.44]) box(group, M.timberDark, 1.15, 0.07, 0.11, 0, 0.035, z)
+  for (let i = 0; i < 6; i++) box(group, M.timber, 1.15, 0.035, 0.13, 0, 0.088, -0.5 + i * 0.2)
+  const perRow = 5
+  const perLayer = perRow * 4
+  const geoFor = {
+    brick: [BL, BH, BD],
+    cast: [1.0, 0.07, 0.28],
+    timber: [1.1, 0.09, 0.15],
+    tile: [0.46, 0.045, 0.4],
+  }[mat.key]
+  const matFor = { brick: null, cast: M.cast, timber: M.timber, tile: M.slate }[mat.key]
+  const mesh = new THREE.InstancedMesh(
+    new THREE.BoxGeometry(geoFor[0], geoFor[1], geoFor[2]),
+    matFor || new THREE.MeshStandardMaterial({ roughness: 0.92 }),
+    capacity,
+  )
+  mesh.castShadow = true
+  mesh.receiveShadow = true
+  const m4 = new THREE.Matrix4()
+  const q = new THREE.Quaternion()
+  const e = new THREE.Euler()
+  const v = new THREE.Vector3()
+  const one = new THREE.Vector3(1, 1, 1)
+  const col = new THREE.Color()
+  for (let i = 0; i < capacity; i++) {
+    const layer = Math.floor(i / perLayer)
+    const k = i % perLayer
+    const row = Math.floor(k / perRow)
+    const c2 = k % perRow
+    const flip = layer & 1
+    e.set(0, flip ? Math.PI / 2 : 0, 0)
+    q.setFromEuler(e)
+    v.set(flip ? -0.44 + row * 0.29 : -0.5 + c2 * 0.25,
+      0.108 + layer * (geoFor[1] + 0.006) + geoFor[1] / 2,
+      flip ? -0.5 + c2 * 0.25 : -0.44 + row * 0.29)
+    m4.compose(v, q, one)
+    mesh.setMatrixAt(i, m4)
+    if (!matFor) mesh.setColorAt(i, col.setHex(COLORS.brick[(i * 7 + 3) % COLORS.brick.length]))
+  }
+  mesh.instanceMatrix.needsUpdate = true
+  if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
+  group.add(mesh)
+  // brick comes shrink-wrapped; everything else is banded, which reads better
+  // than a translucent box round a stack of slates
+  const wrap = mat.key === 'brick' ? box(group, M.wrap, 1.22, 0.9, 1.12, 0, 0.56) : null
+  if (wrap) wrap.castShadow = false
+  const bands = mat.key === 'brick' ? [] : [-0.34, 0.34].map((z) => box(group, M.darkSteel, 1.24, 0.05, 0.03, 0, 0.4, z))
+  let shown = capacity
+  void rng
+  return {
+    group,
+    capacity,
+    key: mat.key,
+    setCount(n) {
+      shown = Math.max(0, Math.min(capacity, Math.round(n)))
+      mesh.count = shown
+      if (wrap) {
+        wrap.visible = shown > 12
+        wrap.scale.y = Math.max(0.12, (shown / capacity) * 0.9)
+        wrap.position.y = wrap.scale.y / 2 + 0.11
+      }
+      for (const b of bands) {
+        b.visible = shown > 10
+        b.position.y = 0.11 + (shown / capacity) * 0.78
+      }
+    },
+    get count() {
+      return shown
+    },
+  }
 }
 
 // --- wheelbarrow -----------------------------------------------------------
@@ -262,11 +371,11 @@ export function buildMixer(rng) {
  * The ring of tube-and-board scaffold round the house. Built as one group per
  * lift so the app can raise it as the wall grows — setDecks(0|1|2).
  */
-export function buildScaffold() {
+export function buildScaffold(geom) {
   const group = new THREE.Group()
-  const { rx, rz, deckW, ladder } = SCAFFOLD
+  const { rx, rz, deckW, ladder } = geom.scaffold
+  const DECKS = geom.decks
   const lifts = []
-  const topY = DECKS[DECKS.length - 1].y
 
   // Standards: uprights at the corners and every couple of metres along.
   const posts = []
@@ -342,7 +451,6 @@ export function buildScaffold() {
     group.visible = v > 0
   }
   setDecks(0)
-  void topY
   return { group, setDecks }
 }
 
@@ -463,4 +571,211 @@ export function buildSign(text) {
   const board = box(g, face, 1.6, 0.8, 0.05, 0, 1.2, 0.04)
   board.material = face
   return g
+}
+
+// --- fit-out and decorating ------------------------------------------------
+
+/**
+ * The carpenter's lorry. Drives in when the house tops out, drops its tailgate,
+ * and the gang unloads it one piece at a time.
+ */
+export function buildTruck(rng) {
+  const group = new THREE.Group()
+  const body = new THREE.MeshStandardMaterial({ color: 0x2f6f4f, roughness: 0.5, metalness: 0.3 })
+  const trim = new THREE.MeshStandardMaterial({ color: 0xe6e2d6, roughness: 0.55 })
+  const glass = new THREE.MeshStandardMaterial({ color: 0x8fb6cc, roughness: 0.12, metalness: 0.5 })
+
+  // cab up front (+Z), flatbed behind
+  box(group, body, 2.0, 1.25, 1.9, 0, 1.28, 2.2)
+  box(group, glass, 1.82, 0.62, 0.06, 0, 1.6, 3.13)
+  for (const s of [-1, 1]) box(group, glass, 0.06, 0.55, 1.2, s * 1.0, 1.58, 2.35)
+  box(group, body, 2.1, 0.28, 0.4, 0, 0.72, 3.2)
+  box(group, M.darkSteel, 2.14, 0.16, 0.22, 0, 0.5, 3.32)
+  // chassis + bed
+  box(group, M.darkSteel, 1.9, 0.22, 5.6, 0, 0.56, 0)
+  box(group, M.timberDark, 2.16, 0.12, 3.7, 0, 0.72, -0.6)
+  for (const s of [-1, 1]) box(group, body, 0.1, 0.62, 3.7, s * 1.08, 1.03, -0.6)
+  box(group, body, 2.16, 0.62, 0.1, 0, 1.03, 1.2)
+  // wheels
+  for (const s of [-1, 1]) {
+    for (const z of [2.1, -0.6, -1.7]) {
+      const w = box(group, M.rubber, 0.72, 0.72, 0.3, s * 1.02, 0.4, z, CYL)
+      w.rotation.z = Math.PI / 2
+      const h = box(group, trim, 0.32, 0.32, 0.32, s * 1.14, 0.4, z, CYL)
+      h.rotation.z = Math.PI / 2
+    }
+  }
+  // painted board on the flank
+  const cv = document.createElement('canvas')
+  cv.width = 512
+  cv.height = 128
+  const c = cv.getContext('2d')
+  c.fillStyle = '#2f6f4f'
+  c.fillRect(0, 0, 512, 128)
+  c.fillStyle = '#f2ead6'
+  c.font = 'bold 52px ui-monospace, Menlo, Consolas, monospace'
+  c.textAlign = 'center'
+  c.fillText('JOINERY & FIT-OUT', 256, 76)
+  const tex = new THREE.CanvasTexture(cv)
+  tex.colorSpace = THREE.SRGBColorSpace
+  for (const s of [-1, 1]) {
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 0.62), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.8 }))
+    sign.position.set(s * 1.09, 1.02, -0.6)
+    sign.rotation.y = s * Math.PI / 2
+    group.add(sign)
+  }
+
+  // tailgate, hinged at the back of the bed
+  const gate = new THREE.Group()
+  gate.position.set(0, 0.72, -2.45)
+  group.add(gate)
+  box(gate, body, 2.16, 0.09, 1.1, 0, 0, -0.55)
+  box(gate, M.darkSteel, 2.2, 0.13, 0.1, 0, 0.02, -1.06)
+  gate.rotation.x = 0
+
+  void rng
+  return {
+    group,
+    /** 0 = shut and upright, 1 = dropped flat. */
+    setGate(open) {
+      gate.rotation.x = -Math.PI / 2 * (1 - open)
+    },
+    /** Where a robot stands to take the next piece off the back. */
+    loadPoint: { x: 0, z: -3.4 },
+  }
+}
+
+const FURN_MATS = new Map()
+function furnMat(color) {
+  let m = FURN_MATS.get(color)
+  if (!m) {
+    m = new THREE.MeshStandardMaterial({ color, roughness: 0.78 })
+    FURN_MATS.set(color, m)
+  }
+  return m
+}
+
+/**
+ * One piece of furniture. Origin on the floor at its centre, so it can be
+ * parented straight onto a robot's hands or set down on the boards.
+ */
+export function buildFurniture(spec) {
+  const g = new THREE.Group()
+  const [w, h, d] = spec.size
+  const mat = furnMat(spec.color)
+  const dark = furnMat(0x4c4238)
+  switch (spec.name) {
+    case 'sofa':
+      box(g, mat, w, h * 0.45, d, 0, h * 0.34, 0)
+      box(g, mat, w, h * 0.8, d * 0.28, 0, h * 0.55, -d * 0.36)
+      for (const s of [-1, 1]) box(g, mat, w * 0.1, h * 0.62, d, s * w * 0.45, h * 0.5, 0)
+      for (const s of [-1, 1]) for (const z of [-1, 1]) box(g, dark, 0.07, h * 0.2, 0.07, s * w * 0.4, h * 0.1, z * d * 0.36)
+      break
+    case 'table':
+      box(g, mat, w, 0.07, d, 0, h - 0.035, 0)
+      for (const s of [-1, 1]) for (const z of [-1, 1]) box(g, dark, 0.08, h - 0.07, 0.08, s * (w / 2 - 0.1), (h - 0.07) / 2, z * (d / 2 - 0.1))
+      break
+    case 'chair':
+      box(g, mat, w, 0.06, d, 0, h * 0.52, 0)
+      box(g, mat, w, h * 0.46, 0.06, 0, h * 0.76, -d * 0.44)
+      for (const s of [-1, 1]) for (const z of [-1, 1]) box(g, dark, 0.05, h * 0.52, 0.05, s * (w / 2 - 0.05), h * 0.26, z * (d / 2 - 0.05))
+      break
+    case 'bed':
+      box(g, mat, w, h * 0.42, d, 0, h * 0.5, 0)
+      box(g, furnMat(0xe8e2d4), w * 0.94, h * 0.2, d * 0.62, 0, h * 0.78, d * 0.14)
+      box(g, dark, w, h * 0.9, 0.08, 0, h * 0.6, -d / 2)
+      for (const s of [-1, 1]) for (const z of [-1, 1]) box(g, dark, 0.09, h * 0.3, 0.09, s * (w / 2 - 0.07), h * 0.15, z * (d / 2 - 0.07))
+      break
+    case 'wardrobe':
+      box(g, mat, w, h, d, 0, h / 2, 0)
+      box(g, dark, w * 0.02, h * 0.9, d * 0.04, 0, h / 2, d / 2 + 0.01)
+      for (const s of [-1, 1]) box(g, furnMat(0xd8c07a), 0.05, 0.05, 0.05, s * 0.09, h * 0.5, d / 2 + 0.03, SPH)
+      break
+    case 'bookcase':
+      box(g, mat, w, h, d, 0, h / 2, 0)
+      for (let i = 1; i < 4; i++) box(g, dark, w * 0.94, 0.03, d * 0.9, 0, (h * i) / 4, 0.01)
+      for (let i = 0; i < 9; i++) {
+        box(g, furnMat([0xb4523a, 0x3f6f8f, 0x6f8f4f][i % 3]),
+          0.05, 0.2, d * 0.6, -w * 0.36 + i * 0.09, h * 0.62, 0)
+      }
+      break
+    default: // lamp
+      box(g, dark, 0.28, 0.04, 0.28, 0, 0.02, 0, CYL)
+      box(g, dark, 0.05, h - 0.3, 0.05, 0, (h - 0.3) / 2, 0, CYL)
+      box(g, furnMat(0xf2e4b8), 0.34, 0.3, 0.34, 0, h - 0.15, 0, CONE)
+      break
+  }
+  g.traverse((o) => {
+    if (o.isMesh) o.castShadow = true
+  })
+  return g
+}
+
+/** A decorator's roller on a pole. Held out in front while painting. */
+export function buildRoller(color) {
+  const g = new THREE.Group()
+  box(g, M.timber, 0.035, 0.9, 0.035, 0, 0.45, 0)
+  box(g, M.darkSteel, 0.03, 0.18, 0.03, 0, 0.96, 0)
+  const sleeve = box(g, furnMat(color), 0.09, 0.26, 0.09, 0, 1.06, 0, CYL)
+  sleeve.rotation.z = Math.PI / 2
+  return g
+}
+
+/** A paint kettle the decorators carry about. */
+export function buildPaintTin(color) {
+  const g = new THREE.Group()
+  box(g, M.steel, 0.24, 0.26, 0.24, 0, 0.13, 0, CYL)
+  box(g, furnMat(color), 0.21, 0.03, 0.21, 0, 0.27, 0, CYL)
+  const handle = box(g, M.darkSteel, 0.26, 0.02, 0.02, 0, 0.34, 0)
+  handle.rotation.z = 0
+  return g
+}
+
+/**
+ * The arrow painted on the tarmac. Tapping it runs you down the road to the
+ * outfitting yard; the same thing at the yard brings you back.
+ */
+export function buildRoadArrow(label, flip) {
+  const g = new THREE.Group()
+  const cv = document.createElement('canvas')
+  cv.width = 512
+  cv.height = 256
+  const c = cv.getContext('2d')
+  c.fillStyle = '#2b2f34'
+  c.fillRect(0, 0, 512, 256)
+  c.fillStyle = '#f0b429'
+  // chunky chevron
+  c.beginPath()
+  c.moveTo(120, 128); c.lineTo(250, 40); c.lineTo(250, 92)
+  c.lineTo(400, 92); c.lineTo(400, 164); c.lineTo(250, 164)
+  c.lineTo(250, 216); c.closePath()
+  c.fill()
+  c.fillStyle = '#f0b429'
+  c.font = 'bold 40px ui-monospace, Menlo, Consolas, monospace'
+  c.textAlign = 'center'
+  c.fillText(label, 256, 246)
+  const tex = new THREE.CanvasTexture(cv)
+  tex.colorSpace = THREE.SRGBColorSpace
+  const plate = new THREE.Mesh(
+    new THREE.PlaneGeometry(4.4, 2.2),
+    new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95, transparent: true }),
+  )
+  plate.rotation.x = -Math.PI / 2
+  plate.rotation.z = flip ? Math.PI : 0
+  plate.position.y = 0.02
+  plate.receiveShadow = true
+  g.add(plate)
+  // an invisible slab that is easy to hit with a finger
+  const hit = box(g, new THREE.MeshBasicMaterial({ visible: false }), 5.0, 1.4, 3.0, 0, 0.7, 0)
+  hit.castShadow = false
+  hit.receiveShadow = false
+  // a post-mounted sign so it reads from a low camera too
+  const post = new THREE.Group()
+  post.position.set(0, 0, -2.0)
+  g.add(post)
+  box(post, M.darkSteel, 0.08, 1.5, 0.08, 0, 0.75, 0)
+  const board = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 1.0), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9, side: THREE.DoubleSide }))
+  board.position.set(0, 1.75, 0)
+  post.add(board)
+  return { group: g, hit, plate }
 }

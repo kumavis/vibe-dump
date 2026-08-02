@@ -94,6 +94,7 @@ html, body {
 }
 .d-haul { background: #59c0e8; }
 .d-lay { background: var(--amber); }
+.d-fit { background: #8fd14f; }
 .d-shift { background: var(--hiviz); }
 
 /* ---------- hint ---------- */
@@ -155,7 +156,10 @@ html, body {
   background: radial-gradient(120% 90% at 50% 30%, rgba(8, 12, 18, 0.28), rgba(6, 9, 14, 0.62));
   opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
 }
-.sheet-backdrop.on { opacity: 1; pointer-events: auto; cursor: zoom-out; }
+.sheet-backdrop.on { opacity: 1; }
+/* Armed only once the sheet has finished unrolling, so the tap that opened it
+   can't land on the backdrop and close it again. */
+.sheet-backdrop.armed { pointer-events: auto; cursor: zoom-out; }
 
 .sheet-stage {
   position: absolute; inset: 0; z-index: 11;
@@ -207,9 +211,9 @@ html, body {
   border: 2px solid #14181b; cursor: pointer;
   font-size: 1rem; line-height: 1; font-weight: 700;
   box-shadow: 0 3px 0 #14181b;
-  opacity: 0; transition: opacity 0.25s ease;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
 }
-.sheet-stage.open .sheet-close { opacity: 1; }
+.sheet-stage.open .sheet-close { opacity: 1; pointer-events: auto; }
 
 /* ---------- loading ---------- */
 #loading {

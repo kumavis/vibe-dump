@@ -1,10 +1,11 @@
 // ---------------------------------------------------------------------------
 // Brick Crew — shared constants. 1 world unit = 1 metre.
 //
-// Everything in the app measures itself against these numbers: the masonry
-// module lays bricks on this grid, the props are sized to it, and the sim
-// walks robots between the landmarks in SITE. Change a number here and the
-// whole site follows.
+// The street holds several plots and no two houses on it are the same, so the
+// numbers that describe *a* house live in a variant and get expanded by
+// houseGeom(). Everything downstream — the masonry plan, the scaffold, the
+// navigation graph, the drawing — reads that expanded geometry rather than a
+// global constant.
 // ---------------------------------------------------------------------------
 
 /** A single brick, in metres (length along the run, height, wall thickness). */
@@ -16,91 +17,155 @@ export const PITCH = BRICK.L + MORTAR // 0.42
 /** Course height (brick + bed joint). */
 export const COURSE = BRICK.H + MORTAR // 0.18
 
-/** The house the crew is putting up. */
-export const HOUSE = {
-  w: 5.04, // exterior extent along X (the ridge runs this way)
-  d: 4.18, // exterior extent along Z
-  t: BRICK.D, // single-leaf wall thickness
-  wallCourses: 14, // 2.52 m to the wall plate
-  gableCourses: 7, // 1.26 m more to the ridge
-  eaveOverhang: 0.3, // roof projection past the long walls, in Z
-}
-
-/** Wall-top height, ridge height, and the pitch those two imply. */
-export const EAVE_Y = HOUSE.wallCourses * COURSE // 2.52
-export const RIDGE_RISE = HOUSE.gableCourses * COURSE // 1.26
-export const RIDGE_Y = EAVE_Y + RIDGE_RISE // 3.78
-export const ROOF_RUN = HOUSE.d / 2 // 2.09
-export const ROOF_PITCH = Math.atan2(RIDGE_RISE, ROOF_RUN) // ~31.1 deg
-/** Wall centreline offsets (bricks sit on these lines). */
-export const WALL_Z = HOUSE.d / 2 - HOUSE.t / 2 // 1.99 — long walls, at z = +/-
-export const WALL_X = HOUSE.w / 2 - HOUSE.t / 2 // 2.42 — gable walls, at x = +/-
-
-/** External chimney breast, flush against the east gable. */
-export const CHIMNEY = {
-  side: 1,
-  x: HOUSE.w / 2 + BRICK.D / 2, // 2.62, hard against the outer face
-  z: -0.9,
-  depth: BRICK.D, // footprint along X
-  runLen: 0.82, // footprint along Z
-  // 22 courses is 3.96 m: the stack has to clear the 3.78 m ridge or it just
-  // reads as more gable wall, and it can't go much higher than the top deck
-  // plus a mason's reach.
-  courses: 22,
-}
-
-/** Scaffold decks. Masons climb to the lowest deck they can work from. */
-export const DECKS = [
-  { y: 0 }, // feet on the dirt
-  { y: 1.44 },
-  { y: 2.7 },
-]
 /** How far above its own feet a robot can set a brick. */
 export const REACH = 1.7
-/** How far below its feet it will still work (stops masons laying from a deck they tower over). */
+/** How far below its feet it will still work. */
 export const DROP = 1.25
-/** How far a mason stands back from the face they are laying, on the ground. */
+/** How far a mason stands back from the face it is laying, on the ground. */
 export const LAY_STANDOFF = 0.72
+/** How close two robots will work on the same face before one waits. */
+export const WORK_SPACING = 0.8
+
+/** The houses on the street. One per plot, cycled. */
+export const HOUSE_TYPES = [
+  { name: 'GABLE COTTAGE', w: 5.04, d: 4.18, wallCourses: 14, gableCourses: 7, eaveOverhang: 0.3 },
+  { name: 'THE LITTLE STACK', w: 4.2, d: 3.78, wallCourses: 16, gableCourses: 6, eaveOverhang: 0.26 },
+  { name: 'BRICKWORKS LODGE', w: 5.88, d: 4.2, wallCourses: 12, gableCourses: 8, eaveOverhang: 0.36 },
+]
+
+/** Paint the decorators bring. One per house, so the street reads as a street. */
+export const PAINT = [
+  { name: 'Chalk', color: 0xe9e2cf },
+  { name: 'Sage', color: 0x9bba93 },
+  { name: 'Cornflower', color: 0x8aa9d2 },
+  { name: 'Terracotta', color: 0xd6835c },
+  { name: 'Lilac', color: 0xb3a3c9 },
+  { name: 'Mint', color: 0x8ccdb4 },
+  { name: 'Butter', color: 0xe7c97a },
+]
 
 /**
- * Scaffold ring. A rectangle of decking standing off the wall faces; masons
- * walk its centreline, so `rx`/`rz` double as the standing line on a deck.
+ * Expand a house variant into everything the rest of the app measures against.
+ * Nothing here is a global: two plots on the street hold two different geoms.
  */
-const SCAFFOLD_STANDOFF = 0.85
-export const SCAFFOLD = {
-  rx: HOUSE.w / 2 + SCAFFOLD_STANDOFF, // 3.37
-  rz: HOUSE.d / 2 + SCAFFOLD_STANDOFF, // 2.94
-  deckW: 0.6,
-  /** Ladder run, on the west leg of the ring. */
-  ladder: { x: -(HOUSE.w / 2 + SCAFFOLD_STANDOFF), z: 2.05 },
+export function houseGeom(type) {
+  const t = BRICK.D
+  const eaveY = type.wallCourses * COURSE
+  const ridgeRise = type.gableCourses * COURSE
+  const ridgeY = eaveY + ridgeRise
+  const roofRun = type.d / 2
+  const roofPitch = Math.atan2(ridgeRise, roofRun)
+  const tanPitch = ridgeRise / roofRun
+  const slopeLen = (roofRun + type.eaveOverhang) / Math.cos(roofPitch)
+  // Two working lifts: one that reaches the wall plate, one for the gables,
+  // the chimney and the roof.
+  const decks = [{ y: 0 }, { y: Math.max(1.2, eaveY - 1.15) }, { y: eaveY + 0.18 }]
+  return {
+    ...type,
+    t,
+    eaveY,
+    ridgeRise,
+    ridgeY,
+    roofRun,
+    roofPitch,
+    tanPitch,
+    slopeLen,
+    decks,
+    /** Wall centrelines: long walls at z = +/-wallZ, gable walls at x = +/-wallX. */
+    wallZ: type.d / 2 - t / 2,
+    wallX: type.w / 2 - t / 2,
+    /** Chimney breast, hard against the east gable, tall enough to clear the ridge. */
+    chimney: {
+      side: 1,
+      x: type.w / 2 + t / 2,
+      z: -Math.min(0.9, type.d / 2 - 0.7),
+      depth: t,
+      runLen: 0.82,
+      courses: Math.ceil((ridgeY + 0.22) / COURSE),
+    },
+    /** Scaffold ring. Masons walk its centreline, so rx/rz are the standing line. */
+    scaffold: {
+      rx: type.w / 2 + 0.85,
+      rz: type.d / 2 + 0.85,
+      deckW: 0.6,
+      ladder: { x: -(type.w / 2 + 0.85), z: Math.min(2.05, type.d / 2 - 0.1) },
+    },
+  }
 }
 
-/** Landmarks. Everything the crew walks between lives here. */
-export const SITE = {
-  trailer: { x: -7.9, z: 3.6, rot: 0.62 },
-  /** Brick pallets the haulers load from. */
-  pallets: [
-    { x: 8.2, z: -3.0 },
-    { x: 8.2, z: -1.2 },
-    { x: 8.2, z: 0.6 },
-  ],
-  /** The mason supply pile — bricks land here, masons draw from here. */
-  stack: { x: 0.0, z: 4.15 },
-  mixer: { x: 3.4, z: 5.1 },
-  timber: { x: -4.9, z: -3.4 },
-  dumpster: { x: 8.6, z: 5.2 },
-  privy: { x: -8.6, z: -2.2 },
-  /** Gate in the hoarding, on the road side. */
-  gate: { x: 0, z: 7.0 },
-  roadZ: 9.7,
-  /** Site hoarding. The gate is the gap in the z1 run. */
-  fence: { x0: -11.2, x1: 10.2, z0: -6.6, z1: 7.0, gapX0: -1.7, gapX1: 1.7 },
-  /** Where a crew lines up during handover. */
-  muster: { x: -5.4, z: 5.9 },
-  /** Off-site marker crews walk to when they clock off. */
-  offsite: { x: 17.0, z: 9.7 },
-  arrival: { x: -17.0, z: 9.7 },
+/** Height of the roof plane (top of the rafters) at a given |z|. */
+export const roofTopY = (g, zAbs) => g.eaveY + 0.12 + (g.roofRun - zAbs) * g.tanPitch
+/** |z| of a point `sd` metres up the slope from the drip edge. */
+export const slopeZ = (g, sd) => g.roofRun + g.eaveOverhang - sd * Math.cos(g.roofPitch)
+
+/**
+ * Materials. A mason has to fetch the right one for whatever it is setting —
+ * you cannot lay a rafter out of the brick pile. Each has a stock by the house
+ * and a delivery point out in the yard, both given relative to the plot.
+ */
+export const MATERIALS = [
+  { key: 'brick', label: 'BRICK', color: 0xa8412c, cap: 56, load: { barrow: 8, carrier: 3, mason: 6 } },
+  { key: 'cast', label: 'CAST', color: 0x7c7c76, cap: 12, load: { barrow: 4, carrier: 2, mason: 2 } },
+  { key: 'timber', label: 'TIMBER', color: 0xb98a4e, cap: 14, load: { barrow: 4, carrier: 2, mason: 2 } },
+  { key: 'tile', label: 'TILE', color: 0x4a4f57, cap: 26, load: { barrow: 6, carrier: 3, mason: 4 } },
+]
+/** Which stock each kind of item comes out of. */
+export const MATERIAL_OF = {
+  brick: 'brick',
+  lintel: 'cast',
+  sill: 'cast',
+  plate: 'timber',
+  rafter: 'timber',
+  ridge: 'timber',
+  tile: 'tile',
+  cap: 'tile',
 }
+
+/** Plot-relative yard layout. The whole yard follows the crew down the street. */
+export const YARD = {
+  /** Stocks the masons draw from, in front of the house. */
+  stacks: {
+    brick: { x: -2.5, z: 4.5 },
+    cast: { x: -0.7, z: 4.6 },
+    timber: { x: 1.1, z: 4.6 },
+    tile: { x: 2.9, z: 4.5 },
+  },
+  /** Where the lorry drops each material, out at the edge of the plot. */
+  sources: {
+    brick: { x: 8.4, z: -2.2 },
+    cast: { x: 8.4, z: 0.2 },
+    timber: { x: 8.4, z: 2.2 },
+    tile: { x: 6.6, z: 3.8 },
+  },
+  mixer: { x: 6.4, z: 5.0 },
+  dumpster: { x: -6.0, z: 4.6 },
+  privy: { x: -6.4, z: -3.0 },
+  /** Where the carpenter's lorry parks to unload. */
+  truck: { x: 2.8, z: 6.6, rot: Math.PI / 2 },
+}
+
+/** The plots along the street, worked left to right then round again. */
+export const PLOTS = [
+  { x: -13, z: 0 },
+  { x: 0, z: 0 },
+  { x: 13, z: 0 },
+]
+
+/** Site-wide landmarks — these do not move when the crew changes plot. */
+export const SITE = {
+  trailer: { x: -20.5, z: 5.2, rot: 0.5 },
+  gate: { x: 0, z: 9.2 },
+  roadZ: 12.4,
+  fence: { x0: -24.5, x1: 24.5, z0: -8.4, z1: 9.2, gapX0: -2.0, gapX1: 2.0 },
+  muster: { x: -18.0, z: 7.4 },
+  offsite: { x: 34.0, z: 12.4 },
+  arrival: { x: -34.0, z: 12.4 },
+  /** The arrow painted on the road that takes you down to the yard. */
+  arrow: { x: 9.0, z: 12.4 },
+}
+
+/** The outfitting yard, down the road from the site. */
+export const DEPOT = { x: -46, z: 12.4 }
 
 /** Wall clock: a shift is five real minutes. */
 export const SHIFT_SECONDS = 300
@@ -122,21 +187,22 @@ export const ROSTER = [
   { role: 'mason', n: 6 },
 ]
 
-/** How much a hauler moves in one trip, and how much a mason carries to the wall. */
-export const LOAD = { barrow: 8, carrier: 3, mason: 6 }
-/** Units the supply stack can hold before haulers stop topping it up. */
-export const STACK_CAP = 70
+/** Units the fit-out and decorating gangs bring. */
+export const FITOUT_CREW = 4
+export const PAINT_CREW = 4
 
 /** Movement + work rates, tuned so a house tops out in roughly eleven minutes. */
 export const RATE = {
-  walk: 2.1, // m/s unladen
-  walkLaden: 1.75, // m/s with a barrow or an armful
-  climb: 2.0, // m/s up a ladder
-  layTime: 0.9, // seconds spent setting one unit
-  pickTime: 0.2, // seconds per unit when loading up
+  walk: 2.1,
+  walkLaden: 1.75,
+  climb: 2.0,
+  layTime: 0.9,
+  pickTime: 0.2,
+  /** Carrying a sofa is slower than carrying bricks. */
+  walkFurniture: 1.3,
+  placeFurniture: 1.1,
+  paintTime: 2.2,
 }
-/** How close two masons will work on the same face before one waits. */
-export const WORK_SPACING = 0.8
 
 /** How far into the build the site already is when the page loads. */
 export const PREROLL_SECONDS = 260

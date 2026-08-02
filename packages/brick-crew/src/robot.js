@@ -56,30 +56,44 @@ const lerp = (a, b, t) => a + (b - a) * t
 const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v)
 
 /**
- * A tidy armful of bricks. Used for what a robot carries and for the load
- * sitting in a wheelbarrow, so it takes its size straight from the real brick.
+ * A tidy armful of whatever the robot has been sent to fetch. A mason carrying
+ * rafters should be carrying rafters, not bricks — that is the whole point of
+ * making them go to the right stock.
  */
-export function buildBrickStack(count, colorList = COLORS.brick) {
+export function buildCarryStack(matKey, count, colorList = COLORS.brick) {
   const g = new THREE.Group()
-  const bl = BRICK.L - MORTAR
-  const bh = BRICK.H - MORTAR
-  const bd = BRICK.D - MORTAR
-  const perRow = 2
+  const piece = {
+    brick: { size: [BRICK.L - MORTAR, BRICK.H - MORTAR, BRICK.D - MORTAR], perRow: 2, gap: 0.012, color: null },
+    cast: { size: [0.9, 0.07, 0.26], perRow: 1, gap: 0.02, color: COLORS.lintel },
+    timber: { size: [1.5, 0.09, 0.14], perRow: 1, gap: 0.02, color: COLORS.timber },
+    tile: { size: [0.44, 0.045, 0.38], perRow: 1, gap: 0.015, color: COLORS.tile[0] },
+  }[matKey] || { size: [0.3, 0.1, 0.2], perRow: 2, gap: 0.01, color: 0x999999 }
+
+  const [pl, ph, pd] = piece.size
   for (let i = 0; i < count; i++) {
-    const row = Math.floor(i / perRow)
-    const col = i % perRow
-    const m = new THREE.Mesh(BOX, mat(colorList[i % colorList.length], { roughness: 0.9, metalness: 0 }))
-    m.scale.set(bl * 0.92, bh, bd * 0.92)
-    m.position.set(
-      (col - (perRow - 1) / 2) * (bd * 1.02),
-      row * (bh + 0.012),
-      ((i * 37) % 7) * 0.004 - 0.012,
-    )
-    m.rotation.y = Math.PI / 2 + (((i * 13) % 5) - 2) * 0.012
+    const row = Math.floor(i / piece.perRow)
+    const col = i % piece.perRow
+    const color = piece.color ?? colorList[i % colorList.length]
+    const m = new THREE.Mesh(BOX, mat(color, { roughness: 0.9, metalness: 0 }))
+    if (matKey === 'brick') {
+      m.scale.set(pl * 0.92, ph, pd * 0.92)
+      m.position.set((col - (piece.perRow - 1) / 2) * (pd * 1.02), row * (ph + piece.gap), ((i * 37) % 7) * 0.004 - 0.012)
+      m.rotation.y = Math.PI / 2 + (((i * 13) % 5) - 2) * 0.012
+    } else {
+      // long stock rides across the arms
+      m.scale.set(pl, ph, pd)
+      m.position.set(0, row * (ph + piece.gap), (((i * 11) % 5) - 2) * 0.012)
+      m.rotation.y = (((i * 7) % 5) - 2) * 0.006
+    }
     m.castShadow = true
     g.add(m)
   }
   return g
+}
+
+/** Kept for callers that only ever wanted bricks. */
+export function buildBrickStack(count, colorList = COLORS.brick) {
+  return buildCarryStack('brick', count, colorList)
 }
 
 /**
@@ -126,6 +140,9 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
   const bodyW = 0.36 + rng() * 0.05
   const bodyD = 0.24
 
+  // Kit the outfitting yard puts on, in the order it goes on.
+  const kit = { boots: [], vest: [], hat: [] }
+
   const root = pivot(group, 0, hipY)
   const torso = pivot(root, 0, 0)
 
@@ -133,14 +150,14 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
   part(root, matDark, bodyW * 0.92, 0.11, bodyD * 0.95, 0, -0.02) // pelvis
   part(torso, matBody, bodyW, torsoH, bodyD, 0, torsoH / 2)
   // hi-vis vest, worn open at the front
-  part(torso, matVest, bodyW + 0.035, torsoH * 0.62, bodyD + 0.035, 0, torsoH * 0.44)
-  if (isForeman) part(torso, matVest, bodyW + 0.03, 0.2, bodyD + 0.03, 0, torsoH * 0.06) // long coat
+  kit.vest.push(part(torso, matVest, bodyW + 0.035, torsoH * 0.62, bodyD + 0.035, 0, torsoH * 0.44))
+  if (isForeman) kit.vest.push(part(torso, matVest, bodyW + 0.03, 0.2, bodyD + 0.03, 0, torsoH * 0.06))
   for (const y of [torsoH * 0.3, torsoH * 0.56]) {
-    part(torso, matBand, bodyW + 0.045, 0.035, bodyD + 0.045, 0, y)
+    kit.vest.push(part(torso, matBand, bodyW + 0.045, 0.035, bodyD + 0.045, 0, y))
   }
-  part(torso, matAccent, 0.1, 0.11, 0.02, bodyW * 0.28, torsoH * 0.72, bodyD / 2 + 0.02) // shoulder flash
+  kit.vest.push(part(torso, matAccent, 0.1, 0.11, 0.02, bodyW * 0.28, torsoH * 0.72, bodyD / 2 + 0.02))
   // crew tag on the back, so a shift change is legible at a glance
-  part(torso, matAccent, 0.14, 0.1, 0.02, 0, torsoH * 0.52, -bodyD / 2 - 0.03)
+  kit.vest.push(part(torso, matAccent, 0.14, 0.1, 0.02, 0, torsoH * 0.52, -bodyD / 2 - 0.03))
   // tool belt
   part(torso, matDark, bodyW + 0.04, 0.06, bodyD + 0.04, 0, 0.04)
   part(torso, matSteel, 0.05, 0.09, 0.04, bodyW * 0.42, 0.02, bodyD / 2 - 0.02)
@@ -153,15 +170,15 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
   const visor = part(neck, matVisor, 0.22, 0.075, 0.02, 0, 0.05 + headH * 0.62, 0.125)
   // hard hat: shell, brim, and a crown rib
   const hatY = 0.04 + headH + 0.035
-  part(neck, matHat, 0.3, 0.13, 0.27, 0, hatY, 0, SPH)
-  part(neck, matHat, 0.34, 0.028, 0.36, 0, hatY - 0.055)
-  part(neck, matAccent, 0.05, 0.1, 0.28, 0, hatY + 0.02)
+  kit.hat.push(part(neck, matHat, 0.3, 0.13, 0.27, 0, hatY, 0, SPH))
+  kit.hat.push(part(neck, matHat, 0.34, 0.028, 0.36, 0, hatY - 0.055))
+  kit.hat.push(part(neck, matAccent, 0.05, 0.1, 0.28, 0, hatY + 0.02))
   if (rng() < 0.45) {
     // little aerial
-    part(neck, matSteel, 0.012, 0.16, 0.012, 0.1, hatY + 0.1)
-    part(neck, matAccent, 0.035, 0.035, 0.035, 0.1, hatY + 0.19, 0, SPH)
+    kit.hat.push(part(neck, matSteel, 0.012, 0.16, 0.012, 0.1, hatY + 0.1))
+    kit.hat.push(part(neck, matAccent, 0.035, 0.035, 0.035, 0.1, hatY + 0.19, 0, SPH))
   } else {
-    part(neck, matBand, 0.09, 0.035, 0.05, 0, hatY + 0.04, 0.13) // head torch
+    kit.hat.push(part(neck, matBand, 0.09, 0.035, 0.05, 0, hatY + 0.04, 0.13)) // head torch
   }
   if (rng() < 0.4) {
     for (const s of [-1, 1]) part(neck, matDark, 0.05, 0.09, 0.09, s * 0.16, 0.05 + headH * 0.55) // ear defenders
@@ -189,8 +206,8 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
     part(kn, matAccent, 0.13, 0.05, 0.13, 0, 0.01) // knee pad
     part(kn, matBody, 0.11, shinLen, 0.12, 0, -shinLen / 2)
     const ft = pivot(kn, 0, -shinLen)
-    part(ft, matRubber, 0.15, 0.09, 0.26, 0, -0.045, 0.045)
-    part(ft, matDark, 0.16, 0.03, 0.24, 0, -0.085, 0.04)
+    kit.boots.push(part(ft, matRubber, 0.15, 0.09, 0.26, 0, -0.045, 0.045))
+    kit.boots.push(part(ft, matDark, 0.16, 0.03, 0.24, 0, -0.085, 0.04))
     return { hp, kn, ft }
   }
   const legL = leg(-1)
@@ -251,6 +268,8 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
     const wReach = clamp01(s.reach ?? 0)
     const wIdle = clamp01(s.idle ?? 0)
     const wWave = clamp01(s.wave ?? 0)
+    const wPaint = clamp01(s.paint ?? 0)
+    const wHaul = clamp01(s.haul ?? 0)
     const wCarry = carry > 0 ? 1 : 0
 
     Object.assign(p, rest())
@@ -326,6 +345,28 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
       p.elL = lerp(p.elL, -0.9, wLay)
       p.rootY = lerp(p.rootY, -0.1, wLay)
     }
+    if (wHaul > 0) {
+      // both arms straight out, leaning back under the weight of the thing
+      p.shLX = lerp(p.shLX, -1.5, wHaul)
+      p.shRX = lerp(p.shRX, -1.5, wHaul)
+      p.shLZ = lerp(p.shLZ, 0.3, wHaul)
+      p.shRZ = lerp(p.shRZ, -0.3, wHaul)
+      p.elL = lerp(p.elL, -0.28, wHaul)
+      p.elR = lerp(p.elR, -0.28, wHaul)
+      p.torsoX = lerp(p.torsoX, -0.16, wHaul)
+    }
+    if (wPaint > 0) {
+      // long strokes up and down the wall
+      const stroke = Math.sin(waveT * 3.1)
+      p.shRX = lerp(p.shRX, -1.55 + stroke * 0.62, wPaint)
+      p.shRZ = lerp(p.shRZ, -0.16, wPaint)
+      p.elR = lerp(p.elR, -0.34 - Math.max(0, stroke) * 0.3, wPaint)
+      p.shLX = lerp(p.shLX, -0.5, wPaint)
+      p.elL = lerp(p.elL, -1.3, wPaint)
+      p.torsoX = lerp(p.torsoX, 0.06 + stroke * 0.05, wPaint)
+      p.hipL = lerp(p.hipL, 0.1, wPaint)
+      p.hipR = lerp(p.hipR, -0.1, wPaint)
+    }
     if (wWave > 0) {
       waveT += dt
       p.shRX = lerp(p.shRX, -2.7, wWave)
@@ -351,11 +392,11 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
     armR.el.rotation.x = p.elR
     group.rotation.x = s.tilt ?? 0
 
-    trowel.visible = wLay > 0.25 && !isForeman
+    trowel.visible = wLay > 0.25 && !isForeman && wPaint < 0.2
     visor.material.emissiveIntensity = 1.15 + Math.sin(waveT * 2.2 + gaitOffset) * 0.25
   }
 
   update(0, {})
 
-  return { group, height, handAnchor, barrowAnchor, update, role }
+  return { group, height, handAnchor, barrowAnchor, rightHand: armR.hand, kit, update, role }
 }

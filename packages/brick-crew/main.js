@@ -1,32 +1,37 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
-  SITE, HOUSE, COURSE, EAVE_Y, RIDGE_Y, CHIMNEY, COLORS, SHIFT_SECONDS, PREROLL_SECONDS,
+  SITE, YARD, PLOTS, DEPOT, COURSE, COLORS, SHIFT_SECONDS, PREROLL_SECONDS,
+  HOUSE_TYPES, PAINT, MATERIALS, houseGeom,
 } from './src/config.js'
 import { buildPlan } from './src/plan.js'
 import { buildSite, buildSky, buildLights } from './src/site.js'
 import {
-  buildPallet, buildSupplyPile, buildMixer, buildScaffold, buildCone,
-  buildToolCrate, buildTimberStack, buildDumpster, buildPrivy, buildSpoilHeap, buildSign,
+  buildStock, buildDrop, buildMixer, buildScaffold, buildCone, buildToolCrate,
+  buildDumpster, buildPrivy, buildSpoilHeap, buildSign, buildRoadArrow,
 } from './src/props.js'
+import { setGeom } from './src/nav.js'
 import { createSim } from './src/sim.js'
+import { createTruckRig } from './src/fitout.js'
+import { createDepot } from './src/depot.js'
 import { createUI } from './src/ui.js'
 import { drawBlueprint } from './src/blueprint.js'
 
 // ---------------------------------------------------------------------------
-// Brick Crew — a robot gang puts up a brick house, one course at a time.
+// Brick Crew — a robot gang works its way down a street.
 //
-// Nothing here is faked: every brick on the wall was carried there by a robot
-// that took it off a pallet. The blueprint in the site office reads the same
-// numbers the sim runs on, so the drawing and the building always agree.
+// On each plot they raise a brick house course by course, fetching the right
+// material for whatever they are setting; the joiners bring the furniture in;
+// the decorators put a coat on it; and then the whole outfit moves next door and
+// starts a different house. The arrow on the road runs you down to the yard
+// where the robots get kitted out.
 //
-// ?seed=N reseeds the house dressing and the crew.
+// ?seed=N reseeds the street.
 // ---------------------------------------------------------------------------
 
 const params = new URLSearchParams(location.search)
 const SEED = (parseInt(params.get('seed'), 10) || 20250801) >>> 0
 
-/** Small deterministic PRNG (mulberry32). */
 function makeRng(seed) {
   let a = seed >>> 0
   return function rng() {
@@ -50,11 +55,9 @@ renderer.toneMappingExposure = 1.02
 renderer.outputColorSpace = THREE.SRGBColorSpace
 
 const scene = new THREE.Scene()
-scene.fog = new THREE.Fog(0xb9d4e6, 58, 210)
+scene.fog = new THREE.Fog(0xb9d4e6, 70, 240)
 
-const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 400)
-// Low enough to read the wall face and the crew on the scaffold, rather than
-// looking down onto the decking.
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 500)
 camera.position.set(13.6, 5.9, 12.5)
 
 const controls = new OrbitControls(camera, canvas)
@@ -63,7 +66,7 @@ controls.enableDamping = true
 controls.dampingFactor = 0.07
 controls.maxPolarAngle = Math.PI * 0.487
 controls.minDistance = 5
-controls.maxDistance = 42
+controls.maxDistance = 60
 controls.autoRotate = true
 controls.autoRotateSpeed = 0.28
 
@@ -91,75 +94,27 @@ scene.add(lights.group)
 const site = buildSite(rng)
 scene.add(site.group)
 
-ui.setLoading(0.3, 'putting up the hoarding…')
+ui.setLoading(0.26, 'putting up the hoarding…')
 
-// --- yard ------------------------------------------------------------------
+// the two arrows on the tarmac, and the yard they run between
+const toDepot = buildRoadArrow('OUTFITTING YARD', true)
+toDepot.group.position.set(SITE.arrow.x, 0, SITE.arrow.z)
+scene.add(toDepot.group)
 
-const yard = new THREE.Group()
-scene.add(yard)
+const depot = createDepot({ origin: DEPOT, rng })
+scene.add(depot.group)
 
-const pallets = SITE.pallets.map((p) => {
-  const pal = buildPallet(rng)
-  pal.group.position.set(p.x, 0, p.z)
-  pal.group.rotation.y = (rng() - 0.5) * 0.3
-  pal.pos = p
-  yard.add(pal.group)
-  return pal
-})
+const toSite = buildRoadArrow('BACK TO SITE', false)
+toSite.group.position.set(DEPOT.x + 13, 0, DEPOT.z)
+scene.add(toSite.group)
 
-const stack = buildSupplyPile(rng)
-stack.group.position.set(SITE.stack.x, 0, SITE.stack.z)
-yard.add(stack.group)
+ui.setLoading(0.44, 'opening the yard…')
 
-const mixer = buildMixer(rng)
-mixer.group.position.set(SITE.mixer.x, 0, SITE.mixer.z)
-mixer.group.rotation.y = -0.5
-yard.add(mixer.group)
-
-const scaffold = buildScaffold()
-yard.add(scaffold.group)
-
-const timber = buildTimberStack(rng)
-timber.position.set(SITE.timber.x, 0, SITE.timber.z)
-yard.add(timber)
-
-const skip = buildDumpster(rng)
-skip.position.set(SITE.dumpster.x, 0, SITE.dumpster.z)
-skip.rotation.y = 0.4
-yard.add(skip)
-
-const privy = buildPrivy(rng)
-privy.position.set(SITE.privy.x, 0, SITE.privy.z)
-yard.add(privy)
-
-const spoil = buildSpoilHeap(rng)
-spoil.position.set(-7.4, 0, -4.4)
-yard.add(spoil)
-
-for (const [x, z, r] of [[-3.2, -4.8, 0], [4.9, -3.6, 0], [-6.2, 1.4, 0]]) {
-  const crate = buildToolCrate(rng)
-  crate.position.set(x, 0, z)
-  crate.rotation.y += r
-  yard.add(crate)
-}
-for (let i = 0; i < 9; i++) {
-  const cone = buildCone(rng)
-  const a = (i / 9) * Math.PI * 2
-  cone.position.set(Math.cos(a) * (5.6 + rng() * 2.4), 0, 4.4 + Math.sin(a) * 2.2)
-  yard.add(cone)
-}
-const sign = buildSign('BRICK CREW\nHARD HATS ON SITE')
-sign.position.set(SITE.gate.x + 3.4, 0, SITE.gate.z - 0.4)
-sign.rotation.y = -0.35
-yard.add(sign)
-
-ui.setLoading(0.52, 'unloading the pallets…')
-
-// --- the building ----------------------------------------------------------
+// --- the street ------------------------------------------------------------
 //
-// Every brick, rafter and tile in the plan gets one instance in one of three
-// InstancedMeshes. Unplaced instances are parked at zero scale, so revealing a
-// brick is a single matrix write — no geometry churn as the house goes up.
+// Each plot gets two groups at its position on the road: the house, which stays
+// standing once it is finished, and the working site, which packs up and
+// follows the crew next door.
 
 const FAMILIES = {
   masonry: { roughness: 0.94, metalness: 0 },
@@ -167,20 +122,29 @@ const FAMILIES = {
   tile: { roughness: 0.66, metalness: 0.05 },
 }
 
-let plan = null
-let sim = null
-let meshes = null
-let mortarMesh = null
-let day = 1
-
 const _m4 = new THREE.Matrix4()
 const _q = new THREE.Quaternion()
 const _e = new THREE.Euler()
 const _v = new THREE.Vector3()
 const _s = new THREE.Vector3()
+const _c = new THREE.Color()
 const ZERO = new THREE.Vector3(0, 0, 0)
-const building = new THREE.Group()
-scene.add(building)
+
+let plan = null
+let sim = null
+let meshes = null
+let mortarMesh = null
+let scaffold = null
+let stocks = null
+let drops = null
+let mixer = null
+let truckRig = null
+let houseGroup = null
+let workGroup = null
+let plotIndex = -1
+let day = 0
+let toppingFlag = null
+const standing = [] // finished houses left on the street
 
 function makeFamily(count, opts) {
   const mesh = new THREE.InstancedMesh(
@@ -221,113 +185,244 @@ function reveal(item, isMortar) {
   mesh.instanceMatrix.needsUpdate = true
 }
 
-/** Bricks are one colour family; a little per-instance variation goes a long way. */
-function paintFamily(mesh, items, family) {
-  const c = new THREE.Color()
-  for (const it of items) {
+/** A decorator has finished a patch: those bricks take the new colour. */
+function paintPatch(patch) {
+  const mesh = meshes.masonry
+  _c.setHex(plan.paint.color)
+  for (const slot of patch.slots) mesh.setColorAt(slot, _c)
+  if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
+  // the joints go with them, a shade lighter
+  const p = sim ? sim.painting : { done: 0, total: 1 }
+  mortarMesh.material.color
+    .setHex(COLORS.mortar)
+    .lerp(_c.setHex(plan.paint.color).offsetHSL(0, -0.1, 0.14), p.done / Math.max(1, p.total))
+}
+
+function paintFamily(mesh, list, family) {
+  for (const it of list) {
     if (it.family !== family) continue
-    mesh.setColorAt(it.slot, c.setHex(it.color))
+    mesh.setColorAt(it.slot, _c.setHex(it.color))
   }
   if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 }
 
 // --- topping-out flag ------------------------------------------------------
 
-const topOut = new THREE.Group()
-topOut.visible = false
-{
+function buildTopOut() {
+  const g = new THREE.Group()
   const pole = new THREE.Mesh(
     new THREE.CylinderGeometry(0.02, 0.02, 1.0, 8),
     new THREE.MeshStandardMaterial({ color: 0x8f6538, roughness: 0.9 }),
   )
   pole.position.y = 0.5
-  topOut.add(pole)
+  g.add(pole)
   for (let i = 0; i < 3; i++) {
     const leaf = new THREE.Mesh(
       new THREE.ConeGeometry(0.24 - i * 0.06, 0.3, 7),
       new THREE.MeshStandardMaterial({ color: 0x3f7d4e, roughness: 0.95 }),
     )
     leaf.position.y = 0.66 + i * 0.16
-    topOut.add(leaf)
+    g.add(leaf)
   }
   const flag = new THREE.Mesh(
     new THREE.PlaneGeometry(0.42, 0.24),
     new THREE.MeshStandardMaterial({ color: 0xf0b429, roughness: 0.9, side: THREE.DoubleSide }),
   )
   flag.position.set(0.21, 0.9, 0)
-  topOut.add(flag)
-  topOut.position.set(0, RIDGE_Y + 0.2, 0)
-  topOut.traverse((o) => (o.castShadow = true))
-  scene.add(topOut)
+  g.add(flag)
+  g.traverse((o) => (o.castShadow = true))
+  return g
 }
 
-// --- build / rebuild -------------------------------------------------------
+// --- start a plot ----------------------------------------------------------
 
-function startBuild(newDay, first) {
-  day = newDay
+function startPlot(first) {
   sim?.dispose()
-  building.clear()
-  plan = buildPlan(rng, day)
+  if (workGroup) scene.remove(workGroup)
+
+  plotIndex = (plotIndex + 1) % PLOTS.length
+  day++
+  // once the street is full, the developer clears it and starts again
+  if (plotIndex === 0 && !first) {
+    for (const g of standing.splice(0)) scene.remove(g)
+  }
+  const origin = PLOTS[plotIndex]
+  const geom = houseGeom(HOUSE_TYPES[(day - 1) % HOUSE_TYPES.length])
+  const paint = PAINT[(day - 1) % PAINT.length]
+
+  plan = buildPlan(rng, { geom, day, plotIndex, paint })
+  setGeom(geom, plan.doorway)
+
+  houseGroup = new THREE.Group()
+  houseGroup.position.set(origin.x, 0, origin.z)
+  scene.add(houseGroup)
+  standing.push(houseGroup)
+
+  workGroup = new THREE.Group()
+  workGroup.position.set(origin.x, 0, origin.z)
+  scene.add(workGroup)
 
   meshes = {}
   for (const [family, opts] of Object.entries(FAMILIES)) {
     const m = makeFamily(plan.familyCount[family], opts)
     meshes[family] = m
-    building.add(m)
+    houseGroup.add(m)
     paintFamily(m, plan.items, family)
   }
   mortarMesh = makeFamily(plan.mortar.length, { color: COLORS.mortar, roughness: 0.98, metalness: 0 })
-  building.add(mortarMesh)
+  houseGroup.add(mortarMesh)
 
+  const topOut = buildTopOut()
+  topOut.position.set(0, geom.ridgeY + 0.2, 0)
   topOut.visible = false
-  scaffold.setDecks(0)
-  // A part-loaded stack, so the masons have something to lay from minute one.
-  stack.setCount(26)
-  pallets.forEach((p) => p.setCount(p.capacity))
+  houseGroup.add(topOut)
+
+  // --- the working site ---------------------------------------------------
+  scaffold = buildScaffold(geom)
+  workGroup.add(scaffold.group)
+
+  stocks = {}
+  drops = {}
+  for (const m of MATERIALS) {
+    const st = buildStock(m, rng)
+    const at = YARD.stacks[m.key]
+    st.group.position.set(at.x, 0, at.z)
+    workGroup.add(st.group)
+    stocks[m.key] = st
+
+    const dp = buildDrop(m, rng)
+    const dat = YARD.sources[m.key]
+    dp.group.position.set(dat.x, 0, dat.z)
+    dp.group.rotation.y = (rng() - 0.5) * 0.3
+    workGroup.add(dp.group)
+    drops[m.key] = dp
+
+    const label = buildSign(m.label)
+    label.scale.setScalar(0.42)
+    label.position.set(at.x, 0, at.z - 1.0)
+    workGroup.add(label)
+  }
+  stocks.brick.setCount(24)
+  for (const m of MATERIALS) drops[m.key].setCount(drops[m.key].capacity)
+
+  mixer = buildMixer(rng)
+  mixer.group.position.set(YARD.mixer.x, 0, YARD.mixer.z)
+  mixer.group.rotation.y = -0.5
+  workGroup.add(mixer.group)
+
+  const skip = buildDumpster(rng)
+  skip.position.set(YARD.dumpster.x, 0, YARD.dumpster.z)
+  skip.rotation.y = 0.4
+  workGroup.add(skip)
+
+  const privy = buildPrivy(rng)
+  privy.position.set(YARD.privy.x, 0, YARD.privy.z)
+  workGroup.add(privy)
+
+  const spoil = buildSpoilHeap(rng)
+  spoil.position.set(-7.2, 0, -4.4)
+  workGroup.add(spoil)
+
+  for (const [x, z] of [[-3.6, -5.0], [5.6, -4.4]]) {
+    const crate = buildToolCrate(rng)
+    crate.position.set(x, 0, z)
+    workGroup.add(crate)
+  }
+  for (let i = 0; i < 8; i++) {
+    const cone = buildCone(rng)
+    const a = (i / 8) * Math.PI * 2
+    cone.position.set(Math.cos(a) * (5.4 + rng() * 2.2), 0, 5.0 + Math.sin(a) * 2.0)
+    workGroup.add(cone)
+  }
+
+  truckRig = createTruckRig({ group: workGroup, houseGroup, plan, origin, rng })
 
   sim = createSim({
     plan,
     rng,
-    scene,
-    stack,
-    pallets,
+    group: workGroup,
+    origin,
+    stocks,
+    drops,
     scaffold,
+    truck: truckRig,
     onPlace: reveal,
+    onPaint: paintPatch,
     onBanner: (t, s, a) => ui.banner(t, s, a),
-    onComplete: () => {
-      topOut.visible = true
-      ui.banner('TOPPED OUT', `${plan.title} — day ${day} complete`, '#8fd14f')
+    onStage: (s) => {
+      if (s === 'fitout') topOut.visible = true
     },
+    onComplete: () => {},
   })
-  // Open on a job already under way: nobody wants to arrive at an empty plot.
+
+  toppingFlag = topOut
   if (first) sim.preroll(PREROLL_SECONDS)
+
+  // frame whichever plot the crew is actually on
+  framePlot(origin)
+  if (first) {
+    camera.position.copy(camGoal.pos)
+    controls.target.copy(camGoal.target)
+    flying = 0
+  } else {
+    flying = 1
+  }
 }
 
-ui.setLoading(0.72, 'reading the drawings…')
-startBuild(1, true)
-ui.setLoading(0.9, 'signing the crew on…')
+/** Look over the hoarding into a plot, from the road side. */
+function framePlot(origin) {
+  camGoal.pos.set(origin.x + 12.4, 8.0, origin.z + 15.0)
+  camGoal.target.set(origin.x + 0.2, 1.5, origin.z + 0.4)
+}
 
-// --- trailer interaction ---------------------------------------------------
+// --- camera moves ----------------------------------------------------------
+
+const camGoal = { pos: new THREE.Vector3(12.4, 8.0, 15.0), target: new THREE.Vector3(0.2, 1.5, 0.4) }
+let view = 'site'
+let flying = 0
+
+function flyTo(next) {
+  view = next
+  flying = 1
+  controls.autoRotate = false
+  if (next === 'depot') {
+    camGoal.pos.set(DEPOT.x + 0.5, 10.5, DEPOT.z + 14)
+    camGoal.target.set(DEPOT.x + 0.5, 1.2, DEPOT.z - 4.0)
+    ui.setHint(false)
+    ui.banner('OUTFITTING YARD', 'where the crew gets kitted out', '#f0b429')
+  } else {
+    framePlot(PLOTS[plotIndex])
+  }
+}
+
+ui.setLoading(0.7, 'reading the drawings…')
+startPlot(true)
+ui.setLoading(0.92, 'signing the crew on…')
+
+// --- picking ---------------------------------------------------------------
 
 const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
-let hovering = false
+let hovering = null
 let downAt = null
 let sheetSeen = false
 
-function pickTrailer(cx, cy) {
+function pick(cx, cy) {
   pointer.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1)
   raycaster.setFromCamera(pointer, camera)
-  return raycaster.intersectObjects(site.trailerTargets, false).length > 0
+  const arrow = view === 'site' ? toDepot : toSite
+  if (raycaster.intersectObject(arrow.hit, false).length) return 'arrow'
+  if (view === 'site' && raycaster.intersectObjects(site.trailerTargets, false).length) return 'trailer'
+  return null
 }
 
 canvas.addEventListener('pointermove', (e) => {
   if (ui.isSheetOpen()) return
-  const hit = pickTrailer(e.clientX, e.clientY)
+  const hit = pick(e.clientX, e.clientY)
   if (hit !== hovering) {
     hovering = hit
-    site.setTrailerHighlight(hit)
-    site.trailerLabel.visible = hit
+    site.setTrailerHighlight(hit === 'trailer')
+    site.trailerLabel.visible = hit === 'trailer'
     canvas.style.cursor = hit ? 'pointer' : ''
   }
 })
@@ -340,14 +435,17 @@ canvas.addEventListener('pointerup', (e) => {
   const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1])
   downAt = null
   if (moved > 6) return
-  if (pickTrailer(e.clientX, e.clientY)) {
+  const hit = pick(e.clientX, e.clientY)
+  if (hit === 'trailer') {
     ui.toggleSheet()
     sheetSeen = true
     ui.setHint(false)
+  } else if (hit === 'arrow') {
+    flyTo(view === 'site' ? 'depot' : 'site')
   }
 })
 canvas.addEventListener('pointerleave', () => {
-  hovering = false
+  hovering = null
   site.setTrailerHighlight(false)
   site.trailerLabel.visible = false
 })
@@ -356,23 +454,16 @@ canvas.addEventListener('pointerleave', () => {
 
 const sheetCtx = ui.sheetCanvas.getContext('2d')
 
-/**
- * How far each part of the house has actually got, in courses, so the drawing
- * can ink in what is standing and ghost what isn't. A fractional value means a
- * course is part-laid.
- */
 function builtByGroup() {
   const tally = new Map()
   for (let i = 0; i < plan.items.length; i++) {
     const it = plan.items[i]
     if (it.course == null || !it.group) continue
-    const key = it.group
-    let g = tally.get(key)
-    if (!g) tally.set(key, (g = []))
-    const c = it.course
-    if (!g[c]) g[c] = [0, 0]
-    g[c][1]++
-    if (sim.isPlaced(i)) g[c][0]++
+    let g = tally.get(it.group)
+    if (!g) tally.set(it.group, (g = []))
+    if (!g[it.course]) g[it.course] = [0, 0]
+    g[it.course][1]++
+    if (sim.isPlaced(i)) g[it.course][0]++
   }
   const out = {}
   for (const [key, courses] of tally) {
@@ -395,20 +486,21 @@ function blueprintState() {
   const phases = sim.phaseProgress()
   const roof = phases.find((p) => p.key === 'roof')
   const tiles = phases.find((p) => p.key === 'tiles')
+  const g = plan.geom
   return {
     title: plan.title,
     house: {
-      w: HOUSE.w,
-      d: HOUSE.d,
-      t: HOUSE.t,
-      wallCourses: HOUSE.wallCourses,
-      gableCourses: HOUSE.gableCourses,
-      eaveY: EAVE_Y,
-      ridgeY: RIDGE_Y,
+      w: g.w,
+      d: g.d,
+      t: g.t,
+      wallCourses: g.wallCourses,
+      gableCourses: g.gableCourses,
+      eaveY: g.eaveY,
+      ridgeY: g.ridgeY,
       courseH: COURSE,
     },
     openings: plan.openings,
-    chimney: CHIMNEY,
+    chimney: g.chimney,
     phases,
     built: builtByGroup(),
     roofDone: roof ? roof.done / Math.max(1, roof.total) : 0,
@@ -442,7 +534,6 @@ renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), 0.25)
   const t = clock.elapsedTime
 
-  // Fixed-step the sim so the five-minute shift never drifts with frame rate.
   acc += dt
   let steps = 0
   while (acc >= STEP && steps < 8) {
@@ -454,11 +545,22 @@ renderer.setAnimationLoop(() => {
 
   site.update(t, dt)
   mixer.update(dt)
+  depot.update(dt, t)
   ui.tick(dt)
 
-  if (sim.finished && sim.celebrateT > 16) startBuild(day + 1)
+  // the plot is handed over; the whole outfit moves next door
+  if (sim.finished && sim.stageT > 14) startPlot(false)
 
-  if (topOut.visible) topOut.rotation.y = Math.sin(t * 0.8) * 0.25
+  if (toppingFlag && toppingFlag.visible) toppingFlag.rotation.y = Math.sin(t * 0.8) * 0.25
+
+  // camera easing — plot to plot, and up and down the road
+  if (flying > 0) {
+    camera.position.lerp(camGoal.pos, Math.min(1, dt * 2.1))
+    controls.target.lerp(camGoal.target, Math.min(1, dt * 2.1))
+    if (camera.position.distanceTo(camGoal.pos) < 0.6) flying = 0
+  } else if (view === 'site') {
+    controls.target.lerp(camGoal.target, Math.min(1, dt * 0.8))
+  }
 
   hudTimer -= dt
   if (hudTimer <= 0) {
@@ -470,16 +572,17 @@ renderer.setAnimationLoop(() => {
       secondsToShiftChange: sim.secondsToShiftChange(),
       placed: sim.placed,
       total: sim.total,
-      phaseLabel: sim.finished ? 'COMPLETE' : sim.phaseLabel,
+      phaseLabel: sim.phaseLabel,
       etaSeconds: sim.etaSeconds(),
       ratePerMin: sim.ratePerMin(),
       onSite: sim.robots.length,
       day,
+      plot: plotIndex + 1,
+      plots: PLOTS.length,
     })
   }
 
-  // nudge the user toward the trailer, once
-  if (!sheetSeen) {
+  if (!sheetSeen && view === 'site') {
     hintTimer += dt
     ui.setHint(hintTimer > 4)
   }
@@ -493,5 +596,12 @@ renderer.setAnimationLoop(() => {
   renderer.render(scene, camera)
 })
 
-// a debug handle, same as the other apps in this repo
-window.brickCrew = { get sim() { return sim }, get plan() { return plan }, scene, camera, controls }
+window.brickCrew = {
+  get sim() { return sim },
+  get plan() { return plan },
+  get view() { return view },
+  flyTo,
+  scene,
+  camera,
+  controls,
+}
