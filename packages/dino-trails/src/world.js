@@ -182,6 +182,51 @@ function buildClinic(scale) {
   return g
 }
 
+function buildSurvey(scale) {
+  const g = new THREE.Group()
+  // striped big-top tent
+  const wall = mesh(CYL, mat(0xf4f1e8), 0, 0.7, 0)
+  wall.scale.set(1.4, 1.4, 1.4)
+  g.add(wall)
+  const roof = mesh(CONE, mat(0xe5533d), 0, 2.1, 0)
+  roof.scale.set(1.7, 1.3, 1.7)
+  g.add(roof)
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2 + 0.4
+    const stripe = mesh(BOX, mat(0xffffff), Math.cos(a) * 1.1, 1.9, Math.sin(a) * 1.1)
+    stripe.scale.set(0.28, 0.7, 0.06)
+    stripe.rotation.y = -a + Math.PI / 2
+    stripe.rotation.z = 0.35
+    g.add(stripe)
+  }
+  const pole = mesh(CYL, mat(0x8d6e63), 0, 3.0, 0)
+  pole.scale.set(0.05, 0.8, 0.05)
+  const flag = mesh(BOX, mat(0xffd54f), 0.28, 3.25, 0)
+  flag.scale.set(0.55, 0.3, 0.05)
+  g.add(pole, flag)
+  g.scale.setScalar(scale)
+  return g
+}
+
+function buildResearch(scale) {
+  const g = new THREE.Group()
+  const base = mesh(CYL, mat(0xcfd8dc), 0, 1.1, 0)
+  base.scale.set(1.0, 2.2, 1.0)
+  g.add(base)
+  const dome = mesh(SPH, mat(0x9fd0e8), 0, 2.4, 0)
+  dome.scale.setScalar(0.85)
+  g.add(dome)
+  const scope = mesh(CYL, mat(0x37474f), 0.35, 2.9, 0)
+  scope.scale.set(0.16, 1.1, 0.16)
+  scope.rotation.z = -0.7
+  g.add(scope)
+  const rail = mesh(CYL, mat(0x8d9aa5), 0, 0.35, 0)
+  rail.scale.set(1.35, 0.1, 1.35)
+  g.add(rail)
+  g.scale.setScalar(scale)
+  return g
+}
+
 const BUILDING_BUILDERS = {
   kiosk: buildKiosk,
   gift: buildGift,
@@ -191,6 +236,8 @@ const BUILDING_BUILDERS = {
   ranger: buildRanger,
   generator: buildGenerator,
   clinic: buildClinic,
+  survey: buildSurvey,
+  research: buildResearch,
 }
 
 const FENCE_COLORS = [0x9a6a43, 0x5c6670, 0x4a5560]
@@ -298,6 +345,12 @@ export class World {
       }
       return keys
     })
+    this.edgeCells = new Map(park.edges.map((e) => [e.key, e.cells]))
+    // Guest-needs sensors: one-shot purchases + exit satisfaction.
+    this.sales = new Map() // cellId -> purchases
+    this.moodSum = 0
+    this.moodCount = 0
+    this.unmet = { food: 0, gift: 0, comfort: 0 }
 
     this.buildStatic()
     this.buildTerrain()
@@ -622,10 +675,19 @@ export class World {
       for (const key of this.cellEdges[i]) sum += this.edgeCounts.get(key) ?? 0
       if (sum) byCell[i] = sum
     }
-    const packet = { entered: this.entered, byCell }
+    const packet = {
+      entered: this.entered,
+      byCell,
+      sales: Object.fromEntries(this.sales),
+      mood: { sum: this.moodSum, count: this.moodCount, unmet: { ...this.unmet } },
+    }
     this.prevCounts = new Map(this.edgeCounts) // keep for the heat overlay
     this.edgeCounts.clear()
     this.entered = 0
+    this.sales.clear()
+    this.moodSum = 0
+    this.moodCount = 0
+    this.unmet = { food: 0, gift: 0, comfort: 0 }
     return packet
   }
 
@@ -677,10 +739,54 @@ export class World {
     const [gx, gz] = park.verts[park.gateVertex]
     g.position.set(gx, TRAIL_Y, gz)
     this.scene.add(g)
-    const guest = { group: g, at: park.gateVertex, path: [], seg: 0, mode: 'wander', dwell: 0, t: Math.random() * 5 }
+    const guest = {
+      group: g,
+      at: park.gateVertex,
+      path: [],
+      seg: 0,
+      mode: 'wander',
+      dwell: 0,
+      t: Math.random() * 5,
+      // Needs: each is satisfied once, not at every stand along the path.
+      hunger: 0.25 + Math.random() * 0.3,
+      comfort: Math.random() * 0.35,
+      wantGift: Math.random() < 0.65,
+      sat: 0.72 + Math.random() * 0.1,
+    }
     this.pickGuestTarget(guest)
     this.guests.push(guest)
     this.entered += 1
+  }
+
+  recordExit(guest, fled) {
+    let sat = guest.sat
+    if (fled) sat *= 0.35 // sprinting from a loose dinosaur ruins the day
+    if (guest.hunger > 0.55) this.unmet.food += 1
+    if (guest.wantGift) this.unmet.gift += 1
+    if (guest.comfort > 0.5) this.unmet.comfort += 1
+    this.moodSum += Math.max(0, Math.min(1, sat))
+    this.moodCount += 1
+  }
+
+  // Passing a stand satisfies a need — and only then does money change hands.
+  shopAtEdge(guest, edgeKey) {
+    const s = this.state
+    if (!s) return
+    for (const cellId of this.edgeCells.get(edgeKey) ?? []) {
+      const use = s.cells[cellId]?.use
+      if (use === 'kiosk' && guest.hunger > 0.55) {
+        guest.hunger = 0
+        guest.sat = Math.min(1, guest.sat + 0.06)
+        this.sales.set(cellId, (this.sales.get(cellId) ?? 0) + 1)
+      } else if (use === 'gift' && guest.wantGift) {
+        guest.wantGift = false
+        guest.sat = Math.min(1, guest.sat + 0.06)
+        this.sales.set(cellId, (this.sales.get(cellId) ?? 0) + 1)
+      } else if (use === 'restroom' && guest.comfort > 0.5) {
+        guest.comfort = 0
+        guest.sat = Math.min(1, guest.sat + 0.05)
+      }
+    }
   }
 
   attractionCells() {
@@ -740,6 +846,11 @@ export class World {
     }
     for (let i = this.guests.length - 1; i >= 0; i--) {
       const guest = this.guests[i]
+      // Needs build while the visit lasts; unmet cravings sour the mood.
+      guest.hunger = Math.min(1, guest.hunger + dt * 0.02)
+      guest.comfort = Math.min(1, guest.comfort + dt * 0.016)
+      if (guest.hunger > 0.85) guest.sat = Math.max(0, guest.sat - dt * 0.015)
+      if (guest.comfort > 0.85) guest.sat = Math.max(0, guest.sat - dt * 0.015)
       // Scurrying-ant pace: a full park crossing takes about a day, so
       // footfall counts actually accumulate on the trails.
       const speed = fleeing ? 7 : 3.6
@@ -764,6 +875,7 @@ export class World {
         continue
       }
       if (guest.mode === 'leave-now') {
+        this.recordExit(guest, fleeing)
         this.scene.remove(guest.group)
         this.guests.splice(i, 1)
         continue
@@ -777,20 +889,23 @@ export class World {
       guest.t += dt
       guest.group.position.y = TRAIL_Y + Math.abs(Math.sin(guest.t * 8)) * 0.07
       if (dist < 0.12) {
-        // segment done — count the crossing
+        // segment done — count the crossing, maybe shop
         const a = guest.path[guest.seg]
         const b = guest.path[guest.seg + 1]
         const key = a < b ? `${a}-${b}` : `${b}-${a}`
         this.edgeCounts.set(key, (this.edgeCounts.get(key) ?? 0) + 1)
+        this.shopAtEdge(guest, key)
         guest.at = b
         guest.seg += 1
         if (guest.seg >= guest.path.length - 1) {
           if (guest.mode === 'leave') {
+            this.recordExit(guest, fleeing)
             this.scene.remove(guest.group)
             this.guests.splice(i, 1)
           } else {
             guest.mode = 'dwell'
             guest.dwell = 1 + Math.random() * 1.5
+            guest.sat = Math.min(1, guest.sat + 0.05) // saw something wonderful
           }
         }
         continue

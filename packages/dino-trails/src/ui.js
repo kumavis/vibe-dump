@@ -265,7 +265,7 @@ export class UI {
     body.innerHTML = `
       <p class="lead">${b.desc}</p>
       ${meta}
-      ${earns ? `<p class="muted">Yesterday's take: ~${fmtMoney(traffic * (cs.use === 'kiosk' ? 2.0 : 3.2))}</p>` : ''}
+      ${earns ? `<p class="muted">Guests buy once when the need bites — busy trails bring the hungry ones here first.</p>` : ''}
       <button class="big danger-outline" data-act="demo" data-confirm="1">💣 Demolish (30% refund)</button>`
     this.wire(body, {
       demo: () => {
@@ -295,13 +295,14 @@ export class UI {
                 ? '❤️ blissful'
                 : '🙂 content'
         const weak = sp.fer > effStrength
+        const research = sim.countUse(s, 'research') > 0
         return `
         <div class="row">
           <span class="row-icon">${sp.icon}</span>
           <div class="row-main">
-            <b>${sp.name}</b>
-            <div class="hap-bar"><i style="width:${Math.round(d.hap)}%" class="${d.hap < 40 ? 'low' : ''}"></i></div>
-            <small class="muted">${mood}${weak ? ' · ⚠️ fence too weak!' : ''}</small>
+            <b>${sp.name}</b>${research ? ` <small class="muted">· ${Math.round(d.hap)}/100</small>` : ''}
+            ${research ? `<div class="hap-bar"><i style="width:${Math.round(d.hap)}%" class="${d.hap < 40 ? 'low' : ''}"></i></div>` : ''}
+            <small class="muted">${mood}${weak ? ' · ⚠️ fence too weak!' : ''}${research ? '' : ' · 🔭 build a Research Post for exact readings'}</small>
           </div>
           ${d.sick ? `<button class="mini" data-act="treat" data-id="${d.id}">Treat<br>${fmtMoney(ECON.treatCost)}</button>` : ''}
           <button class="mini" data-act="sell" data-id="${d.id}" data-confirm="1">Sell<br>${fmtShort(sp.cost * 0.4)}</button>
@@ -465,17 +466,20 @@ export class UI {
         else if (sp.fer > sim.fenceStrength(s, cs)) flags.push('⚠️ fence too weak')
         if (d.sick) flags.push('🤒 sick')
         if (!d.escaped && sp.social === 'herd' && sim.dinosIn(s, d.cell).length < 2) flags.push('😔 lonely')
+        const research = sim.countUse(s, 'research') > 0
+        const mood = d.hap < 40 ? '💢 agitated' : d.hap > 85 ? '❤️ blissful' : '🙂 content'
         return `
         <button class="row row-btn" data-act="go" data-cell="${d.cell}">
           <span class="row-icon">${sp.icon}</span>
           <div class="row-main">
             <b>${sp.name}</b> <small class="muted">· ${this.cellName(cell)}</small>
-            <div class="hap-bar"><i style="width:${Math.round(d.hap)}%" class="${d.hap < 40 ? 'low' : ''}"></i></div>
-            <small class="${flags.length ? 'warn-text' : 'muted'}">${flags.join(' · ') || '🙂 doing fine'}</small>
+            ${research ? `<div class="hap-bar"><i style="width:${Math.round(d.hap)}%" class="${d.hap < 40 ? 'low' : ''}"></i></div>` : ''}
+            <small class="${flags.length ? 'warn-text' : 'muted'}">${flags.join(' · ') || (research ? `${mood} (${Math.round(d.hap)}/100)` : mood)}</small>
           </div>
         </button>`
       })
-      .join('')}</div>`
+      .join('')}</div>
+    ${sim.countUse(s, 'research') ? '' : '<p class="muted center">🔭 A Research Post unlocks exact happiness readings.</p>'}`
     this.wire(body, {
       go: (btn) => this.openSheet({ type: 'cell', cellId: +btn.dataset.cell }),
     })
@@ -508,6 +512,22 @@ export class UI {
         <div class="tile"><small>Power</small><b class="${sys.powered ? 'pos' : ''}">${sys.powered ? 'On grid' : 'None'}</b></div>
         <div class="tile"><small>Clinic</small><b>${sim.countUse(s, 'clinic') ? 'Staffed' : 'None'}</b></div>
       </div>
+      <h3>Guest report</h3>
+      ${
+        sim.countUse(s, 'survey')
+          ? s.unmet
+            ? `<div class="tiles">
+                <div class="tile"><small>Guest mood</small><b class="${s.guestMood < 50 ? 'neg' : s.guestMood > 75 ? 'pos' : ''}">${s.guestMood}/100</b></div>
+                <div class="tile"><small>Left hungry</small><b class="${s.unmet.food > 0.4 ? 'neg' : ''}">${Math.round(s.unmet.food * 100)}%</b></div>
+                <div class="tile"><small>No souvenir</small><b class="${s.unmet.gift > 0.4 ? 'neg' : ''}">${Math.round(s.unmet.gift * 100)}%</b></div>
+                <div class="tile"><small>Uncomfortable</small><b class="${s.unmet.comfort > 0.4 ? 'neg' : ''}">${Math.round(s.unmet.comfort * 100)}%</b></div>
+              </div>
+              <p class="muted" style="margin:6px 2px 0">Guests buy once when a need bites — put stands where hungry
+              guests actually walk, not everywhere.</p>`
+            : '<p class="muted">Surveys start with tomorrow\'s guests.</p>'
+          : `<p class="muted">Build ${BUILDINGS.survey.icon} Guest Services to survey departing guests — who left
+             hungry, empty-handed or uncomfortable.</p>`
+      }
       <h3>Balance — last 30 days</h3>
       <div class="chart-wrap"><canvas id="c-line"></canvas><div class="chart-tip" hidden></div></div>
       <h3>Income vs expenses — last 14 days</h3>
@@ -556,8 +576,11 @@ export class UI {
     body.innerHTML = `
       <div class="help">
         <p><b>👣 Money follows footsteps.</b> Guests walk real trails between the gate and
-        your star dinos. Kiosks earn from the trails beside them — toggle 🔥 to see where
-        the crowds actually go.</p>
+        your star dinos. Toggle 🔥 to see where the crowds actually go.</p>
+        <p><b>🌭 Guests have needs.</b> Each guest gets hungry once, wants one souvenir,
+        and needs a restroom — they buy at the <i>first</i> stand they pass when the need
+        bites, then walk past the rest. Unmet needs sour their mood, and guest mood moves
+        your fame. 🎪 Guest Services unlocks the exit-survey report.</p>
         <p><b>🏞️ Land is unequal.</b> Cells differ in size, terrain and traffic. Prices follow
         footfall, so buy ahead of the crowd. Big species need <i>vast</i> cells — 📐 shows
         the roominess a dino demands.</p>

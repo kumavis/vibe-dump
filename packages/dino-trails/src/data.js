@@ -131,7 +131,18 @@ export const BUILDINGS = {
     name: 'Vet Clinic', icon: '🩺', cost: 550, upkeep: 16,
     desc: 'Sick dinosaurs are treated overnight for free. Without it, illness lingers or costs a call-out fee.',
   },
+  survey: {
+    name: 'Guest Services', icon: '🎪', cost: 400, upkeep: 10,
+    desc: 'Surveys departing guests: unlocks the guest-mood report in the Books — who left hungry, empty-handed or uncomfortable.',
+  },
+  research: {
+    name: 'Research Post', icon: '🔭', cost: 700, upkeep: 18,
+    desc: 'Behavior scientists on staff: unlocks exact happiness readings for every dinosaur instead of keeper guesswork.',
+  },
 }
+
+// Guests buy once per need, not at every stand they pass.
+export const SALE = { kiosk: 6, gift: 9 }
 
 export const DISASTERS = {
   outage: {

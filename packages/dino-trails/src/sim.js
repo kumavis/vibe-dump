@@ -1,7 +1,7 @@
 // Dino Trails simulation. The 3D world simulates guests walking trails and
 // hands actual footfall counts to dayTick — the economy runs on footsteps.
 
-import { ECON, SPECIES, FENCES, BUILDINGS, TERRAIN, DISASTERS, cellPrice, fmtMoney } from './data.js'
+import { ECON, SPECIES, FENCES, BUILDINGS, TERRAIN, DISASTERS, SALE, cellPrice, fmtMoney } from './data.js'
 
 // v2: terrain density changed — v1 saves reference cells that no longer exist.
 const SAVE_KEY = 'dino-trails-v2'
@@ -20,6 +20,8 @@ export function newGame(seed, park) {
     ticket: ECON.ticket,
     disaster: null, // { key, days }
     lastDisaster: 0,
+    guestMood: 70,
+    unmet: null, // { food, gift, comfort } exit-survey fractions
     cells: park.cells.map(() => ({ owned: false, use: null, fence: 0 })),
     dinos: [],
     market: { offers: [], nextRefresh: 0 },
@@ -68,6 +70,8 @@ export function load() {
     s.ticket ??= ECON.ticket
     s.disaster ??= null
     s.lastDisaster ??= 0
+    s.guestMood ??= 70
+    s.unmet ??= null
     return s
   } catch {
     return null
@@ -329,16 +333,26 @@ export function dayTick(s, park, traffic) {
   const tickets = traffic.entered * s.ticket
   if (tickets) ledger(s, `Tickets — ${traffic.entered} guests at ${fmtMoney(s.ticket)}`, tickets, 'tickets')
   inc += tickets
+  // Shops earn per satisfied need, not per passer-by — a guest buys once.
   for (const cell of park.cells) {
     const cs = s.cells[cell.id]
     if (cs.use !== 'kiosk' && cs.use !== 'gift') continue
-    const passes = traffic.byCell[cell.id] ?? 0
-    const rate = cs.use === 'kiosk' ? 2.0 : 3.2
-    let take = Math.round(passes * rate)
+    const sold = traffic.sales?.[cell.id] ?? 0
+    let take = sold * SALE[cs.use]
     if (standsDark) take = Math.round(take * 0.5)
     if (take) {
-      ledger(s, `${BUILDINGS[cs.use].name} — ${passes} passers-by${standsDark ? ' (by candlelight)' : ''}`, take, cs.use === 'kiosk' ? 'food' : 'gifts')
+      ledger(s, `${BUILDINGS[cs.use].name} — ${sold} sale${sold > 1 ? 's' : ''}${standsDark ? ' (by candlelight)' : ''}`, take, cs.use === 'kiosk' ? 'food' : 'gifts')
       inc += take
+    }
+  }
+
+  // Exit surveys → park-wide guest mood (fame follows it).
+  if (traffic.mood?.count) {
+    s.guestMood = Math.round((traffic.mood.sum / traffic.mood.count) * 100)
+    s.unmet = {
+      food: traffic.mood.unmet.food / traffic.mood.count,
+      gift: traffic.mood.unmet.gift / traffic.mood.count,
+      comfort: traffic.mood.unmet.comfort / traffic.mood.count,
     }
   }
 
@@ -465,12 +479,11 @@ export function dayTick(s, park, traffic) {
     }
   }
 
-  // --- fame drift
+  // --- fame drift: variety + dino welfare + how guests actually felt
   const variety = new Set(s.dinos.map((d) => d.sp)).size
   const avgHap = s.dinos.length ? s.dinos.reduce((t, d) => t + d.hap, 0) / s.dinos.length : 60
   let target =
-    25 + variety * 5 + countUse(s, 'garden') * 2.5 + countUse(s, 'restroom') * 3 + (avgHap - 60) * 0.25
-  if (!countUse(s, 'restroom') && traffic.entered > 25) target -= 8
+    25 + variety * 5 + countUse(s, 'garden') * 2.5 + (avgHap - 60) * 0.25 + (s.guestMood - 65) * 0.2
   target = Math.max(5, Math.min(95, target))
   s.fame = Math.max(0, Math.min(100, s.fame + (target - s.fame) * 0.12))
 

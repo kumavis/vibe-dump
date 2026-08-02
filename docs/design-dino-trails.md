@@ -69,6 +69,24 @@ research — Dijkstra over a ~150-node graph.
 - **Gate pricing**: a ticket slider in the Books with fame-driven demand
   elasticity (the sweet price rises as the park gets famous).
 
+## Guest needs — one wallet, not a hose
+
+Guests carry needs: **hunger** (grows during the visit), **one souvenir
+wish**, and **comfort**. A need is satisfied at the *first* stand the guest
+passes once it bites — then they walk past every other stand sated. So shop
+income is per-sale, not per-passer-by: coverage of the hungry stretch of
+trail beats shop spam, and rival kiosks compete for the same first bite.
+
+Unmet needs sour the guest's exit satisfaction; fleeing a loose dinosaur
+ruins it. Exit surveys aggregate into a park-wide **guest mood** that moves
+fame — restrooms and snack coverage now matter through the guests
+themselves, not a hard-coded rule.
+
+**Insight buildings** gate the analytics: **Guest Services** unlocks the
+exit-survey report in the Books (mood, % who left hungry / empty-handed /
+uncomfortable); a **Research Post** unlocks exact per-dinosaur happiness
+readings in place of vague keeper moods.
+
 ## Support systems — running costs that scale with ambition
 
 Advanced dinosaurs pull infrastructure behind them; each support building
