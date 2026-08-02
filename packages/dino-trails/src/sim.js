@@ -3,7 +3,8 @@
 
 import { ECON, SPECIES, FENCES, BUILDINGS, TERRAIN, cellPrice, fmtMoney } from './data.js'
 
-const SAVE_KEY = 'dino-trails-v1'
+// v2: terrain density changed — v1 saves reference cells that no longer exist.
+const SAVE_KEY = 'dino-trails-v2'
 
 // ---------------------------------------------------------------- state
 
