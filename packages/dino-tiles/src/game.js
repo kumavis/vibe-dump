@@ -3,37 +3,40 @@
 // touching a placed tile is buildable. Tiles arrive from an infinite weighted
 // queue, and a rolling quest chain gives the run its goals.
 
+// `color` is the species identity (UI hex chips); `ground` is the tile's
+// terrain color, picked to contrast with the animal standing on it —
+// warm straw under cool-skinned dinos, fresh grass under warm-skinned ones.
 export const TILES = {
   parasaur: {
-    name: 'Parasaurolophus', color: '#58c9a5', kind: 'dino', species: 'parasaur', prey: true, base: 5,
+    name: 'Parasaurolophus', color: '#58c9a5', ground: '#e8d9a4', kind: 'dino', species: 'parasaur', prey: true, base: 5,
     rule: '+6 per parasaur in the pen · loves lakes & gardens · fears predators',
   },
   stego: {
-    name: 'Stegosaurus', color: '#7cb342', kind: 'dino', species: 'stego', prey: true, base: 6,
+    name: 'Stegosaurus', color: '#7cb342', ground: '#e0cf9a', kind: 'dino', species: 'stego', prey: true, base: 6,
     rule: '+6 per stego in the pen · loves lakes & gardens · fears predators',
   },
   trike: {
-    name: 'Triceratops', color: '#6f8fc9', kind: 'dino', species: 'trike', prey: true, base: 7,
+    name: 'Triceratops', color: '#6f8fc9', ground: '#a6d989', kind: 'dino', species: 'trike', prey: true, base: 7,
     rule: '+6 per trike in the pen · loves lakes & gardens · fears predators',
   },
   raptor: {
-    name: 'Velociraptor', color: '#ff9840', kind: 'dino', species: 'raptor', predator: true, base: 8,
+    name: 'Velociraptor', color: '#ff9840', ground: '#95c884', kind: 'dino', species: 'raptor', predator: true, base: 8,
     rule: '+6 per raptor in the pack · scares neighboring herbivores (−8)',
   },
   trex: {
-    name: 'T-Rex', color: '#c0574f', kind: 'dino', species: 'trex', predator: true, loner: true, base: 20,
+    name: 'T-Rex', color: '#c0574f', ground: '#e6d6a0', kind: 'dino', species: 'trex', predator: true, loner: true, base: 20,
     rule: '+6 per lake or garden neighbor · −6 per neighboring dino',
   },
   lake: {
-    name: 'Lake', color: '#6fc8e8', kind: 'scenery', base: 2,
+    name: 'Lake', color: '#6fc8e8', ground: '#6fc8e8', kind: 'scenery', base: 2,
     rule: '+4 per dino neighbor',
   },
   garden: {
-    name: 'Garden', color: '#7ccf5f', kind: 'scenery', base: 2,
+    name: 'Garden', color: '#7ccf5f', ground: '#7ccf5f', kind: 'scenery', base: 2,
     rule: '+3 per non-empty neighbor',
   },
   snack: {
-    name: 'Snack Stand', color: '#f2c14e', kind: 'scenery', base: 3,
+    name: 'Snack Stand', color: '#f2c14e', ground: '#d9b98c', kind: 'scenery', base: 3,
     rule: '+5 per different species around it',
   },
 }
@@ -106,8 +109,8 @@ export function frontierKeys(run) {
   return out
 }
 
-// Connected same-species pen size including `key`.
-export function groupSize(run, key, species) {
+// Connected same-species pen (cell keys) including `key`.
+export function penCells(run, key, species = TILES[run.board[key]]?.species) {
   const seen = new Set([key])
   const stack = [key]
   while (stack.length) {
@@ -120,7 +123,11 @@ export function groupSize(run, key, species) {
       }
     }
   }
-  return seen.size
+  return [...seen]
+}
+
+export function groupSize(run, key, species) {
+  return penCells(run, key, species).length
 }
 
 export function scorePlacement(run, q, r, tileKey) {

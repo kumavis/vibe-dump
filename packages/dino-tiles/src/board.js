@@ -44,17 +44,63 @@ function mesh(g, m, x = 0, y = 0, z = 0) {
   return o
 }
 
-// ------------------------------------------------- tile dressing
-
-function dressDino(group, tileKey) {
-  const scale = { parasaur: 0.55, stego: 0.5, trike: 0.5, raptor: 0.6, trex: 0.42 }[tileKey]
-  const rig = makeDino(tileKey)
-  rig.group.scale.setScalar(scale)
-  rig.group.position.y = TILE_TOP / 2
-  rig.group.rotation.y = Math.PI + (Math.random() - 0.5) * 0.8
-  group.add(rig.group)
-  return rig
+// Hand-drawn emote bubbles (no emoji): heart, music note, zzz, alert.
+const emoteCache = {}
+function emoteTexture(type) {
+  if (emoteCache[type]) return emoteCache[type]
+  const canvas = document.createElement('canvas')
+  canvas.width = canvas.height = 128
+  const ctx = canvas.getContext('2d')
+  ctx.fillStyle = '#fffdf4'
+  ctx.strokeStyle = '#5b4327'
+  ctx.lineWidth = 6
+  ctx.beginPath()
+  ctx.arc(64, 58, 46, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.stroke()
+  // bubble tail
+  ctx.beginPath()
+  ctx.moveTo(48, 98)
+  ctx.lineTo(58, 122)
+  ctx.lineTo(70, 98)
+  ctx.closePath()
+  ctx.fill()
+  if (type === 'heart') {
+    ctx.fillStyle = '#ff6b81'
+    ctx.beginPath()
+    ctx.moveTo(64, 82)
+    ctx.bezierCurveTo(30, 58, 40, 28, 64, 46)
+    ctx.bezierCurveTo(88, 28, 98, 58, 64, 82)
+    ctx.fill()
+  } else if (type === 'note') {
+    ctx.fillStyle = '#5b4327'
+    ctx.font = 'bold 62px system-ui, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('♪', 64, 58)
+  } else if (type === 'zzz') {
+    ctx.fillStyle = '#6a8fd8'
+    ctx.font = 'bold 40px system-ui, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('z', 46, 74)
+    ctx.font = 'bold 30px system-ui, sans-serif'
+    ctx.fillText('z', 70, 56)
+    ctx.font = 'bold 22px system-ui, sans-serif'
+    ctx.fillText('z', 88, 42)
+  } else {
+    ctx.fillStyle = '#e5533d'
+    ctx.font = 'bold 68px system-ui, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('!', 64, 58)
+  }
+  const tex = new THREE.CanvasTexture(canvas)
+  tex.colorSpace = THREE.SRGBColorSpace
+  emoteCache[type] = tex
+  return tex
 }
+
+// ------------------------------------------------- tile dressing
 
 function dressLake(group) {
   const water = mesh(new THREE.CylinderGeometry(TILE_R * 0.72, TILE_R * 0.72, 0.1, 6), mat(0x9be0f5, { transparent: true, opacity: 0.9 }), 0, 0.34, 0)
@@ -131,16 +177,13 @@ export class Board {
     this.controls.maxDistance = 75
     this.controls.minPolarAngle = 0.25
     this.controls.maxPolarAngle = 1.05
-    this.lastUserMove = -10
-    this.controls.addEventListener('start', () => {
-      this.lastUserMove = performance.now() / 1000
-    })
-    this.focus = new THREE.Vector3(0, 0, 0.8)
 
     this.raycaster = new THREE.Raycaster()
     this.pads = new Map() // frontier key -> mesh
-    this.placedViews = new Map() // key -> { group, rig, t }
+    this.placedViews = new Map() // key -> { group, t } (tile + scenery)
+    this.dinoViews = new Map() // key -> wandering dino view
     this.fences = new Map() // key -> group
+    this.getPen = (key) => [key] // main.js wires the real pen lookup
     this.drops = []
     this.popups = []
 
@@ -231,17 +274,40 @@ export class Board {
     }
     const group = new THREE.Group()
     group.position.set(x, instant ? TILE_TOP / 2 : 7, z)
-    const color = parseInt(TILES[tileKey].color.slice(1), 16)
+    const color = parseInt((TILES[tileKey].ground ?? TILES[tileKey].color).slice(1), 16)
     group.add(mesh(HEX_GEO, mat(color)))
     const dress = { lake: dressLake, garden: dressGarden, snack: dressSnack }[tileKey]
-    let rig = null
     if (dress) dress(group)
-    else rig = dressDino(group, tileKey)
     this.scene.add(group)
-    this.placedViews.set(key, { group, rig, t: Math.random() * 10 })
+    this.placedViews.set(key, { group, t: Math.random() * 10 })
     if (!instant) this.drops.push({ group, targetY: TILE_TOP / 2, v: 0 })
+    if (TILES[tileKey].kind === 'dino') this.spawnDino(key, tileKey, instant)
     this.addCellPaths(q, r)
-    if (!instant) this.focus.set(x, 0, z)
+  }
+
+  spawnDino(key, tileKey, instant) {
+    const [q, r] = parseKey(key)
+    const { x, z } = cellPos(q, r)
+    const scale = { parasaur: 0.55, stego: 0.5, trike: 0.5, raptor: 0.6, trex: 0.42 }[tileKey]
+    const rig = makeDino(tileKey)
+    rig.group.scale.setScalar(instant ? scale : 0.01)
+    rig.group.position.set(x, TILE_TOP, z)
+    rig.group.rotation.y = Math.random() * Math.PI * 2
+    this.scene.add(rig.group)
+    this.dinoViews.set(key, {
+      rig,
+      home: key,
+      tileKey,
+      scale,
+      spawnT: instant ? 1 : -0.4, // slight delay so the tile lands first
+      target: null,
+      idle: 0.5 + Math.random() * 1.5,
+      t: Math.random() * 10,
+      moving: false,
+      emote: null,
+      emoteLife: 0,
+      emoteTimer: 3 + Math.random() * 7,
+    })
   }
 
   // Fences: a dino tile is fenced on every edge except those shared with a
@@ -356,28 +422,136 @@ export class Board {
     }
   }
 
+  // ---------------------------------------------- wandering dinos
+
+  // Random spot inside a pen cell, inset from the fence line.
+  penSpot(cellKey) {
+    const [q, r] = parseKey(cellKey)
+    const { x, z } = cellPos(q, r)
+    const a = Math.random() * Math.PI * 2
+    const rad = Math.sqrt(Math.random()) * 1.05
+    return { x: x + Math.cos(a) * rad, z: z + Math.sin(a) * rad }
+  }
+
+  updateDinos(dt, t) {
+    for (const view of this.dinoViews.values()) {
+      const g = view.rig.group
+      // spawn pop-in
+      if (view.spawnT < 1) {
+        view.spawnT += dt * 2.4
+        const p = Math.max(0.01, Math.min(1, view.spawnT))
+        g.scale.setScalar(view.scale * (p + Math.sin(p * Math.PI) * 0.2))
+        if (view.spawnT < 1) continue
+        g.scale.setScalar(view.scale)
+      }
+      // wander the whole pen (merged same-species cells)
+      if (!view.target || view.idle < 0) {
+        const pen = this.getPen(view.home)
+        view.penSize = pen.length
+        view.target = this.penSpot(pen[Math.floor(Math.random() * pen.length)])
+        view.idle = 1.5 + Math.random() * 3
+      }
+      const dx = view.target.x - g.position.x
+      const dz = view.target.z - g.position.z
+      const dist = Math.hypot(dx, dz)
+      view.moving = dist > 0.18
+      const speed = view.tileKey === 'raptor' ? 0.85 : 0.5
+      if (view.moving) {
+        const step = Math.min(dist, speed * dt)
+        g.position.x += (dx / dist) * step
+        g.position.z += (dz / dist) * step
+        const targetYaw = Math.atan2(dx, dz)
+        let dy = targetYaw - g.rotation.y
+        while (dy > Math.PI) dy -= Math.PI * 2
+        while (dy < -Math.PI) dy += Math.PI * 2
+        g.rotation.y += dy * Math.min(1, dt * 4)
+      } else {
+        view.idle -= dt
+      }
+      // animate
+      view.t += dt * (view.moving ? 1.5 : 0.7)
+      const rig = view.rig
+      const amp = view.moving ? 0.5 : 0
+      for (const leg of rig.legs) leg.pivot.rotation.x = Math.sin(view.t * 7 + leg.phase) * amp
+      const baseY = rig.bodyPivot.userData.baseY ?? (rig.bodyPivot.userData.baseY = rig.bodyPivot.position.y)
+      rig.bodyPivot.position.y = baseY + (view.moving ? Math.abs(Math.sin(view.t * 7)) * 0.08 : Math.sin(view.t * 2) * 0.03)
+      rig.tail.forEach((seg, i) => {
+        seg.rotation.y = Math.sin(view.t * 2.2 + i * 0.9) * 0.15
+      })
+      if (rig.wings) {
+        const flap = Math.sin(view.t * 6) * 0.3
+        rig.wings[0].rotation.z = flap
+        rig.wings[1].rotation.z = -flap
+      }
+      if (rig.neck) rig.neck.rotation.x = 0.55 + Math.sin(view.t * 1.1) * 0.06
+      else rig.head.rotation.x = Math.sin(view.t * 1.5) * 0.07
+      if (rig.jaw) rig.jaw.rotation.x = 0.08 + Math.max(0, Math.sin(view.t * 0.7)) * 0.25
+      this.updateEmote(view, dt)
+    }
+  }
+
+  updateEmote(view, dt) {
+    // Sprite is a child of the scaled rig, so local units are divided by
+    // the rig scale to get world-sized results.
+    const inv = 1 / Math.max(0.01, view.scale)
+    const headY = (2.6 * view.scale + 1.15) * inv
+    if (view.emote) {
+      view.emoteLife -= dt
+      view.emote.position.y = headY + Math.sin(view.t * 3) * 0.1 * inv
+      view.emote.material.opacity = Math.min(1, view.emoteLife * 2)
+      if (view.emoteLife <= 0) {
+        view.rig.group.remove(view.emote)
+        view.emote = null
+      }
+      return
+    }
+    view.emoteTimer -= dt
+    if (view.emoteTimer > 0) return
+    view.emoteTimer = 6 + Math.random() * 9
+    const tile = TILES[view.tileKey]
+    const pen = view.penSize ?? 1
+    let type
+    if (tile.predator) type = Math.random() < 0.45 ? 'alert' : 'note'
+    else if (pen >= 3) type = Math.random() < 0.6 ? 'heart' : 'note'
+    else type = Math.random() < 0.5 ? 'zzz' : 'note'
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: emoteTexture(type), transparent: true, depthTest: false }))
+    sprite.scale.setScalar(1.15 * inv)
+    sprite.position.y = headY
+    view.rig.group.add(sprite)
+    view.emote = sprite
+    view.emoteLife = 2.2
+  }
+
   // ---------------------------------------------- popups
 
   popup(key, text, tone = 'good', big = false) {
     const [q, r] = parseKey(key)
     const { x, z } = cellPos(q, r)
     const canvas = document.createElement('canvas')
-    canvas.width = 512
-    canvas.height = 128
+    canvas.width = 1024
+    canvas.height = 160
     const ctx = canvas.getContext('2d')
-    ctx.font = `bold ${big ? 76 : 56}px system-ui, sans-serif`
+    // Shrink long labels to fit the canvas so text never clips.
+    let size = big ? 84 : 62
+    ctx.font = `bold ${size}px system-ui, sans-serif`
+    const w = ctx.measureText(text).width
+    if (w > 950) {
+      size = Math.floor((size * 950) / w)
+      ctx.font = `bold ${size}px system-ui, sans-serif`
+    }
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.lineWidth = 10
     ctx.strokeStyle = 'rgba(30,25,10,0.85)'
-    ctx.strokeText(text, 256, 64)
+    ctx.strokeText(text, 512, 80)
     ctx.fillStyle = tone === 'bad' ? '#ff8f85' : big ? '#ffd54f' : '#b6f397'
-    ctx.fillText(text, 256, 64)
+    ctx.fillText(text, 512, 80)
     const tex = new THREE.CanvasTexture(canvas)
     tex.colorSpace = THREE.SRGBColorSpace
     const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }))
     sprite.position.set(x, 2.6, z)
-    sprite.scale.set(big ? 7 : 5, big ? 1.75 : 1.25, 1)
+    // match the 1024x160 canvas aspect so glyphs aren't squashed
+    sprite.scale.set(big ? 8.4 : 6.2, big ? 1.31 : 0.97, 1)
     this.scene.add(sprite)
     this.popups.push({ sprite, age: 0, life: big ? 1.7 : 1.2 })
   }
@@ -385,6 +559,8 @@ export class Board {
   reset() {
     for (const { group } of this.placedViews.values()) this.scene.remove(group)
     this.placedViews.clear()
+    for (const view of this.dinoViews.values()) this.scene.remove(view.rig.group)
+    this.dinoViews.clear()
     for (const fence of this.fences.values()) this.scene.remove(fence)
     this.fences.clear()
     for (const pad of this.pads.values()) this.scene.remove(pad)
@@ -395,7 +571,6 @@ export class Board {
     this.guests = []
     this.nodes.clear()
     this.drops = []
-    this.focus.set(0, 0, 0.8)
     this.controls.target.set(0, 0, 0.8)
   }
 
@@ -403,11 +578,6 @@ export class Board {
 
   update(dt, t, placedCount) {
     this.controls.update()
-    // Gentle auto-follow toward the latest placement, unless the player is
-    // driving the camera themselves.
-    if (t - this.lastUserMove > 3) {
-      this.controls.target.lerp(this.focus, Math.min(1, dt * 1.6))
-    }
     for (const cloud of this.clouds) {
       cloud.position.x += cloud.userData.speed * dt
       if (cloud.position.x > 44) cloud.position.x = -44
@@ -424,28 +594,11 @@ export class Board {
       }
     }
     for (const view of this.placedViews.values()) {
-      if (!view.rig) {
-        if (view.group.userData?.water) {
-          view.group.userData.water.position.y = 0.34 + Math.sin(t * 2.5 + view.t) * 0.03
-        }
-        continue
+      if (view.group.userData?.water) {
+        view.group.userData.water.position.y = 0.34 + Math.sin(t * 2.5 + view.t) * 0.03
       }
-      view.t += dt
-      const rig = view.rig
-      const baseY = rig.bodyPivot.userData.baseY ?? (rig.bodyPivot.userData.baseY = rig.bodyPivot.position.y)
-      rig.bodyPivot.position.y = baseY + Math.sin(view.t * 2) * 0.03
-      rig.tail.forEach((seg, i) => {
-        seg.rotation.y = Math.sin(view.t * 2.2 + i * 0.9) * 0.14
-      })
-      if (rig.wings) {
-        const flap = Math.sin(view.t * 6) * 0.3
-        rig.wings[0].rotation.z = flap
-        rig.wings[1].rotation.z = -flap
-      }
-      if (rig.neck) rig.neck.rotation.x = 0.55 + Math.sin(view.t * 1.1) * 0.06
-      else rig.head.rotation.x = Math.sin(view.t * 1.5) * 0.07
-      if (rig.jaw) rig.jaw.rotation.x = 0.08 + Math.max(0, Math.sin(view.t * 0.7)) * 0.25
     }
+    this.updateDinos(dt, t)
     this.updateGuests(dt, placedCount)
     for (let i = this.popups.length - 1; i >= 0; i--) {
       const p = this.popups[i]
