@@ -81,7 +81,8 @@ function createSim() {
 
   const outposts = [
     { patch: 0, tank: P.tankCap, gate: true, everOpen: true, probeRate: 0, scout: false },
-    { patch: 1, tank: 0, gate: false, everOpen: false, probeRate: 0, scout: true },
+    // scout stays false until the PLAYER places the survey beacon
+    { patch: 1, tank: 0, gate: false, everOpen: false, probeRate: 0, scout: false },
   ];
 
   const bots = [
@@ -92,6 +93,7 @@ function createSim() {
   const state = {
     t: 0, matter: 45, fluid, patches, structures, outposts, bots,
     jobs: [], events: [], flags: {}, growTimer: 0, done: false,
+    authority: false, // resorption needs an explicit player grant
   };
 
   const ev = (msg) => {
@@ -103,6 +105,26 @@ function createSim() {
   };
   const byId = (id) => structures.find((s) => s.id === id);
   const sname = (s) => `${s.o ? "BETA" : "ALPHA"} ${s.type.toUpperCase()}`;
+
+  /* --- player verbs: the endocrine system's two decisions --- */
+  function survey() {
+    const o = outposts[1];
+    if (o.scout || o.everOpen || state.done) return;
+    o.scout = true;
+    flag("beaconPlaced", "SURVEY BEACON PLACED — thin field forming over Patch B");
+  }
+  function grantAuthority() {
+    if (state.authority || state.done) return;
+    state.authority = true;
+    flag("authority", "RESORB AUTHORITY GRANTED — retreat may fund extension");
+    for (const s of structures) {
+      if (s.wantResorb && !s.queued) {
+        s.queued = true;
+        state.jobs.push({ kind: "resorb", sid: s.id });
+        ev(`${sname(s)} marked for RESORPTION`);
+      }
+    }
+  }
 
   function pourAt(x, z, amt, rad, dt) {
     const cx = (x + WORLD.w / 2) / TS, cz = (z + WORLD.h / 2) / TS;
@@ -195,10 +217,15 @@ function createSim() {
           ev(`${sname(s)} reactivated — field recovered`);
         } else if (f < P.resorb) {
           s.low += dt;
-          if (s.low > P.resorbDelay && !s.queued) {
-            s.queued = true;
-            state.jobs.push({ kind: "resorb", sid: s.id });
-            ev(`${sname(s)} marked for RESORPTION`);
+          if (s.low > P.resorbDelay && !s.queued && !s.wantResorb) {
+            if (state.authority) {
+              s.queued = true;
+              state.jobs.push({ kind: "resorb", sid: s.id });
+              ev(`${sname(s)} marked for RESORPTION`);
+            } else {
+              s.wantResorb = true;
+              flag("resorbWanted", "MOLD REQUESTS RESORB AUTHORITY — dormant limbs are dead weight");
+            }
           }
         } else s.low = 0;
       }
@@ -279,13 +306,12 @@ function createSim() {
   /* pre-warm the field so ALPHA starts in equilibrium, not bootstrap */
   for (let i = 0; i < 120; i++) {
     pourAt(patches[0].x, patches[0].z, P.pour, P.pourRad, DT);
-    pourAt(patches[1].x, patches[1].z, P.scout, P.pourRad, DT);
     fluidStep(DT);
   }
   ev("ALPHA operational — 2 miners, smelter, signal rig");
-  ev("Survey beacon holding a thin field over Patch B (reserve 240)");
+  ev("Rich reserve detected at Patch B (240) — survey beacon available");
 
-  return { state, step, fluidAt };
+  return { state, step, fluidAt, survey, grantAuthority };
 }
 
 /* ======================================================================
@@ -722,8 +748,10 @@ const CHECKLIST = [
   ["start", "Alpha extracting at Patch A"],
   ["deplete", "Patch A depleting"],
   ["gateClosed", "Signal cut — gate closed"],
+  ["beaconPlaced", "YOU: survey beacon at B"],
   ["alphaDorm", "Alpha colony dormant"],
   ["grow", "Gradient reversed — growth at B"],
+  ["authority", "YOU: resorb authority granted"],
   ["resorb1", "First resorption refund"],
   ["done", "Colony relocated — Beta online"],
 ];
@@ -755,6 +783,10 @@ const css = `
 .smf-log div:first-child{color:#c2ccd2;}
 .smf-btn{background:#13202a;border:1px solid #2a3d49;color:#8fa8b5;font:600 11px 'IBM Plex Mono';padding:4px 9px;margin-right:5px;cursor:pointer;}
 .smf-btn.on{color:#0b0e11;background:#55d6f0;border-color:#55d6f0;}
+.smf-act{display:block;width:100%;margin:5px 0;padding:8px 10px;text-align:left;color:#55d6f0;border-color:#2a5d6e;}
+.smf-act:hover{background:#17303c;}
+.smf-act.warn{color:#e0973a;border-color:#8a5a22;animation:smfpulse 1.1s ease-in-out infinite;}
+@keyframes smfpulse{50%{background:#2a1f13;border-color:#e0973a;}}
 .smf-help{position:absolute;left:12px;bottom:10px;font-size:10px;color:#495a64;z-index:4;pointer-events:none;}
 .smf-banner{position:absolute;left:50%;top:16px;transform:translateX(-50%);background:rgba(19,32,42,.95);border:1px solid #55d6f0;color:#8fe9ff;font:700 15px 'Barlow Condensed';letter-spacing:.2em;padding:8px 18px;z-index:6;}
 .smf-legend{margin-top:10px;color:#5b7482;line-height:1.6;}
@@ -802,6 +834,7 @@ export default function Scenario01DyingPatch() {
         flags: { ...s.flags },
         events: s.events.slice(-10).reverse(),
         done: s.done,
+        authority: s.authority,
       });
     }, 200);
 
@@ -829,7 +862,7 @@ export default function Scenario01DyingPatch() {
       <button className="smf-toggle" onClick={() => setPanel(!panel)}>
         {panel ? "HIDE ▸" : "◂ TELEMETRY"}
       </button>
-      <div className="smf-help">drag pan · wheel / pinch zoom · zoom out for tile view</div>
+      <div className="smf-help">drag pan · wheel / pinch zoom · zoom out for tile view · your moves are in the panel</div>
 
       <div className={`smf-panel ${panel ? "" : "hidden"}`}>
         <div className="smf-h1">SLIME MOLD FOUNDRY</div>
@@ -844,6 +877,27 @@ export default function Scenario01DyingPatch() {
             <button key={l} className={`smf-btn ${speed === v ? "on" : ""}`} onClick={() => setSpeed(v)}>{l}</button>
           ))}
         </div>
+
+        {hud && (
+          <div className="smf-card">
+            <div className="smf-cardh"><span>YOUR MOVES</span></div>
+            {!hud.flags.beaconPlaced && !hud.o[1].gate && (
+              <button className="smf-btn smf-act" onClick={() => simRef.current?.survey()}>
+                ◎ PLACE SURVEY BEACON — PATCH B
+              </button>
+            )}
+            {hud.flags.resorbWanted && !hud.authority && (
+              <button className="smf-btn smf-act warn" onClick={() => simRef.current?.grantAuthority()}>
+                ⚠ GRANT RESORB AUTHORITY
+              </button>
+            )}
+            {(hud.flags.beaconPlaced || hud.o[1].gate) && (!hud.flags.resorbWanted || hud.authority) && (
+              <div style={{ color: "#566068", fontSize: 10 }}>
+                no decisions pending — the organism is working
+              </div>
+            )}
+          </div>
+        )}
 
         {hud && ["ALPHA", "BETA"].map((nm, i) => {
           const o = hud.o[i];
