@@ -65,6 +65,36 @@ research — Dijkstra over a ~150-node graph.
   yesterday's adjacent footfall premium. Buying ahead of traffic is the
   speculation game; the heat overlay is the tell.
 - Feed, upkeep and wages as in dino-park; ledger + history retained.
+- **Gate pricing**: a ticket slider in the Books with fame-driven demand
+  elasticity (the sweet price rises as the park gets famous).
+
+## Support systems — running costs that scale with ambition
+
+Advanced dinosaurs pull infrastructure behind them; each support building
+adds daily upkeep, so a bigger roster means a bigger payroll:
+
+- **Feed Depot** — the gate shed feeds 30 appetite for free; beyond total
+  depot capacity, feed is imported at a 1.8× premium and dinos grumble.
+  Big eaters (Brachio 48, Spino 55, T-Rex 75) burn through capacity fast.
+- **Ranger Station** — covers 2 dangerous dinos (ferocity ≥ 3): halves
+  their escape odds; uncovered dangerous dinos escape *more* often.
+  Rangers also auto-recapture runaways within 2 days and discount call-outs.
+- **Generator** — electric fences idle at steel strength without one, and
+  it keeps fences + stands running through power outages.
+- **Vet Clinic** — sickness incidents cure overnight for free; without it,
+  illness lingers 4 days or costs a call-out fee.
+
+A "Park systems" dashboard in the Books shows feed, coverage, power and
+clinic status at a glance.
+
+## Disasters & incidents
+
+- **Power outage** (3 days): electric fences sag, stand income halves —
+  generator negates. **Thunderstorm**: wrecks gardens, guests stay home.
+  **Heatwave** (3 days): −6 happiness unless a pond neighbors the pen.
+  Rolls begin after day 10 with a cooldown; banner shows days remaining.
+- **Incidents**: random sickness (see clinic) and fence wear — a paddock's
+  fence can drop a tier, weighted by its occupants' ferocity.
 
 ## Territory & dinosaurs
 
@@ -100,10 +130,14 @@ space-gated species, escapes-lite; kiosk/gift/garden/restroom; the rotating
 dino market; fame, daily economy, ledger, autosave; dino-park's touch UI
 chrome (HUD chips, bottom sheets, toasts).
 
-**Roadmap after v0:** terrain preferences in the happiness model, elevation
-with cliff fencing, rival-park bidding, guest needs (hunger/restroom queues
-on the trail graph), path upgrades (wider = faster flow), seasonal traffic
-patterns, disasters adapted from dino-park.
+**Since v0:** always-available ranch commons, 12 species (flying Pteranodon,
+lakeside-craving Spinosaurus), roomier terrain, roam-first camera, subtle
+wild trails, and the full support-systems layer above (buildings, disasters,
+incidents, gate pricing).
+
+**Roadmap:** elevation with cliff fencing, rival-park bidding on market
+offers, guest needs (hunger/restroom queues on the trail graph), path
+upgrades (wider = faster flow), seasonal traffic patterns.
 
 ## Technical notes
 

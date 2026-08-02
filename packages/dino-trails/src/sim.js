@@ -1,7 +1,7 @@
 // Dino Trails simulation. The 3D world simulates guests walking trails and
 // hands actual footfall counts to dayTick — the economy runs on footsteps.
 
-import { ECON, SPECIES, FENCES, BUILDINGS, TERRAIN, cellPrice, fmtMoney } from './data.js'
+import { ECON, SPECIES, FENCES, BUILDINGS, TERRAIN, DISASTERS, cellPrice, fmtMoney } from './data.js'
 
 // v2: terrain density changed — v1 saves reference cells that no longer exist.
 const SAVE_KEY = 'dino-trails-v2'
@@ -17,6 +17,9 @@ export function newGame(seed, park) {
     fame: ECON.startFame,
     guests: 0,
     visitorRate: 8,
+    ticket: ECON.ticket,
+    disaster: null, // { key, days }
+    lastDisaster: 0,
     cells: park.cells.map(() => ({ owned: false, use: null, fence: 0 })),
     dinos: [],
     market: { offers: [], nextRefresh: 0 },
@@ -60,7 +63,12 @@ export function save(s) {
 export function load() {
   try {
     const s = JSON.parse(localStorage.getItem(SAVE_KEY) ?? 'null')
-    return s?.v === 1 && Array.isArray(s.cells) ? s : null
+    if (s?.v !== 1 || !Array.isArray(s.cells)) return null
+    // Saves from before the support-systems update get sensible defaults.
+    s.ticket ??= ECON.ticket
+    s.disaster ??= null
+    s.lastDisaster ??= 0
+    return s
   } catch {
     return null
   }
@@ -239,13 +247,51 @@ export function sellDino(s, dino) {
   return { ok: true, msg: `${sp.name} sold for ${fmtMoney(refund)}.` }
 }
 
-export function recaptureCost(dino) {
-  return 150 + SPECIES[dino.sp].fer * 100
+export function setTicket(s, price) {
+  s.ticket = Math.max(ECON.ticketMin, Math.min(ECON.ticketMax, Math.round(price)))
+}
+
+export function sweetTicket(s) {
+  return 7 + s.fame / 9
+}
+
+export function treatDino(s, dino) {
+  if (!dino.sick) return { ok: false }
+  if (s.money < ECON.treatCost) return { ok: false, msg: `The vet call-out is ${fmtMoney(ECON.treatCost)}.` }
+  dino.sick = false
+  dino.sickDays = 0
+  dino.hap = Math.min(100, dino.hap + 15)
+  ledger(s, `Vet call-out for ${SPECIES[dino.sp].name}`, -ECON.treatCost, 'incidents')
+  return { ok: true, msg: `${SPECIES[dino.sp].name} is back on its feet.` }
+}
+
+// Park support systems at a glance — the tick and the Books dashboard
+// both read from here so they can never disagree.
+export function systems(s) {
+  const feedDemand = s.dinos.reduce((t, d) => t + SPECIES[d.sp].food, 0)
+  const feedCapacity = ECON.baseFeedCapacity + countUse(s, 'depot') * 60
+  const dangerous = s.dinos.filter((d) => SPECIES[d.sp].fer >= 3).length
+  const covered = countUse(s, 'ranger') * ECON.rangerCoverage
+  const powered = countUse(s, 'generator') > 0
+  return { feedDemand, feedCapacity, dangerous, covered, powered }
+}
+
+// Effective fence strength: electric fencing only reaches full strength
+// with a generator, and an unpowered outage drops it regardless.
+export function fenceStrength(s, cellState) {
+  let str = FENCES[cellState.fence].strength
+  if (cellState.fence === 2 && !countUse(s, 'generator')) str = 3
+  return str
+}
+
+export function recaptureCost(s, dino) {
+  const base = 150 + SPECIES[dino.sp].fer * 100
+  return countUse(s, 'ranger') ? Math.round(base * 0.6) : base
 }
 
 export function recapture(s, dino) {
   if (!dino.escaped) return { ok: false }
-  const cost = recaptureCost(dino)
+  const cost = recaptureCost(s, dino)
   if (s.money < cost) return { ok: false, msg: `The rangers want ${fmtMoney(cost)} up front.` }
   dino.escaped = false
   dino.escDays = 0
@@ -262,30 +308,54 @@ export function dayTick(s, park, traffic) {
   s.day += 1
   s.guests = traffic.entered
   s.cellTraffic = traffic.byCell
+  const sys = systems(s)
+
+  // --- active disaster timers
+  let disasterMult = 1
+  const standsDark = s.disaster?.key === 'outage' && !sys.powered
+  if (s.disaster) {
+    if (s.disaster.key === 'outage') disasterMult = sys.powered ? 1 : 0.8
+    if (s.disaster.key === 'storm') disasterMult = 0.4
+    if (s.disaster.key === 'heatwave') disasterMult = 0.85
+    s.disaster.days -= 1
+    if (s.disaster.days <= 0) {
+      events.push({ icon: '🌤️', text: `${DISASTERS[s.disaster.key].name} is over.`, tone: 'good' })
+      s.disaster = null
+    }
+  }
 
   // --- income: tickets + footfall shops
   let inc = 0
-  const tickets = traffic.entered * ECON.ticket
-  if (tickets) ledger(s, `Tickets — ${traffic.entered} guests`, tickets, 'tickets')
+  const tickets = traffic.entered * s.ticket
+  if (tickets) ledger(s, `Tickets — ${traffic.entered} guests at ${fmtMoney(s.ticket)}`, tickets, 'tickets')
   inc += tickets
   for (const cell of park.cells) {
     const cs = s.cells[cell.id]
     if (cs.use !== 'kiosk' && cs.use !== 'gift') continue
     const passes = traffic.byCell[cell.id] ?? 0
     const rate = cs.use === 'kiosk' ? 2.0 : 3.2
-    const take = Math.round(passes * rate)
+    let take = Math.round(passes * rate)
+    if (standsDark) take = Math.round(take * 0.5)
     if (take) {
-      ledger(s, `${BUILDINGS[cs.use].name} — ${passes} passers-by`, take, cs.use === 'kiosk' ? 'food' : 'gifts')
+      ledger(s, `${BUILDINGS[cs.use].name} — ${passes} passers-by${standsDark ? ' (by candlelight)' : ''}`, take, cs.use === 'kiosk' ? 'food' : 'gifts')
       inc += take
     }
   }
 
-  // --- expenses
+  // --- expenses: feed (with overflow premium), upkeep, wages
   let exp = 0
-  const feed = s.dinos.reduce((t, d) => t + SPECIES[d.sp].food, 0)
-  if (feed) {
-    ledger(s, `Dinosaur feed (${s.dinos.length})`, -feed, 'upkeep')
-    exp += feed
+  const hungry = sys.feedDemand > sys.feedCapacity
+  if (sys.feedDemand) {
+    const covered = Math.min(sys.feedDemand, sys.feedCapacity)
+    const overflow = sys.feedDemand - covered
+    const feedCost = Math.round(covered + overflow * ECON.overflowFeedMult)
+    ledger(s, overflow ? `Dino feed (${overflow} imported at a premium)` : `Dino feed (${s.dinos.length} dinos)`, -feedCost, 'upkeep')
+    exp += feedCost
+    if (hungry && !s.flags.hungryWarned) {
+      s.flags.hungryWarned = true
+      events.push({ icon: '🌾', text: 'Feed demand exceeds depot capacity — imports cost extra and dinos grumble.', tone: 'bad' })
+    }
+    if (!hungry) s.flags.hungryWarned = false
   }
   const upkeep = s.cells.reduce((t, c) => t + (c.use ? BUILDINGS[c.use].upkeep : 0), 0)
   if (upkeep) {
@@ -295,7 +365,8 @@ export function dayTick(s, park, traffic) {
   ledger(s, 'Staff wages', -ECON.staffBase, 'staff')
   exp += ECON.staffBase
 
-  // --- happiness: room, company, terrain, calm neighbors
+  // --- happiness: room, company, terrain, calm neighbors, hardship
+  const heat = s.disaster?.key === 'heatwave'
   for (const d of s.dinos) {
     const sp = SPECIES[d.sp]
     const cell = park.cells[d.cell]
@@ -314,27 +385,83 @@ export function dayTick(s, park, traffic) {
     }
     if (sp.loves === 'water' && !waterNear) delta -= 3
     if (cell.terrain === 'forest') delta += 1
+    if (heat && !waterNear) delta -= 6
+    if (hungry) delta -= 2
+    if (d.sick) delta -= 4
     delta += Math.random() * 4 - 2
     d.hap = Math.max(0, Math.min(100, d.hap + Math.min(8, delta)))
   }
 
-  // --- escapes
+  // --- sickness runs its course (a clinic cures overnight)
+  const clinics = countUse(s, 'clinic')
+  for (const d of s.dinos) {
+    if (!d.sick) continue
+    if (clinics) {
+      d.sick = false
+      d.sickDays = 0
+      events.push({ icon: '🩺', text: `The clinic patched up the ${SPECIES[d.sp].name}.`, tone: 'good' })
+    } else {
+      d.sickDays = (d.sickDays ?? 0) + 1
+      if (d.sickDays >= 4) {
+        d.sick = false
+        d.sickDays = 0
+      }
+    }
+  }
+
+  // --- escapes: fence vs teeth, moderated by ranger coverage
+  const rangerOn = countUse(s, 'ranger') > 0
+  const coverageFactor =
+    sys.dangerous === 0 ? 1 : sys.covered >= sys.dangerous ? 0.5 : 1.5 - Math.min(1, sys.covered / sys.dangerous)
   for (const d of s.dinos) {
     if (d.escaped) {
       d.escDays += 1
       s.fame = Math.max(0, s.fame - 2)
+      if (rangerOn && d.escDays >= 2) {
+        d.escaped = false
+        d.escDays = 0
+        ledger(s, `Rangers recaptured ${SPECIES[d.sp].name}`, -100, 'incidents')
+        events.push({ icon: '🎯', text: `Rangers wrangled the ${SPECIES[d.sp].name} back home.`, tone: 'good' })
+      }
       continue
     }
     const sp = SPECIES[d.sp]
-    const diff = sp.fer - FENCES[s.cells[d.cell].fence].strength
+    const diff = sp.fer - fenceStrength(s, s.cells[d.cell])
     if (diff <= 0) continue
     let p = 0.02 * diff
     if (d.hap < 40) p += ((40 - d.hap) / 40) * 0.1 * diff
+    if (sp.fer >= 3) p *= coverageFactor
     if (Math.random() < Math.min(0.35, p)) {
       d.escaped = true
       d.escDays = 0
       s.fame = Math.max(0, s.fame - 8)
       events.push({ icon: '🚨', text: `${sp.icon} A ${sp.name} broke out onto the trails! Tap it.`, tone: 'bad' })
+    }
+  }
+
+  // --- small incidents: illness and fence wear
+  if (s.day > 6) {
+    for (const d of s.dinos) {
+      if (!d.sick && !d.escaped && Math.random() < 0.012) {
+        d.sick = true
+        d.sickDays = 0
+        events.push({
+          icon: '🤒',
+          text: `The ${SPECIES[d.sp].name} looks queasy${clinics ? ' — the clinic is on it.' : '. Treat it or wait it out.'}`,
+          tone: 'bad',
+        })
+      }
+    }
+    for (const cell of park.cells) {
+      const cs = s.cells[cell.id]
+      if (cs.use !== 'paddock' || cs.fence === 0) continue
+      const herd = dinosIn(s, cell.id)
+      if (!herd.length) continue
+      const maxFer = Math.max(...herd.map((d) => SPECIES[d.sp].fer))
+      if (Math.random() < 0.008 * maxFer) {
+        cs.fence -= 1
+        events.push({ icon: '🔨', text: `Fence damage in a ${SPECIES[herd[0].sp].name} paddock — it dropped to ${FENCES[cs.fence].name}!`, tone: 'bad' })
+      }
     }
   }
 
@@ -347,10 +474,39 @@ export function dayTick(s, park, traffic) {
   target = Math.max(5, Math.min(95, target))
   s.fame = Math.max(0, Math.min(100, s.fame + (target - s.fame) * 0.12))
 
-  // --- tomorrow's demand (world paces guest spawns off this)
-  let rate = (4 + Math.pow(attractionScore(s), 0.8) * 2.0) * (0.3 + (s.fame / 100) * 1.3)
+  // --- tomorrow's demand: star power × fame × gate price × conditions
+  const priceFactor = 2 / (1 + Math.exp((s.ticket - sweetTicket(s)) / 3.5))
+  let rate = (5 + Math.pow(attractionScore(s), 0.8) * 2.4) * (0.3 + (s.fame / 100) * 1.3)
+  rate *= priceFactor * disasterMult
   if (escapees(s).length) rate *= 0.35
   s.visitorRate = Math.max(2, Math.min(80, Math.round(rate * (0.9 + Math.random() * 0.2))))
+
+  // --- maybe a fresh disaster rolls in
+  if (!s.disaster && s.day > 10 && s.day - s.lastDisaster > 8 && Math.random() < 0.07) {
+    const keys = Object.keys(DISASTERS)
+    const key = keys[Math.floor(Math.random() * keys.length)]
+    s.disaster = { key, days: DISASTERS[key].days }
+    s.lastDisaster = s.day
+    if (key === 'storm') {
+      let wrecked = 0
+      for (const cs of s.cells) {
+        if (cs.use === 'garden' && Math.random() < 0.25) {
+          cs.use = null
+          wrecked += 1
+        }
+      }
+      s.fame = Math.max(0, s.fame - 3)
+      events.push({
+        icon: '⛈️',
+        text: wrecked ? `Thunderstorm! ${wrecked} garden${wrecked > 1 ? 's' : ''} blown to bits.` : 'Thunderstorm! Guests are staying home.',
+        tone: 'bad',
+      })
+    } else if (key === 'outage' && sys.powered) {
+      events.push({ icon: '🔌', text: 'City power failed — your generator kicked in!', tone: 'good' })
+    } else {
+      events.push({ icon: DISASTERS[key].icon, text: `${DISASTERS[key].name}! ${DISASTERS[key].desc}`, tone: 'bad' })
+    }
+  }
 
   // --- market countdown
   s.market.nextRefresh -= 1

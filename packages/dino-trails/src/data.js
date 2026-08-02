@@ -5,12 +5,20 @@ export const ECON = {
   startMoney: 2500,
   startFame: 40,
   ticket: 12,
+  ticketMin: 6,
+  ticketMax: 26,
   staffBase: 20,
   dayMs: 14000,
   fastMult: 3,
   bankruptcyAt: -3000,
   marketSlots: 3,
   marketRefreshDays: 5,
+  // Support-system pressure: the gate shed feeds a small park for free;
+  // beyond that, every mouthful without depot capacity costs a premium.
+  baseFeedCapacity: 30,
+  overflowFeedMult: 1.8,
+  rangerCoverage: 2, // dangerous dinos (fer >= 3) per station
+  treatCost: 250,
 }
 
 // minR: minimum cell inradius ("roominess") the species accepts.
@@ -106,6 +114,37 @@ export const BUILDINGS = {
   restroom: {
     name: 'Restroom', icon: '🚻', cost: 250, upkeep: 8,
     desc: 'Comfy guests spread the word. Fame insurance.',
+  },
+  depot: {
+    name: 'Feed Depot', icon: '🌾', cost: 500, upkeep: 15,
+    desc: 'Feeds 60 appetite. Beyond capacity, feed is imported at a heavy premium and dinos go hungry.',
+  },
+  ranger: {
+    name: 'Ranger Station', icon: '🎯', cost: 600, upkeep: 24,
+    desc: 'Covers 2 dangerous dinos: halves their escape risk and recaptures runaways within 2 days.',
+  },
+  generator: {
+    name: 'Generator', icon: '🔌', cost: 800, upkeep: 20,
+    desc: 'Powers electric fences (they idle at steel strength without it) and keeps stands open through outages.',
+  },
+  clinic: {
+    name: 'Vet Clinic', icon: '🩺', cost: 550, upkeep: 16,
+    desc: 'Sick dinosaurs are treated overnight for free. Without it, illness lingers or costs a call-out fee.',
+  },
+}
+
+export const DISASTERS = {
+  outage: {
+    name: 'Power Outage', icon: '⚡', days: 3,
+    desc: 'Electric fences sag to steel and stands go dark — unless a generator hums.',
+  },
+  storm: {
+    name: 'Thunderstorm', icon: '⛈️', days: 1,
+    desc: 'Gale winds wreck gardens and keep guests home.',
+  },
+  heatwave: {
+    name: 'Heatwave', icon: '🥵', days: 3,
+    desc: 'Tempers grill. Dinos with a pond next door stay cool.',
   },
 }
 

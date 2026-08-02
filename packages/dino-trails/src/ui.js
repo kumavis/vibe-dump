@@ -1,7 +1,7 @@
 // DOM layer: HUD, bottom sheets, toasts, overlays. Mutations go through
 // handlers.run(simFn, ...args) so main.js can save + resync in one place.
 
-import { SPECIES, BUILDINGS, FENCES, TERRAIN, ECON, fmtMoney, fmtShort } from './data.js'
+import { SPECIES, BUILDINGS, FENCES, TERRAIN, ECON, DISASTERS, fmtMoney, fmtShort } from './data.js'
 import * as sim from './sim.js'
 import { lineChart, barChart, attachTooltip, CHART } from './charts.js'
 
@@ -103,6 +103,11 @@ export class UI {
       const sp = SPECIES[esc[0].sp]
       banner.className = 'bad'
       banner.innerHTML = `🚨 <b>${esc.length > 1 ? `${esc.length} dinosaurs are` : `A ${sp.name} is`} loose on the trails!</b> Tap it`
+      banner.hidden = false
+    } else if (s.disaster) {
+      const d = DISASTERS[s.disaster.key]
+      banner.className = 'warn'
+      banner.innerHTML = `${d.icon} <b>${d.name}</b> — ${s.disaster.days} day${s.disaster.days > 1 ? 's' : ''} left`
       banner.hidden = false
     } else if (rare) {
       banner.className = 'good'
@@ -276,11 +281,20 @@ export class UI {
     const next = FENCES[cs.fence + 1]
     this.title(`🦕 Paddock — ${this.cellName(cell)}`)
 
+    const effStrength = sim.fenceStrength(s, cs)
     const rows = herd
       .map((d) => {
         const sp = SPECIES[d.sp]
-        const mood = d.escaped ? '🚨 LOOSE!' : d.hap < 40 ? '💢 agitated' : d.hap > 85 ? '❤️ blissful' : '🙂 content'
-        const weak = sp.fer > fence.strength
+        const mood = d.escaped
+          ? '🚨 LOOSE!'
+          : d.sick
+            ? '🤒 under the weather'
+            : d.hap < 40
+              ? '💢 agitated'
+              : d.hap > 85
+                ? '❤️ blissful'
+                : '🙂 content'
+        const weak = sp.fer > effStrength
         return `
         <div class="row">
           <span class="row-icon">${sp.icon}</span>
@@ -289,6 +303,7 @@ export class UI {
             <div class="hap-bar"><i style="width:${Math.round(d.hap)}%" class="${d.hap < 40 ? 'low' : ''}"></i></div>
             <small class="muted">${mood}${weak ? ' · ⚠️ fence too weak!' : ''}</small>
           </div>
+          ${d.sick ? `<button class="mini" data-act="treat" data-id="${d.id}">Treat<br>${fmtMoney(ECON.treatCost)}</button>` : ''}
           <button class="mini" data-act="sell" data-id="${d.id}" data-confirm="1">Sell<br>${fmtShort(sp.cost * 0.4)}</button>
         </div>`
       })
@@ -298,7 +313,10 @@ export class UI {
       ${meta}
       ${herd.length ? `<div class="rows">${rows}</div>` : '<p class="lead">An empty paddock. Dinosaurs come from the 🛒 Market — when they come at all.</p>'}
       <div class="fence-box">
-        <div><b>Fence: ${fence.name}</b> ${'⛓'.repeat(fence.strength)}<br><small class="muted">${fence.desc}</small></div>
+        <div><b>Fence: ${fence.name}</b> ${'⛓'.repeat(effStrength)}<br>
+        <small class="${cs.fence === 2 && effStrength < 4 ? 'warn-text' : 'muted'}">${
+          cs.fence === 2 && effStrength < 4 ? 'Unpowered — build a Generator for full strength!' : fence.desc
+        }</small></div>
         ${next ? `<button class="mini" data-act="fence" ${s.money < next.cost ? 'disabled' : ''}>Upgrade<br>${fmtMoney(next.cost)}</button>` : '<span class="muted">Maxed</span>'}
       </div>
       <button class="big" data-act="market">🛒 Browse the dino market</button>
@@ -308,6 +326,10 @@ export class UI {
       sell: (btn) => {
         const dino = s.dinos.find((d) => d.id === +btn.dataset.id)
         if (dino) this.h.run(sim.sellDino, dino)
+      },
+      treat: (btn) => {
+        const dino = s.dinos.find((d) => d.id === +btn.dataset.id)
+        if (dino) this.h.run(sim.treatDino, dino)
       },
       fence: () => this.h.run(sim.upgradeFence, cell),
       market: () => this.openSheet({ type: 'market' }),
@@ -440,7 +462,8 @@ export class UI {
         const cs = s.cells[d.cell]
         const flags = []
         if (d.escaped) flags.push('🚨 LOOSE — tap it on the trails!')
-        else if (sp.fer > FENCES[cs.fence].strength) flags.push('⚠️ fence too weak')
+        else if (sp.fer > sim.fenceStrength(s, cs)) flags.push('⚠️ fence too weak')
+        if (d.sick) flags.push('🤒 sick')
         if (!d.escaped && sp.social === 'herd' && sim.dinosIn(s, d.cell).length < 2) flags.push('😔 lonely')
         return `
         <button class="row row-btn" data-act="go" data-cell="${d.cell}">
@@ -463,12 +486,27 @@ export class UI {
     this.title('📊 The Books')
     const last = s.history[s.history.length - 1] ?? { inc: 0, exp: 0 }
     const net = last.inc - last.exp
+    const sys = sim.systems(s)
+    const sweet = sim.sweetTicket(s)
+    const mood = s.ticket < sweet - 3 ? '"A steal!"' : s.ticket > sweet + 4 ? '"Highway robbery!"' : '"Fair price."'
     body.innerHTML = `
       <div class="tiles">
         <div class="tile"><small>Balance</small><b class="${s.money < 0 ? 'neg' : ''}">${fmtShort(s.money)}</b></div>
         <div class="tile"><small>Net yesterday</small><b class="${net < 0 ? 'neg' : 'pos'}">${net >= 0 ? '+' : ''}${fmtShort(net)}</b></div>
         <div class="tile"><small>Guests</small><b>${s.guests}</b></div>
         <div class="tile"><small>Fame</small><b>${Math.round(s.fame)}/100</b></div>
+      </div>
+      <div class="ticket-box">
+        <div class="ticket-row"><b>🎟️ Gate price</b><span id="ticket-val">${fmtMoney(s.ticket)}</span></div>
+        <input type="range" id="ticket" min="${ECON.ticketMin}" max="${ECON.ticketMax}" step="1" value="${s.ticket}">
+        <small class="muted" id="ticket-mood">Guests say: ${mood} (fame raises what they'll pay)</small>
+      </div>
+      <h3>Park systems</h3>
+      <div class="tiles">
+        <div class="tile"><small>Feed</small><b class="${sys.feedDemand > sys.feedCapacity ? 'neg' : ''}">${sys.feedDemand}/${sys.feedCapacity}</b></div>
+        <div class="tile"><small>Ranger cover</small><b class="${sys.dangerous > sys.covered ? 'neg' : ''}">${Math.min(sys.covered, sys.dangerous)}/${sys.dangerous}</b></div>
+        <div class="tile"><small>Power</small><b class="${sys.powered ? 'pos' : ''}">${sys.powered ? 'On grid' : 'None'}</b></div>
+        <div class="tile"><small>Clinic</small><b>${sim.countUse(s, 'clinic') ? 'Staffed' : 'None'}</b></div>
       </div>
       <h3>Balance — last 30 days</h3>
       <div class="chart-wrap"><canvas id="c-line"></canvas><div class="chart-tip" hidden></div></div>
@@ -480,6 +518,15 @@ export class UI {
       <div class="chart-wrap"><canvas id="c-bars"></canvas><div class="chart-tip" hidden></div></div>
       <h3>Ledger</h3>
       <div class="ledger" id="ledger"></div>`
+    const slider = body.querySelector('#ticket')
+    slider.addEventListener('input', () => {
+      sim.setTicket(s, +slider.value)
+      body.querySelector('#ticket-val').textContent = fmtMoney(s.ticket)
+      const sw = sim.sweetTicket(s)
+      const m = s.ticket < sw - 3 ? '"A steal!"' : s.ticket > sw + 4 ? '"Highway robbery!"' : '"Fair price."'
+      body.querySelector('#ticket-mood').textContent = `Guests say: ${m} (fame raises what they'll pay)`
+    })
+
     const lineRef = { fn: null }
     const barRef = { fn: null }
     requestAnimationFrame(() => {
@@ -523,6 +570,13 @@ export class UI {
         walk out — especially when unhappy. Loose dinos empty the park until you tap them.</p>
         <p><b>😊 Happiness</b>: room to roam, herds together, loners alone, gardens and
         lakesides next door.</p>
+        <p><b>🏗️ Big dinos need infrastructure.</b> Electric fences want a Generator,
+        big appetites want Feed Depots (imports cost extra beyond capacity), dangerous
+        species want Ranger cover, and a Vet Clinic shrugs off sickness. Check
+        "Park systems" in the Books.</p>
+        <p><b>⚡ Disasters happen</b>: outages, storms and heatwaves roll through —
+        the right buildings (and lakeside pens) blunt them.</p>
+        <p><b>🎟️ Gate price</b> is set in the Books — fame raises what guests will pay.</p>
         <p><b>💀 Don't drop below ${fmtMoney(ECON.bankruptcyAt)}.</b> The bank has no chill.</p>
       </div>
       <button class="big danger-outline" data-act="reset" data-confirm="1">🗑️ Reset park (new terrain)</button>
@@ -535,7 +589,7 @@ export class UI {
     const dino = s.dinos.find((d) => d.id === this.sheet.dinoId)
     if (!dino?.escaped) return this.closeSheet()
     const sp = SPECIES[dino.sp]
-    const cost = sim.recaptureCost(dino)
+    const cost = sim.recaptureCost(s, dino)
     this.title('🚨 Dinosaur on the trails!')
     body.innerHTML = `
       <p class="lead">${sp.icon} The ${sp.name} is loose and the guests are sprinting for the gate.</p>

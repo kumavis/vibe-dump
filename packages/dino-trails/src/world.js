@@ -99,7 +99,99 @@ function buildRestroom(scale) {
   return g
 }
 
-const BUILDING_BUILDERS = { kiosk: buildKiosk, gift: buildGift, garden: buildGarden, restroom: buildRestroom }
+function buildDepot(scale) {
+  const g = new THREE.Group()
+  const barn = mesh(BOX, mat(0xb5563e), 0, 0.9, 0)
+  barn.scale.set(2.4, 1.8, 1.9)
+  g.add(barn)
+  const roof = mesh(BOX, mat(0x8d3a2a), 0, 1.95, 0)
+  roof.scale.set(2.7, 0.5, 2.2)
+  roof.rotation.z = 0
+  g.add(roof)
+  const door = mesh(BOX, mat(0xf6e3b8), 0, 0.7, 0.96)
+  door.scale.set(1.0, 1.3, 0.1)
+  g.add(door)
+  for (const [x, z] of [[-1.6, 0.4], [-1.5, -0.5]]) {
+    const hay = mesh(CYL, mat(0xe0c368), x, 0.35, z)
+    hay.scale.set(0.35, 0.6, 0.35)
+    hay.rotation.z = Math.PI / 2
+    g.add(hay)
+  }
+  g.scale.setScalar(scale)
+  return g
+}
+
+function buildRanger(scale) {
+  const g = new THREE.Group()
+  for (const [x, z] of [[-0.7, -0.7], [0.7, -0.7], [-0.7, 0.7], [0.7, 0.7]]) {
+    const leg = mesh(CYL, mat(0x8d6e63), x, 0.9, z)
+    leg.scale.set(0.11, 1.8, 0.11)
+    g.add(leg)
+  }
+  const cabin = mesh(BOX, mat(0xa9713f), 0, 2.2, 0)
+  cabin.scale.set(1.9, 1.0, 1.9)
+  const roof = mesh(CONE, mat(0x5d8a4a), 0, 3.2, 0)
+  roof.scale.set(1.7, 1.0, 1.7)
+  const beacon = mesh(SPH, mat(0xe5533d, { emissive: 0x7a1410 }), 0.6, 4.0, 0)
+  beacon.scale.setScalar(0.13)
+  g.add(cabin, roof, beacon)
+  g.userData.anim = { type: 'beacon', beacon }
+  g.scale.setScalar(scale)
+  return g
+}
+
+function buildGenerator(scale) {
+  const g = new THREE.Group()
+  const base = mesh(BOX, mat(0x8d9aa5), 0, 0.65, 0)
+  base.scale.set(2.0, 1.3, 1.5)
+  g.add(base)
+  for (let i = 0; i < 3; i++) {
+    const drum = mesh(CYL, mat(0xffd54f), -0.6 + i * 0.6, 1.5, 0)
+    drum.scale.set(0.24, 0.45, 0.24)
+    g.add(drum)
+  }
+  const fan = mesh(BOX, mat(0x37474f), 0, 0.9, 0.8)
+  fan.scale.set(0.8, 0.8, 0.1)
+  g.add(fan)
+  const bolt = mesh(CONE, mat(0xffe94a, { emissive: 0x8a7500 }), 0.8, 1.75, 0)
+  bolt.scale.set(0.18, 0.45, 0.18)
+  bolt.rotation.z = Math.PI
+  g.add(bolt)
+  g.userData.anim = { type: 'generator', fan }
+  g.scale.setScalar(scale)
+  return g
+}
+
+function buildClinic(scale) {
+  const g = new THREE.Group()
+  const base = mesh(BOX, mat(0xf4f1e8), 0, 0.85, 0)
+  base.scale.set(2.3, 1.7, 1.8)
+  g.add(base)
+  const roof = mesh(BOX, mat(0xcfd8dc), 0, 1.8, 0)
+  roof.scale.set(2.6, 0.22, 2.1)
+  g.add(roof)
+  const crossV = mesh(BOX, mat(0xe5533d), 0, 1.15, 0.93)
+  crossV.scale.set(0.22, 0.75, 0.08)
+  const crossH = mesh(BOX, mat(0xe5533d), 0, 1.15, 0.93)
+  crossH.scale.set(0.75, 0.22, 0.08)
+  g.add(crossV, crossH)
+  const door = mesh(BOX, mat(0x9fd0e8), 0, 0.55, 0.92)
+  door.scale.set(0.7, 1.1, 0.08)
+  g.add(door)
+  g.scale.setScalar(scale)
+  return g
+}
+
+const BUILDING_BUILDERS = {
+  kiosk: buildKiosk,
+  gift: buildGift,
+  garden: buildGarden,
+  restroom: buildRestroom,
+  depot: buildDepot,
+  ranger: buildRanger,
+  generator: buildGenerator,
+  clinic: buildClinic,
+}
 
 const FENCE_COLORS = [0x9a6a43, 0x5c6670, 0x4a5560]
 const FENCE_H = [1.0, 1.6, 1.9]
@@ -387,6 +479,7 @@ export class World {
 
   syncState(s) {
     this.state = s
+    this.powered = s.cells.some((c) => c.use === 'generator')
     const park = this.park
     // Trails firm up as the park expands: an edge is "active" once any
     // adjacent cell is owned.
@@ -424,6 +517,7 @@ export class World {
         const b = BUILDING_BUILDERS[cs.use](scale)
         b.position.set(cx, cell.elev, cz)
         group.add(b)
+        if (b.userData.anim) group.userData.anim = b.userData.anim
       }
       this.scene.add(group)
       this.cellContents.set(cell.id, { group, sig, cell })
@@ -433,7 +527,9 @@ export class World {
     for (const { group, cell } of this.cellContents.values()) {
       const cs = s.cells[cell.id]
       if (cs.use !== 'paddock') continue
-      const weak = s.dinos.some((d) => d.cell === cell.id && !d.escaped && SPECIES[d.sp].fer > FENCES[cs.fence].strength)
+      let strength = FENCES[cs.fence].strength
+      if (cs.fence === 2 && !this.powered) strength = 3 // unpowered electric
+      const weak = s.dinos.some((d) => d.cell === cell.id && !d.escaped && SPECIES[d.sp].fer > strength)
       if (weak && !group.userData.warn) {
         const warn = makeEmote('⚠️')
         warn.position.set(cell.centroid[0], cell.elev + 3.2, cell.centroid[1])
@@ -725,8 +821,13 @@ export class World {
       if (cloud.position.x > 65) cloud.position.x = -65
     }
     for (const { group } of this.cellContents.values()) {
-      if (group.userData.anim?.type === 'electric') {
-        group.userData.anim.mat.emissiveIntensity = 1.1 + Math.sin(t * 10) * 0.5
+      const anim = group.userData.anim
+      if (anim?.type === 'electric') {
+        anim.mat.emissiveIntensity = this.powered ? 1.1 + Math.sin(t * 10) * 0.5 : 0.05
+      } else if (anim?.type === 'generator') {
+        anim.fan.rotation.z += dt * 6
+      } else if (anim?.type === 'beacon') {
+        anim.beacon.material.emissiveIntensity = 1 + Math.sin(t * 4) * 0.9
       }
       if (group.userData.warn) {
         group.userData.warn.position.y += Math.sin(t * 2.5) * 0.004
