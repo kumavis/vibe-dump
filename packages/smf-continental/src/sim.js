@@ -170,6 +170,7 @@ export function createSim(opts = {}) {
     bStart, bItems,
     alive: 0, dormant: 0, resorbedTotal: 0, builtTotal: 0,
     birthsMin: 0, resorbsMin: 0,   // last completed 60 s window
+    birthsRun: 0, resorbsRun: 0,   // current window, running
     activeBlocks: 0,
     emitters, trenches,
     lastPour: { x: 0, z: 0, t: -1e9, prov: -1 },
@@ -735,6 +736,8 @@ export function createSim(opts = {}) {
     if (prof) { const n = pnow(); prof.buckets += n - pt; pt = n; prof.ticks++; }
 
     /* --- milestone windows --- */
+    state.birthsRun = birthsWin;
+    state.resorbsRun = resorbsWin;
     if (t >= windowEnd) {
       state.birthsMin = birthsWin;
       state.resorbsMin = resorbsWin;

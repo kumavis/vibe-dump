@@ -11,7 +11,31 @@
    Exits non-zero with a clear message on any failure.
    ===================================================================== */
 
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { createSim, DT, P } from './src/sim.js';
+
+/* settle past the seeded senescent-province die-off (~T+90s) so the timed
+   window measures the continent's steady churn, not its birth trauma */
+const WARM = 900, MEASURE = 1200;
+
+/* Child mode: benchmark ONE population scale and print JSON.
+   Each scale runs in its own process on purpose: V8 context-specializes a
+   lone sim instance's hot closures (captured typed arrays become compile-
+   time constants). A second world in the same isolate forces shared
+   generic code — ~1.7× slower — which no browser session ever pays,
+   because a page runs exactly one world. One process per scale measures
+   what the player actually gets. */
+if (process.argv[2] === '--bench') {
+  const target = Number(process.argv[3]);
+  const sim = createSim({ target });
+  for (let i = 0; i < WARM; i++) sim.step(DT);
+  const t0 = performance.now();
+  for (let i = 0; i < MEASURE; i++) sim.step(DT);
+  const us = ((performance.now() - t0) * 1000) / MEASURE;
+  console.log(JSON.stringify({ target, us, alive: sim.state.alive, dormant: sim.state.dormant }));
+  process.exit(0);
+}
 
 let failed = false;
 const fail = (msg) => { console.error(`  ✗ FAIL: ${msg}`); failed = true; };
@@ -22,17 +46,14 @@ console.log('SMF 06 · CONTINENTAL — headless harness');
 hr();
 
 /* ---------------------------------------------------- (a) benchmark */
-console.log('SCALING TABLE  (settle 400 ticks, then time 1200 ticks)');
-const WARM = 400, MEASURE = 1200;
+console.log(`SCALING TABLE  (settle ${WARM} ticks, then time ${MEASURE} ticks; one process per scale)`);
+const self = fileURLToPath(import.meta.url);
 const scales = [5000, 20000, 50000];
 const table = [];
 for (const target of scales) {
-  const sim = createSim({ target });
-  for (let i = 0; i < WARM; i++) sim.step(DT);
-  const t0 = performance.now();
-  for (let i = 0; i < MEASURE; i++) sim.step(DT);
-  const us = ((performance.now() - t0) * 1000) / MEASURE;
-  table.push({ target, us, alive: sim.state.alive, dormant: sim.state.dormant });
+  const r = spawnSync(process.execPath, [self, '--bench', String(target)], { encoding: 'utf8' });
+  if (r.status !== 0) { fail(`bench child for ${target} failed: ${r.stderr}`); continue; }
+  table.push(JSON.parse(r.stdout.trim()));
 }
 console.log('  structures   µs/tick   alive    dormant');
 for (const r of table) {

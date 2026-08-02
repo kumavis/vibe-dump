@@ -359,7 +359,7 @@ export function createView(canvas, sim) {
 
     const s = cam.scale;
     const structAlpha = clamp((s - 2.0) / 0.9, 0, 1);
-    const aggAlpha = 1 - structAlpha * 0.9;
+    const aggAlpha = 1 - structAlpha; // full crossfade: cores hand off to quads
     drawProvinces(now, aggAlpha);
     if (structAlpha > 0.02) drawStructures(now, structAlpha, s >= 9);
     drawOverlays(now);

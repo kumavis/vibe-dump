@@ -130,7 +130,9 @@ function updateHud() {
   $('structTotal').textContent = fmtFull(total);
   $('structBreak').textContent =
     `${fmtFull(S.alive)} active · ${fmtFull(S.dormant)} dormant · ${fmtFull(S.resorbedTotal)} resorbed`;
-  $('churn').textContent = `${fmtFull(S.birthsMin)} births · ${fmtFull(S.resorbsMin)} resorbs /min`;
+  const bpm = S.t < 60 ? S.birthsRun : S.birthsMin;
+  const rpm = S.t < 60 ? S.resorbsRun : S.resorbsMin;
+  $('churn').textContent = `${fmtFull(bpm)} births · ${fmtFull(rpm)} resorbs /min`;
   $('matter').textContent = fmt(S.matter);
   $('income').textContent = `+${fmt(S.incomeRate)}/s`;
   let live = 0, survey = 0, dark = 0;
@@ -177,9 +179,9 @@ function loop(now) {
   const ms = performance.now() - t0;
   if (steps > 0) {
     perf.msAcc += ms; perf.tickAcc += steps;
-    if (perf.tickAcc >= 32) {
+    if (perf.tickAcc >= 8) {
       const inst = (perf.msAcc * 1000) / perf.tickAcc;
-      perf.usPerTick += (inst - perf.usPerTick) * 0.25;
+      perf.usPerTick = perf.usPerTick === 0 ? inst : perf.usPerTick + (inst - perf.usPerTick) * 0.2;
       perf.msAcc = 0; perf.tickAcc = 0;
     }
     perf.tpsAcc += steps;
