@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#a8e0f8" />
+    <title>Dino Park Tycoon</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene"></div>
+      <header id="hud"></header>
+      <div id="banner" hidden></div>
+      <div id="toasts"></div>
+      <div id="hint" hidden></div>
+      <nav id="navbar"></nav>
+      <div id="sheet-backdrop" hidden></div>
+      <section id="sheet" hidden>
+        <div id="sheet-grip"></div>
+        <div id="sheet-head">
+          <h2 id="sheet-title"></h2>
+          <button id="sheet-close" aria-label="Close">✕</button>
+        </div>
+        <div id="sheet-body"></div>
+      </section>
+      <div id="overlay" hidden></div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
