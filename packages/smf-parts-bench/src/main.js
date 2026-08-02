@@ -267,6 +267,7 @@ canvas.addEventListener('pointercancel', endPointer)
 canvas.addEventListener('pointerleave', () => { ui.hover = null })
 
 window.addEventListener('keydown', (e) => {
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return
   if (e.key >= '1' && e.key <= '5') {
     sim.act({ type: 'puzzle', ix: +e.key - 1 })
     ui.sel = null
