@@ -154,7 +154,8 @@ html, body {
 }
 
 #start-screen,
-#end-screen {
+#end-screen,
+#core-end-screen {
   position: fixed;
   inset: 0;
   z-index: 10;
@@ -166,7 +167,21 @@ html, body {
 }
 
 #start-screen.hidden,
-#end-screen.hidden { display: none; }
+#end-screen.hidden,
+#core-end-screen.hidden { display: none; }
+
+#core-end-screen {
+  background: radial-gradient(circle at 50% 60%, rgba(60, 22, 6, 0.35), rgba(4, 1, 2, 0.86));
+}
+
+#core-end-screen .start-card {
+  border-color: rgba(255, 90, 60, 0.35);
+  box-shadow: 0 0 60px rgba(255, 110, 50, 0.2);
+}
+
+#core-end-screen h2 { color: #ffb347; }
+
+#core-end-screen button { margin: 4px 6px; }
 
 #end-screen {
   background: radial-gradient(circle at 50% 30%, rgba(40, 32, 8, 0.3), rgba(0, 1, 6, 0.85));
@@ -212,7 +227,10 @@ html, body {
 
 #start-btn,
 #continue-btn,
-#restart-btn {
+#restart-btn,
+#fresh-btn,
+#core-stay-btn,
+#core-restart-btn {
   font: inherit;
   font-size: 15px;
   letter-spacing: 2px;
@@ -227,7 +245,10 @@ html, body {
 
 #start-btn:hover,
 #continue-btn:hover,
-#restart-btn:hover {
+#restart-btn:hover,
+#fresh-btn:hover,
+#core-stay-btn:hover,
+#core-restart-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 0 26px rgba(70, 230, 255, 0.55);
 }
