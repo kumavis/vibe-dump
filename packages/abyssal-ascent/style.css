@@ -22,6 +22,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: block;
+  touch-action: none;
 }
 
 #hud {
@@ -103,11 +104,25 @@ html, body {
 .stat-row {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
   font-size: 11px;
   letter-spacing: 1px;
   color: var(--dim);
   margin-top: 6px;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+}
+
+.ability-label {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--dim);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.ability-label.ready {
+  color: var(--glow);
+  text-shadow: 0 0 10px rgba(70, 230, 255, 0.7), 0 1px 8px #000;
 }
 
 #banner {
@@ -138,7 +153,8 @@ html, body {
   100% { opacity: 0; transform: scale(1.02); }
 }
 
-#start-screen {
+#start-screen,
+#end-screen {
   position: fixed;
   inset: 0;
   z-index: 10;
@@ -149,7 +165,23 @@ html, body {
   backdrop-filter: blur(1.5px);
 }
 
-#start-screen.hidden { display: none; }
+#start-screen.hidden,
+#end-screen.hidden { display: none; }
+
+#end-screen {
+  background: radial-gradient(circle at 50% 30%, rgba(40, 32, 8, 0.3), rgba(0, 1, 6, 0.85));
+}
+
+#end-screen .start-card {
+  border-color: rgba(255, 209, 102, 0.35);
+  box-shadow: 0 0 60px rgba(255, 209, 102, 0.18);
+}
+
+#end-screen h2 { color: #ffd166; }
+
+#end-screen button {
+  margin: 4px 6px;
+}
 
 .start-card {
   max-width: 460px;
@@ -178,7 +210,9 @@ html, body {
 
 .start-card strong { color: var(--glow); }
 
-#start-btn {
+#start-btn,
+#continue-btn,
+#restart-btn {
   font: inherit;
   font-size: 15px;
   letter-spacing: 2px;
@@ -191,7 +225,28 @@ html, body {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-#start-btn:hover {
+#start-btn:hover,
+#continue-btn:hover,
+#restart-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 0 26px rgba(70, 230, 255, 0.55);
+}
+
+/* --- small screens: keep the HUD out of the thumb zone and readable --- */
+@media (max-width: 640px) {
+  #hud { top: max(10px, env(safe-area-inset-top)); left: 14px; right: 14px; }
+  #hud h1 { font-size: 16px; letter-spacing: 4px; }
+  #hud .sub { font-size: 10px; }
+  #stage-panel {
+    left: 14px;
+    right: 14px;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    max-width: none;
+  }
+  .stage-name { font-size: 13px; }
+  .stat-row { font-size: 10px; flex-wrap: wrap; }
+  #banner { font-size: 22px; letter-spacing: 2px; padding: 0 12px; }
+  .start-card { padding: 22px 20px; margin: 14px; }
+  .start-card h2 { font-size: 18px; }
+  .start-card p { font-size: 13px; }
 }

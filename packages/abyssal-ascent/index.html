@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Abyssal Ascent — evolve into a sea monster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Abyssal Ascent — evolve into a sea monster, then keep going</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -11,7 +11,7 @@
 
     <header id="hud">
       <h1>ABYSSAL ASCENT</h1>
-      <p class="sub">move your cursor to swim · eat the small ones · rise through seven zones and become the Kraken</p>
+      <p class="sub">drag or move to swim · tap for your ability · eat the small ones · rise past the waves, through the sky, and eat the moon</p>
     </header>
 
     <div id="stage-panel">
@@ -22,6 +22,7 @@
       <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
       <div class="stat-row">
         <span id="depth-label">The Cradle · 10 500 m</span>
+        <span class="ability-label" id="ability-label"></span>
         <span id="biomass-label">biomass 0</span>
       </div>
     </div>
@@ -32,14 +33,29 @@
       <div class="start-card">
         <h2>You hatch in the cradle, ten kilometres down.</h2>
         <p>
-          Guide yourself with the mouse. Eat anything smaller than you to grow
-          biomass and <strong>evolve</strong> — ten forms, from larva to
-          <strong>The Kraken</strong> and worse. Every depth zone has its own
-          residents: ink-squirting octopuses, electric rays, stinging colonies,
-          and predators that hunt you on sight. The shallows are thick with food
-          — and with boats. Rise far enough and their hulls become food too.
+          Drag (or move the mouse) to swim. Eat anything smaller than you to grow
+          biomass and <strong>evolve</strong> — fourteen forms, from larva to
+          <strong>The Kraken</strong> and far, far worse. From your third form on,
+          every body comes with its own power: <strong>tap to use it</strong>.
+          The residents fight back at every depth — and the ocean is only half
+          the climb. Grow wings, shred the storm layer, graze on satellites,
+          and when nothing on Earth is left to fear, look up.
+          <strong>The moon is edible. It disagrees.</strong>
         </p>
         <button id="start-btn">Rise from the vents</button>
+      </div>
+    </div>
+
+    <div id="end-screen" class="hidden">
+      <div class="start-card">
+        <h2>You have eaten the moon.</h2>
+        <p>
+          The tides are yours now. The fleets tell no more stories, because
+          there is no one left who doubts them. Somewhere below, in a vent-lit
+          cradle, something small watches the new dark sky — and starts to eat.
+        </p>
+        <button id="continue-btn">Keep swimming the endless night</button>
+        <button id="restart-btn">Hatch again</button>
       </div>
     </div>
 

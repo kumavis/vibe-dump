@@ -40,15 +40,20 @@ function shade(hex, amt) {
 
 // ---- World -------------------------------------------------------------
 // A tall vertical column. worldY = 0 is the surface (waterline where boats
-// float); worldY = WORLD_H is the seafloor. Horizontally the world is endless.
+// float); worldY = WORLD_H is the seafloor. The column keeps going the OTHER
+// way too: negative worldY is open air, thinning all the way up to the moon.
+// Horizontally the world is endless.
 const WORLD_H = 7600
 // The waterline sits well below the top of the viewport so there is room to see
 // the hulls — and to watch a kraken take one apart.
 const SURFACE_Y = 155
+// The roof of the world, well past the last wisp of atmosphere.
+const SKY_TOP = -10600
+const MOON_Y = -9950
 const METERS = 1.45 // world units -> displayed metres
 
 // ---- Depth zones -------------------------------------------------------
-// Seven bands, each with its own light, scenery and residents.
+// Seven bands below the waves, each with its own light, scenery and residents.
 const ZONES = [
   { name: 'Sunlight Zone', top: 0 },
   { name: 'Twilight Zone', top: 720 },
@@ -58,7 +63,24 @@ const ZONES = [
   { name: 'Vent Fields',   top: 5800 },
   { name: 'The Cradle',    top: 6850 },
 ]
+// ---- Air zones ---------------------------------------------------------
+// Eight more bands above them, from gull country to the lunar approach.
+// Ordered by `top` descending; a zone owns every y >= its top.
+const AIR_ZONES = [
+  { name: 'The Open Air',    top: -950 },
+  { name: 'The Storm Layer', top: -2350 },
+  { name: 'The Jet Stream',  top: -3750 },
+  { name: 'The Stratosphere',top: -5150 },
+  { name: 'The Edge of Sky', top: -6550 },
+  { name: 'Low Orbit',       top: -7950 },
+  { name: 'The Void',        top: -9250 },
+  { name: 'Lunar Approach',  top: SKY_TOP },
+]
 function zoneAt(y) {
+  if (y < SURFACE_Y - 60) {
+    for (const c of AIR_ZONES) if (y >= c.top) return c
+    return AIR_ZONES[AIR_ZONES.length - 1]
+  }
   let z = ZONES[0]
   for (const c of ZONES) if (y >= c.top) z = c
   return z
@@ -94,23 +116,75 @@ function waterColor(y) {
   return WATER_STOPS[WATER_STOPS.length - 1][1]
 }
 
+// Sky colour anchors up the column: hazy noon blue at the waterline thinning
+// to storm slate, indigo, and finally the near-black of space.
+const SKY_STOPS = [
+  [SURFACE_Y, [126, 188, 224]],
+  [-950,      [ 96, 160, 212]],
+  [-2350,     [ 66,  90, 132]],
+  [-3750,     [ 46,  58, 108]],
+  [-5150,     [ 28,  32,  74]],
+  [-6550,     [ 14,  14,  40]],
+  [-7950,     [  6,   7,  22]],
+  [-9250,     [  3,   3,  13]],
+  [SKY_TOP,   [  1,   1,   6]],
+]
+function skyColor(y) {
+  const d = clamp(y, SKY_TOP, SURFACE_Y)
+  for (let i = 0; i < SKY_STOPS.length - 1; i++) {
+    const [y0, c0] = SKY_STOPS[i]
+    const [y1, c1] = SKY_STOPS[i + 1]
+    if (d >= y1) {
+      const k = (d - y0) / (y1 - y0)
+      return [
+        Math.round(lerp(c0[0], c1[0], k)),
+        Math.round(lerp(c0[1], c1[1], k)),
+        Math.round(lerp(c0[2], c1[2], k)),
+      ]
+    }
+  }
+  return SKY_STOPS[SKY_STOPS.length - 1][1]
+}
+
 // ---- Stages ------------------------------------------------------------
 // Every evolution is a different animal, not just a bigger worm: `form` picks
 // the renderer, `seg`/`space`/`width` set the silhouette, `reach` is how far
-// the maw (or the arms) can grab.
+// the maw (or the arms) can grab. From the Ribbon Eel on, every form also
+// carries its own `ability` — tap (or click) to use it.
 const STAGES = [
   { name: 'Larva',           form: 'larva',   biomass: 0,    seg: 9,  space: 1.00, width: 5,  reach: 1.5, color: '#8fe9ff', accent: '#e8fdff' },
   { name: 'Lanternfish',     form: 'lantern', biomass: 35,   seg: 12, space: 1.00, width: 8,  reach: 1.5, color: '#6fd0ff', accent: '#eaff9c' },
-  { name: 'Ribbon Eel',      form: 'ribbon',  biomass: 95,   seg: 30, space: 0.80, width: 10, reach: 1.6, color: '#4fb6ff', accent: '#9cffd8' },
-  { name: 'Viperfish',       form: 'viper',   biomass: 190,  seg: 18, space: 1.00, width: 13, reach: 1.9, color: '#2f6f9e', accent: '#7dfcff' },
-  { name: 'Gulper Eel',      form: 'gulper',  biomass: 330,  seg: 28, space: 0.85, width: 16, reach: 2.3, color: '#3b5580', accent: '#ff9d4d' },
-  { name: 'Sea Serpent',     form: 'serpent', biomass: 540,  seg: 38, space: 0.90, width: 20, reach: 1.8, color: '#3f7bff', accent: '#8affd0' },
-  { name: 'Bone Shark',      form: 'shark',   biomass: 820,  seg: 18, space: 1.10, width: 25, reach: 1.8, color: '#8d97a6', accent: '#e8f7ff' },
-  { name: 'Leviathan',       form: 'whale',   biomass: 1200, seg: 20, space: 1.15, width: 33, reach: 2.1, color: '#5a52d8', accent: '#ff6aa8' },
-  { name: 'The Kraken',      form: 'kraken',  biomass: 1750, seg: 18, space: 0.95, width: 42, reach: 3.1, color: '#6a2f9e', accent: '#ff3b6b' },
-  { name: 'The Drowned God', form: 'god',     biomass: 2500, seg: 20, space: 1.00, width: 54, reach: 3.5, color: '#3b1150', accent: '#ffd166' },
+  { name: 'Ribbon Eel',      form: 'ribbon',  biomass: 95,   seg: 30, space: 0.80, width: 10, reach: 1.6, color: '#4fb6ff', accent: '#9cffd8',
+    ability: { key: 'dash',    name: 'Slipstream',    cd: 4 } },
+  { name: 'Viperfish',       form: 'viper',   biomass: 190,  seg: 18, space: 1.00, width: 13, reach: 1.9, color: '#2f6f9e', accent: '#7dfcff',
+    ability: { key: 'lure',    name: 'Beacon Lure',   cd: 9 } },
+  { name: 'Gulper Eel',      form: 'gulper',  biomass: 330,  seg: 28, space: 0.85, width: 16, reach: 2.3, color: '#3b5580', accent: '#ff9d4d',
+    ability: { key: 'gulp',    name: 'Vortex Gulp',   cd: 8 } },
+  { name: 'Sea Serpent',     form: 'serpent', biomass: 540,  seg: 38, space: 0.90, width: 20, reach: 1.8, color: '#3f7bff', accent: '#8affd0',
+    ability: { key: 'storm',   name: 'Storm Coil',    cd: 8 } },
+  { name: 'Bone Shark',      form: 'shark',   biomass: 820,  seg: 18, space: 1.10, width: 25, reach: 1.8, color: '#8d97a6', accent: '#e8f7ff',
+    ability: { key: 'frenzy',  name: 'Bone Frenzy',   cd: 12 } },
+  { name: 'Leviathan',       form: 'whale',   biomass: 1200, seg: 20, space: 1.15, width: 33, reach: 2.1, color: '#5a52d8', accent: '#ff6aa8',
+    ability: { key: 'sonar',   name: 'Sonar Boom',    cd: 10 } },
+  { name: 'The Kraken',      form: 'kraken',  biomass: 1750, seg: 18, space: 0.95, width: 42, reach: 3.1, color: '#6a2f9e', accent: '#ff3b6b',
+    ability: { key: 'veil',    name: 'Ink Veil',      cd: 12 } },
+  { name: 'The Drowned God', form: 'god',     biomass: 2500, seg: 20, space: 1.00, width: 54, reach: 3.5, color: '#3b1150', accent: '#ffd166',
+    ability: { key: 'leap',    name: 'Skyward Lunge', cd: 5 } },
+  // --- the sky evolutions: the ocean was only the first half ---
+  { name: 'Stormbringer',    form: 'wyrm',    biomass: 3400, seg: 34, space: 0.90, width: 30, reach: 2.2, color: '#3fa8d8', accent: '#eaff70',
+    ability: { key: 'gale',    name: 'Gale Burst',    cd: 8 } },
+  { name: 'Cloud Devourer',  form: 'skywhale',biomass: 4700, seg: 22, space: 1.15, width: 40, reach: 2.4, color: '#9fc4e8', accent: '#fff2c8',
+    ability: { key: 'vacuum',  name: 'Cyclone Maw',   cd: 10 } },
+  { name: 'Star Serpent',    form: 'starserp',biomass: 6300, seg: 40, space: 0.90, width: 46, reach: 2.6, color: '#7a5cff', accent: '#ffe9a8',
+    ability: { key: 'gravity', name: 'Gravity Well',  cd: 12 } },
+  { name: 'The Mooneater',   form: 'mooneater',biomass: 8300, seg: 20, space: 1.00, width: 58, reach: 3.6, color: '#241040', accent: '#9ff2ff',
+    ability: { key: 'nova',    name: 'Starfall Nova', cd: 14 } },
 ]
 const KRAKEN_STAGE = STAGES.findIndex((s) => s.form === 'kraken')
+// The Drowned God can hurl itself clear of the water; the stage after it flies.
+const BREACH_STAGE = STAGES.findIndex((s) => s.form === 'god')
+const FLY_STAGE = STAGES.findIndex((s) => s.form === 'wyrm')
+const MOONEATER_STAGE = STAGES.findIndex((s) => s.form === 'mooneater')
 const MAX_SEG = Math.max(...STAGES.map((s) => s.seg))
 
 // ---- Input -------------------------------------------------------------
@@ -123,6 +197,47 @@ function setMouse(e) {
 window.addEventListener('mousemove', setMouse)
 window.addEventListener('touchmove', (e) => { setMouse(e); e.preventDefault() }, { passive: false })
 window.addEventListener('touchstart', setMouse, { passive: true })
+
+// A quick tap (or click) fires the current form's ability. A drag steers, so a
+// tap only counts if the pointer barely moved — that keeps swim + ability
+// usable one-handed on a phone.
+let press = null
+window.addEventListener('pointerdown', (e) => {
+  if (e.target.closest && e.target.closest('button')) return
+  press = { x: e.clientX, y: e.clientY, t: performance.now() }
+})
+window.addEventListener('pointerup', (e) => {
+  if (!press) return
+  const moved = Math.hypot(e.clientX - press.x, e.clientY - press.y)
+  const held = performance.now() - press.t
+  press = null
+  if (moved < 14 && held < 350) fireAbility()
+})
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') { e.preventDefault(); fireAbility() }
+})
+
+// ---- Tilt parallax -----------------------------------------------------
+// If the device streams orientation events (no permission prompt — on
+// platforms that would require asking, the listener simply never fires and we
+// fall back), the background layers lean with the phone. Otherwise they lean
+// with the cursor's offset from the centre of the screen.
+const tilt = { x: 0, y: 0, hasGyro: false, gx: 0, gy: 0 }
+window.addEventListener('deviceorientation', (e) => {
+  if (e.gamma == null && e.beta == null) return
+  tilt.hasGyro = true
+  // gamma: left/right tilt; beta: front/back, re-centred on a comfortable
+  // ~40° holding angle so "flat-ish in the hand" reads as neutral.
+  tilt.gx = clamp((e.gamma || 0) / 28, -1, 1)
+  tilt.gy = clamp(((e.beta || 0) - 40) / 32, -1, 1)
+})
+function updateTilt(dt) {
+  const txT = tilt.hasGyro ? tilt.gx : (mouse.x - window.innerWidth / 2) / (window.innerWidth / 2)
+  const tyT = tilt.hasGyro ? tilt.gy : (mouse.y - window.innerHeight / 2) / (window.innerHeight / 2)
+  const k = Math.min(1, dt * 4)
+  tilt.x += (clamp(txT, -1, 1) - tilt.x) * k
+  tilt.y += (clamp(tyT, -1, 1) - tilt.y) * k
+}
 
 // ---- Camera ------------------------------------------------------------
 // Everything starts down on the cradle floor, in sight of the vent chimneys.
@@ -150,6 +265,17 @@ const player = {
   biteCd: 0,      // hull-bite cooldown
   clangCd: 0,     // "that hull is too thick" nag cooldown
   maw: 0,         // 0..1 jaw-open animation, kicks on every meal
+  abilityCd: 0,   // seconds until the tap ability is ready again
+  guard: 0,       // damage immunity from an ability (no red flash)
+  lureT: 0,       // beacon lure: prey drifts toward you
+  gulpT: 0,       // vortex gulp / cyclone maw: prey is dragged in
+  gulpR: 0,       // suction radius for the active gulp
+  frenzyT: 0,     // bone frenzy: speed + immunity
+  veilT: 0,       // ink veil: predators lose you
+  gravT: 0,       // gravity well: everything falls toward you
+  launchT: 0,     // skyward lunge: steering yields to the impulse
+  airborne: false,// above the waterline last frame (for splash detection)
+  breachHinted: 0,// one-time banners: 1 = breach hint shown, 2 = fly shown
 }
 function initSpine() {
   player.spine = []
@@ -171,7 +297,11 @@ function addBiomass(n) {
     ripple(player.x, player.y, 150, s.accent)
     ripple(player.x, player.y, 230, s.color)
     cam.shake = Math.max(cam.shake, 0.5)
-    if (player.stageIndex === KRAKEN_STAGE) queueBanner('THE BOATS ARE PREY NOW', 2.8)
+    if (s.ability) queueBanner(s.ability.name.toUpperCase() + ' · TAP TO USE', 2.6)
+    if (player.stageIndex === KRAKEN_STAGE) queueBanner('THE BOATS ARE PREY NOW', 5.2)
+    if (player.stageIndex === BREACH_STAGE) queueBanner('THE SURFACE IS NOT A CEILING · LEAP', 5.2)
+    if (player.stageIndex === FLY_STAGE) queueBanner('THE SKY IS YOURS · FLY', 5.2)
+    if (player.stageIndex === MOONEATER_STAGE) queueBanner('ONLY ONE THING LEFT TO EAT', 5.2)
   }
 }
 function loseBiomass(n) {
@@ -242,6 +372,57 @@ const SPECIES = [
   // --- the cradle ---
   { key: 'hagfish',     r: 21, tier: 3, speed: 1.0, col: '#8f8674', shape: 'eel',    glow: 0.05, zone: [6300, 7600], ability: 'slime' },
   { key: 'eldersquid',  r: 78, tier: 9, speed: 1.7, col: '#5b2b8a', shape: 'squid',  glow: 0.55, zone: [6500, 7600], pred: true, ability: 'ink', aggro: 860, bold: true },
+
+  // ======= ABOVE THE WAVES (negative y = altitude) =======
+  // --- the open air ---
+  { key: 'flyingfish',  r: 9,  tier: 1, speed: 2.2, col: '#bfe8ff', shape: 'fish',   glow: 0,    zone: [-420, 320], swarm: 4 },
+  { key: 'seagull',     r: 9,  tier: 1, speed: 1.6, col: '#f2f6fa', shape: 'bird',   glow: 0,    zone: [-880, 60],  swarm: 4 },
+  { key: 'pelican',     r: 16, tier: 3, speed: 1.2, col: '#e8dcc8', shape: 'bird',   glow: 0,    zone: [-700, 80],  pouch: true },
+  { key: 'albatross',   r: 22, tier: 4, speed: 1.8, col: '#e6edf4', shape: 'bird',   glow: 0,    zone: [-940, -80], span: true },
+  { key: 'frigate',     r: 19, tier: 4, speed: 2.2, col: '#2c2f3a', shape: 'bird',   glow: 0,    zone: [-940, -60], pred: true, ability: 'lunge', aggro: 440 },
+
+  // --- the storm layer ---
+  { key: 'stormpetrel', r: 8,  tier: 1, speed: 1.9, col: '#9aa8bc', shape: 'bird',   glow: 0,    zone: [-2300, -800], swarm: 5 },
+  { key: 'thunderjelly',r: 18, tier: 3, speed: 0.4, col: '#bfd2ff', shape: 'jelly',  glow: 0.8,  zone: [-2300, -900], ability: 'sting' },
+  { key: 'lightwisp',   r: 15, tier: 3, speed: 1.0, col: '#cfe8ff', shape: 'wisp',   glow: 0.95, zone: [-2350, -1000], ability: 'shock' },
+  { key: 'zeppelin',    r: 36, tier: 8, speed: 0.4, col: '#9c8468', shape: 'zeppelin',glow: 0,   zone: [-2200, -1000], bonus: 300 },
+  { key: 'stormroc',    r: 48, tier: 7, speed: 2.0, col: '#3b4254', shape: 'bird',   glow: 0,    zone: [-2350, -900], pred: true, aggro: 720, bold: true, span: true },
+
+  // --- the jet stream ---
+  { key: 'skyray',      r: 20, tier: 3, speed: 1.5, col: '#a8c8e8', shape: 'ray',    glow: 0.35, zone: [-3700, -2300] },
+  { key: 'propplane',   r: 24, tier: 5, speed: 1.8, col: '#c8b898', shape: 'plane',  glow: 0,    zone: [-3500, -2350], bonus: 90 },
+  { key: 'jetfighter',  r: 30, tier: 6, speed: 2.6, col: '#7a8694', shape: 'jet',    glow: 0,    zone: [-3750, -2400], pred: true, ability: 'lunge', aggro: 680 },
+  { key: 'cargoplane',  r: 42, tier: 7, speed: 1.4, col: '#8a9088', shape: 'plane',  glow: 0,    zone: [-3700, -2500], bonus: 220, big: true },
+
+  // --- the stratosphere ---
+  { key: 'ozonemoth',   r: 12, tier: 2, speed: 0.9, col: '#d8c8ff', shape: 'moth',   glow: 0.6,  zone: [-5100, -3750], swarm: 4 },
+  { key: 'balloon',     r: 18, tier: 2, speed: 0.25,col: '#f2e2d0', shape: 'balloon',glow: 0.1,  zone: [-5000, -3800] },
+  { key: 'auroraeel',   r: 28, tier: 4, speed: 1.3, col: '#7affc8', shape: 'eel',    glow: 0.9,  zone: [-5150, -3900], ability: 'sting' },
+  { key: 'spriteflare', r: 16, tier: 3, speed: 1.1, col: '#ff8a9c', shape: 'wisp',   glow: 1.0,  zone: [-5150, -3800], ability: 'shock' },
+
+  // --- the edge of sky ---
+  { key: 'meteorling',  r: 14, tier: 3, speed: 2.4, col: '#ffb060', shape: 'meteor', glow: 0.8,  zone: [-6550, -5150], swarm: 3 },
+  { key: 'voidjelly',   r: 22, tier: 3, speed: 0.4, col: '#b08aff', shape: 'jelly',  glow: 0.9,  zone: [-6550, -5200], ability: 'sting' },
+  { key: 'satellite',   r: 22, tier: 4, speed: 0.7, col: '#cfd6de', shape: 'satellite',glow: 0.2,zone: [-6550, -5300], bonus: 80 },
+  { key: 'edgewyrm',    r: 44, tier: 7, speed: 1.6, col: '#5a3a6e', shape: 'eel',    glow: 0.5,  zone: [-6550, -5200], pred: true, aggro: 640, bold: true },
+
+  // --- low orbit ---
+  { key: 'spacejunk',   r: 11, tier: 2, speed: 0.5, col: '#9aa2ac', shape: 'junk',   glow: 0.1,  zone: [-7950, -6550], swarm: 4 },
+  { key: 'astronaut',   r: 10, tier: 2, speed: 0.4, col: '#eef2f6', shape: 'astronaut',glow: 0.15,zone: [-7900, -6600] },
+  { key: 'commsat',     r: 28, tier: 5, speed: 0.8, col: '#b8c8d8', shape: 'satellite',glow: 0.3, zone: [-7950, -6600], bonus: 120, dish: true },
+  { key: 'rocketship',  r: 34, tier: 6, speed: 2.0, col: '#e8e2d8', shape: 'rocket', glow: 0.5,  zone: [-7950, -6550], bonus: 260 },
+  { key: 'ufo',         r: 34, tier: 6, speed: 1.6, col: '#8ae8c8', shape: 'ufo',    glow: 0.7,  zone: [-7950, -6600], pred: true, ability: 'lure', aggro: 560 },
+
+  // --- the void ---
+  { key: 'starkrill',   r: 5,  tier: 0, speed: 0.7, col: '#fff2c0', shape: 'dot',    glow: 0.85, zone: [-9250, -7950], swarm: 7 },
+  { key: 'cometling',   r: 24, tier: 4, speed: 2.2, col: '#a0e8ff', shape: 'comet',  glow: 0.9,  zone: [-9250, -7950] },
+  { key: 'nebulajelly', r: 34, tier: 5, speed: 0.35,col: '#e88aff', shape: 'jelly',  glow: 1.0,  zone: [-9250, -8000], ability: 'sting' },
+  { key: 'voidwhale',   r: 70, tier: 9, speed: 1.7, col: '#2a2440', shape: 'whale',  glow: 0.4,  zone: [-9250, -7950], pred: true, ability: 'sonar', aggro: 900, bold: true, bonus: 420 },
+
+  // --- lunar approach ---
+  { key: 'dustwisp',    r: 8,  tier: 1, speed: 0.8, col: '#d8d2c8', shape: 'wisp',   glow: 0.6,  zone: [SKY_TOP + 200, -9250], swarm: 5 },
+  { key: 'moonmoth',    r: 16, tier: 3, speed: 1.0, col: '#f2ecd8', shape: 'moth',   glow: 0.8,  zone: [SKY_TOP + 200, -9250], swarm: 3 },
+  { key: 'lunarshard',  r: 30, tier: 6, speed: 1.9, col: '#cfd2e2', shape: 'meteor', glow: 0.7,  zone: [SKY_TOP + 150, -9200], pred: true, ability: 'lunge', aggro: 600 },
 ]
 
 // Flotsam from a shattered hull — not a species that spawns naturally, it only
@@ -277,6 +458,11 @@ function makeCreature(sp, x, y) {
     frill: !!sp.frill,
     ears: !!sp.ears,
     cloak: !!sp.cloak,
+    pouch: !!sp.pouch,
+    span: !!sp.span,
+    dish: !!sp.dish,
+    big: !!sp.big,
+    bonus: sp.bonus || 0,
     bill: sp.bill || 0,
     wob: rand(0, TAU),
     vy: 0,
@@ -288,6 +474,7 @@ function makeCreature(sp, x, y) {
     puffed: 0,             // pufferfish inflation
     hunting: 0,
     biteCd: 0,
+    stunT: 0,              // stunned by one of the player's abilities
   }
 }
 
@@ -295,7 +482,7 @@ function spawnCreature(nearPlayer) {
   if (creatures.length >= CREATURE_CAP) return
   const pw = player.headW
   const y = nearPlayer
-    ? clamp(player.y + rand(-460, 460), 90, WORLD_H - 40)
+    ? clamp(player.y + rand(-460, 460), SKY_TOP + 120, WORLD_H - 40)
     : rand(120, WORLD_H - 40)
   // Only things that live at this depth, biased toward sizes that matter to a
   // creature our size — always something to eat and something to fear.
@@ -334,7 +521,161 @@ function inkCloud(x, y, r, col) {
   inkClouds.push({ x, y, r: r * 0.4, max: r, a: 1, col, life: 5, blobs: Array.from({ length: 5 }, () => ({ dx: rand(-1, 1), dy: rand(-1, 1), s: rand(0.5, 1) })) })
 }
 function shockRing(x, y, max, opts = {}) {
-  shocks.push({ x, y, r: 8, max, a: 1, hit: false, dmg: opts.dmg ?? 22, stun: opts.stun ?? 0.7, col: opts.col || '#9fe8ff' })
+  shocks.push({ x, y, r: 8, max, a: 1, hit: false, foe: !!opts.foe, dmg: opts.dmg ?? 22, stun: opts.stun ?? 0.7, col: opts.col || '#9fe8ff' })
+}
+
+// A blast the PLAYER owns: stuns / shoves / devours the neighbours instead of
+// hurting us. Effects land instantly; the ring is just the light show.
+function foeBlast(x, y, radius, opts = {}) {
+  shockRing(x, y, radius, { foe: true, col: opts.col || stage().accent })
+  for (let i = creatures.length - 1; i >= 0; i--) {
+    const c = creatures[i]
+    const d = Math.hypot(c.x - x, c.y - y)
+    if (d > radius + c.r) continue
+    if (opts.stun) c.stunT = Math.max(c.stunT, opts.stun)
+    if (opts.push) {
+      const a = Math.atan2(c.y - y, c.x - x)
+      c.dash = 0.4
+      c.dashA = a
+      c.dashS = opts.push * (1 - d / (radius + c.r + 1)) + 3
+    }
+    if (opts.devour && c.r < player.headW * 1.05) {
+      addBiomass(2 + c.r * 1.15 + c.tier * 5 + (c.bonus || 0))
+      puff(c.x, c.y, c.col)
+      creatures.splice(i, 1)
+    }
+  }
+}
+
+// ---- The Moon ----------------------------------------------------------
+// The last meal. It hangs at the top of the column, drifts to loom over
+// whatever climbs that high, and does not want to be eaten.
+const MOON = {
+  x: 0, y: MOON_Y, r: 270,
+  hp: 120, maxHp: 120,
+  awake: false, eaten: false,
+  lanceCd: 3, shardCd: 7, clangCd: 0,
+  bites: [],          // scallops chewed out of the rim: {a, r}
+  quarterBanners: 0,  // how many "the moon cracks" thresholds we've announced
+}
+const moonlances = [] // slow bright bolts the moon throws
+
+function moonRadius() {
+  return MOON.r * (0.45 + 0.55 * clamp(MOON.hp / MOON.maxHp, 0, 1))
+}
+
+function biteMoon() {
+  MOON.hp -= 1
+  MOON.bites.push({ a: Math.atan2(player.y - MOON.y, player.x - MOON.x) + rand(-0.25, 0.25), r: rand(30, 70) })
+  if (MOON.bites.length > 26) MOON.bites.shift()
+  player.flash = 1
+  player.maw = 1
+  cam.shake = Math.max(cam.shake, 0.4)
+  puff(player.x, player.y, '#f2ecd0')
+  addBiomass(6)
+  // knock loose an edible chunk of crust now and then
+  if (Math.random() < 0.4 && creatures.length < CREATURE_CAP) {
+    const chunk = makeCreature(MOONCHUNK, player.x + rand(-60, 60), player.y + rand(-40, 40))
+    chunk.vy = rand(0.4, 1.2)
+    creatures.push(chunk)
+  }
+  const q = Math.floor((1 - MOON.hp / MOON.maxHp) * 4)
+  if (q > MOON.quarterBanners && MOON.hp > 0) {
+    MOON.quarterBanners = q
+    showBanner(['THE MOON CRACKS', 'THE MOON IS WANING', 'THE MOON IS A CRESCENT'][Math.min(q - 1, 2)])
+  }
+  if (MOON.hp <= 0 && !MOON.eaten) eatTheMoon()
+}
+
+function eatTheMoon() {
+  MOON.eaten = true
+  cam.shake = 1.6
+  for (let k = 0; k < 8; k++) ripple(MOON.x + rand(-200, 200), MOON.y + rand(-200, 200), rand(200, 500), '#fff2c8')
+  showBanner('YOU HAVE EATEN THE MOON')
+  queueBanner('THE TIDES ANSWER TO YOU NOW', 3.2)
+  addBiomass(600)
+  setTimeout(() => {
+    const end = document.getElementById('end-screen')
+    if (end) end.classList.remove('hidden')
+  }, 3600)
+}
+
+const MOONCHUNK = { key: 'moonchunk', r: 16, tier: 5, speed: 0.15, col: '#e8e2c8', shape: 'meteor', glow: 0.5, zone: [SKY_TOP, WORLD_H], bonus: 40 }
+
+// ---- Abilities ---------------------------------------------------------
+// One tap, one signature move per form. Cooldowns are short enough to be part
+// of the swim, long enough to matter.
+function fireAbility() {
+  if (!interactive || player.abilityCd > 0 || player.stun > 0) return
+  const ab = stage().ability
+  if (!ab) return
+  player.abilityCd = ab.cd
+  const aimX = mouse.x - window.innerWidth / 2
+  const aimY = mouse.y + cam.y - player.y
+  const al = Math.hypot(aimX, aimY) || 1
+  switch (ab.key) {
+    case 'dash': // Ribbon Eel: a slippery burst toward the cursor
+      player.vx += (aimX / al) * 16
+      player.vy += (aimY / al) * 16
+      player.guard = Math.max(player.guard, 0.5)
+      ripple(player.x, player.y, 90, stage().accent)
+      break
+    case 'lure': // Viperfish: light the lamp; small prey can't help itself
+      player.lureT = 4.5
+      ripple(player.x, player.y, 130, stage().accent)
+      break
+    case 'gulp': // Gulper Eel: open the pouch and inhale
+      player.gulpT = 1.5
+      player.gulpR = 300
+      player.maw = 1
+      break
+    case 'storm': // Sea Serpent: a stunning discharge
+      foeBlast(player.x, player.y, 330, { stun: 2.4, col: '#8affd0' })
+      break
+    case 'frenzy': // Bone Shark: nothing in the water can touch you
+      player.frenzyT = 3
+      player.guard = Math.max(player.guard, 3)
+      ripple(player.x, player.y, 110, '#e8f7ff')
+      break
+    case 'sonar': // Leviathan: the click that stops a whole shoal
+      foeBlast(player.x, player.y, 560, { stun: 2.8, col: '#ff6aa8' })
+      cam.shake = Math.max(cam.shake, 0.3)
+      break
+    case 'veil': // Kraken: vanish into your own night
+      inkCloud(player.x, player.y, 300, '#12041c')
+      player.veilT = 5
+      player.guard = Math.max(player.guard, 1)
+      break
+    case 'leap': // Drowned God: hurl yourself at the sky
+      player.vy -= 24
+      player.vx += (aimX / al) * 7
+      player.launchT = 0.9
+      cam.shake = Math.max(cam.shake, 0.25)
+      if (player.y > SURFACE_Y - 60) {
+        for (let i = 0; i < 3; i++) ripple(player.x + rand(-40, 40), SURFACE_Y + 10, 90, '#cfe9ff')
+      }
+      break
+    case 'gale': // Stormbringer: one wingbeat, a shockwave of wind
+      foeBlast(player.x, player.y, 380, { push: 10, stun: 1.2, col: '#eaff70' })
+      player.vy -= 8
+      break
+    case 'vacuum': // Cloud Devourer: swallow the weather
+      player.gulpT = 2.2
+      player.gulpR = 460
+      player.maw = 1
+      break
+    case 'gravity': // Star Serpent: everything falls toward you
+      player.gravT = 2.6
+      ripple(player.x, player.y, 300, stage().accent)
+      break
+    case 'nova': // The Mooneater: a detonation that feeds you — and cracks moons
+      foeBlast(player.x, player.y, 640, { stun: 2, devour: true, col: '#9ff2ff' })
+      cam.shake = Math.max(cam.shake, 0.6)
+      if (!MOON.eaten && Math.hypot(MOON.x - player.x, MOON.y - player.y) < moonRadius() + 640) {
+        for (let i = 0; i < 4; i++) biteMoon()
+      }
+      break
+  }
 }
 
 // ---- Boats -------------------------------------------------------------
@@ -404,9 +745,9 @@ function sinkBoat(bt, i) {
 }
 
 // ---- Particles / FX ----------------------------------------------------
-const motes = []       // marine snow / bioluminescent drift
-for (let i = 0; i < 190; i++) {
-  motes.push({ x: rand(-2200, 2200), y: rand(0, WORLD_H), r: rand(0.4, 1.9), s: rand(0.2, 0.8), b: rand(0.15, 0.7) })
+const motes = []       // marine snow below, dust and star-glitter above
+for (let i = 0; i < 320; i++) {
+  motes.push({ x: rand(-2200, 2200), y: rand(SKY_TOP, WORLD_H), r: rand(0.4, 1.9), s: rand(0.2, 0.8), b: rand(0.15, 0.7) })
 }
 const bubbles = []     // rising bubbles in the lit water
 for (let i = 0; i < 70; i++) {
@@ -439,6 +780,7 @@ const barFill = document.getElementById('bar-fill')
 const depthLabel = document.getElementById('depth-label')
 const biomassLabel = document.getElementById('biomass-label')
 const effectLabel = document.getElementById('effect-label')
+const abilityLabel = document.getElementById('ability-label')
 function updateHUD() {
   const s = stage()
   const nx = nextStage()
@@ -449,7 +791,12 @@ function updateHUD() {
   } else {
     barFill.style.width = '100%'
   }
-  depthLabel.textContent = zoneAt(player.y).name + ' · ' + Math.round(player.y * METERS) + ' m'
+  // below the waterline: depth; above it: altitude
+  if (player.y > SURFACE_Y) {
+    depthLabel.textContent = zoneAt(player.y).name + ' · ' + Math.round(player.y * METERS) + ' m'
+  } else {
+    depthLabel.textContent = zoneAt(player.y).name + ' · ↑ ' + Math.round((SURFACE_Y - player.y) * METERS) + ' m'
+  }
   biomassLabel.textContent = 'biomass ' + Math.floor(player.biomass)
   const fx = []
   if (player.netted) fx.push('NETTED')
@@ -457,8 +804,22 @@ function updateHUD() {
   if (player.stun > 0) fx.push('STUNNED')
   if (player.inked > 0.15) fx.push('INKED')
   if (player.slow > 0) fx.push('SLOWED')
+  if (player.veilT > 0) fx.push('VEILED')
+  if (player.frenzyT > 0) fx.push('FRENZY')
   effectLabel.textContent = fx.join(' · ')
   effectLabel.style.opacity = fx.length ? '1' : '0'
+  if (s.ability) {
+    if (player.abilityCd > 0) {
+      abilityLabel.textContent = s.ability.name + ' · ' + Math.ceil(player.abilityCd) + 's'
+      abilityLabel.classList.remove('ready')
+    } else {
+      abilityLabel.textContent = s.ability.name + ' · tap'
+      abilityLabel.classList.add('ready')
+    }
+  } else {
+    abilityLabel.textContent = 'evolve to earn an ability'
+    abilityLabel.classList.remove('ready')
+  }
 }
 
 // ---- Game state --------------------------------------------------------
@@ -470,6 +831,7 @@ let wander = { t: 0 }
 
 function update(dt) {
   const s = stage()
+  updateTilt(dt)
 
   // --- steering target: the cursor, or a lazy wander in attract mode ---
   let tx, ty
@@ -483,17 +845,36 @@ function update(dt) {
   }
 
   // --- player movement ---
-  const control = player.stun > 0 ? 0 : 1
+  // Three regimes: swimming (full control), flying (full control, a little
+  // faster), and breaching (ballistic — you steer a little, gravity decides).
+  const inWater = player.y > SURFACE_Y
+  const canFly = player.stageIndex >= FLY_STAGE
+  const ballistic = !inWater && !canFly
+  const control = (player.stun > 0 ? 0 : 1) * (ballistic ? 0.25 : 1) * (player.launchT > 0 ? 0.1 : 1)
   const drag = (player.slow > 0 ? 0.5 : 1) * (player.netted ? 0.4 : 1)
   const speed = (3.2 + player.stageIndex * 0.38) * drag
+    * (player.frenzyT > 0 ? 1.6 : 1)
+    * (!inWater && canFly ? 1.15 : 1)
   let dx = tx - player.x
   let dy = ty - player.y
   const dist = Math.hypot(dx, dy) || 1
   const acc = Math.min(dist, speed * 60) * dt
   player.vx += (dx / dist) * acc * 0.9 * control
   player.vy += (dy / dist) * acc * 0.9 * control
-  player.vx *= 0.86
-  player.vy *= 0.86
+  if (ballistic) {
+    // out of the water without wings: an arc, then the sea takes you back
+    player.vx *= 0.988
+    player.vy *= 0.988
+    player.vy += 14 * dt
+  } else if (player.launchT > 0) {
+    // mid-lunge: keep the momentum, water resistance be damned
+    player.vx *= 0.97
+    player.vy *= 0.97
+  } else {
+    player.vx *= 0.86
+    player.vy *= 0.86
+  }
+  if (player.launchT > 0) player.launchT -= dt
 
   // being reeled in by a hook
   if (player.hooked) {
@@ -546,7 +927,31 @@ function update(dt) {
 
   player.x += player.vx
   player.y += player.vy
-  player.y = clamp(player.y, SURFACE_Y + 18, WORLD_H - 14)
+  // The ceiling depends on what you've become: sea creatures stop at the
+  // waterline, the Drowned God can leap a few hundred metres clear of it, and
+  // the winged forms own the whole column up to the roof of the sky.
+  if (canFly) {
+    player.y = clamp(player.y, SKY_TOP + 80, WORLD_H - 14)
+  } else if (player.stageIndex >= BREACH_STAGE) {
+    player.y = clamp(player.y, SURFACE_Y - 1500, WORLD_H - 14)
+  } else {
+    player.y = clamp(player.y, SURFACE_Y + 18, WORLD_H - 14)
+  }
+  // splash when crossing the waterline with any real speed
+  const airborneNow = player.y <= SURFACE_Y
+  if (airborneNow !== player.airborne && Math.abs(player.vy) > 2.5) {
+    for (let i = 0; i < 3; i++) ripple(player.x + rand(-30, 30), SURFACE_Y + 8, 70 + player.headW * 2, '#cfe9ff')
+    puff(player.x, SURFACE_Y, '#dff2ff')
+    if (airborneNow && player.breachHinted === 0 && !canFly) {
+      player.breachHinted = 1
+      showBanner('THE AIR TASTES OF LIGHTNING · SOMETHING WAITS ABOVE')
+    }
+    if (airborneNow && canFly && player.breachHinted < 2) {
+      player.breachHinted = 2
+      showBanner('WINGS HOLD · THE CLIMB BEGINS')
+    }
+  }
+  player.airborne = airborneNow
 
   // --- spine follows head ---
   const spacing = (4 + s.width * 0.35) * s.space
@@ -575,7 +980,7 @@ function update(dt) {
 
   // --- camera ---
   cam.y += (player.y - window.innerHeight * 0.5 - cam.y) * Math.min(1, dt * 3)
-  cam.y = clamp(cam.y, 0, WORLD_H - window.innerHeight)
+  cam.y = clamp(cam.y, SKY_TOP, WORLD_H - window.innerHeight)
 
   // --- creatures ---
   spawnAcc += dt
@@ -590,10 +995,33 @@ function update(dt) {
     const dxp = player.x - c.x
     const dyp = player.y - c.y
     const dp = Math.hypot(dxp, dyp) || 1
-    // Anything much smaller than a mouthful isn't worth a predator's time.
-    const noticed = player.headW > c.r * 0.22
+    // Anything much smaller than a mouthful isn't worth a predator's time —
+    // and nothing hunts what it can't see through a kraken's ink veil.
+    const noticed = player.headW > c.r * 0.22 && player.veilT <= 0
     const canEatUs = c.r > player.headW * 1.05
-    c.hunting = c.pred && noticed && (canEatUs || c.bold) && dp < c.aggro ? 1 : 0
+    c.hunting = c.pred && noticed && (canEatUs || c.bold) && dp < c.aggro && c.stunT <= 0 ? 1 : 0
+
+    // --- the player's ability fields acting on this creature ---
+    if (player.lureT > 0 && !c.pred && c.r < player.headW && dp < 460 && dp > 10) {
+      c.x += (dxp / dp) * 110 * dt
+      c.y += (dyp / dp) * 110 * dt
+    }
+    if (player.gulpT > 0 && c.r < player.headW * 1.05 && dp < player.gulpR && dp > 6) {
+      const pull = 340 * (1 - dp / player.gulpR) + 80
+      c.x += (dxp / dp) * pull * dt
+      c.y += (dyp / dp) * pull * dt
+    }
+    if (player.gravT > 0 && dp < 640 && dp > 10) {
+      c.x += (dxp / dp) * 200 * dt
+      c.y += (dyp / dp) * 200 * dt
+      if (c.r < player.headW * 1.4) c.stunT = Math.max(c.stunT, 0.4)
+    }
+
+    if (c.stunT > 0) {
+      c.stunT -= dt
+      c.dash = 0
+      c.windup = 0
+    }
 
     if (c.hunting) {
       c.dir = dxp > 0 ? 1 : -1
@@ -605,7 +1033,7 @@ function update(dt) {
     }
 
     // --- abilities ---
-    switch (c.ability) {
+    switch (c.stunT > 0 ? null : c.ability) {
       case 'ink':
         // octopus / squid: blind the hunter and jet away
         if (dp < 230 && c.cd <= 0 && player.headW > c.r * 0.5) {
@@ -671,7 +1099,7 @@ function update(dt) {
       c.x += Math.cos(c.dashA) * c.dashS * dt * 60
       c.y += Math.sin(c.dashA) * c.dashS * dt * 60
     } else {
-      const sp = c.speed * (c.hunting ? 1.9 : 1) * (0.6 + Math.sin(c.wob) * 0.2)
+      const sp = c.speed * (c.hunting ? 1.9 : 1) * (0.6 + Math.sin(c.wob) * 0.2) * (c.stunT > 0 ? 0.12 : 1)
       c.x += c.dir * sp * dt * 60
       c.vy = c.vy * 0.94 + Math.sin(c.wob * 0.7) * 0.06
       c.y += c.vy * dt * 60
@@ -690,17 +1118,17 @@ function update(dt) {
     if (d < eatR + c.r) {
       const spiky = c.ability === 'spike' && c.puffed > 0.35
       if (c.r < player.headW * 1.05 && !spiky) {
-        addBiomass(2 + c.r * 1.15 + c.tier * 5)
+        addBiomass(2 + c.r * 1.15 + c.tier * 5 + (c.bonus || 0))
         puff(c.x, c.y, c.col)
         player.flash = 1
         player.maw = 1
         // stingers are worth eating, but they get one last shot in
-        if (c.ability === 'sting' && player.headW < c.r * 2.6) loseBiomass(8 + c.r * 0.4)
+        if (c.ability === 'sting' && player.headW < c.r * 2.6 && player.guard <= 0) loseBiomass(8 + c.r * 0.4)
         creatures.splice(i, 1)
         continue
       }
-      const dangerous = c.pred || spiky || c.ability === 'sting'
-      if (dangerous && player.hurt <= 0 && c.biteCd <= 0) {
+      const dangerous = (c.pred || spiky || c.ability === 'sting') && c.stunT <= 0
+      if (dangerous && player.hurt <= 0 && player.guard <= 0 && c.biteCd <= 0) {
         c.biteCd = 0.9
         loseBiomass(spiky ? 12 + c.r * 0.4 : c.ability === 'sting' ? 9 + c.r * 0.3 : 14 + c.r * 0.55)
         puff(player.x, player.y, '#ff5a5a')
@@ -823,7 +1251,7 @@ function update(dt) {
     h.x += h.vx * dt * 60
     h.y += h.vy * dt * 60
     h.life -= dt
-    if (Math.hypot(h.x - player.x, h.y - player.y) < player.headW + 8 && player.hurt <= 0) {
+    if (Math.hypot(h.x - player.x, h.y - player.y) < player.headW + 8 && player.hurt <= 0 && player.guard <= 0) {
       loseBiomass(50 + player.stageIndex * 8)
       showBanner('HARPOONED!')
       puff(player.x, player.y, '#ff5a5a')
@@ -849,6 +1277,63 @@ function update(dt) {
     }
   }
 
+  // --- the moon ---
+  if (!MOON.eaten) {
+    // it looms: once you're in the high dark it drifts to hang over you
+    if (player.y < -7000) {
+      MOON.x += (player.x - MOON.x) * Math.min(1, dt * 0.3)
+      MOON.awake = true
+    }
+    const mr = moonRadius()
+    const dm = Math.hypot(MOON.x - player.x, MOON.y - player.y)
+    if (MOON.awake && player.y < -8600 && dm < 1600) {
+      // lunar lances, in volleys of three
+      MOON.lanceCd -= dt
+      if (MOON.lanceCd <= 0) {
+        MOON.lanceCd = rand(2.6, 4.2)
+        for (let k = -1; k <= 1; k++) {
+          const a = Math.atan2(player.y - MOON.y, player.x - MOON.x) + k * 0.16
+          moonlances.push({ x: MOON.x + Math.cos(a) * mr, y: MOON.y + Math.sin(a) * mr, vx: Math.cos(a) * 5.4, vy: Math.sin(a) * 5.4, life: 4 })
+        }
+      }
+      // and shard guardians, called off the crust
+      MOON.shardCd -= dt
+      if (MOON.shardCd <= 0 && creatures.length < CREATURE_CAP - 2) {
+        MOON.shardCd = rand(6, 9)
+        const shardSp = SPECIES.find((s) => s.key === 'lunarshard')
+        for (let k = 0; k < 2; k++) {
+          creatures.push(makeCreature(shardSp, MOON.x + rand(-mr, mr), MOON.y + rand(-mr, mr) * 0.6))
+        }
+      }
+    }
+    // eating it: press your maw to the crust and bite
+    MOON.clangCd -= dt
+    if (dm < mr + player.headW * stage().reach && player.biteCd <= 0) {
+      player.biteCd = 0.5
+      if (player.stageIndex >= MOONEATER_STAGE) {
+        biteMoon()
+      } else if (MOON.clangCd <= 0) {
+        MOON.clangCd = 5
+        showBanner("THE MOON'S CRUST HOLDS · GROW")
+      }
+    }
+  }
+  for (let i = moonlances.length - 1; i >= 0; i--) {
+    const l = moonlances[i]
+    l.x += l.vx * dt * 60
+    l.y += l.vy * dt * 60
+    l.life -= dt
+    if (Math.hypot(l.x - player.x, l.y - player.y) < player.headW + 14 && player.hurt <= 0 && player.guard <= 0) {
+      loseBiomass(70)
+      showBanner('LANCED BY MOONLIGHT!')
+      puff(player.x, player.y, '#fff2c8')
+      cam.shake = Math.max(cam.shake, 0.4)
+      moonlances.splice(i, 1)
+      continue
+    }
+    if (l.life <= 0) moonlances.splice(i, 1)
+  }
+
   // --- hazards ---
   for (let i = inkClouds.length - 1; i >= 0; i--) {
     const k = inkClouds[i]
@@ -865,9 +1350,9 @@ function update(dt) {
     const sh = shocks[i]
     sh.r += (sh.max - sh.r) * dt * 3.2
     sh.a -= dt * 0.85
-    if (!sh.hit && Math.hypot(sh.x - player.x, sh.y - player.y) < sh.r + player.headW) {
+    if (!sh.hit && !sh.foe && Math.hypot(sh.x - player.x, sh.y - player.y) < sh.r + player.headW) {
       sh.hit = true
-      if (player.hurt <= 0) {
+      if (player.hurt <= 0 && player.guard <= 0) {
         player.stun = Math.max(player.stun, sh.stun)
         loseBiomass(sh.dmg)
         puff(player.x, player.y, sh.col)
@@ -890,6 +1375,13 @@ function update(dt) {
   if (player.stun > 0) player.stun -= dt
   if (player.inked > 0) player.inked -= dt * 0.45
   if (player.maw > 0) player.maw -= dt * 2.2
+  if (player.abilityCd > 0) player.abilityCd -= dt
+  if (player.guard > 0) player.guard -= dt
+  if (player.lureT > 0) player.lureT -= dt
+  if (player.gulpT > 0) player.gulpT -= dt
+  if (player.frenzyT > 0) player.frenzyT -= dt
+  if (player.veilT > 0) player.veilT -= dt
+  if (player.gravT > 0) player.gravT -= dt
   if (cam.shake > 0) cam.shake -= dt * 1.6
 
   for (let i = ripples.length - 1; i >= 0; i--) {
@@ -905,7 +1397,7 @@ function update(dt) {
   }
   for (const m of motes) {
     m.y += m.s * dt * 30
-    if (m.y > WORLD_H) m.y = 0
+    if (m.y > WORLD_H) m.y = SKY_TOP
   }
   for (const b of bubbles) {
     b.y -= b.s * dt
@@ -933,17 +1425,89 @@ function draw() {
   const shk = Math.max(0, cam.shake)
   ctx.setTransform(dpr, 0, 0, dpr, rand(-1, 1) * shk * 10 * dpr, rand(-1, 1) * shk * 10 * dpr)
 
-  // --- background depth gradient ---
-  const g = ctx.createLinearGradient(0, 0, 0, vh)
-  const top = waterColor(cam.y)
-  const bot = waterColor(cam.y + vh)
-  g.addColorStop(0, `rgb(${top[0]},${top[1]},${top[2]})`)
-  g.addColorStop(1, `rgb(${bot[0]},${bot[1]},${bot[2]})`)
-  ctx.fillStyle = g
-  ctx.fillRect(-20, -20, vw + 40, vh + 40)
+  // --- background gradient: sky above the waterline, water below ---
+  const wy0 = sy(SURFACE_Y)
+  if (wy0 > -20) {
+    // some sky is visible
+    const sTop = skyColor(cam.y)
+    const sBot = skyColor(Math.min(SURFACE_Y, cam.y + vh))
+    const sg = ctx.createLinearGradient(0, 0, 0, Math.max(1, Math.min(vh, wy0)))
+    sg.addColorStop(0, `rgb(${sTop[0]},${sTop[1]},${sTop[2]})`)
+    sg.addColorStop(1, `rgb(${sBot[0]},${sBot[1]},${sBot[2]})`)
+    ctx.fillStyle = sg
+    ctx.fillRect(-20, -20, vw + 40, Math.min(vh, wy0) + 40)
+  }
+  if (wy0 < vh + 20) {
+    // some water is visible
+    const from = Math.max(0, wy0)
+    const g = ctx.createLinearGradient(0, from, 0, vh)
+    const top = waterColor(Math.max(SURFACE_Y, cam.y + from))
+    const bot = waterColor(cam.y + vh)
+    g.addColorStop(0, `rgb(${top[0]},${top[1]},${top[2]})`)
+    g.addColorStop(1, `rgb(${bot[0]},${bot[1]},${bot[2]})`)
+    ctx.fillStyle = g
+    ctx.fillRect(-20, from - (wy0 < 0 ? 20 : 0), vw + 40, vh - from + 40)
+  }
+
+  // --- stars: fade in above the storm layer, blaze in the void ---
+  const starA = clamp((-1600 - cam.y) / 2600, 0, 1)
+  if (starA > 0) {
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
+    for (let i = 0; i < 150; i++) {
+      const h1 = hash1(i * 3.7), h2 = hash1(i * 9.1 + 4), h3 = hash1(i * 5.3 + 9)
+      const par = 0.04 + h3 * 0.08
+      const sx_ = ((h1 * (vw + 80) - player.x * par - tilt.x * (26 + h3 * 30)) % (vw + 80) + vw + 80) % (vw + 80) - 40
+      const sy_ = ((h2 * (vh + 80) - cam.y * par - tilt.y * (18 + h3 * 22)) % (vh + 80) + vh + 80) % (vh + 80) - 40
+      const tw = 0.4 + 0.6 * Math.abs(Math.sin(now() * 0.001 * (0.5 + h3) + i))
+      ctx.fillStyle = `rgba(${220 + Math.round(h3 * 35)},${225 + Math.round(h1 * 30)},255,${starA * tw * (0.35 + h3 * 0.5)})`
+      ctx.beginPath(); ctx.arc(sx_, sy_, 0.6 + h3 * 1.6, 0, TAU); ctx.fill()
+    }
+    ctx.restore()
+  }
+
+  // --- the sun, low in the sky bands ---
+  if (cam.y < SURFACE_Y + 200 && cam.y > -4200) {
+    const sunX = vw * 0.76 - tilt.x * 60
+    const sunY = vh * 0.14 - tilt.y * 40 - clamp((cam.y + 400) / 6, -80, 200)
+    const fade = clamp(1 - (-cam.y - 1800) / 2400, 0, 1)
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
+    const sg2 = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 180)
+    sg2.addColorStop(0, `rgba(255,244,214,${0.85 * fade})`)
+    sg2.addColorStop(0.25, `rgba(255,230,170,${0.35 * fade})`)
+    sg2.addColorStop(1, 'rgba(255,220,150,0)')
+    ctx.fillStyle = sg2
+    ctx.beginPath(); ctx.arc(sunX, sunY, 180, 0, TAU); ctx.fill()
+    ctx.restore()
+  }
+
+  // --- the moon, seen from far below: a promise on the horizon ---
+  if (!MOON.eaten && cam.y < -1400 && sy(MOON.y) < -MOON.r * 2) {
+    const prog = clamp((-cam.y - 1400) / 7400, 0, 1)
+    const mr = 12 + prog * 54
+    const mx = vw * 0.68 - tilt.x * 44
+    const my = vh * (0.16 - prog * 0.04) - tilt.y * 30
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
+    const mg = ctx.createRadialGradient(mx, my, 0, mx, my, mr * 2.4)
+    mg.addColorStop(0, `rgba(240,238,220,${0.5 + prog * 0.3})`)
+    mg.addColorStop(0.5, 'rgba(220,220,205,0.12)')
+    mg.addColorStop(1, 'rgba(220,220,205,0)')
+    ctx.fillStyle = mg
+    ctx.beginPath(); ctx.arc(mx, my, mr * 2.4, 0, TAU); ctx.fill()
+    ctx.restore()
+    ctx.fillStyle = `rgba(235,232,215,${0.8 + prog * 0.2})`
+    ctx.beginPath(); ctx.arc(mx, my, mr, 0, TAU); ctx.fill()
+    ctx.fillStyle = 'rgba(180,178,168,0.5)'
+    for (let i = 0; i < 5; i++) {
+      const h1 = hash1(i * 7.7), h2 = hash1(i * 3.1 + 2)
+      ctx.beginPath(); ctx.arc(mx + (h1 - 0.5) * mr * 1.3, my + (h2 - 0.5) * mr * 1.3, mr * (0.08 + h1 * 0.14), 0, TAU); ctx.fill()
+    }
+  }
 
   // sunlight god-rays near the surface
-  if (cam.y < 1100) {
+  if (cam.y < 1100 && cam.y > -vh) {
     ctx.save()
     ctx.globalCompositeOperation = 'lighter'
     for (let i = 0; i < 6; i++) {
@@ -965,14 +1529,9 @@ function draw() {
 
   drawScenery(vw, vh)
 
-  // waterline + sky sliver
+  // waterline
   const wy = sy(SURFACE_Y)
   if (wy > -280 && wy < vh + 40) {
-    const sky = ctx.createLinearGradient(0, wy - 260, 0, wy)
-    sky.addColorStop(0, '#060f1e')
-    sky.addColorStop(1, '#12405a')
-    ctx.fillStyle = sky
-    ctx.fillRect(-20, wy - 260, vw + 40, 260)
     ctx.strokeStyle = 'rgba(180,240,255,0.35)'
     ctx.lineWidth = 2
     ctx.beginPath()
@@ -1009,6 +1568,9 @@ function draw() {
     ctx.beginPath(); ctx.arc(sx(sl.x), sy(sl.y), sl.r, 0, TAU); ctx.fill()
   }
 
+  // --- the moon itself ---
+  drawMoon(vw, vh)
+
   // --- creatures ---
   for (const c of creatures) drawCreature(c)
 
@@ -1032,6 +1594,24 @@ function draw() {
     ctx.beginPath(); ctx.roundRect ? ctx.roundRect(cx - 7, cy - 10, 14, 20, 4) : ctx.rect(cx - 7, cy - 10, 14, 20); ctx.fill()
     ctx.fillStyle = ch.fuse % 0.5 < 0.25 ? '#ff5a3c' : '#5a2418'
     ctx.beginPath(); ctx.arc(cx, cy - 12, 3, 0, TAU); ctx.fill()
+  }
+  for (const l of moonlances) {
+    const lx = sx(l.x), ly = sy(l.y)
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
+    const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, 26)
+    lg.addColorStop(0, 'rgba(255,246,214,0.95)')
+    lg.addColorStop(0.4, 'rgba(240,232,190,0.4)')
+    lg.addColorStop(1, 'rgba(240,232,190,0)')
+    ctx.fillStyle = lg
+    ctx.beginPath(); ctx.arc(lx, ly, 26, 0, TAU); ctx.fill()
+    ctx.strokeStyle = 'rgba(255,250,230,0.9)'
+    ctx.lineWidth = 3
+    ctx.beginPath()
+    ctx.moveTo(lx - l.vx * 5, ly - l.vy * 5)
+    ctx.lineTo(lx, ly)
+    ctx.stroke()
+    ctx.restore()
   }
 
   // --- the monster ---
@@ -1098,8 +1678,17 @@ function drawScenery(vw, vh) {
   const camTop = cam.y
   const camBot = cam.y + vh
 
+  // ---- air furniture, band by band ----
+  if (camTop < SURFACE_Y) {
+    if (camTop < 300 && camBot > -2600) drawClouds(vw, vh, -650, 260, 0.30, 1.0)     // fair-weather puffs
+    if (camTop < -600 && camBot > -2600) drawStormClouds(vw, vh)                     // the storm layer
+    if (camTop < -2100 && camBot > -3900) drawContrails(vw, vh)                      // jet stream
+    if (camTop < -3500 && camBot > -5400) drawAurora(vw, vh)                         // stratosphere curtains
+    if (camTop < -6300) drawNebulae(vw, vh)                                          // void colour
+  }
+
   // shallow water: drifting weed mats
-  if (camTop < 1400) {
+  if (camTop < 1400 && camBot > 0) {
     const gap = 380
     const par = 0.72
     const k0 = Math.floor((player.x * par - vw) / gap)
@@ -1298,6 +1887,251 @@ function drawEggBeds(vw, vh) {
   ctx.restore()
 }
 
+// ---- Air scenery -------------------------------------------------------
+// Tilt-parallax: every layer leans with the device (or the cursor), farther
+// layers leaning less. `tp(par)` is the extra screen offset for a layer.
+function tpx(par) { return -tilt.x * 60 * (1 - par) }
+function tpy(par) { return -tilt.y * 40 * (1 - par) }
+
+// fair-weather cumulus: rows of soft puffs
+function drawClouds(vw, vh, midY, spread, par, alpha) {
+  const gap = 460
+  const k0 = Math.floor((player.x * par - vw) / gap)
+  const k1 = Math.ceil((player.x * par + vw) / gap)
+  for (let k = k0; k <= k1; k++) {
+    const h = hash1(k * 2.9)
+    if (h > 0.72) continue
+    const cy = sy(midY + (hash1(k * 6.1) - 0.5) * spread * 2) + tpy(par)
+    if (cy < -120 || cy > vh + 120) continue
+    const x = px(k * gap + hash1(k * 3.7) * gap * 0.6, par) + tpx(par)
+    const s = 40 + h * 70
+    ctx.fillStyle = `rgba(240,248,255,${(0.16 + h * 0.14) * alpha})`
+    for (let b = 0; b < 4; b++) {
+      const bh = hash1(k * 5.1 + b * 1.7)
+      ctx.beginPath()
+      ctx.ellipse(x + (b - 1.5) * s * 0.55, cy + Math.sin(b * 2.1) * s * 0.16, s * (0.5 + bh * 0.4), s * (0.3 + bh * 0.2), 0, 0, TAU)
+      ctx.fill()
+    }
+  }
+}
+
+// the storm layer: anvil-dark cloud banks, rain, and lightning that actually
+// lights the band up
+function drawStormClouds(vw, vh) {
+  const par = 0.42
+  const gap = 560
+  const k0 = Math.floor((player.x * par - vw) / gap)
+  const k1 = Math.ceil((player.x * par + vw) / gap)
+  const t = now() * 0.001
+  for (let k = k0; k <= k1; k++) {
+    const h = hash1(k * 4.3)
+    if (h < 0.25) continue
+    const cy = sy(-1400 + (hash1(k * 7.9) - 0.5) * 900) + tpy(par)
+    if (cy < -220 || cy > vh + 260) continue
+    const x = px(k * gap + hash1(k * 2.1) * gap * 0.5, par) + tpx(par)
+    const s = 80 + h * 110
+    // lightning: a per-column strobe with a long dark phase
+    const strobe = (t * (0.3 + h * 0.4) + h * 7) % 6
+    const lit = strobe < 0.14 ? 1 - strobe / 0.14 : 0
+    ctx.fillStyle = `rgba(${34 + lit * 130},${40 + lit * 130},${58 + lit * 120},${0.5 + h * 0.25})`
+    for (let b = 0; b < 5; b++) {
+      const bh = hash1(k * 9.7 + b * 2.3)
+      ctx.beginPath()
+      ctx.ellipse(x + (b - 2) * s * 0.5, cy + Math.sin(b * 1.7) * s * 0.2, s * (0.45 + bh * 0.4), s * (0.28 + bh * 0.22), 0, 0, TAU)
+      ctx.fill()
+    }
+    // a jagged bolt during the flash
+    if (lit > 0.25) {
+      ctx.save()
+      ctx.globalCompositeOperation = 'lighter'
+      ctx.strokeStyle = `rgba(220,235,255,${lit * 0.9})`
+      ctx.lineWidth = 2.4
+      ctx.beginPath()
+      let bx = x, byy = cy + s * 0.3
+      ctx.moveTo(bx, byy)
+      for (let seg = 0; seg < 5; seg++) {
+        bx += (hash1(k * 3.3 + seg) - 0.5) * 46
+        byy += 34 + hash1(k + seg) * 26
+        ctx.lineTo(bx, byy)
+      }
+      ctx.stroke()
+      ctx.restore()
+    }
+    // rain streaks under the bank
+    ctx.strokeStyle = 'rgba(160,190,220,0.14)'
+    ctx.lineWidth = 1
+    for (let rI = 0; rI < 7; rI++) {
+      const rx = x + (rI - 3) * s * 0.26 + ((t * 60) % 20)
+      ctx.beginPath()
+      ctx.moveTo(rx, cy + s * 0.3)
+      ctx.lineTo(rx - 8, cy + s * 0.3 + 60)
+      ctx.stroke()
+    }
+  }
+}
+
+// the jet stream: long wind shears and old contrails
+function drawContrails(vw, vh) {
+  const par = 0.5
+  const gap = 700
+  const k0 = Math.floor((player.x * par - vw) / gap)
+  const k1 = Math.ceil((player.x * par + vw) / gap)
+  for (let k = k0; k <= k1; k++) {
+    const h = hash1(k * 5.9)
+    if (h < 0.3) continue
+    const cy = sy(-2350 - hash1(k * 3.1) * 1250) + tpy(par)
+    if (cy < -60 || cy > vh + 60) continue
+    const x = px(k * gap, par) + tpx(par)
+    const len = 240 + h * 320
+    const grad = ctx.createLinearGradient(x - len / 2, 0, x + len / 2, 0)
+    grad.addColorStop(0, 'rgba(220,235,250,0)')
+    grad.addColorStop(0.5, `rgba(220,235,250,${0.10 + h * 0.12})`)
+    grad.addColorStop(1, 'rgba(220,235,250,0)')
+    ctx.strokeStyle = grad
+    ctx.lineWidth = 3 + h * 3
+    ctx.beginPath()
+    ctx.moveTo(x - len / 2, cy)
+    ctx.quadraticCurveTo(x, cy + (hash1(k * 8.3) - 0.5) * 40, x + len / 2, cy - 8)
+    ctx.stroke()
+  }
+}
+
+// stratosphere: aurora curtains, slow and enormous
+function drawAurora(vw, vh) {
+  const t = now() * 0.0004
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  for (let band = 0; band < 3; band++) {
+    const par = 0.25 + band * 0.1
+    const baseY = sy(-4100 - band * 380) + tpy(par)
+    if (baseY < -400 || baseY > vh + 400) continue
+    const col = band === 1 ? '122,255,200' : band === 2 ? '255,138,196' : '138,196,255'
+    ctx.beginPath()
+    for (let x = -40; x <= vw + 40; x += 26) {
+      const wob = Math.sin(x * 0.006 + t * (2 + band) + band * 2) * 60 + Math.sin(x * 0.017 - t * 3) * 24
+      x === -40 ? ctx.moveTo(x, baseY + wob) : ctx.lineTo(x, baseY + wob)
+    }
+    for (let x = vw + 40; x >= -40; x -= 26) {
+      const wob = Math.sin(x * 0.006 + t * (2 + band) + band * 2) * 60 + Math.sin(x * 0.017 - t * 3) * 24
+      ctx.lineTo(x, baseY + wob + 150 + band * 40)
+    }
+    ctx.closePath()
+    const grad = ctx.createLinearGradient(0, baseY - 60, 0, baseY + 220)
+    grad.addColorStop(0, `rgba(${col},0.16)`)
+    grad.addColorStop(1, `rgba(${col},0)`)
+    ctx.fillStyle = grad
+    ctx.fill()
+  }
+  ctx.restore()
+}
+
+// the void: dim nebula blooms behind the stars
+function drawNebulae(vw, vh) {
+  const par = 0.08
+  const gap = 900
+  const k0 = Math.floor((player.x * par - vw) / gap)
+  const k1 = Math.ceil((player.x * par + vw) / gap)
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  for (let k = k0; k <= k1; k++) {
+    const h = hash1(k * 6.7)
+    if (h < 0.4) continue
+    const ny = sy(-8300 - hash1(k * 2.3) * 1900) + tpy(par)
+    if (ny < -400 || ny > vh + 400) continue
+    const x = px(k * gap, par) + tpx(par)
+    const r = 180 + h * 260
+    const cols = [['120,60,180', '40,140,200'], ['200,70,140', '80,60,200'], ['60,160,160', '140,80,200']]
+    const [c1, c2] = cols[Math.floor(h * 3) % 3]
+    const g1 = ctx.createRadialGradient(x, ny, 0, x, ny, r)
+    g1.addColorStop(0, `rgba(${c1},0.10)`)
+    g1.addColorStop(1, `rgba(${c1},0)`)
+    ctx.fillStyle = g1
+    ctx.beginPath(); ctx.arc(x, ny, r, 0, TAU); ctx.fill()
+    const g2 = ctx.createRadialGradient(x + r * 0.4, ny + r * 0.2, 0, x + r * 0.4, ny + r * 0.2, r * 0.7)
+    g2.addColorStop(0, `rgba(${c2},0.08)`)
+    g2.addColorStop(1, `rgba(${c2},0)`)
+    ctx.fillStyle = g2
+    ctx.beginPath(); ctx.arc(x + r * 0.4, ny + r * 0.2, r * 0.7, 0, TAU); ctx.fill()
+  }
+  ctx.restore()
+}
+
+// ---- The moon (rendered) -----------------------------------------------
+function drawMoon(vw, vh) {
+  if (MOON.eaten) return
+  const mx = sx(MOON.x)
+  const my = sy(MOON.y)
+  const r = moonRadius()
+  if (mx < -r - 200 || mx > vw + r + 200 || my < -r - 200 || my > vh + r + 200) return
+  const t = now() * 0.001
+
+  // halo
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  const hg = ctx.createRadialGradient(mx, my, r * 0.6, mx, my, r * 2.2)
+  hg.addColorStop(0, 'rgba(240,238,215,0.30)')
+  hg.addColorStop(1, 'rgba(240,238,215,0)')
+  ctx.fillStyle = hg
+  ctx.beginPath(); ctx.arc(mx, my, r * 2.2, 0, TAU); ctx.fill()
+  ctx.restore()
+
+  // body
+  const bg = ctx.createRadialGradient(mx - r * 0.3, my - r * 0.3, r * 0.2, mx, my, r)
+  bg.addColorStop(0, '#f2efdc')
+  bg.addColorStop(0.7, '#d6d2bc')
+  bg.addColorStop(1, '#a8a492')
+  ctx.fillStyle = bg
+  ctx.beginPath(); ctx.arc(mx, my, r, 0, TAU); ctx.fill()
+
+  // craters
+  ctx.fillStyle = 'rgba(150,146,130,0.55)'
+  for (let i = 0; i < 12; i++) {
+    const h1 = hash1(i * 3.3), h2 = hash1(i * 7.1 + 5), h3 = hash1(i * 5.7 + 11)
+    const a = h1 * TAU
+    const d = h2 * r * 0.82
+    ctx.beginPath()
+    ctx.arc(mx + Math.cos(a) * d, my + Math.sin(a) * d, r * (0.05 + h3 * 0.11), 0, TAU)
+    ctx.fill()
+  }
+
+  // bites already taken: scallops of sky chewed out of the rim
+  const bgc = skyColor(MOON.y)
+  ctx.fillStyle = `rgb(${bgc[0]},${bgc[1]},${bgc[2]})`
+  for (const b of MOON.bites) {
+    ctx.beginPath()
+    ctx.arc(mx + Math.cos(b.a) * r, my + Math.sin(b.a) * r, b.r, 0, TAU)
+    ctx.fill()
+  }
+
+  // an awake moon glowers
+  if (MOON.awake) {
+    const pulse = 0.5 + 0.5 * Math.sin(t * 2)
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
+    ctx.strokeStyle = `rgba(255,240,190,${0.2 + pulse * 0.25})`
+    ctx.lineWidth = 3
+    ctx.beginPath(); ctx.arc(mx, my, r + 14 + pulse * 8, 0, TAU); ctx.stroke()
+    ctx.restore()
+    // two dark hollows turned toward you, like eyes
+    const pa = Math.atan2(player.y - MOON.y, player.x - MOON.x)
+    ctx.fillStyle = 'rgba(60,56,48,0.85)'
+    for (const off of [-0.3, 0.3]) {
+      ctx.beginPath()
+      ctx.ellipse(mx + Math.cos(pa + off) * r * 0.45, my + Math.sin(pa + off) * r * 0.45, r * 0.09, r * 0.13, pa, 0, TAU)
+      ctx.fill()
+    }
+  }
+
+  // hull-style health bar once it's been bitten
+  if (MOON.hp < MOON.maxHp) {
+    const f = clamp(MOON.hp / MOON.maxHp, 0, 1)
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'
+    ctx.fillRect(mx - r * 0.7, my - r - 26, r * 1.4, 5)
+    ctx.fillStyle = f > 0.5 ? '#e8e2b8' : f > 0.25 ? '#e8c06a' : '#e2604f'
+    ctx.fillRect(mx - r * 0.7, my - r - 26, r * 1.4 * f, 5)
+  }
+}
+
 // ---- The monster: one renderer per evolution ---------------------------
 // Every stage gets its own silhouette. `profile` is the half-width down the
 // spine (t = 0 at the snout, 1 at the tail tip); `draw` adds the anatomy.
@@ -1317,6 +2151,10 @@ const PROFILES = {
   whale:   (t, w) => w * (0.42 + 1.00 * bell(t, 0.38, 1.00)),
   kraken:  (t, w) => w * (0.06 + 1.02 * Math.pow(1 - t, 0.55)),
   god:     (t, w) => w * (0.06 + 1.08 * Math.pow(1 - t, 0.48)),
+  wyrm:    (t, w) => w * (0.42 + 0.85 * bell(t, 0.16, 0.40)),
+  skywhale:(t, w) => w * (0.40 + 1.05 * bell(t, 0.36, 0.95)),
+  starserp:(t, w) => w * (0.36 + 0.78 * bell(t, 0.14, 0.36)),
+  mooneater:(t, w) => w * (0.06 + 1.10 * Math.pow(1 - t, 0.46)),
 }
 
 // perpendicular to a spine segment; `up` is fixed per frame from the heading so
@@ -2188,6 +3026,323 @@ function drawGodCrown(P) {
   }
 }
 
+// ---- The sky evolutions ------------------------------------------------
+// A pair of wings hung off the spine at `at` (fraction down the body): one
+// far wing (small, dark) and one near wing (full size) rising from the back,
+// swept toward the tail. They beat hard in the air, idle slowly underwater.
+function drawWingPair(P, at, len, col, rim) {
+  const i0 = Math.floor(P.n * at)
+  const i1 = Math.min(P.n - 1, i0 + Math.max(2, Math.floor(P.n * 0.2)))
+  const m = P.mid[i0]
+  const m2 = P.mid[i1]
+  const flying = player.airborne
+  const flap = Math.sin(P.t * (flying ? 8 : 2.2)) * (flying ? 0.5 : 0.16)
+  const [ux, uy] = norm(m.ang, P.up) // dorsal unit
+  const dorsalA = Math.atan2(uy, ux)
+  const fx = Math.cos(m.ang), fy = Math.sin(m.ang)
+  const wings = [
+    { rot: 0.55, s: 0.68, c: hexA(shade(P.s.color, -55), 0.9), far: true },
+    { rot: -0.12, s: 1.0, c: col, far: false },
+  ]
+  for (const w of wings) {
+    const a = dorsalA + P.up * (w.rot - flap * (w.far ? 0.7 : 1))
+    const reach = len * w.s
+    const tipX = m.x + Math.cos(a) * reach - fx * reach * 0.28
+    const tipY = m.y + Math.sin(a) * reach - fy * reach * 0.28
+    const baseFX = m.x + fx * m.w * 1.1  // leading-edge root, ahead of the anchor
+    const baseFY = m.y + fy * m.w * 1.1
+    ctx.beginPath()
+    ctx.moveTo(baseFX, baseFY)
+    ctx.quadraticCurveTo(
+      m.x + Math.cos(a) * reach * 0.7 + fx * reach * 0.12,
+      m.y + Math.sin(a) * reach * 0.7 + fy * reach * 0.12,
+      tipX, tipY
+    )
+    // trailing edge scallops back to the spine further down the body
+    ctx.quadraticCurveTo(
+      (tipX + m2.x) / 2 - Math.cos(a) * reach * 0.16,
+      (tipY + m2.y) / 2 - Math.sin(a) * reach * 0.16,
+      m2.x, m2.y
+    )
+    ctx.closePath()
+    ctx.fillStyle = w.c
+    ctx.fill()
+    if (!w.far) {
+      if (rim) { ctx.strokeStyle = rim; ctx.lineWidth = 1.2; ctx.stroke() }
+      // wing fingers fanning from the root to the trailing edge
+      ctx.strokeStyle = rim || hexA(P.s.accent, 0.4)
+      ctx.lineWidth = 1
+      for (let f = 1; f <= 3; f++) {
+        const k = f / 4
+        ctx.beginPath()
+        ctx.moveTo(m.x, m.y)
+        ctx.lineTo(tipX + (m2.x - tipX) * k, tipY + (m2.y - tipY) * k)
+        ctx.stroke()
+      }
+    }
+  }
+}
+
+// Stage 11 · Stormbringer — the first thing you become that the sky will hold
+function drawWyrm(P) {
+  const s = P.s
+  drawWingPair(P, 0.26, P.maxW * 5.2, hexA(s.color, 0.85), hexA(s.accent, 0.5))
+  // storm crest down the spine
+  ctx.fillStyle = hexA(s.accent, 0.5)
+  for (let i = 2; i < P.n - 2; i += 2) {
+    const m = P.mid[i]
+    const [nx, ny] = norm(m.ang, P.up)
+    const fx = Math.cos(m.ang), fy = Math.sin(m.ang)
+    const h = m.w * (1.1 + Math.sin(i * 0.8 + P.t * 3) * 0.2)
+    ctx.beginPath()
+    ctx.moveTo(m.x + nx * m.w * 0.85 - fx * m.w * 0.5, m.y + ny * m.w * 0.85 - fy * m.w * 0.5)
+    ctx.lineTo(m.x + nx * (m.w + h), m.y + ny * (m.w + h))
+    ctx.lineTo(m.x + nx * m.w * 0.85 + fx * m.w * 0.5, m.y + ny * m.w * 0.85 + fy * m.w * 0.5)
+    ctx.closePath()
+    ctx.fill()
+  }
+  // forked tail streamer
+  {
+    const tl = P.tail
+    const fx = Math.cos(tl.ang), fy = Math.sin(tl.ang)
+    const [ux, uy] = norm(tl.ang, 1)
+    ctx.strokeStyle = hexA(s.accent, 0.6)
+    ctx.lineWidth = 2
+    for (const sd of [1, -1]) {
+      ctx.beginPath()
+      ctx.moveTo(tl.x, tl.y)
+      ctx.quadraticCurveTo(
+        tl.x + fx * P.maxW * 2 + ux * sd * P.maxW * 1.4, tl.y + fy * P.maxW * 2 + uy * sd * P.maxW * 1.4,
+        tl.x + fx * P.maxW * 3.6 + ux * sd * P.maxW * 0.8, tl.y + fy * P.maxW * 3.6 + uy * sd * P.maxW * 0.8
+      )
+      ctx.stroke()
+    }
+  }
+  fillBody(P)
+  // static crackle running the body
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  ctx.strokeStyle = hexA(s.accent, 0.22 + 0.2 * Math.abs(Math.sin(P.t * 7)))
+  ctx.lineWidth = 1.2
+  for (let i = 3; i < P.n - 3; i += 5) {
+    const m = P.mid[i]
+    const h = hash1(i * 3.1 + Math.floor(P.t * 6))
+    if (h < 0.72) continue
+    const [nx, ny] = norm(m.ang, h > 0.75 ? 1 : -1)
+    ctx.beginPath()
+    ctx.moveTo(m.x, m.y)
+    ctx.lineTo(m.x + nx * m.w * 1.9 + (h - 0.5) * 8, m.y + ny * m.w * 1.9)
+    ctx.stroke()
+  }
+  ctx.restore()
+  headSpace(P, () => {
+    const b = P.bodyW
+    const open = 0.3 + player.maw * 0.6
+    // swept storm-horns
+    ctx.fillStyle = hexA(s.accent, 0.85)
+    for (const sgn of [-1.05, -0.55]) {
+      ctx.beginPath()
+      ctx.moveTo(-b * 0.4, sgn * b * 0.5)
+      ctx.quadraticCurveTo(-b * 2.2, sgn * b * 2.0, -b * 3.3, sgn * b * 1.7)
+      ctx.quadraticCurveTo(-b * 2.0, sgn * b * 1.2, -b * 0.75, sgn * b * 0.25)
+      ctx.closePath()
+      ctx.fill()
+    }
+    ctx.fillStyle = '#0a1420'
+    ctx.beginPath()
+    ctx.moveTo(P.noseW * 0.8, 0)
+    ctx.quadraticCurveTo(-b * 0.7, -b * open * 1.4, -b * 1.9, -b * 0.2)
+    ctx.lineTo(-b * 1.9, b * 0.2)
+    ctx.quadraticCurveTo(-b * 0.7, b * open * 1.4, P.noseW * 0.8, 0)
+    ctx.closePath()
+    ctx.fill()
+    ctx.strokeStyle = '#f2ffff'
+    ctx.lineWidth = 1.5
+    for (let i = 0; i < 4; i++) {
+      const tx = P.noseW * 0.5 - i * b * 0.4
+      ctx.beginPath(); ctx.moveTo(tx, -b * open); ctx.lineTo(tx - 1.5, -b * open * 0.2); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(tx - b * 0.14, b * open); ctx.lineTo(tx - b * 0.26, b * open * 0.2); ctx.stroke()
+    }
+    eyeAt(-b * 0.75, -b * 0.55, b * 0.28, '#081018', s.accent)
+  })
+}
+
+// Stage 12 · Cloud Devourer — a whale that grazes on weather
+function drawSkywhale(P) {
+  const s = P.s
+  // it trails its own cloudbank
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  for (let i = Math.floor(P.n * 0.5); i < P.n; i += 2) {
+    const m = P.mid[i]
+    const h = hash1(i * 4.7 + Math.floor(P.t * 2))
+    ctx.fillStyle = `rgba(240,248,255,${0.05 + h * 0.06})`
+    ctx.beginPath()
+    ctx.arc(m.x + (h - 0.5) * m.w, m.y + (hash1(i * 9.1) - 0.5) * m.w * 2, m.w * (0.8 + h), 0, TAU)
+    ctx.fill()
+  }
+  ctx.restore()
+  drawWingPair(P, 0.30, P.maxW * 4.6, hexA(shade(s.color, -12), 0.92), hexA(s.accent, 0.4))
+  // broad flukes
+  const tl = P.tail
+  const fx = Math.cos(tl.ang), fy = Math.sin(tl.ang)
+  const [ux, uy] = norm(tl.ang, 1)
+  ctx.fillStyle = shade(s.color, -30)
+  for (const side of [1, -1]) {
+    ctx.beginPath()
+    ctx.moveTo(tl.x, tl.y)
+    ctx.quadraticCurveTo(
+      tl.x + fx * P.maxW * 0.9 + ux * side * P.maxW * 1.2, tl.y + fy * P.maxW * 0.9 + uy * side * P.maxW * 1.2,
+      tl.x + fx * P.maxW * 2.0 + ux * side * P.maxW * 1.8, tl.y + fy * P.maxW * 2.0 + uy * side * P.maxW * 1.8
+    )
+    ctx.quadraticCurveTo(
+      tl.x + fx * P.maxW * 1.5 + ux * side * P.maxW * 0.4, tl.y + fy * P.maxW * 1.5 + uy * side * P.maxW * 0.4,
+      tl.x + fx * P.maxW * 0.5, tl.y + fy * P.maxW * 0.5
+    )
+    ctx.closePath()
+    ctx.fill()
+  }
+  fillBody(P, { head: shade(s.color, 20), rim: false })
+  // pale belly grooves
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)'
+  ctx.lineWidth = 1.6
+  for (let i = 2; i < Math.floor(P.n * 0.6); i += 2) {
+    const m = P.mid[i]
+    const [nx, ny] = norm(m.ang, -P.up)
+    ctx.beginPath()
+    ctx.moveTo(m.x + nx * m.w * 0.35, m.y + ny * m.w * 0.35)
+    ctx.lineTo(m.x + nx * m.w * 0.95, m.y + ny * m.w * 0.95)
+    ctx.stroke()
+  }
+  headSpace(P, () => {
+    const b = P.bodyW
+    const open = 0.2 + player.maw * 0.8 + (player.gulpT > 0 ? 0.6 : 0)
+    // a cavernous baleen mouth for straining whole flocks
+    ctx.fillStyle = '#101625'
+    ctx.beginPath()
+    ctx.moveTo(P.noseW * 0.7, -b * 0.05)
+    ctx.quadraticCurveTo(-b * 0.4, -b * open, -b * 1.7, b * (0.1 - open * 0.2))
+    ctx.quadraticCurveTo(-b * 0.5, b * (0.3 + open * 0.8), P.noseW * 0.7, b * 0.1)
+    ctx.closePath()
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(255,248,230,0.7)'
+    ctx.lineWidth = 1
+    for (let i = 0; i < 8; i++) {
+      const tx = P.noseW * 0.4 - i * b * 0.22
+      ctx.beginPath()
+      ctx.moveTo(tx, -b * open * 0.6)
+      ctx.lineTo(tx - b * 0.05, b * (0.1 + open * 0.5))
+      ctx.stroke()
+    }
+    eyeAt(-b * 0.9, -b * 0.4, b * 0.2, '#0a0f18', '#fff2c8')
+  })
+}
+
+// Stage 13 · Star Serpent — a river of night sky with a mouth on one end
+function drawStarserp(P) {
+  const s = P.s
+  // flowing ribbon fins
+  ctx.beginPath()
+  for (let i = 0; i < P.n; i++) {
+    const m = P.mid[i]
+    const [nx, ny] = norm(m.ang, P.up)
+    const h = m.w + P.maxW * (1.2 + Math.sin(P.t * 2.4 + i * 0.4) * 0.5)
+    const x = m.x + nx * h, y = m.y + ny * h
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)
+  }
+  for (let i = P.n - 1; i >= 0; i--) {
+    const m = P.mid[i]
+    const [nx, ny] = norm(m.ang, P.up)
+    ctx.lineTo(m.x + nx * m.w * 0.3, m.y + ny * m.w * 0.3)
+  }
+  ctx.closePath()
+  ctx.fillStyle = hexA(s.color, 0.22)
+  ctx.fill()
+  fillBody(P, { head: shade(s.color, 26), tailCol: shade(s.color, -50), rimA: 0.55 })
+  // a body full of stars
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  for (let i = 1; i < P.n - 1; i++) {
+    const m = P.mid[i]
+    for (let j = 0; j < 2; j++) {
+      const h = hash1(i * 7.3 + j * 13.1)
+      const h2 = hash1(i * 3.9 + j * 5.7)
+      const [nx, ny] = norm(m.ang, 1)
+      const off = (h2 - 0.5) * 1.5 * m.w
+      const tw = 0.3 + 0.7 * Math.abs(Math.sin(P.t * (1 + h) * 2 + i + j * 3))
+      ctx.fillStyle = `rgba(255,${230 + Math.round(h * 25)},${170 + Math.round(h2 * 60)},${tw * 0.8})`
+      ctx.beginPath()
+      ctx.arc(m.x + nx * off, m.y + ny * off, Math.max(0.8, m.w * (0.06 + h * 0.1)), 0, TAU)
+      ctx.fill()
+    }
+  }
+  // trailing stardust
+  const tl = P.tail
+  for (let i = 1; i <= 6; i++) {
+    const h = hash1(i * 5.1 + Math.floor(P.t * 4))
+    ctx.fillStyle = `rgba(255,233,168,${0.5 - i * 0.07})`
+    ctx.beginPath()
+    ctx.arc(tl.x + Math.cos(tl.ang) * i * P.maxW * 0.8 + (h - 0.5) * 10, tl.y + Math.sin(tl.ang) * i * P.maxW * 0.8 + (hash1(i * 9.7) - 0.5) * 12, Math.max(0.8, 3 - i * 0.4), 0, TAU)
+    ctx.fill()
+  }
+  ctx.restore()
+  headSpace(P, () => {
+    const b = P.bodyW
+    const open = 0.3 + player.maw * 0.6
+    // antlers of light
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
+    ctx.strokeStyle = hexA(s.accent, 0.8)
+    ctx.lineWidth = 2
+    for (const sgn of [-1, -0.55]) {
+      ctx.beginPath()
+      ctx.moveTo(-b * 0.4, sgn * b * 0.5)
+      ctx.quadraticCurveTo(-b * 1.8, sgn * b * 2.4, -b * 3.0, sgn * b * 2.2)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.moveTo(-b * 1.6, sgn * b * 1.7)
+      ctx.lineTo(-b * 2.2, sgn * b * 2.8)
+      ctx.stroke()
+    }
+    ctx.restore()
+    ctx.fillStyle = '#0c0818'
+    ctx.beginPath()
+    ctx.moveTo(P.noseW * 0.8, 0)
+    ctx.quadraticCurveTo(-b * 0.7, -b * open * 1.3, -b * 1.8, -b * 0.2)
+    ctx.lineTo(-b * 1.8, b * 0.2)
+    ctx.quadraticCurveTo(-b * 0.7, b * open * 1.3, P.noseW * 0.8, 0)
+    ctx.closePath()
+    ctx.fill()
+    eyeAt(-b * 0.7, -b * 0.5, b * 0.3, '#080414', s.accent)
+  })
+}
+
+// Stage 14 · The Mooneater — the cephalopod again, but wrong: winged, crowned
+// in starlight, and hungry for satellites
+function drawMooneater(P) {
+  const s = P.s
+  // orbiting star-sigil halo
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  const R = P.maxW * 5.8
+  ctx.strokeStyle = hexA(s.accent, 0.28)
+  ctx.lineWidth = 2
+  for (let i = 0; i < 11; i++) {
+    const a0 = P.t * 0.3 + (i / 11) * TAU
+    ctx.beginPath(); ctx.arc(P.hx, P.hy, R, a0, a0 + 0.2); ctx.stroke()
+    ctx.beginPath(); ctx.arc(P.hx, P.hy, R * 0.74, -a0 * 1.3, -a0 * 1.3 + 0.14); ctx.stroke()
+  }
+  for (let i = 0; i < 5; i++) {
+    const a = P.t * 0.5 + (i / 5) * TAU
+    const tw = 0.4 + 0.6 * Math.abs(Math.sin(P.t * 3 + i * 2))
+    ctx.fillStyle = `rgba(255,240,200,${tw * 0.7})`
+    ctx.beginPath(); ctx.arc(P.hx + Math.cos(a) * R * 0.88, P.hy + Math.sin(a) * R * 0.88, 2.5, 0, TAU); ctx.fill()
+  }
+  ctx.restore()
+  drawWingPair(P, 0.30, P.maxW * 4.8, hexA(shade(s.color, 30), 0.9), hexA(s.accent, 0.5))
+  drawCephalopod(P, { arms: 14, spread: 3.2, armLen: 6.8, armW: 0.24, thirdEye: true, crown: true })
+}
+
 // `swim`/`waves` set the lateral undulation: eels thrash, whales barely flex.
 const FORMS = {
   larva:   { profile: PROFILES.larva,   draw: drawLarva,   swim: 0.55, waves: 1.2 },
@@ -2200,6 +3355,10 @@ const FORMS = {
   whale:   { profile: PROFILES.whale,   draw: drawWhale,   swim: 0.10, waves: 0.8 },
   kraken:  { profile: PROFILES.kraken,  draw: drawKraken,  swim: 0.07, waves: 0.7 },
   god:     { profile: PROFILES.god,     draw: drawGod,     swim: 0.07, waves: 0.7 },
+  wyrm:    { profile: PROFILES.wyrm,    draw: drawWyrm,    swim: 0.55, waves: 2.0 },
+  skywhale:{ profile: PROFILES.skywhale,draw: drawSkywhale,swim: 0.10, waves: 0.8 },
+  starserp:{ profile: PROFILES.starserp,draw: drawStarserp,swim: 0.70, waves: 2.6 },
+  mooneater:{ profile: PROFILES.mooneater, draw: drawMooneater, swim: 0.07, waves: 0.7 },
 }
 
 // ---- Status effects drawn over the monster -----------------------------
@@ -2729,6 +3888,341 @@ function drawCreature(c) {
       break
     }
 
+    case 'bird': {
+      // body + two beating wings; span birds glide stiff-armed
+      const flap = c.span ? Math.sin(t * 3 + c.wob) * 0.25 : Math.sin(t * 9 + c.wob)
+      ctx.beginPath(); ctx.ellipse(0, 0, r, r * 0.42, 0, 0, TAU); ctx.fill()
+      // tail
+      ctx.beginPath()
+      ctx.moveTo(-r * 0.8, 0); ctx.lineTo(-r * 1.5, -r * 0.25); ctx.lineTo(-r * 1.5, r * 0.25)
+      ctx.closePath(); ctx.fill()
+      // wings
+      const wspan = r * (c.span ? 2.6 : 1.7)
+      ctx.fillStyle = hexA(c.col, 0.9)
+      ctx.beginPath()
+      ctx.moveTo(-r * 0.1, -r * 0.15)
+      ctx.quadraticCurveTo(r * 0.2 - wspan * 0.3, -wspan * (0.55 + flap * 0.4), -wspan * 0.55, -wspan * (0.8 + flap * 0.5))
+      ctx.quadraticCurveTo(-r * 0.5, -wspan * 0.3, -r * 0.4, 0)
+      ctx.closePath(); ctx.fill()
+      ctx.fillStyle = hexA(shade(c.col, -40), 0.8)
+      ctx.beginPath()
+      ctx.moveTo(-r * 0.1, r * 0.05)
+      ctx.quadraticCurveTo(r * 0.1 - wspan * 0.2, wspan * (0.4 - flap * 0.3), -wspan * 0.4, wspan * (0.6 - flap * 0.4))
+      ctx.quadraticCurveTo(-r * 0.5, wspan * 0.24, -r * 0.4, r * 0.1)
+      ctx.closePath(); ctx.fill()
+      ctx.fillStyle = c.col
+      // head + beak (pelicans get the pouch)
+      ctx.beginPath(); ctx.arc(r * 0.9, -r * 0.18, r * 0.3, 0, TAU); ctx.fill()
+      ctx.fillStyle = c.pouch ? '#e8a860' : '#e8b840'
+      ctx.beginPath()
+      ctx.moveTo(r * 1.1, -r * 0.28)
+      ctx.lineTo(r * (c.pouch ? 1.9 : 1.55), c.pouch ? r * 0.1 : -r * 0.12)
+      ctx.lineTo(r * 1.05, c.pouch ? r * 0.22 : -r * 0.02)
+      ctx.closePath(); ctx.fill()
+      ctx.fillStyle = '#101418'
+      ctx.beginPath(); ctx.arc(r * 0.95, -r * 0.26, r * 0.07, 0, TAU); ctx.fill()
+      break
+    }
+
+    case 'wisp': {
+      // ball lightning with a will: a flickering core and stray arcs
+      ctx.save()
+      ctx.globalCompositeOperation = 'lighter'
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 1.4)
+      g.addColorStop(0, hexA(c.col, 0.9))
+      g.addColorStop(0.5, hexA(c.col, 0.35))
+      g.addColorStop(1, hexA(c.col, 0))
+      ctx.fillStyle = g
+      ctx.beginPath(); ctx.arc(0, 0, r * 1.4, 0, TAU); ctx.fill()
+      ctx.strokeStyle = hexA(c.col, 0.8)
+      ctx.lineWidth = 1.3
+      for (let i = 0; i < 4; i++) {
+        const a = t * 6 + i * 1.7 + c.wob
+        ctx.beginPath()
+        ctx.moveTo(Math.cos(a) * r * 0.4, Math.sin(a) * r * 0.4)
+        ctx.lineTo(Math.cos(a + 0.6) * r * (1.1 + Math.sin(t * 11 + i) * 0.3), Math.sin(a + 0.6) * r * 1.1)
+        ctx.stroke()
+      }
+      ctx.restore()
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.28, 0, TAU); ctx.fill()
+      break
+    }
+
+    case 'moth': {
+      const flap = Math.abs(Math.sin(t * 7 + c.wob))
+      ctx.fillStyle = hexA(c.col, 0.85)
+      for (const sgn of [-1, 1]) {
+        ctx.beginPath()
+        ctx.ellipse(-r * 0.1, sgn * r * (0.35 + flap * 0.4), r * 0.85, r * (0.5 + flap * 0.25), sgn * 0.5, 0, TAU)
+        ctx.fill()
+      }
+      ctx.fillStyle = shade(c.col, -50)
+      ctx.beginPath(); ctx.ellipse(0, 0, r * 0.55, r * 0.2, 0, 0, TAU); ctx.fill()
+      ctx.strokeStyle = hexA(c.col, 0.7); ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(r * 0.5, 0); ctx.lineTo(r * 0.9, -r * 0.3); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(r * 0.5, 0); ctx.lineTo(r * 0.9, r * 0.1); ctx.stroke()
+      break
+    }
+
+    case 'balloon': {
+      // weather balloon: envelope, line, and a little instrument box
+      ctx.beginPath(); ctx.ellipse(0, -r * 0.4, r * 0.85, r, 0, 0, TAU); ctx.fill()
+      ctx.strokeStyle = hexA(shade(c.col, -60), 0.7); ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(0, -r * 1.4); ctx.quadraticCurveTo(r * 0.5, -r * 0.4, 0, r * 0.6); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(0, -r * 1.4); ctx.quadraticCurveTo(-r * 0.5, -r * 0.4, 0, r * 0.6); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(0, r * 0.6); ctx.lineTo(0, r * 1.3); ctx.stroke()
+      ctx.fillStyle = '#c8b088'
+      ctx.fillRect(-r * 0.25, r * 1.3, r * 0.5, r * 0.4)
+      break
+    }
+
+    case 'plane': {
+      // prop / cargo plane: tube fuselage, straight wing, tailplane
+      const big = c.big
+      ctx.beginPath(); ctx.ellipse(0, 0, r * 1.3, r * 0.34, 0, 0, TAU); ctx.fill()
+      ctx.fillStyle = hexA(shade(c.col, -30), 0.95)
+      ctx.beginPath()
+      ctx.moveTo(r * 0.25, -r * 0.1)
+      ctx.lineTo(-r * (big ? 0.6 : 0.45), -r * (big ? 1.15 : 0.9))
+      ctx.lineTo(-r * (big ? 0.95 : 0.75), -r * (big ? 1.1 : 0.85))
+      ctx.lineTo(-r * 0.25, -r * 0.05)
+      ctx.closePath(); ctx.fill()
+      ctx.beginPath()
+      ctx.moveTo(-r * 1.05, -r * 0.1); ctx.lineTo(-r * 1.45, -r * 0.75); ctx.lineTo(-r * 1.35, -r * 0.05)
+      ctx.closePath(); ctx.fill()
+      // windows / cockpit
+      ctx.fillStyle = '#9fd0e0'
+      ctx.beginPath(); ctx.ellipse(r * 0.95, -r * 0.1, r * 0.2, r * 0.12, 0, 0, TAU); ctx.fill()
+      // spinning prop blur
+      ctx.strokeStyle = hexA('#dfe8f0', 0.5)
+      ctx.lineWidth = 1.6
+      ctx.beginPath(); ctx.ellipse(r * 1.32, 0, r * 0.08, r * 0.55 * Math.abs(Math.sin(t * 14 + c.wob)) + r * 0.1, 0, 0, TAU); ctx.stroke()
+      break
+    }
+
+    case 'jet': {
+      // fighter: dart silhouette, canted tail, afterburner
+      ctx.beginPath()
+      ctx.moveTo(r * 1.5, 0)
+      ctx.lineTo(r * 0.2, -r * 0.3)
+      ctx.lineTo(-r * 0.5, -r * 0.95)
+      ctx.lineTo(-r * 0.9, -r * 0.25)
+      ctx.lineTo(-r * 1.3, -r * 0.7)
+      ctx.lineTo(-r * 1.2, 0)
+      ctx.lineTo(-r * 0.9, r * 0.2)
+      ctx.lineTo(-r * 0.4, r * 0.75)
+      ctx.lineTo(r * 0.25, r * 0.25)
+      ctx.closePath(); ctx.fill()
+      ctx.fillStyle = '#9fd0e0'
+      ctx.beginPath(); ctx.ellipse(r * 0.85, -r * 0.08, r * 0.28, r * 0.12, -0.1, 0, TAU); ctx.fill()
+      ctx.save()
+      ctx.globalCompositeOperation = 'lighter'
+      const flame = 0.6 + Math.abs(Math.sin(t * 20 + c.wob)) * 0.4
+      const g = ctx.createRadialGradient(-r * 1.25, 0, 0, -r * 1.25, 0, r * flame)
+      g.addColorStop(0, 'rgba(180,220,255,0.9)')
+      g.addColorStop(0.4, 'rgba(255,160,80,0.5)')
+      g.addColorStop(1, 'rgba(255,120,40,0)')
+      ctx.fillStyle = g
+      ctx.beginPath(); ctx.arc(-r * 1.25, 0, r * flame, 0, TAU); ctx.fill()
+      ctx.restore()
+      break
+    }
+
+    case 'zeppelin': {
+      // a fat envelope with fins and a gondola
+      ctx.beginPath(); ctx.ellipse(0, 0, r * 1.7, r * 0.62, 0, 0, TAU); ctx.fill()
+      ctx.fillStyle = hexA(shade(c.col, -40), 0.9)
+      ctx.beginPath()
+      ctx.moveTo(-r * 1.5, -r * 0.2); ctx.lineTo(-r * 2.15, -r * 0.6); ctx.lineTo(-r * 1.85, 0)
+      ctx.lineTo(-r * 2.15, r * 0.6); ctx.lineTo(-r * 1.5, r * 0.2)
+      ctx.closePath(); ctx.fill()
+      ctx.strokeStyle = hexA(shade(c.col, -50), 0.6); ctx.lineWidth = 1
+      for (let i = -2; i <= 2; i++) {
+        ctx.beginPath(); ctx.ellipse(i * r * 0.55, 0, r * 0.28, r * 0.6, 0, -Math.PI * 0.42, Math.PI * 0.42); ctx.stroke()
+      }
+      ctx.fillStyle = '#4a4238'
+      ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-r * 0.45, r * 0.55, r * 0.9, r * 0.3, r * 0.1) : ctx.rect(-r * 0.45, r * 0.55, r * 0.9, r * 0.3); ctx.fill()
+      ctx.fillStyle = '#ffd890'
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath(); ctx.arc(-r * 0.25 + i * r * 0.25, r * 0.7, r * 0.05, 0, TAU); ctx.fill()
+      }
+      break
+    }
+
+    case 'satellite': {
+      // bus + solar wings (+ a dish on the big ones)
+      ctx.save()
+      ctx.rotate(Math.sin(t * 0.4 + c.wob) * 0.5)
+      ctx.fillStyle = c.col
+      ctx.fillRect(-r * 0.4, -r * 0.4, r * 0.8, r * 0.8)
+      ctx.fillStyle = '#3a5a9e'
+      for (const sgn of [-1, 1]) {
+        ctx.fillRect(sgn * r * 0.5 - (sgn < 0 ? r * 1.2 : 0), -r * 0.3, r * 1.2, r * 0.6)
+      }
+      ctx.strokeStyle = 'rgba(220,235,255,0.5)'
+      ctx.lineWidth = 1
+      for (const sgn of [-1, 1]) {
+        for (let i = 1; i < 4; i++) {
+          const xx = sgn * (r * 0.5 + i * r * 0.3)
+          ctx.beginPath(); ctx.moveTo(xx, -r * 0.3); ctx.lineTo(xx, r * 0.3); ctx.stroke()
+        }
+      }
+      if (c.dish) {
+        ctx.fillStyle = '#e8eef4'
+        ctx.beginPath(); ctx.ellipse(0, -r * 0.75, r * 0.5, r * 0.28, 0, Math.PI, 0); ctx.fill()
+        ctx.strokeStyle = '#e8eef4'
+        ctx.beginPath(); ctx.moveTo(0, -r * 0.75); ctx.lineTo(0, -r * 1.1); ctx.stroke()
+      }
+      // blinking beacon
+      ctx.fillStyle = (t * 2 + c.wob) % 1 < 0.5 ? '#ff5a5a' : '#5aff8a'
+      ctx.beginPath(); ctx.arc(0, r * 0.5, r * 0.08, 0, TAU); ctx.fill()
+      ctx.restore()
+      break
+    }
+
+    case 'junk': {
+      ctx.save()
+      ctx.rotate(t * (0.4 + hash1(c.wob) * 0.5) + c.wob)
+      ctx.fillStyle = c.col
+      ctx.fillRect(-r * 0.8, -r * 0.3, r * 1.6, r * 0.6)
+      ctx.fillStyle = hexA(shade(c.col, -50), 0.9)
+      ctx.fillRect(-r * 0.2, -r * 0.7, r * 0.5, r * 0.5)
+      ctx.strokeStyle = hexA(shade(c.col, 40), 0.6); ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(r * 0.8, 0); ctx.lineTo(r * 1.3, -r * 0.4); ctx.stroke()
+      ctx.restore()
+      break
+    }
+
+    case 'astronaut': {
+      ctx.save()
+      ctx.rotate(Math.sin(t * 0.6 + c.wob) * 0.6)
+      // backpack, suit, helmet
+      ctx.fillStyle = '#c8ccd4'
+      ctx.fillRect(-r * 0.9, -r * 0.5, r * 0.45, r * 1.0)
+      ctx.fillStyle = c.col
+      ctx.beginPath(); ctx.ellipse(0, r * 0.15, r * 0.5, r * 0.65, 0, 0, TAU); ctx.fill()
+      // flailing limbs
+      ctx.strokeStyle = c.col; ctx.lineWidth = r * 0.24; ctx.lineCap = 'round'
+      ctx.beginPath(); ctx.moveTo(-r * 0.1, r * 0.5); ctx.lineTo(-r * 0.5 + Math.sin(t * 3) * r * 0.2, r * 1.15); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(r * 0.15, r * 0.5); ctx.lineTo(r * 0.55, r * 1.1 + Math.cos(t * 3.4) * r * 0.2); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(-r * 0.2, -r * 0.1); ctx.lineTo(-r * 0.85 + Math.sin(t * 2.7) * r * 0.2, -r * 0.5); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(r * 0.3, -r * 0.1); ctx.lineTo(r * 0.9, -r * 0.35 + Math.sin(t * 3.1) * r * 0.25); ctx.stroke()
+      ctx.lineCap = 'butt'
+      ctx.beginPath(); ctx.arc(0, -r * 0.55, r * 0.42, 0, TAU); ctx.fillStyle = '#eef2f6'; ctx.fill()
+      ctx.fillStyle = '#2a3038'
+      ctx.beginPath(); ctx.arc(r * 0.08, -r * 0.55, r * 0.3, 0, TAU); ctx.fill()
+      ctx.fillStyle = 'rgba(255,255,255,0.5)'
+      ctx.beginPath(); ctx.arc(r * 0.16, -r * 0.65, r * 0.09, 0, TAU); ctx.fill()
+      ctx.restore()
+      break
+    }
+
+    case 'ufo': {
+      // saucer, dome, and a probing abduction beam
+      ctx.save()
+      ctx.globalCompositeOperation = 'lighter'
+      const bg2 = ctx.createLinearGradient(0, 0, 0, r * 3)
+      bg2.addColorStop(0, hexA(c.col, 0.30))
+      bg2.addColorStop(1, hexA(c.col, 0))
+      ctx.fillStyle = bg2
+      ctx.beginPath()
+      ctx.moveTo(-r * 0.5, r * 0.2); ctx.lineTo(-r * 1.4, r * 3); ctx.lineTo(r * 1.4, r * 3); ctx.lineTo(r * 0.5, r * 0.2)
+      ctx.closePath(); ctx.fill()
+      ctx.restore()
+      ctx.fillStyle = '#aeb8c4'
+      ctx.beginPath(); ctx.ellipse(0, 0, r * 1.3, r * 0.4, 0, 0, TAU); ctx.fill()
+      ctx.fillStyle = hexA(c.col, 0.75)
+      ctx.beginPath(); ctx.ellipse(0, -r * 0.3, r * 0.55, r * 0.42, 0, Math.PI, 0); ctx.fill()
+      for (let i = -2; i <= 2; i++) {
+        ctx.fillStyle = (t * 3 + i) % 5 < 1 ? '#fff8c0' : hexA(c.col, 0.8)
+        ctx.beginPath(); ctx.arc(i * r * 0.5, r * 0.12, r * 0.09, 0, TAU); ctx.fill()
+      }
+      break
+    }
+
+    case 'meteor': {
+      // a tumbling chunk with a hot tail
+      ctx.save()
+      ctx.globalCompositeOperation = 'lighter'
+      const tg = ctx.createLinearGradient(0, 0, -r * 3.4, 0)
+      tg.addColorStop(0, hexA(c.col, 0.55))
+      tg.addColorStop(1, hexA(c.col, 0))
+      ctx.fillStyle = tg
+      ctx.beginPath()
+      ctx.moveTo(0, -r * 0.5); ctx.lineTo(-r * 3.4, 0); ctx.lineTo(0, r * 0.5)
+      ctx.closePath(); ctx.fill()
+      ctx.restore()
+      ctx.save()
+      ctx.rotate(t * 1.5 + c.wob)
+      ctx.fillStyle = c.col
+      ctx.beginPath()
+      for (let i = 0; i < 7; i++) {
+        const a = (i / 7) * TAU
+        const rr = r * (0.72 + hash1(c.wob * 10 + i) * 0.4)
+        i ? ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr) : ctx.moveTo(Math.cos(a) * rr, Math.sin(a) * rr)
+      }
+      ctx.closePath(); ctx.fill()
+      ctx.fillStyle = hexA(shade(c.col, -70), 0.8)
+      ctx.beginPath(); ctx.arc(r * 0.2, -r * 0.15, r * 0.2, 0, TAU); ctx.fill()
+      ctx.beginPath(); ctx.arc(-r * 0.25, r * 0.2, r * 0.14, 0, TAU); ctx.fill()
+      ctx.restore()
+      break
+    }
+
+    case 'comet': {
+      ctx.save()
+      ctx.globalCompositeOperation = 'lighter'
+      const tg = ctx.createLinearGradient(0, 0, -r * 5, 0)
+      tg.addColorStop(0, hexA(c.col, 0.7))
+      tg.addColorStop(1, hexA(c.col, 0))
+      ctx.fillStyle = tg
+      ctx.beginPath()
+      ctx.moveTo(r * 0.3, -r * 0.55)
+      ctx.quadraticCurveTo(-r * 2, -r * 1.1, -r * 5, -r * 0.2)
+      ctx.lineTo(-r * 5, r * 0.2)
+      ctx.quadraticCurveTo(-r * 2, r * 1.1, r * 0.3, r * 0.55)
+      ctx.closePath(); ctx.fill()
+      const cg = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 1.3)
+      cg.addColorStop(0, 'rgba(255,255,255,0.95)')
+      cg.addColorStop(0.4, hexA(c.col, 0.6))
+      cg.addColorStop(1, hexA(c.col, 0))
+      ctx.fillStyle = cg
+      ctx.beginPath(); ctx.arc(0, 0, r * 1.3, 0, TAU); ctx.fill()
+      ctx.restore()
+      ctx.fillStyle = '#e8f6ff'
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.45, 0, TAU); ctx.fill()
+      break
+    }
+
+    case 'rocket': {
+      // climbing hard, riding a plume
+      ctx.beginPath()
+      ctx.moveTo(r * 1.6, 0)
+      ctx.quadraticCurveTo(r * 0.9, -r * 0.5, -r * 0.6, -r * 0.45)
+      ctx.lineTo(-r * 1.1, -r * 0.45)
+      ctx.lineTo(-r * 1.1, r * 0.45)
+      ctx.lineTo(-r * 0.6, r * 0.45)
+      ctx.quadraticCurveTo(r * 0.9, r * 0.5, r * 1.6, 0)
+      ctx.closePath(); ctx.fill()
+      ctx.fillStyle = '#c84a3a'
+      ctx.beginPath(); ctx.moveTo(-r * 0.6, -r * 0.45); ctx.lineTo(-r * 1.35, -r * 0.95); ctx.lineTo(-r * 1.1, -r * 0.3); ctx.closePath(); ctx.fill()
+      ctx.beginPath(); ctx.moveTo(-r * 0.6, r * 0.45); ctx.lineTo(-r * 1.35, r * 0.95); ctx.lineTo(-r * 1.1, r * 0.3); ctx.closePath(); ctx.fill()
+      ctx.fillStyle = '#5a88b8'
+      ctx.beginPath(); ctx.arc(r * 0.7, 0, r * 0.2, 0, TAU); ctx.fill()
+      ctx.save()
+      ctx.globalCompositeOperation = 'lighter'
+      const flame = 1 + Math.abs(Math.sin(t * 18 + c.wob)) * 0.5
+      const fg = ctx.createRadialGradient(-r * 1.3, 0, 0, -r * 1.3, 0, r * flame * 1.3)
+      fg.addColorStop(0, 'rgba(255,240,200,0.95)')
+      fg.addColorStop(0.35, 'rgba(255,170,80,0.6)')
+      fg.addColorStop(1, 'rgba(255,120,40,0)')
+      ctx.fillStyle = fg
+      ctx.beginPath(); ctx.arc(-r * 1.3, 0, r * flame * 1.3, 0, TAU); ctx.fill()
+      ctx.restore()
+      break
+    }
+
     case 'fish':
     default: {
       ctx.beginPath(); ctx.ellipse(0, 0, r, r * 0.6, 0, 0, TAU); ctx.fill()
@@ -2752,6 +4246,22 @@ function drawCreature(c) {
     }
   }
   ctx.restore()
+
+  // a stunned creature sparks and drifts
+  if (c.stunT > 0) {
+    ctx.save()
+    ctx.globalCompositeOperation = 'lighter'
+    ctx.strokeStyle = 'rgba(200,240,255,0.8)'
+    ctx.lineWidth = 1.2
+    for (let i = 0; i < 4; i++) {
+      const a = now() * 0.02 + i * 1.6
+      ctx.beginPath()
+      ctx.moveTo(x + Math.cos(a) * r * 1.1, y + Math.sin(a) * r * 1.1)
+      ctx.lineTo(x + Math.cos(a + 0.4) * r * 1.6, y + Math.sin(a + 0.4) * r * 1.6)
+      ctx.stroke()
+    }
+    ctx.restore()
+  }
 
   // a hunting predator gets a red glint so you can read the threat
   if (c.hunting) {
@@ -2954,6 +4464,12 @@ document.getElementById('start-btn').addEventListener('click', () => {
   mouse.x = window.innerWidth / 2
   mouse.y = window.innerHeight / 2
 })
+document.getElementById('continue-btn').addEventListener('click', () => {
+  document.getElementById('end-screen').classList.add('hidden')
+})
+document.getElementById('restart-btn').addEventListener('click', () => {
+  location.reload()
+})
 
 // The scene runs from the first frame so the deep is already alive behind the
 // start card; clicking start just hands over the controls.
@@ -2969,15 +4485,17 @@ window.abyss = {
     return STAGES[player.stageIndex].name
   },
   dive(y) {
-    player.y = clamp(y, SURFACE_Y + 20, WORLD_H - 20)
+    player.y = clamp(y, SKY_TOP + 100, WORLD_H - 20)
     player.spine.forEach((p, i) => { p.x = player.x - i * 6; p.y = player.y })
-    cam.y = clamp(player.y - window.innerHeight / 2, 0, WORLD_H - window.innerHeight)
+    cam.y = clamp(player.y - window.innerHeight / 2, SKY_TOP, WORLD_H - window.innerHeight)
     return zoneAt(player.y).name
   },
+  ability: () => fireAbility(),
+  moon: () => ({ hp: MOON.hp, dx: Math.round(MOON.x - player.x), dy: Math.round(MOON.y - player.y), awake: MOON.awake, eaten: MOON.eaten }),
   boats: () => boats.map((b) => ({ name: b.type.name, dx: Math.round(b.x - player.x), hp: b.hp })),
   creatures: () => creatures.map((c) => ({ key: c.key, r: Math.round(c.r), sx: Math.round(sx(c.x)), sy: Math.round(sy(c.y)) })),
   stages: STAGES.map((s) => s.name),
-  zones: ZONES.map((z) => z.name),
+  zones: ZONES.map((z) => z.name).concat(AIR_ZONES.map((z) => z.name)),
 }
 
 
