@@ -16,7 +16,7 @@
 
 import {
   BRICK, MORTAR, PITCH, COURSE, REACH, DROP, LAY_STANDOFF, COLORS,
-  MATERIAL_OF, roofTopY, slopeZ,
+  MATERIAL_OF, roofTopY, slopeZ, tileShades,
 } from './config.js'
 
 export const PHASES = [
@@ -89,7 +89,7 @@ const runIndexFor = (runs, b) => runs.findIndex((r) => b.c >= r.u0 - 1e-6 && b.c
  * Build the whole plan for one house on one plot.
  * `geom` comes from houseGeom(); `paint` is the colour the decorators bring.
  */
-export function buildPlan(rng, { geom, day = 1, plotIndex = 0, paint }) {
+export function buildPlan(rng, { geom, day = 1, plotIndex = 0, paint, roof }) {
   const items = []
   const mortar = []
   const mortarBy = new Map()
@@ -111,7 +111,9 @@ export function buildPlan(rng, { geom, day = 1, plotIndex = 0, paint }) {
     return it.i
   }
   const brickColor = () => COLORS.brick[(rng() * COLORS.brick.length) | 0]
-  const tileColor = () => COLORS.tile[(rng() * COLORS.tile.length) | 0]
+  // the roofers work off one pallet, so every tile is a shade of the same colour
+  const roofShades = tileShades(roof.color)
+  const tileColor = () => roofShades[(rng() * roofShades.length) | 0]
 
   function joinMortar(key, make) {
     let idx = mortarBy.get(key)
@@ -643,6 +645,7 @@ export function buildPlan(rng, { geom, day = 1, plotIndex = 0, paint }) {
     paintPatches,
     furniture: FURNITURE,
     paint,
+    roof,
     title: `PLOT ${plotIndex + 1} — ${H.name}`,
     day,
   }

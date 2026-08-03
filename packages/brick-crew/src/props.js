@@ -556,6 +556,163 @@ export function buildSpoilHeap(rng) {
   return g
 }
 
+/**
+ * The side garden that comes with The Little Stack — laid out on the left of
+ * the house, and only turfed once the place is handed over. Lawn, a clipped
+ * hedge round three sides, a bed of flowers under the gable window and a
+ * couple of shrubs.
+ */
+export function buildGarden(geom, rng) {
+  const g = new THREE.Group()
+  const lawn = new THREE.MeshStandardMaterial({ color: 0x6f9a4e, roughness: 1 })
+  const hedge = new THREE.MeshStandardMaterial({ color: 0x3f6b39, roughness: 0.98 })
+  const bark = new THREE.MeshStandardMaterial({ color: 0x6b5236, roughness: 0.95 })
+  const soil = new THREE.MeshStandardMaterial({ color: 0x5a4029, roughness: 1 })
+  const stone = new THREE.MeshStandardMaterial({ color: 0xbdb6a6, roughness: 0.94 })
+
+  const W = 3.6
+  const D = geom.d + 1.2
+  const cx = -(geom.w / 2 + W / 2 + 0.35)
+
+  const turf = box(g, lawn, W, 0.06, D, cx, 0.03)
+  turf.castShadow = false
+  turf.receiveShadow = true
+
+  // clipped hedge along the three open sides
+  const seg = (sx, sz, x, z) => {
+    const h = box(g, hedge, sx, 0.62, sz, x, 0.31, z)
+    h.receiveShadow = true
+  }
+  seg(W, 0.3, cx, -D / 2 + 0.15)
+  seg(W, 0.3, cx, D / 2 - 0.15)
+  seg(0.3, D, cx - W / 2 + 0.15, 0)
+
+  // stepping stones from the front of the plot up the side of the house
+  for (let i = 0; i < 5; i++) {
+    const s = box(g, stone, 0.52, 0.05, 0.46,
+      cx + W / 2 - 0.8 + (rnd(rng) - 0.5) * 0.2, 0.06, D / 2 - 0.9 - i * (D - 1.8) / 4)
+    s.rotation.y = (rnd(rng) - 0.5) * 0.3
+    s.castShadow = false
+  }
+
+  // a flower bed against the gable wall
+  const bedZ = -0.4
+  box(g, soil, 1.5, 0.1, 1.9, cx + W / 2 - 0.75, 0.08, bedZ).castShadow = false
+  const blooms = [0xe4585e, 0xf0c04a, 0xd57ac4, 0xffffff]
+  for (let i = 0; i < 10; i++) {
+    const px = cx + W / 2 - 1.35 + rnd(rng) * 1.2
+    const pz = bedZ - 0.8 + rnd(rng) * 1.6
+    box(g, new THREE.MeshStandardMaterial({ color: 0x4c7a3c, roughness: 1 }), 0.05, 0.26, 0.05, px, 0.24, pz)
+    box(g, new THREE.MeshStandardMaterial({ color: blooms[(rnd(rng) * blooms.length) | 0], roughness: 0.9 }),
+      0.17, 0.13, 0.17, px, 0.42, pz)
+  }
+
+  // two shrubs on the lawn
+  for (const [sx, sz, sc] of [[-0.9, D / 2 - 2.0, 1], [-0.5, -D / 2 + 1.9, 0.78]]) {
+    const t = box(g, bark, 0.14, 0.44, 0.14, cx + sx, 0.22, sz)
+    t.castShadow = true
+    const crown = box(g, hedge, 1.1 * sc, 1.0 * sc, 1.1 * sc, cx + sx, 0.44 + 0.5 * sc, sz, CONE)
+    crown.castShadow = true
+  }
+
+  return g
+}
+
+/**
+ * The gang leader's copy of the drawing: a rolled tube that opens out into a
+ * sheet when it is held up for the gang to look at. `setOpen(k)` runs it from
+ * rolled (0) to flat (1); the roll rides the leading edge the way it does on
+ * the big sheet in the UI.
+ */
+export function buildDrawing() {
+  const g = new THREE.Group()
+  const cv = document.createElement('canvas')
+  cv.width = 256
+  cv.height = 176
+  const c = cv.getContext('2d')
+  c.fillStyle = '#0d3f60'
+  c.fillRect(0, 0, 256, 176)
+  c.strokeStyle = 'rgba(214,234,247,0.75)'
+  c.lineWidth = 2
+  c.strokeRect(10, 10, 236, 156)
+  // a scribble of a house: elevation on the left, plan on the right
+  c.lineWidth = 1.6
+  c.strokeStyle = '#e4f0f8'
+  c.strokeRect(28, 74, 78, 62)
+  c.beginPath()
+  c.moveTo(22, 74)
+  c.lineTo(67, 42)
+  c.lineTo(112, 74)
+  c.stroke()
+  c.strokeRect(44, 96, 18, 22)
+  c.strokeRect(76, 96, 18, 18)
+  c.strokeStyle = 'rgba(214,234,247,0.5)'
+  c.strokeRect(140, 56, 86, 76)
+  c.strokeRect(150, 66, 66, 56)
+  for (let i = 0; i < 5; i++) {
+    c.beginPath()
+    c.moveTo(140, 142 + i * 6)
+    c.lineTo(140 + 40 + (i % 3) * 22, 142 + i * 6)
+    c.stroke()
+  }
+  const tex = new THREE.CanvasTexture(cv)
+  tex.colorSpace = THREE.SRGBColorSpace
+
+  const sheet = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.62, 0.44),
+    new THREE.MeshStandardMaterial({ map: tex, roughness: 0.88, side: THREE.DoubleSide }),
+  )
+  // pivot on the left edge so it unrolls to the right
+  sheet.geometry.translate(0.31, 0, 0)
+  sheet.position.set(-0.31, 0, 0)
+  g.add(sheet)
+
+  const roll = box(g, M.white, 0.05, 0.5, 0.05, 0.31, 0, 0.01, CYL)
+  roll.rotation.x = Math.PI / 2
+  roll.rotation.z = Math.PI / 2
+
+  g.visible = false
+  return {
+    group: g,
+    setOpen(k) {
+      const t = Math.max(0, Math.min(1, k))
+      g.visible = t > 0.01
+      sheet.scale.x = Math.max(0.02, t)
+      roll.position.x = -0.31 + 0.62 * t
+      roll.visible = t < 0.98
+    },
+  }
+}
+
+/**
+ * The merchant's flatbed. Loaded in the yard, driven to whichever plot is
+ * being built, and unloaded into the drops by the shift on site — the same
+ * vehicle either end, because it is the same vehicle.
+ */
+export function buildFlatbed() {
+  const g = new THREE.Group()
+  const cab = new THREE.MeshStandardMaterial({ color: 0x2f6fd8, roughness: 0.5, metalness: 0.2 })
+  const dark = new THREE.MeshStandardMaterial({ color: 0x454b52, roughness: 0.6, metalness: 0.4 })
+  // cab at the front, facing +z
+  box(g, cab, 2.2, 1.7, 2.0, 0, 1.5, 2.4)
+  box(g, dark, 1.9, 0.7, 0.12, 0, 1.9, 3.42)
+  box(g, dark, 2.3, 0.5, 2.1, 0, 0.45, 2.4)
+  // bed
+  box(g, dark, 2.4, 0.3, 5.0, 0, 0.72, -0.7)
+  box(g, M.ply, 2.3, 0.1, 4.9, 0, 0.92, -0.7)
+  for (const s of [-1, 1]) box(g, M.steel, 0.1, 0.5, 4.9, s * 1.15, 1.2, -0.7)
+  box(g, M.steel, 2.4, 0.5, 0.1, 0, 1.2, -3.15)
+  for (const [x, z] of [[-1.15, 2.3], [1.15, 2.3], [-1.15, -1.4], [1.15, -1.4], [-1.15, -2.6], [1.15, -2.6]]) {
+    box(g, M.rubber, 0.34, 0.9, 0.9, x, 0.45, z)
+  }
+  const loadAnchor = new THREE.Group()
+  loadAnchor.position.set(0, 0.97, -0.7)
+  g.add(loadAnchor)
+  /** Where the next pallet goes on the bed. */
+  const slot = (i) => ({ x: ((i % 2) - 0.5) * 1.0, y: 0, z: 1.5 - Math.floor(i / 2) * 1.15 })
+  return { group: g, loadAnchor, slot }
+}
+
 export function buildSign(text) {
   const g = new THREE.Group()
   const cv = document.createElement('canvas')
@@ -679,6 +836,26 @@ function furnMat(color) {
  * One piece of furniture. Origin on the floor at its centre, so it can be
  * parented straight onto a robot's hands or set down on the boards.
  */
+/**
+ * What a piece of furniture can be swapped for once the house is handed over
+ * and somebody starts rearranging it. Sizes go with the kind — a bed is not a
+ * lamp with different geometry.
+ */
+export const FURNITURE_KINDS = [
+  { name: 'sofa', size: [1.4, 0.62, 0.62], color: 0x6d7f9c },
+  { name: 'table', size: [0.95, 0.58, 0.68], color: 0xa9763f },
+  { name: 'chair', size: [0.4, 0.8, 0.4], color: 0x8f5f33 },
+  { name: 'bed', size: [1.2, 0.5, 1.8], color: 0xc4b9a6 },
+  { name: 'wardrobe', size: [0.95, 1.7, 0.52], color: 0x7c5535 },
+  { name: 'bookcase', size: [0.85, 1.4, 0.34], color: 0x96683c },
+  { name: 'lamp', size: [0.3, 1.3, 0.3], color: 0xe0c98a },
+]
+
+/** Finishes you can put a piece in. */
+export const FURNITURE_COLORS = [
+  0x7c5535, 0xa9763f, 0x6d7f9c, 0xc4b9a6, 0x8a9c7a, 0xb0796f, 0xe0c98a, 0x5d5f68,
+]
+
 export function buildFurniture(spec) {
   const g = new THREE.Group()
   const [w, h, d] = spec.size

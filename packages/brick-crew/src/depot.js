@@ -25,8 +25,9 @@
 
 import * as THREE from 'three'
 import { buildRobot, buildCarryStack } from './robot.js'
-import { buildCone, buildSign, buildStock } from './props.js'
+import { buildCone, buildSign, buildStock, buildFlatbed } from './props.js'
 import { MATERIALS, KIT_LEAD_SECONDS } from './config.js'
+import { orders } from './orders.js'
 
 const BOX = new THREE.BoxGeometry(1, 1, 1)
 
@@ -50,6 +51,9 @@ const BAY_DZ = 2.6
 /** Where the flatbed stands to be loaded, and the line the hands load from. */
 const DOCK = { x: 10.2, z: -9.6 }
 const LOAD_POINT = { x: 7.4, z: -10.2 }
+/** Gangers get a white hat, the way they do on a real site. */
+const LEAD_HAT = 0xf2f5f7
+
 /** How many loads fill a lorry before it runs down to the site. */
 const LORRY_LOADS = 7
 
@@ -338,44 +342,19 @@ export function createDepot({ origin, rng }) {
   }
 
   // --- the flatbed ---------------------------------------------------------
-  function buildFlatbed() {
-    const g = new THREE.Group()
-    // cab at the front (+z, pointing at the gate)
-    box(g, M.cab, 2.2, 1.7, 2.0, 0, 1.5, 2.4)
-    box(g, M.dark, 1.9, 0.7, 0.12, 0, 1.9, 3.42)
-    box(g, M.dark, 2.3, 0.5, 2.1, 0, 0.45, 2.4)
-    // bed
-    box(g, M.dark, 2.4, 0.3, 5.0, 0, 0.72, -0.7)
-    box(g, M.ply, 2.3, 0.1, 4.9, 0, 0.92, -0.7)
-    for (const s of [-1, 1]) box(g, M.steel, 0.1, 0.5, 4.9, s * 1.15, 1.2, -0.7)
-    box(g, M.steel, 2.4, 0.5, 0.1, 0, 1.2, -3.15)
-    for (const [x, z] of [[-1.15, 2.3], [1.15, 2.3], [-1.15, -1.4], [1.15, -1.4], [-1.15, -2.6], [1.15, -2.6]]) {
-      const w = box(g, M.rubber, 0.34, 0.9, 0.9, x, 0.45, z)
-      w.castShadow = true
-    }
-    const loadAnchor = new THREE.Group()
-    loadAnchor.position.set(0, 0.97, -0.7)
-    g.add(loadAnchor)
-    return { group: g, loadAnchor }
-  }
-
   const lorry = buildFlatbed()
   // sized against a robot, not against the yard
   lorry.group.scale.setScalar(0.66)
   group.add(lorry.group)
-  const lorryState = { x: DOCK.x, z: DOCK.z, yaw: 0, mode: 'dock', loads: 0, t: 0 }
+  /** The load of the lorry that has just left, waiting to be collected. */
+  let outbound = null
+  const lorryState = { x: DOCK.x, z: DOCK.z, yaw: 0, mode: 'dock', loads: 0, t: 0, manifest: [] }
   lorry.group.position.set(DOCK.x, 0, DOCK.z)
-
-  /** Where the next pallet goes on the bed. */
-  function bedSlot(i) {
-    const col = i % 2
-    const row = Math.floor(i / 2)
-    return { x: (col - 0.5) * 1.0, y: 0, z: 1.5 - row * 1.15 }
-  }
 
   function resetLorry() {
     for (const c of lorry.loadAnchor.children.slice()) lorry.loadAnchor.remove(c)
     lorryState.loads = 0
+    lorryState.manifest = []
   }
 
   // --- the yard hands ------------------------------------------------------
@@ -464,7 +443,7 @@ export function createDepot({ origin, rng }) {
    */
   function prepare(crew, roles) {
     if (order) return
-    order = { crew, roles: roles.slice() }
+    order = { crew, roles: roles.slice(), leads: orders.leads(roles) }
     fed = 0
     // the last body has to be kitted and mustered with time to spare
     const walkOff = (LINE_X1 - LINE_X0 + 1.2) / LINE_SPEED + 6
@@ -481,16 +460,19 @@ export function createDepot({ origin, rng }) {
    */
   function prime(crew, roles) {
     if (order) return
-    order = { crew, roles: roles.slice() }
+    order = { crew, roles: roles.slice(), leads: orders.leads(roles) }
     fed = order.roles.length
     feedT = 0
     roles.forEach((role, i) => {
-      const rig = buildRobot({ role, accent: crew.accent, hatColor: crew.hat, rng })
+      const lead = order.leads[i]
+      const rig = buildRobot({
+        role, accent: crew.accent, hatColor: lead ? LEAD_HAT : crew.hat, lead, rng,
+      })
       setKit(rig, 3)
       group.add(rig.group)
       const slot = queueSlot(i)
       const w = {
-        rig, role, state: 'ready', anim: {},
+        rig, role, lead, state: 'ready', anim: {},
         pos: new THREE.Vector3(slot.x, 0, slot.z),
         slot, via: null, yaw: Math.PI / 2, faceYaw: Math.PI / 2,
       }
@@ -514,6 +496,7 @@ export function createDepot({ origin, rng }) {
     const out = done.map((w) => ({
       rig: w.rig,
       role: w.role,
+      lead: !!w.lead,
       world: { x: origin.x + w.rig.group.position.x, z: origin.z + w.rig.group.position.z },
     }))
     for (const w of done) group.remove(w.rig.group)
@@ -534,11 +517,15 @@ export function createDepot({ origin, rng }) {
     const last = inLine[inLine.length - 1]
     if (last && last.x < LINE_X0 + FEED_GAP) return
     feedT = 0
-    const role = order.roles[fed++]
-    const rig = buildRobot({ role, accent: order.crew.accent, hatColor: order.crew.hat, rng })
+    const i = fed++
+    const role = order.roles[i]
+    const lead = order.leads[i]
+    const rig = buildRobot({
+      role, accent: order.crew.accent, hatColor: lead ? LEAD_HAT : order.crew.hat, lead, rng,
+    })
     setKit(rig, 0)
     group.add(rig.group)
-    inLine.push({ rig, role, x: LINE_X0 - 1.2, stage: 0, anim: {}, state: 'line' })
+    inLine.push({ rig, role, lead, x: LINE_X0 - 1.2, stage: 0, anim: {}, state: 'line' })
   }
 
   function stepLine(dt) {
@@ -667,7 +654,8 @@ export function createDepot({ origin, rng }) {
           if (h.stack) {
             h.rig.handAnchor.remove(h.stack)
             if (lorryState.mode === 'dock' && lorryState.loads < LORRY_LOADS) {
-              const slot = bedSlot(lorryState.loads++)
+              const slot = lorry.slot(lorryState.loads++)
+              lorryState.manifest.push({ key: h.carrying?.key ?? bay.mat.key, n: h.carrying?.n ?? 1 })
               h.stack.position.set(slot.x, slot.y, slot.z)
               h.stack.rotation.y = (rng() - 0.5) * 0.16
               lorry.loadAnchor.add(h.stack)
@@ -715,6 +703,8 @@ export function createDepot({ origin, rng }) {
       if (s.z > 14) {
         s.mode = 'away'
         s.t = 0
+        // hand the load to the site before the bed is cleared
+        outbound = s.manifest.slice()
         resetLorry()
       }
     } else if (s.mode === 'away') {
@@ -762,5 +752,14 @@ export function createDepot({ origin, rng }) {
     get pending() { return order ? order.roles.length - queued.length : 0 },
     /** How big the crew on the books is, or 0 if the line is standing idle. */
     get building() { return order ? order.roles.length : 0 },
+    /**
+     * What the lorry that just pulled out of the gate is carrying. Returned
+     * once and then forgotten, so the site can only take delivery of it once.
+     */
+    collectOutbound() {
+      const m = outbound
+      outbound = null
+      return m
+    },
   }
 }

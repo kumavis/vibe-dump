@@ -227,7 +227,13 @@ html, body {
 .picks button:hover { color: var(--ink); border-color: var(--amber); }
 .picks button.on { background: var(--amber); border-color: var(--amber); color: #14181b; font-weight: 700; }
 
-.swatches { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.swatch-row { margin-top: 8px; }
+.swatch-row > span {
+  display: block; margin-bottom: 3px;
+  font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.swatches { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 0; }
 .swatches button {
   width: 24px; height: 20px; cursor: pointer; padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.24); border-radius: 3px;
@@ -237,6 +243,28 @@ html, body {
 .swatches button.on { border-color: var(--amber); box-shadow: 0 0 0 2px var(--amber) inset; }
 .swatches button.auto { width: auto; padding: 0 7px; letter-spacing: 0.08em; }
 .swatches button.auto.on { background: var(--amber); color: #14181b; box-shadow: none; }
+
+/* ---------- inside a finished house ---------- */
+.house { top: 52px; }
+.furn { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.furn-row { display: flex; align-items: center; gap: 4px; }
+.furn-row.out { opacity: 0.4; }
+.furn-row b {
+  flex: 1 1 auto; min-width: 0;
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 400;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.furn-row button {
+  cursor: pointer; flex: 0 0 auto;
+  width: 21px; height: 21px; padding: 0;
+  font-family: var(--mono); font-size: 0.66rem; line-height: 1;
+  color: var(--ink); background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 3px;
+}
+.furn-row button:hover { border-color: var(--amber); color: var(--amber); }
+.furn-row button.tint { border-color: rgba(255, 255, 255, 0.3); }
+.furn-row button.gone { color: var(--muted); }
 
 /* On a phone the legend and the hint are both too wide to sit side by side,
    so they stack instead of overlapping. */

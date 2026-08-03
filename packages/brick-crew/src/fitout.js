@@ -10,7 +10,7 @@
 // ---------------------------------------------------------------------------
 
 import * as THREE from 'three'
-import { SITE, YARD } from './config.js'
+import { SITE, YARD, toLocal } from './config.js'
 import { buildTruck, buildFurniture } from './props.js'
 
 export function createTruckRig({ group, houseGroup, plan, origin, rng }) {
@@ -18,7 +18,7 @@ export function createTruckRig({ group, houseGroup, plan, origin, rng }) {
   truck.group.visible = false
   group.add(truck.group)
 
-  const L = (p) => ({ x: p.x - origin.x, z: p.z - origin.z })
+  const L = (p) => toLocal(origin, p)
   const road = L({ x: SITE.gate.x, z: SITE.roadZ })
   const gate = L(SITE.gate)
   const park = YARD.truck
@@ -128,8 +128,15 @@ export function createTruckRig({ group, houseGroup, plan, origin, rng }) {
     return { x: pos.x + back.x * c + back.z * s, z: pos.z - back.x * s + back.z * c }
   }
 
+  /** Everything standing in the house, in the order it was carried in. */
+  const settled = new Map()
+
   return {
     group: truck.group,
+    /** What is in the house now — handed to the finished house at handover. */
+    get placed() {
+      return [...settled.values()]
+    },
     arrive,
     leave,
     update,
@@ -148,9 +155,11 @@ export function createTruckRig({ group, houseGroup, plan, origin, rng }) {
       mesh.rotation.set(0, spec.rot, 0)
       mesh.scale.setScalar(1)
       houseGroup.add(mesh)
+      settled.set(keyOf(spec), { spec, mesh })
     },
     /** A robot that clocks off mid-delivery puts it back on the lorry. */
     putBack(mesh, spec) {
+      settled.delete(keyOf(spec))
       const i = pieces.findIndex((p) => keyOf(p.spec) === keyOf(spec))
       mesh.position.set(-0.46 + (i % 2) * 0.92, 0, 1.3 - Math.floor(i / 2) * 0.72)
       mesh.rotation.set(0, (i % 3) * 0.4, 0)

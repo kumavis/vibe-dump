@@ -4,17 +4,20 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import {
   SITE, YARD, PLOTS, DEPOT, COURSE, COLORS, SHIFT_SECONDS, PREROLL_SECONDS,
   HOUSE_TYPES, PAINT, MATERIALS, KIT_LEAD_SECONDS, DAY_SECONDS, houseGeom,
+  toWorld, toLocal,
 } from './src/config.js'
 import { orders } from './src/orders.js'
 import { buildPlan } from './src/plan.js'
 import { buildSite, buildSky, buildLights } from './src/site.js'
 import {
   buildStock, buildDrop, buildMixer, buildScaffold, buildCone, buildToolCrate,
-  buildDumpster, buildPrivy, buildSpoilHeap, buildSign, buildRoadArrow,
+  buildDumpster, buildPrivy, buildSpoilHeap, buildSign, buildRoadArrow, buildGarden,
+  buildFurniture, FURNITURE_KINDS, FURNITURE_COLORS,
 } from './src/props.js'
 import { setGeom, setObstacles } from './src/nav.js'
 import { createSim } from './src/sim.js'
 import { createTruckRig } from './src/fitout.js'
+import { createSupplyRig } from './src/supply.js'
 import { createDepot } from './src/depot.js'
 import { createUI } from './src/ui.js'
 import { drawBlueprint } from './src/blueprint.js'
@@ -163,15 +166,19 @@ let stocks = null
 let drops = null
 let mixer = null
 let truckRig = null
+let supplyRig = null
 let houseGroup = null
 let workGroup = null
 let plotIndex = -1
 let day = 0
 let toppingFlag = null
-// The robot the camera is riding along with. Declared up here because
-// startPlot() clears it, and startPlot runs during module init.
+// The robot the camera is riding along with, and the finished house that has
+// had its roof lifted off. Both are declared up here because startPlot() clears
+// them, and startPlot runs during module init.
 let followed = null
+let openHouseGroup = null
 const standing = [] // finished houses left on the street
+const houseHits = [] // one pick target per finished house
 
 function makeFamily(count, opts, family) {
   const mesh = new THREE.InstancedMesh(
@@ -266,35 +273,38 @@ function buildTopOut() {
 
 function startPlot(first) {
   const carriedClock = sim ? sim.clockT : 0
+  closeHouse()
   followed = null
   ui.setFollow(null)
   sim?.dispose()
   if (workGroup) scene.remove(workGroup)
 
+  // Down one side of the road and back up the other, alternating. Nothing is
+  // ever taken away: the street fills up and stays filled.
   plotIndex = (plotIndex + 1) % PLOTS.length
   day++
-  // once the street is full, the developer clears it and starts again
-  if (plotIndex === 0 && !first) {
-    for (const g of standing.splice(0)) scene.remove(g)
-  }
   const origin = PLOTS[plotIndex]
   // whatever the orders panel asked for, else the next one down the street
   const geom = houseGeom(orders.takeHouse(day))
   const paint = orders.takePaint(day)
+  const roof = orders.takeRoof(day)
 
-  plan = buildPlan(rng, { geom, day, plotIndex, paint })
+  plan = buildPlan(rng, { geom, day, plotIndex, paint, roof })
   setGeom(geom, plan.doorway)
   refreshObstacles(origin)
 
   houseGroup = new THREE.Group()
   houseGroup.position.set(origin.x, 0, origin.z)
+  houseGroup.rotation.y = origin.rot || 0
   houseGroup.userData.plot = plotIndex
+  houseGroup.userData.origin = origin
   houseGroup.userData.geom = geom
   scene.add(houseGroup)
   standing.push(houseGroup)
 
   workGroup = new THREE.Group()
   workGroup.position.set(origin.x, 0, origin.z)
+  workGroup.rotation.y = origin.rot || 0
   scene.add(workGroup)
 
   meshes = {}
@@ -311,6 +321,15 @@ function startPlot(first) {
   topOut.position.set(0, geom.ridgeY + 0.2, 0)
   topOut.visible = false
   houseGroup.add(topOut)
+
+  // The Little Stack comes with a side garden. It goes in at handover — a
+  // lawn beside an active building site would not last the week.
+  let gardenGroup = null
+  if (geom.garden) {
+    gardenGroup = buildGarden(geom, rng)
+    gardenGroup.visible = false
+    houseGroup.add(gardenGroup)
+  }
 
   // --- the working site ---------------------------------------------------
   scaffold = buildScaffold(geom)
@@ -371,6 +390,7 @@ function startPlot(first) {
   }
 
   truckRig = createTruckRig({ group: workGroup, houseGroup, plan, origin, rng })
+  supplyRig = createSupplyRig({ group: workGroup, origin, rng })
 
   sim = createSim({
     plan,
@@ -381,6 +401,7 @@ function startPlot(first) {
     drops,
     scaffold,
     truck: truckRig,
+    supply: supplyRig,
     clock0: carriedClock,
     onPlace: reveal,
     onPaint: paintPatch,
@@ -389,7 +410,31 @@ function startPlot(first) {
     onStage: (s) => {
       if (s === 'fitout') topOut.visible = true
     },
-    onComplete: () => {},
+    onComplete: () => {
+      if (gardenGroup) gardenGroup.visible = true
+      // Everything the house needs to be opened up and rearranged later. The
+      // lid is the roof: tiles and rafters, lifted clear when you look inside.
+      houseGroup.userData.house = {
+        title: plan.title,
+        lid: [meshes.tile, meshes.timber].filter(Boolean),
+        pieces: truckRig.placed.map(({ spec, mesh }) => ({
+          spec: { ...spec },
+          kind: FURNITURE_KINDS.findIndex((k) => k.name === spec.name),
+          tint: 0,
+          color: spec.color,
+          mesh,
+          present: true,
+        })),
+      }
+      const hit = new THREE.Mesh(
+        new THREE.BoxGeometry(geom.w + 1.0, geom.ridgeY, geom.d + 1.0),
+        new THREE.MeshBasicMaterial({ visible: false }),
+      )
+      hit.position.y = geom.ridgeY / 2
+      hit.userData.houseOf = houseGroup
+      houseGroup.add(hit)
+      houseHits.push(hit)
+    },
   })
 
   toppingFlag = topOut
@@ -422,14 +467,14 @@ function refreshObstacles(origin) {
   for (const h of standing) {
     if (h.userData.plot === plotIndex) continue
     const g = h.userData.geom
-    boxes.push({
-      x: h.position.x - origin.x,
-      z: h.position.z - origin.z,
-      hw: g.w / 2 + 0.4,
-      hd: g.d / 2 + 0.4,
-    })
+    const l = toLocal(origin, h.position)
+    // A house on the far row is turned 90 degrees relative to this plot's
+    // axes only if the two rows disagree, which they never do — both rows run
+    // along x — so width and depth carry over unswapped.
+    boxes.push({ x: l.x, z: l.z, hw: g.w / 2 + 0.4, hd: g.d / 2 + 0.4 })
   }
-  boxes.push({ x: SITE.trailer.x - origin.x, z: SITE.trailer.z - origin.z, hw: 3.3, hd: 2.2 })
+  const tr = toLocal(origin, SITE.trailer)
+  boxes.push({ x: tr.x, z: tr.z, hw: 3.3, hd: 2.2 })
   setObstacles(boxes)
 }
 
@@ -443,6 +488,12 @@ function orderNextCrew() {
   if (sim.secondsToShiftChange() < KIT_LEAD_SECONDS) depot.prepare(sim.nextCrew(), orders.roles())
 }
 
+/** A lorry has pulled out of the merchant's gate — it is coming here. */
+function collectDelivery() {
+  const manifest = depot.collectOutbound()
+  if (manifest && manifest.length && supplyRig) supplyRig.arrive(manifest)
+}
+
 /**
  * Run the site and the yard forward without drawing anything. Used to check
  * long-running behaviour without waiting out a shift in real time.
@@ -452,6 +503,7 @@ function fastForward(seconds) {
   for (let t = 0; t < seconds; t += h) {
     orderNextCrew()
     depot.update(h, t)
+    collectDelivery()
     sim.update(h)
     if (sim.finished && sim.stageT > 14) startPlot(false)
   }
@@ -459,8 +511,11 @@ function fastForward(seconds) {
 
 /** Look over the hoarding into a plot, from the road side. */
 function framePlot(origin) {
-  camGoal.pos.set(origin.x + 12.4, 8.0, origin.z + 15.0)
-  camGoal.target.set(origin.x + 0.2, 1.5, origin.z + 0.4)
+  // over the hoarding from the road side, whichever row the plot is on
+  const eye = toWorld(origin, { x: 12.4, z: 15.0 })
+  const at = toWorld(origin, { x: 0.2, z: 0.4 })
+  camGoal.pos.set(eye.x, 8.0, eye.z)
+  camGoal.target.set(at.x, 1.5, at.z)
 }
 
 // --- camera moves ----------------------------------------------------------
@@ -504,9 +559,135 @@ function pick(cx, cy) {
   if (view === 'site') {
     const hit = raycaster.intersectObjects(sim.hitboxes, false)[0]
     if (hit) return { kind: 'robot', robot: hit.object.userData.robot }
+    const h = raycaster.intersectObjects(houseHits, false)[0]
+    if (h) return { kind: 'house', group: h.object.userData.houseOf }
   }
   return null
 }
+
+// --- inside a finished house -----------------------------------------------
+//
+// Tapping one lifts the roof off, drops the camera in over it, and hands the
+// panel a list of what is standing inside. Everything you do in there is
+// undoable — the house keeps its original fit-out spec, so PUT IT ALL BACK
+// really does put it all back.
+
+function houseCard() {
+  const h = openHouseGroup?.userData.house
+  if (!h) return null
+  return {
+    title: h.title,
+    pieces: h.pieces.map((p) => ({
+      name: p.spec.name,
+      present: p.present,
+      css: `#${p.color.toString(16).padStart(6, '0')}`,
+    })),
+  }
+}
+
+function rebuildPiece(p) {
+  const old = p.mesh
+  const mesh = buildFurniture({ ...p.spec, color: p.color })
+  mesh.position.copy(old.position)
+  mesh.rotation.copy(old.rotation)
+  mesh.scale.copy(old.scale)
+  mesh.visible = p.present
+  old.parent.add(mesh)
+  old.parent.remove(old)
+  p.mesh = mesh
+}
+
+function setLid(h, open) {
+  for (const m of h.lid) {
+    m.position.y = open ? 5.5 : 0
+    m.material.transparent = open
+    m.material.opacity = open ? 0.32 : 1
+    m.material.depthWrite = !open
+    m.material.needsUpdate = true
+  }
+}
+
+function openHouse(group) {
+  if (!group?.userData.house) return
+  if (openHouseGroup && openHouseGroup !== group) closeHouse()
+  openHouseGroup = group
+  const h = group.userData.house
+  setLid(h, true)
+  controls.autoRotate = false
+  follow(null)
+  const o = group.userData.origin
+  const eye = toWorld(o, { x: 5.2, z: 9.4 })
+  camGoal.pos.set(eye.x, 9.6, eye.z)
+  camGoal.target.set(group.position.x, 1.0, group.position.z)
+  flying = 1
+  ui.setHouse(houseCard())
+}
+
+function closeHouse() {
+  if (!openHouseGroup) return
+  setLid(openHouseGroup.userData.house, false)
+  openHouseGroup = null
+  ui.setHouse(null)
+  framePlot(PLOTS[plotIndex])
+  flying = 1
+}
+
+ui.onHouse({
+  close: closeHouse,
+  clear() {
+    const h = openHouseGroup?.userData.house
+    if (!h) return
+    for (const p of h.pieces) {
+      p.present = false
+      p.mesh.visible = false
+    }
+    ui.setHouse(houseCard())
+  },
+  restore() {
+    const h = openHouseGroup?.userData.house
+    if (!h) return
+    for (const p of h.pieces) {
+      p.present = true
+      p.color = p.spec.color
+      p.kind = FURNITURE_KINDS.findIndex((k) => k.name === p.spec.name)
+      p.tint = 0
+      p.spec = { ...p.spec, size: p.spec.size }
+      rebuildPiece(p)
+      p.mesh.visible = true
+    }
+    ui.setHouse(houseCard())
+  },
+  swap(i, dir) {
+    const h = openHouseGroup?.userData.house
+    const p = h?.pieces[i]
+    if (!p) return
+    const n = FURNITURE_KINDS.length
+    p.kind = ((p.kind < 0 ? 0 : p.kind) + dir + n) % n
+    const k = FURNITURE_KINDS[p.kind]
+    p.spec = { ...p.spec, name: k.name, size: k.size }
+    p.present = true
+    rebuildPiece(p)
+    ui.setHouse(houseCard())
+  },
+  tint(i) {
+    const h = openHouseGroup?.userData.house
+    const p = h?.pieces[i]
+    if (!p) return
+    p.tint = (p.tint + 1) % FURNITURE_COLORS.length
+    p.color = FURNITURE_COLORS[p.tint]
+    p.present = true
+    rebuildPiece(p)
+    ui.setHouse(houseCard())
+  },
+  toggle(i) {
+    const h = openHouseGroup?.userData.house
+    const p = h?.pieces[i]
+    if (!p) return
+    p.present = !p.present
+    p.mesh.visible = p.present
+    ui.setHouse(houseCard())
+  },
+})
 
 canvas.addEventListener('pointermove', (e) => {
   if (ui.isSheetOpen()) return
@@ -531,6 +712,10 @@ canvas.addEventListener('pointerup', (e) => {
   const hit = pick(e.clientX, e.clientY)
   if (!hit) {
     follow(null)
+    closeHouse()
+  } else if (hit.kind === 'house') {
+    if (openHouseGroup === hit.group) closeHouse()
+    else openHouse(hit.group)
   } else if (hit.kind === 'trailer') {
     ui.toggleSheet()
     sheetSeen = true
@@ -625,6 +810,10 @@ function blueprintState() {
       done: sim.painting.done,
       total: sim.painting.total,
     },
+    roof: {
+      name: plan.roof.name,
+      css: `#${plan.roof.color.toString(16).padStart(6, '0')}`,
+    },
     fitout: sim.fitout,
     phases,
     built: builtByGroup(),
@@ -680,7 +869,12 @@ renderer.setAnimationLoop(() => {
   const dayPhase = (sim.clockT % DAY_SECONDS) / DAY_SECONDS
   const arc = Math.PI * (0.12 + dayPhase * 0.76)
   const elev = Math.sin(arc)
-  lights.sun.position.set(Math.cos(arc) * -26, 6 + elev * 20, 12 + Math.cos(arc) * 6)
+  // The shadow camera is only big enough for one plot, so the sun rides with
+  // the crew rather than staying nailed to the middle of the street.
+  const lit = PLOTS[plotIndex]
+  lights.sun.position.set(lit.x + Math.cos(arc) * -26, 6 + elev * 20, lit.z + 12 + Math.cos(arc) * 6)
+  lights.sun.target.position.set(lit.x, 1.2, lit.z)
+  lights.sun.target.updateMatrixWorld()
   const warmth = 1 - elev
   lights.sun.color.setRGB(1, 0.93 - warmth * 0.12, 0.8 - warmth * 0.26)
   lights.sun.intensity = 1.5 + elev * 0.95
@@ -693,6 +887,7 @@ renderer.setAnimationLoop(() => {
   ui.tick(dt)
 
   orderNextCrew()
+  collectDelivery()
 
   // the plot is handed over; the whole outfit moves next door
   if (sim.finished && sim.stageT > 14) startPlot(false)
@@ -702,8 +897,8 @@ renderer.setAnimationLoop(() => {
   if (followed) {
     if (followed.dead || !sim.robots.includes(followed)) follow(null)
     else {
-      const o = PLOTS[plotIndex]
-      camGoal.target.set(o.x + followed.pos.x, followed.pos.y + 0.95, o.z + followed.pos.z)
+      const w = toWorld(PLOTS[plotIndex], followed.pos)
+      camGoal.target.set(w.x, followed.pos.y + 0.95, w.z)
       controls.target.lerp(camGoal.target, Math.min(1, dt * 3.4))
     }
   }
@@ -713,7 +908,7 @@ renderer.setAnimationLoop(() => {
     camera.position.lerp(camGoal.pos, Math.min(1, dt * 2.1))
     controls.target.lerp(camGoal.target, Math.min(1, dt * 2.1))
     if (camera.position.distanceTo(camGoal.pos) < 0.6) flying = 0
-  } else if (view === 'site' && !followed) {
+  } else if (view === 'site' && !followed && !openHouseGroup) {
     controls.target.lerp(camGoal.target, Math.min(1, dt * 0.8))
   }
 
@@ -769,6 +964,12 @@ window.brickCrew = {
   get origin() { return PLOTS[plotIndex] },
   get houses() { return standing.map((h) => ({ x: h.position.x, z: h.position.z, plot: h.userData.plot, w: h.userData.geom.w, d: h.userData.geom.d })) },
   get plan() { return plan },
+  get supply() { return supplyRig },
+  get stockCounts() { return Object.fromEntries(MATERIALS.map((m) => [m.key, `${stocks[m.key].count}/${stocks[m.key].capacity}`])) },
+  get dropCounts() { return Object.fromEntries(MATERIALS.map((m) => [m.key, drops[m.key].count])) },
+  openHouse,
+  closeHouse,
+  get openHouseGroup() { return openHouseGroup },
   get view() { return view },
   orders,
   follow,

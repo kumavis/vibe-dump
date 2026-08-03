@@ -11,7 +11,7 @@
 
 import { blueprintSheetAspect, formatDuration } from './blueprint.js'
 import { orders, CREWABLE, CREW_MIN, CREW_MAX } from './orders.js'
-import { HOUSE_TYPES, PAINT } from './config.js'
+import { HOUSE_TYPES, PAINT, ROOFS } from './config.js'
 
 const $ = (id) => document.getElementById(id)
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -70,7 +70,15 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     crewNote: $('crew-note'),
     housePick: $('house-pick'),
     paintPick: $('paint-pick'),
+    roofPick: $('roof-pick'),
     plotNote: $('plot-note'),
+    house: $('house'),
+    houseTitle: $('house-title'),
+    houseCount: $('house-count'),
+    houseClose: $('house-close'),
+    houseClear: $('house-clear'),
+    houseRestore: $('house-restore'),
+    houseList: $('house-list'),
   }
   const sheetCanvas = $('sheet-canvas')
 
@@ -132,6 +140,7 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
   function openSheet() {
     if (phase === 'open' || phase === 'unrolling' || phase === 'dropping') return
     showOrders(false)
+    houseFns.close?.()
     sizeSheet()
     phase = 'dropping'
     t = 0
@@ -222,6 +231,7 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
   addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return
     if (phase !== 'closed') closeSheet()
+    else if (el.house.classList.contains('on')) houseFns.close?.()
     else showOrders(false)
   })
 
@@ -301,7 +311,10 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     el.orders.classList.toggle('on', on)
     el.ordersOpen.setAttribute('aria-expanded', String(on))
   }
-  el.ordersOpen.addEventListener('click', () => showOrders(!ordersOn))
+  el.ordersOpen.addEventListener('click', () => {
+    if (!ordersOn) houseFns.close?.()
+    showOrders(!ordersOn)
+  })
   el.ordersClose.addEventListener('click', () => showOrders(false))
 
   for (const b of el.speedSeg.querySelectorAll('button')) {
@@ -340,27 +353,36 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
       return { b, i }
     })
 
-  const paintBtns = [
-    (() => {
-      const b = document.createElement('button')
-      b.type = 'button'
-      b.className = 'auto'
-      b.textContent = 'AUTO'
-      b.addEventListener('click', () => orders.setPaint(null))
-      el.paintPick.append(b)
-      return { b, i: null }
-    })(),
-    ...PAINT.map((p, i) => {
+  /**
+   * A row of colours with a DEFAULT chip in front of it. Every control that
+   * picks a colour gets one, so there is always a way back to whatever the
+   * street would have chosen on its own.
+   */
+  function swatchRow(host, palette, get, set) {
+    const btns = []
+    const dflt = document.createElement('button')
+    dflt.type = 'button'
+    dflt.className = 'auto'
+    dflt.textContent = 'DEFAULT'
+    dflt.title = 'let the street choose'
+    dflt.addEventListener('click', () => set(null))
+    host.append(dflt)
+    btns.push({ b: dflt, i: null })
+    palette.forEach((p, i) => {
       const b = document.createElement('button')
       b.type = 'button'
       b.title = p.name
       b.setAttribute('aria-label', p.name)
       b.style.background = `#${p.color.toString(16).padStart(6, '0')}`
-      b.addEventListener('click', () => orders.setPaint(orders.paint === i ? null : i))
-      el.paintPick.append(b)
-      return { b, i }
-    }),
-  ]
+      b.addEventListener('click', () => set(get() === i ? null : i))
+      host.append(b)
+      btns.push({ b, i })
+    })
+    return btns
+  }
+
+  const paintBtns = swatchRow(el.paintPick, PAINT, () => orders.paint, (i) => orders.setPaint(i))
+  const roofBtns = swatchRow(el.roofPick, ROOFS, () => orders.roof, (i) => orders.setRoof(i))
 
   function renderOrders() {
     for (const b of el.speedSeg.querySelectorAll('button')) {
@@ -377,16 +399,79 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     el.crewSize.textContent = `${size} strong`
     for (const { b, i } of houseBtns) b.classList.toggle('on', orders.house === i)
     for (const { b, i } of paintBtns) b.classList.toggle('on', orders.paint === i)
+    for (const { b, i } of roofBtns) b.classList.toggle('on', orders.roof === i)
     const house = orders.house == null ? null : HOUSE_TYPES[orders.house].name
-    const paint = orders.paint == null ? null : PAINT[orders.paint].name
-    el.plotNote.classList.toggle('live', !!(house || paint))
-    el.plotNote.textContent = house && paint ? `next up: ${house} in ${paint}`
+    const bits = []
+    if (orders.paint != null) bits.push(`${PAINT[orders.paint].name.toLowerCase()} walls`)
+    if (orders.roof != null) bits.push(`a ${ROOFS[orders.roof].name.toLowerCase()} roof`)
+    el.plotNote.classList.toggle('live', !!(house || bits.length))
+    el.plotNote.textContent = house && bits.length ? `next up: ${house}, ${bits.join(' and ')}`
       : house ? `next up: ${house}`
-        : paint ? `next house painted ${paint}`
+        : bits.length ? `next house gets ${bits.join(' and ')}`
           : 'the street carries on in order'
   }
   orders.onChange(renderOrders)
   renderOrders()
+
+  // --- inside a finished house ---------------------------------------------
+  // Tap a house that has been handed over and this opens with what is standing
+  // in it. Everything here is a request back to the renderer, which owns the
+  // meshes; the panel only ever renders what it is given.
+
+  const houseFns = {}
+  let houseRows = []
+  function setHouse(d) {
+    if (!d) {
+      el.house.classList.remove('on')
+      return
+    }
+    el.house.classList.add('on')
+    el.houseTitle.textContent = d.title
+    const inside = d.pieces.filter((p) => p.present).length
+    el.houseCount.textContent = `${inside} of ${d.pieces.length} in`
+    if (houseRows.length !== d.pieces.length) {
+      el.houseList.textContent = ''
+      houseRows = d.pieces.map((_, i) => {
+        const row = document.createElement('div')
+        row.className = 'furn-row'
+        const prev = document.createElement('button')
+        prev.type = 'button'
+        prev.textContent = '‹'
+        prev.title = 'a different piece'
+        prev.addEventListener('click', () => houseFns.swap?.(i, -1))
+        const name = document.createElement('b')
+        const next = document.createElement('button')
+        next.type = 'button'
+        next.textContent = '›'
+        next.title = 'a different piece'
+        next.addEventListener('click', () => houseFns.swap?.(i, +1))
+        const tint = document.createElement('button')
+        tint.type = 'button'
+        tint.className = 'tint'
+        tint.title = 'a different finish'
+        tint.addEventListener('click', () => houseFns.tint?.(i))
+        const gone = document.createElement('button')
+        gone.type = 'button'
+        gone.className = 'gone'
+        gone.textContent = '×'
+        gone.title = 'in or out'
+        gone.addEventListener('click', () => houseFns.toggle?.(i))
+        row.append(name, prev, next, tint, gone)
+        el.houseList.append(row)
+        return { row, name, tint, gone }
+      })
+    }
+    d.pieces.forEach((p, i) => {
+      const r = houseRows[i]
+      r.name.textContent = p.name
+      r.row.classList.toggle('out', !p.present)
+      r.tint.style.background = p.css
+      r.gone.textContent = p.present ? '×' : '+'
+    })
+  }
+  el.houseClose.addEventListener('click', () => houseFns.close?.())
+  el.houseClear.addEventListener('click', () => houseFns.clear?.())
+  el.houseRestore.addEventListener('click', () => houseFns.restore?.())
 
   /** Told by the renderer, because only it knows what the yard is up to. */
   function setCrewNote(text, live) {
@@ -426,6 +511,9 @@ export function createUI({ onSheetOpen, onSheetClose } = {}) {
     setHint,
     setFollow,
     setCrewNote,
+    setHouse,
+    onHouse: (fns) => Object.assign(houseFns, fns),
+    isHouseOpen: () => el.house.classList.contains('on'),
     onDropFollow: (fn) => (onDropFollow = fn),
     onHoldFollow: (fn) => (onHoldFollow = fn),
   }

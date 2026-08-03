@@ -99,9 +99,15 @@ export function buildBrickStack(count, colorList = COLORS.brick) {
 
 /**
  * Build one robot.
- * opts = { role, accent, hatColor, seed, rng }
+ * opts = { role, accent, hatColor, lead, seed, rng }
+ *
+ * A `lead` is its gang's head worker: white hat with an amber band round it,
+ * which is the one marking that reads from across the site whatever livery the
+ * crew is wearing.
  */
-export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b41a, rng = Math.random } = {}) {
+export function buildRobot({
+  role = 'mason', accent = 0xd8442f, hatColor = 0xf4b41a, lead = false, rng = Math.random,
+} = {}) {
   const group = new THREE.Group()
   // Yaw first, then pitch about the robot's own X — so a robot standing on a
   // roof slope leans into the pitch instead of toppling sideways.
@@ -174,6 +180,10 @@ export function buildRobot({ role = 'mason', accent = 0xd8442f, hatColor = 0xf4b
   kit.hat.push(part(neck, matHat, 0.3, 0.13, 0.27, 0, hatY, 0, SPH))
   kit.hat.push(part(neck, matHat, 0.34, 0.028, 0.36, 0, hatY - 0.055))
   kit.hat.push(part(neck, matAccent, 0.05, 0.1, 0.28, 0, hatY + 0.02))
+  if (lead) {
+    const matLead = mat(0xf0b429, { roughness: 0.5, metalness: 0.15 })
+    kit.hat.push(part(neck, matLead, 0.318, 0.05, 0.288, 0, hatY - 0.012, 0, SPH))
+  }
   if (rng() < 0.45) {
     // little aerial
     kit.hat.push(part(neck, matSteel, 0.012, 0.16, 0.012, 0.1, hatY + 0.1))

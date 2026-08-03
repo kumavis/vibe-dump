@@ -71,8 +71,26 @@
         <section class="orders-sec">
           <h4>NEXT PLOT</h4>
           <div class="picks" id="house-pick"></div>
-          <div class="swatches" id="paint-pick"></div>
+          <div class="swatch-row"><span>WALLS</span><div class="swatches" id="paint-pick"></div></div>
+          <div class="swatch-row"><span>ROOF</span><div class="swatches" id="roof-pick"></div></div>
           <p class="orders-note" id="plot-note">the street carries on in order</p>
+        </section>
+      </aside>
+
+      <!-- what is inside a house that has been handed over -->
+      <aside class="orders house" id="house" role="dialog" aria-label="Inside the house">
+        <header class="orders-head">
+          <span id="house-title">THE HOUSE</span>
+          <button class="orders-close" id="house-close" type="button" aria-label="Close">✕</button>
+        </header>
+        <section class="orders-sec">
+          <h4>FURNISHINGS <i id="house-count"></i></h4>
+          <div class="picks">
+            <button type="button" id="house-clear">TAKE IT ALL OUT</button>
+            <button type="button" id="house-restore">PUT IT ALL BACK</button>
+          </div>
+          <div class="furn" id="house-list"></div>
+          <p class="orders-note">the roof lifts off while you are in here</p>
         </section>
       </aside>
 

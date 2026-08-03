@@ -609,21 +609,25 @@ function drawProgress(c, r, state) {
     }
   }
 
-  // the colour the decorators brought
-  if (state.decor && y + 14 < bottom - footerH) {
+  // the two colours this house was specified in
+  const finishes = []
+  if (state.decor) finishes.push(['EXTERNAL FINISH', state.decor.css, state.decor.name])
+  if (state.roof) finishes.push(['ROOF COVERING', state.roof.css, state.roof.name])
+  for (const [label, css, name] of finishes) {
+    if (y + 14 >= bottom - footerH) break
     c.fillStyle = INK_SOFT
     c.font = `${tight ? 8 : 9}px ${MONO}`
     c.textAlign = 'left'
-    c.fillText('EXTERNAL FINISH', x, y + 2)
-    c.fillStyle = state.decor.css
+    c.fillText(label, x, y + 2)
+    c.fillStyle = css
     c.fillRect(x + w - 58, y - 7, 22, 11)
     c.strokeStyle = INK_SOFT
     c.lineWidth = 1
     c.strokeRect(x + w - 58.5, y - 7.5, 23, 12)
     c.fillStyle = INK
     c.textAlign = 'right'
-    c.fillText(state.decor.name.toUpperCase(), x + w, y + 2)
-    y += 16
+    c.fillText(name.toUpperCase(), x + w, y + 2)
+    y += tight ? 13 : 16
   }
 
   y = bottom - footerH + (tight ? 8 : 16)

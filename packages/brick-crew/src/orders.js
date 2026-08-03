@@ -12,7 +12,7 @@
 // and the panel says so.
 // ---------------------------------------------------------------------------
 
-import { ROSTER, HOUSE_TYPES, PAINT } from './config.js'
+import { ROSTER, HOUSE_TYPES, PAINT, ROOFS } from './config.js'
 
 /** Roles you can move robots between. The foreman is not one of them. */
 export const CREWABLE = ['mason', 'barrow', 'carrier']
@@ -35,6 +35,8 @@ export const orders = {
   house: null,
   /** Index into PAINT, or null for the same. */
   paint: null,
+  /** Index into ROOFS, or null to let the street carry on in order. */
+  roof: null,
 
   get counts() {
     return { ...counts }
@@ -50,6 +52,21 @@ export const orders = {
   roles() {
     return ROSTER.flatMap((slot) =>
       Array.from({ length: counts[slot.role] ?? slot.n }, () => slot.role))
+  },
+
+  /**
+   * Which of those are gangers. The first body of each trade off the line is
+   * that gang's head worker — white hat, and the one who holds the drawing at
+   * the start of the shift. Both the yard and the site work it out the same
+   * way from the same list, so they always agree on who is in charge.
+   */
+  leads(roles) {
+    const seen = new Set()
+    return roles.map((role) => {
+      if (role === 'foreman' || seen.has(role)) return false
+      seen.add(role)
+      return true
+    })
   },
 
   /** Move one robot into or out of a role. Returns whether anything changed. */
@@ -79,6 +96,10 @@ export const orders = {
     orders.paint = i
     notify()
   },
+  setRoof(i) {
+    orders.roof = i
+    notify()
+  },
 
   /**
    * What to build on the next plot. A pick is spent once used, so the street
@@ -99,6 +120,15 @@ export const orders = {
       notify()
     }
     return PAINT[i % PAINT.length]
+  },
+  takeRoof(day) {
+    // offset from the wall colour so the two do not march in lockstep
+    const i = orders.roof ?? (day + 2) % ROOFS.length
+    if (orders.roof != null) {
+      orders.roof = null
+      notify()
+    }
+    return ROOFS[i % ROOFS.length]
   },
 
   onChange(fn) {

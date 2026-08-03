@@ -28,10 +28,33 @@ export const WORK_SPACING = 0.8
 
 /** The houses on the street. One per plot, cycled. */
 export const HOUSE_TYPES = [
-  { name: 'GABLE COTTAGE', w: 5.04, d: 4.18, wallCourses: 14, gableCourses: 7, eaveOverhang: 0.3 },
-  { name: 'THE LITTLE STACK', w: 4.2, d: 3.78, wallCourses: 16, gableCourses: 6, eaveOverhang: 0.26 },
-  { name: 'BRICKWORKS LODGE', w: 5.88, d: 4.2, wallCourses: 12, gableCourses: 8, eaveOverhang: 0.36 },
+  { key: 'cottage', name: 'GABLE COTTAGE', w: 5.04, d: 4.18, wallCourses: 14, gableCourses: 7, eaveOverhang: 0.3 },
+  { key: 'stack', name: 'THE LITTLE STACK', w: 4.2, d: 3.78, wallCourses: 16, gableCourses: 6, eaveOverhang: 0.26, garden: true },
+  { key: 'lodge', name: 'BRICKWORKS LODGE', w: 5.88, d: 4.2, wallCourses: 12, gableCourses: 8, eaveOverhang: 0.36 },
 ]
+
+/** What the roofers cover it with. Tiles are laid in three shades of it. */
+export const ROOFS = [
+  { name: 'Slate', color: 0x4a4f57 },
+  { name: 'Charcoal', color: 0x34383e },
+  { name: 'Clay', color: 0xa8562d },
+  { name: 'Moss', color: 0x55704a },
+  { name: 'Ash', color: 0x8d9299 },
+  { name: 'Plum', color: 0x5d4159 },
+  { name: 'Bronze', color: 0x7c6234 },
+]
+
+/** Three tiles off the same pallet are never quite the same shade. */
+export function tileShades(base) {
+  const r = (base >> 16) & 255
+  const g = (base >> 8) & 255
+  const b = base & 255
+  const shift = (k) => {
+    const f = (v) => Math.max(0, Math.min(255, Math.round(v + k)))
+    return (f(r) << 16) | (f(g) << 8) | f(b)
+  }
+  return [base, shift(11), shift(-10)]
+}
 
 /** Paint the decorators bring. One per house, so the street reads as a street. */
 export const PAINT = [
@@ -151,19 +174,63 @@ export const YARD = {
   truck: { x: 2.8, z: 6.6, rot: Math.PI / 2 },
 }
 
-/** The plots along the street, worked left to right then round again. */
+/**
+ * The far row is an exact mirror of the near one about the road centreline, so
+ * anything measured on one side can be reflected onto the other with `mirror`
+ * rather than kept as a second set of numbers.
+ */
+const ROAD_Z = 12.4
+const FAR_Z = 2 * ROAD_Z
+
 export const PLOTS = [
-  { x: -13, z: 0 },
-  { x: 0, z: 0 },
-  { x: 13, z: 0 },
+  { x: -13, z: 0, rot: 0 },
+  { x: -13, z: FAR_Z, rot: Math.PI },
+  { x: 0, z: 0, rot: 0 },
+  { x: 0, z: FAR_Z, rot: Math.PI },
+  { x: 13, z: 0, rot: 0 },
+  { x: 13, z: FAR_Z, rot: Math.PI },
 ]
+
+/**
+ * Plot space ↔ world. The far row is turned to face the road, so everything
+ * measured against a plot — stocks, drops, the crew's route in — has to be
+ * turned with it. Plot-local +z is always "toward the road".
+ */
+export function toWorld(origin, p) {
+  if (!origin.rot) return { x: origin.x + p.x, z: origin.z + p.z }
+  const c = Math.cos(origin.rot)
+  const s = Math.sin(origin.rot)
+  return { x: origin.x + p.x * c + p.z * s, z: origin.z - p.x * s + p.z * c }
+}
+/** True for a plot on the far side of the road. */
+export const isFar = (origin) => origin.z > ROAD_Z
+/** Reflect a point across the road, for the far row's copy of a landmark. */
+export const mirror = (p) => ({ ...p, z: 2 * ROAD_Z - p.z })
+/** The landmark on the row this plot belongs to. */
+export const forRow = (origin, p) => (isFar(origin) ? mirror(p) : p)
+
+export function toLocal(origin, p) {
+  const dx = p.x - origin.x
+  const dz = p.z - origin.z
+  if (!origin.rot) return { x: dx, z: dz }
+  const c = Math.cos(origin.rot)
+  const s = Math.sin(origin.rot)
+  return { x: dx * c - dz * s, z: dx * s + dz * c }
+}
 
 /** Site-wide landmarks — these do not move when the crew changes plot. */
 export const SITE = {
   trailer: { x: -20.5, z: 5.2, rot: 0.5 },
   gate: { x: 0, z: 9.2 },
-  roadZ: 12.4,
-  fence: { x0: -24.5, x1: 24.5, z0: -8.4, z1: 9.2, gapX0: -2.0, gapX1: 2.0 },
+  roadZ: ROAD_Z,
+  /** The near row's hoarding; `gateZ` is the side the crew comes in on. */
+  fence: { x0: -24.5, x1: 24.5, z0: -8.4, z1: 9.2, gapX0: -2.0, gapX1: 2.0, gateZ: 9.2 },
+  /** The far row's, reflected across the road. */
+  fenceFar: {
+    x0: -24.5, x1: 24.5, z0: 2 * ROAD_Z - 9.2, z1: 2 * ROAD_Z + 8.4,
+    gapX0: -2.0, gapX1: 2.0, gateZ: 2 * ROAD_Z - 9.2,
+  },
+  farZ: FAR_Z,
   /** Where a crew gathers by the gate before walking back up the road. */
   muster: { x: -4.6, z: 7.6 },
   /** The yard end of the road: crews come from here and go back to it. */

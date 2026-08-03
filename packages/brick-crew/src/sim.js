@@ -17,21 +17,36 @@
 import * as THREE from 'three'
 import {
   SITE, YARD, CREWS, RATE, SHIFT_SECONDS, COLORS, WORK_SPACING, MATERIALS,
+  toLocal, forRow,
 } from './config.js'
 import { orders } from './orders.js'
 import { PHASES } from './plan.js'
 import { route, stanceOf } from './nav.js'
 import { buildRobot, buildCarryStack } from './robot.js'
-import { buildWheelbarrow, buildFurniture, buildRoller } from './props.js'
+import { buildWheelbarrow, buildFurniture, buildRoller, buildDrawing } from './props.js'
 
 const HIT_GEO = new THREE.CylinderGeometry(0.42, 0.42, 1, 8)
 const HIT_MAT = new THREE.MeshBasicMaterial({ visible: false })
+
+/** Gangers get a white hat, the way they do on a real site. */
+const LEAD_HAT = 0xf2f5f7
+/** How long the gangs stand round the drawing at the start of a shift. */
+const BRIEF_SECONDS = 13
+/** Where each gang gathers — out on the apron, clear of the working faces. */
+const BRIEF_SPOT = {
+  mason: { x: -2.8, z: 7.5 },
+  barrow: { x: 1.6, z: 8.3 },
+  carrier: { x: 5.0, z: 7.4 },
+}
+
+/** How close counts as arrived. */
+const ARRIVE_EPS = 0.16
 
 const TWO_PI = Math.PI * 2
 const wrap = (a) => ((a + Math.PI) % TWO_PI + TWO_PI) % TWO_PI - Math.PI
 
 export function createSim({
-  plan, rng, group, origin, stocks, drops, scaffold, truck,
+  plan, rng, group, origin, stocks, drops, scaffold, truck, supply,
   onPlace, onPaint, onBanner, onStage, onComplete, requestCrew, clock0 = 0,
 }) {
   const robots = []
@@ -41,10 +56,12 @@ export function createSim({
   const claimed = new Int16Array(items.length).fill(-1)
   const mortarLeft = plan.mortar.map((m) => m.needs)
 
-  /** Site landmarks are fixed to the street, so bring them into plot space. */
-  const L = (p) => ({ level: 0, x: p.x - origin.x, y: 0, z: p.z - origin.z })
-  const MUSTER = L(SITE.muster)
-  const GATE = L(SITE.gate)
+  /** Site landmarks into plot space. The far row is turned to face the road,
+   *  so this is a rotation, not just a subtraction. */
+  const L = (p) => { const q = toLocal(origin, p); return { level: 0, x: q.x, y: 0, z: q.z } }
+  // gate and muster belong to whichever row this plot is on
+  const MUSTER = L(forRow(origin, SITE.muster))
+  const GATE = L(forRow(origin, SITE.gate))
   const OFFSITE = L(SITE.offsite)
   const ROAD = L({ x: SITE.gate.x, z: SITE.roadZ })
 
@@ -115,7 +132,7 @@ export function createSim({
       if (!ready) continue
       let clear = true
       for (const o of robots) {
-        if (o === r || o.claim == null) continue
+        if (o === r || o.claim == null || o.leaving) continue
         const s = items[o.claim].stand
         if (Math.hypot(s.x - it.stand.x, s.z - it.stand.z) < WORK_SPACING
           && Math.abs((s.y || 0) - (it.stand.y || 0)) < 0.6) {
@@ -130,7 +147,18 @@ export function createSim({
     return null
   }
 
+  /** Which lift the scaffold needs to be at for the work now coming up. */
+  function decksNeeded() {
+    let need = 0
+    for (let k = firstOpen; k < Math.min(items.length, firstOpen + 90); k++) {
+      const lv = items[k].stand.level
+      need = Math.max(need, lv === 'roof' ? 2 : lv)
+    }
+    return need
+  }
+
   function setPlaced(i) {
+    if (i == null || placed[i]) return
     const it = items[i]
     placed[i] = 1
     claimed[i] = -1
@@ -145,12 +173,8 @@ export function createSim({
       phaseIdx++
       phaseDone = 0
     }
-    let need = 0
-    for (let k = firstOpen; k < Math.min(items.length, firstOpen + 90); k++) {
-      const lv = items[k].stand.level
-      need = Math.max(need, lv === 'roof' ? 2 : lv)
-    }
-    scaffold.setDecks(need)
+    scaffold.setDecks(decksNeeded())
+    sinceProgress = 0
     if (placedCount >= items.length && stage === 'build') enterStage('fitout')
   }
 
@@ -182,26 +206,38 @@ export function createSim({
     // Whoever the yard has finished kitting out turns up as-is; only if it has
     // nobody ready (a fast-forward, or the very first shift) do we build here.
     const want = orders.roles()
+    const leadOf = orders.leads(want)
     const spare = (supplied || []).slice()
-    const roster = want.map((role) => {
+    const roster = want.map((role, idx) => {
       const i = spare.findIndex((s) => s.role === role)
-      if (i < 0) return { role, n: 1 }
+      if (i < 0) return { role, n: 1, lead: leadOf[idx] }
       const [s] = spare.splice(i, 1)
-      return { role, n: 1, rig: s.rig, world: s.world }
+      return { role, n: 1, lead: s.lead ?? leadOf[idx], rig: s.rig, world: s.world }
     })
     for (const slot of roster) {
       for (let k = 0; k < slot.n; k++, n++) {
-        const rig = slot.rig || buildRobot({ role: slot.role, accent: crewDef.accent, hatColor: crewDef.hat, rng })
+        const rig = slot.rig || buildRobot({
+          role: slot.role,
+          accent: crewDef.accent,
+          hatColor: slot.lead ? LEAD_HAT : crewDef.hat,
+          lead: !!slot.lead,
+          rng,
+        })
         // fan the arriving crew out around the gate, whatever size it is
         const spread = (n - (roster.length - 1) / 2) * 0.55
         const start = slot.world
-          ? { level: 0, x: slot.world.x - origin.x, y: 0, z: slot.world.z - origin.z }
+          ? L(slot.world)
           : L(SITE.arrival)
         const r = {
           rig,
           role: slot.role,
           crewId: shiftIndex,
           signedOn: shiftIndex,
+          /** Head worker of its trade: white hat, and holds the drawing. */
+          lead: !!slot.lead,
+          /** Cleared once this one has stood round the drawing this shift. */
+          briefed: quiet || atGate === false,
+          briefSlot: null,
           /** Set from the follow card: this one stays when its crew goes home. */
           held: false,
           pos: slot.world
@@ -245,6 +281,15 @@ export function createSim({
           rig.handAnchor.add(stack)
           r.loads[m.key] = stack
         }
+        // the gang leader's copy of the drawing, held up during the briefing
+        if (slot.lead) {
+          const drawing = buildDrawing()
+          drawing.group.scale.setScalar(0.92)
+          drawing.group.position.set(0, 0.06, 0.12)
+          rig.handAnchor.add(drawing.group)
+          r.drawing = drawing
+        }
+
         const roller = buildRoller(plan.paint.color)
         roller.scale.setScalar(0.8)
         roller.position.set(0, -0.08, 0.04)
@@ -314,6 +359,7 @@ export function createSim({
 
   function think(r) {
     if (r.leaving) return clockOff(r)
+    if (!r.briefed && stage !== 'done') return brief(r)
     if (stage === 'done') return celebrate(r)
     if (r.role === 'foreman') return foreman(r)
     if (stage === 'fitout') return fitter(r)
@@ -321,6 +367,69 @@ export function createSim({
     if (r.role === 'mason') return mason(r)
     return hauler(r)
   }
+
+  /**
+   * The start of a shift: each gang's head worker unrolls the drawing on the
+   * apron and the rest of the gang gathers round to look at it before anyone
+   * picks up a tool. The foreman stands in with the masons.
+   */
+  function brief(r) {
+    const key = BRIEF_SPOT[r.role] ? r.role : 'mason'
+    const spot = BRIEF_SPOT[key]
+    // no head worker on site for this trade — nothing to gather round
+    if (!r.lead && !robots.some((o) => o.lead && !o.dead && !o.leaving
+      && (BRIEF_SPOT[o.role] ? o.role : 'mason') === key)) {
+      r.briefed = true
+      return think(r)
+    }
+    const done = () => {
+      r.briefed = true
+      r.showing = false
+      restart(r)
+    }
+    if (r.lead) {
+      return goto(r, { level: 0, x: spot.x, y: 0, z: spot.z }, () => {
+        faceTowards(r, spot.x, spot.z + 2)
+        r.showing = true
+        // the clock on this gang's huddle starts when its leader gets there
+        briefEnd[key] = clockT + BRIEF_SECONDS
+        wait(r, BRIEF_SECONDS, done)
+      })
+    }
+    // an arc in front of whoever is holding it
+    if (r.briefSlot == null) {
+      r.briefSlot = briefSeats[key] = (briefSeats[key] ?? -1) + 1
+    }
+    const a = ((r.briefSlot % 5) - 2) * 0.42
+    const rad = 1.5 + (r.briefSlot >= 5 ? 0.95 : 0)
+    return goto(r, {
+      level: 0,
+      x: spot.x + Math.sin(a) * rad,
+      y: 0,
+      z: spot.z + Math.cos(a) * rad,
+    }, () => {
+      faceTowards(r, spot.x, spot.z)
+      // Stay until the leader has finished with it. Polled rather than timed,
+      // because the gang trickles in over several seconds and whoever gets
+      // there first should not wander off before the drawing comes out.
+      //
+      // The cap is not decoration: if that gang's leader never turns up — held
+      // over from the last shift, or clocked off on the way in — an uncapped
+      // poll leaves the whole gang standing in a field for the rest of the day.
+      const giveUp = clockT + BRIEF_SECONDS * 2
+      const hold = () => wait(r, 0.6, () => {
+        if (clockT >= giveUp) return done()
+        if (briefEnd[key] != null && clockT >= briefEnd[key]) return done()
+        faceTowards(r, spot.x, spot.z)
+        hold()
+      })
+      hold()
+    })
+  }
+  /** Seats already handed out at each gang's huddle, reset every shift. */
+  let briefSeats = {}
+  /** When each gang's huddle breaks up. */
+  let briefEnd = {}
 
   function mason(r) {
     if (r.claim == null) {
@@ -342,6 +451,10 @@ export function createSim({
       r.claim = i
     }
     const it = items[r.claim]
+    if (!it || placed[r.claim]) {
+      r.claim = null
+      return think(r)
+    }
     if (r.carry <= 0 || r.carryMat !== it.mat) {
       const key = it.mat
       const stock = stocks[key]
@@ -361,9 +474,10 @@ export function createSim({
       r.state = 'lay'
       r.timer = it.phase === 'secondfix' ? RATE.fixTime : RATE.layTime
       r.layHigh = it.pos[1] - (it.stand.y || 0) > 1.05
+      const slot = r.claim
       r.then = () => {
-        if (!placed[r.claim]) setPlaced(r.claim)
-        else claimed[r.claim] = -1
+        if (!placed[slot]) setPlaced(slot)
+        else claimed[slot] = -1
         r.claim = null
         r.carry = Math.max(0, r.carry - 1)
         if (r.carry === 0) r.carryMat = null
@@ -392,7 +506,54 @@ export function createSim({
     return best
   }
 
+  /**
+   * Taking the merchant's delivery off the back of the lorry and onto the
+   * drops. Two of the shift do this at a time — any more and they are just
+   * queueing at the tailgate.
+   */
+  function unloader(r) {
+    const slot = r.unloadSlot
+    return goto(r, supply.stand(slot), () => {
+      faceTowards(r, supply.stand(slot).x + 2, supply.stand(slot).z)
+      wait(r, 0.7, () => {
+        const pallet = supply.left > 0 ? supply.takeOne() : null
+        if (!pallet) {
+          r.unloading = false
+          r.unloadSlot = null
+          return think(r)
+        }
+        r.carry = pallet.n
+        r.carryMat = pallet.key
+        goto(r, dropStand(pallet.key), () => {
+          faceTowards(r, YARD.sources[pallet.key].x, YARD.sources[pallet.key].z)
+          const d = drops[pallet.key]
+          d.setCount(Math.min(d.capacity, d.count + pallet.n * 5))
+          r.carry = 0
+          r.carryMat = null
+          wait(r, 0.8, () => think(r))
+        })
+      })
+    })
+  }
+
+  /** How many are already on the tailgate. */
+  function unloadingCount() {
+    let n = 0
+    for (const o of robots) if (o.unloading && !o.dead) n++
+    return n
+  }
+
   function hauler(r) {
+    // a lorry standing on the plot is the first call on anyone with free hands
+    if (r.unloading) {
+      if (supply.left > 0 || r.carry > 0) return unloader(r)
+      r.unloading = false
+      r.unloadSlot = null
+    } else if (supply.parked && supply.left > 0 && r.carry === 0 && unloadingCount() < 2) {
+      r.unloading = true
+      r.unloadSlot = unloadingCount() - 1
+      return unloader(r)
+    }
     if (r.carry > 0) {
       const key = r.carryMat
       const st = stocks[key]
@@ -584,6 +745,7 @@ export function createSim({
 
   function advance(r, dt) {
     if (!r.path.length) {
+      r.climbing = false
       r.state = 'idle'
       const then = r.then
       r.then = null
@@ -602,7 +764,12 @@ export function createSim({
       const dz = wp.z - r.pos.z
       const dist = Math.hypot(dx, dy, dz)
       const step = speed * dt
-      if (dist <= Math.max(step, 1e-4)) {
+      // Slack on the arrival test. Robots give way to each other now, and with
+      // a hair-thin threshold a shoved robot can circle a waypoint forever
+      // without ever satisfying it. A corner on the way only has to be got
+      // round; only the last waypoint is a place the robot means to stand.
+      const eps = r.path.length > 1 ? ARRIVE_EPS * 2.2 : ARRIVE_EPS
+      if (dist <= Math.max(step, eps)) {
         r.pos.set(wp.x, wp.y, wp.z)
         r.roofSide = wp.roof ?? null
         r.path.shift()
@@ -628,11 +795,107 @@ export function createSim({
     }
   }
 
+  /**
+   * Nobody walks through anybody. Whoever is working holds their ground and
+   * the walkers give way round them; two walkers share the push. It is only a
+   * nudge — `advance` steers each one straight back onto its path afterwards,
+   * so the net effect is people stepping round each other rather than a crowd
+   * shoving itself apart.
+   */
+  const BODY_R = 0.33
+  /**
+   * On the last few steps toward whatever it is heading for. Nudging a robot
+   * here is how you get half a gang circling the same corner of the path graph
+   * forever, each one shoved off the mark just as it is about to land — so
+   * anyone this close to their next waypoint is left alone until they reach it.
+   */
+  function landing(r) {
+    const wp = r.path[0]
+    if (!wp) return false
+    return Math.hypot(wp.x - r.pos.x, wp.z - r.pos.z) < 0.7
+  }
+  /**
+   * Move `r` out of the way by `amount`, in the direction (ax, az).
+   *
+   * Straight backwards is the wrong answer for anyone walking: two robots
+   * meeting head-on each get shoved back exactly as hard as they are pushing
+   * forward, and both stop dead in the middle of the site for good. So a
+   * walker steps *aside* — the shove is turned across its own heading, always
+   * to the same side of whoever it is passing, which is what you would do.
+   */
+  function give(r, ax, az, amount) {
+    const wp = r.path[0]
+    if (r.state === 'walk' && wp) {
+      let hx = wp.x - r.pos.x
+      let hz = wp.z - r.pos.z
+      const h = Math.hypot(hx, hz)
+      if (h > 1e-4) {
+        hx /= h
+        hz /= h
+        // is the shove fighting the way it wants to go?
+        if (hx * ax + hz * az < 0.1) {
+          // step to the side the other one is not on
+          const side = hx * -az - hz * -ax >= 0 ? 1 : -1
+          const lx = hz * side
+          const lz = -hx * side
+          r.pos.x += lx * amount * 1.5
+          r.pos.z += lz * amount * 1.5
+          return
+        }
+      }
+    }
+    r.pos.x += ax * amount
+    r.pos.z += az * amount
+  }
+
+  function separate(dt) {
+    // two relaxation passes: one is not enough when three of them arrive at the
+    // same drop at once
+    for (let pass = 0; pass < 2; pass++) separatePass(dt)
+  }
+  function separatePass(dt) {
+    for (let i = 0; i < robots.length; i++) {
+      const a = robots[i]
+      if (a.dead || a.climbing) continue
+      for (let j = i + 1; j < robots.length; j++) {
+        const b = robots[j]
+        if (b.dead || b.climbing) continue
+        // different lifts of the scaffold never collide
+        if (Math.abs(a.pos.y - b.pos.y) > 0.9) continue
+        const aFixed = a.state !== 'walk' || landing(a)
+        const bFixed = b.state !== 'walk' || landing(b)
+        if (aFixed && bFixed) continue
+        let dx = b.pos.x - a.pos.x
+        let dz = b.pos.z - a.pos.z
+        let d = Math.hypot(dx, dz)
+        const min = BODY_R * 2
+        if (d > min) continue
+        if (d < 1e-4) {
+          // exactly on top of each other: pick a side deterministically
+          dx = (i % 2 ? 1 : -1) * 0.01
+          dz = (j % 2 ? 1 : -1) * 0.01
+          d = Math.hypot(dx, dz)
+        }
+        const push = (min - d) * Math.min(1, dt * 22)
+        const wa = aFixed ? 0 : bFixed ? 1 : 0.5
+        if (wa > 0) give(a, -dx / d, -dz / d, push * wa)
+        if (wa < 1) give(b, dx / d, dz / d, push * (1 - wa))
+      }
+    }
+  }
+
   // --- shifts --------------------------------------------------------------
 
   function startShift(first) {
     shiftIndex++
     crew = CREWS[(shiftIndex - 1) % CREWS.length]
+    // Arm the briefing before anyone is given orders — spawnCrew sets the new
+    // crew thinking, and if the huddle isn't on the books by then they walk
+    // straight past it onto the job.
+    if (!first && !quiet) {
+      briefSeats = {}
+      briefEnd = {}
+    }
     spawnCrew(crew, !first, first ? null : requestCrew?.())
     if (!first) {
       let kept = 0
@@ -646,8 +909,14 @@ export function createSim({
           continue
         }
         r.leaving = true
+        // Give the brick slot back straight away. The robot keeps its own
+        // reference so whatever it was part-way through still completes, but
+        // it stops holding that patch of wall against the crew coming on.
+        if (r.claim != null) claimed[r.claim] = -1
         if (r.state === 'wait' || r.state === 'idle' || r.state === 'inspect') restart(r)
       }
+      // gangs read the drawing before they start; not during a fast-forward,
+      // where nobody would see it and it would only cost the crew time
       if (!quiet) {
         const sub = kept ? `${crew.name} crew on · ${kept} held over` : `${crew.name} crew on`
         onBanner('SHIFT CHANGE', sub, `#${crew.accent.toString(16).padStart(6, '0')}`)
@@ -687,24 +956,60 @@ export function createSim({
     }
   }
 
+  /**
+   * The build must never wedge. Claims are handed round a crew that changes
+   * every five minutes, and a robot that clocks off part-way through an
+   * awkward corner can leave a slot nobody picks up again. Rather than chase
+   * every last ordering case, watch for the wall not moving and shake the
+   * claims out: everything is released, everyone re-reads their orders, and
+   * the scaffold is put back where the work actually is.
+   */
+  let sinceProgress = 0
+  function unwedge(dt) {
+    if (stage !== 'build') {
+      sinceProgress = 0
+      return
+    }
+    sinceProgress += dt
+    if (sinceProgress < 22) return
+    sinceProgress = 0
+    claimed.fill(-1)
+    for (const r of robots) {
+      // Only robots we are actually re-tasking lose their claim — a leaver
+      // still part-way through laying one needs its reference to finish.
+      if (r.leaving) continue
+      r.claim = null
+      restart(r)
+    }
+    scaffold.setDecks(decksNeeded())
+  }
+
   function update(dt) {
     clockT += dt
     stageT += dt
+    unwedge(dt)
     sweepClaims(dt)
     if (stage !== 'done' && Math.floor(clockT / SHIFT_SECONDS) + 1 > shiftIndex) startShift(false)
     truck.update(dt)
 
-    // the merchant keeps the drops topped up
+    supply.update(dt)
+
+    // The drops are filled off the back of the merchant's lorry. This is the
+    // backstop for when one is late — without it a missed delivery would stall
+    // the build for good, which is a worse failure than a bag of cement
+    // appearing on an empty pile.
     for (const m of MATERIALS) {
       const d = drops[m.key]
       if (d.count <= 0 && demand[m.key] > 0) {
         d.restock = (d.restock ?? 0) + dt
-        if (d.restock > 7) {
+        if (d.restock > 40) {
           d.setCount(d.capacity)
           d.restock = 0
         }
-      }
+      } else d.restock = 0
     }
+
+    separate(dt)
 
     for (let i = robots.length - 1; i >= 0; i--) {
       const r = robots[i]
@@ -733,13 +1038,13 @@ export function createSim({
       const moving = r.state === 'walk' && r.path.length > 0
       a.moving = moving
       a.speed = moving ? r.speed || RATE.walk : 0
-      a.carry = r.role === 'barrow' || r.holding ? 0 : r.carry
+      a.carry = r.showing ? 1 : r.role === 'barrow' || r.holding ? 0 : r.carry
       a.push = r.role === 'barrow' && stage === 'build' ? 1 : 0
       a.haul = r.holding ? 1 : 0
       a.lay = r.state === 'lay' && !r.layHigh ? 1 : 0
       a.reach = r.state === 'lay' && r.layHigh ? 1 : 0
       a.paint = r.state === 'paint' ? 1 : 0
-      a.idle = r.state === 'wait' || r.state === 'inspect' ? 1 : 0
+      a.idle = r.showing ? 0 : r.state === 'wait' || r.state === 'inspect' ? 1 : 0
       a.wave = r.state === 'wave' ? 1 : 0
       a.tilt = r.roofSide ? r.stance.tilt || 0.32 : 0
       if (r.climbing && moving) {
@@ -757,7 +1062,12 @@ export function createSim({
           for (let k = 0; k < stack.children.length; k++) stack.children[k].visible = k < r.carry
         }
       }
-      r.roller.visible = stage === 'paint' && !r.leaving && r.role !== 'foreman'
+      r.roller.visible = stage === 'paint' && !r.leaving && r.role !== 'foreman' && !r.showing
+      if (r.drawing) {
+        // unrolls over the first second of the huddle and snaps shut at the end
+        const open = r.showing ? Math.min(1, (r.openT = (r.openT ?? 0) + dt * 1.4)) : (r.openT = 0)
+        r.drawing.setOpen(open)
+      }
       if (r.barrowLoad) {
         const n = Math.round((r.carry / (matDef[r.carryMat]?.load.barrow ?? 8)) * r.barrowLoad.children.length)
         r.barrowLoad.visible = r.carry > 0
