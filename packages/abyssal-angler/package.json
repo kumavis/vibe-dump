@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/abyssal-angler",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Abyssal Angler",
+    "description": "The other end of the line from Abyssal Ascent: skipper a night boat over the same seven-zone abyss and steer your hook down past the easy shallows toward things with more teeth. Fish too heavy for your tackle snap the line, so land what you can, fill the salvage sonar, and haul up ever-better rods — hand line, abyssal winch, hadal cable, and finally the Godhook — until you can reach the Cradle and hook the one catch the fleet should have left alone."
+  }
+}
