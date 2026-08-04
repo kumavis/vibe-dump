@@ -259,8 +259,20 @@ const KRAKEN_STAGE = STAGES.findIndex((s) => s.form === 'kraken')
 const BREACH_STAGE = STAGES.findIndex((s) => s.form === 'god')
 const FLY_STAGE = STAGES.findIndex((s) => s.form === 'wyrm')
 const MOONEATER_STAGE = STAGES.findIndex((s) => s.form === 'mooneater')
+const MAGMAW_STAGE = STAGES.findIndex((s) => s.form === 'magmaw')
 const WORLDEATER_STAGE = STAGES.findIndex((s) => s.form === 'worldeater')
 const MAX_SEG = Math.max(...STAGES.map((s) => s.seg))
+
+// Biomass alone doesn't cross a tier boundary — the world has to permit it.
+// The sky tier wants you to have tasted the air; the core tier stays shut
+// until the moon is gone and the floor is open.
+function tierLock(nextIndex) {
+  // MOON.eaten (not worldFloorOpen) so a reborn chain that already killed the
+  // moon in its past life can still climb the whole ladder in the lake.
+  if (nextIndex >= MAGMAW_STAGE && !MOON.eaten) return 'YOUR FLESH RESISTS · SOMETHING IN THE SKY STILL HOLDS IT'
+  if (nextIndex >= FLY_STAGE && !player.hasBreached) return 'YOUR FLESH RESISTS · IT HAS NEVER TASTED AIR'
+  return null
+}
 
 // ---- Input -------------------------------------------------------------
 const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
@@ -351,6 +363,10 @@ const player = {
   launchT: 0,     // skyward lunge: steering yields to the impulse
   airborne: false,// above the waterline last frame (for splash detection)
   breachHinted: 0,// one-time banners: 1 = breach hint shown, 2 = fly shown
+  hasBreached: false, // ever cleared the waterline — the sky tier's key
+  inArctic: false,    // currently in the frozen reaches (for banners)
+  inCaves: false,     // currently below the old seafloor (for banners)
+  lockNagT: 0,        // cooldown on "your flesh resists" reminders
 }
 function initSpine() {
   player.spine = []
@@ -376,6 +392,15 @@ function addBiomass(n) {
   player.biomass += n
   const nx = nextStage()
   if (nx && player.biomass >= nx.biomass) {
+    const lock = tierLock(player.stageIndex + 1)
+    if (lock) {
+      // hold at the threshold and say why, but not every single meal
+      if (!player.lockNagT || player.lockNagT <= 0) {
+        player.lockNagT = 12
+        showBanner(lock)
+      }
+      return
+    }
     player.stageIndex++
     const s = STAGES[player.stageIndex]
     evolveBanner(s.name)
@@ -558,6 +583,10 @@ const SPECIES = [
   { key: 'bluegill',    r: 9,  tier: 1, speed: 1.5, col: '#a8c8a0', shape: 'fish',   glow: 0,    zone: [150, 1500],  swarm: 4, fresh: true },
   { key: 'carp',        r: 18, tier: 3, speed: 1.2, col: '#c8a860', shape: 'fish',   glow: 0,    zone: [200, 2600],  fresh: true },
   { key: 'crawdad',     r: 12, tier: 2, speed: 0.6, col: '#b04a30', shape: 'bug',    glow: 0,    zone: [1200, 7600], fresh: true },
+  // the deep lake keeps larva-sized food, so a reborn hatchling can start over
+  { key: 'lakeworm',    r: 4,  tier: 0, speed: 0.5, col: '#d8a890', shape: 'dot',    glow: 0.2,  zone: [5200, 7600], swarm: 7, fresh: true },
+  { key: 'siltshrimp',  r: 6,  tier: 1, speed: 0.8, col: '#c8b8a0', shape: 'shrimp', glow: 0.15, zone: [3800, 7600], swarm: 5, fresh: true },
+  { key: 'palefry',     r: 9,  tier: 1, speed: 1.1, col: '#d8d2c0', shape: 'fish',   glow: 0.1,  zone: [2600, 6800], swarm: 4, fresh: true },
   { key: 'dragonnymph', r: 14, tier: 3, speed: 1.6, col: '#7a9a4a', shape: 'bug',    glow: 0,    zone: [150, 1000],  fresh: true, ability: 'lunge', pred: true, aggro: 360 },
   { key: 'riverdolphin', r: 34, tier: 5, speed: 2.0, col: '#e2b8c8', shape: 'whale', glow: 0,    zone: [200, 1700],  fresh: true },
   { key: 'snapper',     r: 26, tier: 5, speed: 0.7, col: '#5a6a42', shape: 'turtle', glow: 0,    zone: [100, 1400],  fresh: true, pred: true, aggro: 300 },
@@ -634,6 +663,22 @@ function makeCreature(sp, x, y) {
 let worldFloorOpen = false
 function floorY() { return worldFloorOpen ? WORLD_BOTTOM : WORLD_H }
 
+// The seafloor is terrain, not a line: smooth-noise hills up to ~300 units
+// tall, so bottom-feeding means climbing ridges, not cruising a flat lane.
+function floorHeightAt(x) {
+  const k = Math.floor(x / 260)
+  const f = x / 260 - k
+  const s = f * f * (3 - 2 * f)
+  const broad = lerp(hash1(k * 17.3), hash1((k + 1) * 17.3), s)
+  const k2 = Math.floor(x / 90)
+  const f2 = x / 90 - k2
+  const s2 = f2 * f2 * (3 - 2 * f2)
+  const fine = lerp(hash1(k2 * 7.9 + 3), hash1((k2 + 1) * 7.9 + 3), s2)
+  return WORLD_H - 30 - broad * 240 - fine * 50
+}
+// where a swimmer at x actually runs out of down
+function bottomLimitAt(x) { return worldFloorOpen ? WORLD_BOTTOM : floorHeightAt(x) }
+
 function spawnCreature(nearPlayer) {
   if (creatures.length >= CREATURE_CAP) return
   const pw = player.headW
@@ -647,9 +692,12 @@ function spawnCreature(nearPlayer) {
     if (y < s.zone[0] || y > s.zone[1]) return false
     const airborneSp = s.zone[1] <= 120  // lives wholly above the waves
     const underworld = s.zone[0] >= 7600 // lives beneath any floor, salt or sweet
+    // arctic natives stay in the arctic no matter the medium (snow petrels
+    // don't wheel over the tropics)
+    if (s.arctic && arc < 0.3) return false
     if (!airborneSp && !underworld) {
       if (s.fresh ? realm !== 'freshwater' : realm === 'freshwater' && !s.ally) return false
-      if (s.arctic ? arc < 0.3 : arc > 0.75 && s.zone[1] < 2800 && s.zone[0] >= 0) return false
+      if (!s.arctic && arc > 0.75 && s.zone[1] < 2800 && s.zone[0] >= 0) return false
     }
     return true
   })
@@ -674,7 +722,7 @@ function spawnCreature(nearPlayer) {
       clamp(y + (n > 1 ? rand(-50, 50) : 0), sp.zone[0], sp.zone[1])
     )
     // the sessile take root in the seafloor, right where they sprouted
-    if (c.sessile) c.y = WORLD_H - rand(4, 18)
+    if (c.sessile) c.y = floorHeightAt(c.x) - rand(2, 10)
     creatures.push(c)
   }
 }
@@ -753,7 +801,7 @@ function updateAlly(c, i, dp, dxp, dyp, dt) {
     }
     c.x += c.dir * c.speed * 0.5 * dt * 60
     c.y += Math.sin(c.wob) * 0.3
-    c.y = clamp(c.y, c.minY, Math.min(floorY() - 18, c.maxY))
+    c.y = clamp(c.y, c.minY, Math.min(bottomLimitAt(c.x) - 12, c.maxY))
     if (dp < player.headW * stage().reach + c.r + 8 && player.headW > c.r && joinedAllies() < ALLY_CAP) {
       c.joined = true
       ripple(c.x, c.y, 60, c.col)
@@ -872,6 +920,7 @@ function biteMoon() {
   if (MOON.hp <= 0 && !MOON.eaten) eatTheMoon()
 }
 
+// No victory screens — the world itself says what's next.
 function eatTheMoon() {
   MOON.eaten = true
   worldFloorOpen = true
@@ -879,12 +928,8 @@ function eatTheMoon() {
   for (let k = 0; k < 8; k++) ripple(MOON.x + rand(-200, 200), MOON.y + rand(-200, 200), rand(200, 500), '#fff2c8')
   showBanner('YOU HAVE EATEN THE MOON')
   queueBanner('THE TIDES ANSWER TO YOU NOW', 3.2)
-  queueBanner('FAR BELOW, THE SEAFLOOR SPLITS OPEN', 6.4)
+  queueBanner('FAR BELOW, THE SEAFLOOR SPLITS OPEN · DIVE', 6.4)
   addBiomass(600)
-  setTimeout(() => {
-    const end = document.getElementById('end-screen')
-    if (end) end.classList.remove('hidden')
-  }, 3600)
 }
 
 const MOONCHUNK = { key: 'moonchunk', r: 16, tier: 5, speed: 0.15, col: '#e8e2c8', shape: 'meteor', glow: 0.5, zone: [SKY_TOP, WORLD_BOTTOM], bonus: 40 }
@@ -922,33 +967,93 @@ function biteCore() {
   if (CORE.hp <= 0 && !CORE.eaten) eatTheCore()
 }
 
+// Eating the core doesn't end with a menu. The hollow world comes down on
+// you, and what crawls out of the wreckage hatches somewhere new.
+const rebirth = { phase: null, t: 0 } // 'collapse' -> 'fade' -> 'rise'
+
 function eatTheCore() {
   CORE.eaten = true
   cam.shake = 2
   for (let k = 0; k < 10; k++) ripple(CORE.x + rand(-260, 260), CORE.y + rand(-260, 260), rand(240, 600), '#ffd166')
   showBanner('YOU HAVE EATEN THE HEART OF THE WORLD')
-  queueBanner('AND STILL YOU ARE HUNGRY', 3.4)
-  addBiomass(900)
-  setTimeout(() => {
-    const end = document.getElementById('core-end-screen')
-    if (end) end.classList.remove('hidden')
-  }, 3800)
+  queueBanner('THE HOLLOW WORLD IS COMING DOWN', 2.8)
+  rebirth.phase = 'collapse'
+  rebirth.t = 0
 }
 
-// The lake at the end of everything.
-function enterFreshwater() {
+function updateRebirth(dt) {
+  if (!rebirth.phase) return
+  rebirth.t += dt
+  if (rebirth.phase === 'collapse') {
+    // the ceiling lets go: constant shake, rock hail from above
+    cam.shake = Math.max(cam.shake, 0.6)
+    for (let i = 0; i < 3; i++) {
+      bites.push({
+        x: player.x + rand(-window.innerWidth * 0.6, window.innerWidth * 0.6),
+        y: cam.y - 30,
+        vx: rand(-1, 1), vy: rand(6, 12), a: 1.6,
+        col: Math.random() < 0.3 ? '#ffb347' : '#5a4432', r: rand(3, 8),
+      })
+    }
+    if (rebirth.t > 3.2) {
+      rebirth.phase = 'fade'
+      rebirth.t = 0
+      showBanner('CRUSHED')
+    }
+  } else if (rebirth.phase === 'fade') {
+    cam.shake = Math.max(cam.shake, 0.4)
+    if (rebirth.t > 1.8) {
+      rebirthInFreshwater()
+      rebirth.phase = 'rise'
+      rebirth.t = 0
+    }
+  } else if (rebirth.phase === 'rise') {
+    if (rebirth.t > 2.2) rebirth.phase = null
+  }
+}
+
+// darkness closing over the crush, lifting off the rebirth
+function rebirthOverlayAlpha() {
+  if (rebirth.phase === 'collapse') return clamp(rebirth.t / 3.2, 0, 1) * 0.45
+  if (rebirth.phase === 'fade') return clamp(0.45 + (rebirth.t / 1.8) * 0.55, 0, 1)
+  if (rebirth.phase === 'rise') return clamp(1 - rebirth.t / 2.2, 0, 1)
+  return 0
+}
+
+// A true rebirth: back to a larva, at the bottom of a lake that has never
+// heard of you. A whole second evolutionary chain, from the first bite.
+function rebirthInFreshwater() {
   realm = 'freshwater'
+  worldFloorOpen = false           // the lake's floor is intact
   creatures.length = 0
   boats.length = 0
+  harpoons.length = 0
+  charges.length = 0
+  moonlances.length = 0
+  inkClouds.length = 0
+  shocks.length = 0
+  slimes.length = 0
   player.x = 0
-  player.y = 700
+  player.y = floorHeightAt(0) - 320
   player.vx = 0
   player.vy = 0
+  player.stageIndex = 0
+  player.biomass = 0
+  player.hasBreached = false       // this body has never tasted air either
+  player.breachHinted = 0
+  player.hooked = null
+  player.netted = null
+  player.strain = 0
+  player.hurt = 0; player.stun = 0; player.slow = 0; player.inked = 0
+  player.guard = 0; player.lureT = 0; player.gulpT = 0; player.frenzyT = 0
+  player.veilT = 0; player.gravT = 0; player.launchT = 0; player.abilityCd = 0
+  player.inCaves = false
+  player.headW = STAGES[0].width
   player.spine.forEach((p, i) => { p.x = player.x - i * 6; p.y = player.y })
   cam.y = clamp(player.y - window.innerHeight / 2, SKY_TOP, floorY() - window.innerHeight)
   for (let i = 0; i < 20; i++) spawnCreature(true)
-  showBanner('THE SWEET WATER')
-  queueBanner('NO SALT · NEW TEETH', 2.8)
+  showBanner('REBORN · THE SWEET WATER')
+  queueBanner('A NEW CHAIN BEGINS · EAT', 3)
 }
 
 // ---- Abilities ---------------------------------------------------------
@@ -964,79 +1069,79 @@ function fireAbility() {
   const al = Math.hypot(aimX, aimY) || 1
   switch (ab.key) {
     case 'dash': // Ribbon Eel: a slippery burst toward the cursor
-      player.vx += (aimX / al) * 16
-      player.vy += (aimY / al) * 16
-      player.guard = Math.max(player.guard, 0.5)
-      ripple(player.x, player.y, 90, stage().accent)
+      player.vx += (aimX / al) * 24
+      player.vy += (aimY / al) * 24
+      player.guard = Math.max(player.guard, 1)
+      ripple(player.x, player.y, 110, stage().accent)
       break
     case 'lure': // Viperfish: light the lamp; small prey can't help itself
-      player.lureT = 4.5
-      ripple(player.x, player.y, 130, stage().accent)
+      player.lureT = 6.5
+      ripple(player.x, player.y, 160, stage().accent)
       break
     case 'gulp': // Gulper Eel: open the pouch and inhale
-      player.gulpT = 1.5
-      player.gulpR = 300
+      player.gulpT = 2
+      player.gulpR = 380
       player.maw = 1
       break
-    case 'storm': // Sea Serpent: a stunning discharge
-      foeBlast(player.x, player.y, 330, { stun: 2.4, col: '#8affd0' })
+    case 'storm': // Sea Serpent: a stunning, searing discharge
+      foeBlast(player.x, player.y, 430, { stun: 3.5, dmg: 25, col: '#8affd0' })
       break
     case 'frenzy': // Bone Shark: nothing in the water can touch you
-      player.frenzyT = 3
-      player.guard = Math.max(player.guard, 3)
-      ripple(player.x, player.y, 110, '#e8f7ff')
+      player.frenzyT = 4.5
+      player.guard = Math.max(player.guard, 4.5)
+      ripple(player.x, player.y, 130, '#e8f7ff')
       break
-    case 'sonar': // Leviathan: the click that stops a whole shoal
-      foeBlast(player.x, player.y, 560, { stun: 2.8, col: '#ff6aa8' })
-      cam.shake = Math.max(cam.shake, 0.3)
+    case 'sonar': // Leviathan: the click that stops — and bursts — a whole shoal
+      foeBlast(player.x, player.y, 720, { stun: 4, dmg: 22, col: '#ff6aa8' })
+      cam.shake = Math.max(cam.shake, 0.35)
       break
     case 'veil': // Kraken: vanish into your own night
-      inkCloud(player.x, player.y, 300, '#12041c')
-      player.veilT = 5
-      player.guard = Math.max(player.guard, 1)
+      inkCloud(player.x, player.y, 340, '#12041c')
+      player.veilT = 7
+      player.guard = Math.max(player.guard, 2)
       break
     case 'leap': // Drowned God: hurl yourself at the sky
-      player.vy -= 24
-      player.vx += (aimX / al) * 7
-      player.launchT = 0.9
-      cam.shake = Math.max(cam.shake, 0.25)
+      player.vy -= 30
+      player.vx += (aimX / al) * 9
+      player.launchT = 1.1
+      cam.shake = Math.max(cam.shake, 0.3)
       if (player.y > SURFACE_Y - 60) {
         for (let i = 0; i < 3; i++) ripple(player.x + rand(-40, 40), SURFACE_Y + 10, 90, '#cfe9ff')
       }
       break
-    case 'gale': // Stormbringer: one wingbeat, a shockwave of wind
-      foeBlast(player.x, player.y, 380, { push: 10, stun: 1.2, col: '#eaff70' })
-      player.vy -= 8
+    case 'gale': // Stormbringer: one wingbeat, a wall of wind
+      foeBlast(player.x, player.y, 480, { push: 15, stun: 2.2, dmg: 16, col: '#eaff70' })
+      player.vy -= 10
       break
     case 'vacuum': // Cloud Devourer: swallow the weather
-      player.gulpT = 2.2
-      player.gulpR = 460
+      player.gulpT = 2.8
+      player.gulpR = 580
       player.maw = 1
       break
     case 'gravity': // Star Serpent: everything falls toward you
-      player.gravT = 2.6
-      ripple(player.x, player.y, 300, stage().accent)
+      player.gravT = 3.4
+      ripple(player.x, player.y, 340, stage().accent)
       break
     case 'nova': // The Mooneater: a detonation that feeds you — and cracks moons
-      foeBlast(player.x, player.y, 640, { stun: 2, devour: true, col: '#9ff2ff' })
+      foeBlast(player.x, player.y, 780, { stun: 2.5, dmg: 55, devour: true, col: '#9ff2ff' })
       cam.shake = Math.max(cam.shake, 0.6)
-      if (!MOON.eaten && Math.hypot(MOON.x - player.x, MOON.y - player.y) < moonRadius() + 640) {
-        for (let i = 0; i < 4; i++) biteMoon()
+      if (!MOON.eaten && Math.hypot(MOON.x - player.x, MOON.y - player.y) < moonRadius() + 780) {
+        for (let i = 0; i < 6; i++) biteMoon()
       }
       break
     case 'eruption': // The Magmaw: cook everything nearby
-      foeBlast(player.x, player.y, 480, { stun: 1.5, dmg: 45, col: '#ffb347' })
-      cam.shake = Math.max(cam.shake, 0.4)
+      foeBlast(player.x, player.y, 600, { stun: 2, dmg: 80, col: '#ffb347' })
+      cam.shake = Math.max(cam.shake, 0.45)
       break
     case 'quake': // Obsidian Colossus: the water itself becomes a hammer
-      foeBlast(player.x, player.y, 560, { stun: 2.8, push: 13, col: '#ff5a3c' })
-      cam.shake = Math.max(cam.shake, 0.7)
+      foeBlast(player.x, player.y, 700, { stun: 3.6, push: 17, dmg: 35, col: '#ff5a3c' })
+      cam.shake = Math.max(cam.shake, 0.8)
       break
     case 'cataclysm': // The Worldeater: an ending, applied locally — cracks cores
-      foeBlast(player.x, player.y, 740, { stun: 2.2, dmg: 70, devour: true, col: '#ffd166' })
-      cam.shake = Math.max(cam.shake, 0.9)
-      if (!CORE.eaten && Math.hypot(CORE.x - player.x, CORE.y - player.y) < coreRadius() + 740) {
-        for (let i = 0; i < 4; i++) biteCore()
+      foeBlast(player.x, player.y, 900, { stun: 2.6, dmg: 110, devour: true, col: '#ffd166' })
+      cam.shake = Math.max(cam.shake, 1)
+      if (!CORE.eaten && Math.hypot(CORE.x - player.x, CORE.y - player.y) < coreRadius() + 900) {
+        for (let i = 0; i < 6; i++) biteCore()
       }
       break
   }
@@ -1285,18 +1390,20 @@ function update(dt) {
   // The ceiling depends on what you've become: sea creatures stop at the
   // waterline, the Drowned God can leap a few hundred metres clear of it, and
   // the winged forms own the whole column up to the roof of the sky.
+  const seabed = bottomLimitAt(player.x) - 14
   if (canFly) {
-    player.y = clamp(player.y, SKY_TOP + 80, floorY() - 14)
+    player.y = clamp(player.y, SKY_TOP + 80, seabed)
   } else if (player.stageIndex >= BREACH_STAGE) {
-    player.y = clamp(player.y, SURFACE_Y - 1500, floorY() - 14)
+    player.y = clamp(player.y, SURFACE_Y - 1500, seabed)
   } else {
-    player.y = clamp(player.y, SURFACE_Y + 18, floorY() - 14)
+    player.y = clamp(player.y, SURFACE_Y + 18, seabed)
   }
   // splash when crossing the waterline with any real speed
   const airborneNow = player.y <= SURFACE_Y
   if (airborneNow !== player.airborne && Math.abs(player.vy) > 2.5) {
     for (let i = 0; i < 3; i++) ripple(player.x + rand(-30, 30), SURFACE_Y + 8, 70 + player.headW * 2, '#cfe9ff')
     puff(player.x, SURFACE_Y, '#dff2ff')
+    if (airborneNow) player.hasBreached = true
     if (airborneNow && player.breachHinted === 0 && !canFly) {
       player.breachHinted = 1
       showBanner('THE AIR TASTES OF LIGHTNING · SOMETHING WAITS ABOVE')
@@ -1307,6 +1414,21 @@ function update(dt) {
     }
   }
   player.airborne = airborneNow
+
+  // crossing the old seafloor line is entering another world — mark it
+  const inCavesNow = player.y > WORLD_H
+  if (inCavesNow !== player.inCaves) {
+    player.inCaves = inCavesNow
+    cam.shake = Math.max(cam.shake, 0.7)
+    for (let i = 0; i < 14; i++) {
+      bites.push({ x: player.x + rand(-160, 160), y: WORLD_H + rand(-30, 30), vx: rand(-2, 2), vy: rand(1, 4), a: 1, col: '#6b4a2c', r: rand(2, 5) })
+    }
+    showBanner(inCavesNow ? 'YOU ENTER THE DROWNED CAVES' : 'BACK BENEATH THE OPEN SEA')
+    if (inCavesNow && !player.cavesHinted) {
+      player.cavesHinted = true
+      queueBanner('DOWN IS THE ONLY WAY LEFT', 2.6)
+    }
+  }
 
   // --- spine follows head ---
   const spacing = (4 + s.width * 0.35) * s.space
@@ -1363,19 +1485,19 @@ function update(dt) {
     c.hunting = c.pred && noticed && (canEatUs || c.bold) && dp < c.aggro && c.stunT <= 0 ? 1 : 0
 
     // --- the player's ability fields acting on this creature ---
-    if (player.lureT > 0 && !c.pred && c.r < player.headW && dp < 460 && dp > 10) {
-      c.x += (dxp / dp) * 110 * dt
-      c.y += (dyp / dp) * 110 * dt
+    if (player.lureT > 0 && !c.pred && c.r < player.headW && dp < 580 && dp > 10) {
+      c.x += (dxp / dp) * 160 * dt
+      c.y += (dyp / dp) * 160 * dt
     }
     if (player.gulpT > 0 && c.r < player.headW * 1.05 && dp < player.gulpR && dp > 6) {
-      const pull = 340 * (1 - dp / player.gulpR) + 80
+      const pull = 460 * (1 - dp / player.gulpR) + 110
       c.x += (dxp / dp) * pull * dt
       c.y += (dyp / dp) * pull * dt
     }
-    if (player.gravT > 0 && dp < 640 && dp > 10) {
-      c.x += (dxp / dp) * 200 * dt
-      c.y += (dyp / dp) * 200 * dt
-      if (c.r < player.headW * 1.4) c.stunT = Math.max(c.stunT, 0.4)
+    if (player.gravT > 0 && dp < 780 && dp > 10) {
+      c.x += (dxp / dp) * 280 * dt
+      c.y += (dyp / dp) * 280 * dt
+      if (c.r < player.headW * 1.6) c.stunT = Math.max(c.stunT, 0.8)
     }
 
     if (c.stunT > 0) {
@@ -1467,7 +1589,7 @@ function update(dt) {
         c.y += c.vy * dt * 60
       }
       if (c.sink) c.y += 32 * dt
-      c.y = clamp(c.y, c.minY, Math.min(floorY() - 18, c.maxY))
+      c.y = clamp(c.y, c.minY, Math.min(bottomLimitAt(c.x) - 12, c.maxY))
     }
 
     // recycle anything that wanders far off-screen
@@ -1800,6 +1922,7 @@ function update(dt) {
   if (player.frenzyT > 0) player.frenzyT -= dt
   if (player.veilT > 0) player.veilT -= dt
   if (player.gravT > 0) player.gravT -= dt
+  if (player.lockNagT > 0) player.lockNagT -= dt
   if (cam.shake > 0) cam.shake -= dt * 1.6
 
   for (let i = ripples.length - 1; i >= 0; i--) {
@@ -1826,12 +1949,17 @@ function update(dt) {
     if (queuedBanners[i].t <= 0) { showBanner(queuedBanners[i].text); queuedBanners.splice(i, 1) }
   }
 
-  // crossing into the ice for the first time deserves an announcement
-  if (!player.arcticGreeted && arcticness(player.x) > 0.6 && player.y > SURFACE_Y - 200 && player.y < 2600) {
-    player.arcticGreeted = true
+  // crossing in and out of the ice both deserve an announcement
+  const arcNow = arcticness(player.x)
+  if (!player.inArctic && arcNow > 0.6 && player.y > SURFACE_Y - 200 && player.y < 2600) {
+    player.inArctic = true
     showBanner('THE FROZEN REACHES')
+  } else if (player.inArctic && arcNow < 0.2) {
+    player.inArctic = false
+    showBanner('THE ICE THINS · OPEN WATER')
   }
 
+  updateRebirth(dt)
   updateHUD()
 }
 
@@ -2096,6 +2224,13 @@ function draw() {
   vg.addColorStop(1, 'rgba(0,0,5,0.58)')
   ctx.fillStyle = vg
   ctx.fillRect(-20, -20, vw + 40, vh + 40)
+
+  // the collapse blackout, over absolutely everything
+  const ra = rebirthOverlayAlpha()
+  if (ra > 0) {
+    ctx.fillStyle = `rgba(2,1,0,${ra})`
+    ctx.fillRect(-20, -20, vw + 40, vh + 40)
+  }
 }
 
 // ---- Scenery -----------------------------------------------------------
@@ -2165,47 +2300,85 @@ function drawScenery(vw, vh) {
     if (camBot > 11000) drawMagmaGlow(vw, vh)
   }
 
-  // seafloor — solid until the moon dies, then split by a burning rift
+  // seafloor — rolling terrain until the moon dies, then a shattered,
+  // burning rift you can swim down through
   const fy = sy(WORLD_H)
-  if (fy > -80 && fy < vh + 60) {
+  if (fy > -420 && fy < vh + 60) {
     if (!worldFloorOpen) {
+      // the terrain silhouette
       ctx.fillStyle = '#080409'
-      ctx.fillRect(-20, fy - 6, vw + 40, vh + 40)
+      ctx.beginPath()
+      ctx.moveTo(-24, vh + 40)
+      for (let sxp = -24; sxp <= vw + 24; sxp += 14) {
+        const wx = player.x + (sxp - vw / 2)
+        ctx.lineTo(sxp, sy(floorHeightAt(wx)))
+      }
+      ctx.lineTo(vw + 24, vh + 40)
+      ctx.closePath()
+      ctx.fill()
+      // a faint volcanic rim tracing the ridgeline
+      ctx.strokeStyle = 'rgba(255,90,50,0.18)'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      for (let sxp = -24; sxp <= vw + 24; sxp += 14) {
+        const wx = player.x + (sxp - vw / 2)
+        ctx.lineTo(sxp, sy(floorHeightAt(wx)) - 2)
+      }
+      ctx.stroke()
+      // sediment mounds scattered over the slopes
       ctx.fillStyle = 'rgba(60,20,24,0.5)'
-      for (let i = -1; i < vw / 40 + 1; i++) {
+      const mg = 90
+      const m0 = Math.floor((player.x - vw) / mg)
+      const m1 = Math.ceil((player.x + vw) / mg)
+      for (let k = m0; k <= m1; k++) {
+        if (hash1(k * 11.7) < 0.5) continue
+        const wx = k * mg + hash1(k * 5.1) * 40
+        const mx = px(wx, 1)
         ctx.beginPath()
-        ctx.ellipse(i * 40 + ((player.x * 0.3) % 40), fy, 28, 11, 0, 0, TAU)
+        ctx.ellipse(mx, sy(floorHeightAt(wx)) + 4, 22 + hash1(k * 3.3) * 16, 9, 0, 0, TAU)
         ctx.fill()
       }
-      ctx.strokeStyle = 'rgba(255,90,50,0.16)'
-      ctx.lineWidth = 2
-      ctx.beginPath(); ctx.moveTo(-20, fy - 4); ctx.lineTo(vw + 20, fy - 4); ctx.stroke()
     } else {
-      // shattered: slabs of old floor with gaps of glowing depth between
+      // shattered: slabs of old floor riding the ridgeline, stalactites
+      // fringing their undersides, and glowing gaps between
       const gap = 260
       const k0 = Math.floor((player.x - vw) / gap)
       const k1 = Math.ceil((player.x + vw) / gap)
       for (let k = k0; k <= k1; k++) {
         const h = hash1(k * 3.7)
         if (h < 0.3) continue // a hole — swim through
-        const x = px(k * gap, 1)
+        const wx = k * gap
+        const fyk = sy(floorHeightAt(wx))
+        const x = px(wx, 1)
         const w = gap * (0.55 + h * 0.4)
         ctx.fillStyle = '#080409'
         ctx.beginPath()
-        ctx.moveTo(x - w / 2, fy - 4 + h * 6)
-        ctx.lineTo(x + w / 2, fy - 8 + h * 10)
-        ctx.lineTo(x + w / 2 - 14, fy + 26)
-        ctx.lineTo(x - w / 2 + 10, fy + 30)
+        ctx.moveTo(x - w / 2, fyk - 4 + h * 6)
+        ctx.lineTo(x + w / 2, fyk - 8 + h * 10)
+        ctx.lineTo(x + w / 2 - 14, fyk + 26)
+        ctx.lineTo(x - w / 2 + 10, fyk + 30)
         ctx.closePath()
         ctx.fill()
+        // cave teeth hanging under the slab
+        ctx.fillStyle = '#0c0708'
+        for (let sI = 0; sI < 4; sI++) {
+          const sh = hash1(k * 9.1 + sI * 2.7)
+          const sxp2 = x - w / 2 + 18 + sI * (w - 36) / 3
+          ctx.beginPath()
+          ctx.moveTo(sxp2 - 8, fyk + 26)
+          ctx.lineTo(sxp2, fyk + 26 + 24 + sh * 50)
+          ctx.lineTo(sxp2 + 8, fyk + 26)
+          ctx.closePath()
+          ctx.fill()
+        }
       }
       ctx.save()
       ctx.globalCompositeOperation = 'lighter'
-      const rg = ctx.createLinearGradient(0, fy + 26, 0, fy - 90)
+      const rg = ctx.createLinearGradient(0, fy + 26, 0, fy - 120)
       rg.addColorStop(0, 'rgba(255,120,40,0.22)')
       rg.addColorStop(1, 'rgba(255,120,40,0)')
       ctx.fillStyle = rg
-      ctx.fillRect(-20, fy - 90, vw + 40, 116)
+      ctx.fillRect(-20, fy - 120, vw + 40, 150)
       ctx.restore()
     }
   }
@@ -2441,9 +2614,11 @@ function drawVents(vw, vh) {
   for (let k = k0; k <= k1; k++) {
     const h = hash1(k * 2.3)
     if (h < 0.35) continue
-    const x = px(k * gap + hash1(k * 4.7) * 160, 1)
+    const wx = k * gap + hash1(k * 4.7) * 160
+    const fyk = sy(floorHeightAt(wx))
+    const x = px(wx, 1)
     const hgt = 90 + h * 250
-    const mouth = fy - hgt
+    const mouth = fyk - hgt
     // plume of superheated water
     ctx.save()
     ctx.globalCompositeOperation = 'lighter'
@@ -2468,10 +2643,10 @@ function drawVents(vw, vh) {
     // chimney
     ctx.fillStyle = '#150a0c'
     ctx.beginPath()
-    ctx.moveTo(x - 28 - h * 12, fy + 6)
+    ctx.moveTo(x - 28 - h * 12, fyk + 6)
     ctx.lineTo(x - 11, mouth)
     ctx.lineTo(x + 11, mouth)
-    ctx.lineTo(x + 28 + h * 12, fy + 6)
+    ctx.lineTo(x + 28 + h * 12, fyk + 6)
     ctx.closePath()
     ctx.fill()
     ctx.strokeStyle = 'rgba(255,110,50,0.28)'
@@ -2492,10 +2667,12 @@ function drawEggBeds(vw, vh) {
   for (let k = k0; k <= k1; k++) {
     const h = hash1(k * 6.7)
     if (h < 0.45) continue
-    const x = px(k * gap + hash1(k * 3.9) * 120, 1)
+    const wx = k * gap + hash1(k * 3.9) * 120
+    const fyk = sy(floorHeightAt(wx))
+    const x = px(wx, 1)
     for (let e = 0; e < 4; e++) {
       const ex = x + (e - 1.5) * 15 + hash1(k + e) * 8
-      const ey = fy - 6 - hash1(k * 2 + e) * 16
+      const ey = fyk - 6 - hash1(k * 2 + e) * 16
       const pulse = 0.45 + 0.35 * Math.sin(t * 2 + k + e)
       const eg = ctx.createRadialGradient(ex, ey, 0, ex, ey, 22)
       eg.addColorStop(0, `rgba(255,90,140,${0.5 * pulse})`)
@@ -5606,22 +5783,6 @@ document.getElementById('start-btn').addEventListener('click', () => {
   mouse.x = window.innerWidth / 2
   mouse.y = window.innerHeight / 2
 })
-document.getElementById('continue-btn').addEventListener('click', () => {
-  document.getElementById('end-screen').classList.add('hidden')
-})
-document.getElementById('restart-btn').addEventListener('click', () => {
-  location.reload()
-})
-document.getElementById('fresh-btn').addEventListener('click', () => {
-  document.getElementById('core-end-screen').classList.add('hidden')
-  enterFreshwater()
-})
-document.getElementById('core-stay-btn').addEventListener('click', () => {
-  document.getElementById('core-end-screen').classList.add('hidden')
-})
-document.getElementById('core-restart-btn').addEventListener('click', () => {
-  location.reload()
-})
 
 // The scene runs from the first frame so the deep is already alive behind the
 // start card; clicking start just hands over the controls.
@@ -5651,7 +5812,8 @@ window.abyss = {
   moon: () => ({ hp: MOON.hp, dx: Math.round(MOON.x - player.x), dy: Math.round(MOON.y - player.y), awake: MOON.awake, eaten: MOON.eaten }),
   core: () => ({ hp: CORE.hp, dx: Math.round(CORE.x - player.x), dy: Math.round(CORE.y - player.y), awake: CORE.awake, eaten: CORE.eaten, open: worldFloorOpen }),
   openFloor() { worldFloorOpen = true; MOON.eaten = true; return 'the seafloor splits' },
-  fresh: () => { enterFreshwater(); return realm },
+  fresh: () => { rebirthInFreshwater(); return realm },
+  crush: () => { rebirth.phase = 'collapse'; rebirth.t = 0; return 'the ceiling lets go' },
   allies: () => creatures.filter((c) => c.isAlly).map((c) => ({ key: c.key, joined: c.joined, hp: Math.round(c.hp) })),
   boats: () => boats.map((b) => ({ name: b.type.name, dx: Math.round(b.x - player.x), hp: b.hp })),
   creatures: () => creatures.map((c) => ({ key: c.key, r: Math.round(c.r), sx: Math.round(sx(c.x)), sy: Math.round(sy(c.y)) })),
