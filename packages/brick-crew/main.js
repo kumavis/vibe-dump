@@ -4,7 +4,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import {
   SITE, YARD, PLOTS, DEPOT, COURSE, COLORS, SHIFT_SECONDS, PREROLL_SECONDS,
   HOUSE_TYPES, PAINT, MATERIALS, KIT_LEAD_SECONDS, DAY_SECONDS, houseGeom,
-  toWorld, toLocal,
+  toWorld, toLocal, fenceRuns,
 } from './src/config.js'
 import { orders } from './src/orders.js'
 import { buildPlan } from './src/plan.js'
@@ -14,10 +14,11 @@ import {
   buildDumpster, buildPrivy, buildSpoilHeap, buildSign, buildRoadArrow, buildGarden,
   buildFurniture, FURNITURE_KINDS, FURNITURE_COLORS,
 } from './src/props.js'
+import * as nav from './src/nav.js'
 import { setGeom, setObstacles } from './src/nav.js'
 import { createSim } from './src/sim.js'
 import { createTruckRig } from './src/fitout.js'
-import { createSupplyRig } from './src/supply.js'
+import { createHaulage } from './src/haulage.js'
 import { createDepot } from './src/depot.js'
 import { createUI } from './src/ui.js'
 import { drawBlueprint } from './src/blueprint.js'
@@ -75,6 +76,14 @@ controls.minDistance = 5
 controls.maxDistance = 60
 controls.autoRotate = true
 controls.autoRotateSpeed = 0.28
+// Panning along the ground rather than across the screen, so a two-finger or
+// right-button drag walks you up and down the street instead of sliding the
+// whole world sideways. The arrow keys do the same thing.
+controls.screenSpacePanning = false
+controls.panSpeed = 1.15
+controls.keyPanSpeed = 22
+controls.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' }
+controls.listenToKeyEvents(window)
 
 function resize() {
   renderer.setSize(innerWidth, innerHeight, false)
@@ -110,6 +119,11 @@ scene.add(toDepot.group)
 
 const depot = createDepot({ origin: DEPOT, rng })
 scene.add(depot.group)
+
+// One lorry on the whole street. The yard loads it, it drives to the plot, the
+// shift on site unloads it, and it drives back.
+const haulage = createHaulage({ scene, rng })
+depot.useHaulage(haulage)
 
 const toSite = buildRoadArrow('BACK TO SITE', +1)
 toSite.group.position.set(DEPOT.x + 10.5, 0, DEPOT.z)
@@ -318,6 +332,7 @@ function startPlot(first) {
   houseGroup.add(mortarMesh)
 
   const topOut = buildTopOut()
+  topOut.userData.topOut = true
   topOut.position.set(0, geom.ridgeY + 0.2, 0)
   topOut.visible = false
   houseGroup.add(topOut)
@@ -390,7 +405,20 @@ function startPlot(first) {
   }
 
   truckRig = createTruckRig({ group: workGroup, houseGroup, plan, origin, rng })
-  supplyRig = createSupplyRig({ group: workGroup, origin, rng })
+  haulage.setPlot(origin)
+  // The sim works in plot coordinates and the lorry works in street
+  // coordinates, so this is the only place the two have to meet.
+  supplyRig = {
+    update() {},
+    get parked() { return haulage.atPlot },
+    get left() { return haulage.left },
+    stand(slot = 0) {
+      const w = haulage.standWorld(slot)
+      const l = toLocal(origin, w)
+      return { level: 0, x: l.x, y: 0, z: l.z }
+    },
+    takeOne: () => haulage.takeOne(),
+  }
 
   sim = createSim({
     plan,
@@ -411,6 +439,9 @@ function startPlot(first) {
       if (s === 'fitout') topOut.visible = true
     },
     onComplete: () => {
+      // The topping-out fir goes up when the roof is on and comes down at
+      // handover — left there it just looks like a tree growing out of the roof.
+      topOut.visible = false
       if (gardenGroup) gardenGroup.visible = true
       // Everything the house needs to be opened up and rearranged later. The
       // lid is the roof: tiles and rafters, lifted clear when you look inside.
@@ -475,6 +506,13 @@ function refreshObstacles(origin) {
   }
   const tr = toLocal(origin, SITE.trailer)
   boxes.push({ x: tr.x, z: tr.z, hw: 3.3, hd: 2.2 })
+  // The hoarding is solid. Crews come and go through the gateway like anyone
+  // else — before this they walked straight out through the panels.
+  for (const run of fenceRuns(origin)) {
+    const c = toLocal(origin, run)
+    const flip = Math.abs(Math.cos(origin.rot || 0)) < 0.5
+    boxes.push({ x: c.x, z: c.z, hw: flip ? run.hd : run.hw, hd: flip ? run.hw : run.hd })
+  }
   setObstacles(boxes)
 }
 
@@ -488,11 +526,7 @@ function orderNextCrew() {
   if (sim.secondsToShiftChange() < KIT_LEAD_SECONDS) depot.prepare(sim.nextCrew(), orders.roles())
 }
 
-/** A lorry has pulled out of the merchant's gate — it is coming here. */
-function collectDelivery() {
-  const manifest = depot.collectOutbound()
-  if (manifest && manifest.length && supplyRig) supplyRig.arrive(manifest)
-}
+
 
 /**
  * Run the site and the yard forward without drawing anything. Used to check
@@ -503,7 +537,7 @@ function fastForward(seconds) {
   for (let t = 0; t < seconds; t += h) {
     orderNextCrew()
     depot.update(h, t)
-    collectDelivery()
+    haulage.update(h)
     sim.update(h)
     if (sim.finished && sim.stageT > 14) startPlot(false)
   }
@@ -588,6 +622,7 @@ function houseCard() {
 function rebuildPiece(p) {
   const old = p.mesh
   const mesh = buildFurniture({ ...p.spec, color: p.color })
+  mesh.userData.piece = true
   mesh.position.copy(old.position)
   mesh.rotation.copy(old.rotation)
   mesh.scale.copy(old.scale)
@@ -630,6 +665,58 @@ function closeHouse() {
   ui.setHouse(null)
   framePlot(PLOTS[plotIndex])
   flying = 1
+}
+
+// --- dragging the furniture -------------------------------------------------
+//
+// While a house is open, its pieces can be picked up and put down somewhere
+// else on the floor. The drag runs on a flat plane at floor level and the
+// result is written back into the piece's own spec, so swapping it for another
+// kind afterwards keeps it where you left it.
+
+const DRAG_PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+const _hit = new THREE.Vector3()
+let dragging = null
+
+/** The piece under the pointer, if a house is open. */
+function pickPiece(cx, cy) {
+  const h = openHouseGroup?.userData.house
+  if (!h) return null
+  pointer.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1)
+  raycaster.setFromCamera(pointer, camera)
+  const live = h.pieces.filter((p) => p.present)
+  const hit = raycaster.intersectObjects(live.map((p) => p.mesh), true)[0]
+  if (!hit) return null
+  return live.find((p) => {
+    let o = hit.object
+    while (o) {
+      if (o === p.mesh) return true
+      o = o.parent
+    }
+    return false
+  }) || null
+}
+
+/** Where the pointer is on the floor, in the open house's own coordinates. */
+function floorPoint(cx, cy) {
+  pointer.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1)
+  raycaster.setFromCamera(pointer, camera)
+  if (!raycaster.ray.intersectPlane(DRAG_PLANE, _hit)) return null
+  return openHouseGroup.worldToLocal(_hit.clone())
+}
+
+function dragTo(cx, cy) {
+  const local = floorPoint(cx, cy)
+  if (!local || !dragging) return
+  const g = openHouseGroup.userData.geom
+  // stays inside its own four walls
+  const mx = Math.max(0.3, g.w / 2 - g.t - 0.32)
+  const mz = Math.max(0.3, g.d / 2 - g.t - 0.32)
+  const x = Math.max(-mx, Math.min(mx, local.x + dragging.dx))
+  const z = Math.max(-mz, Math.min(mz, local.z + dragging.dz))
+  dragging.piece.mesh.position.set(x, 0, z)
+  dragging.piece.spec = { ...dragging.piece.spec, at: [x, 0, z] }
+  dragging.moved = true
 }
 
 ui.onHouse({
@@ -690,7 +777,15 @@ ui.onHouse({
 })
 
 canvas.addEventListener('pointermove', (e) => {
+  if (dragging) {
+    dragTo(e.clientX, e.clientY)
+    return
+  }
   if (ui.isSheetOpen()) return
+  if (openHouseGroup) {
+    canvas.style.cursor = pickPiece(e.clientX, e.clientY) ? 'grab' : ''
+    return
+  }
   const hit = pick(e.clientX, e.clientY)
   const kind = hit ? hit.kind : null
   if (kind !== hovering) {
@@ -702,9 +797,30 @@ canvas.addEventListener('pointermove', (e) => {
 })
 canvas.addEventListener('pointerdown', (e) => {
   controls.autoRotate = false
+  const piece = pickPiece(e.clientX, e.clientY)
+  if (piece) {
+    const local = floorPoint(e.clientX, e.clientY)
+    if (local) {
+      dragging = {
+        piece,
+        dx: piece.mesh.position.x - local.x,
+        dz: piece.mesh.position.z - local.z,
+        moved: false,
+      }
+      controls.enabled = false
+      canvas.setPointerCapture?.(e.pointerId)
+      return
+    }
+  }
   downAt = [e.clientX, e.clientY]
 })
 canvas.addEventListener('pointerup', (e) => {
+  if (dragging) {
+    canvas.releasePointerCapture?.(e.pointerId)
+    dragging = null
+    controls.enabled = true
+    return
+  }
   if (!downAt) return
   const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1])
   downAt = null
@@ -731,6 +847,37 @@ canvas.addEventListener('pointerleave', () => {
   hovering = null
   site.setTrailerHighlight(false)
   site.trailerLabel.visible = false
+})
+
+// --- moving up and down the street ------------------------------------------
+//
+// The street is long and the camera orbits one plot, so getting from one end to
+// the other used to mean a lot of dragging. The two chevrons step a whole plot
+// at a time and CREW snaps back to wherever the gang actually is.
+
+/** How far the view is allowed to wander, so you cannot lose the street. */
+const STREET_X = [DEPOT.x - 16, PLOTS[PLOTS.length - 1].x + 18]
+
+function panStreet(dx) {
+  follow(null)
+  closeHouse()
+  controls.autoRotate = false
+  const at = Math.max(STREET_X[0], Math.min(STREET_X[1], controls.target.x + dx))
+  const move = at - controls.target.x
+  camGoal.pos.set(camera.position.x + move, camera.position.y, camera.position.z)
+  camGoal.target.set(at, controls.target.y, controls.target.z)
+  flying = 1
+}
+
+document.getElementById('pan-left').addEventListener('click', () => panStreet(-13))
+document.getElementById('pan-right').addEventListener('click', () => panStreet(13))
+document.getElementById('pan-here').addEventListener('click', () => {
+  follow(null)
+  closeHouse()
+  controls.autoRotate = false
+  view = 'site'
+  framePlot(PLOTS[plotIndex])
+  flying = 1
 })
 
 /**
@@ -887,7 +1034,7 @@ renderer.setAnimationLoop(() => {
   ui.tick(dt)
 
   orderNextCrew()
-  collectDelivery()
+  haulage.update(dt * speed)
 
   // the plot is handed over; the whole outfit moves next door
   if (sim.finished && sim.stageT > 14) startPlot(false)
@@ -965,6 +1112,10 @@ window.brickCrew = {
   get houses() { return standing.map((h) => ({ x: h.position.x, z: h.position.z, plot: h.userData.plot, w: h.userData.geom.w, d: h.userData.geom.d })) },
   get plan() { return plan },
   get supply() { return supplyRig },
+  haulage,
+  toWorld,
+  toLocal,
+  nav,
   get stockCounts() { return Object.fromEntries(MATERIALS.map((m) => [m.key, `${stocks[m.key].count}/${stocks[m.key].capacity}`])) },
   get dropCounts() { return Object.fromEntries(MATERIALS.map((m) => [m.key, drops[m.key].count])) },
   openHouse,

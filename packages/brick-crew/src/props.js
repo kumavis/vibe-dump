@@ -425,6 +425,7 @@ export function buildScaffold(geom) {
       box(g, M.timber, rx * 2 + deckW, 0.13, 0.03, 0, y + 0.09, s * (rz + deckW / 2))
       box(g, M.timber, 0.03, 0.13, rz * 2, s * (rx + deckW / 2), y + 0.09, 0)
     }
+    g.userData.deck = true
     lifts.push({ group: g, y })
     group.add(g)
   }
@@ -708,6 +709,7 @@ export function buildFlatbed() {
   const loadAnchor = new THREE.Group()
   loadAnchor.position.set(0, 0.97, -0.7)
   g.add(loadAnchor)
+  g.userData.flatbed = true
   /** Where the next pallet goes on the bed. */
   const slot = (i) => ({ x: ((i % 2) - 0.5) * 1.0, y: 0, z: 1.5 - Math.floor(i / 2) * 1.15 })
   return { group: g, loadAnchor, slot }

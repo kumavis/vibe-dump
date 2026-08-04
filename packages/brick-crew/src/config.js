@@ -31,6 +31,14 @@ export const HOUSE_TYPES = [
   { key: 'cottage', name: 'GABLE COTTAGE', w: 5.04, d: 4.18, wallCourses: 14, gableCourses: 7, eaveOverhang: 0.3 },
   { key: 'stack', name: 'THE LITTLE STACK', w: 4.2, d: 3.78, wallCourses: 16, gableCourses: 6, eaveOverhang: 0.26, garden: true },
   { key: 'lodge', name: 'BRICKWORKS LODGE', w: 5.88, d: 4.2, wallCourses: 12, gableCourses: 8, eaveOverhang: 0.36 },
+  // long and low
+  { key: 'barn', name: 'THE LONG BARN', w: 7.56, d: 4.0, wallCourses: 11, gableCourses: 6, eaveOverhang: 0.42 },
+  // narrow and tall
+  { key: 'tower', name: 'CHIMNEY HOUSE', w: 3.78, d: 3.6, wallCourses: 20, gableCourses: 6, eaveOverhang: 0.24 },
+  // wide, deep and squat
+  { key: 'hall', name: 'MASONS HALL', w: 6.72, d: 4.62, wallCourses: 13, gableCourses: 9, eaveOverhang: 0.34 },
+  // a tall narrow one with a garden
+  { key: 'stackTall', name: 'THE HIGH STACK', w: 4.2, d: 3.78, wallCourses: 18, gableCourses: 8, eaveOverhang: 0.28, garden: true },
 ]
 
 /** What the roofers cover it with. Tiles are laid in three shades of it. */
@@ -208,6 +216,31 @@ export const isFar = (origin) => origin.z > ROAD_Z
 export const mirror = (p) => ({ ...p, z: 2 * ROAD_Z - p.z })
 /** The landmark on the row this plot belongs to. */
 export const forRow = (origin, p) => (isFar(origin) ? mirror(p) : p)
+/** The hoarding round the row this plot belongs to. */
+export const fenceFor = (origin) => (isFar(origin) ? SITE.fenceFar : SITE.fence)
+
+/**
+ * The hoarding as a set of solid runs for the router, with the gateway left
+ * open. Each is an axis-aligned box in world coordinates; a half-metre of
+ * thickness so a robot cannot squeeze through the panel itself.
+ */
+export function fenceRuns(origin) {
+  const f = fenceFor(origin)
+  const gz = f.gateZ
+  const bz = gz === f.z1 ? f.z0 : f.z1
+  // Thick enough that a robot shoved sideways by the crowd still cannot end up
+  // standing in the panel: the router keeps a berth rather than hugging it.
+  const T = 0.34
+  const midX = (f.x0 + f.x1) / 2
+  const midZ = (f.z0 + f.z1) / 2
+  return [
+    { x: midX, z: bz, hw: (f.x1 - f.x0) / 2, hd: T },
+    { x: f.x0, z: midZ, hw: T, hd: (f.z1 - f.z0) / 2 },
+    { x: f.x1, z: midZ, hw: T, hd: (f.z1 - f.z0) / 2 },
+    { x: (f.x0 + f.gapX0) / 2, z: gz, hw: (f.gapX0 - f.x0) / 2, hd: T },
+    { x: (f.gapX1 + f.x1) / 2, z: gz, hw: (f.x1 - f.gapX1) / 2, hd: T },
+  ]
+}
 
 export function toLocal(origin, p) {
   const dx = p.x - origin.x

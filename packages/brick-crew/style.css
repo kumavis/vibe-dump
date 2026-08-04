@@ -244,6 +244,23 @@ html, body {
 .swatches button.auto { width: auto; padding: 0 7px; letter-spacing: 0.08em; }
 .swatches button.auto.on { background: var(--amber); color: #14181b; box-shadow: none; }
 
+/* ---------- panning the street ---------- */
+.pan {
+  position: absolute; z-index: 6;
+  left: 50%; bottom: 14px; transform: translateX(-50%);
+  display: flex; gap: 5px;
+}
+.pan button {
+  cursor: pointer;
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em;
+  color: var(--ink); background: var(--asphalt);
+  border: 1px solid var(--line); border-radius: 4px;
+  min-width: 34px; height: 32px; padding: 0 9px;
+}
+.pan button:hover { border-color: var(--amber); color: var(--amber); }
+.pan button:active { transform: translateY(1px); }
+#pan-here { font-size: 0.6rem; }
+
 /* ---------- inside a finished house ---------- */
 .house { top: 52px; }
 .furn { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
@@ -269,7 +286,8 @@ html, body {
 /* On a phone the legend and the hint are both too wide to sit side by side,
    so they stack instead of overlapping. */
 @media (max-width: 560px) {
-  .legend { left: 12px; right: 12px; bottom: 60px; max-width: none; }
+  .legend { left: 12px; right: 12px; bottom: 104px; max-width: none; }
+  .pan { bottom: 58px; }
   .hint { left: 14px; right: 14px; text-align: center; }
   .follow { top: 88px; max-width: min(200px, 58vw); }
 }

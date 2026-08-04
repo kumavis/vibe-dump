@@ -147,14 +147,21 @@ export function createSim({
     return null
   }
 
-  /** Which lift the scaffold needs to be at for the work now coming up. */
+  /**
+   * Which lift the scaffold needs to be at for the work now coming up.
+   *
+   * Once the masonry is done the answer is *not* nothing: the joiners and the
+   * decorators still work off it, and it only comes down at handover. Striking
+   * it as the last brick goes in left the painters standing in mid-air.
+   */
   function decksNeeded() {
+    if (stage !== 'build') return 2
     let need = 0
     for (let k = firstOpen; k < Math.min(items.length, firstOpen + 90); k++) {
       const lv = items[k].stand.level
       need = Math.max(need, lv === 'roof' ? 2 : lv)
     }
-    return need
+    return Math.max(need, firstOpen >= items.length ? 2 : 0)
   }
 
   function setPlaced(i) {
@@ -183,9 +190,11 @@ export function createSim({
     stageT = 0
     onStage?.(next)
     if (next === 'fitout') {
+      scaffold.setDecks(2)
       truck.arrive()
       if (!quiet) onBanner('TOPPED OUT', 'joiners on the way — fitting out', '#8fd14f')
     } else if (next === 'paint') {
+      scaffold.setDecks(2)
       truck.leave()
       if (!quiet) onBanner('DECORATING', `${plan.paint.name.toLowerCase()} — one coat`, '#f3a226')
     } else if (next === 'done') {
@@ -744,6 +753,24 @@ export function createSim({
   // --- movement ------------------------------------------------------------
 
   function advance(r, dt) {
+    // How long it has been working on the waypoint it is on. Crowds, corners
+    // and the odd geometric trap can leave a robot circling one point forever;
+    // rather than try to enumerate every such case, give up on a waypoint that
+    // is taking absurdly long and step onto it. One short hop, and the route
+    // carries on — far better than a robot walking on the spot all afternoon.
+    if (r.path.length === r.wpN) r.wpT = (r.wpT || 0) + dt
+    else {
+      r.wpN = r.path.length
+      r.wpT = 0
+    }
+    if (r.wpT > 6 && r.path.length) {
+      const wp = r.path[0]
+      r.pos.set(wp.x, wp.y ?? r.pos.y, wp.z)
+      r.stance = wp
+      r.path.shift()
+      r.wpN = r.path.length
+      r.wpT = 0
+    }
     if (!r.path.length) {
       r.climbing = false
       r.state = 'idle'

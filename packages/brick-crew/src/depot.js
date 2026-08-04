@@ -11,9 +11,9 @@
 //     to the site. A board on the shed says how many of the order are done.
 //
 //   • A **loading bay** — five stock piles of exactly the material the masons
-//     set, and a flatbed that the yard hands load out of them. When it is full
-//     it pulls out of the gate and runs down to the plots, and an empty one
-//     backs in behind it. That is where the drops on the site come from.
+//     set. The street's one lorry stands on the dock and the yard hands load it
+//     out of them; when it is full it drives down to the plot. That is where
+//     the drops on the site come from.
 //
 // Nothing here is decorative-only: the crews that walk out of this compound
 // are the crews that turn up on site, and the material on the lorry is the
@@ -25,7 +25,7 @@
 
 import * as THREE from 'three'
 import { buildRobot, buildCarryStack } from './robot.js'
-import { buildCone, buildSign, buildStock, buildFlatbed } from './props.js'
+import { buildCone, buildSign, buildStock } from './props.js'
 import { MATERIALS, KIT_LEAD_SECONDS } from './config.js'
 import { orders } from './orders.js'
 
@@ -53,9 +53,6 @@ const DOCK = { x: 10.2, z: -9.6 }
 const LOAD_POINT = { x: 7.4, z: -10.2 }
 /** Gangers get a white hat, the way they do on a real site. */
 const LEAD_HAT = 0xf2f5f7
-
-/** How many loads fill a lorry before it runs down to the site. */
-const LORRY_LOADS = 7
 
 function box(parent, material, sx, sy, sz, x = 0, y = 0, z = 0, geo = BOX) {
   const m = new THREE.Mesh(geo, material)
@@ -342,20 +339,8 @@ export function createDepot({ origin, rng }) {
   }
 
   // --- the flatbed ---------------------------------------------------------
-  const lorry = buildFlatbed()
-  // sized against a robot, not against the yard
-  lorry.group.scale.setScalar(0.66)
-  group.add(lorry.group)
-  /** The load of the lorry that has just left, waiting to be collected. */
-  let outbound = null
-  const lorryState = { x: DOCK.x, z: DOCK.z, yaw: 0, mode: 'dock', loads: 0, t: 0, manifest: [] }
-  lorry.group.position.set(DOCK.x, 0, DOCK.z)
-
-  function resetLorry() {
-    for (const c of lorry.loadAnchor.children.slice()) lorry.loadAnchor.remove(c)
-    lorryState.loads = 0
-    lorryState.manifest = []
-  }
+  /** The one lorry on the street, set by the renderer once it exists. */
+  let haulage = null
 
   // --- the yard hands ------------------------------------------------------
   // Depot staff, not site crew: one livery, and they keep out of each other's
@@ -653,12 +638,12 @@ export function createDepot({ origin, rng }) {
         if (h.timer <= 0) {
           if (h.stack) {
             h.rig.handAnchor.remove(h.stack)
-            if (lorryState.mode === 'dock' && lorryState.loads < LORRY_LOADS) {
-              const slot = lorry.slot(lorryState.loads++)
-              lorryState.manifest.push({ key: h.carrying?.key ?? bay.mat.key, n: h.carrying?.n ?? 1 })
-              h.stack.position.set(slot.x, slot.y, slot.z)
-              h.stack.rotation.y = (rng() - 0.5) * 0.16
-              lorry.loadAnchor.add(h.stack)
+            // onto the lorry if it is standing here; otherwise back it goes
+            const put = h.carrying && haulage?.atDock
+              && haulage.putPallet(h.carrying.key, h.carrying.n)
+            if (!put && h.carrying) {
+              const b = bays.find((x) => x.mat.key === h.carrying.key)
+              if (b) b.held = Math.min(b.stock.capacity, b.held + h.carrying.n)
             }
             h.stack = null
             h.carrying = null
@@ -681,52 +666,6 @@ export function createDepot({ origin, rng }) {
     }
   }
 
-  /**
-   * A full lorry pulls out of the gate and runs down to the plots; an empty one
-   * backs onto the dock behind it. The bays are topped back up while the dock
-   * is clear — the merchant takes its own deliveries off-stage, the way one
-   * would.
-   */
-  function stepLorry(dt) {
-    const s = lorryState
-    if (s.mode === 'dock') {
-      if (s.loads >= LORRY_LOADS) {
-        s.mode = 'out'
-        s.t = 0
-      }
-    } else if (s.mode === 'out') {
-      s.t += dt
-      // nose out of the gate, then away down the road
-      const gx = (GATE.x0 + GATE.x1) / 2
-      s.x += (gx - s.x) * Math.min(1, dt * 1.2)
-      s.z += dt * 5.5
-      if (s.z > 14) {
-        s.mode = 'away'
-        s.t = 0
-        // hand the load to the site before the bed is cleared
-        outbound = s.manifest.slice()
-        resetLorry()
-      }
-    } else if (s.mode === 'away') {
-      s.t += dt
-      if (s.t > 3.5) {
-        s.mode = 'in'
-        s.x = (GATE.x0 + GATE.x1) / 2
-        s.z = 15
-      }
-    } else if (s.mode === 'in') {
-      s.z += (DOCK.z - s.z) * Math.min(1, dt * 1.1)
-      s.x += (DOCK.x - s.x) * Math.min(1, dt * 1.1)
-      if (Math.hypot(s.x - DOCK.x, s.z - DOCK.z) < 0.35) {
-        s.x = DOCK.x
-        s.z = DOCK.z
-        s.mode = 'dock'
-      }
-    }
-    lorry.group.visible = s.mode !== 'away'
-    lorry.group.position.set(s.x, 0, s.z)
-  }
-
   function update(dt, t) {
     feedLine(dt)
     stepLine(dt)
@@ -738,7 +677,6 @@ export function createDepot({ origin, rng }) {
     stepHands(dt)
     separate(dt)
     restock(dt)
-    stepLorry(dt)
     void t
   }
 
@@ -752,14 +690,7 @@ export function createDepot({ origin, rng }) {
     get pending() { return order ? order.roles.length - queued.length : 0 },
     /** How big the crew on the books is, or 0 if the line is standing idle. */
     get building() { return order ? order.roles.length : 0 },
-    /**
-     * What the lorry that just pulled out of the gate is carrying. Returned
-     * once and then forgotten, so the site can only take delivery of it once.
-     */
-    collectOutbound() {
-      const m = outbound
-      outbound = null
-      return m
-    },
+    /** The renderer hands the yard the street's one lorry to load. */
+    useHaulage(h) { haulage = h },
   }
 }
