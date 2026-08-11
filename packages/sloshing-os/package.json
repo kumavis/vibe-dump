@@ -1,0 +1,11 @@
+{
+  "name": "@vibe-dump/sloshing-os",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "gallery": {
+    "title": "SloshOS",
+    "description": "Frutiger-aero toy desktop where every window is liquid-filled glass — a duck pond, a glitter flask, a blue lava lamp and a ring clock that all slosh when dragged."
+  }
+}
