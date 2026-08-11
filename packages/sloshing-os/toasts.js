@@ -9,7 +9,9 @@ const textLayer = document.getElementById('toast-text')
 const blobs = []   // toasts + ambient globules, one physics pool
 let slotSerial = 0
 
-function columnX() { return innerWidth - 128 }
+// goo shrinks with the viewport so a toast never eats half a phone screen
+const gooScale = () => Math.min(1, Math.max(0.58, innerWidth / 840))
+function columnX() { return innerWidth - 128 * gooScale() }
 
 function makeBlobEl(w, h, cls = '') {
   const el = document.createElement('div')
@@ -21,12 +23,13 @@ function makeBlobEl(w, h, cls = '') {
 }
 
 export function toast(msg) {
-  const w = Math.min(228, Math.max(132, 46 + msg.length * 7.2))
+  const sc = gooScale()
+  const w = Math.min(228, Math.max(132, 46 + msg.length * 7.2)) * sc
   const b = {
     kind: 'toast',
-    el: makeBlobEl(w, 66),
+    el: makeBlobEl(w, 66 * sc),
     text: document.createElement('div'),
-    w, h: 66,
+    w, h: 66 * sc, sc,
     x: columnX() + (Math.random() - 0.5) * 20,
     y: innerHeight + 90,
     vy: 0, vx: 0,
@@ -39,6 +42,7 @@ export function toast(msg) {
   b.text.className = 'toast-msg'
   b.text.textContent = msg
   b.text.style.width = w + 'px'
+  b.text.style.fontSize = 12 * sc + 'px'
   textLayer.appendChild(b.text)
   blobs.push(b)
   // a couple of escort droplets so every toast surfaces with goo activity
@@ -46,8 +50,8 @@ export function toast(msg) {
   spawnGlobule(b.x + (Math.random() - 0.5) * 40)
 }
 
-function spawnGlobule(x = columnX() + (Math.random() - 0.5) * 70) {
-  const s = 10 + Math.random() * 22
+function spawnGlobule(x = columnX() + (Math.random() - 0.5) * 70 * gooScale()) {
+  const s = (10 + Math.random() * 22) * gooScale()
   blobs.push({
     kind: 'globule',
     el: makeBlobEl(s, s, 'mini'),
@@ -87,7 +91,7 @@ export function stepToasts(dt, stir) {
         ty = null
       } else {
         const idx = living.indexOf(b)
-        ty = innerHeight - 150 - idx * 88
+        ty = innerHeight - 150 - idx * 88 * (b.sc || 1)
         b.vy += ((ty - b.y) * 14 - b.vy * 5.2) * dt
         b.y += b.vy * dt
       }
@@ -110,7 +114,7 @@ export function stepToasts(dt, stir) {
       `translate(${b.x - b.w / 2}px, ${b.y - b.h / 2}px) scale(${sx}, ${sy})`
     if (b.text) {
       b.text.style.transform =
-        `translate(${b.x - b.w / 2}px, ${b.y - 14}px)`
+        `translate(${b.x - b.w / 2}px, ${b.y - 14 * (b.sc || 1)}px)`
     }
   }
 }

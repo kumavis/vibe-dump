@@ -23,13 +23,21 @@ export const AMP = {
 
 export const KEYGEN = {
   w: 310, h: 282,
-  // cracked-warez jag: every edge slightly off-angle
-  outline: `M 26 20 L 122 4 L 154 18 L 268 8 L 298 42
-    L 282 96 L 302 152 L 276 212 L 292 246
-    L 214 272 L 152 258 L 62 274 L 30 240
-    L 8 166 L 24 122 L 4 62 Z`,
-  inner: `M 38 42 L 270 36 L 276 214 L 44 224 Z`,
-  content: { x: 42, y: 42, w: 228, h: 174 },
+  // warez blob: bouba, not kiki — every lump a different size, zero corners
+  outline: `M 30 44
+    Q 10 22 58 14
+    Q 120 -6 168 16
+    Q 232 -4 272 22
+    Q 306 44 294 92
+    Q 310 140 292 178
+    Q 306 226 268 250
+    Q 220 282 158 262
+    Q 96 284 52 258
+    Q 8 236 20 186
+    Q 2 140 18 104
+    Q 4 66 30 44 Z`,
+  inner: `M 40 46 Q 155 34 270 42 L 274 212 Q 156 226 44 218 Z`,
+  content: { x: 44, y: 46, w: 224, h: 168 },
 }
 
 export const FILES = {

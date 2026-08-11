@@ -14,6 +14,9 @@ import { toast, stepToasts } from './toasts.js'
 const DPR = Math.min(2, window.devicePixelRatio || 1)
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
 
+// phones get the whole desktop scaled down instead of a pile-up
+const uiScale = () => clamp(innerWidth / 840, 0.48, 1)
+
 function fitCanvas(canvas, w, h) {
   canvas.width = Math.round(w * DPR)
   canvas.height = Math.round(h * DPR)
@@ -32,7 +35,11 @@ const desktop = document.getElementById('desktop')
 const windows = []
 let zTop = 20
 
-function makeWindow({ id, title, shape, x, y, titleAt, moat = {}, contentClass, contentHTML }) {
+// pos: [fx, fy] fractions of the free space, so layouts survive any viewport
+function makeWindow({ id, title, shape, pos, titleAt, moat = {}, contentClass, contentHTML }) {
+  const S = uiScale()
+  const x = pos[0] * Math.max(0, innerWidth - shape.w * S)
+  const y = 46 + pos[1] * Math.max(0, innerHeight - 170 - shape.h * S)
   const el = document.createElement('div')
   el.className = 'window'
   el.style.width = shape.w + 'px'
@@ -71,6 +78,7 @@ function makeWindow({ id, title, shape, x, y, titleAt, moat = {}, contentClass, 
   const win = {
     id, shape, el, content,
     w: shape.w, h: shape.h,
+    scale: S,
     x, y, px: x, py: y, vx: 0, vy: 0, ax: 0, ay: 0,
     sk: 0, skv: 0, st: 0, stv: 0,
     dragging: false,
@@ -104,8 +112,10 @@ function makeWindow({ id, title, shape, x, y, titleAt, moat = {}, contentClass, 
   })
   el.addEventListener('pointermove', (e) => {
     if (!win.dragging) return
-    win.x = clamp(e.clientX - grabX, -win.w * 0.35, innerWidth - win.w * 0.55)
+    const sw = win.w * win.scale
+    win.x = clamp(e.clientX - grabX, -sw * 0.35, innerWidth - sw * 0.55)
     win.y = clamp(e.clientY - grabY, 30, innerHeight - 110)
+    e.preventDefault()
   })
   const drop = () => { win.dragging = false }
   el.addEventListener('pointerup', drop)
@@ -134,8 +144,9 @@ function stepWindowPhysics(win, dt) {
   win.sk = clamp(win.sk + win.skv * dt, -0.14, 0.14)
   win.stv += (-180 * win.st - 14 * win.stv + win.ay * 0.0025) * dt
   win.st = clamp(win.st + win.stv * dt, -0.1, 0.1)
+  const S = win.scale
   win.el.style.transform =
-    `translate(${win.x}px, ${win.y}px) skewX(${win.sk}rad) scale(${1 - win.st * 0.5}, ${1 + win.st})`
+    `translate(${win.x}px, ${win.y}px) scale(${S * (1 - win.st * 0.5)}, ${S * (1 + win.st)}) skewX(${win.sk}rad)`
 
   win.sim.step(dt, win.ax, win.ay)
   win.glitter && win.glitter.step(dt, win.sim)
@@ -186,7 +197,7 @@ function renderMoatChrome(win) {
 function makeAmp() {
   const win = makeWindow({
     id: 'amp', title: 'HydroAmp', shape: AMP,
-    x: innerWidth * 0.045, y: innerHeight * 0.13,
+    pos: [0.04, 0.03],
     titleAt: [58, 13],
     moat: { level: 124, glitter: 26, bubbles: 0.5, maxAmp: 16 },
     contentClass: 'amp',
@@ -303,7 +314,7 @@ const serial = () => {
 function makeKeygen() {
   const win = makeWindow({
     id: 'keygen', title: 'KeyGen 2000', shape: KEYGEN,
-    x: innerWidth * 0.36, y: innerHeight * 0.4,
+    pos: [0.38, 0.68],
     titleAt: [44, 17],
     moat: {
       level: 240, glitter: 30, bubbles: 0.7, maxAmp: 16,
@@ -356,7 +367,7 @@ const FILE_LIST = [
 function makeFiles() {
   const win = makeWindow({
     id: 'files', title: 'Aqua Files', shape: FILES,
-    x: innerWidth * 0.55, y: innerHeight * 0.08,
+    pos: [0.94, 0.12],
     titleAt: [84, 36],
     moat: {
       level: 236, glitter: 12, bubbles: 0.5, maxAmp: 18,
@@ -388,7 +399,7 @@ function makeFiles() {
 function makeDonut() {
   const win = makeWindow({
     id: 'donut', title: null, shape: DONUT,
-    x: innerWidth * 0.78, y: innerHeight * 0.47,
+    pos: [0.92, 0.88],
     titleAt: [0, 0],
     moat: { level: 9999 }, // unused; the clock draws its own liquid
   })
@@ -602,7 +613,9 @@ addEventListener('resize', () => {
   buildBgTube()
   buildDock()
   for (const w of windows) {
-    w.x = clamp(w.x, -w.w * 0.35, innerWidth - w.w * 0.55)
+    w.scale = uiScale()
+    const sw = w.w * w.scale
+    w.x = clamp(w.x, -sw * 0.35, innerWidth - sw * 0.55)
     w.y = clamp(w.y, 30, innerHeight - 110)
   }
 })

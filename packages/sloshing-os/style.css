@@ -8,6 +8,9 @@ html, body {
   font-family: 'Segoe UI', 'Trebuchet MS', 'Lucida Grande', Tahoma, sans-serif;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: none;             /* the desktop itself never pans */
+  overscroll-behavior: none;      /* no pull-to-refresh mid-slosh */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -31,7 +34,7 @@ canvas#tube-bg { z-index: 2; }
 
 #menubar {
   position: fixed;
-  top: 8px; left: 50%;
+  top: calc(8px + env(safe-area-inset-top, 0px)); left: 50%;
   transform: translateX(-50%) rotate(-.4deg);
   z-index: 500;
   display: flex; align-items: center; gap: 18px;
@@ -67,6 +70,8 @@ canvas#tube-bg { z-index: 2; }
 .window {
   position: absolute;
   will-change: transform;
+  transform-origin: 0 0;
+  touch-action: none; /* fingers drag windows, not the page */
   /* frosted aero glass, silhouette comes from clip-path set in JS */
   background:
     linear-gradient(165deg,
@@ -279,7 +284,7 @@ canvas#tube-bg { z-index: 2; }
 
 #dock-wrap {
   position: fixed;
-  left: 50%; bottom: 8px;
+  left: 50%; bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
   z-index: 400;
   width: min(680px, 94vw);
@@ -311,3 +316,12 @@ canvas#tube-bg { z-index: 2; }
 .dock-icon:hover { transform: translateY(-7px) scale(1.08) rotate(0deg); }
 .dock-icon:active { transform: translateY(-3px) scale(.96); }
 .dock-icon .glyph { filter: drop-shadow(0 2px 2px rgba(0,50,100,.45)); }
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 560px) {
+  #menubar { min-width: 96vw; gap: 12px; padding: 0 18px; font-size: 12px; }
+  #menubar .menu-item { display: none; }
+  #dock-icons { gap: 13px; }
+  .dock-icon { width: 45px; height: 45px; font-size: 22px; }
+}
