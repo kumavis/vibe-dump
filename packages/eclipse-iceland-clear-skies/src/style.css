@@ -192,6 +192,16 @@ table.models td b { color: var(--ink); }
 }
 .toggle input { accent-color: var(--accent); margin-right: 0.45rem; }
 
+.radar-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  vertical-align: -1px;
+  background: radial-gradient(circle, #e8b04a 0%, #c95926 70%);
+  border: 1px solid var(--hairline);
+}
+
 .path-key { margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted); }
 .path-line {
   display: inline-block;

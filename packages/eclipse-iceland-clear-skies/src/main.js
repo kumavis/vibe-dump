@@ -43,8 +43,15 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map)
 
 map.createPane('clouds').style.zIndex = 320
-map.createPane('radar').style.zIndex = 340
+{
+  // Recolor RainViewer's blue-leaning palette to warm amber/red so rain can
+  // never masquerade as the blue "clear sky" end of the forecast ramp.
+  const radarPane = map.createPane('radar')
+  radarPane.style.zIndex = 340
+  radarPane.style.filter = 'grayscale(1) brightness(1.1) sepia(1) saturate(5) hue-rotate(-12deg)'
+}
 map.createPane('path').style.zIndex = 420
+
 
 // ---------------------------------------------------------------------------
 // Totality path (limits + centerline) from the Besselian-element engine
