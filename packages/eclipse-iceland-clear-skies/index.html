@@ -25,7 +25,7 @@
           <span class="legend-label">clouded&nbsp;out</span>
           <div id="legend-bar"></div>
           <span class="legend-label">clear&nbsp;sky</span>
-          <span class="legend-title">score at each spot's own mid-eclipse minute</span>
+          <span class="legend-title">sun visibility along the line of sight, at each spot's mid-eclipse</span>
         </div>
       </div>
 
@@ -67,8 +67,11 @@
             elements (ΔT = 71.4 s) — accurate to a few seconds. Cloud cover comes from
             four independent weather models (ICON, GFS, ECMWF, and Open-Meteo's best
             match), sampled at <em>each grid point's own</em> mid-eclipse instant and
-            blended into a clear-sky score that weights low cloud most and thin cirrus
-            least. Doppler radar shows precipitation falling <em>now</em> — use it to
+            blended into a sun-visibility score that weights low cloud most and thin
+            cirrus least. Because the Sun is so low, each cloud layer is sampled along
+            the actual line of sight — low cloud (~1.2 km) a few km toward the Sun,
+            mid cloud (~4.5 km) ≈10 km out, cirrus (~8.5 km) ≈18 km out — so clear
+            sky overhead with a cloud bank to the WSW scores poorly, as it should. Doppler radar shows precipitation falling <em>now</em> — use it to
             sanity-check the forecast against reality as the hour approaches.
             Everything refetches automatically as new model runs land.
           </p>

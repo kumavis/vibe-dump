@@ -108,13 +108,22 @@ const gridPoints = []
       const lat = GRID.lat0 + i * GRID.dLat
       const lon = GRID.lon0 + j * GRID.dLon
       const circ = localCircumstances(lat, lon)
-      gridPoints.push({ lat, lon, i, j, tMs: circ ? circ.maxUtcMs : Date.UTC(2026, 7, 12, 17, 46) })
+      gridPoints.push({
+        lat,
+        lon,
+        i,
+        j,
+        tMs: circ ? circ.maxUtcMs : Date.UTC(2026, 7, 12, 17, 46),
+        alt: circ ? circ.sunAltDeg : 25,
+        az: circ ? circ.sunAzDeg : 251,
+      })
     }
   }
 }
 
 const state = {
-  cloud: null, // array parallel to gridPoints
+  cloud: null, // raw per-point model layers, parallel to gridPoints
+  scores: null, // slant-path scores, parallel to gridPoints
   cloudFetchedAt: null,
   rain: null,
   selected: null, // {name, lat, lon}
@@ -149,14 +158,14 @@ function rampCss(s) {
 
 let cloudOverlay = null
 function renderCloudOverlay() {
-  if (!state.cloud) return
+  if (!state.scores) return
   const cv = document.createElement('canvas')
   cv.width = GRID.nLon
   cv.height = GRID.nLat
   const ctx = cv.getContext('2d')
   const img = ctx.createImageData(GRID.nLon, GRID.nLat)
   for (const p of gridPoints) {
-    const c = state.cloud[p.i * GRID.nLon + p.j]
+    const c = state.scores[p.i * GRID.nLon + p.j]
     const px = ((GRID.nLat - 1 - p.i) * GRID.nLon + p.j) * 4
     if (!c) { img.data[px + 3] = 0; continue }
     const [r, g, b] = rampColor(c.score)
@@ -183,13 +192,80 @@ function renderCloudOverlay() {
   else cloudOverlay = L.imageOverlay(url, bounds, { pane: 'clouds', opacity: 0.66, interactive: false, className: 'cloud-img' }).addTo(map)
 }
 
-function cloudAt(lat, lon) {
+function nearestCell(lat, lon) {
   if (!state.cloud) return null
   const i = Math.round((lat - GRID.lat0) / GRID.dLat)
   const j = Math.round((lon - GRID.lon0) / GRID.dLon)
   if (i < 0 || j < 0 || i >= GRID.nLat || j >= GRID.nLon) return null
   return state.cloud[i * GRID.nLon + j]
 }
+
+// Null-tolerant bilinear sample of one model's cloud layer across the grid.
+function layerAt(lat, lon, modelId, layer) {
+  if (!state.cloud) return null
+  const fi = Math.min(GRID.nLat - 1, Math.max(0, (lat - GRID.lat0) / GRID.dLat))
+  const fj = Math.min(GRID.nLon - 1, Math.max(0, (lon - GRID.lon0) / GRID.dLon))
+  const i0 = Math.floor(fi), i1 = Math.min(i0 + 1, GRID.nLat - 1)
+  const j0 = Math.floor(fj), j1 = Math.min(j0 + 1, GRID.nLon - 1)
+  const wi = fi - i0, wj = fj - j0
+  let sum = 0, wsum = 0
+  for (const [i, j, w] of [
+    [i0, j0, (1 - wi) * (1 - wj)],
+    [i0, j1, (1 - wi) * wj],
+    [i1, j0, wi * (1 - wj)],
+    [i1, j1, wi * wj],
+  ]) {
+    const v = state.cloud[i * GRID.nLon + j]?.perModel?.[modelId]?.[layer]
+    if (v == null) continue
+    sum += v * w
+    wsum += w
+  }
+  return wsum > 0 ? sum / wsum : null
+}
+
+// The sun is only ~25° up: each cloud layer is crossed at its own horizontal
+// offset along the sun's azimuth, so a clear zenith with a cloud bank to the
+// WSW still hides the eclipse. Typical layer heights: low ~1.2 km (crossed
+// ~3 km away), mid ~4.5 km (~10 km), high ~8.5 km (~18 km).
+const LAYER_KM = { low: 1.2, mid: 4.5, high: 8.5 }
+const DEG = Math.PI / 180
+
+function scoreToward(lat, lon, altDeg, azDeg) {
+  if (!state.cloud) return null
+  const tanA = Math.tan(Math.max(5, altDeg) * DEG)
+  const azR = azDeg * DEG
+  const offPt = (hKm) => {
+    const d = hKm / tanA
+    return [lat + (d * Math.cos(azR)) / 111.32, lon + (d * Math.sin(azR)) / (111.32 * Math.cos(lat * DEG))]
+  }
+  const near = nearestCell(lat, lon)
+  const perModel = {}
+  const scores = []
+  for (const m of MODELS) {
+    const [laL, loL] = offPt(LAYER_KM.low)
+    const [laM, loM] = offPt(LAYER_KM.mid)
+    const [laH, loH] = offPt(LAYER_KM.high)
+    const cc = {
+      low: layerAt(laL, loL, m.id, 'low'),
+      mid: layerAt(laM, loM, m.id, 'mid'),
+      high: layerAt(laH, loH, m.id, 'high'),
+      precip: near?.perModel?.[m.id]?.precip ?? null,
+      total: near?.perModel?.[m.id]?.total ?? null,
+    }
+    if (cc.low == null && cc.mid == null && cc.high == null) continue
+    perModel[m.id] = cc
+    scores.push(skyScore(cc))
+  }
+  if (!scores.length) return null
+  return {
+    perModel,
+    score: scores.reduce((a, b) => a + b, 0) / scores.length,
+    spread: scores.length > 1 ? Math.max(...scores) - Math.min(...scores) : 0,
+  }
+}
+
+const scoreForCirc = (lat, lon, circ) =>
+  scoreToward(lat, lon, circ?.sunAltDeg ?? 25, circ?.sunAzDeg ?? 251)
 
 // ---------------------------------------------------------------------------
 // Radar / satellite overlays
@@ -315,20 +391,22 @@ function renderDetails() {
     .map(([k, v]) => `<div class="row"><span>${k}</span><b>${v}</b></div>`)
     .join('')
 
-  const cl = cloudAt(s.lat, s.lon)
+  const cl = scoreForCirc(s.lat, s.lon, c)
   if (!cl) {
     $('sel-clouds').innerHTML = '<p class="muted">Forecast loading…</p>'
     return
   }
   const head = `<div class="score-line"><span class="chip" style="background:${rampCss(cl.score)}"></span>
-    <b>${Math.round(cl.score)}</b>/100 clear-sky score at this spot's mid-eclipse
-    <span class="muted">(model spread ±${Math.round(cl.spread / 2)}%)</span></div>`
-  const table = ['<table class="models"><tr><th>model</th><th>low</th><th>mid</th><th>high</th><th>total</th><th>score</th></tr>']
+    <b>${Math.round(cl.score)}</b>/100 sun-visibility score at mid-eclipse
+    <span class="muted">(model spread ±${Math.round(cl.spread / 2)})</span></div>
+    <p class="muted slant-note">Cloud sampled along the line of sight to the ${compass(c.sunAzDeg)} sun
+    — each layer at its own slant offset, not overhead.</p>`
+  const table = ['<table class="models"><tr><th>model</th><th>low</th><th>mid</th><th>high</th><th>score</th></tr>']
   for (const m of MODELS) {
     const cc = cl.perModel[m.id]
     if (!cc) continue
     const pc = (v) => (v == null ? '—' : Math.round(v) + '%')
-    table.push(`<tr><td>${m.label}</td><td>${pc(cc.low)}</td><td>${pc(cc.mid)}</td><td>${pc(cc.high)}</td><td>${pc(cc.total)}</td><td><b>${Math.round(skyScore(cc))}</b></td></tr>`)
+    table.push(`<tr><td>${m.label}</td><td>${pc(cc.low)}</td><td>${pc(cc.mid)}</td><td>${pc(cc.high)}</td><td><b>${Math.round(skyScore(cc))}</b></td></tr>`)
   }
   table.push('</table>')
   const rain = Object.values(cl.perModel).some((cc) => (cc.precip ?? 0) >= 0.1)
@@ -377,7 +455,7 @@ const placeCirc = PLACES.map(([name, lat, lon]) => ({ name, lat, lon, circ: loca
 
 function renderRanking() {
   const rows = placeCirc
-    .map((p) => ({ ...p, cloud: cloudAt(p.lat, p.lon) }))
+    .map((p) => ({ ...p, cloud: scoreForCirc(p.lat, p.lon, p.circ) }))
     .sort((a, b) => {
       const at = a.circ?.total ? 1 : 0, bt = b.circ?.total ? 1 : 0
       if (at !== bt) return bt - at
@@ -421,7 +499,10 @@ const RADAR_EVERY = 5 * 60 * 1000
 async function refreshForecast() {
   $('status').textContent = 'Fetching cloud forecast…'
   try {
-    state.cloud = await fetchCloudGrid(gridPoints)
+    const cloud = await fetchCloudGrid(gridPoints)
+    if (!cloud.some(Boolean)) throw new Error('no forecast data returned')
+    state.cloud = cloud
+    state.scores = gridPoints.map((p) => scoreToward(p.lat, p.lon, p.alt, p.az))
     state.cloudFetchedAt = Date.now()
     renderCloudOverlay()
     renderRanking()

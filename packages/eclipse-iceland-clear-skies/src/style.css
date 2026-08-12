@@ -109,6 +109,7 @@ body { display: flex; flex-direction: column; }
 .row b { color: var(--ink); font-variant-numeric: tabular-nums; }
 
 .score-line { margin: 0.2rem 0 0.5rem; color: var(--ink-2); }
+.slant-note { font-size: 0.75rem; margin: 0 0 0.4rem; line-height: 1.4; }
 .score-line b { color: var(--ink); font-size: 1.2rem; }
 
 .chip {

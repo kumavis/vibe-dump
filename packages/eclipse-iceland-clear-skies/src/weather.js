@@ -39,7 +39,7 @@ function buildUrl(points, useHourWindow) {
   return 'https://api.open-meteo.com/v1/forecast?' + params.toString()
 }
 
-async function fetchChunk(points) {
+async function fetchChunkOnce(points) {
   let res = await fetch(buildUrl(points, true))
   let data = await res.json().catch(() => null)
   if (!res.ok || !data || data.error) {
@@ -49,6 +49,22 @@ async function fetchChunk(points) {
     if (!res.ok || data.error) throw new Error(data?.reason || 'forecast fetch failed')
   }
   return Array.isArray(data) ? data : [data]
+}
+
+// A transient failure on one chunk shouldn't blank the whole map: retry with
+// backoff, then surrender just that chunk (null-filled) and keep the rest.
+async function fetchChunk(points) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fetchChunkOnce(points)
+    } catch (err) {
+      if (attempt >= 2) {
+        console.error('forecast chunk failed', err)
+        return points.map(() => null)
+      }
+      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)))
+    }
+  }
 }
 
 function hourlySeries(hourly, variable, modelId) {
