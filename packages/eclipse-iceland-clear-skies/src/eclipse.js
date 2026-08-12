@@ -113,7 +113,7 @@ function findContact(obs, tMax, useUmbra, sign) {
     t += tau
     if (Math.abs(tau) < 1e-8) return t
   }
-  return t
+  return null // did not converge — only happens within ~1e-5 deg of a limit
 }
 
 function tdtToUtcMs(t) {
@@ -131,10 +131,11 @@ export function localCircumstances(latDeg, lonDeg, heightM = 0) {
   const tMax = findMaximum(obs)
   const c = circumstancesAt(obs, tMax)
   const m = Math.hypot(c.u, c.v)
-  const magnitude = (c.l1p - m) / (c.l1p + c.l2p)
-  if (magnitude <= 0) return null
+  const coverage = (c.l1p - m) / (c.l1p + c.l2p)
+  if (coverage <= 0) return null
 
   const altDeg = Math.asin(Math.max(-1, Math.min(1, c.sinAlt))) / DEG
+  if (altDeg < -0.5) return null // eclipsed sun below the horizon — not visible
   // Compass azimuth of the Sun at maximum (0°=N, 90°=E …): the low eclipse sun
   // means the horizon in exactly this direction decides whether you see it.
   const lat = latDeg * DEG
@@ -143,16 +144,19 @@ export function localCircumstances(latDeg, lonDeg, heightM = 0) {
     Math.cos(c.H) * Math.sin(lat) - Math.tan(c.d) * Math.cos(lat),
   )
   const sunAzDeg = ((A / DEG + 180) % 360 + 360) % 360
-  const total = m < Math.abs(c.l2p)
 
   const res = {
     lat: latDeg,
     lon: lonDeg,
     maxUtcMs: tdtToUtcMs(tMax),
-    magnitude,
+    magnitude: coverage,
     sunAltDeg: altDeg,
     sunAzDeg,
-    total,
+    // Signed distance inside the umbra on the fundamental plane — smooth and
+    // ~linear across the path limit (unlike duration), so limit contours
+    // interpolate cleanly.
+    clearance: Math.abs(c.l2p) - m,
+    total: false,
     totalityS: 0,
     c1UtcMs: null,
     c2UtcMs: null,
@@ -165,16 +169,30 @@ export function localCircumstances(latDeg, lonDeg, heightM = 0) {
   if (c1 != null) res.c1UtcMs = tdtToUtcMs(c1)
   if (c4 != null) res.c4UtcMs = tdtToUtcMs(c4)
 
-  if (total) {
+  if (m < Math.abs(c.l2p)) {
     const c2 = findContact(obs, tMax, true, -1)
     const c3 = findContact(obs, tMax, true, +1)
+    // Grazing hairline points can fail the umbral contact solve; report those
+    // honestly as partial rather than "total" with no times.
     if (c2 != null && c3 != null) {
+      res.total = true
       res.c2UtcMs = tdtToUtcMs(c2)
       res.c3UtcMs = tdtToUtcMs(c3)
       res.totalityS = (c3 - c2) * 3600
+      // Inside totality the conventional (published) magnitude is the
+      // Moon:Sun diameter ratio, not partial coverage.
+      res.magnitude = (c.l1p - c.l2p) / (c.l1p + c.l2p)
     }
   }
   return res
+}
+
+/** Signed umbral clearance at maximum (fundamental-plane units, >0 = total).
+ * Cheap — skips the contact solves. */
+export function umbralClearance(latDeg, lonDeg) {
+  const obs = makeObserver(latDeg, lonDeg)
+  const c = circumstancesAt(obs, findMaximum(obs))
+  return Math.abs(c.l2p) - Math.hypot(c.u, c.v)
 }
 
 /** Fast totality duration in seconds (0 if partial only). */

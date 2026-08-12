@@ -40,19 +40,40 @@ function buildUrl(points, useHourWindow) {
 }
 
 async function fetchChunkOnce(points) {
-  let res = await fetch(buildUrl(points, true))
+  let res = await fetch(buildUrl(points, true), { signal: AbortSignal.timeout(15000) })
   let data = await res.json().catch(() => null)
   if (!res.ok || !data || data.error) {
-    // Older API deployments may not know start_hour/end_hour — fall back.
-    res = await fetch(buildUrl(points, false))
+    // Fall back to the date-window URL only when the API rejected the
+    // start_hour params themselves — retrying other failures (429s, 5xx)
+    // with a second full request would just deepen a rate limit.
+    const reason = data?.reason ?? ''
+    if (!/start_hour|end_hour/i.test(reason)) {
+      throw new Error(reason || `forecast fetch failed (${res.status})`)
+    }
+    res = await fetch(buildUrl(points, false), { signal: AbortSignal.timeout(15000) })
     data = await res.json()
     if (!res.ok || data.error) throw new Error(data?.reason || 'forecast fetch failed')
   }
   return Array.isArray(data) ? data : [data]
 }
 
+/** Quick reachability probe so hosts that block external fetches (offline,
+ * sandboxed viewers) can fall back to baked data fast instead of riding out
+ * the retry ladder. */
+export async function apiReachable() {
+  try {
+    const res = await fetch('https://api.open-meteo.com/v1/elevation?latitude=64&longitude=-22', {
+      signal: AbortSignal.timeout(4000),
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 // A transient failure on one chunk shouldn't blank the whole map: retry with
-// backoff, then surrender just that chunk (null-filled) and keep the rest.
+// backoff — a full minute (plus jitter) for rate-limit errors, since the API
+// quota is per-minute — then surrender just that chunk (null-filled).
 async function fetchChunk(points) {
   for (let attempt = 0; ; attempt++) {
     try {
@@ -62,7 +83,9 @@ async function fetchChunk(points) {
         console.error('forecast chunk failed', err)
         return points.map(() => null)
       }
-      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)))
+      const rateLimited = /limit/i.test(err?.message ?? '')
+      const delay = rateLimited ? 61000 + Math.random() * 10000 : 1500 * (attempt + 1)
+      await new Promise((r) => setTimeout(r, delay))
     }
   }
 }
@@ -86,14 +109,31 @@ function interp(timesMs, values, tMs) {
   return null
 }
 
+// Hourly precipitation labeled t is the accumulation over (t-1h, t]; the value
+// covering an instant is the next label at-or-after it, not a blend.
+function coveringValue(timesMs, values, tMs) {
+  if (!values) return null
+  for (let i = 0; i < timesMs.length; i++) {
+    if (timesMs[i] >= tMs) return values[i]
+  }
+  return null
+}
+
 // Cirrus lets a lot of the show through; low stratus kills it. Weighted
 // obscuration, then an extra penalty when a model has rain falling.
+// Returns null when the model gave us nothing usable — never guess a sky.
 export function skyScore(cc) {
   if (!cc) return null
-  const obscured = Math.min(
-    100,
-    (cc.low ?? cc.total ?? 100) + 0.7 * (cc.mid ?? 0) + 0.35 * (cc.high ?? 0),
-  )
+  let obscured
+  if (cc.low != null) {
+    obscured = Math.min(100, cc.low + 0.7 * (cc.mid ?? 0) + 0.35 * (cc.high ?? 0))
+  } else if (cc.total != null) {
+    // No layer breakdown: total already includes mid/high, so use it alone
+    // (conservatively weighted as fully blocking) rather than double-count.
+    obscured = cc.total
+  } else {
+    return null
+  }
   let score = 100 - obscured
   if ((cc.precip ?? 0) >= 0.1) score -= 20
   return Math.max(0, Math.min(100, score))
@@ -101,9 +141,10 @@ export function skyScore(cc) {
 
 /**
  * Fetch forecasts for grid points [{lat, lon, tMs}] where tMs is that point's
- * mid-eclipse instant (UTC ms). Resolves to an array (same order) of:
- *   { perModel: {modelId: {low, mid, high, total, precip}}, score, spread }
- * Entries can be null if every model failed for that point.
+ * mid-eclipse instant (UTC ms). Resolves to an array (same order) of
+ * { perModel: {modelId: {low, mid, high, total, precip}} } — scoring happens
+ * downstream where the slant-path geometry lives. Entries are null when every
+ * model failed for that point.
  */
 export async function fetchCloudGrid(points) {
   const chunks = []
@@ -116,8 +157,6 @@ export async function fetchCloudGrid(points) {
     if (!loc || !loc.hourly) return null
     const timesMs = loc.hourly.time.map((t) => Date.parse(t + (t.endsWith('Z') ? '' : 'Z')))
     const perModel = {}
-    const scores = []
-    const totals = []
     for (const m of MODELS) {
       const at = (v) => interp(timesMs, hourlySeries(loc.hourly, v, m.id), p.tMs)
       const cc = {
@@ -125,20 +164,12 @@ export async function fetchCloudGrid(points) {
         low: at('cloud_cover_low'),
         mid: at('cloud_cover_mid'),
         high: at('cloud_cover_high'),
-        precip: at('precipitation'),
+        precip: coveringValue(timesMs, hourlySeries(loc.hourly, 'precipitation', m.id), p.tMs),
       }
       if (cc.total == null && cc.low == null) continue
       perModel[m.id] = cc
-      const s = skyScore(cc)
-      if (s != null) scores.push(s)
-      if (cc.total != null) totals.push(cc.total)
     }
-    if (!scores.length) return null
-    return {
-      perModel,
-      score: scores.reduce((a, b) => a + b, 0) / scores.length,
-      spread: totals.length > 1 ? Math.max(...totals) - Math.min(...totals) : 0,
-    }
+    return Object.keys(perModel).length ? { perModel } : null
   })
 }
 

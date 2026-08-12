@@ -2,10 +2,11 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './style.css'
 import coastRings from './coast.js'
-import { localCircumstances, totalityDurationS } from './eclipse.js'
+import { localCircumstances, totalityDurationS, umbralClearance } from './eclipse.js'
 import { PLACES } from './places.js'
-import { MODELS, fetchCloudGrid, fetchRainviewer, skyScore } from './weather.js'
+import { MODELS, fetchCloudGrid, fetchRainviewer, skyScore, apiReachable } from './weather.js'
 import { DISTS_KM, rayPoints, fetchElevations, profileAngle, horizonVerdict } from './terrain.js'
+import { GRID, gridPoints } from './grid.js'
 
 const $ = (id) => document.getElementById(id)
 
@@ -49,24 +50,37 @@ map.createPane('path').style.zIndex = 420
 // Totality path (limits + centerline) from the Besselian-element engine
 // ---------------------------------------------------------------------------
 function computePath() {
-  const lat0 = 62.9, lat1 = 67.3, dLat = 0.05
-  const lon0 = -26.8, lon1 = -17.5, dLon = 0.1
+  // Wide enough to close the western limit (over the Denmark Strait) as well
+  // as the eastern one crossing Iceland.
+  const lat0 = 62.5, lat1 = 67.8, dLat = 0.05
+  const lon0 = -29.5, lon1 = -17.5, dLon = 0.1
   const nLat = Math.round((lat1 - lat0) / dLat) + 1
   const nLon = Math.round((lon1 - lon0) / dLon) + 1
+  // Limits are contoured on the umbral *clearance* field, which is ~linear
+  // across the limit; duration falls off as a square root there, so linear
+  // edge interpolation on duration bows the drawn line up to ~4 km outward.
+  const clr = []
   const dur = []
   for (let i = 0; i < nLat; i++) {
-    const row = []
-    for (let j = 0; j < nLon; j++) row.push(totalityDurationS(lat0 + i * dLat, lon0 + j * dLon))
-    dur.push(row)
+    const crow = []
+    const drow = []
+    for (let j = 0; j < nLon; j++) {
+      const lat = lat0 + i * dLat, lon = lon0 + j * dLon
+      const c = umbralClearance(lat, lon)
+      crow.push(c)
+      drow.push(c > 0 ? totalityDurationS(lat, lon) : 0)
+    }
+    clr.push(crow)
+    dur.push(drow)
   }
-  // Marching-squares segments of the duration==0 contour → totality limits.
+  // Marching-squares segments of the clearance==0 contour → totality limits.
   const segs = []
   const cross = (a, b) => (a > 0) !== (b > 0)
   const frac = (a, b) => a / (a - b)
   for (let i = 0; i < nLat - 1; i++) {
     for (let j = 0; j < nLon - 1; j++) {
-      const v00 = dur[i][j] - 0.5, v10 = dur[i][j + 1] - 0.5
-      const v01 = dur[i + 1][j] - 0.5, v11 = dur[i + 1][j + 1] - 0.5
+      const v00 = clr[i][j], v10 = clr[i][j + 1]
+      const v01 = clr[i + 1][j], v11 = clr[i + 1][j + 1]
       const pts = []
       if (cross(v00, v10)) pts.push([lat0 + i * dLat, lon0 + (j + frac(v00, v10)) * dLon])
       if (cross(v01, v11)) pts.push([lat0 + (i + 1) * dLat, lon0 + (j + frac(v01, v11)) * dLon])
@@ -94,32 +108,11 @@ L.polyline(path.segs, { pane: 'path', color: '#eda100', weight: 2, opacity: 0.9,
 L.polyline(path.center, { pane: 'path', color: '#eda100', weight: 1.5, dashArray: '6 6', opacity: 0.75, interactive: false }).addTo(map)
 
 // ---------------------------------------------------------------------------
-// Forecast grid
+// Forecast grid (shared with the standalone snapshot builder)
 // ---------------------------------------------------------------------------
-const GRID = { lat0: 63.4, lat1: 66.6, dLat: 0.2, lon0: -25.4, lon1: -18.2, dLon: 0.4 }
-const gridPoints = []
-{
-  const nLat = Math.round((GRID.lat1 - GRID.lat0) / GRID.dLat) + 1
-  const nLon = Math.round((GRID.lon1 - GRID.lon0) / GRID.dLon) + 1
-  GRID.nLat = nLat
-  GRID.nLon = nLon
-  for (let i = 0; i < nLat; i++) {
-    for (let j = 0; j < nLon; j++) {
-      const lat = GRID.lat0 + i * GRID.dLat
-      const lon = GRID.lon0 + j * GRID.dLon
-      const circ = localCircumstances(lat, lon)
-      gridPoints.push({
-        lat,
-        lon,
-        i,
-        j,
-        tMs: circ ? circ.maxUtcMs : Date.UTC(2026, 7, 12, 17, 46),
-        alt: circ ? circ.sunAltDeg : 25,
-        az: circ ? circ.sunAzDeg : 251,
-      })
-    }
-  }
-}
+// Optional baked-in data for environments where live fetches are blocked
+// (e.g. the claude.ai artifact viewer's CSP): the app still tries live first.
+const SNAP = typeof window !== 'undefined' ? window.__ECLIPSE_SNAPSHOT__ : null
 
 const state = {
   cloud: null, // raw per-point model layers, parallel to gridPoints
@@ -159,37 +152,69 @@ function rampCss(s) {
 let cloudOverlay = null
 function renderCloudOverlay() {
   if (!state.scores) return
+  // Leaflet stretches an imageOverlay linearly in *Mercator* y, so a bitmap
+  // whose rows are uniform in latitude lands ~6 km north at mid-grid. Render
+  // per-pixel in Mercator space instead, bilinearly sampling the score field.
+  const latTop = GRID.lat1 + GRID.dLat / 2
+  const latBot = GRID.lat0 - GRID.dLat / 2
+  const lonL = GRID.lon0 - GRID.dLon / 2
+  const lonR = GRID.lon1 + GRID.dLon / 2
+  const mercY = (lat) => Math.log(Math.tan(Math.PI / 4 + (lat * DEG) / 2))
+  const yTop = mercY(latTop)
+  const yBot = mercY(latBot)
+  const W = GRID.nLon * 10
+  const H = 480
   const cv = document.createElement('canvas')
-  cv.width = GRID.nLon
-  cv.height = GRID.nLat
+  cv.width = W
+  cv.height = H
   const ctx = cv.getContext('2d')
-  const img = ctx.createImageData(GRID.nLon, GRID.nLat)
-  for (const p of gridPoints) {
-    const c = state.scores[p.i * GRID.nLon + p.j]
-    const px = ((GRID.nLat - 1 - p.i) * GRID.nLon + p.j) * 4
-    if (!c) { img.data[px + 3] = 0; continue }
-    const [r, g, b] = rampColor(c.score)
-    img.data[px] = r
-    img.data[px + 1] = g
-    img.data[px + 2] = b
-    img.data[px + 3] = 168
+  const img = ctx.createImageData(W, H)
+  const val = (i, j) => state.scores[i * GRID.nLon + j]?.score ?? null
+  for (let y = 0; y < H; y++) {
+    const my = yTop + (yBot - yTop) * ((y + 0.5) / H)
+    const lat = (2 * Math.atan(Math.exp(my)) - Math.PI / 2) / DEG
+    const fi = (lat - GRID.lat0) / GRID.dLat
+    const i0 = Math.max(0, Math.min(GRID.nLat - 1, Math.floor(fi)))
+    const i1 = Math.min(i0 + 1, GRID.nLat - 1)
+    const wi = Math.max(0, Math.min(1, fi - i0))
+    for (let x = 0; x < W; x++) {
+      const lon = lonL + (lonR - lonL) * ((x + 0.5) / W)
+      const fj = (lon - GRID.lon0) / GRID.dLon
+      const j0 = Math.max(0, Math.min(GRID.nLon - 1, Math.floor(fj)))
+      const j1 = Math.min(j0 + 1, GRID.nLon - 1)
+      const wj = Math.max(0, Math.min(1, fj - j0))
+      let sum = 0
+      let wsum = 0
+      for (const [i, j, w] of [
+        [i0, j0, (1 - wi) * (1 - wj)],
+        [i0, j1, (1 - wi) * wj],
+        [i1, j0, wi * (1 - wj)],
+        [i1, j1, wi * wj],
+      ]) {
+        const v = val(i, j)
+        if (v == null) continue
+        sum += v * w
+        wsum += w
+      }
+      const px = (y * W + x) * 4
+      if (wsum < 0.05) { img.data[px + 3] = 0; continue }
+      const [r, g, b] = rampColor(sum / wsum)
+      img.data[px] = r
+      img.data[px + 1] = g
+      img.data[px + 2] = b
+      img.data[px + 3] = 168
+    }
   }
   ctx.putImageData(img, 0, 0)
-  // Upscale with smoothing so cells blend into a field rather than blocks.
-  const cv2 = document.createElement('canvas')
-  cv2.width = GRID.nLon * 16
-  cv2.height = GRID.nLat * 16
-  const ctx2 = cv2.getContext('2d')
-  ctx2.imageSmoothingEnabled = true
-  ctx2.imageSmoothingQuality = 'high'
-  ctx2.drawImage(cv, 0, 0, cv2.width, cv2.height)
-  const bounds = [
-    [GRID.lat0 - GRID.dLat / 2, GRID.lon0 - GRID.dLon / 2],
-    [GRID.lat1 + GRID.dLat / 2, GRID.lon1 + GRID.dLon / 2],
-  ]
-  const url = cv2.toDataURL()
-  if (cloudOverlay) cloudOverlay.setUrl(url)
-  else cloudOverlay = L.imageOverlay(url, bounds, { pane: 'clouds', opacity: 0.66, interactive: false, className: 'cloud-img' }).addTo(map)
+  const bounds = [[latBot, lonL], [latTop, lonR]]
+  const url = cv.toDataURL()
+  const opacity = $('toggle-clouds').checked ? 0.66 : 0
+  if (cloudOverlay) {
+    cloudOverlay.setUrl(url)
+    cloudOverlay.setOpacity(opacity)
+  } else {
+    cloudOverlay = L.imageOverlay(url, bounds, { pane: 'clouds', opacity, interactive: false, className: 'cloud-img' }).addTo(map)
+  }
 }
 
 function nearestCell(lat, lon) {
@@ -230,8 +255,15 @@ function layerAt(lat, lon, modelId, layer) {
 const LAYER_KM = { low: 1.2, mid: 4.5, high: 8.5 }
 const DEG = Math.PI / 180
 
+const inGrid = (lat, lon) =>
+  lat >= GRID.lat0 - GRID.dLat && lat <= GRID.lat1 + GRID.dLat &&
+  lon >= GRID.lon0 - GRID.dLon && lon <= GRID.lon1 + GRID.dLon
+
 function scoreToward(lat, lon, altDeg, azDeg) {
   if (!state.cloud) return null
+  // Outside the grid the clamped bilinear would fabricate confident numbers
+  // from the nearest edge, potentially hundreds of km away.
+  if (!inGrid(lat, lon)) return null
   const tanA = Math.tan(Math.max(5, altDeg) * DEG)
   const azR = azDeg * DEG
   const offPt = (hKm) => {
@@ -272,16 +304,23 @@ const scoreForCirc = (lat, lon, circ) =>
 // ---------------------------------------------------------------------------
 let radarLayer = null
 let satLayer = null
+let appliedRain = { radar: null, sat: null }
 function applyRainLayers() {
   const r = state.rain
   if (!r) return
-  if (radarLayer) { map.removeLayer(radarLayer); radarLayer = null }
-  if (satLayer) { map.removeLayer(satLayer); satLayer = null }
-  if (r.radarUrl && $('toggle-radar').checked) {
-    radarLayer = L.tileLayer(r.radarUrl, { pane: 'radar', opacity: 0.8, maxZoom: 13 }).addTo(map)
+  // Rebuild a layer only when its URL or toggle actually changed — a rebuild
+  // refetches every visible tile and blinks the layer.
+  const wantRadar = r.radarUrl && $('toggle-radar').checked ? r.radarUrl : null
+  const wantSat = r.satUrl && $('toggle-sat').checked ? r.satUrl : null
+  if (wantRadar !== appliedRain.radar) {
+    if (radarLayer) { map.removeLayer(radarLayer); radarLayer = null }
+    if (wantRadar) radarLayer = L.tileLayer(wantRadar, { pane: 'radar', opacity: 0.8, maxZoom: 13 }).addTo(map)
+    appliedRain.radar = wantRadar
   }
-  if (r.satUrl && $('toggle-sat').checked) {
-    satLayer = L.tileLayer(r.satUrl, { pane: 'radar', opacity: 0.4, maxZoom: 13 }).addTo(map)
+  if (wantSat !== appliedRain.sat) {
+    if (satLayer) { map.removeLayer(satLayer); satLayer = null }
+    if (wantSat) satLayer = L.tileLayer(wantSat, { pane: 'radar', opacity: 0.4, maxZoom: 13 }).addTo(map)
+    appliedRain.sat = wantSat
   }
   const t = (f) => (f ? new Date(f.time * 1000).toISOString().slice(11, 16) + 'Z' : '—')
   $('radar-time').textContent = t(r.radar)
@@ -313,10 +352,34 @@ async function horizonFor(lat, lon, circ) {
   const ridgeDeg = profileAngle(elevs[0] ?? 0, elevs.slice(1))
   const h = { ridgeDeg, verdict: horizonVerdict(ridgeDeg, circ.sunAltDeg) }
   horizonCache.set(key, h)
+  // Keep the ranking's flags in step when the spot is one of the named places.
+  const place = placeCirc.find((p) => hzKey(p.lat, p.lon) === key)
+  if (place) {
+    place.horizon = h
+    renderRanking()
+  }
   return h
 }
 
+function applySnapshotHorizons() {
+  if (!SNAP?.horizons) return false
+  for (const p of placeCirc) {
+    const h = SNAP.horizons[hzKey(p.lat, p.lon)]
+    if (h) {
+      p.horizon = h
+      horizonCache.set(hzKey(p.lat, p.lon), h)
+    }
+  }
+  renderRanking()
+  renderDetails()
+  return true
+}
+
+let horizonsRunning = false
 async function computePlaceHorizons() {
+  if (horizonsRunning || placeCirc.some((p) => p.horizon)) return
+  if (state.snapshotMode && applySnapshotHorizons()) return
+  horizonsRunning = true
   try {
     const targets = placeCirc.filter((p) => p.circ)
     const coords = []
@@ -333,25 +396,38 @@ async function computePlaceHorizons() {
     renderDetails()
   } catch (err) {
     console.error('horizon check failed', err)
+    applySnapshotHorizons()
+  } finally {
+    horizonsRunning = false
   }
 }
 const fmtDur = (s) => (s >= 60 ? `${Math.floor(s / 60)}m ${String(Math.round(s % 60)).padStart(2, '0')}s` : `${Math.round(s)}s`)
 
 let selMarker = null
 function select(name, lat, lon, pan = false) {
+  lon = ((lon + 180) % 360 + 360) % 360 - 180 // unwrap world-copy clicks
   state.selected = { name, lat, lon, circ: localCircumstances(lat, lon) }
   if (selMarker) map.removeLayer(selMarker)
   selMarker = L.circleMarker([lat, lon], {
     pane: 'path', radius: 7, color: '#ffffff', weight: 2, fillColor: '#eda100', fillOpacity: 0.9,
+    interactive: false,
   }).addTo(map)
   if (pan) map.panTo([lat, lon])
   renderDetails()
   renderCountdown()
-  if (state.selected.circ && !horizonCache.has(hzKey(lat, lon))) {
+  const cachedHz = horizonCache.get(hzKey(lat, lon))
+  if (state.selected.circ && (!cachedHz || (cachedHz.verdict === 'unknown' && !state.snapshotMode))) {
     const key = hzKey(lat, lon)
-    horizonFor(lat, lon, state.selected.circ)
-      .then(() => { if (state.selected && hzKey(state.selected.lat, state.selected.lon) === key) renderDetails() })
-      .catch(() => {})
+    horizonCache.delete(key) // let a transient failure be retried
+    if (state.snapshotMode) {
+      // No API here — don't pretend a check is coming for arbitrary spots.
+      horizonCache.set(key, { ridgeDeg: null, verdict: 'unknown' })
+      renderDetails()
+    } else {
+      horizonFor(lat, lon, state.selected.circ)
+        .catch(() => horizonCache.set(key, { ridgeDeg: null, verdict: 'unknown' }))
+        .then(() => { if (state.selected && hzKey(state.selected.lat, state.selected.lon) === key) renderDetails() })
+    }
   }
 }
 
@@ -362,7 +438,8 @@ function renderDetails() {
   $('sel-coords').textContent = `${s.lat.toFixed(3)}°N ${(-s.lon).toFixed(3)}°W`
   const c = s.circ
   if (!c) {
-    $('sel-circ').innerHTML = '<p class="muted">No eclipse visible here.</p>'
+    $('sel-circ').innerHTML = '<p class="muted">No eclipse visible here — the eclipsed sun is below the horizon or misses this spot entirely.</p>'
+    $('sel-clouds').innerHTML = ''
     return
   }
   const rows = [
@@ -378,11 +455,13 @@ function renderDetails() {
   const hz = horizonCache.get(hzKey(s.lat, s.lon))
   if (hz) {
     const label =
-      hz.verdict === 'blocked'
-        ? `⛔ ridge ~${hz.ridgeDeg.toFixed(0)}° — likely hides the Sun`
-        : hz.verdict === 'tight'
-          ? `⚠ ridge ~${hz.ridgeDeg.toFixed(0)}° vs sun ${c.sunAltDeg.toFixed(0)}° — tight`
-          : `open (ridge ≤ ${Math.max(0, hz.ridgeDeg).toFixed(1)}°)`
+      hz.verdict === 'unknown'
+        ? 'terrain check unavailable here'
+        : hz.verdict === 'blocked'
+          ? `⛔ ridge ~${hz.ridgeDeg.toFixed(0)}° — likely hides the Sun`
+          : hz.verdict === 'tight'
+            ? `⚠ ridge ~${hz.ridgeDeg.toFixed(0)}° vs sun ${c.sunAltDeg.toFixed(0)}° — tight`
+            : `open (ridge ≤ ${Math.max(0, hz.ridgeDeg).toFixed(1)}°)`
     rows.push([`Horizon toward ${compass(c.sunAzDeg)}`, label])
   } else {
     rows.push([`Horizon toward ${compass(c.sunAzDeg)}`, 'checking terrain…'])
@@ -393,7 +472,9 @@ function renderDetails() {
 
   const cl = scoreForCirc(s.lat, s.lon, c)
   if (!cl) {
-    $('sel-clouds').innerHTML = '<p class="muted">Forecast loading…</p>'
+    $('sel-clouds').innerHTML = state.cloud && !inGrid(s.lat, s.lon)
+      ? '<p class="muted">Outside the cloud-forecast grid (western Iceland).</p>'
+      : '<p class="muted">Forecast loading…</p>'
     return
   }
   const head = `<div class="score-line"><span class="chip" style="background:${rampCss(cl.score)}"></span>
@@ -441,7 +522,9 @@ function renderCountdown() {
   } else if (!c.total && c.maxUtcMs && now < c.maxUtcMs) {
     html = `Maximum (partial, mag ${c.magnitude.toFixed(2)}) at <b>${s.name}</b> in <b class="big">${left(c.maxUtcMs)}</b>`
   } else if (c.c4UtcMs && now < c.c4UtcMs) {
-    html = `Totality done here — partial ends in <b class="big">${left(c.c4UtcMs)}</b>`
+    html = c.total
+      ? `Totality done here — partial ends in <b class="big">${left(c.c4UtcMs)}</b>`
+      : `Maximum passed (partial only here) — eclipse ends in <b class="big">${left(c.c4UtcMs)}</b>`
   } else {
     html = `Eclipse over at ${s.name}. See you in 2027.`
   }
@@ -496,22 +579,52 @@ function renderRanking() {
 const FORECAST_EVERY = 10 * 60 * 1000
 const RADAR_EVERY = 5 * 60 * 1000
 
+function useSnapshot() {
+  state.cloud = SNAP.cloud
+  state.scores = gridPoints.map((p) => scoreToward(p.lat, p.lon, p.alt, p.az))
+  state.cloudFetchedAt = SNAP.fetchedAtMs
+  state.snapshotMode = true
+  renderCloudOverlay()
+  renderRanking()
+  renderDetails()
+}
+
 async function refreshForecast() {
+  if (state.refreshing) return // rate-limit backoffs can outlive the interval
+  state.refreshing = true
   $('status').textContent = 'Fetching cloud forecast…'
   try {
+    // If fetches are blocked here (offline, sandboxed viewer) and we carry a
+    // baked snapshot, show it immediately rather than riding the retry ladder.
+    if (!state.cloud && SNAP?.cloud && !(await apiReachable())) {
+      useSnapshot()
+      state.nextRefreshMs = Date.now() + FORECAST_EVERY
+      return
+    }
     const cloud = await fetchCloudGrid(gridPoints)
     if (!cloud.some(Boolean)) throw new Error('no forecast data returned')
     state.cloud = cloud
     state.scores = gridPoints.map((p) => scoreToward(p.lat, p.lon, p.alt, p.az))
     state.cloudFetchedAt = Date.now()
+    state.snapshotMode = false
+    state.lastRefreshFailed = false
     renderCloudOverlay()
     renderRanking()
     renderDetails()
+    // A failed startup horizon batch gets another chance each cycle.
+    if (!placeCirc.some((p) => p.horizon)) computePlaceHorizons()
   } catch (err) {
     console.error(err)
-    $('status').textContent = 'Forecast fetch failed — retrying at next cycle.'
+    state.lastRefreshFailed = true
+    if (!state.cloud && SNAP?.cloud) {
+      useSnapshot()
+    } else if (!state.cloud) {
+      $('status').textContent = 'Forecast fetch failed — retrying at next cycle.'
+    }
+  } finally {
+    state.refreshing = false
+    state.nextRefreshMs = Date.now() + FORECAST_EVERY
   }
-  state.nextRefreshMs = Date.now() + FORECAST_EVERY
 }
 
 async function refreshRadar() {
@@ -524,12 +637,17 @@ async function refreshRadar() {
 }
 
 function renderStatus() {
-  if (!state.cloudFetchedAt) return
+  if (!state.cloudFetchedAt || state.refreshing) return
+  const failNote = state.lastRefreshFailed && !state.snapshotMode ? ' · latest refresh failed, retrying' : ''
   const age = Math.round((Date.now() - state.cloudFetchedAt) / 1000)
+  const stamp = new Date(state.cloudFetchedAt).toISOString().slice(11, 16)
   const next = state.nextRefreshMs ? Math.max(0, Math.round((state.nextRefreshMs - Date.now()) / 1000)) : 0
-  $('status').textContent =
-    `Forecast updated ${new Date(state.cloudFetchedAt).toISOString().slice(11, 16)} UTC ` +
-    `(${Math.floor(age / 60)}m ago) · auto-refresh in ${Math.floor(next / 60)}:${String(next % 60).padStart(2, '0')}`
+  $('status').textContent = state.snapshotMode
+    ? `Live fetch unavailable here — showing forecast snapshot from ${stamp} UTC ` +
+      `(${Math.floor(age / 60)}m old) · retrying live in ${Math.floor(next / 60)}:${String(next % 60).padStart(2, '0')}`
+    : `Forecast updated ${stamp} UTC ` +
+      `(${Math.floor(age / 60)}m ago) · auto-refresh in ${Math.floor(next / 60)}:${String(next % 60).padStart(2, '0')}` +
+      failNote
 }
 
 $('toggle-radar').addEventListener('change', applyRainLayers)
@@ -556,9 +674,10 @@ document.addEventListener('visibilitychange', () => {
 }
 
 select('Reykjavík', 64.1466, -21.9426)
-refreshForecast()
+// Horizons wait for the forecast so snapshot mode is known (and the API
+// isn't hit with both bursts at once).
+refreshForecast().then(computePlaceHorizons)
 refreshRadar()
-computePlaceHorizons()
 setInterval(refreshForecast, FORECAST_EVERY)
 setInterval(refreshRadar, RADAR_EVERY)
 setInterval(() => { renderCountdown(); renderStatus() }, 1000)

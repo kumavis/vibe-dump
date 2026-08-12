@@ -6,8 +6,14 @@
 const EARTH_R_KM = 6371
 const DEG = Math.PI / 180
 
-// Sample distances (km) — dense close in, where a wall steals the most sky.
-export const DISTS_KM = [0.3, 0.6, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 18, 22, 26, 30]
+// Sample distances (km) — dense inside 6 km, where a wall steals the most sky
+// (to reach even a "tight" verdict beyond 6 km would take a >2000 m ridge,
+// taller than anything in Iceland). ~250-400 m spacing so a steep fjord crest
+// can't slip between samples of the 90 m DEM.
+export const DISTS_KM = [
+  0.15, 0.3, 0.45, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.25, 2.5, 2.75,
+  3.0, 3.3, 3.6, 4.0, 4.4, 4.8, 5.2, 5.6, 6.0, 7.0, 8.5, 10, 12, 15,
+]
 
 /** Points along the Sun's azimuth from (lat, lon): [[lat, lon], …]. */
 export function rayPoints(lat, lon, azDeg) {
@@ -28,10 +34,17 @@ export async function fetchElevations(coords) {
       chunk.map((c) => c[0].toFixed(4)).join(',') +
       '&longitude=' +
       chunk.map((c) => c[1].toFixed(4)).join(',')
-    const res = await fetch(url)
-    if (!res.ok) throw new Error('elevation fetch failed')
-    const data = await res.json()
-    out.push(...data.elevation)
+    // Backoffs sized for the API's per-minute quota window.
+    const delays = [2000, 61000 + Math.random() * 10000]
+    for (let attempt = 0; ; attempt++) {
+      const res = await fetch(url, { signal: AbortSignal.timeout(15000) }).catch(() => null)
+      if (res?.ok) {
+        out.push(...(await res.json()).elevation)
+        break
+      }
+      if (attempt >= delays.length) throw new Error('elevation fetch failed')
+      await new Promise((r) => setTimeout(r, delays[attempt]))
+    }
   }
   return out
 }
