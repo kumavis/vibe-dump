@@ -43,8 +43,15 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map)
 
 map.createPane('clouds').style.zIndex = 320
-map.createPane('radar').style.zIndex = 340
+{
+  // Recolor RainViewer's blue-leaning palette to warm amber/red so rain can
+  // never masquerade as the blue "clear sky" end of the forecast ramp.
+  const radarPane = map.createPane('radar')
+  radarPane.style.zIndex = 340
+  radarPane.style.filter = 'grayscale(1) brightness(1.1) sepia(1) saturate(5) hue-rotate(-12deg)'
+}
 map.createPane('path').style.zIndex = 420
+
 
 // ---------------------------------------------------------------------------
 // Totality path (limits + centerline) from the Besselian-element engine
@@ -328,6 +335,9 @@ function applyRainLayers() {
   // RainViewer has been shipping an empty satellite catalog — hide the toggle
   // rather than offer a dead layer (it reappears if the feed comes back).
   $('toggle-sat').closest('label').style.display = r.satUrl ? '' : 'none'
+  for (const b of document.querySelectorAll('[data-for="toggle-sat"]')) {
+    b.style.display = r.satUrl ? '' : 'none'
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -664,6 +674,38 @@ document.addEventListener('visibilitychange', () => {
     refreshRadar()
   }
 })
+
+// On-map layer toggles — on phones the panel (and its checkboxes) sits below
+// the fold, so the map itself needs the switches. Buttons proxy the panel
+// checkboxes, which stay the single source of truth.
+{
+  const ctl = L.control({ position: 'topright' })
+  ctl.onAdd = () => {
+    const div = L.DomUtil.create('div', 'layer-ctl')
+    const defs = [
+      ['toggle-clouds', '☁️ forecast'],
+      ['toggle-radar', '🌧️ radar'],
+      ['toggle-sat', '🛰️ IR sat'],
+    ]
+    for (const [id, label] of defs) {
+      const box = $(id)
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.textContent = label
+      btn.className = 'layer-btn' + (box.checked ? ' on' : '')
+      btn.dataset.for = id
+      btn.addEventListener('click', () => {
+        box.checked = !box.checked
+        box.dispatchEvent(new Event('change'))
+      })
+      box.addEventListener('change', () => btn.classList.toggle('on', box.checked))
+      div.appendChild(btn)
+    }
+    L.DomEvent.disableClickPropagation(div)
+    return div
+  }
+  ctl.addTo(map)
+}
 
 // Legend gradient
 {
