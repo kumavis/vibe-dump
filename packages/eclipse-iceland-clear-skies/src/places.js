@@ -1,0 +1,26 @@
+// Named candidate viewing spots, western Iceland (plus a couple of reference
+// towns outside the path for contrast). [name, lat, lon]
+export const PLACES = [
+  ['Reykjavík', 64.1466, -21.9426],
+  ['Keflavík', 64.0049, -22.5624],
+  ['Garðskagi', 64.0823, -22.6853],
+  ['Akranes', 64.3213, -22.0749],
+  ['Borgarnes', 64.539, -21.9203],
+  ['Arnarstapi', 64.7683, -23.621],
+  ['Hellissandur', 64.9166, -23.8863],
+  ['Ólafsvík', 64.8945, -23.7107],
+  ['Grundarfjörður', 64.9226, -23.2582],
+  ['Stykkishólmur', 65.0757, -22.7297],
+  ['Búðardalur', 65.1069, -21.7669],
+  ['Patreksfjörður', 65.5966, -23.9938],
+  ['Bíldudalur', 65.6857, -23.5978],
+  ['Þingeyri', 65.873, -23.4837],
+  ['Flateyri', 66.048, -23.5116],
+  ['Ísafjörður', 66.0749, -23.124],
+  ['Bolungarvík', 66.1533, -23.2637],
+  ['Hólmavík', 65.7065, -21.6743],
+  ['Hvammstangi', 65.3963, -20.9441],
+  ['Blönduós', 65.6598, -20.2803],
+  ['Þingvellir', 64.2559, -21.1295],
+  ['Selfoss', 63.9339, -21.0031],
+]

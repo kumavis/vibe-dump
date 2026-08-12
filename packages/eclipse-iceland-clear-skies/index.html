@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eclipse Clear Skies — Western Iceland · 12 Aug 2026</title>
+    <meta
+      name="description"
+      content="Live clear-sky estimates for the 12 August 2026 total solar eclipse over western Iceland: exact totality times per location, multi-model cloud forecasts, live radar."
+    />
+  </head>
+  <body>
+    <header id="topbar">
+      <div id="title">
+        <h1>Eclipse Clear Skies</h1>
+        <span class="sub">Western Iceland · total solar eclipse · 12 Aug 2026</span>
+      </div>
+      <div id="countdown" aria-live="polite"></div>
+    </header>
+
+    <div id="content">
+      <div id="map-wrap">
+        <div id="map"></div>
+        <div id="legend">
+          <span class="legend-label">clouded&nbsp;out</span>
+          <div id="legend-bar"></div>
+          <span class="legend-label">clear&nbsp;sky</span>
+          <span class="legend-title">sun visibility along the line of sight, at each spot's mid-eclipse</span>
+        </div>
+      </div>
+
+      <aside id="panel">
+        <section class="card" id="selected-card">
+          <div class="card-head">
+            <h2 id="sel-name">—</h2>
+            <span id="sel-coords" class="muted"></span>
+          </div>
+          <div id="sel-clouds"><p class="muted">Forecast loading…</p></div>
+          <div id="sel-circ"></div>
+          <p class="hint muted">Click anywhere on the map for exact local circumstances.</p>
+        </section>
+
+        <section class="card">
+          <h2>Best bets right now</h2>
+          <div class="rank-head"><span></span><span>place</span><span>totality</span><span>score</span></div>
+          <div id="ranking"><p class="muted">Waiting for forecast…</p></div>
+        </section>
+
+        <section class="card">
+          <h2>Layers</h2>
+          <label class="toggle"><input type="checkbox" id="toggle-clouds" checked />
+            Clear-sky score (multi-model forecast)</label>
+          <label class="toggle"><input type="checkbox" id="toggle-radar" checked />
+            Doppler radar (live, <span id="radar-time">—</span>)</label>
+          <label class="toggle"><input type="checkbox" id="toggle-sat" />
+            IR satellite cloud tops (<span id="sat-time">—</span>)</label>
+          <div class="path-key">
+            <span class="path-line solid"></span> totality limits
+            <span class="path-line dashed"></span> centerline
+          </div>
+        </section>
+
+        <section class="card" id="about">
+          <h2>How this works</h2>
+          <p>
+            Totality times are computed per location from NASA's published Besselian
+            elements (ΔT = 71.4 s) — accurate to a few seconds. Cloud cover comes from
+            four independent weather models (ICON, GFS, ECMWF, and Open-Meteo's best
+            match), sampled at <em>each grid point's own</em> mid-eclipse instant and
+            blended into a sun-visibility score that weights low cloud most and thin
+            cirrus least. Because the Sun is so low, each cloud layer is sampled along
+            the actual line of sight — low cloud (~1.2 km) a few km toward the Sun,
+            mid cloud (~4.5 km) ≈10 km out, cirrus (~8.5 km) ≈18 km out — so clear
+            sky overhead with a cloud bank to the WSW scores poorly, as it should. Doppler radar shows precipitation falling <em>now</em> — use it to
+            sanity-check the forecast against reality as the hour approaches.
+            Everything refetches automatically as new model runs land.
+          </p>
+          <p>
+            Mind the low Sun: during totality it stands only ≈25° high toward the
+            WSW, so a fjord wall or mountain can hide it even under clear sky. Every
+            listed spot (and any spot you click) is checked against a 90&nbsp;m
+            terrain profile along the Sun's exact azimuth — ⛰ flags a crowded
+            horizon. Favor west-facing shores and open ground.
+          </p>
+          <p class="muted" id="status">Starting…</p>
+          <button id="refresh-now">Refresh data now</button>
+        </section>
+      </aside>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
