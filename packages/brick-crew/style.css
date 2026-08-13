@@ -94,7 +94,203 @@ html, body {
 }
 .d-haul { background: #59c0e8; }
 .d-lay { background: var(--amber); }
+.d-fit { background: #8fd14f; }
 .d-shift { background: var(--hiviz); }
+.d-orders { background: var(--ink); }
+.legend b { color: var(--amber); font-weight: 700; letter-spacing: 0.06em; }
+
+/* ---------- following a robot ---------- */
+/* Left-hand column, under the progress bar — the orders panel owns the right. */
+.follow {
+  position: absolute; z-index: 6;
+  left: 12px; top: 94px;
+  background: var(--asphalt); border: 1px solid var(--line);
+  border-left: 4px solid var(--amber);
+  border-radius: 4px; padding: 9px 12px;
+  min-width: 168px; max-width: min(220px, 52vw);
+  opacity: 0; transform: translateX(-10px); pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.follow.on { opacity: 1; transform: none; pointer-events: auto; }
+.follow-role {
+  font-family: var(--mono); font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.14em; color: var(--amber);
+}
+.follow-doing {
+  font-size: 0.76rem; color: var(--ink); margin-top: 3px; line-height: 1.4;
+}
+.follow-drop {
+  margin-top: 8px; width: 100%;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  background: transparent; border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px; padding: 4px; cursor: pointer;
+}
+.follow-drop:hover { color: var(--ink); border-color: var(--amber); }
+.follow-since {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.06em;
+  color: var(--muted); margin-top: 5px;
+}
+.follow-hold {
+  margin-top: 8px; width: 100%;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--amber);
+  background: transparent; border: 1px solid var(--line);
+  border-radius: 3px; padding: 4px; cursor: pointer;
+}
+.follow-hold:hover { border-color: var(--amber); }
+.follow-hold.on { background: var(--amber); border-color: var(--amber); color: #14181b; font-weight: 700; }
+
+/* ---------- site orders ---------- */
+.chip.act {
+  cursor: pointer; pointer-events: auto;
+  font-family: var(--mono); text-transform: uppercase;
+}
+.chip.act:hover { border-color: var(--amber); color: var(--ink); }
+.chip.act[aria-expanded="true"] { background: var(--amber); color: #14181b; border-color: var(--amber); }
+
+.orders {
+  position: absolute; z-index: 8;
+  right: 14px; top: 52px; width: min(276px, 84vw);
+  max-height: calc(100% - 76px); overflow-y: auto;
+  background: var(--asphalt-solid);
+  border: 1px solid var(--line); border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(8, 10, 12, 0.6);
+  opacity: 0; transform: translateY(-8px) scale(0.98); pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.orders.on { opacity: 1; transform: none; pointer-events: auto; }
+.orders-head {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.14em; color: #14181b;
+  background: var(--amber); padding: 7px 10px;
+}
+.orders-close {
+  background: none; border: 0; color: #14181b; cursor: pointer;
+  font-size: 0.8rem; line-height: 1; padding: 0 2px;
+}
+.orders-sec { padding: 10px 11px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.orders-sec h4 {
+  margin: 0 0 8px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.13em; color: var(--muted);
+}
+.orders-sec h4 i {
+  font-style: normal; font-weight: 400; font-size: 0.58rem;
+  letter-spacing: 0.04em; color: var(--amber); text-transform: none;
+}
+.orders-note {
+  margin: 8px 0 0; font-size: 0.62rem; line-height: 1.5; color: var(--muted);
+}
+.orders-note.live { color: var(--amber); }
+
+.seg { display: flex; gap: 4px; }
+.seg button {
+  flex: 1 1 0; cursor: pointer;
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em;
+  color: var(--muted); background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 3px; padding: 5px 0;
+}
+.seg button:hover { color: var(--ink); border-color: var(--amber); }
+.seg button.on { background: var(--amber); border-color: var(--amber); color: #14181b; font-weight: 700; }
+
+.steps { display: flex; flex-direction: column; gap: 5px; }
+.step { display: flex; align-items: center; gap: 6px; }
+.step span {
+  flex: 1 1 auto;
+  font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink);
+}
+.step b {
+  font-family: var(--mono); font-size: 0.74rem; color: var(--amber);
+  min-width: 18px; text-align: center;
+}
+.step button {
+  width: 22px; height: 22px; cursor: pointer;
+  font-family: var(--mono); font-size: 0.8rem; line-height: 1;
+  color: var(--ink); background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 3px;
+}
+.step button:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); }
+.step button:disabled { opacity: 0.3; cursor: default; }
+
+.picks { display: flex; flex-wrap: wrap; gap: 4px; }
+.picks button {
+  cursor: pointer; flex: 1 1 auto;
+  font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.05em;
+  color: var(--muted); background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 3px;
+  padding: 5px 6px; text-align: left;
+}
+.picks button:hover { color: var(--ink); border-color: var(--amber); }
+.picks button.on { background: var(--amber); border-color: var(--amber); color: #14181b; font-weight: 700; }
+
+.swatch-row { margin-top: 8px; }
+.swatch-row > span {
+  display: block; margin-bottom: 3px;
+  font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.swatches { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 0; }
+.swatches button {
+  width: 24px; height: 20px; cursor: pointer; padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.24); border-radius: 3px;
+  font-family: var(--mono); font-size: 0.5rem; color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+.swatches button.on { border-color: var(--amber); box-shadow: 0 0 0 2px var(--amber) inset; }
+.swatches button.auto { width: auto; padding: 0 7px; letter-spacing: 0.08em; }
+.swatches button.auto.on { background: var(--amber); color: #14181b; box-shadow: none; }
+
+/* ---------- panning the street ---------- */
+.pan {
+  position: absolute; z-index: 6;
+  left: 50%; bottom: 14px; transform: translateX(-50%);
+  display: flex; gap: 5px;
+}
+.pan button {
+  cursor: pointer;
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em;
+  color: var(--ink); background: var(--asphalt);
+  border: 1px solid var(--line); border-radius: 4px;
+  min-width: 34px; height: 32px; padding: 0 9px;
+}
+.pan button:hover { border-color: var(--amber); color: var(--amber); }
+.pan button:active { transform: translateY(1px); }
+#pan-here { font-size: 0.6rem; }
+
+/* ---------- inside a finished house ---------- */
+.house { top: 52px; }
+.furn { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.furn-row { display: flex; align-items: center; gap: 4px; }
+.furn-row.out { opacity: 0.4; }
+.furn-row b {
+  flex: 1 1 auto; min-width: 0;
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 400;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.furn-row button {
+  cursor: pointer; flex: 0 0 auto;
+  width: 21px; height: 21px; padding: 0;
+  font-family: var(--mono); font-size: 0.66rem; line-height: 1;
+  color: var(--ink); background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 3px;
+}
+.furn-row button:hover { border-color: var(--amber); color: var(--amber); }
+.furn-row button.tint { border-color: rgba(255, 255, 255, 0.3); }
+.furn-row button.gone { color: var(--muted); }
+
+/* On a phone the legend and the hint are both too wide to sit side by side,
+   so they stack instead of overlapping. */
+@media (max-width: 560px) {
+  .legend { left: 12px; right: 12px; bottom: 104px; max-width: none; }
+  .pan { bottom: 58px; }
+  .hint { left: 14px; right: 14px; text-align: center; }
+  .follow { top: 88px; max-width: min(200px, 58vw); }
+}
 
 /* ---------- hint ---------- */
 .hint {
@@ -155,7 +351,10 @@ html, body {
   background: radial-gradient(120% 90% at 50% 30%, rgba(8, 12, 18, 0.28), rgba(6, 9, 14, 0.62));
   opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
 }
-.sheet-backdrop.on { opacity: 1; pointer-events: auto; cursor: zoom-out; }
+.sheet-backdrop.on { opacity: 1; }
+/* Armed only once the sheet has finished unrolling, so the tap that opened it
+   can't land on the backdrop and close it again. */
+.sheet-backdrop.armed { pointer-events: auto; cursor: zoom-out; }
 
 .sheet-stage {
   position: absolute; inset: 0; z-index: 11;
@@ -207,9 +406,9 @@ html, body {
   border: 2px solid #14181b; cursor: pointer;
   font-size: 1rem; line-height: 1; font-weight: 700;
   box-shadow: 0 3px 0 #14181b;
-  opacity: 0; transition: opacity 0.25s ease;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
 }
-.sheet-stage.open .sheet-close { opacity: 1; }
+.sheet-stage.open .sheet-close { opacity: 1; pointer-events: auto; }
 
 /* ---------- loading ---------- */
 #loading {
@@ -251,6 +450,7 @@ html, body {
   .brand { font-size: 0.86rem; letter-spacing: 0.1em; }
   .chip { font-size: 0.6rem; padding: 3px 7px; }
   #chip-day, #chip-phase { display: none; }
+  .follow { top: 74px; right: 8px; min-width: 140px; padding: 7px 9px; }
   .progress { top: 74px; width: calc(100% - 24px); }
   .legend { font-size: 0.6rem; line-height: 1.6; padding: 6px 8px; }
   .hint { font-size: 0.68rem; padding: 7px 10px; }

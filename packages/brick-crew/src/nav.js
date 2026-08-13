@@ -1,59 +1,84 @@
 // ---------------------------------------------------------------------------
-// Getting about the site.
+// Getting about the plot.
 //
-// A robot is always on one of four kinds of surface: the dirt, the lower
-// scaffold deck, the upper deck, or a roof slope. This module turns "I am here,
-// I need to be there" into a list of waypoints that respects those surfaces —
-// walking round the house rather than through it, up the ladder rather than
-// through the air, and out along the slope once the rafters are on.
+// A robot is always on one of a few surfaces: the dirt, a scaffold lift, a roof
+// slope, or the floor inside the house. This module turns "I am here, I need to
+// be there" into waypoints that respect those surfaces — round the house rather
+// than through the wall, up the ladder rather than through the air, out along
+// the slope once the rafters are on, and in through the front door when the
+// furniture arrives.
 //
-// A waypoint is { x, y, z, climb }. `climb` marks a ladder move, which the sim
-// plays at a different speed and with a different pose.
+// Everything is plot-local. A waypoint is { x, y, z, climb, roof }.
 // ---------------------------------------------------------------------------
 
-import { HOUSE, DECKS, SCAFFOLD } from './config.js'
-import { roofTopY, slopeZ } from './plan.js'
+import { roofTopY, slopeZ } from './config.js'
 
-/** The house itself is the only thing on the ground you cannot walk through. */
-const KX = HOUSE.w / 2 + 0.3
-const KZ = HOUSE.d / 2 + 0.3
-/** Corners are pushed out slightly so a path hugging the wall doesn't graze it. */
-const CX = KX + 0.35
-const CZ = KZ + 0.35
-const CORNERS = [
-  [CX, CZ],
-  [CX, -CZ],
-  [-CX, -CZ],
-  [-CX, CZ],
-]
+let G = null // current house geometry
+let HOUSE_BOX = null
+let RX = 0
+let RZ = 0
+let LEGS = []
+let LEG_LEN = []
+let LEG_START = []
+let RING_P = 0
+let LADDER = { x: 0, z: 0 }
+let LADDER_U = 0
+let DOOR = { x: 0, outZ: 0, inZ: 0 }
 
-const RX = SCAFFOLD.rx
-const RZ = SCAFFOLD.rz
-/** Ring legs, in order, as [x0, z0, x1, z1]. u runs anticlockwise from the SW. */
-const LEGS = [
-  [-RX, RZ, RX, RZ],
-  [RX, RZ, RX, -RZ],
-  [RX, -RZ, -RX, -RZ],
-  [-RX, -RZ, -RX, RZ],
-]
-const LEG_LEN = LEGS.map(([x0, z0, x1, z1]) => Math.hypot(x1 - x0, z1 - z0))
-const LEG_START = LEG_LEN.reduce((acc, l) => (acc.push(acc[acc.length - 1] + l), acc), [0])
-const RING_P = LEG_START[4]
+const mod = (v, m) => ((v % m) + m) % m
 
-/** Where the ladder meets each deck. */
-const LADDER = SCAFFOLD.ladder
+/** Point the router at the house currently being built on this plot. */
+export function setGeom(geom, doorway) {
+  G = geom
+  HOUSE_BOX = { x: 0, z: 0, hw: geom.w / 2 + 0.3, hd: geom.d / 2 + 0.3 }
+  RX = geom.scaffold.rx
+  RZ = geom.scaffold.rz
+  LEGS = [
+    [-RX, RZ, RX, RZ],
+    [RX, RZ, RX, -RZ],
+    [RX, -RZ, -RX, -RZ],
+    [-RX, -RZ, -RX, RZ],
+  ]
+  LEG_LEN = LEGS.map(([x0, z0, x1, z1]) => Math.hypot(x1 - x0, z1 - z0))
+  LEG_START = LEG_LEN.reduce((acc, l) => (acc.push(acc[acc.length - 1] + l), acc), [0])
+  RING_P = LEG_START[4]
+  LADDER = geom.scaffold.ladder
+  LADDER_U = ringU(LADDER.x, LADDER.z)
+  DOOR = {
+    x: doorway ? doorway.x : 0,
+    outZ: geom.d / 2 + 0.95,
+    inZ: geom.d / 2 - geom.t - 0.45,
+  }
+}
 
 // --- ground ----------------------------------------------------------------
+//
+// The plot's own house is not the only thing in the way: the finished houses
+// further down the street and the site office are solid too. They all go in as
+// axis-aligned boxes and the router works a small visibility graph over their
+// corners, which is cheap at this scale and always finds a way round.
 
-/** Segment vs. axis-aligned box, slab method. Grazing the edge doesn't count. */
-function segHitsHouse(ax, az, bx, bz) {
-  const hx = KX - 0.02
-  const hz = KZ - 0.02
+let EXTRA = []
+const CORNER_MARGIN = 0.55
+
+/** Obstacles other than the house on this plot, in plot-local coordinates. */
+export function setObstacles(list) {
+  EXTRA = list.map((b) => ({ x: b.x, z: b.z, hw: b.hw, hd: b.hd }))
+}
+
+const allBoxes = () => (HOUSE_BOX ? [HOUSE_BOX, ...EXTRA] : EXTRA)
+const inside = (b, x, z) => Math.abs(x - b.x) < b.hw && Math.abs(z - b.z) < b.hd
+
+/** Segment vs. one box, slab method. Grazing an edge doesn't count. */
+function segHitsBox(ax, az, bx, bz, b) {
+  const hx = b.hw - 0.02
+  const hz = b.hd - 0.02
   const dx = bx - ax
   const dz = bz - az
+  const rx = ax - b.x
+  const rz = az - b.z
   let t0 = 0
   let t1 = 1
-  // Liang–Barsky: clip the parameter range against each slab in turn.
   const clip = (p, q) => {
     if (Math.abs(p) < 1e-9) return q >= 0
     const r = q / p
@@ -66,54 +91,75 @@ function segHitsHouse(ax, az, bx, bz) {
     }
     return true
   }
-  if (!clip(-dx, ax + hx)) return false
-  if (!clip(dx, hx - ax)) return false
-  if (!clip(-dz, az + hz)) return false
-  if (!clip(dz, hz - az)) return false
+  if (!clip(-dx, rx + hx)) return false
+  if (!clip(dx, hx - rx)) return false
+  if (!clip(-dz, rz + hz)) return false
+  if (!clip(dz, hz - rz)) return false
   return t0 < t1
 }
 
+function blocked(ax, az, bx, bz, skip) {
+  for (const b of allBoxes()) {
+    if (skip.has(b)) continue
+    if (segHitsBox(ax, az, bx, bz, b)) return true
+  }
+  return false
+}
+
 /**
- * Walk the dirt from A to B, going round the house when the straight line
- * would cut through it. Only ever a handful of corners, so brute-forcing the
- * candidate routes is cheaper than any cleverness.
+ * Walk the dirt from A to B, going round whatever is in the way. Boxes that
+ * already contain one of the endpoints are ignored, or a robot standing beside
+ * a wall could never set off.
  */
 export function groundPath(ax, az, bx, bz) {
-  if (!segHitsHouse(ax, az, bx, bz)) return [{ x: bx, y: 0, z: bz }]
-  let best = null
-  for (let start = 0; start < 4; start++) {
-    for (const dir of [1, -1]) {
-      for (let n = 1; n <= 3; n++) {
-        const pts = []
-        let idx = start
-        for (let k = 0; k < n; k++) {
-          pts.push(CORNERS[idx])
-          idx = (idx + dir + 4) % 4
-        }
-        let ok = !segHitsHouse(ax, az, pts[0][0], pts[0][1])
-        for (let k = 0; ok && k < pts.length - 1; k++) {
-          ok = !segHitsHouse(pts[k][0], pts[k][1], pts[k + 1][0], pts[k + 1][1])
-        }
-        const last = pts[pts.length - 1]
-        ok = ok && !segHitsHouse(last[0], last[1], bx, bz)
-        if (!ok) continue
-        let len = Math.hypot(pts[0][0] - ax, pts[0][1] - az)
-        for (let k = 0; k < pts.length - 1; k++) {
-          len += Math.hypot(pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1])
-        }
-        len += Math.hypot(bx - last[0], bz - last[1])
-        if (!best || len < best.len) best = { len, pts }
+  const bs = allBoxes()
+  const skip = new Set(bs.filter((b) => inside(b, ax, az) || inside(b, bx, bz)))
+  if (!blocked(ax, az, bx, bz, skip)) return [{ x: bx, y: 0, z: bz }]
+
+  // nodes: start, every corner of every box still in play, then the target
+  const nodes = [{ x: ax, z: az }]
+  for (const b of bs) {
+    if (skip.has(b)) continue
+    for (const sx of [-1, 1]) {
+      for (const sz of [-1, 1]) {
+        nodes.push({ x: b.x + sx * (b.hw + CORNER_MARGIN), z: b.z + sz * (b.hd + CORNER_MARGIN) })
       }
     }
   }
-  const out = best ? best.pts.map(([x, z]) => ({ x, y: 0, z })) : []
-  out.push({ x: bx, y: 0, z: bz })
+  nodes.push({ x: bx, z: bz })
+  const goal = nodes.length - 1
+
+  const n = nodes.length
+  const dist = new Float64Array(n).fill(Infinity)
+  const prev = new Int16Array(n).fill(-1)
+  const seen = new Uint8Array(n)
+  dist[0] = 0
+  for (;;) {
+    let u = -1
+    let best = Infinity
+    for (let i = 0; i < n; i++) if (!seen[i] && dist[i] < best) (best = dist[i]), (u = i)
+    if (u < 0 || u === goal) break
+    seen[u] = 1
+    for (let v = 0; v < n; v++) {
+      if (seen[v] || v === u) continue
+      if (blocked(nodes[u].x, nodes[u].z, nodes[v].x, nodes[v].z, skip)) continue
+      const d = dist[u] + Math.hypot(nodes[v].x - nodes[u].x, nodes[v].z - nodes[u].z)
+      if (d < dist[v]) {
+        dist[v] = d
+        prev[v] = u
+      }
+    }
+  }
+
+  if (!isFinite(dist[goal])) return [{ x: bx, y: 0, z: bz }] // hemmed in; go straight
+  const out = []
+  for (let v = goal; v > 0; v = prev[v]) out.push({ x: nodes[v].x, y: 0, z: nodes[v].z })
+  out.reverse()
   return out
 }
 
 // --- scaffold ring ---------------------------------------------------------
 
-/** Perimeter coordinate of the nearest point on the ring to (x, z). */
 export function ringU(x, z) {
   let bestD = Infinity
   let bestU = 0
@@ -136,7 +182,7 @@ export function ringU(x, z) {
 }
 
 export function ringPoint(u) {
-  let v = ((u % RING_P) + RING_P) % RING_P
+  let v = mod(u, RING_P)
   for (let i = 0; i < 4; i++) {
     if (v <= LEG_LEN[i] || i === 3) {
       const t = Math.min(1, v / LEG_LEN[i])
@@ -148,13 +194,7 @@ export function ringPoint(u) {
   return { x: LEGS[0][0], z: LEGS[0][1] }
 }
 
-const mod = (v, m) => ((v % m) + m) % m
-
-/**
- * Waypoints along the decking from one perimeter position to another, going
- * whichever way round is shorter. Corners in between become waypoints so the
- * robot turns at the corner instead of cutting across thin air.
- */
+/** Waypoints along the decking, going whichever way round is shorter. */
 export function ringWalk(y, u0, u1) {
   const fwd = mod(u1 - u0, RING_P)
   const dir = fwd <= RING_P - fwd ? 1 : -1
@@ -177,74 +217,76 @@ export function ringWalk(y, u0, u1) {
 
 // --- roof ------------------------------------------------------------------
 
-/** World position of a point `sd` up the slope on `side`, at x. */
 export function roofPoint(x, side, sd) {
-  const zAbs = slopeZ(sd)
-  return { x, y: roofTopY(zAbs), z: side * zAbs }
-}
-
-/** Where the decking meets the slope — the step-across point at the eave. */
-function eavePoint(x, side) {
-  return roofPoint(x, side, 0)
+  const zAbs = slopeZ(G, sd)
+  return { x, y: roofTopY(G, zAbs), z: side * zAbs }
 }
 
 // --- the router ------------------------------------------------------------
 
-const LADDER_U = ringU(LADDER.x, LADDER.z)
-
 /**
  * Full route from a robot's current stance to a target stance.
- * `from` and `to` are both { level, x, y, z, side?, sd? } where level is
- * 0 (dirt), 1 (lower deck), 2 (upper deck) or 'roof'.
+ * level is 0 (dirt), 1..n (scaffold lift), 'roof', or 'inside' (the floor).
  */
 export function route(from, to) {
   const wps = []
   let cur = { ...from }
 
-  // Same slope? Straight across it — a line between two points on a plane
-  // stays on that plane.
+  // --- indoors: only ever reached through the front door -------------------
+  if (cur.level === 'inside' && to.level === 'inside') {
+    wps.push({ x: to.x, y: 0, z: to.z })
+    return wps
+  }
+  if (cur.level === 'inside') {
+    wps.push({ x: DOOR.x, y: 0, z: DOOR.inZ })
+    wps.push({ x: DOOR.x, y: 0, z: DOOR.outZ })
+    cur = { level: 0, x: DOOR.x, y: 0, z: DOOR.outZ }
+  }
+  if (to.level === 'inside') {
+    for (const p of routeToGround(cur, { x: DOOR.x, z: DOOR.outZ })) wps.push(p)
+    wps.push({ x: DOOR.x, y: 0, z: DOOR.inZ })
+    wps.push({ x: to.x, y: 0, z: to.z })
+    return wps
+  }
+
+  // --- same slope: straight across it --------------------------------------
   if (cur.level === 'roof' && to.level === 'roof' && to.side === cur.side) {
     wps.push({ ...roofPoint(to.x, to.side, to.sd), roof: to.side })
     return wps
   }
 
-  // Otherwise come off the roof first, down to the eave and onto the decking.
+  // --- off the roof, down to the eave and onto the decking -----------------
   if (cur.level === 'roof') {
     wps.push({ ...roofPoint(cur.x, cur.side, 0), roof: cur.side })
-    wps.push({ x: cur.x, y: DECKS[2].y, z: cur.side * RZ })
-    cur = { level: 2, x: cur.x, y: DECKS[2].y, z: cur.side * RZ }
+    wps.push({ x: cur.x, y: G.decks[2].y, z: cur.side * RZ })
+    cur = { level: 2, x: cur.x, y: G.decks[2].y, z: cur.side * RZ }
   }
 
   const targetDeck = to.level === 'roof' ? 2 : to.level
 
-  // Down the ladder, one flight at a time.
   while (cur.level > targetDeck) {
     const u = ringU(cur.x, cur.z)
-    for (const p of ringWalk(DECKS[cur.level].y, u, LADDER_U)) wps.push(p)
-    const nextY = cur.level - 1 === 0 ? 0 : DECKS[cur.level - 1].y
+    for (const p of ringWalk(G.decks[cur.level].y, u, LADDER_U)) wps.push(p)
+    const nextY = cur.level - 1 === 0 ? 0 : G.decks[cur.level - 1].y
     wps.push({ x: LADDER.x, y: nextY, z: LADDER.z, climb: true })
     cur = { level: cur.level - 1, x: LADDER.x, y: nextY, z: LADDER.z }
   }
 
-  // Up the ladder.
   while (cur.level < targetDeck) {
     if (cur.level === 0) {
       for (const p of groundPath(cur.x, cur.z, LADDER.x, LADDER.z)) wps.push(p)
     } else {
       const u = ringU(cur.x, cur.z)
-      for (const p of ringWalk(DECKS[cur.level].y, u, LADDER_U)) wps.push(p)
+      for (const p of ringWalk(G.decks[cur.level].y, u, LADDER_U)) wps.push(p)
     }
-    wps.push({ x: LADDER.x, y: DECKS[cur.level + 1].y, z: LADDER.z, climb: true })
-    cur = { level: cur.level + 1, x: LADDER.x, y: DECKS[cur.level + 1].y, z: LADDER.z }
+    wps.push({ x: LADDER.x, y: G.decks[cur.level + 1].y, z: LADDER.z, climb: true })
+    cur = { level: cur.level + 1, x: LADDER.x, y: G.decks[cur.level + 1].y, z: LADDER.z }
   }
 
   if (to.level === 'roof') {
-    // Walk the top deck round to the target's bay, step across at the eave,
-    // then out along the slope.
     const u = ringU(cur.x, cur.z)
-    const target = ringU(to.x, to.side * RZ)
-    for (const p of ringWalk(DECKS[2].y, u, target)) wps.push(p)
-    wps.push({ ...eavePoint(to.x, to.side), roof: to.side })
+    for (const p of ringWalk(G.decks[2].y, u, ringU(to.x, to.side * RZ))) wps.push(p)
+    wps.push({ ...roofPoint(to.x, to.side, 0), roof: to.side })
     wps.push({ ...roofPoint(to.x, to.side, to.sd), roof: to.side })
     return wps
   }
@@ -253,9 +295,14 @@ export function route(from, to) {
     for (const p of groundPath(cur.x, cur.z, to.x, to.z)) wps.push(p)
   } else {
     const u = ringU(cur.x, cur.z)
-    for (const p of ringWalk(DECKS[targetDeck].y, u, ringU(to.x, to.z))) wps.push(p)
+    for (const p of ringWalk(G.decks[targetDeck].y, u, ringU(to.x, to.z))) wps.push(p)
   }
   return wps
+}
+
+/** Bring a robot down to a point on the dirt, from wherever it is standing. */
+function routeToGround(from, xz) {
+  return route(from, { level: 0, x: xz.x, y: 0, z: xz.z })
 }
 
 /** Which surface a finished route leaves the robot standing on. */
@@ -263,5 +310,9 @@ export function stanceOf(to) {
   if (to.level === 'roof') {
     return { level: 'roof', side: to.side, sd: to.sd, x: to.x, y: to.y, z: to.z, tilt: to.tilt ?? 0 }
   }
-  return { level: to.level, x: to.x, y: to.y, z: to.z }
+  return { level: to.level, x: to.x, y: to.y ?? 0, z: to.z }
+}
+
+export function doorPoints() {
+  return { ...DOOR }
 }

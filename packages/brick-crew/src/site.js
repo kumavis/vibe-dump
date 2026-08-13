@@ -7,12 +7,12 @@
 // ---------------------------------------------------------------------------
 
 import * as THREE from 'three'
-import { SITE, COLORS, HOUSE } from './config.js'
+import { SITE, COLORS, PLOTS, YARD, DEPOT, toWorld } from './config.js'
 
 const BOX = new THREE.BoxGeometry(1, 1, 1)
 const CYL = new THREE.CylinderGeometry(0.5, 0.5, 1, 16)
 
-const GROUND = 90
+const GROUND = 180
 
 function box(parent, material, sx, sy, sz, x = 0, y = 0, z = 0, geo = BOX) {
   const m = new THREE.Mesh(geo, material)
@@ -35,7 +35,7 @@ function hash2(x, y) {
 // --- ground ----------------------------------------------------------------
 
 function groundTexture() {
-  const S = 1024
+  const S = 2048
   const cv = document.createElement('canvas')
   cv.width = cv.height = S
   const c = cv.getContext('2d')
@@ -54,21 +54,22 @@ function groundTexture() {
     c.fillRect(x, y, 6 + hash2(i, 4) * 22, 3 + hash2(i, 5) * 6)
   }
 
-  // the compound itself: churned-up dirt inside the hoarding
-  const f = SITE.fence
-  c.fillStyle = hex(COLORS.dirt)
-  c.beginPath()
-  c.rect(px(f.x0 - 0.6), pz(f.z0 - 0.6), m(f.x1 - f.x0 + 1.2), m(f.z1 - f.z0 + 1.2))
-  c.fill()
-  for (let i = 0; i < 4000; i++) {
-    const x = px(f.x0) + hash2(i, 11) * m(f.x1 - f.x0)
-    const y = pz(f.z0) + hash2(i, 12) * m(f.z1 - f.z0)
-    const t = hash2(i, 13)
-    c.fillStyle = t > 0.66 ? 'rgba(150,120,88,0.30)' : t > 0.33 ? 'rgba(120,94,66,0.28)' : 'rgba(196,172,140,0.22)'
-    c.fillRect(x, y, 3 + t * 14, 3 + hash2(i, 14) * 10)
+  // the compounds themselves: churned-up dirt inside each hoarding
+  for (const [seed, f] of [[0, SITE.fence], [500, SITE.fenceFar]]) {
+    c.fillStyle = hex(COLORS.dirt)
+    c.beginPath()
+    c.rect(px(f.x0 - 0.6), pz(f.z0 - 0.6), m(f.x1 - f.x0 + 1.2), m(f.z1 - f.z0 + 1.2))
+    c.fill()
+    for (let i = 0; i < 4000; i++) {
+      const x = px(f.x0) + hash2(i + seed, 11) * m(f.x1 - f.x0)
+      const y = pz(f.z0) + hash2(i + seed, 12) * m(f.z1 - f.z0)
+      const t = hash2(i + seed, 13)
+      c.fillStyle = t > 0.66 ? 'rgba(150,120,88,0.30)' : t > 0.33 ? 'rgba(120,94,66,0.28)' : 'rgba(196,172,140,0.22)'
+      c.fillRect(x, y, 3 + t * 14, 3 + hash2(i + seed, 14) * 10)
+    }
   }
 
-  // worn haul route: gate -> supply stack -> pallets
+  // worn haul routes: in at the gate, then out to each plot and round its yard
   c.strokeStyle = 'rgba(92,72,52,0.5)'
   c.lineCap = 'round'
   const track = (ax, az, bx, bz, w) => {
@@ -78,17 +79,28 @@ function groundTexture() {
     c.lineTo(px(bx), pz(bz))
     c.stroke()
   }
-  track(SITE.gate.x, SITE.roadZ, SITE.gate.x, SITE.stack.z, 2.6)
-  track(SITE.gate.x, SITE.stack.z, SITE.pallets[1].x, SITE.pallets[1].z, 2.2)
-  track(SITE.stack.x, SITE.stack.z, SITE.trailer.x, SITE.trailer.z, 1.6)
-  track(SITE.pallets[0].x, SITE.pallets[0].z, SITE.pallets[2].x, SITE.pallets[2].z, 1.8)
-  // tyre ruts along the main run
+  for (const f of [SITE.fence, SITE.fenceFar]) {
+    const into = f.gateZ === f.z1 ? -1.5 : 1.5
+    track(SITE.gate.x, SITE.roadZ, SITE.gate.x, f.gateZ + into, 3.0)
+    for (const plot of PLOTS) {
+      if (Math.abs(plot.z - (f.z0 + f.z1) / 2) > 12) continue
+      const apron = toWorld(plot, { x: 0, z: 6.0 })
+      const stack = toWorld(plot, YARD.stacks.brick)
+      const tile = toWorld(plot, YARD.stacks.tile)
+      const src = toWorld(plot, YARD.sources.brick)
+      track(SITE.gate.x, f.gateZ + into, apron.x, apron.z, 2.4)
+      track(apron.x, apron.z, stack.x, stack.z, 2.0)
+      track(tile.x, tile.z, src.x, src.z, 1.8)
+    }
+  }
+  track(SITE.gate.x, SITE.gate.z - 1.5, SITE.trailer.x + 2, SITE.trailer.z, 1.6)
+  // tyre ruts up the main run
   c.strokeStyle = 'rgba(70,54,38,0.34)'
   for (const off of [-0.55, 0.55]) {
     c.lineWidth = m(0.2)
     c.beginPath()
     c.moveTo(px(SITE.gate.x + off), pz(SITE.roadZ))
-    c.lineTo(px(SITE.gate.x + off), pz(SITE.stack.z - 1))
+    c.lineTo(px(SITE.gate.x + off), pz(SITE.gate.z - 2))
     c.stroke()
   }
 
@@ -104,6 +116,11 @@ function groundTexture() {
   c.fillStyle = 'rgba(230,230,220,0.5)'
   c.fillRect(0, pz(SITE.roadZ - 3.0), S, m(0.12))
   c.fillRect(0, pz(SITE.roadZ + 2.9), S, m(0.12))
+  // the merchant's apron and its crossover onto the road
+  c.fillStyle = '#8f8a82'
+  c.fillRect(px(DEPOT.x - 14.5), pz(DEPOT.z - 18.5), m(29), m(17.5))
+  c.fillRect(px(DEPOT.x + 6.2), pz(DEPOT.z - 1.2), m(7.2), m(4.0))
+
   // kerb
   c.fillStyle = '#9a958c'
   c.fillRect(0, pz(SITE.roadZ - 3.35), S, m(0.28))
@@ -167,11 +184,12 @@ export function buildLights() {
   sun.position.set(-13, 20, 16)
   sun.castShadow = true
   sun.shadow.mapSize.set(2048, 2048)
+  sun.shadow.camera.updateProjectionMatrix?.()
   const cam = sun.shadow.camera
-  cam.left = -15
-  cam.right = 14
-  cam.top = 15
-  cam.bottom = -11
+  cam.left = -22
+  cam.right = 22
+  cam.top = 20
+  cam.bottom = -16
   cam.near = 1
   cam.far = 60
   sun.shadow.bias = -0.0006
@@ -366,13 +384,18 @@ function labelSprite(text) {
 function buildTreeline(rng) {
   const g = new THREE.Group()
   const spots = []
-  for (let i = 0; i < 220 && spots.length < 90; i++) {
+  for (let i = 0; i < 420 && spots.length < 120; i++) {
     const a = rng() * Math.PI * 2
-    const r = 34 + rng() * 52
+    const r = 40 + rng() * 62
     const x = Math.cos(a) * r
     const z = Math.sin(a) * r
     // keep the road corridor and the approach to the gate clear
-    if (Math.abs(z - SITE.roadZ) < 5.5) continue
+    if (Math.abs(z - SITE.roadZ) < 6.5) continue
+    if (Math.abs(x - DEPOT.x) < 17 && z > DEPOT.z - 21 && z < SITE.roadZ) continue
+    // Both rows of plots stay clear — a tree standing in a finished house is
+    // the sort of thing you only notice once it has happened.
+    if (Math.abs(x) < 30 && z > SITE.fence.z0 - 6 && z < SITE.roadZ) continue
+    if (Math.abs(x) < 30 && z > SITE.roadZ && z < SITE.fenceFar.z1 + 6) continue
     spots.push([x, z, 2.6 + rng() * 3.8, rng()])
   }
 
@@ -413,8 +436,7 @@ function buildTreeline(rng) {
 
 // --- hoarding --------------------------------------------------------------
 
-function buildFence(group) {
-  const f = SITE.fence
+function buildFence(group, f) {
   const post = new THREE.MeshStandardMaterial({ color: 0x6f5c44, roughness: 0.92 })
   const panel = new THREE.MeshStandardMaterial({ color: 0xcf9f5f, roughness: 0.9 })
   const panelAlt = new THREE.MeshStandardMaterial({ color: 0x2f6fa8, roughness: 0.7 })
@@ -444,8 +466,11 @@ function buildFence(group) {
       box(group, post, 0.1, H + 0.14, 0.1, x, (H + 0.14) / 2, z)
     }
   }
-  run(f.x0, f.z1, f.x1, f.z1, [f.gapX0, f.gapX1])
-  run(f.x0, f.z0, f.x1, f.z0)
+  // the gated side faces the road; which of z0/z1 that is depends on the row
+  const gz = f.gateZ
+  const bz = gz === f.z1 ? f.z0 : f.z1
+  run(f.x0, gz, f.x1, gz, [f.gapX0, f.gapX1])
+  run(f.x0, bz, f.x1, bz)
   run(f.x0, f.z0, f.x0, f.z1)
   run(f.x1, f.z0, f.x1, f.z1)
 
@@ -453,7 +478,7 @@ function buildFence(group) {
   const mesh = new THREE.MeshStandardMaterial({ color: 0x9aa2a8, roughness: 0.6, metalness: 0.4 })
   for (const s of [-1, 1]) {
     const leaf = new THREE.Group()
-    leaf.position.set(s > 0 ? SITE.fence.gapX1 : SITE.fence.gapX0, 0, f.z1)
+    leaf.position.set(s > 0 ? f.gapX1 : f.gapX0, 0, gz)
     leaf.rotation.y = s * 1.15
     box(leaf, mesh, 1.7, 1.7, 0.05, (s * 1.7) / 2, 0.9)
     box(leaf, post, 0.08, 1.9, 0.08, 0, 0.95)
@@ -470,7 +495,7 @@ export function buildSite(rng = Math.random) {
   // A big plain apron underneath carries the eye out to the fog, so the
   // detailed site plane doesn't end in a hard edge against the sky.
   const apron = new THREE.Mesh(
-    new THREE.PlaneGeometry(420, 420),
+    new THREE.PlaneGeometry(600, 600),
     new THREE.MeshStandardMaterial({ color: COLORS.grass, roughness: 1 }),
   )
   apron.rotation.x = -Math.PI / 2
@@ -485,7 +510,8 @@ export function buildSite(rng = Math.random) {
   ground.receiveShadow = true
   group.add(ground)
 
-  buildFence(group)
+  buildFence(group, SITE.fence)
+  buildFence(group, SITE.fenceFar)
   group.add(buildTreeline(rng))
 
   const t = buildTrailer()
