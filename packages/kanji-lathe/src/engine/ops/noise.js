@@ -25,9 +25,9 @@ import { recomputeBounds, recomputeLengths, EM } from '../skeleton.js'
 
 const DEG = Math.PI / 180
 const GRAD_H = 0.06 // finite-difference step for the curl gradient, in field cells
-// Calibrated so nzField reads as a displacement in em fractions: the measured
-// RMS of |∇ψ| over the corpus is ≈1.14 per field cell at GRAD_H.
-const CURL_GAIN = 0.88
+// Calibrated so nzField reads directly as a displacement in em fractions: the
+// measured RMS of |∇ψ|/√octaves at GRAD_H is ≈1.05 per field cell.
+const CURL_GAIN = 0.95
 const CURL_CAP = 2.2 // hard ceiling on |displacement| in units of nzField, so a rare steep cell cannot fling a point
 const TREMOR_SLOW = 0.72 // split between the slow waver and the fine chatter riding on it
 const TREMOR_FINE_MUL = 2.7 // irrational-ish ratio: the two octaves never lock into one beat
