@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kanji Lathe</title>
+    <meta
+      name="description"
+      content="A parametric type foundry for the 1,000 most common kanji — stroke-order-aware skeletons, crown shyness, region compression, live TrueType export."
+    />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="boot" class="boot">
+      <div class="boot__mark">漢</div>
+      <div class="boot__text">loading 1,000 kanji…</div>
+    </div>
+
+    <div id="app" class="app" hidden>
+      <header class="bar">
+        <div class="bar__brand">
+          <span class="bar__mark">轆</span>
+          <span class="bar__name">Kanji&nbsp;Lathe</span>
+        </div>
+
+        <nav class="tabs" id="tabs" role="tablist">
+          <button class="tab is-active" data-view="single" role="tab">Glyph</button>
+          <button class="tab" data-view="sheet" role="tab">Specimen</button>
+          <button class="tab" data-view="proof" role="tab">Proof</button>
+          <button class="tab" data-view="evolve" role="tab">Evolve</button>
+        </nav>
+
+        <div class="bar__spacer"></div>
+
+        <label class="field field--preset">
+          <span class="field__label">Preset</span>
+          <select id="presetSelect" class="select"></select>
+        </label>
+
+        <button class="btn" id="btnRandom" title="Roll a new design (R)">Randomise</button>
+        <button class="btn" id="btnReset" title="Back to the plain skeleton">Reset</button>
+        <div class="menu">
+          <button class="btn btn--primary" id="btnExport">Export ▾</button>
+          <div class="menu__panel" id="exportMenu" hidden>
+            <button data-export="svg">SVG — current glyph</button>
+            <button data-export="png">PNG — current glyph</button>
+            <button data-export="sheet">PNG — specimen sheet</button>
+            <hr />
+            <button data-export="ttf250">TrueType font — top 250</button>
+            <button data-export="ttf1000">TrueType font — all 1,000</button>
+            <hr />
+            <button data-export="preset">Preset JSON</button>
+            <button data-export="link">Copy share link</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="panel panel--controls">
+          <div class="panel__head">
+            <input id="paramSearch" class="search" type="search" placeholder="Search controls…" aria-label="Search controls" />
+            <button class="btn btn--ghost" id="btnCollapse" title="Collapse all sections">⌄</button>
+          </div>
+          <div class="panel__body" id="controls"></div>
+        </section>
+
+        <section class="stage" id="stage">
+          <div class="stage__view" data-view="single">
+            <canvas id="glyphCanvas"></canvas>
+            <div class="stage__hud">
+              <div class="hud__char" id="hudChar"></div>
+              <div class="hud__meta" id="hudMeta"></div>
+            </div>
+            <div class="stage__transport">
+              <button class="btn btn--ghost" id="btnPlay" title="Animate the writing order">▶ Write</button>
+              <input type="range" id="writeScrub" class="scrub" min="0" max="1" step="0.001" value="1" aria-label="Writing progress" />
+            </div>
+          </div>
+
+          <div class="stage__view" data-view="sheet" hidden>
+            <div class="sheet__bar">
+              <label class="field"><span class="field__label">From rank</span><input id="sheetFrom" class="num" type="number" min="1" max="1000" value="1" /></label>
+              <label class="field"><span class="field__label">Show</span><input id="sheetCount" class="num" type="number" min="12" max="1000" step="12" value="120" /></label>
+              <label class="field"><span class="field__label">Cell</span><input id="sheetCell" class="num" type="number" min="40" max="220" step="4" value="92" /></label>
+              <span class="sheet__status" id="sheetStatus"></span>
+            </div>
+            <div class="sheet__scroll"><canvas id="sheetCanvas"></canvas></div>
+          </div>
+
+          <div class="stage__view" data-view="proof" hidden>
+            <div class="proof__bar">
+              <textarea id="proofText" class="proof__input" rows="2" spellcheck="false"></textarea>
+              <label class="field"><span class="field__label">Size</span><input id="proofSize" class="num" type="number" min="24" max="200" step="4" value="72" /></label>
+              <label class="field"><span class="field__label">Tracking</span><input id="proofTrack" class="num" type="number" min="-30" max="60" step="2" value="4" /></label>
+              <label class="field field--check">
+                <span class="field__label">Via real font</span>
+                <span class="switch">
+                  <input type="checkbox" id="proofFont" />
+                  <span class="switch__slot"></span><span class="switch__knob"></span>
+                </span>
+              </label>
+              <span class="proof__status" id="proofStatus"></span>
+            </div>
+            <div class="proof__scroll"><canvas id="proofCanvas"></canvas></div>
+          </div>
+
+          <div class="stage__view" data-view="evolve" hidden>
+            <div class="evolve__bar">
+              <label class="field"><span class="field__label">Mutation</span><input id="evolveAmt" class="range" type="range" min="0.05" max="1" step="0.01" value="0.35" /></label>
+              <button class="btn" id="btnRepopulate">Repopulate</button>
+              <span class="evolve__hint">Click a variant to make it the parent. The centre cell is the current design.</span>
+            </div>
+            <div class="evolve__grid" id="evolveGrid"></div>
+          </div>
+        </section>
+
+        <section class="panel panel--inspect">
+          <div class="panel__body">
+            <div class="picker">
+              <input id="charInput" class="picker__input" maxlength="8" spellcheck="false" aria-label="Character" />
+              <input id="charSearch" class="picker__search" type="search" placeholder="Search meaning or reading…" aria-label="Search kanji" />
+              <div class="picker__results" id="charResults"></div>
+            </div>
+
+            <div class="card" id="charCard"></div>
+
+            <div class="card">
+              <h3 class="card__title">Legibility</h3>
+              <div class="meter"><div class="meter__fill" id="legFill"></div></div>
+              <div class="stats" id="metricStats"></div>
+            </div>
+
+            <div class="card">
+              <h3 class="card__title">Push &amp; proof</h3>
+              <div class="pushrow">
+                <button class="btn" id="btnPush">Push it</button>
+                <label class="field">
+                  <span class="field__label">Floor</span>
+                  <input id="pushFloor" class="num" type="number" min="0.2" max="0.98" step="0.02" value="0.62" />
+                </label>
+              </div>
+              <p class="hintline">Drives the current design as far as it goes while every probe glyph still scores above the floor.</p>
+              <button class="btn btn--wide" id="btnAudit">Find the weakest glyphs</button>
+              <div class="audit" id="auditOut"></div>
+            </div>
+
+            <div class="card">
+              <h3 class="card__title">Strokes</h3>
+              <ol class="strokes" id="strokeList"></ol>
+            </div>
+
+            <div class="card card--about">
+              <h3 class="card__title">About</h3>
+              <p>
+                Skeletons and stroke order come from <a href="https://kanjivg.tagaini.net" target="_blank" rel="noopener">KanjiVG</a>
+                (CC&nbsp;BY-SA&nbsp;3.0); frequency ranks, readings and meanings from
+                <a href="https://www.edrdg.org/wiki/index.php/KANJIDIC_Project" target="_blank" rel="noopener">KANJIDIC2</a>
+                (CC&nbsp;BY-SA&nbsp;4.0). Everything else is generated in your browser.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
