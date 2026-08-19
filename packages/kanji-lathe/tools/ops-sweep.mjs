@@ -90,7 +90,23 @@ for (const [name, mod] of Object.entries(MODS)) {
     }
   }
 
-  // 3. idempotence-safety: applying twice must not explode
+  // 3. determinism: a fresh context with the same seed must reproduce the run
+  //    bit-for-bit, or a shared link would not show the same design twice
+  for (const rec of probes) {
+    const a = buildSkeleton(rec)
+    const b = buildSkeleton(rec)
+    mod.apply(a, allMax, mkCtx(rec))
+    mod.apply(b, allMax, mkCtx(rec))
+    for (let i = 0; i < a.strokes.length; i++) {
+      const pa = a.strokes[i].pts
+      const pb = b.strokes[i].pts
+      for (let j = 0; j < pa.length; j++) {
+        if (pa[j] !== pb[j]) { bad(`${name}: not deterministic on ${rec.char}#${i}`); j = pa.length; i = a.strokes.length }
+      }
+    }
+  }
+
+  // 4. idempotence-safety: applying twice must not explode
   for (const rec of probes) {
     const sk = buildSkeleton(rec)
     mod.apply(sk, allMax, mkCtx(rec))

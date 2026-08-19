@@ -12,6 +12,7 @@
 import { clamp, chaikin, mulberry32 } from '../../geom/path.js'
 import { recomputeBounds, recomputeLengths, EM } from '../skeleton.js'
 
+const BOW_ADD = 0.75 // most a single straighten = −1 pass may add to a point's offset, in chord lengths
 const ENTASIS_GAIN = 0.09 // mid-stroke bulge as a fraction of the stroke's own length
 const TENSION_PASSES = 6 // six 3-tap passes ≈ a wide Gaussian; more just melts the stroke
 const CRISP_WINDOW = 0.08 // tangent arm as a fraction of the stroke's samples
@@ -248,7 +249,7 @@ function sanitize(s) {
   for (let i = 0; i < p.length; i++) if (!Number.isFinite(p[i])) p[i] = s.ref[i]
 }
 
-// ── per-stroke shape ────────────────────────────────────────────────────────
+// ── per-stroke shape ─────────────────────────────────────────────────────────
 
 /**
  * Straighten and entasis in one pass — both are displacements scaled by the
@@ -282,18 +283,26 @@ function bow(s, sArr, straighten, entasis, len, cx, cy) {
   for (let i = 1; i < n - 1; i++) {
     const t = sArr[i]
     const hump = Math.sin(Math.PI * t)
-    let x = p[i * 2]
-    let y = p[i * 2 + 1]
+    let ox = p[i * 2] - (x0 + dx * t)
+    let oy = p[i * 2 + 1] - (y0 + dy * t)
     if (straighten !== 0) {
-      x += straighten * hump * (x0 + dx * t - x)
-      y += straighten * hump * (y0 + dy * t - y)
+      // scaling the offset from the chord: 0 at +1 (dead straight), doubled at −1
+      let k = 1 - straighten * hump
+      if (k > 1) {
+        // cap what one pass may add, so re-running the stage cannot double the
+        // bow again and again; well clear of anything a real stroke reaches
+        const d = Math.hypot(ox, oy)
+        if (d * (k - 1) > BOW_ADD * L) k = 1 + (BOW_ADD * L) / Math.max(d, 1e-9)
+      }
+      ox *= k
+      oy *= k
     }
     if (bulge !== 0) {
-      x += nx * bulge * hump
-      y += ny * bulge * hump
+      ox += nx * bulge * hump
+      oy += ny * bulge * hump
     }
-    p[i * 2] = x
-    p[i * 2 + 1] = y
+    p[i * 2] = x0 + dx * t + ox
+    p[i * 2 + 1] = y0 + dy * t + oy
   }
 }
 
@@ -522,7 +531,7 @@ function shorten(s, amount) {
   }
 }
 
-// ── rhythm of stacked parallel strokes ──────────────────────────
+// ── rhythm of stacked parallel strokes ───────────────────────────────────────
 
 /**
  * A candidate for a stack: live, of the class asked for, and lying within 20°
@@ -673,7 +682,7 @@ function rhythmPass(skel, cls, vertical, rhythm, even) {
   }
 }
 
-// ── the stage ───────────────────────────────────────────────────────────────
+// ── the stage ────────────────────────────────────────────────────────────────
 
 function gridSnap(skel, amount, cells, em) {
   const cell = em / cells
@@ -681,7 +690,9 @@ function gridSnap(skel, amount, cells, em) {
   for (const s of skel.strokes) {
     if (!s.alive) continue
     const p = s.pts
-    for (let i = 0; i < p.length; i++) p[i] += amount * (Math.round(p[i] * inv) * cell - p[i])
+    for (let i = 0; i < p.length; i++) {
+      if (Number.isFinite(p[i])) p[i] += amount * (Math.round(p[i] * inv) * cell - p[i])
+    }
   }
 }
 
