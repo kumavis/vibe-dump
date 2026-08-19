@@ -80,6 +80,31 @@ tools/
 operator is a one-file change, and its controls appear in the dashboard by
 themselves.
 
+## Checks
+
+```bash
+npm run check --workspace @vibe-dump/kanji-lathe
+```
+
+Three passes, no browser required:
+
+- `tools/ops-sweep.mjs` takes each operator on its own and asserts it is a genuine
+  no-op at its defaults over all 1,000 kanji, stays finite and in-bounds at every
+  parameter extreme (each alone, then all at once), reproduces bit-for-bit from a
+  seed, survives being applied twice, and holds its time budget. It also holds the
+  pen to a clean monoline at defaults and checks that gray normalisation really
+  does pull simple and complex characters to the same ink coverage.
+- `tools/shyness-check.mjs` measures the minimum clearance between different
+  strokes before and after crown shyness, so the signature effect has to prove it
+  opens gaps rather than merely jiggling points.
+- `tools/smoke.mjs` runs every preset through the whole pipeline across a spread
+  of glyph complexities, outlines the result, scores it, and packs a real
+  TrueType file.
+
+`npm run shots --workspace @vibe-dump/kanji-lathe` drives the built app in
+headless Chromium and writes one screenshot per preset, which is the only way to
+review a visual change honestly.
+
 ## Regenerating the corpus
 
 `public/kanji-1000.json` is committed so the app stays a zero-dependency static
