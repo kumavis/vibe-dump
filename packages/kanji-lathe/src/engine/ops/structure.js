@@ -22,6 +22,7 @@ const TAPER_GAIN = 1.1 // log of the sampling exponent at full taper shift
 const SHORTEN_GAIN = 0.35 // ±35% of the stroke's own axis
 const RHYTHM_GAIN = 1.2 // log of the power-curve exponent at full rhythm
 const PARALLEL_SIN = Math.sin((20 * Math.PI) / 180)
+const OVERLAP_MIN = 0.25 // share of the shorter stroke two neighbours must share to count as stacked
 const EVEN_JITTER = 0.85 // gap randomisation at stEvenness = −1; < 1 keeps every gap positive
 
 export const params = [
@@ -220,6 +221,7 @@ export const params = [
 const buf = {
   s: new Float64Array(256), // normalised arc parameter per point
   a: new Float64Array(512), // rebuilt / resampled point buffer
+  cnt: new Float64Array(32), // candidates inside each component
   c: new Float64Array(32), // cross-axis position of each stroke in a stack
   t: new Float64Array(32), // its target position, 0..1 across the stack
   g: new Float64Array(32),
@@ -520,52 +522,93 @@ function shorten(s, amount) {
   }
 }
 
-// ── rhythm of stacked parallel strokes ──────────────────────────────────────
+// ── rhythm of stacked parallel strokes ──────────────────────────
 
 /**
- * Collect stacks of parallel strokes.
- *
- * The grouping heuristic is (innermost component, stroke class, chord within 20°
- * of the axis). Component matters: stroke.group is a true partition of the
- * glyph, so the three 横 of 三 inside 語 form their own stack instead of being
- * re-spaced against the strokes of 言 — spacing *between* components is the
- * layout stage's business, not this one's. The class and angle tests together
- * throw out anything that merely happens to be lying nearby, e.g. the flat top
- * of a ㇕ (class turn) never joins a 横 stack.
+ * A candidate for a stack: live, of the class asked for, and lying within 20°
+ * of the axis — the class alone is not enough, since layout and warp may have
+ * tilted a 横 well past the point where it still reads as one.
  */
-function collectStacks(skel, cls, vertical) {
-  const stacks = new Map()
+function candidates(skel, cls, vertical, out) {
+  out.length = 0
   for (const s of skel.strokes) {
     if (!s.alive || s.n < 2 || s.cls !== cls) continue
     const p = s.pts
-    const n = s.n
-    const dx = p[(n - 1) * 2] - p[0]
-    const dy = p[(n - 1) * 2 + 1] - p[1]
+    const dx = p[(s.n - 1) * 2] - p[0]
+    const dy = p[(s.n - 1) * 2 + 1] - p[1]
     const L = Math.hypot(dx, dy)
     if (!(L > 1e-6)) continue
     if ((vertical ? Math.abs(dx) : Math.abs(dy)) / L > PARALLEL_SIN) continue
-    const key = s.group
-    let a = stacks.get(key)
-    if (!a) stacks.set(key, (a = []))
-    a.push(s)
+    out.push(s)
   }
-  return stacks
+  return out
 }
+
+/**
+ * Bucket the candidates by component. This takes a climb rather than a lookup
+ * because KanjiVG decomposes more finely than the eye does: 三 is three separate
+ * 一 elements, so every stroke's innermost group is a singleton and no stack
+ * would ever form. Each stroke therefore walks its ancestry outward to the first
+ * component holding two or more candidates, and buckets that nest collapse into
+ * the outer one — the smallest component that actually contains a stack.
+ *
+ * Written into `keys`, parallel to `cand`; -1 means the whole glyph.
+ */
+function bucketKeys(skel, cand, keys) {
+  const gs = skel.groups
+  const count = need('cnt', Math.max(1, gs.length))
+  for (let g = 0; g < gs.length; g++) {
+    let c = 0
+    for (const s of cand) if (s.i >= gs[g].from && s.i < gs[g].to) c++
+    count[g] = c
+  }
+  keys.length = cand.length
+  for (let a = 0; a < cand.length; a++) {
+    const anc = cand[a].ancestry
+    let key = -1
+    for (let k = anc.length - 1; k >= 0; k--) {
+      if (count[anc[k]] >= 2) {
+        key = anc[k]
+        break
+      }
+    }
+    keys[a] = key
+  }
+  // ranges from one tree either nest or are disjoint, so widening once is enough
+  for (let a = 0; a < keys.length; a++) {
+    let best = keys[a]
+    for (let b = 0; b < keys.length; b++) {
+      const kb = keys[b]
+      if (kb === best) continue
+      if (kb === -1) best = -1
+      else if (best !== -1 && gs[kb].from <= gs[best].from && gs[kb].to >= gs[best].to) best = kb
+    }
+    keys[a] = best
+  }
+  return keys
+}
+
+/** Extent of a stroke along its own axis, from its chord ends. */
+const spanLo = (s, vertical) => Math.min(s.pts[vertical ? 1 : 0], s.pts[(s.n - 1) * 2 + (vertical ? 1 : 0)])
+const spanHi = (s, vertical) => Math.max(s.pts[vertical ? 1 : 0], s.pts[(s.n - 1) * 2 + (vertical ? 1 : 0)])
 
 /** Cross-axis coordinate of a stroke's chord midpoint — what the stack sorts on. */
 const crossOf = (s, vertical) => (s.pts[vertical ? 0 : 1] + s.pts[(s.n - 1) * 2 + (vertical ? 0 : 1)]) * 0.5
 
 /**
- * Redistribute one stack's cross-axis positions. The two extreme strokes are
- * pinned, so the stack keeps the extent the rest of the glyph was designed
- * around, and only the interior spacing is rewritten.
+ * Redistribute one run's cross-axis positions. The two extreme strokes are
+ * pinned, so the run keeps the extent the rest of the glyph was designed around
+ * and only the interior spacing is rewritten.
+ *
+ * Natural positions are normalised across the run, bent through a power curve
+ * (the rhythm), then blended toward perfectly equal spacing — 間隔を等しく, the
+ * oldest rule in CJK type — or toward seeded random gaps.
  */
-function respace(stack, vertical, rhythm, even, seed) {
-  const m = stack.length
-  stack.sort((a, b) => crossOf(a, vertical) - crossOf(b, vertical))
+function respace(stack, lo, hi, vertical, rhythm, even, seed) {
+  const m = hi - lo
   const c = need('c', m)
   const t = need('t', m)
-  for (let j = 0; j < m; j++) c[j] = crossOf(stack[j], vertical)
+  for (let j = 0; j < m; j++) c[j] = crossOf(stack[lo + j], vertical)
   const span = c[m - 1] - c[0]
   if (!(span > 1e-3)) return
   const pw = Math.exp(-rhythm * RHYTHM_GAIN)
@@ -573,7 +616,7 @@ function respace(stack, vertical, rhythm, even, seed) {
   if (even > 0) {
     for (let j = 0; j < m; j++) t[j] += even * (j / (m - 1) - t[j])
   } else if (even < 0) {
-    // random but strictly positive gaps, so the stack keeps its order
+    // random but strictly positive gaps, so the run keeps its order
     const rnd = mulberry32(seed)
     const g = need('g', m)
     let sum = 0
@@ -591,16 +634,42 @@ function respace(stack, vertical, rhythm, even, seed) {
   for (let j = 0; j < m; j++) {
     const d = c[0] + t[j] * span - c[j]
     if (!Number.isFinite(d) || d === 0) continue
-    const p = stack[j].pts
+    const p = stack[lo + j].pts
     for (let i = vertical ? 0 : 1; i < p.length; i += 2) p[i] += d
   }
 }
 
+const cand = []
+const keys = []
+
 function rhythmPass(skel, cls, vertical, rhythm, even) {
-  const stacks = collectStacks(skel, cls, vertical)
-  for (const [key, stack] of stacks) {
-    if (stack.length < 3) continue // two strokes are both extremes; nothing to redistribute
-    respace(stack, vertical, rhythm, even, (skel.seed + key * 9176 + (vertical ? 733 : 0)) >>> 0)
+  candidates(skel, cls, vertical, cand)
+  if (cand.length < 3) return
+  bucketKeys(skel, cand, keys)
+  for (const key of new Set(keys)) {
+    const bucket = cand.filter((s, a) => keys[a] === key)
+    if (bucket.length < 3) continue
+    bucket.sort((a, b) => crossOf(a, vertical) - crossOf(b, vertical))
+    // The climb above can escalate to the root when a lone 横 owns its component,
+    // which would stack the left half of 語 against its right half. Cut the bucket
+    // into runs that actually overlap along their own axis: strokes standing side
+    // by side are not stacked on top of each other, whatever the tree says.
+    let run = 0
+    for (let j = 1; j <= bucket.length; j++) {
+      let cut = j === bucket.length
+      if (!cut) {
+        const a = bucket[j - 1]
+        const b = bucket[j]
+        const ov = Math.min(spanHi(a, vertical), spanHi(b, vertical)) - Math.max(spanLo(a, vertical), spanLo(b, vertical))
+        const shorter = Math.min(spanHi(a, vertical) - spanLo(a, vertical), spanHi(b, vertical) - spanLo(b, vertical))
+        cut = ov < OVERLAP_MIN * Math.max(shorter, 1e-6)
+      }
+      if (!cut) continue
+      if (j - run >= 3) {
+        respace(bucket, run, j, vertical, rhythm, even, (skel.seed + key * 9176 + run * 31 + (vertical ? 733 : 0)) >>> 0)
+      }
+      run = j
+    }
   }
 }
 
