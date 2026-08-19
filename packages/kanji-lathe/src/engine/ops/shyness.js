@@ -173,9 +173,12 @@ const STEP_CAP = 0.6 // per-pass ceiling, in radii — what keeps the relaxation
 const TOTAL_CAP = 1.75 // cumulative ceiling, in radii, measured from where the stage found the point
 const BIAS_MAX = 0.9 // at |politeness| = 1 the yielding stroke gets 1.9× the push, the senior one 0.1×
 const END_SPAN = 0.3 // share of each end over which "hold the ends" fades out
-const SELF_SPAN = 1.5 // arc separation, in radii, before a stroke counts as a stranger to itself
+const SELF_DETOUR = 1.5 // a stroke is a stranger to itself where the walk between two points is this much longer than the gap: a right-angle turn measures 1.41 and must not count, a U-turn measures 1.57 and must
 const RELAX_PASSES = 2 // Chaikin passes at syRelax = 1
 const MIN_KEEP = 0.3 // never trim a stroke below this share of its length
+const CTRL_SPAN = 4 // control samples across one influence radius (see gather)
+const CTRL_MIN = 4 // …but never fewer than this many per stroke
+const CTRL_STEP_MAX = 8
 const MAX_DIM = 96 // grid resolution ceiling: a glyph flung across the plane gets coarser cells, not a huge table
 const WORK_BUDGET = 3.5e6 // neighbour tests per apply before the scan starts striding
 const SCOPES = { all: 0, 'cross-component': 1, 'cross-radical': 2, 'same-component': 3 }
@@ -185,7 +188,7 @@ const SCOPES = { all: 0, 'cross-component': 1, 'cross-radical': 2, 'same-compone
 // any of them. Every hot pass destructures this into locals first — reading a
 // module-level binding inside the inner loop costs several times the arithmetic.
 const CLOUD_F = ['px', 'py', 'ax', 'ay', 'ddx', 'ddy', 'tgx', 'tgy', 'arc', 'damp', 'sx', 'sy', 'sarc']
-const CLOUD_I = ['sid', 'key', 'cellOf', 'entries', 'ssid', 'skey']
+const CLOUD_I = ['sid', 'key', 'six', 'cellOf', 'entries', 'ssid', 'skey']
 const cloud = {}
 let cloudCap = 0
 function reserve(n) {
@@ -195,6 +198,15 @@ function reserve(n) {
   for (const k of CLOUD_I) cloud[k] = new Int32Array(cloudCap)
 }
 reserve(512)
+
+// Per-stroke bookkeeping: where each stroke's control samples start in the
+// cloud, and how many source samples one control sample stands for.
+const rows = { off: new Int32Array(64), step: new Int32Array(64) }
+function reserveRows(n) {
+  if (rows.off.length >= n) return
+  rows.off = new Int32Array(n)
+  rows.step = new Int32Array(n)
+}
 
 const grid = { W: 1, H: 1, x0: 0, y0: 0, inv: 1, start: new Int32Array(1), cursor: new Int32Array(1) }
 
@@ -223,30 +235,65 @@ function radicalKey(skel, s) {
   return -1
 }
 
+/** Control samples for a stroke of `n` points taken every `st` points. */
+const ctrlCount = (n, st) => Math.ceil((n - 1) / st) + 1
+
 /**
- * Copy every live stroke into the flat cloud with its per-point constants. The
- * scope collapses to a single integer key per point plus "must match / must
- * differ", which keeps the pair test in the inner loop down to one compare.
+ * Copy every live stroke into the flat cloud, with its per-point constants.
+ *
+ * Not every sample point goes in. The repulsion field varies over the scale of
+ * the influence radius, while a stroke is sampled many times finer than that,
+ * so the cloud takes one CONTROL SAMPLE every `target` of arc length and the
+ * displacement is interpolated back onto the rest afterwards. Pair work is
+ * quadratic in the cloud size, so this is most of what makes the operator
+ * affordable — and it costs nothing visually, since a field sampled four times
+ * per radius has no detail left to lose. `target` of 0 asks for every point,
+ * which is what the tip measurement wants.
+ *
+ * The scope collapses to a single integer key per point plus "must match /
+ * must differ", which keeps the pair test in the inner loop to one compare.
  */
-function gather(skel, live, off, preserve, mode) {
+function gather(skel, live, preserve, mode, target) {
+  const { off, step } = rows
   let N = 0
-  for (let k = 0; k < live.length; k++) N += live[k].n
+  for (let k = 0; k < live.length; k++) {
+    const s = live[k]
+    const n = s.n
+    const p = s.pts
+    let L = 0
+    for (let i = 1; i < n; i++) {
+      const dx = p[i * 2] - p[i * 2 - 2]
+      const dy = p[i * 2 + 1] - p[i * 2 - 1]
+      L += Math.sqrt(dx * dx + dy * dy)
+    }
+    const spacing = L / (n - 1)
+    let st = target > 0 && spacing > 1e-9 ? Math.floor(target / spacing) : 1
+    if (st > CTRL_STEP_MAX) st = CTRL_STEP_MAX
+    const cap = Math.floor((n - 1) / (CTRL_MIN - 1))
+    if (st > cap) st = cap
+    if (st < 1) st = 1
+    step[k] = st
+    off[k] = N
+    N += ctrlCount(n, st)
+  }
+  off[live.length] = N
   if (!N) return 0
   reserve(N)
-  const { px, py, ax, ay, arc, damp, sid, key } = cloud
-  let o = 0
+  const { px, py, ax, ay, arc, damp, sid, key, six } = cloud
   for (let k = 0; k < live.length; k++) {
     const s = live[k]
     const n = s.n
     const p = s.pts
     const kk = mode === 2 ? radicalKey(skel, s) : componentKey(s)
-    off[k] = o
+    const m = ctrlCount(n, step[k])
+    const span = (n - 1) / (m - 1)
+    let g = off[k]
     let acc = 0
-    for (let i = 0; i < n; i++) {
-      const g = o + i
+    for (let c = 0; c < m; c++) {
+      const i = c === m - 1 ? n - 1 : Math.round(c * span) // both tips are always control samples
       const x = fin(p[i * 2], s.ref[i * 2])
       const y = fin(p[i * 2 + 1], s.ref[i * 2 + 1])
-      if (i > 0) {
+      if (g > off[k]) {
         const dx = x - px[g - 1]
         const dy = y - py[g - 1]
         acc += Math.sqrt(dx * dx + dy * dy)
@@ -258,14 +305,56 @@ function gather(skel, live, off, preserve, mode) {
       arc[g] = acc
       sid[g] = s.i
       key[g] = kk
+      six[g] = i
       const u = i / (n - 1)
       const e = (u < 1 - u ? u : 1 - u) / END_SPAN
       damp[g] = 1 - preserve * (1 - smoothstep(e < 1 ? e : 1))
+      g++
     }
-    o += n
   }
-  off[live.length] = o
   return N
+}
+
+/**
+ * Give every source point the displacement its control samples earned, linearly
+ * along the arc between them. The relaxation only ever moved control samples,
+ * so this is what actually edits the skeleton.
+ */
+function spread(live) {
+  const { px, py, ax, ay, six } = cloud
+  const { off } = rows
+  for (let k = 0; k < live.length; k++) {
+    const p = live[k].pts
+    const o = off[k]
+    const m = off[k + 1] - o
+    let ia = six[o]
+    let dxa = px[o] - ax[o]
+    let dya = py[o] - ay[o]
+    p[ia * 2] += dxa
+    p[ia * 2 + 1] += dya
+    for (let c = 1; c < m; c++) {
+      const ib = six[o + c]
+      const dxb = px[o + c] - ax[o + c]
+      const dyb = py[o + c] - ay[o + c]
+      const inv = 1 / Math.max(1, ib - ia)
+      for (let i = ia + 1; i <= ib; i++) {
+        const t = (i - ia) * inv
+        p[i * 2] += dxa + (dxb - dxa) * t
+        p[i * 2 + 1] += dya + (dyb - dya) * t
+      }
+      ia = ib
+      dxa = dxb
+      dya = dyb
+    }
+  }
+}
+
+/** Did the relaxation actually move this stroke? */
+function stirred(k) {
+  const { px, py, ax, ay } = cloud
+  const { off } = rows
+  for (let g = off[k]; g < off[k + 1]; g++) if (px[g] !== ax[g] || py[g] !== ay[g]) return true
+  return false
 }
 
 /**
@@ -336,11 +425,12 @@ function buildGrid(N, cell) {
 }
 
 /** Unit tangent at every point, from its neighbours inside the same stroke. */
-function tangentPass(live, off) {
+function tangentPass(live) {
   const { px, py, tgx, tgy } = cloud
+  const { off } = rows
   for (let k = 0; k < live.length; k++) {
-    const n = live[k].n
     const o = off[k]
+    const n = off[k + 1] - o
     for (let i = 0; i < n; i++) {
       const a = o + (i > 0 ? i - 1 : 0)
       const b = o + (i < n - 1 ? i + 1 : n - 1)
@@ -382,7 +472,7 @@ function scatter(R, gap, want, bias, self, stride, iter) {
   const invR = 1 / R
   const far = R > gap ? R : gap
   const q2 = far * far
-  const selfMin = SELF_SPAN * R
+  const selfDetour = SELF_DETOUR * SELF_DETOUR
   const biasLate = 1 + bias * BIAS_MAX // this point was written after the one pushing it
   const biasEarly = 1 - bias * BIAS_MAX
   const wantSame = want === 2
@@ -417,11 +507,13 @@ function scatter(R, gap, want, bias, self, stride, iter) {
             const sj = ssid[e]
             let scale
             if (sj === si) {
-              // the point's own stroke, including the point itself: strangers
-              // only once they are far enough apart along the arc
+              // The point's own stroke, including the point itself. Adjacent
+              // samples are close in space *because* they are close along the
+              // stroke; only where the arc between them detours far further
+              // than the gap has the stroke curled back on itself.
               if (self <= 0) continue
               const da = ai - sarc[e]
-              if ((da < 0 ? -da : da) < selfMin) continue
+              if (da * da <= selfDetour * d2) continue
               scale = self
             } else {
               if (want !== 0 && (ki === skey[e]) !== wantSame) continue
@@ -556,7 +648,8 @@ function crowded(i, reach2, want) {
  * moves, which makes this idempotent by construction: the same tip measures the
  * same distance next time, and t0/t1 only ever tighten.
  */
-function trimEnds(live, off, allow, reach, want) {
+function trimEnds(live, allow, reach, want) {
+  const { off } = rows
   const reach2 = reach * reach
   for (let k = 0; k < live.length; k++) {
     const s = live[k]
@@ -620,18 +713,18 @@ export function apply(skel, P, ctx) {
   const live = []
   for (const s of skel.strokes) if (s.alive && s.n >= 2) live.push(s)
   // a lone stroke has nobody to be shy of, unless it is shy of itself
-  if (live.length < 2 && !(live.length === 1 && self > 0)) return
+  if (!live.length || (live.length === 1 && self <= 0)) return
 
-  const off = new Int32Array(live.length + 1)
-  const N = gather(skel, live, off, preserve, mode)
+  reserveRows(live.length + 1)
+  const far = Math.max(R, gap)
+  const N = gather(skel, live, preserve, mode, far / CTRL_SPAN)
   if (!N) return
 
-  const cell = Math.max(R, gap, 1e-3)
-  const stepCap = STEP_CAP * Math.max(R, gap)
-  const totalCap = TOTAL_CAP * Math.max(R, gap)
+  const stepCap = STEP_CAP * far
+  const totalCap = TOTAL_CAP * far
   let stride = 1
   for (let it = 0; it < iters; it++) {
-    buildGrid(N, cell)
+    buildGrid(N, far)
     if (it === 0) {
       // Neighbour work grows with the square of the radius. Past the budget the
       // scan samples every stride-th point instead: at a radius that wide the
@@ -639,37 +732,26 @@ export function apply(skel, P, ctx) {
       const est = ((N * N) / Math.max(1, grid.W * grid.H)) * 9 * iters
       stride = est > WORK_BUDGET ? Math.ceil(est / WORK_BUDGET) : 1
     }
-    tangentPass(live, off)
+    tangentPass(live)
     scatter(R, gap, want, bias, self, stride, it)
     integrate(N, perp, strength, stepCap, totalCap)
   }
 
-  const px = cloud.px
-  const py = cloud.py
+  spread(live)
   for (let k = 0; k < live.length; k++) {
     const s = live[k]
-    const o = off[k]
-    for (let i = 0; i < s.n; i++) {
-      s.pts[i * 2] = px[o + i]
-      s.pts[i * 2 + 1] = py[o + i]
-    }
-    if (relax > 0) resmooth(s, relax)
+    // a stroke nobody crowded keeps the shape it arrived with, kinks and all
+    if (relax > 0 && stirred(k)) resmooth(s, relax)
     // one non-finite coordinate would poison every later stage
     for (let i = 0; i < s.pts.length; i++) if (!Number.isFinite(s.pts[i])) s.pts[i] = s.ref[i]
   }
 
   if (allow > 0) {
-    // re-read the smoothed points, then measure every tip against the cloud
-    for (let k = 0; k < live.length; k++) {
-      const s = live[k]
-      const o = off[k]
-      for (let i = 0; i < s.n; i++) {
-        px[o + i] = s.pts[i * 2]
-        py[o + i] = s.pts[i * 2 + 1]
-      }
-    }
-    buildGrid(N, reach)
-    trimEnds(live, off, allow, reach, want)
+    // Tips are measured against every point, not just the control samples: a
+    // stroke passing between two of them is exactly what a tip must retract from.
+    const full = gather(skel, live, preserve, mode, 0)
+    buildGrid(full, reach)
+    trimEnds(live, allow, reach, want)
   }
 
   recomputeBounds(skel)
