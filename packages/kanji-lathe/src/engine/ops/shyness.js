@@ -9,8 +9,8 @@
 // crown leans out of shade. The hard one is a projection that separates any
 // pair closer than the target clearance, whatever the soft force thinks. Both
 // are Jacobi-relaxed: a pass accumulates into a second buffer and is applied
-// only when the pass is over, so nothing depends on the order strokes happen to
-// be visited in, and the result is identical every render.
+// only once the pass is over, so nothing depends on the order the strokes
+// happen to be visited in, and the result is identical every render.
 import { clamp, chaikin, smoothstep } from '../../geom/path.js'
 import { recomputeBounds, recomputeLengths, EM } from '../skeleton.js'
 
@@ -76,7 +76,7 @@ export const params = [
       { value: 'same-component', label: 'Inside one component only' },
     ],
     when: (P) => P.syStrength > 0,
-    hint: 'Which pairs of strokes see each other. Restricting it to component boundaries opens the glyph at its joints while each component stays internally tight — or the exact opposite.',
+    hint: 'Which pairs of strokes see each other. Restrict it to component boundaries and the glyph opens at its joints while each component stays internally tight — or ask for the exact opposite.',
   },
   {
     id: 'syOrderBias',
@@ -171,68 +171,40 @@ const SOFT_STEP = 0.5 // share of the radius the softest force may push in one p
 const HARD_STEP = 0.8 // under-relaxed projection: overshooting one constraint breaks the next
 const STEP_CAP = 0.6 // per-pass ceiling, in radii — what keeps the relaxation from ringing
 const TOTAL_CAP = 1.75 // cumulative ceiling, in radii, measured from where the stage found the point
-const BIAS_MAX = 0.9 // at |politeness| = 1 the yielding stroke gets 1.9x the push, the senior one 0.1x
+const BIAS_MAX = 0.9 // at |politeness| = 1 the yielding stroke gets 1.9× the push, the senior one 0.1×
 const END_SPAN = 0.3 // share of each end over which "hold the ends" fades out
-const SELF_SPAN = 1.5 // arc separation, in radii, before a stroke is a stranger to itself
+const SELF_SPAN = 1.5 // arc separation, in radii, before a stroke counts as a stranger to itself
 const RELAX_PASSES = 2 // Chaikin passes at syRelax = 1
 const MIN_KEEP = 0.3 // never trim a stroke below this share of its length
 const MAX_DIM = 96 // grid resolution ceiling: a glyph flung across the plane gets coarser cells, not a huge table
 const WORK_BUDGET = 3.5e6 // neighbour tests per apply before the scan starts striding
 const SCOPES = { all: 0, 'cross-component': 1, 'cross-radical': 2, 'same-component': 3 }
 
-// Scratch, grown on demand and reused: a thumbnail grid renders a thousand
-// glyphs a second and must not allocate for any of them.
-const bufF = {
-  px: new Float64Array(1024),
-  py: new Float64Array(1024),
-  ax: new Float64Array(1024),
-  ay: new Float64Array(1024),
-  ddx: new Float64Array(1024),
-  ddy: new Float64Array(1024),
-  tgx: new Float64Array(1024),
-  tgy: new Float64Array(1024),
-  arc: new Float64Array(1024),
-  damp: new Float64Array(1024),
+// The point cloud as one struct of arrays, grown in a single go and reused: a
+// thumbnail grid renders a thousand glyphs a second and must not allocate for
+// any of them. Every hot pass destructures this into locals first — reading a
+// module-level binding inside the inner loop costs several times the arithmetic.
+const CLOUD_F = ['px', 'py', 'ax', 'ay', 'ddx', 'ddy', 'tgx', 'tgy', 'arc', 'damp', 'sx', 'sy', 'sarc']
+const CLOUD_I = ['sid', 'key', 'cellOf', 'entries', 'ssid', 'skey']
+const cloud = {}
+let cloudCap = 0
+function reserve(n) {
+  if (n <= cloudCap) return
+  cloudCap = Math.max(n, cloudCap * 2, 512)
+  for (const k of CLOUD_F) cloud[k] = new Float64Array(cloudCap)
+  for (const k of CLOUD_I) cloud[k] = new Int32Array(cloudCap)
 }
-const bufI = {
-  sid: new Int32Array(1024),
-  comp: new Int32Array(1024),
-  rad: new Int32Array(1024),
-  cellOf: new Int32Array(1024),
-  entries: new Int32Array(1024),
-  start: new Int32Array(1024),
-  cursor: new Int32Array(1024),
-  off: new Int32Array(64),
-}
-const needF = (k, n) => (bufF[k].length < n ? (bufF[k] = new Float64Array(n)) : bufF[k])
-const needI = (k, n) => (bufI[k].length < n ? (bufI[k] = new Int32Array(n)) : bufI[k])
+reserve(512)
+
+const grid = { W: 1, H: 1, x0: 0, y0: 0, inv: 1, start: new Int32Array(1), cursor: new Int32Array(1) }
+
 const rd = (v, d, lo, hi) => clamp(Number.isFinite(v) ? v : d, lo, hi)
 const fin = (v, d) => (Number.isFinite(v) ? v : Number.isFinite(d) ? d : 0)
 
-// The point cloud, flat and stroke-contiguous. Module-level so the passes can
-// share it without threading a dozen arguments through the hot loops.
-let px
-let py
-let ax // where this stage found each point — the cumulative clamp measures from here
-let ay
-let ddx // Jacobi accumulator: written during a pass, read after it
-let ddy
-let tgx
-let tgy
-let arc
-let damp
-let sid
-let comp
-let rad
-let cellOf
-let entries
-let gstart
-const grid = { W: 1, H: 1, x0: 0, y0: 0, inv: 1 }
-
 /**
- * The component a stroke belongs to for shyness purposes: the outermost group
- * below the whole-character root. KanjiVG nests far finer than the eye reads,
- * and it is the top-level split (氵 against 青) that a reader sees as two trees.
+ * The component a stroke belongs to, for shyness purposes: the outermost group
+ * below the whole-character root. KanjiVG decomposes far finer than the eye
+ * reads, and it is the top-level split (氵 against 青) that looks like two trees.
  */
 function componentKey(s) {
   const a = s.ancestry
@@ -240,7 +212,7 @@ function componentKey(s) {
   return a.length > 1 ? a[1] : a[0]
 }
 
-/** Outermost ancestor marked as the radical, or −1 for everything outside it. */
+/** Outermost ancestor marked as the radical, −1 for everything outside it. */
 function radicalKey(skel, s) {
   const a = s.ancestry
   if (!a) return -1
@@ -251,56 +223,41 @@ function radicalKey(skel, s) {
   return -1
 }
 
-/** Does the scope let these two points push each other? Callers exclude self-pairs. */
-function scoped(mode, i, j) {
-  if (mode === 1) return comp[i] !== comp[j]
-  if (mode === 2) return rad[i] !== rad[j]
-  if (mode === 3) return comp[i] === comp[j]
-  return true
-}
-
-/** Copy every live stroke into the flat cloud, with its per-point constants. */
-function gather(skel, live, off, preserve) {
+/**
+ * Copy every live stroke into the flat cloud with its per-point constants. The
+ * scope collapses to a single integer key per point plus "must match / must
+ * differ", which keeps the pair test in the inner loop down to one compare.
+ */
+function gather(skel, live, off, preserve, mode) {
   let N = 0
-  for (const s of skel.strokes) if (s.alive && s.n >= 2) N += s.n
+  for (let k = 0; k < live.length; k++) N += live[k].n
   if (!N) return 0
-  px = needF('px', N)
-  py = needF('py', N)
-  ax = needF('ax', N)
-  ay = needF('ay', N)
-  ddx = needF('ddx', N)
-  ddy = needF('ddy', N)
-  tgx = needF('tgx', N)
-  tgy = needF('tgy', N)
-  arc = needF('arc', N)
-  damp = needF('damp', N)
-  sid = needI('sid', N)
-  comp = needI('comp', N)
-  rad = needI('rad', N)
-  cellOf = needI('cellOf', N)
-  entries = needI('entries', N)
+  reserve(N)
+  const { px, py, ax, ay, arc, damp, sid, key } = cloud
   let o = 0
   for (let k = 0; k < live.length; k++) {
     const s = live[k]
     const n = s.n
     const p = s.pts
-    const c = componentKey(s)
-    const r = radicalKey(skel, s)
+    const kk = mode === 2 ? radicalKey(skel, s) : componentKey(s)
     off[k] = o
     let acc = 0
     for (let i = 0; i < n; i++) {
       const g = o + i
       const x = fin(p[i * 2], s.ref[i * 2])
       const y = fin(p[i * 2 + 1], s.ref[i * 2 + 1])
-      if (i > 0) acc += Math.hypot(x - px[g - 1], y - py[g - 1])
+      if (i > 0) {
+        const dx = x - px[g - 1]
+        const dy = y - py[g - 1]
+        acc += Math.sqrt(dx * dx + dy * dy)
+      }
       px[g] = x
       py[g] = y
       ax[g] = x
       ay[g] = y
       arc[g] = acc
       sid[g] = s.i
-      comp[g] = c
-      rad[g] = r
+      key[g] = kk
       const u = i / (n - 1)
       const e = (u < 1 - u ? u : 1 - u) / END_SPAN
       damp[g] = 1 - preserve * (1 - smoothstep(e < 1 ? e : 1))
@@ -314,11 +271,17 @@ function gather(skel, live, off, preserve) {
 /**
  * Uniform bucket grid over the cloud, rebuilt from scratch every pass — points
  * move, and a stale cell assignment silently loses neighbours. The rebuild is a
- * counting sort: two linear passes and no allocation, far cheaper than the
+ * counting sort: two linear passes, no allocation, and far cheaper than the
  * neighbour scans it saves. Cells are at least `cell` across, so the 3×3
- * neighbourhood of a point always contains everything within `cell` of it.
+ * neighbourhood of a point always holds everything within `cell` of it.
+ *
+ * The placement pass also writes each point's position and tags into grid
+ * order (the `s*` arrays). That copy pays for itself many times over: the
+ * neighbour scan then walks memory forwards instead of chasing an index
+ * through the unsorted cloud, which was most of this operator's cost.
  */
 function buildGrid(N, cell) {
+  const { px, py, sid, key, arc, cellOf, entries, sx, sy, ssid, skey, sarc } = cloud
   let x0 = Infinity
   let y0 = Infinity
   let x1 = -Infinity
@@ -338,8 +301,12 @@ function buildGrid(N, cell) {
   const W = Math.max(1, Math.min(MAX_DIM, Math.floor(spanX * inv) + 1))
   const H = Math.max(1, Math.min(MAX_DIM, Math.floor(spanY * inv) + 1))
   const cells = W * H
-  const start = needI('start', cells + 1)
-  const cursor = needI('cursor', cells)
+  if (grid.start.length < cells + 1) {
+    grid.start = new Int32Array(cells + 1)
+    grid.cursor = new Int32Array(cells + 1)
+  }
+  const start = grid.start
+  const cursor = grid.cursor
   start.fill(0, 0, cells + 1)
   for (let k = 0; k < N; k++) {
     const ix = clamp(Math.floor((px[k] - x0) * inv), 0, W - 1)
@@ -348,10 +315,19 @@ function buildGrid(N, cell) {
     cellOf[k] = g
     start[g + 1]++
   }
-  for (let g = 0; g < cells; g++) start[g + 1] += start[g]
-  for (let g = 0; g < cells; g++) cursor[g] = start[g]
-  for (let k = 0; k < N; k++) entries[cursor[cellOf[k]]++] = k
-  gstart = start
+  for (let g = 0; g < cells; g++) {
+    start[g + 1] += start[g]
+    cursor[g] = start[g]
+  }
+  for (let k = 0; k < N; k++) {
+    const e = cursor[cellOf[k]]++
+    entries[e] = k
+    sx[e] = px[k]
+    sy[e] = py[k]
+    ssid[e] = sid[k]
+    skey[e] = key[k]
+    sarc[e] = arc[k]
+  }
   grid.W = W
   grid.H = H
   grid.x0 = x0
@@ -361,6 +337,7 @@ function buildGrid(N, cell) {
 
 /** Unit tangent at every point, from its neighbours inside the same stroke. */
 function tangentPass(live, off) {
+  const { px, py, tgx, tgy } = cloud
   for (let k = 0; k < live.length; k++) {
     const n = live[k].n
     const o = off[k]
@@ -369,7 +346,7 @@ function tangentPass(live, off) {
       const b = o + (i < n - 1 ? i + 1 : n - 1)
       let dx = px[b] - px[a]
       let dy = py[b] - py[a]
-      const L = Math.hypot(dx, dy)
+      const L = Math.sqrt(dx * dx + dy * dy)
       if (L > 1e-9) {
         dx /= L
         dy /= L
@@ -386,112 +363,129 @@ function tangentPass(live, off) {
 /**
  * One accumulation pass: for every point, the repulsion from foreign points
  * within the radius and the projection out of the enforced clearance, both
- * written to the Jacobi buffer and neither applied yet.
+ * written to the Jacobi buffer and neither applied yet. Points are visited cell
+ * by cell, so the three row-runs that cover a 3×3 neighbourhood are found once
+ * per cell rather than once per point.
  *
  * The soft force takes its DIRECTION from the weighted sum of neighbours and
  * its MAGNITUDE from the single closest one. Summing both would let a thicket
- * of far neighbours out-shout one stroke pressing against this point, and would
- * make crowded glyphs move quadratically further than sparse ones.
+ * of distant neighbours out-shout the one stroke actually pressing on this
+ * point, and would make crowded glyphs move quadratically further than sparse
+ * ones — the opposite of a canopy, which opens by the same width everywhere.
  */
-function scatter(N, R, gap, mode, bias, self, stride, iter) {
+function scatter(R, gap, want, bias, self, stride, iter) {
+  const { sx, sy, ssid, skey, sarc, entries, ddx, ddy, tgx, tgy } = cloud
+  const start = grid.start
   const W = grid.W
   const H = grid.H
   const R2 = R * R
   const invR = 1 / R
-  const q2 = Math.max(R, gap) ** 2
+  const far = R > gap ? R : gap
+  const q2 = far * far
   const selfMin = SELF_SPAN * R
-  for (let i = 0; i < N; i++) {
-    const g = cellOf[i]
-    const iy = (g / W) | 0
-    const ix = g - iy * W
-    const xi = px[i]
-    const yi = py[i]
-    const si = sid[i]
-    const cy0 = iy > 0 ? iy - 1 : 0
-    const cy1 = iy < H - 1 ? iy + 1 : H - 1
-    const cx0 = ix > 0 ? ix - 1 : 0
-    const cx1 = ix < W - 1 ? ix + 1 : W - 1
-    let fx = 0
-    let fy = 0
-    let wMax = 0
-    let gx = 0
-    let gy = 0
-    for (let cy = cy0; cy <= cy1; cy++) {
-      const row = cy * W
-      // one row of cells is one contiguous run of entries, so three runs cover
-      // the whole 3×3 neighbourhood
-      const e1 = gstart[row + cx1 + 1]
-      for (let e = gstart[row + cx0] + ((iter + i) % stride); e < e1; e += stride) {
-        const j = entries[e]
-        const sj = sid[j]
-        let scale = 1
-        if (sj === si) {
-          if (self <= 0) continue
-          const da = arc[i] - arc[j]
-          if ((da < 0 ? -da : da) < selfMin) continue
-          scale = self
-        } else {
-          if (mode !== 0 && !scoped(mode, i, j)) continue
-          if (bias !== 0) scale = 1 + bias * (si > sj ? BIAS_MAX : -BIAS_MAX)
+  const biasLate = 1 + bias * BIAS_MAX // this point was written after the one pushing it
+  const biasEarly = 1 - bias * BIAS_MAX
+  const wantSame = want === 2
+  for (let iy = 0; iy < H; iy++) {
+    const row0 = (iy > 0 ? iy - 1 : 0) * W
+    const row1 = (iy < H - 1 ? iy + 1 : H - 1) * W
+    for (let ix = 0; ix < W; ix++) {
+      const q0 = start[iy * W + ix]
+      const q1 = start[iy * W + ix + 1]
+      if (q0 === q1) continue
+      const cx0 = ix > 0 ? ix - 1 : 0
+      const cx1 = (ix < W - 1 ? ix + 1 : W - 1) + 1
+      for (let q = q0; q < q1; q++) {
+        const xi = sx[q]
+        const yi = sy[q]
+        const si = ssid[q]
+        const ki = skey[q]
+        const ai = sarc[q]
+        const phase = stride > 1 ? (iter + q) % stride : 0
+        let fx = 0
+        let fy = 0
+        let wMax = 0
+        let gx = 0
+        let gy = 0
+        for (let row = row0; row <= row1; row += W) {
+          const e1 = start[row + cx1]
+          for (let e = start[row + cx0] + phase; e < e1; e += stride) {
+            let vx = xi - sx[e]
+            let vy = yi - sy[e]
+            const d2 = vx * vx + vy * vy
+            if (d2 >= q2) continue
+            const sj = ssid[e]
+            let scale
+            if (sj === si) {
+              // the point's own stroke, including the point itself: strangers
+              // only once they are far enough apart along the arc
+              if (self <= 0) continue
+              const da = ai - sarc[e]
+              if ((da < 0 ? -da : da) < selfMin) continue
+              scale = self
+            } else {
+              if (want !== 0 && (ki === skey[e]) !== wantSame) continue
+              scale = sj < si ? biasLate : biasEarly
+            }
+            let d = Math.sqrt(d2)
+            if (d > 1e-6) {
+              const invd = 1 / d
+              vx *= invd
+              vy *= invd
+            } else {
+              // exactly coincident: no direction to be had, so leave along the
+              // normal, signed by index so the two points agree to disagree
+              const o = entries[q]
+              const sgn = q > e ? 1 : -1
+              vx = -tgy[o] * sgn
+              vy = tgx[o] * sgn
+              d = 0
+            }
+            if (d2 < R2) {
+              const u = 1 - d * invR
+              const w = u * u * scale
+              fx += w * vx
+              fy += w * vy
+              if (w > wMax) wMax = w
+            }
+            if (d < gap) {
+              const push = (gap - d) * 0.5 * scale
+              gx += push * vx
+              gy += push * vy
+            }
+          }
         }
-        let vx = xi - px[j]
-        let vy = yi - py[j]
-        const d2 = vx * vx + vy * vy
-        if (d2 >= q2) continue
-        let d = Math.sqrt(d2)
-        if (d > 1e-6) {
-          const invd = 1 / d
-          vx *= invd
-          vy *= invd
-        } else {
-          // exactly coincident: no direction to be had, so leave along the
-          // normal, signed by index so both points agree to disagree
-          const s = i > j ? 1 : -1
-          vx = -tgy[i] * s
-          vy = tgx[i] * s
-          d = 0
+        let mx = 0
+        let my = 0
+        if (wMax > 0) {
+          const L = Math.sqrt(fx * fx + fy * fy)
+          if (L > 1e-12) {
+            const mag = (SOFT_STEP * R * wMax) / L
+            mx = fx * mag
+            my = fy * mag
+          }
         }
-        if (d2 < R2) {
-          const u = 1 - d * invR
-          const w = u * u * scale
-          fx += w * vx
-          fy += w * vy
-          if (w > wMax) wMax = w
+        if (gap > 0) {
+          const L = Math.sqrt(gx * gx + gy * gy)
+          if (L > gap) {
+            const k = gap / L
+            gx *= k
+            gy *= k
+          }
+          mx += gx * HARD_STEP
+          my += gy * HARD_STEP
         }
-        if (d < gap) {
-          const push = (gap - d) * 0.5 * scale
-          gx += push * vx
-          gy += push * vy
-        }
+        const o = entries[q]
+        ddx[o] = mx
+        ddy[o] = my
       }
     }
-    let mx = 0
-    let my = 0
-    if (wMax > 0) {
-      const L = Math.hypot(fx, fy)
-      if (L > 1e-12) {
-        const mag = (SOFT_STEP * R * wMax) / L
-        mx = fx * mag
-        my = fy * mag
-      }
-    }
-    if (gap > 0) {
-      const L = Math.hypot(gx, gy)
-      if (L > gap) {
-        const k = gap / L
-        gx *= k
-        gy *= k
-      }
-      mx += gx * HARD_STEP
-      my += gy * HARD_STEP
-    }
-    ddx[i] = mx
-    ddy[i] = my
   }
 }
 
 /** Apply the accumulated pass: perpendicular constraint, end damping, clamps. */
 function integrate(N, perp, strength, stepCap, totalCap) {
+  const { px, py, ax, ay, ddx, ddy, tgx, tgy, damp } = cloud
   for (let i = 0; i < N; i++) {
     let mx = ddx[i] * strength
     let my = ddy[i] * strength
@@ -503,7 +497,7 @@ function integrate(N, perp, strength, stepCap, totalCap) {
     const k = damp[i]
     mx *= k
     my *= k
-    const L = Math.hypot(mx, my)
+    const L = Math.sqrt(mx * mx + my * my)
     if (L > stepCap) {
       const s = stepCap / L
       mx *= s
@@ -513,7 +507,7 @@ function integrate(N, perp, strength, stepCap, totalCap) {
     let y = py[i] + my
     const ex = x - ax[i]
     const ey = y - ay[i]
-    const eL = Math.hypot(ex, ey)
+    const eL = Math.sqrt(ex * ex + ey * ey)
     if (eL > totalCap) {
       const s = totalCap / eL
       x = ax[i] + ex * s
@@ -527,7 +521,9 @@ function integrate(N, perp, strength, stepCap, totalCap) {
 }
 
 /** Is anything foreign within `reach` of this point? */
-function crowded(i, reach2, mode) {
+function crowded(i, reach2, want) {
+  const { px, py, sid, key, cellOf, sx, sy, ssid, skey } = cloud
+  const start = grid.start
   const W = grid.W
   const g = cellOf[i]
   const iy = (g / W) | 0
@@ -535,19 +531,19 @@ function crowded(i, reach2, mode) {
   const xi = px[i]
   const yi = py[i]
   const si = sid[i]
-  const cy0 = iy > 0 ? iy - 1 : 0
-  const cy1 = iy < grid.H - 1 ? iy + 1 : grid.H - 1
+  const ki = key[i]
+  const wantSame = want === 2
+  const row0 = (iy > 0 ? iy - 1 : 0) * W
+  const row1 = (iy < grid.H - 1 ? iy + 1 : grid.H - 1) * W
   const cx0 = ix > 0 ? ix - 1 : 0
-  const cx1 = ix < W - 1 ? ix + 1 : W - 1
-  for (let cy = cy0; cy <= cy1; cy++) {
-    const row = cy * W
-    const e1 = gstart[row + cx1 + 1]
-    for (let e = gstart[row + cx0]; e < e1; e++) {
-      const j = entries[e]
-      if (sid[j] === si) continue
-      if (mode !== 0 && !scoped(mode, i, j)) continue
-      const vx = xi - px[j]
-      const vy = yi - py[j]
+  const cx1 = (ix < W - 1 ? ix + 1 : W - 1) + 1
+  for (let row = row0; row <= row1; row += W) {
+    const e1 = start[row + cx1]
+    for (let e = start[row + cx0]; e < e1; e++) {
+      if (ssid[e] === si) continue
+      if (want !== 0 && (ki === skey[e]) !== wantSame) continue
+      const vx = xi - sx[e]
+      const vy = yi - sy[e]
       if (vx * vx + vy * vy < reach2) return true
     }
   }
@@ -555,12 +551,12 @@ function crowded(i, reach2, mode) {
 }
 
 /**
- * The canopy gap. Walk in from each tip until the sample has its clearance, and
- * trim the stroke there — up to the allowance and no further. Points are not
- * moved, so this is idempotent by construction: the same tip measures the same
- * distance next time, and t0/t1 only ever tighten.
+ * The canopy gap. Walk in from each tip until the sample has its clearance and
+ * trim the stroke there — up to the allowance and never further. No point
+ * moves, which makes this idempotent by construction: the same tip measures the
+ * same distance next time, and t0/t1 only ever tighten.
  */
-function trimEnds(live, off, allow, reach, mode) {
+function trimEnds(live, off, allow, reach, want) {
   const reach2 = reach * reach
   for (let k = 0; k < live.length; k++) {
     const s = live[k]
@@ -569,15 +565,15 @@ function trimEnds(live, off, allow, reach, mode) {
     const maxSteps = Math.floor(allow * (n - 1))
     if (maxSteps < 1) continue
     let a0 = 0
-    while (a0 < maxSteps && crowded(o + a0, reach2, mode)) a0++
+    while (a0 < maxSteps && crowded(o + a0, reach2, want)) a0++
     let a1 = 0
-    while (a1 < maxSteps && crowded(o + n - 1 - a1, reach2, mode)) a1++
+    while (a1 < maxSteps && crowded(o + n - 1 - a1, reach2, want)) a1++
     const t0 = a0 / (n - 1)
     const t1 = 1 - a1 / (n - 1)
     if (t0 > s.t0) s.t0 = t0
     if (t1 < s.t1) s.t1 = t1
     if (s.t1 - s.t0 < MIN_KEEP) {
-      // a stroke crowded at both ends would otherwise vanish entirely
+      // a stroke crowded at both ends would otherwise retract to nothing
       const c = clamp((s.t0 + s.t1) * 0.5, MIN_KEEP / 2, 1 - MIN_KEEP / 2)
       s.t0 = c - MIN_KEEP / 2
       s.t1 = c + MIN_KEEP / 2
@@ -616,16 +612,18 @@ export function apply(skel, P, ctx) {
   const allow = rd(P.syTrim, 0.12, 0, 0.35) * strength
   const reach = rd(P.syTrimReach, 0.07, 0.02, 0.2) * em
   const mode = SCOPES[P.syScope] ?? 0
+  // the pair test only ever asks whether two keys match; the scope decides which answer passes
+  const want = mode === 0 ? 0 : mode === 3 ? 2 : 1
   let iters = Math.round(rd(P.syIterations, 6, 1, 24))
   if (quality < 1) iters = Math.max(1, Math.ceil(iters * quality))
 
   const live = []
   for (const s of skel.strokes) if (s.alive && s.n >= 2) live.push(s)
-  // one stroke has nobody to be shy of, and self-avoidance still needs a stroke
+  // a lone stroke has nobody to be shy of, unless it is shy of itself
   if (live.length < 2 && !(live.length === 1 && self > 0)) return
 
-  const off = needI('off', live.length + 1)
-  const N = gather(skel, live, off, preserve)
+  const off = new Int32Array(live.length + 1)
+  const N = gather(skel, live, off, preserve, mode)
   if (!N) return
 
   const cell = Math.max(R, gap, 1e-3)
@@ -636,16 +634,18 @@ export function apply(skel, P, ctx) {
     buildGrid(N, cell)
     if (it === 0) {
       // Neighbour work grows with the square of the radius. Past the budget the
-      // scan samples every stride-th point instead: at settings that wide the
-      // glyph is a cloud and a sampled direction is indistinguishable.
+      // scan samples every stride-th point instead: at a radius that wide the
+      // glyph is a cloud, and a sampled push direction is indistinguishable.
       const est = ((N * N) / Math.max(1, grid.W * grid.H)) * 9 * iters
       stride = est > WORK_BUDGET ? Math.ceil(est / WORK_BUDGET) : 1
     }
     tangentPass(live, off)
-    scatter(N, R, gap, mode, bias, self, stride, it)
+    scatter(R, gap, want, bias, self, stride, it)
     integrate(N, perp, strength, stepCap, totalCap)
   }
 
+  const px = cloud.px
+  const py = cloud.py
   for (let k = 0; k < live.length; k++) {
     const s = live[k]
     const o = off[k]
@@ -669,7 +669,7 @@ export function apply(skel, P, ctx) {
       }
     }
     buildGrid(N, reach)
-    trimEnds(live, off, allow, reach, mode)
+    trimEnds(live, off, allow, reach, want)
   }
 
   recomputeBounds(skel)

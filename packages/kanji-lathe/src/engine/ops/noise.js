@@ -30,10 +30,11 @@ const GRAD_H = 0.06 // finite-difference step for the curl gradient, in field ce
 const CURL_GAIN = 0.92
 const CURL_CAP = 2.2 // hard ceiling on |displacement| in units of nzField, so a rare steep cell cannot fling a point
 // A displacement bigger than the swirl producing it folds the map over itself:
-// strokes cross and double back instead of curling. Keeping it under a quarter
-// of a cell keeps the deformation injective — and is why a fine field is
-// automatically a gentler one, exactly as small eddies carry less energy.
-const FOLD_LIMIT = 0.5
+// strokes cross and double back instead of curling. Holding it to about a third
+// of a cell keeps folding to well under 1% of segments across the corpus even at
+// the top of the slider, and is why a fine field is automatically a gentler one
+// — the same reason small eddies carry less energy than large ones.
+const FOLD_LIMIT = 0.35
 // Octaves fall off faster than the usual half. What the field does to a stroke
 // is set by its strain, amplitude × frequency², so at ½ the finest octave alone
 // decides how mangled the glyph gets; at 0.3 it adds texture while the base
@@ -305,9 +306,9 @@ export function apply(skel, P, ctx) {
     const n = s.n
     if (!(n > 1)) continue
 
-    // Order decay: 1 at the middle of the writing order, 1±decay at the ends.
-    const k = count > 1 ? clamp((s.i ?? si) / (count - 1), 0, 1) : 0.5
-    const gain = clamp(1 + decay * (2 * k - 1), 0, 2)
+    // Order decay: 1 in the middle of the writing order, 1±decay at either end.
+    const ord = count > 1 ? clamp((s.i ?? si) / (count - 1), 0, 1) : 0.5
+    const gain = clamp(1 + decay * (2 * ord - 1), 0, 2)
     if (gain === 0) continue
 
     const pts = s.pts
@@ -340,17 +341,21 @@ export function apply(skel, P, ctx) {
     const cx = (x0 + x1) / 2
     const cy = (y0 + y1) / 2
     const rot = wRot * wanderRot * gain
-    const cos = Math.cos(rot)
-    const sin = Math.sin(rot)
+    const cosR = Math.cos(rot)
+    const sinR = Math.sin(rot)
     const wr = wander * em * gain * Math.sqrt(Math.abs(wRad))
     const offX = Math.cos(wAng * Math.PI) * wr
     const offY = Math.sin(wAng * Math.PI) * wr
 
     const endAmp = endJit * em * gain
-    const asx = Math.cos(aAng * Math.PI) * Math.sqrt(Math.abs(aRad)) * endAmp
-    const asy = Math.sin(aAng * Math.PI) * Math.sqrt(Math.abs(aRad)) * endAmp
-    const aex = Math.cos(bAng * Math.PI) * Math.sqrt(Math.abs(bRad)) * endAmp
-    const aey = Math.sin(bAng * Math.PI) * Math.sqrt(Math.abs(bRad)) * endAmp
+    // √radius spreads the two landing errors evenly over a disc rather than
+    // bunching them at its centre
+    const sjr = Math.sqrt(Math.abs(aRad)) * endAmp
+    const ejr = Math.sqrt(Math.abs(bRad)) * endAmp
+    const sjx = Math.cos(aAng * Math.PI) * sjr
+    const sjy = Math.sin(aAng * Math.PI) * sjr
+    const ejx = Math.cos(bAng * Math.PI) * ejr
+    const ejy = Math.sin(bAng * Math.PI) * ejr
 
     const tremAmp = tremor * em * gain
     const curlAmp = curlK * gain
@@ -401,15 +406,15 @@ export function apply(skel, P, ctx) {
           // 1 at the end, 0 from the midpoint inwards, with no kink at either
           const ws = 1 - smoothstep(Math.min(1, sp * 2))
           const we = 1 - smoothstep(Math.min(1, (1 - sp) * 2))
-          dx += asx * ws + aex * we
-          dy += asy * ws + aey * we
+          dx += sjx * ws + ejx * we
+          dy += sjy * ws + ejy * we
         }
       }
 
       const rx = px - cx
       const ry = py - cy
-      const nx = cx + rx * cos - ry * sin + offX + dx
-      const ny = cy + rx * sin + ry * cos + offY + dy
+      const nx = cx + rx * cosR - ry * sinR + offX + dx
+      const ny = cy + rx * sinR + ry * cosR + offY + dy
       pts[i * 2] = Number.isFinite(nx) ? nx : px
       pts[i * 2 + 1] = Number.isFinite(ny) ? ny : py
     }
