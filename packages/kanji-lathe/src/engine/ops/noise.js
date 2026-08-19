@@ -26,9 +26,19 @@ import { recomputeBounds, recomputeLengths, EM } from '../skeleton.js'
 const DEG = Math.PI / 180
 const GRAD_H = 0.06 // finite-difference step for the curl gradient, in field cells
 // Calibrated so nzField reads directly as a displacement in em fractions: the
-// measured RMS of |∇ψ|/√octaves at GRAD_H is ≈1.05 per field cell.
-const CURL_GAIN = 0.95
+// measured RMS of the normalised |∇ψ| at GRAD_H is ≈1.08 per field cell.
+const CURL_GAIN = 0.92
 const CURL_CAP = 2.2 // hard ceiling on |displacement| in units of nzField, so a rare steep cell cannot fling a point
+// A displacement bigger than the swirl producing it folds the map over itself:
+// strokes cross and double back instead of curling. Keeping it under a quarter
+// of a cell keeps the deformation injective — and is why a fine field is
+// automatically a gentler one, exactly as small eddies carry less energy.
+const FOLD_LIMIT = 0.5
+// Octaves fall off faster than the usual half. What the field does to a stroke
+// is set by its strain, amplitude × frequency², so at ½ the finest octave alone
+// decides how mangled the glyph gets; at 0.3 it adds texture while the base
+// octave keeps doing the swirling.
+const PERSISTENCE = 0.3
 const TREMOR_SLOW = 0.72 // split between the slow waver and the fine chatter riding on it
 const TREMOR_FINE_MUL = 2.7 // irrational-ish ratio: the two octaves never lock into one beat
 const LANE_SPAN = 71.3 // how far apart in the lattice two strokes' tremor lanes can sit
@@ -45,7 +55,7 @@ export const params = [
     step: 0.001,
     default: 0,
     unit: 'em',
-    hint: 'Displace every point along the rotated gradient of a noise potential. Divergence-free, so the glyph swirls and drifts without strokes pulling apart.',
+    hint: 'Displace every point along the rotated gradient of a noise potential. Divergence-free, so the glyph swirls and drifts instead of pulling apart. Fine fields cap themselves lower — see Field scale.',
   },
   {
     id: 'nzFieldScale',
@@ -57,7 +67,7 @@ export const params = [
     step: 0.1,
     default: 3,
     when: (P) => (P.nzField ?? 0) > 0,
-    hint: 'Spatial frequency of the field. Low values push the whole glyph one way; high values curl every stroke separately.',
+    hint: 'Spatial frequency of the field. Low values push the whole glyph one way; high values curl every stroke separately, and hold the displacement down to a quarter of a swirl so the glyph cannot fold through itself.',
   },
   {
     id: 'nzFieldOctaves',
@@ -174,7 +184,7 @@ let arcBuf = new Float64Array(240)
 /**
  * fBm potential. Successive octaves are offset off the lattice origin so they
  * cannot line up there, and the sum is left un-normalised — only its gradient
- * is used, and that is normalised by octave count at the call site.
+ * is ever used, and that is normalised at the call site.
  */
 function fbm(nse, x, y, oct) {
   let sum = 0
@@ -182,10 +192,36 @@ function fbm(nse, x, y, oct) {
   let f = 1
   for (let k = 0; k < oct; k++) {
     sum += amp * nse(x * f + k * 19.7, y * f + k * 31.3)
-    amp *= 0.5
+    amp *= PERSISTENCE
     f *= 2
   }
   return sum
+}
+
+/** Quadrature sum of the octaves' contributions to |∇ψ|, which scale as (2p)^k. */
+function gradNorm(oct) {
+  let sum = 0
+  let a = 1
+  for (let k = 0; k < oct; k++) {
+    sum += a * a
+    a *= PERSISTENCE * 2
+  }
+  return 1 / Math.sqrt(sum)
+}
+
+/**
+ * Strain a unit-amplitude field applies, relative to a single octave: the
+ * octaves scale as (4p)^k here because strain goes as amplitude × frequency².
+ * This is what the fold limit has to be measured against, not the amplitude.
+ */
+function strainNorm(oct) {
+  let sum = 0
+  let a = 1
+  for (let k = 0; k < oct; k++) {
+    sum += a * a
+    a *= PERSISTENCE * 4
+  }
+  return Math.sqrt(sum) * gradNorm(oct)
 }
 
 // Fallback lattice for callers that hand us no ctx (the pipeline always does).
@@ -210,7 +246,8 @@ export function apply(skel, P, ctx) {
   const decay = rd(P.nzOrderDecay, 0, -1, 1)
   const variance = rd(P.nzGlyphVariance, 1, 0, 1)
   const freq = rd(P.nzTremorFreq, 8, 1, 40)
-  const fieldK = rd(P.nzFieldScale, 3, 0.5, 12) / em
+  const fieldScale = rd(P.nzFieldScale, 3, 0.5, 12)
+  const fieldK = fieldScale / em
   const quality = ctx && Number.isFinite(ctx.quality) ? ctx.quality : 1
   const oct = Math.min(quality < 1 ? FAST_OCTAVES : 4, Math.round(rd(P.nzFieldOctaves, 2, 1, 4)))
 
@@ -243,10 +280,9 @@ export function apply(skel, P, ctx) {
     if (wG > 0) v += wG * fbm(nse, x + ox, y + oy, oct)
     return v * mixNorm
   }
-  // Each octave halves in amplitude but doubles in frequency, so every one of
-  // them contributes equally to the gradient — hence √oct, not the fBm sum.
-  const curlK = (field * em * CURL_GAIN) / Math.sqrt(oct)
-  const curlCap = field * em * CURL_CAP
+  const fieldAmp = Math.min(field * em, (FOLD_LIMIT * em) / (fieldScale * strainNorm(oct)))
+  const curlK = fieldAmp * CURL_GAIN * gradNorm(oct)
+  const curlCap = fieldAmp * CURL_CAP
   const invH2 = 1 / (2 * GRAD_H)
 
   const strokes = skel.strokes
