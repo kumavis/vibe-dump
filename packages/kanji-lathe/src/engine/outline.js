@@ -32,7 +32,8 @@ const ARC_TOL = 0.3 // chord sagitta in em units — sets arc smoothness
 const ARC_MIN = 2
 const ARC_MAX = 32
 const JOIN_ARC_MAX = 16
-const LOOKBACK = 24 // edges searched for a crossing before the cruder rule takes over
+const GUSSET_GAIN = 1.2 // a corner gusset must clear the chord by this much to earn its contour
+const LOOKBACK = 12 // how far back unfold() looks for a self-crossing
 const WEDGE_EXT = 0.95
 const SLAB_EXT = 0.45
 const SPLIT_EXT = 0.35
@@ -231,7 +232,9 @@ function buildSide(sign, m, closed, join, miterLimit, P, W, D, X, U) {
       U[k * 2] = d1x
       U[k * 2 + 1] = d1y
       k++
-      if (!outer && bl > MIN_BIS && gk + 6 <= GUSSET.length) {
+      // …but only where the clipped miter reaches meaningfully past the chord,
+      // or a gentle turn would spend a contour on a sliver worth nothing
+      if (!outer && bl > MIN_BIS && miterLimit * 2 > bl * GUSSET_GAIN && gk + 6 <= GUSSET.length) {
         GUSSET[gk++] = px + n1x * hw
         GUSSET[gk++] = py + n1y * hw
         GUSSET[gk++] = px + bx * hw * miterLimit
@@ -275,17 +278,17 @@ function crosses(ax, ay, bx, by, cx, cy, dx, dy) {
  * the edge just laid down crosses one the boundary already walked, the loop
  * between them is cut and the crossing kept — at a corner that crossing *is* the
  * meeting of the two inner offset lines, so the turn keeps its true point. A
- * fold whose crossing lies further back than LOOKBACK falls through to the
- * cruder rule: drop whatever the boundary has already travelled past. The first
- * point is anchored either way; the terminal is drawn from it.
+ * fold along a straight run has no crossing to find — it doubles back over its
+ * own line — so the two rules alternate until neither applies: cut at
+ * crossings, else drop whatever the boundary has already travelled past. The
+ * first point is anchored either way; the terminal is drawn from it.
  */
 function unfold(X, U, k) {
   let w = 1
   for (let r = 1; r < k; r++) {
     const x = X[r * 2]
     const y = X[r * 2 + 1]
-    let cutAny = false
-    for (let guard = 0; guard < 8; guard++) {
+    for (let guard = 0; guard < 32; guard++) {
       let cut = -1
       const lo = Math.max(0, w - 1 - LOOKBACK)
       for (let j = w - 2; j >= lo; j--) {
@@ -294,20 +297,23 @@ function unfold(X, U, k) {
           break
         }
       }
-      if (cut < 0) break
-      cutAny = true
-      w = cut + 1
-      const ex = x - HIT[0]
-      const ey = y - HIT[1]
-      const L = Math.hypot(ex, ey) || 1
-      X[w * 2] = HIT[0]
-      X[w * 2 + 1] = HIT[1]
-      U[w * 2] = ex / L
-      U[w * 2 + 1] = ey / L
-      w++
-    }
-    if (!cutAny) {
-      while (w > 1 && (x - X[(w - 1) * 2]) * U[(w - 1) * 2] + (y - X[(w - 1) * 2 + 1]) * U[(w - 1) * 2 + 1] < 0) w--
+      if (cut >= 0) {
+        w = cut + 1
+        const ex = x - HIT[0]
+        const ey = y - HIT[1]
+        const L = Math.hypot(ex, ey) || 1
+        X[w * 2] = HIT[0]
+        X[w * 2 + 1] = HIT[1]
+        U[w * 2] = ex / L
+        U[w * 2 + 1] = ey / L
+        w++
+        continue
+      }
+      if (w > 1 && (x - X[(w - 1) * 2]) * U[(w - 1) * 2] + (y - X[(w - 1) * 2 + 1]) * U[(w - 1) * 2 + 1] < 0) {
+        w--
+        continue
+      }
+      break
     }
     X[w * 2] = x
     X[w * 2 + 1] = y
@@ -417,9 +423,19 @@ export function strokeOutline(pts, widths, opts = {}) {
   // 4 — assemble: side A forward, terminal, side B back, terminal
   ok = 0
   for (let i = 0; i < ka; i++) emit(AX[i * 2], AX[i * 2 + 1])
-  if (!closed) emitCap(capEnd, P[(m - 1) * 2], P[(m - 1) * 2 + 1], T[(m - 1) * 2], T[(m - 1) * 2 + 1], W[m - 1], capScale)
-  for (let i = kb - 1; i >= 0; i--) emit(BX[i * 2], BX[i * 2 + 1])
-  if (!closed) emitCap(capStart, P[0], P[1], -T[0], -T[1], W[0], capScale)
+  if (closed) {
+    // a ring is still one contour: right round the far side, across a slit of no
+    // width at the seam, right round the near side. Its hole subtracts under the
+    // non-zero rule without any polygon having to disagree about winding.
+    emit(AX[0], AX[1])
+    emit(BX[0], BX[1])
+    for (let i = kb - 1; i >= 1; i--) emit(BX[i * 2], BX[i * 2 + 1])
+    emit(BX[0], BX[1])
+  } else {
+    emitCap(capEnd, P[(m - 1) * 2], P[(m - 1) * 2 + 1], T[(m - 1) * 2], T[(m - 1) * 2 + 1], W[m - 1], capScale)
+    for (let i = kb - 1; i >= 0; i--) emit(BX[i * 2], BX[i * 2 + 1])
+    emitCap(capStart, P[0], P[1], -T[0], -T[1], W[0], capScale)
+  }
   if (ok >= 4 && Math.abs(out[0] - out[ok - 2]) < WELD && Math.abs(out[1] - out[ok - 1]) < WELD) ok -= 2
   if (ok < 6) {
     // everything collapsed — a dot is a truer answer than a sliver

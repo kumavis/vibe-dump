@@ -2,7 +2,7 @@
 // redrawing, and hands the views a cached, fully-built skeleton.
 import { loadCorpus } from './data/loader.js'
 import { buildGlyph } from './engine/pipeline.js'
-import { freshParams, deserialize, serialize, geometryKey, normalize, randomize, SPECS, BY_ID } from './params.js'
+import { freshParams, deserialize, serialize, geometryKey, normalize, randomize, changedCount, SPECS, BY_ID } from './params.js'
 import { PRESETS } from './presets.js'
 import { buildControls } from './ui/controls.js'
 import { createStage } from './ui/stage.js'
@@ -64,10 +64,14 @@ async function boot() {
     return skel
   }
 
+  // defineProperty, not Object.assign: assign would *invoke* the getter once and
+  // copy its value, freezing app.record on whatever character was current.
+  Object.defineProperty(app, 'record', {
+    get: () => corpus.byChar.get(app.char) || corpus.chars[0],
+    enumerable: true,
+  })
+
   Object.assign(app, {
-    get record() {
-      return corpus.byChar.get(app.char) || corpus.chars[0]
-    },
     glyphFor,
     glyph: (quality = 1) => glyphFor(app.record, quality),
     setChar(ch) {
@@ -141,7 +145,9 @@ async function boot() {
     try {
       if (app.view === 'single') {
         stage.draw()
-        inspector.onRender(app.glyph())
+        const skel = app.glyph()
+        inspector.onRender(skel)
+        updateHud(skel)
       } else if (app.view === 'sheet') sheet.draw()
       else if (app.view === 'proof') proof.draw()
       else if (app.view === 'evolve') {
@@ -153,6 +159,18 @@ async function boot() {
       console.error(err)
       toast('Render error: ' + err.message, true)
     }
+  }
+
+  const hudChar = $('hudChar')
+  const hudMeta = $('hudMeta')
+  function updateHud(skel) {
+    const rec = app.record
+    hudChar.textContent = `${rec.char}  ·  #${rec.freq}  ·  ${rec.meanings[0] || ''}`
+    const n = changedCount(app.P)
+    hudMeta.textContent = [
+      `${app.presetName || 'custom'}${n ? ` · ${n} control${n === 1 ? '' : 's'} moved` : ''}`,
+      `${skel.strokes.filter((s) => s.alive).length}/${skel.strokeCount} strokes · ${skel.groups.length} components`,
+    ].join('\n')
   }
 
   // ── url state ──────────────────────────────────────────────────────────────

@@ -88,11 +88,11 @@ for (const preset of [{ name: 'Defaults', params: {} }, ...PRESETS]) {
       }
       if (s.pts.length !== s.n * 2) fail(`${preset.name} / ${rec.char} #${s.i}: pts resized to ${s.pts.length / 2} (expected ${s.n})`)
       for (let i = 0; i < s.pts.length; i++) {
-        if (!Number.isFinite(s.pts[i])) return fatal(`${preset.name} / ${rec.char} #${s.i}: non-finite point`)
-        if (Math.abs(s.pts[i]) > 40 * EM) return fatal(`${preset.name} / ${rec.char} #${s.i}: point ${s.pts[i]} far outside the em`)
+        if (!Number.isFinite(s.pts[i])) fatal(`${preset.name} / ${rec.char} #${s.i}: non-finite point`)
+        if (Math.abs(s.pts[i]) > 40 * EM) fatal(`${preset.name} / ${rec.char} #${s.i}: point ${s.pts[i]} far outside the em`)
       }
       for (let i = 0; i < s.n; i++) {
-        if (!(s.w[i] >= 0.5)) return fatal(`${preset.name} / ${rec.char} #${s.i}: half-width ${s.w[i]}`)
+        if (!(s.w[i] >= 0.5)) fatal(`${preset.name} / ${rec.char} #${s.i}: half-width ${s.w[i]}`)
       }
       const pts = trimmedPoints(s)
       const w = trimmedWidths(s)
@@ -101,7 +101,7 @@ for (const preset of [{ name: 'Defaults', params: {} }, ...PRESETS]) {
         for (const poly of out) {
           polys++
           if (poly.length < 6) fail(`${preset.name} / ${rec.char} #${s.i}: outline polygon with ${poly.length / 2} points`)
-          for (const v of poly) if (!Number.isFinite(v)) return fatal(`${preset.name} / ${rec.char} #${s.i}: non-finite outline vertex`)
+          for (const v of poly) if (!Number.isFinite(v)) fatal(`${preset.name} / ${rec.char} #${s.i}: non-finite outline vertex`)
         }
       }
     }
@@ -113,6 +113,7 @@ for (const preset of [{ name: 'Defaults', params: {} }, ...PRESETS]) {
   results.push({ preset: preset.name, ms, polys, minLeg, dropped })
 }
 
+/** A non-finite coordinate is not a finding to tally — stop and show the state. */
 function fatal(msg) {
   fail(msg)
   report()

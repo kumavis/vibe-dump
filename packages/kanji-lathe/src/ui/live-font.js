@@ -6,6 +6,7 @@
 // downloaded .ttf on the desktop — so anything the font export gets wrong shows
 // up here immediately rather than after an install.
 import { buildGlyph, EM } from '../engine/pipeline.js'
+import { buildTTF } from '../font/ttf.js'
 import { glyphContours } from './exporter.js'
 
 let counter = 0
@@ -41,7 +42,6 @@ export async function ensureLiveFont(app, chars, key) {
   }
   if (!glyphs.length) return null
 
-  const { buildTTF } = await import('../font/ttf.js')
   const bytes = buildTTF({
     unitsPerEm: upm,
     ascent: Math.round(upm * 0.88),

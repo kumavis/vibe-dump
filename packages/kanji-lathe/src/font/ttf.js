@@ -206,9 +206,19 @@ function simplifyClosed(p, tol) {
  *     P = V + ( β⁻·(V − N⁻) + β⁺·(V − N⁺) ) / α
  *
  * — one Jacobi step of the exact tridiagonal interpolation, which is all this
- * needs: α ≥ ½ always, so the correction is bounded by the adjacent edges and
- * cannot spike, and the residual after one step is well under a font unit at
- * these turn angles.
+ * needs: the residual after one step is well under a font unit at these turn
+ * angles.
+ *
+ * The correction points along V − ½(N⁻ + N⁺), and that is only the direction of
+ * the undershoot while the two edges are of similar length. Where RDP leaves a
+ * short edge beside a long one — a stroke's 600-unit flank meeting the 60-unit
+ * chords of its cap — that vector swings round to lie along the long edge and
+ * hauls the control a hundred units down it, bowing the curve tens of units off
+ * the shape. The apex condition is simply the wrong demand there: at t = ½ the
+ * curve is nowhere near V once the spacing is that lopsided. So the correction
+ * fades with the ratio of the shorter edge to the longer, which is 1 exactly
+ * when the derivation's uniform-spacing assumption holds and 0 when it fails
+ * hardest.
  */
 function pushControls(x, y, on, m) {
   // a separate pair of buffers: every control reads its neighbours' *polygon*
@@ -226,8 +236,13 @@ function pushControls(x, y, on, m) {
     const bp = on[p] ? 0.25 : 0.125
     const bq = on[q] ? 0.25 : 0.125
     const a = 1 - bp - bq
-    bx[i] = x[i] + (bp * (x[i] - x[p]) + bq * (x[i] - x[q])) / a
-    by[i] = y[i] + (bp * (y[i] - y[p]) + bq * (y[i] - y[q])) / a
+    const dp = Math.hypot(x[i] - x[p], y[i] - y[p])
+    const dq = Math.hypot(x[q] - x[i], y[q] - y[i])
+    const hi = Math.max(dp, dq)
+    const even = hi > WELD ? Math.min(dp, dq) / hi : 0
+    const k = even / a
+    bx[i] = x[i] + k * (bp * (x[i] - x[p]) + bq * (x[i] - x[q]))
+    by[i] = y[i] + k * (bp * (y[i] - y[p]) + bq * (y[i] - y[q]))
   }
   for (let i = 0; i < m; i++) {
     x[i] = bx[i]

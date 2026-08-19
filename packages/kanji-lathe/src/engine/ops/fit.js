@@ -8,6 +8,10 @@
 import { clamp, lerp } from '../../geom/path.js'
 import { recomputeBounds } from '../skeleton.js'
 
+// How far either axis may be stretched past the uniform fit, so squareness
+// cannot turn a one-stroke character into a smear.
+const STRETCH_CAP = 2.6
+
 export const params = [
   {
     id: 'ftFit',
@@ -85,16 +89,22 @@ export function apply(skel, P, ctx) {
 
   // Two candidate scalings: uniform (keeps proportions) and full stretch (makes
   // the bounding box exactly square). Squareness blends between them.
+  //
+  // The stretch is capped relative to the uniform scale, because characters with
+  // an extreme natural aspect — 一 is a single horizontal stroke — would
+  // otherwise be inflated by a factor of twenty into an unrecognisable smear.
+  // The cap costs nothing on ordinary glyphs and only bites on the flat ones.
   const iso = Math.min(box / bw, box / bh)
-  let sx = lerp(iso, box / bw, sq)
-  let sy = lerp(iso, box / bh, sq)
+  const cap = STRETCH_CAP * iso
+  let sx = Math.min(lerp(iso, box / bw, sq), cap)
+  let sy = Math.min(lerp(iso, box / bh, sq), cap)
   if (mode === 'none') {
     sx = sy = 1
   } else if (mode === 'clamp') {
     // shrink-to-fit only; never inflate a small character
     const k = Math.min(1, iso)
-    sx = k === 1 ? 1 : lerp(k, box / bw, sq)
-    sy = k === 1 ? 1 : lerp(k, box / bh, sq)
+    sx = k === 1 ? 1 : Math.min(lerp(k, box / bw, sq), STRETCH_CAP * k)
+    sy = k === 1 ? 1 : Math.min(lerp(k, box / bh, sq), STRETCH_CAP * k)
   }
 
   const cx = b.x0 + bw / 2
