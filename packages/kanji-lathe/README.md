@@ -97,6 +97,11 @@ Three passes, no browser required:
 - `tools/shyness-check.mjs` measures the minimum clearance between different
   strokes before and after crown shyness, so the signature effect has to prove it
   opens gaps rather than merely jiggling points.
+- `tools/font-check.mjs` re-parses a generated `.ttf` with a reader written
+  independently of the writer, then hands the file to Chromium and confirms it
+  rasterises distinct, non-blank glyphs. Both halves are needed: the first
+  version of the writer carried a transposed `head.magicNumber`, passed the
+  re-parse cleanly, and was refused by the font sanitiser in every browser.
 - `tools/smoke.mjs` runs every preset through the whole pipeline across a spread
   of glyph complexities, outlines the result, scores it, and packs a real
   TrueType file.

@@ -7,10 +7,9 @@
 // 1/cos(θ/2) — clamped by miterLimit, with a hairpin reversal (where that scale
 // runs away) forced round however the caller set `join`. And the inner side of
 // a turn folds back on itself the moment the brush is wider than the local
-// curvature radius, which a corner with a fat nib always is; a folded contour
-// punches holes under the non-zero rule, so unfold() drops every offset point
-// the boundary has already walked past. At a corner that lands exactly on the
-// intersection of the two inner offset lines, which is the true boundary.
+// curvature radius, which a corner under a fat nib always is; a folded contour
+// punches holes under the non-zero rule, so unfold() drops what the boundary
+// has already walked past and splices in the crossing it actually made.
 //
 // WINDING — every returned polygon has positive signedArea() in these y-down em
 // coordinates. The exporter mirrors y on the way into the font, turning that
@@ -33,6 +32,7 @@ const ARC_TOL = 0.3 // chord sagitta in em units — sets arc smoothness
 const ARC_MIN = 2
 const ARC_MAX = 32
 const JOIN_ARC_MAX = 16
+const LOOKBACK = 24 // edges searched for a crossing before the cruder rule takes over
 const WEDGE_EXT = 0.95
 const SLAB_EXT = 0.45
 const SPLIT_EXT = 0.35
@@ -51,8 +51,8 @@ const fit = (k, n) => {
 
 let out = new Float64Array(2048)
 let ok = 0
-let WEDGE = new Float64Array(256)
-let wk = 0
+let GUSSET = new Float64Array(256)
+let gk = 0
 
 /** Append a vertex, skipping anything non-finite or coincident with the last. */
 const emit = (x, y) => {
@@ -206,7 +206,7 @@ function buildSide(sign, m, closed, join, miterLimit, P, W, D, X, U) {
     // the round or bevel the caller asked for. The inner side takes the chord —
     // its true corner is the miter, but steering the ribbon out to a clipped one
     // only makes unfold() eat the approach, so the concave corner is filled by a
-    // separate wedge instead, which the non-zero rule unions straight back in.
+    // separate gusset instead, which the non-zero rule unions straight back in.
     const cosTurn = d1x * d2x + d1y * d2y
     const cross = d1x * d2y - d1y * d2x
     const outer = sign > 0 ? cross <= 0 : cross >= 0
@@ -231,13 +231,13 @@ function buildSide(sign, m, closed, join, miterLimit, P, W, D, X, U) {
       U[k * 2] = d1x
       U[k * 2 + 1] = d1y
       k++
-      if (!outer && bl > MIN_BIS && wk + 6 <= WEDGE.length) {
-        WEDGE[wk++] = px + n1x * hw
-        WEDGE[wk++] = py + n1y * hw
-        WEDGE[wk++] = px + bx * hw * miterLimit
-        WEDGE[wk++] = py + by * hw * miterLimit
-        WEDGE[wk++] = px + n2x * hw
-        WEDGE[wk++] = py + n2y * hw
+      if (!outer && bl > MIN_BIS && gk + 6 <= GUSSET.length) {
+        GUSSET[gk++] = px + n1x * hw
+        GUSSET[gk++] = py + n1y * hw
+        GUSSET[gk++] = px + bx * hw * miterLimit
+        GUSSET[gk++] = py + by * hw * miterLimit
+        GUSSET[gk++] = px + n2x * hw
+        GUSSET[gk++] = py + n2y * hw
       }
       X[k * 2] = px + n2x * hw
       X[k * 2 + 1] = py + n2y * hw
@@ -270,28 +270,33 @@ function crosses(ax, ay, bx, by, cx, cy, dx, dy) {
 }
 
 /**
- * Local loop removal. A backward step means the offset has crossed itself —
- * which a fat brush on a tight turn always does — and a crossed contour reads
- * as a hole under the non-zero rule. Drop everything the boundary has already
- * walked past, then splice in the crossing the two surviving edges make, so the
- * turn keeps its true corner instead of a chord. The first point is anchored;
- * the terminal is drawn from it.
+ * Local loop removal. A fat brush on a tight turn offsets its inner side into a
+ * loop, and a crossed contour reads as a hole under the non-zero rule. Whenever
+ * the edge just laid down crosses one the boundary already walked, the loop
+ * between them is cut and the crossing kept — at a corner that crossing *is* the
+ * meeting of the two inner offset lines, so the turn keeps its true point. A
+ * fold whose crossing lies further back than LOOKBACK falls through to the
+ * cruder rule: drop whatever the boundary has already travelled past. The first
+ * point is anchored either way; the terminal is drawn from it.
  */
 function unfold(X, U, k) {
   let w = 1
   for (let r = 1; r < k; r++) {
     const x = X[r * 2]
     const y = X[r * 2 + 1]
-    let near = 0
-    let far = 0
-    let popped = 0
-    while (w > 1 && (x - X[(w - 1) * 2]) * U[(w - 1) * 2] + (y - X[(w - 1) * 2 + 1]) * U[(w - 1) * 2 + 1] < 0) {
-      w--
-      if (!popped) far = w
-      near = w
-      popped++
-    }
-    if (popped && crosses(X[(w - 1) * 2], X[(w - 1) * 2 + 1], X[near * 2], X[near * 2 + 1], X[far * 2], X[far * 2 + 1], x, y)) {
+    let cutAny = false
+    for (let guard = 0; guard < 8; guard++) {
+      let cut = -1
+      const lo = Math.max(0, w - 1 - LOOKBACK)
+      for (let j = w - 2; j >= lo; j--) {
+        if (crosses(X[j * 2], X[j * 2 + 1], X[j * 2 + 2], X[j * 2 + 3], X[(w - 1) * 2], X[(w - 1) * 2 + 1], x, y)) {
+          cut = j
+          break
+        }
+      }
+      if (cut < 0) break
+      cutAny = true
+      w = cut + 1
       const ex = x - HIT[0]
       const ey = y - HIT[1]
       const L = Math.hypot(ex, ey) || 1
@@ -300,6 +305,9 @@ function unfold(X, U, k) {
       U[w * 2] = ex / L
       U[w * 2 + 1] = ey / L
       w++
+    }
+    if (!cutAny) {
+      while (w > 1 && (x - X[(w - 1) * 2]) * U[(w - 1) * 2] + (y - X[(w - 1) * 2 + 1]) * U[(w - 1) * 2 + 1] < 0) w--
     }
     X[w * 2] = x
     X[w * 2 + 1] = y
@@ -311,6 +319,15 @@ function unfold(X, U, k) {
 }
 
 // ── the outline ──────────────────────────────────────────────────────────────
+
+/** Tangent at ring vertex `i`, taken across the seam from `a` to `b`. */
+function seamTangent(P, T, i, a, b) {
+  const dx = P[b * 2] - P[a * 2]
+  const dy = P[b * 2 + 1] - P[a * 2 + 1]
+  const L = Math.hypot(dx, dy) || 1
+  T[i * 2] = dx / L
+  T[i * 2 + 1] = dy / L
+}
 
 /**
  * Closed polygons tracing a variable-width centreline. `pts` is flat
@@ -382,26 +399,18 @@ export function strokeOutline(pts, widths, opts = {}) {
   const T = tangents(Pv, fit('tan', m * 2).subarray(0, m * 2))
   if (closed) {
     // tangents() cannot see across the seam; both ends of a ring straddle it
-    for (const [i, a, b] of [
-      [0, m - 1, 1],
-      [m - 1, m - 2, 0],
-    ]) {
-      let dx = P[b * 2] - P[a * 2]
-      let dy = P[b * 2 + 1] - P[a * 2 + 1]
-      const L = Math.hypot(dx, dy) || 1
-      T[i * 2] = dx / L
-      T[i * 2 + 1] = dy / L
-    }
+    seamTangent(P, T, 0, m - 1, 1)
+    seamTangent(P, T, m - 1, m - 2, 0)
   }
 
   // 3 — both sides, each unfolded
-  const cap = m * (JOIN_ARC_MAX + 2) * 2
-  if (WEDGE.length < m * 6) WEDGE = new Float64Array(m * 6)
-  wk = 0
-  const AX = fit('ax', cap)
-  const AU = fit('au', cap)
-  const BX = fit('bx', cap)
-  const BU = fit('bu', cap)
+  const room = m * (JOIN_ARC_MAX + 2) * 2
+  if (GUSSET.length < m * 6) GUSSET = new Float64Array(m * 6)
+  gk = 0
+  const AX = fit('ax', room)
+  const AU = fit('au', room)
+  const BX = fit('bx', room)
+  const BU = fit('bu', room)
   const ka = unfold(AX, AU, buildSide(1, m, closed, join, miterLimit, P, W, D, AX, AU))
   const kb = unfold(BX, BU, buildSide(-1, m, closed, join, miterLimit, P, W, D, BX, BU))
 
@@ -422,14 +431,14 @@ export function strokeOutline(pts, widths, opts = {}) {
   const poly = out.slice(0, ok)
   if (signedArea(poly) < 0) reverseInPlace(poly)
   const polys = [poly]
-  for (let i = 0; i < wk; i += 6) {
-    const wedge = WEDGE.slice(i, i + 6)
+  for (let i = 0; i < gk; i += 6) {
+    const tri = GUSSET.slice(i, i + 6)
     let good = true
-    for (let j = 0; j < 6; j++) if (!Number.isFinite(wedge[j])) good = false
-    const a = good ? signedArea(wedge) : 0
+    for (let j = 0; j < 6; j++) if (!Number.isFinite(tri[j])) good = false
+    const a = good ? signedArea(tri) : 0
     if (Math.abs(a) < WELD) continue
-    if (a < 0) reverseInPlace(wedge)
-    polys.push(wedge)
+    if (a < 0) reverseInPlace(tri)
+    polys.push(tri)
   }
   return polys
 }
