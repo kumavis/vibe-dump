@@ -32,10 +32,12 @@ const SUB = 0.5 // raster sub-sample spacing along a segment, in cells
 const BLUR_PASSES = 2
 const MIN_SPAN = 1e-3
 
-// Everything below is a fraction of the em, so the numbers survive a change of grid.
-const TOPO_SIMPLIFY = 0.01 // RDP tolerance before the crossing scan
-const CONTACT_TOL = 0.016 // strokes closer than this count as meeting…
-const DEAD_LEN = 0.002 // …and a stroke shorter than this counts as gone
+// Lengths below are fractions of the em, so they survive a change of grid.
+const DEAD_LEN = 0.002 // a stroke shorter than this counts as gone
+// The two contact tolerances are fractions of the glyph's OWN extent, not of the
+// em, so scaling a glyph up cannot pull its junctions apart.
+const TOPO_SIMPLIFY = 0.012 // RDP tolerance before the contact scan
+const CONTACT_TOL = 0.02 // strokes closer than this count as meeting
 const CLOUD_STEP = 1 / 64 // spacing of the point cloud used for gaps and ink
 const GAP_CELL = 1 / 16 // first-tier search radius for minGap
 const NOMINAL_W = 0.028 // assumed half-width when the nib has not run yet
@@ -86,10 +88,10 @@ export function computeMetrics(skel, P, ctx) {
   const shapeMatch = correlate(cur, ref)
 
   // — topology: which strokes still touch which
-  const curPairs = contactPairs(live, em)
+  const curPairs = contactPairs(live)
   let refPairs = scratch.mxRefPairs
   if (!refPairs) {
-    refPairs = contactPairs(strokes.map((s) => ({ i: s.i, p: s.ref })), em)
+    refPairs = contactPairs(strokes.map((s) => ({ i: s.i, p: s.ref })))
     scratch.mxRefPairs = refPairs
   }
   const topology = jaccard(curPairs, refPairs)
@@ -209,8 +211,11 @@ function splat(g, grid, x, y, w) {
   }
 }
 
-/** Separable 3-tap box blur, edges clamped. Blurring is what makes the */
-/** comparison about where the ink roughly is rather than pixel accidents. */
+/**
+ * Separable 3-tap box blur, edges clamped. The blur is the whole point of the
+ * comparison: it asks where the ink roughly is, not which cells it happened to
+ * land in, so a stroke that shifted by a hair still matches itself.
+ */
 function boxBlur(g, tmp, grid) {
   for (let y = 0; y < grid; y++) {
     const row = y * grid
@@ -261,6 +266,28 @@ function correlate(a, b) {
 
 // ── Topology: the stroke-contact graph ───────────────────────────────────────
 
+/** Largest dimension of a bundle of polylines — the yardstick for tolerances. */
+function spanOf(entries) {
+  let x0 = Infinity
+  let y0 = Infinity
+  let x1 = -Infinity
+  let y1 = -Infinity
+  for (const e of entries) {
+    const p = e.p
+    if (!p) continue
+    for (let i = 0; i < p.length; i += 2) {
+      const x = p[i]
+      const y = p[i + 1]
+      if (!Number.isFinite(x) || !Number.isFinite(y)) continue
+      if (x < x0) x0 = x
+      if (x > x1) x1 = x
+      if (y < y0) y0 = y
+      if (y > y1) y1 = y
+    }
+  }
+  return x0 === Infinity ? MIN_SPAN : Math.max(x1 - x0, y1 - y0, MIN_SPAN)
+}
+
 /**
  * Pairs of distinct strokes that meet. Contact rather than strict intersection:
  * kanji are full of T-junctions where one stroke lands *on* another, and an
@@ -268,14 +295,15 @@ function correlate(a, b) {
  * tolerance is wider than the simplification below, so simplifying can never
  * invent or destroy a contact by itself.
  */
-function contactPairs(entries, em) {
-  const tol = CONTACT_TOL * em
+function contactPairs(entries) {
+  const span = spanOf(entries)
+  const tol = CONTACT_TOL * span
   const tol2 = tol * tol
   const items = []
   for (const e of entries) {
     const p = e.p
     if (!p || p.length < 4) continue
-    const q = simplify(p, TOPO_SIMPLIFY * em)
+    const q = simplify(p, TOPO_SIMPLIFY * span)
     let x0 = Infinity
     let y0 = Infinity
     let x1 = -Infinity

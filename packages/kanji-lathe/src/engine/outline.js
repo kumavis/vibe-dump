@@ -28,7 +28,7 @@ const MAX_HALF = EM // a half-width past one em is a mistake, not a brush
 const MITER_MAX = 8
 const CAP_MAX = 4
 const REV_COS = -0.996 // ≈175°, past which the miter is meaningless
-const MIN_COS = 0.05 // floor on the bisector projection we divide by
+const MIN_BIS = 0.1 // floor on |n1+n2|, the miter denominator
 const ARC_TOL = 0.3 // chord sagitta in em units — sets arc smoothness
 const ARC_MIN = 2
 const ARC_MAX = 32
@@ -51,6 +51,8 @@ const fit = (k, n) => {
 
 let out = new Float64Array(2048)
 let ok = 0
+let WEDGE = new Float64Array(256)
+let wk = 0
 
 /** Append a vertex, skipping anything non-finite or coincident with the last. */
 const emit = (x, y) => {
@@ -153,7 +155,7 @@ function emitCap(kind, px, py, dx, dy, w, capScale) {
  * the local direction of travel into U (unfold() needs that to tell a fold from
  * an honest turn).
  */
-function buildSide(sign, m, closed, join, miterLimit, P, W, D, T, X, U) {
+function buildSide(sign, m, closed, join, miterLimit, P, W, D, X, U) {
   let k = 0
   for (let i = 0; i < m; i++) {
     const px = P[i * 2]
@@ -176,30 +178,40 @@ function buildSide(sign, m, closed, join, miterLimit, P, W, D, T, X, U) {
     const d1y = D[inS * 2 + 1]
     const d2x = D[outS * 2]
     const d2y = D[outS * 2 + 1]
-    const cosTurn = d1x * d2x + d1y * d2y
-    if (cosTurn > REV_COS) {
-      // the miter: the bisector normal is already unit, so the whole correction
-      // is 1/cos(θ/2) — and cos(θ/2) is the bisector's projection on a segment
-      const tx = T[i * 2]
-      const ty = T[i * 2 + 1]
-      const cosHalf = 0.5 * (tx * d1x + ty * d1y + tx * d2x + ty * d2y)
-      const scale = 1 / Math.max(cosHalf, MIN_COS)
-      if (scale <= miterLimit) {
-        X[k * 2] = px - sign * ty * hw * scale
-        X[k * 2 + 1] = py + sign * tx * hw * scale
-        U[k * 2] = tx
-        U[k * 2 + 1] = ty
-        k++
-        continue
-      }
+    const n1x = -sign * d1y
+    const n1y = sign * d1x
+    const n2x = -sign * d2y
+    const n2y = sign * d2x
+    // The two segment normals sum to the angle bisector, and their sum's length
+    // is 2cos(θ/2) — direction and miter correction fall out together. (This is
+    // perp(T) whenever the samples are evenly spaced, but taking it from the
+    // segments keeps the correction exact after an operator has bunched them.)
+    let bx = n1x + n2x
+    let by = n1y + n2y
+    const bl = Math.hypot(bx, by)
+    const scale = 2 / Math.max(bl, MIN_BIS)
+    if (bl > MIN_BIS) {
+      bx /= bl
+      by /= bl
     }
-    // Past the limit. Only the outer side of the turn can spike, so it gets the
-    // round or bevel treatment; the inner side takes the plain chord and lets
-    // unfold() clean up whatever of it lies buried in the ink.
+    if (bl > MIN_BIS && scale <= miterLimit) {
+      X[k * 2] = px + bx * hw * scale
+      X[k * 2 + 1] = py + by * hw * scale
+      U[k * 2] = sign * by
+      U[k * 2 + 1] = -sign * bx
+      k++
+      continue
+    }
+    // Past the limit. The outer side is the one that would spike, so it takes
+    // the round or bevel the caller asked for. The inner side takes the chord —
+    // its true corner is the miter, but steering the ribbon out to a clipped one
+    // only makes unfold() eat the approach, so the concave corner is filled by a
+    // separate wedge instead, which the non-zero rule unions straight back in.
+    const cosTurn = d1x * d2x + d1y * d2y
     const cross = d1x * d2y - d1y * d2x
     const outer = sign > 0 ? cross <= 0 : cross >= 0
     if (outer && (join === 'round' || cosTurn <= REV_COS)) {
-      const a0 = Math.atan2(sign * d1x, -sign * d1y)
+      const a0 = Math.atan2(n1y, n1x)
       const sw = Math.atan2(cross, cosTurn)
       const segs = arcSegs(sw, hw, JOIN_ARC_MAX)
       const dir = sw >= 0 ? 1 : -1
@@ -214,13 +226,21 @@ function buildSide(sign, m, closed, join, miterLimit, P, W, D, T, X, U) {
         k++
       }
     } else {
-      X[k * 2] = px - sign * d1y * hw
-      X[k * 2 + 1] = py + sign * d1x * hw
+      X[k * 2] = px + n1x * hw
+      X[k * 2 + 1] = py + n1y * hw
       U[k * 2] = d1x
       U[k * 2 + 1] = d1y
       k++
-      X[k * 2] = px - sign * d2y * hw
-      X[k * 2 + 1] = py + sign * d2x * hw
+      if (!outer && bl > MIN_BIS && wk + 6 <= WEDGE.length) {
+        WEDGE[wk++] = px + n1x * hw
+        WEDGE[wk++] = py + n1y * hw
+        WEDGE[wk++] = px + bx * hw * miterLimit
+        WEDGE[wk++] = py + by * hw * miterLimit
+        WEDGE[wk++] = px + n2x * hw
+        WEDGE[wk++] = py + n2y * hw
+      }
+      X[k * 2] = px + n2x * hw
+      X[k * 2 + 1] = py + n2y * hw
       U[k * 2] = d2x
       U[k * 2 + 1] = d2y
       k++
@@ -229,17 +249,58 @@ function buildSide(sign, m, closed, join, miterLimit, P, W, D, T, X, U) {
   return k
 }
 
+const HIT = new Float64Array(2)
+
+/** Proper crossing of two segments, into HIT. Touching at an end does not count. */
+function crosses(ax, ay, bx, by, cx, cy, dx, dy) {
+  const rx = bx - ax
+  const ry = by - ay
+  const sx = dx - cx
+  const sy = dy - cy
+  const den = rx * sy - ry * sx
+  if (Math.abs(den) < 1e-12) return false
+  const qx = cx - ax
+  const qy = cy - ay
+  const t = (qx * sy - qy * sx) / den
+  const u = (qx * ry - qy * rx) / den
+  if (t <= 1e-6 || t >= 1 - 1e-6 || u <= 1e-6 || u >= 1 - 1e-6) return false
+  HIT[0] = ax + rx * t
+  HIT[1] = ay + ry * t
+  return true
+}
+
 /**
- * Local loop removal: pop any point the boundary has already travelled past.
- * One backward step means the offset has crossed itself, and a crossed contour
- * reads as a hole. The first point is anchored — the terminal needs it.
+ * Local loop removal. A backward step means the offset has crossed itself —
+ * which a fat brush on a tight turn always does — and a crossed contour reads
+ * as a hole under the non-zero rule. Drop everything the boundary has already
+ * walked past, then splice in the crossing the two surviving edges make, so the
+ * turn keeps its true corner instead of a chord. The first point is anchored;
+ * the terminal is drawn from it.
  */
 function unfold(X, U, k) {
   let w = 1
   for (let r = 1; r < k; r++) {
     const x = X[r * 2]
     const y = X[r * 2 + 1]
-    while (w > 1 && (x - X[(w - 1) * 2]) * U[(w - 1) * 2] + (y - X[(w - 1) * 2 + 1]) * U[(w - 1) * 2 + 1] < 0) w--
+    let near = 0
+    let far = 0
+    let popped = 0
+    while (w > 1 && (x - X[(w - 1) * 2]) * U[(w - 1) * 2] + (y - X[(w - 1) * 2 + 1]) * U[(w - 1) * 2 + 1] < 0) {
+      w--
+      if (!popped) far = w
+      near = w
+      popped++
+    }
+    if (popped && crosses(X[(w - 1) * 2], X[(w - 1) * 2 + 1], X[near * 2], X[near * 2 + 1], X[far * 2], X[far * 2 + 1], x, y)) {
+      const ex = x - HIT[0]
+      const ey = y - HIT[1]
+      const L = Math.hypot(ex, ey) || 1
+      X[w * 2] = HIT[0]
+      X[w * 2 + 1] = HIT[1]
+      U[w * 2] = ex / L
+      U[w * 2 + 1] = ey / L
+      w++
+    }
     X[w * 2] = x
     X[w * 2 + 1] = y
     U[w * 2] = U[r * 2]
@@ -335,12 +396,14 @@ export function strokeOutline(pts, widths, opts = {}) {
 
   // 3 — both sides, each unfolded
   const cap = m * (JOIN_ARC_MAX + 2) * 2
+  if (WEDGE.length < m * 6) WEDGE = new Float64Array(m * 6)
+  wk = 0
   const AX = fit('ax', cap)
   const AU = fit('au', cap)
   const BX = fit('bx', cap)
   const BU = fit('bu', cap)
-  const ka = unfold(AX, AU, buildSide(1, m, closed, join, miterLimit, P, W, D, T, AX, AU))
-  const kb = unfold(BX, BU, buildSide(-1, m, closed, join, miterLimit, P, W, D, T, BX, BU))
+  const ka = unfold(AX, AU, buildSide(1, m, closed, join, miterLimit, P, W, D, AX, AU))
+  const kb = unfold(BX, BU, buildSide(-1, m, closed, join, miterLimit, P, W, D, BX, BU))
 
   // 4 — assemble: side A forward, terminal, side B back, terminal
   ok = 0
@@ -358,7 +421,17 @@ export function strokeOutline(pts, widths, opts = {}) {
 
   const poly = out.slice(0, ok)
   if (signedArea(poly) < 0) reverseInPlace(poly)
-  return [poly]
+  const polys = [poly]
+  for (let i = 0; i < wk; i += 6) {
+    const wedge = WEDGE.slice(i, i + 6)
+    let good = true
+    for (let j = 0; j < 6; j++) if (!Number.isFinite(wedge[j])) good = false
+    const a = good ? signedArea(wedge) : 0
+    if (Math.abs(a) < WELD) continue
+    if (a < 0) reverseInPlace(wedge)
+    polys.push(wedge)
+  }
+  return polys
 }
 
 /** Total ink area of an outline set, whatever each polygon's orientation. */
