@@ -98,6 +98,16 @@ export async function exportFont(app, count, onProgress) {
   return { bytes, count: glyphs.length, skipped }
 }
 
+// An embedded viewer sandboxes the page and silently discards downloads it did
+// not initiate, so saying nothing would look like a dead button.
+const EMBEDDED = (() => {
+  try {
+    return window.self !== window.top
+  } catch {
+    return true
+  }
+})()
+
 export function wireExport(dom, app) {
   const { btnExport, exportMenu } = dom
   const close = () => {
@@ -114,6 +124,10 @@ export function wireExport(dom, app) {
     const kind = ev.target?.dataset?.export
     if (!kind) return
     close()
+    if (EMBEDDED && kind !== 'link') {
+      toast('This viewer blocks downloads — open the full app to export files.', true)
+      return
+    }
     const stamp = app.char + '-' + (app.presetName || 'custom').toLowerCase().replace(/\s+/g, '-')
     try {
       if (kind === 'svg') {

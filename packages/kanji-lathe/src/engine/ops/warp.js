@@ -1,6 +1,6 @@
 // Nonlinear region compression — the em stops being a uniform grid.
 //
-// Every warp here is a SEPARABLE monotone remap, x' = fx(x) and y' = fy(y) over
+// Every axis warp here is a SEPARABLE monotone remap, x' = fx(x) and y' = fy(y) over
 // the glyph's *current* bbox (so it composes after layout surgery). Each axis map
 // is the normalised integral of a strictly positive density d(u): a band with high
 // density is handed more space, its neighbours less. The integral of something
@@ -12,7 +12,7 @@ import { recomputeBounds, recomputeLengths } from '../skeleton.js'
 
 const PROF = 128 // density-profile resolution, independent of the ink histogram
 const MAX_BANDS = 48
-const TILT_GAIN = 1.2 // log-density swing from one end of the axis to the other
+const TILT_GAIN = 1.2 // log-density swing from the centre to either end (2× end to end)
 const BUMP_GAIN = 2.0
 const QUAD_GAIN = 1.5
 const INK_FLOOR = 0.06 // an empty band still keeps this share of the average width
@@ -222,7 +222,11 @@ function inkHistogram(skel, bands, x0, invW, y0, invH, hx, hy) {
       const dx = p[i] - p[i - 2]
       const dy = p[i + 1] - p[i - 1]
       const L = Math.hypot(dx, dy)
-      if (!(L > 0)) continue
+      // A non-finite point upstream would otherwise put an Infinity in one band,
+      // which makes the mean infinite and every log(ratio) a NaN — one bad point
+      // would poison the whole profile and take the entire glyph with it. The
+      // rest of the module skips non-finite points, so skip them here too.
+      if (!(L > 0 && L < Infinity)) continue
       // segments are short (points are arc-spaced) so the midpoint band is exact enough
       let bx = (((p[i] + p[i - 2]) * 0.5 - x0) * invW * bands) | 0
       let by = (((p[i + 1] + p[i - 1]) * 0.5 - y0) * invH * bands) | 0
@@ -291,7 +295,7 @@ function buildCdf(cum, tilt, bump, eqAmt, hist, bands) {
     for (let k = 0; k < bands; k++) mean += hist[k]
     mean /= bands
   }
-  const useInk = eqAmt !== 0 && mean > 1e-9
+  const useInk = eqAmt !== 0 && mean > 1e-9 && mean < Infinity
   for (let k = 0; k < PROF; k++) {
     const u = (k + 0.5) / PROF
     const c = 2 * u - 1

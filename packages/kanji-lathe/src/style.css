@@ -25,7 +25,9 @@
 
 * { box-sizing: border-box; }
 
-html, body { height: 100%; }
+/* 100dvh rather than 100%: embedded in an iframe that sizes to content, a
+   percentage height resolves against nothing and the whole app collapses. */
+html, body { height: 100vh; height: 100dvh; }
 
 body {
   margin: 0;

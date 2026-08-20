@@ -29,7 +29,10 @@ const GRAY_REF = 3800 // median *total* skeleton length of a glyph — the "alre
 const GRAY_SPAN_LO = 0.62 // 一 and 臓 bracket the corpus at ≈4.7× and ≈0.62× of that reference
 const GRAY_SPAN_HI = 4.7
 const GRAY_LO = 0.35
-const GRAY_HI = 3.5
+// The rail has to clear that bracket, or "full equal-ink" quietly stops short on
+// the one glyph that asks for the most of it: 一 wants 4.69x and used to be cut
+// to 3.5x, landing at 75% of everyone else's ink at nbGrayNorm 1.
+const GRAY_HI = GRAY_SPAN_HI
 const GRAY_FLOOR = 120 // a glyph shorter than this is a single tick; do not divide by it
 const HOOK_EM = 100 // a はね flick is about this long whatever the stroke is
 const HOOK_SPAN_LO = 0.06
@@ -139,6 +142,7 @@ export const params = [
     group: 'Pressure',
     type: 'curve',
     default: flatCurve(0.5),
+    when: (P) => P.nbPressDepth > 0,
     hint: 'Free-hand weight along the stroke, left edge to right edge. Flat at the middle is neutral; raise a section to press harder there.',
   },
   {
@@ -170,6 +174,7 @@ export const params = [
     group: 'Weight by stroke',
     type: 'curve',
     default: flatCurve(0.5),
+    when: (P) => P.nbOrderDepth > 0,
     hint: 'Arbitrary weight against stroke order, first stroke at the left edge.',
   },
   {
@@ -372,7 +377,7 @@ function arcInto(p, n, out) {
 export function applyNib(skel, P, ctx) {
   const p = P || {}
   const em = Number.isFinite(skel.em) && skel.em > 0 ? skel.em : EM
-  const maxW = em * MAX_W_FRAC
+  const maxW = Math.max(MIN_W, em * MAX_W_FRAC) // the floor outranks the ceiling
   const base = rd(p.nbWeight, 26, 4, 90)
   const contrast = rd(p.nbContrast, 0, 0, 1)
   const nibFloor = rd(p.nbNibFloor, 0.25, 0.05, 1)
@@ -420,7 +425,10 @@ export function applyNib(skel, P, ctx) {
   let maxDepth = 0
   if (depthAmt !== 0) for (const g of skel.groups) if (Number.isFinite(g.depth) && g.depth > maxDepth) maxDepth = g.depth
 
-  const last = Math.max(1, (skel.strokeCount || skel.strokes.length) - 1)
+  // A one-stroke glyph has no stroke order, so the ramp and the profile sit at
+  // their midpoint. Reading i/1 = 0 instead would hand 一 the full first-stroke
+  // bonus and knock it out of colour with every other glyph on the page.
+  const last = (skel.strokeCount || skel.strokes.length) - 1
 
   for (const s of skel.strokes) {
     if (!s.alive || !s.n) continue
@@ -431,7 +439,7 @@ export function applyNib(skel, P, ctx) {
     let m = base * grayF
     m *= s.cls === 'dot' ? wDot : s.cls === 'turn' ? wTurn : s.cls === 'd' ? wDiag : s.cls === 'r' ? wRise : 1
 
-    const k = clamp(s.i / last, 0, 1)
+    const k = last > 0 ? clamp(s.i / last, 0, 1) : 0.5
     if (orderAmt !== 0) m *= 1 + orderAmt * ORDER_GAIN * (1 - 2 * k)
     if (orderCurve) m *= 1 + orderDepth * (2 * cv(orderCurve, k) - 1)
 

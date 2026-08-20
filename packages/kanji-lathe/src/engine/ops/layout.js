@@ -5,9 +5,10 @@
 //
 // Three levels of the component tree exist, and every control below commits to
 // exactly one of them:
-//   top-level — the children of the root group: the two or three boxes a reader
-//               parses first (left/right, top/bottom, enclosure/contents).
-//               Packing controls live here — cell fit, explode, other-scale.
+//   top-level — the children of the root group, plus any strokes the root draws
+//               itself: the two or three boxes a reader parses first
+//               (left/right, top/bottom, enclosure/contents). Packing controls
+//               live here — cell fit, explode, other-scale.
 //   tree-wide — every group, walked depth-first so a parent's transform is
 //               already baked into its children's live bounds. Transforms
 //               therefore compound down the chain, which is the whole point of
@@ -306,21 +307,26 @@ function xformBox(skel, ranges, box, sx, sy, rot, tx, ty) {
 }
 
 /**
- * Top-level components: the root's children, merged by position code. KanjiVG
- * splits some wrappers across two stroke ranges (the 囗 of 国 is written first
- * and last), and those halves have to travel as one box or the enclosure tears.
- * A root with no children is itself the glyph's single component.
+ * Top-level components: the root's children, merged by position code, plus the
+ * strokes the root owns directly. KanjiVG splits some wrappers across two
+ * stroke ranges (the 囗 of 国 is written first and last), and those halves have
+ * to travel as one box or the enclosure tears. A root with no children is
+ * itself the glyph's single component. The result is a true partition of the
+ * root's stroke range — no stroke is ever left behind.
  */
 function topComponents(skel) {
   const gs = skel.groups
   const root = gs[0]
   if (!root) return []
   const ids = root.children && root.children.length ? root.children : [0]
+  const n = skel.strokes.length
+  const covered = new Uint8Array(n)
   const byCode = new Map()
   const out = []
   for (const id of ids) {
     const g = gs[id]
     if (!g || g.to <= g.from) continue
+    for (let k = Math.max(0, g.from); k < Math.min(n, g.to); k++) covered[k] = 1
     const code = g.positionCode || ''
     const merged = code ? byCode.get(code) : null
     if (merged) {
@@ -330,6 +336,20 @@ function topComponents(skel) {
     const c = { code, ranges: [g.from, g.to] }
     if (code) byCode.set(code, c)
     out.push(c)
+  }
+  // Strokes the root draws itself sit in no child group at all — the 亠二 above
+  // the 口 of 言, the top six strokes of 馬, two of the three strokes of 与.
+  // Left out of the partition they would stand still while every real component
+  // moved, tearing the glyph; each contiguous run of them is therefore its own
+  // unpositioned component.
+  const lo = Math.max(0, root.from)
+  const hi = Math.min(n, root.to)
+  for (let k = lo; k < hi; k++) {
+    if (covered[k]) continue
+    let e = k + 1
+    while (e < hi && !covered[e]) e++
+    out.push({ code: '', ranges: [k, e] })
+    k = e
   }
   return out
 }
@@ -418,7 +438,10 @@ function cellFit(skel, comps, em, t, gutter, aspect) {
   for (const c of comps) {
     const b = rangeBox(skel, c.ranges)
     if (!b) continue
-    const cell = CELLS[c.code] || FULL_CELL
+    // Array.isArray, not a bare lookup: position codes come straight out of the
+    // SVG, and an unrecognised one must land on FULL_CELL rather than fetch
+    // something off Object.prototype and scale the component by NaN.
+    const cell = Array.isArray(CELLS[c.code]) ? CELLS[c.code] : FULL_CELL
     let x0 = cell[0] * em + gut
     let x1 = cell[2] * em - gut
     let y0 = cell[1] * em + gut
@@ -468,7 +491,7 @@ function treeScale(skel, byPos, depthStep) {
     let f = 1
     if (g.depth > 0 && depthStep !== 1) f *= depthStep
     const pf = byPos[g.positionCode]
-    if (pf) f *= pf
+    if (pf > 0) f *= pf
     if (f === 1) continue
     one[0] = g.from
     one[1] = g.to
@@ -488,7 +511,7 @@ function enclosureBreath(skel, amt) {
     for (const id of g.children) {
       const c = skel.groups[id]
       if (!c || c.to <= c.from) continue
-      const dst = ENCLOSERS[c.positionCode] ? enc : inner
+      const dst = ENCLOSERS[c.positionCode] === 1 ? enc : inner
       dst.push(c.from, c.to)
     }
     if (!enc.length || !inner.length) continue

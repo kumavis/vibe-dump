@@ -31,9 +31,12 @@ const CURL_GAIN = 0.92
 const CURL_CAP = 2.2 // hard ceiling on |displacement| in units of nzField, so a rare steep cell cannot fling a point
 // A displacement bigger than the swirl producing it folds the map over itself:
 // strokes cross and double back instead of curling. Holding it to about a third
-// of a cell keeps folding to well under 1% of segments across the corpus even at
-// the top of the slider, and is why a fine field is automatically a gentler one
-// — the same reason small eddies carry less energy than large ones.
+// of a cell is what makes a fine field automatically a gentler one — the same
+// reason small eddies carry less energy than large ones. It bounds the damage
+// rather than removing it: at the very top of the amplitude slider around 1-2%
+// of stroke segments still reverse (measured across the corpus, worst near the
+// default scale, where the limit only just binds); past about half a cell that
+// figure runs away.
 const FOLD_LIMIT = 0.35
 // Octaves fall off faster than the usual half. What the field does to a stroke
 // is set by its strain, amplitude × frequency², so at ½ the finest octave alone
@@ -68,7 +71,7 @@ export const params = [
     step: 0.1,
     default: 3,
     when: (P) => (P.nzField ?? 0) > 0,
-    hint: 'Spatial frequency of the field. Low values push the whole glyph one way; high values curl every stroke separately, and hold the displacement down to a quarter of a swirl so the glyph cannot fold through itself.',
+    hint: 'Spatial frequency of the field. Low values push the whole glyph one way; high values curl every stroke separately, and hold the displacement down to about a third of a swirl so the glyph mostly cannot fold through itself.',
   },
   {
     id: 'nzFieldOctaves',
@@ -128,7 +131,7 @@ export const params = [
     step: 0.1,
     default: 0,
     unit: '°',
-    hint: 'Turn each stroke about its own midpoint by a random angle.',
+    hint: 'Turn each stroke about the centre of its own bounding box by a random angle.',
   },
   {
     id: 'nzEndpointJit',
@@ -257,17 +260,26 @@ export function apply(skel, P, ctx) {
   const nse = ctx && typeof ctx.noise === 'function' ? ctx.noise : noiseFor(base & 1023)
 
   // Glyph variance crossfades a stream shared by every character against one
-  // keyed to this character. Quadrature weights keep the amplitude flat across
-  // the fade, so "half independent" does not also mean "half as shaky".
+  // keyed to this character. The crossfade is CIRCULAR: half these draws are
+  // read as angles, where -1 and +1 are the same direction, so the fade walks
+  // `variance` of the way round from the shared draw to the glyph's own one.
+  // That lands exactly on either stream at the ends of the fade and stays
+  // exactly uniform in between. A weighted average cannot — even normalised it
+  // overshoots the range, and clipping an angle back into it points a seventh
+  // of every glyph's strokes the same way at full amplitude.
   const wS = 1 - variance
   const wG = variance
   const mixNorm = 1 / Math.max(1e-6, Math.hypot(wS, wG))
   const rngS = mulberry32((base ^ 0x9e3779b9) >>> 0)
   const rngG = mulberry32((base ^ glyph ^ 0x85ebca6b) >>> 0)
+  const wrap1 = (v) => v - 2 * Math.round(v / 2) // back into [-1, 1)
   const draw = () => {
+    // both streams advance on every draw, wherever the fade is set
     const a = rngS() * 2 - 1
     const b = rngG() * 2 - 1
-    return clamp((a * wS + b * wG) * mixNorm, -1, 1)
+    if (wG >= 1) return b
+    if (wG <= 0) return a
+    return wrap1(a + wG * wrap1(b - a))
   }
 
   // The field gets the same treatment, but as a second sampling frame rather
@@ -275,12 +287,16 @@ export function apply(skel, P, ctx) {
   // their curls, so the crossfade is still divergence-free.
   const ox = ((glyph & 1023) / 1024) * 251 + 7
   const oy = (((glyph >>> 10) & 1023) / 1024) * 251 + 3
-  const pot = (x, y) => {
-    let v = 0
-    if (wS > 0) v += wS * fbm(nse, x, y, oct)
-    if (wG > 0) v += wG * fbm(nse, x + ox, y + oy, oct)
-    return v * mixNorm
-  }
+  // The potential itself still blends linearly — it has no range to overshoot,
+  // and quadrature weights keep |grad psi| flat across the fade.
+  const kS = wS * mixNorm
+  const kG = wG * mixNorm
+  const pot =
+    wS <= 0
+      ? (x, y) => kG * fbm(nse, x + ox, y + oy, oct)
+      : wG <= 0
+        ? (x, y) => kS * fbm(nse, x, y, oct)
+        : (x, y) => kS * fbm(nse, x, y, oct) + kG * fbm(nse, x + ox, y + oy, oct)
   const fieldAmp = Math.min(field * em, (FOLD_LIMIT * em) / (fieldScale * strainNorm(oct)))
   const curlK = fieldAmp * CURL_GAIN * gradNorm(oct)
   const curlCap = fieldAmp * CURL_CAP
@@ -312,6 +328,8 @@ export function apply(skel, P, ctx) {
     if (gain === 0) continue
 
     const pts = s.pts
+    // arc length is only ever read by tremor and endpoint jitter
+    const needArc = !!(tremor || endJit)
     if (srcBuf.length < n * 2) srcBuf = new Float64Array(n * 2)
     if (arcBuf.length < n) arcBuf = new Float64Array(n)
     const src = srcBuf
@@ -321,20 +339,29 @@ export function apply(skel, P, ctx) {
     let y0 = Infinity
     let x1 = -Infinity
     let y1 = -Infinity
+    // Summing the coordinates is how a broken stroke is detected: a NaN
+    // anywhere poisons the sum, where it would slip through the bounds scan
+    // untouched (every comparison against a NaN is false).
+    let acc = 0
     arc[0] = 0
     for (let i = 0; i < n; i++) {
       const x = pts[i * 2]
       const y = pts[i * 2 + 1]
       src[i * 2] = x
       src[i * 2 + 1] = y
+      acc += x + y
       if (x < x0) x0 = x
       if (x > x1) x1 = x
       if (y < y0) y0 = y
       if (y > y1) y1 = y
-      if (i > 0) arc[i] = arc[i - 1] + Math.hypot(x - src[i * 2 - 2], y - src[i * 2 - 1])
+      if (i > 0 && needArc) {
+        const ax = x - src[i * 2 - 2]
+        const ay = y - src[i * 2 - 1]
+        arc[i] = arc[i - 1] + Math.sqrt(ax * ax + ay * ay)
+      }
     }
-    if (!Number.isFinite(x0) || !Number.isFinite(y0) || !Number.isFinite(x1) || !Number.isFinite(y1)) continue
-    const total = arc[n - 1]
+    if (!Number.isFinite(acc)) continue
+    const total = needArc ? arc[n - 1] : 0
     // a degenerate (zero-length) stroke still has a well-defined index ramp
     const invTot = total > 1e-9 ? 1 / total : 0
 
@@ -362,6 +389,7 @@ export function apply(skel, P, ctx) {
     const curlLim = curlCap * gain
     const laneX = lane * LANE_SPAN
     const laneY = lane * LANE_SPAN * 0.37 + si * 0.61
+    const rigid = rot !== 0 || offX !== 0 || offY !== 0
 
     for (let i = 0; i < n; i++) {
       const px = src[i * 2]
@@ -377,9 +405,9 @@ export function apply(skel, P, ctx) {
         // quarter-turn of ∇ψ — the 2-D curl of a scalar potential
         let fx = gy * curlAmp
         let fy = -gx * curlAmp
-        const m = Math.hypot(fx, fy)
-        if (m > curlLim) {
-          const f = curlLim / m
+        const m2 = fx * fx + fy * fy
+        if (m2 > curlLim * curlLim) {
+          const f = curlLim / Math.sqrt(m2)
           fx *= f
           fy *= f
         }
@@ -394,7 +422,7 @@ export function apply(skel, P, ctx) {
           const b = i < n - 1 ? i + 1 : n - 1
           const tx = src[b * 2] - src[a * 2]
           const ty = src[b * 2 + 1] - src[a * 2 + 1]
-          const L = Math.hypot(tx, ty) || 1
+          const L = Math.sqrt(tx * tx + ty * ty) || 1
           const u = sp * freq + laneX
           const w =
             nse(u, laneY) * TREMOR_SLOW + nse(u * TREMOR_FINE_MUL + 5.5, laneY + 0.5) * (1 - TREMOR_SLOW)
@@ -411,10 +439,19 @@ export function apply(skel, P, ctx) {
         }
       }
 
-      const rx = px - cx
-      const ry = py - cy
-      const nx = cx + rx * cosR - ry * sinR + offX + dx
-      const ny = cy + rx * sinR + ry * cosR + offY + dy
+      let nx
+      let ny
+      if (rigid) {
+        const rx = px - cx
+        const ry = py - cy
+        nx = cx + rx * cosR - ry * sinR + offX + dx
+        ny = cy + rx * sinR + ry * cosR + offY + dy
+      } else {
+        // no wander: skip the pivot round-trip, which is not exact in floating
+        // point and would drift every point by an ulp for no reason
+        nx = px + dx
+        ny = py + dy
+      }
       pts[i * 2] = Number.isFinite(nx) ? nx : px
       pts[i * 2 + 1] = Number.isFinite(ny) ? ny : py
     }

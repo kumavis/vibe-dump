@@ -729,7 +729,10 @@ export function apply(skel, P, ctx) {
     recomputeBounds(skel)
     const cx = (skel.bbox.x0 + skel.bbox.x1) * 0.5
     const cy = (skel.bbox.y0 + skel.bbox.y1) * 0.5
-    const dirty = tension > 0 || crisp > 0 // these change the point spacing
+    // Anything that moves interior points re-spaces them, so the arc parameter
+    // the late ops read has to be taken again afterwards. bow counts: at the
+    // extremes it changes a stroke's arc length by well over half.
+    const dirty = early || tension > 0 || crisp > 0
     for (const s of skel.strokes) {
       if (!s.alive || s.n < 2) continue
       const sArr = need('s', s.n)

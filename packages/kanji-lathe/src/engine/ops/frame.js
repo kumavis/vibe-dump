@@ -19,13 +19,23 @@ import { recomputeBounds, recomputeLengths } from '../skeleton.js'
 const DEG = Math.PI / 180
 const MIN_SIDE = 1e-3
 const CORNER = Math.SQRT2 // frame radius at the corners — the unit for radial falloff
-const RADIAL_MAX = 1.5 // radial terms stop growing here, so a stray far point can never invert one
+const RADIAL_MAX = 1.5 // the twist angle stops growing here, so a stray far point cannot spin away
 const TWIST_MAX = Math.PI // half a turn at the corner when frTwist is ±1
-const BARREL_GAIN = 0.5
+// Barrel is a radial rescale r ↦ r·f(r), and that is only injective while it keeps
+// increasing: d/dr of r·(1 + a·G·(0.5 − r²/2)) is 1 + a·G·(0.5 − 1.5r²), which at the
+// frame corner (r = √2) is 1 − 2.5·a·G. So G above 0.4 turns the corners inside out at
+// full strength, and the quadratic term has to stop at the corner rather than at
+// RADIAL_MAX or the same thing happens again outside a scaled-up frame.
+const BARREL_GAIN = 0.4
+const BARREL_MAX_RN = 1
 const KEYSTONE_GAIN = 0.6
-// Keeping the bend radius above one frame unit is what stops the far edge of the
-// glyph from sweeping through the arc centre and turning inside out.
+// Keeping the bend radius above one frame unit stops the far edge of an unscaled
+// glyph from sweeping through the arc centre and turning inside out. Scale, barrel
+// and twist all run before the bend and can push a point past |R| anyway, so the
+// distance to the centre is clamped below as well.
 const BEND_MAX = 1.4
+const BEND_CLEAR = 0.05 // closest a point may come to the arc centre, in frame units
+const BEND_MIN_ANGLE = 1e-6 // below this 1/halfBend overflows before the arc is even visible
 const POLAR_INNER_MIN = 0.02 // the ring radius is exponential in v, and ln(0) is the one real singularity here
 const POLAR_V_SLACK = 0.25 // how far outside the frame the polar map still tracks v
 
@@ -237,7 +247,10 @@ export function apply(skel, P) {
   const superN = num(P.frSuperN, 0.4, 6, 2)
   const invSuperN = 1 / superN
   const halfBend = (bend * BEND_MAX) / 2
-  const bendR = bend ? 1 / halfBend : 0 // signed arc radius: (frame half-width 1) / halfBend
+  // signed arc radius: (frame half-width 1) / halfBend. A subnormal frBend would
+  // overflow that reciprocal to Infinity and take every point to NaN, so anything
+  // below a visible curvature is simply no bend at all.
+  const bendR = Math.abs(halfBend) > BEND_MIN_ANGLE ? 1 / halfBend : 0
   const polarArc = num(P.frPolarArc, 30, 360, 360) * DEG
   const lnInner = Math.log(Math.max(num(P.frPolarInner, 0, 0.8, 0.35), POLAR_INNER_MIN))
   const tanSlant = Math.tan(slant)
@@ -253,8 +266,10 @@ export function apply(skel, P) {
     if (!s.alive) continue
     const pts = s.pts
     for (let i = 0; i < s.n; i++) {
-      let p = (pts[i * 2] - cx) * inv
-      let q = (pts[i * 2 + 1] - cy) * inv
+      const ox = pts[i * 2]
+      const oy = pts[i * 2 + 1]
+      let p = (ox - cx) * inv
+      let q = (oy - cy) * inv
 
       if (flipX) p = -p
       if (flipY) q = -q
@@ -276,7 +291,7 @@ export function apply(skel, P) {
       }
 
       if (barrel) {
-        const rn = Math.min(Math.hypot(p, q) / CORNER, RADIAL_MAX)
+        const rn = Math.min(Math.hypot(p, q) / CORNER, BARREL_MAX_RN)
         const f = clamp(1 + barrel * BARREL_GAIN * (0.5 - rn * rn), 0.05, 4)
         p *= f
         q *= f
@@ -292,12 +307,18 @@ export function apply(skel, P) {
       }
 
       if (bendR) {
+        // The radius to the arc centre must keep the sign of R. Scale, barrel and twist
+        // run first and can carry a point past |R|, and (R − q) going negative there is
+        // exactly the inside-out fold BEND_MAX is meant to rule out; holding those points
+        // just short of the centre flattens them instead of reflecting them through it.
+        // A point inside the frame is untouched by the clamp, bit for bit.
+        const qb = bendR > 0 ? Math.min(q, bendR - BEND_CLEAR) : Math.max(q, bendR + BEND_CLEAR)
         // written as R·(1−cos φ) rather than R − (R−q)·cos φ so it stays exact as R → ∞
         const phi = p * halfBend
         const c = Math.cos(phi)
         const sn = Math.sin(phi)
-        p = (bendR - q) * sn
-        q = bendR * (1 - c) + q * c
+        p = (bendR - qb) * sn
+        q = bendR * (1 - c) + qb * c
       }
 
       if (polar) {
@@ -323,9 +344,12 @@ export function apply(skel, P) {
         x -= waveSin * d
         y += waveCos * d
       }
-      // last line of defence: a non-finite coordinate would poison every bbox downstream
-      pts[i * 2] = Number.isFinite(x) ? x : cx
-      pts[i * 2 + 1] = Number.isFinite(y) ? y : cy
+      // Last line of defence: a non-finite coordinate would poison every bbox downstream.
+      // Leaving the point where it was costs nothing and keeps the stroke's shape; only a
+      // point that arrived non-finite has to be invented, and the frame centre is finite
+      // because bbox() skips NaNs and recomputeBounds falls back to the em square.
+      pts[i * 2] = Number.isFinite(x) ? x : Number.isFinite(ox) ? ox : cx
+      pts[i * 2 + 1] = Number.isFinite(y) ? y : Number.isFinite(oy) ? oy : cy
     }
   }
 

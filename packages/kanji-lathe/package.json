@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "check": "node tools/ops-sweep.mjs && node tools/shyness-check.mjs && node tools/font-check.mjs && node tools/smoke.mjs",
-    "shots": "node tools/shoot.mjs"
+    "shots": "node tools/shoot.mjs",
+    "standalone": "vite build && node tools/standalone.mjs",
+    "preview": "node tools/preview.mjs"
   },
   "gallery": {
     "title": "Kanji Lathe",

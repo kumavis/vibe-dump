@@ -179,7 +179,11 @@ async function boot() {
     clearTimeout(hashTimer)
     hashTimer = setTimeout(() => {
       const h = serialize(app.P) + '|' + app.char
-      history.replaceState(null, '', '#' + h)
+      // Embedded in a sandboxed frame the history API throws; the design is
+      // still fully described by the panel, so losing the link is survivable.
+      try {
+        history.replaceState(null, '', '#' + h)
+      } catch {}
     }, 400)
   }
 

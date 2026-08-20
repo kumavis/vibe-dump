@@ -96,14 +96,24 @@ function buildRecord(raw) {
   }
 }
 
-/** Fetch + decode the corpus. Returns records already sorted by frequency. */
+/**
+ * Fetch + decode the corpus. Returns records already sorted by frequency.
+ *
+ * A single-file build bakes the corpus into the page, because hosts with a
+ * strict CSP (the artifact viewer among them) will not serve a side-car fetch.
+ */
 export async function loadCorpus(url = './kanji-1000.json') {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`corpus fetch failed: ${res.status}`)
-  const raw = await res.json()
+  const baked = typeof globalThis !== 'undefined' && globalThis.__KANJI_CORPUS__
+  const raw = baked || (await fetchCorpus(url))
   const chars = raw.chars.map(buildRecord)
   const byChar = new Map(chars.map((c) => [c.char, c]))
   return { meta: raw.meta, chars, byChar }
+}
+
+async function fetchCorpus(url) {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`corpus fetch failed: ${res.status}`)
+  return res.json()
 }
 
 /** Decode a corpus already in memory (used by the Node-side tests). */

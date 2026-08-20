@@ -169,8 +169,8 @@ export const params = [
 
 const SOFT_STEP = 0.5 // share of the radius the softest force may push in one pass
 const HARD_STEP = 0.8 // under-relaxed projection: overshooting one constraint breaks the next
-const STEP_CAP = 0.6 // per-pass ceiling, in radii — what keeps the relaxation from ringing
-const TOTAL_CAP = 1.75 // cumulative ceiling, in radii, measured from where the stage found the point
+const STEP_CAP = 0.6 // per-pass ceiling, in radii (or enforced clearances, whichever is wider) — what keeps the relaxation from ringing
+const TOTAL_CAP = 1.75 // cumulative ceiling, same unit, measured from where the stage found the point
 const BIAS_MAX = 0.9 // at |politeness| = 1 the yielding stroke gets 1.9× the push, the senior one 0.1×
 const END_SPAN = 0.3 // share of each end over which "hold the ends" fades out
 const SELF_DETOUR = 1.5 // a stroke is a stranger to itself where the walk between two points is this much longer than the gap: a right-angle turn measures 1.41 and must not count, a U-turn measures 1.57 and must
@@ -181,7 +181,10 @@ const CTRL_MIN = 4 // …but never fewer than this many per stroke
 const CTRL_STEP_MAX = 8
 const MAX_DIM = 96 // grid resolution ceiling: a glyph flung across the plane gets coarser cells, not a huge table
 const WORK_BUDGET = 3.5e6 // neighbour tests per apply before the scan starts striding
-const SCOPES = { all: 0, 'cross-component': 1, 'cross-radical': 2, 'same-component': 3 }
+// null-prototype: an unrecognised scope must fall back to "every stroke", and a
+// plain object would answer `toString`/`constructor`/`__proto__` with an
+// inherited member that survives the `?? 0` and silently picks another mode.
+const SCOPES = { __proto__: null, all: 0, 'cross-component': 1, 'cross-radical': 2, 'same-component': 3 }
 
 // The point cloud as one struct of arrays, grown in a single go and reused: a
 // thumbnail grid renders a thousand glyphs a second and must not allocate for
@@ -289,15 +292,24 @@ function gather(skel, live, preserve, mode, target) {
     const span = (n - 1) / (m - 1)
     let g = off[k]
     let acc = 0
+    let prev = 0
     for (let c = 0; c < m; c++) {
       const i = c === m - 1 ? n - 1 : Math.round(c * span) // both tips are always control samples
+      // Arc length is walked along the SOURCE polyline, never control sample to
+      // control sample. The self-avoidance test weighs this walk against the
+      // straight-line gap with only 5% of margin between a right-angle turn and
+      // a U-turn, and a chord laid across a decimated hook cuts the corner —
+      // measuring a U-turn short enough to disqualify it. Whole-stroke cost is
+      // one distance per source point, the same pass the spacing already needs.
+      for (let j = prev + 1; j <= i; j++) {
+        const dx = p[j * 2] - p[j * 2 - 2]
+        const dy = p[j * 2 + 1] - p[j * 2 - 1]
+        const d = Math.sqrt(dx * dx + dy * dy)
+        if (d > 0) acc += d // a non-finite point fails the test rather than poisoning the arc
+      }
+      prev = i
       const x = fin(p[i * 2], s.ref[i * 2])
       const y = fin(p[i * 2 + 1], s.ref[i * 2 + 1])
-      if (g > off[k]) {
-        const dx = x - px[g - 1]
-        const dy = y - py[g - 1]
-        acc += Math.sqrt(dx * dx + dy * dy)
-      }
       px[g] = x
       py[g] = y
       ax[g] = x

@@ -107,8 +107,23 @@ Three passes, no browser required:
   TrueType file.
 
 `npm run shots --workspace @vibe-dump/kanji-lathe` drives the built app in
-headless Chromium and writes one screenshot per preset, which is the only way to
-review a visual change honestly.
+headless Chromium and writes one screenshot per preset plus a contact sheet of
+all of them, which is the only way to review a visual change honestly.
+`npm run preview -- "Crown Shy"` renders a single design across several
+characters for fast iteration on one preset.
+
+## Single-file build
+
+```bash
+npm run standalone --workspace @vibe-dump/kanji-lathe   # → dist/artifact.html
+```
+
+Inlines the stylesheet, the script and the corpus into one 700 KiB page fragment
+for hosts that will not serve the corpus as a side-car fetch. The loader checks
+for a baked-in corpus before it reaches for the network, so the same source
+serves both builds. Such hosts usually sandbox the page as well, so the export
+menu says plainly that downloads are blocked there rather than appearing to do
+nothing.
 
 ## Regenerating the corpus
 
