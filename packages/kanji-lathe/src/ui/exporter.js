@@ -58,11 +58,21 @@ export function exportPNG(skel, P, size = 1024) {
  * Build a real .ttf. Contours are mirrored to y-up font units and every glyph
  * gets the same advance so the result sets as a proper monospaced CJK face.
  */
-export async function exportFont(app, count, onProgress) {
+/**
+ * Which characters go into a font. Kana are always included — a Japanese face
+ * without a syllabary sets nothing — and the kanji are taken in frequency
+ * order, which is why this cannot just slice the corpus: kana sort first there.
+ */
+export function fontSet(app, kind) {
+  const { kana, kanji, chars } = app.corpus
+  if (kind === 'ttf-loaded') return chars
+  return [...kana, ...kanji.slice(0, kind === 'ttf-small' ? 250 : 1000)]
+}
+
+export async function exportFont(app, records, onProgress) {
   const P = app.P
   const upm = EM
   const advance = Math.round(upm * (P.ftAdvance ?? 1))
-  const records = app.corpus.chars.slice(0, count)
   const glyphs = []
   let skipped = 0
 
@@ -145,13 +155,13 @@ export function wireExport(dom, app) {
         const url = location.origin + location.pathname + '#' + serialize(app.P) + '|' + app.char
         await navigator.clipboard.writeText(url)
         toast('Share link copied')
-      } else if (kind === 'ttf250' || kind === 'ttf1000') {
-        const n = kind === 'ttf250' ? 250 : 1000
-        toast(`Building a ${n}-glyph font…`)
-        const { bytes, count, skipped } = await exportFont(app, n, (p) => {
+      } else if (kind.startsWith('ttf-')) {
+        const records = fontSet(app, kind)
+        toast(`Building a ${records.length}-glyph font…`)
+        const { bytes, count, skipped } = await exportFont(app, records, (p) => {
           toast(`Building font… ${Math.round(p * 100)}%`)
         })
-        const res = await download(`KanjiLathe-${n}.ttf`, new Blob([bytes], { type: 'font/ttf' }), 'font/ttf')
+        const res = await download(`KanjiLathe-${records.length}.ttf`, new Blob([bytes], { type: 'font/ttf' }), 'font/ttf')
         if (res.saved) toast(`Font saved — ${count} glyphs${skipped ? `, ${skipped} skipped` : ''}, ${(bytes.length / 1024) | 0} KiB${styleNote(app.P)}`)
         else {
           const m = saveFailureMessage(res, 'TrueType')
