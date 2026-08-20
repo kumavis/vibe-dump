@@ -19,7 +19,7 @@ const { buildSkeleton, trimmedPoints } = await import(R + '/src/engine/skeleton.
 const sy = await import(R + '/src/engine/ops/shyness.js')
 const { mulberry32, makeNoise2D, hashString } = await import(R + '/src/geom/path.js')
 
-const corpus = decodeCorpus(JSON.parse(readFileSync(R + '/public/kanji-1000.json', 'utf8')))
+const corpus = decodeCorpus(JSON.parse(readFileSync(R + '/public/corpus-core.json', 'utf8')))
 const D = Object.fromEntries(sy.params.map((s) => [s.id, s.type === 'curve' ? [...s.default] : s.default]))
 const ctx = (rec, q = 1) => ({ rng: mulberry32(hashString(rec.char)), noise: makeNoise2D(1), record: rec, time: 0, seed: 1, quality: q })
 

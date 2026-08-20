@@ -7,6 +7,7 @@
 import { pipelineParams } from './engine/pipeline.js'
 import * as renderer from './render/canvas.js'
 import { CURVE_N } from './engine/curve.js'
+import { FONT_STYLES } from './engine/outline-style.js'
 
 /** Controls that belong to the app rather than to any one operator. */
 const APP_PARAMS = [
@@ -22,6 +23,17 @@ const APP_PARAMS = [
     step: 0.05,
     default: 1,
     hint: 'How finely each stroke is sampled before deformation. Higher gives smoother warps and slower renders.',
+  },
+  {
+    id: 'rdFontStyle',
+    label: 'Font outline',
+    group: 'Export',
+    section: 'Export',
+    stage: 'export',
+    type: 'select',
+    default: 'auto',
+    options: FONT_STYLES,
+    hint: 'What the exported SVG and TrueType carry. A font can only hold filled contours, so hollow and contour rings are built by outlining each stroke a second time at a narrower width and winding it backwards — the fill rule then punches the hole. Colour and glow modes have no equivalent and flatten to solid.',
   },
 ]
 

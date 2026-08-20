@@ -24,7 +24,7 @@ const { computeMetrics } = await import(join(ROOT, 'src/engine/metrics.js'))
 const { trimmedPoints, trimmedWidths } = await import(join(ROOT, 'src/engine/skeleton.js'))
 const { buildTTF } = await import(join(ROOT, 'src/font/ttf.js'))
 
-const corpus = decodeCorpus(JSON.parse(readFileSync(join(ROOT, 'public/kanji-1000.json'), 'utf8')))
+const corpus = decodeCorpus(JSON.parse(readFileSync(join(ROOT, 'public/corpus-core.json'), 'utf8')))
 const args = process.argv.slice(2)
 const ALL = args.includes('--all')
 

@@ -49,17 +49,42 @@ export const STROKE_TYPES = {
   '㇣': { name: 'dian-short', cls: 'dot', hook: false },
 }
 
-const FALLBACK = { name: 'unknown', cls: 'd', hook: false }
+// A handful of entries in KanjiVG's long tail reach for the CJK *ideograph* that
+// looks like a stroke rather than the stroke character itself. They mean the
+// same thing, so treat them as the same thing.
+const ALIASES = { 丨: '㇑', 一: '㇐', 丿: '㇒', 乀: '㇏', 乁: '㇐', 亅: '㇚', 丶: '㇔', 乚: '㇄' }
 
-/** Split a raw `kvg:type` into its parts and look up the family. */
+const FALLBACK = { name: 'unknown', cls: null, hook: false }
+
+/**
+ * Split a raw `kvg:type` into its parts and look up the family.
+ *
+ * `cls` comes back null when the type is missing or unrecognised — a few tail
+ * entries carry no type at all, or literal junk like "Missing stroke". The
+ * skeleton builder fills those in from the stroke's own geometry rather than
+ * guessing a family here.
+ */
 export function decodeStrokeType(raw) {
   const type = raw || ''
   const primary = type.split('/')[0]
-  const base = primary[0] || ''
+  const base = ALIASES[primary[0]] || primary[0] || ''
   const variant = primary.slice(1) // '', 'a', 'b', 'c', 'v'
   const alt = type.includes('/') ? type.split('/')[1][0] : ''
   const info = STROKE_TYPES[base] || FALLBACK
   return { type, base, variant, alt, name: info.name, cls: info.cls, hook: info.hook }
+}
+
+/** Classify a stroke by its own shape, for entries KanjiVG never typed. */
+export function classifyByGeometry(pts, n) {
+  const dx = pts[n * 2 - 2] - pts[0]
+  const dy = pts[n * 2 - 1] - pts[1]
+  const len = Math.hypot(dx, dy)
+  if (len < 60) return 'dot' // under ~6% of the em: a tick, not a stroke
+  const a = Math.abs(dx)
+  const b = Math.abs(dy)
+  if (a > b * 2.5) return 'h'
+  if (b > a * 2.5) return 'v'
+  return dx > 0 === dy > 0 ? 'd' : 'r' // falling right vs rising
 }
 
 /** Human labels for the KanjiVG component-position vocabulary. */

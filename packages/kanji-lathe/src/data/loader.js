@@ -61,6 +61,8 @@ function parseGroups(rec) {
   })
 }
 
+const SCRIPTS = ['kanji', 'hiragana', 'katakana', 'punctuation']
+
 function buildRecord(raw) {
   const groups = parseGroups(raw.gr)
   for (const g of groups) if (g.parent >= 0) groups[g.parent].children.push(g.i)
@@ -82,6 +84,7 @@ function buildRecord(raw) {
 
   return {
     char: raw.c,
+    script: SCRIPTS[raw.k || 0],
     freq: raw.f,
     grade: raw.g,
     jlpt: raw.j,
@@ -97,27 +100,81 @@ function buildRecord(raw) {
 }
 
 /**
- * Fetch + decode the corpus. Returns records already sorted by frequency.
+ * Fetch + decode the corpus.
  *
- * A single-file build bakes the corpus into the page, because hosts with a
- * strict CSP (the artifact viewer among them) will not serve a side-car fetch.
+ * Only the core — the kana, the punctuation and the thousand most frequent
+ * kanji — loads with the page. The remaining five and a half thousand
+ * ideographs are a 1.7 MiB download nobody should pay for until they go looking
+ * for a character outside the core, so they arrive on demand.
+ *
+ * A single-file build bakes both parts into the page as inert JSON script tags,
+ * because hosts with a strict CSP (the artifact viewer among them) will not
+ * serve a side-car fetch — and because inert tags cost nothing until parsed.
  */
-export async function loadCorpus(url = './kanji-1000.json') {
-  const baked = typeof globalThis !== 'undefined' && globalThis.__KANJI_CORPUS__
-  const raw = baked || (await fetchCorpus(url))
-  const chars = raw.chars.map(buildRecord)
-  const byChar = new Map(chars.map((c) => [c.char, c]))
-  return { meta: raw.meta, chars, byChar }
+/** A corpus baked into the page by the single-file build, if there is one. */
+function baked(id) {
+  const el = typeof document !== 'undefined' && document.getElementById(id)
+  return el ? JSON.parse(el.textContent) : null
 }
 
-async function fetchCorpus(url) {
+export async function loadCorpus(coreUrl = './corpus-core.json', extUrl = './corpus-ext.json') {
+  const raw = baked('kl-corpus-core') || (await fetchJson(coreUrl))
+  const corpus = makeCorpus(raw)
+
+  let pending = null
+  corpus.loadExtended = () => {
+    if (corpus.extended) return Promise.resolve(corpus)
+    if (!pending) {
+      const inline = baked('kl-corpus-ext')
+      pending = (inline ? Promise.resolve(inline) : fetchJson(extUrl))
+        .then((extRaw) => {
+          addChars(corpus, extRaw.chars.map(buildRecord))
+          corpus.extended = true
+          return corpus
+        })
+        .catch((err) => {
+          pending = null // a failed fetch should not poison later attempts
+          throw err
+        })
+    }
+    return pending
+  }
+  return corpus
+}
+
+async function fetchJson(url) {
   const res = await fetch(url)
   if (!res.ok) throw new Error(`corpus fetch failed: ${res.status}`)
   return res.json()
 }
 
+function makeCorpus(raw) {
+  const corpus = { meta: raw.meta, chars: [], byChar: new Map(), kanji: [], kana: [], extended: false }
+  addChars(corpus, raw.chars.map(buildRecord))
+  return corpus
+}
+
+/** Merge a batch of records in, keeping the per-script views in step. */
+function addChars(corpus, records) {
+  for (const rec of records) {
+    if (corpus.byChar.has(rec.char)) continue
+    corpus.byChar.set(rec.char, rec)
+    corpus.chars.push(rec)
+    ;(rec.script === 'kanji' ? corpus.kanji : corpus.kana).push(rec)
+  }
+  return corpus
+}
+
 /** Decode a corpus already in memory (used by the Node-side tests). */
 export function decodeCorpus(raw) {
-  const chars = raw.chars.map(buildRecord)
-  return { meta: raw.meta, chars, byChar: new Map(chars.map((c) => [c.char, c])) }
+  const corpus = makeCorpus(raw)
+  corpus.loadExtended = () => Promise.resolve(corpus)
+  return corpus
+}
+
+/** Merge a second already-in-memory part (the extended set) into a corpus. */
+export function mergeCorpus(corpus, raw) {
+  addChars(corpus, raw.chars.map(buildRecord))
+  corpus.extended = true
+  return corpus
 }

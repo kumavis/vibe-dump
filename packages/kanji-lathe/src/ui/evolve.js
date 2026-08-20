@@ -3,14 +3,19 @@
 // a parameter space far too large to slider your way across.
 import { fitCanvas, squareBox } from './canvas-util.js'
 import { renderGlyph } from '../render/canvas.js'
-import { mutate } from '../params.js'
+import { mutate, geometryKey } from '../params.js'
 import { buildGlyph } from '../engine/pipeline.js'
 import { mulberry32 } from '../geom/path.js'
 
 export function createEvolve(gridEl, app) {
   let population = []
+  let stamp = null
   let seed = 12345
   const cells = []
+
+  // The parent is whatever design and character are current, so the population
+  // is stale the moment either changes — including while this tab was hidden.
+  const currentStamp = () => geometryKey(app.P) + '|' + app.char
 
   for (let i = 0; i < 9; i++) {
     const btn = document.createElement('button')
@@ -30,6 +35,7 @@ export function createEvolve(gridEl, app) {
   }
 
   function repopulate() {
+    stamp = currentStamp()
     seed = (seed * 1664525 + 1013904223) >>> 0
     const rnd = mulberry32(seed)
     population = []
@@ -40,7 +46,7 @@ export function createEvolve(gridEl, app) {
   }
 
   function draw() {
-    if (!population.length) repopulate()
+    if (!population.length || stamp !== currentStamp()) return repopulate()
     const rec = app.record
     for (let i = 0; i < 9; i++) {
       const { btn, canvas, tag } = cells[i]

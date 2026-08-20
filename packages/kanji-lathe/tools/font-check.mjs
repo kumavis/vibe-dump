@@ -26,12 +26,21 @@ const OUT = join(tmpdir(), 'kanji-lathe-font-check.ttf')
 const { decodeCorpus } = await import(R + '/src/data/loader.js')
 const { buildSkeleton, trimmedPoints, trimmedWidths } = await import(R + '/src/engine/skeleton.js')
 const nib = await import(R + '/src/engine/nib.js')
-const { strokeOutline } = await import(R + '/src/engine/outline.js')
+const { styledStroke } = await import(R + '/src/engine/outline-style.js')
 const { buildTTF } = await import(R + '/src/font/ttf.js')
 const { mulberry32, makeNoise2D, hashString } = await import(R + '/src/geom/path.js')
 
-const corpus = decodeCorpus(JSON.parse(readFileSync(R + '/public/kanji-1000.json', 'utf8')))
+const STYLE = process.argv.includes('--hollow') ? 'hollow' : 'solid'
+// Written by the solid run, read by the hollow one, so the two are comparable.
+const BASELINE = join(tmpdir(), 'kanji-lathe-solid-ink.txt')
+
+const corpus = decodeCorpus(JSON.parse(readFileSync(R + '/public/corpus-core.json', 'utf8')))
 const P = Object.fromEntries(nib.params.map((s) => [s.id, s.type === 'curve' ? [...s.default] : s.default]))
+// Both runs use the same weight, or the ink comparison below is meaningless:
+// a hollow glyph drawn heavier than the solid one can carry a real hole and
+// still put down more ink. The stroke also has to be thick enough to hold a
+// wall and a hole at all.
+P.nbWeight = 48
 const ctx = (rec) => ({ rng: mulberry32(hashString(rec.char)), noise: makeNoise2D(1), record: rec, time: 0, seed: 1, quality: 1 })
 const UPM = 1024
 let fails = 0
@@ -47,7 +56,7 @@ for (const ch of CHARS) {
   for (const s of sk.strokes) {
     const pts = trimmedPoints(s)
     if (pts.length < 4) continue
-    for (const poly of strokeOutline(pts, trimmedWidths(s), { ...nib.capsFor(s, P), join: 'round', miterLimit: 3, capScale: 1 })) {
+    for (const poly of styledStroke(pts, trimmedWidths(s), nib.capsFor(s, P), STYLE)) {
       const f = new Float64Array(poly.length)
       for (let i = 0; i < poly.length; i += 2) { f[i] = poly[i]; f[i + 1] = UPM - poly[i + 1] }
       contours.push(f)
@@ -57,7 +66,7 @@ for (const ch of CHARS) {
 }
 const bytes = buildTTF({ unitsPerEm: UPM, ascent: 900, descent: -124, familyName: 'Kanji Lathe Test', styleName: 'Regular', version: '1.000', glyphs })
 writeFileSync(OUT, bytes)
-console.log(`built ${glyphs.length} glyphs, ${(bytes.length / 1024).toFixed(1)} KiB`)
+console.log(`built ${glyphs.length} ${STYLE} glyphs, ${(bytes.length / 1024).toFixed(1)} KiB`)
 
 // ── independent re-parse ─────────────────────────────────────────────────────
 const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
@@ -211,5 +220,15 @@ console.log('char  ink px   advance')
 for (const r of result.slice(0, 8)) console.log(`  ${r.ch}   ${String(r.ink).padStart(5)}   ${r.w.toFixed(1)}`)
 console.log(`…${result.length} characters, ${hashes.size} distinct rasters, advance ${[...widths].join('/')}px at 96px`)
 console.log(errors.length ? 'page errors: ' + errors.join('\n') : 'no page errors')
+const totalInk = result.reduce((a, r) => a + r.ink, 0)
+if (STYLE === 'solid') writeFileSync(BASELINE, String(totalInk))
+if (STYLE === 'hollow') {
+  // A punched hole is the whole point: a hollow glyph must put down materially
+  // less ink than the solid one, or the reversed contour was ignored.
+  const base = Number(readFileSync(BASELINE, 'utf8'))
+  const ratio = totalInk / base
+  console.log(`hollow ink is ${(ratio * 100).toFixed(0)}% of solid ink`)
+  if (!(ratio < 0.75)) bad(`hollow glyphs are not hollow — ${(ratio * 100).toFixed(0)}% of solid ink`)
+}
 console.log(fails ? `\n${fails} failure(s)` : '\nOK — the browser rendered every glyph')
 process.exit(fails || errors.length ? 1 : 0)

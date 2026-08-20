@@ -83,8 +83,16 @@
 
           <div class="stage__view" data-view="sheet" hidden>
             <div class="sheet__bar">
-              <label class="field"><span class="field__label">From rank</span><input id="sheetFrom" class="num" type="number" min="1" max="1000" value="1" /></label>
-              <label class="field"><span class="field__label">Show</span><input id="sheetCount" class="num" type="number" min="12" max="1000" step="12" value="120" /></label>
+              <label class="field">
+                <span class="field__label">Set</span>
+                <select id="sheetSet" class="select">
+                  <option value="kanji">Kanji by frequency</option>
+                  <option value="kana">Kana</option>
+                  <option value="all">Everything</option>
+                </select>
+              </label>
+              <label class="field"><span class="field__label">From</span><input id="sheetFrom" class="num" type="number" min="1" value="1" /></label>
+              <label class="field"><span class="field__label">Show</span><input id="sheetCount" class="num" type="number" min="12" max="1200" step="12" value="120" /></label>
               <label class="field"><span class="field__label">Cell</span><input id="sheetCell" class="num" type="number" min="40" max="220" step="4" value="92" /></label>
               <span class="sheet__status" id="sheetStatus"></span>
             </div>
@@ -135,7 +143,7 @@
             </div>
 
             <div class="card">
-              <h3 class="card__title">Push &amp; proof</h3>
+              <h3 class="card__title">Use the meter as a control</h3>
               <div class="pushrow">
                 <button class="btn" id="btnPush">Push it</button>
                 <label class="field">
@@ -143,8 +151,14 @@
                   <input id="pushFloor" class="num" type="number" min="0.2" max="0.98" step="0.02" value="0.62" />
                 </label>
               </div>
-              <p class="hintline">Drives the current design as far as it goes while every probe glyph still scores above the floor.</p>
-              <button class="btn btn--wide" id="btnAudit">Find the weakest glyphs</button>
+              <p class="hintline">
+                <b>Push it</b> asks how far this design can go before it stops reading. It scales every
+                control&rsquo;s distance from its default by one factor, then searches for the largest factor
+                where nine probe characters — from one stroke to thirty — all still score above the floor.
+                A timid design gets driven harder; an overcooked one gets pulled back.
+              </p>
+              <button class="btn btn--wide" id="btnAudit">Find the weakest characters</button>
+              <p class="hintline hintline--under">Scores the whole set under this design and shows which broke first.</p>
               <div class="audit" id="auditOut"></div>
             </div>
 

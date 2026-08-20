@@ -18,27 +18,43 @@ export function createInspector(dom, app) {
   })
   charSearch.addEventListener('input', () => renderResults())
 
+  const matches = (c, q) =>
+    c.char === q ||
+    c.meanings.some((m) => m.toLowerCase().includes(q)) ||
+    c.on.some((r) => r.toLowerCase().includes(q)) ||
+    c.kun.some((r) => r.toLowerCase().includes(q))
+
   function renderResults() {
     const q = charSearch.value.trim().toLowerCase()
+    const all = app.corpus.chars
     let list
-    if (!q) list = app.corpus.chars.slice(0, 120)
+    if (!q) list = app.corpus.kanji.slice(0, 90)
     else if (app.corpus.byChar.has(q)) list = [app.corpus.byChar.get(q)]
-    else
-      list = app.corpus.chars
-        .filter(
-          (c) =>
-            c.char === q ||
-            c.meanings.some((m) => m.toLowerCase().includes(q)) ||
-            c.on.some((r) => r.toLowerCase().includes(q)) ||
-            c.kun.some((r) => r.toLowerCase().includes(q)),
-        )
-        .slice(0, 120)
+    else list = all.filter((c) => matches(c, q)).slice(0, 150)
+
     charResults.textContent = ''
     for (const rec of list) {
       const b = el('button', rec.char === app.char ? 'is-current' : null, rec.char)
-      b.title = `#${rec.freq} · ${rec.meanings.join(', ')}`
+      b.title = `${rec.script}${rec.freq ? ` · #${rec.freq}` : ''} · ${rec.meanings.join(', ')}`
       b.addEventListener('click', () => app.setChar(rec.char))
       charResults.appendChild(b)
+    }
+    if (!list.length) charResults.appendChild(el('div', 'picker__none', 'Nothing matches that.'))
+
+    // The long tail is a 1.7 MiB download, so it stays opt-in — but the offer
+    // has to be visible, or the corpus looks like it stops at a thousand.
+    if (!app.corpus.extended) {
+      const more = el('button', 'picker__more', `Search all ${(app.corpus.chars.length + 5439).toLocaleString()} characters…`)
+      more.addEventListener('click', async () => {
+        more.disabled = true
+        more.textContent = 'loading the rest…'
+        if (await app.loadExtended()) renderResults()
+        else {
+          more.disabled = false
+          more.textContent = 'Retry loading the rest'
+        }
+      })
+      charResults.appendChild(more)
     }
   }
 
@@ -50,11 +66,16 @@ export function createInspector(dom, app) {
     const body = el('div', 'glyphInfo__body')
     body.appendChild(el('div', 'glyphInfo__mean', rec.meanings.join(', ') || '—'))
     const read = el('div', 'glyphInfo__read')
-    read.textContent = [rec.on.join('・'), rec.kun.join('・')].filter(Boolean).join('  /  ')
+    // kana carry their romanisation as the "on" reading purely so search finds
+    // them; repeating it under a meaning that already says it is noise
+    read.textContent =
+      rec.script === 'kanji' ? [rec.on.join('・'), rec.kun.join('・')].filter(Boolean).join('  /  ') : ''
     body.appendChild(read)
     const tags = el('div', 'glyphInfo__tags')
-    tags.appendChild(el('span', 'tag', 'rank ' + rec.freq))
-    tags.appendChild(el('span', 'tag', rec.strokeCount + ' strokes'))
+    if (rec.script === 'kanji') {
+      if (rec.freq) tags.appendChild(el('span', 'tag', 'rank ' + rec.freq))
+    } else tags.appendChild(el('span', 'tag', rec.script))
+    tags.appendChild(el('span', 'tag', rec.strokeCount + ' stroke' + (rec.strokeCount === 1 ? '' : 's')))
     if (rec.grade) tags.appendChild(el('span', 'tag', rec.grade <= 6 ? 'grade ' + rec.grade : 'secondary'))
     if (rec.jlpt) tags.appendChild(el('span', 'tag', 'JLPT N' + (5 - rec.jlpt + 1)))
     const rad = rec.radicalGroup

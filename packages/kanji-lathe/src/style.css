@@ -239,6 +239,7 @@ input[type='range']::-moz-range-thumb { width: 12px; height: 12px; background: v
   border-bottom: 1px solid var(--line); background: var(--bg-2); flex: 0 0 auto;
 }
 .sheet__bar .field, .proof__bar .field, .evolve__bar .field { width: 108px; flex: 0 0 auto; }
+.sheet__bar .field:first-child { width: 168px; }
 .proof__bar .proof__input { flex: 1; resize: vertical; font-size: 15px; }
 .sheet__status, .evolve__hint { color: var(--dim); font: 11px/1.5 var(--mono); margin-left: auto; }
 .evolve__hint { font-family: var(--sans); }
@@ -274,6 +275,14 @@ input[type='range']::-moz-range-thumb { width: 12px; height: 12px; background: v
 }
 .picker__results button:hover { border-color: var(--accent); }
 .picker__results button.is-current { border-color: var(--accent); color: var(--accent); }
+
+.picker__none { width: 100%; color: var(--dim); font-size: 11.5px; padding: 4px 2px; }
+.picker__more {
+  width: 100% !important; height: auto !important; font: 11px/1.4 var(--sans) !important;
+  color: var(--muted) !important; padding: 7px 8px !important; margin-top: 4px;
+  border-style: dashed !important;
+}
+.picker__more:disabled { opacity: 0.55; cursor: default; }
 
 .card { border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 8px; background: var(--bg-3); }
 .card__title { font: 600 10px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin: 0 0 8px; }
@@ -331,7 +340,9 @@ input[type='range']::-moz-range-thumb { width: 12px; height: 12px; background: v
 
 .pushrow { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 6px; }
 .pushrow .field { width: 76px; flex: 0 0 auto; }
-.hintline { margin: 0 0 8px; color: var(--dim); font-size: 11px; line-height: 1.5; }
+.hintline { margin: 0 0 8px; color: var(--dim); font-size: 11px; line-height: 1.55; }
+.hintline b { color: var(--muted); font-weight: 600; }
+.hintline--under { margin: 6px 0 0; }
 .btn--wide { width: 100%; }
 .audit { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
 .audit__note { width: 100%; font: 11px/1.5 var(--mono); color: var(--dim); }

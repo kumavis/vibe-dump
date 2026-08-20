@@ -1,6 +1,7 @@
 # Kanji Lathe
 
-A parametric type foundry for the 1,000 most common kanji.
+A parametric type foundry for Japanese — 6,627 characters: the full hiragana and
+katakana syllabaries, Japanese punctuation, and every kanji KanjiVG draws.
 
 Every character is loaded not as a picture but as a **structure**: an ordered list
 of strokes, each with its CJK stroke type and direction, hung on the nested
@@ -29,6 +30,13 @@ idea costs in readability.
   cell its position implies, turning any kanji into a rigid modular system.
 - **Gray-value normalisation.** A 3-stroke kanji and a 23-stroke kanji are pulled
   to the same ink coverage, which is a real type-design move rather than an effect.
+- **Render modes that survive export.** A font can hold exactly one thing:
+  filled contours under the non-zero winding rule. That is less limiting than it
+  sounds, because the engine still has the centreline and the per-point width
+  when the outline is built — so a hollow glyph is not the outer shape "inset",
+  which is genuinely hard, but the same stroke outlined a second time at a
+  narrower width and wound backwards, letting the fill rule punch the hole.
+  Concentric rings are the same trick repeated.
 - **A real font falls out of it.** The TrueType writer is hand-rolled: dense
   outline polygons are simplified, corner-detected, and re-encoded as quadratic
   B-splines using TrueType's implied-midpoint rule. The proof view can compile the
@@ -102,6 +110,9 @@ Three passes, no browser required:
   rasterises distinct, non-blank glyphs. Both halves are needed: the first
   version of the writer carried a transposed `head.magicNumber`, passed the
   re-parse cleanly, and was refused by the font sanitiser in every browser.
+  `--hollow` builds the same font in the hollow style and checks the browser lays
+  down materially less ink at the same weight, which is the only real proof that
+  the reversed contours are punching holes rather than being quietly dropped.
 - `tools/smoke.mjs` runs every preset through the whole pipeline across a spread
   of glyph complexities, outlines the result, scores it, and packs a real
   TrueType file.
@@ -118,17 +129,27 @@ characters for fast iteration on one preset.
 npm run standalone --workspace @vibe-dump/kanji-lathe   # → dist/artifact.html
 ```
 
-Inlines the stylesheet, the script and the corpus into one 700 KiB page fragment
-for hosts that will not serve the corpus as a side-car fetch. The loader checks
-for a baked-in corpus before it reaches for the network, so the same source
-serves both builds. Such hosts usually sandbox the page as well, so the export
+Inlines the stylesheet, the script and both corpora into one 4 MiB page fragment
+for hosts that will not serve the corpus as a side-car fetch. The corpora ride in
+inert `application/json` script tags rather than as JS object literals, so the
+browser never parses four megabytes of stroke data at load — the extended set
+costs nothing until something asks for a character in it. The loader checks for a
+baked-in corpus before it reaches for the network, so the same source serves both
+builds. Such hosts usually sandbox the page as well, so the export
 menu says plainly that downloads are blocked there rather than appearing to do
 nothing.
 
-## Regenerating the corpus
+## The corpus
 
-`public/kanji-1000.json` is committed so the app stays a zero-dependency static
-build. To rebuild it:
+Two committed files, so the app stays a zero-dependency static build:
+
+- `public/corpus-core.json` — 1,188 characters, 293 KiB gzipped. All the kana and
+  punctuation plus the thousand most frequent kanji. Loads with the page.
+- `public/corpus-ext.json` — 5,439 more kanji, 1.7 MiB gzipped. Nobody should pay
+  that on first paint, so it arrives only when you search past the core, ask the
+  specimen sheet for a range beyond it, or type a character it does not hold.
+
+To rebuild them:
 
 ```bash
 curl -sSL -o /tmp/kanjivg.zip https://github.com/KanjiVG/kanjivg/releases/download/r20230110/kanjivg-20230110-main.zip
@@ -137,8 +158,10 @@ curl -sSL http://www.edrdg.org/kanjidic/kanjidic2.xml.gz | gunzip > /tmp/kanjidi
 node tools/build-dataset.mjs --kanjivg /tmp/kanjivg/kanji --kanjidic /tmp/kanjidic2.xml --count 1000
 ```
 
-The 1,000 characters are the top 1,000 by newspaper frequency (KANJIDIC2's `freq`
-field), all of which KanjiVG covers.
+`--count` is the core/extended split. Kanji are ordered most-worth-having first:
+newspaper frequency rank where KANJIDIC2 knows one, then school grade, then
+stroke count for the long tail. Kana carry a romanisation so that searching "ka"
+finds か and カ; KANJIDIC covers ideographs only.
 
 ## Credits and licences
 

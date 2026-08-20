@@ -25,7 +25,7 @@ for (const name of ['layout', 'warp', 'structure', 'frame', 'noise', 'shyness', 
     console.warn(`! skipping ops/${name}.js — ${err.message}`)
   }
 }
-const corpus = decodeCorpus(JSON.parse(readFileSync(R + '/public/kanji-1000.json', 'utf8')))
+const corpus = decodeCorpus(JSON.parse(readFileSync(R + '/public/corpus-core.json', 'utf8')))
 const skelEm = 1024
 const noise = makeNoise2D(1)
 const mkCtx = (rec) => ({ rng: mulberry32(hashString(rec.char)), noise, record: rec, time: 0, seed: 1, glyphSeed: hashString(rec.char), quality: 1 })

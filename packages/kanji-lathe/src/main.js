@@ -22,7 +22,10 @@ const DEFAULT_TEXT = '日本語の活字は千年のあいだ手で彫られて�
 async function boot() {
   let corpus
   try {
-    corpus = await loadCorpus(new URL('./kanji-1000.json', location.href).href)
+    corpus = await loadCorpus(
+      new URL('./corpus-core.json', location.href).href,
+      new URL('./corpus-ext.json', location.href).href,
+    )
   } catch (err) {
     const bootEl = $('boot')
     bootEl.classList.add('is-error')
@@ -38,7 +41,7 @@ async function boot() {
     view: 'single',
     hotStroke: null,
     evolveAmount: 0.35,
-    sheet: { from: 1, count: 120, cell: 92 },
+    sheet: { from: 1, count: 120, cell: 92, set: 'kanji' },
     proof: { text: DEFAULT_TEXT, size: 72, track: 4, useFont: false },
   }
 
@@ -74,11 +77,31 @@ async function boot() {
   Object.assign(app, {
     glyphFor,
     glyph: (quality = 1) => glyphFor(app.record, quality),
-    setChar(ch) {
-      if (!corpus.byChar.has(ch) || ch === app.char) return
+    setChar(ch, { focus = true } = {}) {
+      if (!corpus.byChar.has(ch)) return
+      // Picking a character is a request to look at it; anything else leaves you
+      // staring at a specimen sheet wondering whether the click registered.
+      if (focus && app.view !== 'single') switchView('single')
+      if (ch === app.char) return
       app.char = ch
       inspector.onCharChange()
       invalidate('char')
+    },
+    /** Pull in the long tail of kanji, reporting progress to the caller. */
+    async loadExtended(onState) {
+      if (corpus.extended) return true
+      onState?.('loading')
+      try {
+        await corpus.loadExtended()
+        inspector.renderResults()
+        invalidate('corpus')
+        onState?.('done')
+        return true
+      } catch (err) {
+        onState?.('failed')
+        toast('Could not load the extended character set: ' + err.message, true)
+        return false
+      }
     },
     setHotStroke(i) {
       if (app.hotStroke === i) return
@@ -232,16 +255,16 @@ async function boot() {
   })
   $('paramSearch').addEventListener('input', (ev) => panel.filter(ev.target.value))
 
-  for (const tab of $('tabs').children) {
-    tab.addEventListener('click', () => {
-      for (const t of $('tabs').children) t.classList.toggle('is-active', t === tab)
-      app.view = tab.dataset.view
-      for (const v of document.querySelectorAll('.stage__view')) v.hidden = v.dataset.view !== app.view
-      sheet.stop()
-      proof.stop()
-      invalidate('view')
-    })
+  function switchView(view) {
+    if (app.view === view) return
+    app.view = view
+    for (const t of $('tabs').children) t.classList.toggle('is-active', t.dataset.view === view)
+    for (const v of document.querySelectorAll('.stage__view')) v.hidden = v.dataset.view !== view
+    sheet.stop()
+    proof.stop()
+    invalidate('view')
   }
+  for (const tab of $('tabs').children) tab.addEventListener('click', () => switchView(tab.dataset.view))
 
   // specimen sheet controls
   for (const [id, key] of [['sheetFrom', 'from'], ['sheetCount', 'count'], ['sheetCell', 'cell']]) {
@@ -250,6 +273,10 @@ async function boot() {
       invalidate('sheet')
     })
   }
+  $('sheetSet').addEventListener('change', () => {
+    app.sheet.set = $('sheetSet').value
+    invalidate('sheet')
+  })
   // text proof controls
   $('proofText').value = DEFAULT_TEXT
   $('proofText').addEventListener('input', () => {
@@ -304,10 +331,10 @@ async function boot() {
     note.textContent = 'scoring 1,000 glyphs…'
     auditOut.appendChild(note)
     try {
-      const { worst, mean } = await auditCorpus(app, 18, (p) => {
+      const { worst, mean, total } = await auditCorpus(app, 18, (p) => {
         note.textContent = `scoring… ${Math.round(p * 100)}%`
       })
-      note.textContent = `mean legibility ${(mean * 100).toFixed(1)}% · weakest ${worst.length}:`
+      note.textContent = `${total.toLocaleString()} scored · mean ${(mean * 100).toFixed(1)}% · weakest ${worst.length}:`
       for (const w of worst) {
         const b = document.createElement('button')
         b.textContent = w.rec.char
@@ -364,9 +391,12 @@ async function boot() {
       btnPlay.click()
     }
     if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
-      const i = corpus.chars.findIndex((c) => c.char === app.char)
-      const n = corpus.chars.length
-      app.setChar(corpus.chars[(i + (ev.key === 'ArrowRight' ? 1 : n - 1)) % n].char)
+      // walk within the current script, so arrowing through kana does not
+      // suddenly dump you in the middle of the frequency list
+      const list = app.record.script === 'kanji' ? corpus.kanji : corpus.kana
+      const i = list.findIndex((c) => c.char === app.char)
+      const n = list.length
+      app.setChar(list[(i + (ev.key === 'ArrowRight' ? 1 : n - 1)) % n].char)
     }
   })
 

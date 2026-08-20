@@ -4,6 +4,7 @@
 // parallel half-width array. Operators only ever move points, set widths, or
 // trim the ends — nothing downstream needs to know which operator ran.
 import { flattenStroke, polylineLength, bbox, tangents, hashString } from '../geom/path.js'
+import { classifyByGeometry } from '../data/strokes.js'
 import { EM } from '../data/loader.js'
 
 export { EM }
@@ -60,7 +61,8 @@ export function buildSkeleton(record, { density = 1 } = {}) {
       base: s.base,
       variant: s.variant,
       name: s.name,
-      cls: s.cls,
+      // untyped tail entries get their family from their own shape
+      cls: s.cls || classifyByGeometry(pts, n),
       hook: s.hook,
       group: s.group,
       ancestry: s.ancestry,

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Build src/data/kanji-1000.json from KanjiVG + KANJIDIC2.
+// Build src/data/corpus-core.json from KanjiVG + KANJIDIC2.
 //
 //   node tools/build-dataset.mjs --kanjivg <dir-of-svgs> --kanjidic <kanjidic2.xml> [--count 1000]
 //
@@ -7,7 +7,7 @@
 // Sources (both redistributable, see LICENSES.md next to the data file):
 //   • KanjiVG   — CC BY-SA 3.0 — https://kanjivg.tagaini.net
 //   • KANJIDIC2 — CC BY-SA 4.0 — https://www.edrdg.org/wiki/index.php/KANJIDIC_Project
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -20,7 +20,7 @@ const arg = (name, dflt) => {
 const VG_DIR = arg('kanjivg')
 const DIC = arg('kanjidic')
 const COUNT = Number(arg('count', 1000))
-const OUT = arg('out', join(HERE, '..', 'public', 'kanji-1000.json'))
+const OUT = arg('out', join(HERE, '..', 'public', 'corpus-core.json'))
 // Importable for tests; only builds when run as a script.
 const IS_MAIN = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]
 if (IS_MAIN && (!VG_DIR || !DIC)) {
@@ -279,46 +279,70 @@ function parseKanjidic(xml) {
   return out
 }
 
+// ── Kana ─────────────────────────────────────────────────────────────────────
+// KANJIDIC covers ideographs only, so the syllabary needs its own labels. The
+// romanisation doubles as the search key: typing "ka" should find か and カ.
+const GOJUON =
+  'あa いi うu えe おo かka きki くku けke こko さsa しshi すsu せse そso たta ちchi つtsu てte とto ' +
+  'なna にni ぬnu ねne のno はha ひhi ふfu へhe ほho まma みmi むmu めme もmo やya ゆyu よyo ' +
+  'らra りri るru れre ろro わwa ゐwi ゑwe をwo んn ' +
+  'がga ぎgi ぐgu げge ごgo ざza じji ずzu ぜze ぞzo だda ぢdi づdu でde どdo ' +
+  'ばba びbi ぶbu べbe ぼbo ぱpa ぴpi ぷpu ぺpe ぽpo ゔvu ' +
+  'ぁa- ぃi- ぅu- ぇe- ぉo- ゃya- ゅyu- ょyo- っtsu- ゎwa- ゕka- ゖke-'
+const ROMAJI = new Map()
+for (const tok of GOJUON.split(/\s+/).filter(Boolean)) {
+  const kana = tok[0]
+  const romaji = tok.slice(1).replace(/-$/, '')
+  ROMAJI.set(kana, romaji)
+  // the katakana block sits exactly 0x60 above hiragana for the whole gojūon
+  ROMAJI.set(String.fromCodePoint(kana.codePointAt(0) + 0x60), romaji)
+}
+const PUNCT = { '、': 'comma', '。': 'full stop', '々': 'iteration mark', '〆': 'closing mark', 'ー': 'long vowel', '・': 'middle dot' }
+
+const scriptOf = (cp) => {
+  if (cp >= 0x3041 && cp <= 0x309f) return 'hiragana'
+  if (cp >= 0x30a0 && cp <= 0x30ff) return 'katakana'
+  if (cp >= 0x3000 && cp <= 0x303f) return 'punctuation'
+  return 'kanji'
+}
+
 // ── Build ────────────────────────────────────────────────────────────────────
 if (!IS_MAIN) { /* imported for its codec only */ } else {
 const dic = parseKanjidic(readFileSync(DIC, 'utf8'))
-const ranked = [...dic.entries()]
-  .filter(([, v]) => v.freq > 0)
-  .sort((a, b) => a[1].freq - b[1].freq)
-  .slice(0, COUNT)
-
 const scale = EM / VG_BOX
-const chars = []
 const typeTally = new Map()
 let coordCount = 0
 
-for (const [ch, info] of ranked) {
-  const cp = ch.codePointAt(0).toString(16).padStart(5, '0')
-  const file = join(VG_DIR, cp + '.svg')
-  if (!existsSync(file)) {
-    console.warn('! no KanjiVG for', ch, cp)
-    continue
-  }
+/** Encode one KanjiVG file into a corpus record, or null if it has no glyph. */
+function encodeChar(ch) {
+  const cp = ch.codePointAt(0)
+  const file = join(VG_DIR, cp.toString(16).padStart(5, '0') + '.svg')
+  if (!existsSync(file)) return null
   const { strokes, groups } = parseKanjiVG(readFileSync(file, 'utf8'))
+  if (!strokes.length) return null
+  const info = dic.get(ch) || { freq: 0, grade: 0, jlpt: 0, meanings: [], on: [], kun: [] }
+  const script = scriptOf(cp)
   const enc = []
   const types = []
   for (const s of strokes) {
-    const raw = parseStrokePath(s.d)
-    const q = raw.map((n) => Math.round(n * scale))
+    const q = parseStrokePath(s.d).map((n) => Math.round(n * scale))
     coordCount += q.length
     enc.push(encodeCoords(q))
     types.push(s.type)
     typeTally.set(s.type, (typeTally.get(s.type) || 0) + 1)
   }
-  chars.push({
+  const romaji = ROMAJI.get(ch)
+  const meanings = script === 'kanji' ? info.meanings : PUNCT[ch] ? [PUNCT[ch]] : romaji ? [`${script} ${romaji}`] : [script]
+  return {
     c: ch,
     f: info.freq,
     g: info.grade,
     j: info.jlpt,
+    k: script === 'kanji' ? 0 : script === 'hiragana' ? 1 : script === 'katakana' ? 2 : 3,
     n: strokes.length,
-    m: info.meanings,
-    on: info.on,
-    kun: info.kun,
+    m: meanings,
+    on: script === 'kanji' ? info.on : romaji ? [romaji] : [],
+    kun: script === 'kanji' ? info.kun : [],
     // strokes: one compact coordinate string each, plus its KanjiVG stroke type
     s: enc,
     // stroke types, space-separated in stroke order
@@ -339,28 +363,66 @@ for (const [ch, info] of ranked) {
         ].join(','),
       )
       .join(';'),
-  })
+  }
 }
 
-const data = {
-  meta: {
-    em: EM,
-    count: chars.length,
-    generated: new Date().toISOString().slice(0, 10),
-    sources: [
-      { name: 'KanjiVG', license: 'CC BY-SA 3.0', url: 'https://kanjivg.tagaini.net' },
-      { name: 'KANJIDIC2', license: 'CC BY-SA 4.0', url: 'https://www.edrdg.org/wiki/index.php/KANJIDIC_Project' },
-    ],
-    note: 'Stroke coordinates are delta+base64 packed absolute cubic Béziers on a 1024 em grid.',
-  },
-  chars,
+// Everything KanjiVG draws, minus the Latin and fullwidth-ASCII filler nobody
+// would set Japanese with.
+const available = readdirSync(VG_DIR)
+  .filter((f) => /^[0-9a-f]{5}\.svg$/.test(f))
+  .map((f) => parseInt(f.slice(0, 5), 16))
+  .filter((cp) => cp > 0x2000)
+  .filter((cp) => !(cp >= 0xff01 && cp <= 0xff5e))
+  .map((cp) => String.fromCodePoint(cp))
+
+const kana = available.filter((c) => scriptOf(c.codePointAt(0)) !== 'kanji')
+const kanji = available.filter((c) => scriptOf(c.codePointAt(0)) === 'kanji')
+
+// Ordering is "most worth having first": frequency rank where the newspaper
+// corpus knows one, then school grade, then stroke count for the long tail.
+const rank = (ch) => {
+  const d = dic.get(ch)
+  if (d?.freq) return d.freq
+  if (d?.grade) return 10000 + d.grade * 100 + (d.strokes || 0)
+  return 20000 + (d?.strokes || 99) * 100
+}
+kanji.sort((a, b) => rank(a) - rank(b) || a.codePointAt(0) - b.codePointAt(0))
+
+// Kana and the top-ranked kanji load with the page; the long tail is fetched
+// only if the user goes looking for it.
+const coreChars = [...kana, ...kanji.slice(0, COUNT)]
+const extChars = kanji.slice(COUNT)
+
+const meta = (count, part) => ({
+  em: EM,
+  count,
+  part,
+  generated: new Date().toISOString().slice(0, 10),
+  sources: [
+    { name: 'KanjiVG', license: 'CC BY-SA 3.0', url: 'https://kanjivg.tagaini.net' },
+    { name: 'KANJIDIC2', license: 'CC BY-SA 4.0', url: 'https://www.edrdg.org/wiki/index.php/KANJIDIC_Project' },
+  ],
+  note: 'Stroke coordinates are delta+base64 packed absolute cubic Béziers on a 1024 em grid.',
+})
+
+function emit(list, part, file) {
+  const chars = []
+  for (const ch of list) {
+    const rec = encodeChar(ch)
+    if (rec) chars.push(rec)
+    else console.warn('! no KanjiVG glyph for', ch)
+  }
+  const out = join(dirname(OUT), file)
+  mkdirSync(dirname(out), { recursive: true })
+  writeFileSync(out, JSON.stringify({ meta: meta(chars.length, part), chars }))
+  const bytes = readFileSync(out).length
+  console.log(`  ${file}: ${chars.length} chars, ${(bytes / 1024).toFixed(0)} KiB`)
+  return chars.length
 }
 
-mkdirSync(dirname(OUT), { recursive: true })
-writeFileSync(OUT, JSON.stringify(data))
-const bytes = readFileSync(OUT).length
-console.log(`wrote ${OUT}`)
-console.log(`  ${chars.length} kanji, ${chars.reduce((a, c) => a + c.s.length, 0)} strokes, ${coordCount} coords`)
-console.log(`  ${(bytes / 1024).toFixed(1)} KiB raw`)
-console.log(`  ${typeTally.size} distinct stroke types`)
+console.log('writing corpus…')
+const nCore = emit(coreChars, 'core', 'corpus-core.json')
+const nExt = emit(extChars, 'ext', 'corpus-ext.json')
+console.log(`\n${nCore + nExt} characters total (${kana.length} kana/punctuation, ${kanji.length} kanji)`)
+console.log(`  ${coordCount} coordinates, ${typeTally.size} distinct stroke types`)
 }

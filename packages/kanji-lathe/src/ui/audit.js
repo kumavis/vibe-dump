@@ -105,7 +105,7 @@ export function auditCorpus(app, count, onProgress) {
       else {
         scored.sort((a, b) => a.leg - b.leg)
         const mean = scored.reduce((a, s) => a + s.leg, 0) / scored.length
-        resolve({ worst: scored.slice(0, count), mean, all: scored })
+        resolve({ worst: scored.slice(0, count), mean, total: scored.length, all: scored })
       }
     }
     requestAnimationFrame(step)
