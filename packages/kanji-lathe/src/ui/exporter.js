@@ -8,7 +8,7 @@ import { capsFor } from '../engine/nib.js'
 import { trimmedPoints, trimmedWidths } from '../engine/skeleton.js'
 import { buildTTF } from '../font/ttf.js'
 import { serialize } from '../params.js'
-import { download, toast, squareBox, fitCanvas } from './canvas-util.js'
+import { download, saveFailureMessage, toast, squareBox, fitCanvas } from './canvas-util.js'
 import { renderGlyph } from '../render/canvas.js'
 
 /** All closed polygons for one finished skeleton, in em coordinates (y down). */
@@ -98,16 +98,6 @@ export async function exportFont(app, count, onProgress) {
   return { bytes, count: glyphs.length, skipped }
 }
 
-// An embedded viewer sandboxes the page and silently discards downloads it did
-// not initiate, so saying nothing would look like a dead button.
-const EMBEDDED = (() => {
-  try {
-    return window.self !== window.top
-  } catch {
-    return true
-  }
-})()
-
 export function wireExport(dom, app) {
   const { btnExport, exportMenu } = dom
   const close = () => {
@@ -120,30 +110,31 @@ export function wireExport(dom, app) {
   document.addEventListener('click', close)
   exportMenu.addEventListener('click', (ev) => ev.stopPropagation())
 
+  const report = (res, what) => {
+    if (res.saved) return toast(`${what} saved`)
+    const m = saveFailureMessage(res, what)
+    if (m) toast(m, true)
+  }
+
   exportMenu.addEventListener('click', async (ev) => {
     const kind = ev.target?.dataset?.export
     if (!kind) return
     close()
-    if (EMBEDDED && kind !== 'link') {
-      toast('This viewer blocks downloads — open the full app to export files.', true)
-      return
-    }
     const stamp = app.char + '-' + (app.presetName || 'custom').toLowerCase().replace(/\s+/g, '-')
     try {
       if (kind === 'svg') {
-        download(`kanji-lathe-${stamp}.svg`, exportSVG(app.glyph(), app.P), 'image/svg+xml')
-        toast('SVG saved')
+        report(await download(`kanji-lathe-${stamp}.svg`, exportSVG(app.glyph(), app.P), 'image/svg+xml'), 'SVG')
       } else if (kind === 'png') {
-        exportPNG(app.glyph(), app.P).toBlob((b) => download(`kanji-lathe-${stamp}.png`, b, 'image/png'))
-        toast('PNG saved')
+        const blob = await new Promise((r) => exportPNG(app.glyph(), app.P).toBlob(r, 'image/png'))
+        report(await download(`kanji-lathe-${stamp}.png`, blob, 'image/png'), 'PNG')
       } else if (kind === 'sheet') {
         const canvas = dom.sheetCanvas
         if (!canvas.width) return toast('Open the Specimen tab first', true)
-        canvas.toBlob((b) => download('kanji-lathe-specimen.png', b, 'image/png'))
-        toast('Specimen saved')
+        const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'))
+        report(await download('kanji-lathe-specimen.png', blob, 'image/png'), 'specimen PNG')
       } else if (kind === 'preset') {
-        download('kanji-lathe-preset.json', JSON.stringify({ name: app.presetName || 'Custom', params: app.P }, null, 2), 'application/json')
-        toast('Preset saved')
+        const json = JSON.stringify({ name: app.presetName || 'Custom', params: app.P }, null, 2)
+        report(await download('kanji-lathe-preset.json', json, 'application/json'), 'preset')
       } else if (kind === 'link') {
         const url = location.origin + location.pathname + '#' + serialize(app.P) + '|' + app.char
         await navigator.clipboard.writeText(url)
@@ -154,8 +145,12 @@ export function wireExport(dom, app) {
         const { bytes, count, skipped } = await exportFont(app, n, (p) => {
           toast(`Building font… ${Math.round(p * 100)}%`)
         })
-        download(`KanjiLathe-${n}.ttf`, new Blob([bytes], { type: 'font/ttf' }), 'font/ttf')
-        toast(`Font saved — ${count} glyphs${skipped ? `, ${skipped} skipped` : ''}, ${(bytes.length / 1024) | 0} KiB`)
+        const res = await download(`KanjiLathe-${n}.ttf`, new Blob([bytes], { type: 'font/ttf' }), 'font/ttf')
+        if (res.saved) toast(`Font saved — ${count} glyphs${skipped ? `, ${skipped} skipped` : ''}, ${(bytes.length / 1024) | 0} KiB`)
+        else {
+          const m = saveFailureMessage(res, 'TrueType')
+          if (m) toast(m, true)
+        }
       }
     } catch (err) {
       toast('Export failed: ' + err.message, true)

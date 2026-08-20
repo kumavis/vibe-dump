@@ -20,7 +20,32 @@ export function squareBox(w, h, pad = 0) {
   return { x: (w - s) / 2, y: (h - s) / 2, w: s, h: s }
 }
 
-export function download(name, blobOrString, mime = 'text/plain') {
+// Two ways to hand the viewer a file. On the open web an anchor is enough; in an
+// embedded viewer the frame is sandboxed and an anchor silently does nothing, so
+// the host mediates the save instead and the viewer confirms it. Resolve which
+// one is available once, and let callers report the outcome either way.
+let downloadsNs
+async function hostDownloads() {
+  if (downloadsNs !== undefined) return downloadsNs
+  try {
+    downloadsNs = (await globalThis.claude?.use?.('downloads')) ?? null
+  } catch {
+    downloadsNs = null
+  }
+  return downloadsNs
+}
+
+/** Offer `name` to the viewer. Resolves { saved } and never throws. */
+export async function download(name, blobOrString, mime = 'text/plain') {
+  const host = await hostDownloads()
+  if (host) {
+    try {
+      await host.save({ filename: name, data: blobOrString })
+      return { saved: true }
+    } catch (err) {
+      return { saved: false, code: err?.code || 'unavailable', message: err?.message || String(err) }
+    }
+  }
   const blob = blobOrString instanceof Blob ? blobOrString : new Blob([blobOrString], { type: mime })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -30,6 +55,23 @@ export function download(name, blobOrString, mime = 'text/plain') {
   a.click()
   a.remove()
   setTimeout(() => URL.revokeObjectURL(url), 4000)
+  return { saved: true }
+}
+
+/** What to tell someone when a save did not happen. */
+export function saveFailureMessage(res, what) {
+  switch (res.code) {
+    case 'declined':
+      return null // they said no; nothing to report back to them
+    case 'extension_not_enabled':
+      return `This viewer will not accept ${what} files — try the PNG export, or open the full app.`
+    case 'too_large':
+      return `That ${what} is over the 16 MiB the viewer accepts. Export fewer glyphs.`
+    case 'rate_limited':
+      return 'A save prompt is already open — finish that one first.'
+    default:
+      return `Could not save the ${what}: ${res.message}`
+  }
 }
 
 export function toast(message, isError = false) {
