@@ -110,6 +110,10 @@ const PADS = []
 }
 
 const CHASE_PERIOD = 3.1
+// A fifth of a second of afterglow: long enough to smear the row into one
+// stroke, short enough that the dwell at the far end burns the tail off before
+// the head starts back.
+const TAIL_TAU = 0.22
 const WAKE_RAMP = 0.3
 const SLEEP_RAMP = 1.05
 
@@ -538,10 +542,14 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
 
   // --- the eight, and the one -----------------------------------------------
 
+  // The lamp bulb is amber at x1.5 and it is the room's single warm anchor.
+  // A 2mm indicator running hotter than the practical lighting the whole desk
+  // is the kind of thing that only looks right in isolation, so the row tops
+  // out level with it. The cyan is at the brief's ceiling and stays there.
   const LED_OFF = new THREE.Color(0x2a1a0c)
-  const LED_ON = new THREE.Color(PALETTE.amber).multiplyScalar(3.4)
+  const LED_ON = new THREE.Color(PALETTE.amber).multiplyScalar(2)
   const PWR_OFF = new THREE.Color(0x0d1c20)
-  const PWR_ON = new THREE.Color(PALETTE.cyan).multiplyScalar(2.4)
+  const PWR_ON = new THREE.Color(PALETTE.cyan).multiplyScalar(2.2)
 
   const ledGeo = edgeDirt(new THREE.BoxGeometry(0.002, 0.001, 0.003), 0.12)
   const leds = []
@@ -558,7 +566,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
 
     // No two parts off the same reel are the same brightness, and a row where
     // they are is the tell that the row is eight copies of one object.
-    leds.push({ mat, glow, gain: 0.86 + Math.random() * 0.14 })
+    leds.push({ mat, glow, charge: 0, gain: 0.86 + Math.random() * 0.14 })
   }
 
   const pwrMat = new THREE.MeshBasicMaterial({ color: PWR_OFF.clone(), toneMapped: true, fog: false })
@@ -713,10 +721,9 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   usbShell.position.set(PART.usb.x, TOP + 0.0016, PART.usb.z)
   group.add(usbShell)
 
-  const usbTongue = box(0.0018, 0.0007, 0.0062, blackPlastic, { dirt: 0.05 })
-  usbTongue.position.set(PART.usb.x + 0.0028, TOP + 0.0016, PART.usb.z)
-  usbTongue.castShadow = false
-  group.add(usbTongue)
+  // No tongue inside the jack. The mouth is the one face of this connector
+  // that is covered by the plug's collar, so anything modelled in there is
+  // twelve triangles of nothing.
 
   const reg = box(PART.reg.w, 0.0018, PART.reg.d, MAT.plastic(0x14121a, 0.86), { dirt: 0.12 })
   reg.position.set(PART.reg.x, TOP + 0.0009, PART.reg.z)
@@ -885,18 +892,21 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
       [0.16, 0.002, -0.115],
       [0.23, 0.002, -0.22],
       [0.303, 0.002, -0.385],
+      // Runs on under the monitor's foot rather than stopping short of it.
+      // TubeGeometry has no end cap, so a lead that ends in the open ends in a
+      // hollow tube; this one ends 50mm inside a solid object. If PLACE.monitor
+      // moves, this point follows it.
+      [0.337, 0.002, -0.465],
     ],
-    { radius: 0.0018, color: 0x181523, segments: detail(40) },
+    { radius: 0.0018, color: 0x181523, segments: detail(44) },
   )
   group.add(lead)
   contactDarken(lead, [DESK], { radius: 0.008, floor: 0.46 })
 
   // --- the hit box ----------------------------------------------------------
 
-  const hit = new THREE.Mesh(
-    new THREE.BoxGeometry(0.13, 0.05, 0.096),
-    new THREE.MeshBasicMaterial({ visible: false }),
-  )
+  const hitMat = new THREE.MeshBasicMaterial({ visible: false })
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.05, 0.096), hitMat)
   hit.position.set(0.002, 0.02, 0)
   group.add(hit)
 
@@ -920,6 +930,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
     if (awake) {
       // Quiet. A micro coming out of reset, not a doorbell.
       sfx?.play('blip', { scale: 0.4 })
+      for (const led of leds) led.charge = 0
       oledClock = 0
       oledStep = 0
       oledKey = null
@@ -933,30 +944,34 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
    */
   const chaseHead = (t) => {
     const u = (t % CHASE_PERIOD) / CHASE_PERIOD
-    if (u < 0.44) return { head: smootherstep(u / 0.44) * (LED_N - 1), dir: 1 }
-    if (u < 0.66) return { head: LED_N - 1, dir: 1 }
-    return { head: (LED_N - 1) * (1 - smootherstep((u - 0.66) / 0.34)), dir: -1 }
+    if (u < 0.44) return smootherstep(u / 0.44) * (LED_N - 1)
+    if (u < 0.66) return LED_N - 1
+    return (LED_N - 1) * (1 - smootherstep((u - 0.66) / 0.34))
   }
-
-  // Quick up the leading edge, long decay behind it. A flame scroll has one
-  // sharp side and one that runs on, and so does this.
-  const flame = (d) => (d > 0 ? Math.exp(d * -6.5) : Math.exp(d * 1.15))
 
   const update = (dt, t) => {
     level = clamp01(level + (awake ? dt / WAKE_RAMP : -dt / SLEEP_RAMP))
     if (level === 0 && settled) return
     settled = level === 0
 
-    const { head, dir } = chaseHead(t)
+    const head = chaseHead(t)
+    const bleed = Math.exp(-dt / TAIL_TAU)
     let energy = 0
     for (let i = 0; i < LED_N; i++) {
       const led = leds[i]
-      const b = level * led.gain * (0.03 + 0.97 * flame((i - head) * dir))
+      // Quick up, long decay: the head lands between two LEDs and splits
+      // itself across them, and everything it has already passed only bleeds
+      // off. Taking the tail from what has happened rather than from a
+      // direction flag is what lets the turn at each end survive — a signed
+      // tail has to jump to the far side of the head in one frame, and eight
+      // LEDs doing that together read as a fault rather than as a sweep.
+      led.charge = Math.max(Math.max(0, 1 - Math.abs(i - head)), led.charge * bleed)
+      const b = level * led.gain * (0.03 + 0.97 * led.charge)
       energy += b
       led.mat.color.copy(LED_OFF).lerp(LED_ON, b)
       led.glow.userData.setIntensity(b)
     }
-    rowLight.intensity = (energy / LED_N) * 0.9
+    rowLight.intensity = (energy / LED_N) * 0.7
 
     pwrMat.color.copy(PWR_OFF).lerp(PWR_ON, level)
     pwrGlow.userData.setIntensity(level * 0.85)
@@ -1013,6 +1028,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
       maskMat.dispose()
       backMat.dispose()
       pwrMat.dispose()
+      hitMat.dispose()
       for (const led of leds) led.mat.dispose()
     },
   }

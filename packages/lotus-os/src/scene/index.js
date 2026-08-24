@@ -50,10 +50,44 @@ const FLIGHT_ARC = new THREE.Vector3(0.12, 1.16, -0.16)
 
 const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
-export async function createWorkspace({ osEl, homeEl, shell }) {
+/**
+ * Build the room, or leave nothing behind.
+ *
+ * Assembling it touches the live desktop before it can fail — CSS3DObject
+ * stamps position, pointer-events and user-select onto the element in its
+ * constructor, and a prop built after that is free to throw. A half-built
+ * room must not leave the panel wearing them, or the page gets its desktop
+ * back absolutely positioned and unselectable.
+ */
+export async function createWorkspace(opts) {
+  const { osEl } = opts
+  const held = {}
+  const before = {
+    transform: osEl.style.transform,
+    position: osEl.style.position,
+    pointerEvents: osEl.style.pointerEvents,
+    userSelect: osEl.style.userSelect,
+  }
+  try {
+    return await buildWorkspace(opts, held)
+  } catch (err) {
+    for (const [key, value] of Object.entries(before)) osEl.style[key] = value
+    osEl.removeAttribute('draggable')
+    osEl.classList.remove('is-embodied')
+    osEl.inert = false
+    osEl.dataset.embodied = 'false'
+    if (!osEl.parentElement || osEl.parentElement !== opts.homeEl) opts.homeEl.append(osEl)
+    held.root?.remove()
+    window.lotus?.fit?.()
+    throw err
+  }
+}
+
+async function buildWorkspace({ osEl, homeEl, shell }, held) {
   // --- DOM ----------------------------------------------------------------
 
   const root = document.createElement('div')
+  held.root = root
   root.className = 'room'
   root.dataset.mode = 'off'
 
@@ -510,6 +544,29 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
       root.dataset.mode = 'room'
       hintText.textContent = 'drag to look · click the printer, the board, the station · click the monitor to go back'
       hud.classList.add('is-settled')
+    } catch (err) {
+      // The hand-off has already moved the panel by the time most of this can
+      // fail. Put it back rather than leaving it stranded in a room nobody is
+      // looking at.
+      console.error('reveal failed part-way', err)
+      try {
+        cssScene.remove(monitor.screenObject)
+        osEl.style.transform = ''
+        osEl.style.position = ''
+        osEl.style.pointerEvents = ''
+        osEl.style.userSelect = ''
+        osEl.removeAttribute('draggable')
+        osEl.classList.remove('is-embodied')
+        osEl.inert = false
+        osEl.dataset.embodied = 'false'
+        homeEl.append(osEl)
+        window.lotus?.fit?.()
+      } finally {
+        root.dataset.mode = 'off'
+        root.style.display = 'none'
+        stop()
+      }
+      throw err
     } finally {
       busy = false
     }
