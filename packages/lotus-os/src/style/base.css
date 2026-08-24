@@ -27,6 +27,31 @@ body {
   opacity: 0;
 }
 
+#narrow {
+  display: none;
+}
+@media (max-width: 720px), (max-height: 460px) {
+  #narrow {
+    position: fixed;
+    left: 50%;
+    bottom: 5vh;
+    transform: translateX(-50%);
+    display: block;
+    margin: 0;
+    max-width: 82vw;
+    text-align: center;
+    color: #8a6f34;
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+  /* once the panel is inside a monitor it is meant to be small */
+  body:has(.os[data-embodied="true"]) #narrow {
+    display: none;
+  }
+}
+
 #stage-wrap {
   position: fixed;
   left: 50%;

@@ -179,7 +179,7 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
     return part
   }
 
-  const room = collect(createRoom({ quality: 1 }))
+  const room = collect(createRoom({ sfx, quality: 1 }))
   const desk = collect(createDesk({ sfx, quality: 1 }))
   const monitor = collect(createMonitor({ screenEl: osEl, CSS3DObject }), PLACE.monitor)
   const printer = collect(createPrinter({ sfx, quality: 1 }), PLACE.printer, -0.06)
