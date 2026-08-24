@@ -555,7 +555,6 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
   // Aimed back across the spring holder: it is drawing fumes off the tip, so
   // it has to be looking at the tip.
   fan.rotation.y = -0.45
-  fan.rotation.x = 0.12
   group.add(fan)
 
   const fanFoot = box(0.09, 0.006, 0.038, shroudMat, { dirt: 0.22 })
@@ -571,6 +570,9 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
 
   const fanBody = new THREE.Group()
   fanBody.position.set(0, 0.093, 0)
+  // The nod belongs to the head, not the whole unit — tilt the foot and one
+  // corner of it sinks into the desk.
+  fanBody.rotation.x = 0.12
   fan.add(fanBody)
 
   for (const [fx, fy, fw, fh] of [

@@ -191,17 +191,15 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     group.add(slat)
   }
 
-  const plate = new THREE.Mesh(
-    tintGeometry(new THREE.PlaneGeometry(0.05, 0.03), 0x9a92a8),
-    new THREE.MeshStandardMaterial({
-      map: decalTexture(),
-      transparent: true,
-      roughness: 0.92,
-      metalness: 0,
-      vertexColors: true,
-      side: THREE.DoubleSide,
-    }),
-  )
+  const plateMat = new THREE.MeshStandardMaterial({
+    map: decalTexture(),
+    transparent: true,
+    roughness: 0.92,
+    metalness: 0,
+    vertexColors: true,
+    side: THREE.DoubleSide,
+  })
+  const plate = new THREE.Mesh(tintGeometry(new THREE.PlaneGeometry(0.05, 0.03), 0x9a92a8), plateMat)
   plate.position.set(-0.135, 0.032, BASE_FRONT + 0.0012)
   plate.rotation.z = -0.05
   group.add(plate)
@@ -368,6 +366,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   // Everything below is built around the nozzle tip at the carriage origin,
   // so parking the head is one assignment instead of an offset table.
   const head = new THREE.Group()
+  head.position.x = PARK_X
   gantry.add(head)
 
   const carriagePlate = box(0.034, 0.05, 0.007, MAT.paint(0x201d29, { rough: 0.5, metal: 0.5 }), { dirt: 0.14 })
@@ -579,15 +578,15 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
 
   // The third one has never lit in the four years this machine has been on the
   // bench. Nobody knows what it is for.
-  const deadLed = new THREE.Mesh(new THREE.CircleGeometry(0.0018, 8), MAT.plastic(0x2a2733, 0.4))
+  const deadLed = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.0018, 8)), MAT.plastic(0x2a2733, 0.4))
   deadLed.position.set(0.01, 0.042, BASE_FRONT + 0.0015)
   group.add(deadLed)
 
   // --- hit box --------------------------------------------------------------
 
   const hitMat = new THREE.MeshBasicMaterial({ visible: false })
-  const hit = new THREE.Mesh(new THREE.BoxGeometry(0.372, 0.45, 0.29), hitMat)
-  hit.position.set(-0.014, 0.222, 0.006)
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(0.376, 0.452, 0.31), hitMat)
+  hit.position.set(-0.014, 0.226, 0.002)
   group.add(hit)
 
   // --- state ----------------------------------------------------------------
@@ -716,16 +715,16 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     else if (state === 'print') beginRetract()
   }
 
+  const coolDown = (dt) => {
+    heat += (0 - heat) * Math.min(1, dt * 2.2)
+    nozTemp += (24 - nozTemp) * Math.min(1, dt * 0.55)
+    bedTemp += (24 - bedTemp) * Math.min(1, dt * 0.4)
+  }
+
   const update = (dt, t) => {
     now = t
-    const idleHeat = () => {
-      heat += (0 - heat) * Math.min(1, dt * 2.2)
-      nozTemp += (24 - nozTemp) * Math.min(1, dt * 0.55)
-      bedTemp += (24 - bedTemp) * Math.min(1, dt * 0.4)
-    }
-
     if (state === 'idle') {
-      idleHeat()
+      coolDown(dt)
       setAxes(PARK_X, PARK_Y, 0)
     } else if (state === 'retract') {
       clock += dt
@@ -738,7 +737,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       capRound.visible = false
       capSquare.visible = false
       setAxes(lerp(from.x, PARK_X, e), lerp(from.y, PARK_Y, e), lerp(from.z, 0, e))
-      idleHeat()
+      coolDown(dt)
       if (k >= 1) {
         state = 'idle'
         clearPrint()
@@ -874,7 +873,8 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       {
         object: hit,
         label: 'Printer',
-        hint: () => (state === 'print' ? 'Printing — click to cancel' : 'Start a print'),
+        hint: () =>
+          state === 'print' ? 'Printing — click to cancel' : state === 'retract' ? 'Clearing the bed' : 'Start a print',
         onClick: start,
       },
     ],
@@ -883,6 +883,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       filament.dispose()
       freshLayer.dispose()
       skirtMat.dispose()
+      plateMat.dispose()
       screenMat.dispose()
       screenTex.dispose()
       hitMat.dispose()
