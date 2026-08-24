@@ -16,9 +16,15 @@ const TREE_DEPTH = 6
 // `run reveal`, `run reveal.run`, `./reveal.run`, or just the name on its own.
 const REVEAL = /^\.?\/?reveal(\.run)?$/i
 
-const tokens = (line) => line.match(/\S+/g) ?? []
+// One node in the tree ("About This Machine") has spaces in its name, so the
+// tokenizer has to understand at least one level of quoting or that path is
+// simply not typeable. Stripping every quote rather than parsing them properly
+// is crude, but it means a half-finished quote degrades instead of throwing.
+const tokens = (line) => (line.match(/"[^"]*"|\S+/g) ?? []).map((t) => t.replace(/"/g, ''))
+const quote = (s) => (s.includes(' ') ? `"${s}"` : s)
 const restOf = (line) => line.trim().replace(/^\S+\s*/, '')
 const pad = (s, n) => String(s).padEnd(n)
+const count = (n, noun) => `${n} ${noun}${n === 1 ? '' : 's'}`
 
 const elapsed = (ms) => {
   const s = Math.max(0, Math.floor(ms / 1000))
@@ -218,7 +224,7 @@ export default {
           const rows = treeLines(target)
           printAll(rows.map((r) => r.text))
           const folders = rows.filter((r) => r.kind === 'folder').length
-          print(`${folders} folders, ${rows.length - folders} files`, 'dim')
+          print(`${count(folders, 'folder')}, ${count(rows.length - folders, 'file')}`, 'dim')
         },
       },
 
@@ -333,15 +339,11 @@ export default {
       motifs: {
         blurb: 'the shapes the ornament is drawn from',
         run() {
-          const names = Object.keys(MOTIFS ?? {})
-          if (!names.length) return fail('motifs: the ornament module is not answering')
-          const width = names.reduce((m, n) => Math.max(m, n.length), 0) + 3
-          for (const name of names) {
-            const entry = MOTIFS[name]
-            const note = entry && typeof entry === 'object' ? (entry.caption ?? entry.label ?? '') : ''
-            print(`  ${pad(name, width)}${note}`)
-          }
-          print('cd /Wat and open one to see it at size', 'dim')
+          // Names only. Every motif carries a paragraph of description, and
+          // seven paragraphs is a wall, not a listing — /Wat is where the prose
+          // and the drawing belong.
+          printAll(columnize(Object.keys(MOTIFS), columns()))
+          print('Each one has an entry in /Wat. Open it for the drawing and the note.', 'dim')
         },
       },
 
@@ -377,9 +379,11 @@ export default {
     function submit(line) {
       print(`${promptEl.textContent} ${line}`, 'echo')
       const text = line.trim()
-      if (!text) return
-      if (history[history.length - 1] !== text) history.push(text)
+      if (text && history[history.length - 1] !== text) history.push(text)
+      // Reset even for a blank line: the user pressed enter, so whatever they
+      // had walked back to is no longer where the arrows should resume.
       histAt = history.length
+      if (!text) return
       const argv = tokens(text)
       const name = argv.shift().toLowerCase()
       if (REVEAL.test(name)) return startReveal()
@@ -432,7 +436,7 @@ export default {
       const texts = candidates.map((c) => c.text)
       const filled = commonPrefix(texts)
       // A folder gets no trailing space: the next thing typed is another name.
-      if (texts.length === 1) setWord(texts[0].endsWith('/') ? texts[0] : `${texts[0]} `)
+      if (texts.length === 1) setWord(texts[0].endsWith('/') ? quote(texts[0]) : `${quote(texts[0])} `)
       else if (filled.length > word.length) setWord(filled)
       else printAll(columnize(candidates.map((c) => c.label), columns()), 'dim')
     }
