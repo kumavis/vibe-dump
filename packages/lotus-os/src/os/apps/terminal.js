@@ -154,7 +154,9 @@ export default {
         run() {
           print('commands', 'note')
           for (const [name, cmd] of Object.entries(COMMANDS)) {
-            print(`  ${pad(cmd.args ? `${name} ${cmd.args}` : name, 18)}${cmd.blurb}`)
+            // Widest signature is "theme [dark|light]" at 18 characters, so the
+            // description column has to start past that or the two collide.
+            print(`  ${pad(cmd.args ? `${name} ${cmd.args}` : name, 21)}${cmd.blurb}`)
           }
           print('  tab completes, up and down walk the history, ctrl-c abandons a line', 'dim')
         },

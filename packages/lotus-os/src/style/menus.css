@@ -189,6 +189,10 @@
 .toast[data-tone="warn"] {
   border-left-color: hsl(348 70% 58%);
 }
+.toast__text {
+  min-width: 0;
+  line-height: 1.5;
+}
 .toast__mark {
   display: flex;
   width: 15px;

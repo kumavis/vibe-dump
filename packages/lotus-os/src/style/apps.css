@@ -291,7 +291,9 @@
 
 .prose {
   margin: 0;
-  padding: 20px 24px 28px;
+  /* The documents are hand-wrapped at about 76 columns; the horizontal padding
+     is what decides whether that fits without re-wrapping ragged. */
+  padding: 20px 20px 28px;
   font-family: var(--font-mono);
   font-size: 12.5px;
   line-height: 1.72;
@@ -679,4 +681,17 @@
   line-height: 1.6;
   color: var(--ink-faint);
   max-width: 40ch;
+}
+
+/* the label column of a .switch, so the sub-line sits under the name rather
+   than beside it */
+.switch__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.switch__text .field__hint {
+  font-size: 11px;
+  line-height: 1.5;
 }

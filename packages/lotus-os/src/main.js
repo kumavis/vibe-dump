@@ -76,11 +76,11 @@ createDesktop({ root: desktopEl, shell, menuLayer })
 requestAnimationFrame(() => {
   const w = windowLayer.clientWidth
   const h = windowLayer.clientHeight
-  shell.launch('reader', { path: '/read-me.txt' }, { width: 566, height: 436, x: 224, y: 66 })
+  shell.launch('reader', { path: '/read-me.txt' }, { width: 700, height: 456, x: 158, y: 56 })
   shell.launch(
     'explorer',
     { path: '/Wat' },
-    { width: 524, height: 396, x: clamp(Math.round(w - 524 - 92), 0, w), y: clamp(Math.round(h - 396 - 96), 0, h) },
+    { width: 528, height: 404, x: clamp(Math.round(w - 528 - 86), 0, w), y: clamp(Math.round(h - 404 - 88), 0, h) },
   )
   osEl.classList.add('is-booted')
 })
