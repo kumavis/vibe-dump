@@ -502,7 +502,9 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   const bulbMat = MAT.emissive(PALETTE.amber, 2).clone()
   const bulbLive = bulbMat.color.clone()
   const bulbDead = new THREE.Color(0x171420)
-  const bulb = new THREE.Mesh(ensureColors(new THREE.SphereGeometry(0.038, 10, 8)), bulbMat)
+  // The brightest object in the frame, and the only one whose silhouette is
+  // read against pure black. Ten segments showed every one of them.
+  const bulb = new THREE.Mesh(ensureColors(new THREE.SphereGeometry(0.038, Math.round(22 * q), Math.round(16 * q))), bulbMat)
   bulb.position.y = -CORD - 0.06
   swing.add(bulb)
 

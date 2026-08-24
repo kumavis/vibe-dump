@@ -460,6 +460,10 @@
   background: linear-gradient(180deg, var(--gold-bright), var(--gold));
   font-weight: 600;
 }
+/* Daylight fills its live controls with accent rather than gold — the weathered
+   gold of the light theme is a dark bronze and reads as a disabled fill. That
+   has to hold for every control that can be on, or one panel paints the same
+   state two colours. */
 .os[data-theme="light"] .seg__btn.is-on {
   color: #fffaf0;
   background: linear-gradient(180deg, var(--accent), var(--accent-deep));
@@ -538,6 +542,13 @@
   transform: translateX(18px);
   background: var(--gold-bright);
   box-shadow: 0 0 8px var(--accent-glow);
+}
+.os[data-theme="light"] .switch.is-on .switch__track {
+  border-color: var(--accent-deep);
+  background: var(--accent-wash);
+}
+.os[data-theme="light"] .switch.is-on .switch__knob {
+  background: var(--accent-deep);
 }
 
 /* --- motif viewer -------------------------------------------------------- */

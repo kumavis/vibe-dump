@@ -78,6 +78,7 @@ export function createRig(camera, { getSize }) {
         from,
         to,
         control,
+        hasMid: !!mid,
         ms,
         ease,
         onUpdate,
@@ -102,7 +103,12 @@ export function createRig(camera, { getSize }) {
     flight.to.position.copy(pose.position)
     flight.to.target.copy(pose.target)
     if (pose.fov !== undefined) flight.to.fov = pose.fov
-    flight.control.copy(flight.from.position).lerp(flight.to.position, 0.5).add(_v.set(0, 0.06, 0))
+    // Keep the arc the caller asked for. Recomputing the control point from the
+    // endpoints would quietly straighten a flight that was deliberately curved,
+    // which on a resize mid-flight reads as the camera being yanked.
+    if (!flight.hasMid) {
+      flight.control.copy(flight.from.position).lerp(flight.to.position, 0.5).add(_v.set(0, 0.06, 0))
+    }
     return true
   }
 

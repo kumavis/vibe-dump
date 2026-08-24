@@ -19,10 +19,14 @@ export default {
   id: 'about',
   title: 'About This Machine',
   mark: 'lotus',
+  // Sized to the card rather than guessed: 507px of content plus the title bar
+  // and the hairlines. It cannot be resized, so anything that does not fit is
+  // gone — and what did not fit was the closing sentence and the button that
+  // sentence points at.
   width: 380,
-  height: 440,
+  height: 552,
   minWidth: 380,
-  minHeight: 440,
+  minHeight: 552,
   resizable: false,
 
   mount(body, { win, shell }) {

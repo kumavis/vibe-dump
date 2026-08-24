@@ -53,7 +53,11 @@ export default {
   id: 'reader',
   title: (args) => nameOf(args?.path),
   mark: 'bud',
-  width: 620,
+  // Wide enough for the widest document this machine ships. They are hand-
+  // wrapped at up to 78 columns, and a reader five columns short of that
+  // re-wraps almost every one of them into orphan words — and collapses the
+  // hanging indents in /Wat/ornament.txt outright.
+  width: 660,
   height: 520,
   minWidth: 320,
   minHeight: 240,

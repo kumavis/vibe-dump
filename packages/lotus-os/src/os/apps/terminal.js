@@ -511,7 +511,10 @@ export default {
 
     print(`lotus shell · ${BUILD}`, 'note')
     print('help lists the commands. Tab completes, the up arrow remembers.', 'dim')
-    print('There is one executable: type run reveal when you want to know where this screen is.', 'dim')
+    // Short enough to fit the window the terminal opens at. A banner that
+    // wraps on its own first frame is a bad first impression from a program
+    // whose whole job is fitting text into a box.
+    print('One executable: run reveal, when you want to know where this screen is.', 'dim')
 
     paintPrompt()
     input.focus()

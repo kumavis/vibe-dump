@@ -130,7 +130,9 @@ export function createMonitor({ screenEl, CSS3DObject }) {
       side: THREE.DoubleSide,
     }),
   )
-  note.position.set(-PANEL_W / 2 + 0.012, PANEL_H / 2 - 0.052, PANEL_D / 2 + 0.001)
+  // Positioned by its centre, so half its width has to clear the edge or the
+  // note hangs off the panel into the room behind it.
+  note.position.set(-PANEL_W / 2 + 0.012 + 0.031, PANEL_H / 2 - 0.052, PANEL_D / 2 + 0.001)
   note.rotation.z = -0.07
   note.rotation.y = 0.12
   panel.add(note)

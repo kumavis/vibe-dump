@@ -627,6 +627,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   let now = 0
   const from = new THREE.Vector3(PARK_X, PARK_Y, 0)
   let retractFrom = 0
+  let retractSkirt = 0
 
   const tipY = (n) => BED_TOP + (n + 1) * LAYER_H
 
@@ -726,6 +727,10 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     outcome = 'stopped'
     clock = 0
     retractFrom = clip.constant
+    // Shrink the skirt from however much of it is down, not from a whole one.
+    // Cancelling while it is still being laid otherwise snaps it to full first
+    // and then pulls it in, which is the opposite of what just happened.
+    retractSkirt = skirtGeo.drawRange.count / SKIRT_STRIDE
     from.set(head.position.x, gantry.position.y, bed.position.z)
     sfx?.play('warn')
     drawScreen()
@@ -754,7 +759,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       // The part sinks back through the bed rather than blinking out. Nothing
       // a real printer does, but it reads as deliberate instead of as a bug.
       clip.constant = lerp(retractFrom, baseY - 0.002, e)
-      skirtGeo.setDrawRange(0, Math.floor((1 - k) * SKIRT_SEG) * SKIRT_STRIDE)
+      skirtGeo.setDrawRange(0, Math.floor((1 - k) * retractSkirt) * SKIRT_STRIDE)
       capRound.visible = false
       capSquare.visible = false
       setAxes(lerp(from.x, PARK_X, e), lerp(from.y, PARK_Y, e), lerp(from.z, 0, e))
