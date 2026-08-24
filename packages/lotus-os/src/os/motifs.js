@@ -160,7 +160,7 @@ const LOTUS_INNER = 'M32 30C26.4 26.4 25.2 20 32 15C38.8 20 37.6 26.4 32 30Z'
 // a bunch of leaves; the outer petals are better implied than outlined.
 const BUD_BODY =
   'M32 56C20.4 50 14.6 39.6 15.8 28.4C16.8 18.6 22.8 9.6 32 3C41.2 9.6 47.2 18.6 48.2 28.4C49.4 39.6 43.6 50 32 56Z'
-const BUD_FOLD = 'M32 55.4C26.6 48.6 24 39.4 24.6 30C25 22.6 26.6 16.6 29.6 11.6'
+const BUD_FOLD = 'M32 55.4C26.6 48.6 24 39.4 24.6 30C25 24.4 25.8 20.4 27.2 17'
 
 const ART = {
   lotus: {
@@ -294,41 +294,49 @@ export function markFor(name) {
 
 const n1 = (v) => round(v, 1)
 
-/** Bell, plinth, needle. Reads at 60px tall, which is all it has to do. */
+/** Bell, plinth, needle. The bell has to own half the height or it reads as a lamp. */
 const chediSilhouette = (x, base, h, w) => {
-  const plinth = n1(base - h * 0.15)
-  const bell = n1(base - h * 0.5)
-  const bw = w * 0.6
-  const cap = w * 0.15
+  const py = (f) => n1(base - f * h)
+  const px = (f) => n1(x - f * w)
+  const qx = (f) => n1(x + f * w)
   return (
-    `M${n1(x - w)} ${base}H${n1(x + w)}V${plinth}H${n1(x - w)}Z` +
-    `M${n1(x - bw)} ${plinth}C${n1(x - bw)} ${n1(base - h * 0.32)} ${n1(x - bw * 0.6)} ${n1(bell + h * 0.05)} ${n1(x - cap)} ${bell}` +
-    `H${n1(x + cap)}C${n1(x + bw * 0.6)} ${n1(bell + h * 0.05)} ${n1(x + bw)} ${n1(base - h * 0.32)} ${n1(x + bw)} ${plinth}Z` +
-    `M${n1(x - cap)} ${bell}C${n1(x - cap * 0.7)} ${n1(bell - h * 0.18)} ${n1(x - cap * 0.28)} ${n1(base - h * 0.86)} ${x} ${n1(base - h)}` +
-    `C${n1(x + cap * 0.28)} ${n1(base - h * 0.86)} ${n1(x + cap * 0.7)} ${n1(bell - h * 0.18)} ${n1(x + cap)} ${bell}Z`
+    `M${px(1)} ${base}H${qx(1)}V${py(0.06)}H${px(1)}Z` +
+    `M${px(0.84)} ${py(0.06)}H${qx(0.84)}V${py(0.14)}H${px(0.84)}Z` +
+    `M${px(0.68)} ${py(0.14)}C${px(0.68)} ${py(0.34)} ${px(0.44)} ${py(0.48)} ${px(0.13)} ${py(0.54)}` +
+    `H${qx(0.13)}C${qx(0.44)} ${py(0.48)} ${qx(0.68)} ${py(0.34)} ${qx(0.68)} ${py(0.14)}Z` +
+    `M${px(0.13)} ${py(0.54)}C${px(0.1)} ${py(0.7)} ${px(0.04)} ${py(0.86)} ${x} ${py(1)}` +
+    `C${qx(0.04)} ${py(0.86)} ${qx(0.1)} ${py(0.7)} ${qx(0.13)} ${py(0.54)}Z`
   )
 }
 
-/** The Khmer corncob: one tapering tower, redented, no bell anywhere in it. */
+// A prang is a stack, not a cone. Smooth sides give you a bullet; the redents
+// are the whole difference between the Khmer corncob and a Sinhalese bell.
+const PRANG_TIERS = [
+  [1, 0], [1, 0.1], [0.9, 0.1], [0.9, 0.22], [0.8, 0.22],
+  [0.8, 0.34], [0.7, 0.34], [0.7, 0.46], [0.6, 0.46], [0.6, 0.58], [0.5, 0.58],
+]
+
 const prangSilhouette = (x, base, h, w) => {
-  const nw = w * 0.4
-  const neck = n1(base - h * 0.72)
-  const top = n1(base - h)
+  const py = (f) => n1(base - f * h)
+  const px = (f) => n1(x - f * w)
+  const qx = (f) => n1(x + f * w)
+  const up = PRANG_TIERS.map(([fw, fh], i) => `${i ? 'L' : 'M'}${px(fw)} ${py(fh)}`).join('')
+  const down = [...PRANG_TIERS].reverse().slice(1).map(([fw, fh]) => `L${qx(fw)} ${py(fh)}`).join('')
   return (
-    `M${n1(x - w)} ${base}` +
-    `C${n1(x - w * 0.92)} ${n1(base - h * 0.3)} ${n1(x - nw * 1.24)} ${n1(base - h * 0.54)} ${n1(x - nw)} ${neck}` +
-    `C${n1(x - nw * 0.9)} ${n1(base - h * 0.86)} ${n1(x - nw * 0.44)} ${n1(base - h * 0.94)} ${x} ${top}` +
-    `C${n1(x + nw * 0.44)} ${n1(base - h * 0.94)} ${n1(x + nw * 0.9)} ${n1(base - h * 0.86)} ${n1(x + nw)} ${neck}` +
-    `C${n1(x + nw * 1.24)} ${n1(base - h * 0.54)} ${n1(x + w * 0.92)} ${n1(base - h * 0.3)} ${n1(x + w)} ${base}Z`
+    up +
+    `C${px(0.44)} ${py(0.72)} ${px(0.2)} ${py(0.9)} ${x} ${py(1)}` +
+    `C${qx(0.2)} ${py(0.9)} ${qx(0.44)} ${py(0.72)} ${qx(0.5)} ${py(0.58)}` +
+    down +
+    'Z'
   )
 }
 
 // Off-centre on purpose: a symmetrical skyline would fight the window stack.
 const HORIZON =
-  prangSilhouette(1148, 726, 212, 54) +
-  chediSilhouette(1264, 726, 152, 40) +
-  chediSilhouette(1056, 726, 104, 30) +
-  chediSilhouette(196, 726, 88, 26)
+  `<path d="${prangSilhouette(1148, 726, 212, 54)}"/>` +
+  `<path d="${chediSilhouette(1264, 726, 152, 40)}"/>` +
+  `<path d="${chediSilhouette(1056, 726, 104, 30)}"/>` +
+  `<path d="${chediSilhouette(196, 726, 88, 26)}"/>`
 
 // Mount Meru at the centre of the field, twelve petals to a ring.
 const MANDALA =
@@ -338,18 +346,18 @@ const MANDALA =
   '<circle cx="720" cy="430" r="378" opacity=".6"/>'
 
 const LATTICE =
-  '<pattern id="lo-lattice" width="96" height="96" patternUnits="userSpaceOnUse" patternTransform="rotate(45 0 0)">' +
-  '<path d="M48 8L88 48L48 88L8 48Z" fill="none" stroke="var(--gold-dim)" stroke-width="1.2"/>' +
-  `<g fill="var(--gold-dim)">${ring('M48 42C43.4 39.2 42.6 33 48 26C53.4 33 52.6 39.2 48 42Z', QUARTERS, 48, 48)}</g>` +
+  '<pattern id="lo-lattice" width="96" height="96" patternUnits="userSpaceOnUse">' +
+  '<path d="M48 8L88 48L48 88L8 48Z" fill="none" stroke="var(--gold-dim)" stroke-width="1.4"/>' +
+  `<g fill="var(--gold-dim)">${ring('M48 40C41.6 36.4 40.4 29 48 21C55.6 29 54.4 36.4 48 40Z', QUARTERS, 48, 48)}</g>` +
   '<g fill="var(--gold-dim)"><circle cx="48" cy="48" r="3.4"/><circle cx="0" cy="0" r="2.2"/>' +
   '<circle cx="96" cy="0" r="2.2"/><circle cx="0" cy="96" r="2.2"/><circle cx="96" cy="96" r="2.2"/></g></pattern>'
 
 // Bai raka: a rhythm of decreasing hooks. Good as a border, hopeless anywhere else.
 const BORDER =
-  '<pattern id="lo-border" width="72" height="44" patternUnits="userSpaceOnUse" patternTransform="translate(0 856)">' +
-  '<path d="M0 42H72" fill="none" stroke="var(--gold-dim)" stroke-width="1.4" opacity=".7"/>' +
-  '<g fill="var(--gold-dim)"><path d="M8 42C8 26 16 14 30 10C22 20 20 30 22 42Z"/>' +
-  '<path d="M42 42C42 32 46 25 54 22C48 29 47 35 48 42Z"/></g></pattern>'
+  '<pattern id="lo-border" width="96" height="44" patternUnits="userSpaceOnUse" patternTransform="translate(0 856)">' +
+  '<path d="M0 42H96" fill="none" stroke="var(--gold-dim)" stroke-width="1.4" opacity=".7"/>' +
+  '<g fill="var(--gold-dim)"><path d="M12 42C12 35 14.8 29.4 20 25.4C19.6 30.6 20.6 36 23 42Z"/>' +
+  '<path d="M56 42C56 37.4 57.8 33.4 61.4 30.4C61.2 34 61.8 37.8 63.2 42Z"/></g></pattern>'
 
 const WATER =
   '<g fill="none" stroke="var(--gold-dim)" stroke-width="1.4">' +
@@ -383,7 +391,7 @@ export function wallpaperSVG({ theme = 'dark', ornament = true } = {}) {
   // Silhouettes are the one thing allowed to be opaque; in the dark they are a
   // hole in the sky, at noon they are the far side of the haze.
   const stone = night ? 'var(--bg-deep)' : 'var(--wall-3)'
-  const horizon = `<g fill="${stone}" opacity="${night ? '.62' : '.5'}">${HORIZON}</g>`
+  const horizon = `<g fill="${stone}" opacity="${night ? '.44' : '.36'}">${HORIZON}</g>`
 
   return (
     open +
@@ -392,9 +400,9 @@ export function wallpaperSVG({ theme = 'dark', ornament = true } = {}) {
     `<rect width="1440" height="900" fill="url(#lo-lattice)" opacity="${night ? '.055' : '.075'}"/>` +
     horizon +
     `<g fill="none" stroke="var(--gold-dim)" stroke-width="2.4" opacity="${night ? '.075' : '.06'}">${MANDALA}</g>` +
-    `<g transform="matrix(1 0 0 -1 0 1596)" opacity="${night ? '.1' : '.08'}">${horizon}</g>` +
+    `<g transform="matrix(1 0 0 -1 0 1524)" opacity="${night ? '.24' : '.2'}">${horizon}</g>` +
     WATER +
-    `<rect y="856" width="1440" height="44" fill="url(#lo-border)" opacity="${night ? '.13' : '.16'}"/>` +
+    `<rect y="856" width="1440" height="44" fill="url(#lo-border)" opacity="${night ? '.1' : '.13'}"/>` +
     '</svg>'
   )
 }

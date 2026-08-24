@@ -15,8 +15,11 @@ import { fileURLToPath } from 'node:url'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
-const dist = join(here, '..', 'dist')
-const outDir = join(here, 'shots')
+// DIST lets the shots be taken against a build somewhere other than the
+// package's own dist/, which is how this gets used while half the scene is
+// still being written.
+const dist = process.env.DIST ?? join(here, '..', 'dist')
+const outDir = process.env.OUT ?? join(here, 'shots')
 
 const VIEW = { width: 1280, height: 800 }
 
@@ -88,7 +91,7 @@ await page.evaluate(() => {
 await page.waitForTimeout(700)
 
 console.log('reveal:')
-await page.evaluate(() => window.lotus.shell.reveal())
+await page.evaluate(() => { window.lotus.shell.reveal() })
 await page.waitForTimeout(1500)
 await shot('04-loading')
 await page.waitForTimeout(900)
@@ -117,9 +120,10 @@ const hits = await page.evaluate(() => {
       if (!o || seen.has(it.label)) continue
       seen.add(it.label)
       o.updateWorldMatrix(true, false)
-      const p = { x: 0, y: 0, z: 0 }
-      o.getWorldPosition(p)
-      out.push({ key, label: it.label, world: [p.x, p.y, p.z] })
+      // Read the translation straight out of the matrix: getWorldPosition wants
+      // a real Vector3 and there is no THREE handle on this side of the bridge.
+      const m = o.matrixWorld.elements
+      out.push({ key, label: it.label, world: [m[12], m[13], m[14]] })
     }
   }
   return out
@@ -158,7 +162,7 @@ await page.waitForTimeout(6000)
 await shot('09-printing')
 
 console.log('return:')
-await page.evaluate(() => window.lotus.shell.workspace?.exit())
+await page.evaluate(() => { window.lotus.shell.workspace?.exit() })
 await page.waitForTimeout(1200)
 await shot('10-flying-back')
 await page.waitForTimeout(2000)

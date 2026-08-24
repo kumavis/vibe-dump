@@ -269,13 +269,12 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
   let pressAt = null
   let pointerInside = false
 
-  const hitObjects = () => {
-    const list = []
-    for (const it of interactives) {
-      if (it.objects) list.push(...it.objects)
-      else if (it.object) list.push(it.object)
-    }
-    return list
+  // The interactive set never changes after assembly, so flatten it once
+  // rather than rebuilding the array on every frame of the hover test.
+  const hitObjects = []
+  for (const it of interactives) {
+    if (it.objects) hitObjects.push(...it.objects)
+    else if (it.object) hitObjects.push(it.object)
   }
 
   function findInteractive(object) {
@@ -295,7 +294,7 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
   function pick() {
     if (!pointerInside || root.dataset.mode !== 'room') return null
     raycaster.setFromCamera(pointer, camera)
-    const hits = raycaster.intersectObjects(hitObjects(), true)
+    const hits = raycaster.intersectObjects(hitObjects, true)
     for (const hit of hits) {
       const it = findInteractive(hit.object)
       if (it) return { it, hit }
