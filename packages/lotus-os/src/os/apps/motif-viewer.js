@@ -35,16 +35,11 @@ export default {
     const known = ORDER.filter((key) => listed.includes(key))
     const keys = [...known, ...listed.filter((key) => !known.includes(key) && table[key]?.caption)]
 
-    // The captions are written once, in fs.js, next to the .motif files they
-    // belong to. Reading them back from there beats keeping a second copy
-    // here that can disagree with the one the explorer shows.
-    const fsCaptions = new Map()
-    for (const node of shell.fs.byPath.values()) {
-      if (node.kind === 'motif' && node.motif && !fsCaptions.has(node.motif)) fsCaptions.set(node.motif, node.caption)
-    }
-
+    // Captions come from motifs.js and not from the .motif nodes in fs.js:
+    // the filesystem blurbs are one-liners cut to fit an explorer row, and
+    // this window has a whole panel to fill.
     const labelOf = (key) => table[key]?.label ?? titleCase(key)
-    const captionOf = (key) => table[key]?.caption ?? fsCaptions.get(key) ?? 'No notes were kept on this one.'
+    const captionOf = (key) => table[key]?.caption ?? 'No notes were kept on this one.'
 
     // --- stage ------------------------------------------------------------
 
@@ -75,9 +70,15 @@ export default {
     let current = null
     let art = null
     let fadeTimer = 0
+    let fadeFrame = 0
 
+    // Everywhere else these get drawn between 16 and 40px, where the default
+    // 1.7 outline is the only thing holding them together. On a 300px stage
+    // that same weight lands about eight pixels thick and the kranok hooks
+    // close up into blobs, so the specimen is drawn finer and leans harder on
+    // the wash to keep its mass.
     const drawing = (key) => {
-      const holder = el('div', { html: motifSVG(key) ?? '' })
+      const holder = el('div', { html: motifSVG(key, { stroke: 1, wash: 0.22 }) })
       return holder.querySelector('svg') ?? el('div.empty-note', { text: `Nothing in the ornament module draws ${key}.` })
     }
 
@@ -87,20 +88,24 @@ export default {
     // flattened to nothing.
     function show(key, animate) {
       clearTimeout(fadeTimer)
+      cancelAnimationFrame(fadeFrame)
       const quick = !animate || !art || shell.prefs.get('motion') === 'reduced'
 
       const swap = () => {
         const next = drawing(key)
         if (art) art.remove()
         art = next
-        if (quick) return stage.append(art)
-        art.style.opacity = '0'
-        stage.append(art)
+        if (quick) return stage.append(next)
+        next.style.opacity = '0'
+        stage.append(next)
         // One frame between insert and target value, or there is no start
-        // state for the transition to run from.
-        requestAnimationFrame(() => {
-          art.style.transition = `opacity ${FADE_MS}ms linear`
-          art.style.opacity = '1'
+        // state for the transition to run from. It is kept cancellable
+        // because a chip clicked during that frame starts fading this same
+        // node straight back out, and an uncancelled fade-in would haul it
+        // to full opacity halfway through.
+        fadeFrame = requestAnimationFrame(() => {
+          next.style.transition = `opacity ${FADE_MS}ms linear`
+          next.style.opacity = '1'
         })
       }
 
@@ -159,6 +164,7 @@ export default {
     win.onDispose(() => {
       document.removeEventListener('keydown', onKey)
       clearTimeout(fadeTimer)
+      cancelAnimationFrame(fadeFrame)
     })
 
     // --- boot -------------------------------------------------------------

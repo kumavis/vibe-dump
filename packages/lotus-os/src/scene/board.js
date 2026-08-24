@@ -17,6 +17,7 @@ import {
   contactDarken,
   ensureColors,
   edgeDirt,
+  grimeTexture,
   makeCanvasTexture,
 } from './materials.js'
 
@@ -366,11 +367,15 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   const group = new THREE.Group()
   const detail = (n) => Math.max(4, Math.round(n * (quality < 1 ? 0.7 : 1)))
 
+  // Solder mask is matte. Left glossy it grows a specular lobe the width of
+  // the whole board under a lamp this close, and the board goes from the
+  // darkest thing on the desk to the brightest.
   const maskMat = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     map: boardTexture(),
-    roughness: 0.58,
-    metalness: 0.12,
+    roughnessMap: grimeTexture(),
+    roughness: 1,
+    metalness: 0.04,
     vertexColors: true,
   })
   // Routed FR4, which is the one part of a board that is not green.
@@ -449,7 +454,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   // schematic settled, and this board has been face-up on a desk ever since.
   // Two triangles aimed at the desktop that nobody will ever read; they are
   // here because the machine's own notes claim they are.
-  const backMat = new THREE.MeshStandardMaterial({ map: backTexture(), roughness: 0.6, metalness: 0.1 })
+  const backMat = new THREE.MeshStandardMaterial({ map: backTexture(), roughness: 0.9, metalness: 0.04 })
   const back = new THREE.Mesh(new THREE.PlaneGeometry(0.034, 0.0128), backMat)
   back.rotation.x = Math.PI / 2
   back.position.set(-0.024, STAND - 0.0002, 0.0165)
@@ -465,9 +470,9 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   // --- the eight, and the one -----------------------------------------------
 
   const LED_OFF = new THREE.Color(0x2a1a0c)
-  const LED_ON = new THREE.Color(PALETTE.amber).multiplyScalar(1.9)
+  const LED_ON = new THREE.Color(PALETTE.amber).multiplyScalar(3.4)
   const PWR_OFF = new THREE.Color(0x0d1c20)
-  const PWR_ON = new THREE.Color(PALETTE.cyan).multiplyScalar(1.5)
+  const PWR_ON = new THREE.Color(PALETTE.cyan).multiplyScalar(2.4)
 
   const ledGeo = edgeDirt(new THREE.BoxGeometry(0.002, 0.001, 0.003), 0.12)
   const leds = []
@@ -477,7 +482,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
     mesh.position.set(ledX(i), TOP + 0.0005, LED_Z)
     group.add(mesh)
 
-    const glow = glowSprite(PALETTE.amber, 0.0026, { core: 0.72, mid: 0.22, halo: 0.055 })
+    const glow = glowSprite(PALETTE.amber, 0.0034, { core: 0.9, mid: 0.3, halo: 0.07 })
     glow.position.set(ledX(i), TOP + 0.0012, LED_Z)
     glow.userData.setIntensity(0)
     group.add(glow)
@@ -492,7 +497,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   pwrLed.position.set(PWR.x, TOP + 0.0005, PWR.z)
   group.add(pwrLed)
 
-  const pwrGlow = glowSprite(PALETTE.cyan, 0.0024, { core: 0.6, mid: 0.16, halo: 0.04 })
+  const pwrGlow = glowSprite(PALETTE.cyan, 0.0028, { core: 0.75, mid: 0.2, halo: 0.045 })
   pwrGlow.position.set(PWR.x, TOP + 0.0012, PWR.z)
   pwrGlow.userData.setIntensity(0)
   group.add(pwrGlow)
@@ -518,23 +523,37 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
 
   // --- the display ----------------------------------------------------------
 
-  const socket = box(0.0112, 0.006, 0.0028, blackPlastic, { dirt: 0.14 })
-  socket.position.set(PART.oled.x, TOP + 0.003, 0.0085)
+  // The module is propped: a tall socket at the back edge, a short nylon
+  // spacer at the front. Sat flat it faces the ceiling, and the person who
+  // built this board does not sit on the ceiling.
+  const TILT = 0.34
+  const PIVOT_Z = PART.oled.z + PART.oled.d / 2
+  const SPACER_H = 0.0028
+  // Where the carrier's back edge ends up once it has been tipped about the
+  // front one. The socket is sized to meet it rather than guessed at.
+  const backLift = PART.oled.d * Math.sin(TILT)
+  const backZ = PIVOT_Z - PART.oled.d * Math.cos(TILT)
+
+  const socket = box(0.0112, SPACER_H + backLift, 0.0028, blackPlastic, { dirt: 0.14 })
+  socket.position.set(PART.oled.x, TOP + (SPACER_H + backLift) / 2, backZ + 0.0004)
   group.add(socket)
 
-  // A nylon spacer under the front edge, because a module held up at one end
-  // is a module that has already been knocked off once.
-  const spacer = box(0.006, 0.006, 0.0022, nylon, { dirt: 0.14 })
-  spacer.position.set(PART.oled.x, TOP + 0.003, 0.024)
+  const spacer = box(0.006, SPACER_H, 0.0022, nylon, { dirt: 0.14 })
+  spacer.position.set(PART.oled.x, TOP + SPACER_H / 2, PIVOT_Z - 0.0004)
   group.add(spacer)
 
+  const display = new THREE.Group()
+  display.position.set(PART.oled.x, TOP + SPACER_H, PIVOT_Z)
+  display.rotation.x = TILT
+  group.add(display)
+
   const carrier = box(PART.oled.w, 0.0012, PART.oled.d, MAT.plastic(0x18271f, 0.6), { dirt: 0.14 })
-  carrier.position.set(PART.oled.x, TOP + 0.0066, PART.oled.z)
-  group.add(carrier)
+  carrier.position.set(0, 0.0006, -PART.oled.d / 2)
+  display.add(carrier)
 
   const glass = box(0.0265, 0.0009, 0.0125, MAT.plastic(0x090810, 0.13), { dirt: 0.08 })
-  glass.position.set(PART.oled.x, TOP + 0.00765, PART.oled.z)
-  group.add(glass)
+  glass.position.set(0, 0.00165, -PART.oled.d / 2)
+  display.add(glass)
 
   const oledCanvas = document.createElement('canvas')
   oledCanvas.width = OLED_W
@@ -600,7 +619,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   // read as light rather than as a printed picture of light.
   const oledMat = new THREE.MeshBasicMaterial({
     map: oledTex,
-    color: 0xc8dcff,
+    color: 0xdcecff,
     transparent: true,
     opacity: 0,
     blending: THREE.AdditiveBlending,
@@ -610,14 +629,14 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   })
   const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.0226, 0.0113), oledMat)
   screen.rotation.x = -Math.PI / 2
-  screen.position.set(PART.oled.x, TOP + 0.0083, PART.oled.z)
+  screen.position.set(0, 0.0022, -PART.oled.d / 2)
   screen.renderOrder = 2
-  group.add(screen)
+  display.add(screen)
 
   const screenGlow = glowSprite(0x8fb4ff, 0.005, { core: 0.22, mid: 0.08, halo: 0.022 })
-  screenGlow.position.set(PART.oled.x, TOP + 0.0092, PART.oled.z)
+  screenGlow.position.set(0, 0.0031, -PART.oled.d / 2)
   screenGlow.userData.setIntensity(0)
-  group.add(screenGlow)
+  display.add(screenGlow)
 
   // --- power, connector, controls -------------------------------------------
 
