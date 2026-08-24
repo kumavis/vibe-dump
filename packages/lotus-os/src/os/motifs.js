@@ -32,8 +32,11 @@ const DIAGONALS = [45, 135, 225, 315]
 // *not* the icons.js glyphs — a title bar mark is ornament in gold, a toolbar
 // icon is signage, and the two registers should not be confused.
 
-const PETAL_FRONT = 'M12 12.8C9.2 9.9 8.7 5.8 12 2.3C15.3 5.8 14.8 9.9 12 12.8Z'
-const PETAL_BACK = 'M12 12.2C9.9 10.1 9.4 7.2 12 4.6C14.6 7.2 14.1 10.1 12 12.2Z'
+// Broad and blunt rather than pointed. A narrow petal survives 84px beautifully
+// and turns into a compass star at 19px, which is the one size the app-bar mark
+// is actually obliged to work at.
+const PETAL_FRONT = 'M12 13C6.6 9.23 7.36 5.01 12 1.9C16.64 5.01 17.4 9.23 12 13Z'
+const PETAL_BACK = 'M12 12.4C8 9.68 8.56 6.64 12 4.4C15.44 6.64 16 9.68 12 12.4Z'
 const PETAL_TINY = 'M12 12.4C9 11 8.6 6.6 12 3.4C15.4 6.6 15 11 12 12.4Z'
 
 // The flame body and its inward spiral, kept apart: at 15px only the body
@@ -49,12 +52,15 @@ const CROWN_WING =
   '<path d="M24.6 18.4c1.1-.5 1.6-1.6 1.3-3" opacity=".8"/>'
 
 const MARKS = {
+  // Hovering the app bar rotates this 22.5 degrees, which is exactly half the
+  // 45 between the two layers, so the inner petals land where the outer ones
+  // were. That only pays off while the layers stay four and four.
   lotusMark: line(
     '0 0 24 24',
-    `<g fill="currentColor" fill-opacity=".45" stroke="none">${ring(PETAL_BACK, DIAGONALS, 12, 12)}</g>` +
-      ring(PETAL_FRONT, QUARTERS, 12, 12) +
-      '<circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/>',
-    1.25,
+    `<g fill="currentColor" fill-opacity=".6" stroke="none">${ring(PETAL_BACK, DIAGONALS, 12, 12)}</g>` +
+      `<g fill="currentColor" fill-opacity=".14">${ring(PETAL_FRONT, QUARTERS, 12, 12)}</g>` +
+      '<circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>',
+    1.7,
   ),
 
   lotusSmall: solid(
@@ -207,10 +213,10 @@ const ART = {
     draw: ({ fine, wash }) =>
       '<path d="M23 58C36 52 46 30 45 5C41 22 26 42 9 57Z" ' +
       `fill="currentColor" fill-opacity="${round(wash, 3)}"/>` +
+      '<path d="M2 60.6H42" opacity=".55"/>' +
       `<g stroke-width="${fine}" opacity=".7">` +
       '<path d="M21 53.6C31 47.6 39.4 35.8 41.6 21.6"/>' +
-      '<path d="M1 61.2C3.6 60.8 6.2 59.6 8.4 57.8"/>' +
-      '<path d="M4.6 60.4c1.2-1.4 1.6-3.2 1-4.8"/></g>',
+      '<path d="M7.4 60.6C7 58.4 8 56.4 10.4 55"/></g>',
   },
 
   chedi: {

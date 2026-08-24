@@ -4,4 +4,6 @@ packages/*/dist/
 .DS_Store
 *.log
 packages/*/tools/shots/
+# scratch harnesses used while verifying a change in a real browser
 /.probe-*.mjs
+/.probe/
