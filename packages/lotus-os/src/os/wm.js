@@ -91,6 +91,18 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
 
   function restore(win) {
     const wasMin = win.state === 'minimized'
+    // A window that was maximized when it was folded away comes back maximized.
+    if (wasMin && win.preMinState === 'maximized') {
+      win.preMinState = null
+      win.state = 'normal'
+      win.el.classList.remove('is-minimized')
+      win.el.style.display = ''
+      maximize(win)
+      win.el.classList.add('is-unfolding')
+      setTimeout(() => win.el.classList.remove('is-unfolding'), 240)
+      return
+    }
+    win.preMinState = null
     win.state = 'normal'
     win.el.classList.remove('is-maximized', 'is-minimized')
     win.el.style.display = ''
@@ -111,6 +123,9 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
   function minimize(win) {
     if (win.state === 'minimized') return
     if (win.state !== 'maximized') win.restoreRect = { ...win.rect }
+    // restore() only knows how to come back to a rect, so a maximized window
+    // folded into the app bar would quietly return at its old size.
+    win.preMinState = win.state
     win.state = 'minimized'
     win.el.classList.add('is-minimized')
     sfx?.play('fold')
@@ -178,9 +193,11 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
       return
     }
     snapLayer.classList.add('is-on')
+    // snapRectFor() speaks window-layer coordinates, but the preview element is
+    // positioned against the panel, which starts one app bar higher up.
     Object.assign(snapLayer.style, {
-      left: `${rect.x}px`,
-      top: `${rect.y}px`,
+      left: `${rect.x + root.offsetLeft}px`,
+      top: `${rect.y + root.offsetTop}px`,
       width: `${rect.w}px`,
       height: `${rect.h}px`,
     })
@@ -195,8 +212,13 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
     const existing = windows.find((w) => w.key === key && !w.closing)
     if (existing) {
       focus(existing)
-      existing.el.classList.add('is-nudged')
-      setTimeout(() => existing.el.classList.remove('is-nudged'), 320)
+      // A program that can walk — the explorer — wants to hear that it was
+      // asked for again, so it can go where it was pointed rather than flinch.
+      const handled = existing.api?.onReopen?.(spec.args) === true
+      if (!handled) {
+        existing.el.classList.add('is-nudged')
+        setTimeout(() => existing.el.classList.remove('is-nudged'), 320)
+      }
       return existing
     }
 
@@ -262,6 +284,7 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
       rect: { x, y, w, h },
       restoreRect: null,
       state: 'normal',
+      preMinState: null,
       z: 0,
       closing: false,
       disposers: [],
@@ -337,7 +360,16 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
         place(win, { ...win.rect, x: nx, y: ny })
 
         const { x: px, y: py } = toLocal(ev.clientX, ev.clientY)
-        const zone = px <= SNAP_EDGE ? 'left' : px >= b.w - SNAP_EDGE ? 'right' : py <= SNAP_EDGE ? 'top' : null
+        const zone =
+          spec.resizable === false
+            ? null
+            : px <= SNAP_EDGE
+              ? 'left'
+              : px >= b.w - SNAP_EDGE
+                ? 'right'
+                : py <= SNAP_EDGE
+                  ? 'top'
+                  : null
         if (zone !== armedZone) {
           armedZone = zone
           showSnapPreview(zone)
@@ -345,6 +377,10 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
       },
       onEnd: () => {
         hideSnapPreview()
+        if (spec.resizable === false) {
+          armedZone = null
+          return
+        }
         if (armedZone === 'top') {
           maximize(win)
         } else if (armedZone) {
@@ -357,8 +393,11 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
       },
     })
 
+    // A window that says it cannot be resized has no grips and no maximize
+    // button, so these are the back doors into resizing it anyway.
     bar.addEventListener('dblclick', (ev) => {
       if (ev.target.closest('.win__btn')) return
+      if (spec.resizable === false) return
       toggleMax(win)
     })
 
@@ -445,8 +484,9 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
       win.state = 'normal'
       win.el.classList.remove('is-maximized')
       win.setMaxGlyph(false)
-      const w = Math.min(760, Math.round(b.w * 0.56))
-      const h = Math.min(520, Math.round(b.h * 0.72))
+      const fixed = win.spec.resizable === false
+      const w = fixed ? win.rect.w : Math.min(760, Math.round(b.w * 0.56))
+      const h = fixed ? win.rect.h : Math.min(520, Math.round(b.h * 0.72))
       place(win, { x: 60 + i * 34, y: 40 + i * 30, w, h }, { animate: true })
       win.z = ++zCounter
       win.el.style.zIndex = String(win.z)
@@ -470,7 +510,12 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
       win.state = 'normal'
       win.el.classList.remove('is-maximized')
       win.setMaxGlyph(false)
-      place(win, { x: gap + c * (cw + gap), y: gap + r * (ch + gap), w: cw, h: ch }, { animate: true })
+      const fixed = win.spec.resizable === false
+      place(
+        win,
+        { x: gap + c * (cw + gap), y: gap + r * (ch + gap), w: fixed ? win.rect.w : cw, h: fixed ? win.rect.h : ch },
+        { animate: true },
+      )
     })
     notify()
   }

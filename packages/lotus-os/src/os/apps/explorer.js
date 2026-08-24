@@ -274,6 +274,11 @@ export default {
       if (push && current && current !== node) trail.push(current.path)
       current = node
       selected = null
+      // The dedupe key has to follow the window, not the path it opened at.
+      // Left behind, opening the folder now on screen matches a stale key and
+      // does nothing, while the folder it started at opens a second window
+      // onto something already visible.
+      win.key = `explorer:${node.path}`
       win.setTitle(node.parent ? node.name : 'Root')
       backBtn.disabled = trail.length === 0
       upBtn.disabled = !node.parent
@@ -339,6 +344,18 @@ export default {
     return {
       onResize() {
         revealSelection()
+      },
+      // Asked for a folder this window is already showing: nothing to do but
+      // come to the front. Asked for a different one: walk there, which is
+      // what the person double-clicking it meant.
+      onReopen(args) {
+        const path = args?.path
+        if (!path || path === current?.path) return true
+        const node = shell.node(path)
+        if (!node || node.kind !== 'folder') return false
+        show(node)
+        shell.sfx?.play('blip')
+        return true
       },
     }
   },

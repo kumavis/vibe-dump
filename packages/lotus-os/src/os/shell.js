@@ -62,6 +62,9 @@ export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer,
       minHeight: app.minHeight,
       resizable: app.resizable,
       variant: app.variant,
+      // Kept on the spec so the manager can hand them back to a window that
+      // already exists, rather than only shaking it at the user.
+      args,
       mount: (body, win) => app.mount(body, { win, shell, args }),
     })
   }
@@ -158,22 +161,33 @@ export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer,
   let revealing = false
   let workspace = null // the 3D room controller, once it has been paid for
 
+  const bodyFor = (err) => {
+    const text = String(err?.message || err)
+    if (/webgl/i.test(text)) {
+      return 'This browser will not give the machine a 3D context, so the camera has nowhere to pull back to. The desktop still works.'
+    }
+    if (/dynamically imported|Failed to fetch|importing a module/i.test(text)) {
+      return 'The room itself never arrived — the rest of the machine is already here, but that part is a separate download and it did not come. The desktop still works.'
+    }
+    return 'Something went wrong assembling the room. The desktop still works.'
+  }
+
   async function reveal() {
     if (revealing) return null
     if (workspace) return workspace.enter()
     revealing = true
-    const { runReveal } = await import('./reveal.js')
     try {
+      // Inside the try: a chunk that fails to arrive — offline, a 404, a CSP
+      // block — would otherwise leave `revealing` stuck true and the
+      // executable permanently dead, with nothing on screen to say why.
+      const { runReveal } = await import('./reveal.js')
       workspace = await runReveal({ shell, osEl })
       return workspace
     } catch (err) {
       console.error('reveal failed', err)
       await sheet({
         title: 'The room did not open',
-        body:
-          err && /webgl/i.test(String(err.message || err))
-            ? 'This browser will not give the machine a 3D context, so the camera has nowhere to pull back to. The desktop still works.'
-            : 'Something went wrong assembling the room. The desktop still works.',
+        body: bodyFor(err),
         actions: [{ id: 'ok', label: 'Stay at the desk', primary: true }],
       })
       return null
