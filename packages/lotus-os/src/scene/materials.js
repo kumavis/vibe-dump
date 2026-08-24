@@ -394,7 +394,13 @@ export function glowSprite(color, size, { core = 0.85, mid = 0.3, halo = 0.1, st
     group.add(sp)
   }
   group.traverse((o) => {
-    if (o.isSprite) o.material.userData.base = o.material.opacity
+    if (!o.isSprite) return
+    o.material.userData.base = o.material.opacity
+    // Sprites are raycast targets, and the halo layer is thirteen times the
+    // emitter's size. Left alone, a 2mm LED hands its prop a hover box that
+    // reaches out over empty desk. No glow in this room is ever the thing you
+    // are meant to be clicking, so none of them answer the ray.
+    o.raycast = () => {}
   })
   group.userData.setIntensity = (k) => {
     group.traverse((o) => {

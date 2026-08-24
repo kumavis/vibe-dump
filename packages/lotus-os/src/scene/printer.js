@@ -358,7 +358,8 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   barLight.castShadow = false
   barLight.position.set(0, 0.014, BEAM_Z + 0.02)
   gantry.add(barLight)
-  const BAR_W = 0.95
+  const BAR_MAX = 0.95
+
   const beamSlot = box(UP_X * 2 - 0.04, 0.006, 0.0016, slot)
   beamSlot.position.set(0, 0.035, BEAM_Z + 0.011)
   beamSlot.castShadow = false
@@ -635,7 +636,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     bed.position.z = z
   }
 
-  const setStatus = () => {
+  const statusText = () => {
     if (state === 'retract') return 'CLEARING'
     if (state === 'print') {
       if (phase === 'warm') return 'HEATING'
@@ -649,7 +650,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
 
   const drawScreen = () => {
     if (!sctx) return
-    const status = setStatus()
+    const status = statusText()
     sctx.fillStyle = '#160e24'
     sctx.fillRect(0, 0, SCREEN_W, SCREEN_H)
 
@@ -707,7 +708,10 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     phase = 'warm'
     outcome = 'none'
     clock = 0
-    layer = 0
+    // -1, not 0: the build step only moves the clipping plane when the layer
+    // number changes, and layer 0 has to be one of those changes or the first
+    // layer never gets revealed at all.
+    layer = -1
     angle = 0
     progress = 0
     from.set(head.position.x, gantry.position.y, bed.position.z)
@@ -758,7 +762,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       if (k >= 1) {
         state = 'idle'
         clearPrint()
-        layer = 0
+        layer = -1
         progress = 0
         sfx?.stopLoop('printer')
         sfx?.play('latch')
@@ -856,14 +860,18 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       // startLoop is a no-op when the voice already exists or when sound is
       // off, so asking every frame is what lets the motor come back after the
       // room was closed mid-print, or after Sound was switched on during one.
-      sfx?.startLoop('printer', { freq: 58, gain: 0.02, filter: 480 })
+      // The state check is not decoration: stopLoop drops its entry from the
+      // loop map synchronously, so on the frame the print ends this line would
+      // otherwise build a fresh motor half a dozen lines after killing the old
+      // one, and the printer would hum until the room closed.
+      if (state === 'print') sfx?.startLoop('printer', { freq: 58, gain: 0.02, filter: 480 })
 
       spool.rotation.y -= dt * 0.55 * heat
       fanSpin.rotation.x += dt * 34 * heat
     }
 
     const barLevel = 0.1 + heat * 0.9
-    barLight.intensity = BAR_W * barLevel
+    barLight.intensity = BAR_MAX * barLevel
     barMat.color.setHex(0xfff0d8).multiplyScalar(0.22 * (0.5 + barLevel * 0.5))
 
     nozzleGlow.userData.setIntensity(heat * (0.7 + 0.3 * Math.sin(t * 11)))

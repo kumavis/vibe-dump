@@ -253,6 +253,12 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
   const ledGlow = glowSprite(PALETTE.sodium, 0.005, { core: 0.7, mid: 0.22, halo: 0.07 })
   ledGlow.position.copy(led.position)
   ledGlow.userData.setIntensity(0)
+  // Sprites are raycast targets, and this one's halo layer is 65 mm across
+  // inside a base unit only 135 mm wide. Left alone it hands the station a
+  // hover box that reaches out over empty desk.
+  ledGlow.traverse((o) => {
+    o.raycast = () => {}
+  })
   panel.add(ledGlow)
 
   // Where the iron's lead plugs in. Sunk half into the cheek so the cable has
@@ -320,7 +326,11 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
   along(0.148, 0.163, 0.0058, 0.0076, gripMat, 8)
 
   const tipAt = pointAt(0.011)
-  const tipGlow = glowSprite(PALETTE.sodium, 0.011, { core: 0.8, mid: 0.28, halo: 0.09 })
+  // Sized off the printer's hot nozzle (0.005, halo 0.05), not off the desk
+  // lamp: the room is allowed exactly one warm anchor and it is not this. The
+  // halo layer is thirteen times the base size, so 0.011 was throwing a 14 cm
+  // orange disc across the desk on behalf of a 2 mm chisel face.
+  const tipGlow = glowSprite(PALETTE.sodium, 0.006, { core: 0.8, mid: 0.22, halo: 0.05 })
   tipGlow.position.copy(tipAt)
   tipGlow.userData.setIntensity(0)
   group.add(tipGlow)
@@ -357,6 +367,7 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
   const pot = cyl(0.024, 0.021, 0.026, potMat, detail(14), { open: true })
   pot.position.set(0.068, 0.013, -0.008)
   group.add(pot)
+  contactDarken(pot, [DESK], { radius: 0.016, floor: 0.34 })
 
   const potFloor = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.021, detail(14))), potMat)
   potFloor.rotation.x = -Math.PI / 2
@@ -364,12 +375,16 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
   potFloor.receiveShadow = true
   group.add(potFloor)
 
-  const woolGeo = new THREE.SphereGeometry(0.021, 8, 5)
+  // Sat below the rim it left a see-through crescent: the pot is an open
+  // cylinder, so its far inner wall is backface-culled and you looked straight
+  // through the gap. Widened until the equator seals the mouth, which is also
+  // how a pot of brass wool actually sits.
+  const woolGeo = new THREE.SphereGeometry(0.0245, 8, 5)
   woolGeo.scale(1, 0.6, 1)
   tintGeometry(woolGeo, 0xb0a88f, 0.34)
   const wool = new THREE.Mesh(woolGeo, MAT.metal(PALETTE.copper, 0.74))
   wool.castShadow = true
-  wool.position.set(0.068, 0.024, -0.008)
+  wool.position.set(0.068, 0.026, -0.008)
   group.add(wool)
 
   // --- 3. the iron's lead ---------------------------------------------------
@@ -706,6 +721,10 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
     sfx?.play('latch')
     rocker.rotation.x = on ? 0.22 : -0.22
     led.rotation.x = rocker.rotation.x
+    // The pilot lamp is wired to the switch, not to the element. It snaps, so
+    // there is nothing here for update() to interpolate sixty times a second.
+    ledMat.color.copy(on ? LED_ON : LED_OFF)
+    ledGlow.userData.setIntensity(on ? 1 : 0)
   }
 
   const update = (dt, t) => {
@@ -717,8 +736,6 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
 
     tipMat.emissiveIntensity = k * 3.2
     tipGlow.userData.setIntensity(k)
-    ledGlow.userData.setIntensity(on ? 1 : 0)
-    ledMat.color.copy(LED_OFF).lerp(LED_ON, on ? 1 : 0)
     tipLight.intensity = k * 0.22
     readMat.opacity = 0.05 + 0.9 * k
 
