@@ -1,0 +1,120 @@
+/* tokens.css — the palette, twice.
+ *
+ * Dark is gold leaf on black lacquer: the inside of a bot at night, one lamp
+ * lit. Light is the same building at noon — limewash walls, weathered gold,
+ * purple ink. Both are driven off one hue variable so the Appearance panel can
+ * swing the whole machine without touching a single component rule.
+ */
+
+:root {
+  --accent-hue: 276;
+
+  --screen-w: 1440px;
+  --screen-h: 900px;
+  --bar-h: 40px;
+
+  --radius: 4px;
+  --radius-lg: 7px;
+  --hair: 1px;
+
+  --font-ui: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --font-title: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --ease-out: cubic-bezier(0.16, 0.84, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ---------------------------------------------------------------- dark --- */
+
+.os[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-deep: #050409;
+  --bg: #0a0713;
+  --bg-2: #0e0a18;
+
+  --surface: #14101f;
+  --surface-2: #1a1428;
+  --surface-3: #221a33;
+  --surface-sunk: #0c0916;
+
+  --ink: #ece5f8;
+  --ink-dim: #a99ec2;
+  --ink-faint: #6f6588;
+
+  --gold: #d3ab55;
+  --gold-dim: #8a6f34;
+  --gold-bright: #f4dd9e;
+  --gold-wash: rgba(211, 171, 85, 0.13);
+
+  --accent: hsl(var(--accent-hue) 78% 66%);
+  --accent-deep: hsl(var(--accent-hue) 62% 42%);
+  --accent-dim: hsl(var(--accent-hue) 40% 30%);
+  --accent-wash: hsl(var(--accent-hue) 70% 60% / 0.14);
+  --accent-glow: hsl(var(--accent-hue) 90% 62% / 0.4);
+
+  --line: rgba(211, 171, 85, 0.16);
+  --line-soft: rgba(236, 229, 248, 0.08);
+  --line-strong: rgba(211, 171, 85, 0.36);
+
+  --shadow-1: 0 2px 10px rgba(0, 0, 0, 0.55);
+  --shadow-2: 0 18px 46px -14px rgba(0, 0, 0, 0.86), 0 2px 0 rgba(211, 171, 85, 0.06) inset;
+  --shadow-focus: 0 24px 64px -18px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(211, 171, 85, 0.3);
+
+  --bar-bg: linear-gradient(180deg, #120e1e 0%, #0b0813 100%);
+  --win-bg: linear-gradient(180deg, #191327 0%, #120e1d 62%, #100c1a 100%);
+  --titlebar-bg: linear-gradient(180deg, rgba(46, 33, 72, 0.92), rgba(24, 18, 39, 0.92));
+  --titlebar-bg-idle: linear-gradient(180deg, rgba(24, 19, 36, 0.9), rgba(17, 13, 27, 0.9));
+
+  --wall-1: #0b0814;
+  --wall-2: #150f26;
+  --wall-3: #241640;
+}
+
+/* --------------------------------------------------------------- light --- */
+
+.os[data-theme="light"] {
+  color-scheme: light;
+
+  --bg-deep: #ddd2c1;
+  --bg: #ece2d2;
+  --bg-2: #f3ebde;
+
+  --surface: #fbf6ec;
+  --surface-2: #f4ecdd;
+  --surface-3: #ece0cc;
+  --surface-sunk: #e5d9c6;
+
+  --ink: #241b32;
+  --ink-dim: #5d5170;
+  --ink-faint: #8d829e;
+
+  --gold: #9a7420;
+  --gold-dim: #bfa25e;
+  --gold-bright: #7c5c14;
+  --gold-wash: rgba(154, 116, 32, 0.12);
+
+  --accent: hsl(var(--accent-hue) 62% 44%);
+  --accent-deep: hsl(var(--accent-hue) 66% 34%);
+  --accent-dim: hsl(var(--accent-hue) 34% 68%);
+  --accent-wash: hsl(var(--accent-hue) 60% 50% / 0.12);
+  --accent-glow: hsl(var(--accent-hue) 70% 46% / 0.3);
+
+  --line: rgba(122, 90, 22, 0.22);
+  --line-soft: rgba(36, 27, 50, 0.1);
+  --line-strong: rgba(122, 90, 22, 0.44);
+
+  --shadow-1: 0 2px 8px rgba(60, 44, 20, 0.16);
+  --shadow-2: 0 16px 40px -16px rgba(58, 42, 18, 0.44), 0 1px 0 rgba(255, 253, 246, 0.7) inset;
+  --shadow-focus: 0 22px 56px -18px rgba(58, 42, 18, 0.5), 0 0 0 1px rgba(122, 90, 22, 0.34);
+
+  --bar-bg: linear-gradient(180deg, #f7f0e2 0%, #ece1cd 100%);
+  --win-bg: linear-gradient(180deg, #fdf9f1 0%, #f7f0e3 70%, #f3ead9 100%);
+  --titlebar-bg: linear-gradient(180deg, #f0e4cd, #e6d7ba);
+  --titlebar-bg-idle: linear-gradient(180deg, #f6efe2, #eee5d4);
+
+  --wall-1: #e9dcc6;
+  --wall-2: #dbc9ab;
+  --wall-3: #c9ae83;
+}

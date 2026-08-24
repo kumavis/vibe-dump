@@ -1,0 +1,324 @@
+/* window.css — the windows.
+ *
+ * A window is a lacquer panel: dark field, hairline gold edge, a double rule
+ * under the title, and two small bracket marks in the upper corners standing
+ * in for the fins that run down a temple roof. One ornament per surface.
+ */
+
+.win {
+  position: absolute;
+  min-width: 180px;
+  min-height: 120px;
+  border-radius: var(--radius-lg);
+  background: var(--win-bg);
+  border: var(--hair) solid var(--line);
+  box-shadow: var(--shadow-2);
+  display: flex;
+  transition: box-shadow 200ms var(--ease-out), border-color 200ms;
+  will-change: transform;
+}
+.win.is-focused {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-focus);
+}
+.win.is-animating {
+  transition:
+    left 240ms var(--ease-out),
+    top 240ms var(--ease-out),
+    width 240ms var(--ease-out),
+    height 240ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+}
+
+.win__frame {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* the two roof-corner brackets */
+.win__frame::before,
+.win__frame::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  width: 13px;
+  height: 13px;
+  pointer-events: none;
+  opacity: 0.55;
+  z-index: 3;
+  transition: opacity 200ms;
+}
+.win__frame::before {
+  left: 5px;
+  border-top: var(--hair) solid var(--gold);
+  border-left: var(--hair) solid var(--gold);
+  border-top-left-radius: 3px;
+}
+.win__frame::after {
+  right: 5px;
+  border-top: var(--hair) solid var(--gold);
+  border-right: var(--hair) solid var(--gold);
+  border-top-right-radius: 3px;
+}
+.win.is-focused .win__frame::before,
+.win.is-focused .win__frame::after {
+  opacity: 1;
+}
+.os.no-ornament .win__frame::before,
+.os.no-ornament .win__frame::after {
+  display: none;
+}
+
+/* --- title bar ----------------------------------------------------------- */
+
+.win__bar {
+  flex: none;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 0 24px;
+  background: var(--titlebar-bg-idle);
+  cursor: grab;
+  touch-action: none;
+  position: relative;
+  z-index: 2;
+}
+.win.is-focused .win__bar {
+  background: var(--titlebar-bg);
+}
+.win__bar:active {
+  cursor: grabbing;
+}
+
+.win__mark {
+  flex: none;
+  display: flex;
+  width: 16px;
+  height: 16px;
+  color: var(--gold);
+  opacity: 0.62;
+}
+.win.is-focused .win__mark {
+  opacity: 1;
+}
+.win__mark svg {
+  width: 100%;
+  height: 100%;
+}
+.win__mark:empty {
+  display: none;
+}
+
+.win__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.win.is-focused .win__title {
+  color: var(--ink);
+}
+
+.win__actions {
+  flex: none;
+  display: flex;
+  gap: 4px;
+}
+.win__btn {
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border: var(--hair) solid transparent;
+  border-radius: 3px;
+  color: var(--ink-faint);
+  transition: color 120ms, background 120ms, border-color 120ms;
+}
+.win__btn svg {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+}
+.win.is-focused .win__btn {
+  color: var(--ink-dim);
+}
+.win__btn:hover {
+  color: var(--gold-bright);
+  border-color: var(--line-strong);
+  background: var(--gold-wash);
+}
+.os[data-theme="light"] .win__btn:hover {
+  color: var(--gold-bright);
+}
+.win__btn--close:hover {
+  color: hsl(348 82% 68%);
+  border-color: hsl(348 60% 50% / 0.55);
+  background: hsl(348 82% 60% / 0.14);
+}
+
+/* the double rule: a gold hairline, an accent hairline, one small diamond */
+.win__rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 34px;
+  height: 3px;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(to bottom, var(--line-strong) 0 1px, transparent 1px),
+    linear-gradient(to bottom, transparent 0 2px, var(--accent-wash) 2px 3px);
+}
+.win__rule::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--surface);
+  border: var(--hair) solid var(--gold);
+  opacity: 0.62;
+}
+.win.is-focused .win__rule::after {
+  opacity: 1;
+  background: var(--gold-wash);
+}
+.os.no-ornament .win__rule::after {
+  display: none;
+}
+
+/* --- body ---------------------------------------------------------------- */
+
+.win__body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  border-top: var(--hair) solid transparent;
+}
+
+/* --- grips --------------------------------------------------------------- */
+
+.win__grip {
+  position: absolute;
+  touch-action: none;
+  z-index: 4;
+}
+.win__grip--n { top: -3px; left: 12px; right: 12px; height: 7px; cursor: ns-resize; }
+.win__grip--s { bottom: -3px; left: 12px; right: 12px; height: 7px; cursor: ns-resize; }
+.win__grip--w { left: -3px; top: 12px; bottom: 12px; width: 7px; cursor: ew-resize; }
+.win__grip--e { right: -3px; top: 12px; bottom: 12px; width: 7px; cursor: ew-resize; }
+.win__grip--nw { left: -4px; top: -4px; width: 16px; height: 16px; cursor: nwse-resize; }
+.win__grip--ne { right: -4px; top: -4px; width: 16px; height: 16px; cursor: nesw-resize; }
+.win__grip--sw { left: -4px; bottom: -4px; width: 16px; height: 16px; cursor: nesw-resize; }
+.win__grip--se { right: -4px; bottom: -4px; width: 16px; height: 16px; cursor: nwse-resize; }
+
+/* the one visible grip, bottom-right: three short gold strokes */
+.win__grip--se::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 9px;
+  height: 9px;
+  opacity: 0.4;
+  background:
+    linear-gradient(135deg, transparent 44%, var(--gold) 44% 56%, transparent 56%) 0 0 / 5px 5px,
+    linear-gradient(135deg, transparent 44%, var(--gold) 44% 56%, transparent 56%) 4px 4px / 5px 5px;
+  background-repeat: no-repeat;
+}
+.win.is-focused .win__grip--se::after {
+  opacity: 0.8;
+}
+
+/* --- states -------------------------------------------------------------- */
+
+.win.is-opening {
+  animation: win-in 220ms var(--ease-out);
+}
+@keyframes win-in {
+  from {
+    opacity: 0;
+    transform: scale(0.965) translateY(6px);
+  }
+}
+.win.is-closing {
+  opacity: 0;
+  transform: scale(0.97) translateY(4px);
+  transition: opacity 170ms ease, transform 170ms ease;
+  pointer-events: none;
+}
+.win.is-minimized {
+  opacity: 0;
+  transform: scale(0.82) translateY(-28%);
+  transform-origin: 90% 0;
+  transition: opacity 190ms ease, transform 190ms var(--ease-in-out);
+  pointer-events: none;
+}
+.win.is-unfolding {
+  animation: win-unfold 220ms var(--ease-out);
+}
+@keyframes win-unfold {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(-20%);
+    transform-origin: 90% 0;
+  }
+}
+.win.is-maximized {
+  border-radius: 0;
+  border-color: transparent;
+}
+.win.is-maximized .win__frame::before,
+.win.is-maximized .win__frame::after {
+  display: none;
+}
+.win.is-nudged {
+  animation: win-nudge 300ms ease;
+}
+@keyframes win-nudge {
+  0%, 100% { transform: translateX(0); }
+  22% { transform: translateX(-4px); }
+  55% { transform: translateX(4px); }
+  80% { transform: translateX(-2px); }
+}
+
+/* --- snap preview -------------------------------------------------------- */
+
+.layer--snap {
+  pointer-events: none;
+}
+#layer-snap {
+  position: absolute;
+  border: var(--hair) dashed var(--gold);
+  border-radius: var(--radius-lg);
+  background: var(--accent-wash);
+  opacity: 0;
+  transition: opacity 140ms, left 120ms var(--ease-out), top 120ms var(--ease-out),
+    width 120ms var(--ease-out), height 120ms var(--ease-out);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4) inset;
+}
+#layer-snap.is-on {
+  opacity: 1;
+}

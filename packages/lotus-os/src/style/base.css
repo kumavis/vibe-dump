@@ -1,0 +1,232 @@
+/* base.css — the page, the panel, and the glass in front of it. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#void {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 40%, #0b0812 0%, #030205 70%, #000 100%);
+  transition: opacity 700ms var(--ease-in-out);
+}
+#void.is-gone {
+  opacity: 0;
+}
+
+#stage-wrap {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: var(--screen-w);
+  height: var(--screen-h);
+  transform-origin: 50% 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* --- the panel itself ---------------------------------------------------- */
+
+.os {
+  position: relative;
+  width: var(--screen-w);
+  height: var(--screen-h);
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  user-select: none;
+  isolation: isolate;
+  /* CSS3DRenderer will overwrite `transform` on this element; nothing in the
+     stylesheet may claim it. Scaling lives on #stage-wrap instead. */
+}
+
+.os,
+.os * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-dim) transparent;
+}
+.os *::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.os *::-webkit-scrollbar-track {
+  background: transparent;
+}
+.os *::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold-dim), var(--accent-dim));
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 6px;
+}
+.os *::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--gold), var(--accent));
+  background-clip: padding-box;
+}
+
+.desktop {
+  position: absolute;
+  inset: var(--bar-h) 0 0 0;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  inset: var(--bar-h) 0 0 0;
+  pointer-events: none;
+}
+.layer > * {
+  pointer-events: auto;
+}
+.layer--windows {
+  z-index: 20;
+}
+.layer--snap {
+  z-index: 15;
+}
+.layer--menus {
+  z-index: 60;
+  inset: 0;
+}
+.layer--modals {
+  z-index: 80;
+  inset: 0;
+}
+
+/* --- glass: only once the panel is inside a monitor ---------------------- */
+
+.glass {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-in-out);
+}
+.os.is-embodied .glass {
+  opacity: 1;
+}
+.os.no-scanlines .glass {
+  opacity: 0;
+}
+
+.glass::before {
+  /* scanlines + phosphor mask */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+.os[data-theme="light"] .glass::before {
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+.glass::after {
+  /* corner vignette and a single diagonal sheen off the desk lamp */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(114deg, transparent 34%, rgba(226, 210, 255, 0.055) 46%, transparent 58%),
+    radial-gradient(ellipse 76% 66% at 50% 46%, transparent 46%, rgba(3, 2, 8, 0.62) 100%);
+}
+
+/* --- shared bits --------------------------------------------------------- */
+
+.icon {
+  display: block;
+  flex: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+
+:where(button, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--gold), 0 0 0 4px var(--accent-glow);
+  border-radius: var(--radius);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 15px;
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--ink-dim);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 140ms, border-color 140ms, background 140ms, transform 140ms;
+}
+.btn:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--surface-3);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn--primary {
+  color: var(--bg-deep);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  border-color: var(--gold);
+  font-weight: 600;
+}
+.os[data-theme="light"] .btn--primary {
+  color: #fffaf0;
+  background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+  border-color: var(--accent-deep);
+}
+.btn--primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+  color: var(--bg-deep);
+}
+.os[data-theme="light"] .btn--primary:hover:not(:disabled) {
+  color: #fffaf0;
+}
+
+.pane-error {
+  padding: 18px;
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.os.reduced-motion *,
+.os.reduced-motion *::before,
+.os.reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
+}

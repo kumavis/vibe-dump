@@ -1,0 +1,208 @@
+/* appbar.css — the bar at the top. */
+
+.appbar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: var(--bar-h);
+  z-index: 40;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  padding: 0 8px 0 6px;
+  background: var(--bar-bg);
+  border-bottom: var(--hair) solid var(--line);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 6px 18px -12px rgba(0, 0, 0, 0.9);
+  font-size: 12.5px;
+}
+.appbar::after {
+  /* a second hairline in accent, a hair below the first — the double rule
+     that runs along every eave in the wallpaper */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-wash) 12%, var(--accent-wash) 88%, transparent);
+}
+
+.appbar__left,
+.appbar__right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+.appbar__center {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.appbar__right {
+  gap: 6px;
+}
+
+.appbar__mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  align-self: center;
+  color: var(--gold);
+  border-radius: var(--radius);
+  transition: background 140ms, color 140ms, transform 300ms var(--ease-out);
+}
+.appbar__mark svg {
+  width: 19px;
+  height: 19px;
+}
+.appbar__mark:hover,
+.appbar__mark.is-open {
+  background: var(--gold-wash);
+  color: var(--gold-bright);
+}
+.appbar__mark:hover {
+  transform: rotate(22.5deg);
+}
+
+.appbar__menus {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+.appbar__menu {
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  color: var(--ink-dim);
+  letter-spacing: 0.045em;
+  transition: background 120ms, color 120ms;
+}
+.appbar__menu:hover,
+.appbar__menu.is-open {
+  color: var(--ink);
+  background: var(--accent-wash);
+}
+
+.appbar__title {
+  font-family: var(--font-title);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 340px;
+}
+
+/* --- open-window chips --------------------------------------------------- */
+
+.appbar__chips {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 460px;
+  overflow: hidden;
+}
+.appbar__chips.is-empty {
+  display: none;
+}
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 150px;
+  padding: 4px 9px 4px 7px;
+  border: var(--hair) solid transparent;
+  border-radius: 12px;
+  color: var(--ink-faint);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  font-size: 11.5px;
+  transition: color 130ms, border-color 130ms, background 130ms;
+}
+.chip:hover {
+  color: var(--ink);
+  border-color: var(--line);
+}
+.chip.is-active {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--gold-wash);
+}
+.chip.is-folded {
+  opacity: 0.55;
+  font-style: italic;
+}
+.chip__dot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  transform: rotate(45deg);
+  background: var(--gold-dim);
+}
+.chip.is-active .chip__dot {
+  background: var(--gold-bright);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+.chip__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appbar__rule {
+  width: 1px;
+  height: 16px;
+  align-self: center;
+  background: var(--line);
+}
+
+.appbar__btn {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  align-self: center;
+  border-radius: var(--radius);
+  color: var(--ink-dim);
+  transition: color 140ms, background 140ms;
+}
+.appbar__btn:hover {
+  color: var(--gold-bright);
+  background: var(--gold-wash);
+}
+.appbar__btn.is-off {
+  color: var(--ink-faint);
+  opacity: 0.65;
+}
+
+.appbar__clock {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+  transition: background 140ms, color 140ms;
+}
+.appbar__clock:hover {
+  background: var(--accent-wash);
+  color: var(--ink);
+}
+.clock__day {
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+.clock__time {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.clock__suffix {
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+}

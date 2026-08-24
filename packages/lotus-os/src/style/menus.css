@@ -1,0 +1,197 @@
+/* menus.css — dropdowns, modal sheets, toasts. */
+
+.layer--menus.is-on {
+  pointer-events: auto;
+}
+
+.menu {
+  position: absolute;
+  min-width: 216px;
+  padding: 5px;
+  background: var(--surface-2);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 130ms var(--ease-out), transform 130ms var(--ease-out);
+}
+.menu.is-in {
+  opacity: 1;
+  transform: none;
+}
+.menu--context {
+  min-width: 200px;
+}
+
+.menu__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 10px 6px 8px;
+  border-radius: 3px;
+  color: var(--ink-dim);
+  font-size: 12.5px;
+  text-align: left;
+  transition: background 110ms, color 110ms;
+}
+.menu__item:hover:not(:disabled) {
+  color: var(--ink);
+  background: linear-gradient(90deg, var(--accent-wash), transparent 88%);
+  box-shadow: inset 2px 0 0 var(--gold);
+}
+.menu__item--accent {
+  color: var(--gold);
+}
+.menu__item--accent:hover:not(:disabled) {
+  color: var(--gold-bright);
+  background: linear-gradient(90deg, var(--gold-wash), transparent 88%);
+}
+.menu__icon {
+  display: flex;
+  width: 16px;
+  color: var(--ink-faint);
+}
+.menu__item:hover .menu__icon {
+  color: var(--gold);
+}
+.menu__item--accent .menu__icon {
+  color: inherit;
+}
+.menu__label {
+  flex: 1;
+}
+.menu__check {
+  display: flex;
+  width: 15px;
+  color: var(--gold);
+}
+
+.menu__sep {
+  height: 9px;
+  margin: 3px 6px;
+  display: flex;
+  align-items: center;
+  color: var(--gold-dim);
+  opacity: 0.7;
+}
+.menu__sep svg {
+  width: 100%;
+  height: 7px;
+}
+
+/* --- modal sheets -------------------------------------------------------- */
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(4, 2, 10, 0.6);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.scrim.is-in {
+  opacity: 1;
+}
+.os[data-theme="light"] .scrim {
+  background: rgba(60, 46, 22, 0.28);
+}
+
+.sheet {
+  width: min(480px, 76%);
+  padding: 26px 30px 22px;
+  background: var(--win-bg);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-focus);
+  text-align: center;
+  transform: translateY(8px) scale(0.985);
+  transition: transform 200ms var(--ease-out);
+}
+.scrim.is-in .sheet {
+  transform: none;
+}
+
+.sheet__crown {
+  display: flex;
+  justify-content: center;
+  margin: -6px 0 12px;
+  color: var(--gold);
+}
+.sheet__crown svg {
+  width: 116px;
+  height: 26px;
+}
+
+.sheet__title {
+  margin: 0 0 10px;
+  font-family: var(--font-title);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.sheet__body {
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 1.62;
+  color: var(--ink-dim);
+  text-align: left;
+}
+.sheet__actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sheet--boot {
+  width: min(420px, 70%);
+}
+
+/* --- toasts -------------------------------------------------------------- */
+
+.toasts {
+  position: absolute;
+  top: calc(var(--bar-h) + 12px);
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  align-items: flex-end;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 380px;
+  padding: 9px 14px 9px 11px;
+  background: var(--surface-2);
+  border: var(--hair) solid var(--line);
+  border-left: 2px solid var(--gold);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  color: var(--ink-dim);
+  font-size: 12.5px;
+  pointer-events: auto;
+  cursor: default;
+  opacity: 0;
+  transform: translateX(14px);
+  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
+}
+.toast.is-in {
+  opacity: 1;
+  transform: none;
+}
+.toast[data-tone="warn"] {
+  border-left-color: hsl(348 70% 58%);
+}
+.toast__mark {
+  display: flex;
+  width: 15px;
+  color: var(--gold);
+  flex: none;
+}

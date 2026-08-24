@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Lotus OS — a toy desktop on a real desk</title>
+    <meta
+      name="description"
+      content="A black-and-purple toy desktop with Thai temple ornament, resizable windows and folders — run reveal.run and the camera pulls back to find the monitor on a cluttered workbench."
+    />
+    <link rel="stylesheet" href="./src/style/index.css" />
+  </head>
+  <body>
+    <!-- The letterbox surround. In desktop mode it is the black around the
+         screen; once the 3D room loads it fades away and the real monitor
+         bezel takes over the job. -->
+    <div id="void" aria-hidden="true"></div>
+
+    <!-- Holds the screen in the page and scales it to fit the viewport.
+         The scale lives HERE and never on #os, because once #os is handed to
+         the CSS3D renderer that element's transform belongs to three.js. -->
+    <div id="stage-wrap">
+      <!-- #os is the whole machine: a fixed 1440x900 logical screen. It is
+           moved, intact and still running, into the 3D monitor and back. -->
+      <div id="os" class="os">
+        <header id="appbar" class="appbar"></header>
+        <main id="desktop" class="desktop"></main>
+        <div id="layer-windows" class="layer layer--windows"></div>
+        <div id="layer-snap" class="layer layer--snap" aria-hidden="true"></div>
+        <div id="layer-menus" class="layer layer--menus"></div>
+        <div id="layer-modals" class="layer layer--modals"></div>
+        <!-- Glass, scanlines and glare. Only switched on once #os is actually
+             sitting inside a monitor. -->
+        <div id="glass" class="glass" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
