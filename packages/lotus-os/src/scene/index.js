@@ -550,6 +550,9 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
 
       root.dataset.mode = 'off'
       root.style.display = 'none'
+      // Stopping the loop strands any voice a prop had running: update() is
+      // the only thing that could ever have turned it off again.
+      shell?.sfx?.stopAll?.()
       stop()
     } finally {
       busy = false
@@ -557,6 +560,7 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
   }
 
   function dispose() {
+    shell?.sfx?.stopAll?.()
     stop()
     window.removeEventListener('resize', onResize)
     window.removeEventListener('keydown', onKey)

@@ -17,7 +17,6 @@ import {
   contactDarken,
   ensureColors,
   edgeDirt,
-  grimeTexture,
   makeCanvasTexture,
 } from './materials.js'
 
@@ -71,6 +70,44 @@ const MOUNT = [
   [-0.047, 0.03],
   [0.047, 0.03],
 ]
+
+// Every copper pad on the board, in one list. The artwork canvas paints them
+// gold and the surface canvas makes them glossy metal, and neither is allowed
+// to disagree with the other about where they are.
+const PADS = []
+{
+  const rect = (x, z, w, d, drill = 0) => PADS.push({ x, z, w, d, drill })
+  for (let i = 0; i < LED_N; i++) {
+    rect(ledX(i), LED_Z - 0.0016, 0.0011, 0.0011)
+    rect(ledX(i), LED_Z + 0.0016, 0.0011, 0.0011)
+    rect(ledX(i), -0.0216, 0.0011, 0.0009)
+    rect(ledX(i), -0.0194, 0.0011, 0.0009)
+  }
+  rect(PWR.x, LED_Z - 0.0016, 0.0011, 0.0011)
+  rect(PWR.x, LED_Z + 0.0016, 0.0011, 0.0011)
+  // The thermal pad, then a fringe of leads on all four sides of the chip.
+  rect(PART.mcu.x, PART.mcu.z, 0.006, 0.006)
+  for (let i = 0; i < 9; i++) {
+    const o = -0.0048 + i * 0.0012
+    rect(PART.mcu.x + o, PART.mcu.z - 0.0059, 0.0007, 0.0016)
+    rect(PART.mcu.x + o, PART.mcu.z + 0.0059, 0.0007, 0.0016)
+    rect(PART.mcu.x - 0.0059, PART.mcu.z + o, 0.0016, 0.0007)
+    rect(PART.mcu.x + 0.0059, PART.mcu.z + o, 0.0016, 0.0007)
+  }
+  rect(PART.usb.x - 0.0042, PART.usb.z, 0.0026, 0.0092)
+  rect(PART.reg.x, PART.reg.z - 0.0026, 0.0055, 0.0016)
+  rect(BODGE_FROM.x, BODGE_FROM.z, 0.0013, 0.0013)
+  // Three pads going nowhere. The machine's own notes are honest about it.
+  for (const o of [-0.0025, 0, 0.0025]) rect(PART.trim.x + o, PART.trim.z - 0.0028, 0.0013, 0.0016)
+  for (const hdr of HEADERS) {
+    for (let i = 0; i < hdr.n; i++) {
+      PADS.push({ x: hdr.x + hdr.dx * i, z: hdr.z + hdr.dz * i, r: 0.0009, drill: 0.0004 })
+    }
+    // Pin 1 is square. Always. It is the only way to plug anything in the
+    // right way round in the dark.
+    rect(hdr.x, hdr.z, 0.0018, 0.0018, 0.0004)
+  }
+}
 
 const CHASE_PERIOD = 3.1
 const WAKE_RAMP = 0.3
@@ -208,49 +245,29 @@ const boardTexture = () =>
       }
 
       // --- pads ---
-      const pad = (x, z, pw, pd) => {
-        ctx.fillRect(px(x) - (pw * sx) / 2, py(z) - (pd * sz) / 2, pw * sx, pd * sz)
-      }
-      ctx.fillStyle = 'rgba(184,115,51,0.72)'
-      for (let i = 0; i < LED_N; i++) {
-        pad(ledX(i), LED_Z - 0.0016, 0.0011, 0.0011)
-        pad(ledX(i), LED_Z + 0.0016, 0.0011, 0.0011)
-        pad(ledX(i), -0.0205 - 0.0011, 0.0011, 0.0009)
-        pad(ledX(i), -0.0205 + 0.0011, 0.0011, 0.0009)
-      }
-      pad(PWR.x, LED_Z - 0.0016, 0.0011, 0.0011)
-      pad(PWR.x, LED_Z + 0.0016, 0.0011, 0.0011)
-      // QFN thermal pad plus a fringe of leads on all four sides.
-      pad(PART.mcu.x, PART.mcu.z, 0.006, 0.006)
-      for (let i = 0; i < 9; i++) {
-        const o = -0.0048 + i * 0.0012
-        pad(PART.mcu.x + o, PART.mcu.z - 0.0059, 0.0007, 0.0016)
-        pad(PART.mcu.x + o, PART.mcu.z + 0.0059, 0.0007, 0.0016)
-        pad(PART.mcu.x - 0.0059, PART.mcu.z + o, 0.0016, 0.0007)
-        pad(PART.mcu.x + 0.0059, PART.mcu.z + o, 0.0016, 0.0007)
-      }
-      pad(PART.usb.x - 0.0042, PART.usb.z, 0.0026, 0.0092)
-      pad(PART.reg.x, PART.reg.z - 0.0026, 0.0055, 0.0016)
-      pad(BODGE_FROM.x, BODGE_FROM.z, 0.0013, 0.0013)
-      for (const hdr of HEADERS) {
-        for (let i = 0; i < hdr.n; i++) {
-          const x = hdr.x + hdr.dx * i
-          const z = hdr.z + hdr.dz * i
+      const fillPad = (p) => {
+        if (p.r) {
           ctx.beginPath()
-          ctx.arc(px(x), py(z), 0.0009 * sx, 0, Math.PI * 2)
+          ctx.arc(px(p.x), py(p.z), p.r * sx, 0, Math.PI * 2)
           ctx.fill()
-          ctx.save()
-          ctx.globalCompositeOperation = 'destination-out'
-          ctx.beginPath()
-          ctx.arc(px(x), py(z), 0.0004 * sx, 0, Math.PI * 2)
-          ctx.fill()
-          ctx.restore()
+        } else {
+          ctx.fillRect(px(p.x) - (p.w * sx) / 2, py(p.z) - (p.d * sz) / 2, p.w * sx, p.d * sz)
         }
-        // Pin 1 is square. Always. It is the only way to plug anything in.
-        pad(hdr.x, hdr.z, 0.0018, 0.0018)
       }
-      // The trimpot's three pads, going nowhere. The notes are honest about it.
-      for (const o of [-0.0025, 0, 0.0025]) pad(PART.trim.x + o, PART.trim.z - 0.0028, 0.0013, 0.0016)
+      ctx.fillStyle = 'rgba(184,115,51,0.74)'
+      for (const p of PADS) fillPad(p)
+
+      // Drill holes punched out rather than painted, so they stay dark however
+      // hot the lamp gets.
+      ctx.save()
+      ctx.globalCompositeOperation = 'destination-out'
+      for (const p of PADS) {
+        if (!p.drill) continue
+        ctx.beginPath()
+        ctx.arc(px(p.x), py(p.z), p.drill * sx, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      ctx.restore()
 
       // --- silkscreen ---
       ctx.strokeStyle = hex(PALETTE.silk)
@@ -344,6 +361,54 @@ const boardTexture = () =>
     { wrap: THREE.ClampToEdgeWrapping },
   )
 
+/**
+ * Roughness in green, metalness in blue: the two channels MeshStandardMaterial
+ * reads them from, in one canvas. Bare copper is glossy metal, solder mask is
+ * matte dielectric, and the flux nobody wiped off sits between the two. Drawn
+ * fine and low-contrast on purpose — the lamp sits close enough that a blotchy
+ * roughness map turns the whole board into one wandering specular.
+ */
+const boardSurfaceTexture = () =>
+  makeCanvasTexture(
+    'board-surface',
+    256,
+    172,
+    (ctx, w, h) => {
+      const sx = w / BW
+      const sz = h / BD
+      const px = (x) => (x + BW / 2) * sx
+      const py = (z) => (z + BD / 2) * sz
+
+      ctx.fillStyle = 'rgb(0,242,8)'
+      ctx.fillRect(0, 0, w, h)
+
+      ctx.fillStyle = 'rgb(0,96,214)'
+      for (const p of PADS) {
+        if (p.r) {
+          ctx.beginPath()
+          ctx.arc(px(p.x), py(p.z), p.r * sx, 0, Math.PI * 2)
+          ctx.fill()
+        } else {
+          ctx.fillRect(px(p.x) - (p.w * sx) / 2, py(p.z) - (p.d * sz) / 2, p.w * sx, p.d * sz)
+        }
+      }
+
+      const flux = ctx.createRadialGradient(px(BODGE_FROM.x), py(BODGE_FROM.z), 1, px(BODGE_FROM.x), py(BODGE_FROM.z), 14)
+      flux.addColorStop(0, 'rgba(0,150,40,0.6)')
+      flux.addColorStop(1, 'rgba(0,150,40,0)')
+      ctx.fillStyle = flux
+      ctx.fillRect(px(BODGE_FROM.x) - 16, py(BODGE_FROM.z) - 16, 32, 32)
+
+      for (let i = 0; i < 900; i++) {
+        ctx.fillStyle = Math.random() > 0.5 ? 'rgba(0,255,10,0.07)' : 'rgba(0,196,10,0.07)'
+        ctx.beginPath()
+        ctx.arc(Math.random() * w, Math.random() * h, 0.7 + Math.random() * 1.8, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    },
+    { srgb: false, wrap: THREE.ClampToEdgeWrapping },
+  )
+
 /** The underside legend. See the comment at its mesh for why this exists. */
 const backTexture = () =>
   makeCanvasTexture(
@@ -370,24 +435,21 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   // Solder mask is matte. Left glossy it grows a specular lobe the width of
   // the whole board under a lamp this close, and the board goes from the
   // darkest thing on the desk to the brightest.
-  // The shared noise tiles once per object by default, which across ten
-  // centimetres is one blotch per centimetre and reads as a dirty lens rather
-  // than a surface. A clone shares the image and costs nothing.
-  const maskRough = grimeTexture().clone()
-  maskRough.repeat.set(5, 4)
-  maskRough.needsUpdate = true
-
+  // One canvas serving both channels, with roughness and metalness left at 1
+  // so the map is the whole story rather than a modulation of a guess.
+  const surface = boardSurfaceTexture()
   const maskMat = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     map: boardTexture(),
-    roughnessMap: maskRough,
+    roughnessMap: surface,
+    metalnessMap: surface,
     roughness: 1,
-    metalness: 0.04,
+    metalness: 1,
     vertexColors: true,
   })
   // Routed FR4, which is the one part of a board that is not green.
   const edgeMat = MAT.plastic(0x3b3f2c, 0.85)
-  const blackPlastic = MAT.plastic(0x120f18, 0.72)
+  const blackPlastic = MAT.plastic(0x120f18, 0.84)
   const nylon = MAT.plastic(0x2b2833, 0.76)
   const goldPin = MAT.metal(0xb99a4e, 0.34)
   const tin = MAT.metal(PALETTE.brightMetal, 0.36)
@@ -519,12 +581,12 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
 
   // --- the chip -------------------------------------------------------------
 
-  const mcu = box(PART.mcu.w, 0.0011, PART.mcu.d, MAT.plastic(0x151318, 0.74), { dirt: 0.1 })
+  const mcu = box(PART.mcu.w, 0.0011, PART.mcu.d, MAT.plastic(0x151318, 0.88), { dirt: 0.1 })
   mcu.position.set(PART.mcu.x, TOP + 0.00055, PART.mcu.z)
   group.add(mcu)
 
-  const pinOne = cyl(0.0009, 0.0009, 0.0003, MAT.plastic(0x090810, 0.7), detail(8))
-  pinOne.position.set(PART.mcu.x - 0.0042, TOP + 0.0011, PART.mcu.z - 0.0042)
+  const pinOne = cyl(0.0009, 0.0009, 0.0003, MAT.plastic(0x050409, 0.95), detail(8))
+  pinOne.position.set(PART.mcu.x - 0.0042, TOP + 0.00105, PART.mcu.z - 0.0042)
   pinOne.castShadow = false
   group.add(pinOne)
 
@@ -656,7 +718,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   usbTongue.castShadow = false
   group.add(usbTongue)
 
-  const reg = box(PART.reg.w, 0.0018, PART.reg.d, MAT.plastic(0x14121a, 0.7), { dirt: 0.12 })
+  const reg = box(PART.reg.w, 0.0018, PART.reg.d, MAT.plastic(0x14121a, 0.86), { dirt: 0.12 })
   reg.position.set(PART.reg.x, TOP + 0.0009, PART.reg.z)
   group.add(reg)
 
@@ -678,13 +740,13 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   buttonBase.position.set(PART.button.x, TOP + 0.001, PART.button.z)
   group.add(buttonBase)
 
-  const plunger = cyl(0.0016, 0.0016, 0.0014, MAT.plastic(0x100e15, 0.66), detail(8))
+  const plunger = cyl(0.0016, 0.0016, 0.0014, MAT.plastic(0x100e15, 0.8), detail(8))
   plunger.position.set(PART.button.x, TOP + 0.0027, PART.button.z)
   group.add(plunger)
 
   // Blue, because trimpots are blue, and turned to nothing in particular
   // because it is wired to nothing in particular.
-  const trim = box(PART.trim.w, 0.0045, PART.trim.d, MAT.plastic(0x1e3070, 0.68), { dirt: 0.14 })
+  const trim = box(PART.trim.w, 0.0045, PART.trim.d, MAT.plastic(0x1e3070, 0.8), { dirt: 0.14 })
   trim.position.set(PART.trim.x, TOP + 0.00225, PART.trim.z)
   group.add(trim)
 
@@ -751,7 +813,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   }
 
   const chipGeo = edgeDirt(new THREE.BoxGeometry(0.0016, 0.0006, 0.0009), 0.18)
-  const passives = new THREE.InstancedMesh(chipGeo, MAT.plastic(0x14121a, 0.72), seats.length)
+  const passives = new THREE.InstancedMesh(chipGeo, MAT.plastic(0x14121a, 0.86), seats.length)
   passives.castShadow = true
   {
     const m = new THREE.Matrix4()

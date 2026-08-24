@@ -853,6 +853,11 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
         }
       }
 
+      // startLoop is a no-op when the voice already exists or when sound is
+      // off, so asking every frame is what lets the motor come back after the
+      // room was closed mid-print, or after Sound was switched on during one.
+      sfx?.startLoop('printer', { freq: 58, gain: 0.02, filter: 480 })
+
       spool.rotation.y -= dt * 0.55 * heat
       fanSpin.rotation.x += dt * 34 * heat
     }

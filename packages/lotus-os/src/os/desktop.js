@@ -62,8 +62,13 @@ export function createDesktop({ root, shell, menuLayer }) {
 
   // --- desktop context menu ----------------------------------------------
 
+  // The menu layer covers the whole panel and takes pointer events while it is
+  // up, so a menu with no way to dismiss it does not merely linger — it locks
+  // the machine. These come off again in close().
+  let dismiss = null
+
   function contextMenu(x, y) {
-    clear(menuLayer)
+    close()
     menuLayer.classList.add('is-on')
     const items = [
       { label: 'New Explorer Window', icon: 'folder', run: () => shell.launch('explorer', { path: '/' }, { id: `explorer:new:${Date.now()}` }) },
@@ -102,9 +107,26 @@ export function createDesktop({ root, shell, menuLayer }) {
     panel.style.top = `${Math.min(y, 900 - 260)}px`
     menuLayer.append(panel)
     requestAnimationFrame(() => panel.classList.add('is-in'))
+
+    const onDown = (e) => {
+      if (!e.target.closest('.menu')) close()
+    }
+    const onKey = (e) => {
+      if (e.key === 'Escape') close()
+    }
+    // Capture, so the menu is torn down before the contextmenu event that
+    // follows a second right-click reaches the desktop and reopens it there.
+    window.addEventListener('pointerdown', onDown, true)
+    window.addEventListener('keydown', onKey)
+    dismiss = () => {
+      window.removeEventListener('pointerdown', onDown, true)
+      window.removeEventListener('keydown', onKey)
+      dismiss = null
+    }
   }
 
   const close = () => {
+    dismiss?.()
     clear(menuLayer)
     menuLayer.classList.remove('is-on')
   }
