@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/ideographic-ink",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Ideographic Ink",
+    "description": "CSS text-box-trim has two values only Japanese fonts can answer — ideographic and ideographic-ink. An interactive tour of the em box, the character face, and the animations you get once you read those metrics yourself."
+  }
+}
