@@ -284,10 +284,17 @@ export const MOTIFS = Object.fromEntries(
   Object.entries(ART).map(([key, { label, caption }]) => [key, { label, caption, svg: motifSVG(key) }]),
 )
 
+// The specimen weights are cut for a 300px stage. Shrunk into a 16px title bar
+// a 1.7-unit stroke on a 64-unit grid lands at four tenths of a pixel and the
+// mark turns to fog, so the seven get a second, heavier cut for mark duty.
+const MOTIF_MARKS = Object.fromEntries(
+  Object.keys(ART).map((key) => [key, motifSVG(key, { stroke: 3.2, wash: 0.32 })]),
+)
+
 /** Never throws, never guesses: an unknown name is simply no ornament. */
 export function markFor(name) {
   if (Object.prototype.hasOwnProperty.call(MARKS, name)) return MARKS[name]
-  if (Object.prototype.hasOwnProperty.call(MOTIFS, name)) return MOTIFS[name].svg
+  if (Object.prototype.hasOwnProperty.call(MOTIF_MARKS, name)) return MOTIF_MARKS[name]
   return ''
 }
 
