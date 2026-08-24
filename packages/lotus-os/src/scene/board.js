@@ -2,9 +2,9 @@
 // is a project rather than a tool.
 //
 // It does nothing useful, thoroughly: eight amber LEDs running a chase and a
-// lotus drawn one petal at a time on a 128x64 mono OLED. One layout table
-// feeds both the silkscreen canvas and the component meshes, so an outline and
-// the part standing in it cannot drift apart.
+// lotus drawn one petal at a time on a 128x64 mono OLED. Its layout lives in
+// two tables that the artwork canvases and the component meshes both read, so
+// a silkscreen outline and the part standing in it cannot drift apart.
 
 import * as THREE from 'three'
 import {
@@ -837,27 +837,28 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   group.add(passives)
 
   // --- the bodge ------------------------------------------------------------
-  // Red, hand-stripped, and taking the long way round the electrolytic. It is
-  // the only red in the room and it is meant to look like an apology.
+  // Red, hand-stripped, and soldered to the top of a header pin rather than
+  // through the hole, which is what you do when the header is already fitted.
+  // It is the only red in the room and it is meant to read as an apology.
 
-  const blob = (x, z) => {
+  const blob = (x, y, z) => {
     const mesh = new THREE.Mesh(ensureColors(new THREE.SphereGeometry(0.0009, 5, 4)), tin)
     mesh.scale.y = 0.6
     mesh.castShadow = true
-    mesh.position.set(x, TOP + 0.0004, z)
+    mesh.position.set(x, y, z)
     group.add(mesh)
   }
-  blob(BODGE_FROM.x, BODGE_FROM.z)
-  blob(BODGE_TO.x, BODGE_TO.z + 0.0002)
+  blob(BODGE_FROM.x, TOP + 0.0004, BODGE_FROM.z)
+  blob(BODGE_TO.x, TOP + 0.0046, BODGE_TO.z)
 
   group.add(
     cable(
       [
         [BODGE_FROM.x, TOP + 0.0006, BODGE_FROM.z],
-        [BODGE_FROM.x - 0.0024, TOP + 0.0062, BODGE_FROM.z + 0.0075],
-        [BODGE_FROM.x - 0.0048, TOP + 0.0079, BODGE_FROM.z + 0.0175],
-        [BODGE_TO.x - 0.0008, TOP + 0.0052, BODGE_TO.z - 0.0088],
-        [BODGE_TO.x, TOP + 0.0018, BODGE_TO.z],
+        [BODGE_FROM.x - 0.0026, TOP + 0.0066, BODGE_FROM.z + 0.0076],
+        [BODGE_FROM.x - 0.005, TOP + 0.0086, BODGE_FROM.z + 0.0176],
+        [BODGE_TO.x - 0.0012, TOP + 0.0078, BODGE_TO.z - 0.0086],
+        [BODGE_TO.x, TOP + 0.0046, BODGE_TO.z],
       ],
       { radius: 0.00055, color: 0x9c3a3a, segments: detail(18) },
     ),
@@ -1009,7 +1010,6 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
       // assembler's to clear.
       oledTex.dispose()
       oledMat.dispose()
-      maskRough.dispose()
       maskMat.dispose()
       backMat.dispose()
       pwrMat.dispose()
