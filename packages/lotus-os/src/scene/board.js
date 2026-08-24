@@ -370,18 +370,25 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   // Solder mask is matte. Left glossy it grows a specular lobe the width of
   // the whole board under a lamp this close, and the board goes from the
   // darkest thing on the desk to the brightest.
+  // The shared noise tiles once per object by default, which across ten
+  // centimetres is one blotch per centimetre and reads as a dirty lens rather
+  // than a surface. A clone shares the image and costs nothing.
+  const maskRough = grimeTexture().clone()
+  maskRough.repeat.set(5, 4)
+  maskRough.needsUpdate = true
+
   const maskMat = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     map: boardTexture(),
-    roughnessMap: grimeTexture(),
+    roughnessMap: maskRough,
     roughness: 1,
     metalness: 0.04,
     vertexColors: true,
   })
   // Routed FR4, which is the one part of a board that is not green.
-  const edgeMat = MAT.plastic(0x3b3f2c, 0.78)
-  const blackPlastic = MAT.plastic(0x120f18, 0.5)
-  const nylon = MAT.plastic(0x2b2833, 0.62)
+  const edgeMat = MAT.plastic(0x3b3f2c, 0.85)
+  const blackPlastic = MAT.plastic(0x120f18, 0.72)
+  const nylon = MAT.plastic(0x2b2833, 0.76)
   const goldPin = MAT.metal(0xb99a4e, 0.34)
   const tin = MAT.metal(PALETTE.brightMetal, 0.36)
 
@@ -512,11 +519,11 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
 
   // --- the chip -------------------------------------------------------------
 
-  const mcu = box(PART.mcu.w, 0.0011, PART.mcu.d, MAT.plastic(0x151318, 0.44), { dirt: 0.1 })
+  const mcu = box(PART.mcu.w, 0.0011, PART.mcu.d, MAT.plastic(0x151318, 0.74), { dirt: 0.1 })
   mcu.position.set(PART.mcu.x, TOP + 0.00055, PART.mcu.z)
   group.add(mcu)
 
-  const pinOne = cyl(0.0009, 0.0009, 0.0003, MAT.plastic(0x090810, 0.4), detail(8))
+  const pinOne = cyl(0.0009, 0.0009, 0.0003, MAT.plastic(0x090810, 0.7), detail(8))
   pinOne.position.set(PART.mcu.x - 0.0042, TOP + 0.0011, PART.mcu.z - 0.0042)
   pinOne.castShadow = false
   group.add(pinOne)
@@ -547,7 +554,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   display.rotation.x = TILT
   group.add(display)
 
-  const carrier = box(PART.oled.w, 0.0012, PART.oled.d, MAT.plastic(0x18271f, 0.6), { dirt: 0.14 })
+  const carrier = box(PART.oled.w, 0.0012, PART.oled.d, MAT.plastic(0x18271f, 0.76), { dirt: 0.14 })
   carrier.position.set(0, 0.0006, -PART.oled.d / 2)
   display.add(carrier)
 
@@ -649,7 +656,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   usbTongue.castShadow = false
   group.add(usbTongue)
 
-  const reg = box(PART.reg.w, 0.0018, PART.reg.d, MAT.plastic(0x14121a, 0.46), { dirt: 0.12 })
+  const reg = box(PART.reg.w, 0.0018, PART.reg.d, MAT.plastic(0x14121a, 0.7), { dirt: 0.12 })
   reg.position.set(PART.reg.x, TOP + 0.0009, PART.reg.z)
   group.add(reg)
 
@@ -658,7 +665,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   regTab.castShadow = false
   group.add(regTab)
 
-  const can = cyl(0.0033, 0.0033, 0.0072, MAT.plastic(0x1b1a24, 0.44), detail(10))
+  const can = cyl(0.0033, 0.0033, 0.0072, MAT.plastic(0x1b1a24, 0.62), detail(10))
   can.position.set(PART.can.x, TOP + 0.0036, PART.can.z)
   group.add(can)
 
@@ -667,17 +674,17 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   canTop.castShadow = false
   group.add(canTop)
 
-  const buttonBase = box(PART.button.w, 0.002, PART.button.d, MAT.plastic(0x2b2833, 0.5), { dirt: 0.12 })
+  const buttonBase = box(PART.button.w, 0.002, PART.button.d, MAT.plastic(0x2b2833, 0.7), { dirt: 0.12 })
   buttonBase.position.set(PART.button.x, TOP + 0.001, PART.button.z)
   group.add(buttonBase)
 
-  const plunger = cyl(0.0016, 0.0016, 0.0014, MAT.plastic(0x100e15, 0.44), detail(8))
+  const plunger = cyl(0.0016, 0.0016, 0.0014, MAT.plastic(0x100e15, 0.66), detail(8))
   plunger.position.set(PART.button.x, TOP + 0.0027, PART.button.z)
   group.add(plunger)
 
   // Blue, because trimpots are blue, and turned to nothing in particular
   // because it is wired to nothing in particular.
-  const trim = box(PART.trim.w, 0.0045, PART.trim.d, MAT.plastic(0x1e3070, 0.52), { dirt: 0.14 })
+  const trim = box(PART.trim.w, 0.0045, PART.trim.d, MAT.plastic(0x1e3070, 0.68), { dirt: 0.14 })
   trim.position.set(PART.trim.x, TOP + 0.00225, PART.trim.z)
   group.add(trim)
 
@@ -686,7 +693,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   trimScrew.castShadow = false
   group.add(trimScrew)
 
-  const trimSlot = box(0.0034, 0.0003, 0.0006, MAT.plastic(0x0a0910, 0.5), { dirt: 0 })
+  const trimSlot = box(0.0034, 0.0003, 0.0006, MAT.plastic(0x0a0910, 0.66), { dirt: 0 })
   trimSlot.position.set(PART.trim.x, TOP + 0.0049, PART.trim.z)
   trimSlot.rotation.y = 0.62
   trimSlot.castShadow = false
@@ -744,7 +751,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   }
 
   const chipGeo = edgeDirt(new THREE.BoxGeometry(0.0016, 0.0006, 0.0009), 0.18)
-  const passives = new THREE.InstancedMesh(chipGeo, MAT.plastic(0x14121a, 0.55), seats.length)
+  const passives = new THREE.InstancedMesh(chipGeo, MAT.plastic(0x14121a, 0.72), seats.length)
   passives.castShadow = true
   {
     const m = new THREE.Matrix4()
@@ -940,6 +947,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
       // assembler's to clear.
       oledTex.dispose()
       oledMat.dispose()
+      maskRough.dispose()
       maskMat.dispose()
       backMat.dispose()
       pwrMat.dispose()
