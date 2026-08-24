@@ -1,0 +1,14 @@
+{
+  "name": "@vibe-dump/elliptic-rank",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Elliptic Rank",
+    "description": "An interactive tour of elliptic curves — the chord-and-tangent group law, torsion, and what rank actually means — ending at the rank-31 record curve of August 2026, whose 31 witness points you can verify in exact big-integer arithmetic."
+  }
+}
