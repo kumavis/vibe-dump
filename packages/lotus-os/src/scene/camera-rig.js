@@ -91,6 +91,21 @@ export function createRig(camera, { getSize }) {
     })
   }
 
+  /**
+   * Change where a flight already under way is going, keeping its clock and
+   * its curve. The screen pose depends on the viewport, so a window resized
+   * on the way home would otherwise land the panel at the size the old
+   * viewport called for.
+   */
+  function retarget(pose) {
+    if (!flight) return false
+    flight.to.position.copy(pose.position)
+    flight.to.target.copy(pose.target)
+    if (pose.fov !== undefined) flight.to.fov = pose.fov
+    flight.control.copy(flight.from.position).lerp(flight.to.position, 0.5).add(_v.set(0, 0.06, 0))
+    return true
+  }
+
   const isFlying = () => flight !== null
 
   function cancelFlight() {
@@ -133,15 +148,17 @@ export function createRig(camera, { getSize }) {
     el.addEventListener('pointermove', onMove)
     el.addEventListener('pointerup', onUp)
     el.addEventListener('pointercancel', onUp)
-    el.addEventListener('pointerleave', () => {
+    const onLeave = () => {
       look.yawTo = 0
       look.pitchTo = 0
-    })
+    }
+    el.addEventListener('pointerleave', onLeave)
     return () => {
       el.removeEventListener('pointerdown', onDown)
       el.removeEventListener('pointermove', onMove)
       el.removeEventListener('pointerup', onUp)
       el.removeEventListener('pointercancel', onUp)
+      el.removeEventListener('pointerleave', onLeave)
     }
   }
 
@@ -217,6 +234,7 @@ export function createRig(camera, { getSize }) {
     base,
     setPose,
     flyTo,
+    retarget,
     cancelFlight,
     isFlying,
     attach,

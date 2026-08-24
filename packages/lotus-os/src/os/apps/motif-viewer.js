@@ -22,6 +22,10 @@ const titleCase = (key) =>
 
 export default {
   id: 'motifs',
+  // One window per motif. Without a key the program is a singleton, so opening
+  // a second .motif from the explorer just focuses the first and shows you the
+  // one you already had.
+  key: (args) => (args?.motif ? `motifs:${args.motif}` : 'motifs'),
   title: 'Ornament Table',
   mark: 'lotus',
   width: 480,

@@ -165,21 +165,26 @@ export function createAppBar({ root, shell, menuLayer }) {
     requestAnimationFrame(() => panel.classList.add('is-in'))
   }
 
+  // Rebuilt on every open, never captured. Half of what is in this model is a
+  // live reading of the machine — whether a window is open to close, which
+  // theme is on, whether the sound is — and a model built once at boot says
+  // all of it wrong for the rest of the session.
+  const defFor = (id) => menus().find((def) => def.id === id)
+
   function renderMenus() {
-    const defs = menus()
     clear(menuStrip)
     markBtn.onclick = (e) => {
       e.stopPropagation()
-      openMenu === 'lotus' ? closeMenu() : showMenu(defs[0], markBtn)
+      openMenu === 'lotus' ? closeMenu() : showMenu(defFor('lotus'), markBtn)
     }
-    markBtn.onpointerenter = () => openMenu && openMenu !== 'lotus' && showMenu(defs[0], markBtn)
-    for (const def of defs.slice(1)) {
-      const btn = el('button.appbar__menu', { type: 'button', role: 'menuitem', text: def.label })
+    markBtn.onpointerenter = () => openMenu && openMenu !== 'lotus' && showMenu(defFor('lotus'), markBtn)
+    for (const { id, label } of menus().slice(1)) {
+      const btn = el('button.appbar__menu', { type: 'button', role: 'menuitem', text: label })
       btn.onclick = (e) => {
         e.stopPropagation()
-        openMenu === def.id ? closeMenu() : showMenu(def, btn)
+        openMenu === id ? closeMenu() : showMenu(defFor(id), btn)
       }
-      btn.onpointerenter = () => openMenu && openMenu !== def.id && showMenu(def, btn)
+      btn.onpointerenter = () => openMenu && openMenu !== id && showMenu(defFor(id), btn)
       menuStrip.append(btn)
     }
   }

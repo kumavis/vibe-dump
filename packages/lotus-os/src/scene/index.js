@@ -239,6 +239,9 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
   function onResize() {
     resize()
     if (root.dataset.mode === 'screen') rig.setPose(screenPose())
+    // The distance that reproduces the page's framing depends on the viewport,
+    // so a resize during the way home invalidates the pose being flown to.
+    else if (root.dataset.mode === 'flying' && homeward) rig.retarget(screenPose())
   }
 
   // --- the two poses ------------------------------------------------------
@@ -403,6 +406,7 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
   // --- entering and leaving ----------------------------------------------
 
   let busy = false
+  let homeward = false
 
   /**
    * Moving a DOM subtree keeps its nodes but loses three things that would
@@ -451,13 +455,14 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
       osEl.dataset.embodied = 'true'
       osEl.classList.add('is-embodied')
       osEl.style.pointerEvents = 'none'
-      osEl.inert = true
       renderer.domElement.style.transition = 'none'
       renderer.domElement.style.opacity = '0'
 
+      // Snapshot before inert: setting it blurs whatever was focused, and the
+      // focus half of keepState would be reading BODY by then.
       const restoreState = keepState()
-      cssScene.add(monitor.screenObject)
-      monitor.syncScreen()
+      osEl.inert = true
+      cssScene.add(monitor.remountScreen())
       rig.drift = 0
       rig.setPose(screenPose())
       renderOnce()
@@ -490,6 +495,7 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
 
       await new Promise((r) => setTimeout(r, reduced() ? 60 : 420))
 
+      homeward = false
       root.dataset.mode = 'flying'
       hud.classList.add('is-on')
       rig.drift = 0
@@ -516,6 +522,7 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
     try {
       hud.classList.remove('is-settled')
       setHover(null)
+      homeward = true
       root.dataset.mode = 'flying'
       rig.recentre()
       await rig.flyTo(screenPose(), {
@@ -530,6 +537,7 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
 
       // Fade the room back out, then take the panel out of the monitor and
       // give it back to the page. Same subtree, same state, same open windows.
+      renderer.domElement.style.transition = `opacity ${reduced() ? 60 : 420}ms ease`
       renderer.domElement.style.opacity = '0'
       hud.classList.remove('is-on')
       await new Promise((r) => setTimeout(r, reduced() ? 60 : 420))
@@ -562,6 +570,22 @@ export async function createWorkspace({ osEl, homeEl, shell }) {
   function dispose() {
     shell?.sfx?.stopAll?.()
     stop()
+    // root owns the CSS3D layer, which owns the live desktop whenever the
+    // panel is embodied. Removing it without handing the panel back first
+    // would take the whole operating system with it.
+    if (osEl.dataset.embodied === 'true') {
+      cssScene.remove(monitor.screenObject)
+      osEl.style.transform = ''
+      osEl.style.position = ''
+      osEl.style.pointerEvents = ''
+      osEl.style.userSelect = ''
+      osEl.removeAttribute('draggable')
+      osEl.classList.remove('is-embodied')
+      osEl.inert = false
+      osEl.dataset.embodied = 'false'
+      homeEl.append(osEl)
+      window.lotus?.fit?.()
+    }
     window.removeEventListener('resize', onResize)
     window.removeEventListener('keydown', onKey)
     renderer.domElement.removeEventListener('pointermove', onPointerMove)

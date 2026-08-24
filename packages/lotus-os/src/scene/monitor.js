@@ -94,7 +94,7 @@ export function createMonitor({ screenEl, CSS3DObject }) {
   panel.add(punch)
 
   // The live OS, at the same place, in the CSS3D scene.
-  const screenObject = new CSS3DObject(screenEl)
+  let screenObject = new CSS3DObject(screenEl)
 
   // --- back of the panel: vents, a port cluster, a power light ---
   const back = box(PANEL_W * 0.52, PANEL_H * 0.44, 0.016, MAT.plastic(0x131119, 0.66))
@@ -179,13 +179,31 @@ export function createMonitor({ screenEl, CSS3DObject }) {
     screenObject.updateMatrixWorld(true)
   }
 
-  return {
+  /**
+   * Hand the panel to a NEW CSS3DObject before each reveal.
+   *
+   * CSS3DRenderer memoises, per object, the transform string it last wrote,
+   * and skips the write when it has not changed. Coming home clears that
+   * inline transform so the page can have its panel back — and the second
+   * reveal then lands on the same camera pose, produces the same string, and
+   * the renderer decides it has nothing to do. The panel renders untransformed
+   * and falls out of the monitor. A fresh object has no cache entry.
+   */
+  function remountScreen() {
+    screenObject = new CSS3DObject(screenEl)
+    api.screenObject = screenObject
+    syncScreen()
+    return screenObject
+  }
+
+  const api = {
     group,
     panel,
     punch,
     screenObject,
     screenPose,
     syncScreen,
+    remountScreen,
     powerLed,
     powerGlow,
     interactives: [
@@ -199,4 +217,6 @@ export function createMonitor({ screenEl, CSS3DObject }) {
     ],
     dispose() {},
   }
+
+  return api
 }
