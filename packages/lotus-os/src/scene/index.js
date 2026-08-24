@@ -25,7 +25,7 @@ import { createSolderKit } from './solder.js'
 import { createBoard } from './board.js'
 
 const FOV_SCREEN = 40
-const FOV_ROOM = 54
+const FOV_ROOM = 52
 
 // Where things stand on the desk. The desk top is at y = 0.75 and every prop
 // is built with its own origin on the surface it sits on, so these are just
@@ -37,9 +37,12 @@ const PLACE = {
   board: [-0.8, 0.75, -0.88],
 }
 
+// Chosen by looking at it. The camera ends far enough back that the cables
+// hanging at z ~ 0.5 crop both edges and the bulb crops a corner, which is the
+// difference between a photograph of a room and a render of some objects.
 const ROOM_POSE = {
-  position: new THREE.Vector3(0.66, 1.31, 0.94),
-  target: new THREE.Vector3(-0.17, 0.95, -1.02),
+  position: new THREE.Vector3(0.64, 1.32, 0.98),
+  target: new THREE.Vector3(-0.06, 0.92, -1.05),
   fov: FOV_ROOM,
 }
 // The camera swings out and to the right rather than sliding straight back.

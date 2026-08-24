@@ -137,7 +137,9 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
   // --- 1. the station base unit --------------------------------------------
 
   const baseUnit = new THREE.Group()
-  baseUnit.position.set(-0.1, 0, 0)
+  // Pushed back off the front third of the footprint: the helping hands need
+  // that strip, and a station parked at the desk edge looks staged.
+  baseUnit.position.set(-0.1, 0, -0.006)
   group.add(baseUnit)
 
   const chassis = wedge(0.135, 0.07, 0.052, 0.09, caseMat, 0.22)
@@ -313,7 +315,7 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
 
   along(0.02, 0.058, 0.0042, 0.004, bright, 8)
   along(0.056, 0.07, 0.0072, 0.0062, steel, 8)
-  along(0.07, 0.148, 0.0098, 0.0118, handleMat, detail(10))
+  along(0.07, 0.148, 0.0118, 0.0098, handleMat, detail(10))
   along(0.086, 0.12, 0.0128, 0.0128, gripMat, detail(10))
   along(0.148, 0.163, 0.0058, 0.0076, gripMat, 8)
 
@@ -406,8 +408,8 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
     new THREE.Vector3(0.036, 0.006, 0.065),
     new THREE.Vector3(0.01, 0.0062, 0.057),
     new THREE.Vector3(-0.01, 0.0098, 0.041),
-    new THREE.Vector3(-0.022, 0.0182, 0.025),
-    new THREE.Vector3(-0.028, 0.024, 0.013),
+    new THREE.Vector3(-0.023, 0.0182, 0.019),
+    new THREE.Vector3(-0.028, 0.024, 0.007),
   ]
   const lead = cable(leadPts, { radius: 0.0055, color: 0x191622, segments: detail(78) })
   group.add(lead)
@@ -601,17 +603,18 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
 
   // Five instances of one blade — five separate meshes here would be five
   // draw calls for a shape nobody can resolve once it is turning.
-  const bladeGeo = edgeDirt(new THREE.BoxGeometry(0.034, 0.021, 0.0016), 0.2)
+  const bladeGeo = edgeDirt(new THREE.BoxGeometry(0.03, 0.021, 0.0016), 0.2)
   const blades = new THREE.InstancedMesh(bladeGeo, MAT.plastic(0x312e3a, 0.55), 5)
   blades.castShadow = true
   {
     const m = new THREE.Matrix4()
     const spin = new THREE.Matrix4()
-    const out = new THREE.Matrix4()
+    // Tip radius 0.038 against a guard ring at 0.042 — blades that reach past
+    // their own cage look like a mistake even when nothing intersects.
+    const out = new THREE.Matrix4().makeTranslation(0.023, 0, 0)
     const pitch = new THREE.Matrix4().makeRotationX(0.55)
     for (let i = 0; i < 5; i++) {
       spin.makeRotationZ((i / 5) * Math.PI * 2)
-      out.makeTranslation(0.026, 0, 0)
       m.multiplyMatrices(spin, out).multiply(pitch)
       blades.setMatrixAt(i, m)
     }
@@ -645,8 +648,8 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
   // is a cheaper story than modelling the board that used to be there.
 
   const hands = new THREE.Group()
-  hands.position.set(-0.158, 0, 0.098)
-  jitter(hands, 0.3, 0)
+  hands.position.set(-0.166, 0, 0.088)
+  jitter(hands, 0.12, 0)
   group.add(hands)
 
   const handsBase = cyl(0.029, 0.033, 0.011, castMat, detail(14))
@@ -665,7 +668,7 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
     { elbow: new THREE.Vector3(0.019, 0.058, 0.019), clip: new THREE.Vector3(0.034, 0.05, 0.036) },
     { elbow: new THREE.Vector3(-0.014, 0.068, 0.016), clip: new THREE.Vector3(0.008, 0.056, 0.034) },
   ]
-  const AIM = new THREE.Vector3(0.09, 0.042, 0.09)
+  const AIM = new THREE.Vector3(0.1, 0.04, 0.072)
 
   for (const arm of arms) {
     hands.add(strut(KNUCKLE, arm.elbow, 0.0022, steel, 6))
@@ -716,7 +719,7 @@ export function createSolderKit({ sfx = null, quality = 1 } = {}) {
     tipGlow.userData.setIntensity(k)
     ledGlow.userData.setIntensity(on ? 1 : 0)
     ledMat.color.copy(LED_OFF).lerp(LED_ON, on ? 1 : 0)
-    tipLight.intensity = k * 0.35
+    tipLight.intensity = k * 0.22
     readMat.opacity = 0.05 + 0.9 * k
 
     shimmerMat.opacity = k * (0.055 + 0.02 * Math.sin(t * 1.13))
