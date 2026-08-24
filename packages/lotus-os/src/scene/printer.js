@@ -342,6 +342,23 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   const beam = box(UP_X * 2 - 0.03, 0.02, 0.02, anodised, { dirt: 0.18 })
   beam.position.set(0, 0.035, BEAM_Z)
   gantry.add(beam)
+
+  // The LED bar under the gantry that every one of these machines has. It is
+  // also the only reason you can see the print happen: the printer stands in
+  // the cool half of the room, well outside the desk lamp's three metres, and
+  // an unlit object slowly appearing inside a dark frame reads as nothing at
+  // all. No shadows — the room affords two casters and neither is here.
+  const barGeo = ensureColors(new THREE.BoxGeometry(UP_X * 1.5, 0.004, 0.006))
+  const barMat = MAT.emissive(0xfff0d8, 0.22).clone()
+  const bar = new THREE.Mesh(barGeo, barMat)
+  bar.position.set(0, 0.022, BEAM_Z + 0.014)
+  gantry.add(bar)
+
+  const barLight = new THREE.PointLight(0xffe9c8, 0, 0.62, 2)
+  barLight.castShadow = false
+  barLight.position.set(0, 0.014, BEAM_Z + 0.02)
+  gantry.add(barLight)
+  const BAR_W = 0.95
   const beamSlot = box(UP_X * 2 - 0.04, 0.006, 0.0016, slot)
   beamSlot.position.set(0, 0.035, BEAM_Z + 0.011)
   beamSlot.castShadow = false
@@ -840,6 +857,10 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       fanSpin.rotation.x += dt * 34 * heat
     }
 
+    const barLevel = 0.1 + heat * 0.9
+    barLight.intensity = BAR_W * barLevel
+    barMat.color.setHex(0xfff0d8).multiplyScalar(0.22 * (0.5 + barLevel * 0.5))
+
     nozzleGlow.userData.setIntensity(heat * (0.7 + 0.3 * Math.sin(t * 11)))
     const hot = heat > 0.02
     heatLed.dot.visible = hot && (phase !== 'warm' || Math.sin(t * 9) > 0)
@@ -880,6 +901,8 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     ],
     dispose() {
       sfx?.stopLoop('printer')
+      barMat.dispose()
+      barGeo.dispose()
       filament.dispose()
       freshLayer.dispose()
       skirtMat.dispose()

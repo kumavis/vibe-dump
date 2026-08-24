@@ -129,8 +129,8 @@ export default {
     function paintSize() {
       prose.style.fontSize = `${size}px`
       sizeText.textContent = `${size} px`
-      smallerBtn.disabled = size <= SIZE.min
-      largerBtn.disabled = size >= SIZE.max
+      smallerBtn.disabled = !found || size <= SIZE.min
+      largerBtn.disabled = !found || size >= SIZE.max
     }
 
     function step(delta) {

@@ -52,7 +52,7 @@ export default {
       spec,
       el('p.about__note', {
         text:
-          'Nothing on this machine does anything useful, which was never the requirement. The panel is 1440 by 900, and it is standing on something.',
+          'Nothing on this machine does anything useful, which was never the requirement. The one thing on it that is not a program is the button below this paragraph, and it does not open a window.',
       }),
       el('button.btn.btn--primary', { type: 'button', onclick: () => shell.reveal() }, [
         el('span', { html: icon('exec', { size: 15 }), 'aria-hidden': 'true' }),

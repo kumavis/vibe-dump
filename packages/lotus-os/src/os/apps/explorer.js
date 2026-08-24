@@ -9,7 +9,7 @@
 import { el, clear, bytes, clamp } from '../util.js'
 import { icon } from '../icons.js'
 import { KINDS, childrenOf, iconFor, sizeOf } from '../fs.js'
-import { markFor } from '../motifs.js'
+import { markFor, motifSVG } from '../motifs.js'
 
 const PLACES = [
   { label: 'Root', path: '/', icon: 'drive' },
@@ -140,7 +140,10 @@ export default {
         { type: 'button', role: 'option', title: node.caption ?? node.name, data: { path: node.path } },
         [
           el('div.tile__glyph', {
-            html: node.kind === 'motif' ? markFor(node.motif) : icon(iconFor(node), { size: 32 }),
+            // markFor() would answer with the app-bar mark for anything whose
+            // name also lives in MARKS (kranok does), and that is the wrong
+            // drawing at this size. The specimen first, the mark only as a net.
+            html: node.kind === 'motif' ? motifSVG(node.motif) || markFor(node.motif) : icon(iconFor(node), { size: 32 }),
             'aria-hidden': 'true',
           }),
           el('div.tile__label', { text: node.name }),
@@ -262,10 +265,12 @@ export default {
     // --- navigation -------------------------------------------------------
 
     function show(node, { push = true } = {}) {
-      // Navigating by keyboard destroys the element the keys were arriving on,
-      // so the pane has to catch its own focus again — but only if it had it,
-      // or the two windows opened at boot would fight over it.
-      const hadFocus = scroll === document.activeElement || scroll.contains(document.activeElement)
+      // Navigating destroys the element the focus was sitting on — a tile, or
+      // the crumb that was just clicked — so the pane has to catch it again.
+      // Only if it held it already, or the windows opened at boot would fight
+      // over it.
+      const active = document.activeElement
+      const hadFocus = scroll === active || scroll.contains(active) || crumbs.contains(active)
       if (push && current && current !== node) trail.push(current.path)
       current = node
       selected = null
@@ -313,6 +318,12 @@ export default {
       gridBtn.classList.toggle('is-active', mode === 'grid')
       listBtn.classList.toggle('is-active', mode === 'list')
       renderItems()
+      revealSelection()
+    }
+
+    const revealSelection = () => {
+      const item = items.find((i) => i.node === selected)
+      if (item) keepInView(item.el)
     }
 
     // --- boot -------------------------------------------------------------
@@ -327,8 +338,7 @@ export default {
 
     return {
       onResize() {
-        const item = items.find((i) => i.node === selected)
-        if (item) keepInView(item.el)
+        revealSelection()
       },
     }
   },
