@@ -954,18 +954,19 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
     if (level === 0 && settled) return
     settled = level === 0
 
+    // Quick up, long decay: the head sits between two LEDs and splits itself
+    // across them, and anything it has already passed only bleeds off. Taking
+    // the tail from what has happened rather than from a direction flag is
+    // what lets the turns survive — a signed tail has to jump to the far side
+    // of the head in a single frame, and eight LEDs doing that together read
+    // as a fault rather than as a sweep.
     const head = chaseHead(t)
     const bleed = Math.exp(-dt / TAIL_TAU)
     let energy = 0
     for (let i = 0; i < LED_N; i++) {
       const led = leds[i]
-      // Quick up, long decay: the head lands between two LEDs and splits
-      // itself across them, and everything it has already passed only bleeds
-      // off. Taking the tail from what has happened rather than from a
-      // direction flag is what lets the turn at each end survive — a signed
-      // tail has to jump to the far side of the head in one frame, and eight
-      // LEDs doing that together read as a fault rather than as a sweep.
-      led.charge = Math.max(Math.max(0, 1 - Math.abs(i - head)), led.charge * bleed)
+      const lit = Math.max(0, 1 - Math.abs(i - head))
+      led.charge = Math.max(lit, led.charge * bleed)
       const b = level * led.gain * (0.03 + 0.97 * led.charge)
       energy += b
       led.mat.color.copy(LED_OFF).lerp(LED_ON, b)
