@@ -242,7 +242,10 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   )
   pool.rotation.set(-Math.PI / 2, Math.atan2(-SUN.z, SUN.x), 0, 'YXZ')
   pool.renderOrder = 1
-  add(pool, 0.5, 0.006, -0.5)
+  // Solved against the floor rather than eyeballed. A pool half a metre off
+  // the end of its own beam is the thing that makes a room read as assembled.
+  const land = shaftOrigin.clone().addScaledVector(SUN, -shaftOrigin.y / SUN.y)
+  add(pool, land.x, 0.006, land.z)
 
   // --- dust ---------------------------------------------------------------
 
@@ -464,10 +467,10 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   // --- wall vent ----------------------------------------------------------
 
   add(box(0.44, 0.26, 0.05, MAT.paint(PALETTE.wallDark, { rough: 0.62, metal: 0.35 }), { dirt: 0.26 }), -1.78, 1.98, Z_BACK + 0.02)
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     const slat = box(0.39, 0.016, 0.032, MAT.paint(PALETTE.aluminium, { rough: 0.55, metal: 0.6 }))
     slat.rotation.x = 0.55
-    add(slat, -1.78, 1.88 + i * 0.048, Z_BACK + 0.05)
+    add(slat, -1.78, 1.876 + i * 0.042, Z_BACK + 0.05)
   }
 
   // --- hanging bulb -------------------------------------------------------
@@ -715,7 +718,9 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
       neonLight.intensity = NEON_W * level
     },
     dispose() {
-      shaftMat.alphaMap?.dispose()
+      // Only what this module minted. The shaft ramp comes out of the shared
+      // texture cache, so disposing it here would hand the next room a dead
+      // texture, and the assembler clears that cache anyway.
       noteDecal.dispose()
       dustGeo.dispose()
       cityGeo.dispose()

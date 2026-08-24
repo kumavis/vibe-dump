@@ -7,3 +7,4 @@ packages/*/tools/shots/
 # scratch harnesses used while verifying a change in a real browser
 /.probe-*.mjs
 /.probe/
+packages/*/tools/_probe*.mjs

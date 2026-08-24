@@ -101,8 +101,15 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   contactDarken(top, [new THREE.Plane(new THREE.Vector3(0, 1, 0), -UNDER)], { radius: 0.022, floor: 0.3 })
 
   // The front edge takes every knock in the room, so it is the one painted
-  // surface wearing the chipped map.
-  const lip = box(W, 0.026, 0.018, MAT.paint(PALETTE.greyMetal, { rough: 0.5, metal: 0.4, chipped: true, substrate: PALETTE.aluminium }), {
+  // surface wearing the chipped map. Box UVs run 0..1 per face, which would
+  // stretch a single 256px copy of that map across all 2.5 m of edge and turn
+  // every chip into a horizontal smear, so this copy tiles it back to about
+  // its own scale.
+  const lipMat = MAT.paint(PALETTE.greyMetal, { rough: 0.5, metal: 0.4, chipped: true, substrate: PALETTE.aluminium }).clone()
+  lipMat.map = lipMat.map.clone()
+  lipMat.map.needsUpdate = true
+  lipMat.map.repeat.set(64, 1)
+  const lip = box(W, 0.026, 0.018, lipMat, {
     dirt: 0.1,
     tint: 0x8e8896,
   })
@@ -291,9 +298,11 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   mouse.rotation.y = -0.14
   group.add(mouse)
 
+  // The shell is 27 mm tall where the wheel sits, and a scroll wheel is sunk in
+  // a slot rather than perched on the lid: this leaves about 3 mm of it proud.
   const wheel = cyl(0.006, 0.006, 0.005, MAT.rubber(0x0d0b12), 8)
   wheel.rotation.z = Math.PI / 2
-  wheel.position.set(0.031, TOP_Y + 0.03, -0.832)
+  wheel.position.set(0.031, TOP_Y + 0.0245, -0.832)
   group.add(wheel)
 
   group.add(
@@ -344,10 +353,13 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   handle.position.set(0.041, 0.052, 0)
   mugGroup.add(handle)
 
-  // Whatever is in there has not been warm since some time yesterday.
-  const brew = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.031, detail(12))), MAT.plastic(0x120c0a, 0.26))
+  // Whatever is in there has not been warm since some time yesterday. cyl()
+  // builds capped cylinders, so a disc down at the real liquid line would be
+  // sealed under the mug's own lid: it sits a hair above the rim instead and
+  // reads as a full mug, leaving a 2.5 mm ring of ceramic showing round it.
+  const brew = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.0335, detail(12))), MAT.plastic(0x120c0a, 0.26))
   brew.rotation.x = -Math.PI / 2
-  brew.position.y = 0.079
+  brew.position.y = 0.0987
   mugGroup.add(brew)
 
   // The stain is where the mug used to live, which is the only reason a ring
@@ -365,7 +377,10 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   })
   const stain = new THREE.Mesh(ensureColors(new THREE.RingGeometry(0.032, 0.041, detail(18))), stainMat)
   stain.rotation.x = -Math.PI / 2
-  stain.position.set(0.108, TOP_Y + 0.0008, -0.938)
+  // Clear of the paper stack, which starts at x 0.107 and whose bottom sheet
+  // sits at this exact height — overlapping them would z-fight and paint half
+  // a ring onto the paper.
+  stain.position.set(0.043, TOP_Y + 0.0008, -0.995)
   group.add(stain)
 
   // --- cable management -----------------------------------------------------
@@ -442,8 +457,10 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   tie.position.set(-1.176, 0.332, -1.378)
   group.add(tie)
 
+  // High enough that the head is buried in the tube of the ring; any lower and
+  // the tail floats free of the tie it is supposed to be hanging off.
   const tieTail = box(0.004, 0.016, 0.002, MAT.plastic(0x0f0d15, 0.5), { dirt: 0.1 })
-  tieTail.position.set(-1.176, 0.312, -1.336)
+  tieTail.position.set(-1.176, 0.325, -1.336)
   tieTail.rotation.x = 0.3
   group.add(tieTail)
 
@@ -574,10 +591,13 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
       },
     ],
     dispose() {
-      // Only the two materials this module made for itself; everything else on
-      // the bench is shared and the assembler clears it.
+      // Only what this module made for itself; everything else on the bench is
+      // shared and the assembler clears it. The lip's map is a private copy of
+      // a cached texture, so it has to go separately.
       shadeMat.dispose()
       stainMat.dispose()
+      lipMat.map.dispose()
+      lipMat.dispose()
     },
   }
 }
