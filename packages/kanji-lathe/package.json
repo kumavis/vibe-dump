@@ -1,0 +1,18 @@
+{
+  "name": "@vibe-dump/kanji-lathe",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check": "node tools/ops-sweep.mjs && node tools/shyness-check.mjs && node tools/font-check.mjs && node tools/font-check.mjs --hollow && node tools/smoke.mjs",
+    "shots": "node tools/shoot.mjs",
+    "standalone": "vite build && node tools/standalone.mjs",
+    "preview": "node tools/preview.mjs"
+  },
+  "gallery": {
+    "title": "Kanji Lathe",
+    "description": "A parametric type foundry for the 1,000 most common kanji: stroke-order-aware skeletons run through a deformation pipeline, with crown shyness, region compression and a live TrueType export."
+  }
+}
