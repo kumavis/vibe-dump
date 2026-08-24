@@ -45,10 +45,13 @@ const browser = await chromium.launch({
   executablePath: await findChromium(),
   args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'],
 })
-const page = await browser.newPage({ viewport: VIEW, deviceScaleFactor: 2 })
+// Software rendering (no GPU in CI or a container) cannot resolve a 2x frame
+// of the lit room inside Playwright's default screenshot timeout, and these
+// are working pictures rather than press shots.
+const page = await browser.newPage({ viewport: VIEW, deviceScaleFactor: 1 })
 
 const shot = async (name) => {
-  await page.screenshot({ path: join(outDir, `${name}.png`) })
+  await page.screenshot({ path: join(outDir, `${name}.png`), timeout: 90000 })
   console.log(`  ${name}.png`)
 }
 

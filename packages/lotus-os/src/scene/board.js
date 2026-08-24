@@ -50,7 +50,7 @@ const LED_Z = -0.0268
 const LED_PITCH = 0.0075
 const ledX = (i) => -0.02625 + i * LED_PITCH
 // The room's one cyan accent, and it is four pixels wide. Keep it that way.
-const PWR = { x: -0.043, z: LED_Z }
+const PWR = { x: -0.0405, z: LED_Z }
 
 const PITCH = 0.00254
 // Header A runs along the front edge, header B up the right-hand side. Every
@@ -124,7 +124,7 @@ const boardTexture = () =>
       // Ground pour over everything but a keepout at the outline. It is the
       // reason a bare board reads green-black rather than flat black.
       ctx.fillStyle = '#16241d'
-      rrect(4 * mm, 4 * mm, w - 8 * mm, h - 8 * mm, 3 * mm)
+      rrect(3 * mm, 3 * mm, w - 6 * mm, h - 6 * mm, 3 * mm)
       ctx.fill()
 
       // Hatched pour on the analogue corner, because someone read a note about
@@ -271,7 +271,7 @@ const boardTexture = () =>
         for (let i = 0; i < n; i++) ctx.fillRect(px(x) + i * (size * 0.85), py(z), size * 0.5, size * 1.7)
       }
 
-      rrect(2.5 * mm, 2.5 * mm, w - 5 * mm, h - 5 * mm, 3 * mm)
+      rrect(1.5 * mm, 1.5 * mm, w - 3 * mm, h - 3 * mm, 3 * mm)
       ctx.stroke()
 
       for (const key of ['mcu', 'oled', 'usb', 'reg', 'can', 'button', 'trim']) outline(PART[key])
@@ -572,16 +572,15 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
         ctx.restore()
       }
 
+      // A one-bit panel has no half tones, so the rank behind is dashed. That
+      // is how it would actually be done on the hardware.
       ctx.lineWidth = 1.5
-      for (let i = 0; i < Math.min(4, petals); i++) {
-        // A one-bit panel has no half tones, so the rank behind is dashed.
-        // That is how it would actually be done.
-        ctx.setLineDash([2, 2])
-        petal(Math.PI / 4 + (i * Math.PI) / 2, 21, 7)
-      }
+      ctx.setLineDash([2, 2])
+      for (let i = 0; i < Math.min(4, petals); i++) petal(Math.PI / 4 + (i * Math.PI) / 2, 21, 7)
       ctx.setLineDash([])
       for (let i = 4; i < Math.min(8, petals); i++) petal(((i - 4) * Math.PI) / 2, 27, 9)
-      if (petals >= 9) {
+      if (petals >= PETALS) {
+        ctx.fillStyle = '#bcd8ff'
         ctx.beginPath()
         ctx.arc(cx, cy, 3.2, 0, Math.PI * 2)
         ctx.fill()
@@ -615,7 +614,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
   screen.renderOrder = 2
   group.add(screen)
 
-  const screenGlow = glowSprite(0x8fb4ff, 0.006, { core: 0.22, mid: 0.09, halo: 0.03 })
+  const screenGlow = glowSprite(0x8fb4ff, 0.005, { core: 0.22, mid: 0.08, halo: 0.022 })
   screenGlow.position.set(PART.oled.x, TOP + 0.0092, PART.oled.z)
   screenGlow.userData.setIntensity(0)
   group.add(screenGlow)
@@ -734,8 +733,9 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
     const p = new THREE.Vector3()
     const s = new THREE.Vector3(1, 1, 1)
     const c = new THREE.Color()
+    const up = new THREE.Vector3(0, 1, 0)
     seats.forEach((seat, i) => {
-      q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), seat.r)
+      q.setFromAxisAngle(up, seat.r)
       p.set(seat.x, TOP + 0.0003, seat.z)
       m.compose(p, q, s)
       passives.setMatrixAt(i, m)
@@ -867,7 +867,7 @@ export function createBoard({ sfx = null, quality = 1 } = {}) {
       led.mat.color.copy(LED_OFF).lerp(LED_ON, b)
       led.glow.userData.setIntensity(b)
     }
-    rowLight.intensity = (energy / LED_N) * 0.32
+    rowLight.intensity = (energy / LED_N) * 0.9
 
     pwrMat.color.copy(PWR_OFF).lerp(PWR_ON, level)
     pwrGlow.userData.setIntensity(level * 0.85)
