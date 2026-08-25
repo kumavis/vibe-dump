@@ -1,15 +1,16 @@
-// clock.js — the weight-driven clock on the back wall.
+// clock.js — the weight-driven skeleton clock on the back wall.
 //
-// A movement with no case: two brass plates, four pillars, and the train
-// running between them where you can watch it. The dial is a lotus seen from
-// above and the petal tips are the hour marks, so there are no numerals and
-// nothing to read — you tell the time off the shape, which is the only excuse
-// for a clock in a room this dark.
+// No plates and no dial. A narrow vertical spine, rounded-end bridges reaching
+// out to each arbor, and the train stacked up that spine where all of it is
+// visible at once. At the bottom hangs a bare ring — no numerals, twelve small
+// petals cut into the band — and the hands float a few millimetres in front of
+// it with nothing behind them but open gearing. A dial would hide the only
+// thing worth modelling.
 //
-// It hangs, and what it hangs on is the point: two raw amethyst points wrapped
-// in gold chain by somebody who was not being careful about it. The wrapping is
-// meant to look wrong. A tidy cage would be jewellery; this is a man who needed
-// a weight and had a crystal and some chain.
+// What it hangs on: two quartz chunks, cleaved rather than cut, carrying a
+// little violet light of their own. Their cords are thin and nearly black on
+// purpose. An earlier pass wrapped them in gold chain and the room's neon
+// turned every turn of it into a hot pink line readable from the desk.
 //
 // The entire lit surface of the prop is the last two millimetres of each hand.
 
@@ -19,15 +20,19 @@ import { MAT, PALETTE, box, cyl, cable, glowSprite, ensureColors, edgeDirt } fro
 const TAU = Math.PI * 2
 const rnd = (a, b) => a + Math.random() * (b - a)
 
-const FACE_R = 0.1 // the lotus dial, 200mm across
-const PLATE_R = 0.078
-const PLATE_GAP = 0.026 // how far apart the two movement plates stand
-const APERTURE = 0.03 // the hole through dial and front plate you watch the train through
-const DROP = 0.2 // face centre below the wall mount
-const FALL = 0.3 // how far a weight travels before it is wound back up
+const RING_OUT = 0.085 // 170mm across, and 10mm of that is band
+const RING_IN = 0.0745
+const DROP = 0.2 // ring centre below the wall mount
+const FALL = 0.13 // how far a weight travels before it is wound back up
 
-const BRASS = 0xb08a4a
-const GOLD = 0xd3ab55
+// The prop is built in flat layers so nothing has to be depth-sorted: spine at
+// the back, train in front of it, bridges in front of that, ring, then hands.
+const SPINE_Z = -0.0105
+const WHEEL_Z = -0.004
+const BRIDGE_Z = 0.002
+const RING_Z = 0.01
+const MARK_Z = 0.0138
+const CORD_TOP = -0.083 // the eyelets under the ring, where the weights hang
 
 /**
  * A lotus petal as a flat closed shape, tip outward along +x.
@@ -42,56 +47,68 @@ function petalShape(inner, outer, halfWidth) {
   return s
 }
 
+/** A bar with half-round ends, running from the origin along +x. The frame is
+ *  nothing but these: every arbor gets one reaching out to it. */
+function stadium(len, half, depth, segments) {
+  const s = new THREE.Shape()
+  s.moveTo(0, half)
+  s.lineTo(len, half)
+  s.absarc(len, 0, half, Math.PI / 2, -Math.PI / 2, true)
+  s.lineTo(0, -half)
+  s.absarc(0, 0, half, -Math.PI / 2, Math.PI / 2, true)
+  return edgeDirt(new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: segments }), 0.12)
+}
+
 /**
- * A wheel whose teeth are petals and whose web is pierced with more of them.
- * At this size the teeth read as a scalloped rim rather than as gearing, which
- * is the intent — a clockmaker would call it wrong and it is the only reason
- * the thing looks like it belongs in this room.
+ * A wheel with a finely serrated rim and a web cut away to three or four
+ * spokes, each opening a petal. The first pass at this left too much web and
+ * the great wheel read as a flower cut into a disc — which is a dial, which is
+ * the one thing this clock is not allowed to have. The openings have to win.
  */
-function lotusWheel(radius, teeth, detail) {
+function lotusWheel(radius, teeth, spokes, detail) {
   const shape = new THREE.Shape()
-  const root = radius * 0.86
-  for (let i = 0; i <= teeth; i++) {
-    const a0 = (i / teeth) * TAU
-    const a1 = ((i + 0.5) / teeth) * TAU
-    const p = i === 0 ? 'moveTo' : 'lineTo'
-    shape[p](Math.cos(a0) * root, Math.sin(a0) * root)
-    shape.quadraticCurveTo(
-      Math.cos(a1) * radius * 1.06,
-      Math.sin(a1) * radius * 1.06,
-      Math.cos(((i + 1) / teeth) * TAU) * root,
-      Math.sin(((i + 1) / teeth) * TAU) * root,
-    )
+  const root = radius * 0.965
+  const tip = radius * 1.035
+  for (let i = 0; i < teeth; i++) {
+    const a = (i / teeth) * TAU
+    const b = ((i + 0.5) / teeth) * TAU
+    shape[i === 0 ? 'moveTo' : 'lineTo'](Math.cos(a) * root, Math.sin(a) * root)
+    shape.lineTo(Math.cos(b) * tip, Math.sin(b) * tip)
   }
-  // Pierce the web: a ring of petal-shaped holes and an arbor hole. This is
-  // what keeps a wheel from reading as a coin.
-  const holes = Math.max(4, Math.round(teeth / 3))
-  for (let i = 0; i < holes; i++) {
-    const a = (i / holes) * TAU
+
+  // Each opening is a petal sampled along its length rather than drawn with
+  // two arcs: at this width the arc version bulges past its own tips.
+  const steps = Math.max(7, detail * 2)
+  const r0 = radius * 0.26
+  const r1 = radius * 0.86
+  const w = (Math.PI / spokes) * 0.82
+  const at = (u, sign) => {
+    const r = r0 + (r1 - r0) * u
+    return { r, d: sign * w * Math.sin(Math.PI * u) ** 0.75 }
+  }
+  for (let i = 0; i < spokes; i++) {
+    const a = (i / spokes) * TAU + Math.PI / 2
     const hole = new THREE.Path()
-    const r0 = radius * 0.28
-    const r1 = radius * 0.66
-    const hw = radius * 0.15
-    hole.moveTo(Math.cos(a) * r0, Math.sin(a) * r0)
-    hole.quadraticCurveTo(
-      Math.cos(a + 0.34) * (r0 + r1) * 0.5,
-      Math.sin(a + 0.34) * (r0 + r1) * 0.5,
-      Math.cos(a) * r1,
-      Math.sin(a) * r1,
-    )
-    hole.quadraticCurveTo(
-      Math.cos(a - 0.34) * (r0 + r1) * 0.5,
-      Math.sin(a - 0.34) * (r0 + r1) * 0.5,
-      Math.cos(a) * r0,
-      Math.sin(a) * r0,
-    )
+    for (let s = 0; s <= steps; s++) {
+      const p = at(s / steps, 1)
+      const x = Math.cos(a + p.d) * p.r
+      const y = Math.sin(a + p.d) * p.r
+      s === 0 ? hole.moveTo(x, y) : hole.lineTo(x, y)
+    }
+    for (let s = steps - 1; s >= 1; s--) {
+      const p = at(s / steps, -1)
+      hole.lineTo(Math.cos(a + p.d) * p.r, Math.sin(a + p.d) * p.r)
+    }
     shape.holes.push(hole)
   }
   const arbor = new THREE.Path()
   arbor.absarc(0, 0, radius * 0.12, 0, TAU, true)
   shape.holes.push(arbor)
 
-  return ensureColors(new THREE.ExtrudeGeometry(shape, { depth: 0.0035, bevelEnabled: false, curveSegments: detail }))
+  return edgeDirt(
+    new THREE.ExtrudeGeometry(shape, { depth: 0.0035, bevelEnabled: false, curveSegments: Math.max(6, detail * 2) }),
+    0.16,
+  )
 }
 
 export function createClock({ sfx = null, quality = 1 } = {}) {
@@ -100,122 +117,165 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
 
   const group = new THREE.Group()
 
-  const brassMat = MAT.metal(BRASS, 0.44)
-  const darkMat = MAT.paint(0x1a1622, { rough: 0.55, metal: 0.4 })
-  const goldMat = MAT.metal(GOLD, 0.36)
+  const frameMat = MAT.wood(0x2b1f15) // walnut, matte enough to stay a silhouette
+  const ringMat = MAT.wood(0x3a2a1c)
+  const brassMat = MAT.metal(0x745a2e, 0.66)
+  const steelMat = MAT.metal(0x2f2b36, 0.54)
+  const bracketMat = MAT.paint(0x1a1622, { rough: 0.6, metal: 0.35 })
+  const podMat = MAT.metal(0x574021, 0.66)
+  // Nothing on the suspension is allowed to catch the neon. Non-metal, nearly
+  // black, very rough — the cords should read as absence, not as line work.
+  const cordMat = MAT.paint(0x140f0b, { rough: 0.94, metal: 0.04 })
+  const chainMat = MAT.metal(0x2a2018, 0.8)
 
   // --- the bracket ----------------------------------------------------------
-  // Minimal on purpose: the ornament budget belongs to the dial.
+  // Two slim cantilever arms off a strip on the wall, as on a skeleton clock:
+  // the movement stands proud of the plaster so the wall reads behind it.
 
-  const backPlate = box(0.05, 0.07, 0.008, darkMat, { dirt: 0.2 })
-  backPlate.position.set(0, -0.03, 0.004)
+  const backPlate = box(0.026, 0.14, 0.006, bracketMat, { dirt: 0.2 })
+  backPlate.position.set(0, -0.077, 0.004)
   group.add(backPlate)
 
-  const arm = cyl(0.006, 0.006, 0.05, darkMat, detail(8))
-  arm.rotation.x = Math.PI / 2
-  arm.position.set(0, -0.03, 0.03)
-  group.add(arm)
+  for (const y of [-0.024, -0.13]) {
+    const arm = cyl(0.0045, 0.0045, 0.031, bracketMat, detail(8))
+    arm.rotation.x = Math.PI / 2
+    arm.position.set(0, y, 0.0225)
+    group.add(arm)
+  }
 
-  // Everything below hangs off this, a little forward of the wall.
+  // Everything below hangs off this. Its origin is the ring centre, which is
+  // also the hand arbor — every measurement in the prop is taken from there.
   const body = new THREE.Group()
   body.position.set(0, -DROP, 0.052)
   group.add(body)
 
-  // --- the movement ---------------------------------------------------------
+  // --- the frame ------------------------------------------------------------
 
-  // The back plate stays solid — it is the dark brass ground the train reads
-  // against. The front one is pierced, because a skeleton movement is the only
-  // kind worth modelling here: the aperture is what lets the dial show its own
-  // gearing instead of hiding it behind a disc.
-  const movementBack = new THREE.Mesh(
-    ensureColors(new THREE.CylinderGeometry(PLATE_R, PLATE_R, 0.004, detail(20))),
-    brassMat,
-  )
-  movementBack.rotation.x = Math.PI / 2
-  movementBack.position.z = -PLATE_GAP / 2
-  movementBack.receiveShadow = true
-  body.add(movementBack)
+  // The spine runs from the top bracket down behind the great wheel, where the
+  // wheel hides its end. It never crosses the lower half of the ring, so you
+  // look straight through the ring at nothing but gears.
+  const spine = box(0.019, 0.154, 0.007, frameMat, { dirt: 0.22 })
+  spine.position.set(0, 0.107, SPINE_Z)
+  body.add(spine)
 
-  const movementFront = new THREE.Mesh(ensureColors(new THREE.RingGeometry(APERTURE, PLATE_R, detail(24))), brassMat)
-  movementFront.position.z = PLATE_GAP / 2
-  movementFront.castShadow = true
-  body.add(movementFront)
+  // --- the train ------------------------------------------------------------
 
-  for (let i = 0; i < 4; i++) {
-    const a = (i / 4) * TAU + Math.PI / 4
-    const pillar = cyl(0.0045, 0.0045, PLATE_GAP, brassMat, detail(6))
-    pillar.rotation.x = Math.PI / 2
-    pillar.position.set(Math.cos(a) * PLATE_R * 0.8, Math.sin(a) * PLATE_R * 0.8, 0)
-    body.add(pillar)
-  }
-
-  // The train. Meshing wheels turn in opposite directions at speeds inversely
-  // proportional to their radii — getting that backwards is the single most
-  // noticeable way a modelled clock reads as fake, and it costs nothing.
-  // Sized so every wheel stays inside the dial rim: one that clears the edge
-  // reads as an ornament stuck to the side rather than as part of a train.
+  // Stacked up the spine rather than huddled behind a dial, and zig-zagged so
+  // consecutive arbors sit either side of it. Centre distances are exactly
+  // r+r: meshing wheels turn in opposite directions at speeds inversely
+  // proportional to their radii, and getting that backwards is the single most
+  // noticeable way a modelled clock reads as fake.
+  // Nothing reaches past the ring's own half-width, so the whole prop stays one
+  // column — a wheel that clears that line reads as an ornament stuck on.
+  // The great wheel is the dark one on purpose: it sits in the ring opening,
+  // and a pale wheel filling that hole is a dial by another name.
   const TRAIN = [
-    { r: 0.05, teeth: 16, x: 0, y: 0, spin: 1 / 60 },
-    { r: 0.026, teeth: 11, x: 0.064, y: -0.013, spin: 0 },
-    { r: 0.019, teeth: 9, x: 0.046, y: 0.044, spin: 0 },
+    { r: 0.052, teeth: 40, spokes: 4, x: 0, y: 0, spin: 1 / 75, mat: steelMat },
+    { r: 0.03, teeth: 23, spokes: 4, x: 0.028, y: 0.0771, mat: brassMat },
+    { r: 0.0225, teeth: 17, spokes: 3, x: -0.0021, y: 0.1201, mat: steelMat },
+    { r: 0.0165, teeth: 13, spokes: 3, x: 0.0162, y: 0.1545, mat: brassMat },
   ]
-  const trainMat = MAT.metal(0x6b5327, 0.66)
+
   const wheels = []
   TRAIN.forEach((w, i) => {
-    const mesh = new THREE.Mesh(lotusWheel(w.r, w.teeth, detail(6)), trainMat)
-    mesh.position.set(w.x, w.y, -0.0018)
+    const mesh = new THREE.Mesh(lotusWheel(w.r, w.teeth, w.spokes, detail(6)), w.mat)
+    // Half a millimetre of stagger. Coplanar wheels z-fight across the little
+    // lens of overlap where their teeth mesh.
+    mesh.position.set(w.x, w.y, WHEEL_Z + (i % 2 ? 0.0006 : -0.0006))
     mesh.castShadow = true
     body.add(mesh)
-    // Each wheel takes its speed from the one before it, reversed and scaled.
     const prev = wheels[i - 1]
     const rate = i === 0 ? w.spin * TAU : -prev.rate * (TRAIN[i - 1].r / w.r)
     wheels.push({ mesh, rate })
   })
 
-  // The barrel the chains come off.
-  const barrel = cyl(0.016, 0.016, PLATE_GAP * 0.7, brassMat, detail(12))
-  barrel.rotation.x = Math.PI / 2
-  barrel.position.set(-0.058, -0.03, 0)
-  body.add(barrel)
+  // A bridge per arbor, each one hung off a pillar a centimetre down the spine
+  // so it arrives at its wheel on the slant instead of squaring off like a
+  // ladder rung. The great wheel's is the long one: it carries on past the
+  // wheel to the ring centre and becomes the cock the hands pivot in.
+  const BRIDGES = [
+    { from: 0.05, x: 0, y: 0, half: 0.0052 },
+    { from: 0.0651, x: 0.028, y: 0.0771, half: 0.0045 },
+    { from: 0.1081, x: -0.0021, y: 0.1201, half: 0.004 },
+    { from: 0.1425, x: 0.0162, y: 0.1545, half: 0.0036 },
+  ]
 
-  // --- the dial -------------------------------------------------------------
+  for (const b of BRIDGES) {
+    const len = Math.max(0.01, Math.hypot(b.x, b.y - b.from))
+    const bar = new THREE.Mesh(stadium(len, b.half, 0.004, detail(7)), frameMat)
+    bar.position.set(0, b.from, BRIDGE_Z)
+    bar.rotation.z = Math.atan2(b.y - b.from, b.x)
+    bar.castShadow = true
+    body.add(bar)
 
-  const dial = new THREE.Group()
-  dial.position.z = PLATE_GAP / 2 + 0.006
-  body.add(dial)
-
-  const dialBack = new THREE.Mesh(
-    ensureColors(new THREE.RingGeometry(APERTURE, FACE_R * 0.92, detail(28))),
-    MAT.plastic(0x0d0a14, 0.42),
-  )
-  dialBack.position.z = -0.002
-  dial.add(dialBack)
-
-  const rim = new THREE.Mesh(
-    ensureColors(new THREE.TorusGeometry(FACE_R * 0.94, 0.0022, 4, detail(30))),
-    MAT.metal(GOLD, 0.62), // rougher than the movement brass: a lit rim would
-  ) // fight the hand tips, which are meant to be the only bright thing here
-  dial.add(rim)
-
-  // Twelve petals for twelve hours, the four cardinals longer, because a dial
-  // you read by shape needs the quarters to be findable without counting.
-  const petalMat = MAT.plastic(0x171225, 0.5)
-  const petalEdgeMat = MAT.metal(0x6b5a34, 0.5)
-  for (let i = 0; i < 12; i++) {
-    const cardinal = i % 3 === 0
-    const outer = cardinal ? FACE_R * 0.88 : FACE_R * 0.74
-    const geo = ensureColors(
-      new THREE.ExtrudeGeometry(petalShape(FACE_R * 0.3, outer, cardinal ? 0.019 : 0.014), {
-        depth: 0.0022,
-        bevelEnabled: false,
-        curveSegments: detail(5),
-      }),
-    )
-    const petal = new THREE.Mesh(geo, cardinal ? petalEdgeMat : petalMat)
-    petal.rotation.z = (i / 12) * TAU
-    dial.add(petal)
+    // Four pillars, same as before, only now they space the bridges off the
+    // spine instead of holding two plates apart.
+    const pillar = cyl(0.0028, 0.0028, 0.009, brassMat, detail(6))
+    pillar.rotation.x = Math.PI / 2
+    pillar.position.set(0, b.from, -0.0025)
+    body.add(pillar)
   }
 
+  for (const w of TRAIN) {
+    const pin = cyl(0.0016, 0.0016, w.r > 0.05 ? 0.024 : 0.013, brassMat, detail(6))
+    pin.rotation.x = Math.PI / 2
+    pin.position.set(w.x, w.y, w.r > 0.05 ? 0.005 : -0.0005)
+    body.add(pin)
+  }
+
+  // --- the ring -------------------------------------------------------------
+
+  const ringShape = new THREE.Shape()
+  ringShape.absarc(0, 0, RING_OUT, 0, TAU, false)
+  const ringHole = new THREE.Path()
+  ringHole.absarc(0, 0, RING_IN, 0, TAU, true)
+  ringShape.holes.push(ringHole)
+
+  const ring = new THREE.Mesh(
+    edgeDirt(new THREE.ExtrudeGeometry(ringShape, { depth: 0.0038, bevelEnabled: false, curveSegments: detail(48) }), 0.1),
+    ringMat,
+  )
+  ring.position.z = RING_Z
+  ring.castShadow = true
+  ring.receiveShadow = true
+  body.add(ring)
+
+  // Twelve marks cut into the band, the four cardinals longer, because a clock
+  // you read by shape needs the quarters findable without counting. A trace of
+  // the lotus rather than a lotus dial: they live on the band and leave the
+  // opening alone.
+  const markMat = MAT.metal(0x4e412a, 0.62)
+  const cardinalMat = MAT.metal(0x7a6338, 0.55)
+  const markGeo = ensureColors(
+    new THREE.ExtrudeGeometry(petalShape(RING_IN + 0.003, RING_OUT - 0.0028, 0.0021), {
+      depth: 0.0014,
+      bevelEnabled: false,
+      curveSegments: detail(5),
+    }),
+  )
+  const cardinalGeo = ensureColors(
+    new THREE.ExtrudeGeometry(petalShape(RING_IN + 0.0012, RING_OUT - 0.0012, 0.003), {
+      depth: 0.0014,
+      bevelEnabled: false,
+      curveSegments: detail(5),
+    }),
+  )
+  for (let i = 0; i < 12; i++) {
+    const cardinal = i % 3 === 0
+    const mark = new THREE.Mesh(cardinal ? cardinalGeo : markGeo, cardinal ? cardinalMat : markMat)
+    mark.rotation.z = (i / 12) * TAU
+    mark.position.z = MARK_Z
+    body.add(mark)
+  }
+
+  // Two eyelets under the band. The weights hang off the ring itself, which is
+  // where the cords come from on every skeleton clock worth copying.
+  const eyeGeo = ensureColors(new THREE.TorusGeometry(0.0026, 0.0009, 3, detail(10)))
+  for (const x of [-0.03, 0.03]) {
+    const eye = new THREE.Mesh(eyeGeo, chainMat)
+    eye.position.set(x, -0.08, RING_Z + 0.0019)
+    body.add(eye)
+  }
 
   // --- the hands, and the only light in the prop -----------------------------
 
@@ -240,55 +300,73 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
     return { group: hand, glow }
   }
 
-  const hourHand = makeHand(FACE_R * 0.52, 0.005, PALETTE.pink, 0.006)
-  const minHand = makeHand(FACE_R * 0.8, 0.0038, PALETTE.violet, 0.007)
-  hourHand.group.position.z = 0.006
-  minHand.group.position.z = 0.008
-  dial.add(hourHand.group, minHand.group)
+  // The minute hand just reaches the band; the hour hand stops out over the
+  // great wheel. Both stand clear of the ring so they read as floating.
+  const hourHand = makeHand(0.05, 0.0046, PALETTE.pink, 0.006)
+  const minHand = makeHand(0.077, 0.0034, PALETTE.violet, 0.0065)
+  hourHand.group.position.z = 0.017
+  minHand.group.position.z = 0.0192
+  body.add(hourHand.group, minHand.group)
 
   // The lotus seed pod goes on last, over the roots of both hands. Under them
   // it just reads as a disc with a wedge bitten out of it; over them the hands
-  // emerge from beneath it the way they do on a real dial. It is small enough
-  // to leave the aperture — and the wheel turning behind it — visible.
-  const seedPod = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(FACE_R * 0.1, detail(12))), goldMat)
-  seedPod.position.z = 0.0098
-  dial.add(seedPod)
+  // emerge from beneath it the way they do on a real clock.
+  const seedPod = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.01, detail(12))), podMat)
+  seedPod.position.z = 0.0212
+  body.add(seedPod)
 
   // --- the weights ----------------------------------------------------------
 
-  /** A raw six-sided quartz point: a prism with a terminated tip, not a gem. */
-  function crystal(len, girth) {
-    const profile = [
-      new THREE.Vector2(0, -len * 0.5),
-      new THREE.Vector2(girth * 0.92, -len * 0.42),
-      new THREE.Vector2(girth, -len * 0.1),
-      new THREE.Vector2(girth * 0.97, len * 0.22),
-      new THREE.Vector2(girth * 0.66, len * 0.4),
-      new THREE.Vector2(0, len * 0.5),
-    ]
-    // Six sides, and no smoothing: quartz is flat faces meeting at hard edges.
-    const geo = ensureColors(new THREE.LatheGeometry(profile, 6))
-    geo.computeVertexNormals()
-    return geo
+  /**
+   * A cleaved chunk, not a gem. A low icosahedron with every corner shoved out
+   * by a different amount and the whole thing drawn out along the hang, left
+   * flat shaded so it is all hard facets meeting at hard edges.
+   */
+  function crystal(len, girth, rough) {
+    const geo = new THREE.IcosahedronGeometry(1, 0)
+    const pos = geo.attributes.position
+    // The solid arrives non-indexed, so a corner turns up once per face that
+    // touches it. Key the perturbation on the position or the faces tear open.
+    const corners = new Map()
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i)
+      const y = pos.getY(i)
+      const z = pos.getZ(i)
+      const key = `${Math.round(x * 1e3)},${Math.round(y * 1e3)},${Math.round(z * 1e3)}`
+      let k = corners.get(key)
+      if (k === undefined) {
+        k = 1 + rnd(-rough, rough)
+        corners.set(key, k)
+      }
+      pos.setXYZ(i, x * girth * k, y * len * 0.5 * k, z * girth * k)
+    }
+    const g = geo.index ? geo.toNonIndexed() : geo
+    g.computeVertexNormals()
+    return ensureColors(g)
   }
 
+  // Transmission plus a trace of emissive: lit from the room and from inside,
+  // faintly. No glow sprite — the halo layer is thirteen times its emitter and
+  // two of them would out-shout the hand tips from across the room.
   const crystalMat = new THREE.MeshPhysicalMaterial({
-    color: 0x4a2a7a,
-    roughness: 0.22,
+    color: 0x241539,
+    roughness: 0.5, // cleaved quartz is not polished quartz
     metalness: 0,
     transmission: 0.45,
-    thickness: 0.05,
+    thickness: 0.045,
     ior: 1.54,
     transparent: true,
-    opacity: 0.92,
+    opacity: 0.8,
+    emissive: new THREE.Color(PALETTE.violet),
+    emissiveIntensity: 0.045,
     attenuationColor: new THREE.Color(0x2a1050),
-    attenuationDistance: 0.06,
+    attenuationDistance: 0.035,
   })
 
   const weights = []
   const WEIGHT_SPEC = [
-    { x: -0.058, len: 0.088, girth: 0.019, hang: 0.2 },
-    { x: -0.03, len: 0.07, girth: 0.015, hang: 0.31 },
+    { x: -0.03, len: 0.086, girth: 0.017, hang: 0.14, rough: 0.45 },
+    { x: 0.03, len: 0.068, girth: 0.0145, hang: 0.205, rough: 0.34 },
   ]
 
   for (const spec of WEIGHT_SPEC) {
@@ -296,16 +374,17 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
     carrier.position.set(spec.x, -spec.hang, 0)
     body.add(carrier)
 
-    const stone = new THREE.Mesh(crystal(spec.len, spec.girth), crystalMat)
+    const stone = new THREE.Mesh(crystal(spec.len, spec.girth, spec.rough), crystalMat)
     stone.rotation.y = rnd(0, TAU)
-    stone.rotation.z = rnd(-0.06, 0.06)
+    stone.rotation.z = rnd(-0.09, 0.09)
+    stone.rotation.x = rnd(-0.07, 0.07)
     stone.castShadow = true
     carrier.add(stone)
 
     // The wrap. Three or four turns that do not agree with each other: one
     // sits square, one rides up over the shoulder, one has slipped down the
     // taper and is going to keep slipping. A neat cage would be jewellery.
-    const turns = q > 0.6 ? 4 : 3
+    const turns = q > 0.6 ? 3 : 2
     for (let i = 0; i < turns; i++) {
       const y = spec.len * (0.3 - i * 0.19) + rnd(-0.006, 0.006)
       const tilt = rnd(-0.34, 0.34)
@@ -316,14 +395,14 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
         pts.push(new THREE.Vector3(Math.cos(a) * r, y + Math.sin(a) * r * Math.sin(tilt), Math.sin(a) * r * Math.cos(tilt)))
       }
       const wrap = new THREE.Mesh(
-        ensureColors(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), detail(14), 0.0011, 3, true)),
-        goldMat,
+        ensureColors(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), detail(14), 0.0009, 3, true)),
+        chainMat,
       )
       carrier.add(wrap)
     }
 
-    // The working end, knotted off at the top where it meets the hanging chain.
-    const knot = new THREE.Mesh(ensureColors(new THREE.TorusKnotGeometry(0.004, 0.0011, 20, 3)), goldMat)
+    // The working end, knotted off at the top where it meets the cord.
+    const knot = new THREE.Mesh(ensureColors(new THREE.TorusKnotGeometry(0.0035, 0.0009, 20, 3)), chainMat)
     knot.position.y = spec.len * 0.48
     carrier.add(knot)
 
@@ -334,34 +413,35 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
         [spec.girth * 0.9, spec.len * 0.3, spec.girth * 0.4],
         [spec.girth * 1.1, spec.len * 0.12, spec.girth * 0.1],
       ],
-      { radius: 0.0011, material: goldMat, segments: 10 },
+      { radius: 0.0009, material: chainMat, segments: 10 },
     )
     carrier.add(tail)
 
-    // The chain up to the barrel. Rebuilt as the weight falls, which is the
+    // The cord up to the eyelet. Rebuilt as the weight falls, which is the
     // only geometry in this prop that changes.
-    const chainGeo = ensureColors(new THREE.CylinderGeometry(0.0012, 0.0012, 1, 3, 1, true))
-    const chain = new THREE.Mesh(chainGeo, goldMat)
-    body.add(chain)
+    const cordGeo = ensureColors(new THREE.CylinderGeometry(0.0008, 0.0008, 1, 3, 1, true))
+    const cord = new THREE.Mesh(cordGeo, cordMat)
+    body.add(cord)
 
-    weights.push({ carrier, chain, spec, fall: rnd(0, FALL * 0.7), winding: 0 })
+    weights.push({ carrier, cord, spec, fall: rnd(0, FALL * 0.7), winding: 0 })
   }
 
-  function layChain(w) {
-    const top = -0.03 // the barrel's local y
+  function layCord(w) {
     const y = -w.spec.hang - w.fall + w.spec.len * 0.5
-    const len = Math.max(0.004, top - y)
-    w.chain.scale.y = len
-    w.chain.position.set(w.spec.x, y + len / 2, 0)
+    const len = Math.max(0.004, CORD_TOP - y)
+    w.cord.scale.y = len
+    w.cord.position.set(w.spec.x, y + len / 2, 0)
     w.carrier.position.y = -w.spec.hang - w.fall
   }
-  for (const w of weights) layChain(w)
+  for (const w of weights) layCord(w)
 
   // --- interaction ----------------------------------------------------------
 
-  const hit = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.26, 0.08), new THREE.MeshBasicMaterial())
+  // Sized to the new silhouette: the ring at the bottom, the gear column above
+  // it, and nothing wider than the ring anywhere.
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.34, 0.075), new THREE.MeshBasicMaterial())
   hit.material.visible = false
-  hit.position.copy(dial.position)
+  hit.position.set(0, 0.04, 0.004)
   body.add(hit)
 
   let winding = 0
@@ -385,7 +465,7 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
     seconds += dt
 
     // The minute hand steps; the hour hand creeps. That difference is most of
-    // what makes a clock face look like a movement rather than a gauge.
+    // what makes a clock look like a movement rather than a gauge.
     const minutes = Math.floor(seconds / 60)
     minHand.group.rotation.z = Math.PI / 2 - (minutes % 60) * (TAU / 60)
     hourHand.group.rotation.z = Math.PI / 2 - ((seconds / 3600) % 12) * (TAU / 12)
@@ -397,7 +477,7 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
       const k = 1 - winding / 2.6
       for (const w of weights) {
         w.fall = w.winding * (1 - k)
-        layChain(w)
+        layCord(w)
       }
       // The train runs backwards and fast while somebody is winding it.
       for (const w of wheels) w.mesh.rotation.z -= w.rate * dt * 26
@@ -405,7 +485,7 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
       for (const w of weights) {
         w.fall += dt * 0.0016
         if (w.fall > FALL) w.fall = FALL
-        layChain(w)
+        layCord(w)
       }
     }
 
@@ -426,7 +506,11 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
       },
     ],
     dispose() {
+      // Everything else in here is either a MAT.* cache entry or a geometry
+      // hanging off the group, and the scene's disposeAll sweeps those.
       crystalMat.dispose()
+      hit.material.dispose()
+      hit.geometry.dispose()
     },
   }
 }
