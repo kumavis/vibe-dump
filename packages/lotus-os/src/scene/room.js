@@ -1,0 +1,974 @@
+// room.js — the shell the workbench stands in.
+//
+// Walls, the window and the light coming through it, and everything bolted
+// down rather than set on the desk: shelf, pipes, bulb, crates, plant, and the
+// cables that hang between the lens and the subject. Built in world space,
+// because this is the one module allowed to be axis-aligned — architecture is.
+// The shaft direction is copied off the directional light in index.js; a beam
+// that disagrees with the shadows it is supposedly casting reads as a bug.
+
+import * as THREE from 'three'
+import {
+  PALETTE,
+  MAT,
+  box,
+  cyl,
+  cable,
+  glowSprite,
+  glowTexture,
+  decalTexture,
+  contactDarken,
+  tintGeometry,
+  ensureColors,
+  jitter,
+  makeCanvasTexture,
+} from './materials.js'
+
+const SHOW_HANGING_CABLES = false
+
+const X_IN = 2.1
+const Z_BACK = -1.55
+const Z_FRONT = 2.1
+const Y_CEIL = 2.45
+const T = 0.2 // wall thickness; thin enough to be cheap, thick enough to have a reveal
+
+const WALL_W = X_IN * 2 + T * 2
+const WALL_D = Z_FRONT - Z_BACK + T
+const WALL_CZ = (Z_FRONT + Z_BACK - T) / 2
+
+// The window, given as the hole in the left wall rather than as a frame.
+const WIN = { y: 1.78, z: 0.3, w: 1.0, h: 0.78 }
+
+// index.js puts the directional at (-3.2, 3.1, 1.1) aiming (0.2, 0.6, -1.0).
+const SUN = new THREE.Vector3(3.4, -2.5, -2.1).normalize()
+const SHAFT_LEN = 3.5
+const SHAFT_R0 = 0.42
+const SHAFT_R1 = 0.78
+const COLD = 0xb9a8ff
+
+const FLOOR_PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+const CEIL_PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), -Y_CEIL)
+const BACK_PLANE = new THREE.Plane(new THREE.Vector3(0, 0, 1), -Z_BACK)
+const LEFT_PLANE = new THREE.Plane(new THREE.Vector3(1, 0, 0), X_IN)
+const RIGHT_PLANE = new THREE.Plane(new THREE.Vector3(1, 0, 0), -X_IN)
+
+const rnd = (a, b) => a + Math.random() * (b - a)
+const TAU = Math.PI * 2
+
+/**
+ * Squash a box's horizontal rows toward its underside. contactDarken has only
+ * vertices to work with, so a wall with evenly spaced rows smears its skirting
+ * grime over half a metre instead of the eight centimetres it belongs in.
+ */
+const crowdBottom = (geo, h, power = 1.7) => {
+  const pos = geo.attributes.position
+  for (let i = 0; i < pos.count; i++) {
+    const k = THREE.MathUtils.clamp((pos.getY(i) + h / 2) / h, 0, 1)
+    pos.setY(i, k ** power * h - h / 2)
+  }
+  pos.needsUpdate = true
+  return geo
+}
+
+/**
+ * A piece of architecture. Deliberately not edgeDirt()-ed: that pass vignettes
+ * every triangle toward its own centroid, which on a subdivided slab draws the
+ * wireframe back onto the wall.
+ */
+const slab = (w, h, d, segs, material, tint = 0xffffff, grade = false) => {
+  const geo = new THREE.BoxGeometry(w, h, d, segs[0], segs[1], segs[2])
+  if (grade) crowdBottom(geo, h)
+  tintGeometry(geo, tint, 0.14)
+  const mesh = new THREE.Mesh(geo, material)
+  mesh.receiveShadow = true
+  // Walls must not occlude the window directional or the room goes out.
+  mesh.castShadow = false
+  return mesh
+}
+
+/** The vertical ramp that stops the shaft from looking like a plastic tube. */
+const shaftRamp = () =>
+  makeCanvasTexture(
+    'shaft-ramp',
+    1,
+    256,
+    (ctx, w, h) => {
+      const g = ctx.createLinearGradient(0, 0, 0, h)
+      g.addColorStop(0, '#ffffff')
+      g.addColorStop(0.3, '#a0a0a0')
+      g.addColorStop(0.72, '#242424')
+      g.addColorStop(1, '#000000')
+      ctx.fillStyle = g
+      ctx.fillRect(0, 0, w, h)
+    },
+    { srgb: false, wrap: THREE.ClampToEdgeWrapping },
+  )
+
+/**
+ * A frond as a flat blade swept along a curve, twisting as it goes so it turns
+ * its face to the room somewhere along its length instead of staying edge-on.
+ *
+ * It replaces a TubeGeometry that was flattened by setting scale.y on the MESH,
+ * which flattens the path as well as the section: every y on the curve came out
+ * at forty percent, so a frond authored to leave the soil at 62mm actually left
+ * at 25mm — down inside the pot — and then travelled out through the
+ * terracotta. A ribbon has no section to flatten, so the path you author is the
+ * path you get.
+ */
+function bladeGeometry(curve, segs, halfWidth) {
+  const pos = new Float32Array((segs + 1) * 6)
+  const idx = new Uint16Array(segs * 6)
+  const p = new THREE.Vector3()
+  const tan = new THREE.Vector3()
+  const side = new THREE.Vector3()
+  const up = new THREE.Vector3(0, 1, 0)
+  for (let i = 0; i <= segs; i++) {
+    const t = i / segs
+    curve.getPointAt(t, p)
+    curve.getTangentAt(t, tan)
+    side.crossVectors(tan, up)
+    // Dead vertical: any direction across the fall line will do.
+    if (side.lengthSq() < 1e-8) side.set(1, 0, 0)
+    side.normalize().applyAxisAngle(tan, t * 0.9)
+    const w = halfWidth(t)
+    const o = i * 6
+    pos[o] = p.x - side.x * w
+    pos[o + 1] = p.y - side.y * w
+    pos[o + 2] = p.z - side.z * w
+    pos[o + 3] = p.x + side.x * w
+    pos[o + 4] = p.y + side.y * w
+    pos[o + 5] = p.z + side.z * w
+  }
+  for (let i = 0; i < segs; i++) {
+    const a = i * 2
+    const n = i * 6
+    idx[n] = a
+    idx[n + 1] = a + 1
+    idx[n + 2] = a + 2
+    idx[n + 3] = a + 1
+    idx[n + 4] = a + 3
+    idx[n + 5] = a + 2
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+  g.setIndex(new THREE.BufferAttribute(idx, 1))
+  g.computeVertexNormals()
+  return ensureColors(g)
+}
+
+export function createRoom({ sfx = null, quality = 1 } = {}) {
+  const q = THREE.MathUtils.clamp(quality, 0.35, 1)
+  const detail = (n) => Math.max(4, Math.round(n * q))
+  const group = new THREE.Group()
+  group.name = 'room'
+
+  const add = (obj, x, y, z) => {
+    if (x !== undefined) obj.position.set(x, y, z)
+    group.add(obj)
+    return obj
+  }
+
+  // --- shell --------------------------------------------------------------
+
+  const concrete = MAT.concrete()
+
+  const floor = add(slab(WALL_W, T, WALL_D, [10, 1, 9], concrete, 0xf2eff8), 0, -T / 2, WALL_CZ)
+  contactDarken(floor, [BACK_PLANE, LEFT_PLANE, RIGHT_PLANE], { radius: 0.34, floor: 0.38 })
+
+  const backWall = add(slab(WALL_W, Y_CEIL, T, [8, 6, 1], concrete, 0xe6e2f0, true), 0, Y_CEIL / 2, Z_BACK - T / 2)
+  contactDarken(backWall, [LEFT_PLANE, RIGHT_PLANE, CEIL_PLANE], { radius: 0.3, floor: 0.5 })
+  contactDarken(backWall, [FLOOR_PLANE], { radius: 0.1, floor: 0.34 })
+
+  const rightWall = add(slab(T, Y_CEIL, WALL_D, [1, 6, 7], concrete, 0xdcd7e8, true), X_IN + T / 2, Y_CEIL / 2, WALL_CZ)
+  contactDarken(rightWall, [BACK_PLANE, CEIL_PLANE], { radius: 0.3, floor: 0.5 })
+  contactDarken(rightWall, [FLOOR_PLANE], { radius: 0.1, floor: 0.34 })
+
+  // The left wall is four pieces around the window hole rather than one slab
+  // with a texture pretending to be a hole. The reveal is worth the meshes.
+  const winZ0 = WIN.z - WIN.w / 2
+  const winZ1 = WIN.z + WIN.w / 2
+  const winY0 = WIN.y - WIN.h / 2
+  const winY1 = WIN.y + WIN.h / 2
+  const leftX = -X_IN - T / 2
+
+  const leftPieces = [
+    slab(T, winY0, WALL_D, [1, 4, 7], concrete, 0xdcd7e8, true),
+    slab(T, Y_CEIL - winY1, WALL_D, [1, 2, 6], concrete, 0xd2cde0),
+    slab(T, WIN.h, winZ0 - (Z_BACK - T), [1, 2, 3], concrete, 0xcfc9de),
+    slab(T, WIN.h, Z_FRONT - winZ1, [1, 2, 3], concrete, 0xcfc9de),
+  ]
+  add(leftPieces[0], leftX, winY0 / 2, WALL_CZ)
+  add(leftPieces[1], leftX, (winY1 + Y_CEIL) / 2, WALL_CZ)
+  add(leftPieces[2], leftX, WIN.y, (Z_BACK - T + winZ0) / 2)
+  add(leftPieces[3], leftX, WIN.y, (winZ1 + Z_FRONT) / 2)
+  contactDarken(leftPieces[0], [BACK_PLANE, CEIL_PLANE], { radius: 0.3, floor: 0.5 })
+  contactDarken(leftPieces[0], [FLOOR_PLANE], { radius: 0.1, floor: 0.34 })
+  for (const p of leftPieces.slice(1)) contactDarken(p, [BACK_PLANE, CEIL_PLANE], { radius: 0.3, floor: 0.55 })
+
+  const ceiling = add(slab(WALL_W, T, WALL_D, [5, 1, 4], MAT.plaster(PALETTE.wallDark), 0xd0cade), 0, Y_CEIL + T / 2, WALL_CZ)
+  contactDarken(ceiling, [BACK_PLANE, LEFT_PLANE, RIGHT_PLANE], { radius: 0.36, floor: 0.44 })
+
+  // --- window -------------------------------------------------------------
+
+  const paneGeo = new THREE.PlaneGeometry(3.2, 2.4)
+  const sky = new THREE.Mesh(paneGeo, MAT.emissive(COLD, 0.5))
+  sky.rotation.y = Math.PI / 2
+  add(sky, -3.7, 1.9, WIN.z)
+
+  // Two silhouettes and a scatter of lit windows is the whole city. Anything
+  // more detailed is invisible through a one-metre hole at four metres.
+  const cityMat = MAT.plaster(PALETTE.void)
+  add(jitter(box(0.5, 2.1, 0.7, cityMat, { dirt: 0.05 }), 0.04, 0.01), -3.05, 1.05, WIN.z - 0.75)
+  add(jitter(box(0.42, 1.5, 0.55, cityMat, { dirt: 0.05 }), 0.04, 0.01), -2.85, 0.75, WIN.z + 0.62)
+
+  const cityCount = 44
+  const cityPos = new Float32Array(cityCount * 3)
+  const cityCol = new Float32Array(cityCount * 3)
+  const cityInks = [new THREE.Color(PALETTE.sodium), new THREE.Color(PALETTE.amber), new THREE.Color(COLD)]
+  for (let i = 0; i < cityCount; i++) {
+    const far = Math.random() < 0.5
+    cityPos[i * 3] = far ? -2.78 : -2.62
+    cityPos[i * 3 + 1] = rnd(0.7, far ? 2.0 : 1.45)
+    cityPos[i * 3 + 2] = WIN.z + (far ? rnd(-1.05, -0.45) : rnd(0.36, 0.88))
+    const c = cityInks[Math.floor(Math.random() * cityInks.length)]
+    const k = rnd(0.35, 1)
+    cityCol[i * 3] = c.r * k
+    cityCol[i * 3 + 1] = c.g * k
+    cityCol[i * 3 + 2] = c.b * k
+  }
+  const cityGeo = new THREE.BufferGeometry()
+  cityGeo.setAttribute('position', new THREE.BufferAttribute(cityPos, 3))
+  cityGeo.setAttribute('color', new THREE.BufferAttribute(cityCol, 3))
+  const cityDots = new THREE.Points(
+    cityGeo,
+    new THREE.PointsMaterial({
+      size: 0.03,
+      sizeAttenuation: true,
+      map: glowTexture(),
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      fog: false,
+    }),
+  )
+  group.add(cityDots)
+
+  const frameMat = MAT.paint(PALETTE.greyMetal, { rough: 0.6, metal: 0.4 })
+  add(box(0.17, 0.05, WIN.w + 0.08, MAT.paint(PALETTE.wall, { rough: 0.9, metal: 0.05 })), -X_IN - 0.03, winY0 - 0.02, WIN.z)
+  for (const dz of [-WIN.w / 6, WIN.w / 6]) add(box(0.05, WIN.h, 0.018, frameMat), -X_IN - 0.06, WIN.y, WIN.z + dz)
+  add(box(0.05, 0.018, WIN.w, frameMat), -X_IN - 0.06, WIN.y + 0.02, WIN.z)
+
+  // --- the shaft ----------------------------------------------------------
+
+  const shaftOrigin = new THREE.Vector3(-X_IN - 0.14, WIN.y, WIN.z)
+  const shaftGeo = new THREE.CylinderGeometry(SHAFT_R0, SHAFT_R1, SHAFT_LEN, 14, 1, true)
+  shaftGeo.translate(0, -SHAFT_LEN / 2, 0)
+  const shaftMat = new THREE.MeshBasicMaterial({
+    color: COLD,
+    alphaMap: shaftRamp(),
+    transparent: true,
+    opacity: 0.06,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    // BackSide keeps the near cap out of the lens when the camera flies into it.
+    side: THREE.BackSide,
+    fog: false,
+  })
+  const shaft = new THREE.Mesh(shaftGeo, shaftMat)
+  shaft.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), SUN)
+  shaft.position.copy(shaftOrigin)
+  shaft.renderOrder = 2
+  group.add(shaft)
+
+  // A shaft with no foot on the floor looks like a prop of a shaft.
+  const pool = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.35, 0.85),
+    new THREE.MeshBasicMaterial({
+      map: glowTexture(),
+      color: COLD,
+      transparent: true,
+      opacity: 0.12,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      fog: false,
+    }),
+  )
+  pool.rotation.set(-Math.PI / 2, Math.atan2(-SUN.z, SUN.x), 0, 'YXZ')
+  pool.renderOrder = 1
+  // Solved against the floor rather than eyeballed. A pool half a metre off
+  // the end of its own beam is the thing that makes a room read as assembled.
+  const land = shaftOrigin.clone().addScaledVector(SUN, -shaftOrigin.y / SUN.y)
+  add(pool, land.x, 0.006, land.z)
+
+  // --- dust ---------------------------------------------------------------
+
+  const BU = new THREE.Vector3(0, 1, 0).cross(SUN).normalize()
+  const BV = new THREE.Vector3().copy(SUN).cross(BU).normalize()
+
+  const motes = Math.round(300 * q)
+  const dustPos = new Float32Array(motes * 3)
+  const dustCol = new Float32Array(motes * 3)
+  const dustS = new Float32Array(motes)
+  const dustR = new Float32Array(motes)
+  const dustA = new Float32Array(motes)
+  const dustP = new Float32Array(motes)
+  const dustF = new Float32Array(motes)
+  const dustV = new Float32Array(motes)
+  for (let i = 0; i < motes; i++) {
+    dustS[i] = Math.random() * SHAFT_LEN
+    dustR[i] = Math.sqrt(Math.random())
+    dustA[i] = Math.random() * TAU
+    dustP[i] = Math.random() * TAU
+    dustF[i] = rnd(0.16, 0.6)
+    dustV[i] = rnd(0.009, 0.024)
+  }
+
+  const dustGeo = new THREE.BufferGeometry()
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3))
+  dustGeo.setAttribute('color', new THREE.BufferAttribute(dustCol, 3))
+  dustGeo.boundingSphere = new THREE.Sphere(
+    shaftOrigin.clone().addScaledVector(SUN, SHAFT_LEN / 2),
+    SHAFT_LEN / 2 + SHAFT_R1 + 0.2,
+  )
+  const dust = new THREE.Points(
+    dustGeo,
+    new THREE.PointsMaterial({
+      size: 0.009,
+      sizeAttenuation: true,
+      map: glowTexture(),
+      color: 0xe8dcff,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.38,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      fog: false,
+    }),
+  )
+  dust.renderOrder = 3
+  group.add(dust)
+
+  const driftDust = (dt, t) => {
+    for (let i = 0; i < motes; i++) {
+      let s = dustS[i] + dustV[i] * dt
+      if (s > SHAFT_LEN) s -= SHAFT_LEN
+      dustS[i] = s
+      const k = s / SHAFT_LEN
+      const rr = dustR[i] * (SHAFT_R0 + (SHAFT_R1 - SHAFT_R0) * k) * 1.05
+      const u = Math.cos(dustA[i]) * rr + Math.sin(t * dustF[i] + dustP[i]) * 0.024
+      const v = Math.sin(dustA[i]) * rr + Math.cos(t * dustF[i] * 0.77 + dustP[i] * 1.7) * 0.018
+      const j = i * 3
+      dustPos[j] = shaftOrigin.x + SUN.x * s + BU.x * u + BV.x * v
+      dustPos[j + 1] = shaftOrigin.y + SUN.y * s + BU.y * u + BV.y * v
+      dustPos[j + 2] = shaftOrigin.z + SUN.z * s + BU.z * u + BV.z * v
+      const fade = Math.min(1, k * 12) * (1 - k)
+      dustCol[j] = dustCol[j + 1] = dustCol[j + 2] = fade
+    }
+    dustGeo.attributes.position.needsUpdate = true
+    dustGeo.attributes.color.needsUpdate = true
+  }
+  driftDust(0, 0)
+
+  // --- neon ---------------------------------------------------------------
+
+  const neon = new THREE.Group()
+  neon.position.set(1.15, 1.68, Z_BACK + 0.06)
+  neon.rotation.z = 0.03
+  group.add(neon)
+
+  const neonPlate = box(0.52, 0.66, 0.022, MAT.paint(PALETTE.wallDark, { rough: 0.75, metal: 0.2 }), { dirt: 0.22 })
+  neonPlate.position.z = -0.032
+  neon.add(neonPlate)
+
+  const neonMat = MAT.emissive(PALETTE.violet, 2.4).clone()
+  const neonBase = neonMat.color.clone()
+
+  const tubeOf = (pts, closed, segs) =>
+    new THREE.Mesh(
+      ensureColors(
+        new THREE.TubeGeometry(
+          new THREE.CatmullRomCurve3(
+            pts.map(([x, y]) => new THREE.Vector3(x, y, rnd(-0.004, 0.004))),
+            closed,
+          ),
+          segs,
+          0.011,
+          5,
+          closed,
+        ),
+      ),
+      neonMat,
+    )
+
+  // A lotus bud in outline. Words in neon at this resolution turn to mush.
+  neon.add(
+    tubeOf(
+      [
+        [0, -0.21],
+        [0.15, -0.12],
+        [0.185, 0.02],
+        [0.13, 0.18],
+        [0, 0.3],
+        [-0.13, 0.18],
+        [-0.185, 0.02],
+        [-0.15, -0.12],
+      ],
+      true,
+      44,
+    ),
+  )
+  if (q > 0.55) {
+    for (const s of [1, -1]) {
+      neon.add(
+        tubeOf(
+          [
+            [s * 0.2, -0.14],
+            [s * 0.29, 0.02],
+            [s * 0.26, 0.16],
+            [s * 0.17, 0.25],
+          ],
+          false,
+          10,
+        ),
+      )
+    }
+  }
+
+  const neonGlow = glowSprite(PALETTE.violet, 0.055, { core: 0.4, mid: 0.12, halo: 0.035 })
+  neonGlow.position.set(0, 0.04, 0.04)
+  neon.add(neonGlow)
+
+  const NEON_W = 2.3
+  const neonLight = new THREE.PointLight(PALETTE.magenta, NEON_W, 2.1, 2)
+  neonLight.castShadow = false // the shadow budget is two casters and both live in index.js
+  neonLight.position.set(0, 0.05, 0.16)
+  neon.add(neonLight)
+
+  let dipEnd = 3 + Math.random() * 4
+  let dipLen = 0.16
+
+  // --- shelf --------------------------------------------------------------
+
+  const SHELF_Y = 1.52
+  const shelfMat = MAT.wood(PALETTE.plywood)
+  const bracketMat = MAT.paint(PALETTE.greyMetal, { rough: 0.62, metal: 0.4 })
+
+  // Named, because the plant further down is placed against this rectangle and
+  // its fronds are cut to it. A plank that moved on its own would put leaves
+  // back through the wood.
+  const PLANK_W = 1.2
+  const PLANK_D = 0.24
+  const PLANK_X = -1.35
+  const PLANK_Z = Z_BACK + 0.12
+  const PLANK_YAW = 0.012
+
+  const plank = add(box(PLANK_W, 0.032, PLANK_D, shelfMat, { dirt: 0.24 }), PLANK_X, SHELF_Y - 0.016, PLANK_Z)
+  plank.rotation.y = PLANK_YAW
+  contactDarken(plank, [BACK_PLANE], { radius: 0.06, floor: 0.55 })
+
+  for (const bx of [-1.78, -0.94]) {
+    add(box(0.02, 0.2, 0.022, bracketMat), bx, SHELF_Y - 0.13, Z_BACK + 0.014)
+    add(box(0.02, 0.022, 0.19, bracketMat), bx, SHELF_Y - 0.043, Z_BACK + 0.1)
+  }
+
+  const shelfItems = [
+    () => cyl(0.045, 0.045, 0.1, MAT.metal(PALETTE.aluminium, 0.52), 10),
+    () => box(0.1, 0.14, 0.08, MAT.paint(PALETTE.plastic, { rough: 0.66, metal: 0.1 })),
+    () => box(0.16, 0.055, 0.11, MAT.card(), { dirt: 0.26 }),
+    () => cyl(0.032, 0.038, 0.17, MAT.plastic(0x2c3a34, 0.5), 10),
+    () => box(0.07, 0.09, 0.07, MAT.paint(PALETTE.wallDark, { rough: 0.5, metal: 0.4, chipped: true, substrate: PALETTE.aluminium })),
+    () => new THREE.Mesh(ensureColors(new THREE.TorusGeometry(0.05, 0.014, 5, 10)), MAT.metal(PALETTE.copper, 0.55)),
+  ]
+  // Spaced pair by pair from each item's own worst-case half-width, along a
+  // plank running -1.95 to -0.75, so the right-hand end comes free for the
+  // plant. The old layout ran to -0.83 and put the plant at -0.9: the solder
+  // coil is 64mm in outer radius and the pot 49.5mm, so that pair needed
+  // 113.5mm between centres and had 70mm, and the pot grew straight through
+  // the coil.
+  //
+  // Worst case means AFTER the yaw below. Half a radian of it turns the 160mm
+  // crate's 80mm half-width into 96.6mm, which is most of the reason the naive
+  // spacing was not enough. Move anything here and the whole chain has to be
+  // rechecked against both neighbours.
+  const shelfSlots = [-1.89, -1.745, -1.55, -1.38, -1.26, -1.11]
+  shelfItems.forEach((make, i) => {
+    const item = make()
+    if (i === 5) item.rotation.x += Math.PI / 2 // the solder coil lies down
+    jitter(item, 0.5, 0.02)
+    // Slop along the shelf, tightened from 20mm: the gaps this layout leaves
+    // are around 10mm, and 20mm on each of a pair would close them.
+    item.position.set(shelfSlots[i] + rnd(-0.012, 0.012), 0, Z_BACK + rnd(0.09, 0.16))
+    item.updateMatrixWorld(true)
+    item.position.y = SHELF_Y - new THREE.Box3().setFromObject(item).min.y - 0.002
+    group.add(item)
+  })
+
+  // --- the shelf plant ------------------------------------------------------
+  //
+  // The only green in the upper half of the room, and the only thing up there
+  // that is alive, in a frame that is otherwise violet and amber. Deliberately
+  // not the floor plant at sixty percent: that one sprays upward, so this one
+  // trails, and one frond is long enough to break the line of the plank —
+  // which is the whole reason to put a plant on a shelf rather than beside one.
+  //
+  // Parked at the end of the plank, because the end is the only side of it a
+  // frond has air to fall past, and centred in the 240mm depth, which leaves
+  // 70mm of wood in front of the rim instead of the 40mm that had the pot
+  // reading as one nudge from going over the front.
+  const POT_LX = 0.52 // along the plank from its middle: 30mm of plank still out past the rim
+  const POT_LZ = 0
+  const shelfPlant = new THREE.Group()
+  shelfPlant.position.set(
+    PLANK_X + POT_LX * Math.cos(PLANK_YAW) + POT_LZ * Math.sin(PLANK_YAW),
+    SHELF_Y,
+    PLANK_Z - POT_LX * Math.sin(PLANK_YAW) + POT_LZ * Math.cos(PLANK_YAW),
+  )
+  jitter(shelfPlant, 0.4, 0.01)
+  group.add(shelfPlant)
+
+  const shelfPotProfile = []
+  for (let i = 0; i <= 6; i++) {
+    const k = i / 6
+    shelfPotProfile.push(new THREE.Vector2(0.036 + Math.sin(k * Math.PI * 0.62) * 0.014, k * 0.062))
+  }
+  const shelfPot = new THREE.Mesh(
+    ensureColors(new THREE.LatheGeometry(shelfPotProfile, detail(12))),
+    MAT.plaster(PALETTE.terracotta),
+  )
+  shelfPot.castShadow = true
+  shelfPot.receiveShadow = true
+  shelfPlant.add(shelfPot)
+
+  const shelfSoil = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.041, detail(10))), MAT.plaster(PALETTE.crevice))
+  shelfSoil.rotation.x = -Math.PI / 2
+  shelfSoil.position.y = 0.058
+  shelfPlant.add(shelfSoil)
+
+  // Each frond climbs out of the crown and then falls. How far it may fall is
+  // decided by which way it points, because the plank top is y = 0 in here: a
+  // frond still over the wood when it comes down to that goes through the wood,
+  // which is what all of them were doing when they all dropped the same 70 to
+  // 150mm. The end of the plank is the only side with air under it, so the end
+  // is the only direction that trails the full length. The wall is the other
+  // thing a frond gets pushed through — it is 114mm behind the pot and a frond
+  // reaches 97mm even when it does not fall at all — so the ones aimed at it
+  // come out standing rather than hanging, which is what a plant against a wall
+  // does anyway.
+  //
+  // The pot is an open shell: its wall exists only for y in [0, 0.062] and is
+  // widest, r = 0.0495, at the rim. Growing from inside the mouth is correct
+  // and falling past the outside at a big radius is correct; the only real
+  // failure is the blade crossing that wall surface. What causes it is a frond
+  // that drops hard without reaching far, because it comes back down through
+  // rim height while still barely outside the rim radius — and the blade is
+  // 14mm to either side of the line it is swept along, so the spine clearing by
+  // a couple of millimetres is not the blade clearing.
+  //
+  // Hence reach is tied to drop rather than drawn independently: fall further,
+  // hang further out. Re-swept over the range the solve below can now hand out,
+  // which is a continuous 0 to 0.27 rather than the two bands it used to be:
+  // no crossing anywhere, the blade 15mm clear of terracotta on its way past
+  // the outside and 31mm clear on its way up out of the mouth. The one thing
+  // that does cross is a blade tessellated so coarsely that its first chord
+  // cuts the corner off the arch and takes the rim with it, which is why the
+  // segment count has a floor under it rather than following quality all the
+  // way down.
+  const FRONDS = q > 0.6 ? 7 : 5
+  // Cloned because MAT caches by key, and a blade has to be visible from the
+  // side the light is not on.
+  const shelfLeafMat = MAT.leaf().clone()
+  shelfLeafMat.side = THREE.DoubleSide
+  const bladeHalf = (t) => 0.0011 + 0.0058 * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.62)), 0.9)
+
+  const CLEAR = 0.009 // air kept under the blade wherever it passes over something
+  const BLADE = 0.0069 // bladeHalf's peak, and it is swept to both sides of the spine
+
+  // How far out a frond is by the time it has fallen to CLEAR: solve y(t) below
+  // for that height, put t back through r(t). Falling harder lands it sooner
+  // but also throws it further out, and out only starts winning at drop = 0.31,
+  // past anything authored here — so over this range the answer only shrinks,
+  // which is what lets a bisection invert it.
+  const landing = (drop, arch) => {
+    const fall = 0.06 + arch - CLEAR
+    if (drop <= fall) return Infinity // never gets down there inside its own length
+    return 0.012 + (0.085 + drop * 0.45) * Math.pow(fall / drop, 1 / 1.6)
+  }
+
+  const dropForRun = (arch, run) => {
+    let lo = 0
+    let hi = 0.27
+    if (landing(hi, arch) >= run) return hi
+    for (let k = 0; k < 20; k++) {
+      const mid = (lo + hi) / 2
+      if (landing(mid, arch) >= run) lo = mid
+      else hi = mid
+    }
+    return lo
+  }
+
+  // Run from the pot to the edge of the plank, in the plank's own frame. The
+  // rectangle is grown by a blade half-width because the blade is swept to
+  // either side of its spine: at a corner the inner edge is still over wood
+  // when the spine is already out over air, and 6mm of that is 9mm of extra
+  // fall at the angle these leave on.
+  const plankRun = (ap) => {
+    const dx = Math.cos(ap)
+    const dz = Math.sin(ap)
+    const tx = dx > 0 ? (PLANK_W / 2 + BLADE - POT_LX) / dx : (-PLANK_W / 2 - BLADE - POT_LX) / dx
+    const tz = dz > 0 ? (PLANK_D / 2 + BLADE - POT_LZ) / dz : (-PLANK_D / 2 - BLADE - POT_LZ) / dz
+    return Math.min(Math.abs(tx), Math.abs(tz))
+  }
+
+  const WALL_GAP = shelfPlant.position.z - Z_BACK - BLADE - CLEAR
+  const FROND_SEGS = Math.max(7, detail(11))
+  // Phased so the fronds with the open end in front of them are the first ones
+  // round. The wander on each was 0.25 and is 0.15 for the same reason: at 0.25
+  // the first one can turn far enough into the wall to lose its fall.
+  const FAN = -0.36
+  for (let i = 0; i < FRONDS; i++) {
+    const ap = FAN + (i / FRONDS) * Math.PI * 2 + rnd(-0.15, 0.15)
+    // Solved in the plank's frame, so the plank's yaw and the plant's own
+    // jitter both have to come back out of the angle further down.
+    const aw = ap - PLANK_YAW
+    const arch = rnd(0.038, 0.048)
+    // A frond reaches 0.097 + 0.45 * drop, all of it at the wall when it points
+    // that way.
+    const byWall = Math.sin(aw) < 0 ? (WALL_GAP / -Math.sin(aw) - 0.097) / 0.45 : Infinity
+    const cap = Math.max(0, Math.min(dropForRun(arch, plankRun(ap)), byWall))
+    // Trail the whole length only where there is room for it. Everywhere else
+    // the frond keeps its tip up, and keeps the shorter reach that goes with a
+    // shorter fall.
+    const drop = Math.min(cap, cap > 0.19 ? rnd(0.2, 0.27) : rnd(0.07, 0.15))
+    const reach = 0.085 + drop * 0.45
+    const a = aw + shelfPlant.rotation.y
+    const pts = []
+    for (let k = 0; k <= 6; k++) {
+      const t = k / 6
+      const r = 0.012 + reach * Math.pow(t, 1.5)
+      const y = 0.06 + arch * Math.sin(Math.PI * Math.min(t * 1.9, 1) * 0.5) - drop * Math.pow(t, 2.4)
+      pts.push(new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r))
+    }
+    const frond = new THREE.Mesh(
+      bladeGeometry(new THREE.CatmullRomCurve3(pts), FROND_SEGS, bladeHalf),
+      shelfLeafMat,
+    )
+    frond.castShadow = true
+    shelfPlant.add(frond)
+  }
+
+  contactDarken(shelfPot, [new THREE.Plane(new THREE.Vector3(0, 1, 0), -SHELF_Y)], { radius: 0.05, floor: 0.45 })
+
+  // --- pipes --------------------------------------------------------------
+
+  const pipeMat = MAT.paint(PALETTE.greyMetal, { rough: 0.6, metal: 0.55 })
+  const rustMat = MAT.paint(PALETTE.terracotta, { rough: 0.92, metal: 0.08 })
+
+  const pipeRun = (y, zRun, xTurn, r, R) => {
+    const cx = xTurn + R
+    const cz = zRun + R
+    const runLen = cx + X_IN - 0.02
+    const a = cyl(r, r, runLen, pipeMat, 8)
+    a.rotation.z = Math.PI / 2
+    add(a, cx - runLen / 2, y, zRun)
+
+    const elbow = new THREE.Mesh(ensureColors(new THREE.TorusGeometry(R, r, 5, 6, Math.PI / 2)), pipeMat)
+    elbow.quaternion.setFromRotationMatrix(
+      new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, -1), new THREE.Vector3(-1, 0, 0), new THREE.Vector3(0, 1, 0)),
+    )
+    add(elbow, cx, y, cz)
+
+    const fwdLen = 1.55 - cz
+    const b = cyl(r, r, fwdLen, pipeMat, 8)
+    b.rotation.x = Math.PI / 2
+    add(b, cx - R, y, cz + fwdLen / 2)
+
+    // Rust arrives at the joints, where the lagging was cut and never replaced.
+    for (const bandX of [rnd(-1.5, -1.1), rnd(-0.3, 0.5)]) {
+      const band = cyl(r * 1.14, r * 1.14, 0.05, rustMat, 8)
+      band.rotation.z = Math.PI / 2
+      add(band, bandX, y, zRun)
+    }
+  }
+
+  pipeRun(2.2, -1.34, 1.86, 0.032, 0.075)
+  pipeRun(2.3, -1.44, 1.78, 0.021, 0.06)
+  for (const bx of [-1.1, 0.6]) add(box(0.045, 0.14, 0.19, bracketMat), bx, 2.27, Z_BACK + 0.105)
+
+  // --- wall vent ----------------------------------------------------------
+
+  add(box(0.44, 0.26, 0.05, MAT.paint(PALETTE.wallDark, { rough: 0.62, metal: 0.35 }), { dirt: 0.26 }), -1.78, 1.98, Z_BACK + 0.02)
+  for (let i = 0; i < 6; i++) {
+    const slat = box(0.39, 0.016, 0.032, MAT.paint(PALETTE.aluminium, { rough: 0.55, metal: 0.6 }))
+    slat.rotation.x = 0.55
+    add(slat, -1.78, 1.876 + i * 0.042, Z_BACK + 0.05)
+  }
+
+  // --- hanging bulb -------------------------------------------------------
+
+  const anchor = new THREE.Vector3(-0.15, Y_CEIL, 0.15)
+  add(cyl(0.05, 0.055, 0.03, MAT.paint(PALETTE.greyMetal, { rough: 0.55, metal: 0.5 }), 10), anchor.x, anchor.y - 0.015, anchor.z)
+
+  const swing = new THREE.Group()
+  swing.position.copy(anchor)
+  group.add(swing)
+
+  const CORD = 0.83
+  const cord = cable(
+    [
+      [0, 0.03, 0],
+      [0.005, -CORD * 0.35, 0.006],
+      [-0.006, -CORD * 0.7, -0.005],
+      [0, -CORD, 0],
+    ],
+    { radius: 0.0045, color: PALETTE.wallDark, segments: 10 },
+  )
+  cord.castShadow = false
+  swing.add(cord)
+
+  const bulbCap = cyl(0.016, 0.023, 0.032, MAT.metal(PALETTE.gold, 0.42), 10)
+  bulbCap.position.y = -CORD - 0.012
+  swing.add(bulbCap)
+
+  const bulbMat = MAT.emissive(PALETTE.amber, 2).clone()
+  const bulbLive = bulbMat.color.clone()
+  const bulbDead = new THREE.Color(0x171420)
+  // The brightest object in the frame, and the only one whose silhouette is
+  // read against pure black. Ten segments showed every one of them.
+  const bulb = new THREE.Mesh(ensureColors(new THREE.SphereGeometry(0.038, Math.round(22 * q), Math.round(16 * q))), bulbMat)
+  bulb.position.y = -CORD - 0.06
+  swing.add(bulb)
+
+  const bulbGlow = glowSprite(PALETTE.amber, 0.04, { core: 0.72, mid: 0.26, halo: 0.08 })
+  bulbGlow.position.y = -CORD - 0.06
+  swing.add(bulbGlow)
+
+  const BULB_W = 2.1
+  const bulbLight = new THREE.PointLight(0xffc98a, BULB_W, 2.4, 2)
+  bulbLight.castShadow = false // see the neon: two casters, both in index.js
+  bulbLight.position.y = -CORD - 0.075
+  swing.add(bulbLight)
+
+  let lit = true
+  let swingAmp = 0.016
+  const setLit = (on) => {
+    lit = on
+    bulbMat.color.copy(on ? bulbLive : bulbDead)
+    bulbGlow.userData.setIntensity(on ? 1 : 0)
+    bulbLight.intensity = on ? BULB_W : 0
+  }
+
+  // --- crates -------------------------------------------------------------
+
+  const card = MAT.card()
+  const tape = MAT.paint(PALETTE.cardboardDark, { rough: 0.8, metal: 0 })
+
+  const crateA = add(box(0.44, 0.35, 0.38, card, { dirt: 0.24 }), -1.79, 0.175, -1.14)
+  crateA.rotation.y = 0.23
+  contactDarken(crateA, [FLOOR_PLANE, BACK_PLANE, LEFT_PLANE], { radius: 0.14, floor: 0.4 })
+
+  const crateB = add(box(0.34, 0.29, 0.31, card, { dirt: 0.24 }), -1.73, 0.495, -1.09)
+  crateB.rotation.y = -0.38
+  contactDarken(crateB, [LEFT_PLANE, BACK_PLANE, new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.35)], { radius: 0.14, floor: 0.44 })
+
+  const crateC = add(box(0.4, 0.31, 0.33, card, { dirt: 0.24 }), -1.42, 0.153, -0.8)
+  crateC.rotation.set(0.03, -0.52, 0.05)
+  contactDarken(crateC, [FLOOR_PLANE], { radius: 0.12, floor: 0.4 })
+
+  // One flap left standing open, because nobody ever re-tapes the top box.
+  const flap = box(0.33, 0.01, 0.15, card, { dirt: 0.3 })
+  flap.rotation.set(-1.15, -0.38, 0)
+  add(flap, -1.79, 0.66, -1.19)
+
+  add(box(0.45, 0.006, 0.07, tape), -1.79, 0.353, -1.14).rotation.y = 0.23
+  add(box(0.07, 0.315, 0.006, tape), -1.503, 0.153, -0.652).rotation.set(0.03, -0.52, 0.05)
+
+  // --- potted plant -------------------------------------------------------
+
+  const plant = new THREE.Group()
+  plant.position.set(-1.62, 0, -0.45)
+  plant.rotation.y = 0.4
+  group.add(plant)
+
+  const potProfile = [
+    [0.001, 0],
+    [0.076, 0],
+    [0.083, 0.02],
+    [0.094, 0.14],
+    [0.106, 0.2],
+    [0.113, 0.216],
+    [0.104, 0.223],
+    [0.097, 0.198],
+  ].map(([x, y]) => new THREE.Vector2(x, y))
+  const pot = new THREE.Mesh(
+    ensureColors(new THREE.LatheGeometry(potProfile, 12)),
+    MAT.paint(PALETTE.terracotta, { rough: 0.92, metal: 0.04 }),
+  )
+  pot.castShadow = true
+  pot.receiveShadow = true
+  plant.add(pot)
+  contactDarken(pot, [FLOOR_PLANE], { radius: 0.08, floor: 0.4 })
+
+  const soil = cyl(0.096, 0.088, 0.03, MAT.plaster(PALETTE.crevice), 12)
+  soil.position.y = 0.198
+  plant.add(soil)
+
+  const leafCount = q > 0.6 ? 8 : 6
+  for (let i = 0; i < leafCount; i++) {
+    const geo = new THREE.PlaneGeometry(0.075, 0.3, 1, 4)
+    const pos = geo.attributes.position
+    for (let v = 0; v < pos.count; v++) {
+      const k = THREE.MathUtils.clamp((pos.getY(v) + 0.15) / 0.3, 0, 1)
+      pos.setX(v, pos.getX(v) * Math.sin(Math.min(1, k * 1.12) * Math.PI) ** 0.55)
+      pos.setZ(v, -0.1 * k * k)
+      pos.setY(v, pos.getY(v) + 0.15)
+    }
+    geo.computeVertexNormals()
+    tintGeometry(geo, i % 3 === 0 ? 0x8a9c84 : 0xffffff, 0.3)
+    const leaf = new THREE.Mesh(ensureColors(geo), MAT.leaf())
+    leaf.castShadow = true
+    const a = (i / leafCount) * TAU + rnd(-0.3, 0.3)
+    leaf.position.set(Math.cos(a) * 0.03, 0.2, Math.sin(a) * 0.03)
+    leaf.rotation.set(rnd(-0.5, -0.15), a + Math.PI / 2, rnd(-0.5, 0.5))
+    plant.add(leaf)
+  }
+
+  // --- taped notes --------------------------------------------------------
+
+  const paper = MAT.paint(PALETTE.brightMetal, { rough: 0.95, metal: 0 })
+  // Off to the far left, under the shelf. These were sitting dead centre-right
+  // of the hero frame and were the brightest cluster of small detail in it —
+  // barcodes will always out-shout the thing you actually want looked at. The
+  // wall they have vacated is where the clock hangs.
+  const notes = [
+    [-1.82, 1.24, 0.13, 0.1, -0.06],
+    [-1.66, 1.4, 0.11, 0.14, 0.09],
+    [-1.5, 1.2, 0.15, 0.11, -0.03],
+  ]
+  for (const [x, y, w, h, rz] of notes) {
+    const note = add(box(w, h, 0.004, paper, { dirt: 0.3, tint: 0xc6c0d2 }), x, y, Z_BACK + 0.004)
+    note.rotation.z = rz
+  }
+
+  const noteDecal = decalTexture().clone()
+  noteDecal.needsUpdate = true
+  noteDecal.repeat.set(0.6, 0.42)
+  noteDecal.offset.set(0.16, 0.3)
+  const decals = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.46, 0.32),
+    new THREE.MeshStandardMaterial({
+      map: noteDecal,
+      transparent: true,
+      roughness: 0.9,
+      metalness: 0,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      side: THREE.DoubleSide,
+    }),
+  )
+  decals.rotation.z = 0.04
+  add(decals, -1.64, 1.3, Z_BACK + 0.009)
+
+  // --- foreground ---------------------------------------------------------
+  //
+  // These hang between the lens and the desk. A frame with nothing cropped by
+  // its own edge is the difference between a photograph and a product render,
+  // so at least two of them are placed to cross a corner of the settle pose.
+
+  const hang = (x, z, drop, radius, color) => {
+    const sway = rnd(-0.05, 0.05)
+    const pts = []
+    for (let i = 0; i <= 4; i++) {
+      const k = i / 4
+      pts.push(
+        new THREE.Vector3(
+          x + Math.sin(k * 2.3 + sway * 8) * 0.035 + sway * k,
+          Y_CEIL + 0.03 - drop * k,
+          z + Math.cos(k * 1.9) * 0.028 - 0.05 * k * k,
+        ),
+      )
+    }
+    const c = cable(pts, { radius, color, segments: 11 })
+    // Thin geometry in a 1024 shadow map is all aliasing and no shadow.
+    c.castShadow = false
+    group.add(c)
+    return c
+  }
+
+  // These were put in front of the desk on purpose — a frame with nothing
+  // cropped by its own edge reads as a render of some objects rather than a
+  // photograph of a room. At the pose the reveal actually settles on they were
+  // crossing the frame instead of cropping it, so they are off. The floor run
+  // below stays: it is not hanging over anything.
+  if (SHOW_HANGING_CABLES) {
+    hang(0.12, 0.62, 1.45, 0.009, PALETTE.wallDark)
+    hang(0.31, 0.7, 1.02, 0.006, PALETTE.greyMetal)
+    hang(0.79, 0.44, 1.32, 0.011, PALETTE.wallDark)
+    hang(-0.38, 0.5, 0.86, 0.007, PALETTE.cardboardDark)
+    if (q > 0.6) hang(1.14, 0.56, 1.18, 0.008, PALETTE.greyMetal)
+  }
+
+  const floorRun = cable(
+    [
+      [-0.92, 0.014, -1.05],
+      [-0.5, 0.016, -0.58],
+      [-0.04, 0.015, -0.26],
+      [0.38, 0.017, 0.16],
+      [0.63, 0.015, 0.66],
+      [0.78, 0.014, 1.25],
+    ],
+    { radius: 0.015, color: PALETTE.greyMetal, segments: 20 },
+  )
+  floorRun.castShadow = false
+  floorRun.receiveShadow = true
+  group.add(floorRun)
+  contactDarken(floorRun, [FLOOR_PLANE], { radius: 0.03, floor: 0.5 })
+
+  // --- frame --------------------------------------------------------------
+
+  const interactives = [
+    {
+      objects: [bulb, bulbCap, cord],
+      label: 'Bulb',
+      hint: 'Pull the cord',
+      onClick: () => {
+        setLit(!lit)
+        swingAmp = 0.12
+        sfx?.play('latch')
+      },
+    },
+  ]
+
+  return {
+    group,
+    interactives,
+    update(dt, t) {
+      driftDust(dt, t)
+
+      swingAmp += (0.016 - swingAmp) * (1 - Math.exp(-dt * 0.22))
+      swing.rotation.z = Math.sin(t * 1.35) * swingAmp
+      swing.rotation.x = Math.sin(t * 1.04 + 2.1) * swingAmp * 0.62
+
+      if (t > dipEnd) {
+        dipLen = rnd(0.1, 0.24)
+        dipEnd = t + dipLen + rnd(3.5, 7)
+      }
+      let level = 1 + Math.sin(t * 3.1) * 0.014 + Math.sin(t * 7.7 + 1.3) * 0.009
+      const since = dipEnd - dipLen - t
+      if (since < 0 && since > -dipLen) level *= 1 - 0.45 * Math.sin((-since / dipLen) * Math.PI) ** 0.6
+      neonMat.color.copy(neonBase).multiplyScalar(level)
+      neonGlow.userData.setIntensity(level)
+      neonLight.intensity = NEON_W * level
+    },
+    dispose() {
+      // Only what this module minted. The shaft ramp comes out of the shared
+      // texture cache, so disposing it here would hand the next room a dead
+      // texture, and the assembler clears that cache anyway.
+      noteDecal.dispose()
+      dustGeo.dispose()
+      cityGeo.dispose()
+    },
+  }
+}

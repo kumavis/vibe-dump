@@ -1,0 +1,11 @@
+/* index.css — assembly order matters: tokens, then the panel, then the things
+ * that live on it, then the room that the panel turns out to be sitting in. */
+
+@import './tokens.css';
+@import './base.css';
+@import './appbar.css';
+@import './desktop.css';
+@import './window.css';
+@import './menus.css';
+@import './apps.css';
+@import './room.css';

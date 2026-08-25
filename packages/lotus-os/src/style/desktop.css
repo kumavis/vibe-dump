@@ -1,0 +1,120 @@
+/* desktop.css — wallpaper and the icon field. */
+
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 100% at 50% 118%, var(--wall-3) 0%, var(--wall-2) 42%, var(--wall-1) 78%);
+  overflow: hidden;
+}
+.wallpaper svg {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  /* The artwork is drawn for the whole 1440x900 panel but lives under the app
+     bar, so give it those 40px back and let the crop land in the sky rather
+     than through the naga border along the bottom. */
+  height: calc(100% + var(--bar-h));
+  display: block;
+}
+
+/* the icon field arrives a beat after the wallpaper, so the machine reads as
+   coming up rather than as already having been on */
+.os:not(.is-booted) .icons {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.icons {
+  transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out);
+  position: absolute;
+  inset: 14px auto 14px 12px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 2px;
+  max-height: calc(100% - 28px);
+}
+
+.icon-cell {
+  width: 92px;
+  padding: 9px 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  border: var(--hair) solid transparent;
+  border-radius: var(--radius);
+  color: var(--ink-dim);
+  text-align: center;
+  cursor: default;
+  transition: background 130ms, border-color 130ms, color 130ms;
+}
+.icon-cell:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--surface) 34%, transparent);
+  border-color: var(--line);
+}
+.icon-cell.is-selected {
+  color: var(--ink);
+  background: var(--accent-wash);
+  border-color: var(--line-strong);
+}
+
+.icon-cell__glyph {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+}
+.icon-cell__glyph svg {
+  width: 34px;
+  height: 34px;
+}
+.icon-cell:hover .icon-cell__glyph {
+  color: var(--gold-bright);
+}
+
+.icon-cell__label {
+  font-size: 11.5px;
+  line-height: 1.3;
+  letter-spacing: 0.015em;
+  word-break: break-word;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+.os[data-theme="light"] .icon-cell__label {
+  text-shadow: 0 1px 0 rgba(255, 252, 245, 0.8);
+}
+
+/* the executable gets a halo and a slow pulse; it is the point of the machine */
+.icon-cell--exec .icon-cell__glyph {
+  position: relative;
+  color: var(--accent);
+}
+.icon-cell--exec .icon-cell__glyph svg {
+  width: 42px;
+  height: 42px;
+  overflow: visible;
+}
+.icon-cell--exec .icon-cell__glyph::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 68%);
+  animation: exec-pulse 3.4s var(--ease-in-out) infinite;
+  z-index: -1;
+}
+@keyframes exec-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.92); }
+  50% { opacity: 0.95; transform: scale(1.08); }
+}
+.icon-cell--exec .icon-cell__label {
+  color: var(--gold-bright);
+  letter-spacing: 0.05em;
+}
