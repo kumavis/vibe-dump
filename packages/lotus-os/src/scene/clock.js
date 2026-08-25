@@ -22,6 +22,7 @@ const rnd = (a, b) => a + Math.random() * (b - a)
 const FACE_R = 0.1 // the lotus dial, 200mm across
 const PLATE_R = 0.078
 const PLATE_GAP = 0.026 // how far apart the two movement plates stand
+const APERTURE = 0.03 // the hole through dial and front plate you watch the train through
 const DROP = 0.2 // face centre below the wall mount
 const FALL = 0.3 // how far a weight travels before it is wound back up
 
@@ -122,15 +123,23 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
 
   // --- the movement ---------------------------------------------------------
 
-  const plateGeo = ensureColors(new THREE.CylinderGeometry(PLATE_R, PLATE_R, 0.004, detail(20)))
-  for (const z of [-PLATE_GAP / 2, PLATE_GAP / 2]) {
-    const plate = new THREE.Mesh(plateGeo, brassMat)
-    plate.rotation.x = Math.PI / 2
-    plate.position.z = z
-    plate.castShadow = true
-    plate.receiveShadow = true
-    body.add(plate)
-  }
+  // The back plate stays solid — it is the dark brass ground the train reads
+  // against. The front one is pierced, because a skeleton movement is the only
+  // kind worth modelling here: the aperture is what lets the dial show its own
+  // gearing instead of hiding it behind a disc.
+  const movementBack = new THREE.Mesh(
+    ensureColors(new THREE.CylinderGeometry(PLATE_R, PLATE_R, 0.004, detail(20))),
+    brassMat,
+  )
+  movementBack.rotation.x = Math.PI / 2
+  movementBack.position.z = -PLATE_GAP / 2
+  movementBack.receiveShadow = true
+  body.add(movementBack)
+
+  const movementFront = new THREE.Mesh(ensureColors(new THREE.RingGeometry(APERTURE, PLATE_R, detail(24))), brassMat)
+  movementFront.position.z = PLATE_GAP / 2
+  movementFront.castShadow = true
+  body.add(movementFront)
 
   for (let i = 0; i < 4; i++) {
     const a = (i / 4) * TAU + Math.PI / 4
@@ -143,14 +152,17 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
   // The train. Meshing wheels turn in opposite directions at speeds inversely
   // proportional to their radii — getting that backwards is the single most
   // noticeable way a modelled clock reads as fake, and it costs nothing.
+  // Sized so every wheel stays inside the dial rim: one that clears the edge
+  // reads as an ornament stuck to the side rather than as part of a train.
   const TRAIN = [
     { r: 0.05, teeth: 16, x: 0, y: 0, spin: 1 / 60 },
-    { r: 0.032, teeth: 11, x: 0.072, y: -0.014, spin: 0 },
-    { r: 0.022, teeth: 9, x: 0.052, y: 0.05, spin: 0 },
+    { r: 0.026, teeth: 11, x: 0.064, y: -0.013, spin: 0 },
+    { r: 0.019, teeth: 9, x: 0.046, y: 0.044, spin: 0 },
   ]
+  const trainMat = MAT.metal(0x6b5327, 0.66)
   const wheels = []
   TRAIN.forEach((w, i) => {
-    const mesh = new THREE.Mesh(lotusWheel(w.r, w.teeth, detail(6)), brassMat)
+    const mesh = new THREE.Mesh(lotusWheel(w.r, w.teeth, detail(6)), trainMat)
     mesh.position.set(w.x, w.y, -0.0018)
     mesh.castShadow = true
     body.add(mesh)
@@ -173,13 +185,16 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
   body.add(dial)
 
   const dialBack = new THREE.Mesh(
-    ensureColors(new THREE.CircleGeometry(FACE_R * 0.92, detail(28))),
+    ensureColors(new THREE.RingGeometry(APERTURE, FACE_R * 0.92, detail(28))),
     MAT.plastic(0x0d0a14, 0.42),
   )
   dialBack.position.z = -0.002
   dial.add(dialBack)
 
-  const rim = new THREE.Mesh(ensureColors(new THREE.TorusGeometry(FACE_R * 0.94, 0.0022, 4, detail(30))), goldMat)
+  const rim = new THREE.Mesh(
+    ensureColors(new THREE.TorusGeometry(FACE_R * 0.94, 0.0022, 4, detail(30))),
+    MAT.metal(GOLD, 0.62), // rougher than the movement brass: a lit rim would
+  ) // fight the hand tips, which are meant to be the only bright thing here
   dial.add(rim)
 
   // Twelve petals for twelve hours, the four cardinals longer, because a dial
@@ -201,9 +216,6 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
     dial.add(petal)
   }
 
-  const seedPod = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(FACE_R * 0.13, detail(12))), goldMat)
-  seedPod.position.z = 0.004
-  dial.add(seedPod)
 
   // --- the hands, and the only light in the prop -----------------------------
 
@@ -233,6 +245,14 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
   hourHand.group.position.z = 0.006
   minHand.group.position.z = 0.008
   dial.add(hourHand.group, minHand.group)
+
+  // The lotus seed pod goes on last, over the roots of both hands. Under them
+  // it just reads as a disc with a wedge bitten out of it; over them the hands
+  // emerge from beneath it the way they do on a real dial. It is small enough
+  // to leave the aperture — and the wheel turning behind it — visible.
+  const seedPod = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(FACE_R * 0.1, detail(12))), goldMat)
+  seedPod.position.z = 0.0098
+  dial.add(seedPod)
 
   // --- the weights ----------------------------------------------------------
 

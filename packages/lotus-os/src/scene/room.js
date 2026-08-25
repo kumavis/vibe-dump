@@ -482,7 +482,7 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
     }
     const frond = new THREE.Mesh(
       ensureColors(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), detail(7), 0.0075, 4, false)),
-      leafMat,
+      shelfLeafMat,
     )
     frond.scale.y = 0.4 // flatten the tube into a leaf rather than a stem
     frond.castShadow = true
