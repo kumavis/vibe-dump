@@ -784,12 +784,15 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   grainGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(-0.15, BED_TOP + 0.12, 0.05), 0.75)
 
   const grainMat = new THREE.PointsMaterial({
-    size: 0.0032,
+    // Screen-space, not physical: a grain the size of an actual grain is a
+    // third of a pixel from where the camera parks. This is the room's dust
+    // size, which is the size a mote reads at in this room.
+    size: 0.009,
     sizeAttenuation: true,
     map: glowTexture(),
     vertexColors: true,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.7,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     fog: false,
