@@ -117,7 +117,7 @@ const hits = await page.evaluate(() => {
   if (!ws) return []
   const out = []
   const seen = new Set()
-  for (const key of ['printer', 'board', 'solder', 'room', 'desk', 'monitor']) {
+  for (const key of ['printer', 'board', 'solder', 'clock', 'room', 'desk', 'monitor']) {
     for (const it of ws.parts[key]?.interactives ?? []) {
       const o = (it.objects ?? (it.object ? [it.object] : []))[0]
       if (!o || seen.has(it.label)) continue

@@ -20,7 +20,11 @@ import {
   tintGeometry,
   ensureColors,
   jitter,
+  glowTexture,
 } from './materials.js'
+
+const TAU = Math.PI * 2
+const rnd = (a, b) => a + Math.random() * (b - a)
 
 const TOP_Y = 0.75
 const THICK = 0.038
@@ -51,8 +55,11 @@ const SHADE_MOUTH = new THREE.Vector3(-0.915, 1.135, -1.258)
 const SHADE_AIM = new THREE.Vector3(-0.84, TOP_Y, -0.94)
 const SHADE_LEN = 0.094
 
-// The chair is a foreground occluder rather than furniture. If it swallows too
-// much of the hero frame, this is the knob to turn.
+// The chair is a foreground occluder rather than furniture, and at the pose the
+// reveal settles on it was swallowing the near half of the frame. Kept, because
+// a chair is the right prop for a desk somebody works at and a camera further
+// back will want it again — but off. One line.
+const SHOW_CHAIR = false
 const CHAIR = new THREE.Vector3(0.1, 0, 0.56)
 
 const UP = new THREE.Vector3(0, 1, 0)
@@ -353,14 +360,94 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   handle.position.set(0.041, 0.052, 0)
   mugGroup.add(handle)
 
-  // Whatever is in there has not been warm since some time yesterday. cyl()
-  // builds capped cylinders, so a disc down at the real liquid line would be
-  // sealed under the mug's own lid: it sits a hair above the rim instead and
-  // reads as a full mug, leaving a 2.5 mm ring of ceramic showing round it.
-  const brew = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.0335, detail(12))), MAT.plastic(0x120c0a, 0.26))
+  // Poured recently enough to still be steaming. cyl() builds capped cylinders,
+  // so a disc down at the real liquid line would be sealed under the mug's own
+  // lid: it sits a hair above the rim instead and reads as a full mug, leaving
+  // a 2.5 mm ring of ceramic showing round it.
+  const brew = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.0335, detail(12))), MAT.plastic(0x2a1508, 0.3))
   brew.rotation.x = -Math.PI / 2
   brew.position.y = 0.0987
   mugGroup.add(brew)
+
+  // --- steam ---------------------------------------------------------------
+  //
+  // Steam in a dark room is not white; it is only wherever the light is. The
+  // desk lamp is off to the left of the mug and the monitor washes it in violet
+  // from behind, so each grain is tinted by where it sits between the two and
+  // the plume comes out warm on one side and cold on the other. Additive and
+  // very faint: at the distance the reveal settles on, this should be something
+  // you notice when you look at the coffee, not a feature announcing itself.
+  const STEAM_N = detail(90)
+  const STEAM_RISE = 0.16 // how far up before a grain is spent
+  const steamPos = new Float32Array(STEAM_N * 3)
+  const steamCol = new Float32Array(STEAM_N * 3)
+  const steamAge = new Float32Array(STEAM_N)
+  const steamLife = new Float32Array(STEAM_N)
+  const steamSeed = new Float32Array(STEAM_N)
+  const steamDrift = new Float32Array(STEAM_N)
+
+  for (let i = 0; i < STEAM_N; i++) {
+    steamLife[i] = rnd(2.4, 4.2)
+    // Stagger the whole population on the first frame, or the plume arrives as
+    // one puff and then breathes in unison forever after.
+    steamAge[i] = Math.random() * steamLife[i]
+    steamSeed[i] = Math.random() * TAU
+    steamDrift[i] = rnd(-0.5, 0.5)
+  }
+
+  const steamGeo = new THREE.BufferGeometry()
+  steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPos, 3).setUsage(THREE.DynamicDrawUsage))
+  steamGeo.setAttribute('color', new THREE.BufferAttribute(steamCol, 3).setUsage(THREE.DynamicDrawUsage))
+
+  const steamMat = new THREE.PointsMaterial({
+    size: 0.026,
+    sizeAttenuation: true,
+    map: glowTexture(),
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.2,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    fog: false,
+  })
+  const steam = new THREE.Points(steamGeo, steamMat)
+  steam.frustumCulled = false
+  steam.renderOrder = 900
+  mugGroup.add(steam)
+
+  const STEAM_WARM = new THREE.Color(0xffb23f)
+  const STEAM_COOL = new THREE.Color(0x7a5cff)
+  const _steamTint = new THREE.Color()
+
+  function driftSteam(dt, t) {
+    for (let i = 0; i < STEAM_N; i++) {
+      steamAge[i] += dt
+      if (steamAge[i] > steamLife[i]) steamAge[i] -= steamLife[i]
+      const k = steamAge[i] / steamLife[i]
+
+      // Rising and spreading: the cone widens with height and the whole column
+      // leans as it goes, because still air over a hot mug is a thing that
+      // exists in diagrams and not on a desk.
+      const y = 0.1 + k * STEAM_RISE
+      const spread = 0.004 + k * 0.026
+      const wobble = Math.sin(t * 1.4 + steamSeed[i]) * spread * 0.55
+      const i3 = i * 3
+      steamPos[i3] = Math.cos(steamSeed[i]) * spread + wobble + steamDrift[i] * k * 0.03
+      steamPos[i3 + 1] = y
+      steamPos[i3 + 2] = Math.sin(steamSeed[i]) * spread + Math.cos(t * 1.1 + steamSeed[i]) * spread * 0.4
+
+      // In and out at both ends, so nothing pops into existence at the surface
+      // or gets cut off at the top.
+      const fade = Math.min(1, k * 6) * (1 - k) ** 1.6
+      // Left of the mug is the lamp, behind it is the screen.
+      _steamTint.copy(STEAM_COOL).lerp(STEAM_WARM, THREE.MathUtils.clamp(0.5 - steamPos[i3] * 9, 0, 1))
+      steamCol[i3] = _steamTint.r * fade
+      steamCol[i3 + 1] = _steamTint.g * fade
+      steamCol[i3 + 2] = _steamTint.b * fade
+    }
+    steamGeo.attributes.position.needsUpdate = true
+    steamGeo.attributes.color.needsUpdate = true
+  }
 
   // The stain is where the mug used to live, which is the only reason a ring
   // on a desk reads as a ring and not as a decal.
@@ -539,7 +626,7 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   const chair = new THREE.Group()
   chair.position.copy(CHAIR)
   chair.rotation.y = 0.13
-  group.add(chair)
+  if (SHOW_CHAIR) group.add(chair)
 
   const backrest = box(0.42, 0.19, 0.05, MAT.cloth(PALETTE.fabric), { dirt: 0.26, tint: 0x8e8a98 })
   backrest.position.set(0, 0.885, 0)
@@ -567,7 +654,8 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
     sfx?.play('latch')
   }
 
-  const update = (dt) => {
+  const update = (dt, t) => {
+    driftSteam(dt, t)
     if (wobble <= 0) return
     wobble = Math.max(0, wobble - dt)
     // Quadratic decay, so it settles rather than stopping dead.
@@ -585,8 +673,8 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
     interactives: [
       {
         object: mugGroup,
-        label: 'Mug',
-        hint: () => (nudged ? 'Still cold' : 'Cold'),
+        label: 'Coffee',
+        hint: () => (nudged ? 'Still hot' : 'Hot'),
         onClick: nudge,
       },
     ],
@@ -596,6 +684,8 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
       // a cached texture, so it has to go separately.
       shadeMat.dispose()
       stainMat.dispose()
+      steamMat.dispose()
+      steamGeo.dispose()
       lipMat.map.dispose()
       lipMat.dispose()
     },

@@ -23,6 +23,7 @@ import { createDesk } from './desk.js'
 import { createPrinter } from './printer.js'
 import { createSolderKit } from './solder.js'
 import { createBoard } from './board.js'
+import { createClock } from './clock.js'
 
 const FOV_SCREEN = 40
 const FOV_ROOM = 52
@@ -225,6 +226,9 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   const printer = collect(createPrinter({ sfx, quality: 1 }), PLACE.printer, -0.06)
   const solder = collect(createSolderKit({ sfx, quality: 1 }), PLACE.solder, 0.14)
   const board = collect(createBoard({ sfx, quality: 1 }), PLACE.board, -0.22)
+  // On the back wall, where a cluster of barcoded notes used to shout over
+  // everything else. Its origin is the wall mount; it hangs from there.
+  const clock = collect(createClock({ sfx, quality: 1 }), [0.4, 1.8, -1.53])
 
   scene.updateMatrixWorld(true)
   monitor.syncScreen()
@@ -690,7 +694,7 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
     scene,
     camera,
     rig,
-    parts: { room, desk, monitor, printer, solder, board },
+    parts: { room, desk, monitor, printer, solder, board, clock },
     enter,
     exit,
     dispose,

@@ -24,6 +24,8 @@ import {
   makeCanvasTexture,
 } from './materials.js'
 
+const SHOW_HANGING_CABLES = false
+
 const X_IN = 2.1
 const Z_BACK = -1.55
 const Z_FRONT = 2.1
@@ -104,6 +106,7 @@ const shaftRamp = () =>
 
 export function createRoom({ sfx = null, quality = 1 } = {}) {
   const q = THREE.MathUtils.clamp(quality, 0.35, 1)
+  const detail = (n) => Math.max(4, Math.round(n * q))
   const group = new THREE.Group()
   group.name = 'room'
 
@@ -428,6 +431,66 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
     group.add(item)
   })
 
+  // --- the shelf plant ------------------------------------------------------
+  //
+  // The only green in the upper half of the room, and the only thing up there
+  // that is alive, in a frame that is otherwise violet and amber. Deliberately
+  // not the floor plant at sixty percent: that one sprays upward, so this one
+  // trails, and one frond is long enough to break the line of the plank —
+  // which is the whole reason to put a plant on a shelf rather than beside one.
+  const shelfPlant = new THREE.Group()
+  shelfPlant.position.set(-0.9, SHELF_Y, Z_BACK + 0.145)
+  jitter(shelfPlant, 0.4, 0.01)
+  group.add(shelfPlant)
+
+  const shelfPotProfile = []
+  for (let i = 0; i <= 6; i++) {
+    const k = i / 6
+    shelfPotProfile.push(new THREE.Vector2(0.036 + Math.sin(k * Math.PI * 0.62) * 0.014, k * 0.062))
+  }
+  const shelfPot = new THREE.Mesh(
+    ensureColors(new THREE.LatheGeometry(shelfPotProfile, detail(12))),
+    MAT.plaster(PALETTE.terracotta),
+  )
+  shelfPot.castShadow = true
+  shelfPot.receiveShadow = true
+  shelfPlant.add(shelfPot)
+
+  const shelfSoil = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.041, detail(10))), MAT.plaster(PALETTE.crevice))
+  shelfSoil.rotation.x = -Math.PI / 2
+  shelfSoil.position.y = 0.058
+  shelfPlant.add(shelfSoil)
+
+  // Each frond is a thin strip bent over the pot rim and dropping. The longest
+  // two hang past the front of the plank on purpose.
+  const FRONDS = q > 0.6 ? 7 : 5
+  const shelfLeafMat = MAT.leaf()
+  for (let i = 0; i < FRONDS; i++) {
+    const a = (i / FRONDS) * Math.PI * 2 + rnd(-0.25, 0.25)
+    const drop = i < 2 ? rnd(0.2, 0.27) : rnd(0.07, 0.15)
+    const reach = 0.05 + drop * 0.42
+    const pts = []
+    for (let k = 0; k <= 4; k++) {
+      const t = k / 4
+      pts.push(
+        new THREE.Vector3(
+          Math.cos(a) * (0.02 + reach * t),
+          0.062 + Math.sin(t * 1.5) * 0.028 - drop * t * t,
+          Math.sin(a) * (0.02 + reach * t),
+        ),
+      )
+    }
+    const frond = new THREE.Mesh(
+      ensureColors(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), detail(7), 0.0075, 4, false)),
+      leafMat,
+    )
+    frond.scale.y = 0.4 // flatten the tube into a leaf rather than a stem
+    frond.castShadow = true
+    shelfPlant.add(frond)
+  }
+
+  contactDarken(shelfPot, [new THREE.Plane(new THREE.Vector3(0, 1, 0), -SHELF_Y)], { radius: 0.05, floor: 0.45 })
+
   // --- pipes --------------------------------------------------------------
 
   const pipeMat = MAT.paint(PALETTE.greyMetal, { rough: 0.6, metal: 0.55 })
@@ -605,10 +668,14 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   // --- taped notes --------------------------------------------------------
 
   const paper = MAT.paint(PALETTE.brightMetal, { rough: 0.95, metal: 0 })
+  // Off to the far left, under the shelf. These were sitting dead centre-right
+  // of the hero frame and were the brightest cluster of small detail in it —
+  // barcodes will always out-shout the thing you actually want looked at. The
+  // wall they have vacated is where the clock hangs.
   const notes = [
-    [0.24, 1.36, 0.13, 0.1, -0.06],
-    [0.4, 1.52, 0.11, 0.14, 0.09],
-    [0.55, 1.35, 0.15, 0.11, -0.03],
+    [-1.82, 1.24, 0.13, 0.1, -0.06],
+    [-1.66, 1.4, 0.11, 0.14, 0.09],
+    [-1.5, 1.2, 0.15, 0.11, -0.03],
   ]
   for (const [x, y, w, h, rz] of notes) {
     const note = add(box(w, h, 0.004, paper, { dirt: 0.3, tint: 0xc6c0d2 }), x, y, Z_BACK + 0.004)
@@ -633,7 +700,7 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
     }),
   )
   decals.rotation.z = 0.04
-  add(decals, 0.4, 1.44, Z_BACK + 0.009)
+  add(decals, -1.64, 1.3, Z_BACK + 0.009)
 
   // --- foreground ---------------------------------------------------------
   //
@@ -661,11 +728,18 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
     return c
   }
 
-  hang(0.12, 0.62, 1.45, 0.009, PALETTE.wallDark)
-  hang(0.31, 0.7, 1.02, 0.006, PALETTE.greyMetal)
-  hang(0.79, 0.44, 1.32, 0.011, PALETTE.wallDark)
-  hang(-0.38, 0.5, 0.86, 0.007, PALETTE.cardboardDark)
-  if (q > 0.6) hang(1.14, 0.56, 1.18, 0.008, PALETTE.greyMetal)
+  // These were put in front of the desk on purpose — a frame with nothing
+  // cropped by its own edge reads as a render of some objects rather than a
+  // photograph of a room. At the pose the reveal actually settles on they were
+  // crossing the frame instead of cropping it, so they are off. The floor run
+  // below stays: it is not hanging over anything.
+  if (SHOW_HANGING_CABLES) {
+    hang(0.12, 0.62, 1.45, 0.009, PALETTE.wallDark)
+    hang(0.31, 0.7, 1.02, 0.006, PALETTE.greyMetal)
+    hang(0.79, 0.44, 1.32, 0.011, PALETTE.wallDark)
+    hang(-0.38, 0.5, 0.86, 0.007, PALETTE.cardboardDark)
+    if (q > 0.6) hang(1.14, 0.56, 1.18, 0.008, PALETTE.greyMetal)
+  }
 
   const floorRun = cable(
     [
