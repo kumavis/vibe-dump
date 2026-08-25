@@ -177,16 +177,22 @@ export function createMonitor({ screenEl, CSS3DObject }) {
   // bezel is 24mm and the note is 70mm, so there is nowhere to put it that
   // does not cross the screen: tape it over the corner, the way people do.
   // Nothing is lost, because the panel is inert while it is in the monitor.
-  note.position.set(-PANEL_W / 2 + 0.040, PANEL_H / 2 - 0.048, PANEL_D / 2 + 0.0045)
+  //
+  // The yaw is what put it back through the screen: at 0.12rad a note 70mm wide
+  // swings its far edge 4.2mm in z, and sitting 4.5mm proud of the panel that
+  // took the receding edge to +0.3mm — behind the punch plane at +2.2mm, so the
+  // running desktop drew over that side of it. Stand it further off and yaw it
+  // less: the receding edge now clears the punch by 3.7mm.
+  note.position.set(-PANEL_W / 2 + 0.04, PANEL_H / 2 - 0.048, PANEL_D / 2 + 0.008)
   note.rotation.z = -0.07
-  note.rotation.y = 0.12
+  note.rotation.y = 0.06
   panel.add(note)
 
   const tapeMat = MAT.plastic(0xb0a68f, 0.9).clone()
   tapeMat.transparent = true
   tapeMat.opacity = 0.55
   const tape = new THREE.Mesh(new THREE.PlaneGeometry(0.024, 0.009), tapeMat)
-  tape.position.set(note.position.x + 0.004, note.position.y + 0.024, PANEL_D / 2 + 0.0052)
+  tape.position.set(note.position.x + 0.004, note.position.y + 0.024, PANEL_D / 2 + 0.0102)
   tape.rotation.z = 0.28
   panel.add(tape)
 

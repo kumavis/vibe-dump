@@ -254,8 +254,16 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   screenLight.lookAt(pose.position.clone().addScaledVector(pose.normal, 1))
   scene.add(screenLight)
 
-  const screenBloom = glowSprite(0x9a6cff, SCREEN.height * 0.5, { core: 0.1, mid: 0.06, halo: 0.035, streak: SCREEN.width * 3.4 })
-  screenBloom.position.copy(pose.position).addScaledVector(pose.normal, 0.006)
+  // The fake glare that stands in for bloom, since there is no post chain. It
+  // used to sit 6mm in FRONT of the panel, which meant that from anywhere near
+  // head-on it was a soft violet ellipse laid over the desktop — veiling the
+  // thing it was supposed to be evidence of. Spill belongs behind the emitter:
+  // from here the panel's own shell occludes it, so what survives is a halo
+  // past the edges of the monitor and on the wall behind it, which is what
+  // screen light in a dark room actually does. Narrower than it was, too — at
+  // three and a half screen widths it was a bar rather than a glow.
+  const screenBloom = glowSprite(0x9a6cff, SCREEN.height * 0.62, { core: 0.07, mid: 0.05, halo: 0.03, streak: SCREEN.width * 1.5 })
+  screenBloom.position.copy(pose.position).addScaledVector(pose.normal, -0.03)
   scene.add(screenBloom)
 
   /**
