@@ -40,6 +40,10 @@ const CROSS_Y = UP_TOP + EXT / 2
 const BED_TOP = 0.104
 const BED_W = 0.150
 const BED_D = 0.125
+// Both measured down from BED_TOP, which is the sheet's top face and the only
+// height anything printed is ever placed at.
+const PLATE_H = 0.005
+const SHEET_H = 0.0012
 
 const BEAM_Z = -0.062 // X beam, measured from the nozzle axis at z = 0
 
@@ -289,17 +293,24 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     }
   }
 
-  const bedPlate = box(BED_W, 0.005, BED_D, MAT.metal(0x2b2830, 0.46), { dirt: 0.1, tint: 0xa89fb6 })
-  bedPlate.position.set(0, 0.1015, 0)
+  // The sheet lies ON the plate — the plate stops where the sheet starts. Both
+  // used to be measured off BED_TOP independently, which put their two top
+  // faces on the same plane to the micron and had the bed flickering against
+  // itself across the whole 150 mm of it.
+  const bedPlate = box(BED_W, PLATE_H, BED_D, MAT.metal(0x2b2830, 0.46), { dirt: 0.1, tint: 0xa89fb6 })
+  bedPlate.position.set(0, BED_TOP - SHEET_H - PLATE_H / 2, 0)
   bed.add(bedPlate)
 
-  const sheet = box(BED_W - 0.004, 0.0012, BED_D - 0.004, MAT.plastic(0x141220, 0.34), { dirt: 0.06, tint: 0x8f88a0 })
-  sheet.position.set(0, BED_TOP - 0.0006, 0)
+  const sheet = box(BED_W - 0.004, SHEET_H, BED_D - 0.004, MAT.plastic(0x141220, 0.34), { dirt: 0.06, tint: 0x8f88a0 })
+  sheet.position.set(0, BED_TOP - SHEET_H / 2, 0)
   bed.add(sheet)
 
+  // Two millimetres of jaw, so it still bites into the plate now the plate's
+  // face has dropped by a sheet's thickness. Only the 3 mm above the bed shows,
+  // which is what showed before.
   for (const sx of [-1, 1]) {
-    const bedClip = box(0.014, 0.004, 0.008, bright)
-    bedClip.position.set(sx * 0.042, BED_TOP + 0.001, BED_D / 2 - 0.003)
+    const bedClip = box(0.014, 0.006, 0.008, bright)
+    bedClip.position.set(sx * 0.042, BED_TOP, BED_D / 2 - 0.003)
     bed.add(bedClip)
   }
 
@@ -527,34 +538,143 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   )
   group.add(strand)
 
-  // The PTFE tube is the one piece of geometry that has to follow a moving
-  // part, so it gets rebuilt — but at 12 Hz, not 60. A bowden tube sweeping as
-  // the head crosses the bed is worth one small allocation a frame in five.
-  const ptfeMat = MAT.plastic(0x4a4652, 0.44)
-  let ptfe = null
+  // The PTFE tube is the one piece of geometry that has to follow a moving part.
+  // It used to be thrown away and rebuilt from a fresh curve, which capped it at
+  // 12 Hz because a TubeGeometry a frame is a TubeGeometry a frame — and at
+  // 12 Hz you can watch it trail the head across the bed. So it is built once,
+  // for the index buffer and the UVs, and after that only its positions and
+  // normals are rewritten, in place, at 60. Nineteen rings of six vertices is
+  // nothing to recompute; it was only ever the allocation that cost.
+  const PTFE_SEG = 18
+  const PTFE_RAD = 5
+  const PTFE_RING = PTFE_RAD + 1
+  const PTFE_R = 0.0032
 
-  const rebuildPtfe = () => {
+  const ptfeMat = MAT.plastic(0x4a4652, 0.44)
+
+  // Five control points that live as long as the room, and one curve over that
+  // same array. CatmullRomCurve3.getPoint reads its points on every call, so
+  // moving these vectors is how the curve gets reshaped — no new curve, no new
+  // points, nothing for the collector.
+  const ptfePts = []
+  for (let i = 0; i < 5; i++) ptfePts.push(new THREE.Vector3())
+  const ptfeCurve = new THREE.CatmullRomCurve3(ptfePts)
+
+  const shapePtfe = () => {
     const topY = gantry.position.y + 0.05
     const midY = (0.362 + topY) / 2
     const cx = head.position.x
-    const pts = [
-      new THREE.Vector3(-0.05, 0.362, -0.086),
-      new THREE.Vector3(-0.072, 0.362 - (0.362 - topY) * 0.3, -0.052),
-      new THREE.Vector3(-0.088, midY, -0.014),
-      new THREE.Vector3(cx * 0.5 - 0.03, topY + (midY - topY) * 0.4, -0.006),
-      new THREE.Vector3(cx, topY, -0.012),
-    ]
-    const geo = ensureColors(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 18, 0.0032, 5, false))
-    if (ptfe) {
-      ptfe.geometry.dispose()
-      ptfe.geometry = geo
-    } else {
-      ptfe = new THREE.Mesh(geo, ptfeMat)
-      ptfe.castShadow = true
-      group.add(ptfe)
-    }
+    ptfePts[0].set(-0.05, 0.362, -0.086)
+    ptfePts[1].set(-0.072, 0.362 - (0.362 - topY) * 0.3, -0.052)
+    ptfePts[2].set(-0.088, midY, -0.014)
+    ptfePts[3].set(cx * 0.5 - 0.03, topY + (midY - topY) * 0.4, -0.006)
+    ptfePts[4].set(cx, topY, -0.012)
   }
-  rebuildPtfe()
+  shapePtfe()
+
+  const ptfeGeo = ensureColors(new THREE.TubeGeometry(ptfeCurve, PTFE_SEG, PTFE_R, PTFE_RAD, false))
+  const ptfePosAttr = ptfeGeo.attributes.position.setUsage(THREE.DynamicDrawUsage)
+  const ptfeNrmAttr = ptfeGeo.attributes.normal.setUsage(THREE.DynamicDrawUsage)
+  const ptfePos = ptfePosAttr.array
+  const ptfeNrm = ptfeNrmAttr.array
+  // Stated, not computed, for the same reason the dust cloud's is: the vertices
+  // move every frame and a sphere fitted to one of them would cull the tube on
+  // the next. This one holds every pose the gantry and the carriage can reach.
+  ptfeGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(-0.028, 0.258, -0.046), 0.15)
+  const ptfe = new THREE.Mesh(ptfeGeo, ptfeMat)
+  ptfe.castShadow = true
+  group.add(ptfe)
+
+  // The ring, once. Same v as TubeGeometry's own generateSegment: sin(v) on the
+  // binormal, -cos(v) on the normal, j running 0..radialSegments inclusive. Get
+  // this wrong and the index buffer we kept describes a different surface than
+  // the one being written into it.
+  const ptfeSin = new Float32Array(PTFE_RING)
+  const ptfeCos = new Float32Array(PTFE_RING)
+  for (let j = 0; j < PTFE_RING; j++) {
+    const v = (j / PTFE_RAD) * Math.PI * 2
+    ptfeSin[j] = Math.sin(v)
+    ptfeCos[j] = -Math.cos(v)
+  }
+
+  const ptfeStation = []
+  const ptfeTangent = []
+  for (let i = 0; i <= PTFE_SEG; i++) {
+    ptfeStation.push(new THREE.Vector3())
+    ptfeTangent.push(new THREE.Vector3())
+  }
+  const _tubeN = new THREE.Vector3()
+  const _tubeB = new THREE.Vector3()
+  const _tubeAxis = new THREE.Vector3()
+  const _tubeRot = new THREE.Matrix4()
+  // The seed normal is carried between frames as well as along the curve.
+  // computeFrenetFrames picks its seed off whichever component of the first
+  // tangent is smallest, which is fine once and awful sixty times a second: the
+  // frame the winning axis changes, the whole tube rolls over.
+  const _tubeSeed = new THREE.Vector3(1, 0, 0)
+
+  const writePtfe = () => {
+    for (let i = 0; i <= PTFE_SEG; i++) ptfeCurve.getPoint(i / PTFE_SEG, ptfeStation[i])
+    // Central differences over stations we already have. curve.getTangent would
+    // sample the curve twice into two fresh vectors on every one of these.
+    for (let i = 0; i <= PTFE_SEG; i++) {
+      const ahead = ptfeStation[i === PTFE_SEG ? PTFE_SEG : i + 1]
+      const behind = ptfeStation[i === 0 ? 0 : i - 1]
+      ptfeTangent[i].subVectors(ahead, behind).normalize()
+    }
+
+    const t0 = ptfeTangent[0]
+    _tubeN.copy(_tubeSeed)
+    _tubeN.addScaledVector(t0, -t0.dot(_tubeN))
+    if (_tubeN.lengthSq() < 1e-10) {
+      _tubeN.set(-t0.y, t0.x, 0)
+      if (_tubeN.lengthSq() < 1e-10) _tubeN.set(0, -t0.z, t0.y)
+    }
+    _tubeN.normalize()
+    _tubeSeed.copy(_tubeN)
+
+    for (let i = 0; i <= PTFE_SEG; i++) {
+      const T = ptfeTangent[i]
+      if (i > 0) {
+        // Parallel transport: swing the previous ring's normal onto this
+        // tangent. An up-cross-tangent frame would be one line and would flip
+        // on its back where the tangent goes vertical, which this one does —
+        // 82 degrees off horizontal with the gantry down on the first layer.
+        const prev = ptfeTangent[i - 1]
+        _tubeAxis.crossVectors(prev, T)
+        if (_tubeAxis.lengthSq() > 1e-14) {
+          const d = prev.dot(T)
+          _tubeRot.makeRotationAxis(_tubeAxis.normalize(), Math.acos(d < -1 ? -1 : d > 1 ? 1 : d))
+          _tubeN.applyMatrix4(_tubeRot)
+        }
+        // Eighteen float rotations drift off the perpendicular. One project and
+        // normalise a hop keeps the ring a circle instead of a slow ellipse.
+        _tubeN.addScaledVector(T, -T.dot(_tubeN)).normalize()
+      }
+      _tubeB.crossVectors(T, _tubeN)
+      const P = ptfeStation[i]
+      const base = i * PTFE_RING * 3
+      for (let j = 0; j < PTFE_RING; j++) {
+        const c = ptfeCos[j]
+        const sn = ptfeSin[j]
+        const nx = c * _tubeN.x + sn * _tubeB.x
+        const ny = c * _tubeN.y + sn * _tubeB.y
+        const nz = c * _tubeN.z + sn * _tubeB.z
+        const o = base + j * 3
+        ptfeNrm[o] = nx
+        ptfeNrm[o + 1] = ny
+        ptfeNrm[o + 2] = nz
+        ptfePos[o] = P.x + PTFE_R * nx
+        ptfePos[o + 1] = P.y + PTFE_R * ny
+        ptfePos[o + 2] = P.z + PTFE_R * nz
+      }
+    }
+    ptfePosAttr.needsUpdate = true
+    ptfeNrmAttr.needsUpdate = true
+  }
+  // The constructor sampled by arc length and this samples uniformly in t, so
+  // run it once here rather than let the first frame shuffle the rings.
+  writePtfe()
 
   // --- control panel --------------------------------------------------------
 
@@ -639,7 +759,6 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   let bedTemp = 24
   let baseY = 0
   let screenAcc = 0
-  let tubeAcc = 0
   let lastCos = 1
   let servoAt = -10
   let now = 0
@@ -1131,13 +1250,11 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     heatLed.halo.userData.setIntensity(heatLed.dot.visible ? 1 : 0)
     powerLed.halo.userData.setIntensity(0.85 + 0.15 * Math.sin(t * 1.7))
 
-    tubeAcc += dt
-    if (tubeAcc > 1 / 12) {
-      tubeAcc = 0
-      // Only the two states that move the head. During the atomise it is parked
-      // and this would rebuild the same curve three dozen times for nothing.
-      if (state === 'print' || state === 'retract') rebuildPtfe()
-    }
+    // Every frame, and cheap enough to be: the tube rewrites its own buffers,
+    // so keeping station with the head costs 114 vertices of arithmetic and two
+    // small uploads. Gated to 12 Hz it visibly trailed a fast X move.
+    shapePtfe()
+    writePtfe()
 
     screenAcc += dt
     if (screenAcc > 1 / 7) {
@@ -1185,7 +1302,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       grainGeo.dispose()
       latheGeo.dispose()
       skirtGeo.dispose()
-      ptfe?.geometry.dispose()
+      ptfeGeo.dispose()
     },
   }
 }
