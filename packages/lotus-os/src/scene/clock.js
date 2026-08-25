@@ -23,7 +23,6 @@ const rnd = (a, b) => a + Math.random() * (b - a)
 const RING_OUT = 0.085 // 170mm across, and 10mm of that is band
 const RING_IN = 0.0745
 const DROP = 0.2 // ring centre below the wall mount
-const FALL = 0.13 // how far a weight travels before it is wound back up
 
 // The prop is built in flat layers so nothing has to be depth-sorted: spine at
 // the back, train in front of it, bridges in front of that, ring, then hands.
@@ -363,11 +362,30 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
     attenuationDistance: 0.035,
   })
 
+  // Two stones, one cord, one barrel — so they are not two falling weights,
+  // they are the two ends of the same cord. The heavy one pays out and the
+  // light one is hauled up by exactly as much. `dir` is which end each is.
   const weights = []
   const WEIGHT_SPEC = [
-    { x: -0.03, len: 0.086, girth: 0.017, hang: 0.14, rough: 0.45 },
-    { x: 0.03, len: 0.068, girth: 0.0145, hang: 0.205, rough: 0.34 },
+    { x: -0.03, len: 0.086, girth: 0.017, hang: 0.14, rough: 0.45, dir: 1 },
+    { x: 0.03, len: 0.068, girth: 0.0145, hang: 0.205, rough: 0.34, dir: -1 },
   ]
+
+  // A full run swaps the two hangs: each stone finishes where the other
+  // started. Not symmetry for its own sake — it is the one travel that needs
+  // no bounds arithmetic of its own, because the pair then never leave the
+  // 65mm band between the two hang values, and both of those were already
+  // picked clear of everything. So the climbing stone tops out at -0.099,
+  // lower than the heavy one already sits at rest (-0.085, against eyelets at
+  // -0.083), and the descending one bottoms out at -0.261, 115mm shallower
+  // than the old free-fall reached. The old one-way 0.13 does not survive the
+  // coupling: run upward it puts the light stone's crown at -0.034, up through
+  // the eyelets and inside the ring opening.
+  const FALL = Math.abs(WEIGHT_SPEC[1].hang - WEIGHT_SPEC[0].hang)
+
+  // One number for the pair, for the same reason. Part-run at build so the
+  // clock is not freshly wound every time the room loads.
+  let travel = rnd(0, FALL * 0.7)
 
   for (const spec of WEIGHT_SPEC) {
     const carrier = new THREE.Group()
@@ -417,21 +435,27 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
     )
     carrier.add(tail)
 
-    // The cord up to the eyelet. Rebuilt as the weight falls, which is the
+    // The cord up to the eyelet. Rebuilt as the weight moves, which is the
     // only geometry in this prop that changes.
     const cordGeo = ensureColors(new THREE.CylinderGeometry(0.0008, 0.0008, 1, 3, 1, true))
     const cord = new THREE.Mesh(cordGeo, cordMat)
     body.add(cord)
 
-    weights.push({ carrier, cord, spec, fall: rnd(0, FALL * 0.7), winding: 0 })
+    weights.push({ carrier, cord, spec })
   }
 
+  // Laid downward from the fixed eyelet to wherever the stone is now, rather
+  // than grown from a rest length, so it takes a stone travelling up as
+  // readily as one travelling down. The climbing stone's cord bottoms out at
+  // 23mm, still longer than the heavy one's 14mm at rest, so nothing here ever
+  // reaches the 4mm floor or inverts.
   function layCord(w) {
-    const y = -w.spec.hang - w.fall + w.spec.len * 0.5
+    const drop = w.spec.dir * travel
+    const y = -w.spec.hang - drop + w.spec.len * 0.5
     const len = Math.max(0.004, CORD_TOP - y)
     w.cord.scale.y = len
     w.cord.position.set(w.spec.x, y + len / 2, 0)
-    w.carrier.position.y = -w.spec.hang - w.fall
+    w.carrier.position.y = -w.spec.hang - drop
   }
   for (const w of weights) layCord(w)
 
@@ -444,12 +468,14 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
   hit.position.set(0, 0.04, 0.004)
   body.add(hit)
 
+  const WIND_TIME = 2.6
   let winding = 0
+  let windFrom = 0
 
   const wind = () => {
     if (winding > 0) return
-    winding = 2.6
-    for (const w of weights) w.winding = w.fall
+    winding = WIND_TIME
+    windFrom = travel
     sfx?.play('latch')
     sfx?.bowl?.({ base: 392, dur: 2.4, gain: 0.045 })
   }
@@ -474,19 +500,17 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
 
     if (winding > 0) {
       winding = Math.max(0, winding - dt)
-      const k = 1 - winding / 2.6
-      for (const w of weights) {
-        w.fall = w.winding * (1 - k)
-        layCord(w)
-      }
+      // The barrel turns the other way, so the pair reverse together: the heavy
+      // stone is hauled back up and the light one pays back down.
+      travel = windFrom * (winding / WIND_TIME)
+      for (const w of weights) layCord(w)
       // The train runs backwards and fast while somebody is winding it.
       for (const w of wheels) w.mesh.rotation.z -= w.rate * dt * 26
     } else {
-      for (const w of weights) {
-        w.fall += dt * 0.0016
-        if (w.fall > FALL) w.fall = FALL
-        layCord(w)
-      }
+      // Clamped at the top of the run, not just tested, so an hour of idle
+      // cannot walk either stone out of the band the hangs define.
+      travel = Math.min(FALL, travel + dt * 0.0016)
+      for (const w of weights) layCord(w)
     }
 
     // The two tips breathe, very slightly, and not together.
