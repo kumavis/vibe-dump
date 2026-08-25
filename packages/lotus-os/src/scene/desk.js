@@ -387,7 +387,17 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   const WISP_ROWS = detail(26)
   const WISP_COLS = 5 // four quads across, so the width falloff is a curve
   const WISP_SHEETS = 2
-  const WISP_RISE = 0.2
+  // Every row converges on the axis at the bottom of the strip, and with the
+  // strip starting just above the brew that pinch sat in open air, reading as a
+  // nozzle. So it begins down near the bottom of the cup instead: the brew is
+  // opaque and so is the wall, which buries the knot from above and from every
+  // low angle the reveal can reach, and what climbs over the rim is already a
+  // formed thread. It never touches the crockery on the way up — nowhere under
+  // the lip does the strip reach 20 mm off the axis, sway included, against a
+  // 33.5 mm bore.
+  const WISP_BASE = 0.022
+  const WISP_TOP = 0.3
+  const WISP_RISE = WISP_TOP - WISP_BASE
 
   // Nothing here changes over time; only the spine moves. Baked once and read
   // every frame so update() can stay arithmetic.
@@ -398,10 +408,11 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   for (let r = 0; r < WISP_ROWS; r++) {
     const v = r / (WISP_ROWS - 1)
     wispV[r] = v
-    wispY[r] = 0.1 + v * WISP_RISE
+    wispY[r] = WISP_BASE + v * WISP_RISE
     wispHalf[r] = 0.006 + 0.02 * Math.pow(v, 0.75)
-    // Densest just clear of the surface and gone well before the top, because
-    // a thread of steam dissolves rather than ending.
+    // The ramp in is spent under the lid now — full value by y = 0.044, less
+    // than half way up to the brew — so all that is left above the rim is the
+    // decay, which is right: a thread of steam dissolves rather than ending.
     wispFade[r] = Math.min(1, v / 0.08) * Math.pow(1 - v, 1.5)
   }
 
@@ -461,7 +472,10 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   const wispMat = new THREE.MeshBasicMaterial({
     vertexColors: true,
     transparent: true,
-    opacity: 0.15,
+    // A suggestion of steam, not a plume. Sinking the base moved the rim onto
+    // the decaying half of the fade and took about a third off the value where
+    // the thread emerges, so 0.15 -> 0.11 lands nearer half of what it was.
+    opacity: 0.11,
     depthWrite: false,
     side: THREE.DoubleSide,
     blending: THREE.AdditiveBlending,
@@ -476,7 +490,18 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   // this flag is what the sweep in scene/index.js keys off.
   wisp.userData.effect = true
   wisp.raycast = () => {}
-  mugGroup.add(wisp)
+
+  // Not mugGroup. Clicking the coffee drives a wobble into mugGroup.rotation,
+  // and a wisp parented there swung the whole plume with the cup as if the air
+  // were tied to the crockery. A sibling holding the mug's own position is the
+  // same place in the world with none of that rotation — jitter() only touches
+  // rotation too, so the position copy is the entire transform. It also keeps
+  // the steam out of the registered prop's subtree, which is where a decorative
+  // child once made the coffee hoverable from anywhere on screen.
+  const wispAnchor = new THREE.Group()
+  wispAnchor.position.copy(mugGroup.position)
+  group.add(wispAnchor)
+  wispAnchor.add(wisp)
 
   const WISP_WARM = new THREE.Color(0xffb23f)
   const WISP_COOL = new THREE.Color(0x7a5cff)
@@ -753,11 +778,11 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
     bulbGlow,
     interactives: [
       {
-        // The mug model, not the group. The group also holds the steam, and a
-        // decorative child inside a registered group is how the coffee came to
-        // own the entire screen: three.js raycasts Points against a threshold
-        // that defaults to one world unit, so every ray passing within a metre
-        // of a steam grain was a hit. Every other prop in this room already
+        // The mug models, not the group. A decorative child inside a registered
+        // group is how the coffee came to own the entire screen: three.js
+        // raycasts Points against a threshold that defaults to one world unit,
+        // so every ray passing within a metre of a steam grain was a hit. The
+        // steam hangs off a sibling group now, but every other prop in this room
         // hit-tests against an explicit model or proxy; this one was the
         // exception. Naming the meshes keeps it that way no matter what gets
         // parented to the mug later.
