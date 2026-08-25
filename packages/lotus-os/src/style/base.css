@@ -150,19 +150,25 @@ body {
 }
 
 .glass::before {
-  /* scanlines + phosphor mask */
+  /* Scanlines only. There used to be a vertical phosphor mask crossed with
+     these, and two perpendicular 3px patterns downsampled into a monitor a
+     tenth of the panel's size beat against each other into a moire that was
+     the most eye-catching thing in the room.
+
+     The remaining stripes still alias at that size — any fixed pattern does,
+     far past Nyquist — so --glass-scan carries how much of the panel the
+     camera is actually seeing, and the scanlines fade out as it shrinks. They
+     are there when you are close enough to read them and gone when they would
+     only be interference. */
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 3px);
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 4px);
   mix-blend-mode: multiply;
-  opacity: 0.85;
+  opacity: calc(0.85 * var(--glass-scan, 1));
 }
 .os[data-theme="light"] .glass::before {
-  mix-blend-mode: multiply;
-  opacity: 0.5;
+  opacity: calc(0.5 * var(--glass-scan, 1));
 }
 
 .glass::after {

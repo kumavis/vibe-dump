@@ -9,7 +9,7 @@
 // correctly covers it.
 
 import * as THREE from 'three'
-import { MAT, PALETTE, box, cyl, cable, glowSprite, decalTexture, edgeDirt, tintGeometry } from './materials.js'
+import { MAT, PALETTE, box, cyl, cable, glowSprite, makeCanvasTexture, edgeDirt, tintGeometry } from './materials.js'
 
 // The OS is a 1440x900 logical panel. At 0.0004 world units per CSS pixel it
 // becomes a 0.576 x 0.36 m active area — a 27 inch 16:10 display, which is
@@ -119,11 +119,49 @@ export function createMonitor({ screenEl, CSS3DObject }) {
   panel.add(powerGlow)
 
   // A note taped to the corner of the bezel. Every monitor has one.
+  //
+  // It used to borrow the shared decal sheet — a scatter of barcodes and
+  // warning labels across a mostly empty 512px square — so at monitor size it
+  // sampled blank paper almost every time and the only thing that read was the
+  // tape holding it on. It gets its own scrawl now: nobody has to be able to
+  // read it, but it has to be obvious that somebody wrote something.
+  const noteTex = makeCanvasTexture('bezel-note', 128, 96, (ctx, w, h) => {
+    ctx.fillStyle = '#b3a878'
+    ctx.fillRect(0, 0, w, h)
+    // a fold shadow down one edge, so it is a piece of paper and not a swatch
+    const fold = ctx.createLinearGradient(0, 0, w * 0.18, 0)
+    fold.addColorStop(0, 'rgba(0,0,0,0.16)')
+    fold.addColorStop(1, 'rgba(0,0,0,0)')
+    ctx.fillStyle = fold
+    ctx.fillRect(0, 0, w * 0.18, h)
+
+    ctx.strokeStyle = 'rgba(38,32,28,0.62)'
+    ctx.lineWidth = 2.2
+    ctx.lineCap = 'round'
+    const lines = [0.9, 0.72, 0.86, 0.55, 0.34]
+    lines.forEach((len, i) => {
+      const y = 20 + i * 13
+      ctx.beginPath()
+      ctx.moveTo(14, y)
+      // a run of small arcs reads as handwriting at any size a straight rule
+      // would read as a form to fill in
+      for (let x = 14; x < 14 + (w - 30) * len; x += 6) {
+        ctx.quadraticCurveTo(x + 3, y - 3, x + 6, y)
+      }
+      ctx.stroke()
+    })
+    ctx.strokeStyle = 'rgba(150,40,40,0.55)'
+    ctx.lineWidth = 3
+    ctx.beginPath()
+    ctx.moveTo(14, 84)
+    ctx.lineTo(60, 84)
+    ctx.stroke()
+  })
+
   const note = new THREE.Mesh(
-    tintGeometry(new THREE.PlaneGeometry(0.062, 0.044), 0xb9ad93),
+    tintGeometry(new THREE.PlaneGeometry(0.07, 0.052), 0xffffff),
     new THREE.MeshStandardMaterial({
-      map: decalTexture(),
-      transparent: true,
+      map: noteTex,
       roughness: 0.95,
       metalness: 0,
       vertexColors: true,
@@ -132,13 +170,16 @@ export function createMonitor({ screenEl, CSS3DObject }) {
   )
   // Positioned by its centre, so half its width has to clear the edge or the
   // note hangs off the panel into the room behind it.
-  note.position.set(-PANEL_W / 2 + 0.012 + 0.031, PANEL_H / 2 - 0.052, PANEL_D / 2 + 0.001)
+  note.position.set(-PANEL_W / 2 + 0.012 + 0.035, PANEL_H / 2 - 0.056, PANEL_D / 2 + 0.001)
   note.rotation.z = -0.07
   note.rotation.y = 0.12
   panel.add(note)
 
-  const tape = box(0.02, 0.008, 0.001, MAT.plastic(0xb0a68f, 0.9))
-  tape.position.set(note.position.x + 0.004, note.position.y + 0.02, PANEL_D / 2 + 0.002)
+  const tapeMat = MAT.plastic(0xb0a68f, 0.9).clone()
+  tapeMat.transparent = true
+  tapeMat.opacity = 0.55
+  const tape = new THREE.Mesh(new THREE.PlaneGeometry(0.024, 0.009), tapeMat)
+  tape.position.set(note.position.x + 0.004, note.position.y + 0.024, PANEL_D / 2 + 0.0022)
   tape.rotation.z = 0.28
   panel.add(tape)
 

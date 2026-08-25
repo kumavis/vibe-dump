@@ -32,8 +32,11 @@ const FOV_ROOM = 52
 // footprint centres.
 const PLACE = {
   monitor: [-0.3, 0.75, -1.28],
-  printer: [0.8, 0.75, -1.1],
-  solder: [-1.05, 0.75, -1.22],
+  // Both of these used to sit out at the ends of a 2.5m desk, which read as two
+  // separate still lifes with a monitor stranded between them. Pulled in, they
+  // become one bench somebody works at.
+  printer: [0.66, 0.75, -1.06],
+  solder: [-0.92, 0.75, -1.16],
   board: [-0.8, 0.75, -0.88],
 }
 
@@ -251,6 +254,29 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   screenBloom.position.copy(pose.position).addScaledVector(pose.normal, 0.006)
   scene.add(screenBloom)
 
+  /**
+   * Tell the panel how much of itself the camera can actually see.
+   *
+   * The scanline overlay is a 4px pattern on a 1440px panel. Once the camera
+   * has pulled back far enough that the whole panel is a hundred pixels wide,
+   * that pattern is being sampled at a fraction of its own frequency and turns
+   * into moire — which, being the highest-contrast thing in a near-black room,
+   * is then the first thing the eye goes to. So it fades out with distance:
+   * present while you can resolve it, gone once it would only be interference.
+   */
+  const _screenMid = new THREE.Vector3()
+  let lastScan = -1
+
+  function updateGlass() {
+    monitor.punch.getWorldPosition(_screenMid)
+    const dist = camera.position.distanceTo(_screenMid)
+    const px = (SCREEN.height * window.innerHeight) / (2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2))
+    const k = THREE.MathUtils.smoothstep(px, window.innerHeight * 0.2, window.innerHeight * 0.62)
+    if (Math.abs(k - lastScan) < 0.01) return
+    lastScan = k
+    osEl.style.setProperty('--glass-scan', k.toFixed(3))
+  }
+
   // --- hover marker -------------------------------------------------------
 
   const marker = glowSprite(PALETTE.gold, 0.012, { core: 0.55, mid: 0.18, halo: 0.05 })
@@ -412,6 +438,7 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
     t += dt
 
     rig.update(dt, t)
+    updateGlass()
     for (const p of parts) p.update?.(dt, t)
     if (root.dataset.mode === 'room') setHover(pick())
 
@@ -609,6 +636,8 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
       osEl.classList.remove('is-embodied')
       osEl.inert = false
       osEl.dataset.embodied = 'false'
+      osEl.style.removeProperty('--glass-scan')
+      lastScan = -1
       homeEl.append(osEl)
       window.lotus?.fit?.()
       restoreState()

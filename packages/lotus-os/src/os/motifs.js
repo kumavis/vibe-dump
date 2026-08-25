@@ -345,11 +345,17 @@ const prangSilhouette = (x, base, h, w) => {
 }
 
 // Off-centre on purpose: a symmetrical skyline would fight the window stack.
+// Every base sits on the waterline at y=798, and the reflection below mirrors
+// about that same line. They have to agree: a temple standing even a few pixels
+// clear of its own reflection reads as floating, which is the one thing a
+// reflection cannot do.
+const WATERLINE = 798
+
 const HORIZON =
-  `<path d="${prangSilhouette(1148, 726, 212, 54)}"/>` +
-  `<path d="${chediSilhouette(1264, 726, 152, 40)}"/>` +
-  `<path d="${chediSilhouette(1056, 726, 104, 30)}"/>` +
-  `<path d="${chediSilhouette(196, 726, 88, 26)}"/>`
+  `<path d="${prangSilhouette(1148, WATERLINE, 212, 54)}"/>` +
+  `<path d="${chediSilhouette(1264, WATERLINE, 152, 40)}"/>` +
+  `<path d="${chediSilhouette(1056, WATERLINE, 104, 30)}"/>` +
+  `<path d="${chediSilhouette(196, WATERLINE, 88, 26)}"/>`
 
 // Mount Meru at the centre of the field, twelve petals to a ring.
 const MANDALA =
@@ -413,7 +419,7 @@ export function wallpaperSVG({ theme = 'dark', ornament = true } = {}) {
     `<rect width="1440" height="900" fill="url(#lo-lattice)" opacity="${night ? '.055' : '.075'}"/>` +
     horizon +
     `<g fill="none" stroke="var(--gold-dim)" stroke-width="2.4" opacity="${night ? '.075' : '.06'}">${MANDALA}</g>` +
-    `<g transform="matrix(1 0 0 -1 0 1524)" opacity="${night ? '.24' : '.2'}">${horizon}</g>` +
+    `<g transform="matrix(1 0 0 -1 0 ${WATERLINE * 2})" opacity="${night ? '.24' : '.2'}">${horizon}</g>` +
     WATER +
     `<rect y="856" width="1440" height="44" fill="url(#lo-border)" opacity="${night ? '.1' : '.13'}"/>` +
     '</svg>'
