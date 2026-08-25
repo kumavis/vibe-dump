@@ -15,6 +15,7 @@ import {
   cyl,
   cable,
   glowSprite,
+  glowTexture,
   contactDarken,
   decalTexture,
   ensureColors,
@@ -53,6 +54,7 @@ const SKIRT_R = 0.032
 const SKIRT_SEG = 56
 const SKIRT_RAD = 4
 const SKIRT_STRIDE = SKIRT_RAD * 6
+const FILAMENT_HEX = 0x532b8e // the spool's own purple. The dust is made of it.
 
 // Radius/height pairs for the spire, bottom to top: a drum on the plinth, a
 // cornice, the bell, the harmika lip, five diminishing rings and the needle.
@@ -102,10 +104,26 @@ const LOOP_RATE = Math.PI * 2 * 1.9 // rad/s around the perimeter
 const PARK_X = -0.062
 const PARK_Y = BED_TOP + 0.055
 
+// --- coming apart -----------------------------------------------------------
+
+const T_EAT = 1.05 // the front falls from the top of the print to the bed
+const T_ATOMISE = 3.0 // ... and by here the last grain has faded out
+const GRAIN_LIFE = 1.9
+const SKIRT_TAIL = 0.012 // how far below the plate the front keeps falling, to take the skirt
+// A draught, not a blast: half a metre of travel over the whole three seconds,
+// left across the bench and a little toward the camera.
+const DRAUGHT_X = -0.17
+const DRAUGHT_Y = 0.055
+const DRAUGHT_Z = 0.06
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5))
+
 const SCREEN_W = 256
 const SCREEN_H = 128
 
 const DESK = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+const GRAIN_HOT = new THREE.Color(PALETTE.violet)
+const GRAIN_COOL = new THREE.Color(FILAMENT_HEX)
+const _grainColor = new THREE.Color()
 const lerp = THREE.MathUtils.lerp
 const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v)
 const smooth = (x) => x * x * x * (x * (x * 6 - 15) + 10)
@@ -145,7 +163,7 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   // canvas that gets redrawn. Everything else comes off the shared bench.
   const clip = new THREE.Plane(new THREE.Vector3(0, -1, 0), -1000)
   const filament = new THREE.MeshStandardMaterial({
-    color: 0x532b8e,
+    color: FILAMENT_HEX,
     roughness: 0.58,
     metalness: 0,
     vertexColors: true,
@@ -626,8 +644,6 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   let servoAt = -10
   let now = 0
   const from = new THREE.Vector3(PARK_X, PARK_Y, 0)
-  let retractFrom = 0
-  let retractSkirt = 0
 
   const tipY = (n) => BED_TOP + (n + 1) * LAYER_H
 
@@ -638,7 +654,8 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
   }
 
   const statusText = () => {
-    if (state === 'retract') return 'CLEARING'
+    if (state === 'atomise') return 'CLEARING'
+    if (state === 'retract') return 'STOPPING'
     if (state === 'print') {
       if (phase === 'warm') return 'HEATING'
       if (phase === 'finish') return 'FINISHING'
@@ -663,7 +680,8 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     sctx.fillText(file, SCREEN_W - 10 - sctx.measureText(file).width, 20)
 
     sctx.font = '600 22px ui-monospace, SFMono-Regular, Menlo, monospace'
-    sctx.fillStyle = status === 'STOPPED' ? '#ff2e88' : status === 'DONE' ? '#ff6fe0' : '#c79bff'
+    sctx.fillStyle =
+      status === 'STOPPED' ? '#ff2e88' : status === 'DONE' ? '#ff6fe0' : status === 'CLEARING' ? '#e040fb' : '#c79bff'
     sctx.fillText(status, 10, 50)
 
     sctx.strokeStyle = '#4a3a6e'
@@ -726,19 +744,197 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     phase = 'idle'
     outcome = 'stopped'
     clock = 0
-    retractFrom = clip.constant
-    // Shrink the skirt from however much of it is down, not from a whole one.
-    // Cancelling while it is still being laid otherwise snaps it to full first
-    // and then pulls it in, which is the opposite of what just happened.
-    retractSkirt = skirtGeo.drawRange.count / SKIRT_STRIDE
     from.set(head.position.x, gantry.position.y, bed.position.z)
     sfx?.play('warn')
     drawScreen()
   }
 
+  // --- the atomiser ---------------------------------------------------------
+  //
+  // Clicking a printer that already has a print on the bed does not start a
+  // second one through it. The one that is there comes apart instead: the
+  // clipping plane that revealed the model layer by layer runs backwards, so
+  // whatever is still standing stays real geometry and only the part that has
+  // already left the model has to be particles.
+
+  const GRAINS = Math.round(1600 * (quality < 1 ? 0.75 : 1))
+  const RING_GRAINS = Math.round(GRAINS * 0.06) // the skirt's share
+  const BODY_GRAINS = GRAINS - RING_GRAINS
+
+  const grainPos = new Float32Array(GRAINS * 3)
+  const grainCol = new Float32Array(GRAINS * 3)
+  const grainBase = new Float32Array(GRAINS * 3) // colour before the fade is applied
+  // Velocity stays a plain array rather than a fourth attribute: nothing in
+  // PointsMaterial reads it, and a buffer the GPU never looks at is still a
+  // buffer the GPU has to be handed every time the cloud moves.
+  const grainVel = new Float32Array(GRAINS * 3)
+  const grainRel = new Float32Array(GRAINS) // the height the front has to fall past
+  const grainBorn = new Float32Array(GRAINS)
+  const grainPhase = new Float32Array(GRAINS)
+
+  const grainPosAttr = new THREE.BufferAttribute(grainPos, 3).setUsage(THREE.DynamicDrawUsage)
+  const grainColAttr = new THREE.BufferAttribute(grainCol, 3).setUsage(THREE.DynamicDrawUsage)
+  const grainGeo = new THREE.BufferGeometry()
+  grainGeo.setAttribute('position', grainPosAttr)
+  grainGeo.setAttribute('color', grainColAttr)
+  grainGeo.setDrawRange(0, 0)
+  // Stated, not computed: the cloud sits on the bed one second and is half a
+  // metre downwind the next, and a sphere fitted to the first frame would cull
+  // the thing exactly as it got interesting.
+  grainGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(-0.15, BED_TOP + 0.12, 0.05), 0.75)
+
+  const grainMat = new THREE.PointsMaterial({
+    size: 0.0032,
+    sizeAttenuation: true,
+    map: glowTexture(),
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.9,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    fog: false,
+  })
+  const grains = new THREE.Points(grainGeo, grainMat)
+  grains.visible = false
+  grains.renderOrder = 4
+  group.add(grains)
+
+  let grainCount = 0
+  let bodyCount = 0
+  let ringCount = 0
+  let freed = 0 // grains the front has passed
+  let dead = 0 // ... and of those, the ones that have finished fading
+  let atomiseTop = 0
+  let atomiseRing = 0
+
+  const seedGrain = (i, x, y, z) => {
+    const i3 = i * 3
+    grainPos[i3] = x
+    grainPos[i3 + 1] = y
+    grainPos[i3 + 2] = z
+    grainVel[i3] = 0
+    grainVel[i3 + 1] = 0
+    grainVel[i3 + 2] = 0
+    grainCol[i3] = 0
+    grainCol[i3 + 1] = 0
+    grainCol[i3 + 2] = 0
+    // Mostly the filament's own purple with a hot violet minority. One colour
+    // reads as a texture; two read as a material coming apart.
+    const m = Math.random()
+    _grainColor.lerpColors(GRAIN_COOL, GRAIN_HOT, m * m * m)
+    const b = 0.5 + Math.random() * 0.8
+    grainBase[i3] = _grainColor.r * b
+    grainBase[i3 + 1] = _grainColor.g * b
+    grainBase[i3 + 2] = _grainColor.b * b
+    grainPhase[i] = Math.random() * Math.PI * 2
+    grainBorn[i] = 0
+  }
+
+  /**
+   * Scatter the buffers over whatever is actually standing on the bed — which
+   * the clipping plane already knows to the layer. Runs once, inside the click,
+   * which is the entire reason the arrays are allocated up here: sixteen
+   * hundred fresh vectors in a click handler is a hitch you can see.
+   */
+  const fillGrains = (topH, ringSegs) => {
+    bodyCount = topH > 0 ? BODY_GRAINS : 0
+    for (let i = 0; i < bodyCount; i++) {
+      // (1 - u)^1.7 spends most of the budget low down, where the surface
+      // actually is. Sampled evenly in height the needle would get as many
+      // grains as the plinth.
+      const h = topH * Math.pow(1 - i / bodyCount, 1.7)
+      grainRel[i] = h
+      // The release height stays exact and only the drawn point wanders, so the
+      // front eats strictly in order while its edge still crumbles.
+      const hh = clamp01((h + (Math.random() - 0.5) * LAYER_H * 1.6) / topH) * topH
+      const a = i * GOLDEN_ANGLE + Math.random() * 0.5
+      const wall = hh <= PLINTH_H ? squareRadius(PLINTH_HALF, a) : sampleRadius(hh)
+      // Some way in from the wall as well as on it, so the cloud has a
+      // thickness instead of being a shed skin.
+      const r = wall * (0.7 + Math.random() * 0.3)
+      seedGrain(i, Math.cos(a) * r, BED_TOP + hh, Math.sin(a) * r)
+    }
+
+    const frac = ringSegs / SKIRT_SEG
+    ringCount = ringSegs > 0 ? Math.max(1, Math.round(RING_GRAINS * frac)) : 0
+    for (let j = 0; j < ringCount; j++) {
+      const i = bodyCount + j
+      // Backwards around the ring, because that is the direction the tube's
+      // draw range retracts and the two have to take away the same length.
+      const a = (1 - (j + 0.5) / ringCount) * frac * Math.PI * 2
+      const r = SKIRT_R * (0.985 + Math.random() * 0.03)
+      grainRel[i] = -SKIRT_TAIL * ((j + 0.5) / ringCount)
+      seedGrain(i, Math.cos(a) * r, BED_TOP + 0.0008 + Math.random() * 0.0006, Math.sin(a) * r)
+    }
+    grainCount = bodyCount + ringCount
+  }
+
+  const releaseGrain = (i) => {
+    const i3 = i * 3
+    grainBorn[i] = clock
+    const x = grainPos[i3]
+    const z = grainPos[i3 + 2]
+    const d = Math.hypot(x, z) || 1
+    // It lets go; it is not fired. Just enough to come off the wall it was.
+    const puff = 0.01 + Math.random() * 0.026
+    grainVel[i3] = (x / d) * puff
+    grainVel[i3 + 1] = 0.01 + Math.random() * 0.04
+    grainVel[i3 + 2] = (z / d) * puff
+  }
+
+  const driftGrains = (dt, t) => {
+    for (let i = dead; i < freed; i++) {
+      const i3 = i * 3
+      const ph = grainPhase[i]
+      // Turbulence, cheaply: two out-of-step sines per grain, so the cloud
+      // shears rather than travelling as one block.
+      const wa = Math.sin(t * 2.3 + ph)
+      const wb = Math.sin(t * 3.7 + ph * 1.7)
+      const k = Math.min(1, dt * 1.5)
+      grainVel[i3] += (DRAUGHT_X * (0.75 + 0.5 * wb) - grainVel[i3]) * k
+      grainVel[i3 + 1] += (DRAUGHT_Y * (0.6 + 0.7 * wa) - grainVel[i3 + 1]) * k
+      grainVel[i3 + 2] += (DRAUGHT_Z * (0.7 + 0.6 * wa) - grainVel[i3 + 2]) * k
+      grainPos[i3] += grainVel[i3] * dt
+      grainPos[i3 + 1] += grainVel[i3 + 1] * dt
+      grainPos[i3 + 2] += grainVel[i3 + 2] * dt
+      // Additive, so dimming the colour is the fade. There is no per-particle
+      // alpha to be had out of PointsMaterial and none is needed.
+      const f = 1 - (clock - grainBorn[i]) / GRAIN_LIFE
+      const a = f <= 0 ? 0 : f * f * (3 - 2 * f)
+      grainCol[i3] = grainBase[i3] * a
+      grainCol[i3 + 1] = grainBase[i3 + 1] * a
+      grainCol[i3 + 2] = grainBase[i3 + 2] * a
+    }
+    // Grains die in the order they were born, so the live ones are always one
+    // contiguous run and the draw range can just walk along behind them.
+    while (dead < freed && clock - grainBorn[dead] >= GRAIN_LIFE) dead++
+    grainGeo.setDrawRange(dead, freed - dead)
+    grainPosAttr.needsUpdate = true
+    grainColAttr.needsUpdate = true
+  }
+
+  const beginAtomise = () => {
+    atomiseTop = Math.min(PRINT_H, clip.constant - baseY)
+    atomiseRing = skirtGeo.drawRange.count / SKIRT_STRIDE
+    fillGrains(atomiseTop, atomiseRing)
+    freed = 0
+    dead = 0
+    grainGeo.setDrawRange(0, 0)
+    grains.visible = true
+    state = 'atomise'
+    phase = 'idle'
+    clock = 0
+    sfx?.play('servo')
+    drawScreen()
+  }
+
   const start = () => {
-    if (state === 'idle') beginPrint()
-    else if (state === 'print') beginRetract()
+    if (state === 'print') beginRetract()
+    else if (state === 'idle') {
+      // A finished print is not something to print through.
+      if (outcome === 'none') beginPrint()
+      else beginAtomise()
+    }
   }
 
   const coolDown = (dt) => {
@@ -756,20 +952,67 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       clock += dt
       const k = clamp01(clock / T_RETRACT)
       const e = smooth(k)
-      // The part sinks back through the bed rather than blinking out. Nothing
-      // a real printer does, but it reads as deliberate instead of as a bug.
-      clip.constant = lerp(retractFrom, baseY - 0.002, e)
-      skirtGeo.setDrawRange(0, Math.floor((1 - k) * retractSkirt) * SKIRT_STRIDE)
-      capRound.visible = false
-      capSquare.visible = false
+      // The stub is left standing. It used to sink back down through the bed,
+      // which was only ever a way of getting rid of it; there is a better one
+      // now, and half a chedi on the plate is a better object than a bare plate.
       setAxes(lerp(from.x, PARK_X, e), lerp(from.y, PARK_Y, e), lerp(from.z, 0, e))
       coolDown(dt)
       if (k >= 1) {
         state = 'idle'
-        clearPrint()
-        layer = -1
+        // Cancelled during the warm-up there is nothing down to clear, and the
+        // next click should print rather than atomise a bare plate.
+        outcome = clip.constant > baseY || skirtGeo.drawRange.count > 0 ? 'stopped' : 'none'
         progress = 0
         sfx?.stopLoop('printer')
+        sfx?.play('latch')
+        drawScreen()
+      }
+    } else if (state === 'atomise') {
+      clock += dt
+      const k = clamp01(clock / T_EAT)
+      // Falling, not rising. The front carries on a little past the plate so
+      // that the tail of it takes the skirt as well.
+      const front = atomiseTop - (atomiseTop + SKIRT_TAIL) * smooth(k)
+      clip.constant = baseY + Math.max(front, -0.002)
+      layer = Math.max(-1, Math.ceil(front / LAYER_H) - 1)
+      progress = 1 - k
+      while (freed < grainCount && grainRel[freed] >= front) releaseGrain(freed++)
+      if (ringCount > 0) {
+        const left = 1 - clamp01((freed - bodyCount) / ringCount)
+        skirtGeo.setDrawRange(0, Math.floor(left * atomiseRing) * SKIRT_STRIDE)
+      }
+      // The top face follows the front down for the same reason it followed it
+      // up: without it you are looking into an open shell.
+      if (front > PLINTH_H) {
+        capRound.visible = true
+        capSquare.visible = false
+        capRound.scale.setScalar(Math.max(0.0008, sampleRadius(front)))
+        capRound.position.y = BED_TOP + front - 0.0004
+      } else if (front > 0) {
+        capSquare.visible = true
+        capRound.visible = false
+        capSquare.position.y = BED_TOP + front - 0.0004
+      } else {
+        capRound.visible = false
+        capSquare.visible = false
+      }
+      driftGrains(dt, t)
+      // servo() rate-limits itself to one burst every half second, so asking
+      // every frame buys two or three hisses across the eat and no more.
+      if (front > 0) servo()
+      setAxes(PARK_X, PARK_Y, 0)
+      coolDown(dt)
+      if (clock >= T_ATOMISE) {
+        state = 'idle'
+        outcome = 'none'
+        layer = -1
+        progress = 0
+        freed = 0
+        dead = 0
+        grainCount = 0
+        grainGeo.setDrawRange(0, 0)
+        grains.visible = false
+        clearPrint()
         sfx?.play('latch')
         drawScreen()
       }
@@ -888,7 +1131,9 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
     tubeAcc += dt
     if (tubeAcc > 1 / 12) {
       tubeAcc = 0
-      if (state !== 'idle') rebuildPtfe()
+      // Only the two states that move the head. During the atomise it is parked
+      // and this would rebuild the same curve three dozen times for nothing.
+      if (state === 'print' || state === 'retract') rebuildPtfe()
     }
 
     screenAcc += dt
@@ -912,8 +1157,13 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       {
         object: hit,
         label: 'Printer',
-        hint: () =>
-          state === 'print' ? 'Printing — click to cancel' : state === 'retract' ? 'Clearing the bed' : 'Start a print',
+        hint: () => {
+          if (state === 'print') return 'Printing — click to cancel'
+          if (state === 'retract') return 'Stopping'
+          if (state === 'atomise') return 'Clearing the bed'
+          if (outcome === 'none') return 'Start a print'
+          return outcome === 'done' ? 'Finished print — click to clear the bed' : 'Cancelled print — click to clear the bed'
+        },
         onClick: start,
       },
     ],
@@ -928,6 +1178,8 @@ export function createPrinter({ sfx = null, quality = 1 } = {}) {
       screenMat.dispose()
       screenTex.dispose()
       hitMat.dispose()
+      grainMat.dispose()
+      grainGeo.dispose()
       latheGeo.dispose()
       skirtGeo.dispose()
       ptfe?.geometry.dispose()
