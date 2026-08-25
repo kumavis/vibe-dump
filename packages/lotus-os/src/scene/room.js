@@ -455,8 +455,17 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   const shelfMat = MAT.wood(PALETTE.plywood)
   const bracketMat = MAT.paint(PALETTE.greyMetal, { rough: 0.62, metal: 0.4 })
 
-  const plank = add(box(1.2, 0.032, 0.24, shelfMat, { dirt: 0.24 }), -1.35, SHELF_Y - 0.016, Z_BACK + 0.12)
-  plank.rotation.y = 0.012
+  // Named, because the plant further down is placed against this rectangle and
+  // its fronds are cut to it. A plank that moved on its own would put leaves
+  // back through the wood.
+  const PLANK_W = 1.2
+  const PLANK_D = 0.24
+  const PLANK_X = -1.35
+  const PLANK_Z = Z_BACK + 0.12
+  const PLANK_YAW = 0.012
+
+  const plank = add(box(PLANK_W, 0.032, PLANK_D, shelfMat, { dirt: 0.24 }), PLANK_X, SHELF_Y - 0.016, PLANK_Z)
+  plank.rotation.y = PLANK_YAW
   contactDarken(plank, [BACK_PLANE], { radius: 0.06, floor: 0.55 })
 
   for (const bx of [-1.78, -0.94]) {
@@ -503,8 +512,19 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   // not the floor plant at sixty percent: that one sprays upward, so this one
   // trails, and one frond is long enough to break the line of the plank —
   // which is the whole reason to put a plant on a shelf rather than beside one.
+  //
+  // Parked at the end of the plank, because the end is the only side of it a
+  // frond has air to fall past, and centred in the 240mm depth, which leaves
+  // 70mm of wood in front of the rim instead of the 40mm that had the pot
+  // reading as one nudge from going over the front.
+  const POT_LX = 0.52 // along the plank from its middle: 30mm of plank still out past the rim
+  const POT_LZ = 0
   const shelfPlant = new THREE.Group()
-  shelfPlant.position.set(-0.97, SHELF_Y, Z_BACK + 0.145)
+  shelfPlant.position.set(
+    PLANK_X + POT_LX * Math.cos(PLANK_YAW) + POT_LZ * Math.sin(PLANK_YAW),
+    SHELF_Y,
+    PLANK_Z - POT_LX * Math.sin(PLANK_YAW) + POT_LZ * Math.cos(PLANK_YAW),
+  )
   jitter(shelfPlant, 0.4, 0.01)
   group.add(shelfPlant)
 
@@ -526,8 +546,16 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   shelfSoil.position.y = 0.058
   shelfPlant.add(shelfSoil)
 
-  // Each frond climbs out of the crown and then falls. The longest two hang
-  // past the front of the plank on purpose.
+  // Each frond climbs out of the crown and then falls. How far it may fall is
+  // decided by which way it points, because the plank top is y = 0 in here: a
+  // frond still over the wood when it comes down to that goes through the wood,
+  // which is what all of them were doing when they all dropped the same 70 to
+  // 150mm. The end of the plank is the only side with air under it, so the end
+  // is the only direction that trails the full length. The wall is the other
+  // thing a frond gets pushed through — it is 114mm behind the pot and a frond
+  // reaches 97mm even when it does not fall at all — so the ones aimed at it
+  // come out standing rather than hanging, which is what a plant against a wall
+  // does anyway.
   //
   // The pot is an open shell: its wall exists only for y in [0, 0.062] and is
   // widest, r = 0.0495, at the rim. Growing from inside the mouth is correct
@@ -539,19 +567,82 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   // a couple of millimetres is not the blade clearing.
   //
   // Hence reach is tied to drop rather than drawn independently: fall further,
-  // hang further out. Swept over the whole parameter range that leaves no
-  // crossing at all, with the blade never coming within 11mm of terracotta.
+  // hang further out. Re-swept over the range the solve below can now hand out,
+  // which is a continuous 0 to 0.27 rather than the two bands it used to be:
+  // no crossing anywhere, the blade 15mm clear of terracotta on its way past
+  // the outside and 31mm clear on its way up out of the mouth. The one thing
+  // that does cross is a blade tessellated so coarsely that its first chord
+  // cuts the corner off the arch and takes the rim with it, which is why the
+  // segment count has a floor under it rather than following quality all the
+  // way down.
   const FRONDS = q > 0.6 ? 7 : 5
   // Cloned because MAT caches by key, and a blade has to be visible from the
   // side the light is not on.
   const shelfLeafMat = MAT.leaf().clone()
   shelfLeafMat.side = THREE.DoubleSide
   const bladeHalf = (t) => 0.0011 + 0.0058 * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.62)), 0.9)
+
+  const CLEAR = 0.009 // air kept under the blade wherever it passes over something
+  const BLADE = 0.0069 // bladeHalf's peak, and it is swept to both sides of the spine
+
+  // How far out a frond is by the time it has fallen to CLEAR: solve y(t) below
+  // for that height, put t back through r(t). Falling harder lands it sooner
+  // but also throws it further out, and out only starts winning at drop = 0.31,
+  // past anything authored here — so over this range the answer only shrinks,
+  // which is what lets a bisection invert it.
+  const landing = (drop, arch) => {
+    const fall = 0.06 + arch - CLEAR
+    if (drop <= fall) return Infinity // never gets down there inside its own length
+    return 0.012 + (0.085 + drop * 0.45) * Math.pow(fall / drop, 1 / 1.6)
+  }
+
+  const dropForRun = (arch, run) => {
+    let lo = 0
+    let hi = 0.27
+    if (landing(hi, arch) >= run) return hi
+    for (let k = 0; k < 20; k++) {
+      const mid = (lo + hi) / 2
+      if (landing(mid, arch) >= run) lo = mid
+      else hi = mid
+    }
+    return lo
+  }
+
+  // Run from the pot to the edge of the plank, in the plank's own frame. The
+  // rectangle is grown by a blade half-width because the blade is swept to
+  // either side of its spine: at a corner the inner edge is still over wood
+  // when the spine is already out over air, and 6mm of that is 9mm of extra
+  // fall at the angle these leave on.
+  const plankRun = (ap) => {
+    const dx = Math.cos(ap)
+    const dz = Math.sin(ap)
+    const tx = dx > 0 ? (PLANK_W / 2 + BLADE - POT_LX) / dx : (-PLANK_W / 2 - BLADE - POT_LX) / dx
+    const tz = dz > 0 ? (PLANK_D / 2 + BLADE - POT_LZ) / dz : (-PLANK_D / 2 - BLADE - POT_LZ) / dz
+    return Math.min(Math.abs(tx), Math.abs(tz))
+  }
+
+  const WALL_GAP = shelfPlant.position.z - Z_BACK - BLADE - CLEAR
+  const FROND_SEGS = Math.max(7, detail(11))
+  // Phased so the fronds with the open end in front of them are the first ones
+  // round. The wander on each was 0.25 and is 0.15 for the same reason: at 0.25
+  // the first one can turn far enough into the wall to lose its fall.
+  const FAN = -0.36
   for (let i = 0; i < FRONDS; i++) {
-    const a = (i / FRONDS) * Math.PI * 2 + rnd(-0.25, 0.25)
-    const drop = i < 2 ? rnd(0.2, 0.27) : rnd(0.07, 0.15)
-    const reach = 0.085 + drop * 0.45
+    const ap = FAN + (i / FRONDS) * Math.PI * 2 + rnd(-0.15, 0.15)
+    // Solved in the plank's frame, so the plank's yaw and the plant's own
+    // jitter both have to come back out of the angle further down.
+    const aw = ap - PLANK_YAW
     const arch = rnd(0.038, 0.048)
+    // A frond reaches 0.097 + 0.45 * drop, all of it at the wall when it points
+    // that way.
+    const byWall = Math.sin(aw) < 0 ? (WALL_GAP / -Math.sin(aw) - 0.097) / 0.45 : Infinity
+    const cap = Math.max(0, Math.min(dropForRun(arch, plankRun(ap)), byWall))
+    // Trail the whole length only where there is room for it. Everywhere else
+    // the frond keeps its tip up, and keeps the shorter reach that goes with a
+    // shorter fall.
+    const drop = Math.min(cap, cap > 0.19 ? rnd(0.2, 0.27) : rnd(0.07, 0.15))
+    const reach = 0.085 + drop * 0.45
+    const a = aw + shelfPlant.rotation.y
     const pts = []
     for (let k = 0; k <= 6; k++) {
       const t = k / 6
@@ -560,7 +651,7 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
       pts.push(new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r))
     }
     const frond = new THREE.Mesh(
-      bladeGeometry(new THREE.CatmullRomCurve3(pts), detail(11), bladeHalf),
+      bladeGeometry(new THREE.CatmullRomCurve3(pts), FROND_SEGS, bladeHalf),
       shelfLeafMat,
     )
     frond.castShadow = true
