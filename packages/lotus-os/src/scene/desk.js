@@ -348,7 +348,12 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   jitter(mugGroup, 0.4, 0.01)
   group.add(mugGroup)
 
-  const mugBody = cyl(0.036, 0.032, 0.098, MAT.plastic(0x35323f, 0.55), detail(14))
+  // Open-topped, and cloned because MAT caches by key: a mug you can see down
+  // is the whole reason the drink can stop being visible. At this size a
+  // zero-thickness wall reads as ceramic, so there is no inner shell.
+  const mugMat = MAT.plastic(0x35323f, 0.55).clone()
+  mugMat.side = THREE.DoubleSide
+  const mugBody = cyl(0.036, 0.032, 0.098, mugMat, detail(14), { open: true })
   mugBody.position.y = 0.049
   mugGroup.add(mugBody)
 
@@ -359,14 +364,18 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   handle.position.set(0.041, 0.052, 0)
   mugGroup.add(handle)
 
-  // Poured recently enough to still be steaming. cyl() builds capped cylinders,
-  // so a disc down at the real liquid line would be sealed under the mug's own
-  // lid: it sits a hair above the rim instead and reads as a full mug, leaving
-  // a 2.5 mm ring of ceramic showing round it.
-  const brew = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.0335, detail(12))), MAT.plastic(0x2a1508, 0.3))
-  brew.rotation.x = -Math.PI / 2
-  brew.position.y = 0.0987
-  mugGroup.add(brew)
+  // What used to be here was a disc of coffee sitting a hair PROUD of the rim,
+  // because cyl() caps its cylinders and a disc at the real liquid line would
+  // have been sealed under the mug's own lid. It read as filled to the brim,
+  // which is the one thing a mug on a desk never is. Now the tube is open and
+  // this is the bottom of the cavity rather than the top of a drink: far enough
+  // down to be in shadow, dark enough to read as shadow, and — the reason it is
+  // at 36mm and not lower — sitting above the steam ribbon's origin at 22mm, so
+  // the point where that ribbon pinches to nothing stays underneath it.
+  const mugFloor = new THREE.Mesh(ensureColors(new THREE.CircleGeometry(0.0335, detail(12))), MAT.plaster(PALETTE.void))
+  mugFloor.rotation.x = -Math.PI / 2
+  mugFloor.position.y = 0.036
+  mugGroup.add(mugFloor)
 
   // --- steam ---------------------------------------------------------------
   //
@@ -786,7 +795,7 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
         // hit-tests against an explicit model or proxy; this one was the
         // exception. Naming the meshes keeps it that way no matter what gets
         // parented to the mug later.
-        objects: [mugBody, handle, brew],
+        objects: [mugBody, handle, mugFloor],
         label: 'Coffee',
         hint: () => (nudged ? 'Still hot' : 'Hot'),
         onClick: nudge,
@@ -798,6 +807,7 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
       // a cached texture, so it has to go separately.
       shadeMat.dispose()
       stainMat.dispose()
+      mugMat.dispose()
       wispMat.dispose()
       wispGeo.dispose()
       lipMat.map.dispose()
