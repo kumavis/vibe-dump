@@ -367,8 +367,8 @@ export function createClock({ sfx = null, quality = 1 } = {}) {
   // light one is hauled up by exactly as much. `dir` is which end each is.
   const weights = []
   const WEIGHT_SPEC = [
-    { x: -0.03, len: 0.086, girth: 0.017, hang: 0.14, rough: 0.45, dir: 1 },
-    { x: 0.03, len: 0.068, girth: 0.0145, hang: 0.205, rough: 0.34, dir: -1 },
+    { x: -0.03, len: 0.086, girth: 0.017, hang: 0.26, rough: 0.45, dir: 1 },
+    { x: 0.03, len: 0.068, girth: 0.0145, hang: 0.4, rough: 0.34, dir: -1 },
   ]
 
   // A full run swaps the two hangs: each stone finishes where the other
