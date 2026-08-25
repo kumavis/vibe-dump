@@ -12,6 +12,7 @@ import { APPS } from './registry.js'
 import { icon } from './icons.js'
 import { el, clear, uid } from './util.js'
 import { markFor } from './motifs.js'
+import { prepareRoom, runReveal } from './reveal.js'
 
 export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer, menuLayer, modalLayer, getScale, sfx }) {
   const prefs = createPrefs(osEl)
@@ -160,6 +161,35 @@ export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer,
 
   let revealing = false
   let workspace = null // the 3D room controller, once it has been paid for
+  let building = null // and the promise for it while it is still being assembled
+
+  // One build, whoever asks first. The prewarm and a double-click that lands
+  // while the prewarm is still in flight have to share a promise: two builds
+  // means two renderers, and the second one takes the desktop out of the first
+  // one's monitor on its way past.
+  function buildRoom() {
+    if (!building) {
+      building = prepareRoom({ shell, osEl })
+        .then((ws) => {
+          workspace = ws
+          return ws
+        })
+        .catch((err) => {
+          // Let a later click try again and report the failure properly.
+          building = null
+          throw err
+        })
+    }
+    return building
+  }
+
+  // Start paying for the room before anyone asks for it. Silent on purpose: at
+  // this point nobody has requested anything, so there is nothing to apologise
+  // for, and a click will hit the same failure and put up the sheet that
+  // explains it.
+  function prewarmRoom() {
+    buildRoom().catch(() => {})
+  }
 
   const bodyFor = (err) => {
     const text = String(err?.message || err)
@@ -180,8 +210,7 @@ export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer,
       // Inside the try: a chunk that fails to arrive — offline, a 404, a CSP
       // block — would otherwise leave `revealing` stuck true and the
       // executable permanently dead, with nothing on screen to say why.
-      const { runReveal } = await import('./reveal.js')
-      workspace = await runReveal({ shell, osEl })
+      workspace = await runReveal({ shell, build: buildRoom })
       return workspace
     } catch (err) {
       console.error('reveal failed', err)
@@ -208,6 +237,7 @@ export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer,
     notify,
     sheet,
     reveal,
+    prewarmRoom,
     get workspace() {
       return workspace
     },

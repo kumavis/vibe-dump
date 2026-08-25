@@ -83,6 +83,16 @@ requestAnimationFrame(() => {
     { width: 528, height: 404, x: clamp(Math.round(w - 528 - 86), 0, w), y: clamp(Math.round(h - 404 - 88), 0, h) },
   )
   osEl.classList.add('is-booted')
+
+  // The room is a few hundred kilobytes and a few hundred milliseconds of
+  // assembly. Spending both here, while the desktop is sitting there doing
+  // nothing and nobody has asked for anything, is what lets reveal.run be a
+  // camera move instead of a loading screen. Idle-scheduled so it cannot get in
+  // front of the desktop becoming interactive, with a timeout so a browser that
+  // never goes idle still gets there.
+  const warm = () => shell.prewarmRoom()
+  if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 2500 })
+  else setTimeout(warm, 1200)
 })
 
 // Handy for poking at the machine from a console, and how the build's
