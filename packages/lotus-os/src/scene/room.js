@@ -104,6 +104,58 @@ const shaftRamp = () =>
     { srgb: false, wrap: THREE.ClampToEdgeWrapping },
   )
 
+/**
+ * A frond as a flat blade swept along a curve, twisting as it goes so it turns
+ * its face to the room somewhere along its length instead of staying edge-on.
+ *
+ * It replaces a TubeGeometry that was flattened by setting scale.y on the MESH,
+ * which flattens the path as well as the section: every y on the curve came out
+ * at forty percent, so a frond authored to leave the soil at 62mm actually left
+ * at 25mm — down inside the pot — and then travelled out through the
+ * terracotta. A ribbon has no section to flatten, so the path you author is the
+ * path you get.
+ */
+function bladeGeometry(curve, segs, halfWidth) {
+  const pos = new Float32Array((segs + 1) * 6)
+  const idx = new Uint16Array(segs * 6)
+  const p = new THREE.Vector3()
+  const tan = new THREE.Vector3()
+  const side = new THREE.Vector3()
+  const up = new THREE.Vector3(0, 1, 0)
+  for (let i = 0; i <= segs; i++) {
+    const t = i / segs
+    curve.getPointAt(t, p)
+    curve.getTangentAt(t, tan)
+    side.crossVectors(tan, up)
+    // Dead vertical: any direction across the fall line will do.
+    if (side.lengthSq() < 1e-8) side.set(1, 0, 0)
+    side.normalize().applyAxisAngle(tan, t * 0.9)
+    const w = halfWidth(t)
+    const o = i * 6
+    pos[o] = p.x - side.x * w
+    pos[o + 1] = p.y - side.y * w
+    pos[o + 2] = p.z - side.z * w
+    pos[o + 3] = p.x + side.x * w
+    pos[o + 4] = p.y + side.y * w
+    pos[o + 5] = p.z + side.z * w
+  }
+  for (let i = 0; i < segs; i++) {
+    const a = i * 2
+    const n = i * 6
+    idx[n] = a
+    idx[n + 1] = a + 1
+    idx[n + 2] = a + 2
+    idx[n + 3] = a + 1
+    idx[n + 4] = a + 3
+    idx[n + 5] = a + 2
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+  g.setIndex(new THREE.BufferAttribute(idx, 1))
+  g.computeVertexNormals()
+  return ensureColors(g)
+}
+
 export function createRoom({ sfx = null, quality = 1 } = {}) {
   const q = THREE.MathUtils.clamp(quality, 0.35, 1)
   const detail = (n) => Math.max(4, Math.round(n * q))
@@ -420,12 +472,25 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
     () => box(0.07, 0.09, 0.07, MAT.paint(PALETTE.wallDark, { rough: 0.5, metal: 0.4, chipped: true, substrate: PALETTE.aluminium })),
     () => new THREE.Mesh(ensureColors(new THREE.TorusGeometry(0.05, 0.014, 5, 10)), MAT.metal(PALETTE.copper, 0.55)),
   ]
-  const shelfSlots = [-1.85, -1.66, -1.44, -1.2, -1.0, -0.83]
+  // Spaced pair by pair from each item's own worst-case half-width, along a
+  // plank running -1.95 to -0.75, so the right-hand end comes free for the
+  // plant. The old layout ran to -0.83 and put the plant at -0.9: the solder
+  // coil is 64mm in outer radius and the pot 49.5mm, so that pair needed
+  // 113.5mm between centres and had 70mm, and the pot grew straight through
+  // the coil.
+  //
+  // Worst case means AFTER the yaw below. Half a radian of it turns the 160mm
+  // crate's 80mm half-width into 96.6mm, which is most of the reason the naive
+  // spacing was not enough. Move anything here and the whole chain has to be
+  // rechecked against both neighbours.
+  const shelfSlots = [-1.89, -1.745, -1.55, -1.38, -1.26, -1.11]
   shelfItems.forEach((make, i) => {
     const item = make()
     if (i === 5) item.rotation.x += Math.PI / 2 // the solder coil lies down
     jitter(item, 0.5, 0.02)
-    item.position.set(shelfSlots[i] + rnd(-0.02, 0.02), 0, Z_BACK + rnd(0.09, 0.16))
+    // Slop along the shelf, tightened from 20mm: the gaps this layout leaves
+    // are around 10mm, and 20mm on each of a pair would close them.
+    item.position.set(shelfSlots[i] + rnd(-0.012, 0.012), 0, Z_BACK + rnd(0.09, 0.16))
     item.updateMatrixWorld(true)
     item.position.y = SHELF_Y - new THREE.Box3().setFromObject(item).min.y - 0.002
     group.add(item)
@@ -439,7 +504,7 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   // trails, and one frond is long enough to break the line of the plank —
   // which is the whole reason to put a plant on a shelf rather than beside one.
   const shelfPlant = new THREE.Group()
-  shelfPlant.position.set(-0.9, SHELF_Y, Z_BACK + 0.145)
+  shelfPlant.position.set(-0.97, SHELF_Y, Z_BACK + 0.145)
   jitter(shelfPlant, 0.4, 0.01)
   group.add(shelfPlant)
 
@@ -461,30 +526,43 @@ export function createRoom({ sfx = null, quality = 1 } = {}) {
   shelfSoil.position.y = 0.058
   shelfPlant.add(shelfSoil)
 
-  // Each frond is a thin strip bent over the pot rim and dropping. The longest
-  // two hang past the front of the plank on purpose.
+  // Each frond climbs out of the crown and then falls. The longest two hang
+  // past the front of the plank on purpose.
+  //
+  // The pot is an open shell: its wall exists only for y in [0, 0.062] and is
+  // widest, r = 0.0495, at the rim. Growing from inside the mouth is correct
+  // and falling past the outside at a big radius is correct; the only real
+  // failure is the blade crossing that wall surface. What causes it is a frond
+  // that drops hard without reaching far, because it comes back down through
+  // rim height while still barely outside the rim radius — and the blade is
+  // 14mm to either side of the line it is swept along, so the spine clearing by
+  // a couple of millimetres is not the blade clearing.
+  //
+  // Hence reach is tied to drop rather than drawn independently: fall further,
+  // hang further out. Swept over the whole parameter range that leaves no
+  // crossing at all, with the blade never coming within 11mm of terracotta.
   const FRONDS = q > 0.6 ? 7 : 5
-  const shelfLeafMat = MAT.leaf()
+  // Cloned because MAT caches by key, and a blade has to be visible from the
+  // side the light is not on.
+  const shelfLeafMat = MAT.leaf().clone()
+  shelfLeafMat.side = THREE.DoubleSide
+  const bladeHalf = (t) => 0.0011 + 0.0058 * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.62)), 0.9)
   for (let i = 0; i < FRONDS; i++) {
     const a = (i / FRONDS) * Math.PI * 2 + rnd(-0.25, 0.25)
     const drop = i < 2 ? rnd(0.2, 0.27) : rnd(0.07, 0.15)
-    const reach = 0.05 + drop * 0.42
+    const reach = 0.085 + drop * 0.45
+    const arch = rnd(0.038, 0.048)
     const pts = []
-    for (let k = 0; k <= 4; k++) {
-      const t = k / 4
-      pts.push(
-        new THREE.Vector3(
-          Math.cos(a) * (0.02 + reach * t),
-          0.062 + Math.sin(t * 1.5) * 0.028 - drop * t * t,
-          Math.sin(a) * (0.02 + reach * t),
-        ),
-      )
+    for (let k = 0; k <= 6; k++) {
+      const t = k / 6
+      const r = 0.012 + reach * Math.pow(t, 1.5)
+      const y = 0.06 + arch * Math.sin(Math.PI * Math.min(t * 1.9, 1) * 0.5) - drop * Math.pow(t, 2.4)
+      pts.push(new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r))
     }
     const frond = new THREE.Mesh(
-      ensureColors(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), detail(7), 0.0075, 4, false)),
+      bladeGeometry(new THREE.CatmullRomCurve3(pts), detail(11), bladeHalf),
       shelfLeafMat,
     )
-    frond.scale.y = 0.4 // flatten the tube into a leaf rather than a stem
     frond.castShadow = true
     shelfPlant.add(frond)
   }
