@@ -10,16 +10,17 @@ const KEY = 'lotus-os.prefs.v1'
 export const ACCENTS = {
   amethyst: { label: 'Amethyst', hue: 276, note: 'House purple. Gold on black lacquer.' },
   orchid: { label: 'Orchid', hue: 310, note: 'Hotter. Pushes toward the neon in the room.' },
+  magenta: { label: 'Magenta', hue: 300, note: 'The sign over the desk, brought indoors.' },
   indigo: { label: 'Indigo', hue: 248, note: 'Cooler and quieter; more night, less shrine.' },
   jade: { label: 'Jade', hue: 158, note: 'Roof-tile green. Gold still holds it together.' },
 }
 
 const DEFAULTS = {
   theme: 'dark', // 'dark' | 'light'
-  accent: 'amethyst',
+  accent: 'magenta',
   ornament: true, // wallpaper lattice + window corner marks
   scanlines: true, // only ever visible once the screen is inside the monitor
-  sound: false, // off until asked for; nobody wants a surprise beep
+  sound: true, // the room has a voice and the point is to hear it
   motion: 'full', // 'full' | 'reduced'
 }
 

@@ -7,7 +7,7 @@
  */
 
 :root {
-  --accent-hue: 276;
+  --accent-hue: 300; /* Magenta — the default; theme.js overrides it per accent */
 
   --screen-w: 1440px;
   --screen-h: 900px;
