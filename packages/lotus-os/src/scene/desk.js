@@ -20,7 +20,6 @@ import {
   tintGeometry,
   ensureColors,
   jitter,
-  glowTexture,
 } from './materials.js'
 
 const TAU = Math.PI * 2
@@ -371,83 +370,165 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
 
   // --- steam ---------------------------------------------------------------
   //
+  // One ribbon, not a particle system. A hundred additive dots over a mug at
+  // this distance read as sensor grain, and no amount of tuning talks them into
+  // being a fluid. This is a single strip lofted along a spine that travels as
+  // a slow wave, so the whole thread snakes as one piece.
+  //
+  // Two strips crossed at right angles share that spine: a flat ribbon is
+  // invisible the moment it turns edge-on, and the reveal camera swings.
+  //
   // Steam in a dark room is not white; it is only wherever the light is. The
   // desk lamp is off to the left of the mug and the monitor washes it in violet
-  // from behind, so each grain is tinted by where it sits between the two and
-  // the plume comes out warm on one side and cold on the other. Additive and
-  // very faint: at the distance the reveal settles on, this should be something
-  // you notice when you look at the coffee, not a feature announcing itself.
-  const STEAM_N = detail(90)
-  const STEAM_RISE = 0.16 // how far up before a grain is spent
-  const steamPos = new Float32Array(STEAM_N * 3)
-  const steamCol = new Float32Array(STEAM_N * 3)
-  const steamAge = new Float32Array(STEAM_N)
-  const steamLife = new Float32Array(STEAM_N)
-  const steamSeed = new Float32Array(STEAM_N)
-  const steamDrift = new Float32Array(STEAM_N)
+  // from behind, so the ribbon is tinted across its own width and comes out
+  // warm on one side and cold on the other. Additive and very faint: at the
+  // distance the reveal settles on, this should be something you notice when
+  // you look at the coffee, not a feature announcing itself.
+  const WISP_ROWS = detail(26)
+  const WISP_COLS = 5 // four quads across, so the width falloff is a curve
+  const WISP_SHEETS = 2
+  const WISP_RISE = 0.2
 
-  for (let i = 0; i < STEAM_N; i++) {
-    steamLife[i] = rnd(2.4, 4.2)
-    // Stagger the whole population on the first frame, or the plume arrives as
-    // one puff and then breathes in unison forever after.
-    steamAge[i] = Math.random() * steamLife[i]
-    steamSeed[i] = Math.random() * TAU
-    steamDrift[i] = rnd(-0.5, 0.5)
+  // Nothing here changes over time; only the spine moves. Baked once and read
+  // every frame so update() can stay arithmetic.
+  const wispV = new Float32Array(WISP_ROWS)
+  const wispY = new Float32Array(WISP_ROWS)
+  const wispHalf = new Float32Array(WISP_ROWS)
+  const wispFade = new Float32Array(WISP_ROWS)
+  for (let r = 0; r < WISP_ROWS; r++) {
+    const v = r / (WISP_ROWS - 1)
+    wispV[r] = v
+    wispY[r] = 0.1 + v * WISP_RISE
+    wispHalf[r] = 0.006 + 0.02 * Math.pow(v, 0.75)
+    // Densest just clear of the surface and gone well before the top, because
+    // a thread of steam dissolves rather than ending.
+    wispFade[r] = Math.min(1, v / 0.08) * Math.pow(1 - v, 1.5)
   }
 
-  const steamGeo = new THREE.BufferGeometry()
-  steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPos, 3).setUsage(THREE.DynamicDrawUsage))
-  steamGeo.setAttribute('color', new THREE.BufferAttribute(steamCol, 3).setUsage(THREE.DynamicDrawUsage))
+  const wispU = new Float32Array(WISP_COLS)
+  const wispEdge = new Float32Array(WISP_COLS)
+  for (let c = 0; c < WISP_COLS; c++) {
+    const across = (c / (WISP_COLS - 1)) * 2 - 1
+    wispU[c] = across
+    // Additive, so this cosine across the width is the soft edge — the strip
+    // dissolves sideways instead of ending on a cut line.
+    wispEdge[c] = Math.cos((across * Math.PI) / 2) ** 1.2
+  }
 
-  const steamMat = new THREE.PointsMaterial({
-    size: 0.026,
-    sizeAttenuation: true,
-    map: glowTexture(),
+  // Both sheets sit at 45 degrees to the desk axes, so neither is ever the one
+  // that has gone flat, and where they cross the thread has a hotter core.
+  const wispAxis = new Float32Array(WISP_SHEETS * 2)
+  for (let s = 0; s < WISP_SHEETS; s++) {
+    const a = Math.PI * (0.25 + s * 0.5)
+    wispAxis[s * 2] = Math.cos(a)
+    wispAxis[s * 2 + 1] = Math.sin(a)
+  }
+
+  const wispVerts = WISP_ROWS * WISP_COLS * WISP_SHEETS
+  const wispPos = new Float32Array(wispVerts * 3)
+  const wispCol = new Float32Array(wispVerts * 3)
+  const wispIdx = new Uint16Array((WISP_ROWS - 1) * (WISP_COLS - 1) * WISP_SHEETS * 6)
+  {
+    let n = 0
+    for (let s = 0; s < WISP_SHEETS; s++) {
+      for (let r = 0; r < WISP_ROWS - 1; r++) {
+        for (let c = 0; c < WISP_COLS - 1; c++) {
+          const a = (s * WISP_ROWS + r) * WISP_COLS + c
+          wispIdx[n++] = a
+          wispIdx[n++] = a + WISP_COLS
+          wispIdx[n++] = a + 1
+          wispIdx[n++] = a + 1
+          wispIdx[n++] = a + WISP_COLS
+          wispIdx[n++] = a + WISP_COLS + 1
+        }
+      }
+    }
+    // Height is fixed per row; the wave only ever moves a vertex sideways.
+    for (let s = 0; s < WISP_SHEETS; s++) {
+      for (let r = 0; r < WISP_ROWS; r++) {
+        for (let c = 0; c < WISP_COLS; c++) {
+          wispPos[((s * WISP_ROWS + r) * WISP_COLS + c) * 3 + 1] = wispY[r]
+        }
+      }
+    }
+  }
+
+  const wispGeo = new THREE.BufferGeometry()
+  wispGeo.setAttribute('position', new THREE.BufferAttribute(wispPos, 3).setUsage(THREE.DynamicDrawUsage))
+  wispGeo.setAttribute('color', new THREE.BufferAttribute(wispCol, 3).setUsage(THREE.DynamicDrawUsage))
+  wispGeo.setIndex(new THREE.BufferAttribute(wispIdx, 1))
+
+  const wispMat = new THREE.MeshBasicMaterial({
     vertexColors: true,
     transparent: true,
-    opacity: 0.2,
+    opacity: 0.15,
     depthWrite: false,
+    side: THREE.DoubleSide,
     blending: THREE.AdditiveBlending,
     fog: false,
   })
-  const steam = new THREE.Points(steamGeo, steamMat)
-  steam.frustumCulled = false
-  steam.renderOrder = 900
-  mugGroup.add(steam)
+  const wisp = new THREE.Mesh(wispGeo, wispMat)
+  // The spine moves every frame, so the bounds computed at build time are a
+  // lie and the mug would flicker out at the edge of frame.
+  wisp.frustumCulled = false
+  wisp.renderOrder = 900
+  // The mug is the Coffee prop. Its steam must never be what the ray hits, and
+  // this flag is what the sweep in scene/index.js keys off.
+  wisp.userData.effect = true
+  wisp.raycast = () => {}
+  mugGroup.add(wisp)
 
-  const STEAM_WARM = new THREE.Color(0xffb23f)
-  const STEAM_COOL = new THREE.Color(0x7a5cff)
-  const _steamTint = new THREE.Color()
+  const WISP_WARM = new THREE.Color(0xffb23f)
+  const WISP_COOL = new THREE.Color(0x7a5cff)
+  const WISP_DR = WISP_WARM.r - WISP_COOL.r
+  const WISP_DG = WISP_WARM.g - WISP_COOL.g
+  const WISP_DB = WISP_WARM.b - WISP_COOL.b
+  // Every room starts its curl somewhere else in the cycle.
+  const wispPhase = rnd(0, TAU)
 
-  function driftSteam(dt, t) {
-    for (let i = 0; i < STEAM_N; i++) {
-      steamAge[i] += dt
-      if (steamAge[i] > steamLife[i]) steamAge[i] -= steamLife[i]
-      const k = steamAge[i] / steamLife[i]
-
-      // Rising and spreading: the cone widens with height and the whole column
-      // leans as it goes, because still air over a hot mug is a thing that
-      // exists in diagrams and not on a desk.
-      const y = 0.1 + k * STEAM_RISE
-      const spread = 0.004 + k * 0.026
-      const wobble = Math.sin(t * 1.4 + steamSeed[i]) * spread * 0.55
-      const i3 = i * 3
-      steamPos[i3] = Math.cos(steamSeed[i]) * spread + wobble + steamDrift[i] * k * 0.03
-      steamPos[i3 + 1] = y
-      steamPos[i3 + 2] = Math.sin(steamSeed[i]) * spread + Math.cos(t * 1.1 + steamSeed[i]) * spread * 0.4
-
-      // In and out at both ends, so nothing pops into existence at the surface
-      // or gets cut off at the top.
-      const fade = Math.min(1, k * 6) * (1 - k) ** 1.6
-      // Left of the mug is the lamp, behind it is the screen.
-      _steamTint.copy(STEAM_COOL).lerp(STEAM_WARM, THREE.MathUtils.clamp(0.5 - steamPos[i3] * 9, 0, 1))
-      steamCol[i3] = _steamTint.r * fade
-      steamCol[i3 + 1] = _steamTint.g * fade
-      steamCol[i3 + 2] = _steamTint.b * fade
+  function swayWisp(t) {
+    for (let r = 0; r < WISP_ROWS; r++) {
+      const v = wispV[r]
+      // Pinned at the surface and freer with height. Two waves that do not
+      // share a period: one alone swings the thread like a rope on a peg, and
+      // it is the beat between them that makes the curl arrive when you are not
+      // watching for it. Both are slow — a full lean takes the best part of
+      // twenty seconds.
+      const lean = v * (0.35 + 0.65 * v)
+      const cx = (Math.sin(v * 4.6 - t * 0.33 + wispPhase) * 0.02 + Math.sin(v * 8.4 - t * 0.21 + wispPhase * 1.7) * 0.009) * lean
+      const cz = (Math.cos(v * 4.2 - t * 0.28 + wispPhase * 0.6) * 0.018 + Math.sin(v * 7.6 - t * 0.23 + wispPhase * 2.3) * 0.008) * lean
+      const half = wispHalf[r]
+      // A swell riding up the thread. Without it the ribbon is a fixed shape
+      // that merely waves, which is the tell.
+      const bright = wispFade[r] * (0.8 + 0.26 * Math.sin(v * 5.2 - t * 0.72 + wispPhase * 1.3))
+      for (let s = 0; s < WISP_SHEETS; s++) {
+        const ax = wispAxis[s * 2]
+        const az = wispAxis[s * 2 + 1]
+        let o = (s * WISP_ROWS + r) * WISP_COLS * 3
+        for (let c = 0; c < WISP_COLS; c++, o += 3) {
+          const off = wispU[c] * half
+          const x = cx + ax * off
+          wispPos[o] = x
+          wispPos[o + 2] = cz + az * off
+          // Left of the mug is the lamp, behind it is the screen. The thread is
+          // only a few centimetres across, so the ramp has to be this steep to
+          // put warm and cold on opposite edges of it rather than tinting the
+          // whole plume one way.
+          const k = THREE.MathUtils.clamp(0.5 - x * 15, 0, 1)
+          const b = bright * wispEdge[c]
+          wispCol[o] = (WISP_COOL.r + WISP_DR * k) * b
+          wispCol[o + 1] = (WISP_COOL.g + WISP_DG * k) * b
+          wispCol[o + 2] = (WISP_COOL.b + WISP_DB * k) * b
+        }
+      }
     }
-    steamGeo.attributes.position.needsUpdate = true
-    steamGeo.attributes.color.needsUpdate = true
+    wispGeo.attributes.position.needsUpdate = true
+    wispGeo.attributes.color.needsUpdate = true
   }
+
+  // Every vertex sits on the axis until the first sway, which is a frame of
+  // zero-area triangles if the first render beats the first update.
+  swayWisp(0)
 
   // The stain is where the mug used to live, which is the only reason a ring
   // on a desk reads as a ring and not as a decal.
@@ -655,7 +736,7 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
   }
 
   const update = (dt, t) => {
-    driftSteam(dt, t)
+    swayWisp(t)
     if (wobble <= 0) return
     wobble = Math.max(0, wobble - dt)
     // Quadratic decay, so it settles rather than stopping dead.
@@ -672,7 +753,15 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
     bulbGlow,
     interactives: [
       {
-        object: mugGroup,
+        // The mug model, not the group. The group also holds the steam, and a
+        // decorative child inside a registered group is how the coffee came to
+        // own the entire screen: three.js raycasts Points against a threshold
+        // that defaults to one world unit, so every ray passing within a metre
+        // of a steam grain was a hit. Every other prop in this room already
+        // hit-tests against an explicit model or proxy; this one was the
+        // exception. Naming the meshes keeps it that way no matter what gets
+        // parented to the mug later.
+        objects: [mugBody, handle, brew],
         label: 'Coffee',
         hint: () => (nudged ? 'Still hot' : 'Hot'),
         onClick: nudge,
@@ -684,8 +773,8 @@ export function createDesk({ sfx = null, quality = 1 } = {}) {
       // a cached texture, so it has to go separately.
       shadeMat.dispose()
       stainMat.dispose()
-      steamMat.dispose()
-      steamGeo.dispose()
+      wispMat.dispose()
+      wispGeo.dispose()
       lipMat.map.dispose()
       lipMat.dispose()
     },
