@@ -178,7 +178,16 @@ body {
   inset: 0;
   background:
     linear-gradient(114deg, transparent 34%, rgba(226, 210, 255, 0.055) 46%, transparent 58%),
-    radial-gradient(ellipse 76% 66% at 50% 46%, transparent 46%, rgba(3, 2, 8, 0.62) 100%);
+    radial-gradient(
+      ellipse 88% 78% at 50% 46%,
+      rgba(3, 2, 8, 0) 0%,
+      rgba(3, 2, 8, 0.02) 32%,
+      rgba(3, 2, 8, 0.08) 52%,
+      rgba(3, 2, 8, 0.18) 68%,
+      rgba(3, 2, 8, 0.33) 82%,
+      rgba(3, 2, 8, 0.5) 92%,
+      rgba(3, 2, 8, 0.66) 100%
+    );
 }
 
 /* --- shared bits --------------------------------------------------------- */

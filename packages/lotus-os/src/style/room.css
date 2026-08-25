@@ -57,7 +57,11 @@
   z-index: 2;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 700ms ease;
+  /* Matches the canvas fade in index.js on the way out. It used to be 700ms
+     against a 420ms wait, so the room was hidden outright while this layer —
+     the vignette included — was still a third of the way up, and it cut to
+     nothing in one frame at exactly the moment the panel was handed back. */
+  transition: opacity 560ms ease;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 .room__hud.is-on {
@@ -124,7 +128,22 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 78% 68% at 50% 46%, rgba(0, 0, 0, 0) 40%, rgba(4, 3, 8, 0.55) 100%);
+  /* Stops follow a cubic, because two stops do not make a vignette. The old
+     pair held flat-transparent out to 40% and only then began to ramp, which
+     put a hard elliptical edge right across the middle of the frame — most
+     visible when the monitor fills it, since the boundary then cuts across the
+     screen. CSS interpolates linearly between stops, so the curve has to be
+     spelled out; alpha here is 0.62 * t^3, which never has a corner in it. */
+  background: radial-gradient(
+    ellipse 92% 84% at 50% 46%,
+    rgba(4, 3, 8, 0) 0%,
+    rgba(4, 3, 8, 0.02) 30%,
+    rgba(4, 3, 8, 0.07) 50%,
+    rgba(4, 3, 8, 0.16) 66%,
+    rgba(4, 3, 8, 0.3) 80%,
+    rgba(4, 3, 8, 0.48) 90%,
+    rgba(4, 3, 8, 0.62) 100%
+  );
 }
 .room__post::after {
   content: "";

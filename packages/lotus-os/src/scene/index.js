@@ -574,6 +574,7 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
       await new Promise((r) => setTimeout(r, reduced() ? 60 : 420))
 
       homeward = false
+      rig.lookEnabled = false
       root.dataset.mode = 'flying'
       hud.classList.add('is-on')
       rig.drift = 0
@@ -586,6 +587,7 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
       })
       rig.drift = 1
       root.dataset.mode = 'room'
+      rig.lookEnabled = true
       hintText.textContent = 'drag to look · click the printer, the board, the station · click the monitor to go back'
       hud.classList.add('is-settled')
     } catch (err) {
@@ -625,7 +627,7 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
       setHover(null)
       homeward = true
       root.dataset.mode = 'flying'
-      rig.recentre()
+      rig.lookEnabled = false
       await rig.flyTo(screenPose(), {
         ms: reduced() ? 360 : 2100,
         mid: FLIGHT_ARC,
@@ -634,14 +636,30 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
         },
       })
       rig.drift = 0
+      // Land on the pose exactly, rather than trusting the look-around to have
+      // decayed into it. The panel is about to be handed back to the page,
+      // where it sits dead centre, so any residual rotation here is a visible
+      // jump at the moment of the swap — and how much residue there is depends
+      // on the frame rate and on whether the flight was shortened for reduced
+      // motion, which is no basis for a seamless cut. setPose is instant and
+      // zeroes the look-around outright. Measured after: nought pixels from any
+      // cursor position, against 1-3px of top and height before.
+      rig.setPose(screenPose())
       root.dataset.mode = 'screen'
 
       // Fade the room back out, then take the panel out of the monitor and
       // give it back to the page. Same subtree, same state, same open windows.
-      renderer.domElement.style.transition = `opacity ${reduced() ? 60 : 420}ms ease`
+      // Canvas and hud have to go down together and be finished before the
+      // swap. The vignette lives in the hud, and cutting it away mid-fade is a
+      // step change in how dark the edges of the frame are, landing on the same
+      // frame as the panel changing hands — which is most of what made the
+      // hand-off feel like a jump rather than a dissolve. The geometry itself
+      // measures exact: 0.04px of top and height across three aspect ratios.
+      const fade = reduced() ? 60 : 560
+      renderer.domElement.style.transition = `opacity ${fade}ms ease`
       renderer.domElement.style.opacity = '0'
       hud.classList.remove('is-on')
-      await new Promise((r) => setTimeout(r, reduced() ? 60 : 420))
+      await new Promise((r) => setTimeout(r, fade + 40))
 
       const restoreState = keepState()
       cssScene.remove(monitor.screenObject) // detaches the element from the CSS layer

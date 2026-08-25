@@ -35,6 +35,11 @@ export function createRig(camera, { getSize }) {
   const look = { yaw: 0, pitch: 0, yawTo: 0, pitchTo: 0 }
   let limits = { yaw: 0.34, pitch: 0.17 }
   let driftAmount = 0
+  // The pointer only gets to push the view while you are actually standing in
+  // the room. Off during the flights and at the screen pose, because the panel
+  // has to land on exactly the pose the DOM copy will be restored to — see the
+  // setter below for what happens when it does not.
+  let lookEnabled = true
   let flight = null
   let dragging = false
   let last = null
@@ -124,12 +129,13 @@ export function createRig(camera, { getSize }) {
 
   function attach(el) {
     const onDown = (ev) => {
-      if (ev.button !== 0) return
+      if (!lookEnabled || ev.button !== 0) return
       dragging = true
       last = { x: ev.clientX, y: ev.clientY }
       el.setPointerCapture?.(ev.pointerId)
     }
     const onMove = (ev) => {
+      if (!lookEnabled) return
       const { width, height } = getSize()
       if (!dragging || !last) {
         // even without a drag, the pointer nudges the view a little
@@ -155,6 +161,7 @@ export function createRig(camera, { getSize }) {
     el.addEventListener('pointerup', onUp)
     el.addEventListener('pointercancel', onUp)
     const onLeave = () => {
+      if (!lookEnabled) return
       look.yawTo = 0
       look.pitchTo = 0
     }
@@ -254,10 +261,31 @@ export function createRig(camera, { getSize }) {
     set limits(v) {
       limits = v
     },
-    /** Snap the look-around back to centre without a jump. */
-    recentre() {
-      look.yawTo = 0
-      look.pitchTo = 0
+    /**
+     * Hand the view back to the code, or give it to the pointer.
+     *
+     * This has to be off for the whole return trip, and it is not enough to
+     * zero the look-around once at the start of it. update() re-pins the rig to
+     * the screen pose every frame while the panel is embodied, and setPose does
+     * clear the look-around — but the easing that runs immediately afterwards
+     * drags it straight back toward wherever the cursor is sitting, half the
+     * remaining distance per frame. So the camera arrives at the screen pose
+     * rotated by up to three and a half degrees of pitch, the panel is a few
+     * pixels off and a few pixels too tall, and handing it back to the page
+     * puts it right in one frame. That is the jump. Measured: cursor centred,
+     * zero; cursor in a corner, the panel lands 2-4px out and 3.7px oversized.
+     */
+    set lookEnabled(v) {
+      lookEnabled = v
+      if (!v) {
+        look.yawTo = 0
+        look.pitchTo = 0
+        dragging = false
+        last = null
+      }
+    },
+    get lookEnabled() {
+      return lookEnabled
     },
   }
 }
