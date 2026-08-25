@@ -170,7 +170,14 @@ export function createMonitor({ screenEl, CSS3DObject }) {
   )
   // Positioned by its centre, so half its width has to clear the edge or the
   // note hangs off the panel into the room behind it.
-  note.position.set(-PANEL_W / 2 + 0.012 + 0.035, PANEL_H / 2 - 0.056, PANEL_D / 2 + 0.001)
+  //
+  // It has to sit in FRONT of the punch plane. The punch writes depth, and the
+  // hole it opens is where the CSS3D desktop shows through — so a note behind
+  // it is a note behind the running OS, which is what it looked like. The
+  // bezel is 24mm and the note is 70mm, so there is nowhere to put it that
+  // does not cross the screen: tape it over the corner, the way people do.
+  // Nothing is lost, because the panel is inert while it is in the monitor.
+  note.position.set(-PANEL_W / 2 + 0.040, PANEL_H / 2 - 0.048, PANEL_D / 2 + 0.0045)
   note.rotation.z = -0.07
   note.rotation.y = 0.12
   panel.add(note)
@@ -179,7 +186,7 @@ export function createMonitor({ screenEl, CSS3DObject }) {
   tapeMat.transparent = true
   tapeMat.opacity = 0.55
   const tape = new THREE.Mesh(new THREE.PlaneGeometry(0.024, 0.009), tapeMat)
-  tape.position.set(note.position.x + 0.004, note.position.y + 0.024, PANEL_D / 2 + 0.0022)
+  tape.position.set(note.position.x + 0.004, note.position.y + 0.024, PANEL_D / 2 + 0.0052)
   tape.rotation.z = 0.28
   panel.add(tape)
 

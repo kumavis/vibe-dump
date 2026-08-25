@@ -334,6 +334,9 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   // --- interaction --------------------------------------------------------
 
   const raycaster = new THREE.Raycaster()
+  // Only matters for anything the sweep below misses; the default of 1 is a
+  // metre, which is most of the room.
+  raycaster.params.Points.threshold = 0.004
   const pointer = new THREE.Vector2()
   let hovered = null
   let pressAt = null
@@ -345,6 +348,21 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   for (const it of interactives) {
     if (it.objects) hitObjects.push(...it.objects)
     else if (it.object) hitObjects.push(it.object)
+  }
+
+  // Effect objects live inside the prop groups that get registered as
+  // interactive, and they are catastrophically generous about being hit.
+  // three.js raycasts Points against raycaster.params.Points.threshold, which
+  // defaults to one WORLD UNIT: in a room three metres across, every ray that
+  // passes within a metre of a steam particle counts as a hit on the coffee,
+  // which is to say the entire screen does. Sprites are similarly loose.
+  // Neither is ever the thing somebody meant to click, so take the whole class
+  // out of the hit test rather than tuning a threshold that only papers over it.
+  const noRaycast = () => {}
+  for (const o of hitObjects) {
+    o.traverse((child) => {
+      if (child.isPoints || child.isSprite || child.userData.effect) child.raycast = noRaycast
+    })
   }
 
   function findInteractive(object) {
