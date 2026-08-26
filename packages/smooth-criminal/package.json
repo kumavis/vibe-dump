@@ -12,6 +12,14 @@
   },
   "gallery": {
     "title": "Smooth Criminal",
-    "description": "A stick man in a white top hat runs the whole routine on a loop — hat tilt, toe spin, the anti-gravity lean, moonwalk — on a lit speakeasy diorama under a turntable camera. Three.js."
+    "description": "A stick man in a white top hat runs the whole routine on a loop — hat tilt, toe spin, the anti-gravity lean, moonwalk — on a lit speakeasy diorama under a turntable camera. Three.js.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

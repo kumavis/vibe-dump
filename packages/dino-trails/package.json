@@ -13,6 +13,15 @@
   },
   "gallery": {
     "title": "Dino Trails",
-    "description": "Territory-and-footfall dinosaur tycoon on procedurally carved parkland: guests walk real trails, money follows the footsteps, and rare dinos hit the market on a countdown. Three.js."
+    "description": "Territory-and-footfall dinosaur tycoon on procedurally carved parkland: guests walk real trails, money follows the footsteps, and rare dinos hit the market on a countdown. Three.js.",
+    "tags": [
+      "game",
+      "simulation"
+    ],
+    "status": "done",
+    "models": [
+      "Fable 5"
+    ],
+    "thinking": "unknown"
   }
 }

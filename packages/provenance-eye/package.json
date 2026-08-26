@@ -12,6 +12,14 @@
   },
   "gallery": {
     "title": "Eye of Provenance",
-    "description": "A thick golden eye-in-triangle rides a cloud. When it closes, sunbeams and petals bloom behind it — and once in a while it goes alien, sprouts tentacles, and winks. Three.js."
+    "description": "A thick golden eye-in-triangle rides a cloud. When it closes, sunbeams and petals bloom behind it — and once in a while it goes alien, sprouts tentacles, and winks. Three.js.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Fable 5"
+    ],
+    "thinking": "unknown"
   }
 }

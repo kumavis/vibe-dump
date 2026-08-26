@@ -7,6 +7,14 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Onsen Winter",
-    "description": "A low-poly winter onsen diorama where lantern light glows through rising steam as day melts into night."
+    "description": "A low-poly winter onsen diorama where lantern light glows through rising steam as day melts into night.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

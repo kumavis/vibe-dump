@@ -7,6 +7,15 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Saucer Synth",
-    "description": "A hovering alien saucer you play like an instrument — its glowing ports are a pentatonic Web Audio synth."
+    "description": "A hovering alien saucer you play like an instrument — its glowing ports are a pentatonic Web Audio synth.",
+    "tags": [
+      "art",
+      "kids"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

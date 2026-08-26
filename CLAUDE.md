@@ -49,10 +49,16 @@ Pick a `slug` (kebab-case, e.g. `particle-pond`). It becomes the directory name
      "scripts": { "dev": "vite", "build": "vite build" },
      "gallery": {
        "title": "Particle Pond",
-       "description": "One-line pitch shown on the gallery card."
+       "description": "One-line pitch shown on the gallery card.",
+       "tags": ["art"],
+       "status": "wip",
+       "models": ["Opus 5"],
+       "thinking": "high"
      }
    }
    ```
+
+   See **Gallery metadata** below for what goes in the four new fields.
 
 2. **Create `packages/<slug>/vite.config.js`** — always re-export the shared
    config (it sets `base: './'` so the app works under the Pages sub-path):
@@ -90,6 +96,38 @@ Pick a `slug` (kebab-case, e.g. `particle-pond`). It becomes the directory name
    see the section below for the ones that come out blank.
 
 That's the whole wiring. The "N and counting" tagline updates itself.
+
+## Gallery metadata
+
+Beyond `title` and `description`, each package's `gallery` field carries four
+things the grid uses. The vocabularies live in `scripts/apps.mjs`; the gallery
+build warns about a value outside them, because a tag with no chip quietly drops
+the app out of every filtered view.
+
+| field      | values                                              |
+| ---------- | --------------------------------------------------- |
+| `tags`     | any of `game`, `simulation`, `art`, `kids`, `tutorial` — one or more |
+| `status`   | `done` or `wip` (a `wip` card gets a badge)          |
+| `models`   | the model(s) that built it, e.g. `["Opus 4.8", "Opus 5"]`; `[]` if unrecorded |
+| `thinking` | `low` / `medium` / `high` / `max`, or `unknown`      |
+
+The filter chips are OR **within** a group and AND **across** them, so `art` +
+`wip` means unfinished art things. The selection lives in the URL fragment —
+`/vibe-dump/#art,wip` opens straight into that view.
+
+`models` was backfilled from the `Co-Authored-By` trailers in each package's
+own commits:
+
+```bash
+git log --format="%b" -- packages/<slug> | grep -oE "Claude (Opus|Sonnet|Haiku|Fable) [0-9.]+" | sort -u
+```
+
+Five apps predate that convention and have no trailer at all (`brick-crew`,
+`eclipse-iceland-clear-skies`, `flute-machine`, `ideographic-ink`,
+`sloshing-os`), so their `models` is `[]`. **Nothing in the history records
+thinking level**, so every app starts at `"unknown"` — it has to be filled in by
+hand by whoever remembers. A card renders neither line when it doesn't know, so
+an unrecorded app reads as silent rather than as the word "unknown".
 
 ## Two kinds of app
 

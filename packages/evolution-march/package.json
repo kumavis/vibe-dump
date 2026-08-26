@@ -6,6 +6,15 @@
   "scripts": { "dev": "vite", "build": "vite build" },
   "gallery": {
     "title": "Evolution March",
-    "description": "A cartoony auto-scrolling journey from primordial soup to a solar-punk future."
+    "description": "A cartoony auto-scrolling journey from primordial soup to a solar-punk future.",
+    "tags": [
+      "art",
+      "kids"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

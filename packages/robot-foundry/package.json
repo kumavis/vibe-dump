@@ -7,6 +7,15 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Robot Foundry",
-    "description": "Self-replicating cube robots scavenge blocks and build new robots that join the hunt."
+    "description": "Self-replicating cube robots scavenge blocks and build new robots that join the hunt.",
+    "tags": [
+      "simulation"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8",
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

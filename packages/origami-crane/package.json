@@ -12,6 +12,14 @@
   },
   "gallery": {
     "title": "Origami Crane",
-    "description": "A square of paper folds itself into a crane, step by step, under a slow turntable camera. Three.js."
+    "description": "A square of paper folds itself into a crane, step by step, under a slow turntable camera. Three.js.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

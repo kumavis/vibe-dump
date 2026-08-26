@@ -6,6 +6,15 @@
   "scripts": { "dev": "vite", "build": "vite build" },
   "gallery": {
     "title": "Token Foundry",
-    "description": "A Factorio-like about running an LLM inference company: tokenize prompts, prefill them into KV-cache blocks, belt the cache to bandwidth-bound decode pods, sell output tokens — then scrape data, train bigger checkpoints, and keep the megawatts and cooling ahead of the batch size."
+    "description": "A Factorio-like about running an LLM inference company: tokenize prompts, prefill them into KV-cache blocks, belt the cache to bandwidth-bound decode pods, sell output tokens — then scrape data, train bigger checkpoints, and keep the megawatts and cooling ahead of the batch size.",
+    "tags": [
+      "game",
+      "simulation"
+    ],
+    "status": "done",
+    "models": [
+      "Fable 5"
+    ],
+    "thinking": "unknown"
   }
 }

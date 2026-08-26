@@ -11,7 +11,15 @@
   },
   "gallery": {
     "title": "mewlang",
-    "description": "A tiny functional language evaluated by equality saturation: programs compile to a propagator network of e-graph cells, animated round by round with an interactive tutorial."
+    "description": "A tiny functional language evaluated by equality saturation: programs compile to a propagator network of e-graph cells, animated round by round with an interactive tutorial.",
+    "tags": [
+      "tutorial"
+    ],
+    "status": "done",
+    "models": [
+      "Fable 5"
+    ],
+    "thinking": "unknown"
   },
   "dependencies": {
     "@codemirror/commands": "^6.6.0",

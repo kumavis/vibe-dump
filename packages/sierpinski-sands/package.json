@@ -12,6 +12,14 @@
   },
   "gallery": {
     "title": "Sierpinski Sands",
-    "description": "An ancient stepped pyramid hauls itself out of the desert, then rumbles one level deeper into recursion each time — sheets of sand pouring off its ledges while a polygonal sphinx keeps watch through the heat haze. Three.js."
+    "description": "An ancient stepped pyramid hauls itself out of the desert, then rumbles one level deeper into recursion each time — sheets of sand pouring off its ledges while a polygonal sphinx keeps watch through the heat haze. Three.js.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

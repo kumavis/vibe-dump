@@ -9,6 +9,14 @@
   },
   "gallery": {
     "title": "Mirror Field",
-    "description": "An instanced grid of reflective mirror plates that tilt to animated heightfields, with lasers that ray-trace and bounce off the surface. Three.js + bloom, fully self-contained."
+    "description": "An instanced grid of reflective mirror plates that tilt to animated heightfields, with lasers that ray-trace and bounce off the surface. Three.js + bloom, fully self-contained.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

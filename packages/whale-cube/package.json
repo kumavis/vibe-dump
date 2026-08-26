@@ -12,6 +12,15 @@
   },
   "gallery": {
     "title": "Whale Cube",
-    "description": "A pod of whales drifts and dives inside a glassy cube of water, under a slow turntable camera. Three.js."
+    "description": "A pod of whales drifts and dives inside a glassy cube of water, under a slow turntable camera. Three.js.",
+    "tags": [
+      "art",
+      "kids"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

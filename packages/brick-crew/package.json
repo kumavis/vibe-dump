@@ -7,6 +7,12 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Brick Crew",
-    "description": "Hard-hat robots haul bricks by hand and barrow to raise a house — click the site trailer to unroll the blueprints."
+    "description": "Hard-hat robots haul bricks by hand and barrow to raise a house — click the site trailer to unroll the blueprints.",
+    "tags": [
+      "simulation"
+    ],
+    "status": "done",
+    "models": [],
+    "thinking": "unknown"
   }
 }

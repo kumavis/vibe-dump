@@ -31,6 +31,10 @@ vibe-dump/
 2. `npm run build:gallery` copies each app into `dist/<name>/` along with its
    committed `thumbnail.jpg`, and writes a gallery `dist/index.html` — a tight
    grid of thumbnail + title + description, each card linking to the app.
+   Cards carry tags (`game` · `simulation` · `art` · `kids` · `tutorial`), a
+   `wip`/`done` status and the model that built them, and the grid filters on
+   them — the chips are OR within a group and AND across them, and the choice
+   lives in the URL, so `/vibe-dump/#art,wip` is a shareable filtered view.
 3. The combined `dist/` is published to GitHub Pages by the workflow.
 
 Card thumbnails are **captured once by hand and committed**, not generated on

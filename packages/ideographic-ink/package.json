@@ -9,6 +9,12 @@
   },
   "gallery": {
     "title": "Ideographic Ink",
-    "description": "CSS text-box-trim has two values only Japanese fonts can answer — ideographic and ideographic-ink. An interactive tour of the em box, the character face, and the animations you get once you read those metrics yourself."
+    "description": "CSS text-box-trim has two values only Japanese fonts can answer — ideographic and ideographic-ink. An interactive tour of the em box, the character face, and the animations you get once you read those metrics yourself.",
+    "tags": [
+      "tutorial"
+    ],
+    "status": "done",
+    "models": [],
+    "thinking": "unknown"
   }
 }

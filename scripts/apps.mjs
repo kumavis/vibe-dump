@@ -15,6 +15,21 @@ export const THUMBNAIL = 'thumbnail.jpg'
 // aspect ratio, so changing it means changing `.thumb` in the gallery CSS too.
 export const SHOT = { width: 1280, height: 800 }
 
+// The tag vocabulary the gallery filter offers, in the order the chips appear.
+// An app declares any subset in its `gallery.tags`; the gallery build warns
+// about anything outside this list, since a stray tag has no chip to match it
+// and would quietly drop the app out of every filtered view.
+export const TAGS = ['game', 'simulation', 'art', 'kids', 'tutorial']
+
+// Every app is either finished or still being poked at. Anything else is a typo.
+export const STATUSES = ['done', 'wip']
+
+// Which model(s) built an app, and how hard they were told to think. Recovered
+// from the Co-Authored-By trailers in each package's commits where they exist;
+// nothing in the history records thinking level, so those start as "unknown"
+// and are filled in by hand.
+export const THINKING = ['unknown', 'low', 'medium', 'high', 'max']
+
 // Discover every package under packages/. `built` says whether `vite build` has
 // run for it; `hasThumbnail` whether a committed thumbnail sits alongside it.
 export async function discoverApps() {
@@ -37,6 +52,10 @@ export async function discoverApps() {
       hasThumbnail: existsSync(thumbnail),
       title: meta.title ?? entry.name,
       description: meta.description ?? '',
+      tags: meta.tags ?? [],
+      status: meta.status ?? 'done',
+      models: meta.models ?? [],
+      thinking: meta.thinking ?? 'unknown',
       // Optional per-app thumbnail tuning, for apps that don't put their best
       // face forward on their own:
       //   "gallery": { "thumbnail": { "waitFor": "!#boot", "click": "#x", "settle": 2000 } }
