@@ -9,6 +9,7 @@
   },
   "gallery": {
     "title": "Space Goblin",
-    "description": "A procedurally rigged, skinned space goblin sprints and fights across an alien flat — every bone, texture, strap and cape simulated from math alone."
+    "description": "A procedurally rigged, skinned space goblin sprints and fights across an alien flat — every bone, texture, strap and cape simulated from math alone.",
+    "thumbnail": { "waitFor": "!#boot", "settle": 3000 }
   }
 }

@@ -25,9 +25,17 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        env:
+          # Thumbnails are captured by hand (`npm run thumbnails`) and committed,
+          # so CI never launches a browser. Playwright has no postinstall hook at
+          # the pinned version; this makes sure a future bump can't quietly put a
+          # browser download back into the build.
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
 
       - name: Build apps + gallery
         run: npm run build
+
+      # A new app whose thumbnail was never captured would silently ship a text
+      # placeholder card, so fail the PR instead of the gallery.
+      - name: Check every app has a committed thumbnail
+        run: npm run thumbnails -- --check

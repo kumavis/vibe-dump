@@ -1,7 +1,7 @@
 # CLAUDE.md — working in this repo
 
 `vibe-dump` is an **npm-workspaces monorepo** of tiny static web apps. Each app
-is one package under `packages/`. A build step screenshots every app and emits a
+is one package under `packages/`. A build step collects every app and emits a
 gallery (`dist/index.html`) that's deployed to GitHub Pages.
 
 This file is the playbook for adding a new app. Follow it top to bottom.
@@ -9,14 +9,24 @@ This file is the playbook for adding a new app. Follow it top to bottom.
 ## How the build fits together
 
 ```
-npm run build
+npm run build                                    (no browser — safe in CI)
 ├─ build:apps      → vite build in every package  → packages/<name>/dist/
 └─ build:gallery   → scripts/build-gallery.mjs
                      • copies each packages/<name>/dist into dist/<name>/
-                     • screenshots each app with Playwright → dist/<name>/screenshot.png
+                     • copies the committed packages/<name>/thumbnail.jpg beside it
                      • renders the grid dist/index.html from each package's
                        `gallery` field (title + description)
+
+npm run thumbnails                               (needs a browser — run by hand)
+└─ scripts/thumbnails.mjs
+   • screenshots each app with Playwright → packages/<name>/thumbnail.jpg
+   • you commit the result
 ```
+
+Thumbnails are captured **once, by hand, after developing an app** and committed
+to the repo. The build and both CI workflows never launch a browser — a deploy
+just copies the committed image. That keeps CI fast and deterministic, and means
+a card can't silently change because a screenshot landed on a different frame.
 
 The gallery is **auto-discovered**: any package with a built `dist/index.html`
 shows up. There is **no central registry to edit** — wiring up a new app means
@@ -67,6 +77,18 @@ Pick a `slug` (kebab-case, e.g. `particle-pond`). It becomes the directory name
 
    Confirm the new card appears in the gallery and its app loads.
 
+6. **Shoot the thumbnail and commit it** — a new app has no card image until
+   you do, and PR CI fails on the missing one:
+
+   ```bash
+   npm run thumbnails                 # shoots only apps with no thumbnail yet
+   npm run build:gallery              # re-render the grid with the new card
+   git add packages/<slug>/thumbnail.jpg
+   ```
+
+   **Look at the result** (`packages/<slug>/thumbnail.jpg`) before committing —
+   see the section below for the ones that come out blank.
+
 That's the whole wiring. The "N and counting" tagline updates itself.
 
 ## Two kinds of app
@@ -79,22 +101,53 @@ That's the whole wiring. The "N and counting" tagline updates itself.
   offline file (no CDN `<script src>`/importmap) so Pages has zero external
   requests.
 
-## Screenshots (Playwright) — important gotcha
+## Thumbnails (Playwright) — important gotchas
 
-`build:gallery` screenshots each app with Playwright's Chromium.
+`npm run thumbnails` shoots `packages/<slug>/thumbnail.jpg` with Playwright's
+Chromium. It's a **local, by-hand step** — never CI. Apps must be built first,
+because it shoots the real `dist/` output, not the dev server.
 
-- **In CI** the workflow runs `npx playwright install --with-deps chromium`, so
-  it just works.
-- **Locally / in this container** Playwright's downloaded browser may not match
-  a pre-installed one. Point it at the pre-installed Chromium via env var:
+```bash
+npm run thumbnails                  # only the apps that have no thumbnail yet
+npm run thumbnails -- <slug>...     # re-shoot specific apps
+npm run thumbnails -- --all         # re-shoot everything
+npm run thumbnails -- --check       # list apps missing one (exit 1) — this is what CI runs
+```
+
+- **Point it at the pre-installed Chromium.** Playwright's downloaded browser
+  may not match the one this container has:
 
   ```bash
-  CHROMIUM_PATH=/opt/pw-browsers/chromium-<build>/chrome-linux/chrome npm run build
+  CHROMIUM_PATH=/opt/pw-browsers/chromium-<build>/chrome-linux/chrome npm run thumbnails
   ```
 
-  Find the path with `ls /opt/pw-browsers`. If no browser is available the
-  build still succeeds — the gallery just falls back to text placeholders
-  instead of screenshots (see `scripts/build-gallery.mjs`).
+  Find the path with `ls /opt/pw-browsers`. Unlike the old in-build screenshot
+  pass, a missing browser is a hard error here — you asked for thumbnails, so
+  silently producing none would be worse than failing.
+
+- **The shot is taken 1200 ms after the page settles, at DPR 2**, written out
+  at CSS size (1280×800) via Playwright's `scale: 'css'`. Several apps time
+  their opening move against that exact 1200 ms (grep `1200 ms` under
+  `packages/`) and at least one picks its render resolution off DPR 2 — so
+  don't change either without re-shooting everything and looking at it.
+
+- **Slow-booting apps need a hint.** `space-goblin` spends ~20 s sculpting its
+  rig under SwiftShader, so a plain delay caught its loading bar. Declare what
+  "ready" means instead — `waitFor` takes a selector, prefixed with `!` to wait
+  for it to *leave*:
+
+  ```json
+  "gallery": {
+    "title": "Space Goblin",
+    "description": "...",
+    "thumbnail": { "waitFor": "!#boot", "settle": 3000 }
+  }
+  ```
+
+- **Apps that fetch live data** (`eclipse-iceland-clear-skies` pulls forecasts)
+  shoot fine but with empty data panels when the sandbox has no outbound
+  network. That's cosmetic at card size; re-shoot on a networked machine if it
+  matters.
 
 WebGL/Three.js apps screenshot fine (headless Chromium uses SwiftShader).
 
@@ -114,6 +167,8 @@ above. Keep provenance in the commit message (link the source PR).
 ## Conventions
 
 - Don't commit build output — `dist/` and `packages/*/dist/` are gitignored.
+  `packages/*/thumbnail.jpg` is the one generated file that **is** committed:
+  it's an input to the build, not output of it.
 - Keep each app self-contained in its own package; no cross-package imports.
 - Commit `package-lock.json` (CI uses `npm ci`). Always commit lockfile
   changes in a **separate commit** from the code change — never mix a

@@ -1,108 +1,33 @@
-import { readFile, readdir, mkdir, rm, cp, writeFile } from 'node:fs/promises'
-import { existsSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import { dirname, join } from 'node:path'
-import { startStaticServer } from './static-server.mjs'
+import { mkdir, rm, cp, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { discoverApps, outDir, THUMBNAIL, SHOT } from './apps.mjs'
 
-const root = dirname(dirname(fileURLToPath(import.meta.url)))
-const packagesDir = join(root, 'packages')
-const outDir = join(root, 'dist')
-
-const SHOT = { width: 1280, height: 800 }
-
-// 1. Discover every built package (a package with a dist/ directory).
-async function discoverApps() {
-  const entries = await readdir(packagesDir, { withFileTypes: true })
-  const apps = []
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue
-    const pkgDir = join(packagesDir, entry.name)
-    const distDir = join(pkgDir, 'dist')
-    if (!existsSync(join(distDir, 'index.html'))) {
-      console.warn(`! Skipping "${entry.name}" — no dist/index.html (did it build?)`)
-      continue
-    }
-    const pkg = JSON.parse(await readFile(join(pkgDir, 'package.json'), 'utf8'))
-    const meta = pkg.gallery ?? {}
-    apps.push({
-      slug: entry.name,
-      distDir,
-      title: meta.title ?? entry.name,
-      description: meta.description ?? '',
-    })
-  }
-  apps.sort((a, b) => a.title.localeCompare(b.title))
-  return apps
-}
-
-// 2. Assemble the combined site: dist/<slug>/ for each app.
+// Assemble the combined site: dist/<slug>/ for each app, plus its committed
+// thumbnail. No browser involved — thumbnails are captured out of band by
+// `npm run thumbnails` and live in the repo.
 async function assemble(apps) {
   await rm(outDir, { recursive: true, force: true })
   await mkdir(outDir, { recursive: true })
+  const withThumbnail = new Set()
   for (const app of apps) {
     await cp(app.distDir, join(outDir, app.slug), { recursive: true })
-  }
-}
-
-// 3. Screenshot each app. Returns the set of slugs that got a real screenshot.
-async function screenshot(apps) {
-  let chromium
-  try {
-    ;({ chromium } = await import('playwright'))
-  } catch {
-    console.warn('! Playwright not installed — generating gallery without screenshots.')
-    return new Set()
-  }
-
-  const { url, close } = await startStaticServer(outDir)
-  let browser
-  const captured = new Set()
-  // Allow pointing at a pre-installed browser (e.g. CI images that ship one)
-  // instead of the version Playwright would download for itself.
-  const executablePath = process.env.CHROMIUM_PATH || undefined
-  try {
-    try {
-      browser = await chromium.launch({ executablePath })
-    } catch (err) {
-      console.warn(`! Could not launch Chromium — gallery will use text placeholders.\n  ${err.message}`)
-      await close()
-      return captured
+    if (app.hasThumbnail) {
+      await cp(app.thumbnail, join(outDir, app.slug, THUMBNAIL))
+      withThumbnail.add(app.slug)
     }
-    const context = await browser.newContext({
-      viewport: SHOT,
-      deviceScaleFactor: 2,
-    })
-    for (const app of apps) {
-      const page = await context.newPage()
-      try {
-        await page.goto(`${url}/${app.slug}/`, { waitUntil: 'networkidle', timeout: 15000 })
-        // Give animations a moment to paint something interesting.
-        await page.waitForTimeout(1200)
-        await page.screenshot({ path: join(outDir, app.slug, 'screenshot.png') })
-        captured.add(app.slug)
-        console.log(`  ✓ shot ${app.slug}`)
-      } catch (err) {
-        console.warn(`  ! failed to shoot ${app.slug}: ${err.message}`)
-      } finally {
-        await page.close()
-      }
-    }
-  } finally {
-    if (browser) await browser.close()
-    await close()
   }
-  return captured
+  return withThumbnail
 }
 
 const escapeHtml = (s) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
 
-// 4. Render the gallery index.html.
-function renderGallery(apps, captured) {
+// Render the gallery index.html.
+function renderGallery(apps, withThumbnail) {
   const cards = apps
     .map((app) => {
-      const thumb = captured.has(app.slug)
-        ? `<img class="thumb" src="./${app.slug}/screenshot.png" alt="Screenshot of ${escapeHtml(app.title)}" loading="lazy" />`
+      const thumb = withThumbnail.has(app.slug)
+        ? `<img class="thumb" src="./${app.slug}/${THUMBNAIL}" alt="Screenshot of ${escapeHtml(app.title)}" loading="lazy" />`
         : `<div class="thumb thumb--empty">${escapeHtml(app.title)}</div>`
       return `      <a class="card" href="./${app.slug}/">
         ${thumb}
@@ -212,7 +137,7 @@ body {
 .thumb {
   display: block;
   width: 100%;
-  aspect-ratio: 1280 / 800;
+  aspect-ratio: ${SHOT.width} / ${SHOT.height};
   object-fit: cover;
   background: #0b0c1e;
   border-bottom: 1px solid var(--border);
@@ -252,16 +177,27 @@ body {
 
 async function main() {
   console.log('Building gallery...')
-  const apps = await discoverApps()
+  const all = await discoverApps()
+  for (const app of all.filter((a) => !a.built)) {
+    console.warn(`! Skipping "${app.slug}" — no dist/index.html (did it build?)`)
+  }
+  const apps = all.filter((a) => a.built)
   if (apps.length === 0) {
     throw new Error('No built apps found. Run "npm run build:apps" first.')
   }
   console.log(`Found ${apps.length} app(s): ${apps.map((a) => a.slug).join(', ')}`)
 
-  await assemble(apps)
-  const captured = await screenshot(apps)
+  const missing = apps.filter((a) => !a.hasThumbnail)
+  if (missing.length > 0) {
+    console.warn(
+      `! No committed ${THUMBNAIL} for: ${missing.map((a) => a.slug).join(', ')}\n` +
+        '  Those cards fall back to a text placeholder. Run "npm run thumbnails" and commit the result.',
+    )
+  }
 
-  await writeFile(join(outDir, 'index.html'), renderGallery(apps, captured))
+  const withThumbnail = await assemble(apps)
+
+  await writeFile(join(outDir, 'index.html'), renderGallery(apps, withThumbnail))
   await writeFile(join(outDir, 'gallery.css'), GALLERY_CSS)
   // Disable Jekyll so GitHub Pages serves files/dirs starting with "_" verbatim.
   await writeFile(join(outDir, '.nojekyll'), '')
