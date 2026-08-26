@@ -556,12 +556,6 @@ const els = {
   nav: document.getElementById('nav'),
   panelclose: document.getElementById('panelclose'),
   paneltoggle: document.getElementById('paneltoggle'),
-  tbN: document.getElementById('tb-n'),
-  tbM: document.getElementById('tb-m'),
-  tbGb: document.getElementById('tb-gb'),
-  tbCap: document.getElementById('tb-cap'),
-  tbCap2: document.getElementById('tb-cap2'),
-  tbBack: document.getElementById('tb-back'),
 }
 
 /** Read the chrome's real size so the camera fit and mobile insets stay honest. */
@@ -587,13 +581,9 @@ let N = 9
 let seed = 1 << (N >> 1) // the classic single lit cell
 let collapse = false
 
-// The graph needs one node per state, so it is bounded by memory, not patience:
-// a 28-cell ring is 268 million states. The spacetime view has no such limit.
-const MAX_GRAPH_N = 16
-
 // Hand-picked rules worth looking at, then the record-holders for each stat —
 // which depend on ring size, so they are found live rather than hardcoded.
-const CURATED = [153, 151, 154, 169, 172, 182, 118, 22, 120, 133]
+const CURATED = [153, 151, 154, 169, 172, 182, 118, 133]
 const STAT_KEYS = ['nComp', 'maxCycle', 'fixedPoints', 'maxDist', 'edenCount']
 const extremesByN = new Map()
 let tourPos = -1
@@ -653,9 +643,8 @@ function drawSeed() {
   els.seedbits.innerHTML = bits
 
   const { transient, period } = drawSpacetime(els.spacetime, rule, N, seed)
-  els.seedfate.textContent =
-    transient < 0 ? 'orbit longer than 50k steps'
-    : transient === 0 ? `already on a period-${period} cycle`
+  els.seedfate.textContent = transient === 0
+    ? `already on a period-${period} cycle`
     : `falls in after ${transient}, then period ${period}`
   updateSeedMark()
 }
@@ -673,19 +662,6 @@ function update({ rebuild = true } = {}) {
   drawSeed()
   if (!rebuild) return
 
-  if (N > MAX_GRAPH_N) {
-    // Don't even analyse: the successor map alone would be a gigabyte.
-    clearTimeout(timer)
-    els.loading.classList.remove('show')
-    disposeGraph()
-    setHover(-1)
-    updateSeedMark()
-    showTooBig()
-    needsRender = true
-    return
-  }
-  document.body.classList.remove('too-big')
-
   els.loading.classList.add('show')
   clearTimeout(timer)
   timer = setTimeout(() => {
@@ -694,21 +670,6 @@ function update({ rebuild = true } = {}) {
     buildGraph(a)
     els.loading.classList.remove('show')
   }, 16)
-}
-
-function showTooBig() {
-  const states = 2 ** N
-  // succ + positions + colours + line positions + line colours + dist + compOf
-  const gb = (states * 84) / 1e9
-  els.tbN.textContent = N
-  els.tbM.textContent = states.toLocaleString()
-  els.tbGb.textContent = gb >= 10 ? Math.round(gb) : gb.toFixed(1)
-  els.tbCap.textContent = MAX_GRAPH_N
-  els.tbCap2.textContent = MAX_GRAPH_N
-  els.stats.innerHTML =
-    `<div class="stat wide"><div class="k">graph statistics</div>` +
-    `<div class="note">need the whole state space; unavailable past ${MAX_GRAPH_N} cells</div></div>`
-  document.body.classList.add('too-big')
 }
 
 /** A new rule deserves a fresh vantage point, so re-roll the spacetime seed. */
@@ -763,11 +724,6 @@ els.collapse.addEventListener('change', () => { collapse = els.collapse.checked;
 
 els.panelclose.addEventListener('click', () => setPanel(false))
 els.paneltoggle.addEventListener('click', () => setPanel(true))
-els.tbBack.addEventListener('click', () => {
-  els.width.value = MAX_GRAPH_N
-  els.width.dispatchEvent(new Event('input'))
-  els.width.dispatchEvent(new Event('change'))
-})
 
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return
