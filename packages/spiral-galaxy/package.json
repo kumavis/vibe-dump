@@ -9,8 +9,8 @@
     "title": "Spiral Galaxy",
     "description": "A rotating particle galaxy with a hungry black hole, supernovae, and a tour of procedural worlds.",
     "tags": [
-      "art",
-      "simulation"
+      "simulation",
+      "art"
     ],
     "status": "done",
     "models": [
