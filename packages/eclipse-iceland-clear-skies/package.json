@@ -9,6 +9,7 @@
     "title": "Eclipse Clear Skies",
     "description": "Live clear-sky forecaster for the 12 Aug 2026 total solar eclipse over western Iceland: exact per-location totality times computed from NASA's Besselian elements, blended multi-model cloud forecasts at each spot's own mid-eclipse minute, live doppler radar and IR satellite overlays, and a ranked list of the best places to stand — refreshing itself as new model runs land.",
     "tags": [
+      "tool",
       "tutorial"
     ],
     "status": "done",

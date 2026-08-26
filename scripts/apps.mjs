@@ -1,5 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
@@ -19,7 +20,7 @@ export const SHOT = { width: 1280, height: 800 }
 // An app declares any subset in its `gallery.tags`; the gallery build warns
 // about anything outside this list, since a stray tag has no chip to match it
 // and would quietly drop the app out of every filtered view.
-export const TAGS = ['game', 'simulation', 'art', 'kids', 'tutorial']
+export const TAGS = ['game', 'simulation', 'tool', 'art', 'kids', 'tutorial']
 
 // Every app is either finished or still being poked at. Anything else is a typo.
 export const STATUSES = ['done', 'wip']
@@ -30,9 +31,57 @@ export const STATUSES = ['done', 'wip']
 // and are filled in by hand.
 export const THINKING = ['unknown', 'low', 'medium', 'high', 'max']
 
+// When each package first appeared, so the gallery can lead with the newest.
+// Read out of the history rather than a hand-maintained field — the date an app
+// landed is a fact git already knows, and one nobody would remember to update.
+//
+// One `git log` for the whole tree, oldest first, so the first time a slug shows
+// up is the commit that added it. A shallow clone (or no git at all) simply
+// doesn't know, and the caller falls back to alphabetical.
+function addedDates() {
+  const dates = new Map()
+  let out
+  try {
+    out = execFileSync(
+      'git',
+      ['log', '--diff-filter=A', '--reverse', '--format=%aI', '--name-only', '--', 'packages/'],
+      { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 32 * 1024 * 1024 },
+    )
+  } catch {
+    return dates
+  }
+  let date = null
+  for (const line of out.split('\n')) {
+    if (line === '') continue
+    if (line.startsWith('packages/')) {
+      const slug = line.split('/')[1]
+      if (slug && !dates.has(slug)) dates.set(slug, date)
+    } else {
+      date = line
+    }
+  }
+  return dates
+}
+
+// Problems with an app's declared metadata, as a flat list of sentences. The
+// gallery build prints these as warnings for fast local feedback; `npm run
+// verify` treats them as failures, because that's the gate a PR has to pass.
+export function metaProblems(apps) {
+  const problems = []
+  for (const app of apps) {
+    const stray = app.tags.filter((t) => !TAGS.includes(t))
+    if (stray.length > 0) problems.push(`"${app.slug}" has unknown tag(s): ${stray.join(', ')}`)
+    if (app.tags.length === 0) problems.push(`"${app.slug}" has no tags`)
+    if (!STATUSES.includes(app.status)) problems.push(`"${app.slug}" has unknown status "${app.status}"`)
+    if (!THINKING.includes(app.thinking)) problems.push(`"${app.slug}" has unknown thinking "${app.thinking}"`)
+  }
+  return problems
+}
+
 // Discover every package under packages/. `built` says whether `vite build` has
 // run for it; `hasThumbnail` whether a committed thumbnail sits alongside it.
 export async function discoverApps() {
+  const added = addedDates()
   const entries = await readdir(packagesDir, { withFileTypes: true })
   const apps = []
   for (const entry of entries) {
@@ -48,6 +97,7 @@ export async function discoverApps() {
       pkgDir,
       distDir,
       thumbnail,
+      added: added.get(entry.name) ?? null,
       built: existsSync(join(distDir, 'index.html')),
       hasThumbnail: existsSync(thumbnail),
       title: meta.title ?? entry.name,
@@ -67,6 +117,9 @@ export async function discoverApps() {
       click: meta.thumbnail?.click,
     })
   }
-  apps.sort((a, b) => a.title.localeCompare(b.title))
+  // Newest first. Eight apps arrived in the same monorepo import and share a
+  // timestamp to the second, so title breaks the tie and the order stays stable
+  // between builds instead of drifting with readdir.
+  apps.sort((a, b) => (b.added ?? '').localeCompare(a.added ?? '') || a.title.localeCompare(b.title))
   return apps
 }

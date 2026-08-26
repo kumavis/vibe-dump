@@ -13,6 +13,7 @@
     "build:gallery": "node scripts/build-gallery.mjs",
     "build": "npm run build:apps && npm run build:gallery",
     "thumbnails": "node scripts/thumbnails.mjs",
+    "verify": "node scripts/verify.mjs",
     "preview": "node scripts/serve.mjs dist",
     "clean": "node scripts/clean.mjs"
   },

@@ -1,8 +1,11 @@
-name: CI build check
+name: CI check
 
-# Verify the whole monorepo builds (apps + screenshot gallery) on every PR,
-# so a branch can't merge into main unless `npm run build` succeeds. This job
-# only builds — it never deploys (that's deploy.yml's job on push to main).
+# Check that the committed dist/ still matches the packages, on every PR.
+#
+# This job deliberately builds nothing. The apps are built by hand and dist/ is
+# committed with the PR (see "Adding a vibe" in README.md), so CI's only job is
+# to catch a PR that changed an app and forgot to rebuild. Building all of them
+# here would get slower with every vibe added; this stays flat.
 on:
   pull_request:
     branches:
@@ -13,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,21 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
-        env:
-          # Thumbnails are captured by hand (`npm run thumbnails`) and committed,
-          # so CI never launches a browser. Playwright has no postinstall hook at
-          # the pinned version; this makes sure a future bump can't quietly put a
-          # browser download back into the build.
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
-
-      - name: Build apps + gallery
-        run: npm run build
-
-      # A new app whose thumbnail was never captured would silently ship a text
-      # placeholder card, so fail the PR instead of the gallery.
-      - name: Check every app has a committed thumbnail
-        run: npm run thumbnails -- --check
+      # No npm install: scripts/verify.mjs is node builtins only.
+      - name: Verify dist/ is in step with packages/
+        run: npm run verify

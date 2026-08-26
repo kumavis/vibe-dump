@@ -15,6 +15,7 @@
     "description": "Browse all 256 elementary cellular-automata rules and fly through the 3-D state-transition graph of each — attractors, basins, and the transient trees that feed them. Three.js.",
     "tags": [
       "simulation",
+      "tool",
       "tutorial"
     ],
     "status": "done",

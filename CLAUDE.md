@@ -9,28 +9,42 @@ This file is the playbook for adding a new app. Follow it top to bottom.
 ## How the build fits together
 
 ```
-npm run build                                    (no browser — safe in CI)
+npm run build                                    (by hand — output is committed)
 ├─ build:apps      → vite build in every package  → packages/<name>/dist/
 └─ build:gallery   → scripts/build-gallery.mjs
                      • copies each packages/<name>/dist into dist/<name>/
                      • copies the committed packages/<name>/thumbnail.jpg beside it
                      • renders the grid dist/index.html from each package's
-                       `gallery` field (title + description)
+                       `gallery` field, newest vibe first
 
 npm run thumbnails                               (needs a browser — run by hand)
 └─ scripts/thumbnails.mjs
    • screenshots each app with Playwright → packages/<name>/thumbnail.jpg
    • you commit the result
+
+npm run verify                                   (what CI runs — builds nothing)
+└─ scripts/verify.mjs
+   • checks the committed dist/ still matches packages/
 ```
 
-Thumbnails are captured **once, by hand, after developing an app** and committed
-to the repo. The build and both CI workflows never launch a browser — a deploy
-just copies the committed image. That keeps CI fast and deterministic, and means
-a card can't silently change because a screenshot landed on a different frame.
+**Nothing is built in CI.** Two generated things are produced by hand and
+committed, because both got more expensive with every vibe added:
+
+- **`dist/`** — the assembled gallery. `deploy.yml` publishes the committed copy
+  with no Node, no npm and no build; `ci.yml` runs `npm run verify` and nothing
+  else. So the last step before pushing is always `npm run build` + commit
+  `dist/`. Vite output is deterministic, so an app you didn't touch rebuilds
+  byte-identical and doesn't show up in the diff.
+- **`packages/<name>/thumbnail.jpg`** — captured once after developing an app.
+  A card can't silently change because a screenshot landed on a different frame.
 
 The gallery is **auto-discovered**: any package with a built `dist/index.html`
 shows up. There is **no central registry to edit** — wiring up a new app means
 creating the package correctly, nothing more.
+
+The full contributor workflow — create, iterate, shoot, prepare the PR — is in
+[README.md](./README.md#working-on-a-vibe). What follows is the checklist form
+plus the gotchas that only bite when you're deep in it.
 
 ## Add a new package — checklist
 
@@ -83,30 +97,38 @@ Pick a `slug` (kebab-case, e.g. `particle-pond`). It becomes the directory name
 
    Confirm the new card appears in the gallery and its app loads.
 
-6. **Shoot the thumbnail and commit it** — a new app has no card image until
-   you do, and PR CI fails on the missing one:
+6. **Shoot the thumbnail** — a new app has no card image until you do, and
+   `npm run verify` fails on the missing one:
 
    ```bash
    npm run thumbnails                 # shoots only apps with no thumbnail yet
-   npm run build:gallery              # re-render the grid with the new card
-   git add packages/<slug>/thumbnail.jpg
    ```
 
-   **Look at the result** (`packages/<slug>/thumbnail.jpg`) before committing —
-   see the section below for the ones that come out blank.
+   **Look at the result** (`packages/<slug>/thumbnail.jpg`) before moving on —
+   see the section below for the ones that come out blank, and for the
+   `waitFor` / `click` / `settle` knobs that fix them.
+
+7. **Rebuild and commit the built gallery** — `dist/` is committed, so a PR that
+   adds an app but not its built output fails CI:
+
+   ```bash
+   npm run build                      # apps + gallery, with the new card in it
+   npm run verify                     # the exact check CI runs
+   git add packages/<slug> dist
+   ```
 
 That's the whole wiring. The "N and counting" tagline updates itself.
 
 ## Gallery metadata
 
 Beyond `title` and `description`, each package's `gallery` field carries four
-things the grid uses. The vocabularies live in `scripts/apps.mjs`; the gallery
-build warns about a value outside them, because a tag with no chip quietly drops
-the app out of every filtered view.
+things the grid uses. The vocabularies live in `scripts/apps.mjs`. The gallery
+build warns about a value outside them and `npm run verify` fails on it, because
+a tag with no chip quietly drops the app out of every filtered view.
 
 | field      | values                                              |
 | ---------- | --------------------------------------------------- |
-| `tags`     | any of `game`, `simulation`, `art`, `kids`, `tutorial` — one or more |
+| `tags`     | any of `game`, `simulation`, `tool`, `art`, `kids`, `tutorial` — one or more |
 | `status`   | `done` or `wip` (a `wip` card gets a badge)          |
 | `models`   | the model(s) that built it, e.g. `["Opus 4.8", "Opus 5"]`; `[]` if unrecorded |
 | `thinking` | `low` / `medium` / `high` / `max`, or `unknown`      |
@@ -149,7 +171,7 @@ because it shoots the real `dist/` output, not the dev server.
 npm run thumbnails                  # only the apps that have no thumbnail yet
 npm run thumbnails -- <slug>...     # re-shoot specific apps
 npm run thumbnails -- --all         # re-shoot everything
-npm run thumbnails -- --check       # list apps missing one (exit 1) — this is what CI runs
+npm run thumbnails -- --check       # list apps missing one (exit 1)
 ```
 
 - **Point it at the pre-installed Chromium.** Playwright's downloaded browser
@@ -217,11 +239,14 @@ above. Keep provenance in the commit message (link the source PR).
 
 ## Conventions
 
-- Don't commit build output — `dist/` and `packages/*/dist/` are gitignored.
-  `packages/*/thumbnail.jpg` is the one generated file that **is** committed:
-  it's an input to the build, not output of it.
+- **`dist/` is committed** — it's what Pages deploys, and CI builds nothing.
+  Always finish with `npm run build && npm run verify` before pushing.
+  `packages/*/dist/` stays gitignored: it's the intermediate `dist/` is
+  assembled from, not the deployable.
+- `packages/*/thumbnail.jpg` is committed too — an input to the build rather
+  than output of it.
 - Keep each app self-contained in its own package; no cross-package imports.
-- Commit `package-lock.json` (CI uses `npm ci`). Always commit lockfile
+- Commit `package-lock.json`. Always commit lockfile
   changes in a **separate commit** from the code change — never mix a
   `package-lock.json` update into a commit that also touches app code. This
   keeps diffs readable and makes lockfile-only changes (and rebase/merge

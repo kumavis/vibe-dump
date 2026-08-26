@@ -1,6 +1,6 @@
 import { mkdir, rm, cp, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { discoverApps, outDir, THUMBNAIL, SHOT, TAGS, STATUSES } from './apps.mjs'
+import { discoverApps, metaProblems, outDir, THUMBNAIL, SHOT, TAGS } from './apps.mjs'
 
 // Assemble the combined site: dist/<slug>/ for each app, plus its committed
 // thumbnail. No browser involved — thumbnails are captured out of band by
@@ -381,11 +381,16 @@ async function main() {
 
   // A tag with no chip, or a status the filter doesn't know, would quietly drop
   // an app out of every filtered view — so say so rather than shipping it.
-  for (const app of apps) {
-    const strayTags = app.tags.filter((t) => !TAGS.includes(t))
-    if (strayTags.length > 0) console.warn(`! "${app.slug}" has unknown tag(s): ${strayTags.join(', ')}`)
-    if (!STATUSES.includes(app.status)) console.warn(`! "${app.slug}" has unknown status "${app.status}"`)
-    if (app.tags.length === 0) console.warn(`! "${app.slug}" has no tags`)
+  // `npm run verify` fails on the same list; here it's just a fast heads-up.
+  for (const problem of metaProblems(apps)) console.warn(`! ${problem}`)
+
+  // Cards are ordered newest first off the git history. A shallow clone has no
+  // history to read, and would silently ship an alphabetical gallery.
+  if (apps.every((a) => !a.added)) {
+    throw new Error(
+      'Could not read when any package was added, so the gallery cannot be ordered newest first.\n' +
+        'This is a shallow clone or not a git checkout — run "git fetch --unshallow" and build again.',
+    )
   }
 
   const missing = apps.filter((a) => !a.hasThumbnail)
