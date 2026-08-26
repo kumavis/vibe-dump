@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>SloshOS — a Frutiger Aero toy desktop</title>
+  <script type="module" crossorigin src="./assets/index-DuTsMfQB.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-C36doESU.css">
+</head>
+<body>
+  <!-- goo filter for the lava-globule notification toasts -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b" />
+        <feColorMatrix in="b" mode="matrix"
+          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11" result="g" />
+        <feComposite in="SourceGraphic" in2="g" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+
+  <canvas id="sky"></canvas>
+  <canvas id="tube-bg"></canvas>
+
+  <div id="menubar">
+    <span class="logo"><span class="drop">💧</span> SloshOS</span>
+    <span class="menu-item">Liquids</span>
+    <span class="menu-item">Ducks</span>
+    <span class="menu-item">Weird</span>
+    <span class="spacer"></span>
+    <span id="menu-clock">--:--</span>
+  </div>
+
+  <div id="desktop"></div>
+
+  <div id="toast-goo"></div>
+  <div id="toast-text"></div>
+
+  <div id="dock-wrap">
+    <canvas id="dock-tube"></canvas>
+    <div id="dock-icons"></div>
+  </div>
+
+</body>
+</html>

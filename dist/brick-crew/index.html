@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brick Crew</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%A7%B1%3C/text%3E%3C/svg%3E" />
+    <script type="module" crossorigin src="./assets/index-BNvH55gB.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D5Q-a58W.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene"></canvas>
+
+      <!-- HUD -->
+      <header class="hud bar" id="hud">
+        <span class="brand">BRICK<i>CREW</i></span>
+        <span class="chip" id="chip-shift"><b id="shift-no">SHIFT 1</b> <span id="crew-name">—</span></span>
+        <span class="chip" id="chip-clock">CHANGEOVER <b id="shift-left">5:00</b></span>
+        <span class="chip" id="chip-phase">—</span>
+        <span class="chip" id="chip-eta">ETA <b id="eta">--</b></span>
+        <span class="chip mono" id="chip-day">DAY 1</span>
+        <span class="grow"></span>
+        <span class="chip" id="chip-crew">👷 <b id="on-site">0</b></span>
+      </header>
+
+      <div class="hud progress" id="progress">
+        <div class="progress-track"><i id="progress-fill"></i></div>
+        <div class="progress-text"><span id="progress-count">0 / 0</span><span id="progress-rate">0.0 /min</span></div>
+      </div>
+
+      <aside class="hud legend" id="legend">
+        <div><span class="dot d-haul"></span>haulers load pallets and tip out on the stack</div>
+        <div><span class="dot d-lay"></span>masons draw from the stack and lay the course</div>
+        <div><span class="dot d-shift"></span>whole crew swaps out every five minutes</div>
+      </aside>
+
+      <button class="hint" id="hint" type="button">Click the <b>site office</b> for the blueprints</button>
+
+      <!-- shift-change / topped-out banner -->
+      <div class="banner" id="banner" aria-live="polite">
+        <div class="banner-stripes"></div>
+        <div class="banner-inner">
+          <strong id="banner-text">SHIFT CHANGE</strong>
+          <small id="banner-sub"></small>
+        </div>
+      </div>
+
+      <!-- the blueprint sheet -->
+      <div class="sheet-backdrop" id="sheet-backdrop"></div>
+      <div class="sheet-stage" id="sheet-stage" role="dialog" aria-label="Blueprints">
+        <div class="sheet-wrap" id="sheet-wrap">
+          <div class="sheet-clip" id="sheet-clip">
+            <canvas id="sheet-canvas"></canvas>
+            <div class="sheet-deckle"></div>
+          </div>
+          <div class="sheet-roll" id="sheet-roll">
+            <div class="roll-band"></div>
+            <div class="roll-band r2"></div>
+          </div>
+          <button class="sheet-close" id="sheet-close" type="button" aria-label="Close">✕</button>
+        </div>
+      </div>
+
+      <!-- loading -->
+      <div id="loading">
+        <div class="load-plate">
+          <div class="load-title">BRICK CREW</div>
+          <div class="load-sub" id="load-sub">signing on…</div>
+          <div class="load-bar"><i id="load-fill"></i></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
