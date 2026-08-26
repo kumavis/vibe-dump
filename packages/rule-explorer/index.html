@@ -38,7 +38,7 @@
         <section class="controls">
           <label class="row">
             <span>ring size <b id="widthval">9</b> cells <span class="hint" id="statecount"></span></span>
-            <input id="width" type="range" min="4" max="16" step="1" value="9" />
+            <input id="width" type="range" min="4" max="28" step="1" value="9" />
           </label>
           <label class="row toggle">
             <input id="autorotate" type="checkbox" checked />
@@ -100,6 +100,16 @@
         </div>
       </div>
     </nav>
+
+    <div id="toobig">
+      <p class="big">Ring too large to graph</p>
+      <p>A <b id="tb-n">28</b>-cell ring has <b id="tb-m">268,435,456</b> states, and the
+         graph needs a node for every one — roughly <b id="tb-gb">22</b> GB. It draws up
+         to <b id="tb-cap">16</b> cells.</p>
+      <p class="lede">The spacetime view runs at any size, and this is where rule 110's
+         gliders live: ring sizes that are multiples of 14 carry its ether.</p>
+      <button id="tb-back">back to <span id="tb-cap2">16</span> cells</button>
+    </div>
 
     <div id="loading">building state graph…</div>
     <div id="tip" role="status" aria-live="polite"></div>

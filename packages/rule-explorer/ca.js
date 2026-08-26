@@ -185,24 +185,41 @@ function indegOriginal(rev, s) {
 }
 
 /**
- * Follow a seed state until it repeats, which it always must: the state space is
- * finite and the rule deterministic. Returns how many steps are spent falling
- * (transient) and the length of the cycle it lands in (period).
+ * Follow a seed until it repeats, which it always must: the state space is finite
+ * and the rule deterministic. Returns the steps spent falling (transient) and the
+ * length of the cycle it lands in (period).
+ *
+ * Brent's cycle detection: constant memory, so it still works at ring sizes
+ * where a visited array of 2^N entries would be gigabytes. A trajectory can also
+ * be astronomically long at those sizes, so it gives up after `budget` steps and
+ * reports -1 rather than hanging.
  */
-// Reused across calls: dragging the seed slider calls this on every input event,
-// and at N=16 a fresh buffer each time is a quarter-megabyte of garbage per event.
-let seenBuf = null
-export function trajectoryInfo(seed, N, table) {
-  const R = 1 << N
-  if (!seenBuf || seenBuf.length < R) seenBuf = new Int32Array(R)
-  const seen = seenBuf
-  seen.fill(-1, 0, R)
-  let s = seed
-  for (let t = 0; ; t++) {
-    if (seen[s] >= 0) return { transient: seen[s], period: t - seen[s] }
-    seen[s] = t
-    s = stepState(s, N, table)
+export function trajectoryInfo(seed, N, table, budget = 50000) {
+  let steps = 0
+  const unknown = { transient: -1, period: -1 }
+
+  let power = 1
+  let period = 1
+  let tortoise = seed
+  let hare = stepState(seed, N, table)
+  while (tortoise !== hare) {
+    if (++steps > budget) return unknown
+    if (power === period) { tortoise = hare; power *= 2; period = 0 }
+    hare = stepState(hare, N, table)
+    period++
   }
+
+  tortoise = seed
+  hare = seed
+  for (let i = 0; i < period; i++) hare = stepState(hare, N, table)
+  let transient = 0
+  while (tortoise !== hare) {
+    if (++steps > budget) return unknown
+    tortoise = stepState(tortoise, N, table)
+    hare = stepState(hare, N, table)
+    transient++
+  }
+  return { transient, period }
 }
 
 /**
@@ -230,6 +247,7 @@ export function drawSpacetime(canvas, rule, N, seed, opts = {}) {
   const fgCycle = hexToRgb(opts.fgCycle || '#ffd166')
 
   const { transient, period } = trajectoryInfo(seed, N, table)
+  const fallsIn = transient >= 0 // false when the orbit outran the search budget
 
   // Tile the ring only enough to keep cells ~11px wide: finer than that and the
   // repetition reads as busy wallpaper instead of a legible row of cells.
@@ -244,7 +262,7 @@ export function drawSpacetime(canvas, rule, N, seed, opts = {}) {
 
   let s = seed
   for (let t = 0; t < steps; t++) {
-    const fg = t >= transient ? fgCycle : fgTransient
+    const fg = fallsIn && t >= transient ? fgCycle : fgTransient
     for (let sub = 0; sub < rowH; sub++) {
       const y = t * rowH + sub
       if (y >= H) break
@@ -263,7 +281,7 @@ export function drawSpacetime(canvas, rule, N, seed, opts = {}) {
   ctx.putImageData(img, 0, 0)
 
   // Mark the moment it falls in, when that happens inside the visible window.
-  if (transient > 0 && transient < steps) {
+  if (fallsIn && transient > 0 && transient < steps) {
     ctx.fillStyle = 'rgba(255, 209, 102, 0.85)'
     ctx.fillRect(0, transient * rowH - 1, W, 1)
   }
