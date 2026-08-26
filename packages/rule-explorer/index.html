@@ -2,85 +2,104 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Rule Explorer — 3D state-transition graphs of elementary cellular automata</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <div id="graph"></div>
 
+    <!-- Detail panel: everything about the currently selected rule. Collapsible,
+         and collapsed by default on narrow screens. -->
     <aside id="panel">
-      <header>
-        <h1>RULE EXPLORER</h1>
-        <p class="sub">elementary cellular automata · 3-D state graphs</p>
+      <header class="panel-head">
+        <div>
+          <h1>RULE EXPLORER</h1>
+          <p class="sub">elementary cellular automata · 3-D state graphs</p>
+        </div>
+        <button id="panelclose" class="icon-btn" title="Hide details" aria-label="Hide details">‹</button>
       </header>
 
-      <section class="rule-pick">
-        <div class="rule-num">
-          <button id="prev" title="Previous rule (←)">‹</button>
-          <label>
-            <span>RULE</span>
-            <input id="rule" type="number" min="0" max="255" step="1" value="110" />
+      <div class="panel-body">
+        <section class="evo">
+          <div class="section-label">spacetime <span class="hint" id="seedfate"></span></div>
+          <div class="seed">
+            <div class="seed-top">
+              <span class="seed-label">seed</span>
+              <span class="seed-bits" id="seedbits"></span>
+              <button id="seedrandom" title="Random starting state">rnd</button>
+            </div>
+            <input id="seed" type="range" min="0" max="511" step="1" value="16" aria-label="Starting state" />
+          </div>
+          <canvas id="spacetime" width="256" height="160"></canvas>
+          <p class="seed-note">Click any node in the graph to start from that state.</p>
+        </section>
+
+        <section class="controls">
+          <label class="row">
+            <span>ring size <b id="widthval">9</b> cells <span class="hint" id="statecount"></span></span>
+            <input id="width" type="range" min="4" max="14" step="1" value="9" />
           </label>
-          <button id="next" title="Next rule (→)">›</button>
-        </div>
-        <div class="rule-actions">
-          <button id="random">random</button>
+          <label class="row toggle">
+            <input id="autorotate" type="checkbox" checked />
+            <span>auto-orbit</span>
+          </label>
+          <label class="row toggle">
+            <input id="flow" type="checkbox" checked />
+            <span>flow sparks</span>
+          </label>
+          <label class="row toggle">
+            <input id="collapse" type="checkbox" />
+            <span>collapse rotations</span>
+          </label>
+          <p class="control-note">Rotating a ring gives a different state with an
+             identical future, so basins come in look-alike families. Collapsing
+             merges each family into one node.</p>
+        </section>
+
+        <section class="stats" id="stats"></section>
+
+        <section class="legend">
+          <div class="section-label">reading the graph</div>
+          <ul>
+            <li><span class="sw ring"></span><b>Bright ring</b> — an attractor cycle. A period-7 orbit is drawn as a literal 7-gon; a fixed point is a lone dot.</li>
+            <li><span class="sw up"></span><b>Height</b> — steps left before you fall into the attractor. Every edge points strictly downhill, so time runs like gravity.</li>
+            <li><span class="sw basin"></span><b>Each cone</b> — one basin of attraction. Separate cones mean states that can never reach each other.</li>
+            <li><span class="sw spark"></span><b>Sparks</b> — states moving forward one tick at a time: down the trees, then circling the ring forever.</li>
+            <li><span class="sw eden"></span><b>Outer tips</b> — garden-of-Eden states, which nothing maps to. Only a reachable past has none.</li>
+          </ul>
+        </section>
+
+        <footer>
+          <p>Each node is one global state of a length-<i>N</i> ring (wrap-around). A
+             deterministic rule sends every state to exactly one successor, so the whole
+             thing is a <b>functional graph</b> — transient trees draining into cycles.</p>
+          <p>Hover a link to read its transition · click a node to seed the spacetime
+             panel · drag to orbit · scroll to zoom.</p>
+        </footer>
+      </div>
+    </aside>
+
+    <button id="paneltoggle" title="Show details" aria-label="Show details">
+      <span class="chev">›</span><span class="lbl">details</span>
+    </button>
+
+    <!-- Rule navigator: pinned bottom-centre, always available. -->
+    <nav id="nav">
+      <canvas id="ruleicon" width="416" height="120"></canvas>
+      <div class="nav-row">
+        <button id="prev" class="step" title="Previous rule (←)">‹</button>
+        <label class="rule-num">
+          <span>RULE</span>
+          <input id="rule" type="number" min="0" max="255" step="1" value="110" />
+        </label>
+        <button id="next" class="step" title="Next rule (→)">›</button>
+        <div class="nav-actions">
+          <button id="random" title="Random rule (R)">random</button>
           <button id="interesting" title="Cycle through rules with rich graphs">surprise me</button>
         </div>
-        <canvas id="ruleicon" width="416" height="120"></canvas>
-      </section>
-
-      <section class="evo">
-        <div class="section-label">spacetime <span class="hint" id="seedfate"></span></div>
-        <div class="seed">
-          <div class="seed-top">
-            <span class="seed-label">seed</span>
-            <span class="seed-bits" id="seedbits"></span>
-            <button id="seedrandom" title="Random starting state">rnd</button>
-          </div>
-          <input id="seed" type="range" min="0" max="511" step="1" value="16" aria-label="Starting state" />
-        </div>
-        <canvas id="spacetime" width="256" height="160"></canvas>
-        <p class="seed-note">Click any node in the graph to start from that state.</p>
-      </section>
-
-      <section class="controls">
-        <label class="row">
-          <span>ring size <b id="widthval">9</b> cells <span class="hint" id="statecount"></span></span>
-          <input id="width" type="range" min="4" max="12" step="1" value="9" />
-        </label>
-        <label class="row toggle">
-          <input id="autorotate" type="checkbox" checked />
-          <span>auto-orbit</span>
-        </label>
-        <label class="row toggle">
-          <input id="flow" type="checkbox" checked />
-          <span>flow sparks</span>
-        </label>
-      </section>
-
-      <section class="stats" id="stats"></section>
-
-      <section class="legend">
-        <div class="section-label">reading the graph</div>
-        <ul>
-          <li><span class="sw ring"></span><b>Bright ring</b> — an attractor cycle. A period-7 orbit is drawn as a literal 7-gon; a fixed point is a lone dot.</li>
-          <li><span class="sw up"></span><b>Height</b> — steps left before you fall into the attractor. Every edge points strictly downhill, so time runs like gravity.</li>
-          <li><span class="sw basin"></span><b>Each cone</b> — one basin of attraction. Separate cones mean states that can never reach each other.</li>
-          <li><span class="sw spark"></span><b>Sparks</b> — states moving forward one tick at a time: down the trees, then circling the ring forever.</li>
-          <li><span class="sw eden"></span><b>Outer tips</b> — garden-of-Eden states, which nothing maps to. Only a reachable past has none.</li>
-        </ul>
-      </section>
-
-      <footer>
-        <p>Each node is one global state of a length-<i>N</i> ring (wrap-around). A
-           deterministic rule sends every state to exactly one successor, so the whole
-           thing is a <b>functional graph</b> — transient trees draining into cycles.</p>
-        <p>Hover a link to read its transition · click a node to seed the spacetime
-           panel · drag to orbit · scroll to zoom.</p>
-      </footer>
-    </aside>
+      </div>
+    </nav>
 
     <div id="loading">building state graph…</div>
     <div id="tip" role="status" aria-live="polite"></div>

@@ -1,15 +1,18 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { analyzeRule, drawSpacetime, drawRuleIcon } from './ca.js'
+import { analyzeRule, drawSpacetime, drawRuleIcon, stepState, rotateState } from './ca.js'
 import { layoutGraph, depthColor } from './layout.js'
 
 // ---------------------------------------------------------------------------
 // Scene
 // ---------------------------------------------------------------------------
 const container = document.getElementById('graph')
-const renderer = new THREE.WebGLRenderer({ antialias: true })
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 renderer.setSize(innerWidth, innerHeight)
+// Only four transparent objects, all with explicit renderOrder — the per-frame
+// sort buys nothing.
+renderer.sortObjects = false
 container.appendChild(renderer.domElement)
 
 const scene = new THREE.Scene()
@@ -28,6 +31,11 @@ controls.autoRotateSpeed = 0.5
 
 const sprite = makeDiscTexture()
 let graph = null
+
+// Declared up here because the render loop starts before the UI section below.
+let needsRender = true
+let panelOpen = true
+let PAD = 16
 
 // ---------------------------------------------------------------------------
 // Build the scene objects for one analysed rule
@@ -136,7 +144,9 @@ function buildGraph(a) {
     walkT[i] = frac(Math.sin(i * 91.7) * 4137.17)
   }
   const walkGeo = new THREE.BufferGeometry()
-  walkGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(wCount * 3), 3))
+  const walkAttr = new THREE.BufferAttribute(new Float32Array(wCount * 3), 3)
+  walkAttr.setUsage(THREE.DynamicDrawUsage) // rewritten every frame
+  walkGeo.setAttribute('position', walkAttr)
   const walkers = new THREE.Points(
     walkGeo,
     new THREE.PointsMaterial({
@@ -208,7 +218,7 @@ function stepWalkers(dt) {
  * withheld from the fit and then panned away — the graph lands in the space
  * actually left over rather than hiding underneath the UI.
  */
-function fitCamera(positions, M) {
+function fitCamera(positions, M, keepDir = false) {
   let minX = Infinity, minY = Infinity, minZ = Infinity
   let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity
   for (let i = 0; i < M; i++) {
@@ -219,13 +229,25 @@ function fitCamera(positions, M) {
   }
   const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2, cz = (minZ + maxZ) / 2
 
-  const dir = new THREE.Vector3(0.35, -0.86, 0.42).normalize() // target -> camera
+  // target -> camera. Refits triggered by chrome moving keep the user's angle.
+  const dir = keepDir
+    ? camera.position.clone().sub(controls.target).normalize()
+    : new THREE.Vector3(0.35, -0.86, 0.42).normalize()
   const right = new THREE.Vector3().crossVectors(camera.up, dir).normalize()
   const camUp = new THREE.Vector3().crossVectors(dir, right).normalize()
 
-  const panelFrac = innerWidth > 720 ? Math.min(0.45, 352 / innerWidth) : 0
-  const tanV = Math.tan((camera.fov * Math.PI) / 360)
-  const tanH = tanV * camera.aspect * (1 - panelFrac)
+  // Withhold the share of the frustum the chrome covers — the rail on the left
+  // (only when open, and only where it isn't an overlay) and the navigator along
+  // the bottom — then pan by half of each, so the graph lands in what's left.
+  const wide = innerWidth > 720
+  const railPx = wide && panelOpen ? els.panel.getBoundingClientRect().width + 2 * PAD : 0
+  const navPx = els.nav.getBoundingClientRect().height + 2 * PAD
+  const panelFrac = Math.min(0.5, railPx / innerWidth)
+  const navFrac = Math.min(0.45, navPx / innerHeight)
+
+  const tanV0 = Math.tan((camera.fov * Math.PI) / 360)
+  const tanH = tanV0 * camera.aspect * (1 - panelFrac)
+  const tanV = tanV0 * (1 - navFrac)
 
   const p = new THREE.Vector3()
   let d = 1
@@ -237,9 +259,11 @@ function fitCamera(positions, M) {
   }
   d *= 1.06
 
-  // Slide the whole view sideways by half the panel's width at this depth.
-  const shift = panelFrac * d * tanV * camera.aspect
-  const target = new THREE.Vector3(cx, cy, cz).addScaledVector(right, -shift)
+  const shiftH = panelFrac * d * tanV0 * camera.aspect
+  const shiftV = navFrac * d * tanV0
+  const target = new THREE.Vector3(cx, cy, cz)
+    .addScaledVector(right, -shiftH)
+    .addScaledVector(camUp, -shiftV)
 
   controls.target.copy(target)
   camera.position.copy(target).addScaledVector(dir, d)
@@ -249,6 +273,12 @@ function fitCamera(positions, M) {
   controls.minDistance = d / 60
   controls.maxDistance = d * 6
   controls.update()
+  needsRender = true
+}
+
+/** Re-frame for the current chrome without disturbing the viewing angle. */
+function refit() {
+  if (graph) fitCamera(graph.positions, graph.M, true)
 }
 
 // ---------------------------------------------------------------------------
@@ -303,12 +333,28 @@ seedMark.renderOrder = 9
 seedMark.visible = false
 scene.add(seedMark)
 
+// Nodes are raw states normally, but rotation *classes* when collapsed — these
+// two translate between a node index and a real ring state either way.
+function repOf(node) {
+  const a = graph.a
+  return a.rep ? a.rep[node] : node
+}
+function nodeOf(state) {
+  const a = graph.a
+  if (state < 0 || state >= a.rawStates) return -1
+  return a.nodeOf ? a.nodeOf[state] : state
+}
+
+// The marker only means something next to the spacetime panel it seeds, so it
+// goes away with the panel.
 function updateSeedMark() {
-  if (!graph || seed >= graph.M) { seedMark.visible = false; return }
+  needsRender = true
+  const node = graph ? nodeOf(seed) : -1
+  if (!graph || !panelOpen || node < 0) { seedMark.visible = false; return }
   const p = seedMark.geometry.attributes.position.array
-  p[0] = graph.positions[seed * 3]
-  p[1] = graph.positions[seed * 3 + 1]
-  p[2] = graph.positions[seed * 3 + 2]
+  p[0] = graph.positions[node * 3]
+  p[1] = graph.positions[node * 3 + 1]
+  p[2] = graph.positions[node * 3 + 2]
   seedMark.geometry.attributes.position.needsUpdate = true
   seedMark.visible = true
 }
@@ -327,7 +373,7 @@ canvas.addEventListener('pointerleave', () => { pointerInside = false; needPick 
 canvas.addEventListener('pointerdown', (e) => { downX = e.clientX; downY = e.clientY; dragging = false })
 canvas.addEventListener('pointerup', (e) => {
   // Only a press that didn't orbit counts as a click.
-  if (Math.hypot(e.clientX - downX, e.clientY - downY) < 5 && hovered >= 0) setSeed(hovered)
+  if (Math.hypot(e.clientX - downX, e.clientY - downY) < 5 && hovered >= 0) setSeed(repOf(hovered))
 })
 controls.addEventListener('start', () => { dragging = true; tip.classList.remove('show') })
 controls.addEventListener('end', () => { dragging = false; needPick = true })
@@ -352,6 +398,7 @@ function pick() {
 function setHover(s) {
   if (s === hovered) { if (s >= 0) placeTip(); return }
   hovered = s
+  needsRender = true
   canvas.style.cursor = s >= 0 ? 'pointer' : 'default'
   if (s < 0) {
     hlLine.visible = false
@@ -394,17 +441,32 @@ function stateTags(v) {
   return tags.join('')
 }
 
+/** How many distinct states a rotation class holds (a divisor of N). */
+function orbitSize(state, n) {
+  const seen = new Set()
+  let r = state
+  for (let k = 0; k < n; k++) { seen.add(r); r = rotateState(r, n) }
+  return seen.size
+}
+
+// `s` and `t` are node indices; the rows show a real one-tick transition between
+// ring states, which stays literally true when nodes are rotation classes.
 function renderTip(s, t) {
-  const n = graph.a.N
+  const a = graph.a
+  const n = a.N
+  const from = repOf(s)
+  const to = stepState(from, n, a.table)
   let changed = 0
-  for (let i = 0; i < n; i++) if (((s ^ t) >> i) & 1) changed++
+  for (let i = 0; i < n; i++) if (((from ^ to) >> i) & 1) changed++
+
+  const classTag = a.collapsed ? `<em>class of ${orbitSize(from, n)}</em>` : ''
   tip.innerHTML =
     `<div class="tip-head"><span>state transition</span><span>one tick</span></div>` +
-    `<div class="tip-row"><div class="tip-cells">${cellRow(s, t, n)}</div><span class="tip-id">#${s}</span></div>` +
+    `<div class="tip-row"><div class="tip-cells">${cellRow(from, to, n)}</div><span class="tip-id">#${from}</span></div>` +
     `<div class="tip-arrow">↓ rule ${rule}${s === t ? ' · maps to itself' : ''}</div>` +
-    `<div class="tip-row"><div class="tip-cells">${cellRow(t, s, n)}</div><span class="tip-id">#${t}</span></div>` +
+    `<div class="tip-row"><div class="tip-cells">${cellRow(to, from, n)}</div><span class="tip-id">#${to}</span></div>` +
     `<div class="tip-tags">${stateTags(s)}${stateTags(t)}` +
-    `<em>${changed} of ${n} cells changed</em></div>` +
+    `<em>${changed} of ${n} cells changed</em>${classTag}</div>` +
     `<div class="tip-hint">click to seed the spacetime view</div>`
 }
 
@@ -424,24 +486,44 @@ function placeTip() {
 let flowOn = true
 let autoRotateWanted = true
 let last = performance.now()
+let lastPick = 0
+
 function animate() {
   requestAnimationFrame(animate)
   const now = performance.now()
   const dt = Math.min(0.05, (now - last) / 1000)
   last = now
-  if (flowOn) stepWalkers(dt)
+
+  if (flowOn && graph) { stepWalkers(dt); needsRender = true }
   // Hold still while a link is being read, or it drifts out from under the cursor.
   controls.autoRotate = autoRotateWanted && hovered < 0
-  controls.update()
-  if (needPick) { needPick = false; pick() }
-  renderer.render(scene, camera)
+  if (controls.update()) needsRender = true
+
+  // Picking walks every edge, so at 16k edges it is the most expensive thing
+  // here. Hover doesn't need 60Hz — 60ms is imperceptible and cuts it ~4x.
+  if (needPick && now - lastPick > 60) {
+    needPick = false
+    lastPick = now
+    pick()
+  }
+
+  // Nothing moving (sparks off, no orbit, no interaction) means nothing to draw.
+  if (needsRender) {
+    needsRender = false
+    renderer.render(scene, camera)
+  }
 }
 animate()
 
+let resizeTimer = null
 addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight
   camera.updateProjectionMatrix()
   renderer.setSize(innerWidth, innerHeight)
+  measureChrome()
+  needsRender = true
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(refit, 180)
 })
 
 // ---------------------------------------------------------------------------
@@ -458,6 +540,7 @@ const els = {
   statecount: document.getElementById('statecount'),
   autorotate: document.getElementById('autorotate'),
   flow: document.getElementById('flow'),
+  collapse: document.getElementById('collapse'),
   stats: document.getElementById('stats'),
   spacetime: document.getElementById('spacetime'),
   ruleicon: document.getElementById('ruleicon'),
@@ -466,18 +549,41 @@ const els = {
   seedbits: document.getElementById('seedbits'),
   seedrandom: document.getElementById('seedrandom'),
   seedfate: document.getElementById('seedfate'),
+  panel: document.getElementById('panel'),
+  nav: document.getElementById('nav'),
+  panelclose: document.getElementById('panelclose'),
+  paneltoggle: document.getElementById('paneltoggle'),
 }
+
+/** Read the chrome's real size so the camera fit and mobile insets stay honest. */
+function measureChrome() {
+  PAD = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pad')) || 16
+  const navH = els.nav.getBoundingClientRect().height
+  document.documentElement.style.setProperty('--nav-h', `${Math.round(navH)}px`)
+}
+
+function setPanel(open) {
+  panelOpen = open
+  document.body.classList.toggle('panel-hidden', !open)
+  els.paneltoggle.setAttribute('aria-expanded', String(open))
+  updateSeedMark()
+  measureChrome()
+  clearTimeout(panelTimer)
+  panelTimer = setTimeout(refit, 300) // after the slide transition settles
+}
+let panelTimer = null
 
 let rule = 110
 let N = 9
 let seed = 1 << (N >> 1) // the classic single lit cell
+let collapse = false
 
 const TOUR = [110, 30, 90, 54, 150, 184, 22, 122, 105, 60, 73, 45, 126, 18, 161, 250, 99, 124]
 let tourPos = 0
 
 function setStats(a) {
   const rows = [
-    ['states', a.M.toLocaleString()],
+    [a.collapsed ? 'classes' : 'states', a.M.toLocaleString()],
     ['basins', a.attractors],
     ['longest cycle', a.maxCycle],
     ['fixed points', a.fixedPoints],
@@ -522,19 +628,24 @@ function update({ rebuild = true } = {}) {
   els.loading.classList.add('show')
   clearTimeout(timer)
   timer = setTimeout(() => {
-    const a = analyzeRule(rule, N)
+    const a = analyzeRule(rule, N, { collapseRotation: collapse })
     setStats(a)
     buildGraph(a)
     els.loading.classList.remove('show')
   }, 16)
 }
 
+/** A new rule deserves a fresh vantage point, so re-roll the spacetime seed. */
 function setRule(r) {
   els.rule.value = ((r % 256) + 256) % 256
+  seed = Math.floor(Math.random() * (1 << N))
   update()
 }
 
-els.rule.addEventListener('change', () => update())
+els.rule.addEventListener('change', () => {
+  seed = Math.floor(Math.random() * (1 << N))
+  update()
+})
 els.prev.addEventListener('click', () => setRule(rule - 1))
 els.next.addEventListener('click', () => setRule(rule + 1))
 els.random.addEventListener('click', () => setRule(Math.floor(Math.random() * 256)))
@@ -566,7 +677,12 @@ els.autorotate.addEventListener('change', () => { autoRotateWanted = els.autorot
 els.flow.addEventListener('change', () => {
   flowOn = els.flow.checked
   if (graph) graph.walkers.visible = flowOn
+  needsRender = true
 })
+els.collapse.addEventListener('change', () => { collapse = els.collapse.checked; update() })
+
+els.panelclose.addEventListener('click', () => setPanel(false))
+els.paneltoggle.addEventListener('click', () => setPanel(true))
 
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return
@@ -578,6 +694,12 @@ addEventListener('keydown', (e) => {
 els.width.value = N
 els.widthval.textContent = N
 els.statecount.textContent = `= ${(1 << N).toLocaleString()} states`
+
+// Narrow screens start with the rail out of the way; the graph is the point.
+panelOpen = !matchMedia('(max-width: 720px)').matches
+document.body.classList.toggle('panel-hidden', !panelOpen)
+els.paneltoggle.setAttribute('aria-expanded', String(panelOpen))
+measureChrome()
 update()
 
 // ---------------------------------------------------------------------------

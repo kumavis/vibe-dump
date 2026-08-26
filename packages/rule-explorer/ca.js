@@ -29,17 +29,56 @@ export function stepState(state, N, table) {
   return next
 }
 
-/**
- * Analyse the full state-transition graph for a rule on a ring of N cells.
- * Returns the successor map plus per-node classification (component, cycle
- * membership, distance to attractor) and summary statistics.
- */
-export function analyzeRule(rule, N) {
-  const M = 1 << N
-  const table = ruleTable(rule)
+/** Rotate a ring state one cell. */
+export function rotateState(s, N) {
+  return ((s >> 1) | (s << (N - 1))) & ((1 << N) - 1)
+}
 
-  const succ = new Int32Array(M)
-  for (let s = 0; s < M; s++) succ[s] = stepState(s, N, table)
+/**
+ * Analyse a rule's state-transition graph on a ring of N cells.
+ *
+ * With `collapseRotation`, nodes become rotation *classes* instead of raw states.
+ * That quotient is well defined because shifting commutes with the rule —
+ * F(shift(x)) = shift(F(x)) — so F descends to classes, and the result is still
+ * a functional graph. It merges the look-alike basins that are really the same
+ * shape seen at N different rotations.
+ *
+ * `rep[i]` is node i's representative raw state and `nodeOf[s]` the node holding
+ * raw state s; both are null when nodes already are raw states.
+ */
+export function analyzeRule(rule, N, { collapseRotation = false } = {}) {
+  const table = ruleTable(rule)
+  const R = 1 << N
+
+  if (!collapseRotation) {
+    const succ = new Int32Array(R)
+    for (let s = 0; s < R; s++) succ[s] = stepState(s, N, table)
+    return analyzeSucc(succ, { rule, N, table, collapsed: false, rep: null, nodeOf: null, rawStates: R })
+  }
+
+  // Scanning upward and marking whole orbits means the first unmarked state of
+  // an orbit is automatically its smallest member, so it is the canonical one.
+  const nodeOf = new Int32Array(R).fill(-1)
+  const reps = []
+  for (let s = 0; s < R; s++) {
+    if (nodeOf[s] >= 0) continue
+    const idx = reps.length
+    reps.push(s)
+    let r = s
+    for (let k = 0; k < N; k++) { nodeOf[r] = idx; r = rotateState(r, N) }
+  }
+  const rep = Int32Array.from(reps)
+  const succ = new Int32Array(rep.length)
+  for (let i = 0; i < rep.length; i++) succ[i] = nodeOf[stepState(rep[i], N, table)]
+  return analyzeSucc(succ, { rule, N, table, collapsed: true, rep, nodeOf, rawStates: R })
+}
+
+/**
+ * Classify any functional graph given its successor map: cycle membership,
+ * connected components, distance to attractor, and summary statistics.
+ */
+function analyzeSucc(succ, meta) {
+  const M = succ.length
 
   // --- attractor nodes: strip leaves until only cycles remain (Kahn-style) ---
   const indeg = new Int32Array(M)
@@ -115,7 +154,8 @@ export function analyzeRule(rule, N) {
   for (let s = 0; s < M; s++) if (onCycle[s]) cycleNodes++
 
   return {
-    rule, N, M, table, succ, rev,
+    ...meta,
+    M, succ, rev,
     onCycle, compOf, dist, maxDist,
     nComp,
     attractors: cycleLenByComp.size,
