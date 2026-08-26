@@ -29,17 +29,56 @@ export function stepState(state, N, table) {
   return next
 }
 
-/**
- * Analyse the full state-transition graph for a rule on a ring of N cells.
- * Returns the successor map plus per-node classification (component, cycle
- * membership, distance to attractor) and summary statistics.
- */
-export function analyzeRule(rule, N) {
-  const M = 1 << N
-  const table = ruleTable(rule)
+/** Rotate a ring state one cell. */
+export function rotateState(s, N) {
+  return ((s >> 1) | (s << (N - 1))) & ((1 << N) - 1)
+}
 
-  const succ = new Int32Array(M)
-  for (let s = 0; s < M; s++) succ[s] = stepState(s, N, table)
+/**
+ * Analyse a rule's state-transition graph on a ring of N cells.
+ *
+ * With `collapseRotation`, nodes become rotation *classes* instead of raw states.
+ * That quotient is well defined because shifting commutes with the rule —
+ * F(shift(x)) = shift(F(x)) — so F descends to classes, and the result is still
+ * a functional graph. It merges the look-alike basins that are really the same
+ * shape seen at N different rotations.
+ *
+ * `rep[i]` is node i's representative raw state and `nodeOf[s]` the node holding
+ * raw state s; both are null when nodes already are raw states.
+ */
+export function analyzeRule(rule, N, { collapseRotation = false } = {}) {
+  const table = ruleTable(rule)
+  const R = 1 << N
+
+  if (!collapseRotation) {
+    const succ = new Int32Array(R)
+    for (let s = 0; s < R; s++) succ[s] = stepState(s, N, table)
+    return analyzeSucc(succ, { rule, N, table, collapsed: false, rep: null, nodeOf: null, rawStates: R })
+  }
+
+  // Scanning upward and marking whole orbits means the first unmarked state of
+  // an orbit is automatically its smallest member, so it is the canonical one.
+  const nodeOf = new Int32Array(R).fill(-1)
+  const reps = []
+  for (let s = 0; s < R; s++) {
+    if (nodeOf[s] >= 0) continue
+    const idx = reps.length
+    reps.push(s)
+    let r = s
+    for (let k = 0; k < N; k++) { nodeOf[r] = idx; r = rotateState(r, N) }
+  }
+  const rep = Int32Array.from(reps)
+  const succ = new Int32Array(rep.length)
+  for (let i = 0; i < rep.length; i++) succ[i] = nodeOf[stepState(rep[i], N, table)]
+  return analyzeSucc(succ, { rule, N, table, collapsed: true, rep, nodeOf, rawStates: R })
+}
+
+/**
+ * Classify any functional graph given its successor map: cycle membership,
+ * connected components, distance to attractor, and summary statistics.
+ */
+function analyzeSucc(succ, meta) {
+  const M = succ.length
 
   // --- attractor nodes: strip leaves until only cycles remain (Kahn-style) ---
   const indeg = new Int32Array(M)
@@ -115,7 +154,8 @@ export function analyzeRule(rule, N) {
   for (let s = 0; s < M; s++) if (onCycle[s]) cycleNodes++
 
   return {
-    rule, N, M, table, succ,
+    ...meta,
+    M, succ, rev,
     onCycle, compOf, dist, maxDist,
     nComp,
     attractors: cycleLenByComp.size,
@@ -145,46 +185,100 @@ function indegOriginal(rev, s) {
 }
 
 /**
- * Render a rule's classic spacetime diagram from a single centre seed onto a
- * 2D canvas (time flows downward). Width = canvas width in cells.
+ * Follow a seed until it repeats, which it always must: the state space is finite
+ * and the rule deterministic. Returns the steps spent falling (transient) and the
+ * length of the cycle it lands in (period).
+ *
+ * Brent's cycle detection, so this costs constant memory rather than a visited
+ * array of 2^N entries — which the seed slider would otherwise allocate and clear
+ * on every drag event.
  */
-export function drawSpacetime(canvas, rule, opts = {}) {
+export function trajectoryInfo(seed, N, table) {
+  let power = 1
+  let period = 1
+  let tortoise = seed
+  let hare = stepState(seed, N, table)
+  while (tortoise !== hare) {
+    if (power === period) { tortoise = hare; power *= 2; period = 0 }
+    hare = stepState(hare, N, table)
+    period++
+  }
+
+  tortoise = seed
+  hare = seed
+  for (let i = 0; i < period; i++) hare = stepState(hare, N, table)
+  let transient = 0
+  while (tortoise !== hare) {
+    tortoise = stepState(tortoise, N, table)
+    hare = stepState(hare, N, table)
+    transient++
+  }
+  return { transient, period }
+}
+
+/**
+ * Draw one seed's trajectory as a spacetime diagram: time flows downward, the
+ * N-cell ring runs across. The ring is tiled horizontally to fill the canvas —
+ * honest rather than decorative, since a length-N periodic ring *is* an infinite
+ * lattice with spatial period N.
+ *
+ * Rows switch from the transient colour to the attractor colour at the step where
+ * the trajectory falls into its cycle, which is the same event as a spark
+ * reaching the glowing ring in the 3-D graph.
+ *
+ * Returns { transient, period }.
+ */
+export function drawSpacetime(canvas, rule, N, seed, opts = {}) {
   const ctx = canvas.getContext('2d')
   const W = canvas.width
   const H = canvas.height
   const table = ruleTable(rule)
-  const fg = opts.fg || '#6cf'
-  const bg = opts.bg || '#0a0c16'
+  const rowH = opts.rowH ?? 2
+  const steps = Math.floor(H / rowH)
 
-  ctx.fillStyle = bg
-  ctx.fillRect(0, 0, W, H)
+  const bg = hexToRgb(opts.bg || '#0a0c16')
+  const fgTransient = hexToRgb(opts.fg || '#66ccff')
+  const fgCycle = hexToRgb(opts.fgCycle || '#ffd166')
 
-  let row = new Uint8Array(W)
-  row[W >> 1] = 1 // single seed in the centre
+  const { transient, period } = trajectoryInfo(seed, N, table)
+
+  // Tile the ring only enough to keep cells ~11px wide: finer than that and the
+  // repetition reads as busy wallpaper instead of a legible row of cells.
+  const repeats = Math.max(1, Math.round(W / (N * 11)))
+  const cellW = W / (N * repeats)
 
   const img = ctx.createImageData(W, H)
-  const [fr, fgc, fb] = hexToRgb(fg)
-  const [br, bgc, bb] = hexToRgb(bg)
+  // Which ring bit each column shows. Bit N-1 is the leftmost cell, matching the
+  // usual binary reading order.
+  const bitAt = new Int32Array(W)
+  for (let x = 0; x < W; x++) bitAt[x] = N - 1 - (Math.floor(x / cellW) % N)
 
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      const on = row[x]
-      const o = (y * W + x) * 4
-      img.data[o] = on ? fr : br
-      img.data[o + 1] = on ? fgc : bgc
-      img.data[o + 2] = on ? fb : bb
-      img.data[o + 3] = 255
+  let s = seed
+  for (let t = 0; t < steps; t++) {
+    const fg = t >= transient ? fgCycle : fgTransient
+    for (let sub = 0; sub < rowH; sub++) {
+      const y = t * rowH + sub
+      if (y >= H) break
+      for (let x = 0; x < W; x++) {
+        const on = (s >> bitAt[x]) & 1
+        const c = on ? fg : bg
+        const o = (y * W + x) * 4
+        img.data[o] = c[0]
+        img.data[o + 1] = c[1]
+        img.data[o + 2] = c[2]
+        img.data[o + 3] = 255
+      }
     }
-    const nextRow = new Uint8Array(W)
-    for (let x = 0; x < W; x++) {
-      const l = row[(x - 1 + W) % W]
-      const c = row[x]
-      const r = row[(x + 1) % W]
-      nextRow[x] = table[(l << 2) | (c << 1) | r]
-    }
-    row = nextRow
+    s = stepState(s, N, table)
   }
   ctx.putImageData(img, 0, 0)
+
+  // Mark the moment it falls in, when that happens inside the visible window.
+  if (transient > 0 && transient < steps) {
+    ctx.fillStyle = 'rgba(255, 209, 102, 0.85)'
+    ctx.fillRect(0, transient * rowH - 1, W, 1)
+  }
+  return { transient, period }
 }
 
 /** Draw the 8-cell rule diagram (neighbourhood patterns over their outputs). */

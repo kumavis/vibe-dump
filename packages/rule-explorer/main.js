@@ -1,78 +1,58 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { analyzeRule, drawSpacetime, drawRuleIcon } from './ca.js'
+import { analyzeRule, drawSpacetime, drawRuleIcon, stepState, rotateState } from './ca.js'
+import { layoutGraph, depthColor } from './layout.js'
 
 // ---------------------------------------------------------------------------
 // Scene
 // ---------------------------------------------------------------------------
 const container = document.getElementById('graph')
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 renderer.setSize(innerWidth, innerHeight)
+// Only four transparent objects, all with explicit renderOrder — the per-frame
+// sort buys nothing.
+renderer.sortObjects = false
 container.appendChild(renderer.domElement)
 
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x05060b)
-scene.fog = new THREE.FogExp2(0x05060b, 0.0016)
 
-const camera = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.1, 6000)
-camera.position.set(0, 0, 320)
+// Time runs along +z, so z is up: the camera orbits the basin field like a
+// landscape rather than tumbling around an arbitrary axis.
+const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.5, 200000)
+camera.up.set(0, 0, 1)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
-controls.dampingFactor = 0.07
+controls.dampingFactor = 0.08
 controls.autoRotate = true
-controls.autoRotateSpeed = 0.55
-controls.minDistance = 8
-controls.maxDistance = 4000
+controls.autoRotateSpeed = 0.5
 
-// Soft circular sprite shared by all point clouds.
 const sprite = makeDiscTexture()
+let graph = null
+
+// Declared up here because the render loop starts before the UI section below.
+let needsRender = true
+let panelOpen = true
+let PAD = 16
 
 // ---------------------------------------------------------------------------
-// State graph objects (rebuilt per rule)
+// Build the scene objects for one analysed rule
 // ---------------------------------------------------------------------------
-let graph = null // { points, glow, lines, positions, velocities, succ, onCycle, settled, alpha, M }
-const tmpColor = new THREE.Color()
-
 function buildGraph(a) {
   disposeGraph()
 
+  const { positions, nodeSpacing } = layoutGraph(a)
   const M = a.M
-  const positions = new Float32Array(M * 3)
-  const velocities = new Float32Array(M * 3)
-
-  // Seed positions on a jittered sphere shell so the sim untangles cleanly.
-  const R0 = Math.cbrt(M) * 9 + 20
-  for (let i = 0; i < M; i++) {
-    // deterministic pseudo-random from index (no Math.random needed for repeatability)
-    const u = frac(Math.sin(i * 12.9898) * 43758.5453)
-    const v = frac(Math.sin(i * 78.233) * 12345.6789)
-    const theta = u * Math.PI * 2
-    const phi = Math.acos(2 * v - 1)
-    const rr = R0 * (0.55 + 0.45 * frac(Math.sin(i * 3.7) * 9999))
-    positions[i * 3] = rr * Math.sin(phi) * Math.cos(theta)
-    positions[i * 3 + 1] = rr * Math.sin(phi) * Math.sin(theta)
-    positions[i * 3 + 2] = rr * Math.cos(phi)
-  }
-
-  // Per-node colours: component hue, lightness driven by distance to attractor.
-  const nodeColors = new Float32Array(M * 3)
   const maxD = Math.max(1, a.maxDist)
-  for (let i = 0; i < M; i++) {
-    const hue = frac(a.compOf[i] * 0.61803398875 + 0.06)
-    const cycle = a.onCycle[i]
-    const t = a.dist[i] / maxD // 0 at attractor, 1 deepest transient
-    const light = cycle ? 0.66 : 0.52 - 0.3 * t
-    const sat = cycle ? 0.85 : 0.7
-    tmpColor.setHSL(hue, sat, Math.max(0.16, light))
-    nodeColors[i * 3] = tmpColor.r
-    nodeColors[i * 3 + 1] = tmpColor.g
-    nodeColors[i * 3 + 2] = tmpColor.b
-  }
 
-  // Node cloud.
-  const nodeSize = clamp(220 / Math.sqrt(M), 2.2, 9)
+  // Node colour: 1 at the attractor, falling to 0 at the deepest transient.
+  const nodeColors = new Float32Array(M * 3)
+  for (let v = 0; v < M; v++) depthColor(1 - a.dist[v] / maxD, nodeColors, v * 3)
+
+  const nodeSize = nodeSpacing * 0.5
+
   const nodeGeo = new THREE.BufferGeometry()
   nodeGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
   nodeGeo.setAttribute('color', new THREE.BufferAttribute(nodeColors, 3))
@@ -83,37 +63,34 @@ function buildGraph(a) {
       map: sprite,
       vertexColors: true,
       transparent: true,
-      alphaTest: 0.04,
       depthWrite: false,
       sizeAttenuation: true,
     })
   )
   scene.add(points)
 
-  // Bright additive glow on attractor (cycle) nodes only.
-  const cycleIdx = []
-  for (let i = 0; i < M; i++) if (a.onCycle[i]) cycleIdx.push(i)
+  // Attractor nodes get an additive halo so the rings read as the hot core.
+  let nCycle = 0
+  for (let v = 0; v < M; v++) if (a.onCycle[v]) nCycle++
+  const cycleIdx = new Int32Array(nCycle)
+  for (let v = 0, j = 0; v < M; v++) if (a.onCycle[v]) cycleIdx[j++] = v
   const glowPos = new Float32Array(cycleIdx.length * 3)
-  const glowCol = new Float32Array(cycleIdx.length * 3)
   for (let j = 0; j < cycleIdx.length; j++) {
-    const i = cycleIdx[j]
-    const hue = frac(a.compOf[i] * 0.61803398875 + 0.06)
-    tmpColor.setHSL(hue, 0.9, 0.72)
-    glowCol[j * 3] = tmpColor.r
-    glowCol[j * 3 + 1] = tmpColor.g
-    glowCol[j * 3 + 2] = tmpColor.b
+    const i = cycleIdx[j] * 3
+    glowPos[j * 3] = positions[i]
+    glowPos[j * 3 + 1] = positions[i + 1]
+    glowPos[j * 3 + 2] = positions[i + 2]
   }
   const glowGeo = new THREE.BufferGeometry()
   glowGeo.setAttribute('position', new THREE.BufferAttribute(glowPos, 3))
-  glowGeo.setAttribute('color', new THREE.BufferAttribute(glowCol, 3))
   const glow = new THREE.Points(
     glowGeo,
     new THREE.PointsMaterial({
-      size: nodeSize * 2.6,
+      size: nodeSize * 3.4,
       map: sprite,
-      vertexColors: true,
+      color: 0xffcf6e,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.55,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       sizeAttenuation: true,
@@ -121,22 +98,29 @@ function buildGraph(a) {
   )
   scene.add(glow)
 
-  // Edges s -> succ[s] (skip self-loops, which would be zero-length).
-  const edgeList = []
-  for (let s = 0; s < M; s++) if (a.succ[s] !== s) edgeList.push(s)
-  const linePos = new Float32Array(edgeList.length * 6)
-  const lineCol = new Float32Array(edgeList.length * 6)
-  for (let e = 0; e < edgeList.length; e++) {
-    const s = edgeList[e]
+  // Edges, coloured per endpoint. Because colour tracks depth, every edge is a
+  // gradient running from cool (source) to hot (target) — direction for free.
+  let nEdges = 0
+  for (let s = 0; s < M; s++) if (a.succ[s] !== s) nEdges++
+  const edges = new Int32Array(nEdges)
+  for (let s = 0, e = 0; s < M; s++) if (a.succ[s] !== s) edges[e++] = s
+
+  const linePos = new Float32Array(nEdges * 6)
+  const lineCol = new Float32Array(nEdges * 6)
+  for (let e = 0; e < nEdges; e++) {
+    const s = edges[e]
     const t = a.succ[s]
-    const both = a.onCycle[s] && a.onCycle[t]
-    const hue = frac(a.compOf[s] * 0.61803398875 + 0.06)
-    tmpColor.setHSL(hue, both ? 0.9 : 0.6, both ? 0.6 : 0.34)
-    for (let k = 0; k < 2; k++) {
-      lineCol[e * 6 + k * 3] = tmpColor.r
-      lineCol[e * 6 + k * 3 + 1] = tmpColor.g
-      lineCol[e * 6 + k * 3 + 2] = tmpColor.b
-    }
+    const boost = a.onCycle[s] && a.onCycle[t] ? 1.0 : 0.62 // attractor edges burn brighter
+    const o = e * 6
+    writeEdge(linePos, o, positions, s, t)
+    const si = s * 3
+    const ti = t * 3
+    lineCol[o] = nodeColors[si] * boost
+    lineCol[o + 1] = nodeColors[si + 1] * boost
+    lineCol[o + 2] = nodeColors[si + 2] * boost
+    lineCol[o + 3] = nodeColors[ti] * boost
+    lineCol[o + 4] = nodeColors[ti + 1] * boost
+    lineCol[o + 5] = nodeColors[ti + 2] * boost
   }
   const lineGeo = new THREE.BufferGeometry()
   lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3))
@@ -146,28 +130,61 @@ function buildGraph(a) {
     new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.62,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     })
   )
   scene.add(lines)
 
-  graph = {
-    points, glow, lines,
-    positions, velocities,
-    succ: a.succ, onCycle: a.onCycle, compOf: a.compOf,
-    edgeList, cycleIdx,
-    M, alpha: 1, settled: false, frames: 0,
-    R0,
+  // Walkers: sparks riding the edges forward in time. They fall down the trees
+  // and then circulate forever once they reach a ring — the dynamics, animated.
+  const wCount = Math.min(1400, M)
+  const walkFrom = new Int32Array(wCount)
+  const walkT = new Float32Array(wCount)
+  for (let i = 0; i < wCount; i++) {
+    walkFrom[i] = Math.floor((i * M) / wCount)
+    walkT[i] = frac(Math.sin(i * 91.7) * 4137.17)
   }
-  syncGeometry()
-  fitted = false
+  const walkGeo = new THREE.BufferGeometry()
+  const walkAttr = new THREE.BufferAttribute(new Float32Array(wCount * 3), 3)
+  walkAttr.setUsage(THREE.DynamicDrawUsage) // rewritten every frame
+  walkGeo.setAttribute('position', walkAttr)
+  const walkers = new THREE.Points(
+    walkGeo,
+    new THREE.PointsMaterial({
+      size: nodeSize * 1.15,
+      map: sprite,
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      sizeAttenuation: true,
+    })
+  )
+  scene.add(walkers)
+
+  graph = { points, glow, lines, walkers, positions, succ: a.succ, walkFrom, walkT, wCount, M, edges, a, nodeSize }
+  hlNodes.material.size = nodeSize * 2.4
+  seedMark.material.size = nodeSize * 3.2
+  setHover(-1)
+  updateSeedMark()
+  fitCamera(positions, M)
+}
+
+function writeEdge(arr, o, pos, s, t) {
+  arr[o] = pos[s * 3]
+  arr[o + 1] = pos[s * 3 + 1]
+  arr[o + 2] = pos[s * 3 + 2]
+  arr[o + 3] = pos[t * 3]
+  arr[o + 4] = pos[t * 3 + 1]
+  arr[o + 5] = pos[t * 3 + 2]
 }
 
 function disposeGraph() {
   if (!graph) return
-  for (const o of [graph.points, graph.glow, graph.lines]) {
+  for (const o of [graph.points, graph.glow, graph.lines, graph.walkers]) {
     scene.remove(o)
     o.geometry.dispose()
     o.material.dispose()
@@ -175,149 +192,341 @@ function disposeGraph() {
   graph = null
 }
 
-// ---------------------------------------------------------------------------
-// 3D force-directed layout (cools down, then freezes)
-// ---------------------------------------------------------------------------
-function tickLayout() {
-  if (!graph || graph.settled) return
-  const { positions, velocities, M, succ } = graph
-  const alpha = graph.alpha
-
-  const repK = 240 * graph.R0 * 0.04 // repulsion strength scales with graph size
-  const springK = 0.035
-  const restLen = clamp(graph.R0 * 0.05, 6, 26)
-  const gravity = 0.012
-  const damping = 0.86
-  const maxStep = restLen * 1.2
-
-  // Repulsion (O(M^2)) — only while cooling, so the cost is transient.
-  for (let i = 0; i < M; i++) {
-    const ix = i * 3
-    let fx = 0, fy = 0, fz = 0
-    const xi = positions[ix], yi = positions[ix + 1], zi = positions[ix + 2]
-    for (let j = i + 1; j < M; j++) {
-      const jx = j * 3
-      let dx = xi - positions[jx]
-      let dy = yi - positions[jx + 1]
-      let dz = zi - positions[jx + 2]
-      let d2 = dx * dx + dy * dy + dz * dz
-      if (d2 < 1e-4) { dx = (i - j) * 1e-3 + 0.01; dy = 0.013; dz = 0.007; d2 = dx * dx + dy * dy + dz * dz }
-      const inv = repK / (d2 * Math.sqrt(d2))
-      const ax = dx * inv, ay = dy * inv, az = dz * inv
-      fx += ax; fy += ay; fz += az
-      velocities[jx] -= ax * alpha
-      velocities[jx + 1] -= ay * alpha
-      velocities[jx + 2] -= az * alpha
-    }
-    velocities[ix] += fx * alpha
-    velocities[ix + 1] += fy * alpha
-    velocities[ix + 2] += fz * alpha
+function stepWalkers(dt) {
+  if (!graph) return
+  const { positions, succ, walkFrom, walkT, wCount } = graph
+  const arr = graph.walkers.geometry.attributes.position.array
+  const speed = 0.85
+  for (let i = 0; i < wCount; i++) {
+    let t = walkT[i] + dt * speed
+    let from = walkFrom[i]
+    while (t >= 1) { from = succ[from]; t -= 1 }
+    walkFrom[i] = from
+    walkT[i] = t
+    const to = succ[from]
+    const e = t * t * (3 - 2 * t) // ease so sparks linger on the states themselves
+    const f = from * 3
+    const g = to * 3
+    arr[i * 3] = positions[f] + (positions[g] - positions[f]) * e
+    arr[i * 3 + 1] = positions[f + 1] + (positions[g + 1] - positions[f + 1]) * e
+    arr[i * 3 + 2] = positions[f + 2] + (positions[g + 2] - positions[f + 2]) * e
   }
-
-  // Springs along directed edges + gentle gravity toward origin.
-  for (let s = 0; s < M; s++) {
-    const t = succ[s]
-    if (t === s) continue
-    const sx = s * 3, tx = t * 3
-    const dx = positions[tx] - positions[sx]
-    const dy = positions[tx + 1] - positions[sx + 1]
-    const dz = positions[tx + 2] - positions[sx + 2]
-    const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1e-4
-    const f = (springK * (d - restLen)) / d
-    const ax = dx * f * alpha, ay = dy * f * alpha, az = dz * f * alpha
-    velocities[sx] += ax; velocities[sx + 1] += ay; velocities[sx + 2] += az
-    velocities[tx] -= ax; velocities[tx + 1] -= ay; velocities[tx + 2] -= az
-  }
-
-  for (let i = 0; i < M; i++) {
-    const ix = i * 3
-    velocities[ix] -= positions[ix] * gravity * alpha
-    velocities[ix + 1] -= positions[ix + 1] * gravity * alpha
-    velocities[ix + 2] -= positions[ix + 2] * gravity * alpha
-
-    velocities[ix] *= damping
-    velocities[ix + 1] *= damping
-    velocities[ix + 2] *= damping
-
-    let vx = velocities[ix], vy = velocities[ix + 1], vz = velocities[ix + 2]
-    const sp = Math.sqrt(vx * vx + vy * vy + vz * vz)
-    if (sp > maxStep) { const k = maxStep / sp; vx *= k; vy *= k; vz *= k }
-    positions[ix] += vx
-    positions[ix + 1] += vy
-    positions[ix + 2] += vz
-  }
-
-  graph.alpha *= 0.975
-  graph.frames++
-  if (graph.alpha < 0.02 || graph.frames > 600) graph.settled = true
+  graph.walkers.geometry.attributes.position.needsUpdate = true
 }
 
-function syncGeometry() {
-  if (!graph) return
-  const { positions, succ, edgeList, cycleIdx } = graph
-
-  graph.points.geometry.attributes.position.needsUpdate = true
-
-  const glowPos = graph.glow.geometry.attributes.position.array
-  for (let j = 0; j < cycleIdx.length; j++) {
-    const i = cycleIdx[j] * 3
-    glowPos[j * 3] = positions[i]
-    glowPos[j * 3 + 1] = positions[i + 1]
-    glowPos[j * 3 + 2] = positions[i + 2]
-  }
-  graph.glow.geometry.attributes.position.needsUpdate = true
-
-  const linePos = graph.lines.geometry.attributes.position.array
-  for (let e = 0; e < edgeList.length; e++) {
-    const s = edgeList[e] * 3
-    const t = succ[edgeList[e]] * 3
-    linePos[e * 6] = positions[s]
-    linePos[e * 6 + 1] = positions[s + 1]
-    linePos[e * 6 + 2] = positions[s + 2]
-    linePos[e * 6 + 3] = positions[t]
-    linePos[e * 6 + 4] = positions[t + 1]
-    linePos[e * 6 + 5] = positions[t + 2]
-  }
-  graph.lines.geometry.attributes.position.needsUpdate = true
-}
-
-let fitted = false
-function fitCamera() {
-  if (!graph) return
-  const { positions, M } = graph
-  let r = 1
+/**
+ * Frame the whole field exactly: project every node onto the camera basis and
+ * solve for the smallest distance that keeps it inside the frustum. The side
+ * panel covers part of the viewport, so its share of the horizontal FOV is
+ * withheld from the fit and then panned away — the graph lands in the space
+ * actually left over rather than hiding underneath the UI.
+ */
+function fitCamera(positions, M, keepDir = false) {
+  let minX = Infinity, minY = Infinity, minZ = Infinity
+  let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity
   for (let i = 0; i < M; i++) {
     const x = positions[i * 3], y = positions[i * 3 + 1], z = positions[i * 3 + 2]
-    const d = Math.sqrt(x * x + y * y + z * z)
-    if (d > r) r = d
+    if (x < minX) minX = x; if (x > maxX) maxX = x
+    if (y < minY) minY = y; if (y > maxY) maxY = y
+    if (z < minZ) minZ = z; if (z > maxZ) maxZ = z
   }
-  const dist = r / Math.sin((camera.fov * Math.PI) / 180 / 2) * 1.15
-  controls.target.set(0, 0, 0)
-  const dir = camera.position.clone().normalize()
-  camera.position.copy(dir.multiplyScalar(dist))
+  const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2, cz = (minZ + maxZ) / 2
+
+  // target -> camera. Refits triggered by chrome moving keep the user's angle.
+  const dir = keepDir
+    ? camera.position.clone().sub(controls.target).normalize()
+    : new THREE.Vector3(0.35, -0.86, 0.42).normalize()
+  const right = new THREE.Vector3().crossVectors(camera.up, dir).normalize()
+  const camUp = new THREE.Vector3().crossVectors(dir, right).normalize()
+
+  // Withhold the share of the frustum the chrome covers — the rail on the left
+  // (only when open, and only where it isn't an overlay) and the navigator along
+  // the bottom — then pan by half of each, so the graph lands in what's left.
+  const wide = innerWidth > 720
+  const railPx = wide && panelOpen ? els.panel.getBoundingClientRect().width + 2 * PAD : 0
+  const navPx = els.nav.getBoundingClientRect().height + 2 * PAD
+  const panelFrac = Math.min(0.5, railPx / innerWidth)
+  const navFrac = Math.min(0.45, navPx / innerHeight)
+
+  const tanV0 = Math.tan((camera.fov * Math.PI) / 360)
+  const tanH = tanV0 * camera.aspect * (1 - panelFrac)
+  const tanV = tanV0 * (1 - navFrac)
+
+  const p = new THREE.Vector3()
+  let d = 1
+  for (let i = 0; i < M; i++) {
+    p.set(positions[i * 3] - cx, positions[i * 3 + 1] - cy, positions[i * 3 + 2] - cz)
+    const along = p.dot(dir)
+    const need = Math.max(Math.abs(p.dot(right)) / tanH, Math.abs(p.dot(camUp)) / tanV)
+    if (along + need > d) d = along + need
+  }
+  d *= 1.06
+
+  const shiftH = panelFrac * d * tanV0 * camera.aspect
+  const shiftV = navFrac * d * tanV0
+  const target = new THREE.Vector3(cx, cy, cz)
+    .addScaledVector(right, -shiftH)
+    .addScaledVector(camUp, -shiftV)
+
+  controls.target.copy(target)
+  camera.position.copy(target).addScaledVector(dir, d)
+  camera.near = Math.max(0.5, d / 900)
+  camera.far = d * 12
   camera.updateProjectionMatrix()
+  controls.minDistance = d / 60
+  controls.maxDistance = d * 6
+  controls.update()
+  needsRender = true
+}
+
+/** Re-frame for the current chrome without disturbing the viewing angle. */
+function refit() {
+  if (graph) fitCamera(graph.positions, graph.M, true)
+}
+
+// ---------------------------------------------------------------------------
+// Hover + click picking
+// ---------------------------------------------------------------------------
+// Hovering resolves to a *source state*: on an edge that's the state the edge
+// leaves, on a node the node itself. Either way the thing being described is the
+// transition state -> succ[state], so both paths share one code path. The node
+// fallback also covers fixed points, whose self-loop edge has zero length and so
+// is never drawn or hit.
+const raycaster = new THREE.Raycaster()
+const pointer = new THREE.Vector2()
+const tip = document.getElementById('tip')
+
+let hovered = -1
+let pointerInside = false
+let needPick = false
+let cursorX = 0
+let cursorY = 0
+let downX = 0
+let downY = 0
+let dragging = false
+
+const hlLine = new THREE.LineSegments(
+  new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3)),
+  new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, depthTest: false })
+)
+hlLine.renderOrder = 10
+hlLine.visible = false
+scene.add(hlLine)
+
+const hlNodes = new THREE.Points(
+  new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3)),
+  new THREE.PointsMaterial({
+    map: sprite, color: 0xffffff, size: 8, transparent: true,
+    depthTest: false, depthWrite: false, sizeAttenuation: true,
+  })
+)
+hlNodes.renderOrder = 11
+hlNodes.visible = false
+scene.add(hlNodes)
+
+// Where the spacetime panel's seed sits in the graph.
+const seedMark = new THREE.Points(
+  new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3)),
+  new THREE.PointsMaterial({
+    map: sprite, color: 0x66ccff, size: 10, transparent: true, opacity: 0.95,
+    blending: THREE.AdditiveBlending, depthTest: false, depthWrite: false, sizeAttenuation: true,
+  })
+)
+seedMark.renderOrder = 9
+seedMark.visible = false
+scene.add(seedMark)
+
+// Nodes are raw states normally, but rotation *classes* when collapsed — these
+// two translate between a node index and a real ring state either way.
+function repOf(node) {
+  const a = graph.a
+  return a.rep ? a.rep[node] : node
+}
+function nodeOf(state) {
+  const a = graph.a
+  if (state < 0 || state >= a.rawStates) return -1
+  return a.nodeOf ? a.nodeOf[state] : state
+}
+
+// The marker only means something next to the spacetime panel it seeds, so it
+// goes away with the panel.
+function updateSeedMark() {
+  needsRender = true
+  const node = graph ? nodeOf(seed) : -1
+  if (!graph || !panelOpen || node < 0) { seedMark.visible = false; return }
+  const p = seedMark.geometry.attributes.position.array
+  p[0] = graph.positions[node * 3]
+  p[1] = graph.positions[node * 3 + 1]
+  p[2] = graph.positions[node * 3 + 2]
+  seedMark.geometry.attributes.position.needsUpdate = true
+  seedMark.visible = true
+}
+
+const canvas = renderer.domElement
+canvas.addEventListener('pointermove', (e) => {
+  const r = canvas.getBoundingClientRect()
+  pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1
+  pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1
+  cursorX = e.clientX
+  cursorY = e.clientY
+  pointerInside = true
+  needPick = true
+})
+canvas.addEventListener('pointerleave', () => { pointerInside = false; needPick = true })
+canvas.addEventListener('pointerdown', (e) => { downX = e.clientX; downY = e.clientY; dragging = false })
+canvas.addEventListener('pointerup', (e) => {
+  // Only a press that didn't orbit counts as a click.
+  if (Math.hypot(e.clientX - downX, e.clientY - downY) < 5 && hovered >= 0) setSeed(repOf(hovered))
+})
+controls.addEventListener('start', () => { dragging = true; tip.classList.remove('show') })
+controls.addEventListener('end', () => { dragging = false; needPick = true })
+controls.addEventListener('change', () => { needPick = true })
+
+function pick() {
+  if (!graph || !pointerInside || dragging) { setHover(-1); return }
+
+  // Keep the pick radius a constant number of screen pixels at any zoom.
+  const d = camera.position.distanceTo(controls.target)
+  const worldPerPixel = (2 * d * Math.tan((camera.fov * Math.PI) / 360)) / canvas.clientHeight
+  raycaster.params.Line.threshold = 7 * worldPerPixel
+  raycaster.params.Points.threshold = 7 * worldPerPixel
+  raycaster.setFromCamera(pointer, camera)
+
+  const onEdge = raycaster.intersectObject(graph.lines, false)
+  if (onEdge.length) { setHover(graph.edges[onEdge[0].index >> 1]); return }
+  const onNode = raycaster.intersectObject(graph.points, false)
+  setHover(onNode.length ? onNode[0].index : -1)
+}
+
+function setHover(s) {
+  if (s === hovered) { if (s >= 0) placeTip(); return }
+  hovered = s
+  needsRender = true
+  canvas.style.cursor = s >= 0 ? 'pointer' : 'default'
+  if (s < 0) {
+    hlLine.visible = false
+    hlNodes.visible = false
+    tip.classList.remove('show')
+    return
+  }
+  const t = graph.succ[s]
+  const P = graph.positions
+  const lp = hlLine.geometry.attributes.position.array
+  lp[0] = P[s * 3]; lp[1] = P[s * 3 + 1]; lp[2] = P[s * 3 + 2]
+  lp[3] = P[t * 3]; lp[4] = P[t * 3 + 1]; lp[5] = P[t * 3 + 2]
+  hlLine.geometry.attributes.position.needsUpdate = true
+  hlNodes.geometry.attributes.position.array.set(lp)
+  hlNodes.geometry.attributes.position.needsUpdate = true
+  hlLine.visible = s !== t // a fixed point's self-edge has no length to draw
+  hlNodes.visible = true
+
+  renderTip(s, t)
+  tip.classList.add('show')
+  placeTip()
+}
+
+/** One state as a row of cells; cells that differ from `other` get an outline. */
+function cellRow(v, other, n) {
+  let out = ''
+  for (let i = n - 1; i >= 0; i--) {
+    const on = (v >> i) & 1
+    const changed = (other >> i & 1) !== on
+    out += `<i class="${on ? 'on' : ''}${changed ? ' ch' : ''}"></i>`
+  }
+  return out
+}
+
+function stateTags(v) {
+  const a = graph.a
+  if (a.onCycle[v]) return '<em class="ring">on ring</em>'
+  const tags = [`<em>${a.dist[v]} to attractor</em>`]
+  if (a.rev[v].length === 0) tags.push('<em class="eden">eden</em>')
+  return tags.join('')
+}
+
+/** How many distinct states a rotation class holds (a divisor of N). */
+function orbitSize(state, n) {
+  const seen = new Set()
+  let r = state
+  for (let k = 0; k < n; k++) { seen.add(r); r = rotateState(r, n) }
+  return seen.size
+}
+
+// `s` and `t` are node indices; the rows show a real one-tick transition between
+// ring states, which stays literally true when nodes are rotation classes.
+function renderTip(s, t) {
+  const a = graph.a
+  const n = a.N
+  const from = repOf(s)
+  const to = stepState(from, n, a.table)
+  let changed = 0
+  for (let i = 0; i < n; i++) if (((from ^ to) >> i) & 1) changed++
+
+  const classTag = a.collapsed ? `<em>class of ${orbitSize(from, n)}</em>` : ''
+  tip.innerHTML =
+    `<div class="tip-head"><span>state transition</span><span>one tick</span></div>` +
+    `<div class="tip-row"><div class="tip-cells">${cellRow(from, to, n)}</div><span class="tip-id">#${from}</span></div>` +
+    `<div class="tip-arrow">↓ rule ${rule}${s === t ? ' · maps to itself' : ''}</div>` +
+    `<div class="tip-row"><div class="tip-cells">${cellRow(to, from, n)}</div><span class="tip-id">#${to}</span></div>` +
+    `<div class="tip-tags">${stateTags(s)}${stateTags(t)}` +
+    `<em>${changed} of ${n} cells changed</em>${classTag}</div>` +
+    `<div class="tip-hint">click to seed the spacetime view</div>`
+}
+
+function placeTip() {
+  const r = tip.getBoundingClientRect()
+  let left = cursorX + 18
+  let top = cursorY + 18
+  if (left + r.width > innerWidth - 10) left = cursorX - r.width - 18
+  if (top + r.height > innerHeight - 10) top = cursorY - r.height - 18
+  tip.style.left = `${Math.max(10, left)}px`
+  tip.style.top = `${Math.max(10, top)}px`
 }
 
 // ---------------------------------------------------------------------------
 // Render loop
 // ---------------------------------------------------------------------------
+let flowOn = true
+let autoRotateWanted = true
+let last = performance.now()
+let lastPick = 0
+
 function animate() {
   requestAnimationFrame(animate)
-  if (graph && !graph.settled) {
-    tickLayout()
-    syncGeometry()
-    // fit once the layout has roughly taken shape
-    if (!fitted && graph.frames > 40) { fitCamera(); fitted = true }
+  const now = performance.now()
+  const dt = Math.min(0.05, (now - last) / 1000)
+  last = now
+
+  if (flowOn && graph) { stepWalkers(dt); needsRender = true }
+  // Hold still while a link is being read, or it drifts out from under the cursor.
+  controls.autoRotate = autoRotateWanted && hovered < 0
+  if (controls.update()) needsRender = true
+
+  // Picking walks every edge, so at 16k edges it is the most expensive thing
+  // here. Hover doesn't need 60Hz — 60ms is imperceptible and cuts it ~4x.
+  if (needPick && now - lastPick > 60) {
+    needPick = false
+    lastPick = now
+    pick()
   }
-  controls.update()
-  renderer.render(scene, camera)
+
+  // Nothing moving (sparks off, no orbit, no interaction) means nothing to draw.
+  if (needsRender) {
+    needsRender = false
+    renderer.render(scene, camera)
+  }
 }
 animate()
 
+let resizeTimer = null
 addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight
   camera.updateProjectionMatrix()
   renderer.setSize(innerWidth, innerHeight)
+  measureChrome()
+  needsRender = true
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(refit, 180)
 })
 
 // ---------------------------------------------------------------------------
@@ -333,26 +542,89 @@ const els = {
   widthval: document.getElementById('widthval'),
   statecount: document.getElementById('statecount'),
   autorotate: document.getElementById('autorotate'),
+  flow: document.getElementById('flow'),
+  collapse: document.getElementById('collapse'),
   stats: document.getElementById('stats'),
   spacetime: document.getElementById('spacetime'),
   ruleicon: document.getElementById('ruleicon'),
   loading: document.getElementById('loading'),
+  seed: document.getElementById('seed'),
+  seedbits: document.getElementById('seedbits'),
+  seedrandom: document.getElementById('seedrandom'),
+  seedfate: document.getElementById('seedfate'),
+  panel: document.getElementById('panel'),
+  nav: document.getElementById('nav'),
+  panelclose: document.getElementById('panelclose'),
+  paneltoggle: document.getElementById('paneltoggle'),
 }
+
+/** Read the chrome's real size so the camera fit and mobile insets stay honest. */
+function measureChrome() {
+  PAD = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pad')) || 16
+  const navH = els.nav.getBoundingClientRect().height
+  document.documentElement.style.setProperty('--nav-h', `${Math.round(navH)}px`)
+}
+
+function setPanel(open) {
+  panelOpen = open
+  document.body.classList.toggle('panel-hidden', !open)
+  els.paneltoggle.setAttribute('aria-expanded', String(open))
+  updateSeedMark()
+  measureChrome()
+  clearTimeout(panelTimer)
+  panelTimer = setTimeout(refit, 300) // after the slide transition settles
+}
+let panelTimer = null
 
 let rule = 110
 let N = 9
+let seed = 1 << (N >> 1) // the classic single lit cell
+let collapse = false
 
-// A hand-picked tour of rules with structurally rich / pretty state graphs.
-const TOUR = [110, 30, 90, 54, 150, 184, 22, 122, 105, 60, 73, 45, 126, 18, 161, 250, 99, 124]
-let tourPos = 0
+// Hand-picked rules worth looking at, then the record-holders for each stat —
+// which depend on ring size, so they are found live rather than hardcoded.
+const CURATED = [153, 151, 154, 169, 172, 182, 118, 133]
+const STAT_KEYS = ['nComp', 'maxCycle', 'fixedPoints', 'maxDist', 'edenCount']
+const extremesByN = new Map()
+let tourPos = -1
+
+function statExtremes(refN) {
+  let found = extremesByN.get(refN)
+  if (found) return found
+  const hi = new Map()
+  const lo = new Map()
+  for (let r = 0; r < 256; r++) {
+    const a = analyzeRule(r, refN)
+    for (const k of STAT_KEYS) {
+      if (!hi.has(k) || a[k] > hi.get(k).v) hi.set(k, { r, v: a[k] })
+      if (!lo.has(k) || a[k] < lo.get(k).v) lo.set(k, { r, v: a[k] })
+    }
+  }
+  found = [...hi.values(), ...lo.values()].map((x) => x.r)
+  extremesByN.set(refN, found)
+  return found
+}
+
+/** Curated rules first, then any stat record-holders not already among them. */
+function tourRules() {
+  // Scanning all 256 rules costs ~2^refN each, so cap the reference size; which
+  // rules hold the records barely moves above it.
+  const refN = Math.min(N, 11)
+  const seen = new Set(CURATED)
+  const extra = []
+  for (const r of statExtremes(refN)) {
+    if (!seen.has(r)) { seen.add(r); extra.push(r) }
+  }
+  return CURATED.concat(extra)
+}
 
 function setStats(a) {
   const rows = [
-    ['states', a.M.toLocaleString()],
-    ['attractors', a.attractors],
-    ['max cycle', a.maxCycle],
+    [a.collapsed ? 'classes' : 'states', a.M.toLocaleString()],
+    ['basins', a.attractors],
+    ['longest cycle', a.maxCycle],
     ['fixed points', a.fixedPoints],
-    ['components', a.nComp],
+    ['deepest tree', a.maxDist],
     ['eden states', a.edenCount],
   ]
   els.stats.innerHTML = rows
@@ -360,46 +632,98 @@ function setStats(a) {
     .join('')
 }
 
-let rebuildTimer = null
+/** Redraw the spacetime panel and everything that reports the current seed. */
+function drawSeed() {
+  seed = clamp(seed, 0, (1 << N) - 1)
+  els.seed.max = (1 << N) - 1
+  els.seed.value = seed
+
+  let bits = ''
+  for (let i = N - 1; i >= 0; i--) bits += `<i class="${(seed >> i) & 1 ? 'on' : ''}"></i>`
+  els.seedbits.innerHTML = bits
+
+  const { transient, period } = drawSpacetime(els.spacetime, rule, N, seed)
+  els.seedfate.textContent = transient === 0
+    ? `already on a period-${period} cycle`
+    : `falls in after ${transient}, then period ${period}`
+  updateSeedMark()
+}
+
+function setSeed(s) {
+  seed = s
+  drawSeed()
+}
+
+let timer = null
 function update({ rebuild = true } = {}) {
   rule = clamp(parseInt(els.rule.value) || 0, 0, 255)
   els.rule.value = rule
-
   drawRuleIcon(els.ruleicon, rule)
-  drawSpacetime(els.spacetime, rule)
-
+  drawSeed()
   if (!rebuild) return
+
   els.loading.classList.add('show')
-  // defer the (potentially heavy) analysis so the loading text can paint
-  clearTimeout(rebuildTimer)
-  rebuildTimer = setTimeout(() => {
-    const a = analyzeRule(rule, N)
+  clearTimeout(timer)
+  timer = setTimeout(() => {
+    const a = analyzeRule(rule, N, { collapseRotation: collapse })
     setStats(a)
-    els.statecount.textContent = `= ${a.M.toLocaleString()} states`
     buildGraph(a)
     els.loading.classList.remove('show')
   }, 16)
 }
 
+/** A new rule deserves a fresh vantage point, so re-roll the spacetime seed. */
 function setRule(r) {
   els.rule.value = ((r % 256) + 256) % 256
+  seed = Math.floor(Math.random() * (1 << N))
   update()
 }
 
-els.rule.addEventListener('change', () => update())
+els.rule.addEventListener('change', () => {
+  seed = Math.floor(Math.random() * (1 << N))
+  update()
+})
 els.prev.addEventListener('click', () => setRule(rule - 1))
 els.next.addEventListener('click', () => setRule(rule + 1))
-els.random.addEventListener('click', () => setRule(Math.floor(frac(Math.sin(performance.now()) * 9301) * 256)))
-els.interesting.addEventListener('click', () => { tourPos = (tourPos + 1) % TOUR.length; setRule(TOUR[tourPos]) })
-
-els.width.addEventListener('input', () => {
-  N = parseInt(els.width.value)
-  els.widthval.textContent = N
-  els.statecount.textContent = `= ${(1 << N).toLocaleString()} states`
+els.random.addEventListener('click', () => setRule(Math.floor(Math.random() * 256)))
+els.interesting.addEventListener('click', () => {
+  els.loading.classList.add('show') // finding the record-holders scans all 256 rules
+  requestAnimationFrame(() => {
+    const list = tourRules()
+    tourPos = (tourPos + 1) % list.length
+    setRule(list[tourPos])
+  })
 })
-els.width.addEventListener('change', () => { N = parseInt(els.width.value); update() })
 
-els.autorotate.addEventListener('change', () => { controls.autoRotate = els.autorotate.checked })
+// `input` only previews the labels — it must not touch N, or the `change`
+// handler below would read the new value as its own previous one.
+els.width.addEventListener('input', () => {
+  const n = parseInt(els.width.value)
+  els.widthval.textContent = n
+  els.statecount.textContent = `= ${(1 << n).toLocaleString()} states`
+})
+els.width.addEventListener('change', () => {
+  const prev = N
+  N = parseInt(els.width.value)
+  // Keep the seed pattern anchored at the same end of the ring when N changes.
+  if (N > prev) seed <<= N - prev
+  else seed >>= prev - N
+  update()
+})
+
+els.seed.addEventListener('input', () => setSeed(parseInt(els.seed.value)))
+els.seedrandom.addEventListener('click', () => setSeed(Math.floor(Math.random() * (1 << N))))
+
+els.autorotate.addEventListener('change', () => { autoRotateWanted = els.autorotate.checked })
+els.flow.addEventListener('change', () => {
+  flowOn = els.flow.checked
+  if (graph) graph.walkers.visible = flowOn
+  needsRender = true
+})
+els.collapse.addEventListener('change', () => { collapse = els.collapse.checked; update() })
+
+els.panelclose.addEventListener('click', () => setPanel(false))
+els.paneltoggle.addEventListener('click', () => setPanel(true))
 
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return
@@ -408,13 +732,17 @@ addEventListener('keydown', (e) => {
   else if (e.key === 'r' || e.key === 'R') els.random.click()
 })
 
-// init
 els.width.value = N
 els.widthval.textContent = N
+els.statecount.textContent = `= ${(1 << N).toLocaleString()} states`
+
+// Narrow screens start with the rail out of the way; the graph is the point.
+panelOpen = !matchMedia('(max-width: 720px)').matches
+document.body.classList.toggle('panel-hidden', !panelOpen)
+els.paneltoggle.setAttribute('aria-expanded', String(panelOpen))
+measureChrome()
 update()
 
-// ---------------------------------------------------------------------------
-// helpers
 // ---------------------------------------------------------------------------
 function frac(x) { return x - Math.floor(x) }
 function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)) }
@@ -426,11 +754,9 @@ function makeDiscTexture() {
   const ctx = c.getContext('2d')
   const g = ctx.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2)
   g.addColorStop(0, 'rgba(255,255,255,1)')
-  g.addColorStop(0.35, 'rgba(255,255,255,0.85)')
+  g.addColorStop(0.35, 'rgba(255,255,255,0.8)')
   g.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = g
   ctx.fillRect(0, 0, s, s)
-  const tex = new THREE.CanvasTexture(c)
-  tex.needsUpdate = true
-  return tex
+  return new THREE.CanvasTexture(c)
 }
