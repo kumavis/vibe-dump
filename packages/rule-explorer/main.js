@@ -49,12 +49,7 @@ function buildGraph(a) {
 
   // Node colour: 1 at the attractor, falling to 0 at the deepest transient.
   const nodeColors = new Float32Array(M * 3)
-  for (let v = 0; v < M; v++) {
-    const [r, g, b] = depthColor(1 - a.dist[v] / maxD)
-    nodeColors[v * 3] = r
-    nodeColors[v * 3 + 1] = g
-    nodeColors[v * 3 + 2] = b
-  }
+  for (let v = 0; v < M; v++) depthColor(1 - a.dist[v] / maxD, nodeColors, v * 3)
 
   const nodeSize = nodeSpacing * 0.5
 
@@ -75,8 +70,10 @@ function buildGraph(a) {
   scene.add(points)
 
   // Attractor nodes get an additive halo so the rings read as the hot core.
-  const cycleIdx = []
-  for (let v = 0; v < M; v++) if (a.onCycle[v]) cycleIdx.push(v)
+  let nCycle = 0
+  for (let v = 0; v < M; v++) if (a.onCycle[v]) nCycle++
+  const cycleIdx = new Int32Array(nCycle)
+  for (let v = 0, j = 0; v < M; v++) if (a.onCycle[v]) cycleIdx[j++] = v
   const glowPos = new Float32Array(cycleIdx.length * 3)
   for (let j = 0; j < cycleIdx.length; j++) {
     const i = cycleIdx[j] * 3
@@ -103,21 +100,27 @@ function buildGraph(a) {
 
   // Edges, coloured per endpoint. Because colour tracks depth, every edge is a
   // gradient running from cool (source) to hot (target) — direction for free.
-  const edges = []
-  for (let s = 0; s < M; s++) if (a.succ[s] !== s) edges.push(s)
-  const linePos = new Float32Array(edges.length * 6)
-  const lineCol = new Float32Array(edges.length * 6)
-  for (let e = 0; e < edges.length; e++) {
+  let nEdges = 0
+  for (let s = 0; s < M; s++) if (a.succ[s] !== s) nEdges++
+  const edges = new Int32Array(nEdges)
+  for (let s = 0, e = 0; s < M; s++) if (a.succ[s] !== s) edges[e++] = s
+
+  const linePos = new Float32Array(nEdges * 6)
+  const lineCol = new Float32Array(nEdges * 6)
+  for (let e = 0; e < nEdges; e++) {
     const s = edges[e]
     const t = a.succ[s]
-    const ring = a.onCycle[s] && a.onCycle[t] // attractor edges burn brighter
-    writeEdge(linePos, e * 6, positions, s, t)
-    for (const [k, v] of [[0, s], [1, t]]) {
-      const boost = ring ? 1.0 : 0.62
-      lineCol[e * 6 + k * 3] = nodeColors[v * 3] * boost
-      lineCol[e * 6 + k * 3 + 1] = nodeColors[v * 3 + 1] * boost
-      lineCol[e * 6 + k * 3 + 2] = nodeColors[v * 3 + 2] * boost
-    }
+    const boost = a.onCycle[s] && a.onCycle[t] ? 1.0 : 0.62 // attractor edges burn brighter
+    const o = e * 6
+    writeEdge(linePos, o, positions, s, t)
+    const si = s * 3
+    const ti = t * 3
+    lineCol[o] = nodeColors[si] * boost
+    lineCol[o + 1] = nodeColors[si + 1] * boost
+    lineCol[o + 2] = nodeColors[si + 2] * boost
+    lineCol[o + 3] = nodeColors[ti] * boost
+    lineCol[o + 4] = nodeColors[ti + 1] * boost
+    lineCol[o + 5] = nodeColors[ti + 2] * boost
   }
   const lineGeo = new THREE.BufferGeometry()
   lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3))

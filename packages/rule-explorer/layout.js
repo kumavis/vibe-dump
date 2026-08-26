@@ -192,11 +192,16 @@ function packDisks(radii, pad) {
   const order = Array.from({ length: n }, (_, i) => i).sort((i, j) => radii[j] - radii[i])
   const out = new Array(n)
   let cursor = 0
+  let prevR = Infinity
 
   for (const idx of order) {
     const r = radii[idx] + pad
-    // Disks only shrink as we go, so resume the spiral near the last hit.
-    let t = Math.max(0, cursor - 64)
+    // Disks only shrink as we go, so resume the spiral near the last hit. A disk
+    // no smaller than its predecessor cannot fit in a gap the predecessor already
+    // rejected, so it skips the backtrack entirely — which is the whole cost for
+    // rules like 204 where all 2^N basins are the same size.
+    let t = r < prevR ? Math.max(0, cursor - 32) : cursor + 1
+    prevR = r
     for (;;) {
       const ang = t * GOLDEN
       const rad = step * Math.sqrt(t)
@@ -232,17 +237,19 @@ const RAMP = [
   [1.0, 0xfd, 0xef, 0xa2],
 ]
 
-/** Map v in [0,1] (1 = attractor) to an [r,g,b] triple in 0..1. */
-export function depthColor(v) {
+/**
+ * Map v in [0,1] (1 = attractor) to rgb in 0..1, written straight into `out` at
+ * `o`. Writing in place rather than returning a triple avoids one allocation per
+ * node, which at 65k nodes is the difference between smooth and janky.
+ */
+export function depthColor(v, out, o) {
   const t = v <= 0 ? 0 : v >= 1 ? 1 : v
   let i = 0
   while (i < RAMP.length - 2 && t > RAMP[i + 1][0]) i++
   const a = RAMP[i]
   const b = RAMP[i + 1]
   const k = (t - a[0]) / (b[0] - a[0])
-  return [
-    (a[1] + (b[1] - a[1]) * k) / 255,
-    (a[2] + (b[2] - a[2]) * k) / 255,
-    (a[3] + (b[3] - a[3]) * k) / 255,
-  ]
+  out[o] = (a[1] + (b[1] - a[1]) * k) / 255
+  out[o + 1] = (a[2] + (b[2] - a[2]) * k) / 255
+  out[o + 2] = (a[3] + (b[3] - a[3]) * k) / 255
 }

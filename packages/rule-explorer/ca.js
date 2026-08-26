@@ -189,8 +189,14 @@ function indegOriginal(rev, s) {
  * finite and the rule deterministic. Returns how many steps are spent falling
  * (transient) and the length of the cycle it lands in (period).
  */
+// Reused across calls: dragging the seed slider calls this on every input event,
+// and at N=16 a fresh buffer each time is a quarter-megabyte of garbage per event.
+let seenBuf = null
 export function trajectoryInfo(seed, N, table) {
-  const seen = new Int32Array(1 << N).fill(-1)
+  const R = 1 << N
+  if (!seenBuf || seenBuf.length < R) seenBuf = new Int32Array(R)
+  const seen = seenBuf
+  seen.fill(-1, 0, R)
   let s = seed
   for (let t = 0; ; t++) {
     if (seen[s] >= 0) return { transient: seen[s], period: t - seen[s] }
