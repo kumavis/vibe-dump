@@ -158,6 +158,110 @@ button:active { transform: translateY(1px); }
 }
 .section-label .hint { float: right; opacity: 0.7; letter-spacing: 0.06em; text-transform: none; }
 
+.seed { margin-bottom: 8px; }
+.seed-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.seed-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.seed-bits {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+}
+.seed-bits i {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+}
+.seed-bits i.on { background: var(--accent); }
+.seed-top button {
+  padding: 3px 7px;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  color: var(--dim);
+  flex: none;
+}
+.seed input[type="range"] { width: 100%; accent-color: var(--accent); display: block; }
+.seed-note {
+  margin: 7px 0 0;
+  font-size: 10px;
+  line-height: 1.45;
+  color: var(--dim);
+}
+
+#tip {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+  background: rgba(10, 12, 22, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+#tip.show { opacity: 1; }
+.tip-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 9px;
+}
+.tip-row { display: flex; align-items: center; gap: 9px; }
+.tip-cells { display: flex; gap: 2px; }
+.tip-cells i {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid transparent;
+}
+.tip-cells i.on { background: #e8ecff; }
+.tip-cells i.ch { border-color: #f9990a; }
+.tip-cells i.on.ch { background: #fdefa2; }
+.tip-id {
+  font-size: 11px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+.tip-arrow {
+  font-size: 10px;
+  color: var(--accent);
+  margin: 4px 0 4px 3px;
+  letter-spacing: 0.06em;
+}
+.tip-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+.tip-tags em {
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--dim);
+}
+.tip-tags em.ring { background: rgba(255, 209, 102, 0.16); color: #ffd166; }
+.tip-tags em.eden { background: rgba(156, 39, 99, 0.24); color: #e88bb4; }
+.tip-hint { margin-top: 8px; font-size: 9.5px; color: var(--dim); opacity: 0.75; }
+
 #spacetime {
   width: 100%;
   height: auto;

@@ -152,7 +152,11 @@ function buildGraph(a) {
   )
   scene.add(walkers)
 
-  graph = { points, glow, lines, walkers, positions, succ: a.succ, walkFrom, walkT, wCount, M }
+  graph = { points, glow, lines, walkers, positions, succ: a.succ, walkFrom, walkT, wCount, M, edges, a, nodeSize }
+  hlNodes.material.size = nodeSize * 2.4
+  seedMark.material.size = nodeSize * 3.2
+  setHover(-1)
+  updateSeedMark()
   fitCamera(positions, M)
 }
 
@@ -248,9 +252,177 @@ function fitCamera(positions, M) {
 }
 
 // ---------------------------------------------------------------------------
+// Hover + click picking
+// ---------------------------------------------------------------------------
+// Hovering resolves to a *source state*: on an edge that's the state the edge
+// leaves, on a node the node itself. Either way the thing being described is the
+// transition state -> succ[state], so both paths share one code path. The node
+// fallback also covers fixed points, whose self-loop edge has zero length and so
+// is never drawn or hit.
+const raycaster = new THREE.Raycaster()
+const pointer = new THREE.Vector2()
+const tip = document.getElementById('tip')
+
+let hovered = -1
+let pointerInside = false
+let needPick = false
+let cursorX = 0
+let cursorY = 0
+let downX = 0
+let downY = 0
+let dragging = false
+
+const hlLine = new THREE.LineSegments(
+  new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3)),
+  new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, depthTest: false })
+)
+hlLine.renderOrder = 10
+hlLine.visible = false
+scene.add(hlLine)
+
+const hlNodes = new THREE.Points(
+  new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3)),
+  new THREE.PointsMaterial({
+    map: sprite, color: 0xffffff, size: 8, transparent: true,
+    depthTest: false, depthWrite: false, sizeAttenuation: true,
+  })
+)
+hlNodes.renderOrder = 11
+hlNodes.visible = false
+scene.add(hlNodes)
+
+// Where the spacetime panel's seed sits in the graph.
+const seedMark = new THREE.Points(
+  new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3)),
+  new THREE.PointsMaterial({
+    map: sprite, color: 0x66ccff, size: 10, transparent: true, opacity: 0.95,
+    blending: THREE.AdditiveBlending, depthTest: false, depthWrite: false, sizeAttenuation: true,
+  })
+)
+seedMark.renderOrder = 9
+seedMark.visible = false
+scene.add(seedMark)
+
+function updateSeedMark() {
+  if (!graph || seed >= graph.M) { seedMark.visible = false; return }
+  const p = seedMark.geometry.attributes.position.array
+  p[0] = graph.positions[seed * 3]
+  p[1] = graph.positions[seed * 3 + 1]
+  p[2] = graph.positions[seed * 3 + 2]
+  seedMark.geometry.attributes.position.needsUpdate = true
+  seedMark.visible = true
+}
+
+const canvas = renderer.domElement
+canvas.addEventListener('pointermove', (e) => {
+  const r = canvas.getBoundingClientRect()
+  pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1
+  pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1
+  cursorX = e.clientX
+  cursorY = e.clientY
+  pointerInside = true
+  needPick = true
+})
+canvas.addEventListener('pointerleave', () => { pointerInside = false; needPick = true })
+canvas.addEventListener('pointerdown', (e) => { downX = e.clientX; downY = e.clientY; dragging = false })
+canvas.addEventListener('pointerup', (e) => {
+  // Only a press that didn't orbit counts as a click.
+  if (Math.hypot(e.clientX - downX, e.clientY - downY) < 5 && hovered >= 0) setSeed(hovered)
+})
+controls.addEventListener('start', () => { dragging = true; tip.classList.remove('show') })
+controls.addEventListener('end', () => { dragging = false; needPick = true })
+controls.addEventListener('change', () => { needPick = true })
+
+function pick() {
+  if (!graph || !pointerInside || dragging) { setHover(-1); return }
+
+  // Keep the pick radius a constant number of screen pixels at any zoom.
+  const d = camera.position.distanceTo(controls.target)
+  const worldPerPixel = (2 * d * Math.tan((camera.fov * Math.PI) / 360)) / canvas.clientHeight
+  raycaster.params.Line.threshold = 7 * worldPerPixel
+  raycaster.params.Points.threshold = 7 * worldPerPixel
+  raycaster.setFromCamera(pointer, camera)
+
+  const onEdge = raycaster.intersectObject(graph.lines, false)
+  if (onEdge.length) { setHover(graph.edges[onEdge[0].index >> 1]); return }
+  const onNode = raycaster.intersectObject(graph.points, false)
+  setHover(onNode.length ? onNode[0].index : -1)
+}
+
+function setHover(s) {
+  if (s === hovered) { if (s >= 0) placeTip(); return }
+  hovered = s
+  canvas.style.cursor = s >= 0 ? 'pointer' : 'default'
+  if (s < 0) {
+    hlLine.visible = false
+    hlNodes.visible = false
+    tip.classList.remove('show')
+    return
+  }
+  const t = graph.succ[s]
+  const P = graph.positions
+  const lp = hlLine.geometry.attributes.position.array
+  lp[0] = P[s * 3]; lp[1] = P[s * 3 + 1]; lp[2] = P[s * 3 + 2]
+  lp[3] = P[t * 3]; lp[4] = P[t * 3 + 1]; lp[5] = P[t * 3 + 2]
+  hlLine.geometry.attributes.position.needsUpdate = true
+  hlNodes.geometry.attributes.position.array.set(lp)
+  hlNodes.geometry.attributes.position.needsUpdate = true
+  hlLine.visible = s !== t // a fixed point's self-edge has no length to draw
+  hlNodes.visible = true
+
+  renderTip(s, t)
+  tip.classList.add('show')
+  placeTip()
+}
+
+/** One state as a row of cells; cells that differ from `other` get an outline. */
+function cellRow(v, other, n) {
+  let out = ''
+  for (let i = n - 1; i >= 0; i--) {
+    const on = (v >> i) & 1
+    const changed = (other >> i & 1) !== on
+    out += `<i class="${on ? 'on' : ''}${changed ? ' ch' : ''}"></i>`
+  }
+  return out
+}
+
+function stateTags(v) {
+  const a = graph.a
+  if (a.onCycle[v]) return '<em class="ring">on ring</em>'
+  const tags = [`<em>${a.dist[v]} to attractor</em>`]
+  if (a.rev[v].length === 0) tags.push('<em class="eden">eden</em>')
+  return tags.join('')
+}
+
+function renderTip(s, t) {
+  const n = graph.a.N
+  let changed = 0
+  for (let i = 0; i < n; i++) if (((s ^ t) >> i) & 1) changed++
+  tip.innerHTML =
+    `<div class="tip-head"><span>state transition</span><span>one tick</span></div>` +
+    `<div class="tip-row"><div class="tip-cells">${cellRow(s, t, n)}</div><span class="tip-id">#${s}</span></div>` +
+    `<div class="tip-arrow">↓ rule ${rule}${s === t ? ' · maps to itself' : ''}</div>` +
+    `<div class="tip-row"><div class="tip-cells">${cellRow(t, s, n)}</div><span class="tip-id">#${t}</span></div>` +
+    `<div class="tip-tags">${stateTags(s)}${stateTags(t)}` +
+    `<em>${changed} of ${n} cells changed</em></div>` +
+    `<div class="tip-hint">click to seed the spacetime view</div>`
+}
+
+function placeTip() {
+  const r = tip.getBoundingClientRect()
+  let left = cursorX + 18
+  let top = cursorY + 18
+  if (left + r.width > innerWidth - 10) left = cursorX - r.width - 18
+  if (top + r.height > innerHeight - 10) top = cursorY - r.height - 18
+  tip.style.left = `${Math.max(10, left)}px`
+  tip.style.top = `${Math.max(10, top)}px`
+}
+
+// ---------------------------------------------------------------------------
 // Render loop
 // ---------------------------------------------------------------------------
 let flowOn = true
+let autoRotateWanted = true
 let last = performance.now()
 function animate() {
   requestAnimationFrame(animate)
@@ -258,7 +430,10 @@ function animate() {
   const dt = Math.min(0.05, (now - last) / 1000)
   last = now
   if (flowOn) stepWalkers(dt)
+  // Hold still while a link is being read, or it drifts out from under the cursor.
+  controls.autoRotate = autoRotateWanted && hovered < 0
   controls.update()
+  if (needPick) { needPick = false; pick() }
   renderer.render(scene, camera)
 }
 animate()
@@ -287,10 +462,15 @@ const els = {
   spacetime: document.getElementById('spacetime'),
   ruleicon: document.getElementById('ruleicon'),
   loading: document.getElementById('loading'),
+  seed: document.getElementById('seed'),
+  seedbits: document.getElementById('seedbits'),
+  seedrandom: document.getElementById('seedrandom'),
+  seedfate: document.getElementById('seedfate'),
 }
 
 let rule = 110
 let N = 9
+let seed = 1 << (N >> 1) // the classic single lit cell
 
 const TOUR = [110, 30, 90, 54, 150, 184, 22, 122, 105, 60, 73, 45, 126, 18, 161, 250, 99, 124]
 let tourPos = 0
@@ -309,12 +489,34 @@ function setStats(a) {
     .join('')
 }
 
+/** Redraw the spacetime panel and everything that reports the current seed. */
+function drawSeed() {
+  seed = clamp(seed, 0, (1 << N) - 1)
+  els.seed.max = (1 << N) - 1
+  els.seed.value = seed
+
+  let bits = ''
+  for (let i = N - 1; i >= 0; i--) bits += `<i class="${(seed >> i) & 1 ? 'on' : ''}"></i>`
+  els.seedbits.innerHTML = bits
+
+  const { transient, period } = drawSpacetime(els.spacetime, rule, N, seed)
+  els.seedfate.textContent = transient === 0
+    ? `already on a period-${period} cycle`
+    : `falls in after ${transient}, then period ${period}`
+  updateSeedMark()
+}
+
+function setSeed(s) {
+  seed = s
+  drawSeed()
+}
+
 let timer = null
 function update({ rebuild = true } = {}) {
   rule = clamp(parseInt(els.rule.value) || 0, 0, 255)
   els.rule.value = rule
   drawRuleIcon(els.ruleicon, rule)
-  drawSpacetime(els.spacetime, rule)
+  drawSeed()
   if (!rebuild) return
 
   els.loading.classList.add('show')
@@ -341,14 +543,26 @@ els.interesting.addEventListener('click', () => {
   setRule(TOUR[tourPos])
 })
 
+// `input` only previews the labels — it must not touch N, or the `change`
+// handler below would read the new value as its own previous one.
 els.width.addEventListener('input', () => {
-  N = parseInt(els.width.value)
-  els.widthval.textContent = N
-  els.statecount.textContent = `= ${(1 << N).toLocaleString()} states`
+  const n = parseInt(els.width.value)
+  els.widthval.textContent = n
+  els.statecount.textContent = `= ${(1 << n).toLocaleString()} states`
 })
-els.width.addEventListener('change', () => { N = parseInt(els.width.value); update() })
+els.width.addEventListener('change', () => {
+  const prev = N
+  N = parseInt(els.width.value)
+  // Keep the seed pattern anchored at the same end of the ring when N changes.
+  if (N > prev) seed <<= N - prev
+  else seed >>= prev - N
+  update()
+})
 
-els.autorotate.addEventListener('change', () => { controls.autoRotate = els.autorotate.checked })
+els.seed.addEventListener('input', () => setSeed(parseInt(els.seed.value)))
+els.seedrandom.addEventListener('click', () => setSeed(Math.floor(Math.random() * (1 << N))))
+
+els.autorotate.addEventListener('change', () => { autoRotateWanted = els.autorotate.checked })
 els.flow.addEventListener('change', () => {
   flowOn = els.flow.checked
   if (graph) graph.walkers.visible = flowOn

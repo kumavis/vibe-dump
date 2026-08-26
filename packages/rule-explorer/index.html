@@ -32,8 +32,17 @@
       </section>
 
       <section class="evo">
-        <div class="section-label">spacetime <span class="hint">single seed, top-down</span></div>
+        <div class="section-label">spacetime <span class="hint" id="seedfate"></span></div>
+        <div class="seed">
+          <div class="seed-top">
+            <span class="seed-label">seed</span>
+            <span class="seed-bits" id="seedbits"></span>
+            <button id="seedrandom" title="Random starting state">rnd</button>
+          </div>
+          <input id="seed" type="range" min="0" max="511" step="1" value="16" aria-label="Starting state" />
+        </div>
         <canvas id="spacetime" width="256" height="160"></canvas>
+        <p class="seed-note">Click any node in the graph to start from that state.</p>
       </section>
 
       <section class="controls">
@@ -67,12 +76,14 @@
       <footer>
         <p>Each node is one global state of a length-<i>N</i> ring (wrap-around). A
            deterministic rule sends every state to exactly one successor, so the whole
-           thing is a <b>functional graph</b> — transient trees draining into cycles.
-           Drag to orbit · scroll to zoom.</p>
+           thing is a <b>functional graph</b> — transient trees draining into cycles.</p>
+        <p>Hover a link to read its transition · click a node to seed the spacetime
+           panel · drag to orbit · scroll to zoom.</p>
       </footer>
     </aside>
 
     <div id="loading">building state graph…</div>
+    <div id="tip" role="status" aria-live="polite"></div>
 
     <script type="module" src="./main.js"></script>
   </body>

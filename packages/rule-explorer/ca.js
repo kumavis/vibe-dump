@@ -145,46 +145,83 @@ function indegOriginal(rev, s) {
 }
 
 /**
- * Render a rule's classic spacetime diagram from a single centre seed onto a
- * 2D canvas (time flows downward). Width = canvas width in cells.
+ * Follow a seed state until it repeats, which it always must: the state space is
+ * finite and the rule deterministic. Returns how many steps are spent falling
+ * (transient) and the length of the cycle it lands in (period).
  */
-export function drawSpacetime(canvas, rule, opts = {}) {
+export function trajectoryInfo(seed, N, table) {
+  const seen = new Int32Array(1 << N).fill(-1)
+  let s = seed
+  for (let t = 0; ; t++) {
+    if (seen[s] >= 0) return { transient: seen[s], period: t - seen[s] }
+    seen[s] = t
+    s = stepState(s, N, table)
+  }
+}
+
+/**
+ * Draw one seed's trajectory as a spacetime diagram: time flows downward, the
+ * N-cell ring runs across. The ring is tiled horizontally to fill the canvas —
+ * honest rather than decorative, since a length-N periodic ring *is* an infinite
+ * lattice with spatial period N.
+ *
+ * Rows switch from the transient colour to the attractor colour at the step where
+ * the trajectory falls into its cycle, which is the same event as a spark
+ * reaching the glowing ring in the 3-D graph.
+ *
+ * Returns { transient, period }.
+ */
+export function drawSpacetime(canvas, rule, N, seed, opts = {}) {
   const ctx = canvas.getContext('2d')
   const W = canvas.width
   const H = canvas.height
   const table = ruleTable(rule)
-  const fg = opts.fg || '#6cf'
-  const bg = opts.bg || '#0a0c16'
+  const rowH = opts.rowH ?? 2
+  const steps = Math.floor(H / rowH)
 
-  ctx.fillStyle = bg
-  ctx.fillRect(0, 0, W, H)
+  const bg = hexToRgb(opts.bg || '#0a0c16')
+  const fgTransient = hexToRgb(opts.fg || '#66ccff')
+  const fgCycle = hexToRgb(opts.fgCycle || '#ffd166')
 
-  let row = new Uint8Array(W)
-  row[W >> 1] = 1 // single seed in the centre
+  const { transient, period } = trajectoryInfo(seed, N, table)
+
+  // Tile the ring only enough to keep cells ~11px wide: finer than that and the
+  // repetition reads as busy wallpaper instead of a legible row of cells.
+  const repeats = Math.max(1, Math.round(W / (N * 11)))
+  const cellW = W / (N * repeats)
 
   const img = ctx.createImageData(W, H)
-  const [fr, fgc, fb] = hexToRgb(fg)
-  const [br, bgc, bb] = hexToRgb(bg)
+  // Which ring bit each column shows. Bit N-1 is the leftmost cell, matching the
+  // usual binary reading order.
+  const bitAt = new Int32Array(W)
+  for (let x = 0; x < W; x++) bitAt[x] = N - 1 - (Math.floor(x / cellW) % N)
 
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      const on = row[x]
-      const o = (y * W + x) * 4
-      img.data[o] = on ? fr : br
-      img.data[o + 1] = on ? fgc : bgc
-      img.data[o + 2] = on ? fb : bb
-      img.data[o + 3] = 255
+  let s = seed
+  for (let t = 0; t < steps; t++) {
+    const fg = t >= transient ? fgCycle : fgTransient
+    for (let sub = 0; sub < rowH; sub++) {
+      const y = t * rowH + sub
+      if (y >= H) break
+      for (let x = 0; x < W; x++) {
+        const on = (s >> bitAt[x]) & 1
+        const c = on ? fg : bg
+        const o = (y * W + x) * 4
+        img.data[o] = c[0]
+        img.data[o + 1] = c[1]
+        img.data[o + 2] = c[2]
+        img.data[o + 3] = 255
+      }
     }
-    const nextRow = new Uint8Array(W)
-    for (let x = 0; x < W; x++) {
-      const l = row[(x - 1 + W) % W]
-      const c = row[x]
-      const r = row[(x + 1) % W]
-      nextRow[x] = table[(l << 2) | (c << 1) | r]
-    }
-    row = nextRow
+    s = stepState(s, N, table)
   }
   ctx.putImageData(img, 0, 0)
+
+  // Mark the moment it falls in, when that happens inside the visible window.
+  if (transient > 0 && transient < steps) {
+    ctx.fillStyle = 'rgba(255, 209, 102, 0.85)'
+    ctx.fillRect(0, transient * rowH - 1, W, 1)
+  }
+  return { transient, period }
 }
 
 /** Draw the 8-cell rule diagram (neighbourhood patterns over their outputs). */
