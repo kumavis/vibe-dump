@@ -144,6 +144,19 @@ npm run thumbnails -- --check       # list apps missing one (exit 1) — this is
   }
   ```
 
+- **An app whose chrome hides its own subject can press it away.** `click`
+  takes a selector, pressed once the app is ready and before the settle.
+  `rule-explorer` opens with a detail rail over two thirds of the frame, so
+  its card was mostly UI and a smear of graph; closing the rail refits the
+  camera and the basins become the picture:
+
+  ```json
+  "thumbnail": { "waitFor": "!#loading.show", "click": "#panelclose", "settle": 1500 }
+  ```
+
+  Wait for *built*, not just loaded, before clicking — a refit that lands
+  mid-build frames a graph that isn't there yet.
+
 - **Apps that fetch live data** (`eclipse-iceland-clear-skies` pulls forecasts)
   shoot fine but with empty data panels when the sandbox has no outbound
   network. That's cosmetic at card size; re-shoot on a networked machine if it

@@ -37,13 +37,15 @@ export async function discoverApps() {
       hasThumbnail: existsSync(thumbnail),
       title: meta.title ?? entry.name,
       description: meta.description ?? '',
-      // Optional per-app thumbnail tuning, for scenes that need longer than the
-      // default before they look like anything:
-      //   "gallery": { "thumbnail": { "waitFor": "!#boot", "settle": 2000 } }
-      // `settle` is the pause before the shot; `waitFor` is a selector to wait
-      // for first, prefixed with "!" to wait for it to *leave* instead.
+      // Optional per-app thumbnail tuning, for apps that don't put their best
+      // face forward on their own:
+      //   "gallery": { "thumbnail": { "waitFor": "!#boot", "click": "#x", "settle": 2000 } }
+      // `waitFor` is a selector to wait for, prefixed with "!" to wait for it to
+      // *leave* instead; `click` is a control to press once it's there; `settle`
+      // is the pause before the shot.
       settle: meta.thumbnail?.settle,
       waitFor: meta.thumbnail?.waitFor,
+      click: meta.thumbnail?.click,
     })
   }
   apps.sort((a, b) => a.title.localeCompare(b.title))

@@ -95,6 +95,9 @@ async function shoot(apps, settleOverride) {
             timeout: WAIT_FOR_TIMEOUT_MS,
           })
         }
+        // Some apps open with chrome in front of the thing worth showing — a
+        // detail rail, an intro card. Press it out of the way first.
+        if (app.click) await page.click(app.click, { timeout: 15000 })
         await page.waitForTimeout(settleOverride ?? app.settle ?? SETTLE_MS)
         await page.screenshot({ path: app.thumbnail, type: 'jpeg', quality: QUALITY, scale: 'css' })
         console.log(`  ✓ ${app.slug}`)
