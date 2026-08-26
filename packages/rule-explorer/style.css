@@ -212,6 +212,34 @@ button:active { transform: translateY(1px); }
 }
 .stat .v small { font-size: 11px; color: var(--dim); font-weight: 400; }
 
+.legend ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.legend li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 8px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--dim);
+}
+.legend li b { color: var(--ink); font-weight: 600; }
+.legend .sw {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.legend .ring { background: #fdefa2; box-shadow: 0 0 7px #f9990a; }
+.legend .up { background: linear-gradient(#180a3c, #e8622c); border-radius: 2px; }
+.legend .basin { background: none; border: 1.5px solid #9c2763; border-radius: 50%; }
+.legend .spark { background: #fff; box-shadow: 0 0 6px #fff; }
+.legend .eden { background: #400a67; }
+
 #panel footer p {
   font-size: 10.5px;
   line-height: 1.55;

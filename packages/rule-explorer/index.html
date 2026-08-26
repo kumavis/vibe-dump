@@ -39,21 +39,36 @@
       <section class="controls">
         <label class="row">
           <span>ring size <b id="widthval">9</b> cells <span class="hint" id="statecount"></span></span>
-          <input id="width" type="range" min="4" max="10" step="1" value="9" />
+          <input id="width" type="range" min="4" max="12" step="1" value="9" />
         </label>
         <label class="row toggle">
           <input id="autorotate" type="checkbox" checked />
           <span>auto-orbit</span>
         </label>
+        <label class="row toggle">
+          <input id="flow" type="checkbox" checked />
+          <span>flow sparks</span>
+        </label>
       </section>
 
       <section class="stats" id="stats"></section>
 
+      <section class="legend">
+        <div class="section-label">reading the graph</div>
+        <ul>
+          <li><span class="sw ring"></span><b>Bright ring</b> — an attractor cycle. A period-7 orbit is drawn as a literal 7-gon; a fixed point is a lone dot.</li>
+          <li><span class="sw up"></span><b>Height</b> — steps left before you fall into the attractor. Every edge points strictly downhill, so time runs like gravity.</li>
+          <li><span class="sw basin"></span><b>Each cone</b> — one basin of attraction. Separate cones mean states that can never reach each other.</li>
+          <li><span class="sw spark"></span><b>Sparks</b> — states moving forward one tick at a time: down the trees, then circling the ring forever.</li>
+          <li><span class="sw eden"></span><b>Outer tips</b> — garden-of-Eden states, which nothing maps to. Only a reachable past has none.</li>
+        </ul>
+      </section>
+
       <footer>
-        <p>Each node is one global state of a length-<i>N</i> ring (wrap-around).
-           A deterministic rule sends every state to exactly one successor, so the
-           graph is a <b>functional graph</b>: tangled transient trees draining into
-           the bright <b>attractor</b> cycles. Drag to orbit · scroll to zoom.</p>
+        <p>Each node is one global state of a length-<i>N</i> ring (wrap-around). A
+           deterministic rule sends every state to exactly one successor, so the whole
+           thing is a <b>functional graph</b> — transient trees draining into cycles.
+           Drag to orbit · scroll to zoom.</p>
       </footer>
     </aside>
 

@@ -115,7 +115,7 @@ export function analyzeRule(rule, N) {
   for (let s = 0; s < M; s++) if (onCycle[s]) cycleNodes++
 
   return {
-    rule, N, M, table, succ,
+    rule, N, M, table, succ, rev,
     onCycle, compOf, dist, maxDist,
     nComp,
     attractors: cycleLenByComp.size,
