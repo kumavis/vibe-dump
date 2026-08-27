@@ -9,7 +9,9 @@
     "title": "Robot Foundry",
     "description": "Self-replicating cube robots scavenge blocks and build new robots that join the hunt.",
     "tags": [
-      "simulation"
+      "simulation",
+      "art",
+      "kids"
     ],
     "status": "done",
     "models": [
