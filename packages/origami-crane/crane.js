@@ -31,22 +31,28 @@ import { Paper } from './origami.js'
 // two big flaps are exactly two opposite corner pairs of the square.
 // ---------------------------------------------------------------------------
 
-// Chevron half-angles (measured from the ridge, in the flat sheet) set how
-// steeply each point rises out of its reverse fold at the final tent opening:
-// neck 40° → climbs ~72° from the body line (a forward-leaning blade), tail 30°
-// → ~53°, head 52° → the beak breaks ~96° back down off the neck. Apexes
-// place the joints on the ridge. A reverse-folded flap always opens exactly
-// as wide as the body it comes out of (the parity flip mirrors the dihedral),
-// so slim, blade-like points require a deeply folded body — that's why the
-// final pose keeps the tent at 60° and flattens only the outer wing strips.
+// Joint positions come from measuring the traditional crane itself: flat-fold
+// the classic crease pattern (004_traditional_Crane.fold, flat-folder's
+// examples) and the reverse-fold joints land 25% along the diagonal from each
+// corner, the head joint 11.5% in, neck and tail flaps exactly equal. Those
+// fractions are baked in below (apexes at ±0.5 and 0.77 on the half-diagonal).
+//
+// Chevron half-angles are ours, not the CP's 67.5°/45°: a single sheet shows
+// its points at the pose's own dihedral, so the angles are chosen for the
+// DISPLAYED kinks of a finished crane — neck 50° → climbs ~92° from the body
+// line (near-vertical blade), tail 30° → ~53°, head 52° → the beak breaks
+// ~96° back down. A reverse-folded flap always opens exactly as wide as the
+// body it comes out of (the parity flip mirrors the dihedral), so blade-like
+// points require a deeply folded body — that's why the final pose keeps the
+// tent at 60° and flattens only the outer wing strips.
 export const GEOM = {
-  tailApex: -0.42,
-  neckApex: 0.3,
-  headApex: 0.72,
-  thetaNeck: 40,
+  tailApex: -0.5,
+  neckApex: 0.5,
+  headApex: 0.77,
+  thetaNeck: 50,
   thetaTail: 30,
   thetaHead: 52,
-  wing: 0.66,
+  wing: 0.6,
 }
 
 // Where a ray from `from` at `angleDeg` (CCW from +x) first leaves the square
@@ -128,8 +134,8 @@ const S2 = -120 // final tent angle (dihedral 60°): steep body, points half-clo
 export const STEPS = [
   { name: 'a flat square', spine: 0, tailRidge: 0, neckRidge: 0, headRidge: 0, neckFold: 0, tailFold: 0, headFold: 0, wingL: 0, wingR: 0 },
   { name: 'mountain-fold the diagonal', spine: S1, tailRidge: S1, neckRidge: S1, headRidge: S1, neckFold: 0, tailFold: 0, headFold: 0, wingL: 0, wingR: 0 },
-  { name: 'reverse-fold the neck', spine: S1, tailRidge: S1, neckRidge: -S1, headRidge: -S1, neckFold: -148.84, tailFold: 0, headFold: 0, wingL: 0, wingR: 0 },
-  { name: 'reverse-fold the tail', spine: S1, tailRidge: -S1, neckRidge: -S1, headRidge: -S1, neckFold: -148.84, tailFold: -145.01, headFold: 0, wingL: 0, wingR: 0 },
-  { name: 'reverse-fold a beak', spine: S1, tailRidge: -S1, neckRidge: -S1, headRidge: S1, neckFold: -148.84, tailFold: -145.01, headFold: 154.74, wingL: 0, wingR: 0 },
-  { name: 'spread the wings', spine: S2, tailRidge: -S2, neckRidge: -S2, headRidge: S2, neckFold: -132.28, tailFold: -126.87, headFold: 140.86, wingL: 50, wingR: 50 },
+  { name: 'reverse-fold the neck', spine: S1, tailRidge: S1, neckRidge: -S1, headRidge: -S1, neckFold: -153.66, tailFold: 0, headFold: 0, wingL: 0, wingR: 0 },
+  { name: 'reverse-fold the tail', spine: S1, tailRidge: -S1, neckRidge: -S1, headRidge: -S1, neckFold: -153.66, tailFold: -145.01, headFold: 0, wingL: 0, wingR: 0 },
+  { name: 'reverse-fold a beak', spine: S1, tailRidge: -S1, neckRidge: -S1, headRidge: S1, neckFold: -153.66, tailFold: -145.01, headFold: 154.74, wingL: 0, wingR: 0 },
+  { name: 'spread the wings', spine: S2, tailRidge: -S2, neckRidge: -S2, headRidge: S2, neckFold: -139.28, tailFold: -126.87, headFold: 140.86, wingL: 50, wingR: 50 },
 ]
