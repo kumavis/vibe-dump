@@ -91,11 +91,21 @@ which:
 | ----------- | --------------------------------------------------------------- |
 | gallery     | `../rule-explorer/`, a sibling directory on the deployed site    |
 | `npm run dev` | the same path, served off the sibling's `dist/` by a middleware in `vite.config.js` — build it once and the window works in dev too |
-| `standalone.mjs` | a copy baked into the file on `window.__LOTUS_EMBEDS__`, because one page has no next door and no network |
+| `standalone.mjs` | the neighbour's published address on `window.__LOTUS_EMBEDS__`, because one page has no next door |
+
+The sibling path wins wherever it resolves: same origin, no second host that has
+to be up, and the copy you just built rather than the copy that happens to be
+deployed. Only the single-file build falls back to the published URL, and that
+window then needs the network *and* needs the viewer to permit framing another
+host. Both can fail, they fail identically to look at — a browser error page,
+delivered by a `load` event, sitting in the window like a crash — and only
+`securitypolicyviolation` tells them apart, so that is what the failure card is
+built on. If a host refuses, the window says so by name instead of showing the
+wreckage.
 
 The two packages stay independent: nothing here imports anything from there.
-The only thing that crosses is a directory name in `embeds.js`, read by a
-dev-server middleware and by a by-hand build tool.
+The only things that cross are a directory name and a URL in `embeds.js`, read
+by a dev-server middleware and by a by-hand build tool.
 
 ## The room
 

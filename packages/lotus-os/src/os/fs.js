@@ -154,8 +154,10 @@ Rule 110 is the one to type in if you only type one.
 
 Note for later: the frame goes and gets the page from next door, which works on
 the gallery and works in dev because the config serves the neighbour there too.
-The single-file build has no next door, so it carries a copy. Same window either
-way; the toolbar says which one you are looking at.
+The single-file build has no next door, so it goes out to the published address
+instead — same program, longer wire. The toolbar says which one you are looking
+at, and if the host you are reading this on will not allow a page from another
+host inside itself, the window says that too rather than sitting there empty.
 `,
     ),
 

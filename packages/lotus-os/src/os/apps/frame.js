@@ -6,7 +6,7 @@
 // is. The OS's job shrinks to being a window manager, which is what a window
 // manager was always supposed to be.
 //
-// Three things need care once a document you did not write is inside a window
+// Four things need care once a document you did not write is inside a window
 // you are dragging around:
 //
 //   focus     a click that lands inside the frame is a click this document
@@ -18,6 +18,12 @@
 //             move in before then. The shield closes that gap; it also comes
 //             down on a release anywhere, including outside the page, or a drag
 //             ended off the edge would seal the frame over for good.
+//   refusal   a host may forbid framing another origin at all. A refused frame
+//             loads a browser error page, which fires `load` like a success and
+//             then sits in the window looking like the neighbour crashed. Only
+//             `securitypolicyviolation` says what really happened, so that is
+//             what the failure card is built on — and it is the *only* thing
+//             that can be known about a cross-origin frame from out here.
 //   failure   an iframe reports a 404 as a successful load of a 404 page, and a
 //             dev server that answers every unknown path with its own index
 //             would put Lotus OS inside Lotus OS and call that a success. Both
@@ -25,7 +31,7 @@
 
 import { el } from '../util.js'
 import { icon } from '../icons.js'
-import { EMBEDS, urlFor, bakedDoc } from '../embeds.js'
+import { EMBEDS, sourceFor } from '../embeds.js'
 
 const specOf = (args) => EMBEDS[args?.embed] ?? null
 
@@ -62,12 +68,11 @@ export default {
       return
     }
 
-    // A baked copy only exists in a single-file build, and in one of those a
-    // relative URL has nowhere to point — so wherever it is there, it is also
-    // the only way in. Resolve the URL once, here, so the link in the toolbar
-    // is honest about where the frame actually went.
-    const baked = bakedDoc(args.embed)
-    const href = baked ? null : new URL(urlFor(embed), document.baseURI).href
+    const { url, sameSite } = sourceFor(args.embed, embed)
+    // Resolved once, here, so the toolbar link and the refusal check are talking
+    // about the same address the frame actually went to.
+    const href = new URL(url, document.baseURI).href
+    const origin = new URL(href).origin
     const loadingText = `Loading ${embed.title.toLowerCase()}…`
 
     // --- chrome -----------------------------------------------------------
@@ -81,21 +86,16 @@ export default {
         onclick: () => load({ again: true }),
       }),
       el('span.toolbar__sep', { 'aria-hidden': 'true' }),
-      el('span.toolbar__text', {
-        text: baked ? 'carried inside this file' : urlFor(embed),
-        title: baked ? 'Built into this page. There is nothing to fetch.' : href,
-      }),
+      el('span.toolbar__text', { text: sameSite ? url : origin, title: href }),
       el('span.toolbar__spacer'),
-      href
-        ? el('a.toolbar__btn', {
-            href,
-            target: '_blank',
-            rel: 'noopener',
-            title: 'Open it on its own, outside the machine',
-            'aria-label': 'Open outside',
-            html: icon('external', { size: 15 }),
-          })
-        : null,
+      el('a.toolbar__btn', {
+        href,
+        target: '_blank',
+        rel: 'noopener',
+        title: 'Open it on its own, outside the machine',
+        'aria-label': 'Open outside',
+        html: icon('external', { size: 15 }),
+      }),
     ])
 
     const view = el('iframe.frame__view', {
@@ -109,6 +109,23 @@ export default {
     const veil = el('div.frame__veil')
     const stage = el('div.frame', [view, shield, veil])
     pane.append(toolbar, stage)
+
+    // --- what the host will and will not allow ----------------------------
+
+    // A frame the policy refuses and a frame the network never answers look
+    // identical from out here: both fire `load`, and both throw when you read
+    // their location, because a browser error page has an opaque origin exactly
+    // like a real cross-origin document does. This event is the only thing that
+    // tells them apart, and it fires before the load does.
+    let refusal = null
+    const onRefusal = (ev) => {
+      const directive = String(ev.effectiveDirective || ev.violatedDirective || '')
+      if (!/^(frame-src|child-src|default-src)/.test(directive)) return
+      const blocked = ev.blockedURI || ''
+      if (blocked && !href.startsWith(blocked) && blocked !== origin) return
+      refusal = directive
+    }
+    document.addEventListener('securitypolicyviolation', onRefusal)
 
     // --- loading ----------------------------------------------------------
 
@@ -128,15 +145,21 @@ export default {
       stage.classList.add('is-failed')
       veil.classList.remove('is-gone')
       veil.replaceChildren(
-        el('strong', { text: 'Nothing came back' }),
+        el('strong', { text: refusal ? 'This page is not allowed to show that one' : 'Nothing came back' }),
         el('span', { text: why }),
-        href ? el('a.frame__link', { href, target: '_blank', rel: 'noopener', text: 'Try it outside the machine' }) : null,
+        el('a.frame__link', { href, target: '_blank', rel: 'noopener', text: 'Open it outside the machine' }),
       )
     }
 
-    // Same origin either way — a sibling directory, or a srcdoc, which inherits
-    // this document's origin — so the frame can simply be asked whether what
-    // arrived is what was sent for. Anything that throws is taken at its word.
+    function succeed() {
+      settled = true
+      clearTimeout(patience)
+      stage.classList.remove('is-failed')
+      veil.classList.add('is-gone')
+    }
+
+    // Same-origin, so the frame's own document can be asked whether what
+    // arrived is what was sent for. Cross-origin throws and is taken at its word.
     function wrongPage() {
       try {
         const doc = view.contentDocument
@@ -150,14 +173,25 @@ export default {
     }
 
     view.addEventListener('load', () => {
+      if (settled) return
+      if (refusal) {
+        return fail(
+          `This viewer's security policy (${refusal}) will not let a page from ${origin} be shown inside it.`,
+        )
+      }
       const wrong = wrongPage()
-      if (wrong) return fail(`${urlFor(embed)} answered with ${wrong} instead of ${embed.title}.`)
-      settled = true
-      clearTimeout(patience)
-      stage.classList.remove('is-failed')
-      veil.classList.add('is-gone')
+      if (wrong) return fail(`${url} answered with ${wrong} instead of ${embed.title}.`)
+      // A cross-origin host that is simply down is *not* checked for, on
+      // purpose. Nothing readable from here separates its error page from a
+      // real document — location throws for both, resource timing records both,
+      // and responseStatus is zeroed for both — so any test would be a guess,
+      // and a guess that fires on a working frame is worse than no test. The
+      // browser's own "cannot reach this site" page is left to say it instead.
+      succeed()
     })
-    view.addEventListener('error', () => fail('The page reported an error while loading.'))
+    view.addEventListener('error', () => {
+      if (!settled) fail('The page reported an error while loading.')
+    })
 
     /**
      * Point the frame at the page. `again` reloads in place where the browser
@@ -166,11 +200,16 @@ export default {
      */
     function load({ again = false } = {}) {
       waiting()
+      refusal = null
       clearTimeout(patience)
       // A frame that never answers is worse than one that answers badly: there
       // is nothing on screen to read and nothing to click.
       patience = setTimeout(() => {
-        if (!settled) fail('The page has not answered. It may not be there.')
+        if (settled) return
+        if (refusal) {
+          return fail(`This viewer's security policy (${refusal}) will not let a page from ${origin} be shown inside it.`)
+        }
+        fail('The page has not answered. It may not be there.')
       }, PATIENCE_MS)
 
       if (again) {
@@ -181,8 +220,7 @@ export default {
           // Cross-origin, or nothing loaded yet. Fall through and re-navigate.
         }
       }
-      if (baked) view.srcdoc = baked
-      else view.src = href
+      view.src = href
     }
 
     load()
@@ -213,13 +251,13 @@ export default {
 
     win.onDispose(() => {
       clearTimeout(patience)
+      document.removeEventListener('securitypolicyviolation', onRefusal)
       os.removeEventListener('pointerdown', raise, true)
       window.removeEventListener('pointerup', drop, true)
       window.removeEventListener('pointercancel', drop, true)
       window.removeEventListener('blur', onBlur)
       // Drop the document before the node goes, so its renderer stops now
       // rather than whenever the frame is collected.
-      view.removeAttribute('srcdoc')
       view.src = 'about:blank'
     })
   },
