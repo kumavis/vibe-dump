@@ -14,14 +14,14 @@
     </header>
     <nav class="filters" id="filters" aria-label="Filter apps">
         <button class="chip" data-tag="game" aria-pressed="false">game<span class="chip__n">5</span></button>
-        <button class="chip" data-tag="simulation" aria-pressed="false">simulation<span class="chip__n">10</span></button>
+        <button class="chip" data-tag="simulation" aria-pressed="false">simulation<span class="chip__n">7</span></button>
         <button class="chip" data-tag="tool" aria-pressed="false">tool<span class="chip__n">4</span></button>
-        <button class="chip" data-tag="art" aria-pressed="false">art<span class="chip__n">19</span></button>
-        <button class="chip" data-tag="kids" aria-pressed="false">kids<span class="chip__n">6</span></button>
-        <button class="chip" data-tag="tutorial" aria-pressed="false">tutorial<span class="chip__n">5</span></button>
+        <button class="chip" data-tag="art" aria-pressed="false">art<span class="chip__n">22</span></button>
+        <button class="chip" data-tag="kids" aria-pressed="false">kids<span class="chip__n">16</span></button>
+        <button class="chip" data-tag="tutorial" aria-pressed="false">tutorial<span class="chip__n">4</span></button>
       <span class="filters__sep" role="separator"></span>
-      <button class="chip chip--status" data-status="wip" aria-pressed="false">wip<span class="chip__n">0</span></button>
-      <button class="chip chip--status" data-status="done" aria-pressed="false">done<span class="chip__n">34</span></button>
+      <button class="chip chip--status" data-status="wip" aria-pressed="false">wip<span class="chip__n">7</span></button>
+      <button class="chip chip--status" data-status="done" aria-pressed="false">done<span class="chip__n">27</span></button>
       <button class="chip chip--clear" id="clear" hidden>clear</button>
       <output class="filters__count" id="count"></output>
     </nav>
@@ -61,33 +61,36 @@
           <div class="card__tags"><span class="tag">tool</span><span class="tag">art</span></div>
         </div>
       </a>
-      <a class="card" href="./eclipse-iceland-clear-skies/" data-tags="tool tutorial" data-status="done">
+      <a class="card" href="./eclipse-iceland-clear-skies/" data-tags="tool" data-status="done">
         <img class="thumb" src="./eclipse-iceland-clear-skies/thumbnail.jpg" alt="Screenshot of Eclipse Clear Skies" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Eclipse Clear Skies</h2>
           <p class="card__desc">Live clear-sky forecaster for the 12 Aug 2026 total solar eclipse over western Iceland: exact per-location totality times computed from NASA&#39;s Besselian elements, blended multi-model cloud forecasts at each spot&#39;s own mid-eclipse minute, live doppler radar and IR satellite overlays, and a ranked list of the best places to stand — refreshing itself as new model runs land.</p>
-          <div class="card__tags"><span class="tag">tool</span><span class="tag">tutorial</span></div>
+          <div class="card__tags"><span class="tag">tool</span></div>
         </div>
       </a>
-      <a class="card" href="./sloshing-os/" data-tags="art kids" data-status="done">
+      <a class="card" href="./sloshing-os/" data-tags="art kids" data-status="wip">
         <img class="thumb" src="./sloshing-os/thumbnail.jpg" alt="Screenshot of SloshOS" loading="lazy" />
+        <span class="wip">WIP</span>
         <div class="card__body">
           <h2 class="card__title">SloshOS</h2>
           <p class="card__desc">Frutiger-aero toy desktop where every window is liquid-filled glass — a duck pond, a glitter flask, a blue lava lamp and a ring clock that all slosh when dragged.</p>
           <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./abyssal-angler/" data-tags="game" data-status="done">
+      <a class="card" href="./abyssal-angler/" data-tags="game kids" data-status="wip">
         <img class="thumb" src="./abyssal-angler/thumbnail.jpg" alt="Screenshot of Abyssal Angler" loading="lazy" />
+        <span class="wip">WIP</span>
         <div class="card__body">
           <h2 class="card__title">Abyssal Angler</h2>
           <p class="card__desc">The other end of the line from Abyssal Ascent: skipper a night boat over the same seven-zone abyss and steer your hook down past the easy shallows toward things with more teeth. Fish too heavy for your tackle snap the line, so land what you can, fill the salvage sonar, and haul up ever-better rods — hand line, abyssal winch, hadal cable, and finally the Godhook — until you can reach the Cradle and hook the one catch the fleet should have left alone.</p>
           <p class="card__credits">Fable 5</p>
-          <div class="card__tags"><span class="tag">game</span></div>
+          <div class="card__tags"><span class="tag">game</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./dino-tiles/" data-tags="game" data-status="done">
+      <a class="card" href="./dino-tiles/" data-tags="game" data-status="wip">
         <img class="thumb" src="./dino-tiles/thumbnail.jpg" alt="Screenshot of Dino Tiles" loading="lazy" />
+        <span class="wip">WIP</span>
         <div class="card__body">
           <h2 class="card__title">Dino Tiles</h2>
           <p class="card__desc">A rapid dino-park puzzle: place 30 hex tiles for adjacency combos — build herds, fence the raptors, give the T-Rex space. 3-minute runs, star ratings. Three.js.</p>
@@ -104,21 +107,21 @@
           <div class="card__tags"><span class="tag">game</span><span class="tag">simulation</span></div>
         </div>
       </a>
-      <a class="card" href="./brick-crew/" data-tags="simulation" data-status="done">
+      <a class="card" href="./brick-crew/" data-tags="simulation kids" data-status="done">
         <img class="thumb" src="./brick-crew/thumbnail.jpg" alt="Screenshot of Brick Crew" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Brick Crew</h2>
           <p class="card__desc">Hard-hat robots haul bricks by hand and barrow to raise a house — click the site trailer to unroll the blueprints.</p>
-          <div class="card__tags"><span class="tag">simulation</span></div>
+          <div class="card__tags"><span class="tag">simulation</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./smooth-criminal/" data-tags="art" data-status="done">
+      <a class="card" href="./smooth-criminal/" data-tags="art kids" data-status="done">
         <img class="thumb" src="./smooth-criminal/thumbnail.jpg" alt="Screenshot of Smooth Criminal" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Smooth Criminal</h2>
           <p class="card__desc">A stick man in a white top hat runs the whole routine on a loop — hat tilt, toe spin, the anti-gravity lean, moonwalk — on a lit speakeasy diorama under a turntable camera. Three.js.</p>
           <p class="card__credits">Opus 5</p>
-          <div class="card__tags"><span class="tag">art</span></div>
+          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
       <a class="card" href="./provenance-eye-opus/" data-tags="art" data-status="done">
@@ -139,22 +142,22 @@
           <div class="card__tags"><span class="tag">art</span></div>
         </div>
       </a>
-      <a class="card" href="./market-bazaar/" data-tags="simulation" data-status="done">
+      <a class="card" href="./market-bazaar/" data-tags="simulation art kids" data-status="done">
         <img class="thumb" src="./market-bazaar/thumbnail.jpg" alt="Screenshot of The Night Bazaar" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">The Night Bazaar</h2>
           <p class="card__desc">A living market economy: rigged, animated humans, aliens, monsters and devils haggle in emoji over eels, gems and curse scrolls — every price discovered, every coin accounted for.</p>
           <p class="card__credits">Fable 5</p>
-          <div class="card__tags"><span class="tag">simulation</span></div>
+          <div class="card__tags"><span class="tag">simulation</span><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./sierpinski-sands/" data-tags="art" data-status="done">
+      <a class="card" href="./sierpinski-sands/" data-tags="art kids" data-status="done">
         <img class="thumb" src="./sierpinski-sands/thumbnail.jpg" alt="Screenshot of Sierpinski Sands" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Sierpinski Sands</h2>
           <p class="card__desc">An ancient stepped pyramid hauls itself out of the desert, then rumbles one level deeper into recursion each time — sheets of sand pouring off its ledges while a polygonal sphinx keeps watch through the heat haze. Three.js.</p>
           <p class="card__credits">Opus 5</p>
-          <div class="card__tags"><span class="tag">art</span></div>
+          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
       <a class="card" href="./menger-sponge/" data-tags="art" data-status="done">
@@ -174,13 +177,13 @@
           <div class="card__tags"><span class="tag">tool</span><span class="tag">art</span></div>
         </div>
       </a>
-      <a class="card" href="./space-goblin/" data-tags="simulation art" data-status="done">
+      <a class="card" href="./space-goblin/" data-tags="art kids" data-status="done">
         <img class="thumb" src="./space-goblin/thumbnail.jpg" alt="Screenshot of Space Goblin" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Space Goblin</h2>
           <p class="card__desc">A procedurally rigged, skinned space goblin sprints and fights across an alien flat — every bone, texture, strap and cape simulated from math alone.</p>
           <p class="card__credits">Opus 5</p>
-          <div class="card__tags"><span class="tag">simulation</span><span class="tag">art</span></div>
+          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
       <a class="card" href="./cosmic-cuties/" data-tags="art kids" data-status="done">
@@ -192,8 +195,9 @@
           <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./token-foundry/" data-tags="game simulation" data-status="done">
+      <a class="card" href="./token-foundry/" data-tags="game simulation" data-status="wip">
         <img class="thumb" src="./token-foundry/thumbnail.jpg" alt="Screenshot of Token Foundry" loading="lazy" />
+        <span class="wip">WIP</span>
         <div class="card__body">
           <h2 class="card__title">Token Foundry</h2>
           <p class="card__desc">A Factorio-like about running an LLM inference company: tokenize prompts, prefill them into KV-cache blocks, belt the cache to bandwidth-bound decode pods, sell output tokens — then scrape data, train bigger checkpoints, and keep the megawatts and cooling ahead of the batch size.</p>
@@ -210,22 +214,22 @@
           <div class="card__tags"><span class="tag">tutorial</span></div>
         </div>
       </a>
-      <a class="card" href="./abyssal-ascent/" data-tags="game" data-status="done">
+      <a class="card" href="./abyssal-ascent/" data-tags="game kids" data-status="done">
         <img class="thumb" src="./abyssal-ascent/thumbnail.jpg" alt="Screenshot of Abyssal Ascent" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Abyssal Ascent</h2>
           <p class="card__desc">Hatch in the vent-lit cradle ten kilometres down and devour your way up through seven depth zones, evolving ten times over — larva, ribbon eel, viperfish, gulper, sea serpent, bone shark, leviathan, and finally The Kraken. The residents fight back: octopuses blind you with ink, rays discharge, anglerfish reel you in, orcas and sperm whales hunt you on sight. Reach the surface as a kraken and the fishing fleet stops being a hazard and starts being food — until they send something with a thicker hull.</p>
           <p class="card__credits">Opus 4.8 + Opus 5</p>
-          <div class="card__tags"><span class="tag">game</span></div>
+          <div class="card__tags"><span class="tag">game</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./rule-explorer/" data-tags="simulation tool tutorial" data-status="done">
+      <a class="card" href="./rule-explorer/" data-tags="tool art tutorial" data-status="done">
         <img class="thumb" src="./rule-explorer/thumbnail.jpg" alt="Screenshot of Rule Explorer" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Rule Explorer</h2>
           <p class="card__desc">Browse all 256 elementary cellular-automata rules and fly through the 3-D state-transition graph of each — attractors, basins, and the transient trees that feed them. Three.js.</p>
           <p class="card__credits">Opus 4.8</p>
-          <div class="card__tags"><span class="tag">simulation</span><span class="tag">tool</span><span class="tag">tutorial</span></div>
+          <div class="card__tags"><span class="tag">tool</span><span class="tag">art</span><span class="tag">tutorial</span></div>
         </div>
       </a>
       <a class="card" href="./bronze-empires/" data-tags="simulation" data-status="done">
@@ -246,8 +250,9 @@
           <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./onsen-winter/" data-tags="art" data-status="done">
+      <a class="card" href="./onsen-winter/" data-tags="art" data-status="wip">
         <img class="thumb" src="./onsen-winter/thumbnail.jpg" alt="Screenshot of Onsen Winter" loading="lazy" />
+        <span class="wip">WIP</span>
         <div class="card__body">
           <h2 class="card__title">Onsen Winter</h2>
           <p class="card__desc">A low-poly winter onsen diorama where lantern light glows through rising steam as day melts into night.</p>
@@ -255,13 +260,13 @@
           <div class="card__tags"><span class="tag">art</span></div>
         </div>
       </a>
-      <a class="card" href="./robot-foundry/" data-tags="simulation" data-status="done">
+      <a class="card" href="./robot-foundry/" data-tags="simulation art kids" data-status="done">
         <img class="thumb" src="./robot-foundry/thumbnail.jpg" alt="Screenshot of Robot Foundry" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Robot Foundry</h2>
           <p class="card__desc">Self-replicating cube robots scavenge blocks and build new robots that join the hunt.</p>
           <p class="card__credits">Opus 4.8 + Opus 5</p>
-          <div class="card__tags"><span class="tag">simulation</span></div>
+          <div class="card__tags"><span class="tag">simulation</span><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
       <a class="card" href="./saucer-synth/" data-tags="art kids" data-status="done">
@@ -273,17 +278,18 @@
           <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./spiral-galaxy/" data-tags="simulation art" data-status="done">
+      <a class="card" href="./spiral-galaxy/" data-tags="art kids" data-status="done">
         <img class="thumb" src="./spiral-galaxy/thumbnail.jpg" alt="Screenshot of Spiral Galaxy" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Spiral Galaxy</h2>
           <p class="card__desc">A rotating particle galaxy with a hungry black hole, supernovae, and a tour of procedural worlds.</p>
           <p class="card__credits">Opus 4.8</p>
-          <div class="card__tags"><span class="tag">simulation</span><span class="tag">art</span></div>
+          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./tilt-city/" data-tags="simulation kids" data-status="done">
+      <a class="card" href="./tilt-city/" data-tags="simulation kids" data-status="wip">
         <img class="thumb" src="./tilt-city/thumbnail.jpg" alt="Screenshot of Tilt City" loading="lazy" />
+        <span class="wip">WIP</span>
         <div class="card__body">
           <h2 class="card__title">Tilt City</h2>
           <p class="card__desc">A tilt-shift miniature town where toy cars run errands, queue in traffic, and obey the lights.</p>
@@ -291,13 +297,13 @@
           <div class="card__tags"><span class="tag">simulation</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./black-snake-swamp/" data-tags="art" data-status="done">
+      <a class="card" href="./black-snake-swamp/" data-tags="art kids" data-status="done">
         <img class="thumb" src="./black-snake-swamp/thumbnail.jpg" alt="Screenshot of Black Snake Swamp" loading="lazy" />
         <div class="card__body">
           <h2 class="card__title">Black Snake Swamp</h2>
           <p class="card__desc">A dark-forest swamp at night: a black snake slithers across the water, evaporating it into rising steam while terrified frogs croak and tremble. Procedural canvas + Web Audio spooky ambience, fully self-contained.</p>
           <p class="card__credits">Opus 4.8</p>
-          <div class="card__tags"><span class="tag">art</span></div>
+          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
       <a class="card" href="./whale-cube/" data-tags="art kids" data-status="done">
@@ -309,8 +315,9 @@
           <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./origami-crane/" data-tags="art" data-status="done">
+      <a class="card" href="./origami-crane/" data-tags="art" data-status="wip">
         <img class="thumb" src="./origami-crane/thumbnail.jpg" alt="Screenshot of Origami Crane" loading="lazy" />
+        <span class="wip">WIP</span>
         <div class="card__body">
           <h2 class="card__title">Origami Crane</h2>
           <p class="card__desc">A square of paper folds itself into a crane, step by step, under a slow turntable camera. Three.js.</p>
