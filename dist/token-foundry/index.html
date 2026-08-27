@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Token Foundry</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒️</text></svg>" />
+  <script type="module" crossorigin src="./assets/index-DlrC7G6X.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B5Ih3W0W.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <header id="hud">
+    <div class="hud-group brand">⚒ Token Foundry</div>
+    <div class="hud-group"><span class="hud-label">bank</span><b id="hud-money">$0</b><span id="hud-income" class="dim"></span></div>
+    <div class="hud-group grow">
+      <span class="hud-label">grid</span><span id="hud-power">0 / 0 MW</span>
+      <div class="bar"><div id="hud-power-bar" class="bar-fill"></div></div>
+    </div>
+    <div class="hud-group"><span class="hud-label">serving</span><b id="hud-sold">0 otok/s</b></div>
+    <div class="hud-group"><span class="hud-label">model</span><b id="hud-model"></b></div>
+    <div class="hud-group"><span class="hud-label">fleet</span><b id="hud-hw"></b></div>
+    <div class="hud-group grow objline" id="hud-obj"></div>
+    <button id="btn-help" title="Engineering primer (H)">?</button>
+    <button id="btn-reset" title="Reset save">↺</button>
+  </header>
+
+  <nav id="toolbar"></nav>
+
+  <aside id="panel">
+    <div id="panel-tabs"></div>
+    <div id="panel-body"></div>
+  </aside>
+
+  <div id="toasts"></div>
+  <div id="tooltip"></div>
+
+  <div id="help" class="modal">
+    <div class="modal-card">
+      <button id="help-close" class="modal-x">✕</button>
+      <div id="help-body"></div>
+    </div>
+  </div>
+
+</body>
+</html>

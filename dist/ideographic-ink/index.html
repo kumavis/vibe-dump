@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ideographic Ink — the Japanese metrics inside CSS text-box-trim</title>
+<meta name="description" content="An interactive tour of text-box-trim's CJK-only edges: the em box (仮想ボディ), the character face (字面), and the animations you get once you read those font metrics yourself.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f4efe4'/><text x='16' y='24' font-size='23' text-anchor='middle' fill='%23b23c28' font-family='serif'>字</text></svg>">
+  <script type="module" crossorigin src="./assets/index-0j62mir5.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Cx4BU0Ok.css">
+</head>
+<body>
+
+<nav class="rail" aria-label="Sections">
+  <a href="#top" class="rail-mark" aria-label="Top">字</a>
+  <ol>
+    <li><a href="#anatomy"><b>解剖</b><span>Anatomy</span></a></li>
+    <li><a href="#playground"><b>実験</b><span>Playground</span></a></li>
+    <li><a href="#faces"><b>字面率</b><span>Face ratio</span></a></li>
+    <li><a href="#vertical"><b>縦組</b><span>Vertical</span></a></li>
+    <li><a href="#play"><b>遊</b><span>Play</span></a></li>
+    <li><a href="#support"><b>現状</b><span>Reality</span></a></li>
+  </ol>
+</nav>
+
+<main id="top">
+
+<!-- ─────────────────────────────────────────────── hero -->
+<header class="hero">
+  <div class="hero-stage" id="hero-stage"></div>
+  <div class="hero-copy">
+    <p class="eyebrow">CSS Inline Layout 3 · <code>text-box-trim</code></p>
+    <h1><span class="ja">字面</span><span class="en">Ideographic&nbsp;Ink</span></h1>
+    <p class="lede">
+      <code>text-box-trim</code> shaves the invisible padding off a line of text.
+      Four of its edge keywords describe Latin letters. Two of them —
+      <code>ideographic</code> and <code>ideographic-ink</code> — ask a question
+      only a Japanese font can answer, out of a table no browser has ever
+      exposed to CSS.
+    </p>
+    <p class="lede sub">
+      No engine has shipped them — the live table at the end checks yours. So this
+      page reads the metrics straight out of six font binaries and draws them for
+      you, then does the trimming itself, which turns out to unlock things the
+      real property can’t do.
+    </p>
+    <div class="statline" id="hero-stats"></div>
+  </div>
+</header>
+
+<!-- ─────────────────────────────────────────────── anatomy -->
+<section id="anatomy" class="section">
+  <div class="section-head">
+    <p class="kicker"><b>解剖</b> Anatomy</p>
+    <h2>One glyph, five edges</h2>
+    <p class="intro">
+      A Japanese character is designed inside a square: the <b lang="ja">仮想ボディ</b>
+      — the <i>virtual body</i>, exactly 1em on a side. The ink is not allowed to fill
+      it. It stops short, inside a smaller centred square called the
+      <b lang="ja">字面</b> (<i>jizura</i>, the character face), and the gap between the
+      two is what keeps dense text breathing.
+      Both squares are pinned by OpenType <code>BASE</code> baselines:
+      <code>ideo</code> sets the floor of the em box, <code>icft</code> and
+      <code>icfb</code> bracket the face. That is precisely what
+      <code>ideographic</code> and <code>ideographic-ink</code> point at.
+      Drag the size, swap the face, toggle the layers.
+    </p>
+  </div>
+
+  <div class="anatomy">
+    <div class="anatomy-stage-wrap">
+      <div class="stage" id="anatomy-stage"></div>
+      <div class="stage-controls" id="anatomy-glyphs"></div>
+    </div>
+    <aside class="anatomy-side">
+      <div class="field">
+        <label for="anatomy-size">Size <output id="anatomy-size-out"></output></label>
+        <input type="range" id="anatomy-size" min="90" max="300" value="190" step="1">
+      </div>
+      <div class="layers" id="anatomy-layers"></div>
+      <table class="metrics-table" id="anatomy-table">
+        <thead><tr><th>CSS edge</th><th>OpenType</th><th>em</th><th>units</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="footnote" id="anatomy-note"></p>
+    </aside>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────── playground -->
+<section id="playground" class="section">
+  <div class="section-head">
+    <p class="kicker"><b>実験</b> Playground</p>
+    <h2>Cut the box</h2>
+    <p class="intro">
+      <code>text-box-trim</code> picks <i>which</i> sides to cut;
+      <code>text-box-edge</code> picks <i>where</i> to cut to. Set them and watch the
+      leading disappear. Flip the engine to <b>native</b> to see what your browser
+      really does today — the two ideographic values will simply stop working, because
+      no engine has implemented them.
+    </p>
+  </div>
+
+  <div class="pg">
+    <div class="pg-controls">
+      <div class="ctl" id="pg-engine"></div>
+      <div class="ctl" id="pg-trim"></div>
+      <div class="ctl" id="pg-over"></div>
+      <div class="ctl" id="pg-under"></div>
+      <div class="field">
+        <label for="pg-lh">line-height <output id="pg-lh-out"></output></label>
+        <input type="range" id="pg-lh" min="100" max="260" value="180" step="1">
+      </div>
+      <div class="field">
+        <label for="pg-font">Face</label>
+        <select id="pg-font"></select>
+      </div>
+      <label class="check"><input type="checkbox" id="pg-text-toggle"> Latin in the mix</label>
+    </div>
+
+    <div class="pg-preview">
+      <div class="pg-frame">
+        <div class="pg-ghost" id="pg-ghost"></div>
+        <div class="pg-flow">
+          <div class="pg-neighbour">a box sitting directly above</div>
+          <div class="pg-target" id="pg-target"></div>
+          <div class="pg-neighbour">and one directly below</div>
+        </div>
+      </div>
+      <div class="pg-readout">
+        <pre class="code" id="pg-css"></pre>
+        <div class="pg-badges" id="pg-badges"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────── face ratio -->
+<section id="faces" class="section">
+  <div class="section-head">
+    <p class="kicker"><b>字面率</b> Face ratio</p>
+    <h2>Every face fills its square differently</h2>
+    <p class="intro">
+      The em box is always 1em. The character face inside it is not — its share of
+      the square is the <b lang="ja">字面率</b>, and it is a real design decision.
+      Screen gothics push toward 90% so small text stays legible. A brush face
+      leaves a third of the square empty, because that emptiness <i>is</i> the
+      letterform. This is why <code>ideographic-ink</code> has to be a separate
+      keyword from <code>ideographic</code>: only the font knows.
+    </p>
+  </div>
+  <div class="face-grid" id="face-grid"></div>
+</section>
+
+<!-- ─────────────────────────────────────────────── vertical -->
+<section id="vertical" class="section">
+  <div class="section-head">
+    <p class="kicker"><b>縦組</b> Vertical</p>
+    <h2>Turn the page ninety degrees</h2>
+    <p class="intro">
+      Fonts declare the character face twice — once along each axis of the
+      <code>BASE</code> table. Set text vertically and the edges that were over and
+      under become left and right, so the same two keywords now trim the
+      <em>column</em>. The face square is centred either way, which is why a
+      vertical line of Japanese has even gutters without anyone measuring anything.
+    </p>
+  </div>
+  <div class="vert" id="vert"></div>
+</section>
+
+<!-- ─────────────────────────────────────────────── play -->
+<section id="play" class="section">
+  <div class="section-head">
+    <p class="kicker"><b>遊</b> Play</p>
+    <h2>What the metrics are good for</h2>
+    <p class="intro">
+      Once the character face is a number you hold, it stops being a typesetting
+      detail and becomes an anchor to hang things off. Each of these knows exactly
+      where the ink is designed to start and stop — and the last one does something
+      the real CSS property, whose values are discrete, could never animate.
+    </p>
+  </div>
+  <div class="demos" id="demos"></div>
+</section>
+
+<!-- ─────────────────────────────────────────────── support -->
+<section id="support" class="section">
+  <div class="section-head">
+    <p class="kicker"><b>現状</b> Reality</p>
+    <h2>What actually ships</h2>
+  </div>
+  <div class="support">
+    <table class="support-table" id="support-table">
+      <thead><tr><th>Value</th><th>Spec</th><th>This browser</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="support-notes">
+      <p>
+        <code>text-box-trim</code>, <code>text-box-edge</code> and the
+        <code>text-box</code> shorthand shipped in Chrome&nbsp;133 and
+        Safari&nbsp;18.2. Firefox has not implemented them.
+      </p>
+      <p>
+        <code>ideographic</code> and <code>ideographic-ink</code> were explicitly
+        deferred out of that release. Two spec questions are still open: how an
+        engine should synthesize the ideographic <em>over</em> edge when a font has
+        no <code>idtp</code> baseline (none of the six here do), and which font in
+        the cascade should be asked when a line mixes scripts.
+      </p>
+      <p>
+        This page synthesizes the over edge as <code>ideo&nbsp;+&nbsp;1em</code> —
+        the em box itself, which is the reading Japanese typesetting has always
+        used. Treat the ideographic rows as a preview, not a promise.
+      </p>
+      <p>
+        Of the four baselines involved, exactly one is reachable from script
+        today: <code>TextMetrics.ideographicBaseline</code> reports
+        <code>ideo</code>, and it correctly accounts for a font whose
+        <code>romn</code> is offset. <code>icft</code> and <code>icfb</code> — the
+        character face, the whole reason <code>ideographic-ink</code> exists — are
+        exposed by no API at all, so this page reads them out of the font binaries
+        at build time.
+      </p>
+      <details>
+        <summary>The polyfill, in full</summary>
+        <pre class="code" id="polyfill-src"></pre>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>
+    Metrics read from the OpenType <code>BASE</code> table of six OFL-licensed
+    Japanese faces — Noto Sans JP, Noto Serif JP, Yuji Syuku, Klee One,
+    DotGothic16, Rampart One — subset and bundled locally. Nothing is fetched at
+    runtime.
+  </p>
+  <p class="foot-links">
+    <a href="https://drafts.csswg.org/css-inline-3/#text-box-trim">CSS Inline Layout 3</a>
+    <a href="https://github.com/w3c/csswg-drafts/issues/10850">csswg-drafts#10850</a>
+    <a href="https://github.com/w3c/csswg-drafts/issues/10928">csswg-drafts#10928</a>
+    <a href="https://developer.chrome.com/blog/css-text-box-trim">Chrome: text-box-trim</a>
+  </p>
+</footer>
+
+</main>
+</body>
+</html>

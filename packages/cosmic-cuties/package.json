@@ -7,6 +7,15 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Cosmic Cuties",
-    "description": "A cartoon solar system where every planet pulls faces, a nosy UFO buzzes past, and a grinning meteor keeps faking a collision."
+    "description": "A cartoon solar system where every planet pulls faces, a nosy UFO buzzes past, and a grinning meteor keeps faking a collision.",
+    "tags": [
+      "art",
+      "kids"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

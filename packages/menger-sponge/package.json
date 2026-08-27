@@ -12,6 +12,14 @@
   },
   "gallery": {
     "title": "Menger Sponge",
-    "description": "A dark-metal Menger sponge pistons itself up and down the recursion, compressing and redeploying 8,000 greebled cubes veined with sickly Borg-green light. Three.js."
+    "description": "A dark-metal Menger sponge pistons itself up and down the recursion, compressing and redeploying 8,000 greebled cubes veined with sickly Borg-green light. Three.js.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

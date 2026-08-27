@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rank 31 — an interactive tour of elliptic curves</title>
+    <meta
+      name="description"
+      content="What an elliptic curve is, how its points form a group, what rank means, and how a curve of rank 31 was found in August 2026. Every computation runs live in your browser in exact arithmetic."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <script type="module" crossorigin src="./assets/index-1ezNKWi9.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BSs50w0q.css">
+  </head>
+  <body>
+    <nav id="rail" aria-label="Chapters">
+      <ol></ol>
+    </nav>
+
+    <!-- ─────────────────────────────────────────────── hero -->
+    <header class="hero" id="ch-hero">
+      <canvas id="hero-field" aria-hidden="true"></canvas>
+      <div class="hero__inner">
+        <p class="eyebrow">23 August 2026 · leaderboard curve #302</p>
+        <h1 class="hero__title">Rank<span class="hero__num">31</span></h1>
+        <p class="hero__lede">
+          Somebody found a cubic equation whose rational solutions need
+          <strong>thirty-one</strong> independent generators. It is the second
+          time in four days that the world record fell.
+        </p>
+        <p class="hero__sub">
+          This page explains what that sentence means, from the shape of a cubic
+          up to the record itself. Every number below is computed live in your
+          browser, in exact integer arithmetic — including a check of all 31
+          witness points.
+        </p>
+        <div class="hero__eq" id="hero-eq"></div>
+        <a class="hero__scroll" href="#ch-shape">start at the beginning ↓</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- ─────────────────────────────────────────────── 1. shape -->
+      <section class="chapter" id="ch-shape" data-chapter="Not an ellipse">
+        <div class="chapter__head">
+          <span class="chapter__num">01</span>
+          <h2>An elliptic curve is not an ellipse</h2>
+        </div>
+        <div class="prose">
+          <p>
+            It is the set of points satisfying a cubic equation in two variables.
+            The tidy version — the one every picture on this page uses — is
+          </p>
+          <p class="display">y<sup>2</sup> = x<sup>3</sup> + A x + B</p>
+          <p>
+            together with one extra point, written <b>O</b>, that sits
+            infinitely far up the y-axis. You will see why that point has to be
+            there in a moment.
+          </p>
+          <p>
+            The only rule is that the curve must be <em>smooth</em>: no corners,
+            no self-crossings. That is controlled by a single number, the
+            <b>discriminant</b>
+          </p>
+          <p class="display">Δ = −16 (4A<sup>3</sup> + 27B<sup>2</sup>)</p>
+          <p>
+            When Δ ≠ 0 the curve is an elliptic curve. When Δ = 0 it degenerates
+            into something with a pinch point, and everything that follows falls
+            apart. Drag the sliders and watch the two regimes: when Δ &gt; 0 the
+            real picture has <em>two</em> pieces — a closed oval and an unbounded
+            branch; when Δ &lt; 0 there is just the one branch.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-shape">
+          <div class="panel__grid panel__grid--split">
+            <div class="panel__plot">
+              <canvas class="cv" id="cv-shape"></canvas>
+            </div>
+            <div class="panel__plot panel__plot--small">
+              <canvas class="cv" id="cv-shape-map"></canvas>
+              <p class="cap">
+                the (A, B) plane · the dark wedge is Δ &lt; 0 · the cusp curve
+                4A<sup>3</sup> + 27B<sup>2</sup> = 0 is where curves go singular
+                · drag the marker
+              </p>
+            </div>
+          </div>
+          <div class="controls">
+            <label class="slider">
+              <span>A</span>
+              <input id="sl-a" type="range" min="-6" max="6" step="0.02" value="-3" />
+              <output id="out-a">−3.00</output>
+            </label>
+            <label class="slider">
+              <span>B</span>
+              <input id="sl-b" type="range" min="-6" max="6" step="0.02" value="1" />
+              <output id="out-b">1.00</output>
+            </label>
+            <div class="presets">
+              <button data-ab="-3,1">two pieces</button>
+              <button data-ab="1,2">one piece</button>
+              <button data-ab="-3,2">node (Δ=0)</button>
+              <button data-ab="0,0">cusp (Δ=0)</button>
+            </div>
+          </div>
+          <div class="readout" id="ro-shape"></div>
+        </figure>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 2. group law -->
+      <section class="chapter" id="ch-group" data-chapter="Adding points">
+        <div class="chapter__head">
+          <span class="chapter__num">02</span>
+          <h2>You can add two points and get a third</h2>
+        </div>
+        <div class="prose">
+          <p>
+            This is the strange and wonderful fact that makes elliptic curves
+            worth a century of attention. Take any two points P and Q on the
+            curve. Draw the straight line through them. Because the equation is
+            a cubic, that line meets the curve in exactly one more place — call
+            it R. Now reflect R across the x-axis. That reflected point is
+            <em>defined</em> to be P + Q.
+          </p>
+          <p>
+            Three points on a line always sum to <b>O</b>. That single rule
+            forces everything else: <b>O</b> is the identity, the reflection of
+            P is its inverse −P, and a vertical line — which "meets the curve at
+            infinity" — is exactly the statement P + (−P) = <b>O</b>. That is
+            why the point at infinity has to exist. Without it the operation
+            would have holes.
+          </p>
+          <p>
+            When P = Q there is no line through two distinct points, so you take
+            the tangent instead. That gives doubling, P + P = 2P.
+          </p>
+          <p>
+            The one hard fact is that this addition is <em>associative</em>:
+            (P + Q) + S = P + (Q + S). It is not obvious from the picture at all.
+            With it, the points of the curve form an abelian group.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-group">
+          <div class="panel__plot panel__plot--tall">
+            <canvas class="cv" id="cv-group"></canvas>
+          </div>
+          <div class="controls">
+            <div class="presets" role="group" aria-label="operation">
+              <button data-op="add" class="on">P + Q</button>
+              <button data-op="double">2P (tangent)</button>
+              <button data-op="inverse">P + (−P) = O</button>
+            </div>
+            <p class="hint">drag the labelled points along the curve</p>
+          </div>
+          <div class="readout" id="ro-group"></div>
+        </figure>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 3. rational points -->
+      <section class="chapter" id="ch-rational" data-chapter="Rational points">
+        <div class="chapter__head">
+          <span class="chapter__num">03</span>
+          <h2>Now demand that the coordinates be fractions</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Everything above works over the real numbers, where the curve is a
+            smooth line you can trace with a finger. The actual subject —
+            <em>arithmetic</em> geometry — starts when you throw away every point
+            whose coordinates are not rational numbers.
+          </p>
+          <p>
+            What survives is a scatter of dust on the curve. But the group law is
+            built from addition, subtraction, multiplication and division, so
+            adding two rational points always lands on a third rational point.
+            The dust is closed under the operation. It is a group of its own,
+            written <b>E(ℚ)</b>.
+          </p>
+          <p>
+            Here is the curve y<sup>2</sup> + y = x<sup>3</sup> − x. Of all the
+            curves whose rational points are infinite in number, this one has
+            the smallest conductor — 37 — which makes it the standard first
+            example. Start at P = (0, 0) and keep adding P to itself. Watch the
+            coordinates.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-rational">
+          <div class="panel__grid panel__grid--split">
+            <div class="panel__plot">
+              <canvas class="cv" id="cv-rational"></canvas>
+            </div>
+            <div class="panel__plot panel__plot--small">
+              <canvas class="cv" id="cv-height"></canvas>
+              <p class="cap">
+                digits needed to write x(nP) · the envelope is a parabola,
+                because height grows like n<sup>2</sup>
+              </p>
+            </div>
+          </div>
+          <div class="controls">
+            <div class="presets">
+              <button id="rat-step">add P</button>
+              <button id="rat-run">run ▸</button>
+              <button id="rat-reset">reset</button>
+            </div>
+            <label class="slider">
+              <span>n</span>
+              <input id="sl-n" type="range" min="1" max="24" step="1" value="1" />
+              <output id="out-n">1</output>
+            </label>
+          </div>
+          <div class="readout readout--wide" id="ro-rational"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            The coordinates blow up quadratically — the number of digits in
+            x(nP) grows like n<sup>2</sup>. That growth is not an accident; it is
+            the defining property of the <b>canonical height</b>,
+          </p>
+          <p class="display">ĥ(P) = lim<sub>n→∞</sub> h(nP) ⁄ n<sup>2</sup></p>
+          <p>
+            a function satisfying ĥ(nP) = n<sup>2</sup> ĥ(P) exactly. The
+            naive height you can count off the digits is not quite that — it
+            differs from ĥ by a bounded amount — so the
+            <span class="nowrap">h ⁄ n<sup>2</sup></span> figure in the readout
+            wobbles <em>toward</em> the limit rather than descending onto it,
+            the wobble being that bounded error divided by n<sup>2</sup>. Drag
+            the slider and watch it bounce: for this curve and this generator
+            the true value is ĥ = 0.05111140…, and the readout settles within a
+            couple of percent of it by about n = 20. Height is the ruler used
+            for everything that follows, including the "how big is this curve"
+            axis of the record leaderboard.
+          </p>
+          <p>
+            It also means these points never repeat. P has <em>infinite order</em>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 4. Mordell-Weil -->
+      <section class="chapter" id="ch-mw" data-chapter="Mordell–Weil">
+        <div class="chapter__head">
+          <span class="chapter__num">04</span>
+          <h2>All of it, from finitely many points</h2>
+        </div>
+        <div class="prose">
+          <p>
+            In 1922 Mordell proved something that had been conjectured by
+            Poincaré: however infinite E(ℚ) is, it is
+            <strong>finitely generated</strong>. There is a finite list of
+            rational points from which every other rational point can be reached
+            by repeated addition. Weil generalised it in 1929, and the result is
+            now the <b>Mordell–Weil theorem</b>:
+          </p>
+          <p class="display">E(ℚ) ≅ ℤ<sup>r</sup> ⊕ E(ℚ)<sub>tors</sub></p>
+          <p>
+            Two pieces. On the right, the <b>torsion</b> subgroup: the points of
+            finite order, the ones that cycle back to <b>O</b> if you keep adding
+            them. On the left, r copies of the integers — r independent points of
+            infinite order, each running off forever like the one in the previous
+            section. That r is the <b>rank</b>.
+          </p>
+          <p>
+            Torsion is completely understood. In 1977 Mazur proved that only
+            fifteen groups can ever appear, and the largest has just 16 elements.
+            Pick a curve below and step around its cycle.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-torsion">
+          <div class="panel__grid panel__grid--split">
+            <div class="panel__plot">
+              <canvas class="cv" id="cv-torsion"></canvas>
+            </div>
+            <div class="panel__plot panel__plot--small">
+              <canvas class="cv" id="cv-torsion-ring"></canvas>
+              <p class="cap">the cycle · adding P walks around the ring and returns to O</p>
+            </div>
+          </div>
+          <div class="controls">
+            <div class="presets" id="torsion-picks"></div>
+            <div class="presets">
+              <button id="tor-step">add P</button>
+              <button id="tor-run">run ▸</button>
+            </div>
+          </div>
+          <div class="readout" id="ro-torsion"></div>
+        </figure>
+
+        <div class="prose">
+          <p class="mazur" id="mazur-list"></p>
+          <p>
+            Rank is the opposite story. There is no theorem like Mazur's. Nobody
+            knows which values of r occur, nobody knows whether r is bounded, and
+            for a given curve there is no algorithm <em>guaranteed</em> to
+            compute it. Everything difficult about elliptic curves lives in that
+            one integer.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 5. rank -->
+      <section class="chapter" id="ch-rank" data-chapter="What rank means">
+        <div class="chapter__head">
+          <span class="chapter__num">05</span>
+          <h2>Rank is a dimension</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Ignore torsion for a moment. Then Mordell–Weil says the rational
+            points form a <b>lattice</b> of dimension r: pick generators
+            P<sub>1</sub>, …, P<sub>r</sub>, and every rational point on the
+            curve is
+          </p>
+          <p class="display">
+            n<sub>1</sub>P<sub>1</sub> + n<sub>2</sub>P<sub>2</sub> + ⋯ +
+            n<sub>r</sub>P<sub>r</sub>
+          </p>
+          <p>
+            for exactly one choice of integers n<sub>i</sub>. Rank 0 means the
+            lattice is a single point and the curve has only finitely many
+            rational solutions. Rank 1 means a line of them. Rank 2 means a
+            plane, rank 3 a 3-D grid — and rank 31 means a 31-dimensional grid of
+            integer coordinates, every cell of which is a different rational
+            solution to one cubic equation.
+          </p>
+          <p>
+            The colour below is the height of each combination: how many digits
+            that solution needs. Because the canonical height is a positive
+            definite quadratic form in the n<sub>i</sub>, the picture is a
+            paraboloid — a bowl. Cheap solutions sit near the middle; everything
+            else costs digits fast.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-lattice">
+          <div class="panel__plot panel__plot--tall">
+            <canvas class="cv" id="cv-lattice"></canvas>
+          </div>
+          <div class="controls">
+            <div class="presets" id="lattice-picks">
+              <button data-r="1" class="on">rank 1</button>
+              <button data-r="2">rank 2</button>
+              <button data-r="3">rank 3</button>
+            </div>
+            <p class="hint">hover a cell to see the actual rational point</p>
+          </div>
+          <div class="readout readout--wide" id="ro-lattice"></div>
+        </figure>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 6. mod p -->
+      <section class="chapter" id="ch-modp" data-chapter="Fingerprints mod p">
+        <div class="chapter__head">
+          <span class="chapter__num">06</span>
+          <h2>Rank leaves fingerprints on every prime</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Finding the rank directly is hard. So here is the sideways attack
+            that has driven the subject since the 1960s: instead of looking for
+            rational solutions, count solutions <em>modulo p</em> for each prime
+            p. That is a finite computation — just try every pair (x, y) in a
+            grid of size p.
+          </p>
+          <p>
+            Write N<sub>p</sub> for the number of solutions mod p, counting
+            <b>O</b>. On average N<sub>p</sub> ≈ p + 1, and Hasse proved in the
+            1930s that the error term
+          </p>
+          <p class="display">a<sub>p</sub> = p + 1 − N<sub>p</sub>,  |a<sub>p</sub>| ≤ 2√p</p>
+          <p>
+            never gets larger than 2√p. So a<sub>p</sub>/2√p always lands in
+            [−1, 1]. For a curve with no rational points to speak of, those
+            values scatter symmetrically about zero.
+          </p>
+          <p>
+            But a curve with lots of rational points has lots of points mod p
+            too — every rational solution reduces to a solution mod p. High rank
+            pushes N<sub>p</sub> up, which pushes a<sub>p</sub>
+            <em>down</em>. Drag the rank slider and watch the whole cloud sink.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-modp">
+          <div class="panel__plot panel__plot--tall">
+            <canvas class="cv" id="cv-modp"></canvas>
+          </div>
+          <div class="controls">
+            <label class="slider slider--wide">
+              <span>rank</span>
+              <input id="sl-rank" type="range" min="0" max="31" step="1" value="0" />
+              <output id="out-rank">0</output>
+            </label>
+            <label class="slider">
+              <span>primes up to</span>
+              <input id="sl-plimit" type="range" min="200" max="4000" step="100" value="1500" />
+              <output id="out-plimit">1500</output>
+            </label>
+          </div>
+          <div class="readout readout--wide" id="ro-modp"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            The curves in that slider are the smallest known curve at each rank
+            from 1 to 31, straight off the record leaderboard, with the
+            conductor-11 curve standing in at rank 0 — so the rank-31 row is the
+            record curve itself, and its a<sub>p</sub> values really do hug the
+            floor of the Hasse band.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 7. BSD -->
+      <section class="chapter" id="ch-bsd" data-chapter="The EDSAC experiment">
+        <div class="chapter__head">
+          <span class="chapter__num">07</span>
+          <h2>The experiment that became a million-dollar conjecture</h2>
+        </div>
+        <div class="prose">
+          <p>
+            In the early 1960s Bryan Birch and Peter Swinnerton-Dyer had access
+            to EDSAC in Cambridge, and they used it to do something nobody had
+            done before: compute N<sub>p</sub> for thousands of primes on
+            hundreds of curves, and look for a pattern. What they plotted was the
+            running product
+          </p>
+          <p class="display">
+            ∏<sub>p ≤ X</sub> N<sub>p</sub> ⁄ p
+          </p>
+          <p>
+            over the primes of good reduction, and what they saw was that it
+            grows like C·(log X)<sup>r</sup>, where r is the rank. Take logs
+            twice and the rank is a <em>slope</em>. Run it yourself below — the
+            computation is genuinely happening, prime by prime.
+          </p>
+          <p>
+            Watch what happens when you add the record curve to the plot. It
+            starts <em>below</em> everything else and then climbs straight
+            through them all. Thirty thousand primes is nowhere near enough for
+            the estimate to settle at 31 — (log X)<sup>31</sup> is a slow thing
+            to see — but the shape of the claim is unmistakable.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-bsd">
+          <div class="panel__plot panel__plot--tall">
+            <canvas class="cv" id="cv-bsd"></canvas>
+          </div>
+          <div class="controls">
+            <div class="presets" id="bsd-picks"></div>
+            <div class="presets">
+              <button id="bsd-run">run to 30 000 ▸</button>
+              <button id="bsd-reset">reset</button>
+            </div>
+            <p class="hint">
+              add the record curve — the slope estimate is honest but slow to
+              settle, so rank 31 reads about 25 by 30 000 primes
+            </p>
+          </div>
+          <div class="readout readout--wide" id="ro-bsd"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            That empirical slope is a heuristic, not a proof — but it was enough
+            to suggest the real statement. Package all the a<sub>p</sub> into a
+            single analytic function, the <b>L-function</b> of the curve,
+          </p>
+          <p class="display">
+            L(E, s) = ∏<sub>p good</sub> (1 − a<sub>p</sub>p<sup>−s</sup> +
+            p<sup>1−2s</sup>)<sup>−1</sup>
+          </p>
+          <p class="fine">
+            (the finitely many bad primes contribute simpler factors, and the
+            product only converges for s well to the right of 1 — continuing it
+            to s = 1 at all took the modularity theorem)
+          </p>
+          <p>
+            and the <b>Birch and Swinnerton-Dyer conjecture</b> says the order of
+            vanishing of L at the point s = 1 equals the rank:
+          </p>
+          <p class="display">ord<sub>s=1</sub> L(E, s) = r</p>
+          <p>
+            One side is analysis, the other is arithmetic, and there is no
+            visible reason they should agree. It is one of the seven Clay
+            Millennium Prize Problems, still open. What <em>is</em> proved, by
+            Gross–Zagier and Kolyvagin in the 1980s, is the case where the
+            analytic side is 0 or 1 — there the two ranks do match. Above 1,
+            nothing is known in general, in <em>either</em> direction.
+          </p>
+          <p>
+            Worth knowing: the product you just watched is not simply the
+            conjecture rewritten. Because the Euler product only converges to
+            the right of the critical line, asserting that
+            ∏ N<sub>p</sub>/p behaves like (log X)<sup>r</sup> is
+            <em>stronger</em> than the vanishing statement — it implies the
+            Riemann hypothesis for L(E, s) along the way. Birch and
+            Swinnerton-Dyer measured the strong version and conjectured the
+            careful one.
+          </p>
+          <p>
+            That gap is exactly why the record curves come with an asterisk, as
+            we will see.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 8. records -->
+      <section class="chapter" id="ch-records" data-chapter="The record hunt">
+        <div class="chapter__head">
+          <span class="chapter__num">08</span>
+          <h2>Ninety years of climbing</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Nobody has ever proved that a curve of rank 31 exists, in the sense
+            of a general theorem. The only way anyone knows to demonstrate high
+            rank is to <em>build a curve and exhibit the points</em>. So the
+            history of the subject is a ladder of explicit examples.
+          </p>
+          <p>
+            The early rungs came from clever hand computation. From 1982 the
+            climb is dominated by machine search: Mestre found families of curves
+            forced to contain many rational points by construction; Elkies sliced
+            high-rank elliptic surfaces — K3 surfaces — to produce curves that
+            inherit lots of points from the surface. His 2006 curve of rank ≥ 28
+            stood untouched for eighteen years.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-timeline">
+          <div class="panel__plot panel__plot--tall">
+            <canvas class="cv" id="cv-timeline"></canvas>
+          </div>
+          <div class="readout readout--wide" id="ro-timeline"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            There is a second axis to the game, and it is the one the ICARM
+            leaderboard is actually built around: not just <em>how high</em> a
+            rank you can reach, but how <em>small</em> a curve you can reach it
+            with. High rank is easy if you allow monstrous coefficients. The
+            interesting question is the trade-off.
+          </p>
+          <p>
+            Below is every curve on the board — <span data-board-count></span>
+            of them — plotted as rank against size. The frontier along the bottom
+            is the current state of the art.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-board">
+          <div class="panel__plot panel__plot--tall">
+            <canvas class="cv" id="cv-board"></canvas>
+          </div>
+          <div class="controls">
+            <div class="presets" id="board-metric">
+              <button data-m="nh" class="on">naive height</button>
+              <button data-m="fh">Faltings height</button>
+              <button data-m="cond">log conductor</button>
+            </div>
+            <p class="hint">hover a point for its curve</p>
+          </div>
+          <div class="readout readout--wide" id="ro-board"></div>
+        </figure>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 9. curve 302 -->
+      <section class="chapter" id="ch-302" data-chapter="Curve #302">
+        <div class="chapter__head">
+          <span class="chapter__num">09</span>
+          <h2>The record itself</h2>
+        </div>
+        <div class="prose">
+          <p>
+            On 20 August 2026 a user calling themselves
+            <code>ranksunbounded</code> uploaded a curve of rank ≥ 30 to the
+            leaderboard, beating Elkies and Klagsbrun's rank-29 curve from 2024.
+            Three days later, on 23 August, curve #302 arrived at rank ≥ 31. Its
+            commentary, verbatim:
+          </p>
+          <blockquote>
+            BSD + GRH certified to rank 31, found by Claude, Levent Alpöge, and
+            Ava Howell.
+          </blockquote>
+          <p>
+            That sentence is commentary — free text typed by the submitter. The
+            only field the leaderboard machine-checks is
+            <code>rank_lower_bound = 31</code>, and it checks it properly, which
+            is the subject of the next chapter. Here is the curve. This is the
+            whole equation, every digit.
+          </p>
+        </div>
+
+        <figure class="panel panel--record" id="panel-302">
+          <div class="eqbox" id="eq-302"></div>
+          <div class="statline" id="stat-302"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Nothing about that curve can be drawn. Plot it on any screen and the
+            visible window is a featureless vertical wall — the interesting
+            structure happens at x-coordinates around 10<sup>33</sup>, and the
+            31 witness points have numerators up to 43 digits over denominators
+            of 10.
+          </p>
+          <p>
+            But you can <em>check</em> it. Verifying that a point lies on the
+            curve is just arithmetic on big integers, and your browser has
+            arbitrary-precision integers built in. Press the button: each of the
+            31 points gets substituted into the equation, both sides evaluated
+            exactly, and compared.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-verify">
+          <div class="controls controls--lead">
+            <div class="presets">
+              <button id="verify-run" class="primary">verify all 31 witness points</button>
+              <button id="verify-reset">reset</button>
+            </div>
+            <div class="verify-tally" id="verify-tally"></div>
+          </div>
+          <div class="verify-list" id="verify-list"></div>
+        </figure>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 10. certification -->
+      <section class="chapter" id="ch-cert" data-chapter="What “certified” means">
+        <div class="chapter__head">
+          <span class="chapter__num">10</span>
+          <h2>Why the record says “≥ 31”</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Those 31 points prove a lower bound and nothing more. To pin the rank
+            down you need both halves of a sandwich, and the two halves are not
+            equally solid.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-sandwich">
+          <div class="sandwich" id="sandwich"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            <b>The lower bound is unconditional.</b> Exhibiting 31 points is not
+            enough on its own — they must be shown to be <em>independent</em>,
+            that is, no combination n<sub>1</sub>P<sub>1</sub> + ⋯ +
+            n<sub>31</sub>P<sub>31</sub> collapses to <b>O</b> unless every
+            n<sub>i</sub> is zero. The leaderboard certifies this by exact
+            2-descent: quadratic characters evaluated at good primes build a
+            matrix over 𝔽<sub>2</sub> whose rank is a proven lower bound for the
+            rank of the curve. No floating point is involved anywhere in the
+            decision, so rank ≥ 31 is a theorem.
+          </p>
+          <p>
+            <b>The upper bound is not.</b> There is no known unconditional way to
+            prove a curve this large has rank <em>at most</em> 31. What can be
+            done is Bober's method: assuming the
+            <b>Generalised Riemann Hypothesis</b> for the curve's L-function, an
+            explicit formula bounds the order of vanishing of L at s = 1 — the
+            <em>analytic</em> rank. Then you need <b>BSD</b> to say that the
+            analytic rank is the actual rank. Neither is a theorem. Hence: BSD +
+            GRH certified.
+          </p>
+          <p>
+            For the rank-30 curve the argument is on the record: Bober's bound
+            with Δ = 4.25 gives analytic rank ≤ 31, and the root number is +1, so
+            the rank is even — forcing exactly 30.
+          </p>
+          <p>
+            How far can you get without assumptions? The largest rank ever
+            determined <em>exactly and unconditionally</em> is
+            <strong>20</strong>, by Elkies and Klagsbrun in 2020. Assuming GRH
+            alone — no BSD — Klagsbrun, Sherman and Weigandt pinned Elkies'
+            2006 curve at exactly <strong>28</strong> in 2019. Everything above
+            that is a certified lower bound with a conditional lid.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 11. unbounded? -->
+      <section class="chapter" id="ch-open" data-chapter="Is rank bounded?">
+        <div class="chapter__head">
+          <span class="chapter__num">11</span>
+          <h2>Nobody knows how high this goes</h2>
+        </div>
+        <div class="prose">
+          <p>
+            For most of the twentieth century the working assumption was that
+            ranks are unbounded — that for every r there is a curve of rank r,
+            and the record climbs forever because there is always more room. The
+            pseudonym the rank-30 curve arrived under,
+            <code>ranksunbounded</code>, is a joke about exactly this.
+          </p>
+          <p>
+            In 2016 Park, Poonen, Voight and Wood built a heuristic model that
+            points the other way. Counting curves by size and modelling their
+            points as random lattice data, their model predicts that only
+            <strong>finitely many</strong> elliptic curves over ℚ have rank
+            greater than <strong>21</strong>. If that is right, the ladder above
+            rank 21 is not a staircase but a short, finite list — and every new
+            record is a rare specimen rather than a step.
+          </p>
+          <p>
+            So a curve of rank 31 is either a routine rung on an infinite ladder
+            or one of a handful of freaks in the entire universe of cubic
+            equations. The same discovery is evidence for two opposite pictures,
+            depending on which you already believed. That is a genuinely open
+            question, and it is why a record that would be a curiosity in another
+            field is news in this one.
+          </p>
+          <p class="closing">
+            Four days, two records, and the arithmetic still checks out by hand.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p>
+        Curve data from the
+        <a href="https://elliptic-rank.icarm.cloud/" target="_blank" rel="noreferrer">ICARM Elliptic Curve Rank Leaderboard</a>
+        (public database snapshot, 24 Aug 2026), maintained by the NSF Institute
+        for Computer-Aided Reasoning in Mathematics under grant DMS 2425401.
+        Record history from
+        <a href="https://web.math.pmf.unizg.hr/~duje/tors/rankhist.html" target="_blank" rel="noreferrer">Andrej Dujella's rank-record tables</a>.
+        Background:
+        <a href="https://www.quantamagazine.org/new-elliptic-curve-breaks-18-year-old-record-20241111/" target="_blank" rel="noreferrer">Quanta on the 2024 rank-29 record</a>,
+        <a href="https://arxiv.org/abs/1602.01431" target="_blank" rel="noreferrer">Park–Poonen–Voight–Wood</a>,
+        <a href="https://arxiv.org/abs/1112.1503" target="_blank" rel="noreferrer">Bober</a>,
+        <a href="https://arxiv.org/abs/1606.07178" target="_blank" rel="noreferrer">Klagsbrun–Sherman–Weigandt</a>.
+      </p>
+      <p class="colophon__note">
+        All arithmetic on this page is exact: rational numbers are pairs of
+        JavaScript BigInts, and the group law is the general Weierstrass one, so
+        every point shown is verified rather than approximated.
+      </p>
+    </footer>
+
+  </body>
+</html>

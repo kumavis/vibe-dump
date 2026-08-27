@@ -13,6 +13,14 @@
   },
   "gallery": {
     "title": "Lotus OS",
-    "description": "A black-and-gold-on-purple toy desktop cut with Thai temple ornament — folders, resizable windows, a terminal — until you run reveal.run and the camera pulls back off the screen to find the monitor sitting on a cluttered workbench, 3D printer and all."
+    "description": "A black-and-gold-on-purple toy desktop cut with Thai temple ornament — folders, resizable windows, a terminal — until you run reveal.run and the camera pulls back off the screen to find the monitor sitting on a cluttered workbench, 3D printer and all.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

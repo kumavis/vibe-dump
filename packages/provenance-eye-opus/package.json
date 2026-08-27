@@ -9,6 +9,14 @@
   },
   "gallery": {
     "title": "Eye of Provenance (Opus)",
-    "description": "A cast-gold triangle eye rides a cloud — it blinks into a sunburst, and sometimes something else blinks back. Click it to steer."
+    "description": "A cast-gold triangle eye rides a cloud — it blinks into a sunburst, and sometimes something else blinks back. Click it to steer.",
+    "tags": [
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

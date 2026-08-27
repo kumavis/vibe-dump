@@ -13,6 +13,15 @@
   },
   "gallery": {
     "title": "Kanji Lathe",
-    "description": "A parametric type foundry for the 1,000 most common kanji: stroke-order-aware skeletons run through a deformation pipeline, with crown shyness, region compression and a live TrueType export."
+    "description": "A parametric type foundry for the 1,000 most common kanji: stroke-order-aware skeletons run through a deformation pipeline, with crown shyness, region compression and a live TrueType export.",
+    "tags": [
+      "tool",
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "unknown"
   }
 }

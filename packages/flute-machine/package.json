@@ -6,6 +6,13 @@
   "scripts": { "dev": "vite", "build": "vite build" },
   "gallery": {
     "title": "Flute Machine",
-    "description": "A self-improvising breath-driven flute — lock it to a low bassy drone or let it scatter little flurries, then save the take as JSON, MIDI or WAV."
+    "description": "A self-improvising breath-driven flute — lock it to a low bassy drone or let it scatter little flurries, then save the take as JSON, MIDI or WAV.",
+    "tags": [
+      "tool",
+      "art"
+    ],
+    "status": "done",
+    "models": [],
+    "thinking": "unknown"
   }
 }

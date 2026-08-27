@@ -9,6 +9,20 @@
   },
   "gallery": {
     "title": "Abyssal Ascent",
-    "description": "Hatch in the vent-lit cradle ten kilometres down and devour your way up through seven depth zones, evolving ten times over — larva, ribbon eel, viperfish, gulper, sea serpent, bone shark, leviathan, and finally The Kraken. The residents fight back: octopuses blind you with ink, rays discharge, anglerfish reel you in, orcas and sperm whales hunt you on sight. Reach the surface as a kraken and the fishing fleet stops being a hazard and starts being food — until they send something with a thicker hull."
+    "description": "Hatch in the vent-lit cradle ten kilometres down and devour your way up through seven depth zones, evolving ten times over — larva, ribbon eel, viperfish, gulper, sea serpent, bone shark, leviathan, and finally The Kraken. The residents fight back: octopuses blind you with ink, rays discharge, anglerfish reel you in, orcas and sperm whales hunt you on sight. Reach the surface as a kraken and the fishing fleet stops being a hazard and starts being food — until they send something with a thicker hull.",
+    "tags": [
+      "game",
+      "kids"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8",
+      "Opus 5"
+    ],
+    "thinking": "unknown",
+    "thumbnail": {
+      "click": "#start-btn",
+      "settle": 6000
+    }
   }
 }

@@ -7,6 +7,15 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Tilt City",
-    "description": "A tilt-shift miniature town where toy cars run errands, queue in traffic, and obey the lights."
+    "description": "A tilt-shift miniature town where toy cars run errands, queue in traffic, and obey the lights.",
+    "tags": [
+      "simulation",
+      "kids"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

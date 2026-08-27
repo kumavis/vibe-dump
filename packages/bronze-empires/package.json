@@ -6,6 +6,14 @@
   "scripts": { "dev": "vite", "build": "vite build" },
   "gallery": {
     "title": "Bronze Empires",
-    "description": "Three swords-and-ships civilizations harvest, war, sign treaties, and spread culture through wandering poets — a self-playing top-down RTS."
+    "description": "Three swords-and-ships civilizations harvest, war, sign treaties, and spread culture through wandering poets — a self-playing top-down RTS.",
+    "tags": [
+      "simulation"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

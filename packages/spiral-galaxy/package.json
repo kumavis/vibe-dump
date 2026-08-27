@@ -7,6 +7,15 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Spiral Galaxy",
-    "description": "A rotating particle galaxy with a hungry black hole, supernovae, and a tour of procedural worlds."
+    "description": "A rotating particle galaxy with a hungry black hole, supernovae, and a tour of procedural worlds.",
+    "tags": [
+      "art",
+      "kids"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 4.8"
+    ],
+    "thinking": "unknown"
   }
 }

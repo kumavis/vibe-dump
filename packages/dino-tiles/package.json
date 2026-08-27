@@ -12,6 +12,14 @@
   },
   "gallery": {
     "title": "Dino Tiles",
-    "description": "A rapid dino-park puzzle: place 30 hex tiles for adjacency combos — build herds, fence the raptors, give the T-Rex space. 3-minute runs, star ratings. Three.js."
+    "description": "A rapid dino-park puzzle: place 30 hex tiles for adjacency combos — build herds, fence the raptors, give the T-Rex space. 3-minute runs, star ratings. Three.js.",
+    "tags": [
+      "game"
+    ],
+    "status": "wip",
+    "models": [
+      "Fable 5"
+    ],
+    "thinking": "unknown"
   }
 }

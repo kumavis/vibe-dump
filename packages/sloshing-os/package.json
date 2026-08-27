@@ -6,6 +6,13 @@
   "scripts": { "dev": "vite", "build": "vite build" },
   "gallery": {
     "title": "SloshOS",
-    "description": "Frutiger-aero toy desktop where every window is liquid-filled glass — a duck pond, a glitter flask, a blue lava lamp and a ring clock that all slosh when dragged."
+    "description": "Frutiger-aero toy desktop where every window is liquid-filled glass — a duck pond, a glitter flask, a blue lava lamp and a ring clock that all slosh when dragged.",
+    "tags": [
+      "art",
+      "kids"
+    ],
+    "status": "wip",
+    "models": [],
+    "thinking": "unknown"
   }
 }

@@ -1,5 +1,7 @@
 node_modules/
-dist/
+# The assembled gallery at /dist is COMMITTED — it's what GitHub Pages deploys,
+# and building it in CI got slower with every vibe. Per-package dist/ stays out:
+# it's the intermediate that /dist is assembled from.
 packages/*/dist/
 .DS_Store
 *.log

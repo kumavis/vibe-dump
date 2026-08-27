@@ -1,0 +1,213 @@
+:root {
+  color-scheme: dark;
+  --bg: #0a0b16;
+  --card: #14162a;
+  --border: #232744;
+  --text: #e2e8f0;
+  --muted: #8b93b0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: radial-gradient(120% 80% at 50% -10%, #1a1d3a 0%, var(--bg) 60%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.masthead {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 2rem;
+  text-align: center;
+}
+
+.masthead__title {
+  margin: 0;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(120deg, #f0abfc, #818cf8, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.masthead__tagline {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.filters {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.chip:hover { color: var(--text); border-color: #3b4070; }
+
+.chip[aria-pressed="true"] {
+  color: #0a0b16;
+  background: #a5b4fc;
+  border-color: #a5b4fc;
+  font-weight: 600;
+}
+
+.chip__n { font-size: 0.75rem; opacity: 0.65; font-variant-numeric: tabular-nums; }
+
+.chip--status[aria-pressed="true"] { background: #fcd34d; border-color: #fcd34d; }
+
+.chip--clear { border-style: dashed; }
+
+/* An author `display` beats the UA rule for [hidden], so say it again here. */
+.chip[hidden] { display: none; }
+
+.filters__sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 0.15rem 0.35rem;
+  background: var(--border);
+}
+
+.filters__count {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+/* Hiding a card has to beat the grid item's own display. */
+.card[hidden] { display: none; }
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #3b4070;
+  box-shadow: 0 18px 40px -20px rgba(129, 140, 248, 0.6);
+}
+
+.thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1280 / 800;
+  object-fit: cover;
+  background: #0b0c1e;
+  border-bottom: 1px solid var(--border);
+}
+
+.thumb--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--muted);
+}
+
+.card__body {
+  padding: 1rem 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Tags sit on the card's floor whatever the description's length. */
+.card__tags { margin-top: auto; padding-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+.tag {
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.card__credits {
+  margin: 0.6rem 0 0;
+  font-size: 0.75rem;
+  color: #6b7396;
+}
+
+.wip {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: #fcd34d;
+  color: #0a0b16;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.card__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.card__desc {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.colophon {
+  text-align: center;
+  padding: 2rem 1.5rem 3rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}

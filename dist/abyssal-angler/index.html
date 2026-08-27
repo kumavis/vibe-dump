@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abyssal Angler — catch better rods for better fish</title>
+    <link rel="icon" href="data:," />
+    <script type="module" crossorigin src="./assets/index-DHB_gDli.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-MiZskpMP.css">
+  </head>
+  <body>
+    <canvas id="ocean"></canvas>
+
+    <header id="hud">
+      <h1>ABYSSAL ANGLER</h1>
+      <p class="sub">move to steer the boat · click to cast · steer the hook onto a fish · click again to reel early</p>
+    </header>
+
+    <div id="stage-panel">
+      <div class="stage-row">
+        <span class="stage-name" id="rod-name">Hand Line</span>
+        <span class="effect" id="effect-label"></span>
+      </div>
+      <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
+      <div class="stat-row">
+        <span id="depth-label">Sunlight Zone · 0 m</span>
+        <span id="haul-label">haul $0 · 0 fish</span>
+      </div>
+      <div class="stat-row sonar-row"><span id="sonar-label">salvage sonar charging…</span></div>
+    </div>
+
+    <div id="banner"></div>
+
+    <div id="start-screen">
+      <div class="start-card">
+        <h2>The abyss is full of fish. And of rods that failed.</h2>
+        <p>
+          Years before anything rose from the Cradle, the fleet fished these
+          waters. Steer your hook down and land whatever bites — but a fish too
+          heavy for your tackle will <strong>snap the line</strong>. Every catch
+          feeds the <strong>salvage sonar</strong>: fill it and it finds lost
+          tackle on the seafloor, each rod stronger and longer than the last.
+          Seven rods down lies the <strong>Godhook</strong> — and below it, in
+          the Cradle, something is waiting to be caught. Or to catch you.
+        </p>
+        <button id="start-btn">Cast off</button>
+        <p class="cross-link"><a href="../abyssal-ascent/">played the other side? — Abyssal Ascent</a></p>
+      </div>
+    </div>
+
+    <div id="end-screen" class="hidden">
+      <div class="start-card">
+        <h2 id="end-title">You hooked The Kraken.</h2>
+        <p id="end-story">
+          The Godhook holds. The winch screams. For one glorious moment the
+          whole catch breaks the surface, and the fleet cheers. Then the line
+          goes taut <em>the other way</em> — and the boat begins its descent.
+        </p>
+        <p class="end-stats" id="end-stats"></p>
+        <button id="again-btn">Fish again</button>
+        <p class="cross-link"><a href="../abyssal-ascent/">the story continues in Abyssal Ascent →</a></p>
+      </div>
+    </div>
+
+  </body>
+</html>

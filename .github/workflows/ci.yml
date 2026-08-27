@@ -1,8 +1,11 @@
-name: CI build check
+name: CI check
 
-# Verify the whole monorepo builds (apps + screenshot gallery) on every PR,
-# so a branch can't merge into main unless `npm run build` succeeds. This job
-# only builds — it never deploys (that's deploy.yml's job on push to main).
+# Check that the committed dist/ still matches the packages, on every PR.
+#
+# This job deliberately builds nothing. The apps are built by hand and dist/ is
+# committed with the PR (see "Adding a vibe" in README.md), so CI's only job is
+# to catch a PR that changed an app and forgot to rebuild. Building all of them
+# here would get slower with every vibe added; this stays flat.
 on:
   pull_request:
     branches:
@@ -13,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,13 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Build apps + gallery
-        run: npm run build
+      # No npm install: scripts/verify.mjs is node builtins only.
+      - name: Verify dist/ is in step with packages/
+        run: npm run verify
