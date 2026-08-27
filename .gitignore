@@ -3,6 +3,9 @@ node_modules/
 # and building it in CI got slower with every vibe. Per-package dist/ stays out:
 # it's the intermediate that /dist is assembled from.
 packages/*/dist/
+# and the scratch dirs the single-file build makes on its way to dist/artifact.html
+packages/*/dist-standalone/
+packages/*/dist-embed/
 .DS_Store
 *.log
 packages/*/tools/shots/

@@ -130,6 +130,37 @@ Purple filament: about 400g left on the spool, by weight. Enough for the
 chedi twice, which is good, because the first one will fail.
 `,
     ),
+    doc(
+      'other-machines.txt',
+      `
+OTHER MACHINES
+==============
+
+Automata Graph on the desktop is not a program on this machine. It is a whole
+other page, in a frame, doing its own drawing — the window manager holds the
+edges and gets out of the way. Everything inside it is somebody else's.
+
+Which is the honest version of what a window always was. The rest of the OS
+draws its own contents and pretends the frame is incidental; this one drops the
+pretence and the frame is the entire contribution.
+
+What it draws: every state a ring of cells can be in, one dot each, with an
+arrow from each state to the one the rule sends it to next. A rule is
+deterministic, so every dot has exactly one arrow out, and a graph like that can
+only do one thing — run downhill into a loop. The loops are the bright rings.
+The trees hanging off them are the states that fall in and never come back out.
+
+Rule 110 is the one to type in if you only type one.
+
+Note for later: the frame goes and gets the page from next door, which works on
+the gallery and works in dev because the config serves the neighbour there too.
+The single-file build has no next door, so it goes out to the published address
+instead — same program, longer wire. The toolbar says which one you are looking
+at, and if the host you are reading this on will not allow a page from another
+host inside itself, the window says that too rather than sitting there empty.
+`,
+    ),
+
     folder('Old', [
       doc(
         'first-boot.txt',
@@ -235,6 +266,15 @@ glare        = only when embodied
   ]),
 
   { kind: 'app', name: 'Terminal', app: 'terminal', icon: 'terminal' },
+
+  {
+    kind: 'app',
+    name: 'Automata Graph',
+    app: 'frame',
+    icon: 'chip',
+    args: { embed: 'automata-graph' },
+    caption: 'Another machine\'s program, running in a window on this one.',
+  },
 
   {
     kind: 'exec',

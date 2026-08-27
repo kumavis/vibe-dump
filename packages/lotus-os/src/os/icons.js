@@ -27,6 +27,10 @@ const PATHS = {
   grid: '<rect x="4.2" y="4.2" width="6.2" height="6.2" rx="1"/><rect x="13.6" y="4.2" width="6.2" height="6.2" rx="1"/><rect x="4.2" y="13.6" width="6.2" height="6.2" rx="1"/><rect x="13.6" y="13.6" width="6.2" height="6.2" rx="1"/>',
   list: '<path d="M8.4 6.6h11.4M8.4 12h11.4M8.4 17.4h11.4M4.4 6.6h.1M4.4 12h.1M4.4 17.4h.1" stroke-linecap="round"/>',
   search: '<circle cx="10.8" cy="10.8" r="5.8"/><path d="M15.2 15.2l4.4 4.4" stroke-linecap="round"/>',
+  refresh:
+    '<path d="M20 12a8 8 0 11-2.6-5.9" stroke-linecap="round"/><path d="M20.2 3.6v4.6h-4.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  external:
+    '<path d="M13.4 4.4h6.2v6.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.6 4.4L11 13" stroke-linecap="round"/><path d="M17.4 14.2v4.2c0 .9-.7 1.6-1.6 1.6H5.6c-.9 0-1.6-.7-1.6-1.6V8c0-.9.7-1.6 1.6-1.6h4.2" stroke-linecap="round"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 3.2v2.4M12 18.4v2.4M3.2 12h2.4M18.4 12h2.4M5.8 5.8l1.7 1.7M16.5 16.5l1.7 1.7M18.2 5.8l-1.7 1.7M7.5 16.5l-1.7 1.7" stroke-linecap="round"/>',
   moon: '<path d="M20 14.2A8.6 8.6 0 019.8 4 8.6 8.6 0 1020 14.2z"/>',
   'sound-on':
