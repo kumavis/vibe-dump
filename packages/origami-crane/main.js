@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { Paper } from './origami.js'
+import { buildCrane, STEPS, FOLD_IDS } from './crane.js'
 
 const { degToRad, lerp, clamp } = THREE.MathUtils
 
@@ -21,10 +21,10 @@ scene.background = makeGradientBackground('#241a2e', '#0b0a12')
 scene.fog = new THREE.Fog('#0f0b16', 6, 14)
 
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100)
-camera.position.set(2.2, 2.5, 2.6)
+camera.position.set(3.1, 1.05, 2.3)
 
 const controls = new OrbitControls(camera, renderer.domElement)
-controls.target.set(0, 0.15, 0)
+controls.target.set(0, 0.32, 0)
 controls.enableDamping = true
 controls.dampingFactor = 0.06
 controls.autoRotate = true // turntable
@@ -37,7 +37,7 @@ controls.enablePan = false
 // ---------------------------------------------------------------------------
 // Lighting + shadow-catcher ground
 // ---------------------------------------------------------------------------
-scene.add(new THREE.HemisphereLight('#fff4e2', '#2a2336', 0.65))
+scene.add(new THREE.HemisphereLight('#fff4e2', '#2a2336', 0.85))
 
 const keyLight = new THREE.DirectionalLight('#ffe9cf', 2.1)
 keyLight.position.set(3.2, 5.0, 2.4)
@@ -61,44 +61,18 @@ const ground = new THREE.Mesh(
   new THREE.CircleGeometry(7, 64).rotateX(-Math.PI / 2),
   new THREE.ShadowMaterial({ opacity: 0.3 }),
 )
-ground.position.y = -0.46
+ground.position.y = -0.1
 ground.receiveShadow = true
 scene.add(ground)
 
 // ---------------------------------------------------------------------------
-// Build the crane crease pattern by SPLITTING the square plane along fold lines.
-//
-// The bird base — the start of every crane — turns the FOUR CORNERS of the
-// square into the bird's four points: a neck, a tail, and two wings, all rising
-// from a central body. We mirror that directly: one crease cuts across each
-// corner, and a sixth reverse-folds the neck's tip into a head.
-//
-// This is also what keeps the paper whole. Each corner crease lives in its own
-// corner and no two creases ever cross inside the sheet, so the panels form a
-// TREE hinged along shared edges. A tree of rigid hinges folds with zero
-// stretch and can never come apart — there is no over-constrained interior
-// vertex to tear open. (The old pattern ran creases straight across each other
-// at right angles; such a crossing is not rigidly foldable, which is what split
-// the wings off the body and cut the sheet.)
-//
-// Sheet corners: TR → neck (+head at its tip), BL → tail, TL & BR → the wings.
-// A single spine crease across the body (y = 0) folds it into a ridge for some
-// depth; it runs only through the central panel and never reaches the corner
-// creases, so the pattern stays a non-crossing tree.
+// The crease pattern and fold sequence live in crane.js — spine along the
+// neck–tail diagonal, true inside-reverse-fold chevrons for neck, tail and
+// head, wing hinges parallel to the spine. See the comments there for why the
+// old pattern (edge-to-edge spine, single straight corner creases) put the
+// body fold in the wrong place and could never look like a crane.
 // ---------------------------------------------------------------------------
-const paper = new Paper(1)
-  // Spine: a shallow ridge down the body, giving the crane some depth.
-  .crease('spine', [-1, 0], [1, 0])
-  // Neck: fold the top-right corner up. Head: reverse-fold its very tip back.
-  .crease('neck', [0.18, 1], [1, 0.18])
-  .crease('head', [0.74, 1], [1, 0.74])
-  // Tail: fold the opposite (bottom-left) corner up to balance the neck.
-  .crease('tail', [-1, -0.18], [-0.18, -1])
-  // The two remaining corners open out into a left and a right wing.
-  .crease('wingL', [-0.18, 1], [-1, 0.18])
-  .crease('wingR', [1, -0.18], [0.18, -1])
-  // Root = the central body panel; it stays put while the four points rise.
-  .build(([cx, cy]) => -(Math.abs(cx) + Math.abs(cy)))
+const paper = buildCrane()
 
 // Paper mesh (flat-shaded, both sides) + crease lines.
 const paperMat = new THREE.MeshStandardMaterial({
@@ -128,30 +102,49 @@ mesh.add(creaseLines)
 
 const craneRoot = new THREE.Group()
 craneRoot.add(mesh)
-scene.add(craneRoot)
+// `keel` levels the tent: a per-frame roll about the body ridge (display X
+// after craneRoot's static rotation) computed from the solved geometry, so
+// the tent's opening always faces straight up no matter which face the
+// solver picked as its fixed root.
+const keel = new THREE.Group()
+keel.add(craneRoot)
+scene.add(keel)
 
-// ---------------------------------------------------------------------------
-// Steps — target dihedral angles (degrees) for each fold line. Flat → crane.
-// ---------------------------------------------------------------------------
-const STEPS = [
-  { name: 'a flat square', spine: 0, neck: 0, head: 0, tail: 0, wingL: 0, wingR: 0 },
-  { name: 'crease the body', spine: 70, neck: 0, head: 0, tail: 0, wingL: 0, wingR: 0 },
-  { name: 'lift the neck and tail', spine: 70, neck: 135, head: 0, tail: 128, wingL: 0, wingR: 0 },
-  { name: 'spread the wings', spine: 70, neck: 135, head: 0, tail: 128, wingL: 95, wingR: 95 },
-  { name: 'reverse-fold the head', spine: 70, neck: 135, head: -115, tail: 128, wingL: 95, wingR: 95 },
-  { name: 'a paper crane', spine: 72, neck: 137, head: -117, tail: 130, wingL: 97, wingR: 97 },
-]
 const LAST = STEPS.length - 1
 const a = { ...STEPS[0] } // live angles (deg); start flat and fold from there
 
-// Orient the folded crane to a pleasing pose (belly down, neck up-forward),
-// reclined slightly toward the camera so the head and wings read on the turntable.
-craneRoot.rotation.set(-1.05, -0.4, 0)
-craneRoot.position.y = 0.05
+// Pose: the sheet folds with its ridge along the (1,1,0) diagonal of the
+// rest square. craneRoot's static rotation lays that ridge along world X;
+// keel then rolls about it so the tent opens upward — crane sitting
+// keel-down, wings rising in a V, neck and tail climbing out of it, the
+// turntable doing the rest.
+craneRoot.rotation.set(Math.PI / 2, 0, -Math.PI / 4)
+keel.position.y = 0.02
 
-const baseMatrix = new THREE.Matrix4()
+// The two wing corners are a mirror pair, so the tent's opening direction is
+// the average of their offsets from the ridge. Measuring it from the solved
+// mesh (rather than deriving it from the fold angles) keeps the pose upright
+// regardless of which face the fold solver hangs everything from.
+const AXIS_U = new THREE.Vector3(1, 1, 0).normalize() // the ridge, at rest
+const AXIS_V = new THREE.Vector3(-1, 1, 0).normalize()
+const vidNear = (x, y) => paper.pts.findIndex((p) => Math.abs(p[0] - x) < 1e-6 && Math.abs(p[1] - y) < 1e-6)
+const WING_L = vidNear(-1, 1)
+const WING_R = vidNear(1, -1)
+const IDENTITY = new THREE.Matrix4()
+const bis = new THREE.Vector3()
+const tmpV = new THREE.Vector3()
 function updatePaper() {
-  paper.solve((id) => degToRad(a[id]), baseMatrix)
+  paper.solve((id) => degToRad(a[id]), IDENTITY)
+  // Roll the keel so the wing-corner bisector points up (-z in sheet space).
+  bis.set(0, 0, 0)
+  for (const vid of [WING_L, WING_R]) {
+    tmpV.copy(paper.world[vid])
+    tmpV.addScaledVector(AXIS_U, -tmpV.dot(AXIS_U))
+    bis.add(tmpV)
+  }
+  if (bis.lengthSq() > 1e-6) {
+    keel.rotation.x = -Math.PI / 2 - Math.atan2(bis.z, bis.dot(AXIS_V))
+  }
   paper.writePositions(posAttr.array)
   posAttr.needsUpdate = true
   paper.writeCreaseLines(creaseAttr.array)
@@ -202,6 +195,9 @@ document.getElementById('play').addEventListener('click', () => {
 })
 refreshHud()
 
+// Handle for tooling (step scripts, thumbnail framing). Not part of the UI.
+window.__crane = { camera, controls, gotoStep, scene, mesh, craneRoot }
+
 // ---------------------------------------------------------------------------
 // Loop
 // ---------------------------------------------------------------------------
@@ -210,7 +206,7 @@ function tick() {
   const dt = Math.min(clock.getDelta(), 0.05)
   const target = STEPS[stepIndex]
   const k = 1 - Math.pow(0.0012, dt) // frame-rate-independent smoothing
-  for (const id of ['spine', 'neck', 'head', 'tail', 'wingL', 'wingR']) a[id] = lerp(a[id], target[id], k)
+  for (const id of FOLD_IDS) a[id] = lerp(a[id], target[id], k)
   updatePaper()
 
   timer += dt

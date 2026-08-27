@@ -244,9 +244,11 @@ export class Paper {
     // Tag which edges are creases (and which fold line they belong to).
     for (const edge of edgeMap.values()) {
       edge.lineId = null
+      edge.line = null
       for (const line of this.lines) {
         if (this._edgeOnLine(edge.i, edge.j, line)) {
           edge.lineId = line.id
+          edge.line = line
           break
         }
       }
@@ -295,10 +297,30 @@ export class Paper {
       console.warn(`origami: ${tris.length - seen.size} triangle(s) detached from the sheet — mesh is not connected`)
     }
 
+    // A fold's direction must be a fact of the crease PATTERN, not of which
+    // vertex happened to become edge.i during triangulation. Convention:
+    // positive angle lifts the face on the LEFT of the crease's a->b direction
+    // toward +z (a valley seen from +z); negative is a mountain. Each child's
+    // sign folds that into (axis orientation) x (which side the child is on),
+    // so the same line id folds coherently along its whole length.
+    const foldSign = new Array(tris.length).fill(1)
+    for (let ti = 0; ti < tris.length; ti++) {
+      const edge = parentEdge[ti]
+      if (!edge || !edge.line) continue
+      const { a, b } = edge.line
+      const p = this.pts[edge.i]
+      const q = this.pts[edge.j]
+      const axisAlong =
+        (q[0] - p[0]) * (b[0] - a[0]) + (q[1] - p[1]) * (b[1] - a[1]) >= 0 ? 1 : -1
+      const childLeft = Paper._side(a, b, centroid(tris[ti])) > 0 ? 1 : -1
+      foldSign[ti] = axisAlong * childLeft
+    }
+
     this.tris = tris
     this.order = order
     this.parent = parent
     this.parentEdge = parentEdge
+    this.foldSign = foldSign
     this.matrices = tris.map(() => new THREE.Matrix4())
     this.creaseEdges = [...edgeMap.values()].filter((e) => e.lineId)
 
@@ -334,7 +356,7 @@ export class Paper {
         continue
       }
       const edge = this.parentEdge[ti]
-      const angle = edge.lineId ? angleOf(edge.lineId) : 0
+      const angle = edge.lineId ? angleOf(edge.lineId) * this.foldSign[ti] : 0
       const parentM = this.matrices[pa]
       if (angle === 0) {
         m.copy(parentM)
