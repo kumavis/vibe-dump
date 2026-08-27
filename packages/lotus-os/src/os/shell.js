@@ -50,17 +50,23 @@ export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer,
       return null
     }
     const key = opts.id ?? (app.singleton === false ? uid(appId) : app.key ? app.key(args) : appId)
+    // The title always had to be able to depend on `args` — one window per
+    // folder needs one title per folder — and the rest are read the same way,
+    // so a program showing a different thing in each window can be a different
+    // shape and wear a different mark in each window too.
+    const of = (v) => (typeof v === 'function' ? v(args) : v)
+    const mark = of(app.mark)
     return wm.open({
       id: key,
       app: appId,
-      title: typeof app.title === 'function' ? app.title(args) : app.title,
-      mark: app.mark ? markFor(app.mark) : '',
-      width: opts.width ?? app.width,
-      height: opts.height ?? app.height,
+      title: of(app.title),
+      mark: mark ? markFor(mark) : '',
+      width: opts.width ?? of(app.width),
+      height: opts.height ?? of(app.height),
       x: opts.x,
       y: opts.y,
-      minWidth: app.minWidth,
-      minHeight: app.minHeight,
+      minWidth: of(app.minWidth),
+      minHeight: of(app.minHeight),
       resizable: app.resizable,
       variant: app.variant,
       // Kept on the spec so the manager can hand them back to a window that
@@ -81,7 +87,10 @@ export function createShell({ osEl, appbarEl, desktopEl, windowLayer, snapLayer,
       case 'motif':
         return launch('motifs', { motif: node.motif, path: node.path })
       case 'app':
-        return launch(node.app, {})
+        // `args` lets one program stand for several entries — the frame program
+        // is a different neighbour in every window, and this is where it is told
+        // which one.
+        return launch(node.app, node.args ?? {})
       case 'exec':
         return reveal()
       default:

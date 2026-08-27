@@ -9,6 +9,7 @@ import terminal from './apps/terminal.js'
 import settings from './apps/settings.js'
 import motifs from './apps/motif-viewer.js'
 import about from './apps/about.js'
+import frame from './apps/frame.js'
 
 export const APPS = {
   explorer,
@@ -17,4 +18,5 @@ export const APPS = {
   settings,
   motifs,
   about,
+  frame,
 }

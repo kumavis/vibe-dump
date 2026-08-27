@@ -60,7 +60,9 @@ src/
     motifs.js        kranok, chofa, naga, chedi, lotus, prajam yam, as SVG
     icons.js         the plain line icons, kept separate from the ornament
     reveal.js        the loader, and the lazy import of everything below
-    apps/            explorer, reader, terminal, settings, motif viewer, about
+    apps/            explorer, reader, terminal, settings, motif viewer, about,
+                     frame (an iframe with a neighbouring app in it)
+    embeds.js        which neighbours the frame is allowed to show
   scene/
     index.js         assembly, lights, interaction, the hand-off
     camera-rig.js    poses, the flight path, the handheld drift
@@ -70,8 +72,30 @@ src/
 ```
 
 Nothing under `scene/` is in the initial bundle. The desktop ships as about
-31 kB of gzipped JavaScript; the 234 kB of three.js and room arrive only when
+34 kB of gzipped JavaScript; the 234 kB of three.js and room arrive only when
 somebody runs the executable.
+
+## The neighbour
+
+`Automata Graph` on the desktop is not a program on this machine. It is
+[Rule Explorer](../rule-explorer) — another app out of the same gallery — in an
+iframe filling the window body, running its own event loop and its own WebGL
+context. The OS's contribution is the edges, which is what a window manager was
+always supposed to be. It survives `reveal.run` too: the frame goes into the
+monitor with the rest of the panel and keeps drawing on it.
+
+Where the page comes from depends on the build, and the window's toolbar says
+which:
+
+| build       | source                                                          |
+| ----------- | --------------------------------------------------------------- |
+| gallery     | `../rule-explorer/`, a sibling directory on the deployed site    |
+| `npm run dev` | the same path, served off the sibling's `dist/` by a middleware in `vite.config.js` — build it once and the window works in dev too |
+| `standalone.mjs` | a copy baked into the file on `window.__LOTUS_EMBEDS__`, because one page has no next door and no network |
+
+The two packages stay independent: nothing here imports anything from there.
+The only thing that crosses is a directory name in `embeds.js`, read by a
+dev-server middleware and by a by-hand build tool.
 
 ## The room
 

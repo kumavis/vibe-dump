@@ -706,3 +706,104 @@
   font-size: 11px;
   line-height: 1.5;
 }
+
+/* --- embedded programs --------------------------------------------------- */
+/*
+ * The window body is handed to a page this OS did not write, so everything here
+ * is edge furniture: a sunk ground behind the frame while it is empty, a veil
+ * over it while it is loading, and a shield that only exists during a drag.
+ */
+
+.frame {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: var(--surface-sunk);
+}
+.frame__view {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* Loading and failed states both have something to say and the frame is
+     underneath them saying nothing; fading it in stops the swap from flashing
+     a white document edge on a dark desktop. */
+  opacity: 1;
+  transition: opacity 200ms var(--ease-out);
+}
+.frame.is-failed .frame__view {
+  opacity: 0;
+}
+
+/* Only in the way while a window gesture is running. Pointer capture covers
+   most of a drag, but it is taken on pointerdown and the first move of a fast
+   grab can beat it into the frame. */
+.frame__shield {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+.frame__shield.is-on {
+  display: block;
+}
+
+.frame__veil {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  text-align: center;
+  background: var(--surface-sunk);
+  color: var(--ink-faint);
+  font-size: 12px;
+  line-height: 1.6;
+  transition: opacity 260ms var(--ease-out);
+}
+.frame__veil.is-gone {
+  opacity: 0;
+  pointer-events: none;
+}
+.frame__veil strong {
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-dim);
+}
+.frame__veil span {
+  max-width: 46ch;
+}
+.frame__link {
+  color: var(--gold);
+  font-size: 11.5px;
+  text-decoration: none;
+  border-bottom: var(--hair) solid var(--gold-dim);
+}
+.frame__link:hover {
+  color: var(--gold-bright);
+}
+/* One kranok hook, going round. Reduced motion flattens it to a still ring,
+   which is what the animation reads as at any single instant anyway. */
+.frame__spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  border-top-color: var(--gold);
+  animation: frame-spin 900ms linear infinite;
+}
+@keyframes frame-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* The toolbar's "open outside" is an anchor wearing a button's clothes. */
+a.toolbar__btn {
+  text-decoration: none;
+}
