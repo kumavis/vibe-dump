@@ -20,7 +20,9 @@
       "tutorial"
     ],
     "status": "done",
-    "models": [],
+    "models": [
+      "Opus 5"
+    ],
     "thinking": "unknown",
     "thumbnail": {
       "waitFor": "#tour",
