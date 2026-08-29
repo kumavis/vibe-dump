@@ -6,7 +6,7 @@
 import { makeRng } from './rng.mjs'
 import { buildPopulation, trueOutput, EMPLOYMENT } from './population.mjs'
 import { generateEvents, updateTrust } from './events.mjs'
-import { Feed, initFollowGraph, runFeeds } from './social.mjs'
+import { Feed, initFollowGraph, runFeeds, runCuration } from './social.mjs'
 import { eigenTrust, preTrustFromBalances } from './eigentrust.mjs'
 import { Pool, Speculator } from './market.mjs'
 import { dailyWage, monthlySettlement, patronBuying, portfolioRebalance, DAYS_PER_MONTH } from './economy.mjs'
@@ -74,6 +74,10 @@ export function createModel (config) {
     // because it decides who is visible at all, and the trust graph can only
     // rank people who are.
     feed.publish(rng, agents, config, tick)
+    feed.refresh(config, tick)
+    // Curators dig before the feeds run, so what they surface can reach their
+    // followers the same day.
+    runCuration(rng, agents, feed, config, tick)
     runFeeds(rng, agents, feed, config, tick)
 
     // 1b. direct interaction — the channels that bypass the feed entirely

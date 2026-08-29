@@ -35,7 +35,17 @@ export class Feed {
     this.cum = null
     this.cumTotal = 0
     this.nextId = 0
-    this.stats = { posts: 0, impressions: 0, follows: 0, unfollows: 0, reshares: 0 }
+    this.stats = {
+      posts: 0,
+      impressions: 0,
+      curatedImpressions: 0,
+      follows: 0,
+      unfollows: 0,
+      reshares: 0,
+      digs: 0,
+      boosts: 0,
+      rescued: 0 // posts a curator was the first to surface
+    }
   }
 
   /**
@@ -102,6 +112,70 @@ export class Feed {
     }
     return this.active[lo]
   }
+
+  /**
+   * Unweighted pick. This is what digging looks like: the curator goes through
+   * everything, not what the ranker served. It is the only sampling path in the
+   * model that is indifferent to engagement.
+   */
+  sampleTail (rng) {
+    const n = this.active.length
+    return n === 0 ? null : this.active[rng.int(n)]
+  }
+}
+
+/**
+ * Curation, as a distinct discovery channel.
+ *
+ * A curator spends `effort.curate` digging through posts the ranker did not
+ * surface, and reads them deeply enough to see past the legibility gate — they
+ * read the paper rather than the abstract, they run the tool. That last part is
+ * why this is the only mechanism in the model that can rescue illegible work:
+ * everything else can only see `output * legibility`.
+ *
+ * What they find, they boost, which puts it in their followers' feeds carrying
+ * their judgement with it.
+ */
+export function runCuration (rng, agents, feed, config, tick) {
+  if (feed.active.length === 0) return
+
+  for (const curator of agents) {
+    const rate = config.digRate * curator.effort.curate * (0.3 + curator.traits.taste)
+    let digs = Math.floor(rate)
+    if (rng.next() < rate - digs) digs++
+
+    for (let d = 0; d < digs; d++) {
+      const post = feed.sampleTail(rng)
+      if (!post || post.author === curator.id) continue
+      const author = agents[post.author]
+
+      // Depth: attention and discernment recover part of what the post format
+      // threw away. A perfect curator reading closely sees the real work.
+      const depth = config.curationDepth * curator.traits.taste * (0.3 + curator.effort.curate * 3)
+      const leg = author.traits.legibility
+      const recovered = trueOutput(author) * Math.min(leg + (1 - leg) * depth, 1)
+
+      feed.stats.digs++
+      const belief = observe(rng, curator, author, 'curated', config, {
+        visible: recovered,
+        vetterTaste: curator.traits.taste
+      })
+
+      // The bar is relative to what this curator normally sees, not absolute.
+      // An absolute threshold just re-encodes the legibility gate: quiet work
+      // produces a small signal however good it is, and would never clear it.
+      curator.seenMean += (belief - curator.seenMean) * 0.02
+      if (belief < curator.seenMean * config.curateBarMultiple) continue
+
+      // A curator carries a list, not a single item — capping them at one
+      // find per day caps curation throughput regardless of how much they dig.
+      curator.recentBoosts.push({ post, tick })
+      if (curator.recentBoosts.length > config.boostQueueSize) curator.recentBoosts.shift()
+      post.engagement += config.curatorBoostWeight
+      feed.stats.boosts++
+      if (!post.everBoosted) { post.everBoosted = true; feed.stats.rescued++ }
+    }
+  }
 }
 
 /**
@@ -110,10 +184,7 @@ export class Feed {
  * ranking — which is where preferential attachment comes from.
  */
 export function runFeeds (rng, agents, feed, config, tick) {
-  feed.refresh(config, tick)
   if (feed.active.length === 0) return
-
-  const boosted = []
 
   for (const viewer of agents) {
     const attention = Math.round(config.feedSize * (0.3 + viewer.traits.social * 1.4))
@@ -122,20 +193,44 @@ export function runFeeds (rng, agents, feed, config, tick) {
 
     for (let slot = 0; slot < attention; slot++) {
       let post = null
+      let vetter = null
       if (rng.next() < config.algoShare || following.length === 0) {
         post = feed.sampleAlgorithmic(rng)
       } else {
-        const author = agents[following[rng.int(following.length)]]
-        const own = author.recentPost
-        const boost = author.recentBoost
-        post = (boost && (!own || boost.tick > own.tick)) ? boost : own
-        if (post && post.tick < tick - config.postTtl) post = null
+        const via = agents[following[rng.int(following.length)]]
+        // What this account is putting in front of you today: their own post,
+        // or anything on their boost list.
+        const fresh = tick - config.postTtl
+        const own = via.recentPost && via.recentPost.tick >= fresh ? via.recentPost : null
+        const boosts = via.recentBoosts
+        const choices = own ? boosts.length + 1 : boosts.length
+        if (choices > 0) {
+          const pick = rng.int(choices)
+          if (own && pick === boosts.length) {
+            post = own
+          } else {
+            const entry = boosts[pick]
+            if (entry && entry.post.tick >= fresh) {
+              post = entry.post
+              vetter = via // it reached the viewer through this person's judgement
+            }
+          }
+        }
       }
       if (!post || post.author === viewer.id) continue
 
       const author = agents[post.author]
       feed.stats.impressions++
-      const signal = observe(rng, viewer, author, 'exposure', config, undefined, post.substance)
+      let signal
+      if (vetter && vetter.id !== author.id) {
+        feed.stats.curatedImpressions++
+        signal = observe(rng, viewer, author, 'curated', config, {
+          visible: post.substance,
+          vetterTaste: vetter.traits.taste
+        })
+      } else {
+        signal = observe(rng, viewer, author, 'exposure', config, { visible: post.substance })
+      }
 
       // How much this landed. Note the viewer reacts to the *perceived* value,
       // which packaging inflated — so engagement is not a quality signal, and
@@ -148,8 +243,8 @@ export function runFeeds (rng, agents, feed, config, tick) {
         follow(agents, viewer, author, config, feed)
       }
       if (rng.next() < config.reshareRate) {
-        viewer.recentBoost = post
-        boosted.push(post)
+        viewer.recentBoosts.push({ post, tick })
+        if (viewer.recentBoosts.length > config.boostQueueSize) viewer.recentBoosts.shift()
         post.engagement += config.reshareWeight
         feed.stats.reshares++
       }

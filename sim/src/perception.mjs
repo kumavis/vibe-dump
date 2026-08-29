@@ -7,9 +7,14 @@
 import { trueOutput } from './population.mjs'
 
 export const EVENT_KINDS = {
-  // Seeing a post. Heavily biased by packaging, and gated by legibility: only
-  // the part of the work that survives compression into a post is visible.
+  // Seeing a post in a feed. Heavily biased by packaging, and gated by
+  // legibility: only the part of the work that survives compression is visible.
   exposure: { info: 0.35, kappa: 1.0, noise: 0.45 },
+  // Seeing a post because someone you follow put it in front of you. Their
+  // judgement rides along, so the noise is theirs rather than yours — which
+  // means following a good curator makes you effectively discerning, and
+  // following a bad one makes you worse than you are.
+  curated: { info: 0.65, kappa: 0.3, noise: 0.25 },
   // Working alongside someone. High information, almost no packaging bias, and
   // legibility does not apply — you saw the work itself.
   collaboration: { info: 1.0, kappa: 0.05, noise: 0.15 },
@@ -20,12 +25,16 @@ export const EVENT_KINDS = {
 /**
  * Fold one observation of `subject` into `observer`'s belief.
  *
- * @param inheritedSignal for referrals: the sourcing agent's belief, bias and all
- * @param visible         for feed exposure: the pre-computed visible substance
- *                        of the post, already gated by legibility
+ * @param opts.inheritedSignal for referrals: the sourcing agent's belief, bias
+ *                             and all
+ * @param opts.visible         for anything seen as a post: the visible
+ *                             substance, already gated by legibility
+ * @param opts.vetterTaste     for curated posts: the taste of whoever put it in
+ *                             front of the observer
  */
-export function observe (rng, observer, subject, kind, config, inheritedSignal, visible) {
+export function observe (rng, observer, subject, kind, config, opts = {}) {
   const spec = EVENT_KINDS[kind]
+  const { inheritedSignal, visible, vetterTaste } = opts
 
   let signal
   if (kind === 'referral' && inheritedSignal !== undefined) {
@@ -34,7 +43,12 @@ export function observe (rng, observer, subject, kind, config, inheritedSignal, 
     const substance = visible !== undefined ? visible : trueOutput(subject)
     const promoted = substance +
       config.kappa * spec.kappa * subject.traits.hustle * subject.effort.hustle
-    const sd = spec.noise * (1 - observer.traits.taste) * config.signalNoise
+    // A vetted post is filtered through the vetter's discernment, not the
+    // viewer's — you inherit whoever's judgement you chose to follow.
+    const effectiveTaste = vetterTaste !== undefined
+      ? Math.max(observer.traits.taste, vetterTaste * config.curationTransfer)
+      : observer.traits.taste
+    const sd = spec.noise * (1 - effectiveTaste) * config.signalNoise
     signal = promoted + rng.normal(0, sd)
   }
 

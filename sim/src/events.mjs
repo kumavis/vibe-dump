@@ -60,7 +60,7 @@ export function generateEvents (rng, agents, config, tick) {
     const entries = [...via.beliefs.entries()]
     const [subjectId, belief] = entries[rng.int(entries.length)]
     if (subjectId === i) continue
-    observe(rng, agent, agents[subjectId], 'referral', config, belief.value)
+    observe(rng, agent, agents[subjectId], 'referral', config, { inheritedSignal: belief.value })
     counts.referral++
   }
 

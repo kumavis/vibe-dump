@@ -56,6 +56,16 @@ export const DEFAULTS = {
   maxFollowing: 150,
   followRate: 0.05,
   reshareRate: 0.02,
+  // --- curation ---
+  // The one discovery channel indifferent to engagement ranking, and the only
+  // one that can see past the legibility gate.
+  digRate: 30, // posts dug through per unit of curate effort per day
+  curationDepth: 1.0, // how far close reading recovers what the post format lost
+  curateBarMultiple: 1.4, // boost what beats this multiple of what you usually see
+  boostQueueSize: 5, // a curator carries a list, not a single item
+  curatorBoostWeight: 0.25,
+  curationTransfer: 0.9, // how much of a vetter's discernment the viewer inherits
+
   engageScale: 0.35,
   engageWeight: 0.02,
   reshareWeight: 0.08,

@@ -284,7 +284,9 @@ export function summary (model) {
   }
   const ev = state.stats.events
   const fs = state.feed.stats
-  out.push(`  feed: ${money(fs.posts)} posts · ${money(fs.impressions)} impressions · ${money(fs.follows)} follows · ${money(fs.reshares)} reshares`)
+  out.push(`  feed: ${money(fs.posts)} posts · ${money(fs.impressions)} impressions ` +
+    `(${pct(fs.impressions > 0 ? fs.curatedImpressions / fs.impressions : 0, 1)} vetted) · ${money(fs.follows)} follows`)
+  out.push(`  curation: ${money(fs.digs)} posts dug through · ${money(fs.boosts)} boosted · ${money(fs.rescued)} first surfaced by a curator`)
   out.push(`  direct: ${money(ev.collaboration)} collab · ${money(ev.patronage)} patronage · ${money(ev.referral)} referral`)
   out.push(`  trust rows rewritten: ${state.stats.rewrites} · EigenTrust last converged in ${state.stats.etIterations} iterations`)
   out.push('')

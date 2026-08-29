@@ -34,17 +34,20 @@ const FIELDS = [
   ['hustl~end', 10, (r) => r.endHustleCorr.toFixed(2)],
   ['legib~end', 10, (r) => r.endLegibilityCorr.toFixed(2)],
   ['flwGini', 9, (r) => r.followerGini.toFixed(3)],
+  ['amp:art', 9, (r) => `${r.ampArt.toFixed(2)}x`],
+  ['amp:rsch', 10, (r) => `${r.ampResearch.toFixed(2)}x`],
+  ['amp:infra', 10, (r) => `${r.ampInfra.toFixed(2)}x`],
+  ['flw:rsch', 9, (r) => r.flwResearch.toFixed(0)],
   ['craft f/t', 10, (r) => r.fullCraft.toFixed(1)],
-  ['back', 6, (r) => r.returned.toFixed(1)],
   ['output', 8, (r) => r.totalOutput.toFixed(1)],
-  ['price', 8, (r) => r.price.toFixed(3)],
   ['recip', 7, (r) => `${(r.reciprocityRate * 100).toFixed(0)}%`],
-  ['endorse$', 9, (r) => `${(r.endorsementCost * 100).toFixed(0)}%`],
   ['giniRAIN', 9, (r) => r.giniRain.toFixed(3)]
 ]
 
 const AGG_KEYS = [
   'endCraftCorr', 'endHustleCorr', 'endLegibilityCorr', 'followerGini',
+  'ampArt', 'ampResearch', 'ampInfra', 'ampGeneral',
+  'flwArt', 'flwResearch', 'flwInfra',
   'fullCraft', 'returned', 'totalOutput', 'price', 'reciprocityRate',
   'endorsementCost', 'giniRain'
 ]

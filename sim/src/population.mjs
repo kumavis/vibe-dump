@@ -230,7 +230,8 @@ export function buildPopulation (rng, config) {
       following: new Set(),
       followers: new Set(),
       recentPost: null,
-      recentBoost: null,
+      recentBoosts: [],
+      seenMean: 0.02,
       // belief and delegation
       beliefs: new Map(),
       driftSinceRewrite: 0,
