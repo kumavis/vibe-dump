@@ -26,6 +26,11 @@ const el = (id) => document.getElementById(id)
 const garden = new Garden(canvas)
 const ambience = new Ambience(garden.scene)
 
+// Which words the instructions use, and whether the Place button is there. A
+// coarse pointer with no hover is a touchscreen; the first real touch confirms
+// it, which is what catches a laptop with a screen you can also poke.
+if (matchMedia('(hover: none) and (pointer: coarse)').matches) document.body.classList.add('touch')
+
 let game
 let hover = null // { cell, fits, index }
 let sticky = null // orientation the player last chose, kept across moves
@@ -210,11 +215,52 @@ function setHover(hit) {
   clearHover()
 }
 
+/**
+ * Aim from a tap. A fingertip covers about forty pixels of a phone screen and a
+ * kite at overview zoom is smaller than that, so landing on one is luck. If
+ * nothing legal is under the finger, take the nearest light instead — measured
+ * on screen, because that is where the player is aiming.
+ */
+const snapRange = () => Math.max(110, Math.min(innerWidth, innerHeight) * 0.28)
+
+function aimNear(cx, cy) {
+  const hit = garden.pick(...ndc(cx, cy))
+  if (hit) {
+    setHover(hit)
+    if (hover) return true
+  }
+  let best = null
+  let bd = Infinity
+  for (const f of game.fits) {
+    const [x, z] = hubOf(f.cells)
+    const v = garden.project(x, 0.02, z)
+    const d = Math.hypot(((v.x + 1) / 2) * innerWidth - cx, ((1 - v.y) / 2) * innerHeight - cy)
+    if (d < bd) {
+      bd = d
+      best = f
+    }
+  }
+  if (!best || bd > snapRange()) return false
+  const [hx, hz] = hubOf(best.cells)
+  setHover({ cell: best.cells[0], x: hx, z: hz })
+  return !!hover
+}
+
 function clearHover() {
   hover = null
   garden.setGhost(null)
   el('fitcount').textContent = ''
   el('contact').textContent = ''
+  setControls(false)
+}
+
+/** The turn and lay buttons only mean anything once a spot is chosen. On a
+ *  phone they are the whole interface, so they say so. */
+function setControls(aimed) {
+  const n = aimed && hover ? hover.fits.length : 0
+  el('lay').disabled = !aimed
+  el('prev').disabled = n < 2
+  el('next').disabled = n < 2
 }
 
 function showGhost() {
@@ -235,6 +281,7 @@ function showGhost() {
   else if (fit.touch > 0) parts.push(`${fit.touch} edge${fit.touch > 1 ? 's' : ''} shared`)
   c.textContent = parts.join(' · ')
   c.classList.toggle('flush', fit.touch >= 3 || fit.joins > 0)
+  setControls(true)
   drawTileCard(fit.o)
 }
 
@@ -368,56 +415,132 @@ function endGame() {
 
 // --- input ------------------------------------------------------------------
 
-let dragging = false
+// One handler for mouse, pen and touch. Fingers get their own rules: a bigger
+// slop before a tap becomes a drag, and a second finger that takes over as a
+// pinch — zoom, pan and twist together, which is the only way to work a 3D
+// board without a scroll wheel or a modifier key.
+const SLOP_MOUSE = 4
+const SLOP_TOUCH = 11
+
+const pointers = new Map()
+let pinch = null // { gap, cx, cy, angle } from the last move
+let multi = false // a second finger joined, so the release is not a tap
 let dragged = 0
 let lastX = 0
 let lastY = 0
 let button = 0
+let slop = SLOP_MOUSE
+
+const ndc = (x, y) => [(x / innerWidth) * 2 - 1, -(y / innerHeight) * 2 + 1]
+
+/** Gap, midpoint and twist between the two fingers down. */
+function pinchFrame() {
+  const [a, b] = [...pointers.values()]
+  return {
+    gap: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)),
+    cx: (a.x + b.x) / 2,
+    cy: (a.y + b.y) / 2,
+    angle: Math.atan2(b.y - a.y, b.x - a.x),
+  }
+}
+
+/** Capture keeps a finger's moves coming to the canvas even once it slides off
+ *  the edge. It throws if the pointer has already gone, which is not worth
+ *  losing the gesture over. */
+function capture(id, on) {
+  try {
+    if (on) canvas.setPointerCapture(id)
+    else canvas.releasePointerCapture(id)
+  } catch {}
+}
 
 canvas.addEventListener('pointerdown', (e) => {
-  dragging = true
-  dragged = 0
-  lastX = e.clientX
-  lastY = e.clientY
-  button = e.button
-  canvas.setPointerCapture(e.pointerId)
+  if (e.pointerType === 'touch') document.body.classList.add('touch')
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+  capture(e.pointerId, true)
+  if (pointers.size === 1) {
+    dragged = 0
+    multi = false
+    button = e.button
+    slop = e.pointerType === 'mouse' ? SLOP_MOUSE : SLOP_TOUCH
+    lastX = e.clientX
+    lastY = e.clientY
+  } else {
+    multi = true
+    if (pointers.size === 2) pinch = pinchFrame()
+  }
 })
 
 canvas.addEventListener('pointermove', (e) => {
-  if (dragging) {
+  const p = pointers.get(e.pointerId)
+  if (p) {
+    p.x = e.clientX
+    p.y = e.clientY
+  }
+
+  if (pointers.size >= 2) {
+    const now = pinchFrame()
+    if (pinch) {
+      garden.zoom(pinch.gap / now.gap)
+      garden.pan(now.cx - pinch.cx, now.cy - pinch.cy)
+      // Twisting the fingers swings the camera round, which on a phone is the
+      // only spare gesture left — one finger is already orbiting.
+      let turn = now.angle - pinch.angle
+      if (turn > Math.PI) turn -= Math.PI * 2
+      else if (turn < -Math.PI) turn += Math.PI * 2
+      garden.spin(turn)
+    }
+    pinch = now
+    document.body.classList.add('dragging')
+    return
+  }
+
+  if (p) {
     const dx = e.clientX - lastX
     const dy = e.clientY - lastY
     dragged += Math.abs(dx) + Math.abs(dy)
     lastX = e.clientX
     lastY = e.clientY
-    if (dragged > 4) {
+    if (dragged > slop) {
       document.body.classList.add('dragging')
       if (button === 2 || e.shiftKey) garden.pan(dx, dy)
       else garden.orbit(dx, dy)
     }
     return
   }
-  if (!running) return
-  setHover(garden.pick((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1))
+  if (!running || e.pointerType === 'touch') return
+  setHover(garden.pick(...ndc(e.clientX, e.clientY)))
 })
 
-canvas.addEventListener('pointerup', (e) => {
-  dragging = false
+function endPointer(e) {
+  const had = pointers.delete(e.pointerId)
+  capture(e.pointerId, false)
+  if (pointers.size < 2) pinch = null
+  if (pointers.size > 0) {
+    // a finger lifted out of a pinch: carry on from where the other one is
+    const [rest] = [...pointers.values()]
+    lastX = rest.x
+    lastY = rest.y
+    return
+  }
   document.body.classList.remove('dragging')
-  canvas.releasePointerCapture?.(e.pointerId)
-  if (dragged > 4 || button !== 0 || !running) return
+  if (!had || multi || dragged > slop || button !== 0 || !running) return
+
   if (e.pointerType === 'touch') {
-    // No hover on a touchscreen, so the first tap aims and the second lays —
-    // with the ⟲ ⟳ buttons in between if the fit wants turning.
-    const hit = garden.pick((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1)
-    if (!hit) return
-    if (!hover || hover.cell !== hit.cell) {
-      setHover(hit)
+    // No hover on a touchscreen, so the first tap aims and the second lays.
+    // Anywhere on the ghost counts as the same spot — asking for the same kite
+    // twice is a two-millimetre target on a phone.
+    const hit = garden.pick(...ndc(e.clientX, e.clientY))
+    if (!hover || !hit || !hover.fits[hover.index].cells.includes(hit.cell)) {
+      aimNear(e.clientX, e.clientY)
       return
     }
   }
   commit()
-})
+}
+
+canvas.addEventListener('pointerup', endPointer)
+canvas.addEventListener('pointercancel', endPointer)
 
 canvas.addEventListener('contextmenu', (e) => e.preventDefault())
 
@@ -451,7 +574,20 @@ function discard() {
   syncHud()
 }
 
-addEventListener('resize', () => garden.resize(innerWidth, innerHeight))
+// A phone's viewport moves under you — the URL bar slides away, the keyboard
+// comes and goes, the thing gets turned sideways — and none of those fire a
+// plain resize on every browser.
+const fit = () => garden.resize(innerWidth, innerHeight)
+addEventListener('resize', fit)
+addEventListener('orientationchange', () => setTimeout(fit, 250))
+visualViewport?.addEventListener('resize', fit)
+
+// Tapping the stats puts the whole garden back in frame — the way out of
+// having pinched yourself into a corner.
+el('top').addEventListener('click', () => {
+  garden.resetCamera()
+  if (game) garden.frame(boundsOf(game))
+})
 
 // --- boot -------------------------------------------------------------------
 
@@ -461,6 +597,7 @@ function start(seed) {
   running = true
   clearHover()
   ambience.reset()
+  garden.resetCamera()
   const [sx, sz] = cart(SUMMIT[0], SUMMIT[1])
   garden.setMountain(sx * W, sz * W)
   rebuild(true)
@@ -470,6 +607,9 @@ function start(seed) {
 
 el('prev').addEventListener('click', () => cycle(-1))
 el('next').addEventListener('click', () => cycle(1))
+// the drawing of the tile turns it too — the obvious thing to poke at
+el('tileart').addEventListener('click', () => cycle(1))
+el('lay').addEventListener('click', commit)
 el('toss').addEventListener('click', discard)
 el('swap').addEventListener('click', () => {
   if (!game.swapNext()) return

@@ -34,25 +34,32 @@
     <footer id="hand">
       <div id="tilecard">
         <canvas id="tileart" width="220" height="180"></canvas>
-        <div id="tilekind">meadow</div>
-        <div id="contact"></div>
         <div id="fitcount"></div>
+        <div id="tilemeta">
+          <div id="tilekind">meadow</div>
+          <div id="contact"></div>
+          <div id="tilebtns">
+            <button id="prev" title="turn it the other way (Q)">⟲</button>
+            <button id="lay" title="lay the tile">Place</button>
+            <button id="next" title="turn it (E)">⟳</button>
+            <button id="toss" title="discard this tile (R)">discard</button>
+          </div>
+        </div>
         <button id="swap" class="hidden" title="take the other tile instead">
           <canvas id="nextart" width="110" height="90"></canvas>
           <span>swap</span>
         </button>
-        <div id="tilebtns">
-          <button id="prev" title="previous fit (Q)">⟲</button>
-          <button id="next" title="next fit (E)">⟳</button>
-          <button id="toss" title="discard this tile (R)">discard</button>
-        </div>
       </div>
-      <div id="keys">
+      <div class="keys mouse">
         <span><kbd>move</kbd> choose a spot</span>
         <span><kbd>scroll</kbd> / <kbd>Q</kbd><kbd>E</kbd> cycle the fits</span>
         <span><kbd>click</kbd> lay the tile</span>
         <span><kbd>drag</kbd> orbit · <kbd>⇧scroll</kbd> zoom</span>
         <span><kbd>R</kbd> discard (−1)</span>
+      </div>
+      <div class="keys touch">
+        <span><kbd>tap</kbd> a light · <kbd>tap again</kbd> to lay</span>
+        <span><kbd>two fingers</kbd> zoom, pan, turn</span>
       </div>
     </footer>
 
@@ -63,11 +70,25 @@
         and never repeats. Three hats pinwheel around a snow-capped peak; a river runs off it.
       </p>
       <ul>
-        <li><b>Move</b> the mouse near a light. The hat turns itself to a way it fits there.</li>
-        <li><b>Scroll</b> (or <b>Q</b>/<b>E</b>) to cycle the other ways — twelve orientations, mirrored ones included.</li>
-        <li><b>Click</b> to lay it. Covers may meet however they like; only two things are forbidden — walling in a stream, and leaving a gap no hat could ever fill.</li>
+        <li class="mouse"><b>Move</b> the mouse near a light. The hat turns itself to a way it fits there.</li>
+        <li class="touch"><b>Tap</b> near a light. The hat turns itself to a way it fits there.</li>
+        <li class="mouse">
+          <b>Scroll</b> (or <b>Q</b>/<b>E</b>) to cycle the other ways — twelve orientations, mirrored ones included.
+        </li>
+        <li class="touch">
+          <b>⟲ ⟳</b> cycle the other ways — twelve orientations, mirrored ones included.
+        </li>
+        <li class="mouse">
+          <b>Click</b> to lay it. Covers may meet however they like; only two things are forbidden — walling in a
+          stream, and leaving a gap no hat could ever fill.
+        </li>
+        <li class="touch">
+          <b>Tap it again</b>, or press <b>Place</b>, to lay it. Covers may meet however they like; only two things are
+          forbidden — walling in a stream, and leaving a gap no hat could ever fill.
+        </li>
         <li>Ring a <b>meadow, forest, hills, hamlet or scree</b> completely and it seals: big points, and more tiles.</li>
         <li>A mill stands off across the grass with a dry leat. <b>Carry the headwater to it</b> — two or three stream tiles — and its wheel starts turning.</li>
+        <li class="touch"><b>Drag</b> to look round; <b>two fingers</b> zoom, pan and turn the garden.</li>
       </ul>
       <div class="row">
         <button id="play">Plant the garden</button>

@@ -469,6 +469,19 @@ export class Garden {
   }
 
   resize(w, h) {
+    // A phone with a 3× screen would render four times the pixels of a laptop
+    // for a canvas a fifth the size, and drop to a slideshow doing it. Below a
+    // tablet's width the ratio comes down; the tiles are big flat facets and
+    // lose nothing for it.
+    const dpr = devicePixelRatio || 1
+    this.narrow = w < 720
+    this.renderer.setPixelRatio(Math.min(dpr, this.narrow && dpr >= 3 ? 1.6 : 2))
+    const shadow = this.narrow ? 1024 : 2048
+    if (this.sun.shadow.mapSize.x !== shadow) {
+      this.sun.shadow.mapSize.setScalar(shadow)
+      this.sun.shadow.map?.dispose()
+      this.sun.shadow.map = null
+    }
     this.renderer.setSize(w, h, false)
     this.camera.aspect = w / h
     this.camera.updateProjectionMatrix()
@@ -571,8 +584,6 @@ export class Garden {
     c.far = pad * 4 + 34
     c.updateProjectionMatrix()
     this.sunRadius = pad
-    this.scene.fog.near = Math.max(16, r * 1.7)
-    this.scene.fog.far = this.scene.fog.near + r * 2.6 + 30
     this.haze.position.set(cx, -0.55, cz)
     this.haze.scale.setScalar(r + 7)
   }
@@ -621,14 +632,35 @@ export class Garden {
     const elev = Math.PI / 2 - this.polar
     const half = Math.tan((this.camera.fov * Math.PI) / 360)
     const maxY = this.peakY ?? 1
-    const vert = r * Math.sin(elev) + maxY * 0.5 * Math.cos(elev) + 0.9
-    const horiz = r + 0.9
+    // A phone has no margin to spare: the same border that reads as breathing
+    // room on a laptop is a fifth of the short side, and the garden ends up a
+    // postage stamp between two panels.
+    const pad = this.narrow ? 0.35 : 0.9
+    const vert = r * Math.sin(elev) + maxY * 0.5 * Math.cos(elev) + pad
+    const horiz = r + pad
+    const fit = Math.max(this.narrow ? 7 : 9, Math.max(vert / half, horiz / (half * this.camera.aspect)) * 0.96)
+    // Once the camera has been moved by hand — and on a phone it always has,
+    // because you have to zoom in to place anything — refitting after every
+    // tile would yank the view back out from under the player. So it only ever
+    // pulls *back*, and only when the garden has outgrown the frame.
+    if (this.userFramed) {
+      if (fit > this.wantDist) this.wantDist = fit
+      return
+    }
     this.wantTarget.set(cx, maxY * 0.22, cz)
-    this.wantDist = Math.max(9, Math.max(vert / half, horiz / (half * this.camera.aspect)) * 0.96)
+    this.wantDist = fit
     if (instant) {
       this.target.copy(this.wantTarget)
       this.dist = this.wantDist
     }
+  }
+
+  /** Hand the camera to the player, or take it back on a new garden. */
+  releaseCamera() {
+    this.userFramed = true
+  }
+  resetCamera() {
+    this.userFramed = false
   }
 
   orbit(dx, dy) {
@@ -636,11 +668,19 @@ export class Garden {
     this.polar = Math.min(1.42, Math.max(0.28, this.polar - dy * 0.005))
   }
 
+  /** Swing the camera round by an angle rather than by a drag — what a
+   *  two-finger twist turns into. */
+  spin(radians) {
+    this.azimuth += radians
+  }
+
   zoom(f) {
-    this.wantDist = Math.min(90, Math.max(5, this.wantDist * f))
+    this.userFramed = true
+    this.wantDist = Math.min(90, Math.max(4, this.wantDist * f))
   }
 
   pan(dx, dy) {
+    this.userFramed = true
     const s = this.dist * 0.0016
     const ca = Math.cos(this.azimuth)
     const sa = Math.sin(this.azimuth)
@@ -659,6 +699,14 @@ export class Garden {
       this.target.z + this.dist * sp * Math.cos(this.azimuth),
     )
     this.camera.lookAt(this.target)
+
+    // Fog rides the camera, not the garden. Tying it to the garden's radius
+    // alone was fine on a laptop and hopeless on a phone held upright: a tall
+    // narrow frame puts the camera half again as far back for the same garden,
+    // and the whole thing sat past the far plane as a pale smudge.
+    const r = this.lastBounds?.r ?? 6
+    this.scene.fog.near = Math.max(3, this.dist - r * 0.9)
+    this.scene.fog.far = this.scene.fog.near + r * 1.9 + 30
 
     // Keep the sun a fixed 48° off the camera's shoulder. Orbit a fixed sun and
     // half the turns leave the garden flat or backlit; carry it with the camera

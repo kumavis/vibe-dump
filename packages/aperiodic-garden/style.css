@@ -29,6 +29,13 @@ body {
   height: 100%;
   display: block;
   cursor: crosshair;
+  /* every gesture over the board is ours: without this the browser eats the
+     one-finger drag as a scroll and the pinch as a page zoom */
+  touch-action: none;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 body.dragging #scene {
@@ -37,11 +44,17 @@ body.dragging #scene {
 
 /* --- top stats ---------------------------------------------------------- */
 
+/* `width: max-content` on both of these because a fixed box at left:50% with no
+   right is otherwise shrink-to-fit into the half-viewport that remains, and on
+   a phone that is 195px — enough to wrap "hamlet sealed · 3 kites · +28" onto
+   two lines. */
 #top {
   position: fixed;
   top: 14px;
   left: 50%;
   transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 12px);
   display: flex;
   gap: 2px;
   padding: 4px;
@@ -51,6 +64,11 @@ body.dragging #scene {
   box-shadow: 0 6px 22px rgba(38, 55, 70, 0.13);
   backdrop-filter: blur(6px);
   z-index: 5;
+  cursor: pointer;
+}
+
+#top:hover {
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .stat {
@@ -84,6 +102,7 @@ body.dragging #scene {
   text-transform: uppercase;
   color: var(--ink-soft);
   margin-top: 2px;
+  white-space: nowrap;
 }
 
 /* --- event feed --------------------------------------------------------- */
@@ -93,6 +112,8 @@ body.dragging #scene {
   top: 78px;
   left: 50%;
   transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 12px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -102,6 +123,7 @@ body.dragging #scene {
 }
 
 #feed div {
+  white-space: nowrap;
   font-size: 12px;
   padding: 3px 11px;
   border-radius: 999px;
@@ -150,6 +172,7 @@ body.dragging #scene {
   display: block;
   width: 208px;
   height: 170px;
+  cursor: pointer;
 }
 
 #tilekind {
@@ -226,7 +249,7 @@ body.dragging #scene {
   color: var(--ink-soft);
 }
 
-#keys {
+.keys {
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -234,6 +257,33 @@ body.dragging #scene {
   color: var(--ink-soft);
   padding-left: 4px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* One set of words for a mouse, one for fingers, everywhere they differ. The
+   class lands on <body> for a coarse pointer and again the first time a touch
+   actually arrives, so a hybrid machine follows whichever the player picked up.
+   `revert` rather than a fixed display so a list item stays a list item. */
+/* `body .touch`, never a bare `.touch`: the flag itself lives on <body>, and an
+   unscoped rule hides the whole page. */
+body .touch,
+#lay {
+  display: none;
+}
+
+/* spelled out per element: `revert` would roll all the way back to the browser
+   default and throw away the flex layout .keys asks for */
+body.touch li.touch {
+  display: list-item;
+}
+body.touch .keys.touch {
+  display: flex;
+}
+body.touch #lay {
+  display: inline-block;
+}
+
+body.touch .mouse {
+  display: none;
 }
 
 kbd {
@@ -551,79 +601,243 @@ body:has(#intro) #hand {
   border-bottom: 1px solid rgba(38, 49, 58, 0.07);
 }
 
-@media (max-width: 620px) {
-  #contact {
-  height: 15px;
-  text-align: center;
-  font-size: 11px;
-  margin-top: 3px;
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-}
+/* --- phones and tablets ------------------------------------------------- */
+/*
+   The desktop layout parks a 220px card bottom-left and a legend under it, and
+   leans on hover for everything else. Neither survives a phone: the card and
+   the errand banner meet in the middle of a 390px screen, and there is no
+   hover to choose a spot with. So the narrow layout turns the card on its side
+   into one bottom bar — the tile, what it is, and the controls that stand in
+   for hovering — and moves the errand under the stats instead of beside them.
+*/
 
-#contact.flush {
-  color: #7a5bb0;
-  font-weight: 700;
-}
-
-.card .fine {
-  margin: 12px 0 0;
-  font-size: 12px;
-  color: var(--ink-soft);
-}
-
-#tilebtns {
-  display: flex;
-  gap: 5px;
-  justify-content: center;
-  margin-top: 7px;
-}
-
-#tilebtns button {
-  font: inherit;
-  font-size: 13px;
-  font-weight: 650;
-  line-height: 1;
-  padding: 6px 10px;
-  min-width: 34px;
-  border-radius: 9px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--ink);
-  cursor: pointer;
-}
-
-#tilebtns button:hover {
-  background: #fff;
-}
-
-#tilebtns button:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-#tilebtns #toss {
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-#keys {
-    display: none;
-  }
-  #tilecard {
-    width: 150px;
-  }
-  #tileart {
-    width: 138px;
-    height: 113px;
+@media (max-width: 720px) {
+  #top {
+    top: calc(8px + env(safe-area-inset-top));
+    border-radius: 12px;
   }
   .stat {
-    min-width: 62px;
-    padding: 5px 8px;
+    min-width: 0;
+    padding: 5px 9px;
+  }
+  .stat b {
+    font-size: 17px;
+  }
+  .stat span {
+    font-size: 9px;
+    letter-spacing: 0.06em;
   }
   .stat.wide {
+    display: none;
+  }
+
+  #quest {
+    top: calc(56px + env(safe-area-inset-top));
+    left: calc(8px + env(safe-area-inset-left));
+    right: calc(8px + env(safe-area-inset-right));
+    width: auto;
+    padding: 6px 11px 8px;
+    border-radius: 12px;
+  }
+  #quest .eyebrow {
+    display: inline;
+    margin-right: 7px;
+  }
+  #quest b {
+    display: inline;
+    font-size: 13px;
+  }
+  #quest span#questhint {
+    font-size: 11px;
+    margin-top: 1px;
+  }
+
+  #feed {
+    top: calc(112px + env(safe-area-inset-top));
+  }
+  #feed div {
+    font-size: 11px;
+  }
+
+  /* the card, laid on its side: tile · what it is · what you can do with it */
+  #hand {
+    left: calc(8px + env(safe-area-inset-left));
+    right: calc(8px + env(safe-area-inset-right));
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    gap: 6px;
+  }
+  #tilecard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: auto;
+    padding: 8px 10px;
+  }
+  #tileart {
+    flex: none;
+    width: 92px;
+    height: 76px;
+  }
+  #tilemeta {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  #tilekind,
+  #contact {
+    text-align: left;
+  }
+  #contact {
+    height: auto;
+    min-height: 15px;
+  }
+  #tilebtns {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    margin-top: 8px;
+    gap: 6px;
+  }
+  #tilebtns button {
+    /* a thumb wants 44px; these are the whole interface on a phone */
+    min-height: 40px;
+    min-width: 42px;
+    padding: 6px 8px;
+    font-size: 17px;
+    border-radius: 11px;
+  }
+  #tilebtns #lay {
+    flex: 0 0 auto;
+    padding: 0 15px;
+    font-size: 14px;
+    color: #fffdf7;
+    border-color: transparent;
+    background: linear-gradient(180deg, #5c8f52, #47743f);
+  }
+  #tilebtns #lay:disabled {
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--ink-soft);
+  }
+  /* pushed to the far end, where it will not be hit by accident */
+  #tilebtns #toss {
+    margin-left: auto;
+    padding: 6px 9px;
+    font-size: 10px;
+    min-width: 0;
+  }
+  #fitcount {
+    top: 8px;
+    left: 10px;
+    right: auto;
+    padding: 1px 5px;
+    border-radius: 6px;
+    background: rgba(255, 253, 247, 0.85);
+  }
+
+  /* the swap tile joins the row rather than hanging off the card's edge */
+  #swap {
+    position: static;
+    flex: none;
+    width: 56px;
+  }
+  #swap canvas {
+    width: 48px;
+    height: 39px;
+  }
+
+  #intro,
+  .card {
+    left: calc(8px + env(safe-area-inset-left));
+    right: calc(8px + env(safe-area-inset-right));
+    top: 50%;
+    width: auto;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+    transform: translateY(-50%);
+    padding: 20px 20px 18px;
+  }
+  .card h1 {
+    font-size: 21px;
+  }
+  .card p {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .card ul {
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  #intro .fine {
+    display: none;
+  }
+  body:has(#intro) #top,
+  body:has(#intro) #quest,
+  body:has(#intro) #feed {
+    display: none;
+  }
+
+  #startbar {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+  #pops span {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  /* above the card, not under it: the very bottom of a phone is the home
+     indicator's, and a two-line legend down there gets clipped */
+  .keys {
+    order: -1;
+    align-items: center;
+    font-size: 10.5px;
+    padding: 0;
+    gap: 2px;
+  }
+}
+
+/* A phone held sideways is 390px tall, and the portrait layout spends a third
+   of that on a full-width card and another third on the banner and the feed.
+   Short screens get the compact version: the card shrinks back to a corner
+   panel, the legend goes, and the errand keeps its title but loses its line of
+   explanation. */
+@media (max-height: 520px) {
+  #hand .keys {
+    display: none;
+  }
+  #hand {
+    right: auto;
+    max-width: calc(100vw - 16px);
+  }
+  #tileart {
+    width: 74px;
+    height: 61px;
+  }
+  #tilecard {
+    padding: 6px 8px;
+    gap: 8px;
+  }
+  #tilebtns {
+    margin-top: 5px;
+  }
+  #tilebtns button {
+    min-height: 34px;
+    min-width: 40px;
+    font-size: 15px;
+  }
+  #top {
+    top: calc(4px + env(safe-area-inset-top));
+  }
+  #quest {
+    top: calc(48px + env(safe-area-inset-top));
+    padding: 5px 11px 6px;
+  }
+  #quest span#questhint {
+    display: none;
+  }
+  #feed {
+    top: calc(84px + env(safe-area-inset-top));
+  }
+  #feed div:nth-child(n + 3) {
     display: none;
   }
 }
