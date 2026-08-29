@@ -34,11 +34,15 @@ import { Paper } from './origami.js'
 // Proportions are tuned to what the eye measures on a finished crane, using
 // the traditional crease pattern (004_traditional_Crane.fold, flat-folder's
 // examples) as the reference. Its beak joint sits 11.5% in from the corner —
-// kept exactly (head apex 0.77). Its neck JOINT sits 25% in, but a real
-// crane's point is layered paper standing entirely proud of a compact body,
-// while a single sheet buries the base of each flap inside the body wedge —
-// so matching the EXPOSED neck a crane shows means a longer flap here: neck
-// apex at 0.3 (the flap is half the diagonal, most of it clearing the wings).
+// kept exactly (head apex 0.77). Its neck JOINT sits 25% in, but that number
+// does NOT transfer: a real crane's neck is four layers of paper standing
+// entirely proud of a body the bird base has already narrowed, while a
+// single sheet buries the base of every flap inside the body wedge. Only the
+// part clearing the wings reads as neck. So the neck joint moves most of the
+// way to the centre of the sheet (apex 0.1): the flap is then 1.73x the body
+// it grows out of, which is what finally reads as a crane's neck rather than
+// a bump. It stops at 0.1 rather than dead centre because the joint and the
+// wing band are coupled — see wingBandProblems below.
 //
 // The stance: a long neck climbing steeply (40° chevron → ~77° from the
 // body line), a long tail trailing low behind (22° → ~42°), the beak
@@ -48,14 +52,58 @@ import { Paper } from './origami.js'
 // dihedral), so slim blade-like points need a deeply folded body: the tent
 // holds dihedral 40° all the way through, and the last step is purely the
 // wings folding down and apart — which is also how the real crane ends.
+//
+// The arm angles in STEPS below are unchanged by any of this: closure at a
+// symmetric degree-4 vertex depends only on its sector angle and the ridge
+// angle arriving at it, never on where along the ridge it sits. Moving a
+// joint re-proportions the bird without disturbing the fold.
 export const GEOM = {
   tailApex: -0.42,
-  neckApex: 0.3,
+  neckApex: 0.1,
   headApex: 0.77,
   thetaNeck: 40,
   thetaTail: 22,
   thetaHead: 52,
-  wing: 0.68,
+  wing: 0.84,
+}
+
+// A wing hinge is the line y = x ± wing; a chevron arm leaves its apex on the
+// diagonal and climbs in |y − x| until it exits the sheet. If an arm reaches
+// |y − x| = wing before the edge, the two creases CROSS, and a crossing is not
+// rigidly foldable — the fold stops closing and the paper stretches at that
+// vertex instead. (It survives on screen because the mesh is welded, which is
+// exactly why it needs a check: it looks plausible while being wrong.) Moving
+// a joint changes how far its arms reach, so the two constants are coupled:
+// this reports the violation instead of letting it render quietly.
+function armReach(apex, dirDeg) {
+  const rad = (dirDeg * Math.PI) / 180
+  const dx = Math.cos(rad)
+  const dy = Math.sin(rad)
+  let t = Infinity
+  if (dx > 1e-12) t = Math.min(t, (1 - apex) / dx)
+  if (dx < -1e-12) t = Math.min(t, (-1 - apex) / dx)
+  if (dy > 1e-12) t = Math.min(t, (1 - apex) / dy)
+  if (dy < -1e-12) t = Math.min(t, (-1 - apex) / dy)
+  return Math.abs(t * (dy - dx))
+}
+
+export function wingBandProblems(g = GEOM) {
+  const arms = [
+    ['neck', g.neckApex, 45 + g.thetaNeck],
+    ['neck', g.neckApex, 45 - g.thetaNeck],
+    ['head', g.headApex, 45 + g.thetaHead],
+    ['head', g.headApex, 45 - g.thetaHead],
+    ['tail', g.tailApex, 225 - g.thetaTail],
+    ['tail', g.tailApex, 225 + g.thetaTail],
+  ]
+  const problems = []
+  for (const [name, apex, dir] of arms) {
+    const reach = armReach(apex, dir)
+    if (reach > g.wing - 1e-9) {
+      problems.push(`${name} chevron arm reaches |y-x| = ${reach.toFixed(3)}, crossing the wing hinge at ${g.wing}`)
+    }
+  }
+  return problems
 }
 
 // Where a ray from `from` at `angleDeg` (CCW from +x) first leaves the square
@@ -96,7 +144,9 @@ export function buildCrane(g = GEOM) {
   p.crease('headFold', rayToEdge(hA, 45 - g.thetaHead), hA, { segment: true })
   p.crease('tailFold', tA, rayToEdge(tA, 225 - g.thetaTail), { segment: true })
   p.crease('tailFold', rayToEdge(tA, 225 + g.thetaTail), tA, { segment: true })
-  // Wing hinges, parallel to the spine on each side.
+  // Wing hinges, parallel to the spine on each side. They must clear every
+  // chevron arm — see wingBandProblems above for why a crossing is fatal.
+  for (const problem of wingBandProblems(g)) console.warn(`origami-crane: ${problem}`)
   p.crease('wingL', [1 - g.wing, 1], [-1, g.wing - 1])
   p.crease('wingR', [1, 1 - g.wing], [g.wing - 1, -1])
   // Root = a body-flank triangle near the middle, biased into the TL half so
@@ -139,5 +189,5 @@ export const STEPS = [
   { name: 'reverse-fold the neck', spine: S, tailRidge: S, neckRidge: -S, headRidge: -S, neckFold: -148.84, tailFold: 0, headFold: 0, wingL: 0, wingR: 0 },
   { name: 'reverse-fold the tail', spine: S, tailRidge: -S, neckRidge: -S, headRidge: -S, neckFold: -148.84, tailFold: -142.7, headFold: 0, wingL: 0, wingR: 0 },
   { name: 'reverse-fold a beak', spine: S, tailRidge: -S, neckRidge: -S, headRidge: S, neckFold: -148.84, tailFold: -142.7, headFold: 154.74, wingL: 0, wingR: 0 },
-  { name: 'spread the wings', spine: S, tailRidge: -S, neckRidge: -S, headRidge: S, neckFold: -148.84, tailFold: -142.7, headFold: 154.74, wingL: 78, wingR: 78 },
+  { name: 'spread the wings', spine: S, tailRidge: -S, neckRidge: -S, headRidge: S, neckFold: -148.84, tailFold: -142.7, headFold: 154.74, wingL: 80, wingR: 80 },
 ]
