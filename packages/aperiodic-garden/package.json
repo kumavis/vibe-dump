@@ -1,0 +1,17 @@
+{
+  "name": "@vibe-dump/aperiodic-garden",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": { "three": "^0.160.0" },
+  "gallery": {
+    "title": "Aperiodic Garden",
+    "description": "A Dorfromantik-style tile-laying game played on the einstein monotile: lay hats around a snow-capped peak, keep the river flowing, seal off meadows and forests for points.",
+    "tags": ["game"],
+    "status": "wip",
+    "models": ["Opus 5"],
+    "thinking": "ultracode",
+    "thumbnail": { "click": "#watch", "settle": 5000 }
+  }
+}
