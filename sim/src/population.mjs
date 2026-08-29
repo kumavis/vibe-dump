@@ -89,7 +89,11 @@ export const PERSONAS = {
   patron: {
     label: 'Staff Engineer',
     share: 0.14,
-    field: 'infra',
+    // 'general', not 'infra'. They are in this model to fund the scene, not to
+    // maintain it, and 56 patrons inside a 72-agent infra bucket made every
+    // field-level reading a statement about patrons instead of about
+    // maintainers.
+    field: 'general',
     occupation: 'staffEng',
     tier: 3,
     rainWeight: 5,
