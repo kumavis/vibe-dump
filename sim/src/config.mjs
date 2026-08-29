@@ -25,18 +25,44 @@ export const DEFAULTS = {
   burnBps: 0,
 
   // --- trust formation ---
-  delegationK: 5,
   softmaxTemp: 0.35,
   selfWeightMax: 0.6, // a fully sophisticated agent keeps this much on itself
   reciprocityBonus: 0.15,
   rewriteThreshold: 0.12, // accumulated belief drift needed to bother rewriting
   rewriteChance: 0.15, // ...and even then, not today necessarily
-  rankScale: 0.15, // maps a rank percentile into belief units for conformity
+  baseReviewRate: 0.004, // daily chance of revisiting anyway, scaled by (1-stickiness)
+  rankScale: 0.15, // maps a rank percentile into belief units
+  // Trust is granted at the margin and decays rather than being replaced: a new
+  // endorsement dilutes everything already in the row by this fraction, so old
+  // delegations fade over several updates instead of vanishing at a rewrite.
+  trustDecayOnUpdate: 0.30,
+  newDelegationsPerUpdate: 2,
+  minTrustWeight: 0.02, // dust threshold; below this an edge drops off
+  // Scales every agent's `corrective` trait — how much they delegate to the
+  // UNDERSERVED (believed in but not currently well funded) rather than to the
+  // best. 0 turns the behaviour off entirely and leaves only herding.
+  correctiveScale: 1.0,
 
-  // --- events ---
-  kappa: 1.6, // how much hustle inflates perceived output. THE parameter.
+  // --- discovery: the feed ---
+  // algoShare 0 is a pure chronological follow feed; 1 is pure recommender.
+  // This is the parameter the discovery layer exists to sweep.
+  algoShare: 0.55,
+  algoGamma: 1.4, // >1 amplifies: twice as engaging gets more than twice the reach
+  algoPackagingWeight: 1.2, // how much packaging drives the engagement the algo ranks on
+  feedSize: 7, // posts consumed per agent per day, scaled by social
+  postRate: 0.35,
+  postTtl: 4, // days a post stays in circulation
+  initialFollows: 8,
+  maxFollowing: 150,
+  followRate: 0.05,
+  reshareRate: 0.02,
+  engageScale: 0.35,
+  engageWeight: 0.02,
+  reshareWeight: 0.08,
+
+  // --- direct interaction ---
+  kappa: 1.6, // how much packaging inflates perceived output. THE parameter.
   signalNoise: 0.35,
-  exposureRate: 26, // viewers per unit of hustle effort per day
   collabRate: 0.06, // collaborating pairs per agent per day
   patronageRate: 0.08,
   referralRate: 0.01,
@@ -105,7 +131,10 @@ raindrop sim — a small-city economy with Raindrop issuance layered on top
   --burn-bps N          EIP-1559 base-fee burn, bps of the RAIN leg (default ${DEFAULTS.burnBps})
   --reentry-cooldown-months N   months locked out after a forced return (default ${DEFAULTS.reentryCooldownMonths})
   --reentry-wage-penalty F      wage haircut per forced return (default ${DEFAULTS.reentryWagePenalty})
-  --kappa F             how much hustle inflates perceived output (default ${DEFAULTS.kappa})
+  --kappa F             how much packaging inflates perceived output (default ${DEFAULTS.kappa})
+  --algo-share F        share of the feed from the recommender vs follows (default ${DEFAULTS.algoShare})
+  --algo-gamma F        engagement amplification exponent (default ${DEFAULTS.algoGamma})
+  --trust-decay-on-update F  how much old trust fades per new endorsement (default ${DEFAULTS.trustDecayOnUpdate})
   --patron-propensity F share of surplus patrons spend on RAIN (default ${DEFAULTS.patronPropensity})
   --collective N        plant a mutual-trust bloc of N agents (default 0)
   --no-raindrop         counterfactual: same population, no issuance, no token

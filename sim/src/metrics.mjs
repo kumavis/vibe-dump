@@ -2,6 +2,7 @@
 // work, or reaching the marketing?
 
 import { EMPLOYMENT, monthlyBurn } from './population.mjs'
+import { trustAge } from './events.mjs'
 
 function ranks (values) {
   const idx = values.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0])
@@ -77,7 +78,7 @@ export function reciprocity (agents) {
 }
 
 export function snapshot (state) {
-  const { agents, pool, g, pre, tick, config, stats } = state
+  const { agents, pool, g, pre, tick, stats } = state
   const n = agents.length
 
   const craft = agents.map((a) => a.traits.craft)
@@ -96,6 +97,11 @@ export function snapshot (state) {
   // pure staking yield would have paid them divides that out. Above 1 means
   // trust amplified you beyond your stake; below 1 means it taxed you.
   const amplification = agents.map((a) => a.cum.rainReceived / Math.max(a.cum.proRata, 1e-9))
+  // Amplification is still a ratio, so it explodes for the smallest holders and
+  // the ranking ends up dominated by them. Cumulative endorsement — other
+  // people's trust weighted by their own standing — has no such denominator.
+  // This is the targeting measure to trust.
+  const endorsement = agents.map((a) => a.cum.endorsed)
   const rain = agents.map((a) => a.rain)
   const usd = agents.map((a) => a.usd)
 
@@ -123,6 +129,8 @@ export function snapshot (state) {
   // How much of issuance is decided by stale or self-directed trust
   let selfWeight = 0
   let staleWeight = 0
+  let ageAcc = 0
+  let ageWeight = 0
   for (const a of agents) {
     const share = g ? g[a.id] : 0
     if (a.trustRow.length === 0) selfWeight += share
@@ -130,7 +138,9 @@ export function snapshot (state) {
       const self = a.trustRow.find((e) => e.j === a.id)
       if (self) selfWeight += share * self.w
     }
-    if (a.trustRowAge > 365) staleWeight += share
+    const age = trustAge(a, tick)
+    if (age > 365) staleWeight += share
+    if (a.trustRow.length > 0) { ageAcc += age * share; ageWeight += share }
   }
 
   // Talent nobody has ever observed
@@ -138,6 +148,26 @@ export function snapshot (state) {
   for (const a of agents) for (const j of a.beliefs.keys()) observedBy[j]++
   const topCraft = agents.filter((a) => a.traits.craft > 0.75)
   const invisible = topCraft.filter((a) => observedBy[a.id] < 3).length
+
+  // --- the discovery layer ---
+  // Attention is upstream of money: if the follower distribution tracks
+  // packaging rather than work, the trust graph inherits that however good
+  // everyone's taste is.
+  const followers = agents.map((a) => a.followers.size)
+  const legibility = agents.map((a) => a.traits.legibility)
+
+  const byField = {}
+  for (const a of agents) {
+    const f = (byField[a.field] ??= { n: 0, amp: 0, followers: 0, craft: 0, freed: 0 })
+    f.n++
+    f.amp += a.cum.rainReceived / Math.max(a.cum.proRata, 1e-9)
+    f.followers += a.followers.size
+    f.craft += a.traits.craft
+    if (a.employment !== EMPLOYMENT.FULLTIME) f.freed++
+  }
+  for (const f of Object.values(byField)) {
+    f.amp /= f.n; f.followers /= f.n; f.craft /= f.n
+  }
 
   const netIncidence = g && pre ? agents.map((a) => g[a.id] - pre[a.id]) : agents.map(() => 0)
 
@@ -168,12 +198,32 @@ export function snapshot (state) {
     // what trust actually redistributed, still balance-confounded
     incCraftCorr: spearman(incidence, craft),
     incHustleCorr: spearman(incidence, hustle),
-    // amplification over a pure staking yield — the honest targeting measure
+    // endorsement received from others — the honest targeting measure
+    endCraftCorr: spearman(endorsement, craft),
+    endHustleCorr: spearman(endorsement, hustle),
+    endTasteCorr: spearman(endorsement, taste),
+    endLegibilityCorr: spearman(endorsement, legibility),
+    endSocialCorr: spearman(endorsement, agents.map((a) => a.traits.social)),
+    // amplification over a pure staking yield
     ampCraftCorr: spearman(amplification, craft),
     ampHustleCorr: spearman(amplification, hustle),
     ampTasteCorr: spearman(amplification, taste),
     ampSocialCorr: spearman(amplification, agents.map((a) => a.traits.social)),
+    // Does the money track how *presentable* the work is, independent of how
+    // good it is? A positive number here means the mechanism is funding
+    // legibility — art over research, demos over maintenance.
+    ampLegibilityCorr: spearman(amplification, legibility),
     amplification,
+
+    // attention
+    followerGini: gini(followers),
+    followerTop: topShare(followers, 0.05),
+    followerCraftCorr: spearman(followers, craft),
+    followerHustleCorr: spearman(followers, hustle),
+    followerLegibilityCorr: spearman(followers, legibility),
+    meanFollowers: followers.reduce((s, v) => s + v, 0) / n,
+    byField,
+    meanTrustAge: ageWeight > 0 ? ageAcc / ageWeight : 0,
     reciprocityRate: rec.rate,
     reciprocityCraftCorr: spearman(rec.perAgent, craft),
     giniRain: gini(rain),

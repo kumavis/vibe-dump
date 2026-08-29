@@ -1,81 +1,25 @@
-// Interaction events, beliefs, and delegation rewrites.
+// Direct interaction (the channels that are not the feed) and delegation.
 //
-// Trust does not update on a timer. It updates when something happens between
-// two people, and the four event types differ enormously in how much they
-// reveal and how much promotion can distort them. This asymmetry is the whole
-// experiment: exposure is the channel hustle games, collaboration is the
-// channel it cannot.
+// Feed discovery lives in src/social.mjs. What remains here is the part of the
+// world you learn about by being in it: working with someone, paying for their
+// work, or being told about them by someone you already trust.
 
 import { clamp01 } from './rng.mjs'
+import { observe } from './perception.mjs'
 import { trueOutput } from './population.mjs'
 
-export const EVENT_KINDS = {
-  exposure: { info: 0.35, kappa: 1.0, noise: 0.45 },
-  collaboration: { info: 1.0, kappa: 0.05, noise: 0.15 },
-  patronage: { info: 0.6, kappa: 0.4, noise: 0.3 },
-  referral: { info: 0.5, kappa: 0.0, noise: 0.35 } // bias inherited from source
-}
-
-/** Fold one observation into i's belief about j. */
-function observe (rng, observer, subject, kind, config, inheritedSignal) {
-  const spec = EVENT_KINDS[kind]
-  const y = trueOutput(subject)
-
-  let signal
-  if (kind === 'referral' && inheritedSignal !== undefined) {
-    // A referral carries the sourcing agent's belief, bias and all.
-    signal = inheritedSignal
-  } else {
-    const promoted = y * (1 + config.kappa * spec.kappa * subject.traits.hustle * subject.effort.hustle)
-    const sd = spec.noise * (1 - observer.traits.taste) * config.signalNoise
-    signal = promoted + rng.normal(0, sd)
-  }
-
-  const prior = observer.beliefs.get(subject.id)
-  const weight = spec.info
-  if (prior === undefined) {
-    observer.beliefs.set(subject.id, { value: signal, evidence: weight, lastSeen: 0 })
-    observer.driftSinceRewrite += Math.abs(signal) * 0.5
-    return
-  }
-  // Information-weighted EMA: more evidence means slower revision.
-  const lr = weight / (prior.evidence + weight)
-  const delta = lr * (signal - prior.value)
-  prior.value += delta
-  prior.evidence = Math.min(prior.evidence + weight, config.maxEvidence)
-  observer.driftSinceRewrite += Math.abs(delta)
-}
-
 /**
- * Generate one day of interaction events across the population.
- * Returns per-kind counts for the trace.
+ * One day of direct interaction. Returns per-kind counts for the trace.
  */
 export function generateEvents (rng, agents, config, tick) {
   const n = agents.length
-  const counts = { exposure: 0, collaboration: 0, patronage: 0, referral: 0 }
-
-  // --- exposure: broadcast reach, scaled by hustle effort ---
-  // Attention weights: who is available to be reached at all.
-  const attention = agents.map((a) => 0.2 + a.traits.social)
-  const attentionTotal = attention.reduce((s, v) => s + v, 0)
-
-  for (let j = 0; j < n; j++) {
-    const subject = agents[j]
-    const reach = subject.traits.social * subject.effort.hustle * config.exposureRate
-    let k = Math.floor(reach)
-    if (rng.next() < reach - k) k++
-    for (let e = 0; e < k; e++) {
-      const i = rng.weightedIndex(attention, attentionTotal)
-      if (i === j) continue
-      observe(rng, agents[i], subject, 'exposure', config)
-      counts.exposure++
-    }
-  }
+  const counts = { collaboration: 0, patronage: 0, referral: 0 }
 
   // --- collaboration: the high-signal, low-bias channel ---
-  // Pairs form in proportion to craft effort. People stuck in day jobs have
+  // Pairs form in proportion to craft effort, and legibility does not apply:
+  // you were in the room, you saw the work. People stuck in day jobs have
   // little craft effort, so they collaborate rarely and learn about each other
-  // only through the biased channel above. That coupling is deliberate.
+  // only through the feed. That coupling is the point.
   const collabWeight = agents.map((a) => a.effort.craft * (0.3 + a.traits.social))
   const collabTotal = collabWeight.reduce((s, v) => s + v, 0)
   const collabCount = Math.round(n * config.collabRate)
@@ -90,7 +34,7 @@ export function generateEvents (rng, agents, config, tick) {
     }
   }
 
-  // --- patronage: you paid for it, you consumed it ---
+  // --- patronage: you paid for it and consumed it ---
   const supplyWeight = agents.map((a) => trueOutput(a) * (0.3 + a.traits.social) + 1e-6)
   const supplyTotal = supplyWeight.reduce((s, v) => s + v, 0)
   for (let i = 0; i < n; i++) {
@@ -124,23 +68,34 @@ export function generateEvents (rng, agents, config, tick) {
 }
 
 /**
- * Rewrite the delegation rows of agents whose beliefs have moved enough to be
- * worth acting on. Returns the number of rows rewritten this tick.
+ * Delegation.
  *
- * The self-weight is where §02's Consequence 2 bites: delegating outward costs
- * (1 - alpha) of your own issuance share, so a *sophisticated* agent keeps some
- * weight on itself and preferentially endorses agents who endorse it back. A
- * naive agent ignores the cost entirely.
+ * Two things distinguish this from "rewrite the row with your current top-k":
+ *
+ * 1. TRUST IS MARGINAL, NOT ABSOLUTE. The paper defines a delegation as saying
+ *    this account would further the network's goals *if granted additional
+ *    allocation* — which is a claim about the margin, not the level. So a
+ *    delegator with `corrective` weight ranks candidates by how underserved
+ *    they are: believed-in but not currently well funded. That is the direct
+ *    counterweight to `conformity`, which chases whoever is already ranked
+ *    highly. Both act on the same public-rank term with opposite signs.
+ *
+ * 2. TRUST DECAYS RATHER THAN BEING REPLACED. Assigning new trust dilutes what
+ *    you granted before instead of wiping it, so old endorsements fade out over
+ *    several updates. Rows carry a tail of stale small weights, turnover is
+ *    gradual, and the graph is path dependent — all of which is both more
+ *    realistic for a system where you sign a transaction to add an edge, and
+ *    materially different from a clean rewrite for the snapshot-problem claim.
  */
 export function updateTrust (rng, agents, config, tick, g) {
   const n = agents.length
   let rewrites = 0
 
-  // Conformity weighs "who is already highly ranked" against own belief. Rank
-  // has to enter as a PERCENTILE, not as raw g: allocation shares span orders of
-  // magnitude, so feeding g in directly makes the conformity term dwarf every
-  // belief and collapses the whole population onto whoever holds the most —
-  // rank feeding delegation feeding rank, with merit nowhere in the loop.
+  // Conformity and correctiveness weigh "how well funded is this person
+  // already". Rank has to enter as a PERCENTILE, not as raw g: allocation
+  // shares span orders of magnitude, so feeding g in directly makes the term
+  // dwarf every belief and collapses the population onto whoever holds the
+  // most — rank feeding delegation feeding rank, with merit nowhere in it.
   let publicRank = null
   if (g) {
     const order = Array.from({ length: n }, (_, i) => i).sort((a, b) => g[a] - g[b])
@@ -148,7 +103,6 @@ export function updateTrust (rng, agents, config, tick, g) {
     for (let r = 0; r < n; r++) publicRank[order[r]] = r / Math.max(n - 1, 1)
   }
 
-  // Who currently trusts me? Needed for the reciprocity term.
   const trustedBy = Array.from({ length: n }, () => new Set())
   for (const a of agents) for (const e of a.trustRow) trustedBy[e.j].add(a.id)
 
@@ -156,47 +110,41 @@ export function updateTrust (rng, agents, config, tick, g) {
     agent.trustRowAge++
     if (agent.beliefs.size === 0) continue
 
-    // stickiness is a threshold on accumulated belief drift, not a timer
     const threshold = config.rewriteThreshold * (0.2 + agent.traits.stickiness * 2.5)
-    if (agent.driftSinceRewrite < threshold) continue
-    // even a triggered agent may not get round to it today
-    if (rng.next() > config.rewriteChance) continue
+    // Belief evidence saturates, so drift alone eventually stops accumulating
+    // and the graph freezes with whatever it happened to settle on in year one.
+    // A slow base review rate keeps delegations alive without making anyone
+    // attentive — this is the difference between a stale graph and a dead one.
+    const triggered = agent.driftSinceRewrite >= threshold
+    const reviewing = rng.next() < config.baseReviewRate * (1 - agent.traits.stickiness)
+    if (!triggered && !reviewing) continue
+    if (triggered && !reviewing && rng.next() > config.rewriteChance) continue
 
     const conformity = agent.traits.conformity
+    const corrective = clamp01(agent.traits.corrective * config.correctiveScale)
     const scored = []
     for (const [j, belief] of agent.beliefs) {
       if (j === agent.id) continue
-      const rank = publicRank ? publicRank[j] : 0
-      const merit = (1 - conformity) * belief.value + conformity * rank * config.rankScale
+      const rank = publicRank ? publicRank[j] : 0.5
+      // herding pulls toward the already-funded, correctiveness pushes away
+      const crowd = (conformity - corrective) * rank * config.rankScale
       const reciprocal = trustedBy[agent.id].has(j) ? config.reciprocityBonus : 0
-      scored.push({ j, score: merit + reciprocal * agent.traits.sophistication })
+      scored.push({
+        j,
+        score: (1 - conformity) * belief.value + crowd +
+          reciprocal * agent.traits.sophistication
+      })
     }
     if (scored.length === 0) continue
 
     scored.sort((a, b) => b.score - a.score)
-    const k = Math.min(config.delegationK, scored.length)
-    const top = scored.slice(0, k).filter((s) => s.score > 0)
-    if (top.length === 0) {
-      agent.trustRow = []
+    const picks = scored.slice(0, config.newDelegationsPerUpdate).filter((s) => s.score > 0)
+    if (picks.length === 0) {
       agent.driftSinceRewrite = 0
-      agent.trustRowAge = 0
       continue
     }
 
-    // Softmax over the surviving candidates.
-    const maxScore = top[0].score
-    const exps = top.map((s) => Math.exp((s.score - maxScore) / config.softmaxTemp))
-    const expTotal = exps.reduce((s, v) => s + v, 0)
-
-    // A sophisticated agent prices the cost of endorsing and holds some weight
-    // back on itself; a naive one delegates everything.
-    const selfWeight = clamp01(agent.traits.sophistication * config.selfWeightMax)
-    const outward = 1 - selfWeight
-
-    const row = top.map((s, idx) => ({ j: s.j, w: outward * (exps[idx] / expTotal) }))
-    if (selfWeight > 1e-9) row.push({ j: agent.id, w: selfWeight })
-
-    agent.trustRow = row
+    applyDelegations(agent, picks, config, tick)
     agent.driftSinceRewrite = 0
     agent.trustRowAge = 0
     agent.lastRewriteTick = tick
@@ -206,7 +154,57 @@ export function updateTrust (rng, agents, config, tick, g) {
   return rewrites
 }
 
-/** Sparse row-stochastic C for the whole population. Empty row == self-trust. */
-export function buildTrustRows (agents) {
-  return agents.map((a) => a.trustRow)
+/**
+ * Blend new endorsements into an existing row: everything already there fades
+ * by `trustDecayOnUpdate`, the new picks take up the freed weight, entries that
+ * fall below the dust threshold drop off, and the row is renormalised with the
+ * agent's self-weight held back.
+ */
+function applyDelegations (agent, picks, config, tick) {
+  const selfWeight = clamp01(agent.traits.sophistication * config.selfWeightMax)
+  const decay = config.trustDecayOnUpdate
+
+  const weights = new Map()
+  for (const e of agent.trustRow) {
+    if (e.j === agent.id) continue
+    weights.set(e.j, { w: e.w * (1 - decay), since: e.since ?? tick })
+  }
+
+  // Freed weight is split across the new picks, softmaxed by score.
+  const maxScore = picks[0].score
+  const exps = picks.map((p) => Math.exp((p.score - maxScore) / config.softmaxTemp))
+  const expTotal = exps.reduce((s, v) => s + v, 0)
+  picks.forEach((p, idx) => {
+    const share = decay * (exps[idx] / expTotal)
+    const prior = weights.get(p.j)
+    if (prior) prior.w += share
+    else weights.set(p.j, { w: share, since: tick })
+  })
+
+  let total = 0
+  for (const [j, entry] of weights) {
+    if (entry.w < config.minTrustWeight) weights.delete(j)
+    else total += entry.w
+  }
+  if (total <= 0) { agent.trustRow = []; return }
+
+  const outward = 1 - selfWeight
+  const row = []
+  for (const [j, entry] of weights) {
+    row.push({ j, w: outward * (entry.w / total), since: entry.since })
+  }
+  if (selfWeight > 1e-9) row.push({ j: agent.id, w: selfWeight, since: tick })
+  agent.trustRow = row
+}
+
+/** Weighted mean age of an agent's outgoing delegations, in ticks. */
+export function trustAge (agent, tick) {
+  let acc = 0
+  let total = 0
+  for (const e of agent.trustRow) {
+    if (e.j === agent.id) continue
+    acc += e.w * (tick - (e.since ?? tick))
+    total += e.w
+  }
+  return total > 0 ? acc / total : 0
 }

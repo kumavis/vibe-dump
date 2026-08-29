@@ -27,8 +27,9 @@ const COLUMNS = [
   ['craft', 6, (r) => String(r.fullCraft)],
   ['rent', 5, (r) => String(r.rentier)],
   ['back', 5, (r) => String(r.returned)],
-  ['craft~amp', 10, (r) => sign(r.ampCraftCorr)],
-  ['hustl~amp', 10, (r) => sign(r.ampHustleCorr)],
+  ['craft~end', 10, (r) => sign(r.endCraftCorr)],
+  ['hustl~end', 10, (r) => sign(r.endHustleCorr)],
+  ['legib~end', 10, (r) => sign(r.endLegibilityCorr)],
   ['recip', 6, (r) => pct(r.reciprocityRate)],
   ['giniR', 6, (r) => r.giniRain.toFixed(3)],
   ['self', 5, (r) => pct(r.selfWeight)],
@@ -63,10 +64,12 @@ export function legend () {
     '  FT/PT/craft  agents at full-time work, reduced hours, and full-time craft',
     '  rent         left the workforce but are not making anything — rentiers',
     '  back         agents who have been forced back to work at least once',
-    '  craft~amp    rank correlation of AMPLIFICATION with true craft, where amplification',
-    '               is RAIN received divided by what a pure staking yield would have paid.',
-    '               Above 1 trust lifted you above your stake; below 1 it taxed you.',
-    '  hustl~amp    ...and with hustle. If hustle wins, the mechanism pays for marketing.',
+    '  craft~end    rank correlation of cumulative ENDORSEMENT with true craft, where',
+    '               endorsement is other people\'s trust weighted by their own standing —',
+    '               your balance and your self-trust both removed.',
+    '  hustl~end    ...and with hustle. If hustle wins, the mechanism pays for marketing.',
+    '  legib~end    ...and with legibility: how much of the work survives a post at all.',
+    '               Positive means research and maintenance lose to things that photograph.',
     '  self         share of issuance decided by self-directed trust',
     '  out          total daily craft output across the population (smoothed)',
     ''
@@ -209,15 +212,18 @@ export function summary (model) {
   const craft = agents.map((a) => a.traits.craft)
   const hustle = agents.map((a) => a.traits.hustle)
   const social = agents.map((a) => a.traits.social)
-  const verdict = last.ampCraftCorr > last.ampHustleCorr ? 'craft' : 'HUSTLE'
+  const verdict = last.endCraftCorr > last.endHustleCorr ? 'craft' : 'HUSTLE'
 
-  out.push(`  THE HEADLINE — trust amplification tracked ${verdict}.`)
-  out.push('    amplification = RAIN received / pure staking yield, so balance is divided out:')
-  out.push(`      craft  ρ = ${sign(last.ampCraftCorr)}     hustle ρ = ${sign(last.ampHustleCorr)}` +
-    `     taste ρ = ${sign(last.ampTasteCorr)}     social ρ = ${sign(last.ampSocialCorr)}`)
+  out.push(`  THE HEADLINE — endorsement tracked ${verdict}.`)
+  out.push("    endorsement = others' trust weighted by their standing; balance removed:")
+  out.push(`      craft ρ = ${sign(last.endCraftCorr)}   hustle ρ = ${sign(last.endHustleCorr)}` +
+    `   taste ρ = ${sign(last.endTasteCorr)}   legibility ρ = ${sign(last.endLegibilityCorr)}` +
+    `   social ρ = ${sign(last.endSocialCorr)}`)
+  out.push('    amplification over a pure staking yield (ratio — heavy-tailed for small holders):')
+  out.push(`      craft ρ = ${sign(last.ampCraftCorr)}   hustle ρ = ${sign(last.ampHustleCorr)}`)
   out.push('    gross RAIN received, which the pro-rata component dominates:')
-  out.push(`      craft  ρ = ${sign(spearman(received, craft))}     hustle ρ = ${sign(spearman(received, hustle))}` +
-    `     social ρ = ${sign(spearman(received, social))}`)
+  out.push(`      craft ρ = ${sign(spearman(received, craft))}   hustle ρ = ${sign(spearman(received, hustle))}` +
+    `   social ρ = ${sign(spearman(received, social))}`)
   out.push('')
   out.push(whoGotLifted(agents))
   out.push('')
@@ -237,10 +243,30 @@ export function summary (model) {
       `— burn covered ${pct(last.burnCoverage, 1)} of issuance`)
   }
   out.push('')
+  out.push('  Discovery — who the feed made visible:')
+  out.push(`    followers: gini ${last.followerGini.toFixed(3)}, top 5% hold ${pct(last.followerTop, 1)} of all follows, mean ${last.meanFollowers.toFixed(0)}`)
+  out.push(`    followers ~ craft ρ = ${sign(last.followerCraftCorr)}   ~ hustle ρ = ${sign(last.followerHustleCorr)}   ~ legibility ρ = ${sign(last.followerLegibilityCorr)}`)
+  out.push(`    amplification ~ legibility ρ = ${sign(last.ampLegibilityCorr)}  ` +
+    '(positive means the money is funding presentability, not quality)')
+  out.push(`    ${last.invisibleTalent} high-craft agents were seen by fewer than 3 people`)
+  out.push('')
+  out.push('    field        n   mean craft   followers   amplification   escaped f/t')
+  out.push('    ' + '-'.repeat(66))
+  for (const [name, f] of Object.entries(last.byField).sort((a, b) => b[1].amp - a[1].amp)) {
+    out.push('    ' +
+      name.padEnd(11) +
+      String(f.n).padStart(3) +
+      f.craft.toFixed(2).padStart(13) +
+      f.followers.toFixed(0).padStart(12) +
+      `${f.amp.toFixed(2)}x`.padStart(16) +
+      String(f.freed).padStart(14))
+  }
+  out.push('')
   out.push('  Trust graph:')
   out.push(`    reciprocity ${pct(last.reciprocityRate, 1)} of delegations · reciprocity~craft ρ = ${sign(last.reciprocityCraftCorr)}`)
   out.push(`    ${pct(last.selfWeight, 1)} of issuance decided by self-directed trust`)
-  out.push(`    ${pct(last.staleWeight, 1)} decided by delegations older than a year`)
+  out.push(`    ${pct(last.staleWeight, 1)} decided by delegations older than a year ` +
+    `(weighted mean age ${(last.meanTrustAge / 30).toFixed(1)} months)`)
   out.push(`    cost of endorsing: a delegator gives up ${pct(last.endorsementCost, 1)} of their own allocation`)
   out.push('')
   out.push('  Distribution:')
@@ -257,7 +283,9 @@ export function summary (model) {
     for (const f of failures.slice(0, 5)) out.push(`    tick ${f.tick}: ${f.what} ${f.value ?? ''}`)
   }
   const ev = state.stats.events
-  out.push(`  events: ${money(ev.exposure)} exposure · ${money(ev.collaboration)} collab · ${money(ev.patronage)} patronage · ${money(ev.referral)} referral`)
+  const fs = state.feed.stats
+  out.push(`  feed: ${money(fs.posts)} posts · ${money(fs.impressions)} impressions · ${money(fs.follows)} follows · ${money(fs.reshares)} reshares`)
+  out.push(`  direct: ${money(ev.collaboration)} collab · ${money(ev.patronage)} patronage · ${money(ev.referral)} referral`)
   out.push(`  trust rows rewritten: ${state.stats.rewrites} · EigenTrust last converged in ${state.stats.etIterations} iterations`)
   out.push('')
   return out.join('\n')

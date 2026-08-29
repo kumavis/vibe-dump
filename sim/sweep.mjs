@@ -30,17 +30,23 @@ const median = (xs) => {
 }
 
 const FIELDS = [
-  ['craft~amp', 10, (r) => r.ampCraftCorr.toFixed(2)],
-  ['hustl~amp', 10, (r) => r.ampHustleCorr.toFixed(2)],
+  ['craft~end', 10, (r) => r.endCraftCorr.toFixed(2)],
+  ['hustl~end', 10, (r) => r.endHustleCorr.toFixed(2)],
+  ['legib~end', 10, (r) => r.endLegibilityCorr.toFixed(2)],
+  ['flwGini', 9, (r) => r.followerGini.toFixed(3)],
   ['craft f/t', 10, (r) => r.fullCraft.toFixed(1)],
-  ['rentier', 8, (r) => r.rentier.toFixed(1)],
   ['back', 6, (r) => r.returned.toFixed(1)],
   ['output', 8, (r) => r.totalOutput.toFixed(1)],
   ['price', 8, (r) => r.price.toFixed(3)],
   ['recip', 7, (r) => `${(r.reciprocityRate * 100).toFixed(0)}%`],
   ['endorse$', 9, (r) => `${(r.endorsementCost * 100).toFixed(0)}%`],
-  ['giniRAIN', 9, (r) => r.giniRain.toFixed(3)],
-  ['burn/mint', 10, (r) => r.burnCoverage.toFixed(2)]
+  ['giniRAIN', 9, (r) => r.giniRain.toFixed(3)]
+]
+
+const AGG_KEYS = [
+  'endCraftCorr', 'endHustleCorr', 'endLegibilityCorr', 'followerGini',
+  'fullCraft', 'returned', 'totalOutput', 'price', 'reciprocityRate',
+  'endorsementCost', 'giniRain'
 ]
 
 process.stdout.write(`\n  sweep: ${param} · ${seeds} seeds · ${base.years}y · medians\n\n`)
@@ -55,10 +61,7 @@ for (const value of values) {
     runs.push(model.state.reports[model.state.reports.length - 1])
   }
   const agg = {}
-  for (const [, , get] of FIELDS) void get // keep the shape obvious
-  for (const key of ['ampCraftCorr', 'ampHustleCorr', 'fullCraft', 'rentier', 'returned', 'totalOutput', 'price', 'reciprocityRate', 'endorsementCost', 'giniRain', 'burnCoverage']) {
-    agg[key] = median(runs.map((r) => r[key] ?? 0))
-  }
+  for (const key of AGG_KEYS) agg[key] = median(runs.map((r) => r[key] ?? 0))
   process.stdout.write(String(value).padStart(9) + FIELDS.map(([, w, get]) => get(agg).padStart(w)).join('') + '\n')
 }
 process.stdout.write('\n')

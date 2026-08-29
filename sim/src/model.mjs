@@ -6,6 +6,7 @@
 import { makeRng } from './rng.mjs'
 import { buildPopulation, trueOutput, EMPLOYMENT } from './population.mjs'
 import { generateEvents, updateTrust } from './events.mjs'
+import { Feed, initFollowGraph, runFeeds } from './social.mjs'
 import { eigenTrust, preTrustFromBalances } from './eigentrust.mjs'
 import { Pool, Speculator } from './market.mjs'
 import { dailyWage, monthlySettlement, patronBuying, portfolioRebalance, DAYS_PER_MONTH } from './economy.mjs'
@@ -20,6 +21,8 @@ export function createModel (config) {
 
   const pool = new Pool(config.poolUsd, config.poolRain, config.feeBps, config.burnBps)
   const speculator = new Speculator(config.speculatorUsd, config)
+  const feed = new Feed()
+  initFollowGraph(rng, agents, config)
 
   const state = {
     config,
@@ -27,6 +30,7 @@ export function createModel (config) {
     agents,
     pool,
     speculator,
+    feed,
     tick: 0,
     supply: config.rainSupply,
     dailyMint: 0,
@@ -34,6 +38,7 @@ export function createModel (config) {
     pre: new Float64Array(n),
     warm: null,
     balances: new Float64Array(n),
+    endorsedBuf: new Float64Array(n),
     stats: {
       outputEma: 0,
       patronUsdMonth: 0,
@@ -44,7 +49,7 @@ export function createModel (config) {
       mintedTotal: 0,
       burnedTotal: 0,
       endorsementCostShare: 0,
-      events: { exposure: 0, collaboration: 0, patronage: 0, referral: 0 },
+      events: { collaboration: 0, patronage: 0, referral: 0 },
       rewrites: 0,
       etIterations: 0
     },
@@ -65,7 +70,13 @@ export function createModel (config) {
     const tick = state.tick
     const isMonthEnd = tick > 0 && tick % DAYS_PER_MONTH === 0
 
-    // 1. interaction events — the engine; everything downstream is bookkeeping
+    // 1a. discovery — people post, and everyone reads a feed. This runs first
+    // because it decides who is visible at all, and the trust graph can only
+    // rank people who are.
+    feed.publish(rng, agents, config, tick)
+    runFeeds(rng, agents, feed, config, tick)
+
+    // 1b. direct interaction — the channels that bypass the feed entirely
     const counts = generateEvents(rng, agents, config, tick)
     for (const k of Object.keys(counts)) state.stats.events[k] += counts[k]
 
@@ -95,6 +106,22 @@ export function createModel (config) {
       state.warm = res.g
       state.stats.etIterations = res.iterations
 
+      // What OTHER people's endorsements, weighted by the endorser's own
+      // standing, sent to each agent. At the fixed point this is exactly
+      // (g - alpha*b)/(1 - alpha) minus the self-trust term, so it is the pure
+      // "what the network said about you" signal with your own balance and your
+      // own self-trust both removed. It is the honest targeting measure —
+      // amplification ratios blow up for the smallest holders and the ranking
+      // ends up dominated by them.
+      state.endorsedBuf.fill(0)
+      for (let i = 0; i < n; i++) {
+        const gi = state.g[i]
+        if (gi === 0) continue
+        for (const e of agents[i].trustRow) {
+          if (e.j !== i) state.endorsedBuf[e.j] += gi * e.w
+        }
+      }
+
       const mint = state.supply * dailyIssuanceRate
       state.dailyMint = mint
       state.supply += mint
@@ -106,6 +133,7 @@ export function createModel (config) {
         agents[i].cum.rainReceived += got
         agents[i].cum.netIncidence += mint * (state.g[i] - state.pre[i])
         agents[i].cum.proRata += mint * state.pre[i]
+        agents[i].cum.endorsed += mint * state.endorsedBuf[i]
         const usdValue = got * price
         agents[i].rainIncomeEma += (usdValue - agents[i].rainIncomeEma) * INCOME_EMA_LAMBDA
       }

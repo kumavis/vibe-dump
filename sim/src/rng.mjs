@@ -4,6 +4,7 @@
 
 export function makeRng (seed) {
   let a = seed >>> 0
+  let spare = null
   const next = () => {
     a = (a + 0x6d2b79f5) >>> 0
     let t = a
@@ -19,13 +20,22 @@ export function makeRng (seed) {
     // integer in [0, n)
     int: (n) => Math.floor(next() * n),
     bool: (p) => next() < p,
+    // Box-Muller, keeping the second variate. This is called tens of millions
+    // of times per run by the feed, so the spare is worth holding on to.
     normal: (mean = 0, sd = 1) => {
-      // Box-Muller; the second variate is discarded, which is fine here
+      if (spare !== null) {
+        const value = spare
+        spare = null
+        return mean + sd * value
+      }
       let u = 0
       let v = 0
       while (u === 0) u = next()
       while (v === 0) v = next()
-      return mean + sd * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v)
+      const r = Math.sqrt(-2 * Math.log(u))
+      const theta = 2 * Math.PI * v
+      spare = r * Math.sin(theta)
+      return mean + sd * r * Math.cos(theta)
     },
     lognormal: (median, sigma) => median * Math.exp(sigma * rng.normal(0, 1)),
     // Marsaglia-Tsang

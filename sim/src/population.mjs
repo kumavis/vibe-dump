@@ -22,87 +22,129 @@ export const LIFESTYLE_TIERS = [1500, 2300, 3600, 5800, 9500]
 // Fraction of the effort budget a full-time job consumes.
 export const JOB_FULL = 0.70
 
+/**
+ * How much of the real work survives compression into a post. This is the
+ * single trait that decides whether a discovery feed can see you at all: a
+ * painting reads from a thumbnail, a proof does not, and a maintained build
+ * system reads as nothing whatsoever until it breaks.
+ */
+export const FIELD_LEGIBILITY = {
+  art: 0.85,
+  research: 0.30,
+  infra: 0.22,
+  general: 0.55
+}
+
 export const PERSONAS = {
   painter: {
     label: 'Barista Painter',
-    share: 0.12,
+    share: 0.11,
+    field: 'art',
     occupation: 'barista',
     tier: 1,
     rainWeight: 0.5,
-    traits: { craft: 0.85, hustle: 0.20, taste: 0.55, jobSkill: 0.30, social: 0.45, riskTolerance: 0.45, vocation: 0.90, stickiness: 0.55, conformity: 0.35, statusSeeking: 0.30, opportunism: 0.10, affinity: 0.65, sophistication: 0.25 },
+    traits: { craft: 0.85, hustle: 0.20, taste: 0.55, jobSkill: 0.30, social: 0.45, riskTolerance: 0.45, vocation: 0.90, stickiness: 0.55, conformity: 0.35, corrective: 0.35, statusSeeking: 0.30, opportunism: 0.10, affinity: 0.65, sophistication: 0.25 },
     preferred: { job: 0.05, craft: 0.60, hustle: 0.10, curate: 0.05, rest: 0.20 }
+  },
+  researcher: {
+    label: 'Quiet Researcher',
+    share: 0.06,
+    field: 'research',
+    occupation: 'teacher',
+    tier: 1,
+    rainWeight: 0.8,
+    traits: { craft: 0.85, hustle: 0.15, taste: 0.80, jobSkill: 0.60, social: 0.30, riskTolerance: 0.35, vocation: 0.90, stickiness: 0.50, conformity: 0.25, corrective: 0.50, statusSeeking: 0.25, opportunism: 0.08, affinity: 0.60, sophistication: 0.45 },
+    preferred: { job: 0.10, craft: 0.60, hustle: 0.05, curate: 0.05, rest: 0.20 }
+  },
+  infra: {
+    label: 'Infra Maintainer',
+    share: 0.04,
+    field: 'infra',
+    occupation: 'juniorDev',
+    tier: 2,
+    rainWeight: 1,
+    traits: { craft: 0.80, hustle: 0.10, taste: 0.65, jobSkill: 0.75, social: 0.35, riskTolerance: 0.30, vocation: 0.75, stickiness: 0.60, conformity: 0.30, corrective: 0.60, statusSeeking: 0.35, opportunism: 0.08, affinity: 0.50, sophistication: 0.50 },
+    preferred: { job: 0.15, craft: 0.55, hustle: 0.03, curate: 0.07, rest: 0.20 }
   },
   connector: {
     label: 'Scene Connector',
     share: 0.05,
+    field: 'art',
     occupation: 'gig',
     tier: 1,
     rainWeight: 3,
-    traits: { craft: 0.30, hustle: 0.55, taste: 0.90, jobSkill: 0.45, social: 0.95, riskTolerance: 0.55, vocation: 0.70, stickiness: 0.15, conformity: 0.20, statusSeeking: 0.45, opportunism: 0.20, affinity: 0.90, sophistication: 0.55 },
+    traits: { craft: 0.30, hustle: 0.55, taste: 0.90, jobSkill: 0.45, social: 0.95, riskTolerance: 0.55, vocation: 0.70, stickiness: 0.15, conformity: 0.20, corrective: 0.70, statusSeeking: 0.45, opportunism: 0.20, affinity: 0.90, sophistication: 0.55 },
     preferred: { job: 0.10, craft: 0.20, hustle: 0.20, curate: 0.30, rest: 0.20 }
   },
   hacker: {
     label: 'Growth Hacker',
     share: 0.06,
+    field: 'art',
     occupation: 'gig',
     tier: 2,
     rainWeight: 1.5,
-    traits: { craft: 0.22, hustle: 0.95, taste: 0.25, jobSkill: 0.50, social: 0.80, riskTolerance: 0.80, vocation: 0.25, stickiness: 0.20, conformity: 0.55, statusSeeking: 0.85, opportunism: 0.75, affinity: 0.35, sophistication: 0.90 },
+    traits: { craft: 0.22, hustle: 0.95, taste: 0.25, jobSkill: 0.50, social: 0.80, riskTolerance: 0.80, vocation: 0.25, stickiness: 0.20, conformity: 0.55, corrective: 0.05, statusSeeking: 0.85, opportunism: 0.75, affinity: 0.35, sophistication: 0.90 },
     preferred: { job: 0.05, craft: 0.15, hustle: 0.55, curate: 0.05, rest: 0.20 }
   },
   patron: {
     label: 'Staff Engineer',
-    share: 0.15,
+    share: 0.14,
+    field: 'infra',
     occupation: 'staffEng',
     tier: 3,
     rainWeight: 5,
-    traits: { craft: 0.35, hustle: 0.30, taste: 0.55, jobSkill: 0.92, social: 0.55, riskTolerance: 0.35, vocation: 0.40, stickiness: 0.45, conformity: 0.40, statusSeeking: 0.50, opportunism: 0.10, affinity: 0.70, sophistication: 0.65 },
+    traits: { craft: 0.35, hustle: 0.30, taste: 0.55, jobSkill: 0.92, social: 0.55, riskTolerance: 0.35, vocation: 0.40, stickiness: 0.45, conformity: 0.40, corrective: 0.45, statusSeeking: 0.50, opportunism: 0.10, affinity: 0.70, sophistication: 0.65 },
     preferred: { job: 0.45, craft: 0.20, hustle: 0.05, curate: 0.10, rest: 0.20 }
   },
   whale: {
     label: 'Early Whale',
     share: 0.02,
+    field: 'general',
     occupation: 'gig',
     tier: 3,
     rainWeight: 40,
-    traits: { craft: 0.10, hustle: 0.20, taste: 0.30, jobSkill: 0.40, social: 0.30, riskTolerance: 0.60, vocation: 0.30, stickiness: 0.97, conformity: 0.50, statusSeeking: 0.60, opportunism: 0.40, affinity: 0.15, sophistication: 0.80 },
+    traits: { craft: 0.10, hustle: 0.20, taste: 0.30, jobSkill: 0.40, social: 0.30, riskTolerance: 0.60, vocation: 0.30, stickiness: 0.97, conformity: 0.50, corrective: 0.10, statusSeeking: 0.60, opportunism: 0.40, affinity: 0.15, sophistication: 0.80 },
     preferred: { job: 0.20, craft: 0.10, hustle: 0.05, curate: 0.05, rest: 0.60 }
   },
   burnout: {
     label: 'The Burnout',
-    share: 0.08,
+    share: 0.07,
+    field: 'research',
     occupation: 'juniorDev',
     tier: 3,
     rainWeight: 1,
-    traits: { craft: 0.75, hustle: 0.30, taste: 0.60, jobSkill: 0.65, social: 0.40, riskTolerance: 0.12, vocation: 0.65, stickiness: 0.70, conformity: 0.40, statusSeeking: 0.70, opportunism: 0.10, affinity: 0.55, sophistication: 0.40 },
+    traits: { craft: 0.75, hustle: 0.30, taste: 0.60, jobSkill: 0.65, social: 0.40, riskTolerance: 0.12, vocation: 0.65, stickiness: 0.70, conformity: 0.40, corrective: 0.35, statusSeeking: 0.70, opportunism: 0.10, affinity: 0.55, sophistication: 0.40 },
     preferred: { job: 0.15, craft: 0.50, hustle: 0.05, curate: 0.05, rest: 0.25 }
   },
   lifer: {
     label: 'The Lifer',
-    share: 0.45,
+    share: 0.40,
+    field: 'general',
     occupation: 'retail',
     tier: 1,
     rainWeight: 1,
-    traits: { craft: 0.25, hustle: 0.20, taste: 0.40, jobSkill: 0.45, social: 0.40, riskTolerance: 0.25, vocation: 0.35, stickiness: 0.95, conformity: 0.55, statusSeeking: 0.40, opportunism: 0.15, affinity: 0.10, sophistication: 0.30 },
+    traits: { craft: 0.25, hustle: 0.20, taste: 0.40, jobSkill: 0.45, social: 0.40, riskTolerance: 0.25, vocation: 0.35, stickiness: 0.95, conformity: 0.55, corrective: 0.20, statusSeeking: 0.40, opportunism: 0.15, affinity: 0.10, sophistication: 0.30 },
     preferred: { job: 0.50, craft: 0.05, hustle: 0.02, curate: 0.03, rest: 0.40 }
   },
   mixed: {
     label: 'Mixed',
-    share: 0.07,
+    share: 0.05,
+    field: 'general',
     occupation: 'teacher',
     tier: 2,
     rainWeight: 1,
-    traits: { craft: 0.50, hustle: 0.50, taste: 0.50, jobSkill: 0.50, social: 0.50, riskTolerance: 0.50, vocation: 0.50, stickiness: 0.60, conformity: 0.50, statusSeeking: 0.50, opportunism: 0.20, affinity: 0.45, sophistication: 0.50 },
+    traits: { craft: 0.50, hustle: 0.50, taste: 0.50, jobSkill: 0.50, social: 0.50, riskTolerance: 0.50, vocation: 0.50, stickiness: 0.60, conformity: 0.50, corrective: 0.35, statusSeeking: 0.50, opportunism: 0.20, affinity: 0.45, sophistication: 0.50 },
     preferred: { job: 0.35, craft: 0.25, hustle: 0.08, curate: 0.07, rest: 0.25 }
   },
   // Red team. Off by default; --collective N moves N agents into it.
   collective: {
     label: 'The Collective',
     share: 0,
+    field: 'art',
     occupation: 'gig',
     tier: 1,
     rainWeight: 1.5,
-    traits: { craft: 0.40, hustle: 0.65, taste: 0.45, jobSkill: 0.45, social: 0.55, riskTolerance: 0.65, vocation: 0.60, stickiness: 0.30, conformity: 0.30, statusSeeking: 0.55, opportunism: 0.60, affinity: 0.60, sophistication: 0.85 },
+    traits: { craft: 0.40, hustle: 0.65, taste: 0.45, jobSkill: 0.45, social: 0.55, riskTolerance: 0.65, vocation: 0.60, stickiness: 0.30, conformity: 0.30, corrective: 0.15, statusSeeking: 0.55, opportunism: 0.60, affinity: 0.60, sophistication: 0.85 },
     preferred: { job: 0.10, craft: 0.40, hustle: 0.25, curate: 0.05, rest: 0.20 }
   }
 }
@@ -115,8 +157,9 @@ function startingEffort (persona) {
   const job = persona.key === 'whale' ? 0.2 : JOB_FULL
   const spare = 1 - job - 0.2
   const p = persona.preferred
-  const craftShare = p.craft / Math.max(p.craft + p.hustle + p.curate, 1e-6)
-  const hustleShare = p.hustle / Math.max(p.craft + p.hustle + p.curate, 1e-6)
+  const wants = p.craft + p.hustle + p.curate
+  const craftShare = p.craft / Math.max(wants, 1e-6)
+  const hustleShare = p.hustle / Math.max(wants, 1e-6)
   return {
     job,
     craft: spare * craftShare,
@@ -141,7 +184,6 @@ export function buildPopulation (rng, config) {
 
   const roster = []
   for (const k of keys) for (let i = 0; i < counts[k]; i++) roster.push(k)
-  // Optional red-team bloc, carved out of the lifers.
   for (let i = 0; i < (config.collective ?? 0); i++) {
     const idx = roster.lastIndexOf('lifer')
     if (idx >= 0) roster[idx] = 'collective'
@@ -156,6 +198,8 @@ export function buildPopulation (rng, config) {
     for (const [name, mean] of Object.entries(persona.traits)) {
       t[name] = rng.trait(mean, 16)
     }
+    t.legibility = clamp01(rng.trait(FIELD_LEGIBILITY[persona.field], 14))
+
     // People mostly start living within their means. Take the persona's tier as
     // an aspiration and step it down to something the day job actually covers,
     // otherwise the whole population opens the run in deficit and dumps RAIN in
@@ -163,11 +207,13 @@ export function buildPopulation (rng, config) {
     const wage = OCCUPATIONS[persona.occupation] * (0.7 + 0.6 * t.jobSkill)
     let tier = Math.max(0, Math.min(4, persona.tier + (rng.bool(0.25) ? (rng.bool(0.5) ? 1 : -1) : 0)))
     while (tier > 0 && LIFESTYLE_TIERS[tier] > wage * 0.92) tier--
+
     return {
       id,
       name: `${key}-${String(perPersonaCount[key]).padStart(2, '0')}`,
       persona: key,
       personaLabel: persona.label,
+      field: persona.field,
       traits: t,
       preferred: { ...persona.preferred },
       effort: startingEffort(persona),
@@ -180,26 +226,29 @@ export function buildPopulation (rng, config) {
       rain: 0, // filled below
       rainIncomeEma: 0,
       incomeEma3mo: 0,
-      beliefs: new Map(), // id -> { value, evidence }
+      // discovery layer — separate from the trust graph on purpose
+      following: new Set(),
+      followers: new Set(),
+      recentPost: null,
+      recentBoost: null,
+      // belief and delegation
+      beliefs: new Map(),
       driftSinceRewrite: 0,
-      trustRow: [], // empty == self-trust
+      trustRow: [],
       trustRowAge: 0,
       lastRewriteTick: -1,
-      // cumulative accounting
       cum: {
         craftOutput: 0,
         rainReceived: 0,
-        // The redistributive part of issuance: what trust moved, net of the
-        // pro-rata share this agent's balance would have earned anyway.
         netIncidence: 0,
-        // What a pure staking yield would have paid them, for the ratio below.
         proRata: 0,
+        endorsed: 0,
         rainSoldUsd: 0,
         usdSpentOnRain: 0,
         wages: 0,
         weeksFullCraft: 0,
         forcedReturns: 0,
-        endorsementCost: 0
+        impressions: 0
       },
       story: []
     }
