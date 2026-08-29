@@ -23,7 +23,7 @@
     "models": [
       "Opus 5"
     ],
-    "thinking": "unknown",
+    "thinking": "ultracode",
     "thumbnail": {
       "waitFor": "#tour",
       "click": "#tourSkip",
