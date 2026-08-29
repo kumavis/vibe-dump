@@ -28,8 +28,10 @@ export const STATUSES = ['done', 'wip']
 // Which model(s) built an app, and how hard they were told to think. Recovered
 // from the Co-Authored-By trailers in each package's commits where they exist;
 // nothing in the history records thinking level, so those start as "unknown"
-// and are filled in by hand.
-export const THINKING = ['unknown', 'low', 'medium', 'high', 'max']
+// and are filled in by hand. The list runs from least to most effort — this is
+// a guard against typos silently dropping a card out of a filtered view, so a
+// genuinely new setting belongs in it rather than rounded to the nearest old one.
+export const THINKING = ['unknown', 'low', 'medium', 'high', 'max', 'ultracode']
 
 // When each package first appeared, so the gallery can lead with the newest.
 // Read out of the history rather than a hand-maintained field — the date an app

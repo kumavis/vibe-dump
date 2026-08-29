@@ -1,0 +1,33 @@
+{
+  "name": "@vibe-dump/busy-beaver-basins",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@fontsource/archivo": "^5.1.0",
+    "@fontsource/ibm-plex-mono": "^5.1.0"
+  },
+  "gallery": {
+    "title": "Busy Beaver Basins",
+    "description": "A guided tour into the busy beaver problem, ending inside the 3-D state graph of a Turing machine run on a cyclic tape: one amber cone for every configuration that halts, cyan cones for the loops, and the blank tape's own run hanging off it. Raw WebGL.",
+    "tags": [
+      "tool",
+      "art",
+      "tutorial"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "ultracode",
+    "thumbnail": {
+      "waitFor": "#tour",
+      "click": "#tourSkip",
+      "settle": 3400
+    }
+  }
+}

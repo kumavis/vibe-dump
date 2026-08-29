@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Busy Beaver Basins — busy beaver Turing machines on a cyclic tape</title>
+    <script type="module" crossorigin src="./assets/index-B_gIHrj7.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BQSKKcIL.css">
+  </head>
+  <body>
+<canvas id="gl"></canvas>
+
+<div id="stage" aria-hidden="true">
+  <div class="stage-now" id="stageNow"></div>
+  <canvas id="stageCanvas"></canvas>
+  <div class="stage-cap" id="stageCap"></div>
+</div>
+
+<aside id="rail">
+  <header class="rail-head">
+    <div>
+      <h1>Busy Beaver Basins</h1>
+      <p class="sub">Turing machines on a cyclic tape · 3-D state graphs</p>
+    </div>
+    <button id="railclose" class="icon-btn" title="Hide panel" aria-label="Hide panel">&lsaquo;</button>
+  </header>
+
+  <div class="rail-body">
+    <section data-tour="verdict">
+      <div class="label">Does it stop?</div>
+      <div class="verdicts">
+        <div class="verdict">
+          <span class="where">Unbounded tape · the real question</span>
+          <span class="fate" id="trueFate">—</span>
+          <span class="detail" id="trueDetail"></span>
+        </div>
+        <div class="verdict">
+          <span class="where">This ring · what you are flying through</span>
+          <span class="fate" id="ringFate">—</span>
+          <span class="detail" id="ringDetail"></span>
+        </div>
+        <div class="agree" id="agree"><span class="dot"></span><span id="agreeText"></span></div>
+      </div>
+    </section>
+
+    <section data-tour="spacetime">
+      <div class="label">
+        <span>Spacetime</span>
+        <span class="seg" role="group" aria-label="What the panel runs">
+          <button data-st="ring" class="on">this ring</button>
+          <button data-st="free">unbounded</button>
+        </span>
+      </div>
+      <div class="tapewrap"><canvas id="spacetime" width="672" height="384"></canvas></div>
+      <p class="tapecap" id="stFoot"></p>
+    </section>
+
+    <section data-tour="ring">
+      <div class="label">Ring</div>
+      <div class="row">
+        <div class="cap"><span>tape cells <b id="nVal">12</b></span><span class="aside" id="nodeCount"></span></div>
+        <input id="nRange" type="range" min="4" max="16" step="1" value="12" aria-label="Ring size in tape cells">
+      </div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="tOrbit" checked><span>orbit</span></label>
+        <label class="toggle"><input type="checkbox" id="tFlow" checked><span>flow</span></label>
+        <label class="toggle"><input type="checkbox" id="tEdges" checked><span>edges</span></label>
+        <label class="toggle"><input type="checkbox" id="tSplit"><span>split halts</span></label>
+      </div>
+      <p class="note" id="splitNote">Every halting configuration is merged into one
+        sink, so the halting basin is a single cone. <b>Split halts</b> gives each final
+        tape its own fixed point — and shatters the picture into thousands of specks,
+        which is exactly why merging is the right call.</p>
+    </section>
+
+    <section data-tour="stats">
+      <div class="label">The graph</div>
+      <div class="stats">
+        <div class="stat"><span class="k">configurations</span><span class="v" id="sNodes">—</span></div>
+        <div class="stat"><span class="k">basins</span><span class="v" id="sBasins">—</span></div>
+        <div class="stat"><span class="k">halting share</span><span class="v halt" id="sHalt">—</span></div>
+        <div class="stat"><span class="k">loop basins</span><span class="v loop" id="sLoops">—</span></div>
+        <div class="stat"><span class="k">tallest transient</span><span class="v" id="sDepth">—</span></div>
+        <div class="stat"><span class="k">garden of eden</span><span class="v" id="sEden">—</span></div>
+      </div>
+      <p class="note" id="probeNote"></p>
+    </section>
+
+    <section>
+      <div class="label">Reading it</div>
+      <ul class="legend">
+        <li><span class="sw h"></span><span><b>Amber cone</b> — the halting basin. Every
+          configuration in it eventually stops. The bright core is the halt state itself.</span></li>
+        <li><span class="sw l"></span><span><b>Cyan cones</b> — basins that never halt. The
+          glowing ring at the bottom of each is the cycle it is trapped in; a period-9 orbit
+          is drawn as a literal 9-gon.</span></li>
+        <li><span class="sw s"></span><span><b>Magenta node</b> — the blank tape, where a busy
+          beaver starts. The thread hanging off it is its whole run; <b>its height is the
+          machine's score</b>.</span></li>
+        <li><span class="sw d"></span><span><b>Height</b> — steps left before the machine's fate
+          is sealed. Every edge points strictly downhill, so time runs like gravity.</span></li>
+      </ul>
+      <p class="note">Click any node to run it in the panel above and hang its
+        trajectory off it here. Drag to orbit, scroll to zoom.</p>
+    </section>
+
+    <section>
+      <div class="label">The catch</div>
+      <p class="note">A tape of <i>N</i> cells has finitely many configurations, so on this
+        ring halting is always decidable — that is why there is a picture at all. The real
+        busy beaver problem is not. Where the ring is wide enough to hold the whole
+        computation the two agree exactly; where it is not, the tape wraps and the machine
+        answers a different question. <b>BB(5) needs 12,289 cells</b>, so no ring you can
+        draw will ever reach it.</p>
+    </section>
+  </div>
+</aside>
+
+<button id="railopen" class="icon-btn" title="Show panel" aria-label="Show panel">&rsaquo;</button>
+
+<div id="dock">
+  <div id="tour" role="region" aria-label="Guided tour">
+    <div class="tour-top">
+      <span class="tour-count" id="tourCount"></span>
+      <span class="tour-dots" id="tourDots"></span>
+      <button class="tour-skip" id="tourSkip">skip tour</button>
+    </div>
+    <h2 id="tourTitle"></h2>
+    <p id="tourBody"></p>
+    <div class="tour-nav">
+      <button id="tourBack">back</button>
+      <button id="tourNext" class="primary">next</button>
+      <span class="grow"></span>
+      <span class="tour-hint">← → to move</span>
+    </div>
+  </div>
+
+  <nav id="nav">
+  <div class="sprocket"></div>
+  <div class="machine">
+    <div class="states" id="states"></div>
+    <div class="navrow">
+      <input id="code" spellcheck="false" autocomplete="off" aria-label="Machine code" value="">
+      <button id="random">random</button>
+      <button id="surprise" class="primary">surprise me</button>
+      <button id="tourStart">tour</button>
+    </div>
+    <div class="presets" id="presets"></div>
+  </div>
+  </nav>
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+<div id="boot">building state graph</div>
+
+  </body>
+</html>
