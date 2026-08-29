@@ -150,6 +150,46 @@ export function neighbourKeys(a, b, k, out = []) {
   return out
 }
 
+// --- long edges, and the river vocabulary they define -----------------------
+//
+// A kite's first two sides are the long ones (√3, centre→midpoint); they are
+// exactly the sides shared with another kite of the *same hexagon*. Rivers cross
+// only these, which is what turns an aperiodic 13-gon into a tidy river graph:
+//
+//   PORT_SIDE[slot]  0     1     2     3     4     5     6     7
+//                    —     0     1     —     1     0     1     0
+//
+// Six of the hat's eight slots own exactly one long side on the tile's outline;
+// slots 0 and 3 own none. So a tile has at most six places a river can cross its
+// border, one per slot — and the hub, slot 0, is where they all meet.
+export const PORT_SLOTS = [1, 2, 4, 5, 6, 7]
+export const PORT_SIDE = (() => {
+  const index = new Map(HAT_KITES.map(([a, b, k], i) => [KEY(a, b, k), i]))
+  const nb = []
+  return HAT_KITES.map(([a, b, k]) => {
+    neighbourKeys(a, b, k, nb)
+    for (let s = 0; s < 2; s++) if (!index.has(nb[s])) return s
+    return null
+  })
+})()
+
+/** Reflecting the hat swaps a kite's two long sides (and its two short ones). */
+export const worldSide = (side, flipped) => (flipped ? 1 - side : side)
+
+/**
+ * An id for the long edge on `side` of kite (a, b, k). Both kites that share the
+ * edge produce the same id, so a river crossing is one entry in one Set.
+ */
+export const longEdgeId = (a, b, k, side) => KEY(a, b, side === 0 ? k : (k + 5) % 6)
+
+/** Where that edge's midpoint sits, in lattice-cartesian coordinates. */
+export function longEdgeMid(a, b, k, side) {
+  const j = side === 0 ? k : (k + 5) % 6
+  const d0 = D[j]
+  const d1 = D[(j + 1) % 6]
+  return cart(a + (d0[0] + d1[0]) / 2, b + (d0[1] + d1[1]) / 2)
+}
+
 // --- placements -------------------------------------------------------------
 
 /** The same eight cells as packed keys, in slot order. */

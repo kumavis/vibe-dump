@@ -1,8 +1,9 @@
 // The deck, and the mountain you start from.
 //
-// A tile is eight biomes, one per hat slot. Slots are numbered by HAT_KITES, and
-// they travel with the orientation — slot 3 is slot 3 whichever of the twelve
-// ways round the hat is lying — so a tile's pattern never has to be rotated.
+// A tile is eight biomes — one per hat slot — plus a set of river ports. Slots
+// are numbered by HAT_KITES and travel with the orientation, so slot 3 is slot 3
+// whichever of the twelve ways round the hat is lying and a tile's pattern never
+// has to be rotated.
 //
 // The slot graph (computed, not chosen: it falls out of the hat's kite structure)
 //
@@ -12,20 +13,32 @@
 //
 // exactly:  0:{1,3,5,7}  1:{0,6}  2:{3}  3:{0,2}  4:{5}  5:{0,4,7}  6:{1,7}  7:{0,5,6}
 //
-// and the number of tile-boundary edges each slot owns:
-//
-//   slot     0  1  2  3  4  5  6  7
-//   edges    0  2  3  2  3  1  2  1        (14 in total — the hat's 14 unit sides)
-//
-// Rivers fall straight out of that. A river is a connected set of water slots;
-// the number of open river mouths it presents to the world is just the sum of
-// those edge counts. So {0,5,7} is a river running clean through (two mouths),
-// {5} is a spring (one), {0,3,5} forks into three, and {2} — the leaf kite with
-// three sides on the boundary — is a delta all by itself. The deck below is
-// nothing more than a weighted list of those sets.
+// A river is a line, not a cover: it enters through one or more of the six port
+// slots (1, 2, 4, 5, 6, 7 — the ones owning a long side on the tile's outline)
+// and every branch runs to the hub at slot 0, where they meet. So a two-port
+// tile is a run or a bend, three is a fork, one is a spring that rises here and
+// leaves once. Nothing else about a tile is constrained: biomes may meet however
+// they like, and only cost you the region when they disagree.
 
-import { HAT_KITES, KEY, neighbourKeys } from './hat.js'
-import { WATER, PLAINS, FOREST, HILLS, VILLAGE, PEAK } from './board.js'
+import {
+  HAT_KITES,
+  KEY,
+  KEY_A,
+  KEY_B,
+  KEY_K,
+  ORIENT_KITES,
+  PORT_SIDE,
+  PORT_SLOTS,
+  cart,
+  cellAt,
+  kiteCentre,
+  longEdgeId,
+  longEdgeMid,
+  neighbourKeys,
+  placementKeys,
+  worldSide,
+} from './hat.js'
+import { PLAINS, FOREST, HILLS, VILLAGE, SCREE } from './board.js'
 
 /** Which slots each slot touches inside the tile. Derived at load from the kite
  *  lattice rather than written down, so it cannot drift from the geometry. */
@@ -44,90 +57,29 @@ export const SLOT_ADJ = []
   }
 }
 
-// --- the river vocabulary ---------------------------------------------------
-//
-// A river leaves a tile through a *port*: one of the six slots that owns a long
-// side on the tile's boundary. Slots 0 and 3 own none, so they can carry water
-// but never let it out — which is exactly what a hub and a backwater are.
-//
-//   port slot    1      2        4        5      6        7
-//   water laid  1,0   2,3,0    4,5,0    5,0    6,1,0    7,0
-//
-// The water for a tile is the union of those paths, so every port is joined to
-// the hub and therefore to every other port: one connected river, whatever the
-// combination. Ports are the only thing the deck picks; the water follows.
-
-// Ports 1, 5 and 7 sit one step from the hub; 2, 4 and 6 sit two, and so lay
-// down an extra kite of water each. Favouring the short ones keeps a three-mouth
-// fork at four kites of water instead of seven — a river, not a flood.
-export const PORTS = [
-  [1, 3],
-  [5, 3],
-  [7, 3],
-  [2, 1],
-  [4, 1],
-  [6, 1],
-]
-
-/** Shortest path through the slot graph from each port to the hub. */
-export const PORT_PATH = {
-  1: [1, 0],
-  2: [2, 3, 0],
-  4: [4, 5, 0],
-  5: [5, 0],
-  6: [6, 1, 0],
-  7: [7, 0],
-}
-
-/** Water with no way out at all: a tarn inside one tile. */
-const PONDS = [[3], [0, 3], [2, 3]]
-
-/** How many mouths a river tile has. Two is a river; one ends it; three forks. */
+/**
+ * How many mouths a stream tile has. Never one: a single-mouth tile laid onto an
+ * open mouth *caps* that river, and a capped river can never be carried any
+ * further — which is how a garden ends up with the water stranded three tiles
+ * short of the mill and no legal way to finish. Every stream tile carries the
+ * water through; the only one-mouth pieces on the board are the mountain's
+ * source and a town's leat, both placed at the start.
+ */
 const PORT_COUNT_W = [
-  [2, 52],
-  [1, 15],
-  [3, 20],
-  [4, 4],
-  [0, 6], // a pond, sealed inside its own tile
+  [2, 58],
+  [3, 28],
+  [4, 14],
 ]
 const PORT_COUNT_TOTAL = PORT_COUNT_W.reduce((s, [, w]) => s + w, 0)
+const KIND = [null, 'spring', 'run', 'fork', 'delta']
 
-const KIND = ['pond', 'spring', 'run', 'fork', 'delta']
-
-function riverPattern(rnd) {
-  const n = pickWeighted(PORT_COUNT_W, ([, w]) => w, PORT_COUNT_TOTAL, rnd)[0]
-  if (n === 0) {
-    const p = PONDS[Math.floor(rnd() * PONDS.length)]
-    return { water: p, kind: 'pond', mouths: 0 }
-  }
-  const pool = PORTS.map(([p, w]) => ({ p, w }))
-  const chosen = []
-  for (let i = 0; i < n && pool.length; i++) {
-    let total = 0
-    for (const q of pool) total += q.w
-    let r = rnd() * total
-    let idx = pool.length - 1
-    for (let j = 0; j < pool.length; j++) {
-      r -= pool[j].w
-      if (r <= 0) {
-        idx = j
-        break
-      }
-    }
-    chosen.push(pool.splice(idx, 1)[0].p)
-  }
-  const water = new Set()
-  for (const p of chosen) for (const slot of PORT_PATH[p]) water.add(slot)
-  return { water: [...water], kind: KIND[n], mouths: n }
-}
-
-/** Land biomes and how often they turn up as a tile's dominant cover. */
+/** Land covers and how often they turn up as a tile's dominant one. */
 const LAND_W = [
   [PLAINS, 36],
   [FOREST, 32],
-  [HILLS, 15],
+  [HILLS, 16],
   [VILLAGE, 10],
-  [PEAK, 5],
+  [SCREE, 6],
 ]
 
 /** Deterministic RNG so a seeded garden replays exactly. */
@@ -151,108 +103,77 @@ function pickWeighted(list, weightOf, total, rnd) {
 }
 
 function pickLand(rnd, allowRare = true) {
-  const pool = allowRare ? LAND_W : LAND_W.filter(([b]) => b !== VILLAGE && b !== PEAK)
+  const pool = allowRare ? LAND_W : LAND_W.filter(([b]) => b !== VILLAGE && b !== SCREE)
   const total = pool.reduce((s, [, w]) => s + w, 0)
   return pickWeighted(pool, ([, w]) => w, total, rnd)[0]
 }
 
 /**
- * Paint the land slots. A tile is either all one cover — the ones worth saving,
+ * Paint the eight slots. A tile is either all one cover — the ones worth saving,
  * because they extend a region by eight at a stroke — or two covers split along
  * a grown blob, which is how you get the ragged edges that make regions
  * interesting to close.
  */
-function paintLand(slots, rnd) {
-  const out = new Map()
-  if (slots.length === 0) return out
-  const single = rnd() < 0.3
+function paintLand(rnd) {
+  const out = new Array(8)
+  const single = rnd() < 0.28
   const a = pickLand(rnd, !single)
-  if (single || slots.length <= 2) {
-    for (const s of slots) out.set(s, a)
+  if (single) {
+    out.fill(a)
     return out
   }
   let b = pickLand(rnd)
   let guard = 0
   while (b === a && guard++ < 8) b = pickLand(rnd)
 
-  // Grow a blob of `a` from a random slot, staying inside the land slots.
-  const pool = new Set(slots)
-  const start = slots[Math.floor(rnd() * slots.length)]
+  const start = Math.floor(rnd() * 8)
   const blob = new Set([start])
-  // Always at least two of each, so a two-cover tile really shows two covers.
-  const target = 2 + Math.floor(rnd() * Math.max(1, slots.length - 3))
+  const target = 2 + Math.floor(rnd() * 5)
   let guard2 = 0
   while (blob.size < target && guard2++ < 40) {
     const frontier = []
-    for (const s of blob) for (const n of SLOT_ADJ[s]) if (pool.has(n) && !blob.has(n)) frontier.push(n)
+    for (const s of blob) for (const n of SLOT_ADJ[s]) if (!blob.has(n)) frontier.push(n)
     if (frontier.length === 0) break
     blob.add(frontier[Math.floor(rnd() * frontier.length)])
   }
-  // Hamlets and crags stay small — a whole tile of either reads as a mistake.
-  const cap = (x) => (x === VILLAGE || x === PEAK ? 3 : 8)
-  for (const s of slots) out.set(s, blob.has(s) ? a : b)
-  for (const rare of [VILLAGE, PEAK]) {
-    const cells = slots.filter((s) => out.get(s) === rare)
-    if (cells.length > cap(rare)) {
-      const keep = new Set(cells.slice(0, cap(rare)))
-      for (const s of cells) if (!keep.has(s)) out.set(s, PLAINS)
-    }
+  for (let i = 0; i < 8; i++) out[i] = blob.has(i) ? a : b
+  // Hamlets and scree stay small — a whole tile of either reads as a mistake.
+  for (const rare of [VILLAGE, SCREE]) {
+    const cells = []
+    for (let i = 0; i < 8; i++) if (out[i] === rare) cells.push(i)
+    if (cells.length > 3) for (const i of cells.slice(3)) out[i] = PLAINS
   }
   return out
 }
 
-/** One tile: eight biomes in slot order, plus a label for the HUD. */
+/** One tile: eight covers, a set of river ports, and a label for the HUD. */
 export function makeTile(rnd, riverChance = 0.42) {
-  let water = []
+  const ports = new Set()
   let kind = 'land'
-  let mouths = 0
   if (rnd() < riverChance) {
-    const r = riverPattern(rnd)
-    water = r.water
-    kind = r.kind
-    mouths = r.mouths
+    const n = pickWeighted(PORT_COUNT_W, ([, w]) => w, PORT_COUNT_TOTAL, rnd)[0]
+    const pool = PORT_SLOTS.slice()
+    for (let i = 0; i < n; i++) ports.add(...pool.splice(Math.floor(rnd() * pool.length), 1))
+    kind = KIND[n]
   }
-  const waterSet = new Set(water)
-  const land = []
-  for (let i = 0; i < 8; i++) if (!waterSet.has(i)) land.push(i)
-  const paint = paintLand(land, rnd)
-  const biomes = new Array(8)
-  for (let i = 0; i < 8; i++) biomes[i] = waterSet.has(i) ? WATER : (paint.get(i) ?? PLAINS)
-  return { biomes, kind, mouths }
+  return { biomes: paintLand(rnd), ports, kind, mouths: ports.size }
 }
 
 /**
- * A tile built to fit one specific gap — the escape hatch that makes a dead end
- * impossible. `want` comes from Board.demand(): true where the garden insists on
- * water, false where it insists on land, null where it does not care.
+ * A tile cut to fit one specific gap: exactly the crossings the board demands
+ * there, and no others. Every forced crossing is met and no new mouth is opened,
+ * so it is always placeable — the escape hatch that makes a dead end impossible.
  */
-export function fitTile(want, rnd) {
-  const wet = new Set()
-  for (let i = 0; i < 8; i++) if (want[i] === true) wet.add(i)
-  // Run each demanded mouth back to the hub where the garden allows it, so a
-  // fitted tile still looks like a river rather than a puddle bolted to an edge.
-  for (const p of [...wet]) {
-    const path = PORT_PATH[p]
-    if (!path) continue
-    if (path.every((slot) => want[slot] !== false)) for (const slot of path) wet.add(slot)
-  }
-  const biomes = new Array(8)
-  const land = []
-  for (let i = 0; i < 8; i++) {
-    if (wet.has(i)) biomes[i] = WATER
-    else land.push(i)
-  }
-  const paint = paintLand(land, rnd)
-  for (const i of land) biomes[i] = paint.get(i) ?? PLAINS
-  return { biomes, kind: 'fitted', mouths: 0 }
+export function fitTile(ports, rnd) {
+  return { biomes: paintLand(rnd), ports: new Set(ports), kind: 'fitted', mouths: ports.size }
 }
 
-// --- the opening mountain ---------------------------------------------------
+// --- the opening massif ------------------------------------------------------
 
 // Three hats pinwheeled 120° about the hexagon centre at lattice (2,2). They
 // cover that hexagon's six kites exactly — three tiles, two summit wedges each —
-// so the massif has a real peak rather than a flat top, and the seam pattern
-// radiates from it. Verified compact: no other conjoined triple packs tighter.
+// so the peak has somewhere to stand and the seam pattern radiates from under
+// it. Verified compact: no other conjoined triple packs tighter.
 export const SEED_TILES = [
   { orient: 0, ta: 0, tb: 0 },
   { orient: 2, ta: 6, tb: 0 },
@@ -260,37 +181,169 @@ export const SEED_TILES = [
 ]
 export const SUMMIT = [2, 2] // lattice coordinates of the peak
 
-// Distances of the four concentric shells from the summit, for reference:
-// 1.250 (6 summit kites) · 2.462 (12 shoulder) · 3.683 (3 flank) · 4.589 (3 foot).
-const SHELL_SUMMIT = 1.9
-const SHELL_SHOULDER = 3.0
-const SHELL_FLANK = 4.2
+// Concentric shells of the massif, by distance from the summit. The kites come
+// out at 1.250 (six, under the peak) · 2.462 (twelve) · 3.683 (three) · 4.589
+// (three), so these thresholds cut cleanly between them.
+const SHELL_SCREE = 3.0
+const SHELL_HILLS = 3.0
+const SHELL_TREES = 4.2
 
 /**
- * Biomes for the opening massif, given a kite's distance from the summit and
- * which tile/slot it belongs to. Tile 0 carries the river: slot 7 is a tarn just
- * under the cap, slot 0 the gorge below it, slot 3 the mouth where it leaves the
- * mountain — two adjoining sides of one kite, so it reads as a single outflow
- * that the next river tile has to pick up.
+ * The opening three tiles: flat ground like every other tile in the deck, laid
+ * out as bare stone under the peak, then upland, then treeline, then pasture at
+ * the foot. The mountain itself is not terrain — it is a feature standing on
+ * this ground, which is why nothing here has a height.
+ *
+ * One stream leaves the massif: the port on tile 0 whose crossing lies furthest
+ * from the summit, so the river runs off the mountain and away rather than back
+ * into it.
  */
-export const SEED_RIVER = new Set([7, 0, 3]) // slots, tile 0 only
+export function seedGarden() {
+  const [sx, sz] = cart(SUMMIT[0], SUMMIT[1])
+  const all = new Set()
+  for (const t of SEED_TILES) for (const key of placementKeys(t.orient, t.ta, t.tb)) all.add(key)
+  let headwater = null
 
-export function seedBiome(tileIndex, slot, dist) {
-  if (tileIndex === 0 && SEED_RIVER.has(slot)) return WATER
-  // Cap, alpine slope, treeline, pasture. How much of the cap is actually white
-  // is decided by height rather than here, so the snowline crosses the faces as
-  // a curve instead of stopping at a kite boundary.
-  if (dist < SHELL_SUMMIT) return PEAK
-  if (dist < SHELL_SHOULDER) return PEAK
-  if (dist < SHELL_FLANK) return FOREST
-  // The foot: one hamlet, the rest meadow.
-  return tileIndex === 1 ? VILLAGE : PLAINS
+  const tiles = SEED_TILES.map((t, ti) => {
+    const cells = placementKeys(t.orient, t.ta, t.tb)
+    const biomes = cells.map((key) => {
+      const [x, z] = kiteCentre(KEY_A(key), KEY_B(key), KEY_K(key))
+      const d = Math.hypot(x - sx, z - sz)
+      if (d < SHELL_SCREE) return SCREE
+      if (d < SHELL_HILLS) return HILLS
+      if (d < SHELL_TREES) return FOREST
+      return ti === 1 ? VILLAGE : PLAINS
+    })
+
+    const ports = new Set()
+    if (ti === 0) {
+      const flipped = t.orient >= 6
+      let best = null
+      let bestD = -1
+      for (const slot of PORT_SLOTS) {
+        const side = worldSide(PORT_SIDE[slot], flipped)
+        const key = cells[slot]
+        const a = KEY_A(key)
+        const b = KEY_B(key)
+        const k = KEY_K(key)
+        if (all.has(neighbourKeys(a, b, k)[side])) continue // faces another seed tile
+        const [mx, mz] = longEdgeMid(a, b, k, side)
+        const d = Math.hypot(mx - sx, mz - sz)
+        if (d > bestD) {
+          bestD = d
+          best = slot
+        }
+      }
+      if (best !== null) {
+        ports.add(best)
+        const key = cells[best]
+        const a = KEY_A(key)
+        const b = KEY_B(key)
+        const k = KEY_K(key)
+        const side = worldSide(PORT_SIDE[best], flipped)
+        const [mx, mz] = longEdgeMid(a, b, k, side)
+        const len = Math.hypot(mx - sx, mz - sz) || 1
+        headwater = { edge: longEdgeId(a, b, k, side), mid: [mx, mz], dir: [(mx - sx) / len, (mz - sz) / len] }
+      }
+    }
+
+    return { orient: t.orient, ta: t.ta, tb: t.tb, tile: { biomes, ports, kind: 'massif', mouths: ports.size } }
+  })
+
+  return { tiles, headwater, summit: [sx, sz] }
 }
 
-/** Elevation for a kite: a cone around the summit plus the biome's own lift. */
-export const BIOME_LIFT = [-0.1, 0.0, 0.14, 0.34, 0.06, 0.5]
+// --- the places the river is meant to reach ---------------------------------
 
-export function seedElevation(dist) {
-  const u = Math.min(1, dist / 6.5)
-  return 3.6 * Math.pow(1 - u, 1.25)
+/**
+ * A hat placement standing on its own near (tx, tz): no overlap with what is
+ * already down, and not even touching it, so there is a real gap of open ground
+ * to bridge. Anchors are tried across a couple of rings around the target so a
+ * spot is found even when the exact cell there is awkward.
+ */
+export function siteNear(tx, tz, occupied, want = 1) {
+  const [ca, cb, ck] = cellAt(tx, tz)
+  const anchors = new Set([KEY(ca, cb, ck)])
+  for (let ring = 0; ring < 2; ring++) {
+    for (const key of [...anchors]) {
+      for (const n of neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key))) anchors.add(n)
+    }
+  }
+  const found = []
+  for (const anchor of anchors) {
+    const fa = KEY_A(anchor)
+    const fb = KEY_B(anchor)
+    const fk = KEY_K(anchor)
+    for (let o = 0; o < 12; o++) {
+      const base = ORIENT_KITES[o]
+      for (let i = 0; i < 8; i++) {
+        if (base[i][2] !== fk) continue
+        const ta = fa - base[i][0]
+        const tb = fb - base[i][1]
+        const cells = placementKeys(o, ta, tb)
+        let ok = true
+        for (const key of cells) {
+          if (occupied.has(key)) {
+            ok = false
+            break
+          }
+          for (const n of neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key))) {
+            if (occupied.has(n)) {
+              ok = false
+              break
+            }
+          }
+          if (!ok) break
+        }
+        if (!ok) continue
+        let hx = 0
+        let hz = 0
+        for (const key of cells) {
+          const [x, z] = kiteCentre(KEY_A(key), KEY_B(key), KEY_K(key))
+          hx += x
+          hz += z
+        }
+        hx /= 8
+        hz /= 8
+        found.push({ orient: o, ta, tb, cells, hub: [hx, hz], d: Math.hypot(hx - tx, hz - tz) })
+      }
+    }
+  }
+  found.sort((a, b) => a.d - b.d)
+  return want === 1 ? (found[0] ?? null) : found.slice(0, want)
+}
+
+/**
+ * Dress a site as a small town with one crossing — the leat that turns its
+ * wheel — chosen to face back the way the water has to come.
+ */
+export function townTile(site, towardX, towardZ) {
+  const flipped = site.orient >= 6
+  let best = null
+  let bestD = Infinity
+  let bestMid = null
+  for (const slot of PORT_SLOTS) {
+    const key = site.cells[slot]
+    const a = KEY_A(key)
+    const b = KEY_B(key)
+    const k = KEY_K(key)
+    const side = worldSide(PORT_SIDE[slot], flipped)
+    const [mx, mz] = longEdgeMid(a, b, k, side)
+    const d = Math.hypot(mx - towardX, mz - towardZ)
+    if (d < bestD) {
+      bestD = d
+      best = { slot, edge: longEdgeId(a, b, k, side) }
+      bestMid = [mx, mz]
+    }
+  }
+  // houses crowd the water; the rest is the common land around them
+  const biomes = new Array(8).fill(PLAINS)
+  const near = [best.slot, ...SLOT_ADJ[best.slot], 0]
+  for (const i of near) biomes[i] = VILLAGE
+  return {
+    tile: { biomes, ports: new Set([best.slot]), kind: 'town', mouths: 1 },
+    edge: best.edge,
+    mid: bestMid,
+    slot: best.slot,
+  }
 }

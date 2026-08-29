@@ -5,9 +5,9 @@
 // are not there any more. If you notice them every time, they are too loud.
 
 import * as THREE from 'three'
-import { KEY_A, KEY_B, KEY_K, kiteCentre, neighbourKeys } from './hat.js'
-import { WATER, PLAINS, FOREST, HILLS, VILLAGE } from './board.js'
-import { W, worldY } from './geometry.js'
+import { KEY_A, KEY_B, KEY_K, kiteCentre } from './hat.js'
+import { PLAINS, FOREST, HILLS, VILLAGE } from './board.js'
+import { W } from './geometry.js'
 
 const lin = (hex) => new THREE.Color(hex).convertSRGBToLinear()
 
@@ -67,6 +67,44 @@ class Pool {
   }
 }
 const UP = new THREE.Vector3(0, 1, 0)
+
+/**
+ * Stitch the mesh builder's per-tile river branches into walkable polylines.
+ * Two branches of one tile meet at its hub; two branches of neighbouring tiles
+ * meet at the midpoint of the edge they share. Both meetings are exact — the
+ * same point, computed the same way — so joining on rounded coordinates finds
+ * every one of them.
+ */
+function chainBranches(branches) {
+  const key = (p) => `${p[0].toFixed(3)},${p[1].toFixed(3)}`
+  const ends = new Map()
+  branches.forEach((b, i) => {
+    for (const p of [b[0], b[b.length - 1]]) {
+      const k = key(p)
+      if (!ends.has(k)) ends.set(k, [])
+      ends.get(k).push(i)
+    }
+  })
+  const used = new Set()
+  const paths = []
+  for (let i = 0; i < branches.length; i++) {
+    if (used.has(i)) continue
+    used.add(i)
+    let path = branches[i].slice()
+    for (let step = 0; step < 60; step++) {
+      const k = key(path[path.length - 1])
+      const next = (ends.get(k) ?? []).find((j) => !used.has(j))
+      if (next === undefined) break
+      used.add(next)
+      const b = branches[next]
+      const seg = key(b[0]) === k ? b : b.slice().reverse()
+      path = path.concat(seg.slice(1))
+    }
+    if (path.length >= 8) paths.push(path)
+  }
+  paths.sort((a, b) => b.length - a.length)
+  return paths
+}
 
 // --- the ambience -----------------------------------------------------------
 
@@ -132,73 +170,27 @@ export class Ambience {
     this.t = 0
   }
 
-  /** Re-read the board: where the water runs, where the woods and pastures are. */
-  sync(game) {
+  /** Re-read the board: where the woods and pastures are, and where the river
+   *  runs — the latter comes in as the mesh builder's own ribbon polylines, so
+   *  a boat follows exactly the line that is drawn. */
+  sync(game, branches = []) {
     const board = game.board
     const at = (key) => {
       const [x, z] = kiteCentre(KEY_A(key), KEY_B(key), KEY_K(key))
-      return [x * W, worldY(game.elev.get(key) ?? 0), z * W]
+      return [x * W, 0, z * W]
     }
 
     this.forest = []
     this.grazing = []
     this.chimneys = []
-    const waterCells = []
     for (const key of board.filled) {
       const b = board.biome.get(key)
       if (b === FOREST) this.forest.push(at(key))
       else if (b === PLAINS || b === HILLS) this.grazing.push(at(key))
       else if (b === VILLAGE) this.chimneys.push(at(key))
-      else if (b === WATER) waterCells.push(key)
     }
 
-    // Walk each river into a polyline so a boat can follow it.
-    this.rivers = []
-    const water = new Set(waterCells)
-    const seen = new Set()
-    const nb = [0, 0, 0, 0]
-    const waterNbrs = (key) => {
-      neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), nb)
-      const out = []
-      for (let i = 0; i < 4; i++) if (water.has(nb[i])) out.push(nb[i])
-      return out
-    }
-    for (const start of waterCells) {
-      if (seen.has(start)) continue
-      // collect the component, then walk it from an end
-      const comp = []
-      const stack = [start]
-      seen.add(start)
-      while (stack.length) {
-        const c = stack.pop()
-        comp.push(c)
-        for (const n of waterNbrs(c)) {
-          if (seen.has(n)) continue
-          seen.add(n)
-          stack.push(n)
-        }
-      }
-      if (comp.length < 3) continue
-      let head = comp[0]
-      let deg = 5
-      for (const c of comp) {
-        const d = waterNbrs(c).length
-        if (d < deg) {
-          deg = d
-          head = c
-        }
-      }
-      const path = []
-      const used = new Set()
-      let cur = head
-      while (cur !== undefined && !used.has(cur)) {
-        used.add(cur)
-        path.push(at(cur))
-        cur = waterNbrs(cur).find((n) => !used.has(n))
-      }
-      if (path.length >= 3) this.rivers.push(path)
-    }
-    this.rivers.sort((a, b) => b.length - a.length)
+    this.rivers = chainBranches(branches)
 
     // Sheep settle in one or two pastures and stay there.
     if (this.grazing.length > 3) {
@@ -219,9 +211,9 @@ export class Ambience {
     }
   }
 
-  celebrate(res, game) {
-    // sealing a river is a fine excuse to send a boat down it
-    if (res.announce?.some((r) => r.biome === WATER)) this.boatAt = Math.min(this.boatAt, 1.2)
+  celebrate(res) {
+    // carrying the river on is a fine excuse to send a boat down it
+    if (res.joined > 0) this.boatAt = Math.min(this.boatAt, 2.0)
     if (res.announce?.length) this.flockAt = Math.min(this.flockAt, 2.5)
   }
 
@@ -350,12 +342,13 @@ export class Ambience {
     if (!this.boat) {
       this.boatAt -= dt
       if (this.boatAt <= 0 && this.rivers.length) {
-        this.boat = { path: this.rivers[0], u: 0 }
+        const pick = this.rivers[Math.floor(Math.random() * Math.min(3, this.rivers.length))]
+        this.boat = { path: pick, u: 0 }
         this.boatAt = 20 + Math.random() * 28
       }
     } else {
       const p = this.boat.path
-      this.boat.u += dt * 0.44
+      this.boat.u += dt * 1.6
       const i = Math.floor(this.boat.u)
       if (i >= p.length - 1) {
         this.boat = null
@@ -364,9 +357,9 @@ export class Ambience {
         const a = p[i]
         const b = p[i + 1]
         const x = a[0] + (b[0] - a[0]) * f
-        const z = a[2] + (b[2] - a[2]) * f
-        const y = a[1] + (b[1] - a[1]) * f + 0.03
-        const yaw = Math.atan2(b[0] - a[0], b[2] - a[2])
+        const z = a[1] + (b[1] - a[1]) * f
+        const y = 0.03
+        const yaw = Math.atan2(b[0] - a[0], b[1] - a[1])
         const bob = Math.sin(t * 3.1) * 0.008
         this.kayak.put(x, y + bob, z, yaw, 1, 1, 1)
         this.paddler.put(x, y + 0.045 + bob, z, yaw + Math.sin(t * 4.2) * 0.28, 1, 1, 1)

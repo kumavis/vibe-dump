@@ -25,12 +25,22 @@
 
     <div id="feed"></div>
 
+    <aside id="quest" class="hidden">
+      <span class="eyebrow">errand</span>
+      <b id="questtitle"></b>
+      <span id="questhint"></span>
+    </aside>
+
     <footer id="hand">
       <div id="tilecard">
         <canvas id="tileart" width="220" height="180"></canvas>
         <div id="tilekind">meadow</div>
         <div id="contact"></div>
         <div id="fitcount"></div>
+        <button id="swap" class="hidden" title="take the other tile instead">
+          <canvas id="nextart" width="110" height="90"></canvas>
+          <span>swap</span>
+        </button>
         <div id="tilebtns">
           <button id="prev" title="previous fit (Q)">⟲</button>
           <button id="next" title="next fit (E)">⟳</button>
@@ -53,10 +63,11 @@
         and never repeats. Three hats pinwheel around a snow-capped peak; a river runs off it.
       </p>
       <ul>
-        <li><b>Move</b> the mouse to choose where the next hat goes. Only legal spots are offered.</li>
-        <li><b>Scroll</b> (or <b>Q</b>/<b>E</b>) to cycle the ways it fits there — twelve orientations, mirrored ones included.</li>
-        <li><b>Click</b> to lay it. A river must meet a river, so a stream can never dead-end into a bank.</li>
-        <li>Ring a <b>meadow, forest, hills, hamlet or river</b> completely and it seals — big points, and more tiles.</li>
+        <li><b>Move</b> the mouse near a light. The hat turns itself to a way it fits there.</li>
+        <li><b>Scroll</b> (or <b>Q</b>/<b>E</b>) to cycle the other ways — twelve orientations, mirrored ones included.</li>
+        <li><b>Click</b> to lay it. Covers may meet however they like; only two things are forbidden — walling in a stream, and leaving a gap no hat could ever fill.</li>
+        <li>Ring a <b>meadow, forest, hills, hamlet or scree</b> completely and it seals: big points, and more tiles.</li>
+        <li>A mill stands off across the grass with a dry leat. <b>Carry the headwater to it</b> — two or three stream tiles — and its wheel starts turning.</li>
       </ul>
       <div class="row">
         <button id="play">Plant the garden</button>

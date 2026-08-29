@@ -1,5 +1,5 @@
-// Board state: which kite cells are filled, what grows on them, and which
-// biome regions have been sealed off.
+// Board state: which kite cells are filled, what grows on them, where the river
+// runs, and which biome regions have been sealed off.
 //
 // Everything here is incremental. A placement touches eight cells, so scoring
 // must cost O(8 · 4) rather than O(board) — otherwise the two-hundredth tile
@@ -8,39 +8,42 @@
 // (kite, direction) pairs facing an empty cell. A region is closed exactly when
 // that count reaches zero, and because cells are never removed a closed region
 // can never re-open or merge with anything — so it scores once and freezes.
+//
+// Water is not one of the biomes. The river is a line: a set of long kite edges
+// it crosses, drawn as a ribbon from each crossing to the tile's hub. Biomes
+// never constrain a placement — meadow may butt onto forest all day, it just
+// costs you the region. Only three things make a placement illegal, and all
+// three are about keeping the garden playable rather than tidy:
+//
+//   1. it must not overlap anything;
+//   2. every shared long edge must agree about whether a river crosses it;
+//   3. it must leave the board fillable — no pocket too small or too awkward for
+//      another hat, and no river end walled in with nowhere left to flow.
 
-import { KEY_A, KEY_B, KEY_K, ORIENT_KITES, neighbourKeys, candidatePlacements, placementKeys } from './hat.js'
+import {
+  KEY_A,
+  KEY_B,
+  KEY_K,
+  ORIENT_KITES,
+  PORT_SIDE,
+  longEdgeId,
+  neighbourKeys,
+  candidatePlacements,
+  placementKeys,
+  worldSide,
+} from './hat.js'
 
-export const WATER = 0
-export const PLAINS = 1
-export const FOREST = 2
-export const HILLS = 3
-export const VILLAGE = 4
-export const PEAK = 5
+export const PLAINS = 0
+export const FOREST = 1
+export const HILLS = 2
+export const VILLAGE = 3
+export const SCREE = 4
 
-export const BIOME_NAME = ['river', 'meadow', 'forest', 'hills', 'hamlet', 'peak']
+export const BIOME_NAME = ['meadow', 'forest', 'hills', 'hamlet', 'scree']
 
-// How much a sealed region of each biome is worth per kite². Rivers are the
-// fiddliest to close, hamlets the scarcest, so they pay best.
-export const BIOME_MULT = [1.6, 1.0, 1.1, 1.25, 1.8, 1.4]
-
-export const isWater = (b) => b === WATER
-
-/**
- * Only the first two of a kite's four sides are *long* (the √3 ones, running
- * from the hexagon's centre to an edge midpoint); the other two are the short
- * unit sides. neighbourKeys() puts the long pair first, so `side < 2` is the
- * whole test.
- *
- * That distinction is what makes rivers workable. Each of the hat's slots owns
- * *at most one* long side on the tile's boundary — slots 1, 2, 4, 5, 6 and 7 own
- * exactly one, slots 0 and 3 own none — so a river can only ever leave a tile in
- * as many places as it has water on those six slots. Water that meets land
- * across a short side is simply a bank. Enforce the match on every side instead
- * and a river tile demands up to five simultaneous matches, which almost never
- * line up: the river then breaks into puddles instead of flowing.
- */
-export const LONG_SIDE = 2
+/** How much a sealed region of each biome is worth per kite². Hamlets are the
+ *  scarcest cover in the deck, so they pay best. */
+export const BIOME_MULT = [1.0, 1.15, 1.3, 1.85, 1.4]
 
 /** Points for sealing off `n` kites of biome `b`. Superlinear, so one big
  *  meadow beats four small ones — the whole reason to plan ahead. */
@@ -68,6 +71,16 @@ export function regionTiles(n) {
   return 0
 }
 
+/** Beyond this many cells an enclosed pocket is certainly roomy enough for a
+ *  hat, so the fill test can stop looking. */
+const POCKET_CAP = 60
+
+const NO_CELLS = new Set()
+
+/** An open mouth, as one number: the empty cell plus which of its two long
+ *  sides the water is waiting on. */
+export const MOUTH_KEY = (cell, side) => cell * 2 + side
+
 export class Board {
   constructor() {
     /** key → biome */
@@ -76,24 +89,33 @@ export class Board {
     this.owner = new Map()
     /** every filled cell, for the placement enumerator */
     this.filled = new Set()
+    /** long-edge ids the river crosses */
+    this.ports = new Set()
+    /** edge id → [empty cell, its side] for every river mouth still open */
+    this.openMouths = new Map()
+    /** union-find over port edges: two edges share a root when water can run
+     *  from one to the other. Every branch of a tile meets at its hub, so a
+     *  tile's crossings are all one set; a crossing shared by two tiles is one
+     *  edge id, so the two tiles' networks merge by themselves. */
+    this.riverParent = new Map()
     /** union-find over filled cells */
     this.parent = new Map()
     this.rsize = new Map()
     this.ropen = new Map()
     /** roots whose score has already been banked */
     this.sealed = new Set()
-    /** empty cells that can never be filled — see _sealPockets */
-    this.dead = new Set()
     /** root → the cell that carries its pennant, once sealed */
     this.landmarks = new Map()
-    this.tiles = [] // {orient, ta, tb, cells:[key×8], biomes:[…], flipped}
+    this.tiles = [] // {orient, ta, tb, cells, biomes, ports, flipped}
+    this._stuck = new Set()
+    this._stuckAt = -1
     this._nb = []
+    this._nb2 = []
   }
 
   find(x) {
     let r = x
     while (this.parent.get(r) !== r) r = this.parent.get(r)
-    // path compression
     let c = x
     while (this.parent.get(c) !== r) {
       const n = this.parent.get(c)
@@ -116,103 +138,425 @@ export class Board {
     return ra
   }
 
-  // --- legality -------------------------------------------------------------
+  riverFind(e) {
+    let r = e
+    while (this.riverParent.get(r) !== r) r = this.riverParent.get(r)
+    let c = e
+    while (this.riverParent.get(c) !== r) {
+      const n = this.riverParent.get(c)
+      this.riverParent.set(c, r)
+      c = n
+    }
+    return r
+  }
+
+  /** Can water run from one crossing to the other? */
+  riverConnected(a, b) {
+    if (!this.riverParent.has(a) || !this.riverParent.has(b)) return false
+    return this.riverFind(a) === this.riverFind(b)
+  }
+
+  // --- where a tile's river crossings land ----------------------------------
 
   /**
-   * Can `biomes` (eight entries, in slot order) sit at this placement?
-   * The only hard constraint is the river: along every edge where the new tile
-   * meets the existing garden, water must meet water and land must meet land.
-   * Forest butting onto meadow is allowed — it just costs you the region.
+   * For a placement, the world-space river crossings it would make: one entry
+   * per port slot, whether or not the tile actually carries a river there.
+   * `{ slot, cell, side, edge, far }` — `far` being the cell on the other side.
    */
-  legal(orient, ta, tb, biomes) {
-    const cells = placementKeys(orient, ta, tb)
-    const own = new Set(cells)
+  crossings(orient, ta, tb, cells = placementKeys(orient, ta, tb), out = []) {
+    out.length = 0
+    const flipped = orient >= 6
     for (let i = 0; i < 8; i++) {
-      if (this.filled.has(cells[i])) return false
-      const w = isWater(biomes[i])
-      neighbourKeys(KEY_A(cells[i]), KEY_B(cells[i]), KEY_K(cells[i]), this._nb)
-      for (let j = 0; j < LONG_SIDE; j++) {
-        const m = this._nb[j]
-        if (own.has(m)) continue
-        if (!this.filled.has(m)) continue
-        if (isWater(this.biome.get(m)) !== w) return false
+      const s = PORT_SIDE[i]
+      if (s === null) continue
+      const side = worldSide(s, flipped)
+      const key = cells[i]
+      const a = KEY_A(key)
+      const b = KEY_B(key)
+      const k = KEY_K(key)
+      neighbourKeys(a, b, k, this._nb)
+      out.push({ slot: i, cell: key, side, edge: longEdgeId(a, b, k, side), far: this._nb[side] })
+    }
+    return out
+  }
+
+  // --- legality -------------------------------------------------------------
+
+  /** Rule 2 on its own: does the river agree along every edge already built? */
+  matchesRiver(orient, ta, tb, ports, cells = placementKeys(orient, ta, tb)) {
+    for (let i = 0; i < 8; i++) if (this.filled.has(cells[i])) return false
+    const xs = this.crossings(orient, ta, tb, cells, [])
+    for (const x of xs) {
+      if (!this.filled.has(x.far)) continue
+      if (this.ports.has(x.edge) !== ports.has(x.slot)) return false
+    }
+    return true
+  }
+
+  /** Does this placement's river actually meet the river already on the board? */
+  joinsRiver(orient, ta, tb, ports, cells = placementKeys(orient, ta, tb)) {
+    for (const x of this.crossings(orient, ta, tb, cells, [])) {
+      if (ports.has(x.slot) && this.filled.has(x.far) && this.ports.has(x.edge)) return true
+    }
+    return false
+  }
+
+  /**
+   * The full test: rules 1–3. Split out from matchesRiver because the first two
+   * are cheap enough to run over every candidate, while rule 3 walks the empty
+   * space around the placement and is only worth paying for once a tile has
+   * survived the others.
+   */
+  placeable(orient, ta, tb, ports, cells = placementKeys(orient, ta, tb)) {
+    if (!this.matchesRiver(orient, ta, tb, ports, cells)) return false
+    const added = new Set(cells)
+    return this.leavesRoom(cells, added) && this.streamsCanFlow(orient, ta, tb, ports, cells, added)
+  }
+
+  /** Every legal placement for one tile. */
+  legalPlacements(tile) {
+    const out = []
+    for (const c of candidatePlacements(this.filled)) {
+      const cells = placementKeys(c.o, c.ta, c.tb)
+      if (this.placeable(c.o, c.ta, c.tb, tile.ports, cells)) out.push({ ...c, cells })
+    }
+    return out
+  }
+
+  /**
+   * Rule 3a — no stranded gap. A hat needs eight kites in a hat-shaped
+   * arrangement, so a careless placement can leave a hole nothing will ever fill
+   * again. Rather than paper over it afterwards, such a placement is simply not
+   * allowed: the garden stays a garden you could finish.
+   */
+  leavesRoom(cells, added) {
+    const seen = new Set()
+    for (const key of cells) {
+      neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), this._nb)
+      for (let j = 0; j < 4; j++) {
+        const start = this._nb[j]
+        if (this.filled.has(start) || added.has(start) || seen.has(start)) continue
+        const pocket = this._pocket(start, added)
+        for (const c of pocket.cells) seen.add(c)
+        // Ran past the cap, so it opens onto the rest of the plane — or it is
+        // roomy enough that a hat certainly fits somewhere inside it.
+        if (pocket.open) continue
+        if (pocket.cells.length < 8) return false
+        if (!this._fitsInside(pocket.cells)) return false
       }
     }
     return true
   }
 
-  /** Every legal (placement, orientation) for one tile's biome pattern.
-   *  `pattern` is indexed by hat slot, so rotating the tile rotates nothing —
-   *  the slots travel with the orientation. */
-  legalPlacements(pattern) {
-    const out = []
-    const joins = []
-    const wet = pattern.some(isWater)
-    for (const c of candidatePlacements(this.filled)) {
-      if (!this.legal(c.o, c.ta, c.tb, pattern)) continue
-      out.push(c)
-      if (wet && this.joinsRiver(c.o, c.ta, c.tb, pattern)) joins.push(c)
+  /**
+   * Rule 3b — no walled-in stream. Every river mouth this tile opens must still
+   * have somewhere to go: an empty cell across it that some hat could cover with
+   * a crossing on that same edge. A river may end at a spring, but it may never
+   * be bricked up.
+   */
+  streamsCanFlow(orient, ta, tb, ports, cells, added) {
+    // Every mouth this tile opens must have somewhere to go…
+    const consumed = new Set()
+    for (const x of this.crossings(orient, ta, tb, cells, [])) {
+      if (!ports.has(x.slot)) continue
+      if (this.filled.has(x.far)) {
+        consumed.add(x.edge) // this crossing meets one already built
+        continue
+      }
+      // the shared edge is side `x.side` from here, so the other side from there
+      if (!this._continuable(x.far, 1 - x.side, added)) return false
     }
-    // Join if you can. A tile carrying water may only be laid where its water
-    // actually meets water already on the board — but only while such a spot
-    // exists, so the rule can never empty the legal set. That is what keeps the
-    // river a river instead of a scatter of disconnected puddles.
-    return joins.length > 0 ? joins : out
+    // …and so must every mouth already open elsewhere. Checking only the mouths
+    // this tile happens to touch is not enough: a hat covers eight cells, so it
+    // can take away the last way of continuing a mouth two cells away without
+    // ever bordering it. The open set is small, so check all of it — but skip
+    // any mouth that was *already* stuck, or one bad mouth would veto every
+    // move on the board and the garden would seize up with tiles still in hand.
+    const stuck = this.stuckMouths()
+    for (const [edge, m] of this.openMouths) {
+      if (consumed.has(edge) || added.has(m[0]) || stuck.has(edge)) continue
+      if (!this._continuable(m[0], m[1], added)) return false
+    }
+    return true
   }
 
-  /** Does this placement's water touch water already on the board? */
-  joinsRiver(orient, ta, tb, biomes) {
-    const cells = placementKeys(orient, ta, tb)
-    const own = new Set(cells)
-    for (let i = 0; i < 8; i++) {
-      if (!isWater(biomes[i])) continue
-      neighbourKeys(KEY_A(cells[i]), KEY_B(cells[i]), KEY_K(cells[i]), this._nb)
-      for (let j = 0; j < LONG_SIDE; j++) {
-        const m = this._nb[j]
-        if (own.has(m)) continue
-        if (this.filled.has(m) && isWater(this.biome.get(m))) return true
+  /**
+   * Mouths that already have nowhere to go. No placement can be blamed for
+   * these, so none may be rejected on their account. Cached against the board's
+   * size, which only ever grows.
+   */
+  stuckMouths() {
+    if (this._stuckAt === this.filled.size) return this._stuck
+    const stuck = new Set()
+    for (const [edge, m] of this.openMouths) {
+      if (!this._continuable(m[0], m[1], NO_CELLS)) stuck.add(edge)
+    }
+    this._stuck = stuck
+    this._stuckAt = this.filled.size
+    return stuck
+  }
+
+  /** Could any hat cover `cell` with a river crossing on `side` of it? */
+  _continuable(cell, side, added) {
+    const fa = KEY_A(cell)
+    const fb = KEY_B(cell)
+    const fk = KEY_K(cell)
+    for (let o = 0; o < 12; o++) {
+      const flipped = o >= 6
+      const base = ORIENT_KITES[o]
+      for (let i = 0; i < 8; i++) {
+        const s = PORT_SIDE[i]
+        if (s === null || worldSide(s, flipped) !== side) continue
+        if (base[i][2] !== fk) continue
+        const ta = fa - base[i][0]
+        const tb = fb - base[i][1]
+        let free = true
+        for (let j = 0; j < 8; j++) {
+          const kk = base[j]
+          const key = ((kk[0] + ta + 1024) << 15) | ((kk[1] + tb + 1024) << 3) | kk[2]
+          if (this.filled.has(key) || added.has(key)) {
+            free = false
+            break
+          }
+        }
+        if (free) return true
       }
     }
     return false
   }
 
-  /** The river-edge signature a placement demands: for each slot, `true` if the
-   *  garden already insists that slot be water, `false` if it insists on land,
-   *  `null` if the slot is free. Used to *synthesise* a fitting tile so the
-   *  game can never dead-end. */
-  demand(orient, ta, tb) {
-    const cells = placementKeys(orient, ta, tb)
-    const own = new Set(cells)
-    const want = new Array(8).fill(null)
-    for (let i = 0; i < 8; i++) {
-      if (this.filled.has(cells[i])) return null
-      neighbourKeys(KEY_A(cells[i]), KEY_B(cells[i]), KEY_K(cells[i]), this._nb)
-      for (let j = 0; j < LONG_SIDE; j++) {
-        const m = this._nb[j]
-        if (own.has(m) || !this.filled.has(m)) continue
-        const w = isWater(this.biome.get(m))
-        if (want[i] === null) want[i] = w
-        else if (want[i] !== w) return null // this slot is asked to be two things
+  /**
+   * Every way a hat could cover `cell` with a river crossing on `side` of it.
+   * The same enumeration as _continuable, but collecting rather than stopping at
+   * the first — the deck uses it to cut a stream tile that carries the river on.
+   */
+  continuations(cell, side) {
+    const out = []
+    const fa = KEY_A(cell)
+    const fb = KEY_B(cell)
+    const fk = KEY_K(cell)
+    for (let o = 0; o < 12; o++) {
+      const flipped = o >= 6
+      const base = ORIENT_KITES[o]
+      for (let i = 0; i < 8; i++) {
+        const sd = PORT_SIDE[i]
+        if (sd === null || worldSide(sd, flipped) !== side) continue
+        if (base[i][2] !== fk) continue
+        const ta = fa - base[i][0]
+        const tb = fb - base[i][1]
+        let free = true
+        for (let j = 0; j < 8; j++) {
+          const kk = base[j]
+          const key = ((kk[0] + ta + 1024) << 15) | ((kk[1] + tb + 1024) << 3) | kk[2]
+          if (this.filled.has(key)) {
+            free = false
+            break
+          }
+        }
+        if (free) out.push({ o, ta, tb, slot: i })
       }
+    }
+    return out
+  }
+
+  /** Every mouth a hat placed here could take its water from — one per port
+   *  slot, as MOUTH_KEY(cell, side). A hat laid on any of these carries that
+   *  mouth's river on. */
+  servedMouths(orient, cells) {
+    const flipped = orient >= 6
+    const out = []
+    for (let i = 0; i < 8; i++) {
+      const s = PORT_SIDE[i]
+      if (s !== null) out.push(MOUTH_KEY(cells[i], worldSide(s, flipped)))
+    }
+    return out
+  }
+
+  /**
+   * Could the water be carried from one open mouth to another in at most `hops`
+   * hats? Cells in `avoid` count as occupied, so a town can ask whether the
+   * water could reach it *without* running through the ground it is about to
+   * stand on.
+   *
+   * This is what tells a short errand from a hopeless one, and distance across
+   * the board does not: the hat's crossings sit only on the six long sides of
+   * its outline, so where a river can actually go is far spikier than a circle
+   * round its mouth — a town four units away can be unreachable while one eight
+   * units off is two tiles' work.
+   *
+   * The last hat is the interesting one. A mouth is an empty cell with water
+   * waiting on one of its two long sides, and a hat covering that cell has a
+   * port on only one of them, so the two mouths cannot simply be walked into
+   * each other: the closing hat has to serve the destination *and* one of the
+   * mouths the chain has opened. So the search grows the chain's frontier and
+   * asks, at every step, whether any hat that would close the destination also
+   * serves something on it.
+   */
+  routeTo(fromCell, fromSide, toCell, toSide, hops, avoid = NO_CELLS) {
+    const closers = []
+    for (const c of this.continuations(toCell, toSide)) {
+      const cells = placementKeys(c.o, c.ta, c.tb)
+      if (cells.some((key) => avoid.has(key))) continue
+      closers.push({ place: c, cells, serves: new Set(this.servedMouths(c.o, cells)) })
+    }
+    if (closers.length === 0) return null
+
+    let level = [{ cell: fromCell, side: fromSide, used: avoid, first: null, laid: [] }]
+    for (let step = 0; step < hops && level.length; step++) {
+      for (const st of level) {
+        const key = MOUTH_KEY(st.cell, st.side)
+        for (const h of closers) {
+          if (!h.serves.has(key)) continue
+          if (h.cells.some((c) => st.used.has(c))) continue
+          // The ground this route needs. Whoever asked can then wave through
+          // every placement that does not touch it, instead of running the
+          // search again for each of a hundred candidates.
+          return { first: st.first ?? h.place, cells: new Set([...st.laid, ...h.cells]) }
+        }
+      }
+      if (step + 1 >= hops) break
+      const next = []
+      for (const st of level) {
+        for (const c of this.continuations(st.cell, st.side)) {
+          const cells = placementKeys(c.o, c.ta, c.tb)
+          if (cells.some((key) => st.used.has(key))) continue
+          const used = new Set(st.used)
+          for (const key of cells) used.add(key)
+          const first = st.first ?? c
+          const laid = [...st.laid, ...cells]
+          for (const x of this.crossings(c.o, c.ta, c.tb, cells, [])) {
+            if (x.slot === c.slot || this.filled.has(x.far) || used.has(x.far)) continue
+            next.push({ cell: x.far, side: 1 - x.side, used, first, laid })
+          }
+        }
+      }
+      // A full breadth at three hops is tens of thousands of hats; a wide even
+      // sample of it answers "could the water get there" just as well. Thinned
+      // by stride rather than by chance, so a seeded garden still replays.
+      if (next.length > 700) {
+        const stride = Math.ceil(next.length / 700)
+        const thin = []
+        for (let j = 0; j < next.length; j += stride) thin.push(next[j])
+        level = thin
+      } else level = next
+    }
+    return null
+  }
+
+  canCarryTo(fromCell, fromSide, toCell, toSide, hops, avoid = NO_CELLS) {
+    return this.routeTo(fromCell, fromSide, toCell, toSide, hops, avoid) !== null
+  }
+
+  /**
+   * The empty component containing `start`, with `open` set once it runs past
+   * the cap — which, for anything but a sealed pocket, means it reaches the rest
+   * of the plane. The visited set is local on purpose: sharing one across
+   * separate fills lets an earlier fill's footprint wall off a later one, and
+   * the open plane then reports itself as a tiny sealed pocket.
+   */
+  _pocket(start, added) {
+    const visited = new Set([start])
+    const stack = [start]
+    const out = []
+    while (stack.length) {
+      const key = stack.pop()
+      out.push(key)
+      if (out.length > POCKET_CAP) return { cells: out, open: true }
+      neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), this._nb2)
+      for (let j = 0; j < 4; j++) {
+        const m = this._nb2[j]
+        if (this.filled.has(m) || added.has(m) || visited.has(m)) continue
+        visited.add(m)
+        stack.push(m)
+      }
+    }
+    return { cells: out, open: false }
+  }
+
+  /** Could a hat ever be placed wholly inside this pocket? */
+  _fitsInside(pocket) {
+    const set = new Set(pocket)
+    for (const key of pocket) {
+      const fa = KEY_A(key)
+      const fb = KEY_B(key)
+      const fk = KEY_K(key)
+      for (let o = 0; o < 12; o++) {
+        const base = ORIENT_KITES[o]
+        for (let i = 0; i < 8; i++) {
+          if (base[i][2] !== fk) continue
+          const ta = fa - base[i][0]
+          const tb = fb - base[i][1]
+          let ok = true
+          for (let j = 0; j < 8; j++) {
+            const kk = base[j]
+            if (!set.has(((kk[0] + ta + 1024) << 15) | ((kk[1] + tb + 1024) << 3) | kk[2])) {
+              ok = false
+              break
+            }
+          }
+          if (ok) return true
+        }
+      }
+    }
+    return false
+  }
+
+  /**
+   * The river crossings the board forces at a spot: the port slots that *must*
+   * carry a river because the tile already across that edge does. A tile built
+   * with exactly this set is always placeable here as far as the river goes —
+   * every forced crossing is met, and no unforced one is opened — which is what
+   * makes a dead end impossible.
+   */
+  demandedPorts(orient, ta, tb, cells = placementKeys(orient, ta, tb)) {
+    const want = new Set()
+    for (let i = 0; i < 8; i++) if (this.filled.has(cells[i])) return null
+    for (const x of this.crossings(orient, ta, tb, cells, [])) {
+      if (this.filled.has(x.far) && this.ports.has(x.edge)) want.add(x.slot)
     }
     return want
   }
 
   // --- placement ------------------------------------------------------------
 
-  /**
-   * Drop a tile. Returns { closed: [{root, size, biome, score, tiles}],
-   * hollows: [key…] } — the latter being pockets retired this turn, which the
-   * renderer draws as tarns.
-   */
-  place(orient, ta, tb, biomes, tileIndex) {
+  /** Drop a tile. Returns { closed, cells, joined } — `joined` counting the
+   *  river crossings that met a river already on the board. */
+  place(orient, ta, tb, tile, tileIndex) {
     const cells = placementKeys(orient, ta, tb)
-    this.tiles.push({ orient, ta, tb, cells, biomes: biomes.slice(), flipped: orient >= 6 })
+    this.tiles.push({
+      orient,
+      ta,
+      tb,
+      cells,
+      biomes: tile.biomes.slice(),
+      ports: new Set(tile.ports),
+      flipped: orient >= 6,
+    })
 
-    const touched = this._addCells(cells, biomes, tileIndex)
-    const hollows = this._sealPockets(cells, touched)
+    let joined = 0
+    let firstEdge = null
+    for (const x of this.crossings(orient, ta, tb, cells, [])) {
+      if (!tile.ports.has(x.slot)) continue
+      this.ports.add(x.edge)
+      if (!this.riverParent.has(x.edge)) this.riverParent.set(x.edge, x.edge)
+      // every branch of this tile meets at its hub, so they are one network
+      if (firstEdge === null) firstEdge = x.edge
+      else {
+        const ra = this.riverFind(firstEdge)
+        const rb = this.riverFind(x.edge)
+        if (ra !== rb) this.riverParent.set(rb, ra)
+      }
+      if (this.filled.has(x.far)) {
+        joined++
+        this.openMouths.delete(x.edge) // the two halves have met
+      } else {
+        this.openMouths.set(x.edge, [x.far, 1 - x.side])
+      }
+    }
+
+    const touched = this._addCells(cells, tile.biomes, tileIndex)
     const closed = this._collectSealed(touched)
-    return { closed, hollows, cells }
+    return { closed, cells, joined }
   }
 
   _addCells(cells, biomes, tileIndex) {
@@ -234,14 +578,11 @@ export class Board {
       for (let j = 0; j < 4; j++) {
         const m = this._nb[j]
         if (!this.filled.has(m)) {
-          if (!this.dead.has(m)) {
-            const r = this.find(key)
-            this.ropen.set(r, this.ropen.get(r) + 1)
-          }
+          const r = this.find(key)
+          this.ropen.set(r, this.ropen.get(r) + 1)
           continue
         }
         if (!isNew.has(m)) {
-          // the neighbour's region just lost an open edge
           const rm = this.find(m)
           this.ropen.set(rm, this.ropen.get(rm) - 1)
           touched.add(rm)
@@ -252,103 +593,6 @@ export class Board {
     }
     return touched
   }
-
-  /**
-   * A hat needs eight kites, so an awkward placement can leave behind a pocket
-   * no tile will ever fit into. Left alone, such a pocket keeps an open edge on
-   * every region around it, and those regions can never seal — which the player
-   * would experience as the game quietly breaking after forty tiles.
-   *
-   * The pocket is *retired* rather than filled: its cells are marked dead, and
-   * every region facing them gives up the open edges that face them. Nothing is
-   * invented — the garden never grows land the player did not lay. What is left
-   * is a hollow between the pieces, which the renderer fills with water and the
-   * game calls a tarn.
-   */
-  _sealPockets(cells, touched) {
-    const CAP = 42
-    const seen = new Set()
-    const retired = []
-    for (const key of cells) {
-      neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), this._nb)
-      for (let j = 0; j < 4; j++) {
-        const start = this._nb[j]
-        if (this.filled.has(start) || seen.has(start) || this.dead.has(start)) continue
-        const pocket = this._pocket(start, CAP)
-        for (const p of pocket ?? []) seen.add(p)
-        if (!pocket) continue
-        if (pocket.length >= 8 && this._fitsInside(pocket)) continue
-        for (const p of pocket) {
-          this.dead.add(p)
-          retired.push(p)
-        }
-      }
-    }
-    // A retired pocket is enclosed by definition, so each of its edges faces a
-    // filled cell exactly once — one decrement per edge, no dedupe.
-    for (const p of retired) {
-      neighbourKeys(KEY_A(p), KEY_B(p), KEY_K(p), this._nb)
-      for (let j = 0; j < 4; j++) {
-        const m = this._nb[j]
-        if (!this.filled.has(m)) continue
-        const r = this.find(m)
-        this.ropen.set(r, this.ropen.get(r) - 1)
-        touched.add(r)
-      }
-    }
-    return retired
-  }
-
-  /** The empty component containing `start`, or null if it is bigger than `cap`
-   *  (which, for anything but a sealed pocket, means "open to the outside"). */
-  _pocket(start, cap) {
-    const seen = new Set([start])
-    const stack = [start]
-    const out = []
-    while (stack.length) {
-      const key = stack.pop()
-      out.push(key)
-      if (out.length > cap) return null
-      neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), this._nb)
-      for (let j = 0; j < 4; j++) {
-        const m = this._nb[j]
-        if (this.filled.has(m) || seen.has(m)) continue
-        seen.add(m)
-        stack.push(m)
-      }
-    }
-    return out
-  }
-
-  /** Could a hat ever be placed wholly inside this pocket? */
-  _fitsInside(pocket) {
-    const set = new Set(pocket)
-    // Anchor on every cell of the pocket, every orientation, every matching slot.
-    for (const key of pocket) {
-      const fa = KEY_A(key)
-      const fb = KEY_B(key)
-      const fk = KEY_K(key)
-      for (let o = 0; o < 12; o++) {
-        for (let i = 0; i < 8; i++) {
-          const base = ORIENT_KITES[o][i]
-          if (base[2] !== fk) continue
-          const ta = fa - base[0]
-          const tb = fb - base[1]
-          let ok = true
-          const ks = placementKeys(o, ta, tb)
-          for (let j = 0; j < 8; j++) {
-            if (!set.has(ks[j])) {
-              ok = false
-              break
-            }
-          }
-          if (ok) return true
-        }
-      }
-    }
-    return false
-  }
-
 
   _collectSealed(touched) {
     const out = []
@@ -370,18 +614,18 @@ export class Board {
   /** The cell of a region nearest its own centre — where its pennant goes. */
   _heart(root) {
     const cells = this.regionCells(root)
-    let ax = 0
+    let aa = 0
     let ab = 0
     for (const k of cells) {
-      ax += KEY_A(k)
+      aa += KEY_A(k)
       ab += KEY_B(k)
     }
-    ax /= cells.length
+    aa /= cells.length
     ab /= cells.length
     let best = cells[0]
     let bestD = Infinity
     for (const k of cells) {
-      const da = KEY_A(k) - ax
+      const da = KEY_A(k) - aa
       const db = KEY_B(k) - ab
       const d = da * da + da * db + db * db
       if (d < bestD) {
@@ -392,7 +636,7 @@ export class Board {
     return best
   }
 
-  /** Every region on the board, sealed or not, as {root, size, biome, sealed}. */
+  /** Every region on the board, sealed or not. */
   allRegions() {
     const out = []
     const seen = new Set()
@@ -406,19 +650,11 @@ export class Board {
   }
 
   /** Every cell of the region containing `key` — only needed for the "region
-   *  sealed" flourish, so a plain flood fill is fine. */
+   *  sealed" flourish, so a plain scan is fine. */
   regionCells(key) {
     const root = this.find(key)
     const out = []
     for (const k of this.filled) if (this.find(k) === root) out.push(k)
     return out
-  }
-
-  /** How close each unsealed region is to closing — drives the gentle outline
-   *  the renderer draws around the region under the cursor. */
-  regionOf(key) {
-    if (!this.filled.has(key)) return null
-    const r = this.find(key)
-    return { root: r, size: this.rsize.get(r), open: this.ropen.get(r), biome: this.biome.get(key), sealed: this.sealed.has(r) }
   }
 }

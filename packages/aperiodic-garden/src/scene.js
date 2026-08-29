@@ -1,16 +1,7 @@
 // Renderer, camera, lights, and every mesh in the garden.
 
 import * as THREE from 'three'
-import {
-  W,
-  worldY,
-  PROP_CONIFER,
-  PROP_BROADLEAF,
-  PROP_ROCK,
-  PROP_HOUSE,
-  PROP_BUSH,
-  PROP_PENNANT,
-} from './geometry.js'
+import { W, Buf, PROP_CONIFER, PROP_BROADLEAF, PROP_ROCK, PROP_HOUSE, PROP_BUSH, PROP_PENNANT } from './geometry.js'
 import { cellAt, KEY } from './hat.js'
 import {
   SKY_TOP,
@@ -22,8 +13,15 @@ import {
   HOUSE_WALLS,
   HOUSE_ROOFS,
   ROCK_GREYS,
+  ROCK,
+  ROCK_DARK,
+  SNOW,
+  SNOW_SHADE,
+  HINT,
+  GHOST_RIM,
   LOOK,
   shade,
+  mixHex,
 } from './palette.js'
 
 const lin = (hex) => new THREE.Color(hex).convertSRGBToLinear()
@@ -63,16 +61,21 @@ function houseBodyGeo() {
   g.translate(0, 0.065, 0)
   return g
 }
+function houseRoofGeo() {
+  const g = new THREE.ConeGeometry(0.16, 0.11, 4, 1)
+  g.rotateY(Math.PI / 4)
+  g.translate(0, 0.185, 0)
+  return g
+}
 function poleGeo() {
   const g = new THREE.CylinderGeometry(0.013, 0.016, 0.5, 5, 1)
   g.translate(0, 0.25, 0)
   return g
 }
 function pennantGeo() {
-  // A triangular flag, planted in every sealed region. One triangle drawn
-  // double-sided — emitting front and back faces instead would leave every
-  // vertex with two opposite normals averaging to zero, and the flag would
-  // vanish into unlit black.
+  // One triangle drawn double-sided. Emitting front and back faces instead
+  // would leave every vertex with two opposite normals averaging to zero, and
+  // the flag would vanish into unlit black.
   const g = new THREE.BufferGeometry()
   g.setAttribute(
     'position',
@@ -81,10 +84,146 @@ function pennantGeo() {
   g.computeVertexNormals()
   return g
 }
-function houseRoofGeo() {
-  const g = new THREE.ConeGeometry(0.16, 0.11, 4, 1)
-  g.rotateY(Math.PI / 4)
-  g.translate(0, 0.185, 0)
+
+// --- the peak ---------------------------------------------------------------
+
+/**
+ * The mountain is a *feature*, not terrain: a modelled peak standing on ground
+ * as flat as every other tile's. Building it this way keeps the board honest —
+ * the three opening hats are ordinary tiles you could have been dealt — and it
+ * lets the silhouette be a proper faceted mountain rather than whatever a
+ * height field happens to make of eight kites.
+ */
+function mountainMesh(radius, height) {
+  const buf = new Buf()
+  const SEG = 11
+  // The silhouette, as a profile: how far out the flank sits at each height.
+  const KEY_UP = [0, 0.2, 0.44, 0.68, 0.87, 1]
+  const KEY_OUT = [1, 0.83, 0.62, 0.4, 0.19, 0.035]
+  const outAt = (t) => {
+    for (let i = 1; i < KEY_UP.length; i++) {
+      if (t <= KEY_UP[i]) {
+        const f = (t - KEY_UP[i - 1]) / (KEY_UP[i] - KEY_UP[i - 1])
+        return KEY_OUT[i - 1] + (KEY_OUT[i] - KEY_OUT[i - 1]) * f
+      }
+    }
+    return KEY_OUT[KEY_OUT.length - 1]
+  }
+
+  const hash = (i) => {
+    const x = Math.sin(i * 127.1 + 311.7) * 43758.5453
+    return x - Math.floor(x)
+  }
+  const seg = (s) => ((s % SEG) + SEG) % SEG
+  // Each spur keeps its own girth all the way up, with a little ring-to-ring
+  // drift on top — enough to give the silhouette buttresses and gullies instead
+  // of the smooth cone a single radius produces.
+  const wob = (ring, s) => (0.74 + 0.5 * hash(seg(s))) * (0.93 + 0.15 * hash(seg(s) + ring * 17))
+  // Where this spur's snow starts. Colouring by ring would put the snowline on
+  // a ring, and a ring is a circle: the cap came out a smooth grey dome. So the
+  // snowline gets a ring of its own, *bent* — every spur sets its own height for
+  // it, and the two rings that share that height (one rock, one snow) put a hard
+  // ragged edge exactly there.
+  const snowline = (s) => 0.55 + 0.26 * (hash(seg(s) + 31) - 0.5)
+
+  // rings, foot to summit; SNOW_RING and the one below it ride the bent line
+  const SNOW_RING = 4
+  // the two entries at SNOW_RING-1 and SNOW_RING are nominal — heightAt bends
+  // both of those rings onto snowline(s) instead
+  const BAND = [0, 0.14, 0.28, 0.55, 0.55, 0.72, 0.88, 1]
+  const heightAt = (ring, s) => (ring === SNOW_RING - 1 || ring === SNOW_RING ? snowline(s) : BAND[ring])
+
+  const pt = (ring, s) => {
+    const a = (seg(s) / SEG) * Math.PI * 2
+    const t = heightAt(ring, s)
+    const r = radius * outAt(t) * (ring === BAND.length - 1 ? 1 : wob(ring, s))
+    return [Math.cos(a) * r, height * t, Math.sin(a) * r]
+  }
+  const col = (ring, s) =>
+    ring >= SNOW_RING
+      ? mixHex(SNOW, SNOW_SHADE, hash(s * 3 + ring) * 0.5)
+      : mixHex(ROCK_DARK, ROCK, hash(s * 7 + ring))
+
+  for (let ring = 0; ring < BAND.length - 1; ring++) {
+    for (let s = 0; s < SEG; s++) {
+      const a = pt(ring, s)
+      const b = pt(ring, s + 1)
+      const c = pt(ring + 1, s + 1)
+      const d = pt(ring + 1, s)
+      const ca = col(ring, s)
+      const cb = col(ring, s + 1)
+      const cc = col(ring + 1, s + 1)
+      const cd = col(ring + 1, s)
+      // outward-facing: the other winding turns the peak inside out and it
+      // renders as an unlit black lump
+      buf.tri(a, c, b, ca, cc, cb)
+      buf.tri(a, d, c, ca, cd, cc)
+    }
+  }
+  // cap the summit
+  const top = [0, height * 1.03, 0]
+  for (let s = 0; s < SEG; s++) {
+    buf.tri(pt(BAND.length - 1, s + 1), pt(BAND.length - 1, s), top, SNOW, SNOW, SNOW)
+  }
+  return buf
+}
+
+// --- the mill ---------------------------------------------------------------
+
+// Pale, so the wheel stands out against the mill's slate roof rather than
+// disappearing into it — at card size the wheel is the whole point of the town.
+const WOOD = 0xc8a273
+const WOOD_DARK = 0x9a7346
+const SLATE = 0x5d6775
+const PLASTER = 0xe6dcc6
+
+/** A water wheel: two rims on six spokes, eight paddles and an axle, built in
+ *  the XY plane so the whole thing spins about its own Z once water reaches it. */
+function wheelGroup() {
+  const g = new THREE.Group()
+  const rim = new THREE.MeshLambertMaterial({ color: lin(WOOD) })
+  const paddle = new THREE.MeshLambertMaterial({ color: lin(WOOD_DARK) })
+  const R = 0.2
+  for (const z of [-0.06, 0.06]) {
+    const t = new THREE.Mesh(new THREE.TorusGeometry(R, 0.018, 4, 14), rim)
+    t.position.z = z
+    t.castShadow = true
+    g.add(t)
+  }
+  const sg = new THREE.BoxGeometry(R * 1.9, 0.02, 0.02)
+  for (let i = 0; i < 3; i++) {
+    const m = new THREE.Mesh(sg, rim)
+    m.rotation.z = (i / 3) * Math.PI
+    g.add(m)
+  }
+  const pg = new THREE.BoxGeometry(0.06, 0.026, 0.15)
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2
+    const m = new THREE.Mesh(pg, paddle)
+    m.position.set(Math.cos(a) * (R - 0.015), Math.sin(a) * (R - 0.015), 0)
+    m.rotation.z = a
+    m.castShadow = true
+    g.add(m)
+  }
+  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.19, 6), rim)
+  axle.rotation.x = Math.PI / 2
+  g.add(axle)
+  return g
+}
+
+/** The mill itself: a plastered house under slate, a size up from the cottages
+ *  the hamlet biome scatters around it. */
+function millHouse() {
+  const g = new THREE.Group()
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.24, 0.24), new THREE.MeshLambertMaterial({ color: lin(PLASTER) }))
+  body.position.y = 0.12
+  body.castShadow = true
+  g.add(body)
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(0.245, 0.16, 4), new THREE.MeshLambertMaterial({ color: lin(SLATE) }))
+  roof.rotation.y = Math.PI / 4
+  roof.position.y = 0.31
+  roof.castShadow = true
+  g.add(roof)
   return g
 }
 
@@ -107,9 +246,9 @@ class Instancer {
       this.cap = Math.max(64, Math.ceil(n * 1.6))
       this.mesh = new THREE.InstancedMesh(this.geo, this.mat, this.cap)
       this.mesh.castShadow = this.shadow
-      this.mesh.receiveShadow = false
       this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
       this.mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(this.cap * 3), 3)
+      this.mesh.frustumCulled = false
       this.scene.add(this.mesh)
     }
     if (!this.mesh) return
@@ -122,7 +261,7 @@ class Instancer {
       const p = list[i]
       pos.set(p.x, p.y, p.z)
       q.setFromAxisAngle(UP, p.rot)
-      scl.set(p.s, p.sy ?? p.s, p.s)
+      scl.set(p.s, p.s, p.s)
       m.compose(pos, q, scl)
       this.mesh.setMatrixAt(i, m)
       col.set(p.colour ?? 0xffffff).convertSRGBToLinear()
@@ -131,7 +270,6 @@ class Instancer {
     this.mesh.count = n
     this.mesh.instanceMatrix.needsUpdate = true
     this.mesh.instanceColor.needsUpdate = true
-    this.mesh.frustumCulled = false
   }
 }
 const UP = new THREE.Vector3(0, 1, 0)
@@ -139,18 +277,12 @@ const UP = new THREE.Vector3(0, 1, 0)
 // --- water ------------------------------------------------------------------
 
 const WATER_VERT = /* glsl */ `
-  uniform float uTime;
   varying vec3 vPos;
-  varying float vWave;
   #include <common>
   #include <fog_pars_vertex>
   void main() {
-    vec3 p = position;
-    float w = sin(p.x * 2.9 + uTime * 1.15) * 0.5 + sin(p.z * 2.3 - uTime * 0.95) * 0.5;
-    p.y += w * 0.011;
-    vWave = w;
-    vPos = p;
-    vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+    vPos = position;
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
     gl_Position = projectionMatrix * mvPosition;
     #include <fog_vertex>
   }
@@ -164,16 +296,14 @@ const WATER_FRAG = /* glsl */ `
   uniform vec3 uShallow;
   uniform vec3 uDeep;
   varying vec3 vPos;
-  varying float vWave;
   #include <common>
   #include <fog_pars_fragment>
   void main() {
-    vec3 c = mix(uDeep, uShallow, 0.42 + 0.34 * vWave);
-    float ripple = sin(vPos.x * 11.0 + uTime * 1.9) * sin(vPos.z * 8.5 - uTime * 1.35);
-    c += smoothstep(0.72, 1.0, ripple) * 0.12;
-    float glint = sin(vPos.x * 24.0 - uTime * 2.6) * sin(vPos.z * 19.0 + uTime * 1.7);
-    c += smoothstep(0.93, 1.0, glint) * 0.35;
-    gl_FragColor = vec4(c, 0.92);
+    float w = sin(vPos.x * 4.6 + uTime * 1.3) * 0.5 + sin(vPos.z * 3.9 - uTime * 1.05) * 0.5;
+    vec3 c = mix(uDeep, uShallow, 0.45 + 0.32 * w);
+    float glint = sin(vPos.x * 26.0 - uTime * 2.6) * sin(vPos.z * 21.0 + uTime * 1.7);
+    c += smoothstep(0.9, 1.0, glint) * 0.4;
+    gl_FragColor = vec4(c, 1.0);
     #include <colorspace_fragment>
     #include <fog_fragment>
   }
@@ -196,21 +326,16 @@ export class Garden {
 
     this.camera = new THREE.PerspectiveCamera(32, 1, 0.5, 200)
 
-    const hemi = new THREE.HemisphereLight(lin(SKY_TOP), lin(0x6f6e58), 1.32)
-    this.scene.add(hemi)
+    this.scene.add(new THREE.HemisphereLight(lin(SKY_TOP), lin(0x6f6e58), 1.3))
     this.sun = new THREE.DirectionalLight(lin(0xfff3dd), 2.3)
-    this.sun.position.set(-8, 14, 7)
     this.sun.castShadow = true
     this.sun.shadow.mapSize.set(2048, 2048)
     this.sun.shadow.camera.near = 1
-    this.sun.shadow.camera.far = 60
     this.sun.shadow.bias = -0.0012
     this.sun.shadow.normalBias = 0.02
     this.scene.add(this.sun)
     this.scene.add(this.sun.target)
 
-    // A shallow plate under the garden so it sits on something. It is sized to
-    // the garden each rebuild and tinted near the fog, so its rim dissolves.
     this.haze = new THREE.Mesh(
       new THREE.CircleGeometry(1, 72),
       new THREE.MeshBasicMaterial({
@@ -222,7 +347,7 @@ export class Garden {
       }),
     )
     this.haze.rotation.x = -Math.PI / 2
-    this.haze.position.y = -0.62
+    this.haze.position.y = -0.55
     this.scene.add(this.haze)
 
     this.landMat = new THREE.MeshLambertMaterial({ vertexColors: true })
@@ -238,18 +363,26 @@ export class Garden {
       uShallow: { value: lin(WATER_SHALLOW) },
       uDeep: { value: lin(WATER_DEEP) },
     }
-    this.waterMat = new THREE.ShaderMaterial({
+    const waterMat = new THREE.ShaderMaterial({
       uniforms: this.waterUniforms,
       fog: true,
       vertexShader: WATER_VERT,
       fragmentShader: WATER_FRAG,
-      transparent: true,
-      depthWrite: false,
     })
-    this.water = new THREE.Mesh(new THREE.BufferGeometry(), this.waterMat)
+    this.water = new THREE.Mesh(new THREE.BufferGeometry(), waterMat)
     this.water.frustumCulled = false
     this.water.renderOrder = 2
     this.scene.add(this.water)
+
+    // the peak, added once the garden knows where its summit is
+    this.mountain = new THREE.Mesh(
+      new THREE.BufferGeometry(),
+      new THREE.MeshLambertMaterial({ vertexColors: true }),
+    )
+    this.mountain.castShadow = true
+    this.mountain.receiveShadow = true
+    this.mountain.visible = false
+    this.scene.add(this.mountain)
 
     this.props = {
       trunk: new Instancer(this.scene, trunkGeo(), 0x6a4f3a),
@@ -263,15 +396,51 @@ export class Garden {
       pennant: new Instancer(this.scene, pennantGeo(), 0xffffff, { side: THREE.DoubleSide }),
     }
 
-    // The held tile is solid, not translucent — a ghosted one reads as a
-    // rendering fault on this palette. It floats, bobs, and casts a real shadow
-    // onto the garden, which is what says "not placed yet" without any tint.
-    this.ghostMat = new THREE.MeshLambertMaterial({ vertexColors: true })
-    this.ghost = new THREE.Mesh(new THREE.BufferGeometry(), this.ghostMat)
+    // --- the piece under the cursor ---
+    // Drawn inline with the garden, exactly where it will land. The pulsing
+    // outline is what says "not laid yet"; a raised ghost only makes the player
+    // guess where it would come down.
+    this.ghost = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshLambertMaterial({ vertexColors: true }))
     this.ghost.frustumCulled = false
-    this.ghost.castShadow = true
+    this.ghost.renderOrder = 3
     this.ghost.visible = false
     this.scene.add(this.ghost)
+
+    this.ghostWater = new THREE.Mesh(new THREE.BufferGeometry(), waterMat)
+    this.ghostWater.frustumCulled = false
+    this.ghostWater.renderOrder = 4
+    this.ghostWater.visible = false
+    this.scene.add(this.ghostWater)
+
+    this.rimMat = new THREE.MeshBasicMaterial({
+      color: lin(GHOST_RIM),
+      transparent: true,
+      opacity: 0.9,
+      depthWrite: false,
+    })
+    this.rim = new THREE.Mesh(new THREE.BufferGeometry(), this.rimMat)
+    this.rim.frustumCulled = false
+    this.rim.renderOrder = 5
+    this.rim.visible = false
+    this.scene.add(this.rim)
+
+    // --- where a tile could go ---
+    this.hintMat = new THREE.PointsMaterial({
+      color: lin(HINT),
+      size: 0.5,
+      map: glowTexture(),
+      transparent: true,
+      opacity: 0.5,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true,
+    })
+    const hg = new THREE.BufferGeometry()
+    hg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3))
+    this.hints = new THREE.Points(hg, this.hintMat)
+    this.hints.frustumCulled = false
+    this.hints.renderOrder = 1
+    this.scene.add(this.hints)
 
     this.flashMat = new THREE.MeshBasicMaterial({
       color: 0xffffff,
@@ -282,7 +451,7 @@ export class Garden {
     })
     this.flash = new THREE.Mesh(new THREE.BufferGeometry(), this.flashMat)
     this.flash.frustumCulled = false
-    this.flash.renderOrder = 4
+    this.flash.renderOrder = 6
     this.flash.visible = false
     this.scene.add(this.flash)
     this.flashT = 0
@@ -307,6 +476,50 @@ export class Garden {
   }
 
   // --- content ---------------------------------------------------------------
+
+  setMountain(x, z, radius = 0.88, height = 1.6) {
+    applyBuf(this.mountain.geometry, mountainMesh(radius, height))
+    this.mountain.position.set(x, 0, z)
+    this.mountain.visible = true
+    this.peakY = height * 1.03
+  }
+
+  /**
+   * The towns the river is meant to reach. Each gets a mill house and a wheel
+   * standing across its leat; the wheel only turns once the water arrives, which
+   * is the whole reward made visible.
+   */
+  setSites(sites) {
+    if (!this.siteRoot) {
+      this.siteRoot = new THREE.Group()
+      this.scene.add(this.siteRoot)
+    }
+    if (this._siteSig === JSON.stringify(sites)) return
+    this._siteSig = JSON.stringify(sites)
+    this.siteRoot.clear()
+    this.wheels = []
+    for (const s of sites) {
+      let dx = s.hx - s.x
+      let dz = s.hz - s.z
+      const len = Math.hypot(dx, dz) || 1
+      dx /= len
+      dz /= len
+      // the wheel straddles the leat just inside the tile, its plane along the
+      // flow; a rotation about Y by this angle carries local +X onto the stream
+      const pivot = new THREE.Group()
+      pivot.position.set(s.x + dx * 0.3, 0.15, s.z + dz * 0.3)
+      pivot.rotation.y = Math.atan2(-dz, dx)
+      const wheel = wheelGroup()
+      pivot.add(wheel)
+      this.siteRoot.add(pivot)
+      this.wheels.push({ wheel, running: s.done })
+
+      const house = millHouse()
+      house.position.set(s.x + dx * 0.62 - dz * 0.3, 0, s.z + dz * 0.62 + dx * 0.3)
+      house.rotation.y = Math.atan2(dx, dz)
+      this.siteRoot.add(house)
+    }
+  }
 
   setGarden(bundle, bounds) {
     applyBuf(this.land.geometry, bundle.land)
@@ -345,7 +558,6 @@ export class Garden {
       }
     }
     for (const k of Object.keys(lists)) this.props[k].set(lists[k])
-
     if (bounds) this.fitShadow(bounds)
   }
 
@@ -361,17 +573,36 @@ export class Garden {
     this.sunRadius = pad
     this.scene.fog.near = Math.max(16, r * 1.7)
     this.scene.fog.far = this.scene.fog.near + r * 2.6 + 30
-    this.haze.position.set(cx, -0.62, cz)
+    this.haze.position.set(cx, -0.55, cz)
     this.haze.scale.setScalar(r + 7)
   }
 
-  setGhost(buf) {
-    if (!buf) {
+  /** Soft lights over every distinct spot a tile could go. */
+  setHints(points) {
+    const arr = new Float32Array(Math.max(1, points.length) * 3)
+    for (let i = 0; i < points.length; i++) {
+      arr[i * 3] = points[i][0]
+      arr[i * 3 + 1] = 0.16
+      arr[i * 3 + 2] = points[i][1]
+    }
+    this.hints.geometry.setAttribute('position', new THREE.BufferAttribute(arr, 3))
+    this.hints.geometry.setDrawRange(0, points.length)
+    this.hints.geometry.computeBoundingSphere()
+  }
+
+  setGhost(g) {
+    if (!g) {
       this.ghost.visible = false
+      this.ghostWater.visible = false
+      this.rim.visible = false
       return
     }
-    applyBuf(this.ghost.geometry, buf)
+    applyBuf(this.ghost.geometry, g.buf)
+    applyBuf(this.ghostWater.geometry, g.water)
+    applyBuf(this.rim.geometry, g.rim)
     this.ghost.visible = true
+    this.ghostWater.visible = g.water.count > 0
+    this.rim.visible = true
   }
 
   playFlash(buf) {
@@ -383,17 +614,16 @@ export class Garden {
   // --- camera ----------------------------------------------------------------
 
   frame(bounds, instant = false) {
-    const { cx, cz, r, maxY = 1 } = bounds
+    const { cx, cz, r } = bounds
     this.lastBounds = bounds
-    // Fit properly rather than guessing: at this camera pitch a garden of world
-    // radius r covers 2r·sin(elevation) vertically, plus whatever the massif
-    // adds. Guessing a multiplier leaves the garden hanging off the bottom of
-    // the screen the moment it grows in one direction more than the other.
+    // Fit properly rather than guessing: at this pitch a garden of world radius
+    // r covers 2r·sin(elevation) vertically, plus whatever the peak adds.
     const elev = Math.PI / 2 - this.polar
     const half = Math.tan((this.camera.fov * Math.PI) / 360)
+    const maxY = this.peakY ?? 1
     const vert = r * Math.sin(elev) + maxY * 0.5 * Math.cos(elev) + 0.9
     const horiz = r + 0.9
-    this.wantTarget.set(cx, maxY * 0.3, cz)
+    this.wantTarget.set(cx, maxY * 0.22, cz)
     this.wantDist = Math.max(9, Math.max(vert / half, horiz / (half * this.camera.aspect)) * 0.96)
     if (instant) {
       this.target.copy(this.wantTarget)
@@ -415,7 +645,7 @@ export class Garden {
     const ca = Math.cos(this.azimuth)
     const sa = Math.sin(this.azimuth)
     this.wantTarget.x += (-dx * ca - dy * sa) * s
-    this.wantTarget.z += (-dx * -sa - dy * ca) * s
+    this.wantTarget.z += (dx * sa - dy * ca) * s
   }
 
   updateCamera(dt) {
@@ -432,7 +662,7 @@ export class Garden {
 
     // Keep the sun a fixed 48° off the camera's shoulder. Orbit a fixed sun and
     // half the turns leave the garden flat or backlit; carry it with the camera
-    // and the light is always raking across the tiles, whichever way you look.
+    // and the light always rakes across the tiles, whichever way you look.
     const pad = this.sunRadius ?? 10
     const az = this.azimuth + 0.84
     this.sun.position.set(
@@ -445,27 +675,16 @@ export class Garden {
   }
 
   /**
-   * Screen point → kite cell. Rather than raycasting fifty thousand triangles on
-   * every mouse move, intersect the ground plane, read the height of whatever
-   * cell that lands in, and intersect again at that height. Two corrections is
-   * plenty even on the shoulder of the mountain.
+   * Screen point → kite cell. The ground is flat, so one intersection with
+   * y = 0 is exact — no iterating against a height field any more.
    */
-  pick(nx, ny, game) {
+  pick(nx, ny) {
     this.ray.setFromCamera({ x: nx, y: ny }, this.camera)
-    let y = 0.2
-    let cell = null
-    for (let i = 0; i < 3; i++) {
-      this.plane.constant = -y
-      const hit = this.ray.ray.intersectPlane(this.plane, this._v)
-      if (!hit) return null
-      const [a, b, k] = cellAt(hit.x / W, hit.z / W)
-      cell = KEY(a, b, k)
-      const e = game.elev.get(cell)
-      const ny2 = e === undefined ? 0.2 : worldY(e)
-      if (Math.abs(ny2 - y) < 0.01) break
-      y = ny2
-    }
-    return { cell, point: this._v.clone() }
+    this.plane.constant = 0
+    const hit = this.ray.ray.intersectPlane(this.plane, this._v)
+    if (!hit) return null
+    const [a, b, k] = cellAt(hit.x / W, hit.z / W)
+    return { cell: KEY(a, b, k), x: hit.x, z: hit.z }
   }
 
   project(x, y, z) {
@@ -475,11 +694,12 @@ export class Garden {
 
   render(dt, t) {
     this.waterUniforms.uTime.value = t
-    if (this.ghost.visible) this.ghost.position.y = Math.sin(t * 1.7) * 0.035
+    this.hintMat.opacity = 0.34 + 0.2 * Math.sin(t * 1.6)
+    for (const w of this.wheels ?? []) if (w.running) w.wheel.rotation.z -= dt * 1.5
+    this.rimMat.opacity = 0.62 + 0.3 * Math.sin(t * 3.4)
     if (this.flashT > 0) {
       this.flashT = Math.max(0, this.flashT - dt * 1.15)
-      const f = this.flashT
-      this.flashMat.opacity = Math.sin(Math.min(1, f) * Math.PI) * 0.5
+      this.flashMat.opacity = Math.sin(Math.min(1, this.flashT) * Math.PI) * 0.5
       this.flash.visible = this.flashT > 0
     }
     this.renderer.render(this.scene, this.camera)
@@ -498,6 +718,23 @@ function fadeTexture() {
   g.fillStyle = grad
   g.fillRect(0, 0, 128, 128)
   return new THREE.CanvasTexture(c)
+}
+
+/** A soft spark: bright core, long falloff. */
+function glowTexture() {
+  const c = document.createElement('canvas')
+  c.width = c.height = 64
+  const g = c.getContext('2d')
+  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32)
+  grad.addColorStop(0, 'rgba(255,255,255,1)')
+  grad.addColorStop(0.18, 'rgba(255,246,214,0.85)')
+  grad.addColorStop(0.55, 'rgba(255,232,168,0.22)')
+  grad.addColorStop(1, 'rgba(255,232,168,0)')
+  g.fillStyle = grad
+  g.fillRect(0, 0, 64, 64)
+  const t = new THREE.CanvasTexture(c)
+  t.colorSpace = THREE.SRGBColorSpace
+  return t
 }
 
 /** A soft vertical gradient, drawn as a full-screen background. */
@@ -522,8 +759,7 @@ function applyBuf(geo, buf) {
   geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(buf.pos), 3))
   geo.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(buf.nrm), 3))
   geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(buf.col), 3))
-  geo.attributes.position.needsUpdate = true
   geo.computeBoundingSphere()
 }
 
-export { applyBuf, lin }
+export { applyBuf, Buf }

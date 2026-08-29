@@ -246,6 +246,93 @@ kbd {
   padding: 0 4px;
 }
 
+/* --- the errand --------------------------------------------------------- */
+
+#quest {
+  position: fixed;
+  top: 14px;
+  left: 18px;
+  width: 208px;
+  padding: 9px 13px 11px;
+  border-radius: 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 22px rgba(38, 55, 70, 0.13);
+  backdrop-filter: blur(6px);
+  z-index: 5;
+}
+
+#quest.hidden {
+  display: none;
+}
+
+#quest.done {
+  border-color: rgba(120, 155, 90, 0.6);
+  background: rgba(243, 249, 235, 0.94);
+}
+
+#quest .eyebrow {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 3px;
+}
+
+#quest b {
+  display: block;
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+#quest span#questhint {
+  display: block;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  margin-top: 3px;
+}
+
+/* --- the tile the mill lets you swap to --------------------------------- */
+
+#swap {
+  position: absolute;
+  right: -66px;
+  bottom: 46px;
+  width: 62px;
+  padding: 4px 3px 3px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: 0 5px 16px rgba(38, 55, 70, 0.15);
+  cursor: pointer;
+  font: inherit;
+}
+
+#swap.hidden {
+  display: none;
+}
+
+#swap canvas {
+  display: block;
+  width: 54px;
+  height: 44px;
+}
+
+#swap span {
+  display: block;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+#swap:hover {
+  background: #fff;
+}
+
 /* --- score pops --------------------------------------------------------- */
 
 #pops {

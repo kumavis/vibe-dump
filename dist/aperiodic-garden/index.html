@@ -9,8 +9,8 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23cfe0e8'/><path d='M9.00,18.02 2.00,22.06 4.33,26.10 13.67,26.10 16.00,22.06 23.00,26.10 30.00,22.06 27.67,18.02 23.00,18.02 23.00,9.94 16.00,5.90 13.67,9.94 9.00,9.94Z' fill='%236f9a52' stroke='%233c5c34' stroke-width='1.4' stroke-linejoin='round'/></svg>"
     />
-    <script type="module" crossorigin src="./assets/index-BZOdC3sy.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BzqInwPz.css">
+    <script type="module" crossorigin src="./assets/index-BfyrgCpt.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CblAHltb.css">
   </head>
   <body>
     <canvas id="scene"></canvas>
@@ -26,12 +26,22 @@
 
     <div id="feed"></div>
 
+    <aside id="quest" class="hidden">
+      <span class="eyebrow">errand</span>
+      <b id="questtitle"></b>
+      <span id="questhint"></span>
+    </aside>
+
     <footer id="hand">
       <div id="tilecard">
         <canvas id="tileart" width="220" height="180"></canvas>
         <div id="tilekind">meadow</div>
         <div id="contact"></div>
         <div id="fitcount"></div>
+        <button id="swap" class="hidden" title="take the other tile instead">
+          <canvas id="nextart" width="110" height="90"></canvas>
+          <span>swap</span>
+        </button>
         <div id="tilebtns">
           <button id="prev" title="previous fit (Q)">⟲</button>
           <button id="next" title="next fit (E)">⟳</button>
@@ -54,10 +64,11 @@
         and never repeats. Three hats pinwheel around a snow-capped peak; a river runs off it.
       </p>
       <ul>
-        <li><b>Move</b> the mouse to choose where the next hat goes. Only legal spots are offered.</li>
-        <li><b>Scroll</b> (or <b>Q</b>/<b>E</b>) to cycle the ways it fits there — twelve orientations, mirrored ones included.</li>
-        <li><b>Click</b> to lay it. A river must meet a river, so a stream can never dead-end into a bank.</li>
-        <li>Ring a <b>meadow, forest, hills, hamlet or river</b> completely and it seals — big points, and more tiles.</li>
+        <li><b>Move</b> the mouse near a light. The hat turns itself to a way it fits there.</li>
+        <li><b>Scroll</b> (or <b>Q</b>/<b>E</b>) to cycle the other ways — twelve orientations, mirrored ones included.</li>
+        <li><b>Click</b> to lay it. Covers may meet however they like; only two things are forbidden — walling in a stream, and leaving a gap no hat could ever fill.</li>
+        <li>Ring a <b>meadow, forest, hills, hamlet or scree</b> completely and it seals: big points, and more tiles.</li>
+        <li>A mill stands off across the grass with a dry leat. <b>Carry the headwater to it</b> — two or three stream tiles — and its wheel starts turning.</li>
       </ul>
       <div class="row">
         <button id="play">Plant the garden</button>

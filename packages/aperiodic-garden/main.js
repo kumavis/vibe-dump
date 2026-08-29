@@ -3,19 +3,21 @@
 import { Game } from './src/game.js'
 import { Garden } from './src/scene.js'
 import { Ambience } from './src/ambient.js'
-import { buildGarden, buildGhost, W, worldY, Buf } from './src/geometry.js'
+import { buildGarden, buildGhost, outlineRibbon, hubOf, branchPath, W, Buf } from './src/geometry.js'
 import {
   KEY_A,
   KEY_B,
   KEY_K,
   ORIENT_KITES,
-  orientOutline,
+  cart,
   kiteCentre,
   kiteCorners,
-  cart,
+  neighbourKeys,
+  orientOutline,
   placementKeys,
 } from './src/hat.js'
-import { LOOK } from './src/palette.js'
+import { SUMMIT } from './src/tiles.js'
+import { LOOK, RIVER_BANK, WATER_SHALLOW, GHOST_RIM, css } from './src/palette.js'
 import { BIOME_NAME } from './src/board.js'
 
 const canvas = document.getElementById('scene')
@@ -36,20 +38,36 @@ function boundsOf(g) {
   let maxX = -Infinity
   let minZ = Infinity
   let maxZ = -Infinity
-  let maxY = 0
   for (const key of g.board.filled) {
     const [x, z] = kiteCentre(KEY_A(key), KEY_B(key), KEY_K(key))
     if (x < minX) minX = x
     if (x > maxX) maxX = x
     if (z < minZ) minZ = z
     if (z > maxZ) maxZ = z
-    const y = worldY(g.elev.get(key) ?? 0)
-    if (y > maxY) maxY = y
   }
   const cx = ((minX + maxX) / 2) * W
   const cz = ((minZ + maxZ) / 2) * W
   const r = Math.max(maxX - minX, maxZ - minZ) * 0.5 * W + 0.7
-  return { cx, cz, r, maxY }
+  return { cx, cz, r }
+}
+
+/**
+ * One soft light per place a tile could go. Every legal placement has a hub;
+ * rounding those onto a coarse grid collapses the dozens of ways to fill one
+ * gap down to a single spark sitting over it.
+ */
+function hintPoints() {
+  const seen = new Set()
+  const out = []
+  for (const f of game.fits) {
+    const [x, z] = hubOf(f.cells)
+    const k = `${Math.round(x / 0.55)},${Math.round(z / 0.55)}`
+    if (seen.has(k)) continue
+    seen.add(k)
+    out.push([x, z])
+    if (out.length >= 160) break
+  }
+  return out
 }
 
 function rebuild(instantFrame = false) {
@@ -57,19 +75,24 @@ function rebuild(instantFrame = false) {
   const b = boundsOf(game)
   garden.setGarden(bundle, b)
   garden.frame(b, instantFrame)
-  ambience.sync(game)
+  ambience.sync(game, bundle.branches)
+  garden.setHints(game.over ? [] : hintPoints())
+  garden.setSites(
+    game.sites.map((s) => ({ x: s.mid[0] * W, z: s.mid[1] * W, hx: s.hub[0] * W, hz: s.hub[1] * W, done: s.done })),
+  )
 }
 
 // --- the tile card ----------------------------------------------------------
 
 const artCtx = el('tileart').getContext('2d')
+const nextCtx = el('nextart').getContext('2d')
 
-function drawTileCard(orient) {
-  const c = artCtx
+const drawTileCard = (orient) => paintTile(artCtx, game.tile, orient, 14, 2.2)
+
+function paintTile(c, tile, orient, pad, lw) {
   const wpx = c.canvas.width
   const hpx = c.canvas.height
   c.clearRect(0, 0, wpx, hpx)
-  const tile = game.tile
   if (!tile) return
   const cells = ORIENT_KITES[orient]
   const polys = cells.map(([a, b, k]) => kiteCorners(a, b, k).map(([p, q]) => cart(p, q)))
@@ -84,15 +107,14 @@ function drawTileCard(orient) {
       minY = Math.min(minY, y)
       maxY = Math.max(maxY, y)
     }
-  const pad = 14
   const s = Math.min((wpx - pad * 2) / (maxX - minX), (hpx - pad * 2) / (maxY - minY))
   const ox = (wpx - (maxX - minX) * s) / 2 - minX * s
   const oy = (hpx - (maxY - minY) * s) / 2 + maxY * s
   const P = ([x, y]) => [ox + x * s, oy - y * s]
 
   c.lineJoin = 'round'
+  c.lineCap = 'round'
   for (let i = 0; i < 8; i++) {
-    const look = LOOK[tile.biomes[i]]
     c.beginPath()
     polys[i].forEach((p, j) => {
       const [x, y] = P(p)
@@ -100,85 +122,119 @@ function drawTileCard(orient) {
       else c.lineTo(x, y)
     })
     c.closePath()
-    c.fillStyle = '#' + look.top.toString(16).padStart(6, '0')
+    c.fillStyle = css(LOOK[tile.biomes[i]].top)
     c.fill()
-    c.strokeStyle = 'rgba(255,255,255,0.32)'
+    c.strokeStyle = 'rgba(255,255,255,0.3)'
     c.lineWidth = 1
     c.stroke()
   }
-  // the hat's own outline, so its 13 sides are unmistakable
-  c.beginPath()
-  for (const poly of polys) {
-    poly.forEach((p, j) => {
-      const [x, y] = P(p)
-      if (j === 0) c.moveTo(x, y)
-      else c.lineTo(x, y)
-    })
-    c.closePath()
-  }
-  c.strokeStyle = 'rgba(40,52,60,0.14)'
-  c.lineWidth = 1
-  c.stroke()
 
-  const outline = orientOutline(orient)
+  // the hat's own 13-sided outline, so the shape is unmistakable
   c.beginPath()
-  outline.forEach((p, j) => {
+  orientOutline(orient).forEach((p, j) => {
     const [x, y] = P(p)
     if (j === 0) c.moveTo(x, y)
     else c.lineTo(x, y)
   })
   c.closePath()
-  c.strokeStyle = 'rgba(34,45,54,0.75)'
-  c.lineWidth = 2.4
+  c.strokeStyle = 'rgba(34,45,54,0.7)'
+  c.lineWidth = lw
   c.stroke()
-}
 
+  // and the stream running through it, drawn from the same path the garden uses
+  if (tile.ports.size) {
+    const keys = placementKeys(orient, 0, 0)
+    const hub = hubOf(keys)
+    for (const pass of [0, 1]) {
+      c.strokeStyle = pass === 0 ? css(RIVER_BANK) : css(WATER_SHALLOW)
+      c.lineWidth = (pass === 0 ? 4.1 : 2.3) * lw
+      for (const slot of tile.ports) {
+        const path = branchPath(keys, orient, slot, hub)
+        c.beginPath()
+        path.forEach((p, j) => {
+          const [x, y] = P([p[0] / W, p[1] / W])
+          if (j === 0) c.moveTo(x, y)
+          else c.lineTo(x, y)
+        })
+        c.stroke()
+      }
+      if (tile.ports.size === 1) {
+        const [hx, hy] = P([hub[0] / W, hub[1] / W])
+        c.beginPath()
+        c.arc(hx, hy, (pass === 0 ? 2.3 : 1.55) * lw, 0, Math.PI * 2)
+        c.fillStyle = c.strokeStyle
+        c.fill()
+      }
+    }
+  }
+}
 
 // --- hover ------------------------------------------------------------------
 
-function setHover(cellKey) {
-  if (!game || game.over) return
-  if (cellKey === null) {
-    hover = null
-    garden.setGhost(null)
+/**
+ * Choose a spot from where the cursor is. If the exact kite under the pointer
+ * has no legal placement over it, try its four neighbours nearest-first — so
+ * hovering *near* a gap is enough, and the tile turns itself to suit.
+ */
+function setHover(hit) {
+  if (!game || game.over) {
+    clearHover()
     return
   }
-  const fits = game.fitsAtCell(cellKey)
-  if (fits.length === 0) {
-    hover = null
-    garden.setGhost(null)
-    el('fitcount').textContent = ''
-    el('contact').textContent = ''
+  if (!hit) {
+    clearHover()
     return
   }
-  let index = 0
-  if (sticky !== null) {
-    const i = fits.findIndex((f) => f.o === sticky)
-    if (i >= 0) index = i
+  const tries = [hit.cell]
+  const nb = neighbourKeys(KEY_A(hit.cell), KEY_B(hit.cell), KEY_K(hit.cell))
+  const ranked = nb
+    .map((k) => {
+      const [x, z] = kiteCentre(KEY_A(k), KEY_B(k), KEY_K(k))
+      return { k, d: Math.hypot(x * W - hit.x, z * W - hit.z) }
+    })
+    .sort((a, b) => a.d - b.d)
+  for (const r of ranked) tries.push(r.k)
+
+  for (const cell of tries) {
+    const fits = game.fitsAtCell(cell)
+    if (fits.length === 0) continue
+    let index = 0
+    if (sticky !== null) {
+      const i = fits.findIndex((f) => f.o === sticky)
+      if (i >= 0) index = i
+    }
+    hover = { cell, fits, index }
+    showGhost()
+    return
   }
-  hover = { cell: cellKey, fits, index }
-  showGhost()
+  clearHover()
+}
+
+function clearHover() {
+  hover = null
+  garden.setGhost(null)
+  el('fitcount').textContent = ''
+  el('contact').textContent = ''
 }
 
 function showGhost() {
   if (!hover) return
   const fit = hover.fits[hover.index]
-  const cells = placementKeys(fit.o, fit.ta, fit.tb)
-  garden.setGhost(buildGhost(cells, game.tile.biomes, game, 0.42))
+  const g = buildGhost(fit.cells, game.tile, fit.o)
+  g.rim = outlineRibbon(g.outline, 0.028, 0.022, GHOST_RIM)
+  garden.setGhost(g)
   el('fitcount').textContent = hover.fits.length > 1 ? `${hover.index + 1}/${hover.fits.length}` : ''
   // How snugly it sits, and — because of a small theorem about the hat — which
   // way round the piece must be. Of the 38 ways one hat can touch another,
   // every four-edge fit is a mirrored pair and every three-edge fit is not.
   const c = el('contact')
-  c.textContent =
-    fit.touch === 0
-      ? ''
-      : fit.touch === 4
-        ? 'flush ×4 · a mirrored fit'
-        : fit.touch === 3
-          ? 'flush ×3 · same hand'
-          : `${fit.touch} edge${fit.touch > 1 ? 's' : ''} shared`
-  c.classList.toggle('flush', fit.touch >= 3)
+  const parts = []
+  if (fit.joins > 0) parts.push(`${fit.joins} stream${fit.joins > 1 ? 's' : ''} carried on`)
+  if (fit.touch === 4) parts.push('flush ×4 · a mirrored fit')
+  else if (fit.touch === 3) parts.push('flush ×3 · same hand')
+  else if (fit.touch > 0) parts.push(`${fit.touch} edge${fit.touch > 1 ? 's' : ''} shared`)
+  c.textContent = parts.join(' · ')
+  c.classList.toggle('flush', fit.touch >= 3 || fit.joins > 0)
   drawTileCard(fit.o)
 }
 
@@ -194,53 +250,43 @@ function cycle(step) {
 function commit() {
   if (!hover || !game || game.over) return
   const fit = hover.fits[hover.index]
-  const cells = placementKeys(fit.o, fit.ta, fit.tb)
   const res = game.place(fit)
   rebuild()
 
-  const mid = centroidOf(cells)
+  const mid = centroidOf(fit.cells)
   if (res.fitScore > 0) pop(mid, `+${res.fitScore}`, res.perfect)
   for (const r of res.announce) {
-    const cells2 = game.board.regionCells(r.root)
-    garden.playFlash(flashGeometry(cells2))
-    pop(centroidOf(cells2), `${BIOME_NAME[r.biome]} +${r.score}`, true)
+    const cells = game.board.regionCells(r.root)
+    garden.playFlash(flashGeometry(cells))
+    pop(centroidOf(cells), `${BIOME_NAME[r.biome]} +${r.score}`, true)
   }
   if (res.bonus > 0) pop(mid, `+${res.bonus} tiles`, false, 0.5)
-  if (res.hollows.length) pop(centroidOf(res.hollows), 'a hidden hollow', false, 0.7)
+  if (res.quest) {
+    const site = res.quest
+    pop([site.hub[0] * W, 0.9, site.hub[1] * W], `${site.title} · +${site.score}`, true, 0.25)
+    garden.playFlash(flashGeometry(site.cells ?? []))
+  }
 
-  ambience.celebrate(res, game)
-  hover = null
-  garden.setGhost(null)
+  ambience.celebrate(res)
+  clearHover()
   syncHud()
   if (game.over) endGame()
 }
 
 function centroidOf(cells) {
-  let x = 0
-  let z = 0
-  let y = -Infinity
-  for (const key of cells) {
-    const [cx, cz] = kiteCentre(KEY_A(key), KEY_B(key), KEY_K(key))
-    x += cx
-    z += cz
-    y = Math.max(y, worldY(game.elev.get(key) ?? 0))
-  }
-  return [(x / cells.length) * W, y + 0.25, (z / cells.length) * W]
+  const [x, z] = hubOf(cells)
+  return [x, 0.3, z]
 }
 
 function flashGeometry(cells) {
   const buf = new Buf()
   for (const key of cells) {
-    const a = KEY_A(key)
-    const b = KEY_B(key)
-    const k = KEY_K(key)
-    const h = worldY(game.elev.get(key) ?? 0) + 0.02
-    const p = kiteCorners(a, b, k).map(([u, v]) => {
+    const p = kiteCorners(KEY_A(key), KEY_B(key), KEY_K(key)).map(([u, v]) => {
       const [x, y] = cart(u, v)
-      return [x * W, h, y * W]
+      return [x * W, 0.02, y * W]
     })
-    buf.tri(p[0], p[2], p[1], 0xffffff, 0xffffff, 0xffffff)
-    buf.tri(p[0], p[3], p[2], 0xffffff, 0xffffff, 0xffffff)
+    buf.tri(p[0], p[2], p[1], 0xffffff)
+    buf.tri(p[0], p[3], p[2], 0xffffff)
   }
   return buf
 }
@@ -266,6 +312,25 @@ function syncHud() {
   const big = game.biggestOpen()
   el('growing').textContent = big && big.size > 2 ? `${big.size} · ${BIOME_NAME[big.biome]}` : '—'
   el('tilekind').textContent = tileLabel(game.tile)
+
+  const q = game.quest ?? game.sites[game.sites.length - 1]
+  const banner = el('quest')
+  if (!q) banner.classList.add('hidden')
+  else {
+    banner.classList.remove('hidden')
+    banner.classList.toggle('done', !!q.done)
+    el('questtitle').textContent = q.done ? `${q.title} ✓` : q.title
+    el('questhint').textContent = q.done ? q.unlockNote || 'Done.' : q.hint
+  }
+
+  // the mill's gift: take the other tile instead
+  const swap = el('swap')
+  if (game.canChoose && !game.over && game.queue[1]) {
+    swap.classList.remove('hidden')
+    paintTile(nextCtx, game.queue[1], 0, 8, 1.1)
+  } else {
+    swap.classList.add('hidden')
+  }
   const feed = el('feed')
   feed.textContent = ''
   for (const line of game.log) {
@@ -281,7 +346,7 @@ function tileLabel(tile) {
   const counts = new Map()
   for (const b of tile.biomes) counts.set(b, (counts.get(b) ?? 0) + 1)
   const parts = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([b]) => BIOME_NAME[b])
-  const kind = tile.kind === 'land' || tile.kind === 'fitted' ? '' : ` · ${tile.kind}`
+  const kind = tile.ports.size ? ` · ${tile.kind === 'fitted' ? 'stream' : tile.kind}` : ''
   return parts.slice(0, 2).join(' + ') + kind
 }
 
@@ -333,10 +398,7 @@ canvas.addEventListener('pointermove', (e) => {
     return
   }
   if (!running) return
-  const nx = (e.clientX / innerWidth) * 2 - 1
-  const ny = -(e.clientY / innerHeight) * 2 + 1
-  const hit = garden.pick(nx, ny, game)
-  setHover(hit ? hit.cell : null)
+  setHover(garden.pick((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1))
 })
 
 canvas.addEventListener('pointerup', (e) => {
@@ -347,12 +409,10 @@ canvas.addEventListener('pointerup', (e) => {
   if (e.pointerType === 'touch') {
     // No hover on a touchscreen, so the first tap aims and the second lays —
     // with the ⟲ ⟳ buttons in between if the fit wants turning.
-    const nx = (e.clientX / innerWidth) * 2 - 1
-    const ny = -(e.clientY / innerHeight) * 2 + 1
-    const hit = garden.pick(nx, ny, game)
+    const hit = garden.pick((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1)
     if (!hit) return
     if (!hover || hover.cell !== hit.cell) {
-      setHover(hit.cell)
+      setHover(hit)
       return
     }
   }
@@ -365,11 +425,8 @@ canvas.addEventListener(
   'wheel',
   (e) => {
     e.preventDefault()
-    if (e.shiftKey || e.ctrlKey || !hover) {
-      garden.zoom(e.deltaY > 0 ? 1.12 : 0.89)
-    } else {
-      cycle(e.deltaY > 0 ? 1 : -1)
-    }
+    if (e.shiftKey || e.ctrlKey || !hover) garden.zoom(e.deltaY > 0 ? 1.12 : 0.89)
+    else cycle(e.deltaY > 0 ? 1 : -1)
   },
   { passive: false },
 )
@@ -379,18 +436,20 @@ addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase()
   if (k === 'q') cycle(-1)
   else if (k === 'e' || k === ' ') cycle(1)
-  else if (k === 'r') {
-    if (game.reroll()) {
-      sticky = null
-      hover = null
-      garden.setGhost(null)
-      syncHud()
-    }
-  } else if (k === '+' || k === '=') garden.zoom(0.85)
+  else if (k === 'r') discard()
+  else if (k === '+' || k === '=') garden.zoom(0.85)
   else if (k === '-') garden.zoom(1.18)
   else return
   e.preventDefault()
 })
+
+function discard() {
+  if (!game.reroll()) return
+  sticky = null
+  clearHover()
+  garden.setHints(hintPoints())
+  syncHud()
+}
 
 addEventListener('resize', () => garden.resize(innerWidth, innerHeight))
 
@@ -399,10 +458,11 @@ addEventListener('resize', () => garden.resize(innerWidth, innerHeight))
 function start(seed) {
   game = new Game(seed)
   sticky = null
-  hover = null
   running = true
-  garden.setGhost(null)
+  clearHover()
   ambience.reset()
+  const [sx, sz] = cart(SUMMIT[0], SUMMIT[1])
+  garden.setMountain(sx * W, sz * W)
   rebuild(true)
   syncHud()
   el('gameover').classList.add('hidden')
@@ -410,13 +470,13 @@ function start(seed) {
 
 el('prev').addEventListener('click', () => cycle(-1))
 el('next').addEventListener('click', () => cycle(1))
-el('toss').addEventListener('click', () => {
-  if (game.reroll()) {
-    sticky = null
-    hover = null
-    garden.setGhost(null)
-    syncHud()
-  }
+el('toss').addEventListener('click', discard)
+el('swap').addEventListener('click', () => {
+  if (!game.swapNext()) return
+  sticky = null
+  clearHover()
+  garden.setHints(hintPoints())
+  syncHud()
 })
 
 el('play').addEventListener('click', () => {
@@ -438,13 +498,12 @@ el('again').addEventListener('click', () => start((Math.random() * 1e9) | 0))
 
 // --- attract mode -----------------------------------------------------------
 //
-// While the title card is up the garden lays itself, a hat every third of a
-// second, playing the same harmony heuristic the ghost ranks fits by. It shows
-// the shape doing its trick before anyone has to read a word — and it is what
-// the gallery thumbnail catches.
+// While the title card is up the garden lays itself, playing the same ranking
+// the ghost uses. It shows the shape doing its trick before anyone has to read
+// a word — and it is what the gallery thumbnail catches.
 
 let demoAt = 0.6
-const DEMO_TILES = 30
+const DEMO_TILES = 34
 
 function demoStep() {
   if (!game || game.over || game.placed >= DEMO_TILES + 3) return
@@ -453,9 +512,8 @@ function demoStep() {
   let best = null
   let bs = -Infinity
   for (const f of fits) {
-    const cells = placementKeys(f.o, f.ta, f.tb)
-    const h = game._harmony(cells, game.tile.biomes)
-    const s = h.match * 3 + h.touch + Math.random() * 2
+    const h = game._harmony(f.o, f.cells, game.tile)
+    const s = h.joins * 6 + h.match * 3 + h.touch + Math.random() * 2
     if (s > bs) {
       bs = s
       best = f
@@ -463,9 +521,7 @@ function demoStep() {
   }
   const res = game.place(best)
   rebuild()
-  for (const r of res.announce) {
-    garden.playFlash(flashGeometry(game.board.regionCells(r.root)))
-  }
+  for (const r of res.announce) garden.playFlash(flashGeometry(game.board.regionCells(r.root)))
   syncHud()
 }
 
@@ -482,14 +538,19 @@ window.aperiodicGarden = {
   },
   step: demoStep,
   restart: start,
+  /** After poking at game state by hand, put the scene and HUD back in step. */
+  refresh: () => {
+    rebuild()
+    syncHud()
+  },
 }
 
 garden.resize(innerWidth, innerHeight)
 start(1741)
 running = false
 // Lay the first stretch of the demo garden in one go, so the title screen opens
-// on something worth looking at — and so the gallery's thumbnail, which is shot
-// a second or two after load, catches a garden rather than a bare peak.
+// on something worth looking at — and so the gallery's thumbnail, shot a second
+// or two after load, catches a garden rather than a bare peak.
 for (let i = 0; i < 20; i++) demoStep()
 
 let last = performance.now()
