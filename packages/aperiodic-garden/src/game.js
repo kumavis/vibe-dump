@@ -15,13 +15,121 @@ import {
   candidatePlacements,
   neighbourKeys,
 } from './hat.js'
-import { Board, PLAINS, BIOME_NAME, openScore } from './board.js'
-import { seedGarden, siteNear, townTile, makeTile, fitTile, campTile, CAMPS, mulberry32 } from './tiles.js'
+import { Board, PLAINS, VILLAGE, BIOME_NAME, openScore } from './board.js'
+import {
+  seedGarden,
+  siteNear,
+  townTile,
+  makeTile,
+  fitTile,
+  lakeTile,
+  campTile,
+  CAMPS,
+  mulberry32,
+} from './tiles.js'
 
 export const START_TILES = 42
 
 /** How often the deck offers a camp rather than plain ground. */
 const CAMP_CHANCE = 0.1
+
+// --- the second game ---------------------------------------------------------
+//
+// Laying tiles is the puzzle. Underneath it there is a slower one: the things
+// you build *work*. A turning wheel grinds, a camp cuts timber, a quarry cuts
+// stone — and every few tiles they each hand you one of whatever they make.
+// Spend that at the workshop and you get a tile you chose rather than one you
+// were dealt, which is the only way in the game to answer a gap on purpose.
+
+/** What the working buildings make. */
+export const RESOURCES = [
+  { key: 'flour', glyph: '🌾', label: 'flour', from: 'the mill' },
+  { key: 'timber', glyph: '🪵', label: 'timber', from: "the woodcutter's camp" },
+  { key: 'stone', glyph: '🪨', label: 'stone', from: 'the quarry' },
+  { key: 'wool', glyph: '🧶', label: 'wool', from: "the shepherd's fold" },
+  { key: 'wine', glyph: '🍇', label: 'wine', from: 'the vineyard' },
+]
+
+/** Which building makes which. */
+const YIELD = { 'mill': 'flour', 'woodcutter': 'timber', 'quarry': 'stone', 'shepherd': 'wool', 'vineyard': 'wine' }
+
+/** Every this many tiles laid, each working building pays out once. */
+const HARVEST_EVERY = 3
+
+/**
+ * What the workshop can make. `make` returns a tile; the game puts it at the
+ * front of the queue, so what you were about to be dealt is still there behind
+ * it. A recipe that cannot make anything useful right now returns null and
+ * costs nothing.
+ */
+export const RECIPES = [
+  {
+    key: 'clearing',
+    title: 'clearing',
+    note: 'a whole tile of whatever your biggest open region is — the piece that finishes it',
+    cost: { timber: 3 },
+    make(game) {
+      const big = game.biggestOpen()
+      const biome = big ? big.biome : PLAINS
+      return { biomes: new Array(8).fill(biome), ports: new Set(), kind: BIOME_NAME[biome], mouths: 0 }
+    },
+  },
+  {
+    key: 'aqueduct',
+    title: 'aqueduct',
+    note: 'a stream cut to carry the water on from wherever it has got to',
+    cost: { stone: 3 },
+    make(game) {
+      const cut = game._cutStream()
+      if (!cut) return null
+      cut.tile.kind = 'aqueduct'
+      return cut.tile
+    },
+  },
+  {
+    key: 'hamlet',
+    title: 'vintners’ hamlet',
+    note: 'a whole tile of houses — the richest cover there is, and never dealt',
+    cost: { wine: 3, timber: 2 },
+    make() {
+      return { biomes: new Array(8).fill(VILLAGE), ports: new Set(), kind: 'hamlet', mouths: 0 }
+    },
+  },
+  {
+    key: 'millpond',
+    title: 'millpond',
+    note: 'a lake, to let a stream you have finished with end tidily',
+    cost: { flour: 3 },
+    make(game) {
+      const stuck = game.board.stuckMouths()
+      for (const [edge, m] of game.board.openMouths) {
+        if (stuck.has(edge)) continue
+        for (const c of game.board.continuations(m[0], m[1])) {
+          const cells = placementKeys(c.o, c.ta, c.tb)
+          const want = game.board.demandedPorts(c.o, c.ta, c.tb, cells)
+          if (!want || want.size !== 1) continue
+          if (!game.board.placeable(c.o, c.ta, c.tb, want, cells)) continue
+          return lakeTile([...want][0], game.rnd)
+        }
+      }
+      return null
+    },
+  },
+  {
+    key: 'provisions',
+    title: 'provisions',
+    note: 'six more tiles on the stack; each load costs more wool than the last',
+    cost: { wool: 3 },
+    // Everything else you can make is a tile, so it spends a turn as well as
+    // the resources. Provisions buy turns outright, and at a flat price a
+    // shepherd's fold quietly becomes a machine for never running out — a bot
+    // spending everything ran one garden past six hundred tiles. So the price
+    // climbs by one each time.
+    escalates: true,
+    make: null, // not a tile — see craft()
+    tiles: 6,
+  },
+]
 
 const MILL_NAMES = [
   'the mill',
@@ -77,9 +185,86 @@ export class Game {
     this.queue = []
     this.log = []
     this.over = false
+    /** what the working buildings have made and you have not spent */
+    this.res = Object.fromEntries(RESOURCES.map((r) => [r.key, 0]))
+    /** every building that pays out, as { kind, resource, at:[x,z] } */
+    this.works = []
+    this.sinceHarvest = 0
+    this.crafted = 0
+    /** how many of each recipe have been made, for the ones that get dearer */
+    this.bought = {}
 
     this._seed()
     this._refillQueue()
+  }
+
+  // --- resources and the workshop --------------------------------------------
+
+  /** Every this-many tiles, each working building hands over one of its own. */
+  _harvest() {
+    if (this.works.length === 0) return null
+    if (++this.sinceHarvest < HARVEST_EVERY) return null
+    this.sinceHarvest = 0
+    const got = {}
+    for (const w of this.works) {
+      this.res[w.resource] += 1
+      got[w.resource] = (got[w.resource] ?? 0) + 1
+    }
+    return got
+  }
+
+  /** What this recipe costs now — some get dearer the more you make. */
+  costOf(recipe) {
+    if (!recipe.escalates) return recipe.cost
+    const n = this.bought[recipe.key] ?? 0
+    return Object.fromEntries(Object.entries(recipe.cost).map(([k, v]) => [k, v + n]))
+  }
+
+  /** Can this recipe be paid for right now? */
+  affordable(recipe) {
+    return Object.entries(this.costOf(recipe)).every(([k, n]) => this.res[k] >= n)
+  }
+
+  /**
+   * Buy one. The tile goes to the *front* of the queue rather than replacing
+   * what you were holding, so crafting never costs you the tile you already had.
+   */
+  craft(key) {
+    const recipe = RECIPES.find((r) => r.key === key)
+    if (!recipe || this.over || !this.affordable(recipe)) return null
+
+    if (!recipe.make) {
+      this._pay(recipe)
+      this.tilesLeft += recipe.tiles
+      this.crafted += 1
+      this.log.unshift(`${recipe.title} · +${recipe.tiles} tiles`)
+      return recipe
+    }
+
+    const tile = recipe.make(this)
+    if (!tile) return null // nothing it could usefully be right now, so no charge
+    tile.cost = this._pay(recipe)
+    tile.crafted = true
+    tile.craftTitle = recipe.title
+    this.crafted += 1
+    this.queue.unshift(tile)
+    this._fits = null
+    this._ensurePlayable()
+    this.log.unshift(`${recipe.title} · made`)
+    return recipe
+  }
+
+  _pay(recipe) {
+    const cost = this.costOf(recipe)
+    for (const [k, n] of Object.entries(cost)) this.res[k] -= n
+    this.bought[recipe.key] = (this.bought[recipe.key] ?? 0) + 1
+    return cost
+  }
+
+  /** Give the cost back — for a crafted tile that turned out to have nowhere
+   *  to go by the time it reached the front of the queue. */
+  refund(tile) {
+    for (const [k, n] of Object.entries(tile.cost ?? {})) this.res[k] += n
   }
 
   _remember(cells) {
@@ -375,6 +560,19 @@ export class Game {
     const tile = this.queue[0]
     if (!tile) return
     let fits = this._legalFor(tile)
+    // A tile you paid resources for is yours. The deck may not quietly swap it
+    // for something it thinks you need more — the only thing that overrides it
+    // is having nowhere at all to put it, and then the cost comes back.
+    if (tile.crafted) {
+      if (fits.length > 0) {
+        this._fits = fits
+        return
+      }
+      this.refund(tile)
+      this.queue.shift()
+      this.log.unshift(`nowhere for the ${tile.craftTitle} — refunded`)
+      return this._ensurePlayable()
+    }
     // The moment the two rivers are one tile apart, that tile is what the deck
     // hands you — whatever it was about to deal. Gating this on already holding a
     // stream wasted the chance five turns in six, and a confluence you can see
@@ -681,12 +879,16 @@ export class Game {
       bonus += camp.tiles
       this.camps = (this.camps ?? 0) + 1
       this.log.unshift(`${camp.title} · +${camp.score}`)
+      // and from now on it works
+      this.works.push({ kind: camp.key, resource: YIELD[camp.key], at: hubOfCells(res.cells) })
     }
     const quest = this._checkQuest()
     if (quest) {
       gained += quest.score
       bonus += quest.tiles
+      this.works.push({ kind: 'mill', resource: YIELD.mill, at: quest.hub })
     }
+    const harvest = this._harvest()
     this.tilesLeft += bonus
     this.log.length = Math.min(this.log.length, 5)
 
@@ -694,7 +896,7 @@ export class Game {
     this._fits = null
     this._refillQueue()
     if (this.tilesLeft <= 0 || this.fits.length === 0) this.finish()
-    return { ...res, gained, fitScore, perfect, bonus, announce, quest, camp, ...h, joined: res.joined }
+    return { ...res, gained, fitScore, perfect, bonus, announce, quest, camp, harvest, ...h, joined: res.joined }
   }
 
   /** The largest region still open, for the HUD's "growing" line. */
@@ -729,4 +931,16 @@ export class Game {
 
 // Kept out of the class so the hot path stays monomorphic.
 const nbBuf = [0, 0, 0, 0]
+
+/** Lattice centre of a set of cells. */
+function hubOfCells(cells) {
+  let x = 0
+  let z = 0
+  for (const key of cells) {
+    const [cx, cz] = kiteCentre(KEY_A(key), KEY_B(key), KEY_K(key))
+    x += cx
+    z += cz
+  }
+  return [x / cells.length, z / cells.length]
+}
 const NONE = new Set()

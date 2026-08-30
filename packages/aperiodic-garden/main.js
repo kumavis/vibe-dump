@@ -1,6 +1,6 @@
 // Aperiodic Garden — wiring: game state ↔ scene ↔ pointer ↔ HUD.
 
-import { Game } from './src/game.js'
+import { Game, RECIPES, RESOURCES } from './src/game.js'
 import { Garden } from './src/scene.js'
 import { Ambience } from './src/ambient.js'
 import { buildGarden, buildGhost, outlineRibbon, hubOf, branchPath, W, Buf } from './src/geometry.js'
@@ -309,6 +309,14 @@ function commit() {
     pop(centroidOf(cells), `${BIOME_NAME[r.biome]} +${r.score}`, true)
   }
   if (res.camp) pop(mid, `${res.camp.title} · +${res.camp.score}`, true, 0.2)
+  if (res.harvest) {
+    // one over each building that just paid out, so it is obvious where the
+    // resources are coming from
+    game.works.forEach((w, i) => {
+      const glyph = RESOURCES.find((x) => x.key === w.resource)?.glyph ?? '·'
+      pop([w.at[0] * W, 0.5, w.at[1] * W], `${glyph}+1`, false, 0.1 + i * 0.06)
+    })
+  }
   if (res.bonus > 0) pop(mid, `+${res.bonus} tiles`, false, 0.5)
   if (res.quest) {
     const site = res.quest
@@ -354,7 +362,52 @@ function pop([x, y, z], text, big = false, delay = 0) {
   setTimeout(() => span.remove(), 1900 + delay * 1000)
 }
 
+// --- the workshop -----------------------------------------------------------
+//
+// The other half of the game: what the buildings make, and what it buys. Built
+// once from the recipe table; only the counts and the enabled state change.
+
+const recipeButtons = RECIPES.map((r) => {
+  const b = document.createElement('button')
+  b.className = 'recipe'
+  b.title = r.note
+  b.innerHTML = `<b></b><span class="cost"></span>`
+  b.querySelector('b').textContent = r.title
+  b.addEventListener('click', () => {
+    if (!game || !game.craft(r.key)) return
+    sticky = null
+    clearHover()
+    garden.setHints(hintPoints())
+    syncHud()
+  })
+  el('recipes').appendChild(b)
+  return { r, b }
+})
+
+const glyphOf = Object.fromEntries(RESOURCES.map((x) => [x.key, x.glyph]))
+
+function syncShop() {
+  const shop = el('shop')
+  // nothing to spend and nothing making it: no shop
+  if (!game.works.length && !Object.values(game.res).some((n) => n > 0)) {
+    shop.classList.add('hidden')
+    return
+  }
+  shop.classList.remove('hidden')
+  el('purse').textContent = RESOURCES.filter((x) => game.res[x.key] > 0)
+    .map((x) => `${x.glyph}${game.res[x.key]}`)
+    .join('  ')
+  for (const { r, b } of recipeButtons) {
+    const cost = game.costOf(r)
+    b.querySelector('.cost').textContent = Object.entries(cost)
+      .map(([k, n]) => `${glyphOf[k]}${n}`)
+      .join(' ')
+    b.disabled = game.over || !game.affordable(r)
+  }
+}
+
 function syncHud() {
+  syncShop()
   el('score').textContent = game.score.toLocaleString()
   el('tiles').textContent = Math.max(0, game.tilesLeft)
   el('sealed').textContent = game.sealedCount

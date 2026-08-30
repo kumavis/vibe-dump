@@ -383,6 +383,93 @@ kbd {
   background: #fff;
 }
 
+/* --- the workshop ------------------------------------------------------- */
+/*
+   The other game. It stays out of the way until something on the board is
+   actually making anything, and then it sits opposite the tile in hand: what
+   you have on the left of the screen, what you could turn it into on the right.
+*/
+
+#shop {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 196px;
+  padding: 9px 10px 10px;
+  border-radius: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 26px rgba(38, 55, 70, 0.15);
+  backdrop-filter: blur(6px);
+  z-index: 5;
+}
+
+#shop.hidden {
+  display: none;
+}
+
+#purse {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  justify-content: center;
+  min-height: 20px;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  margin-bottom: 7px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+#recipes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recipe {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font: inherit;
+  font-size: 12px;
+  padding: 6px 9px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.recipe b {
+  font-weight: 650;
+}
+
+.recipe .cost {
+  flex: none;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.recipe:enabled:hover {
+  background: #fff;
+  border-color: rgba(120, 155, 90, 0.7);
+}
+
+.recipe:disabled {
+  opacity: 0.42;
+  cursor: default;
+}
+
+body:has(#intro) #shop {
+  display: none;
+}
+
 /* --- score pops --------------------------------------------------------- */
 
 #pops {
@@ -675,8 +762,8 @@ body:has(#intro) #hand {
   }
   #tileart {
     flex: none;
-    width: 92px;
-    height: 76px;
+    width: 78px;
+    height: 64px;
   }
   #tilemeta {
     flex: 1 1 auto;
@@ -694,7 +781,7 @@ body:has(#intro) #hand {
     justify-content: flex-start;
     flex-wrap: nowrap;
     margin-top: 8px;
-    gap: 6px;
+    gap: 5px;
   }
   #tilebtns button {
     /* a thumb wants 44px; these are the whole interface on a phone */
@@ -706,7 +793,7 @@ body:has(#intro) #hand {
   }
   #tilebtns #lay {
     flex: 0 0 auto;
-    padding: 0 15px;
+    padding: 0 11px;
     font-size: 14px;
     color: #fffdf7;
     border-color: transparent;
@@ -716,12 +803,20 @@ body:has(#intro) #hand {
     background: rgba(255, 255, 255, 0.72);
     color: var(--ink-soft);
   }
-  /* pushed to the far end, where it will not be hit by accident */
+  /* Out of the row and up into the card's corner. Three thumb-sized buttons,
+     a swap card and the word DISCARD do not fit across a phone, and the row
+     was overflowing under the swap card with the word half cut off. Discard is
+     also the one button here you do not want next to the one you press most. */
   #tilebtns #toss {
-    margin-left: auto;
-    padding: 6px 9px;
-    font-size: 10px;
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    margin: 0;
+    min-height: 0;
     min-width: 0;
+    padding: 3px 7px;
+    font-size: 9.5px;
+    border-radius: 7px;
   }
   #fitcount {
     top: 8px;
@@ -735,12 +830,13 @@ body:has(#intro) #hand {
   /* the swap tile joins the row rather than hanging off the card's edge */
   #swap {
     position: static;
+    align-self: flex-end;
     flex: none;
-    width: 56px;
+    width: 50px;
   }
   #swap canvas {
-    width: 48px;
-    height: 39px;
+    width: 42px;
+    height: 34px;
   }
 
   #intro,
@@ -773,6 +869,44 @@ body:has(#intro) #hand {
   body:has(#intro) #quest,
   body:has(#intro) #feed {
     display: none;
+  }
+
+  /* the workshop joins the bottom stack above the tile bar and lies flat:
+     purse on the left, recipes scrolling across beside it */
+  #shop {
+    position: static;
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 9px;
+    border-radius: 13px;
+  }
+  #purse {
+    flex: none;
+    margin: 0;
+    padding: 0 9px 0 0;
+    min-height: 0;
+    border-bottom: none;
+    border-right: 1px solid var(--line);
+    flex-direction: column;
+    gap: 0;
+    font-size: 13px;
+  }
+  #recipes {
+    flex: 1 1 auto;
+    flex-direction: row;
+    gap: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .recipe {
+    flex: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-height: 40px;
+    padding: 5px 9px;
   }
 
   #startbar {
