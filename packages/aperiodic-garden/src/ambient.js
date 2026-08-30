@@ -6,8 +6,8 @@
 
 import * as THREE from 'three'
 import { KEY_A, KEY_B, KEY_K, kiteCentre } from './hat.js'
-import { PLAINS, FOREST, HILLS, VILLAGE } from './board.js'
-import { W } from './geometry.js'
+import { PLAINS, FOREST, HILLS, VILLAGE, SCREE } from './board.js'
+import { W, hubOf } from './geometry.js'
 
 const lin = (hex) => new THREE.Color(hex).convertSRGBToLinear()
 
@@ -106,6 +106,23 @@ function chainBranches(branches) {
   return paths
 }
 
+/**
+ * Who lives where. `on` names the cover a party will only turn up on, `n` how
+ * many of them come at once, `hop` how much they bounce as they go, and `every`
+ * roughly how long between visits in seconds.
+ *
+ * Deliberately quiet numbers: a garden with a rabbit in it once a minute reads
+ * as somewhere alive, and one with rabbits on every meadow reads as a screensaver.
+ */
+const SPECIES = [
+  { key: 'rabbit', on: 'meadow', size: [0.03, 0.03, 0.042], colour: 0xb9a893, head: 0xcdbda8, n: 3, cap: 4, hop: 0.05, speed: 0.5, every: 26 },
+  { key: 'fox', on: 'meadow', size: [0.032, 0.03, 0.075], colour: 0xc4703a, head: 0xd88a4e, n: 1, cap: 2, hop: 0.012, speed: 0.42, every: 52 },
+  { key: 'boar', on: 'forest', size: [0.05, 0.045, 0.09], colour: 0x54473e, head: 0x6a5a4d, n: 2, cap: 3, hop: 0.008, speed: 0.26, every: 38 },
+  { key: 'goat', on: 'stone', size: [0.036, 0.04, 0.058], colour: 0xe4ded2, head: 0xcabfae, n: 3, cap: 4, hop: 0.02, speed: 0.3, every: 32 },
+  { key: 'cow', on: 'meadow', size: [0.055, 0.05, 0.095], colour: 0xd9cfc0, head: 0x8a6a52, n: 2, cap: 3, hop: 0.004, speed: 0.16, every: 44 },
+  { key: 'duck', on: 'water', size: [0.022, 0.02, 0.036], colour: 0xf0ead8, head: 0x4d6b46, n: 4, cap: 5, hop: 0.006, speed: 0.18, every: 30 },
+]
+
 // --- the ambience -----------------------------------------------------------
 
 export class Ambience {
@@ -130,6 +147,20 @@ export class Ambience {
       44,
     )
     this.smoke.mesh.renderOrder = 5
+
+    // The rest of the wildlife. One pool per creature, all driven by the same
+    // loop below: a party turns up on ground that suits it, mills about for a
+    // while, and fades away again. Kept to a handful at a time — the garden is
+    // meant to feel inhabited, not stocked.
+    this.critters = SPECIES.map((sp) => ({
+      spec: sp,
+      body: new Pool(this.root, bodyGeo(sp.size[0], sp.size[1], sp.size[2]), soft(sp.colour), sp.cap),
+      head: sp.head
+        ? new Pool(this.root, bodyGeo(sp.size[0] * 0.6, sp.size[1] * 0.6, sp.size[1] * 0.7), soft(sp.head), sp.cap)
+        : null,
+      party: null,
+      at: 5 + Math.random() * 14,
+    }))
 
     // pollen / midges over the woods
     const moteN = 90
@@ -167,6 +198,13 @@ export class Ambience {
     this.rivers = []
     this.forest = []
     this.grazing = []
+    this.stone = []
+    this.meadow = []
+    this.water = []
+    for (const c of this.critters ?? []) {
+      c.party = null
+      c.at = 5 + Math.random() * 14
+    }
     this.t = 0
   }
 
@@ -183,14 +221,26 @@ export class Ambience {
     this.forest = []
     this.grazing = []
     this.chimneys = []
+    this.stone = []
+    this.meadow = []
     for (const key of board.filled) {
       const b = board.biome.get(key)
       if (b === FOREST) this.forest.push(at(key))
       else if (b === PLAINS || b === HILLS) this.grazing.push(at(key))
       else if (b === VILLAGE) this.chimneys.push(at(key))
+      if (b === PLAINS) this.meadow.push(at(key))
+      else if (b === SCREE || b === HILLS) this.stone.push(at(key))
     }
 
     this.rivers = chainBranches(branches)
+    // Ducks want still water, so the lakes: a tile with one crossing has its
+    // pool at the hub, and that is where they sit.
+    this.water = []
+    for (const t of board.tiles) {
+      if (t.ports.size !== 1) continue
+      const [x, z] = hubOf(t.cells)
+      this.water.push([x, 0.02, z])
+    }
 
     // Sheep settle in one or two pastures and stay there.
     if (this.grazing.length > 3) {
@@ -223,6 +273,7 @@ export class Ambience {
     this._deer(dt, t)
     this._sheep(t)
     this._boat(dt, t)
+    this._critters(dt, t)
     this._smoke(t)
     this._motes(t)
   }
@@ -367,6 +418,72 @@ export class Ambience {
     }
     this.kayak.end()
     this.paddler.end()
+  }
+
+  /**
+   * Everything that walks. One party per species at a time: it arrives on
+   * ground of its own kind, wanders a small circle for a while, and fades out.
+   * The whole thing is one loop over the table rather than a method each,
+   * because "a few of these turn up over there and mill about" is the same
+   * behaviour for a rabbit, a boar and a duck — only the numbers differ.
+   */
+  _critters(dt, t) {
+    for (const c of this.critters) {
+      const sp = c.spec
+      c.body.begin()
+      c.head?.begin()
+      const ground = this[sp.on] ?? []
+
+      if (!c.party) {
+        c.at -= dt
+        if (c.at <= 0 && ground.length) {
+          const home = ground[Math.floor(Math.random() * ground.length)]
+          c.party = {
+            x: home[0],
+            y: home[1],
+            z: home[2],
+            life: 0,
+            span: 14 + Math.random() * 12,
+            ph: Math.random() * 9,
+            // each one keeps its own offset and its own little orbit
+            who: Array.from({ length: sp.n }, () => ({
+              a: Math.random() * Math.PI * 2,
+              r: 0.06 + Math.random() * 0.18,
+              w: (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random()),
+              b: Math.random() * 7,
+            })),
+          }
+          c.at = sp.every * (0.6 + Math.random() * 0.8)
+        }
+      } else {
+        const p = c.party
+        p.life += dt
+        // in over the first second, out over the last two
+        const fade = Math.min(1, p.life * 1.6, Math.max(0, (p.span - p.life) * 0.5))
+        for (const w of p.who) {
+          const a = w.a + t * sp.speed * w.w
+          const x = p.x + Math.cos(a) * w.r
+          const z = p.z + Math.sin(a) * w.r
+          const bob = Math.abs(Math.sin(t * 3.4 + w.b)) * sp.hop
+          const yaw = a + (w.w > 0 ? Math.PI / 2 : -Math.PI / 2)
+          c.body.put(x, p.y + bob, z, yaw, fade)
+          // the head out front, so which way it is facing reads at a glance
+          if (c.head) {
+            c.head.put(
+              x + Math.cos(yaw) * sp.size[2] * 0.85,
+              p.y + bob + sp.size[1] * 0.55,
+              z + Math.sin(yaw) * sp.size[2] * 0.85,
+              yaw,
+              fade,
+            )
+          }
+        }
+        if (p.life > p.span) c.party = null
+      }
+
+      c.body.end()
+      c.head?.end()
+    }
   }
 
   _smoke(t) {

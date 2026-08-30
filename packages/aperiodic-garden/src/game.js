@@ -5,44 +5,62 @@
 // bulge in it. So there is no terrain field here at all, only a per-cell random
 // number the renderer scatters trees and rocks with.
 
-import { KEY_A, KEY_B, KEY_K, kiteCentre, placementKeys, candidatePlacements, neighbourKeys } from './hat.js'
+import {
+  KEY_A,
+  KEY_B,
+  KEY_K,
+  PORT_SLOTS,
+  kiteCentre,
+  placementKeys,
+  candidatePlacements,
+  neighbourKeys,
+} from './hat.js'
 import { Board, PLAINS, BIOME_NAME, openScore } from './board.js'
-import { seedGarden, siteNear, townTile, makeTile, fitTile, mulberry32 } from './tiles.js'
+import { seedGarden, siteNear, townTile, makeTile, fitTile, campTile, CAMPS, mulberry32 } from './tiles.js'
 
 export const START_TILES = 42
 
-/**
- * The objectives, in order. Each puts a small town on the board on its own,
- * a short way out, with one leat waiting for water — and asks you to carry the
- * mountain's headwater to it, stream by stream. Finishing one pays, opens the
- * next, and may hand you a new way to play.
- */
-export const QUESTS = [
-  {
-    key: 'mill',
-    title: 'Turn the mill wheel',
-    hint: 'Carry the headwater down to the mill.',
-    hops: 2,
-    dist: 7,
-    turn: 0,
-    score: 320,
-    tiles: 6,
-    unlock: 'choice',
-    unlockNote: 'The village will now offer you a choice of two tiles.',
-  },
-  {
-    key: 'lake',
-    title: 'Reach the lake town',
-    hint: 'Carry the stream on to the second town.',
-    hops: 3,
-    dist: 10,
-    turn: 0.95,
-    score: 760,
-    tiles: 9,
-    unlock: null,
-    unlockNote: '',
-  },
+/** How often the deck offers a camp rather than plain ground. */
+const CAMP_CHANCE = 0.1
+
+const MILL_NAMES = [
+  'the mill',
+  'the fulling mill',
+  'the sawmill',
+  'the oil mill',
+  'the paper mill',
+  'the forge hammer',
+  'the last mill on the river',
 ]
+
+/**
+ * The errands, as many as the garden lasts for. Each puts a small town on the
+ * board on its own, a short way further down the valley, with a dry leat and a
+ * tailrace — and asks you to carry the water to it. Turning its wheel pays,
+ * and the next town is sited from the tailrace it just started.
+ *
+ * A written list of two ran out, and the mill was the only one most gardens ever
+ * saw; a river you are still extending on the fortieth tile is a better spine
+ * for the game than one that stops paying on the fifth.
+ */
+export function questAt(i) {
+  const name = MILL_NAMES[Math.min(i, MILL_NAMES.length - 1)]
+  return {
+    key: `mill-${i}`,
+    index: i,
+    title: i === 0 ? 'Turn the mill wheel' : `Reach ${name}`,
+    hint: i === 0 ? 'Carry the headwater down to the mill.' : 'Carry the water on, wheel to wheel.',
+    hops: 2,
+    dist: 7 + Math.min(i, 3),
+    // each one a little further round, so the chain walks the garden rather
+    // than running off in a straight line
+    turn: i === 0 ? 0 : (i % 2 ? 0.85 : -0.7),
+    score: 320 + i * 260,
+    tiles: 6 + i,
+    unlock: i === 0 ? 'choice' : null,
+    unlockNote: i === 0 ? 'The village will now offer you a choice of two tiles.' : '',
+  }
+}
 
 export class Game {
   constructor(seed = 1) {
@@ -104,11 +122,13 @@ export class Game {
    * where the water can arrive.
    */
   _openSite(i) {
-    const q = QUESTS[i]
+    const q = questAt(i)
     this.quest = null
-    if (!q || !this.headwater) return
+    if (!this.headwater) return
     const prev = this.sites[this.sites.length - 1]
-    const from = prev ? prev.mid : this.headwater.mid
+    // From the last mill's tailrace, not its leat: the water has crossed the
+    // town and comes out the far side, and that is where the next reach starts.
+    const from = prev ? (prev.tail?.mid ?? prev.mid) : this.headwater.mid
     // Walk out from wherever the mountain's water currently ends. After the
     // first errand that is *not* the town's leat any more — the leat is joined,
     // so it has stopped being a mouth — but one of the open ends of the same
@@ -153,10 +173,12 @@ export class Game {
       const town = townTile(site, from[0], from[1])
       const added = new Set(site.cells)
       if (!this.board.leavesRoom(site.cells, added)) continue
-      const x = this.board
-        .crossings(site.orient, site.ta, site.tb, site.cells, [])
-        .find((c) => c.slot === town.slot)
+      const xs = this.board.crossings(site.orient, site.ta, site.tb, site.cells, [])
+      const x = xs.find((c) => c.slot === town.slot)
       if (!x || this.board.filled.has(x.far)) continue
+      // Only the leat has to work now. The tailrace is not opened until the
+      // wheel turns, and which side it comes out of is settled then — insisting
+      // on it here threw away good sites for water that was not coming yet.
       if (!this.board._continuable(x.far, 1 - x.side, added)) continue
       // The town's own eight kites are off the table for the river that has to
       // reach it — otherwise the search happily routes the water straight
@@ -164,7 +186,16 @@ export class Game {
       if (fromMouth && !this.board.canCarryTo(fromMouth[0], fromMouth[1], x.far, 1 - x.side, hops, added)) continue
       const res = this.board.place(site.orient, site.ta, site.tb, town.tile, 900 + i)
       this._remember(res.cells)
-      const entry = { ...q, hub: site.hub, mid: town.mid, edge: town.edge, cells: res.cells, done: false }
+      const entry = {
+        ...q,
+        hub: site.hub,
+        mid: town.mid,
+        edge: town.edge,
+        tail: town.tail,
+        cells: res.cells,
+        tileIndex: this.board.tiles.length - 1,
+        done: false,
+      }
       this.sites.push(entry)
       this.quest = entry
       return true
@@ -182,6 +213,16 @@ export class Game {
     this.tilesLeft += q.tiles
     if (q.unlock === 'choice') this.canChoose = true
     this.log.unshift(`${q.title} · +${q.score}`)
+    // The wheel turns, so the tailrace starts running. Its intended side may
+    // have been built over while the water was on its way; any free crossing on
+    // the far side of the town will do, and if there is none the water simply
+    // ends here and the next mill is sited from the leat.
+    for (const slot of [q.tail.slot, ...PORT_SLOTS]) {
+      const x = this.board.openCrossing(q.tileIndex, slot)
+      if (!x) continue
+      q.tail = { edge: x.edge, slot, mid: this.centreOf(x.far) }
+      break
+    }
     this.questIndex += 1
     this._openSite(this.questIndex)
     return q
@@ -201,8 +242,17 @@ export class Game {
   // --- the deck --------------------------------------------------------------
 
   _refillQueue() {
-    while (this.queue.length < 3) this.queue.push(makeTile(this.rnd))
+    while (this.queue.length < 3) this.queue.push(this._deal())
     this._ensurePlayable()
+  }
+
+  /** One tile off the top. Mostly ordinary ground; now and then a camp, which
+   *  may only be laid where the cover it lives off already is. */
+  _deal() {
+    if (this.placed > 8 && this.rnd() < CAMP_CHANCE) {
+      return campTile(CAMPS[Math.floor(this.rnd() * CAMPS.length)])
+    }
+    return makeTile(this.rnd)
   }
 
   /**
@@ -229,7 +279,7 @@ export class Game {
     // that way, silently, several turns before anyone could tell. So a placement
     // that leaves the mill no route at all is refused, unless it is itself
     // carrying the water on.
-    const wants = this._endsOf(q.edge)
+    const wants = this._questTargets(q)
     const ends = this._riverEnds()
     if (ends.length === 0 || wants.length === 0) return fits
     const slack = q.hops + 1
@@ -279,13 +329,25 @@ export class Game {
     })
   }
 
-  /** The open ends of whichever river `edge` belongs to. For the headwater that
-   *  is where an errand can be carried on from; for a town's leat it is where
-   *  the water has to arrive — and *not* only the leat itself, because a stream
-   *  laid on the leat by some unrelated pond takes that mouth over. The errand
-   *  is not lost when that happens: the water can still come, it just has to
-   *  meet the pond now. Aiming at the leat edge alone left those gardens with no
-   *  target at all and quietly gave up on them. */
+  /**
+   * Where the water has to arrive for the errand in hand.
+   *
+   * The leat, while it is still open — that is the near side of the mill, the
+   * side the river is coming from. Not the tailrace, even though the two are one
+   * network: the tailrace is the outflow on the far side of the town, and aiming
+   * at it sends the deck round the back of a building it could have met head on.
+   * If a passing pond takes the leat's mouth over the errand is not lost, so fall
+   * back to the rest of the town's water, tailrace last.
+   */
+  _questTargets(q) {
+    const leat = this.board.openMouths.get(q.edge)
+    if (leat) return [leat]
+    const tail = q.tail ? this.board.openMouths.get(q.tail.edge) : null
+    const rest = this._endsOf(q.edge).filter((m) => !tail || m[0] !== tail[0] || m[1] !== tail[1])
+    return rest.length ? rest : this._endsOf(q.edge)
+  }
+
+  /** The open ends of whichever river `edge` belongs to. */
   _endsOf(edge) {
     const out = []
     if (!edge || !this.board.riverParent.has(edge)) return out
@@ -450,7 +512,7 @@ export class Game {
     // a route outright, and the piece in hand is cut for its *first hat*. That
     // is the errand made concrete: two or three specific tiles, offered one at a
     // time, each one still yours to place wherever you like.
-    const wants = this.quest && !this.quest.done ? this._endsOf(this.quest.edge) : []
+    const wants = this.quest && !this.quest.done ? this._questTargets(this.quest) : []
     const aiming = wants.length > 0 && hwRoot !== null && qRoot !== null && hwRoot !== qRoot
     if (aiming) {
       const steps = []
@@ -610,6 +672,16 @@ export class Game {
         this.log.unshift(`${BIOME_NAME[r.biome]} sealed · ${r.size} kites · +${r.score}`)
       }
     }
+    // A camp could only be laid where its cover already was, so it has earned
+    // its bounty simply by being here.
+    const camp = tile.camp ?? null
+    if (camp) {
+      this.score += camp.score
+      gained += camp.score
+      bonus += camp.tiles
+      this.camps = (this.camps ?? 0) + 1
+      this.log.unshift(`${camp.title} · +${camp.score}`)
+    }
     const quest = this._checkQuest()
     if (quest) {
       gained += quest.score
@@ -622,7 +694,7 @@ export class Game {
     this._fits = null
     this._refillQueue()
     if (this.tilesLeft <= 0 || this.fits.length === 0) this.finish()
-    return { ...res, gained, fitScore, perfect, bonus, announce, quest, ...h, joined: res.joined }
+    return { ...res, gained, fitScore, perfect, bonus, announce, quest, camp, ...h, joined: res.joined }
   }
 
   /** The largest region still open, for the HUD's "growing" line. */

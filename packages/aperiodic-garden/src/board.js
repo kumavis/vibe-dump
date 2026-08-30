@@ -17,8 +17,8 @@
 //
 //   1. it must not overlap anything;
 //   2. every shared long edge must agree about whether a river crosses it;
-//   3. it must leave the board fillable — no pocket too small or too awkward for
-//      another hat, and no river end walled in with nowhere left to flow.
+//   3. it must leave the board fillable — every empty cell near it still has
+//      some hat that could cover it, and no river end is walled in.
 
 import {
   KEY_A,
@@ -71,9 +71,32 @@ export function regionTiles(n) {
   return 0
 }
 
-/** Beyond this many cells an enclosed pocket is certainly roomy enough for a
- *  hat, so the fill test can stop looking. */
-const POCKET_CAP = 60
+/** How far apart two kites of one hat can be, in neighbour-steps. Computed from
+ *  the shape rather than eyeballed: it is exactly how far a placement's
+ *  influence on what can still be covered reaches. */
+export const HAT_REACH = (() => {
+  const cells = placementKeys(0, 0, 0)
+  const nb = []
+  let worst = 0
+  for (const start of cells) {
+    const seen = new Set([start])
+    let ring = [start]
+    for (let step = 1; step <= 8 && ring.length; step++) {
+      const next = []
+      for (const key of ring) {
+        neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), nb)
+        for (let j = 0; j < 4; j++) {
+          if (seen.has(nb[j])) continue
+          seen.add(nb[j])
+          next.push(nb[j])
+          if (cells.includes(nb[j])) worst = Math.max(worst, step)
+        }
+      }
+      ring = next
+    }
+  }
+  return worst
+})()
 
 const NO_CELLS = new Set()
 
@@ -218,34 +241,104 @@ export class Board {
     const out = []
     for (const c of candidatePlacements(this.filled)) {
       const cells = placementKeys(c.o, c.ta, c.tb)
+      // cheap and it prunes hard, so it goes first
+      if (tile.demand && !this.meetsDemand(cells, tile.demand)) continue
       if (this.placeable(c.o, c.ta, c.tb, tile.ports, cells)) out.push({ ...c, cells })
     }
     return out
   }
 
-  /**
-   * Rule 3a — no stranded gap. A hat needs eight kites in a hat-shaped
-   * arrangement, so a careless placement can leave a hole nothing will ever fill
-   * again. Rather than paper over it afterwards, such a placement is simply not
-   * allowed: the garden stays a garden you could finish.
-   */
-  leavesRoom(cells, added) {
-    const seen = new Set()
+  /** Does this spot already have enough of the cover a camp tile lives off?
+   *  Counted in shared edges, so a camp has to sit *in* the wood rather than
+   *  touch one corner of it. */
+  meetsDemand(cells, { biome, wants }) {
+    const own = new Set(cells)
+    let n = 0
     for (const key of cells) {
       neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), this._nb)
       for (let j = 0; j < 4; j++) {
-        const start = this._nb[j]
-        if (this.filled.has(start) || added.has(start) || seen.has(start)) continue
-        const pocket = this._pocket(start, added)
-        for (const c of pocket.cells) seen.add(c)
-        // Ran past the cap, so it opens onto the rest of the plane — or it is
-        // roomy enough that a hat certainly fits somewhere inside it.
-        if (pocket.open) continue
-        if (pocket.cells.length < 8) return false
-        if (!this._fitsInside(pocket.cells)) return false
+        const m = this._nb[j]
+        if (own.has(m) || !this.filled.has(m)) continue
+        if (this.biome.get(m) === biome && ++n >= wants) return true
       }
     }
+    return false
+  }
+
+  /**
+   * Rule 3a — no stranded ground. Every empty cell near this placement must
+   * still be coverable: some hat, somewhere, able to lie over it with all eight
+   * of its kites on empty ground.
+   *
+   * This used to be a flood fill looking for *enclosed* pockets too small or too
+   * awkward for a hat, and it let the common case straight through. The gaps
+   * that actually appear are not enclosed at all — they are notches a kite or
+   * two deep along the edge of the garden, wide open to the plane and yet too
+   * pinched for any hat to reach into. A fill walks out of one into open ground
+   * and calls the whole thing roomy. Asking the question cell by cell instead
+   * catches both, and says what the rule means: no space you cannot fill.
+   *
+   * Four rings, and four is not a guess: two kites of one hat are at most four
+   * neighbour-steps apart (measured from HAT_KITES, not assumed), so a placement
+   * can only take away the last hat covering a cell within four steps of it.
+   * Two rings looked like plenty and let a stranding through in fourteen games
+   * out of twenty.
+   */
+  leavesRoom(cells, added) {
+    for (const key of this._nearby(cells, added)) {
+      if (!this._coverable(key, added)) return false
+    }
     return true
+  }
+
+  /** The empty cells a placement could possibly strand: everything within one
+   *  hat's reach of it. */
+  _nearby(cells, added) {
+    let ring = cells
+    const out = []
+    const seen = new Set(cells)
+    for (let step = 0; step < HAT_REACH; step++) {
+      const next = []
+      for (const key of ring) {
+        neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), this._nb)
+        for (let j = 0; j < 4; j++) {
+          const m = this._nb[j]
+          if (seen.has(m)) continue
+          seen.add(m)
+          if (this.filled.has(m) || added.has(m)) continue
+          out.push(m)
+          next.push(m)
+        }
+      }
+      ring = next
+    }
+    return out
+  }
+
+  /** Could any hat at all lie over `cell`? */
+  _coverable(cell, added) {
+    const fa = KEY_A(cell)
+    const fb = KEY_B(cell)
+    const fk = KEY_K(cell)
+    for (let o = 0; o < 12; o++) {
+      const base = ORIENT_KITES[o]
+      for (let i = 0; i < 8; i++) {
+        if (base[i][2] !== fk) continue
+        const ta = fa - base[i][0]
+        const tb = fb - base[i][1]
+        let free = true
+        for (let j = 0; j < 8; j++) {
+          const kk = base[j]
+          const key = ((kk[0] + ta + 1024) << 15) | ((kk[1] + tb + 1024) << 3) | kk[2]
+          if (this.filled.has(key) || added.has(key)) {
+            free = false
+            break
+          }
+        }
+        if (free) return true
+      }
+    }
+    return false
   }
 
   /**
@@ -448,57 +541,31 @@ export class Board {
   }
 
   /**
-   * The empty component containing `start`, with `open` set once it runs past
-   * the cap — which, for anything but a sealed pocket, means it reaches the rest
-   * of the plane. The visited set is local on purpose: sharing one across
-   * separate fills lets an earlier fill's footprint wall off a later one, and
-   * the open plane then reports itself as a tiny sealed pocket.
+   * Start a new crossing on a tile already laid — the tailrace a mill opens
+   * once its wheel turns. Refuses if the ground across it is taken or has
+   * nowhere to carry the water on, because that would leave a mouth no
+   * placement could ever satisfy and seize the board up.
    */
-  _pocket(start, added) {
-    const visited = new Set([start])
-    const stack = [start]
-    const out = []
-    while (stack.length) {
-      const key = stack.pop()
-      out.push(key)
-      if (out.length > POCKET_CAP) return { cells: out, open: true }
-      neighbourKeys(KEY_A(key), KEY_B(key), KEY_K(key), this._nb2)
-      for (let j = 0; j < 4; j++) {
-        const m = this._nb2[j]
-        if (this.filled.has(m) || added.has(m) || visited.has(m)) continue
-        visited.add(m)
-        stack.push(m)
-      }
-    }
-    return { cells: out, open: false }
-  }
+  openCrossing(tileIndex, slot) {
+    const t = this.tiles[tileIndex]
+    if (!t || t.ports.has(slot)) return null
+    const x = this.crossings(t.orient, t.ta, t.tb, t.cells, []).find((c) => c.slot === slot)
+    if (!x || this.filled.has(x.far)) return null
+    if (!this._continuable(x.far, 1 - x.side, NO_CELLS)) return null
 
-  /** Could a hat ever be placed wholly inside this pocket? */
-  _fitsInside(pocket) {
-    const set = new Set(pocket)
-    for (const key of pocket) {
-      const fa = KEY_A(key)
-      const fb = KEY_B(key)
-      const fk = KEY_K(key)
-      for (let o = 0; o < 12; o++) {
-        const base = ORIENT_KITES[o]
-        for (let i = 0; i < 8; i++) {
-          if (base[i][2] !== fk) continue
-          const ta = fa - base[i][0]
-          const tb = fb - base[i][1]
-          let ok = true
-          for (let j = 0; j < 8; j++) {
-            const kk = base[j]
-            if (!set.has(((kk[0] + ta + 1024) << 15) | ((kk[1] + tb + 1024) << 3) | kk[2])) {
-              ok = false
-              break
-            }
-          }
-          if (ok) return true
-        }
-      }
+    t.ports.add(slot)
+    this.ports.add(x.edge)
+    if (!this.riverParent.has(x.edge)) this.riverParent.set(x.edge, x.edge)
+    // the tile's crossings all meet at its hub, so this joins the water it has
+    for (const other of this.crossings(t.orient, t.ta, t.tb, t.cells, [])) {
+      if (other.slot === slot || !t.ports.has(other.slot)) continue
+      const ra = this.riverFind(other.edge)
+      const rb = this.riverFind(x.edge)
+      if (ra !== rb) this.riverParent.set(rb, ra)
     }
-    return false
+    this.openMouths.set(x.edge, [x.far, 1 - x.side])
+    this._stuckAt = -1
+    return x
   }
 
   /**

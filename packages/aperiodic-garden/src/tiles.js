@@ -58,12 +58,16 @@ export const SLOT_ADJ = []
 }
 
 /**
- * How many mouths a stream tile has. Never one: a single-mouth tile laid onto an
- * open mouth *caps* that river, and a capped river can never be carried any
- * further — which is how a garden ends up with the water stranded three tiles
- * short of the mill and no legal way to finish. Every stream tile carries the
- * water through; the only one-mouth pieces on the board are the mountain's
- * source and a town's leat, both placed at the start.
+ * How many mouths a stream tile has. Never one *by accident*: a single-mouth
+ * tile laid onto an open mouth caps that river, and a capped river can never be
+ * carried any further — which is how a garden ends up with the water stranded
+ * three tiles short of the mill and no legal way to finish. Every ordinary
+ * stream tile carries the water through.
+ *
+ * A river does have to be allowed to end somewhere, though, or the garden fills
+ * up with mouths nobody can ever satisfy. It ends in a **lake**: a one-mouth
+ * tile with a pool on it, dealt on purpose and drawn so you can see what it is.
+ * That is the only cap in the deck.
  */
 const PORT_COUNT_W = [
   [2, 58],
@@ -71,7 +75,10 @@ const PORT_COUNT_W = [
   [4, 14],
 ]
 const PORT_COUNT_TOTAL = PORT_COUNT_W.reduce((s, [, w]) => s + w, 0)
-const KIND = [null, 'spring', 'run', 'fork', 'delta']
+const KIND = [null, 'lake', 'run', 'fork', 'delta']
+
+/** How often a river tile is a lake rather than a run. */
+const LAKE_CHANCE = 0.11
 
 /** Land covers and how often they turn up as a tile's dominant one. */
 const LAND_W = [
@@ -151,12 +158,51 @@ export function makeTile(rnd, riverChance = 0.42) {
   const ports = new Set()
   let kind = 'land'
   if (rnd() < riverChance) {
-    const n = pickWeighted(PORT_COUNT_W, ([, w]) => w, PORT_COUNT_TOTAL, rnd)[0]
+    const n = rnd() < LAKE_CHANCE ? 1 : pickWeighted(PORT_COUNT_W, ([, w]) => w, PORT_COUNT_TOTAL, rnd)[0]
     const pool = PORT_SLOTS.slice()
     for (let i = 0; i < n; i++) ports.add(...pool.splice(Math.floor(rnd() * pool.length), 1))
     kind = KIND[n]
   }
-  return { biomes: paintLand(rnd), ports, kind, mouths: ports.size }
+  return { biomes: paintLand(rnd), ports, kind, mouths: ports.size, lake: ports.size === 1 }
+}
+
+/** A pool for the water to end in, cut for one particular crossing. */
+export function lakeTile(slot, rnd) {
+  return { biomes: paintLand(rnd), ports: new Set([slot]), kind: 'lake', mouths: 1, lake: true }
+}
+
+// --- tiles that have to earn their place -------------------------------------
+
+/**
+ * A working camp: a tile that may only be laid where the cover it lives off
+ * already surrounds it. A woodcutter needs woods; a shepherd needs grazing; a
+ * quarry needs the stone it is cutting.
+ *
+ * `wants` is how many of the tile's own outward edges must meet that cover
+ * across the seam. Meeting the condition pays — it is the one placement in the
+ * game where *what is already there* decides where a tile may go, and it turns
+ * a stretch of forest you have been growing into somewhere worth building.
+ */
+export const CAMPS = [
+  { key: 'woodcutter', title: "woodcutter's camp", biome: FOREST, wants: 4, score: 180, tiles: 2 },
+  { key: 'shepherd', title: "shepherd's fold", biome: PLAINS, wants: 5, score: 140, tiles: 2 },
+  { key: 'quarry', title: 'quarry', biome: SCREE, wants: 2, score: 240, tiles: 3 },
+  { key: 'vineyard', title: 'vineyard', biome: HILLS, wants: 3, score: 210, tiles: 2 },
+]
+
+/** One camp tile: the camp's own cover under it, and the demand it carries. */
+export function campTile(camp) {
+  const biomes = new Array(8).fill(camp.biome)
+  // a clearing in the middle of it, so the camp reads as built rather than grown
+  for (const i of [0, ...SLOT_ADJ[0]]) biomes[i] = VILLAGE
+  return {
+    biomes,
+    ports: new Set(),
+    kind: camp.key,
+    mouths: 0,
+    camp,
+    demand: { biome: camp.biome, wants: camp.wants },
+  }
 }
 
 /**
@@ -314,36 +360,52 @@ export function siteNear(tx, tz, occupied, want = 1) {
 }
 
 /**
- * Dress a site as a small town with one crossing — the leat that turns its
- * wheel — chosen to face back the way the water has to come.
+ * Dress a site as a small town with two crossings: the leat, facing back the way
+ * the water has to come, and a tailrace on the far side of the wheel.
+ *
+ * The tailrace is the point. A mill is somewhere a river passes *through* — the
+ * water turns the wheel and carries on — and giving the town a single crossing
+ * made it a plug: the errand ended with the stream stopped dead at a building,
+ * which looks wrong and leaves nothing to build on. The tailrace is what the
+ * next errand starts from.
  */
 export function townTile(site, towardX, towardZ) {
   const flipped = site.orient >= 6
-  let best = null
-  let bestD = Infinity
-  let bestMid = null
-  for (const slot of PORT_SLOTS) {
+  const ports = PORT_SLOTS.map((slot) => {
     const key = site.cells[slot]
     const a = KEY_A(key)
     const b = KEY_B(key)
     const k = KEY_K(key)
     const side = worldSide(PORT_SIDE[slot], flipped)
     const [mx, mz] = longEdgeMid(a, b, k, side)
-    const d = Math.hypot(mx - towardX, mz - towardZ)
-    if (d < bestD) {
-      bestD = d
-      best = { slot, edge: longEdgeId(a, b, k, side) }
-      bestMid = [mx, mz]
+    return { slot, side, edge: longEdgeId(a, b, k, side), mid: [mx, mz], d: Math.hypot(mx - towardX, mz - towardZ) }
+  })
+  ports.sort((p, q) => p.d - q.d)
+  const leat = ports[0]
+  // …and out the other side: of the remaining crossings, the one furthest from
+  // the leat, so the water is seen to cross the town rather than double back.
+  let tail = null
+  let far = -1
+  for (const p of ports.slice(1)) {
+    const d = Math.hypot(p.mid[0] - leat.mid[0], p.mid[1] - leat.mid[1])
+    if (d > far) {
+      far = d
+      tail = p
     }
   }
+
   // houses crowd the water; the rest is the common land around them
   const biomes = new Array(8).fill(PLAINS)
-  const near = [best.slot, ...SLOT_ADJ[best.slot], 0]
-  for (const i of near) biomes[i] = VILLAGE
+  for (const i of [leat.slot, ...SLOT_ADJ[leat.slot], 0]) biomes[i] = VILLAGE
+  // Only the leat to begin with. A dry mill has no outflow, and opening the
+  // tailrace before the wheel turns puts a second mouth on the board that every
+  // placement then has to keep satisfiable, for water that is not coming yet.
+  // It starts running when the wheel does.
   return {
-    tile: { biomes, ports: new Set([best.slot]), kind: 'town', mouths: 1 },
-    edge: best.edge,
-    mid: bestMid,
-    slot: best.slot,
+    tile: { biomes, ports: new Set([leat.slot]), kind: 'town', mouths: 1 },
+    edge: leat.edge,
+    mid: leat.mid,
+    slot: leat.slot,
+    tail: { edge: tail.edge, mid: tail.mid, slot: tail.slot, side: tail.side },
   }
 }

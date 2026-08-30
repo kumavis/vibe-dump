@@ -190,6 +190,37 @@ export function longEdgeMid(a, b, k, side) {
   return cart(a + (d0[0] + d1[0]) / 2, b + (d0[1] + d1[1]) / 2)
 }
 
+/**
+ * That edge's midpoint together with the unit normal pointing into kite `k`.
+ *
+ * A river crosses the edge here, and the two tiles either side each draw their
+ * half. If both leave along this normal they leave in *opposite directions
+ * along one line*, and the two halves meet as one curve. Aiming each half at
+ * its own kite's centroid instead — which is what the first version did — has
+ * them leave at whatever angle the geometry happens to give, and every crossing
+ * on the board shows a kink.
+ */
+export function longEdgeFrame(a, b, k, side) {
+  const j = side === 0 ? k : (k + 5) % 6
+  const d0 = D[j]
+  const d1 = D[(j + 1) % 6]
+  const mid = cart(a + (d0[0] + d1[0]) / 2, b + (d0[1] + d1[1]) / 2)
+  // the edge runs from the hexagon centre out to M(j)
+  const [ox, oy] = cart(a, b)
+  const [ex, ey] = cart(a + d0[0] + d1[0], b + d0[1] + d1[1])
+  const tx = ex - ox
+  const ty = ey - oy
+  const len = Math.hypot(tx, ty) || 1
+  let nx = -ty / len
+  let ny = tx / len
+  const [kx, ky] = kiteCentre(a, b, k)
+  if ((kx - mid[0]) * nx + (ky - mid[1]) * ny < 0) {
+    nx = -nx
+    ny = -ny
+  }
+  return { mid, nx, ny }
+}
+
 // --- placements -------------------------------------------------------------
 
 /** The same eight cells as packed keys, in slot order. */

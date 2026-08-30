@@ -94,9 +94,9 @@ function pennantGeo() {
  * lets the silhouette be a proper faceted mountain rather than whatever a
  * height field happens to make of eight kites.
  */
-function mountainMesh(radius, height) {
+function mountainMesh(radius, height, gully) {
   const buf = new Buf()
-  const SEG = 11
+  const SEG = 17
   // The silhouette, as a profile: how far out the flank sits at each height.
   const KEY_UP = [0, 0.2, 0.44, 0.68, 0.87, 1]
   const KEY_OUT = [1, 0.83, 0.62, 0.4, 0.19, 0.035]
@@ -133,10 +133,26 @@ function mountainMesh(radius, height) {
   const BAND = [0, 0.14, 0.28, 0.55, 0.55, 0.72, 0.88, 1]
   const heightAt = (ring, s) => (ring === SNOW_RING - 1 || ring === SNOW_RING ? snowline(s) : BAND[ring])
 
+  // The valley the headwater comes down. The cut is strongest at the foot and
+  // fades to nothing at the summit, so it reads as a notch let into one flank
+  // rather than a slice off the top — and from above the massif closes round it
+  // in a rough C, with the river running out of the gap.
+  const GULLY_W = 0.62
+  const gullyAt = (s) => {
+    if (gully === null || gully === undefined) return 0
+    let d = (seg(s) / SEG) * Math.PI * 2 - gully
+    while (d > Math.PI) d -= Math.PI * 2
+    while (d < -Math.PI) d += Math.PI * 2
+    if (Math.abs(d) >= GULLY_W) return 0
+    return 0.5 + 0.5 * Math.cos((Math.PI * Math.abs(d)) / GULLY_W)
+  }
+
   const pt = (ring, s) => {
     const a = (seg(s) / SEG) * Math.PI * 2
-    const t = heightAt(ring, s)
-    const r = radius * outAt(t) * (ring === BAND.length - 1 ? 1 : wob(ring, s))
+    const t0 = heightAt(ring, s)
+    const cut = gullyAt(s) * (1 - t0)
+    const t = t0 * (1 - 0.4 * cut)
+    const r = radius * outAt(t) * (ring === BAND.length - 1 ? 1 : wob(ring, s)) * (1 - 0.52 * cut)
     return [Math.cos(a) * r, height * t, Math.sin(a) * r]
   }
   const col = (ring, s) =>
@@ -236,7 +252,10 @@ class Instancer {
     this.shadow = shadow
     this.cap = 0
   }
-  set(list) {
+  /** `scaleOf` lets the caller shrink individual instances — how the props on a
+   *  tile just laid grow in rather than appearing all at once. */
+  set(list, scaleOf = null) {
+    this.list = list
     const n = list.length
     if (n > this.cap) {
       if (this.mesh) {
@@ -261,7 +280,8 @@ class Instancer {
       const p = list[i]
       pos.set(p.x, p.y, p.z)
       q.setFromAxisAngle(UP, p.rot)
-      scl.set(p.s, p.s, p.s)
+      const s = scaleOf ? p.s * scaleOf(p) : p.s
+      scl.set(s, s, s)
       m.compose(pos, q, scl)
       this.mesh.setMatrixAt(i, m)
       col.set(p.colour ?? 0xffffff).convertSRGBToLinear()
@@ -273,6 +293,10 @@ class Instancer {
   }
 }
 const UP = new THREE.Vector3(0, 1, 0)
+
+/** How long a tile's decorations take to grow in, and how far apart they start. */
+const GROW_TIME = 0.34
+const GROW_STAGGER = 0.22
 
 // --- water ------------------------------------------------------------------
 
@@ -490,8 +514,8 @@ export class Garden {
 
   // --- content ---------------------------------------------------------------
 
-  setMountain(x, z, radius = 0.88, height = 1.6) {
-    applyBuf(this.mountain.geometry, mountainMesh(radius, height))
+  setMountain(x, z, gully = null, radius = 0.88, height = 1.6) {
+    applyBuf(this.mountain.geometry, mountainMesh(radius, height, gully))
     this.mountain.position.set(x, 0, z)
     this.mountain.visible = true
     this.peakY = height * 1.03
@@ -570,8 +594,33 @@ export class Garden {
           break
       }
     }
-    for (const k of Object.keys(lists)) this.props[k].set(lists[k])
+    this.propLists = lists
+    this._writeProps()
     if (bounds) this.fitShadow(bounds)
+  }
+
+  /**
+   * Grow the decorations on a tile in rather than having them appear whole.
+   * Only the newest tile's props move, so the rest of the garden costs nothing
+   * beyond rewriting the instance buffers for the third of a second it takes.
+   */
+  growTile(cells) {
+    this.grown = { cells: new Set(cells), t: 0 }
+  }
+
+  _writeProps() {
+    const g = this.grown
+    const scaleOf = g
+      ? (p) => {
+          if (!g.cells.has(p.key)) return 1
+          // each prop a little behind the last, so a tile's trees come up in a
+          // ripple rather than in lockstep
+          const k = Math.max(0, Math.min(1, (g.t - (p.tint ?? 0) * GROW_STAGGER) / GROW_TIME))
+          // overshoot a touch and settle: things planted, not extruded
+          return k >= 1 ? 1 : k * k * (3 - 2 * k) * (1 + 0.16 * Math.sin(k * Math.PI))
+        }
+      : null
+    for (const k of Object.keys(this.propLists)) this.props[k].set(this.propLists[k], scaleOf)
   }
 
   fitShadow({ cx, cz, r }) {
@@ -742,6 +791,11 @@ export class Garden {
 
   render(dt, t) {
     this.waterUniforms.uTime.value = t
+    if (this.grown) {
+      this.grown.t += dt
+      if (this.grown.t > GROW_TIME + GROW_STAGGER) this.grown = null
+      this._writeProps()
+    }
     this.hintMat.opacity = 0.34 + 0.2 * Math.sin(t * 1.6)
     for (const w of this.wheels ?? []) if (w.running) w.wheel.rotation.z -= dt * 1.5
     this.rimMat.opacity = 0.62 + 0.3 * Math.sin(t * 3.4)

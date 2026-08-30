@@ -26,6 +26,7 @@ import {
   cart,
   kiteCentre,
   kiteCorners,
+  longEdgeFrame,
   longEdgeMid,
   neighbourKeys,
   worldSide,
@@ -138,26 +139,39 @@ function pushCol(arr, hex) {
 
 /**
  * The polyline a river branch follows inside one tile: from the midpoint of the
- * crossed edge, bending through the port kite, to the tile's hub. Two tiles
- * sharing an edge both start at that same midpoint, so their branches join.
+ * crossed edge, out along the edge's normal, bending through the port kite, to
+ * the tile's hub.
+ *
+ * Two tiles sharing an edge start at the same midpoint *and* leave along the
+ * same line, in opposite directions — which is what makes the two halves read as
+ * one river rather than two ribbons meeting at an angle. The normal segment is
+ * short; past it the curve is free to swing toward the kite's centre and on to
+ * the hub.
  */
-export function branchPath(cells, orient, slot, hub, steps = 7) {
+const EXIT = 0.16 * W
+
+export function branchPath(cells, orient, slot, hub, steps = 10) {
   const key = cells[slot]
   const a = KEY_A(key)
   const b = KEY_B(key)
   const k = KEY_K(key)
   const side = worldSide(PORT_SIDE[slot], orient >= 6)
-  const [mx, mz] = longEdgeMid(a, b, k, side)
+  const { mid, nx, ny } = longEdgeFrame(a, b, k, side)
   const [cx, cz] = kiteCentre(a, b, k)
-  const p0 = [mx * W, mz * W]
-  const p1 = [cx * W, cz * W]
+  const p0 = [mid[0] * W, mid[1] * W]
+  const p1 = [p0[0] + nx * EXIT, p0[1] + ny * EXIT]
+  const p2 = [cx * W, cz * W]
   const out = []
   for (let i = 0; i <= steps; i++) {
     const t = i / steps
     const u = 1 - t
+    const w0 = u * u * u
+    const w1 = 3 * u * u * t
+    const w2 = 3 * u * t * t
+    const w3 = t * t * t
     out.push([
-      u * u * p0[0] + 2 * u * t * p1[0] + t * t * hub[0],
-      u * u * p0[1] + 2 * u * t * p1[1] + t * t * hub[1],
+      w0 * p0[0] + w1 * p1[0] + w2 * p2[0] + w3 * hub[0],
+      w0 * p0[1] + w1 * p1[1] + w2 * p2[1] + w3 * hub[1],
     ])
   }
   return out
@@ -175,25 +189,65 @@ export function hubOf(cells) {
   return [(x / cells.length) * W, (z / cells.length) * W]
 }
 
+/**
+ * A flat band along a polyline.
+ *
+ * The offsets are worked out once per *point*, from the direction through it
+ * rather than the direction of each segment. Taking them per segment gives every
+ * quad its own two corners, and on the outside of a bend those corners do not
+ * line up: the bank came out with a row of little teeth down it wherever the
+ * river turned. Sharing one offset between the quads either side leaves no gap
+ * to show.
+ */
 function ribbon(buf, path, y, halfWidth, colour, taperTo = 1) {
-  for (let i = 0; i < path.length - 1; i++) {
-    const p = path[i]
-    const q = path[i + 1]
+  const n = path.length
+  if (n < 2) return
+  const off = []
+  for (let i = 0; i < n; i++) {
+    const p = path[Math.max(0, i - 1)]
+    const q = path[Math.min(n - 1, i + 1)]
     let dx = q[0] - p[0]
     let dz = q[1] - p[1]
     const len = Math.hypot(dx, dz) || 1
     dx /= len
     dz /= len
-    const w0 = halfWidth * (1 - (1 - taperTo) * (i / (path.length - 1)))
-    const w1 = halfWidth * (1 - (1 - taperTo) * ((i + 1) / (path.length - 1)))
-    const a = [p[0] - dz * w0, y, p[1] + dx * w0]
-    const b = [q[0] - dz * w1, y, q[1] + dx * w1]
-    const c = [q[0] + dz * w1, y, q[1] - dx * w1]
-    const d = [p[0] + dz * w0, y, p[1] - dx * w0]
+    const w = halfWidth * (1 - (1 - taperTo) * (i / (n - 1)))
+    off.push([-dz * w, dx * w])
+  }
+  for (let i = 0; i < n - 1; i++) {
+    const p = path[i]
+    const q = path[i + 1]
+    const o0 = off[i]
+    const o1 = off[i + 1]
+    const a = [p[0] + o0[0], y, p[1] + o0[1]]
+    const b = [q[0] + o1[0], y, q[1] + o1[1]]
+    const c = [q[0] - o1[0], y, q[1] - o1[1]]
+    const d = [p[0] - o0[0], y, p[1] - o0[1]]
     // wound so the face normal comes out +Y; the mirror of this faces the floor
     // and is culled, which reads as the river simply not being drawn
     buf.tri(a, b, c, colour)
     buf.tri(a, c, d, colour)
+  }
+}
+
+/** A lake: a disc with its rim pushed about a little, so it reads as water
+ *  rather than as a coin. Wobbled off the cell key, so a garden reloads the
+ *  same. */
+const LAKE_R = 0.3 * W
+
+function pool(buf, centre, y, r, colour, key, seg = 14) {
+  const rad = (i) => r * (0.78 + 0.42 * cellHash(key, (i % seg) * 37 + 5))
+  for (let i = 0; i < seg; i++) {
+    const a0 = (i / seg) * Math.PI * 2
+    const a1 = ((i + 1) / seg) * Math.PI * 2
+    const r0 = rad(i)
+    const r1 = rad(i + 1)
+    buf.tri(
+      [centre[0], y, centre[1]],
+      [centre[0] + Math.cos(a1) * r1, y, centre[1] + Math.sin(a1) * r1],
+      [centre[0] + Math.cos(a0) * r0, y, centre[1] + Math.sin(a0) * r0],
+      colour,
+    )
   }
 }
 
@@ -315,8 +369,16 @@ export function buildGarden(game, opts = {}) {
       ribbon(land, path, BANK_Y, BANK_W, RIVER_BANK)
       ribbon(water, path, WATER_Y, WATER_W, 0xffffff)
     }
-    disc(land, hub, BANK_Y, BANK_W, RIVER_BANK)
-    disc(water, hub, WATER_Y, WATER_W * (t.ports.size === 1 ? 1.5 : 1), 0xffffff)
+    // A tile with one crossing is a lake: the water arrives and stops there,
+    // which is the only way a river is allowed to end. Drawn as a pool big
+    // enough to read as one, so a dead end never looks like a mistake.
+    if (t.ports.size === 1) {
+      pool(land, hub, BANK_Y, LAKE_R + BANK_W * 0.7, RIVER_BANK, t.cells[0])
+      pool(water, hub, WATER_Y, LAKE_R, 0xffffff, t.cells[0])
+    } else {
+      disc(land, hub, BANK_Y, BANK_W, RIVER_BANK)
+      disc(water, hub, WATER_Y, WATER_W, 0xffffff)
+    }
   }
 
   // --- pennants -------------------------------------------------------------
@@ -370,7 +432,7 @@ export const PROP_PENNANT = 5
 function scatter(out, key, biome, inner, jit) {
   const push = (type, i, scale) => {
     const [x, z] = pointIn(inner, key, i)
-    out.push({ type, x, y: 0, z, s: scale, rot: cellHash(key, i * 13 + 5) * Math.PI * 2, tint: cellHash(key, i * 13 + 6) })
+    out.push({ type, key, x, y: 0, z, s: scale, rot: cellHash(key, i * 13 + 5) * Math.PI * 2, tint: cellHash(key, i * 13 + 6) })
   }
   switch (biome) {
     case FOREST: {

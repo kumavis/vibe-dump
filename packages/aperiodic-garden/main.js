@@ -299,6 +299,7 @@ function commit() {
   const fit = hover.fits[hover.index]
   const res = game.place(fit)
   rebuild()
+  garden.growTile(res.cells)
 
   const mid = centroidOf(fit.cells)
   if (res.fitScore > 0) pop(mid, `+${res.fitScore}`, res.perfect)
@@ -307,6 +308,7 @@ function commit() {
     garden.playFlash(flashGeometry(cells))
     pop(centroidOf(cells), `${BIOME_NAME[r.biome]} +${r.score}`, true)
   }
+  if (res.camp) pop(mid, `${res.camp.title} · +${res.camp.score}`, true, 0.2)
   if (res.bonus > 0) pop(mid, `+${res.bonus} tiles`, false, 0.5)
   if (res.quest) {
     const site = res.quest
@@ -390,6 +392,7 @@ function syncHud() {
 
 function tileLabel(tile) {
   if (!tile) return ''
+  if (tile.camp) return `${tile.camp.title} · needs ${BIOME_NAME[tile.camp.biome]}`
   const counts = new Map()
   for (const b of tile.biomes) counts.set(b, (counts.get(b) ?? 0) + 1)
   const parts = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([b]) => BIOME_NAME[b])
@@ -544,12 +547,35 @@ canvas.addEventListener('pointercancel', endPointer)
 
 canvas.addEventListener('contextmenu', (e) => e.preventDefault())
 
+// A mouse wheel sends one big notch; a trackpad sends a stream of small ones,
+// and a fixed factor per event made two fingers on a trackpad rocket in and out.
+// Zoom follows how far the wheel actually turned instead, in the units the event
+// says it is using.
+const WHEEL_LINE = 16
+const WHEEL_PAGE = 400
+function wheelPixels(e) {
+  if (e.deltaMode === 1) return e.deltaY * WHEEL_LINE
+  if (e.deltaMode === 2) return e.deltaY * WHEEL_PAGE
+  return e.deltaY
+}
+
+let cycledAt = 0
+
 canvas.addEventListener(
   'wheel',
   (e) => {
     e.preventDefault()
-    if (e.shiftKey || e.ctrlKey || !hover) garden.zoom(e.deltaY > 0 ? 1.12 : 0.89)
-    else cycle(e.deltaY > 0 ? 1 : -1)
+    const dy = wheelPixels(e)
+    if (e.shiftKey || e.ctrlKey || !hover) {
+      garden.zoom(Math.exp(Math.max(-120, Math.min(120, dy)) * 0.0016))
+      return
+    }
+    // Cycling the fits is a discrete step, so a trackpad's fifty little events
+    // per flick have to be collapsed into one.
+    const now = performance.now()
+    if (Math.abs(dy) < 2 || now - cycledAt < 110) return
+    cycledAt = now
+    cycle(dy > 0 ? 1 : -1)
   },
   { passive: false },
 )
@@ -599,7 +625,8 @@ function start(seed) {
   ambience.reset()
   garden.resetCamera()
   const [sx, sz] = cart(SUMMIT[0], SUMMIT[1])
-  garden.setMountain(sx * W, sz * W)
+  const dir = game.headwater?.dir
+  garden.setMountain(sx * W, sz * W, dir ? Math.atan2(dir[1], dir[0]) : null)
   rebuild(true)
   syncHud()
   el('gameover').classList.add('hidden')
@@ -661,6 +688,7 @@ function demoStep() {
   }
   const res = game.place(best)
   rebuild()
+  garden.growTile(res.cells)
   for (const r of res.announce) garden.playFlash(flashGeometry(game.board.regionCells(r.root)))
   syncHud()
 }
@@ -678,6 +706,9 @@ window.aperiodicGarden = {
   },
   step: demoStep,
   restart: start,
+  get ambience() {
+    return ambience
+  },
   /** After poking at game state by hand, put the scene and HUD back in step. */
   refresh: () => {
     rebuild()
