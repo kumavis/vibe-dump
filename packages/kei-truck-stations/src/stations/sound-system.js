@@ -436,9 +436,15 @@ function build(ctx) {
       pivot: [0, -PANEL_T, sz * (BOOTH_W / 2 - mm(30))],
       joint: 'hinge',
       axis: [1, 0, 0],
-      // Lying flat on the fascia at rest, folding IN across its face; a quarter
-      // turn stands each one up in the plane the counter needs holding in.
-      range: [0, sz * Math.PI / 2],
+      // Lying flat on the fascia at rest, reaching INBOARD across its face; a
+      // quarter turn stands each one up in the plane the counter needs holding
+      // in. THE SIGN OF THAT QUARTER TURN IS WHICH SIDE THE BRACKET ENDS UP ON,
+      // and it was the wrong one: the cheeks stood up reaching AFT, out over the
+      // crowd, where a bracket holds up nothing at all. The counter cantilevers
+      // forward toward the DJ, so its support has to be forward too. Free to
+      // check and easy to get backwards — the counter's hull runs x -940 to -465
+      // and the cheeks now run with it instead of away from it.
+      range: [0, -sz * Math.PI / 2],
       stage: 6,
       mass: 3,
       com: [BOOTH_PANEL * 0.4, 0, sz * -BOOTH_PANEL * 0.25],

@@ -51,6 +51,36 @@ const statics = [
   ...truck.hulls.map((h) => staticHull(h.id, { c: h.c, s: h.s })),
 ]
 
+/** The truck's own extent, which every station's deployed box is unioned with. */
+const TRUCK_BOX = (() => {
+  const b = new THREE.Box3()
+  const v = new THREE.Vector3()
+  for (const h of truck.hulls) {
+    b.expandByPoint(v.set(h.c[0] - h.s[0] / 2, h.c[1] - h.s[1] / 2, h.c[2] - h.s[2] / 2))
+    b.expandByPoint(v.set(h.c[0] + h.s[0] / 2, h.c[1] + h.s[1] / 2, h.c[2] + h.s[2] / 2))
+  }
+  return b
+})()
+
+/** World AABB of a rig at full deployment — the thing the camera has to fit. */
+function deployedBox(rig) {
+  const before = rig.t ?? 0
+  rig.setProgress(1)
+  const b = TRUCK_BOX.clone()
+  const v = new THREE.Vector3()
+  for (const { obb } of rig.worldHulls()) {
+    const e = obb.rotation.elements
+    const hs = obb.halfSize
+    const hx = Math.abs(e[0]) * hs.x + Math.abs(e[3]) * hs.y + Math.abs(e[6]) * hs.z
+    const hy = Math.abs(e[1]) * hs.x + Math.abs(e[4]) * hs.y + Math.abs(e[7]) * hs.z
+    const hz = Math.abs(e[2]) * hs.x + Math.abs(e[5]) * hs.y + Math.abs(e[8]) * hs.z
+    b.expandByPoint(v.set(obb.center.x - hx, obb.center.y - hy, obb.center.z - hz))
+    b.expandByPoint(v.set(obb.center.x + hx, obb.center.y + hy, obb.center.z + hz))
+  }
+  rig.setProgress(before)
+  return b
+}
+
 // --- the current station ----------------------------------------------------
 
 let current = null
@@ -74,7 +104,7 @@ function load(stationId) {
   const overlay = buildOverlay({ rig, lib, statics, report })
   bedOrigin.add(overlay.group)
 
-  current = { def, rig, meta, report, overlay }
+  current = { def, rig, meta, report, overlay, bounds: deployedBox(rig) }
   return current
 }
 
@@ -138,27 +168,98 @@ function setProgress(t) {
 // --- resize / loop ----------------------------------------------------------
 
 /**
- * Size the renderer, and CENTRE THE TRUCK IN THE PART OF THE WINDOW YOU CAN SEE.
+ * THE PANEL IS PART OF THE VIEWPORT, so the camera treats it as one.
  *
- * The panel is 384 px of fixed chrome down the left edge, so a subject centred
- * in the canvas is not centred on screen — it sits a third of the way out from
- * under the panel, which is why every screenshot of this app had the truck
- * pushed right and the tail half-hidden. A negative view offset shifts the
- * frustum by half the panel width, which puts the middle of the scene in the
- * middle of the space that is actually visible. Collapse the panel and it
- * clears itself, so the framing is right either way.
+ * 384 px of fixed chrome down the left edge does two things to a 3D view, and
+ * both have to be answered or the subject sits half under the panel with dead
+ * space beside it.
+ *
+ *   1. It moves the CENTRE. A negative view offset shifts the frustum by half
+ *      the panel width, which puts the middle of the scene in the middle of the
+ *      space you can actually see.
+ *   2. It narrows the FRAME. The visible strip is 70 per cent of the window on a
+ *      laptop and can be a third of it in a side panel, so the distance that fit
+ *      the deployed module in the whole window does not fit it in what is left.
+ *
+ * So the fit is computed rather than tuned: take the module's deployed bounding
+ * box, project its eight corners onto the camera's own axes, and solve for the
+ * distance at which the tallest and the widest of them just clear the frustum —
+ * using the horizontal half-angle of the VISIBLE strip, not of the window. It
+ * re-runs on resize, on a panel toggle and on every station change, because a
+ * 3.6 m light mast and a 2.1 m shrine roof want different distances.
+ *
+ * It only runs while the view is on autopilot. The moment somebody drags or
+ * picks a named view, auto-orbit goes off and the camera is theirs.
  */
+/**
+ * How much of the window the panel is standing on, and from which edge.
+ *
+ * Below 760 px the panel stops being a left rail and becomes a bottom sheet —
+ * so the inset is vertical there, not horizontal. Reading the rect rather than
+ * re-testing the breakpoint means the CSS stays the single source of truth for
+ * where the panel is; get that wrong and the narrow layout pushes the truck to
+ * a dot in the corner while the fit solves for a viewport that is not there.
+ */
+function panelInset() {
+  const panelEl = document.querySelector('.panel')
+  if (!panelEl || panelEl.classList.contains('hidden')) return { x: 0, y: 0 }
+  const r = panelEl.getBoundingClientRect()
+  const bottomSheet = r.width > innerWidth * 0.7
+  return bottomSheet ? { x: 0, y: Math.min(r.height, innerHeight * 0.7) } : { x: Math.min(r.width, innerWidth * 0.7), y: 0 }
+}
+
+const _f = { c: new THREE.Vector3(), dir: new THREE.Vector3(), right: new THREE.Vector3(), up: new THREE.Vector3(), p: new THREE.Vector3() }
+
+function fitToSubject() {
+  if (!current?.bounds) return
+  const b = current.bounds
+  const h = innerHeight
+  const inset = panelInset()
+  const usableW = Math.max(200, innerWidth - inset.x)
+  const usableH = Math.max(200, h - inset.y)
+  b.getCenter(_f.c)
+
+  _f.dir.copy(camera.position).sub(controls.target)
+  if (_f.dir.lengthSq() < 1e-6) _f.dir.set(-1, 0.5, 1)
+  _f.dir.normalize()
+  // A world-up cross product degenerates when the camera looks straight down.
+  _f.right.crossVectors(Math.abs(_f.dir.y) > 0.99 ? new THREE.Vector3(0, 0, 1) : new THREE.Vector3(0, 1, 0), _f.dir).normalize()
+  _f.up.crossVectors(_f.dir, _f.right).normalize()
+
+  let mx = 0
+  let my = 0
+  let mz = 0
+  for (let i = 0; i < 8; i++) {
+    _f.p.set(i & 1 ? b.max.x : b.min.x, i & 2 ? b.max.y : b.min.y, i & 4 ? b.max.z : b.min.z).sub(_f.c)
+    mx = Math.max(mx, Math.abs(_f.p.dot(_f.right)))
+    my = Math.max(my, Math.abs(_f.p.dot(_f.up)))
+    mz = Math.max(mz, _f.p.dot(_f.dir))
+  }
+  // Half-angles of the strip you can actually see, not of the window.
+  const vHalf = (camera.fov * Math.PI) / 360
+  const vv = Math.atan(Math.tan(vHalf) * (usableH / h))
+  const hh = Math.atan(Math.tan(vHalf) * (usableW / h))
+  const d = Math.max(my / Math.tan(vv), mx / Math.tan(hh)) * 1.07 + mz
+
+  controls.target.copy(_f.c)
+  camera.position.copy(_f.c).addScaledVector(_f.dir, Math.min(Math.max(d, controls.minDistance), controls.maxDistance))
+  camera.lookAt(controls.target)
+  controls.update()
+}
+
 function resize() {
   const w = innerWidth
   const h = innerHeight
   renderer.setSize(w, h, false)
   camera.aspect = w / h
-  const panelEl = document.querySelector('.panel')
-  const shown = panelEl && !panelEl.classList.contains('hidden')
-  const pw = shown ? panelEl.getBoundingClientRect().width : 0
-  if (pw > 0 && w - pw > 260) camera.setViewOffset(w, h, -pw / 2, 0, w, h)
+  const inset = panelInset()
+  // A negative x moves the frustum left, so the subject moves right, out from
+  // under a left rail; a positive y moves it down, so the subject rides above a
+  // bottom sheet.
+  if (inset.x > 0 || inset.y > 0) camera.setViewOffset(w, h, -inset.x / 2, inset.y / 2, w, h)
   else camera.clearViewOffset()
   camera.updateProjectionMatrix()
+  if (state.orbit) fitToSubject()
 }
 addEventListener('resize', resize)
 
@@ -169,6 +270,7 @@ const ui = mountUI({
     const c = load(id)
     setProgress(state.t)
     ui.describe(c)
+    if (state.orbit) fitToSubject()
     return c
   },
   onProgress: (t) => {
@@ -187,9 +289,9 @@ setProgress(state.t)
 ui.tick(state.t, current)
 ui.frame('three-quarter')
 resize()
-// Collapsing the panel changes how much window the scene actually has, so the
-// view offset has to follow it. Watching the class is less coupling than a
-// callback and cannot get out of step with the CSS.
+// Collapsing the panel changes how much window the scene actually has, so both
+// the view offset and the fit have to follow it. Watching the class is less
+// coupling than a callback and cannot get out of step with the CSS.
 {
   const panelEl = document.querySelector('.panel')
   if (panelEl) new MutationObserver(resize).observe(panelEl, { attributes: true, attributeFilter: ['class'] })

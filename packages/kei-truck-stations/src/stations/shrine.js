@@ -84,6 +84,9 @@ const FACET_LEN = [mm(300), mm(300), mm(300)]
 const FACET_ANGLE = [deg(40), deg(28), deg(16)]
 const FACET_GAP = FACET_T + mm(14)
 
+const CHOCHIN_H = mm(420) // 尺丸, and 40 mm of it when collapsed for the road
+const OFFER_X = -mm(260) //  the offering platform, on the dais inside the open face
+
 export default {
   id: 'hokora',
   title: 'Hokora',
@@ -114,6 +117,9 @@ function build(ctx) {
     hulls: [
       ...subframeHull(FLOOR),
       { c: [mm(200), DAIS - mm(30), 0], s: [SHRINE.x1 - SHRINE.x0, mm(60), SHRINE.z * 2], tag: 'dais' },
+      // The offering platform and everything standing on it. In the hull set
+      // because it is 300 mm tall and sits under the arc of two 1850 mm pillars.
+      { c: [OFFER_X, DAIS + mm(200), 0], s: [mm(320), mm(400), mm(780)], tag: 'offerings' },
     ],
   })
   rig.attach(base.id, subframe(lib, { height: FLOOR, skin: lib.hinoki }))
@@ -325,11 +331,45 @@ function build(ctx) {
   }
 
   // --- what makes it a shrine ----------------------------------------------
+  //
+  // THE FITTINGS WERE HUNG IN MID-AIR, AND MID-AIR MOVES. Everything on a shrine
+  // hangs: the bell on its rope, the lanterns on their bails, the shide off the
+  // shimenawa. That is fine at 1620 mm of ridge and absurd at 170, which is
+  // where the ridge sits with the posts nested — the bell was ending up 530 mm
+  // BELOW the cargo deck, swinging through the chassis, and the lanterns a
+  // further 400 below that.
+  //
+  // The fix is the one the objects themselves suggest. A chochin is not rigid:
+  // it collapses to about 40 mm between its two rings, which is exactly how it
+  // travels. A 鈴緒 coils. So both are soft goods driven off the post extension —
+  // the lanterns concertina open and the rope pays out as the ridge rises, and
+  // packed they are a pair of discs and a coil tucked under the ridge beam at
+  // 530 above the deck. The bell is the one rigid piece and it simply hangs on a
+  // short strap, 210 below the beam instead of 700.
+  //
+  // The offering set moved too. It was bolted to the tail gate, which spends the
+  // entire journey VERTICAL — so a 250 mm offertory box, a pair of lanterns and
+  // two open ceramic vases travelled sticking straight out the back of the truck
+  // at right angles. They now stand on a low platform on the deck in front of
+  // the shrine, where the tail gate drops to let you reach them.
   rig.attach('kasagi', shimenawa(lib))
-  rig.attach('gate-tail', offerings(lib))
-  rig.attach('post-3', bellAndRope(lib))
+  rig.attach('floor', offerings(lib))
+  const face = shrineFace(lib)
+  rig.attach('post-3', face)
 
   return {
+    /**
+     * Soft goods: the paper and the rope, which the joint tree cannot express.
+     * Both are driven by how far the ridge posts have gone up, not by the global
+     * progress, so they stay right if the stage windows are ever retimed.
+     */
+    update(_t, r) {
+      const q = r.parts.get('post-3')?.q ?? 0
+      const u = Math.min(1, Math.max(0, q / POST_STAGE))
+      const collapsed = mm(40) / CHOCHIN_H
+      for (const c of face.userData.chochin) c.scale.y = collapsed + (1 - collapsed) * u
+      face.userData.rope.scale.y = 0.02 + 0.98 * u
+    },
     massBudget: [
       ['subframe + dais', 62],
       ['torii: pillars, kasagi, nuki', 48],
@@ -491,39 +531,54 @@ function shimenawa(lib) {
 }
 
 /**
- * What sits on the dropped tailgate: the saisenbako, a pair of battery-lit
- * lanterns, the sakaki vases and a sanbo.
+ * The offering set, standing on a low platform on the dais just inside the
+ * shrine's open face: saisenbako, a pair of battery lanterns, the sakaki vases
+ * and a sanbo.
  *
  * Everything here is drawn at the size it is actually sold at. A 賽銭箱 一尺 is
  * 303 wide, 220 deep and 250 tall, which is deliberately modest — anything
- * larger reads as a collection tin rather than shrine carpentry, and it also has
- * to clear 1120 mm of stowed headroom underneath the folded platform. The
- * 神前灯籠 is the 250 mm battery pattern, not a stone lantern: a stone one is
- * three figures of kilograms and this truck has 350.
+ * larger reads as a collection tin rather than shrine carpentry. The 神前灯籠 is
+ * the 250 mm battery pattern, not a stone lantern: a stone one is three figures
+ * of kilograms and this truck has 350.
  *
- * NONE of it is fastened through its own faces, because none of it has a fixing
+ * IT USED TO BE BOLTED TO THE TAIL GATE, which spends the whole journey
+ * vertical — so the box, the lanterns and two open ceramic vases travelled
+ * projecting straight out the back of the truck at right angles to the road.
+ *
+ * On the dais they travel the way they sit, and the tail gate drops to let you
+ * reach them. The dais rather than the deck in front of it, because the nuki
+ * sweeps a 1240 mm arc down the outside of its pillar on its way across, and
+ * that arc passes 208 mm above the deck right through the strip between the
+ * shrine's face and the tail. Six hundred millimetres of open deck, and a beam
+ * uses all of it.
+ *
+ * None of it is fastened through its own faces, because none of it has a fixing
  * point. The box drops into a felt-lined well and takes two M6 up through the
- * deck into its internal cleats; the vases sit in counterbored wells and come
- * out entirely for transit, because a water-filled vase on a moving truck is a
- * spill onto a cashew-lacquered pillar.
+ * platform into its internal cleats; the vases sit in counterbored wells and
+ * lift out entirely for transit, because a water-filled vase on a moving truck
+ * is a spill onto a cashew-lacquered pillar.
  */
 function offerings(lib) {
   const g = new THREE.Group()
+  g.position.set(OFFER_X, DAIS, 0)
+
+  // The platform, and the felt-lined well the box drops into.
+  g.add(slab([mm(320), mm(60), mm(780)], lib.hinoki, { anchor: [0, -1, 0] }))
+  g.add(slab([mm(350), mm(16), mm(810)], lib.hinoki, { pos: [0, mm(52), 0] }))
+
   const box = new THREE.Group()
-  box.position.set(mm(150), mm(30), 0)
+  box.position.set(-mm(40), mm(60), 0)
   box.add(slab([mm(220), mm(250), mm(303)], lib.hinoki, { anchor: [0, -1, 0] }))
   for (let i = -3; i <= 3; i++) {
     box.add(slab([mm(20), mm(22), mm(260)], lib.trim, { pos: [i * mm(28), mm(258), 0] }))
   }
   box.add(slab([mm(240), mm(18), mm(325)], lib.hinoki, { pos: [0, mm(242), 0] }))
-  // The well it drops into, felt-lined, and the D-rings for the strap.
-  box.add(slab([mm(250), mm(14), mm(335)], lib.hinoki, { pos: [0, -mm(7), 0] }))
   g.add(box)
 
   // 神前灯籠, 250 mm: turned base, sill, washi box, roof.
-  for (const s of [-1, 1]) {
+  for (const sz of [-1, 1]) {
     const t = new THREE.Group()
-    t.position.set(mm(60), 0, s * mm(560))
+    t.position.set(mm(30), mm(60), sz * mm(330))
     t.add(lathe([[mm(58), 0], [mm(46), mm(40)], [mm(34), mm(120)]], lib.hinoki, { seg: 10 }))
     t.add(slab([mm(130), mm(16), mm(130)], lib.hinoki, { pos: [0, mm(128), 0] }))
     t.add(slab([mm(104), mm(96), mm(104)], lib.washi, { pos: [0, mm(184), 0] }))
@@ -536,15 +591,15 @@ function offerings(lib) {
     g.add(t)
   }
 
-  // 榊立 三寸 — 55 φ, 95 tall, a pair, in counterbored wells.
-  for (const s of [-1, 1]) {
+  // 榊立 三寸 — 55 across, 95 tall, a pair, in counterbored wells.
+  for (const sz of [-1, 1]) {
     const v = lathe([[mm(22), 0], [mm(27), mm(20)], [mm(20), mm(70)], [mm(24), mm(95)], [mm(19), mm(95)]], lib.washi, { seg: 12 })
-    v.position.set(mm(150), mm(255), s * mm(230))
+    v.position.set(mm(120), mm(60), sz * mm(170))
     g.add(v)
   }
-  // 三方 六寸 — a 182 mm折敷 on its cut-out box.
+  // 三宝 六寸 — a 182 mm 折敷 on its cut-out box.
   const sanbo = new THREE.Group()
-  sanbo.position.set(mm(150), mm(255), 0)
+  sanbo.position.set(mm(120), mm(60), 0)
   sanbo.add(slab([mm(150), mm(70), mm(150)], lib.hinoki, { anchor: [0, -1, 0] }))
   sanbo.add(slab([mm(182), mm(16), mm(182)], lib.hinoki, { pos: [0, mm(78), 0] }))
   g.add(sanbo)
@@ -552,79 +607,113 @@ function offerings(lib) {
 }
 
 /**
- * A chochin: 尺丸, 300 φ and 420 tall, drawn as the paper barrel between its two
- * bamboo rings with the steel hanging bail that is its ONE mount point.
+ * A chochin: 尺丸, 300 across and 420 tall, drawn as the paper barrel between its
+ * two bamboo rings with the steel bail that is its ONE mount point.
  *
- * The body is 和紙 over split bamboo. It cannot be pierced, clamped or taped —
- * a screw into the 輪 splits it — so the lantern hangs from the bail and nothing
- * else, and for transit it collapses to about 40 mm and drops into a felt-lined
- * well. Hung, it would beat itself to death against the pillars in one trip.
+ * Authored HANGING — the group's origin is the hook, the bail runs down from it,
+ * and the paper hangs below that in its own group so the fold can concertina it.
+ * A chochin collapses to about 40 mm between the rings and that is exactly how
+ * it travels; modelling it as a rigid 420 mm object is what put a pair of
+ * lanterns 400 mm through the cargo deck with the ridge posts nested.
+ *
+ * The body cannot be pierced, clamped or taped — a screw into the 輪 splits it —
+ * so the lantern hangs from the bail and nothing else.
  */
 function chochin(lib) {
   const g = new THREE.Group()
   const R = mm(150)
-  const H = mm(420)
-  g.add(
+  const H = CHOCHIN_H
+  // The bail: a wire loop from the hook down to the top ring.
+  g.add(rod([0, 0, 0], [-mm(50), -mm(56), 0], mm(4), lib.steelRod))
+  g.add(rod([0, 0, 0], [mm(50), -mm(56), 0], mm(4), lib.steelRod))
+
+  const body = new THREE.Group()
+  body.position.y = -mm(70)
+  body.add(
     lathe(
       [
         [mm(52), 0],
-        [R * 0.86, H * 0.14],
-        [R, H * 0.46],
-        [R * 0.9, H * 0.78],
-        [mm(58), H],
+        [R * 0.86, -H * 0.14],
+        [R, -H * 0.46],
+        [R * 0.9, -H * 0.78],
+        [mm(58), -H],
       ],
       lib.washi,
       { seg: 16, open: true },
     ),
   )
-  for (const y of [0, H]) {
-    g.add(lathe([[mm(52), y], [mm(60), y], [mm(60), y + mm(14)], [mm(52), y + mm(14)]], lib.hinoki, { seg: 16 }))
+  for (const y of [0, -H]) {
+    body.add(lathe([[mm(52), y], [mm(60), y], [mm(60), y - mm(14)], [mm(52), y - mm(14)]], lib.hinoki, { seg: 16 }))
   }
   // Ribs, drawn as a few rings so the paper reads as a chochin and not a drum.
   for (let i = 1; i < 9; i++) {
     const t = i / 9
     const r = mm(52) + (R - mm(52)) * Math.sin(Math.PI * t)
-    g.add(lathe([[r + mm(2), H * t], [r + mm(9), H * t + mm(7)], [r + mm(2), H * t + mm(14)]], lib.hinoki, { seg: 16 }))
+    body.add(lathe([[r + mm(2), -H * t], [r + mm(9), -H * t - mm(7)], [r + mm(2), -H * t - mm(14)]], lib.hinoki, { seg: 16 }))
   }
-  // The bail — a wire loop through the top ring, and the only load path there is.
-  g.add(rod([-mm(50), H + mm(14), 0], [0, H + mm(70), 0], mm(4), lib.steelRod))
-  g.add(rod([mm(50), H + mm(14), 0], [0, H + mm(70), 0], mm(4), lib.steelRod))
   const glow = new THREE.PointLight(0xffc07a, 2.2, 2.4, 2)
-  glow.position.y = H * 0.4
-  g.add(glow)
+  glow.position.y = -H * 0.4
+  body.add(glow)
+  g.add(body)
+  g.userData.body = body
   return g
 }
 
 /**
- * Suzu bell, its rope, and a chochin either side — the face of the shrine.
+ * The face of the shrine, hanging off the ridge beam: the suzu on its short
+ * strap, the 鈴緒 below it, and a chochin either side.
  *
- * The bell is a 本坪鈴 四寸: 120 mm across and 2 kg, which is small for a public
- * shrine and correct for a hokora at this scale. Size is a structural choice
- * here rather than a stylistic one. It hangs from a cast eye at its crown — the
- * only attachment provision a one-piece casting has — on an M8 stainless eye
- * bolt taken THROUGH the header with a nut and a big washer on top, never a wood
- * screw, because the load is not the 2 kg bell. It is a child hauling on the
- * 鈴緒, which is worth about 40 kg dynamic, and that is why the header carries a
- * steel plate over the eye bolt instead of trusting 檜 end grain.
+ * THE DROPS ARE THE WHOLE PROBLEM HERE. With the ridge posts nested the beam
+ * sits 170 mm above the cargo deck, and a bell on 700 mm of strap plus 1200 of
+ * rope is then a metre and a half underground. So the rigid piece hangs SHORT —
+ * the bell is 210 below the beam, not 700 — and the two things that are not
+ * rigid do what they actually do on the road: the rope coils and the lanterns
+ * collapse between their rings. Both are driven off the post extension by the
+ * station's update(), so packed they are a coil and two discs tucked under the
+ * beam at 530 above the deck, and deployed the bell rings at 2.0 m over the road
+ * with the rope grab at 840.
+ *
+ * The bell is a 本坪鈴 四寸: 122 mm across and 1.7 kg, which is small for a public
+ * shrine and correct for a hokora at this scale. Size is structural here rather
+ * than stylistic. It hangs from the cast eye at its crown — the only attachment
+ * provision a one-piece casting has — on an M8 stainless eye bolt taken THROUGH
+ * the beam with a nut and a big washer on top, never a wood screw, because the
+ * load is not the 1.7 kg bell. It is a child hauling on the 鈴緒, worth about
+ * 40 kg dynamic, and that is why the beam carries a steel plate over the eye
+ * bolt instead of trusting 檜 end grain.
  */
-function bellAndRope(lib) {
+function shrineFace(lib) {
   const g = new THREE.Group()
-  const y = POST_HOUSING - mm(40)
-  const x = SHRINE.x0 + mm(60)
-  const b = lathe([[0, mm(75)], [mm(45), mm(60)], [mm(60), mm(20)], [mm(55), 0], [0, 0]], lib.gold, { seg: 16 })
-  b.position.set(x, y - mm(700), 0)
-  g.add(b)
-  g.add(rod([x, y, 0], [x, y - mm(700), 0], mm(10), lib.rope))
-  // 鈴緒 紅白, 36 mm × 1200 — a four-shaku rope. 45 mm is the six-shaku size and
+  const HOOK = POST_HOUSING - mm(50) // just under the ridge beam
+  const x = SHRINE.x0 + mm(60) //      the shrine's face
+
+  // Eye bolt, shackle and the bell itself.
+  g.add(rod([x, HOOK, 0], [x, HOOK - mm(70), 0], mm(9), lib.steelRod))
+  const bell = lathe(
+    [[0, mm(150)], [mm(45), mm(120)], [mm(61), mm(40)], [mm(55), 0], [0, 0]],
+    lib.gold,
+    { seg: 16 },
+  )
+  bell.position.set(x, HOOK - mm(220), 0)
+  g.add(bell)
+
+  // 鈴緒 紅白, 36 mm x 1200 — a four-shaku rope. 45 mm is the six-shaku size, and
   // putting it on a 1200 mm drop is the kind of mismatch a supplier catches for
   // you at the counter and a drawing never does.
+  const rope = new THREE.Group()
+  rope.position.set(x, HOOK - mm(220), 0)
   const r = cloth(mm(60), mm(1200), mm(36), lib.rope, { nx: 3, ny: 7, wave: 0.01 })
-  r.position.set(x, y - mm(1330), 0)
-  g.add(r)
-  for (const s of [-1, 1]) {
+  r.position.y = -mm(600)
+  rope.add(r)
+  g.add(rope)
+
+  const chochins = []
+  for (const sz of [-1, 1]) {
     const c = chochin(lib)
-    c.position.set(x + mm(40), y - mm(700), s * mm(440))
+    c.position.set(x + mm(40), HOOK, sz * mm(440))
     g.add(c)
+    chochins.push(c.userData.body)
   }
+  g.userData = { rope, chochin: chochins }
   return g
 }
