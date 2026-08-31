@@ -33,6 +33,7 @@ import {
 } from './hat.js'
 import { PLAINS, FOREST, HILLS, VILLAGE, SCREE } from './board.js'
 import { topColour, edgeColour, EARTH_TOP, EARTH_LOW, RIVER_BANK, shade } from './palette.js'
+import { hasLandmarkModel } from './landmarks.js'
 
 /** Lattice units → world units. */
 export const W = 0.42
@@ -281,6 +282,28 @@ export function buildGarden(game, opts = {}) {
   const bnd = [false, false, false, false]
   const empty = [false, false, false, false]
 
+  // Tiles that stand a building of their own. Worked out before the ground
+  // loop, because the middle of such a tile has to be left *clear*: the
+  // scatterer would fill the same ground with cottages and boulders and bury
+  // the thing the tile was laid for.
+  const landmarks = []
+  const cleared = new Set()
+  for (let i = 0; i < board.tiles.length; i++) {
+    const t = board.tiles[i]
+    // A dealt lake is labelled 'stream' like any other one-crossing tile — the
+    // label is what the HUD prints, and a lake tile *is* a stream tile that
+    // happens to end. What makes it a lake is the single crossing, which is the
+    // same test the pool below is drawn on, so ask that instead of the label.
+    const kind = hasLandmarkModel(t.kind) ? t.kind : t.ports.size === 1 ? 'lake' : null
+    if (!kind) continue
+    const [hx, hz] = hubOf(t.cells)
+    landmarks.push({ id: i, kind, x: hx, z: hz, rot: (t.orient % 6) * (Math.PI / 3), tile: t })
+    for (const c of t.cells) {
+      const [cx, cz] = kiteCentre(KEY_A(c), KEY_B(c), KEY_K(c))
+      if (Math.hypot(cx * W - hx, cz * W - hz) < W * 0.62) cleared.add(c)
+    }
+  }
+
   for (const key of board.filled) {
     const a = KEY_A(key)
     const b = KEY_B(key)
@@ -355,16 +378,25 @@ export function buildGarden(game, opts = {}) {
       )
     }
 
-    if (!opts.noProps) scatter(props, key, biome, inner, jit)
+    if (!opts.noProps && !cleared.has(key)) scatter(props, key, biome, inner, jit)
   }
 
   // --- the river ------------------------------------------------------------
   const branches = []
-  for (const t of board.tiles) {
+  // which way the water leaves each tile, so a landmark that has to line up with
+  // the stream — an aqueduct carries it, a boat floats on it — can be turned to
+  // face it instead of taking the tile's own arbitrary orientation
+  const flow = new Map()
+  for (let ti = 0; ti < board.tiles.length; ti++) {
+    const t = board.tiles[ti]
     if (t.ports.size === 0) continue
     const hub = hubOf(t.cells)
     for (const slot of t.ports) {
       const path = branchPath(t.cells, t.orient, slot, hub)
+      if (!flow.has(ti)) {
+        const end = path[path.length - 1]
+        flow.set(ti, Math.atan2(end[1] - hub[1], end[0] - hub[0]))
+      }
       branches.push(path)
       ribbon(land, path, BANK_Y, BANK_W, RIVER_BANK)
       ribbon(water, path, WATER_Y, WATER_W, 0xffffff)
@@ -397,7 +429,15 @@ export function buildGarden(game, opts = {}) {
     })
   }
 
-  return { land, water, props, branches }
+  // A model built facing +x, turned by `rot` about y. Lattice y is world z, and
+  // a turn that goes anticlockwise in the lattice goes clockwise seen from above
+  // once it gets there, so the flow angle comes back negated.
+  for (const l of landmarks) {
+    if (flow.has(l.id)) l.rot = -flow.get(l.id)
+    delete l.tile
+  }
+
+  return { land, water, props, branches, landmarks }
 }
 
 // --- props ------------------------------------------------------------------

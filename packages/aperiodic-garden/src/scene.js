@@ -3,6 +3,7 @@
 import * as THREE from 'three'
 import { W, Buf, PROP_CONIFER, PROP_BROADLEAF, PROP_ROCK, PROP_HOUSE, PROP_BUSH, PROP_PENNANT } from './geometry.js'
 import { cellAt, KEY } from './hat.js'
+import { landmarkGroup } from './landmarks.js'
 import {
   SKY_TOP,
   FOG,
@@ -18,6 +19,7 @@ import {
   SNOW,
   SNOW_SHADE,
   HINT,
+  BEACON,
   GHOST_RIM,
   LOOK,
   shade,
@@ -96,90 +98,131 @@ function pennantGeo() {
  */
 function mountainMesh(radius, height, gully) {
   const buf = new Buf()
-  const SEG = 17
-  // The silhouette, as a profile: how far out the flank sits at each height.
-  const KEY_UP = [0, 0.2, 0.44, 0.68, 0.87, 1]
-  const KEY_OUT = [1, 0.83, 0.62, 0.4, 0.19, 0.035]
-  const outAt = (t) => {
-    for (let i = 1; i < KEY_UP.length; i++) {
-      if (t <= KEY_UP[i]) {
-        const f = (t - KEY_UP[i - 1]) / (KEY_UP[i] - KEY_UP[i - 1])
-        return KEY_OUT[i - 1] + (KEY_OUT[i] - KEY_OUT[i - 1]) * f
-      }
-    }
-    return KEY_OUT[KEY_OUT.length - 1]
-  }
+  const SEG = 24
+  const RINGS = [0.16, 0.27, 0.39, 0.52, 0.66, 0.82, 1]
 
   const hash = (i) => {
     const x = Math.sin(i * 127.1 + 311.7) * 43758.5453
     return x - Math.floor(x)
   }
   const seg = (s) => ((s % SEG) + SEG) % SEG
-  // Each spur keeps its own girth all the way up, with a little ring-to-ring
-  // drift on top — enough to give the silhouette buttresses and gullies instead
-  // of the smooth cone a single radius produces.
-  const wob = (ring, s) => (0.74 + 0.5 * hash(seg(s))) * (0.93 + 0.15 * hash(seg(s) + ring * 17))
-  // Where this spur's snow starts. Colouring by ring would put the snowline on
-  // a ring, and a ring is a circle: the cap came out a smooth grey dome. So the
-  // snowline gets a ring of its own, *bent* — every spur sets its own height for
-  // it, and the two rings that share that height (one rock, one snow) put a hard
-  // ragged edge exactly there.
-  const snowline = (s) => 0.55 + 0.26 * (hash(seg(s) + 31) - 0.5)
 
-  // rings, foot to summit; SNOW_RING and the one below it ride the bent line
-  const SNOW_RING = 4
-  // the two entries at SNOW_RING-1 and SNOW_RING are nominal — heightAt bends
-  // both of those rings onto snowline(s) instead
-  const BAND = [0, 0.14, 0.28, 0.55, 0.55, 0.72, 0.88, 1]
-  const heightAt = (ring, s) => (ring === SNOW_RING - 1 || ring === SNOW_RING ? snowline(s) : BAND[ring])
+  /**
+   * How high the mountain stands at a fraction `u` of the way out from its
+   * centre.
+   *
+   * This is the one number the whole peak lives or dies by, and two rewrites
+   * got it wrong the same way: a profile that falls off fast near the middle
+   * (`t²(0.55 + 0.45t)`, or anything else concave) has shed four fifths of its
+   * height by the time it is halfway out, and what stands up is a needle on a
+   * plate. A mountain's outline is *convex* — the flank leaves the summit
+   * almost vertically and only lies down near the foot — so the curve has to
+   * stay high across the middle of the radius and drop at the end. This is the
+   * silhouette the original keyframed profile drew, as one expression.
+   */
+  const profile = (u) => 1 - Math.pow(u, 1.35)
 
-  // The valley the headwater comes down. The cut is strongest at the foot and
-  // fades to nothing at the summit, so it reads as a notch let into one flank
-  // rather than a slice off the top — and from above the massif closes round it
-  // in a rough C, with the river running out of the gap.
-  const GULLY_W = 0.62
-  const gullyAt = (s) => {
+  /**
+   * The valley, as a wedge of *floor* rather than a dent in the outline.
+   *
+   * Two earlier attempts pulled the flank in near the gully and faded the cut
+   * out towards the summit. Neither looked like anything: narrowing a cone's
+   * skirt only makes it slightly less round, and forcing the spurs either side
+   * to rise turned the whole peak into a splayed star of fins. What reads as a
+   * valley is ground that stays *low* right through where the mountain would
+   * otherwise be, with the massif standing on both sides of it — so inside this
+   * wedge the height is clamped to a floor, and the mountain closes round the
+   * gap in a C.
+   *
+   * Two things keep it from simply sawing the peak in half. The wedge is wide —
+   * near a third of the circle — so its walls spread over three or four spokes
+   * and slope like hillsides instead of standing up as the vertical blades a
+   * narrow one cut. And it fades out over the last of the way in, so the valley
+   * heads in a corrie under the summit rather than running through it: the
+   * massif keeps a top, and the top curves round the gap.
+   */
+  const GULLY_W = 1.0
+  const gullyAt = (a) => {
     if (gully === null || gully === undefined) return 0
-    let d = (seg(s) / SEG) * Math.PI * 2 - gully
+    let d = a - gully
     while (d > Math.PI) d -= Math.PI * 2
     while (d < -Math.PI) d += Math.PI * 2
-    if (Math.abs(d) >= GULLY_W) return 0
-    return 0.5 + 0.5 * Math.cos((Math.PI * Math.abs(d)) / GULLY_W)
+    const x = Math.abs(d) / GULLY_W
+    return x >= 1 ? 0 : 0.5 + 0.5 * Math.cos(Math.PI * x)
   }
+  // how much of the cut has arrived by `u` — nothing under the cap, all of it
+  // by a third of the way out
+  const reach = (u) => {
+    const k = Math.max(0, Math.min(1, (u - 0.2) / 0.24))
+    return k * k * (3 - 2 * k)
+  }
+  const floorAt = (u) => 0.06 + 0.5 * Math.pow(1 - u, 1.4)
 
-  const pt = (ring, s) => {
+  // Each spur keeps its own girth all the way up, with a little ring-to-ring
+  // drift on top — enough to give the silhouette buttresses and gullies instead
+  // of the smooth cone a single radius produces. Only the plan outline wobbles;
+  // the heights stay on their rings, or the ridges turn into fins.
+  const wob = (j, s) =>
+    j === 0 ? 1 : (0.78 + 0.44 * hash(seg(s))) * (0.94 + 0.13 * hash(seg(s) + j * 17))
+
+  // Where this spur's snow starts. Colouring by ring would put the snowline on
+  // a ring, and a ring is a circle: the cap comes out a smooth grey dome. Every
+  // spur setting its own height for it makes the boundary jump a ring back and
+  // forth round the peak, which is the ragged edge snow actually has.
+  const snowline = (s) => 0.55 + 0.26 * (hash(seg(s) + 31) - 0.5)
+
+  const at = (s, j) => {
     const a = (seg(s) / SEG) * Math.PI * 2
-    const t0 = heightAt(ring, s)
-    const cut = gullyAt(s) * (1 - t0)
-    const t = t0 * (1 - 0.4 * cut)
-    const r = radius * outAt(t) * (ring === BAND.length - 1 ? 1 : wob(ring, s)) * (1 - 0.52 * cut)
-    return [Math.cos(a) * r, height * t, Math.sin(a) * r]
+    const u = RINGS[j]
+    const base = profile(u)
+    const g = gullyAt(a) * reach(u)
+    const h = g > 0 ? base * (1 - g) + Math.min(base, floorAt(u)) * g : base
+    // the foot draws in a little where the valley runs out of it, so the gap in
+    // the C is a gap in the outline too and not only in the shading
+    const r = radius * u * wob(j, s) * (1 - 0.18 * g * u)
+    return { p: [Math.cos(a) * r, height * h, Math.sin(a) * r], h }
   }
-  const col = (ring, s) =>
-    ring >= SNOW_RING
-      ? mixHex(SNOW, SNOW_SHADE, hash(s * 3 + ring) * 0.5)
-      : mixHex(ROCK_DARK, ROCK, hash(s * 7 + ring))
 
-  for (let ring = 0; ring < BAND.length - 1; ring++) {
+  const colourAt = (s, h) =>
+    h > snowline(s)
+      ? mixHex(SNOW, SNOW_SHADE, hash(s * 3 + 7) * 0.5)
+      : mixHex(ROCK_DARK, ROCK, hash(s * 7 + 13))
+
+  for (let j = 0; j < RINGS.length - 1; j++) {
     for (let s = 0; s < SEG; s++) {
-      const a = pt(ring, s)
-      const b = pt(ring, s + 1)
-      const c = pt(ring + 1, s + 1)
-      const d = pt(ring + 1, s)
-      const ca = col(ring, s)
-      const cb = col(ring, s + 1)
-      const cc = col(ring + 1, s + 1)
-      const cd = col(ring + 1, s)
-      // outward-facing: the other winding turns the peak inside out and it
-      // renders as an unlit black lump
-      buf.tri(a, c, b, ca, cc, cb)
-      buf.tri(a, d, c, ca, cd, cc)
+      const a = at(s, j)
+      const b = at(s + 1, j)
+      const c = at(s + 1, j + 1)
+      const d = at(s, j + 1)
+      const ca = colourAt(s, a.h)
+      const cb = colourAt(s + 1, b.h)
+      const cc = colourAt(s + 1, c.h)
+      const cd = colourAt(s, d.h)
+      // Outward-facing. The rings run from the summit *out*, where the profile
+      // this replaced ran from the foot *up*, so the winding that was right
+      // there is backwards here: keep it and every flank faces inwards, gets
+      // culled, and the peak renders as a white cap floating over bare ground
+      // with a few slivers of valley wall under it.
+      buf.tri(a.p, b.p, c.p, ca, cb, cc)
+      buf.tri(a.p, c.p, d.p, ca, cc, cd)
     }
   }
-  // cap the summit
-  const top = [0, height * 1.03, 0]
+  // Cap the summit. It sits off-centre, leaned away from the valley, so the
+  // ridge line curves round the corrie instead of standing over it — the top of
+  // the C rather than a lid on it.
+  // Kept well inside the innermost ring's radius: lean it further than that and
+  // the fan triangles on the valley side turn themselves inside out, which is
+  // what put a splayed white fin on one flank of the last attempt.
+  const lean = gully === null || gully === undefined ? 0 : radius * RINGS[0] * 0.45
+  const apex = [
+    -Math.cos(gully ?? 0) * lean,
+    height * (lean ? 1.0 : 1.03),
+    -Math.sin(gully ?? 0) * lean,
+  ]
   for (let s = 0; s < SEG; s++) {
-    buf.tri(pt(BAND.length - 1, s + 1), pt(BAND.length - 1, s), top, SNOW, SNOW, SNOW)
+    const a = at(s, 0)
+    const b = at(s + 1, 0)
+    buf.tri(b.p, a.p, apex, colourAt(s + 1, b.h), colourAt(s, a.h), SNOW)
   }
   return buf
 }
@@ -596,7 +639,45 @@ export class Garden {
     }
     this.propLists = lists
     this._writeProps()
+    this.setLandmarks(bundle.landmarks ?? [])
     if (bounds) this.fitShadow(bounds)
+  }
+
+  /**
+   * The buildings that belong to one tile each — the camps, the boat at a
+   * lake's edge, an aqueduct's arches. They are rebuilt only when the list
+   * actually changes: the garden geometry is thrown away and remade on every
+   * placement, and rebuilding a dozen little groups along with it would throw
+   * away their meshes twenty times a game for nothing.
+   */
+  setLandmarks(list) {
+    if (!this.landmarkRoot) {
+      this.landmarkRoot = new THREE.Group()
+      this.scene.add(this.landmarkRoot)
+      this._landmarks = new Map()
+    }
+    const seen = new Set()
+    for (const l of list) {
+      seen.add(l.id)
+      let g = this._landmarks.get(l.id)
+      if (!g) {
+        g = landmarkGroup(l.kind)
+        if (!g) continue
+        // built, not dropped: it comes up out of the ground with the tile's
+        // trees, on the same clock
+        g.scale.setScalar(0.01)
+        g.userData.grow = 0
+        this.landmarkRoot.add(g)
+        this._landmarks.set(l.id, g)
+      }
+      g.position.set(l.x, 0, l.z)
+      g.rotation.y = l.rot
+    }
+    for (const [id, g] of this._landmarks) {
+      if (seen.has(id)) continue
+      this.landmarkRoot.remove(g)
+      this._landmarks.delete(id)
+    }
   }
 
   /**
@@ -635,6 +716,47 @@ export class Garden {
     this.sunRadius = pad
     this.haze.position.set(cx, -0.55, cz)
     this.haze.scale.setScalar(r + 7)
+  }
+
+  /**
+   * The one spot the errand wants, marked apart from the rest: a slow ring of
+   * gold that turns above it. Forty identical lights say "anywhere"; this says
+   * "here", which is the difference between an errand you can see and one you
+   * have to solve twice.
+   */
+  setBeacon(at) {
+    if (!this.beacon) {
+      const g = new THREE.Group()
+      const mat = new THREE.MeshBasicMaterial({
+        color: lin(BEACON),
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      })
+      this.beaconMat = mat
+      const ring = new THREE.Mesh(new THREE.RingGeometry(0.2, 0.26, 18), mat)
+      ring.rotation.x = -Math.PI / 2
+      g.add(ring)
+      // three motes riding the ring, so it reads as alive rather than printed
+      this.beaconMotes = []
+      for (let i = 0; i < 3; i++) {
+        const m = new THREE.Mesh(new THREE.IcosahedronGeometry(0.03, 0), mat)
+        g.add(m)
+        this.beaconMotes.push(m)
+      }
+      g.position.y = 0.05
+      g.renderOrder = 2
+      g.visible = false
+      this.beacon = g
+      this.scene.add(g)
+    }
+    if (!at) {
+      this.beacon.visible = false
+      return
+    }
+    this.beacon.position.set(at[0], 0.05, at[1])
+    this.beacon.visible = true
   }
 
   /** Soft lights over every distinct spot a tile could go. */
@@ -796,7 +918,27 @@ export class Garden {
       if (this.grown.t > GROW_TIME + GROW_STAGGER) this.grown = null
       this._writeProps()
     }
+    if (this._landmarks) {
+      for (const g of this._landmarks.values()) {
+        if (g.userData.grow === undefined) continue
+        const k = (g.userData.grow += dt / (GROW_TIME * 1.8))
+        if (k >= 1) {
+          g.scale.setScalar(1)
+          delete g.userData.grow
+        } else {
+          g.scale.setScalar(k * k * (3 - 2 * k) * (1 + 0.12 * Math.sin(k * Math.PI)))
+        }
+      }
+    }
     this.hintMat.opacity = 0.34 + 0.2 * Math.sin(t * 1.6)
+    if (this.beacon?.visible) {
+      this.beacon.rotation.y = t * 0.8
+      this.beaconMat.opacity = 0.6 + 0.35 * Math.sin(t * 2.6)
+      this.beaconMotes.forEach((m, i) => {
+        const a = t * 1.4 + (i / 3) * Math.PI * 2
+        m.position.set(Math.cos(a) * 0.27, 0.04 + 0.05 * Math.sin(t * 3 + i), Math.sin(a) * 0.27)
+      })
+    }
     for (const w of this.wheels ?? []) if (w.running) w.wheel.rotation.z -= dt * 1.5
     this.rimMat.opacity = 0.62 + 0.3 * Math.sin(t * 3.4)
     if (this.flashT > 0) {

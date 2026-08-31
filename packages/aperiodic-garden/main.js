@@ -82,6 +82,8 @@ function rebuild(instantFrame = false) {
   garden.frame(b, instantFrame)
   ambience.sync(game, bundle.branches)
   garden.setHints(game.over ? [] : hintPoints())
+  const step = game.over ? null : game.suggestion
+  garden.setBeacon(step ? hubOf(step.cells) : null)
   garden.setSites(
     game.sites.map((s) => ({ x: s.mid[0] * W, z: s.mid[1] * W, hx: s.hub[0] * W, hz: s.hub[1] * W, done: s.done })),
   )
@@ -91,6 +93,47 @@ function rebuild(instantFrame = false) {
 
 const artCtx = el('tileart').getContext('2d')
 const nextCtx = el('nextart').getContext('2d')
+const sparkCtx = el('tilesparkle').getContext('2d')
+
+/**
+ * The glitter over a special tile's drawing. Twenty-odd motes drifting up and
+ * fading, on their own canvas over the art — the art is repainted on every
+ * hover and would wipe anything drawn into it.
+ */
+const isSpecial = (tile) => !!(tile && (tile.camp || tile.crafted || tile.kind === 'confluence' || tile.lake))
+
+const SPARKS = Array.from({ length: 22 }, (_, i) => ({
+  x: (i * 37) % 100,
+  y: (i * 61) % 100,
+  ph: (i * 0.41) % 1,
+  sp: 0.22 + ((i * 13) % 7) / 20,
+  r: 1 + ((i * 7) % 5) * 0.5,
+}))
+
+function drawSparkle(t) {
+  const c = sparkCtx
+  const w = c.canvas.width
+  const h = c.canvas.height
+  c.clearRect(0, 0, w, h)
+  if (!isSpecial(game?.tile)) return
+  for (const s of SPARKS) {
+    const k = (s.ph + t * s.sp) % 1
+    const x = (s.x / 100) * w + Math.sin((k + s.ph) * 6.3) * 9
+    const y = (1 - k) * h * 0.92 + (s.y / 100) * h * 0.08
+    // brightest halfway up, gone at either end
+    const a = Math.sin(k * Math.PI) ** 2
+    if (a < 0.02) continue
+    const r = s.r * (2 + a * 2.2)
+    const g = c.createRadialGradient(x, y, 0, x, y, r * 3)
+    g.addColorStop(0, `rgba(255,240,190,${0.9 * a})`)
+    g.addColorStop(0.4, `rgba(255,198,90,${0.5 * a})`)
+    g.addColorStop(1, 'rgba(255,198,90,0)')
+    c.fillStyle = g
+    c.beginPath()
+    c.arc(x, y, r * 3, 0, Math.PI * 2)
+    c.fill()
+  }
+}
 
 const drawTileCard = (orient) => paintTile(artCtx, game.tile, orient, 14, 2.2)
 
@@ -181,12 +224,8 @@ function paintTile(c, tile, orient, pad, lw) {
  * has no legal placement over it, try its four neighbours nearest-first — so
  * hovering *near* a gap is enough, and the tile turns itself to suit.
  */
-function setHover(hit) {
-  if (!game || game.over) {
-    clearHover()
-    return
-  }
-  if (!hit) {
+function setHover(hit, sx = 0, sy = 0) {
+  if (!game || game.over || !hit) {
     clearHover()
     return
   }
@@ -201,18 +240,29 @@ function setHover(hit) {
   for (const r of ranked) tries.push(r.k)
 
   for (const cell of tries) {
-    const fits = game.fitsAtCell(cell)
-    if (fits.length === 0) continue
-    let index = 0
-    if (sticky !== null) {
-      const i = fits.findIndex((f) => f.o === sticky)
-      if (i >= 0) index = i
-    }
-    hover = { cell, fits, index }
-    showGhost()
-    return
+    if (aimAt(cell)) return
   }
-  clearHover()
+  // Still nothing under the pointer. Rather than showing an empty hand, take
+  // the nearest light — the same reach a finger gets, only tighter, because a
+  // mouse is precise enough to mean the spot it is over. Hovering an inch from
+  // a legal spot and being shown nothing is what makes the rules feel narrower
+  // than they are.
+  if (!aimNear(sx, sy, MOUSE_SNAP)) clearHover()
+}
+
+/** Take the best fit covering this cell, keeping the player's chosen turn if it
+ *  is among them. */
+function aimAt(cell) {
+  const fits = game.fitsAtCell(cell)
+  if (fits.length === 0) return false
+  let index = 0
+  if (sticky !== null) {
+    const i = fits.findIndex((f) => f.o === sticky)
+    if (i >= 0) index = i
+  }
+  hover = { cell, fits, index }
+  showGhost()
+  return true
 }
 
 /**
@@ -222,13 +272,9 @@ function setHover(hit) {
  * on screen, because that is where the player is aiming.
  */
 const snapRange = () => Math.max(110, Math.min(innerWidth, innerHeight) * 0.28)
+const MOUSE_SNAP = 72
 
-function aimNear(cx, cy) {
-  const hit = garden.pick(...ndc(cx, cy))
-  if (hit) {
-    setHover(hit)
-    if (hover) return true
-  }
+function aimNear(cx, cy, range = snapRange()) {
   let best = null
   let bd = Infinity
   for (const f of game.fits) {
@@ -240,10 +286,8 @@ function aimNear(cx, cy) {
       best = f
     }
   }
-  if (!best || bd > snapRange()) return false
-  const [hx, hz] = hubOf(best.cells)
-  setHover({ cell: best.cells[0], x: hx, z: hz })
-  return !!hover
+  if (!best || bd > range) return false
+  return aimAt(best.cells[0])
 }
 
 function clearHover() {
@@ -273,14 +317,18 @@ function showGhost() {
   // How snugly it sits, and — because of a small theorem about the hat — which
   // way round the piece must be. Of the 38 ways one hat can touch another,
   // every four-edge fit is a mirrored pair and every three-edge fit is not.
+  // What this spot is worth, not what it is allowed to be. Covers never have to
+  // agree — the old line only ever mentioned how flush the fit was, which read
+  // as a condition being met rather than a bonus being earned.
   const c = el('contact')
+  const worth = fit.match * 3 + fit.joins * 6 + (fit.touch > 0 && fit.match === fit.touch ? 12 : 0)
   const parts = []
   if (fit.joins > 0) parts.push(`${fit.joins} stream${fit.joins > 1 ? 's' : ''} carried on`)
-  if (fit.touch === 4) parts.push('flush ×4 · a mirrored fit')
-  else if (fit.touch === 3) parts.push('flush ×3 · same hand')
-  else if (fit.touch > 0) parts.push(`${fit.touch} edge${fit.touch > 1 ? 's' : ''} shared`)
-  c.textContent = parts.join(' · ')
-  c.classList.toggle('flush', fit.touch >= 3 || fit.joins > 0)
+  if (fit.match > 0) parts.push(`${fit.match} of ${fit.touch} edges agree`)
+  else if (fit.touch > 0) parts.push(`${fit.touch} edge${fit.touch > 1 ? 's' : ''} met, none agree`)
+  else parts.push('standing on its own')
+  c.textContent = worth > 0 ? `${parts.join(' · ')} · +${worth}` : parts.join(' · ')
+  c.classList.toggle('flush', fit.touch > 0 && fit.match === fit.touch)
   setControls(true)
   drawTileCard(fit.o)
 }
@@ -375,10 +423,7 @@ const recipeButtons = RECIPES.map((r) => {
   b.querySelector('b').textContent = r.title
   b.addEventListener('click', () => {
     if (!game || !game.craft(r.key)) return
-    sticky = null
-    clearHover()
-    garden.setHints(hintPoints())
-    syncHud()
+    handChanged()
   })
   el('recipes').appendChild(b)
   return { r, b }
@@ -414,6 +459,7 @@ function syncHud() {
   const big = game.biggestOpen()
   el('growing').textContent = big && big.size > 2 ? `${big.size} · ${BIOME_NAME[big.biome]}` : '—'
   el('tilekind').textContent = tileLabel(game.tile)
+  el('tilecard').classList.toggle('special', isSpecial(game.tile))
 
   const q = game.quest ?? game.sites[game.sites.length - 1]
   const banner = el('quest')
@@ -565,7 +611,7 @@ canvas.addEventListener('pointermove', (e) => {
     return
   }
   if (!running || e.pointerType === 'touch') return
-  setHover(garden.pick(...ndc(e.clientX, e.clientY)))
+  setHover(garden.pick(...ndc(e.clientX, e.clientY)), e.clientX, e.clientY)
 })
 
 function endPointer(e) {
@@ -588,7 +634,8 @@ function endPointer(e) {
     // twice is a two-millimetre target on a phone.
     const hit = garden.pick(...ndc(e.clientX, e.clientY))
     if (!hover || !hit || !hover.fits[hover.index].cells.includes(hit.cell)) {
-      aimNear(e.clientX, e.clientY)
+      setHover(hit, e.clientX, e.clientY)
+      if (!hover) aimNear(e.clientX, e.clientY)
       return
     }
   }
@@ -647,9 +694,17 @@ addEventListener('keydown', (e) => {
 
 function discard() {
   if (!game.reroll()) return
+  handChanged()
+}
+
+/** The tile in hand has been swapped, crafted or thrown away: the lights, the
+ *  errand's beacon and the card all describe a different piece now. */
+function handChanged() {
   sticky = null
   clearHover()
   garden.setHints(hintPoints())
+  const step = game.suggestion
+  garden.setBeacon(step ? hubOf(step.cells) : null)
   syncHud()
 }
 
@@ -693,10 +748,7 @@ el('lay').addEventListener('click', commit)
 el('toss').addEventListener('click', discard)
 el('swap').addEventListener('click', () => {
   if (!game.swapNext()) return
-  sticky = null
-  clearHover()
-  garden.setHints(hintPoints())
-  syncHud()
+  handChanged()
 })
 
 el('play').addEventListener('click', () => {
@@ -793,6 +845,7 @@ function frame(now) {
   garden.updateCamera(dt)
   ambience.update(dt, clock, game)
   garden.render(dt, clock)
+  drawSparkle(clock)
   requestAnimationFrame(frame)
 }
 requestAnimationFrame(frame)

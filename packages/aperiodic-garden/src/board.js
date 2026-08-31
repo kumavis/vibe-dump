@@ -98,6 +98,24 @@ export const HAT_REACH = (() => {
   return worst
 })()
 
+/**
+ * How many kites a placement may strand. Zero: the strict reading of "leave no
+ * space a tile cannot fit".
+ *
+ * A slack of one was tried, because this rule is expensive — it refuses about a
+ * sixth of all legal placements, and the ones it refuses are the loose ones, so
+ * what is left over are the snug spots, and snug spots are also the ones whose
+ * covers happen to line up. The rule therefore *looks* like a different rule
+ * entirely: it reads as though the garden were making you match biomes.
+ *
+ * Three games at a slack of one stranded nothing and it looked free. Twenty-four
+ * games stranded ground in sixteen of them. So it is back to zero, and the
+ * cramped feeling is answered where it actually comes from — the hover snaps to
+ * a legal spot from further away, and the orientation it picks is no longer the
+ * one that happens to match.
+ */
+const STRAND_SLACK = 0
+
 const NO_CELLS = new Set()
 
 /** An open mouth, as one number: the empty cell plus which of its two long
@@ -284,9 +302,11 @@ export class Board {
    * Two rings looked like plenty and let a stranding through in fourteen games
    * out of twenty.
    */
-  leavesRoom(cells, added) {
+  leavesRoom(cells, added, slack = STRAND_SLACK) {
+    let n = 0
     for (const key of this._nearby(cells, added)) {
-      if (!this._coverable(key, added)) return false
+      if (this._coverable(key, added)) continue
+      if (++n > slack) return false
     }
     return true
   }
@@ -595,6 +615,9 @@ export class Board {
       ta,
       tb,
       cells,
+      // what it *is*, not just what it covers: the renderer stands a building on
+      // a camp or a lake, and only the kind says which
+      kind: tile.kind,
       biomes: tile.biomes.slice(),
       ports: new Set(tile.ports),
       flipped: orient >= 6,

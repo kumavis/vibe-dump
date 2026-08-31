@@ -175,6 +175,53 @@ body.dragging #scene {
   cursor: pointer;
 }
 
+/* --- a tile worth having ------------------------------------------------- */
+/*
+   Camps, confluences and anything made at the workshop are rare enough that
+   being dealt one is an event, and they look like any other tile on the card.
+   Gold says so: a slow glow round the card and a drift of sparks over the
+   drawing. The sparks are their own canvas laid over the tile art, because the
+   art is repainted on every hover and would wipe them.
+*/
+
+#tilesparkle {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 208px;
+  height: 170px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#tilecard.special #tilesparkle {
+  opacity: 1;
+}
+
+#tilecard.special {
+  border-color: rgba(214, 162, 48, 0.75);
+  box-shadow:
+    0 8px 26px rgba(38, 55, 70, 0.15),
+    0 0 0 1px rgba(255, 198, 90, 0.5),
+    0 0 22px rgba(255, 198, 90, 0.35);
+  animation: gilded 2.4s ease-in-out infinite;
+}
+
+@keyframes gilded {
+  50% {
+    box-shadow:
+      0 8px 26px rgba(38, 55, 70, 0.15),
+      0 0 0 1px rgba(255, 198, 90, 0.8),
+      0 0 34px rgba(255, 198, 90, 0.6);
+  }
+}
+
+#tilecard.special #tilekind {
+  color: #9a6f16;
+  font-weight: 700;
+}
+
 #tilekind {
   text-align: center;
   font-size: 11px;
@@ -762,6 +809,12 @@ body:has(#intro) #hand {
   }
   #tileart {
     flex: none;
+    width: 78px;
+    height: 64px;
+  }
+  #tilesparkle {
+    top: 8px;
+    left: 10px;
     width: 78px;
     height: 64px;
   }

@@ -42,6 +42,8 @@ export const ROCK_GREYS = [0x8b8f96, 0x9aa0a6, 0x7c8189]
 export const HINT = 0xffe9a8
 /** The outline that says the piece under the cursor is not laid yet. */
 export const GHOST_RIM = 0xfff0b8
+/** Gold: the errand's next move, and the glitter round a tile worth having. */
+export const BEACON = 0xffc65a
 
 export function shade(hex, k) {
   const r = Math.min(255, Math.round(((hex >> 16) & 255) * k))
