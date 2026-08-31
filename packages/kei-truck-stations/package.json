@@ -1,0 +1,27 @@
+{
+  "name": "@vibe-dump/kei-truck-stations",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Kei Truck Stations",
+    "description": "A dimensionally accurate Suzuki Carry unfolds four bed modules — DJ booth, yatai, shrine, cabin — through real hinge kinematics you can scrub, with the load path drawn.",
+    "tags": [
+      "simulation",
+      "tool",
+      "art"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "ultracode"
+  }
+}

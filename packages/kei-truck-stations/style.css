@@ -1,0 +1,11 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: #0d1420; }
+#scene { display: block; width: 100vw; height: 100vh; }
+#boot {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  font: 500 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .12em; text-transform: uppercase; color: #7f93b5;
+  background: #0d1420; transition: opacity .5s;
+}
+#boot.gone { opacity: 0; pointer-events: none; }
