@@ -99,11 +99,25 @@ function disposeTree(root) {
  * `hold` pauses at each end so the deployed state and the stowed state each get
  * a beat to be looked at.
  */
+// OPENS DEPLOYED, AND SITS THERE FOR TWELVE SECONDS. Starting stowed and folding
+// out reads well on paper and badly in practice: for the first six seconds the
+// app is a flat truck bed, which is also exactly what the thumbnail pass
+// photographs. Opening on the finished thing and packing it away shows what the
+// module IS first and how it stows second.
+//
+// The opening beat lasts until BOTH three seconds have passed AND the renderer
+// has produced two dozen frames. On a GPU that is three seconds. Under a
+// software renderer, where the first frames are a second and a half apart, it is
+// half a minute — which is right: the fold is worth nothing as a slideshow, and
+// the thing standing still is worth a lot. It also makes the opening state
+// deterministic for anything photographing the page, which a wall-clock hold
+// alone is not when handing over a screenshot itself takes ten seconds.
+const WARMUP_FRAMES = 24
 const state = {
-  t: 0,
+  t: 1,
   playing: true,
-  dir: 1,
-  hold: 0,
+  dir: -1,
+  hold: 3,
   speed: 0.17,
   orbit: true,
   xray: false,
@@ -123,11 +137,27 @@ function setProgress(t) {
 
 // --- resize / loop ----------------------------------------------------------
 
+/**
+ * Size the renderer, and CENTRE THE TRUCK IN THE PART OF THE WINDOW YOU CAN SEE.
+ *
+ * The panel is 384 px of fixed chrome down the left edge, so a subject centred
+ * in the canvas is not centred on screen — it sits a third of the way out from
+ * under the panel, which is why every screenshot of this app had the truck
+ * pushed right and the tail half-hidden. A negative view offset shifts the
+ * frustum by half the panel width, which puts the middle of the scene in the
+ * middle of the space that is actually visible. Collapse the panel and it
+ * clears itself, so the framing is right either way.
+ */
 function resize() {
   const w = innerWidth
   const h = innerHeight
   renderer.setSize(w, h, false)
   camera.aspect = w / h
+  const panelEl = document.querySelector('.panel')
+  const shown = panelEl && !panelEl.classList.contains('hidden')
+  const pw = shown ? panelEl.getBoundingClientRect().width : 0
+  if (pw > 0 && w - pw > 260) camera.setViewOffset(w, h, -pw / 2, 0, w, h)
+  else camera.clearViewOffset()
   camera.updateProjectionMatrix()
 }
 addEventListener('resize', resize)
@@ -153,11 +183,21 @@ const ui = mountUI({
 })
 
 ui.describe(load(STATIONS[0].id))
-setProgress(0)
+setProgress(state.t)
+ui.tick(state.t, current)
 ui.frame('three-quarter')
 resize()
+// Collapsing the panel changes how much window the scene actually has, so the
+// view offset has to follow it. Watching the class is less coupling than a
+// callback and cannot get out of step with the CSS.
+{
+  const panelEl = document.querySelector('.panel')
+  if (panelEl) new MutationObserver(resize).observe(panelEl, { attributes: true, attributeFilter: ['class'] })
+}
 
 let last = performance.now()
+let booted = false
+let frames = 0
 renderer.setAnimationLoop((now) => {
   // THE STEP IS REAL TIME, and the clamp is only a guard against a suspended tab.
   //
@@ -171,9 +211,12 @@ renderer.setAnimationLoop((now) => {
   // was backgrounded for a while.
   const dt = Math.min(2, (now - last) / 1000)
   last = now
+  frames += 1
 
   if (state.playing) {
-    if (state.hold > 0) {
+    if (frames < WARMUP_FRAMES) {
+      // Warming up: hold the opening pose and let the clock idle with it.
+    } else if (state.hold > 0) {
       state.hold -= dt
     } else {
       let t = state.t + state.dir * state.speed * dt
@@ -209,6 +252,17 @@ renderer.setAnimationLoop((now) => {
 
   controls.update()
   renderer.render(scene, camera)
+
+  // Clear the boot overlay on the FIRST RENDERED FRAME, not when this module
+  // finished evaluating. Those are the same instant on a GPU and ten seconds
+  // apart under a software renderer, where building the truck, generating the
+  // textures and compiling the shadow shaders all happen inside frame one — so
+  // the old placement uncovered a black canvas and told anything watching that
+  // the app was ready when it was not.
+  if (!booted) {
+    booted = true
+    document.getElementById('boot')?.classList.add('gone')
+  }
 })
 
 controls.addEventListener('start', () => {
@@ -219,8 +273,6 @@ controls.addEventListener('start', () => {
 controls.addEventListener('end', () => {
   controls.dragging = false
 })
-
-document.getElementById('boot')?.classList.add('gone')
 
 // A handle for the console and for the screenshot harness.
 window.kei = {

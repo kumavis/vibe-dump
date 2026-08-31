@@ -25,8 +25,7 @@
     "thinking": "ultracode",
     "thumbnail": {
       "waitFor": "!#boot:not(.gone)",
-      "click": ".collapse",
-      "settle": 7000
+      "settle": 2500
     }
   }
 }

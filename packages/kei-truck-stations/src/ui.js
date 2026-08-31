@@ -111,7 +111,11 @@ export function mountUI({ stations, state, onStation, onProgress, camera, contro
   const stepList = el('ol', 'steps')
   deploy.appendChild(stepList)
 
-  const stepAt = (i, n) => Math.min(1, Math.max(0, (i + 0.9) / n))
+  // Jump to a step: nine tenths of the way through its window, which is where
+  // that step has finished and the next has not started. The LAST step is the
+  // exception and goes to exactly 1 — clicking "light wings open" and getting
+  // wings that are seven degrees short is not what anybody meant.
+  const stepAt = (i, n) => (i >= n - 1 ? 1 : Math.min(1, Math.max(0, (i + 0.9) / n)))
   function jumpStep(delta) {
     const rig = currentStation.rig
     const n = Math.max(1, rig.stageCount)
