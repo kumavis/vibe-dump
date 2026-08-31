@@ -112,6 +112,12 @@ const state = {
 function setProgress(t) {
   state.t = Math.min(1, Math.max(0, t))
   current.rig.setProgress(state.t)
+  // Soft goods. A rig part is a rigid body, and fabric is not: an awning's
+  // canvas has to GROW as its rail runs out, and a bellows has to stretch. A
+  // station may return an update(t) to move anything the joint tree cannot,
+  // which is exactly the set of things that are not structure and so are not
+  // in the collision audit either.
+  current.meta.update?.(state.t, current.rig)
   current.overlay.update(state.t)
 }
 

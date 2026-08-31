@@ -1,4 +1,5 @@
 import { mm } from './build.js'
+import { BOM, bomTotals, byCategory, captureCount } from './bom.js'
 
 // ---------------------------------------------------------------------------
 // The HUD
@@ -129,6 +130,16 @@ export function mountUI({ stations, state, onStation, onProgress, camera, contro
   const readout = el('section', 'readout')
   root.appendChild(readout)
 
+  // --- bill of materials ----------------------------------------------------
+  const bomToggle = el('button', 'bomtoggle', 'bill of materials ▾')
+  root.appendChild(bomToggle)
+  const bomBox = el('section', 'bom')
+  root.appendChild(bomBox)
+  bomToggle.addEventListener('click', () => {
+    const open = bomBox.classList.toggle('open')
+    bomToggle.textContent = `bill of materials ${open ? '▴' : '▾'}`
+  })
+
   // --- view controls --------------------------------------------------------
   const views = el('div', 'views')
   for (const name of Object.keys(CAMERAS)) {
@@ -240,6 +251,66 @@ export function mountUI({ stations, state, onStation, onProgress, camera, contro
 
     readout.appendChild(sectionTitle('how it stands up'))
     for (const n of meta.notes) readout.appendChild(el('p', 'note', n))
+
+    renderBom(station)
+  }
+
+  /**
+   * The bill of materials.
+   *
+   * Long, so it collapses — but it is not an appendix. It is the answer to
+   * "could you build this", and the MOUNT line on each row is the answer to the
+   * harder question underneath: a hinge cannot be bolted to a loudspeaker, a
+   * rotomoulded water tank or an LP cylinder, so most of what a module carries
+   * has to be captured in a cradle rather than fixed to. The count of items with
+   * no fixing points of their own is printed at the top, because that number is
+   * how much custom timber the build actually needs.
+   */
+  function renderBom(station) {
+    bomBox.innerHTML = ''
+    const items = BOM[station.def.bom ?? station.def.id] ?? []
+    if (!items.length) {
+      bomBox.appendChild(el('p', 'note', 'Gear list still being priced for this module.'))
+      bomToggle.classList.add('empty')
+      return
+    }
+    bomToggle.classList.remove('empty')
+    const { jpy, kg, lines } = bomTotals(items)
+    const cap = captureCount(items)
+    bomBox.appendChild(
+      kv('bought-in gear', `¥${jpy.toLocaleString('en-US')} · ${kg.toFixed(1)} kg · ${lines} lines`),
+    )
+    bomBox.appendChild(
+      kv('no fixing points', `${cap} of ${lines} items must be captured in a cradle`, cap > lines / 2 ? 'warn' : ''),
+    )
+    for (const [cat, group] of byCategory(items)) {
+      bomBox.appendChild(sectionTitle(cat))
+      for (const it of group) {
+        const row = el('div', 'bomrow')
+        const head = el('div', 'bomhead')
+        head.appendChild(el('span', 'bommodel', it.model))
+        head.appendChild(el('span', 'bomprice', `¥${(it.jpy * it.qty).toLocaleString('en-US')}`))
+        row.appendChild(head)
+        row.appendChild(
+          el(
+            'div',
+            'bommeta',
+            [
+              it.maker,
+              it.qty > 1 ? `×${it.qty}` : null,
+              it.size ? `${it.size[0]} × ${it.size[1]} × ${it.size[2]} mm` : null,
+              `${it.kg} kg`,
+              it.where,
+            ]
+              .filter(Boolean)
+              .join(' · '),
+          ),
+        )
+        row.appendChild(el('div', 'bommount', it.mount))
+        if (it.note) row.appendChild(el('div', 'bomnote', it.note))
+        bomBox.appendChild(row)
+      }
+    }
   }
 
   /** Rebuild the ordered step list for a station. */
