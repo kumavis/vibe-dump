@@ -670,48 +670,57 @@ export const CABIN = [
 // attachment anywhere. Plywood has no fixings of its own — it is the thing you
 // put fixings INTO, which is why the insert line exists.
 //
-// Confidence is worth reading on this list. One price here was read straight off
-// the maker's own product page; most of the rest are catalogue-real parts with
-// estimated yen, and they are marked as such rather than dressed up.
+// Every line here went back out to be checked, and the hardware list is where
+// that paid best. Three Takigen part numbers named sizes the series does not
+// make. A gas spring was priced at half its list. The trim seal was a series
+// that does not exist. And the one that mattered: the platform slide had been
+// written up as a 100 kg-plus pair on the strength of Accuride's American
+// reputation, when the C3832 is a medium-duty rail derating to about 33 kgf per
+// pair at full extension — a slide chosen off a remembered figure rather than
+// the extension-derated one is how fold-out decks fail.
+//
+// Confidence is still worth reading. Where a price came off the maker's own page
+// it says high; where the part is catalogue-real and the yen is inferred from a
+// neighbouring size it says medium, and it is marked rather than dressed up.
 export const SHARED = [
   {
-    cat: 'piano hinge (stainless)', maker: 'タキゲン製造 (TAKIGEN)', model: 'B-1007 ステンレス長蝶番シリーズ (SUS304, 幅50 × 板厚2.0 × L1000)',
-    size: [1000, 50, 2], kg: 0.85, jpy: 7800, qty: 8, where: 'タキゲン直販／WEBショップ takigen.co.jp 品番 B-1007（幅25/32/38/50 × 板厚0.8/1.5/2.0 × 長さ120〜1800 の組合せで枝番 B-1007-1〜-54）。カタログ標準在庫、1〜3営業日出荷。MonotaRO でもタキゲン扱いあり。長尺は別途送料。',
-    mount: 'Approved provision is ONLY the factory countersunk screw-hole line running down both leaves at fixed pitch (~50–60 mm). Do not drill new holes within ~10 mm of the knuckle and never drill through the barrel. Into 15 mm plywood use M5×25 SUS pan-head machine screws passing right through the leaf, through the ply, into a 25×3 mm SUS backing strap or a captive nut on the far face — wood screws into a 15 mm panel will pull out the first time a 60 kg wing is folded down. The hinge is designed to be cut to length: cut between holes, deburr, and passivate the cut end. The barrel itself is not a mount point — no clamps, no straps around it.',
+    cat: 'piano hinge (stainless)', maker: 'タキゲン製造 (TAKIGEN)', model: 'B-1007-12 ステンレス長蝶番 (SUS304, 幅50 × 板厚1.5 × L1000)',
+    size: [1000, 50, 1.5], kg: 0.74, jpy: 4498, qty: 8, where: 'タキゲン直販／WEBショップ takigen.co.jp 品番 B-1007（幅25/32/38/50 × 板厚0.8/1.5/2.0 × 長さ120〜1800 の組合せで枝番 B-1007-1〜-54）。カタログ標準在庫、1〜3営業日出荷。MonotaRO でもタキゲン扱いあり。長尺は別途送料。',
+    mount: 'Approved provision is ONLY the factory hole line: ø3.5 at 20 mm pitch down both leaves. That is an M3 or M4 countersunk screw — an M5 will not go through, which is worth knowing before you buy the fasteners. Do not drill new holes within about 10 mm of the knuckle and never drill through the barrel. Into 15 mm plywood run M4 × 25 SUS pan-heads right through the leaf, the ply and a 25 × 3 mm SUS backing strap; wood screws into a 15 mm panel pull out the first time a 60 kg wing folds down. With 20 mm pitch you have plenty of holes, so use every third one and you still have a fixing every 60 mm. The hinge is designed to be cut to length: cut between holes, deburr, and passivate the cut end. The barrel itself is not a mount point — no clamps, no straps around it.',
     conf: 'medium',
-    note: 'Model, material, widths/thicknesses and length range verified on Takigen\'s product page; price is estimated. B-7 is the identical geometry in SPCC zinc-chromate and is the variant that lists 1800 mm — roughly a third the price, so use B-7 on dry interior fold lines and keep SUS304 for the weather side.',
+    note: 'Model, material, widths/thicknesses and length range verified on Takigen\'s product page; price is estimated. B-7-12 is the identical geometry in SPCC zinc-chromate at ¥2,498 — 56 per cent of the SUS price, not the third it is easy to assume, so use B-7 on dry interior fold lines and keep SUS304 for the weather side.',
   },
   {
-    cat: 'lift-off butt hinge (stainless)', maker: 'タキゲン製造 (TAKIGEN)', model: 'B-1065 ステンレス抜差蝶番シリーズ (SUS304, 重量扉サイズ)',
-    size: [45, 100, 4], kg: 0.28, jpy: 3800, qty: 12, where: 'タキゲン直販 takigen.co.jp 品番 B-1065（B-65 の SUS304 版）。標準在庫、1〜3営業日。',
+    cat: 'lift-off butt hinge (stainless)', maker: 'タキゲン製造 (TAKIGEN)', model: 'B-1065-10 ステンレス抜差蝶番 穴あき (SUS304, 幅100 × 全長125 × t4)',
+    size: [100, 125, 4], kg: 0.28, jpy: 2474, qty: 12, where: 'タキゲン直販 takigen.co.jp 品番 B-1065（B-65 の SUS304 版）。標準在庫、1〜3営業日。',
     mount: 'Bolt-through holes in each leaf only — typically 4 × ø7 for M6, or ø9 for M8 on the heavy sizes. That drilled pattern is the whole approved provision; the leaf is not to be welded (it is a polished SUS304 leaf carrying the panel and welding needs re-passivation). Loose-pin geometry means the male/pin leaf must go on the FIXED frame so the panel lifts off upward — mount it the other way and the panel drops off over a bump. Use three hinges minimum on a 60–80 kg panel and load-share by shimming so all three barrels are collinear within ~0.5 mm; two hinges out of line puts the whole panel on one.',
     conf: 'medium',
     note: 'Series and material verified on Takigen; the exact size枝番 and price are estimated. B-1365 (超重量用厚口, 150–200 mm tall × 120–160 mm wide, SUS304) is the same family scaled for ship and floodgate doors — genuinely rated far past 80 kg but physically far too big and expensive for a kei-truck fold-out.',
   },
   {
-    cat: 'weld-on lift-off hinge (stainless)', maker: 'タキゲン製造 (TAKIGEN)', model: 'B-1026 ステンレス両抜旗蝶番 超重量用厚口',
-    size: [65, 120, 12], kg: 0.55, jpy: 6200, qty: 8, where: 'タキゲン直販 takigen.co.jp 品番 B-1026（B-26 の SUS304 版）。受注生産寄り、目安 3〜7営業日。',
+    cat: 'weld-on lift-off hinge (stainless)', maker: 'タキゲン製造 (TAKIGEN)', model: 'B-1026-2 ステンレス両抜旗蝶番 超重量用厚口 (全長114)',
+    size: [114, 65, 12], kg: 1.3, jpy: 7488, qty: 8, where: 'タキゲン直販 takigen.co.jp 品番 B-1026（B-26 の SUS304 版）。受注生産寄り、目安 3〜7営業日。',
     mount: 'This is the one with LITERALLY NO SCREW HOLES. A 旗蝶番 (flag hinge) is a weld-on part: the approved provision is a full fillet weld of each half to steel or stainless, all round the flag plate. So it cannot touch plywood directly — it needs a steel sub-frame. The buildable path is: weld both halves to a 4.5 mm SUS304 or SS400 angle (40×40 or 50×50), then bolt that angle to the HFS5-4040 extrusion with M8 through the T-slot, or through-bolt it to the ply with M8 + 60×60×6 backing plates. Weld first, bolt second — welding an angle that is already bolted to ply sets the ply on fire and warps the bolt line.',
     conf: 'medium',
     note: 'Series verified on Takigen\'s 抜差蝶番 category page (両抜旗蝶番: B-3/B-1003 heavy, B-26/B-1026 ultra-heavy thick). Price and exact dimensions estimated. This is the hinge for the one module face that has to come off completely for servicing.',
   },
   {
-    cat: 'heavy platform slide (100 kg+ pair)', maker: 'スガツネ工業 LAMP / Accuride', model: '3832 (フルエクステンション重量用スライドレール, 3832-24 = 610 mm)',
-    size: [610, 48, 13], kg: 4.2, jpy: 12800, qty: 4, where: 'スガツネ工業 search.sugatsune.co.jp（3832 のページは実在／カタログ品）、または建材・機械商社経由。長さは 356〜711 mm（14〜28インチ）。目安 3〜10営業日、長尺は取り寄せ。',
-    mount: 'Both members carry a full row of round and slotted bolt-through holes for M5/M6 — those holes are the entire approved provision, and the 100 kg+ rating assumes EVERY hole is used. The cabinet member must sit on a flat, continuously supported face (15 mm ply or the extrusion\'s flat side), never on a plywood edge or a spacer stack. The two rails of a pair must be parallel within about 1 mm over their length or the ball retainers bind and the rating is fiction. Use M6 SUS bolts into 鬼目ナット / through-bolts with washers; wood screws are not an approved fixing for this rail at any load. Do not drill extra holes in the rail — the raceway is right behind the web.',
+    cat: 'platform slide — READ THE RATING', maker: 'スガツネ工業 LAMP / Accuride', model: 'C3832-24 フルエクステンションスライド (ストローク 610 mm)',
+    size: [600, 48, 13], kg: 2.3, jpy: 7000, qty: 4, where: 'スガツネ工業 search.sugatsune.co.jp（LAMP 扱いの Accuride C3832）。ストローク 250–700 mm。3〜10営業日。',
+    mount: 'Both members carry a full row of round and slotted bolt-through holes for M5/M6, and those holes are the entire approved provision — every one of them is meant to be used. The cabinet member must sit on a flat, continuously supported face, never on a plywood edge or a spacer stack, and the two rails of a pair must be parallel within about a millimetre or the ball retainers bind. Never drill extra holes: the raceway is directly behind the web.',
     conf: 'medium',
-    note: '3832 is a real, long-standing Accuride heavy-duty full-extension slide (500 lb / ~227 kg per pair class) carried in Japan through Sugatsune; the Sugatsune page for it exists but rendered as mojibake so the exact JP price could not be read — figure estimated. If you need genuine OVER-travel (platform clears the tailgate line), 9308 is the over-travel sibling in the same family; confirm the length/rating table with Sugatsune before ordering.',
+    note: 'THE RATING IS THE FINDING HERE. The first draft called this a 100 kg-plus pair on the strength of Accuride\'s American 500 lb reputation. The C3832 is a MEDIUM-duty side-mount rail: 441 N per pair at best, about 324 N (33 kgf) at 600 mm of extension. It will carry a battery drawer or a stove tray and it must never carry the 60–80 kg standing platform. For that, the sound module\'s LAMP 3509-24 at 2117 N per pair is the right class, or 日本アキュライド C3441 at roughly ten times this price. A slide chosen off a remembered figure rather than the extension-derated one is how fold-out decks fail.',
   },
   {
     cat: '3-stage slide (mid duty)', maker: 'スガツネ工業 LAMP', model: '3618-700 (3段引きスライドレール, 全長700 mm)',
-    size: [700, 45, 13], kg: 2, jpy: 2820, qty: 6, where: 'スガツネ工業 search.sugatsune.co.jp 品番 3618-700。¥2,820 税別 / ¥3,102 税込（1セット）。150〜700 mm を50 mm刻み、黒染 BL 仕様は 150〜600 mm。カタログ在庫品。',
+    size: [700, 36, 12.7], kg: 2, jpy: 2820, qty: 6, where: 'スガツネ工業 search.sugatsune.co.jp 品番 3618-700。¥2,820 税別 / ¥3,102 税込（1セット）。150〜700 mm を50 mm刻み、黒染 BL 仕様は 150〜600 mm。カタログ在庫品。',
     mount: 'Bolt-through / screw holes down both members only; no clamping, no welding, no drilling. Same rule as the 3832: continuous flat backing and a parallel pair. On a kei-truck this rail wants its own 12 mm ply cheeks tied top and bottom to the frame, otherwise bed flex twists the pair and it jams closed on a corner.',
     conf: 'high',
     note: 'Model and price read directly off Sugatsune\'s own product page — the one fully verified price in this list. Rated well under 100 kg per pair (mid-duty class), so use it for the stove tray, the battery drawer, the tool drawer; NOT for the 60–80 kg standing platform, which is what line 4 exists for.',
   },
   {
-    cat: 'gas spring', maker: '不二ラテックス (FUJI LATEX)', model: 'FGS-19 シリーズ（φ19 チューブ／ストローク250 mm／反力300 N 指定）',
-    size: [610, 19, 19], kg: 0.35, jpy: 4800, qty: 8, where: '不二ラテックス fujilatex.co.jp（ガススプリング FGS シリーズ）、流通は MonotaRO / ミスミ / 機械商社。反力は10 N刻みで指定、ストロークは20〜750 mm。指定品につき目安 5〜10営業日。',
+    cat: 'gas spring', maker: '不二ラテックス (FUJI LATEX)', model: 'FGS-19-250-BB-300（φ19 チューブ／ストローク250 mm／反力300 N）',
+    size: [564, 19, 19], kg: 0.35, jpy: 9800, qty: 8, where: '不二ラテックス fujilatex.co.jp（ガススプリング FGS シリーズ）、流通は MonotaRO / ミスミ / 機械商社。反力は10 N刻みで指定、ストロークは20〜750 mm。指定品につき目安 5〜10営業日。',
     mount: 'The strut\'s approved provision is the male thread at each end (M8 on the φ19 size) — nothing else. Never clamp, strap or drill the tube: it is a sealed pressure vessel at well over 100 bar and a hose clamp on the barrel scores the seal path. End fittings screw onto those threads, and the load then transfers to a ball stud (next line). Mount rod-end DOWN so the piston seal stays in oil, and set the geometry so the strut is never side-loaded — a gas spring is an axial-only part and a bent rod is a scrapped rod. For a 30 kg lid hinged at the back, two struts of ~300 N each with the pivot ~60–80 mm off the hinge line is the usual starting point; buy one pair, measure, then order the rest at the corrected force.',
     conf: 'medium',
     note: 'Series names (FGS-10/12/15/19/22/28, SUS and vacuum variants), the 10 N force increments and the stroke range are verified on Fuji Latex\'s own page; the specific stroke/force suffix format and the price are estimated. Chose a Japanese maker over Stabilus Lift-O-Mat because the 10 N-step made-to-order force is exactly what you need when the lid mass is still moving during the build.',
@@ -725,14 +734,14 @@ export const SHARED = [
   },
   {
     cat: 'over-centre / draw latch', maker: 'タキゲン製造 (TAKIGEN)', model: 'C-174-S クランプファスナー（締込み式ファスナー）',
-    size: [110, 30, 22], kg: 0.15, jpy: 2400, qty: 12, where: 'タキゲン直販 takigen.co.jp 品番 C-174-S。同ファミリーに C-124、C-432-A（折りたたみレバークランプ）、C-1174-T（SUS T型クランプ錠）。標準在庫、1〜3営業日。',
+    size: [110, 30, 22], kg: 0.15, jpy: 1800, qty: 12, where: 'タキゲン直販 takigen.co.jp 品番 C-174-S。同ファミリーに C-124、C-432-A（折りたたみレバークランプ）、C-1174-T（SUS T型クランプ錠）。標準在庫、1〜3営業日。',
     mount: 'Two-part latch: the lever body and the strike each have their own bolt-through hole pattern (typically 2 × ø5.5 for M5). Those four holes are the whole approved provision. An over-centre latch only develops its clamping preload if the two halves sit within a couple of millimetres of the designed spacing — shim with washers under the strike to tune it, do NOT slot the holes to make it fit, because a slotted hole lets the latch walk under vibration and it will be loose by the far end of the Chuo Expressway. Through-bolt into 鬼目ナット or a backing plate; a latch is a cyclic load and a screw in ply will egg out its hole.',
     conf: 'medium',
     note: 'Model verified on Takigen\'s 締込み式ファスナー category page; price estimated. C-1174-T is the stainless one in the family — spend the extra on the two latches that live on the outside face and use C-174-S internally.',
   },
   {
     cat: 'rated hasp', maker: 'モノタロウ (MonotaRO PB)', model: 'ステンレス製 掛金（ハスプ）※SKU未確認 — 全長130 mm クラス、南京錠対応',
-    size: [130, 45, 6], kg: 0.2, jpy: 1200, qty: 4, where: 'MonotaRO / コーナン / カインズ 店頭。ステンレス掛金は常時在庫、当日〜翌日。',
+    size: [130, 45, 3], kg: 0.15, jpy: 1200, qty: 4, where: 'MonotaRO / コーナン / カインズ 店頭。ステンレス掛金は常時在庫、当日〜翌日。',
     mount: 'A hasp\'s provision is bolt-through holes only, and the only ones worth having are the pattern where the staple plate hides its own fixings when the hasp is closed and locked. It MUST be through-bolted — M6 SUS carriage bolts with a 40×40×3 washer plate on the inside face. A hasp screwed to plywood is decoration: the failure mode is the whole plate tearing out with the ply face veneer still attached to it. Fit it so the shackle takes shear, not prising, and put a second one at the far end rather than one big one in the middle.',
     conf: 'low',
     note: 'Could not pin a specific SKU — web search was unavailable in this session, so this is deliberately a generic-but-real home-centre/MonotaRO stainless hasp bought by dimension over the counter rather than an invented model number. Takigen\'s 止め金 range (AC-25 / AC-1025 series) is real and stainless but those are cam-lock tongues used with a 平面ハンドル, not padlockable hasps — the wrong part for this job.',
@@ -746,14 +755,14 @@ export const SHARED = [
   },
   {
     cat: 'aluminium extrusion (structural)', maker: 'ミスミ (MISUMI)', model: 'HFS5-4040（アルミフレーム 5系列 40×40、指定長カット）',
-    size: [1000, 40, 40], kg: 1.35, jpy: 1180, qty: 12, where: 'ミスミ jp.misumi-ec.com 型番 HFS5-4040-1000（1 mm単位の指定長カット可、カット費別途）。標準出荷 目安3日。表面処理は白アルマイト／黒アルマイト等を選択。',
+    size: [1000, 40, 40], kg: 1.35, jpy: 1400, qty: 12, where: 'ミスミ jp.misumi-ec.com 型番 HFS5-4040-1000（1 mm単位の指定長カット可、カット費別途）。標準出荷 目安3日。表面処理は白アルマイト／黒アルマイト等を選択。',
     mount: 'The extrusion\'s provision is its four T-slots plus optionally tapped ends — and that is deliberate: you never drill it. Every bracket, hinge sub-plate and panel bolt lands on a post-assembly nut in the slot (next line). Bolting a ply panel to the slot requires a washer that spans the slot lip; a bare M5 socket head will pull through the lip under a shock load. End-tapping for M8 is a Misumi option (counterbore + tap) — order it with the cut, because tapping a 40×40 end square by hand in the field is miserable. For the 60–80 kg fold-outs, 4040 is the minimum section for any member that cantilevers more than ~500 mm.',
     conf: 'medium',
     note: 'HFS5 series and the cut-to-length service verified on Misumi; the 4040 price is scaled from the 2020 page and is an estimate. Mass ~1.35 kg/m matters: the whole four-module frame in 4040 must be budgeted against the Hijet\'s 350 kg payload before any gear goes in.',
   },
   {
     cat: 'aluminium extrusion (light)', maker: 'ミスミ (MISUMI)', model: 'HFS5-2020（アルミフレーム 5系列 20×20、指定長カット）',
-    size: [1000, 20, 20], kg: 0.5, jpy: 320, qty: 20, where: 'ミスミ jp.misumi-ec.com 型番 HFS5-2020-1000。ページ記載で 1000 mm の指定長が概ね ¥220〜380（表面処理・数量で変動、カット費別）。標準出荷 目安3日。',
+    size: [1000, 20, 20], kg: 0.5, jpy: 510, qty: 20, where: 'ミスミ jp.misumi-ec.com 型番 HFS5-2020-1000。ページ記載で 1000 mm の指定長が概ね ¥220〜380（表面処理・数量で変動、カット費別）。標準出荷 目安3日。',
     mount: 'Same T-slot logic as the 4040, sized for M5 post-assembly nuts. Because 2020 has a single slot per face, a bracket on it can only be located, not triangulated — so treat 2020 as door frames, screen rails, awning battens and cable runs, never as anything a person stands on or that a 30 kg lid hangs off. Corner brackets (Misumi HBLFSN5 family) bolt into the slot and are the approved way to make a joint; a self-tapper into the slot is not.',
     conf: 'medium',
     note: 'Part number, 20×20 square section and 0.5 kg/m verified on the Misumi product page; the exact yen figure moves with surface treatment, quantity tier and the per-cut charge, so budget ~¥500/m delivered rather than the headline number.',
@@ -781,14 +790,14 @@ export const SHARED = [
   },
   {
     cat: 'lashing system', maker: 'タキゲン製造 (TAKIGEN)', model: 'C-1998 ステンレスラチェットバックル ＋ C-1994 シリーズ エンドフィッティング',
-    size: [180, 70, 45], kg: 0.9, jpy: 8500, qty: 8, where: 'タキゲン直販 takigen.co.jp、ラッシングシステム分類。C-1998（巻取り式ラチェット）、C-1997（オーバーセンター式）、C-996（カムバックル）、C-1994-A〜N（エンド金具）、C-993 系（縫製のみ）。目安 3〜7営業日。',
+    size: [180, 70, 45], kg: 0.9, jpy: 14000, qty: 8, where: 'タキゲン直販 takigen.co.jp、ラッシングシステム分類。C-1998（巻取り式ラチェット）、C-1997（オーバーセンター式）、C-996（カムバックル）、C-1994-A〜N（エンド金具）、C-993 系（縫製のみ）。目安 3〜7営業日。',
     mount: 'The buckle is not fastened to the structure at all — it lives inline in the webbing, so it has no mount point and needs none. The mount point is the END FITTING (C-1994 series): a hook or flat plate that the webbing is sewn to, and its rating is only as good as whatever it hooks onto. So this line\'s real mount question is answered by the next one — put rated anchors in the frame first, then pick the C-1994 variant whose throat matches them. Do not hook a lashing end onto an extrusion slot, a handle, or a hinge barrel; none of those are rated for a dynamic strap load.',
     conf: 'medium',
     note: 'Buckle and end-fitting series verified on Takigen\'s ラッシングシステム category page; prices estimated. A plain ラッシングベルト from MonotaRO or a home centre is ¥1,500–3,000 with LC 300–500 kgf and is fine for loose kit; the Takigen SUS system earns its price only on the straps that live permanently outdoors on the module.',
   },
   {
-    cat: 'tie-down anchor', maker: 'JIS B 1168 準拠品（MonotaRO PB 等）', model: 'アイボルト SUS304 M12（使用荷重 0.63 t 軸方向）',
-    size: [50, 62, 12], kg: 0.12, jpy: 780, qty: 16, where: 'MonotaRO / コーナン 店頭。JIS アイボルトは M8〜M24 まで常時在庫、当日〜翌日。',
+    cat: 'tie-down anchor', maker: 'JIS B 1168 準拠品（MonotaRO PB 等）', model: 'アイボルト SUS304 M12（使用荷重 0.40 t 軸方向）',
+    size: [50, 51, 12], kg: 0.12, jpy: 780, qty: 16, where: 'MonotaRO / コーナン 店頭。JIS アイボルトは M8〜M24 まで常時在庫、当日〜翌日。',
     mount: 'An eyebolt\'s rating exists ONLY when it is screwed into a full-depth tapped hole with at least 1.5 × d of thread engagement in steel, pulled along its own axis, and seated hard against the face. None of that is true of plywood, so through ply it needs either a tapped steel boss or a plain nut plus a 60×60×6 backing plate, torqued until the shoulder is bedded. And the moment you side-load it, the 0.63 t drops to roughly a fifth. For any strap that pulls at an angle — which is most of them — use a proper D-ring / eye plate with two to four bolt-through holes instead, so the load goes into a plate in shear rather than into a bolt in bending.',
     conf: 'medium',
     note: 'JIS B 1168 is a real national standard with a published load table, so the designation and rating are solid even though the retailer SKU is generic; price estimated. This is the deliberate choice over inventing a branded D-ring part number.',
@@ -802,14 +811,14 @@ export const SHARED = [
   },
   {
     cat: 'stainless fasteners', maker: 'モノタロウ (MonotaRO PB)', model: '六角穴付ボルト ステンレス SUS304 M8 × 30（および M5/M6 各サイズ、ナイロンナット・平座金セット）',
-    size: [13, 30, 13], kg: 0.021, jpy: 25, qty: 200, where: 'MonotaRO 通販、箱売り（50本/100本入）。SUS 六角穴付は定番在庫、翌日出荷。ホームセンターのバラ売りは 1本 ¥50〜80 で割高。',
+    size: [13, 30, 13], kg: 0.021, jpy: 45, qty: 200, where: 'MonotaRO 通販、箱売り（50本/100本入）。SUS 六角穴付は定番在庫、翌日出荷。ホームセンターのバラ売りは 1本 ¥50〜80 で割高。',
     mount: 'Not applicable — this is the fastener. Two warnings that matter here: SUS304 against aluminium extrusion galls, so use anti-seize or a nylon washer under the head and never re-run a bolt that has picked up. And torque SUS M8 to roughly 18 N·m, not the ~25 N·m you would use on a steel bolt — stainless work-hardens and snaps with very little warning, usually at the worst moment, halfway through assembling a module at a campsite. Buy a box of each size; running out of M6 in a rural home centre on a Sunday is the classic build-stopper.',
     conf: 'medium',
     note: 'MonotaRO own-brand stainless socket-head bolts are a real, catalogued, always-in-stock line; unit price is an estimate around the usual box-quantity rate. Named generically on purpose rather than fabricating a branded fastener part number.',
   },
   {
-    cat: 'weather sealing', maker: '岩田製作所 (IWATA)', model: 'トリムシール（EPDM・バルブ付）2100 シリーズ（型番末尾で対応板厚・バルブ径・長さを指定）',
-    size: [1000, 22, 14], kg: 0.12, jpy: 1450, qty: 20, where: 'ミスミ jp.misumi-ec.com（岩田製作所ブランド取扱）／MonotaRO。指定長カット対応、目安 3〜5営業日。iwata-fa.jp の「トリム＆トリムシール」分類に EPDM・TPE・PVC の設定あり。',
+    cat: 'weather sealing', maker: '岩田製作所 (IWATA)', model: '4100-B-3X16CT-L2 トリムシール（EPDM・バルブ付、対応板厚3 mm、2 m）',
+    size: [1000, 22, 14], kg: 0.12, jpy: 2250, qty: 20, where: 'ミスミ jp.misumi-ec.com（岩田製作所ブランド取扱）／MonotaRO。指定長カット対応、目安 3〜5営業日。iwata-fa.jp の「トリム＆トリムシール」分類に EPDM・TPE・PVC の設定あり。',
     mount: 'The good news: this needs NO fasteners at all, which is exactly why it is the right seal for a folding structure. The trim section has a steel-cored U channel that grips a panel edge of a specified thickness, and the bulb sits proud of it. The approved provision is therefore a clean, continuous, correctly-thick edge — so specify the grip range to match what it is going onto. A raw 12 mm ply edge is outside most trim seals\' grip range, so either fit an aluminium edge trim first to bring the edge into range, or order the wide-grip variant. Corners are the failure point: mitre-relieve the channel rather than forcing it round, and finish the run on a straight, so the joint is not on a corner.',
     conf: 'medium',
     note: '岩田製作所 is confirmed as a real Japanese maker of trim and trim-seal in EPDM; the series page returned no populated part list, so the full suffix code is described rather than invented — the trailing digits encode grip thickness, bulb size and cut length and are set at order. Cheaper option is a self-adhesive EPDM D-profile from コーナン at about ¥600 per 2 m, but adhesive-only seals peel at the corners after one summer in a truck bed; the mechanically-gripping trim seal is the one that survives the Hijet.',
