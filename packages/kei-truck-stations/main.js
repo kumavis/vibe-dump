@@ -211,7 +211,11 @@ window.kei = {
   get station() {
     return current
   },
-  setProgress,
+  /** Drives the rig AND the panel, so the console and the readout never disagree. */
+  setProgress: (t) => {
+    setProgress(t)
+    ui.tick(state.t, current)
+  },
   /** Swap station AND refresh the panel, so the console and the UI agree. */
   load: (id) => {
     const c = load(id)

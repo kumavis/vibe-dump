@@ -181,9 +181,120 @@ export const YATAI = [
 ]
 
 // --- SOUND SYSTEM ------------------------------------------------------------
-// Filled from the gear research. Until it lands this is the shape the readout
-// expects, and the geometry keeps its own dimensions.
-export const SOUND = []
+// THE HEADLINE FINDING, and it reshaped the module: not one powered speaker in
+// this class has a single usable mounting point on its base, sides or back. The
+// complete inventory of threaded features on a modern active PA box is a pole
+// socket in the top (compression only — never a tie-down), sometimes M8 or M10
+// eyebolt inserts, and cast handle recesses. Everything else is 15 mm plywood
+// and a rubber foot.
+//
+// So every box here is a CAPTURE item, and the trick that makes one survive
+// 60 km/h is not the strap: it is hardwood battens screwed inside the well walls
+// that hook into the cast side-handle apertures, so the strap only has to stop
+// the box rocking rather than lifting.
+//
+// TWO HEIGHT FAILURES the research caught, both of which changed the mechanism:
+//
+//   Tray 60 + DXS15XLF 587 + a top box standing on it = 1149 mm, which is 29 mm
+//   over the ceiling. The tops cannot stow upright on the subs. They travel
+//   LYING ON THEIR SIDES on top of them: 60 + 587 + 315 = 962 mm.
+//
+//   No wind-up mast in this class collapses below 1120. The K&M 24730 stows at
+//   1405, the 24740 at 1715, the Manfrotto 087NWB at 1670. So the mast cannot
+//   stand on the deck at all — it lies flat along it and is hinged at its foot,
+//   which is why it is drawn that way.
+export const SOUND = [
+  {
+    cat: 'PA — low', maker: 'YAMAHA', model: 'DXS15XLF 15" powered subwoofer',
+    size: [450, 587, 600], kg: 40, jpy: 243000, qty: 2, where: 'Soundhouse 254525 (特別注文, 2–4 週)',
+    mount: 'The ONLY threaded features are in the top panel: a dual socket, Φ35 × 80 deep concentric with M20 × 25. That is rated for a pole in COMPRESSION and must never be used as a tie-down. No base inserts, no flypoints. Captured in a 460 × 610 ply well with hardwood battens hooking the two cast side-handle apertures, plus one 24 mm endless strap over the top.',
+    conf: 'high',
+    note: 'The only 15" active that hits the 40–45 kg brief with a documented dual pole socket.',
+  },
+  {
+    cat: 'PA — mid/top', maker: 'YAMAHA', model: 'DZR10 10" powered top',
+    size: [315, 537, 345], kg: 17.9, jpy: 217800, qty: 2, where: 'Soundhouse 254521',
+    mount: 'M10 × 8 PLUS M8 × 2 threaded inserts — by far the richest flypoint pattern of any box here, and the reason it is specified over the cheaper DXR10mk3. It is the one speaker on this truck that can be BOLTED to a yoke instead of cradled, which is what lets it tip up on a hinge rather than be lifted clear.',
+    conf: 'high',
+    note: 'The DXR10mk3 is ¥143,800 and 14.5 kg, but only has Φ35 slip sockets and M8 × 15 rear inserts — cradle only.',
+  },
+  {
+    cat: 'PA — mid/top', maker: 'K&M (König & Meyer)', model: '21336 distance rod',
+    size: [35, 1475, 35], kg: 2.27, jpy: 9500, qty: 4, where: 'Soundhouse 47964 (在庫)',
+    mount: 'A PAIR PER SIDE, standing either side of the sub rather than on it. The M20 male base screws into a captive M20 boss recessed 50 mm into the tray pan, through a Φ50 guide sleeve that takes the side load; the Φ35 upper tubes carry the mid-top’s trunnion yoke between them. The sub’s own top socket is capped and unused — it is rated for a pole in compression, and a yoke that has to be tipped puts a moment into its mount. 945–1475 mm each, 530 of travel, rated 35 kg against the 22 kg they share.',
+    conf: 'high',
+    note: 'Two short columns instead of one long one is what makes the tip possible: a single rod on the sub’s centreline has nothing to pin a trunnion to.',
+  },
+  {
+    cat: 'light', maker: 'K&M (König & Meyer)', model: '24730 crank-up lighting stand',
+    size: [120, 1405, 120], kg: 12, jpy: 85000, qty: 1, where: 'Soundhouse 309730',
+    mount: 'WIND-UP: the load rides a steel cable on a worm drive, which is the only class safe to leave standing under a truss wing — friction-collar stands creep and drop. 1405–3000 mm, rated 40 kg, Φ35 top spigot with M10. No column flange, so it is captured in split shaft collars on a hinged base plate.',
+    conf: 'high',
+    note: 'Stows at 1405 mm — 285 above the packing ceiling. It cannot stand on the deck; it lies flat and hinges up.',
+  },
+  {
+    cat: 'light', maker: 'STAGE EVOLUTION', model: 'TRUSS4/100/22I 220 mm box truss, 1 m',
+    size: [220, 220, 1000], kg: 5, jpy: 20000, qty: 2, where: 'Soundhouse 269838 (在庫)',
+    mount: 'Four Φ35 chords, plate ends, PIN + R-CLIP couplers — tool-free, which matters at 3 m up in the dark. The I revision reinforces the end plates against transport deformation, which is exactly this application.',
+    conf: 'medium',
+    note: 'Weight is calculated from four Φ35 chords plus bracing; STAGE EVOLUTION do not publish it.',
+  },
+  {
+    cat: 'light', maker: 'STAGE EVOLUTION', model: 'TRUSS4/BP/22 base plate + TRUSS4/HC/22 couplers',
+    size: [300, 10, 300], kg: 2.2, jpy: 4500, qty: 2, where: 'Soundhouse 90585 (在庫僅少)',
+    mount: 'Bolts face-up to a 6 mm aluminium head plate on the mast’s Φ35 spigot; the wings pin into it.',
+    conf: 'high',
+  },
+  {
+    cat: 'light', maker: 'ELIMINATOR LIGHTING', model: 'MINI PAR BAR (4 × RGBW, 8ch DMX)',
+    size: [730, 89, 205], kg: 2.7, jpy: 42800, qty: 1, where: 'Soundhouse 344190 (在庫)',
+    mount: 'Supplied with its own T-bar stand, which is discarded; the bar clamps to a truss chord. At 89 mm deep it folds INSIDE the 220 mm truss.',
+    conf: 'high',
+  },
+  {
+    cat: 'light', maker: 'STAGE EVOLUTION', model: 'SLIMPAR12 (12 × 3 W RGB, DMX)',
+    size: [193, 89, 180], kg: 0.6, jpy: 9980, qty: 6, where: 'Soundhouse 268702 (在庫)',
+    mount: 'Double-yoke bracket with an M8 through-hole into a CCLAMP. 89 mm body plus ~60 mm of yoke and clamp is 150 mm, which fits inside the truss depth — so the wings fold to the mast with the fixtures still on.',
+    conf: 'high',
+  },
+  {
+    cat: 'light', maker: 'STAGE EVOLUTION', model: 'CCLAMP (φ20–51 jaw) + safety bonds',
+    size: [60, 90, 50], kg: 0.35, jpy: 780, qty: 10, where: 'Soundhouse 89988 (在庫)',
+    mount: 'One jaw range covers the truss’s Φ35 chords and the mast’s Φ35 spigot. Fixture attaches on an M8 bolt through the clamp body. One steel safety bond per suspended fixture, non-negotiable.',
+    conf: 'high',
+  },
+  {
+    cat: 'booth', maker: 'Pioneer DJ', model: 'DDJ-FLX4 controller',
+    size: [482, 59, 273], kg: 2.1, jpy: 49500, qty: 1, where: 'Soundhouse 318895 (在庫)',
+    mount: 'NO MOUNT POINTS AT ALL — four rubber feet. It is 482 mm wide, within a millimetre of 19 inches, and that will tempt you: it has no rack ears and no provision for them. Captured in a 486 × 277 × 12 mm routed recess in the counter with a hinged retaining bar, so it stays put while the counter folds.',
+    conf: 'high',
+  },
+  {
+    cat: 'booth', maker: 'YAMAHA', model: 'MG10XU mixer',
+    size: [244, 71, 294], kg: 2.1, jpy: 32400, qty: 1, where: 'Soundhouse 193650 (在庫)',
+    mount: 'No rack ears; Yamaha’s RK-MG12 kit fits the MG12/16, NOT this chassis. Routed recess plus a rear retaining bar, same as the controller.',
+    conf: 'high',
+  },
+  {
+    cat: 'power', maker: 'EcoFlow', model: 'DELTA 2 Max (2048 Wh)',
+    size: [497, 305, 242], kg: 23, jpy: 180000, qty: 1, where: 'EcoFlow Japan / Amazon.co.jp / ヨドバシ',
+    mount: 'Moulded side handle recesses only, no inserts, no tie-down eyes. Ply well 505 × 250 internal with a 60 mm lip and tongues into the handle apertures, one 24 mm strap over the top.',
+    conf: 'low',
+    note: 'The 4096 Wh DELTA Pro 3 gives about 4.5 h at 800 W but weighs 51.5 kg, which this module does not have. At 2048 Wh expect roughly 2 to 2.5 hours — the honest number.',
+  },
+  {
+    cat: 'mechanism', maker: 'LAMP / スガツネ工業', model: '3509-24 heavy-duty slide, 610 mm',
+    size: [24, 76, 610], kg: 5, jpy: 28578, qty: 2, where: 'モノタロウ 00351811',
+    mount: '3-stage over-travel steel slide, 632 mm stroke, rated 2117 N per pair (about 216 kgf) — but that is a STATIC rating at the rail midpoint. It says nothing about a 60 kg tray taking vertical shock at 60 km/h, so the trays latch closed with over-centre catches and bear on hardwood stops in transit.',
+    conf: 'high',
+  },
+  {
+    cat: 'mechanism', maker: 'モノタロウ', model: '荷締めベルト ラチェット式 エンドレス 24 mm × 5 m',
+    size: [24, 1, 5000], kg: 0.8, jpy: 1099, qty: 6, where: 'モノタロウ 53262388',
+    mount: 'Working load 100 kg, breaking 500. Take the ENDLESS variant — no hooks, a continuous loop — so it passes over the box and through M8 eye plates on the tray without a steel hook loose beside a speaker cone.',
+    conf: 'high',
+  },
+]
 
 // --- HOKORA ------------------------------------------------------------------
 export const HOKORA = []
