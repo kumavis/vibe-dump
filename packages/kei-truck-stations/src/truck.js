@@ -551,8 +551,8 @@ function truckHulls() {
     { id: 'cab', c: [(X.nose + X.cabRear) / 2, (SILL + T.H) / 2, 0], s: [X.nose - X.cabRear, T.H - SILL, T.W] },
     { id: 'torii', c: [T.bedLen / 2 - mm(10), T.deckH + T.toriiH / 2 + T.bedSide / 2, 0], s: [mm(60), T.toriiH - T.bedSide, T.bedWid] },
     { id: 'deck', c: [0, T.deckH - mm(30), 0], s: [T.bedLen + T.gate * 2, mm(60), T.bedWid + T.gate * 2] },
-    { id: 'wheel-rl', c: [X.axleRear, T.tyreR, -T.trackRear / 2], s: [T.tyreR * 2, T.tyreR * 2, T.tyreW * 1.1] },
-    { id: 'wheel-rr', c: [X.axleRear, T.tyreR, T.trackRear / 2], s: [T.tyreR * 2, T.tyreR * 2, T.tyreW * 1.1] },
+    { id: 'wheel-rl', c: [X.axleRear, T.tyreR, -T.trackRear / 2], s: [T.tyreR * 2, T.tyreR * 2, T.tyreW] },
+    { id: 'wheel-rr', c: [X.axleRear, T.tyreR, T.trackRear / 2], s: [T.tyreR * 2, T.tyreR * 2, T.tyreW] },
     { id: 'mirror-l', c: [X.doorFront + mm(20), T.mirrorY + mm(60), -(T.bodyW / 2 + T.mirrorReach)], s: [mm(140), mm(230), mm(70)] },
     { id: 'mirror-r', c: [X.doorFront + mm(20), T.mirrorY + mm(60), T.bodyW / 2 + T.mirrorReach], s: [mm(140), mm(230), mm(70)] },
   ]

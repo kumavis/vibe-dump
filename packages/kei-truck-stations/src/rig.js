@@ -85,6 +85,11 @@ class Part {
     /** ids this part is allowed to touch — latch faces, seated feet, sockets. */
     this.mates = new Set(spec.mates ?? [])
     this.static = spec.static === true
+    /** kg, and where it acts in the part's own frame — for the tipping check. */
+    this.mass = spec.mass ?? 0
+    this.com = new THREE.Vector3().fromArray(spec.com ?? [0, 0, 0])
+    /** Which foot, if any, this part plants on the ground. */
+    this.footprint = spec.footprint ?? null
     this.children = []
     this.q = 0 // current joint value, in radians or metres
   }
@@ -169,6 +174,40 @@ export class Rig {
     return this.parts.get(id)
   }
 
+  /**
+   * Where the whole assembly's weight acts, in world coordinates, at the
+   * current pose — plus the total.
+   *
+   * This is what the tipping check needs. A deployed module moves mass a long
+   * way sideways (a speaker tray glides 600 mm outboard; an awning cantilevers
+   * a metre and a half), and whether that is fine or alarming depends entirely
+   * on where the resulting centre of gravity lands relative to the feet on the
+   * ground.
+   */
+  centreOfMass() {
+    const acc = new THREE.Vector3()
+    let total = 0
+    for (const part of this.order) {
+      if (!part.mass) continue
+      _v.copy(part.com).applyMatrix4(part.group.matrixWorld)
+      acc.addScaledVector(_v, part.mass)
+      total += part.mass
+    }
+    if (total > 0) acc.multiplyScalar(1 / total)
+    return { point: acc, mass: total }
+  }
+
+  /** Every ground contact the assembly currently has, in world XZ. */
+  feet() {
+    const out = []
+    for (const part of this.order) {
+      if (!part.footprint) continue
+      _v.copy(part.footprint).applyMatrix4(part.group.matrixWorld)
+      out.push({ id: part.id, x: _v.x, z: _v.z, y: _v.y })
+    }
+    return out
+  }
+
   /** Human-readable stage names shown in the HUD. */
   setStages(labels) {
     this.stageLabels = labels
@@ -207,7 +246,12 @@ export class Rig {
       const u = part.easing ? ease(raw) : Math.min(1, Math.max(0, raw))
       part.setJoint(part.from + (part.to - part.from) * u)
     }
-    this.root.updateMatrixWorld(true)
+    // updateWorldMatrix, not updateMatrixWorld: the rig hangs off a bedOrigin
+    // group whose own world matrix has not necessarily been computed yet when
+    // audit() runs at load time, before the first render. Walking UP first is
+    // the difference between hulls in world space and hulls 660 mm underground,
+    // which the audit faithfully reports as every leg colliding with the tarmac.
+    this.root.updateWorldMatrix(true, true)
   }
 
   /**
@@ -251,7 +295,7 @@ export class Rig {
    * the ground, a panel closing onto its sill. Those are contacts the design
    * *wants*.
    */
-  audit({ samples = 96, statics = [] } = {}) {
+  audit({ samples = 96, statics = [], tolerance = 0.0006 } = {}) {
     const before = this.t ?? 0
     const worst = new Map()
     let pairsTested = 0
@@ -269,8 +313,12 @@ export class Rig {
           if (A.part === B.part) continue
           if (exempt(A.part, B.part)) continue
           pairsTested++
+          // A tolerance, not a fudge: real assemblies are built with clearance,
+          // and two surfaces designed to sit against each other will register a
+          // few microns of overlap from floating point alone. Anything under
+          // half a millimetre is contact, not interference.
           const depth = penetration(A.obb, B.obb)
-          if (depth <= 0) continue
+          if (depth <= tolerance) continue
           const key = A.part.id < B.part.id ? `${A.part.id}|${B.part.id}` : `${B.part.id}|${A.part.id}`
           const prev = worst.get(key)
           if (!prev || depth > prev.depth) {
