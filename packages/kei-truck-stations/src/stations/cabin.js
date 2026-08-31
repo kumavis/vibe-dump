@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import {
-  mm, deg, slab, rod, extrusion, T, X, HALF_W,
-  addGates, addJack, subframe, subframeHull, foldPanel, foldPanelHull,
-  hingeX, hingeZ, legGeometry, latch, REST,
+  mm, deg, slab, rod, extrusion, X, HALF_W,
+  addGates, addJack, subframe, subframeHull, foldPanelHull,
+  hingeX, hingeZ, legGeometry, REST,
 } from './common.js'
 import { bellows, cloth, lathe, roundedSlab } from '../build.js'
 
@@ -37,11 +37,31 @@ import { bellows, cloth, lathe, roundedSlab } from '../build.js'
 // is enough for a lot of people and honestly short for the rest, and saying so
 // is better than rounding it up to 2000.
 //
-// THE THIRD: living in a 2.7 m^2 box is grim. So the kerbside wall is a GULLWING
-// — the entire 1940 x 1010 panel hinges at its top edge and lifts to become a
-// porch roof, and the drop side plus a fold-out deck make the porch floor under
-// it. The inside and the outside become one room, which is the entire reason to
-// camp.
+// THE THIRD: living in 2.4 m^2 is grim, and the fix is the only one that costs
+// no packing volume at all. THE KERBSIDE WALL FALLS OUT AND BECOMES THE FLOOR.
+// It is hinged at the floor line rather than at the top, so it drops through 90
+// degrees to a 1740 x 1050 deck standing level with the cabin floor on two legs
+// to the tarmac — 1.83 m^2 of room added, entirely outside the chassis, by a
+// panel the truck was already carrying. Interior 2.43 plus deck 1.83 is 4.26
+// square metres, which is a 75% larger house for four kilograms of legs.
+//
+// THAT IS THE WHOLE IDEA, AND IT IS WORTH BEING PRECISE ABOUT WHY IT PACKS. A
+// fold-out that stows as a panel costs its own thickness in the load space; a
+// fold-out that stows as a WALL costs nothing, because the wall had to exist
+// anyway. The deck's 40 mm is 40 mm the shell was already spending. The legs and
+// the canopy poles are recessed into that 40 mm, flush with the skin, so they
+// are free too. Everything else in the outdoor room is fabric in a bag.
+//
+// The room gets a roof the same way: two poles telescope up off the deck's outer
+// edge and a canopy unrolls to them from a keder rail on the raised lid. Fabric
+// spans 1.0 m of ground for 4 kg. A hard porch roof — which is what the gullwing
+// this replaces was — costs 24 kg and a 1.0 m swept arc, and shelters the same
+// ground.
+//
+// WITH THE KERB WALL DOWN, THE LID IS CARRIED ON THAT SIDE BY THE TWO CORNER
+// COLUMNS and the top rails of the front and rear walls. The wall panel sits
+// between those columns rather than being structure itself, which is why it can
+// be hinged at all — and why it is 1740 wide rather than 1850.
 //
 // Packed, the whole thing is 1940 x 1410 x 1100 above the deck: 1760 mm overall,
 // and 20 mm under the cab roof — the tightest packing of the four, and the
@@ -52,7 +72,16 @@ import { bellows, cloth, lathe, roundedSlab } from '../build.js'
 const FLOOR = mm(90)
 const BOX = { h: mm(1010), t: mm(40) } // hard shell, floor to lid
 const LID_RISE = mm(880)
-const BUNK_Y = mm(880) // bunk deck above the module floor
+// THE BUNK DROPS BEFORE IT SLIDES, and the two numbers that force it are 1120
+// and 1780. Packed, the bunk deck has to be under the packing ceiling, so it
+// tucks right up beneath the parked lid at 870 above the cargo deck. Deployed,
+// the half of it that goes over the cab has to be ABOVE the cab roof, which is
+// 1780 above the road — so it has to end up at 1220 above the deck, 530 mm
+// lower relative to a lid that has itself risen 880. A bunk bolted to the lid at
+// a fixed offset can satisfy one of those and never both: at the packed offset
+// it deploys 630 mm above the cab roof, floating, and at the deployed offset it
+// packs down through the galley worktop.
+const BUNK_DROP = mm(530)
 // The module stops 40 mm short of the truck's own torii guard at x = 930, which
 // is why nothing here is symmetric about the deck centre.
 const BOX_CX = -mm(20)
@@ -60,14 +89,26 @@ const BUNK_L = mm(1850)
 const BUNK_W = mm(1280)
 const SLIDE_L = mm(1200)
 const SLIDE_TRAVEL = mm(950)
-const PORCH_D = mm(500)
 const PANEL_T = mm(34)
 const HALF = HALF_W - mm(20)
+// The kerb wall, which is also the deck. Its depth is the shell's height plus
+// its own thickness, so standing up it exactly fills the opening from the floor
+// line to the lid sill, and lying down its top face lands flush with the cabin
+// floor rather than 40 mm proud of it.
+const DECK_D = BOX.h + BOX.t
+const DECK_W = mm(1740) // between the corner columns, not across them
+const DECK_LEG = mm(608) // + 122 of screw foot = 730, which is the pin height
+// The canopy poles. 860 + 680 stows inside the 1050 panel with the leg lying in
+// the lane beside it, and stands the hem 1520 above the deck at a 20 degree fall
+// from the lid rail — a pitch that sheds rain, and headroom you only stoop under
+// in the last 300 mm of the floor.
+const POLE_H = mm(860)
+const POLE_RISE = mm(680)
 
 export default {
   id: 'cabin',
   title: 'Cabin',
-  tagline: 'a 1940 mm bed cannot sleep two — so the bunk goes over the cab',
+  tagline: 'the wall you drive with is the floor you camp on',
   build,
 }
 
@@ -75,11 +116,11 @@ function build(ctx) {
   const { rig, lib } = ctx
 
   rig.setStages([
-    'kerb side down, jacks in',
+    'gates down, jacks in',
     'roof pops, bellows unfold',
-    'gullwing lifts',
-    'porch deck out, legs down',
-    'bunk slides over the cab',
+    'the kerb wall falls out and becomes the deck',
+    'deck legs down, poles up, bunk drops to cab height',
+    'poles telescope, canopy unrolls, bunk over the cab',
   ])
 
   const base = rig.add({
@@ -92,7 +133,7 @@ function build(ctx) {
     com: [0, FLOOR + BOX.h * 0.4, mm(120)],
     hulls: [
       ...subframeHull(FLOOR),
-      // Three walls; the kerbside is the gullwing and is its own part.
+      // Three walls. The kerb side is the fold-down deck and is its own part.
       { c: [mm(905), FLOOR + BOX.h / 2, 0], s: [BOX.t, BOX.h, HALF * 2], tag: 'front wall' },
       { c: [-mm(945), FLOOR + BOX.h / 2, 0], s: [BOX.t, BOX.h, HALF * 2], tag: 'rear wall' },
       { c: [BOX_CX, FLOOR + BOX.h / 2, HALF - BOX.t / 2], s: [mm(1850), BOX.h, BOX.t], tag: 'off-side wall' },
@@ -108,7 +149,11 @@ function build(ctx) {
   rig.attach(base.id, shell(lib))
   rig.attach(base.id, interior(lib))
 
-  addGates(rig, ctx, { left: 'flat', right: 'hang', tail: 'flat', stage: 0 })
+  // The kerb gate HANGS. It used to be held flat to carry the porch, and there
+  // is nothing left for it to carry: the deck lands 90 mm above it and stands on
+  // its own legs. Held flat it would be a 285 mm shelf 50 mm under the deck,
+  // which is a shin at the exact height of a shin.
+  addGates(rig, ctx, { left: 'hang', right: 'hang', tail: 'flat', stage: 0 })
   for (const sx of [-1, 1]) {
     for (const sz of [-1, 1]) {
       addJack(rig, lib, { id: `jack-${sx > 0 ? 'f' : 'r'}${sz > 0 ? 'r' : 'l'}`, at: [sx * mm(880), -mm(70), sz * mm(660)], stage: 0 })
@@ -139,112 +184,123 @@ function build(ctx) {
     note: 'standing height goes from 900 to 1780 mm',
   })
   rig.attach(lid.id, popTop(lib))
+  const sail = canopy(lib)
+  rig.attach(lid.id, sail)
 
-  // --- gullwing ------------------------------------------------------------
-  // The kerbside wall, hinged at its TOP edge on the lid's sill, opening to a
-  // porch roof. 1940 x 1010 is a big panel and it sweeps a 1010 mm radius arc
-  // through the whole space outboard of the truck — which is empty, and has to
-  // stay empty until this is up. Hence the porch deck comes AFTER it.
-  const wing = rig.add({
-    id: 'gullwing',
+  // --- the kerb wall, which is the deck ------------------------------------
+  // Hinged at the FLOOR line and falling outboard, not hinged at the top and
+  // lifting. That single change is the whole redesign, and three things fall out
+  // of it at once.
+  //
+  // It doubles the house. Standing up it is a 1740 x 1050 wall; lying down it is
+  // a 1740 x 1050 floor, level with the cabin floor and continuous with it, so
+  // the inside and the outside are one room at one height rather than a room and
+  // a step.
+  //
+  // It costs no packing volume. The panel is the wall; the wall had to be there.
+  // A porch that stows as a porch spends its own thickness on the load space
+  // twice over — once for the panel and once for the clearance to swing it.
+  //
+  // And the face that ends up underfoot is the face that spent the drive looking
+  // INTO the cabin, which is the right way round: the walking surface travels
+  // clean and dry and the road-facing skin becomes the underside. The legs and
+  // the poles live in routed channels at mid-thickness, between the two.
+  //
+  // What it needs in exchange is real support. 1050 mm of cantilever off a hinge
+  // with two adults on it is not a doorstep, it is a floor, so it gets two legs
+  // to the tarmac rather than the gas stays a porch would use.
+  const deck = rig.add({
+    id: 'kerb-deck',
     parent: 'floor',
-    label: 'gullwing wall / porch roof',
-    pivot: [BOX_CX, FLOOR + BOX.h - mm(30), -(HALF - BOX.t / 2)],
-    joint: 'hinge',
-    axis: [1, 0, 0],
-    range: [0, deg(104)],
-    stage: 2,
-    mass: 32,
-    com: [0, -BOX.h / 2, 0],
-    // Authored hanging down from its pin, which is how it stows.
-    hulls: [{ c: [0, -BOX.h / 2, 0], s: [mm(1850), BOX.h, BOX.t], tag: 'gullwing' }],
-    mates: ['floor', 'lid', 'gate-left'],
-    note: 'the wall becomes the roof; a 1.0 m panel needs 1.0 m of clear sweep',
-  })
-  rig.attach(wing.id, gullwingPanel(lib))
-
-  // The props are hinged on the BODY, not on the panel. Hanging them off the
-  // gullwing means their stowed position rides with it and their sweep has to
-  // be reasoned about in a frame that is itself rotating; hinged on the wall
-  // they stow flat inside the shell and simply lean out. It is also where a gas
-  // strut actually goes.
-  for (const [n, sx] of [['f', 1], ['r', -1]]) {
-    const prop = rig.add({
-      id: `wing-prop-${n}`,
-      parent: 'floor',
-      label: 'gullwing prop',
-      pivot: [BOX_CX + sx * mm(740), FLOOR + mm(120), -mm(560)],
-      joint: 'hinge',
-      axis: [1, 0, 0],
-      range: [0, -deg(23)],
-      stage: 3,
-      mass: 1.6,
-      com: [0, mm(250), 0],
-      hulls: [{ c: [0, mm(250), 0], s: [mm(44), mm(500), mm(44)], tag: 'prop' }],
-      mates: ['gullwing', 'floor', 'lid'],
-      note: 'a gas strut: it has to get longer, so it is modelled as one',
-    })
-    rig.attach(prop.id, propStrut(lib, mm(500)))
-
-    // The rod. A gas strut is a linear actuator with both ends pinned, which is
-    // a closed kinematic loop and not something a joint TREE can express. What
-    // a tree can express is the same two motions in series — a hinge and a
-    // telescope — which puts the free end exactly where the strut's rod end
-    // goes, and stows to the 500 mm the cylinder actually is.
-    rig.add({
-      id: `wing-rod-${n}`,
-      parent: `wing-prop-${n}`,
-      label: 'strut rod',
-      pivot: [0, mm(500), 0],
-      joint: 'telescope',
-      axis: [0, 1, 0],
-      range: [0, mm(500)],
-      stage: 3,
-      mass: 0.8,
-      com: [0, -mm(250), 0],
-      hulls: [{ c: [0, -mm(250), 0], s: [mm(26), mm(500), mm(26)], tag: 'rod' }],
-      mates: [`wing-prop-${n}`, 'gullwing', 'floor', 'lid'],
-    })
-    rig.attach(`wing-rod-${n}`, slab([mm(26), mm(500), mm(26)], lib.chrome, { anchor: [0, 1, 0] }))
-  }
-
-  // --- porch ---------------------------------------------------------------
-  // The dropped kerb gate gives 285 mm of ledge; a fold-out panel doubles it to
-  // 985, which is a porch you can put a chair on. Legs at the outer edge,
-  // because a 985 mm cantilever off a gate hinge is a lever, not a floor.
-  // The porch stows lying FLAT ON THE CABIN FLOOR, pointing inboard, and swings
-  // 180 degrees out over the dropped gate. Folding it against the gate instead
-  // would be the obvious move and it does not work: a 700 mm panel folded onto
-  // a 285 mm gate overhangs by 415 mm whichever way you fold it, and once the
-  // gate is down that overhang is inside the truck. The floor is the only flat
-  // 700 mm the module has, and it is free because it is the walking space.
-  const porch = rig.add({
-    id: 'porch',
-    parent: 'floor',
-    label: 'porch deck',
-    pivot: [BOX_CX, FLOOR, -(HALF - BOX.t - mm(20))],
+    label: 'kerb wall / fold-down deck',
+    // The pin is 40 below the floor line so the panel's TOP face — the walking
+    // surface — arrives exactly at floor level. Pin it at the floor line instead
+    // and the deck lands 40 proud, which is a trip hazard in the doorway.
+    pivot: [BOX_CX, FLOOR - BOX.t, -HALF],
     joint: 'hinge',
     axis: [1, 0, 0],
     rest: REST.UP_ALONG_X,
-    // Stands against the inside of the kerb wall and swings down to horizontal.
+    // Outboard is -Z, and a positive turn about +X carries +Y toward +Z. So the
+    // travel is negative: the wall falls away from the truck, not into it.
     range: [0, -Math.PI / 2],
-    stage: 3,
-    mass: 24,
-    com: [PORCH_D / 2, 0, 0],
-    hulls: foldPanelHull(PORCH_D, mm(1780), PANEL_T, 'porch'),
-    mates: ['gate-left', 'floor'],
-    note: 'nobody stands on the fold-outs at crowd density — this is a doorstep, not a stage',
+    stage: 2,
+    mass: 30,
+    com: [DECK_D / 2, 0, 0],
+    // foldPanelHull inflates by 6 mm, so it is handed 34 to describe the 40 mm
+    // panel exactly. Six millimetres of courtesy is not free here: the bunk deck
+    // is 1280 wide in a 1290 clear opening, and the inflated hull spends 5 of
+    // the 5 it has on each side.
+    hulls: foldPanelHull(DECK_D, DECK_W, BOX.t - mm(6), 'kerb wall / deck', -1),
+    // The lid parks INSIDE the top 110 mm of the shell, so the wall's top edge
+    // is inside the lid's footprint whenever the roof is down — which is why the
+    // roof pops first and why this pair is declared.
+    mates: ['floor', 'lid', 'gate-left'],
+    note: '1740 x 1050 of floor, outside the chassis, from a panel already on the truck',
   })
-  rig.attach(porch.id, foldPanel(lib, PORCH_D, mm(1780), PANEL_T))
-  rig.attach(porch.id, hingeZ(lib, mm(1780)))
+  rig.attach(deck.id, deckPanel(lib))
+  rig.attach(deck.id, hingeZ(lib, DECK_W))
 
-  // NO LEGS, and that is the design rather than an omission. The dropped gate
-  // is a 285 mm shelf at deck level and the porch lands on spacers on top of
-  // it, so the gate carries the porch from 717 to 1002 mm out and only the last
-  // 123 mm is free cantilever. A leg long enough to reach the tarmac from
-  // 750 mm up cannot stow on a 500 mm panel anyway, and every arrangement that
-  // makes it fit has it sweeping back through the truck on the way down.
-  rig.attach('gate-left', porchSpacers(lib))
+  for (const [n, sz] of [['f', 1], ['r', -1]]) {
+    // THE LEGS. Pinned at mid-thickness rather than on the underside, which is
+    // not fussiness: pinned on the face, a 44 mm leg stows 22 mm proud of the
+    // skin and the truck is 24 mm over its own body line. At mid-thickness it
+    // sits in a routed channel and the wall is flat.
+    rig.add({
+      id: `deck-leg-${n}`,
+      parent: 'kerb-deck',
+      label: 'deck leg',
+      pivot: [DECK_D - mm(70), BOX.t / 2, sz * mm(700)],
+      joint: 'hinge',
+      axis: [0, 0, 1],
+      // Authored hanging along -Y, which is straight down once the deck is over.
+      // A quarter turn the other way lays it back along the panel toward the
+      // hinge, which is DOWN the wall while the wall is standing.
+      range: [-Math.PI / 2, 0],
+      stage: 3,
+      mass: 2.6,
+      com: [0, -DECK_LEG / 2, 0],
+      hulls: [{ c: [0, -DECK_LEG / 2, 0], s: [mm(44), DECK_LEG, mm(44)], tag: 'leg' }],
+      mates: ['kerb-deck', 'floor', 'gate-left', 'lid'],
+    })
+    rig.attach(`deck-leg-${n}`, legGeometry(lib, DECK_LEG, { section: mm(40), foot: mm(130) }))
+
+    // THE CANOPY POLES, on the same edge and in the same channels, swinging the
+    // other way. 860 mm is all that stows on a 1050 panel once the leg is lying
+    // in the lane beside it, and the canopy wants 1540, so it telescopes.
+    rig.add({
+      id: `canopy-pole-${n}`,
+      parent: 'kerb-deck',
+      label: 'canopy pole',
+      pivot: [DECK_D - mm(70), BOX.t / 2, sz * mm(790)],
+      joint: 'hinge',
+      axis: [0, 0, 1],
+      // Authored standing up +Y — vertical the moment the deck is down — and
+      // laid back along the panel by a quarter turn for transit.
+      range: [Math.PI / 2, 0],
+      stage: 3,
+      mass: 1.4,
+      com: [0, POLE_H / 2, 0],
+      hulls: [{ c: [0, POLE_H / 2, 0], s: [mm(44), POLE_H, mm(44)], tag: 'pole' }],
+      mates: ['kerb-deck', 'floor', 'gate-left', 'lid'],
+    })
+    rig.attach(`canopy-pole-${n}`, polePart(lib, POLE_H, mm(22)))
+
+    rig.add({
+      id: `canopy-mast-${n}`,
+      parent: `canopy-pole-${n}`,
+      label: 'pole extension',
+      pivot: [0, POLE_H, 0],
+      joint: 'telescope',
+      axis: [0, 1, 0],
+      range: [0, POLE_RISE],
+      stage: 4,
+      mass: 0.9,
+      com: [0, -POLE_RISE / 2, 0],
+      hulls: [{ c: [0, -POLE_RISE / 2, 0], s: [mm(38), POLE_RISE, mm(38)], tag: 'pole' }],
+      mates: [`canopy-pole-${n}`, 'kerb-deck', 'floor', 'gate-left', 'lid'],
+    })
+    rig.attach(`canopy-mast-${n}`, polePart(lib, POLE_RISE, mm(19), { anchor: -1 }))
+  }
 
   // --- the bunk ------------------------------------------------------------
   const bunk = rig.add({
@@ -252,12 +308,24 @@ function build(ctx) {
     parent: 'lid',
     label: 'bunk deck',
     pivot: [0, -mm(120), 0],
-    joint: 'fixed',
-    stage: 0,
+    joint: 'telescope',
+    axis: [0, 1, 0],
+    // Down the same four corner guides the lid came up. It rides them to 1220
+    // above the deck, which puts the cabover's underside 20 mm over the cab roof
+    // — enough for the anti-sway pads and nothing more.
+    range: [0, -BUNK_DROP],
+    // An explicit window, not a stage. Stages overlap by 28% so the fold reads
+    // as one continuous move, and here the overlap is the whole problem: start
+    // sliding while the bunk is still 200 mm high and the cabover drives into
+    // the torii guard. The drop finishes before the slide begins, full stop.
+    window: [0.55, 0.75],
     mass: 26,
     com: [0, 0, 0],
-    hulls: [{ c: [0, -mm(40), 0], s: [BUNK_L, mm(80), BUNK_W], tag: 'bunk' }],
+    // The mattress is in the hull. It was not, and 110 mm of foam that the
+    // packing check cannot see is 110 mm of foam that ends up inside the lid.
+    hulls: [{ c: [0, mm(15), 0], s: [BUNK_L, mm(190), BUNK_W], tag: 'bunk + mattress' }],
     mates: ['lid', 'floor'],
+    note: 'packs under the lid at 870; drops to 1220 so the cabover clears the cab roof',
   })
   rig.attach(bunk.id, bunkDeck(lib))
 
@@ -269,11 +337,14 @@ function build(ctx) {
     joint: 'slide',
     axis: [1, 0, 0],
     range: [0, SLIDE_TRAVEL],
-    stage: 4,
+    window: [0.8, 1],
     mass: 22 + 12,
     com: [SLIDE_L / 2, 0, 0],
     hulls: [{ c: [SLIDE_L / 2, 0, 0], s: [SLIDE_L, mm(80), BUNK_W - mm(60)], tag: 'cabover' }],
-    mates: ['bunk', 'lid', 'cab', 'floor'],
+    // 'cab' is NOT declared here any more. It used to be, and it was hiding the
+    // fault above: the cabover was 150 mm inside the cab roof and the mate said
+    // so was fine. It now clears by 20 and the auditor is allowed to check.
+    mates: ['bunk', 'lid', 'floor'],
     note: '950 mm over the cab: 700 Nm at the root, 13.5 MPa in the side rails',
   })
   rig.attach(slideOut.id, bunkSlide(lib))
@@ -283,8 +354,9 @@ function build(ctx) {
       ['subframe', 36],
       ['hard shell: composite walls + floor', 54],
       ['pop-top lid, bellows and guides', 35],
-      ['gullwing wall + props', 24],
-      ['porch deck + spacers', 16],
+      ['kerb wall / fold-down deck', 30],
+      ['deck legs, canopy poles, feet', 8],
+      ['canopy: sheet, rail, hem bar, guys', 6],
       ['bunk deck + cabover slides', 49],
       ['stabiliser jacks (4)', 18],
       ['fitted kit — see the bill of materials', 84],
@@ -299,10 +371,26 @@ function build(ctx) {
       'Four guided corners rather than scissor arms. A scissor is the nicer mechanism but it is a closed loop; four guides hold the lid parallel with no synchronising linkage.',
       'The shell is 3 mm aluminium composite on 40 × 40 extrusion, not plywood. Plywood walls and floor come to about 90 kg on this footprint and the fitted kit is 84 — one of the two had to give, and it was not the fridge.',
       'The bill of materials totals 98 kg and 84 of it is fitted. The difference is the WAVE 2 air conditioner: it survived the first pass and then did not survive the check, because a Seitz S4 window weighs 8.5 kg rather than the 5.5 that was assumed, and two of them took the margin. The line stays on the list with its price, because the trade is the decision.',
+      'The whole outdoor room costs 4 kg over the gullwing and porch it replaces, and gives 1.83 m² of floor instead of 0.89 m² of porch. That is the only line in this project where more space came out cheaper.',
       'Water is 20 L, one tank. A second 20 L tank is 40 kg of water and 40 kg is the entire margin, so the spare tank on the list is exactly that: a spare, filled at the tap, not carried full.',
-      'The porch has no legs: it lands on the dropped gate, which carries it for all but the last 123 mm. A leg that reached the tarmac could not stow on a 500 mm panel.',
+      'THE KERB WALL IS THE FLOOR. Hinged at the floor line rather than the top, it falls outboard to a 1740 × 1050 deck level with the cabin floor — 1.83 m² of room outside the chassis from a panel the truck was carrying anyway. Interior 2.43 plus deck 1.83 is 4.26 m², against 2.43 for the box on its own.',
+      'And it costs nothing to pack, which is the point of doing it this way. A fold-out that stows as a panel spends its own thickness on the load space; a fold-out that stows as a WALL spends nothing, because the wall existed. The legs and the poles are routed into that 40 mm skin, flush, so they are free too — and everything else in the outdoor room is fabric in a bag.',
+      'It has legs to the tarmac, not stays. 1050 mm of cantilever with two adults on it is a floor, not a doorstep: a hinge and a gas strut would be carrying about 1.5 kN·m between them, and a deck that visibly moves underfoot is a deck nobody stands on.',
+      'The 1050 is the shell height plus the panel thickness, so standing up it exactly fills the opening from the floor line to the lid sill, and lying down its top face lands FLUSH with the cabin floor instead of 40 mm proud of it. A 40 mm step in a doorway is the one you catch.',
+      'With the kerb wall down the lid is carried on that side by the two corner columns and the top rails of the front and rear walls. That is why the panel is 1740 wide and sits between the columns rather than being structure itself — a wall you intend to drop cannot also be holding the roof up.',
+      'The roof over the deck is a canopy, not a gullwing. Two poles telescope up off the outer edge and a sheet unrolls to them from a keder rail on the raised lid: 1.0 m of sheltered ground for 6 kg, where the hard porch roof this replaces was 24 kg and swept a 1.0 m arc through the space it was trying to shelter.',
       'Packed it is 1010 mm above the deck — 1670 overall, 110 under the cab roof. It should look like a work truck with a canopy until it opens.',
     ],
+    // Soft goods, outside the collision audit because nothing about a rolled
+    // sheet is a rigid body. The canopy tracks the pole extension: it unrolls as
+    // the masts rise, and the roll beside the rail shrinks by exactly as much.
+    update(_t, r) {
+      const q = r.parts.get('canopy-mast-f')?.q ?? 0
+      const u = Math.min(1, Math.max(0, q / POLE_RISE))
+      const { roll, bag } = sail.userData
+      roll.scale.y = Math.max(0.004, u)
+      bag.scale.set(1 - 0.86 * u, 1, 1 - 0.86 * u)
+    },
   }
 }
 
@@ -312,7 +400,7 @@ function shell(lib) {
   const g = new THREE.Group()
   const y = FLOOR + BOX.h / 2
   const skin = lib.ply
-  // Front (cab end), rear, and off-side walls. The kerb side is the gullwing.
+  // Front (cab end), rear, and off-side walls. The kerb side is the deck.
   g.add(slab([BOX.t, BOX.h, HALF * 2], skin, { pos: [mm(905), y, 0] }))
   g.add(slab([BOX.t, BOX.h, HALF * 2], skin, { pos: [-mm(945), y, 0] }))
   g.add(slab([mm(1850), BOX.h, BOX.t], skin, { pos: [BOX_CX, y, HALF - BOX.t / 2] }))
@@ -460,44 +548,111 @@ function popTop(lib) {
 }
 
 /**
- * The gullwing, authored HANGING DOWN from its pin at the top — which is both
- * how it stows and how it is hinged. Panelled outside, lined inside, with a
- * window, because it is a wall for eleven months of the year.
+ * The kerb wall, authored as foldPanel does it — running along its own +X from
+ * the pin, with anchorY -1 so the skin sits on the inboard side of the hinge
+ * line. Standing up that +X is up and the panel is a wall; over the top it is
+ * outboard and the same face is the floor.
+ *
+ * WHICH SIDE IS WHICH MATTERS HERE MORE THAN ANYWHERE ELSE IN THE PROJECT, and
+ * it comes out the good way round. Rotating outboard puts the panel's INBOARD
+ * face upward, so the surface people walk on is the one that spent the drive
+ * facing into the cabin — anti-slip battens and drainage falls, kept clean and
+ * dry — and the face that took the road grime and the hedges becomes the
+ * underside. Every fold-down deck ever built has this property; most of them
+ * are detailed for it and the ones that are not are the ones you slip on.
  */
-function gullwingPanel(lib) {
+function deckPanel(lib) {
   const g = new THREE.Group()
-  g.add(slab([mm(1850), BOX.h, BOX.t], lib.ply, { anchor: [0, 1, 0] }))
-  g.add(slab([mm(1880), mm(50), BOX.t + mm(14)], lib.aluDark, { pos: [0, -BOX.h + mm(25), 0] }))
-  g.add(slab([mm(1880), mm(40), BOX.t + mm(14)], lib.aluDark, { pos: [0, -mm(20), 0] }))
-  g.add(slab([mm(900), mm(380), mm(14)], lib.glass, { pos: [mm(400), -mm(360), -BOX.t / 2 - mm(8)] }))
-  g.add(hingeX(lib, mm(1850), mm(17)))
-  // A string of festoon bulbs along the leading edge, which is what actually
-  // turns a propped panel into somewhere to sit.
+  const a = [-1, -1, 0]
+  // The sandwich panel itself, and the extruded edge that is the deck's beam.
+  g.add(slab([DECK_D, BOX.t, DECK_W], lib.ply, { anchor: a }))
+  g.add(slab([mm(70), BOX.t + mm(16), DECK_W], lib.aluDark, { anchor: a, pos: [DECK_D - mm(70), 0, 0] }))
+  for (const sz of [-1, 1]) {
+    g.add(slab([DECK_D, BOX.t + mm(10), mm(40)], lib.alu, { anchor: a, pos: [0, 0, sz * (DECK_W / 2 - mm(20))] }))
+  }
+  // Anti-slip battens across the walking face — which is the INBOARD face while
+  // this is a wall, so they double as the cabin's kerb-side lining ribs.
+  for (let i = 1; i <= 6; i++) {
+    g.add(slab([mm(34), mm(8), DECK_W - mm(120)], lib.aluDark, { pos: [i * mm(145), BOX.t + mm(4), 0] }))
+  }
+  // The routed channels the legs and poles drop into, flush with the skin.
+  for (const sz of [-1, 1]) {
+    for (const cz of [mm(700), mm(790)]) {
+      g.add(slab([mm(660), mm(10), mm(52)], lib.trim, { pos: [DECK_D - mm(400), mm(6), sz * cz] }))
+    }
+  }
+  g.add(hingeX(lib, DECK_W, mm(17)))
+  // No window in this panel, and that is the one thing the gullwing had that
+  // this does not. A wall you intend to walk on cannot have glass in it — the
+  // face that carries the light is the face that carries the feet. The daylight
+  // comes from the off-side Seitz and from the bellows band instead.
+  // Festoon along the outer edge: the thing that actually turns a deck into
+  // somewhere to sit.
   for (let i = -4; i <= 4; i++) {
-    g.add(slab([mm(60), mm(60), mm(60)], lib.ledWarm, { pos: [i * mm(210), -BOX.h + mm(90), -BOX.t / 2 - mm(30)] }))
+    g.add(slab([mm(60), mm(60), mm(60)], lib.ledWarm, { pos: [DECK_D - mm(40), BOX.t + mm(40), i * mm(200)] }))
   }
   const glow = new THREE.PointLight(0xffc07a, 6, 5, 2)
-  glow.position.set(0, -BOX.h + mm(120), -mm(120))
+  glow.position.set(DECK_D - mm(120), BOX.t + mm(120), 0)
   g.add(glow)
   return g
 }
 
-/** A gas strut: a tube, a rod, and the eyes at each end. */
-/** Spacer blocks on the dropped gate that the porch deck lands on. */
-function porchSpacers(lib) {
+/** A telescoping pole section: a tube with a collar at each end. */
+function polePart(lib, length, radius, { anchor = 1 } = {}) {
   const g = new THREE.Group()
-  for (let i = -3; i <= 3; i++) {
-    g.add(slab([mm(120), mm(90), mm(180)], lib.aluDark, { pos: [i * mm(290), mm(200), 0] }))
-  }
+  const tube = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, length, 12), lib.alu)
+  tube.position.y = (anchor * length) / 2
+  g.add(tube)
+  g.add(slab([radius * 2.6, mm(34), radius * 2.6], lib.aluDark, { pos: [0, anchor * mm(20), 0] }))
+  g.add(slab([radius * 2.6, mm(34), radius * 2.6], lib.aluDark, { pos: [0, anchor * (length - mm(20)), 0] }))
   return g
 }
 
-function propStrut(lib, length) {
+/**
+ * The canopy: a keder rail on the raised lid's kerb edge, and a sheet that
+ * unrolls off it to the pole tips.
+ *
+ * It is drawn rather than jointed because it is fabric — nothing about a rolled
+ * sheet is a rigid body and nothing about it can collide. What it does have to
+ * do is unroll from the rail rather than appear, so the sheet hangs from a group
+ * scaled along its own length and the roll beside it shrinks as the sheet grows.
+ *
+ * THE SLOPE IS SET BY THE TWO ENDS AND NOTHING ELSE. The rail is 2626 above the
+ * road with the lid up; the pole tips are 2270; they are 980 mm apart across the
+ * truck. That is a 1043 mm run at 20 degrees — a pitch that sheds rain, and a
+ * hem 1520 above the deck, which is headroom everywhere but the last 300 mm.
+ */
+function canopy(lib) {
   const g = new THREE.Group()
-  g.add(slab([mm(44), length * 0.58, mm(44)], lib.aluDark, { anchor: [0, -1, 0] }))
-  g.add(slab([mm(26), length * 0.46, mm(26)], lib.chrome, { anchor: [0, -1, 0], pos: [0, length * 0.56, 0] }))
-  g.add(slab([mm(56), mm(46), mm(30)], lib.aluDark, { pos: [0, mm(10), 0] }))
-  g.add(slab([mm(56), mm(46), mm(30)], lib.aluDark, { pos: [0, length - mm(10), 0] }))
+  const RUN = mm(980) - mm(24)
+  const DROP = mm(356) + mm(36)
+  const L = Math.hypot(RUN, DROP)
+  // Inboard of the skin, not on it. The rolled sheet is 150 across and it stows
+  // under the lid's own overhang: on the outside face it would be 65 mm past the
+  // truck's body line, which is 65 mm of canvas at hedge height on every lane in
+  // Japan.
+  g.position.set(0, mm(60), -HALF + mm(120))
+
+  // The keder rail, which is the only hard part of the whole outdoor room.
+  g.add(slab([DECK_W + mm(60), mm(36), mm(46)], lib.aluDark, { pos: [0, 0, -mm(96)] }))
+
+  const roll = new THREE.Group()
+  roll.rotation.x = Math.atan2(RUN, DROP)
+  const sheet = cloth(DECK_W, L, mm(55), lib.canvasCream, { nx: 12, ny: 6 })
+  sheet.position.y = -L / 2
+  sheet.material.side = THREE.DoubleSide
+  roll.add(sheet)
+  // The hem bar, which is what the poles actually pick up.
+  const hem = slab([DECK_W + mm(40), mm(30), mm(30)], lib.aluDark, { pos: [0, -L, 0] })
+  roll.add(hem)
+  g.add(roll)
+
+  const bag = new THREE.Mesh(new THREE.CylinderGeometry(mm(75), mm(75), DECK_W, 14), lib.canvasCream)
+  bag.rotation.z = Math.PI / 2
+  bag.position.set(0, -mm(4), 0)
+  g.add(bag)
+
+  g.userData = { roll, bag }
   return g
 }
 

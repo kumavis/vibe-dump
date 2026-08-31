@@ -524,7 +524,6 @@ export const HOKORA = [
 ]
 
 // --- CABIN -------------------------------------------------------------------
-// --- CABIN -------------------------------------------------------------------
 // The camper is the module where the list, not the geometry, is the binding
 // constraint — and the number that binds it is 350 kg.
 //
@@ -543,7 +542,14 @@ export const HOKORA = [
 //
 // The bellows is 11号帆布 by the metre rather than a proprietary pop-top skirt,
 // because nobody sells a pop-top skirt for a truck this size and canvas is what
-// the coachbuilders use.
+// the coachbuilders use. The same bolt supplies the canopy over the deck.
+//
+// AND THE OUTDOOR ROOM IS NOT ON THIS LIST, which is the point of it. The kerb
+// wall falls out to become a 1740 x 1050 deck; the legs and the canopy poles are
+// aluminium tube routed into that wall's own 40 mm; the canopy is 3 m² off the
+// canvas bolt already bought for the bellows. 1.83 m² of floor outside the
+// chassis costs four kilograms and no catalogue part at all — which is what
+// happens when the fold-out is a part the vehicle had to carry anyway.
 export const CABIN = [
   {
     cat: 'sleeping / bunk mattress', maker: 'DOD (ディーオーディー)', model: 'ソトネノキワミ M / CM2-650 (1150 × 2080 × 100)',
@@ -559,7 +565,7 @@ export const CABIN = [
     mount: 'No mount points; a foam block in a zipped removable cover, and the zip is not structural. Two capture modes. Flat: the same 12 mm ply kerb around the main 1940 mm deck section holds it. Folded into a day bench: two 50 mm cam-buckle straps pass right around the tri-folded block and hook to two M8 stainless D-rings bolted through the floor deck on 40 x 40 x 3 mm backing plates. Do NOT screw hinges, snap studs or Velcro plates to the cover — the cover is meant to come off and be washed, and a fastener through it tears the foam edge.',
     capture: true,
     conf: 'medium',
-    note: 'Folds in three so the same mattress is the mattress at night and the porch bench by day, which is the whole reason for a tri-fold over a one-piece. Rejected a 敷き布団: cotton futon in a pop-top with a fabric bellows will mildew in a Japanese summer. Price and weight for the SD size are approximate.',
+    note: 'Folds in three so the same mattress is the mattress at night and the deck bench by day, which is the whole reason for a tri-fold over a one-piece. Rejected a 敷き布団: cotton futon in a pop-top with a fabric bellows will mildew in a Japanese summer. Price and weight for the SD size are approximate.',
   },
   {
     cat: 'sleeping / bags', maker: 'スノーピーク (Snow Peak)', model: 'セパレートオフトンワイド700 / BDD-103',
@@ -580,15 +586,15 @@ export const CABIN = [
   {
     cat: 'soft goods / flyscreen', maker: 'ダイオ化成 (Dio Chemical)', model: 'クラウンネット 24メッシュ グラスファイバー グレイ 910 mm × 6 m',
     size: [910, 1, 6000], kg: 0.5, jpy: 1280, qty: 1, where: 'コーナン / カインズ / ジョイフル本田 の網戸コーナー、または MonotaRO。Sold by the metre or as a 910 mm x 2 m pack. Always in stock.',
-    mount: 'No fixings. Two approved captures depending on the opening. Fixed openings (the two S4 window bays already carry their own cassette screens, so this is for the gullwing apertures): tension the mesh into a groove in an aluminium screen frame with standard 網戸用ゴム glazing spline, and screw the FRAME, not the mesh, to the opening. Removable porch screen: sew the mesh to a 25 mm YKK #5 coil zip on three sides and to a hook-and-loop tape strip on the fourth; the loop tape is bonded to the framing with 3M VHB and the mesh never sees a screw or a grommet.',
+    mount: 'No fixings. Two approved captures depending on the opening. Fixed openings (the S4 window bays already carry their own cassette screens, so this is for the kerb-wall opening): tension the mesh into a groove in an aluminium screen frame with standard 網戸用ゴム glazing spline, and screw the FRAME, not the mesh, to the opening. Removable deck screen: sew the mesh to a 25 mm YKK #5 coil zip on three sides and to a hook-and-loop tape strip on the fourth; the loop tape is bonded to the framing with 3M VHB and the mesh never sees a screw or a grommet.',
     capture: true,
     conf: 'medium',
-    note: 'Glass-fibre 24-mesh rather than 18-mesh polyester: 24 stops ヌカカ/ブヨ, and glass fibre does not sag after a summer stretched over a warm gullwing. Cheap and replaceable, which is the point — it is the part that gets torn.',
+    note: 'Glass-fibre 24-mesh rather than 18-mesh polyester: 24 stops ヌカカ/ブヨ, and glass fibre does not sag after a summer stretched over a warm kerb wall. Cheap and replaceable, which is the point — it is the part that gets torn.',
   },
   {
     cat: 'soft goods / blackout', maker: 'ブラームス (BRAHMS)', model: 'ブラインドシェード ハイゼットトラック S500P/S510P フロント3面セット',
     size: [1300, 15, 700], kg: 1.2, jpy: 19580, qty: 1, where: 'アイズ公式 / Amazon.co.jp / 楽天。Vehicle-specific, cut to pattern — allow 1-2 weeks if the S500P/S510P pattern is not on the shelf.',
-    mount: 'No fixings, and that is the design: a semi-rigid mesh panel with neodymium magnets sewn into the hem that grip the painted steel window surround of the cab. Nothing is screwed, suckered or taped to glass. This covers the cab only — the camper shell\'s own glazing does NOT need a separate curtain track, because the Dometic S4 windows below carry an integral Rastrollo pleated blackout in the inner frame. That avoids a curtain rail across the gullwing panels, which would foul the props.',
+    mount: 'No fixings, and that is the design: a semi-rigid mesh panel with neodymium magnets sewn into the hem that grip the painted steel window surround of the cab. Nothing is screwed, suckered or taped to glass. This covers the cab only — the camper shell\'s own glazing does NOT need a separate curtain track, because the Dometic S4 windows below carry an integral Rastrollo pleated blackout in the inner frame. That avoids a curtain rail across the kerb opening, which the canopy already shades.',
     capture: true,
     conf: 'medium',
     note: 'Confirm the pattern matches your cab generation (S500P/S510P vs the older S201P) before ordering — an aiz shade is cut per body code and will not fudge. Price estimated.',
@@ -596,15 +602,15 @@ export const CABIN = [
   {
     cat: 'cooking / stove', maker: '岩谷産業 (Iwatani)', model: 'カセットフー タフまる CB-ODX-1',
     size: [343, 129, 284], kg: 2.4, jpy: 9800, qty: 1, where: 'ヨドバシ・ドット・コム / Amazon.co.jp / コーナン / カインズ。Staple item, always in stock.',
-    mount: 'No threaded inserts, no bolt holes, no flange — a sheet-steel body on four rubber feet, and the maker explicitly forbids modifying or enclosing it. Capture, do not fasten: rout a 350 x 290 x 25 mm well into the porch worktop lined with 1.0 mm stainless, so the stove drops in and cannot slide while cooking on the dropped tailgate. For travel, one 25 mm cam strap over the body to two M6 rivet-nut D-rings either side of the well. The CB-250-OR cassette must be removed and stowed separately before driving — the magnetic cartridge holder is a gas seal, not a travel restraint, and a cartridge left in a hot cab is the single worst failure mode in this whole module. Keep 150 mm clear of any wall and never build a surround.',
+    mount: 'No threaded inserts, no bolt holes, no flange — a sheet-steel body on four rubber feet, and the maker explicitly forbids modifying or enclosing it. Capture, do not fasten: rout a 350 x 290 x 25 mm well into the deck worktop lined with 1.0 mm stainless, so the stove drops in and cannot slide while cooking on the fold-down deck. For travel, one 25 mm cam strap over the body to two M6 rivet-nut D-rings either side of the well. The CB-250-OR cassette must be removed and stowed separately before driving — the magnetic cartridge holder is a gas seal, not a travel restraint, and a cartridge left in a hot cab is the single worst failure mode in this whole module. Keep 150 mm clear of any wall and never build a surround.',
     capture: true,
     conf: 'high',
-    note: 'Double windbreak ring and a wide-body burner mean it actually works on an open porch, which the flat ジュニアバーナー does not. Iwatani has no true twin-burner cassette stove in this class; two タフまる is the honest twin-burner answer if you need it, at 4.8 kg.',
+    note: 'Double windbreak ring and a wide-body burner mean it actually works on an open deck, which the flat ジュニアバーナー does not. Iwatani has no true twin-burner cassette stove in this class; two タフまる is the honest twin-burner answer if you need it, at 4.8 kg.',
   },
   {
     cat: 'water / tank', maker: 'モノタロウ (MonotaRO)', model: 'ポリタンク 白 20L (食品衛生法適合)',
     size: [350, 416, 178], kg: 1.4, jpy: 3078, qty: 2, where: 'MonotaRO (own-brand polytank, 20 L white food-grade). Next-day in Tokyo. コーナン PRO equivalent is interchangeable.',
-    mount: 'Handle aperture and the moulded body — no inserts, no flange. The moulded handle is rated to carry 20 kg by hand and nothing more, so it is a strap route, not a structural anchor. Build a three-sided 12 mm ply well under the porch deck sized 360 x 245 per tank with a hinged ply lid closing the fourth side, and run one 25 mm webbing strap through each handle to an M8 eye bolt through the floor on a 40 x 40 x 3 mm washer plate. 40 kg of water is the largest movable mass in the module and it sits high in a short-wheelbase kei truck — strap it, and put it as far forward and as low as the porch deck allows.',
+    mount: 'Handle aperture and the moulded body — no inserts, no flange. The moulded handle is rated to carry 20 kg by hand and nothing more, so it is a strap route, not a structural anchor. Build a three-sided 12 mm ply well under the fold-down deck sized 360 x 245 per tank with a hinged ply lid closing the fourth side, and run one 25 mm webbing strap through each handle to an M8 eye bolt through the floor on a 40 x 40 x 3 mm washer plate. 40 kg of water is the largest movable mass in the module and it sits high in a short-wheelbase kei truck — strap it, and put it as far forward and as low as the deck allows.',
     capture: true,
     conf: 'medium',
     note: 'Two 20 L tanks rather than one 40 L: 20 kg is the most a person carries to a tap, and one tank can be the grey-water catch. Generic own-brand deliberately, per the no-invented-model rule — a コーナン or ヒシエス equivalent is the same part. Price is per tank.',
@@ -614,7 +620,7 @@ export const CABIN = [
     size: [180, 100, 100], kg: 1.2, jpy: 8800, qty: 1, where: 'Amazon.co.jp (SEAFLO日本正規取扱) / 楽天。In stock. Exact SFDP1 suffix (flow/pressure variant) must be confirmed at order — do not order on the designation above alone.',
     mount: 'Four M5 bolt-through holes in the moulded base plate, on rubber isolator bushes — that IS the approved and only mount, and the isolators are the reason it is quiet. Bolt through 12 mm ply with M5 x 30 stainless and nyloc nuts, tightened until the bush just seats and NO further; crush the rubber and the whole shell becomes a soundboard at 3 a.m. Never clamp the pump head or the motor can. Plumb both ports with 1/2" flexible hose and a short loop, not rigid pipe, or the isolators are bypassed.',
     conf: 'medium',
-    note: 'Confidence is low only on the exact SFDP1 variant code — SEAFLO is a real, widely stocked brand and any 3-4 L/min 12 V diaphragm pump with a pressure switch works here. Rejected the foot pump (Whale Babyfoot GP4618, four bolt-through feet, no electrical load) purely because the sink sits on the porch and a foot pump wants a fixed footwell. A foot pump is the better answer if you want zero draw.',
+    note: 'Confidence is low only on the exact SFDP1 variant code — SEAFLO is a real, widely stocked brand and any 3-4 L/min 12 V diaphragm pump with a pressure switch works here. Rejected the foot pump (Whale Babyfoot GP4618, four bolt-through feet, no electrical load) purely because the sink sits on the deck and a foot pump wants a fixed footwell. A foot pump is the better answer if you want zero draw.',
   },
   {
     cat: 'water / sink', maker: 'カクダイ (KAKUDAI)', model: '丸型手洗器 φ300 × 深100（はめ込み／アンダーカウンター仕様）+ 折りたたみ水栓',
@@ -649,7 +655,7 @@ export const CABIN = [
   {
     cat: 'climate / air conditioner', maker: 'EcoFlow', model: 'WAVE 2 (ポータブルエアコン, 冷房 5100 BTU / 暖房 6100 BTU)',
     size: [518, 336, 297], kg: 14.5, jpy: 143000, qty: 1, where: 'EcoFlow公式ストア / Amazon.co.jp。In stock, heavily discounted in autumn.',
-    mount: 'No mount points: four rubber feet, two side grab handles, and moulded duct collars — the collars take ducting only and will not take load. It rides on the floor at the tailgate end in a 530 x 310 mm ply well and straps down with two 38 mm cam straps to M8 eye bolts through the deck on backing plates. In use, the hot-side exhaust duct passes through a 130 mm bulkhead port cut in the porch face and closed with a ply blanking plug when stowed; condensate drains through the spigot into a hose exiting the floor through a bulkhead gland. Never run it ducted into the cabin volume it is cooling.',
+    mount: 'No mount points: four rubber feet, two side grab handles, and moulded duct collars — the collars take ducting only and will not take load. It rides on the floor at the tailgate end in a 530 x 310 mm ply well and straps down with two 38 mm cam straps to M8 eye bolts through the deck on backing plates. In use, the hot-side exhaust duct passes through a 130 mm bulkhead port cut in the deck face and closed with a ply blanking plug when stowed; condensate drains through the spigot into a hose exiting the floor through a bulkhead gland. Never run it ducted into the cabin volume it is cooling.',
     capture: true,
     conf: 'medium',
     note: 'It fits the weight budget but it eats the whole energy budget: ~1 hour on the DELTA 2 alone, so this is a hook-up-site and shoulder-season item, or it needs the DELTA 2 Extra Battery. The honest alternative for a free camp is the MaxxFan below on reverse-draw plus the flyscreen — that is 3 W, not 500. Included because you asked whether one exists in budget: it does, at 14.5 kg.',
@@ -673,19 +679,19 @@ export const CABIN = [
     size: [586, 236, 417], kg: 4.5, jpy: 72000, qty: 1, where: 'オグショー (OGUshow) / VANTECH / Amazon.co.jp の並行輸入。Often on backorder from the US — allow 2-4 weeks. Fiamma Turbo-Vent Premium is the直接的な代替 at a similar price.',
     mount: 'The flange IS the mount, and this is the one item that dictates structure before it dictates hardware. Cut a 355 x 355 mm (14" x 14") opening in the hard shell roof — the fixed shell, not the pop-top lid, which flexes and would work the seal loose. Frame a 30 x 30 mm hardwood kerb right around the opening and laminate it in BEFORE cutting the skin. Bed the vent\'s outer flange on continuous butyl tape and screw through with #8 x 25 mm stainless pan screws at ~100 mm centres into that kerb, then fillet the flange edge with a self-levelling roof sealant. The internal garnish ring screws up into the flange from below and is what carries the ceiling lining — it takes trim weight only.',
     conf: 'medium',
-    note: 'The lid design is the reason for this over a plain 40 x 40 vent: it runs open in rain and at speed, so you can drive with it extracting. It is also the whole fan strategy — reverse-draw plus the porch flyscreen is 3 W of cooling versus 500 W for the WAVE 2. Price is a Japanese parallel-import estimate; the US list is far lower.',
+    note: 'The lid design is the reason for this over a plain 40 x 40 vent: it runs open in rain and at speed, so you can drive with it extracting. It is also the whole fan strategy — reverse-draw plus the deck flyscreen is 3 W of cooling versus 500 W for the WAVE 2. Price is a Japanese parallel-import estimate; the US list is far lower.',
   },
   {
     cat: 'glazing / camper windows', maker: 'Dometic (Seitz)', model: 'SEITZ S4 900 x 450（アクリル二重窓・網戸+遮光プリーツ内蔵）',
     size: [900, 450, 60], kg: 8.5, jpy: 68000, qty: 2, where: 'オグショー / ホワイトハウス / VANTECH ほか国内キャンピングカー部材商社。Made-to-order sizes; allow 3-6 weeks from Europe.',
-    mount: 'A sandwich-clamp frame — no fastener ever touches the acrylic, which is the entire point of buying a caravan window rather than glazing a hole yourself. The outer frame goes in from outside onto a bead of butyl/sealant; the inner frame, which carries the Rastrollo pleated blackout blind and the cassette flyscreen, screws to the outer frame from inside and clamps the wall between the two. S4 accepts a wall thickness of roughly 26-42 mm, so the gullwing panel core MUST be built to that band or the window simply will not clamp — decide the window before you decide the panel sandwich. Cut-out is nominal size +2 mm with radiused corners; square corners crack the panel skin.',
+    mount: 'A sandwich-clamp frame — no fastener ever touches the acrylic, which is the entire point of buying a caravan window rather than glazing a hole yourself. The outer frame goes in from outside onto a bead of butyl/sealant; the inner frame, which carries the Rastrollo pleated blackout blind and the cassette flyscreen, screws to the outer frame from inside and clamps the wall between the two. S4 accepts a wall thickness of roughly 26-42 mm, so the off-side wall core MUST be built to that band or the window simply will not clamp — decide the window before you decide the panel sandwich. Cut-out is nominal size +2 mm with radiused corners; square corners crack the panel skin.',
     conf: 'medium',
-    note: 'One per gullwing. These carry the blackout and the bug screen internally, which is why no curtain track is needed across the gullwings — a track there would foul the props. The acrylic scratches and yellows and is the maintenance item; that is the accepted price for 5.5 kg instead of ~14 kg of glass. Price and mass per unit are estimates.',
+    note: 'One in the off-side wall and one in the rear door. These carry the blackout and the bug screen internally, which is why no curtain track is needed anywhere in the shell — a track across the kerb opening would hang in the doorway. The acrylic scratches and yellows and is the maintenance item; that is the accepted price for 5.5 kg instead of ~14 kg of glass. Price and mass per unit are estimates.',
   },
   {
     cat: 'safety / fire extinguisher', maker: 'モリタ宮田工業 (Morita Miyata)', model: 'MVF1HB 住宅用消火器「キッチンアイ」（強化液・中性 1.0 L）',
     size: [85, 375, 145], kg: 2.2, jpy: 5800, qty: 1, where: 'コーナン / カインズ / Amazon.co.jp / MonotaRO。In stock. Note the 5-year design life stamped on the body.',
-    mount: 'Supplied with its own wall hanger/bracket — that bracket is the approved provision and the only one; the cylinder itself has no fixing feature and must never be banded, clamped or hose-clipped to a frame member, because a dent in a pressurised cylinder wall is a condemned extinguisher. Screw the bracket with two M5 pan screws into a hardwood or 18 mm ply pad, not into shell skin. Site it within 600 mm of the porch step so it is reachable from OUTSIDE the camper — a fire at the stove is between you and an extinguisher mounted deep inside.',
+    mount: 'Supplied with its own wall hanger/bracket — that bracket is the approved provision and the only one; the cylinder itself has no fixing feature and must never be banded, clamped or hose-clipped to a frame member, because a dent in a pressurised cylinder wall is a condemned extinguisher. Screw the bracket with two M5 pan screws into a hardwood or 18 mm ply pad, not into shell skin. Site it within 600 mm of the deck edge so it is reachable from OUTSIDE the camper — a fire at the stove is between you and an extinguisher mounted deep inside.',
     capture: true,
     conf: 'medium',
     note: 'Wet-chemical/強化液 rather than ABC powder on purpose: powder in a 1120 mm-headroom box coats every soft good you own and the fire you are actually planning for is a cassette-stove cooking-oil fire, which is what 強化液 is formulated for. Exact catalogue suffix not verified this session — buy on the 住宅用消火器 marking and the 天ぷら油 rating.',
@@ -693,7 +699,7 @@ export const CABIN = [
   {
     cat: 'safety / first aid', maker: '日進医療器（リーダー）', model: '救急セット（携帯用ケース入り）',
     size: [270, 90, 190], kg: 0.9, jpy: 3200, qty: 1, where: 'MonotaRO / Amazon.co.jp / マツモトキヨシ。In stock. A 白十字 or ミドリ安全 kit of the same class substitutes directly.',
-    mount: 'A soft or moulded case with a carry handle and no fixings of any kind. Two options, both non-invasive: bond a 100 mm strip of loop tape into a shallow wall pocket and a matching hook strip to the case back (the case is the consumable, not the wall), or stow it in the same cabover nose locker as the sleeping bags under the shockcord net. It must be findable in the dark from the bunk — put it at the head end, not in the porch locker.',
+    mount: 'A soft or moulded case with a carry handle and no fixings of any kind. Two options, both non-invasive: bond a 100 mm strip of loop tape into a shallow wall pocket and a matching hook strip to the case back (the case is the consumable, not the wall), or stow it in the same cabover nose locker as the sleeping bags under the shockcord net. It must be findable in the dark from the bunk — put it at the head end, not in the deck locker.',
     capture: true,
     conf: 'medium',
     note: 'Restock it as a camper kit rather than a car kit: add burn gel for the stove, tweezers and a triangular bandage, and keep a 保険証 copy and the 消防 119 procedure card in the lid. Whole-module mass runs roughly 90 kg dry plus 40 kg of water, before the shell structure itself and two occupants — against a 350 kg payload the shell is the number to watch, not this list.',
