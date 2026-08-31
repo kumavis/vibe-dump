@@ -83,12 +83,43 @@ export function mountUI({ stations, state, onStation, onProgress, camera, contro
 
   playBtn.addEventListener('click', () => {
     state.playing = !state.playing
+    state.hold = 0
     playBtn.textContent = state.playing ? '❚❚' : '▶'
   })
   scrub.addEventListener('input', () => {
     playBtn.textContent = '▶'
     onProgress(Number(scrub.value) / 1000)
   })
+
+  // Step buttons and the ordered sequence. Folding in is the same list read
+  // bottom to top, because it is the same function of t read backwards.
+  const stepRow = el('div', 'steprow')
+  const prevBtn = el('button', 'icon', '◀')
+  prevBtn.title = 'previous step'
+  const dirLabel = el('span', 'dirlabel')
+  const nextBtn = el('button', 'icon', '▶')
+  nextBtn.title = 'next step'
+  stepRow.appendChild(prevBtn)
+  stepRow.appendChild(dirLabel)
+  stepRow.appendChild(nextBtn)
+  deploy.appendChild(stepRow)
+  const stepList = el('ol', 'steps')
+  deploy.appendChild(stepList)
+
+  const stepAt = (i, n) => Math.min(1, Math.max(0, (i + 0.9) / n))
+  function jumpStep(delta) {
+    const rig = currentStation.rig
+    const n = Math.max(1, rig.stageCount)
+    const here = Math.min(n - 1, Math.floor(state.t * n))
+    const to = Math.min(n - 1, Math.max(0, here + delta))
+    state.playing = false
+    state.hold = 0
+    state.dir = delta >= 0 ? 1 : -1
+    playBtn.textContent = '▶'
+    onProgress(delta >= 0 && here === to && state.t < 1 ? 1 : stepAt(to, n))
+  }
+  prevBtn.addEventListener('click', () => jumpStep(-1))
+  nextBtn.addEventListener('click', () => jumpStep(1))
 
   // --- verdict --------------------------------------------------------------
   const verdict = el('div', 'verdict')
@@ -149,6 +180,7 @@ export function mountUI({ stations, state, onStation, onProgress, camera, contro
     for (const [id, b] of buttons) b.classList.toggle('on', id === station.def.id)
     title.textContent = station.def.title
     tagline.textContent = station.def.tagline
+    renderSteps(station)
 
     const { report, meta, rig } = station
     verdict.className = `verdict ${report.ok ? 'pass' : 'fail'}`
@@ -210,6 +242,23 @@ export function mountUI({ stations, state, onStation, onProgress, camera, contro
     for (const n of meta.notes) readout.appendChild(el('p', 'note', n))
   }
 
+  /** Rebuild the ordered step list for a station. */
+  function renderSteps(station) {
+    stepList.innerHTML = ''
+    station.rig.stageLabels.forEach((label, i) => {
+      const li = el('li', 'step')
+      li.appendChild(el('span', 'step-n', String(i + 1)))
+      li.appendChild(el('span', 'step-t', label))
+      li.addEventListener('click', () => {
+        state.playing = false
+        state.hold = 0
+        playBtn.textContent = '▶'
+        onProgress(stepAt(i, Math.max(1, station.rig.stageCount)))
+      })
+      stepList.appendChild(li)
+    })
+  }
+
   const stageEl = stageLine
   function tick(t, station) {
     scrub.value = String(Math.round(t * 1000))
@@ -217,16 +266,34 @@ export function mountUI({ stations, state, onStation, onProgress, camera, contro
     const rig = station.rig
     const n = rig.stageCount
     const i = Math.min(n - 1, Math.floor(t * n))
-    const label = rig.stageLabels[i] ?? ''
+    const stowed = t <= 0.001
+    const deployed = t >= 0.999
+    const inward = state.dir < 0
+
+    stepList.classList.toggle('inward', inward && !stowed && !deployed)
+    ;[...stepList.children].forEach((li, k) => {
+      li.classList.toggle('on', !stowed && !deployed && k === i)
+      li.classList.toggle('done', deployed || (!stowed && k < i))
+    })
+
+    dirLabel.textContent = stowed
+      ? 'stowed — ready to drive'
+      : deployed
+        ? 'deployed'
+        : inward
+          ? `folding in · step ${n - i} of ${n}`
+          : `folding out · step ${i + 1} of ${n}`
+    dirLabel.className = `dirlabel ${stowed ? 'stowed' : deployed ? 'deployed' : inward ? 'inward' : 'outward'}`
+
     const tip = station.overlay.status
     stageEl.innerHTML = ''
-    stageEl.appendChild(el('span', 'stage-n', `${t <= 0 ? 'stowed' : t >= 1 ? 'deployed' : `${i + 1}/${n}`}`))
-    stageEl.appendChild(el('span', 'stage-label', t <= 0 ? 'ready to drive' : label))
+    stageEl.appendChild(el('span', 'stage-n', stowed ? 'stowed' : deployed ? 'deployed' : `${i + 1}/${n}`))
+    stageEl.appendChild(el('span', 'stage-label', stowed ? 'ready to drive' : rig.stageLabels[i] ?? ''))
     stageEl.appendChild(
       el(
         'span',
         `stage-tip ${tip.inside ? 'ok' : 'bad'}`,
-        tip.inside ? `CG ${fmt(tip.margin)} mm inside the feet` : `CG OUTSIDE the support polygon`,
+        tip.inside ? `CG ${fmt(tip.margin)} mm inside the feet` : 'CG OUTSIDE the support polygon',
       ),
     )
   }

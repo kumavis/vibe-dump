@@ -86,11 +86,25 @@ function disposeTree(root) {
 
 // --- deployment clock -------------------------------------------------------
 
+/**
+ * The deployment clock.
+ *
+ * One scalar drives everything, so folding IN is not a separate animation — it
+ * is the same function of t, read backwards. That is worth stating because it
+ * is also the guarantee: the steps cannot come out in the wrong order on the
+ * way in, because there is no second ordering to get wrong. The tray legs fold
+ * up before the trays slide back, the roof rolls up before its posts drop, and
+ * neither is scripted anywhere.
+ *
+ * `hold` pauses at each end so the deployed state and the stowed state each get
+ * a beat to be looked at.
+ */
 const state = {
   t: 0,
   playing: true,
   dir: 1,
-  speed: 0.16,
+  hold: 0,
+  speed: 0.17,
   orbit: true,
   xray: false,
 }
@@ -144,20 +158,21 @@ renderer.setAnimationLoop((now) => {
   last = now
 
   if (state.playing) {
-    let t = state.t + state.dir * state.speed * dt
-    if (t >= 1) {
-      t = 1
-      state.dir = -1
-      state.hold = (state.hold ?? 0) + dt
-      if (state.hold < 2.5) t = 1
-      else {
-        state.hold = 0
+    if (state.hold > 0) {
+      state.hold -= dt
+    } else {
+      let t = state.t + state.dir * state.speed * dt
+      if (t >= 1) {
+        t = 1
+        state.dir = -1
+        state.hold = 2.8
+      } else if (t <= 0) {
+        t = 0
+        state.dir = 1
+        state.hold = 1.6
       }
-    } else if (t <= 0) {
-      t = 0
-      state.dir = 1
+      setProgress(t)
     }
-    setProgress(t)
     ui.tick(state.t, current)
   }
 
