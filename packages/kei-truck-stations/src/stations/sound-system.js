@@ -58,48 +58,57 @@ import {
 const FLOOR = mm(110) // module floor above the cargo deck
 
 // --- the trays ---------------------------------------------------------------
-// 570 wide each, and that number is not free: the sub is 450, the lift columns
-// have to stand outboard of it, and the two trays plus the mast's centre channel
-// have to close on the bed's 1410. 570 + 570 + 270 = 1410, exactly.
+// 610 wide each, and that number is the loudspeaker's. A JBL PRX918XLF is 591
+// across; the deck is 1410; 610 + 610 + a 190 mm centre channel closes it
+// exactly, and the channel is what the light mast lies in.
 const TRAY_T = mm(60)
 const TRAY_L = mm(1360)
-const TRAY_W = mm(570)
+const TRAY_W = mm(610)
 const TRAY_TRAVEL = mm(610) // LAMP 3509-24, 632 mm of stroke
 const TRAY_CX = mm(240)
-const TRAY_CZ = mm(420)
+const TRAY_CZ = mm(400)
 
-// Yamaha DXS15XLF, as installed: 600 deep in X because it faces the crowd,
-// 450 across the tray, 587 tall. Yamaha DZR10: 345 x 315 x 537.
-const SUB = { d: mm(600), w: mm(450), h: mm(587) }
+// JBL PRX918XLF, as installed: 654 deep in X because it faces the crowd, 591
+// across the tray, 693 tall. Yamaha DZR10: 345 x 315 x 537.
+const SUB = { d: mm(654), w: mm(591), h: mm(693) }
 const TOP = { d: mm(345), w: mm(315), h: mm(537) }
-const SUB_CX = -mm(370) // sub centred on the tray's aft half
-const SUB_TOP = TRAY_T + SUB.h // 647 — the shelf the top box travels on
+const SUB_CX = -mm(353) // sub on the tray's aft half
 
-// K&M 21336 distance rod: M20 male base, Ø35 upper tube, 945 -> 1475, 35 kg.
-// A pair per side, one either side of the sub, feet in M20 bosses recessed
-// 50 mm into the tray pan so the collapsed head lands at 955 rather than 1005.
-const COL_X = -mm(330)
-const COL_Z = mm(255) // outboard of the sub's 225, inboard of the tray's 285
-const COL_BASE = mm(10)
-const COL_STOW = mm(945)
-const COL_RISE = mm(530) // 945 -> 1475, the rod's real travel
-const PIN_Y = COL_BASE + COL_STOW // 955 — the trunnion, and the yoke's pin
+// THE 18-INCH BOX EVICTED THE MID-TOP FROM ITS ROOF. Tray 60 plus a DXS15XLF's
+// 587 plus a DZR10 lying on it was 992, and that fitted. The same sum with a
+// PRX918XLF's 693 is 1098, which is 1208 above the deck and 88 over the ceiling
+// — and lying the top on its back instead of its side only buys 30 of it. So
+// the mid-top travels FORWARD of the sub, flat in the tray's own bay, and goes
+// up a pair of posts instead of off the sub's roof.
+const POST_X = mm(466) //  the lift posts, either side of the mid-top's bay
+const POST_Z = mm(230)
+const POST_H = mm(945)
+const CARRIAGE_Y = mm(368) // the trunnion, level with the lying box's upper inserts
+const CARRIAGE_RISE = mm(527)
+const TOP_LIE_X = mm(330) // the box's lying centre
+const TOP_LIE_Y = TRAY_T + TOP.d / 2
 
-// Where the top box sits while it travels, and therefore where the pin has to
-// be. Lying centre is fixed by the sub; the pin is fixed by the rods; the
-// deployed pose falls out of the quarter turn and is not a free choice.
-const TOP_LIE_X = SUB_CX
-const TOP_LIE_Y = SUB_TOP + TOP.d / 2
-
-// K&M 24730 crank-up stand: 1405 stowed, 3000 extended, 40 kg rated, Ø35 spigot.
-const MAST_X = mm(600)
-const MAST_Y = mm(420) // axis height on its hinged collar plate
-const MAST_STOW = mm(1405)
-const MAST_CRANK = mm(900) // of the 1595 available — see the notes
-// STAGE EVOLUTION TRUSS4/100/22I: 220 mm square, 1 m, Ø35 chords, pin and R-clip.
-const WING_L = mm(1000)
-const WING_S = mm(220)
-const WING_OFF = mm(185) // half the stagger — see lightWing()
+// THE LIGHT RIG IS A SCAFFOLD GOALPOST, and the research behind it is worth the
+// paragraph. The brief was a frame that unfolds onto the cab roof. It cannot: an
+// S500P roof is 0.7 mm steel over three hoops with no threaded provision
+// anywhere, and the failure mode is not pressure but the overturning moment — a
+// 1.5 m mast with 5 kg on top needs one gust to put 75 N·m into a panel that
+// oil-cans under a hand. There IS a rated carrier for this truck, a TUFREQ
+// KF326A+ at 50 kg through the gutters, and it is a SHELF, not a foundation:
+// gutter clamps react vertical load by friction and never contemplate a lever.
+// The roof is also 1780 above the road against a 2000 kei limit, so building up
+// from it starts you 220 mm from the ceiling.
+//
+// So the frame clears the roof entirely: one 単管 mast off a base plate
+// through-bolted to the front crossmember, and a crossbar 380 above the cab roof
+// line. Cheap, rudimentary and certified — φ48.6 scaffold pipe is 労働安全衛生
+// 規則 material, and STAGE EVOLUTION's φ48-51 lighting clamps fit it exactly,
+// which is the coincidence the whole rig is built on. It replaces ¥85,000 of
+// crank-up mast with about ¥1,200 of pipe.
+const MAST_X = mm(870)
+const MAST_Y = mm(250) // the pipe lies this high — set by the booth stack under it
+const MAST_H = mm(1740) // crossbar at 2550 over the road, 770 clear of the cab roof
+const BAR_LEN = mm(1400)
 
 const BOOTH_X = -mm(940) // hinge line of the booth's lower panel
 const BOOTH_PANEL = mm(475)
@@ -125,12 +134,12 @@ function build(ctx) {
   // reads the other way round, which is exactly what packing up is.
   rig.setStages([
     'sides down, jacks in',
-    'trays glide out, mast swings up',
-    'legs down, mast cranks',
+    'trays glide out',
+    'legs down, light frame swings up',
     'feet out, booth fascia stands',
-    'fascia extends, lift columns rise',
+    'fascia extends, mid-tops wind up',
     'counter over, tops tip upright',
-    'end cheeks up, light wings open',
+    'end cheeks up',
   ])
 
   // --- what stays put ------------------------------------------------------
@@ -146,7 +155,7 @@ function build(ctx) {
   })
   rig.attach(base.id, subframe(lib, { height: FLOOR }))
   rig.attach(base.id, stageFloorDetail(lib))
-  rig.attach(base.id, mastPlinth(lib))
+  rig.attach(base.id, mastFoot(lib))
 
   addGates(rig, ctx, { left: 'hang', right: 'hang', tail: 'flat', stage: 0 })
 
@@ -178,11 +187,10 @@ function build(ctx) {
       hulls: [
         { c: [0, TRAY_T / 2, 0], s: [TRAY_L, TRAY_T, TRAY_W], tag: 'tray' },
         { c: [SUB_CX, TRAY_T + SUB.h / 2, 0], s: [SUB.d, SUB.h, SUB.w], tag: 'DXS15XLF + well' },
-        // The two lift columns are part of the tray: they stand on it and ride
-        // out with it. Same part, so the audit doesn't police them against the
-        // sub they straddle — but the 30 mm clearance is in the numbers above.
-        { c: [COL_X, (COL_BASE + PIN_Y) / 2, COL_Z], s: [mm(60), COL_STOW, mm(60)], tag: 'lift column' },
-        { c: [COL_X, (COL_BASE + PIN_Y) / 2, -COL_Z], s: [mm(60), COL_STOW, mm(60)], tag: 'lift column' },
+        // The two lift posts are part of the tray: they stand on it and ride out
+        // with it.
+        { c: [POST_X, TRAY_T + POST_H / 2, POST_Z], s: [mm(64), POST_H, mm(64)], tag: 'lift post' },
+        { c: [POST_X, TRAY_T + POST_H / 2, -POST_Z], s: [mm(64), POST_H, mm(64)], tag: 'lift post' },
       ],
       mates: [`gate-${side === 'l' ? 'left' : 'right'}`],
       note: 'LAMP 3509-24 over-travel slides; the load stays in shear the whole way out',
@@ -242,32 +250,33 @@ function build(ctx) {
 
     // THE MID-TOP GOES UP, THEN TIPS — in that order, and the order is forced.
     //
-    // It travels lying on its side on the sub, because tray 60 + sub 587 + a box
-    // standing on it is 1149 mm against a 1120 ceiling; lying, the stack is 992.
-    // The yoke pin sits 37 mm below the box's top face, bolted through the upper
-    // side inserts. Rotate about that pin where it stands and the box's far
-    // bottom corner swings on a 436 mm radius — 130 mm INTO the sub. So the pin
-    // rises 530 mm on the pair of distance rods first, which puts the lowest
-    // point of the arc at 1049, and the sub's top is at 647.
+    // It travels lying flat in the bay forward of the sub, because an 18-inch
+    // box is 693 tall and a DZR10 lying on its roof would be 1208 above the deck
+    // against a 1120 ceiling. A carriage winds up the two posts on a strap, and
+    // only then does the box rotate: the trunnion is level with the box's upper
+    // side inserts, so tipping it where it lies would swing its far bottom
+    // corner 86 mm through the tray pan. 527 of lift puts the arc clear.
+    //
+    // The tip is a real hinge and not a hand lift only because the DZR10 has
+    // M10 x 8 and M8 x 2 inserts: a bolted aluminium yoke is possible on this
+    // box and on almost nothing else in its class.
     const lift = rig.add({
       id: `top-lift-${side}`,
       parent: `tray-${side}`,
-      label: 'mid-top lift columns',
-      pivot: [COL_X, PIN_Y, 0],
-      joint: 'telescope',
+      label: 'mid-top carriage',
+      pivot: [POST_X, CARRIAGE_Y, 0],
+      joint: 'slide',
       axis: [0, 1, 0],
-      range: [0, COL_RISE],
+      range: [0, CARRIAGE_RISE],
       stage: 4,
-      mass: 4.5 + 2.27 * 2,
-      com: [0, -mm(300), 0],
-      // The inner tubes only. Retracted they live inside the outer columns,
-      // which belong to the tray — hence the mate.
+      mass: 6,
+      com: [-mm(60), 0, 0],
       hulls: [
-        { c: [0, -mm(415), COL_Z], s: [mm(45), mm(830), mm(45)], tag: 'Ø35 inner' },
-        { c: [0, -mm(415), -COL_Z], s: [mm(45), mm(830), mm(45)], tag: 'Ø35 inner' },
+        { c: [0, 0, POST_Z], s: [mm(150), mm(190), mm(90)], tag: 'carriage' },
+        { c: [0, 0, -POST_Z], s: [mm(150), mm(190), mm(90)], tag: 'carriage' },
       ],
       mates: [`tray-${side}`],
-      note: '300 mm of engagement left in the collars at full extension',
+      note: 'winds up on a 2:1 strap — 20 kg at the handle becomes 10',
     })
     rig.attach(lift.id, topYoke(lib))
 
@@ -281,82 +290,60 @@ function build(ctx) {
       range: [0, Math.PI / 2],
       stage: 5,
       mass: 17.9,
-      com: [-mm(40), -mm(135.5), 0],
+      com: [TOP_LIE_X - POST_X, TOP_LIE_Y - CARRIAGE_Y, 0],
       hulls: [
-        { c: [TOP_LIE_X - COL_X, TOP_LIE_Y - PIN_Y, 0], s: [TOP.h, TOP.d, TOP.w], tag: 'DZR10' },
+        { c: [TOP_LIE_X - POST_X, TOP_LIE_Y - CARRIAGE_Y, 0], s: [TOP.h, TOP.d, TOP.w], tag: 'DZR10' },
       ],
       mates: [`top-lift-${side}`, `tray-${side}`],
-      note: 'lands 1947 mm over the road, aimed down 8° at the crowd',
+      note: 'acoustic centre lands 1665 mm over the road — ear height for a standing crowd',
     })
     rig.attach(tip.id, topBox(lib))
   }
 
-  // --- the mast ------------------------------------------------------------
-  // The 24730 cannot stand on this deck: 1405 stowed against a 1120 ceiling. It
-  // lies flat down the 270 mm centre channel between the trays, its column
-  // clamped in two split shaft collars on a plate that hinges off a plinth at
-  // the headboard, and swings up through a quarter turn before a single crank
-  // handle does the rest.
-  const swing = rig.add({
-    id: 'mast-swing',
+  // --- the light rig -------------------------------------------------------
+  // ONE RIGID T, ONE HINGE. The first version folded the crossbar off the mast
+  // the way the shrine's torii carries its lintel, and that cannot work here:
+  // the yatai's header ends up running fore-and-aft, so a turn about the
+  // vertical gets it there, and NO rotation about Z will ever move a vector out
+  // of the XY plane. This bar has to end up across the truck. Turning it about
+  // the mast's own local Y does that, but then the fixtures — which have to hang
+  // DOWN when it is up — sweep through the cab on the way.
+  //
+  // So nothing folds. A 1740 mm mast with a 1400 mm crossbar across its head,
+  // lying flat down the deck with the bar at the tail and the fixtures pointing
+  // forward along it, and one quarter turn stands the whole thing up with the
+  // fixtures pointing at the floor. That is more rudimentary than the version it
+  // replaces in every sense: one moving part, one pipe joint, no crank.
+  //
+  // The arc is the thing to check, and it clears by geometry rather than by
+  // luck: the crossbar is only below the tops of the loaded trays while it is
+  // within 20 degrees of flat, and at 20 degrees it is still at x = -765, three
+  // hundred millimetres aft of where the trays begin.
+  const mast = rig.add({
+    id: 'mast',
     parent: 'floor',
-    label: 'light mast (swing up)',
+    label: 'light T-frame (単管 φ48.6)',
     pivot: [MAST_X, FLOOR + MAST_Y, 0],
     joint: 'hinge',
     axis: [0, 0, 1],
     // Authored lying aft along -X; a quarter turn the negative way stands it up.
     range: [0, -Math.PI / 2],
-    stage: 1,
-    mass: 12,
-    com: [-MAST_STOW / 2, 0, 0],
-    hulls: [{ c: [-MAST_STOW / 2, 0, 0], s: [MAST_STOW, mm(120), mm(120)], tag: 'K&M 24730' }],
-    mates: ['floor'],
-    note: 'braced back to the truck’s torii — a frame crossmember, not the deck ply',
-  })
-  rig.attach(swing.id, mastColumn(lib))
-
-  const crank = rig.add({
-    id: 'mast-crank',
-    parent: 'mast-swing',
-    label: 'mast (crank up)',
-    pivot: [-MAST_STOW, 0, 0],
-    joint: 'telescope',
-    axis: [-1, 0, 0],
-    range: [0, MAST_CRANK],
+    // AFTER the trays, not with them. The frame sweeps a 1740 mm arc up the
+    // middle of the deck, and while it is within about 25 degrees of flat its
+    // crossbar and fixtures are lower than a loaded tray. Once the trays are out
+    // the middle of the deck is empty and the arc has nothing to hit.
     stage: 2,
-    mass: 8,
-    com: [mm(700), 0, 0],
-    hulls: [{ c: [mm(700), 0, 0], s: [mm(1400), mm(96), mm(96)], tag: 'inner section' }],
-    // Nested sections share space by design when retracted.
-    mates: ['mast-swing', 'floor'],
+    mass: 8 + 4 + 7,
+    com: [-MAST_H * 0.6, 0, 0],
+    hulls: [
+      { c: [-MAST_H / 2, 0, 0], s: [MAST_H, mm(56), mm(56)], tag: 'mast' },
+      { c: [-MAST_H + mm(30), 0, 0], s: [mm(60), mm(56), BAR_LEN], tag: 'crossbar' },
+      { c: [-MAST_H + mm(230), 0, 0], s: [mm(400), mm(200), BAR_LEN - mm(160)], tag: 'fixtures' },
+    ],
+    mates: ['floor'],
+    note: '2.08 kg/m of certified scaffold pipe instead of ¥85,000 of crank-up stand',
   })
-  rig.attach(crank.id, mastInner(lib))
-
-  // The wing of lights: two 1 m box trusses that stow lying down the mast and
-  // swing out to a 2 m span. They are STAGGERED 370 mm fore-and-aft, because two
-  // 220 mm trusses cannot both fold flat against a 120 mm column on the same
-  // line — one has to pass the other. The stagger is the design, not a slip.
-  for (const [side, sz] of [['l', -1], ['r', 1]]) {
-    const arm = rig.add({
-      id: `light-arm-${side}`,
-      parent: 'mast-crank',
-      label: 'light wing',
-      pivot: [0, sz * WING_OFF, 0],
-      joint: 'hinge',
-      axis: [0, 1, 0],
-      // Authored pointing back down the mast; a quarter turn brings it out
-      // square. Right hand rule about +Y sends +X to -Z, so the sign follows
-      // the side — get it backwards and both wings fold onto the same flank.
-      range: [0, -sz * (Math.PI / 2)],
-      stage: 6,
-      mass: 5 + 2.2 + (side === 'l' ? 2.7 : 0) + 0.6 * 3 + 0.35 * 5,
-      com: [WING_L * 0.45, 0, 0],
-      hulls: [{ c: [WING_L / 2, 0, 0], s: [WING_L, WING_S, WING_S], tag: 'TRUSS4 + fixtures' }],
-      mates: ['mast-crank', 'mast-swing'],
-      note: 'fixtures recessed inside the 220 mm truss so the wing folds with them on',
-    })
-    rig.attach(arm.id, lightWing(lib, side === 'l'))
-  }
+  rig.attach(mast.id, lightFrame(lib))
 
   // --- the booth -----------------------------------------------------------
   // Three panels in a carpenter's-rule chain, folding out of a 96 mm stack into
@@ -462,21 +449,23 @@ function build(ctx) {
   return {
     massBudget: [
       ['subframe + stage floor', 36],
-      ['trays, slides, drop legs and feet', 48],
-      ['subwoofers (2) + capture wells', 90],
-      ['mid-tops (2), lift columns, yokes', 55],
-      ['mast, plinth, wings and fixtures', 44],
+      ['trays, slides, drop legs and feet', 50],
+      ['subwoofers (2 × 18") + capture wells', 93],
+      ['mid-tops (2), lift posts, carriages', 58],
+      ['light T-frame: pipe, bases, clamps, fixtures', 36],
       ['booth: fascia, counter, cheeks', 28],
       ['stabiliser jacks (4)', 18],
-      ['power station, control, cable', 28],
+      ['power, control, cable', 28],
     ],
     notes: [
-      'Weight, not space, is the binding constraint: the deck has 2.7 m² and 1120 mm of headroom, and 350 kg of payload. The build lands at 347.',
-      'Nothing on this module hangs off a speaker cabinet. The subs are captured in wells with battens into the cast handle apertures; only the DZR10s are bolted, and only because their M10 × 8 pattern is rated for it.',
-      'The tops rise BEFORE they tip. Tip first and the box’s trailing corner swings 130 mm into the sub it is standing on — the auditor catches it, and so does a tape measure.',
-      'The mast is cranked to 900 of its 1595 mm of travel, which puts the fixtures 3.5 m over the road and the top chord at 3.6. Wind it to the stop for 4.3 m if the site and the wind allow; the stand is rated 40 kg and the wing pair weighs 21.',
+      'NO AMPLIFIERS. Every box on this truck is active — the PRX918XLF carries 2000 W of fanless Class D with 6-band PEQ, delay and a selectable crossover; the DZR10 carries 2000 W bi-amped with a 96 kHz FIR crossover. There is no rack amp, no external processor and no speakON cable anywhere in the build. The passive alternative prices out the same, weighs 13 kg more and gives each box a third of the power.',
+      'What IS still needed is the part people forget: NONE of these boxes has an AC thru. They daisy-chain signal and never power, so four boxes means four outlets — two earth-leakage cord reels, which is also how you get two circuits. A steel truck body feeding metal-grilled boxes standing on wet ground is the case the 漏電遮断器 exists for. The hum loop gets lifted at the DI, never at the mains earth.',
+      'The 18-inch box was free on payload and expensive on geometry. A PRX918XLF is 0.7 kg heavier than the DXS15XLF it replaces and goes three hertz deeper, but it is 591 across — so the trays grew from 570 to 610 and the deck now closes at 610 + 610 + a 190 mm centre channel, exactly 1410.',
+      'And it evicted the mid-top from its roof. Tray 60 plus 693 plus a DZR10 lying on top is 1208 above the deck against a 1120 ceiling. The tops now travel flat in the bay forward of the sub and wind up two posts on a strap.',
+      'NOTHING STANDS ON THE CAB ROOF. It is 0.7 mm of steel over three hoops with no threaded provision anywhere, and the failure mode is the overturning moment, not the pressure — a 1.5 m mast with 5 kg on top needs one gust to put 75 N·m into a panel that oil-cans under a hand. There is a rated carrier for this truck, a TUFREQ KF326A+ at 50 kg, and that rating is for distributed vertical load through the gutters: it is a shelf, not a foundation.',
+      'So the light frame clears the roof entirely — a rigid T of φ48.6 scaffold pipe off a base plate through-bolted to the front crossmember, standing its crossbar 770 mm above the cab roof line. One moving part, one pipe joint, about ¥1,200 of pipe where the crank-up stand was ¥85,000.',
+      'The fixtures never roll on their clamps. They point along the mast toward its foot, which is forward along the deck while the frame is flat and straight down once it is up: the quarter turn that stands the mast up is the same quarter turn that aims the lights.',
       'Four jacks take the truck off its leaf springs. Without them the whole vehicle rolls the moment the DJ shifts weight — and the DJ’s own 75 kg is carried by the jacks, not the axles.',
-      'Two hours and a half at 800 W from the DELTA 2 Max. The 4096 Wh Pro 3 would double it and cost 51.5 kg, which this module does not have.',
     ],
   }
 }
@@ -494,18 +483,64 @@ function stageFloorDetail(lib) {
 }
 
 /**
- * The plinth the mast hinges off: a slim tower against the headboard, braced
- * back into the torii guard, which is the strongest hard point on the vehicle —
- * bolted through the deck into a frame crossmember and triangulated by the cab.
+ * The mast's foot: a 大洋製器工業 固定ベース on a steel spreader, through-bolted
+ * M10 into the truck's front crossmember with 60 x 60 x 4 backing plates.
+ *
+ * NOT into the deck boards and never into the tie-down hooks. The mast is a
+ * 1.5 m lever with lights on the end and the whole point of clearing the cab
+ * roof is that the moment goes into the chassis instead of into 0.7 mm of
+ * bodywork — which only holds if the foot is fixed to the chassis too.
  */
-function mastPlinth(lib) {
+function mastFoot(lib) {
   const g = new THREE.Group()
-  const top = FLOOR + MAST_Y - mm(80)
-  g.add(slab([mm(200), MAST_Y - mm(80), mm(190)], lib.aluDark, { anchor: [0, -1, 0], pos: [MAST_X, FLOOR, 0] }))
-  g.add(slab([mm(260), mm(22), mm(240)], lib.galv, { pos: [MAST_X, top, 0] }))
-  for (const s of [-1, 1]) {
-    g.add(rod([MAST_X + mm(60), top, s * mm(80)], [MAST_X + mm(330), FLOOR + mm(1040), s * mm(540)], mm(16), lib.steelRod))
-    g.add(rod([MAST_X - mm(60), top, s * mm(80)], [MAST_X - mm(300), FLOOR + mm(20), s * mm(150)], mm(14), lib.steelRod))
+  const y = FLOOR + MAST_Y
+  g.add(slab([mm(280), mm(14), mm(280)], lib.galv, { pos: [MAST_X, FLOOR + mm(7), 0] }))
+  g.add(slab([mm(121), y - FLOOR - mm(30), mm(121)], lib.aluDark, { anchor: [0, -1, 0], pos: [MAST_X, FLOOR + mm(14), 0] }))
+  g.add(slab([mm(150), mm(20), mm(150)], lib.galv, { pos: [MAST_X, y - mm(24), 0] }))
+  // Braced back to the torii guard, which is bolted through to a crossmember.
+  for (const sx of [-1, 1]) {
+    g.add(rod([MAST_X, y, sx * mm(40)], [MAST_X + mm(90), FLOOR + mm(980), sx * mm(520)], mm(16), lib.steelRod))
+  }
+  return g
+}
+
+/**
+ * The T: mast, crossbar and the fixtures clamped to it, all one rigid frame.
+ *
+ * The fixtures point along +X — toward the mast's foot — which is FORWARD along
+ * the deck while the frame is flat and straight DOWN once it is up. That is the
+ * whole reason nothing has to roll on its clamps: the quarter turn that stands
+ * the mast up is the same quarter turn that aims the lights.
+ */
+function lightFrame(lib) {
+  const g = new THREE.Group()
+  const pipe = new THREE.Mesh(new THREE.CylinderGeometry(mm(24.3), mm(24.3), MAST_H, 14), lib.galv)
+  pipe.rotation.z = Math.PI / 2
+  pipe.position.x = -MAST_H / 2
+  g.add(pipe)
+  // 単管用ジョイント part way down, because 2 m is the length pipe comes in.
+  g.add(slab([mm(150), mm(56), mm(56)], lib.aluDark, { pos: [-mm(900), 0, 0] }))
+
+  const bx = -MAST_H + mm(30)
+  const bar = new THREE.Mesh(new THREE.CylinderGeometry(mm(24.3), mm(24.3), BAR_LEN, 14), lib.galv)
+  bar.position.set(bx, 0, 0)
+  g.add(bar)
+  // 直交クランプ where the bar crosses the mast — the rated 500 kg one.
+  g.add(slab([mm(110), mm(100), mm(110)], lib.aluDark, { pos: [bx, 0, 0] }))
+
+  // COLOR STRIP12 down the middle, four SLIMPAR12s spread along the bar, each on
+  // a φ48–51 stage clamp with a steel safety bond.
+  g.add(slab([mm(115), mm(85), mm(1060)], lib.aluDark, { pos: [bx + mm(80), 0, 0] }))
+  g.add(slab([mm(90), mm(26), mm(1000)], lib.ledCyan, { pos: [bx + mm(122), 0, 0] }))
+  for (let i = 0; i < 4; i++) {
+    const z = -BAR_LEN / 2 + mm(180) + i * mm(346)
+    g.add(slab([mm(45), mm(110), mm(60)], lib.galv, { pos: [bx + mm(30), 0, z] }))
+    g.add(slab([mm(180), mm(193), mm(89)], lib.aluDark, { pos: [bx + mm(170), 0, z] }))
+    g.add(slab([mm(30), mm(150), mm(70)], i % 2 ? lib.ledMagenta : lib.ledWarm, { pos: [bx + mm(256), 0, z] }))
+    const beam = new THREE.PointLight(i % 2 ? 0xff3cae : 0xffb347, 3.4, 8, 2)
+    beam.position.set(bx + mm(340), 0, z)
+    g.add(beam)
+    g.add(stay(lib, [bx + mm(40), mm(30), z], [bx + mm(160), mm(80), z], { radius: mm(3) }))
   }
   return g
 }
@@ -553,34 +588,30 @@ function trayGeometry(lib) {
   bin.add(slab([mm(26), SUB.h + mm(30), SUB.w + mm(40)], lib.trim, { pos: [mm(180), SUB.h / 2, 0] }))
   g.add(bin)
 
-  // The two lift columns: Ø35 outer tubes in flanged bosses recessed into the
-  // pan, with the split collars that take the yoke's reaction.
+  // The two lift posts, with the winch drum at the foot of one of them.
   for (const s of [-1, 1]) {
-    const cz = s * COL_Z
-    g.add(slab([mm(150), mm(16), mm(150)], lib.galv, { pos: [COL_X, TRAY_T, cz] }))
-    g.add(rod([COL_X, COL_BASE, cz], [COL_X, PIN_Y, cz], mm(24), lib.alu))
-    g.add(slab([mm(66), mm(40), mm(66)], lib.aluDark, { pos: [COL_X, PIN_Y - mm(20), cz] }))
+    const cz = s * POST_Z
+    g.add(slab([mm(150), mm(16), mm(150)], lib.galv, { pos: [POST_X, TRAY_T, cz] }))
+    g.add(slab([mm(64), POST_H, mm(64)], lib.alu, { anchor: [0, -1, 0], pos: [POST_X, TRAY_T, cz] }))
+    g.add(slab([mm(90), mm(30), mm(90)], lib.aluDark, { pos: [POST_X, TRAY_T + POST_H, cz] }))
   }
+  g.add(slab([mm(120), mm(90), mm(70)], lib.aluDark, { pos: [POST_X, TRAY_T + mm(120), POST_Z + mm(70)] }))
   return g
 }
 
 /**
- * The yoke that the mid-top hangs in, on the tops of the two distance rods.
- *
- * Authored about the trunnion pin at (0,0,0), with the rods running DOWN from
- * it — which is how a telescope authored along +Y has to be drawn, because the
- * part's origin is the moving end.
+ * The carriage and the yoke it carries: two shoes running on the posts, tied by
+ * a cross-tie under the box, with the trunnion stubs that bolt into the DZR10's
+ * upper side inserts.
  */
 function topYoke(lib) {
   const g = new THREE.Group()
-  for (const s of [-1, 1]) {
-    const cz = s * COL_Z
-    g.add(rod([0, mm(20), cz], [0, -mm(830), cz], mm(17), lib.alu))
-    // Cheek plate and the stub axle that reaches in to the box's side inserts.
-    g.add(slab([mm(150), mm(190), mm(14)], lib.aluDark, { pos: [-mm(20), -mm(40), cz - s * mm(14)] }))
-    g.add(rod([0, 0, cz - s * mm(20)], [0, 0, s * (TOP.w / 2 - mm(10))], mm(11), lib.steelRod))
+  for (const sz of [-1, 1]) {
+    const cz = sz * POST_Z
+    g.add(slab([mm(150), mm(190), mm(90)], lib.aluDark, { pos: [0, 0, cz] }))
+    g.add(rod([0, 0, cz - sz * mm(45)], [0, 0, sz * (TOP.w / 2 - mm(10))], mm(11), lib.steelRod))
   }
-  g.add(slab([mm(90), mm(26), 2 * COL_Z - mm(40)], lib.galv, { pos: [-mm(60), -mm(150), 0] }))
+  g.add(slab([mm(90), mm(26), 2 * POST_Z - mm(120)], lib.galv, { pos: [-mm(60), -mm(130), 0] }))
   return g
 }
 
@@ -590,97 +621,23 @@ function topYoke(lib) {
  */
 function topBox(lib) {
   const g = new THREE.Group()
-  const cx = TOP_LIE_X - COL_X
-  const cy = TOP_LIE_Y - PIN_Y
   const b = new THREE.Group()
-  b.position.set(cx, cy, 0)
+  b.position.set(TOP_LIE_X - POST_X, TOP_LIE_Y - CARRIAGE_Y, 0)
   b.add(slab([TOP.h, TOP.d, TOP.w], lib.speakerBox))
   b.add(slab([TOP.h - mm(60), mm(20), TOP.w - mm(50)], lib.speakerGrille, { pos: [mm(10), TOP.d / 2 + mm(5), 0] }))
-  // Bass reflex slot at what becomes the bottom of the front face.
   b.add(slab([mm(90), mm(24), TOP.w - mm(140)], lib.trim, { pos: [-TOP.h / 2 + mm(70), TOP.d / 2 + mm(8), 0] }))
-  // The rigging pattern that made this box the one: M10 x 8 in the sides.
-  for (const s of [-1, 1]) {
+  for (const sz of [-1, 1]) {
     for (const dx of [-mm(150), mm(0), mm(150)]) {
-      b.add(slab([mm(26), mm(26), mm(10)], lib.galv, { pos: [dx, 0, s * (TOP.w / 2 + mm(3))] }))
+      b.add(slab([mm(26), mm(26), mm(10)], lib.galv, { pos: [dx, 0, sz * (TOP.w / 2 + mm(3))] }))
     }
   }
-  // Amp pack and handle on what becomes the back.
   b.add(slab([TOP.h - mm(180), mm(18), TOP.w - mm(120)], lib.aluDark, { pos: [0, -TOP.d / 2 - mm(6), 0] }))
   g.add(b)
   return g
 }
 
-/** The 24730's outer column, lying aft along -X from its collar plate. */
-function mastColumn(lib) {
-  const g = new THREE.Group()
-  // anchor +1 puts the box's MAX face on the origin, i.e. it runs aft along -X.
-  g.add(slab([MAST_STOW, mm(112), mm(112)], lib.aluDark, { anchor: [1, 0, 0] }))
-  // Two split shaft collars — K&M ship no column flange, so this is the fixing.
-  for (const x of [-mm(120), -mm(560)]) {
-    g.add(slab([mm(70), mm(150), mm(150)], lib.galv, { pos: [x, 0, 0] }))
-  }
-  // The crank handle and its winch drum, at the base end where a hand reaches it.
-  g.add(rod([-mm(200), 0, mm(70)], [-mm(200), 0, mm(150)], mm(12), lib.steelRod))
-  g.add(slab([mm(40), mm(150), mm(20)], lib.aluDark, { pos: [-mm(200), mm(70), mm(150)] }))
-  return g
-}
 
-/** The inner section, drawn running back down inside the outer one. */
-function mastInner(lib) {
-  const g = new THREE.Group()
-  // Authored running back DOWN the mast from the head, 1400 long so that at full
-  // crank 200 mm is still swallowed by the outer section and at rest it is flush.
-  g.add(slab([mm(1400), mm(88), mm(88)], lib.alu, { anchor: [-1, 0, 0] }))
-  // Head plate: TRUSS4/BP/22 base plate face-up on the Ø35 spigot.
-  g.add(slab([mm(24), mm(300), mm(300)], lib.galv))
-  g.add(rod([0, 0, 0], [-mm(90), 0, 0], mm(17), lib.chrome))
-  return g
-}
 
-/**
- * One wing: a 1 m box truss with its fixtures recessed INSIDE the 220 mm depth,
- * authored along +X so that it stows lying back down the mast.
- *
- * Recessing the fixtures is not a styling choice. A wing that folds against the
- * column arrives with whatever hangs below it pointing straight at the column,
- * and 280 mm of moving head beside a 120 mm mast is an interference rather than
- * a light rig. A SLIMPAR12 is 89 mm deep and its yoke and clamp add 60, so 150
- * of the truss's 220 swallows the lot and the wing folds with the fixtures on.
- */
-function lightWing(lib, isLeft) {
-  const g = new THREE.Group()
-  const t = truss(WING_L, WING_S, WING_S, lib.alu, { chord: mm(35), bays: 5 })
-  t.position.y = -WING_S / 2
-  g.add(t)
-  // Pin-and-R-clip coupler at the root.
-  g.add(slab([mm(26), mm(260), mm(260)], lib.galv, { pos: [mm(13), 0, 0] }))
-
-  if (isLeft) {
-    // ELIMINATOR MINI PAR BAR — 730 x 89 x 205, four RGBW cans on one bar.
-    g.add(slab([mm(730), mm(89), mm(205)], lib.aluDark, { pos: [mm(430), -mm(20), 0] }))
-    for (let i = 0; i < 4; i++) {
-      const x = mm(160) + i * mm(180)
-      g.add(slab([mm(120), mm(40), mm(120)], i % 2 ? lib.ledMagenta : lib.ledCyan, { pos: [x, -mm(72), 0] }))
-      const beam = new THREE.PointLight(i % 2 ? 0xff3cae : 0x33e0ff, 2.6, 6, 2)
-      beam.position.set(x, -mm(150), 0)
-      g.add(beam)
-    }
-  } else {
-    // Three SLIMPAR12s on CCLAMPs, alternating up and down the chord.
-    for (let i = 0; i < 3; i++) {
-      const x = mm(200) + i * mm(300)
-      g.add(slab([mm(60), mm(90), mm(50)], lib.galv, { pos: [x, mm(75), 0] }))
-      g.add(slab([mm(193), mm(89), mm(180)], lib.aluDark, { pos: [x, -mm(10), 0] }))
-      g.add(slab([mm(150), mm(30), mm(140)], i % 2 ? lib.ledWarm : lib.ledMagenta, { pos: [x, -mm(64), 0] }))
-      const beam = new THREE.PointLight(i % 2 ? 0xffb347 : 0xff3cae, 2.6, 6, 2)
-      beam.position.set(x, -mm(150), 0)
-      g.add(beam)
-    }
-  }
-  // Safety bond per fixture, plus the tip stay back to the coupler plate.
-  g.add(stay(lib, [mm(20), mm(100), 0], [WING_L - mm(60), mm(20), 0], { radius: mm(4) }))
-  return g
-}
 
 /** A leg strut, authored along +X from its hinge — the frame it stows in. */
 function legStrut(lib, length) {
