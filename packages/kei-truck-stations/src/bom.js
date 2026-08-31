@@ -63,6 +63,11 @@ const mm = (v) => v
 // THREE BOWLS, NOT TWO. Two wash compartments plus a SEPARATE hand-wash basin.
 // The separate basin is the requirement people most often miss.
 //
+// AND NO EXTRACT AT ALL. An open-air stall is not a kitchen car: with the sky
+// over the griddle there is nothing to duct to, so the hood, the grease filter,
+// the 150 mm flexible and the 200 mm 有圧換気扇 come off the list. That is 16 kg
+// and ¥48,873, and it is most of what pays for the serving table.
+//
 // THE GAS BOTTLE CANNOT BE ON THE DECK. It has to be outdoors, upright, vented
 // at low level (propane sinks) and 2 m from any flame. On a 1940 mm deck with a
 // griddle on it, 2 m does not exist — so the external rear locker is not
@@ -139,18 +144,6 @@ export const YATAI = [
     cat: 'gas', maker: 'custom (アルミ)', model: 'ボンベ庫 — vented cylinder locker 340 × 340 × 620 internal',
     size: [380, 680, 380], kg: 8.5, jpy: 28000, qty: 1, where: 'fabrication',
     mount: 'Bolted M10 to the rear crossmember, outboard of the tail. Low-level louvres.',
-    conf: 'low',
-  },
-  {
-    cat: 'extract', maker: '三菱電機', model: 'EWF-20YSA 産業用有圧換気扇 200 mm',
-    size: [300, 250, 300], kg: 7.5, jpy: 17173, qty: 1, where: 'モノタロウ / ヨドバシ',
-    mount: 'Four corner flange holes into a ply bulkhead on the flue.',
-    conf: 'medium',
-  },
-  {
-    cat: 'extract', maker: '汎用 SUS304 + アルミフレキ', model: '排気フード + グリスフィルター + φ150 ダクト + ベントキャップ',
-    size: [700, 450, 300], kg: 8.5, jpy: 31700, qty: 1, where: '合羽橋 / モノタロウ',
-    mount: 'Hood riveted to the worktop backsplash; the flexible duct compresses to a quarter of its length, which is what lets the flue telescope.',
     conf: 'low',
   },
   {
