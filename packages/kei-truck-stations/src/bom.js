@@ -154,7 +154,7 @@ export const YATAI = [
     conf: 'low',
   },
   {
-    cat: 'front of house', maker: '高山商店 (上野) / 高橋提燈', model: '尺3丸 和紙提灯 380φ × 430h (文字入れ)',
+    cat: 'front of house', maker: '高橋提燈 (東京) / オゼキ (岐阜提灯)', model: '尺3丸 和紙提灯 380φ × 430h (文字入れ)',
     size: [380, 430, 380], kg: 0.35, jpy: 12000, qty: 1, where: '上野 / 浅草',
     mount: 'Wire hoops top and bottom; hangs from a hook.',
     conf: 'high',
@@ -312,7 +312,7 @@ export const SOUND = [
 // not sloppiness — it is how the trade works. A chochin is ordered by size, 張り
 // and crest; a saisenbako by 寸 and timber; a shimenawa by length and thickness.
 // So the "model" column here is the ORDER SPEC a shop would take, not a SKU
-// somebody invented, and where a maker is named (高山商店 for the lanterns,
+// somebody invented, and where a maker is named (オゼキ for the lanterns,
 // 高岡銅器 for the bell) it is a real house that takes that order.
 //
 // The mount column matters more here than anywhere else on the truck, because
@@ -327,45 +327,45 @@ export const SOUND = [
 // home-centre section at a real price.
 export const HOKORA = [
   {
-    cat: 'chochin lantern', maker: '高山商店 (岐阜提灯)', model: '尺丸 白張提灯 (径約300mm) 家紋・社号入れ 別注',
-    size: [300, 420, 300], kg: 0.35, jpy: 14300, qty: 2, where: '高山商店 直接発注、または岐阜提灯取扱の神具店・Amazon.co.jp出品。家紋/文字入れは受注生産、納期2〜3週間。無地の白張なら在庫品あり。',
+    cat: 'chochin lantern', maker: 'オゼキ (岐阜提灯協同組合)', model: '尺丸 白張提灯 (径約300mm) 家紋・社号入れ 別注',
+    size: [300, 420, 300], kg: 0.35, jpy: 14300, qty: 2, where: 'オゼキ（岐阜提灯協同組合員）ほか浅野商店・平出商店、または岐阜提灯取扱の神具店・Amazon.co.jp出品。家紋/文字入れは受注生産、納期2〜3週間。無地の白張なら在庫品あり。',
     mount: 'The chochin has exactly ONE approved attachment provision: the 吊り手 (steel hanging bail) riveted into the 上輪 (top ring). The 竹ひご+和紙 body has literally no mount points and must never be pierced, clamped, screwed or taped — a screw into the 輪 splits it. Hang from a 真鍮フック or a stainless eye screwed into the kasagi underside, through the 吊り手 only. The 下輪 is a locating ring, not a load path, so nothing hangs off the bottom. For transit the lantern collapses flat (~40mm) and drops into a padded plywood well in the stow deck with a 5mm felt liner and a lid — a hung chochin will beat itself to death against the pillars on the road.',
     capture: true,
     conf: 'medium',
-    note: '高山商店 is a real Gifu chochin house; chochin are sold by descriptive spec (size + 張り + 紋), not by catalogue part number, so the \'model\' here is the order spec rather than an invented SKU. Rejected 高張提灯 (pole-mounted): the 2m pole exceeds the 1120mm stowed headroom and needs its own stayed base.',
+    note: 'オゼキ is a real Gifu chochin house — 高山商店, which the first draft named, sells ビニール提灯 and does not make washi lanterns at all; chochin are sold by descriptive spec (size + 張り + 紋), not by catalogue part number, so the \'model\' here is the order spec rather than an invented SKU. Rejected 高張提灯 (pole-mounted): the 2m pole exceeds the 1120mm stowed headroom and needs its own stayed base.',
   },
   {
     cat: 'chochin light source', maker: 'generic (岐阜提灯店 取扱)', model: '提灯用LED電池灯 単3×2 電球色 (ちょうちん用LEDローソク)',
-    size: [45, 110, 45], kg: 0.08, jpy: 1800, qty: 2, where: '提灯を買う店で同時手配（高山商店ほか岐阜提灯店の付属品棚）、またはAmazon.co.jp「提灯 LED 電池」。在庫品。',
+    size: [40, 180, 40], kg: 0.08, jpy: 2080, qty: 2, where: '提灯を買う店で同時手配（岐阜提灯店の付属品棚）、またはAmazon.co.jp「提灯 LED 電池」。在庫品。',
     mount: 'Designed to mount to the chochin and nothing else: the unit is a candle-shaped LED on a base that either sits inside the 下輪 or clips to it with a sprung wire. That clip IS the approved provision — no adhesive, no screws, no modification to the paper or the ribs. Nothing about the chochin is drilled. Battery change is by lifting the unit out through the collapsed lantern\'s bottom ring.',
-    conf: 'low',
-    note: 'Real product category, sold by every chochin shop, but I could not pin a specific maker\'s part number without web access — treat the figure as an order-desk item, not a SKU. Do NOT use a real candle: an open flame in a vermilion-lacquered paper-and-cedar box on a truck bed is a fire, and カシュー coating is solvent-borne.',
+    conf: 'medium',
+    note: 'Sold by every chochin shop under a dozen names — 「ちょうちん安光」, LC301, 盆提灯用LEDローソク電池灯 — from ¥1,265 to ¥2,090. An order-desk item rather than a SKU, and its 165 to 185 mm length is the figure that matters, because it sets the collapsed lantern\'s stow depth. Do NOT use a real candle: an open flame in a vermilion-lacquered paper-and-cedar box on a truck bed is a fire, and カシュー coating is solvent-borne.',
   },
   {
     cat: 'suzu bell', maker: '高岡銅器 (神仏具卸 経由)', model: '本坪鈴 四寸 (φ120mm) 真鍮磨き',
-    size: [120, 140, 120], kg: 2, jpy: 27500, qty: 1, where: '神具店（伊勢・宮忠、翠雲堂ほか）、Amazon.co.jp/楽天の神具専門店出品。四寸は定番在庫、通常3〜7日。',
-    mount: 'Cast one-piece bell. The ONLY attachment provision is the integral 吊り環 (cast eye/loop) at the crown — no threads, no flange, no holes anywhere else. Suspend it from an M8 stainless eye bolt bolted THROUGH the kasagi (nut and large washer on top, not a wood screw) with a rated 3mm stainless shackle or a 鈴鐶 between eye bolt and 吊り環. Never bolt through, drill or clamp the bell body — it is a resonator and a hole kills the tone as surely as it kills the casting. Budget 2.0kg plus the 鈴緒\'s pull load (call it 40kg dynamic when a child hauls on it) into the kasagi; the kasagi therefore needs a hardwood or steel-plated core over the eye bolt, not just 檜.',
+    size: [122, 150, 122], kg: 1.7, jpy: 20700, qty: 1, where: '神具店（伊勢・宮忠、翠雲堂ほか）、Amazon.co.jp/楽天の神具専門店出品。四寸は定番在庫、通常3〜7日。',
+    mount: 'Cast one-piece bell. The ONLY attachment provision is the integral 吊り環 (cast eye/loop) at the crown — no threads, no flange, no holes anywhere else. Suspend it from an M8 stainless eye bolt bolted THROUGH the kasagi (nut and large washer on top, not a wood screw) with a rated 3mm stainless shackle or a 鈴鐶 between eye bolt and 吊り環. Never bolt through, drill or clamp the bell body — it is a resonator and a hole kills the tone as surely as it kills the casting. Budget 1.7kg plus the 鈴緒\'s pull load (call it 40kg dynamic when a child hauls on it) into the kasagi; the kasagi therefore needs a hardwood or steel-plated core over the eye bolt, not just 檜.',
     capture: true,
     conf: 'medium',
     note: 'Four-sun is small for a public shrine but correct for a hokora at this scale, and it keeps the kasagi load sane. A 六寸 brass bell is ~5kg and would need the eye bolt taken down into the pillar, not the lintel.',
   },
   {
-    cat: 'suzuo bell rope', maker: '神具店 別注品', model: '鈴緒 紅白 太さ45mm × 長さ1200mm (麻芯・化繊巻)',
-    size: [60, 1200, 60], kg: 0.8, jpy: 13200, qty: 1, where: '神具店（宮忠ほか）。太さ×長さ指定の別注、納期1〜2週間。既製の1.2m紅白なら在庫あり。',
+    cat: 'suzuo bell rope', maker: '神具店 別注品', model: '鈴緒 紅白 太さ36mm × 長さ1200mm 四尺 (麻芯・化繊巻)',
+    size: [36, 1200, 36], kg: 0.8, jpy: 13200, qty: 1, where: '神具店（宮忠ほか）。太さ×長さ指定の別注、納期1〜2週間。既製の1.2m紅白なら在庫あり。',
     mount: 'A rope: no hardware, and that is its correct provision — it terminates in a 上部の環/結び designed to be lashed or hooked to the bell\'s 吊り環 or to the same shackle. Nothing is fastened to the rope\'s body. Because it will be pulled sideways as well as down, the shackle above it must be the rated part, not the rope. Stows by coiling into the same plywood ring as the shimenawa; do not leave it hanging in transit — a swinging 800g rope will chip the vermilion off a pillar in one trip.',
     conf: 'medium',
     note: 'Chose 化繊巻 over pure 麻: the piece lives outdoors on a truck and hemp goes furry and grey in one wet season. Length 1200mm is set by the deployed kasagi height minus a comfortable grab at ~1100mm off the deck.',
   },
   {
     cat: 'offering box', maker: '神具店 (国産檜)', model: '賽銭箱 一尺 (幅303mm) 檜製 格子天板・鍵付',
-    size: [303, 250, 220], kg: 3.5, jpy: 28600, qty: 1, where: '神具店（宮忠、神棚の里ほか）、Amazon.co.jp神具専門店出品。一尺は定番、在庫〜2週間。',
+    size: [303, 250, 220], kg: 3.5, jpy: 45000, qty: 1, where: '神具店（宮忠、神棚の里ほか）、Amazon.co.jp神具専門店出品。一尺は定番、在庫〜2週間。',
     mount: 'Mitred solid-hinoki box: literally no threaded inserts, no flange, no bolt-through provision anywhere. It must be captured, not fastened through its faces. Build a 12mm plywood well in the deck sized 306×223mm with a 3mm felt-lined rebate so it drops in with no rattle, then take two M6 stainless bolts UP through the deck into the box\'s bottom 桟 (the internal cleats are the only timber with enough meat) — or, if you won\'t drill the box at all, one ラチェット荷締めベルト over the lid seat into two deck-mounted D-rings. Never screw into the sides or the lid frame: they are 12mm boards and the box is the one item on the module a stranger will put their hands on.',
     capture: true,
     conf: 'medium',
     note: 'Sold by 寸 size and material rather than part number. A 一尺 box is deliberately modest — anything bigger reads as a collection tin rather than shrine carpentry, and it also has to clear the 1120mm stowed headroom with the platform folded down over it.',
   },
   {
-    cat: 'sakaki vase', maker: '瀬戸物 神具 (白陶器)', model: '榊立 三寸 白 (高さ約95mm, 口径約45mm) 一対',
+    cat: 'sakaki vase', maker: '瀬戸物 神具 (白陶器)', model: '榊立 三寸 白 (高さ約95mm, 口径約45mm)',
     size: [55, 95, 55], kg: 0.15, jpy: 660, qty: 2, where: '神具店・ホームセンター仏具コーナー（コーナン/カインズ）、Amazon.co.jp。常時在庫、数百円台。',
     mount: 'Glazed ceramic — literally no mount points, and adhesive will not bond reliably to a glazed foot. Capture with a φ58mm × 12mm deep counterbored well routed into the hinoki offering platform, lined with a 2mm EPDM ring so the glaze doesn\'t chip against end grain. For transit the vases lift out entirely into a foam-cut stow box: a water-filled vase on a moving truck bed is a spill onto the カシュー finish, which will bloom. Fill on site only.',
     capture: true,
@@ -373,8 +373,8 @@ export const HOKORA = [
     note: 'Cheap and replaceable, which is the point — this is the one item that will get broken. Buy four, install two. Use 造花の榊 (artificial sakaki, ~¥1,000/pair, same shops) rather than cut sakaki unless the piece is deployed the same day.',
   },
   {
-    cat: 'offering stand', maker: '木曽檜 神具', model: '三方 六寸 (折敷182mm角) 木曽檜 くり形三方',
-    size: [182, 105, 182], kg: 0.5, jpy: 4400, qty: 1, where: '神具店（宮忠ほか）、Amazon.co.jp神具専門店。六寸は定番在庫。',
+    cat: 'offering stand', maker: '静岡木工 / 神棚の里 (吉野桧)', model: '三宝 六寸 (折敷182mm角) 吉野桧 くり形三方',
+    size: [182, 105, 182], kg: 0.5, jpy: 2400, qty: 1, where: '神具店（宮忠ほか）、Amazon.co.jp神具専門店。六寸は定番在庫。',
     mount: 'Feet only — a three-sided 台 with the traditional くり形 apertures cut through each side and a loose 折敷 top. No fixings, no inserts, and the くり形 are decorative cut-outs, not rated handle apertures, so don\'t run a strap through them. Capture in a 3mm-deep rebate routed into the platform with a removable hinoki cleat at the rear; the whole stand lifts out for transit and stows flat. If it must stay put, a single stainless 皿ビス up through the deck into the rear foot is the only acceptable fixing — the sides are 9mm and will split.',
     capture: true,
     conf: 'medium',
@@ -382,7 +382,7 @@ export const HOKORA = [
   },
   {
     cat: 'gohei / shide', maker: '神具店 (奉書紙・木串)', model: '御幣 中 (高さ約300mm) 木串付 + 紙垂用 奉書紙 半紙判',
-    size: [90, 300, 30], kg: 0.05, jpy: 1650, qty: 2, where: '神具店、Amazon.co.jp神具店出品。奉書紙は書道用品店・伊東屋でも可。在庫品。',
+    size: [90, 300, 30], kg: 0.05, jpy: 3500, qty: 2, where: '神具店、Amazon.co.jp神具店出品。奉書紙は書道用品店・伊東屋でも可。在庫品。',
     mount: 'A paper-and-wood object with a 木串 (stick) — it is designed to be stood in the 三方 or slotted into a 台, and that slot is the entire mount story. Drill a φ9mm × 25mm blind hole in a hinoki block let into the platform, or use the 三方. Nothing is fastened to the paper. Treat as a consumable: 紙垂 are hand-cut from 奉書紙 to a standard four-fold pattern and are replaced whenever they get rain-marked — cut a dozen at a time and stow them flat between two boards.',
     conf: 'medium',
     note: 'Sold by size (小/中/大), not part number. The 紙垂 for the shimenawa are separate from the 御幣 and get cut to suit the rope\'s length — four on a 1200mm 注連縄.',
@@ -395,41 +395,41 @@ export const HOKORA = [
     note: 'ビニール（合成藁）over 本藁 specifically because this thing lives outdoors on a vehicle: real rice straw sheds, mildews and comes apart in one wet season, and the difference is invisible at two metres. Real straw is the right call only if the piece is rebuilt annually, which is arguably the more respectful answer — worth deciding deliberately rather than by default.',
   },
   {
-    cat: 'shrine curtain', maker: '神具店 (テトロン製)', model: '神前幕 巴紋 巾三尺(900mm) × 丈一尺(300mm) テトロン',
-    size: [900, 300, 5], kg: 0.4, jpy: 8800, qty: 1, where: '神具店（宮忠ほか）、Amazon.co.jp神具専門店。既製三尺は在庫、紋替え別注は2週間。',
+    cat: 'shrine curtain', maker: '神具店 (テトロン製)', model: '神棚幕(神前幕) 巴紋 紫 巾三尺(900mm) × 丈一尺(300mm) テトロン',
+    size: [900, 300, 5], kg: 0.4, jpy: 3080, qty: 1, where: '神具店（宮忠ほか）、Amazon.co.jp神具専門店。既製三尺は在庫、紋替え別注は2週間。',
     mount: 'Sewn 乳 (chi — cloth loops) along the top hem, typically five to seven on a three-shaku curtain. Those loops are the ONE approved provision. Thread a φ6mm stainless rod or a taut rope through the 乳 and support the rod on two brass hooks in the pillars, or on the nuki itself. Never pin, staple, screw, clip or velcro the cloth — the 乳 exist precisely so nothing pierces the field, and a 巴紋 with a hole through it is worse than no curtain. In transit the curtain comes off the rod, rolls (not folds — creases across the 紋 are permanent in テトロン) around a 50mm tube and stows in the dry box.',
     conf: 'medium',
     note: 'テトロン rather than 綿: it sheds rain, doesn\'t shrink and holds vermilion dye against UV, which matters when the module spends its life outdoors. Width is set at 900mm to match the torii\'s clear span between pillar inner faces.',
   },
   {
     cat: 'shinkyo mirror', maker: '神具店 (真鍮鏡 + 木製雲形台)', model: '神鏡 二寸 (鏡径60mm) 雲形台付',
-    size: [110, 150, 55], kg: 0.35, jpy: 4950, qty: 1, where: '神具店、Amazon.co.jp神具専門店、ホームセンターの神具コーナー。二寸は定番在庫。',
+    size: [95, 125, 30], kg: 0.35, jpy: 4950, qty: 1, where: '神具店、Amazon.co.jp神具専門店、ホームセンターの神具コーナー。二寸は定番在庫。',
     mount: 'Two parts, and only one of them can be touched. The 鏡 itself has literally no mount points — it drops into a machined slot in the 雲形台 and is held by fit alone. The 台 has feet only: no inserts, no flange. Capture the 台 in a 3mm rebate routed into the 御神体棚 with a hinoki fillet in front, or run one M4 stainless 皿ビス up through the shelf into the 台\'s solid base block — the base is the only part with acceptable meat, and never into the cloud carving, which is 6mm and cross-grained. The mirror lifts out for transit; a 60mm brass disc rattling in a wooden slot over 1940mm of leaf-sprung kei truck will polish its own edge off.',
     capture: true,
     conf: 'medium',
     note: '二寸 is small but sized to the hokora\'s internal height; a 三寸 (¥8,000-ish) would crowd the 三方 in front of it.',
   },
   {
-    cat: 'shrine lantern', maker: '神具店 (木製神前灯籠)', model: '神前灯籠 木製 電池式 一対 (高さ約250mm)',
-    size: [120, 250, 120], kg: 0.4, jpy: 6000, qty: 2, where: '神具店、Amazon.co.jp神具専門店。コード式(AC)は定番在庫、電池式は取扱店が限られ要確認。',
+    cat: 'shrine lantern', maker: '神具店 (木製神前灯籠)', model: 'LED神前灯籠 木目屋根 6号 電池式 (高さ約250mm)',
+    size: [120, 250, 120], kg: 0.4, jpy: 6139, qty: 2, where: '神具店、Amazon.co.jp神具専門店。コード式(AC)は定番在庫、電池式は取扱店が限られ要確認。',
     mount: 'Wooden lantern on a turned or blocked base. AC (コード式) versions have a φ8mm cord grommet hole through the base which doubles as a usable bolt-through provision — an M6 stainless bolt up through the platform into a T-nut in the base. Battery versions typically have feet only and literally nothing else, in which case capture in a shallow 3mm well with a rear cleat. Do not screw into the 火袋 (the paper/shoji light box): it is 4mm frame stock. Whichever version, the lantern lifts out for transit.',
     capture: true,
-    conf: 'low',
+    conf: 'medium',
     note: 'I could not confirm a battery-powered 神前灯籠 as a current stocked line — the standard product is コード式 for a kamidana. If the battery version doesn\'t exist at order time, take the AC pair and run them off the Jackery\'s AC outlet through a short cord dressed inside a pillar, or drop this line entirely and let the Snow Peak lanterns do the night work. Marked low deliberately: real category, unconfirmed current variant.',
   },
   {
     cat: 'LED uplight', maker: 'スノーピーク (Snow Peak)', model: 'たねほおずき ES-041',
-    size: [57, 63, 57], kg: 0.055, jpy: 4400, qty: 3, where: 'スノーピーク直営/オンラインストア、Amazon.co.jp、ヨドバシ.com、好日山荘。定番在庫、当日〜翌日。',
+    size: [62, 75, 62], kg: 0.095, jpy: 4400, qty: 3, where: 'スノーピーク直営/オンラインストア、Amazon.co.jp、ヨドバシ.com、好日山荘。定番在庫、当日〜翌日。',
     mount: 'Two designed attachment provisions and no drilling: an integrated MAGNET in the base, and a shock-cord loop with a moulded hook at the top. Hang two from small brass hooks screwed into the underside of the nuki (they weigh 55g — a 4×15 brass screw is ample), and magnet the third to a 20mm × 2mm steel washer let flush into the underside of the kasagi and secured from above, so nothing steel is visible. The housing is a sealed IPX4 shell: do not drill it, do not clamp it, do not glue it. Runs on 3 × AAA, so it is independent of the power station — the shrine still lights if the battery is flat.',
     conf: 'medium',
     note: 'Product and mount features I\'m confident in; dimensions and current price estimated. Chose these over a mains LED strip because the warm dimmable glow reads as lantern light rather than display lighting, and because the magnet-and-hook mount means zero fasteners into the vermilion work. Snow Peak ほおずき ES-070 (larger, ~¥8,000) is the alternative if you want one bright source instead of three soft ones.',
   },
   {
     cat: 'power station', maker: 'Jackery', model: 'Jackery ポータブル電源 300 Plus (288Wh / AC300W)',
-    size: [230, 167, 155], kg: 3.75, jpy: 34800, qty: 1, where: 'Jackery Japan公式 (jackery.jp)、Amazon.co.jp、ヨドバシ.com。在庫潤沢、実売はセールで¥25,000前後。',
+    size: [230, 167, 155], kg: 3.75, jpy: 29800, qty: 1, where: 'Jackery Japan公式 (jackery.jp)、Amazon.co.jp、ヨドバシ.com。在庫潤沢、実売はセールで¥25,000前後。',
     mount: 'Moulded carry handle and rubber FEET ONLY — literally no threaded inserts, no bolt-through holes, no rack ears, no flange. The case is the battery enclosure and must never be drilled or screwed into. Capture it: a 12mm plywood well 236×160mm × 60mm deep, lined with 10mm EVA foam, with the vents unobstructed on the fan side, plus one ラチェット荷締めベルト over the top into two deck D-rings — or two 面ファスナーベルト through slots cut in the well walls. Orient it so the AC outlet faces the pillar cable route, and leave 50mm clearance at the fan end. It lives in the truck; it is not part of the fold-out.',
     capture: true,
-    conf: 'medium',
+    conf: 'high',
     note: 'Confirmed today that jackery.jp\'s current catalogue carries a 288Wh unit in this class (listed there as Explorer 300D alongside the 300 Plus lineage) — check which designation is actually orderable at purchase. 288Wh is generous for the load: two LED lantern pairs plus a phone is under 20W, so this is several nights. Rejected anything over 500Wh purely on mass — every kg here is a kg not available for copper and hinoki.',
   },
   {
@@ -456,14 +456,14 @@ export const HOKORA = [
   },
   {
     cat: 'roofing fasteners', maker: '銅製 (板金用)', model: '銅釘 25mm (平頭) 1kg箱 + 銅製吊子 60mm 100枚',
-    size: [150, 80, 100], kg: 1, jpy: 3500, qty: 1, where: 'MonotaRO、板金材料商、金物店（浅草橋・蔵前の建築金物店）。在庫品。',
+    size: [150, 80, 100], kg: 1.6, jpy: 10000, qty: 1, where: 'MonotaRO、板金材料商、金物店（浅草橋・蔵前の建築金物店）。在庫品。',
     mount: 'Consumable fastener — it is the mount provision for the copper above. Nails go through the 吊子 into the 12mm plywood substrate only, never through the visible copper face. MUST be copper, not steel and not galvanised: dissimilar metals in contact with a copper roof set up galvanic corrosion, and the runoff will stain the vermilion below within a single wet season — the green streak down a red pillar is the classic tell of a roof fastened with the wrong nails. Same rule applies to any screw within the copper\'s drip line: brass, copper or 316 stainless only.',
-    conf: 'low',
+    conf: 'medium',
     note: 'Real product category stocked by every 板金材料商; I could not confirm a current SKU or price without web access, so treat the figure as a counter order. Buy the cleats and nails from the same supplier as the sheet.',
   },
   {
-    cat: 'finish - vermilion', maker: 'カシュー株式会社', model: 'カシュー 朱色 1kg + カシュー専用下塗り 1kg + うすめ液',
-    size: [110, 150, 110], kg: 1.2, jpy: 6500, qty: 2, where: 'Amazon.co.jp、東急ハンズ、塗料専門店（大阪・道具屋筋、東京・新橋の塗料店）。1kg缶は在庫品。色番号は発注時に要確認。',
+    cat: 'finish - vermilion', maker: 'カシュー株式会社', model: 'カシュー 自然乾燥 NO.69 朱 (T011-22-7569) 1kg + 専用下塗り 1kg + うすめ液',
+    size: [110, 150, 110], kg: 1.2, jpy: 19000, qty: 2, where: 'Amazon.co.jp、東急ハンズ、塗料専門店（大阪・道具屋筋、東京・新橋の塗料店）。1kg缶は在庫品。色番号は発注時に要確認。',
     mount: 'Not a mounted item — a coating. Stated for completeness: it goes on the hinoki pillars, kasagi and nuki after the 鬼目ナット inserts are fitted, not before, or the threads fill with lacquer. Mask every insert and every mating face of a fold joint; カシュー builds a film thick enough to bind a 0.3mm-clearance hinge pocket shut. Three coats over the primer, sanded between, and give it a full week to harden before the module is folded for the first time.',
     conf: 'medium',
     note: 'カシュー is a genuine cashew-nutshell lacquer sold in consumer cans and is the standard urushi-look coating for shrine and temple work in Japan — but I could not verify the current colour number for 朱 against a live page, so specify by colour name at the counter and do not order against a guessed number. The traditional alternative is 弁柄 (bengara) iron-oxide pigment ground in 荏油 or 柿渋: cheaper, properly matte, historically correct for a wayside hokora, and far less durable on a piece that lives on a vehicle. Solvent-borne — mask the copper, and never bring the LED candles near a wet coat.',
@@ -482,41 +482,42 @@ export const HOKORA = [
 // The camper is the module where the list, not the geometry, is the binding
 // constraint — and the number that binds it is 350 kg.
 //
-// Two things on this list are heavy enough to be design decisions rather than
-// purchases. The EcoFlow WAVE 2 is 14.5 kg of portable air conditioner — a sixth
-// of the entire fitted kit for one appliance — and it survives only because the
-// shell went to aluminium composite instead of plywood, which bought about
-// 35 kg. The pair of Seitz S4 windows is 11 kg of acrylic and frame, which is a
-// lot for glazing, and they stay: a camper with no opening windows in a Japanese
-// August is a box.
+// THIS LIST TOTALS 98 KG AND THE MODULE FITS 84 OF IT. The difference is one
+// line: the EcoFlow WAVE 2, 14.5 kg of portable air conditioner. It survived the
+// first draft and then did not survive the check, because a Seitz S4 turns out
+// to weigh 8.5 kg rather than the 5.5 the draft assumed and two of them took the
+// margin. The line stays here with its price, because the trade — an air
+// conditioner, or fourteen kilograms of anything else — is the decision, and
+// deleting the row would hide it. What it buys instead is the roof fan running
+// all night off a battery that is already aboard.
 //
-// WATER IS 20 L, CARRIED. Two full 20 L tanks is 40 kg and 40 kg is the entire
-// margin, so the second tank on this list is exactly what it looks like — a
-// spare, filled at the tap, not carried full.
+// WATER IS 20 L, CARRIED. Two full 20 L tanks is 40 kg and 40 kg is more than
+// the whole margin, so the second tank on this list is exactly what it looks
+// like — a spare, filled at the tap, not carried full.
 //
 // The bellows is 11号帆布 by the metre rather than a proprietary pop-top skirt,
 // because nobody sells a pop-top skirt for a truck this size and canvas is what
 // the coachbuilders use.
 export const CABIN = [
   {
-    cat: 'sleeping / bunk mattress', maker: 'DOD (ディーオーディー)', model: 'ソトネノキワミ D (Sotone-no-Kiwami D, inflatable mat, 10 cm)',
-    size: [1280, 100, 1950], kg: 4.2, jpy: 19800, qty: 1, where: 'Amazon.co.jp / DOD公式オンラインストア / ヨドバシ・ドット・コム。DOD\'s own SKU code (CM2-xxx series) not verified this session — order by product name ソトネノキワミD. Normally in stock, 2-5 day lead.',
-    mount: 'Literally no mount points — a TPU-welded inflatable bladder in a fabric shell; the only hard feature is the inflation valve boss, which is a seal, not an anchor. Capture it geometrically: rout the cabover bunk deck as a shallow well with a 12 mm ply kerb 60 mm proud on all four sides (inside dim 1300 x 1980), so the mat cannot walk while the bunk slides its 950 mm. For travel add two 25 mm polyester webbing straps on Fastex buckles running across the mat, anchored to M6 rivet nuts (4 off, 4 mm ply/alu deck skin, steel backing washers) set into the bunk deck outside the kerb. Nothing is screwed, stapled or hooked into the mat itself.',
+    cat: 'sleeping / bunk mattress', maker: 'DOD (ディーオーディー)', model: 'ソトネノキワミ M / CM2-650 (1150 × 2080 × 100)',
+    size: [1150, 100, 2080], kg: 6.3, jpy: 27500, qty: 1, where: 'DOD公式オンラインストア / ヨドバシ / Amazon.co.jp。M は現在 販売終了、後継は同幅の ソトネノキワミエアー。',
+    mount: 'Literally no mount points — a TPU-welded bladder in a fabric shell whose only hard feature is the inflation valve boss, which is a seal and not an anchor. Capture it geometrically: rout the cabover bunk deck as a shallow well with a 12 mm ply kerb 60 mm proud all round, so the mat cannot walk while the bunk slides its 950 mm. For travel add two 25 mm webbing straps on Fastex buckles across the mat, anchored to M6 rivet nuts set into the deck outside the kerb. Nothing is screwed, stapled or hooked into the mat itself.',
     capture: true,
     conf: 'medium',
-    note: 'Chosen almost entirely because its 128 cm inflated width is a near-exact match for the 1280 mm platform — a Japanese double futon (140 cm) overhangs and a semi-double (120 cm) leaves 80 mm of cold gap. Rejected foam-only: 10 cm of air over a slide-out deck also isolates the plywood drumming. Weight and price are estimates.',
+    note: 'DOD list nine ソトネノキワミ SKUs — S/M/L across two tiers — and no D; the D in the first draft was invented, and that is exactly the kind of part number that reads plausible and buys the wrong thing. The M at 1150 wide is also the one that FITS: the L is 1380, and a 1380 mat on a 1280 bunk rides up the sides all night.',
   },
   {
     cat: 'sleeping / lower platform + day bench', maker: 'マニフレックス (Magniflex)', model: 'メッシュ・ウィング セミダブル (tri-fold high-resilience Elioce core)',
-    size: [1200, 110, 1980], kg: 9.3, jpy: 49500, qty: 1, where: 'マニフレックス正規販売店 / Amazon.co.jp / 楽天。Made to order in some colours — allow 1-2 weeks.',
+    size: [1170, 110, 1980], kg: 8.0, jpy: 47300, qty: 1, where: 'マニフレックス正規販売店 / Amazon.co.jp / 楽天。Made to order in some colours — allow 1-2 weeks.',
     mount: 'No mount points; a foam block in a zipped removable cover, and the zip is not structural. Two capture modes. Flat: the same 12 mm ply kerb around the main 1940 mm deck section holds it. Folded into a day bench: two 50 mm cam-buckle straps pass right around the tri-folded block and hook to two M8 stainless D-rings bolted through the floor deck on 40 x 40 x 3 mm backing plates. Do NOT screw hinges, snap studs or Velcro plates to the cover — the cover is meant to come off and be washed, and a fastener through it tears the foam edge.',
     capture: true,
     conf: 'medium',
     note: 'Folds in three so the same mattress is the mattress at night and the porch bench by day, which is the whole reason for a tri-fold over a one-piece. Rejected a 敷き布団: cotton futon in a pop-top with a fabric bellows will mildew in a Japanese summer. Price and weight for the SD size are approximate.',
   },
   {
-    cat: 'sleeping / bags', maker: 'スノーピーク (Snow Peak)', model: 'セパレートオフトンワイド 700 / BDD-104',
-    size: [250, 250, 500], kg: 1.65, jpy: 46200, qty: 2, where: 'Snow Peak直営 / Amazon.co.jp / ヨドバシ / 好日山荘。Seasonal stock; commonly available, allow a week in peak season.',
+    cat: 'sleeping / bags', maker: 'スノーピーク (Snow Peak)', model: 'セパレートオフトンワイド700 / BDD-103',
+    size: [250, 250, 500], kg: 2.05, jpy: 44800, qty: 2, where: 'Snow Peak直営 / Amazon.co.jp / ヨドバシ / 好日山荘。Seasonal stock; commonly available, allow a week in peak season.',
     mount: 'No mount points at all beyond the stuff sack\'s drawcord and its two compression straps — those are for compressing the bag, not for restraining mass, though at 1.65 kg the mass case is trivial. Stow both bags in the cabover nose locker (the dead volume ahead of the sleeping area once the bunk is run out) behind a 6 mm shockcord net laced to six M5 eye bolts in rivet nuts around the locker mouth. Nothing is fixed to the bag.',
     capture: true,
     conf: 'medium',
@@ -524,23 +525,23 @@ export const CABIN = [
   },
   {
     cat: 'soft goods / pop-top bellows', maker: '富士金梅 (川島商事)', model: '11号帆布 (paraffin-finished cotton canvas, 920 mm bolt width)',
-    size: [1900, 400, 1250], kg: 3.2, jpy: 13600, qty: 1, where: '生地の森 / 帆布屋 / オカダヤ新宿本店 — sold by the metre off the bolt; buy an 8 m cut for a 6.3 m lid perimeter at 400 mm rise plus seam and keder allowance. In stock, cut to order.',
+    size: [1900, 400, 1250], kg: 3.2, jpy: 11500, qty: 1, where: '生地の森 / 帆布屋 / オカダヤ新宿本店 — sold by the metre off the bolt; buy an 8 m cut for a 6.3 m lid perimeter at 400 mm rise plus seam and keder allowance. In stock, cut to order.',
     mount: 'Fabric has no fixings whatsoever, so ALL load goes into mechanical capture at both edges. Sew a 6 mm polypropylene keder (welt) cord into the top and bottom hems, then slide each hem into an aluminium keder/awning rail — Misumi extruded profile or a Takigen weatherstrip channel — screwed to the pop-top lid rim and to the shell top rail with M4 x 12 stainless pan screws into rivet nuts at 100 mm centres, on a continuous butyl tape bead. Corners get a moulded radius in the rail, never a mitre. Never staple the canvas and never trap it under a flat batten: a batten pulls out of the weave in one gust.',
     capture: true,
     conf: 'medium',
     note: '11号 (~430 g/m2) is the lightest 帆布 that still stands up as a bellows wall. Real trade-off: cotton canvas breathes beautifully and folds flat, but it will mould in a Kanto summer if you close the lid wet. The right upgrade is Sunbrella marine acrylic or a PU-coated polyester from 平岡織染 — I could not pin a current 平岡織染 pattern code this session, so the 帆布 is the safe named answer. Metre price and finished weight are estimates.',
   },
   {
-    cat: 'soft goods / flyscreen', maker: 'ダイオ化成 (Dio Chemical)', model: '防虫網 グラスファイバー 24メッシュ グレー 910 mm幅',
-    size: [910, 1, 4000], kg: 0.4, jpy: 2400, qty: 1, where: 'コーナン / カインズ / ジョイフル本田 の網戸コーナー、または MonotaRO。Sold by the metre or as a 910 mm x 2 m pack. Always in stock.',
+    cat: 'soft goods / flyscreen', maker: 'ダイオ化成 (Dio Chemical)', model: 'クラウンネット 24メッシュ グラスファイバー グレイ 910 mm × 6 m',
+    size: [910, 1, 6000], kg: 0.5, jpy: 1280, qty: 1, where: 'コーナン / カインズ / ジョイフル本田 の網戸コーナー、または MonotaRO。Sold by the metre or as a 910 mm x 2 m pack. Always in stock.',
     mount: 'No fixings. Two approved captures depending on the opening. Fixed openings (the two S4 window bays already carry their own cassette screens, so this is for the gullwing apertures): tension the mesh into a groove in an aluminium screen frame with standard 網戸用ゴム glazing spline, and screw the FRAME, not the mesh, to the opening. Removable porch screen: sew the mesh to a 25 mm YKK #5 coil zip on three sides and to a hook-and-loop tape strip on the fourth; the loop tape is bonded to the framing with 3M VHB and the mesh never sees a screw or a grommet.',
     capture: true,
     conf: 'medium',
     note: 'Glass-fibre 24-mesh rather than 18-mesh polyester: 24 stops ヌカカ/ブヨ, and glass fibre does not sag after a summer stretched over a warm gullwing. Cheap and replaceable, which is the point — it is the part that gets torn.',
   },
   {
-    cat: 'soft goods / blackout', maker: 'アイズ (aiz)', model: 'ブラインドシェード ハイゼットトラック S500P/S510P フロント3面セット',
-    size: [1300, 15, 700], kg: 1.2, jpy: 19800, qty: 1, where: 'アイズ公式 / Amazon.co.jp / 楽天。Vehicle-specific, cut to pattern — allow 1-2 weeks if the S500P/S510P pattern is not on the shelf.',
+    cat: 'soft goods / blackout', maker: 'ブラームス (BRAHMS)', model: 'ブラインドシェード ハイゼットトラック S500P/S510P フロント3面セット',
+    size: [1300, 15, 700], kg: 1.2, jpy: 19580, qty: 1, where: 'アイズ公式 / Amazon.co.jp / 楽天。Vehicle-specific, cut to pattern — allow 1-2 weeks if the S500P/S510P pattern is not on the shelf.',
     mount: 'No fixings, and that is the design: a semi-rigid mesh panel with neodymium magnets sewn into the hem that grip the painted steel window surround of the cab. Nothing is screwed, suckered or taped to glass. This covers the cab only — the camper shell\'s own glazing does NOT need a separate curtain track, because the Dometic S4 windows below carry an integral Rastrollo pleated blackout in the inner frame. That avoids a curtain rail across the gullwing panels, which would foul the props.',
     capture: true,
     conf: 'medium',
@@ -556,29 +557,29 @@ export const CABIN = [
   },
   {
     cat: 'water / tank', maker: 'モノタロウ (MonotaRO)', model: 'ポリタンク 白 20L (食品衛生法適合)',
-    size: [345, 400, 230], kg: 1.3, jpy: 1290, qty: 2, where: 'MonotaRO (own-brand polytank, 20 L white food-grade). Next-day in Tokyo. コーナン PRO equivalent is interchangeable.',
+    size: [350, 416, 178], kg: 1.4, jpy: 3078, qty: 2, where: 'MonotaRO (own-brand polytank, 20 L white food-grade). Next-day in Tokyo. コーナン PRO equivalent is interchangeable.',
     mount: 'Handle aperture and the moulded body — no inserts, no flange. The moulded handle is rated to carry 20 kg by hand and nothing more, so it is a strap route, not a structural anchor. Build a three-sided 12 mm ply well under the porch deck sized 360 x 245 per tank with a hinged ply lid closing the fourth side, and run one 25 mm webbing strap through each handle to an M8 eye bolt through the floor on a 40 x 40 x 3 mm washer plate. 40 kg of water is the largest movable mass in the module and it sits high in a short-wheelbase kei truck — strap it, and put it as far forward and as low as the porch deck allows.',
     capture: true,
     conf: 'medium',
     note: 'Two 20 L tanks rather than one 40 L: 20 kg is the most a person carries to a tap, and one tank can be the grey-water catch. Generic own-brand deliberately, per the no-invented-model rule — a コーナン or ヒシエス equivalent is the same part. Price is per tank.',
   },
   {
-    cat: 'water / pump', maker: 'SEAFLO', model: '12V ダイヤフラム自吸式給水ポンプ SFDP1シリーズ (約3.8 L/min, 35 PSI, 圧力スイッチ付)',
+    cat: 'water / pump', maker: 'SEAFLO', model: 'SFDP1-012-035-21 12V ダイヤフラム自吸式給水ポンプ (約4.5 L/min, 35 PSI, 圧力スイッチ付)',
     size: [180, 100, 100], kg: 1.2, jpy: 8800, qty: 1, where: 'Amazon.co.jp (SEAFLO日本正規取扱) / 楽天。In stock. Exact SFDP1 suffix (flow/pressure variant) must be confirmed at order — do not order on the designation above alone.',
     mount: 'Four M5 bolt-through holes in the moulded base plate, on rubber isolator bushes — that IS the approved and only mount, and the isolators are the reason it is quiet. Bolt through 12 mm ply with M5 x 30 stainless and nyloc nuts, tightened until the bush just seats and NO further; crush the rubber and the whole shell becomes a soundboard at 3 a.m. Never clamp the pump head or the motor can. Plumb both ports with 1/2" flexible hose and a short loop, not rigid pipe, or the isolators are bypassed.',
-    conf: 'low',
+    conf: 'medium',
     note: 'Confidence is low only on the exact SFDP1 variant code — SEAFLO is a real, widely stocked brand and any 3-4 L/min 12 V diaphragm pump with a pressure switch works here. Rejected the foot pump (Whale Babyfoot GP4618, four bolt-through feet, no electrical load) purely because the sink sits on the porch and a foot pump wants a fixed footwell. A foot pump is the better answer if you want zero draw.',
   },
   {
-    cat: 'water / sink', maker: 'カクダイ (KAKUDAI)', model: 'ステンレス丸型手洗器（オーバーカウンター・φ約300）',
-    size: [300, 130, 300], kg: 1.4, jpy: 12000, qty: 1, where: 'MonotaRO / カクダイ取扱の住設商社 / Amazon.co.jp。Exact KAKUDAI catalogue number not pinned this session — specify by bowl diameter and drain size at order.',
+    cat: 'water / sink', maker: 'カクダイ (KAKUDAI)', model: '493-338 丸型手洗器（ステンレス・ヘアライン、置型）',
+    size: [300, 100, 300], kg: 1.4, jpy: 25000, qty: 1, where: 'MonotaRO / カクダイ取扱の住設商社 / Amazon.co.jp。Exact KAKUDAI catalogue number not pinned this session — specify by bowl diameter and drain size at order.',
     mount: 'A drop-in bowl\'s approved provisions are its rim and its waste flange, nothing else. It hangs on a cut-out in the porch worktop and is pulled down by four J-clips (supplied) that hook the underside of the rim and screw against the counter, plus the 1-1/2" waste flange with its rubber gasket clamping the bowl to the tailpiece. No screw ever passes through the bowl wall. Cut the counter opening 5 mm under the rim diameter and seal the rim on a bead of silicone so porch splash cannot get into the ply edge.',
     conf: 'low',
     note: 'Marked low because I could not verify a current KAKUDAI catalogue number this session — the maker and the product class are real and any 280-300 mm stainless drop-in bowl is a drop-in substitute. Stainless not ceramic: a ceramic 手洗器 of this size is 4-5 kg and will crack on a kei-truck deck.',
   },
   {
     cat: 'cold / 12V compressor fridge', maker: '澤藤電機 (ENGEL)', model: 'MHD14F-D (14 L, DC12/24V + AC100V, swing motor)',
-    size: [300, 305, 440], kg: 9.5, jpy: 64900, qty: 1, where: 'ENGEL正規販売店 / Amazon.co.jp / ヨドバシ。Usually in stock; ENGEL runs periodic backorders on the small bodies, allow 2 weeks.',
+    size: [442, 398, 284], kg: 11.5, jpy: 64900, qty: 1, where: 'ENGEL正規販売店 / Amazon.co.jp / ヨドバシ。Usually in stock; ENGEL runs periodic backorders on the small bodies, allow 2 weeks.',
     mount: 'The case has moulded carry handles and moulded feet, and no threaded inserts anywhere on the shell — the swing compressor and its charge sit directly behind that skin, so a screw into the case is a scrapped fridge. ENGEL\'s own tie-down bracket, which captures the case rather than piercing it, is the sanctioned hardware; absent that, build a three-sided 12 mm ply cradle with a 15 mm EVA foam liner and run two 25 mm cam straps over the lid seam to four M6 rivet-nut anchors in the deck. Leave 50 mm clear air at the condenser end and do not box it in — a fridge in a sealed locker in a Japanese August draws its rated current continuously and flattens the DELTA 2 overnight.',
     capture: true,
     conf: 'medium',
@@ -586,7 +587,7 @@ export const CABIN = [
   },
   {
     cat: 'power / battery station', maker: 'EcoFlow', model: 'DELTA 2 (1024 Wh LiFePO4, 1500 W AC出力)',
-    size: [400, 281, 211], kg: 12, jpy: 99800, qty: 1, where: 'EcoFlow公式ストア / Amazon.co.jp / ヨドバシ。Always in stock, frequently discounted below list.',
+    size: [400, 281, 211], kg: 12, jpy: 110000, qty: 1, where: 'EcoFlow公式ストア / Amazon.co.jp / ヨドバシ。Always in stock, frequently discounted below list.',
     mount: 'Literally no mount points — moulded shell, two recessed grab handles, four rubber feet, and the handles are explicitly NOT rated tie-downs. Floor-mount it at the bulkhead in a 410 x 220 mm ply well with 20 mm EVA underneath, restrained by two 38 mm cam-buckle straps passing over the case (over the body, not through the handles) down to four M8 stainless eye bolts through the plinth into a 4 mm steel backing plate. Keep it on the floor and forward: 12 kg loose at bunk height in a rollover is the argument that decides this. Its vents are on the two short ends — 100 mm clear both ends or it throttles.',
     capture: true,
     conf: 'high',
@@ -601,43 +602,43 @@ export const CABIN = [
   },
   {
     cat: 'climate / air conditioner', maker: 'EcoFlow', model: 'WAVE 2 (ポータブルエアコン, 冷房 5100 BTU / 暖房 6100 BTU)',
-    size: [518, 338, 297], kg: 14.5, jpy: 119800, qty: 1, where: 'EcoFlow公式ストア / Amazon.co.jp。In stock, heavily discounted in autumn.',
+    size: [518, 336, 297], kg: 14.5, jpy: 143000, qty: 1, where: 'EcoFlow公式ストア / Amazon.co.jp。In stock, heavily discounted in autumn.',
     mount: 'No mount points: four rubber feet, two side grab handles, and moulded duct collars — the collars take ducting only and will not take load. It rides on the floor at the tailgate end in a 530 x 310 mm ply well and straps down with two 38 mm cam straps to M8 eye bolts through the deck on backing plates. In use, the hot-side exhaust duct passes through a 130 mm bulkhead port cut in the porch face and closed with a ply blanking plug when stowed; condensate drains through the spigot into a hose exiting the floor through a bulkhead gland. Never run it ducted into the cabin volume it is cooling.',
     capture: true,
     conf: 'medium',
     note: 'It fits the weight budget but it eats the whole energy budget: ~1 hour on the DELTA 2 alone, so this is a hook-up-site and shoulder-season item, or it needs the DELTA 2 Extra Battery. The honest alternative for a free camp is the MaxxFan below on reverse-draw plus the flyscreen — that is 3 W, not 500. Included because you asked whether one exists in budget: it does, at 14.5 kg.',
   },
   {
-    cat: 'lighting / 12V LED', maker: 'エーモン工業 (amon)', model: 'LEDテープライト 12V（白・600 mm）+ アルミLEDバーチャンネル・拡散カバー',
-    size: [600, 12, 10], kg: 0.15, jpy: 1580, qty: 6, where: 'Amazon.co.jp / オートバックス / MonotaRO。Always in stock. amon\'s 品番 for the current tape not pinned this session — order by length, colour temperature and 12 V rating.',
-    mount: 'The strip\'s own 3M adhesive back is its only provision and it is not adequate: at 50 C under a dark roof in August the acrylic adhesive creeps and the tape drops off in a fortnight. Bond the tape instead into an extruded aluminium LED channel with a frosted diffuser (Misumi or MonotaRO stock profile), and screw the CHANNEL to the framing with M3 x 10 pan screws at 250 mm centres. The channel also acts as the heatsink, which roughly doubles LED life. Feed from the DELTA 2\'s 12 V car socket through a 3 A blade fuse and a rocker switch; six 600 mm runs gives a continuous cove along both gullwing rails plus the bunk.',
+    cat: 'lighting / 12V LED', maker: '汎用 (モノタロウ / Amazon.co.jp 取扱)', model: '12V LEDテープライト 電球色 3000K IP65 5 m + アルミチャンネル・拡散カバー 1 m × 4',
+    size: [5000, 12, 10], kg: 0.4, jpy: 4200, qty: 1, where: 'モノタロウ / Amazon.co.jp。常時在庫。チャンネルは 1 m 押出材を切って使う。',
+    mount: 'Self-adhesive backing, which is not a fixing on a vehicle: 3M tape lets go the first hot afternoon over a galley. Run the tape inside an anodised aluminium channel and screw the CHANNEL to the carcass with M3 countersunk into pilot holes every 250 mm. The channel is also the heatsink and the diffuser, so it is not trim.',
     conf: 'low',
-    note: 'Low confidence on the exact amon 品番 only — the product line is real and stocked everywhere, and any 12 V strip of the right CCT substitutes. Pick 2700-3000 K, not the 6000 K default that most auto tape ships in: daylight-white in a 1120 mm headroom box at night is brutal. Price is per 600 mm run including the channel.',
+    note: 'The first draft named an エーモン 12 V tape at 600 mm. amon make 15, 30 and 45 cm only — 2704, 2705, 2709 — and their white is 8000 K, which is a headlamp colour and wrong for a bed. A generic 3000 K reel in channel is what actually gets fitted.',
   },
   {
-    cat: 'safety / CO alarm', maker: '新コスモス電機 (New Cosmos Electric)', model: '住宅用一酸化炭素警報器（電池式・EN 50291 相当認証品）',
-    size: [100, 100, 35], kg: 0.2, jpy: 8800, qty: 1, where: 'MonotaRO / Amazon.co.jp / 防災用品商社。Specify a battery unit with an electrochemical CO sensor and a printed EN 50291 or UL 2034 mark — that certification, not a brand, is the buying criterion.',
-    mount: 'Two keyhole slots moulded into the back plate, typically at ~60 mm centres, taking two M4 pan screws — that is the approved and sufficient mount. Screw into a ply ceiling rail or a ply pad, never directly into thin FRP shell skin, which will pull through. Site it 300 mm below the ceiling and roughly 1.5 m from the stove, but NOT directly above it: mounted over the burner it alarms on cooking plume and gets muted, which is exactly how people die. Test it after the shell is finished, with the pop-top down.',
+    cat: 'safety / CO alarm', maker: '輸入品 (Amazon.co.jp / モノタロウ 取扱)', model: '一酸化炭素警報器（EN 50291 または UL 2034 表示の電池式）',
+    size: [100, 100, 35], kg: 0.2, jpy: 4000, qty: 1, where: 'Amazon.co.jp / モノタロウ。国内メーカー品が存在しないので、輸入品を EN/UL 表示で選ぶ。',
+    mount: 'Keyhole slots and two screws into the wall — a real fixing, and it belongs at head height near the bunk rather than at floor level: CO is close to air density and a low mount is a smoke-alarm habit applied to the wrong gas.',
     conf: 'low',
-    note: 'Marked low deliberately: 新コスモス電機 is a real and appropriate Japanese maker, but I could not verify a current household-CO model number this session and I will not guess one. This is the item on the list where a fabricated part number would be genuinely dangerous. Buy on the certification mark. A cassette stove plus a sealed pop-top is a real CO scenario, not a formality.',
+    note: 'The first draft credited this to 新コスモス電機 with EN 50291. They make 住宅用火災警報器 and industrial CO detectors, not a household CO alarm, and Japan has no approval scheme for one at all — EN 50291 is European. So it is an imported EN- or UL-marked unit, bought on that marking. Fit a 住宅用火災警報器 as well: a cassette stove in a 2.7 m² box with the lid down is the one place on this truck where both matter.',
   },
   {
     cat: 'ventilation / roof vent', maker: 'MaxxAir', model: 'MaxxFan Deluxe 6200K (10段可変・双方向・リモコン・雨天走行可能フード)',
-    size: [470, 190, 470], kg: 4.5, jpy: 72000, qty: 1, where: 'オグショー (OGUshow) / VANTECH / Amazon.co.jp の並行輸入。Often on backorder from the US — allow 2-4 weeks. Fiamma Turbo-Vent Premium is the直接的な代替 at a similar price.',
+    size: [586, 236, 417], kg: 4.5, jpy: 72000, qty: 1, where: 'オグショー (OGUshow) / VANTECH / Amazon.co.jp の並行輸入。Often on backorder from the US — allow 2-4 weeks. Fiamma Turbo-Vent Premium is the直接的な代替 at a similar price.',
     mount: 'The flange IS the mount, and this is the one item that dictates structure before it dictates hardware. Cut a 355 x 355 mm (14" x 14") opening in the hard shell roof — the fixed shell, not the pop-top lid, which flexes and would work the seal loose. Frame a 30 x 30 mm hardwood kerb right around the opening and laminate it in BEFORE cutting the skin. Bed the vent\'s outer flange on continuous butyl tape and screw through with #8 x 25 mm stainless pan screws at ~100 mm centres into that kerb, then fillet the flange edge with a self-levelling roof sealant. The internal garnish ring screws up into the flange from below and is what carries the ceiling lining — it takes trim weight only.',
     conf: 'medium',
     note: 'The lid design is the reason for this over a plain 40 x 40 vent: it runs open in rain and at speed, so you can drive with it extracting. It is also the whole fan strategy — reverse-draw plus the porch flyscreen is 3 W of cooling versus 500 W for the WAVE 2. Price is a Japanese parallel-import estimate; the US list is far lower.',
   },
   {
     cat: 'glazing / camper windows', maker: 'Dometic (Seitz)', model: 'SEITZ S4 900 x 450（アクリル二重窓・網戸+遮光プリーツ内蔵）',
-    size: [900, 450, 60], kg: 5.5, jpy: 68000, qty: 2, where: 'オグショー / ホワイトハウス / VANTECH ほか国内キャンピングカー部材商社。Made-to-order sizes; allow 3-6 weeks from Europe.',
+    size: [900, 450, 60], kg: 8.5, jpy: 68000, qty: 2, where: 'オグショー / ホワイトハウス / VANTECH ほか国内キャンピングカー部材商社。Made-to-order sizes; allow 3-6 weeks from Europe.',
     mount: 'A sandwich-clamp frame — no fastener ever touches the acrylic, which is the entire point of buying a caravan window rather than glazing a hole yourself. The outer frame goes in from outside onto a bead of butyl/sealant; the inner frame, which carries the Rastrollo pleated blackout blind and the cassette flyscreen, screws to the outer frame from inside and clamps the wall between the two. S4 accepts a wall thickness of roughly 26-42 mm, so the gullwing panel core MUST be built to that band or the window simply will not clamp — decide the window before you decide the panel sandwich. Cut-out is nominal size +2 mm with radiused corners; square corners crack the panel skin.',
     conf: 'medium',
     note: 'One per gullwing. These carry the blackout and the bug screen internally, which is why no curtain track is needed across the gullwings — a track there would foul the props. The acrylic scratches and yellows and is the maintenance item; that is the accepted price for 5.5 kg instead of ~14 kg of glass. Price and mass per unit are estimates.',
   },
   {
-    cat: 'safety / fire extinguisher', maker: 'モリタ宮田工業 (Morita Miyata)', model: '住宅用消火器「キッチンアイ」（強化液・中性）',
-    size: [110, 340, 110], kg: 1.6, jpy: 5800, qty: 1, where: 'コーナン / カインズ / Amazon.co.jp / MonotaRO。In stock. Note the 5-year design life stamped on the body.',
+    cat: 'safety / fire extinguisher', maker: 'モリタ宮田工業 (Morita Miyata)', model: 'MVF1HB 住宅用消火器「キッチンアイ」（強化液・中性 1.0 L）',
+    size: [85, 375, 145], kg: 2.2, jpy: 5800, qty: 1, where: 'コーナン / カインズ / Amazon.co.jp / MonotaRO。In stock. Note the 5-year design life stamped on the body.',
     mount: 'Supplied with its own wall hanger/bracket — that bracket is the approved provision and the only one; the cylinder itself has no fixing feature and must never be banded, clamped or hose-clipped to a frame member, because a dent in a pressurised cylinder wall is a condemned extinguisher. Screw the bracket with two M5 pan screws into a hardwood or 18 mm ply pad, not into shell skin. Site it within 600 mm of the porch step so it is reachable from OUTSIDE the camper — a fire at the stove is between you and an extinguisher mounted deep inside.',
     capture: true,
     conf: 'medium',

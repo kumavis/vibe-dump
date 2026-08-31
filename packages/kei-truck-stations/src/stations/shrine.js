@@ -615,8 +615,10 @@ function bellAndRope(lib) {
   b.position.set(x, y - mm(700), 0)
   g.add(b)
   g.add(rod([x, y, 0], [x, y - mm(700), 0], mm(10), lib.rope))
-  // 鈴緒 紅白, 45 mm × 1200, hanging to a comfortable grab.
-  const r = cloth(mm(150), mm(1200), mm(22), lib.rope, { nx: 3, ny: 7, wave: 0.01 })
+  // 鈴緒 紅白, 36 mm × 1200 — a four-shaku rope. 45 mm is the six-shaku size and
+  // putting it on a 1200 mm drop is the kind of mismatch a supplier catches for
+  // you at the counter and a drawing never does.
+  const r = cloth(mm(60), mm(1200), mm(36), lib.rope, { nx: 3, ny: 7, wave: 0.01 })
   r.position.set(x, y - mm(1330), 0)
   g.add(r)
   for (const s of [-1, 1]) {

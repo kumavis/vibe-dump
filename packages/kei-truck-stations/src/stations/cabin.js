@@ -4,7 +4,7 @@ import {
   addGates, addJack, subframe, subframeHull, foldPanel, foldPanelHull,
   hingeX, hingeZ, legGeometry, latch, REST,
 } from './common.js'
-import { bellows, cloth, roundedSlab } from '../build.js'
+import { bellows, cloth, lathe, roundedSlab } from '../build.js'
 
 // ---------------------------------------------------------------------------
 // CABIN — a hard-sided camper that packs inside the cab's own silhouette
@@ -281,15 +281,17 @@ function build(ctx) {
       ['porch deck + spacers', 16],
       ['bunk deck + cabover slides', 49],
       ['stabiliser jacks (4)', 18],
-      ['fitted kit — see the bill of materials', 88],
+      ['fitted kit — see the bill of materials', 84],
       ['water, 20 L', 20],
     ],
     notes: [
       'An adult is 1800 mm and the bed is 1940 × 1410. One person fits lengthwise; two do not. So the bunk slides 950 mm out over the cab roof and becomes 2820 × 1280.',
       'That cantilever is real: two adults at 475 mm out is 700 Nm at the root, 13.5 MPa in a pair of 100 × 50 × 3 aluminium rails against 240 MPa yield. The pads on the cab roof stop it swaying; a 0.7 mm steel cab roof carries nothing.',
       'The pop-top takes standing height from 900 to 1780 mm. That is enough for a lot of people and short for the rest, which is worth saying rather than rounding up to 2000.',
+      'The aisle between the galley and the bench is 335 mm. That is not a mistake and it is not fixable: 1290 mm of interior width minus a 450 mm galley run minus a 480 mm seat is what is left. It is also the entire reason the kerb wall lifts — the room is outside.',
       'Four guided corners rather than scissor arms. A scissor is the nicer mechanism but it is a closed loop; four guides hold the lid parallel with no synchronising linkage.',
-      'The shell is 3 mm aluminium composite on 40 × 40 extrusion, not plywood. Plywood walls and floor come to about 90 kg on this footprint and the fitted kit is 88 — one of the two had to give, and it was not the fridge.',
+      'The shell is 3 mm aluminium composite on 40 × 40 extrusion, not plywood. Plywood walls and floor come to about 90 kg on this footprint and the fitted kit is 84 — one of the two had to give, and it was not the fridge.',
+      'The bill of materials totals 98 kg and 84 of it is fitted. The difference is the WAVE 2 air conditioner: it survived the first pass and then did not survive the check, because a Seitz S4 window weighs 8.5 kg rather than the 5.5 that was assumed, and two of them took the margin. The line stays on the list with its price, because the trade is the decision.',
       'Water is 20 L, one tank. A second 20 L tank is 40 kg of water and 40 kg is the entire margin, so the spare tank on the list is exactly that: a spare, filled at the tap, not carried full.',
       'The porch has no legs: it lands on the dropped gate, which carries it for all but the last 123 mm. A leg that reached the tarmac could not stow on a 500 mm panel.',
       'Packed it is 1010 mm above the deck — 1670 overall, 110 under the cab roof. It should look like a work truck with a canopy until it opens.',
@@ -314,9 +316,13 @@ function shell(lib) {
       g.add(extrusion([BOX_CX + sx * mm(925), FLOOR, sz * (HALF - mm(20))], [BOX_CX + sx * mm(925), FLOOR + BOX.h, sz * (HALF - mm(20))], mm(56), lib.aluDark))
     }
   }
-  // A door in the rear wall, and a window in the off-side.
+  // A door in the rear wall, and a Seitz S4 in the off-side: 900 x 450 of
+  // acrylic double glazing in its own frame, which is a real camper window with
+  // a flyscreen and a blackout pleat already inside it. It is 5.5 kg, which is a
+  // lot for a hole in a wall, and it is why there are two of these and not four.
   g.add(slab([mm(16), mm(760), mm(560)], lib.aluDark, { pos: [-mm(966), FLOOR + mm(400), mm(180)] }))
-  g.add(slab([mm(16), mm(300), mm(700)], lib.glass, { pos: [0, FLOOR + mm(700), HALF - mm(6)] }))
+  g.add(slab([mm(20), mm(510), mm(960)], lib.aluDark, { pos: [BOX_CX + mm(300), FLOOR + mm(610), HALF - mm(10)] }))
+  g.add(slab([mm(14), mm(450), mm(900)], lib.glass, { pos: [BOX_CX + mm(300), FLOOR + mm(610), HALF - mm(4)] }))
   // The four guides the lid runs on, standing proud inside the corners.
   for (const sx of [-1, 1]) {
     for (const sz of [-1, 1]) {
@@ -326,18 +332,72 @@ function shell(lib) {
   return g
 }
 
-/** What you see through the open side: a bench, a galley, a lantern. */
+/**
+ * The galley down the off-side wall, and the bench that becomes the lower bed.
+ *
+ * Every box in here is the size of the box on the invoice, which is the only
+ * reason the layout means anything. The worktop is at 720 rather than a
+ * domestic 850, because the shell is 1010 tall and the counter has to live
+ * inside it with the lid DOWN: 720 plus a 40 mm top is 760, and the packed
+ * interior is 900.
+ *
+ * Nothing here is screwed to its own case. The ENGEL runs in a ply cradle on
+ * heavy slides; the DELTA 2 sits in a well with a strap through its handle
+ * apertures; the Iwatani drops into a 3 mm rebate with a retaining bar, because
+ * a cassette stove has four rubber feet and a gas cartridge and belongs to
+ * neither the counter nor the road.
+ */
 function interior(lib) {
   const g = new THREE.Group()
-  g.add(slab([mm(1700), mm(60), mm(520)], lib.ply, { pos: [0, FLOOR + mm(420), mm(380)] }))
-  g.add(slab([mm(1700), mm(420), mm(60)], lib.ply, { pos: [0, FLOOR + mm(210), mm(120)] }))
-  g.add(slab([mm(620), mm(560), mm(480)], lib.aluDark, { pos: [mm(600), FLOOR + mm(280), mm(360)] }))
-  g.add(slab([mm(640), mm(40), mm(500)], lib.stainless, { pos: [mm(600), FLOOR + mm(580), mm(360)] }))
-  g.add(slab([mm(240), mm(30), mm(300)], lib.stainless, { pos: [mm(420), FLOOR + mm(600), mm(360)] }))
-  const lamp = new THREE.PointLight(0xffc98a, 7, 4, 2)
-  lamp.position.set(-mm(200), FLOOR + mm(880), mm(100))
+  const TOP = FLOOR + mm(720)
+  const Z = mm(410) // centreline of the galley run, off-side
+
+  // Counter carcass and worktop, 1780 long down the off-side wall.
+  g.add(slab([mm(1780), mm(680), mm(450)], lib.ply, { anchor: [0, -1, 0], pos: [BOX_CX, FLOOR, Z] }))
+  g.add(slab([mm(1800), mm(40), mm(470)], lib.ply, { pos: [BOX_CX, TOP, Z] }))
+
+  // Iwatani タフまる CB-ODX-1 — 343 x 129 x 284, in a rebate with a bar over it.
+  g.add(slab([mm(284), mm(129), mm(343)], lib.aluDark, { pos: [mm(480), TOP + mm(50), Z] }))
+  g.add(rod([mm(480) - mm(160), TOP + mm(120), Z - mm(190)], [mm(480) - mm(160), TOP + mm(120), Z + mm(190)], mm(8), lib.chrome))
+
+  // KAKUDAI 493-338, 300 across and 100 deep. It is an OVER-COUNTER basin: it
+  // stands on the top on its own rim with a 55 mm tail through a small hole,
+  // rather than dropping through a 300 mm cut-out. That matters — a drop-in
+  // cut-out in a 40 mm worktop over a slide-out galley is a hole where the
+  // stiffness was.
+  const bowl = lathe([[mm(150), mm(100)], [mm(146), mm(14)], [mm(40), 0], [0, 0]], lib.stainless, { seg: 20, open: true })
+  bowl.position.set(mm(60), TOP + mm(20), Z)
+  g.add(bowl)
+  g.add(rod([mm(60) - mm(200), TOP + mm(20), Z], [mm(60) - mm(200), TOP + mm(250), Z], mm(14), lib.chrome))
+  g.add(rod([mm(60) - mm(200), TOP + mm(245), Z], [mm(60) - mm(60), TOP + mm(235), Z], mm(12), lib.chrome))
+
+  // ENGEL MHD14F-D — 442 wide, 284 deep, 398 tall and 11.5 kg, on slides under
+  // the worktop. The 680 mm void is sized off that 398 and not the other way
+  // round; the first draft had this box 100 mm shorter and 150 mm deeper than it
+  // is, and a three-sided cradle cut to those numbers would not take the fridge.
+  g.add(slab([mm(442), mm(398), mm(284)], lib.aluDark, { pos: [-mm(300), FLOOR + mm(250), Z + mm(40)] }))
+  g.add(slab([mm(20), mm(300), mm(240)], lib.trim, { pos: [-mm(300) - mm(231), FLOOR + mm(250), Z + mm(40)] }))
+
+  // EcoFlow DELTA 2 — 400 x 281 x 211, in a strapped well.
+  g.add(slab([mm(211), mm(281), mm(400)], lib.trim, { pos: [-mm(760), FLOOR + mm(190), Z] }))
+  g.add(slab([mm(50), mm(30), mm(300)], lib.ledCyan, { pos: [-mm(760) - mm(110), FLOOR + mm(250), Z] }))
+
+  // Food-grade 20 L tank, 350 x 416 x 178 — the narrow deep one, not the fat
+  // kerosene can it is easy to buy by mistake. One carried, one spare and empty.
+  for (const dx of [0, mm(200)]) {
+    g.add(slab([mm(178), mm(416), mm(350)], lib.paint, { pos: [mm(600) + dx, FLOOR + mm(215), Z] }))
+  }
+
+  // The bench down the kerb side: locker below, cushion on top. It is the lower
+  // berth as well, which is what a tri-fold mattress buys you.
+  g.add(slab([mm(1800), mm(340), mm(480)], lib.ply, { anchor: [0, -1, 0], pos: [BOX_CX, FLOOR, -mm(390)] }))
+  g.add(slab([mm(1800), mm(110), mm(480)], lib.canvasIndigo, { pos: [BOX_CX, FLOOR + mm(395), -mm(390)] }))
+
+  // 12 V strip over the galley, and the lamp that actually lights the render.
+  g.add(slab([mm(1400), mm(22), mm(60)], lib.ledWarm, { pos: [BOX_CX, FLOOR + mm(900), Z + mm(200)] }))
+  const lamp = new THREE.PointLight(0xffc98a, 6, 4, 2)
+  lamp.position.set(BOX_CX, FLOOR + mm(860), mm(60))
   g.add(lamp)
-  g.add(slab([mm(300), mm(26), mm(120)], lib.ledWarm, { pos: [-mm(200), FLOOR + mm(930), mm(300)] }))
   return g
 }
 
@@ -346,6 +406,21 @@ function popTop(lib) {
   const g = new THREE.Group()
   g.add(slab([mm(1850), mm(70), mm(1370)], lib.ply, { anchor: [0, -1, 0], pos: [0, mm(20), 0] }))
   g.add(slab([mm(1880), mm(30), mm(1400)], lib.aluDark, { pos: [0, mm(105), 0] }))
+  // MaxxFan Deluxe 6200K through a 400 mm cut-out. Its FLANGE is 586 x 417, not
+  // the 470 square the first draft assumed, and that 116 mm matters: the lid is
+  // 1850 x 1370 and it also has to carry two 1050 x 540 solar panels. Turn the
+  // panels across the lid — 1050 in Z, 540 each in X — and they take 1080 of the
+  // 1850, which leaves 770 for a 586 flange. Lay them along the lid instead and
+  // nothing fits. The fan lives in the LID rather than the shell because the
+  // shell's roof is the surface that has to pass under 1120 mm.
+  g.add(slab([mm(586), mm(60), mm(417)], lib.paint, { pos: [-mm(620), mm(150), 0] }))
+  g.add(slab([mm(520), mm(80), mm(380)], lib.paint, { anchor: [0, -1, 0], rot: [0, 0, deg(-12)], pos: [-mm(620), mm(178), 0] }))
+  g.add(slab([mm(400), mm(190), mm(400)], lib.aluDark, { pos: [-mm(620), mm(20), 0] }))
+  // Two Renogy 100 W flexible panels, bonded to the lid skin and edge-sealed.
+  for (const dx of [mm(30), mm(580)]) {
+    g.add(slab([mm(540), mm(6), mm(1050)], lib.trim, { pos: [dx, mm(142), 0] }))
+    g.add(slab([mm(500), mm(3), mm(1010)], lib.glass, { pos: [dx, mm(147), 0] }))
+  }
   // Bellows on all four sides, authored hanging down from the lid so they
   // stretch as it rises — which is exactly what the fabric does.
   for (const sz of [-1, 1]) {
