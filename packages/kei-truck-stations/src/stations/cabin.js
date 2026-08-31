@@ -31,9 +31,9 @@ import { bellows, cloth, roundedSlab } from '../build.js'
 // that touch the cab roof are there to stop it swaying, not to carry it: a kei
 // cab roof is 0.7 mm steel and it carries nothing.
 //
-// THE SECOND PROBLEM: 1120 mm of packed height is a crawl space. So the roof
+// THE SECOND PROBLEM: 900 mm of packed headroom is a crawl space. So the roof
 // pops. A hard lid rises 880 mm on four corner guides with a canvas bellows
-// filling the gap, and the standing height inside goes from 1010 to 1780 — which
+// filling the gap, and the standing height inside goes from 900 to 1780 — which
 // is enough for a lot of people and honestly short for the rest, and saying so
 // is better than rounding it up to 2000.
 //
@@ -43,9 +43,10 @@ import { bellows, cloth, roundedSlab } from '../build.js'
 // it. The inside and the outside become one room, which is the entire reason to
 // camp.
 //
-// Packed, the whole thing is 1940 x 1410 x 1010 above the deck: 1670 mm overall,
-// 110 mm under the cab roof. It looks like a work truck with a canopy, which is
-// the point.
+// Packed, the whole thing is 1940 x 1410 x 1100 above the deck: 1760 mm overall,
+// and 20 mm under the cab roof — the tightest packing of the four, and the
+// reason the lid sits inside the shell rather than on it. It looks like a work
+// truck with a canopy, which is the point.
 // ---------------------------------------------------------------------------
 
 const FLOOR = mm(90)
@@ -129,7 +130,7 @@ function build(ctx) {
     com: [0, mm(60), 0],
     hulls: [{ c: [0, mm(55), 0], s: [mm(1850), mm(110), mm(1370)], tag: 'lid' }],
     mates: ['floor', 'bunk', 'bunk-slide'],
-    note: 'standing height goes from 1010 to 1780 mm',
+    note: 'standing height goes from 900 to 1780 mm',
   })
   rig.attach(lid.id, popTop(lib))
 
@@ -285,7 +286,7 @@ function build(ctx) {
     notes: [
       'An adult is 1800 mm and the bed is 1940 × 1410. One person fits lengthwise; two do not. So the bunk slides 950 mm out over the cab roof and becomes 2820 × 1280.',
       'That cantilever is real: two adults at 475 mm out is 700 Nm at the root, 13.5 MPa in a pair of 100 × 50 × 3 aluminium rails against 240 MPa yield. The pads on the cab roof stop it swaying; a 0.7 mm steel cab roof carries nothing.',
-      'The pop-top takes standing height from 1010 to 1780 mm. That is enough for a lot of people and short for the rest, which is worth saying rather than rounding up to 2000.',
+      'The pop-top takes standing height from 900 to 1780 mm. That is enough for a lot of people and short for the rest, which is worth saying rather than rounding up to 2000.',
       'Four guided corners rather than scissor arms. A scissor is the nicer mechanism but it is a closed loop; four guides hold the lid parallel with no synchronising linkage.',
       'The porch has no legs: it lands on the dropped gate, which carries it for all but the last 123 mm. A leg that reached the tarmac could not stow on a 500 mm panel.',
       'Packed it is 1010 mm above the deck — 1670 overall, 110 under the cab roof. It should look like a work truck with a canopy until it opens.',

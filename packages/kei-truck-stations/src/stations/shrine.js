@@ -14,14 +14,15 @@ import { lathe, cloth, shrineRoofPlane, roundedSlab } from '../build.js'
 // The answer is the one Japanese carpenters have always used. A real hiwadabuki
 // roof is not a curved sheet; it is straight boards laid over curved rafters,
 // and the curve lives in the rafter line rather than in the material. So the
-// roof here is a chain of four flat facets per slope, hinged along the ridge
-// direction, and the sori is in the ANGLES rather than in any panel: 44, 35, 26
-// and 17 degrees from horizontal, stepping down by nine degrees at every joint.
+// roof here is a chain of three flat facets per slope, hinged along the ridge
+// direction, and the sori is in the ANGLES rather than in any panel: 40, 28 and
+// 16 degrees from horizontal, stepping down by twelve degrees at every joint.
 // Concave off the ridge, flattening to the eave. That is the curve, discretised
 // exactly the way the timber does it.
 //
-// And because every step is the same nine degrees, every joint travels the same
-// 189 degrees from stowed to deployed, so the whole fan opens on one motion.
+// And because every step is the same twelve degrees, every joint after the first
+// travels the same 168 degrees from stowed to deployed, so the fan opens on one
+// motion — from the inside out, which is how a roll has to unroll.
 //
 // Everything else follows from a small number of hard facts:
 //
@@ -265,17 +266,16 @@ function build(ctx) {
   rig.attach('post-3', ridgeBeam(lib))
 
   // --- the roof ------------------------------------------------------------
-  // Four facets a side, each folded back 180 degrees onto the one before it.
+  // Three facets a side, each folded back 180 degrees onto the one before it.
   // The pins alternate faces down the chain, which is what stacks them cleanly;
   // see foldPanel() for why that alternation is not optional.
   for (const [n, sz] of [['l', -1], ['r', 1]]) {
     let facetParent = 'post-3'
     // The two slopes start 120 mm either side of the centreline rather than on
-    // it, and the reason is the packing: each facet is longer than the one it
-    // folds onto, so a folded-back stack overshoots its own slope by the sum of
-    // those differences — 112 mm here — and lands on the other slope. Starting
-    // the slopes apart leaves the overshoot somewhere to go, and the gap
-    // between them is the ridge beam, which a shrine roof has anyway.
+    // it, and the reason is the packing: the hinge offsets step outward down the
+    // chain, so a folded stack sits proud of its own ridge line by the sum of
+    // them. Starting the slopes apart leaves that stack somewhere to go, and the
+    // gap between them is the ridge beam, which a shrine roof has anyway.
     let facetPivot = [0, POST_HOUSING + mm(40), sz * mm(120)]
     for (let k = 0; k < FACET_LEN.length; k++) {
       const id = `roof-${n}${k + 1}`
@@ -293,15 +293,15 @@ function build(ctx) {
         // hinging a roof panel about its own slope is a twist, not a fold.
         axis: first ? [1, 0, 0] : [0, 0, 1],
         rest: first ? [[0, 1, 0], sz > 0 ? -Math.PI / 2 : Math.PI / 2] : null,
-        // The first facet drops from flat by 44 degrees, in whichever sense
+        // The first facet drops from flat by 40 degrees, in whichever sense
         // takes it down-and-outboard on its own side. Every joint after it
-        // unrolls from folded-back and stops nine degrees SHALLOWER than its
+        // unrolls from folded-back and stops twelve degrees SHALLOWER than its
         // parent — and shallower is the same sign on both slopes, because each
         // one is already measured in its own parent's frame.
         range: first ? [0, sz * FACET_ANGLE[0]] : [Math.PI, deg(12)],
         stage: 5,
-        // Explicit, staggered windows rather than one shared stage. A four-panel
-        // roll fold whose joints all open together has its outer panels sweeping
+        // Explicit, staggered windows rather than one shared stage. A roll fold
+        // whose joints all open together has its outer panels sweeping
         // back across its inner ones; a roll unrolls from the inside out, one
         // joint at a time, and this is what saying so looks like.
         window: [0.58 + k * 0.135, 0.72 + k * 0.135],
@@ -335,13 +335,13 @@ function build(ctx) {
       ['torii: pillars, kasagi, nuki', 48],
       ['shrine walls (3)', 30],
       ['ridge posts + beam', 24],
-      ['roof: 8 folding facets', 72],
+      ['roof: 6 folding facets', 54],
       ['offerings, bell, shimenawa', 14],
       ['stabiliser jacks (4)', 18],
     ],
     notes: [
-      'The roof curve is in the ANGLES, not the panels: four flat facets a side at 44°, 35°, 26° and 17°, stepping down nine degrees at every joint. That is how a real roof does it too — straight boards over curved rafters.',
-      'Because every step is the same nine degrees, every joint travels the same 189° from stowed to open, and the whole fan deploys on one motion.',
+      'The roof curve is in the ANGLES, not the panels: three flat facets a side at 40°, 28° and 16°, stepping down twelve degrees at every joint. That is how a real roof does it too — straight boards over curved rafters.',
+      'Three facets, not four, and all the same length. A chain folding the same way is a roll, and in a roll each wrap reaches back over the one before it: with four, the fourth lands on the second. The audit found that, and the fix was one wrap fewer.',
       'The torii is 1850 mm tall because that is the longest pillar that will lie on a 1940 mm deck, and 1240 mm wide because the pillars have to stow outboard of the shrine. Both numbers are the truck, not the drawing.',
       'The pillars sweep an 1850 mm arc across the entire deck. Nothing but lateral separation saves that — they lie in the planes z = ±620 and the shrine stays inside ±450.',
       'The lightest of the four by a long way. A shrine is mostly roof, and roof is mostly air.',

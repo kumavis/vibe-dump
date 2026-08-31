@@ -72,6 +72,7 @@ export const YATAI = [
     cat: 'cooking', maker: 'IKK (伊東金属工業所)', model: 'TKO18321 てっぱんたこ焼 3連式 LPガス',
     size: [595, 190, 358], kg: 38, jpy: 67880, qty: 1, where: 'テンポスバスターズ / 厨房卸売センター',
     mount: 'NO mount points — a sheet-steel case on four 30 mm feet. Captured: a 605 × 368 well cut through the 24 mm ply worktop, lined with calcium-silicate board and stainless (bare ply against a cast-iron gas griddle is a fire), with two straps over the case ends.',
+    capture: true,
     conf: 'medium',
     note: 'The cast plates lift straight out of the frame. Roughly 20 kg of loose iron unless they are removed and stowed for transit — the single most dangerous item in the module.',
   },
@@ -79,6 +80,7 @@ export const YATAI = [
     cat: 'cooking', maker: '岩谷産業 (Iwatani)', model: 'CB-ETK-2 プロたこマルチ',
     size: [346, 135, 278], kg: 3.4, jpy: 9800, qty: 1, where: 'ヨドバシ / Amazon.co.jp',
     mount: 'Four rubber feet, no fixings. A 3 mm ply rebate 350 × 282 with a hinged retaining bar across the front, so it locates positively and still lifts out.',
+    capture: true,
     conf: 'medium',
   },
   {
@@ -97,6 +99,7 @@ export const YATAI = [
     cat: 'water', maker: 'スイコー (Suiko)', model: 'HLT-50 ホームローリータンク 50 L',
     size: [400, 500, 380], kg: 3.5, jpy: 9000, qty: 2, where: 'モノタロウ / コーナン',
     mount: 'ZERO mount points — rotomoulded PE, smooth radiused body, one 100 mm filler and one 38 mm cock boss. Cannot be bolted anywhere. Captured in a three-sided ply well 405 × 505 with two cam straps over the shoulder.',
+    capture: true,
     conf: 'high',
     note: 'One supply, one waste, filled to 40 L each = 80 kg of water. That is 23% of the payload.',
   },
@@ -116,12 +119,14 @@ export const YATAI = [
     cat: 'cold', maker: '山善 (Yamazen)', model: 'YFR-AC252(B) 車載用冷凍冷蔵庫 25 L',
     size: [593, 410, 345], kg: 11.2, jpy: 34800, qty: 1, where: 'ヨドバシ / Amazon.co.jp',
     mount: 'Moulded case with recessed side handles, no threaded inserts. A ply cradle gripping the base rim, plus one cam strap through the handle recesses.',
+    capture: true,
     conf: 'medium',
   },
   {
     cat: 'gas', maker: 'LPガス販売事業者', model: 'LPガス容器 8 kg (内容積 19 L)',
     size: [290, 500, 290], kg: 18, jpy: 12000, qty: 1, where: '岩谷産業 販売店 (充填契約)',
     mount: 'LITERALLY no mount points — a smooth barrel with a foot skirt and a neck guard. Barrel bands are the only restraint that exists. Lives in an external vented locker off the rear crossmember, upright, vented at the BOTTOM because propane sinks.',
+    capture: true,
     conf: 'high',
   },
   {
@@ -170,6 +175,7 @@ export const YATAI = [
     cat: 'prep', maker: '住べテクノプラスチック', model: '20SWK 抗菌スーパー耐熱まな板 600 × 300 × 20',
     size: [600, 20, 300], kg: 3.4, jpy: 8253, qty: 1, where: '合羽橋 / モノタロウ',
     mount: 'Loose on the worktop; stowed in a slot beside the tank well for transit.',
+    capture: true,
     conf: 'high',
   },
   {
@@ -208,6 +214,7 @@ export const SOUND = [
     cat: 'PA — low', maker: 'YAMAHA', model: 'DXS15XLF 15" powered subwoofer',
     size: [450, 587, 600], kg: 40, jpy: 243000, qty: 2, where: 'Soundhouse 254525 (特別注文, 2–4 週)',
     mount: 'The ONLY threaded features are in the top panel: a dual socket, Φ35 × 80 deep concentric with M20 × 25. That is rated for a pole in COMPRESSION and must never be used as a tie-down. No base inserts, no flypoints. Captured in a 460 × 610 ply well with hardwood battens hooking the two cast side-handle apertures, plus one 24 mm endless strap over the top.',
+    capture: true,
     conf: 'high',
     note: 'The only 15" active that hits the 40–45 kg brief with a documented dual pole socket.',
   },
@@ -267,18 +274,21 @@ export const SOUND = [
     cat: 'booth', maker: 'Pioneer DJ', model: 'DDJ-FLX4 controller',
     size: [482, 59, 273], kg: 2.1, jpy: 49500, qty: 1, where: 'Soundhouse 318895 (在庫)',
     mount: 'NO MOUNT POINTS AT ALL — four rubber feet. It is 482 mm wide, within a millimetre of 19 inches, and that will tempt you: it has no rack ears and no provision for them. Captured in a 486 × 277 × 12 mm routed recess in the counter with a hinged retaining bar, so it stays put while the counter folds.',
+    capture: true,
     conf: 'high',
   },
   {
     cat: 'booth', maker: 'YAMAHA', model: 'MG10XU mixer',
     size: [244, 71, 294], kg: 2.1, jpy: 32400, qty: 1, where: 'Soundhouse 193650 (在庫)',
     mount: 'No rack ears; Yamaha’s RK-MG12 kit fits the MG12/16, NOT this chassis. Routed recess plus a rear retaining bar, same as the controller.',
+    capture: true,
     conf: 'high',
   },
   {
     cat: 'power', maker: 'EcoFlow', model: 'DELTA 2 Max (2048 Wh)',
     size: [497, 305, 242], kg: 23, jpy: 180000, qty: 1, where: 'EcoFlow Japan / Amazon.co.jp / ヨドバシ',
     mount: 'Moulded side handle recesses only, no inserts, no tie-down eyes. Ply well 505 × 250 internal with a 60 mm lip and tongues into the handle apertures, one 24 mm strap over the top.',
+    capture: true,
     conf: 'low',
     note: 'The 4096 Wh DELTA Pro 3 gives about 4.5 h at 800 W but weighs 51.5 kg, which this module does not have. At 2048 Wh expect roughly 2 to 2.5 hours — the honest number.',
   },
@@ -338,9 +348,15 @@ export function byCategory(items) {
   return out
 }
 
-/** How many items in a list have no fixing points of their own. */
+/**
+ * How many items in a list have no fixing points of their own.
+ *
+ * Flagged by hand rather than sniffed out of the prose, because "no rack ears"
+ * and "no mount points" are the same fact written two ways and a regex over the
+ * mount notes quietly undercounted the things that actually need a cradle.
+ */
 export function captureCount(items) {
-  return items.filter((i) => /no mount points|zero mount points|no fixings|literally no/i.test(i.mount)).length
+  return items.filter((i) => i.capture === true).length
 }
 
 export { mm }
