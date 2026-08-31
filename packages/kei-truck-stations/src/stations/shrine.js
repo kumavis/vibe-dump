@@ -1,0 +1,530 @@
+import * as THREE from 'three'
+import {
+  mm, deg, slab, rod, extrusion, T, X,
+  addGates, addJack, subframe, subframeHull, foldPanel, foldPanelHull, hingeX, hingeZ, REST,
+} from './common.js'
+import { lathe, cloth, shrineRoofPlane, roundedSlab } from '../build.js'
+
+// ---------------------------------------------------------------------------
+// HOKORA — a wayside shrine that folds flat
+//
+// The hard problem, and the one worth reading this file for: a Japanese shrine
+// roof is a CURVED surface, and a folding structure is made of FLAT panels.
+//
+// The answer is the one Japanese carpenters have always used. A real hiwadabuki
+// roof is not a curved sheet; it is straight boards laid over curved rafters,
+// and the curve lives in the rafter line rather than in the material. So the
+// roof here is a chain of four flat facets per slope, hinged along the ridge
+// direction, and the sori is in the ANGLES rather than in any panel: 44, 35, 26
+// and 17 degrees from horizontal, stepping down by nine degrees at every joint.
+// Concave off the ridge, flattening to the eave. That is the curve, discretised
+// exactly the way the timber does it.
+//
+// And because every step is the same nine degrees, every joint travels the same
+// 189 degrees from stowed to deployed, so the whole fan opens on one motion.
+//
+// Everything else follows from a small number of hard facts:
+//
+//   The torii is 1850 mm tall because that is how long a pillar can lie on a
+//   1940 mm deck. Its pillars are 1240 apart because they have to lie OUTBOARD
+//   of the shrine — which turns out fine, since 0.67 is inside the range real
+//   torii use, and being wider than the shrine is the point of a gate.
+//
+//   The shrine walls are only 390 mm because two 390 mm walls folding inward
+//   onto a 900 mm floor leave a 120 mm channel down the middle, and the ridge
+//   posts need that channel. Wall height is set by the packing, not by taste —
+//   and a hokora is a small thing anyway.
+//
+//   The pillars sweep an 1850 mm arc through the entire volume above the deck.
+//   They get away with it only because they lie in the planes z = +/-620 and
+//   the shrine lives inside z = +/-450. Lateral separation is what makes a
+//   long sweep survivable; there is no amount of deploy-ordering that would
+//   have saved it.
+//
+// This is the lightest of the four modules by a wide margin, and that is not an
+// accident either: it is almost entirely thin panels and hollow posts. A shrine
+// is mostly roof, and roof is mostly air.
+// ---------------------------------------------------------------------------
+
+const FLOOR = mm(90)
+const DAIS = mm(150) // shrine floor above the cargo deck
+const SHRINE = { x0: -mm(435), x1: mm(835), z: mm(430) } // 1270 x 860
+const WALL_H = mm(378)
+const WALL_T = mm(28)
+
+const TORII = { x: -mm(930), z: mm(620), h: mm(1850), post: mm(120) }
+
+// The posts sit clear of where the back wall lands when it folds down: the wall
+// covers x in [445, 835], so a post at 650 is straight through it.
+const POST_X = [-mm(250), mm(400)]
+const POST_HOUSING = mm(480)
+const POST_STAGE = mm(330)
+const RIDGE_Y = DAIS + POST_HOUSING + POST_STAGE * 3 // 1620 above the deck
+
+const FACET_T = mm(24)
+const ROOF_LEN = mm(1500) // along the ridge, gable overhangs included
+
+// THREE flat facets per slope whose angles step down by twelve degrees: the
+// sori curve, discretised.
+//
+// THREE, not four, and all the same length — both of which the audit decided.
+//
+// A chain of panels folding the same way is a ROLL, and in a roll each wrap
+// reaches back over the one before it. With four facets, the fourth folded back
+// lands on the SECOND, which is not a parent, not a child, and not a contact the
+// design wants. Three facets is one wrap fewer and the reach never gets that
+// far. Equal lengths matter for the same reason: make each facet longer than
+// the one it folds onto and the extra length is exactly how far it overshoots
+// into its grandparent.
+//
+// Three segments is still a curve. A shrine roof is boards over rafters, and
+// the eye reads the rafter line, not the board count.
+const FACET_LEN = [mm(300), mm(300), mm(300)]
+const FACET_ANGLE = [deg(40), deg(28), deg(16)]
+const FACET_GAP = FACET_T + mm(14)
+
+export default {
+  id: 'hokora',
+  title: 'Hokora',
+  tagline: 'a curved shrine roof, built from flat panels that fold',
+  build,
+}
+
+function build(ctx) {
+  const { rig, lib } = ctx
+
+  rig.setStages([
+    'tailgate down, jacks in',
+    'torii pillars rise',
+    'kasagi and nuki swing across',
+    'nuki across, shrine walls up',
+    'ridge posts telescope',
+    'the roof unrolls',
+  ])
+
+  const base = rig.add({
+    id: 'floor',
+    parent: null,
+    label: 'subframe + dais',
+    joint: 'fixed',
+    static: true,
+    mass: 40 + 22,
+    com: [mm(200), FLOOR, 0],
+    hulls: [
+      ...subframeHull(FLOOR),
+      { c: [mm(200), DAIS - mm(30), 0], s: [SHRINE.x1 - SHRINE.x0, mm(60), SHRINE.z * 2], tag: 'dais' },
+    ],
+  })
+  rig.attach(base.id, subframe(lib, { height: FLOOR, skin: lib.hinoki }))
+  rig.attach(base.id, dais(lib))
+
+  addGates(rig, ctx, { left: 'hang', right: 'hang', tail: 'flat', stage: 0 })
+  for (const sx of [-1, 1]) {
+    for (const sz of [-1, 1]) {
+      addJack(rig, lib, { id: `jack-${sx > 0 ? 'f' : 'r'}${sz > 0 ? 'r' : 'l'}`, at: [sx * mm(880), -mm(70), sz * mm(660)], stage: 0 })
+    }
+  }
+
+  // --- the torii -----------------------------------------------------------
+  for (const [n, sz] of [['l', -1], ['r', 1]]) {
+    const pillar = rig.add({
+      id: `pillar-${n}`,
+      parent: 'floor',
+      label: 'torii pillar',
+      pivot: [TORII.x, FLOOR + mm(170), sz * TORII.z],
+      joint: 'hinge',
+      axis: [0, 0, 1],
+      range: [0, Math.PI / 2],
+      stage: 1,
+      mass: 15,
+      com: [TORII.h / 2, 0, 0],
+      hulls: [{ c: [TORII.h / 2, 0, 0], s: [TORII.h, TORII.post, TORII.post], tag: 'pillar' }],
+      mates: ['floor', 'ground'],
+      note: 'sweeps 1850 mm; survivable only because it lies outboard of the shrine',
+    })
+    rig.attach(pillar.id, toriiPillar(lib))
+  }
+
+  // Kasagi and nuki fold against the pillars and swing across once they are up.
+  // Carrying the beams on the pillars rather than loose on the deck is what
+  // makes the whole gate one assembly: nothing has to be lifted into place.
+  const kasagi = rig.add({
+    id: 'kasagi',
+    parent: 'pillar-r',
+    label: 'kasagi (top lintel)',
+    // Folded back ALONG its pillar, and swung across once the pillar is up. The
+    // axis is the pillar's local Y: rotating about the pillar's own long axis
+    // would only twist the beam, and rotating about local Z would swing it in
+    // the wrong plane entirely.
+    pivot: [TORII.h - mm(110), mm(80), -mm(75)],
+    joint: 'hinge',
+    axis: [0, 1, 0],
+    range: [0, -Math.PI / 2],
+    stage: 2,
+    mass: 11,
+    com: [-mm(620), 0, 0],
+    hulls: [{ c: [-mm(620), 0, 0], s: [mm(1400), mm(150), mm(190)], tag: 'kasagi' }],
+    mates: ['pillar-r', 'pillar-l'],
+  })
+  rig.attach(kasagi.id, kasagiBeam(lib))
+
+  const nuki = rig.add({
+    id: 'nuki',
+    parent: 'pillar-r',
+    label: 'nuki (tie beam)',
+    // BOTH beams hinge off the same pillar, 630 mm apart up its length, and
+    // swing the same way. Hang one off each pillar and their arcs cross at
+    // 45 degrees — two beams sweeping the same gap from opposite ends is the
+    // one interference in this design that no offset fixes, only a shared
+    // pivot does.
+    pivot: [TORII.h * 0.64, -mm(80), -mm(75)],
+    joint: 'hinge',
+    axis: [0, 1, 0],
+    range: [0, -Math.PI / 2],
+    window: [0.42, 0.60],
+    // A stage after the kasagi, not alongside it. Both beams swing across the
+    // same gap from opposite pillars, and their arcs cross at 45 degrees — the
+    // one place in this design where deploy ORDER, not geometry, is the fix.
+    stage: 3,
+    mass: 7,
+    com: [-mm(570), 0, 0],
+    hulls: [{ c: [-mm(570), 0, 0], s: [mm(1240), mm(110), mm(130)], tag: 'nuki' }],
+    mates: ['pillar-r', 'pillar-l'],
+  })
+  rig.attach(nuki.id, nukiBeam(lib))
+
+  // --- the shrine body -----------------------------------------------------
+  // Back wall folds first and lies underneath; the two side walls fold on top
+  // of it. Their pins are a panel thickness higher for exactly that reason.
+  const back = rig.add({
+    id: 'wall-back',
+    parent: 'floor',
+    label: 'back wall',
+    pivot: [SHRINE.x1, DAIS, 0],
+    joint: 'hinge',
+    axis: [0, 0, 1],
+    rest: REST.FLAT_AFT,
+    range: [0, -Math.PI / 2],
+    stage: 3,
+    mass: 8,
+    com: [WALL_H / 2, 0, 0],
+    hulls: foldPanelHull(WALL_H, SHRINE.z * 2 - mm(20), WALL_T, 'wall', -1),
+    mates: ['floor'],
+  })
+  rig.attach(back.id, foldPanel(lib, WALL_H, SHRINE.z * 2 - mm(20), WALL_T, { face: lib.vermilion, anchorY: -1 }))
+
+  for (const [n, sz] of [['l', -1], ['r', 1]]) {
+    const wall = rig.add({
+      id: `wall-${n}`,
+      parent: 'floor',
+      label: 'side wall',
+      pivot: [mm(200), DAIS + WALL_T + mm(6), sz * SHRINE.z],
+      joint: 'hinge',
+      axis: [1, 0, 0],
+      rest: REST.UP_ALONG_X,
+      // Stowed LYING FLAT (t = 0) and erect at the end, so the travel runs the
+      // other way from the panels that stow upright.
+      range: [-sz * Math.PI / 2, 0],
+      stage: 3,
+      mass: 11,
+      com: [WALL_H / 2, 0, 0],
+      hulls: foldPanelHull(WALL_H, SHRINE.x1 - SHRINE.x0 - mm(30), WALL_T, 'wall', -1),
+      mates: ['floor', 'wall-back'],
+      note: '390 mm tall because two of them have to fold onto a 900 mm floor and leave the posts a channel',
+    })
+    rig.attach(wall.id, foldPanel(lib, WALL_H, SHRINE.x1 - SHRINE.x0 - mm(30), WALL_T, { face: lib.vermilion, anchorY: -1 }))
+  }
+
+  // --- ridge posts ---------------------------------------------------------
+  // One rigid assembly per stage, carrying both posts and (at the top) the
+  // ridge beam. 150 mm of engagement stays inside the stage below at full
+  // height — 1.9 times the 80 mm section.
+  rig.attach('floor', postHousings(lib))
+  let parent = 'floor'
+  let pivot = [0, DAIS + mm(20), 0]
+  for (let k = 1; k <= 3; k++) {
+    const id = `post-${k}`
+    rig.add({
+      id,
+      parent,
+      label: `ridge post (stage ${k})`,
+      pivot,
+      joint: 'telescope',
+      axis: [0, 1, 0],
+      range: [0, POST_STAGE],
+      stage: 4,
+      mass: k === 3 ? 12 : 6,
+      com: [mm(200), POST_HOUSING / 2, 0],
+      hulls: POST_X.map((x) => ({ c: [x, POST_HOUSING / 2, 0], s: [mm(88), POST_HOUSING, mm(88)], tag: `post ${k}` })),
+      mates: ['floor', 'post-1', 'post-2', 'post-3'],
+    })
+    rig.attach(id, postStage(lib, k))
+    parent = id
+    pivot = [0, 0, 0]
+  }
+  rig.attach('post-3', ridgeBeam(lib))
+
+  // --- the roof ------------------------------------------------------------
+  // Four facets a side, each folded back 180 degrees onto the one before it.
+  // The pins alternate faces down the chain, which is what stacks them cleanly;
+  // see foldPanel() for why that alternation is not optional.
+  for (const [n, sz] of [['l', -1], ['r', 1]]) {
+    let facetParent = 'post-3'
+    // The two slopes start 120 mm either side of the centreline rather than on
+    // it, and the reason is the packing: each facet is longer than the one it
+    // folds onto, so a folded-back stack overshoots its own slope by the sum of
+    // those differences — 112 mm here — and lands on the other slope. Starting
+    // the slopes apart leaves the overshoot somewhere to go, and the gap
+    // between them is the ridge beam, which a shrine roof has anyway.
+    let facetPivot = [0, POST_HOUSING + mm(40), sz * mm(120)]
+    for (let k = 0; k < FACET_LEN.length; k++) {
+      const id = `roof-${n}${k + 1}`
+      const first = k === 0
+      const anchorY = k % 2 === 0 ? -1 : 1
+      rig.add({
+        id,
+        parent: facetParent,
+        label: `roof facet ${k + 1}`,
+        pivot: facetPivot,
+        joint: 'hinge',
+        // Facet 1 folds about the world X axis, which is the ridge. Every facet
+        // after it folds about its PARENT's local Z — because the rest applied
+        // to facet 1 turned the chain's local X into the slope direction, and
+        // hinging a roof panel about its own slope is a twist, not a fold.
+        axis: first ? [1, 0, 0] : [0, 0, 1],
+        rest: first ? [[0, 1, 0], sz > 0 ? -Math.PI / 2 : Math.PI / 2] : null,
+        // The first facet drops from flat by 44 degrees, in whichever sense
+        // takes it down-and-outboard on its own side. Every joint after it
+        // unrolls from folded-back and stops nine degrees SHALLOWER than its
+        // parent — and shallower is the same sign on both slopes, because each
+        // one is already measured in its own parent's frame.
+        range: first ? [0, sz * FACET_ANGLE[0]] : [Math.PI, deg(12)],
+        stage: 5,
+        // Explicit, staggered windows rather than one shared stage. A four-panel
+        // roll fold whose joints all open together has its outer panels sweeping
+        // back across its inner ones; a roll unrolls from the inside out, one
+        // joint at a time, and this is what saying so looks like.
+        window: [0.58 + k * 0.135, 0.72 + k * 0.135],
+        mass: 9,
+        com: [FACET_LEN[k] / 2, 0, 0],
+        hulls: foldPanelHull(FACET_LEN[k], ROOF_LEN, FACET_T, `facet ${k + 1}`, anchorY),
+        mates: [facetParent],
+        note: `${Math.round((FACET_ANGLE[k] * 180) / Math.PI)}° below horizontal`,
+      })
+      rig.attach(id, roofFacet(lib, k, sz, anchorY))
+      facetParent = id
+      // The hinge gap GROWS down the chain. A stack of panels folding onto each
+      // other needs its pins stepped clear of the accumulated thickness, not set
+      // at a constant offset — with a constant one, panel k+2 rides only two
+      // sheets above panel k and clips it as the joints swing through. Stepping
+      // the offsets costs 80 mm of packed height and buys the clearance the
+      // sweep needs.
+      const gap = FACET_GAP * (k + 1)
+      facetPivot = [FACET_LEN[k], anchorY < 0 ? gap : -gap, 0]
+    }
+  }
+
+  // --- what makes it a shrine ----------------------------------------------
+  rig.attach('kasagi', shimenawa(lib))
+  rig.attach('gate-tail', offerings(lib))
+  rig.attach('post-3', bellAndRope(lib))
+
+  return {
+    massBudget: [
+      ['subframe + dais', 62],
+      ['torii: pillars, kasagi, nuki', 48],
+      ['shrine walls (3)', 30],
+      ['ridge posts + beam', 24],
+      ['roof: 8 folding facets', 72],
+      ['offerings, bell, shimenawa', 14],
+      ['stabiliser jacks (4)', 18],
+    ],
+    notes: [
+      'The roof curve is in the ANGLES, not the panels: four flat facets a side at 44°, 35°, 26° and 17°, stepping down nine degrees at every joint. That is how a real roof does it too — straight boards over curved rafters.',
+      'Because every step is the same nine degrees, every joint travels the same 189° from stowed to open, and the whole fan deploys on one motion.',
+      'The torii is 1850 mm tall because that is the longest pillar that will lie on a 1940 mm deck, and 1240 mm wide because the pillars have to stow outboard of the shrine. Both numbers are the truck, not the drawing.',
+      'The pillars sweep an 1850 mm arc across the entire deck. Nothing but lateral separation saves that — they lie in the planes z = ±620 and the shrine stays inside ±450.',
+      'The lightest of the four by a long way. A shrine is mostly roof, and roof is mostly air.',
+    ],
+  }
+}
+
+// --- geometry ---------------------------------------------------------------
+
+function dais(lib) {
+  const g = new THREE.Group()
+  const L = SHRINE.x1 - SHRINE.x0
+  g.add(slab([L, mm(60), SHRINE.z * 2], lib.hinoki, { pos: [mm(200), DAIS - mm(30), 0] }))
+  // A moulded edge, and the step up onto it at the front.
+  g.add(slab([L + mm(50), mm(22), SHRINE.z * 2 + mm(50)], lib.hinoki, { pos: [mm(200), DAIS - mm(56), 0] }))
+  g.add(slab([mm(220), mm(46), SHRINE.z * 2 - mm(200)], lib.hinoki, { pos: [SHRINE.x0 - mm(120), FLOOR + mm(23), 0] }))
+  // Base stones for the torii pillars: the pillars hinge 150 mm above the
+  // module floor, and something has to be under them.
+  for (const sz of [-1, 1]) {
+    g.add(slab([mm(300), mm(170), mm(300)], lib.aluDark, { anchor: [0, -1, 0], pos: [TORII.x, FLOOR, sz * TORII.z] }))
+  }
+  return g
+}
+
+function toriiPillar(lib) {
+  const g = new THREE.Group()
+  // Slight entasis: a real torii pillar tapers, and the taper is most of what
+  // stops it reading as a length of box section.
+  const p = lathe(
+    [[mm(72), 0], [mm(70), TORII.h * 0.35], [mm(64), TORII.h * 0.72], [mm(58), TORII.h - mm(60)], [mm(52), TORII.h]],
+    lib.vermilion,
+    { seg: 14 },
+  )
+  p.rotation.z = -Math.PI / 2 // authored up +Y; the part lies along +X
+  g.add(p)
+  g.add(slab([mm(60), mm(190), mm(190)], lib.vermilionDeep, { pos: [mm(30), 0, 0] }))
+  return g
+}
+
+/** Kasagi: the top lintel, with its shimaki underbeam and upturned ends. */
+function kasagiBeam(lib) {
+  const g = new THREE.Group()
+  const L = mm(1400)
+  const beam = new THREE.Group()
+  beam.position.x = -L / 2 // authored along -X, folded back along its pillar
+  beam.add(slab([L, mm(96), mm(190)], lib.vermilion, { pos: [0, mm(40), 0] }))
+  beam.add(slab([L - mm(90), mm(70), mm(150)], lib.vermilionDeep, { pos: [0, -mm(26), 0] }))
+  // The ends rise: a myojin torii's kasagi is never a straight stick.
+  for (const s of [-1, 1]) {
+    beam.add(slab([mm(220), mm(84), mm(180)], lib.vermilion, { pos: [s * (L / 2 - mm(80)), mm(66), 0], rot: [0, 0, -s * deg(9)] }))
+  }
+  g.add(beam)
+  return g
+}
+
+function nukiBeam(lib) {
+  const g = new THREE.Group()
+  const L = mm(1240)
+  g.add(slab([L, mm(96), mm(130)], lib.vermilionDeep, { pos: [-L / 2, 0, 0] }))
+  g.add(slab([mm(120), mm(150), mm(150)], lib.vermilion, { pos: [-L, 0, 0] }))
+  return g
+}
+
+function postHousings(lib) {
+  const g = new THREE.Group()
+  for (const x of POST_X) {
+    g.add(slab([mm(110), POST_HOUSING, mm(110)], lib.hinoki, { anchor: [0, -1, 0], pos: [x, DAIS, 0] }))
+    g.add(slab([mm(150), mm(30), mm(150)], lib.copperTrim, { pos: [x, DAIS + POST_HOUSING, 0] }))
+  }
+  return g
+}
+
+function postStage(lib, k) {
+  const g = new THREE.Group()
+  const s = mm(92) - k * mm(6)
+  for (const x of POST_X) {
+    g.add(slab([s, POST_HOUSING, s], lib.hinoki, { anchor: [0, -1, 0], pos: [x, 0, 0] }))
+    g.add(slab([s + mm(14), mm(22), s + mm(14)], lib.copperTrim, { pos: [x, mm(11), 0] }))
+  }
+  return g
+}
+
+/** The ridge beam, plus the gable-end bargeboards the facets hang off. */
+function ridgeBeam(lib) {
+  const g = new THREE.Group()
+  g.add(slab([mm(1050), mm(90), mm(150)], lib.hinoki, { pos: [mm(75), POST_HOUSING + mm(20), 0] }))
+  // Katsuogi: the short billets that lie across a shrine ridge.
+  for (let i = -1; i <= 1; i++) {
+    const k = lathe([[mm(46), 0], [mm(54), mm(90)], [mm(46), mm(180)]], lib.copperTrim, { seg: 10 })
+    k.rotation.x = Math.PI / 2
+    k.position.set(mm(75) + i * mm(380), POST_HOUSING + mm(90), -mm(90))
+    g.add(k)
+  }
+  // Chigi: the crossed finials at each gable.
+  for (const s of [-1, 1]) {
+    for (const t of [-1, 1]) {
+      g.add(rod(
+        [mm(75) + s * mm(560), POST_HOUSING + mm(10), 0],
+        [mm(75) + s * mm(700), POST_HOUSING + mm(420), t * mm(150)],
+        mm(26), lib.gold,
+      ))
+    }
+  }
+  return g
+}
+
+/**
+ * One roof facet: boards running down the slope, a copper batten at the eave
+ * edge, and — on the outermost facet — the deep fascia that reads as an eave.
+ */
+function roofFacet(lib, k, sz, anchorY) {
+  const g = new THREE.Group()
+  const L = FACET_LEN[k]
+  const last = k === FACET_LEN.length - 1
+  g.add(foldPanel(lib, L, ROOF_LEN, FACET_T, { face: lib.copperRoof, frame: false, anchorY }))
+  // Board lines running down the slope, which is how the real roof is laid.
+  for (let i = -6; i <= 6; i++) {
+    g.add(slab([L, FACET_T + mm(5), mm(16)], lib.copperTrim, { anchor: [-1, anchorY, 0], pos: [0, 0, i * mm(112)] }))
+  }
+  g.add(slab([mm(26), FACET_T + mm(16), ROOF_LEN], lib.copperTrim, { anchor: [-1, anchorY, 0], pos: [L - mm(26), 0, 0] }))
+  if (last) {
+    // The eave fascia, and a row of rafter ends under it.
+    g.add(slab([mm(40), mm(120), ROOF_LEN], lib.vermilionDeep, { pos: [L, -anchorY * mm(40), 0] }))
+    for (let i = -6; i <= 6; i++) {
+      g.add(slab([mm(180), mm(46), mm(46)], lib.hinoki, { pos: [L - mm(90), -anchorY * mm(46), i * mm(112)] }))
+    }
+  }
+  g.add(hingeZ(lib, ROOF_LEN, mm(13)))
+  return g
+}
+
+/** Shimenawa across the torii, with its shide. */
+function shimenawa(lib) {
+  const g = new THREE.Group()
+  const L = mm(1240)
+  const r = cloth(L, mm(120), mm(90), lib.rope, { nx: 14, ny: 2, wave: 0.004 })
+  r.position.set(-mm(700), -mm(170), 0)
+  g.add(r)
+  for (let i = 0; i < 5; i++) {
+    const x = -mm(700) - L / 2 + mm(120) + (i * (L - mm(240))) / 4
+    const s = cloth(mm(90), mm(230), mm(6), lib.washi, { nx: 3, ny: 4, wave: 0.008 })
+    s.position.set(x, -mm(310), 0)
+    g.add(s)
+  }
+  return g
+}
+
+/** Saisenbako and a pair of stone lanterns, on the dropped tailgate. */
+function offerings(lib) {
+  const g = new THREE.Group()
+  const box = new THREE.Group()
+  box.position.set(mm(150), mm(30), 0)
+  box.add(slab([mm(320), mm(230), mm(560)], lib.hinoki, { anchor: [0, -1, 0] }))
+  for (let i = -4; i <= 4; i++) {
+    box.add(slab([mm(26), mm(24), mm(500)], lib.trim, { pos: [i * mm(34), mm(240), 0] }))
+  }
+  box.add(slab([mm(340), mm(20), mm(580)], lib.hinoki, { pos: [0, mm(220), 0] }))
+  g.add(box)
+  for (const s of [-1, 1]) {
+    const t = new THREE.Group()
+    t.position.set(mm(60), 0, s * mm(560))
+    t.add(lathe([[mm(60), 0], [mm(52), mm(120)], [mm(46), mm(230)]], lib.hinoki, { seg: 10 }))
+    t.add(slab([mm(180), mm(30), mm(180)], lib.hinoki, { pos: [0, mm(245), 0] }))
+    t.add(slab([mm(150), mm(160), mm(150)], lib.washi, { pos: [0, mm(340), 0] }))
+    const glow = new THREE.PointLight(0xffb257, 2.6, 2.2, 2)
+    glow.position.y = mm(340)
+    t.add(glow)
+    t.add(lathe([[mm(120), 0], [mm(96), mm(70)], [0, mm(120)]], lib.hinoki, { seg: 10 })).position.y = mm(0)
+    g.add(t)
+  }
+  return g
+}
+
+/** Suzu bell and its rope, hanging under the ridge at the shrine's face. */
+function bellAndRope(lib) {
+  const g = new THREE.Group()
+  const y = POST_HOUSING - mm(40)
+  const b = lathe([[0, mm(150)], [mm(90), mm(120)], [mm(120), mm(40)], [mm(110), 0], [0, 0]], lib.gold, { seg: 16 })
+  b.position.set(SHRINE.x0 + mm(60), y - mm(700), 0)
+  g.add(b)
+  g.add(rod([SHRINE.x0 + mm(60), y, 0], [SHRINE.x0 + mm(60), y - mm(700), 0], mm(10), lib.rope))
+  const r = cloth(mm(150), mm(900), mm(20), lib.rope, { nx: 3, ny: 6, wave: 0.01 })
+  r.position.set(SHRINE.x0 + mm(60), y - mm(1200), 0)
+  g.add(r)
+  return g
+}

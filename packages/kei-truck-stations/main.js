@@ -191,7 +191,13 @@ window.kei = {
     return current
   },
   setProgress,
-  load,
+  /** Swap station AND refresh the panel, so the console and the UI agree. */
+  load: (id) => {
+    const c = load(id)
+    ui.describe(c)
+    setProgress(state.t)
+    return c
+  },
   audit: () => current.rig.audit({ samples: 240, statics }),
   view(px, py, pz, tx = 0, ty = 1.1, tz = 0) {
     state.orbit = false

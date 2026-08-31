@@ -297,6 +297,40 @@ export function foldPanelHull(length, width, thickness, tag = 'panel', anchorY =
   return [{ c: [length / 2, (-anchorY * t) / 2, 0], s: [length, t, width], tag }]
 }
 
+/**
+ * Rest orientations for panels authored by foldPanel().
+ *
+ * foldPanel builds a panel that runs along its own +X, is `width` wide along
+ * its own Z, and thin in its own Y. That frame is right for a panel hinged
+ * about the world Z axis and nothing else, so a panel hinged about world X
+ * needs turning first — and it needs turning in BOTH axes, which is the part
+ * that catches you out.
+ *
+ * A single quarter turn about Z stands the panel up correctly but leaves its
+ * width lying along world Z, i.e. across the truck instead of along it. A
+ * counter meant to be 1740 mm of serving frontage ends up 1740 mm deep and
+ * 450 mm wide, sticking out through both sides of the vehicle. The audit
+ * reports it as half a metre of interference with the deck, which is exactly
+ * what it is.
+ *
+ * UP_ALONG_X is the cyclic permutation x -> y -> z -> x, a 120 degree turn
+ * about (1,1,1): the panel's length goes up, its width goes along the truck,
+ * and its thickness goes across. That is the frame a wall, a counter or a
+ * shelf hinged on a fore-and-aft line actually wants.
+ */
+export const REST = {
+  /** length -> +Y (up), width -> +X (along the truck), thickness -> +Z. */
+  UP_ALONG_X: [[1, 1, 1], (2 * Math.PI) / 3],
+  /** length -> -Y (hanging), width -> +X. The mirror of UP_ALONG_X. */
+  DOWN_ALONG_X: [[-1, 1, -1], (2 * Math.PI) / 3],
+  /** length -> -X (lying aft), width -> -Z. For a panel hinged about world Z. */
+  FLAT_AFT: [[0, 1, 0], Math.PI],
+  /** length -> +Z (lying outboard), width -> +X. Thickness flips to -Y. */
+  FLAT_OUTBOARD: [[1, 0, 1], Math.PI],
+  /** A leg authored hanging down -Y, laid along -X instead. */
+  LEG_ALONG_X: [[0, 0, 1], -Math.PI / 2],
+}
+
 /** Knuckles drawn on a hinge line running along Z at the part's origin. */
 export function hingeZ(lib, width, radius = mm(15)) {
   return hingeLine([0, 0, -width / 2], [0, 0, width / 2], radius, lib.hinge)
