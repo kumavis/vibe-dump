@@ -158,9 +158,18 @@ ui.frame('three-quarter')
 resize()
 
 let last = performance.now()
-let orbitAngle = 0
 renderer.setAnimationLoop((now) => {
-  const dt = Math.min(0.05, (now - last) / 1000)
+  // THE STEP IS REAL TIME, and the clamp is only a guard against a suspended tab.
+  //
+  // It used to be clamped at a twentieth of a second, which is fine at 60 fps and
+  // a lie at anything slower: a software renderer producing a frame every 1.2 s
+  // advanced the fold by 0.05 s each time, so the same deployment that takes six
+  // seconds on a GPU took two and a half minutes — and the thumbnail pass, which
+  // runs under SwiftShader, photographed a truck that was still packed. Clamping
+  // at two seconds instead means the fold takes its stated 5.9 s of WALL time
+  // wherever it runs, and the only thing the clamp still catches is a tab that
+  // was backgrounded for a while.
+  const dt = Math.min(2, (now - last) / 1000)
   last = now
 
   if (state.playing) {
@@ -182,11 +191,19 @@ renderer.setAnimationLoop((now) => {
     ui.tick(state.t, current)
   }
 
+  // Orbit from WHEREVER the camera is, rather than from a stored angle. A stored
+  // angle starts at zero, which snapped the view to dead-ahead on the first
+  // frame and threw away the framing the app had just chosen — and did the same
+  // again every time someone picked a view or dragged. Reading the angle back
+  // out of the camera each frame means the orbit continues from the shot you are
+  // looking at, which is the only behaviour that is never surprising.
   if (state.orbit && !controls.dragging) {
-    orbitAngle += dt * 0.06
-    const r = Math.hypot(camera.position.x - controls.target.x, camera.position.z - controls.target.z)
-    camera.position.x = controls.target.x + Math.cos(orbitAngle) * r
-    camera.position.z = controls.target.z + Math.sin(orbitAngle) * r
+    const dx = camera.position.x - controls.target.x
+    const dz = camera.position.z - controls.target.z
+    const a = Math.atan2(dz, dx) + dt * 0.06
+    const r = Math.hypot(dx, dz)
+    camera.position.x = controls.target.x + Math.cos(a) * r
+    camera.position.z = controls.target.z + Math.sin(a) * r
     camera.lookAt(controls.target)
   }
 

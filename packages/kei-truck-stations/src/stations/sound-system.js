@@ -95,7 +95,7 @@ const TOP_LIE_Y = SUB_TOP + TOP.d / 2
 const MAST_X = mm(600)
 const MAST_Y = mm(420) // axis height on its hinged collar plate
 const MAST_STOW = mm(1405)
-const MAST_CRANK = mm(1200) // of the 1595 available — see the notes
+const MAST_CRANK = mm(900) // of the 1595 available — see the notes
 // STAGE EVOLUTION TRUSS4/100/22I: 220 mm square, 1 m, Ø35 chords, pin and R-clip.
 const WING_L = mm(1000)
 const WING_S = mm(220)
@@ -468,7 +468,7 @@ function build(ctx) {
       'Weight, not space, is the binding constraint: the deck has 2.7 m² and 1120 mm of headroom, and 350 kg of payload. The build lands at 347.',
       'Nothing on this module hangs off a speaker cabinet. The subs are captured in wells with battens into the cast handle apertures; only the DZR10s are bolted, and only because their M10 × 8 pattern is rated for it.',
       'The tops rise BEFORE they tip. Tip first and the box’s trailing corner swings 130 mm into the sub it is standing on — the auditor catches it, and so does a tape measure.',
-      'The mast is cranked to 1200 of its 1595 mm of travel, which puts the fixtures 3.8 m over the road and the top chord at 3.9. Wind it to the stop for 4.3 m if the site and the wind allow; the stand is rated 40 kg and the wing pair weighs 21.',
+      'The mast is cranked to 900 of its 1595 mm of travel, which puts the fixtures 3.5 m over the road and the top chord at 3.6. Wind it to the stop for 4.3 m if the site and the wind allow; the stand is rated 40 kg and the wing pair weighs 21.',
       'Four jacks take the truck off its leaf springs. Without them the whole vehicle rolls the moment the DJ shifts weight — and the DJ’s own 75 kg is carried by the jacks, not the axles.',
       'Two hours and a half at 800 W from the DELTA 2 Max. The 4096 Wh Pro 3 would double it and cost 51.5 kg, which this module does not have.',
     ],

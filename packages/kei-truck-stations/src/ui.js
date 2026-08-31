@@ -17,8 +17,12 @@ import { BOM, bomTotals, byCategory, captureCount } from './bom.js'
 // ---------------------------------------------------------------------------
 
 const CAMERAS = {
-  'three-quarter': { p: [-5.6, 2.5, 5.4], t: [-0.2, 1.0, 0] },
-  crowd: { p: [-6.4, 1.8, 0.9], t: [-0.9, 1.1, 0] },
+  // Pulled back and raised since the sound module grew a 3.9 m light mast: the
+  // old framing cropped the wings clean off. Started a little short of a true
+  // three-quarter too, because the auto-orbit carries it round about 25 degrees
+  // in the time the fold takes, and the shot worth having is the one at the end.
+  'three-quarter': { p: [-4.3, 3.0, 7.5], t: [-0.2, 1.35, 0] },
+  crowd: { p: [-7.2, 2.1, 1.0], t: [-0.9, 1.4, 0] },
   side: { p: [0.1, 1.8, 7.4], t: [0.1, 1.0, 0] },
   head: { p: [-0.1, 9.2, 0.6], t: [-0.1, 0.7, 0] },
 }

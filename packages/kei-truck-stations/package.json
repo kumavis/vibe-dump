@@ -22,6 +22,11 @@
     "models": [
       "Opus 5"
     ],
-    "thinking": "ultracode"
+    "thinking": "ultracode",
+    "thumbnail": {
+      "waitFor": "!#boot:not(.gone)",
+      "click": ".collapse",
+      "settle": 7000
+    }
   }
 }
