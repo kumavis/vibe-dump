@@ -96,6 +96,12 @@ function build(ctx) {
       { c: [mm(905), FLOOR + BOX.h / 2, 0], s: [BOX.t, BOX.h, HALF * 2], tag: 'front wall' },
       { c: [-mm(945), FLOOR + BOX.h / 2, 0], s: [BOX.t, BOX.h, HALF * 2], tag: 'rear wall' },
       { c: [BOX_CX, FLOOR + BOX.h / 2, HALF - BOX.t / 2], s: [mm(1850), BOX.h, BOX.t], tag: 'off-side wall' },
+      // The furniture is in the hull set too. It was not, and the packing check
+      // was correspondingly blind: the galley worktop started at 810 and the
+      // bunk deck hangs at 790, so the two were 40 mm inside each other and
+      // nothing said so. A fitted interior is structure.
+      { c: [BOX_CX, FLOOR + mm(330), mm(410)], s: [mm(1800), mm(660), mm(470)], tag: 'galley run' },
+      { c: [BOX_CX, FLOOR + mm(225), -mm(390)], s: [mm(1800), mm(450), mm(480)], tag: 'bench / lower berth' },
     ],
   })
   rig.attach(base.id, subframe(lib, { height: FLOOR }))
@@ -288,6 +294,7 @@ function build(ctx) {
       'An adult is 1800 mm and the bed is 1940 × 1410. One person fits lengthwise; two do not. So the bunk slides 950 mm out over the cab roof and becomes 2820 × 1280.',
       'That cantilever is real: two adults at 475 mm out is 700 Nm at the root, 13.5 MPa in a pair of 100 × 50 × 3 aluminium rails against 240 MPa yield. The pads on the cab roof stop it swaying; a 0.7 mm steel cab roof carries nothing.',
       'The pop-top takes standing height from 900 to 1780 mm. That is enough for a lot of people and short for the rest, which is worth saying rather than rounding up to 2000.',
+      'The galley worktop finishes at 750 mm and nothing on it stands proud, because the bunk deck hangs at 790 with the lid down. That one clearance decides three purchases: a folding tap, a drop-in bowl instead of the over-counter one the catalogue pushes, and a hob that travels in the locker — which is what Iwatani ask for anyway, since the cartridge sits in the body.',
       'The aisle between the galley and the bench is 335 mm. That is not a mistake and it is not fixable: 1290 mm of interior width minus a 450 mm galley run minus a 480 mm seat is what is left. It is also the entire reason the kerb wall lifts — the room is outside.',
       'Four guided corners rather than scissor arms. A scissor is the nicer mechanism but it is a closed loop; four guides hold the lid parallel with no synchronising linkage.',
       'The shell is 3 mm aluminium composite on 40 × 40 extrusion, not plywood. Plywood walls and floor come to about 90 kg on this footprint and the fitted kit is 84 — one of the two had to give, and it was not the fridge.',
@@ -349,34 +356,44 @@ function shell(lib) {
  */
 function interior(lib) {
   const g = new THREE.Group()
-  const TOP = FLOOR + mm(720)
+  // 640, not a domestic 850, and not the 720 this started at either. THE BUNK
+  // DECK SETS IT. Packed, the bunk hangs off the lid at 790 to 870 above the
+  // cargo deck and it spans the full width, so the worktop's top face has to
+  // finish below 790 — and NOTHING may stand proud of it. That is the whole
+  // reason the hob lives in the locker and the basin is a drop-in rather than
+  // the over-counter bowl the catalogue wants to sell you.
+  const TOP = FLOOR + mm(640)
   const Z = mm(410) // centreline of the galley run, off-side
 
   // Counter carcass and worktop, 1780 long down the off-side wall.
-  g.add(slab([mm(1780), mm(680), mm(450)], lib.ply, { anchor: [0, -1, 0], pos: [BOX_CX, FLOOR, Z] }))
+  g.add(slab([mm(1780), mm(600), mm(450)], lib.ply, { anchor: [0, -1, 0], pos: [BOX_CX, FLOOR, Z] }))
   g.add(slab([mm(1800), mm(40), mm(470)], lib.ply, { pos: [BOX_CX, TOP, Z] }))
 
-  // Iwatani タフまる CB-ODX-1 — 343 x 129 x 284, in a rebate with a bar over it.
-  g.add(slab([mm(284), mm(129), mm(343)], lib.aluDark, { pos: [mm(480), TOP + mm(50), Z] }))
-  g.add(rod([mm(480) - mm(160), TOP + mm(120), Z - mm(190)], [mm(480) - mm(160), TOP + mm(120), Z + mm(190)], mm(8), lib.chrome))
+  // Iwatani タフまる CB-ODX-1, 341 x 129 x 283, in the open locker under the
+  // worktop. It is not fixed to anything and it is not meant to be: Iwatani's
+  // own instruction is DO NOT ENCLOSE, because the cartridge sits in the body
+  // and heats. It is lifted out and used on the porch, which is also the only
+  // place on this vehicle where an open flame belongs.
+  g.add(slab([mm(283), mm(129), mm(341)], lib.aluDark, { pos: [mm(560), FLOOR + mm(150), Z - mm(30)] }))
+  g.add(slab([mm(300), mm(10), mm(360)], lib.ply, { pos: [mm(560), FLOOR + mm(80), Z - mm(30)] }))
 
-  // KAKUDAI 493-338, 300 across and 100 deep. It is an OVER-COUNTER basin: it
-  // stands on the top on its own rim with a 55 mm tail through a small hole,
-  // rather than dropping through a 300 mm cut-out. That matters — a drop-in
-  // cut-out in a 40 mm worktop over a slide-out galley is a hole where the
-  // stiffness was.
-  const bowl = lathe([[mm(150), mm(100)], [mm(146), mm(14)], [mm(40), 0], [0, 0]], lib.stainless, { seg: 20, open: true })
-  bowl.position.set(mm(60), TOP + mm(20), Z)
+  // A 300 mm drop-in bowl, 100 deep, recessed clean into the worktop. The
+  // over-counter version of the same basin stands 100 mm proud, and there is no
+  // 100 mm to be had under a bunk deck sitting 40 mm above the top.
+  const bowl = lathe([[mm(150), mm(20)], [mm(146), -mm(80)], [mm(40), -mm(100)], [0, -mm(100)]], lib.stainless, { seg: 20, open: true })
+  bowl.position.set(mm(60), TOP, Z)
   g.add(bowl)
-  g.add(rod([mm(60) - mm(200), TOP + mm(20), Z], [mm(60) - mm(200), TOP + mm(250), Z], mm(14), lib.chrome))
-  g.add(rod([mm(60) - mm(200), TOP + mm(245), Z], [mm(60) - mm(60), TOP + mm(235), Z], mm(12), lib.chrome))
+  // Folding tap: it lies down inside the bowl's rim for travel, which is what
+  // every galley tap on a boat does and for exactly this reason.
+  g.add(rod([mm(60) - mm(200), TOP, Z], [mm(60) - mm(200), TOP + mm(20), Z], mm(14), lib.chrome))
+  g.add(rod([mm(60) - mm(200), TOP + mm(16), Z], [mm(60) - mm(60), TOP + mm(10), Z], mm(12), lib.chrome))
 
   // ENGEL MHD14F-D — 442 wide, 284 deep, 398 tall and 11.5 kg, on slides under
   // the worktop. The 680 mm void is sized off that 398 and not the other way
   // round; the first draft had this box 100 mm shorter and 150 mm deeper than it
   // is, and a three-sided cradle cut to those numbers would not take the fridge.
-  g.add(slab([mm(442), mm(398), mm(284)], lib.aluDark, { pos: [-mm(300), FLOOR + mm(250), Z + mm(40)] }))
-  g.add(slab([mm(20), mm(300), mm(240)], lib.trim, { pos: [-mm(300) - mm(231), FLOOR + mm(250), Z + mm(40)] }))
+  g.add(slab([mm(442), mm(398), mm(284)], lib.aluDark, { pos: [-mm(300), FLOOR + mm(230), Z + mm(40)] }))
+  g.add(slab([mm(20), mm(300), mm(240)], lib.trim, { pos: [-mm(300) - mm(231), FLOOR + mm(230), Z + mm(40)] }))
 
   // EcoFlow DELTA 2 — 400 x 281 x 211, in a strapped well.
   g.add(slab([mm(211), mm(281), mm(400)], lib.trim, { pos: [-mm(760), FLOOR + mm(190), Z] }))
@@ -384,8 +401,8 @@ function interior(lib) {
 
   // Food-grade 20 L tank, 350 x 416 x 178 — the narrow deep one, not the fat
   // kerosene can it is easy to buy by mistake. One carried, one spare and empty.
-  for (const dx of [0, mm(200)]) {
-    g.add(slab([mm(178), mm(416), mm(350)], lib.paint, { pos: [mm(600) + dx, FLOOR + mm(215), Z] }))
+  for (const dx of [-mm(880), -mm(680)]) {
+    g.add(slab([mm(178), mm(416), mm(350)], lib.paint, { pos: [mm(600) + dx, FLOOR + mm(215), Z + mm(30)] }))
   }
 
   // The bench down the kerb side: locker below, cushion on top. It is the lower
@@ -394,7 +411,7 @@ function interior(lib) {
   g.add(slab([mm(1800), mm(110), mm(480)], lib.canvasIndigo, { pos: [BOX_CX, FLOOR + mm(395), -mm(390)] }))
 
   // 12 V strip over the galley, and the lamp that actually lights the render.
-  g.add(slab([mm(1400), mm(22), mm(60)], lib.ledWarm, { pos: [BOX_CX, FLOOR + mm(900), Z + mm(200)] }))
+  g.add(slab([mm(1400), mm(22), mm(60)], lib.ledWarm, { pos: [BOX_CX, FLOOR + mm(690), Z + mm(215)] }))
   const lamp = new THREE.PointLight(0xffc98a, 6, 4, 2)
   lamp.position.set(BOX_CX, FLOOR + mm(860), mm(60))
   g.add(lamp)

@@ -571,11 +571,11 @@ export const CABIN = [
     note: 'Confidence is low only on the exact SFDP1 variant code — SEAFLO is a real, widely stocked brand and any 3-4 L/min 12 V diaphragm pump with a pressure switch works here. Rejected the foot pump (Whale Babyfoot GP4618, four bolt-through feet, no electrical load) purely because the sink sits on the porch and a foot pump wants a fixed footwell. A foot pump is the better answer if you want zero draw.',
   },
   {
-    cat: 'water / sink', maker: 'カクダイ (KAKUDAI)', model: '493-338 丸型手洗器（ステンレス・ヘアライン、置型）',
-    size: [300, 100, 300], kg: 1.4, jpy: 25000, qty: 1, where: 'MonotaRO / カクダイ取扱の住設商社 / Amazon.co.jp。Exact KAKUDAI catalogue number not pinned this session — specify by bowl diameter and drain size at order.',
-    mount: 'A drop-in bowl\'s approved provisions are its rim and its waste flange, nothing else. It hangs on a cut-out in the porch worktop and is pulled down by four J-clips (supplied) that hook the underside of the rim and screw against the counter, plus the 1-1/2" waste flange with its rubber gasket clamping the bowl to the tailpiece. No screw ever passes through the bowl wall. Cut the counter opening 5 mm under the rim diameter and seal the rim on a bead of silicone so porch splash cannot get into the ply edge.',
+    cat: 'water / sink', maker: 'カクダイ (KAKUDAI)', model: '丸型手洗器 φ300 × 深100（はめ込み／アンダーカウンター仕様）+ 折りたたみ水栓',
+    size: [300, 100, 300], kg: 1.4, jpy: 25000, qty: 1, where: 'カクダイ取扱の水道材料商 / モノタロウ。493-338 は同寸の置型（オーバーカウンター）で、そちらは在庫豊富。',
+    mount: 'A drop-in bowl hangs on its own rim and is pulled down onto a silicone bed by four clips under the worktop — the rim IS the fixing and there is no other. Cut the 40 mm top for a 290 mm hole and take a 30 x 3 mm hardwood ring right round the underside of the cut, because a 300 mm hole in a 1800 mm worktop over a slide-out galley is a hole where the stiffness was, and the ring puts it back.',
     conf: 'low',
-    note: 'Marked low because I could not verify a current KAKUDAI catalogue number this session — the maker and the product class are real and any 280-300 mm stainless drop-in bowl is a drop-in substitute. Stainless not ceramic: a ceramic 手洗器 of this size is 4-5 kg and will crack on a kei-truck deck.',
+    note: 'The verified over-counter part, カクダイ 493-338, stands 100 mm PROUD of the top. There is no 100 mm to be had here: the bunk deck hangs 40 mm above the worktop when the lid is down, so nothing on this counter may stand up at all. That is also why the tap folds and the hob lives in the locker. Price is carried across from 493-338; the drop-in variant is the same bowl in a different rim and will be within a few thousand yen either way.',
   },
   {
     cat: 'cold / 12V compressor fridge', maker: '澤藤電機 (ENGEL)', model: 'MHD14F-D (14 L, DC12/24V + AC100V, swing motor)',
