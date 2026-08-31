@@ -10,10 +10,10 @@ import {
 //
 // The crowd stands behind the truck. The cargo deck is the DJ's floor, already
 // 660 mm up, which is a riser nobody had to build. Two trays glide out of the
-// flanks carrying the subs; the mid-tops ride up a pair of poles and tip
-// upright at the top; a crank-up mast lies flat down the centre and swings up
-// to fly a wing of lights over the whole thing; and a three-panel booth stands
-// off the tail with its fascia facing the crowd.
+// flanks carrying the subs; the mid-tops ride up a pair of posts and tip
+// upright at the top; a scaffold T lies flat down the centre channel and swings
+// up to hang lights over the whole thing; and a three-panel booth stands off the
+// tail with its fascia facing the crowd.
 //
 // EVERY BOX HERE IS REAL, AND THAT DECIDED THE MECHANISM THREE TIMES OVER.
 //
@@ -27,21 +27,25 @@ import {
 // plus M8 x 2 is the one flypoint pattern here rich enough to BOLT a yoke to —
 // which is what lets them tip up on a trunnion instead of being lifted by hand.
 //
-// SECOND: NO CRANK-UP MAST IN THIS CLASS COLLAPSES BELOW 1120 mm. The K&M 24730
-// stows at 1405, the 24740 at 1715, the Manfrotto 087NWB at 1670. There is no
-// mast that stands on this deck with the truck legal to drive. So the mast lies
-// FLAT down the centre channel, captured in split shaft collars on a hinged
-// plate — K&M ship no column flange, so collars are the only fixing anyway —
-// and swings up before it cranks.
+// SECOND: THERE ARE NO AMPLIFIERS ON THIS TRUCK, and that is a finding rather
+// than an omission. Every box is active and every box is self-contained. The
+// PRX918XLF carries 2000 W of fanless Class D with 6-band parametric EQ, delay
+// and a selectable crossover already in the cabinet; the DZR10 carries 2000 W
+// bi-amped behind a 96 kHz FIR crossover. There is no rack amp, no outboard
+// DSP, no speakON cable and no processing rack anywhere in the build — the
+// mixer's XLR outs go straight to the subs and the subs' thru feeds the tops.
+// What the boxes do NOT provide is mains: not one of them has an AC thru, so
+// four cabinets need four outlets, and that is why the list carries two
+// earth-leakage cord reels and a distribution block instead of an amp rack.
 //
-// THIRD, and this is the one that shaped the trays: tray 60 + DXS15XLF 587 + a
-// DZR10 standing on it is 1149 mm, 29 over the ceiling. Lying on its side the
-// top box measures 345 and the stack is 992, which fits. But a box lying on a
-// sub cannot simply tip upright in place — swing it about any pin and a corner
-// dips 400 mm into the cabinet underneath it. So it goes UP FIRST and TIPS
-// SECOND: a pair of K&M 21336 distance rods either side of the sub raise the
-// yoke 530 mm clear, and only then does the box rotate. Both moves are in the
-// step list in that order, and the auditor checks the arc.
+// THIRD, and this is the one that shaped the trays: MAXIMISING THE SUB EVICTED
+// THE MID-TOP FROM ITS ROOF. A 610 mm tray takes the biggest 18 in the class,
+// a JBL PRX918XLF at 591 wide and 693 tall — an octave lower than the pair of
+// 15s it replaces for 1.4 kg more. But tray 60 plus 693 plus a DZR10 lying on
+// it is 1098, which is 88 over the packing ceiling. So the top does not ride on
+// the sub at all: it travels flat in its own bay forward of it and winds up a
+// pair of K&M distance rods before it tips. Both moves are in the step list in
+// that order, and the auditor checks the arc.
 //
 // WEIGHT IS STILL THE BINDING CONSTRAINT. The deck has 2.7 m^2 and 1120 mm of
 // headroom, which is generous; it has 350 kg of payload, which is not. The

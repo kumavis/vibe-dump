@@ -51,17 +51,24 @@ const mm = (v) => v
 // Three findings from the research drive this list, and all three are about the
 // truck rather than the food.
 //
-// THE WATER TIER IS SET BY PAYLOAD. Japan's mobile-food-vehicle licence has
-// 40 / 80 / 200 L supply tiers, and waste has to match. Water alone is 80 kg at
-// 40 L, 160 kg at 80 L, and 400 kg at 200 L — which is more than the entire
-// payload before a single screw. The 200 L tier is physically impossible on a
-// kei truck and 80 L leaves nothing for the canopy. So this is a 40 L vehicle,
-// which permits reheating and assembling pre-prepped food in disposable
-// containers: takoyaki, yakisoba, karaage, oden. Which is a yatai menu, so the
-// constraint costs nothing at all.
+// ONE BASIN, NOT THREE, and this correction is worth more than any part on the
+// list. The 三槽シンク — two wash compartments plus a separate hand-wash — is a
+// FIXED-PREMISES requirement, and the familiar 40 / 80 / 200 L supply tiers are
+// the 自動車営業 (kitchen-car) tiers. A 露店 is neither of those things. What a
+// stall must carry is a hand-wash basin with RUNNING WATER at the cook, and
+// nothing more; bowls, tongs and plates go back dirty to a licensed 基地施設 and
+// are washed there. That is not a loophole, it is the licence: no base premises,
+// no permit.
 //
-// THREE BOWLS, NOT TWO. Two wash compartments plus a SEPARATE hand-wash basin.
-// The separate basin is the requirement people most often miss.
+// SO THE WATER HALVES. Two stainless wash bowls, two of the three taps and half
+// the water come off the truck, and the tanks now run 20 L supply and 20 L waste
+// instead of 40 and 40. Forty kilograms of payload handed back — more than the
+// entire serving table costs.
+//
+// THE MENU FOLLOWS FROM THE PERMIT, not from the water. A stall permit is a
+// 直前加熱 permit: reheat and assemble, serve straight into disposable
+// containers, no raw handling and no holding. Takoyaki, yakisoba, karaage, oden.
+// Which is a yatai menu, so the restriction costs nothing at all.
 //
 // AND NO EXTRACT AT ALL. An open-air stall is not a kitchen car: with the sky
 // over the griddle there is nothing to duct to, so the hood, the grease filter,
@@ -89,16 +96,17 @@ export const YATAI = [
     conf: 'medium',
   },
   {
-    cat: 'water', maker: '汎用 SUS304', model: '角型シンクボウル 450 × 390 × 深180',
-    size: [450, 180, 390], kg: 2, jpy: 6800, qty: 2, where: 'モノタロウ / 合羽橋',
-    mount: 'Drop-in, no fixings supplied. The rolled rim sits on the worktop over a 430 × 370 cut-out, bedded in food-grade silicone and pulled down by four stainless under-clips.',
-    conf: 'medium',
-  },
-  {
     cat: 'water', maker: '汎用 SUS304', model: '手洗い用シンクボウル 320 × 230 × 深120',
     size: [320, 120, 230], kg: 1.2, jpy: 3900, qty: 1, where: 'モノタロウ / 合羽橋',
-    mount: 'Same rim-and-underclip, 300 × 210 cut-out. Sited at the serving end, physically separated from the wash pair, with its own tap — the inspector checks that it is separate.',
+    mount: 'Drop-in on a rolled rim over a 300 × 210 cut-out, bedded in food-grade silicone and pulled down by four stainless under-clips. It stands on its OWN carcass across the deck from the prep counter, at the cook’s elbow — this is the one plumbed fitting in the build and the one an inspector actually looks for.',
     conf: 'medium',
+    note: 'The two 450 × 390 wash bowls that used to sit beside it are gone: washing-up is a fixed-premises requirement, done at the 基地施設, not on the truck.',
+  },
+  {
+    cat: 'prep', maker: '汎用 SUS304', model: 'ホテルパン 1/3 × 深100 + 蓋',
+    size: [325, 100, 176], kg: 0.7, jpy: 1800, qty: 6, where: '合羽橋 / モノタロウ',
+    mount: 'Drop into three 250 × 320 wells cut through the prep counter’s stainless top and hang on their own flanges. Batter, cabbage, sauce and finished takoyaki — the pans that used to be a sink, without the plumbing.',
+    conf: 'high',
   },
   {
     cat: 'water', maker: 'スイコー (Suiko)', model: 'HLT-50 ホームローリータンク 50 L',
@@ -106,7 +114,7 @@ export const YATAI = [
     mount: 'ZERO mount points — rotomoulded PE, smooth radiused body, one 100 mm filler and one 38 mm cock boss. Cannot be bolted anywhere. Captured in a three-sided ply well 405 × 505 with two cam straps over the shoulder.',
     capture: true,
     conf: 'high',
-    note: 'One supply, one waste, filled to 40 L each = 80 kg of water. That is 23% of the payload.',
+    note: 'One supply, one waste. Filled to 20 L each rather than 40, because a hand-wash is all that draws on them: 40 kg of water instead of 80. The 50 L tank stays — it is 3.5 kg empty and the headroom is free — so a longer pitch just means filling it fuller.',
   },
   {
     cat: 'water', maker: '汎用 (キャンピングカー部品)', model: 'DC12V 水中ポンプ 10 L/min',
@@ -116,8 +124,8 @@ export const YATAI = [
   },
   {
     cat: 'water', maker: 'SANEI', model: '自在水栓 泡沫キャップ付 呼13',
-    size: [150, 230, 60], kg: 0.5, jpy: 3200, qty: 3, where: 'コーナン / モノタロウ',
-    mount: 'Deck-mount shank with a backnut through the worktop.',
+    size: [150, 230, 60], kg: 0.5, jpy: 3200, qty: 1, where: 'コーナン / モノタロウ',
+    mount: 'Deck-mount shank with a backnut through the hand-basin stand’s top. One tap, over the one basin: the other two went with the wash bowls.',
     conf: 'medium',
   },
   {
@@ -180,36 +188,56 @@ export const YATAI = [
 ]
 
 // --- SOUND SYSTEM ------------------------------------------------------------
-// THE HEADLINE FINDING, and it reshaped the module: not one powered speaker in
-// this class has a single usable mounting point on its base, sides or back. The
-// complete inventory of threaded features on a modern active PA box is a pole
-// socket in the top (compression only — never a tie-down), sometimes M8 or M10
-// eyebolt inserts, and cast handle recesses. Everything else is 15 mm plywood
-// and a rubber foot.
+// THE FIRST FINDING RESHAPED THE MODULE: not one powered speaker in this class
+// has a single usable mounting point on its base, sides or back. The complete
+// inventory of threaded features on a modern active PA box is a pole socket in
+// the top (compression only — never a tie-down), sometimes M8 or M10 eyebolt
+// inserts, and cast handle recesses. Everything else is 15 mm plywood and a
+// rubber foot.
 //
 // So every box here is a CAPTURE item, and the trick that makes one survive
 // 60 km/h is not the strap: it is hardwood battens screwed inside the well walls
 // that hook into the cast side-handle apertures, so the strap only has to stop
 // the box rocking rather than lifting.
 //
-// TWO HEIGHT FAILURES the research caught, both of which changed the mechanism:
+// THE SECOND FINDING IS AN ABSENCE, and it is the largest single thing this list
+// does not contain. THERE IS NO AMPLIFIER ANYWHERE IN THIS BUILD, and none is
+// needed. Every cabinet is active and every cabinet is self-contained: the
+// PRX918XLF has 2000 W of fanless Class D behind 6-band parametric EQ, delay and
+// a selectable crossover; the DZR10 has 2000 W bi-amped behind a 96 kHz FIR
+// crossover with its own presets. Mixer XLR out → sub input, sub thru → top
+// input, and the signal chain is finished. There is no rack amp, no outboard
+// DSP, no processing rack and no speakON cable on the truck.
 //
-//   Tray 60 + DXS15XLF 587 + a top box standing on it = 1149 mm, which is 29 mm
-//   over the ceiling. The tops cannot stow upright on the subs. They travel
-//   LYING ON THEIR SIDES on top of them: 60 + 587 + 315 = 962 mm.
+// What the boxes genuinely do NOT provide is MAINS. Not one of these cabinets
+// has an AC thru — they daisy-chain signal and never power — so four cabinets
+// need four outlets, which is why this list carries two earth-leakage cord reels
+// and a DI where a passive rig would carry an amp rack. A steel truck body
+// feeding metal-grilled boxes standing on wet ground is exactly the case the
+// 漏電遮断器 exists for, and the hum loop gets lifted at the DI, never at the
+// mains earth.
 //
-//   No wind-up mast in this class collapses below 1120. The K&M 24730 stows at
-//   1405, the 24740 at 1715, the Manfrotto 087NWB at 1670. So the mast cannot
-//   stand on the deck at all — it lies flat along it and is hinged at its foot,
-//   which is why it is drawn that way.
+// THE THIRD FINDING IS A HEIGHT, and it is what maximising the sub cost. A
+// 610 mm tray takes the biggest 18 in the class — 610 + 610 + a 190 mm centre
+// channel closes the 1410 deck exactly — but tray 60 + PRX918XLF 693 + a DZR10
+// lying on it is 1098, which is 1208 above the deck against a 1120 ceiling. So
+// the tops do not travel on the subs at all: they lie flat in their own bay
+// forward of them and wind up a pair of distance rods before they tip.
+//
+// AND THE LIGHT RIG IS SCAFFOLD PIPE, which is the fourth. No crank-up stand in
+// this class collapses below 1120 (the K&M 24730 stows at 1405), and nothing may
+// stand on the cab roof — 0.7 mm of steel over three hoops, where the failure
+// mode is the overturning moment rather than the pressure. φ48.6 単管 is
+// 労働安全衛生規則 material, costs about ¥1,200 for the whole frame against
+// ¥85,000 of crank-up mast, and STAGE EVOLUTION's φ48–51 clamps fit it exactly.
 export const SOUND = [
   {
-    cat: 'PA — low', maker: 'YAMAHA', model: 'DXS15XLF 15" powered subwoofer',
-    size: [450, 587, 600], kg: 40, jpy: 243000, qty: 2, where: 'Soundhouse 254525 (特別注文, 2–4 週)',
-    mount: 'The ONLY threaded features are in the top panel: a dual socket, Φ35 × 80 deep concentric with M20 × 25. That is rated for a pole in COMPRESSION and must never be used as a tie-down. No base inserts, no flypoints. Captured in a 460 × 610 ply well with hardwood battens hooking the two cast side-handle apertures, plus one 24 mm endless strap over the top.',
+    cat: 'PA — low', maker: 'JBL Professional', model: 'PRX918XLF 18" powered subwoofer',
+    size: [591, 693, 654], kg: 40.7, jpy: 238000, qty: 2, where: 'Soundhouse / ハーマンプロ (取寄せ)',
+    mount: 'The ONLY threaded features are in the top panel: an M20 pole socket, rated for a pole in COMPRESSION and never usable as a tie-down. No base inserts, no flypoints. Captured in a 611 × 674 ply well with hardwood battens hooking the cast side-handle apertures, plus one 24 mm endless strap over the top.',
     capture: true,
-    conf: 'high',
-    note: 'The only 15" active that hits the 40–45 kg brief with a documented dual pole socket.',
+    conf: 'medium',
+    note: 'THE BIGGEST BOX THAT FITS, and that is the whole reason it is here. 591 mm across is what set the tray at 610 and the centre channel at 190. It is 0.7 kg heavier than the pair of DXS15XLFs it replaces and reaches 30 Hz instead of 33 — the extra octave is free on payload and expensive only on geometry.',
   },
   {
     cat: 'PA — mid/top', maker: 'YAMAHA', model: 'DZR10 10" powered top',
@@ -221,46 +249,57 @@ export const SOUND = [
   {
     cat: 'PA — mid/top', maker: 'K&M (König & Meyer)', model: '21336 distance rod',
     size: [35, 1475, 35], kg: 2.27, jpy: 9500, qty: 4, where: 'Soundhouse 47964 (在庫)',
-    mount: 'A PAIR PER SIDE, standing either side of the sub rather than on it. The M20 male base screws into a captive M20 boss recessed 50 mm into the tray pan, through a Φ50 guide sleeve that takes the side load; the Φ35 upper tubes carry the mid-top’s trunnion yoke between them. The sub’s own top socket is capped and unused — it is rated for a pole in compression, and a yoke that has to be tipped puts a moment into its mount. 945–1475 mm each, 530 of travel, rated 35 kg against the 22 kg they share.',
+    mount: 'A PAIR PER SIDE, standing either side of the mid-top’s own bay — forward of the sub, not on it. The M20 male base screws into a captive M20 boss recessed 50 mm into the tray pan through a Φ50 guide sleeve that takes the side load; the Φ35 upper tubes carry the top’s trunnion yoke between them. The sub’s top socket is capped and unused. 945–1475 mm each, 530 of travel, rated 35 kg against the 22 kg they share.',
     conf: 'high',
-    note: 'Two short columns instead of one long one is what makes the tip possible: a single rod on the sub’s centreline has nothing to pin a trunnion to.',
+    note: 'Two short columns instead of one long one is what makes the tip possible: a single rod has nothing to pin a trunnion to. Their collapsed 945 is also what sets the carriage rise at 527.',
   },
   {
-    cat: 'light', maker: 'K&M (König & Meyer)', model: '24730 crank-up lighting stand',
-    size: [120, 1405, 120], kg: 12, jpy: 85000, qty: 1, where: 'Soundhouse 309730',
-    mount: 'WIND-UP: the load rides a steel cable on a worm drive, which is the only class safe to leave standing under a truss wing — friction-collar stands creep and drop. 1405–3000 mm, rated 40 kg, Φ35 top spigot with M10. No column flange, so it is captured in split shaft collars on a hinged base plate.',
+    cat: 'light', maker: 'ダイワ (単管パイプ)', model: '単管パイプ φ48.6 × t1.8 × 2000 めっき',
+    size: [48.6, 2000, 48.6], kg: 4.16, jpy: 1180, qty: 3, where: 'コーナン / カインズ / モノタロウ',
+    mount: 'The mast is one length cut to 1740, the crossbar a second cut to 1400, the third is the diagonal brace. Nothing about this is exotic — it is 労働安全衛生規則 scaffold material sold by the metre in every home centre in Japan, and the whole frame costs less than one lighting clamp on the stand it replaces.',
     conf: 'high',
-    note: 'Stows at 1405 mm — 285 above the packing ceiling. It cannot stand on the deck; it lies flat and hinges up.',
+    note: 'The coincidence the rig is built on: φ48.6 is inside STAGE EVOLUTION’s φ48–51 clamp jaw, so stage fixtures bolt to builders’ pipe with no adapter at all.',
   },
   {
-    cat: 'light', maker: 'STAGE EVOLUTION', model: 'TRUSS4/100/22I 220 mm box truss, 1 m',
-    size: [220, 220, 1000], kg: 5, jpy: 20000, qty: 2, where: 'Soundhouse 269838 (在庫)',
-    mount: 'Four Φ35 chords, plate ends, PIN + R-CLIP couplers — tool-free, which matters at 3 m up in the dark. The I revision reinforces the end plates against transport deformation, which is exactly this application.',
+    cat: 'light', maker: '大洋製器工業', model: '固定ベース KB48.6 (単管ベース)',
+    size: [150, 60, 150], kg: 0.69, jpy: 398, qty: 2, where: 'モノタロウ / コーナン',
+    mount: 'A 150 mm square plate with a φ48.6 spigot and four fixing holes. Bolted M10 to a 6 mm steel spreader over the front crossmember — the mast’s foot, and the only place on this truck taking a bending moment into the chassis rather than into a panel.',
+    conf: 'high',
+  },
+  {
+    cat: 'light', maker: '信和 (シンワ)', model: '直交クランプ φ48.6 用 (耐力 500 kgf)',
+    size: [110, 100, 110], kg: 0.74, jpy: 300, qty: 4, where: 'コーナン / モノタロウ',
+    mount: 'Two make the T where the crossbar crosses the mast; two take the diagonal brace. RIGHT-ANGLE clamps specifically — the 自在クランプ swivels but does NOT lock at an angle under load, so it can carry a brace but must never define the frame’s geometry.',
+    conf: 'high',
+  },
+  {
+    cat: 'light', maker: 'custom (鋼製)', model: 'マストヒンジ — fabricated fold-down knuckle + over-centre latch',
+    size: [180, 160, 200], kg: 3.2, jpy: 24000, qty: 1, where: 'fabrication',
+    mount: 'THIS PART HAS TO BE MADE, and the reason is the finding above: no catalogue scaffold fitting locks a pipe at a chosen angle, so the one joint that decides whether the frame is standing or lying cannot be bought. A 12 mm plate clevis on a φ16 pin between the base plate and the mast’s heel, with a drop-in pin at 90° and an over-centre latch holding it flat for transit.',
+    conf: 'low',
+  },
+  {
+    cat: 'light', maker: 'STAGE EVOLUTION', model: 'SCLAMP (φ48–51 jaw)',
+    size: [70, 95, 55], kg: 0.4, jpy: 780, qty: 6, where: 'Soundhouse (在庫)',
+    mount: 'Jaw range covers the φ48.6 pipe exactly. Fixture hangs on an M10 bolt through the clamp body; all six are done up on the bench with the frame lying flat, and never touched again.',
+    conf: 'high',
+  },
+  {
+    cat: 'light', maker: 'STAGE EVOLUTION', model: 'SC90 セーフティワイヤー (90 cm)',
+    size: [10, 900, 10], kg: 0.2, jpy: 480, qty: 6, where: 'Soundhouse (在庫)',
+    mount: 'One steel bond per suspended fixture, round the pipe and back to the yoke. Non-negotiable, and cheaper than any of the arguments about it.',
+    conf: 'high',
+  },
+  {
+    cat: 'light', maker: 'CHAUVET DJ', model: 'COLOR STRIP12 (12 × 3 W RGB batten, DMX)',
+    size: [1060, 85, 115], kg: 2.5, jpy: 23800, qty: 1, where: 'Soundhouse (在庫)',
+    mount: 'Two integral yokes onto two SCLAMPs, mounted along the crossbar rather than across it — which is why it can hang under a single pipe instead of needing a truss to span.',
     conf: 'medium',
-    note: 'Weight is calculated from four Φ35 chords plus bracing; STAGE EVOLUTION do not publish it.',
-  },
-  {
-    cat: 'light', maker: 'STAGE EVOLUTION', model: 'TRUSS4/BP/22 base plate + TRUSS4/HC/22 couplers',
-    size: [300, 10, 300], kg: 2.2, jpy: 4500, qty: 2, where: 'Soundhouse 90585 (在庫僅少)',
-    mount: 'Bolts face-up to a 6 mm aluminium head plate on the mast’s Φ35 spigot; the wings pin into it.',
-    conf: 'high',
-  },
-  {
-    cat: 'light', maker: 'ELIMINATOR LIGHTING', model: 'MINI PAR BAR (4 × RGBW, 8ch DMX)',
-    size: [730, 89, 205], kg: 2.7, jpy: 42800, qty: 1, where: 'Soundhouse 344190 (在庫)',
-    mount: 'Supplied with its own T-bar stand, which is discarded; the bar clamps to a truss chord. At 89 mm deep it folds INSIDE the 220 mm truss.',
-    conf: 'high',
   },
   {
     cat: 'light', maker: 'STAGE EVOLUTION', model: 'SLIMPAR12 (12 × 3 W RGB, DMX)',
-    size: [193, 89, 180], kg: 0.6, jpy: 9980, qty: 6, where: 'Soundhouse 268702 (在庫)',
-    mount: 'Double-yoke bracket with an M8 through-hole into a CCLAMP. 89 mm body plus ~60 mm of yoke and clamp is 150 mm, which fits inside the truss depth — so the wings fold to the mast with the fixtures still on.',
-    conf: 'high',
-  },
-  {
-    cat: 'light', maker: 'STAGE EVOLUTION', model: 'CCLAMP (φ20–51 jaw) + safety bonds',
-    size: [60, 90, 50], kg: 0.35, jpy: 780, qty: 10, where: 'Soundhouse 89988 (在庫)',
-    mount: 'One jaw range covers the truss’s Φ35 chords and the mast’s Φ35 spigot. Fixture attaches on an M8 bolt through the clamp body. One steel safety bond per suspended fixture, non-negotiable.',
+    size: [193, 89, 180], kg: 0.6, jpy: 9980, qty: 4, where: 'Soundhouse 268702 (在庫)',
+    mount: 'Double-yoke bracket, M8 through-hole into an SCLAMP, spread at 346 mm centres along the 1400 crossbar. They are clamped POINTING ALONG THE MAST toward its foot — forward while the frame is lying down, straight at the deck once it is up — so the quarter turn that stands the frame is also the aim, and nothing rolls on its clamp at the venue.',
     conf: 'high',
   },
   {
@@ -276,6 +315,13 @@ export const SOUND = [
     mount: 'No rack ears; Yamaha’s RK-MG12 kit fits the MG12/16, NOT this chassis. Routed recess plus a rear retaining bar, same as the controller.',
     capture: true,
     conf: 'high',
+    note: 'This is the entire signal chain upstream of the speakers. Its XLR outs go straight to the subs; there is nothing between them.',
+  },
+  {
+    cat: 'booth', maker: 'BSS Audio', model: 'AR-133 active DI',
+    size: [59, 143, 124], kg: 0.65, jpy: 17800, qty: 1, where: 'Soundhouse 15477 (在庫)',
+    mount: 'A steel wedge with a rubber base and no fixings. Velcro to the underside of the counter inside the booth. It is here for its GROUND LIFT: the mains earth on a steel truck body stays connected, and the audio screen is what gets broken.',
+    conf: 'high',
   },
   {
     cat: 'power', maker: 'EcoFlow', model: 'DELTA 2 Max (2048 Wh)',
@@ -284,6 +330,13 @@ export const SOUND = [
     capture: true,
     conf: 'low',
     note: 'The 4096 Wh DELTA Pro 3 gives about 4.5 h at 800 W but weighs 51.5 kg, which this module does not have. At 2048 Wh expect roughly 2 to 2.5 hours — the honest number.',
+  },
+  {
+    cat: 'power', maker: '日動工業', model: 'NW-EB33 漏電遮断器付コードリール 30 m',
+    size: [300, 350, 260], kg: 7.7, jpy: 43758, qty: 2, where: 'モノタロウ / コーナン',
+    mount: 'Carry handle and a drum frame; sits in a strapped ply cradle under the stage floor. Two of them, because none of the four cabinets has an AC thru and two reels is also how you get two circuits.',
+    conf: 'medium',
+    note: 'The 15 mA / 0.1 s earth-leakage breaker is the item, not the cable. Metal-grilled boxes on wet ground fed from a steel body is the exact fault this protects against, and it is the one part of this list that is about the crowd rather than the show.',
   },
   {
     cat: 'mechanism', maker: 'LAMP / スガツネ工業', model: '3509-24 heavy-duty slide, 610 mm',

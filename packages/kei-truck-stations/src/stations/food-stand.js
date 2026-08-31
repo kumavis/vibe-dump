@@ -21,8 +21,8 @@ import { cloth, lathe, roundedSlab, profile } from '../build.js'
 //   GRIDDLE PLATE 850 above the road. An IKK TKO18321 is 190 mm tall and the
 //   deck is 660, and 850 is where you want a teppan — below the elbow, so you
 //   are looking down onto it.
-//   SINK RIM 980. The one thing that does need a counter, because a drop-in bowl
-//   needs something to drop into: 320 mm of carcass, and the 180 mm bowls hang
+//   COUNTER TOP 980. The one thing that does need a carcass, because a drop-in
+//   gastronorm needs something to drop into: 320 mm of it, and the 120 mm pans hang
 //   clear of the deck with the plumbing under them.
 //   FRIDGE TOP 1070, TANK TOP 1160. Stores stand along the off side as a back
 //   wall, which is exactly where a wall is useful.
@@ -535,8 +535,8 @@ function build(ctx) {
     massBudget: [
       ['subframe + sink counter (fabricated)', 32],
       ['IKK TKO18321 griddle + Iwatani plate', 41],
-      ['water hardware: 2 tanks, 3 bowls, pump, taps', 9],
-      ['water itself, 40 L supply + 40 L waste', 80],
+      ['water hardware: 2 tanks, hand basin, pump, tap', 7],
+      ['water itself, 20 L supply + 20 L waste', 40],
       ['fridge + LiFePO4 and inverter', 27],
       ['LP gas: bottle, locker, regulator, hose', 28],
       ['stall frame: posts, header, cassette, arms', 29],
@@ -546,12 +546,13 @@ function build(ctx) {
     ],
     notes: [
       'The cook stands on the tarmac, not on the deck. 1120 mm of packing headroom means anything you can stand under is taller than the cab roof — so the bed itself is the galley, and the equipment simply stands on it.',
-      'Nothing is built up to a working height except the sink, because a drop-in bowl needs something to drop into. The griddle plate lands at 850 above the road on its own feet, the fridge top at 1070, the tank tops at 1160.',
+      'Nothing is built up to a working height except the prep counter, because a drop-in gastronorm needs something to drop into. The griddle plate lands at 850 above the road on its own feet, the fridge top at 1070, the tank tops at 1160.',
       'The serving is off the BACK. A counter down the kerb side puts the queue where the cook is working; 1400 mm of table off the tail plus a 700 mm draw leaf puts it behind the truck, facing the kitchen, off the road.',
       'The third leaf DRAWS instead of folding. A leaf on a 700 mm arm sweeps a half circle to get in line, and the leaf folded onto it rides that circle straight across the first one — 171 mm into it, whichever way the pins are stepped. An extending dining table has solved this for four hundred years.',
       'No extract. An open-air stall with the sky over the griddle does not need the hood, the grease filter, the 150 mm duct and the 200 mm 有圧換気扇 that a closed kitchen car needs. That deletion, the galley carcass it made unnecessary and a valance that turned out to be fabric are 34 of the 58 kg the table costs.',
-      'This is a 40 L water vehicle, and the payload decided that, not the menu. 40 L supply plus 40 L waste is 80 kg — 23% of the payload. The 80 L tier is 160 kg; the 200 L tier is 400 kg, which is more than the truck can carry empty.',
-      'Three bowls, not two: two wash compartments and a SEPARATE hand-wash basin on its own stand across the deck. The separate basin is the requirement most often missed.',
+      'ONE BASIN, NOT THREE, and it is worth being exact about why. The 三槽シンク — two wash compartments plus a separate hand-wash — is a FIXED-PREMISES rule, and the 40 / 80 / 200 L supply tiers are the 自動車営業 (kitchen-car) tiers. A 露店 is neither. What a stall has to carry is a hand-wash basin with running water at the cook, and that is all; the bowls, the tongs and the plates go back dirty to a licensed 基地施設 and are washed there.',
+      'That single correction is the cheapest 40 kg in the whole project. Two stainless wash bowls, two taps and half the water come off, and the tanks now run 20 L supply and 20 L waste instead of 40 and 40 — 40 kg of payload handed back, which is more than the serving table costs. The 基地施設 is not optional in exchange: no premises, no licence.',
+      'The menu follows from it. A stall permit is a 直前加熱 permit — reheat and assemble, serve straight into disposable containers, no raw handling and no holding. Takoyaki, yakisoba, karaage, oden. Which is a yatai menu, so the restriction costs nothing at all.',
       'The gas bottle is outside the body in a vented locker off the rear crossmember, because the rule wants it upright, vented at low level, and 2 m from any flame — and on a 1940 mm deck with a griddle on it, 2 m does not exist.',
     ],
   }
@@ -608,9 +609,9 @@ function tableLamps(lib) {
  * the Yamazen. That is what makes the packing check mean anything: with invented
  * boxes it is a drawing, not a check.
  *
- * ONE CARCASS, and only because a drop-in bowl needs something to drop into. The
- * sink counter is 320 tall, which puts the rim at 980 above the road and leaves
- * the 180 mm bowls hanging clear of the deck with room for the trap. The griddle
+ * ONE CARCASS, and only because a drop-in pan needs something to drop into. The
+ * prep counter is 320 tall, which puts the top at 980 above the road and leaves
+ * the 120 mm gastronorms hanging clear of the deck. The griddle
  * and the fridge and the tanks just stand there, and their working heights come
  * out at 850, 1070 and 1160 without anyone deciding them.
  */
@@ -621,14 +622,20 @@ function galley(lib) {
   const TOP = FLOOR + SINK_H
 
   // --- the working line, along the kerb ------------------------------------
-  // Sink counter: 1000 of stainless-topped ply with the two wash compartments in
-  // it, and the battery and the spare plate in the void underneath.
+  // The prep counter: 1000 of stainless-topped ply for plating and portioning,
+  // with the battery and the spare plate in the void underneath. THERE IS NO
+  // WASHING-UP SINK ON THIS TRUCK, and that is the licence rather than a
+  // shortcut — the 三槽シンク is a fixed-premises rule. A stall carries a
+  // hand-wash with running water and nothing else; the bowls and the tongs go
+  // back to the 基地施設 dirty.
   g.add(slab([mm(1000), SINK_H - mm(24), KERB.z1 - KERB.z0], lib.ply, { pos: [-mm(300), FLOOR + (SINK_H - mm(24)) / 2, kz] }))
   g.add(slab([mm(1030), mm(24), KERB.z1 - KERB.z0 + mm(24)], lib.stainless, { pos: [-mm(300), TOP - mm(12), kz] }))
-  for (const bx of [-mm(535), -mm(65)]) {
-    g.add(slab([mm(450), mm(30), mm(390)], lib.stainless, { pos: [bx, TOP - mm(15), kz] }))
-    g.add(slab([mm(410), mm(180), mm(350)], lib.trim, { pos: [bx, TOP - mm(105), kz] }))
-    g.add(rod([bx - mm(160), TOP, kz + mm(150)], [bx - mm(160), TOP + mm(230), kz + mm(150)], mm(11), lib.chrome))
+  // Gastronorm wells sunk into the top instead: batter, cabbage, sauce, and a
+  // pan of finished takoyaki under a lamp. Same carcass, no plumbing.
+  for (let i = 0; i < 3; i++) {
+    const bx = -mm(640) + i * mm(300)
+    g.add(slab([mm(250), mm(24), mm(320)], lib.stainless, { pos: [bx, TOP - mm(12), kz] }))
+    g.add(slab([mm(224), mm(120), mm(294)], lib.trim, { pos: [bx, TOP - mm(76), kz] }))
   }
   // 12 V battery and inverter, in the void under the counter where they are out
   // of the weather and low in the truck.
@@ -654,12 +661,14 @@ function galley(lib) {
       g.add(slab([mm(170), mm(8), mm(310)], lib.trim, { pos: [px, FLOOR + mm(206), kz] }))
     }
   }
-  // Cutting board, on the counter beside the bowls.
+  // Cutting board, on the counter at the griddle end.
   g.add(slab([mm(600), mm(20), mm(300)], lib.ply, { pos: [mm(120), TOP + mm(10), kz] }))
 
   // --- the stores, along the off side --------------------------------------
-  // Hand basin on its own stand, physically separated from the wash pair. The
-  // separate basin is the requirement people most often miss.
+  // THE HAND BASIN, on its own stand with its own tap and its own foot pump.
+  // It is the only plumbed fitting in the build and the only one a 露店
+  // inspector actually looks for: running water, at the cook, in reach without
+  // touching anything else.
   g.add(slab([mm(340), mm(240), mm(320)], lib.ply, { anchor: [0, -1, 0], pos: [-mm(630), FLOOR, bz] }))
   g.add(slab([mm(320), mm(30), mm(230)], lib.stainless, { pos: [-mm(630), FLOOR + mm(240), bz] }))
   g.add(rod([-mm(750), FLOOR + mm(240), bz], [-mm(750), FLOOR + mm(420), bz], mm(10), lib.chrome))
