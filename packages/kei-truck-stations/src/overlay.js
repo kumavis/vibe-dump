@@ -68,14 +68,23 @@ export function buildOverlay({ rig, lib, statics, report }) {
   }
 
   // --- hinge axes and swept arcs -------------------------------------------
-  // Both are drawn as children of the relevant group, so they inherit the
-  // transform for free and never need updating.
+  // Both are drawn as children of the RIG's own groups rather than of this
+  // overlay's, because that is the only way they inherit the part's transform
+  // for free and never need updating: an arc is drawn in the parent's frame and
+  // a stub in the part's own.
+  //
+  // WHICH MEANS THEY ARE OUTSIDE `group`, AND SETTING group.visible DOES NOT
+  // TOUCH THEM. They leaked: every hinge in the project drew a 900 mm axis line
+  // and a swept arc into the scene permanently, x-ray off or on, which is the
+  // thin wire hoops and long straight lines that were over all four stations.
+  // So they are collected here and switched by hand, and disposed by hand too.
+  const strays = []
   for (const part of rig.order) {
     if (part.static || part.jointType === 'fixed') continue
     const stub = axisStub(part, lib)
-    if (stub) part.group.add(stub)
+    if (stub) { stub.visible = false; strays.push(stub); part.group.add(stub) }
     const arc = sweptArc(part, lib)
-    if (arc) (part.group.parent ?? group).add(arc)
+    if (arc) { arc.visible = false; strays.push(arc); (part.group.parent ?? group).add(arc) }
   }
 
   // --- support polygon + centre of gravity ---------------------------------
@@ -165,9 +174,15 @@ export function buildOverlay({ rig, lib, statics, report }) {
     update,
     setVisible(on) {
       group.visible = on
+      for (const s of strays) s.visible = on
     },
     dispose() {
       group.traverse((o) => o.geometry?.dispose?.())
+      for (const s of strays) {
+        s.geometry?.dispose?.()
+        s.parent?.remove(s)
+      }
+      strays.length = 0
     },
   }
 }
