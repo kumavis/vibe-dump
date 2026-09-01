@@ -245,7 +245,8 @@ function build(ctx) {
     mates: ['post-a', 'post-b'],
   })
   rig.attach(header.id, headerBeam(lib))
-  rig.attach(header.id, lanterns(lib))
+  const lamps = lanterns(lib)
+  rig.attach(header.id, lamps)
 
   // --- the awning ----------------------------------------------------------
   const awning = rig.add({
@@ -561,6 +562,9 @@ function build(ctx) {
     update(t, r) {
       const out = r.get('awning')?.q ?? 0
       canvas.scale.z = Math.max(0.02, out / AWNING_OUT)
+      // The lanterns open as the header swings up, and travel as five discs.
+      const u = Math.min(1, Math.max(0, (r.get('header')?.q ?? 0) / (Math.PI / 2)))
+      for (const b of lamps.userData.bodies) b.hang.scale.y = b.collapsed + (1 - b.collapsed) * u
     },
     massBudget: [
       ['subframe + sink counter (fabricated)', 32],
@@ -833,9 +837,18 @@ function awningFabric(lib) {
 }
 
 
-/** Four chochin along the header — one paper 尺3, four vinyl 9号. */
+/**
+ * Four chochin along the header — one paper 尺3, four vinyl 9号.
+ *
+ * They concertina, like the shrine's. A vinyl 9号 collapses to about 35 mm
+ * between its two rings and that is how it travels; drawn at full 330 mm the
+ * packed truck carried five inflated lanterns down the road, which is not a
+ * thing anybody has ever done. Each body hangs inside a group pinned at the
+ * hook so the station's update() can scale it from the hook down.
+ */
 function lanterns(lib) {
   const g = new THREE.Group()
+  const bodies = []
   for (let i = 0; i < 5; i++) {
     // Spread over 700 mm less of beam than before, because folded flat the aft
     // lantern landed at world x -810, inside the three-leaf table stack, with a
@@ -852,13 +865,18 @@ function lanterns(lib) {
       lib.washi,
       { seg: 14 },
     )
-    body.position.y = -mm(90) - h / 2
-    l.add(body)
+    const hang = new THREE.Group()
+    hang.position.y = -mm(90)
+    body.position.y = -h / 2
+    hang.add(body)
     const glow = new THREE.PointLight(0xffb257, big ? 4.2 : 2.6, 2.8, 2)
-    glow.position.y = -mm(90) - h / 2
-    l.add(glow)
+    glow.position.y = -h / 2
+    hang.add(glow)
+    l.add(hang)
+    bodies.push({ hang, collapsed: mm(35) / h })
     g.add(l)
   }
+  g.userData.bodies = bodies
   return g
 }
 
