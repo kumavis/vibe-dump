@@ -229,7 +229,11 @@ function build(ctx) {
     // everything hung on it — from the posts in a direction that does not change
     // as they rotate. Without it the awning cassette and the arms sweep a circle
     // centred on post A's top and pass straight through the post below it.
-    pivot: [POST_LEN - mm(60), mm(110), mm(120)],
+    // 170 in post-local Y, not 110: at 110 the roller cassette hanging under the
+    // folded header dipped 55 mm into the 360 mm plinth that post A itself
+    // hinges off, so the assembly passed through its own mounting block for the
+    // whole first half of the deployment.
+    pivot: [POST_LEN - mm(60), mm(170), mm(120)],
     joint: 'hinge',
     rest: [[0, 0, 1], Math.PI],
     axis: [0, 0, 1],
@@ -298,12 +302,14 @@ function build(ctx) {
       range: [0, sx > 0 ? -Math.PI / 2 : Math.PI / 2],
       window: [0.86, 1],
       mass: 4,
-      com: [mm(560), 0, 0],
-      hulls: [{ c: [mm(560), 0, 0], s: [mm(1120), mm(50), mm(50)], tag: 'arm' }],
+      com: [AWNING_OUT / 2, 0, 0],
+      hulls: [{ c: [AWNING_OUT / 2, 0, 0], s: [AWNING_OUT, mm(44), mm(44)], tag: 'arm' }],
       mates: ['header', 'awning', 'awning-arm-l', 'awning-arm-r'],
       note: 'the awning is a cantilever; the arm is what makes it a triangle',
     })
-    rig.attach(arm.id, armStrut(lib, mm(1120)))
+    // AWNING_OUT, not 1120. A strut that stops 180 mm short of the leading rail
+    // is not a triangle, it is a rod ending in mid-air.
+    rig.attach(arm.id, armStrut(lib, AWNING_OUT))
   }
 
   // NO RIGID VALANCE. It used to be a hinged panel stowed lying back over the
@@ -343,14 +349,17 @@ function build(ctx) {
       pivot: [mm(280), PANEL_T / 2, sx * mm(560)],
       joint: 'hinge',
       axis: [0, 0, 1],
-      range: [Math.PI, Math.PI + deg(140)],
+      // 48 degrees, not 140. Past about 50 the prop swings THROUGH vertical and
+      // out over the kerb, so the strut that is supposed to carry the counter's
+      // outer half finished in mid-air 268 mm outboard of the counter's own edge.
+      range: [Math.PI, Math.PI + deg(48)],
       window: [0.74, 0.88],
       mass: 1.8,
-      com: [mm(170), 0, 0],
-      hulls: [{ c: [mm(175), 0, 0], s: [mm(350), mm(40), mm(40)], tag: 'bracket' }],
+      com: [mm(220), 0, 0],
+      hulls: [{ c: [mm(220), 0, 0], s: [mm(440), mm(40), mm(40)], tag: 'bracket' }],
       mates: ['counter', 'floor'],
     })
-    rig.attach(br.id, armStrut(lib, mm(350)))
+    rig.attach(br.id, armStrut(lib, mm(440)))
   }
 
   // --- the serving table ---------------------------------------------------
@@ -386,11 +395,13 @@ function build(ctx) {
     id: 'table-b',
     parent: 'table-a',
     label: 'serving table (second leaf)',
-    // The pin sits on the leaf's UPPER face. The first leaf's local +Y points
-    // down once it is over, so a pin at +t puts the second leaf 40 mm under the
-    // first — which reads as a tidy stack on paper and as a panel through the
-    // table posts in the audit.
-    pivot: [TABLE_L, -TABLE_T, 0],
+    // The pin sits IN the shared face plane, not one thickness off it. Offset by
+    // -TABLE_T the second leaf opened 40 mm proud of the first, and the flat
+    // 2100 x 900 communal table was actually delivered as three tops at 1080,
+    // 1040 and 1028 with a 40 mm and a 12 mm step between them. Folded, the leaf
+    // still stacks face to face on its neighbour — a face meeting a face is a
+    // stack, not an interference — and the packed pile is 40 mm thinner for it.
+    pivot: [TABLE_L, 0, 0],
     joint: 'hinge',
     axis: [0, 0, 1],
     // UNFOLDS OVER THE TOP, not under. A leaf on a 700 mm arm sweeps a half
@@ -452,7 +463,19 @@ function build(ctx) {
         id: `${id}${sz > 0 ? 'r' : 'l'}`,
         parent,
         label: 'table leg',
-        pivot: [TABLE_L - mm(20), 0, sz * (TABLE_W / 2 + mm(30))],
+        // The draw leaf's legs are pinned 180 mm further in, and the reason is
+        // the fold. The comment below assumes the two pairs hang off leaves
+        // folded 180 degrees onto each other, which points them opposite ways;
+        // but table-c is a SLIDE nested at zero offset under table-b, so both
+        // pairs stowed at the same leaf-local 680, lay back the same way and
+        // landed 46 mm inside each other. Pinning the draw leaf's pair aft of
+        // the other pair is what separates them, and it shortens the longest
+        // unsupported span from 1400 to 1200 into the bargain.
+        pivot: [
+          parent === 'table-c' ? TABLE_L - mm(200) : TABLE_L - mm(20),
+          0,
+          sz * (TABLE_W / 2 + (parent === 'table-c' ? mm(72) : mm(30))),
+        ],
         joint: 'hinge',
         axis: [0, 0, 1],
         // Authored pointing +Y in the leaf's frame, which is DOWN once the leaf
@@ -471,7 +494,11 @@ function build(ctx) {
         mates: [parent],
       })
       const gl = legGeometry(lib, LEG_LEN, { section: mm(46), foot: mm(0.1) })
-      gl.rotation.x = Math.PI // legGeometry hangs along -Y; the leaf's down is +Y
+      // About Z, not X. Both turns flip Y, which is all the tube, the foot and
+      // the pads need; but Rx also flips Z and sends legGeometry's diagonal brace
+      // AWAY from the leaf, out past its far edge to end in open air. Rz keeps
+      // the brace running back under the panel it triangulates.
+      gl.rotation.z = Math.PI // legGeometry hangs along -Y; the leaf's down is +Y
       rig.attach(leg.id, gl)
 
       // The last 320 telescopes, because 680 is what fits on a 700 mm leaf and
@@ -487,7 +514,10 @@ function build(ctx) {
         pivot: [0, LEG_LEN - mm(380), 0],
         joint: 'telescope',
         axis: [0, 1, 0],
-        range: [0, LEG_DROP],
+        // The draw leaf rides 46 mm above its parent, so its legs need 33 mm
+        // less drop to land on the same tarmac. Screw feet are adjustable; this
+        // is what they would be adjusted to.
+        range: [0, parent === 'table-c' ? LEG_DROP - mm(33) : LEG_DROP],
         window: [0.84, 0.94],
         mass: 1.2,
         com: [0, mm(180), 0],
@@ -571,7 +601,7 @@ function drawLeaf(lib) {
   for (const sz of [-1, 1]) {
     g.add(extrusion([0, mm(30), sz * (TABLE_W / 2 - mm(90))], [TABLE_L, mm(30), sz * (TABLE_W / 2 - mm(90))], mm(40), lib.alu))
   }
-  g.add(slab([mm(36), TABLE_T + mm(40), TABLE_W - mm(60)], lib.alu, { pos: [TABLE_L - mm(18), mm(6), 0] }))
+  g.add(slab([mm(36), TABLE_T + mm(40), TABLE_W - mm(60)], lib.alu, { pos: [TABLE_L - mm(22), mm(2), 0] }))
   return g
 }
 
@@ -579,8 +609,10 @@ function tablePosts(lib) {
   const g = new THREE.Group()
   for (const sz of [-1, 1]) {
     const z = TABLE_Z + sz * mm(380)
-    g.add(slab([mm(90), TABLE_Y - FLOOR, mm(90)], lib.aluDark, { anchor: [0, -1, 0], pos: [TABLE_X, FLOOR, z] }))
-    g.add(slab([mm(200), mm(16), mm(200)], lib.galv, { pos: [TABLE_X, FLOOR + mm(8), z] }))
+    // The plate is let into the deck rather than laid on it, so nothing else
+    // standing on the deck starts at the same coordinate it does.
+    g.add(slab([mm(200), mm(16), mm(200)], lib.galv, { pos: [TABLE_X, FLOOR + mm(2), z] }))
+    g.add(slab([mm(90), TABLE_Y - FLOOR - mm(10), mm(90)], lib.aluDark, { anchor: [0, -1, 0], pos: [TABLE_X, FLOOR + mm(10), z] }))
     g.add(rod([TABLE_X, TABLE_Y - mm(40), z], [TABLE_X + mm(300), FLOOR + mm(20), z], mm(16), lib.steelRod))
   }
   g.add(extrusion([TABLE_X, TABLE_Y, TABLE_Z - mm(380)], [TABLE_X, TABLE_Y, TABLE_Z + mm(380)], mm(70), lib.alu))
@@ -634,7 +666,7 @@ function galley(lib) {
   // pan of finished takoyaki under a lamp. Same carcass, no plumbing.
   for (let i = 0; i < 3; i++) {
     const bx = -mm(640) + i * mm(300)
-    g.add(slab([mm(250), mm(24), mm(320)], lib.stainless, { pos: [bx, TOP - mm(12), kz] }))
+    g.add(slab([mm(250), mm(24), mm(320)], lib.stainless, { pos: [bx, TOP - mm(10), kz] }))
     g.add(slab([mm(224), mm(120), mm(294)], lib.trim, { pos: [bx, TOP - mm(76), kz] }))
   }
   // 12 V battery and inverter, in the void under the counter where they are out
@@ -674,12 +706,12 @@ function galley(lib) {
   g.add(rod([-mm(750), FLOOR + mm(240), bz], [-mm(750), FLOOR + mm(420), bz], mm(10), lib.chrome))
 
   // The fridge in its cradle, and the waste tank beside it.
-  g.add(slab([mm(593), mm(410), mm(345)], lib.stainless, { anchor: [0, -1, 0], pos: [-mm(164), FLOOR, bz] }))
   g.add(slab([mm(623), mm(50), mm(375)], lib.ply, { anchor: [0, -1, 0], pos: [-mm(164), FLOOR, bz] }))
+  g.add(slab([mm(593), mm(410), mm(345)], lib.stainless, { anchor: [0, -1, 0], pos: [-mm(164), FLOOR + mm(50), bz] }))
 
   for (const [tx, tz] of [[mm(333), bz], [mm(733), bz]]) {
-    g.add(slab([mm(400), mm(500), mm(380)], lib.rubberFoot, { anchor: [0, -1, 0], pos: [tx, FLOOR, tz] }))
-    g.add(slab([mm(430), mm(60), mm(410)], lib.ply, { anchor: [0, -1, 0], pos: [tx, FLOOR, tz] }))
+    g.add(slab([mm(400), mm(60), mm(410)], lib.ply, { anchor: [0, -1, 0], pos: [tx, FLOOR, tz] }))
+    g.add(slab([mm(400), mm(500), mm(380)], lib.rubberFoot, { anchor: [0, -1, 0], pos: [tx, FLOOR + mm(60), tz] }))
     // Cam straps over the shoulder: a rotomoulded tank has no fixings at all.
     for (const sy of [mm(180), mm(400)]) {
       g.add(slab([mm(420), mm(26), mm(400)], lib.aluDark, { pos: [tx, FLOOR + sy, tz] }))
@@ -700,10 +732,17 @@ function galley(lib) {
   // wants the cylinder outdoors, upright and 2 m from the flame, and 2 m does
   // not exist on this deck.
   const locker = new THREE.Group()
-  locker.position.set(X.bedRearOuter - mm(200), -mm(180), mm(300))
+  // Hung so its floor is 100 mm above the road, not 200 mm below it. A 680 mm
+  // locker cannot hang clear under a 660 mm deck, so it stands 120 proud of the
+  // deck line at the tail — which is where a real one on a kitchen car sits,
+  // and outboard of the tailgate either way.
+  locker.position.set(X.bedRearOuter - mm(200), mm(120), mm(300))
   locker.add(slab([mm(380), mm(680), mm(380)], lib.galv, { anchor: [0, 1, 0] }))
+  // Low-level louvres, ON the locker rather than beside it. Added to the galley
+  // group at a fixed height they did not travel with the locker and were left
+  // 147 mm under the tarmac — propane sinks, but not that far.
   for (let i = 0; i < 4; i++) {
-    g.add(slab([mm(300), mm(14), mm(20)], lib.trim, { pos: [X.bedRearOuter - mm(200), -mm(800) + i * mm(30), mm(492)] }))
+    locker.add(slab([mm(300), mm(14), mm(20)], lib.trim, { pos: [0, -mm(640) + i * mm(30), mm(192)] }))
   }
   // Plinths the stall posts hinge off, 220 mm up so the folded frame rides
   // clear of the deck.
@@ -778,7 +817,11 @@ function awningFabric(lib) {
     const v = (p.getY(i) + AWNING_OUT / 2) / AWNING_OUT
     // Slack between the arms, plus the fall toward the leading rail: a stall
     // awning always sheds outward.
-    p.setZ(i, -Math.cos(u * Math.PI) * mm(18) * v - v * mm(230))
+    // 75, not 230. The fall belongs at the leading edge; baked into the roller
+    // end it lifted the canvas 155 mm clear of the tube it is supposed to come
+    // off, and the awning read as a sheet hanging from nothing. 75 is the
+    // roller's own radius, so the sheet leaves the cassette tangentially.
+    p.setZ(i, -Math.cos(u * Math.PI) * mm(18) * v - v * mm(75))
   }
   f.geometry.computeVertexNormals()
   f.rotation.x = Math.PI / 2
@@ -794,7 +837,10 @@ function awningFabric(lib) {
 function lanterns(lib) {
   const g = new THREE.Group()
   for (let i = 0; i < 5; i++) {
-    const x = mm(220) + (i * (HEADER_LEN - mm(440))) / 4
+    // Spread over 700 mm less of beam than before, because folded flat the aft
+    // lantern landed at world x -810, inside the three-leaf table stack, with a
+    // 260 mm paper body swallowing two legs and their telescoping feet.
+    const x = mm(220) + (i * (HEADER_LEN - mm(700))) / 4
     const big = i === 2
     const r = big ? mm(190) : mm(130)
     const h = big ? mm(430) : mm(330)

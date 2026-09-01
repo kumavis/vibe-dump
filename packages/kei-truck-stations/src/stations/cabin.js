@@ -72,6 +72,10 @@ import { bellows, cloth, lathe, roundedSlab } from '../build.js'
 const FLOOR = mm(90)
 const BOX = { h: mm(1010), t: mm(40) } // hard shell, floor to lid
 const LID_RISE = mm(880)
+// The canvas skirt is shorter than the lid's travel by the 90 mm the lid parks
+// down inside the shell: top rail at 1100 above the deck, lid underside at 1890
+// with the roof up.
+const SKIRT_H = LID_RISE - mm(90)
 // THE BUNK DROPS BEFORE IT SLIDES, and the two numbers that force it are 1120
 // and 1780. Packed, the bunk deck has to be under the packing ceiling, so it
 // tucks right up beneath the parked lid at 870 above the cargo deck. Deployed,
@@ -97,7 +101,7 @@ const HALF = HALF_W - mm(20)
 // floor rather than 40 mm proud of it.
 const DECK_D = BOX.h + BOX.t
 const DECK_W = mm(1740) // between the corner columns, not across them
-const DECK_LEG = mm(608) // + 122 of screw foot = 730, which is the pin height
+const DECK_LEG = mm(601) // + 129 of screw foot and pad = 730, the pin height
 // The canopy poles. 860 + 680 stows inside the 1050 panel with the leg lying in
 // the lane beside it, and stands the hem 1520 above the deck at a 20 degree fall
 // from the lid rail — a pitch that sheds rain, and headroom you only stoop under
@@ -183,7 +187,8 @@ function build(ctx) {
     mates: ['floor', 'bunk', 'bunk-slide'],
     note: 'standing height goes from 900 to 1780 mm',
   })
-  rig.attach(lid.id, popTop(lib))
+  const top = popTop(lib)
+  rig.attach(lid.id, top)
   const sail = canopy(lib)
   rig.attach(lid.id, sail)
 
@@ -333,7 +338,13 @@ function build(ctx) {
     id: 'bunk-slide',
     parent: 'bunk',
     label: 'cabover extension',
-    pivot: [BUNK_L / 2 - SLIDE_L, -mm(40), 0],
+    // 20 below the bunk deck's own origin, and those 20 mm are load-bearing in
+    // the drawing sense. At 40 the extension's 100 mm side rails ran from 1770
+    // to 1870 above the road against a cab roof at 1780 — ten millimetres of
+    // aluminium inside the cab — and its plywood underside came out at exactly
+    // the same height as the bunk deck's, so 0.3 m² of two down-facing ply
+    // surfaces sat at one depth and shimmered against each other.
+    pivot: [BUNK_L / 2 - SLIDE_L, -mm(20), 0],
     joint: 'slide',
     axis: [1, 0, 0],
     range: [0, SLIDE_TRAVEL],
@@ -390,6 +401,11 @@ function build(ctx) {
       const { roll, bag } = sail.userData
       roll.scale.y = Math.max(0.004, u)
       bag.scale.set(1 - 0.86 * u, 1, 1 - 0.86 * u)
+      // The bellows concertina with the roof rather than standing at full
+      // height with it down, which is both what fabric does and the only way
+      // the packed box does not have 790 mm of canvas hanging through it.
+      const lift = r.parts.get('lid')?.q ?? 0
+      top.userData.skirt.scale.y = Math.max(0.015, Math.min(1, lift / LID_RISE))
     },
   }
 }
@@ -401,8 +417,12 @@ function shell(lib) {
   const y = FLOOR + BOX.h / 2
   const skin = lib.ply
   // Front (cab end), rear, and off-side walls. The kerb side is the deck.
-  g.add(slab([BOX.t, BOX.h, HALF * 2], skin, { pos: [mm(905), y, 0] }))
-  g.add(slab([BOX.t, BOX.h, HALF * 2], skin, { pos: [-mm(945), y, 0] }))
+  // The end walls run BETWEEN the off-side wall and the kerb panel rather than
+  // across the full width, which is both the joinery and the fix: full width
+  // they finished on exactly the plane the side wall finishes on, and two white
+  // ply faces pointing the same way at one depth is a corner that shimmers.
+  g.add(slab([BOX.t, BOX.h, HALF * 2 - BOX.t * 2], skin, { pos: [mm(905), y, 0] }))
+  g.add(slab([BOX.t, BOX.h, HALF * 2 - BOX.t * 2], skin, { pos: [-mm(945), y, 0] }))
   g.add(slab([mm(1850), BOX.h, BOX.t], skin, { pos: [BOX_CX, y, HALF - BOX.t / 2] }))
   // Corner extrusions, which is what a sandwich-panel body is actually held
   // together by.
@@ -416,8 +436,13 @@ function shell(lib) {
   // a flyscreen and a blackout pleat already inside it. It is 5.5 kg, which is a
   // lot for a hole in a wall, and it is why there are two of these and not four.
   g.add(slab([mm(16), mm(760), mm(560)], lib.aluDark, { pos: [-mm(966), FLOOR + mm(400), mm(180)] }))
-  g.add(slab([mm(20), mm(510), mm(960)], lib.aluDark, { pos: [BOX_CX + mm(300), FLOOR + mm(610), HALF - mm(10)] }))
-  g.add(slab([mm(14), mm(450), mm(900)], lib.glass, { pos: [BOX_CX + mm(300), FLOOR + mm(610), HALF - mm(4)] }))
+  // THE WINDOW WAS THIN IN THE WRONG AXIS. slab() takes [x, y, z], and the
+  // off-side wall is the one that is thin in Z — so a frame written 20 x 510 x
+  // 960 is not a window in that wall, it is a 960 mm panel standing at right
+  // angles to it, sticking straight out over the traffic side. It rendered as a
+  // slab hanging in the air off the shell's front corner.
+  g.add(slab([mm(960), mm(510), mm(20)], lib.aluDark, { pos: [BOX_CX + mm(300), FLOOR + mm(610), HALF + mm(8)] }))
+  g.add(slab([mm(900), mm(450), mm(14)], lib.glass, { pos: [BOX_CX + mm(300), FLOOR + mm(610), HALF + mm(8)] }))
   // The four guides the lid runs on, standing proud inside the corners.
   for (const sx of [-1, 1]) {
     for (const sz of [-1, 1]) {
@@ -469,7 +494,7 @@ function interior(lib) {
   // over-counter version of the same basin stands 100 mm proud, and there is no
   // 100 mm to be had under a bunk deck sitting 40 mm above the top.
   const bowl = lathe([[mm(150), mm(20)], [mm(146), -mm(80)], [mm(40), -mm(100)], [0, -mm(100)]], lib.stainless, { seg: 20, open: true })
-  bowl.position.set(mm(60), TOP, Z)
+  bowl.position.set(mm(60), TOP + mm(3), Z)
   g.add(bowl)
   // Folding tap: it lies down inside the bowl's rim for travel, which is what
   // every galley tap on a boat does and for exactly this reason.
@@ -509,7 +534,11 @@ function interior(lib) {
 /** The pop-top: lid, bellows, and the sleeves that run on the guides. */
 function popTop(lib) {
   const g = new THREE.Group()
-  g.add(slab([mm(1850), mm(70), mm(1370)], lib.ply, { anchor: [0, -1, 0], pos: [0, mm(20), 0] }))
+  // 1840 x 1360, not 1850 x 1370: the lid's own deck stops 5 mm short of the
+  // shell's outer faces on every side so the two do not finish on one plane
+  // with the roof down. The 1880 x 1400 cap over it is what the eye reads as
+  // the roofline anyway, and it still overhangs.
+  g.add(slab([mm(1840), mm(70), mm(1360)], lib.ply, { anchor: [0, -1, 0], pos: [0, mm(20), 0] }))
   g.add(slab([mm(1880), mm(30), mm(1400)], lib.aluDark, { pos: [0, mm(105), 0] }))
   // MaxxFan Deluxe 6200K through a 400 mm cut-out. Its FLANGE is 586 x 417, not
   // the 470 square the first draft assumed, and that 116 mm matters: the lid is
@@ -526,18 +555,33 @@ function popTop(lib) {
     g.add(slab([mm(540), mm(6), mm(1050)], lib.trim, { pos: [dx, mm(142), 0] }))
     g.add(slab([mm(500), mm(3), mm(1010)], lib.glass, { pos: [dx, mm(147), 0] }))
   }
-  // Bellows on all four sides, authored hanging down from the lid so they
-  // stretch as it rises — which is exactly what the fabric does.
+  // THE SKIRT, and its height is not the lid's travel. The gap the canvas has
+  // to close runs from the shell's top rail at 1100 above the deck to the lid's
+  // own underside, which is 20 above the lid's origin — 790 mm with the roof
+  // fully up, not the 880 the lid rises. Cut at 880 from the lid's centreline
+  // the canvas ran 90 mm down INSIDE the 40 mm shell wall, and its pleats swing
+  // 35 either way, so a band of fabric and a band of plywood were fighting for
+  // the same pixels all the way round the top of the box. That was the dithered
+  // stripe under the roofline in every view of this station.
+  //
+  // And it now concertinas. The skirt hangs from the lid's underside and is
+  // scaled by the lid's own extension in update(), so with the roof down it is
+  // a 12 mm bundle of folds under the lid rather than 790 mm of taut canvas
+  // hanging through the galley.
+  const skirt = new THREE.Group()
+  skirt.position.y = mm(20)
+  g.add(skirt)
+  g.userData.skirt = skirt
   for (const sz of [-1, 1]) {
-    const b = bellows(mm(1810), LID_RISE, mm(70), lib.canvasCream, { pleats: 9 })
-    b.position.set(0, -LID_RISE / 2 + mm(10), sz * (HALF - mm(45)))
-    g.add(b)
+    const b = bellows(mm(1810), SKIRT_H, mm(70), lib.canvasCream, { pleats: 9 })
+    b.position.set(0, -SKIRT_H / 2, sz * (HALF - mm(45)))
+    skirt.add(b)
   }
   for (const sx of [-1, 1]) {
-    const b = bellows(mm(1320), LID_RISE, mm(70), lib.canvasCream, { pleats: 7 })
+    const b = bellows(mm(1320), SKIRT_H, mm(70), lib.canvasCream, { pleats: 7 })
     b.rotation.y = Math.PI / 2
-    b.position.set(sx * mm(900), -LID_RISE / 2 + mm(10), 0)
-    g.add(b)
+    b.position.set(sx * mm(900), -SKIRT_H / 2, 0)
+    skirt.add(b)
   }
   for (const sx of [-1, 1]) {
     for (const sz of [-1, 1]) {
@@ -566,9 +610,9 @@ function deckPanel(lib) {
   const a = [-1, -1, 0]
   // The sandwich panel itself, and the extruded edge that is the deck's beam.
   g.add(slab([DECK_D, BOX.t, DECK_W], lib.ply, { anchor: a }))
-  g.add(slab([mm(70), BOX.t + mm(16), DECK_W], lib.aluDark, { anchor: a, pos: [DECK_D - mm(70), 0, 0] }))
+  g.add(slab([mm(70), BOX.t + mm(16), DECK_W], lib.aluDark, { anchor: a, pos: [DECK_D - mm(74), -mm(6), 0] }))
   for (const sz of [-1, 1]) {
-    g.add(slab([DECK_D, BOX.t + mm(10), mm(40)], lib.alu, { anchor: a, pos: [0, 0, sz * (DECK_W / 2 - mm(20))] }))
+    g.add(slab([DECK_D - mm(8), BOX.t + mm(10), mm(40)], lib.alu, { anchor: a, pos: [mm(4), -mm(5), sz * (DECK_W / 2 - mm(24))] }))
   }
   // Anti-slip battens across the walking face — which is the INBOARD face while
   // this is a wall, so they double as the cabin's kerb-side lining ribs.
@@ -660,7 +704,7 @@ function bunkDeck(lib) {
   const g = new THREE.Group()
   g.add(slab([BUNK_L, mm(70), BUNK_W], lib.ply, { pos: [0, -mm(35), 0] }))
   for (const sz of [-1, 1]) {
-    g.add(slab([BUNK_L, mm(100), mm(50)], lib.aluDark, { pos: [0, -mm(50), sz * (BUNK_W / 2 - mm(25))] }))
+    g.add(slab([BUNK_L, mm(100), mm(50)], lib.aluDark, { pos: [0, -mm(53), sz * (BUNK_W / 2 - mm(29))] }))
   }
   // A mattress, because an empty bunk reads as a shelf.
   g.add(roundedSlab(BUNK_L - mm(120), mm(110), BUNK_W - mm(90), mm(50), lib.canvasIndigo, { pos: [0, mm(55), 0] }))
@@ -676,13 +720,16 @@ function bunkSlide(lib) {
   g.add(slab([SLIDE_L, mm(60), BUNK_W - mm(80)], lib.ply, { anchor: [-1, 0, 0] }))
   for (const sz of [-1, 1]) {
     // 100 x 50 x 3 rails: the members the cantilever calculation is about.
-    g.add(slab([SLIDE_L, mm(100), mm(50)], lib.aluDark, { anchor: [-1, 0, 0], pos: [0, -mm(20), sz * (BUNK_W / 2 - mm(65))] }))
+    g.add(slab([SLIDE_L, mm(100), mm(50)], lib.aluDark, { anchor: [-1, 0, 0], pos: [0, -mm(24), sz * (BUNK_W / 2 - mm(69))] }))
   }
   g.add(roundedSlab(SLIDE_L - mm(160), mm(110), BUNK_W - mm(180), mm(50), lib.canvasIndigo, { pos: [SLIDE_L / 2, mm(85), 0] }))
   for (const sz of [-1, 1]) {
-    g.add(slab([mm(160), mm(40), mm(120)], lib.rubberFoot, { pos: [SLIDE_L - mm(140), -mm(90), sz * mm(430)] }))
+    // The anti-sway pads REST ON the cab roof: bottom face at 1780 above the
+    // road, which is the roof, and not a millimetre lower. They used to hang to
+    // 1730, fifty millimetres inside a panel they are supposed to touch.
+    g.add(slab([mm(160), mm(40), mm(120)], lib.rubberFoot, { pos: [SLIDE_L - mm(140), -mm(60), sz * mm(430)] }))
   }
   // A window in the cabover's front face, which every truck camper has.
-  g.add(slab([mm(16), mm(300), mm(760)], lib.glass, { pos: [SLIDE_L - mm(8), mm(120), 0] }))
+  g.add(slab([mm(16), mm(300), mm(760)], lib.glass, { pos: [SLIDE_L - mm(4), mm(120), 0] }))
   return g
 }

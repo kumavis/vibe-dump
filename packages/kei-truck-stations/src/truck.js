@@ -376,7 +376,12 @@ function bed(lib) {
   const deck = T.deckH
 
   // Deck floor: the pressed-and-swaged steel pan, plus the structure below it.
-  g.add(slab([T.bedLen + T.gate * 2, mm(14), T.bedWid + T.gate * 2], lib.deckSteel, { pos: [0, deck - mm(7), 0], anchor: [0, 0, 0] }))
+  // The pan's top face is 1.5 mm BELOW the deck line, and those 1.5 mm are the
+  // difference between a flush walkway and a shimmering one. A dropped gate is
+  // hinged half a panel thickness low precisely so its top face lands at deck
+  // level; draw the pan's top face there too and the two steel surfaces lap over
+  // 25 mm of width at exactly one depth, all the way across the tail.
+  g.add(slab([T.bedLen + T.gate * 2, mm(14), T.bedWid + T.gate * 2], lib.deckSteel, { pos: [0, deck - mm(8.5), 0], anchor: [0, 0, 0] }))
   g.add(slab([T.bedLen + T.gate * 2, mm(45), T.bedWid - mm(60)], lib.frame, { pos: [0, deck - mm(38), 0] }))
   // Deck cross-bearers, visible from the side under the lip.
   for (let i = -3; i <= 3; i++) {
@@ -388,7 +393,12 @@ function bed(lib) {
   // dropped gate as a working surface rather than as decoration.
   for (const sx of [-1, 1]) {
     for (const sz of [-1, 1]) {
-      g.add(slab([mm(45), T.bedSide, mm(45)], lib.galv, { pos: [sx * (halfL - mm(22)), deck, sz * (halfW - mm(22))], anchor: [0, -1, 0] }))
+      // 16 mm across the bed, not 45. A module built to the bed's own 1370 mm
+      // leaves 20 mm of gap at each side, and a 45 mm square post does not fit
+      // in 20 mm of gap — it stood 25 mm inside every module's wall, in all
+      // four stations. A corner stake on a truck this size is a pressed strap
+      // anyway, and a strap is what lives in the gap the modules leave.
+      g.add(slab([mm(45), T.bedSide, mm(16)], lib.galv, { pos: [sx * (halfL - mm(22)), deck, sz * (halfW - mm(8))], anchor: [0, -1, 0] }))
     }
   }
 

@@ -126,20 +126,29 @@ export function addGates(rig, ctx, { left = 'hang', right = 'hang', tail = 'hang
  * station packs is measured from that face, so it is the one number that trades
  * module floor thickness against packing headroom.
  */
-export function subframe(lib, { height = mm(110), inset = mm(10), skin = null } = {}) {
+export function subframe(lib, { height = mm(110), inset = mm(22), skin = null } = {}) {
   const g = new THREE.Group()
   const L = T.bedLen - inset * 2
   const W = T.bedWid - inset * 2
-  const sec = mm(60)
+  const SKIN = mm(22)
+  // THE FRAME GOES UNDER ITS OWN DECK, which is obvious as joinery and was not
+  // what the drawing said: both the rails and the 22 mm skin were topped out at
+  // `height`, so four 1920 x 60 aluminium faces and the plywood over them
+  // pointed the same way at one coordinate — 0.46 m^2 of shimmer in every
+  // station, the largest artifact in the project. The section is capped so this
+  // still works at the yatai's 60 mm floor, where 60 of extrusion and 22 of ply
+  // do not both fit in 60 mm of headroom and something has to give.
+  const sec = Math.min(mm(60), height - SKIN)
+  const railY = height - SKIN - sec / 2
 
   // Perimeter and two longitudinal rails, on 40 x 60 extrusion.
   for (const z of [-W / 2 + sec / 2, -mm(230), mm(230), W / 2 - sec / 2]) {
-    g.add(extrusion([-L / 2, height - sec / 2, z], [L / 2, height - sec / 2, z], sec, lib.aluDark))
+    g.add(extrusion([-L / 2, railY, z], [L / 2, railY, z], sec, lib.aluDark))
   }
   // Cross bearers land over the truck's own deck bearers, which is the whole
   // point of a subframe: point loads reach the chassis, not the deck pan.
   for (let i = -3; i <= 3; i++) {
-    g.add(extrusion([i * mm(300), height - sec / 2, -W / 2], [i * mm(300), height - sec / 2, W / 2], mm(45), lib.aluDark))
+    g.add(extrusion([i * mm(300), railY, -W / 2], [i * mm(300), railY, W / 2], Math.min(mm(45), sec), lib.aluDark))
   }
   // Spreader plates and bolts at the four corners, into the deck's own tie-downs.
   for (const sx of [-1, 1]) {
@@ -147,12 +156,15 @@ export function subframe(lib, { height = mm(110), inset = mm(10), skin = null } 
       g.add(slab([mm(150), mm(10), mm(150)], lib.galv, { pos: [sx * (L / 2 - mm(90)), mm(6), sz * (W / 2 - mm(90))] }))
     }
   }
-  g.add(slab([L, mm(22), W], skin ?? lib.ply, { pos: [0, height - mm(11), 0] }))
+  g.add(slab([L, SKIN, W], skin ?? lib.ply, { pos: [0, height - SKIN / 2, 0] }))
   return g
 }
 
 /** The collision hull the subframe above occupies. */
-export function subframeHull(height = mm(110), inset = mm(10)) {
+// 22 mm of inset, not 10, so the frame clears the truck's own corner stakes at
+// the four bed corners instead of grazing them. It costs 24 mm of module length
+// and width, which nothing in any station was using.
+export function subframeHull(height = mm(110), inset = mm(22)) {
   return [{ c: [0, height / 2, 0], s: [T.bedLen - inset * 2, height, T.bedWid - inset * 2], tag: 'subframe' }]
 }
 
@@ -189,7 +201,9 @@ export function addJack(rig, lib, { id, parent = null, at, stage, drop = null, l
   const g = new THREE.Group()
   g.add(slab([mm(58), mm(280), mm(58)], lib.galv, { pos: [0, -mm(140), 0] }))
   g.add(slab([mm(170), mm(22), mm(170)], lib.aluDark, { pos: [0, -FOOT_DROP + mm(20), 0] }))
-  g.add(slab([mm(190), mm(16), mm(190)], lib.rubberFoot, { pos: [0, -FOOT_DROP + mm(4), 0] }))
+  // +8, so the pad's own 16 mm of rubber sits ON the tarmac rather than 4 mm
+  // into it. FOOT_DROP is where the screw reaches, not where the rubber ends.
+  g.add(slab([mm(190), mm(16), mm(190)], lib.rubberFoot, { pos: [0, -FOOT_DROP + mm(8), 0] }))
   const crank = rod([mm(30), -mm(20), 0], [mm(130), -mm(20), 0], mm(9), lib.steelRod)
   g.add(crank)
   rig.attach(id, g)
@@ -282,11 +296,19 @@ export function foldPanel(lib, length, width, thickness, { face = null, frame = 
   const a = [-1, anchorY, 0]
   g.add(slab([length, thickness, width], face ?? lib.ply, { anchor: a }))
   if (frame) {
-    const e = thickness + mm(5)
-    g.add(slab([length, e, mm(34)], lib.alu, { anchor: a, pos: [0, 0, width / 2 - mm(17)] }))
-    g.add(slab([length, e, mm(34)], lib.alu, { anchor: a, pos: [0, 0, -width / 2 + mm(17)] }))
-    g.add(slab([mm(34), e, width], lib.alu, { anchor: a, pos: [length - mm(34), 0, 0] }))
-    g.add(slab([mm(34), e, width], lib.alu, { anchor: a }))
+    // THE EDGE FRAME IS HELD OFF THE PANEL'S OWN EDGES, in all three axes, and
+    // that is not fussiness. Drawn flush — the frame starting where the sheet
+    // starts and finishing where it finishes — every panel in the project put an
+    // aluminium face and a plywood face in the same plane pointing the same way,
+    // four times over. On the booth alone that was six coplanar pairs of 0.044
+    // m^2 each. 4 mm of reveal all round costs nothing and reads as the reveal a
+    // capping section actually has.
+    const e = thickness + mm(6)
+    const dy = anchorY * mm(3) // proud of BOTH faces rather than flush with one
+    g.add(slab([length - mm(8), e, mm(30)], lib.alu, { anchor: a, pos: [mm(4), dy, width / 2 - mm(19)] }))
+    g.add(slab([length - mm(8), e, mm(30)], lib.alu, { anchor: a, pos: [mm(4), dy, -width / 2 + mm(19)] }))
+    g.add(slab([mm(30), e, width - mm(8)], lib.alu, { anchor: a, pos: [length - mm(38), dy, 0] }))
+    g.add(slab([mm(30), e, width - mm(8)], lib.alu, { anchor: a, pos: [mm(4), dy, 0] }))
   }
   return g
 }

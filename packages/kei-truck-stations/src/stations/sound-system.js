@@ -245,7 +245,7 @@ function build(ctx) {
         stage: 3,
         mass: 1.1,
         com: [mm(120), 0, 0],
-        footprint: [mm(380), 0, 0],
+        footprint: [mm(200), 0, 0],
         hulls: [{ c: [mm(100), 0, 0], s: [mm(200), mm(38), mm(38)], tag: 'foot' }],
         mates: ['ground', `tray-leg-${side}${n}`, `tray-${side}`],
       })
@@ -527,6 +527,12 @@ function lightFrame(lib) {
 
   const bx = -MAST_H + mm(30)
   const bar = new THREE.Mesh(new THREE.CylinderGeometry(mm(24.3), mm(24.3), BAR_LEN, 14), lib.galv)
+  // ACROSS the mast, which needs saying because a THREE cylinder is built along
+  // its own +Y and the mast above it is turned onto X. Left unturned, this bar
+  // ran along the mast instead of across it: fore-and-aft over the cab with the
+  // frame up, and straight down through the deck with it flat. The fixtures
+  // were already authored along Z and were crossing it at ninety degrees.
+  bar.rotation.x = Math.PI / 2
   bar.position.set(bx, 0, 0)
   g.add(bar)
   // 直交クランプ where the bar crosses the mast — the rated 500 kg one.
@@ -555,7 +561,7 @@ function trayGeometry(lib) {
   g.add(slab([TRAY_L, TRAY_T, TRAY_W], lib.aluDark, { anchor: [0, -1, 0] }))
   g.add(slab([TRAY_L - mm(40), mm(8), TRAY_W - mm(40)], lib.alu, { pos: [0, TRAY_T, 0] }))
   for (const s of [-1, 1]) {
-    g.add(extrusion([-TRAY_L / 2, TRAY_T / 2, s * (TRAY_W / 2 - mm(30))], [TRAY_L / 2, TRAY_T / 2, s * (TRAY_W / 2 - mm(30))], mm(44), lib.alu))
+    g.add(extrusion([-TRAY_L / 2 + mm(4), TRAY_T / 2, s * (TRAY_W / 2 - mm(30))], [TRAY_L / 2 - mm(4), TRAY_T / 2, s * (TRAY_W / 2 - mm(30))], mm(44), lib.alu))
   }
 
   // THE WELL. A DXS15XLF has no base inserts and no flypoints — the only
@@ -570,14 +576,14 @@ function trayGeometry(lib) {
   for (const s of [-1, 1]) {
     well.add(slab([SUB.d + mm(40), mm(150), mm(18)], lib.ply, { anchor: [0, -1, 0], pos: [0, 0, s * (SUB.w / 2 + mm(9))] }))
   }
-  well.add(slab([mm(18), mm(150), SUB.w + mm(36)], lib.ply, { anchor: [0, -1, 0], pos: [-SUB.d / 2 - mm(9), 0, 0] }))
+  well.add(slab([mm(18), mm(150), SUB.w + mm(40)], lib.ply, { anchor: [0, -1, 0], pos: [-SUB.d / 2 - mm(9), 0, 0] }))
   g.add(well)
 
   // Bass bin: a ported 15", front-loaded, facing the crowd (-X).
   const bin = new THREE.Group()
   bin.position.set(wx, TRAY_T, 0)
   bin.add(slab([SUB.d, SUB.h, SUB.w], lib.speakerBox, { anchor: [0, -1, 0] }))
-  bin.add(slab([mm(24), SUB.h - mm(90), SUB.w - mm(70)], lib.speakerGrille, { pos: [-SUB.d / 2 - mm(6), SUB.h / 2 + mm(20), 0] }))
+  bin.add(slab([mm(24), SUB.h - mm(90), SUB.w - mm(70)], lib.speakerGrille, { pos: [-SUB.d / 2 - mm(8), SUB.h / 2 + mm(20), 0] }))
   // The port slot, which is what makes a bass bin read as a bass bin.
   bin.add(slab([mm(30), mm(110), SUB.w - mm(180)], lib.trim, { pos: [-SUB.d / 2 - mm(10), mm(90), 0] }))
   for (const s of [-1, 1]) {
@@ -657,9 +663,13 @@ function legStrut(lib, length) {
 /** The telescoping foot at the end of a leg. */
 function footPad(lib) {
   const g = new THREE.Group()
-  g.add(slab([mm(380), mm(38), mm(38)], lib.aluDark, { anchor: [-1, 0, 0] }))
-  g.add(slab([mm(22), mm(160), mm(160)], lib.aluDark, { pos: [mm(371), 0, 0] }))
-  g.add(slab([mm(14), mm(180), mm(180)], lib.rubberFoot, { pos: [mm(387), 0, 0] }))
+  // 186, not 380. The screw's own hull is 200 long and the leg reaches the
+  // tarmac at 200 past the foot's origin; drawn at 380 the pad face finished
+  // 194 mm UNDER the road, which is what the four drop legs were doing in every
+  // view while the screw jacks beside them stood on it correctly.
+  g.add(slab([mm(186), mm(38), mm(38)], lib.aluDark, { anchor: [-1, 0, 0] }))
+  g.add(slab([mm(22), mm(160), mm(160)], lib.aluDark, { pos: [mm(177), 0, 0] }))
+  g.add(slab([mm(14), mm(180), mm(180)], lib.rubberFoot, { pos: [mm(193), 0, 0] }))
   return g
 }
 
@@ -682,6 +692,10 @@ function cheekPanel(lib, sz) {
   shape.closePath()
   const geo = new THREE.ExtrudeGeometry(shape, { depth: mm(28), bevelEnabled: false })
   geo.rotateX(Math.PI / 2) // authored in XY, laid down into XZ
+  // 2 mm off the panel's own face. Flush, the stowed cheek's underside sat in
+  // exactly the plane of the counter's underside over a fifth of a square metre
+  // — the largest coplanar pair in the station.
+  geo.translate(0, -mm(2), 0)
   if (sz < 0) geo.scale(1, 1, -1)
   geo.computeVertexNormals()
   const m = new THREE.Mesh(geo, lib.aluDark)
@@ -696,7 +710,10 @@ function fasciaLights(lib) {
   const g = new THREE.Group()
   for (let i = 0; i < 5; i++) {
     const x = mm(70) + i * mm(85)
-    g.add(slab([mm(40), PANEL_T + mm(10), BOOTH_W - mm(160)], i % 2 ? lib.ledCyan : lib.ledMagenta, { pos: [x, 0, 0] }))
+    // Centred on the panel's crowd-facing surface, which with anchorY -1 is
+    // local +PANEL_T. Centred on zero they stood 21 mm proud of the DECK side
+    // and were buried behind the face the crowd looks at.
+    g.add(slab([mm(40), PANEL_T + mm(10), BOOTH_W - mm(160)], i % 2 ? lib.ledCyan : lib.ledMagenta, { pos: [x, PANEL_T, 0] }))
   }
   return g
 }
