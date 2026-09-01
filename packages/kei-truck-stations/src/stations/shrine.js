@@ -279,7 +279,8 @@ function build(ctx) {
     parent = id
     pivot = [0, 0, 0]
   }
-  rig.attach('post-3', ridgeBeam(lib))
+  const ridge = ridgeBeam(lib)
+  rig.attach('post-3', ridge)
 
   // --- the roof ------------------------------------------------------------
   // Three facets a side, each folded back 180 degrees onto the one before it.
@@ -374,6 +375,15 @@ function build(ctx) {
      * progress, so they stay right if the stage windows are ever retimed.
      */
     update(_t, r) {
+      // The chigi go up with the roof: facet 1's own angle drives them, so they
+      // are a pair of stubs on the ridge while the roof is a folded stack and
+      // full height by the time it is a roof.
+      const f1 = r.parts.get('roof-l1')
+      if (f1) {
+        const span = Math.abs(f1.to - f1.from) || 1
+        const c = Math.min(1, Math.max(0, Math.abs(f1.q - f1.from) / span))
+        ridge.userData.chigi.scale.y = 0.04 + 0.96 * c
+      }
       const q = r.parts.get('post-3')?.q ?? 0
       const u = Math.min(1, Math.max(0, q / POST_STAGE))
       const collapsed = mm(40) / CHOCHIN_H
@@ -415,7 +425,7 @@ function dais(lib) {
     // pillar hinge is 30 mm off the module floor's rear edge and 85 mm off the
     // bed side, so a 300 mm stone centred on it cantilevered 120 mm past the
     // back of the floor and 65 mm through the truck's own corner stake.
-    g.add(slab([mm(240), mm(170), mm(220)], lib.aluDark, { anchor: [0, -1, 0], pos: [TORII.x + mm(110), FLOOR, sz * (TORII.z - mm(60))] }))
+    g.add(slab([mm(200), mm(170), mm(220)], lib.aluDark, { anchor: [0, -1, 0], pos: [TORII.x + mm(20), FLOOR, sz * (TORII.z - mm(60))] }))
   }
   return g
 }
@@ -481,7 +491,12 @@ function postStage(lib, k) {
 /** The ridge beam, plus the gable-end bargeboards the facets hang off. */
 function ridgeBeam(lib) {
   const g = new THREE.Group()
-  g.add(slab([mm(1050), mm(90), mm(150)], lib.hinoki, { pos: [mm(75), POST_HOUSING + mm(20), 0] }))
+  // 260 across, not 150, and topped just above the facet pivots. The two slopes
+  // deliberately start 120 mm either side of the centreline so the folded stack
+  // has somewhere to go — but a 150 mm beam in a 240 mm gap leaves 45 mm of open
+  // slot down each side of the ridge, and head-on you could see daylight through
+  // the roof of a shrine.
+  g.add(slab([mm(1050), mm(90), mm(260)], lib.hinoki, { pos: [mm(75), POST_HOUSING + mm(5), 0] }))
   // Katsuogi: the short billets that lie across a shrine ridge.
   for (let i = -1; i <= 1; i++) {
     const k = lathe([[mm(46), 0], [mm(54), mm(90)], [mm(46), mm(180)]], lib.copperTrim, { seg: 10 })
@@ -489,19 +504,27 @@ function ridgeBeam(lib) {
     k.position.set(mm(75) + i * mm(380), POST_HOUSING + mm(90), -mm(90))
     g.add(k)
   }
-  // Chigi: the crossed finials at each gable.
+  // Chigi: the crossed finials at each gable. They are ROOTED ON THE RIDGE, as
+  // chigi are, and they fold — which they have to, because rooted at the ridge
+  // and 410 mm tall they start below the packed roof stack and finish above it,
+  // and all four spend the first half of the deployment inside two wrapped
+  // facets. Drawing them higher up instead just leaves four gold rods floating
+  // over the ridge with nothing under them. So they are scaled from the ridge by
+  // the roof's own progress, the way the lanterns and the rope already are: two
+  // timbers that go on last, which on a shrine you take apart is what they are.
+  const chigi = new THREE.Group()
+  chigi.position.y = POST_HOUSING + mm(10)
   for (const s of [-1, 1]) {
     for (const t of [-1, 1]) {
-      g.add(rod(
-        // Starting at +10 the finials began BELOW the folded roof stack and
-        // finished above it, so all four passed through both wrapped facets for
-        // the whole first half of the fold. The stack tops out at about +206.
-        [mm(75) + s * mm(560), POST_HOUSING + mm(230), 0],
-        [mm(75) + s * mm(700), POST_HOUSING + mm(420), t * mm(150)],
+      chigi.add(rod(
+        [mm(75) + s * mm(560), 0, 0],
+        [mm(75) + s * mm(700), mm(410), t * mm(150)],
         mm(26), lib.gold,
       ))
     }
   }
+  g.add(chigi)
+  g.userData.chigi = chigi
   return g
 }
 
@@ -741,7 +764,7 @@ function shrineFace(lib) {
     // 440 either side of the ridge, and at 440 the soffit is only 252 above
     // post-3 — 178 below where the lantern's top ring was, so a 300 mm paper
     // barrel was 162 mm inside the second facet on each slope.
-    c.position.set(x + mm(40), HOOK - mm(200), sz * mm(440))
+    c.position.set(x + mm(40), HOOK - mm(200), sz * mm(250))
     g.add(c)
     chochins.push(c.userData.body)
   }
