@@ -464,19 +464,16 @@ function build(ctx) {
         id: `${id}${sz > 0 ? 'r' : 'l'}`,
         parent,
         label: 'table leg',
-        // The draw leaf's legs are pinned 180 mm further in, and the reason is
-        // the fold. The comment below assumes the two pairs hang off leaves
-        // folded 180 degrees onto each other, which points them opposite ways;
-        // but table-c is a SLIDE nested at zero offset under table-b, so both
-        // pairs stowed at the same leaf-local 680, lay back the same way and
-        // landed 46 mm inside each other. Pinning the draw leaf's pair aft of
-        // the other pair is what separates them, and it shortens the longest
-        // unsupported span from 1400 to 1200 into the bargain.
-        pivot: [
-          parent === 'table-c' ? TABLE_L - mm(200) : TABLE_L - mm(20),
-          0,
-          sz * (TABLE_W / 2 + (parent === 'table-c' ? mm(72) : mm(30))),
-        ],
+        // THE TWO PAIRS ARE SEPARATED ACROSS THE TABLE, not along it. The
+        // comment below assumes they hang off leaves folded 180 degrees onto
+        // each other, which points them opposite ways; but table-c is a SLIDE
+        // nested under table-b, so both pairs stowed at the same leaf-local 680,
+        // lay back the same way and landed 46 mm inside each other with their
+        // brace rods crossing. Stepping the draw leaf's pair 42 mm further
+        // outboard clears both. Stepping them ALONG the leaf instead does
+        // separate them and also stows them 180 mm higher, which puts the packed
+        // truck 140 mm over the cab roof — the packing check catches it at once.
+        pivot: [TABLE_L - mm(20), 0, sz * (TABLE_W / 2 + (parent === 'table-c' ? mm(64) : mm(30)))],
         joint: 'hinge',
         axis: [0, 0, 1],
         // Authored pointing +Y in the leaf's frame, which is DOWN once the leaf
@@ -515,10 +512,10 @@ function build(ctx) {
         pivot: [0, LEG_LEN - mm(380), 0],
         joint: 'telescope',
         axis: [0, 1, 0],
-        // The draw leaf rides 46 mm above its parent, so its legs need 33 mm
+        // The draw leaf rides 46 mm above its parent, so its legs need 46 mm
         // less drop to land on the same tarmac. Screw feet are adjustable; this
         // is what they would be adjusted to.
-        range: [0, parent === 'table-c' ? LEG_DROP - mm(33) : LEG_DROP],
+        range: [0, parent === 'table-c' ? LEG_DROP - mm(46) : LEG_DROP],
         window: [0.84, 0.94],
         mass: 1.2,
         com: [0, mm(180), 0],
@@ -740,7 +737,7 @@ function galley(lib) {
   // locker cannot hang clear under a 660 mm deck, so it stands 120 proud of the
   // deck line at the tail — which is where a real one on a kitchen car sits,
   // and outboard of the tailgate either way.
-  locker.position.set(X.bedRearOuter - mm(200), mm(120), mm(300))
+  locker.position.set(X.bedRearOuter - mm(230), mm(120), mm(300))
   locker.add(slab([mm(380), mm(680), mm(380)], lib.galv, { anchor: [0, 1, 0] }))
   // Low-level louvres, ON the locker rather than beside it. Added to the galley
   // group at a fixed height they did not travel with the locker and were left

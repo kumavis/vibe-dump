@@ -85,7 +85,13 @@ const FACET_ANGLE = [deg(40), deg(28), deg(16)]
 const FACET_GAP = FACET_T + mm(14)
 
 const CHOCHIN_H = mm(420) // 尺丸, and 40 mm of it when collapsed for the road
-const OFFER_X = -mm(260) //  the offering platform, on the dais inside the open face
+// The offering platform, on the dais inside the open face. It used to be at
+// -260, which is where the bell rope falls (x -405..-345) and where the forward
+// ridge post stands (x -305..-195) — the rope's whole lower 310 mm was inside
+// the saisenbako and the post grew straight up through it. Neither showed in the
+// audit: the rope hangs off post-3 which declares 'floor' as a mate, and the
+// post and the box are both drawn on 'floor', so nothing was checking.
+const OFFER_X = mm(20)
 
 export default {
   id: 'hokora',
@@ -184,7 +190,11 @@ function build(ctx) {
     // 45 degrees — two beams sweeping the same gap from opposite ends is the
     // one interference in this design that no offset fixes, only a shared
     // pivot does.
-    pivot: [TORII.h * 0.64, -mm(80), -mm(75)],
+    // 0.79 of the pillar, not 0.64. At 0.64 the hinge is 1184 up a pillar and
+    // the beam is 1240 long, so folded back it reaches 56 mm PAST its own hinge
+    // and its 120 mm end block 116 past — straight into the base stone the
+    // pillar stands on, and through the raised tailgate behind it.
+    pivot: [TORII.h * 0.79, -mm(80), -mm(75)],
     joint: 'hinge',
     axis: [0, 1, 0],
     range: [0, -Math.PI / 2],
@@ -401,7 +411,11 @@ function dais(lib) {
   // Base stones for the torii pillars: the pillars hinge 150 mm above the
   // module floor, and something has to be under them.
   for (const sz of [-1, 1]) {
-    g.add(slab([mm(300), mm(170), mm(300)], lib.aluDark, { anchor: [0, -1, 0], pos: [TORII.x, FLOOR, sz * TORII.z] }))
+    // 240 x 220 and pulled inboard, not 300 square centred on the hinge. The
+    // pillar hinge is 30 mm off the module floor's rear edge and 85 mm off the
+    // bed side, so a 300 mm stone centred on it cantilevered 120 mm past the
+    // back of the floor and 65 mm through the truck's own corner stake.
+    g.add(slab([mm(240), mm(170), mm(220)], lib.aluDark, { anchor: [0, -1, 0], pos: [TORII.x + mm(110), FLOOR, sz * (TORII.z - mm(60))] }))
   }
   return g
 }
@@ -417,7 +431,7 @@ function toriiPillar(lib) {
   )
   p.rotation.z = -Math.PI / 2 // authored up +Y; the part lies along +X
   g.add(p)
-  g.add(slab([mm(60), mm(190), mm(190)], lib.vermilionDeep, { pos: [mm(30), 0, 0] }))
+  g.add(slab([mm(60), mm(190), mm(190)], lib.vermilionDeep, { pos: [mm(33), 0, 0] }))
   return g
 }
 
@@ -479,7 +493,10 @@ function ridgeBeam(lib) {
   for (const s of [-1, 1]) {
     for (const t of [-1, 1]) {
       g.add(rod(
-        [mm(75) + s * mm(560), POST_HOUSING + mm(10), 0],
+        // Starting at +10 the finials began BELOW the folded roof stack and
+        // finished above it, so all four passed through both wrapped facets for
+        // the whole first half of the fold. The stack tops out at about +206.
+        [mm(75) + s * mm(560), POST_HOUSING + mm(230), 0],
         [mm(75) + s * mm(700), POST_HOUSING + mm(420), t * mm(150)],
         mm(26), lib.gold,
       ))
@@ -499,9 +516,11 @@ function roofFacet(lib, k, sz, anchorY) {
   g.add(foldPanel(lib, L, ROOF_LEN, FACET_T, { face: lib.copperRoof, frame: false, anchorY }))
   // Board lines running down the slope, which is how the real roof is laid.
   for (let i = -6; i <= 6; i++) {
-    g.add(slab([L, FACET_T + mm(5), mm(16)], lib.copperTrim, { anchor: [-1, anchorY, 0], pos: [0, 0, i * mm(112)] }))
+    g.add(slab([L, FACET_T + mm(5), mm(16)], lib.copperTrim, { anchor: [-1, anchorY, 0], pos: [0, anchorY * mm(3), i * mm(112)] }))
   }
-  g.add(slab([mm(26), FACET_T + mm(16), ROOF_LEN], lib.copperTrim, { anchor: [-1, anchorY, 0], pos: [L - mm(26), 0, 0] }))
+  // The same 3 mm reveal foldPanel gives its own capping, for the same reason:
+  // frame:false here means this trim has to arrange it itself.
+  g.add(slab([mm(26), FACET_T + mm(16), ROOF_LEN], lib.copperTrim, { anchor: [-1, anchorY, 0], pos: [L - mm(26), anchorY * mm(3), 0] }))
   if (last) {
     // The eave fascia, and a row of rafter ends under it.
     g.add(slab([mm(40), mm(120), ROOF_LEN], lib.vermilionDeep, { pos: [L, -anchorY * mm(40), 0] }))
@@ -518,13 +537,21 @@ function shimenawa(lib) {
   const g = new THREE.Group()
   // 大根注連, 1200 long and 110 through the middle — the sizes it is sold at.
   const L = mm(1200)
+  // DOWN IS +Z IN THIS FRAME, not -Y, and that is the whole of it. The pillar
+  // stands up with a quarter turn about world Z and the kasagi swings across
+  // with a quarter turn about its own Y, which together map the beam's local -Y
+  // onto world +X and its local +Z onto world down. Hung on -Y the rope and all
+  // five shide sat at the height of the lintel itself, displaced along the
+  // truck — a rope 8 mm below a beam it is supposed to hang a foot under.
   const r = cloth(L, mm(110), mm(90), lib.rope, { nx: 14, ny: 2, wave: 0.004 })
-  r.position.set(-mm(700), -mm(170), 0)
+  r.rotation.x = Math.PI / 2
+  r.position.set(-mm(700), 0, mm(170))
   g.add(r)
   for (let i = 0; i < 5; i++) {
     const x = -mm(700) - L / 2 + mm(120) + (i * (L - mm(240))) / 4
     const s = cloth(mm(90), mm(230), mm(6), lib.washi, { nx: 3, ny: 4, wave: 0.008 })
-    s.position.set(x, -mm(310), 0)
+    s.rotation.x = Math.PI / 2
+    s.position.set(x, 0, mm(310))
     g.add(s)
   }
   return g
@@ -564,10 +591,10 @@ function offerings(lib) {
 
   // The platform, and the felt-lined well the box drops into.
   g.add(slab([mm(320), mm(60), mm(780)], lib.hinoki, { anchor: [0, -1, 0] }))
-  g.add(slab([mm(350), mm(16), mm(810)], lib.hinoki, { pos: [0, mm(52), 0] }))
+  g.add(slab([mm(350), mm(16), mm(810)], lib.hinoki, { pos: [0, mm(68), 0] }))
 
   const box = new THREE.Group()
-  box.position.set(-mm(40), mm(60), 0)
+  box.position.set(-mm(40), mm(76), 0)
   box.add(slab([mm(220), mm(250), mm(303)], lib.hinoki, { anchor: [0, -1, 0] }))
   for (let i = -3; i <= 3; i++) {
     box.add(slab([mm(20), mm(22), mm(260)], lib.trim, { pos: [i * mm(28), mm(258), 0] }))
@@ -578,7 +605,7 @@ function offerings(lib) {
   // 神前灯籠, 250 mm: turned base, sill, washi box, roof.
   for (const sz of [-1, 1]) {
     const t = new THREE.Group()
-    t.position.set(mm(30), mm(60), sz * mm(330))
+    t.position.set(mm(30), mm(76), sz * mm(330))
     t.add(lathe([[mm(58), 0], [mm(46), mm(40)], [mm(34), mm(120)]], lib.hinoki, { seg: 10 }))
     t.add(slab([mm(130), mm(16), mm(130)], lib.hinoki, { pos: [0, mm(128), 0] }))
     t.add(slab([mm(104), mm(96), mm(104)], lib.washi, { pos: [0, mm(184), 0] }))
@@ -594,12 +621,12 @@ function offerings(lib) {
   // 榊立 三寸 — 55 across, 95 tall, a pair, in counterbored wells.
   for (const sz of [-1, 1]) {
     const v = lathe([[mm(22), 0], [mm(27), mm(20)], [mm(20), mm(70)], [mm(24), mm(95)], [mm(19), mm(95)]], lib.washi, { seg: 12 })
-    v.position.set(mm(120), mm(60), sz * mm(170))
+    v.position.set(mm(120), mm(76), sz * mm(170))
     g.add(v)
   }
   // 三宝 六寸 — a 182 mm 折敷 on its cut-out box.
   const sanbo = new THREE.Group()
-  sanbo.position.set(mm(120), mm(60), 0)
+  sanbo.position.set(mm(120), mm(76), 0)
   sanbo.add(slab([mm(150), mm(70), mm(150)], lib.hinoki, { anchor: [0, -1, 0] }))
   sanbo.add(slab([mm(182), mm(16), mm(182)], lib.hinoki, { pos: [0, mm(78), 0] }))
   g.add(sanbo)
@@ -643,7 +670,7 @@ function chochin(lib) {
     ),
   )
   for (const y of [0, -H]) {
-    body.add(lathe([[mm(52), y], [mm(60), y], [mm(60), y - mm(14)], [mm(52), y - mm(14)]], lib.hinoki, { seg: 16 }))
+    body.add(lathe([[mm(52), y + mm(3)], [mm(60), y + mm(3)], [mm(60), y - mm(11)], [mm(52), y - mm(11)]], lib.hinoki, { seg: 16 }))
   }
   // Ribs, drawn as a few rings so the paper reads as a chochin and not a drum.
   for (let i = 1; i < 9; i++) {
@@ -710,7 +737,11 @@ function shrineFace(lib) {
   const chochins = []
   for (const sz of [-1, 1]) {
     const c = chochin(lib)
-    c.position.set(x + mm(40), HOOK, sz * mm(440))
+    // 200 below the bell's hook, because the roof is in the way. The hooks are
+    // 440 either side of the ridge, and at 440 the soffit is only 252 above
+    // post-3 — 178 below where the lantern's top ring was, so a 300 mm paper
+    // barrel was 162 mm inside the second facet on each slope.
+    c.position.set(x + mm(40), HOOK - mm(200), sz * mm(440))
     g.add(c)
     chochins.push(c.userData.body)
   }
