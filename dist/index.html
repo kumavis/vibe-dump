@@ -13,19 +13,29 @@
       <p class="masthead__tagline">A dump of tiny static web experiments.</p>
     </header>
     <nav class="filters" id="filters" aria-label="Filter apps">
-        <button class="chip" data-tag="game" aria-pressed="false">game<span class="chip__n">5</span></button>
+        <button class="chip" data-tag="game" aria-pressed="false">game<span class="chip__n">6</span></button>
         <button class="chip" data-tag="simulation" aria-pressed="false">simulation<span class="chip__n">7</span></button>
         <button class="chip" data-tag="tool" aria-pressed="false">tool<span class="chip__n">5</span></button>
         <button class="chip" data-tag="art" aria-pressed="false">art<span class="chip__n">23</span></button>
         <button class="chip" data-tag="kids" aria-pressed="false">kids<span class="chip__n">16</span></button>
         <button class="chip" data-tag="tutorial" aria-pressed="false">tutorial<span class="chip__n">5</span></button>
       <span class="filters__sep" role="separator"></span>
-      <button class="chip chip--status" data-status="wip" aria-pressed="false">wip<span class="chip__n">7</span></button>
+      <button class="chip chip--status" data-status="wip" aria-pressed="false">wip<span class="chip__n">8</span></button>
       <button class="chip chip--status" data-status="done" aria-pressed="false">done<span class="chip__n">28</span></button>
       <button class="chip chip--clear" id="clear" hidden>clear</button>
       <output class="filters__count" id="count"></output>
     </nav>
     <main class="grid" id="grid">
+      <a class="card" href="./aperiodic-garden/" data-tags="game" data-status="wip">
+        <img class="thumb" src="./aperiodic-garden/thumbnail.jpg" alt="Screenshot of Aperiodic Garden" loading="lazy" />
+        <span class="wip">WIP</span>
+        <div class="card__body">
+          <h2 class="card__title">Aperiodic Garden</h2>
+          <p class="card__desc">A Dorfromantik-style tile-laying game played on the einstein monotile: lay hats around a snow-capped peak, carry the headwater down to the mill, and seal off meadows and forests for points.</p>
+          <p class="card__credits">Opus 5 · ultracode effort</p>
+          <div class="card__tags"><span class="tag">game</span></div>
+        </div>
+      </a>
       <a class="card" href="./busy-beaver-basins/" data-tags="tool art tutorial" data-status="done">
         <img class="thumb" src="./busy-beaver-basins/thumbnail.jpg" alt="Screenshot of Busy Beaver Basins" loading="lazy" />
         <div class="card__body">
@@ -324,6 +334,15 @@
           <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
+      <a class="card" href="./mirror-field/" data-tags="art" data-status="done">
+        <img class="thumb" src="./mirror-field/thumbnail.jpg" alt="Screenshot of Mirror Field" loading="lazy" />
+        <div class="card__body">
+          <h2 class="card__title">Mirror Field</h2>
+          <p class="card__desc">An instanced grid of reflective mirror plates that tilt to animated heightfields, with lasers that ray-trace and bounce off the surface. Three.js + bloom, fully self-contained.</p>
+          <p class="card__credits">Opus 4.8</p>
+          <div class="card__tags"><span class="tag">art</span></div>
+        </div>
+      </a>
       <a class="card" href="./origami-crane/" data-tags="art" data-status="wip">
         <img class="thumb" src="./origami-crane/thumbnail.jpg" alt="Screenshot of Origami Crane" loading="lazy" />
         <span class="wip">WIP</span>
@@ -331,15 +350,6 @@
           <h2 class="card__title">Origami Crane</h2>
           <p class="card__desc">A square of paper folds itself into a crane through real inside reverse folds, step by step, under a slow turntable camera. Three.js.</p>
           <p class="card__credits">Opus 4.8 + Fable 5</p>
-          <div class="card__tags"><span class="tag">art</span></div>
-        </div>
-      </a>
-      <a class="card" href="./mirror-field/" data-tags="art" data-status="done">
-        <img class="thumb" src="./mirror-field/thumbnail.jpg" alt="Screenshot of Mirror Field" loading="lazy" />
-        <div class="card__body">
-          <h2 class="card__title">Mirror Field</h2>
-          <p class="card__desc">An instanced grid of reflective mirror plates that tilt to animated heightfields, with lasers that ray-trace and bounce off the surface. Three.js + bloom, fully self-contained.</p>
-          <p class="card__credits">Opus 4.8</p>
           <div class="card__tags"><span class="tag">art</span></div>
         </div>
       </a>

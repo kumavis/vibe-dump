@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aperiodic Garden</title>
+    <!-- the hat itself, drawn from the same 13 vertices the game uses -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23cfe0e8'/><path d='M9.00,18.02 2.00,22.06 4.33,26.10 13.67,26.10 16.00,22.06 23.00,26.10 30.00,22.06 27.67,18.02 23.00,18.02 23.00,9.94 16.00,5.90 13.67,9.94 9.00,9.94Z' fill='%236f9a52' stroke='%233c5c34' stroke-width='1.4' stroke-linejoin='round'/></svg>"
+    />
+    <script type="module" crossorigin src="./assets/index-CL36ZPdy.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DM6OEdtb.css">
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <div id="pops"></div>
+
+    <header id="top">
+      <div class="stat"><b id="score">0</b><span>score</span></div>
+      <div class="stat"><b id="tiles">42</b><span>tiles left</span></div>
+      <div class="stat"><b id="sealed">0</b><span>sealed</span></div>
+      <div class="stat wide"><b id="growing">—</b><span>largest open</span></div>
+    </header>
+
+    <div id="feed"></div>
+
+    <aside id="history" class="shut">
+      <button id="historytoggle" title="everything that has scored (L)">
+        <span class="mark">≡</span><b id="historycount">0</b><span class="chev">▸</span>
+      </button>
+      <ol id="historylist"></ol>
+    </aside>
+
+    <aside id="quest" class="hidden">
+      <span class="eyebrow">errand</span>
+      <b id="questtitle"></b>
+      <span id="questhint"></span>
+    </aside>
+
+    <footer id="hand">
+      <aside id="shop" class="hidden">
+        <div id="purse"></div>
+        <div id="recipes"></div>
+      </aside>
+      <div id="tilecard">
+        <canvas id="tileart" width="220" height="180"></canvas>
+        <canvas id="tilesparkle" width="220" height="180"></canvas>
+        <div id="fitcount"></div>
+        <div id="tilemeta">
+          <div id="tilekind">meadow</div>
+          <div id="contact"></div>
+          <div id="tilebtns">
+            <button id="prev" title="turn it the other way (Q)">⟲</button>
+            <button id="lay" title="lay the tile">Place</button>
+            <button id="next" title="turn it (E)">⟳</button>
+            <button id="toss" title="discard this tile (R)">discard</button>
+          </div>
+        </div>
+        <button id="swap" class="hidden" title="take the other tile instead">
+          <canvas id="nextart" width="110" height="90"></canvas>
+          <span>swap</span>
+        </button>
+      </div>
+      <div class="keys mouse">
+        <span><kbd>move</kbd> choose a spot</span>
+        <span><kbd>scroll</kbd> / <kbd>Q</kbd><kbd>E</kbd> cycle the fits</span>
+        <span><kbd>click</kbd> lay the tile</span>
+        <span><kbd>drag</kbd> orbit · <kbd>⇧scroll</kbd> zoom</span>
+        <span><kbd>R</kbd> discard (−1)</span>
+      </div>
+      <div class="keys touch">
+        <span><kbd>tap</kbd> a light · <kbd>tap again</kbd> to lay</span>
+        <span><kbd>two fingers</kbd> zoom, pan, turn</span>
+      </div>
+    </footer>
+
+    <div id="intro" class="card">
+      <h1>Aperiodic Garden</h1>
+      <p>
+        A garden laid out on <b>the hat</b> — the 13-sided einstein monotile that tiles the plane
+        and never repeats. Three hats pinwheel around a snow-capped peak; a river runs off it.
+      </p>
+      <ul>
+        <li class="mouse"><b>Move</b> the mouse near a light. The hat turns itself to a way it fits there.</li>
+        <li class="touch"><b>Tap</b> near a light. The hat turns itself to a way it fits there.</li>
+        <li class="mouse">
+          <b>Scroll</b> (or <b>Q</b>/<b>E</b>) to cycle the other ways — twelve orientations, mirrored ones included.
+        </li>
+        <li class="touch">
+          <b>⟲ ⟳</b> cycle the other ways — twelve orientations, mirrored ones included.
+        </li>
+        <li class="mouse">
+          <b>Click</b> to lay it. Covers may meet however they like; only two things are forbidden — walling in a
+          stream, and leaving a gap no hat could ever fill.
+        </li>
+        <li class="touch">
+          <b>Tap it again</b>, or press <b>Place</b>, to lay it. Covers may meet however they like; only two things are
+          forbidden — walling in a stream, and leaving a gap no hat could ever fill.
+        </li>
+        <li>Ring a <b>meadow, forest, hills, hamlet or scree</b> completely and it seals: big points, and more tiles.</li>
+        <li>A mill stands off across the grass with a dry leat. <b>Carry the headwater to it</b> — two or three stream tiles — and its wheel starts turning.</li>
+        <li>
+          Everything you build <b>works</b>: a turning wheel grinds, a woodcutter's camp cuts timber. Spend what they
+          make at the <b>workshop</b> for a tile you chose rather than one you were dealt — up to the
+          <b>water works</b>, which goes anywhere and takes up every stream it lands against.
+        </li>
+        <li class="touch"><b>Drag</b> to look round; <b>two fingers</b> zoom, pan and turn the garden.</li>
+      </ul>
+      <div class="row">
+        <button id="play">Plant the garden</button>
+        <button id="watch" class="quiet">just watch</button>
+      </div>
+      <p class="fine">The garden behind this card is laying itself. Yours starts from the peak.</p>
+    </div>
+
+    <button id="startbar" class="hidden">Plant your own garden</button>
+
+    <div id="gameover" class="card hidden">
+      <h1>The garden is planted</h1>
+      <div id="finalscore">0</div>
+      <div id="finalnote"></div>
+      <ul id="finaltally"></ul>
+      <button id="again">Again</button>
+    </div>
+
+  </body>
+</html>
