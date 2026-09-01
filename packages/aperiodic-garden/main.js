@@ -9,6 +9,7 @@ import {
   KEY_B,
   KEY_K,
   ORIENT_KITES,
+  PORT_SLOTS,
   cart,
   kiteCentre,
   kiteCorners,
@@ -189,14 +190,20 @@ function paintTile(c, tile, orient, pad, lw) {
   c.lineWidth = lw
   c.stroke()
 
-  // and the stream running through it, drawn from the same path the garden uses
-  if (tile.ports.size) {
+  // And the stream running through it, drawn from the same path the garden uses.
+  // A water works has no stream of its own until it is standing somewhere, so
+  // its card shows all six crossings faintly and dashed: whichever of them are
+  // there when you lay it, it takes.
+  const slots = tile.adaptive ? PORT_SLOTS : [...tile.ports]
+  if (slots.length) {
     const keys = placementKeys(orient, 0, 0)
     const hub = hubOf(keys)
+    c.globalAlpha = tile.adaptive ? 0.45 : 1
+    if (tile.adaptive) c.setLineDash([3.2 * lw, 3.2 * lw])
     for (const pass of [0, 1]) {
       c.strokeStyle = pass === 0 ? css(RIVER_BANK) : css(WATER_SHALLOW)
       c.lineWidth = (pass === 0 ? 4.1 : 2.3) * lw
-      for (const slot of tile.ports) {
+      for (const slot of slots) {
         const path = branchPath(keys, orient, slot, hub)
         c.beginPath()
         path.forEach((p, j) => {
@@ -206,14 +213,18 @@ function paintTile(c, tile, orient, pad, lw) {
         })
         c.stroke()
       }
-      if (tile.ports.size === 1) {
+      if (slots.length === 1 || tile.adaptive) {
         const [hx, hy] = P([hub[0] / W, hub[1] / W])
         c.beginPath()
+        c.setLineDash([])
         c.arc(hx, hy, (pass === 0 ? 2.3 : 1.55) * lw, 0, Math.PI * 2)
         c.fillStyle = c.strokeStyle
         c.fill()
+        if (tile.adaptive) c.setLineDash([3.2 * lw, 3.2 * lw])
       }
     }
+    c.setLineDash([])
+    c.globalAlpha = 1
   }
 }
 
@@ -310,7 +321,7 @@ function setControls(aimed) {
 function showGhost() {
   if (!hover) return
   const fit = hover.fits[hover.index]
-  const g = buildGhost(fit.cells, game.tile, fit.o)
+  const g = buildGhost(fit.cells, game.tile, fit.o, fit.ports ?? game.tile.ports)
   g.rim = outlineRibbon(g.outline, 0.028, 0.022, GHOST_RIM)
   garden.setGhost(g)
   el('fitcount').textContent = hover.fits.length > 1 ? `${hover.index + 1}/${hover.fits.length}` : ''
@@ -479,18 +490,61 @@ function syncHud() {
   } else {
     swap.classList.add('hidden')
   }
-  const feed = el('feed')
-  feed.textContent = ''
-  for (const line of game.log) {
-    const d = document.createElement('div')
-    d.textContent = line
-    feed.appendChild(d)
-  }
+  syncLog()
   drawTileCard(hover ? hover.fits[hover.index].o : 0)
+}
+
+// --- the log ----------------------------------------------------------------
+//
+// Two views of the same list. Anything that has happened since the HUD last
+// looked is announced as a toast over the garden and then taken away again,
+// because a score you have already read is clutter sitting on top of the thing
+// you are trying to look at. The whole run stays in a log you can open, so
+// nothing is actually lost by letting the toasts go.
+
+const TOAST_LIFE = 3400
+const TOAST_FADE = 550
+let shownId = 0
+
+function syncLog() {
+  const feed = el('feed')
+  // oldest first, so several events from one placement stack in the order they
+  // happened rather than upside down
+  const fresh = game.log.filter((e) => e.id > shownId).reverse()
+  for (const e of fresh) {
+    shownId = Math.max(shownId, e.id)
+    const d = document.createElement('div')
+    d.textContent = e.text
+    feed.appendChild(d)
+    setTimeout(() => {
+      d.classList.add('going')
+      setTimeout(() => d.remove(), TOAST_FADE)
+    }, TOAST_LIFE)
+  }
+  el('historycount').textContent = game.log.length
+  if (fresh.length && !el('history').classList.contains('shut')) drawHistory()
+}
+
+function drawHistory() {
+  const list = el('historylist')
+  list.textContent = ''
+  if (!game.log.length) {
+    const li = document.createElement('li')
+    li.className = 'empty'
+    li.textContent = 'nothing has scored yet'
+    list.appendChild(li)
+    return
+  }
+  for (const e of game.log) {
+    const li = document.createElement('li')
+    li.textContent = e.text
+    list.appendChild(li)
+  }
 }
 
 function tileLabel(tile) {
   if (!tile) return ''
+  if (tile.adaptive) return 'water works · joins every stream it touches'
   if (tile.camp) return `${tile.camp.title} · needs ${BIOME_NAME[tile.camp.biome]}`
   const counts = new Map()
   for (const b of tile.biomes) counts.set(b, (counts.get(b) ?? 0) + 1)
@@ -686,6 +740,7 @@ addEventListener('keydown', (e) => {
   if (k === 'q') cycle(-1)
   else if (k === 'e' || k === ' ') cycle(1)
   else if (k === 'r') discard()
+  else if (k === 'l') toggleHistory()
   else if (k === '+' || k === '=') garden.zoom(0.85)
   else if (k === '-') garden.zoom(1.18)
   else return
@@ -723,12 +778,22 @@ el('top').addEventListener('click', () => {
   if (game) garden.frame(boundsOf(game))
 })
 
+const toggleHistory = () => {
+  const shut = el('history').classList.toggle('shut')
+  if (!shut) drawHistory()
+}
+el('historytoggle').addEventListener('click', toggleHistory)
+
 // --- boot -------------------------------------------------------------------
 
 function start(seed) {
   game = new Game(seed)
   sticky = null
   running = true
+  // a new garden starts with an empty slate in both views of the log
+  shownId = 0
+  el('feed').textContent = ''
+  el('history').classList.add('shut')
   clearHover()
   ambience.reset()
   garden.resetCamera()

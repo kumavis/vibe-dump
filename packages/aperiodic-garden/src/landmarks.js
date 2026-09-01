@@ -327,29 +327,55 @@ export function lakeReeds() {
 }
 
 /**
- * The aqueduct a crafted stream is cut for: three arches on piers, carrying a
- * trough at head height. It stands across the tile rather than on its heart, so
- * the water it carries looks like it is going somewhere.
+ * The water works.
+ *
+ * An aqueduct stood here first and never made sense: an aqueduct carries water
+ * *across* something, in one direction, and this tile's whole trick is that it
+ * gathers water from every direction at once. So the model is what the rule
+ * actually is — a round stone cistern with six dressed channels running out of
+ * it, one towards each crossing the hat can have, each closed by a sluice gate
+ * on a screw. Whichever channels meet a stream carry it in; the rest stand shut.
+ *
+ * The six radiate at exactly the angles the hat's ports sit at, which is why
+ * the channels line up with the river the garden draws no matter which way the
+ * tile is turned.
  */
-export function aqueductSpan() {
+export function waterWorks() {
   const g = new THREE.Group()
-  const H = 0.17
-  const SP = 0.15
-  for (let i = 0; i < 4; i++) box(g, STONE, 0.04, H, 0.085, (i - 1.5) * SP, H / 2, 0)
-  for (let i = 0; i < 3; i++) {
-    // The arch spans the *gap*, so it stands in the plane of the wall — the
-    // torus is already drawn in local xy and needs no turn at all. Turning it a
-    // quarter about y (the obvious guess) lays each arch along the span, where
-    // it disappears inside the pier it sits on.
-    const arch = new THREE.Mesh(new THREE.TorusGeometry(SP / 2 - 0.018, 0.013, 4, 9, Math.PI), mat(STONE_CUT))
-    arch.position.set((i - 1) * SP, H, 0)
-    arch.castShadow = true
-    g.add(arch)
+  const R = 0.1
+
+  // the cistern: a stone drum, its water sitting a little below the rim
+  cyl(g, STONE, R + 0.022, R + 0.026, 0.08, 12, 0, 0.04, 0)
+  cyl(g, STONE_CUT, R + 0.03, R + 0.03, 0.014, 12, 0, 0.085, 0)
+  cyl(g, 0x6fb6d6, R, R, 0.01, 12, 0, 0.073, 0)
+
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + Math.PI / 6
+    const cos = Math.cos(a)
+    const sin = Math.sin(a)
+    const at = (d) => [cos * d, -sin * d]
+    // the channel: a floor with a kerb either side, running out from the drum
+    const [mx, mz] = at(R + 0.12)
+    box(g, STONE_CUT, 0.17, 0.012, 0.055, mx, 0.006, mz, a)
+    for (const s of [-1, 1]) {
+      const ox = -sin * 0.032 * s
+      const oz = -cos * 0.032 * s
+      box(g, STONE, 0.17, 0.032, 0.014, mx + ox, 0.016, mz + oz, a)
+    }
+    // the sluice: two posts, a head beam, the gate hung between them, and the
+    // screw that lifts it
+    const [gx, gz] = at(R + 0.16)
+    for (const s of [-1, 1])
+      box(g, TIMBER_DARK, 0.014, 0.075, 0.014, gx - sin * 0.036 * s, 0.038, gz - cos * 0.036 * s, a)
+    box(g, TIMBER_DARK, 0.014, 0.012, 0.088, gx, 0.08, gz, a)
+    box(g, TIMBER, 0.008, 0.042, 0.058, gx, 0.03, gz, a)
+    cyl(g, IRON, 0.0035, 0.0035, 0.05, 4, gx, 0.095, gz)
+    box(g, IRON, 0.03, 0.006, 0.006, gx, 0.118, gz, a + 0.6)
   }
-  box(g, STONE_CUT, 0.54, 0.028, 0.105, 0, H + 0.046, 0)
-  for (const z of [-0.045, 0.045]) box(g, STONE, 0.54, 0.032, 0.015, 0, H + 0.076, z)
-  // the water it carries, sitting in the channel between the parapets
-  box(g, 0x6fb6d6, 0.5, 0.012, 0.06, 0, H + 0.066, 0)
+
+  // the works themselves: a small slated house over the drum's north side, the
+  // one thing tall enough to give the tile a silhouette
+  hut(g, PLASTER, SLATE, 0.14, 0.14, 0, -0.26, 0.35)
   return g
 }
 
@@ -384,7 +410,7 @@ export const LANDMARK_MODELS = {
   vineyard: vineyardRows,
   lake: lakeReeds,
   millpond: lakeReeds,
-  aqueduct: aqueductSpan,
+  waterworks: waterWorks,
   hamlet: bellTower,
 }
 

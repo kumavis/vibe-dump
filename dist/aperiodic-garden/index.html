@@ -9,8 +9,8 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23cfe0e8'/><path d='M9.00,18.02 2.00,22.06 4.33,26.10 13.67,26.10 16.00,22.06 23.00,26.10 30.00,22.06 27.67,18.02 23.00,18.02 23.00,9.94 16.00,5.90 13.67,9.94 9.00,9.94Z' fill='%236f9a52' stroke='%233c5c34' stroke-width='1.4' stroke-linejoin='round'/></svg>"
     />
-    <script type="module" crossorigin src="./assets/index-MsS5X1O_.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CLP50KYO.css">
+    <script type="module" crossorigin src="./assets/index-DxIMwruw.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DM6OEdtb.css">
   </head>
   <body>
     <canvas id="scene"></canvas>
@@ -25,6 +25,13 @@
     </header>
 
     <div id="feed"></div>
+
+    <aside id="history" class="shut">
+      <button id="historytoggle" title="everything that has scored (L)">
+        <span class="mark">≡</span><b id="historycount">0</b><span class="chev">▸</span>
+      </button>
+      <ol id="historylist"></ol>
+    </aside>
 
     <aside id="quest" class="hidden">
       <span class="eyebrow">errand</span>
@@ -96,7 +103,8 @@
         <li>A mill stands off across the grass with a dry leat. <b>Carry the headwater to it</b> — two or three stream tiles — and its wheel starts turning.</li>
         <li>
           Everything you build <b>works</b>: a turning wheel grinds, a woodcutter's camp cuts timber. Spend what they
-          make at the <b>workshop</b> for a tile you chose rather than one you were dealt.
+          make at the <b>workshop</b> for a tile you chose rather than one you were dealt — up to the
+          <b>water works</b>, which goes anywhere and takes up every stream it lands against.
         </li>
         <li class="touch"><b>Drag</b> to look round; <b>two fingers</b> zoom, pan and turn the garden.</li>
       </ul>

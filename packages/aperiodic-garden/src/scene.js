@@ -645,7 +645,7 @@ export class Garden {
 
   /**
    * The buildings that belong to one tile each — the camps, the boat at a
-   * lake's edge, an aqueduct's arches. They are rebuilt only when the list
+   * lake's edge, the cistern a water works gathers into. They are rebuilt only when the list
    * actually changes: the garden geometry is thrown away and remade on every
    * placement, and rebuilding a dozen little groups along with it would throw
    * away their meshes twenty times a game for nothing.

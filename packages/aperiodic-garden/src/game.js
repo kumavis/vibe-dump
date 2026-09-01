@@ -23,6 +23,7 @@ import {
   makeTile,
   fitTile,
   lakeTile,
+  waterworksTile,
   campTile,
   CAMPS,
   mulberry32,
@@ -75,15 +76,12 @@ export const RECIPES = [
     },
   },
   {
-    key: 'aqueduct',
-    title: 'aqueduct',
-    note: 'a stream cut to carry the water on from wherever it has got to',
-    cost: { stone: 3 },
+    key: 'waterworks',
+    title: 'water works',
+    note: 'goes anywhere, and takes up every stream it lands against',
+    cost: { stone: 4, timber: 3 },
     make(game) {
-      const cut = game._cutStream()
-      if (!cut) return null
-      cut.tile.kind = 'aqueduct'
-      return cut.tile
+      return waterworksTile(game.rnd)
     },
   },
   {
@@ -183,7 +181,9 @@ export class Game {
     this.sealedCount = 0
     this.best = { size: 0, biome: PLAINS }
     this.queue = []
+    /** every scoring event, newest first, each with a number of its own */
     this.log = []
+    this.logSeq = 0
     this.over = false
     /** what the working buildings have made and you have not spent */
     this.res = Object.fromEntries(RESOURCES.map((r) => [r.key, 0]))
@@ -196,6 +196,22 @@ export class Game {
 
     this._seed()
     this._refillQueue()
+  }
+
+  /**
+   * Record something worth telling the player about.
+   *
+   * The log used to be five strings, trimmed to five after every placement, and
+   * the HUD redrew all five on every frame it synced. That made it a *display*
+   * rather than a history: it could not say which lines were new, so nothing
+   * could fade, and it could not be scrolled back through either. Numbering
+   * each line is all it takes to be both — the HUD shows anything above the
+   * number it last saw and lets it go a few seconds later, and the whole list
+   * stays for the log.
+   */
+  _note(text) {
+    this.log.unshift({ id: ++this.logSeq, text })
+    if (this.log.length > 60) this.log.length = 60
   }
 
   // --- resources and the workshop --------------------------------------------
@@ -237,7 +253,7 @@ export class Game {
       this._pay(recipe)
       this.tilesLeft += recipe.tiles
       this.crafted += 1
-      this.log.unshift(`${recipe.title} · +${recipe.tiles} tiles`)
+      this._note(`${recipe.title} · +${recipe.tiles} tiles`)
       return recipe
     }
 
@@ -251,7 +267,7 @@ export class Game {
     this._fits = null
     this._hint = undefined
     this._ensurePlayable()
-    this.log.unshift(`${recipe.title} · made`)
+    this._note(`${recipe.title} · made`)
     return recipe
   }
 
@@ -398,7 +414,7 @@ export class Game {
     this.score += q.score
     this.tilesLeft += q.tiles
     if (q.unlock === 'choice') this.canChoose = true
-    this.log.unshift(`${q.title} · +${q.score}`)
+    this._note(`${q.title} · +${q.score}`)
     // The wheel turns, so the tailrace starts running. Its intended side may
     // have been built over while the water was on its way; any free crossing on
     // the far side of the town will do, and if there is none the water simply
@@ -572,7 +588,7 @@ export class Game {
       }
       this.refund(tile)
       this.queue.shift()
-      this.log.unshift(`nowhere for the ${tile.craftTitle} — refunded`)
+      this._note(`nowhere for the ${tile.craftTitle} — refunded`)
       return this._ensurePlayable()
     }
     // The moment the two rivers are one tile apart, that tile is what the deck
@@ -865,7 +881,7 @@ export class Game {
     const out = []
     for (const f of this.fits) {
       if (!f.cells.includes(cellKey)) continue
-      out.push({ ...f, ...this._harmony(f.o, f.cells, this.tile) })
+      out.push({ ...f, ...this._harmony(f.o, f.cells, this.tile, f.ports) })
     }
     // Snugness before agreement. Ranking by matching covers first made the tile
     // spin to the biome-matching way round every time you hovered, and a piece
@@ -881,7 +897,7 @@ export class Game {
    *  The orientation matters: reflecting the hat swaps which of a kite's two
    *  long sides faces out, so a crossing computed at orient 0 lands on the wrong
    *  edge for any of the six mirrored placements. */
-  _harmony(orient, cells, tile) {
+  _harmony(orient, cells, tile, ports = tile.ports) {
     let match = 0
     let touch = 0
     const own = new Set(cells)
@@ -897,7 +913,7 @@ export class Game {
     }
     let joins = 0
     for (const x of this.board.crossings(orient, 0, 0, cells, [])) {
-      if (tile.ports.has(x.slot) && this.board.filled.has(x.far) && this.board.ports.has(x.edge)) joins++
+      if (ports.has(x.slot) && this.board.filled.has(x.far) && this.board.ports.has(x.edge)) joins++
     }
     return { match, touch, joins }
   }
@@ -907,10 +923,11 @@ export class Game {
   place(fit) {
     if (this.over) return null
     const tile = this.tile
-    const h = this._harmony(fit.o, fit.cells, tile)
+    const ports = fit.ports ?? tile.ports
+    const h = this._harmony(fit.o, fit.cells, tile, ports)
     const perfect = h.touch > 0 && h.match === h.touch
 
-    const res = this.board.place(fit.o, fit.ta, fit.tb, tile, this.placed)
+    const res = this.board.place(fit.o, fit.ta, fit.tb, tile, this.placed, ports)
     this._remember(res.cells)
     this.placed += 1
     this.tilesLeft -= 1
@@ -931,7 +948,7 @@ export class Game {
       if (r.size > this.best.size) this.best = { size: r.size, biome: r.biome }
       if (r.size >= 3) {
         announce.push(r)
-        this.log.unshift(`${BIOME_NAME[r.biome]} sealed · ${r.size} kites · +${r.score}`)
+        this._note(`${BIOME_NAME[r.biome]} sealed · ${r.size} kites · +${r.score}`)
       }
     }
     // A camp could only be laid where its cover already was, so it has earned
@@ -942,7 +959,7 @@ export class Game {
       gained += camp.score
       bonus += camp.tiles
       this.camps = (this.camps ?? 0) + 1
-      this.log.unshift(`${camp.title} · +${camp.score}`)
+      this._note(`${camp.title} · +${camp.score}`)
       // and from now on it works
       this.works.push({ kind: camp.key, resource: YIELD[camp.key], at: hubOfCells(res.cells) })
     }
@@ -954,7 +971,6 @@ export class Game {
     }
     const harvest = this._harvest()
     this.tilesLeft += bonus
-    this.log.length = Math.min(this.log.length, 5)
 
     this.queue.shift()
     this._fits = null

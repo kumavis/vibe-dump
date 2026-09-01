@@ -178,6 +178,13 @@ export function branchPath(cells, orient, slot, hub, steps = 10) {
   return out
 }
 
+/**
+ * A tile the water arrives at and stops. One crossing is the test — except for
+ * a water works, which also takes the water in and lets none out, but takes it
+ * into a cistern rather than into a pond, and has its own model to say so.
+ */
+const isLake = (t) => t.ports.size === 1 && t.kind !== 'waterworks'
+
 /** The centre of a placement, where its river branches meet. */
 export function hubOf(cells) {
   let x = 0
@@ -294,13 +301,15 @@ export function buildGarden(game, opts = {}) {
     // label is what the HUD prints, and a lake tile *is* a stream tile that
     // happens to end. What makes it a lake is the single crossing, which is the
     // same test the pool below is drawn on, so ask that instead of the label.
-    const kind = hasLandmarkModel(t.kind) ? t.kind : t.ports.size === 1 ? 'lake' : null
+    const kind = hasLandmarkModel(t.kind) ? t.kind : isLake(t) ? 'lake' : null
     if (!kind) continue
     const [hx, hz] = hubOf(t.cells)
     landmarks.push({ id: i, kind, x: hx, z: hz, rot: (t.orient % 6) * (Math.PI / 3), tile: t })
     for (const c of t.cells) {
       const [cx, cz] = kiteCentre(KEY_A(c), KEY_B(c), KEY_K(c))
-      if (Math.hypot(cx * W - hx, cz * W - hz) < W * 0.62) cleared.add(c)
+      // wide enough that the scatterer's cottages stop at the edge of the
+      // works rather than standing in its channels
+      if (Math.hypot(cx * W - hx, cz * W - hz) < W * 0.88) cleared.add(c)
     }
   }
 
@@ -384,7 +393,7 @@ export function buildGarden(game, opts = {}) {
   // --- the river ------------------------------------------------------------
   const branches = []
   // which way the water leaves each tile, so a landmark that has to line up with
-  // the stream — an aqueduct carries it, a boat floats on it — can be turned to
+  // the stream — a water works gathers it, a boat floats on it — can be turned to
   // face it instead of taking the tile's own arbitrary orientation
   const flow = new Map()
   for (let ti = 0; ti < board.tiles.length; ti++) {
@@ -404,7 +413,7 @@ export function buildGarden(game, opts = {}) {
     // A tile with one crossing is a lake: the water arrives and stops there,
     // which is the only way a river is allowed to end. Drawn as a pool big
     // enough to read as one, so a dead end never looks like a mistake.
-    if (t.ports.size === 1) {
+    if (isLake(t)) {
       pool(land, hub, BANK_Y, LAKE_R + BANK_W * 0.7, RIVER_BANK, t.cells[0])
       pool(water, hub, WATER_Y, LAKE_R, 0xffffff, t.cells[0])
     } else {
@@ -517,7 +526,7 @@ function scatter(out, key, biome, inner, jit) {
  * garden, not floating above it. What says "not laid yet" is the outline the
  * scene pulses around it, not a height offset the eye has to correct for.
  */
-export function buildGhost(cells, tile, orient) {
+export function buildGhost(cells, tile, orient, ports = tile.ports) {
   const buf = new Buf()
   const water = new Buf()
   const outline = []
@@ -556,15 +565,18 @@ export function buildGhost(cells, tile, orient) {
       outline.push([pts[i0], pts[i1]])
     }
   }
-  if (tile.ports.size) {
+  // The crossings the *placement* takes, which for a water works is decided by
+  // where it is standing — so the preview under the cursor shows the streams it
+  // would pick up here, and moving it one spot along redraws them.
+  if (ports.size) {
     const hub = hubOf(cells)
-    for (const slot of tile.ports) {
+    for (const slot of ports) {
       const path = branchPath(cells, orient, slot, hub)
       ribbon(buf, path, BANK_Y, BANK_W, RIVER_BANK)
       ribbon(water, path, WATER_Y, WATER_W, 0xffffff)
     }
     disc(buf, hub, BANK_Y, BANK_W, RIVER_BANK)
-    disc(water, hub, WATER_Y, WATER_W * (tile.ports.size === 1 ? 1.5 : 1), 0xffffff)
+    disc(water, hub, WATER_Y, WATER_W * (ports.size === 1 ? 1.5 : 1), 0xffffff)
   }
   return { buf, water, outline }
 }

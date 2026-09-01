@@ -117,6 +117,7 @@ export const HAT_REACH = (() => {
 const STRAND_SLACK = 0
 
 const NO_CELLS = new Set()
+const NO_PORTS = new Set()
 
 /** An open mouth, as one number: the empty cell plus which of its two long
  *  sides the water is waiting on. */
@@ -254,14 +255,30 @@ export class Board {
     return this.leavesRoom(cells, added) && this.streamsCanFlow(orient, ta, tb, ports, cells, added)
   }
 
-  /** Every legal placement for one tile. */
+  /**
+   * The crossings a tile takes at one particular placement.
+   *
+   * Nearly every tile carries its own and that is the whole game: a stream is a
+   * specific shape and finding where it fits is the puzzle. An *adaptive* tile —
+   * the water works — has none of its own and takes exactly the ones the board
+   * demands wherever it lands. That satisfies rule 1 by construction, which is
+   * what makes it the piece you keep for a corner nothing else will go in.
+   */
+  portsAt(tile, orient, ta, tb, cells) {
+    if (!tile.adaptive) return tile.ports
+    return this.demandedPorts(orient, ta, tb, cells) ?? NO_PORTS
+  }
+
+  /** Every legal placement for one tile, each with the crossings it would take
+   *  there — the same set for every spot unless the tile is adaptive. */
   legalPlacements(tile) {
     const out = []
     for (const c of candidatePlacements(this.filled)) {
       const cells = placementKeys(c.o, c.ta, c.tb)
       // cheap and it prunes hard, so it goes first
       if (tile.demand && !this.meetsDemand(cells, tile.demand)) continue
-      if (this.placeable(c.o, c.ta, c.tb, tile.ports, cells)) out.push({ ...c, cells })
+      const ports = this.portsAt(tile, c.o, c.ta, c.tb, cells)
+      if (this.placeable(c.o, c.ta, c.tb, ports, cells)) out.push({ ...c, cells, ports })
     }
     return out
   }
@@ -608,8 +625,12 @@ export class Board {
 
   /** Drop a tile. Returns { closed, cells, joined } — `joined` counting the
    *  river crossings that met a river already on the board. */
-  place(orient, ta, tb, tile, tileIndex) {
+  place(orient, ta, tb, tile, tileIndex, ports = null) {
     const cells = placementKeys(orient, ta, tb)
+    // An adaptive tile has no crossings until it is somewhere; the caller passes
+    // the ones its placement resolved to, and falling back to working them out
+    // here keeps every other caller as it was.
+    const took = ports ?? this.portsAt(tile, orient, ta, tb, cells)
     this.tiles.push({
       orient,
       ta,
@@ -619,14 +640,14 @@ export class Board {
       // a camp or a lake, and only the kind says which
       kind: tile.kind,
       biomes: tile.biomes.slice(),
-      ports: new Set(tile.ports),
+      ports: new Set(took),
       flipped: orient >= 6,
     })
 
     let joined = 0
     let firstEdge = null
     for (const x of this.crossings(orient, ta, tb, cells, [])) {
-      if (!tile.ports.has(x.slot)) continue
+      if (!took.has(x.slot)) continue
       this.ports.add(x.edge)
       if (!this.riverParent.has(x.edge)) this.riverParent.set(x.edge, x.edge)
       // every branch of this tile meets at its hub, so they are one network

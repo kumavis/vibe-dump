@@ -171,6 +171,29 @@ export function lakeTile(slot, rnd) {
   return { biomes: paintLand(rnd), ports: new Set([slot]), kind: 'lake', mouths: 1, lake: true }
 }
 
+/**
+ * The water works: the one tile with no river of its own.
+ *
+ * Every other tile is a fixed shape and the puzzle is finding where that shape
+ * fits. This one is `adaptive` — it takes whatever crossings the board demands
+ * wherever you put it, and opens none of its own. Rule 1 is then satisfied by
+ * construction at every spot, so the only thing that can refuse it is the
+ * ground: it goes anywhere a hat goes at all, joins every stream it lands
+ * against, and ends each of them tidily inside itself.
+ *
+ * That is deliberately the strongest thing in the game, which is why it costs
+ * more than anything else in the workshop. It is the answer to the corner you
+ * have painted yourself into — a pinch of ground surrounded by three different
+ * mouths, where no dealt tile carries that particular set of crossings and none
+ * ever will.
+ */
+export function waterworksTile(rnd) {
+  const biomes = paintLand(rnd)
+  // a stone yard through the middle of it, so it reads as built rather than grown
+  for (const i of [0, ...SLOT_ADJ[0]]) biomes[i] = VILLAGE
+  return { biomes, ports: new Set(), kind: 'waterworks', mouths: 0, adaptive: true }
+}
+
 // --- tiles that have to earn their place -------------------------------------
 
 /**

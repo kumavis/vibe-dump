@@ -122,6 +122,9 @@ body.dragging #scene {
   z-index: 4;
 }
 
+/* Each event is a toast: it slips in, holds, and goes. The whole run is kept in
+   the log — this is only the part that is *news*, so it gets to be loud and
+   then get out of the way. */
 #feed div {
   white-space: nowrap;
   font-size: 12px;
@@ -129,13 +132,114 @@ body.dragging #scene {
   border-radius: 999px;
   background: rgba(255, 253, 247, 0.86);
   border: 1px solid var(--line);
-  color: var(--ink-soft);
+  color: var(--ink);
+  font-weight: 650;
   animation: slip 0.45s ease-out both;
 }
 
-#feed div:first-child {
+#feed div.going {
+  animation: fade 0.55s ease-in both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* --- the log ------------------------------------------------------------- */
+
+#history {
+  position: fixed;
+  top: 14px;
+  right: 12px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  max-width: min(260px, calc(100vw - 24px));
+}
+
+#historytoggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--ink-soft);
+  padding: 5px 9px;
+  border-radius: 11px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 22px rgba(38, 55, 70, 0.13);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+
+#historytoggle:hover {
   color: var(--ink);
-  font-weight: 650;
+}
+
+#historytoggle .mark {
+  font-size: 13px;
+  line-height: 1;
+}
+
+#historytoggle b {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+#historytoggle .chev {
+  font-size: 9px;
+  transition: transform 0.18s ease;
+}
+
+#history:not(.shut) #historytoggle .chev {
+  transform: rotate(90deg);
+}
+
+#historylist {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  width: 244px;
+  max-width: calc(100vw - 24px);
+  max-height: min(46vh, 340px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 26px rgba(38, 55, 70, 0.16);
+  backdrop-filter: blur(6px);
+}
+
+#history.shut #historylist {
+  display: none;
+}
+
+#historylist li {
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  padding: 3px 6px;
+  border-radius: 7px;
+}
+
+#historylist li:nth-child(odd) {
+  background: rgba(38, 49, 58, 0.035);
+}
+
+#historylist li.empty {
+  color: var(--ink-soft);
+  opacity: 0.7;
+  font-style: italic;
 }
 
 @keyframes slip {
@@ -791,6 +895,16 @@ body:has(#intro) #hand {
   }
   #feed div {
     font-size: 11px;
+  }
+
+  /* the quest banner runs the full width under the stats, so the log sits
+     beside the stats rather than under them */
+  #history {
+    top: calc(8px + env(safe-area-inset-top));
+    right: calc(8px + env(safe-area-inset-right));
+  }
+  #historytoggle {
+    padding: 6px 8px;
   }
 
   /* the card, laid on its side: tile · what it is · what you can do with it */
