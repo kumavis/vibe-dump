@@ -1,0 +1,31 @@
+{
+  "name": "@vibe-dump/kei-truck-stations",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Kei Truck Stations",
+    "description": "A dimensionally accurate Daihatsu Hijet unfolds four bed modules — DJ booth, yatai, shrine, cabin — through hinge kinematics you can scrub, audited for self-intersection and priced to the last bolt.",
+    "tags": [
+      "simulation",
+      "tool",
+      "art"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "ultracode",
+    "thumbnail": {
+      "waitFor": "!#boot:not(.gone)",
+      "settle": 2500
+    }
+  }
+}
