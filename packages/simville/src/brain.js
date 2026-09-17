@@ -209,11 +209,20 @@ export class LiveBrain {
       // Whatever goes wrong inside the worker comes back across postMessage as
       // a plain string rather than an Error, so read it as text either way.
       const msg = err?.message ?? String(err)
-      // "Failed to fetch" is what a blocked or offline connection looks like
-      // from here, and on its own it tells the player nothing.
+      // "Failed to fetch" is what both an offline connection and a blocked one
+      // look like from here — a Content-Security-Policy refusal is reported to
+      // the console but reaches script as the same generic TypeError, so there
+      // is nothing to tell them apart by. Say both, and don't advise a retry
+      // that can't work. Being inside someone else's frame is the one strong
+      // hint available, and it's the usual reason: an embedding host's
+      // connect-src won't list huggingface.co.
       if (/failed to fetch|networkerror|load failed|err_/i.test(msg)) {
+        const embedded = window.self !== window.top
         throw new Error(
-          'Couldn’t download the weights. They come from Hugging Face — check the connection and try again.',
+          'Couldn’t reach Hugging Face for the weights. ' +
+            (embedded
+              ? 'This page is running inside another site, and that site’s content-security policy almost certainly blocks the download — open Simville on its own to load a model.'
+              : 'Either the connection is down or something on the network is blocking it.'),
         )
       }
       if (/webgpu|adapter|device/i.test(msg)) {
