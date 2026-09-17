@@ -18,6 +18,7 @@ import {
   mulberry32,
   scatterNear,
 } from './town.js'
+import { ACTION_BY_ID, TIDY, TOOLS, actionsFor, toolName } from './objects.js'
 import { clamp, pick, timeOfDay } from './util.js'
 
 const DAY_START = 7 * 60
@@ -35,6 +36,8 @@ const DRIFT_CHANCE = 0.012 // per idle minute, so roughly one errand every 1-2 h
 // How long two people stand together when there are no words for them — long
 // enough to read as a conversation, short enough not to hold up the day.
 const MURMUR_SECONDS = 4.5
+const ERRAND_EVERY = 200 // sim minutes before somebody takes up another job
+const ERRAND_CHANCE = 0.02 // per idle minute
 
 // How readily each resident passes something on, and how readily they swallow
 // it. Milo is the town's network backbone; Ray is where rumours go to die.
@@ -72,7 +75,13 @@ class Agent {
     this.lastDecision = -1e9
     this.lastDrift = -1e9
     this.walkPhase = 0
-    this.seen = new Set() // who they've noticed this tick, to avoid spam
+    this.seen = new Set() // who and what they've noticed, to avoid spam
+    this.carrying = null // tool id
+    this.errand = null // { action, tool, stage, until, tries }
+    this.wants = null // the tool they're hunting for, which is what they ask about
+    this.frustration = 0
+    this.lastErrand = -1e9
+    this.lastAction = null
   }
 
   get asleep() {
@@ -122,7 +131,8 @@ export class Simulation {
     this.ties = new Map(Object.entries(INITIAL_TIES))
     this.brain = null
     this.selected = null
-    this.stats = { conversations: 0, rumoursSpread: 0, reflections: 0, modelActions: 0 }
+    this.stats = { conversations: 0, rumoursSpread: 0, reflections: 0, modelActions: 0, actionsDone: 0 }
+    this.#initTools()
 
     this.agents = CAST.map((def) => new Agent(def, this))
     this.byId = new Map(this.agents.map((a) => [a.id, a]))
@@ -279,7 +289,11 @@ export class Simulation {
       if (target) this.#sendToPoint(a, { x: Math.round(target.x), y: Math.round(target.y) }, wantGoal)
     }
 
-    if (a.asleep) return
+    if (a.asleep) {
+      // Nobody sleeps holding the axe.
+      if (a.carrying) this.#setDown(a, this.rng() < (TIDY[a.id] ?? 0.5))
+      return
+    }
 
     // Noticing people. Cheap, and it's what gives the memory stream texture.
     for (const b of this.agents) {
@@ -295,12 +309,22 @@ export class Simulation {
         }
       } else if (d > 7) {
         a.seen.delete(key)
+        // Also forget what they were carrying, so picking the same thing up
+        // again later is a fresh thing to notice rather than old news.
+        for (const k of a.seen) if (k.startsWith(`carry:${b.id}:`)) a.seen.delete(k)
       }
     }
+    this.#noticeObjects(a)
 
     if (a.sinceReflect >= REFLECT_AFTER && a.conversation == null) {
       a.sinceReflect = 0
       this.#reflect(a, sync)
+    }
+
+    // An errand in progress owns the body until it's done or given up on.
+    if (a.errand) {
+      if (a.conversation == null) this.#tickErrand(a)
+      return
     }
 
     // Free time, once they've arrived and have nothing scheduled but "be here".
@@ -315,6 +339,8 @@ export class Simulation {
     ) {
       a.lastDecision = this.time
       this.#decide(a)
+    } else if (this.time - a.lastErrand > ERRAND_EVERY && this.rng() < ERRAND_CHANCE) {
+      this.#startErrand(a)
     } else if (this.time - a.lastDrift > DRIFT_EVERY && this.rng() < DRIFT_CHANCE) {
       this.#drift(a)
     }
@@ -444,8 +470,9 @@ export class Simulation {
         const last = a.lastTalk.get(b.id) ?? -1e9
         if (this.time - last < TALK_COOLDOWN) continue
         // Two people crossing paths don't always stop, and a town where they
-        // always do is exhausting to watch.
-        if (this.rng() > 0.72) continue
+        // always do is exhausting to watch — unless one of them has lost
+        // something, in which case they'll stop anyone.
+        if (!a.wants && !b.wants && this.rng() > 0.72) continue
         this.#beginConversation(a, b, sync)
       }
     }
@@ -465,6 +492,7 @@ export class Simulation {
       startedReal: this.realClock,
       startedSim: this.time,
       rumour: null,
+      question: null,
       silent: false,
       source: 'none',
     }
@@ -483,6 +511,25 @@ export class Simulation {
     // Does the opener have something to pass on?
     const fresh = a.knownRumours().filter((r) => !b.rumours.has(r.id))
     if (fresh.length && this.rng() < GOSSIP[a.id]) conv.rumour = pick(this.rng, fresh)
+
+    // Somebody who can't find their tool asks about it. The sim works out the
+    // answer from what the other one actually remembers — the brain only gets
+    // to phrase it, so nobody can be told a location that was never observed.
+    const asker = a.wants ? a : b.wants ? b : null
+    if (asker) {
+      const other = asker === a ? b : a
+      const known = this.lastKnownTool(other, asker.wants)
+      conv.question = {
+        asker: asker === a ? 'a' : 'b',
+        tool: asker.wants,
+        name: toolName(asker.wants),
+        answer: known ? (known.spot ? known.spot.where : this.byId.get(known.holder)?.firstName) : null,
+        known,
+      }
+      // Asking outranks gossip; you don't open with the fish when you've lost
+      // the axe.
+      conv.rumour = null
+    }
 
     const ctx = this.#conversationContext(conv)
     if (sync || !this.brain) {
@@ -513,6 +560,8 @@ export class Simulation {
       place: conv.place.short,
       timeOfDay: timeOfDay(this.time),
       rumour: conv.rumour,
+      question: conv.question ?? null,
+      carrying: { a: a.carrying ? toolName(a.carrying) : null, b: b.carrying ? toolName(b.carrying) : null },
       tie: this.tie(a.id, b.id),
     }
   }
@@ -591,6 +640,32 @@ export class Simulation {
     b.sinceReflect++
     this.bumpTie(a.id, b.id, 0.04)
 
+    if (conv.question) {
+      const asker = conv.question.asker === 'a' ? a : b
+      const other = asker === a ? b : a
+      const q = conv.question
+      if (q.known) {
+        // Hearsay, but good hearsay: it carries the same spot/holder the other
+        // one remembers, so the asker can now go and look.
+        asker.memory.add(this.time, 'object', `${other.firstName} said to look for the ${q.name} at ${q.answer}`, 6, {
+          topic: `the ${q.name}`,
+          tool: q.tool,
+          who: other.id,
+          spot: q.known.spot,
+          holder: q.known.holder,
+        })
+        asker.frustration = Math.max(0, asker.frustration - 0.3)
+        this.logEvent('object', `${other.firstName} tells ${asker.firstName} where to find the ${q.name}`, [a.id, b.id])
+      } else {
+        asker.frustration = Math.min(1, asker.frustration + 0.15)
+        asker.memory.add(this.time, 'object', `${other.firstName} hasn’t seen the ${q.name} either`, 3, {
+          topic: `the ${q.name}`,
+          who: other.id,
+        })
+        this.logEvent('object', `${other.firstName} hasn’t seen the ${q.name} either`, [a.id, b.id])
+      }
+    }
+
     if (conv.rumour && !b.rumours.has(conv.rumour.id)) {
       if (this.rng() < GOSSIP[b.id]) {
         b.rumours.add(conv.rumour.id)
@@ -616,6 +691,303 @@ export class Simulation {
     for (const p of [a, b]) {
       if (p.resumeGoal) this.#sendTo(p, p.resumeGoal)
       p.resumeGoal = null
+    }
+  }
+
+  // ------------------------------------------------------------- objects ---
+
+  #initTools() {
+    this.tools = new Map()
+    for (const def of TOOLS) {
+      const home = this.locations.get(def.home)
+      const spot = scatterNear(this.town, home, this.rng, 1)
+      this.tools.set(def.id, { def, holder: null, x: spot.x, y: spot.y, home: def.home })
+    }
+  }
+
+  toolsOnGround() {
+    return [...this.tools.values()].filter((t) => !t.holder)
+  }
+
+  // Where something is, in the words the town would use for it.
+  placeWords(x, y) {
+    let best = null
+    let bestD = Infinity
+    for (const loc of this.locations.values()) {
+      const d = Math.hypot(loc.x - x, loc.y - y)
+      if (d < bestD) {
+        bestD = d
+        best = loc
+      }
+    }
+    if (!best) return 'somewhere out there'
+    // A thing dropped in open country is "out past the workshop", not "at" it.
+    return bestD > 6 ? `out past ${best.short}` : best.short
+  }
+
+  // What this resident currently believes about where a tool is. This is a
+  // straight read of the memory stream and nothing else — there is no oracle,
+  // which is the entire point. A record goes stale the moment they go and look
+  // and it isn't there, so a wrong belief costs a wasted walk exactly once.
+  lastKnownTool(a, toolId) {
+    for (let i = a.memory.items.length - 1; i >= 0; i--) {
+      const m = a.memory.items[i]
+      if (m.tool === toolId && !m.stale && (m.spot || m.holder)) return m
+    }
+    return null
+  }
+
+  #pickUp(a, toolId) {
+    const t = this.tools.get(toolId)
+    if (!t || t.holder) return false
+    if (a.carrying) this.#setDown(a)
+    t.holder = a.id
+    a.carrying = toolId
+    a.memory.add(this.time, 'object', `picked up the ${toolName(toolId)}`, 4, {
+      topic: `the ${toolName(toolId)}`,
+      tool: toolId,
+      holder: a.id,
+    })
+    return true
+  }
+
+  #setDown(a, tidy = false) {
+    const toolId = a.carrying
+    if (!toolId) return
+    const t = this.tools.get(toolId)
+    a.carrying = null
+    t.holder = null
+    if (tidy) {
+      const home = this.locations.get(t.home)
+      const spot = scatterNear(this.town, home, this.rng, 1)
+      t.x = spot.x
+      t.y = spot.y
+    } else {
+      t.x = Math.round(a.x)
+      t.y = Math.round(a.y)
+    }
+    const where = this.placeWords(t.x, t.y)
+    a.memory.add(this.time, 'object', `left the ${toolName(toolId)} at ${where}`, 3, {
+      topic: `the ${toolName(toolId)}`,
+      tool: toolId,
+      spot: { x: t.x, y: t.y, where },
+    })
+    // Only the careless drops are worth the log. Putting a thing back where it
+    // belongs is the case where nothing interesting will happen next.
+    if (!tidy) this.logEvent('object', `${a.firstName} leaves the ${toolName(toolId)} at ${where}`, [a.id])
+  }
+
+  #handOver(from, to, toolId) {
+    const t = this.tools.get(toolId)
+    if (!t || t.holder !== from.id) return false
+    // Nobody has three hands. Whatever the receiver was already holding goes
+    // down first — otherwise that tool keeps pointing at them as its holder
+    // while they're visibly carrying something else, and it can never be found
+    // again.
+    if (to.carrying) this.#setDown(to, this.rng() < (TIDY[to.id] ?? 0.5))
+    from.carrying = null
+    t.holder = to.id
+    to.carrying = toolId
+    const line = `${from.firstName} handed over the ${toolName(toolId)}`
+    for (const p of [from, to]) {
+      p.memory.add(this.time, 'object', line, 5, {
+        topic: `the ${toolName(toolId)}`,
+        tool: toolId,
+        holder: to.id,
+        who: p === from ? to.id : from.id,
+      })
+    }
+    this.bumpTie(from.id, to.id, 0.06)
+    this.logEvent('object', `${line} to ${to.firstName}`, [from.id, to.id])
+    return true
+  }
+
+  // Noticing objects, which works exactly like noticing people: near enough,
+  // once, and into the stream. These records are the only thing anybody has to
+  // go on later.
+  #noticeObjects(a) {
+    for (const b of this.agents) {
+      if (b === a || b.asleep || !b.carrying) continue
+      const d = Math.hypot(b.x - a.x, b.y - a.y)
+      const key = `carry:${b.id}:${b.carrying}`
+      if (d < 4.5 && !a.seen.has(key)) {
+        a.seen.add(key)
+        a.memory.add(this.time, 'object', `saw ${b.name} carrying the ${toolName(b.carrying)}`, 4, {
+          topic: `the ${toolName(b.carrying)}`,
+          who: b.id,
+          tool: b.carrying,
+          holder: b.id,
+        })
+      }
+    }
+    for (const [id, t] of this.tools) {
+      if (t.holder) continue
+      const d = Math.hypot(t.x - a.x, t.y - a.y)
+      const key = `ground:${id}:${t.x},${t.y}`
+      if (d < 4.5) {
+        if (a.seen.has(key)) continue
+        a.seen.add(key)
+        const where = this.placeWords(t.x, t.y)
+        a.memory.add(this.time, 'object', `saw the ${toolName(id)} lying at ${where}`, 3, {
+          topic: `the ${toolName(id)}`,
+          tool: id,
+          spot: { x: t.x, y: t.y, where },
+        })
+      } else if (d > 7) {
+        a.seen.delete(key)
+      }
+    }
+  }
+
+  // ------------------------------------------------------------- errands ---
+
+  #startErrand(a) {
+    const options = actionsFor(a.id).filter((act) => act.id !== a.lastAction)
+    if (!options.length) return
+    const action = pick(this.rng, options)
+    a.lastErrand = this.time
+    a.errand = { action: action.id, tool: action.tool, stage: 'get', until: 0, tries: 0 }
+    a.memory.add(this.time, 'plan', `decided to go ${action.doing}`, 4, {
+      topic: `the ${toolName(action.tool)}`,
+      tool: action.tool,
+    })
+  }
+
+  #abandonErrand(a, why) {
+    if (!a.errand) return
+    const action = ACTION_BY_ID.get(a.errand.action)
+    a.memory.add(this.time, 'plan', `gave up on ${action.doing} — ${why}`, 5, {
+      topic: `the ${toolName(a.errand.tool)}`,
+    })
+    this.logEvent('errand', `${a.firstName} gives up on ${action.doing} — ${why}`, [a.id])
+    a.errand = null
+    a.wants = null
+    a.override = null
+    a.frustration = Math.min(1, a.frustration + 0.3)
+  }
+
+  #finishErrand(a) {
+    const action = ACTION_BY_ID.get(a.errand.action)
+    a.memory.add(this.time, 'object', action.done, 6, { topic: `the ${toolName(action.tool)}`, tool: action.tool })
+    this.logEvent('errand', `${a.firstName} ${action.done}`, [a.id])
+    this.stats.actionsDone++
+    a.lastAction = action.id
+    a.errand = null
+    a.wants = null
+    a.override = null
+    a.frustration = Math.max(0, a.frustration - 0.5)
+    // Tidy people put it back where it belongs; the rest put it down where they
+    // happen to be standing, which is where the next search starts — or wander
+    // off still holding it, which is worse and much more true to life.
+    const tidy = TIDY[a.id] ?? 0.5
+    if (this.rng() < tidy) this.#setDown(a, true)
+    else if (this.rng() < 0.55) this.#setDown(a, false)
+  }
+
+  // The errand state machine. `get` is looking for the tool, `carry` is taking
+  // it to where the job is, `do` is doing the job, `lost` is not knowing.
+  #tickErrand(a) {
+    const e = a.errand
+    const action = ACTION_BY_ID.get(e.action)
+    const dest = this.locations.get(action.at)
+
+    if (e.stage === 'do') {
+      if (this.time >= e.until) this.#finishErrand(a)
+      return
+    }
+
+    if (a.carrying === e.tool) {
+      if (e.stage !== 'carry') {
+        e.stage = 'carry'
+        a.wants = null
+        a.plannedBy = 'errand'
+        a.override = {
+          goal: action.at,
+          until: this.time + 600,
+          doing: `taking the ${toolName(e.tool)} to ${dest.short}`,
+        }
+        this.#sendTo(a, action.at)
+      }
+      if (!a.path.length && Math.hypot(a.x - dest.x, a.y - dest.y) < 4.5) {
+        e.stage = 'do'
+        e.until = this.time + action.minutes
+        a.override = { goal: action.at, until: this.time + action.minutes + 20, doing: action.doing }
+        a.reason = ''
+        this.logEvent('errand', `${a.firstName} is ${action.doing}`, [a.id])
+      }
+      return
+    }
+
+    // They don't have it. Everything from here is memory, not knowledge.
+    const known = this.lastKnownTool(a, e.tool)
+    const tool = this.tools.get(e.tool)
+
+    if (!known) {
+      if (e.stage !== 'lost') {
+        e.stage = 'lost'
+        a.wants = e.tool
+        a.frustration = Math.min(1, a.frustration + 0.25)
+        this.logEvent('errand', `${a.firstName} can’t find the ${toolName(e.tool)}`, [a.id])
+      }
+      // Look somewhere plausible while asking around. Where it lives is the
+      // obvious first guess, and being wrong is how you end up asking.
+      if (!a.path.length) {
+        e.tries++
+        if (e.tries > 6) return this.#abandonErrand(a, `no sign of the ${toolName(e.tool)}`)
+        const guess = e.tries === 1 ? this.tools.get(e.tool).home : pick(this.rng, ['square', 'kettle', 'market', 'pond'])
+        a.override = { goal: guess, until: this.time + 600, doing: `looking for the ${toolName(e.tool)}` }
+        this.#sendTo(a, guess)
+      }
+      return
+    }
+
+    if (known.holder && known.holder !== a.id) {
+      const holder = this.byId.get(known.holder)
+      // Still got it? Go and ask for it.
+      if (holder && tool.holder === holder.id) {
+        e.stage = 'get'
+        a.wants = null
+        a.override = {
+          goal: a.goal,
+          until: this.time + 600,
+          doing: `after the ${toolName(e.tool)}`,
+          chasing: holder.id,
+        }
+        // They'll hand it over if they aren't in the middle of using it.
+        if (Math.hypot(holder.x - a.x, holder.y - a.y) < 2.4 && holder.errand?.tool !== e.tool) {
+          this.#handOver(holder, a, e.tool)
+        }
+        return
+      }
+      // They've put it down since. That memory is no use any more.
+      known.stale = true
+      return
+    }
+
+    if (known.spot) {
+      e.stage = 'get'
+      a.wants = null
+      const at = known.spot
+      if (Math.hypot(at.x - a.x, at.y - a.y) < 1.8) {
+        if (!tool.holder && Math.hypot(tool.x - a.x, tool.y - a.y) < 2.2) {
+          this.#pickUp(a, e.tool)
+        } else {
+          // Somebody moved it. Remember being wrong, and look again.
+          known.stale = true
+          a.frustration = Math.min(1, a.frustration + 0.2)
+          a.memory.add(this.time, 'object', `the ${toolName(e.tool)} wasn’t at ${at.where} after all`, 5, {
+            topic: `the ${toolName(e.tool)}`,
+          })
+          this.logEvent('object', `${a.firstName} finds no ${toolName(e.tool)} at ${at.where}`, [a.id])
+        }
+        return
+      }
+      if (!a.path.length) {
+        a.override = { goal: a.goal, until: this.time + 600, doing: `fetching the ${toolName(e.tool)}` }
+        this.#sendToPoint(a, { x: at.x, y: at.y }, a.goal)
+        // Nowhere to walk to means the memory is unusable.
+        if (!a.path.length) known.stale = true
+      }
     }
   }
 

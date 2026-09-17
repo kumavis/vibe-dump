@@ -7,12 +7,14 @@
 
 import { MODELS, SCRIPTED } from './brain.js'
 import { SEED_RUMOURS } from './cast.js'
+import { ACTION_BY_ID, TOOLS, toolName } from './objects.js'
 import { clockOf, escapeHtml, timeOfDay } from './util.js'
 
 // Observations already read as "saw X at Y", so tagging them "saw" stutters.
 // They're also most of the stream, and leaving them untagged is what makes the
 // handful of tagged records — the rumours and the reflections — stand out.
 const KIND_LABEL = {
+  object: 'thing',
   dialogue: 'talk',
   reflection: 'thought',
   plan: 'plan',
@@ -303,6 +305,25 @@ export class UI {
       <h3>Who’s about</h3>
       <div class="cast">${cast}</div>
 
+      <h3>Where everything is</h3>
+      <p>Nobody in town can see this list. They only know what they’ve seen or been told.</p>
+      <div class="things">
+        ${TOOLS.map((def) => {
+          const t = sim.tools.get(def.id)
+          const holder = t.holder ? sim.byId.get(t.holder) : null
+          const hunted = sim.agents.find((a) => a.wants === def.id)
+          return `<div class="thing${hunted ? ' hunted' : ''}">
+            <span class="nm">${escapeHtml(def.name)}</span>
+            <span class="wh">${
+              holder
+                ? `held by ${escapeHtml(holder.firstName)}`
+                : escapeHtml(sim.placeWords(t.x, t.y))
+            }</span>
+            ${hunted ? `<span class="badge">${escapeHtml(hunted.firstName)} is hunting</span>` : ''}
+          </div>`
+        }).join('')}
+      </div>
+
       <h3>Going round</h3>
       ${rumours}
       <div class="plant">
@@ -378,7 +399,23 @@ export class UI {
         ${escapeHtml(a.doing)}
         <span class="where">at ${escapeHtml(place.short)} · ${escapeHtml(timeOfDay(sim.time))}</span>
         ${a.reason ? `<span class="why">own reason: ${escapeHtml(a.reason)}</span>` : ''}
+        ${a.carrying ? `<span class="holding">carrying the ${escapeHtml(toolName(a.carrying))}</span>` : ''}
       </div>
+      ${
+        a.errand
+          ? `<div class="job${a.wants ? ' stuck' : ''}">
+              <b>${escapeHtml(ACTION_BY_ID.get(a.errand.action)?.doing ?? a.errand.action)}</b>
+              ${
+                a.wants
+                  ? `<span>Can’t find the ${escapeHtml(toolName(a.wants))}, and has no memory of seeing it. Asking around.</span>`
+                  : `<span>needs the ${escapeHtml(toolName(a.errand.tool))} — ${escapeHtml(
+                      a.errand.stage === 'do' ? 'at it now' : a.errand.stage === 'carry' ? 'has it, on the way' : 'going to fetch it',
+                    )}</span>`
+              }
+              ${a.frustration > 0.05 ? `<span class="bar"><i style="width:${Math.round(a.frustration * 100)}%"></i></span>` : ''}
+            </div>`
+          : ''
+      }
 
       ${a.thought ? `<h3>Last thought</h3><div class="thought">${escapeHtml(a.thought)}</div>` : ''}
 

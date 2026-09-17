@@ -69,6 +69,8 @@ export const PLACES = {
   dock: { name: 'the dock', short: 'the dock', x: 18, y: 23 },
   bench: { name: 'the bench', short: 'the bench by the pond', x: 24, y: 24 },
   lane: { name: 'the lane', short: 'the lane', x: 32, y: 8 },
+  // Out at the western treeline, where the wood gets split.
+  woods: { name: 'the woodpile', short: 'the woodpile', x: 5, y: 10 },
 }
 
 // Fixed decoration the renderer draws on top of the tiles. Lamps are also the
@@ -95,6 +97,9 @@ export const PROPS = [
   { kind: 'planter', x: 30, y: 16 },
   { kind: 'planter', x: 34, y: 16 },
   { kind: 'boat', x: 15, y: 27 },
+  { kind: 'logs', x: 5, y: 10 },
+  { kind: 'logs', x: 4, y: 12 },
+  { kind: 'crate', x: 7, y: 9 },
 ]
 
 function inEllipse(x, y, e) {
@@ -188,6 +193,8 @@ export function buildTown(seed = 20260917) {
   carve(PLAZA.cx, PLAZA.cy, PLACES.bench.x, PLACES.bench.y, false)
   carve(PLACES.bench.x, PLACES.bench.y, 18, 22, true)
   carve(13, 11, 13, 22, false)
+  // A track out to the woodpile, otherwise it sits behind a wall of trees.
+  carve(13, 11, PLACES.woods.x, PLACES.woods.y, true)
   carve(40, 12, 40, 20, false)
 
   // Trees and flowers fill the leftovers. Trees keep off the paths so they
