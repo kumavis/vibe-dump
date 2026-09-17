@@ -106,6 +106,36 @@ const MEMORY_FRAMES = [
   'Don’t get me started on {topic}.',
 ]
 
+// Looking for something. Shared rather than per-resident: these are the lines
+// where what matters is the fact being passed, not the voice passing it.
+const ASKS = [
+  'Have you seen the {tool} anywhere?',
+  'You haven’t got the {tool}, have you?',
+  'I’m after the {tool}. It’s walked off.',
+  'Quick one — the {tool}. Any idea?',
+]
+
+const TELLS = [
+  'It was at {where}, last I saw.',
+  '{where}. I’d start there.',
+  'Try {where}.',
+  'Saw it at {where}, if that helps.',
+]
+
+const DUNNOS = [
+  'Not for days, sorry.',
+  'Haven’t laid eyes on it.',
+  'No. Somebody’s always taking it.',
+  'Not a clue. Ask Milo.',
+]
+
+const THANKS = [
+  'Right. Thank you.',
+  'Course it is. Of course.',
+  'That’ll be it. Cheers.',
+  'I looked there. I must be blind.',
+]
+
 const HANDOFFS = [
   'Anyway.',
   'You see what I mean.',
@@ -131,6 +161,24 @@ export class OfflineBrain {
     const lines = []
     const open = pick(rng, ctx.a.voice.open).replace(/\{them\}/g, them)
     lines.push({ who: 'a', text: open })
+
+    if (ctx.question) {
+      // The answer is decided by the simulation from what the other one
+      // actually remembers; this only chooses the words for it.
+      const q = ctx.question
+      const asked = pick(rng, ASKS).replace('{tool}', q.name)
+      const reply = q.answer ? pick(rng, TELLS).replace('{where}', q.answer) : pick(rng, DUNNOS)
+      const first = q.asker === 'a' ? 'a' : 'b'
+      const second = first === 'a' ? 'b' : 'a'
+      return {
+        lines: [
+          { who: first, text: asked },
+          { who: second, text: reply },
+          { who: first, text: q.answer ? pick(rng, THANKS) : pick(rng, ctx[first].voice.reply) },
+        ],
+        source: 'offline',
+      }
+    }
 
     if (ctx.rumour) {
       lines.push({ who: 'b', text: pick(rng, ctx.b.voice.reply) })
@@ -294,6 +342,21 @@ export class LiveBrain {
       ctx.a.memories.length ? `A has been thinking about: ${ctx.a.memories.join('; ')}.` : '',
       ctx.b.memories.length ? `B has been thinking about: ${ctx.b.memories.join('; ')}.` : '',
       ctx.rumour ? `A wants to bring up a rumour: "${ctx.rumour.text}". B reacts in character.` : '',
+      ctx.carrying?.a ? `A is carrying the ${ctx.carrying.a}.` : '',
+      ctx.carrying?.b ? `B is carrying the ${ctx.carrying.b}.` : '',
+      // The facts are the simulation's; the model phrases them and must not
+      // invent a location nobody ever saw.
+      ctx.question
+        ? ctx.question.asker === 'a'
+          ? `A has lost the ${ctx.question.name} and asks B about it. ` +
+            (ctx.question.answer
+              ? `B remembers it being at ${ctx.question.answer} and says exactly that — do not name anywhere else.`
+              : `B genuinely has no idea and says so — do not invent a location.`)
+          : `B has lost the ${ctx.question.name} and asks A about it. ` +
+            (ctx.question.answer
+              ? `A remembers it being at ${ctx.question.answer} and says exactly that — do not name anywhere else.`
+              : `A genuinely has no idea and says so — do not invent a location.`)
+        : '',
       ctx.tie > 0.4 ? 'They like each other.' : ctx.tie < -0.2 ? 'They get on each other’s nerves.' : '',
       '',
       'Return {"lines": [...]} with exactly 4 strings: A, then B, then A, then B.',
