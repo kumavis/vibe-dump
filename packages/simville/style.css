@@ -737,6 +737,16 @@ button.go:disabled {
   border-color: var(--gold);
 }
 
+/* Whichever brain is actually installed. */
+.models button.on {
+  border-color: var(--gold);
+  background: rgba(232, 192, 105, 0.08);
+}
+
+.models button .badge {
+  margin-left: auto;
+}
+
 .models .label {
   font-size: 13.5px;
   font-weight: 700;
