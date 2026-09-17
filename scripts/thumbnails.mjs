@@ -97,7 +97,10 @@ async function shoot(apps, settleOverride) {
         }
         // Some apps open with chrome in front of the thing worth showing — a
         // detail rail, an intro card. Press it out of the way first.
-        if (app.click) await page.click(app.click, { timeout: 15000 })
+        // One selector, or several in order — an app that opens with a dialog
+        // over the thing worth photographing needs to dismiss that and then
+        // tidy the frame, which is two presses.
+        for (const selector of app.click) await page.click(selector, { timeout: 15000 })
         await page.waitForTimeout(settleOverride ?? app.settle ?? SETTLE_MS)
         await page.screenshot({ path: app.thumbnail, type: 'jpeg', quality: QUALITY, scale: 'css' })
         console.log(`  ✓ ${app.slug}`)

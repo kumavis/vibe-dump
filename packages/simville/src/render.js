@@ -45,6 +45,193 @@ const WALLS = {
   home: { base: '#8d6b4d', top: '#a98664' },
 }
 
+// The twelve tools, drawn small. Each one gets a silhouette you can tell apart
+// at a glance at this size — that's the whole requirement, since a tool on the
+// ground is a clue and a tool in somebody's hand is a different clue.
+// Everything is drawn around (0, 0) at roughly 14px, and the caller scales it.
+const TOOL_ART = {
+  rod: (g) => {
+    g.strokeStyle = '#a97c4e'
+    g.lineWidth = 1.6
+    g.beginPath()
+    g.moveTo(-6, 5)
+    g.lineTo(6, -6)
+    g.stroke()
+    g.strokeStyle = 'rgba(230,240,255,.85)'
+    g.lineWidth = 0.8
+    g.beginPath()
+    g.moveTo(6, -6)
+    g.lineTo(7, 3)
+    g.stroke()
+  },
+  axe: (g) => {
+    g.strokeStyle = '#8a5f37'
+    g.lineWidth = 2
+    g.beginPath()
+    g.moveTo(-5, 6)
+    g.lineTo(3, -4)
+    g.stroke()
+    g.fillStyle = '#b9c2cc'
+    g.beginPath()
+    g.moveTo(2, -6)
+    g.lineTo(8, -7)
+    g.lineTo(7, -1)
+    g.lineTo(1, -2)
+    g.closePath()
+    g.fill()
+  },
+  broom: (g) => {
+    g.strokeStyle = '#a97c4e'
+    g.lineWidth = 1.8
+    g.beginPath()
+    g.moveTo(-4, -7)
+    g.lineTo(2, 3)
+    g.stroke()
+    g.fillStyle = '#d8b46a'
+    g.beginPath()
+    g.moveTo(0, 2)
+    g.lineTo(6, 6)
+    g.lineTo(2, 8)
+    g.closePath()
+    g.fill()
+  },
+  can: (g) => {
+    g.fillStyle = '#7f9aa8'
+    g.fillRect(-5, -2, 8, 7)
+    g.strokeStyle = '#7f9aa8'
+    g.lineWidth = 1.6
+    g.beginPath()
+    g.moveTo(3, 0)
+    g.lineTo(8, -4)
+    g.stroke()
+    g.beginPath()
+    g.arc(-1, -3, 3.2, Math.PI, 0)
+    g.stroke()
+  },
+  teapot: (g) => {
+    g.fillStyle = '#c2763f'
+    g.beginPath()
+    g.ellipse(-1, 1, 5, 4.2, 0, 0, Math.PI * 2)
+    g.fill()
+    g.strokeStyle = '#c2763f'
+    g.lineWidth = 1.5
+    g.beginPath()
+    g.moveTo(4, 0)
+    g.lineTo(8, -3)
+    g.stroke()
+    g.fillStyle = '#8f5428'
+    g.fillRect(-2, -5, 3, 2)
+  },
+  spanner: (g) => {
+    g.strokeStyle = '#aab3bd'
+    g.lineWidth = 2.4
+    g.beginPath()
+    g.moveTo(-5, 5)
+    g.lineTo(4, -4)
+    g.stroke()
+    g.lineWidth = 1.4
+    g.beginPath()
+    g.arc(5, -5, 3, 0.6, 5.2)
+    g.stroke()
+  },
+  brushes: (g) => {
+    for (let i = 0; i < 3; i++) {
+      g.strokeStyle = '#a97c4e'
+      g.lineWidth = 1.4
+      g.beginPath()
+      g.moveTo(-4 + i * 3, 6)
+      g.lineTo(-2 + i * 3, -5)
+      g.stroke()
+      g.fillStyle = ['#c6553f', '#4a9fd8', '#f2c14e'][i]
+      g.fillRect(-3 + i * 3, -7, 2.4, 3)
+    }
+  },
+  ledger: (g) => {
+    g.fillStyle = '#8b6fc4'
+    g.fillRect(-6, -5, 11, 9)
+    g.fillStyle = '#efe7d6'
+    g.fillRect(-4, -4, 8, 7)
+    g.strokeStyle = 'rgba(0,0,0,.25)'
+    g.lineWidth = 0.7
+    for (let i = 0; i < 3; i++) {
+      g.beginPath()
+      g.moveTo(-3, -2 + i * 2)
+      g.lineTo(3, -2 + i * 2)
+      g.stroke()
+    }
+  },
+  pin: (g) => {
+    g.fillStyle = '#e0c79a'
+    g.beginPath()
+    g.roundRect?.(-7, -2, 14, 4, 2)
+    if (!g.roundRect) g.rect(-7, -2, 14, 4)
+    g.fill()
+    g.fillStyle = '#a97c4e'
+    g.fillRect(-9, -1, 3, 2)
+    g.fillRect(6, -1, 3, 2)
+  },
+  scales: (g) => {
+    g.strokeStyle = '#c9a227'
+    g.lineWidth = 1.5
+    g.beginPath()
+    g.moveTo(0, 5)
+    g.lineTo(0, -4)
+    g.moveTo(-6, -4)
+    g.lineTo(6, -4)
+    g.stroke()
+    g.fillStyle = '#c9a227'
+    for (const x of [-6, 6]) {
+      g.beginPath()
+      g.arc(x, -1, 2.6, 0, Math.PI)
+      g.fill()
+    }
+  },
+  ladder: (g) => {
+    g.strokeStyle = '#b08350'
+    g.lineWidth = 1.6
+    g.beginPath()
+    g.moveTo(-4, 7)
+    g.lineTo(-2, -7)
+    g.moveTo(3, 7)
+    g.lineTo(5, -7)
+    g.stroke()
+    g.lineWidth = 1.2
+    for (let i = 0; i < 3; i++) {
+      g.beginPath()
+      g.moveTo(-3.4 + i * 0.5, 4 - i * 4)
+      g.lineTo(4.4 - i * 0.5, 4 - i * 4)
+      g.stroke()
+    }
+  },
+  bucket: (g) => {
+    g.fillStyle = '#9aa7b2'
+    g.beginPath()
+    g.moveTo(-5, -2)
+    g.lineTo(5, -2)
+    g.lineTo(3.5, 6)
+    g.lineTo(-3.5, 6)
+    g.closePath()
+    g.fill()
+    g.strokeStyle = '#7d8893'
+    g.lineWidth = 1.2
+    g.beginPath()
+    g.arc(0, -2, 5, Math.PI, 0)
+    g.stroke()
+  },
+}
+
+export function drawTool(g, id, cx, cy, scale = 1) {
+  const art = TOOL_ART[id]
+  if (!art) return
+  g.save()
+  g.translate(cx, cy)
+  g.scale(scale, scale)
+  g.lineCap = 'round'
+  g.lineJoin = 'round'
+  art(g)
+  g.restore()
+}
+
 export class Renderer {
   constructor(canvas, sim) {
     this.canvas = canvas
@@ -54,6 +241,14 @@ export class Renderer {
     this.view = { scale: 1, ox: 0, oy: 0, dpr: 1 }
     this.hover = null
     this.showNames = true
+  }
+
+  // Restarting builds a whole new Simulation; the renderer's cached terrain
+  // belongs to the old one and has to go with it.
+  setSim(sim) {
+    this.sim = sim
+    this.hover = null
+    this.resize()
   }
 
   resize() {
@@ -584,6 +779,24 @@ export class Renderer {
         g.arc(cx + 5, cy - 8, 2, 0, Math.PI * 2)
         g.fill()
         break
+      case 'logs': {
+        g.fillStyle = 'rgba(30,30,40,.22)'
+        g.fillRect(cx - 11, cy + 3, 24, 5)
+        for (let i = 0; i < 3; i++) {
+          g.fillStyle = '#7a5433'
+          g.fillRect(cx - 11 + i * 8, cy - 6, 7, 10)
+          g.fillStyle = '#c49a68'
+          g.beginPath()
+          g.ellipse(cx - 7.5 + i * 8, cy - 6, 3.5, 1.6, 0, 0, Math.PI * 2)
+          g.fill()
+          g.strokeStyle = '#8f6c45'
+          g.lineWidth = 0.8
+          g.beginPath()
+          g.arc(cx - 7.5 + i * 8, cy - 6, 1.6, 0, Math.PI * 2)
+          g.stroke()
+        }
+        break
+      }
       case 'boat':
         g.fillStyle = 'rgba(10,30,45,.3)'
         g.beginPath()
@@ -666,9 +879,32 @@ export class Renderer {
     ctx.restore()
   }
 
+  // People and dropped tools share one depth-sorted pass, so somebody standing
+  // below a bucket is drawn in front of it.
   #drawAgents(ctx, t) {
-    const order = [...this.sim.agents].sort((a, b) => a.y - b.y)
-    for (const a of order) this.#drawAgent(ctx, a, t)
+    const order = [
+      ...this.sim.agents.map((a) => ({ y: a.y, agent: a })),
+      ...this.sim.toolsOnGround().map((o) => ({ y: o.y, tool: o })),
+    ].sort((p, q) => p.y - q.y)
+    for (const item of order) {
+      if (item.agent) this.#drawAgent(ctx, item.agent, t)
+      else this.#drawGroundTool(ctx, item.tool, t)
+    }
+  }
+
+  #drawGroundTool(ctx, o, t) {
+    const cx = o.x * TILE + TILE / 2
+    const cy = o.y * TILE + TILE / 2
+    // At the scale the whole town has to fit into, a bare icon on grass is a
+    // smudge. The pad is what makes it read as an object lying there.
+    ctx.fillStyle = 'rgba(24,30,40,.3)'
+    ctx.beginPath()
+    ctx.ellipse(cx, cy + 4, 11, 6, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(255,246,222,.3)'
+    ctx.lineWidth = 1
+    ctx.stroke()
+    drawTool(ctx, o.def.id, cx, cy + Math.sin(t * 0.0016 + o.x) * 0.7, 1.05)
   }
 
   #drawAgent(ctx, a, t) {
@@ -748,6 +984,43 @@ export class Renderer {
       const dx = a.facing === 'e' ? 1.4 : a.facing === 'w' ? -1.4 : 0
       ctx.fillRect(cx - 2.2 + dx, y - 11.4, 1.5, 1.8)
       ctx.fillRect(cx + 0.8 + dx, y - 11.4, 1.5, 1.8)
+    }
+
+    // What they're carrying, held clear of the body on the trailing side so the
+    // silhouette isn't fighting the shirt colour behind it.
+    if (a.carrying) {
+      const side = a.facing === 'w' ? -1 : 1
+      const hx = cx + side * 11
+      const hy = y - 1
+      ctx.fillStyle = 'rgba(24,30,40,.28)'
+      ctx.beginPath()
+      ctx.ellipse(hx, hy + 1, 8.5, 8.5, 0, 0, Math.PI * 2)
+      ctx.fill()
+      drawTool(ctx, a.carrying, hx, hy, 0.86)
+    }
+
+    // Looking for something, said without words — a model isn't speaking for
+    // them here and the grammar shouldn't either.
+    if (a.wants && !a.bubble) {
+      const bx = cx
+      const by = cy - 24 + Math.sin(t * 0.004) * 1.2
+      ctx.save()
+      ctx.fillStyle = 'rgba(253,250,244,.94)'
+      ctx.strokeStyle = a.frustration > 0.5 ? '#e8734a' : a.def.color
+      ctx.lineWidth = 1.4
+      roundRect(ctx, bx - 15, by - 10, 30, 19, 7)
+      ctx.fill()
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(bx - 4, by + 12, 2, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+      drawTool(ctx, a.wants, bx - 5, by, 0.52)
+      ctx.fillStyle = '#26221d'
+      ctx.font = '700 11px ui-sans-serif, system-ui, sans-serif'
+      ctx.textAlign = 'left'
+      ctx.fillText('?', bx + 6, by + 4)
+      ctx.restore()
     }
 
     if (this.showNames) {

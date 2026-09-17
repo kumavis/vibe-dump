@@ -7,12 +7,14 @@
 
 import { MODELS, SCRIPTED } from './brain.js'
 import { SEED_RUMOURS } from './cast.js'
+import { ACTION_BY_ID, TOOLS, toolName } from './objects.js'
 import { clockOf, escapeHtml, timeOfDay } from './util.js'
 
 // Observations already read as "saw X at Y", so tagging them "saw" stutters.
 // They're also most of the stream, and leaving them untagged is what makes the
 // handful of tagged records — the rumours and the reflections — stand out.
 const KIND_LABEL = {
+  object: 'thing',
   dialogue: 'talk',
   reflection: 'thought',
   plan: 'plan',
@@ -52,6 +54,7 @@ export class UI {
       loadfill: document.getElementById('loadfill'),
       loadtext: document.getElementById('loadtext'),
       brains: document.getElementById('brains'),
+      restart: document.getElementById('restart'),
       toast: document.getElementById('toast'),
       canvas: document.getElementById('town'),
     }
@@ -67,6 +70,28 @@ export class UI {
         this.controls.setSpeed(Number(b.dataset.speed))
       })
     }
+
+    // Two-step, because one stray click would otherwise wipe eight memory
+    // streams and there's no undo for that.
+    el.restart.addEventListener('click', () => {
+      if (this._armed) {
+        clearTimeout(this._armTimer)
+        this._armed = false
+        el.restart.textContent = '⟳'
+        el.restart.classList.remove('armed')
+        this.controls.restart()
+        return
+      }
+      this._armed = true
+      el.restart.textContent = '?'
+      el.restart.classList.add('armed')
+      this.toast('Start over? Press again. Everything they remember goes.', 3400)
+      this._armTimer = setTimeout(() => {
+        this._armed = false
+        el.restart.textContent = '⟳'
+        el.restart.classList.remove('armed')
+      }, 3400)
+    })
 
     el.panelClose.addEventListener('click', () => this.setRail(false))
     el.railOpen.addEventListener('click', () => this.setRail(true))
@@ -106,6 +131,21 @@ export class UI {
     this.renderModels()
     this.brain.onChange(() => this.renderBrainState())
     this.renderBrainState()
+    this.renderRail(true)
+    // The picker is the first thing you see. What the residents think with is
+    // the decision this whole thing is about, and leaving it behind a button in
+    // the corner meant most people never knowingly made it.
+    this.openSheet()
+  }
+
+  // Point the panel at a new town. The model, if one is loaded, stays loaded.
+  setSim(sim) {
+    this.sim = sim
+    this.lastEventCount = -1
+    this.answer = null
+    this.answerSource = null
+    this.draftQuestion = ''
+    this.el.back.hidden = true
     this.renderRail(true)
   }
 
@@ -170,14 +210,25 @@ export class UI {
     brains.textContent = b.isLive
       ? `eight residents · real memories, words by ${model}`
       : 'eight residents · real memories, scripted words'
-    const installed = `${b.mode}:${b.modelId ?? ''}`
+    // Only a settled brain counts. `wake` flips the mode the instant it starts
+    // downloading, and a failed load flips it back — neither is a change worth
+    // acting on, and acting on both would restart the town twice for nothing.
+    const settled = b.status === 'live' || b.status === 'scripted'
+    const installed = settled ? `${b.mode}:${b.modelId ?? ''}` : this._installed
     if (installed !== this._installed) {
-      const wasScripted = this._installed?.startsWith('scripted')
+      const first = this._installed === undefined
       this._installed = installed
       this.renderModels()
-      // Swapping the grammar out for a model takes effect immediately, backlog
-      // and all — see Simulation#dropScriptedWords.
-      if (b.isLive && wasScripted !== false) this.sim.dropScriptedWords()
+      // A new brain gets a new town. Half a day of somebody else's dialogue,
+      // reflections and errands is not this model's history, and leaving it in
+      // place is the same confusion as the fallback used to cause.
+      if (!first) {
+        this.controls.restart(
+          b.isLive
+            ? `${model} is in, on a fresh town. Everything they say from here is theirs.`
+            : 'Back to the grammar, on a fresh town. Every line is scripted again.',
+        )
+      }
     }
     if (b.status === 'loading') {
       wakeLabel.textContent = `Loading… ${Math.round(b.progress * 100)}%`
@@ -191,8 +242,9 @@ export class UI {
       loadtext.textContent = ''
       if (!this._announced) {
         this._announced = true
+        // The restart note below is the one message about this; a second toast
+        // here would only land on top of it.
         this.closeSheet()
-        this.toast('The model is in. Everything they say from here is theirs.', 4200)
       }
     } else if (b.status === 'failed') {
       wakeLabel.textContent = 'Couldn’t load'
@@ -303,6 +355,25 @@ export class UI {
       <h3>Who’s about</h3>
       <div class="cast">${cast}</div>
 
+      <h3>Where everything is</h3>
+      <p>Nobody in town can see this list. They only know what they’ve seen or been told.</p>
+      <div class="things">
+        ${TOOLS.map((def) => {
+          const t = sim.tools.get(def.id)
+          const holder = t.holder ? sim.byId.get(t.holder) : null
+          const hunted = sim.agents.find((a) => a.wants === def.id)
+          return `<div class="thing${hunted ? ' hunted' : ''}">
+            <span class="nm">${escapeHtml(def.name)}</span>
+            <span class="wh">${
+              holder
+                ? `held by ${escapeHtml(holder.firstName)}`
+                : escapeHtml(sim.placeWords(t.x, t.y))
+            }</span>
+            ${hunted ? `<span class="badge">${escapeHtml(hunted.firstName)} is hunting</span>` : ''}
+          </div>`
+        }).join('')}
+      </div>
+
       <h3>Going round</h3>
       ${rumours}
       <div class="plant">
@@ -378,7 +449,23 @@ export class UI {
         ${escapeHtml(a.doing)}
         <span class="where">at ${escapeHtml(place.short)} · ${escapeHtml(timeOfDay(sim.time))}</span>
         ${a.reason ? `<span class="why">own reason: ${escapeHtml(a.reason)}</span>` : ''}
+        ${a.carrying ? `<span class="holding">carrying the ${escapeHtml(toolName(a.carrying))}</span>` : ''}
       </div>
+      ${
+        a.errand
+          ? `<div class="job${a.wants ? ' stuck' : ''}">
+              <b>${escapeHtml(ACTION_BY_ID.get(a.errand.action)?.doing ?? a.errand.action)}</b>
+              ${
+                a.wants
+                  ? `<span>Can’t find the ${escapeHtml(toolName(a.wants))}, and has no memory of seeing it. Asking around.</span>`
+                  : `<span>needs the ${escapeHtml(toolName(a.errand.tool))} — ${escapeHtml(
+                      a.errand.stage === 'do' ? 'at it now' : a.errand.stage === 'carry' ? 'has it, on the way' : 'going to fetch it',
+                    )}</span>`
+              }
+              ${a.frustration > 0.05 ? `<span class="bar"><i style="width:${Math.round(a.frustration * 100)}%"></i></span>` : ''}
+            </div>`
+          : ''
+      }
 
       ${a.thought ? `<h3>Last thought</h3><div class="thought">${escapeHtml(a.thought)}</div>` : ''}
 

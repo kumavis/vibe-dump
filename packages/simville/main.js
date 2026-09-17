@@ -16,7 +16,20 @@ import { UI } from './src/ui.js'
 // live through and you can still read what people say to each other.
 const MINUTES_PER_SECOND = 4
 
-const sim = new Simulation()
+// A town, wound forward to late afternoon and ready to draw. Restarting makes
+// a new one with a new seed — same map, same eight people, a different day —
+// and hands it to the renderer and the panel. Whatever model is loaded stays
+// loaded; swapping the world out is not a reason to re-download two gigabytes.
+function newTown(seed) {
+  const town = new Simulation(seed)
+  town.attachBrain(brain)
+  const problems = townProblems(town.town, town.locations)
+  if (problems.length) console.warn(`[simville] town layout:\n  ${problems.join('\n  ')}`)
+  town.warmStart(WARM_START)
+  return town
+}
+
+let sim = new Simulation()
 const brain = new BrainHub(sim.rng)
 sim.attachBrain(brain)
 
@@ -31,7 +44,8 @@ if (problems.length) console.warn(`[simville] town layout:\n  ${problems.join('\
 // like a screensaver. By 17:20 everyone is out at their own end of the map, the
 // memory streams have a day in them, a rumour is five people deep, and the
 // light has gone golden. The whole replay costs about 20ms.
-sim.warmStart(620)
+const WARM_START = 620
+sim.warmStart(WARM_START)
 
 const canvas = document.getElementById('town')
 const renderer = new Renderer(canvas, sim)
@@ -48,6 +62,13 @@ const controls = {
     }
   },
   resize: () => renderer.resize(),
+  restart: (note) => {
+    sim = newTown((Math.random() * 0xffffffff) >>> 0)
+    renderer.setSim(sim)
+    ui.setSim(sim)
+    globalThis.__simville.sim = sim
+    ui.toast(note ?? 'A new day, and nobody remembers the last one.')
+  },
 }
 
 const ui = new UI(sim, brain, renderer, controls)

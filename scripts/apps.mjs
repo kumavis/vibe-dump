@@ -111,12 +111,14 @@ export async function discoverApps() {
       // Optional per-app thumbnail tuning, for apps that don't put their best
       // face forward on their own:
       //   "gallery": { "thumbnail": { "waitFor": "!#boot", "click": "#x", "settle": 2000 } }
+      // `click` also takes an array, pressed in order, for an app that opens
+      // behind a dialog it has to dismiss before the frame is worth shooting.
       // `waitFor` is a selector to wait for, prefixed with "!" to wait for it to
       // *leave* instead; `click` is a control to press once it's there; `settle`
       // is the pause before the shot.
       settle: meta.thumbnail?.settle,
       waitFor: meta.thumbnail?.waitFor,
-      click: meta.thumbnail?.click,
+      click: meta.thumbnail?.click == null ? [] : [meta.thumbnail.click].flat(),
     })
   }
   // Newest first. Eight apps arrived in the same monorepo import and share a

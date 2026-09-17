@@ -203,6 +203,12 @@ body {
   border-color: var(--gold);
 }
 
+.icon.armed {
+  color: #14181f;
+  background: var(--warm);
+  border-color: var(--warm);
+}
+
 /* --------------------------------------------------------------- the log */
 
 #log {
@@ -240,6 +246,16 @@ body {
 #log div.decision {
   border-left-color: var(--good);
   color: #cfeedb;
+}
+
+#log div.object {
+  border-left-color: var(--gold);
+  color: #f0e4c6;
+}
+
+#log div.errand {
+  border-left-color: #4a9fd8;
+  color: #cfe4f2;
 }
 
 @keyframes slide {
@@ -612,6 +628,20 @@ button.go:disabled {
   color: #d3e3ef;
 }
 
+/* Objects — picking one up, putting it down, spotting one — read as their own
+   thread through the stream rather than as more of the ambient noticing. */
+.mem.k-object .tx {
+  color: #f0e4c6;
+}
+
+.mem.k-object .imp {
+  background: linear-gradient(180deg, var(--gold), rgba(232, 192, 105, 0.15));
+}
+
+.mem.k-plan .tx {
+  color: #cfeedb;
+}
+
 .mem .imp {
   flex: 0 0 auto;
   width: 3px;
@@ -818,4 +848,89 @@ button.go:disabled {
     width: calc(100% - 32px);
     font-size: 10.5px;
   }
+}
+
+/* Objects: what somebody is carrying, the job they're on, and the omniscient
+   list of where everything actually is. */
+
+.doing .holding {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--gold);
+}
+
+.job {
+  margin-top: 7px;
+  padding: 9px 11px;
+  background: var(--panel-2);
+  border-left: 2px solid var(--good);
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.job.stuck {
+  border-left-color: var(--warm);
+}
+
+.job b {
+  display: block;
+  color: var(--ink);
+}
+
+.job span {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink-faint);
+  font-size: 11.5px;
+}
+
+.job .bar {
+  margin-top: 6px;
+}
+
+.job.stuck .bar > i {
+  background: linear-gradient(90deg, var(--warm), #e05d5d);
+}
+
+.things {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.thing {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 9px;
+  background: var(--panel-2);
+  border-radius: 6px;
+  font-size: 11.5px;
+}
+
+.thing.hunted {
+  box-shadow: inset 2px 0 0 var(--warm);
+}
+
+.thing .nm {
+  flex: 0 0 auto;
+  color: var(--ink);
+}
+
+.thing .wh {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+.thing .badge {
+  flex: 0 0 auto;
+  background: rgba(232, 115, 74, 0.18);
+  color: var(--warm);
 }
