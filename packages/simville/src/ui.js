@@ -51,6 +51,7 @@ export class UI {
       loadbar: document.getElementById('loadbar'),
       loadfill: document.getElementById('loadfill'),
       loadtext: document.getElementById('loadtext'),
+      brains: document.getElementById('brains'),
       toast: document.getElementById('toast'),
       canvas: document.getElementById('town'),
     }
@@ -163,9 +164,17 @@ export class UI {
   }
 
   renderBrainState() {
-    const { wake, wakeLabel, loadbar, loadfill, loadtext } = this.el
+    const { wake, wakeLabel, loadbar, loadfill, loadtext, brains } = this.el
     const b = this.brain
     wake.dataset.state = b.status
+
+    // The one always-visible line about which half of this is real. Somebody
+    // who reads nothing else should still not come away thinking a language
+    // model wrote the speech bubbles when it didn't.
+    const model = MODELS.find((m) => m.id === b.modelId)?.label ?? 'the model'
+    brains.textContent = b.isLive
+      ? `eight residents · real memories, words by ${model}`
+      : 'eight residents · real memories, scripted words'
     if (b.status === 'loading') {
       wakeLabel.textContent = `Loading… ${Math.round(b.progress * 100)}%`
       loadbar.hidden = false
@@ -268,6 +277,13 @@ export class UI {
       <p>
         Everyone keeps a schedule, notices who they pass, and remembers it. Stop two of them next to each other
         and they talk; what gets said goes into both their memory streams and comes back out later.
+      </p>
+      <p>
+        ${
+          this.brain.isLive
+            ? 'The schedules, memories and rumours are simulated. The words are being written, right now, by the model on your GPU.'
+            : 'The schedules, memories and rumours are simulated. The words are not — every line is stitched from a grammar per resident, until you wake the minds.'
+        }
       </p>
 
       <h3>Who’s about</h3>
