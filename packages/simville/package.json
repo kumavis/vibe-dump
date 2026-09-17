@@ -1,0 +1,31 @@
+{
+  "name": "@vibe-dump/simville",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/vendor-webllm.mjs && vite",
+    "build": "node scripts/vendor-webllm.mjs && vite build",
+    "test": "node tests/brain.test.mjs"
+  },
+  "dependencies": {
+    "@mlc-ai/web-llm": "^0.2.85"
+  },
+  "gallery": {
+    "title": "Simville",
+    "description": "A Smallville-style generative-agent town: eight residents keep schedules, bump into each other, and gossip. Press one button and a real LLM takes over their heads — Qwen3 running on your GPU via WebLLM, no server.",
+    "tags": [
+      "simulation",
+      "game"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "high",
+    "thumbnail": {
+      "click": "#panelclose",
+      "settle": 2500
+    }
+  }
+}

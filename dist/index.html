@@ -13,19 +13,28 @@
       <p class="masthead__tagline">A dump of tiny static web experiments.</p>
     </header>
     <nav class="filters" id="filters" aria-label="Filter apps">
-        <button class="chip" data-tag="game" aria-pressed="false">game<span class="chip__n">6</span></button>
-        <button class="chip" data-tag="simulation" aria-pressed="false">simulation<span class="chip__n">8</span></button>
+        <button class="chip" data-tag="game" aria-pressed="false">game<span class="chip__n">7</span></button>
+        <button class="chip" data-tag="simulation" aria-pressed="false">simulation<span class="chip__n">9</span></button>
         <button class="chip" data-tag="tool" aria-pressed="false">tool<span class="chip__n">6</span></button>
         <button class="chip" data-tag="art" aria-pressed="false">art<span class="chip__n">24</span></button>
         <button class="chip" data-tag="kids" aria-pressed="false">kids<span class="chip__n">16</span></button>
         <button class="chip" data-tag="tutorial" aria-pressed="false">tutorial<span class="chip__n">5</span></button>
       <span class="filters__sep" role="separator"></span>
       <button class="chip chip--status" data-status="wip" aria-pressed="false">wip<span class="chip__n">9</span></button>
-      <button class="chip chip--status" data-status="done" aria-pressed="false">done<span class="chip__n">28</span></button>
+      <button class="chip chip--status" data-status="done" aria-pressed="false">done<span class="chip__n">29</span></button>
       <button class="chip chip--clear" id="clear" hidden>clear</button>
       <output class="filters__count" id="count"></output>
     </nav>
     <main class="grid" id="grid">
+      <a class="card" href="./simville/" data-tags="simulation game" data-status="done">
+        <img class="thumb" src="./simville/thumbnail.jpg" alt="Screenshot of Simville" loading="lazy" />
+        <div class="card__body">
+          <h2 class="card__title">Simville</h2>
+          <p class="card__desc">A Smallville-style generative-agent town: eight residents keep schedules, bump into each other, and gossip. Press one button and a real LLM takes over their heads — Qwen3 running on your GPU via WebLLM, no server.</p>
+          <p class="card__credits">Opus 5 · high effort</p>
+          <div class="card__tags"><span class="tag">simulation</span><span class="tag">game</span></div>
+        </div>
+      </a>
       <a class="card" href="./kei-truck-stations/" data-tags="simulation tool art" data-status="wip">
         <img class="thumb" src="./kei-truck-stations/thumbnail.jpg" alt="Screenshot of Kei Truck Stations" loading="lazy" />
         <span class="wip">WIP</span>
@@ -326,24 +335,6 @@
           <div class="card__tags"><span class="tag">simulation</span><span class="tag">kids</span></div>
         </div>
       </a>
-      <a class="card" href="./black-snake-swamp/" data-tags="art kids" data-status="done">
-        <img class="thumb" src="./black-snake-swamp/thumbnail.jpg" alt="Screenshot of Black Snake Swamp" loading="lazy" />
-        <div class="card__body">
-          <h2 class="card__title">Black Snake Swamp</h2>
-          <p class="card__desc">A dark-forest swamp at night: a black snake slithers across the water, evaporating it into rising steam while terrified frogs croak and tremble. Procedural canvas + Web Audio spooky ambience, fully self-contained.</p>
-          <p class="card__credits">Opus 4.8</p>
-          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
-        </div>
-      </a>
-      <a class="card" href="./whale-cube/" data-tags="art kids" data-status="done">
-        <img class="thumb" src="./whale-cube/thumbnail.jpg" alt="Screenshot of Whale Cube" loading="lazy" />
-        <div class="card__body">
-          <h2 class="card__title">Whale Cube</h2>
-          <p class="card__desc">A pod of whales drifts and dives inside a glassy cube of water, under a slow turntable camera. Three.js.</p>
-          <p class="card__credits">Opus 4.8</p>
-          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
-        </div>
-      </a>
       <a class="card" href="./mirror-field/" data-tags="art" data-status="done">
         <img class="thumb" src="./mirror-field/thumbnail.jpg" alt="Screenshot of Mirror Field" loading="lazy" />
         <div class="card__body">
@@ -361,6 +352,24 @@
           <p class="card__desc">A square of paper folds itself into a crane through real inside reverse folds, step by step, under a slow turntable camera. Three.js.</p>
           <p class="card__credits">Opus 4.8 + Fable 5</p>
           <div class="card__tags"><span class="tag">art</span></div>
+        </div>
+      </a>
+      <a class="card" href="./whale-cube/" data-tags="art kids" data-status="done">
+        <img class="thumb" src="./whale-cube/thumbnail.jpg" alt="Screenshot of Whale Cube" loading="lazy" />
+        <div class="card__body">
+          <h2 class="card__title">Whale Cube</h2>
+          <p class="card__desc">A pod of whales drifts and dives inside a glassy cube of water, under a slow turntable camera. Three.js.</p>
+          <p class="card__credits">Opus 4.8</p>
+          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
+        </div>
+      </a>
+      <a class="card" href="./black-snake-swamp/" data-tags="art kids" data-status="done">
+        <img class="thumb" src="./black-snake-swamp/thumbnail.jpg" alt="Screenshot of Black Snake Swamp" loading="lazy" />
+        <div class="card__body">
+          <h2 class="card__title">Black Snake Swamp</h2>
+          <p class="card__desc">A dark-forest swamp at night: a black snake slithers across the water, evaporating it into rising steam while terrified frogs croak and tremble. Procedural canvas + Web Audio spooky ambience, fully self-contained.</p>
+          <p class="card__credits">Opus 4.8</p>
+          <div class="card__tags"><span class="tag">art</span><span class="tag">kids</span></div>
         </div>
       </a>
     </main>
