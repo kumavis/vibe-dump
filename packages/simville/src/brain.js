@@ -5,16 +5,25 @@
 // to know which one is installed:
 //
 //   OfflineBrain  grammar + memory retrieval. Instant, works with no GPU and no
-//                 network, and is what the town runs on by default.
+//                 network, and is what you arrive with.
 //   LiveBrain     a real LLM on the GPU (WebLLM / WebGPU, in a worker), with
 //                 JSON-schema-constrained output so a 0.8B model can't wander
 //                 off and return an essay instead of four lines of dialogue.
 //
-// BrainHub picks between them per request. Anything the live brain can't take
-// right now — still loading, queue already deep, threw — silently falls back,
-// because a town that stops talking is worse than a town talking in templates.
+// BrainHub installs exactly one of them, chosen by the player, and never
+// substitutes. See the note above the class for why that matters.
 
 import { pick } from './util.js'
+
+// The brains on offer, scripted first because it's what you arrive with and
+// what you fall back to on a machine with no WebGPU. It is listed as a peer of
+// the models, not hidden behind them, so choosing it is a choice.
+export const SCRIPTED = {
+  id: 'scripted',
+  label: 'No model',
+  note: 'a grammar per resident — instant, offline, and obviously not thinking',
+  vram: 0,
+}
 
 export const MODELS = [
   {
@@ -499,11 +508,22 @@ export class LiveBrain {
 
 // -------------------------------------------------------------------- hub ---
 
+// Which brain is installed is a mode the player picks, not something the hub
+// decides per request.
+//
+// It used to fall back to the grammar whenever the model was busy, slow or
+// threw, which meant a town running a real model still emitted scripted lines
+// several times a minute with nothing to tell them apart — the one genuinely
+// dishonest thing this could do. So: `scripted` gives you the grammar and says
+// so, `live` gives you the model and nothing else. A model that can't take a
+// request right now produces silence, and the town carries on without words,
+// because a conversation you can't hear is true and a fake one isn't.
 export class BrainHub {
   constructor(rng = Math.random) {
     this.offline = new OfflineBrain(rng)
     this.live = null
-    this.status = 'offline' // offline | loading | live | failed
+    this.mode = 'scripted' // scripted | live
+    this.status = 'scripted' // scripted | loading | live | failed
     this.progress = 0
     this.detail = ''
     this.error = null
@@ -511,8 +531,10 @@ export class BrainHub {
     this.pending = 0
     this.listeners = new Set()
     // Two in flight is enough to keep the GPU busy without the town drifting
-    // minutes behind the words coming out of it.
+    // minutes behind the words coming out of it. Anything past that is a
+    // conversation nobody hears.
     this.maxPending = 2
+    this.skipped = 0 // conversations the model was too busy to speak for
   }
 
   onChange(fn) {
@@ -530,6 +552,7 @@ export class BrainHub {
 
   async wake(modelId) {
     if (this.status === 'loading') return
+    this.mode = 'live'
     this.status = 'loading'
     this.progress = 0
     this.detail = 'starting up'
@@ -550,38 +573,55 @@ export class BrainHub {
       this.error = err?.message ?? String(err)
       this.status = 'failed'
       this.live = null
+      // A model that never arrived must not leave the town silently running on
+      // the grammar while the header claims a model is in.
+      this.mode = 'scripted'
+      this.modelId = null
     }
     this.#emit()
   }
 
+  // Back to the grammar, deliberately. Unloading frees the GPU memory.
   async sleep() {
     const live = this.live
     this.live = null
-    this.status = 'offline'
+    this.mode = 'scripted'
+    this.status = 'scripted'
+    this.modelId = null
     this.progress = 0
     this.error = null
     this.#emit()
-    await live?.unload()
+    // The mode has already flipped; a failure tearing the engine down must not
+    // propagate and leave the UI thinking the switch didn't happen.
+    try {
+      await live?.unload()
+    } catch (err) {
+      console.warn('[simville] unloading the model failed:', err)
+    }
   }
 
-  // Route one request. `name` is the method; everything else is passed through.
-  // The live brain only gets it if it's up and not already backed up.
-  async #route(name, args, { allowQueue = true } = {}) {
-    if (this.isLive && (allowQueue || this.pending === 0) && this.pending < this.maxPending) {
-      this.pending++
-      this.#emit()
-      try {
-        return await this.live[name](...args)
-      } catch (err) {
-        // A single bad generation is not worth tearing the model down for; a
-        // dead engine will keep throwing and every call just falls through.
-        console.warn(`[simville] live ${name} failed, falling back:`, err)
-      } finally {
-        this.pending--
-        this.#emit()
-      }
+  // Route one request to whichever brain is installed. In `live` mode the
+  // grammar is not a fallback — if the model can't take this one, nobody says
+  // anything, and `null` tells the sim to run the conversation silently.
+  async #route(name, args) {
+    if (this.mode !== 'live') return this.offline[name](...args)
+    if (!this.isLive || this.pending >= this.maxPending) {
+      this.skipped++
+      return null
     }
-    return this.offline[name](...args)
+    this.pending++
+    this.#emit()
+    try {
+      return await this.live[name](...args)
+    } catch (err) {
+      // One bad generation isn't worth tearing the model down for, and a dead
+      // engine will simply keep returning nothing.
+      console.warn(`[simville] ${name} failed; staying quiet rather than faking it:`, err)
+      return null
+    } finally {
+      this.pending--
+      this.#emit()
+    }
   }
 
   converse(ctx) {
@@ -592,8 +632,9 @@ export class BrainHub {
     return this.#route('reflect', [ctx])
   }
 
-  // Straight to the offline brain, no promise. The warm start needs a few hours
-  // of town history before the first frame draws, and can't await for it.
+  // Straight to the grammar, no promise. The warm start replays hours of town
+  // history before the first frame draws and can't await anything; it only ever
+  // runs at startup, when no model has been loaded yet.
   converseSync(ctx) {
     return this.offline.converse(ctx)
   }
@@ -619,25 +660,27 @@ export class BrainHub {
     }
   }
 
-  // The player's own question jumps the queue — they're waiting on it.
+  // The player's own question jumps the queue — they asked, and they're waiting.
+  // In live mode a failure is reported rather than papered over with a grammar
+  // line the player would have no way of recognising as one.
   async interview(ctx, onToken) {
-    if (this.isLive) {
-      this.pending++
+    if (this.mode !== 'live') return this.offline.interview(ctx)
+    if (!this.isLive) return null
+    this.pending++
+    this.#emit()
+    try {
+      return await this.live.interview(ctx, onToken)
+    } catch (err) {
+      console.warn('[simville] interview failed:', err)
+      return null
+    } finally {
+      this.pending--
       this.#emit()
-      try {
-        return await this.live.interview(ctx, onToken)
-      } catch (err) {
-        console.warn('[simville] live interview failed, falling back:', err)
-      } finally {
-        this.pending--
-        this.#emit()
-      }
     }
-    return this.offline.interview(ctx)
   }
 
   get stats() {
     if (!this.isLive) return null
-    return { tps: this.live.tokensPerSecond, tokens: this.live.tokens }
+    return { tps: this.live.tokensPerSecond, tokens: this.live.tokens, skipped: this.skipped }
   }
 }

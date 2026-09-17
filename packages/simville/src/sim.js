@@ -32,6 +32,9 @@ const REFLECT_AFTER = 16
 const DECIDE_EVERY = 150 // sim minutes between a resident's free-time decisions
 const DRIFT_EVERY = 55 // sim minutes before someone will wander off again
 const DRIFT_CHANCE = 0.012 // per idle minute, so roughly one errand every 1-2 hours
+// How long two people stand together when there are no words for them — long
+// enough to read as a conversation, short enough not to hold up the day.
+const MURMUR_SECONDS = 4.5
 
 // How readily each resident passes something on, and how readily they swallow
 // it. Milo is the town's network backbone; Ray is where rumours go to die.
@@ -63,6 +66,7 @@ class Agent {
     this.resumeGoal = null
     this.bubble = null
     this.thought = ''
+    this.thoughtScripted = false
     this.lastTalk = new Map()
     this.sinceReflect = 0
     this.lastDecision = -1e9
@@ -416,9 +420,12 @@ export class Simulation {
       topics: a.topics(3),
       memories: a.recall('', 5),
     }
+    // Null when the model was busy or threw: no thought, rather than a
+    // grammar one wearing the model's name.
     const res = sync || !this.brain ? (this.brain?.reflectSync(ctx) ?? null) : await this.brain.reflect(ctx)
     if (!res?.text) return
     a.thought = res.text
+    a.thoughtScripted = res.source !== 'live'
     a.memory.add(this.time, 'reflection', res.text, 6, { topic: ctx.topics[0] ?? null })
     this.stats.reflections++
     this.logEvent('reflection', `${a.firstName}: “${res.text}”`, [a.id])
@@ -458,7 +465,8 @@ export class Simulation {
       startedReal: this.realClock,
       startedSim: this.time,
       rumour: null,
-      source: 'offline',
+      silent: false,
+      source: 'none',
     }
     a.conversation = conv.id
     b.conversation = conv.id
@@ -478,13 +486,13 @@ export class Simulation {
 
     const ctx = this.#conversationContext(conv)
     if (sync || !this.brain) {
-      this.#fillConversation(conv, this.brain ? this.brain.converseSync(ctx) : { lines: [], source: 'offline' })
+      this.#fillConversation(conv, this.brain ? this.brain.converseSync(ctx) : null)
     } else {
       a.say('…', 20)
       this.brain
         .converse(ctx)
         .then((res) => this.#fillConversation(conv, res))
-        .catch(() => this.#fillConversation(conv, this.brain.converseSync(ctx)))
+        .catch(() => this.#fillConversation(conv, null))
     }
   }
 
@@ -509,25 +517,33 @@ export class Simulation {
     }
   }
 
+  // `res` is null when the installed brain had nothing to give — the model was
+  // busy, or it threw. The two of them still stop and talk, and the rumour still
+  // changes hands; we just don't get to hear it. Filling the silence with a
+  // grammar line would be the one thing this shouldn't do.
   #fillConversation(conv, res) {
     if (!this.conversations.includes(conv)) return
-    conv.lines = res?.lines?.length ? res.lines : [{ who: 'a', text: '…' }]
-    conv.source = res?.source ?? 'offline'
+    conv.lines = res?.lines?.length ? res.lines : []
+    conv.silent = conv.lines.length === 0
+    conv.source = res?.source ?? 'none'
     conv.pending = false
     conv.idx = -1
-    conv.nextAt = this.realClock
+    conv.nextAt = this.realClock + (conv.silent ? MURMUR_SECONDS : 0)
     conv.a.bubble = null
     conv.b.bubble = null
+    if (conv.silent) {
+      // A murmur, so you can see a conversation happening even when there are
+      // no words for it.
+      conv.a.say('⋯', MURMUR_SECONDS)
+    }
   }
 
   #tickConversations() {
     for (let i = this.conversations.length - 1; i >= 0; i--) {
       const conv = this.conversations[i]
-      // Waiting on the model. Give it a while, then take the template.
+      // Waiting on the model. Give it a while, then let them talk in private.
       if (conv.pending) {
-        if (this.realClock - conv.startedReal > 25) {
-          this.#fillConversation(conv, this.brain?.converseSync(this.#conversationContext(conv)))
-        }
+        if (this.realClock - conv.startedReal > 25) this.#fillConversation(conv, null)
         continue
       }
       if (this.realClock < conv.nextAt) continue
@@ -600,6 +616,31 @@ export class Simulation {
     for (const p of [a, b]) {
       if (p.resumeGoal) this.#sendTo(p, p.resumeGoal)
       p.resumeGoal = null
+    }
+  }
+
+  // Called the moment a model is installed. A conversation begun under the
+  // grammar still has un-played lines queued, and a thought from the warm start
+  // is grammar prose sitting in the inspector — both would surface after the
+  // header started claiming a model was in, which is the whole thing we're
+  // trying not to do. Drop them; what's already on screen finishes.
+  dropScriptedWords() {
+    for (const conv of this.conversations) {
+      if (conv.source !== 'offline') continue
+      // Including whatever is mid-bubble. Letting the current line play out
+      // reads as the model's first words and is exactly the confusion this
+      // exists to prevent; a bubble vanishing when you deliberately change
+      // what's doing the talking is the expected thing.
+      conv.lines = []
+      conv.source = 'dropped'
+      conv.nextAt = this.realClock
+      conv.a.bubble = null
+      conv.b.bubble = null
+    }
+    for (const a of this.agents) {
+      if (!a.thoughtScripted) continue
+      a.thought = ''
+      a.thoughtScripted = false
     }
   }
 

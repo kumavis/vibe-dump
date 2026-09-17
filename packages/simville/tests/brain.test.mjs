@@ -8,7 +8,7 @@
 // comes back.
 //
 //   node tests/brain.test.mjs
-import { LiveBrain, OfflineBrain } from '../src/brain.js'
+import { BrainHub, LiveBrain, OfflineBrain } from '../src/brain.js'
 
 let pass = 0
 let fail = 0
@@ -158,6 +158,50 @@ console.log('offline brain is synchronous (the warm start depends on it)')
   const r = o.converse({ a: { ...ctxA.a, voice }, b: { ...ctxA.b, voice }, rumour: { text: 'the well' } })
   check('returns a value, not a promise', !(r instanceof Promise) && r.lines.length === 4)
   check('rumour reaches the line', r.lines[2].text.includes('the well'), JSON.stringify(r.lines[2]))
+}
+
+console.log('the hub never substitutes one brain for the other')
+{
+  // The bug this guards: in live mode the hub used to fall back to the grammar
+  // whenever the model was busy or threw, so a town running a real model still
+  // emitted scripted lines with nothing to tell them apart.
+  const hub = new BrainHub(() => 0.5)
+  check('starts on the grammar', hub.mode === 'scripted' && hub.status === 'scripted')
+
+  const voice = { open: ['Hi {them}.'], reply: ['Mm.'], gossip: ['{rumor}'], hear: ['Oh.'], idle: ['...'] }
+  const ctx = { a: { ...ctxA.a, voice }, b: { ...ctxA.b, voice }, rumour: null }
+  const scripted = await hub.converse(ctx)
+  check('scripted mode speaks', scripted?.lines?.length === 4 && scripted.source === 'offline')
+
+  // Live, but the queue is full.
+  hub.mode = 'live'
+  hub.live = { engine: {}, unload: async () => {} }
+  hub.status = 'live'
+  hub.pending = hub.maxPending
+  check('busy model returns nothing, not a grammar line', (await hub.converse(ctx)) === null)
+  check('busy model has no thought either', (await hub.reflect({ topics: ['x'], memories: [] })) === null)
+  // The player's own question deliberately jumps the queue, so it isn't a
+  // "skip" — but a failure there still returns nothing rather than a grammar
+  // line the player would read as the model's.
+  check('a failed interview returns nothing', (await hub.interview({ self: { voice } })) === null)
+  check('both skips counted', hub.skipped === 2, String(hub.skipped))
+
+  // Live, free, but the engine throws.
+  hub.pending = 0
+  hub.live = {
+    engine: {},
+    unload: async () => {},
+    converse: async () => {
+      throw new Error('boom')
+    },
+  }
+  check('a throwing model returns nothing, not a grammar line', (await hub.converse(ctx)) === null)
+
+  // And back again on purpose.
+  await hub.sleep()
+  check('sleep returns to the grammar', hub.mode === 'scripted' && hub.modelId === null)
+  const again = await hub.converse(ctx)
+  check('grammar speaks again once chosen', again?.source === 'offline')
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)
