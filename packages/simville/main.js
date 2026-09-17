@@ -62,12 +62,12 @@ const controls = {
     }
   },
   resize: () => renderer.resize(),
-  restart: () => {
+  restart: (note) => {
     sim = newTown((Math.random() * 0xffffffff) >>> 0)
     renderer.setSim(sim)
     ui.setSim(sim)
     globalThis.__simville.sim = sim
-    ui.toast('A new day, and nobody remembers the last one.')
+    ui.toast(note ?? 'A new day, and nobody remembers the last one.')
   },
 }
 

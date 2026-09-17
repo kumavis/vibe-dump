@@ -24,7 +24,10 @@
     ],
     "thinking": "high",
     "thumbnail": {
-      "click": "#panelclose",
+      "click": [
+        "#sheetclose",
+        "#panelclose"
+      ],
       "settle": 2500
     }
   }

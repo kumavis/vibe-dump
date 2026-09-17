@@ -1002,31 +1002,6 @@ export class Simulation {
     }
   }
 
-  // Called the moment a model is installed. A conversation begun under the
-  // grammar still has un-played lines queued, and a thought from the warm start
-  // is grammar prose sitting in the inspector — both would surface after the
-  // header started claiming a model was in, which is the whole thing we're
-  // trying not to do. Drop them; what's already on screen finishes.
-  dropScriptedWords() {
-    for (const conv of this.conversations) {
-      if (conv.source !== 'offline') continue
-      // Including whatever is mid-bubble. Letting the current line play out
-      // reads as the model's first words and is exactly the confusion this
-      // exists to prevent; a bubble vanishing when you deliberately change
-      // what's doing the talking is the expected thing.
-      conv.lines = []
-      conv.source = 'dropped'
-      conv.nextAt = this.realClock
-      conv.a.bubble = null
-      conv.b.bubble = null
-    }
-    for (const a of this.agents) {
-      if (!a.thoughtScripted) continue
-      a.thought = ''
-      a.thoughtScripted = false
-    }
-  }
-
   // ------------------------------------------------------------- the player ---
 
   async interview(agentId, question, onToken) {

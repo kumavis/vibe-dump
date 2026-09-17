@@ -132,6 +132,10 @@ export class UI {
     this.brain.onChange(() => this.renderBrainState())
     this.renderBrainState()
     this.renderRail(true)
+    // The picker is the first thing you see. What the residents think with is
+    // the decision this whole thing is about, and leaving it behind a button in
+    // the corner meant most people never knowingly made it.
+    this.openSheet()
   }
 
   // Point the panel at a new town. The model, if one is loaded, stays loaded.
@@ -206,14 +210,25 @@ export class UI {
     brains.textContent = b.isLive
       ? `eight residents · real memories, words by ${model}`
       : 'eight residents · real memories, scripted words'
-    const installed = `${b.mode}:${b.modelId ?? ''}`
+    // Only a settled brain counts. `wake` flips the mode the instant it starts
+    // downloading, and a failed load flips it back — neither is a change worth
+    // acting on, and acting on both would restart the town twice for nothing.
+    const settled = b.status === 'live' || b.status === 'scripted'
+    const installed = settled ? `${b.mode}:${b.modelId ?? ''}` : this._installed
     if (installed !== this._installed) {
-      const wasScripted = this._installed?.startsWith('scripted')
+      const first = this._installed === undefined
       this._installed = installed
       this.renderModels()
-      // Swapping the grammar out for a model takes effect immediately, backlog
-      // and all — see Simulation#dropScriptedWords.
-      if (b.isLive && wasScripted !== false) this.sim.dropScriptedWords()
+      // A new brain gets a new town. Half a day of somebody else's dialogue,
+      // reflections and errands is not this model's history, and leaving it in
+      // place is the same confusion as the fallback used to cause.
+      if (!first) {
+        this.controls.restart(
+          b.isLive
+            ? `${model} is in, on a fresh town. Everything they say from here is theirs.`
+            : 'Back to the grammar, on a fresh town. Every line is scripted again.',
+        )
+      }
     }
     if (b.status === 'loading') {
       wakeLabel.textContent = `Loading… ${Math.round(b.progress * 100)}%`
@@ -227,8 +242,9 @@ export class UI {
       loadtext.textContent = ''
       if (!this._announced) {
         this._announced = true
+        // The restart note below is the one message about this; a second toast
+        // here would only land on top of it.
         this.closeSheet()
-        this.toast('The model is in. Everything they say from here is theirs.', 4200)
       }
     } else if (b.status === 'failed') {
       wakeLabel.textContent = 'Couldn’t load'
