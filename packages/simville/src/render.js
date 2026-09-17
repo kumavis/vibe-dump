@@ -243,6 +243,14 @@ export class Renderer {
     this.showNames = true
   }
 
+  // Restarting builds a whole new Simulation; the renderer's cached terrain
+  // belongs to the old one and has to go with it.
+  setSim(sim) {
+    this.sim = sim
+    this.hover = null
+    this.resize()
+  }
+
   resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     const rect = this.canvas.getBoundingClientRect()
@@ -887,12 +895,16 @@ export class Renderer {
   #drawGroundTool(ctx, o, t) {
     const cx = o.x * TILE + TILE / 2
     const cy = o.y * TILE + TILE / 2
-    ctx.fillStyle = 'rgba(20,25,35,.22)'
+    // At the scale the whole town has to fit into, a bare icon on grass is a
+    // smudge. The pad is what makes it read as an object lying there.
+    ctx.fillStyle = 'rgba(24,30,40,.3)'
     ctx.beginPath()
-    ctx.ellipse(cx, cy + 5, 8, 3.2, 0, 0, Math.PI * 2)
+    ctx.ellipse(cx, cy + 4, 11, 6, 0, 0, Math.PI * 2)
     ctx.fill()
-    // A slow bob, so a thing lying in the grass still catches the eye.
-    drawTool(ctx, o.def.id, cx, cy + Math.sin(t * 0.0016 + o.x) * 0.7, 0.82)
+    ctx.strokeStyle = 'rgba(255,246,222,.3)'
+    ctx.lineWidth = 1
+    ctx.stroke()
+    drawTool(ctx, o.def.id, cx, cy + Math.sin(t * 0.0016 + o.x) * 0.7, 1.05)
   }
 
   #drawAgent(ctx, a, t) {
@@ -974,10 +986,17 @@ export class Renderer {
       ctx.fillRect(cx + 0.8 + dx, y - 11.4, 1.5, 1.8)
     }
 
-    // What they're carrying, tucked under the trailing arm.
+    // What they're carrying, held clear of the body on the trailing side so the
+    // silhouette isn't fighting the shirt colour behind it.
     if (a.carrying) {
       const side = a.facing === 'w' ? -1 : 1
-      drawTool(ctx, a.carrying, cx + side * 9, y + 1, 0.62)
+      const hx = cx + side * 11
+      const hy = y - 1
+      ctx.fillStyle = 'rgba(24,30,40,.28)'
+      ctx.beginPath()
+      ctx.ellipse(hx, hy + 1, 8.5, 8.5, 0, 0, Math.PI * 2)
+      ctx.fill()
+      drawTool(ctx, a.carrying, hx, hy, 0.86)
     }
 
     // Looking for something, said without words — a model isn't speaking for

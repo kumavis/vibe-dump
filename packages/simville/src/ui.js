@@ -54,6 +54,7 @@ export class UI {
       loadfill: document.getElementById('loadfill'),
       loadtext: document.getElementById('loadtext'),
       brains: document.getElementById('brains'),
+      restart: document.getElementById('restart'),
       toast: document.getElementById('toast'),
       canvas: document.getElementById('town'),
     }
@@ -69,6 +70,28 @@ export class UI {
         this.controls.setSpeed(Number(b.dataset.speed))
       })
     }
+
+    // Two-step, because one stray click would otherwise wipe eight memory
+    // streams and there's no undo for that.
+    el.restart.addEventListener('click', () => {
+      if (this._armed) {
+        clearTimeout(this._armTimer)
+        this._armed = false
+        el.restart.textContent = '⟳'
+        el.restart.classList.remove('armed')
+        this.controls.restart()
+        return
+      }
+      this._armed = true
+      el.restart.textContent = '?'
+      el.restart.classList.add('armed')
+      this.toast('Start over? Press again. Everything they remember goes.', 3400)
+      this._armTimer = setTimeout(() => {
+        this._armed = false
+        el.restart.textContent = '⟳'
+        el.restart.classList.remove('armed')
+      }, 3400)
+    })
 
     el.panelClose.addEventListener('click', () => this.setRail(false))
     el.railOpen.addEventListener('click', () => this.setRail(true))
@@ -108,6 +131,17 @@ export class UI {
     this.renderModels()
     this.brain.onChange(() => this.renderBrainState())
     this.renderBrainState()
+    this.renderRail(true)
+  }
+
+  // Point the panel at a new town. The model, if one is loaded, stays loaded.
+  setSim(sim) {
+    this.sim = sim
+    this.lastEventCount = -1
+    this.answer = null
+    this.answerSource = null
+    this.draftQuestion = ''
+    this.el.back.hidden = true
     this.renderRail(true)
   }
 

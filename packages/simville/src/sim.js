@@ -18,8 +18,8 @@ import {
   mulberry32,
   scatterNear,
 } from './town.js'
-import { ACTION_BY_ID, TIDY, TOOLS, actionsFor, toolName } from './objects.js'
-import { clamp, pick, timeOfDay } from './util.js'
+import { ACTION_BY_ID, TIDY, TOOLS, actionsFor, matchTool, toolName } from './objects.js'
+import { clamp, clockOf, pick, timeOfDay } from './util.js'
 
 const DAY_START = 7 * 60
 const WALK_SPEED = 2.4 // tiles per sim minute
@@ -743,7 +743,7 @@ export class Simulation {
     if (a.carrying) this.#setDown(a)
     t.holder = a.id
     a.carrying = toolId
-    a.memory.add(this.time, 'object', `picked up the ${toolName(toolId)}`, 4, {
+    a.memory.add(this.time, 'object', `picked up the ${toolName(toolId)}`, 6, {
       topic: `the ${toolName(toolId)}`,
       tool: toolId,
       holder: a.id,
@@ -767,7 +767,7 @@ export class Simulation {
       t.y = Math.round(a.y)
     }
     const where = this.placeWords(t.x, t.y)
-    a.memory.add(this.time, 'object', `left the ${toolName(toolId)} at ${where}`, 3, {
+    a.memory.add(this.time, 'object', `left the ${toolName(toolId)} at ${where}`, 5, {
       topic: `the ${toolName(toolId)}`,
       tool: toolId,
       spot: { x: t.x, y: t.y, where },
@@ -805,6 +805,15 @@ export class Simulation {
   // Noticing objects, which works exactly like noticing people: near enough,
   // once, and into the stream. These records are the only thing anybody has to
   // go on later.
+  // Already knowing this exact thing — same tool, same spot, not since proven
+  // wrong — means there's nothing to learn and nothing to file.
+  #alreadyKnows(a, toolId, spot, holder) {
+    const known = this.lastKnownTool(a, toolId)
+    if (!known) return false
+    if (holder) return known.holder === holder && !known.spot
+    return known.spot && known.spot.x === spot.x && known.spot.y === spot.y
+  }
+
   #noticeObjects(a) {
     for (const b of this.agents) {
       if (b === a || b.asleep || !b.carrying) continue
@@ -812,6 +821,7 @@ export class Simulation {
       const key = `carry:${b.id}:${b.carrying}`
       if (d < 4.5 && !a.seen.has(key)) {
         a.seen.add(key)
+        if (this.#alreadyKnows(a, b.carrying, null, b.id)) continue
         a.memory.add(this.time, 'object', `saw ${b.name} carrying the ${toolName(b.carrying)}`, 4, {
           topic: `the ${toolName(b.carrying)}`,
           who: b.id,
@@ -827,6 +837,7 @@ export class Simulation {
       if (d < 4.5) {
         if (a.seen.has(key)) continue
         a.seen.add(key)
+        if (this.#alreadyKnows(a, id, { x: t.x, y: t.y }, null)) continue
         const where = this.placeWords(t.x, t.y)
         a.memory.add(this.time, 'object', `saw the ${toolName(id)} lying at ${where}`, 3, {
           topic: `the ${toolName(id)}`,
@@ -1021,18 +1032,44 @@ export class Simulation {
   async interview(agentId, question, onToken) {
     const a = this.byId.get(agentId)
     if (!a) return null
+    // If they're being asked about a thing, the answer comes out of the memory
+    // stream, the same way it does when another resident asks. What they can
+    // say is bounded by what they actually saw.
+    const askedAbout = matchTool(question)
+    let item = null
+    if (askedAbout) {
+      const known = this.lastKnownTool(a, askedAbout)
+      item = {
+        tool: askedAbout,
+        name: toolName(askedAbout),
+        carrying: a.carrying === askedAbout,
+        answer: known ? (known.spot ? known.spot.where : this.byId.get(known.holder)?.name) : null,
+        heldBy: known?.holder ? this.byId.get(known.holder)?.name : null,
+        when: known ? clockOf(known.t) : null,
+      }
+    }
     const ctx = {
       self: { name: a.name, role: a.role, bio: a.def.bio, voice: a.def.voice },
       place: this.whereIs(a).short,
       doing: a.doing,
       timeOfDay: timeOfDay(this.time),
-      memories: a.recall(question, 4),
+      // Records of being interviewed are filtered out: quoting one back at the
+      // visitor produces "what I can tell you is this: was asked about you",
+      // which is a hall of mirrors rather than an answer.
+      memories: a.memory
+        .retrieve(this.time, question, 8)
+        .map((r) => r.m)
+        .filter((m) => !m.visitor)
+        .slice(0, 4)
+        .map((m) => m.text),
       rumours: a.knownRumours().map((r) => r.text),
+      item,
       question,
     }
     const res = await this.brain.interview(ctx, onToken)
     a.memory.add(this.time, 'dialogue', `was asked about ${shortQuestion(question)} by a visitor`, 5, {
       topic: shortQuestion(question),
+      visitor: true,
     })
     if (res?.text) a.say(res.text.split(/(?<=[.!?])\s/)[0].slice(0, 90), 6)
     return res

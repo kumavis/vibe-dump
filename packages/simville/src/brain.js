@@ -219,6 +219,18 @@ export class OfflineBrain {
   interview(ctx) {
     const rng = this.rng
     const bits = []
+    // Asked about a thing: answer from the memory the simulation looked up,
+    // and say plainly when there's nothing there.
+    if (ctx.item) {
+      if (ctx.item.carrying) return { text: `I've got it right here.`, source: 'offline' }
+      if (ctx.item.answer) {
+        return {
+          text: `${pick(rng, TELLS).replace('{where}', ctx.item.answer)} That was ${ctx.item.when}.`,
+          source: 'offline',
+        }
+      }
+      return { text: `The ${ctx.item.name}? ${pick(rng, DUNNOS)}`, source: 'offline' }
+    }
     bits.push(pick(rng, ctx.self.voice.reply))
     if (ctx.memories.length) {
       bits.push(`What I can tell you is this: ${ctx.memories[0]}.`)
@@ -531,6 +543,16 @@ export class LiveBrain {
             `It is ${ctx.timeOfDay} and you are at ${ctx.place}, ${ctx.doing}.\n` +
             (ctx.memories.length ? `Recently: ${ctx.memories.join('; ')}.\n` : '') +
             (ctx.rumours.length ? `Rumours you've heard: ${ctx.rumours.join('; ')}.\n` : '') +
+            // Questions about an object are answered from the memory stream, so
+            // the fact is settled before the model sees it and the model's job
+            // is only to say it in character.
+            (ctx.item
+              ? ctx.item.carrying
+                ? `You are asked about the ${ctx.item.name}. You are holding it right now — say so.\n`
+                : ctx.item.answer
+                  ? `You are asked about the ${ctx.item.name}. The last you saw of it was at ${ctx.item.answer}, at ${ctx.item.when}. Say that and nothing else about where it is — do not name any other place.\n`
+                  : `You are asked about the ${ctx.item.name}. You have not seen it and have no idea where it is. Say so plainly; do not guess at a location.\n`
+              : '') +
             'Answer in character, in two or three short sentences. Never break character or mention being a model.',
         },
         { role: 'user', content: ctx.question },

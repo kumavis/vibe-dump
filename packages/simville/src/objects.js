@@ -160,6 +160,42 @@ export function actionsFor(agentId) {
   return ACTIONS.filter((a) => a.who.includes(agentId))
 }
 
+// Words that mean a particular tool, for spotting one in a question somebody
+// types. Deliberately no bare "kettle" — that's the café, and asking what's
+// happening at the Kettle shouldn't be read as asking after the teapot.
+const ALIASES = {
+  rod: ['fishing rod', 'the rod', 'fishing pole', 'fishing'],
+  axe: ['axe', 'ax '],
+  broom: ['broom', 'sweeping brush'],
+  can: ['watering can', 'the can'],
+  teapot: ['copper kettle', 'teapot', 'tea pot'],
+  spanner: ['spanner', 'wrench'],
+  brushes: ['paint brushes', 'paintbrush', 'brushes', 'paints'],
+  ledger: ['ledger', 'the book'],
+  pin: ['rolling pin'],
+  scales: ['scales', 'the balance'],
+  ladder: ['ladder'],
+  bucket: ['bucket', 'pail'],
+}
+
+// Which tool, if any, a question is about.
+export function matchTool(text) {
+  const q = ` ${String(text).toLowerCase().replace(/[^a-z ]/g, ' ')} `
+  let best = null
+  let bestLen = 0
+  for (const [id, words] of Object.entries(ALIASES)) {
+    for (const w of words) {
+      if (q.includes(` ${w.trim()} `) || q.includes(`${w} `)) {
+        if (w.length > bestLen) {
+          bestLen = w.length
+          best = id
+        }
+      }
+    }
+  }
+  return best
+}
+
 export function toolName(id) {
   return TOOL_BY_ID.get(id)?.name ?? id
 }

@@ -203,6 +203,12 @@ body {
   border-color: var(--gold);
 }
 
+.icon.armed {
+  color: #14181f;
+  background: var(--warm);
+  border-color: var(--warm);
+}
+
 /* --------------------------------------------------------------- the log */
 
 #log {
@@ -620,6 +626,20 @@ button.go:disabled {
 
 .mem.k-dialogue .tx {
   color: #d3e3ef;
+}
+
+/* Objects — picking one up, putting it down, spotting one — read as their own
+   thread through the stream rather than as more of the ambient noticing. */
+.mem.k-object .tx {
+  color: #f0e4c6;
+}
+
+.mem.k-object .imp {
+  background: linear-gradient(180deg, var(--gold), rgba(232, 192, 105, 0.15));
+}
+
+.mem.k-plan .tx {
+  color: #cfeedb;
 }
 
 .mem .imp {
