@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Simville</title>
+    <meta
+      name="description"
+      content="A small town of generative agents that keep schedules, bump into each other and gossip — optionally powered by an LLM running on your own GPU."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%237aa857'/%3E%3Cpath d='M6 20h20v6H6z' fill='%23cbb491'/%3E%3Cpath d='M9 8h6v12H9zM18 11h7v9h-7z' fill='%239c6242'/%3E%3Ccircle cx='12' cy='24' r='2.4' fill='%23e8734a'/%3E%3Ccircle cx='21' cy='24' r='2.4' fill='%234a9fd8'/%3E%3C/svg%3E"
+    />
+    <script type="module" crossorigin src="./assets/index-DEwSzk7Y.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B2KY0BC6.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage">
+        <canvas id="town"></canvas>
+
+        <header id="hud">
+          <div class="brand">
+            <h1>Simville</h1>
+            <p>eight residents, one memory stream each</p>
+          </div>
+
+          <div class="clock">
+            <div class="clock-time"><span id="clock">07:00</span></div>
+            <div class="clock-sub"><span id="day">Day 1</span> · <span id="tod">early morning</span></div>
+          </div>
+
+          <div class="speeds" role="group" aria-label="Simulation speed">
+            <button type="button" data-speed="0" title="Pause">❙❙</button>
+            <button type="button" data-speed="1" class="on">1×</button>
+            <button type="button" data-speed="3">3×</button>
+            <button type="button" data-speed="8">8×</button>
+          </div>
+
+          <button type="button" id="wake" class="wake">
+            <span class="wake-dot"></span>
+            <span id="wake-label">Wake the minds</span>
+          </button>
+
+          <button type="button" id="railopen" class="icon" title="Open the panel" hidden>☰</button>
+        </header>
+
+        <div id="log" aria-live="polite"></div>
+
+        <div id="toast" hidden></div>
+      </div>
+
+      <aside id="rail">
+        <div class="rail-top">
+          <button type="button" id="back" class="linky" hidden>← the town</button>
+          <button type="button" id="panelclose" class="icon" title="Hide the panel">✕</button>
+        </div>
+        <div id="rail-body"></div>
+      </aside>
+    </div>
+
+    <div id="sheet" class="sheet" hidden>
+      <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <h2 id="sheet-title">Put a real mind in them</h2>
+        <p class="sheet-lede">
+          Simville runs on templates by default. Load a language model and it takes over the dialogue, the
+          end-of-day reflections, what people do with a free hour, and any question you ask them. The model runs
+          <strong>entirely in this tab</strong>, on your GPU, through
+          <a href="https://github.com/mlc-ai/web-llm" target="_blank" rel="noreferrer">WebLLM</a> and WebGPU. No
+          server sees a word of it.
+        </p>
+        <div id="modellist" class="models"></div>
+        <p class="sheet-note">
+          First load downloads the weights from Hugging Face and caches them in your browser — a few hundred
+          megabytes to a couple of gigabytes, once. Needs WebGPU: Chrome or Edge 113+, Safari 26+.
+        </p>
+        <div id="loadbar" class="loadbar" hidden><div id="loadfill"></div></div>
+        <p id="loadtext" class="loadtext"></p>
+        <div class="sheet-actions">
+          <button type="button" id="sheetclose" class="ghost">Not now</button>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

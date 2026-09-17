@@ -1,0 +1,1 @@
+(function(){"use strict";let e=null;const s=[];self.onmessage=n=>{var i;if(((i=n.data)==null?void 0:i.kind)==="simville-init"){import(n.data.lib).then(l=>{e=new l.WebWorkerMLCEngineHandler;for(const o of s.splice(0))e.onmessage(o)});return}e?e.onmessage(n):s.push(n)}})();
