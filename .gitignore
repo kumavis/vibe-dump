@@ -6,6 +6,8 @@ packages/*/dist/
 # and the scratch dirs the single-file build makes on its way to dist/artifact.html
 packages/*/dist-standalone/
 packages/*/dist-embed/
+# the WebLLM copy simville generates from node_modules on its way into dist/
+packages/*/public/vendor/
 .DS_Store
 *.log
 packages/*/tools/shots/
