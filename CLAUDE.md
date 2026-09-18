@@ -15,7 +15,7 @@ npm run build                                    (by hand — output is committe
                      • copies each packages/<name>/dist into dist/<name>/
                      • copies the committed packages/<name>/thumbnail.jpg beside it
                      • renders the grid dist/index.html from each package's
-                       `gallery` field, newest vibe first
+                       `gallery` field, most recently updated vibe first
 
 npm run thumbnails                               (needs a browser — run by hand)
 └─ scripts/thumbnails.mjs
@@ -132,7 +132,6 @@ a tag with no chip quietly drops the app out of every filtered view.
 | `status`   | `done` or `wip` (a `wip` card gets a badge)          |
 | `models`   | the model(s) that built it, e.g. `["Opus 4.8", "Opus 5"]`; `[]` if unrecorded |
 | `thinking` | `low` / `medium` / `high` / `max` / `ultracode`, or `unknown` |
-| `pinLast`  | `true` to sit at the end of the grid whatever the dates say; omit otherwise |
 
 The filter chips are OR **within** a group and AND **across** them, so `art` +
 `wip` means unfinished art things. The selection lives in the URL fragment —

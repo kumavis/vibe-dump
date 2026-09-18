@@ -384,11 +384,21 @@ async function main() {
   // `npm run verify` fails on the same list; here it's just a fast heads-up.
   for (const problem of metaProblems(apps)) console.warn(`! ${problem}`)
 
-  // Cards are ordered newest first off the git history. A shallow clone has no
-  // history to read, and would silently ship an alphabetical gallery.
-  if (apps.every((a) => !a.added)) {
+  // Cards are ordered by when each app was last touched, off the git history.
+  // Every package has at least one commit that changed it — that is how it got
+  // here — so a package with no date means the history does not go back far
+  // enough to hold it, and the cards around it are in the wrong order.
+  //
+  // `every` was not enough: a shallow clone deep enough to date SOME apps
+  // passed this and shipped a gallery with the undated ones swept to the end,
+  // which is a quieter version of the same wrong answer and produces a dist/
+  // that disagrees with the one CI would build.
+  const undated = apps.filter((a) => !a.updated)
+  if (undated.length > 0) {
     throw new Error(
-      'Could not read when any package was added, so the gallery cannot be ordered newest first.\n' +
+      `Could not read when ${undated.length} of ${apps.length} package(s) were last updated, ` +
+        'so the gallery cannot be ordered:\n' +
+        `  ${undated.map((a) => a.slug).join(', ')}\n` +
         'This is a shallow clone or not a git checkout — run "git fetch --unshallow" and build again.',
     )
   }
