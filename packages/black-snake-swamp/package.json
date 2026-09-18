@@ -18,6 +18,7 @@
     "models": [
       "Opus 4.8"
     ],
-    "thinking": "unknown"
+    "thinking": "unknown",
+    "pinLast": true
   }
 }

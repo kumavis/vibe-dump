@@ -108,6 +108,9 @@ export async function discoverApps() {
       status: meta.status ?? 'done',
       models: meta.models ?? [],
       thinking: meta.thinking ?? 'unknown',
+      // Send this one to the end of the grid whatever its date says. For an
+      // app whose add-commit is not a useful claim about how new it is.
+      pinLast: meta.pinLast === true,
       // Optional per-app thumbnail tuning, for apps that don't put their best
       // face forward on their own:
       //   "gallery": { "thumbnail": { "waitFor": "!#boot", "click": "#x", "settle": 2000 } }
@@ -121,9 +124,17 @@ export async function discoverApps() {
       click: meta.thumbnail?.click == null ? [] : [meta.thumbnail.click].flat(),
     })
   }
-  // Newest first. Eight apps arrived in the same monorepo import and share a
+  // Newest first, with anything asking for `pinLast` at the end whatever its
+  // date says. Eight apps arrived in the same monorepo import and share a
   // timestamp to the second, so title breaks the tie and the order stays stable
   // between builds instead of drifting with readdir.
-  apps.sort((a, b) => (b.added ?? '').localeCompare(a.added ?? '') || a.title.localeCompare(b.title))
+  //
+  // An app whose date could not be read sorts to the end too — which is every
+  // app, in a shallow clone, where `git log` cannot see the commit that added
+  // one. That is worth knowing when a rebuild reshuffles the grid for no
+  // apparent reason: the order is only right in a clone deep enough to hold
+  // the whole history.
+  const rank = (app) => (app.pinLast ? '' : (app.added ?? ''))
+  apps.sort((a, b) => rank(b).localeCompare(rank(a)) || a.title.localeCompare(b.title))
   return apps
 }

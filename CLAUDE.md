@@ -132,6 +132,7 @@ a tag with no chip quietly drops the app out of every filtered view.
 | `status`   | `done` or `wip` (a `wip` card gets a badge)          |
 | `models`   | the model(s) that built it, e.g. `["Opus 4.8", "Opus 5"]`; `[]` if unrecorded |
 | `thinking` | `low` / `medium` / `high` / `max` / `ultracode`, or `unknown` |
+| `pinLast`  | `true` to sit at the end of the grid whatever the dates say; omit otherwise |
 
 The filter chips are OR **within** a group and AND **across** them, so `art` +
 `wip` means unfinished art things. The selection lives in the URL fragment —
