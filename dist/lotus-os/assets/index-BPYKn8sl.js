@@ -1,4 +1,4 @@
-import{S as Ni}from"./index-C1s1riC0.js";/**
+import{S as Ni}from"./index-BssU8v2O.js";/**
  * @license
  * Copyright 2010-2023 Three.js Authors
  * SPDX-License-Identifier: MIT

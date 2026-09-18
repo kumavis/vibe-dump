@@ -13,10 +13,10 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  /* The artwork is drawn for the whole 1440x900 panel but lives under the app
-     bar, so give it those 40px back. Between this and the SVG's own YMax
-     alignment, whatever the panel's shape costs is taken out of the sky and
-     never out of the naga border along the bottom. */
+  /* The field is composed for the whole panel but lives under the app bar, so
+     give it those 40px back — which also makes this element exactly the
+     panel's size, and therefore exactly the shape motifs.js draws its viewBox
+     to. Nothing is cropped or stretched at any aspect because of that. */
   height: calc(100% + var(--bar-h));
   display: block;
 }

@@ -90,6 +90,9 @@ window.addEventListener('resize', () => {
   fit()
   flashOsd()
   shell.wm.reflow()
+  // The wallpaper is drawn to the panel's shape, not scaled to fit it, so a
+  // window that changed shape needs it drawn again.
+  desktop.reflowWallpaper()
 })
 fit()
 
@@ -110,7 +113,7 @@ const shell = createShell({
 })
 
 createAppBar({ root: appbarEl, shell, menuLayer })
-createDesktop({ root: desktopEl, shell, menuLayer })
+const desktop = createDesktop({ root: desktopEl, shell, menuLayer })
 
 // Open a couple of things so the machine looks inhabited the moment it is
 // switched on — an empty desktop is a screensaver, not a computer.

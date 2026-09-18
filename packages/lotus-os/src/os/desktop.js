@@ -5,6 +5,7 @@ import { el, clear } from './util.js'
 import { icon } from './icons.js'
 import { childrenOf, iconFor } from './fs.js'
 import { markFor, wallpaperSVG } from './motifs.js'
+import { SCREEN } from './screen.js'
 
 export function createDesktop({ root, shell, menuLayer }) {
   const wallpaper = el('div.wallpaper', { 'aria-hidden': 'true' })
@@ -13,11 +14,26 @@ export function createDesktop({ root, shell, menuLayer }) {
 
   let selected = null
 
+  // The field is composed for the panel's shape, so it has to be redrawn when
+  // that changes — and the panel is the browser window, so "when that changes"
+  // is forty times during one drag of a window edge. Redrawn only when the
+  // shape has actually moved enough to draw differently: two decimal places of
+  // aspect is about a pixel of skyline on any panel anyone has.
+  let paintedAspect = null
+
   function paintWallpaper() {
+    const aspect = SCREEN.w / SCREEN.h
+    paintedAspect = Math.round(aspect * 100)
     wallpaper.innerHTML = wallpaperSVG({
       theme: shell.prefs.get('theme'),
       ornament: shell.prefs.get('ornament'),
+      aspect,
     })
+  }
+
+  /** Called on every resize. Cheap when the shape has not really changed. */
+  function reflowWallpaper() {
+    if (Math.round((SCREEN.w / SCREEN.h) * 100) !== paintedAspect) paintWallpaper()
   }
 
   function select(node, cell) {
@@ -159,5 +175,5 @@ export function createDesktop({ root, shell, menuLayer }) {
     if (changed === 'theme' || changed === 'ornament' || changed === 'accent' || changed === '*') paintWallpaper()
   })
 
-  return { renderIcons, paintWallpaper, closeContextMenu: close }
+  return { renderIcons, paintWallpaper, reflowWallpaper, closeContextMenu: close }
 }

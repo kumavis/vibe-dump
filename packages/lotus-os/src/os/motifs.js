@@ -7,7 +7,7 @@
 // edges are fair game, what stands inside one is not. Everything draws in
 // currentColor so the gold and accent systems drive it without a repaint.
 
-import { round } from './util.js'
+import { round, clamp } from './util.js'
 
 /** Repeat one path around a centre. Rotational symmetry is most of the grammar. */
 const ring = (d, angles, cx, cy) =>
@@ -300,10 +300,27 @@ export function markFor(name) {
 
 // --- wallpaper ------------------------------------------------------------
 //
-// One 1440x900 field that has to stay quiet under a stack of windows, so
-// almost nothing here goes above 0.16 opacity. Colours come from the theme
-// custom properties rather than currentColor: inline SVG resolves var(), so
-// switching theme or accent re-skins the wallpaper with no work at all.
+// A field that has to stay quiet under a stack of windows, so almost nothing
+// here goes above 0.16 opacity. Colours come from the theme custom properties
+// rather than currentColor: inline SVG resolves var(), so switching theme or
+// accent re-skins the wallpaper with no work at all.
+//
+// It used to be one 1440x900 drawing, scaled to COVER whatever panel it landed
+// on. That was fine while the panel was always 1440x900 and merely wrong at
+// 21:9; on a phone, where the panel is 900x1948, it was a disaster. Cover means
+// scale by the larger factor, so a portrait panel magnified the drawing 2.2x
+// and showed the middle 29% of its width — and every temple on the skyline is
+// drawn out at 196, 1056, 1148 and 1264, so all four fell outside that strip.
+// What was left below the waterline was nothing at all, which is exactly what
+// it looked like: a desktop that stops before it reaches the bottom.
+//
+// So the field is composed for the panel instead of cropped to it. The viewBox
+// is 900 tall always — the waterline sits at 798 and has to stay near the
+// bottom whatever shape the screen is — and as wide as the panel's aspect
+// makes it, which means it never crops and never stretches. The skyline is
+// placed at fractions of that width rather than at the pixel columns it was
+// drawn at, and the things standing ON the waterline scale with it, so a
+// narrow panel gets a smaller, nearer skyline rather than an empty one.
 
 const n1 = (v) => round(v, 1)
 
@@ -351,11 +368,38 @@ const prangSilhouette = (x, base, h, w) => {
 // reflection cannot do.
 const WATERLINE = 798
 
-const HORIZON =
-  `<path d="${prangSilhouette(1148, WATERLINE, 212, 54)}"/>` +
-  `<path d="${chediSilhouette(1264, WATERLINE, 152, 40)}"/>` +
-  `<path d="${chediSilhouette(1056, WATERLINE, 104, 30)}"/>` +
-  `<path d="${chediSilhouette(196, WATERLINE, 88, 26)}"/>`
+// The drawing these fractions came off, and the only place 1440x900 still
+// means anything: `fx` is where each one stood across that width.
+const REF = { w: 1440, h: 900 }
+
+const SKYLINE = [
+  { shape: prangSilhouette, fx: 1148 / REF.w, h: 212, w: 54 },
+  { shape: chediSilhouette, fx: 1264 / REF.w, h: 152, w: 40 },
+  { shape: chediSilhouette, fx: 1056 / REF.w, h: 104, w: 30 },
+  { shape: chediSilhouette, fx: 196 / REF.w, h: 88, w: 26 },
+]
+
+// The ripples each temple stands in. `dy` is how far below the waterline the
+// centre sits, so they scale with the thing casting them.
+const RIPPLES = [
+  { fx: 1150 / REF.w, dy: 18, rx: 128, ry: 15, opacity: 0.1 },
+  { fx: 1150 / REF.w, dy: 18, rx: 216, ry: 26, opacity: 0.075 },
+  { fx: 1150 / REF.w, dy: 18, rx: 312, ry: 38, opacity: 0.05 },
+  { fx: 392 / REF.w, dy: 50, rx: 86, ry: 11, opacity: 0.08 },
+  { fx: 392 / REF.w, dy: 50, rx: 150, ry: 19, opacity: 0.055 },
+]
+
+const skylineFor = (vw, k) =>
+  SKYLINE.map(({ shape, fx, h, w }) => `<path d="${shape(n1(fx * vw), WATERLINE, h * k, w * k)}"/>`).join('')
+
+const waterFor = (vw, k) =>
+  '<g fill="none" stroke="var(--gold-dim)" stroke-width="1.4">' +
+  `<path d="M0 ${WATERLINE}H${vw}" opacity=".16"/><path d="M0 ${n1(WATERLINE + 42 * k)}H${vw}" opacity=".06"/>` +
+  RIPPLES.map(
+    ({ fx, dy, rx, ry, opacity }) =>
+      `<ellipse cx="${n1(fx * vw)}" cy="${n1(WATERLINE + dy * k)}" rx="${n1(rx * k)}" ry="${n1(ry * k)}" opacity="${opacity}"/>`,
+  ).join('') +
+  '</g>'
 
 // Mount Meru at the centre of the field, twelve petals to a ring.
 const MANDALA =
@@ -378,28 +422,28 @@ const BORDER =
   '<g fill="var(--gold-dim)"><path d="M12 42C12 35 14.8 29.4 20 25.4C19.6 30.6 20.6 36 23 42Z"/>' +
   '<path d="M56 42C56 37.4 57.8 33.4 61.4 30.4C61.2 34 61.8 37.8 63.2 42Z"/></g></pattern>'
 
-const WATER =
-  '<g fill="none" stroke="var(--gold-dim)" stroke-width="1.4">' +
-  '<path d="M0 798H1440" opacity=".16"/><path d="M0 840H1440" opacity=".06"/>' +
-  '<ellipse cx="1150" cy="816" rx="128" ry="15" opacity=".1"/>' +
-  '<ellipse cx="1150" cy="816" rx="216" ry="26" opacity=".075"/>' +
-  '<ellipse cx="1150" cy="816" rx="312" ry="38" opacity=".05"/>' +
-  '<ellipse cx="392" cy="848" rx="86" ry="11" opacity=".08"/>' +
-  '<ellipse cx="392" cy="848" rx="150" ry="19" opacity=".055"/></g>'
-
 /**
  * The desktop field. With `ornament` off it is a gradient and nothing else —
  * the ornament switch has to actually mean something, not just thin the lines.
+ *
+ * `aspect` is the panel's width over its height. It decides how wide the
+ * viewBox is, and therefore the one thing that matters here: that the box the
+ * field is drawn in is the same shape as the screen it is drawn on, so there
+ * is never a crop and never a stretch.
  */
-export function wallpaperSVG({ theme = 'dark', ornament = true } = {}) {
+export function wallpaperSVG({ theme = 'dark', ornament = true, aspect = REF.w / REF.h } = {}) {
   const night = theme !== 'light'
-  // YMax, not YMid. The artwork is drawn 1440x900 and covers a panel that is
-  // now whatever shape the window is, so on anything wider than 16:10 `slice`
-  // has to throw some of it away — and a centred crop takes it off both ends,
-  // which on a 21:9 panel means the naga border and the roofline along the
-  // bottom, the only part of this field that is actually drawn. Pinning the
-  // bottom edge spends the whole crop on empty sky instead.
-  const open = '<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">'
+  // Height is pinned so the composition keeps its footing — the waterline at
+  // 798 is 89% of the way down and has to stay there. Width follows the panel.
+  const vw = Math.max(280, Math.round(REF.h * clamp(aspect, 0.28, 4)))
+  // How much room there is across that width, for the things that stand in it.
+  // Clamped at both ends: a phone would otherwise get a skyline too small to
+  // see, and an ultrawide one tall enough to be the subject of the picture.
+  const k = clamp(vw / REF.w, 0.66, 1.08)
+  // Matching aspects make slice, meet and none the same thing; slice is the
+  // one that answers a pixel of rounding drift with a crop instead of a
+  // stretch, which is the harmless way to be wrong.
+  const open = `<svg viewBox="0 0 ${vw} ${REF.h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">`
   const gradients =
     '<linearGradient id="lo-sky" x1="0" y1="0" x2="0" y2="1">' +
     '<stop offset="0" style="stop-color:var(--wall-1);stop-opacity:.9"/>' +
@@ -409,25 +453,29 @@ export function wallpaperSVG({ theme = 'dark', ornament = true } = {}) {
     `<stop offset="0" style="stop-color:var(--accent-dim);stop-opacity:${night ? '.32' : '.18'}"/>` +
     '<stop offset="1" style="stop-color:var(--accent-dim);stop-opacity:0"/></radialGradient>'
   const wash =
-    '<rect width="1440" height="900" fill="url(#lo-sky)"/><rect width="1440" height="900" fill="url(#lo-halo)"/>'
+    `<rect width="${vw}" height="${REF.h}" fill="url(#lo-sky)"/>` +
+    `<rect width="${vw}" height="${REF.h}" fill="url(#lo-halo)"/>`
 
   if (!ornament) return `${open}<defs>${gradients}</defs>${wash}</svg>`
 
   // Silhouettes are the one thing allowed to be opaque; in the dark they are a
   // hole in the sky, at noon they are the far side of the haze.
   const stone = night ? 'var(--bg-deep)' : 'var(--wall-3)'
-  const horizon = `<g fill="${stone}" opacity="${night ? '.44' : '.36'}">${HORIZON}</g>`
+  const horizon = `<g fill="${stone}" opacity="${night ? '.44' : '.36'}">${skylineFor(vw, k)}</g>`
+  // Mount Meru sits at the centre of whatever width it has been given.
+  const mandala =
+    `<g transform="translate(${n1(vw / 2 - 720 * k)} ${n1(430 - 430 * k)}) scale(${round(k, 3)})">${MANDALA}</g>`
 
   return (
     open +
     `<defs>${gradients}${LATTICE}${BORDER}</defs>` +
     wash +
-    `<rect width="1440" height="900" fill="url(#lo-lattice)" opacity="${night ? '.055' : '.075'}"/>` +
+    `<rect width="${vw}" height="${REF.h}" fill="url(#lo-lattice)" opacity="${night ? '.055' : '.075'}"/>` +
     horizon +
-    `<g fill="none" stroke="var(--gold-dim)" stroke-width="2.4" opacity="${night ? '.075' : '.06'}">${MANDALA}</g>` +
+    `<g fill="none" stroke="var(--gold-dim)" stroke-width="2.4" opacity="${night ? '.075' : '.06'}">${mandala}</g>` +
     `<g transform="matrix(1 0 0 -1 0 ${WATERLINE * 2})" opacity="${night ? '.24' : '.2'}">${horizon}</g>` +
-    WATER +
-    `<rect y="856" width="1440" height="44" fill="url(#lo-border)" opacity="${night ? '.1' : '.13'}"/>` +
+    waterFor(vw, k) +
+    `<rect y="856" width="${vw}" height="44" fill="url(#lo-border)" opacity="${night ? '.1' : '.13'}"/>` +
     '</svg>'
   )
 }
