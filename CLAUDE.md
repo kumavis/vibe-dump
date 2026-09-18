@@ -15,7 +15,7 @@ npm run build                                    (by hand — output is committe
                      • copies each packages/<name>/dist into dist/<name>/
                      • copies the committed packages/<name>/thumbnail.jpg beside it
                      • renders the grid dist/index.html from each package's
-                       `gallery` field, newest vibe first
+                       `gallery` field, most recently updated vibe first
 
 npm run thumbnails                               (needs a browser — run by hand)
 └─ scripts/thumbnails.mjs

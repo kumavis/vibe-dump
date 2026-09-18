@@ -254,13 +254,19 @@ supports            = off    # design it so you do not need them
       'display.conf',
       `
 # display
-panel        = 1440 x 900, 16:10
-scaling      = fit, integer-agnostic
+panel        = native — the window, whatever shape it is
+minimum      = 900 x 560, below which the whole layer is scaled down
+scaling      = 1:1, integer-agnostic
 scanlines    = only when embodied
 glare        = only when embodied
+osd          = only when embodied
 
 # "embodied" means the screen has stopped being the whole world and gone
 # back to being a panel on a desk. See reveal.run.
+#
+# The monitor out there is built to the shape this panel happens to be, which
+# is why the hand-off has no seam — and why it has opinions about being
+# resized while you are standing in the room looking at it.
 `,
     ),
   ]),

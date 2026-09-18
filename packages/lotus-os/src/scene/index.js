@@ -18,6 +18,7 @@ import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLigh
 import { PALETTE, glowSprite, disposeAll } from './materials.js'
 import { createRig, screenFitDistance } from './camera-rig.js'
 import { createMonitor, SCREEN } from './monitor.js'
+import { SCREEN as PANEL } from '../os/screen.js'
 import { createRoom } from './room.js'
 import { createDesk } from './desk.js'
 import { createPrinter } from './printer.js'
@@ -223,6 +224,10 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   const room = collect(createRoom({ sfx, quality: 1 }))
   const desk = collect(createDesk({ sfx, quality: 1 }))
   const monitor = collect(createMonitor({ screenEl: osEl, CSS3DObject }), PLACE.monitor)
+  // The monitor is built to whatever shape the window is right now. Snapped,
+  // not sprung: the room may well be being assembled minutes before anybody
+  // looks at it, and there is nothing to animate for.
+  monitor.setPanel(PANEL.w, PANEL.h)
   const printer = collect(createPrinter({ sfx, quality: 1 }), PLACE.printer, -0.06)
   const solder = collect(createSolderKit({ sfx, quality: 1 }), PLACE.solder, 0.14)
   const board = collect(createBoard({ sfx, quality: 1 }), PLACE.board, -0.22)
@@ -248,10 +253,7 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
 
   // The screen washing the desk in violet is most of why the shot reads as a
   // computer rather than as a prop of one.
-  const pose = monitor.screenPose()
   const screenLight = new THREE.RectAreaLight(0x8a5cff, 6.5, SCREEN.width * 0.94, SCREEN.height * 0.94)
-  screenLight.position.copy(pose.position).addScaledVector(pose.normal, 0.012)
-  screenLight.lookAt(pose.position.clone().addScaledVector(pose.normal, 1))
   scene.add(screenLight)
 
   // The fake glare that stands in for bloom, since there is no post chain. It
@@ -262,9 +264,38 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   // past the edges of the monitor and on the wall behind it, which is what
   // screen light in a dark room actually does. Narrower than it was, too — at
   // three and a half screen widths it was a bar rather than a glow.
-  const screenBloom = glowSprite(0x9a6cff, SCREEN.height * 0.62, { core: 0.07, mid: 0.05, halo: 0.03, streak: SCREEN.width * 1.5 })
-  screenBloom.position.copy(pose.position).addScaledVector(pose.normal, -0.03)
+  //
+  // Built once at a reference size and then scaled, because sprites cannot be
+  // rebuilt cheaply and because a panel that has gone wide and short should
+  // throw a wide, short glow.
+  const BLOOM_REF = { width: 0.576, height: 0.36 }
+  const screenBloom = glowSprite(0x9a6cff, BLOOM_REF.height * 0.62, {
+    core: 0.07,
+    mid: 0.05,
+    halo: 0.03,
+    streak: BLOOM_REF.width * 1.5,
+  })
   scene.add(screenBloom)
+
+  /**
+   * Re-fit everything the panel lights, to the panel as it is this frame.
+   *
+   * Called by the monitor on every layout — so once at assembly, once per
+   * resize, and then on each frame of the spring that follows one, which is
+   * what keeps the violet wash on the desk moving with the panel instead of
+   * snapping to its new size when it stops.
+   */
+  function fitScreenLight(live) {
+    const p = monitor.screenPose()
+    screenLight.width = live.width * 0.94
+    screenLight.height = live.height * 0.94
+    screenLight.position.copy(p.position).addScaledVector(p.normal, 0.012)
+    screenLight.lookAt(p.position.clone().addScaledVector(p.normal, 1))
+    screenBloom.position.copy(p.position).addScaledVector(p.normal, -0.03)
+    screenBloom.scale.set(live.width / BLOOM_REF.width, live.height / BLOOM_REF.height, 1)
+  }
+  monitor.onReshape = fitScreenLight
+  fitScreenLight(monitor.live)
 
   /**
    * Tell the panel how much of itself the camera can actually see.
@@ -282,7 +313,7 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   function updateGlass() {
     monitor.punch.getWorldPosition(_screenMid)
     const dist = camera.position.distanceTo(_screenMid)
-    const px = (SCREEN.height * window.innerHeight) / (2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2))
+    const px = (monitor.live.height * window.innerHeight) / (2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2))
     const k = THREE.MathUtils.smoothstep(px, window.innerHeight * 0.2, window.innerHeight * 0.62)
     if (Math.abs(k - lastScan) < 0.01) return
     lastScan = k
@@ -308,12 +339,33 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   resize()
   window.addEventListener('resize', onResize)
 
+  /**
+   * The window changed, so the machine's screen changed, so the monitor on the
+   * desk changed — it is the same screen.
+   *
+   * fit() first, and not because the page's own resize handler might not have
+   * run: it has, this listener was registered second. It is called because
+   * depending on that ordering to get the panel's size right is the kind of
+   * thing that survives every test and then breaks the day somebody moves a
+   * line. It is idempotent and it costs two custom properties.
+   *
+   * Then the monitor, and only in the room — and only for somebody who has not
+   * asked for less motion — does it get to make a performance of it. At the screen pose, or on the way back to it, the hole in the canvas
+   * has to be exactly the rectangle the page is about to draw the panel at, so
+   * the new shape is taken instantly and the camera is re-solved for it.
+   */
   function onResize() {
+    window.lotus?.fit?.()
     resize()
-    if (root.dataset.mode === 'screen') rig.setPose(screenPose())
+    const mode = root.dataset.mode
+    // Everything else in this room honours prefers-reduced-motion by getting
+    // shorter; a monitor that springs and rocks has no shorter version worth
+    // having, so under that setting it simply is the new shape.
+    monitor.setPanel(PANEL.w, PANEL.h, { animate: mode === 'room' && !reduced() })
+    if (mode === 'screen') rig.setPose(screenPose())
     // The distance that reproduces the page's framing depends on the viewport,
     // so a resize during the way home invalidates the pose being flown to.
-    else if (root.dataset.mode === 'flying' && homeward) rig.retarget(screenPose())
+    else if (mode === 'flying' && homeward) rig.retarget(screenPose())
   }
 
   // --- the two poses ------------------------------------------------------
@@ -325,11 +377,15 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
   function screenPose() {
     const p = monitor.screenPose()
     const vh = window.innerHeight
-    const fit = Math.min(window.innerWidth / SCREEN.cssWidth, vh / SCREEN.cssHeight)
+    // `PANEL.h * PANEL.scale` is the viewport height, and writing it out rather
+    // than writing `vh` twice is the point: it is the page's own arithmetic for
+    // how tall it draws the panel, and this pose is only correct for as long as
+    // the two agree. The monitor's live height, not SCREEN's, because a panel
+    // still moving is a panel this has to solve for as it is.
     const d = screenFitDistance({
-      worldHeight: SCREEN.height,
+      worldHeight: monitor.live.height,
       viewportHeight: vh,
-      targetHeightPx: SCREEN.cssHeight * fit,
+      targetHeightPx: PANEL.h * PANEL.scale,
       fov: FOV_SCREEN,
     })
     return {
@@ -524,6 +580,10 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
     if (busy || root.dataset.mode === 'room') return controller
     busy = true
     try {
+      // Whatever shape the monitor was on its way to, it is that shape now.
+      // Everything below solves for a panel that is standing still.
+      monitor.settle()
+
       // Measure the panel exactly as the page is drawing it, before touching
       // anything — this is the rectangle the 3D copy has to match.
       const homeRect = osEl.getBoundingClientRect()
@@ -625,6 +685,11 @@ async function buildWorkspace({ osEl, homeEl, shell }, held) {
     try {
       hud.classList.remove('is-settled')
       setHover(null)
+      // Stop any reshape still in flight before solving for where the panel
+      // has to land. A spring that is still moving when the flight home is
+      // planned lands the camera at a distance for a rectangle that no longer
+      // exists by the time it gets there, and that is the seam.
+      monitor.settle()
       homeward = true
       root.dataset.mode = 'flying'
       rig.lookEnabled = false

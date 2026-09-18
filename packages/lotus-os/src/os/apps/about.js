@@ -1,14 +1,15 @@
 // about.js — the about box.
 //
 // Half of this window is a spec sheet for a machine that does not exist, so
-// every line in it has to be one the OS can actually answer for: the theme,
-// the accent, the window count and the uptime are read live rather than
-// written down. The panel size is the only figure that is simply a fact.
+// every line in it has to be one the OS can actually answer for, and every
+// one of them is read live rather than written down — the panel size
+// included, now that the panel is whatever shape the window is.
 
 import { el } from '../util.js'
 import { icon } from '../icons.js'
 import { markFor } from '../motifs.js'
 import { ACCENTS } from '../theme.js'
+import { SCREEN, aspectLabel } from '../screen.js'
 
 const BUILD = 'build 0.9.4 "bai sema"'
 
@@ -47,7 +48,11 @@ export default {
     row('uptime', 'Uptime')
     row('ornament', 'Ornament')
 
-    values.panel.textContent = '1440 x 900, 16:10'
+    // Live, because the panel is the window now and this is the one place on
+    // the machine that ever says what it is running at.
+    const showPanel = () => {
+      values.panel.textContent = `${SCREEN.w} x ${SCREEN.h}, ${aspectLabel()}`
+    }
 
     const card = el('div.about', [
       el('div.about__mark', { html: markFor('lotusMark'), 'aria-hidden': 'true' }),
@@ -79,6 +84,7 @@ export default {
     // this machine has ever had.
     const tick = () => {
       values.uptime.textContent = mmss(performance.now() / 1000)
+      showPanel()
     }
 
     refresh()

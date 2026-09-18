@@ -33,20 +33,38 @@ export const STATUSES = ['done', 'wip']
 // genuinely new setting belongs in it rather than rounded to the nearest old one.
 export const THINKING = ['unknown', 'low', 'medium', 'high', 'max', 'ultracode']
 
-// When each package first appeared, so the gallery can lead with the newest.
-// Read out of the history rather than a hand-maintained field — the date an app
-// landed is a fact git already knows, and one nobody would remember to update.
+// When each package was last worked on, so the gallery can lead with whatever
+// is freshest. Read out of the history rather than a hand-maintained field —
+// the date somebody last touched an app is a fact git already knows, and one
+// nobody would remember to bump.
 //
-// One `git log` for the whole tree, oldest first, so the first time a slug shows
-// up is the commit that added it. A shallow clone (or no git at all) simply
-// doesn't know, and the caller falls back to alphabetical.
-function addedDates() {
+// Two files per package are excluded, and they are the whole reason this is not
+// a one-liner. `package.json` and `thumbnail.jpg` are metadata, and metadata
+// gets rewritten in sweeps: one commit tagged and credited every app in the
+// repo, another committed thirty-eight thumbnails at once. Counting those, more
+// than half the gallery shares a timestamp to the second and the order it is
+// supposed to express collapses into the title tie-break. Excluded, every app
+// but one pair has a date of its own, and it is the date of the last time the
+// app itself changed.
+//
+// The max rather than the first hit, because a commit's author date is when the
+// work was done and not when it landed: a branch merged a week later carries the
+// older date and shows up out of order in the log.
+function updatedDates() {
   const dates = new Map()
   let out
   try {
     out = execFileSync(
       'git',
-      ['log', '--diff-filter=A', '--reverse', '--format=%aI', '--name-only', '--', 'packages/'],
+      [
+        'log',
+        '--format=%aI',
+        '--name-only',
+        '--',
+        'packages/',
+        ':(exclude)packages/*/package.json',
+        ':(exclude)packages/*/thumbnail.jpg',
+      ],
       { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 32 * 1024 * 1024 },
     )
   } catch {
@@ -57,7 +75,9 @@ function addedDates() {
     if (line === '') continue
     if (line.startsWith('packages/')) {
       const slug = line.split('/')[1]
-      if (slug && !dates.has(slug)) dates.set(slug, date)
+      if (!slug) continue
+      const seen = dates.get(slug)
+      if (!seen || Date.parse(date) > Date.parse(seen)) dates.set(slug, date)
     } else {
       date = line
     }
@@ -83,7 +103,7 @@ export function metaProblems(apps) {
 // Discover every package under packages/. `built` says whether `vite build` has
 // run for it; `hasThumbnail` whether a committed thumbnail sits alongside it.
 export async function discoverApps() {
-  const added = addedDates()
+  const updated = updatedDates()
   const entries = await readdir(packagesDir, { withFileTypes: true })
   const apps = []
   for (const entry of entries) {
@@ -99,7 +119,7 @@ export async function discoverApps() {
       pkgDir,
       distDir,
       thumbnail,
-      added: added.get(entry.name) ?? null,
+      updated: updated.get(entry.name) ?? null,
       built: existsSync(join(distDir, 'index.html')),
       hasThumbnail: existsSync(thumbnail),
       title: meta.title ?? entry.name,
@@ -121,9 +141,13 @@ export async function discoverApps() {
       click: meta.thumbnail?.click == null ? [] : [meta.thumbnail.click].flat(),
     })
   }
-  // Newest first. Eight apps arrived in the same monorepo import and share a
-  // timestamp to the second, so title breaks the tie and the order stays stable
-  // between builds instead of drifting with readdir.
-  apps.sort((a, b) => (b.added ?? '').localeCompare(a.added ?? '') || a.title.localeCompare(b.title))
+  // Most recently touched first. Two apps last changed in the same commit, so
+  // title breaks the tie and the order stays stable between builds instead of
+  // drifting with readdir.
+  //
+  // An app whose date could not be read sorts to the end — which is most of
+  // them in a shallow clone, where `git log` cannot see far enough back. The
+  // gallery build refuses to ship that; see the check it makes.
+  apps.sort((a, b) => (b.updated ?? '').localeCompare(a.updated ?? '') || a.title.localeCompare(b.title))
   return apps
 }

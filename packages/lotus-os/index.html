@@ -12,22 +12,26 @@
     <link rel="stylesheet" href="./src/style/index.css" />
   </head>
   <body>
-    <!-- The letterbox surround. In desktop mode it is the black around the
-         screen; once the 3D room loads it fades away and the real monitor
-         bezel takes over the job. -->
+    <!-- Behind the panel, and normally invisible because the panel covers the
+         window. It shows as a letterbox only in a window too small to hold the
+         machine at 1:1, and it is what the room fades up out of. -->
     <div id="void" aria-hidden="true"></div>
 
-    <!-- The panel has one fixed size and always fits itself into the window,
-         which on a phone leaves it very small. Say so rather than leaving
-         somebody squinting at a postage stamp wondering what went wrong. -->
-    <p id="narrow">The panel is 1440 by 900. Give it a wider window.</p>
+    <!-- The panel is the window, down to a floor. Under that it holds its
+         minimum and the whole layer is scaled down, which on a phone leaves it
+         small — say so rather than leaving somebody squinting at it wondering
+         what went wrong. -->
+    <p id="narrow">This machine wants a bigger window.</p>
 
-    <!-- Holds the screen in the page and scales it to fit the viewport.
-         The scale lives HERE and never on #os, because once #os is handed to
-         the CSS3D renderer that element's transform belongs to three.js. -->
+    <!-- Holds the screen in the page. Normally the scale here is exactly 1 and
+         this element is the size of the window; it only does any scaling below
+         the floor. The scale lives HERE and never on #os, because once #os is
+         handed to the CSS3D renderer that element's transform belongs to
+         three.js. -->
     <div id="stage-wrap">
-      <!-- #os is the whole machine: a fixed 1440x900 logical screen. It is
-           moved, intact and still running, into the 3D monitor and back. -->
+      <!-- #os is the whole machine: a logical screen the size and shape of the
+           window. It is moved, intact and still running, into the 3D monitor
+           and back. -->
       <div id="os" class="os">
         <header id="appbar" class="appbar"></header>
         <main id="desktop" class="desktop"></main>
@@ -38,6 +42,9 @@
         <!-- Glass, scanlines and glare. Only switched on once #os is actually
              sitting inside a monitor. -->
         <div id="glass" class="glass" aria-hidden="true"></div>
+        <!-- The monitor's own OSD. Only ever raised while #os is inside the
+             monitor and the signal it is being fed changes shape. -->
+        <div id="osd" class="osd" aria-hidden="true"></div>
       </div>
     </div>
 
