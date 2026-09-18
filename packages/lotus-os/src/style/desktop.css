@@ -14,8 +14,9 @@
   bottom: 0;
   width: 100%;
   /* The artwork is drawn for the whole 1440x900 panel but lives under the app
-     bar, so give it those 40px back and let the crop land in the sky rather
-     than through the naga border along the bottom. */
+     bar, so give it those 40px back. Between this and the SVG's own YMax
+     alignment, whatever the panel's shape costs is taken out of the sky and
+     never out of the naga border along the bottom. */
   height: calc(100% + var(--bar-h));
   display: block;
 }

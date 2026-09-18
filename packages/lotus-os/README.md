@@ -14,23 +14,27 @@ npm run shots -w @vibe-dump/lotus-os    # drives the whole thing in a browser
 ## The trick
 
 The interesting part is that there is no cut. The operating system is a single
-DOM subtree — one `#os` element, fixed at 1440x900 logical pixels — and the
-reveal *moves* it, still running, into a `CSS3DObject` sitting exactly where
-the monitor's screen is. Three things make that invisible:
+DOM subtree — one `#os` element — and the reveal *moves* it, still running,
+into a `CSS3DObject` sitting exactly where the monitor's screen is. Three
+things make that invisible:
 
-**The panel never reflows.** `#os` is always 1440x900 and is scaled to fit the
-window by a transform on its parent. In the page that transform is a CSS
-`scale()`; inside the monitor it is a perspective matrix from three.js. The
-element itself never learns which.
+**The monitor is built to the shape of your window.** `#os` is the browser
+window, edge to edge, one logical pixel to one page pixel (`os/screen.js`), and
+the monitor's active area is built to whatever aspect that is — 16:10, 21:9,
+portrait if you turn a phone over. That is not decoration. The hand-off below
+solves for *height*, and matching the height only matches the width as well if
+the two rectangles are already the same shape. What is held fixed instead is
+the diagonal: however it comes out, the person at this desk owns one 27 inch
+monitor.
 
 **The camera starts at the one distance that matches.** The on-screen height of
 a plane of world height `H` at distance `d` is `H · (viewportPx/2) / (d · tan(fov/2))`.
 Set that equal to the height the page was already drawing the panel at and
 solve for `d` (`screenFitDistance()` in `scene/camera-rig.js`). Measured in
-Chromium at three aspect ratios, the panel lands within a thousandth of a pixel
-of where it was a frame earlier. A single correction pass — apparent size goes
-as `1/d`, so the ratio of measured heights *is* the error — is kept for the
-cases where it does not.
+Chromium on the exact hand-off frame: nothing at all at 16:10, 0.05px at 16:9,
+0.06px into a 900x1300 portrait window and 0.32px into a 2400x760 slot. A
+single correction pass — apparent size goes as `1/d`, so the ratio of measured
+heights *is* the error — is kept for the cases where it does not.
 
 **The screen is a hole in the canvas.** The WebGL canvas sits on top of the
 CSS3D layer, and a plane coincident with the screen is drawn with
@@ -43,15 +47,40 @@ the desk edge) correctly covers the desktop.
 
 Moving a subtree loses scroll offsets, focus and the clock on every running CSS
 animation, so `keepState()` snapshots all three and puts them back in the same
-frame. The panel is `inert` while it is in the monitor: a 1440x900 desktop
-rendered six pixels tall should not be tab-focusable.
+frame. The panel is `inert` while it is in the monitor: a desktop rendered six
+pixels tall should not be tab-focusable.
+
+One floor survives from when the panel was nailed to 1440x900: under 900x560 it
+stops shrinking and the page scales the whole layer down instead, because below
+that the app bar stops being an app bar. `scale` is 1 in every window bigger
+than that, which is nearly all of them.
+
+## Resizing the window while you are in the room
+
+Because the monitor is built to the window's shape, changing the window's shape
+while you are standing in the room is changing the monitor. It does not cut to
+the new shape — it goes there on a spring, slightly under-damped, so it
+overshoots a couple of millimetres and comes back; the panel rocks on its hinge,
+kicked once by an impulse the size of the change and signed by which way it
+went; the power light drops to amber and blinks at six hertz while it re-acquires
+its signal; and the machine inside puts up its own OSD in the corner with the
+new resolution, the way a monitor does. The desktop is stretched along with the
+panel on the way, because the CSS3D copy is scaled from where the panel *is*
+this frame and not from where it is heading.
+
+None of that is allowed to happen anywhere near the hand-off. At the screen pose
+and on the flight home the new shape is taken instantly and the camera is
+re-solved for it, because for those frames the hole in the canvas has to be
+exactly the rectangle the page is about to draw — and a spring that is still
+moving is a rectangle that is not.
 
 ## Layout
 
 ```
 src/
-  main.js            boot; fits the panel to the window
+  main.js            boot; sizes the panel to the window, and the monitor's OSD
   os/
+    screen.js        how big the panel is: the window, down to a floor
     shell.js         owns the filesystem, window manager, prefs, programs
     wm.js            drag, eight-way resize, snap, minimise, tile, focus stack
     appbar.js        menus, open-window chips, theme switch, clock
@@ -66,7 +95,9 @@ src/
   scene/
     index.js         assembly, lights, interaction, the hand-off
     camera-rig.js    poses, the flight path, the handheld drift
-    monitor.js       the panel, the hole, and the live desktop behind it
+    monitor.js       the panel, the hole, the live desktop behind it — and
+                     the shape it takes from the window, and the spring, nod
+                     and blink it takes getting there
     materials.js     palette, procedural textures, fake bloom, contact dirt
     room.js desk.js printer.js solder.js board.js
 ```

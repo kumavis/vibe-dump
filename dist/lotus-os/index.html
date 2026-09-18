@@ -9,27 +9,32 @@
       content="A black-and-purple toy desktop with Thai temple ornament, resizable windows and folders — run reveal.run and the camera pulls back to find the monitor on a cluttered workbench."
     />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0713'/><g fill='none' stroke='%23d3ab55' stroke-width='1.6' stroke-linejoin='round'><path d='M16 7c2.6 2.7 2.6 6.6 0 9.3-2.6-2.7-2.6-6.6 0-9.3z'/><path d='M16 16.3c-3.4 1-6.8-.6-8.2-3.8 3.4-1 6.8.6 8.2 3.8z'/><path d='M16 16.3c3.4 1 6.8-.6 8.2-3.8-3.4-1-6.8.6-8.2 3.8z'/><path d='M16 17c-3.7 0-6.8 2.4-7.7 5.7 3.7.9 7.4-.9 8.9-4.3'/><path d='M16 17c3.7 0 6.8 2.4 7.7 5.7-3.7.9-7.4-.9-8.9-4.3'/><path d='M6.6 24.4h18.8'/></g></svg>" />
-    <script type="module" crossorigin src="./assets/index-D_KNCXA4.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DSBWMpYK.css">
-    <link rel="modulepreload" crossorigin href="./assets/index-CRSGMMuI.js">
+    <script type="module" crossorigin src="./assets/index-C1s1riC0.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DX062A5z.css">
+    <link rel="modulepreload" crossorigin href="./assets/index-DlybsAAA.js">
+    <link rel="modulepreload" crossorigin href="./assets/index-C1s1riC0.js">
   </head>
   <body>
-    <!-- The letterbox surround. In desktop mode it is the black around the
-         screen; once the 3D room loads it fades away and the real monitor
-         bezel takes over the job. -->
+    <!-- Behind the panel, and normally invisible because the panel covers the
+         window. It shows as a letterbox only in a window too small to hold the
+         machine at 1:1, and it is what the room fades up out of. -->
     <div id="void" aria-hidden="true"></div>
 
-    <!-- The panel has one fixed size and always fits itself into the window,
-         which on a phone leaves it very small. Say so rather than leaving
-         somebody squinting at a postage stamp wondering what went wrong. -->
-    <p id="narrow">The panel is 1440 by 900. Give it a wider window.</p>
+    <!-- The panel is the window, down to a floor. Under that it holds its
+         minimum and the whole layer is scaled down, which on a phone leaves it
+         small — say so rather than leaving somebody squinting at it wondering
+         what went wrong. -->
+    <p id="narrow">This machine wants a bigger window.</p>
 
-    <!-- Holds the screen in the page and scales it to fit the viewport.
-         The scale lives HERE and never on #os, because once #os is handed to
-         the CSS3D renderer that element's transform belongs to three.js. -->
+    <!-- Holds the screen in the page. Normally the scale here is exactly 1 and
+         this element is the size of the window; it only does any scaling below
+         the floor. The scale lives HERE and never on #os, because once #os is
+         handed to the CSS3D renderer that element's transform belongs to
+         three.js. -->
     <div id="stage-wrap">
-      <!-- #os is the whole machine: a fixed 1440x900 logical screen. It is
-           moved, intact and still running, into the 3D monitor and back. -->
+      <!-- #os is the whole machine: a logical screen the size and shape of the
+           window. It is moved, intact and still running, into the 3D monitor
+           and back. -->
       <div id="os" class="os">
         <header id="appbar" class="appbar"></header>
         <main id="desktop" class="desktop"></main>
@@ -40,6 +45,9 @@
         <!-- Glass, scanlines and glare. Only switched on once #os is actually
              sitting inside a monitor. -->
         <div id="glass" class="glass" aria-hidden="true"></div>
+        <!-- The monitor's own OSD. Only ever raised while #os is inside the
+             monitor and the signal it is being fed changes shape. -->
+        <div id="osd" class="osd" aria-hidden="true"></div>
       </div>
     </div>
 

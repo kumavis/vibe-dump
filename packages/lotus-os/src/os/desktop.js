@@ -103,8 +103,12 @@ export function createDesktop({ root, shell, menuLayer }) {
         ]),
       )
     }
-    panel.style.left = `${Math.min(x, 1440 - 240)}px`
-    panel.style.top = `${Math.min(y, 900 - 260)}px`
+    // Against the panel as it is now, not against the 1440x900 it used to
+    // always be: the screen is the window's size and shape these days, and a
+    // menu clamped to a remembered one either hangs off a small panel or
+    // lands nowhere near the corner of a large one.
+    panel.style.left = `${Math.max(0, Math.min(x, menuLayer.clientWidth - 240))}px`
+    panel.style.top = `${Math.max(0, Math.min(y, menuLayer.clientHeight - 260))}px`
     menuLayer.append(panel)
     requestAnimationFrame(() => panel.classList.add('is-in'))
 

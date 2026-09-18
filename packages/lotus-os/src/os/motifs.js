@@ -393,7 +393,13 @@ const WATER =
  */
 export function wallpaperSVG({ theme = 'dark', ornament = true } = {}) {
   const night = theme !== 'light'
-  const open = '<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'
+  // YMax, not YMid. The artwork is drawn 1440x900 and covers a panel that is
+  // now whatever shape the window is, so on anything wider than 16:10 `slice`
+  // has to throw some of it away — and a centred crop takes it off both ends,
+  // which on a 21:9 panel means the naga border and the roofline along the
+  // bottom, the only part of this field that is actually drawn. Pinning the
+  // bottom edge spends the whole crop on empty sky instead.
+  const open = '<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">'
   const gradients =
     '<linearGradient id="lo-sky" x1="0" y1="0" x2="0" y2="1">' +
     '<stop offset="0" style="stop-color:var(--wall-1);stop-opacity:.9"/>' +

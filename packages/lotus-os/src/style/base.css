@@ -30,7 +30,7 @@ body {
 #narrow {
   display: none;
 }
-@media (max-width: 720px), (max-height: 460px) {
+@media (max-width: 640px), (max-height: 420px) {
   #narrow {
     position: fixed;
     left: 50%;
@@ -130,6 +130,36 @@ body {
 .layer--modals {
   z-index: 80;
   inset: 0;
+}
+
+/* --- the monitor's OSD --------------------------------------------------- */
+
+/* Raised by main.js when the window changes shape while the panel is inside
+   the monitor, and never otherwise. It is the box a real monitor throws up
+   when the signal changes — so it is styled as firmware and not as this
+   machine's own UI: no theme tokens, no rounding beyond a hairline, and the
+   one green a panel's own menu is ever printed in. */
+.osd {
+  position: absolute;
+  top: 5.5%;
+  right: 4.5%;
+  z-index: 95;
+  padding: 10px 16px;
+  border: 2px solid rgba(126, 232, 168, 0.5);
+  background: rgba(4, 10, 7, 0.72);
+  color: #7ee8a8;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 10px rgba(126, 232, 168, 0.55);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+.osd.is-on {
+  opacity: 1;
+  transform: none;
 }
 
 /* --- glass: only once the panel is inside a monitor ---------------------- */

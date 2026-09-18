@@ -1,10 +1,14 @@
 // wm.js — the window manager.
 //
-// Windows live in a fixed 1440x900 logical screen, so every coordinate in here
-// is in screen pixels and never in viewport pixels: the whole OS is scaled as
-// one layer (by CSS in the page, by three.js once it is inside the monitor)
-// and pointer deltas have to be divided back down by that scale before they
-// mean anything. `getScale()` is how the manager finds out.
+// Every coordinate in here is in screen pixels and never in viewport pixels:
+// the whole OS is scaled as one layer (by CSS in the page, by three.js once it
+// is inside the monitor) and pointer deltas have to be divided back down by
+// that scale before they mean anything. `getScale()` is how the manager finds
+// out, and it is 1 in any window big enough to hold the machine.
+//
+// The screen those pixels belong to is the browser window and changes size
+// whenever it does, so nothing here may be measured against a constant.
+// Everything reads `bounds()`, and reflow() runs on every resize.
 
 import { clamp, drag, el, uid, easeOutCubic, tween } from './util.js'
 
@@ -387,6 +391,7 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
           win.restoreRect = { ...win.rect }
           place(win, snapRectFor(armedZone), { animate: true })
           win.state = 'snapped'
+          win.snapZone = armedZone
           notify()
         }
         armedZone = null
@@ -461,14 +466,29 @@ export function createWM({ root, snapLayer, getScale = () => 1, onChange = () =>
   }
 
   // Re-flow anything that was pinned to an edge if the screen itself changes.
+  // Which it now does constantly: the panel is the browser window, so every
+  // drag of a window edge is this machine's screen being resized under it.
   function reflow() {
     const b = bounds()
     for (const win of windows) {
       if (win.state === 'maximized') place(win, { x: 0, y: 0, w: b.w, h: b.h })
+      else if (win.state === 'snapped' && win.snapZone) place(win, snapRectFor(win.snapZone))
       else {
+        // A window can be wider than the screen it is on now — the screen
+        // shrank under it — and the clamp below only keeps a grab-able strip
+        // of title bar on the panel, which is the desktop convention and is
+        // also all a fixed-size window will accept.
+        // Never below what the program said it needs: a window squeezed past
+        // its own minimum is a window whose contents have collapsed, which is
+        // worse than one hanging off the edge of a screen it no longer fits.
+        const fixed = win.spec.resizable === false
+        const w = fixed ? win.rect.w : Math.max(Math.min(win.rect.w, b.w), win.spec.minWidth ?? 260)
+        const h = fixed ? win.rect.h : Math.max(Math.min(win.rect.h, b.h), win.spec.minHeight ?? 160)
         place(win, {
           ...win.rect,
-          x: clamp(win.rect.x, -win.rect.w + 90, Math.max(0, b.w - 90)),
+          w,
+          h,
+          x: clamp(win.rect.x, -w + 90, Math.max(0, b.w - 90)),
           y: clamp(win.rect.y, 0, Math.max(0, b.h - 34)),
         })
       }
