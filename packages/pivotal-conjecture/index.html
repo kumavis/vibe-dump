@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Pivotal Conjecture — ENO 2.8, explained</title>
+    <meta
+      name="description"
+      content="Etingof–Nikshych–Ostrik Conjecture 2.8: every fusion category admits a pivotal structure. An interactive notebook that builds up from group representations to the open problem, with every fusion rule, dimension and grading computed live."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <nav id="rail" aria-label="Chapters"><ol></ol></nav>
+
+    <!-- ───────────────────────────────────────────────────── hero -->
+    <header class="hero" id="ch-hero">
+      <canvas id="hero-field" aria-hidden="true"></canvas>
+      <div class="hero__inner">
+        <p class="eyebrow">Annals of Mathematics 162 (2005) · still open</p>
+        <h1 class="hero__title">Can you take a <em>trace</em>?</h1>
+
+        <div class="hero__card">
+          <span class="tag">Conjecture 2.8</span>
+          <p class="claim">Any fusion category admits a pivotal structure.</p>
+          <p class="src">Etingof, Nikshych &amp; Ostrik, <i>On fusion categories</i>, §2.3</p>
+        </div>
+
+        <p class="hero__sub">
+          Twenty-one words, no proof, no counterexample, and almost every
+          construction downstream of it quietly assumes it is true. This page
+          starts from the tensor product of two group representations and
+          builds, chapter by chapter, to what that sentence is asking for — and
+          to why it is so stubborn. Every fusion rule, dimension and grading
+          below is computed in your browser from the fusion data itself.
+        </p>
+        <a class="hero__scroll" href="#ch-objects">start from representations ↓</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- ─────────────────────────────────────────── 1. fusion categories -->
+      <section class="chapter" id="ch-objects" data-chapter="Objects that multiply">
+        <div class="chapter__head">
+          <span class="chapter__num">01</span>
+          <h2>A number system whose numbers are objects</h2>
+        </div>
+        <div class="prose">
+          <p>
+            You already know an example, and it is worth starting there rather
+            than with the definition. Fix a finite group G — say the symmetries
+            of a triangle, S₃ — and consider its <b>representations</b>: the ways
+            G can act by invertible linear maps on a finite-dimensional complex
+            vector space.
+          </p>
+          <p>
+            Three things are true of that collection, and they are the only three
+            that matter here. You can <em>add</em> two representations, by
+            stacking them in a direct sum V ⊕ W. You can <em>multiply</em> them,
+            by taking the tensor product V ⊗ W of the underlying vector spaces
+            and letting G act on both factors at once. And every representation
+            breaks up, uniquely, into a sum of finitely many
+            <b>irreducible</b> ones that cannot be broken further. For S₃ there
+            are exactly three: the trivial one <span class="nowrap">1</span>, the
+            sign representation ε, and a 2-dimensional one V.
+          </p>
+          <p>
+            So the irreducibles behave like a peculiar set of numbers. They
+            multiply, and the product comes back out as a sum of irreducibles
+            with whole-number coefficients:
+          </p>
+          <p class="display">ε ⊗ ε = 1 ε ⊗ V = V V ⊗ V = 1 ⊕ ε ⊕ V</p>
+          <p>
+            Check the last one by dimensions: 2 × 2 = 1 + 1 + 2. That table of
+            coefficients is called the <b>fusion rules</b>, and it is the
+            skeleton of everything that follows. Write it as a single symbol:
+            <span class="nowrap">N<sub>ij</sub><sup>k</sup></span> is how many
+            copies of the k-th irreducible sit inside the product of the i-th and
+            the j-th.
+          </p>
+          <p>
+            A <b>fusion category</b> is an abstraction of exactly this situation,
+            with the group thrown away. You keep: finitely many irreducible —
+            here called <b>simple</b> — objects; a way to add and a way to
+            multiply them; a unit object <b>1</b> that multiplies like the number
+            one; and, crucially, a notion of dual, which is the whole subject of
+            the next chapter. What you do <em>not</em> get to assume is that any
+            of it came from a group. Most fusion categories do not.
+          </p>
+          <p>
+            The panel below carries nine of them. Some are representation
+            categories of familiar groups. Some are not, and have simple objects
+            whose dimension is √2, or the golden ratio — which no honest
+            vector space can have, and which is the first sign that you have left
+            ordinary algebra behind.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-explorer">
+          <p class="panel__title">Fusion rules, live</p>
+          <div class="controls controls--lead">
+            <div class="presets" id="ex-picks"></div>
+          </div>
+          <div class="panel__grid--split">
+            <div class="ftable-wrap"><table class="ftable" id="ex-table"></table></div>
+            <div class="panel__plot panel__plot--small">
+              <canvas class="cv" id="cv-explorer"></canvas>
+              <p class="cap">
+                each simple object as a disc, area proportional to its dimension ·
+                arcs show what the highlighted object produces when you multiply
+                by it
+              </p>
+            </div>
+          </div>
+          <div class="readout readout--wide" id="ro-explorer"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Where do those non-integer dimensions come from? Not from counting
+            basis vectors — there is no vector space to count. They come from the
+            fusion rules alone. Treat multiplication by the object X as an
+            integer matrix N<sub>X</sub>, whose entries are the
+            N<sub>Xj</sub><sup>k</sup>. That matrix has non-negative entries, so
+            the <b>Perron–Frobenius theorem</b> hands you a largest eigenvalue
+            with a positive eigenvector, and the same eigenvector works for every
+            X at once. That eigenvalue is the <b>Frobenius–Perron dimension</b>
+            FPdim(X), and the panel computes it by iterating the matrix.
+          </p>
+          <p>
+            It behaves like a dimension should — FPdim(X ⊗ Y) = FPdim(X)·FPdim(Y)
+            — and for Rep(G) it is the ordinary dimension of the vector space.
+            The size of the whole category is the sum of the squares,
+          </p>
+          <p class="display">FPdim(C) = Σ<sub>i</sub> FPdim(X<sub>i</sub>)²</p>
+          <p>
+            which for Rep(G) reproduces |G|, by the same identity that says the
+            squares of the irreducible dimensions add up to the order of the
+            group. Hold on to this number. In chapter nine it becomes the sharpest
+            tool anyone has for attacking the conjecture.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 2. duals -->
+      <section class="chapter" id="ch-duals" data-chapter="Duals and wires">
+        <div class="chapter__head">
+          <span class="chapter__num">02</span>
+          <h2>Duality is a wire you can pull straight</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Linear algebra first. Given a finite-dimensional vector space V, the
+            dual V* is the space of linear functionals on it, and there are two
+            completely canonical maps in play. One <b>evaluates</b> a functional
+            on a vector,
+          </p>
+          <p class="display">ev : V* ⊗ V → ℂ, φ ⊗ v ↦ φ(v)</p>
+          <p>
+            and the other goes the other way, producing something out of nothing:
+          </p>
+          <p class="display">coev : ℂ → V ⊗ V*, 1 ↦ Σ<sub>i</sub> e<sub>i</sub> ⊗ e<sup>i</sup></p>
+          <p>
+            That second map is less familiar but you have met it: written as a
+            matrix it is the identity matrix, with the sum running over any basis
+            and its dual basis. It is <b>coevaluation</b>, and the fact that it
+            does not depend on which basis you picked is the point.
+          </p>
+          <p>
+            Now the identity that ties them together. Start with a vector,
+            tensor in a coevaluation on the right, then evaluate on the left. In
+            symbols that composite is
+          </p>
+          <p class="display">V → V ⊗ V* ⊗ V → V</p>
+          <p>
+            and if you push a basis vector through it, you get the same basis
+            vector back. The composite is the identity. This is a real theorem
+            about matrices and it is also completely invisible written this way,
+            which is why people draw it instead.
+          </p>
+          <p>
+            <b>String diagrams.</b> Draw an object as a vertical wire, read the
+            page from bottom to top, and put an arrow on the wire: up for V, down
+            for V*. Then coevaluation is a wire bending over — a
+            <b>cup</b> — and evaluation is a wire bending back — a <b>cap</b>.
+            The identity above says that a wire with one bend up and one bend
+            down can be pulled taut. It is called the <b>zig-zag identity</b>,
+            and it is the entire content of what "V* is dual to V" means.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-zigzag">
+          <p class="panel__title">The zig-zag</p>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-zigzag"></canvas></div>
+          <div class="controls">
+            <label class="slider slider--wide">
+              <span>slack</span>
+              <input id="sl-slack" type="range" min="0" max="1" step="0.005" value="1" />
+              <output id="out-slack">1.00</output>
+            </label>
+            <div class="presets">
+              <button id="zz-pull" class="primary">pull taut</button>
+              <button id="zz-reset">slacken</button>
+            </div>
+            <div class="presets" id="zz-side">
+              <button data-side="left" class="on">left dual V*</button>
+              <button data-side="right">right dual *V</button>
+            </div>
+          </div>
+          <div class="readout readout--wide" id="ro-zigzag"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            A category in which every object has a dual satisfying that identity
+            is called <b>rigid</b>, and rigidity is part of the definition of a
+            fusion category. The diagrams are not decoration: for these
+            categories the picture <em>is</em> the proof. Two string diagrams that
+            can be deformed into one another without cutting wires denote the
+            same morphism, and that is a theorem, not a convention.
+          </p>
+          <p>
+            But notice what the panel's second button did. Bending the wire to
+            the left and bending it to the right are two different moves, and
+            they produce two different duals.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 3. two duals -->
+      <section class="chapter" id="ch-two" data-chapter="Two duals">
+        <div class="chapter__head">
+          <span class="chapter__num">03</span>
+          <h2>The left dual, the right dual, and the gap between them</h2>
+        </div>
+        <div class="prose">
+          <p>
+            In ordinary linear algebra there is only one dual because V and V**
+            are the same space — the canonical map v ↦ (φ ↦ φ(v)) identifies
+            them, and does so without any choices. Dualise twice and you are back
+            where you started, for free.
+          </p>
+          <p>
+            In a general monoidal category, dualising is a <em>construction</em>,
+            not a space of functionals, and it comes in two handednesses. The
+            <b>left dual</b> X* is the object that lets you bend a wire one way;
+            the <b>right dual</b> *X is the one that lets you bend it the other.
+            Dualising twice on the same side gives X**, and in general there is
+            no reason on earth for X** to equal X.
+          </p>
+          <p>
+            For fusion categories, though, the first piece of good news arrives
+            immediately, and it is the opening result of the paper we are reading:
+          </p>
+          <div class="statement">
+            <span class="lbl">Proposition 2.1</span>
+            <p>In a fusion category, any simple object V is isomorphic to its double dual V**.</p>
+          </div>
+          <p>
+            The proof is two lines and worth seeing, because it shows how much of
+            this subject is bookkeeping about which object contains the unit. X*
+            is characterised as the unique simple object whose product with X
+            <em>contains</em> the unit <b>1</b>. And *X is the unique simple
+            object whose product with X <em>maps onto</em> the unit. In a
+            semisimple category containing and mapping-onto are the same
+            condition, so *X = X*, and applying that twice gives X** ≅ X.
+          </p>
+          <p>
+            So at the level of objects, nothing is wrong. Below: the duality map
+            on each catalogue entry, which is always an involution — pairs swap,
+            self-dual objects sit alone.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-duality">
+          <p class="panel__title">X ↦ X* on the simple objects</p>
+          <div class="controls controls--lead">
+            <div class="presets" id="du-picks"></div>
+          </div>
+          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-duality"></canvas></div>
+          <div class="readout readout--wide" id="ro-duality"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Which raises the obvious question: if X ≅ X** for every object, what
+            is left to conjecture? The answer is the difference between
+            <em>an</em> isomorphism and <em>a system</em> of them, and it takes
+            the next two chapters to make that difference bite.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 4. the trace -->
+      <section class="chapter" id="ch-trace" data-chapter="The trace problem">
+        <div class="chapter__head">
+          <span class="chapter__num">04</span>
+          <h2>The loop that will not close</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Here is why anyone cares. Take a linear map f : V → V and ask for its
+            trace. In coordinates it is the sum of the diagonal entries, but
+            there is a coordinate-free way to write it that uses only the cup and
+            the cap: feed in a coevaluation, apply f to one leg, and evaluate.
+          </p>
+          <p class="display">tr(f) : ℂ → V ⊗ V* → V ⊗ V* → ℂ</p>
+          <p>
+            Diagrammatically, you take the wire carrying f and <b>bend it around
+            into a closed loop</b>. The trace of a map is the map with its ends
+            joined up. Setting f = id gives the dimension of V as the value of a
+            bare circle.
+          </p>
+          <p>
+            Now try that in a fusion category. The cup produces X ⊗ X*. To cap it
+            off you need an evaluation, and the only evaluation available to the
+            object X* is the one that eats X** ⊗ X*. So the left leg of your loop
+            arrives labelled X and the socket it has to plug into is labelled
+            X**. The loop does not close.
+          </p>
+          <p>
+            By Proposition 2.1 that is a repairable problem: pick an isomorphism
+            a : X → X**, insert it as a bead on the wire, and the loop closes.
+            That composite is the <b>quantum trace</b>, and it is exactly what the
+            paper writes as
+          </p>
+          <p class="display">Tr<sub>V</sub>(a) = ev<sub>V*</sub> ∘ (a ⊗ 1<sub>V*</sub>) ∘ coev<sub>V</sub></p>
+          <p>
+            Try it in the panel. Then move the slider, which rescales the bead by
+            a non-zero number λ.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-trace">
+          <p class="panel__title">Closing the loop</p>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-trace"></canvas></div>
+          <div class="controls">
+            <div class="presets" id="tr-mode">
+              <button data-mode="open" class="on">no bead</button>
+              <button data-mode="closed">insert a : X → X**</button>
+            </div>
+            <label class="slider slider--wide">
+              <span>λ</span>
+              <input id="sl-lambda" type="range" min="-2" max="2" step="0.01" value="1" />
+              <output id="out-lambda">1.00</output>
+            </label>
+            <div class="presets" id="tr-obj"></div>
+          </div>
+          <div class="readout readout--wide" id="ro-trace"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Two things happen at once, and the whole conjecture lives in the gap
+            between them.
+          </p>
+          <p>
+            First, the number you called the dimension moved. That is not a bug
+            in the panel. X is simple, so by <b>Schur's lemma</b> the space of
+            maps X → X** is one-dimensional: any two choices of a differ by a
+            scalar, and nothing in the category prefers one over another. The
+            quantum trace of a is a genuine invariant of the pair (X, a), not of
+            X.
+          </p>
+          <p>
+            Second, one number on the readout did <em>not</em> move. Rescaling
+            a by λ scales Tr<sub>V</sub>(a) by λ, and it scales the trace of the
+            inverse-transposed map by 1/λ — so their product is immune. The paper
+            calls it the <b>squared norm</b>,
+          </p>
+          <p class="display">|V|² = Tr<sub>V</sub>(a) · Tr<sub>V*</sub>((a<sup>−1</sup>)*)</p>
+          <p>
+            and it exists in every fusion category with no choices and no
+            conjectures, which is precisely why the authors could prove hard
+            theorems about it — including that |V|² is always a positive real
+            number, a result that took them most of the paper. Summing the
+            squared norms gives the <b>global dimension</b> dim(C), which is also
+            unconditional.
+          </p>
+          <div class="aside">
+            <span class="lbl">the asymmetry in one line</span>
+            <p>
+              dim(V) needs a choice and may not exist coherently.
+              |V|² and dim(C) need no choice and always exist.
+              Everything that is hard about the conjecture is the first line;
+              everything the 2005 paper actually proves is the second.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 5. the conjecture -->
+      <section class="chapter" id="ch-conj" data-chapter="The conjecture">
+        <div class="chapter__head">
+          <span class="chapter__num">05</span>
+          <h2>One choice, made consistently, everywhere at once</h2>
+        </div>
+        <div class="prose">
+          <p>
+            A single object's worth of ambiguity is survivable — pick a bead and
+            move on. What you cannot survive is picking them independently,
+            because then the dimension of a product has no reason to be the
+            product of the dimensions, and a quantity that fails to be
+            multiplicative is not a dimension.
+          </p>
+          <p>
+            So you want a whole system of beads, one a<sub>X</sub> : X → X** for
+            every object X, subject to two demands. It must be <b>natural</b>:
+            compatible with every morphism in the category, so that beads slide
+            along wires past anything else drawn on them. And it must be
+            <b>monoidal</b>: the bead on a product is the product of the beads,
+          </p>
+          <p class="display big">a<sub>X ⊗ Y</sub> = a<sub>X</sub> ⊗ a<sub>Y</sub></p>
+          <p>
+            That is the definition, and it is Definition 2.7 of the paper: a
+            <b>pivotal structure</b> is an isomorphism of tensor functors from the
+            identity functor to the double-dual functor. Unpacked, it is a
+            coherent system of beads. And a category that has one is called
+            <b>pivotal</b>.
+          </p>
+          <div class="statement">
+            <span class="lbl">Conjecture 2.8 · Etingof–Nikshych–Ostrik, 2005</span>
+            <p>Any fusion category admits a pivotal structure.</p>
+          </div>
+          <p>
+            Note what it does not say. It does not ask for a canonical one, or a
+            unique one, or a nice one. It asks whether the set of pivotal
+            structures on an arbitrary fusion category is ever empty. Nobody
+            knows.
+          </p>
+          <p>
+            To feel where the difficulty sits, play the panel. Fix a category and
+            a starting system of beads, then try to change it: multiply each
+            a<sub>X</sub> by a phase λ<sub>X</sub>. Naturality survives anything,
+            but monoidality turns into an arithmetic condition, one equation for
+            every fusion rule:
+          </p>
+          <p class="display">λ<sub>i</sub> λ<sub>j</sub> = λ<sub>k</sub> whenever N<sub>ij</sub><sup>k</sup> &gt; 0</p>
+          <p>
+            Turn one dial and watch how many equations go red at once. This is
+            what "coherent" costs.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-coherence">
+          <p class="panel__title">The coherence game</p>
+          <div class="controls controls--lead">
+            <div class="presets" id="co-picks"></div>
+          </div>
+          <div class="dials" id="co-dials"></div>
+          <div class="controls">
+            <div class="presets">
+              <button id="co-solve">snap to a solution</button>
+              <button id="co-next">next solution</button>
+              <button id="co-scramble">scramble</button>
+            </div>
+          </div>
+          <div class="constraints" id="co-constraints"></div>
+          <div class="readout readout--wide" id="ro-coherence"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Be clear about what that game does and does not show. It measures the
+            <em>difference</em> between two pivotal structures, and the difference
+            always has at least one solution — set every λ to 1 and every equation
+            holds. What the conjecture asks is whether there is anything to take
+            the difference of. The game is played on the set of pivotal
+            structures assuming that set is non-empty; nobody has found a way to
+            decide the assumption.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 6. counting -->
+      <section class="chapter" id="ch-count" data-chapter="How many">
+        <div class="chapter__head">
+          <span class="chapter__num">06</span>
+          <h2>How many pivotal structures, if any</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The solutions you were just hunting have a name. A system of scalars
+            λ with λ<sub>i</sub>λ<sub>j</sub> = λ<sub>k</sub> for every fusion
+            rule is a <b>tensor automorphism of the identity functor</b>, and
+            those form a group. Two pivotal structures differ by exactly one of
+            them, so the set of pivotal structures on C is either empty or a copy
+            of that group — a torsor, in the jargon: no preferred origin, but a
+            well-defined size.
+          </p>
+          <p>
+            And that group is computable from the fusion rules alone, because a λ
+            satisfying those equations is constant on a certain partition of the
+            simple objects. Start with the <b>adjoint subcategory</b>
+            C<sub>ad</sub>, everything appearing in some X ⊗ X*; any λ must be 1
+            there, since λ<sub>X</sub>λ<sub>X*</sub> = λ<sub>1</sub> = 1 forces
+            it. The remaining objects fall into blocks that multiply like a
+            group, and that group — the finest grading the category admits — is
+            the <b>universal grading group</b> U(C).
+          </p>
+          <p class="display">Aut<sub>⊗</sub>(Id<sub>C</sub>) ≅ Hom(U(C), ℂ<sup>×</sup>)</p>
+          <p>
+            Rep(G) is graded by the characters of the centre of G; the Ising
+            category is graded by ℤ/2, with the bosons in one block and the spin
+            field σ alone in the other; a category of G-graded vector spaces is
+            graded by G itself. The panel computes the blocks and their
+            multiplication table from N.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-grading">
+          <p class="panel__title">Universal grading</p>
+          <div class="controls controls--lead">
+            <div class="presets" id="gr-picks"></div>
+          </div>
+          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-grading"></canvas></div>
+          <div class="readout readout--wide" id="ro-grading"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            So the counting problem is finished and the existence problem is
+            untouched — a fair summary of the state of the whole subject. We know
+            exactly how many pivotal structures a fusion category has, on the
+            assumption that it has one.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 7. fourth dual -->
+      <section class="chapter" id="ch-fourth" data-chapter="The fourth dual">
+        <div class="chapter__head">
+          <span class="chapter__num">07</span>
+          <h2>The fourth dual comes for free</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Here is the result that makes the conjecture look so nearly true, and
+            it is the theorem the conjecture was announced as a strengthening of.
+          </p>
+          <div class="statement">
+            <span class="lbl">Theorem 2.6</span>
+            <p>In any fusion category, the identity functor is isomorphic to the functor **** as a tensor functor.</p>
+          </div>
+          <p>
+            Dualise four times and you return to the identity, coherently,
+            monoidally, with no hypotheses. For representation categories of Hopf
+            algebras this is Radford's formula for the fourth power of the
+            antipode, an identity from 1976; the fusion-category version follows
+            from Nikshych's analogue of it for weak Hopf algebras.
+          </p>
+          <p>
+            So the double dual is an operation that squares to the identity. The
+            conjecture asks whether it <em>is</em> the identity — whether that
+            square root can be taken. You are one step away, and there is no
+            general argument for taking it.
+          </p>
+          <p>
+            The picture to hold is a twisted ribbon. Thicken each wire into a flat
+            band; then the double dual is what a full 2π turn of the band does to
+            the object at its end. A band with one full twist in it is genuinely
+            not the same as a flat band — you cannot undo it. A band with
+            <em>two</em> full twists can be undone, by passing a loop of it around
+            the end, which is the Dirac belt trick. Drag the panel past 4π and
+            press release.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-ribbon">
+          <p class="panel__title">Twist, and the belt trick at 4π</p>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-ribbon"></canvas></div>
+          <div class="controls">
+            <label class="slider slider--wide">
+              <span>twist</span>
+              <input id="sl-twist" type="range" min="0" max="2" step="0.005" value="0" />
+              <output id="out-twist">0</output>
+            </label>
+            <div class="presets">
+              <button id="rb-release" class="primary">release</button>
+              <button id="rb-reset">reset</button>
+            </div>
+          </div>
+          <div class="readout readout--wide" id="ro-ribbon"></div>
+        </figure>
+
+        <div class="prose">
+          <p class="fine">
+            The belt trick is an analogy for why 4π is special, not the proof
+            that **** ≅ Id; that is Theorem 2.6, by way of weak Hopf algebras.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 8. cover -->
+      <section class="chapter" id="ch-cover" data-chapter="The double cover">
+        <div class="chapter__head">
+          <span class="chapter__num">08</span>
+          <h2>Every fusion category is covered by a pivotal one</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The square root you cannot take inside C, you can always take by
+            stepping outside it. Using the canonical trivialisation
+            g : Id → **** of the previous chapter, build a new category
+            <b>C̃</b> whose simple objects are <em>pairs</em>: a simple object X
+            of C, together with a chosen isomorphism f : X → X** whose own double
+            dual composes back to g.
+          </p>
+          <p>
+            Since f and −f both qualify and are never the same choice, every
+            simple object of C has exactly two lifts. C̃ has twice as many simple
+            objects as C and twice its Frobenius–Perron dimension, and it comes
+            with a forgetful functor back down that just drops the f. And C̃ is
+            pivotal by construction: each object arrived carrying its own bead.
+          </p>
+          <p>
+            It is better than pivotal. The paper proves, by pushing the question
+            into the Drinfeld centre and noting that the relevant double is
+            ribbon:
+          </p>
+          <div class="statement">
+            <span class="lbl">Proposition 3.34 — sphericity of the pivotalisation</span>
+            <p>If dim C ≠ 0 then the canonical pivotal structure of C̃ is in fact a spherical structure.</p>
+          </div>
+          <p>
+            <b>Spherical</b> is the stronger condition that dim(V) = dim(V*) for
+            every simple V — the left-handed and right-handed traces agree, so a
+            loop drawn on a sphere gives the same answer whichever way you close
+            it. It is what topological applications actually want.
+          </p>
+          <p>
+            This construction — the <b>pivotalisation</b> — is why the conjecture
+            is not urgent in practice. Whatever you were trying to do with a
+            fusion category, you can usually do upstairs in its double cover, pay
+            a factor of two, and proceed. It is also why the conjecture is hard:
+            the cover exists, the functor down exists, and there is no known way
+            to choose a section of it.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-cover">
+          <p class="panel__title">The two-sheeted cover C̃ → C</p>
+          <div class="controls controls--lead">
+            <div class="presets" id="cv-picks"></div>
+          </div>
+          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-cover"></canvas></div>
+          <div class="readout readout--wide" id="ro-cover"></div>
+        </figure>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 9. known cases -->
+      <section class="chapter" id="ch-known" data-chapter="Where it is known">
+        <div class="chapter__head">
+          <span class="chapter__num">09</span>
+          <h2>The one good theorem, and its exact reach</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Two dimensions have been following us around. FPdim(C), from chapter
+            one, built out of integer matrices. And dim(C), the sum of squared
+            norms from chapter four, built out of traces. They are different
+            numbers, and the paper proves they are never far apart in one
+            direction:
+          </p>
+          <p class="display">dim(C) ≤ FPdim(C) always, with dim(C)/FPdim(C) an algebraic integer</p>
+          <p>
+            Call a category <b>pseudo-unitary</b> when equality holds. Then:
+          </p>
+          <div class="statement">
+            <span class="lbl">Proposition 8.23</span>
+            <p>
+              Any pseudo-unitary fusion category admits a unique pivotal — in
+              fact spherical — structure, with respect to which the categorical
+              dimensions of all simple objects are positive and coincide with
+              their Frobenius–Perron dimensions.
+            </p>
+          </div>
+          <p>
+            That is the conjecture, proved, for every category where the two
+            dimensions agree. And a companion result makes it enormously more
+            useful than it first sounds:
+          </p>
+          <div class="statement">
+            <span class="lbl">Proposition 8.24</span>
+            <p>If FPdim(C) is an integer then C is pseudo-unitary.</p>
+          </div>
+          <p>
+            An <em>integer</em> — not integer dimensions object by object. The
+            Tambara–Yamagami category in the catalogue has an object of dimension
+            √3 and is still settled, because 1+1+1+3 = 6. Between them these two
+            propositions dispose of every representation category of a semisimple
+            Hopf or quasi-Hopf algebra, every category of graded vector spaces,
+            everything with integer or even merely rational-summing dimensions,
+            and every unitary category coming from operator algebras.
+          </p>
+          <p>
+            So what is left? Categories where dim(C) &lt; FPdim(C) strictly. They
+            are not exotic and they are easy to manufacture: take a perfectly
+            nice category and apply a field automorphism to it. Below is the
+            standard family — the Verlinde categories of SU(2) at level k, and
+            their Galois conjugates, obtained by replacing the root of unity
+            q = e<sup>iπ/(k+2)</sup> by another primitive one.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-galois">
+          <p class="panel__title">Galois conjugates of SU(2)<sub>k</sub></p>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-galois"></canvas></div>
+          <div class="controls">
+            <label class="slider slider--wide">
+              <span>level k</span>
+              <input id="sl-level" type="range" min="1" max="14" step="1" value="8" />
+              <output id="out-level">8</output>
+            </label>
+            <p class="hint">click a bar to read that conjugate's object dimensions</p>
+          </div>
+          <div class="readout readout--wide" id="ro-galois"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Only the first conjugate sits on the diagonal. All the others have
+            dim(C) strictly smaller — sometimes dramatically so — and
+            Proposition 8.23 has nothing to say about them. The smallest example
+            is the <b>Yang–Lee</b> category, which has the same fusion rules as
+            Fibonacci but assigns its non-trivial object the dimension
+            (1−√5)/2 ≈ −0.618. A negative dimension. Its global dimension is
+            (5−√5)/2 ≈ 1.382 against an FPdim of ≈ 3.618.
+          </p>
+          <p>
+            And yet every single one of those conjugates <em>is</em> pivotal —
+            they are braided, in fact modular, and one can write their pivotal
+            structures down. Which is the real state of the art in one sentence:
+            the only general theorem anyone has covers a condition that is
+            sufficient but visibly not necessary, and every category outside it
+            has had to be handled by hand.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────────── 10. stakes -->
+      <section class="chapter" id="ch-stakes" data-chapter="What rests on it">
+        <div class="chapter__head">
+          <span class="chapter__num">10</span>
+          <h2>What rests on it, and where it stands</h2>
+        </div>
+        <div class="prose">
+          <p>
+            A conjecture about beads on wires sounds like an internal matter. It
+            is not, because the quantum trace is the gate through which fusion
+            categories reach topology and physics. Close a loop and you get a
+            number; close a knotted loop and you get a knot invariant; glue
+            tetrahedra labelled by simple objects and sum over the labels and you
+            get an invariant of 3-manifolds. Turaev–Viro state sums, string-net
+            models of topological phases, Frobenius–Schur indicators, the modular
+            data of a Drinfeld centre — all of them start by drawing a closed
+            diagram and asking what number it evaluates to.
+          </p>
+          <p>
+            The map below separates what a fusion category gives you outright
+            from what it gives you only once a pivotal structure is in hand.
+            Toggle the assumption.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-deps">
+          <p class="panel__title">Downstream of the bead</p>
+          <div class="controls controls--lead">
+            <div class="presets" id="dp-toggle">
+              <button data-on="1" class="on">assume pivotal</button>
+              <button data-on="0">withhold it</button>
+            </div>
+          </div>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-deps"></canvas></div>
+          <div class="readout readout--wide" id="ro-deps"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Where does it actually stand? Open, over an algebraically closed
+            field of characteristic zero, which is the setting the conjecture was
+            posed in. In the twenty-one years since, the known cases have not
+            moved much past Propositions 8.23 and 8.24 plus case-by-case work,
+            and no counterexample has appeared.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-ledger">
+          <p class="panel__title">Status</p>
+          <div class="ledger" id="ledger"></div>
+        </figure>
+
+        <div class="prose">
+          <p>
+            There is one more reason the question is interesting rather than
+            merely unfinished. Relax the hypotheses and strange things start
+            happening: over fields that are not algebraically closed, simple
+            objects can have division algebras as their endomorphism rings, and
+            Galois theory enters the structure of the category in ways it simply
+            cannot over ℂ. Nobody has turned that into a counterexample over ℂ.
+            But it is a standing reminder that nothing in the argument so far
+            explains <em>why</em> a pivotal structure ought to exist. The
+            evidence is that every category anyone has been able to build has one.
+          </p>
+          <p>
+            Which is, in the end, a strange position to be in. Dualising twice
+            leaves every object where it was. Dualising four times leaves the
+            whole category where it was, coherently. The missing statement is the
+            one in between, and it has been missing for two decades.
+          </p>
+          <p class="closing">
+            Pull the wire taut, and it comes back to you rotated by a turn nobody
+            can prove is trivial.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p>
+        Primary source:
+        <a href="https://arxiv.org/abs/math/0203060" target="_blank" rel="noreferrer">P. Etingof, D. Nikshych, V. Ostrik, <i>On fusion categories</i></a>,
+        Annals of Mathematics <b>162</b> (2005) 581–642. Conjecture 2.8 is in
+        §2.3; Theorem 2.6, Proposition 2.1 and Propositions 8.23–8.24 are quoted
+        above in the authors' own words. Background:
+        <a href="https://math.mit.edu/~etingof/egnobookfinal.pdf" target="_blank" rel="noreferrer">Etingof–Gelaki–Nikshych–Ostrik, <i>Tensor Categories</i></a> (the textbook),
+        <a href="https://arxiv.org/abs/0906.0620" target="_blank" rel="noreferrer">Drinfeld–Gelaki–Nikshych–Ostrik on braided fusion categories</a>
+        for the universal grading group,
+        <a href="https://arxiv.org/abs/2401.02354" target="_blank" rel="noreferrer">Sanford on fusion categories over non-algebraically-closed fields</a>,
+        and <a href="https://ncatlab.org/nlab/show/pivotal+category" target="_blank" rel="noreferrer">the nLab</a> for definitions.
+      </p>
+      <p class="colophon__note">
+        Every fusion ring on this page is checked at build time for associativity,
+        unit, rigidity and Frobenius reciprocity; dimensions come from
+        Perron–Frobenius iteration on the fusion matrices, and gradings from the
+        adjoint subcategory — nothing displayed is hand-entered. Status as of
+        September 2026.
+      </p>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
