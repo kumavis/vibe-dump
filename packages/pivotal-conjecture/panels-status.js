@@ -9,19 +9,25 @@ const gcd = (a, b) => (b ? gcd(b, a % b) : a)
 
 /**
  * The Verlinde category of SU(2) at level k has k+1 simple objects whose
- * dimensions are quantum integers [m] = sin(mπ/(k+2)) / sin(π/(k+2)). Replacing
- * the primitive root of unity by another one — index j, coprime to k+2 — is a
- * field automorphism applied to the whole category, and gives another fusion
- * category with the same fusion rules and different dimensions.
+ * dimensions are quantum integers [m] = sin(mπ/h) / sin(π/h), h = k+2. Applying
+ * a field automorphism to the whole category replaces q by another primitive
+ * root of unity of the same order, giving a fusion category with the same fusion
+ * rules and different dimensions.
  *
- * j and (k+2)−j give dimensions differing only by signs, hence the same global
- * dimension, so only the first half of the range is listed.
+ * The modulus matters: q = e^{iπ/h} is a primitive **2h**-th root of unity, so
+ * the Galois orbit is indexed by j coprime to 2h, not to h. Taking gcd(j, h) = 1
+ * instead lets in even j whenever h is odd, and those tuples are not Galois
+ * conjugates of anything — at level 3 it invents a "conjugate" with dimensions
+ * (1, φ−1, 1−φ, −1), when the actual conjugate of φ is 1−φ throughout.
+ *
+ * j and 2h−j give dimensions differing only by signs, hence the same global
+ * dimension, so only j < h is listed.
  */
 function conjugates(k) {
   const h = k + 2
   const out = []
-  for (let j = 1; j * 2 <= h; j++) {
-    if (gcd(j, h) !== 1) continue
+  for (let j = 1; j < h; j++) {
+    if (gcd(j, 2 * h) !== 1) continue
     const dims = []
     for (let m = 1; m <= k + 1; m++) dims.push(Math.sin((m * j * Math.PI) / h) / Math.sin((j * Math.PI) / h))
     out.push({ j, dims, dim: dims.reduce((s, d) => s + d * d, 0) })
@@ -54,7 +60,7 @@ export function initGalois() {
     // The FPdim line: the ceiling nothing can exceed (Proposition 8.21).
     const fy = scale(fp)
     sheet.stroke([[padL - 10, fy], [sheet.w - padR, fy]], { color: INK.verm, width: 1.4, dash: [6, 4], smooth: false })
-    sheet.text(sheet.w - padR, fy - 10, `FPdim(C) = ${num(fp, 4)}`, {
+        sheet.text(sheet.w - padR, fy + 13, `FPdim(C) = ${num(fp, 4)}`, {
       align: 'right', color: INK.verm, font: '10.5px ui-monospace, monospace', halo: INK.panel,
     })
 
@@ -66,7 +72,7 @@ export function initGalois() {
       const x = padL + i * bw
       const w = Math.min(bw - 12, 66)
       const y = scale(c.dim)
-      const isFP = i === 0
+            const isFP = Math.abs(c.dim - fp) < 1e-9
       const on = i === picked
       sheet.ctx.save()
       sheet.ctx.globalAlpha = on ? 0.9 : 0.55
@@ -80,15 +86,20 @@ export function initGalois() {
         sheet.ctx.strokeRect(x - 0.5, y - 0.5, w + 1, padT + plotH - y + 1)
         sheet.ctx.restore()
       }
-      sheet.text(x + w / 2, y - 11, num(c.dim, 3), {
+            sheet.text(x + w / 2, y - 11, num(c.dim, 4), {
         align: 'center', color: isFP ? INK.verm : INK.indigo, font: '10.5px ui-monospace, monospace', halo: INK.panel,
       })
       sheet.text(x + w / 2, padT + plotH + 15, `q^${c.j}`, {
         align: 'center', color: INK.soft, font: '11px ui-monospace, monospace',
       })
-      if (isFP) {
+            if (isFP) {
         sheet.text(x + w / 2, padT + plotH + 30, 'pseudo-unitary', {
           align: 'center', color: INK.verm, font: '9px ui-monospace, monospace',
+        })
+      }
+      if (c.dims.some((d) => d < 0)) {
+        sheet.text(x + w / 2, padT + plotH + (isFP ? 42 : 30), 'signed', {
+          align: 'center', color: INK.faint, font: '9px ui-monospace, monospace',
         })
       }
       return { x, w, i }
@@ -107,29 +118,47 @@ export function initGalois() {
     const list = conjugates(k)
     const c = list[Math.min(picked, list.length - 1)]
     const fp = list[0].dim
-    const dims = c.dims.map((d, m) => `<span class="${d < 0 ? 'bad' : ''}">X${'₀₁₂₃₄₅₆₇₈₉'[m] || m}=${num(d, 4)}</span>`).join(' <span class="k">·</span> ')
+        const sub = (n) => String(n).replace(/\d/g, (t) => '₀₁₂₃₄₅₆₇₈₉'[+t])
+    const dims = c.dims.map((d, m) => `<span class="${d < 0 ? 'bad' : ''}">X${sub(m)}=${num(d, 4)}</span>`).join(' <span class="k">·</span> ')
     const pu = Math.abs(c.dim - fp) < 1e-9
     ro.innerHTML = `
       <div><b>q ↦ q<sup>${c.j}</sup></b> <span class="k">·</span> dim(C) <span class="k">=</span> <b>${num(c.dim, 6)}</b>
         <span class="k">vs FPdim(C) =</span> ${num(fp, 6)}
         <span class="${pu ? 'good' : 'bad'}">${pu ? '· pseudo-unitary — Proposition 8.23 applies' : `· ratio ${num(c.dim / fp, 4)} < 1 — Proposition 8.23 does not apply`}</span></div>
       <div style="margin-top:6px">${dims}</div>
-      ${c.dims.some((d) => d < 0)
-        ? '<div class="k" style="margin-top:6px">Some dimensions are negative. That is allowed: a pivotal structure assigns numbers, and nothing makes them positive unless the category is pseudo-unitary.</div>'
+            ${c.dims.some((d) => d < 0)
+        ? `<div class="k" style="margin-top:6px">Some of these dimensions are negative, which a pivotal structure is perfectly entitled to produce.${
+            pu ? ' Proposition 8.23 still applies here, and it promises a pivotal structure whose dimensions are all positive — a different one, differing from this by a character of U(C), exactly as chapter six describes.' : ''
+          }</div>`
         : ''}
-      <div class="k" style="margin-top:6px">Each listed conjugate is paired with a mirror one (q ↦ q<sup>${k + 2}−${c.j}</sup>)
-        whose dimensions differ by signs and whose dim(C) is identical, so only half the orbit is drawn.
-        Every one of these categories is modular, hence pivotal — the theorem simply does not see them.</div>`
+      <div class="k" style="margin-top:6px">${
+        list.length === 1
+          ? 'At this level the category is defined over the rationals: the Galois orbit has one member, and it is pseudo-unitary.'
+          : `Each conjugate drawn is paired with a mirror one (q ↦ q<sup>${2 * (k + 2) - c.j}</sup>) with the same dimensions and the same dim(C), so half the orbit is folded in.`
+      }${
+        pu ? '' : ' Nothing in Proposition 8.23 reaches this category — and it is pivotal anyway, because the quantum-group construction hands you the structure directly.'
+      }</div>`
   }
 
-  slider.addEventListener('input', () => { picked = 0; render() })
+    function pickers() {
+    const host = $('#ga-picks')
+    if (!host) return
+    const list = conjugates(+slider.value)
+    buttonRow(host, list.map((c) => ({ label: `q^${c.j}`, i: list.indexOf(c) })), (item) => {
+      picked = item.i
+      render()
+    }, picked)
+  }
+
+  slider.addEventListener('input', () => { picked = 0; render(); pickers() })
   sheet.canvas.addEventListener('click', (e) => {
     const r = sheet.canvas.getBoundingClientRect()
     const mx = e.clientX - r.left
-    const hit = bars.find((b) => mx >= b.x - 6 && mx <= b.x + b.w + 6)
-    if (hit) { picked = hit.i; render() }
+        const hit = bars.find((b) => mx >= b.x - 6 && mx <= b.x + b.w + 6)
+    if (hit) { picked = hit.i; render(); pickers() }
   })
-  onResize(sheet, render)
+    onResize(sheet, render)
+  pickers()
 }
 
 /* ──────────────────────────────── 10. what depends on the bead */
@@ -144,7 +173,7 @@ const NODES = [
   { id: 'sph', x: 0.63, y: 0.68, label: 'spherical structure', kind: 'needs' },
   { id: 'tv', x: 0.3, y: 0.9, label: 'Turaev–Viro invariants', kind: 'needs' },
   { id: 'sn', x: 0.62, y: 0.9, label: 'string-net models', kind: 'needs' },
-  { id: 'mod', x: 0.87, y: 0.74, label: 'modular data of Z(C)', kind: 'needs' },
+  { id: 'mod', x: 0.85, y: 0.72, label: 'modular data of the centre Z(C)', kind: 'needs' },
 ]
 const EDGES = [
   ['c', 'norm'], ['c', 'fp'], ['c', 'piv'],
@@ -224,7 +253,16 @@ export function initDeps() {
     const mx = e.clientX - r.left
     const my = e.clientY - r.top
     const P = place()
-    const hit = Object.values(P).find((n) => Math.abs(n.px - mx) < 80 && Math.abs(n.py - my) < 14)
+        // Boxes are between 70 and 200px wide and sit closer than that together, so
+    // a fixed radius surfaces the wrong node's note. Measure, then take nearest.
+    let hit = null
+    let best = Infinity
+    for (const n of Object.values(P)) {
+      const half = (sheet.measure(n.label, '11px ui-monospace, monospace') + 20) / 2
+      const dx = Math.abs(n.px - mx)
+      if (dx > half || Math.abs(n.py - my) > 13) continue
+      if (dx < best) { best = dx; hit = n }
+    }
     const next = hit ? hit.id : null
     if (next !== hover) { hover = next; draw() }
   })
@@ -238,7 +276,7 @@ export function initDeps() {
 const LEDGER = [
   {
     t: 'Pseudo-unitary categories — dim(C) = FPdim(C)',
-    d: 'Proposition 8.23: a unique spherical structure, with all dimensions positive and equal to the Frobenius–Perron ones.',
+    d: 'Proposition 8.23: a unique spherical structure whose dimensions are all positive and equal to the Frobenius–Perron ones. Unique among the positive ones — there may be others, differing by a character, as chapter six counts.',
     badge: 'proved', kind: 'yes',
   },
   {
@@ -263,7 +301,7 @@ const LEDGER = [
   },
   {
     t: 'Braided fusion categories',
-    d: 'Pivotal structures on a braided category correspond exactly to twists, via the Drinfeld isomorphism. Restating the question does not answer it.',
+    d: 'Via the Drinfeld isomorphism, pivotal structures on a braided category correspond exactly to balancings — twists θ with θ_{X⊗Y} = (θ_X ⊗ θ_Y)c_{Y,X}c_{X,Y}. (Not to ribbon structures, which match the spherical ones.) Restating the question does not answer it.',
     badge: 'open', kind: 'open',
   },
   {

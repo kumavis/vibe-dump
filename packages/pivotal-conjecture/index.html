@@ -24,12 +24,12 @@
         <div class="hero__card">
           <span class="tag">Conjecture 2.8</span>
           <p class="claim">Any fusion category admits a pivotal structure.</p>
-          <p class="src">Etingof, Nikshych &amp; Ostrik, <i>On fusion categories</i>, §2.3</p>
+          <p class="src">Etingof, Nikshych &amp; Ostrik, <i>On fusion categories</i>, §2.1</p>
         </div>
 
         <p class="hero__sub">
-          Twenty-one words, no proof, no counterexample, and almost every
-          construction downstream of it quietly assumes it is true. This page
+          Seven words, no proof, no counterexample — and a hypothesis a great deal
+          of later mathematics simply helps itself to. This page
           starts from the tensor product of two group representations and
           builds, chapter by chapter, to what that sentence is asking for — and
           to why it is so stubborn. Every fusion rule, dimension and grading
@@ -61,9 +61,19 @@
             by taking the tensor product V ⊗ W of the underlying vector spaces
             and letting G act on both factors at once. And every representation
             breaks up, uniquely, into a sum of finitely many
-            <b>irreducible</b> ones that cannot be broken further. For S₃ there
-            are exactly three: the trivial one <span class="nowrap">1</span>, the
-            sign representation ε, and a 2-dimensional one V.
+            <b>irreducible</b> ones that cannot be broken further. For S₃ there are exactly three: the trivial one
+            <span class="nowrap">1</span>, the sign representation ε, and a
+            2-dimensional one V.
+          </p>
+          <p>
+            One thing more, and it is the thing everything below turns on.
+            Alongside the objects sit the <b>maps</b> between them — for
+            representations, the linear maps that commute with the action of G.
+            The general word is <b>morphism</b>, and a <b>category</b> is exactly
+            this: a collection of objects together with the morphisms between
+            them. The conjecture in the title is not about objects at all. It is
+            about whether a certain family of morphisms can be chosen
+            consistently.
           </p>
           <p>
             So the irreducibles behave like a peculiar set of numbers. They
@@ -98,22 +108,22 @@
         </div>
 
         <figure class="panel" id="panel-explorer">
-          <p class="panel__title">Fusion rules, live</p>
+          <figcaption class="panel__title">Fusion rules, live</figcaption>
           <div class="controls controls--lead">
-            <div class="presets" id="ex-picks"></div>
+            <div class="presets" id="ex-picks" role="group" aria-label="example category"></div>
           </div>
           <div class="panel__grid--split">
             <div class="ftable-wrap"><table class="ftable" id="ex-table"></table></div>
             <div class="panel__plot panel__plot--small">
-              <canvas class="cv" id="cv-explorer"></canvas>
+              <canvas class="cv" id="cv-explorer" role="img" aria-label="Fusion graph: each simple object is a disc sized by its dimension, with arcs showing the products."></canvas>
               <p class="cap">
-                each simple object as a disc, area proportional to its dimension ·
-                arcs show what the highlighted object produces when you multiply
-                by it
+                each simple object as a disc, sized by its
+                dimension · arcs show what the highlighted object produces when
+                you multiply by it
               </p>
             </div>
           </div>
-          <div class="readout readout--wide" id="ro-explorer"></div>
+          <div class="readout" id="ro-explorer"></div>
         </figure>
 
         <div class="prose">
@@ -122,10 +132,12 @@
             basis vectors — there is no vector space to count. They come from the
             fusion rules alone. Treat multiplication by the object X as an
             integer matrix N<sub>X</sub>, whose entries are the
-            N<sub>Xj</sub><sup>k</sup>. That matrix has non-negative entries, so
-            the <b>Perron–Frobenius theorem</b> hands you a largest eigenvalue
-            with a positive eigenvector, and the same eigenvector works for every
-            X at once. That eigenvalue is the <b>Frobenius–Perron dimension</b>
+            N<sub>Xj</sub><sup>k</sup>. Those matrices have non-negative entries, and because every simple
+            object turns up somewhere in the products their sum is
+            <em>strictly</em> positive — which is what <b>Perron–Frobenius</b>
+            needs in order to hand you a largest eigenvalue with a genuinely
+            positive eigenvector. That single eigenvector works for every X at
+            once. That eigenvalue is the <b>Frobenius–Perron dimension</b>
             FPdim(X), and the panel computes it by iterating the matrix.
           </p>
           <p>
@@ -135,9 +147,9 @@
           </p>
           <p class="display">FPdim(C) = Σ<sub>i</sub> FPdim(X<sub>i</sub>)²</p>
           <p>
-            which for Rep(G) reproduces |G|, by the same identity that says the
-            squares of the irreducible dimensions add up to the order of the
-            group. Hold on to this number. In chapter nine it becomes the sharpest
+            which for Rep(G) comes out as |G| — the classical fact that the squares
+            of a finite group's irreducible dimensions sum to its order. For S₃
+            that is 1 + 1 + 4 = 6. Hold on to this number. In chapter nine it becomes the sharpest
             tool anyone has for attacking the conjecture.
           </p>
         </div>
@@ -169,7 +181,7 @@
           </p>
           <p>
             Now the identity that ties them together. Start with a vector,
-            tensor in a coevaluation on the right, then evaluate on the left. In
+            tensor in a coevaluation on the left, then evaluate on the right. In
             symbols that composite is
           </p>
           <p class="display">V → V ⊗ V* ⊗ V → V</p>
@@ -191,8 +203,8 @@
         </div>
 
         <figure class="panel" id="panel-zigzag">
-          <p class="panel__title">The zig-zag</p>
-          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-zigzag"></canvas></div>
+          <figcaption class="panel__title">The zig-zag</figcaption>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-zigzag" role="img" aria-label="String diagram of the zig-zag identity: a wire with one bend up and one bend down, pulled taut."></canvas></div>
           <div class="controls">
             <label class="slider slider--wide">
               <span>slack</span>
@@ -203,22 +215,20 @@
               <button id="zz-pull" class="primary">pull taut</button>
               <button id="zz-reset">slacken</button>
             </div>
-            <div class="presets" id="zz-side">
-              <button data-side="left" class="on">left dual V*</button>
-              <button data-side="right">right dual *V</button>
-            </div>
+            <div class="presets" id="zz-side" role="group" aria-label="which dual"></div>
           </div>
-          <div class="readout readout--wide" id="ro-zigzag"></div>
+          <div class="readout" id="ro-zigzag"></div>
         </figure>
 
         <div class="prose">
           <p>
             A category in which every object has a dual satisfying that identity
             is called <b>rigid</b>, and rigidity is part of the definition of a
-            fusion category. The diagrams are not decoration: for these
-            categories the picture <em>is</em> the proof. Two string diagrams that
-            can be deformed into one another without cutting wires denote the
-            same morphism, and that is a theorem, not a convention.
+            fusion category. The diagrams are not decoration: sliding a box along a wire and pulling
+            a bend out are genuine equalities between maps, so the picture does
+            real work. What you may <em>not</em> yet do is rotate a piece of the
+            picture through a full turn and assume nothing changed. That move is
+            the subject of this whole page, and it is not free.
           </p>
           <p>
             But notice what the panel's second button did. Bending the wire to
@@ -236,16 +246,19 @@
         </div>
         <div class="prose">
           <p>
-            In ordinary linear algebra there is only one dual because V and V**
-            are the same space — the canonical map v ↦ (φ ↦ φ(v)) identifies
-            them, and does so without any choices. Dualise twice and you are back
+            In ordinary linear algebra there is only one dual worth the name,
+            because V and V** come with a canonical identification: send a vector
+            v to the functional φ ↦ φ(v). It needs no basis and no choices, so it
+            costs nothing and you stop noticing it. Dualise twice and you are back
             where you started, for free.
           </p>
           <p>
             In a general monoidal category, dualising is a <em>construction</em>,
             not a space of functionals, and it comes in two handednesses. The
-            <b>left dual</b> X* is the object that lets you bend a wire one way;
-            the <b>right dual</b> *X is the one that lets you bend it the other.
+            <b>right dual</b> X* is the object that lets you bend a wire one way;
+            the <b>left dual</b> *X is the one that bends it the other. The names
+            are the paper's, and worth keeping straight, because the gap between
+            the two is the whole subject.
             Dualising twice on the same side gives X**, and in general there is
             no reason on earth for X** to equal X.
           </p>
@@ -259,10 +272,9 @@
           </div>
           <p>
             The proof is two lines and worth seeing, because it shows how much of
-            this subject is bookkeeping about which object contains the unit. X*
-            is characterised as the unique simple object whose product with X
-            <em>contains</em> the unit <b>1</b>. And *X is the unique simple
-            object whose product with X <em>maps onto</em> the unit. In a
+            this subject is bookkeeping about which object contains the unit. The right dual X* is the unique simple object whose product with X
+            <em>contains</em> the unit <b>1</b>. The left dual *X is the unique
+            simple object whose product with X <em>maps onto</em> the unit. In a
             semisimple category containing and mapping-onto are the same
             condition, so *X = X*, and applying that twice gives X** ≅ X.
           </p>
@@ -274,18 +286,17 @@
         </div>
 
         <figure class="panel" id="panel-duality">
-          <p class="panel__title">X ↦ X* on the simple objects</p>
+          <figcaption class="panel__title">X ↦ X* on the simple objects</figcaption>
           <div class="controls controls--lead">
-            <div class="presets" id="du-picks"></div>
+            <div class="presets" id="du-picks" role="group" aria-label="example category"></div>
           </div>
-          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-duality"></canvas></div>
-          <div class="readout readout--wide" id="ro-duality"></div>
+          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-duality" role="img" aria-label="The duality map on simple objects, pairing each with its dual."></canvas></div>
+          <div class="readout" id="ro-duality"></div>
         </figure>
 
         <div class="prose">
           <p>
-            Which raises the obvious question: if X ≅ X** for every object, what
-            is left to conjecture? The answer is the difference between
+            So if X ≅ X** for every object, what is left to conjecture? The answer is the difference between
             <em>an</em> isomorphism and <em>a system</em> of them, and it takes
             the next two chapters to make that difference bite.
           </p>
@@ -305,7 +316,13 @@
             there is a coordinate-free way to write it that uses only the cup and
             the cap: feed in a coevaluation, apply f to one leg, and evaluate.
           </p>
-          <p class="display">tr(f) : ℂ → V ⊗ V* → V ⊗ V* → ℂ</p>
+          <p class="display">tr(f) : ℂ &nbsp;→&nbsp; V ⊗ V* &nbsp;→&nbsp; V ⊗ V* &nbsp;→&nbsp; ℂ</p>
+          <p class="fine">
+            coev, then f on the left leg, then an evaluation that eats V ⊗ V* —
+            and note the order, because the ev of chapter two eats V* ⊗ V. Over
+            vector spaces the canonical V ≅ V** quietly supplies the other one,
+            and that silent step is what this chapter is about.
+          </p>
           <p>
             Diagrammatically, you take the wire carrying f and <b>bend it around
             into a closed loop</b>. The trace of a map is the map with its ends
@@ -333,21 +350,18 @@
         </div>
 
         <figure class="panel" id="panel-trace">
-          <p class="panel__title">Closing the loop</p>
-          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-trace"></canvas></div>
+          <figcaption class="panel__title">Closing the loop</figcaption>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-trace" role="img" aria-label="String diagram of a loop closing around an endomorphism, with the bead that closes it."></canvas></div>
           <div class="controls">
-            <div class="presets" id="tr-mode">
-              <button data-mode="open" class="on">no bead</button>
-              <button data-mode="closed">insert a : X → X**</button>
-            </div>
+            <div class="presets" id="tr-mode" role="group" aria-label="loop closure"></div>
             <label class="slider slider--wide slider--sym">
               <span>λ</span>
               <input id="sl-lambda" type="range" min="-2" max="2" step="0.01" value="1" />
               <output id="out-lambda">1.00</output>
             </label>
-            <div class="presets" id="tr-obj"></div>
+            <div class="presets" id="tr-obj" role="group" aria-label="which object"></div>
           </div>
-          <div class="readout readout--wide" id="ro-trace"></div>
+          <div class="readout" id="ro-trace"></div>
         </figure>
 
         <div class="prose">
@@ -413,11 +427,20 @@
           </p>
           <p class="display big">a<sub>X ⊗ Y</sub> = a<sub>X</sub> ⊗ a<sub>Y</sub></p>
           <p>
-            That is the definition, and it is Definition 2.7 of the paper: a
-            <b>pivotal structure</b> is an isomorphism of tensor functors from the
-            identity functor to the double-dual functor. Unpacked, it is a
-            coherent system of beads. And a category that has one is called
+            A coherent system of beads, then — one per object, sliding freely, and
+            multiplying the way the objects do. A category that has one is called
             <b>pivotal</b>.
+          </p>
+          <p>
+            The paper's Definition 2.7 says the same thing in four words of
+            professional shorthand: a pivotal structure is <i>an isomorphism of
+            tensor functors from the identity functor to the double-dual
+            functor</i>. A <b>functor</b> is a rule sending objects to objects and
+            morphisms to morphisms without breaking composition; the
+            double-dual functor is the rule X ↦ X**, and the identity functor is
+            the rule that does nothing. <b>Isomorphism of tensor functors</b> is
+            naturality and monoidality together — beads that slide, and beads that
+            multiply. Nothing is hidden in the phrase; it is the beads.
           </p>
           <div class="statement">
             <span class="lbl">Conjecture 2.8 · Etingof–Nikshych–Ostrik, 2005</span>
@@ -444,9 +467,9 @@
         </div>
 
         <figure class="panel" id="panel-coherence">
-          <p class="panel__title">The coherence game</p>
+          <figcaption class="panel__title">The coherence game</figcaption>
           <div class="controls controls--lead">
-            <div class="presets" id="co-picks"></div>
+            <div class="presets" id="co-picks" role="group" aria-label="example category"></div>
           </div>
           <div class="dials" id="co-dials"></div>
           <div class="controls">
@@ -457,7 +480,7 @@
             </div>
           </div>
           <div class="constraints" id="co-constraints"></div>
-          <div class="readout readout--wide" id="ro-coherence"></div>
+          <div class="readout" id="ro-coherence"></div>
         </figure>
 
         <div class="prose">
@@ -501,29 +524,26 @@
           </p>
           <p class="display">Aut<sub>⊗</sub>(Id<sub>C</sub>) ≅ Hom(U(C), ℂ<sup>×</sup>)</p>
           <p>
-            Rep(G) is graded by the characters of the centre of G; the Ising
-            category is graded by ℤ/2, with the bosons in one block and the spin
-            field σ alone in the other; a category of G-graded vector spaces is
+            Rep(G) is graded by the characters of the centre of G; the Ising category is graded by ℤ/2, with the unit and ψ in one block and σ
+            alone in the other; a category of G-graded vector spaces is
             graded by G itself. The panel computes the blocks and their
             multiplication table from N.
           </p>
         </div>
 
         <figure class="panel" id="panel-grading">
-          <p class="panel__title">Universal grading</p>
+          <figcaption class="panel__title">Universal grading</figcaption>
           <div class="controls controls--lead">
-            <div class="presets" id="gr-picks"></div>
+            <div class="presets" id="gr-picks" role="group" aria-label="example category"></div>
           </div>
-          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-grading"></canvas></div>
-          <div class="readout readout--wide" id="ro-grading"></div>
+          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-grading" role="img" aria-label="The simple objects sorted into the blocks of the universal grading group, with its multiplication table."></canvas></div>
+          <div class="readout" id="ro-grading"></div>
         </figure>
 
         <div class="prose">
           <p>
             So the counting problem is finished and the existence problem is
-            untouched — a fair summary of the state of the whole subject. We know
-            exactly how many pivotal structures a fusion category has, on the
-            assumption that it has one.
+            untouched, which is a fair summary of the state of the whole subject.
           </p>
         </div>
       </section>
@@ -559,17 +579,24 @@
           <p>
             The picture to hold is a twisted ribbon. Thicken each wire into a flat
             band; then the double dual is what a full 2π turn of the band does to
-            the object at its end. A band with one full twist in it is genuinely
-            not the same as a flat band — you cannot undo it. A band with
-            <em>two</em> full twists can be undone, by passing a loop of it around
-            the end, which is the Dirac belt trick. Drag the panel past 4π and
-            press release.
+            the object at its end. A band with one full twist in it cannot be flattened by sliding it
+            about. A band with <em>two</em> full twists can, by passing a loop of
+            it around the end — the Dirac belt trick. Take the twist all the way
+            to 4π and press release.
+          </p>
+          <p>
+            Take that picture for exactly what it is: a demonstration that two
+            turns are special in a way one turn is not. It is <em>not</em>
+            evidence about how the conjecture comes out. In the belt, one turn is
+            provably non-trivial. In a fusion category, whether the double dual
+            is coherently trivial is the thing nobody can settle — in either
+            direction.
           </p>
         </div>
 
         <figure class="panel" id="panel-ribbon">
-          <p class="panel__title">Twist, and the belt trick at 4π</p>
-          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-ribbon"></canvas></div>
+          <figcaption class="panel__title">Twist, and the belt trick at 4π</figcaption>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-ribbon" role="img" aria-label="A flat band carrying a variable amount of twist, from none to two full turns."></canvas></div>
           <div class="controls">
             <label class="slider slider--wide">
               <span>twist</span>
@@ -581,7 +608,7 @@
               <button id="rb-reset">reset</button>
             </div>
           </div>
-          <div class="readout readout--wide" id="ro-ribbon"></div>
+          <div class="readout" id="ro-ribbon"></div>
         </figure>
 
         <div class="prose">
@@ -615,14 +642,17 @@
             pivotal by construction: each object arrived carrying its own bead.
           </p>
           <p>
-            It is better than pivotal. The paper proves, by pushing the question
-            into the Drinfeld centre and noting that the relevant double is
-            ribbon:
+            It is better than pivotal. The paper proves:
           </p>
           <div class="statement">
-            <span class="lbl">Proposition 3.34 — sphericity of the pivotalisation</span>
+            <span class="lbl">Proposition 5.14 — sphericity of the pivotalisation</span>
             <p>If dim C ≠ 0 then the canonical pivotal structure of C̃ is in fact a spherical structure.</p>
           </div>
+          <p class="fine">
+            The hypothesis dim C ≠ 0 is free over ℂ — that is Theorem 2.3 from
+            chapter four — but not in positive characteristic, where global
+            dimensions really can vanish.
+          </p>
           <p>
             <b>Spherical</b> is the stronger condition that dim(V) = dim(V*) for
             every simple V — the left-handed and right-handed traces agree, so a
@@ -640,12 +670,16 @@
         </div>
 
         <figure class="panel" id="panel-cover">
-          <p class="panel__title">The two-sheeted cover C̃ → C</p>
+          <figcaption class="panel__title">The two-sheeted cover C̃ → C</figcaption>
           <div class="controls controls--lead">
-            <div class="presets" id="cv-picks"></div>
+            <div class="presets" id="cov-picks" role="group" aria-label="example category"></div>
           </div>
-          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-cover"></canvas></div>
-          <div class="readout readout--wide" id="ro-cover"></div>
+          <div class="panel__plot panel__plot--short"><canvas class="cv" id="cv-cover"  role="img" aria-label="The two-sheeted pivotalisation: two lifts above each simple object of the category below."></canvas></div>
+          <div class="controls">
+            <div class="presets"><button id="cov-reset">reset every lift</button></div>
+            <p class="hint">click an object to flip which lift you chose — the unit is locked</p>
+          </div>
+          <div class="readout" id="ro-cover"></div>
         </figure>
       </section>
 
@@ -659,9 +693,8 @@
           <p>
             Two dimensions have been following us around. FPdim(C), from chapter
             one, built out of integer matrices. And dim(C), the sum of squared
-            norms from chapter four, built out of traces. They are different
-            numbers, and the paper proves they are never far apart in one
-            direction:
+            norms from chapter four, built out of traces. They are different numbers, and the paper proves that one of them never
+            exceeds the other:
           </p>
           <p class="display">dim(C) ≤ FPdim(C)&emsp;&emsp;<span style="font-size:0.88em">with dim(C)/FPdim(C) an algebraic integer</span></p>
           <p>
@@ -691,50 +724,54 @@
             √3 and is still settled, because 1+1+1+3 = 6. Between them these two
             propositions dispose of every representation category of a semisimple
             Hopf or quasi-Hopf algebra, every category of graded vector spaces,
-            everything with integer or even merely rational-summing dimensions,
+            everything whose dimensions square and sum to a whole number,
             and every unitary category coming from operator algebras.
           </p>
           <p>
             So what is left? Categories where dim(C) &lt; FPdim(C) strictly. They
             are not exotic and they are easy to manufacture: take a perfectly
-            nice category and apply a field automorphism to it. Below is the
-            standard family — the Verlinde categories of SU(2) at level k, and
-            their Galois conjugates, obtained by replacing the root of unity
-            q = e<sup>iπ/(k+2)</sup> by another primitive one.
+            nice category and apply a field automorphism to it. Below is the standard family: the Verlinde categories of SU(2) at level
+            k and their Galois conjugates, obtained by replacing
+            q = e<sup>iπ/(k+2)</sup> by another primitive root of unity
+            <em>of the same order</em> — which is 2(k+2), not (k+2), and the
+            distinction decides which of the bars below are real.
           </p>
         </div>
 
         <figure class="panel" id="panel-galois">
-          <p class="panel__title">Galois conjugates of SU(2)<sub>k</sub></p>
-          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-galois"></canvas></div>
+          <figcaption class="panel__title">Galois conjugates of SU(2)<sub>k</sub></figcaption>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-galois" role="img" aria-label="Bar chart of the global dimension of each Galois conjugate against the Frobenius-Perron dimension."></canvas></div>
           <div class="controls">
             <label class="slider slider--wide">
               <span>level k</span>
               <input id="sl-level" type="range" min="1" max="14" step="1" value="8" />
               <output id="out-level">8</output>
             </label>
-            <p class="hint">click a bar to read that conjugate's object dimensions</p>
+            <div class="presets" id="ga-picks" role="group" aria-label="which conjugate"></div>
+            <p class="hint">pick a conjugate, or click its bar, to read the object dimensions</p>
           </div>
-          <div class="readout readout--wide" id="ro-galois"></div>
+          <div class="readout" id="ro-galois"></div>
         </figure>
 
         <div class="prose">
           <p>
-            Only the first conjugate sits on the diagonal. All the others have
-            dim(C) strictly smaller — sometimes dramatically so — and
-            Proposition 8.23 has nothing to say about them. The smallest example
-            is the <b>Yang–Lee</b> category, which has the same fusion rules as
-            Fibonacci but assigns its non-trivial object the dimension
-            (1−√5)/2 ≈ −0.618. A negative dimension. Its global dimension is
-            (5−√5)/2 ≈ 1.382 against an FPdim of ≈ 3.618.
+            Most of the orbit falls strictly below the dashed line, sometimes by a
+            factor of twenty, and Proposition 8.23 has nothing whatever to say
+            about those categories. (At even levels a second conjugate lands
+            exactly on the line: its dimensions are the top one's with signs
+            attached, so the squares — and therefore dim(C) — are unchanged.) The smallest example of all is the <b>Yang–Lee</b> category, which has
+            exactly the fusion rules of Fibonacci but gives its non-trivial object
+            the dimension (1−√5)/2 ≈ −0.618. A negative dimension, and a perfectly
+            legitimate one. Its global dimension is (5−√5)/2 ≈ 1.382 against an
+            FPdim of ≈ 3.618 — the same fusion rules, a very different category.
           </p>
           <p>
-            And yet every single one of those conjugates <em>is</em> pivotal —
-            they are braided, in fact modular, and one can write their pivotal
-            structures down. Which is the real state of the art in one sentence:
-            the only general theorem anyone has covers a condition that is
-            sufficient but visibly not necessary, and every category outside it
-            has had to be handled by hand.
+            And yet every one of those conjugates <em>is</em> pivotal. Not by any
+            theorem about fusion categories in general — they are built from
+            quantum groups, and the construction hands you the pivotal structure
+            explicitly, signs and all. The real state of the art is one sentence: the only general theorem anyone has covers a condition that
+            is sufficient but visibly not necessary, and everything outside it has
+            been settled, where it has been settled at all, one family at a time.
           </p>
         </div>
       </section>
@@ -750,9 +787,10 @@
             A conjecture about beads on wires sounds like an internal matter. It
             is not, because the quantum trace is the gate through which fusion
             categories reach topology and physics. Close a loop and you get a
-            number; close a knotted loop and you get a knot invariant; glue
-            tetrahedra labelled by simple objects and sum over the labels and you
-            get an invariant of 3-manifolds. Turaev–Viro state sums, string-net
+            number; glue tetrahedra labelled by simple objects, sum over all the
+            labellings, and you get an invariant of 3-manifolds. (Knots need one
+            ingredient more — a braiding, a rule for crossing two wires — but
+            they need the trace first.) Turaev–Viro state sums, string-net
             models of topological phases, Frobenius–Schur indicators, the modular
             data of a Drinfeld centre — all of them start by drawing a closed
             diagram and asking what number it evaluates to.
@@ -765,15 +803,12 @@
         </div>
 
         <figure class="panel" id="panel-deps">
-          <p class="panel__title">Downstream of the bead</p>
+          <figcaption class="panel__title">Downstream of the bead</figcaption>
           <div class="controls controls--lead">
-            <div class="presets" id="dp-toggle">
-              <button data-on="1" class="on">assume pivotal</button>
-              <button data-on="0">withhold it</button>
-            </div>
+            <div class="presets" id="dp-toggle" role="group" aria-label="assumption"></div>
           </div>
-          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-deps"></canvas></div>
-          <div class="readout readout--wide" id="ro-deps"></div>
+          <div class="panel__plot panel__plot--tall"><canvas class="cv" id="cv-deps" role="img" aria-label="A map of what a fusion category gives you outright and what needs a pivotal structure first."></canvas></div>
+          <div class="readout" id="ro-deps"></div>
         </figure>
 
         <div class="prose">
@@ -787,31 +822,35 @@
         </div>
 
         <figure class="panel" id="panel-ledger">
-          <p class="panel__title">Status</p>
+          <figcaption class="panel__title">Status</figcaption>
           <div class="ledger" id="ledger"></div>
         </figure>
 
         <div class="prose">
           <p>
             There is one more reason the question is interesting rather than
-            merely unfinished. Relax the hypotheses and strange things start
-            happening: over fields that are not algebraically closed, simple
-            objects can have division algebras as their endomorphism rings, and
-            Galois theory enters the structure of the category in ways it simply
-            cannot over ℂ. Nobody has turned that into a counterexample over ℂ.
-            But it is a standing reminder that nothing in the argument so far
-            explains <em>why</em> a pivotal structure ought to exist. The
-            evidence is that every category anyone has been able to build has one.
+            merely unfinished. Relax the hypotheses and strange things start happening. Over a field
+            that is not algebraically closed, a simple object can have a division
+            algebra rather than just the scalars as its self-maps, Schur's lemma
+            stops handing you a one-dimensional space of beads, and Galois theory
+            enters the structure of the category in ways it simply cannot over ℂ.
+            None of that is a counterexample over ℂ, and it does not pretend to
+            be. What it shows is that the conjecture is not true for any soft
+            reason: the moment you loosen the setting, the argument you did not
+            have stays missing. The evidence for it remains what it always was —
+            every fusion category anyone has managed to write down has a pivotal
+            structure.
           </p>
           <p>
-            Which is, in the end, a strange position to be in. Dualising twice
-            leaves every object where it was. Dualising four times leaves the
-            whole category where it was, coherently. The missing statement is the
-            one in between, and it has been missing for two decades.
+            It is a strange place to be stuck. Every object comes back to itself
+            under a double dual, and the whole category comes back to itself under
+            a quadruple one. The gap is a single square root, it is twenty-one
+            years old, and it is the difference between a diagram you can close
+            and one you cannot.
           </p>
           <p class="closing">
-            Pull the wire taut, and it comes back to you rotated by a turn nobody
-            can prove is trivial.
+            Dualise twice and nothing moves. Dualise four times and nothing moves,
+            coherently, provably. The missing sentence is the one in between.
           </p>
         </div>
       </section>
@@ -821,18 +860,20 @@
       <p>
         Primary source:
         <a href="https://arxiv.org/abs/math/0203060" target="_blank" rel="noreferrer">P. Etingof, D. Nikshych, V. Ostrik, <i>On fusion categories</i></a>,
-        Annals of Mathematics <b>162</b> (2005) 581–642. Conjecture 2.8 is in
-        §2.3; Theorem 2.6, Proposition 2.1 and Propositions 8.23–8.24 are quoted
+        Annals of Mathematics <b>162</b> (2005) 581–642. Conjecture 2.8 is in §2.1; Theorem 2.6, Proposition 2.1 and Propositions 8.23–8.24 are quoted
         above in the authors' own words. Background:
         <a href="https://math.mit.edu/~etingof/egnobookfinal.pdf" target="_blank" rel="noreferrer">Etingof–Gelaki–Nikshych–Ostrik, <i>Tensor Categories</i></a> (the textbook),
-        <a href="https://arxiv.org/abs/0906.0620" target="_blank" rel="noreferrer">Drinfeld–Gelaki–Nikshych–Ostrik on braided fusion categories</a>
-        for the universal grading group,
+        <a href="https://arxiv.org/abs/math/0610726" target="_blank" rel="noreferrer">Gelaki–Nikshych, <i>Nilpotent fusion categories</i></a>,
+        where the universal grading group and its characters come from,
         <a href="https://arxiv.org/abs/2401.02354" target="_blank" rel="noreferrer">Sanford on fusion categories over non-algebraically-closed fields</a>,
         and <a href="https://ncatlab.org/nlab/show/pivotal+category" target="_blank" rel="noreferrer">the nLab</a> for definitions.
       </p>
       <p class="colophon__note">
-        Every fusion ring on this page is checked at build time for associativity,
-        unit, rigidity and Frobenius reciprocity; dimensions come from
+        Every fusion ring on this page is checked at build time — by
+        <code>tools/check.mjs</code>, which the package's build script runs
+        before Vite — for unit, associativity, rigidity, Frobenius reciprocity,
+        multiplicativity of dimensions and consistency of the grading. Dimensions
+        come from
         Perron–Frobenius iteration on the fusion matrices, and gradings from the
         adjoint subcategory — nothing displayed is hand-entered. Status as of
         September 2026.

@@ -20,20 +20,19 @@ export function initExplorer() {
     render()
   }, CATALOG.findIndex((c) => c.id === 'reps3'))
 
-  function renderTable() {
-    const n = cat.labels.length
-    const head = ['<tr><th>⊗</th>' + cat.labels.map((l, j) => `<th data-col="${j}">${l}</th>`).join('') + '</tr>']
+    function renderTable() {
+        const head = ['<tr><th>⊗</th>' + cat.labels.map((l, j) => `<th><button type="button" data-col="${j}">${l}</button></th>`).join('') + '</tr>']
     const rows = cat.labels.map((l, i) => {
       const cells = cat.labels.map((_, j) => {
         const cls = i === j ? 'diag' : i === generator || j === generator ? 'hl' : ''
         return `<td class="${cls}">${decompose(cat, i, j)}</td>`
       })
-      return `<tr><th data-col="${i}">${l}</th>${cells.join('')}</tr>`
+            return `<tr><th><button type="button" data-col="${i}">${l}</button></th>${cells.join('')}</tr>`
     })
-    void n
-    table.innerHTML = `<thead>${head.join('')}</thead><tbody>${rows.join('')}</tbody>`
-    table.querySelectorAll('[data-col]').forEach((el) => {
-      el.style.cursor = 'pointer'
+        table.innerHTML = `<thead>${head.join('')}</thead><tbody>${rows.join('')}</tbody>`
+        table.querySelectorAll('[data-col]').forEach((el) => {
+      el.title = `multiply by ${cat.labels[+el.dataset.col]}`
+      el.setAttribute('aria-pressed', String(+el.dataset.col === generator))
       el.addEventListener('click', () => { generator = +el.dataset.col; render() })
     })
   }
@@ -161,14 +160,17 @@ export function initZigzag() {
 
   function draw() {
     sheet.clear()
-    const s = slack()
+        const s = slack()
     const flip = side === 'right' ? -1 : 1
-    const cx = sheet.w * 0.42
-    const cy = sheet.h / 2
-    const spread = Math.min(sheet.w * 0.17, 92)
-    const height = Math.min(sheet.h * 0.19, 74)
-    const top = sheet.h * 0.1
-    const bot = sheet.h * 0.9
+    // Below this width the claim cannot sit beside the picture, so it goes
+    // underneath and the picture gives up the bottom quarter of the canvas.
+    const narrow = sheet.w < 420
+    const cx = narrow ? sheet.w / 2 : sheet.w * 0.42
+    const top = sheet.h * 0.07
+    const bot = sheet.h * (narrow ? 0.66 : 0.9)
+    const cy = (top + bot) / 2
+    const spread = Math.min(sheet.w * (narrow ? 0.2 : 0.17), 92)
+    const height = Math.min((bot - top) * 0.21, 74)
 
     const x0 = cx - flip * spread * s
     const x1 = cx
@@ -198,7 +200,7 @@ export function initZigzag() {
     const lbl = (x, y, t, color, align = 'left') =>
       sheet.text(x, y, t, { color, align, font: '12px ui-monospace, monospace', halo: INK.panel })
 
-    lbl(x2 + flip * 10, bot - 22, side === 'left' ? 'V' : 'V', INK.teal, flip > 0 ? 'left' : 'right')
+    lbl(x2 + flip * 10, bot - 22, 'V', INK.teal, flip > 0 ? 'left' : 'right')
     lbl(x0 - flip * 10, top + 22, 'V', INK.teal, flip > 0 ? 'right' : 'left')
     if (s > 0.12) {
       lbl(x1 + flip * 11, (y1 + y2) / 2, side === 'left' ? 'V*' : '*V', INK.verm, flip > 0 ? 'left' : 'right')
@@ -206,18 +208,20 @@ export function initZigzag() {
       lbl((x0 + x1) / 2, y1 + 34 * s + 8, 'coev', INK.ink, 'center')
     }
 
-    // The claim, written out beside the picture.
-    const ex = sheet.w * 0.76
-    sheet.text(ex, cy - 26, side === 'left' ? '(1 ⊗ ev) ∘ (coev ⊗ 1)' : '(ev ⊗ 1) ∘ (1 ⊗ coev)', {
-      align: 'center', color: INK.soft, font: '12px ui-monospace, monospace',
+            // The claim, beside the picture, or beneath it on a narrow canvas.
+    const ex = narrow ? sheet.w / 2 : sheet.w * 0.76
+    const ey = narrow ? sheet.h - 78 : cy
+    const half = Math.min(88, sheet.w / 2 - 12)
+        sheet.text(ex, ey - 26, side === 'left' ? '(1 ⊗ ev) ∘ (coev ⊗ 1)' : '(ev ⊗ 1) ∘ (1 ⊗ coev)', {
+      align: 'center', color: INK.soft, font: `${narrow ? 10.5 : 12}px ui-monospace, monospace`, halo: INK.panel,
     })
-    sheet.text(ex, cy, '=', { align: 'center', color: INK.faint, font: '13px ui-monospace, monospace' })
-    sheet.text(ex, cy + 26, '1' + (side === 'left' ? '_V' : '_V'), {
+    sheet.text(ex, ey, '=', { align: 'center', color: INK.faint, font: '13px ui-monospace, monospace', halo: INK.panel })
+            sheet.text(ex, ey + 22, 'id  on V', {
       align: 'center', color: INK.indigo, font: '13px ui-monospace, monospace',
     })
-    sheet.stroke([[ex - 88, cy + 46], [ex + 88, cy + 46]], { color: INK.rule, width: 1, smooth: false })
-    sheet.text(ex, cy + 64, s < 0.02 ? 'taut' : `slack ${(s * 100).toFixed(0)}%`, {
-      align: 'center', color: s < 0.02 ? INK.teal : INK.faint, font: '11px ui-monospace, monospace',
+        sheet.stroke([[ex - half, ey + 42], [ex + half, ey + 42]], { color: INK.rule, width: 1, smooth: false })
+    sheet.text(ex, ey + 58, s < 0.02 ? 'taut' : `slack ${(s * 100).toFixed(0)}%`, {
+      align: 'center', color: s < 0.02 ? INK.teal : INK.soft, font: '11px ui-monospace, monospace', halo: INK.panel,
     })
   }
 
@@ -227,7 +231,7 @@ export function initZigzag() {
     const s = slack()
     ro.innerHTML = s < 0.02
       ? `<span class="good">Taut.</span> <span class="k">The two bends cancelled: what is left is the bare identity wire on V. Whatever the cup and cap are, they satisfy this — that is the definition of a dual.</span>`
-      : `<span class="k">Three strands, reading bottom to top: V up the ${side === 'left' ? 'right' : 'left'}, then a cap, then ${side === 'left' ? 'V*' : '*V'} coming down against the arrows, then a cup, then V again. Pull it taut and nothing is left.</span>`
+            : `<span class="k">Read it bottom to top, which is the order things happen in. First the cup, low down — that is coev, making a ${side === 'left' ? 'V and a V*' : 'V and a *V'} out of nothing. Then the cap above it — that is ev, eating the middle strand against the one that came in. Three strands in the picture, one wire in fact: follow it and you never lift the pen. Pull it taut and nothing is left but V.</span>`
   }
 
   slider.addEventListener('input', () => { if (cancel) cancel(); render() })
@@ -241,9 +245,9 @@ export function initZigzag() {
     const from = slack()
     cancel = animate(700, (t) => { slider.value = String(from + (1 - from) * t); render() })
   })
-  buttonRow($('#zz-side'), [
-    { label: 'left dual V*', v: 'left' },
-    { label: 'right dual *V', v: 'right' },
+    buttonRow($('#zz-side'), [
+    { label: 'right dual V*', v: 'left' },
+    { label: 'left dual *V', v: 'right' },
   ], (item) => { side = item.v; render() })
 
   onResize(sheet, render)

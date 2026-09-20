@@ -1,7 +1,7 @@
 // Chapters 4–8: the trace, the coherence game, the grading, the fourth dual,
 // and the pivotalisation.
 
-import { CATALOG, byId } from './catalog.js'
+import { CATALOG, byId, decompose } from './catalog.js'
 import { Sheet, INK, bezier, onResize, animate, $, buttonRow, num, lerp } from './viz.js'
 
 const GRADE_COLORS = [INK.indigo, INK.verm, INK.teal, INK.plum, INK.ochre]
@@ -116,7 +116,7 @@ export function initTrace() {
   }
 
   function render() {
-    out.textContent = (+slider.value).toFixed(2)
+    out.textContent = num(lam(), 2)
     draw()
     const d = obj.d
     const l = lam()
@@ -141,6 +141,7 @@ export function initCoherence() {
   let cat = byId('ising')
   let theta = []
   let charIndex = 0
+  let anim = null
 
   buttonRow($('#co-picks'), CATALOG.map((c) => ({ label: c.name, id: c.id })), (item) => {
     cat = byId(item.id)
@@ -150,17 +151,10 @@ export function initCoherence() {
   /** The distinct equations λ_i λ_j = λ_k coming from the fusion rules. */
   function constraints() {
     const out = []
-    const seen = new Set()
     const n = cat.labels.length
     for (let i = 1; i < n; i++) {
       for (let j = i; j < n; j++) {
-        for (let k = 0; k < n; k++) {
-          if (!cat.N[i][j][k]) continue
-          const key = `${i}.${j}.${k}`
-          if (seen.has(key)) continue
-          seen.add(key)
-          out.push([i, j, k])
-        }
+        for (let k = 0; k < n; k++) if (cat.N[i][j][k]) out.push([i, j, k])
       }
     }
     return out
@@ -170,6 +164,8 @@ export function initCoherence() {
   const ok = (i, j, k) => Math.abs(wrap(theta[i] + theta[j] - theta[k])) < 0.004
 
   function reset() {
+    if (anim) anim()
+    anim = null
     theta = cat.labels.map(() => 0)
     charIndex = 0
     build()
@@ -200,17 +196,35 @@ export function initCoherence() {
   }
 
   function render() {
+    // A cancelled animation can still deliver one frame against the old rank.
+    if (theta.length !== dialsHost.children.length) return
     ;[...dialsHost.children].forEach((el, i) => {
       el._input.value = String(theta[i])
       const t = theta[i]
       el._val.textContent = t < 0.002 || t > 0.998 ? '1' : `e^(2πi·${t.toFixed(3)})`
     })
-    const cs = constraints()
+        const cs = constraints()
     const good = cs.filter(([i, j, k]) => ok(i, j, k))
-    consHost.innerHTML = cs
-      .map(([i, j, k]) => {
-        const pass = ok(i, j, k)
-        return `<div class="crow ${pass ? 'ok' : 'no'}"><span>λ(${cat.labels[i]}) · λ(${cat.labels[j]}) = λ(${cat.labels[k]})</span><span class="mk">${pass ? '✓' : '✗'}</span></div>`
+    // Grouped by the fusion rule they came from: two equations with the same
+    // left-hand side and different right-hand sides look like a contradiction
+    // until you can see they are one rule, X ⊗ Y = ⊕ Z, spelled out.
+    const groups = new Map()
+    for (const [i, j, k] of cs) {
+      const key = `${i}.${j}`
+      if (!groups.has(key)) groups.set(key, [])
+      groups.get(key).push(k)
+    }
+    consHost.innerHTML = [...groups.entries()]
+      .map(([key, ks]) => {
+        const [i, j] = key.split('.').map(Number)
+        const rule = `${cat.labels[i]} ⊗ ${cat.labels[j]} = ${decompose(cat, i, j)}`
+        const rows = ks
+          .map((k) => {
+            const pass = ok(i, j, k)
+            return `<div class="crow ${pass ? 'ok' : 'no'}"><span>λ(${cat.labels[i]}) · λ(${cat.labels[j]}) = λ(${cat.labels[k]})</span><span class="mk">${pass ? '✓' : '✗'}</span></div>`
+          })
+          .join('')
+        return `<div class="cgroup"><div class="crule">from ${rule}</div>${rows}</div>`
       })
       .join('')
     const solutions = cat.chars.length
@@ -232,24 +246,29 @@ export function initCoherence() {
       if (d < bestD) { bestD = d; best = idx }
     })
     charIndex = best
-    apply(cat.chars[best])
+    apply(cat.chars[best], true)
   })
   $('#co-next').addEventListener('click', () => {
     charIndex = (charIndex + 1) % cat.chars.length
-    apply(cat.chars[charIndex])
+    apply(cat.chars[charIndex], true)
   })
   $('#co-scramble').addEventListener('click', () => {
     const target = cat.labels.map((_, i) => (i === 0 ? 0 : Math.round(Math.random() * 200) / 200))
-    apply(target)
+    apply(target, false)
   })
 
-  function apply(target) {
+  /**
+   * Ease the dials to `target`. A character is a phase per GRADE and a scramble
+   * is a phase per SIMPLE OBJECT; both are arrays of numbers, so the caller has
+   * to say which — sniffing the value's type silently mis-snapped every graded
+   * category, including the default one.
+   */
+  function apply(target, byGrade) {
+    if (anim) anim()
     const from = theta.slice()
-    animate(450, (t) => {
-      theta = from.map((v, i) => {
-        const to = typeof target[i] === 'number' ? target[i] : target[cat.grading.grade[i]]
-        return (v + wrap(to - v) * t + 1) % 1
-      })
+    const want = from.map((_, i) => (byGrade ? target[cat.grading.grade[i]] : target[i]))
+    anim = animate(450, (t) => {
+      theta = from.map((v, i) => (v + wrap(want[i] - v) * t + 1) % 1)
       render()
     })
   }
@@ -273,7 +292,7 @@ export function initGrading() {
     sheet.clear()
     const U = cat.grading
     const cols = U.size
-    const colW = Math.min(150, (sheet.w - 150) / cols)
+    const colW = Math.max(96, Math.min(150, (sheet.w - 150) / cols))
     const x0 = 28
     const tallest = Math.max(...U.members.map((m) => m.length))
     const rowH = Math.min(30, Math.max(19, (sheet.h - 86) / tallest))
@@ -298,7 +317,8 @@ export function initGrading() {
     // The group's multiplication table, drawn small at the right.
     const tx = x0 + colW * cols + 34
     if (tx + cols * 26 < sheet.w) {
-      sheet.text(tx, topY - 34, `U(C) = ${cat.gradingName}`, { color: INK.ink, font: '11px ui-monospace, monospace' })
+            sheet.text(tx, topY - 34, `U(C) = ${cat.gradingName}`, { color: INK.ink, font: '11px ui-monospace, monospace' })
+      sheet.text(tx, topY - 20, 'block × block', { color: INK.faint, font: '9px ui-monospace, monospace' })
       for (let a = 0; a < cols; a++) {
         for (let b = 0; b < cols; b++) {
           const x = tx + b * 26
@@ -344,6 +364,7 @@ export function initRibbon() {
   let loop = 0 // how far through the belt trick, 0…1
   let cancel = null
   let shake = 0
+  let refused = false
 
   const turns = () => +slider.value
 
@@ -417,6 +438,10 @@ export function initRibbon() {
     out.textContent = T === 0 ? '0' : `${(T * 2).toFixed(2)}π`
     draw()
     const eff = T * (1 - loop)
+    if (refused) {
+      ro.innerHTML = `<span class="bad">Stuck.</span> <span class="k">Only an even number of full turns comes out. Set the twist to 4π and try again.</span>`
+      return
+    }
     ro.innerHTML = loop > 0 && loop < 1
       ? `<span class="hot">Releasing.</span> <span class="k">The band is swinging a loop around its end, and the twist is draining out as it goes — ${(eff * 2).toFixed(2)}π left. Nothing was cut and nothing was fixed in place; the two turns simply were not there to begin with.</span>`
       : eff < 0.02
@@ -428,19 +453,42 @@ export function initRibbon() {
           : `<span class="k">${(eff * 2).toFixed(2)}π of twist in the band.</span>`
   }
 
-  slider.addEventListener('input', () => { loop = 0; if (cancel) cancel(); render() })
+  slider.addEventListener('input', () => {
+    if (cancel) cancel()
+    loop = 0
+    shake = 0
+    refused = false
+    render()
+  })
   $('#rb-release').addEventListener('click', () => {
+    if (cancel) cancel()
     if (Math.abs(turns() - 2) > 0.03) {
-      // Not at 4π: refuse, visibly.
-      if (cancel) cancel()
-      cancel = animate(420, (t) => { shake = Math.sin(t * Math.PI * 6) * 7 * (1 - t); render() })
-      ro.innerHTML = `<span class="bad">Stuck.</span> <span class="k">Only an even number of full turns comes out. Set the twist to 4π and try again.</span>`
+      // Not at 4π: refuse, and say so. The flag outlives the shake, because
+      // render() runs again on the animation's first frame and would otherwise
+      // overwrite the explanation before anyone could read it.
+      refused = true
+      cancel = animate(420, (t) => {
+        shake = Math.sin(t * Math.PI * 6) * 7 * (1 - t)
+        if (t >= 1) shake = 0
+        render()
+      })
       return
     }
-    if (cancel) cancel()
-    cancel = animate(2200, (t) => { loop = t; if (t >= 1) { slider.value = '0'; loop = 0 } render() })
+    refused = false
+    cancel = animate(2200, (t) => {
+      loop = t
+      if (t >= 1) { slider.value = '0'; loop = 0 }
+      render()
+    })
   })
-  $('#rb-reset').addEventListener('click', () => { if (cancel) cancel(); loop = 0; shake = 0; slider.value = '0'; render() })
+  $('#rb-reset').addEventListener('click', () => {
+    if (cancel) cancel()
+    loop = 0
+    shake = 0
+    refused = false
+    slider.value = '0'
+    render()
+  })
 
   onResize(sheet, render)
 }
@@ -453,7 +501,7 @@ export function initCover() {
   let cat = byId('fib')
   let chosen = []
 
-  buttonRow($('#cv-picks'), CATALOG.map((c) => ({ label: c.name, id: c.id })), (item) => {
+    buttonRow($('#cov-picks'), CATALOG.map((c) => ({ label: c.name, id: c.id })), (item) => {
     cat = byId(item.id)
     chosen = cat.labels.map(() => 0)
     render()
@@ -466,9 +514,30 @@ export function initCover() {
     return { xs: cat.labels.map((_, i) => x0 + i * m), yBot: sheet.h * 0.8, yTop: sheet.h * 0.26, gap: 24 }
   }
 
+    /**
+   * The lifts of X ⊗ Y are determined by those of X and Y, so a choice of one
+   * lift per simple object is a section of C̃ → C exactly when the signs are
+   * multiplicative: s_i · s_j = s_k whenever N_ij^k > 0. That is the coherence
+   * game of chapter five again, played over {±1}.
+   */
+  function broken() {
+    const n = cat.labels.length
+    const bad = new Set()
+    for (let i = 0; i < n; i++) {
+      for (let j = i; j < n; j++) {
+        for (let k = 0; k < n; k++) {
+          if (!cat.N[i][j][k]) continue
+          if (((chosen[i] + chosen[j]) & 1) !== chosen[k]) { bad.add(i); bad.add(j); bad.add(k) }
+        }
+      }
+    }
+    return bad
+  }
+
   function draw() {
     sheet.clear()
     const { xs, yBot, yTop, gap } = layout()
+    const bad = broken()
     sheet.text(12, yTop - 44, 'C̃  — every object carries its own bead', { color: INK.plum, font: '10.5px ui-monospace, monospace' })
     sheet.text(12, yBot + 34, 'C  — the category you started with', { color: INK.soft, font: '10.5px ui-monospace, monospace' })
 
@@ -486,25 +555,37 @@ export function initCover() {
           color: picked ? INK.plum : INK.faint, font: '10px ui-monospace, monospace', halo: INK.panel,
         })
       }
-      sheet.disc(x, yBot, 10, { fill: INK.panel, stroke: INK.ink, width: 2 })
-      sheet.text(x, yBot + 20, cat.labels[i], { align: 'center', color: INK.ink, font: '11.5px ui-monospace, monospace' })
+            const off = bad.has(i)
+      sheet.disc(x, yBot, 10, { fill: off ? 'rgba(176,58,36,0.16)' : INK.panel, stroke: off ? INK.verm : INK.ink, width: 2 })
+      sheet.text(x, yBot + 20, cat.labels[i], {
+        align: 'center', color: off ? INK.verm : INK.ink, font: '11.5px ui-monospace, monospace',
+      })
+      if (i === 0) sheet.text(x, yBot + 34, 'locked', { align: 'center', color: INK.faint, font: '9px ui-monospace, monospace' })
     })
 
     sheet.text(sheet.w - 14, yBot - 6, 'forget f', { align: 'right', color: INK.faint, font: '10px ui-monospace, monospace' })
   }
 
-  function render() {
+    function render() {
     if (chosen.length !== cat.labels.length) chosen = cat.labels.map(() => 0)
+    chosen[0] = 0
+    const bad = broken()
     draw()
     ro.innerHTML = `
       <div><span class="k">rank</span> ${cat.labels.length} <span class="k">→</span> <b>${cat.labels.length * 2}</b>
         <span class="k">· FPdim</span> ${num(cat.fpdimC, 5)} <span class="k">→</span> <b>${num(cat.fpdimC * 2, 5)}</b>
-        <span class="k">· C̃ is spherical, always</span></div>
-      <div class="k" style="margin-top:6px">Two lifts per simple object, differing by a sign, and the whole
-        two-sheeted category is pivotal by construction. Choosing one lift per object is easy; choosing them so
-        that the choice for X ⊗ Y is the product of the choices for X and Y is precisely the conjecture.</div>`
+        <span class="k">· C̃ is spherical whenever dim C ≠ 0, which over ℂ is always</span></div>
+      <div style="margin-top:6px">${
+        bad.size === 0
+          ? '<span class="good">These lifts are multiplicative.</span> <span class="k">The choice for X ⊗ Y is the product of the choices for X and Y, so they assemble into a section of C̃ → C — which is to say, a pivotal structure.</span>'
+          : `<span class="bad">Not multiplicative.</span> <span class="k">${[...bad].map((i) => cat.labels[i]).join(', ')} sit in a fusion rule the signs break. Flip lifts until every rule holds, or press reset.</span>`
+      }</div>
+      <div class="k" style="margin-top:6px">This is chapter five's game again, played over {+, −}. It is winnable here only
+        because the two sheets were drawn relative to a choice that already works. In general there is no such drawing to start from,
+        and that — exactly that — is the conjecture.</div>`
   }
 
+    sheet.canvas.style.cursor = 'pointer'
   sheet.canvas.addEventListener('click', (e) => {
     const r = sheet.canvas.getBoundingClientRect()
     const mx = e.clientX - r.left
@@ -512,8 +593,11 @@ export function initCover() {
     let best = -1
     let bd = 34
     xs.forEach((x, i) => { const d = Math.abs(x - mx); if (d < bd) { bd = d; best = i } })
-    if (best >= 0) { chosen[best] = 1 - chosen[best]; render() }
+    // The unit has to take f = id: no pivotal structure moves it.
+    if (best > 0) { chosen[best] = 1 - chosen[best]; render() }
   })
+  const reset = $('#cov-reset')
+  if (reset) reset.addEventListener('click', () => { chosen = cat.labels.map(() => 0); render() })
 
   onResize(sheet, render)
 }

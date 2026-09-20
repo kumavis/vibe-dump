@@ -13,12 +13,12 @@ export const INK = {
   panel: '#fbf8f1',
   ink: '#1e1c19',
   soft: '#5d574c',
-  faint: '#a9a094',
+    faint: '#6b6456',
   rule: 'rgba(60, 52, 40, 0.14)',
   indigo: '#2d4a78',
   verm: '#b03a24',
   teal: '#18685c',
-  ochre: '#9a6d10',
+    ochre: '#855e00',
   plum: '#6a3d78',
 }
 
@@ -213,22 +213,26 @@ export function bezier(p0, p1, p2, p3, steps = 48) {
   return out
 }
 
-/** Linear blend of two #rrggbb colours. */
-export function mix(a, b, t) {
-  const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16))
-  const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16))
-  const p = pa.map((v, i) => Math.round(v + (pb[i] - v) * Math.min(1, Math.max(0, t))))
-  return `rgb(${p[0]},${p[1]},${p[2]})`
-}
+
 
 export const lerp = (a, b, t) => a + (b - a) * t
 
 /** Ease used by every animated control on the page. */
 export const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
-/** Run `fn(progress)` for `ms`, then settle at 1. Returns a cancel function. */
+/**
+ * Run `fn(progress)` for `ms`, then settle at 1. Returns a cancel function.
+ *
+ * Under prefers-reduced-motion it jumps straight to the end state: the CSS
+ * media query only reaches CSS animations, and the largest moving thing on the
+ * page — the belt trick — is driven from here.
+ */
 export function animate(ms, fn) {
   let raf = 0
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    fn(1)
+    return () => {}
+  }
   const start = performance.now()
   const step = (now) => {
     const t = Math.min(1, (now - start) / ms)
@@ -248,7 +252,6 @@ export function onResize(sheet, fn) {
 }
 
 export const $ = (s, r = document) => r.querySelector(s)
-export const $$ = (s, r = document) => [...r.querySelectorAll(s)]
 
 /** A button row; returns the buttons so callers can restyle the active one. */
 export function buttonRow(host, items, onPick, activeIndex = 0) {
@@ -257,8 +260,13 @@ export function buttonRow(host, items, onPick, activeIndex = 0) {
     const b = document.createElement('button')
     b.textContent = item.label
     if (item.title) b.title = item.title
+        b.type = 'button'
+    b.setAttribute('aria-pressed', String(i === activeIndex))
     b.addEventListener('click', () => {
-      btns.forEach((o, j) => o.classList.toggle('on', j === i))
+      btns.forEach((o, j) => {
+        o.classList.toggle('on', j === i)
+        o.setAttribute('aria-pressed', String(j === i))
+      })
       onPick(item, i)
     })
     if (i === activeIndex) b.classList.add('on')

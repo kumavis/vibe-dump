@@ -161,9 +161,15 @@ function heroField() {
 /* ───────────────────────────────────────────────────────── boot */
 
 function boot() {
-  buildRail()
-  heroField()
-  renderLedger()
+  // Each panel below is guarded individually; guard the page furniture too,
+  // or a throw here takes the observer down with it and nothing initialises.
+  for (const [name, fn] of [['rail', buildRail], ['hero', heroField], ['ledger', renderLedger]]) {
+    try {
+      fn()
+    } catch (err) {
+      console.error(`${name} failed`, err)
+    }
+  }
 
   const lazy = [
     ['#panel-explorer', initExplorer],

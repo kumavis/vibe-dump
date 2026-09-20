@@ -97,7 +97,7 @@ const RAW = [
   {
     id: 'reps4',
     name: 'Rep(S₄)',
-    blurb: 'Five irreducibles of dimensions 1, 1, 2, 3, 3 — the first example here where two distinct objects have the same dimension.',
+    blurb: 'Five irreducibles of dimensions 1, 1, 2, 3, 3 — the first example here with two distinct objects of the same dimension above 1.',
     labels: ['1', 'ε', 'V', 'W', 'W′'],
     rules: [
       [['1'], ['ε'], ['V'], ['W'], ['W′']],
@@ -129,7 +129,7 @@ const RAW = [
     blurb: 'The Verlinde category of the affine algebra at level 4 — five objects, dimensions built from sines.',
     ...verlinde(4),
     globalNote:
-      'FPdim(C) = 12. Integral, so settled — even though two of its five objects have dimension √3.',
+      'FPdim(C) = 12 — weakly integral, though not integral: two of its five objects have dimension √3. Proposition 8.24 only asks about the total.',
   },
   {
     id: 'su2-3',
