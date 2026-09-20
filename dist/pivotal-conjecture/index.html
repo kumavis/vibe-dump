@@ -9,7 +9,7 @@
       content="Etingof–Nikshych–Ostrik Conjecture 2.8: every fusion category admits a pivotal structure. An interactive notebook that builds up from group representations to the open problem, with every fusion rule, dimension and grading computed live."
     />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <script type="module" crossorigin src="./assets/index-CjSJZgEK.js"></script>
+    <script type="module" crossorigin src="./assets/index-B-vMWRaw.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-DcQs31aI.css">
   </head>
   <body>
@@ -137,13 +137,16 @@
             basis vectors — there is no vector space to count. They come from the
             fusion rules alone. Treat multiplication by the object X as an
             integer matrix N<sub>X</sub>, whose entries are the
-            N<sub>Xj</sub><sup>k</sup>. Those matrices have non-negative entries, and because every simple
-            object turns up somewhere in the products their sum is
-            <em>strictly</em> positive — which is what <b>Perron–Frobenius</b>
-            needs in order to hand you a largest eigenvalue with a genuinely
-            positive eigenvector. That single eigenvector works for every X at
-            once. That eigenvalue is the <b>Frobenius–Perron dimension</b>
-            FPdim(X), and the panel computes it by iterating the matrix.
+            N<sub>Xj</sub><sup>k</sup>. Those matrices have non-negative entries, and because every simple object
+            turns up somewhere in the products their <em>sum</em> is strictly
+            positive — which is what <b>Perron–Frobenius</b> needs in order to
+            hand you a positive eigenvector, unique up to scale. The useful part
+            is that this one vector is an eigenvector of every
+            N<sub>X</sub> separately. The vector is shared; the eigenvalues are
+            not. N<sub>X</sub>'s eigenvalue on it is the
+            <b>Frobenius–Perron dimension</b> FPdim(X) — for Rep(S₃) the three
+            of them are 1, 1 and 2, while their sum has eigenvalue 4 — and the
+            panel finds the vector by iterating.
           </p>
           <p>
             It behaves like a dimension should — FPdim(X ⊗ Y) = FPdim(X)·FPdim(Y)
@@ -282,11 +285,14 @@
           </div>
           <p>
             The proof is two lines and worth seeing, because it shows how much of
-            this subject is bookkeeping about which object contains the unit. The right dual X* is the unique simple object whose product with X
-            <em>contains</em> the unit <b>1</b>. The left dual *X is the unique
-            simple object whose product with X <em>maps onto</em> the unit. In a
-            semisimple category containing and mapping-onto are the same
-            condition, so *X = X*, and applying that twice gives X** ≅ X.
+            this subject is bookkeeping about which object contains the unit. The right dual X* is the unique simple Y with
+            Hom(<b>1</b>, X ⊗ Y) ≠ 0 — the unit sits <em>inside</em> the product.
+            The left dual *X is the unique simple Y with
+            Hom(X ⊗ Y, <b>1</b>) ≠ 0 — the product <em>maps onto</em> the unit.
+            Written that way the handedness is visible, and so is the reason the
+            two coincide: in a semisimple category every surjection splits, so a
+            non-zero map onto <b>1</b> gives a copy of <b>1</b> inside. Hence
+            *X ≅ X*, and applying that twice gives X** ≅ X.
           </p>
           <p>
             So at the level of objects, nothing is wrong. Below: the duality map
@@ -435,7 +441,17 @@
             along wires past anything else drawn on them. And it must be
             <b>monoidal</b>: the bead on a product is the product of the beads,
           </p>
-          <p class="display big">a<sub>X ⊗ Y</sub> = a<sub>X</sub> ⊗ a<sub>Y</sub></p>
+          <p class="display big">
+            <span class="ln">a<sub>X ⊗ Y</sub> = a<sub>X</sub> ⊗ a<sub>Y</sub></span>
+            <span class="qual">under the canonical X** ⊗ Y** ≅ (X ⊗ Y)**</span>
+          </p>
+          <p class="fine">
+            Without that identification the two sides do not even land in the
+            same object. It is one of the structure isomorphisms every fusion
+            category carries and a multiplication table does not record —
+            associativity is another. The fusion rules are the skeleton; the
+            category is the skeleton plus this bookkeeping.
+          </p>
           <p>
             A coherent system of beads, then — one per object, sliding freely, and
             multiplying the way the objects do. A category that has one is called
@@ -528,10 +544,12 @@
           <p>
             And that group is computable from the fusion rules alone, because a λ
             satisfying those equations is constant on a certain partition of the
-            simple objects. Start with the <b>adjoint subcategory</b>
-            C<sub>ad</sub>, everything appearing in some X ⊗ X*; any λ must be 1
-            there, since λ<sub>X</sub>λ<sub>X*</sub> = λ<sub>1</sub> = 1 forces
-            it. The remaining objects fall into blocks that multiply like a
+            simple objects. Start with the <b>adjoint subcategory</b> C<sub>ad</sub>: the tensor
+            subcategory <em>generated by</em> the simple constituents of X ⊗ X*
+            as X runs over the <em>simple</em> objects. Both qualifications
+            matter — it is a subcategory, closed under ⊗, not just a list of
+            products. Any λ must be 1 on it, since
+            λ<sub>X</sub>λ<sub>X*</sub> = λ<sub>1</sub> = 1 forces it. The remaining objects fall into blocks that multiply like a
             group, and that group — the finest grading the category admits — is
             the <b>universal grading group</b> U(C).
           </p>
@@ -648,11 +666,11 @@
             dual composes back to g.
           </p>
           <p>
-            Since f and −f both qualify and are never the same choice, every
-            simple object of C has exactly two lifts. C̃ has twice as many simple
-            objects as C and twice its Frobenius–Perron dimension, and it comes
-            with a forgetful functor back down that just drops the f. And C̃ is
-            pivotal by construction: each object arrived carrying its own bead.
+            Since f and −f both qualify and are never the same choice, every simple
+            object of C has exactly two lifts. C̃ has twice as many simple objects
+            as C and twice its Frobenius–Perron dimension, and it comes with a
+            forgetful functor back down that just drops the f. And C̃ is pivotal
+            by construction: each object arrived carrying its own bead.
           </p>
           <p>
             It is better than pivotal. The paper proves:
@@ -673,12 +691,24 @@
             it. It is what topological applications actually want.
           </p>
           <p>
-            This construction — the <b>pivotalisation</b> — is why the conjecture
-            is not urgent in practice. Whatever you were trying to do with a
-            fusion category, you can usually do upstairs in its double cover, pay
-            a factor of two, and proceed. It is also why the conjecture is hard:
-            the cover exists, the functor down exists, and there is no known way
-            to choose a section of it.
+            This construction — the <b>pivotalisation</b> — is why the conjecture is
+            rarely urgent. The cover is a spherical category you can actually work
+            in, and a good deal of the theory is developed there. What it is not
+            is a free pass: C̃ is a different category, and carrying a result back
+            down to C needs its own argument each time. Doubling the
+            Frobenius–Perron dimension is a theorem; "so just work upstairs" is a
+            hope.
+          </p>
+          <p>
+            One warning about the panel below, because it is the sort of thing
+            this page should not let slide. Choosing a lift per object is a
+            <em>sign</em> per object, so the game it plays has solutions
+            Hom(U(C), ℤ/2) — and chapter six counts Hom(U(C), ℂ<sup>×</sup>).
+            For Vec(ℤ/3) those are 1 and 3. The gap is not a bug in the toy: a
+            section of C̃ → C is a pivotal structure that additionally squares to
+            the canonical g, and pulling the cover's spherical structure back
+            along it gives something spherical. The panel is asking a
+            <em>harder</em> question than Conjecture 2.8 does.
           </p>
         </div>
 
@@ -771,11 +801,13 @@
 
         <div class="prose">
           <p>
-            Most of the orbit falls strictly below the dashed line, sometimes by a
-            factor of twenty, and Proposition 8.23 has nothing whatever to say
-            about those categories. (At even levels a second conjugate lands
-            exactly on the line: its dimensions are the top one's with signs
-            attached, so the squares — and therefore dim(C) — are unchanged.) The smallest example of all is the <b>Yang–Lee</b> category, which has
+            At many levels part of the orbit falls strictly below the dashed line,
+            sometimes by a factor of twenty, and Proposition 8.23 has nothing
+            whatever to say about those categories. Not at every level: at k = 1,
+            2 and 4 the orbit is small and every member sits on the line. And at
+            even levels a second conjugate lands exactly on it, because its
+            dimensions are the top one's with signs attached and the squares are
+            unchanged. Slide the level and watch which is which. The smallest example of all is the <b>Yang–Lee</b> category, which has
             exactly the fusion rules of Fibonacci but gives its non-trivial object
             the dimension (1−√5)/2 ≈ −0.618. A negative dimension, and a perfectly
             legitimate one. Its global dimension is (5−√5)/2 ≈ 1.382 against an
@@ -785,9 +817,11 @@
             And yet every one of those conjugates <em>is</em> pivotal. Not by any
             theorem about fusion categories in general — they are built from
             quantum groups, and the construction hands you the pivotal structure
-            explicitly, signs and all. The real state of the art is one sentence: the only general theorem anyone has covers a condition that
-            is sufficient but visibly not necessary, and everything outside it has
-            been settled, where it has been settled at all, one family at a time.
+            explicitly, signs and all. Which is roughly the state of the art. Pseudo-unitarity is a broad
+            sufficient criterion and the one with the longest reach; other
+            results cover other classes, and a good deal has been settled one
+            family at a time by construction. What nobody has is an argument that
+            works for an arbitrary fusion category.
           </p>
         </div>
       </section>
@@ -850,12 +884,13 @@
             algebra rather than just the scalars as its self-maps, Schur's lemma
             stops handing you a one-dimensional space of beads, and Galois theory
             enters the structure of the category in ways it simply cannot over ℂ.
-            None of that is a counterexample over ℂ, and it does not pretend to
-            be. What it shows is that the conjecture is not true for any soft
-            reason: the moment you loosen the setting, the argument you did not
-            have stays missing. The evidence for it remains what it always was —
-            every fusion category anyone has managed to write down has a pivotal
-            structure.
+            None of that is a counterexample over ℂ, and it does not pretend to be.
+            What it does show is which step of the story was load-bearing. Chapter
+            four got its one-dimensional space of beads from Schur's lemma over an
+            algebraically closed field; change the field and that scalar is gone,
+            and with it the shape of the whole argument. The evidence for the
+            conjecture remains what it always was — every fusion category anyone
+            has managed to write down has a pivotal structure.
           </p>
           <p>
             It is a strange place to be stuck. Every object comes back to itself
@@ -885,14 +920,18 @@
         and <a href="https://ncatlab.org/nlab/show/pivotal+category" target="_blank" rel="noreferrer">the nLab</a> for definitions.
       </p>
       <p class="colophon__note">
-        Every fusion ring on this page is checked at build time — by
-        <code>tools/check.mjs</code>, which the package's build script runs
-        before Vite — for unit, associativity, rigidity, Frobenius reciprocity,
-        multiplicativity of dimensions and consistency of the grading. Dimensions
-        come from
-        Perron–Frobenius iteration on the fusion matrices, and gradings from the
-        adjoint subcategory — nothing displayed is hand-entered. Status as of
-        September 2026.
+        For the nine catalogue categories, the Frobenius–Perron dimensions,
+        duals, adjoint subcategory, universal grading group and its characters
+        are all derived at runtime from the fusion multiplicities alone, and
+        <code>tools/check.mjs</code> — which the package's build script runs
+        before Vite — audits every ring for unit, associativity, rigidity,
+        Frobenius reciprocity, multiplicativity and grading consistency. Two
+        panels take other inputs, as they must: the trace panel names its
+        categorical dimensions, and the Galois panel computes quantum integers
+        from sines. That division is not tidiness. Fusion rules cannot determine
+        categorical dimensions at all — Fibonacci and Yang–Lee share a fusion
+        ring and disagree about every dimension in it, which is chapter nine's
+        whole point. Status as of September 2026.
       </p>
     </footer>
 

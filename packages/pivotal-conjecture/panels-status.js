@@ -163,17 +163,21 @@ export function initGalois() {
 
 /* ──────────────────────────────── 10. what depends on the bead */
 
+// `level` is how much you have to assume before the box is available: 0 is
+// free, 1 needs a pivotal structure, 2 needs a spherical one. Sphericity is a
+// strictly further condition — dim(V) = dim(V*) — and the state-sum
+// constructions want it, not merely pivotality, so it gates its own subtree.
 const NODES = [
-  { id: 'c', x: 0.5, y: 0.08, label: 'a fusion category C', kind: 'free' },
-  { id: 'norm', x: 0.17, y: 0.33, label: '|X|², dim(C)', kind: 'free', note: 'squared norms need no choice — Theorem 2.3' },
-  { id: 'fp', x: 0.17, y: 0.55, label: 'FPdim, rigidity results', kind: 'free', note: 'Perron–Frobenius, Ocneanu rigidity' },
-  { id: 'piv', x: 0.63, y: 0.3, label: 'pivotal structure', kind: 'gate', note: 'Conjecture 2.8 — open' },
-  { id: 'dim', x: 0.47, y: 0.52, label: 'dim(X), quantum trace', kind: 'needs' },
-  { id: 'fs', x: 0.83, y: 0.5, label: 'Frobenius–Schur indicators', kind: 'needs' },
-  { id: 'sph', x: 0.63, y: 0.68, label: 'spherical structure', kind: 'needs' },
-  { id: 'tv', x: 0.3, y: 0.9, label: 'Turaev–Viro invariants', kind: 'needs' },
-  { id: 'sn', x: 0.62, y: 0.9, label: 'string-net models', kind: 'needs' },
-  { id: 'mod', x: 0.85, y: 0.72, label: 'modular data of the centre Z(C)', kind: 'needs' },
+  { id: 'c', x: 0.5, y: 0.07, label: 'a fusion category C', level: 0 },
+  { id: 'norm', x: 0.17, y: 0.3, label: '|X|², dim(C)', level: 0, note: 'squared norms need no choice — Theorem 2.3' },
+  { id: 'fp', x: 0.17, y: 0.52, label: 'FPdim, rigidity results', level: 0, note: 'Perron–Frobenius, Ocneanu rigidity' },
+  { id: 'piv', x: 0.63, y: 0.26, label: 'pivotal structure', level: 1, gate: true, note: 'Conjecture 2.8 — open' },
+  { id: 'dim', x: 0.44, y: 0.46, label: 'dim(X), quantum trace', level: 1 },
+  { id: 'fs', x: 0.84, y: 0.46, label: 'Frobenius–Schur indicators', level: 1 },
+  { id: 'sph', x: 0.63, y: 0.66, label: 'spherical structure', level: 2, gate: true, note: 'a further condition: dim(V) = dim(V*)' },
+  { id: 'tv', x: 0.29, y: 0.88, label: 'Turaev–Viro invariants', level: 2 },
+  { id: 'sn', x: 0.62, y: 0.88, label: 'string-net models', level: 2 },
+  { id: 'mod', x: 0.85, y: 0.79, label: 'modular data of Z(C)', level: 2 },
 ]
 const EDGES = [
   ['c', 'norm'], ['c', 'fp'], ['c', 'piv'],
@@ -184,13 +188,14 @@ const EDGES = [
 export function initDeps() {
   const sheet = new Sheet($('#cv-deps'))
   const ro = $('#ro-deps')
-  let assume = true
+  let assume = 1
   let hover = null
 
   buttonRow($('#dp-toggle'), [
-    { label: 'assume pivotal', v: true },
-    { label: 'withhold it', v: false },
-  ], (item) => { assume = item.v; render() })
+    { label: 'assume nothing', v: 0 },
+    { label: 'assume pivotal', v: 1 },
+    { label: 'assume spherical', v: 2 },
+  ], (item) => { assume = item.v; render() }, 1)
 
   const place = () => {
     const padX = 56
@@ -203,8 +208,8 @@ export function initDeps() {
   function draw() {
     sheet.clear()
     const P = place()
-    for (const [a, b] of EDGES) {
-      const live = assume || (NODES.find((n) => n.id === b).kind === 'free')
+        for (const [a, b] of EDGES) {
+      const live = assume >= P[b].level
       sheet.stroke([[P[a].px, P[a].py + 11], [P[b].px, P[b].py - 11]], {
         color: live ? INK.soft : INK.faint,
         width: 1.3,
@@ -214,9 +219,9 @@ export function initDeps() {
       })
     }
     for (const n of Object.values(P)) {
-      const free = n.kind === 'free'
-      const gate = n.kind === 'gate'
-      const live = assume || free
+      const free = n.level === 0
+      const gate = n.gate
+      const live = assume >= n.level
       const color = gate ? INK.verm : free ? INK.teal : INK.indigo
       const w = sheet.measure(n.label, '11px ui-monospace, monospace') + 20
       sheet.ctx.save()
@@ -227,7 +232,7 @@ export function initDeps() {
       sheet.ctx.beginPath()
       sheet.ctx.rect(n.px - w / 2, n.py - 11, w, 22)
       sheet.ctx.fill()
-      if (gate && !assume) sheet.ctx.setLineDash([5, 4])
+            if (gate && assume < n.level) sheet.ctx.setLineDash([5, 4])
       sheet.ctx.stroke()
       sheet.ctx.restore()
       sheet.text(n.px, n.py, n.label, {
@@ -241,11 +246,13 @@ export function initDeps() {
     }
   }
 
-  function render() {
+    function render() {
     draw()
-    ro.innerHTML = assume
-      ? `<span class="k">With a pivotal structure in hand, every box lights up: objects have dimensions, closed diagrams have values, and the state-sum constructions that build 3-manifold invariants and lattice models out of a fusion category go through.</span>`
-      : `<span class="bad">Without it,</span> <span class="k">the green boxes survive — squared norms, the global dimension, Frobenius–Perron theory, Ocneanu rigidity — and everything else is conditional. This is why the conjecture is usually stated as a hypothesis rather than fought over: in practice people assume it, or work in the spherical double cover of chapter eight.</span>`
+    ro.innerHTML = [
+      `<span class="bad">Assuming nothing,</span> <span class="k">the green boxes survive — squared norms, the global dimension, Frobenius–Perron theory, Ocneanu rigidity. They need no choice at all, and they are what the 2005 paper actually proves. Everything else is conditional.</span>`,
+      `<span class="k">A pivotal structure buys objects their dimensions and closed diagrams their values. It does <b>not</b> reach the bottom row: the state-sum constructions want <b>sphericity</b> — dim(V) = dim(V*), so that a loop gives the same answer whichever way you close it — and that is a further condition, not a consequence.</span>`,
+      `<span class="k">With a spherical structure, the whole map lights up. Which is why the literature usually assumes sphericity outright, or works in the double cover of chapter eight, where it comes for free.</span>`,
+    ][assume]
   }
 
   sheet.canvas.addEventListener('mousemove', (e) => {

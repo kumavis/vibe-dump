@@ -62,7 +62,7 @@ const RAW = [
   {
     id: 'vecz3',
     name: 'Vec(Z/3)',
-    blurb: 'Z/3-graded vector spaces. Every object is invertible; this is as simple as a fusion category gets past Vec.',
+    blurb: 'Z/3-graded vector spaces. Every simple object is invertible — a pointed category — which is as plain as a fusion category gets past Vec itself.',
     labels: ['1', 'a', 'a²'],
     rules: pointed(['1', 'a', 'a²'], (i, j) => (i + j) % 3).rules,
     globalNote: 'FPdim(C) = 3. Pointed categories are integral, hence pseudo-unitary, hence pivotal.',

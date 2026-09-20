@@ -514,11 +514,18 @@ export function initCover() {
     return { xs: cat.labels.map((_, i) => x0 + i * m), yBot: sheet.h * 0.8, yTop: sheet.h * 0.26, gap: 24 }
   }
 
-    /**
+      /**
    * The lifts of X ⊗ Y are determined by those of X and Y, so a choice of one
    * lift per simple object is a section of C̃ → C exactly when the signs are
-   * multiplicative: s_i · s_j = s_k whenever N_ij^k > 0. That is the coherence
-   * game of chapter five again, played over {±1}.
+   * multiplicative: s_i · s_j = s_k whenever N_ij^k > 0.
+   *
+   * Note what this does NOT count. The signs take values in {±1}, so solutions
+   * are Hom(U(C), Z/2) — a subgroup of the Hom(U(C), k^×) that chapter five
+   * counts, and a proper one whenever U(C) has odd order. Vec(Z/3) is the tell:
+   * three pivotal structures there, one solution here. The difference is real
+   * and not an artefact of the toy — a section additionally satisfies
+   * f** ∘ f = g, and pulling C̃'s spherical structure (Proposition 5.14) back
+   * along the section makes the result spherical, not merely pivotal.
    */
   function broken() {
     const n = cat.labels.length
@@ -566,10 +573,31 @@ export function initCover() {
     sheet.text(sheet.w - 14, yBot - 6, 'forget f', { align: 'right', color: INK.faint, font: '10px ui-monospace, monospace' })
   }
 
-    function render() {
+      /** How many sign choices solve the game: |Hom(U(C), Z/2)|. */
+  function solutions() {
+    const n = cat.labels.length
+    let count = 0
+    for (let m = 0; m < 1 << n; m++) {
+      if (m & 1) continue
+      const s = [...Array(n)].map((_, i) => (m >> i) & 1)
+      let ok = true
+      for (let i = 0; i < n && ok; i++) {
+        for (let j = i; j < n && ok; j++) {
+          for (let k = 0; k < n; k++) {
+            if (cat.N[i][j][k] && ((s[i] + s[j]) & 1) !== s[k]) { ok = false; break }
+          }
+        }
+      }
+      if (ok) count++
+    }
+    return count
+  }
+
+  function render() {
     if (chosen.length !== cat.labels.length) chosen = cat.labels.map(() => 0)
     chosen[0] = 0
     const bad = broken()
+    const sols = solutions()
     draw()
     ro.innerHTML = `
       <div><span class="k">rank</span> ${cat.labels.length} <span class="k">→</span> <b>${cat.labels.length * 2}</b>
@@ -577,12 +605,15 @@ export function initCover() {
         <span class="k">· C̃ is spherical whenever dim C ≠ 0, which over ℂ is always</span></div>
       <div style="margin-top:6px">${
         bad.size === 0
-          ? '<span class="good">These lifts are multiplicative.</span> <span class="k">The choice for X ⊗ Y is the product of the choices for X and Y, so they assemble into a section of C̃ → C — which is to say, a pivotal structure.</span>'
+          ? '<span class="good">These lifts are multiplicative.</span> <span class="k">The choice for X ⊗ Y is the product of the choices for X and Y, so they assemble into a section of C̃ → C — and hence into a spherical structure on C.</span>'
           : `<span class="bad">Not multiplicative.</span> <span class="k">${[...bad].map((i) => cat.labels[i]).join(', ')} sit in a fusion rule the signs break. Flip lifts until every rule holds, or press reset.</span>`
       }</div>
-      <div class="k" style="margin-top:6px">This is chapter five's game again, played over {+, −}. It is winnable here only
-        because the two sheets were drawn relative to a choice that already works. In general there is no such drawing to start from,
-        and that — exactly that — is the conjecture.</div>`
+            <div class="k" style="margin-top:6px">This is chapter five's game with the scalars cut down to {+, −},
+        and it asks for <b>more</b> than the conjecture does. A section of C̃ → C is a pivotal structure that also squares to the
+        canonical g, and pulling back the cover's spherical structure makes it <b>spherical</b>. So the count here
+        (<b>${sols}</b>) can be smaller than chapter six's (<b>${cat.chars.length}</b>)${
+          sols === cat.chars.length ? ' — for this category they happen to agree' : `, and for ${cat.name} it is`
+        }. What the conjecture asks is only that some coherent system of beads exist at all.</div>`
   }
 
     sheet.canvas.style.cursor = 'pointer'
