@@ -9,8 +9,8 @@
       content="Etingof–Nikshych–Ostrik Conjecture 2.8: every fusion category admits a pivotal structure. An interactive notebook that builds up from group representations to the open problem, with every fusion rule, dimension and grading computed live."
     />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <script type="module" crossorigin src="./assets/index-CPp_w76R.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CrcPclxF.css">
+    <script type="module" crossorigin src="./assets/index-CjSJZgEK.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DcQs31aI.css">
   </head>
   <body>
     <nav id="rail" aria-label="Chapters"><ol></ol></nav>
@@ -81,7 +81,11 @@
             multiply, and the product comes back out as a sum of irreducibles
             with whole-number coefficients:
           </p>
-          <p class="display">ε ⊗ ε = 1&emsp;&emsp;ε ⊗ V = V&emsp;&emsp;V ⊗ V = 1 ⊕ ε ⊕ V</p>
+          <p class="display">
+            <span class="ln">ε ⊗ ε = 1</span>
+            <span class="ln">ε ⊗ V = V</span>
+            <span class="ln">V ⊗ V = 1 ⊕ ε ⊕ V</span>
+          </p>
           <p>
             Check the last one by dimensions: 2 × 2 = 1 + 1 + 2. That table of
             coefficients is called the <b>fusion rules</b>, and it is the
@@ -169,11 +173,17 @@
             completely canonical maps in play. One <b>evaluates</b> a functional
             on a vector,
           </p>
-          <p class="display">ev : V* ⊗ V → ℂ,&emsp;φ ⊗ v ↦ φ(v)</p>
+          <p class="display">
+            <span class="ln">ev : V* ⊗ V → ℂ</span>
+            <span class="ln">φ ⊗ v ↦ φ(v)</span>
+          </p>
           <p>
             and the other goes the other way, producing something out of nothing:
           </p>
-          <p class="display">coev : ℂ → V ⊗ V*,&emsp;1 ↦ Σ<sub>i</sub> e<sub>i</sub> ⊗ e<sup>i</sup></p>
+          <p class="display">
+            <span class="ln">coev : ℂ → V ⊗ V*</span>
+            <span class="ln">1 ↦ Σ<sub>i</sub> e<sub>i</sub> ⊗ e<sup>i</sup></span>
+          </p>
           <p>
             That second map is less familiar but you have met it: written as a
             matrix it is the identity matrix, with the sum running over any basis
@@ -188,9 +198,8 @@
           <p class="display">V → V ⊗ V* ⊗ V → V</p>
           <p>
             and if you push a basis vector through it, you get the same basis
-            vector back. The composite is the identity. This is a real theorem
-            about matrices and it is also completely invisible written this way,
-            which is why people draw it instead.
+            vector back. The composite is the identity. It is a routine fact about matrices — and completely invisible written
+            this way, which is why people draw it instead.
           </p>
           <p>
             <b>String diagrams.</b> Draw an object as a vertical wire, read the
@@ -460,7 +469,10 @@
             but monoidality turns into an arithmetic condition, one equation for
             every fusion rule:
           </p>
-          <p class="display">λ<sub>i</sub> λ<sub>j</sub> = λ<sub>k</sub>&emsp;&emsp;whenever N<sub>ij</sub><sup>k</sup> &gt; 0</p>
+          <p class="display">
+            <span class="ln">λ<sub>i</sub> λ<sub>j</sub> = λ<sub>k</sub></span>
+            <span class="qual">whenever N<sub>ij</sub><sup>k</sup> &gt; 0</span>
+          </p>
           <p>
             Turn one dial and watch how many equations go red at once. This is
             what "coherent" costs.
@@ -697,7 +709,10 @@
             norms from chapter four, built out of traces. They are different numbers, and the paper proves that one of them never
             exceeds the other:
           </p>
-          <p class="display">dim(C) ≤ FPdim(C)&emsp;&emsp;<span style="font-size:0.88em">with dim(C)/FPdim(C) an algebraic integer</span></p>
+          <p class="display">
+            <span class="ln">dim(C) ≤ FPdim(C)</span>
+            <span class="qual">with dim(C) / FPdim(C) an algebraic integer</span>
+          </p>
           <p>
             Call a category <b>pseudo-unitary</b> when equality holds. Then:
           </p>

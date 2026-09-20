@@ -192,6 +192,17 @@ main { max-width: 760px; margin: 0 auto; padding: 0 24px; }
 }
 .display.big { font-size: 1.1rem; }
 
+/* A display holding more than one statement stacks them. Separating equations
+   by horizontal space reads as one long expression however wide the gap is. */
+.display .ln { display: block; }
+.display .ln + .ln { margin-top: 0.3em; }
+.display .qual {
+  display: block;
+  margin-top: 0.5em;
+  font-size: 0.86em;
+  color: var(--soft);
+}
+
 .statement {
   margin: 1.8em 0;
   padding: 18px 22px;
