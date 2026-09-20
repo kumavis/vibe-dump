@@ -271,6 +271,8 @@ export function buttonRow(host, items, onPick, activeIndex = 0) {
 /** Six significant figures, without an exponent for the sizes on this page. */
 export const num = (v, digits = 6) => {
   if (!Number.isFinite(v)) return '—'
-  if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v))
-  return v.toFixed(digits).replace(/0+$/, '').replace(/\.$/, '')
+  const body = Math.abs(v - Math.round(v)) < 1e-9
+    ? String(Math.round(v))
+    : v.toFixed(digits).replace(/0+$/, '').replace(/\.$/, '')
+  return body.replace(/^-/, '\u2212')
 }

@@ -71,7 +71,7 @@ export function initTrace() {
       })
       const by = lerp(bot - 34, top + 34, 0.52)
       sheet.box(xL, by, 30, 24, 'a', { color: INK.plum })
-      sheet.text(xL - 20, by, `×${num(lam(), 2)}`, { align: 'right', color: INK.plum, font: '11px ui-monospace, monospace', halo: INK.panel })
+      sheet.text(xL - 21, by, `λ = ${num(lam(), 2)}`, { align: 'right', color: INK.plum, font: '11px ui-monospace, monospace', halo: INK.panel })
       sheet.text(xL + 10, top + 52, 'X**', { color: INK.plum, font: '11.5px ui-monospace, monospace', halo: INK.panel })
       sheet.text(cx, top - 36, 'ev', { align: 'center', color: INK.ink, font: '12px ui-monospace, monospace' })
       sheet.text(cx, top - 54, 'the loop closes', { align: 'center', color: INK.teal, font: '11px ui-monospace, monospace' })
@@ -84,8 +84,8 @@ export function initTrace() {
         color: INK.verm, width: 2, dash: [5, 5],
       })
       sheet.disc(cx, top - 18, 5.5, { fill: INK.verm, stroke: INK.panel, width: 2 })
-      sheet.text(cx, top - 40, 'X ≠ X**', { align: 'center', color: INK.verm, font: '12px ui-monospace, monospace' })
-      sheet.text(cx, top - 58, 'no evaluation accepts this leg', { align: 'center', color: INK.faint, font: '10px ui-monospace, monospace' })
+      sheet.text(cx, top - 40, 'this socket wants X**', { align: 'center', color: INK.verm, font: '12px ui-monospace, monospace' })
+      sheet.text(cx, top - 58, 'the leg arriving is X', { align: 'center', color: INK.faint, font: '10px ui-monospace, monospace' })
     }
 
     sheet.text(xL - 12, bot - 60, 'X', { align: 'right', color: INK.teal, font: '12px ui-monospace, monospace', halo: INK.panel })
@@ -121,7 +121,7 @@ export function initTrace() {
     const d = obj.d
     const l = lam()
     ro.innerHTML = mode === 'open'
-      ? `<span class="bad">The loop is open.</span> <span class="k">The cup handed you an X on the left, and the only evaluation the object X* has expects an X** there. Nothing has gone wrong — there is simply no canonical way to join the ends.</span>`
+      ? `<span class="bad">The loop is open.</span> <span class="k">The cup handed you an X on the left, and the only evaluation available to X* expects an X** in that slot. Nothing has gone wrong: the two objects are isomorphic by Proposition 2.1, but nothing in the category picks the isomorphism for you.</span>`
       : `<span class="k">dim(X) := Tr(a) =</span> <b class="pl">${num(l * d, 6)}</b>
          <span class="k">· but a was only defined up to scale, so this number is a property of the choice, not of X.</span>
          <span class="k">The product</span> <b class="good">|X|² = ${num(d * d, 6)}</b>
@@ -275,7 +275,9 @@ export function initGrading() {
     const cols = U.size
     const colW = Math.min(150, (sheet.w - 150) / cols)
     const x0 = 28
-    const topY = 46
+    const tallest = Math.max(...U.members.map((m) => m.length))
+    const rowH = Math.min(30, Math.max(19, (sheet.h - 86) / tallest))
+    const topY = Math.max(44, (sheet.h - tallest * rowH) / 2 + 12)
 
     U.members.forEach((members, g) => {
       const cx = x0 + colW * g + colW / 2
@@ -285,7 +287,7 @@ export function initGrading() {
         align: 'center', color, font: '10px ui-monospace, monospace',
       })
       members.forEach((i, r) => {
-        const y = topY + 6 + r * 30
+        const y = topY + 6 + r * rowH
         sheet.disc(cx - 34, y, 9, { fill: 'rgba(0,0,0,0)', stroke: color, width: 2 })
         sheet.text(cx - 34, y, String(r + 1), { align: 'center', color, font: '9px ui-monospace, monospace' })
         sheet.text(cx - 18, y, `${cat.labels[i]}`, { color: INK.ink, font: '12px ui-monospace, monospace' })
@@ -354,26 +356,42 @@ export function initRibbon() {
     const T = turns()
     const steps = 150
 
-    const pts = []
+    // Centreline first, then the band's half-width along the centreline's own
+    // normal — otherwise the band shears instead of bending when the release
+    // swings it sideways.
+    const spine = []
     for (let s = 0; s <= steps; s++) {
       const t = s / steps
-      const y = lerp(bot, top, t)
-      // During the release the twist migrates into a loop that swings out and back.
-      const bulge = loop > 0 ? Math.sin(Math.PI * loop) * Math.sin(Math.PI * t) * 96 : 0
-      const th = T * (1 - loop) * Math.PI * 2 * t
+      const bulge = loop > 0 ? Math.sin(Math.PI * loop) * Math.sin(Math.PI * t) * 70 : 0
+      spine.push([cx + bulge, lerp(bot, top, t)])
+    }
+    const pts = spine.map(([x, y], s) => {
+      const a = spine[Math.max(0, s - 1)]
+      const b = spine[Math.min(steps, s + 1)]
+      const tx = b[0] - a[0]
+      const ty = b[1] - a[1]
+      const len = Math.hypot(tx, ty) || 1
+      const nx = -ty / len
+      const ny = tx / len
+      const th = T * (1 - loop) * Math.PI * 2 * (s / steps)
       const w = halfW * Math.cos(th)
-      pts.push({ x: cx + bulge, y, w, face: Math.cos(th) >= 0 })
+      return { x, y, lx: x - nx * w, ly: y - ny * w, rx: x + nx * w, ry: y + ny * w, face: Math.cos(th) >= 0 }
+    })
+
+    // Fill each run of same-facing samples in one go: quad-by-quad leaves
+    // antialiasing seams across what is meant to read as a single surface.
+    let runStart = 0
+    for (let s = 1; s <= steps; s++) {
+      if (s < steps && pts[s].face === pts[runStart].face) continue
+      const end = Math.min(steps, s + 1)
+      const poly = []
+      for (let q = runStart; q <= end; q++) poly.push([pts[q].lx, pts[q].ly])
+      for (let q = end; q >= runStart; q--) poly.push([pts[q].rx, pts[q].ry])
+      sheet.fillPath(poly, { color: pts[runStart].face ? INK.indigo : INK.ochre, alpha: 0.5 })
+      runStart = s
     }
-    for (let s = 0; s < steps; s++) {
-      const a = pts[s]
-      const b = pts[s + 1]
-      sheet.fillPath(
-        [[a.x - a.w, a.y], [a.x + a.w, a.y], [b.x + b.w, b.y], [b.x - b.w, b.y]],
-        { color: a.face ? INK.indigo : INK.ochre, alpha: 0.55 },
-      )
-    }
-    sheet.stroke(pts.map((p) => [p.x - p.w, p.y]), { color: INK.ink, width: 1.4, smooth: false })
-    sheet.stroke(pts.map((p) => [p.x + p.w, p.y]), { color: INK.ink, width: 1.4, smooth: false })
+    sheet.stroke(pts.map((p) => [p.lx, p.ly]), { color: INK.ink, width: 1.4, smooth: false })
+    sheet.stroke(pts.map((p) => [p.rx, p.ry]), { color: INK.ink, width: 1.4, smooth: false })
 
     const eff = T * (1 - loop)
     const marks = [
@@ -389,7 +407,7 @@ export function initRibbon() {
     })
     sheet.text(16, sheet.h * 0.2, 'front', { color: INK.indigo, font: '10px ui-monospace, monospace' })
     sheet.text(16, sheet.h * 0.2 + 16, 'back', { color: INK.ochre, font: '10px ui-monospace, monospace' })
-    sheet.text(cx, bot + 22, `${(eff * 2).toFixed(2)}π of twist`, {
+    sheet.text(spine[0][0], bot + 22, `${(eff * 2).toFixed(2)}π of twist`, {
       align: 'center', color: INK.soft, font: '11px ui-monospace, monospace',
     })
   }
@@ -399,7 +417,9 @@ export function initRibbon() {
     out.textContent = T === 0 ? '0' : `${(T * 2).toFixed(2)}π`
     draw()
     const eff = T * (1 - loop)
-    ro.innerHTML = eff < 0.02
+    ro.innerHTML = loop > 0 && loop < 1
+      ? `<span class="hot">Releasing.</span> <span class="k">The band is swinging a loop around its end, and the twist is draining out as it goes — ${(eff * 2).toFixed(2)}π left. Nothing was cut and nothing was fixed in place; the two turns simply were not there to begin with.</span>`
+      : eff < 0.02
       ? `<span class="good">Flat.</span> <span class="k">A band with no twist is the identity functor. Where a full turn cannot be undone, two full turns can — which is the shape of Theorem 2.6, and the shape of the conjecture's difficulty: you want the square root of a trivialisation you already have.</span>`
       : Math.abs(eff - 1) < 0.03
         ? `<span class="bad">One full turn.</span> <span class="k">This is the double dual. You cannot untwist it by sliding the band around — and correspondingly, nobody can produce a coherent isomorphism Id → ** in general.</span>`

@@ -66,12 +66,19 @@ export function initExplorer() {
         if (!m) continue
         const dim = hover != null && hover !== from.i && hover !== to.i
         if (from.i === to.i) {
+          // A loop hanging off the node, pointing away from the centre.
           const ang = Math.atan2(from.y - sheet.h / 2, from.x - sheet.w / 2)
-          const lx = from.x + Math.cos(ang) * (from.r + 11)
-          const ly = from.y + Math.sin(ang) * (from.r + 11)
+          const ux = Math.cos(ang)
+          const uy = Math.sin(ang)
+          const px = -uy
+          const py = ux
+          const a0 = [from.x + ux * from.r + px * 4, from.y + uy * from.r + py * 4]
+          const a1 = [from.x + ux * from.r - px * 4, from.y + uy * from.r - py * 4]
+          const reach = 30
           sheet.stroke(
-            bezier([from.x, from.y], [lx + 13, ly - 13], [lx - 13, ly + 13], [from.x, from.y], 40),
-            { color: INK.ochre, width: 1.2 + m * 0.7, alpha: dim ? 0.18 : 0.7 },
+            bezier(a0, [a0[0] + ux * reach + px * 22, a0[1] + uy * reach + py * 22],
+                   [a1[0] + ux * reach - px * 22, a1[1] + uy * reach - py * 22], a1, 44),
+            { color: INK.ochre, width: 1.2 + m * 0.7, alpha: dim ? 0.18 : 0.75 },
           )
           continue
         }
@@ -94,8 +101,9 @@ export function initExplorer() {
         stroke: isGen ? INK.verm : INK.ink,
         width: 1.8,
       })
-      sheet.text(nd.x, nd.y - nd.r - 10, nd.label, {
+      sheet.text(nd.x, nd.y - nd.r - 13, nd.label, {
         align: 'center',
+        baseline: 'bottom',
         color: isGen ? INK.verm : INK.ink,
         font: '12px ui-monospace, monospace',
         halo: INK.panel,

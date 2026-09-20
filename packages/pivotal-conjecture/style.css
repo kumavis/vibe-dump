@@ -299,6 +299,7 @@ blockquote {
 
 .slider { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 10.5px; color: var(--soft); }
 .slider span { letter-spacing: 0.1em; text-transform: uppercase; }
+.slider--sym span { text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--plum); }
 .slider input[type="range"] { width: 130px; accent-color: var(--indigo); }
 .slider--wide input[type="range"] { width: 220px; accent-color: var(--verm); }
 .slider output { color: var(--ink); min-width: 3.6em; font-variant-numeric: tabular-nums; }
@@ -358,8 +359,8 @@ button:disabled { opacity: 0.4; cursor: default; }
 }
 .ftable th { color: var(--indigo); background: rgba(45, 74, 120, 0.05); font-weight: 600; }
 .ftable thead th:first-child { color: var(--faint); background: transparent; }
-.ftable td.diag { background: rgba(176, 58, 36, 0.05); color: var(--ink); }
-.ftable td.hl { background: rgba(154, 109, 16, 0.14); color: var(--ink); }
+.ftable td.diag { background: rgba(176, 58, 36, 0.09); color: var(--ink); }
+.ftable td.hl { background: rgba(45, 74, 120, 0.1); color: var(--ink); }
 .ftable-wrap { overflow-x: auto; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }

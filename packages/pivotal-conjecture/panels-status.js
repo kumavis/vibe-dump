@@ -140,11 +140,11 @@ const NODES = [
   { id: 'fp', x: 0.17, y: 0.55, label: 'FPdim, rigidity results', kind: 'free', note: 'Perron–Frobenius, Ocneanu rigidity' },
   { id: 'piv', x: 0.63, y: 0.3, label: 'pivotal structure', kind: 'gate', note: 'Conjecture 2.8 — open' },
   { id: 'dim', x: 0.47, y: 0.52, label: 'dim(X), quantum trace', kind: 'needs' },
-  { id: 'fs', x: 0.84, y: 0.52, label: 'Frobenius–Schur indicators', kind: 'needs' },
+  { id: 'fs', x: 0.83, y: 0.5, label: 'Frobenius–Schur indicators', kind: 'needs' },
   { id: 'sph', x: 0.63, y: 0.68, label: 'spherical structure', kind: 'needs' },
-  { id: 'tv', x: 0.38, y: 0.88, label: 'Turaev–Viro invariants', kind: 'needs' },
-  { id: 'sn', x: 0.66, y: 0.88, label: 'string-net models', kind: 'needs' },
-  { id: 'mod', x: 0.9, y: 0.78, label: 'modular data of Z(C)', kind: 'needs' },
+  { id: 'tv', x: 0.3, y: 0.9, label: 'Turaev–Viro invariants', kind: 'needs' },
+  { id: 'sn', x: 0.62, y: 0.9, label: 'string-net models', kind: 'needs' },
+  { id: 'mod', x: 0.87, y: 0.74, label: 'modular data of Z(C)', kind: 'needs' },
 ]
 const EDGES = [
   ['c', 'norm'], ['c', 'fp'], ['c', 'piv'],
