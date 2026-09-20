@@ -1,0 +1,23 @@
+{
+  "name": "@vibe-dump/pivotal-conjecture",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "check": "node tools/check.mjs",
+    "build": "node tools/check.mjs && vite build"
+  },
+  "gallery": {
+    "title": "The Pivotal Conjecture",
+    "description": "Etingof–Nikshych–Ostrik Conjecture 2.8, open since 2005: every fusion category should admit a pivotal structure. Why you cannot take a trace without one, built up from group representations.",
+    "tags": [
+      "tutorial"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5"
+    ],
+    "thinking": "high"
+  }
+}
