@@ -550,7 +550,12 @@ function renderPanel(unfold) {
         await navigator.clipboard.writeText(text)
         e.target.textContent = 'Copied'
       } catch {
-        e.target.textContent = 'Select & copy'
+        // No clipboard here: select the sentence so the reader can copy it.
+        const range = document.createRange()
+        range.selectNodeContents($('#said', note))
+        getSelection().removeAllRanges()
+        getSelection().addRange(range)
+        e.target.textContent = 'Selected — copy it'
       }
       setTimeout(() => (e.target.textContent = 'Copy'), 1600)
     })
@@ -612,7 +617,11 @@ function renderAbout() {
 function writeHash() {
   const parts = [state.core, state.closer, state.need].filter(Boolean).map(encodeURIComponent)
   const url = parts.length ? `#${parts.join('/')}` : location.pathname + location.search
-  history.replaceState(null, '', url)
+  // A sandboxed host (the claude.ai artifact viewer) may refuse to touch its
+  // history. The link is a convenience; the page works the same without it.
+  try {
+    history.replaceState(null, '', url)
+  } catch {}
 }
 
 function go(path, how = 'hover') {

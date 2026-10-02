@@ -70,8 +70,7 @@ button {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(320px, 31vw, 420px);
-  height: 100vh;
-  height: 100dvh;
+  height: 100%;
 }
 
 #stage-wrap {
@@ -684,7 +683,7 @@ button {
   }
 
   #panel {
-    padding: 10px 12px 24px;
+    padding: 10px 16px 24px;
     border-top: 1px solid var(--line);
     background: rgba(244, 236, 221, 0.7);
     backdrop-filter: blur(3px);

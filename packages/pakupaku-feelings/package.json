@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "standalone": "vite build && node tools/standalone.mjs"
   },
   "dependencies": {
     "@fontsource/nunito": "^5.3.0",
@@ -22,7 +23,7 @@
     "models": [
       "Opus 5.5"
     ],
-    "thinking": "unknown",
+    "thinking": "extra",
     "thumbnail": {
       "click": [
         "[data-core=scared]",
