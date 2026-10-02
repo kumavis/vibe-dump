@@ -14,7 +14,7 @@
   },
   "gallery": {
     "title": "Pakupaku Feelings",
-    "description": "A paper fortune teller for feelings. Touch a simple feeling and its fold opens into subtler words; open one of those and the needs underneath it unfold as petals, Nonviolent Communication style.",
+    "description": "A paper fortune teller for feelings, in English or Japanese. It opens to eight plain feelings; unfold one into subtler words, and those into the needs underneath them, Nonviolent Communication style.",
     "tags": [
       "tool",
       "kids"
@@ -26,9 +26,9 @@
     "thinking": "extra",
     "thumbnail": {
       "click": [
-        "[data-core=scared]",
-        "[data-closer=overwhelmed]",
-        "[data-need=support]"
+        "[data-kind=cover] .back .hit",
+        "[data-kind=core][data-id=scared] .back .hit",
+        "[data-kind=closer][data-id=overwhelmed] .front .hit"
       ],
       "settle": 2600
     }

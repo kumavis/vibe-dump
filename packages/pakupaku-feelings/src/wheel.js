@@ -114,7 +114,8 @@ export function lighten(a, t) {
 // ------------------------------------------------------------------- text --
 
 const measurer = document.createElement('canvas').getContext('2d')
-export const LABEL_FONT = '"Patrick Hand", "Comic Sans MS", "Segoe Print", cursive'
+// Patrick Hand has no Japanese; those characters fall through to Klee One.
+export const LABEL_FONT = '"Patrick Hand", "Klee One", "Comic Sans MS", "Segoe Print", cursive'
 
 function measure(text, size) {
   measurer.font = `${size}px ${LABEL_FONT}`
@@ -131,8 +132,15 @@ function label(poly, p, text, size, cls = 'lbl') {
   // Pull the label back toward the anchor when the span is lopsided, so it
   // stays visually tied to where the paper is widest along the fold's spine.
   const cx = Math.abs(x - p[0]) > 24 ? p[0] + Math.sign(x - p[0]) * 24 : x
-  return `<text class="${cls}" x="${cx.toFixed(1)}" y="${p[1].toFixed(1)}" font-size="${fit.toFixed(1)}" dy="0.34em">${text}</text>`
+  return (
+    `<text class="${cls}" x="${cx.toFixed(1)}" y="${p[1].toFixed(1)}" font-size="${fit.toFixed(1)}" dy="0.34em">${esc(text)}</text>` +
+    // A dot under the word that takes the click — a precise target for tests
+    // and the thumbnail shooter, which press an element's centre.
+    `<circle class="hit" cx="${cx.toFixed(1)}" cy="${p[1].toFixed(1)}" r="3"/>`
+  )
 }
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 
 // ----------------------------------------------------------------- drawing --
 
@@ -149,7 +157,7 @@ function el(markup, attrs) {
  * A two-faced flap. `facets` is a list of [poly, colour] tiled over the front;
  * `crease` an optional valley line drawn on both faces.
  */
-function flapEl({ poly, facets, back, backArt = '', crease, extra = '', attrs = {} }) {
+function flapEl({ poly, facets, back, backArt = '', crease, extra = '', title = '', attrs = {} }) {
   const outline = pts(poly)
   const creaseLine = crease ? `<line class="crease" x1="${crease[0][0]}" y1="${crease[0][1]}" x2="${crease[1][0]}" y2="${crease[1][1]}"/>` : ''
   const front =
@@ -163,7 +171,8 @@ function flapEl({ poly, facets, back, backArt = '', crease, extra = '', attrs = 
     `<polygon class="grain" points="${outline}"/>` +
     `<polygon class="edge" points="${outline}"/>`
   return el(
-    `<g class="front">${front}</g><g class="back" style="display:none">${backFace}</g>` +
+    (title ? `<title>${esc(title)}</title>` : '') +
+      `<g class="front">${front}</g><g class="back" style="display:none">${backFace}</g>` +
       `<polygon class="shade" points="${outline}" style="opacity:0"/><polygon class="veil" points="${outline}"/>`,
     { class: 'flap', ...attrs },
   )
@@ -275,6 +284,7 @@ export function buildCores(sheet, cores) {
       backArt,
       crease: [flip(O), flip(e)],
       extra: faceMarkup(core.id, fp[0], fp[1], 15.5, core.color) + label(open, tp, core.word, 23, 'lbl core-lbl'),
+      title: core.gist,
       attrs: { 'data-kind': 'core', 'data-id': core.id, 'data-pick': '' },
     })
     // Hover lifts it about the same edge it opens on (a negative lift, since
@@ -289,8 +299,14 @@ export function buildCores(sheet, cores) {
   return flaps
 }
 
-/** Four pastel flaps folded over the square, which open out like petals. */
-export function buildCovers(sheet) {
+/**
+ * The four corner flaps, folded in over the square: the outside of the closed
+ * fortune teller. `lines` is written across them — each flap carries its own
+ * piece of the writing, clipped to it and pre-mirrored across its fold, so the
+ * words read whole while it's shut and come apart as it opens. Opened out,
+ * they lie flat as the four points of a diamond.
+ */
+export function buildCovers(sheet, lines) {
   const H = G.H
   const colors = ['#f6b2c3', '#9fd0f0', '#f9df84', '#a8dca4']
   const edges = [
@@ -299,18 +315,34 @@ export function buildCovers(sheet) {
     [[H, H], [-H, H]],
     [[-H, H], [-H, -H]],
   ]
+  const size = 44
+  const writing = lines
+    .map((line, i) => `<text class="lbl cover-lbl" x="0" y="${((i - (lines.length - 1) / 2) * size * 1.12).toFixed(1)}" font-size="${size}" dy="0.34em">${esc(line)}</text>`)
+    .join('')
   return edges.map(([p, q], i) => {
     const m = mid(p, q)
     const apex = [m[0] * 2, m[1] * 2]
     const poly = [p, q, apex]
+    const shut = [p, q, [0, 0]]
+    const mirror = Math.abs(m[1]) < 1e-6 ? `matrix(-1 0 0 1 ${2 * m[0]} 0)` : `matrix(1 0 0 -1 0 ${2 * m[1]})`
+    const clip = `cover-clip-${nextSeq()}`
+    const centre = [(p[0] + q[0]) / 3, (p[1] + q[1]) / 3]
+    const backArt =
+      `<g transform="${mirror}">` +
+      `<clipPath id="${clip}"><polygon points="${pts(shut)}"/></clipPath>` +
+      `<polygon points="${pts(shut)}" fill="${colors[i]}"/>` +
+      `<line class="crease" x1="${m[0]}" y1="${m[1]}" x2="0" y2="0"/>` +
+      `<g clip-path="url(#${clip})">${writing}</g>` +
+      `<circle class="hit" cx="${centre[0].toFixed(1)}" cy="${centre[1].toFixed(1)}" r="3"/>` +
+      `</g>`
     const g = flapEl({
       poly,
       facets: [[[p, m, apex], lighten(colors[i], 0.35)], [[m, q, apex], lighten(colors[i], 0.2)]],
-      back: colors[i],
+      backArt,
       crease: [m, apex],
-      attrs: { 'data-kind': 'cover', 'aria-hidden': 'true' },
+      attrs: { 'data-kind': 'cover', 'data-id': String(i), 'data-pick': '' },
     })
-    const f = new Flap({ poly, el: g, hinge: [p, q], angle: 180 })
+    const f = new Flap({ poly, el: g, hinge: [p, q], liftHinge: [p, q], angle: 180 })
     f.seq = nextSeq()
     f.kind = 'cover'
     sheet.add(f)
@@ -401,6 +433,7 @@ export function buildCloserFan(sheet, core, triangle) {
         back: mix(PAPER_BACK, core.color, 0.12),
         crease: [im, om],
         extra: label(poly, tp, word.word, 19.5),
+        title: word.gist,
         attrs: { 'data-kind': 'closer', 'data-id': word.id, 'data-pick': '' },
       })
       return { poly, g, liftHinge: [inner[0], inner[inner.length - 1]] }
@@ -439,7 +472,8 @@ export function buildNeedsFan(sheet, word, needs, families) {
         back: mix(PAPER_BACK, color, 0.14),
         crease: [im, tip],
         extra: label(poly, tp, need.name, 18.5),
-        attrs: { 'data-kind': 'need', 'data-id': need.name, 'data-pick': '' },
+        title: need.means,
+        attrs: { 'data-kind': 'need', 'data-id': need.key, 'data-pick': '' },
       })
       return { poly, g, liftHinge: [i1, i0] }
     },

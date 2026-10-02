@@ -4,20 +4,29 @@ import '@fontsource/nunito/latin-700.css'
 import '@fontsource/nunito/latin-800.css'
 import './style.css'
 
-import { CORES, NEEDS, FAMILIES, THOUGHT_WORDS } from './data.js'
+import { FAMILIES } from './data.js'
+import { content, startLang, saveLang, LANGS } from './i18n.js'
 import { Sheet, ease } from './fold.js'
-import { G, baseMarkup, buildCores, buildCovers, buildCloserFan, buildNeedsFan, faceMarkup, bbox } from './wheel.js'
+import { G, baseMarkup, buildCores, buildCovers, buildCloserFan, buildNeedsFan, bbox } from './wheel.js'
 import { flowerMarkup, gardenMarkup } from './flowers.js'
 
 const $ = (s, root = document) => root.querySelector(s)
 const stage = $('#stage')
-const note = $('#note')
-const panel = $('#panel')
+const choices = $('#choices')
+const fortune = $('#fortune')
+const about = $('#about')
+const nvcLink = $('#nvc-link')
 
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches
 const SLOW = REDUCED ? 0.3 : 1
 
-const coreById = new Map(CORES.map((c) => [c.id, c]))
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+
+// --------------------------------------------------------------- language --
+
+let lang = startLang()
+let C = content(lang) // { cores, needs, thoughts, ui } in the current language
+const coreOf = (id) => C.cores.find((c) => c.id === id) ?? null
 
 // ------------------------------------------------------------------ paper --
 
@@ -52,37 +61,42 @@ function grainTile() {
 }
 
 $('#grain image').setAttribute('href', grainTile())
-$('#under').innerHTML = baseMarkup(CORES, flowerMarkup)
+$('#under').innerHTML = baseMarkup(C.cores, flowerMarkup)
 $('#garden').innerHTML = gardenMarkup()
 
 const sheet = new Sheet($('#sheet'))
 
 // ------------------------------------------------------------------ state --
 
-const state = { core: null, closer: null, need: null }
+const state = { opened: false, core: null, closer: null, need: null }
 let cores = new Map() // id → the core's triangle Flap
 let covers = []
 // Folded-up fans stay attached to their parent while they fold away, so a
 // quick change of mind can open the same paper again instead of a copy.
 const closerFans = new Map() // core id → fan
 const needsFans = new Map() // "core/closer" → fan
-let introDone = false
+let introDone = false // the corner flaps have finished opening
 const afterIntro = []
 let observation = ''
+let seenFortune = false
 
 const needsKey = (core, closer) => `${core}/${closer}`
-
-function current() {
-  const core = state.core ? coreById.get(state.core) : null
-  const closer = core && state.closer ? core.closer.find((c) => c.id === state.closer) : null
-  const need = closer && state.need ? NEEDS[state.need] : null
-  return { core, closer, need }
-}
-
 const openCloserFan = () => (state.core ? closerFans.get(state.core) : null)
 const openNeedsFan = () => (state.closer ? needsFans.get(needsKey(state.core, state.closer)) : null)
 
+function current() {
+  const core = state.core ? coreOf(state.core) : null
+  const closer = core && state.closer ? core.closer.find((c) => c.id === state.closer) : null
+  const need = closer && state.need ? C.needs[state.need] : null
+  return { core, closer, need }
+}
+
 // ----------------------------------------------------------------- folding --
+
+// Opening goes from the inside out. Folding up goes the other way, strictly:
+// the outermost ring of paper folds in first, and each ring waits for the one
+// outside it to finish — petals, then words, then the triangle.
+const FOLD = 150
 
 /** How long until this flap and everything it hangs from stop moving. */
 function settleIn(f) {
@@ -108,30 +122,39 @@ function unfold(fan, delay) {
   }
 }
 
-/** Fold a fan back up onto its parent; returns how long that takes (ms). */
+/** Fold a fan back up, outermost flaps first; returns when it's done (ms). */
 function refold(fan, delay = 0) {
   const deepest = Math.max(...fan.flaps.map((f) => f.order))
   for (const f of fan.flaps) {
     f.closing = true
     f.el.classList.add('closing')
-    if (f !== fan.root) f.to(180, { dur: 230 * SLOW, delay: (delay + (deepest - f.order) * 40) * SLOW, curve: ease.inOut })
+    const ring = deepest - f.order
+    f.to(180, { dur: FOLD * SLOW, delay: (delay + ring * FOLD) * SLOW, curve: ease.inOut })
   }
-  const rootAt = delay + Math.max(0, deepest - 1) * 40 + 110
-  fan.root.to(180, { dur: 260 * SLOW, delay: rootAt * SLOW, curve: ease.inOut })
-  return rootAt + 260
+  return delay + (deepest + 1) * FOLD
+}
+
+function makeCloserFan(core) {
+  const T = cores.get(core.id)
+  const fan = buildCloserFan(sheet, core, T)
+  // Folded inside the triangle, the words only show once it has swung past
+  // upright — before that they'd be peeking out from under the square.
+  fan.root.gate = () => T.angle < 92
+  closerFans.set(core.id, fan)
+  return fan
+}
+
+function makeNeedsFan(core, index) {
+  const word = closerFans.get(core.id).flaps[index]
+  const needs = core.closer[index].needs.map((key) => C.needs[key])
+  const fan = buildNeedsFan(sheet, word, needs, FAMILIES)
+  needsFans.set(needsKey(core.id, core.closer[index].id), fan)
+  return fan
 }
 
 function openCore(core) {
-  const T = cores.get(core.id)
-  let fan = closerFans.get(core.id)
-  if (!fan) {
-    fan = buildCloserFan(sheet, core, T)
-    // Folded inside the triangle, the words only show once it has swung past
-    // upright — before that they'd be peeking out from under the square.
-    fan.root.gate = () => T.angle < 92
-    closerFans.set(core.id, fan)
-  }
-  T.to(0, { dur: 460 * SLOW, curve: ease.inOut })
+  const fan = closerFans.get(core.id) ?? makeCloserFan(core)
+  cores.get(core.id).to(0, { dur: 460 * SLOW, curve: ease.inOut })
   unfold(fan, 330)
 }
 
@@ -142,7 +165,7 @@ function closeCore(id) {
   for (const key of needsFans.keys()) if (key.startsWith(`${id}/`)) wait = Math.max(wait, closeNeeds(key))
   if (fan) wait = refold(fan, wait)
   T.to(180, {
-    dur: 380 * SLOW,
+    dur: 300 * SLOW,
     delay: wait * SLOW,
     curve: ease.inOut,
     done: () => {
@@ -156,16 +179,10 @@ function closeCore(id) {
 }
 
 function openNeeds(core, index) {
-  const word = closerFans.get(core.id).flaps[index]
   const key = needsKey(core.id, core.closer[index].id)
-  let fan = needsFans.get(key)
-  if (!fan) {
-    const needs = core.closer[index].needs.map((name) => ({ name, ...NEEDS[name] }))
-    fan = buildNeedsFan(sheet, word, needs, FAMILIES)
-    needsFans.set(key, fan)
-  }
+  const fan = needsFans.get(key) ?? makeNeedsFan(core, index)
   // Wait for the word itself to finish opening out.
-  unfold(fan, settleIn(word) / SLOW)
+  unfold(fan, settleIn(closerFans.get(core.id).flaps[index]) / SLOW)
 }
 
 function closeNeeds(key) {
@@ -181,10 +198,25 @@ function closeNeeds(key) {
   return took
 }
 
+/** Unfold the four corner flaps to show the feelings inside. */
+function open() {
+  if (state.opened) return
+  state.opened = true
+  covers.forEach((f, i) => {
+    f.el.removeAttribute('data-pick')
+    f.to(-7, { dur: 820 * SLOW, delay: i * 90 * SLOW, curve: ease.back })
+  })
+  setTimeout(() => {
+    introDone = true
+    for (const fn of afterIntro.splice(0)) fn()
+  }, (90 * 3 + 600) * SLOW)
+  changed()
+}
+
 // -------------------------------------------------------------- selection --
 
 function selectCore(id) {
-  const core = coreById.get(id)
+  const core = coreOf(id)
   if (!core) return
   if (state.core === id) return collapseTo(state.closer ? 1 : 0)
   if (state.core) closeCore(state.core)
@@ -205,11 +237,11 @@ function selectCloser(id) {
   changed()
 }
 
-function selectNeed(name) {
+function selectNeed(key) {
   const { closer } = current()
-  if (!closer || !closer.needs.includes(name)) return
-  if (state.need === name) return collapseTo(2)
-  state.need = name
+  if (!closer || !closer.needs.includes(key)) return
+  state.need = key
+  seenFortune = true
   changed()
 }
 
@@ -235,24 +267,29 @@ function pick(kind, id) {
 
 function changed() {
   refreshLifts()
-  renderPanel()
+  renderChoices()
+  renderFortune()
+  nvcLink.hidden = !seenFortune
   writeHash()
   retarget()
 }
 
 // ------------------------------------------------------------ hover & lift --
 
-// Hovering only hints: a folded triangle starts to peel up from its inner
-// corner, a word or petal tilts up off the table. Nothing opens until a click.
-let hover = null // the Flap under the pointer, or under a hovered chip
+// Hovering only hints: a folded flap starts to peel up from its inner corner,
+// a word or petal tilts up off the table. Nothing opens until a click.
+let hover = null // the Flap under the pointer, or under a focused choice
 const rippling = new Set()
 
 function refreshLifts() {
   const { core } = current()
+  for (const f of covers) {
+    // Negative: folded over, the way up off the table is back toward open.
+    f.liftTarget = state.opened ? 0 : hover === f ? -15 : rippling.has(f) ? -11 : 0
+  }
   for (const f of cores.values()) {
     const sel = state.core === f.id
-    // Negative: folded over, the way up off the table is back toward open.
-    f.liftTarget = sel ? 0 : hover === f ? -20 : rippling.has(f) ? -17 : 0
+    f.liftTarget = sel || !state.opened ? 0 : hover === f ? -20 : rippling.has(f) ? -17 : 0
     f.el.classList.toggle('sel', sel)
     f.el.classList.toggle('dim', !!core && !sel)
     f.el.classList.toggle('hov', hover === f && !sel)
@@ -298,24 +335,37 @@ stage.addEventListener('pointermove', (e) => {
 stage.addEventListener('pointerleave', () => setHover(null))
 stage.addEventListener('click', (e) => {
   const f = flapAt(e.target)
-  if (!f || !introDone) return
-  pick(f.el.dataset.kind, f.el.dataset.id)
+  if (!f) return
+  if (f.kind === 'cover') return open()
+  if (introDone) pick(f.el.dataset.kind, f.el.dataset.id)
 })
 
 addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape' || e.target.closest?.('input')) return
-  if (state.need) collapseTo(2)
-  else if (state.closer) collapseTo(1)
+  if (e.key !== 'Escape' || fortune.open || about.open || e.target.closest?.('input')) return
+  if (state.closer) collapseTo(1)
   else if (state.core) collapseTo(0)
 })
 
-// The fortune teller's own idle motion: two opposite corners lift, then the
-// other two — paku, paku — while nobody has picked anything yet.
+// While it's shut, one flap at a time lifts its tip a little: something in
+// here opens. Once open, two opposite corners of the inside lift, then the
+// other two — paku, paku — until a feeling is chosen.
+let nextCover = 0
+setInterval(() => {
+  if (state.opened || hover || REDUCED || !covers.length) return
+  const f = covers[nextCover++ % covers.length]
+  rippling.add(f)
+  refreshLifts()
+  setTimeout(() => {
+    rippling.delete(f)
+    refreshLifts()
+  }, 650)
+}, 2400)
+
 const QUADS = [
   ['scared', 'angry', 'loving', 'calm'],
   ['excited', 'happy', 'tired', 'sad'],
 ]
-function pakupaku() {
+setInterval(() => {
   if (!introDone || state.core || hover || REDUCED) return
   QUADS.forEach((ids, beat) => {
     setTimeout(() => {
@@ -327,17 +377,16 @@ function pakupaku() {
       }, 230)
     }, beat * 380)
   })
-}
-setInterval(pakupaku, 4200)
+}, 4200)
 
 // ---------------------------------------------------------------- camera --
 
-// Before anything is chosen the camera leans in on the square. On a big screen
-// it pulls back to the whole wheel as soon as something unfolds and then stays
-// put. On a small one it keeps following the unfolding — the square, then the
-// open fan, then the needs — so the words stay big enough to read.
+// Shut, the fortune teller sits in the middle of the page. Open, the camera
+// frames the diamond; once a feeling unfolds on a big screen it pulls back to
+// the whole wheel and stays put. On a small screen it follows the unfolding —
+// the open fan, then the needs — so the words stay big enough to read.
 const FULL = 2 * (G.R2T + 18)
-const IDLE = 2 * (2 * G.H + 34) // the square with its four petals open
+const IDLE = 2 * (2 * G.H + 40) // the square with its four corner flaps open
 const view = { x: -FULL / 2, y: -FULL / 2, w: FULL, h: FULL }
 let goal = { ...view }
 let snap = true
@@ -352,7 +401,8 @@ function focusPolys() {
     return [sel.poly, ...needs.flaps.map((f) => f.poly)]
   }
   if (words) return [square, cores.get(state.core).poly, ...words.flaps.map((f) => f.poly)]
-  return [square]
+  const D = 2 * G.H + 20
+  return [[[-D, -D], [D, D]]]
 }
 
 function retarget() {
@@ -360,11 +410,13 @@ function retarget() {
   if (!r.width || !r.height) return
   const short = Math.min(r.width, r.height)
   const all = short / FULL
-  let s = all, cx = 0, cy = 0
-  if (all >= 0.6) {
-    if (!state.core) s = short / IDLE
+  let s, cx = 0, cy = 0
+  if (!state.opened) {
+    s = (short * (r.width < 600 ? 0.66 : 0.5)) / (2 * G.H)
+  } else if (all >= 0.6) {
+    s = state.core ? all : short / IDLE
   } else {
-    // Frame what's open, keeping clear of the title strip along the top.
+    // Frame what's open, keeping clear of a strip along the top.
     const b = bbox(focusPolys())
     const m = 20
     const top = 44
@@ -382,7 +434,7 @@ new ResizeObserver(() => {
 
 let lastBox = ''
 function moveCamera() {
-  const k = snap ? 1 : REDUCED ? 0.3 : 0.085
+  const k = snap ? 1 : REDUCED ? 0.3 : 0.075
   snap = false
   for (const key of ['x', 'y', 'w', 'h']) {
     const d = goal[key] - view[key]
@@ -401,94 +453,20 @@ function loop(now) {
   requestAnimationFrame(loop)
 }
 
-// ------------------------------------------------------------------- panel --
+// ---------------------------------------------------------------- fortune --
 
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
-
-function faceSvg(core, size = 30) {
-  return `<svg class="face-ico" viewBox="-17 -17 34 34" width="${size}" height="${size}" aria-hidden="true">${faceMarkup(core.id, 0, 0, 16, core.color)}</svg>`
-}
-
-// How a need reads at the end of "because I need ___" — most read as they
-// are, a few want a verb.
-function said(name) {
-  return NEEDS[name].said ?? name
-}
-
-function crumbs() {
-  const { core, closer, need } = current()
-  if (!core) return ''
-  const parts = [`<button class="crumb" data-level="0">All feelings</button>`]
-  parts.push(`<button class="crumb" data-level="1" style="--c:${core.color}">${core.word}</button>`)
-  if (closer) parts.push(`<button class="crumb" data-level="2" style="--c:${core.color}">${closer.word}</button>`)
-  if (need) parts.push(`<span class="crumb here" style="--c:${FAMILIES[need.family].color}">${esc(state.need)}</span>`)
-  return `<nav class="crumbs" aria-label="Where you are">${parts.join('<span class="sep">›</span>')}</nav>`
-}
-
-function coreChips() {
-  // Pleasant first, then painful, each in wheel order.
-  const order = ['happy', 'excited', 'loving', 'calm', 'sad', 'angry', 'scared', 'tired']
-  return order
-    .map((id) => coreById.get(id))
-    .map((c) => `<button class="chip" data-core="${c.id}" style="--c:${c.color}">${faceSvg(c, 26)}<span>${c.word}</span></button>`)
-    .join('')
-}
-
-function introNote() {
-  return `
-    <p class="kicker">How are you feeling?</p>
-    <h2 class="big">Touch the paper.</h2>
-    <p>Start with the plainest word that fits. Its fold opens into closer words, and under those are the needs your feeling may be pointing to.</p>
-    <div class="chips">${coreChips()}</div>`
-}
-
-function coreNote(core) {
-  const chips = core.closer
-    .map((c) => `<button class="chip" data-closer="${c.id}" style="--c:${core.color}"><span>${c.word}</span></button>`)
-    .join('')
-  const why = core.met
-    ? `<b>Pleasant feelings</b> are a sign that some of your needs are being met right now.`
-    : `<b>Painful feelings</b> are messengers: a need is asking for care. Nothing is wrong with you for feeling this.`
-  return `
-    <div class="head">${faceSvg(core, 54)}<div><p class="kicker">You feel</p><h2>${core.word}</h2></div></div>
-    <p class="gist">${core.gist}</p>
-    <p class="why" style="--c:${core.color}">${why}</p>
-    <h3>Which word fits a little closer?</h3>
-    <div class="chips">${chips}</div>`
-}
-
-function needChips(names) {
-  return names
-    .map((n) => {
-      const fam = FAMILIES[NEEDS[n].family]
-      return `<button class="chip need" data-need="${esc(n)}" style="--c:${fam.color}"><span>${esc(n)}</span></button>`
+function needChips(keys) {
+  return keys
+    .map((k) => {
+      const n = C.needs[k]
+      return `<button class="chip" type="button" data-need="${esc(k)}" style="--c:${FAMILIES[n.family].color}">${esc(n.name)}</button>`
     })
     .join('')
 }
 
-function closerNote(core, closer) {
-  const lead = core.met
-    ? `Feeling <b>${closer.word.toLowerCase()}</b> can be a sign that needs like these are being met:`
-    : `When you feel <b>${closer.word.toLowerCase()}</b>, you might be needing:`
-  return `
-    <div class="head">${faceSvg(core, 42)}<div><p class="kicker">${core.word}, more exactly</p><h2>${closer.word}</h2></div></div>
-    <p class="gist">${closer.gist}.</p>
-    <p>${lead}</p>
-    <div class="chips">${needChips(closer.needs)}</div>
-    <p class="aside">Needs are what every person shares. They aren't about any one person or any one way of getting them — so there's usually more than one way to meet them.</p>
-    <h3 class="prompt">Touch a petal to unfold its fortune.</h3>`
-}
-
-// The fill-in NVC sentence after the "When ___," blank.
-function sentence(core, closer, name) {
-  const need = NEEDS[name]
-  const word = closer.word.toLowerCase()
-  const what = esc(said(name))
-  if (core.met) {
-    const tail = what.startsWith('to ') ? `to <b>${what.slice(3)}</b>` : `for <b>${what}</b>`
-    return `I felt <b>${word}</b>, because it met my need ${tail}. Thank you!`
-  }
-  return `I feel <b>${word}</b>, because I need <b>${what}</b>. Would you be willing to ${esc(need.ask)}?`
+function sentence(core, closer, need) {
+  const w = closer.word.toLowerCase()
+  return core.met ? C.ui.met(w, need.said) : C.ui.unmet(w, need.said, need.ask)
 }
 
 function plain(html) {
@@ -497,115 +475,225 @@ function plain(html) {
   return d.textContent.replace(/\s+/g, ' ').trim()
 }
 
-function fortuneNote(core, closer, name) {
-  const need = NEEDS[name]
+// One path for the eye: a quiet lead-in, the need in big lettering, what it
+// means, two short things to do, then the sentence to say.
+function renderFortune() {
+  const { core, closer, need } = current()
+  if (!need) {
+    if (fortune.open) fortune.close()
+    return
+  }
+  const ui = C.ui
   const fam = FAMILIES[need.family]
-  const word = closer.word.toLowerCase()
-  const lead = core.met ? `Feeling ${word} says this need is being met:` : `Under ${word} there may be a need for`
+  const w = closer.word.toLowerCase()
   const steps = core.met
     ? [
-        ['Savor', 'Notice where the feeling sits in your body, and what helped it happen.'],
-        ['Thank', 'If someone helped meet this need, tell them.'],
+        [ui.savorLabel, ui.savor],
+        [ui.thankLabel, ui.thank],
       ]
     : [
-        ['Try', esc(need.try)],
-        ['Ask', `“Would you be willing to ${esc(need.ask)}?”`],
+        [ui.tryLabel, esc(need.try)],
+        [ui.askLabel, ui.asked(need.ask)],
       ]
-  const others = closer.needs.filter((n) => n !== name)
-  return `
-    <article class="fortune" style="--c:${fam.color}">
-      <p class="label">${lead}</p>
-      <h2 class="need"><svg class="fortune-flower" viewBox="-50 -50 100 100" aria-hidden="true">${flowerMarkup(fam.color, { petals: 8, r: 46, turn: -90 })}</svg>${esc(name)}</h2>
+  const others = closer.needs.filter((k) => k !== need.key)
+  fortune.style.setProperty('--c', fam.color)
+  fortune.innerHTML = `
+    <div class="sheet-body" tabindex="-1">
+      <button class="close" type="button" aria-label="${esc(ui.close)}">×</button>
+      <p class="label">${core.met ? ui.leadMet(w) : ui.leadUnmet(w)}</p>
+      <h2 class="need"><svg class="fortune-flower" viewBox="-50 -50 100 100" aria-hidden="true">${flowerMarkup(fam.color, { petals: 8, r: 46, turn: -90 })}</svg>${esc(need.name)}</h2>
       <p class="means">${esc(need.means)}</p>
       <dl class="steps">${steps.map(([k, v]) => `<dt class="label">${k}</dt><dd>${v}</dd>`).join('')}</dl>
       <div class="say">
-        <p class="label">Say it the NVC way</p>
-        <p class="said">When <input id="obs" type="text" autocomplete="off" aria-label="What happened, just the facts" placeholder="this happened">, <span id="said">${sentence(core, closer, name)}</span></p>
-        <button class="copy" id="copy" type="button">Copy</button>
+        <p class="label">${ui.sayIt}</p>
+        <p class="said">${ui.when[0]}<input id="obs" type="text" autocomplete="off" aria-label="${esc(ui.obsLabel)}" placeholder="${esc(ui.placeholder)}">${ui.when[1]}<span id="said">${sentence(core, closer, need)}</span></p>
+        <button class="copy" id="copy" type="button">${ui.copy}</button>
       </div>
-    </article>
-    <p class="label also">Other needs under ${word}</p>
-    <div class="chips">${needChips(others)}</div>`
-}
+      <p class="label also">${ui.others(w)}</p>
+      <div class="chips">${needChips(others)}</div>
+    </div>`
 
-let shownNeed = null
-
-function renderPanel() {
-  const { core, closer, need } = current()
-  let body
-  if (!core) body = introNote()
-  else if (!closer) body = coreNote(core)
-  else if (!need) body = closerNote(core, closer)
-  else body = fortuneNote(core, closer, state.need)
-  note.innerHTML = crumbs() + body
-
-  const obs = $('#obs', note)
-  if (obs) {
-    obs.value = observation
-    const fit = () => (obs.style.width = `${Math.max(obs.placeholder.length, obs.value.length) + 1}ch`)
+  const obs = $('#obs', fortune)
+  obs.value = observation
+  const fit = () => (obs.style.width = `${Math.max(obs.placeholder.length, obs.value.length) * (lang === 'ja' ? 1.05 : 0.55) + 1}em`)
+  fit()
+  obs.addEventListener('input', () => {
+    observation = obs.value
     fit()
-    obs.addEventListener('input', () => {
-      observation = obs.value
-      fit()
-    })
-    $('#copy', note).addEventListener('click', async (e) => {
-      const text = `When ${observation.trim() || '…'}, ${plain($('#said', note).innerHTML)}`
-      try {
-        await navigator.clipboard.writeText(text)
-        e.target.textContent = 'Copied'
-      } catch {
-        // No clipboard here: select the sentence so the reader can copy it.
-        const range = document.createRange()
-        range.selectNodeContents($('.said', note))
-        getSelection().removeAllRanges()
-        getSelection().addRange(range)
-        e.target.textContent = 'Selected — copy it'
-      }
-      setTimeout(() => (e.target.textContent = 'Copy'), 1600)
-    })
-  }
-  // On a small screen the note sits under the paper; bring a new fortune up.
-  if (need && state.need !== shownNeed && panel.scrollHeight > panel.clientHeight) {
-    panel.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' })
-  }
-  shownNeed = state.need
+  })
+  $('#copy', fortune).addEventListener('click', async (e) => {
+    const text = `${ui.when[0]}${observation.trim() || '…'}${ui.when[1]}${plain($('#said', fortune).innerHTML)}`
+    try {
+      await navigator.clipboard.writeText(text)
+      e.target.textContent = ui.copied
+    } catch {
+      // No clipboard here: select the sentence so the reader can copy it.
+      const range = document.createRange()
+      range.selectNodeContents($('.said', fortune))
+      getSelection().removeAllRanges()
+      getSelection().addRange(range)
+      e.target.textContent = ui.selected
+    }
+    setTimeout(() => (e.target.textContent = ui.copy), 1600)
+  })
+  if (!fortune.open) fortune.showModal()
+  // The sheet's contents were just replaced; keep focus inside it, on the
+  // sheet itself so Tab starts from the top and no ring appears for a mouse.
+  $('.sheet-body', fortune).focus()
 }
 
-// Chips in the panel do what the paper does, and point at their flap.
-note.addEventListener('click', (e) => {
-  const b = e.target.closest('button')
-  if (!b) return
-  if (b.dataset.level != null) return collapseTo(Number(b.dataset.level))
-  if (b.dataset.core) return whenReady(() => pick('core', b.dataset.core))
-  if (b.dataset.closer) return pick('closer', b.dataset.closer)
-  if (b.dataset.need) return pick('need', b.dataset.need)
+fortune.addEventListener('click', (e) => {
+  // A click on the backdrop lands on the dialog itself.
+  if (e.target === fortune || e.target.closest('.close')) return fortune.close()
+  const b = e.target.closest('[data-need]')
+  if (b) selectNeed(b.dataset.need)
 })
-note.addEventListener('pointerover', (e) => {
-  const b = e.target.closest?.('button.chip')
-  if (!b) return
-  const f = b.dataset.core ? flapFor('core', b.dataset.core) : b.dataset.closer ? flapFor('closer', b.dataset.closer) : b.dataset.need ? flapFor('need', b.dataset.need) : null
-  setHover(f)
-})
-note.addEventListener('pointerout', (e) => {
-  if (e.target.closest?.('button.chip') && !e.relatedTarget?.closest?.('button.chip')) setHover(null)
+fortune.addEventListener('close', () => {
+  if (state.need) {
+    state.need = null
+    changed()
+  }
 })
 
-// ------------------------------------------------------------------- about --
+// ------------------------------------------------------------------ about --
 
 function renderAbout() {
-  const rows = THOUGHT_WORDS.map((t) => {
-    const core = coreById.get(t.feeling[0])
-    const closer = core.closer.find((c) => c.id === t.feeling[1])
-    return `<li><button data-go="${t.feeling.join('/')}" style="--c:${core.color}"><span class="tw">“${t.word}”</span><span class="arrow">→</span><span>maybe <b>${closer.word.toLowerCase()}</b>, needing ${t.needs.map((n) => `<b>${esc(n)}</b>`).join(' or ')}</span></button></li>`
-  }).join('')
-  $('#thoughts').innerHTML = rows
-  $('#thoughts').addEventListener('click', (e) => {
-    const b = e.target.closest('button[data-go]')
-    if (!b) return
-    const [c, cl] = b.dataset.go.split('/')
-    go([c, cl])
-  })
+  const rows = C.thoughts
+    .map((t) => {
+      const core = coreOf(t.feeling[0])
+      const closer = core.closer.find((c) => c.id === t.feeling[1])
+      const needs = t.needs.map((k) => C.needs[k].name)
+      return `<li><button type="button" data-go="${t.feeling.join('/')}" style="--c:${core.color}">${C.ui.thought(t.label, closer.word.toLowerCase(), needs)}</button></li>`
+    })
+    .join('')
+  about.innerHTML = `
+    <div class="sheet-body" tabindex="-1">
+      <button class="close" type="button" aria-label="${esc(C.ui.close)}">×</button>
+      ${C.ui.about}
+      <ul class="thoughts">${rows}</ul>
+      <p class="small">${C.ui.aboutSmall}</p>
+    </div>`
 }
+
+nvcLink.addEventListener('click', () => {
+  renderAbout()
+  about.showModal()
+  $('.sheet-body', about).focus()
+})
+about.addEventListener('click', (e) => {
+  if (e.target === about || e.target.closest('.close')) return about.close()
+  const b = e.target.closest('[data-go]')
+  if (!b) return
+  about.close()
+  go(b.dataset.go.split('/'))
+})
+
+// ---------------------------------------------------------------- choices --
+
+// The same choices as the paper, as buttons: hidden until someone tabs to
+// them, for keyboards and screen readers.
+function renderChoices() {
+  const ui = C.ui
+  const { core, closer } = current()
+  const had = choices.contains(document.activeElement)
+  let label, buttons
+  const btn = (attrs, text, color) => `<button type="button" ${attrs}${color ? ` style="--c:${color}"` : ''}>${esc(text)}</button>`
+  if (!state.opened) {
+    label = ui.title
+    buttons = btn('data-act="open"', ui.open)
+  } else if (!core) {
+    label = ui.pickFeeling
+    buttons = C.cores.map((c) => btn(`data-core="${c.id}"`, c.word, c.color)).join('')
+  } else if (!closer) {
+    label = ui.pickCloser
+    buttons = btn('data-act="back"', ui.back) + core.closer.map((c) => btn(`data-closer="${c.id}"`, c.word, core.color)).join('')
+  } else {
+    label = ui.pickNeed
+    buttons = btn('data-act="back"', ui.back) + closer.needs.map((k) => btn(`data-need="${esc(k)}"`, C.needs[k].name, FAMILIES[C.needs[k].family].color)).join('')
+  }
+  choices.setAttribute('aria-label', label)
+  choices.innerHTML = buttons
+  if (had) choices.querySelector('button')?.focus()
+}
+
+choices.addEventListener('click', (e) => {
+  const b = e.target.closest('button')
+  if (!b) return
+  if (b.dataset.act === 'open') return open()
+  if (b.dataset.act === 'back') return collapseTo(state.closer ? 1 : 0)
+  whenReady(() => {
+    if (b.dataset.core) pick('core', b.dataset.core)
+    else if (b.dataset.closer) pick('closer', b.dataset.closer)
+    else if (b.dataset.need) pick('need', b.dataset.need)
+  })
+})
+choices.addEventListener('focusin', (e) => {
+  const b = e.target.closest('button')
+  setHover(b?.dataset.core ? flapFor('core', b.dataset.core) : b?.dataset.closer ? flapFor('closer', b.dataset.closer) : b?.dataset.need ? flapFor('need', b.dataset.need) : null)
+})
+choices.addEventListener('focusout', () => setHover(null))
+
+// --------------------------------------------------------------- language --
+
+function renderChrome() {
+  document.documentElement.lang = lang
+  document.title = C.ui.title
+  stage.setAttribute('aria-label', C.ui.stage)
+  nvcLink.textContent = C.ui.nvcLink
+  for (const b of document.querySelectorAll('#lang button')) b.setAttribute('aria-pressed', String(b.dataset.lang === lang))
+}
+
+async function loadFonts() {
+  // Labels are measured to fit their flap, so the faces have to be here first.
+  // Don't wait forever for them, though.
+  const faces = [document.fonts.load('20px "Patrick Hand"')]
+  if (lang === 'ja') faces.push(document.fonts.load('20px "Klee One"', 'あ'))
+  await Promise.race([Promise.all(faces), new Promise((r) => setTimeout(r, 1500))])
+}
+
+/** Draw all the paper for the current language, in the state it's in now. */
+function build() {
+  for (const r of [...sheet.roots]) sheet.remove(r)
+  closerFans.clear()
+  needsFans.clear()
+  cores = new Map(buildCores(sheet, C.cores).map((f) => [f.id, f]))
+  covers = buildCovers(sheet, C.ui.cover)
+  if (state.opened) {
+    for (const f of covers) {
+      f.angle = -7
+      f.el.removeAttribute('data-pick')
+    }
+  }
+  const { core } = current()
+  if (core) {
+    cores.get(core.id).angle = 0
+    for (const f of makeCloserFan(core).flaps) f.angle = 0
+    if (state.closer) {
+      const index = core.closer.findIndex((c) => c.id === state.closer)
+      for (const f of makeNeedsFan(core, index).flaps) f.angle = 0
+    }
+  }
+  hover = null
+  renderChrome()
+  refreshLifts()
+  renderChoices()
+}
+
+async function setLang(next) {
+  if (next === lang || !LANGS.includes(next)) return
+  lang = next
+  saveLang(next)
+  C = content(next)
+  await loadFonts()
+  build()
+  if (fortune.open) renderFortune()
+  if (about.open) renderAbout()
+}
+
+$('#lang').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-lang]')
+  if (b) setLang(b.dataset.lang)
+})
 
 // ------------------------------------------------------------------- hash --
 
@@ -624,7 +712,7 @@ function writeHash() {
 function go(path) {
   whenReady(() => {
     const [c, cl, n] = path
-    if (!coreById.has(c)) return
+    if (!coreOf(c)) return
     if (state.core !== c) pick('core', c)
     if (cl && state.closer !== cl) pick('closer', cl)
     if (n && state.need !== n) pick('need', n)
@@ -632,50 +720,21 @@ function go(path) {
 }
 
 function whenReady(fn) {
-  if (introDone) fn()
-  else afterIntro.push(fn)
+  if (introDone) return fn()
+  afterIntro.push(fn)
+  open()
 }
 
 // ------------------------------------------------------------------- start --
 
 async function start() {
-  // Labels are measured to fit their flap, so the hand-lettered face has to be
-  // here first. Don't wait forever for it, though.
-  await Promise.race([document.fonts.load('20px "Patrick Hand"'), new Promise((r) => setTimeout(r, 1500))])
-
-  cores = new Map(buildCores(sheet, CORES).map((f) => [f.id, f]))
-  covers = buildCovers(sheet)
-  renderPanel()
-  renderAbout()
+  await loadFonts()
+  build()
   retarget()
   snap = true
   requestAnimationFrame(loop)
-
-  // The opening: four pastel flaps lying folded over the square spring open.
-  covers.forEach((f, i) => {
-    f.to(-7, { dur: 820 * SLOW, delay: (180 + i * 90) * SLOW, curve: ease.back })
-  })
-  setTimeout(() => {
-    introDone = true
-    for (const fn of afterIntro.splice(0)) fn()
-  }, (180 + 90 * 3 + 600) * SLOW)
-
   const path = decodeURIComponent(location.hash.slice(1)).split('/').filter(Boolean)
   if (path.length) go(path)
 }
-
-$('#refold').addEventListener('click', () => {
-  collapseTo(0)
-  introDone = false
-  covers.forEach((f, i) =>
-    f
-      .to(180, { dur: 520 * SLOW, delay: (3 - i) * 70 * SLOW, curve: ease.inOut })
-      .then(-7, { dur: 820 * SLOW, delay: (220 + i * 90) * SLOW, curve: ease.back }),
-  )
-  setTimeout(() => {
-    introDone = true
-    for (const fn of afterIntro.splice(0)) fn()
-  }, (900 + 90 * 3 + 600) * SLOW)
-})
 
 start()
