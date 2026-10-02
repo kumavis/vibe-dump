@@ -108,7 +108,7 @@ name and the URL path (`/vibe-dump/<slug>/`).
    | `tags`     | one or more of `game`, `simulation`, `tool`, `art`, `kids`, `tutorial` |
    | `status`   | `done`, or `wip` for a badge on the card                       |
    | `models`   | which model(s) built it, e.g. `["Opus 5"]`                     |
-   | `thinking` | `low` / `medium` / `high` / `max`, or `unknown`                |
+   | `thinking` | `low` / `medium` / `high` / `extra` / `max` / `ultracode`, or `unknown` |
 
    The vocabularies live in `scripts/apps.mjs`, and `npm run verify` fails on a
    value outside them — a tag with no chip would drop the app out of every
