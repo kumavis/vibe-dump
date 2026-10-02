@@ -31,7 +31,7 @@ export const STATUSES = ['done', 'wip']
 // and are filled in by hand. The list runs from least to most effort — this is
 // a guard against typos silently dropping a card out of a filtered view, so a
 // genuinely new setting belongs in it rather than rounded to the nearest old one.
-export const THINKING = ['unknown', 'low', 'medium', 'high', 'max', 'ultracode']
+export const THINKING = ['unknown', 'low', 'medium', 'high', 'extra', 'max', 'ultracode']
 
 // When each package was last worked on, so the gallery can lead with whatever
 // is freshest. Read out of the history rather than a hand-maintained field —

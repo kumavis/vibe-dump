@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "standalone": "vite build && node tools/standalone.mjs"
   },
   "dependencies": {
     "three": "^0.160.0"
@@ -20,7 +21,7 @@
     "models": [
       "Opus 5.5"
     ],
-    "thinking": "unknown",
+    "thinking": "extra",
     "thumbnail": {
       "waitFor": "body.ready",
       "settle": 3400
