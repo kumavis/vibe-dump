@@ -1,0 +1,29 @@
+{
+  "name": "@vibe-dump/jukugo-tumble",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Jukugo Tumble",
+    "description": "A field of two-kanji words on white blocks. One block at a time tumbles over to a new character, the word changes meaning, and the lines tying words to each other, to their notes and to the floor's diagrams re-wire around it.",
+    "tags": [
+      "art"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5.5"
+    ],
+    "thinking": "unknown",
+    "thumbnail": {
+      "waitFor": "body.ready",
+      "settle": 3400
+    }
+  }
+}

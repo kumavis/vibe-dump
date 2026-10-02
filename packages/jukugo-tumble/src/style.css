@@ -1,0 +1,318 @@
+@font-face {
+  font-family: 'JT Serif';
+  src: url('./fonts/noto-serif-jp-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: 'JT Serif';
+  src: url('./fonts/noto-serif-jp-600.woff2') format('woff2');
+  font-weight: 600;
+  font-display: block;
+}
+@font-face {
+  font-family: 'JT Mono';
+  src: url('./fonts/ibm-plex-mono-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: 'JT Mono';
+  src: url('./fonts/ibm-plex-mono-500.woff2') format('woff2');
+  font-weight: 500;
+  font-display: block;
+}
+
+:root {
+  --paper: #ecebe7;
+  --card: #fbfbf9;
+  --ink: #141414;
+  --ink-2: #55544f;
+  --ink-3: #96958f;
+  --hair: #c4c3be;
+  --serif: 'JT Serif', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --mono: 'JT Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  /* The floor itself: a faint falloff toward the edges, like a studio sweep. */
+  background:
+    radial-gradient(120% 90% at 50% 45%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 60%),
+    var(--paper);
+  touch-action: none;
+  cursor: grab;
+}
+#stage.dragging { cursor: grabbing; }
+
+#stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#hud { pointer-events: none; }
+#cards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ── chrome ─────────────────────────────────────────────────────────────── */
+
+/* The fixed chrome sits on small plates of card stock, so the field can run
+   underneath without the text fighting it. */
+.plate {
+  background: rgba(251, 251, 249, 0.94);
+  border: 1px solid var(--ink);
+  box-shadow:
+    0 1px 1px rgba(20, 20, 20, 0.05),
+    0 18px 30px -20px rgba(20, 20, 20, 0.3);
+}
+
+#title {
+  position: fixed;
+  left: 24px;
+  top: 22px;
+  max-width: 300px;
+  padding: 12px 15px 13px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.2s;
+}
+#title h1 {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-weight: 400;
+}
+#title .ja {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.04em;
+}
+#title .en {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+#title p {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+#legend {
+  position: fixed;
+  left: 24px;
+  bottom: 22px;
+  padding: 10px 14px;
+  display: grid;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.4s;
+}
+#legend div { display: flex; align-items: center; gap: 10px; }
+.sw {
+  display: inline-block;
+  width: 28px;
+  height: 0;
+  border-top: 1.25px solid var(--ink);
+  position: relative;
+}
+.sw-pair::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4.5px;
+  width: 7px;
+  height: 7px;
+  margin-left: -4px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+}
+.sw-field { border-top: 1px dashed var(--ink-2); }
+.sw-note::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+#stats {
+  position: fixed;
+  right: 24px;
+  bottom: 22px;
+  padding: 9px 14px;
+  display: flex;
+  gap: 18px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.6s;
+}
+#stats b {
+  color: var(--ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+#stats .keys { color: var(--ink-3); text-transform: none; letter-spacing: 0.04em; }
+
+body.ready #title,
+body.ready #legend,
+body.ready #stats { opacity: 1; }
+
+/* ── notes ──────────────────────────────────────────────────────────────── */
+
+.card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 212px;
+  padding: 11px 13px 12px;
+  background: var(--card);
+  border: 1px solid var(--ink);
+  /* contact shadow + long soft drop: the note floats a little above the floor */
+  box-shadow:
+    0 1px 1px rgba(20, 20, 20, 0.06),
+    0 6px 12px -6px rgba(20, 20, 20, 0.2),
+    0 26px 40px -22px rgba(20, 20, 20, 0.32);
+  will-change: transform, clip-path;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.45s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.card.from-right { clip-path: inset(0 0 0 100%); }
+.card.open { clip-path: inset(0 0 0 0); }
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+  text-transform: uppercase;
+}
+.card-head .rule { flex: 1; height: 0; border-top: 1px solid var(--hair); }
+.card-head .field b {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  margin-right: 5px;
+}
+
+.card-word {
+  display: flex;
+  gap: 2px;
+  margin: 7px 0 2px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 1.1;
+  perspective: 400px;
+}
+.card-word .k {
+  display: inline-block;
+  transform-origin: 50% 50% -0.5em;
+  backface-visibility: hidden;
+}
+.card-word .k.turn { animation: turn 0.62s cubic-bezier(0.55, 0, 0.25, 1); }
+@keyframes turn {
+  0%   { transform: rotateX(0deg); opacity: 1; }
+  49%  { transform: rotateX(-90deg); opacity: 0.2; }
+  51%  { transform: rotateX(90deg); opacity: 0.2; }
+  100% { transform: rotateX(0deg); opacity: 1; }
+}
+
+.card-read {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 11px;
+}
+.card-read .kana { font-family: var(--serif); font-size: 13px; }
+.card-read .ro { color: var(--ink-2); letter-spacing: 0.06em; }
+
+.card-gloss {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  min-height: 1.2em;
+}
+
+.card-parts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hair);
+  font-size: 10px;
+  color: var(--ink-2);
+}
+.card-parts div { display: flex; gap: 6px; align-items: baseline; min-width: 0; }
+.card-parts b {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+}
+.card-parts span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-parts .hot span { color: var(--ink); }
+
+.card-hist {
+  margin-top: 7px;
+  font-size: 9.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 1.3em;
+}
+.card-hist b { font-family: var(--serif); font-weight: 400; font-size: 11px; color: var(--ink-2); }
+
+@media (max-width: 640px) {
+  #title { left: 12px; top: 12px; max-width: 240px; padding: 9px 12px; }
+  #title .ja { font-size: 24px; }
+  #title p { display: none; }
+  #legend { left: 12px; bottom: 12px; padding: 8px 10px; }
+  #stats { right: 12px; bottom: 12px; padding: 8px 10px; flex-direction: column; gap: 3px; text-align: right; }
+  #stats .keys { display: none; }
+  .card { width: 176px; padding: 9px 10px 10px; }
+  .card-word { font-size: 32px; }
+  .card-hist { display: none; }
+}
