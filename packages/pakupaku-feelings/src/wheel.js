@@ -1,34 +1,36 @@
 // The fortune teller's geometry, and the SVG for each flap of it.
 //
-// Lying open, the paper looks like this (not to scale):
+// It is one square of paper, the way a real fortune teller is:
 //
-//           ╱‾‾‾‾‾ needs: pointed petals, one fan per closer word ‾‾‾‾‾╲
-//         ╱   closer words: a fan of trapezoids around one core      ╲
-//        │              ┌───────┬───────┐                             │
-//        │              │╲  core│core  ╱│   eight core feelings: the  │
-//        │              │  ╲    │    ╱  │   eight triangles inside a  │
-//        │              ├─────── ───────┤   flattened paper fortune   │
-//        │              │  ╱    │    ╲  │   teller                    │
-//        │              │╱      │      ╲│                             │
-//                       └───────┴───────┘
+//                        ◇  the four corner flaps, folded out, make a diamond
+//                      ╱ │ ╲
+//                    ╱───┼───╲    eight core triangles, each folded in over
+//                  ◇ │ ╲ │ ╱ │ ◇  one half-side of the square — so their
+//                    ╲─╱─┼─╲─╱    outer edges, opened out, are the diamond's
+//                      ╲ │ ╱      rim
+//                        ◇
 //
-// A closer-word fan is centred on its core's triangle and unfolds from it: the
-// middle trapezoid swings up off the square's edge, then each neighbour swings
-// out sideways off the one before. A needs fan does the same off the outer edge
-// of its closer word.
+// Opening a core flips its triangle out over its side of the square, onto the
+// diamond. Its closer words are folded up inside it: the first unfolds off the
+// triangle's outer edge (the diamond's rim), and the rest fan out sideways
+// around the ring, each off the one before. A closer word's needs are folded up
+// inside it the same way and open off its outer edge as a crown of petals.
 
 import { Flap, nextSeq } from './fold.js'
 
 const SVGNS = 'http://www.w3.org/2000/svg'
 const DEG = Math.PI / 180
 
+const H = 120 // half the square
 export const G = {
-  H: 130, // half the square
-  HO: 140, // the square plus the gap before the closer-word fan
-  R1: 320, // outer edge of the closer-word fan
-  R2I: 331, // inner edge of the needs fan
-  R2S: 394, // a needs petal's shoulders, where it starts to narrow
-  R2T: 484, // the tip of a needs petal
+  H,
+  // Where the closer words start: the diamond the opened corner flaps make
+  // (|x| + |y| = 2H), pushed out by a hairline gap.
+  DI: 2 * H + 8 * Math.SQRT2,
+  R1: 356, // outer edge of the closer-word ring
+  R2I: 366, // inner edge of the needs fan
+  R2S: 428, // a needs petal's shoulders, where it starts to narrow
+  R2T: 498, // the tip of a needs petal
   D1: 22.5, // degrees per closer word
   D2: 20, // degrees per need
 }
@@ -47,14 +49,19 @@ export function toSquare(a, half) {
   return half / Math.max(c, s)
 }
 
-/** The offset square's outline from angle a0 to a1, corners included. */
-function squarePath(a0, a1, half) {
-  const pts = [at(toSquare(a0, half), a0)]
-  for (let k = -12; k <= 12; k++) {
-    const ca = 45 + 90 * k
-    if (ca > a0 + 1e-6 && ca < a1 - 1e-6) pts.push([Math.sign(Math.cos(ca * DEG)) * half, Math.sign(Math.sin(ca * DEG)) * half])
+/** Distance from the centre to the diamond |x| + |y| = d, along angle `a`. */
+function toDiamond(a, d) {
+  return d / (Math.abs(Math.cos(a * DEG)) + Math.abs(Math.sin(a * DEG)))
+}
+
+/** The diamond's outline from angle a0 to a1, its points included. */
+function diamondPath(a0, a1, d) {
+  const pts = [at(toDiamond(a0, d), a0)]
+  for (let k = -8; k <= 8; k++) {
+    const ca = 90 * k
+    if (ca > a0 + 1e-6 && ca < a1 - 1e-6) pts.push(at(d, ca))
   }
-  pts.push(at(toSquare(a1, half), a1))
+  pts.push(at(toDiamond(a1, d), a1))
   return pts
 }
 
@@ -142,7 +149,7 @@ function el(markup, attrs) {
  * A two-faced flap. `facets` is a list of [poly, colour] tiled over the front;
  * `crease` an optional valley line drawn on both faces.
  */
-function flapEl({ poly, facets, back, crease, extra = '', attrs = {} }) {
+function flapEl({ poly, facets, back, backArt = '', crease, extra = '', attrs = {} }) {
   const outline = pts(poly)
   const creaseLine = crease ? `<line class="crease" x1="${crease[0][0]}" y1="${crease[0][1]}" x2="${crease[1][0]}" y2="${crease[1][1]}"/>` : ''
   const front =
@@ -152,9 +159,8 @@ function flapEl({ poly, facets, back, crease, extra = '', attrs = {} }) {
     `<polygon class="edge" points="${outline}"/>` +
     extra
   const backFace =
-    `<polygon points="${outline}" fill="${back}"/>` +
+    (backArt || `<polygon points="${outline}" fill="${back}"/>` + creaseLine) +
     `<polygon class="grain" points="${outline}"/>` +
-    creaseLine +
     `<polygon class="edge" points="${outline}"/>`
   return el(
     `<g class="front">${front}</g><g class="back" style="display:none">${backFace}</g>` +
@@ -188,49 +194,92 @@ export function faceMarkup(id, x, y, r, color) {
 
 // ------------------------------------------------------------------- build --
 
-/** The paper the core sits on, with its drop shadow. Static. */
-export function baseMarkup() {
-  const h = G.H + 5
-  return `<rect x="${-h}" y="${-h}" width="${2 * h}" height="${2 * h}" rx="3" class="base"/>`
+/** A core triangle's corners: the centre O, the midpoint M of the side it
+ * folds over, and the corner K at the other end of that half-side. */
+function corners(core) {
+  const a0 = core.angle - 22.5, a1 = core.angle + 22.5
+  const p0 = at(toSquare(a0, G.H), a0)
+  const p1 = at(toSquare(a1, G.H), a1)
+  const onAxis = (p) => Math.abs(p[0]) < 1e-6 || Math.abs(p[1]) < 1e-6
+  return { p0, p1, M: onAxis(p0) ? p0 : p1, K: onAxis(p0) ? p1 : p0 }
 }
 
-/** The eight core triangles. */
+/**
+ * The paper the core sits on, with its drop shadow — and, under each
+ * triangle, a flower for whoever opens it. `flower(color, opts)` draws one.
+ */
+export function baseMarkup(cores, flower) {
+  const h = G.H + 5
+  let out = `<rect x="${-h}" y="${-h}" width="${2 * h}" height="${2 * h}" rx="3" class="base"/>`
+  const r = (G.H * (2 - Math.SQRT2)) / 2 // the triangle's inscribed circle
+  for (const core of cores) {
+    const { M, K } = corners(core)
+    const toO = [-M[0] / G.H, -M[1] / G.H]
+    const toK = [(K[0] - M[0]) / G.H, (K[1] - M[1]) / G.H]
+    const x = M[0] + r * (toO[0] + toK[0]), y = M[1] + r * (toO[1] + toK[1])
+    out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)})" class="hidden-flower">${flower(core.color, { petals: 6, r: r * 0.9, turn: core.angle })}</g>`
+  }
+  return out
+}
+
+/**
+ * The eight core triangles. Each one's resting state is *folded*: its flat
+ * shape is where it lies opened out, over its side of the square, and at rest
+ * it sits at 180° — folded in over that side. So what you see on the square is
+ * its back, and that is where the coloured feeling is drawn (pre-mirrored
+ * across the fold, so the fold puts it the right way round). Opened out, it
+ * shows its pale inside, with the word again.
+ */
 export function buildCores(sheet, cores) {
   const flaps = []
   for (const core of cores) {
     const c = core.angle
-    const a0 = c - 22.5, a1 = c + 22.5
-    const p0 = at(toSquare(a0, G.H), a0)
-    const p1 = at(toSquare(a1, G.H), a1)
+    const { p0, p1, M, K } = corners(core)
     const e = at(toSquare(c, G.H), c)
     const O = [0, 0]
-    const poly = [O, p0, p1]
-    const fA = [O, p0, e]
-    const fB = [O, e, p1]
-    // The lit side of each crease faces the upper-left light.
-    const litFirst = Math.sin((a0 - 225) * DEG) < Math.sin((a1 - 225) * DEG)
-    const light = lighten(core.color, 0.1), dark = darken(core.color, 0.07)
-    // Each triangle is a right triangle: centre, the midpoint of a side (M),
-    // and a corner (K). Horizontal text wants the triangle's widest rows: near
-    // the centre line when M is on a left/right side, out by the edge when M is
-    // on the top/bottom. The face takes the room that's left.
-    const onAxis = (p) => Math.abs(p[0]) < 1e-6 || Math.abs(p[1]) < 1e-6
-    const M = onAxis(p0) ? p0 : p1
-    const K = onAxis(p0) ? p1 : p0
-    const along = (m, k) => [M[0] * m + (K[0] - M[0]) * k, M[1] * m + (K[1] - M[1]) * k]
+    const inside = [O, p0, p1]
+    // Folding over a left/right side mirrors x; over a top/bottom side, y.
     const sideways = Math.abs(M[1]) < 1e-6
+    const flip = sideways ? ([x, y]) => [2 * M[0] - x, y] : ([x, y]) => [x, 2 * M[1] - y]
+    const mirror = sideways ? `matrix(-1 0 0 1 ${2 * M[0]} 0)` : `matrix(1 0 0 -1 0 ${2 * M[1]})`
+    const open = inside.map(flip)
+
+    // Horizontal text wants the triangle's widest rows: near the centre line
+    // when M is on a left/right side, out by the edge when M is on the top or
+    // bottom. The face takes the room that's left.
+    const along = (m, k) => [M[0] * m + (K[0] - M[0]) * k, M[1] * m + (K[1] - M[1]) * k]
     const textPt = sideways ? along(0.6, 0.17) : along(0.86, 0.42)
     const facePt = sideways ? along(0.75, 0.5) : along(0.48, 0.19)
-    const extra = faceMarkup(core.id, facePt[0], facePt[1], 15.5, core.color) + label(poly, textPt, core.word, 23, 'lbl core-lbl')
+
+    // The lit side of each crease faces the upper-left light.
+    const litFirst = Math.sin((c - 22.5 - 225) * DEG) < Math.sin((c + 22.5 - 225) * DEG)
+    const fA = [O, p0, e]
+    const fB = [O, e, p1]
+    const tone = (light, dark) => [[fA, litFirst ? light : dark], [fB, litFirst ? dark : light]]
+    const poly = (pts, fill) => `<polygon points="${pts.map((p) => p.join(',')).join(' ')}" fill="${fill}" stroke="${fill}" stroke-width="0.6"/>`
+
+    // The back: the feeling as it shows on the square.
+    const backArt =
+      `<g transform="${mirror}">` +
+      tone(lighten(core.color, 0.1), darken(core.color, 0.07)).map(([f, fill]) => poly(f, fill)).join('') +
+      `<line class="crease" x1="0" y1="0" x2="${e[0]}" y2="${e[1]}"/>` +
+      faceMarkup(core.id, facePt[0], facePt[1], 15.5, core.color) +
+      label(inside, textPt, core.word, 23, 'lbl core-lbl') +
+      `</g>`
+
+    // The inside, seen once it has opened out onto the diamond.
+    const fp = flip(facePt), tp = flip(textPt)
     const g = flapEl({
-      poly,
-      facets: [[fA, litFirst ? light : dark], [fB, litFirst ? dark : light]],
-      back: mix(PAPER_BACK, core.color, 0.1),
-      crease: [O, e],
-      extra,
+      poly: open,
+      facets: tone(lighten(core.color, 0.52), lighten(core.color, 0.4)).map(([f, fill]) => [f.map(flip), fill]),
+      backArt,
+      crease: [flip(O), flip(e)],
+      extra: faceMarkup(core.id, fp[0], fp[1], 15.5, core.color) + label(open, tp, core.word, 23, 'lbl core-lbl'),
       attrs: { 'data-kind': 'core', 'data-id': core.id, 'data-pick': '' },
     })
-    const f = new Flap({ poly, el: g, liftHinge: [p1, p0] })
+    // Hover lifts it about the same edge it opens on (a negative lift, since
+    // folded over, "up" for the paper is back toward open).
+    const f = new Flap({ poly: open, el: g, hinge: [M, K], liftHinge: [M, K], angle: 180 })
     f.seq = nextSeq()
     f.kind = 'core'
     f.id = core.id
@@ -270,11 +319,12 @@ export function buildCovers(sheet) {
 }
 
 /**
- * Open a fan of trapezoids or petals. `slots` are [a0, a1] angle ranges in
- * order; the root is the slot nearest `centre`, hinged on `rootHinge(slot)`;
- * the rest hang off their neighbour toward the root by the shared radial edge.
+ * Build a fan of trapezoids or petals, folded up flat onto `parent`. `slots`
+ * are [a0, a1] angle ranges in order; the root is the slot nearest `centre`,
+ * hinged to the parent by `rootHinge(slot)`; the rest hang off their neighbour
+ * toward the root by the shared radial edge, each folded onto it.
  */
-function buildFan(sheet, { slots, centre, make, rootHinge, sideHinge }) {
+function buildFan(sheet, { parent, slots, centre, make, rootHinge, sideHinge }) {
   let root = 0
   let best = Infinity
   slots.forEach(([a0, a1], i) => {
@@ -287,7 +337,7 @@ function buildFan(sheet, { slots, centre, make, rootHinge, sideHinge }) {
   const flaps = new Array(slots.length)
   const mk = (i, parent, hinge) => {
     const { poly, g, liftHinge } = make(slots[i], i)
-    const f = new Flap({ poly, el: g, parent, hinge, liftHinge, angle: parent ? 180 : 90 })
+    const f = new Flap({ poly, el: g, parent, hinge, liftHinge, angle: 180 })
     f.seq = nextSeq()
     f.index = i
     f.slot = slots[i]
@@ -295,7 +345,7 @@ function buildFan(sheet, { slots, centre, make, rootHinge, sideHinge }) {
     flaps[i] = f
     return f
   }
-  const r = mk(root, null, rootHinge(slots[root]))
+  const r = mk(root, parent, rootHinge(slots[root]))
   r.order = 0
   let prev = r
   for (let i = root - 1; i >= 0; i--) {
@@ -315,30 +365,31 @@ function centredSlots(centre, n, step) {
   return Array.from({ length: n }, (_, i) => [start + i * step, start + (i + 1) * step])
 }
 
-/** The closer-word fan around one core feeling. */
-export function buildCloserFan(sheet, core) {
+/** The closer-word fan around one core feeling, folded up inside its triangle. */
+export function buildCloserFan(sheet, core, triangle) {
   const n = core.closer.length
   const slots = centredSlots(core.angle, n, G.D1)
   return buildFan(sheet, {
+    parent: triangle,
     slots,
     centre: core.angle,
-    rootHinge: ([a0, a1]) => [at(toSquare(a0, G.HO), a0), at(toSquare(a1, G.HO), a1)],
-    sideHinge: (a) => [at(toSquare(a, G.HO), a), at(G.R1, a)],
+    rootHinge: ([a0, a1]) => [at(toDiamond(a0, G.DI), a0), at(toDiamond(a1, G.DI), a1)],
+    sideHinge: (a) => [at(toDiamond(a, G.DI), a), at(G.R1, a)],
     make: ([a0, a1], i) => {
       const am = (a0 + a1) / 2
       const word = core.closer[i]
-      const inner = squarePath(a0, a1, G.HO)
+      const inner = diamondPath(a0, a1, G.DI)
       const o0 = at(G.R1, a0), o1 = at(G.R1, a1)
       const poly = [...inner, o1, o0]
-      const im = at(toSquare(am, G.HO), am)
+      const im = at(toDiamond(am, G.DI), am)
       const om = mid(o0, o1)
-      const fA = [...squarePath(a0, am, G.HO), om, o0]
-      const fB = [...squarePath(am, a1, G.HO), o1, om]
+      const fA = [...diamondPath(a0, am, G.DI), om, o0]
+      const fB = [...diamondPath(am, a1, G.DI), o1, om]
       // Alternate two tints so neighbouring words read as separate sheets.
       const dark = lighten(core.color, i % 2 ? 0.42 : 0.3)
       const light = lighten(core.color, i % 2 ? 0.5 : 0.38)
       const litFirst = Math.sin((a0 - 225) * DEG) < Math.sin((a1 - 225) * DEG)
-      const rIn = toSquare(am, G.HO)
+      const rIn = toDiamond(am, G.DI)
       const rOut = G.R1 * Math.cos((G.D1 / 2) * DEG)
       const tp = at(rIn + (rOut - rIn) * 0.56, am)
       const g = flapEl({
@@ -357,10 +408,12 @@ export function buildCloserFan(sheet, core) {
   })
 }
 
-/** The needs fan off one closer word. */
-export function buildNeedsFan(sheet, centre, needs, families) {
+/** The needs fan, folded up inside one closer word. */
+export function buildNeedsFan(sheet, word, needs, families) {
+  const centre = (word.slot[0] + word.slot[1]) / 2
   const slots = centredSlots(centre, needs.length, G.D2)
   return buildFan(sheet, {
+    parent: word,
     slots,
     centre,
     rootHinge: ([a0, a1]) => [at(G.R2I, a0), at(G.R2I, a1)],

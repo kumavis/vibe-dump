@@ -16,10 +16,8 @@ const panel = $('#panel')
 
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches
 const SLOW = REDUCED ? 0.3 : 1
-const FINE = matchMedia('(hover: hover) and (pointer: fine)')
 
 const coreById = new Map(CORES.map((c) => [c.id, c]))
-const LEVEL = { core: 1, closer: 2, need: 3 }
 
 // ------------------------------------------------------------------ paper --
 
@@ -54,21 +52,25 @@ function grainTile() {
 }
 
 $('#grain image').setAttribute('href', grainTile())
-$('#under').innerHTML = baseMarkup()
+$('#under').innerHTML = baseMarkup(CORES, flowerMarkup)
 $('#garden').innerHTML = gardenMarkup()
 
 const sheet = new Sheet($('#sheet'))
 
 // ------------------------------------------------------------------ state --
 
-const state = { core: null, closer: null, need: null, pin: 0 }
-let cores = new Map() // id → Flap
+const state = { core: null, closer: null, need: null }
+let cores = new Map() // id → the core's triangle Flap
 let covers = []
-let closerFan = null
-let needsFan = null
+// Folded-up fans stay attached to their parent while they fold away, so a
+// quick change of mind can open the same paper again instead of a copy.
+const closerFans = new Map() // core id → fan
+const needsFans = new Map() // "core/closer" → fan
 let introDone = false
 const afterIntro = []
 let observation = ''
+
+const needsKey = (core, closer) => `${core}/${closer}`
 
 function current() {
   const core = state.core ? coreById.get(state.core) : null
@@ -77,40 +79,106 @@ function current() {
   return { core, closer, need }
 }
 
-// ------------------------------------------------------------------- fans --
+const openCloserFan = () => (state.core ? closerFans.get(state.core) : null)
+const openNeedsFan = () => (state.closer ? needsFans.get(needsKey(state.core, state.closer)) : null)
 
-function openFan(fan) {
-  fan.root.to(0, { dur: 440 * SLOW, curve: ease.out })
+// ----------------------------------------------------------------- folding --
+
+/** How long until this flap and everything it hangs from stop moving. */
+function settleIn(f) {
+  const now = performance.now()
+  let end = now
+  for (let p = f; p; p = p.parent) {
+    let t = now
+    for (const tw of p.tweens) {
+      t = (tw.at ?? t + tw.delay) + tw.dur
+      end = Math.max(end, t)
+    }
+  }
+  return end - now
+}
+
+/** Unfold a fan: its first flap off the parent, then the rest sideways. */
+function unfold(fan, delay) {
   for (const f of fan.flaps) {
-    if (f === fan.root) continue
-    f.to(0, { dur: 360 * SLOW, delay: (210 + (f.order - 1) * 150) * SLOW, curve: ease.out })
+    f.closing = false
+    f.el.classList.remove('closing')
+    const at = f === fan.root ? delay : delay + 220 + (f.order - 1) * 140
+    f.to(0, { dur: (f === fan.root ? 400 : 340) * SLOW, delay: at * SLOW, curve: ease.out })
   }
 }
 
-function closeFan(fan) {
-  if (!fan) return
+/** Fold a fan back up onto its parent; returns how long that takes (ms). */
+function refold(fan, delay = 0) {
   const deepest = Math.max(...fan.flaps.map((f) => f.order))
   for (const f of fan.flaps) {
     f.closing = true
     f.el.classList.add('closing')
-    if (f !== fan.root) f.to(180, { dur: 230 * SLOW, delay: (deepest - f.order) * 45 * SLOW, curve: ease.inOut })
+    if (f !== fan.root) f.to(180, { dur: 230 * SLOW, delay: (delay + (deepest - f.order) * 40) * SLOW, curve: ease.inOut })
   }
-  fan.root.to(90, {
-    dur: 250 * SLOW,
-    delay: (Math.max(0, deepest - 1) * 45 + 120) * SLOW,
+  const rootAt = delay + Math.max(0, deepest - 1) * 40 + 110
+  fan.root.to(180, { dur: 260 * SLOW, delay: rootAt * SLOW, curve: ease.inOut })
+  return rootAt + 260
+}
+
+function openCore(core) {
+  const T = cores.get(core.id)
+  let fan = closerFans.get(core.id)
+  if (!fan) {
+    fan = buildCloserFan(sheet, core, T)
+    // Folded inside the triangle, the words only show once it has swung past
+    // upright — before that they'd be peeking out from under the square.
+    fan.root.gate = () => T.angle < 92
+    closerFans.set(core.id, fan)
+  }
+  T.to(0, { dur: 460 * SLOW, curve: ease.inOut })
+  unfold(fan, 330)
+}
+
+function closeCore(id) {
+  const T = cores.get(id)
+  const fan = closerFans.get(id)
+  let wait = 0
+  for (const key of needsFans.keys()) if (key.startsWith(`${id}/`)) wait = Math.max(wait, closeNeeds(key))
+  if (fan) wait = refold(fan, wait)
+  T.to(180, {
+    dur: 380 * SLOW,
+    delay: wait * SLOW,
     curve: ease.inOut,
-    done: () => sheet.remove(fan.root),
+    done: () => {
+      // Only if nobody opened it again while it was folding.
+      if (state.core === id || !fan) return
+      sheet.remove(fan.root)
+      closerFans.delete(id)
+      for (const key of [...needsFans.keys()]) if (key.startsWith(`${id}/`)) needsFans.delete(key)
+    },
   })
 }
 
-function closeNeeds() {
-  closeFan(needsFan)
-  needsFan = null
+function openNeeds(core, index) {
+  const word = closerFans.get(core.id).flaps[index]
+  const key = needsKey(core.id, core.closer[index].id)
+  let fan = needsFans.get(key)
+  if (!fan) {
+    const needs = core.closer[index].needs.map((name) => ({ name, ...NEEDS[name] }))
+    fan = buildNeedsFan(sheet, word, needs, FAMILIES)
+    needsFans.set(key, fan)
+  }
+  // Wait for the word itself to finish opening out.
+  unfold(fan, settleIn(word) / SLOW)
 }
 
-function closeCloser() {
-  closeFan(closerFan)
-  closerFan = null
+function closeNeeds(key) {
+  const fan = needsFans.get(key)
+  if (!fan) return 0
+  const took = refold(fan)
+  const root = fan.root
+  root.tweens[0].done = () => {
+    if (needsKey(state.core, state.closer) === key) return
+    sheet.remove(root)
+    needsFans.delete(key)
+  }
+  return took
 }
 
 // -------------------------------------------------------------- selection --
@@ -118,76 +186,64 @@ function closeCloser() {
 function selectCore(id) {
   const core = coreById.get(id)
   if (!core) return
-  if (state.core === id) {
-    if (state.closer) collapseTo(1)
-    return
-  }
-  closeNeeds()
-  closeCloser()
+  if (state.core === id) return collapseTo(state.closer ? 1 : 0)
+  if (state.core) closeCore(state.core)
   Object.assign(state, { core: id, closer: null, need: null })
-  closerFan = buildCloserFan(sheet, core)
-  openFan(closerFan)
+  openCore(core)
   changed()
 }
 
 function selectCloser(id) {
   const { core } = current()
-  if (!core || !closerFan) return
+  if (!core) return
   const index = core.closer.findIndex((c) => c.id === id)
   if (index < 0) return
-  if (state.closer === id) {
-    if (state.need) collapseTo(2)
-    return
-  }
-  closeNeeds()
+  if (state.closer === id) return collapseTo(state.need ? 2 : 1)
+  if (state.closer) closeNeeds(needsKey(state.core, state.closer))
   Object.assign(state, { closer: id, need: null })
-  const [a0, a1] = closerFan.flaps[index].slot
-  const needs = core.closer[index].needs.map((name) => ({ name, ...NEEDS[name] }))
-  needsFan = buildNeedsFan(sheet, (a0 + a1) / 2, needs, FAMILIES)
-  openFan(needsFan)
+  openNeeds(core, index)
   changed()
 }
 
 function selectNeed(name) {
   const { closer } = current()
-  if (!closer || !closer.needs.includes(name) || state.need === name) return
+  if (!closer || !closer.needs.includes(name)) return
+  if (state.need === name) return collapseTo(2)
   state.need = name
-  changed({ unfold: true })
+  changed()
 }
 
 function collapseTo(level) {
   if (level < 3) state.need = null
-  if (level < 2) {
-    closeNeeds()
+  if (level < 2 && state.closer) {
+    closeNeeds(needsKey(state.core, state.closer))
     state.closer = null
   }
-  if (level < 1) {
-    closeCloser()
+  if (level < 1 && state.core) {
+    const id = state.core
     state.core = null
+    closeCore(id)
   }
-  state.pin = Math.min(state.pin, level)
   changed()
 }
 
-function pick(kind, id, how) {
+function pick(kind, id) {
   if (kind === 'core') selectCore(id)
   else if (kind === 'closer') selectCloser(id)
   else if (kind === 'need') selectNeed(id)
-  if (how !== 'hover') {
-    state.pin = LEVEL[kind]
-    renderPin()
-  }
 }
 
-function changed({ unfold = false } = {}) {
+function changed() {
   refreshLifts()
-  renderPanel(unfold)
+  renderPanel()
   writeHash()
   retarget()
 }
 
 // ------------------------------------------------------------ hover & lift --
 
+// Hovering only hints: a folded triangle starts to peel up from its inner
+// corner, a word or petal tilts up off the table. Nothing opens until a click.
 let hover = null // the Flap under the pointer, or under a hovered chip
 const rippling = new Set()
 
@@ -195,20 +251,24 @@ function refreshLifts() {
   const { core } = current()
   for (const f of cores.values()) {
     const sel = state.core === f.id
-    f.liftTarget = hover === f ? 15 : rippling.has(f) ? 17 : sel ? 9 : 0
+    // Negative: folded over, the way up off the table is back toward open.
+    f.liftTarget = sel ? 0 : hover === f ? -20 : rippling.has(f) ? -17 : 0
     f.el.classList.toggle('sel', sel)
     f.el.classList.toggle('dim', !!core && !sel)
-    f.el.classList.toggle('hov', hover === f)
+    f.el.classList.toggle('hov', hover === f && !sel)
   }
-  for (const fan of [closerFan, needsFan]) {
+  for (const [fan, chosen] of [
+    [openCloserFan(), state.closer],
+    [openNeedsFan(), state.need],
+  ]) {
     if (!fan) continue
-    const chosen = fan === closerFan ? state.closer : state.need
     for (const f of fan.flaps) {
       const sel = chosen === f.el.dataset.id
-      f.liftTarget = hover === f ? 11 : sel ? 8 : 0
+      const isNeed = f.el.dataset.kind === 'need'
+      f.liftTarget = hover === f && !sel ? 13 : sel && isNeed ? 8 : 0
       f.el.classList.toggle('sel', sel)
       f.el.classList.toggle('dim', !!chosen && !sel)
-      f.el.classList.toggle('hov', hover === f)
+      f.el.classList.toggle('hov', hover === f && !sel)
     }
   }
 }
@@ -221,48 +281,8 @@ function setHover(f) {
 
 function flapFor(kind, id) {
   if (kind === 'core') return cores.get(id) ?? null
-  const fan = kind === 'closer' ? closerFan : kind === 'need' ? needsFan : null
+  const fan = kind === 'closer' ? openCloserFan() : kind === 'need' ? openNeedsFan() : null
   return fan?.flaps.find((f) => f.el.dataset.id === id) ?? null
-}
-
-// Hover unfolds, after a short dwell so a pointer passing over the paper on its
-// way somewhere doesn't rearrange it. Changing a choice you've already made
-// waits longer than making one. A click pins that choice: hovering can still
-// explore deeper, but won't change it until you click elsewhere.
-let dwell = { flap: null, timer: 0 }
-
-function dwellFor(f) {
-  const kind = f.el.dataset.kind
-  const id = f.el.dataset.id
-  if (LEVEL[kind] <= state.pin) return null
-  if (kind === 'core') return state.core === id ? null : state.core ? (state.closer ? 520 : 320) : 140
-  if (kind === 'closer') return state.closer === id ? null : state.closer ? (state.need ? 420 : 300) : 170
-  if (kind === 'need') return state.need === id ? null : state.need ? 220 : 150
-  return null
-}
-
-function scheduleDwell(f) {
-  if (f === dwell.flap) return
-  clearTimeout(dwell.timer)
-  dwell = { flap: f, timer: 0 }
-  if (!f || !introDone) return
-  const ms = dwellFor(f)
-  if (ms == null) return
-  dwell.timer = setTimeout(() => {
-    if (f.closing || camBusy) return
-    pick(f.el.dataset.kind, f.el.dataset.id, 'hover')
-  }, ms)
-}
-
-// While the camera glides the paper slides under a pointer that hasn't moved;
-// that's not the person choosing anything. Once it stops, wait for them to
-// actually move before hover picks again.
-let still = null // pointer position when the camera settled
-let pointer = null
-function settled() {
-  clearTimeout(dwell.timer)
-  dwell = { flap: null, timer: 0 }
-  still = pointer
 }
 
 function flapAt(target) {
@@ -273,30 +293,13 @@ function flapAt(target) {
 
 stage.addEventListener('pointermove', (e) => {
   if (e.pointerType === 'touch') return
-  pointer = [e.clientX, e.clientY]
-  const f = flapAt(e.target)
-  setHover(f)
-  if (camBusy) return
-  if (still && Math.hypot(pointer[0] - still[0], pointer[1] - still[1]) < 8) return
-  still = null
-  scheduleDwell(f)
+  setHover(flapAt(e.target))
 })
-stage.addEventListener('pointerleave', () => {
-  setHover(null)
-  scheduleDwell(null)
-})
+stage.addEventListener('pointerleave', () => setHover(null))
 stage.addEventListener('click', (e) => {
   const f = flapAt(e.target)
-  if (!f) {
-    if (state.pin) {
-      state.pin = 0
-      renderPin()
-    }
-    return
-  }
-  if (!introDone) return
-  clearTimeout(dwell.timer)
-  pick(f.el.dataset.kind, f.el.dataset.id, 'click')
+  if (!f || !introDone) return
+  pick(f.el.dataset.kind, f.el.dataset.id)
 })
 
 addEventListener('keydown', (e) => {
@@ -338,16 +341,17 @@ const IDLE = 2 * (2 * G.H + 34) // the square with its four petals open
 const view = { x: -FULL / 2, y: -FULL / 2, w: FULL, h: FULL }
 let goal = { ...view }
 let snap = true
-let camBusy = false
 
 function focusPolys() {
   const H = G.H + 26
   const square = [[-H, -H], [H, H]]
-  if (state.closer && needsFan && closerFan) {
-    const sel = closerFan.flaps.find((f) => f.el.dataset.id === state.closer)
-    return [sel.poly, ...needsFan.flaps.map((f) => f.poly)]
+  const words = openCloserFan()
+  const needs = openNeedsFan()
+  if (words && needs) {
+    const sel = words.flaps.find((f) => f.el.dataset.id === state.closer)
+    return [sel.poly, ...needs.flaps.map((f) => f.poly)]
   }
-  if (state.core && closerFan) return [square, ...closerFan.flaps.map((f) => f.poly)]
+  if (words) return [square, cores.get(state.core).poly, ...words.flaps.map((f) => f.poly)]
   return [square]
 }
 
@@ -360,11 +364,13 @@ function retarget() {
   if (all >= 0.6) {
     if (!state.core) s = short / IDLE
   } else {
+    // Frame what's open, keeping clear of the title strip along the top.
     const b = bbox(focusPolys())
     const m = 20
-    s = Math.min(r.width / (b.x1 - b.x0 + 2 * m), r.height / (b.y1 - b.y0 + 2 * m), 1.3)
+    const top = 44
+    s = Math.min(r.width / (b.x1 - b.x0 + 2 * m), (r.height - top) / (b.y1 - b.y0 + 2 * m), 1.3)
     cx = (b.x0 + b.x1) / 2
-    cy = (b.y0 + b.y1) / 2
+    cy = (b.y0 + b.y1) / 2 - top / 2 / s
   }
   goal = { x: cx - r.width / s / 2, y: cy - r.height / s / 2, w: r.width / s, h: r.height / s }
 }
@@ -378,14 +384,10 @@ let lastBox = ''
 function moveCamera() {
   const k = snap ? 1 : REDUCED ? 0.3 : 0.085
   snap = false
-  let moving = false
   for (const key of ['x', 'y', 'w', 'h']) {
     const d = goal[key] - view[key]
-    if (Math.abs(d) > 0.5) moving = true
     view[key] = Math.abs(d) < 0.05 ? goal[key] : view[key] + d * k
   }
-  if (camBusy && !moving) settled()
-  camBusy = moving
   const box = `${view.x.toFixed(2)} ${view.y.toFixed(2)} ${view.w.toFixed(2)} ${view.h.toFixed(2)}`
   if (box !== lastBox) {
     lastBox = box
@@ -477,16 +479,16 @@ function closerNote(core, closer) {
     <h3 class="prompt">Touch a petal to unfold its fortune.</h3>`
 }
 
+// The fill-in NVC sentence after the "When ___," blank.
 function sentence(core, closer, name) {
   const need = NEEDS[name]
-  const when = observation.trim() ? esc(observation.trim()) : '<i>…</i>'
   const word = closer.word.toLowerCase()
   const what = esc(said(name))
   if (core.met) {
     const tail = what.startsWith('to ') ? `to <b>${what.slice(3)}</b>` : `for <b>${what}</b>`
-    return `When ${when}, I felt <b>${word}</b>, because it met my need ${tail}. Thank you!`
+    return `I felt <b>${word}</b>, because it met my need ${tail}. Thank you!`
   }
-  return `When ${when}, I feel <b>${word}</b>, because I need <b>${what}</b>. Would you be willing to ${esc(need.ask)}?`
+  return `I feel <b>${word}</b>, because I need <b>${what}</b>. Would you be willing to ${esc(need.ask)}?`
 }
 
 function plain(html) {
@@ -499,60 +501,62 @@ function fortuneNote(core, closer, name) {
   const need = NEEDS[name]
   const fam = FAMILIES[need.family]
   const word = closer.word.toLowerCase()
-  const lead = core.met ? `Feeling <b>${word}</b> says your need for` : `Under <b>${word}</b> there may be a need for`
+  const lead = core.met ? `Feeling ${word} says this need is being met:` : `Under ${word} there may be a need for`
   const steps = core.met
-    ? `<div class="step"><h3>Savor it</h3><p>Notice where the feeling sits in your body. What helped make it happen? Remembering is a way back here.</p></div>
-       <div class="step"><h3>Say thank you</h3><p>If someone helped meet this need, tell them. Hearing it meets their needs too.</p></div>`
-    : `<div class="step"><h3>Something to try</h3><p>${esc(need.try)}</p></div>
-       <div class="step"><h3>Something to ask</h3><p class="ask">“Would you be willing to ${esc(need.ask)}?”</p></div>`
+    ? [
+        ['Savor', 'Notice where the feeling sits in your body, and what helped it happen.'],
+        ['Thank', 'If someone helped meet this need, tell them.'],
+      ]
+    : [
+        ['Try', esc(need.try)],
+        ['Ask', `“Would you be willing to ${esc(need.ask)}?”`],
+      ]
   const others = closer.needs.filter((n) => n !== name)
   return `
     <article class="fortune" style="--c:${fam.color}">
-      <svg class="fortune-flower" viewBox="-50 -50 100 100" aria-hidden="true">${flowerMarkup(fam.color, { petals: 8, r: 46, turn: -90 })}</svg>
-      <p class="kicker">Your fortune</p>
-      <p class="lead">${lead}</p>
-      <h2 class="need">${esc(name)}</h2>
-      ${core.met ? '<p class="lead after">is being met.</p>' : ''}
-      <p class="family"><span class="dot"></span>${fam.name} · <span>${esc(need.means)}</span></p>
-      ${steps}
-      <div class="sentence">
-        <h3>Say it the NVC way</h3>
-        <label class="obs">When… <input id="obs" type="text" autocomplete="off" placeholder="what happened? just the facts, like a camera"></label>
-        <p id="said">${sentence(core, closer, name)}</p>
+      <p class="label">${lead}</p>
+      <h2 class="need"><svg class="fortune-flower" viewBox="-50 -50 100 100" aria-hidden="true">${flowerMarkup(fam.color, { petals: 8, r: 46, turn: -90 })}</svg>${esc(name)}</h2>
+      <p class="means">${esc(need.means)}</p>
+      <dl class="steps">${steps.map(([k, v]) => `<dt class="label">${k}</dt><dd>${v}</dd>`).join('')}</dl>
+      <div class="say">
+        <p class="label">Say it the NVC way</p>
+        <p class="said">When <input id="obs" type="text" autocomplete="off" aria-label="What happened, just the facts" placeholder="this happened">, <span id="said">${sentence(core, closer, name)}</span></p>
         <button class="copy" id="copy" type="button">Copy</button>
       </div>
     </article>
-    <p class="also">Other needs under <b>${word}</b>:</p>
+    <p class="label also">Other needs under ${word}</p>
     <div class="chips">${needChips(others)}</div>`
 }
 
-function renderPanel(unfold) {
+let shownNeed = null
+
+function renderPanel() {
   const { core, closer, need } = current()
   let body
   if (!core) body = introNote()
   else if (!closer) body = coreNote(core)
   else if (!need) body = closerNote(core, closer)
   else body = fortuneNote(core, closer, state.need)
-  note.innerHTML = crumbs() + body + `<p class="pin" id="pin" hidden></p>`
-  note.dataset.level = need ? 3 : closer ? 2 : core ? 1 : 0
-  renderPin()
+  note.innerHTML = crumbs() + body
 
   const obs = $('#obs', note)
   if (obs) {
     obs.value = observation
+    const fit = () => (obs.style.width = `${Math.max(obs.placeholder.length, obs.value.length) + 1}ch`)
+    fit()
     obs.addEventListener('input', () => {
       observation = obs.value
-      $('#said', note).innerHTML = sentence(core, closer, state.need)
+      fit()
     })
     $('#copy', note).addEventListener('click', async (e) => {
-      const text = plain($('#said', note).innerHTML)
+      const text = `When ${observation.trim() || '…'}, ${plain($('#said', note).innerHTML)}`
       try {
         await navigator.clipboard.writeText(text)
         e.target.textContent = 'Copied'
       } catch {
         // No clipboard here: select the sentence so the reader can copy it.
         const range = document.createRange()
-        range.selectNodeContents($('#said', note))
+        range.selectNodeContents($('.said', note))
         getSelection().removeAllRanges()
         getSelection().addRange(range)
         e.target.textContent = 'Selected — copy it'
@@ -560,20 +564,11 @@ function renderPanel(unfold) {
       setTimeout(() => (e.target.textContent = 'Copy'), 1600)
     })
   }
-  if (unfold) {
-    const fortune = $('.fortune', note)
-    fortune?.classList.add('unfold')
-    // On a small screen the note sits under the paper; bring the fortune up.
-    if (fortune && panel.scrollHeight > panel.clientHeight) panel.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' })
+  // On a small screen the note sits under the paper; bring a new fortune up.
+  if (need && state.need !== shownNeed && panel.scrollHeight > panel.clientHeight) {
+    panel.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' })
   }
-}
-
-function renderPin() {
-  const el = $('#pin', note)
-  if (!el) return
-  const show = state.pin > 0 && FINE.matches
-  el.hidden = !show
-  if (show) el.innerHTML = `<span class="pin-dot"></span>Held by your click. Hovering won't change it — click empty paper to let it roam again.`
+  shownNeed = state.need
 }
 
 // Chips in the panel do what the paper does, and point at their flap.
@@ -581,9 +576,9 @@ note.addEventListener('click', (e) => {
   const b = e.target.closest('button')
   if (!b) return
   if (b.dataset.level != null) return collapseTo(Number(b.dataset.level))
-  if (b.dataset.core) return whenReady(() => pick('core', b.dataset.core, 'panel'))
-  if (b.dataset.closer) return pick('closer', b.dataset.closer, 'panel')
-  if (b.dataset.need) return pick('need', b.dataset.need, 'panel')
+  if (b.dataset.core) return whenReady(() => pick('core', b.dataset.core))
+  if (b.dataset.closer) return pick('closer', b.dataset.closer)
+  if (b.dataset.need) return pick('need', b.dataset.need)
 })
 note.addEventListener('pointerover', (e) => {
   const b = e.target.closest?.('button.chip')
@@ -608,7 +603,7 @@ function renderAbout() {
     const b = e.target.closest('button[data-go]')
     if (!b) return
     const [c, cl] = b.dataset.go.split('/')
-    go([c, cl], 'panel')
+    go([c, cl])
   })
 }
 
@@ -624,17 +619,15 @@ function writeHash() {
   } catch {}
 }
 
-function go(path, how = 'hover') {
+// Open a path like ['sad', 'lonely', 'companionship'] one fold at a time.
+// Each step can start right away: a needs fan waits for its word to open.
+function go(path) {
   whenReady(() => {
     const [c, cl, n] = path
     if (!coreById.has(c)) return
-    if (state.core !== c) pick('core', c, how)
-    else if (state.closer && state.closer !== cl) collapseTo(1)
-    if (!cl) return
-    setTimeout(() => {
-      pick('closer', cl, how)
-      if (n) setTimeout(() => pick('need', n, how), 380 * SLOW)
-    }, (state.closer === cl ? 0 : 380) * SLOW)
+    if (state.core !== c) pick('core', c)
+    if (cl && state.closer !== cl) pick('closer', cl)
+    if (n && state.need !== n) pick('need', n)
   })
 }
 
@@ -668,12 +661,11 @@ async function start() {
   }, (180 + 90 * 3 + 600) * SLOW)
 
   const path = decodeURIComponent(location.hash.slice(1)).split('/').filter(Boolean)
-  if (path.length) go(path, 'panel')
+  if (path.length) go(path)
 }
 
 $('#refold').addEventListener('click', () => {
   collapseTo(0)
-  state.pin = 0
   introDone = false
   covers.forEach((f, i) =>
     f

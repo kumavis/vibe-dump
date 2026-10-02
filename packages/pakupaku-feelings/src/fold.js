@@ -112,6 +112,7 @@ export class Flap {
     this.shade = o.el.querySelector('.shade')
     this.shadow = null
     this.hidden = false
+    this.gate = null // optional () => boolean: drawn only while it says so
     this.world = IDENTITY
     this.render = IDENTITY
     this.lastKey = ''
@@ -229,6 +230,7 @@ export class Sheet {
     else this.roots = this.roots.filter((f) => f !== flap)
   }
 
+  /** Every flap, each one after its parent. */
   *all() {
     const stack = [...this.roots]
     while (stack.length) {
@@ -246,21 +248,25 @@ export class Sheet {
   frame(now = performance.now()) {
     const dt = Math.min(64, now - this.last)
     this.last = now
+    for (const f of [...this.all()]) f.step(now, dt)
+    // Gather again: a fold finishing this frame may have removed its flaps,
+    // and painting a removed flap would put it straight back on the page.
     const flaps = [...this.all()]
-    for (const f of flaps) f.step(now, dt)
     for (const r of this.roots) r.compose()
 
     const ground = []
     const raised = []
     for (const f of flaps) {
-      if (f.hidden) {
+      // Parents come before children here, so a flap can inherit visibility.
+      f._shown = !f.hidden && (!f.gate || f.gate()) && (!f.parent || f.parent._shown)
+      if (!f._shown) {
         if (f.el.style.display !== 'none') f.el.style.display = 'none'
         if (f.shadow.style.display !== 'none') f.shadow.style.display = 'none'
         continue
       }
       if (f.el.style.display === 'none') f.el.style.display = ''
       f._z = f.z
-      ;(f._z > 0.3 ? raised : ground).push(f)
+      ;(f._z > 1 ? raised : ground).push(f)
       this.paint(f)
     }
     const byHeight = (a, b) => a._z - b._z || a.depth - b.depth || a.seq - b.seq
