@@ -64,6 +64,10 @@ export class Notes {
       x: null,
       y: null,
       side: null,
+      from: null,
+      offset: null,
+      moved: 0,
+      bad: 0,
       pulse: -10,
     }
     this.fill(note, pair.entry)
@@ -133,64 +137,86 @@ export class Notes {
 
   // Place every card near its word, keep them off each other and the screen
   // chrome, then draw the leaders.
+  //
+  // A card rides rigidly with its word, at one of four corners round it, and
+  // only changes corner when the one it has has become clearly bad — mostly
+  // covered or pushed off screen — for a moment, and not within a few seconds
+  // of its last move. When it does move, the offset glides across; when it
+  // doesn't, nothing about the card is re-decided frame to frame. Small
+  // overlaps are tolerated rather than chased, and the screen edge is handled
+  // by clamping, which slides instead of jumps.
   update(scene, now, dt, reserved) {
     const due = this.queue.filter((q) => q.at <= now)
     this.queue = this.queue.filter((q) => q.at > now)
     for (const q of due) q.run()
-    const placed = []
     // Read every card's size before writing any position, so the browser lays
     // out once per frame rather than once per card.
     const sizes = this.list.map((n) => [n.el.offsetWidth || 212, n.el.offsetHeight || 150])
-    this.list.forEach((note) => {
+    for (const note of this.list) {
       const p = note.pair
-      const [ax, ay] = scene.project(p.x, 1.0, p.z)
-      note.ax = ax
-      note.ay = ay
-    })
+      ;[note.ax, note.ay] = scene.project(p.x, 1.0, p.z)
+    }
+    const live = this.list.filter((n) => !n.closing)
     this.list.forEach((note, i) => {
       const { ax, ay } = note
-      const [w, h] = sizes[i]
-      const gapX = 44
-      const options = {
-        ne: [ax + gapX, ay - 64 - h],
-        nw: [ax - gapX - w, ay - 64 - h],
-        se: [ax + gapX, ay + 70],
-        sw: [ax - gapX - w, ay + 70],
-      }
-      const cost = (x, y) => {
+      const [w, rawH] = sizes[i]
+      // A gloss that wraps mid-scramble makes the card a line taller for a
+      // moment. Place by the tallest the card has been, eased toward, so a
+      // card above its word doesn't hop up and back down with its text.
+      note.hMax = Math.max(note.hMax ?? 0, rawH)
+      note.hs = note.hs == null ? rawH : note.hs + (note.hMax - note.hs) * (1 - Math.exp(-dt * 6))
+      const h = note.hs
+      const offsets = cornerOffsets(w, h)
+      // Cost of a corner, against where the other cards actually are.
+      const cost = (side) => {
+        const x = ax + offsets[side][0]
+        const y = ay + offsets[side][1]
         let c = 0
-        for (const r of placed) c += overlap(x, y, w, h, r.x, r.y, r.w, r.h) * 3
-        for (const r of reserved) c += overlap(x, y, w, h, r.x, r.y, r.w, r.h) * 2
-        c += (w * h - overlap(x, y, w, h, 8, 8, this.w - 16, this.h - 16)) * 4
-        for (const other of this.list) {
-          if (other !== note && other.ax != null) c += overlap(x, y, w, h, other.ax - 20, other.ay - 20, 40, 40) * 2
+        for (const o of live) {
+          if (o === note || o.x == null) continue
+          c += overlap(x, y, w, h, o.x, o.y, o.w, o.h) * 3
+          c += overlap(x, y, w, h, o.ax - 20, o.ay - 20, 40, 40) * 2
         }
+        for (const r of reserved) c += overlap(x, y, w, h, r.x, r.y, r.w, r.h) * 2
+        c += (w * h - overlap(x, y, w, h, 8, 8, this.w - 16, this.h - 16)) * 2
         return c
       }
-      let best = note.side
-      let bestCost = best ? cost(...options[best]) * 0.7 : Infinity
-      for (const side of Object.keys(options)) {
-        const c = cost(...options[side])
-        if (c < bestCost) {
-          best = side
-          bestCost = c
+      const best = () => SIDES.reduce((a, b) => (cost(b) < cost(a) ? b : a))
+
+      if (!note.side) {
+        note.side = best()
+        note.from = offsets[note.side]
+        note.fromEast = east(note.side)
+        note.moved = now
+        note.bad = 0
+        note.el.classList.toggle('from-right', note.side[1] === 'w')
+      } else if (!note.closing) {
+        const here = cost(note.side)
+        note.bad = here > w * h * 0.18 ? note.bad + dt : 0
+        if (note.bad > 0.5 && now - note.moved > 3) {
+          const next = best()
+          if (next !== note.side && cost(next) < here * 0.4) {
+            note.from = note.offset
+            note.fromEast = note.east
+            note.side = next
+            note.moved = now
+            note.bad = 0
+            note.el.classList.toggle('from-right', next[1] === 'w')
+          }
         }
       }
-      note.side = best
-      const [tx, ty] = options[best]
-      if (note.x == null) {
-        note.x = tx
-        note.y = ty
-      } else {
-        const k = 1 - Math.exp(-dt * 7)
-        note.x += (tx - note.x) * k
-        note.y += (ty - note.y) * k
-      }
+
+      const u = inOutCubic(clamp01((now - note.moved) / 0.6))
+      const to = offsets[note.side]
+      note.offset = [note.from[0] + (to[0] - note.from[0]) * u, note.from[1] + (to[1] - note.from[1]) * u]
+      // Which edge the leader lands on, 1 = left edge (card east of its word),
+      // gliding with the card when it changes corner.
+      note.east = note.fromEast + (east(note.side) - note.fromEast) * u
+      note.x = Math.max(8, Math.min(this.w - w - 8, ax + note.offset[0]))
+      note.y = Math.max(8, Math.min(this.h - h - 8, ay + note.offset[1]))
       note.w = w
-      note.h = h
-      placed.push({ x: tx, y: ty, w, h })
+      note.h = rawH
       note.el.style.transform = `translate3d(${note.x.toFixed(1)}px, ${note.y.toFixed(1)}px, 0)`
-      note.el.classList.toggle('from-right', best === 'nw' || best === 'sw')
 
       for (const s of note.scrambles) scramble(s, now)
     })
@@ -208,9 +234,8 @@ export class Notes {
     ctx.lineJoin = 'round'
     for (const note of this.list) {
       const { ax, ay } = note
-      const east = note.side === 'ne' || note.side === 'se'
-      const sx = east ? 1 : -1
-      const attachX = east ? note.x : note.x + note.w
+      const attachX = note.x + note.w * (1 - note.east)
+      const sx = attachX >= ax ? 1 : -1
       const attachY = note.y + 34
       const dy = attachY - ay
       let ex = ax + sx * Math.abs(dy)
@@ -263,6 +288,20 @@ export class Notes {
         ctx.stroke()
       }
     }
+  }
+}
+
+const SIDES = ['ne', 'nw', 'se', 'sw']
+const east = (side) => (side[1] === 'e' ? 1 : 0)
+const GAP_X = 44
+
+// Card top-left relative to the anchor, for each corner round the word.
+function cornerOffsets(w, h) {
+  return {
+    ne: [GAP_X, -64 - h],
+    nw: [-GAP_X - w, -64 - h],
+    se: [GAP_X, 70],
+    sw: [-GAP_X - w, 70],
   }
 }
 
