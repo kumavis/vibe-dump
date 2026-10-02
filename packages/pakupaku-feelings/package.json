@@ -1,0 +1,35 @@
+{
+  "name": "@vibe-dump/pakupaku-feelings",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@fontsource/nunito": "^5.3.0",
+    "@fontsource/patrick-hand": "^5.3.0"
+  },
+  "gallery": {
+    "title": "Pakupaku Feelings",
+    "description": "A paper fortune teller for feelings. Touch a simple feeling and its fold opens into subtler words; open one of those and the needs underneath it unfold as petals, Nonviolent Communication style.",
+    "tags": [
+      "tool",
+      "kids"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5.5"
+    ],
+    "thinking": "unknown",
+    "thumbnail": {
+      "click": [
+        "[data-core=scared]",
+        "[data-closer=overwhelmed]",
+        "[data-need=support]"
+      ],
+      "settle": 1600
+    }
+  }
+}
