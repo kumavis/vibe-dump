@@ -120,7 +120,9 @@ reps = []
 rp = os.path.join(REVIEW, 'repeats.tsv')
 if os.path.exists(rp):
     for r in csv.DictReader(open(rp, encoding='utf-8'), delimiter='\t'):
-        if r.get('verdict') in ('keep', 'keep-pending') and r.get('exclusion_flag') != 'True' and r.get('transparency') != 'opaque':
+        # a repeat ships only as its base doubled in a sense the base keeps (owner, B7 overridden)
+        if (r.get('verdict') in ('keep', 'keep-pending') and r.get('exclusion_flag') != 'True' and r.get('transparency') != 'opaque'
+                and r.get('is_repeat_of_base', 'yes') != 'no' and r.get('sense') not in ('', 'unresolved')):
             base = okina(r['base'])
             ship.append({'row': {**r, 'split': f'{base}·{base}'}, 'a': base, 'b': base, 'sa': r['sense'], 'sb': r['sense'], 'verdict': r['verdict']})
             reps.append(r['word'])
@@ -128,11 +130,23 @@ if os.path.exists(rp):
 
 # ── stones: one id per root in sense ─────────────────────────────────────
 
+RENAMES = {okina(k): okina(v) for k, v in (glossary.get('renames') or {}).items()}
+
+
+def renamed(sid):
+    """A curator's split or merge, followed to its end."""
+    seen = set()
+    while sid in RENAMES and sid not in seen:
+        seen.add(sid)
+        sid = RENAMES[sid]
+    return sid
+
+
 def stone_id(root, sense, word):
     """'unresolved' senses become a stone of their own, so they never draw a false line."""
     if not sense or sense == 'unresolved':
         return f'{root}?{word}'
-    return okina(sense)
+    return renamed(okina(sense))
 
 
 roots = {}
