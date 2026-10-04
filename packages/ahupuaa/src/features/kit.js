@@ -88,10 +88,8 @@ export class Builder {
     const b = [P(-hx, 0, -hz), P(hx, 0, -hz), P(hx, 0, hz), P(-hx, 0, hz)]
     const t = [P(-tx, h, -tz), P(tx, h, -tz), P(tx, h, tz), P(-tx, h, tz)]
     this.quad(t[0], t[3], t[2], t[1], color, mat)
-    this.quad(b[0], b[1], t[1], t[0], color, mat)
-    this.quad(b[1], b[2], t[2], t[1], color, mat)
-    this.quad(b[2], b[3], t[3], t[2], color, mat)
-    this.quad(b[3], b[0], t[0], t[3], color, mat)
+    // sides wound so their front faces look outward
+    for (let k = 0; k < 4; k++) this.quad(b[k], t[k], t[(k + 1) % 4], b[(k + 1) % 4], color, mat)
   }
 
   /** Tapered cylinder between two points. */
@@ -343,6 +341,9 @@ void main() {
   if (uObjDebug == 2) lit = n * 0.5 + 0.5;
   if (uObjDebug == 3) lit = vec3(vis);
   if (uObjDebug == 4) lit = vColor * 3.0;
+  // facing audit (with the material made double-sided): red is a face seen
+  // from behind, which a single-sided material would cull
+  if (uObjDebug == 5) lit = gl_FrontFacing ? vec3(0.15, 1.4, 0.25) * (0.35 + 0.65 * max(dot(n, uSunDir), 0.0)) : vec3(3.0, 0.04, 0.04);
   gl_FragColor = vec4(lit, 1.0);
 }
 `
