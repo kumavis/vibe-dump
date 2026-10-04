@@ -1,5 +1,7 @@
 # Research — work in progress
 
+See [`../DESIGN.md`](../DESIGN.md) for what this material is for.
+
 Raw material for the Hawaiian cut of Jukugo Tumble. Not an app yet: there is
 no `package.json` here, so the gallery build skips this directory.
 
