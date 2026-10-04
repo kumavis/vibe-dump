@@ -1,24 +1,36 @@
-import { FIELDS, STONES, stoneText } from './lexicon.js'
+import { FIELDS, STONES, stoneText, turns } from './lexicon.js'
 import { CAPTION, WORD } from './field.js'
 import { INK, PAPER_2, font } from './palette.js'
 import { clamp01, inOutCubic, smooth } from './ease.js'
 
-// What a letter flickers through while it settles, by what it is settling
-// into: English for the glosses, Hawaiian for the stones and any Hawaiian
-// word inside a gloss, POLLEX's notation for an ancestor (vowel length
-// written double, the glottal stop as q), and the other Polynesian languages
-// for a cognate. The Polynesian sets flicker in (C)V syllables, as all of
-// these languages are written, with the short vowels twice over, since a
-// kahakō is the rarer mark. The ʻokina is never one of the chances
-// (scramble() holds it in place), so no flicker shows one doubled, closing a
-// word or after a consonant.
+// What a letter may flicker through while it settles. Only the glosses and
+// the stones' spellings flicker at all: an ancestor or a cognate is a claim
+// about another language, and a flicker through letters would put a false
+// one on the card for a frame, so those fade instead. English flickers in
+// a–z. A Hawaiian word flickers in Hawaiian letters, in (C)V syllables as
+// Hawaiian is written, with the short vowels twice over, since a kahakō is
+// the rarer mark. A word in a gloss that only might be Hawaiian (ukulele, but
+// also home or line) keeps to the letters the two alphabets share. The ʻokina
+// is never one of the chances: a place settling into one flickers through
+// consonants, so no flicker shows one doubled, closing a word or after a
+// consonant.
 const ENGLISH = { letters: 'abcdefghijklmnopqrstuvwxyz' }
 const HAW = { vowels: 'aeiouaeiouāēīōū', consonants: 'hklmnpw' }
+const SHARED = { vowels: 'aeiou', consonants: HAW.consonants }
 const STONE = { vowels: HAW.vowels.toUpperCase(), consonants: HAW.consonants.toUpperCase() }
-const PROTO = { vowels: 'aeiou', consonants: 'fhklmnŋpqrstvw' }
-const POLY = { vowels: HAW.vowels, consonants: 'fghklmnprstvw' }
 const LETTER = /[\p{L}ʻ]/u
 const VOWEL = /[aeiouāēīōū]/iu
+
+// What a slot shows when its source records nothing — an unresolved stone's
+// sense, a root with no cognates on file, the word before a card's first
+// turn: a quiet dash in the faintest ink, so an empty line reads as nothing
+// recorded rather than as something missing. (A missing ancestor shows
+// nothing at all: a dash there would sit where a starred form belongs.)
+const NONE = '—'
+const FAINT = 'var(--ink-3)'
+// The open circle after a pending word on the "was" line, as style.css draws
+// it there: 5px across with 4px of margin, and a pixel to spare.
+const RING_PX = 10
 
 // Notes are HTML cards floating over the scene, each tied back to its word by
 // a leader line drawn on the HUD canvas. They are screen-space on purpose:
@@ -64,7 +76,7 @@ export class Notes {
         <div><b lang="haw"></b><span class="sense"></span><p class="pp"><span class="code"></span><i></i></p></div>
       </div>
       <div class="card-cog"></div>
-      <div class="card-hist"></div>`
+      <div class="card-hist">was <i style="color: ${FAINT}">${NONE}</i></div>`
     this.root.appendChild(el)
     const q = (s) => el.querySelector(s)
     const note = {
@@ -80,13 +92,14 @@ export class Notes {
         el: d,
         stone: d.querySelector('b'),
         gloss: d.querySelector('.sense'),
+        anc: d.querySelector('.pp'),
         code: d.querySelector('.code'),
         pp: d.querySelector('.pp i'),
       })),
       cog: q('.card-cog'),
       hist: q('.card-hist'),
       hot: null,
-      scrambles: [],
+      tweens: [],
       t0: now,
       closing: null,
       x: null,
@@ -99,17 +112,29 @@ export class Notes {
       pulse: -10,
     }
     // Read the card's measure once, while it's new: the room the word has, its
-    // largest size (style.css sets it per screen), and the cognate line's face.
-    const cs = getComputedStyle(note.cog)
+    // largest size (style.css sets it per screen), and the room and face of
+    // each line that is fitted to its width — a stone's sense, the cognates,
+    // the "was" line (none on a small screen, which hides it).
+    const sense = note.parts[0].gloss
+    // A sense is fitted to its column here, so its settled text never needs
+    // style.css's ellipsis; while it decodes, a wide flicker is cut off
+    // instead of showing one.
+    for (const p of note.parts) p.gloss.style.textOverflow = 'clip'
     note.room = note.word.clientWidth || 200
     note.wordPx = parseFloat(getComputedStyle(note.word).getPropertyValue('--word')) || 36
+    note.senseRoom = sense.clientWidth || 90
+    note.senseFace = face(sense)
     note.cogRoom = note.cog.clientWidth || 200
-    note.cogFont = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`
+    note.cogFace = face(note.cog)
+    note.histRoom = note.hist.clientWidth
+    note.histFace = face(note.hist)
+    note.histWordFace = face(note.hist.querySelector('i'))
 
-    // A word that has already turned opens on the stone that turned it.
+    // A word that has already turned opens on the stone that turned it; one
+    // that hasn't, on the stone it will likely turn first (lead()).
     const e = pair.entry
     const prev = pair.history.at(-1)
-    if (prev) note.hot = prev.a !== e.a ? 0 : 1
+    note.hot = prev ? (prev.a !== e.a ? 0 : 1) : lead(e)
     this.fill(note, e, prev)
     note.no.textContent = `No. ${String(pair.id + 1).padStart(3, '0')}`
     this.list.push(note)
@@ -143,12 +168,35 @@ export class Notes {
   }
 
   setPart(note, i, id) {
-    const p = note.parts[i]
-    p.stone.textContent = stoneText(id)
+    note.parts[i].stone.textContent = stoneText(id)
+    this.setAncestor(note.parts[i], id)
+    this.setSense(note, note.parts[i], id)
+  }
+
+  setAncestor(p, id) {
     const pp = ancestor(id)
     p.code.textContent = pp.code
     p.pp.textContent = pp.form
-    p.gloss.textContent = STONES[id].g
+  }
+
+  // A stone's sense, fitted to its column (see clip()); a stone with none
+  // recorded shows the dash, in the faint ink whichever stone is ruled.
+  setSense(note, p, id) {
+    const s = this.sense(note, id)
+    p.gloss.textContent = s.text
+    p.gloss.style.color = STONES[id].g ? '' : FAINT
+    this.senseScale(note, p, s.scale)
+  }
+
+  sense(note, id) {
+    const g = STONES[id].g
+    if (!g) return { text: NONE, scale: 1 }
+    this.measure.font = note.senseFace.font
+    return clip(this.measure, g, note.senseRoom - 1, 0.9)
+  }
+
+  senseScale(note, p, scale) {
+    p.gloss.style.fontSize = scale < 1 ? `${(note.senseFace.px * scale).toFixed(2)}px` : ''
   }
 
   setWord(note, w, e) {
@@ -158,10 +206,24 @@ export class Notes {
     note.word.classList.toggle('pending', e.ev === 'pending')
   }
 
+  // The word the card's word last was, and its gloss, cut to the line at a
+  // whole sense. Before the first turn the line says so with the dash, so the
+  // foot of a new card reads as finished rather than as still loading. The
+  // dash stands where the word will, in the word's face — a size up from the
+  // line's — so the line is as tall without a word as with one.
   setHist(note, prev) {
-    note.hist.innerHTML = prev
-      ? `was <i lang="haw">${esc(prev.word)}</i>${prev.ev === 'pending' ? '<i class="ring"></i>' : ''} ${esc(prev.gloss)}`
-      : '&nbsp;'
+    if (!prev) {
+      note.hist.innerHTML = `was <i style="color: ${FAINT}">${NONE}</i>`
+      return
+    }
+    const ring = prev.ev === 'pending'
+    const m = this.measure
+    m.font = note.histWordFace.font
+    let room = note.histRoom - 1 - m.measureText(prev.word).width - (ring ? RING_PX : 0)
+    m.font = note.histFace.font
+    room -= m.measureText('was  ').width
+    const gloss = room > 0 ? clip(m, prev.gloss, room).text : ''
+    note.hist.innerHTML = `was <i lang="haw">${esc(prev.word)}</i>${ring ? '<i class="ring"></i>' : ''}${gloss ? ` ${esc(gloss)}` : ''}`
   }
 
   // Size the word to its card. Roots run from one letter to eight, and a word
@@ -180,15 +242,13 @@ export class Notes {
     note.word.style.fontSize = `${Math.min(note.wordPx, (note.room - 2) / total).toFixed(2)}px`
   }
 
-  // The cognates of the stone that turned, as many whole entries as fit on
-  // one line: Māori wai · Tahitian vai · Sāmoan vai. The line is the turned
-  // stone's alone. Before either stone has turned, or when the one that did
-  // has none recorded, it stays empty: the other stone's would read as this
-  // one's.
+  // The cognates of the ruled stone, as many whole entries as fit on one
+  // line: Māori wai · Tahitian vai · Sāmoan vai. The line is that stone's
+  // alone — the other stone's would read as this one's — so a stone with none
+  // recorded leaves it to the dash.
   cognates(note, e) {
-    if (note.hot == null) return []
     const fit = []
-    this.measure.font = note.cogFont
+    this.measure.font = note.cogFace.font
     for (const c of STONES[note.hot ? e.b : e.a].cog) {
       if (fit.length && this.measure.measureText(cogLine([...fit, c])).width > note.cogRoom) break
       fit.push(c)
@@ -206,7 +266,18 @@ export class Notes {
     this.queue.push({ at, run: () => this.startTurn(note, index, prev, pair.entry, at) })
   }
 
+  // The turn on the card, `at` being when its word starts to flip. The word
+  // itself flips, and changes while it is edge-on, at +0.3 s; whatever goes
+  // with the word — its field, the "was" line — changes then too, unseen, so
+  // no moment pairs the old word with the new word's facts or the reverse.
+  // The ruled stone's spelling and sense decode together, so a settled new
+  // spelling never sits over its old sense; its ancestor is gone while they
+  // do, and comes back once the spelling has settled; its cognates follow
+  // the stone down, one language at a time, once it has landed.
   startTurn(note, index, prev, e, at) {
+    // A turn that comes before the last one has played out finishes it
+    // first, so no slot is left mid-flicker or faded out.
+    for (const tw of note.tweens) finish(tw)
     const k = note.ks[index]
     const w = spell(e)
     k.classList.remove('turn')
@@ -214,9 +285,8 @@ export class Notes {
     k.classList.add('turn')
     note.word.classList.add('glide')
     this.fit(note, w, e)
-    // The new root lands at the flip's midpoint, edge-on and unreadable. The
-    // join is re-spelled then too: a turn can carry a word from one written
-    // word to two, or move an ʻokina across the join.
+    // A turn can carry a word from one written word to two, or move an ʻokina
+    // across the join, so the join is re-spelled with it.
     this.queue.push({ at: at + 0.3, run: () => this.setWord(note, w, e) })
     this.queue.push({ at: at + 0.7, run: () => note.word.classList.remove('glide') })
     note.pulse = at
@@ -227,17 +297,27 @@ export class Notes {
     note.hot = index
     note.parts.forEach((p, i) => p.el.classList.toggle('hot', i === index))
     const cogs = this.cognates(note, e)
-    note.scrambles = [
-      { el: note.gloss, t0: at + 0.1, dur: 0.7, ...prose(prev.gloss, e.gloss) },
-      { el: part.stone, t0: at + 0.05, dur: 0.5, ...plain(stoneText(left), stoneText(id), STONE) },
-      { el: part.pp, t0: at + 0.08, dur: 0.5, ...plain(ancestor(left).form, ancestor(id).form, PROTO) },
-      { el: part.gloss, t0: at + 0.1, dur: 0.6, ...prose(STONES[left].g, STONES[id].g) },
-      { el: note.cog, t0: at + 0.18, dur: 0.75, ...cognateRuns(note.cogs, cogs) },
+    const tweens = [
+      decode(note.gloss, at + 0.1, 0.7, prose(prev.gloss, e.gloss)),
+      decode(part.stone, at + 0.05, 0.5, plain(stoneText(left), stoneText(id), STONE)),
     ]
+    // Two senses decode one into the other; a dash fades, being no word.
+    const from = this.sense(note, left)
+    const to = this.sense(note, id)
+    if (STONES[left].g && STONES[id].g) {
+      // Set for the smaller of the two while it decodes, so neither runs out
+      // of its column on the way.
+      this.senseScale(note, part, Math.min(from.scale, to.scale))
+      tweens.push(decode(part.gloss, at + 0.05, 0.6, prose(from.text, to.text), () => this.setSense(note, part, id)))
+    } else if (from.text !== to.text) {
+      tweens.push(fade(part.gloss, at, [0.15, 0.25, 0.3], () => this.setSense(note, part, id)))
+    }
+    if (STONES[left].pp !== STONES[id].pp) tweens.push(fade(part.anc, at, [0.15, 0.4, 0.3], () => this.setAncestor(part, id)))
+    if (cogLine(note.cogs) !== cogLine(cogs)) tweens.push(reveal(note.cog, at, cogs))
     note.cogs = cogs
-    part.code.textContent = ancestor(id).code
-    this.setField(note, e)
-    this.setHist(note, prev)
+    if (prev.field !== e.field) tweens.push(fade(note.field, at + 0.1, [0.15, 0.05, 0.3], () => this.setField(note, e)))
+    tweens.push(fade(note.hist, at + 0.1, [0.15, 0.05, 0.35], () => this.setHist(note, prev)))
+    note.tweens = tweens
   }
 
   // Place every card near its word, keep them off each other and the screen
@@ -334,7 +414,7 @@ export class Notes {
       note.h = rawH
       note.el.style.transform = `translate3d(${note.x.toFixed(1)}px, ${note.y.toFixed(1)}px, 0)`
 
-      for (const s of note.scrambles) scramble(s, now)
+      for (const tw of note.tweens) run(tw, now)
     })
     for (const n of this.list) if (n.closing && now - n.closing >= 0.9) n.el.remove()
     this.list = this.list.filter((n) => !n.closing || now - n.closing < 0.9)
@@ -476,101 +556,200 @@ function overlap(x, y, w, h, X, Y, W, H) {
   return ox * oy
 }
 
-// The cognate line as written: Māori wai · Tahitian vai.
+// The cognate line as written: Māori wai · Tahitian vai; the dash for a
+// stone with none recorded.
 function cogLine(cogs) {
-  return cogs.map(([lang, form]) => `${lang} ${form}`).join(' · ')
+  return cogs.length ? cogs.map(([lang, form]) => `${lang} ${form}`).join(' · ') : NONE
 }
 
-// A scramble is a line cut into runs, each with the letters it may flicker
-// through. These build the three kinds the cards use, and the text each
-// settles on.
+// A line's face, for measuring its text off the page: the canvas font string,
+// and the size in px.
+function face(el) {
+  const cs = getComputedStyle(el)
+  return { font: `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`, px: parseFloat(cs.fontSize) }
+}
 
-// One alphabet throughout: a stone, an ancestor.
+// The stone a card is ruled on before its word has turned. Its foot shows
+// that stone's cognates from the moment it opens, so it takes a stone with
+// cognates to show, and of two, the one with more words to turn to — the
+// likelier to turn first. If the other turns instead, the rule and the line
+// move to it with the turn, as they do on any turn.
+function lead(e) {
+  const score = (i) => (STONES[i ? e.b : e.a].cog.length ? 1000 : 0) + turns(e, i).length
+  return score(1) > score(0) ? 1 : 0
+}
+
+// A gloss cut to `room` at a whole sense: 'assembly, gathering' → 'assembly'.
+// Senses part at commas and semicolons outside brackets, so 'light (weight)'
+// stays whole. A single sense too long by a little is set smaller, down to
+// `least` of its size, rather than cut; beyond that it is cut after a word
+// and marked so — never inside one, nor after a word that only leads into
+// the next ('food bundle wrapped…', not '…wrapped in…').
+const LEADS = /^(a|an|and|as|at|by|for|from|in|into|of|on|or|the|to|with)$/i
+function clip(m, text, room, least = 1) {
+  const fits = (s) => m.measureText(s).width <= room
+  if (fits(text)) return { text, scale: 1 }
+  const [first, ...rest] = senses(text)
+  let out = first
+  for (const s of rest) {
+    if (!fits(out + s)) break
+    out += s
+  }
+  if (fits(out)) return { text: out, scale: 1 }
+  const scale = room / m.measureText(out).width
+  if (scale >= least) return { text: out, scale }
+  const words = out.split(' ')
+  for (let n = words.length - 1; n > 1; n--) {
+    if (LEADS.test(words[n - 1])) continue
+    const cut = `${words.slice(0, n).join(' ').replace(/[,;:(]+$/, '')}…`
+    if (fits(cut)) return { text: cut, scale: 1 }
+  }
+  return { text: `${words[0]}…`, scale: 1 }
+}
+
+// 'liver; desire, wish' → ['liver', '; desire', ', wish'].
+function senses(text) {
+  const out = ['']
+  let depth = 0
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]
+    depth += c === '(' ? 1 : c === ')' ? -1 : 0
+    if (!depth && (c === ',' || c === ';') && text[i + 1] === ' ') out.push('')
+    out[out.length - 1] += c
+  }
+  return out
+}
+
+// Every change on a card that takes time is a tween run from the frame loop:
+// step(u) for u from 0 to 1 over [t0, t0 + dur], where step(1) leaves its
+// slot as it is to stay.
+function run(tw, now) {
+  const u = (now - tw.t0) / tw.dur
+  if (tw.done || u < 0) return
+  tw.step(Math.min(1, u))
+  tw.done = u >= 1
+}
+
+function finish(tw) {
+  if (tw.done) return
+  tw.step(1)
+  tw.done = true
+}
+
+// A line decoding into new text (scramble()); `end` sets whatever else goes
+// with the text it settles on.
+function decode(el, t0, dur, s, end) {
+  return {
+    t0,
+    dur,
+    step(u) {
+      el.textContent = u < 1 ? scramble(s, u) : s.text
+      if (u >= 1) end?.()
+    },
+  }
+}
+
+// A slot fading out, changed while unseen, and fading back in: `out`, `hold`
+// and `back` in seconds.
+function fade(el, t0, [out, hold, back], swap) {
+  const dur = out + hold + back
+  let swapped = false
+  return {
+    t0,
+    dur,
+    step(u) {
+      const s = u * dur
+      if (s >= out && !swapped) {
+        swapped = true
+        swap()
+      }
+      el.style.opacity = u >= 1 ? '' : String(s < out ? 1 - smooth(s / out) : smooth(clamp01((s - out - hold) / back)))
+    },
+  }
+}
+
+// The cognate line going over to another stone's: the old line fades, and
+// once the stone has landed the new one comes in a language at a time, each
+// entry whole — a form is never shown half-spelt.
+const COG = { out: 0.15, in: 0.6, each: 0.3, step: 0.14 }
+function reveal(el, t0, cogs) {
+  const entries = cogs.length ? cogs.map(([lang, form], j) => `${j ? ' · ' : ''}${lang} ${form}`) : [NONE]
+  const dur = COG.in + (entries.length - 1) * COG.step + COG.each
+  let spans = null
+  return {
+    t0,
+    dur,
+    step(u) {
+      const s = u * dur
+      if (u >= 1) {
+        el.style.opacity = ''
+        el.textContent = cogLine(cogs)
+      } else if (s < COG.out) {
+        el.style.opacity = String(1 - smooth(s / COG.out))
+      } else {
+        if (!spans) {
+          el.textContent = ''
+          el.style.opacity = ''
+          spans = entries.map((t) => el.appendChild(Object.assign(document.createElement('span'), { textContent: t })))
+        }
+        spans.forEach((sp, j) => (sp.style.opacity = String(smooth(clamp01((s - COG.in - j * COG.step) / COG.each)))))
+      }
+    },
+  }
+}
+
+// A scramble is a line with, place by place, the letters it may flicker
+// through, and the text it settles on.
+
+// One alphabet throughout: a stone's spelling.
 function plain(from, to, set) {
   const n = Math.max([...from].length, [...to].length)
-  return { runs: [{ from: [...from], to: [...to], sets: Array(n).fill(set) }], text: to }
+  return { from: [...from], to: [...to], sets: Array(n).fill(set), text: to }
 }
 
 // An English gloss, which may hold a Hawaiian word ('dam feeding an ʻauwai'):
-// the Hawaiian word flickers in Hawaiian letters, the English round it in
-// English ones. A place past the end of the new text goes by the old.
+// each word flickers in its own alphabet (alphabets()). A place past the end
+// of the new text goes by the old.
 function prose(from, to) {
   const f = [...from]
   const t = [...to]
-  const hf = hawaiian(f)
-  const ht = hawaiian(t)
-  const sets = Array.from({ length: Math.max(f.length, t.length) }, (_, i) =>
-    (i < t.length ? ht[i] : hf[i]) ? HAW : ENGLISH,
-  )
-  return { runs: [{ from: f, to: t, sets }], text: to }
-}
-
-// The cognate line, entry by entry, so the forms re-spell in place while the
-// language names hold still: a name that changes is swapped whole, never
-// spelt through random letters, and an entry that comes or goes does so
-// whole, name and form together.
-function cognateRuns(from, to) {
-  const runs = []
-  const name = (cogs, j) => (cogs[j] ? `${j ? ' · ' : ''}${cogs[j][0]} ` : '')
-  const whole = (a, b) => ({ from: [...a], to: [...b], sets: null })
-  for (let j = 0; j < Math.max(from.length, to.length); j++) {
-    if (from[j] && to[j]) {
-      runs.push(whole(name(from, j), name(to, j)))
-      runs.push(plain(from[j][1], to[j][1], POLY).runs[0])
-    } else {
-      runs.push(whole(name(from, j) + (from[j]?.[1] ?? ''), name(to, j) + (to[j]?.[1] ?? '')))
-    }
-  }
-  return { runs, text: cogLine(to) }
+  const af = alphabets(f)
+  const at = alphabets(t)
+  const sets = Array.from({ length: Math.max(f.length, t.length) }, (_, i) => (i < t.length ? at[i] : af[i]))
+  return { from: f, to: t, sets, text: to }
 }
 
 // A letter only Hawaiian writes among these: an ʻokina or a kahakō vowel.
 const MARKED = /[ʻāēīōū]/iu
+// A word that could be Hawaiian as it is spelt: (C)V syllables in the letters
+// Hawaiian and English share.
+const MAYBE = /^(?:[hklmnpw]?[aeiou])+$/i
 
-// Which places in `chars` are inside a word that is visibly Hawaiian.
-function hawaiian(chars) {
-  const out = chars.map(() => false)
+// The alphabet for each place in `chars`, word by word: Hawaiian for a word
+// that is visibly Hawaiian, the shared letters for one that might be, a–z for
+// the rest.
+function alphabets(chars) {
+  const out = chars.map(() => ENGLISH)
   for (let i = 0; i < chars.length; i++) {
     if (!LETTER.test(chars[i])) continue
     let j = i
     while (j < chars.length && LETTER.test(chars[j])) j++
-    if (chars.slice(i, j).some((c) => MARKED.test(c))) out.fill(true, i, j)
+    const word = chars.slice(i, j)
+    out.fill(word.some((c) => MARKED.test(c)) ? HAW : MAYBE.test(word.join('')) ? SHARED : ENGLISH, i, j)
     i = j
   }
   return out
 }
 
-// Decode-style text change: characters settle left to right, each one
-// flickering through random letters until its turn comes. A letter the old
-// and new text share in the same place holds still, and so does a place
-// settling into an ʻokina — it shows its old letter until it settles, so the
-// ʻokina only ever appears where it belongs.
-function scramble(s, now) {
-  const t = (now - s.t0) / s.dur
-  if (t < 0 || s.done) return
-  if (t >= 1) {
-    s.el.textContent = s.text
-    s.done = true
-    return
-  }
-  const total = s.runs.reduce((n, r) => n + span(r), 0) || 1
-  let out = ''
-  let at = 0
-  for (const r of s.runs) {
-    out += scrambleRun(r, t, at, total)
-    at += span(r)
-  }
-  s.el.textContent = out
-}
-
-const span = (run) => Math.max(run.from.length, run.to.length)
-
-// One run of a scramble at time t (0–1), its first place `at` of the line's
-// `total`: the line settles left to right as one, whatever its runs.
-function scrambleRun({ from, to, sets }, t, at, total) {
-  const settleAt = (i) => ((at + i) / total) * 0.75 + 0.2
-  // A run with no letters to flicker (a language name) swaps whole.
-  if (!sets) return (t >= settleAt(0) ? to : from).join('')
+// Decode-style text change, at t from 0 to 1: places settle left to right,
+// each one flickering through its alphabet until its turn comes. A letter the
+// old and new text share in the same place holds still. Any other place
+// flickers from the start, and never through the letter it is leaving, so no
+// frame spells the old text back out beside the new: a stone already reading
+// AHI over its old sense, still "firm".
+function scramble({ from, to, sets }, t) {
+  const n = Math.max(from.length, to.length)
+  const settleAt = (i) => (i / n) * 0.75 + 0.2
   let len = Math.round(from.length + (to.length - from.length) * Math.min(1, t * 1.6))
   // A growing word shows one place past the letters that have settled, so
   // what settles is never left standing as its end.
@@ -579,12 +758,9 @@ function scrambleRun({ from, to, sets }, t, at, total) {
   // random letter can see what stands on either side of it.
   const fixed = []
   for (let i = 0; i < len; i++) {
-    const settle = settleAt(i)
-    if (t >= settle || from[i] === to[i]) fixed.push(to[i] ?? '')
-    else if (t < settle - 0.35 && i < from.length) fixed.push(from[i])
+    if (t >= settleAt(i) || from[i] === to[i]) fixed.push(to[i] ?? '')
     // Spaces, the join point and punctuation take their places at once.
     else if (from[i] === ' ' || (to[i] !== undefined && !LETTER.test(to[i]))) fixed.push(to[i] ?? ' ')
-    else if (to[i] === 'ʻ') fixed.push(from[i] ?? '')
     else fixed.push(null)
   }
   // A word cut short as it shrinks still ends on a vowel, not on whatever
@@ -601,7 +777,8 @@ function scrambleRun({ from, to, sets }, t, at, total) {
     }
     const set = sets[i]
     let pool = set.letters
-    if (set.vowels) {
+    if (to[i] === 'ʻ') pool = set.consonants
+    else if (set.vowels) {
       // A vowel after a consonant or an ʻokina, before one, and to end a
       // word; elsewhere either: (C)V syllables, whatever chance brings.
       const next = fixed.slice(i + 1).find((c) => c !== '')
@@ -610,6 +787,7 @@ function scrambleRun({ from, to, sets }, t, at, total) {
         (LETTER.test(prev) && !VOWEL.test(prev)) || next === undefined || (next !== null && !VOWEL.test(next))
       pool = vowel || Math.random() < 0.5 ? set.vowels : set.consonants
     }
+    pool = pool.split(from[i]).join('')
     out += pool[Math.floor(Math.random() * pool.length)]
   }
   return out

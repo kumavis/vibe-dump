@@ -4,7 +4,7 @@ import { FloorPainter, REVEAL } from './floor.js'
 import { LinkStore } from './links.js'
 import { Notes } from './notes.js'
 import { Director } from './director.js'
-import { REACH, clamp, wander } from './view.js'
+import { clamp, reach, wander } from './view.js'
 import { SERIF } from './palette.js'
 
 const $ = (id) => document.getElementById(id)
@@ -126,8 +126,9 @@ async function boot() {
     // affine map.
     const [a, b, c, d] = scene.floorAffine()
     const det = a * d - b * c
-    user.dx = clamp(user.dx - (d * dx - c * dy) / det, 0, REACH.x)
-    user.dz = clamp(user.dz - (-b * dx + a * dy) / det, 0, REACH.z)
+    const r = reach(innerWidth, innerHeight)
+    user.dx = clamp(user.dx - (d * dx - c * dy) / det, 0, r.x)
+    user.dz = clamp(user.dz - (-b * dx + a * dy) / det, 0, r.z)
   })
   const end = (e) => {
     if (!drag) return

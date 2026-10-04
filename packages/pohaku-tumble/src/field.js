@@ -22,6 +22,7 @@ export const GRID = { cols: Math.max(4, Math.round(cells / rows)), rows }
 const x1 = (21 * GRID.cols) / 9
 const z1 = (14.5 * GRID.rows) / 8
 export const BOUNDS = { x0: -x1, x1, z0: -z1, z1 }
+export const CELL = { w: (2 * x1) / GRID.cols, h: (2 * z1) / GRID.rows }
 
 // A stone is a slab, 1.5 wide and 1 deep and high: one width for every root,
 // wide enough for a five-letter root at a good size. The roll is about the
@@ -63,16 +64,20 @@ export function mulberry32(seed) {
 // may move anywhere else within the jitter (board.js).
 export const JITTER = { x: 0.35, z: 0.45 }
 
+// Whether two words stand in neighbouring cells, diagonals included. The
+// jitter moves a word well under half a cell, so this can go by position.
+export function beside(p, q) {
+  return Math.abs(p.x - q.x) < 1.5 * CELL.w && Math.abs(p.z - q.z) < 1.5 * CELL.h
+}
+
 export function layoutPairs(rng) {
   const { cols, rows } = GRID
-  const cw = (BOUNDS.x1 - BOUNDS.x0) / cols
-  const ch = (BOUNDS.z1 - BOUNDS.z0) / rows
   const pairs = []
   for (let j = 0; j < rows; j++) {
     for (let i = 0; i < cols; i++) {
       // A few holes keep the grid from reading as a grid.
       if (rng() < 0.08) continue
-      const cell = [BOUNDS.x0 + (i + 0.5) * cw, BOUNDS.z0 + (j + 0.5) * ch]
+      const cell = [BOUNDS.x0 + (i + 0.5) * CELL.w, BOUNDS.z0 + (j + 0.5) * CELL.h]
       const x = cell[0] + (rng() - 0.5) * 2 * JITTER.x
       const z = cell[1] + (rng() - 0.5) * 2 * JITTER.z
       pairs.push({ x, z, dir: 'h', cell })

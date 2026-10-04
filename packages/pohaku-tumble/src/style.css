@@ -429,6 +429,31 @@ body.ready #stats { opacity: 1; }
 .card-hist i { color: var(--ink-2); font-size: 13px; }
 .card-hist .ring { width: 5px; height: 5px; margin: 0 1px 1px 3px; vertical-align: middle; border-width: 1px; }
 
+/* The plates stay in the margins the Director leaves outside its in-view
+   band (director.js `inView`: the top 16% of the frame and the bottom 14%),
+   so a stone it turns is never under one. Stacked, the title and the legend
+   need a screen 920 high for that. On a laptop's screen, or one shorter
+   still, the plates lie flat instead: the sentence beside the name, the
+   legend in two columns, and on a narrow foot the keys give way. */
+@media (min-width: 641px) and (min-height: 521px) and (max-height: 919px) {
+  #title { top: 16px; max-width: none; display: flex; align-items: center; padding: 9px 16px 10px; }
+  #title h1 { flex: none; }
+  #title p {
+    width: 326px;
+    margin: 0 0 0 16px;
+    padding-left: 16px;
+    border-left: 1px solid var(--hair);
+    font-size: 13px;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+  #foot { bottom: 16px; }
+  #legend { grid-template-rows: auto auto; grid-auto-flow: column; gap: 4px 22px; }
+}
+@media (min-width: 641px) and (max-width: 899px) and (min-height: 521px) and (max-height: 919px) {
+  #stats .keys { display: none; }
+}
+
 /* A small screen either way up — a phone, or a phone held sideways, where
    the desktop's plates would cover half the frame: the title without its
    sentence, the legend on one line, the stats in two, and the cards a size
@@ -445,20 +470,35 @@ body.ready #stats { opacity: 1; }
   .sw-pair::after { width: 11px; margin-left: -5.5px; }
   .sw-pending { width: auto; }
   /* Side by side, the legend gives way first, to two lines, so the credit
-     stays whole. */
+     stays whole; on the narrowest phones it takes two lines itself rather
+     than lose its end. */
   #stats { flex: none; padding: 4px 10px 5px; }
   #stats .counts { gap: 14px; font-size: 13px; line-height: 1.2; }
   #stats .keys { display: none; }
-  #stats .credit { margin-top: 2px; padding-top: 2px; font-size: 10px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #stats .credit { margin-top: 2px; padding-top: 2px; font-size: 10px; line-height: 1.25; text-wrap: balance; }
   .card { --word: 30px; width: 192px; padding: 8px 11px 9px; }
   .card-word { height: 34px; }
   .card-gloss { font-size: 14.5px; }
   .card-parts { gap: 9px; }
   .card-hist { display: none; }
 }
+/* Sideways, a phone's frame is so shallow that its margins outside the
+   Director's band are 50–60 px: the plates draw in to the edges and tighten
+   to fit them, and the legend to keep to one line beside the stats. */
+@media (max-height: 520px) {
+  #title { left: 10px; top: 10px; padding: 6px 11px 7px; }
+  #title .haw { font-size: 23px; }
+  #foot { left: 10px; right: 10px; bottom: 9px; }
+  #legend { gap: 1px 8px; padding: 4px 9px 5px; line-height: 1.15; }
+  #legend div { gap: 5px; }
+  .sw { width: 18px; }
+  #stats { padding: 3px 10px 4px; }
+  #stats .counts { line-height: 1.15; }
+  #stats .credit { line-height: 1.2; }
+}
 /* Upright, the legend and the stats close up into one plate across the
    bottom: the legend's line, the counts, the credit. */
-@media (max-width: 640px) {
+@media (max-width: 640px) and (orientation: portrait) {
   #foot { flex-direction: column; align-items: stretch; gap: 0; }
   #legend { border-bottom: 0; box-shadow: none; padding-bottom: 3px; }
   #stats { border-top: 0; padding-top: 0; transition-delay: 0.4s; }

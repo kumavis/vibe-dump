@@ -1,5 +1,5 @@
 import { LEXICON, BY_STONE, LINK_MAX, turns, degree, compSize, unresolved } from './lexicon.js'
-import { BOUNDS, WORD, JITTER, layoutPairs, tileOffsets, linkPath, fieldAnchor, mulberry32 } from './field.js'
+import { BOUNDS, WORD, JITTER, layoutPairs, tileOffsets, beside, linkPath, fieldAnchor, mulberry32 } from './field.js'
 import { buildIsland, touchesUpland } from './island.js'
 
 // How many words a pair remembers. A turn prefers a word outside them.
@@ -18,6 +18,16 @@ const REACH = { depth: 3, cap: 40, dead: 0.1 }
 // Only words in a component of at least this many are dealt, so no pair opens
 // in a little island of three words where every turn after the second repeats.
 const COMPONENT_MIN = 12
+// The opening shows no stone on more than this many faces: a few roots (*wai*,
+// *paʻa*, *kai*) are in so many words that the deal's neighbour match piled
+// six or seven of one onto a board of forty, and a frame read as one root
+// over and over. A repeat (*laulau*) shows its stone twice. And repeats
+// themselves, which read as a stutter side by side, open on at most one pair
+// in sixteen — about their share of the dealable words — and never in
+// neighbouring cells. Both give way, on a list too small to meet them, before
+// a pair would be left empty.
+const DEAL_FACES = 3
+const DEAL_REPEATS = 1 / 16
 // How close a line may run to the upland's edge.
 const MARGIN = 0.12
 // The star compass is the lani place, and the one place whose drawing is the
@@ -134,6 +144,10 @@ export class Board {
   // pair is dealt again, from words with a turn still free. A new word can
   // take another pair's last free turn, so this runs again, a few times at
   // most; on any real list it settles in one.
+  //
+  // Every choice is made first among the words that keep the opening varied
+  // (DEAL_FACES, DEAL_REPEATS), and only from the rest when none of those
+  // will do.
   deal() {
     const rng = this.rng
     const ok = (e) => !e.nodeal && !this.used.has(e.word) && compSize(e) >= COMPONENT_MIN
@@ -143,6 +157,22 @@ export class Board {
       const j = Math.floor(rng() * (i + 1))
       ;[order[i], order[j]] = [order[j], order[i]]
     }
+    // What the opening shows so far: faces per stone, and the pairs on a repeat.
+    const faces = new Map()
+    const repeats = new Set()
+    const show = (pair, k) => {
+      const { a, b } = pair.entry
+      faces.set(a, (faces.get(a) ?? 0) + k)
+      faces.set(b, (faces.get(b) ?? 0) + k)
+      if (a === b) k > 0 ? repeats.add(pair) : repeats.delete(pair)
+    }
+    const maxRepeats = Math.max(1, Math.floor(this.pairs.length * DEAL_REPEATS))
+    const varied = (pair) => (e) => {
+      const k = e.a === e.b ? 2 : 1
+      if ((faces.get(e.a) ?? 0) + k > DEAL_FACES || (faces.get(e.b) ?? 0) + k > DEAL_FACES) return false
+      return e.a !== e.b || (repeats.size < maxRepeats && ![...repeats].some((q) => beside(q, pair)))
+    }
+    const anything = () => true
     const placed = []
     const empty = new Set()
     for (const pair of order) {
@@ -151,18 +181,21 @@ export class Board {
       if (near.length && rng() < 0.6) {
         const q = pick(near)
         const stone = rng() < 0.5 ? q.entry.a : q.entry.b
-        const options = (BY_STONE.get(stone) ?? []).filter((e) => ok(e) && degree(e) >= 3)
+        const options = (BY_STONE.get(stone) ?? []).filter((e) => ok(e) && degree(e) >= 3 && varied(pair)(e))
         if (options.length) entry = pick(options)
       }
-      for (let k = 5; !entry && k >= 2; k--) {
-        const pool = LEXICON.filter((e) => ok(e) && degree(e) >= k)
-        if (pool.length) entry = pick(pool)
+      for (const fits of [varied(pair), anything]) {
+        for (let k = 5; !entry && k >= 2; k--) {
+          const pool = LEXICON.filter((e) => ok(e) && degree(e) >= k && fits(e))
+          if (pool.length) entry = pick(pool)
+        }
       }
       if (!entry) {
         empty.add(pair)
         continue
       }
       this.setWord(pair, entry)
+      show(pair, 1)
       placed.push(pair)
     }
     const free = (e) => [0, 1].some((i) => turns(e, i).some((t) => !this.used.has(t.word)))
@@ -170,8 +203,11 @@ export class Board {
       const frozen = placed.filter((p) => !this.canTurn(p, Infinity))
       if (!frozen.length) break
       for (const pair of frozen) {
+        show(pair, -1)
         const pool = LEXICON.filter((e) => ok(e) && free(e))
-        if (pool.length) this.redeal(pair, pick(pool))
+        const better = pool.filter(varied(pair))
+        if (pool.length) this.redeal(pair, pick(better.length ? better : pool))
+        show(pair, 1)
       }
     }
     if (empty.size) {
