@@ -50,7 +50,7 @@ export function hale(B, rand, L = 7, W = 4.6, H = 5.2, door = true) {
   B.box(0, ridge - 0.12, 0, L + 0.9, 0.35, 0.55, thD, MAT.thatch)
   if (door) {
     const dk = [0.05, 0.035, 0.025]
-    B.quad([gx + 0.02, y0, -0.45], [gx + 0.02, y0, 0.45], [gx + 0.02, y0 + 1.4, 0.45], [gx + 0.02, y0 + 1.4, -0.45], dk, 0)
+    B.quad([gx + 0.02, y0, -0.45], [gx + 0.02, y0 + 1.4, -0.45], [gx + 0.02, y0 + 1.4, 0.45], [gx + 0.02, y0, 0.45], dk, 0)
   }
 }
 
@@ -169,7 +169,9 @@ export function halau(B, rand, L = 16, W = 6) {
   B.quad([ox, 0.3, oz], [ox, ridge, 0], [-ox, ridge, 0], [-ox, 0.3, oz], th, MAT.thatch)
   B.quad([ox, 0.3, -oz], [ox, ridge, 0], [-ox, ridge, 0], [-ox, 0.3, -oz], thD, MAT.thatch)
   B.quad([-ox, 0.3, oz], [-ox, ridge, 0], [ox, ridge, 0], [ox, 0.3, oz], thD, MAT.thatch)
-  B.tri([-ox, 0.3, oz], [-ox, 0.3, -oz], [-ox, ridge, 0], th, MAT.thatch) // closed back
+  // closed back, thatched on both faces
+  B.tri([-ox, 0.3, oz], [-ox, 0.3, -oz], [-ox, ridge, 0], thD, MAT.thatch)
+  B.tri([-ox, 0.3, -oz], [-ox, 0.3, oz], [-ox, ridge, 0], th, MAT.thatch)
   B.box(0, ridge - 0.1, 0, L + 0.4, 0.3, 0.45, thD, MAT.thatch)
   B.cyl([ox, 0, 0], [ox, ridge, 0], 0.15, 0.12, w, MAT.wood, 5)
 }

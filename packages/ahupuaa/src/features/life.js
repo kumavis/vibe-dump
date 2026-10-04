@@ -30,8 +30,7 @@ function person(pose, rand) {
     B.box(0.12, 0, 0, 0.16, 0.8, 0.18, skin, MAT.skin, 0, 0.8)
     B.box(0, 0.72, 0.05, 0.42, 0.3, 0.3, cloth, MAT.plain)
     // torso tipped forward toward +z, hands down in the water
-    B.quad([-0.22, 0.95, 0.05], [0.22, 0.95, 0.05], [0.2, 1.05, 0.62], [-0.2, 1.05, 0.62], skin, MAT.skin)
-    B.quad([-0.2, 0.8, 0.62], [0.2, 0.8, 0.62], [0.22, 0.75, 0.05], [-0.22, 0.75, 0.05], skin, MAT.skin)
+    B.hexa([[-0.22, 0.75, 0.05], [0.22, 0.75, 0.05], [0.2, 0.8, 0.62], [-0.2, 0.8, 0.62]], [[-0.22, 0.95, 0.05], [0.22, 0.95, 0.05], [0.2, 1.05, 0.62], [-0.2, 1.05, 0.62]], skin, MAT.skin)
     B.box(0, 0.78, 0.62, 0.4, 0.27, 0.1, skin, MAT.skin)
     B.box(-0.24, 0.35, 0.6, 0.1, 0.5, 0.1, skin, MAT.skin)
     B.box(0.24, 0.35, 0.6, 0.1, 0.5, 0.1, skin, MAT.skin)
@@ -56,12 +55,18 @@ function surfboard(rand) {
 function bird(rand) {
   const B = new Builder()
   const c = col('#1d1d22', 0.1, rand)
-  // ʻiwa: long, sharply bent wings
-  B.tri([0, 0, 0.6], [-1.1, 0.25, -0.1], [0, 0, -0.3], c, MAT.plain)
-  B.tri([0, 0, 0.6], [0, 0, -0.3], [1.1, 0.25, -0.1], c, MAT.plain)
-  B.tri([-1.1, 0.25, -0.1], [-2.0, -0.1, -0.5], [-0.6, 0.15, -0.25], c, MAT.plain)
-  B.tri([1.1, 0.25, -0.1], [0.6, 0.15, -0.25], [2.0, -0.1, -0.5], c, MAT.plain)
-  B.tri([0, 0, -0.3], [-0.25, 0, -1.0], [0.25, 0, -1.0], c, MAT.plain)
+  // ʻiwa: long, sharply bent wings, thin sheets seen from above and below
+  const wing = [
+    [[0, 0, 0.6], [-1.1, 0.25, -0.1], [0, 0, -0.3]],
+    [[0, 0, 0.6], [0, 0, -0.3], [1.1, 0.25, -0.1]],
+    [[-1.1, 0.25, -0.1], [-2.0, -0.1, -0.5], [-0.6, 0.15, -0.25]],
+    [[1.1, 0.25, -0.1], [0.6, 0.15, -0.25], [2.0, -0.1, -0.5]],
+    [[0, 0, -0.3], [-0.25, 0, -1.0], [0.25, 0, -1.0]],
+  ]
+  for (const [a, b, d] of wing) {
+    B.tri(a, b, d, c, MAT.plain)
+    B.tri(a, d, b, c, MAT.plain)
+  }
   return B.geometry()
 }
 

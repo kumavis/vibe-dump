@@ -76,7 +76,21 @@ export class Builder {
     this.tri(a, c, d, color, mat)
   }
 
-  /** Axis-aligned box centred at (x, y0..y0+h, z), optionally rotated about y. */
+  /**
+   * A closed six-sided solid from its bottom and top rings, each four corners
+   * in the order (-x, -z), (+x, -z), (+x, +z), (-x, +z) of its own frame. Every
+   * face is wound so its front looks outward.
+   */
+  hexa(b, t, color, mat = 0) {
+    this.quad(t[0], t[3], t[2], t[1], color, mat)
+    this.quad(b[0], b[1], b[2], b[3], color, mat)
+    for (let k = 0; k < 4; k++) this.quad(b[k], t[k], t[(k + 1) % 4], b[(k + 1) % 4], color, mat)
+  }
+
+  /**
+   * Axis-aligned box centred at (x, y0..y0+h, z), optionally rotated about y;
+   * `taper` shrinks the end at y0 + h. A negative h hangs it down from y0.
+   */
   box(x, y0, z, sx, h, sz, color, mat = 0, rot = 0, taper = 1) {
     const c = Math.cos(rot)
     const s = Math.sin(rot)
@@ -87,9 +101,8 @@ export class Builder {
     const tz = hz * taper
     const b = [P(-hx, 0, -hz), P(hx, 0, -hz), P(hx, 0, hz), P(-hx, 0, hz)]
     const t = [P(-tx, h, -tz), P(tx, h, -tz), P(tx, h, tz), P(-tx, h, tz)]
-    this.quad(t[0], t[3], t[2], t[1], color, mat)
-    // sides wound so their front faces look outward
-    for (let k = 0; k < 4; k++) this.quad(b[k], t[k], t[(k + 1) % 4], b[(k + 1) % 4], color, mat)
+    if (h < 0) this.hexa(t, b, color, mat)
+    else this.hexa(b, t, color, mat)
   }
 
   /** Tapered cylinder between two points. */
@@ -183,28 +196,50 @@ export class Builder {
    * a width and a height; sloped sides like a dry-stacked stone wall.
    */
   wall(pts, width, height, color, mat = MAT.stone, batter = 0.7) {
-    for (let i = 0; i < pts.length - 1; i++) {
-      const a = pts[i]
-      const b = pts[i + 1]
-      const dx = b[0] - a[0]
-      const dz = b[2] - a[2]
+    const n = pts.length
+    if (n < 2) return
+    const closed = n > 2 && Math.hypot(pts[0][0] - pts[n - 1][0], pts[0][2] - pts[n - 1][2]) < 1e-9
+    const seg = []
+    for (let i = 0; i < n - 1; i++) {
+      const dx = pts[i + 1][0] - pts[i][0]
+      const dz = pts[i + 1][2] - pts[i][2]
       const l = Math.hypot(dx, dz) || 1
-      const nx = -dz / l
-      const nz = dx / l
-      const wb = width / 2
-      const wt = (width * batter) / 2
-      const A = (p, w, h) => [p[0] + nx * w, p[1] + h, p[2] + nz * w]
-      const a0 = A(a, -wb, -height * 0.3)
-      const a1 = A(a, wb, -height * 0.3)
-      const a2 = A(a, wt, height)
-      const a3 = A(a, -wt, height)
-      const b0 = A(b, -wb, -height * 0.3)
-      const b1 = A(b, wb, -height * 0.3)
-      const b2 = A(b, wt, height)
-      const b3 = A(b, -wt, height)
+      seg.push([-dz / l, dx / l])
+    }
+    // Mitred joints: each point's sideways offset bisects the two segments it
+    // joins, stretched so the wall keeps its width round the bend, so
+    // neighbouring segments share their corners instead of leaving a notch.
+    const off = pts.map((_, i) => {
+      let a = seg[i - 1]
+      let b = seg[i]
+      if (closed && i === 0) a = seg[n - 2]
+      if (closed && i === n - 1) b = seg[0]
+      if (!a) return b
+      if (!b) return a
+      const mx = a[0] + b[0]
+      const mz = a[1] + b[1]
+      const ml = Math.hypot(mx, mz)
+      if (ml < 1e-6) return b
+      const k = 1 / Math.max(0.35, (mx * b[0] + mz * b[1]) / ml)
+      return [(mx / ml) * k, (mz / ml) * k]
+    })
+    const wb = width / 2
+    const wt = (width * batter) / 2
+    const A = (p, o, w, h) => [p[0] + o[0] * w, p[1] + h, p[2] + o[1] * w]
+    const ring = (i) => [A(pts[i], off[i], -wb, -height * 0.3), A(pts[i], off[i], wb, -height * 0.3), A(pts[i], off[i], wt, height), A(pts[i], off[i], -wt, height)]
+    for (let i = 0; i < n - 1; i++) {
+      const [a0, a1, a2, a3] = ring(i)
+      const [b0, b1, b2, b3] = ring(i + 1)
       this.quad(a3, a2, b2, b3, color, mat)
       this.quad(a1, b1, b2, a2, color, mat)
       this.quad(b0, a0, a3, b3, color, mat)
+    }
+    if (!closed) {
+      // close the two ends
+      const [a0, a1, a2, a3] = ring(0)
+      const [b0, b1, b2, b3] = ring(n - 1)
+      this.quad(a0, a1, a2, a3, color, mat)
+      this.quad(b1, b0, b3, b2, color, mat)
     }
   }
 
