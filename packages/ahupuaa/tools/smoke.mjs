@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const server = await createServer({ root, server: { port: 5198 }, logLevel: 'error' })
+const port = Number(process.env.PORT || 5198)
+const server = await createServer({ root, server: { port, strictPort: true }, logLevel: 'error' })
 await server.listen()
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
@@ -17,7 +18,7 @@ const browser = await chromium.launch({
 })
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
 page.on('pageerror', (e) => console.log('[pageerror]', e.message))
-await page.goto('http://localhost:5198/')
+await page.goto(`http://localhost:${port}/`)
 await page.waitForSelector('#boot', { state: 'detached', timeout: 120000 })
 
 let failed = 0

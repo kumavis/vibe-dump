@@ -4,6 +4,7 @@
 //   node tools/shoot.mjs <outdir> '<json array of shots>'
 //   shot = { name, cam: [x, z, dist, yaw, pitch], hour, doy, wait, eval }
 //   VIEWPORT=390x844 node tools/shoot.mjs ...   (e.g. to check the phone layout)
+//   PORT=5201 node tools/shoot.mjs ...          (to run two at once)
 import { createServer } from 'vite'
 import { chromium } from 'playwright'
 import { fileURLToPath } from 'node:url'
@@ -13,7 +14,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = process.argv[2]
 const shots = JSON.parse(process.argv[3] || '[{"name":"default"}]')
 const query = process.argv[4] || ''
-const server = await createServer({ root, server: { port: 5199 }, logLevel: 'error' })
+const port = Number(process.env.PORT || 5199)
+const server = await createServer({ root, server: { port, strictPort: true }, logLevel: 'error' })
 await server.listen()
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
@@ -24,7 +26,7 @@ const page = await browser.newPage({ viewport: { width: vw, height: vh }, device
 page.on('console', (m) => console.log('[page]', m.type(), m.text()))
 page.on('pageerror', (e) => console.log('[pageerror]', e.message))
 const t0 = Date.now()
-await page.goto(`http://localhost:5199/${query}`)
+await page.goto(`http://localhost:${port}/${query}`)
 await page.waitForFunction(() => window.__app && window.__app.frames > 2, null, { timeout: 120000 })
 console.log('ready after', Date.now() - t0, 'ms')
 for (const s of shots) {
