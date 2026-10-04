@@ -29,13 +29,20 @@ for (let s = 0; s < SEEDS; s++) {
     const pair = pool[Math.floor(Math.random() * pool.length)]
     attempts++
     const recent = new Set(pair.history.map((e) => e.word))
-    const choice = board.chooseTurn(pair)
+    let choice = board.chooseTurn(pair)
+    // SIM.retry: like a Director that, finding nowhere to turn, tries up to N other idle pairs this beat
+    let p2 = pair
+    for (let k = 0; !choice && k < (cfg.retry ?? 0); k++) {
+      p2 = pool[Math.floor(Math.random() * pool.length)]
+      choice = board.chooseTurn(p2)
+    }
     if (!choice) { stalls++; continue }
+    if (p2 !== pair) { recent.clear(); for (const e of p2.history) recent.add(e.word) }
     if (recent.has(choice.entry.word)) repeats++
-    board.turn(pair, choice)
+    board.turn(p2, choice)
     turnsDone++
     seen.add(choice.entry.word)
-    last.set(pair, t)
+    last.set(p2, t)
     if (t % 10 === 0) { linkedSum += board.linkedFraction(); linkedN++ }
     if (t % 50 === 0) {
       let stuck = 0

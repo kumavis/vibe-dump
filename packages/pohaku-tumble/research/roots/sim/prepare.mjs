@@ -18,6 +18,9 @@ function patch(text, from, to) {
 
 let board = readFileSync(join(src, 'board.js'), 'utf8')
 board = patch(board, "from './lexicon.js'", "from './lexicon.sim.js'")
+// SIM.dealMin / SIM.matchMin: the deal's degree bounds (Jukugo: 5 for the pool, 3 for a neighbour match)
+board = patch(board, 'const pool = LEXICON.filter((e) => degree(e) >= 5)', 'const pool = LEXICON.filter((e) => degree(e) >= (globalThis.SIM?.dealMin ?? 5))')
+board = patch(board, "!this.used.has(e.word) && degree(e) >= 3)", "!this.used.has(e.word) && degree(e) >= (globalThis.SIM?.matchMin ?? 3))")
 board = patch(
   board,
   '      while (!entry || this.used.has(entry.word)) entry = pool[Math.floor(rng() * pool.length)]',
