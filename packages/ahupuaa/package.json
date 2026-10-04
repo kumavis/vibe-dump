@@ -1,0 +1,26 @@
+{
+  "name": "@vibe-dump/ahupuaa",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Ahupuaʻa",
+    "description": "A Hawaiian high island cut mauka to makai into ahupuaʻa along its own ridgelines. Take the guided tour from the cloud forest down through loʻi kalo, heiau and fishponds to the reef, or roam free while trade winds pile rain on the windward peaks.",
+    "tags": ["simulation", "tutorial", "art"],
+    "status": "done",
+    "models": [],
+    "thinking": "unknown",
+    "thumbnail": {
+      "waitFor": "!#boot",
+      "click": ".card-close",
+      "settle": 4500
+    }
+  }
+}
