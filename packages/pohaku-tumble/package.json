@@ -1,0 +1,30 @@
+{
+  "name": "@vibe-dump/pohaku-tumble",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "standalone": "vite build && node tools/standalone.mjs"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Pōhaku Tumble",
+    "description": "Two-root Hawaiian words cut in basalt over a hand-drawn island. One stone at a time rolls over to another root, the word turns into another word, and the lines between shared roots, the cards and the island's places re-wire around it.",
+    "tags": [
+      "art"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5.5"
+    ],
+    "thinking": "ultracode",
+    "thumbnail": {
+      "waitFor": "body.opened",
+      "settle": 3000
+    }
+  }
+}
