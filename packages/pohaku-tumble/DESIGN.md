@@ -19,9 +19,12 @@ standing where each boundary crosses the trail, the summit left unmarked. If
 someone who knows this material looks closely, they should find nothing careless.
 If someone who doesn't looks, they should simply find it beautiful.
 
-Status: **design only.** Research material is in [`research/`](./research). There
-is no `package.json` yet, so the gallery build skips this directory. Whether option
-B (§2) has enough words is measured in [`research/ROOTS.md`](./research/ROOTS.md).
+Status: **built** with option B (§2), which the owner chose. The rest of this
+document is the design as written. What the build decided where the design left
+a choice open, and where it departs from the design, is in
+[`BUILD-NOTES.md`](./BUILD-NOTES.md). Research material is in
+[`research/`](./research). Whether option B (§2) has enough words is measured in
+[`research/ROOTS.md`](./research/ROOTS.md).
 Every Hawaiian term on the map and compass is checked in
 [`research/TERMS.md`](./research/TERMS.md).
 
