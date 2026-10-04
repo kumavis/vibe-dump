@@ -20,7 +20,10 @@ someone who knows this material looks closely, they should find nothing careless
 If someone who doesn't looks, they should simply find it beautiful.
 
 Status: **design only.** Research material is in [`research/`](./research). There
-is no `package.json` yet, so the gallery build skips this directory.
+is no `package.json` yet, so the gallery build skips this directory. Whether option
+B (§2) has enough words is measured in [`research/ROOTS.md`](./research/ROOTS.md).
+Every Hawaiian term on the map and compass is checked in
+[`research/TERMS.md`](./research/TERMS.md).
 
 ---
 
@@ -29,7 +32,11 @@ is no `package.json` yet, so the gallery build skips this directory.
 The Jukugo Tumble architecture is right and stays:
 
 - `Board` (layout, dealing, `chooseTurn` weighting toward ~half the words linked,
-  MST links per shared unit, field links for the unlinked),
+  MST links per shared unit, field links for the unlinked) — with one fix: the
+  deal's pick loop has no exit, and hangs the page if fewer words can turn five
+  ways than there are pairs. It needs a guard, or a board sized from the list,
+- the `turns`/`degree`/shared-unit lookups, keyed by root *sense* rather than
+  spelling under option B (§2),
 - `Director` (background pulse + slower beat for noted words, capacity by width),
 - `LinkStore` (octilinear routes, draw-on/let-go animation, ports),
 - `Notes` (screen-space cards, corner placement with hysteresis, scramble text,
@@ -69,7 +76,7 @@ Each block is one mora: an optional consonant (h k l m n p w ʻ) plus a vowel
 ### B. One root per block, two-root compounds — **recommended**
 
 Each block is a root (a morpheme of 1–3 morae). Words are compounds of two roots,
-written as one word the way Pukui & Elbert write them:
+written as Pukui & Elbert write them — one word (*waimaka*) or two (*hale pule*):
 
 - WAI·MAKA *tears* (water + eye) → WAI·Ū *milk* (water + breast) → WAI·WAI *rich*
 - KAHA·KAI *beach* → KAHA·WAI *stream* → KAHA·ONE *sandy beach*
@@ -87,20 +94,48 @@ This is the true analogue of a jukugo, and it fixes A's two problems at once:
   wisdom into ignorance;
 - words are 5–9 letters, answering "too short".
 
-**Data.** Wiktionary's *Category:Hawaiian compound terms* has 409 entries, 201 of
-them single lowercase words. Many are out (three roots, English loans, proper
-names, and the *kūkae-* family, which is excrement). The rest of the source is the
-*Derived terms* section of each root's own entry (maka → waimaka), plus Pukui &
-Elbert knowledge, every item verified the same way as §4. A realistic final list
-is 150–300 compounds, against Jukugo's ~1,650. **Risk: connectivity.** Each word
-needs ≥ 3 turns for the deal (`degree(e) >= 3`). Mitigations, in order:
-(1) count degrees as soon as the list exists and cut the board to fit (fewer,
-better-spaced pairs is fine, and it gives the map more room); (2) allow the
-causative prefix *hoʻo-* as a root (hoʻo·ulu *to grow* · hoʻo·kele *to steer,
-navigate*), which is a large, regular,
-meaningful family — though some of its best members (hoʻokele, *to steer*)
-are not on Wiktionary and would rest on Pukui & Elbert alone; (3) only then,
-admit two-word compounds (*loko iʻa*).
+**Data — measured.** The full study is in [`research/ROOTS.md`](./research/ROOTS.md).
+Wiktionary analyses 144 single words as root + root. Andrews' dictionary,
+revised by Parker (1922), attests about 930 more. After the exclusion screen
+(§4.3) and dropping prefix-built words, two groups are left:
+
+- **128 attested:** in Wiktionary, or in Andrews–Parker with a modern spelling
+  Wiktionary confirms.
+- **777 Andrews-only:** spelling pieced together from the roots, so the ʻokina,
+  kahakō and word break are unconfirmed.
+
+**Connectivity decides it.**
+
+- The deal draws its opening words from those that can turn at least five ways
+  (`degree(e) >= 5` in `board.js`; three only for a word picked to match a
+  neighbour), one per pair. The attested 128 have 21 such words, so they cannot
+  deal a full board.
+- Run on Jukugo's real `Board`:
+  - ~900 confirmed compounds gives a board almost as lively as Jukugo's (3% of
+    turns stall, 12% repeat a recent word);
+  - ~600 is livable (8% / 18%);
+  - under ~400 is not worth it.
+- So option B stands or falls on a person checking the Andrews candidates
+  against Pukui & Elbert. wehewehe.org refuses automated access. The worksheet
+  is [`research/roots/compounds.tsv`](./research/roots/compounds.tsv).
+
+The measurements changed three things in the first draft of this section:
+
+- **Two-word compounds are in from the start.** Modern spelling splits many
+  compounds older writing joined (*hale pule*, *makua kāne*, *kiʻi pōhaku*),
+  and each is still two roots on two stones.
+- ***hoʻo-* is not a root.** As a stone it deals easily, but it ties 90% of the
+  board together with lines that only mean "both causative". The same goes for
+  pā-, kā-, pō-, haʻa- and the other prefixes, wherever they are prefixes rather
+  than roots (*pō* night, *pā* enclosure).
+- **A stone is a root in sense, not in spelling.**
+  - 126 of the 476 roots have unrelated homographs: *lua* is "two" and "pit",
+    *ao* "daylight" and "cloud".
+  - Two stones link, and a stone stays put through a turn, only when they are
+    the same root.
+  - This costs little: five-turn words go from 706 to 669.
+  - It means the data has to record which sense each compound uses
+    (`lua¹`, `lua²`), which the parts row needs anyway.
 
 **Geometry.** Roots differ in length (Ū … KANAKA). The roll is about the X axis,
 so a block's width never enters the roll: stones become slabs `1.5 × 1 × 1`
@@ -108,8 +143,10 @@ instead of cubes, one width for all, wide enough for a 4–5 letter root at a go
 size. Longer roots are set slightly condensed rather than smaller. Horizontal
 pairs are `1.5 + gap + 1.5 ≈ 3.1` wide, inside the 4.67-unit column.
 
-The reviewed two-mora list from A becomes B's **root glossary** — most Hawaiian
-roots are one or two morae — so none of that work is wasted.
+The reviewed two-mora list from A feeds B's **root glossary** — most Hawaiian
+roots are one or two morae. But B also needs one-syllable roots (*lā*, *pō*, *ū*)
+and longer ones (*ʻāina*, *naʻau*, *ʻauina*). [`research/roots/roots.tsv`](./research/roots/roots.tsv)
+lists the 476 the candidates use.
 
 ### C. One phoneme per block, longer words
 
@@ -163,9 +200,11 @@ checked, and a fluent reader to check every name. See §10.
 - **Streams.** One per ahupuaʻa, down the valley floor to a stream mouth.
 - **Reef.** A dotted fringing reef offshore on parts of the coast, with surf
   marks where swell breaks on it.
-- **Wao akua.** The summit, above the forest line, is drawn with contours and
-  nothing else. No symbol, no label, no stone caption reaches into it. It is
-  left alone.
+- **The upland.** Above the forest people use (*wao kanaka*) lies *wao akua*,
+  the forest belt that belongs to the gods, and above it the summit zones. All
+  of it is drawn with contours and nothing else. No symbol, no label, no stone
+  caption reaches into it. It is left alone. (*Wao akua* is a forest zone, not
+  the bare summit — [TERMS.md](./research/TERMS.md#wao-akua).)
 
 ### 3.3 Drawing it
 
@@ -194,19 +233,36 @@ then the boundaries run down from the summit to the sea, then the stones fall.
   caps. One star rises in a house on the east side and travels a faint arc to
   set in the house **of the same name** on the west side, over about a minute.
   That rule is the compass's central idea, and it is shown, not captioned.
-  Names to be confirmed before drawing (research pending): cardinals **ʻĀkau**
-  (N), **Hikina** (E), **Hema** (S), **Komohana** (W); houses from east toward
-  north **Lā, ʻĀina, Noio, Manu, Nā Lani, Nā Leo, Haka**, repeated in each
-  quadrant; quadrants **Koʻolau** (NE), **Malanai** (SE), **Kona** (SW),
-  **Hoʻolua** (NW). Map north is away from the viewer, so the compass and the
-  island agree: the swell comes from the compass's Koʻolau quarter onto the
-  island's Koʻolau coast.
+  Names, confirmed against the Polynesian Voyaging Society's material
+  ([TERMS.md](./research/TERMS.md) has all 32 houses with bearings):
+  - **cardinals:** **ʻĀkau** (N), **Hikina** (E), **Hema** (S), **Komohana**
+    (W). These are houses too: 4 × 7 + 4 = 32.
+  - **houses, from each east/west point toward north or south:** **Lā, ʻĀina,
+    Noio, Manu, Nālani, Nā Leo, Haka**.
+    - *Nālani* is one word in every PVS source; *Nā Leo* is two.
+    - The order is mirrored, not rotated, between quadrants: Lā always sits
+      next to Hikina or Komohana, Haka next to ʻĀkau or Hema.
+  - **quadrants:** **Koʻolau** (NE), **Malanai** (SE), **Kona** (SW),
+    **Hoʻolua** (NW). Malanai and Hoʻolua are wind names that PVS gave to
+    quadrants, so don't caption them as winds from those directions.
+  - The house names are Nainoa Thompson's (PVS), not ancient. The compass
+    carries a small credit line to PVS / Nainoa Thompson.
+
+  Map north is away from the viewer, so the compass and the island agree: the
+  swell comes from the compass's Koʻolau quarter onto the island's Koʻolau
+  coast.
 
 Every Hawaiian term used on the map — *ala loa*, *ahu*, *kuapā*, *mākāhā*,
-*ʻauwai*, *loʻi kalo*, *kauhale*, *hālau waʻa*, *wao akua*, the lava types — is in
-the same pending research check as the compass, and is drawn only once it has
-been confirmed. (Wiktionary, for one, glosses *alaloa* only as "highway"; that
-the ala loa was the trail around an island rests on other sources.)
+*ʻauwai*, *loʻi kalo*, *kauhale*, *hālau waʻa*, *wao akua*, the lava types — has
+been checked in [TERMS.md](./research/TERMS.md). All are confirmed in the
+spellings used here.
+
+- *Ala loa*, as the trail around an island, is the National Park Service's
+  usage; dictionaries have *alaloa*, "highway".
+- *Kula* is the open, dry country between the shore and the forest, not
+  upland.
+- Pukui & Elbert itself was not read (wehewehe.org refuses automated access).
+  So these terms still go past the fluent reader with the word list.
 
 ### 3.5 The eight fields as places on the map
 
@@ -221,7 +277,7 @@ word ran a dashed line to its field's diagram. Here each field is a place:
 | **ulu** · growth | plants, crops, food | **loʻi kalo** terraces stepping down a windward valley, fed by an *ʻauwai* off the stream and draining back into it | water moving along the ʻauwai |
 | **kanaka** · people | people, kin, the body | a **kauhale**: a few house platforms and thatched hale near the shore | none |
 | **hana** · craft | work, tools, canoes, houses, cloth | a **hālau waʻa** (canoe house) with a double-hulled canoe drawn in plan on the sand before it | none |
-| **naʻau** · mind | thought, feeling, voice, song, spirit, values | the **cloud cap** over the summit: a band of fine hatching around (not inside) the wao akua | the cloud band drifting |
+| **naʻau** · mind | thought, feeling, voice, song, spirit, values | the **cloud cap** over the summit: a band of fine hatching around (not inside) the unmarked upland | the cloud band drifting |
 | **hele** · motion | going, turning, time, number | the largest **stream**, summit to sea, with its mouth | flow dashes running downstream |
 
 Field labels on the floor: the Hawaiian word large and pale in the italic, with a
@@ -235,15 +291,27 @@ on the stream and the lava front, not only on circles and rectangles.
 
 ### 4.1 Source
 
-Wiktionary's Hawaiian entries, which are largely drawn from Pukui & Elbert's
-*Hawaiian Dictionary*. `research/fetch-lemmas.py` pulls *Category:Hawaiian
+The authority is Pukui & Elbert's *Hawaiian Dictionary* (University of Hawaiʻi
+Press), with *Māmaka Kaiao* for modern coinages. Both are online at
+wehewehe.org, which answers automated requests with a Cloudflare bot challenge.
+So they are checked by a person, not by tools — see
+[`research/ROOTS.md`](./research/ROOTS.md#the-pukui--elbert-check). What tools
+can reach:
+
+- Wiktionary's Hawaiian entries (crowd-edited, secondary);
+- Andrews' dictionary as revised by Parker (1922, public domain), which
+  attests words and their parts but writes no ʻokina or kahakō;
+- POLLEX-Online for Proto-Polynesian etyma;
+- Hawaiian Wikipedia, to see whether a spelling is in use.
+
+For option A, `research/fetch-lemmas.py` pulls *Category:Hawaiian
 lemmas* (3,089 pages); `research/fetch-definitions.py` keeps the two-mora words
 and boils each page down to senses, Proto-Polynesian etymon (281 have one) and
-cognates (287 have some — Māori, Sāmoan, Tahitian, Tongan, Rapa Nui…). Option B
-adds the compound category and each root's *Derived terms*. Four words were
-added by hand (ʻalā basalt, koʻi adze, moi threadfin, lāʻī ti leaf) and are marked
-as such. wehewehe.org sits behind a Cloudflare challenge and can't be used from
-here.
+cognates (287 have some — Māori, Sāmoan, Tahitian, Tongan, Rapa Nui…). Four words meant to be
+added by hand (ʻalā basalt, koʻi adze, moi threadfin, lāʻī ti leaf) never made it
+into the file. None is in Wiktionary, and Andrews–Parker attests all four. Option
+B's candidates come from Wiktionary's root + root analyses and Andrews–Parker's
+bracketed etymologies (`research/roots/`).
 
 ### 4.2 Review
 
@@ -255,9 +323,11 @@ Every word passes through three reads before it can appear:
    senses; spelling exactly as the headword;
 3. **cultural sensitivity** — read as a kumu would: drop, reword, or restore.
 
-A workflow running these over the 563 two-mora candidates is in flight; its
-output will land in `research/` (it becomes B's root glossary). Then, before the
-app is marked `done` in the gallery, **the list is read by a fluent speaker.**
+A first pass of these over the 563 two-mora candidates was started but its
+output never landed in `research/`. For option B, the Pukui & Elbert check of
+`research/roots/compounds.tsv` comes first: the three reads only make sense on
+words that are confirmed to exist as spelled. Then, before the app is marked
+`done` in the gallery, **the list is read by a fluent speaker.**
 Until that has happened the package stays `"status": "wip"`.
 
 ### 4.3 Exclusion rules
@@ -282,8 +352,8 @@ A word never appears if:
 ### 4.4 Orthography
 
 - ʻokina is always **U+02BB** (ʻ), never an apostrophe or a left quote.
-  `verify`-style check in the package: fail the build on `'` or `‘` inside the
-  word data.
+  `verify`-style check in the package: fail the build on `'`, `‘`, `’` or `ʼ`
+  (U+02BC) inside the word data.
 - kahakō vowels are precomposed (ā ē ī ō ū, NFC).
 - Long and short vowels, and ʻokina vs none, are different units. MA, MĀ and ʻA
   are three different stones and never link.
@@ -303,6 +373,16 @@ plus a root glossary (`roots.js`, the successor of `kanji.js`):
 ```
 wai   water            *wai     Māori wai · Tahitian vai · Sāmoan vai
 maka  eye; face; bud   *mata    Māori mata · Tahitian mata
+```
+
+A spelling with unrelated homographs gets one glossary line per root, and the
+word list names which one it uses, so two stones only link when they are the
+same root:
+
+```
+lua¹  two              *rua     Māori rua · Sāmoan lua
+lua²  pit, hole        *lua     Māori rua
+luapō  noun  the grave  |  lua²·pō  |  ʻāina
 ```
 
 Attribution: Wiktionary text is CC BY-SA. Glosses are short paraphrases, but the
@@ -403,9 +483,16 @@ spelled without its kahakō.
 ## 9. Plan
 
 1. **Decide the unit** (§2) and the island question (§3.1).
-2. **Lexicon.** Land the reviewed two-mora list in `research/` as the root
-   glossary. If B: mine compounds and derived terms, run the same three-read
-   review, count degrees, size the board to fit. Fluent-speaker read.
+2. **Lexicon.** If B:
+   - a person checks `research/roots/compounds.tsv` against Pukui & Elbert,
+     most connective rows first, recording spelling, one or two words, and the
+     "Lit." reading;
+   - go / no-go at about 600 confirmed core words (`research/ROOTS.md`);
+   - then annotate each compound's root senses, run the three reads, and do the
+     fluent-speaker read.
+
+   If A: land the reviewed two-mora list, then the three reads and the
+   fluent-speaker read.
 3. **Scaffold** `packages/pohaku-tumble` from Jukugo (package.json with
    `gallery` metadata, `vite.config.js` re-export, horizontal-only layout,
    slab stones).
@@ -424,10 +511,23 @@ Each step is checked by eye with Playwright screenshots at the gallery's
 
 ## 10. Open questions
 
-1. **Unit:** root pairs (B, recommended) or syllable pairs (A)?
+1. **Unit:** root pairs (B) or syllable pairs (A)?
+   - B is still the better piece.
+   - Its data does not exist yet in confirmed form: 128 attested compounds
+     against the ~600 a livable board needs (`research/ROOTS.md`).
+   - So B means committing to the Pukui & Elbert check first. A can start now.
 2. **Island:** made (recommended) or real (State GIS ahupuaʻa layer)?
 3. **Star names** as the one allowed class of proper noun?
 4. **Name:** *Pōhaku Tumble* (slug `pohaku-tumble`)? *huaʻōlelo* ("word" —
    confirmed on Wiktionary) is the natural parallel to 熟語 for the Hawaiian on
    the title plate.
 5. **Fluent reader:** who reviews the word list before it ships as `done`?
+6. **The Pukui & Elbert check:** who does it? Or do we ask Ulukau / Hale
+   Kuamoʻo (UH Hilo) for permission or a data export for a non-commercial piece
+   that credits the dictionary?
+7. **Which compounds count?**
+   - two-word compounds (recommended: yes);
+   - reduplications like *waiwai*;
+   - opaque compounds whose parts don't add up to the meaning (*kūlolo*): drop
+     them, or show them without the parts row;
+   - modern coinages like *kinoea*: allowed, or marked as modern?

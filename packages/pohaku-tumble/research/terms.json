@@ -1,0 +1,2071 @@
+{
+  "title": "Pōhaku Tumble: Hawaiian term verification",
+  "date": "2026-10-04",
+  "conventions": {
+    "okina": "U+02BB MODIFIER LETTER TURNED COMMA",
+    "kahako": "precomposed vowels with macron (U+0101 ā, U+0113 ē, U+012B ī, U+014D ō, U+016B ū; capitals U+0100, U+0112, U+012A, U+014C, U+016A), text NFC-normalised",
+    "note": "Several sources type U+2018 or an apostrophe for the ʻokina. Spellings below are re-keyed with U+02BB."
+  },
+  "local_sources": {
+    "kaikki": "roots/.cache/kaikki-haw.jsonl",
+    "andrews_parker_1922": "roots/.cache/andrews-parker1922.txt"
+  },
+  "not_consulted": "Pukui & Elbert (wehewehe.org and its mirrors), puke.ulukau.org, trussel2.com and the en.wiktionary API were deliberately not accessed. Pukui-Elbert readings appear only where a reachable source quotes or cites them.",
+  "terms": [
+    {
+      "group": "1. Star compass",
+      "proposed": "32 houses of 11.25°",
+      "design_gloss": "compass layout",
+      "verdict": "confirmed",
+      "spelling": "—",
+      "meaning": "32 houses, each 11.25° wide; 4 of them are the cardinal points, 7 named houses fill each quadrant (4 × 7 + 4 = 32).",
+      "notes": "Each name marks the centre of its house, so a house spans ±5.625° around its point. The house names are modern: the PVS archive says they \"were devised by Nainoa Thompson\" (it credits Will Kyselka, An Ocean in Mind, pp. 96-97). The cardinal and quadrant (wind) names are older Hawaiian words. Present the houses as the PVS / Nainoa Thompson star compass, not as ancient names.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "says 32 houses, \"4 of which are the cardinal points\", 11.25° apart"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "each named point is \"the midpoint of a house of the same name\", each house 11.25° wide"
+        },
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "diagram draws Hikina, ʻĀkau, Komohana, Hema as their own (shaded) houses"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "ʻĀkau",
+      "design_gloss": "N",
+      "verdict": "confirmed",
+      "spelling": "ʻĀkau",
+      "meaning": "North (literally \"right\": facing west with your back to the east, your right hand points north).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "ʻĀkau, \"Right or North\""
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1619,
+          "note": "ʻākau: right (not left); north"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 4599,
+          "note": "Akau: north, one of the four cardinal points"
+        },
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "label ʻĀKAU (North)"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB U+0100"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Hikina",
+      "design_gloss": "E",
+      "verdict": "confirmed",
+      "spelling": "Hikina",
+      "meaning": "East: where the sun and stars \"arrive\" (hiki).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "the arriving horizon is called Hikina"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1620,
+          "note": "hikina: east; hiki \"to come\" + -na"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 17692,
+          "note": "Hikina: the east, the place of the sun's rising"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Hema",
+      "design_gloss": "S",
+      "verdict": "confirmed",
+      "spelling": "Hema",
+      "meaning": "South (literally \"left\").",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Hema, \"Left or South\""
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1176,
+          "note": "hema: left; south"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 17013,
+          "note": "Hema: left; welau hema = south pole"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Komohana",
+      "design_gloss": "W",
+      "verdict": "confirmed",
+      "spelling": "Komohana",
+      "meaning": "West: where the sun and stars \"enter\" (komo) the sea.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "the entering horizon is called Komohana"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1621,
+          "note": "komohana: west; komo \"to enter\""
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 47648,
+          "note": "Komohana: the west, where the sun enters the sea"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Lā",
+      "design_gloss": "house next to E/W",
+      "verdict": "confirmed",
+      "spelling": "Lā",
+      "meaning": "Sun; the house on either side of Hikina and of Komohana.",
+      "notes": "Lā is a house, not the east-west line. The east and west points are the houses Hikina and Komohana. There are four Lā houses, centred 11.25° north and south of due east and due west.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "first house Lā (Sun) \"positioned on either side of Hikina (East) and Komohana (West)\""
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "La Koʻolau = E by N, La Malanai = E by S, La Hoʻolua = W by N, La Kona = W by S"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Lines\" (declination / house tables)",
+          "url": "https://archive.hokulea.com/ike/hookele/hawaiian_star_lines.html",
+          "note": "a star at declination 0° (Mintaka) is listed under Hikina-Komohana, not Lā; Rigel at -8° is in Lā"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 603,
+          "note": "lā: sun"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 53622,
+          "note": "La: the sun"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "ʻĀina",
+      "design_gloss": "house 2",
+      "verdict": "confirmed",
+      "spelling": "ʻĀina",
+      "meaning": "Land.",
+      "notes": "The two spellings in the brief look the same. Use U+02BB (ʻokina) + U+0100 (Ā), NFC-normalised, not U+2018/U+0027 or A + combining macron. hokulea.com/polynesian-wayfinding uses U+2018 as its ʻokina, which is a font workaround.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "ʻĀina (Land), written with U+02BB and precomposed Ā (U+0100)"
+        },
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "label ʻĀINA"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1689,
+          "note": "ʻāina: land"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 3973,
+          "note": "Aina: land"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB U+0100"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Noio",
+      "design_gloss": "house 3",
+      "verdict": "confirmed",
+      "spelling": "Noio",
+      "meaning": "Noddy tern (Hawaiian black noddy, Anous minutus), a seabird that fishes by day and returns to land at night.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Noio (Tern)"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "named for the Hawaiian tern, range about 40 miles"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 2109,
+          "note": "noio: \"lesser noddy (Anous tenuirostris)\", probably a Wiktionary error; see the Hawaiʻi Birding Trails entry"
+        },
+        {
+          "source": "State of Hawaiʻi, Hawaiʻi Birding Trails, \"black noddy | noio\"",
+          "url": "https://hawaiibirdingtrails.hawaii.gov/bird/black-noddy",
+          "note": "Anous minutus | black noddy | noio"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Manu",
+      "design_gloss": "house 4",
+      "verdict": "confirmed",
+      "spelling": "Manu",
+      "meaning": "Bird; the four Manu houses are the intercardinal points (NE, SE, SW, NW).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Manu (Bird)"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "Manu Koʻolau = NE, etc."
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 100,
+          "note": "manu: bird"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 65080,
+          "note": "Manu: bird"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Nā Lani",
+      "design_gloss": "house 5",
+      "verdict": "spelling correction",
+      "spelling": "Nālani",
+      "meaning": "The heavens (nā \"the\", plural + lani \"sky\").",
+      "notes": "Use Nālani, as one word. \"Nā Lani\" turns up only in a 2019 UH computer-science thesis. Every PVS source writes it as one word.",
+      "sources": [
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "canonical PVS diagram labels it NĀLANI, one word"
+        },
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Nālani (Heavens)"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "Nalani (no diacritics; one word), named for Canopus"
+        },
+        {
+          "source": "PVS Archives on Ulukau, News and Magazine Articles 1992, p. 19 (PVSA-008_0096.1.19)",
+          "url": "https://www.ulukau.org/pagespvs/cgi-bin/pagespvs?a=d&d=PVSA-008_0096.1.19",
+          "note": "1992 PVS release: \"Nalani (The Heavens)\", one word"
+        },
+        {
+          "source": "Iaukea, L. K. (2021), PhD diss., UH Mānoa, ScholarSpace 10125/81614, pp. 185-186",
+          "url": "https://hdl.handle.net/10125/81614",
+          "note": "Nālani, one word"
+        },
+        {
+          "source": "Karjala, P. A. (2019), MS thesis \"Kilo Hōkū\", UH Mānoa, ScholarSpace 10125/66205, Table 2",
+          "url": "https://hdl.handle.net/10125/66205",
+          "note": "minority variant \"nā lani\", two words"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 910,
+          "note": "Nālani is also a given name, \"the heavens, the chiefs\""
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Nā Leo",
+      "design_gloss": "house 6",
+      "verdict": "confirmed",
+      "spelling": "Nā Leo",
+      "meaning": "The voices (the voices of the stars speaking to the navigator).",
+      "notes": "The PVS spacing is inconsistent: Nālani is always one word, but Nā Leo is two words in the diagram, the archive, the 1992 release and the UH dissertation, and one word (\"Nāleo\") in the current hokulea.com text. Nā Leo (two words) matches the canonical diagram. Do not \"fix\" it to match Nālani.",
+      "sources": [
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "canonical diagram labels it NĀ LEO, two words"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "\"Na Leo: The Voices\"; also once \"NaLeo\" in the star-lines tables"
+        },
+        {
+          "source": "PVS Archives on Ulukau, News and Magazine Articles 1992, p. 19 (PVSA-008_0096.1.19)",
+          "url": "https://www.ulukau.org/pagespvs/cgi-bin/pagespvs?a=d&d=PVSA-008_0096.1.19",
+          "note": "1992: \"Na Leo (The Voices)\""
+        },
+        {
+          "source": "Iaukea, L. K. (2021), PhD diss., UH Mānoa, ScholarSpace 10125/81614, pp. 185-186",
+          "url": "https://hdl.handle.net/10125/81614",
+          "note": "Nā Leo"
+        },
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "current hokulea.com prose writes \"Nāleo\", one word, as a variant"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 84,
+          "note": "leo: voice; sound"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Haka",
+      "design_gloss": "house 7 (next to N/S)",
+      "verdict": "confirmed",
+      "spelling": "Haka",
+      "meaning": "Empty (the relatively empty sky around the celestial poles).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Haka (Empty)"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "Haka Koʻolau = N by E; \"relatively empty skies around the north and south celestial poles\""
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 262,
+          "note": "haka: empty, vacant"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 12713,
+          "note": "Haka: a hole; a breach"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "order Lā, ʻĀina, Noio, Manu, Nā Lani, Nā Leo, Haka (east toward north), repeated in each quadrant",
+      "design_gloss": "house order",
+      "verdict": "confirmed",
+      "spelling": "Lā, ʻĀina, Noio, Manu, Nālani, Nā Leo, Haka",
+      "meaning": "Lā is next to Hikina/Komohana and Haka is next to ʻĀkau/Hema in every quadrant.",
+      "notes": "The order is mirrored, not rotated. It always runs from the E or W point toward the N or S point. Going clockwise from north you get Haka, Nā Leo, Nālani, Manu, Noio, ʻĀina, Lā (NE), then Hikina, then Lā, ʻĀina, Noio, Manu, Nālani, Nā Leo, Haka (SE), and so on. Code that rotates one 7-name list by 90° per quadrant puts SE and NW in the wrong order. See the 32-house table.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "\"Starting in the east and moving northwards and southwards\": Lā ... Haka"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "full 28-point table, e.g. Haka Koʻolau = N by E, Lā Koʻolau = E by N"
+        },
+        {
+          "source": "PVS archive compass diagram (compass.gif, linked from navigate/compass.html)",
+          "url": "https://archive.hokulea.com/pics/compass.gif",
+          "note": "diagram with bearings 0°, 11.25° ... 180°"
+        },
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "diagram"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101 U+02BB U+0100 U+0101 U+0101"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Koʻolau",
+      "design_gloss": "NE quadrant",
+      "verdict": "confirmed",
+      "spelling": "Koʻolau",
+      "meaning": "Windward; the NE quadrant, named for the side of the islands facing the NE trade winds.",
+      "notes": "Kaikki has no Koʻolau entry. Spelling from PVS/UH.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Koʻolau \"is theNortheast quadrant and is named for the trade winds\""
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "Ko'olau is the NE quadrant"
+        },
+        {
+          "source": "U.S. National Library of Medicine, \"A Voyage to Health\" exhibit: Hawaiian Star Compass (credit: C. Nainoa Thompson)",
+          "url": "https://www.nlm.nih.gov/exhibition/avoyagetohealth/education/online-star-horizons.html",
+          "note": "Koʻolau: windward sides of the islands"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 48030,
+          "note": "Koolau: 1. North. 2. general name of lands on the north side"
+        },
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "label KOʻOLAU (NE Horizon)"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Malanai",
+      "design_gloss": "SE quadrant",
+      "verdict": "confirmed",
+      "spelling": "Malanai",
+      "meaning": "SE quadrant, named for a gentle breeze.",
+      "notes": "The quadrant name is right. But Malanai as a wind is not a \"south-east wind\" in the dictionaries: Andrews calls it a name of the NE trade wind. PVS assigned the name to the SE quadrant.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Malanai is the Southeast quadrant"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "citing Pukui-Elbert: \"a gentle breeze\" associated with Kailua, Oʻahu"
+        },
+        {
+          "source": "U.S. National Library of Medicine, \"A Voyage to Health\" exhibit: Hawaiian Star Compass (credit: C. Nainoa Thompson)",
+          "url": "https://www.nlm.nih.gov/exhibition/avoyagetohealth/education/online-star-horizons.html",
+          "note": "gentle breeze associated with Kailua, Kōloa and Hāna"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 63612,
+          "note": "Malanai: the gentle blowing of the northeast wind; one of the names of the trade wind"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Kona",
+      "design_gloss": "SW quadrant",
+      "verdict": "confirmed",
+      "spelling": "Kona",
+      "meaning": "Leeward; the SW quadrant (winds from the south or southwest).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Kona \"is the Southwest quadrant\""
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 344,
+          "note": "kona: leeward side of an island"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 47692,
+          "note": "Kona: 1. South. 2. The southwest wind ... 4. south or southwest sides of the islands"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "Hoʻolua",
+      "design_gloss": "NW quadrant",
+      "verdict": "confirmed",
+      "spelling": "Hoʻolua",
+      "meaning": "NW quadrant, named for a strong north wind.",
+      "notes": "Kaikki has no entry. The wind blows from the north. PVS assigns it to the NW quadrant.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "Hoʻolua the Northwest"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "named for a strong north wind; notes Pukui-Elbert gives Kiu for the NW wind"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 25741,
+          "note": "Hoolua: the strong north wind"
+        },
+        {
+          "source": "PVS star compass diagram, compass_with_stars.gif (© Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+          "note": "label HOʻOLUA (NW Horizon)"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "1. Star compass",
+      "proposed": "a star rising in a house in the east sets in the house of the same name in the west",
+      "design_gloss": "rising/setting rule",
+      "verdict": "confirmed",
+      "spelling": "—",
+      "meaning": "A star that rises in house X in Koʻolau (NE) sets in house X in Hoʻolua (NW). A star that rises in X in Malanai (SE) sets in X in Kona (SW).",
+      "notes": "The rule holds. The quadrant mirrors north-south (NE→NW, SE→SW) and a star never crosses from the north half to the south half. Do not confuse it with swells and wind: those cross the compass to the same house name in the diagonally opposite quadrant (Manu Koʻolau → Manu Kona), 180° away.",
+      "sources": [
+        {
+          "source": "PVS / Hōkūleʻa, \"The Star Compass\" (text and diagram © Nainoa Thompson)",
+          "url": "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+          "note": "rises in ʻĀina in Koʻolau → sets in ʻĀina in Hoʻolua; Nālani Malanai → Nālani Kona"
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Compass\" (Nainoa Thompson; names after Kyselka, An Ocean in Mind 96-97)",
+          "url": "https://archive.hokulea.com/navigate/stars.html",
+          "note": "\"sets in a house of the same name on the NW horizon\""
+        },
+        {
+          "source": "PVS archive, \"Hawaiian Star Lines\" (declination / house tables)",
+          "url": "https://archive.hokulea.com/ike/hookele/hawaiian_star_lines.html",
+          "note": "e.g. Na Hiku rises at Na Leo Koʻolau (NNE) and sets at Na Leo Hoʻolua (NNW)"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "ahupuaʻa",
+      "design_gloss": "land division",
+      "verdict": "confirmed",
+      "spelling": "ahupuaʻa",
+      "meaning": "Traditional land division, usually running from the uplands to the sea.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 824,
+          "note": "a wedge-shaped land subdivision ... from the mountains to the sea; ahu + puaʻa"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 3212,
+          "note": "Ahupuaa: one of the smaller divisions of a district ... a hog was the tax of that district"
+        },
+        {
+          "source": "NPS, Hawaiʻi Volcanoes NP, \"The Ahupuaʻa\"",
+          "url": "https://home.nps.gov/havo/learn/historyculture/ahupuaa.htm",
+          "note": "ahu (a pile of stones) + puaʻa (pig)"
+        },
+        {
+          "source": "Kamehameha Schools, Kumukahi, \"Loko Iʻa\" lesson",
+          "url": "https://kumukahi.org/units/ka-honua/onaepuni/loko-ia",
+          "note": "a land division stretching from the mountains out into the sea"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "moku",
+      "design_gloss": "district",
+      "verdict": "confirmed",
+      "spelling": "moku",
+      "meaning": "District; a major division of an island, made up of ahupuaʻa (also \"island\", \"ship\" in other senses).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 170,
+          "note": "moku: an island, district, forest, section"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 67875,
+          "note": "Moku: a district; a division of an island, as Kona on Hawaii"
+        },
+        {
+          "source": "UH Mānoa, Kahoʻiwai place-name portal, \"Koʻolau (Kauaʻi)\" (cites Wichman)",
+          "url": "https://www.hawaii.edu/kawaihapai/?p=748",
+          "note": "\"Hiʻona ʻāina: Moku\" used for districts"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "ala loa",
+      "design_gloss": "trail around the island",
+      "verdict": "confirmed",
+      "spelling": "ala loa",
+      "meaning": "The long trail or main road around an island, the old round-island route.",
+      "notes": "The dictionaries write it as one word (alaloa, \"highway\"). NPS and trail literature write \"ala loa\" for the round-island trail. Either is defensible; \"ala loa\" matches the NPS sources for this meaning.",
+      "sources": [
+        {
+          "source": "NPS, Ala Kahakai NHT brochure (2018), mirrored at npshistory.com",
+          "url": "https://www.npshistory.com/publications/alka/brochures/2018.pdf",
+          "note": "\"Ala loa is an ancient name for the long trail, highway, and/or main road around the island\""
+        },
+        {
+          "source": "NPS, Ala Kahakai NHT, History & Culture",
+          "url": "https://www.nps.gov/alka/learn/historyculture/index.htm",
+          "note": "major prehistoric trails, or ala loa"
+        },
+        {
+          "source": "Ala Kahakai Trail Association, \"The Hawaiʻi Island Trails\"",
+          "url": "https://alakahakaitrail.org/the-trail",
+          "note": "Ala Loa, \"lit. The long trail\""
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 3554,
+          "note": "alaloa: highway, beltway; ala + loa \"long road\""
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 5681,
+          "note": "Alaloa: a highway; a main road"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 97857,
+          "note": "place-name list: Alaloa, long road, ancient roadway, Kona, Hawaii"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "ahu",
+      "design_gloss": "cairn/altar marking ahupuaʻa boundaries",
+      "verdict": "confirmed",
+      "spelling": "ahu",
+      "meaning": "Heap or pile of stones; cairn; altar or shrine.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1412,
+          "note": "ahu: heap, pile, mound; cairn, altar, shrine"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 3018,
+          "note": "Ahu: a heap of stones as a way mark or memorial"
+        },
+        {
+          "source": "NPS, Hawaiʻi Volcanoes NP, \"The Ahupuaʻa\"",
+          "url": "https://home.nps.gov/havo/learn/historyculture/ahupuaa.htm",
+          "note": "boundaries \"often marked with a mound of rocks topped by an image of a pig\""
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "ahupuaʻa named for the ahu with a pig image or offering",
+      "design_gloss": "etymology claim",
+      "verdict": "confirmed",
+      "spelling": "ahupuaʻa = ahu + puaʻa",
+      "meaning": "This is the traditional explanation. Sources give two versions: a pig image on the boundary ahu, or a pig (or other tribute) offered there as tax.",
+      "notes": "Fine to use, framed as the traditional account. Say \"pig image or pig offering\" rather than one definite story. NPS adds that some boundaries were natural features (ridges, outcrops) with no ahu.",
+      "sources": [
+        {
+          "source": "NPS, Hawaiʻi Volcanoes NP, \"The Ahupuaʻa\"",
+          "url": "https://home.nps.gov/havo/learn/historyculture/ahupuaa.htm",
+          "note": "mound of rocks topped by an image of a pig, \"perhaps in the form of a wood carving\""
+        },
+        {
+          "source": "Kapiʻolani CC Library (UH), Ahupuaʻa research guide",
+          "url": "https://guides.library.kapiolani.hawaii.edu/apdl/ahupuaa",
+          "note": "ahu (altar of stones) with an image of the head of a puaʻa"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 3212,
+          "note": "Ahu + puaa; \"a hog was the tax of that district to the king\""
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB U+02BB"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "loko iʻa",
+      "design_gloss": "fishpond",
+      "verdict": "confirmed",
+      "spelling": "loko iʻa",
+      "meaning": "Fishpond.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 263,
+          "note": "loko: pond, lake; derived \"loko iʻa\" = fishpond"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 760,
+          "note": "iʻa: fish"
+        },
+        {
+          "source": "Kamehameha Schools, Kumukahi, \"Loko Iʻa\" lesson",
+          "url": "https://kumukahi.org/units/ka-honua/onaepuni/loko-ia",
+          "note": "loko iʻa = fishpond"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 58463,
+          "note": "Loko: a pond; a lake"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "kuapā",
+      "design_gloss": "fishpond wall",
+      "verdict": "confirmed",
+      "spelling": "kuapā",
+      "meaning": "The (sea)wall of a fishpond; a loko kuapā is a walled shoreline pond.",
+      "notes": "The design is right. The Wiktionary extract leaves the kahakō off. Do not copy \"kuapa\" from it.",
+      "sources": [
+        {
+          "source": "NPS, Kaloko-Honokōhau NHP, \"Kaloko Fishpond\"",
+          "url": "https://www.nps.gov/places/kaloko-fishpond.htm",
+          "note": "loko kuapā type fishpond ... a kuapā (or seawall)"
+        },
+        {
+          "source": "Kamehameha Schools, Kumukahi, \"Loko Iʻa\" lesson",
+          "url": "https://kumukahi.org/units/ka-honua/onaepuni/loko-ia",
+          "note": "loko kuapā"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 49122,
+          "note": "Kuapa (ku'-a-pa'): wall of a fish-pond; final stress mark consistent with long ā"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 2348,
+          "note": "entry spelled \"kuapa\" (no kahakō): The rock wall of a fishpond"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "mākāhā",
+      "design_gloss": "sluice gate",
+      "verdict": "confirmed",
+      "spelling": "mākāhā",
+      "meaning": "Sluice gate of a fishpond (a fixed grate that lets small fish in and keeps big fish from leaving).",
+      "notes": "Not in the Wiktionary extract. All three vowels are long. Do not confuse it with the place name Mākaha (Waiʻanae, Oʻahu), which has only the first kahakō.",
+      "sources": [
+        {
+          "source": "NPS, Kaloko-Honokōhau NHP, \"Kaloko Fishpond\"",
+          "url": "https://www.nps.gov/places/kaloko-fishpond.htm",
+          "note": "placed a mākāhā (or sluice gate) in the channel"
+        },
+        {
+          "source": "Kamehameha Schools, Kumukahi, \"Loko Iʻa\" lesson",
+          "url": "https://kumukahi.org/units/ka-honua/onaepuni/loko-ia",
+          "note": "mākāhā: sluice gate"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 62084,
+          "note": "Makaha (ma'-ka'-ha'): gate at the outlet of a fish-pond"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101 U+0101 U+0101"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "ʻauwai",
+      "design_gloss": "irrigation ditch",
+      "verdict": "confirmed",
+      "spelling": "ʻauwai",
+      "meaning": "Ditch or watercourse, especially for irrigating loʻi; also a fishpond channel.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 3476,
+          "note": "ʻauwai: ditch"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 9617,
+          "note": "Auwai: the general name for streams used in artificial irrigation"
+        },
+        {
+          "source": "Kamehameha Schools, Kumukahi, \"Loko Iʻa\" lesson",
+          "url": "https://kumukahi.org/units/ka-honua/onaepuni/loko-ia",
+          "note": "‘auwai (ditch)"
+        },
+        {
+          "source": "NPS, Kaloko-Honokōhau NHP, \"Kaloko Fishpond\"",
+          "url": "https://www.nps.gov/places/kaloko-fishpond.htm",
+          "note": "‘auwai (channel)"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "loʻi kalo",
+      "design_gloss": "taro terrace/patch",
+      "verdict": "confirmed",
+      "spelling": "loʻi kalo",
+      "meaning": "Irrigated taro pondfield or terrace.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 3238,
+          "note": "loʻi: irrigated pond for agriculture; taro pond"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 459,
+          "note": "kalo: taro"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 58319,
+          "note": "Loi: a water taro patch"
+        },
+        {
+          "source": "Kamehameha Schools, Kumukahi, \"Loko Iʻa\" lesson",
+          "url": "https://kumukahi.org/units/ka-honua/onaepuni/loko-ia",
+          "note": "uses \"lo‘i kalo\""
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "kauhale",
+      "design_gloss": "group of houses",
+      "verdict": "confirmed",
+      "spelling": "kauhale",
+      "meaning": "Homestead: the cluster of houses of one household, each with its own job; also a village.",
+      "notes": "Not a headword in the Wiktionary extract. It has no ʻokina or kahakō.",
+      "sources": [
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 41151,
+          "note": "Kauhale: a small cluster of houses; a village"
+        },
+        {
+          "source": "Bishop Museum, Hawaiʻi Alive, \"Hale Pili\"",
+          "url": "https://www.hawaiialive.org/resource/hale-pili",
+          "note": "the kauhale, or homestead"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 2132,
+          "note": "kūlanakauhale (town) built from kau + hale, confirms the unmarked spelling"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "hale",
+      "design_gloss": "house",
+      "verdict": "confirmed",
+      "spelling": "hale",
+      "meaning": "House, building.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 218,
+          "note": "hale: house, building"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 13501,
+          "note": "Hale: a house; a habitation"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "hālau waʻa",
+      "design_gloss": "canoe house",
+      "verdict": "confirmed",
+      "spelling": "hālau waʻa",
+      "meaning": "Canoe house: a long open-ended shed for canoes.",
+      "notes": "Bishop Museum uses the near-synonym hale waʻa for a household canoe shed.",
+      "sources": [
+        {
+          "source": "Kamehameha Schools Holomoana, \"Hālau Waʻa\"",
+          "url": "https://blogs.ksbe.edu/holomoana/?p=7858",
+          "note": "Hālau Waʻa; the traditional hālau wa'a was a longhouse \"dedicated to all matters related to canoes\""
+        },
+        {
+          "source": "NPS, Puʻuhonua o Hōnaunau NHP, walking tour stop 16 \"Hālau\"",
+          "url": "https://www.nps.gov/places/walking-tour-stop-16-halau.htm",
+          "note": "hālau: long house used for meetings, storing canoes, or learning"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 2935,
+          "note": "hālau: longhouse"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 2532,
+          "note": "waʻa: canoe"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 13470,
+          "note": "Halau: a long house with openings on both ends used mostly for canoes"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101 U+02BB"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "wao akua",
+      "design_gloss": "upland realm left to the gods",
+      "verdict": "confirmed",
+      "spelling": "wao akua",
+      "meaning": "Inland forest zone believed to be inhabited by gods and spirits, rarely entered.",
+      "notes": "The gloss is fine. On the map it is a forest belt above wao kanaka (the forest people use) and below wao maʻukele and the summit zones. It is not the bare summit. Not in the Wiktionary extract.",
+      "sources": [
+        {
+          "source": "NPS, Hawaiʻi Volcanoes NP, Kīpukapuaulu Trail Guide (PDF)",
+          "url": "https://www.nps.gov/havo/planyourvisit/upload/Kipukapuaulu_Trail_Guide.pdf",
+          "note": "\"Wao Akua, the realm of the gods\"; one of seven zones: Kuahiwi, Kualono, Wao maʻukele, Wao Akua, Wao kanaka, Kula, Kahakai"
+        },
+        {
+          "source": "Office of Hawaiian Affairs, Wao Kele o Puna information sheet (PDF)",
+          "url": "https://www.oha.org/wp-content/uploads/Waokeleopuna-Information-Sheet.pdf",
+          "note": "a forest zone inhabited by the gods, \"not often entered\""
+        },
+        {
+          "source": "Hawaiʻi Association of Watershed Partnerships, cultural significance of forests",
+          "url": "https://hawp.org/?p=673",
+          "note": "the upland forest was wao akua"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 96741,
+          "note": "Waoakua: region on the side of a mountain below the waomaukele ... a region of the gods"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 474,
+          "note": "akua: god"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "kula",
+      "design_gloss": "dry upland plain",
+      "verdict": "meaning correction",
+      "spelling": "kula",
+      "meaning": "Plain, open country, field or pasture: the open, often dry land back from the shore, below the forest.",
+      "notes": "Minor. \"Plain\" and \"dry\" are right, but in the mountain-to-sea order kula sits between the shore and wao kanaka, not above the forest. Gloss it \"open plain / dry open country\" and draw it low on the slope. \"Upland\" works only in some local cases, such as Kula, Maui.",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 181,
+          "note": "kula: field, pasture; plain, open country"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 51096,
+          "note": "Kula: the open country back from the sea ... where people may live"
+        },
+        {
+          "source": "NPS, Hawaiʻi Volcanoes NP, Kīpukapuaulu Trail Guide (PDF)",
+          "url": "https://www.nps.gov/havo/planyourvisit/upload/Kipukapuaulu_Trail_Guide.pdf",
+          "note": "zone order ... Wao kanaka, Kula, Kahakai, so kula lies below the forest"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 102889,
+          "note": "place-name list glosses the land section Kula (Puna) as \"dry upland\""
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "mauka",
+      "design_gloss": "toward the mountain",
+      "verdict": "confirmed",
+      "spelling": "mauka",
+      "meaning": "Inland, toward the mountains (ma- + uka).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 906,
+          "note": "mauka: inland; upland; towards the mountains"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 65656,
+          "note": "Mauka: inland ... opposite to makai"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "makai",
+      "design_gloss": "toward the sea",
+      "verdict": "confirmed",
+      "spelling": "makai",
+      "meaning": "Seaward, toward the sea (ma- + kai).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 907,
+          "note": "makai: seaward"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 62224,
+          "note": "Makai: at or toward the sea, in distinction from mauka"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "Koʻolau",
+      "design_gloss": "windward district name, several islands",
+      "verdict": "confirmed",
+      "spelling": "Koʻolau",
+      "meaning": "Windward; the name of the windward moku on several islands.",
+      "notes": "Oʻahu splits it into Koʻolauloa and Koʻolaupoko. Koʻolau is also the name of Oʻahu's mountain range.",
+      "sources": [
+        {
+          "source": "UH Mānoa, Kahoʻiwai place-name portal, \"Koʻolau (Kauaʻi)\" (cites Wichman)",
+          "url": "https://www.hawaii.edu/kawaihapai/?p=748",
+          "note": "koʻolau \"windward\" names the side facing the trades; separate Koʻolau districts on Molokaʻi, Maui, Oʻahu (and Kauaʻi)"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 102614,
+          "note": "place-name list: Koolau, windward side, \"applied to windward districts in the Hawaiian islands\""
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 48030,
+          "note": "Koolau: general name of lands or districts on the north side of the islands"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "Kona",
+      "design_gloss": "leeward district name, several islands",
+      "verdict": "confirmed",
+      "spelling": "Kona",
+      "meaning": "Leeward; the name of the leeward moku on several islands (Hawaiʻi, Kauaʻi, Oʻahu, Molokaʻi).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 102592,
+          "note": "place-name list: Kona, leeward, \"applied to the leeward districts in the Hawaiian islands\""
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 344,
+          "note": "kona: leeward side of an island"
+        },
+        {
+          "source": "UH Mānoa, Kahoʻiwai place-name portal, \"Kauaʻi\" (lists its moku)",
+          "url": "https://www.hawaii.edu/kawaihapai/ka-pae-%ca%bbaina-o-hawai%ca%bbi-na-kai-%ca%bbewalu/kaua%ca%bbi/",
+          "note": "lists Kona (Kauaʻi) and Koʻolau (Kauaʻi) among Kauaʻi's moku"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 47692,
+          "note": "Kona: 4. the south or southwest sides of the Hawaiian islands"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "pāhoehoe",
+      "design_gloss": "smooth lava",
+      "verdict": "confirmed",
+      "spelling": "pāhoehoe",
+      "meaning": "Smooth, billowy or ropy lava.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 256,
+          "note": "pāhoehoe: a kind of lava"
+        },
+        {
+          "source": "USGS Hawaiian Volcano Observatory, Volcano Watch, \"Appreciating contributions of ʻŌlelo Hawaiʻi to volcanology\" (2024)",
+          "url": "https://www.usgs.gov/observatories/hvo/news/volcano-watch-appreciating-contributions-olelo-hawaii-volcanology",
+          "note": "smooth, sometimes ropy texture"
+        },
+        {
+          "source": "NPS, \"Lava Flow Forms\"",
+          "url": "https://www.nps.gov/articles/000/lava-flow-forms.htm",
+          "note": "smooth, billowy, or ropy surfaces"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 79460,
+          "note": "Pahoehoe: smooth shining lava"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+0101"
+    },
+    {
+      "group": "2. Map terms",
+      "proposed": "ʻaʻā",
+      "design_gloss": "rough lava",
+      "verdict": "confirmed",
+      "spelling": "ʻaʻā",
+      "meaning": "Rough, broken, clinkery lava.",
+      "notes": "Two ʻokina. NPS pages often type ‘ (U+2018); use U+02BB.",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 149,
+          "note": "ʻaʻā: aa, a type of lava"
+        },
+        {
+          "source": "USGS Hawaiian Volcano Observatory, Volcano Watch, \"Appreciating contributions of ʻŌlelo Hawaiʻi to volcanology\" (2024)",
+          "url": "https://www.usgs.gov/observatories/hvo/news/volcano-watch-appreciating-contributions-olelo-hawaii-volcanology",
+          "note": "\"rough and broken\"; spelled ʻaʻā (U+02BB ×2, ā)"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 1502,
+          "note": "Aa: stony; ground rough with broken lava"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB U+02BB U+0101"
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "lani",
+      "design_gloss": "sky",
+      "verdict": "confirmed",
+      "spelling": "lani",
+      "meaning": "Sky, heavens (also \"chief, royal\").",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 480,
+          "note": "lani: sky, heavens, firmament"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 54808,
+          "note": "Lani: the upper air; the sky"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "kai",
+      "design_gloss": "sea",
+      "verdict": "confirmed",
+      "spelling": "kai",
+      "meaning": "Sea, seawater, coast (the open deep ocean is moana).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 163,
+          "note": "kai: sea; seawater; seaside"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 36594,
+          "note": "Kai: the sea"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "ʻāina",
+      "design_gloss": "land",
+      "verdict": "confirmed",
+      "spelling": "ʻāina",
+      "meaning": "Land, earth.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1689,
+          "note": "ʻāina: land"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 3973,
+          "note": "Aina: land"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB U+0101"
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "ulu",
+      "design_gloss": "growth",
+      "verdict": "confirmed",
+      "spelling": "ulu",
+      "meaning": "Growth; to grow, increase.",
+      "notes": "Keep it ulu, with no ʻokina. ʻulu means breadfruit. Andrews (1922) writes both as \"ulu\", so do not take the spelling from it.",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 241,
+          "note": "ulu (noun): growth, grove"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 242,
+          "note": "ulu (verb): to grow"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 93821,
+          "note": "Ulu: to grow, as a plant"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1466,
+          "note": "contrast ʻulu (with ʻokina) = breadfruit"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "kanaka",
+      "design_gloss": "people",
+      "verdict": "confirmed",
+      "spelling": "kanaka",
+      "meaning": "Person, human being; humankind. The plural \"people\" is kānaka.",
+      "notes": "Fine as a field label for \"humans\". If the label is meant to read as plural \"people\", write kānaka.",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 238,
+          "note": "kanaka: man, human, human being"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1547,
+          "note": "kānaka: plural of kanaka"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 39437,
+          "note": "Kanaka: a man ... general name of men, women and children"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 39445,
+          "note": "plural form (stress ka'-na-ka): people in general"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "hana",
+      "design_gloss": "craft/work",
+      "verdict": "confirmed",
+      "spelling": "hana",
+      "meaning": "Work, labour, deed; to do, make, create.",
+      "notes": "Hana is the general word for work and making. \"Craft\" is a fair loose gloss. A narrower \"skilled craft\" compound was not verified here.",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 516,
+          "note": "hana (noun): work, labor ... activity"
+        },
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 517,
+          "note": "hana (verb): to work, do, make, manufacture, create"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 14465,
+          "note": "Hana: work; labor"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "naʻau",
+      "design_gloss": "mind/gut, seat of thought and feeling",
+      "verdict": "confirmed",
+      "spelling": "naʻau",
+      "meaning": "Intestines, gut; mind, heart, the seat of thought and feeling.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1589,
+          "note": "naʻau: guts, intestines; mind, heart"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 69397,
+          "note": "Naau: the small intestines ... supposed to be the seat of thought, of intellect and the affections"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "3. Semantic field labels",
+      "proposed": "hele",
+      "design_gloss": "motion",
+      "verdict": "confirmed",
+      "spelling": "hele",
+      "meaning": "To go, come, walk, move; a going or journey.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 530,
+          "note": "hele: to walk, move"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 16838,
+          "note": "Hele: to walk, to go, to move"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 16835,
+          "note": "Hele (n.): a going; a journey"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    },
+    {
+      "group": "4. Title words",
+      "proposed": "pōhaku",
+      "design_gloss": "stone",
+      "verdict": "confirmed",
+      "spelling": "pōhaku",
+      "meaning": "Stone, rock.",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1735,
+          "note": "pōhaku: stone, rock, mineral"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 86430,
+          "note": "Pohaku: the general name of stones, rocks"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+014D"
+    },
+    {
+      "group": "4. Title words",
+      "proposed": "huaʻōlelo",
+      "design_gloss": "word",
+      "verdict": "confirmed",
+      "spelling": "huaʻōlelo",
+      "meaning": "Word (hua \"seed, fruit\" + ʻōlelo \"language\").",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 2127,
+          "note": "huaʻōlelo: word"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 31136,
+          "note": "Huaolelo: a single word"
+        },
+        {
+          "source": "USGS Hawaiian Volcano Observatory, Volcano Watch, \"Appreciating contributions of ʻŌlelo Hawaiʻi to volcanology\" (2024)",
+          "url": "https://www.usgs.gov/observatories/hvo/news/volcano-watch-appreciating-contributions-olelo-hawaii-volcanology",
+          "note": "used in the Hawaiian-language text as \"huaʻōlelo\""
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB U+014D"
+    },
+    {
+      "group": "4. Title words",
+      "proposed": "kiʻi pōhaku",
+      "design_gloss": "petroglyph",
+      "verdict": "confirmed",
+      "spelling": "kiʻi pōhaku",
+      "meaning": "Petroglyph; image carved in stone (also a stone image).",
+      "notes": "",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 4134,
+          "note": "kiʻi pōhaku: a petroglyph; a stone statue"
+        },
+        {
+          "source": "NPS, Hawaiʻi Volcanoes NP, \"Puʻuloa Petroglyphs\" day hike",
+          "url": "https://www.nps.gov/havo/planyourvisit/hike_day_puuloa.htm",
+          "note": "kiʻi pōhaku (images carved in stone)"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 43902,
+          "note": "Kii: an image ... kii pohaku, an image of stone"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB U+014D"
+    },
+    {
+      "group": "4. Title words",
+      "proposed": "ʻalaea",
+      "design_gloss": "red ochre earth",
+      "verdict": "confirmed",
+      "spelling": "ʻalaea",
+      "meaning": "Red earth / ochre clay (iron oxide), used to colour salt, as dye, in medicine and ritual.",
+      "notes": "Not in the Wiktionary extract. Initial ʻokina, no kahakō. UH SeaLearning types the ʻokina as ‘ (U+2018); use U+02BB.",
+      "sources": [
+        {
+          "source": "UH SOEST SeaLearning, \"Traditional Ways of Knowing: Salt Harvesting\"",
+          "url": "https://sealearning.soest.hawaii.edu/sealearning/grade-5/physical-science/matter-sea/traditional-ways-knowing-salt-harvesting",
+          "note": "red ‘alaea clay ... the red color comes from iron oxide"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 5477,
+          "note": "Alaea: red dirt ... any red coloring matter; a dye for tapa; red ochre"
+        },
+        {
+          "source": "Hawaiʻi State Legislature, HCR 181 (2010), Hanapēpē salt ponds",
+          "url": "https://data.capitol.hawaii.gov/sessions/session2010/Bills/HCR181_.pdf",
+          "note": "alaea, \"a form of red dirt\""
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": "U+02BB"
+    },
+    {
+      "group": "4. Title words",
+      "proposed": "kukui",
+      "design_gloss": "candlenut; soot used for ink/dye",
+      "verdict": "confirmed",
+      "spelling": "kukui",
+      "meaning": "Candlenut tree and nut (Aleurites moluccanus); also torch or lamp. Soot from burnt nuts made a black pigment.",
+      "notes": "\"Ink\" means tattoo pigment and paint for kapa and canoes, not writing ink. There was no writing before contact.",
+      "sources": [
+        {
+          "source": "Wiktionary via Kaikki extract (local)",
+          "file": "roots/.cache/kaikki-haw.jsonl",
+          "line": 1320,
+          "note": "kukui: candlenut tree and fruit; torch, light"
+        },
+        {
+          "source": "Andrews, rev. Parker, A Dictionary of the Hawaiian Language (1922), OCR (local)",
+          "file": "roots/.cache/andrews-parker1922.txt",
+          "line": 50868,
+          "note": "Kukui: candlenut tree; nut burned for lights; root bark with charcoal for coloring canoes black"
+        },
+        {
+          "source": "Canoe Plants of Ancient Hawaiʻi, \"Kukui\"",
+          "url": "https://canoeplants.com/kukui.html",
+          "note": "soot (pau) of burned nuts gave a black dye for tattooing and for painting canoes and tapa"
+        },
+        {
+          "source": "BYU-Hawaiʻi Herbarium digital exhibit, \"Kukui\"",
+          "url": "https://digitalcollections.byuh.edu/exhibit/herbarium/kukui/",
+          "note": "kukui used for dye in kākau (tattooing), kapa and waʻa"
+        }
+      ],
+      "spelling_nfc_codepoints_non_ascii": ""
+    }
+  ],
+  "star_compass_layout": [
+    {
+      "azimuth_deg": 0.0,
+      "span_deg": [
+        354.375,
+        5.625
+      ],
+      "house": "ʻĀkau",
+      "quadrant": "",
+      "full_name": "ʻĀkau",
+      "english_point": "N"
+    },
+    {
+      "azimuth_deg": 11.25,
+      "span_deg": [
+        5.625,
+        16.875
+      ],
+      "house": "Haka",
+      "quadrant": "Koʻolau",
+      "full_name": "Haka Koʻolau",
+      "english_point": "N by E"
+    },
+    {
+      "azimuth_deg": 22.5,
+      "span_deg": [
+        16.875,
+        28.125
+      ],
+      "house": "Nā Leo",
+      "quadrant": "Koʻolau",
+      "full_name": "Nā Leo Koʻolau",
+      "english_point": "NNE"
+    },
+    {
+      "azimuth_deg": 33.75,
+      "span_deg": [
+        28.125,
+        39.375
+      ],
+      "house": "Nālani",
+      "quadrant": "Koʻolau",
+      "full_name": "Nālani Koʻolau",
+      "english_point": "NE by N"
+    },
+    {
+      "azimuth_deg": 45.0,
+      "span_deg": [
+        39.375,
+        50.625
+      ],
+      "house": "Manu",
+      "quadrant": "Koʻolau",
+      "full_name": "Manu Koʻolau",
+      "english_point": "NE"
+    },
+    {
+      "azimuth_deg": 56.25,
+      "span_deg": [
+        50.625,
+        61.875
+      ],
+      "house": "Noio",
+      "quadrant": "Koʻolau",
+      "full_name": "Noio Koʻolau",
+      "english_point": "NE by E"
+    },
+    {
+      "azimuth_deg": 67.5,
+      "span_deg": [
+        61.875,
+        73.125
+      ],
+      "house": "ʻĀina",
+      "quadrant": "Koʻolau",
+      "full_name": "ʻĀina Koʻolau",
+      "english_point": "ENE"
+    },
+    {
+      "azimuth_deg": 78.75,
+      "span_deg": [
+        73.125,
+        84.375
+      ],
+      "house": "Lā",
+      "quadrant": "Koʻolau",
+      "full_name": "Lā Koʻolau",
+      "english_point": "E by N"
+    },
+    {
+      "azimuth_deg": 90.0,
+      "span_deg": [
+        84.375,
+        95.625
+      ],
+      "house": "Hikina",
+      "quadrant": "",
+      "full_name": "Hikina",
+      "english_point": "E"
+    },
+    {
+      "azimuth_deg": 101.25,
+      "span_deg": [
+        95.625,
+        106.875
+      ],
+      "house": "Lā",
+      "quadrant": "Malanai",
+      "full_name": "Lā Malanai",
+      "english_point": "E by S"
+    },
+    {
+      "azimuth_deg": 112.5,
+      "span_deg": [
+        106.875,
+        118.125
+      ],
+      "house": "ʻĀina",
+      "quadrant": "Malanai",
+      "full_name": "ʻĀina Malanai",
+      "english_point": "ESE"
+    },
+    {
+      "azimuth_deg": 123.75,
+      "span_deg": [
+        118.125,
+        129.375
+      ],
+      "house": "Noio",
+      "quadrant": "Malanai",
+      "full_name": "Noio Malanai",
+      "english_point": "SE by E"
+    },
+    {
+      "azimuth_deg": 135.0,
+      "span_deg": [
+        129.375,
+        140.625
+      ],
+      "house": "Manu",
+      "quadrant": "Malanai",
+      "full_name": "Manu Malanai",
+      "english_point": "SE"
+    },
+    {
+      "azimuth_deg": 146.25,
+      "span_deg": [
+        140.625,
+        151.875
+      ],
+      "house": "Nālani",
+      "quadrant": "Malanai",
+      "full_name": "Nālani Malanai",
+      "english_point": "SE by S"
+    },
+    {
+      "azimuth_deg": 157.5,
+      "span_deg": [
+        151.875,
+        163.125
+      ],
+      "house": "Nā Leo",
+      "quadrant": "Malanai",
+      "full_name": "Nā Leo Malanai",
+      "english_point": "SSE"
+    },
+    {
+      "azimuth_deg": 168.75,
+      "span_deg": [
+        163.125,
+        174.375
+      ],
+      "house": "Haka",
+      "quadrant": "Malanai",
+      "full_name": "Haka Malanai",
+      "english_point": "S by E"
+    },
+    {
+      "azimuth_deg": 180.0,
+      "span_deg": [
+        174.375,
+        185.625
+      ],
+      "house": "Hema",
+      "quadrant": "",
+      "full_name": "Hema",
+      "english_point": "S"
+    },
+    {
+      "azimuth_deg": 191.25,
+      "span_deg": [
+        185.625,
+        196.875
+      ],
+      "house": "Haka",
+      "quadrant": "Kona",
+      "full_name": "Haka Kona",
+      "english_point": "S by W"
+    },
+    {
+      "azimuth_deg": 202.5,
+      "span_deg": [
+        196.875,
+        208.125
+      ],
+      "house": "Nā Leo",
+      "quadrant": "Kona",
+      "full_name": "Nā Leo Kona",
+      "english_point": "SSW"
+    },
+    {
+      "azimuth_deg": 213.75,
+      "span_deg": [
+        208.125,
+        219.375
+      ],
+      "house": "Nālani",
+      "quadrant": "Kona",
+      "full_name": "Nālani Kona",
+      "english_point": "SW by S"
+    },
+    {
+      "azimuth_deg": 225.0,
+      "span_deg": [
+        219.375,
+        230.625
+      ],
+      "house": "Manu",
+      "quadrant": "Kona",
+      "full_name": "Manu Kona",
+      "english_point": "SW"
+    },
+    {
+      "azimuth_deg": 236.25,
+      "span_deg": [
+        230.625,
+        241.875
+      ],
+      "house": "Noio",
+      "quadrant": "Kona",
+      "full_name": "Noio Kona",
+      "english_point": "SW by W"
+    },
+    {
+      "azimuth_deg": 247.5,
+      "span_deg": [
+        241.875,
+        253.125
+      ],
+      "house": "ʻĀina",
+      "quadrant": "Kona",
+      "full_name": "ʻĀina Kona",
+      "english_point": "WSW"
+    },
+    {
+      "azimuth_deg": 258.75,
+      "span_deg": [
+        253.125,
+        264.375
+      ],
+      "house": "Lā",
+      "quadrant": "Kona",
+      "full_name": "Lā Kona",
+      "english_point": "W by S"
+    },
+    {
+      "azimuth_deg": 270.0,
+      "span_deg": [
+        264.375,
+        275.625
+      ],
+      "house": "Komohana",
+      "quadrant": "",
+      "full_name": "Komohana",
+      "english_point": "W"
+    },
+    {
+      "azimuth_deg": 281.25,
+      "span_deg": [
+        275.625,
+        286.875
+      ],
+      "house": "Lā",
+      "quadrant": "Hoʻolua",
+      "full_name": "Lā Hoʻolua",
+      "english_point": "W by N"
+    },
+    {
+      "azimuth_deg": 292.5,
+      "span_deg": [
+        286.875,
+        298.125
+      ],
+      "house": "ʻĀina",
+      "quadrant": "Hoʻolua",
+      "full_name": "ʻĀina Hoʻolua",
+      "english_point": "WNW"
+    },
+    {
+      "azimuth_deg": 303.75,
+      "span_deg": [
+        298.125,
+        309.375
+      ],
+      "house": "Noio",
+      "quadrant": "Hoʻolua",
+      "full_name": "Noio Hoʻolua",
+      "english_point": "NW by W"
+    },
+    {
+      "azimuth_deg": 315.0,
+      "span_deg": [
+        309.375,
+        320.625
+      ],
+      "house": "Manu",
+      "quadrant": "Hoʻolua",
+      "full_name": "Manu Hoʻolua",
+      "english_point": "NW"
+    },
+    {
+      "azimuth_deg": 326.25,
+      "span_deg": [
+        320.625,
+        331.875
+      ],
+      "house": "Nālani",
+      "quadrant": "Hoʻolua",
+      "full_name": "Nālani Hoʻolua",
+      "english_point": "NW by N"
+    },
+    {
+      "azimuth_deg": 337.5,
+      "span_deg": [
+        331.875,
+        343.125
+      ],
+      "house": "Nā Leo",
+      "quadrant": "Hoʻolua",
+      "full_name": "Nā Leo Hoʻolua",
+      "english_point": "NNW"
+    },
+    {
+      "azimuth_deg": 348.75,
+      "span_deg": [
+        343.125,
+        354.375
+      ],
+      "house": "Haka",
+      "quadrant": "Hoʻolua",
+      "full_name": "Haka Hoʻolua",
+      "english_point": "N by W"
+    }
+  ],
+  "alternatives_and_doubts": [
+    {
+      "item": "Nālani spelling",
+      "detail": "PVS diagram, archive, 1992 release, hokulea.com and the 2021 UH dissertation all write it as one word (Nālani / Nalani). Karjala (2019 UH thesis) writes \"nā lani\".",
+      "sources": [
+        "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+        "https://archive.hokulea.com/navigate/stars.html",
+        "https://www.ulukau.org/pagespvs/cgi-bin/pagespvs?a=d&d=PVSA-008_0096.1.19",
+        "https://hdl.handle.net/10125/81614",
+        "https://hdl.handle.net/10125/66205"
+      ]
+    },
+    {
+      "item": "Nā Leo spelling",
+      "detail": "Two words in the PVS diagram, the archive, the 1992 release and the UH dissertation. \"Nāleo\" (one word) in current hokulea.com prose. \"NaLeo\" once in the archive star-line tables.",
+      "sources": [
+        "https://worldwidevoyage.hokulea.com/wp-content/uploads/2014/04/compass_with_stars.gif",
+        "https://archive.hokulea.com/navigate/stars.html",
+        "https://worldwidevoyage.hokulea.com/education-at-sea/polynesian-navigation/the-star-compass/",
+        "https://archive.hokulea.com/ike/hookele/hawaiian_star_lines.html"
+      ]
+    },
+    {
+      "item": "Origin of the house names",
+      "detail": "Devised by Nainoa Thompson (PVS archive, citing Kyselka, An Ocean in Mind, pp. 96-97). The cardinal and quadrant names are older Hawaiian words; the quadrant assignment is a PVS convention.",
+      "sources": [
+        "https://archive.hokulea.com/navigate/stars.html"
+      ]
+    },
+    {
+      "item": "Mau Piailug's Satawalese star compass",
+      "detail": "The Micronesian compass Thompson's system is based on. Its 32 points are named for the stars that rise and set there (rising = Tan, setting = Tupul). It is a different system, not a variant spelling.",
+      "sources": [
+        "https://archive.hokulea.com/navigate/mauscompass.gif"
+      ]
+    },
+    {
+      "item": "Wind meanings behind the quadrant names",
+      "detail": "Andrews calls Malanai a name of the gentle NE trade wind and Hoʻolua the strong north wind. Pukui-Elbert (cited by PVS) gives Kiu as the NW wind. The quadrant names are PVS labels, not literal wind bearings.",
+      "sources": [
+        "https://archive.hokulea.com/navigate/stars.html"
+      ]
+    },
+    {
+      "item": "Typos in PVS archive tables",
+      "detail": "Sharatan and Hamal are listed as \"'Aina-Koʻolau and La-Hoʻolua\", which contradicts the same-house rule. These are transcription slips; the rule is stated plainly on the same site.",
+      "sources": [
+        "https://archive.hokulea.com/ike/hookele/hawaiian_star_lines.html"
+      ]
+    }
+  ]
+}
