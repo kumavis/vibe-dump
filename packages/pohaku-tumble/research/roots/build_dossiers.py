@@ -89,7 +89,7 @@ def contexts(phrase, k=6):
 
 
 pollex = collections.defaultdict(list)
-pp = os.environ.get('POLLEX') or os.path.join(HERE, '..', 'pollex', 'hawaiian-reflexes.json')
+pp = os.environ.get('POLLEX') or os.path.join(C, 'pollex', 'hawaiian-reflexes.json')
 if os.path.exists(pp):
     for x in json.load(open(pp)):
         pollex[nfc(x.get('haw') or '')].append({k: x.get(k) for k in ('haw_gloss', 'level', 'proto', 'proto_gloss', 'cognates')})

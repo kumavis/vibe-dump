@@ -39,7 +39,7 @@ Nothing in `roots/` should be treated as checked against Pukui & Elbert.
 | puke.ulukau.org, baibala.org (Ulukau's books and the Hawaiian Bible) | text in modern spelling | **no** — same bot challenge |
 | Wiktionary, via kaikki.org's wiktextract dump (CC BY-SA 4.0) | modern spelling, glosses, root + root analyses, homographs | yes: the only modern-spelling source reachable in bulk. Crowd-edited, so secondary. |
 | Lorrin Andrews, *A Dictionary of the Hawaiian Language*, revised by Henry H. Parker (1922), archive.org OCR (public domain) | about 15,000 entries, often with the parts in brackets: *Waimaka … [Wai, water, and maka, eyes.]* | yes: attests a word, its parts and its meaning. It writes no ʻokina or kahakō, and some of its etymologies are guesses ("Po, intensive", "Ka, the"). |
-| POLLEX-Online (Greenhill & Clark 2011) | Proto-Polynesian etyma and cognates | yes. It confirms the homograph cases below (*lua* "pit" < PPN \*lua, *lua* "two" < PPN \*rua; *ao* "day" < \*qaho, *ao* "cloud" < \*qao). The full Hawaiian table for `roots.tsv` follows separately. |
+| POLLEX-Online (Greenhill & Clark 2011), crawled with [`pollex/`](./pollex) | Proto-Polynesian etyma and cognates for 2,258 Hawaiian reflexes — **98% of them cited to Pukui & Elbert 1986**, so where a word is in POLLEX its spelling there is Pukui & Elbert's (POLLEX writes ʔ and doubled vowels; converted) | yes: the one indirect Pukui & Elbert check available. It confirms the homograph cases below (*lua* "pit" < PPN \*lua, *lua* "two" < PPN \*rua; *ao* "day" < \*qaho, *ao* "cloud" < \*qao). Data kept out of git: no open licence is stated. |
 | Hawaiian Wikipedia (dumps.wikimedia.org) | whether a spelling is used in running modern text, as one word or two | yes, counts only |
 
 ## Method
@@ -77,6 +77,21 @@ Nothing in `roots/` should be treated as checked against Pukui & Elbert.
    pair that hasn't turned in the last three ticks. 1,500 ticks per run, ten
    seeds per row. `roots/sim/` patches only what the test needs: the lexicon,
    the grid, a guard on the deal loop.
+
+7. **Pukui & Elbert via POLLEX.** `pe_via_pollex` in both tables compares a
+   spelling with POLLEX's (Pukui & Elbert-sourced) form, ignoring ʻokina,
+   kahakō and spaces.
+   - **Roots:** 394 of the 476 core roots are in POLLEX, and 380 match. The 14
+     that differ are mostly my mapping picking the wrong homograph (*ʻahā*
+     "four" for *ʻaha*, *aina* for *ʻaina*).
+   - **Compounds:** 58 core candidates are in POLLEX, and 37 match. The 21 that
+     differ are the two failure modes `A*` was warned for:
+     - Pukui & Elbert writes two words where Andrews wrote one: *wai puna*,
+       *maka mua*, *pale kai*, *lau hala*, *make wai*, *lima kuhi*;
+     - the pieced-together ʻokina or kahakō is wrong: *makaʻala*, *makapōuli*,
+       *uahi*, *kupua*, *keʻahakahaka*.
+   - `roots.tsv`'s `protoforms` column lists every POLLEX row for that spelling,
+     whatever the sense. *kū* shows a night name and "to cut", not "to stand".
 
 What survives steps 4–5 is the **core**: 905 candidates (70 `W`, 36 `W+A`,
 22 `A`, 777 `A*`) over 476 roots.
@@ -255,7 +270,10 @@ cd packages/pohaku-tumble/research/roots
 ./fetch_sources.sh            # Wiktionary dump, Andrews–Parker OCR, Hawaiian Wikipedia → .cache/
 python3 extract_wiktionary.py # → .cache/wiktionary.json
 python3 extract_andrews.py    # → .cache/andrews.json
+(cd ../pollex && python3 crawl_language.py && python3 crawl_entries.py && python3 build.py)  # POLLEX, ~45 min at 1 req/s
 python3 build_lexicon.py      # → compounds.tsv, roots.tsv, .cache/tiers/
+python3 build_curves.py       # → .cache/tiers/curve-*.json
+python3 build_dossiers.py     # → .cache/dossiers/ (per-word evidence for review)
 ./sim/run.sh                  # → viability.tsv (Node; reads ../../../jukugo-tumble/src)
 ```
 

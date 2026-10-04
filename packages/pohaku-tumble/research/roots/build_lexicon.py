@@ -5,7 +5,10 @@ Inputs (from fetch_sources.sh, extract_wiktionary.py, extract_andrews.py):
   .cache/wiktionary.json   Wiktionary headwords + root+root analyses
   .cache/andrews.json      Andrews–Parker (1922) bracketed etymologies
   .cache/hawwiki.xml       Hawaiian Wikipedia, for spellings in running text
-  ../pollex/hawaiian-reflexes.json   optional: POLLEX protoforms for roots
+  .cache/pollex/hawaiian-reflexes.json   POLLEX's Hawaiian reflexes (../pollex/),
+                           98% of them cited to Pukui & Elbert 1986 — so where a
+                           word or root is in POLLEX, its spelling there is
+                           Pukui & Elbert's
 
 Outputs:
   compounds.tsv            every candidate, its evidence, flags, and blank
@@ -35,6 +38,8 @@ A = json.load(open(os.path.join(C, 'andrews.json')))
 heads = W['heads']
 
 LEXPOS = {'noun', 'verb', 'adj', 'adv', 'num'}
+PX = os.path.join(C, 'pollex', 'hawaiian-reflexes.json')
+POLLEX = json.load(open(PX)) if os.path.exists(PX) else []
 STOP = set('the a an to of in on at as for and or is be by it with from that this which his her its'.split())
 
 
@@ -69,6 +74,29 @@ def homographs(word):
     for h in lexical(word):
         groups.setdefault(h['etym'], []).extend(h['glosses'])
     return list(groups.items())
+
+
+def pollex_forms(word):
+    """Pukui & Elbert's spelling(s), via POLLEX, of anything spelled like `word` once ʻokina,
+    kahakō and spaces are ignored."""
+    return sorted(PE_FORMS.get(strip(word).replace(' ', ''), ()))
+
+
+PE_FORMS = collections.defaultdict(set)
+PE_ROWS = collections.defaultdict(list)
+for x in POLLEX:
+    for f in (x.get('haw_forms') or [x.get('haw')]):
+        if f:
+            f = nfc(f.lower())
+            PE_FORMS[strip(f).replace(' ', '')].add(f)
+            PE_ROWS[f].append(x)
+
+
+def pe_check(word):
+    forms = pollex_forms(word)
+    if not forms:
+        return ''
+    return 'match' if word in forms else 'differs: ' + ' / '.join(forms)
 
 
 index = collections.defaultdict(list)
@@ -293,7 +321,7 @@ for keep in (60, 35):
         tiers[f'core-{keep}pct-r{k}'] = [{**r, 'parts': morpheme_parts(r)} for r in sub]
 
 os.makedirs(os.path.join(C, 'tiers'), exist_ok=True)
-for k, v in tiers.items():
+for k, v in (tiers.items() if not os.environ.get('NO_TIERS') else ()):
     json.dump([{'word': r['word'], 'parts': r['parts']} for r in v],
               open(os.path.join(C, 'tiers', f'{k}.json'), 'w'), ensure_ascii=False)
 
@@ -333,7 +361,7 @@ def tsv(v):
     return re.sub(r'[\t\n]+', ' ', str(v if v is not None else '')).strip()
 
 
-cols = ['n', 'word', 'split', 'evidence', 'status', 'flags', 'degree', 'hawwiki_1w', 'hawwiki_2w',
+cols = ['n', 'word', 'split', 'evidence', 'status', 'flags', 'degree', 'pe_via_pollex', 'hawwiki_1w', 'hawwiki_2w',
         'root_a', 'root_b', 'wiktionary_gloss', 'andrews_1922', 'andrews_definition',
         'pe_found', 'pe_spelling', 'pe_one_or_two_words', 'pe_meaning_ok', 'review_note']
 with open(os.path.join(HERE, 'compounds.tsv'), 'w', encoding='utf-8') as f:
@@ -348,7 +376,7 @@ with open(os.path.join(HERE, 'compounds.tsv'), 'w', encoding='utf-8') as f:
             flags.append('homograph root: sense unresolved')
         flags += r['notes']
         row = [n, r['word'], '·'.join(r['parts']), '+'.join(sorted(r['evidence'], key=ev_order.get)), status(r),
-               ' | '.join(flags), r['degree'] if r['degree'] is not None else '', r['hawwiki_one'], r['hawwiki_two'],
+               ' | '.join(flags), r['degree'] if r['degree'] is not None else '', pe_check(r['word']), r['hawwiki_one'], r['hawwiki_two'],
                f'{r["parts"][0]}: {gloss_of(r, 0)}', f'{r["parts"][1]}: {gloss_of(r, 1)}', r['wikt_gloss'],
                (f'{r["andrews"]} [{r["andrews_ety"]}]' if r.get('andrews') else ''), r.get('andrews_def', '')[:140],
                '', '', '', '', '']
@@ -357,28 +385,25 @@ with open(os.path.join(HERE, 'compounds.tsv'), 'w', encoding='utf-8') as f:
 
 # ── 7. the root glossary ──────────────────────────────────────────────────
 
-pollex = {}
-pp = os.path.join(HERE, '..', 'pollex', 'hawaiian-reflexes.json')
-if os.path.exists(pp):
-    for x in json.load(open(pp)):
-        pollex.setdefault(nfc(x.get('haw') or ''), []).append(x)
-
 use = collections.defaultdict(lambda: [0, 0])
 for r in core:
     use[r['parts'][0]][0] += 1
     use[r['parts'][1]][1] += 1
 with open(os.path.join(HERE, 'roots.tsv'), 'w', encoding='utf-8') as f:
-    f.write('root\tfirst\tsecond\thomographs\tglosses\tloan\tflag\tpollex\n')
+    f.write('root\tfirst\tsecond\thomographs\tglosses\tloan\tflag\tpe_via_pollex\tprotoforms\n')
     for root, (a, b) in sorted(use.items(), key=lambda x: -(x[1][0] + x[1][1])):
         hs = homographs(root)
         gl = ' ‖ '.join('; '.join(g)[:60] for _, g in hs)
         flag = next((m.group(0) for t in senses(root) for m in [SENSITIVE.search(t)] if m), '')
-        px = ' ‖ '.join(sorted({f'{x.get("level", "")} {x.get("proto", "")}'.strip() for x in pollex.get(root, [])}))
-        f.write('\t'.join(tsv(v) for v in [root, a, b, len(hs), gl, 'loan' if is_loan(root) else '', flag, px]) + '\n')
+        px = ' ‖ '.join(sorted({f'{x.get("level", "")} {x.get("proto_ng") or x.get("proto", "")} "{(x.get("proto_gloss") or "")[:40]}"'
+                                 for x in PE_ROWS.get(root, [])}))
+        f.write('\t'.join(tsv(v) for v in [root, a, b, len(hs), gl, 'loan' if is_loan(root) else '', flag, pe_check(root), px]) + '\n')
 
 print('andrews:', dict(andrews_stats))
 print('candidates:', len(allc), dict(collections.Counter('+'.join(sorted(r['evidence'], key=ev_order.get)) for r in allc)))
 print('status:', dict(collections.Counter(status(r) for r in allc)))
 for k, v in tiers.items():
     print(f'tier {k:<20} {len(v):>5}')
-print('roots in core:', len(use), '| with POLLEX protoform:', sum(1 for r in use if r in pollex))
+print('roots in core:', len(use), '| in POLLEX with this spelling:', sum(1 for r in use if pe_check(r) == 'match'),
+      '| POLLEX spells differently:', sum(1 for r in use if pe_check(r).startswith('differs')))
+print('candidates in POLLEX:', sum(1 for r in core if pe_check(r['word'])), '| same spelling:', sum(1 for r in core if pe_check(r['word']) == 'match'))

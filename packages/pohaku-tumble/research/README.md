@@ -22,10 +22,14 @@ no `package.json` here, so the gallery build skips this directory.
   with evidence, flags, root senses, Andrews–Parker's etymology, and blank
   columns for the Pukui & Elbert check.
 - [`roots/roots.tsv`](./roots/roots.tsv) — the 476 roots the candidates use,
-  with their homographs.
+  with their homographs, Proto-Polynesian protoforms, and a spelling check
+  against Pukui & Elbert via POLLEX.
 - [`roots/viability.tsv`](./roots/viability.tsv) — the simulation results.
 - `roots/*.py`, `roots/fetch_sources.sh`, `roots/sim/` — rebuild all of it
   (see ROOTS.md, "Rebuilding").
+- [`pollex/`](./pollex) — the POLLEX-Online crawler (2,258 Hawaiian reflexes,
+  98% cited to Pukui & Elbert). Its data stays in `roots/.cache/pollex/` (no
+  open licence). It gives `pe_via_pollex` in both tables.
 
 ## Option A: syllables
 
