@@ -77,10 +77,13 @@ export function buildIsland(seed, bounds) {
   coast.sort((a, b) => Math.abs(area(b.pts)) - Math.abs(area(a.pts)))
   const shore = coast[0].pts
 
-  const pond = fishpond(grid, shore, streams[sites.fishpond].at(-1), k, rand)
-  const halau = canoeHouse(grid, shore, streams[sites.halau].at(-1), k, rand)
-  const kauhale = houseLots(grid, shore, streams[sites.kauhale].at(-1), k, rand)
-  const loi = taroTerraces(streams[sites.loi], shape, k, rand)
+  // Each place stays inside its own ahupuaʻa: clear of the ridges either
+  // side of its valley, and of the valley's stream.
+  const within = (i) => ({ stream: streams[i], ridges: [ridges[(i - 1 + ridges.length) % ridges.length], ridges[i]] })
+  const pond = fishpond(grid, shore, within(sites.fishpond), k, rand)
+  const halau = canoeHouse(grid, shore, within(sites.halau), k, rand)
+  const kauhale = houseLots(grid, shore, within(sites.kauhale), k, rand)
+  const loi = taroTerraces(shape, within(sites.loi), k, rand)
 
   // Distance from land out to sea, with the fishpond's wall counted as land so
   // the waterlines run round it; and from the sea in over the land.
@@ -229,14 +232,14 @@ function placeCompass(bounds, k, rand) {
 // placed to fit the floor, clear of the compass.
 function shapeIsland(bounds, compass, k, rand) {
   const N = 720
-  const m = 1.4 * k
+  const m = 2 * k
   const R = { x0: bounds.x0 + m, x1: bounds.x1 - m, z0: bounds.z0 + m, z1: bounds.z1 - m }
   const A = 1
   const B = ((R.z1 - R.z0) / (R.x1 - R.x0)) * (0.92 + 0.12 * rand())
   const so = [(rand() - 0.5) * 0.3, (rand() - 0.5) * 0.24 * B]
   const shoulder = rand() * TAU
   const lobe = 0.1 + 0.08 * rand()
-  const harmonics = [2, 3, 4, 5, 7].map((n) => [n, (0.05 + 0.04 * rand()) / Math.sqrt(n), rand() * TAU])
+  const harmonics = [2, 3, 4, 5, 7, 9, 12, 16].map((n) => [n, (0.05 + 0.04 * rand()) / Math.pow(n, 0.75), rand() * TAU])
   const unit = new Float64Array(N)
   const pts = []
   for (let i = 0; i < N; i++) {
@@ -351,18 +354,28 @@ function cutValleys(shape, u, rand) {
       )
     }
   }
+  // Neighbouring valleys bend the same way, so they never close up.
+  const bendPhase = rand() * TAU
   for (const v of valleys) {
-    // A valley wanders a little on its way down.
-    v.wobble = 0.02 + 0.03 * rand()
+    v.bend = 0.24 * Math.sin(2 * v.bearing + bendPhase) + 0.08 * (rand() - 0.5)
+    v.wobble = 0.015 + 0.025 * rand()
     v.phase = rand() * TAU
     v.freq = 4 + 4 * rand()
+    // How much of a bay the valley cuts where it meets the sea.
+    // Most windward valleys reach the sea in a small cove; now and then one
+    // has cut a real bay.
+    v.mouth = v.windward ? (rand() < 0.2 ? 0.6 + 0.2 * rand() : 0.08 + 0.4 * rand()) : 0.4 + 0.5 * rand()
     // Beyond this far across, the valley no longer cuts the slope.
     v.reach = 3 * v.width * 1.2
   }
   return valleys
 }
 
-const axisOf = (v, rho) => v.bearing + v.wobble * Math.sin(rho * v.freq + v.phase)
+// A valley's line at height ρ: it bends a little as it descends, and wanders.
+const axisOf = (v, rho) =>
+  v.bearing +
+  v.bend * Math.max(0, rho - v.head) ** 2 +
+  v.wobble * (Math.sin(rho * v.freq + v.phase) + 0.5 * Math.sin(rho * v.freq * 2.3 + v.phase * 1.7))
 
 // Height at any point: the two shields, a little low-frequency noise, and the
 // valleys cut into them. 1 at the summit, 0 at the coast, negative at sea.
@@ -382,12 +395,14 @@ function heightFunction(shape, valleys, seed) {
     h += shoulder.k * Math.exp(-(sx * sx + sz * sz) / (shoulder.s * shoulder.s)) * smoothstep(1.02, 0.6, rho)
     h += 0.035 * (noise(x / scale, z / scale) + 0.5 * noise(x / (scale * 0.45) + 17, z / (scale * 0.45) - 9))
     for (const v of valleys) {
-      if (rho < v.head || Math.abs(adiff(b, v.bearing)) * r > v.reach + v.wobble * r) continue
+      if (rho < v.head || Math.abs(adiff(b, v.bearing)) * r > v.reach + (1.5 * v.wobble + Math.abs(v.bend)) * r) continue
       const across = r * adiff(b, axisOf(v, rho))
       const sigma = v.width * (0.5 + 0.6 * rho)
       if (Math.abs(across) > 3 * sigma) continue
       const along =
-        smoothstep(v.head, v.head + 0.16, rho) * (1 - 0.5 * smoothstep(0.82, 1, rho)) * (1 - smoothstep(1.04, 1.16, rho))
+        smoothstep(v.head, v.head + 0.16, rho) *
+        (1 - (1 - v.mouth) * smoothstep(0.82, 1, rho)) *
+        (1 - smoothstep(1.04, 1.16, rho))
       h -= v.depth * along * Math.exp(-((across / sigma) ** 2))
     }
     return h
@@ -464,23 +479,26 @@ function traceValley(shape, heightAt, v, r0, k) {
 }
 
 // The ridge between valleys a and b: from the edge of the upland down along
-// the crest to the shore — the ahupuaʻa boundary.
+// the crest to the shore — the ahupuaʻa boundary. At each step it looks for
+// the highest ground between the two valleys as they stand at that height.
 function traceRidge(shape, heightAt, upland, a, b, k) {
   const { S } = shape
   const step = 0.12 * k
-  const gap = angleSpan(a.bearing, b.bearing)
-  let c = wrap(a.bearing + gap / 2)
+  let c = wrap(a.bearing + angleSpan(a.bearing, b.bearing) / 2)
   const pts = []
   let prev = null
   for (let r = upland.radiusAt(c); r < shape.rcAt(c) * 1.3; r += step) {
-    const lo = axisOf(a, r / shape.rcAt(c)) + gap * 0.22
-    const span = gap * 0.56
+    const rho = r / shape.rcAt(c)
+    const left = axisOf(a, rho)
+    const gap = angleSpan(left, axisOf(b, rho))
+    const lo = left + gap * 0.2
+    const span = gap * 0.6
     const off = angleSpan(lo, c)
     if (off > span) c = off - span < TAU - off ? lo + span : lo
     let best = -Infinity
     let bc = c
     for (let j = -6; j <= 6; j++) {
-      const t = c + (j / 6) * (0.6 * step) / r
+      const t = c + ((j / 6) * (0.6 * step)) / r
       if (angleSpan(lo, t) > span) continue
       const [dx, dz] = dir(t)
       const lateral = (t - c) * r
@@ -529,20 +547,25 @@ function offshore(grid, seaDist, line, reach, k) {
 // ── the eight places ────────────────────────────────────────────────────
 
 // Which valley each place goes in: the stream and the loʻi in windward
-// valleys, the lava down a leeward gulch, the pond on the sheltered leeward
-// shore, the canoe house and the houses at valley mouths. Each in its own
-// ahupuaʻa, with another between them where the island allows.
+// valleys, the lava down a leeward gulch, the pond, the canoe house and the
+// houses on the wider, sheltered leeward shore. Each in its own ahupuaʻa,
+// with another between them where the island allows.
 function chooseSites(valleys, rand) {
   const n = valleys.length
   const used = []
   const jitter = () => (rand() - 0.5) * 30
   const apart = (i, j) => Math.min(Math.abs(i - j), n - Math.abs(i - j))
-  const pick = (want, ok) => {
-    for (const gap of [2, 1]) {
+  const pick = (want, prefer) => {
+    for (const [strict, gap] of [
+      [true, 2],
+      [true, 1],
+      [false, 2],
+      [false, 1],
+    ]) {
       let best = -1
       let bestScore = Infinity
       valleys.forEach((v, i) => {
-        if (!ok(v) || used.some((j) => apart(i, j) < gap)) return
+        if ((strict && !prefer(v)) || used.some((j) => apart(i, j) < gap)) return
         const score = Math.abs(adiff(v.bearing, want * DEG)) + (v.windward ? -v.depth : 0)
         if (score < bestScore) {
           best = i
@@ -556,12 +579,14 @@ function chooseSites(valleys, rand) {
     }
     throw new Error('island: no valley left for a place')
   }
-  const stream = pick(60 + jitter(), (v) => v.windward)
-  const loi = pick(rand() < 0.5 ? 105 : 15, (v) => v.windward)
-  const lava = pick(245 + jitter(), (v) => !v.windward)
-  const fishpond = pick(195 + jitter(), (v) => !v.windward)
-  const halau = pick(160 + jitter(), () => true)
-  const kauhale = pick(130 + jitter(), () => true)
+  const windward = (v) => v.windward
+  const leeward = (v) => !v.windward
+  const stream = pick(60 + jitter(), windward)
+  const loi = pick(rand() < 0.5 ? 105 : 15, windward)
+  const lava = pick(245 + jitter(), leeward)
+  const fishpond = pick(195 + jitter(), leeward)
+  const halau = pick(160 + jitter(), leeward)
+  const kauhale = pick(140 + jitter(), leeward)
   return { stream, loi, lava, fishpond, halau, kauhale }
 }
 
@@ -581,10 +606,10 @@ function lavaFlow(shape, heightAt, upland, v, k, rand) {
   const [ex, ez] = path.at(-1)
   const [px, pz] = path.at(-3)
   const el = Math.hypot(ex - px, ez - pz) || 1
-  for (let s = 0.12 * k; s <= 0.7 * k; s += 0.12 * k) path.push([ex + ((ex - px) / el) * s, ez + ((ez - pz) / el) * s])
+  for (let s = 0.12 * k; s <= 0.45 * k; s += 0.11 * k) path.push([ex + ((ex - px) / el) * s, ez + ((ez - pz) / el) * s])
   const axis = resample(chaikin(path, false, 2), 0.06 * k)
   const L = (axis.length - 1) * 0.06 * k
-  const split = 0.42
+  const split = 0.5
   const ln = noise1(rand() * 1000)
   const rn = noise1(rand() * 1000)
   const width = (s, side) => {
@@ -653,7 +678,7 @@ function lavaFlow(shape, heightAt, upland, v, k, rand) {
   }
   // ʻAʻā: a stipple of clinker, on a jittered lattice so it reads even.
   const stipple = []
-  const ds = 0.1 * k
+  const ds = 0.13 * k
   for (let s = L * split; s < L; s += ds) {
     const w = (width(s, -1) + width(s, 1)) / 2
     const n = Math.max(2, Math.round((2 * w) / ds))
@@ -668,14 +693,16 @@ function lavaFlow(shape, heightAt, upland, v, k, rand) {
 
 // A walled pond (loko kuapā) on the reef flat at a stream mouth: a curved
 // stone wall from shore to shore, with sluice gates (mākāhā) in it.
-function fishpond(grid, shore, mouth, k, rand) {
+function fishpond(grid, shore, own, k, rand) {
+  const mouth = own.stream.at(-1)
   const [mx, mz] = nearestOnLine(shore, mouth[0], mouth[1])
   const [nx, nz] = seaward(grid, mx, mz)
   const tx = -nz
   const tz = nx
-  const r = 1.35 * k
-  const cx = mx - nx * 0.25 * r
-  const cz = mz - nz * 0.25 * r
+  const room = Math.min(...roomBeside(shore, mx, mz, own.ridges, k).map((o) => o.gap))
+  const r = clamp(0.85 * room, 1.1 * k, 1.9 * k)
+  const cx = mx - nx * 0.2 * r
+  const cz = mz - nz * 0.2 * r
   const arc = []
   for (let i = 0; i <= 90; i++) {
     const a = ((i / 90) * 2 - 1) * 115 * DEG
@@ -708,10 +735,21 @@ function fishpond(grid, shore, mouth, k, rand) {
 
 // A canoe house (hālau waʻa) back from a beach beside a stream mouth, and a
 // double-hulled canoe drawn up on the sand in front of it, bows to the sea.
-function canoeHouse(grid, shore, mouth, k, rand) {
-  const side = rand() < 0.5 ? -1 : 1
+function canoeHouse(grid, shore, own, k, rand) {
+  const mouth = own.stream.at(-1)
   const [ax, az] = nearestOnLine(shore, mouth[0], mouth[1])
-  const [x0, z0] = walkLine(shore, ax, az, side * 0.8 * k)
+  // On the side of the stream mouth with more beach before the boundary, as
+  // far along as keeps the shed and the canoe clear of both.
+  const { s, gap } = roomBeside(shore, ax, az, own.ridges, k).sort((a, b) => b.gap - a.gap)[0]
+  const avoid = [own.stream, ...own.ridges]
+  let x0 = ax
+  let z0 = az
+  for (const f of [0.45, 0.55, 0.35, 0.65, 0.28]) {
+    ;[x0, z0] = walkLine(shore, ax, az, s * clamp(f * gap, 0.35 * k, 1.4 * k))
+    const [nx, nz] = seaward(grid, x0, z0)
+    const corners = [-0.24, 0.24].flatMap((a) => [-0.1, -2.2].map((d) => [x0 + nx * d * k - nz * a * k, z0 + nz * d * k + nx * a * k]))
+    if (corners.every(([x, z]) => avoid.every((l) => distTo(l, x, z) > 0.12 * k))) break
+  }
   const [nx, nz] = seaward(grid, x0, z0)
   const tx = -nz
   const tz = nx
@@ -772,13 +810,24 @@ function canoeHouse(grid, shore, mouth, k, rand) {
 
 // A kauhale: a few house platforms (paepae) near the shore, some with
 // thatched hale on them, each house to its own use.
-function houseLots(grid, shore, mouth, k, rand) {
-  const side = rand() < 0.5 ? -1 : 1
+function houseLots(grid, shore, own, k, rand) {
+  const mouth = own.stream.at(-1)
   const [ax, az] = nearestOnLine(shore, mouth[0], mouth[1])
-  const [x0, z0] = walkLine(shore, ax, az, side * 0.95 * k)
+  const { s, gap } = roomBeside(shore, ax, az, own.ridges, k).sort((a, b) => b.gap - a.gap)[0]
+  const avoid = [own.stream, ...own.ridges]
+  const clear = (x, z, d) => avoid.every((l) => distTo(l, x, z) > d)
+  let x0 = ax
+  let z0 = az
+  let cx = ax
+  let cz = az
+  for (const f of [0.5, 0.4, 0.6, 0.3]) {
+    ;[x0, z0] = walkLine(shore, ax, az, s * clamp(f * gap, 0.4 * k, 1.6 * k))
+    const [sx, sz] = seaward(grid, x0, z0)
+    cx = x0 - sx * 0.95 * k
+    cz = z0 - sz * 0.95 * k
+    if (clear(cx, cz, 0.8 * k)) break
+  }
   const [nx, nz] = seaward(grid, x0, z0)
-  const cx = x0 - nx * 0.95 * k
-  const cz = z0 - nz * 0.95 * k
   const base = Math.atan2(nx, -nz) // along the shore
   const lots = []
   for (let tries = 0; tries < 400 && lots.length < 5; tries++) {
@@ -791,7 +840,7 @@ function houseLots(grid, shore, mouth, k, rand) {
     const ang = base + (rand() - 0.5) * 0.4
     const lot = { x, z, w, h, ang }
     const corners = box(lot)
-    if (corners.some(([px, pz]) => sample(grid, grid.h, px, pz) < 0.004)) continue
+    if (corners.some(([px, pz]) => sample(grid, grid.h, px, pz) < 0.004 || !clear(px, pz, 0.12 * k))) continue
     if (lots.some((o) => Math.hypot(o.x - x, o.z - z) < (Math.max(o.w, o.h) + Math.max(w, h)) * 0.55 + 0.05 * k)) continue
     lots.push(lot)
   }
@@ -826,51 +875,71 @@ function houseLots(grid, shore, mouth, k, rand) {
   return { x, z, r: Math.hypot(hw, hh), hw, hh, houses }
 }
 
-// Loʻi kalo stepping down a windward valley floor beside its stream, fed by
-// an ʻauwai taken off the stream above them and draining back into it below.
-function taroTerraces(stream, shape, k, rand) {
-  const line = resample(stream, 0.04 * k)
-  const frame = axisFrames(line)
-  const side = rand() < 0.5 ? -1 : 1
+// Loʻi kalo stepping down a windward valley floor on one bank of its stream,
+// fed by an ʻauwai taken off the stream above them and draining back into it
+// below. The banks follow the contours: from the stream they run out and a
+// little downstream, the way contours do in a valley.
+function taroTerraces(shape, own, k, rand) {
+  const per = 0.04 * k // one step along the stream
+  const steps = (d) => Math.round(d / per)
+  const frame = axisFrames(resample(own.stream, per))
   const rhoOf = ([x, z]) => {
     const dx = x - shape.S[0]
     const dz = z - shape.S[1]
     return Math.hypot(dx, dz) / shape.rcAt(bearingOf(dx, dz))
   }
-  let ia = frame.findIndex((p) => rhoOf(p) > 0.62)
-  if (ia < 0) ia = Math.floor(frame.length * 0.5)
-  const span = Math.min(frame.length - 1 - ia - Math.round((0.5 * k) / (0.04 * k)), Math.round((2.3 * k) / (0.04 * k)))
-  const ib = ia + Math.max(span, Math.round((1.0 * k) / (0.04 * k)))
+  const end = frame.length - 1 - steps(0.55 * k)
+  let ia = frame.findIndex((p) => rhoOf(p) > 0.6)
+  if (ia < 0 || ia > end - steps(1.5 * k)) ia = Math.max(steps(0.7 * k), end - steps(2.2 * k))
+  const ib = Math.min(end, ia + steps(2.6 * k))
+  // The bank with more room before the ridge, and how wide the fields can go.
+  const [mx, mz, mnx, mnz] = frame[Math.round((ia + ib) / 2)]
+  const room = [-1, 1].map((sd) => {
+    for (let o = 0.1 * k; o < 2.5 * k; o += 0.05 * k) {
+      const x = mx + mnx * o * sd
+      const z = mz + mnz * o * sd
+      if (own.ridges.some((l) => distTo(l, x, z) < 0.2 * k)) return o
+    }
+    return 2.5 * k
+  })
+  const side = room[0] > room[1] ? -1 : 1
+  const width = clamp(0.75 * Math.max(...room), 0.6 * k, 1.3 * k)
+  const slant = 0.2 // downstream run of a bank per unit out from the stream
   const at = (i, o) => {
-    const [x, z, nx, nz] = frame[clamp(Math.round(i), 0, frame.length - 1)]
+    const [x, z, nx, nz] = frame[clamp(Math.round(i + (o * slant) / per), 0, frame.length - 1)]
     return [x + nx * o * side, z + nz * o * side]
   }
-  const rows = clamp(Math.round(((ib - ia) * 0.04) / 0.42), 3, 6)
-  const cols = [
-    [0.1 * k, 0.56 * k],
-    [0.62 * k, 1.04 * k],
-  ]
+  const rows = clamp(Math.round(((ib - ia) * per) / (0.4 * k)), 4, 7)
+  const cols = width > 0.9 * k ? 3 : 2
   const terraces = []
-  cols.forEach(([o0, o1]) => {
-    // Banks in neighbouring columns don't line up.
+  let o0 = 0.08 * k
+  for (let c = 0; c < cols; c++) {
+    const last = c === cols - 1
+    const o1 = last ? width : o0 + (width - 0.08 * k) * (c === 0 ? 0.42 : 0.3)
+    // Each column cuts its banks at its own places; the outermost thins out.
     const cuts = [ia]
-    for (let r = 1; r < rows; r++) cuts.push(ia + ((ib - ia) * (r + (rand() - 0.5) * 0.35)) / rows)
+    for (let r = 1; r < rows; r++) cuts.push(ia + ((ib - ia) * (r + (rand() - 0.5) * 0.4)) / rows)
     cuts.push(ib)
     for (let r = 0; r < rows; r++) {
-      const g = 0.03 * k / 0.04 / k
-      const a = cuts[r] + g
-      const b = cuts[r + 1] - g
-      terraces.push([at(a, o0), at(b, o0), at(b, o1), at(a, o1)])
+      if (last && rand() < 0.3) continue
+      const out = o1 - (last ? rand() * 0.18 * k : 0)
+      const a = cuts[r] + 0.6
+      const b = cuts[r + 1] - 0.6
+      const j = () => (rand() - 0.5) * 0.05 * k
+      terraces.push(
+        [at(a, o0), at(b, o0), at(b, out), at(a, out)].map(([x, z]) => [x + j(), z + j()]),
+      )
     }
-  })
-  const out = 1.14 * k
-  const intake = ia - (0.6 * k) / (0.04 * k)
-  const auwai = [at(intake, 0.02 * k)]
-  for (let i = intake + 3; i <= ib - 4; i += 3) {
-    const f = clamp((i - intake) / ((0.45 * k) / (0.04 * k)), 0, 1)
-    auwai.push(at(i, 0.02 * k + (out - 0.02 * k) * smoothstep(0, 1, f)))
+    o0 = o1 + 0.05 * k
   }
-  const drain = [at(ib + 1, 0.35 * k), at(ib + (0.2 * k) / (0.04 * k), 0.12 * k), at(ib + (0.36 * k) / (0.04 * k), 0)]
+  const outside = width + 0.12 * k
+  const intake = ia - steps(0.6 * k)
+  const auwai = []
+  for (let i = intake; i <= ib - 2; i += 3) {
+    const f = clamp((i - intake) / steps(0.45 * k), 0, 1)
+    auwai.push(at(i - (outside * smoothstep(0, 1, f) * slant) / per, 0.02 * k + (outside - 0.02 * k) * smoothstep(0, 1, f)))
+  }
+  const drain = [at(ib + 1, 0.3 * k), at(ib + steps(0.2 * k), 0.12 * k), at(ib + steps(0.36 * k), 0)]
   const hull = convexHull(terraces.flat())
   hull.push(hull[0])
   return { ...circleAround(hull), line: hull, terraces, auwai: chaikin(auwai, false, 2), drain }
@@ -890,29 +959,34 @@ function cloudBand(shape, upland, k, rand) {
     }
     return pts
   }
-  // Fine hatching on a jittered lattice, each stroke tagged with where it
-  // sits in the band so the drawing can thin it into drifting cloud.
+  // Cloud the way an engraver draws it: rows of fine horizontal strokes,
+  // broken into dashes of uneven length. Each dash is tagged with where it
+  // sits in the band, so the drawing can thin the rows into drifting cloud.
   const strokes = []
   const R = upland.r + 0.9 * k
-  const ang = -32 * DEG
-  const hx = Math.cos(ang) * 0.15 * k
-  const hz = Math.sin(ang) * 0.15 * k
-  const step = 0.11 * k
-  let row = 0
-  for (let gz = -R; gz <= R; gz += step, row++) {
-    for (let gx = -R; gx <= R; gx += step * 2.4) {
-      const x = shape.S[0] + gx + (row % 2) * step * 1.2 + (rand() - 0.5) * step * 1.2
-      const z = shape.S[1] + gz + (rand() - 0.5) * step * 0.6
-      const dx = x - shape.S[0]
-      const dz = z - shape.S[1]
-      const b = bearingOf(dx, dz)
-      const r = Math.hypot(dx, dz)
-      const f = (r - inner(b)) / (outer(b) - inner(b))
-      if (f < 0 || f > 1) continue
-      // Keep the strokes' ends out of the upland too.
-      if (Math.hypot(dx - hx, dz - hz) < inner(bearingOf(dx - hx, dz - hz)) + 0.02 * k) continue
-      if (Math.hypot(dx + hx, dz + hz) < inner(bearingOf(dx + hx, dz + hz)) + 0.02 * k) continue
-      strokes.push({ x0: x - hx, z0: z - hz, x1: x + hx, z1: z + hz, b, f })
+  const fine = 0.04 * k
+  const at = (x, z) => {
+    const dx = x - shape.S[0]
+    const dz = z - shape.S[1]
+    const b = bearingOf(dx, dz)
+    return { b, f: (Math.hypot(dx, dz) - inner(b)) / (outer(b) - inner(b)) }
+  }
+  for (let z = shape.S[1] - R; z <= shape.S[1] + R; z += 0.085 * k) {
+    let start = null
+    let len = 0
+    for (let x = shape.S[0] - R; x <= shape.S[0] + R + fine; x += fine) {
+      const { f } = at(x, z)
+      const inBand = f >= 0 && f <= 1
+      if (inBand && start == null) {
+        start = x + rand() * 0.1 * k
+        len = (0.18 + 0.4 * rand()) * k
+      }
+      if (start != null && (!inBand || x - start >= len)) {
+        const end = inBand ? x : x - fine
+        if (end - start > 0.06 * k) strokes.push({ x0: start, z0: z, x1: end, z1: z, ...at((start + end) / 2, z) })
+        start = inBand ? x + (0.05 + 0.08 * rand()) * k : null
+        len = (0.18 + 0.4 * rand()) * k
+      }
     }
   }
   const line = ring(outer)
@@ -1022,18 +1096,21 @@ function fringingReef(grid, seaDist, shape, at, lava, pond, k, rand) {
     if (walked >= nextSurf && nx * from[0] + nz * from[1] > 0.2) {
       const tx = -nz
       const tz = nx
+      // Two short strokes along the reef's edge, the outer one shorter: the
+      // breaker marks of an old chart.
+      const lean = (rand() - 0.5) * 0.06
       for (const [o, half] of [
-        [0.17, 0.16],
-        [0.3, 0.1],
+        [0.15, 0.13],
+        [0.24, 0.08],
       ]) {
         const cx = x + nx * o * k
         const cz = z + nz * o * k
         surf.push({
           x: cx,
           z: cz,
-          pts: [-1, -0.5, 0, 0.5, 1].map((t) => [
-            cx + tx * t * half * k - nx * (1 - t * t) * 0.04 * k,
-            cz + tz * t * half * k - nz * (1 - t * t) * 0.04 * k,
+          pts: [-1, 0, 1].map((t) => [
+            cx + (tx + nx * lean) * t * half * k + nx * (1 - t * t) * 0.012 * k,
+            cz + (tz + nz * lean) * t * half * k + nz * (1 - t * t) * 0.012 * k,
           ]),
         })
       }
@@ -1474,6 +1551,24 @@ function walkLine(ring, x, z, s) {
     i = j
   }
   return ring[i]
+}
+
+// How far along the shore, each way from (x, z), before one of the boundary
+// lines in `ridges` comes down to it.
+function roomBeside(shore, x, z, ridges, k) {
+  const ends = ridges.map((l) => l.at(-1))
+  return [-1, 1].map((s) => {
+    for (let d = 0.1 * k; d < 8 * k; d += 0.1 * k) {
+      const [px, pz] = walkLine(shore, x, z, s * d)
+      if (ends.some(([ex, ez]) => Math.hypot(px - ex, pz - ez) < 0.25 * k)) return { s, gap: d }
+    }
+    return { s, gap: 8 * k }
+  })
+}
+
+function distTo(line, x, z) {
+  const [px, pz] = nearestOnLine(line, x, z)
+  return Math.hypot(px - x, pz - z)
 }
 
 function nearestOnLine(pts, px, pz) {

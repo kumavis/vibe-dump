@@ -126,10 +126,12 @@ export function compSize(entry) {
 }
 
 // Longest line two stones showing the same root will run to each other. Jukugo
-// used 11.5 for 1,600 words over 1,000 characters. A small Hawaiian list leans
-// on a few roots (*wai*, *ala*, *lima*), and at that length they would wire
-// most of the floor into one web — so the reach shrinks with the chance that
-// two random stone faces show the same root, down to 5.
+// used 11.5 for 1,650 words over 740 characters. A small Hawaiian list leans
+// harder on a few roots (*wai*, *paʻa*, *hale*), and at that length they could
+// wire most of the floor into one web — so the reach shrinks with COLLIDE, the
+// chance that two random stone faces show the same root: 11.5 up to 0.010
+// (Jukugo is 0.004), then as 1/√COLLIDE, never below 5. The calibration is
+// research/ENGINE.md §2.1.
 const faces = new Map()
 for (const e of LEXICON) {
   faces.set(e.a, (faces.get(e.a) ?? 0) + 1)

@@ -2,7 +2,8 @@
 // Run the real Board — and the real Director — in Node, on the real word list,
 // and print how the engine behaves over a long run: the metrics of
 // research/ENGINE.md §13. Then check that the deal can't hang, on the real
-// list and on lists cut down far below anything that should ship.
+// list and on lists cut down far below anything that should ship, and that no
+// stone or line the engine puts down ever reaches into the island's upland.
 //
 //   node tools/sim.mjs                      harness, Director model, deal check
 //   node tools/sim.mjs --seeds 30 --ticks 6000 --hours 2 --view 1920x1080
@@ -100,6 +101,8 @@ export async function resolve(specifier, context, next) {
 
 const { Board } = await import('../src/board.js')
 const { Director } = await import('../src/director.js')
+const { LinkStore, pointAt } = await import('../src/links.js')
+const { touchesUpland } = await import('../src/island.js')
 const { ALL, LEXICON, LINK_MAX, COLLIDE, compSize } = await import('../src/lexicon.js')
 const { GRID, BOUNDS, layoutPairs, mulberry32 } = await import('../src/field.js')
 
@@ -354,7 +357,9 @@ function directed(seed, w, h) {
 
 // Deal 30 boards and check every one: each pair holds a playable word, no
 // word twice, never a nodeal word, never one from a small component. A pair
-// with nothing left to deal is left out; its cell counts as a hole.
+// with nothing left to deal is left out; its cell counts as a hole. Then turn
+// each board 100 times and check that no stone, and no line as links.js
+// draws it (stubs included), ever reaches into the upland.
 function dealOnly() {
   const N = 30
   let holes = 0, pairs = 0
@@ -371,6 +376,25 @@ function dealOnly() {
     if (words.some((e) => e.nodeal)) fail('a nodeal word was dealt')
     if (words.some((e) => compSize(e) < 12)) fail('a word from a small component was dealt')
     if (board.tiles.some((t, i) => t.id !== i || t.pair !== Math.floor(i / 2))) fail('ids not renumbered')
+    const touches = (x, z, m) => touchesUpland(board.island, x - m, z - m, x + m, z + m)
+    if (board.tiles.some((t) => touchesUpland(board.island, t.x - 0.75, t.z - 0.5, t.x + 0.75, t.z + 0.5))) fail('a stone stands on the upland')
+    const store = new LinkStore()
+    const checked = new Set()
+    for (let k = 0; k <= 100 && board.pairs.length; k++) {
+      store.sync(board.desiredLinks(), k)
+      for (const l of store.links.values()) {
+        if (checked.has(l)) continue
+        checked.add(l)
+        for (let d = 0; d <= l.len; d += 0.05) {
+          const [x, z] = pointAt(l, d)
+          if (touches(x, z, 0)) fail(`a ${l.kind} line crosses the upland (${l.key})`)
+        }
+      }
+      const movable = board.pairs.filter((p) => board.canTurn(p, k * 2.05))
+      if (!movable.length) break
+      const p = movable[k % movable.length]
+      board.turn(p, board.chooseTurn(p, k * 2.05), k * 2.05)
+    }
     pairs += board.pairs.length
     holes += layoutPairs(mulberry32(seed)).length - board.pairs.length
   }

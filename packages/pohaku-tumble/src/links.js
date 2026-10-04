@@ -9,7 +9,7 @@ const STUB = 2.6
 
 // Lines live on the floor (y = 0) as polylines in world units. Each one draws
 // on from one end and retracts toward whichever end is staying put, so a line
-// visibly lets go of the block that turned rather than just vanishing.
+// visibly lets go of the stone that turned rather than just vanishing.
 export class LinkStore {
   constructor() {
     this.links = new Map()
@@ -17,7 +17,7 @@ export class LinkStore {
 
   // Reconcile the drawn lines with `desired`. `origin` is the tile that just
   // turned (lines grow out of it, and let go of it); `holdUntil(link)` is the
-  // earliest a new line may start — not before the blocks it joins have landed.
+  // earliest a new line may start — not before the stones it joins have landed.
   sync(desired, now, { origin = null, holdUntil = () => now } = {}) {
     let stagger = 0
     for (const [key, d] of desired) {
