@@ -1,47 +1,65 @@
 #!/usr/bin/env python3
-"""Subset the bundled fonts down to the characters this app can ever draw.
+"""Subset Alegreya down to the characters this app can ever draw.
 
     pip install fonttools brotli
-    python3 tools/build-fonts.py <dir-with-NotoSerifJP-ttfs> <dir-with-IBMPlexMono-ttfs>
+    python3 tools/build-fonts.py <dir-with-Alegreya-ttfs>
 
 The source TTFs are Google Fonts' static instances (the @expo-google-fonts
-npm packages ship them: `npm pack @expo-google-fonts/noto-serif-jp
-@expo-google-fonts/ibm-plex-mono`). The serif is cut to every CJK and kana
-character that appears anywhere in src/ or index.html — the whole word list,
-not just what's on screen, because any word can turn up — plus ASCII. Re-run
-it whenever the word list grows a new character.
+npm package ships them: `npm pack @expo-google-fonts/alegreya`). Three cuts
+are kept, registered in style.css as one family, 'PT Alegreya': regular,
+italic and semibold. Each is cut to Latin, the ʻokina (U+02BB), the kahakō
+vowels in both cases, the punctuation the page sets, and every character
+that appears anywhere in src/ or index.html — the whole word list and root
+glossary, not just what is on screen, because any word can turn up and any
+root's cognates can reach a card. Re-run it whenever the data is
+regenerated; it names any character the font itself lacks.
 """
 import pathlib
 import sys
+import unicodedata
 
 from fontTools import subset
+from fontTools.ttLib import TTFont
 
 HERE = pathlib.Path(__file__).resolve().parent.parent
 OUT = HERE / 'src' / 'fonts'
 
-# The serif needs ASCII too: the card's headline and floor watermark set Latin
-# in it alongside the kanji.
-LATIN = ''.join(chr(c) for c in range(0x20, 0x7F)) + 'āēīōūĀĒĪŌŪ·—–−’‘“”…←→↑↓×'
+ASCII = ''.join(chr(c) for c in range(0x20, 0x7F))
+# The ʻokina is a letter (U+02BB), never an apostrophe; kahakō vowels are
+# precomposed (NFC), so each is one glyph in both cases.
+HAWAIIAN = 'ʻāēīōūĀĒĪŌŪ'
+# Cognates and Proto-Polynesian forms pick up a few more: the eng of *taŋata,
+# the glottal stop some sources write as ʔ.
+POLYNESIAN = 'ŋŊʔ'
+PUNCTUATION = '·—–‘’“”…×←→•°№   '
+
+CUTS = [
+    ('400Regular', 'alegreya-400.woff2'),
+    ('400Regular_Italic', 'alegreya-400-italic.woff2'),
+    ('600SemiBold', 'alegreya-600.woff2'),
+]
+
+# Ligatures and kerning; real small caps (the English line under a field
+# name, the stats); old-style and lining, proportional and tabular figures
+# (the turn counter must not jitter); marks, for any combining sequence.
+FEATURES = ['kern', 'liga', 'ccmp', 'locl', 'mark', 'mkmk', 'smcp', 'c2sc', 'onum', 'lnum', 'pnum', 'tnum', 'case']
 
 
 def source_chars():
-    chars = set()
-    for path in [HERE / 'index.html', *sorted((HERE / 'src').rglob('*.js')), *sorted((HERE / 'src').rglob('*.css'))]:
+    """Every non-ASCII character in the app's own files, and where it came from."""
+    found = {}
+    paths = [HERE / 'index.html', *sorted((HERE / 'src').rglob('*.js')), *sorted((HERE / 'src').rglob('*.css'))]
+    for path in paths:
         for ch in path.read_text(encoding='utf-8'):
-            cp = ord(ch)
-            if (
-                0x3000 <= cp <= 0x30FF  # punctuation, hiragana, katakana
-                or 0x4E00 <= cp <= 0x9FFF  # unified ideographs
-                or 0xFF00 <= cp <= 0xFFEF  # full-width forms
-            ):
-                chars.add(ch)
-    return chars
+            if ord(ch) > 0x7E:
+                found.setdefault(ch, set()).add(path.relative_to(HERE).as_posix())
+    return found
 
 
 def cut(src, dest, text):
     opts = subset.Options()
     opts.flavor = 'woff2'
-    opts.layout_features = ['kern', 'liga', 'palt', 'vert', 'locl']
+    opts.layout_features = FEATURES
     opts.name_IDs = ['*']
     opts.notdef_outline = True
     opts.hinting = False
@@ -50,21 +68,28 @@ def cut(src, dest, text):
     sub.populate(text=text)
     sub.subset(font)
     subset.save_font(font, str(dest), opts)
-    print(f'{dest.name}: {dest.stat().st_size / 1024:.0f} KB')
+    print(f'{dest.name}: {dest.stat().st_size / 1024:.1f} KB')
 
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         sys.exit(__doc__)
-    serif_dir, mono_dir = map(pathlib.Path, sys.argv[1:])
-    cjk = source_chars()
-    print(f'{len(cjk)} CJK/kana characters')
-    text = ''.join(sorted(cjk)) + LATIN
+    src_dir = pathlib.Path(sys.argv[1])
+    found = source_chars()
+    text = ''.join(sorted(set(ASCII + HAWAIIAN + POLYNESIAN + PUNCTUATION) | set(found)))
+
+    # Anything shown that the font can't draw would fall back to another face
+    # mid-word. Letters and marks matter wherever they are; other symbols only
+    # in the data and the page (comments are full of box-drawing rules).
+    cmap = TTFont(next(src_dir.rglob('Alegreya_400Regular.ttf'))).getBestCmap()
+    for ch, where in sorted(found.items()):
+        shown = any(w.startswith('src/data/') or w == 'index.html' for w in where)
+        if ord(ch) not in cmap and (shown or unicodedata.category(ch)[0] in 'LM'):
+            print(f'not in Alegreya: U+{ord(ch):04X} {unicodedata.name(ch, "?")} ({", ".join(sorted(where))})')
+
     OUT.mkdir(parents=True, exist_ok=True)
-    for weight, name in [(400, '400Regular'), (600, '600SemiBold')]:
-        cut(next(serif_dir.rglob(f'NotoSerifJP_{name}.ttf')), OUT / f'noto-serif-jp-{weight}.woff2', text)
-    for weight, name in [(400, '400Regular'), (500, '500Medium')]:
-        cut(next(mono_dir.rglob(f'IBMPlexMono_{name}.ttf')), OUT / f'ibm-plex-mono-{weight}.woff2', LATIN)
+    for name, out in CUTS:
+        cut(next(src_dir.rglob(f'Alegreya_{name}.ttf')), OUT / out, text)
 
 
 if __name__ == '__main__':

@@ -1,26 +1,43 @@
 import { Board } from './board.js'
 import { Scene3D } from './scene3d.js'
-import { FloorPainter } from './floor.js'
+import { FloorPainter, REVEAL } from './floor.js'
 import { LinkStore } from './links.js'
 import { Notes } from './notes.js'
 import { Director } from './director.js'
 import { BOUNDS } from './field.js'
+import { SERIF } from './palette.js'
 
 const $ = (id) => document.getElementById(id)
 // ?slow=8 runs the whole piece at an eighth of the speed — for watching a
-// block tumble, or a line let go and find somewhere else to land.
+// stone tumble, or a line let go and find somewhere else to land.
 const SLOW = Number(new URLSearchParams(location.search).get('slow')) || 1
 const clock = () => performance.now() / 1000 / SLOW
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 
+// The camera's slow wander: x is two sines (±2.5 and ±1.4), z one (±1.8).
+// The board is sized from the word list and can be much smaller than
+// Jukugo's, so the wander and the reach of a drag both come from the floor:
+// the view's centre keeps 6 units in from the sides and 4 from the ends, the
+// wander shrinks to fit what's left, and a drag reaches no further than the
+// wander's edge — past it the view only clamps.
+const MARGIN = { x: 6, z: 4 }
+const centre = { x: (BOUNDS.x0 + BOUNDS.x1) / 2, z: (BOUNDS.z0 + BOUNDS.z1) / 2 }
+const range = {
+  x: Math.max(0, (BOUNDS.x1 - BOUNDS.x0) / 2 - MARGIN.x),
+  z: Math.max(0, (BOUNDS.z1 - BOUNDS.z0) / 2 - MARGIN.z),
+}
+const drift = { x: Math.min(1, range.x / 3.9), z: Math.min(1, range.z / 1.8) }
+const reach = { x: range.x + 3.9 * drift.x, z: range.z + 1.8 * drift.z }
+const clamp = (v, c, r) => Math.max(c - r, Math.min(c + r, v))
+
 async function boot() {
-  // Every glyph is drawn into a texture or onto a canvas, and a canvas won't
-  // wait for a web font — so wait here, once, for all four files.
+  // Every letter is pecked into a texture or drawn onto a canvas, and a canvas
+  // won't wait for a web font — so wait here, once, for all three cuts.
+  const sample = 'Pōhaku ʻāina'
   await Promise.all([
-    document.fonts.load("600 64px 'JT Serif'", '熟語'),
-    document.fonts.load("400 16px 'JT Serif'", '熟語'),
-    document.fonts.load("400 12px 'JT Mono'", 'Ag'),
-    document.fonts.load("500 12px 'JT Mono'", 'Ag'),
+    document.fonts.load(`400 16px ${SERIF}`, sample),
+    document.fonts.load(`italic 400 16px ${SERIF}`, sample),
+    document.fonts.load(`600 16px ${SERIF}`, sample),
   ]).catch(() => {})
 
   const params = new URLSearchParams(location.search)
@@ -59,27 +76,28 @@ async function boot() {
     const h = innerHeight
     const base = Math.max(34, Math.min(60, Math.min(w, h) / 17))
     const t = reduceMotion ? 0 : now - t0
-    view.ppu = base * user.zoom * (1 + 0.035 * Math.sin((t / 53) * Math.PI * 2))
-    view.tx = clampX(2.5 * Math.sin((t / 97) * Math.PI * 2) + 1.4 * Math.sin((t / 41) * Math.PI * 2) + user.dx)
-    view.tz = clampZ(1.8 * Math.sin((t / 83) * Math.PI * 2 + 1) + user.dz)
-    view.yaw = ((-3 + 5 * Math.sin((t / 120) * Math.PI * 2)) * Math.PI) / 180
-    view.pitch = ((55 + 2.5 * Math.sin((t / 71) * Math.PI * 2)) * Math.PI) / 180
+    const wave = (period, phase = 0) => Math.sin((t / period) * Math.PI * 2 + phase)
+    view.ppu = base * user.zoom * (1 + 0.035 * wave(53))
+    view.tx = clamp(centre.x + drift.x * (2.5 * wave(97) + 1.4 * wave(41)) + user.dx, centre.x, range.x)
+    view.tz = clamp(centre.z + drift.z * 1.8 * wave(83, 1) + user.dz, centre.z, range.z)
+    view.yaw = ((-3 + 5 * wave(120)) * Math.PI) / 180
+    view.pitch = ((55 + 2.5 * wave(71)) * Math.PI) / 180
   }
-  const clampX = (x) => Math.max(BOUNDS.x0 + 6, Math.min(BOUNDS.x1 - 6, x))
-  const clampZ = (z) => Math.max(BOUNDS.z0 + 4, Math.min(BOUNDS.z1 - 4, z))
 
   const t0 = clock()
   updateView(t0)
   scene.setView(view)
 
-  // The opening: blocks fall in from the middle of the frame outward, lines
-  // draw between them as they land, captions type in after.
+  // The opening: the map draws itself first (floor.js), then the stones fall
+  // in from the middle of the frame outward, lines draw between them as they
+  // land, captions type in after.
+  const drop = t0 + REVEAL.stones
   for (const p of board.pairs) {
     const d = Math.hypot(p.x - view.tx, p.z - view.tz)
-    const start = t0 + 0.15 + d * 0.035 + Math.random() * 0.12
+    const start = drop + d * 0.035 + Math.random() * 0.12
     for (const t of p.tiles) scene.addTile(t).dropIn(start + t.index * 0.06)
     const e = p.entry
-    p.caption = { prev1: '', prev2: '', text1: e.romaji.toUpperCase(), text2: e.gloss, t0: start + 1.0 }
+    p.caption = { prev1: '', prev2: '', text1: e.word.toUpperCase(), text2: e.gloss, t0: start + 1.0 }
   }
   links.sync(board.desiredLinks(), t0, {
     holdUntil: (d) => {
@@ -87,7 +105,9 @@ async function boot() {
       return Math.max(...tiles.map((t) => scene.block(t).drop.t0 + scene.block(t).drop.dur)) + 0.1
     },
   })
-  director.start(t0)
+  // The first card and the first turn keep Jukugo's distance from the first
+  // stone landing.
+  director.start(drop - 0.15)
 
   // ── input ────────────────────────────────────────────────────────────────
   const stage = $('stage')
@@ -108,10 +128,8 @@ async function boot() {
     // affine map.
     const [a, b, c, d] = scene.floorAffine()
     const det = a * d - b * c
-    user.dx -= (d * dx - c * dy) / det
-    user.dz -= (-b * dx + a * dy) / det
-    user.dx = Math.max(-18, Math.min(18, user.dx))
-    user.dz = Math.max(-12, Math.min(12, user.dz))
+    user.dx = clamp(user.dx - (d * dx - c * dy) / det, 0, reach.x)
+    user.dz = clamp(user.dz - (-b * dx + a * dy) / det, 0, reach.z)
   })
   const end = (e) => {
     if (!drag) return
