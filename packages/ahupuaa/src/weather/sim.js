@@ -110,7 +110,7 @@ export class Weather {
   }
 
   /** Advance by `dtSim` simulated seconds. `sunY` drives daytime heating. */
-  step(dtSim, sunY, hour, season) {
+  step(dtSim, sunY, hour, season, force = false) {
     if (dtSim <= 0) return
     this.simTime += dtSim
     if (this.mode === 'auto' && this.simTime > this.nextChange) {
@@ -144,10 +144,19 @@ export class Weather {
     this.windOffset.x += ux * dtSim
     this.windOffset.y += uz * dtSim
 
+    // The grid itself changes slowly, so its physics runs about twelve times a
+    // second on the time gathered since, not every frame; the wind offset above
+    // keeps the clouds gliding smoothly in between.
+    this.pending = (this.pending || 0) + dtSim
+    const now = performance.now()
+    if (!force && now - (this.lastPhysics || 0) < 80) return
+    this.lastPhysics = now
+    const dtp = this.pending
+    this.pending = 0
     // sub-step so a cell never moves more than ~1.5 cells per step
-    const travel = Math.hypot(ux, uz) * dtSim
+    const travel = Math.hypot(ux, uz) * dtp
     const n = Math.max(1, Math.min(12, Math.ceil(travel / (this.cell * 1.5))))
-    for (let i = 0; i < n; i++) this.substep(dtSim / n, ux, uz, sunY)
+    for (let i = 0; i < n; i++) this.substep(dtp / n, ux, uz, sunY)
     this.pack()
   }
 
@@ -300,7 +309,7 @@ export class Weather {
 
   /** Spin up from a blank sky so the first frame already has weather in it. */
   warm(hours, sunY, hour, season) {
-    for (let t = 0; t < hours * 3600; t += 600) this.step(600, sunY, hour, season)
+    for (let t = 0; t < hours * 3600; t += 600) this.step(600, sunY, hour, season, true)
   }
 
   /** Heights (world Y) of the cloud layer right now. */

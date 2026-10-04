@@ -6,6 +6,12 @@
 // grown around the camera from a deterministic hash — the same tree always
 // stands in the same spot — and handed back to the terrain's canopy texture
 // beyond a kilometre or so, where individual crowns stop being readable.
+//
+// The forest is the heaviest thing on screen, so it is kept in small tiles
+// whose instance data is built once, and each frame only the tiles inside the
+// view are copied into the draw buffers. Past a few hundred metres a tree is a
+// few pixels tall and is drawn as a single rounded crown on a stick; the full
+// model dithers into it over a short band, so the switch never pops.
 
 import * as THREE from 'three'
 import { HYDRO_RES, WORLD, HALF } from '../config.js'
@@ -72,6 +78,20 @@ function broadleaf(rand, { trunkH, crownR, color, trunkColor = '#5a4636', blobs 
       B.blob(0.3 + Math.cos(a) * crownR * 0.8, trunkH + crownR * (0.35 + e * 0.45), 0.1 + Math.sin(a) * crownR * 0.8, 0.7, 0.35, 0.7, rc, MAT.leaf, k)
     }
   }
+  return B.geometry()
+}
+
+// the same tree from a few hundred metres: one rounded crown on a stick
+function broadleafFar(rand, { trunkH, crownR, color, trunkColor = '#5a4636', flatten = 1 }) {
+  const B = new Builder()
+  B.cyl([0, 0, 0], [0.3, trunkH, 0.1], 0.4, 0.25, col(trunkColor, 0.1, rand), MAT.wood, 3)
+  B.blob(0.3, trunkH + crownR * 0.42 * flatten, 0.1, crownR * 1.18, crownR * 0.7 * flatten, crownR * 1.18, col(color, 0.12, rand), MAT.leaf, 1, true, 0)
+  return B.geometry()
+}
+
+function shrubFar(rand, color) {
+  const B = new Builder()
+  B.blob(0, 0.55, 0, 1.3, 0.8, 1.3, col(color, 0.15, rand), MAT.leaf, 1, true, 0)
   return B.geometry()
 }
 
@@ -150,6 +170,10 @@ function shrub(rand, color) {
 // --- placement ----------------------------------------------------------------
 
 export const KINDS = ['niu', 'hala', 'ulu', 'kukui', 'maia', 'ki', 'kiRed', 'ohia', 'koa', 'wiliwili', 'naupaka', 'aalii']
+const FOREST_KINDS = ['ohia', 'koa', 'kukui', 'wiliwili', 'aalii']
+const FOREST_T = 2 // tile size, world units
+const FOREST_R = 13.5 // forest radius around the camera; the canopy texture takes over beyond
+const FOREST_LOD = [3.6, 4.6] // full models hand over to simple crowns across this band
 
 export class Vegetation {
   constructor(app) {
@@ -169,8 +193,19 @@ export class Vegetation {
       naupaka: shrub(rand, '#5f8a42'),
       aalii: shrub(rand, '#8b7c4a'),
     }
-    this.fixedMat = objectMaterial(app.shared, { fade: [34, 48], close: 0.7 })
-    this.forestMat = objectMaterial(app.shared, { fade: [10, 13.5], close: 0.7 })
+    const TREES = {
+      ohia: { trunkH: 6, crownR: 5.4, color: '#3a5e2c', trunkColor: '#4d4038' },
+      koa: { trunkH: 10, crownR: 7.5, color: '#5d7449', trunkColor: '#5b4a3a', flatten: 0.7 },
+      kukui: { trunkH: 5, crownR: 5.6, color: '#6f8a5c', trunkColor: '#7b7468' },
+      wiliwili: { trunkH: 5, crownR: 3.8, color: '#a3864a', trunkColor: '#8a7255', flatten: 0.8 },
+    }
+    this.farGeoms = {
+      ...Object.fromEntries(Object.entries(TREES).map(([k, o]) => [k, broadleafFar(rand, o)])),
+      aalii: shrubFar(rand, '#8b7c4a'),
+    }
+    this.fixedMat = objectMaterial(app.shared, { fade: [34, 48], close: 0.3, sway: 1 })
+    this.forestMat = objectMaterial(app.shared, { fade: [FOREST_LOD[0], FOREST_LOD[1]], close: 0.3, sway: 1 })
+    this.forestFarMat = objectMaterial(app.shared, { fade: [FOREST_R - 3.5, FOREST_R], fadeIn: FOREST_LOD, sway: 1 })
     this.group = new THREE.Group()
     this.land = app.landTex.image.data
     this.cleared = this.clearings()
@@ -185,18 +220,30 @@ export class Vegetation {
       this.group.add(mesh)
       this.meshes[k] = mesh
     }
-    // the streamed forest: one mesh per forest species, refilled as we move
-    this.forest = {}
-    for (const k of ['ohia', 'koa', 'kukui', 'wiliwili', 'aalii']) {
-      const mesh = new THREE.InstancedMesh(this.geoms[k], this.forestMat, 9000)
-      mesh.count = 0
-      mesh.frustumCulled = false
-      mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
-      this.group.add(mesh)
-      this.forest[k] = mesh
+    // the streamed forest: per species, a near mesh (the full model) and a far
+    // one (the simple crown), refilled from whichever tiles are in view
+    this.forest = { near: {}, far: {} }
+    for (const k of FOREST_KINDS) {
+      this.forest.near[k] = this.forestMesh(this.geoms[k], this.forestMat, 2500)
+      this.forest.far[k] = this.forestMesh(this.farGeoms[k], this.forestFarMat, 9000)
     }
     this.tiles = new Map()
-    this.lastCentre = new THREE.Vector2(1e9, 1e9)
+    this.frustum = new THREE.Frustum()
+    this.projView = new THREE.Matrix4()
+    this.box = new THREE.Box3()
+    this.wanted = []
+    this.lastSelection = ''
+  }
+
+  forestMesh(geom, mat, capacity) {
+    const mesh = new THREE.InstancedMesh(geom, mat, capacity)
+    mesh.count = 0
+    mesh.frustumCulled = false
+    mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
+    mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(capacity * 3), 3)
+    mesh.instanceColor.setUsage(THREE.DynamicDrawUsage)
+    this.group.add(mesh)
+    return mesh
   }
 
   /** Ground people have cleared: paddies, kauhale, heiau courts. */
@@ -252,7 +299,7 @@ export class Vegetation {
       s.setScalar(t.s)
       m.compose(p, q, s)
       mesh.setMatrixAt(i, m)
-      c.setRGB(t.c, t.c * (0.96 + 0.08 * ((i * 7) % 5) / 5), t.c)
+      c.setRGB(t.c, t.c * (0.96 + 0.08 * (((t.x * 997 + t.z * 131) % 1) + 1) % 1), t.c)
       mesh.setColorAt(i, c)
     }
     mesh.count = list.length
@@ -329,46 +376,69 @@ export class Vegetation {
     return out
   }
 
-  // A forest tile's trees: deterministic per tile, ~one candidate every 16 m.
-  tile(ti, tj) {
-    const key = ti * 4096 + tj
-    let t = this.tiles.get(key)
-    if (t) return t
+  // A forest tile's trees: deterministic per tile, ~one candidate every 17 m,
+  // packed straight into instance matrices and colours for each species.
+  buildTile(ti, tj) {
     const { terrain } = this.app
-    const T = 4
-    const step = 0.17
-    t = { ohia: [], koa: [], kukui: [], wiliwili: [], aalii: [] }
-    const n = Math.round(T / step)
+    const n = Math.round(FOREST_T / 0.17)
+    const step = FOREST_T / n
+    const trees = Object.fromEntries(FOREST_KINDS.map((k) => [k, []]))
+    let y0 = Infinity
+    let y1 = -Infinity
     for (let a = 0; a < n; a++) {
       for (let b = 0; b < n; b++) {
-        const h1 = hash2(ti * n + a, tj * n + b, 11)
-        const h2 = hash2(ti * n + a, tj * n + b, 12)
-        const x = ti * T + (a + h1) * step
-        const z = tj * T + (b + h2) * step
+        const gi = ti * n + a
+        const gj = tj * n + b
+        const h1 = hash2(gi, gj, 11)
+        const h2 = hash2(gi, gj, 12)
+        const x = (gi + h1) * step
+        const z = (gj + h2) * step
         const L = this.landAt(x, z)
         if (!L || L.sand > 0.2 || L.field > 0.3 || this.isCleared(x, z)) continue
         const m = terrain.metresAt(x, z)
         if (m < 3) continue
-        const r = L.rain + (hash2(a, b, ti * 31 + tj) - 0.5) * 0.12
+        const r = L.rain + (hash2(gi, gj, 3) - 0.5) * 0.12
         const forest = Math.min(1, Math.max(0, (r - 0.3) / 0.22))
-        const h3 = hash2(ti * n + a, tj * n + b, 13)
+        const h3 = hash2(gi, gj, 13)
         let kind = null
         if (h3 < forest * 0.85) {
           if (L.rip > 0.4 && m < 450 && h3 < 0.5) kind = 'kukui'
-          else if (m > 600 && r > 0.45) kind = hash2(a, b, 7) < 0.7 ? 'ohia' : 'koa'
-          else if (m > 350) kind = hash2(a, b, 8) < 0.55 ? 'koa' : 'ohia'
+          else if (m > 600 && r > 0.45) kind = hash2(gi, gj, 7) < 0.7 ? 'ohia' : 'koa'
+          else if (m > 350) kind = hash2(gi, gj, 8) < 0.55 ? 'koa' : 'ohia'
           else kind = r > 0.5 ? 'ohia' : 'kukui'
-        } else if (r < 0.3 && h3 < 0.08) kind = m < 500 && hash2(a, b, 9) < 0.5 ? 'wiliwili' : 'aalii'
+        } else if (r < 0.3 && h3 < 0.08) kind = m < 500 && hash2(gi, gj, 9) < 0.5 ? 'wiliwili' : 'aalii'
         if (!kind) continue
-        // keep clear of the loʻi, the houses and the steepest pali
+        // keep off the steepest pali
+        if (terrain.normalAt(x, z).y < 0.35 && hash2(gi, gj, 5) < 0.7) continue
         const y = terrain.heightAt(x, z)
-        const nrm = terrain.normalAt(x, z)
-        if (nrm.y < 0.35 && hash2(a, b, 5) < 0.7) continue
-        t[kind].push({ x, y, z, rot: h1 * 6.28, s: S * (0.75 + h2 * 0.6) * (kind === 'aalii' ? 0.8 : 1), c: 0.82 + h3 * 0.35 })
+        trees[kind].push(x, y, z, h1 * 6.28, S * (0.75 + h2 * 0.6) * (kind === 'aalii' ? 0.8 : 1), 0.82 + h3 * 0.35, hash2(gi, gj, 14))
+        y0 = Math.min(y0, y)
+        y1 = Math.max(y1, y)
       }
     }
-    this.tiles.set(key, t)
-    return t
+    const data = {}
+    let total = 0
+    for (const k of FOREST_KINDS) {
+      const t = trees[k]
+      const cnt = t.length / 7
+      const mat = new Float32Array(cnt * 16)
+      const colr = new Float32Array(cnt * 3)
+      for (let i = 0; i < cnt; i++) {
+        const [x, y, z, rot, sc, c, v] = t.slice(i * 7, i * 7 + 7)
+        const cs = Math.cos(rot) * sc
+        const sn = Math.sin(rot) * sc
+        // rotation about y, uniform scale, translation (column-major)
+        mat.set([cs, 0, -sn, 0, 0, sc, 0, 0, sn, 0, cs, 0, x, y, z, 1], i * 16)
+        colr.set([c, c * (0.96 + 0.08 * v), c], i * 3)
+      }
+      data[k] = { mat, col: colr, n: cnt }
+      total += cnt
+    }
+    const x0 = ti * FOREST_T
+    const z0 = tj * FOREST_T
+    // crowns reach ~0.2 units up and out from the trunk, and sway a little
+    const box = total ? new THREE.Box3(new THREE.Vector3(x0 - 0.2, y0, z0 - 0.2), new THREE.Vector3(x0 + FOREST_T + 0.2, y1 + 0.3, z0 + FOREST_T + 0.2)) : null
+    return { data, box, total }
   }
 
   update(camera) {
@@ -377,35 +447,96 @@ export class Vegetation {
     const ground = Math.max(0, this.app.terrain.heightAt(p.x, p.z))
     const alt = p.y - ground
     const show = alt < 14
-    for (const k in this.forest) this.forest[k].visible = show
     for (const k in this.meshes) this.meshes[k].visible = alt < 60
+    this.group.visible = alt < 60
+    for (const k of FOREST_KINDS) {
+      this.forest.near[k].visible = show
+      this.forest.far[k].visible = show
+    }
     if (!show) return
-    if (this.lastCentre.distanceTo(new THREE.Vector2(p.x, p.z)) < 1.2) return
-    this.lastCentre.set(p.x, p.z)
-    const T = 4
-    const R = 14
-    const lists = { ohia: [], koa: [], kukui: [], wiliwili: [], aalii: [] }
-    const i0 = Math.floor((p.x - R) / T)
-    const i1 = Math.floor((p.x + R) / T)
-    const j0 = Math.floor((p.z - R) / T)
-    const j1 = Math.floor((p.z + R) / T)
+
+    camera.updateMatrixWorld()
+    this.projView.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
+    this.frustum.setFromProjectionMatrix(this.projView)
+    // which tiles are in view, and at which level of detail
+    const R = FOREST_R
+    const i0 = Math.floor((p.x - R) / FOREST_T)
+    const i1 = Math.floor((p.x + R) / FOREST_T)
+    const j0 = Math.floor((p.z - R) / FOREST_T)
+    const j1 = Math.floor((p.z + R) / FOREST_T)
+    const near = []
+    const far = []
+    const missing = []
+    let sel = ''
     for (let i = i0; i <= i1; i++) {
       for (let j = j0; j <= j1; j++) {
-        const t = this.tile(i, j)
-        for (const k in t) {
-          for (const tr of t[k]) {
-            if (Math.abs(tr.x - p.x) > R || Math.abs(tr.z - p.z) > R) continue
-            lists[k].push(tr)
-          }
+        const x0 = i * FOREST_T
+        const z0 = j * FOREST_T
+        const dx = Math.max(x0 - p.x, 0, p.x - x0 - FOREST_T)
+        const dz = Math.max(z0 - p.z, 0, p.z - z0 - FOREST_T)
+        const dNear = Math.hypot(dx, dz)
+        if (dNear > R) continue
+        const key = i * 8192 + j
+        const t = this.tiles.get(key)
+        if (!t) {
+          missing.push([dNear, i, j])
+          continue
         }
+        if (!t.box || !this.frustum.intersectsBox(t.box)) continue
+        const dFar = Math.hypot(Math.max(Math.abs(x0 - p.x), Math.abs(x0 + FOREST_T - p.x)), Math.max(Math.abs(z0 - p.z), Math.abs(z0 + FOREST_T - p.z)))
+        const n = dNear < FOREST_LOD[1] + 0.3
+        const f = dFar > FOREST_LOD[0] - 0.3
+        if (n) near.push(t)
+        if (f) far.push(t)
+        sel += `${key}${n ? 'n' : ''}${f ? 'f' : ''},`
       }
     }
-    for (const k in lists) {
-      const mesh = this.forest[k]
-      const list = lists[k].slice(0, mesh.instanceMatrix.count)
-      this.writeInstances(mesh, list)
+    // grow a few missing tiles a frame, nearest first, so arriving somewhere
+    // never stalls a frame
+    missing.sort((a, b) => a[0] - b[0])
+    for (let k = 0; k < Math.min(missing.length, 10); k++) {
+      const [, i, j] = missing[k]
+      this.tiles.set(i * 8192 + j, this.buildTile(i, j))
     }
-    // drop far tiles from the cache now and then
-    if (this.tiles.size > 400) this.tiles.clear()
+    if (this.tiles.size > 3000) {
+      // forget tiles far behind us
+      for (const [key, t] of this.tiles) {
+        const i = Math.floor(key / 8192 + 0.5)
+        const j = key - i * 8192
+        if (Math.hypot((i + 0.5) * FOREST_T - p.x, (j + 0.5) * FOREST_T - p.z) > R * 3) this.tiles.delete(key)
+      }
+    }
+    if (sel === this.lastSelection) return
+    this.lastSelection = sel
+    this.fill(this.forest.near, near)
+    this.fill(this.forest.far, far)
+  }
+
+  /** Copy the chosen tiles' prebuilt instances into each species' buffers. */
+  fill(meshes, tiles) {
+    for (const k of FOREST_KINDS) {
+      const mesh = meshes[k]
+      const cap = mesh.instanceMatrix.count
+      const M = mesh.instanceMatrix
+      const C = mesh.instanceColor
+      let n = 0
+      for (const t of tiles) {
+        const d = t.data[k]
+        if (!d.n) continue
+        const take = Math.min(d.n, cap - n)
+        if (take <= 0) break
+        M.array.set(take === d.n ? d.mat : d.mat.subarray(0, take * 16), n * 16)
+        C.array.set(take === d.n ? d.col : d.col.subarray(0, take * 3), n * 3)
+        n += take
+      }
+      mesh.count = n
+      if (!n) continue
+      M.clearUpdateRanges()
+      M.addUpdateRange(0, n * 16)
+      M.needsUpdate = true
+      C.clearUpdateRanges()
+      C.addUpdateRange(0, n * 3)
+      C.needsUpdate = true
+    }
   }
 }

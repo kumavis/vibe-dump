@@ -123,7 +123,7 @@ export class Builder {
   }
 
   /** A low irregular blob (stone, bush, crown): squashed icosahedron-ish. */
-  blob(x, y, z, rx, ry, rz, color, mat = 0, seed = 0, smooth = mat === MAT.leaf) {
+  blob(x, y, z, rx, ry, rz, color, mat = 0, seed = 0, smooth = mat === MAT.leaf, detail = 1) {
     const t = (1 + Math.sqrt(5)) / 2
     const V = [[-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0], [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t], [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]]
     const F = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]]
@@ -160,6 +160,11 @@ export class Builder {
         this.col.push(color[0], color[1], color[2])
         this.mat.push(mat)
       }
+    }
+    if (detail === 0) {
+      // the far-off version: the bare twenty faces, still shaded round
+      for (const f of F) put(P[f[0]], P[f[1]], P[f[2]])
+      return
     }
     for (const f of F) {
       const a = P[f[0]]
@@ -230,43 +235,62 @@ uniform float uTime;
 uniform vec2 uWindVec;
 uniform float uFadeNear;
 uniform float uFadeFar;
+uniform vec2 uFadeIn;
 uniform float uFadeClose;
+uniform float uSway;
 out vec3 vWorld;
 out vec3 vNormal;
 out vec3 vColor;
 out float vMat;
 out vec3 vLocal;
 out float vFade;
+out float vFadeIn;
 void main() {
   mat4 im = mat4(1.0);
   #ifdef USE_INSTANCING
   im = instanceMatrix;
   #endif
   vec3 p = position;
-  vec4 wp = modelMatrix * im * vec4(p, 1.0);
+  mat4 mm = modelMatrix * im;
+  vec4 wp = mm * vec4(p, 1.0);
+  vec3 origin = (mm * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
   vec3 c = color;
   #ifdef USE_INSTANCING_COLOR
   c *= instanceColor;
   #endif
-  if (aMat > 2.5 && aMat < 3.5) {
-    // foliage sways with the wind, more toward the tips
+  if (uSway > 0.0) {
+    // A plant sways as one piece: phase and gusts come from where it stands,
+    // and it bends more toward the top. Models are in metres, so the bend is
+    // worked out in metres and scaled into the world by the instance's size.
+    float scale = length(mm[1].xyz);
     float h = max(p.y, 0.0);
-    float ph = uTime * 1.9 + wp.x * 37.0 + wp.z * 23.0;
-    float gust = 0.6 + 0.4 * sin(uTime * 0.7 + wp.x * 3.0);
-    wp.xz += (uWindVec * (0.5 + 0.5 * sin(ph)) * gust + vec2(sin(ph * 1.3), cos(ph * 1.1)) * 0.15 * length(uWindVec)) * h * 0.012;
+    float bend = (0.02 * h + 0.0012 * h * h) * scale * uSway;
+    float ph = uTime * 1.3 + origin.x * 37.0 + origin.z * 23.0;
+    float gust = 0.6 + 0.4 * sin(uTime * 0.55 + origin.x * 2.1 + origin.z * 1.7);
+    wp.xz += uWindVec * (0.55 + 0.45 * sin(ph)) * gust * bend;
+    if (aMat > 2.5 && aMat < 3.5) {
+      // and the leaves flutter a few centimetres on their own
+      float f = uTime * 5.0 + dot(p, vec3(1.7, 2.3, 1.1));
+      wp.xyz += vec3(sin(f), 0.5 * sin(f * 1.3 + 1.0), cos(f * 0.9)) * (0.05 * min(h, 4.0) / 4.0) * scale * length(uWindVec) * uSway;
+    }
   }
   vWorld = wp.xyz;
-  vNormal = normalize(mat3(modelMatrix * im) * normal);
+  vNormal = normalize(mat3(mm) * normal);
   vColor = c;
   vMat = aMat;
   vLocal = p;
+  #ifdef USE_INSTANCING
+  // whole instances fade together, so a tree never dissolves from one side
+  float dist = distance(cameraPosition, origin);
+  #else
   float dist = distance(cameraPosition, wp.xyz);
+  #endif
   vFade = 1.0 - smoothstep(uFadeNear, uFadeFar, dist);
   // a tree right in front of the lens thins out rather than filling the view
-  if (uFadeClose > 0.0) {
-    vec3 origin = (modelMatrix * im * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-    vFade *= smoothstep(uFadeClose * 0.4, uFadeClose, distance(cameraPosition, origin));
-  }
+  if (uFadeClose > 0.0) vFade *= smoothstep(uFadeClose * 0.5, uFadeClose, dist);
+  // the far, simpler model of a tree dithers in exactly where the near one
+  // dithers out (complementary thresholds, so no gaps and no doubling)
+  vFadeIn = uFadeIn.y > 0.0 ? smoothstep(uFadeIn.x, uFadeIn.y, dist) : 1.0;
   gl_Position = projectionMatrix * viewMatrix * wp;
 }
 `
@@ -282,11 +306,13 @@ in vec3 vColor;
 in float vMat;
 in vec3 vLocal;
 in float vFade;
+in float vFadeIn;
 uniform int uObjDebug;
 void main() {
-  if (vFade <= 0.0) discard;
-  // dither out at the far end of the range instead of popping
-  if (vFade < 1.0 && hash12(gl_FragCoord.xy) > vFade) discard;
+  if (vFade <= 0.0 || vFadeIn <= 0.0) discard;
+  // dither in and out over a distance instead of popping
+  float dither = hash12(gl_FragCoord.xy);
+  if (dither >= vFade || dither < 1.0 - vFadeIn) discard;
   vec3 n = normalize(vNormal);
   if (!gl_FrontFacing) n = -n;
   vec3 a = vColor;
@@ -322,8 +348,11 @@ void main() {
 `
 
 /**
- * The shared object material. `opts.fade` = [near, far] world-unit distances;
- * `opts.close` dithers out whole instances nearer the camera than that.
+ * The shared object material. `opts.fade` = [near, far] world-unit distances
+ * to dither out over; `opts.fadeIn` = [near, far] to dither in over (the far
+ * level of detail of something whose near model fades out over the same band);
+ * `opts.close` dithers out whole instances nearer the camera than that;
+ * `opts.sway` bends instances with the wind (plants).
  */
 export function objectMaterial(shared, opts = {}) {
   const [near, far] = opts.fade || [120, 160]
@@ -338,6 +367,8 @@ export function objectMaterial(shared, opts = {}) {
       uFadeNear: { value: near },
       uFadeFar: { value: far },
       uFadeClose: { value: opts.close || 0 },
+      uFadeIn: { value: new THREE.Vector2(...(opts.fadeIn || [0, 0])) },
+      uSway: { value: opts.sway || 0 },
       uObjDebug: { value: 0 },
     },
   })

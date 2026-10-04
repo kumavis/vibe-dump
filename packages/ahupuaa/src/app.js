@@ -197,7 +197,9 @@ export class App {
     const dbg = gl.getExtension('WEBGL_debug_renderer_info')
     const gpu = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : ''
     this.software = /swiftshader|llvmpipe|software/i.test(gpu)
-    this.quality = { level: 3, avg: 16, since: 0, fixed: this.software || this.params.has('fixedq') }
+    // start a step below the top (full DPR 2 with MSAA is a lot of pixels) and
+    // let the governor climb if there is headroom
+    this.quality = { level: 2, cap: 3, avg: 16, since: 0, raisedAt: -1e9, fixed: this.software || this.params.has('fixedq') }
     if (this.params.get('q')) this.quality.level = Number(this.params.get('q'))
     this.applyQuality()
 
@@ -223,19 +225,26 @@ export class App {
     if (this.sized) this.resize()
   }
 
-  /** Step quality down when frames run long, back up when there's headroom. */
+  /**
+   * Step quality down when frames run long, back up when there's headroom.
+   * Every change reallocates the render targets, which is itself a hitch, so
+   * it waits for a steady reading and never ping-pongs: if a step up has to be
+   * taken back soon after, that level becomes the ceiling.
+   */
   govern(dt) {
     const q = this.quality
     if (q.fixed || this.time < 3) return
     q.avg += (dt * 1000 - q.avg) * 0.05
     q.since += dt
-    if (q.avg > 38 && q.since > 1.5 && q.level > 0) {
+    if (q.avg > 34 && q.since > 2 && q.level > 0) {
+      if (this.time - q.raisedAt < 20) q.cap = q.level - 1
       q.level--
       q.since = 0
       this.applyQuality()
-    } else if (q.avg < 17 && q.since > 6 && q.level < 3) {
+    } else if (q.avg < 15 && q.since > 8 && q.level < q.cap) {
       q.level++
       q.since = 0
+      q.raisedAt = this.time
       this.applyQuality()
     }
   }
@@ -272,9 +281,14 @@ export class App {
   }
 
   frame(now) {
-    const dt = Math.min(0.1, (now - this.last) / 1000)
+    // (the first frame's timestamp can predate the end of a long setup, so
+    // never let dt go negative)
+    const dt = Math.max(0, Math.min(0.1, (now - this.last) / 1000))
     this.last = now
     this.time += dt
+    // the camera moves on a lightly smoothed clock, so one slow frame nudges
+    // it rather than jolting it
+    this.camDt = this.camDt === undefined ? dt : this.camDt + (dt - this.camDt) * 0.3
     this.govern(dt)
     this.update(dt)
     this.sky.renderMap(this.renderer)
@@ -293,7 +307,7 @@ export class App {
     }
     this.sky.update(c.doy, c.hour, this.time, this.light)
     this.shared.uniforms.uTime.value = this.time
-    this.rig.update(dt)
+    this.rig.update(this.camDt ?? dt)
     this.terrain.update(this.camera)
     this.ocean.update(this.camera)
     this.vegetation.update(this.camera)

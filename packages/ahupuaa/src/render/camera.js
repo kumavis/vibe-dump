@@ -22,6 +22,7 @@ export class CameraRig {
     this.state = { target: new THREE.Vector3(0, 0, 20), distance: 420, yaw: 0.35, pitch: 0.62, lift: 0 }
     this.goal = { target: this.state.target.clone(), distance: 420, yaw: 0.35, pitch: 0.62, lift: 0 }
     this.flight = null
+    this.floor = 0 // smoothed lift that keeps the camera clear of the ground
     this.minDistance = 0.5
     this.maxDistance = 900
     this.autoOrbit = 0 // radians per second while idle
@@ -260,11 +261,15 @@ export class CameraRig {
     } else if (this.autoOrbit && performance.now() - this.lastInput > 4000) {
       g.yaw += this.autoOrbit * dt
     }
-    // keep the target on the land/sea surface and inside the world
+    // keep the target on the land/sea surface and inside the world (a flight
+    // already runs between two points on the ground, so leave its height be:
+    // nudging it toward the terrain each frame would jitter with frame time)
     g.target.x = THREE.MathUtils.clamp(g.target.x, -HALF * 1.3, HALF * 1.3)
     g.target.z = THREE.MathUtils.clamp(g.target.z, -HALF * 1.3, HALF * 1.3)
-    const gy = Math.max(0, this.terrain.heightAt(g.target.x, g.target.z))
-    g.target.y += (gy - g.target.y) * Math.min(1, dt * 6)
+    if (!this.flight) {
+      const gy = Math.max(0, this.terrain.heightAt(g.target.x, g.target.z))
+      g.target.y += (gy - g.target.y) * (1 - Math.exp(-dt * 6))
+    }
 
     const s = this.state
     const k = this.flight ? 1 : 1 - Math.exp(-dt * 7)
@@ -274,10 +279,29 @@ export class CameraRig {
     s.pitch += (g.pitch - s.pitch) * k
     s.lift += (g.lift - s.lift) * k
 
-    this.apply()
+    this.apply(dt)
   }
 
-  apply() {
+  /**
+   * Ground under the camera, and a little way ahead of where it is heading, so
+   * it starts to rise before a ridge rather than on it.
+   */
+  groundAhead(x, z, dt) {
+    const T = this.terrain
+    let g = T.heightAt(x, z)
+    const prev = this._prevXZ
+    if (prev && dt > 0) {
+      const vx = (x - prev.x) / dt
+      const vz = (z - prev.y) / dt
+      const speed = Math.hypot(vx, vz)
+      const ahead = Math.min(2, speed * 0.3)
+      if (ahead > 0.005) g = Math.max(g, T.heightAt(x + (vx / speed) * ahead, z + (vz / speed) * ahead))
+    }
+    this._prevXZ = (this._prevXZ || new THREE.Vector2()).set(x, z)
+    return Math.max(0, g)
+  }
+
+  apply(dt = 0) {
     const s = this.state
     const cam = this.camera
     const cp = Math.cos(s.pitch)
@@ -286,14 +310,23 @@ export class CameraRig {
       s.target.y + s.distance * Math.sin(s.pitch),
       s.target.z + s.distance * cp * Math.cos(s.yaw),
     )
-    // never under the ground: lift the camera, tilting down toward the target
-    const ground = Math.max(0, this.terrain.heightAt(cam.position.x, cam.position.z))
+    // Never under the ground. Clamping to the height right under the camera
+    // makes it bob over every ridge and gully (the terrain is only piecewise
+    // smooth), so the lift is eased instead: it rises quickly, settles back
+    // slowly, and looks ahead along the camera's path so it starts climbing
+    // before the ground does. A hard floor just above the surface is the backstop.
     const clearance = 0.12 + s.distance * 0.03
-    if (cam.position.y < ground + clearance) cam.position.y = ground + clearance
+    const ground = this.groundAhead(cam.position.x, cam.position.z, dt)
+    const want = Math.max(0, ground + clearance - cam.position.y)
+    if (dt <= 0) this.floor = want
+    else this.floor += (want - this.floor) * (1 - Math.exp(-dt * (want > this.floor ? 9 : 2.5)))
+    cam.position.y += this.floor
+    const under = Math.max(0, this.terrain.heightAt(cam.position.x, cam.position.z))
+    cam.position.y = Math.max(cam.position.y, under + Math.min(0.04, clearance * 0.3))
     this._v.copy(s.target)
     this._v.y += s.lift * s.distance * 0.45
     cam.lookAt(this._v)
-    const alt = cam.position.y - ground
+    const alt = cam.position.y - under
     cam.near = THREE.MathUtils.clamp(Math.min(alt, s.distance) * 0.12, 0.02, 4)
     cam.far = 9000
     cam.updateProjectionMatrix()

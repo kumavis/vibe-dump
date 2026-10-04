@@ -4,7 +4,9 @@
 // much of the sun's disc clears the ridges (soft, with a penumbra that widens
 // with distance — the classic heightfield soft-shadow trick). It only needs
 // redrawing when the sun has moved, and everything lit samples it by world xz:
-// the land, the sea, the trees standing on it.
+// the land, the sea, the trees standing on it. When the clock runs fast (the
+// tour sweeps through hours in seconds) it is redrawn a strip per frame, so the
+// cost is spread out instead of landing on one frame.
 
 import * as THREE from 'three'
 import { constants, heightFetch } from './shaders/common.glsl.js'
@@ -60,6 +62,9 @@ export class TerrainShadow {
     this.scene.add(m)
     this.cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
     this.last = new THREE.Vector3(0, -2, 0)
+    this.size = size
+    this.strips = 4
+    this.strip = -1 // the strip being redrawn, or -1 when up to date
   }
 
   get texture() {
@@ -67,12 +72,38 @@ export class TerrainShadow {
   }
 
   update(renderer, sunDir, force = false) {
-    if (!force && sunDir.angleTo(this.last) < 0.004) return
-    this.last.copy(sunDir)
-    this.material.uniforms.uSunDir.value.copy(sunDir)
+    if (force || !this.drawn) {
+      this.drawn = true
+      this.draw(renderer, sunDir, -1)
+      return
+    }
+    if (this.strip < 0) {
+      if (sunDir.angleTo(this.last) < 0.004) return
+      // start a sweep with the sun where it is now
+      this.material.uniforms.uSunDir.value.copy(sunDir)
+      this.last.copy(sunDir)
+      this.strip = 0
+    }
+    this.draw(renderer, null, this.strip)
+    this.strip = this.strip + 1 >= this.strips ? -1 : this.strip + 1
+  }
+
+  /** Redraw one horizontal strip of the map (or all of it, strip -1). */
+  draw(renderer, sunDir, strip) {
+    if (sunDir) {
+      this.material.uniforms.uSunDir.value.copy(sunDir)
+      this.last.copy(sunDir)
+    }
+    const rt = this.rt
+    if (strip >= 0) {
+      const h = this.size / this.strips
+      rt.scissor.set(0, strip * h, this.size, h)
+      rt.scissorTest = true
+    } else rt.scissorTest = false
     const prev = renderer.getRenderTarget()
-    renderer.setRenderTarget(this.rt)
+    renderer.setRenderTarget(rt)
     renderer.render(this.scene, this.cam)
     renderer.setRenderTarget(prev)
+    rt.scissorTest = false
   }
 }
