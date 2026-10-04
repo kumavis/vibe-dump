@@ -4,6 +4,18 @@ Research for [DESIGN.md](../DESIGN.md) §2, option B (one root per stone, words
 that are compounds of two roots). Done 2026-10-04. The data and the scripts
 that rebuild every number below are in [`roots/`](./roots).
 
+> **Later work.** Every candidate has since been reviewed word by word
+> ([`review/`](./review)). That review found faults in this pipeline, none of
+> which is fixed below yet:
+> - the OCR "repair" invented some words;
+> - Andrews' bracket was trusted over his headword;
+> - *X·ana* rows are really -na nouns;
+> - two-word headwords and POLLEX glosses were missed.
+>
+> It also raised about 50 decisions ([`review/DECISIONS.md`](./review/DECISIONS.md)).
+> A structural analysis of Hawaiian ([`STRUCTURE.md`](./STRUCTURE.md)) puts this
+> frame in context.
+
 ## The answer
 
 **Not on what can be confirmed today, and probably yes once Pukui & Elbert is

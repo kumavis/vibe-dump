@@ -16,6 +16,18 @@ no `package.json` here, so the gallery build skips this directory.
   Society's material, National Park Service and UH sources, Wiktionary and
   Andrews–Parker. Includes all 32 star-compass houses with bearings.
 
+- [`STRUCTURE.md`](./STRUCTURE.md): a structural-linguistics analysis of Hawaiian.
+  It asks where a form difference carries a systematic meaning difference, so that
+  swapping one unit in a slot means something, as a kanji tumble does. It confirms
+  that ʻokina or kahakō switches are arbitrary in the open vocabulary. It maps the
+  frames that do work: head + modifier (compounds and phrases), and the closed
+  grammatical grids. Working notes are in [`structure/`](./structure). Research
+  only.
+- [`review/`](./review): the word-by-word review of the 905 candidate compounds,
+  with verdicts, spellings, root senses and glosses. It includes a blind second
+  reading (90% agreement on which words survive) and the list of decisions it
+  raised for the owner and a kumu ([`review/DECISIONS.md`](./review/DECISIONS.md)).
+
 ## Option B: roots
 
 - [`roots/compounds.tsv`](./roots/compounds.tsv) — 1,112 candidate compounds
