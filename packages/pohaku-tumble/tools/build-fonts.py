@@ -28,10 +28,10 @@ ASCII = ''.join(chr(c) for c in range(0x20, 0x7F))
 # The ʻokina is a letter (U+02BB), never an apostrophe; kahakō vowels are
 # precomposed (NFC), so each is one glyph in both cases.
 HAWAIIAN = 'ʻāēīōūĀĒĪŌŪ'
-# Cognates and Proto-Polynesian forms pick up a few more: the eng of *taŋata,
-# the glottal stop some sources write as ʔ.
-POLYNESIAN = 'ŋŊʔ'
-PUNCTUATION = '·—–‘’“”…×←→•°№   '
+# Proto-Polynesian forms write the velar nasal as an eng: *taŋata.
+POLYNESIAN = 'ŋŊ'
+# Punctuation for the English glosses, and the no-break, thin and hair spaces.
+PUNCTUATION = '·—–‘’“”…\u00a0\u2009\u200a'
 
 CUTS = [
     ('400Regular', 'alegreya-400.woff2'),

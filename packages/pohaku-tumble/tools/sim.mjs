@@ -3,7 +3,9 @@
 // and print how the engine behaves over a long run: the metrics of
 // research/ENGINE.md §13. Then check that the deal can't hang, on the real
 // list and on lists cut down far below anything that should ship, and that no
-// stone or line the engine puts down ever reaches into the island's upland.
+// stone or line the engine puts down ever reaches into the island's upland,
+// that no word is set on the star compass, and that no field line ends under
+// its own word.
 //
 //   node tools/sim.mjs                      harness, Director model, deal check
 //   node tools/sim.mjs --seeds 30 --ticks 6000 --hours 2 --view 1920x1080
@@ -16,10 +18,13 @@
 // `chooseTurn` steers on the whole floor's linked share; there is no view.
 //
 // The Director model: src/director.js itself, stepped at 30 fps against stand-
-// ins for the scene (Jukugo's camera drift and orthographic projection, the
-// 0.7 s drop-in and the 0.86 s roll), the cards and the lines. It only turns
-// what is in view, runs the cards on their own beat, and steers on the linked
-// share in view. It is the harsher of the two and closer to what a viewer sees.
+// ins for the scene (the camera's wander from src/view.js, Scene3D's
+// orthographic projection, the opening from floor.js REVEAL, the 0.7 s
+// drop-in and the 0.86 s roll), the cards and the lines. It only turns what
+// is in view, runs the cards on their own beat, and steers on the linked
+// share in view. It is the harsher of the two and closer to what a viewer
+// sees. The default views are a desktop, a phone, and the phone held
+// sideways.
 //
 //   stall   beats lost: beats on which no pair could turn
 //   stuck   pairs that can't turn even after resting (harness: every 10 ticks;
@@ -31,10 +36,16 @@
 //   return  turns back to the word the pair just left (Director: per hour)
 //   linked  pairs on a shared-root line: Board.linkedFraction() (harness,
 //           with its 10th–90th percentile), or the share of those in view
-//   seen    share of the whole list (not just the playable set) ever shown
-//   t/min   turns a minute, cards included
+//   seen    share of the whole list (not just the playable set) ever shown;
+//           Director: shown on screen, so a word dealt to a corner the camera
+//           never reaches doesn't count
+//   t/min   turns a minute, cards included; t/pair = per word in view
 //   cards   cards that showed both their turns; short = retired early for want
 //           of a turn while still in view
+//   top3    share of all cards that went to the three most-carded pairs
+//   regap   median seconds from a card closing to the next card on that pair;
+//           re15 = share of those within 15 s (a card folds away and another
+//           opens on the same stones)
 //
 // GOOD: stall ≤ .05, stuck ≤ .10, repeat ≤ .20, linked .35–.70
 // JUKUGO-LIKE: stall ≤ .02, stuck ≤ .03, repeat ≤ .13, linked .40–.65
@@ -56,7 +67,7 @@ const arg = (name, fallback) => {
 const SEEDS = Number(arg('seeds', 10))
 const TICKS = Number(arg('ticks', 1500))
 const HOURS = Number(arg('hours', 1))
-const VIEWS = arg('view', '1280x800,390x844').split(',').map((v) => v.split('x').map(Number))
+const VIEWS = arg('view', '1280x800,390x844,844x390').split(',').map((v) => v.split('x').map(Number))
 const WORDS_N = Number(arg('words', 0))
 const NODEAL = Number(arg('nodeal', 0))
 const BEAT = 2.05
@@ -104,7 +115,9 @@ const { Director } = await import('../src/director.js')
 const { LinkStore, pointAt } = await import('../src/links.js')
 const { touchesUpland } = await import('../src/island.js')
 const { ALL, LEXICON, LINK_MAX, COLLIDE, compSize } = await import('../src/lexicon.js')
-const { GRID, BOUNDS, layoutPairs, mulberry32 } = await import('../src/field.js')
+const { GRID, BOUNDS, WORD, layoutPairs, mulberry32 } = await import('../src/field.js')
+const { wander } = await import('../src/view.js')
+const { REVEAL } = await import('../src/floor.js')
 
 if (args.includes('--deal-only')) dealOnly()
 else {
@@ -112,7 +125,7 @@ else {
   console.log(`COLLIDE ${COLLIDE.toFixed(4)} · LINK_MAX ${LINK_MAX.toFixed(2)}\n`)
   table(`harness: ${SEEDS} seeds × ${TICKS} beats of ${BEAT} s`, ['pairs', 'stall', 'stuck', 'strict', 'repeat', 'rep24', 'return', 'linked', 'lo', 'hi', 'seen'], harness)
   for (const [w, h] of VIEWS) {
-    table(`Director at ${w}×${h}: ${SEEDS} seeds × ${HOURS} h`, ['inview', 'stall', 'stuck', 'strict', 'repeat', 'rep24', 'return/h', 'linked', 'seen', 't/min', 'cards', 'short'], (seed) => directed(seed, w, h))
+    table(`Director at ${w}×${h}: ${SEEDS} seeds × ${HOURS} h`, ['inview', 'stall', 'stuck', 'strict', 'repeat', 'rep24', 'return/h', 'linked', 'seen', 't/min', 't/pair', 'cards', 'short', 'top3', 'regap', 're15'], (seed) => directed(seed, w, h))
   }
   await dealCheck()
 }
@@ -140,7 +153,7 @@ function table(title, cols, run) {
 
 // Counts to one decimal; shares to three, without the leading zero.
 function fmt(col, v) {
-  const count = ['pairs', 'inview', 'return/h', 't/min'].includes(col)
+  const count = ['pairs', 'inview', 'return/h', 't/min', 't/pair', 'regap'].includes(col)
   return (count ? v.toFixed(1) : v.toFixed(3).replace(/^0/, '')).padStart(9)
 }
 
@@ -221,19 +234,12 @@ function directed(seed, w, h) {
   const board = new Board(seed)
   const rec = recorder(board)
 
-  // main.js's drift, clamped to the floor, and Scene3D's orthographic projection.
-  const TAU = Math.PI * 2
+  // The camera's wander (view.js), with no drag, and Scene3D's orthographic
+  // projection.
   const cam = {}
   const camera = (t) => {
-    const base = Math.max(34, Math.min(60, Math.min(w, h) / 17))
-    cam.ppu = base * (1 + 0.035 * Math.sin((t / 53) * TAU))
-    const tx = 2.5 * Math.sin((t / 97) * TAU) + 1.4 * Math.sin((t / 41) * TAU)
-    const tz = 1.8 * Math.sin((t / 83) * TAU + 1)
-    cam.tx = Math.max(BOUNDS.x0 + 6, Math.min(BOUNDS.x1 - 6, tx))
-    cam.tz = Math.max(BOUNDS.z0 + 4, Math.min(BOUNDS.z1 - 4, tz))
-    const yaw = ((-3 + 5 * Math.sin((t / 120) * TAU)) * Math.PI) / 180
-    const pitch = ((55 + 2.5 * Math.sin((t / 71) * TAU)) * Math.PI) / 180
-    Object.assign(cam, { cy: Math.cos(yaw), sy: Math.sin(yaw), cp: Math.cos(pitch), sp: Math.sin(pitch) })
+    wander(cam, t, w, h)
+    Object.assign(cam, { cy: Math.cos(cam.yaw), sy: Math.sin(cam.yaw), cp: Math.cos(cam.pitch), sp: Math.sin(cam.pitch) })
   }
   const blocks = new Map(
     board.tiles.map((t) => [
@@ -264,6 +270,9 @@ function directed(seed, w, h) {
     },
   }
   let opened = 0, full = 0, short = 0
+  const carded = new Map()
+  const closedAt = new Map()
+  const regaps = []
   const notes = {
     list: [],
     has(pair) {
@@ -272,15 +281,18 @@ function directed(seed, w, h) {
     noted() {
       return new Set(this.list.filter((n) => !n.closing).map((n) => n.pair))
     },
-    open(pair) {
+    open(pair, now) {
       const note = { pair, closing: null, turns: 0 }
       this.list.push(note)
       opened++
+      carded.set(pair, (carded.get(pair) ?? 0) + 1)
+      if (closedAt.has(pair)) regaps.push(now - closedAt.get(pair))
       return note
     },
     close(note, now) {
       if (note.closing) return
       note.closing = now
+      closedAt.set(note.pair, now)
       if (note.turns >= 2) full++
       else if (director.inView(-0.05).includes(note.pair)) short++
     },
@@ -299,16 +311,20 @@ function directed(seed, w, h) {
     Board.prototype.turn.call(board, pair, choice, now)
   }
 
-  // The opening, as main.js: stones fall in from the middle of the frame out.
+  // The opening, as main.js: the map draws itself, then the stones fall in
+  // from the middle of the frame out, and the Director starts just before
+  // the first lands.
   camera(0)
+  const drop = REVEAL.stones
   for (const p of board.pairs) {
-    const start = 0.15 + Math.hypot(p.x - cam.tx, p.z - cam.tz) * 0.035 + Math.random() * 0.12
+    const start = drop + Math.hypot(p.x - cam.tx, p.z - cam.tz) * 0.035 + Math.random() * 0.12
     for (const t of p.tiles) blocks.get(t).drop = { t0: start + t.index * 0.06, dur: 0.7 }
     p.caption = { text1: '', text2: '' }
   }
-  director.start(0)
+  director.start(drop - 0.15)
 
   const DUR = HOURS * 3600
+  const shown = new Set()
   let beats = 0, lost = 0
   let linked = 0, linkedN = 0, stuck = 0, strict = 0, stuckN = 0, inview = 0
   for (let step = 0; step * DT <= DUR; step++) {
@@ -326,6 +342,7 @@ function directed(seed, w, h) {
       if (b.roll && now >= b.roll.t0 + b.roll.dur) b.roll = null
     }
     notes.list = notes.list.filter((n) => !n.closing || now - n.closing < 0.9)
+    if (step % 15 === 0) for (const p of director.inView(0)) shown.add(p.entry.word)
     if (step % 60 === 0) {
       linked += director.linkedInView() ?? 0
       linkedN++
@@ -339,6 +356,8 @@ function directed(seed, w, h) {
       stuckN++
     }
   }
+  const top = [...carded.values()].sort((a, b) => b - a).slice(0, 3)
+  regaps.sort((a, b) => a - b)
   return {
     inview: inview / stuckN,
     stall: lost / Math.max(1, beats),
@@ -348,18 +367,24 @@ function directed(seed, w, h) {
     rep24: rec.rep24 / Math.max(1, rec.turns),
     'return/h': rec.returns / HOURS,
     linked: linked / linkedN,
-    seen: rec.seen.size / ALL.length,
+    seen: shown.size / ALL.length,
     't/min': rec.turns / (DUR / 60),
+    't/pair': rec.turns / (DUR / 60) / (inview / stuckN),
     cards: full / Math.max(1, opened),
     short: short / Math.max(1, opened),
+    top3: top.reduce((a, b) => a + b, 0) / Math.max(1, opened),
+    regap: regaps.length ? regaps[Math.floor(regaps.length / 2)] : 0,
+    re15: regaps.filter((g) => g < 15).length / Math.max(1, regaps.length),
   }
 }
 
 // Deal 30 boards and check every one: each pair holds a playable word, no
-// word twice, never a nodeal word, never one from a small component. A pair
-// with nothing left to deal is left out; its cell counts as a hole. Then turn
-// each board 100 times and check that no stone, and no line as links.js
-// draws it (stubs included), ever reaches into the upland.
+// word twice, never a nodeal word, never one from a small component, none on
+// the star compass. A pair with nothing left to deal is left out; its cell
+// counts as a hole. Then turn each board 100 times and check that no stone,
+// and no line as links.js draws it (stubs included), ever reaches into the
+// upland, that no line crosses the compass's rim on its way somewhere else,
+// and that every field line shows past its word's stones.
 function dealOnly() {
   const N = 30
   let holes = 0, pairs = 0
@@ -378,6 +403,8 @@ function dealOnly() {
     if (board.tiles.some((t, i) => t.id !== i || t.pair !== Math.floor(i / 2))) fail('ids not renumbered')
     const touches = (x, z, m) => touchesUpland(board.island, x - m, z - m, x + m, z + m)
     if (board.tiles.some((t) => touchesUpland(board.island, t.x - 0.75, t.z - 0.5, t.x + 0.75, t.z + 0.5))) fail('a stone stands on the upland')
+    const c = board.island.compass
+    if (board.pairs.some((p) => Math.hypot(Math.max(0, Math.abs(p.x - c.x) - WORD.slabs.hx), Math.max(0, Math.abs(p.z - c.z) - WORD.slabs.hz)) < c.r)) fail('a word is set on the star compass')
     const store = new LinkStore()
     const checked = new Set()
     for (let k = 0; k <= 100 && board.pairs.length; k++) {
@@ -388,7 +415,9 @@ function dealOnly() {
         for (let d = 0; d <= l.len; d += 0.05) {
           const [x, z] = pointAt(l, d)
           if (touches(x, z, 0)) fail(`a ${l.kind} line crosses the upland (${l.key})`)
+          if (l.feature?.kind !== 'compass' && Math.hypot(x - c.x, z - c.z) < c.r * 1.12) fail(`a ${l.kind} line crosses the star compass (${l.key})`)
         }
+        if (l.kind === 'field' && l.len - l.portA < 0.15) fail(`a field line ends under its own word (${l.key})`)
       }
       const movable = board.pairs.filter((p) => board.canTurn(p, k * 2.05))
       if (!movable.length) break
@@ -422,7 +451,10 @@ async function dealCheck() {
         const timer = setTimeout(() => child.kill(), 90000)
         child.on('close', (code, signal) => {
           clearTimeout(timer)
-          resolve({ n, nodeal, ok: code === 0, text: signal ? 'the deal hung' : (code === 0 ? out : err).trim() })
+          // A kill only says the 90 s ran out: a hung deal, or a machine too
+          // busy to finish 30 boards (the full list takes ~14 s on its own).
+          const text = signal ? 'no result in 90 s: the deal hung, or the machine is busy' : (code === 0 ? out : err).trim()
+          resolve({ n, nodeal, ok: code === 0, text })
         })
       }),
   )

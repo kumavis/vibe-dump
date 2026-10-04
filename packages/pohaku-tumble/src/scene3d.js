@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { clamp01, inOutCubic, smooth } from './ease.js'
-import { stoneText } from './lexicon.js'
+import { BY_STONE, stoneText } from './lexicon.js'
 import { SLAB, mulberry32 } from './field.js'
 import { SHADOW, STONE, STONE_LIGHT, font } from './palette.js'
 
@@ -13,8 +13,9 @@ const WORN = 0.09
 const BEVEL = 0.06
 const VARIANTS = 6
 // A face just turned away keeps this much of its pecking's lightness: the
-// carving is still there, but the fresh grey has gone back toward the stone.
-const GHOST = 0.4
+// carving is still there, but the fresh grey has gone most of the way back to
+// the stone — there to be read when you look for it, not at a glance.
+const GHOST = 0.22
 // A glyph texture covers one 1.5 × 1 face, at 256 texels a unit.
 const GW = 384
 const GH = 256
@@ -26,12 +27,13 @@ const GH = 256
 // ghost of what the word used to be. The face that was on the front goes
 // underneath and is thrown away.
 //
-// The stone keeps every roll it has made (the mesh's own quaternion), so its
+// The stone keeps the rolls it has made (the mesh's own quaternion), so its
 // grain, pits and worn edges go round with it instead of snapping back when a
-// roll ends. The four faces a roll passes through are numbered in the stone's
-// own frame — 0 +Y, 1 +Z, 2 −Y, 3 −Z — and after r rolls face k sits where
-// face (k + r) mod 4 sat at the start: 0 top, 1 front, 2 underneath, 3 back.
-const ROLL = new THREE.Quaternion().setFromAxisAngle(X, Math.PI / 2)
+// roll ends. Four rolls bring it back to where it started, so only the count
+// mod 4 is kept. The four faces a roll passes through are numbered in the
+// stone's own frame — 0 +Y, 1 +Z, 2 −Y, 3 −Z — and after r rolls face k sits
+// where face (k + r) mod 4 sat at the start: 0 top, 1 front, 2 underneath,
+// 3 back.
 const TOP = 0
 const FRONT = 1
 const BACK = 3
@@ -50,30 +52,36 @@ export class Scene3D {
     this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 400)
 
     // Warm light off the paper from below, a pale sky above.
-    scene.add(new THREE.HemisphereLight(0xfaf4ea, 0xab9d86, 1.9))
+    scene.add(new THREE.HemisphereLight(0xfaf4ea, 0xbcae95, 1.9))
     const sun = new THREE.DirectionalLight(0xffeedb, 2.9)
     sun.castShadow = true
     sun.shadow.mapSize.set(1024, 1024)
-    sun.shadow.radius = 7
+    sun.shadow.radius = 4
     sun.shadow.blurSamples = 12
     sun.shadow.bias = -0.0006
     sun.shadow.camera.near = 1
     sun.shadow.camera.far = 120
     scene.add(sun, sun.target)
     this.sun = sun
-    // A low sun from the left and a little behind, about 38° up: low enough to
-    // rake across the faces so the pits and the pecking stand out, and coming
-    // mostly from the side, so the longer shadows run along a row of stones
-    // rather than down over the captions beneath them. The fronts are in the
-    // fill and read as the dark side of the stone.
-    this.sunDir = new THREE.Vector3(-0.74, 0.62, -0.3).normalize()
+    // The sun stands behind and to the left, a little under 60° up, about
+    // where Jukugo's does. High enough that a stone's shadow stays short — a
+    // dark seam along its right side and its foot, not a smear across the next
+    // word — and coming mostly from the side, so what shadow there is runs
+    // along the row rather than down over the captions beneath it. The fronts
+    // are in the fill and read as the dark side of the stone.
+    this.sunDir = new THREE.Vector3(-0.55, 1, -0.35).normalize()
+    // The pecking is read by a lower light from the same quarter, about 38°
+    // up: raking across a face, it lays a thin shadow inside each letter's
+    // edge. Only the stone's shader uses it, so it casts no shadow of its own.
+    this.rake = new THREE.Vector3(-0.74, 0.62, -0.3).normalize()
 
     // The floor is the page itself (the map is on a canvas underneath this
     // one). The GL floor only exists to catch shadows, drawn as a translucent
-    // warm brown over whatever is below.
+    // warm brown over whatever is below — light enough that the map reads on
+    // through it.
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(400, 400),
-      new THREE.ShadowMaterial({ color: new THREE.Color(SHADOW), opacity: 0.34 }),
+      new THREE.ShadowMaterial({ color: new THREE.Color(SHADOW), opacity: 0.2 }),
     )
     ground.rotation.x = -Math.PI / 2
     ground.receiveShadow = true
@@ -188,7 +196,7 @@ class Block {
     this.u = stoneUniforms(scene3d, rng)
     const stone = new THREE.Mesh(scene3d.slabs[Math.floor(rng() * VARIANTS)], stoneMaterial(this.u))
     this.rolls = Math.floor(rng() * 4)
-    for (let i = 0; i < this.rolls; i++) stone.quaternion.premultiply(ROLL)
+    stone.quaternion.setFromAxisAngle(X, (this.rolls * Math.PI) / 2)
     stone.castShadow = true
     stone.receiveShadow = true
     stone.userData.tile = tile
@@ -215,8 +223,10 @@ class Block {
     scene3d.scene.add(blob)
     this.blob = blob
 
-    // What is pecked into each of the stone's four faces, by its own frame.
+    // What is pecked into each of the stone's four faces, by its own frame,
+    // and which of them are still waiting for their root's texture.
     this.faces = [null, null, null, null]
+    this.waiting = new Set()
     this.peck(this.face(TOP), tile.stone, 1)
     this.roll = null
     this.drop = null
@@ -224,16 +234,23 @@ class Block {
 
   // The stone's own face that currently sits at `place` (TOP, FRONT, …).
   face(place) {
-    return (place - this.rolls + 400) % 4
+    return (place - this.rolls + 4) % 4
   }
 
+  // The root's texture may come a little later, from the cache's idle-time
+  // pecking; `hurry` sees that it is there before the face can be seen.
   peck(k, stone, lift) {
     this.free(k)
     const text = stoneText(stone)
     this.faces[k] = text
-    this.u.uGlyph.value[k] = this.s.glyphs.acquire(text)
     this.u.uLift.value.setComponent(k, lift)
     this.u.uCut.value.setComponent(k, 1)
+    this.waiting.add(k)
+    this.s.glyphs.acquire(text, (tex) => {
+      if (this.faces[k] !== text) return
+      this.u.uGlyph.value[k] = tex
+      this.waiting.delete(k)
+    })
   }
 
   free(k) {
@@ -241,6 +258,7 @@ class Block {
     if (!text) return
     this.s.glyphs.release(text)
     this.faces[k] = null
+    this.waiting.delete(k)
     this.u.uGlyph.value[k] = this.s.glyphs.blank
     this.u.uLift.value.setComponent(k, 0)
     this.u.uCut.value.setComponent(k, 0)
@@ -265,22 +283,40 @@ class Block {
     return this.roll ? this.roll.t0 + this.roll.dur : 0
   }
 
+  // Letters still waiting when the stone is about to show them are pecked
+  // there and then: every face from the moment the stone starts to fall, but
+  // a turn's new root only once the roll is a fifth through — until then it
+  // is on the back, out of sight, and idle time may yet get to it.
+  hurry(now) {
+    if (!this.waiting.size || (this.drop && now < this.drop.t0)) return
+    const r = this.roll
+    const hidden = r && now < r.t0 + 0.2 * r.dur ? r.faces.back : -1
+    for (const k of this.waiting) if (k !== hidden) this.s.glyphs.hurry(this.faces[k])
+  }
+
   finishRoll() {
     const { faces } = this.roll
     this.free(faces.front)
     this.u.uLift.value.setComponent(faces.top, GHOST)
-    this.stone.quaternion.premultiply(ROLL)
-    this.rolls++
+    // Set from the count rather than turned once more, so a stone that has
+    // rolled for hours sits as square as it did at the start.
+    this.rolls = (this.rolls + 1) % 4
+    this.stone.quaternion.setFromAxisAngle(X, (this.rolls * Math.PI) / 2)
     this.group.quaternion.identity()
     this.group.position.y = 0.5
     this.roll = null
   }
 
   update(now) {
+    this.hurry(now)
     const g = this.group
     let lift = 0
     if (this.drop) {
       const t = clamp01((now - this.drop.t0) / this.drop.dur)
+      // A stone waiting to fall isn't in the world yet. Hung above the floor
+      // it would show at the top of the frame, and cast a shadow, while the
+      // map is still drawing itself.
+      g.visible = now >= this.drop.t0
       if (now < this.drop.t0) {
         lift = 30
       } else if (t < 0.62) {
@@ -331,9 +367,12 @@ const HALF = [SLAB / 2, 0.5, 0.5]
 // The block every slab is worked from: a box divided finely enough to be
 // shaped, the outer B rows on each side spent on the band the widest bevel can
 // reach and the rest spread evenly over the face. Built once and shared.
+// The faces want few rows: their swell is under a pixel, and the pits, grain
+// and letters are all in the shader. The rows along an edge are there to
+// carry its wear from rounded to nearly sharp — about 1,700 triangles a slab.
 function slabBlank() {
-  const B = 4 // rows across each quarter of the widest bevel
-  const flat = [30, 20, 20] // rows across the rest of each face
+  const B = 3 // rows across the band, on each face that meets an edge
+  const flat = [8, 5, 5] // rows across the rest of each face
   const N = flat.map((n) => n + 2 * B)
   const geo = new THREE.BoxGeometry(1, 1, 1, ...N)
   geo.deleteAttribute('normal')
@@ -414,13 +453,13 @@ function valueNoise(rng) {
   }
 }
 
-// Each stone's own uniforms: where in the rock it was cut from, the sun (one
-// vector, shared), and the four faces' pecking.
+// Each stone's own uniforms: where in the rock it was cut from, the raking
+// light (one vector, shared), and the four faces' pecking.
 function stoneUniforms(scene3d, rng) {
   const blank = scene3d.glyphs.blank
   return {
     uSeed: { value: new THREE.Vector3(rng() * 40, rng() * 40, rng() * 40) },
-    uSun: { value: scene3d.sunDir },
+    uSun: { value: scene3d.rake },
     uGlyph: { value: [blank, blank, blank, blank] },
     uLift: { value: new THREE.Vector4() },
     uCut: { value: new THREE.Vector4() },
@@ -429,8 +468,9 @@ function stoneUniforms(scene3d, rng) {
 
 // The palette's basalt is the stone's middle tone; the body drifts either side
 // of it, a little greyer than the swatch so the warm light doesn't turn it to
-// brown.
-const BASALT = greyer(new THREE.Color(STONE), 0.45)
+// brown, and a little lighter, so a lit face reads as dark warm grey rather
+// than black and the slabs don't outweigh the map they stand on.
+const BASALT = greyer(new THREE.Color(STONE), 0.45).multiplyScalar(1.2)
 const DARK = BASALT.clone().multiplyScalar(0.72)
 const LIGHT = BASALT.clone().multiplyScalar(1.45)
 const PECKED = new THREE.Color(STONE_LIGHT)
@@ -540,16 +580,19 @@ float vnoise(vec3 p) {
 }
 
 // Distance to the nearest of a jittered lattice of points, and a random
-// number belonging to that point's cell.
+// number belonging to that point's cell. Only the eight cells nearest p are
+// searched, not all 27 round it: a point in any other cell is at least half
+// a cell away, and a pit is never that wide.
 vec2 worley(vec3 p) {
   vec3 i = floor(p);
   vec3 f = fract(p);
+  vec3 o = step(0.5, f) - 1.0;
   float best = 9.0;
   float id = 0.0;
-  for (int z = -1; z <= 1; z++)
-  for (int y = -1; y <= 1; y++)
-  for (int x = -1; x <= 1; x++) {
-    vec3 c = vec3(x, y, z);
+  for (int z = 0; z <= 1; z++)
+  for (int y = 0; y <= 1; y++)
+  for (int x = 0; x <= 1; x++) {
+    vec3 c = o + vec3(x, y, z);
     vec3 d = c + hash33(i + c) - f;
     float dd = dot(d, d);
     if (dd < best) {
@@ -600,23 +643,25 @@ vec3 dpy = dFdy(vObj);
 float px = max(max(length(dpx), length(dpy)), 1e-5);
 
 // The body: slow drift between a darker and a lighter grey, and a finer
-// grain over it.
+// grain over it. The fine detail, here and in the pits below, is only worked
+// out where it can be seen: zoomed out, or on a small screen, it is skipped.
 vec3 sp = vObj + uSeed;
 float tone = 0.55 * vnoise(sp * 2.1) + 0.3 * vnoise(sp * 4.7 + 9.1) + 0.15 * vnoise(sp * 11.0 + 3.3);
-float grain = vnoise(sp * 38.0);
 // Each stone a shade of its own, as stones gathered from one shore are.
 vec3 rock = mix(uDark, uLight, smoothstep(0.25, 0.78, tone)) * (0.84 + 0.32 * hash13(uSeed));
-rock *= 0.9 + 0.2 * mix(0.5, grain, smoothstep(2.5, 6.0, 0.026 / px));
-// Pale specks of feldspar in the groundmass, seen once the stone is near.
-rock *= 1.0 + 0.45 * smoothstep(0.82, 0.93, vnoise(sp * 90.0)) * smoothstep(1.5, 3.0, 0.011 / px);
+float near = smoothstep(2.5, 6.0, 0.026 / px);
+if (near > 0.0) rock *= 0.9 + 0.2 * mix(0.5, vnoise(sp * 38.0), near);
+// Pale specks of feldspar in the groundmass, seen once the stone is nearer.
+float nearer = smoothstep(1.5, 3.0, 0.011 / px);
+if (nearer > 0.0) rock *= 1.0 + 0.45 * smoothstep(0.82, 0.93, vnoise(sp * 90.0)) * nearer;
 
 // Vesicles and olivine, one Worley field: where the rock is frothy up to two
 // cells in five hold a pit, where it is dense none; one in sixty holds a
 // crystal.
 const float CELLS = 24.0;
-vec2 wv = worley(sp * CELLS);
 float aa = px * CELLS * 0.75;
 float seen = smoothstep(1.2, 3.0, 1.0 / (CELLS * px));
+vec2 wv = seen > 0.0 ? worley(sp * CELLS) : vec2(9.0, 0.0);
 float hasPit = step(wv.y, 0.42 * smoothstep(0.2, 0.75, vnoise(sp * 3.3 + 5.0))) * seen;
 float rad = mix(0.1, 0.34, pow(fract(wv.y * 37.0), 2.2));
 float pit = hasPit * (1.0 - smoothstep(rad - aa, rad + aa, wv.x));
@@ -702,22 +747,33 @@ function blobTexture() {
 
 // One texture per root on show, shared by every face that carries it.
 // Released roots linger a while — the same few hundred keep coming back.
+// A root not to hand is pecked in the page's idle time rather than on the
+// frame that asks for it: the opening's fifty-odd would otherwise hold up the
+// first frame, and a turn would hitch. A face about to be seen can't wait for
+// that, and has its root pecked at once (`hurry`).
 class GlyphCache {
   constructor() {
     this.map = new Map()
     this.idle = []
+    this.queue = []
+    this.asked = false
     this.blank = glyphTexture(new Uint8Array([0, 0]), 1, 1)
   }
 
-  acquire(text) {
+  // `use(tex)` gets the root's texture: at once if it is cached, or as soon
+  // as it has been pecked.
+  acquire(text, use) {
     let e = this.map.get(text)
     if (!e) {
-      e = { tex: pecked(text), refs: 0 }
+      e = { text, tex: null, refs: 0, waiting: [] }
       this.map.set(text, e)
+      this.queue.push(e)
+      this.ask()
     }
     if (e.refs === 0) this.idle = this.idle.filter((t) => t !== text)
     e.refs++
-    return e.tex
+    if (e.tex) use(e.tex)
+    else e.waiting.push(use)
   }
 
   release(text) {
@@ -727,23 +783,76 @@ class GlyphCache {
     if (e.refs > 0) return
     this.idle.push(text)
     while (this.idle.length > 48) {
-      const old = this.idle.shift()
-      this.map.get(old).tex.dispose()
-      this.map.delete(old)
+      const old = this.map.get(this.idle.shift())
+      old.tex?.dispose()
+      this.map.delete(old.text)
     }
+  }
+
+  hurry(text) {
+    const e = this.map.get(text)
+    if (!e || e.tex) return
+    this.queue.splice(this.queue.indexOf(e), 1)
+    this.peck(e)
+  }
+
+  peck(e) {
+    e.tex = pecked(e.text)
+    for (const use of e.waiting) use(e.tex)
+    e.waiting = []
+  }
+
+  ask() {
+    if (this.asked) return
+    this.asked = true
+    const work = (deadline) => this.work(deadline)
+    if (window.requestIdleCallback) requestIdleCallback(work, { timeout: 50 })
+    else setTimeout(work, 0)
+  }
+
+  // Pecks while the idle period lasts. A page that never falls idle gets the
+  // timeout instead (and one without idle callbacks, a plain task), and gives
+  // the queue a short slice of time anyway. Always at least one root.
+  work(deadline) {
+    this.asked = false
+    const idle = deadline && !deadline.didTimeout
+    const start = performance.now()
+    const more = () => (idle ? deadline.timeRemaining() > 3 : performance.now() - start < 8)
+    for (let n = 0; this.queue.length && (n === 0 || more()); n++) {
+      const e = this.queue.shift()
+      // One released and evicted before it was pecked has nobody waiting.
+      if (this.map.get(e.text) === e) this.peck(e)
+    }
+    if (this.queue.length) this.ask()
   }
 }
 
-// Every root is set at one size if it fits the measure — 4–5 letters do —
-// so the two stones of a word read as one word. Longer roots are condensed,
-// down to NARROWEST; only past that do they get smaller.
-const EM = 108
-const MEASURE = 0.86 * GW
+const EM = 108 // the largest a root is set
+const SMALLEST = 84 // below this a root on a phone stops reading as letters
+const MEASURE = 0.88 * GW // the flat of the face, inside the most worn arris
 const NARROWEST = 0.6
 const TRACK = 0.05 // letter-spacing, in em, as cut capitals want
 const PECK = 2.6 // peck radius in texels: ~1.5 mm on a 30 cm slab
 
 let scratch = null
+let em = 0
+
+// Every root of up to five letters is set at one size, so the two stones of a
+// word read as one word: the size at which the widest of them just fills the
+// measure, found once from the word list. Longer roots are condensed, down to
+// NARROWEST; only past that do they get smaller.
+function rootSize(ctx) {
+  if (em) return em
+  ctx.font = font(100, { weight: 600 })
+  let widest = 0
+  for (const id of BY_STONE.keys()) {
+    const text = stoneText(id)
+    const n = [...text].length
+    if (n <= 5) widest = Math.max(widest, ctx.measureText(text).width / 100 + TRACK * (n - 1))
+  }
+  em = Math.max(SMALLEST, Math.min(EM, Math.floor(MEASURE / widest)))
+  return em
+}
 
 // Pecked, not printed: the root is set in a scratch canvas, then rebuilt as
 // a field of overlapping pecks — small discs, each struck where the letter is
@@ -775,11 +884,12 @@ function pecked(text) {
     const width = ctx.measureText(text).width + TRACK * size * (chars.length - 1)
     return { at, width }
   }
-  let size = EM
+  const full = rootSize(ctx)
+  let size = full
   let m = measure(size)
   let squeeze = Math.min(1, MEASURE / m.width)
   if (squeeze < NARROWEST) {
-    size = Math.floor((EM * squeeze) / NARROWEST)
+    size = Math.floor((full * squeeze) / NARROWEST)
     m = measure(size)
     squeeze = Math.min(1, MEASURE / m.width)
   }
@@ -797,27 +907,38 @@ function pecked(text) {
     ctx.fillText(ch, 0, 0)
     ctx.restore()
   })
-  const ink = ctx.getImageData(0, 0, GW, GH).data
+
+  // Only the letters' box is worked, with room round it for the tilt and the
+  // strays: on most roots, under half the face.
+  const ext = ctx.measureText(text)
+  const pad = Math.ceil(PECK * 4)
+  const left = Math.max(0, Math.floor(x0 - pad))
+  const top = Math.max(0, Math.floor(base - ext.actualBoundingBoxAscent - pad))
+  const bw = Math.min(GW, Math.ceil(x0 + m.width * squeeze + pad)) - left
+  const bh = Math.min(GH, Math.ceil(base + ext.actualBoundingBoxDescent + pad)) - top
+  const ink = ctx.getImageData(left, top, bw, bh).data
   const inside = (x, y) => {
-    const i = Math.round(y) * GW + Math.round(x)
-    return x < 0 || y < 0 || x >= GW || y >= GH ? 0 : ink[i * 4] / 255
+    const i = Math.round(y) * bw + Math.round(x)
+    return x < 0 || y < 0 || x > bw - 1 || y > bh - 1 ? 0 : ink[i * 4] / 255
   }
 
-  const cover = new Float32Array(GW * GH)
-  const bright = new Float32Array(GW * GH)
+  const cover = new Float32Array(bw * bh)
+  const bright = new Float32Array(bw * bh)
   const strike = (cx, cy, r, b) => {
-    const left = Math.max(0, Math.floor(cx - r - 1))
-    const right = Math.min(GW - 1, Math.ceil(cx + r + 1))
-    const top = Math.max(0, Math.floor(cy - r - 1))
-    const bottom = Math.min(GH - 1, Math.ceil(cy + r + 1))
-    for (let y = top; y <= bottom; y++) {
+    const reach = r + 0.5
+    const x1 = Math.max(0, Math.floor(cx - reach))
+    const x2 = Math.min(bw - 1, Math.ceil(cx + reach))
+    const y1 = Math.max(0, Math.floor(cy - reach))
+    const y2 = Math.min(bh - 1, Math.ceil(cy + reach))
+    for (let y = y1; y <= y2; y++) {
       const dy = y + 0.5 - cy
-      for (let x = left; x <= right; x++) {
+      for (let x = x1; x <= x2; x++) {
         const dx = x + 0.5 - cx
-        const a = Math.min(1, r + 0.5 - Math.sqrt(dx * dx + dy * dy))
-        if (a <= 0) continue
-        const i = y * GW + x
-        cover[i] = Math.max(cover[i], a)
+        const d2 = dx * dx + dy * dy
+        if (d2 >= reach * reach) continue
+        const a = Math.min(1, reach - Math.sqrt(d2))
+        const i = y * bw + x
+        if (a > cover[i]) cover[i] = a
         if (a > 0.5) bright[i] = b
       }
     }
@@ -825,8 +946,8 @@ function pecked(text) {
   // A jittered grid of strikes over the letters, thick enough to close up,
   // with the edge left to chance; then a few strays just outside.
   const step = PECK * 1.15
-  for (let y = step / 2; y < GH; y += step) {
-    for (let x = step / 2; x < GW; x += step) {
+  for (let y = step / 2; y < bh; y += step) {
+    for (let x = step / 2; x < bw; x += step) {
       const cx = x + (rng() - 0.5) * step
       const cy = y + (rng() - 0.5) * step
       const v = inside(cx, cy)
@@ -841,12 +962,13 @@ function pecked(text) {
     }
   }
 
+  // Into the face's texture, the rest of which stays unpecked (zero).
   const data = new Uint8Array(GW * GH * 2)
-  for (let y = 0; y < GH; y++) {
+  for (let y = 0; y < bh; y++) {
     // Canvas rows run down, texture rows up.
-    const row = (GH - 1 - y) * GW
-    for (let x = 0; x < GW; x++) {
-      const i = y * GW + x
+    const row = (GH - 1 - (top + y)) * GW + left
+    for (let x = 0; x < bw; x++) {
+      const i = y * bw + x
       data[(row + x) * 2] = Math.round(cover[i] * 255)
       data[(row + x) * 2 + 1] = Math.round(bright[i] * 255)
     }
@@ -862,6 +984,11 @@ function glyphTexture(data, w, h) {
   tex.magFilter = THREE.LinearFilter
   tex.anisotropy = 4
   tex.needsUpdate = true
+  // Once it is on the GPU the bytes aren't needed again; letting them go
+  // keeps a couple of hundred kilobytes a root out of the page's memory.
+  tex.onUpdate = () => {
+    tex.image.data = null
+  }
   return tex
 }
 

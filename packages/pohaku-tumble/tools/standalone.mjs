@@ -6,7 +6,7 @@
 //   node tools/standalone.mjs            → dist/artifact.html
 //
 // The emitted file is a page *fragment* — title, style, markup, script, with no
-// <html>/<body> wrapper — as the artifact pipeline expects. The four woff2
+// <html>/<body> wrapper — as the artifact pipeline expects. The three woff2
 // subsets go in as data: URIs: the whole piece is drawn with them, and a host
 // that refuses the font files would fall back silently to a system face.
 import { readFile, writeFile, readdir } from 'node:fs/promises'
@@ -40,8 +40,8 @@ const bodyInner = html
 // byte-identical once the parser hands the string to JS.
 const guard = (s) => s.replaceAll('</script', '<\\/script')
 
-// The app's own <title> carries the kanji too; an artifact is named by its name.
-const out = `<title>Jukugo Tumble</title>
+// An artifact is named by its <title>.
+const out = `<title>Pōhaku Tumble</title>
 <style>
 ${css}
 </style>

@@ -38,12 +38,11 @@ export function unresolved(id) {
 // The whole list, for the cards and the gloss lookups. A word is its spelling;
 // a second row with the same spelling is dropped.
 export const ALL = []
-export const BY_WORD = new Map()
+const spelled = new Set()
 for (const r of WORDS) {
-  if (BY_WORD.has(r.w)) continue
-  const entry = { word: r.w, a: r.a, b: r.b, gloss: r.g, field: r.f, ev: r.ev, nodeal: !!r.nodeal }
-  ALL.push(entry)
-  BY_WORD.set(entry.word, entry)
+  if (spelled.has(r.w)) continue
+  spelled.add(r.w)
+  ALL.push({ word: r.w, a: r.a, b: r.b, gloss: r.g, field: r.f, ev: r.ev, nodeal: !!r.nodeal })
 }
 
 function push(map, key, value) {

@@ -1,5 +1,5 @@
 import { clamp01, inOutCubic } from './ease.js'
-import { featureAnchor, linkPath, tileOffsets, SLAB } from './field.js'
+import { linkPath, tileOffsets, WORD } from './field.js'
 
 // A field line longer than this doesn't cross the island to its place: it
 // runs a short way in the right direction and ends in an arrow, an off-page
@@ -84,12 +84,13 @@ function build(d) {
     link.portB = exitAt(link, footprint(d.b), true)
     return link
   }
-  // A field line lands on the nearest point of its place's outline: a circle,
-  // a rectangle, or a polyline such as the stream or the lava front. `room` is
-  // how far it may run before it would reach into the upland; one that would
-  // cross the upland to get there is cut down to a connector that stops short.
-  const { pair, feature, room } = d
-  let [ex, ez] = featureAnchor(feature, pair.x, pair.z)
+  // A field line lands on its place's outline at `end`, which the board
+  // works out (field.js fieldAnchor): on a circle, a rectangle, or a polyline
+  // such as the stream or the lava front. `room` is how far it may run before
+  // it would reach into the upland; one that would cross the upland to get
+  // there is cut down to a connector that stops short.
+  const { pair, end, room } = d
+  let [ex, ez] = end
   let stub = false
   const dist = Math.hypot(ex - pair.x, ez - pair.z)
   if (dist > Math.min(FIELD_REACH, room)) {
@@ -99,18 +100,13 @@ function build(d) {
     stub = true
   }
   const link = { ...d, stub, ...measure([[pair.x, pair.z], [ex, ez]]) }
-  link.portA = exitAt(link, { x: pair.x, z: pair.z, ...HALF }, false)
+  link.portA = exitAt(link, { x: pair.x, z: pair.z, ...WORD.slabs }, false)
   return link
 }
 
-// Half the footprint of a word on the floor — two slabs and the gap between
-// them, 1 deep — with a hair of margin so the port sits just clear of the
-// stone's edge.
-const HALF = { hx: tileOffsets()[1][0] + SLAB / 2 + 0.05, hz: 0.55 }
-
-// The footprint of the word a stone belongs to.
+// The slabs of the word a stone belongs to, where its lines come out.
 function footprint(tile) {
-  return { x: tile.x - tileOffsets()[tile.index][0], z: tile.z, ...HALF }
+  return { x: tile.x - tileOffsets()[tile.index][0], z: tile.z, ...WORD.slabs }
 }
 
 function measure(pts) {

@@ -1,7 +1,7 @@
 import { FIELDS, stoneText } from './lexicon.js'
 import { pointAt, visibleSpan } from './links.js'
 import { isolines } from './island.js'
-import { SLAB, GAP } from './field.js'
+import { SLAB, GAP, WORD } from './field.js'
 import { clamp01, smooth, outCubic } from './ease.js'
 import { PAPER, PAPER_2, INK, INK_2, INK_3, OCHRE, font } from './palette.js'
 
@@ -160,7 +160,7 @@ export class FloorPainter {
     const [a, b, c, d, e, f] = s.A
     const k = this.dpr
     this.M = new DOMMatrix([a * k, b * k, c * k, d * k, e * k, f * k])
-    if (this.island !== island) this.prepare(island)
+    if (this.island !== island) this.prepare(island, s.board.pairs)
     this.device()
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     ctx.lineCap = 'round'
@@ -191,11 +191,12 @@ export class FloorPainter {
     this.mokuLabels(labels)
     for (const p of island.places) this.fieldLabel(p, labels, linkedTo.get(p) ?? 0)
 
+    // A pair's corner marks are where its stones will land, so they come in
+    // with the stones, not with the map under them.
+    const set = smooth(clamp01((t - REVEAL.stones) / 0.5))
     const cap = smooth(clamp01((t - REVEAL.stones - 0.6) / 0.8))
-    for (const p of s.board.pairs) {
-      if (!near(view, p.x, p.z, 2.5)) continue
-      this.pairMarks(p, s.noted.has(p), cap)
-    }
+    const shown = s.board.pairs.filter((p) => near(view, p.x, p.z, 2.5))
+    this.pairMarks(shown, s.noted, set, cap)
 
     for (const l of s.links.links.values()) if (l.kind === 'field') this.fieldLink(l, s.noted.has(l.pair))
     for (const l of s.links.links.values()) if (l.kind === 'pair') this.pairLink(l)
@@ -207,7 +208,7 @@ export class FloorPainter {
 
   // ── building the map once ───────────────────────────────────────────────
 
-  prepare(island) {
+  prepare(island, pairs) {
     this.island = island
     this.K = island.k
     const lines = (ls) => path(ls.map((l) => l.pts ?? l))
@@ -215,19 +216,21 @@ export class FloorPainter {
     const frame = new Path2D()
     frame.rect(sheet.x0, sheet.z0, sheet.x1 - sheet.x0, sheet.z1 - sheet.z0)
     const c = island.compass
+    // The compass and its credit, kept clear of the sea's linework.
     const disc = new Path2D()
-    disc.arc(c.x, c.z, c.r * 1.01, 0, TAU)
+    disc.arc(c.x, c.z, c.r * 1.13, 0, TAU)
     this.paths = {
       frame,
       disc,
       coast: lines(island.coast),
-      minor: lines(island.contours.filter((l) => !l.major).flatMap((l) => l.lines)),
+      minor: minorContours(island),
       major: lines(island.contours.filter((l) => l.major).flatMap((l) => l.lines)),
       water: island.waterlines.map((w) => lines(w.lines)),
       ahupuaa: path(island.boundaries.filter((b) => !b.moku).map((b) => b.line)),
       moku: path(island.boundaries.filter((b) => b.moku).map((b) => b.line)),
       offshore: path(island.boundaries.map((b) => b.sea)),
-      trail: path([island.trail.pts]),
+      trail: path(island.trail.firm),
+      trailFlow: path(island.trail.flow),
       windward: lines(island.streams.filter((s) => s.windward)),
       leeward: lines(island.streams.filter((s) => !s.windward)),
       reef: dots(island.reef.dots),
@@ -237,7 +240,9 @@ export class FloorPainter {
     }
     this.placeArt = new Map(island.places.map((p) => [p, this.art(p)]))
     this.crests = null
-    this.layoutLabels(island)
+    this.surfAt = null
+    this.layoutLabels(island, pairs)
+    this.compassType(c)
   }
 
   // The static linework of one place, as world paths.
@@ -332,7 +337,7 @@ export class FloorPainter {
       }
       case 'lava':
         return {
-          edge: path([p.line], true),
+          edge: path(p.edges),
           lobes: path(p.lobes),
           ropes: path(p.ropes),
           stipple: dots(p.stipple),
@@ -398,52 +403,107 @@ export class FloorPainter {
   }
 
   // Each place gets its field's name set beside it, the Hawaiian word large
-  // and pale in the italic with a small-caps line beneath. Positions are
-  // chosen once: clear of the upland and the cloud round it, of the other
-  // places and their names, and inside the sheet.
-  layoutLabels(island) {
+  // and pale in the italic with a small-caps line beneath; each moku its name
+  // across its slopes. Positions are chosen once, from many candidates round
+  // each place: near it, and clear of the words (which never move), of the
+  // upland and the cloud round it, of the other places and names, of the
+  // boundary lines where it can be, and inside the sheet.
+  layoutLabels(island, pairs) {
     const K = this.K
     const word = Math.round(92 * K)
     const small = Math.round(17 * Math.max(0.9, K))
     this.labelSize = { word, small, gap: 0.36 * Math.max(0.9, K) }
     const taken = []
     const cloud = island.places.find((p) => p.kind === 'cloud')
+    const lava = island.places.find((p) => p.kind === 'lava')
     const compass = island.compass
-    // Compact places block by their circle; the long ones by their lines; the
+    const { sheet } = island
+    // Compact places block by their circle; the long ones, and the
+    // boundaries, by their lines, and the lava by its whole flow too; the
     // cloud by the whole summit it rings.
     const long = (p) => p.kind === 'stream' || p.kind === 'lava'
     const blockers = island.places
       .filter((p) => !long(p) && p !== cloud)
       .map((p) => ({ p, x: p.x, z: p.z, r: p === compass ? p.r * 1.28 : p.r }))
-    const lineBlockers = island.places.filter(long)
-    const { sheet } = island
+    // The long places and the boundaries as points a tenth of a unit apart,
+    // each with what it costs a name to sit on it, filed by unit square.
+    const lineCost = new Map()
+    const lines = [
+      ...island.places.filter(long).map((p) => ({ own: p, cost: 400, line: p.line })),
+      ...island.boundaries.map((b) => ({ own: null, cost: b.moku ? 120 : 40, line: b.line })),
+    ]
+    for (const { own, cost, line } of lines) {
+      for (const [x, z] of densify(line, 0.1)) {
+        const key = Math.floor(x) * 4096 + Math.floor(z)
+        if (!lineCost.has(key)) lineCost.set(key, [])
+        lineCost.get(key).push({ x, z, own, cost })
+      }
+    }
+    // What a word hides of the floor: its marks and the caption typed in
+    // beneath it (field.js), and behind it the stones themselves, which stand
+    // a unit high and cover the floor beyond them on screen. A long gloss runs
+    // on to the right of the marks: that is a lesser cost.
+    const m = WORD.marks
+    const words = pairs.map((p) => ({ x0: p.x + m.x0, x1: p.x + m.x1, z0: p.z - 1.3, z1: p.z + m.z1 }))
+    const glosses = pairs.map((p) => ({ x0: p.x + m.x1, x1: p.x + m.x1 + 1.6, z0: p.z + 0.85, z1: p.z + m.z1 }))
 
-    const score = (box, own) => {
-      let s = 0
+    // What it costs to set a name in `box`; `air` keeps it that far from the
+    // names already set. Every term is a cost, so a candidate is dropped as
+    // soon as it costs more than the best so far, `limit` — most are, at the
+    // first word they cover.
+    const NO_LINES = []
+    const score = (box, own, air, limit) => {
+      // Nearer the middle of the floor is in view more often.
+      let s = Math.hypot((box.x0 + box.x1) / 2, (box.z0 + box.z1) / 2) * 3
       if (box.x0 < sheet.x0 + 0.3 || box.x1 > sheet.x1 - 0.3 || box.z0 < sheet.z0 + 0.3 || box.z1 > sheet.z1 - 0.3) {
         s += 1e7
       }
-      if (own !== cloud && boxCircle(box, cloud.x, cloud.z, cloud.r + 0.2)) s += 1e7
+      for (const w of words) s += 1e6 * overlap(box, w)
+      if (s >= limit) return s
+      const roomy = air ? { x0: box.x0 - air, x1: box.x1 + air, z0: box.z0 - air, z1: box.z1 + air } : box
+      for (const o of taken) s += 1e6 * overlap(roomy, o)
+      if (s >= limit) return s
+      if (own === cloud ? touchesRing(box, island.upland.ring) : boxCircle(box, cloud.x, cloud.z, cloud.r + 0.2)) {
+        s += 1e7
+      }
       for (const b of blockers) {
         if (b.p === own) continue
         const o = boxCircle(box, b.x, b.z, b.r + 0.15)
         if (o) s += b.p === compass ? 1e7 : 3e3 * o
       }
-      for (const lp of lineBlockers) {
-        if (lp === own) continue
-        for (const [x, z] of lp.line) if (x > box.x0 && x < box.x1 && z > box.z0 && z < box.z1) s += 400
+      if (own !== lava && touchesRing(box, lava.line)) s += 2e4
+      for (const g of glosses) s += 2e4 * overlap(box, g)
+      if (s >= limit) return s
+      for (let ix = Math.floor(box.x0); ix <= Math.floor(box.x1); ix++) {
+        for (let iz = Math.floor(box.z0); iz <= Math.floor(box.z1); iz++) {
+          for (const q of lineCost.get(ix * 4096 + iz) ?? NO_LINES) {
+            if (q.own !== own && q.x > box.x0 && q.x < box.x1 && q.z > box.z0 && q.z < box.z1) s += q.cost
+          }
+        }
       }
-      for (const o of taken) s += 1e5 * overlap(box, o)
       if (own) {
         const g = island.height
         const wet = sampleGrid(g, g.h, (box.x0 + box.x1) / 2, (box.z0 + box.z1) / 2) <= 0
         const water = own.kind === 'fishpond' || own.kind === 'compass'
         if (wet !== water) s += water ? 600 : 250
       }
-      // Nearer the middle of the floor is in view more often.
-      s += Math.hypot((box.x0 + box.x1) / 2, (box.z0 + box.z1) / 2) * 3
       return s
     }
+    // The cheapest candidate; `extra` is its own cost on top of `score`.
+    const best = (candidates, own, air, extra) => {
+      let found = null
+      let least = Infinity
+      for (const box of candidates) {
+        const add = extra(box)
+        const sc = score(box, own, air, least - add) + add
+        if (sc < least) {
+          least = sc
+          found = box
+        }
+      }
+      return found
+    }
+    const boxAt = (cx, cz, w, h) => ({ x0: cx - w / 2, x1: cx + w / 2, z0: cz - h / 2, z1: cz + h / 2 })
 
     this.labels = new Map()
     for (const p of island.places) {
@@ -453,86 +513,80 @@ export class FloorPainter {
         this.measure(`${info.label.toUpperCase()} · ${info.en.toUpperCase()} — 00`, small, { weight: 600 }, 1.5) + 0.06,
       )
       const top = (word / 100) * 0.74
-      const bottom = this.labelSize.gap + 0.06
-      const h = top + bottom
-      const candidates = []
+      const h = top + this.labelSize.gap + 0.06
       const pad = 0.25 * K
+      // Candidates at a few distances out from the place, each costing a
+      // little more the further it strays.
+      const candidates = []
       if (long(p)) {
         const pts = p.kind === 'stream' ? p.line : p.axis
-        for (let f = 0.25; f <= 0.76; f += 0.125) {
+        const reach = p.kind === 'lava' ? 1.0 * K : 0
+        for (let f = 0.1; f <= 0.91; f += 0.05) {
           const i = Math.round(f * (pts.length - 1))
           const [x, z] = pts[i]
           const [x2, z2] = pts[Math.min(pts.length - 1, i + 1)]
           const l = Math.hypot(x2 - x, z2 - z) || 1
           const nx = -(z2 - z) / l
           const nz = (x2 - x) / l
-          const reach = p.kind === 'lava' ? 1.0 * K : 0
           for (const side of [-1, 1]) {
-            const ux = nx * side
-            const uz = nz * side
-            const cx = x + ux * (pad + reach) + (ux * w) / 2
-            const cz = z + uz * (pad + reach) + (uz * h) / 2
-            candidates.push({ cx, cz })
+            for (const gap of [0, 0.5, 1.1, 1.8]) {
+              const ux = nx * side
+              const uz = nz * side
+              const d = pad + reach + gap * K
+              candidates.push({ ...boxAt(x + ux * d + (ux * w) / 2, z + uz * d + (uz * h) / 2, w, h), gap })
+            }
           }
         }
       } else {
-        const r = p.kind === 'compass' ? p.r * 1.3 : p.r
-        for (let i = 0; i < 16; i++) {
-          const a = (i / 16) * TAU
+        for (let i = 0; i < 24; i++) {
+          const a = (i / 24) * TAU
           const ux = Math.cos(a)
           const uz = Math.sin(a)
-          candidates.push({ cx: p.x + ux * (r + pad) + (ux * w) / 2, cz: p.z + uz * (r + pad) + (uz * h) / 2 })
-        }
-      }
-      let best = null
-      let bestScore = Infinity
-      for (const { cx, cz } of candidates) {
-        const box = { x0: cx - w / 2, x1: cx + w / 2, z0: cz - h / 2, z1: cz + h / 2 }
-        const sc = score(box, p)
-        if (sc < bestScore) {
-          bestScore = sc
-          best = box
-        }
-      }
-      taken.push(best)
-      this.labels.set(p, { x: best.x0, z: best.z0 + top, box: best })
-    }
-
-    // The two moku, in spaced roman capitals across their own slopes.
-    const mokuPx = Math.round(34 * K)
-    this.moku = island.moku.map((m) => {
-      const text = m.name.toUpperCase()
-      const spacing = mokuPx * 0.5
-      const w = this.measure(text, mokuPx, {}, spacing)
-      const h = (mokuPx / 100) * 0.9
-      let best = null
-      let bestScore = Infinity
-      for (const db of [0, -0.25, 0.25, -0.5, 0.5]) {
-        const b = m.bearing + db
-        const reach = coastReach(island, b)
-        for (const f of [0.5, 0.6, 0.7]) {
-          const [dx, dz] = dirOf(b)
-          const cx = island.summit[0] + dx * reach * f
-          const cz = island.summit[1] + dz * reach * f
-          const box = { x0: cx - w / 2, x1: cx + w / 2, z0: cz - h / 2, z1: cz + h / 2 }
-          const sc = score(box, null) + Math.abs(db) * 40
-          if (sc < bestScore) {
-            bestScore = sc
-            best = box
+          // The cloud is a ring round an irregular upland, not a circle: go
+          // out to its edge in this direction.
+          const r = p === cloud ? rayOut(p.line, p.x, p.z, ux, uz) : p.kind === 'compass' ? p.r * 1.3 : p.r
+          for (const gap of [0, 0.5, 1.1, 1.8, 2.6]) {
+            const d = r + pad + gap * K
+            candidates.push({ ...boxAt(p.x + ux * d + (ux * w) / 2, p.z + uz * d + (uz * h) / 2, w, h), gap })
           }
         }
       }
-      taken.push(best)
-      return { text, px: mokuPx, spacing, x: best.x0, z: best.z1 - 0.1 * h, box: best }
+      const box = best(candidates, p, 0, (b) => 500 * b.gap)
+      taken.push(box)
+      this.labels.set(p, { x: box.x0, z: box.z0 + top, box })
+    }
+
+    // The two moku, in spaced roman capitals across their own slopes, kept
+    // well apart from the field names so neither reads as part of the other.
+    const mokuPx = Math.round(34 * K)
+    this.moku = island.moku.map((mk) => {
+      const text = mk.name.toUpperCase()
+      const spacing = mokuPx * 0.5
+      const w = this.measure(text, mokuPx, {}, spacing)
+      const h = (mokuPx / 100) * 0.9
+      const candidates = []
+      for (let db = -0.9; db <= 0.91; db += 0.15) {
+        const b = mk.bearing + db
+        const reach = coastReach(island, b)
+        const [dx, dz] = dirOf(b)
+        for (let f = 0.3; f <= 0.86; f += 0.06) {
+          const cx = island.summit[0] + dx * reach * f
+          const cz = island.summit[1] + dz * reach * f
+          candidates.push({ ...boxAt(cx, cz, w, h), db })
+        }
+      }
+      const box = best(candidates, null, 0.9, (b) => Math.abs(b.db) * 40)
+      taken.push(box)
+      return { text, px: mokuPx, spacing, x: box.x0, z: box.z1 - 0.1 * h, box }
     })
 
-    // Contours and the trail break around the names and the drawn places, as
-    // they would on a sheet drawn by hand — each gap opening as the thing it
-    // makes room for appears.
+    // Contours, boundaries and the trail break around the names and the
+    // drawn places, as they would on a sheet drawn by hand — each gap opening
+    // as the thing it makes room for appears.
     const gaps = [...this.labels.values(), ...this.moku].map(({ box }) => {
       const g = new Path2D()
-      const m = 0.08
-      g.rect(box.x0 - m, box.z0 - m, box.x1 - box.x0 + 2 * m, box.z1 - box.z0 + 2 * m)
+      const e = 0.08
+      g.rect(box.x0 - e, box.z0 - e, box.x1 - box.x0 + 2 * e, box.z1 - box.z0 + 2 * e)
       return { path: g, when: REVEAL.labels }
     })
     for (const p of island.places) {
@@ -646,7 +700,7 @@ export class FloorPainter {
     const sw = this.island.swell
     const ph = (this.now / sw.period) % 1
     if (!this.crests || Math.abs(ph - this.crests.ph) * sw.lambda > 0.02) {
-      const S = new Float32Array(sw.nx * sw.nz)
+      const S = this.crests?.S ?? new Float32Array(sw.nx * sw.nz)
       for (let i = 0; i < S.length; i++) {
         S[i] = Number.isFinite(sw.T[i]) ? Math.sin(TAU * (sw.T[i] / sw.lambda - ph)) : -1
       }
@@ -666,36 +720,48 @@ export class FloorPainter {
           } else if (run) run.lineTo(x, z)
         }
       }
-      this.crests = { ph, buckets }
+      this.crests = { ph, buckets, S }
     }
     this.crests.buckets.forEach((p, i) => this.ink(p, 0.8, INK_3, a * [0.16, 0.28, 0.42][i], [6, 7]))
   }
 
-  // Surf marks on the reef's outer edge brighten as each crest arrives.
+  // Surf marks on the reef's outer edge brighten as each crest arrives. A
+  // mark changes brightness a few times a swell period, so the marks are
+  // sorted into their three shades only when the phase has moved on a little.
   surf(a) {
     if (a <= 0) return
     const sw = this.island.swell
-    const ph = (this.now / sw.period) % 1
-    const buckets = [new Path2D(), new Path2D(), new Path2D()]
-    for (const m of this.island.reef.surf) {
-      const T = sampleGrid(sw, sw.T, m.x, m.z)
-      const u = Number.isFinite(T) ? (((T / sw.lambda - ph) % 1) + 1) % 1 : 0.5
-      const b = Math.min(2, Math.floor(Math.pow(Math.cos(Math.PI * u), 8) * 3))
-      const p = buckets[b]
-      p.moveTo(...m.pts[0])
-      for (const q of m.pts.slice(1)) p.lineTo(...q)
+    const at = Math.floor(((this.now / sw.period) % 1) * 240)
+    if (this.surfAt?.at !== at) {
+      const ph = at / 240
+      const buckets = [new Path2D(), new Path2D(), new Path2D()]
+      for (const m of this.island.reef.surf) {
+        const T = sampleGrid(sw, sw.T, m.x, m.z)
+        const u = Number.isFinite(T) ? (((T / sw.lambda - ph) % 1) + 1) % 1 : 0.5
+        const p = buckets[Math.min(2, Math.floor(Math.pow(Math.cos(Math.PI * u), 8) * 3))]
+        p.moveTo(m.pts[0][0], m.pts[0][1])
+        for (let i = 1; i < m.pts.length; i++) p.lineTo(m.pts[i][0], m.pts[i][1])
+      }
+      this.surfAt = { at, buckets }
     }
-    buckets.forEach((p, i) => this.ink(p, 0.8, INK_2, a * [0.3, 0.5, 0.8][i]))
+    this.surfAt.buckets.forEach((p, i) => this.ink(p, 0.8, INK_2, a * [0.3, 0.5, 0.8][i]))
   }
 
   // Contours (fine, every fifth heavier), then the coast drawn on as one pen
   // line. Contours run through the upland — they're the only thing that does.
   relief(t) {
-    const ctx = this.ctx
     const a = smooth(phase(t, REVEAL.relief))
     if (a > 0) {
+      // The floor's smallest scale on screen, in CSS pixels per unit: how far
+      // apart contours of a given spacing are drawn at the narrowest.
+      const [p, q, r, u] = this.A
+      const sum = p * p + q * q + r * r + u * u
+      const det = p * u - q * r
+      const px = Math.sqrt(Math.max(0, (sum - Math.sqrt(Math.max(0, sum * sum - 4 * det * det))) / 2))
       this.broken(t, (k) => {
-        this.ink(this.paths.minor, 0.7, INK_3, a * k * 0.5)
+        for (const { lo, path: run } of this.paths.minor) {
+          this.ink(run, 0.7, INK_3, a * k * 0.32 * smooth(clamp01((lo * px - 3) / 2)))
+        }
         this.ink(this.paths.major, 1.05, INK_3, a * k * 0.8)
       })
     }
@@ -718,8 +784,20 @@ export class FloorPainter {
   // alpha.
   broken(t, draw) {
     const ctx = this.ctx
+    // Each gap as a clip keeping what lies outside it, projected once a frame
+    // for all the linework that breaks.
+    if (this.gapsAt !== this.M) {
+      this.gapsAt = this.M
+      this.gapsOut = this.gaps.map((g) => {
+        const p = new Path2D()
+        p.rect(0, 0, this.canvas.width, this.canvas.height)
+        p.addPath(g.path, this.M)
+        return p
+      })
+    }
     ctx.save()
-    for (const g of this.gaps) this.keepOut(g.path)
+    this.device()
+    for (const p of this.gapsOut) ctx.clip(p, 'evenodd')
     draw(1)
     ctx.restore()
     for (const g of this.gaps) {
@@ -733,29 +811,33 @@ export class FloorPainter {
   }
 
   // Boundaries in ʻalaea red from the upland's edge to the reef, the moku
-  // line heavier; the ala loa dotted round the island with an ahu wherever a
-  // boundary crosses it; one stream to each ahupuaʻa.
+  // line heavier and the ahupuaʻa lighter, so the one reads above the many
+  // and the active field line (ʻalaea too) stands out from both; the ala loa
+  // dotted round the island with an ahu wherever a boundary crosses it; one
+  // stream to each ahupuaʻa.
   survey(t) {
     const island = this.island
     const ctx = this.ctx
     const bd = phase(t, REVEAL.bounds)
     // Under the cloud band the boundaries are faint: they come out of the
-    // cloud rather than meeting at the summit like spokes.
-    const bounds = (land, moku, a) => {
-      ctx.save()
-      this.keepIn(this.paths.cloud)
-      this.ink(land, 0.9, OCHRE, a * 0.2)
-      this.ink(moku, 1.9, OCHRE, a * 0.25, [10, 3, 1.5, 3])
-      ctx.restore()
-      ctx.save()
-      this.keepOut(this.paths.cloud)
-      this.ink(land, 0.9, OCHRE, a * 0.75)
-      this.ink(moku, 1.9, OCHRE, a * 0.85, [10, 3, 1.5, 3])
-      ctx.restore()
-    }
+    // cloud rather than meeting at the summit like spokes. Like the contours,
+    // they break round the names.
+    const bounds = (land, moku) =>
+      this.broken(t, (k) => {
+        ctx.save()
+        this.keepIn(this.paths.cloud)
+        this.ink(land, 0.9, OCHRE, k * 0.12)
+        this.ink(moku, 1.9, OCHRE, k * 0.25, [10, 3, 1.5, 3])
+        ctx.restore()
+        ctx.save()
+        this.keepOut(this.paths.cloud)
+        this.ink(land, 0.9, OCHRE, k * 0.45)
+        this.ink(moku, 1.9, OCHRE, k * 0.85, [10, 3, 1.5, 3])
+        ctx.restore()
+      })
     if (bd >= 1) {
-      bounds(this.paths.ahupuaa, this.paths.moku, 1)
-      this.ink(this.paths.offshore, 0.9, OCHRE, 0.5, [2.5, 3.5])
+      bounds(this.paths.ahupuaa, this.paths.moku)
+      this.ink(this.paths.offshore, 0.9, OCHRE, 0.35, [2.5, 3.5])
     } else if (bd > 0) {
       // Running down from the summit: each boundary a little after the last,
       // round the island.
@@ -769,13 +851,16 @@ export class FloorPainter {
         into.moveTo(...b.line[0])
         for (let j = 1; j < n; j++) into.lineTo(...b.line[j])
       })
-      bounds(land, moku, 1)
+      bounds(land, moku)
     }
     const m = phase(t, REVEAL.marks)
     if (m <= 0) return
     this.ink(this.paths.windward, 0.95, INK_2, m * 0.75)
     this.ink(this.paths.leeward, 0.85, INK_3, m * 0.85, [4, 2.5])
-    this.broken(t, (k) => this.ink(this.paths.trail, 1.35, INK_2, m * k * 0.8, [0.01, 3.4]))
+    this.broken(t, (k) => {
+      this.ink(this.paths.trail, 1.35, INK_2, m * k * 0.8, [0.01, 3.4])
+      this.ink(this.paths.trailFlow, 1.35, INK_2, m * k * 0.8, [0.01, 7])
+    })
     // Ahu: a small cairn of stacked stones, unlabelled, drawn upright.
     this.screen()
     ctx.globalAlpha = m
@@ -907,7 +992,7 @@ export class FloorPainter {
   // and sets, about a minute later, in the house of the same name on the west.
   compass(p, art, rev) {
     const ctx = this.ctx
-    const { x, z, r, horizon } = p
+    const { x, z, horizon } = p
     this.fillWorld(art.cardinal, PALE, rev * 0.8)
     this.ink(art.rings, 1, INK_2, rev)
     this.ink(art.spokes, 0.7, INK_3, rev)
@@ -962,133 +1047,187 @@ export class FloorPainter {
       ctx.globalAlpha = 1
     }
 
-    // Names. House names read outward on the east side and inward on the
-    // west, so none is upside down. The cardinal points are houses too, set
-    // in their shaded houses a little heavier; a long name is set smaller to
-    // fit the band. The two houses of the star now crossing darken.
-    const band = (horizon + r) / 2
-    const room = (r - horizon) * 100 * 0.86
-    const px = Math.round(r * 7.4)
-    for (const h of p.houses) {
+    // Names, set out once by compassType().
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    let styled = null
+    for (const h of this.compassNames) {
       const lit = show > 0 && h.name === star.name && (h.quadrant === star.rises || h.quadrant === star.sets)
-      const weight = h.cardinal || lit ? 700 : 500
-      const text = h.name.toUpperCase()
-      let size = h.cardinal ? Math.round(px * 1.1) : px
-      ctx.font = font(size, { weight })
-      ctx.letterSpacing = `${size * 0.06}px`
-      const w = ctx.measureText(text).width
-      if (w > room) size = Math.floor((size * room) / w)
-      const [dx, dz] = dirOf(h.bearing)
+      const st = lit ? h.lit : h.style
       this.floor(0.01)
-      ctx.translate((x + dx * band) * 100, (z + dz * band) * 100)
-      let ang = h.bearing - Math.PI / 2
-      if (h.bearing > Math.PI) ang += Math.PI
-      ctx.rotate(ang)
-      ctx.font = font(size, { weight })
-      ctx.letterSpacing = `${size * 0.06}px`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
+      ctx.translate(h.x * 100, h.z * 100)
+      ctx.rotate(h.ang)
+      if (st !== styled) {
+        ctx.font = st.font
+        ctx.letterSpacing = st.spacing
+        styled = st
+      }
       ctx.fillStyle = h.cardinal || lit ? INK : INK_2
       ctx.globalAlpha = rev * (h.cardinal || lit ? 1 : 0.85)
-      ctx.fillText(text, 0, 0)
+      ctx.fillText(h.text, 0, 0)
     }
     this.floor(0.01)
     ctx.globalAlpha = rev
     ctx.letterSpacing = '0px'
-    ctx.font = font(Math.round(px * 1.05), { italic: true })
+    ctx.font = this.compassQuadrantFont
     ctx.fillStyle = INK_3
     for (const q of p.quadrants) {
       const [dx, dz] = dirOf(q.bearing)
       ctx.fillText(q.name, (x + dx * horizon * 0.6) * 100, (z + dz * horizon * 0.6) * 100)
     }
-    // The credit, set small just outside the rim on the island's side.
-    const toward = p.x < 0 ? 1 : -1
-    const cb = toward > 0 ? (128 * Math.PI) / 180 : (232 * Math.PI) / 180
-    const [cx, cz] = dirOf(cb)
-    ctx.font = font(Math.round(px * 0.9), { italic: true })
-    ctx.textAlign = toward > 0 ? 'left' : 'right'
-    ctx.globalAlpha = rev * 0.9
-    ctx.fillText('after PVS / Nainoa Thompson', (x + cx * r * 1.08) * 100, (z + cz * r * 1.08) * 100)
+    // The credit, small, round the outside of the rim under Hema.
+    ctx.font = this.compassCredit.font
+    ctx.textAlign = 'center'
     ctx.textBaseline = 'alphabetic'
+    ctx.globalAlpha = rev * 0.9
+    for (const ch of this.compassCredit.chars) {
+      this.floor(0.01)
+      ctx.translate(ch.x * 100, ch.z * 100)
+      ctx.rotate(ch.ang)
+      ctx.fillText(ch.text, 0, 0)
+    }
     ctx.globalAlpha = 1
+  }
+
+  // The compass's lettering, measured and placed once. House names sit in the
+  // band between horizon and rim, reading outward on the east side and inward
+  // on the west, so none is upside down. The cardinal points are houses too,
+  // set in their shaded houses a little heavier; a long name is set smaller to
+  // fit the band; the two houses of the star now crossing are set heavier.
+  // The credit runs round the outside of the rim at the bottom, its letters
+  // hanging from it, all inside the clearance the board keeps round the ring.
+  compassType(p) {
+    const ctx = this.ctx
+    const { x, z, r, horizon } = p
+    const band = (horizon + r) / 2
+    const room = (r - horizon) * 100 * 0.86
+    const px = Math.round(r * 7.4)
+    const style = (text, size, weight) => {
+      ctx.font = font(size, { weight })
+      ctx.letterSpacing = `${size * 0.06}px`
+      const w = ctx.measureText(text).width
+      if (w > room) size = Math.floor((size * room) / w)
+      ctx.letterSpacing = '0px'
+      // Read back what the canvas made of the font string, so the drawing can
+      // tell when it has to set a new one.
+      ctx.font = font(size, { weight })
+      return { font: ctx.font, spacing: `${size * 0.06}px` }
+    }
+    this.compassNames = p.houses.map((h) => {
+      const text = h.name.toUpperCase()
+      const size = h.cardinal ? Math.round(px * 1.1) : px
+      const [dx, dz] = dirOf(h.bearing)
+      const bold = style(text, size, 600)
+      return {
+        name: h.name,
+        quadrant: h.quadrant,
+        cardinal: h.cardinal,
+        text,
+        x: x + dx * band,
+        z: z + dz * band,
+        ang: h.bearing - Math.PI / 2 + (h.bearing > Math.PI ? Math.PI : 0),
+        style: h.cardinal ? bold : style(text, size, 400),
+        lit: bold,
+      }
+    })
+    ctx.font = font(Math.round(px * 1.05), { italic: true })
+    this.compassQuadrantFont = ctx.font
+    const size = Math.round(px * 0.9)
+    ctx.font = font(size, { italic: true })
+    const text = [...'after PVS / Nainoa Thompson']
+    const widths = text.map((ch) => ctx.measureText(ch).width / 100)
+    const total = widths.reduce((a, b) => a + b, 0)
+    // Letter tops just clear of the rim ticks; baseline below them.
+    const R = r * 1.05 + (size / 100) * 0.7
+    let along = -total / 2
+    this.compassCredit = {
+      font: ctx.font,
+      chars: text.map((ch, i) => {
+        const b = Math.PI - (along + widths[i] / 2) / R
+        along += widths[i]
+        const [dx, dz] = dirOf(b)
+        return { text: ch, x: x + dx * R, z: z + dz * R, ang: b - Math.PI }
+      }),
+    }
   }
 
   // ── words ───────────────────────────────────────────────────────────────
 
-  pairMarks(p, noted, alpha) {
+  // Each word's corner marks, its number, and its caption: the word in small
+  // caps with its gloss beneath, typed in after each turn. Drawn a kind at a
+  // time across all the words, so each font is set once a frame.
+  pairMarks(pairs, noted, set, alpha) {
+    if (set <= 0) return
     const ctx = this.ctx
     const hx = HALF_W + 0.2
     const hz = HALF_D + 0.2
-    const x0 = p.x - hx
-    const x1 = p.x + hx
-    const z0 = p.z - hz
-    const z1 = p.z + hz
-    const arm = noted ? 0.34 : 0.22
-    this.floor()
-    ctx.beginPath()
-    for (const [cx, cz, sx, sz] of [
-      [x0, z0, 1, 1],
-      [x1, z0, -1, 1],
-      [x0, z1, 1, -1],
-      [x1, z1, -1, -1],
-    ]) {
-      ctx.moveTo(cx + sx * arm, cz)
-      ctx.lineTo(cx, cz)
-      ctx.lineTo(cx, cz + sz * arm)
+    for (const on of [false, true]) {
+      this.floor()
+      ctx.beginPath()
+      for (const p of pairs) {
+        if (noted.has(p) !== on) continue
+        const arm = on ? 0.34 : 0.22
+        for (const [cx, cz, sx, sz] of [
+          [p.x - hx, p.z - hz, 1, 1],
+          [p.x + hx, p.z - hz, -1, 1],
+          [p.x - hx, p.z + hz, 1, -1],
+          [p.x + hx, p.z + hz, -1, -1],
+        ]) {
+          ctx.moveTo(cx + sx * arm, cz)
+          ctx.lineTo(cx, cz)
+          ctx.lineTo(cx, cz + sz * arm)
+        }
+      }
+      ctx.globalAlpha = set
+      this.stroke(on ? 1.4 : 1, on ? INK : INK_3)
     }
-    this.stroke(noted ? 1.4 : 1, noted ? INK : INK_3)
-
+    ctx.globalAlpha = 1
     if (alpha <= 0) return
+
+    const now = this.now
+    const lines = pairs.map((p) => {
+      const cap = p.caption
+      let l1 = cap.prev1
+      let l2 = cap.prev2
+      let cursor = 0
+      if (now >= cap.t0) {
+        const n = Math.floor((now - cap.t0) / 0.026)
+        l1 = cap.text1.slice(0, n)
+        l2 = cap.text2.slice(0, Math.max(0, n - cap.text1.length * 0.4))
+        if (n < cap.text1.length) cursor = 1
+        else if (l2.length < cap.text2.length) cursor = 2
+      } else if (now >= cap.t0 - 0.3) {
+        // Erase back to nothing just before the new word types in.
+        const k = clamp01((cap.t0 - now) / 0.3)
+        l1 = cap.prev1.slice(0, Math.ceil(cap.prev1.length * k))
+        l2 = cap.prev2.slice(0, Math.ceil(cap.prev2.length * k))
+      }
+      const x = (p.x - hx) * 100
+      const y1 = (p.z + hz + 0.34) * 100
+      return { p, x, y0: (p.z - hz - 0.1) * 100, y1, y2: y1 + 27, l1, l2, cursor, noted: noted.has(p) }
+    })
     ctx.globalAlpha = alpha
     this.floor(0.01)
     ctx.textAlign = 'left'
     ctx.textBaseline = 'alphabetic'
     ctx.fillStyle = INK_3
     ctx.font = font(14)
-    ctx.fillText(String(p.id + 1).padStart(3, '0'), x0 * 100, (z0 - 0.1) * 100)
-
-    // The word in small caps, its gloss beneath, typed in after each turn.
-    const cap = p.caption
-    const tx = x0
-    const ty1 = z1 + 0.34
-    const ty2 = ty1 + 0.27
-    const now = this.now
-    let l1 = cap.prev1
-    let l2 = cap.prev2
-    let cursor = null
-    if (now >= cap.t0) {
-      const n = Math.floor((now - cap.t0) / 0.026)
-      l1 = cap.text1.slice(0, n)
-      l2 = cap.text2.slice(0, Math.max(0, n - cap.text1.length * 0.4))
-      if (n < cap.text1.length) cursor = [1, l1]
-      else if (l2.length < cap.text2.length) cursor = [2, l2]
-    } else if (now >= cap.t0 - 0.3) {
-      // Erase back to nothing just before the new word types in.
-      const k = clamp01((cap.t0 - now) / 0.3)
-      l1 = cap.prev1.slice(0, Math.ceil(cap.prev1.length * k))
-      l2 = cap.prev2.slice(0, Math.ceil(cap.prev2.length * k))
-    }
-    const line1 = () => {
-      ctx.font = font(17, { weight: 600 })
-      ctx.letterSpacing = '1.6px'
-    }
-    const line2 = () => {
-      ctx.font = font(17)
-      ctx.letterSpacing = '0px'
-    }
-    line1()
-    ctx.fillStyle = noted ? INK : INK_2
-    ctx.fillText(l1, tx * 100, ty1 * 100)
-    line2()
-    ctx.fillStyle = INK_3
-    ctx.fillText(l2, tx * 100, ty2 * 100)
-    if (cursor) {
-      const [line, text] = cursor
-      if (line === 1) line1()
-      else line2()
-      const cx = tx * 100 + ctx.measureText(text).width + 2
-      ctx.fillStyle = INK
-      ctx.fillRect(cx, (line === 1 ? ty1 : ty2) * 100 - 14, 9, 17)
+    for (const w of lines) ctx.fillText(String(w.p.id + 1).padStart(3, '0'), w.x, w.y0)
+    // The word, then the gloss, each with the typing cursor where it is.
+    for (const [key, at, style, spacing] of [
+      ['l1', 'y1', font(17, { weight: 600 }), '1.6px'],
+      ['l2', 'y2', font(17), '0px'],
+    ]) {
+      ctx.font = style
+      ctx.letterSpacing = spacing
+      const line = key === 'l1' ? 1 : 2
+      for (const w of lines) {
+        ctx.fillStyle = line === 2 ? INK_3 : w.noted ? INK : INK_2
+        ctx.fillText(w[key], w.x, w[at])
+        if (w.cursor !== line) continue
+        ctx.fillStyle = INK
+        ctx.fillRect(w.x + ctx.measureText(w[key]).width + 2, w[at] - 14, 9, 17)
+      }
     }
     ctx.letterSpacing = '0px'
     ctx.globalAlpha = 1
@@ -1306,6 +1445,50 @@ function dots(pts) {
   return p
 }
 
+// The minor contours sorted by how close they run to their neighbours. On
+// steep ground they bunch into folds too tight to read, and a sheet drawn by
+// hand leaves them out there and keeps only every fifth. Each run of a line
+// goes into a bucket by its spacing (world units, the level step over the
+// slope); relief() fades out the buckets that come closer than a few pixels
+// at the scale of the moment.
+const SPACING = [0, 0.04, 0.06, 0.08, 0.1, 0.125, 0.15, 0.2]
+function minorContours(island) {
+  const g = island.height
+  const levels = island.contours
+  const dh = levels[1].level - levels[0].level
+  const e = g.step
+  const spacing = (x, z) => {
+    const gx = sampleGrid(g, g.h, x + e, z) - sampleGrid(g, g.h, x - e, z)
+    const gz = sampleGrid(g, g.h, x, z + e) - sampleGrid(g, g.h, x, z - e)
+    return dh / (Math.hypot(gx, gz) / (2 * e) || 1e-9)
+  }
+  const bucketOf = (d) => {
+    let b = 0
+    while (b + 1 < SPACING.length && d >= SPACING[b + 1]) b++
+    return b
+  }
+  const runs = SPACING.map(() => [])
+  for (const c of levels) {
+    if (c.major) continue
+    for (const { pts } of c.lines) {
+      let run = null
+      let at = -1
+      for (let i = 1; i < pts.length; i++) {
+        const [ax, az] = pts[i - 1]
+        const [bx, bz] = pts[i]
+        const b = bucketOf(spacing((ax + bx) / 2, (az + bz) / 2))
+        if (b !== at) {
+          run = [pts[i - 1]]
+          runs[b].push(run)
+          at = b
+        }
+        run.push(pts[i])
+      }
+    }
+  }
+  return SPACING.map((lo, b) => ({ lo, path: path(runs[b]) }))
+}
+
 function densify(pts, step) {
   const out = [pts[0]]
   for (let i = 1; i < pts.length; i++) {
@@ -1351,6 +1534,45 @@ function coastReach(island, b) {
   let r = 0
   while (r < 60 && sampleGrid(g, g.h, sx + dx * r, sz + dz * r) > 0) r += 0.1
   return r
+}
+
+// How far from (x, z) along (ux, uz) a closed ring around that point lies.
+function rayOut(ring, x, z, ux, uz) {
+  let best = 0
+  for (let i = 1; i < ring.length; i++) {
+    const [ax, az] = ring[i - 1]
+    const [bx, bz] = ring[i]
+    const ex = bx - ax
+    const ez = bz - az
+    const den = ux * ez - uz * ex
+    if (!den) continue
+    const t = ((ax - x) * ez - (az - z) * ex) / den
+    const v = ((ax - x) * uz - (az - z) * ux) / den
+    if (t > 0 && v >= 0 && v <= 1) best = Math.max(best, t)
+  }
+  return best
+}
+
+// Whether a box reaches inside a closed ring (corners or centre in it, or a
+// ring point in the box).
+function touchesRing(box, ring) {
+  const inRing = (x, z) => {
+    let c = false
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [xi, zi] = ring[i]
+      const [xj, zj] = ring[j]
+      if (zi > z !== zj > z && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) c = !c
+    }
+    return c
+  }
+  const corners = [
+    [box.x0, box.z0],
+    [box.x1, box.z0],
+    [box.x0, box.z1],
+    [box.x1, box.z1],
+    [(box.x0 + box.x1) / 2, (box.z0 + box.z1) / 2],
+  ]
+  return corners.some(([x, z]) => inRing(x, z)) || ring.some(([x, z]) => x > box.x0 && x < box.x1 && z > box.z0 && z < box.z1)
 }
 
 function overlap(a, b) {

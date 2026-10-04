@@ -3,7 +3,8 @@ import { LEXICON } from './lexicon.js'
 // The floor plan: where every pair of stones sits. A stone is one world unit
 // high and deep; x runs right, z runs toward the viewer, y is up. The island
 // under the stones, and the eight places on it, come from island.js.
-export { featureAnchor } from './island.js'
+import { featureAnchor } from './island.js'
+export { featureAnchor }
 
 // The board is sized from the list. Jukugo's 9 × 8 grid wants ~65 words in
 // play at once out of 1,600; a list of a few hundred spread that thin repeats
@@ -29,6 +30,20 @@ export const BOUNDS = { x0: -x1, x1, z0: -z1, z1 }
 export const SLAB = 1.5
 export const GAP = { h: 0.12 }
 
+// A word on the floor, measured from its centre. `slabs` is its two stones
+// and the gap between them, with a hair over, where a line's port is drawn.
+// `marks` is everything floor.js prints round them as well (pairMarks): the
+// corner ticks, the number above, and the caption typed in beneath, its gloss
+// running on to the right. CAPTION is where the caption's second line ends,
+// descenders and all: nothing may clip it, and a card set below the word
+// starts under it.
+const HALF_W = GAP.h / 2 + SLAB
+export const CAPTION = 1.45
+export const WORD = {
+  slabs: { hx: HALF_W + 0.05, hz: 0.55 },
+  marks: { x0: -(HALF_W + 0.24), x1: 2, z0: -0.92, z1: CAPTION },
+}
+
 export function mulberry32(seed) {
   let a = seed >>> 0
   return () => {
@@ -43,7 +58,11 @@ export function mulberry32(seed) {
 // One pair per cell, every word left to right: Hawaiian is not written
 // top-to-bottom, so Jukugo's vertical words are gone. A pair is 3.12 wide in
 // a 4.67 cell, so the sideways jitter is kept small enough (±0.35) that two
-// neighbouring words never close up into a row of four stones.
+// neighbouring words never close up into a row of four stones. Each pair
+// keeps its cell's centre: a word that can't stand where the jitter put it
+// may move anywhere else within the jitter (board.js).
+export const JITTER = { x: 0.35, z: 0.45 }
+
 export function layoutPairs(rng) {
   const { cols, rows } = GRID
   const cw = (BOUNDS.x1 - BOUNDS.x0) / cols
@@ -53,9 +72,10 @@ export function layoutPairs(rng) {
     for (let i = 0; i < cols; i++) {
       // A few holes keep the grid from reading as a grid.
       if (rng() < 0.08) continue
-      const x = BOUNDS.x0 + (i + 0.5) * cw + (rng() - 0.5) * 0.7
-      const z = BOUNDS.z0 + (j + 0.5) * ch + (rng() - 0.5) * 0.9
-      pairs.push({ x, z, dir: 'h' })
+      const cell = [BOUNDS.x0 + (i + 0.5) * cw, BOUNDS.z0 + (j + 0.5) * ch]
+      const x = cell[0] + (rng() - 0.5) * 2 * JITTER.x
+      const z = cell[1] + (rng() - 0.5) * 2 * JITTER.z
+      pairs.push({ x, z, dir: 'h', cell })
     }
   }
   return pairs
@@ -68,6 +88,62 @@ export function tileOffsets() {
     [-d, 0],
     [d, 0],
   ]
+}
+
+// Where a word's field line lands: the nearest point of its place's outline
+// (featureAnchor), unless that point lies under the word itself — as it does
+// for a word set down across the stream, the lava's edge or the ring of
+// cloud. A line that ends under its own stones draws nothing, and the word
+// reads as unlinked, so it goes instead to the nearest point of the outline
+// that leaves some line showing past the stones and clear of the caption.
+export function fieldAnchor(place, x, z) {
+  const nearest = featureAnchor(place, x, z)
+  if (!underWord(nearest, x, z)) return nearest
+  let best = nearest
+  let bestD = Infinity
+  for (const p of outline(place)) {
+    const d = Math.hypot(p[0] - x, p[1] - z)
+    if (d < bestD && !underWord(p, x, z)) {
+      best = p
+      bestD = d
+    }
+  }
+  return best
+}
+
+// Under the word, for a line's end: within SHOW of its stones to either side
+// or behind, or anywhere up to just past its caption in front.
+const SHOW = 0.5
+function underWord([px, pz], x, z) {
+  const { hx, hz } = WORD.slabs
+  return Math.abs(px - x) < hx + SHOW && pz - z > -hz - SHOW && pz - z < CAPTION + 0.15
+}
+
+// A place's outline as points about 0.05 apart: its polyline, its rectangle
+// or its circle, the three shapes featureAnchor lands on.
+function outline(place) {
+  if (place.line) return densify(place.line)
+  const { x, z } = place
+  if (place.hw != null) {
+    const { hw, hh } = place
+    return densify([[x - hw, z - hh], [x + hw, z - hh], [x + hw, z + hh], [x - hw, z + hh], [x - hw, z - hh]])
+  }
+  const n = Math.ceil((2 * Math.PI * place.r) / 0.05)
+  return Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * 2 * Math.PI
+    return [x + Math.cos(a) * place.r, z + Math.sin(a) * place.r]
+  })
+}
+
+function densify(pts) {
+  const out = [pts[0]]
+  for (let i = 1; i < pts.length; i++) {
+    const [ax, az] = pts[i - 1]
+    const [bx, bz] = pts[i]
+    const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / 0.05))
+    for (let k = 1; k <= n; k++) out.push([ax + ((bx - ax) * k) / n, az + ((bz - az) * k) / n])
+  }
+  return out
 }
 
 // The path a root line takes between stones a and b: an octilinear route —

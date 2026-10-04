@@ -4,7 +4,7 @@ import { FloorPainter, REVEAL } from './floor.js'
 import { LinkStore } from './links.js'
 import { Notes } from './notes.js'
 import { Director } from './director.js'
-import { BOUNDS } from './field.js'
+import { REACH, clamp, wander } from './view.js'
 import { SERIF } from './palette.js'
 
 const $ = (id) => document.getElementById(id)
@@ -13,22 +13,6 @@ const $ = (id) => document.getElementById(id)
 const SLOW = Number(new URLSearchParams(location.search).get('slow')) || 1
 const clock = () => performance.now() / 1000 / SLOW
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
-
-// The camera's slow wander: x is two sines (±2.5 and ±1.4), z one (±1.8).
-// The board is sized from the word list and can be much smaller than
-// Jukugo's, so the wander and the reach of a drag both come from the floor:
-// the view's centre keeps 6 units in from the sides and 4 from the ends, the
-// wander shrinks to fit what's left, and a drag reaches no further than the
-// wander's edge — past it the view only clamps.
-const MARGIN = { x: 6, z: 4 }
-const centre = { x: (BOUNDS.x0 + BOUNDS.x1) / 2, z: (BOUNDS.z0 + BOUNDS.z1) / 2 }
-const range = {
-  x: Math.max(0, (BOUNDS.x1 - BOUNDS.x0) / 2 - MARGIN.x),
-  z: Math.max(0, (BOUNDS.z1 - BOUNDS.z0) / 2 - MARGIN.z),
-}
-const drift = { x: Math.min(1, range.x / 3.9), z: Math.min(1, range.z / 1.8) }
-const reach = { x: range.x + 3.9 * drift.x, z: range.z + 1.8 * drift.z }
-const clamp = (v, c, r) => Math.max(c - r, Math.min(c + r, v))
 
 async function boot() {
   // Every letter is pecked into a texture or drawn onto a canvas, and a canvas
@@ -68,21 +52,29 @@ async function boot() {
   }
   addEventListener('resize', resize)
   resize()
-
-  // A slow drift over the floor — never still, never fast enough to make the
-  // captions hard to read.
-  function updateView(now) {
-    const w = innerWidth
-    const h = innerHeight
-    const base = Math.max(34, Math.min(60, Math.min(w, h) / 17))
-    const t = reduceMotion ? 0 : now - t0
-    const wave = (period, phase = 0) => Math.sin((t / period) * Math.PI * 2 + phase)
-    view.ppu = base * user.zoom * (1 + 0.035 * wave(53))
-    view.tx = clamp(centre.x + drift.x * (2.5 * wave(97) + 1.4 * wave(41)) + user.dx, centre.x, range.x)
-    view.tz = clamp(centre.z + drift.z * 1.8 * wave(83, 1) + user.dz, centre.z, range.z)
-    view.yaw = ((-3 + 5 * wave(120)) * Math.PI) / 180
-    view.pitch = ((55 + 2.5 * wave(71)) * Math.PI) / 180
+  // The star compass is the one place whose drawing is the point, so a card
+  // weighs sitting on it as it does sitting on the chrome. It moves with the
+  // camera, so its box on screen is taken each frame.
+  const compass = board.island.compass
+  const compassBox = () => {
+    let x0 = Infinity
+    let y0 = Infinity
+    let x1 = -Infinity
+    let y1 = -Infinity
+    for (let i = 0; i < 16; i++) {
+      const a = (i / 16) * Math.PI * 2
+      const [x, y] = scene.project(compass.x + Math.cos(a) * compass.r, 0, compass.z + Math.sin(a) * compass.r)
+      x0 = Math.min(x0, x)
+      y0 = Math.min(y0, y)
+      x1 = Math.max(x1, x)
+      y1 = Math.max(y1, y)
+    }
+    return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }
   }
+
+  // The camera's slow drift over the floor (view.js); with reduced motion it
+  // holds where the drift begins.
+  const updateView = (now) => wander(view, reduceMotion ? 0 : now - t0, innerWidth, innerHeight, user)
 
   const t0 = clock()
   updateView(t0)
@@ -99,12 +91,18 @@ async function boot() {
     const e = p.entry
     p.caption = { prev1: '', prev2: '', text1: e.word.toUpperCase(), text2: e.gloss, t0: start + 1.0 }
   }
-  links.sync(board.desiredLinks(), t0, {
-    holdUntil: (d) => {
-      const tiles = d.kind === 'pair' ? [d.a, d.b] : d.pair.tiles
-      return Math.max(...tiles.map((t) => scene.block(t).drop.t0 + scene.block(t).drop.dur)) + 0.1
-    },
-  })
+  // Each line waits for its stones to land, and LinkStore starts new lines a
+  // beat apart in the order it is handed them, so hand them over in the order
+  // their stones land: from the middle of the frame out. In the board's own
+  // order they would start from the top-left corner, long after the middle
+  // had landed.
+  const landed = (d) => {
+    const tiles = d.kind === 'pair' ? [d.a, d.b] : d.pair.tiles
+    return Math.max(...tiles.map((t) => scene.block(t).drop.t0 + scene.block(t).drop.dur)) + 0.1
+  }
+  const opening = [...board.desiredLinks()].sort(([, a], [, b]) => landed(a) - landed(b))
+  links.sync(new Map(opening), t0, { holdUntil: landed })
+  const openingLines = [...links.links.values()]
   // The first card and the first turn keep Jukugo's distance from the first
   // stone landing.
   director.start(drop - 0.15)
@@ -128,8 +126,8 @@ async function boot() {
     // affine map.
     const [a, b, c, d] = scene.floorAffine()
     const det = a * d - b * c
-    user.dx = clamp(user.dx - (d * dx - c * dy) / det, 0, reach.x)
-    user.dz = clamp(user.dz - (-b * dx + a * dy) / det, 0, reach.z)
+    user.dx = clamp(user.dx - (d * dx - c * dy) / det, 0, REACH.x)
+    user.dz = clamp(user.dz - (-b * dx + a * dy) / det, 0, REACH.z)
   })
   const end = (e) => {
     if (!drag) return
@@ -165,6 +163,7 @@ async function boot() {
   st.pairs.textContent = String(board.pairs.length)
   let last = clock()
   let ready = false
+  let opened = false
   function frame() {
     const now = clock()
     const dt = Math.min(0.1, now - last)
@@ -176,12 +175,23 @@ async function boot() {
     scene.update(now)
     scene.render()
     floor.draw({ A: scene.floorAffine(), board, links, ripples, now, intro: now - t0, noted: notes.noted() })
-    notes.update(scene, now, dt, reserved)
+    notes.update(scene, now, dt, [...reserved, compassBox()])
     st.turns.textContent = String(board.turnCount).padStart(4, '0')
     st.links.textContent = String(links.count()).padStart(2, '0')
     if (!ready) {
       ready = true
       document.body.classList.add('ready')
+    }
+    // The opening is over once every line it drew is in (or has since let
+    // go) and the first card has opened: the gallery's thumbnail waits for
+    // this, rather than for a guess at how long the opening takes.
+    if (
+      !opened &&
+      openingLines.every((l) => l.p >= 1 || l.to === 0) &&
+      notes.list.some((n) => n.el.classList.contains('open'))
+    ) {
+      opened = true
+      document.body.classList.add('opened')
     }
     requestAnimationFrame(frame)
   }
