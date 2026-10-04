@@ -72,3 +72,21 @@ The exact-verdict and sense figures are lower partly by design: the second reade
 - `DECISIONS.md`: the decisions, with affected words, options, a recommendation, and who decides.
 - `CRITIC.md`: the consistency critic's report.
 - `reviewer_notes.md`: each batch reviewer's notes. This is where most pipeline faults and policy questions were first raised.
+- `overrides.json`: the DECISIONS.md recommendations applied as **default rulings**. The owner has not ruled on any of them; every reason starts "Default ruling (owner has not ruled)" and names its decision. 96 words: 19 restored where a ruling clears a root-level sense (LĀʻAU, KAPA, PIʻI, HUNA, HUA, star names), 15 removed (B1, B6, C2, C5, E3 epithets, P1 phantoms), and 35 never dealt as an opening word (E1 death, burial, disease and disability; E3 war).
+- `glossary.json`: the curated stones, one per root in one sense, keyed by etymon (POLLEX set; lettered sub-sets of one set are one root, B8/B9). Each has its spelling, card gloss, Proto-Polynesian ancestor and up to three cognates, with the source and a one-line etymon note. Two passes: the first over the stones of the reviewed list, the second over the stones it never saw (restored words, the bases of full repeats). `renames` records the splits and merges (hua / hua#word, moʻo / moʻo#line, koa tree / brave, ʻau handle / group / swim, ʻawa kava / bitter; lā sun + day, papa, kahu, kūkulu, lae).
+- `repeats.tsv`: 266 candidate full repeats (waiwai = WAI·WAI), reviewed because the owner wants them in (overriding B7(a)). A repeat ships only as its base doubled in a sense the base keeps. 70 keep, 61 pending, 21 doubtful, 114 drop.
+- `wordlist.tsv`: what ships, with its stone ids and provenance. Written by `../roots/build_words.py`.
+
+## How the shipped list is made
+
+`../roots/merge_curation.py <curation dir>` folds the curators' outputs into the three files above; `../roots/build_words.py` turns them and `review.tsv` into `src/data/words.js` and `src/data/roots.js`. The build drops a word when:
+- its final verdict is not keep or keep-pending, or it carries a §4.3 exclusion, or it is opaque;
+- a stone would be over 8 letters (B11);
+- one of its stones is itself a shipped repeat (B6, one form per word: *waiʻeleʻele* gives way to ʻELE·ʻELE);
+- its two stones do not spell it (*alaula* would have printed ALA·ʻULA until the ʻula stone was respelled).
+
+It fails outright on an apostrophe or non-NFC letter in a Hawaiian field (§4.4) and on any gloss containing English from the F1 banned list.
+
+Result: 598 words (228 confirmed by two sources or P&E via POLLEX, 370 awaiting the Pukui & Elbert check, shown with ◦), 129 of them repeats; 436 stones, of which 30 are unresolved senses that never link. 423 words are playable (the 2-core of the turn graph); `../../tools/sim.mjs` rates the board Jukugo-like on desktop and phone.
+
+Changes the curation forces on DESIGN's own examples (F4): *waiwai* is WAI "keep, retain" (PPN *qai) doubled, not water, so WAI·MAKA → WAI·WAI is not a chain; and *kahawai* no longer shares a stone with *kahakai*, so KAHA·KAI → KAHA·WAI is not either.

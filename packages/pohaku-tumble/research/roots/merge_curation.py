@@ -40,6 +40,7 @@ if os.path.exists(p):
 # ── glossary ─────────────────────────────────────────────────────────────
 stones, words, renames, conflicts = {}, {}, {}, []
 repeat_senses = {}
+pending_words = []
 # glossary2/ is the second pass: stones the first pass never saw (restored words, repeat bases)
 for f in sorted(glob.glob(os.path.join(SRC, 'glossary', 'batch-*.json'))) + sorted(glob.glob(os.path.join(SRC, 'glossary2', 'batch-*.json'))):
     g = json.load(open(f, encoding='utf-8'))
@@ -61,17 +62,7 @@ for f in sorted(glob.glob(os.path.join(SRC, 'glossary', 'batch-*.json'))) + sort
     for w, sid in (g.get('repeat_senses') or {}).items():
         repeat_senses[w] = okina(sid)
     for w, v in (g.get('words') or {}).items():
-        v = {k: okina(x) if k.startswith('sense_') else x for k, x in v.items()}
-        if w in words:
-            # one batch curates side a, another side b: combine
-            prev = words[w]
-            for k in ('sense_a', 'sense_b'):
-                if k in v and k in prev and v[k] != prev[k]:
-                    conflicts.append(f'{tag}: {w} {k} {v[k]} vs {prev[k]}')
-                elif k in v:
-                    prev[k] = v[k]
-            continue
-        words[w] = dict(v)
+        pending_words.append((tag, w, {k: okina(x) if k.startswith('sense_') else x for k, x in v.items()}))
 
 
 def follow(sid):
@@ -82,10 +73,22 @@ def follow(sid):
     return sid
 
 
-for w in words.values():
+# word re-sensings compare after every batch's renames are known: one batch may
+# name kūkulu#1 where another has merged it into kūkulu#0
+for tag, w, v in pending_words:
     for k in ('sense_a', 'sense_b'):
-        if k in w:
-            w[k] = follow(w[k])
+        if k in v:
+            v[k] = follow(v[k])
+    if w in words:
+        # one batch curates side a, another side b: combine
+        prev = words[w]
+        for k in ('sense_a', 'sense_b'):
+            if k in v and k in prev and v[k] != prev[k]:
+                conflicts.append(f'{tag}: {w} {k} {v[k]} vs {prev[k]}')
+            elif k in v:
+                prev[k] = v[k]
+        continue
+    words[w] = dict(v)
 for old in list(stones):
     new = follow(old)
     if new != old:
