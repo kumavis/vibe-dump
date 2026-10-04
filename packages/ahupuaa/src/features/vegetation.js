@@ -203,7 +203,8 @@ export class Vegetation {
       ...Object.fromEntries(Object.entries(TREES).map(([k, o]) => [k, broadleafFar(rand, o)])),
       aalii: shrubFar(rand, '#8b7c4a'),
     }
-    this.fixedMat = objectMaterial(app.shared, { fade: [34, 48], close: 0.3, sway: 1 })
+    // palm fronds, hala, maiʻa and kī leaves are single sheets: draw both faces
+    this.fixedMat = objectMaterial(app.shared, { fade: [34, 48], close: 0.3, sway: 1, doubleSide: true })
     this.forestMat = objectMaterial(app.shared, { fade: [FOREST_LOD[0], FOREST_LOD[1]], close: 0.3, sway: 1 })
     this.forestFarMat = objectMaterial(app.shared, { fade: [FOREST_R - 3.5, FOREST_R], fadeIn: FOREST_LOD, sway: 1 })
     this.group = new THREE.Group()

@@ -150,7 +150,11 @@ export class Life {
     this.poseMeshes = {}
     for (const pose of ['stand', 'bend', 'sit']) {
       const list = this.people[pose]
-      const mesh = new THREE.InstancedMesh(person(pose, rand), this.mat, Math.max(1, list.length + (pose === 'stand' ? 40 : 0)))
+      const count = Math.max(1, list.length + (pose === 'stand' ? 40 : 0))
+      const mesh = new THREE.InstancedMesh(person(pose, rand), this.mat, count)
+      // three makes the colour buffer on the first setColorAt, filled with
+      // black, so anyone placed before that would stay a silhouette
+      mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(count * 3).fill(1), 3)
       mesh.frustumCulled = false
       mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
       this.group.add(mesh)
