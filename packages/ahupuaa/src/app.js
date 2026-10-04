@@ -14,6 +14,7 @@ import { Features } from './features/index.js'
 import { Vegetation } from './features/vegetation.js'
 import { Life } from './features/life.js'
 import { Streams } from './features/streams.js'
+import { planFalls, Waterfalls } from './features/waterfalls.js'
 import { blur, distanceTransform } from './gen/grid.js'
 
 function dataTexture(arr, N, { filter = 'mip', format = THREE.RGBAFormat } = {}) {
@@ -148,6 +149,10 @@ export class App {
       },
     }
 
+    // the hero falls cut their headwalls into the heightfield first, so the
+    // terrain, its shadow, the trees and the stream ribbons all see the carve
+    const fp = this.params.get('falls')
+    this.wailele = fp === '0' ? null : planFalls(island, { carve: fp !== 'flat' })
     this.terrain = new Terrain(d, this.shared)
     this.scene.add(this.terrain.group)
     this.shadow = new TerrainShadow(this.terrain.heightTex)
@@ -167,6 +172,9 @@ export class App {
     this.clouds = new Clouds({ shape: d.cloudShape, shapeSize: ss, detail: d.cloudDetail, detailSize: ds })
     this.clouds.uniforms.uWeather.value = this.weather.texture
     this.clouds.uniforms.uWeatherRect.value = this.weather.rect
+    // the rainbow asks the land which rain the sun can reach
+    this.clouds.uniforms.uShadow.value = this.shadow.texture
+    this.clouds.uniforms.uHeight.value = this.terrain.heightTex
     this.shared.uniforms.uWeather.value = this.weather.texture
     this.shared.uniforms.uWeatherRect.value = this.weather.rect
     this.pipeline.atmosphere = this.clouds
@@ -179,6 +187,10 @@ export class App {
     this.scene.add(this.life.group)
     this.streams = new Streams(this)
     this.scene.add(this.streams.mesh)
+    if (this.wailele) {
+      this.waterfalls = new Waterfalls(this, this.wailele)
+      this.scene.add(this.waterfalls.group)
+    }
     this.flash = { t: -10, next: 0, pos: new THREE.Vector3(), k: 0 }
 
     this.rig = new CameraRig(this.camera, canvas, this.terrain)
@@ -222,6 +234,7 @@ export class App {
     this.clouds.uniforms.uSteps.value = L.steps
     this.clouds.uniforms.uLightSteps.value = L.light
     this.terrain.setRange(L.range)
+    this.waterfalls?.setQuality(this.quality.level)
     if (this.sized) this.resize()
   }
 
@@ -314,6 +327,7 @@ export class App {
     this.weather.step(dt * c.speed, this.light.sunDir.y, c.hour, this.season)
     this.life.update(dt, this.time)
     this.streams.update()
+    this.waterfalls?.update(dt)
     this.lightning()
     for (const u of this.updaters) u(dt, this.time)
     const L = this.light

@@ -7,12 +7,21 @@
 // toward the sun to see how much cloud is in the way (Beer–Lambert with a
 // powder term for the bright crinkly edges and a two-lobe phase function for
 // the silver lining). Below the base, wherever the grid says it is raining,
-// the ray picks up grey rain streaks — and if sunlight reaches that rain at
-// 40–42° from the point opposite the sun, it picks up a rainbow, which is
-// exactly where a real one would hang.
+// the ray picks up grey rain streaks.
+//
+// Rain the sun can reach (clear of the cloud above it and of the land's
+// shadow) also sends a little light back near 42° from the point opposite the
+// sun: the ānuenue. How much, and in what colours, comes from a table worked
+// out once from the optics of a raindrop: red on the outside, the sky inside
+// the bow a shade lighter, a dark band beyond it, and a much fainter secondary
+// bow with its colours reversed. The bow is only as bright as the lit rain in
+// that cone, so usually just a piece of one shows: an ʻōnohi standing on the
+// sea, the pale punakea of drizzle, uakoko low over sunlit ground. It is light
+// added on top of the scene, so it all but vanishes against bright sky and
+// shows against dark cloud and shaded rain, as a real one does.
 
 import * as THREE from 'three'
-import { constants } from './shaders/common.glsl.js'
+import { constants, heightFetch } from './shaders/common.glsl.js'
 import { fullscreenTriangle } from './pipeline.js'
 
 const fragment = /* glsl */ `
@@ -41,13 +50,21 @@ uniform float uTop;        // world y of the inversion
 uniform float uDensity;
 uniform float uFarCover;   // trade cumulus beyond the simulated patch
 uniform float uOvercast;   // 0..1, a stratiform deck over everything (Kona storms)
-uniform float uRainbow;
+uniform float uRainbow;    // 1 = rainbows on; also a debug gain
 uniform float uSteps;
 uniform float uLightSteps;
 uniform float uFlash;      // lightning
 uniform vec3 uFlashPos;
 uniform vec2 uRes;
+uniform sampler2D uBowLUT;  // raindrop light near the bows (x = degrees from antisolar / 64; rows: showers, light rain, drizzle)
+uniform sampler2D uShadow;  // terrain shadow from the sun, top-down
+${heightFetch}
 in vec2 vUv;
+
+// the bow table is drop optics (light relative to isotropic scattering); this
+// one constant sets how strongly the app's rain veil, which already stands in
+// for multiple scattering, carries it
+#define BOW_GAIN 0.3
 
 float hash(vec2 p) { return fract(52.9829189 * fract(dot(p, vec2(0.06711056, 0.00583715)))); }
 float vn(vec2 p) {
@@ -135,24 +152,32 @@ float hg(float c, float g) {
   return (1.0 - g2) / pow(1.0 + g2 - 2.0 * g * c, 1.5);
 }
 
-vec3 rainbowColour(float deg) {
-  // primary bow: violet at 40.6°, red at 42.3°; secondary reversed at 50–53°
-  vec3 c = vec3(0.0);
-  float x = (deg - 40.4) / 2.1;
-  if (x > -0.3 && x < 1.3) {
-    c += vec3(smoothstep(0.55, 0.9, x) * (1.0 - smoothstep(0.95, 1.2, x)),
-              smoothstep(0.25, 0.55, x) * (1.0 - smoothstep(0.6, 0.85, x)),
-              smoothstep(-0.25, 0.05, x) * (1.0 - smoothstep(0.25, 0.55, x)));
-  }
-  float y = (deg - 50.0) / 3.4;
-  if (y > -0.3 && y < 1.3) {
-    c += 0.45 * vec3(smoothstep(-0.2, 0.15, y) * (1.0 - smoothstep(0.25, 0.5, y)),
-                     smoothstep(0.3, 0.55, y) * (1.0 - smoothstep(0.6, 0.85, y)),
-                     smoothstep(0.65, 0.9, y) * (1.0 - smoothstep(0.95, 1.25, y)));
-  }
-  // the sky inside the primary bow is a little brighter
-  c += vec3(0.05) * (1.0 - smoothstep(30.0, 40.5, deg));
-  return c;
+// Does sunlight reach this drop? Cloud: where its sun ray crosses the base and
+// a third of the way up. Land: follow the same ray away from the sun down to
+// the ground; that spot shares the ray and the air between is open, so the
+// terrain shadow map there answers for the drop. Two passes find the ground on
+// slopes; the nearest height texel is plenty for that.
+float groundY(vec2 xz) {
+  ivec2 i = clamp(ivec2(worldToUv(xz) * HRES), ivec2(0), ivec2(int(HRES) - 1));
+  return max(texelFetch(uHeight, i, 0).r, 0.0) * Y_PER_M;
+}
+float terrainLit(vec3 p, vec2 run) {
+  vec2 g = p.xz - run * max(p.y - groundY(p.xz), 0.0);
+  g = p.xz - run * max(p.y - groundY(g), 0.0);
+  vec2 uv = worldToUv(g);
+  if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0) return 1.0;
+  return texture(uShadow, uv).r;
+}
+// cloud cover where a sun ray crosses the layer: the simulated patch alone
+// (the sun rays from rain in view seldom leave it), with a storm deck as a
+// flat floor
+float coverAt(vec2 xz) {
+  return max(texture(uWeather, (xz - uWeatherRect.xy) / uWeatherRect.zw).r, uOvercast * 0.7);
+}
+float sunlitRain(vec3 p, vec2 run) {
+  float c0 = coverAt(p.xz + run * max(uBase - p.y, 0.0));
+  float c1 = coverAt(p.xz + run * max(mix(uBase, uTop, 0.35) - p.y, 0.0));
+  return terrainLit(p, run) * exp(-2.6 * (c0 + c1));
 }
 
 void main() {
@@ -187,7 +212,19 @@ void main() {
   float cosS = dot(rd, uSunDir);
   float phase = mix(hg(cosS, 0.62), hg(cosS, -0.22), 0.3) * 0.75 + 0.25;
   float antiDeg = degrees(acos(clamp(dot(rd, -uSunDir), -1.0, 1.0)));
-  vec3 bow = rainbowColour(antiDeg) * uRainbow * smoothstep(-0.02, 0.06, uSunDir.y);
+  // the drops' light toward this pixel, for big shower drops, light rain and
+  // drizzle; past 63° there is nothing left to add
+  float bowOn = uRainbow * BOW_GAIN * smoothstep(0.0, 0.05, uSunDir.y) * step(antiDeg, 63.0);
+  vec3 bowShower = vec3(0.0), bowLight = vec3(0.0), bowDrizzle = vec3(0.0);
+  if (bowOn > 0.0) {
+    float u = antiDeg / 64.0;
+    bowShower = textureLod(uBowLUT, vec2(u, 0.5 / 3.0), 0.0).rgb * bowOn;
+    bowLight = textureLod(uBowLUT, vec2(u, 1.5 / 3.0), 0.0).rgb * bowOn;
+    bowDrizzle = textureLod(uBowLUT, vec2(u, 2.5 / 3.0), 0.0).rgb * bowOn;
+  }
+  vec2 sunRun = uSunDir.xz / max(uSunDir.y, 0.05); // xz travelled per unit of height toward the sun
+  float lit = 1.0;
+  float litT = -1e9;
   vec3 sunL = uSunColor;
   float fogK = 0.0011;
   float detailK = uSteps / 56.0;
@@ -229,21 +266,33 @@ void main() {
         L += T * (S * (1.0 - Ts) * fogT + uFogColor * (1.0 - fogT) * (1.0 - Ts));
         T *= Ts;
       }
-    } else {
-      // rain: grey streaks below the base, thinning toward the ground in dry air
+    } else if (w.g > 0.0) {
+      // rain (under cloud that isn't raining there is nothing to add): grey
+      // streaks below the base, thinning toward the ground in dry air
       // streaks: fine near the camera, a soft veil farther off
       float near = 1.0 - smoothstep(4.0, 30.0, t);
       vec3 q = vec3(p.x * mix(0.5, 3.0, near), p.y * 0.05 + uTime * 0.9, p.z * mix(0.5, 3.0, near)) + vec3(uWind.x * 0.5, 0.0, uWind.y * 0.5);
       float streak = texture(uDetail, q).r;
-      float r = w.g * smoothstep(0.25, 0.75, streak + w.g * 0.4) * smoothstep(0.0, uBase * 0.3, p.y + uBase * 0.08);
-      r *= mix(1.0, 0.35, near);
-      // cloud overhead along the sun ray decides whether the rain is sunlit
-      vec2 up = p.xz + uSunDir.xz / max(uSunDir.y, 0.05) * max(uBase - p.y, 0.0);
-      float shade = exp(-weatherAll(up).r * 3.0);
-      vec3 S = uSkyColor * 0.55 + sunL * shade * 0.14 + sunL * shade * bow * 3.0;
+      float fall = smoothstep(0.0, uBase * 0.3, p.y + uBase * 0.08) * mix(1.0, 0.35, near);
+      float r = w.g * smoothstep(0.25, 0.75, streak + w.g * 0.4) * fall;
+      // is the sun on this rain? cloud and land, re-checked every 1.5 units
+      // near by and more sparsely far off, where the veil is soft anyway
+      if (t - litT > max(1.5, t * 0.03)) {
+        lit = sunlitRain(p, sunRun);
+        litT = t;
+      }
+      // rain under its own cloud sees less sky, so shafts read grey and a bow shows on them
+      vec3 S = uSkyColor * 0.55 * mix(1.0, 0.8, w.r) + sunL * lit * 0.14;
       float sigma = r * 0.14;
       float Ts = exp(-sigma * dt);
       L += T * (S * (1.0 - Ts) * fogT + uFogColor * (1.0 - fogT) * (1.0 - Ts));
+      // the bow rides on the mean rain, not the streaks, so it holds still;
+      // drop size follows the rain rate: drizzle pale and broad, showers narrow and vivid
+      if (bowOn > 0.0 && lit > 0.003) {
+        float sb = w.g * fall * 0.12; // mean extinction: 0.14 × the streaks' average cover
+        vec3 bowP = mix(mix(bowDrizzle, bowLight, smoothstep(0.05, 0.25, w.g)), bowShower, smoothstep(0.3, 0.65, w.g));
+        L += T * sunL * lit * bowP * (1.0 - exp(-sb * dt)) * fogT;
+      }
       T *= Ts;
     }
     t += dt;
@@ -251,6 +300,247 @@ void main() {
   gl_FragColor = vec4(L, T);
 }
 `
+
+// The ānuenue table: how much sunlight raindrops send back near the bows, per
+// degree from the antisolar point, in linear RGB relative to isotropic
+// scattering. Airy theory gives each bow (one internal reflection for the
+// primary, two for the secondary) per wavelength and drop size; a spread of
+// drop sizes, the eye's colour matching and the sun's disc then blur it into
+// what is actually seen. Built once, in a few tens of milliseconds.
+const BOW_N = 512 // texels over 0..BOW_MAX degrees
+const BOW_MAX = 64
+
+function airy(z) {
+  // Ai(z): power series near the origin, the oscillating asymptote far inside
+  if (z > 6) return 0
+  if (z < -7) {
+    const x = -z
+    const zeta = (2 / 3) * x * Math.sqrt(x)
+    const ph = zeta + Math.PI / 4
+    return (Math.sin(ph) - (5 / (72 * zeta)) * Math.cos(ph)) / (Math.sqrt(Math.PI) * Math.sqrt(Math.sqrt(x)))
+  }
+  const z3 = z * z * z
+  let f = 1
+  let g = z
+  let tf = 1
+  let tg = z
+  for (let k = 1; k < 80; k++) {
+    tf *= z3 / ((3 * k - 1) * (3 * k))
+    tg *= z3 / ((3 * k) * (3 * k + 1))
+    f += tf
+    g += tg
+    if (Math.abs(tf) + Math.abs(tg) < 1e-16) break
+  }
+  return 0.355028053887817 * f - 0.258819403792807 * g
+}
+
+// water at 20 °C: a Cauchy fit (λ in µm)
+const nWater = (um) => 1.3239 + 0.003125 / (um * um)
+
+// Fresnel throughput of a ray that enters, reflects k times inside and leaves,
+// averaged over the two polarisations
+function throughput(n, k, b) {
+  const ci = Math.sqrt(1 - b * b)
+  const cr = Math.sqrt(1 - (b * b) / (n * n))
+  const rs = (ci - n * cr) / (ci + n * cr)
+  const rp = (n * ci - cr) / (n * ci + cr)
+  const Rs = rs * rs
+  const Rp = rp * rp
+  return 0.5 * ((1 - Rs) ** 2 * Rs ** k + (1 - Rp) ** 2 * Rp ** k)
+}
+
+// angle from the antisolar point of a ray with impact parameter b
+function rayAlpha(n, k, b) {
+  const i = Math.asin(b)
+  const r = Math.asin(b / n)
+  const D = 2 * (i - r) + k * (Math.PI - 2 * r)
+  return k === 1 ? Math.PI - D : D - Math.PI
+}
+
+// the rainbow ray (where the deviation turns): impact parameter, its angle,
+// the curvature of the deviation there and its throughput
+function bowRay(n, k) {
+  const b = Math.sqrt(1 - (n * n - 1) / (k * (k + 2)))
+  const d2 = (2 * b) / Math.pow(1 - b * b, 1.5) - (2 * (k + 1) * b) / Math.pow(n * n - b * b, 1.5)
+  return { b, alpha: rayAlpha(n, k, b), d2: Math.abs(d2), eps: throughput(n, k, b) }
+}
+
+// CIE 1931 observer (Wyman, Sloan & Shirley's multi-lobe fit) and XYZ → linear sRGB
+const lobe = (l, m, s1, s2) => Math.exp(-0.5 * ((l - m) / (l < m ? s1 : s2)) ** 2)
+const cie = (l) => [
+  1.056 * lobe(l, 599.8, 37.9, 31.0) + 0.362 * lobe(l, 442.0, 16.0, 26.7) - 0.065 * lobe(l, 501.1, 20.4, 26.2),
+  0.821 * lobe(l, 568.8, 46.9, 40.5) + 0.286 * lobe(l, 530.9, 16.3, 31.1),
+  1.217 * lobe(l, 437.0, 11.8, 36.0) + 0.681 * lobe(l, 459.0, 26.0, 13.8),
+]
+const toRGB = ([X, Y, Z]) => [3.2406 * X - 1.5372 * Y - 0.4986 * Z, -0.9689 * X + 1.8758 * Y + 0.0415 * Z, 0.0557 * X - 0.204 * Y + 1.057 * Z]
+
+// Airy theory treats the deviation as a parabola about the rainbow ray, which
+// holds near the bow but overstates the light far inside it. Geometric optics
+// gets that region right, so on the bright side the Airy light is scaled by
+// the ratio of the two (1 at the bow). It hardly depends on wavelength: one
+// table per bow, indexed by the distance from it.
+const CORR_STEP = 0.25 // degrees
+function geometricBow(n, k, al) {
+  // sum over the two ray branches that leave at antisolar angle al
+  const ray = bowRay(n, k)
+  let p = 0
+  for (const [lo0, hi0] of [[1e-6, ray.b], [ray.b, 1 - 1e-9]]) {
+    let lo = lo0
+    let hi = hi0
+    const fl = rayAlpha(n, k, lo) - al
+    if (fl * (rayAlpha(n, k, hi) - al) > 0) continue
+    for (let it = 0; it < 40; it++) {
+      const m = (lo + hi) / 2
+      if ((rayAlpha(n, k, m) - al) * fl > 0) lo = m
+      else hi = m
+    }
+    const b = (lo + hi) / 2
+    const b0 = Math.max(b - 1e-6, 0)
+    const b1 = Math.min(b + 1e-6, 1)
+    const dadb = Math.abs(rayAlpha(n, k, b1) - rayAlpha(n, k, b0)) / (b1 - b0)
+    p += (2 * throughput(n, k, b) * b) / (dadb * Math.sin(al)) // (ε b |db/dα| / 2π sin α) · 4π
+  }
+  return p
+}
+function airyCorrection() {
+  const n = nWater(0.55)
+  return [1, 2].map((k) => {
+    const ray = bowRay(n, k)
+    const out = new Float32Array(Math.ceil(BOW_MAX / CORR_STEP) + 1)
+    for (let j = 0; j < out.length; j++) {
+      const d = (Math.max(j * CORR_STEP, 0.5) * Math.PI) / 180
+      const al = k === 1 ? ray.alpha - d : ray.alpha + d
+      if (al <= 0.01 || al >= Math.PI - 0.01) {
+        out[j] = out[j - 1] || 1
+        continue
+      }
+      // the Airy mean there: amp / (2π √|z|) / sin α, with the drop size cancelling out
+      const mean = (ray.eps * ray.b * Math.cbrt(4) * Math.pow(ray.d2, -2 / 3) * 2) / (Math.sqrt(d * Math.cbrt(2 / ray.d2)) * Math.sin(al))
+      out[j] = geometricBow(n, k, al) / mean
+    }
+    return out
+  })
+}
+
+// Ai² sampled finely once, since the rows below need it about 100k times
+const AI_LO = -20
+const AI_STEP = 0.01
+function airySquared() {
+  const out = new Float32Array(Math.round((6 - AI_LO) / AI_STEP) + 2)
+  for (let i = 0; i < out.length; i++) out[i] = airy(AI_LO + i * AI_STEP) ** 2
+  return out
+}
+
+// one row of the table, for drops around radius a0 (mm): BOW_N × rgb
+function bowRow(a0, corr, ai2) {
+  const N = BOW_N
+  const step = BOW_MAX / N
+  const out = new Float32Array(N * 3)
+  // drop sizes spread log-normally about a0, weighted by cross-section
+  const sizes = [0.6, 0.75, 0.9, 1.0, 1.1, 1.25, 1.45, 1.7].map((s) => a0 * s)
+  const weights = sizes.map((a) => Math.exp(-0.5 * (Math.log(a / a0) / 0.3) ** 2) * a * a)
+  const wsum = weights.reduce((s, w) => s + w, 0)
+  // the antisolar point itself is left flat: Airy and the 1/sin α focus both fail there
+  const al = new Float32Array(N)
+  const invSin = new Float32Array(N)
+  for (let t = 0; t < N; t++) {
+    al[t] = (Math.max((t + 0.5) * step, 1) * Math.PI) / 180
+    invSin[t] = 1 / Math.sin(al[t])
+  }
+  const white = [0, 0, 0]
+  const xyz = new Float32Array(N * 3)
+  for (let l = 400; l <= 700; l += 20) {
+    const c = cie(l)
+    for (let j = 0; j < 3; j++) white[j] += c[j]
+    const n = nWater(l / 1000)
+    for (const k of [1, 2]) {
+      const ray = bowRay(n, k)
+      const cor = corr[k - 1]
+      // walk from the bright side out to where the bow's light dies away:
+      // inward for the primary, outward for the secondary
+      const dir = k === 1 ? 1 : -1
+      for (let s = 0; s < sizes.length; s++) {
+        const x = (2 * Math.PI * sizes[s] * 1e6) / l // size parameter
+        const x13 = Math.cbrt(x)
+        const zk = x13 * x13 * Math.cbrt(2 / ray.d2)
+        const amp = ray.eps * ray.b * Math.cbrt(4) * x13 * Math.pow(ray.d2, -2 / 3) * 4 * Math.PI * (weights[s] / wsum)
+        for (let t = k === 1 ? 0 : N - 1; t >= 0 && t < N; t += dir) {
+          const dAl = (ray.alpha - al[t]) * dir // > 0 on the bright side
+          const z = -dAl * zk
+          if (z > 6) break
+          let a2
+          if (z < AI_LO) {
+            // far from the bow the fringes are finer than the sun's disc: keep their mean
+            a2 = 1 / (2 * Math.PI * Math.sqrt(-z))
+          } else {
+            const f = (z - AI_LO) / AI_STEP
+            const i = Math.floor(f)
+            a2 = ai2[i] + (ai2[i + 1] - ai2[i]) * (f - i)
+          }
+          let p = amp * a2 * invSin[t]
+          if (dAl > 0) {
+            const f = Math.min(cor.length - 1.001, (dAl * 180) / Math.PI / CORR_STEP)
+            const i = Math.floor(f)
+            p *= cor[i] + (cor[i + 1] - cor[i]) * (f - i)
+          }
+          xyz[t * 3] += p * c[0]
+          xyz[t * 3 + 1] += p * c[1]
+          xyz[t * 3 + 2] += p * c[2]
+        }
+      }
+    }
+  }
+  const wRGB = toRGB(white)
+  // the sun's disc (0.27° radius) projected onto the radial direction
+  const R = Math.ceil(0.2665 / step)
+  const ker = []
+  for (let d = -R; d <= R; d++) ker.push(Math.sqrt(Math.max(0, 1 - ((d * step) / 0.2665) ** 2)))
+  const ks = ker.reduce((s, w) => s + w, 0)
+  const acc = [0, 0, 0]
+  for (let t = 0; t < N; t++) {
+    acc.fill(0)
+    for (let d = -R; d <= R; d++) {
+      const q = Math.min(N - 1, Math.max(0, t + d))
+      for (let j = 0; j < 3; j++) acc[j] += (xyz[q * 3 + j] * ker[d + R]) / ks
+    }
+    // a flat spectrum comes out white (1, 1, 1)
+    const rgb = toRGB(acc).map((v, j) => v / wRGB[j])
+    // out-of-gamut violet: add white until it fits, keeping the luminance
+    const lum = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
+    const lo = Math.min(rgb[0], rgb[1], rgb[2])
+    const sat = lo < 0 ? lum / Math.max(lum - lo, 1e-6) : 1
+    // the faint glow of the third bow outside the secondary is cut off before the table ends
+    const taper = 1 - Math.min(1, Math.max(0, ((t + 0.5) * step - 58) / 5))
+    for (let j = 0; j < 3; j++) out[t * 3 + j] = Math.max(0, lum + (rgb[j] - lum) * sat) * taper
+  }
+  return out
+}
+
+// rows: big shower drops (0.5 mm), light rain (0.15 mm, with supernumerary
+// fringes inside the bow), drizzle (0.05 mm, pale and broad); half floats so
+// linear filtering works everywhere
+function bowTable() {
+  const t0 = performance.now()
+  const corr = airyCorrection()
+  const ai2 = airySquared()
+  const rows = [bowRow(0.5, corr, ai2), bowRow(0.15, corr, ai2), bowRow(0.05, corr, ai2)]
+  const N = BOW_N
+  const data = new Uint16Array(N * 3 * 4)
+  const one = THREE.DataUtils.toHalfFloat(1)
+  for (let r = 0; r < 3; r++) {
+    for (let t = 0; t < N; t++) {
+      const o = (r * N + t) * 4
+      for (let j = 0; j < 3; j++) data[o + j] = THREE.DataUtils.toHalfFloat(rows[r][t * 3 + j])
+      data[o + 3] = one
+    }
+  }
+  const tex = new THREE.DataTexture(data, N, 3, THREE.RGBAFormat, THREE.HalfFloatType)
+  tex.minFilter = tex.magFilter = THREE.LinearFilter
+  tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping
+  tex.needsUpdate = true
+  if (import.meta.env?.DEV) console.log(`rainbow table built in ${(performance.now() - t0).toFixed(0)} ms`)
+  return tex
+}
 
 export class Clouds {
   constructor(noise) {
@@ -295,6 +585,9 @@ export class Clouds {
       uFarCover: { value: 0.32 },
       uOvercast: { value: 0 },
       uRainbow: { value: 1 },
+      uBowLUT: { value: bowTable() },
+      uShadow: { value: null },
+      uHeight: { value: null },
       uSteps: { value: 56 },
       uLightSteps: { value: 4 },
       uFlash: { value: 0 },
