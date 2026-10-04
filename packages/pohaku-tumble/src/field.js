@@ -1,13 +1,33 @@
-// The floor plan: where every pair of blocks sits, and where the eight
-// field diagrams are printed underneath them. World units are block widths;
-// x runs right, z runs toward the viewer, y is up.
+import { LEXICON } from './lexicon.js'
 
-export const BOUNDS = { x0: -21, x1: 21, z0: -14.5, z1: 14.5 }
+// The floor plan: where every pair of stones sits. A stone is one world unit
+// high and deep; x runs right, z runs toward the viewer, y is up. The island
+// under the stones, and the eight places on it, come from island.js.
+export { featureAnchor } from './island.js'
 
-// Gap between the two blocks of a word. A vertical (top-to-bottom) word needs
-// more: its blocks tumble toward each other, and at 45° a cube reaches 0.707
-// out from its centre — further than a 0.1 gap leaves room for.
-export const GAP = { h: 0.12, v: 0.24 }
+// The board is sized from the list. Jukugo's 9 × 8 grid wants ~65 words in
+// play at once out of 1,600; a list of a few hundred spread that thin repeats
+// itself within minutes. So: about one pair for every eight playable words,
+// never fewer than 18 (below that it stops reading as a field), never more
+// than Jukugo's 65, on cells of Jukugo's 9:8 shape. ~8% of cells are left
+// empty by the layout, hence the 0.92.
+const target = Math.max(18, Math.min(65, Math.round(LEXICON.length / 8)))
+const cells = target / 0.92
+const rows = Math.max(4, Math.round(Math.sqrt(cells / 1.125)))
+export const GRID = { cols: Math.max(4, Math.round(cells / rows)), rows }
+
+// The floor shrinks with the grid so a cell stays Jukugo's 4.67 × 3.625: the
+// link reach, the deal's neighbourhood and the slab width need no change.
+const x1 = (21 * GRID.cols) / 9
+const z1 = (14.5 * GRID.rows) / 8
+export const BOUNDS = { x0: -x1, x1, z0: -z1, z1 }
+
+// A stone is a slab, 1.5 wide and 1 deep and high: one width for every root,
+// wide enough for a five-letter root at a good size. The roll is about the
+// x axis, so the width never enters it. The two stones of a word sit 0.12
+// apart.
+export const SLAB = 1.5
+export const GAP = { h: 0.12 }
 
 export function mulberry32(seed) {
   let a = seed >>> 0
@@ -20,9 +40,12 @@ export function mulberry32(seed) {
   }
 }
 
+// One pair per cell, every word left to right: Hawaiian is not written
+// top-to-bottom, so Jukugo's vertical words are gone. A pair is 3.12 wide in
+// a 4.67 cell, so the sideways jitter is kept small enough (±0.35) that two
+// neighbouring words never close up into a row of four stones.
 export function layoutPairs(rng) {
-  const cols = 9
-  const rows = 8
+  const { cols, rows } = GRID
   const cw = (BOUNDS.x1 - BOUNDS.x0) / cols
   const ch = (BOUNDS.z1 - BOUNDS.z0) / rows
   const pairs = []
@@ -30,87 +53,101 @@ export function layoutPairs(rng) {
     for (let i = 0; i < cols; i++) {
       // A few holes keep the grid from reading as a grid.
       if (rng() < 0.08) continue
-      const dir = rng() < 0.3 ? 'v' : 'h'
-      const x = BOUNDS.x0 + (i + 0.5) * cw + (rng() - 0.5) * 1.3
-      const z = BOUNDS.z0 + (j + 0.5) * ch + (rng() - 0.5) * (dir === 'v' ? 0.5 : 0.9)
-      pairs.push({ x, z, dir })
+      const x = BOUNDS.x0 + (i + 0.5) * cw + (rng() - 0.5) * 0.7
+      const z = BOUNDS.z0 + (j + 0.5) * ch + (rng() - 0.5) * 0.9
+      pairs.push({ x, z, dir: 'h' })
     }
   }
   return pairs
 }
 
-// Tile centres for a pair: first character left (across) or top (down).
-export function tileOffsets(dir) {
-  const d = (1 + GAP[dir]) / 2
-  return dir === 'h'
-    ? [
-        [-d, 0],
-        [d, 0],
-      ]
-    : [
-        [0, -d],
-        [0, d],
-      ]
+// Stone centres for a pair, first root on the left.
+export function tileOffsets() {
+  const d = (SLAB + GAP.h) / 2
+  return [
+    [-d, 0],
+    [d, 0],
+  ]
 }
 
-// Each field gets one diagram. They are laid out on a loose 4×2 grid so every
-// part of the floor is near a few of them, sized so neighbours overlap a
-// little — background, not tiles.
-const KINDS = { n: 'ripples', t: 'dial', l: 'grid', m: 'spiral', h: 'venn', w: 'genko', p: 'crowd', o: 'blueprint' }
+// The path a root line takes between stones a and b: an octilinear route —
+// horizontals, verticals and 45° diagonals, like a transit map — with its
+// corners rounded off. The line's key picks one of three styles, so a floor
+// full of them doesn't all bend the same way (straight-diagonal-straight,
+// diagonal first, or straight first), and one of five parallel lanes. It
+// lives with the floor plan because the board needs it as well as the lines:
+// a line whose path would cross the upland is never made.
+export function linkPath(key, a, b) {
+  const lane = (hash(key) % 5) - 2
+  const style = hash(key + '#') % 3
+  return route(a.x, a.z, b.x, b.z, lane * 0.09, style)
+}
 
-export function layoutFeatures(rng, fieldKeys) {
-  const order = [...fieldKeys]
-  for (let i = order.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1))
-    ;[order[i], order[j]] = [order[j], order[i]]
+const CORNER = 0.45
+
+function route(ax, az, bx, bz, offset, style) {
+  const dx = bx - ax
+  const dz = bz - az
+  const adx = Math.abs(dx)
+  const adz = Math.abs(dz)
+  const sx = Math.sign(dx) || 1
+  const sz = Math.sign(dz) || 1
+  let pts
+  if (adx >= adz) {
+    const run = adx - adz
+    const [r0, r1] = style === 0 ? [run / 2, run / 2] : style === 1 ? [0, run] : [run, 0]
+    pts = [
+      [ax, az],
+      [ax + sx * r0, az],
+      [bx - sx * r1, bz],
+      [bx, bz],
+    ]
+  } else {
+    const run = adz - adx
+    const [r0, r1] = style === 0 ? [run / 2, run / 2] : style === 1 ? [0, run] : [run, 0]
+    pts = [
+      [ax, az],
+      [ax, az + sz * r0],
+      [bx, bz - sz * r1],
+      [bx, bz],
+    ]
   }
-  const xs = [-15, -5, 5, 15]
-  const zs = [-6.5, 6.5]
-  const features = []
-  order.forEach((field, k) => {
-    const x = xs[k % 4] + (rng() - 0.5) * 3
-    const z = zs[Math.floor(k / 4)] + (rng() - 0.5) * 2.5 + (k % 2 ? 1 : -1)
-    const r = 3.6 + rng() * 1.3
-    features.push(makeFeature(field, KINDS[field], x, z, r, rng))
-  })
-  return features
-}
-
-function makeFeature(field, kind, x, z, r, rng) {
-  const f = { field, kind, x, z, r, phase: rng() * Math.PI * 2, spin: rng() < 0.5 ? -1 : 1 }
-  if (kind === 'grid') {
-    f.hw = r
-    f.hh = r * 0.86
-  } else if (kind === 'genko') {
-    f.cell = 0.46
-    f.cols = Math.round((r * 2) / f.cell / 2) * 2 + 1 // odd: the fold sits in the middle column
-    f.rows = Math.round((r * 1.35) / f.cell)
-    f.hw = (f.cols * f.cell) / 2
-    f.hh = (f.rows * f.cell) / 2
-  } else if (kind === 'blueprint') {
-    f.hw = r * 0.82
-    f.hh = r * 0.82
+  // Shift the whole route sideways a little so lines sharing a corridor sit
+  // in parallel lanes instead of on top of each other.
+  if (offset) {
+    const len = Math.hypot(dx, dz) || 1
+    const nx = -dz / len
+    const nz = dx / len
+    pts = pts.map(([x, z]) => [x + nx * offset, z + nz * offset])
   }
-  return f
+  pts = pts.filter((p, i) => i === 0 || Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]) > 1e-4)
+  return roundCorners(pts, CORNER)
 }
 
-// Where a line from (px, pz) should land on the feature's outline: the nearest
-// point on the circle, or on the rectangle's border.
-export function featureAnchor(f, px, pz) {
-  if (f.hw != null) {
-    const dx = px - f.x
-    const dz = pz - f.z
-    const inside = Math.abs(dx) <= f.hw && Math.abs(dz) <= f.hh
-    if (!inside) {
-      return [f.x + Math.max(-f.hw, Math.min(f.hw, dx)), f.z + Math.max(-f.hh, Math.min(f.hh, dz))]
+function roundCorners(pts, radius) {
+  if (pts.length < 3) return pts
+  const out = [pts[0]]
+  for (let i = 1; i < pts.length - 1; i++) {
+    const [px, pz] = pts[i - 1]
+    const [cx, cz] = pts[i]
+    const [nx, nz] = pts[i + 1]
+    const l0 = Math.hypot(cx - px, cz - pz)
+    const l1 = Math.hypot(nx - cx, nz - cz)
+    const r = Math.min(radius, l0 / 2, l1 / 2)
+    const a = [cx + ((px - cx) / l0) * r, cz + ((pz - cz) / l0) * r]
+    const b = [cx + ((nx - cx) / l1) * r, cz + ((nz - cz) / l1) * r]
+    for (let k = 0; k <= 6; k++) {
+      const t = k / 6
+      const u = 1 - t
+      out.push([u * u * a[0] + 2 * u * t * cx + t * t * b[0], u * u * a[1] + 2 * u * t * cz + t * t * b[1]])
     }
-    // Inside: out to the nearest side.
-    const gx = f.hw - Math.abs(dx)
-    const gz = f.hh - Math.abs(dz)
-    return gx < gz ? [f.x + Math.sign(dx || 1) * f.hw, pz] : [px, f.z + Math.sign(dz || 1) * f.hh]
   }
-  const dx = px - f.x
-  const dz = pz - f.z
-  const d = Math.hypot(dx, dz) || 1
-  return [f.x + (dx / d) * f.r, f.z + (dz / d) * f.r]
+  out.push(pts.at(-1))
+  return out
+}
+
+function hash(s) {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619)
+  return h >>> 0
 }

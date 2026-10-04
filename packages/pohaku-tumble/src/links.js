@@ -1,12 +1,11 @@
 import { clamp01, inOutCubic } from './ease.js'
-import { featureAnchor } from './field.js'
+import { featureAnchor, linkPath, tileOffsets, SLAB } from './field.js'
 
-// A field line longer than this doesn't cross the whole floor to its diagram:
-// it runs a short way in the right direction and ends in an arrow, an
-// off-page connector.
+// A field line longer than this doesn't cross the island to its place: it
+// runs a short way in the right direction and ends in an arrow, an off-page
+// connector.
 const FIELD_REACH = 12.5
 const STUB = 2.6
-const CORNER = 0.45
 
 // Lines live on the floor (y = 0) as polylines in world units. Each one draws
 // on from one end and retracts toward whichever end is staying put, so a line
@@ -40,8 +39,8 @@ export class LinkStore {
     }
     for (const [key, link] of this.links) {
       if (desired.has(key) || link.to === 0) continue
-      // Let go of the block that turned; a field line is drawn back into its
-      // diagram. A line caught half-drawn just reverses the way it came.
+      // Let go of the stone that turned; a field line is drawn back into its
+      // place. A line caught half-drawn just reverses the way it came.
       let anchor = link.kind === 'field' ? 'end' : origin === link.a.id ? 'end' : 'start'
       if (link.p < 0.999) anchor = link.anchor
       this.animate(link, now, 0, anchor)
@@ -76,29 +75,42 @@ export class LinkStore {
 
 function build(d) {
   if (d.kind === 'pair') {
-    const lane = (hash(d.key) % 5) - 2
-    const style = hash(d.key + '#') % 3
-    const pts = route(d.a.x, d.a.z, d.b.x, d.b.z, lane * 0.09, style)
-    const link = { ...d, ...measure(pts) }
-    // Where the line comes out from under each block — a small port is drawn
-    // there, since the line itself starts hidden beneath the cube.
-    link.portA = exitAt(link, d.a, false)
-    link.portB = exitAt(link, d.b, true)
+    const link = { ...d, ...measure(linkPath(d.key, d.a, d.b)) }
+    // Where the line comes out from under each word — a small port is drawn
+    // there, since the line itself starts hidden beneath the stone. It is the
+    // edge of the whole word, not of the one stone: a line from a word's left
+    // stone that sets off to the right runs on under its right stone first.
+    link.portA = exitAt(link, footprint(d.a), false)
+    link.portB = exitAt(link, footprint(d.b), true)
     return link
   }
-  const { pair, feature } = d
+  // A field line lands on the nearest point of its place's outline: a circle,
+  // a rectangle, or a polyline such as the stream or the lava front. `room` is
+  // how far it may run before it would reach into the upland; one that would
+  // cross the upland to get there is cut down to a connector that stops short.
+  const { pair, feature, room } = d
   let [ex, ez] = featureAnchor(feature, pair.x, pair.z)
   let stub = false
   const dist = Math.hypot(ex - pair.x, ez - pair.z)
-  if (dist > FIELD_REACH) {
-    const k = STUB / dist
+  if (dist > Math.min(FIELD_REACH, room)) {
+    const k = Math.min(STUB, room - 0.3) / dist
     ex = pair.x + (ex - pair.x) * k
     ez = pair.z + (ez - pair.z) * k
     stub = true
   }
   const link = { ...d, stub, ...measure([[pair.x, pair.z], [ex, ez]]) }
-  link.portA = exitAt(link, pair, false, pair.dir === 'h' ? 1.1 : 0.55, pair.dir === 'h' ? 0.55 : 1.1)
+  link.portA = exitAt(link, { x: pair.x, z: pair.z, ...HALF }, false)
   return link
+}
+
+// Half the footprint of a word on the floor — two slabs and the gap between
+// them, 1 deep — with a hair of margin so the port sits just clear of the
+// stone's edge.
+const HALF = { hx: tileOffsets()[1][0] + SLAB / 2 + 0.05, hz: 0.55 }
+
+// The footprint of the word a stone belongs to.
+function footprint(tile) {
+  return { x: tile.x - tileOffsets()[tile.index][0], z: tile.z, ...HALF }
 }
 
 function measure(pts) {
@@ -126,84 +138,13 @@ export function visibleSpan(link) {
   return link.anchor === 'start' ? [0, shown] : [link.len - shown, link.len]
 }
 
-// Arc length where the polyline leaves the footprint around (cx, cz), walking
-// in from the far end if `fromEnd`.
-function exitAt(link, c, fromEnd, hx = 0.55, hz = 0.55) {
+// Arc length where the polyline leaves the box { x, z, hx, hz }, walking in
+// from the far end if `fromEnd`.
+function exitAt(link, box, fromEnd) {
   const step = 0.04
   for (let s = 0; s <= link.len; s += step) {
     const [x, z] = pointAt(link, fromEnd ? link.len - s : s)
-    if (Math.abs(x - c.x) > hx || Math.abs(z - c.z) > hz) return fromEnd ? link.len - s : s
+    if (Math.abs(x - box.x) > box.hx || Math.abs(z - box.z) > box.hz) return fromEnd ? link.len - s : s
   }
   return fromEnd ? 0 : link.len
-}
-
-// An octilinear route — horizontals, verticals and 45° diagonals, like a
-// transit map — from a to b, with its corners rounded off. Three styles so a
-// floor full of them doesn't all bend the same way: straight-diagonal-straight,
-// diagonal first, or straight first.
-function route(ax, az, bx, bz, offset, style) {
-  const dx = bx - ax
-  const dz = bz - az
-  const adx = Math.abs(dx)
-  const adz = Math.abs(dz)
-  const sx = Math.sign(dx) || 1
-  const sz = Math.sign(dz) || 1
-  let pts
-  if (adx >= adz) {
-    const run = adx - adz
-    const [r0, r1] = style === 0 ? [run / 2, run / 2] : style === 1 ? [0, run] : [run, 0]
-    pts = [
-      [ax, az],
-      [ax + sx * r0, az],
-      [bx - sx * r1, bz],
-      [bx, bz],
-    ]
-  } else {
-    const run = adz - adx
-    const [r0, r1] = style === 0 ? [run / 2, run / 2] : style === 1 ? [0, run] : [run, 0]
-    pts = [
-      [ax, az],
-      [ax, az + sz * r0],
-      [bx, bz - sz * r1],
-      [bx, bz],
-    ]
-  }
-  // Shift the whole route sideways a little so lines sharing a corridor sit
-  // in parallel lanes instead of on top of each other.
-  if (offset) {
-    const len = Math.hypot(dx, dz) || 1
-    const nx = -dz / len
-    const nz = dx / len
-    pts = pts.map(([x, z]) => [x + nx * offset, z + nz * offset])
-  }
-  pts = pts.filter((p, i) => i === 0 || Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]) > 1e-4)
-  return roundCorners(pts, CORNER)
-}
-
-function roundCorners(pts, radius) {
-  if (pts.length < 3) return pts
-  const out = [pts[0]]
-  for (let i = 1; i < pts.length - 1; i++) {
-    const [px, pz] = pts[i - 1]
-    const [cx, cz] = pts[i]
-    const [nx, nz] = pts[i + 1]
-    const l0 = Math.hypot(cx - px, cz - pz)
-    const l1 = Math.hypot(nx - cx, nz - cz)
-    const r = Math.min(radius, l0 / 2, l1 / 2)
-    const a = [cx + ((px - cx) / l0) * r, cz + ((pz - cz) / l0) * r]
-    const b = [cx + ((nx - cx) / l1) * r, cz + ((nz - cz) / l1) * r]
-    for (let k = 0; k <= 6; k++) {
-      const t = k / 6
-      const u = 1 - t
-      out.push([u * u * a[0] + 2 * u * t * cx + t * t * b[0], u * u * a[1] + 2 * u * t * cz + t * t * b[1]])
-    }
-  }
-  out.push(pts.at(-1))
-  return out
-}
-
-function hash(s) {
-  let h = 2166136261
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619)
-  return h >>> 0
 }

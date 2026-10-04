@@ -13,7 +13,6 @@ export class Director {
     this.notes = notes
     this.ripples = ripples
     this.paused = false
-    this.lastTurn = new Map()
     this.meta = new Map()
   }
 
@@ -37,28 +36,38 @@ export class Director {
     })
   }
 
-  // Busy blocks: mid-tumble, or still falling in at the start.
+  // The share of the pairs in view that sit on a shared-root line. Turns steer
+  // on this rather than on the whole floor: the viewer judges the half-linked
+  // balance by what they can see.
+  linkedInView() {
+    const visible = this.inView()
+    if (!visible.length) return undefined
+    const linked = this.board.linkedPairs()
+    return visible.filter((p) => linked.has(p.id)).length / visible.length
+  }
+
+  // Busy stones: mid-tumble, or still falling in at the start.
   rolling(pair) {
     return pair.tiles.some((t) => this.scene.block(t).roll || this.scene.block(t).drop)
   }
 
-  // Turn one block of `pair` over. Lines on the turning block let go at
+  // Turn one stone of `pair` over. Lines on the turning stone let go at
   // once; the new ones wait for it to land.
   turnPair(pair, now) {
     if (this.rolling(pair)) return false
-    const choice = this.board.chooseTurn(pair)
+    const choice = this.board.chooseTurn(pair, now, this.linkedInView())
     if (!choice) return false
     const prev = pair.entry
     const tile = pair.tiles[choice.index]
-    this.board.turn(pair, choice)
+    this.board.turn(pair, choice, now)
     const start = now + 0.12
-    const land = this.scene.block(tile).turn(tile.char, start, ROLL)
+    const land = this.scene.block(tile).turn(tile.stone, start, ROLL)
     const e = pair.entry
     const cap = pair.caption
     pair.caption = {
       prev1: cap.text1,
       prev2: cap.text2,
-      text1: e.romaji.toUpperCase(),
+      text1: e.word.toUpperCase(),
       text2: e.gloss,
       t0: start + ROLL * 0.62,
     }
@@ -70,7 +79,6 @@ export class Director {
       holdUntil: (d) =>
         d.kind === 'pair' ? Math.max(landOf(d.a), landOf(d.b)) : Math.max(...d.pair.tiles.map(landOf)),
     })
-    this.lastTurn.set(pair, now)
     return true
   }
 
@@ -80,8 +88,11 @@ export class Director {
     return note
   }
 
-  // A clicked block turns now, and gets a note if it hasn't one.
+  // A clicked stone turns now, and gets a note if it hasn't one. A pair with
+  // nowhere to go — resting before it may return — gets no card, rather than
+  // one that opens, turns nothing and retires.
   poke(pair, now) {
+    if (!this.board.canTurn(pair, now)) return
     if (!this.notes.has(pair)) {
       const open = this.notes.list.filter((n) => !n.closing)
       if (open.length >= this.capacity()) this.notes.close(open[0], now)
@@ -139,10 +150,12 @@ export class Director {
       }
     }
 
+    // The background pulse picks only among pairs that have somewhere to go,
+    // so a beat is lost only when nothing in view can turn at all.
     if (now >= this.nextBackground) {
       const noted = this.notes.noted()
       const pool = visible.filter(
-        (p) => !noted.has(p) && !this.rolling(p) && now - (this.lastTurn.get(p) ?? -99) > 6,
+        (p) => !noted.has(p) && !this.rolling(p) && now - p.turnedAt > 6 && this.board.canTurn(p, now),
       )
       if (pool.length) this.turnPair(pool[Math.floor(Math.random() * pool.length)], now)
       this.nextBackground = now + 1.5 + Math.random() * 1.1
@@ -150,7 +163,10 @@ export class Director {
   }
 
   // A good word to annotate: well inside the frame, not crowding an existing
-  // note, and not one that just turned.
+  // note, and not one that just turned. A card wants two turns to show, so a
+  // pair that can't turn twice without going back, or whose next word would
+  // only be one it showed lately, is passed over while anything else is in
+  // the inner frame.
   pickForNote(visible, open, now) {
     const inner = new Set(this.inView(0.2))
     const anchors = open.map((n) => this.scene.project(n.pair.x, 1, n.pair.z))
@@ -161,7 +177,9 @@ export class Director {
       const [x, y] = this.scene.project(p.x, 1, p.z)
       let far = Infinity
       for (const [ax, ay] of anchors) far = Math.min(far, Math.hypot(ax - x, ay - y))
-      const score = Math.min(far, 420) + Math.random() * 160 - (now - (this.lastTurn.get(p) ?? -99) < 4 ? 300 : 0)
+      let score = Math.min(far, 420) + Math.random() * 160 - (now - p.turnedAt < 4 ? 300 : 0)
+      if (!this.board.canTurnTwice(p, now)) score -= 1000
+      if (!this.board.targets(p, now).some((o) => o.tier === 0)) score -= 1000
       if (score > bestScore) {
         best = p
         bestScore = score
