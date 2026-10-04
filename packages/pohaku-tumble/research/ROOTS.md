@@ -15,6 +15,10 @@ that rebuild every number below are in [`roots/`](./roots).
 > It also raised about 50 decisions ([`review/DECISIONS.md`](./review/DECISIONS.md)).
 > A structural analysis of Hawaiian ([`STRUCTURE.md`](./STRUCTURE.md)) puts this
 > frame in context.
+> An engine study ([`ENGINE.md`](./ENGINE.md)) changes the board numbers below. They
+> were measured on stock Jukugo rules. With the recommended engine changes, a good
+> board needs about 200 confirmed words, on a smaller board sized from the list.
+> That holds only if the designer accepts the changes and the critic's caveats.
 
 ## The answer
 

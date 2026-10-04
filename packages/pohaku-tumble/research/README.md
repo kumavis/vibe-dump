@@ -23,6 +23,15 @@ no `package.json` here, so the gallery build skips this directory.
   frames that do work: head + modifier (compounds and phrases), and the closed
   grammatical grids. Working notes are in [`structure/`](./structure). Research
   only.
+- [`ENGINE.md`](./ENGINE.md): what the Jukugo engine needs in order to run on a small
+  Hawaiian list, simulated on Jukugo's real Board and reproduced independently. With
+  the recommended changes, about **200 confirmed words** make a good board (on phones
+  too), against roughly 600 under stock rules. The critic's caveats are appended:
+  - a small board (18 pairs);
+  - words recycle visibly faster than in Jukugo;
+  - the island's eight places don't fit a small floor as specified.
+
+  Working notes are in [`engine/`](./engine). Research only.
 - [`review/`](./review): the word-by-word review of the 905 candidate compounds,
   with verdicts, spellings, root senses and glosses. It includes a blind second
   reading (90% agreement on which words survive) and the list of decisions it
