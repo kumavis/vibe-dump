@@ -2,6 +2,7 @@
 
   <curation>/overrides.json          → ../review/overrides.json   (DECISIONS.md defaults)
   <curation>/glossary/batch-NN.json  → ../review/glossary.json    ({stones, words}, renames applied)
+  <curation>/glossary2/batch-NN.json   the second pass: same, plus repeat_senses {word: stone id}
   <curation>/repeats/batch-NN.json   → ../review/repeats.tsv      (reviewed full repeats)
 
 Usage: python3 merge_curation.py <curation dir>
@@ -38,7 +39,9 @@ if os.path.exists(p):
 
 # ── glossary ─────────────────────────────────────────────────────────────
 stones, words, renames, conflicts = {}, {}, {}, []
-for f in sorted(glob.glob(os.path.join(SRC, 'glossary', 'batch-*.json'))):
+repeat_senses = {}
+# glossary2/ is the second pass: stones the first pass never saw (restored words, repeat bases)
+for f in sorted(glob.glob(os.path.join(SRC, 'glossary', 'batch-*.json'))) + sorted(glob.glob(os.path.join(SRC, 'glossary2', 'batch-*.json'))):
     g = json.load(open(f, encoding='utf-8'))
     tag = os.path.basename(f)
     for old, new in (g.get('renames') or {}).items():
@@ -55,6 +58,8 @@ for f in sorted(glob.glob(os.path.join(SRC, 'glossary', 'batch-*.json'))):
             conflicts.append(f'{tag}: stone {sid} curated twice')
             continue
         stones[sid] = v
+    for w, sid in (g.get('repeat_senses') or {}).items():
+        repeat_senses[w] = okina(sid)
     for w, v in (g.get('words') or {}).items():
         v = {k: okina(x) if k.startswith('sense_') else x for k, x in v.items()}
         if w in words:
@@ -103,6 +108,8 @@ if rows:
         wr = csv.writer(fh, delimiter='\t', lineterminator='\n')
         wr.writerow(cols)
         for r in sorted(rows, key=lambda r: r['word']):
+            if r['word'] in repeat_senses:
+                r = {**r, 'sense': repeat_senses[r['word']]}
             out = []
             for c in cols:
                 x = r.get(c, '')
@@ -117,7 +124,7 @@ if rows:
     v = {}
     for r in rows:
         v[r.get('verdict')] = v.get(r.get('verdict'), 0) + 1
-    print(f'repeats: {len(rows)} reviewed {v}')
+    print(f'repeats: {len(rows)} reviewed {v}; {len(repeat_senses)} re-sensed by the glossary')
 
 for c in conflicts:
     print('CONFLICT', c)

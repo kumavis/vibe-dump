@@ -57,24 +57,49 @@ def homographs(word):
 
 
 # ── glossary inputs ──────────────────────────────────────────────────────
+# A second pass (--provisional <dry-run dir>) covers only the stones a dry run of
+# build_words.py still marks provisional: roots of words the rulings restored, and
+# the bases of reviewed repeats, with each repeat's review row.
+import sys
+SECOND = sys.argv[1] if len(sys.argv) > 2 and sys.argv[1] == '--provisional' else None
+DRY = sys.argv[2] if SECOND else None
+wordlist = os.path.join(DRY, 'wordlist.tsv') if DRY else os.path.join(HERE, '..', 'review', 'wordlist.tsv')
+want = None
+if DRY:
+    src = open(os.path.join(DRY, 'roots.js'), encoding='utf-8').read()
+    want = set(re.findall(r'"([^"]+)": \{[^}]*"provisional": true', src))
+    rep_rows = {r['word']: r for r in csv.DictReader(open(os.path.join(HERE, '..', 'review', 'repeats.tsv'), encoding='utf-8'), delimiter='\t')}
 use = collections.defaultdict(list)
-for r in csv.DictReader(open(os.path.join(HERE, '..', 'review', 'wordlist.tsv'), encoding='utf-8'), delimiter='\t'):
+for r in csv.DictReader(open(wordlist, encoding='utf-8'), delimiter='\t'):
     for side in ('stone_a', 'stone_b'):
         sid = r[side]
+        if want is not None and sid not in want:
+            continue
         root = re.split(r'[#?]', sid)[0]
-        use[root].append({'word': r['word'], 'form': r['form'], 'stone': sid, 'side': side[-1], 'gloss': r['gloss'], 'verdict': r['verdict']})
+        u = {'word': r['word'], 'form': r['form'], 'stone': sid, 'side': side[-1], 'gloss': r['gloss'], 'verdict': r['verdict']}
+        if DRY and r['word'] in rep_rows:
+            u['repeat_review'] = rep_rows[r['word']]
+        use[root].append(u)
+if DRY:
+    # repeats held back only because their base had no stone: offer them for a new one
+    for w, r in rep_rows.items():
+        if r['verdict'] in ('keep', 'keep-pending') and r['sense'] in ('', 'unresolved') and r['is_repeat_of_base'] != 'no' and r['exclusion_flag'] != 'True':
+            use[r["base"]].append({'word': w, 'form': r['form'], 'stone': 'unresolved', 'side': 'ab', 'gloss': r['gloss'], 'verdict': r['verdict'], 'repeat_review': r})
 entries = []
 for root in sorted(use):
     entries.append({'root': root, 'homographs': homographs(root), 'pollex': px_by.get(root, [])[:8],
                     'andrews': andrews.get(strip(root), [])[:5], 'used_by': use[root]})
-out = os.path.join(C, 'glossary-in')
+out = os.path.join(C, 'glossary-in2' if DRY else 'glossary-in')
 os.makedirs(out, exist_ok=True)
 for f in os.listdir(out):
     os.remove(os.path.join(out, f))
-N = 36
+N = 36 if not DRY else 20
 for i in range(0, len(entries), N):
     json.dump(entries[i:i + N], open(os.path.join(out, f'batch-{i // N:02d}.json'), 'w'), ensure_ascii=False, indent=1)
 print(f'glossary: {len(entries)} root spellings, {sum(len(e["used_by"]) for e in entries)} uses → {(len(entries) + N - 1) // N} batches')
+
+if DRY:
+    sys.exit(0)
 
 # ── repeats ──────────────────────────────────────────────────────────────
 xml = open(os.path.join(C, 'hawwiki.xml'), encoding='utf-8').read()

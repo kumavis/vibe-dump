@@ -12,7 +12,25 @@
   "koi?koikahi": "koʻi",
   "koi?koilipi": "koʻi",
   "kūkulu#1": "kūkulu#0",
-  "lae#1": "lae#0"
+  "lae#1": "lae#0",
+  "lā#2": "lā#1",
+  "manamana#1": "manamana#0",
+  "moʻo?moʻoaliʻi": "moʻo#line",
+  "moʻo?moʻokanaka": "moʻo#line",
+  "moʻo?moʻokupuna": "moʻo#line",
+  "moʻo?moʻokūʻauhau": "moʻo#line",
+  "moʻo?moʻoʻōlelo": "moʻo#line",
+  "palai?palaimaka": "palai#avert",
+  "pane?panepoʻo": "pane#head",
+  "papa#1": "papa#0",
+  "pipi?pipiwai": "pipi#seep",
+  "pā?waʻapā": "pā#plate",
+  "pī?pīkai": "pī#sprinkle",
+  "pū#2": "pū#1",
+  "wale?kaʻawale": "wale#only",
+  "ʻau?wiliʻau": "au",
+  "ʻau?ʻaumoana": "ʻau#group",
+  "ʻiʻo#1": "ʻiʻo#0"
  },
  "stones": {
   "ahi": {
@@ -3138,6 +3156,2559 @@
    "protoform": "",
    "spelling": "leoleo"
   },
+  "lewa": {
+   "cognates": [
+    [
+     "Māori",
+     "rewa"
+    ],
+    [
+     "Tahitian",
+     "reva"
+    ],
+    [
+     "Rapa Nui",
+     "reva"
+    ]
+   ],
+   "etymon_note": "POLLEX LEWA.1 PNP *lewa \"free-float in air or on water, be suspended\"; Wiktionary agrees. Words halelewa (movable house) and lewa lani (upper air).",
+   "gloss": "floating; sky",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Hanging, float\"; Wiktionary \"atmosphere; heaven, sky\", \"to float\"",
+   "protoform": "PNP *lewa",
+   "spelling": "lewa"
+  },
+  "like": {
+   "cognates": [
+    [
+     "Māori",
+     "rite"
+    ],
+    [
+     "Rapa Nui",
+     "rite"
+    ]
+   ],
+   "etymon_note": "POLLEX RITE PEP *rite \"alike, equal\"; Wiktionary agrees. Words kaulike, ʻahālike, ʻaulike.",
+   "gloss": "alike",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Alike, equal\"; Wiktionary \"like, alike, similar\"",
+   "protoform": "PEP *rite",
+   "spelling": "like"
+  },
+  "lima": {
+   "cognates": [
+    [
+     "Tahitian",
+     "rima"
+    ],
+    [
+     "Sāmoan",
+     "lima"
+    ],
+    [
+     "Tongan",
+     "nima"
+    ]
+   ],
+   "etymon_note": "POLLEX LIMA.B PPN *lima \"hand, arm\". All eight words use the hand sense (laulima, limahana, lima hema, lima kuhi, lima ʻākau, manamana lima, pihalima, ʻaulima). The numeral lima \"five\" (LIMA.A) is used by no word here; a five word would need its own id (lima#five). Māori ringa omitted (POLLEX flags it irregular).",
+   "gloss": "hand",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Hand\"; Wiktionary \"hand\"",
+   "protoform": "PPN *lima",
+   "spelling": "lima"
+  },
+  "lio": {
+   "cognates": [],
+   "etymon_note": "No POLLEX row. Wiktionary cites Schütz: a shortening of ʻīlio \"dog\" extended to any quadruped, not an English loan. No ancestor is printed. The Andrews senses \"tight\" and \"stare wildly\" belong to other words. Word holo lio.",
+   "gloss": "horse",
+   "gloss_source": "Wiktionary \"horse\"",
+   "protoform": "",
+   "spelling": "lio"
+  },
+  "lipi": {
+   "cognates": [
+    [
+     "Māori",
+     "ripi"
+    ],
+    [
+     "Tongan",
+     "lipi"
+    ]
+   ],
+   "etymon_note": "POLLEX LIPI.1 PPN *lipi \"sharp edge, cutting edge\"; Wiktionary agrees. Word koʻilipi. Marquesan omitted (spelling of its glottal stop unsure).",
+   "gloss": "blade, edge",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Adze, chisel, sharp edge\"; Wiktionary \"any sharp edge or blade\"",
+   "protoform": "PPN *lipi",
+   "spelling": "lipi"
+  },
+  "liu": {
+   "cognates": [
+    [
+     "Māori",
+     "riu"
+    ],
+    [
+     "Tahitian",
+     "riu"
+    ],
+    [
+     "Sāmoan",
+     "liu"
+    ]
+   ],
+   "etymon_note": "POLLEX LIU.1 PPN *liu \"bilge of vessel, bilge-water\"; Wiktionary agrees. The Andrews liu \"salty\" and liu \"slowly\" are other words. Word omoliu.",
+   "gloss": "bilge water",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Bilge-water\"; Wiktionary \"bilgewater, leakage\"",
+   "protoform": "PPN *liu",
+   "spelling": "liu"
+  },
+  "liʻi#1": {
+   "cognates": [],
+   "etymon_note": "Wiktionary liʻi 2, a short form of aliʻi, has no etymology. Andrews brackets makualii as makua + lii \"chief\". Neither POLLEX liʻi row applies: *riki \"small\" is liʻi#0, and *ruki is flagged problematic. So no ancestor is printed. The only word is makualiʻi, so the stone links to nothing; P&E should confirm the analysis.",
+   "gloss": "chief",
+   "gloss_source": "Wiktionary liʻi 2 \"short for aliʻi (chief)\"; Andrews–Parker 1922 bracket \"lii, chief\" (placeholder until P&E)",
+   "protoform": "",
+   "spelling": "liʻi"
+  },
+  "loa": {
+   "cognates": [
+    [
+     "Māori",
+     "roa"
+    ],
+    [
+     "Tahitian",
+     "roa"
+    ],
+    [
+     "Sāmoan",
+     "loa"
+    ]
+   ],
+   "etymon_note": "POLLEX LOA.1 PPN *loa \"long (in space or time); tall\"; Wiktionary agrees. It is not the intensive particle loa (LOA.2 PNP *loa; B1 says no particle is a stone). Words aholoa, akeloa, alaloa and kāmaʻaloa all read \"long\".",
+   "gloss": "long",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Distant, long, tall\"; Wiktionary \"long; distance, length\"",
+   "protoform": "PPN *loa",
+   "spelling": "loa"
+  },
+  "loko": {
+   "cognates": [
+    [
+     "Māori",
+     "roto"
+    ],
+    [
+     "Tahitian",
+     "roto"
+    ],
+    [
+     "Sāmoan",
+     "loto"
+    ]
+   ],
+   "etymon_note": "POLLEX LOTO.A \"inside\", LOTO.B \"lagoon, pool\" and LOTO.C \"heart, mind\" are lettered sub-sets of one PPN *loto set, and Wiktionary gives one etymology. So pond and disposition are one etymon (B8), and B9 lists loko for linking. Words: kūloko (inside), lokowai (pond), lokomaikaʻi and lokoʻino (disposition).",
+   "gloss": "inside; pond",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Inside\", \"Pool, lake\", \"Character, disposition, heart\"; Wiktionary \"pond, lake; interior, inside\"",
+   "protoform": "PPN *loto",
+   "spelling": "loko"
+  },
+  "lole": {
+   "cognates": [],
+   "etymon_note": "No POLLEX row. Wiktionary gives one etymology for both cloth and reverse, \"likely\" PPN *lole \"rub, smoothen\", which is too hedged to print. One stone, per B9 (lole: reverse / cloth). Words halelole and lole hana (cloth), lolelua (turned).",
+   "gloss": "cloth; reversed",
+   "gloss_source": "Wiktionary \"cloth, fabric; clothes\", \"to unfold, reverse\"; Andrews–Parker 1922 \"to be reversed; to be turned\"",
+   "protoform": "",
+   "spelling": "lole"
+  },
+  "lolo": {
+   "cognates": [
+    [
+     "Māori",
+     "roro"
+    ],
+    [
+     "Tahitian",
+     "roro"
+    ],
+    [
+     "Rapa Nui",
+     "roro"
+    ]
+   ],
+   "etymon_note": "POLLEX RORO.1 PEP *roro \"brains, bone marrow, spongy matter\"; Wiktionary agrees. It is not the fish (RORO.2), and not the Andrews lolo \"palsied\", a different word. Words aʻalolo, lolokaʻa, lolouila.",
+   "gloss": "brain",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Bone marrow, brains, spongy matter\"; Wiktionary \"brain; bone marrow\"",
+   "protoform": "PEP *roro",
+   "spelling": "lolo"
+  },
+  "lua#0": {
+   "cognates": [
+    [
+     "Māori",
+     "rua"
+    ],
+    [
+     "Tahitian",
+     "rua"
+    ],
+    [
+     "Sāmoan",
+     "lua"
+    ]
+   ],
+   "etymon_note": "POLLEX RUA PPN *rua \"two\"; Wiktionary lua 1. Kept apart from lua \"pit\" (lua#1, PPN *lua). Words hulilua, kaulua, kialua, kuilua, laelua, lolelua, naʻaulua and ʻililua all read \"two, double, second\".",
+   "gloss": "two",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Two\"; Wiktionary \"two; second; double\"",
+   "protoform": "PPN *rua",
+   "spelling": "lua"
+  },
+  "lua#1": {
+   "cognates": [
+    [
+     "Māori",
+     "rua"
+    ],
+    [
+     "Tahitian",
+     "rua"
+    ],
+    [
+     "Sāmoan",
+     "lua"
+    ]
+   ],
+   "etymon_note": "POLLEX LUA.1 PPN *lua \"hole, pit\"; Wiktionary lua 2. Kept apart from lua \"two\" (lua#0, PPN *rua). Words lua pele (crater) and luapō (grave). The \"toilet\" sense in Wiktionary is never printed (A9).",
+   "gloss": "pit, hole",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Hole, pit\"; Wiktionary \"pit, hole\"",
+   "protoform": "PPN *lua",
+   "spelling": "lua"
+  },
+  "luhi#0": {
+   "cognates": [
+    [
+     "Māori",
+     "ruhi"
+    ]
+   ],
+   "etymon_note": "POLLEX RUFI.2 PCE *rufi \"weak, tired, exhausted\"; Wiktionary luhi 1 agrees. It is not luhi 2 \"person raised with care\". Word paʻaluhi. Tahitian omitted: POLLEX writes ruhi, Wiktionary uhi.",
+   "gloss": "weary",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Weary, tired, fatigued\"; Wiktionary \"tired; tiring, laborious\"",
+   "protoform": "PCE *rufi",
+   "spelling": "luhi"
+  },
+  "luku": {
+   "cognates": [
+    [
+     "Māori",
+     "rutu"
+    ],
+    [
+     "Tahitian",
+     "rutu"
+    ],
+    [
+     "Rapa Nui",
+     "rutu"
+    ]
+   ],
+   "etymon_note": "POLLEX RUTU PEP *rutu \"hit, beat, attack\"; Wiktionary agrees. Word makaluku.",
+   "gloss": "destroy",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"To massacre, destroy, slaughter, lay waste\"; Wiktionary \"to destroy, to devastate\"",
+   "protoform": "PEP *rutu",
+   "spelling": "luku"
+  },
+  "luna#1": {
+   "cognates": [],
+   "etymon_note": "Wiktionary says luna 2 \"overseer\" is possibly a specialised use of luna \"above\" (luna#0, PPN *luŋa). POLLEX files the P&E \"foreman, boss, leader, overseer\" under PTA *runaŋa but flags it Problematic. The ancestor is unsettled, so none is printed, and the stone stays apart from luna#0 until P&E settles it. All eleven words (luna hana … lunaʻōlelo) read \"officer\", as the Andrews brackets say.",
+   "gloss": "overseer, officer",
+   "gloss_source": "Wiktionary luna 2 \"boss, overseer, foreman ... any kind of official\"; POLLEX (Pukui & Elbert 1986) \"Foreman, boss, leader, overseer\"; Andrews–Parker 1922 brackets \"luna, officer\"",
+   "protoform": "",
+   "spelling": "luna"
+  },
+  "luna?kaʻaluna": {
+   "cognates": [],
+   "etymon_note": "Unresolved. Andrews brackets kaaluna with luna \"one over others in command\" (luna#1) for sense 1, \"to domineer\". The card shows sense 2, \"to sail against the wind\", which as the opposite of kaʻalalo implies luna \"above\" (luna#0). No source glosses luna in the sailing sense; P&E decides.",
+   "gloss": "",
+   "gloss_source": "none settled: the Andrews bracket \"luna, one over others in command\" explains only sense 1 (to domineer), not the sailing sense the card shows",
+   "protoform": "",
+   "spelling": "luna"
+  },
+  "luʻu": {
+   "cognates": [
+    [
+     "Māori",
+     "ruku"
+    ],
+    [
+     "Tongan",
+     "uku"
+    ],
+    [
+     "Rapa Nui",
+     "ruku"
+    ]
+   ],
+   "etymon_note": "POLLEX RUKU PPN *ruku \"dive; submerge, immerse\"; Wiktionary agrees. Word mokuluʻu. Tahitian omitted: POLLEX glosses it as a fishing method and the modern spelling is unsure.",
+   "gloss": "dive",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Dive, plunge into water, immerse\"; Wiktionary \"to dive, plunge\"",
+   "protoform": "PPN *ruku",
+   "spelling": "luʻu"
+  },
+  "lā#1": {
+   "cognates": [
+    [
+     "Māori",
+     "rā"
+    ],
+    [
+     "Tahitian",
+     "rā"
+    ],
+    [
+     "Sāmoan",
+     "lā"
+    ]
+   ],
+   "etymon_note": "POLLEX LAQAA.A PPN *laqaa \"sun\" and LAQAA.B PNP *laqaa \"day\" are lettered sub-sets of one set, and Wiktionary derives both lā 2 (sun) and lā 3 (day) from PPN *laqa, so lā#2 is merged in. It is not lā \"sail\" (LAA.1, lā#0) and not the particle lā (RAA). Words: ʻauinalā (sun); kikolā, lā hana and anilā (day).",
+   "gloss": "sun; day",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Sun\", \"Day, date\"; Wiktionary \"sun\", \"day\"",
+   "protoform": "PPN *laqaa",
+   "spelling": "lā"
+  },
+  "lāhui": {
+   "cognates": [
+    [
+     "Sāmoan",
+     "lafu"
+    ]
+   ],
+   "etymon_note": "POLLEX files the P&E lāhui \"nation, race, tribe, people; assemble\" under LAFU.1 PPN *lafu \"group of animals or birds\" (segmented lāhu-i). The \"prohibit\" sense on the same spelling is another set (RAAFUI PEP *raafui) and is not used. Word lāhui kaua. Māori rāhui \"flock\" omitted, because that spelling is far better known as the prohibition word from the other set.",
+   "gloss": "people, assembly",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Nation, race, tribe, people; assemble\"; Wiktionary \"race, nation, tribe, people\"",
+   "protoform": "PPN *lafu",
+   "spelling": "lāhui"
+  },
+  "lālā": {
+   "cognates": [
+    [
+     "Māori",
+     "rārā"
+    ],
+    [
+     "Sāmoan",
+     "lālā"
+    ],
+    [
+     "Tongan",
+     "vaʻavaʻa"
+    ]
+   ],
+   "etymon_note": "POLLEX RAQA-RAQA PPN *raqa-raqa \"branchy; small branches\"; Wiktionary agrees. Word kūlālā. Tahitian omitted (modern spelling unsure).",
+   "gloss": "branch",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Branch, limb, bough\"; Wiktionary \"branch, bough\"",
+   "protoform": "PPN *raqa-raqa",
+   "spelling": "lālā"
+  },
+  "lōʻihi": {
+   "cognates": [],
+   "etymon_note": "No POLLEX row and no etymology in Wiktionary. Andrews writes it loihi, sometimes lokihi. Word pōʻai lōʻihi.",
+   "gloss": "long",
+   "gloss_source": "Wiktionary \"long; tall\"; Andrews–Parker 1922 \"long\"",
+   "protoform": "",
+   "spelling": "lōʻihi"
+  },
+  "mahi": {
+   "cognates": [
+    [
+     "Māori",
+     "mahi"
+    ],
+    [
+     "Tongan",
+     "mafi"
+    ],
+    [
+     "Rapa Nui",
+     "mahi"
+    ]
+   ],
+   "etymon_note": "POLLEX files the P&E mahi \"cultivate\" under MAFI PPN *mafi \"strong, powerful, energetic, hardworking\", and Andrews has both \"to cultivate\" and \"strong\" (moa mahi). One etymon (B9). Words mahiʻai (cultivate), moa mahi (strong).",
+   "gloss": "cultivate; strong",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Cultivate\"; Wiktionary \"to cultivate, to farm\"; Andrews–Parker 1922 \"strong; energetic ... moa mahi, a fighting-cock\" (placeholder for the second sense)",
+   "protoform": "PPN *mafi",
+   "spelling": "mahi"
+  },
+  "maikaʻi": {
+   "cognates": [
+    [
+     "Māori",
+     "maitai"
+    ],
+    [
+     "Tahitian",
+     "maitaʻi"
+    ]
+   ],
+   "etymon_note": "POLLEX MAQITAKI PEP *maqitaki \"good, pleasant\"; Wiktionary agrees. Word lokomaikaʻi. The Tongan reflex is omitted (flagged problematic, a different sense).",
+   "gloss": "good",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Good, fine, all right, well\"; Wiktionary \"goodness; to be well, fine\"",
+   "protoform": "PEP *maqitaki",
+   "spelling": "maikaʻi"
+  },
+  "maka#0": {
+   "cognates": [
+    [
+     "Māori",
+     "mata"
+    ],
+    [
+     "Tahitian",
+     "mata"
+    ],
+    [
+     "Sāmoan",
+     "mata"
+    ]
+   ],
+   "etymon_note": "POLLEX MATA.1A \"eye, face\", MATA.1B \"mesh\" and MATA.1C \"point, blade\" are one PPN *mata set; Wiktionary maka 1. Kept apart from maka \"raw\" (MATA.2A, maka#1). Words kūmaka through waimaka (15); makamua uses the \"point, front\" sense of the same set (B9).",
+   "gloss": "eye, face",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Eye, face\"; Wiktionary \"eye; face\"",
+   "protoform": "PPN *mata",
+   "spelling": "maka"
+  },
+  "maka#1": {
+   "cognates": [
+    [
+     "Māori",
+     "mata"
+    ],
+    [
+     "Sāmoan",
+     "mata"
+    ],
+    [
+     "Tongan",
+     "mata"
+    ]
+   ],
+   "etymon_note": "POLLEX MATA.2A PPN *mata \"raw, unripe\", a set apart from *mata \"eye\" (MATA.1); Wiktionary maka 2. Word moʻamaka.",
+   "gloss": "raw",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Raw (fish), uncooked; green, unripe\"; Wiktionary \"raw (undercooked)\"",
+   "protoform": "PPN *mata",
+   "spelling": "maka"
+  },
+  "maka?makahakahaka": {
+   "cognates": [],
+   "etymon_note": "Unresolved. The Andrews bracket leaves maka unglossed. His senses (deep pit, clearing, deep-set eyes) point to different readings of maka; P&E decides.",
+   "gloss": "",
+   "gloss_source": "none settled: the Andrews bracket [Maka and hakahaka, open, full of holes] glosses only hakahaka",
+   "protoform": "",
+   "spelling": "maka"
+  },
+  "makani": {
+   "cognates": [
+    [
+     "Māori",
+     "matangi"
+    ],
+    [
+     "Tahitian",
+     "mataʻi"
+    ],
+    [
+     "Sāmoan",
+     "matagi"
+    ]
+   ],
+   "etymon_note": "POLLEX MATAGI PPN *mataŋi \"wind, breeze\"; Wiktionary agrees. Word puka makani.",
+   "gloss": "wind",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Wind\"; Wiktionary \"wind\"",
+   "protoform": "PPN *mataŋi",
+   "spelling": "makani"
+  },
+  "make": {
+   "cognates": [
+    [
+     "Māori",
+     "mate"
+    ],
+    [
+     "Tahitian",
+     "mate"
+    ],
+    [
+     "Sāmoan",
+     "mate"
+    ]
+   ],
+   "etymon_note": "POLLEX MATE.1A \"die\", MATE.1B \"faint\" and MATE.1C \"desire, want\" are one PPN *mate set, and Wiktionary has one etymology. One stone (B9). Words kāne make, laumake, laʻamake (die); make wai (want).",
+   "gloss": "die; want",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Die\", \"Desire, want; to want\"; Wiktionary \"to die\"; Andrews–Parker 1922 \"to desire; to need\"",
+   "protoform": "PPN *mate",
+   "spelling": "make"
+  },
+  "make?makehewa": {
+   "cognates": [],
+   "etymon_note": "Unresolved. Andrews brackets makehewa as [Make and hewa, wrong] without glossing make, and puts \"make hewa, a bad bargain\" under make v. 4, \"to be exchanged (in barter)\". Neither POLLEX nor Wiktionary records that sense, so it may not be *mate; P&E decides.",
+   "gloss": "exchange",
+   "gloss_source": "Andrews–Parker 1922 make v. 4 \"to be exchanged ... as in traffic by barter\", where he gives \"make hewa, a bad bargain\" (placeholder until P&E)",
+   "protoform": "",
+   "spelling": "make"
+  },
+  "makua": {
+   "cognates": [
+    [
+     "Māori",
+     "matua"
+    ],
+    [
+     "Tahitian",
+     "metua"
+    ],
+    [
+     "Sāmoan",
+     "matua"
+    ]
+   ],
+   "etymon_note": "POLLEX MATUQA.B \"main, principal\" and MATUQA.C \"parent\" are one PPN *matuqa set; Wiktionary agrees. Words makua kāne, makualiʻi and ʻaumakua (parent); kanaka makua (mature).",
+   "gloss": "parent; mature",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Parent\", \"Main stalk of a plant\"; Wiktionary \"elder; parent\"; Andrews–Parker 1922 \"full grown; mature\"",
+   "protoform": "PPN *matuqa",
+   "spelling": "makua"
+  },
+  "malolo": {
+   "cognates": [
+    [
+     "Māori",
+     "maroro"
+    ],
+    [
+     "Tongan",
+     "malolo"
+    ]
+   ],
+   "etymon_note": "POLLEX MALOLO PPN *malolo \"sink down, subside\" (P&E \"low, of tide\") is the sense in kai malolo. The \"rest\" sense on this spelling is another set (MAALOOLOO.B PPN *maalooloo) and is not used. mālolo \"flying fish\" is a different word. Word kai malolo.",
+   "gloss": "ebbing, low",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Low, of tide\"; Andrews–Parker 1922 \"ebbing much farther than usual, as the sea\"",
+   "protoform": "PPN *malolo",
+   "spelling": "malolo"
+  },
+  "malu": {
+   "cognates": [
+    [
+     "Māori",
+     "maru"
+    ],
+    [
+     "Tahitian",
+     "maru"
+    ],
+    [
+     "Sāmoan",
+     "malu"
+    ]
+   ],
+   "etymon_note": "POLLEX MALU.A \"shade, shelter\" and MALU.C \"protection\" are one PPN *malu set. The Andrews malu \"secret; unlawful\" (stressed on the last syllable) is another word. Word halemalu.",
+   "gloss": "shade, shelter",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Shade, shelter, protection\"; Wiktionary \"shade; shelter, protection\"",
+   "protoform": "PPN *malu",
+   "spelling": "malu"
+  },
+  "mana#0": {
+   "cognates": [
+    [
+     "Māori",
+     "mana"
+    ],
+    [
+     "Tahitian",
+     "mana"
+    ],
+    [
+     "Sāmoan",
+     "mana"
+    ]
+   ],
+   "etymon_note": "POLLEX MANA.1 PPN *mana \"power, effectiveness, prestige\"; Wiktionary mana 1. It is not mana \"branch\" (MAGA.1 PPN *maŋa, mana#1). Word hana mana.",
+   "gloss": "power",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Supernatural or divine power ... authority\"; Wiktionary \"power, authority\"",
+   "protoform": "PPN *mana",
+   "spelling": "mana"
+  },
+  "manamana#0": {
+   "cognates": [],
+   "etymon_note": "POLLEX files the P&E manamana \"finger, toe\" under MAGA-MAGA.B PEC *maŋa-maŋa, which it derives from *maŋa \"branch, fork\". Wiktionary derives both manamana 1 (finger) and manamana 2 (branching) from reduplicated *maŋamaŋa, and Andrews reads the finger words as \"branch of the hand / foot\". One etymon, so manamana#1 is merged in. Words manamana lima, manamana nui and manamana wāwae (finger); haomanamana and papamanamana (branching). No cognates: the Rapa Nui and Marquesan forms need ŋ or a glottal stop whose modern spelling is unsure, and the Sāmoan items are phrases.",
+   "gloss": "finger; branching",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Finger, toe\"; Wiktionary \"finger, toe\" and \"branches; claws; rays\"; Andrews–Parker 1922 \"branching\"",
+   "protoform": "PEC *maŋa-maŋa",
+   "spelling": "manamana"
+  },
+  "manawa": {
+   "cognates": [],
+   "etymon_note": "The only POLLEX row for Hawaiian manawa is the P&E \"anterior fontanelle\" (MANAWA.2 PMQ), a different set from the feelings sense. Wiktionary gives PPN *manawa \"breath, life force\", but POLLEX does not file this Hawaiian sense under MANAWA.1, so no ancestor is printed. Word manawaʻino.",
+   "gloss": "disposition",
+   "gloss_source": "Wiktionary \"affections, feelings, disposition\"; Andrews–Parker 1922 bracket \"Manawa, disposition\"",
+   "protoform": "",
+   "spelling": "manawa"
+  },
+  "manaʻo": {
+   "cognates": [
+    [
+     "Māori",
+     "manako"
+    ],
+    [
+     "Tahitian",
+     "manaʻo"
+    ],
+    [
+     "Sāmoan",
+     "manaʻo"
+    ]
+   ],
+   "etymon_note": "POLLEX MANAKO PPN *manako \"to desire\"; Wiktionary agrees. Words anamanaʻo, lunamanaʻo, manaʻolana, manaʻo paʻa, manaʻoʻiʻo.",
+   "gloss": "thought",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Thought, idea, belief, opinion ... mind, desire\"; Wiktionary \"thought, idea; to think\"",
+   "protoform": "PPN *manako",
+   "spelling": "manaʻo"
+  },
+  "manu": {
+   "cognates": [
+    [
+     "Māori",
+     "manu"
+    ],
+    [
+     "Tahitian",
+     "manu"
+    ],
+    [
+     "Sāmoan",
+     "manu"
+    ]
+   ],
+   "etymon_note": "POLLEX MANU.1A PPN *manu \"bird; living creature\"; Wiktionary agrees. It is not MAGU.1 or MAGU.2 (\"bruised\", \"salty\"). Words kāwilimanu, lawaiʻa manu, manuhelekū (dropped, B6) and manu ihu. Andrews brackets manuihu as [Manu, bird, and ihu, nose] \"the beak\", so the canoe end-piece is the bird sense.",
+   "gloss": "bird",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Bird\"; Wiktionary \"bird\"",
+   "protoform": "PPN *manu",
+   "spelling": "manu"
+  },
+  "mauna": {
+   "cognates": [
+    [
+     "Māori",
+     "maunga"
+    ],
+    [
+     "Sāmoan",
+     "mauga"
+    ],
+    [
+     "Tongan",
+     "moʻunga"
+    ]
+   ],
+   "etymon_note": "POLLEX MAQUGA PPN *maquŋa \"mountain\"; Wiktionary agrees. Word kuamauna. Tahitian omitted: POLLEX gives both mauʻa and mouʻa.",
+   "gloss": "mountain",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Mountain\"; Wiktionary \"mountain\"",
+   "protoform": "PPN *maquŋa",
+   "spelling": "mauna"
+  },
+  "maʻa": {
+   "cognates": [],
+   "etymon_note": "The word uses maʻa \"accustomed\" (Wiktionary: maʻalahi from maʻa + lahi). The only POLLEX row for maʻa is MAKA.B PPN *maka \"sling\", another homograph that Wiktionary lumps into the same entry, so no ancestor is printed. The Andrews maa \"stinking\" is a third word and is never printed. Word maʻalahi. A sling word would need its own id (maʻa#sling).",
+   "gloss": "accustomed",
+   "gloss_source": "Wiktionary \"accustomed, familiar, experienced\"; Andrews–Parker 1922 \"accustomed to do a thing\"",
+   "protoform": "",
+   "spelling": "maʻa"
+  },
+  "maʻawe": {
+   "cognates": [
+    [
+     "Māori",
+     "makawe"
+    ],
+    [
+     "Sāmoan",
+     "maʻave"
+    ]
+   ],
+   "etymon_note": "POLLEX MA-KAWE PNP *ma-kawe \"hair, strand of hair\"; Wiktionary agrees and links the sense \"trace, path\" to it. Word maʻaweʻula (track).",
+   "gloss": "strand; track",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Thread, strand, fibre\"; Wiktionary \"thread, fiber, strand; trace, track, path\"",
+   "protoform": "PNP *ma-kawe",
+   "spelling": "maʻawe"
+  },
+  "mele#0": {
+   "cognates": [
+    [
+     "Māori",
+     "umere"
+    ]
+   ],
+   "etymon_note": "POLLEX UMELE (PNP *umele \"kind of song or chant\"), Hawaiian reflex flagged Problematic (initial u- lost); Wiktionary gives the same etymon; words hakumele, huamele, ʻahamele.",
+   "gloss": "song, chant",
+   "gloss_source": "POLLEX (P&E) \"sing, song, chant\"; Wiktionary mele#0",
+   "protoform": "PNP *umele",
+   "spelling": "mele"
+  },
+  "miki#0": {
+   "cognates": [
+    [
+     "Māori",
+     "miti"
+    ],
+    [
+     "Tahitian",
+     "miti"
+    ],
+    [
+     "Sāmoan",
+     "miti"
+    ]
+   ],
+   "etymon_note": "POLLEX MITI.3A (PPN *miti \"suck, lick up\") and MITI.3B (PEC *miti \"undertow, eddy, ebb\", Māori miti \"undertow\") are one set; word aumiki \"rip current\". Not miki#1 \"quick\".",
+   "gloss": "recede, suck in",
+   "gloss_source": "Wiktionary miki#0 \"to suck in; to recede\" and aumiki etymology \"receding\"; POLLEX (P&E) \"suck in; undertow\"",
+   "protoform": "PPN *miti",
+   "spelling": "miki"
+  },
+  "moa": {
+   "cognates": [
+    [
+     "Māori",
+     "moa"
+    ],
+    [
+     "Sāmoan",
+     "moa"
+    ],
+    [
+     "Tongan",
+     "moa"
+    ]
+   ],
+   "etymon_note": "POLLEX MOA.1 PPN *moa \"fowl\"; words huamoa, moamahi, hakamoa (Andrews: haka + moa \"a fowl\"). Not MOA.4A (banana bud, dart game) nor moʻa \"cooked\".",
+   "gloss": "fowl, chicken",
+   "gloss_source": "POLLEX (P&E) \"fowl\"; Wiktionary \"chicken or similar fowl\"",
+   "protoform": "PPN *moa",
+   "spelling": "moa"
+  },
+  "moana#0": {
+   "cognates": [
+    [
+     "Māori",
+     "moana"
+    ],
+    [
+     "Tahitian",
+     "moana"
+    ],
+    [
+     "Sāmoan",
+     "moana"
+    ]
+   ],
+   "etymon_note": "POLLEX MOANA PPN *moana \"sea beyond the reef, ocean\"; words moanakai, moanawai, ʻaumoana. Not moana#1 \"chiefs' meeting place\".",
+   "gloss": "ocean, open sea",
+   "gloss_source": "POLLEX (P&E) \"ocean, open sea, lake\"; Wiktionary",
+   "protoform": "PPN *moana",
+   "spelling": "moana"
+  },
+  "moe": {
+   "cognates": [
+    [
+     "Māori",
+     "moe"
+    ],
+    [
+     "Tahitian",
+     "moe"
+    ],
+    [
+     "Sāmoan",
+     "moe"
+    ]
+   ],
+   "etymon_note": "POLLEX MOHE PPN *mohe \"sleep\"; words aumoe, halemoe, hikimoe, kikomoe, moehewa, moeone, moeʻino, moeʻuhane (DECISIONS A15: keep, P&E check).",
+   "gloss": "sleep, lie down",
+   "gloss_source": "POLLEX (P&E) \"sleep, lie down\"; Wiktionary",
+   "protoform": "PPN *mohe",
+   "spelling": "moe"
+  },
+  "moku": {
+   "cognates": [
+    [
+     "Māori",
+     "motu"
+    ],
+    [
+     "Tahitian",
+     "motu"
+    ],
+    [
+     "Sāmoan",
+     "motu"
+    ]
+   ],
+   "etymon_note": "POLLEX MOTU.A (\"severed\") and MOTU.B (\"island\") are one set, as B9 says; every word uses island/district/ship: mokupuni, mokuʻāina, mokuhonua, mokukaua, mokulele, mokuluʻu, mokumāhu, holomoku.",
+   "gloss": "island, ship",
+   "gloss_source": "POLLEX (P&E) \"island\"; Wiktionary \"island, district; ships\"; Andrews 1922 \"ship\"",
+   "protoform": "PPN *motu",
+   "spelling": "moku"
+  },
+  "momi": {
+   "cognates": [],
+   "etymon_note": "No POLLEX row; makamomi (Andrews bracket: maka eye + momi pearl). Not Andrews momi \"swallow\" (= moni).",
+   "gloss": "pearl",
+   "gloss_source": "Wiktionary \"pearl\"; Andrews 1922 \"pearl of the oyster\"",
+   "protoform": "",
+   "spelling": "momi"
+  },
+  "mona": {
+   "cognates": [],
+   "etymon_note": "Base of momona (Wiktionary: doublet; Andrews: primitive form). POLLEX files only momona, under PPN *moo-mona \"fat, rich, tasty\", with a note PCP *mona; Wiktionary says PPN *mona. Ancestor of the bare form left blank. Word monakō.",
+   "gloss": "fat",
+   "gloss_source": "Wiktionary mona \"fat\" and monakō etymology (\"sugar fat\")",
+   "protoform": "",
+   "spelling": "mona"
+  },
+  "moʻa": {
+   "cognates": [
+    [
+     "Māori",
+     "maoa"
+    ],
+    [
+     "Tahitian",
+     "maoa"
+    ]
+   ],
+   "etymon_note": "POLLEX MAQOHA PPN *maqoha \"cooked\", Hawaiian flagged Phonologically Irregular (Wiktionary says the same); word moʻamaka.",
+   "gloss": "cooked",
+   "gloss_source": "POLLEX (P&E) \"cooked\"; Wiktionary",
+   "protoform": "PPN *maqoha",
+   "spelling": "moʻa"
+  },
+  "moʻo": {
+   "cognates": [
+    [
+     "Māori",
+     "moko"
+    ],
+    [
+     "Tahitian",
+     "moʻo"
+    ],
+    [
+     "Sāmoan",
+     "moʻo"
+    ]
+   ],
+   "etymon_note": "POLLEX MOKO.1A PPN *moko \"lizard\"; words kuamoʻo (Andrews and Wiktionary: kua back + moʻo lizard) and moʻolele (Andrews: moo, reptile).",
+   "gloss": "lizard",
+   "gloss_source": "POLLEX (P&E) \"lizard; reptile\"; Wiktionary \"lizard\"",
+   "protoform": "PPN *moko",
+   "spelling": "moʻo"
+  },
+  "moʻo#line": {
+   "cognates": [],
+   "etymon_note": "New stone: moʻo \"line, succession, lineage\", a separate root from moʻo \"lizard\" (DECISIONS B8); POLLEX has no set for it. Words moʻoaliʻi, moʻokanaka, moʻokupuna, moʻokūʻauhau, moʻoʻōlelo.",
+   "gloss": "line, succession",
+   "gloss_source": "Andrews 1922 brackets \"moo, a line\" (moʻokūʻauhau, moʻoaliʻi, moʻokupuna, moʻoʻōlelo) and moo n. 3 \"a line\"; DECISIONS B8 \"succession\"",
+   "protoform": "",
+   "spelling": "moʻo"
+  },
+  "mua": {
+   "cognates": [
+    [
+     "Māori",
+     "mua"
+    ],
+    [
+     "Tahitian",
+     "mua"
+    ],
+    [
+     "Sāmoan",
+     "mua"
+    ]
+   ],
+   "etymon_note": "POLLEX MUQA.A PPN *muqa \"front, before\"; words hānaumua, makamua.",
+   "gloss": "first, front",
+   "gloss_source": "POLLEX (P&E) \"before, ahead, front\"; Wiktionary \"first, in front\"",
+   "protoform": "PPN *muqa",
+   "spelling": "mua"
+  },
+  "muli": {
+   "cognates": [
+    [
+     "Māori",
+     "muri"
+    ],
+    [
+     "Tahitian",
+     "muri"
+    ],
+    [
+     "Sāmoan",
+     "muli"
+    ]
+   ],
+   "etymon_note": "POLLEX MURI.1A PPN *muri \"behind, after, be last\" (MURI.1C \"young\" is the same set); word mulihope (Andrews: muli last + hope end).",
+   "gloss": "last, after",
+   "gloss_source": "POLLEX (P&E) \"behind\"; Andrews 1922 bracket \"muli, last\"; Wiktionary",
+   "protoform": "PPN *muri",
+   "spelling": "muli"
+  },
+  "māhu": {
+   "cognates": [
+    [
+     "Māori",
+     "māhu"
+    ],
+    [
+     "Sāmoan",
+     "māfu"
+    ]
+   ],
+   "etymon_note": "POLLEX MA-QAFU.1 PNP *ma-qafu \"steam, steamy\"; word mokumāhu. A different stone from māhū (DECISIONS A17).",
+   "gloss": "steam",
+   "gloss_source": "POLLEX (P&E) \"to steam, exude vapour\"; Wiktionary \"steam, vapor\"",
+   "protoform": "PNP *ma-qafu",
+   "spelling": "māhu"
+  },
+  "mākaʻi": {
+   "cognates": [
+    [
+     "Māori",
+     "mātaki"
+    ],
+    [
+     "Tahitian",
+     "mātaʻitaʻi"
+    ]
+   ],
+   "etymon_note": "POLLEX MAATA-KI PPN *maata-ki \"visit, inspect, observe\" (Wiktionary's mā- + kaʻi analysis is not followed); word halemākaʻi.",
+   "gloss": "police, inspect",
+   "gloss_source": "POLLEX (P&E) \"to police, inspect; policeman\"; Wiktionary",
+   "protoform": "PPN *maata-ki",
+   "spelling": "mākaʻi"
+  },
+  "māmā": {
+   "cognates": [
+    [
+     "Māori",
+     "māmā"
+    ],
+    [
+     "Tahitian",
+     "māmā"
+    ],
+    [
+     "Sāmoan",
+     "māmā"
+    ]
+   ],
+   "etymon_note": "POLLEX MAQA-MAQA.A PPN *maqa-maqa \"light in weight\"; word akemāmā (ake + light). Not Andrews mama \"chew\".",
+   "gloss": "light (weight)",
+   "gloss_source": "POLLEX (P&E) \"light (in weight)\"; Wiktionary",
+   "protoform": "PPN *maqa-maqa",
+   "spelling": "māmā"
+  },
+  "mū#2": {
+   "cognates": [],
+   "etymon_note": "The game sense has no POLLEX set (POLLEX MUMU \"crowded together\" covers only \"gathered together\", flagged Problematic). Wiktionary's group also holds a captor sense that is never shown (DECISIONS A17). Word papamū.",
+   "gloss": "kōnane, checkers",
+   "gloss_source": "Wiktionary mū#2 \"kōnane; checkers\" and papamū etymology",
+   "protoform": "",
+   "spelling": "mū"
+  },
+  "nahele": {
+   "cognates": [
+    [
+     "Māori",
+     "ngahere"
+    ],
+    [
+     "Tahitian",
+     "ʻaihere"
+    ]
+   ],
+   "etymon_note": "POLLEX GASERE PCE *ŋasere \"forest\"; word makanahele (Andrews: maka face + nahele the wild).",
+   "gloss": "forest, the wild",
+   "gloss_source": "POLLEX (P&E) \"forest\"; Wiktionary \"forest, bush\"; Andrews 1922 \"the wild\"",
+   "protoform": "PCE *ŋasere",
+   "spelling": "nahele"
+  },
+  "nalu#0": {
+   "cognates": [
+    [
+     "Māori",
+     "ngaru"
+    ],
+    [
+     "Sāmoan",
+     "galu"
+    ],
+    [
+     "Tongan",
+     "ngalu"
+    ]
+   ],
+   "etymon_note": "POLLEX GALU.1 PPN *ŋalu \"wave of sea\"; words heʻenalu, heiheinalu. POLLEX RANU.B (*ranu) is another etymon and is never shown (DECISIONS A16).",
+   "gloss": "wave, surf",
+   "gloss_source": "POLLEX (P&E) \"wave\"; Wiktionary \"wave, surf\"",
+   "protoform": "PPN *ŋalu",
+   "spelling": "nalu"
+  },
+  "naʻau": {
+   "cognates": [
+    [
+     "Māori",
+     "ngākau"
+    ],
+    [
+     "Tahitian",
+     "ʻāʻau"
+    ],
+    [
+     "Tongan",
+     "ngākau"
+    ]
+   ],
+   "etymon_note": "POLLEX GAAKAU PPN *ŋaakau \"intestines\" (seat of thought); words naʻauao, naʻaupō, naʻaulua, naʻaupono, paʻanaʻau.",
+   "gloss": "mind, heart",
+   "gloss_source": "POLLEX (P&E) \"intestines; mind, heart, affections\"; Wiktionary \"guts; mind, heart\"",
+   "protoform": "PPN *ŋaakau",
+   "spelling": "naʻau"
+  },
+  "naʻi#0": {
+   "cognates": [
+    [
+     "Māori",
+     "ngaki"
+    ]
+   ],
+   "etymon_note": "POLLEX GAKI.B PCE *ŋaki \"avenge, conquer\"; word hōkūnaʻi. GAKI.A (naʻi#1 \"strive\") is the same set.",
+   "gloss": "conquer",
+   "gloss_source": "POLLEX (P&E) \"conquer, take by force\"; Wiktionary hōkūnaʻi etymology \"conquering star\"",
+   "protoform": "PCE *ŋaki",
+   "spelling": "naʻi"
+  },
+  "nihi": {
+   "cognates": [
+    [
+     "Māori",
+     "ninihi"
+    ],
+    [
+     "Rapa Nui",
+     "nihi"
+    ],
+    [
+     "Marquesan",
+     "nihinihi"
+    ]
+   ],
+   "etymon_note": "POLLEX NIFI.1 PPN *nifi \"thin, sharp\" (Hawaiian edge); word kūnihi. Not NIFI.2 \"move stealthily\".",
+   "gloss": "edge",
+   "gloss_source": "POLLEX (P&E) \"edge, brink, rim; standing on edge\"; Andrews 1922 bracket \"nihi, to turn edgeways\"",
+   "protoform": "PPN *nifi",
+   "spelling": "nihi"
+  },
+  "nini#1": {
+   "cognates": [],
+   "etymon_note": "Wiktionary-only sense with no etymology (Andrews nini v. 4 \"to face or cover with stone\" is near); not POLLEX NIGI/NINI.3 \"pour; ointment\" (nini#0). Word pānini, a P&E check.",
+   "gloss": "stone fence",
+   "gloss_source": "Wiktionary nini#1 \"fence, line of stones\" and pānini etymology",
+   "protoform": "",
+   "spelling": "nini"
+  },
+  "niu#0": {
+   "cognates": [
+    [
+     "Māori",
+     "niu"
+    ],
+    [
+     "Tahitian",
+     "niu"
+    ],
+    [
+     "Sāmoan",
+     "niu"
+    ]
+   ],
+   "etymon_note": "POLLEX NIU.1 PPN *niu \"coconut palm\"; words hāniu, ʻaʻaniu. Not NIU.2 \"spinning\" (niu#1).",
+   "gloss": "coconut",
+   "gloss_source": "POLLEX (P&E) \"coconut palm, coconut meat\"; Wiktionary",
+   "protoform": "PPN *niu",
+   "spelling": "niu"
+  },
+  "noho": {
+   "cognates": [
+    [
+     "Māori",
+     "noho"
+    ],
+    [
+     "Tahitian",
+     "noho"
+    ],
+    [
+     "Sāmoan",
+     "nofo"
+    ]
+   ],
+   "etymon_note": "POLLEX NOFO PPN *nofo \"sit, dwell\"; words nohoaliʻi, nohopaʻa.",
+   "gloss": "sit, dwell",
+   "gloss_source": "POLLEX (P&E) \"sit, dwell\"; Wiktionary \"seat; to sit, reside\"",
+   "protoform": "PPN *nofo",
+   "spelling": "noho"
+  },
+  "nui": {
+   "cognates": [
+    [
+     "Māori",
+     "nui"
+    ],
+    [
+     "Tahitian",
+     "nui"
+    ],
+    [
+     "Sāmoan",
+     "nui"
+    ]
+   ],
+   "etymon_note": "POLLEX NUI.1 PNP *nui \"big\"; words alanui, ahonui, kuanui, manamananui.",
+   "gloss": "big, great",
+   "gloss_source": "POLLEX (P&E) \"big\"; Wiktionary \"big, great\"",
+   "protoform": "PNP *nui",
+   "spelling": "nui"
+  },
+  "nuku#0": {
+   "cognates": [
+    [
+     "Māori",
+     "ngutu"
+    ],
+    [
+     "Tahitian",
+     "ʻutu"
+    ],
+    [
+     "Sāmoan",
+     "gutu"
+    ]
+   ],
+   "etymon_note": "POLLEX GUTU.A PPN *ŋutu \"mouth, lip, beak, orifice\"; word nukuwai. GUTU.B (nuku#1 \"scold\") is the same set.",
+   "gloss": "mouth, beak",
+   "gloss_source": "POLLEX (P&E) \"beak, snout, mouth (of harbour)\"; Andrews 1922 bracket \"nuku, mouth\"",
+   "protoform": "PPN *ŋutu",
+   "spelling": "nuku"
+  },
+  "nānā#1": {
+   "cognates": [
+    [
+     "Māori",
+     "nānā"
+    ],
+    [
+     "Tahitian",
+     "nānā"
+    ]
+   ],
+   "etymon_note": "POLLEX NAA-NAA PCE *naa-naa \"look at\"; words kūnānā, nānāao, nānāuli.",
+   "gloss": "look, watch",
+   "gloss_source": "POLLEX (P&E) \"look at, observe\"; Wiktionary \"to look, observe\"",
+   "protoform": "PCE *naa-naa",
+   "spelling": "nānā"
+  },
+  "nīnau": {
+   "cognates": [],
+   "etymon_note": "No POLLEX row; word kikonīnau (Andrews: kiko point + ninau question).",
+   "gloss": "question, ask",
+   "gloss_source": "Wiktionary \"question; to ask\"; Andrews 1922",
+   "protoform": "",
+   "spelling": "nīnau"
+  },
+  "ola": {
+   "cognates": [
+    [
+     "Māori",
+     "ora"
+    ],
+    [
+     "Tahitian",
+     "ora"
+    ],
+    [
+     "Sāmoan",
+     "ola"
+    ]
+   ],
+   "etymon_note": "POLLEX OLA.1 PPN *ola \"be alive, well\"; words kūola, laweola (Andrews brackets: ola life). Not Andrews olā \"gurgle\".",
+   "gloss": "life, health",
+   "gloss_source": "POLLEX (P&E) \"life, health\"; Wiktionary",
+   "protoform": "PPN *ola",
+   "spelling": "ola"
+  },
+  "olo?olokaʻa": {
+   "cognates": [],
+   "etymon_note": "Unresolved: no source says which olo (POLLEX OLO.1 hill, OLO.2 resound, OLO.3 rub back and forth) or whether olo- is a formative. Word olokaʻa.",
+   "gloss": "",
+   "gloss_source": "none: Andrews bracket [Olo and kaa, to roll] leaves olo unglossed",
+   "protoform": "",
+   "spelling": "olo"
+  },
+  "omo": {
+   "cognates": [
+    [
+     "Māori",
+     "omo"
+    ],
+    [
+     "Marquesan",
+     "omo"
+    ]
+   ],
+   "etymon_note": "POLLEX QOMO PEP *qomo \"suck\"; words omokoko, omoliu (Andrews brackets: omo, to suck).",
+   "gloss": "suck",
+   "gloss_source": "POLLEX (P&E) \"suck\"; Wiktionary \"suck, absorb\"",
+   "protoform": "PEP *qomo",
+   "spelling": "omo"
+  },
+  "one": {
+   "cognates": [
+    [
+     "Māori",
+     "one"
+    ],
+    [
+     "Tahitian",
+     "one"
+    ],
+    [
+     "Sāmoan",
+     "oneone"
+    ]
+   ],
+   "etymon_note": "POLLEX QONE PPN *qone \"sand\"; words kahaone, moeone, onehānau, oneʻā, puʻuone.",
+   "gloss": "sand",
+   "gloss_source": "POLLEX (P&E) \"sand\"; Wiktionary",
+   "protoform": "PPN *qone",
+   "spelling": "one"
+  },
+  "paepae": {
+   "cognates": [
+    [
+     "Tongan",
+     "paepae"
+    ],
+    [
+     "Rapa Nui",
+     "paepae"
+    ],
+    [
+     "Marquesan",
+     "paepae"
+    ]
+   ],
+   "etymon_note": "POLLEX PAE-PAE (PN) \"stone surround of a structure\", which has no Hawaiian row; Wiktionary assigns Hawaiian paepae to it. Word paepaepuka.",
+   "gloss": "platform, support",
+   "gloss_source": "Wiktionary \"platform; prop, support\"; Andrews 1922 bracket \"paepae, a platform\"",
+   "protoform": "PPN *pae-pae",
+   "spelling": "paepae"
+  },
+  "pahu#0": {
+   "cognates": [
+    [
+     "Māori",
+     "pahū"
+    ],
+    [
+     "Tahitian",
+     "pahu"
+    ],
+    [
+     "Marquesan",
+     "pahu"
+    ]
+   ],
+   "etymon_note": "POLLEX PASU.1B PCE *pasu \"drum\"; P&E has drum and box in one entry (Andrews: box from drum). POLLEX also files that entry under PPN *pusa \"box\", flagged Problematic. Words pahukani, pahupalapala.",
+   "gloss": "drum, box",
+   "gloss_source": "POLLEX (P&E) \"box, drum, cask, chest\"; Wiktionary pahu#0",
+   "protoform": "PCE *pasu",
+   "spelling": "pahu"
+  },
+  "pahu?pahukapu": {
+   "cognates": [],
+   "etymon_note": "Unresolved: the shipped gloss (kapu marker) uses pahu \"stake\" while Andrews' Lit. says \"sacred box\"; sacred subject, so a P&E check and the kumu decide. Word pahukapu.",
+   "gloss": "",
+   "gloss_source": "none settled: Andrews bracket \"pahu, box\" vs Andrews sense 2 \"tabu stake\" (pahu n. 3 \"stake, post\")",
+   "protoform": "",
+   "spelling": "pahu"
+  },
+  "paio": {
+   "cognates": [],
+   "etymon_note": "No POLLEX row; word hoapaio.",
+   "gloss": "contend, fight",
+   "gloss_source": "Wiktionary \"to fight, quarrel; contend\"; Andrews 1922 bracket \"paio, to contend\"",
+   "protoform": "",
+   "spelling": "paio"
+  },
+  "palai#avert": {
+   "cognates": [],
+   "etymon_note": "New stone: Andrews' verb palai \"turn the face away\", neither the fern (PPN *palai \"yam\", palai#0) nor \"fry\" (from English, palai#1). No POLLEX row. Word palaimaka. Spelling and sense still need P&E.",
+   "gloss": "turn away",
+   "gloss_source": "Andrews 1922 palai v. \"to be ashamed and turn the face away\" and palaimaka bracket \"palai, to turn away\"",
+   "protoform": "",
+   "spelling": "palai"
+  },
+  "palapala": {
+   "cognates": [],
+   "etymon_note": "No POLLEX set for palapala. Wiktionary: reduplication of pala \"to dab, to blot\"; POLLEX pala sets (PALA.1A-C, 2, 3) are other homographs, so none is attached. Reduplicated stem as one stone (B7 b). Words kiʻipalapala, pahupalapala, papapalapala.",
+   "gloss": "writing, print",
+   "gloss_source": "Wiktionary \"printed patterns on kapa; print or document; writing of any kind\"; Andrews 1922 \"characters impressed on tapa or paper; a writing\"",
+   "protoform": "",
+   "spelling": "palapala"
+  },
+  "pale#0": {
+   "cognates": [
+    [
+     "Māori",
+     "pare"
+    ],
+    [
+     "Tongan",
+     "pale"
+    ]
+   ],
+   "etymon_note": "Wiktionary files cover/lining with headdress (POc *pale2; POLLEX PALE.2 PPN *pale \"head-dress\", Marquesan \"any head covering; cap\"). Andrews files coverings under ward-off instead, but both POLLEX sets are PPN *pale, and Māori pare and Tongan pale are in both rows, so the printed line is right either way. Words palemaka, paleuhi (face veil, covering).",
+   "gloss": "covering",
+   "gloss_source": "Wiktionary pale#0 \"headdress; cover; pad, lining\"; Andrews 1922 bracket \"pale, a garment / a covering\" (palemaka, paleuhi)",
+   "protoform": "PPN *pale",
+   "spelling": "pale"
+  },
+  "pale#1": {
+   "cognates": [
+    [
+     "Māori",
+     "pare"
+    ],
+    [
+     "Tahitian",
+     "pare"
+    ],
+    [
+     "Tongan",
+     "pale"
+    ]
+   ],
+   "etymon_note": "POLLEX PALE.1A PPN *pale \"ward off; protection, defense\"; P&E pale kai (breakwater) is POLLEX PALE-TAI PNP *pale-tai. Words palekai, palekaua, palekeiki (Andrews files \"to deliver\" under this verb).",
+   "gloss": "ward off, defend",
+   "gloss_source": "POLLEX (P&E) \"ward off, thrust aside, parry, fend off\"; Wiktionary pale#1 \"to ward off; to protect\"",
+   "protoform": "PPN *pale",
+   "spelling": "pale"
+  },
+  "pale?kaupale": {
+   "cognates": [],
+   "etymon_note": "Left unresolved, as the kau side was in batch-02: with the partition sense (Andrews) it is pale#1 \"ward off\"; with P&E sense (imu cover) it may be pale \"lining\" (pale#0). The P&E gloss chosen for the card decides.",
+   "gloss": "",
+   "gloss_source": "none: Andrews bracket \"pale, to ward off\" (partition sense); POLLEX files P&E kaupale \"to cover an oven ... to keep earth out\" under TAU.12 *tau \"cover\" and leaves pale unassigned",
+   "protoform": "",
+   "spelling": "pale"
+  },
+  "pana": {
+   "cognates": [
+    [
+     "Māori",
+     "pana"
+    ],
+    [
+     "Tahitian",
+     "pana"
+    ],
+    [
+     "Marquesan",
+     "pana"
+    ]
+   ],
+   "etymon_note": "POLLEX PANA.1A PPN *pana \"release something held under tension, recoil\" (sub-sets 1B throb, 1C PMQ bow are the same set). Wiktionary traces the bow sense to PPN *fana; POLLEX files Hawaiian pana under *pana. Words panapua (shoot arrows), panapoʻo (flick or strike the head).",
+   "gloss": "shoot, flick",
+   "gloss_source": "POLLEX (P&E) \"shoot (as marbles)\"; Wiktionary \"to shoot; to snap; to flip\"; Andrews 1922 \"to shoot, as an arrow\"",
+   "protoform": "PPN *pana",
+   "spelling": "pana"
+  },
+  "pane#head": {
+   "cognates": [
+    [
+     "Māori",
+     "pane"
+    ],
+    [
+     "Marquesan",
+     "pane"
+    ]
+   ],
+   "etymon_note": "POLLEX PANE.A PPN *pane \"blunt or knoblike projection\"; P&E pane \"hind part of the head\". Not Wiktionary pane \"answer\" (no etymology), which no shipped word uses. Word panepoʻo.",
+   "gloss": "back of head",
+   "gloss_source": "POLLEX (P&E) \"hind part of the head; top or summit\"; Andrews 1922 pane \"the joining of the head with the bones of the neck\"",
+   "protoform": "PPN *pane",
+   "spelling": "pane"
+  },
+  "pani": {
+   "cognates": [
+    [
+     "Māori",
+     "pani"
+    ],
+    [
+     "Tahitian",
+     "pani"
+    ]
+   ],
+   "etymon_note": "POLLEX PANI.2 PCE *pani \"block up\"; Wiktionary gives the same etymon. Words panipuka (door), panipū (wad of a gun), panipūpū (shell set as an eyestone).",
+   "gloss": "close, stopper",
+   "gloss_source": "POLLEX (P&E) \"close, shut\"; Wiktionary \"to close, to shut; plug, stopper; lid; gate, door\"",
+   "protoform": "PCE *pani",
+   "spelling": "pani"
+  },
+  "papa#0": {
+   "cognates": [
+    [
+     "Māori",
+     "papa"
+    ],
+    [
+     "Tahitian",
+     "papa"
+    ],
+    [
+     "Sāmoan",
+     "papa"
+    ]
+   ],
+   "etymon_note": "POLLEX PAPA.1A (PPN board), 1B (PPN flat hard surface) and 1C (PEP layer, stratum; list, genealogy; P&E \"class, rank\") are one set (B8/B9: link). Takes in papa#1: kūkulupapa uses \"rank\" (1C), keikipapa uses Andrews \"papa, an ancestor\" (1C genealogy). Words papamū, papakea, laupapa, papalalo, papawaena, kuapapa and the table words.",
+   "gloss": "flat surface, layer",
+   "gloss_source": "Wiktionary papa ety. 1 \"board, lumber; flat surface, layer; foundation; storey\"; POLLEX (P&E) \"board\", \"flat hard surface\", \"class, rank, grade, order\"",
+   "protoform": "PPN *papa",
+   "spelling": "papa"
+  },
+  "pau": {
+   "cognates": [
+    [
+     "Māori",
+     "pau"
+    ],
+    [
+     "Tahitian",
+     "pau"
+    ],
+    [
+     "Sāmoan",
+     "pau"
+    ]
+   ],
+   "etymon_note": "POLLEX PAU.1C PNP *pau \"finished, over, ended\", with 1D (PEP consumed, used up) and 1E (PCE all) in the same set; Sāmoan pau from 1C, Māori and Tahitian pau from 1D. Word pauaho (out of breath). Not paʻu \"soot\" (PAKU.C).",
+   "gloss": "finished, used up",
+   "gloss_source": "POLLEX (P&E) \"finished, ended, through\"; \"consumed, destroyed\"; Wiktionary \"finished, done; destroyed; all\"",
+   "protoform": "PNP *pau",
+   "spelling": "pau"
+  },
+  "paʻa": {
+   "cognates": [
+    [
+     "Māori",
+     "paka"
+    ],
+    [
+     "Tahitian",
+     "paʻapaʻa"
+    ],
+    [
+     "Rapa Nui",
+     "pakapaka"
+    ]
+   ],
+   "etymon_note": "POLLEX PAKA.1A PPN *paka \"dried, scorched\"; Wiktionary gives the same etymon. The hold-fast words (paʻahao, paʻawaha, paʻakāhili, paʻanaʻau) are the same entry in Andrews (\"to be fast; to hold\"). Words kinopaʻa, kūpaʻa, paʻakai, kōpaʻa, waiūpaʻa and 20 more.",
+   "gloss": "firm, solid",
+   "gloss_source": "POLLEX (P&E) \"firm, solid, tight ... hard, sound\"; Wiktionary \"solid; firm, fast, permanent\"",
+   "protoform": "PPN *paka",
+   "spelling": "paʻa"
+  },
+  "paʻa?wahapaʻa": {
+   "cognates": [],
+   "etymon_note": "Left unresolved. Andrews ends the entry \"o ka wahapaa, oia ka hoopaapaa\", tying it to hoʻopaʻapaʻa \"argue\"; no source says whether that paʻa is paʻa \"firm\" (PAKA.1A). Not linked until P&E settles it.",
+   "gloss": "",
+   "gloss_source": "none: Andrews 1922 brackets \"waha, mouth, and paa\" with paa unglossed",
+   "protoform": "",
+   "spelling": "paʻa"
+  },
+  "paʻi": {
+   "cognates": [
+    [
+     "Māori",
+     "papaki"
+    ],
+    [
+     "Sāmoan",
+     "paʻi"
+    ],
+    [
+     "Tongan",
+     "paki"
+    ]
+   ],
+   "etymon_note": "POLLEX PAKI.1 PPN *paki \"slap, clap; hit, beat; touch\"; Wiktionary gives the same etymon. Word paʻi kiʻi (print an image). Tahitian forms left out (POLLEX gives pāʻi/paʻipaʻi from a source that may not mark length).",
+   "gloss": "strike, print",
+   "gloss_source": "POLLEX (P&E) \"slap, spank, beat, hit, clap\"; Wiktionary \"to hit; to slap; to clap; to print; to photograph\"",
+   "protoform": "PPN *paki",
+   "spelling": "paʻi"
+  },
+  "paʻi?paʻiaʻa": {
+   "cognates": [],
+   "etymon_note": "Left unresolved. POLLEX files P&E paʻiaʻa \"root system, rootlets\" whole under PAKI-AKA PNP *paki-aka \"root of a plant\" (Māori pakiaka, Tahitian paiaa); the first element is not PAKI.1 \"slap\" and its sense is unknown, so it must not link to paʻi kiʻi.",
+   "gloss": "",
+   "gloss_source": "none: Andrews 1922 bracket \"pai and aa, small roots\" leaves pai unglossed",
+   "protoform": "",
+   "spelling": "paʻi"
+  },
+  "paʻi?paʻiʻai": {
+   "cognates": [],
+   "etymon_note": "Left unresolved: Andrews writes pai \"bundle\" (no ʻokina marked) while the modern word is paʻi ʻai; no source shows a paʻi \"bundle\", and it must not link to paʻi \"strike\". Gloss is Andrews only (F1 placeholder).",
+   "gloss": "bundle",
+   "gloss_source": "Andrews 1922 bracket \"pai, a bundle, and ai, food\" (paiai \"bundle of pounded taro done up in ti leaves\"); Hawaii News Now (via review)",
+   "protoform": "",
+   "spelling": "paʻi"
+  },
+  "pele": {
+   "cognates": [],
+   "etymon_note": "POLLEX files P&E pele under PERE.3 PTA *pere \"dart\", flagged Problematic; Wiktionary gives no etymology, so no ancestor is printed (the provisional *pere and Māori pere are dropped). Common noun only, never the goddess (DESIGN 4.3). Word luapele.",
+   "gloss": "lava, volcano",
+   "gloss_source": "Wiktionary \"volcano\"; POLLEX (P&E) \"volcano, eruption, lava flow\"; Andrews 1922 \"a volcano\"",
+   "protoform": "",
+   "spelling": "pele"
+  },
+  "pia#0": {
+   "cognates": [
+    [
+     "Tahitian",
+     "pia"
+    ],
+    [
+     "Sāmoan",
+     "pia"
+    ],
+    [
+     "Rapa Nui",
+     "pia"
+    ]
+   ],
+   "etymon_note": "POLLEX PIA.1 PPN *pia \"arrowroot (Tacca leontopetaloides); starch\"; Wiktionary gives the same etymon. Not pia#1 \"beer\" (borrowed) or pia#2. Word haupia.",
+   "gloss": "arrowroot, starch",
+   "gloss_source": "POLLEX (P&E) \"arrowroot, starch\"; Wiktionary pia#0 \"Polynesian arrowroot; starch\"",
+   "protoform": "PPN *pia",
+   "spelling": "pia"
+  },
+  "piha": {
+   "cognates": [],
+   "etymon_note": "POLLEX files P&E piha under PISA.* PEP *pisa \"box\", flagged Uncertain Semantic Connection; Wiktionary gives no etymology, so no ancestor is printed (the provisional *pisa and Tahitian piha are dropped). Word pihalima (a handful).",
+   "gloss": "full",
+   "gloss_source": "POLLEX (P&E) \"full, complete, filled\"; Wiktionary \"full, filled; complete\"; Andrews 1922 bracket \"piha, full\"",
+   "protoform": "",
+   "spelling": "piha"
+  },
+  "pili": {
+   "cognates": [
+    [
+     "Māori",
+     "piri"
+    ],
+    [
+     "Tahitian",
+     "piri"
+    ],
+    [
+     "Rapa Nui",
+     "piri"
+    ]
+   ],
+   "etymon_note": "POLLEX PILI.1A PPN *pili \"adhere, stick to\" and 1B PNP *pili \"be close to, joined\" are one set. Not PIRI-PIRI PCE *piri-piri, the pili grass, which the provisional entry had. Words kahapili (touching line, tangent), ʻikepili (data).",
+   "gloss": "cling, join",
+   "gloss_source": "POLLEX (P&E) \"adhere to\", \"joined to\"; Wiktionary \"to cling, to stick; to join; to be close, associated; to relate to\"",
+   "protoform": "PPN *pili",
+   "spelling": "pili"
+  },
+  "pipi#seep": {
+   "cognates": [],
+   "etymon_note": "New stone for pīpīwai, resolving pipi?pipiwai: Andrews names pipi \"to percolate\" (pipi v. [Pi, to throw water]). Not Wiktionary pipi#0 pearl oyster (POLLEX PIPI.1 *pipi) or pipi#1 \"beef\". Spelled pīpī as in the word pīpīwai; id keeps the dossier key \"pipi\". Reduplicated stem, never linked to pī#sprinkle (B7 b, B10). No POLLEX set.",
+   "gloss": "seep, sprinkle",
+   "gloss_source": "Andrews 1922 pipiwai bracket \"pipi, to percolate\"; Andrews pipi v. \"to sprinkle; to wet by sprinkling water\"",
+   "protoform": "",
+   "spelling": "pīpī"
+  },
+  "piʻo": {
+   "cognates": [
+    [
+     "Māori",
+     "piko"
+    ],
+    [
+     "Sāmoan",
+     "piʻo"
+    ],
+    [
+     "Tongan",
+     "piko"
+    ]
+   ],
+   "etymon_note": "POLLEX PIKO.A PPN *piko \"bent, curved, crooked\"; Wiktionary gives the same etymon. Not pio \"extinguished\" (PIO, PCE *pio) nor Andrews pio \"captive\". Word halepiʻo.",
+   "gloss": "bent, arched",
+   "gloss_source": "POLLEX (P&E) \"bent\"; Wiktionary \"bend, curve, arc; to arch (of a rainbow)\"; Andrews 1922 bracket \"pio, an arch\"",
+   "protoform": "PPN *piko",
+   "spelling": "piʻo"
+  },
+  "poepoe": {
+   "cognates": [
+    [
+     "Tahitian",
+     "poe"
+    ],
+    [
+     "Rapa Nui",
+     "poe"
+    ],
+    [
+     "Marquesan",
+     "poe"
+    ]
+   ],
+   "etymon_note": "Reduplication of poe \"round\" (Wiktionary), whose POLLEX set is POE PEP *poe \"pearl\" (P&E poe \"round, spherical\"); one stone, never linked to a poe stone (B7 b). Words hulipoepoe, paʻapoepoe.",
+   "gloss": "round, sphere",
+   "gloss_source": "Wiktionary \"round, rounded; sphere, globe\"; Andrews 1922 \"round; globular\"; POLLEX (P&E) poe \"round (spherical)\"",
+   "protoform": "PEP *poe",
+   "spelling": "poepoe"
+  },
+  "poi?hiʻipoi": {
+   "cognates": [],
+   "etymon_note": "Left unresolved. Andrews poi \"to cover, protect\" is the word P&E spells poʻi, a different spelling and stone; the food poi (POLLEX POQOI PPN *poqoi) is not attached because no source reads hiʻipoi that way. The provisional \"porridge\" gloss and *poqoi are dropped.",
+   "gloss": "",
+   "gloss_source": "none: Andrews 1922 bracket \"hii and poi, to protect\" (poi v. \"to cover; to shut, as with a lid\"); the popular reading is poi the food",
+   "protoform": "",
+   "spelling": "poi"
+  },
+  "pona": {
+   "cognates": [
+    [
+     "Māori",
+     "pona"
+    ],
+    [
+     "Tahitian",
+     "pona"
+    ],
+    [
+     "Sāmoan",
+     "pona"
+    ]
+   ],
+   "etymon_note": "POLLEX PONA PPN *pona \"knot, joint, swelling\"; Wiktionary gives the same etymon. Not POGA.2/3 PNP *poŋa (socket; spotted). Word iwipona.",
+   "gloss": "joint, node",
+   "gloss_source": "POLLEX (P&E) \"joint of sugarcane or bamboo stem\"; Wiktionary \"node of bamboo or sugarcane; joint of bones, fingers\"; Andrews 1922 \"the joints, as of the spine and fingers\"",
+   "protoform": "PPN *pona",
+   "spelling": "pona"
+  },
+  "pono": {
+   "cognates": [
+    [
+     "Māori",
+     "pono"
+    ],
+    [
+     "Marquesan",
+     "pono"
+    ]
+   ],
+   "etymon_note": "POLLEX PONO.2 PCE *pono \"true, correct\"; Wiktionary says PPN *pono, probably an Eastern Polynesian innovation. Words kūpono, lelepono, naʻaupono.",
+   "gloss": "right, proper",
+   "gloss_source": "POLLEX (P&E) \"correct procedure, correctness\"; Wiktionary \"goodness; correct procedure; good, moral, proper\"",
+   "protoform": "PCE *pono",
+   "spelling": "pono"
+  },
+  "pouli": {
+   "cognates": [
+    [
+     "Māori",
+     "pōuri"
+    ],
+    [
+     "Tahitian",
+     "pōuri"
+    ],
+    [
+     "Tongan",
+     "poʻuli"
+    ]
+   ],
+   "etymon_note": "POLLEX POO-QULI PPN *poo-quli \"dark night, darkness\". Spelled pōuli: POLLEX gives P&E makapōuli (MATA-POOURI PCE *mata-poouri) and the long *poo, though its root row and Wiktionary write pouli; id \"pouli\" kept (B10). Word makapōuli.",
+   "gloss": "dark, darkness",
+   "gloss_source": "POLLEX (P&E) \"dark; darkness, dark night\"; Wiktionary \"darkness; eclipse\"; Andrews 1922 bracket \"pouli, darkness\"",
+   "protoform": "PPN *poo-quli",
+   "spelling": "pōuli"
+  },
+  "poʻo": {
+   "cognates": [],
+   "etymon_note": "Wiktionary derives poʻo \"head\" from PPN *qulu-poko (Tahitian poʻo, Māori upoko), but POLLEX lists no Hawaiian poʻo \"head\"; its poʻo rows are POKO.2 \"cavity\" and POKO.3 \"slap water\", other homographs, so no ancestor is printed. Twelve words, all \"head\".",
+   "gloss": "head",
+   "gloss_source": "Wiktionary \"head; summit; director\"; Andrews 1922 \"the head; the summit; a head, leader\"",
+   "protoform": "",
+   "spelling": "poʻo"
+  },
+  "pua": {
+   "cognates": [
+    [
+     "Māori",
+     "pua"
+    ],
+    [
+     "Tahitian",
+     "pua"
+    ],
+    [
+     "Rapa Nui",
+     "pua"
+    ]
+   ],
+   "etymon_note": "POLLEX PUA.1B PEP *pua \"to flower; flower, blossom\" (1A PPN *pua, a tree with showy flowers, same set). Andrews derives \"arrow\" from the flowering sugar-cane tassel used as a dart, and Wiktionary keeps both on one entry, so one stone (B9). Words puakala, puapoʻo (flower); panapua, ʻaʻapua (arrow).",
+   "gloss": "flower, arrow",
+   "gloss_source": "POLLEX (P&E) \"flower, blossom\"; Wiktionary \"flower; progeny; arrow, dart\"; Andrews 1922 \"a blossom; ... hence, an arrow\"",
+   "protoform": "PEP *pua",
+   "spelling": "pua"
+  },
+  "puaʻa": {
+   "cognates": [
+    [
+     "Tahitian",
+     "puaʻa"
+    ],
+    [
+     "Sāmoan",
+     "puaʻa"
+    ],
+    [
+     "Tongan",
+     "puaka"
+    ]
+   ],
+   "etymon_note": "POLLEX PUAKA PPN *puaka \"pig\"; Wiktionary gives the same etymon. Māori poaka left out (POLLEX flags it Problematic). Not pūʻāʻā \"scattered\". Words ahupuaʻa, kahu puaʻa.",
+   "gloss": "pig",
+   "gloss_source": "POLLEX (P&E) \"pig\"; Wiktionary \"pig, hog, swine\"",
+   "protoform": "PPN *puaka",
+   "spelling": "puaʻa"
+  },
+  "puka": {
+   "cognates": [
+    [
+     "Māori",
+     "puta"
+    ],
+    [
+     "Tahitian",
+     "puta"
+    ],
+    [
+     "Marquesan",
+     "puta"
+    ]
+   ],
+   "etymon_note": "POLLEX PUTA.1A PPN *puta \"aperture, hole\" and 1B PCE \"pass through, emerge\" are one set; Wiktionary gives the same etymon. Words pukaihu, pukahale, puka makani, panipuka, kiaʻipuka, paepae puka.",
+   "gloss": "hole, opening",
+   "gloss_source": "POLLEX (P&E) \"hole; door, entrance, opening\"; Wiktionary \"hole, gate, doorway\"",
+   "protoform": "PPN *puta",
+   "spelling": "puka"
+  },
+  "pule#0": {
+   "cognates": [
+    [
+     "Māori",
+     "pure"
+    ],
+    [
+     "Tahitian",
+     "pure"
+    ],
+    [
+     "Sāmoan",
+     "pule"
+    ]
+   ],
+   "etymon_note": "POLLEX PULE.2 PPN *pule \"have authority\"; Wiktionary gives the same etymon. Not pule#1 \"speckled\" (cowrie, PULE.1). Words haipule, hale pule.",
+   "gloss": "prayer",
+   "gloss_source": "POLLEX (P&E) \"prayer, pray, grace, blessing\"; Wiktionary pule#0 \"prayer; to pray\"",
+   "protoform": "PPN *pule",
+   "spelling": "pule"
+  },
+  "puna#0": {
+   "cognates": [
+    [
+     "Māori",
+     "puna"
+    ],
+    [
+     "Sāmoan",
+     "puna"
+    ],
+    [
+     "Rapa Nui",
+     "puna"
+    ]
+   ],
+   "etymon_note": "POLLEX PUNA PPN *puna \"bubble or well up; a spring\". Not puna \"coral, lime\" (PUGA PPN *puŋa) or \"internode\" (PNP *puŋa), which Wiktionary puna#0 also lists. Words wai puna, hūpuna. Not pūnā of pūnāwai (B10).",
+   "gloss": "spring",
+   "gloss_source": "POLLEX (P&E) \"spring\"; Wiktionary puna#0 \"spring (water source)\"",
+   "protoform": "PPN *puna",
+   "spelling": "puna"
+  },
+  "puni#0": {
+   "cognates": [
+    [
+     "Māori",
+     "puni"
+    ],
+    [
+     "Sāmoan",
+     "puni"
+    ],
+    [
+     "Tongan",
+     "punipuni"
+    ]
+   ],
+   "etymon_note": "POLLEX PUNI.1A PPN *puni \"prevent access by surrounding completely\"; Wiktionary gives the same etymon. Words mokupuni, kaʻapuni, anapuni, kūpuni, pōʻai puni.",
+   "gloss": "surrounded, around",
+   "gloss_source": "POLLEX (P&E) \"surrounded; completed\"; Wiktionary puni#0 \"surrounded, enclosed\"; Andrews 1922 \"around; on every side\"",
+   "protoform": "PPN *puni",
+   "spelling": "puni"
+  },
+  "puni#1": {
+   "cognates": [],
+   "etymon_note": "Wiktionary keeps \"fond of\" apart from puni#0 and gives no etymology; POLLEX has no row for it, so no ancestor (the provisional *puni and Māori puni are dropped). Kept apart until P&E shows whether it is the same entry as \"surrounded, overcome\". Words punikoko, puniwaiwai.",
+   "gloss": "fond of, craving",
+   "gloss_source": "Wiktionary puni#1 \"to be fond of, to be partial to; to desire, to covet\"; Andrews 1922 puni n. 4 \"a desire; a strong inclination\"",
+   "protoform": "",
+   "spelling": "puni"
+  },
+  "puʻu": {
+   "cognates": [
+    [
+     "Māori",
+     "puku"
+    ],
+    [
+     "Tahitian",
+     "puʻu"
+    ],
+    [
+     "Rapa Nui",
+     "puku"
+    ]
+   ],
+   "etymon_note": "POLLEX PUKU.1A PPN *puku \"protuberance, lump, joint, knot\" (1C PCE \"hill\", same set); Wiktionary gives the same etymon. Andrews puts the throat here too, as in puʻukani. Not PUKU.3. Words puʻuwai, puʻuone, puʻukani, puʻukaua, puʻukoko, kuapuʻu.",
+   "gloss": "hill, lump",
+   "gloss_source": "POLLEX (P&E) \"protuberance, lump, swelling\", \"hill\"; Wiktionary \"hill, mound; pile; lump; joint\"",
+   "protoform": "PPN *puku",
+   "spelling": "puʻu"
+  },
+  "pā#0": {
+   "cognates": [
+    [
+     "Tahitian",
+     "pā"
+    ],
+    [
+     "Sāmoan",
+     "pā"
+    ],
+    [
+     "Tongan",
+     "pā"
+    ]
+   ],
+   "etymon_note": "POLLEX PAA.1 PPN *paa \"enclosure, fence, wall\"; Wiktionary gives the same etymon. Māori is left out because POLLEX gives only the derived pāia. Words pākū, pānini.",
+   "gloss": "fence, wall",
+   "gloss_source": "POLLEX (P&E) \"enclosure, fence\"; Wiktionary pā#0 \"fence, wall, enclosure\"",
+   "protoform": "PPN *paa",
+   "spelling": "pā"
+  },
+  "pā#4": {
+   "cognates": [
+    [
+     "Māori",
+     "pā"
+    ],
+    [
+     "Tahitian",
+     "pā"
+    ]
+   ],
+   "etymon_note": "POLLEX PAA.2B PPN *paa \"strike against, hit; touch; reach\" (P&E pāʻia) and PAA.2C PNP \"blow against (of wind)\" (P&E pā) are one set; Wiktionary pā#4 holds both. Words pāleo, pāleoleo (Wiktionary parts).",
+   "gloss": "touch, reach",
+   "gloss_source": "POLLEX (P&E) pāʻia \"touch, get, contact, reach, hit\" and pā \"blow (of wind)\"; Wiktionary pā#4 \"to touch, strike; to reach; to blow (as the wind)\"",
+   "protoform": "PPN *paa",
+   "spelling": "pā"
+  },
+  "pā#plate": {
+   "cognates": [
+    [
+     "Sāmoan",
+     "pā"
+    ]
+   ],
+   "etymon_note": "New stone for waʻapā, resolving pā?waʻapā: POLLEX PAA.4 PPN *paa \"plate, platter, bowl\" (P&E pā \"dish, plate\"), which Andrews joins to \"board\" in one sense. Not pā#0 fence or pā#4 touch. Tongan pā \"shield\" left out (POLLEX: uncertain).",
+   "gloss": "board, plate",
+   "gloss_source": "Andrews 1922 waapa bracket \"pa, a board\"; Andrews pa n. 1 \"a material having a flat surface, as a board, a plate, a server, a pan\"; POLLEX (P&E) \"dish, plate\"",
+   "protoform": "PPN *paa",
+   "spelling": "pā"
+  },
+  "pāpale": {
+   "cognates": [],
+   "etymon_note": "No POLLEX set. Wiktionary: partial reduplication of pale \"headdress\", or pā + pale; Andrews brackets pa + pale \"a defense\". Its own stone, not linked to pale (B7 b, B10); no ancestor printed because the formation is uncertain. Word pāpale aliʻi.",
+   "gloss": "hat",
+   "gloss_source": "Wiktionary \"hat, cap\"; Andrews 1922 bracket \"papale, hat\" (pāpale aliʻi)",
+   "protoform": "",
+   "spelling": "pāpale"
+  },
+  "pāʻina": {
+   "cognates": [],
+   "etymon_note": "No POLLEX set; Wiktionary says -na is a nominaliser but no verb pāʻi exists, so no ancestor. Word papapāʻina.",
+   "gloss": "meal",
+   "gloss_source": "Wiktionary \"meal; dinner; small dinner party\"; Andrews 1922 paina \"a call to eat; a meal\"",
+   "protoform": "",
+   "spelling": "pāʻina"
+  },
+  "pī#sprinkle": {
+   "cognates": [],
+   "etymon_note": "New stone for pīkai, resolving pī?pīkai: Andrews names pi \"to sprinkle\". Not Wiktionary pī \"stingy\" (no etymology), which no shipped word uses. Spelled pī as in pīkai. No POLLEX set. Gloss is Andrews only (F1 placeholder until P&E).",
+   "gloss": "sprinkle",
+   "gloss_source": "Andrews 1922 pikai bracket \"pi, to sprinkle\"; Andrews pi v. 1 \"to sprinkle, as water; to throw water with the hand\"",
+   "protoform": "",
+   "spelling": "pī"
+  },
+  "pō": {
+   "cognates": [
+    [
+     "Māori",
+     "pō"
+    ],
+    [
+     "Tahitian",
+     "pō"
+    ],
+    [
+     "Sāmoan",
+     "pō"
+    ]
+   ],
+   "etymon_note": "POLLEX POO.1A PPN *poo \"night\" (1B \"24-hour day\", 1C PCE \"the realm of the gods\", same set); Wiktionary gives the same etymon. Card gloss stays \"night, darkness\". Words makapō, naʻaupō, pōʻele, ʻauinapō, kiaʻipō, luapō, Pōʻaono.",
+   "gloss": "night, darkness",
+   "gloss_source": "POLLEX (P&E) \"night\"; Wiktionary \"night, period of darkness\"; Andrews 1922 \"night; darkness\"",
+   "protoform": "PPN *poo",
+   "spelling": "pō"
+  },
+  "pōhaku": {
+   "cognates": [
+    [
+     "Māori",
+     "pōhatu"
+    ]
+   ],
+   "etymon_note": "POLLEX POO-FATU.1* PCE *poo-fatu \"general term for stone or rock\"; Wiktionary gives the same etymon. The Marquesan pohatu is left out because POLLEX flags it. Words kiʻi pōhaku, kālai pōhaku, papapōhaku, pōhakuhele, pōhaku paʻa.",
+   "gloss": "stone",
+   "gloss_source": "POLLEX (P&E) \"stone\"; Wiktionary \"stone, rock\"",
+   "protoform": "PCE *poo-fatu",
+   "spelling": "pōhaku"
+  },
+  "pōʻai": {
+   "cognates": [
+    [
+     "Māori",
+     "pōkai"
+    ],
+    [
+     "Tahitian",
+     "pōʻai"
+    ]
+   ],
+   "etymon_note": "POLLEX POOKAI PPN *pookai \"to coil, wrap up\"; Wiktionary gives the same etymon. Words pōʻailani (horizon), pōʻai lōʻihi, pōʻai puni, kahapōʻai.",
+   "gloss": "circle, encircle",
+   "gloss_source": "POLLEX (P&E) \"coil\"; Wiktionary \"to coil up; to encircle; circle, circuit\"; Andrews 1922 \"a circle; to encircle\"",
+   "protoform": "PPN *pookai",
+   "spelling": "pōʻai"
+  },
+  "pū#0": {
+   "cognates": [
+    [
+     "Māori",
+     "pū"
+    ],
+    [
+     "Tahitian",
+     "pū"
+    ]
+   ],
+   "etymon_note": "pūkonakona uses \"cluster, clump\" (Wiktionary parts), POLLEX PUU.6 PCE *puu. Wiktionary pū#0 also holds \"tree\", which POLLEX files apart (PUQU PNP *puqu); no shipped word uses \"tree\", so no split now (a tree word would get pū#tree). Word pūkonakona.",
+   "gloss": "cluster, clump",
+   "gloss_source": "POLLEX (P&E) \"cluster of several stalks; clump\"; Wiktionary pū#0 \"tree, cluster of several stalks; cluster, clump\"",
+   "protoform": "PCE *puu",
+   "spelling": "pū"
+  },
+  "pū#1": {
+   "cognates": [
+    [
+     "Māori",
+     "pū"
+    ],
+    [
+     "Tahitian",
+     "pū"
+    ],
+    [
+     "Sāmoan",
+     "pū"
+    ]
+   ],
+   "etymon_note": "POLLEX PUU.1 PPN *puu \"trumpet shell; trumpet\". Wiktionary derives pū \"gun\" (pū#2) from pū \"conch\" (pū#1) and Andrews has both in one entry, so pū#2 merges into pū#1. Tongan left out. Word panipū.",
+   "gloss": "conch, gun",
+   "gloss_source": "Wiktionary pū \"conch shell; any wind instrument\" and \"gun, pistol\" (semantic extension); Andrews 1922 pu n. 1 \"a conch; a trumpet\", 2 \"a gun, pistol\"",
+   "protoform": "PPN *puu",
+   "spelling": "pū"
+  },
+  "pū?paʻapū": {
+   "cognates": [],
+   "etymon_note": "Left unresolved. The likeliest pū is the particle \"together, completely\" (POLLEX PUU.7 PCE *puu), which B1 rules out as a stone; if so the word drops. Not linked to pū#0 or pū#1.",
+   "gloss": "",
+   "gloss_source": "none: Wiktionary parses paʻapū as paʻa + pū \"stand\", a sense no pū entry has",
+   "protoform": "",
+   "spelling": "pū"
+  },
+  "pūpū#1": {
+   "cognates": [
+    [
+     "Māori",
+     "pūpū"
+    ],
+    [
+     "Tahitian",
+     "pūpū"
+    ]
+   ],
+   "etymon_note": "POLLEX PUUPUU.2 PPN *puupuu 'univalve shellfish' (cf. *puu 'shell trumpet'), a set apart from PUUPUU.4 'bundle' (pūpū#0, unused). Word panipūpū (eyestone shell).",
+   "gloss": "shell",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Shell, snail\"; Wiktionary \"shell (marine or land), beads\"",
+   "protoform": "PPN *puupuu",
+   "spelling": "pūpū"
+  },
+  "ua": {
+   "cognates": [
+    [
+     "Māori",
+     "ua"
+    ],
+    [
+     "Tahitian",
+     "ua"
+    ],
+    [
+     "Sāmoan",
+     "ua"
+    ]
+   ],
+   "etymon_note": "POLLEX QUHA PPN *quha 'rain'; not the particles ua (perfect, *kua) or ua 'aforementioned' (*t-aua). Word waiua.",
+   "gloss": "rain",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Rain\"; Wiktionary \"rain; to rain\"",
+   "protoform": "PPN *quha",
+   "spelling": "ua"
+  },
+  "uhi#1": {
+   "cognates": [
+    [
+     "Māori",
+     "uwhi"
+    ],
+    [
+     "Sāmoan",
+     "ufi"
+    ],
+    [
+     "Tongan",
+     "ʻufiʻufi"
+    ]
+   ],
+   "etymon_note": "POLLEX QUFI.3 PPN *qufi 'cover up'; not QUFI.1 yam (uhi#0) and not PEP *uhi 'tattooing instrument', which Wiktionary files in the same entry. Words paleuhi, uhikino.",
+   "gloss": "cover, covering",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Covering, cover, veil, lid\"; Wiktionary \"covering, veil; to cover\"",
+   "protoform": "PPN *qufi",
+   "spelling": "uhi"
+  },
+  "uila": {
+   "cognates": [
+    [
+     "Māori",
+     "uira"
+    ],
+    [
+     "Tahitian",
+     "uira"
+    ],
+    [
+     "Sāmoan",
+     "uila"
+    ]
+   ],
+   "etymon_note": "POLLEX QUHILA PPN *quhila 'lightning'. Word lolouila (computer, 'electric brain').",
+   "gloss": "lightning",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Lightning\"; Wiktionary \"lightning; electricity\"",
+   "protoform": "PPN *quhila",
+   "spelling": "uila"
+  },
+  "uli#0": {
+   "cognates": [
+    [
+     "Māori",
+     "uri"
+    ],
+    [
+     "Tahitian",
+     "uri"
+    ],
+    [
+     "Sāmoan",
+     "uli"
+    ]
+   ],
+   "etymon_note": "POLLEX QULI.2 PPN *quli 'black, dark in colour', a set apart from QULI.1 'steer' (uli#1). Words aouli, kaiuli, nānāuli (Andrews' 'blue sky' is this sense). Andrews' uli n. 3 (a class of gods) is never printed.",
+   "gloss": "dark, deep blue",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Dark colour\"; Wiktionary \"any dark color (blue, green, black)\"",
+   "protoform": "PPN *quli",
+   "spelling": "uli"
+  },
+  "uli#1": {
+   "cognates": [
+    [
+     "Sāmoan",
+     "uli"
+    ],
+    [
+     "Tongan",
+     "ʻuli"
+    ]
+   ],
+   "etymon_note": "POLLEX QULI.1 PPN *quli 'to steer a vessel' (POc *quliŋ). Word hoe uli (steering paddle).",
+   "gloss": "steer",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Steer v\"; Wiktionary \"to steer; steersman\"",
+   "protoform": "PPN *quli",
+   "spelling": "uli"
+  },
+  "ulu#0": {
+   "cognates": [],
+   "etymon_note": "No ancestor printed: POLLEX files P&E's ulu 'to grow' under PPN *huru 'enter' (HURU.A) flagged Uncertain Semantic Connection, while Wiktionary derives it from *qulu, which POLLEX keeps for ulu 'grove' (QULU.2). Words laʻaulu, uluwehi.",
+   "gloss": "grow, growth",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"To grow, increase, spread\"; Wiktionary \"growth; to grow\"",
+   "protoform": "",
+   "spelling": "ulu"
+  },
+  "waena": {
+   "cognates": [
+    [
+     "Māori",
+     "waenga"
+    ],
+    [
+     "Sāmoan",
+     "vāega"
+    ],
+    [
+     "Tongan",
+     "vāhenga"
+    ]
+   ],
+   "etymon_note": "POLLEX WAHE-GA PPN *wahe-ŋa 'division, portion; middle'. Words anawaena, kikowaena, leowaena, papawaena.",
+   "gloss": "middle",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Middle; cultivated field\"; Wiktionary \"middle\"",
+   "protoform": "PPN *wahe-ŋa",
+   "spelling": "waena"
+  },
+  "waha#0": {
+   "cognates": [
+    [
+     "Māori",
+     "waha"
+    ],
+    [
+     "Tahitian",
+     "vaha"
+    ]
+   ],
+   "etymon_note": "POLLEX PCE *waha 'mouth', a set apart from PCE *waha 'carry on the back' (waha#1, unused). Words haowaha, kaulawaha, paʻawaha, wahahewa, wahaheʻe, wahapaʻa.",
+   "gloss": "mouth",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Mouth, opening\"; Wiktionary \"mouth\"",
+   "protoform": "PCE *waha",
+   "spelling": "waha"
+  },
+  "wahine": {
+   "cognates": [
+    [
+     "Māori",
+     "wahine"
+    ],
+    [
+     "Tahitian",
+     "vahine"
+    ],
+    [
+     "Marquesan",
+     "vehine"
+    ]
+   ],
+   "etymon_note": "POLLEX PCE *wahine 'woman, female'. Words aliʻiwahine, haku wahine, kupuna wahine, leo wahine.",
+   "gloss": "woman, female",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Woman\"; Wiktionary \"woman, female\"",
+   "protoform": "PCE *wahine",
+   "spelling": "wahine"
+  },
+  "wai#0": {
+   "cognates": [
+    [
+     "Māori",
+     "wai"
+    ],
+    [
+     "Tahitian",
+     "vai"
+    ],
+    [
+     "Sāmoan",
+     "vai"
+    ]
+   ],
+   "etymon_note": "POLLEX WAI.1 PPN *wai 'fresh water'; not wai 'leave, deposit' (*qai, wai#1) or wai 'who' (*hai). 29 words, all the water sense: waimaka, waiū, kahawai, puʻuwai, ʻauwai and the rest.",
+   "gloss": "water",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Water\"; Wiktionary \"water, especially fresh\"",
+   "protoform": "PPN *wai",
+   "spelling": "wai"
+  },
+  "wailua": {
+   "cognates": [
+    [
+     "Māori",
+     "wairua"
+    ],
+    [
+     "Tahitian",
+     "vārua"
+    ]
+   ],
+   "etymon_note": "POLLEX WAI-RUA PEP *wai-rua 'spirit', an inherited compound kept as one stone (B6); never links to wai or lua. Word kino wailua.",
+   "gloss": "spirit, ghost",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Spirit, ghost\"; Wiktionary \"ghost, spirit\"",
+   "protoform": "PEP *wai-rua",
+   "spelling": "wailua"
+  },
+  "waiwai": {
+   "cognates": [
+    [
+     "Tongan",
+     "ʻai"
+    ]
+   ],
+   "etymon_note": "POLLEX files waiwai under QAI.1 PPN *qai 'place, deposit, leave' (via wai 'deposit'), not *wai 'water'; Wiktionary agrees ('more likely' wai 'leave'). A reduplicated stem as one stone (B7); never links to wai#0. Word puniwaiwai.",
+   "gloss": "wealth, goods",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Goods, property... wealth... rich\"; Wiktionary \"to be rich\"",
+   "protoform": "PPN *qai",
+   "spelling": "waiwai"
+  },
+  "waiū": {
+   "cognates": [
+    [
+     "Māori",
+     "waiū"
+    ]
+   ],
+   "etymon_note": "POLLEX WAI-UU PNP *wai-uu 'milk', an inherited compound as one stone. Word waiūpaʻa; but waiū is also dealt as the two-stone word wai·ū, so B6 drops waiūpaʻa by default.",
+   "gloss": "milk",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Milk\"; Wiktionary \"milk\"",
+   "protoform": "PNP *wai-uu",
+   "spelling": "waiū"
+  },
+  "wale#only": {
+   "cognates": [
+    [
+     "Māori",
+     "ware"
+    ],
+    [
+     "Sāmoan",
+     "vale"
+    ]
+   ],
+   "etymon_note": "New: POLLEX WALE.3 PPN *wale 'of no account, ordinary; only, just', the particle, a set apart from WALE.1, the secretion sense of the old wale id, which no word uses now and which must never print. Word kaʻawale. A particle stone exists only if B1 option 2 is chosen; the default ruling drops kaʻawale.",
+   "gloss": "only, alone",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Postposed particle: only, just... alone; without payment, cause or reason\"; Wiktionary particle \"only, just, alone; for free\"",
+   "protoform": "PPN *wale",
+   "spelling": "wale"
+  },
+  "waʻa": {
+   "cognates": [
+    [
+     "Māori",
+     "waka"
+    ],
+    [
+     "Tahitian",
+     "vaʻa"
+    ],
+    [
+     "Sāmoan",
+     "vaʻa"
+    ]
+   ],
+   "etymon_note": "POLLEX WAKA PPN *waka 'canoe'. Words auwaʻa, hoe waʻa, holowaʻa, waʻapā. Andrews' waa 'dig a furrow' (= waha) is not this stone.",
+   "gloss": "canoe",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Canoe\"; Wiktionary \"canoe\"",
+   "protoform": "PPN *waka",
+   "spelling": "waʻa"
+  },
+  "wehi": {
+   "cognates": [],
+   "etymon_note": "No ancestor printed: POLLEX's only Hawaiian wehi is P&E wehi 'dark' under PMQ *vehi (a moon phase, flagged uncertain), a different homograph from wehi 'adornment'. Word uluwehi.",
+   "gloss": "decoration",
+   "gloss_source": "Wiktionary \"decoration, ornament; to decorate\"",
+   "protoform": "",
+   "spelling": "wehi"
+  },
+  "wili": {
+   "cognates": [
+    [
+     "Māori",
+     "wiri"
+    ],
+    [
+     "Tahitian",
+     "viri"
+    ],
+    [
+     "Sāmoan",
+     "vili"
+    ]
+   ],
+   "etymon_note": "POLLEX WILI PPN *wili 'twist, turn; bore, drill'. Words lauwili, wiliʻau (form wiliau). Andrews' phrase for a disease under wili is never printed.",
+   "gloss": "twist, turn",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Wind, twist, writhe, crank, turn, screw, drill\"; Wiktionary \"to twist, wring; to bore\"",
+   "protoform": "PPN *wili",
+   "spelling": "wili"
+  },
+  "wāwae": {
+   "cognates": [
+    [
+     "Māori",
+     "waewae"
+    ],
+    [
+     "Tahitian",
+     "ʻāvae"
+    ],
+    [
+     "Sāmoan",
+     "vae"
+    ]
+   ],
+   "etymon_note": "POLLEX WAQE PPN *waqe 'leg' lists Hawaiian wae and notes CE *wae(wae); wāwae is its reduplication (Wiktionary cognates Māori waewae, Tahitian ʻāvae), so no row matched the spelling. Words kaniwāwae, manamana wāwae.",
+   "gloss": "leg, foot",
+   "gloss_source": "Wiktionary \"leg, foot\"; Andrews–Parker 1922 \"the leg... the foot\"",
+   "protoform": "PPN *waqe",
+   "spelling": "wāwae"
+  },
+  "ū#0": {
+   "cognates": [
+    [
+     "Māori",
+     "ū"
+    ],
+    [
+     "Tahitian",
+     "ū"
+    ],
+    [
+     "Sāmoan",
+     "susu"
+    ]
+   ],
+   "etymon_note": "POLLEX PPN *huhu 'breast, milk' (Wiktionary writes *susu); not ū 'drip, ooze' (ū#1). Word waiū.",
+   "gloss": "breast",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Breast, teat, udder\"; Wiktionary \"breast; udder\"",
+   "protoform": "PPN *huhu",
+   "spelling": "ū"
+  },
+  "ʻaeʻa": {
+   "cognates": [],
+   "etymon_note": "No POLLEX set and no Wiktionary etymology; no ancestor given. Word hōkū ʻaeʻa (planet).",
+   "gloss": "wandering",
+   "gloss_source": "Wiktionary \"to wander\"; Andrews–Parker 1922 \"wandering; unstable\"",
+   "protoform": "",
+   "spelling": "ʻaeʻa"
+  },
+  "ʻaha#0": {
+   "cognates": [],
+   "etymon_note": "No POLLEX set for ʻaha 'assembly'; POLLEX's two ʻaha sets are *kafa 'sennit' (ʻaha#1) and *kafa 'mullet' (ʻaha#2), neither used, so no ancestor is printed. Words ʻahakanaka, ʻaha mele, ʻahaʻōlelo, ʻahāinu, ʻahāʻaina (forms ʻahainu, ʻahaʻaina; not ʻahā 'four').",
+   "gloss": "assembly, gathering",
+   "gloss_source": "Wiktionary \"meeting, gathering, assembly\"; Wiktionary etymologies of ʻahamele, ʻahaʻōlelo",
+   "protoform": "",
+   "spelling": "ʻaha"
+  },
+  "ʻahu": {
+   "cognates": [
+    [
+     "Māori",
+     "kahu"
+    ],
+    [
+     "Tahitian",
+     "ʻahu"
+    ],
+    [
+     "Sāmoan",
+     "ʻafu"
+    ]
+   ],
+   "etymon_note": "POLLEX KAFU.A PPN *kafu 'covering, clothing'; not ahu 'heap' (*qafu, no ʻokina). Words ʻahuao (covering mat), ʻahu ʻula (feather cloak).",
+   "gloss": "garment, covering",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Covering, clothing\"; Wiktionary \"cape, coat, any upper garment; covering; mat\"",
+   "protoform": "PPN *kafu",
+   "spelling": "ʻahu"
+  },
+  "ʻahā": {
+   "cognates": [],
+   "etymon_note": "Wiktionary: ʻa- + hā 'four'. A derived numeral admitted as a stone (B12); POLLEX has no set for the derived form, so no ancestor is printed (the base hā is PPN *faa, FAA.1). Word ʻahālike.",
+   "gloss": "four",
+   "gloss_source": "Wiktionary \"four; four times\"; Andrews–Parker 1922 \"the numeral four\"",
+   "protoform": "",
+   "spelling": "ʻahā"
+  },
+  "ʻai": {
+   "cognates": [
+    [
+     "Māori",
+     "kai"
+    ],
+    [
+     "Tahitian",
+     "ʻai"
+    ],
+    [
+     "Sāmoan",
+     "ʻai"
+    ]
+   ],
+   "etymon_note": "POLLEX KAI PPN *kai 'food, eat'; the game-score set (also *kai) is not used. Words hoaʻai, holo ʻai, huaʻai, kuʻi ʻai, kēʻai, kōhiʻai, kūʻai, mahiʻai, paʻi ʻai, ʻaialo, ʻai kapu.",
+   "gloss": "food, eat",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"To eat; food or food plant\"; Wiktionary \"food; to eat\"",
+   "protoform": "PPN *kai",
+   "spelling": "ʻai"
+  },
+  "ʻaina#0": {
+   "cognates": [
+    [
+     "Sāmoan",
+     "ʻaiga"
+    ],
+    [
+     "Rapa Nui",
+     "kainga"
+    ],
+    [
+     "Marquesan",
+     "kaika"
+    ]
+   ],
+   "etymon_note": "POLLEX KAI-GA.A PNP *kai-ŋa 'meal, feast'; not KAI-GA.B 'food refuse' or ʻāina 'land'. Words papa ʻaina, ʻahāʻaina.",
+   "gloss": "meal",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Meal\"; Wiktionary \"meal\"",
+   "protoform": "PNP *kai-ŋa",
+   "spelling": "ʻaina"
+  },
+  "ʻaka": {
+   "cognates": [
+    [
+     "Māori",
+     "kata"
+    ],
+    [
+     "Tahitian",
+     "ʻata"
+    ],
+    [
+     "Sāmoan",
+     "ʻata"
+    ]
+   ],
+   "etymon_note": "POLLEX KATA PPN *kata 'laugh'; not Andrews' aka 'shadow' or 'but'. Word ʻakahenehene.",
+   "gloss": "laugh",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Laugh\"; Wiktionary \"to laugh\"",
+   "protoform": "PPN *kata",
+   "spelling": "ʻaka"
+  },
+  "ʻaono": {
+   "cognates": [],
+   "etymon_note": "Wiktionary: ʻa- + ono 'six'. A derived numeral admitted as a stone (B12); POLLEX has no set for the derived form, so no ancestor is printed (the base ono is PPN *ono). Word Pōʻaono.",
+   "gloss": "six",
+   "gloss_source": "Wiktionary \"six; six times\"; Andrews–Parker 1922 \"six\"",
+   "protoform": "",
+   "spelling": "ʻaono"
+  },
+  "ʻau#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kau"
+    ],
+    [
+     "Sāmoan",
+     "ʻau"
+    ],
+    [
+     "Tongan",
+     "kau"
+    ]
+   ],
+   "etymon_note": "POLLEX KAU.4 PPN *kau 'stalk, stem, handle'; kūʻau is POLLEX *tuu-kau << *kau.4. ʻaulima is CE *kau-rima, which POLLEX compares with *kau.3 'wood' (no Hawaiian reflex); Andrews reads 'au, a handle'. The group sense Wiktionary lumps in here is now ʻau#group; ʻaumakua is withdrawn to ʻau?ʻaumakua.",
+   "gloss": "handle, staff",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Handle, staff, stem, stalk, shaft\"; Wiktionary \"handle; staff; stem; stalk\"",
+   "protoform": "PPN *kau",
+   "spelling": "ʻau"
+  },
+  "ʻau#1": {
+   "cognates": [
+    [
+     "Māori",
+     "kau"
+    ],
+    [
+     "Tahitian",
+     "ʻau"
+    ],
+    [
+     "Rapa Nui",
+     "kau"
+    ]
+   ],
+   "etymon_note": "POLLEX KAU.1 PPN *kau 'swim'. Words kai ʻau (sea one must swim in), ʻaulike (swim abreast). ʻauwai is withdrawn to ʻau?ʻauwai; ʻauʻau 'bathe' is its own stone.",
+   "gloss": "swim",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Swim\"; Wiktionary \"to swim, travel by sea\"",
+   "protoform": "PPN *kau",
+   "spelling": "ʻau"
+  },
   "ʻau#group": {
    "cognates": [
     [
@@ -3158,6 +5729,589 @@
    "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Group (in ʻau waʻa, ʻau moku)\"; Andrews–Parker 1922 bracket \"au, a number\"",
    "protoform": "PPN *kau",
    "spelling": "ʻau"
+  },
+  "ʻau?ʻaumakua": {
+   "cognates": [],
+   "etymon_note": "Unresolved, split from ʻau#0: POLLEX files ʻaumakua under PNP *kau-matua 'elderly man' with only 'Cf. *kau.2 group'; Wiktionary reads ʻau 'stem, stalk' (ʻau#0). Sources name different homographs (P18), so no link until P&E's Lit. Word ʻaumakua.",
+   "gloss": "",
+   "gloss_source": "none settled: Wiktionary ʻau 'stem, stalk'; POLLEX compares PPN *kau.2 'group, company'",
+   "protoform": "",
+   "spelling": "ʻau"
+  },
+  "ʻau?ʻauwai": {
+   "cognates": [],
+   "etymon_note": "Unresolved, withdrawn from ʻau#1 as the adjudication asks: Wiktionary reads ʻau 'swim', Andrews 'furrow' (back-formed, as for ʻauwaha); ʻauwai is not in POLLEX. Word ʻauwai.",
+   "gloss": "",
+   "gloss_source": "none settled: Wiktionary ʻau 'to swim'; Andrews–Parker bracket 'au, furrow'",
+   "protoform": "",
+   "spelling": "ʻau"
+  },
+  "ʻauhau": {
+   "cognates": [
+    [
+     "Māori",
+     "kauwhau"
+    ],
+    [
+     "Tahitian",
+     "ʻaufau"
+    ]
+   ],
+   "etymon_note": "POLLEX KAUFAU PCE *kaufau 'an ordered list or recitation' carries both P&E ʻauhau 'tax' and kūʻauhau 'genealogist', so one stone (B9): lunaʻauhau uses 'tax', kūʻauhau the older 'recitation' sense and needs its own parts-row gloss.",
+   "gloss": "tax, tribute",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Price, tax, levy tax\"; Wiktionary \"tribute; tax\"",
+   "protoform": "PCE *kaufau",
+   "spelling": "ʻauhau"
+  },
+  "ʻauina": {
+   "cognates": [],
+   "etymon_note": "Wiktionary: ʻaui 'to decline' + -na, a derived stem as one stone; no POLLEX set, so no ancestor. Words ʻauinalā, ʻauinapō.",
+   "gloss": "decline, slope",
+   "gloss_source": "Wiktionary \"slope, decline, descent\"; Andrews–Parker 1922 \"descent; slope; declination\"",
+   "protoform": "",
+   "spelling": "ʻauina"
+  },
+  "ʻauʻau": {
+   "cognates": [
+    [
+     "Māori",
+     "kaukau"
+    ],
+    [
+     "Sāmoan",
+     "ʻauʻau"
+    ],
+    [
+     "Tongan",
+     "kaukau"
+    ]
+   ],
+   "etymon_note": "POLLEX KAU-KAU PPN *kau-kau 'bathe', its own set; a reduplicated stem as one stone (B7), never linked to ʻau 'swim'. Word wai ʻauʻau.",
+   "gloss": "bathe",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Bathe\"; Wiktionary \"to swim; to bathe\"",
+   "protoform": "PPN *kau-kau",
+   "spelling": "ʻauʻau"
+  },
+  "ʻaʻa#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kaka"
+    ],
+    [
+     "Tahitian",
+     "ʻaʻa"
+    ],
+    [
+     "Sāmoan",
+     "ʻaʻa"
+    ]
+   ],
+   "etymon_note": "POLLEX KAKA.1A PPN *kaka 'clothlike fibre at the base of coconut fronds' and KAKA.1B 'envelope' (bag, pocket) are sub-sets of one set, so one stone (B8, B9): ʻaʻaniu (frond sheath), ʻaʻapua (arrow bag). Not ʻaʻa 'brave' (*ma-kaka).",
+   "gloss": "sheath, bag",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Fibre from coconut husk\"; \"Bag, pocket, caul... chaff, hull\"; Wiktionary \"clothlike sheath at the base of a coconut frond; pocket, bag\"",
+   "protoform": "PPN *kaka",
+   "spelling": "ʻaʻa"
+  },
+  "ʻele": {
+   "cognates": [
+    [
+     "Māori",
+     "kere"
+    ],
+    [
+     "Tahitian",
+     "ʻereʻere"
+    ],
+    [
+     "Rapa Nui",
+     "kerekere"
+    ]
+   ],
+   "etymon_note": "POLLEX KELE.C PEP *kele(-kele) 'dark, black', written ʻele(ʻele) in POLLEX, so no row matched. Its own stone, never linked to ʻeleʻele (§4.4). Words pōʻele, waiʻele.",
+   "gloss": "dark, black",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) ʻele(ʻele) \"Black\"; Wiktionary \"dark, black\"",
+   "protoform": "PEP *kele",
+   "spelling": "ʻele"
+  },
+  "ʻeleʻele": {
+   "cognates": [
+    [
+     "Māori",
+     "kere"
+    ],
+    [
+     "Tahitian",
+     "ʻereʻere"
+    ],
+    [
+     "Rapa Nui",
+     "kerekere"
+    ]
+   ],
+   "etymon_note": "POLLEX KELE.C PEP *kele(-kele), reduplicated stem as one stone (B7), never linked to ʻele. Word wai ʻeleʻele (ink). Andrews' sense 2 under eleele is never printed (F1).",
+   "gloss": "black",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) ʻele(ʻele) \"Black\"; Wiktionary \"black, dark\"",
+   "protoform": "PEP *kele",
+   "spelling": "ʻeleʻele"
+  },
+  "ʻeli": {
+   "cognates": [
+    [
+     "Māori",
+     "keri"
+    ],
+    [
+     "Sāmoan",
+     "ʻeli"
+    ],
+    [
+     "Tongan",
+     "keli"
+    ]
+   ],
+   "etymon_note": "POLLEX KELI PPN *keli 'dig'. Word hauʻeli.",
+   "gloss": "dig",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Dig\"; Wiktionary \"to dig\"",
+   "protoform": "PPN *keli",
+   "spelling": "ʻeli"
+  },
+  "ʻike": {
+   "cognates": [
+    [
+     "Māori",
+     "kite"
+    ],
+    [
+     "Tahitian",
+     "ʻite"
+    ]
+   ],
+   "etymon_note": "POLLEX KITE.A PPN *kite 'see, know', written ʻike-a in POLLEX, so no row matched. Word ʻikepili (data). Andrews' sense 4 (a biblical euphemism) is never printed (A1).",
+   "gloss": "knowledge",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) ʻike-a \"See, know, feel\"; Wiktionary \"sight; knowledge; to see, to know\"",
+   "protoform": "PPN *kite",
+   "spelling": "ʻike"
+  },
+  "ʻili": {
+   "cognates": [
+    [
+     "Māori",
+     "kiri"
+    ],
+    [
+     "Tahitian",
+     "ʻiri"
+    ],
+    [
+     "Tongan",
+     "kili"
+    ]
+   ],
+   "etymon_note": "POLLEX KILI.1 PPN *kili \"skin; bark\"; \"surface\" is the same word (P&E ʻilikai < PCE *kiri-a-tai \"surface of the sea\"). Not Andrews' ili \"run aground\" (POLLEX HILI, no ʻokina), and the land-division sense is not used. Words hueʻili, ʻililua (skin), ʻilikai, paʻaʻili (surface).",
+   "gloss": "skin, surface",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Skin\"; Wiktionary \"skin; peel, bark, rind; surface\"; POLLEX (Pukui & Elbert 1986) ʻilikai \"surface of the sea\"",
+   "protoform": "PPN *kili",
+   "spelling": "ʻili"
+  },
+  "ʻino": {
+   "cognates": [
+    [
+     "Māori",
+     "kino"
+    ],
+    [
+     "Tahitian",
+     "ʻino"
+    ],
+    [
+     "Rapa Nui",
+     "kino"
+    ]
+   ],
+   "etymon_note": "POLLEX KINO PPN *kino \"bad\"; one Wiktionary entry. Tongan kinohaʻa (POLLEX) left out on purpose. Words lokoʻino, manawaʻino, moeʻino.",
+   "gloss": "bad",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Wicked, spoiled, ugly\"; Wiktionary \"bad, wicked\"",
+   "protoform": "PPN *kino",
+   "spelling": "ʻino"
+  },
+  "ʻiʻiwi": {
+   "cognates": [],
+   "etymon_note": "A bird name with no POLLEX set and no Wiktionary etymology, so no ancestor is printed. Word huluʻiʻiwi.",
+   "gloss": "scarlet honeycreeper",
+   "gloss_source": "Wiktionary \"iiwi, scarlet honeycreeper\"; Andrews–Parker 1922 bracket \"iiwi, a small red bird\" (huluiiwi)",
+   "protoform": "",
+   "spelling": "ʻiʻiwi"
+  },
+  "ʻiʻo#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kiko"
+    ],
+    [
+     "Tahitian",
+     "ʻiʻo"
+    ],
+    [
+     "Sāmoan",
+     "ʻiʻo"
+    ]
+   ],
+   "etymon_note": "POLLEX KIKO.A PPN *kiko \"flesh\" quotes P&E's single ʻiʻo entry, which runs from \"flesh, meat\" through \"essence, substance\" to \"true, genuine\". So Wiktionary's ʻiʻo#1 \"true\" (\"perhaps from the preceding\") is the same etymon as ʻiʻo#0 \"flesh\" and is merged into it (B8, B9: one root, per-word gloss). Word manaʻoʻiʻo.",
+   "gloss": "true, genuine",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) ʻiʻo \"... essence, substance; heart or gist of a matter; true, genuine\"; Wiktionary ʻiʻo \"true, genuine\"; Andrews–Parker 1922 bracket \"io, real; substantial\"",
+   "protoform": "PPN *kiko",
+   "spelling": "ʻiʻo"
+  },
+  "ʻohana#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kōhanga"
+    ],
+    [
+     "Tahitian",
+     "ʻōfaʻa"
+    ]
+   ],
+   "etymon_note": "POLLEX KOO-FAGA PCE *koo-faŋa \"nest\"; Wiktionary agrees (PPN *kofa-ŋa \"nest\"). One derived stem as one stone (B6); not ʻohā, a different spelling. Māori is written kōhanga as Wiktionary gives it (POLLEX koowhanga). ʻohana#1 \"family prayers\" is not used. Word lunaʻohana.",
+   "gloss": "family",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Family, kin group; related\"; Wiktionary \"family, relatives, kin group\"",
+   "protoform": "PCE *koo-faŋa",
+   "spelling": "ʻohana"
+  },
+  "ʻohā": {
+   "cognates": [],
+   "etymon_note": "Wiktionary derives it from PPN *kofa, but POLLEX has no Hawaiian ʻohā row, so no ancestor is printed. Andrews' oha \"lovesick\" and \"salutation\" are another word (POLLEX OFA oha \"affection, greeting\", no ʻokina or kahakō) and never reach this stone. Word ʻohākulaʻi.",
+   "gloss": "taro offshoot",
+   "gloss_source": "Wiktionary \"taro corm growing from the older root; offspring\"; Andrews–Parker 1922 \"small sprigs of taro that grow on the sides of the older roots\"",
+   "protoform": "",
+   "spelling": "ʻohā"
+  },
+  "ʻoi": {
+   "cognates": [
+    [
+     "Māori",
+     "koi"
+    ],
+    [
+     "Tahitian",
+     "ʻoi"
+    ],
+    [
+     "Marquesan",
+     "koi"
+    ]
+   ],
+   "etymon_note": "POLLEX KOI.2 PCE *koi \"sharp\". Andrews has \"superiority, be better\" and \"sharp edge, be sharp\" in one entry, and Wiktionary links ʻoihana's ʻoi \"main\" to the *koi entry, so it is one word. P&E should confirm that \"best\" is not a separate homograph. Not KOI.3 PPN *koi \"while\" (a particle). Word ʻoihana.",
+   "gloss": "main, foremost",
+   "gloss_source": "Wiktionary ʻoihana \"ʻoi (main) + hana (work)\"; Andrews–Parker 1922 oi n. \"excess; superiority\", v. \"to be more; to be better\" (one entry with \"sharp\")",
+   "protoform": "PCE *koi",
+   "spelling": "ʻoi"
+  },
+  "ʻoli": {
+   "cognates": [
+    [
+     "Tahitian",
+     "ʻori"
+    ],
+    [
+     "Sāmoan",
+     "ʻoliʻoli"
+    ],
+    [
+     "Rapa Nui",
+     "kori"
+    ]
+   ],
+   "etymon_note": "POLLEX KOLI.1B PPN *koli \"to dance; rejoice, be happy\". P&E (via POLLEX) splits hauʻoli as hau/ʻoli, so it is ʻoli \"joy\", not Andrews' oli \"chant\". The Māori form POLLEX lists is left out on purpose (irregular, and its sense must not be printed). Same POLLEX set as ʻoni (KOLI.1A), but a different spelling, so a different stone (B10). Word hauʻoli.",
+   "gloss": "joy",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Joy, happiness, pleasure; happy, joyful\"; Wiktionary \"joy, happiness, pleasure\"",
+   "protoform": "PPN *koli",
+   "spelling": "ʻoli"
+  },
+  "ʻoniʻoni": {
+   "cognates": [
+    [
+     "Māori",
+     "konikoni"
+    ]
+   ],
+   "etymon_note": "Reduplication of ʻoni (Wiktionary), which POLLEX files under KOLI.1A PNP *koli \"to move\" (variant *ko(l,n)i; Wiktionary writes *koni). Like other reduplicated stems it is a stone of its own (B7) and never links to ʻoli. 8 characters, at B11's cap. Word kiʻiʻoniʻoni.",
+   "gloss": "moving",
+   "gloss_source": "Wiktionary \"to move back and forth; to move constantly; movement\"; POLLEX (Pukui & Elbert 1986) ʻoni \"to move, fidget, wriggle\"",
+   "protoform": "PNP *koli",
+   "spelling": "ʻoniʻoni"
+  },
+  "ʻuala": {
+   "cognates": [
+    [
+     "Māori",
+     "kūmara"
+    ],
+    [
+     "Sāmoan",
+     "ʻumala"
+    ],
+    [
+     "Tongan",
+     "kumala"
+    ]
+   ],
+   "etymon_note": "POLLEX KUMALA.1 PN *ku(u)mala \"sweet potato\" (from the local POLLEX page cache; the batch input had no row). POLLEX marks the Hawaiian form Problematic because the m is lost, but the etymon is not in doubt; Wiktionary agrees (PPN *kumala). Word ʻualakahiki.",
+   "gloss": "sweet potato",
+   "gloss_source": "Wiktionary \"sweet potato\"; POLLEX KUMALA.1 (Pukui & Elbert) ʔU(w)ala \"Sweet potato (Ipomoea batatas)\"",
+   "protoform": "PPN *kumala",
+   "spelling": "ʻuala"
+  },
+  "ʻuhane": {
+   "cognates": [
+    [
+     "Rapa Nui",
+     "kuhane"
+    ],
+    [
+     "Marquesan",
+     "kuhane"
+    ]
+   ],
+   "etymon_note": "POLLEX KUHANE PEP *kuhane \"ghost, soul, spirit\"; an East Polynesian word, so there are no Māori, Tahitian or Sāmoan cognates in the set. Word moeʻuhane.",
+   "gloss": "soul, spirit",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Soul, spirit, ghost\"; Wiktionary \"soul, spirit\"",
+   "protoform": "PEP *kuhane",
+   "spelling": "ʻuhane"
+  },
+  "ʻuku#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kutu"
+    ],
+    [
+     "Tahitian",
+     "ʻutu"
+    ],
+    [
+     "Sāmoan",
+     "ʻutu"
+    ]
+   ],
+   "etymon_note": "POLLEX KUTU.1 PPN *kutu \"louse\". Not Andrews' uku \"pay, wages\" (POLLEX UTU.1A, no ʻokina); ʻuku#1 \"small\" is not used. Words ʻukulele, ʻukupoʻo.",
+   "gloss": "louse, flea",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Louse\"; Wiktionary \"louse, flea (insect)\"",
+   "protoform": "PPN *kutu",
+   "spelling": "ʻuku"
+  },
+  "ʻula#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kura"
+    ],
+    [
+     "Tahitian",
+     "ʻura"
+    ],
+    [
+     "Sāmoan",
+     "ʻula"
+    ]
+   ],
+   "etymon_note": "POLLEX KULA.1A PPN *kula \"red\". KULA.1C \"sacred, regal\" (Wiktionary ʻula#1) and Wiktionary's ʻula#2 \"blood\" are the same set, so one root (B8). ʻahuʻula links here whether P&E reads it \"red\" (Andrews) or \"sacred\" (Wiktionary); its per-word gloss waits for P&E (B9). Words hamoʻula, kōʻula, maʻaweʻula, ʻahuʻula.",
+   "gloss": "red",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Red\"; Wiktionary \"red (color)\"",
+   "protoform": "PPN *kula",
+   "spelling": "ʻula"
+  },
+  "ʻula?alaʻula": {
+   "cognates": [],
+   "etymon_note": "Unresolved. The word is spelled alaula with no ʻokina (the review counts that spelling as corroborated, and words.js ships it), so the stone is ULA, not ʻula \"red\" (B10). The ʻ in the id is the old guess and is kept only because ids are never changed silently. P&E's ula \"flame\" (POLLEX ULA.1A PPN *ula) would fit \"dawn light, sunset glow\", but no source says which ula alaula uses, so no gloss or ancestor is printed. Word alaʻula.",
+   "gloss": "",
+   "gloss_source": "none settled: Andrews–Parker 1922 bracket \"ula, red\" (Andrews marks no ʻokina); POLLEX (Pukui & Elbert 1986) ula \"flame, to flame\"",
+   "protoform": "",
+   "spelling": "ula"
+  },
+  "ʻulu": {
+   "cognates": [
+    [
+     "Māori",
+     "kuru"
+    ],
+    [
+     "Tahitian",
+     "ʻuru"
+    ],
+    [
+     "Sāmoan",
+     "ʻulu"
+    ]
+   ],
+   "etymon_note": "POLLEX KULU.1 PPN *kulu \"breadfruit\". Not ulu \"grow\" (no ʻokina, batch-07's ulu#0). Words lauʻulu, ʻulukahiki.",
+   "gloss": "breadfruit",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Breadfruit\"; Wiktionary \"breadfruit\"",
+   "protoform": "PPN *kulu",
+   "spelling": "ʻulu"
+  },
+  "ʻā#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kā"
+    ],
+    [
+     "Tahitian",
+     "ʻā"
+    ],
+    [
+     "Rapa Nui",
+     "kā"
+    ]
+   ],
+   "etymon_note": "POLLEX KAHA.1 PPN *kaha \"to burn\". ʻā#1 (drive animals, booby, damselfish, the letter) is unrelated and not used. Word oneʻā (spelling inferred from Andrews' bracket).",
+   "gloss": "burning, fire",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Fiery, burning; fire: to burn, blaze\"; Wiktionary \"fire, burning; to burn\"",
+   "protoform": "PPN *kaha",
+   "spelling": "ʻā"
+  },
+  "ʻāina": {
+   "cognates": [
+    [
+     "Māori",
+     "kāinga"
+    ],
+    [
+     "Tahitian",
+     "ʻāiʻa"
+    ],
+    [
+     "Sāmoan",
+     "ʻāiga"
+    ]
+   ],
+   "etymon_note": "POLLEX KAAIGA PPN *kaaiŋa \"place of residence, home\". Andrews' aina \"meal; refuse\" is modern ʻaina, another spelling and stone. Words anaʻāina, hakuʻāina, hoaʻāina, kahuʻāina, kiaʻāina, komoʻāina, kuaʻāina, kālaiʻāina, mokuʻāina.",
+   "gloss": "land",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Land, earth\"; Wiktionary \"land (earth; country; real estate)\"",
+   "protoform": "PPN *kaaiŋa",
+   "spelling": "ʻāina"
+  },
+  "ʻākau": {
+   "cognates": [
+    [
+     "Māori",
+     "katau"
+    ],
+    [
+     "Tahitian",
+     "ʻatau"
+    ]
+   ],
+   "etymon_note": "POLLEX KATAU PCE *katau \"right (not left)\". Word limaʻākau.",
+   "gloss": "right side",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Right (not left)\"; Wiktionary \"right (not left); north\"",
+   "protoform": "PCE *katau",
+   "spelling": "ʻākau"
+  },
+  "ʻē#1": {
+   "cognates": [
+    [
+     "Māori",
+     "kē"
+    ],
+    [
+     "Tahitian",
+     "ʻē"
+    ],
+    [
+     "Tongan",
+     "kehe"
+    ]
+   ],
+   "etymon_note": "POLLEX KEHE PPN *kehe \"different, other\". P&E's kūʻē is a POLLEX compound in its own right (PPN *tuqu-kehe \"be different\"). Not POLLEX EE \"yes\" or Wiktionary's ʻē#0 (the letter). Word kūʻē.",
+   "gloss": "different",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Different\"; Wiktionary \"strange, different\"",
+   "protoform": "PPN *kehe",
+   "spelling": "ʻē"
+  },
+  "ʻēʻē#0": {
+   "cognates": [
+    [
+     "Māori",
+     "kē"
+    ],
+    [
+     "Tahitian",
+     "ʻē"
+    ],
+    [
+     "Tongan",
+     "kehe"
+    ]
+   ],
+   "etymon_note": "Reduplication of ʻē \"different\" < PPN *kehe (Wiktionary; Andrews sets ee beside e in kuee). The only POLLEX ʻēʻē row, KEEKEE PCE *keekee, is the other homograph (ʻēʻē#1) and is not attached. A reduplicated stem as one stone (B7), not linked to ʻē#1. Word kūʻēʻē.",
+   "gloss": "contrary",
+   "gloss_source": "Wiktionary \"peculiar; contrary, opposite\"; Andrews–Parker 1922 ee adv. \"in a contrary manner; adversely\"",
+   "protoform": "PPN *kehe",
+   "spelling": "ʻēʻē"
+  },
+  "ʻōlelo": {
+   "cognates": [
+    [
+     "Māori",
+     "kōrero"
+    ],
+    [
+     "Tahitian",
+     "ʻōrero"
+    ]
+   ],
+   "etymon_note": "POLLEX KOO-LELO PNP *koo-lelo \"speak, orate, recite\", which settles Wiktionary's two options in favour of the *kolelo one (Māori kōrero). Words hakuʻōlelo, hoaʻōlelo, huaʻōlelo, kakaʻōlelo, lunaʻōlelo, moʻoʻōlelo, poʻoʻōlelo, ʻahaʻōlelo, ʻōleloaʻo, ʻōlelopaʻa.",
+   "gloss": "speech, word",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Language, speech, word\"; Wiktionary \"language, speech; word, term\"",
+   "protoform": "PNP *koo-lelo",
+   "spelling": "ʻōlelo"
+  },
+  "ʻōpū": {
+   "cognates": [
+    [
+     "Māori",
+     "kōpū"
+    ],
+    [
+     "Tahitian",
+     "ʻōpū"
+    ],
+    [
+     "Rapa Nui",
+     "kōpū"
+    ]
+   ],
+   "etymon_note": "POLLEX KOOPUU.B PEC *koopuu \"gullet, stomach, belly, guts\"; Wiktionary writes PPN *kuupoo. The gloss leads with \"belly\". The other anatomical senses in the entry are never printed. Words ʻōpūao, ʻōpūhao, ʻōpūhue.",
+   "gloss": "belly",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Belly, stomach, abdomen\"; Wiktionary \"stomach, belly\"",
+   "protoform": "PEC *koopuu",
+   "spelling": "ʻōpū"
+  },
+  "ʻōʻō#1": {
+   "cognates": [
+    [
+     "Māori",
+     "kō"
+    ],
+    [
+     "Tahitian",
+     "ʻō"
+    ],
+    [
+     "Sāmoan",
+     "ʻoso"
+    ]
+   ],
+   "etymon_note": "POLLEX KOHO PPN *koho \"digging stick, husking stake\". Not ʻōʻō#0, the bird (onomatopoeic; POLLEX KOOKOO.1 PEC *kookoo). ʻō \"pierce\" is the same set but a different spelling and stone. Words ʻōʻōahi, ʻōʻōhao, ʻōʻōhou.",
+   "gloss": "digging stick",
+   "gloss_source": "POLLEX (Pukui & Elbert 1986) \"Digging-stick\"; Wiktionary \"spade; digging stick\"",
+   "protoform": "PPN *koho",
+   "spelling": "ʻōʻō"
   }
  },
  "words": {
@@ -3165,6 +6319,11 @@
    "reason": "POLLEX (P&E) alahaka \"plank bridge, ladder\" < PCE *ara-fata \"bridge or ladder\", cf. PPN *fata \"shelf\": haka \"shelf, platform\" (haka#0), not haka \"gap\".",
    "sense_a": "ala#0",
    "sense_b": "haka#0"
+  },
+  "anilā": {
+   "reason": "lā#2 (day) merged into lā#1: POLLEX sun (LAQAA.A) and day (LAQAA.B) are one set, PPN *laqaa; Wiktionary derives both from *laqa.",
+   "sense_a": "ani",
+   "sense_b": "lā#1"
   },
   "aumoe": {
    "reason": "POLLEX (P&E) and Wiktionary derive aumoe from *aqu-mohe \"fast asleep\", not *qau \"current\"; Andrews reads au \"time\". Split off the current stone, left unresolved.",
@@ -3175,6 +6334,11 @@
    "reason": "Form ʻauwaʻa; POLLEX (P&E) glosses ʻau \"group (in ʻau waʻa)\" < PPN *kau \"group of people\". Not au \"current\".",
    "sense_a": "ʻau#group",
    "sense_b": "waʻa"
+  },
+  "haomanamana": {
+   "reason": "manamana#1 (branching) merged into manamana#0: both are reduplicated *maŋa \"branch\" (Wiktionary; POLLEX MAGA-MAGA.B, from *maŋa); Andrews reads the finger as the branch of the hand.",
+   "sense_a": "hao#0",
+   "sense_b": "manamana#0"
   },
   "hauʻoli": {
    "reason": "POLLEX (P&E) lists hau/ʻoli under PPN *sau \"(in compounds) temperament\"; Wiktionary agrees. Not hau \"dew\" or \"hibiscus\".",
@@ -3209,6 +6373,20 @@
    "reason": "Resolved: POLLEX (P&E) kala hale 'house gable' < PPN *tara 'end wall of a house', and Andrews' kala n. 3 'the ends of a house'; a fifth kala, apart from the *tala sets.",
    "sense_a": "kala#gable"
   },
+  "kaʻawale": {
+   "reason": "Resolves wale?kaʻawale: Wiktionary's kaʻa + wale 'alone' and P&E via POLLEX (WALE.3) name the particle 'only, alone', not the secretion noun (WALE.1). B1 still decides whether the word ships (default: drop).",
+   "sense_b": "wale#only"
+  },
+  "keikipapa": {
+   "reason": "Andrews bracket \"papa, an ancestor\" is the genealogy/stratum sense of PAPA.1C (same set as board); Wiktionary splits papa senses by entry, not etymon (it splits class and list too). P&E to confirm.",
+   "sense_a": "keiki",
+   "sense_b": "papa#0"
+  },
+  "kikolā": {
+   "reason": "lā#2 (day) merged into lā#1: POLLEX LAQAA.A sun / LAQAA.B day are one set.",
+   "sense_a": "kiko",
+   "sense_b": "lā#1"
+  },
   "koikahi": {
    "reason": "Resolved: Andrews' koi n. 'ax; adze' sends the reader to its compounds; the tool word takes koʻi 'adze' (P&E spelling, PPN *toki), as the form koʻikahi already does.",
    "sense_a": "koʻi"
@@ -3220,7 +6398,7 @@
   "kūkulupapa": {
    "reason": "kūkulu#1 merged into kūkulu#0: POLLEX (P&E) glosses one kūkulu 'pillar, post; to build a house' (PNP *tulu-tulu).",
    "sense_a": "kūkulu#0",
-   "sense_b": "papa#1"
+   "sense_b": "papa#0"
   },
   "laelua": {
    "reason": "lae#1 merged into lae#0: POLLEX forehead (LAQE.A) and promontory (LAQE.B) are one set, PPN *laqe.",
@@ -3250,6 +6428,94 @@
   "lunakoa": {
    "reason": "Split of koa#0: 'soldier' (Andrews' bracket) belongs with brave/warrior under PPN *toqa (POLLEX), not with the koa tree (*toa).",
    "sense_b": "koa#1"
+  },
+  "lāhana": {
+   "reason": "lā#2 (day) merged into lā#1: POLLEX LAQAA.A sun / LAQAA.B day are one set.",
+   "sense_a": "lā#1",
+   "sense_b": "hana#0"
+  },
+  "manaʻoʻiʻo": {
+   "reason": "Merge ʻiʻo#1 into ʻiʻo#0: POLLEX KIKO.A quotes P&E's one ʻiʻo entry, which gives \"true, genuine\" together with \"flesh\", so it is one etymon, PPN *kiko. The stone keeps the gloss \"true, genuine\" for this word. manaʻo is unchanged.",
+   "sense_a": "manaʻo",
+   "sense_b": "ʻiʻo#0"
+  },
+  "moʻoaliʻi": {
+   "reason": "Andrews bracket [Moo, a line, and alii, chief]: moʻo \"line, succession\", not the lizard.",
+   "sense_a": "moʻo#line",
+   "sense_b": "aliʻi"
+  },
+  "moʻokanaka": {
+   "reason": "Andrews: a genealogy or list of the people; moʻo \"line\" (bracket OCR live = line).",
+   "sense_a": "moʻo#line",
+   "sense_b": "kanaka"
+  },
+  "moʻokupuna": {
+   "reason": "Andrews bracket [Moo, line, and kupuna]: line of ancestors.",
+   "sense_a": "moʻo#line",
+   "sense_b": "kupuna"
+  },
+  "moʻokūʻauhau": {
+   "reason": "Andrews bracket [Moo, a line, and kuauhau]: line of descent.",
+   "sense_a": "moʻo#line",
+   "sense_b": "kūʻauhau"
+  },
+  "moʻoʻōlelo": {
+   "reason": "Andrews bracket [Moo, line, and olelo, discourse]; moʻolelo is its contraction (succession of talk).",
+   "sense_a": "moʻo#line",
+   "sense_b": "ʻōlelo"
+  },
+  "palaimaka": {
+   "reason": "Andrews bracket [Palai, to turn away, and maka, face] and Andrews verb palai \"turn the face away\"; not fern or fry.",
+   "sense_a": "palai#avert",
+   "sense_b": "maka#0"
+  },
+  "panepoʻo": {
+   "reason": "POLLEX PANE.A (P&E pane \"hind part of the head\") and Andrews pane \"joining of head and neck\" settle it: not pane \"answer\".",
+   "sense_a": "pane#head",
+   "sense_b": "poʻo"
+  },
+  "panipū": {
+   "reason": "pū \"gun\" is a semantic extension of pū \"conch\" (Wiktionary, Andrews): pū#2 renamed to pū#1, PPN *puu.",
+   "sense_a": "pani",
+   "sense_b": "pū#1"
+  },
+  "papamanamana": {
+   "reason": "manamana#1 (branching) merged into manamana#0: one etymon, reduplicated *maŋa \"branch\".",
+   "sense_a": "papa#0",
+   "sense_b": "manamana#0"
+  },
+  "pipiwai": {
+   "reason": "Andrews bracket \"pipi, to percolate, and wai, water\"; neither pipi oyster nor pipi beef. Stone spelled pīpī.",
+   "sense_a": "pipi#seep",
+   "sense_b": "wai#0"
+  },
+  "pīkai": {
+   "reason": "Andrews bracket \"pi, to sprinkle, and kai, salt water\"; not pī \"stingy\".",
+   "sense_a": "pī#sprinkle",
+   "sense_b": "kai"
+  },
+  "waʻapā": {
+   "reason": "Andrews bracket \"pa, a board\"; pā \"flat object: board, plate\" (POLLEX PAA.4), not fence or touch.",
+   "sense_a": "waʻa",
+   "sense_b": "pā#plate"
+  },
+  "wiliʻau": {
+   "reason": "Resolves ʻau?wiliʻau: form wiliau has no ʻokina, so not ʻau 'swim'; Andrews' au n. 'current... circular motion, as caused by an eddy' is the word's own meaning. B10 names au 'current' (wiliau); batch-00's au (PPN *qau).",
+   "sense_a": "wili",
+   "sense_b": "au"
+  },
+  "ʻaumakua": {
+   "reason": "Split from ʻau#0: Wiktionary reads ʻau 'stem, stalk', POLLEX's *kau-matua only compares *kau.2 'group'. Different homographs named (P18), so no link to ʻaulima or ʻaumoana until P&E's Lit.",
+   "sense_a": "ʻau?ʻaumakua"
+  },
+  "ʻaumoana": {
+   "reason": "Resolves ʻau?ʻaumoana: POLLEX lists P&E ʻau-moana 'sailor' as CE *kau-moana << PN *kau.2 'group, company' (and KAU.2B >> *kau-moana); Andrews' 'au, to swim' is a 1922 bracket (F2). Shares batch-00's ʻau#group with auwaʻa.",
+   "sense_a": "ʻau#group"
+  },
+  "ʻauwai": {
+   "reason": "Withdrawn from ʻau#1 as the adjudication asks: Wiktionary 'swim' vs Andrews 'furrow', not in POLLEX; 'a sense too weak to support a Lit. is too weak to support a stone link'. wai#0 unchanged.",
+   "sense_a": "ʻau?ʻauwai",
+   "sense_b": "wai#0"
   }
  }
 }

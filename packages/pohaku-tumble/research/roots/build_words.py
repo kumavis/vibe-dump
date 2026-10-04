@@ -206,12 +206,20 @@ for s in ship:
 FIELDS = {'lani', 'kai', 'ʻāina', 'ulu', 'kanaka', 'hana', 'naʻau', 'hele'}
 words = []
 seen = set()
+misspelt = []
 for s in ship:
     r = s['row']
-    form = okina(r.get('form') or r['word'])
+    # §4.4: common nouns in lower case (Hōkūloa the star is written hōkūloa on a stone pair)
+    form = okina(r.get('form') or r['word']).lower()
     if form in seen:
         continue
+    # the two stones must spell the word, or a turn would print letters the word does not have
+    if roots[s['id_a']]['s'] + roots[s['id_b']]['s'] != form.replace(' ', ''):
+        misspelt.append(f"{form} ≠ {roots[s['id_a']]['s']}·{roots[s['id_b']]['s']}")
+        dropped['stones do not spell the word'] += 1
+        continue
     seen.add(form)
+    s['shipped'] = True
     field = okina(r.get('field'))
     words.append({
         'w': form,
@@ -223,6 +231,10 @@ for s in ship:
         'ev': 'keep' if s['verdict'] == 'keep' else 'pending',
         'nodeal': bool((overrides.get(r.get('word', '')) or {}).get('nodeal')),
     })
+
+used = {x['a'] for x in words} | {x['b'] for x in words}
+roots = {k: v for k, v in roots.items() if k in used}
+ship = [s for s in ship if s.get('shipped')]
 
 # §4.4: the Hawaiian fields (the word, the stone spellings) use U+02BB only, NFC
 APOS = re.compile("['‘’ʼ`]")
@@ -245,8 +257,10 @@ with open(os.path.join(OUT or REVIEW, 'wordlist.tsv'), 'w', encoding='utf-8') as
     f.write('word\tform\tstone_a\tstone_b\tgloss\tfield\tevidence\tverdict\n')
     for s in ship:
         r = s['row']
-        f.write('\t'.join([r['word'], okina(r.get('form') or r['word']), s['id_a'], s['id_b'], r.get('gloss', ''), r.get('field', ''), r.get('evidence', ''), s['verdict']]) + '\n')
+        f.write('\t'.join([r['word'], okina(r.get('form') or r['word']).lower(), s['id_a'], s['id_b'], r.get('gloss', ''), r.get('field', ''), r.get('evidence', ''), s['verdict']]) + '\n')
 
 print(f'{len(words)} words ({sum(x["ev"] == "keep" for x in words)} keep, {sum(x["ev"] == "pending" for x in words)} pending, {len(reps)} repeats); '
       f'{len(roots)} stones ({sum(1 for k in roots if "?" in k)} isolated unresolved, {sum(1 for v in roots.values() if v.get("provisional"))} provisional)')
 print('not shipped:', dict(dropped))
+if misspelt:
+    print('stones do not spell:', '; '.join(misspelt))
