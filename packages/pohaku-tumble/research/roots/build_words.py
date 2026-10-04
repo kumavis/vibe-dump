@@ -51,6 +51,8 @@ rows = list(csv.DictReader(open(os.path.join(REVIEW, 'review.tsv'), encoding='ut
 compounds = {r['word']: r for r in csv.DictReader(open(os.path.join(HERE, 'compounds.tsv'), encoding='utf-8'), delimiter='\t')}
 overrides = load_opt('overrides.json') or {}
 glossary = load_opt('glossary.json') or {}
+# fixes from the build reviews, keyed by the word as shipped: rephrased glosses, sense changes
+FIXES = load_opt('fixes.json') or {}
 W = json.load(open(os.path.join(C, 'wiktionary.json'), encoding='utf-8'))
 heads = W['heads']
 POLLEX = json.load(open(os.path.join(C, 'pollex', 'hawaiian-reflexes.json'), encoding='utf-8'))
@@ -111,7 +113,8 @@ for r in rows:
         dropped['opaque'] += 1
         continue
     a, b = r['split'].split('·')
-    fix = (glossary.get('words') or {}).get(r['word'], {})
+    fix = {**(glossary.get('words') or {}).get(r['word'], {}),
+           **(FIXES.get('words') or {}).get(okina(r.get('form') or r['word']).lower(), {})}
     sa, sb = fix.get('sense_a', r['sense_a']), fix.get('sense_b', r['sense_b'])
     if max(len(a), len(b)) > 8:
         dropped['stone over 8 letters'] += 1
@@ -172,8 +175,12 @@ for s in ship:
         if g:
             roots[sid] = {'s': okina(g['spelling']), 'g': g['gloss'], 'pp': g.get('protoform', ''), 'cog': g.get('cognates', [])}
             continue
-        # provisional: Wiktionary homograph gloss, POLLEX protoform by gloss overlap
         base = okina(root)
+        if '?' in sid:
+            # unresolved and uncurated: the sources disagree on the root, so print no sense
+            roots[sid] = {'s': base, 'g': '', 'pp': '', 'cog': []}
+            continue
+        # provisional: Wiktionary homograph gloss, POLLEX protoform by gloss overlap
         hs = homographs(base)
         m = re.search(r'#(\d+)$', sid)
         k = int(m.group(1)) if m else 0
@@ -200,6 +207,22 @@ for s in ship:
                         cog.append([label, f])
         roots[sid] = {'s': base, 'g': gloss, 'pp': pp, 'cog': cog, 'provisional': True}
 
+# An ancestor is printed only at a level Hawaiian descends from. POLLEX's EC is
+# Ellicean (the Northern and Equatorial Outliers), SO Samoic-Outlier, TA Tahitic.
+ANCESTRAL = {'PAN', 'PMP', 'POC', 'PEO', 'PCP', 'PPN', 'PNP', 'PCE', 'PEP', 'PMQ'}
+for v in roots.values():
+    if v['pp'] and v['pp'].split()[0] not in ANCESTRAL:
+        v['pp'] = ''
+
+# An unresolved stone has no curated spelling: it is spelled as its word writes it
+for s in ship:
+    form = okina(s['row'].get('form') or s['row']['word']).lower().replace(' ', '')
+    a, b = s['id_a'], s['id_b']
+    if '?' in a and '?' not in b and form.endswith(roots[b]['s']):
+        roots[a]['s'] = form[:len(form) - len(roots[b]['s'])]
+    elif '?' in b and '?' not in a and form.startswith(roots[a]['s']):
+        roots[b]['s'] = form[len(roots[a]['s']):]
+
 
 # ── words ─────────────────────────────────────────────────────────────────
 
@@ -225,22 +248,26 @@ for s in ship:
         'w': form,
         'a': s['id_a'],
         'b': s['id_b'],
-        # English possessives take a typographic apostrophe; Hawaiian never does (§4.4)
-        'g': nfc((r.get('gloss') or '').strip()).replace("'", '’'),
+        'g': nfc((FIXES.get('glosses') or {}).get(form) or (r.get('gloss') or '').strip()),
         'f': field if field in FIELDS else 'hele',
         'ev': 'keep' if s['verdict'] == 'keep' else 'pending',
-        'nodeal': bool((overrides.get(r.get('word', '')) or {}).get('nodeal')),
+        # E1/E3 rulings; and (build default) coinages for introduced things never open the
+        # board, so the first view is the older vocabulary and 'garage' arrives by a turn
+        'nodeal': bool((overrides.get(r.get('word', '')) or {}).get('nodeal'))
+                  or r.get('register') in ('19th-century coinage', 'modern coinage'),
     })
 
 used = {x['a'] for x in words} | {x['b'] for x in words}
 roots = {k: v for k, v in roots.items() if k in used}
 ship = [s for s in ship if s.get('shipped')]
 
-# §4.4: the Hawaiian fields (the word, the stone spellings) use U+02BB only, NFC
-APOS = re.compile("['‘’ʼ`]")
-bad = [x['w'] for x in words if APOS.search(x['w']) or nfc(x['w']) != x['w']]
-bad += [v['s'] for v in roots.values() if APOS.search(v['s']) or nfc(v['s']) != v['s']]
-assert not bad, f'apostrophe or non-NFC in Hawaiian data: {bad[:5]}'
+# §4.4: no apostrophe of any kind anywhere in the data (an English ’ beside an ʻokina
+# reads as a misspelling at caption size), and everything NFC
+APOS = re.compile("['‘’ʼ`´ʔ]")
+texts = [x[k] for x in words for k in ('w', 'g')]
+texts += [t for v in roots.values() for t in (v['s'], v['g'], v['pp'], *[f for _, f in v['cog']])]
+bad = [t for t in texts if APOS.search(t) or nfc(t) != t]
+assert not bad, f'apostrophe or non-NFC in the data: {bad[:5]}'
 
 # F1: English that must never reach a card (Andrews' 1922 wording, §4.3 senses, put-downs)
 BANNED = re.compile(r'\b(idol|heathen|holy water|astrolog|mistress|dumb|negro|black-skinned|hell|sex|penis|vagin|genital'

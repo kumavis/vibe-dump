@@ -1,0 +1,22 @@
+{
+ "_about": "Fixes from the build reviews (pohaku-build workflow), applied by build_words.py after the curation. glosses: card glosses rephrased so no English apostrophe sits beside an ʻokina (DESIGN §4.4). words: per-word sense changes.",
+ "glosses": {
+  "hale aliʻi": "house of a chief; palace",
+  "hoahanauna": "fellow kin; relatives",
+  "hoahānau": "cousin; kin of the same generation",
+  "hua moa": "hen egg",
+  "kiaʻipoʻo": "bodyguard of a king",
+  "koʻikahi": "wood plane",
+  "kuahao": "anvil",
+  "lā hana": "workday; day of work",
+  "lāʻau kia": "limed stick for catching birds",
+  "pale kai": "breakwater; ship railing",
+  "paʻa kāhili": "kāhili bearer, attendant of a chief"
+ },
+ "words": {
+  "makaʻala": {
+   "sense_b": "unresolved",
+   "reason": "ʻala on its own is 'fragrant' and 'awake' is ala (PPN *q leaves no ʻokina), so the stone cannot be glossed 'awake' without teaching a false root; left unresolved until Pukui & Elbert's Lit. settles it (DECISIONS B10)."
+  }
+ }
+}
