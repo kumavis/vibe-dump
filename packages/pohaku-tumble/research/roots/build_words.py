@@ -27,7 +27,9 @@ import unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REVIEW = os.path.join(HERE, '..', 'review')
-DATA = os.path.join(HERE, '..', '..', 'src', 'data')
+# POHAKU_OUT=<dir> writes everything there instead, for a dry run beside a live build
+OUT = os.environ.get('POHAKU_OUT')
+DATA = OUT or os.path.join(HERE, '..', '..', 'src', 'data')
 C = os.path.join(HERE, '.cache')
 
 
@@ -127,6 +129,16 @@ if os.path.exists(rp):
             ship.append({'row': {**r, 'split': f'{base}·{base}'}, 'a': base, 'b': base, 'sa': r['sense'], 'sb': r['sense'], 'verdict': r['verdict']})
             reps.append(r['word'])
 
+# B6, one form per word: a shipped repeat (waiʻeleʻele's ʻeleʻele) is a two-stone
+# word, so no other word may carry it as a single stone (research default)
+rep_forms = {okina(s['row'].get('form') or s['row']['word']).replace(' ', '') for s in ship if s['a'] == s['b'] and s['row'].get('base')}
+kept = []
+for s in ship:
+    if not s['row'].get('base') and (okina(s['a']) in rep_forms or okina(s['b']) in rep_forms):
+        dropped['B6 stone is a shipped repeat'] += 1
+        continue
+    kept.append(s)
+ship = kept
 
 # ── stones: one id per root in sense ─────────────────────────────────────
 
@@ -229,7 +241,7 @@ with open(os.path.join(DATA, 'roots.js'), 'w', encoding='utf-8') as f:
     f.write(head + '// id: root in sense ("wai#0"); s: spelling on the stone; g: gloss; pp: Proto-Polynesian ancestor;\n'
             '// cog: cognates [[language, form]]; provisional: gloss and ancestor picked by script, not yet curated.\n')
     f.write('export const ROOTS = ' + json.dumps(roots, ensure_ascii=False, indent=0).replace('\n', '').replace('},"', '},\n"') + '\n')
-with open(os.path.join(REVIEW, 'wordlist.tsv'), 'w', encoding='utf-8') as f:
+with open(os.path.join(OUT or REVIEW, 'wordlist.tsv'), 'w', encoding='utf-8') as f:
     f.write('word\tform\tstone_a\tstone_b\tgloss\tfield\tevidence\tverdict\n')
     for s in ship:
         r = s['row']
