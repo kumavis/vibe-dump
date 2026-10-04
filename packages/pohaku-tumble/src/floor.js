@@ -209,8 +209,7 @@ export class FloorPainter {
 
   prepare(island) {
     this.island = island
-    const K = island.k
-    this.K = K
+    this.K = island.k
     const lines = (ls) => path(ls.map((l) => l.pts ?? l))
     const { sheet } = island
     const frame = new Path2D()
@@ -646,7 +645,7 @@ export class FloorPainter {
   swell(a) {
     const sw = this.island.swell
     const ph = (this.now / sw.period) % 1
-    if (!this.crests || Math.abs(ph - this.crests.ph) * sw.lambda > 0.012) {
+    if (!this.crests || Math.abs(ph - this.crests.ph) * sw.lambda > 0.02) {
       const S = new Float32Array(sw.nx * sw.nz)
       for (let i = 0; i < S.length; i++) {
         S[i] = Number.isFinite(sw.T[i]) ? Math.sin(TAU * (sw.T[i] / sw.lambda - ph)) : -1

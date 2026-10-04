@@ -56,7 +56,7 @@ export function buildIsland(seed, bounds) {
   const u = Math.min(W / 42, D / 29)
   const k = Math.max(0.62, u)
 
-  const compass = placeCompass(bounds, k, rand)
+  const compass = placeCompass(bounds, rand)
   const margin = Math.max(2.2 * k, compass.over + 0.9 * k)
   const sheet = { x0: bounds.x0 - margin, x1: bounds.x1 + margin, z0: bounds.z0 - margin, z1: bounds.z1 + margin }
 
@@ -69,7 +69,7 @@ export function buildIsland(seed, bounds) {
   const ridges = valleys.map((v, i) => traceRidge(shape, heightAt, upland, v, valleys[(i + 1) % valleys.length], k))
 
   const sites = chooseSites(valleys, rand)
-  const grid = heightGrid(sheet, heightAt, k)
+  const grid = heightGrid(sheet, heightAt)
   const lava = lavaFlow(shape, heightAt, upland, valleys[sites.lava], k, rand)
   raiseInside(grid, lava.line, 0.02)
 
@@ -159,7 +159,7 @@ export function buildIsland(seed, bounds) {
       .map((pts, i) => ({ pts: simplify(chaikin(pts, false, 2), 0.01 * k), windward: valleys[i].windward }))
       .filter((s, i) => i !== sites.lava && i !== sites.stream),
     reef,
-    upland,
+    upland: { x: upland.x, z: upland.z, r: upland.r, ring: upland.ring },
     moku: [
       { name: 'Koʻolau', bearing: wrap(shape.mokuSplit[0] + angleSpan(shape.mokuSplit[0], shape.mokuSplit[1]) / 2) },
       { name: 'Kona', bearing: wrap(shape.mokuSplit[1] + angleSpan(shape.mokuSplit[1], shape.mokuSplit[0]) / 2) },
@@ -212,7 +212,7 @@ export function featureAnchor(place, px, pz) {
 // The compass sits in open water off a near corner of the floor, where the
 // opening view and the gallery card can see it, hanging a little past the
 // stones' edge.
-function placeCompass(bounds, k, rand) {
+function placeCompass(bounds, rand) {
   const r = clamp(0.15 * Math.min(bounds.x1 - bounds.x0, bounds.z1 - bounds.z0), 2.1, 3.6)
   const sx = rand() < 0.5 ? -1 : 1
   const inset = 0.7 * r
@@ -1205,7 +1205,7 @@ function swellField(sheet, grid, seaDist, reefAt, k) {
 
 // ── grids ───────────────────────────────────────────────────────────────
 
-function heightGrid(sheet, heightAt, k) {
+function heightGrid(sheet, heightAt) {
   const step = clamp((sheet.x1 - sheet.x0) / 320, 0.1, 0.15)
   const nx = Math.ceil((sheet.x1 - sheet.x0) / step) + 1
   const nz = Math.ceil((sheet.z1 - sheet.z0) / step) + 1
