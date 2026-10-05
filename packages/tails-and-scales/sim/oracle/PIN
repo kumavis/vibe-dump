@@ -17,5 +17,5 @@
 # code produced the new hashes, in the same push; `node sim/parity.mjs --pin`
 # must pass afterwards. (From R6 the reference runner is sim/run.mjs: revisit
 # this rule there.)
-WORKTREE
-hooks WORKTREE
+cacf5f5ade9c38720875b428a7dd82f6a386efdc
+hooks cacf5f5ade9c38720875b428a7dd82f6a386efdc
