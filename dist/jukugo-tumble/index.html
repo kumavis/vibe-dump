@@ -6,8 +6,8 @@
 <title>Jukugo Tumble — 熟語</title>
 <meta name="description" content="Two-kanji words on white blocks. One block at a time tumbles over to a new character, the word changes meaning, and the lines between words re-wire around it.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='%23ecebe8'/><rect x='4' y='9' width='11' height='11' rx='1.5' fill='%23fff' stroke='%23111' stroke-width='1'/><rect x='17' y='9' width='11' height='11' rx='1.5' fill='%23fff' stroke='%23111' stroke-width='1'/><path d='M9.5 20v5h13v-5' fill='none' stroke='%23111' stroke-width='1'/></svg>">
-  <script type="module" crossorigin src="./assets/index-CACRIs3m.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CuevJvQ_.css">
+  <script type="module" crossorigin src="./assets/index-DxCBRPRz.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DWajttNB.css">
 </head>
 <body>
 <div id="stage">
@@ -22,6 +22,8 @@
   <p>Two-character words. Each block can turn over to another character, and the word turns into another word.</p>
 </header>
 
+<button id="mode" class="plate" type="button" aria-pressed="false" aria-label="Manual mode" title="Manual mode (M): nothing turns or opens by itself"><span class="auto">auto</span><span class="hand">manual</span></button>
+
 <aside id="legend" class="plate" aria-label="Legend">
   <div><i class="sw sw-pair"></i><span>shared character</span></div>
   <div><i class="sw sw-field"></i><span>semantic field</span></div>
@@ -32,7 +34,7 @@
   <span><b id="st-turns">0000</b> turns</span>
   <span><b id="st-links">00</b> links</span>
   <span><b id="st-pairs">00</b> words</span>
-  <span class="keys">drag · scroll · click a block · space</span>
+  <span class="keys" id="keys">drag · scroll · click a block · space</span>
 </footer>
 
 </body>
