@@ -20,8 +20,8 @@ import { WORLD, Y_PER_M, windVector } from '../config.js'
 import { makeSimplex, fbm, smoothstep, clamp } from '../gen/noise.js'
 
 export const REGIMES = {
-  moae: { name: 'Moaʻe', gloss: 'trade winds', bearing: 62, speed: 8.5, humidity: 1.0, lcl: 650, inversion: 2150, patch: 1.0, convect: 0.55 },
-  kona: { name: 'Kona', gloss: 'southerly storm', bearing: 205, speed: 11, humidity: 1.45, lcl: 420, inversion: 4800, patch: 1.6, convect: 0.8 },
+  moae: { name: 'Moaʻe', gloss: 'trade winds', bearing: 62, speed: 8.5, humidity: 1.0, lcl: 650, inversion: 2000, patch: 1.0, convect: 0.55 },
+  kona: { name: 'Kona', gloss: 'southerly storm', bearing: 205, speed: 11, humidity: 1.45, lcl: 420, inversion: 3800, patch: 1.6, convect: 0.8 },
   malie: { name: 'Mālie', gloss: 'calm, sea breezes', bearing: 110, speed: 2.4, humidity: 0.85, lcl: 900, inversion: 2900, patch: 0.5, convect: 1.5 },
 }
 

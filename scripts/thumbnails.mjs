@@ -22,6 +22,10 @@ const QUALITY = 82 // JPEG: visually identical to PNG at card size, ~5x smaller
 // into a crisp 1280x800 instead of shipping a 2560x1600 binary in the repo.
 const DEVICE_SCALE_FACTOR = 2
 const WAIT_FOR_TIMEOUT_MS = 90000 // a heavy procedural boot under SwiftShader is slow
+// Playwright only clicks once the control has held still across animation
+// frames, and a heavy WebGL scene under SwiftShader can run at ~1 fps — so the
+// check itself can take longer than a fast page would ever need.
+const CLICK_TIMEOUT_MS = 60000
 
 function parseArgs(argv) {
   // `settle` stays undefined unless asked for, so a per-app value can tell the
@@ -100,7 +104,7 @@ async function shoot(apps, settleOverride) {
         // One selector, or several in order — an app that opens with a dialog
         // over the thing worth photographing needs to dismiss that and then
         // tidy the frame, which is two presses.
-        for (const selector of app.click) await page.click(selector, { timeout: 15000 })
+        for (const selector of app.click) await page.click(selector, { timeout: CLICK_TIMEOUT_MS })
         await page.waitForTimeout(settleOverride ?? app.settle ?? SETTLE_MS)
         await page.screenshot({ path: app.thumbnail, type: 'jpeg', quality: QUALITY, scale: 'css' })
         console.log(`  ✓ ${app.slug}`)
