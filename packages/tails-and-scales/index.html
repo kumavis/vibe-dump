@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tails &amp; Scales</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="labels"></div>
+
+    <header id="hud">
+      <div class="side s0" id="sideA"><span class="ic">🐿️</span><span class="nm">Bushtail Clans</span><span class="vp" id="vp0">0</span></div>
+      <div class="mid">
+        <div id="round">Round 1 / 5</div>
+        <div id="phases">
+          <span class="ph" data-k="move">Move</span><span class="ph" data-k="shoot">Shoot</span><span class="ph" data-k="charge">Charge</span><span class="ph" data-k="fight">Fight</span><span class="ph" data-k="morale">Morale</span>
+        </div>
+      </div>
+      <div class="side s1" id="sideB"><span class="vp" id="vp1">0</span><span class="nm">Coil of Ssithra</span><span class="ic">🐍</span></div>
+    </header>
+
+    <div id="tools">
+      <button id="speed" title="Animation speed">⏩ 1×</button>
+      <button id="follow" title="Camera follows the action on AI turns">🎥</button>
+      <button id="mute" title="Sound">🔊</button>
+      <button id="helpBtn" title="Rules">?</button>
+    </div>
+
+    <div id="hint"></div>
+    <aside id="card"></aside>
+    <div id="tray"></div>
+
+    <aside id="log">
+      <h3 id="logToggle">Battle log <span>▾</span></h3>
+      <div id="logList"></div>
+    </aside>
+
+    <div id="actions">
+      <button id="advance">Advance</button>
+      <button id="autoPhase" title="Let the AI play this phase for you">🤖 Auto</button>
+      <button id="endPhase" class="primary">End phase ▸</button>
+    </div>
+
+    <div id="tooltip"></div>
+    <div id="banner"></div>
+
+    <div id="title" class="modal">
+      <div class="panel">
+        <h1>Tails <span>&amp;</span> Scales</h1>
+        <p class="tag">A pocket-sized tabletop war between the <b class="c0">Bushtail Clans</b> and the <b class="c1">Coil of Ssithra</b>.</p>
+        <div class="modes">
+          <button data-mode="bushtail" class="m0">🐿️ Lead the Bushtails<small>vs. the AI</small></button>
+          <button data-mode="serpent" class="m1">🐍 Lead the Serpents<small>vs. the AI</small></button>
+          <button data-mode="hotseat">⚔️ Two players<small>one screen, take turns</small></button>
+          <button data-mode="watch" id="watch">🎥 Watch the AI fight<small>sit back with snacks</small></button>
+        </div>
+        <div class="seedrow">
+          <label>Battlefield <input id="seed" type="number" /></label>
+          <button id="reroll">🎲 New battlefield</button>
+        </div>
+        <p class="small">Five rounds. Hold the glowing objectives at the end of each round for victory points, or wipe the other side off the table. Drag to orbit · right-drag or WASD to pan · scroll to zoom.</p>
+      </div>
+    </div>
+
+    <div id="help" class="modal hidden">
+      <div class="panel rules">
+        <button id="helpClose" class="close">✕</button>
+        <h2>How a turn works</h2>
+        <p>Players alternate whole turns for five rounds. Each turn runs through five phases:</p>
+        <ol>
+          <li><b>Movement</b> — each unit may move up to its <b>M</b>. Difficult ground (forest floor, rubble, hedges, crates) costs double. You can't move within 1" of an enemy. <b>Advance</b> adds D6" but the unit can't shoot (unless Assault) or charge afterwards. A unit already in combat may only <b>fall back</b>.</li>
+          <li><b>Shooting</b> — pick a target in range and in sight. Roll to <b>hit</b> (BS+), to <b>wound</b> (Strength vs Toughness), then the target rolls <b>saves</b> (Sv, worsened by AP, +1 in cover). Each unsaved wound does D damage to one model.</li>
+          <li><b>Charge</b> — a unit within 12" of an enemy may charge: roll 2D6 and it needs at least the distance to get within 1".</li>
+          <li><b>Fight</b> — units that charged strike first, then everyone else locked in combat takes turns, defender first. Same hit/wound/save, using WS.</li>
+          <li><b>Morale</b> — a squad that lost models this turn rolls D6 + models lost; for every point over its Leadership, one more model flees. A natural 1 always holds. Heroes lend their Ld to friends within 6".</li>
+        </ol>
+        <h2>Wound roll</h2>
+        <table class="wt"><tr><th>S vs T</th><td>S ≥ 2T</td><td>S &gt; T</td><td>S = T</td><td>S &lt; T</td><td>2S ≤ T</td></tr><tr><th>needs</th><td>2+</td><td>3+</td><td>4+</td><td>5+</td><td>6+</td></tr></table>
+        <h2>Blast templates &amp; scenery</h2>
+        <p>Blast weapons drop a circular template. On a hit it lands on the target; on a miss it <b>scatters</b> D6+1" in a random direction. Every model under it takes a hit — <b>friends included</b> — and the blast damages scenery: walls lose blocks (and the blocks above fall into the gap), trees topple into logs, hedges, crates and mushrooms burst. Rubble and logs still give cover. Rocks are forever.</p>
+        <p>Line of sight is real: walls block it, one tree or hedge in the way gives cover, two block it. <b>Indirect</b> weapons can fire without sight at −1 to hit. <b>Heavy</b> weapons are −1 to hit after moving. The <b>Constrictor Brute</b> simply walks through walls.</p>
+        <h2>Victory</h2>
+        <p>At the end of every round, each objective goes to the side with the most <b>OC</b> (objective control) within 3" — 1 VP each. Most VP after round 5 wins; wiping out the enemy wins at once.</p>
+      </div>
+    </div>
+
+    <div id="over" class="modal hidden">
+      <div class="panel">
+        <h1 id="overTitle">Victory</h1>
+        <p id="overWhy"></p>
+        <button id="again" class="primary">Back to the war room</button>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
