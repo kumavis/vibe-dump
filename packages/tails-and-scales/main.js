@@ -917,15 +917,18 @@ function chargeTargets(u) {
   return enemiesOf(u).filter((e) => gap(u, e) <= CHARGE_RANGE)
 }
 
-// Shortest route that ends within 1" of the target without ending within 1"
-// of anyone else. Returns the distance the dice have to beat.
+// Every spot a charge could end on: within 1" of the target, not within 1" of
+// any other enemy, not on top of a friend — each with the length of the
+// shortest route there. The closest one sets the distance the dice must beat;
+// a roll that beats it may end on any spot it reaches.
 function chargePlan(u, target) {
   refreshNav()
   const others = enemiesOf(u).filter((e) => e !== target)
   const mode = moveMode(u)
-  const forbid = forbidMask(u, ENGAGE + 0.05, [target])
   // the target's 1" bubble is fine to enter, its base is not
+  const forbid = forbidMask(u, ENGAGE + 0.05, [target])
   const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max: CHARGE_RANGE + 0.5, mode, forbid: mode === 'fly' ? null : forbid })
+  const spots = []
   let best = -1, bd = Infinity
   const want = target.r + u.r + ENGAGE - 0.08
   const R = Math.ceil((want + 1) / nav.cell)
@@ -936,20 +939,23 @@ function chargePlan(u, target) {
     if (ix < 0 || iz < 0 || ix >= nav.nx || iz >= nav.nz) continue
     const i = iz * nav.nx + ix
     const d = res.dist[i]
-    if (!isFinite(d) || d >= bd) continue
+    if (!isFinite(d)) continue
     const dd = Math.hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z)
     if (dd > want || dd < target.r + u.r + 0.02) continue
     if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
     if (others.some((e) => Math.hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
     if (units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && Math.hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
-    best = i
-    bd = d
+    spots.push({ i, d })
+    if (d < bd) {
+      best = i
+      bd = d
+    }
   }
   if (best < 0) return null
-  return { cell: best, need: Math.max(2, Math.ceil(bd - 0.01)), res, forbid, mode, dist: bd }
+  return { cell: best, need: Math.max(2, Math.ceil(bd - 0.01)), res, forbid, mode, dist: bd, spots }
 }
 
-async function doCharge(u, target) {
+async function doCharge(u, target, { auto = false } = {}) {
   S.busy = true
   const plan = chargePlan(u, target)
   u.flags.chargeTried = true
@@ -959,23 +965,63 @@ async function doCharge(u, target) {
     return finishAction()
   }
   const r = roll(2)
-  const ok = r[0] + r[1] >= plan.need
+  const total = r[0] + r[1]
+  const ok = total >= plan.need
   await tray.row(`Charge ${plan.need}" (2D6)`, r, 0, { sum: true, pass: ok })
   face(u, target)
   if (!ok) {
     fx.text(top(u), 'Charge failed', '#d0d0d0')
-    log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${r[0] + r[1]}, needed ${plan.need}. Failed.`)
+    log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total}, needed ${plan.need}. Failed.`)
     return finishAction()
   }
   u.flags.charged = true
   u.flags.chargeTarget = target.id
-  const pts = nav.path(plan.res, plan.cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   fx.text(top(u), 'CHARGE!', SIDES[u.side].color, { size: 22 })
-  log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${r[0] + r[1]} vs ${plan.need}. <b>Contact!</b>`)
+  log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total} vs ${plan.need}. <b>Contact!</b>`)
+  // a human chooses where around the target to end; the AI takes the closest spot
+  const cell = auto || !human(u.side) ? plan.cell : await pickChargeSpot(u, target, plan, total)
+  const pts = nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   await walk(u, pts, { speed: 11, fly: plan.mode === 'fly' })
   refreshNav()
   for (const x of [u, target]) updateLabel(x)
   finishAction()
+}
+
+// Shade every spot the roll reaches and wait for a click on one of them.
+function pickChargeSpot(u, target, plan, rolled) {
+  // same 0.01" grace `need` was rounded with, and the closest spot always
+  // counts, so a roll that made the charge can never leave nowhere to stand
+  const ok = new Uint8Array(nav.N)
+  for (const s of plan.spots) if (s.d <= rolled + 0.011) ok[s.i] = 1
+  ok[plan.cell] = 1
+  paintMask(ok, [255, 150, 60])
+  return new Promise((resolve) => {
+    S.chargePick = { u, target, plan, rolled, ok, resolve }
+    refreshUI()
+  })
+}
+
+function nearestSpot(pick, x, z, within = 2.4) {
+  let best = -1, bd = within
+  for (let i = 0; i < nav.N; i++) {
+    if (!pick.ok[i]) continue
+    const d = Math.hypot(nav.x(i) - x, nav.z(i) - z)
+    if (d < bd) {
+      bd = d
+      best = i
+    }
+  }
+  return best
+}
+
+function placeCharge(i) {
+  const pick = S.chargePick
+  if (!pick || i < 0 || !pick.ok[i]) return
+  S.chargePick = null
+  clearOverlay()
+  ghost.visible = false
+  refreshUI()
+  pick.resolve(i)
 }
 
 async function fight(u) {
@@ -1276,6 +1322,11 @@ function myTurn() {
 async function click({ unit, ground }) {
   $('#tooltip').style.display = 'none'
   if (S.stage === 'deploy') return deployClick(unit, ground)
+  if (S.chargePick) {
+    // the board under the cursor counts even when it's under a model
+    if (ground) placeCharge(nearestSpot(S.chargePick, ground.x, ground.z))
+    return
+  }
   if (!myTurn()) {
     if (unit) showCard(unit)
     return
@@ -1358,12 +1409,15 @@ scene.add(ovMesh)
 // friend are still shaded (a click there snaps to the nearest legal spot), so
 // the region reads as one shape instead of a sieve.
 function paintReach(plan) {
-  ovData.fill(0)
   const adv = plan.u.flags.advanced
-  const col = plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255]
   const { u, res, mode, endForbid } = plan
   const ok = new Uint8Array(nav.N)
   for (let i = 0; i < nav.N; i++) if (isFinite(res.dist[i]) && nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) ok[i] = 1
+  paintMask(ok, plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255])
+}
+
+function paintMask(ok, col) {
+  ovData.fill(0)
   for (let i = 0; i < nav.N; i++) {
     if (!ok[i]) continue
     const ix = i % nav.nx, iz = (i / nav.nx) | 0
@@ -1414,7 +1468,20 @@ function hover() {
   S.hover = h.unit
   let text = ''
   const sel = S.sel
-  if (S.stage === 'battle' && myTurn() && sel) {
+  if (S.chargePick && h.ground) {
+    const pk = S.chargePick
+    const i = nearestSpot(pk, h.ground.x, h.ground.z)
+    if (i >= 0) {
+      const pts = nav.path(pk.plan.res, i, pk.u.r, pk.plan.mode === 'fly' ? null : pk.plan.forbid)
+      pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
+      pathLine.visible = true
+      ghost.position.x = nav.x(i)
+      ghost.position.z = nav.z(i)
+      ghost.scale.setScalar(pk.u.r)
+      ghost.visible = true
+      text = `End charge here · ${pk.plan.res.dist[i].toFixed(1)}" of ${pk.rolled}"`
+    } else text = `✖ out of reach — pick a spot in the orange area`
+  } else if (S.stage === 'battle' && myTurn() && sel) {
     if (S.phase === 'move' && S.reach && h.ground && !h.unit) {
       const i = nearestValid(S.reach, h.ground.x, h.ground.z)
       if (i >= 0) {
@@ -1595,17 +1662,20 @@ function refreshUI() {
   $('#sideB').classList.toggle('active', S.stage === 'battle' && S.active === 1)
   const mine = S.stage === 'battle' && human(S.active) && !!phaseResolve
   const sel = S.sel
-  $('#endPhase').style.display = mine || S.stage === 'deploy' ? '' : 'none'
+  const picking = !!S.chargePick
+  $('#endPhase').style.display = (mine && !picking) || S.stage === 'deploy' ? '' : 'none'
+  $('#closestSpot').style.display = picking ? '' : 'none'
   $('#endPhase').textContent = S.stage === 'deploy' ? 'Begin battle ▸' : `End ${PHASES.find((p) => p.key === S.phase).name} ▸`
   $('#endPhase').disabled = S.busy
-  $('#autoPhase').style.display = mine ? '' : 'none'
+  $('#autoPhase').style.display = mine && !picking ? '' : 'none'
   const adv = $('#advance')
   adv.style.display = mine && S.phase === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(sel) ? '' : 'none'
   adv.textContent = `Advance (+D6") — no ${sel?.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`
   if (sel?.t.abilities?.some((a) => a.startsWith('Sidewind'))) adv.textContent = 'Advance (+D6") — can still charge'
   // hint line
   let hint = ''
-  if (S.stage === 'deploy') hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
+  if (picking) hint = `Charge! You rolled ${S.chargePick.rolled}" — click in the orange area to choose where ${S.chargePick.u.t.short} end up.`
+  else if (S.stage === 'deploy') hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
   else if (S.stage === 'battle' && !human(S.active)) hint = `${SIDES[S.active].name} (AI) are taking their turn…`
   else if (mine) {
     hint = {
@@ -1663,6 +1733,10 @@ $('#endPhase').onclick = () => {
   if (S.busy || !phaseResolve) return
   select(null)
   phaseResolve()
+}
+$('#closestSpot').onclick = () => {
+  sfx.click()
+  if (S.chargePick) placeCharge(S.chargePick.plan.cell)
 }
 $('#autoPhase').onclick = async () => {
   if (S.busy || !phaseResolve) return
@@ -1729,7 +1803,7 @@ const keys = new Set()
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return
   keys.add(e.key.toLowerCase())
-  if (e.key === 'Escape') select(null)
+  if (e.key === 'Escape' && !S.chargePick) select(null)
 })
 addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()))
 function panKeys(dt) {

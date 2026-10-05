@@ -282,7 +282,7 @@ async function aiCharge(api, side) {
     }
     if (best) {
       api.focus((u.pos.x + best.pos.x) / 2, (u.pos.z + best.pos.z) / 2)
-      await api.doCharge(u, best)
+      await api.doCharge(u, best, { auto: true })
       await wait(0.1)
     }
   }
