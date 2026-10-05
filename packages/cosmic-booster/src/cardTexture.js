@@ -108,7 +108,22 @@ function valueText(ctx, text, x, y, size, align = 'right') {
   return total
 }
 
+// Greedy wrap, then narrowed as far as it can go without adding a line, so
+// the lines come out even instead of leaving a word dangling on the last.
 function wrap(ctx, text, maxW) {
+  const lines = greedy(ctx, text, maxW)
+  if (lines.length < 2) return lines
+  let lo = maxW / 2
+  let hi = maxW
+  while (hi - lo > 4) {
+    const mid = (lo + hi) / 2
+    if (greedy(ctx, text, mid).length > lines.length) lo = mid
+    else hi = mid
+  }
+  return greedy(ctx, text, hi)
+}
+
+function greedy(ctx, text, maxW) {
   const words = text.split(' ')
   const lines = []
   let line = ''

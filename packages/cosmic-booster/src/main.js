@@ -872,6 +872,13 @@ function resize() {
   view.aspect = view.w / view.h
   renderer.setPixelRatio(pixelRatio)
   renderer.setSize(view.w, view.h)
+  const samples = pixelRatio < 1.5 ? 4 : 0
+  for (const rt of [composer.renderTarget1, composer.renderTarget2]) {
+    if (rt.samples !== samples) {
+      rt.samples = samples
+      rt.dispose()
+    }
+  }
   composer.setPixelRatio(pixelRatio)
   composer.setSize(view.w, view.h)
   camera.aspect = view.aspect
@@ -911,6 +918,7 @@ function cardPixels(c) {
 let frameNo = 0
 let lastNow = performance.now() / 1000
 let slowFrames = 0
+let frameAvg = 1 / 60
 
 function frame(ms) {
   const now = ms / 1000
@@ -921,12 +929,15 @@ function frame(ms) {
   frameNo++
   stepTweens(now)
 
-  // let a struggling GPU breathe: drop resolution after a run of slow frames
+  // let a struggling GPU breathe: a sustained run of slow frames steps the
+  // resolution down; frames slower than ~8 fps drop it to 1x at once
+  if (rawDt < 1) frameAvg += (rawDt - frameAvg) * 0.25
   if (rawDt > 0.045 && rawDt < 0.5) slowFrames++
   else slowFrames = Math.max(0, slowFrames - 1)
-  if (slowFrames > 90 && pixelRatio > 1) {
-    pixelRatio = Math.max(1, pixelRatio - 0.5)
+  if (pixelRatio > 1 && frameNo > 4 && (frameAvg > 0.12 || slowFrames > 90)) {
+    pixelRatio = frameAvg > 0.12 ? 1 : Math.max(1, pixelRatio - 0.5)
     slowFrames = 0
+    frameAvg = 1 / 60
     resize()
   }
 
