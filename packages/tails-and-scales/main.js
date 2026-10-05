@@ -2087,11 +2087,44 @@ frame()
 if (params.has('watch')) start('watch')
 // ?debug exposes the table to the console (and to the test harness)
 if (params.has('debug')) {
+  // The input hooks are the very calls a click or a button makes, so sim/ can
+  // play a human seat headlessly; without ?debug none of this exists.
+  // What sim/ reads (oracle/human-bot.mjs, oracle/shadow.mjs, chromium.mjs):
+  // S.{stage,deploySide,phase,active,round,first,vp,wiped,busy,auto,reach,
+  // control}; trace, whose push it wraps; units[].{id,side,pos,r,alive,lost,
+  // mesmerized,flags,models[].{alive,w,ox,oz},t.{M,W,ranged}};
+  // scenery.chunks[].{alive,hp,shape.{x,y,z,yaw}}; nav.{x,z,index,N,W,H};
+  // validEnd(plan, i) with plan.res.dist; phaseResolve; chargePick.{u,
+  // plan.cell,ok}; start and the input hooks below; and every q member with
+  // today's arity and results: alive, isEngaged, canAct truthy or not;
+  // shootTargets and chargeTargets arrays of the units[] objects themselves;
+  // shotInfo(u, tg).ok; chargePlan(u, tg) null when no spot is reachable,
+  // else a plan with .need; freeSpot(...) null or {x, z}; movePlan(u, extra)
+  // the plan validEnd takes; rngState() as the trace prints it. Replaying a
+  // log needs the hooks, alive, isEngaged, canAct, shotInfo().ok,
+  // chargeTargets, chargePlan's null and rngState(); the rest feeds only the
+  // corpus policies (run on the PIN), so parity won't notice a reshape of
+  // those. Outside __ts it wraps #logList's prepend (the battle log) and, in
+  // Chromium, presses #title's [data-mode] buttons. When internals move,
+  // later steps keep this surface working here, inside this block, never by
+  // editing sim/oracle: the PIN and the working tree share a driver (from
+  // R4 the members map in place, e.g. rngState: () => q.rngState(G.rng)).
   window.__ts = {
     S, clock, scenery, nav, camera, controls, renderer, validEnd, setUnitPos, trace,
     get units() {
       return units
     },
+    get phaseResolve() {
+      return phaseResolve
+    },
+    get chargePick() {
+      return S.chargePick
+    },
+    start, select, doMove, doAdvance, doShoot, doCharge, placeCharge, deployClick,
+    endPhase: () => $('#endPhase').onclick(),
+    autoPhase: () => $('#autoPhase').onclick(),
+    // read-only rules queries, for choosing legal input (only what sim/ uses)
+    q: { alive, isEngaged, canAct, movePlan, freeSpot, shootTargets, shotInfo, chargeTargets, chargePlan, rngState },
     screen(x, y, z) {
       const v = new THREE.Vector3(x, y, z).project(camera)
       return [(v.x * 0.5 + 0.5) * innerWidth, (-v.y * 0.5 + 0.5) * innerHeight]

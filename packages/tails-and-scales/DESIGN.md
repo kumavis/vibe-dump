@@ -37,8 +37,9 @@ Specific ideas are grafted from content-first and experience-first. They are nam
 | `freeSpot` returns cell centres | 367-382. So `place {u, c}` reproduces deployment exactly. |
 | Deploying both sides at once leaves the trace unchanged | No trace line sits between the two "deploy your army" logs (1933-1944). Placements commute: the zones are at least 24" apart, and the clearance is only 0.4". |
 | `ImmutableString` is exported by `@automerge/automerge` 3.5.0 | Checked. Plain strings in a list are collaborative text and can be edited character by character (`judge-str.mjs`). |
-| Approximated `Math.*` calls in logic files | main.js: hypot 20, sin 25, cos 8, atan2 11. scenery: hypot 11, sin 14, cos 12, atan2 2. ai: hypot 12. nav: hypot 7, sin 1, cos 1. Some of these are view code that still lives in those files. `exp` (2) is view-only. |
+| Approximated `Math.*` calls in logic files | main.js: hypot 20, sin 25, cos 8, atan2 11. scenery: hypot 11, sin 14, cos 12, atan2 2, atan 1 (a hedgerow's yaw, 482). ai: hypot 12. nav: hypot 7, sin 1, cos 1. Some of these are view code that still lives in those files. `exp` (2) is view-only. |
 | `npm run verify` builds nothing and accepts extra files under `dist/<slug>/` | scripts/verify.mjs. A `.wasm` asset is fine. |
+| Node's and Chromium's builds of V8 disagree in the last bit of `Math.sin`/`cos` for ~3% of inputs and `pow` for ~10%; `atan`, `atan2`, `exp` and `hypot` agree | Found at R0 over 100k samples. Node 20, 21 and 22 (V8 11.3 to 12.4) agree with each other on all seven; Chromium 141 (Playwright 1.61's `chromium-1194`) differs. So the split follows Chromium's build of V8, not the V8 version (a newer Chromium was reported to change `atan` too). Terrain built with sin/cos then sits an ULP apart in the two engines: 31 of the 40 R0 battles have a different Chromium shadow while their traces match byte for byte. So "the V8" is two engines: the parity shadow is compared per engine (`webShadow`), `pairs.json` names the Node and the Chromium that recorded it (`engines`), and a Chromium (Playwright) upgrade is followed by `parity.mjs --browser`, then `--record --browser` if only `webShadow` moved. |
 
 ### 0.2 Conflict resolutions
 
@@ -53,7 +54,7 @@ Specific ideas are grafted from content-first and experience-first. They are nam
 | 7 | Who appends `start`; where the seed commitment lives | The creator. The commitment is the immutable first log entry `open {commit}`, not a mutable lobby field. | The creator holds the reveal `a`. A last-writer-wins lobby field could be overwritten after the fact. |
 | 8 | Seeds | The board seed is the creator's visible choice, as the title screen's "New battlefield" is today. The dice seed is a joint commit-reveal. | The board is not hidden information. Only the dice stream must be grind-proof. |
 | 9 | AI in online games | Runs inside the fold on every peer. AI seats append nothing. `hold` is internal to the AI and never on the wire. | All 12 traces stay valid, no host has to be online, and nobody can play the AI for their own benefit. Cost: AI code is rules code. |
-| 10 | dmath timing | The two-argument `hypot` (V8 formula port, proven trace-neutral on 12/12 and 5M samples) lands at R1. Three-argument `hypot` lands at R1 only if it matches V8 exactly, otherwise at N0. `sin`/`cos`/`atan2` land at **N0**. | Single-engine parity doesn't need them. Netplay across engines does. **Cross-engine determinism only requires dmath to be pure JS over exact IEEE operations. Matching V8 bit for bit only avoids one re-baseline.** If a V8-exact port proves elusive, take `CORE_VERSION 2` and re-record once, in a commit of its own. |
+| 10 | dmath timing | The two-argument `hypot` (V8 formula port, proven trace-neutral on 12/12 and 5M samples) lands at R1. Three-argument `hypot` lands at R1 only if it matches V8 exactly, otherwise at N0. `sin`/`cos`/`atan`/`atan2` land at **N0**. | Single-engine parity doesn't need them. Netplay across engines does. **Cross-engine determinism only requires dmath to be pure JS over exact IEEE operations. Matching V8 bit for bit only avoids one re-baseline.** If a V8-exact port proves elusive, take `CORE_VERSION 2` and re-record once, in a commit of its own. |
 | 11 | Nav cache | Explicit `refreshNav(G)` at exactly today's call sites (477, 572, 816, 939, 999, plus setup at 1897). No lazy cache. | testability-first's lazy cache claim is unproven. `inCover` reads `nav.cover`. |
 | 12 | Forking and fixtures | Refold `(setup, entries.slice(0, k))`. `structuredClone(G)` is not required, so `G` may hold `NavGrid` and `Terrain` instances. Invariant: **between commands, `G` holds no in-flight control state** (no promises, generators or pending closures). | Event sourcing gives forks for free, in at most 0.3 s. |
 | 13 | Abilities | Flags on data, each read by exactly one rules module, plus a lint. content-first's hook and registry framework is deferred. | 4-6 new mechanics don't justify a framework inside the parity window. Hooks would also have to reach `expected()` and the AI. |
@@ -81,7 +82,7 @@ packages/tails-and-scales/
 ├─ core/                          CONSENSUS · pure · synchronous · runs in plain Node
 │  ├─ index.js                    the public API (§2.2): createMatch, legal, apply, pendingSeats, stateHash, shadowState, q, CORE_VERSION, RULES_ID
 │  ├─ version.js                  CORE_VERSION (manual int); RULES_ID = cyrb53(canonical(rule-bearing data))
-│  ├─ dmath.js                    hypot, hypot3 (R1); sin, cos, atan2 (N0). Only exact IEEE ops (+ − × ÷ sqrt abs floor imul)
+│  ├─ dmath.js                    hypot, hypot3 (R1); sin, cos, atan, atan2 (N0). Only exact IEEE ops (+ − × ÷ sqrt abs floor imul)
 │  ├─ rng.js                      createRng(seed) → {a, n, h, locked}; draw(r); rngState(r) (same 'n#h36' string); lock/unlock
 │  ├─ util.js                     mulberry32 (layout stream), lerp, pick, rr, cyrb53, canonicalJSON
 │  ├─ rules.js                    BOARD…AURA, PHASES, d6(G), roll(G,n), passes, clamp, pD6, p2D6, woundNeed, saveNeed, hitNeed, attackCount, expected
@@ -141,10 +142,13 @@ packages/tails-and-scales/
 ├─ input/                         human.js (derived input mode, selection), picking.js, tools/{deploy,move,shoot,charge,charge-end}.js
 ├─ ui/                            hud, actions, tray, log, card, tooltip, banner, netbadge, theme, screens/{title,races,lobby,result,help}
 └─ sim/                           Node only, never bundled, run by hand
-   ├─ oracle/                     fakedom.mjs, three-shim.mjs, orbit-stub.mjs, register.mjs, hooks.mjs, run-legacy.mjs, human-bot.mjs, PIN
-   ├─ run.mjs, parity.mjs         headless fold CLI · all baselines, first divergence with context
+   ├─ oracle/                     fakedom.mjs, three-shim.mjs, orbit-stub.mjs, register.mjs, hooks.mjs, run-legacy.mjs, human-bot.mjs, shadow.mjs (the frozen parity shadow and battle-log formats), pin.mjs, PIN
+   ├─ run.mjs, parity.mjs         headless fold CLI · all baselines, first divergence with context (`--browser`: the same in Chromium, on a fresh build)
+   ├─ chromium.mjs, browser.mjs   the Chromium runner (library) · its one-battle CLI
+   ├─ corpus.mjs, lib.mjs         builds the corpus, admitting only what Node and Chromium agree on · shared plumbing (oracle runs with a deadline, verdicts)
+   ├─ mutation.mjs, hooks-inert.mjs, self-test.mjs   one swapped die must fail parity · the `?debug` hooks change nothing outside `?debug` · the harness catches what it must
    ├─ present-check.mjs, property.mjs, merge-sim.mjs, peers.mjs, perturb.mjs, terrain-check.mjs, data-check.mjs, boundaries.mjs
-   └─ baselines/                  pairs.json, ai/*.txt.gz, human/*.json.gz, shadow/*.txt.gz
+   └─ baselines/                  pairs.json, human/*.json: inputs plus a 10-hex hash per trace line, per shadow snapshot and per battle-log write (`webShadow` where Chromium's shadow differs); full texts are regenerated from oracle/PIN (`parity.mjs --pin --dump <dir>`)
 ```
 
 ### 1.2 Layer rules, enforced by `sim/boundaries.mjs`
@@ -153,7 +157,7 @@ packages/tails-and-scales/
 
 | Layer | May import | Must not contain |
 |---|---|---|
-| `core/`, `data/` | each other | `three`; `@automerge`; `document`, `window`, `location`, `localStorage`, `requestAnimationFrame`; `async`, `await`, `Promise`; `Math.random`, `Date`, `performance`; module-level mutable state (ids, rng, counters); approximated `Math.*`: `hypot` from R1, `sin\|cos\|tan\|atan2\|exp\|pow\|log` from N0; tests on unit key, race key, ability text or `fx` (`.key ===`, `startsWith(`, `.fx`) |
+| `core/`, `data/` | each other | `three`; `@automerge`; `document`, `window`, `location`, `localStorage`, `requestAnimationFrame`; `async`, `await`, `Promise`; `Math.random`, `Date`, `performance`; module-level mutable state (ids, rng, counters); approximated `Math.*`: `hypot` from R1, `sin\|cos\|tan\|atan\|atan2\|exp\|pow\|log` from N0; tests on unit key, race key, ability text or `fx` (`.key ===`, `startsWith(`, `.fx`) |
 | `match/` | core, data | three, DOM, Automerge, `async`/`await` |
 | `present/` | core (read-only queries), match | three, DOM |
 | `net/` | match, core, `@automerge/*` | three, DOM rendering |
@@ -241,7 +245,7 @@ Line numbers are from HEAD.
 | 2012-2030 | `paintObjective`, `animateObjectives` | `view/objectives.js`: owners from the mirror, never `controlOf` |
 | 2032-2063 | `FAST`, `frame` | `view/stage.js`; `?fast` = player speed 1e4, no render |
 | 2065-2081 | `defaultView`, `fitFov`, resize | `present/camera-presets.js`, `view/camera.js` |
-| 2083-2098 | boot, `?watch`, `?debug` | `app/boot.js`; `window.__ts` keeps `S.stage` and `trace` as getters, so `parity/replay.mjs` runs unchanged on every build |
+| 2083-2098 | boot, `?watch`, `?debug` | `app/boot.js`; under `?debug`, `window.__ts` keeps the whole surface `sim/` reads, listed in the comment at the top of main.js's `?debug` block (`S` fields, `trace`, `units`, `scenery.chunks`, `nav`, `validEnd`, `phaseResolve`, `chargePick`, ten `q` members with the result fields named there, `start` and the input hooks), so `node sim/parity.mjs --browser` (`sim/chromium.mjs`) runs unchanged on every build. It also presses the title screen's `[data-mode]` buttons and reads `#logList`, so the screens and the log UI keep those (or `sim/` changes them in one place) |
 
 #### Other modules
 
@@ -343,16 +347,19 @@ Death voice and gore colours (892-897) come from race `look`. A mirror match use
 
 ```js
 // core/index.js: the only API that match/, sim/ and the UI call
-export function createMatch(setup, { out = null } = {})  // terrain, units, deployArmies; logs "deploy your army" per human seat
+export function createMatch(setup, { out = null, onTrace = null } = {})  // onTrace(line, G): sim/debug only (R0 notes, §4)
+                                                        // terrain, units, deployArmies; logs "deploy your army" per human seat
                                                         // (seat order); pending = deploy(humanSeats) or straight on: an all-AI
                                                         // match runs to 'over' inside this call
 export const pendingSeats = (G) => G.pending?.seats ?? []
 export function legal(G, seat, body)                    // → null | 'why'; runs under rng.lock; pure; may refreshNav (idempotent)
 export function apply(G, seat, body) { HANDLERS[body.t](G, seat, body, 'seat'); advance(G) }  // precondition: legal
 export function stateHash(G)                            // cyrb53 → base36 over canonical pre-state (§2.6)
-export function shadowState(G)                          // sim/debug: full-precision superset of traceState
-export * as q from './queries.js'                       // read-only, for previews
+export function shadowState(G)                          // debug: full-precision superset of traceState (not the parity shadow, §2.6)
+export * as q from './queries.js'                       // read-only, for previews and the ?debug __ts surface
 ```
+
+`q` covers every query the `__ts` contract names (R0 notes, §4), so `app/` can serve that surface without importing anything it may not: `queries.js` re-exports `movePlan`, `validEnd`, `nearestValid` (`actions/move.js`), `freeSpot` (`deploy.js`), `shootTargets`, `shotInfo` (`actions/shoot.js`), `chargeTargets`, `chargePlan`, `chargeSpots` (`actions/charge.js`) and a read-only `rngState(r)` from `core/rng.js`, which `app/`, `view/`, `input/` and `ui/` never import (§1.2). The `?debug` block maps it as `rngState: () => q.rngState(G.rng)` and never rebuilds the `n#h36` format from `G.rng`'s fields itself.
 
 **Step machine.** `battle()` and `playerTurn()` (1201-1264) are unrolled into resumable steps. The statement order is unchanged, so the trace lines up line for line:
 
@@ -426,7 +433,7 @@ Inside the generators:
 | Group | Events |
 |---|---|
 | Flow | `phase.start {side, phase}` · `pause {s}` · `focus {x, z}` · `round.scored {round, held, vp, owners}` · `objectives {owners}` (at every action end) · `status {engaged: [ids], mesmerized: [ids]}` (at action end; labels) · `act {tag, proj?}` (after `traceState('act')`; `proj` = `mirror.project(G)` in sim only) · `pending {k, seats}` · `game.over {win, why: 'score'\|'wipe'\|'concede', vp, rounds}` |
-| Tray and log | `tray.open {title}` · `dice {label, dice, need, sum, pass, note, save}` · `log {side, html, cls, traced}` |
+| Tray and log | `tray.open {title}` · `dice {label, dice, need, sum, pass, note, save}` · `log {side, html, cls, traced, at}` (`at`: trace length when logged or flushed) |
 | Units | `unit.move {u, path: [{x,z}], L, speed, fly, smashes: [{s, ev: [terrain events]}]}` · `unit.face {u, tg}` · `unit.wound {u, m, dmg}` · `unit.slain {u, m, by}` · `unit.flee {u, m}` · `unit.formation {u, offs, r, pos}` · `unit.destroyed {u, by}` |
 | Attacks | `volley {u, tg, fx, n}` · `blast.aim {x, z, r}` · `blast.scatter {from, to, d}` · `blast.fire {u, to, fx}` · `blast.land {x, z, r, fx}` · `spell.cast {u}` · `spell.fizzle {u}` · `spell.thorns {u, x, z, r}` · `spell.gaze {u, tg}` · `melee {u, tg, hits}` · `charge.result {u, tg, ok}` |
 | Terrain | `terrain.hurt {id, from}` · `terrain.destroy {id, kind, from}` · `terrain.collapse {drops: [{id, dy}]}` · `terrain.add {def}` (rubble, log; `def.look` included) · `terrain.rubble {id, from}` |
@@ -472,7 +479,7 @@ export class EventPlayer {
   - Live backlog is handled elastically (experience-first): above 8 s at the current speed, play at 2×, then 4×. Above 30 s, or while `document.hidden`, snap and toast a summary such as "Caught up: Ann moved 3 units, shot twice". The log keeps every line.
   - The fold is driven by store change events, never by `requestAnimationFrame`, so background tabs stay current.
 - **Checks.** `sim/present-check.mjs` asserts `applyEvent*` equals `project(G)` at every `act` of every log, so a missing event is a failing test, not a ghost unit. Under `?debug` the browser diffs the drained view against a fresh `snap(G)`.
-- **`?fast`** keeps `clock.speed = 1e4` and no render (legacy behaviour), so `parity/replay.mjs` keeps working.
+- **`?fast`** keeps `clock.speed = 1e4` and no render (legacy behaviour), so `sim/chromium.mjs` keeps working.
 
 ### 2.5 Controllers
 
@@ -504,7 +511,7 @@ Hotseat is two local seats. During a simultaneous deploy, `submit` takes an expl
 - every chunk: id, alive, hp, `shape.y`;
 - `rngState` plus the generator word.
 
-`shadowState` is the same string; `sim/` stores it next to every `act` line.
+`shadowState` is the same string, for debugging. It is **not** the parity shadow. The shadow hashes in `sim/baselines` are `sim/oracle/shadow.mjs`'s legacy format, frozen at R0 and taken at every state line of the trace, not only at `act`. From R4/R6, `sim/` keeps a G → legacy-shadow adapter beside the `__ts` one. It reproduces that format's quirks, which the header of shadow.mjs lists: the last phase run on `round` lines, the round overshoot and stage `battle` on a non-wipe `over` line, `wiped` printed `-` rather than −1, false flags dropped, chunks by array index. The same adapter rebuilds the third parity stream, the battle log as written (`written`: each `#logList` entry as `@<trace length> <class>: <html>`), from `G.journal` once the core has no DOM; it is what pins the destroyed-unit lines that are written but never traced (§4.1 rule 8).
 
 ```js
 // match/fold.js: pure, synchronous; the replicated authority; knows nothing about Automerge
@@ -856,30 +863,57 @@ export const battleView = ({ localSeats, edges }) => localSeats.length === 1 ? P
 
 | Gate | What it checks |
 |---|---|
-| **P-ai** | 12 existing plus ~12 widened AI baselines: trace **byte-identical**, and the shadow snapshot at every `act` identical |
-| **P-human** | the human command logs: trace plus shadow |
-| **P-browser** | `parity/replay.mjs` on the built `dist/`, 3 seeds; at milestones only |
+| **P-ai** | 12 existing plus ~12 widened AI baselines: trace **byte-identical**, the shadow snapshot at every state line identical (per engine: in Chromium against `webShadow` where the corpus records one, since the engines' sin/cos differ, §0.1), and every battle-log write identical (`written`, which includes the destroyed-unit lines the trace never shows) |
+| **P-human** | the human command logs: trace, shadow and battle log (per engine, as P-ai) |
+| **P-browser** | `node sim/parity.mjs --browser`: a fresh build of the code under test in Chromium (`sim/chromium.mjs`), every battle started from its title-screen button; the whole corpus, AI pairs and human logs, or `--only` a few; at milestones only |
 | **P-terrain** | ChunkDefs for board seeds 1-500 against legacy `scenery.js`, which imports in Node with a no-op fx proxy |
 | **P-present** | mirror equals `project(G)` at every `act` of every log |
 | **P-prop** | `legal`/previews never move `rngState`; the AI never issues an illegal command; random legal play never throws |
 | **P-merge** | merge-sim agreement |
 | **P-peers** | real Automerge two- and three-peer runs |
 
-Everything runs by hand with `npm run parity -w @vibe-dump/tails-and-scales` (and `test`, `peers`). The parity harness runs the **working tree's** `main.js` under the fake-DOM harness through R5, and the pure core with no shims from R6. A failure prints the first diverging line with context.
+Everything runs by hand with `npm run parity -w @vibe-dump/tails-and-scales` (and `test`, `peers`). The parity harness runs the **working tree's** `main.js` under the fake-DOM harness through R5, and the pure core with no shims from R6. A failure prints the first diverging line with context; a Node battle that never finishes is stopped at a deadline (`ORACLE_TIMEOUT_MS`, 60 s) and named. `node sim/self-test.mjs [--browser]` checks the harness itself catches what it must.
 
 ### Refactor proper (R0-R8): behaviour frozen, no rules or AI changes
 
 | Step | Change | Checkpoint |
 |---|---|---|
-| **R0 Harness and corpus** | (1) Add `?debug`-only hooks to `__ts`: `select`, `doMove`, `doAdvance`, `doShoot`, `doCharge`, `placeCharge`, `deployClick`, `endPhase`, `autoPhase`, plus getters for `phaseResolve`/`chargePick`/`S`. They are inert without `?debug`. Commit; this sha becomes `sim/oracle/PIN`. (2) `sim/oracle/` is the scratch harness; `run-legacy.mjs` runs `git archive PIN` output, so references come from frozen code. (3) The oracle wraps `__ts.trace.push` to record a **full-precision shadow** at every `act`: positions, flags, mesmerized, lost, chunk hp and `shape.y`, rngState. (4) `human-bot.mjs` plays human seats through the hooks with its own mulberry32, never `rng()`. Policies: random-legal, and aggressive (wipe-seeking). It covers deploy, advance, fall back, non-shortest and shortest charge ends, a failed charge, and Auto in each phase. It records `{setup, entries: [bodies], trace, shadow}` in the §2.2 format. (5) Corpus: ≥6 vs-AI (both sides) plus ≥6 hotseat human logs, ≥3 ending in a wipe-out; ~12 extra AI pairs chosen to show friendly fire, mesmerize, flee, wrecked, fizzles, failed charges. **A log or pair is admitted only when Node and Chromium agree** (browser via `replay.mjs`, plus a hooks driver for 3 human logs). | 12/12 existing identical (done). Each human log reproduces twice. **Mutation check:** a build with one swapped die fails and names the first divergent line. Hooks inert (dist identical apart from the hook code). |
+| **R0 Harness and corpus** | (1) Add `?debug`-only hooks to `__ts`: `select`, `doMove`, `doAdvance`, `doShoot`, `doCharge`, `placeCharge`, `deployClick`, `endPhase`, `autoPhase`, plus getters for `phaseResolve`/`chargePick`/`S`. They are inert without `?debug`. Commit; this sha becomes `sim/oracle/PIN`. (2) `sim/oracle/` is the scratch harness; `run-legacy.mjs` runs `git archive PIN` output, so references come from frozen code. (3) The oracle wraps `__ts.trace.push` to record a **full-precision shadow** at every state line of the trace (each `act`, `phase`, `round` and `over` line: every non-`log` line; `sim/oracle/shadow.mjs`, frozen format): positions, flags, mesmerized, lost, chunk hp and `shape.y`, rngState. (4) `human-bot.mjs` plays human seats through the hooks with its own mulberry32, never `rng()`. Policies: random-legal; `late` (random-legal, plus Auto part-way through a phase, most often straight after an Advance, which produces the `re-advance` logs); and aggressive (wipe-seeking). It covers deploy, advance, fall back, non-shortest and shortest charge ends, a failed charge, and Auto in each phase. Its entries are §2.2 command bodies; what the corpus stores is in the R0 notes below. (5) Corpus: ≥6 vs-AI (both sides) plus ≥6 hotseat human logs, ≥3 ending in a wipe-out; ~12 extra AI pairs chosen to show friendly fire, mesmerize, flee, wrecked, fizzles, failed charges. **A log or pair is admitted only when Node and Chromium agree** (browser via `sim/chromium.mjs`, which drives human logs through the same hooks driver). | 12/12 existing identical (done). Each human log reproduces twice. **Mutation check:** a build with one swapped die fails and names the first divergent line. Hooks inert (`sim/hooks-inert.mjs`: the unminified and the identifier-keeping builds are identical outside the hook block; the shipped minified bundle also differs by identifier renaming). |
 | **R1 Per-match RNG and hypot** | `core/rng.js` `createRng`; main.js holds `G.rng`; `d6(G)`/`roll(G,n)`; ai.js draws via `G`. `core/dmath.js` `hypot` (2-arg V8 port) replaces `Math.hypot` in logic, and `hypot3` too if it matches V8 on 5M samples. | P-ai, P-human. The `perturb.mjs` probe on `hypot` alone: 0/12 diverge. |
 | **R2 Race data and seats** | `data/schema.js`, `squirrel.js`, `serpent.js`, `compat.js` (`TYPES`/`ARMIES`/`SIDES` views); `G.seats` with race, edge, ctrl; every side-hard-wired site in §2.1 → `edge`/race `look`; flags `chargeAfterAdvance`, `corrodes`, `noCharge`, `brawler`; `ROLE` → `t.ai`; `RULES_ID`; the key/ability/fx lint | `data-check` deep-equal; P-ai, P-human. New: serpent-vs-serpent, squirrel-vs-squirrel and swapped-seat AI games finish, twice identically (no baseline, determinism only). |
 | **R3 Terrain split** | `core/terrain/{terrain,recipes,sets,geom}.js`, `view/terrain.js`, a `Scenery` facade so main.js is untouched | P-terrain (shape, hp, navKind, los, cover, order, `look` against legacy mesh parameters); P-ai, P-human; screenshot diff of 3 tables with tufts hidden |
-| **R4 State and queries** | `G` owns units, objectives, terrain, nav, turn, journal; queries become `(G, …)`; unit logic/view split (`UnitView` map by id); ids per match; `refreshNav(G)` at the same sites | P-ai, P-human (shadow included) |
+| **R4 State and queries** | `G` owns units, objectives, terrain, nav, turn, journal; queries become `(G, …)`; unit logic/view split (`UnitView` map by id); ids per match; `refreshNav(G)` at the same sites. The `?debug` block keeps the `__ts` surface `sim/` reads (R0 note below), adapted in place, e.g. `q.canAct: (u) => canAct(G, u)`; `sim/oracle` is never edited for it, since the PIN and the working tree run one driver. | P-ai, P-human (shadow included) |
 | **R5 Synchronous actions** | One file per commit: damage → morale → fight → charge (split) → shoot → move (`resolveWalk`). Each `await` becomes `emit` in place. main.js wraps each call as `fn(); await player.play(drain(G))` through a transitional `EventPlayer` holding the old visuals verbatim. **From the first file:** the mirror, display positions and event-driven labels, flags and VP. | P-ai, P-human after each file; P-present from the first file; one game watched per file; P-browser after the last |
-| **R6 Engine and commands** | `core/engine.js` step machine and `G.pending` (built **beside** the old loop, switched only at full parity); `commands.js` `legal`/`HANDLERS`; AI generators plus `hold`; `rng.lock`; `match/store.js` `LocalStore` and `match/session.js` (plain bodies, no envelopes yet); input produces commands; `phaseResolve`, `S.deployDone`, `S.chargePick`, `S.busy`, `S.auto` deleted; `compat.js` deleted; `sim/run.mjs`; `sim/boundaries.mjs`; the parity harness switches to the pure core | **Headless pure-Node fold (no fakedom, no three) reproduces every AI and human baseline**, about 0.3 s per battle. P-prop, P-present, boundaries green. P-browser 3/3. |
-| **R7 View and UI decomposition** | stage, clock, camera rig and presets, table, objectives, units, terrain view, overlay, input tools, `ui/*`, screens, `present/hud-model.js`, `PACE`, fallback handler, template cache and dispose, compatibility `__ts` getters | No logic touched: P-ai, P-human unchanged; P-present; P-browser; the `?debug` snap-equivalence diff holds after every drained queue; `renderer.info` and heap after 5 rematches; title still up at 1200 ms (thumbnail unchanged) |
+| **R6 Engine and commands** | `core/engine.js` step machine and `G.pending` (built **beside** the old loop, switched only at full parity); `commands.js` `legal`/`HANDLERS`; AI generators plus `hold`; `rng.lock`; `match/store.js` `LocalStore` and `match/session.js` (plain bodies, no envelopes yet); input produces commands; `phaseResolve`, `S.deployDone`, `S.chargePick`, `S.busy`, `S.auto` deleted; `compat.js` deleted; `sim/run.mjs`; `sim/boundaries.mjs`; the parity harness switches to the pure core. The human logs' entries are already command bodies, so the Node fold applies them directly. For the browser half, the `?debug` block implements the R0 `__ts` surface over the Session, so `sim/oracle` and `sim/chromium.mjs` run unchanged (one driver for the PIN and the working tree): the input hooks become promise-returning wrappers that build a body and call `session.submit(seat, body)`, settling once `player.idle` again (`doMove(u, c)` → `{t:'move', u:u.id, c}`, `placeCharge(c)` → `{t:'chargeEnd', c}`, `deployClick` keeps its select-then-place pair ending in `{t:'place'}`, `endPhase` and `autoPhase` likewise; `doCharge`'s promise stays pending until the `chargeEnd` is placed, as today). The block derives the rest: `select(u)` sets `S.reach` to a plan `validEnd(plan, i)` accepts; `phaseResolve` is truthy iff a local seat holds a `phase` decision in `G.pending` and `player.idle`; `chargePick` is `{u, plan:{cell}, ok}` from a pending `chargeEnd` (ok a per-cell boolean array); `S.busy` and `S.auto` read `!player.idle`; `S.deploySide` comes from the pending deploy seat; the turn fields, `units` and `scenery.chunks` keep the legacy shapes, and the shadow and battle log come from the G adapter (§2.6). (The legacy double advance after Advance-then-Auto was fixed before the corpus was recorded, commit 33946a4, so P-prop's "the AI never issues an illegal command" holds without exception.) | **Headless pure-Node fold (no fakedom, no three) reproduces every AI and human baseline**, about 0.3 s per battle. P-prop, P-present, boundaries green. P-browser (the whole corpus). |
+| **R7 View and UI decomposition** | stage, clock, camera rig and presets, table, objectives, units, terrain view, overlay, input tools, `ui/*`, screens, `present/hud-model.js`, `PACE`, fallback handler, template cache and dispose, compatibility `__ts` getters | No logic touched: P-ai, P-human unchanged; P-present; P-browser (which presses the title screen's `[data-mode]` buttons and reads `#logList`); the `?debug` snap-equivalence diff holds after every drained queue; `renderer.info` and heap after 5 rematches; title still up at 1200 ms (thumbnail unchanged) |
 | **R8 Netplay seams (pure)** | `core/hash.js` `stateHash`; `CORE_VERSION = 1`; `RULES_ID` in `start`; `match/envelope.js`; `match/fold.js` `Folder` (all of §2.6: seat, device, prev, h by kind, out-of-band, caps, desync freeze); `Session` goes through `Folder`, so single-player exercises the validator; `sim/merge-sim.mjs` | P-ai, P-human now **through the Folder** with envelopes. **P-merge:** K peers over random linear extensions of the causal DAG of appends (each peer sees a causally closed subset ordered by one fixed tie-break rule, like Automerge) with stale `prev`, out-of-turn, duplicate, junk, same-seat fork and concurrent deploy; all agree on `{accepted, rejected, stateHash}`, and the accepted trace equals the single-process trace. **Desync drill:** patch `hypot` in one peer, and both freeze at the same entry with a report. |
+
+**R0 as built.**
+- **Corpus.** `sim/baselines` commits inputs and hashes only: `pairs.json` (seed and dice, plus `engines`: the Node and the Chromium that recorded the corpus) and `human/*.json` (`{setup, bot, why, n, trace, shadow[, webShadow], written, entries}`), with a 10-hex hash per trace line, per shadow snapshot and per battle-log write. Full texts are regenerated from the PIN code on demand (`node sim/parity.mjs --pin --dump <dir>`). `sim/corpus.mjs` rebuilds it, seeded. Chromium runs a fresh build of the PIN code for admission, and nothing is written unless the run is complete: every original admissible, every quota and coverage target met (`--no-browser` only previews). It holds the 12 originals plus 12 AI pairs, and 16 human logs: 4 per vs-AI seat and 8 hotseat. Six end in a wipe-out: by the AI's shooting, in a fight, by a human's shot, and by a human's own friendly fire. The logs cover deployment, advances, falling back, both charge ends, a failed charge, Auto first and after acting, and the AI advancing an already-advanced unit again after Auto.
+- **Three streams, per engine.** Admission means the Node and Chromium **traces and battle logs** agree. The shadow is compared within one engine: Node against `shadow`, Chromium against `webShadow` where the corpus records one (§0.1). The battle log (`written`) is every entry put into `#logList`, which pins the destroyed-unit lines the trace never shows.
+- **The PIN.** `sim/oracle/PIN` names two commits. The PIN is the one whose code produced the committed hashes; references and failure context come from it. `hooks` is the commit that added the `?debug` hooks, which `hooks-inert.mjs` checks by default. After the R0 commit, both are set to its sha in a commit of their own. A deliberate re-record (`--record` then `--record --browser`, N0's `CORE_VERSION 2`, the F4, F5 and F7 baselines) moves the PIN, and only the PIN, to the commit whose code produced the new hashes, in the same push; `node sim/parity.mjs --pin` must pass after it. Until it does, parity shows hashes instead of stale context and `mutation.mjs` reports inconclusive. Revisit this rule at R6, when `sim/run.mjs` regenerates references.
+- **The `__ts` contract.** The comment at the top of main.js's `?debug` block lists everything `sim/` reads: the `S` fields, `trace`, the unit, chunk and nav fields, `validEnd`, `phaseResolve`, `chargePick`, `start`, the input hooks, and the ten `q` members (`alive`, `isEngaged`, `canAct`, `movePlan`, `freeSpot`, `shootTargets`, `shotInfo`, `chargeTargets`, `chargePlan`, `rngState`) with today's arity and the result fields `sim/` reads: `shotInfo().ok`; `chargePlan()` null when unreachable, else a plan with `.need`; `freeSpot()` null or `{x, z}`; `movePlan()` the plan `validEnd` takes; target lists holding the unit objects themselves. Replaying a log depends on the hooks, `alive`/`isEngaged`/`canAct`, `shotInfo().ok`, `chargeTargets`, `chargePlan`'s null and `rngState()`. `.need`, `freeSpot` and `movePlan` feed only the corpus policies, so parity alone won't catch a reshape of them. R2-R7 keep the surface working inside that block, mapping members in place (`rngState: () => q.rngState(G.rng)`, §2.2; from R6 derived from the Session). Outside `__ts`, `sim/` wraps `#logList`'s `prepend` and, in Chromium, presses `#title`'s `[data-mode]` buttons. The oracle refuses code older than the PIN (it has no hooks) and setups the legacy URL can't carry, across the whole corpus: a step that adds logs it can't carry (F4, F5, F7) loosens `legacyMode` in the same step.
+- **The driver** checks what the UI's own gates check before each entry: the seat holds the pending decision, the command answers that kind of decision and belongs to the current phase, then the per-command query. A log that breaks one stops with an error naming the entry.
+- **Checks.**
+  - `sim/mutation.mjs` swaps one die. It exits 2, inconclusive, when the swap changes nothing.
+  - `sim/hooks-inert.mjs` compares everything outside the `?debug` block's body by parsing. It also compares every other source file at any depth, `vite.config.js`, `package.json` outside `scripts` and `gallery`, the root shared config and the locked `three`. Its `--self-test` shows it catches edits before the block, after it, in an `else`, in a second block, in another module, in a new subdirectory, in the Vite config and in a dependency, and that it passes a scripts-only edit.
+  - `sim/self-test.mjs` shows the harness refuses wrong-phase commands and runs through a symlinked path. It stops a battle that spins forever (`ORACLE_TIMEOUT_MS`) and names it, and fails a build that drops the destroyed-unit lines. With `--browser`, it fails a title screen whose buttons start nothing.
+- **Spec changes made at R0 (approved by the lead).** Beyond R0's own row, R0 changed:
+  - §0.1: the per-engine trig fact; `atan` added to the logic `Math.*` list, N0's dmath list and the lint.
+  - §2.2: `q` re-exports the whole `__ts` query set, `rngState(r)` included.
+  - §2.6: the parity shadow is `shadow.mjs`'s legacy format, not `shadowState`. A G adapter keeps its quirks through R8 and rebuilds the battle log from `G.journal`.
+  - The gate rows: P-ai and P-human snapshot every state line, check the battle log and compare per engine. P-browser is the whole corpus on a fresh build, started from the title buttons.
+  - R0's checkpoint: the hooks-inert criterion, and admission on traces and battle logs.
+  - R4 and R6: the `__ts` obligation, which R6 meets by deriving the surface from the Session.
+  - N0's target, and §4.1's statement of who enforces what.
+
+  The lead's decisions on the three open choices:
+  1. **Shadows at every state line: kept.** It is the stronger check. The G adapter keeps the round, phase and stage quirks through R8.
+  2. **The double advance: fixed, not pinned.** A human's Advance followed by Auto let the AI advance the same unit again (a second D6). That is a rules bug, so it was fixed in its own commit (33946a4: the AI moves an already-advanced unit on its existing roll) before the corpus was recorded. The same commit ends a blast volley whose own unit is wiped out by its first template, which used to crash and soft-lock the game. Neither path occurs in an AI-only battle; the 12 original battles replay identically across it.
+  3. **`shadowState` as the parity shadow: no.** The legacy `shadow.mjs` format stays the parity shadow, through the G adapter. `shadowState` remains a debugging aid.
+- **Two hooks later steps need (from the R0 review).**
+  - **The battle log's position stamp.** The corpus's `written` stream records, for each line put into `#logList`, the trace length at the moment it was written. From R5 the log is an event played later by the presenter, when the trace has run ahead, so that stamp would drift. The `log` event therefore carries `at` (the trace length when the line was logged or flushed, §2.3). `ui/log.js` (and R5's transitional log handler) puts it on the entry as `data-at` under `?debug`, and the instrumentation reads `data-at`, falling back to the live trace length for the PIN code, which has none. No re-record is needed.
+  - **Seeing trace lines as the core makes them.** From R4/R6 there is no `__ts.trace.push` to wrap. `createMatch(setup, { out, onTrace })` takes a sim/debug-only callback that `journal.js` calls synchronously with `(line, G)` on every trace push. It never draws, is not part of G's hashed state, and sits beside `out` (so §0.2 #12's "no pending closures in G" still holds). The `?debug` block keeps `__ts.trace` as one page-lifetime array fed by it.
 
 **The refactor ends at R8.** At that point:
 - the core runs headless in Node;
@@ -890,7 +924,7 @@ Everything runs by hand with `npm run parity -w @vibe-dump/tails-and-scales` (an
 
 | Step | Change | Checkpoint |
 |---|---|---|
-| **N0 Consensus hardening** | dmath `sin`/`cos`/`atan2` (and `hypot3` if it was deferred): pure-JS ports, attempted bit-exact to the shipped V8; lint bans the approximated `Math.*` in `core/` and `data/` | `perturb.mjs` goes **from 11/12 diverging to 0/12**. If the V8 match fails: `CORE_VERSION 2` and one re-record commit containing only baselines, never mixed with code changes. |
+| **N0 Consensus hardening** | dmath `sin`/`cos`/`atan`/`atan2` (and `hypot3` if it was deferred): pure-JS ports; lint bans the approximated `Math.*` in `core/` and `data/`. "Bit-exact to the shipped V8" can't mean both engines, since Node's and Chromium's sin/cos already disagree (§0.1): match Node's (the baselines' `shadow`) and retire `webShadow`, or take the re-record below. | `perturb.mjs` goes **from 11/12 diverging to 0/12**. If the V8 match fails: `CORE_VERSION 2` and one re-record commit containing only baselines, never mixed with code changes. |
 | **F3 → F1 → F2** | §3 | P-ai/P-human unchanged; manual check in landscape and portrait |
 | **F4 Keep playing** | §3 | P-ai/P-human unchanged; 2 new vote logs; merge-sim with concurrent votes |
 | **N1 Real Automerge in Node** | pinned deps (lockfile commit separate); `net/automerge-store.js`; `sim/peers.mjs`: (a) raw `@automerge/automerge` docs from shared genesis bytes, a manual `generateSyncMessage`/`receiveSyncMessage` pump with random delays and partitions, each scenario run with actor ids **swapped** so both concurrent orders occur; (b) three Repos (host, guest, spectator) over `MessageChannelNetworkAdapter` | **P-peers:** each human log split by seat across 2 peers; a spectator joining in round 3; same-seat fork with rollback; out-of-turn junk; concurrent deploy; desync drill; tamper (delete an accepted entry → `tamper`). All peers agree on `{accepted, rejected, stateHash, trace}`, equal to the single-process fold and the baseline. |
@@ -901,13 +935,13 @@ Everything runs by hand with `npm run parity -w @vibe-dump/tails-and-scales` (an
 
 ### 4.1 RNG-order rules
 
-Each rule gets a comment at its new site, and the parity suite enforces them all.
+Each rule gets a comment at its new site. The parity gates (P-ai, P-human and P-browser: trace, shadow and battle log) enforce rules 3-11. Rule 1 is enforced by `sim/boundaries.mjs` (imports) and by parity (a stray draw shifts every later die), rule 2 by P-prop, rule 12 by the envelope decoder and P-merge, and rule 13 by `boundaries.mjs` and P-peers.
 
 1. **Only consensus code draws, and only through `G.rng`** (`d6(G)`, `roll(G,n)`, `draw(G.rng)`). The view, presenter, input, UI, match and net layers never import `core/rng.js`. Cosmetic randomness stays on `Math.random` in the view.
 2. **`legal`, previews (`oddsText`, hover `chargePlan`/`movePlan`, reach overlays), `hudModel` and the AI-legality assertion run under `rng.lock`.** A draw throws.
 3. **Statement order inside each action is frozen.** Each `await` is replaced *in place* by an `emit`. No logic moves across an emit. Building an event never draws or mutates.
 4. **These orders must be kept exactly:**
-   - `blastVolley`, per template (712-721): break if the target is dead and `k > 0`; aim angle `rng()`, then offset `rng()`; then the hit `roll(1)`; on a miss, scatter `roll(1)[0]+1`, then the angle `rng()`.
+   - `blastVolley`, per template (712-721): break if the shooter's own unit is dead (33946a4), then break if the target is dead and `k > 0`; aim angle `rng()`, then offset `rng()`; then the hit `roll(1)`; on a miss, scatter `roll(1)[0]+1`, then the angle `rng()`.
    - `blastLands` (799): all victims are collected first, in unit order. Per victim, a big target's `d6()` comes before the wound roll.
    - The mesmerize D3 comes after the cast (828).
    - The roll-off is `do { a = roll(1); b = roll(1) } while (a[0] === b[0])` (1208-1213).
@@ -924,7 +958,7 @@ Each rule gets a comment at its new site, and the parity suite enforces them all
 7. **Walk:** the final position is the k=1 lerp, not `pts.at(-1)`. A path under 0.05" moves nothing and smashes nothing (519). Smash samples are taken every 0.25" plus the end point, in order.
 8. **Journal quirks:**
    - `doAdvance` writes no `act` line;
-   - destroyed-unit lines are flushed through `write` and are not traced (917, 1284, 1653);
+   - destroyed-unit lines are flushed through `write` and are not traced (917, 1284, 1653); the corpus's battle-log stream (`written`) pins where they land;
    - the "deploy your army" lines are logged in seat order at `createMatch`;
    - unit ids restart at 1 per match;
    - the trace format is unchanged (`toFixed(3)`, alive chunk count, vp, `rngState`).

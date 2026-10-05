@@ -1,0 +1,21 @@
+# The commit whose code is the parity oracle. sim/ regenerates full reference
+# traces by running `git archive <PIN>` of this package under the fake DOM, so
+# references always come from frozen code (the committed baselines are hashes
+# only).
+#
+# The first line below is the PIN: the commit whose code produced the
+# committed hashes. `hooks` is the commit that added the ?debug input hooks,
+# which sim/hooks-inert.mjs compares with its parent by default; it never
+# moves.
+#
+# WORKTREE means "the working tree itself": correct only until the R0 commit
+# (the one that adds the hooks) lands. Once it has, set both lines to that
+# commit's full sha, in a commit of its own.
+#
+# A deliberate re-record (parity.mjs --record, N0's CORE_VERSION 2, the F4,
+# F5 and F7 baselines) moves the PIN, and only the PIN, to the commit whose
+# code produced the new hashes, in the same push; `node sim/parity.mjs --pin`
+# must pass afterwards. (From R6 the reference runner is sim/run.mjs: revisit
+# this rule there.)
+WORKTREE
+hooks WORKTREE

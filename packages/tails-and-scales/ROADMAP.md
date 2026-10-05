@@ -5,12 +5,21 @@ the commit, and add whatever the work turned up.
 
 ## Standing rules
 
-- **Behaviour parity.** Refactors must not change how a battle plays. With the
-  app built, `node test/parity.mjs` replays twelve seeded AI-vs-AI battles in
-  the browser (`?debug&fast`) and compares each trace line against
-  `test/baseline.json`. Set `CHROMIUM_PATH` to the pre-installed Chromium if
-  Playwright's own isn't installed. Re-record (`--record`) only for a change
-  that is *meant* to alter play, and say so in the commit.
+- **Behaviour parity.** Refactors must not change how a battle plays.
+  `npm run parity -w @vibe-dump/tails-and-scales` replays the corpus in
+  `sim/baselines` (seeded AI-vs-AI battles and human command logs) with the
+  working tree's code in Node, and checks every trace line, every
+  full-precision shadow snapshot and every battle-log write against the
+  recorded hashes; a failure names the first diverging line, with context
+  from the frozen code in `sim/oracle/PIN`. `node sim/parity.mjs --browser`
+  builds the app and does the same in Chromium, starting each battle from its
+  title-screen button; set `CHROMIUM_PATH` to the pre-installed Chromium if
+  Playwright's own isn't installed. `node sim/self-test.mjs` checks the
+  harness still catches what it must. Re-record (`--record`, then
+  `--record --browser`) only for a change that is *meant* to alter play, and
+  say so in the commit; the re-record moves `sim/oracle/PIN` (its first line)
+  to the commit whose code produced the new hashes, in the same push, and
+  `node sim/parity.mjs --pin` must pass after it.
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (`rng.js`), never `Math.random`, and reads logical positions, never
   animated ones. Visual randomness stays on `Math.random`.
@@ -29,10 +38,35 @@ step keeps the game playable.
 
 **Refactor proper: behaviour frozen.** Byte-identical parity gates every step.
 
-- [ ] **R0 Harness and corpus.** `?debug` input hooks; `sim/oracle` runs the
+- [x] **R0 Harness and corpus.** `?debug` input hooks; `sim/oracle` runs the
   frozen legacy code in Node; a human-bot that plays through the hooks; a
   widened corpus (vs-AI, hotseat, wipe-outs) admitted only where Node and
   Chromium agree; a full-precision shadow snapshot at every action.
+  Landed: `sim/` replaces `test/` (the 12 original battles, same hashes)
+  and holds 24 AI pairs and 16 human command logs (4 per vs-AI seat, 8
+  hotseat, 6 wipe-outs, one by a human's shot and one by their own friendly
+  fire), built by `sim/corpus.mjs`. Each has its trace, its full-precision
+  shadow and its battle log (including the destroyed-unit lines the trace
+  never shows). Checks: `sim/mutation.mjs` (one swapped die fails parity at
+  the right line), `sim/hooks-inert.mjs` (the hooks change nothing outside
+  `?debug`) and `sim/self-test.mjs` (the harness catches wrong-phase
+  commands, a spinning battle, a lost log line, a dead title screen).
+  `sim/oracle/PIN` names the R0 commit. To read a reference trace:
+  `node sim/parity.mjs --pin --dump <dir>`.
+  Turned up:
+  - Two rules bugs, fixed in their own commit (33946a4) before the corpus
+    was recorded: a blast volley that wiped out its own unit crashed and
+    soft-locked the game, and Advance-then-Auto let the AI advance the same
+    unit twice.
+  - Chromium's build of V8 disagrees with Node's in the last bit of
+    `Math.sin`/`cos` for ~3% of inputs (`pow` ~10%; `atan`, `atan2`, `exp`
+    and `hypot` agree). So 31 of the 40 battles have terrain an ULP apart in
+    the two engines while their traces match; the corpus keeps Chromium's
+    shadow hashes for those (`webShadow`). N0 picks which engine's trig to
+    match, and `atan` joins its list.
+  - DESIGN.md's R0 notes record the spec changes R0 made and the lead's
+    decisions on them, plus two hooks later steps need (`log.at`,
+    `createMatch`'s `onTrace`).
 - [ ] **R1 Per-match RNG and `hypot`.** `core/rng.js` instances; `dmath.hypot`.
 - [ ] **R2 Race data and seats.** `data/` race definitions; seats with race,
   edge and controller; ability flags instead of text checks; `RULES_ID`.
@@ -51,7 +85,7 @@ step keeps the game playable.
 
 **Multiplayer and features.**
 
-- [ ] **N0** Cross-engine maths (`sin`/`cos`/`atan2` in `dmath`).
+- [ ] **N0** Cross-engine maths (`sin`/`cos`/`atan`/`atan2` in `dmath`).
 - [ ] **F3** The End-phase button lights up when nothing is left to do.
 - [ ] **F1** Playing a side puts your side of the board in front of you
   (the serpents included).
@@ -87,4 +121,4 @@ step keeps the game playable.
   bodies and open shells fixed; exact pathfinding distances; Auto race
   closed.
 - Battles replay exactly (logic RNG, logical positions, sampled wrecking,
-  trace, `?fast`), plus the parity tooling in `test/`.
+  trace, `?fast`), plus the parity tooling in `test/` (moved to `sim/` in R0).

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "vite", "build": "vite build", "parity": "node test/parity.mjs" },
+  "scripts": { "dev": "vite", "build": "vite build", "parity": "node sim/parity.mjs" },
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Tails & Scales",
