@@ -22,33 +22,64 @@ the commit, and add whatever the work turned up.
 
 ## Queue
 
-1. [ ] **Architecture design.** Hands-on Automerge research, competing
-   architecture proposals, judged and merged into one spec.
-2. [ ] **Refactor.** A deterministic core that runs headless in Node (state,
-   rules, commands, AI); a presenter seam so the browser paces it with
-   animation while tests and network catch-up run it instantly; races,
-   abilities and terrain as data; view, UI and input split out of `main.js`.
-   Parity is checked after every step.
-3. [ ] **Verify the refactor.** Parity in the browser and in Node, browser
-   play-through tests, an adversarial review.
-4. [ ] **Remote multiplayer over Automerge.** The match setup and an
-   append-only command log live in an Automerge document; every client
-   replays it through the core. Join by link, spectate, desync detection.
-   (The claude.ai artifact blocks outside connections, so online play works
-   from GitHub Pages or a local server.)
-5. [ ] Playing as the serpents (side 1) starts with your side of the board in
-   front of you.
-6. [ ] Spectating is viewed from the side: one army left, one right.
-7. [ ] The End-phase button lights up when you have nothing left to do.
-8. [ ] After round 5, the win screen offers **Keep playing**.
-9. [ ] A new race: insectoids (about six unit types, models, abilities).
-10. [ ] A new race: bird-people (about six unit types, models, abilities).
-11. [ ] Race selection shows a mini 3D diorama of the race's figures.
-12. [ ] More terrain, including fortifications you can climb onto (2.5D
-    elevation: raised walkable tops, stairs and ramps, height for line of
-    sight and cover, destructible platforms).
-13. [ ] Verify the features, rebuild, re-shoot the thumbnail if needed,
-    publish.
+The architecture is specified in [DESIGN.md](./DESIGN.md), the output of a
+design panel (Automerge research, four competing proposals, three judges).
+Its migration plan (§4) is the order of work. Every step has a gate, and every
+step keeps the game playable.
+
+**Refactor proper: behaviour frozen.** Byte-identical parity gates every step.
+
+- [ ] **R0 Harness and corpus.** `?debug` input hooks; `sim/oracle` runs the
+  frozen legacy code in Node; a human-bot that plays through the hooks; a
+  widened corpus (vs-AI, hotseat, wipe-outs) admitted only where Node and
+  Chromium agree; a full-precision shadow snapshot at every action.
+- [ ] **R1 Per-match RNG and `hypot`.** `core/rng.js` instances; `dmath.hypot`.
+- [ ] **R2 Race data and seats.** `data/` race definitions; seats with race,
+  edge and controller; ability flags instead of text checks; `RULES_ID`.
+- [ ] **R3 Terrain split.** `core/terrain/*` logic and recipes separated from
+  `view/terrain.js` meshes.
+- [ ] **R4 State and queries.** The game state `G` owns units, terrain, nav,
+  turn and journal; queries take `(G, …)`.
+- [ ] **R5 Synchronous actions.** Each `await` becomes an emitted event; a
+  transitional `EventPlayer` keeps today's visuals; a mirror for display state.
+- [ ] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as
+  generators, `LocalStore` + `Session`; the core runs headless in Node.
+- [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,
+  input tools, `ui/*`, HUD model, template cache.
+- [ ] **R8 Netplay seams.** `stateHash`, envelopes, `Folder` (the replicated
+  authority), merge-sim.
+
+**Multiplayer and features.**
+
+- [ ] **N0** Cross-engine maths (`sin`/`cos`/`atan2` in `dmath`).
+- [ ] **F3** The End-phase button lights up when nothing is left to do.
+- [ ] **F1** Playing a side puts your side of the board in front of you
+  (the serpents included).
+- [ ] **F2** Spectating is viewed broadside: one army left, one right.
+- [ ] **F4** After round 5, the win screen offers **Keep playing** (a vote).
+- [ ] **N1** Real Automerge in Node: two- and three-peer tests.
+- [ ] **N2** Online play: lobby, join by link, joint dice seed, presence,
+  desync report. (The claude.ai artifact blocks outside connections, so
+  online play works from GitHub Pages or a local server.)
+- [ ] **N3** Spectating, rejoin, scrubbing, replay export, tamper alarm.
+- [ ] **F6** Race selection with a mini 3D diorama of each race's figures.
+- [ ] **F5** New races: insectoids (burrow, swarm) and bird-people (fly,
+  swoop).
+- [ ] **F7** More terrain: climbable fortifications (2.5D elevation).
+- [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
+  needed, publish.
+
+### Open questions (building the defaults unless told otherwise)
+
+1. Online opponents are **friends sharing a link**. Dice are seeded jointly,
+   so nobody can grind the seed, but a player with devtools could foresee
+   rolls. Strangers would need fair commit-reveal dice and signed commands.
+2. Sync goes through the **public `wss://sync.automerge.org`**, with a
+   `?sync=` override for a self-hosted server.
+3. The Automerge wasm (3.6 MB, about 1.1 MB compressed) is **committed in
+   `dist/`** and loaded only when you play online.
+4. A rules change makes in-progress online matches **read-only**.
+5. Insect burrowing is **always visible**.
 
 ## Done
 
