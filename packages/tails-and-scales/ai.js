@@ -84,7 +84,9 @@ async function aiMove(api, side) {
       }
       continue
     }
-    let plan = api.movePlan(u)
+    // a unit its player already advanced (before pressing Auto) moves on that
+    // roll; it never advances twice
+    let plan = api.movePlan(u, u.flags.advanced ? u.flags.advRoll : 0)
     let pick = bestSpot(api, u, plan, claimed)
     // Advance when the extra inches are worth more than what it forfeits:
     // brawlers still far from a charge, shooters with nothing to shoot yet.
@@ -95,7 +97,7 @@ async function aiMove(api, side) {
     } else if (role === 'shooter') {
       advance = !pick.canShoot && !pick.onObjective && (u.t.ranged.assault || nearest > u.t.ranged.range + u.t.M + 3)
     }
-    if (advance) {
+    if (advance && !u.flags.advanced) {
       api.focus(u.pos.x, u.pos.z)
       const r = await api.doAdvance(u)
       plan = api.movePlan(u, r)

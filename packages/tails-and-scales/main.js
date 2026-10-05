@@ -708,6 +708,8 @@ async function blastVolley(u, target, w, info) {
   const n = attackCount(u, w, false)
   log(u.side, `<b>${u.t.short}</b> fire ${w.name} at ${target.t.short} (${info.need}+${info.visible ? '' : ', unseen'}).`)
   for (let k = 0; k < n; k++) {
+    // a template that wiped out its own unit ends the volley: nobody is left to throw
+    if (!alive(u)) break
     if (!alive(target) && k > 0) break
     const ang = rng() * Math.PI * 2, off = rng() * target.r * 0.5
     const aim = { x: target.pos.x + Math.cos(ang) * off, z: target.pos.z + Math.sin(ang) * off }
