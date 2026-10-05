@@ -134,6 +134,9 @@ export class App {
         uWeatherRect: { value: new THREE.Vector4(-WORLD, -WORLD, WORLD * 2, WORLD * 2) },
         uCloudShadowK: { value: 0 },
         uCloudMidY: { value: 15 },
+        uCloudWind: { value: new THREE.Vector2() },
+        uCloudWindDir: { value: new THREE.Vector2(1, 0) },
+        uFarCover: { value: 0.32 },
         uWetness: { value: 0 },
         uLand: { value: this.landTex },
         uSkyMap: { value: null },
@@ -357,6 +360,9 @@ export class App {
     }
     this.shared.uniforms.uCloudShadowK.value = 2.6
     this.shared.uniforms.uCloudMidY.value = (W.base + W.top) * 0.5
+    this.shared.uniforms.uCloudWind.value.copy(W.windOffset)
+    this.shared.uniforms.uCloudWindDir.value.copy(W.wind)
+    this.shared.uniforms.uFarCover.value = cu.uFarCover.value
     this.ocean.uniforms.uWind.value.set(W.wind.x / 9, W.wind.y / 9)
     this.shared.uniforms.uWindVec.value.set(W.wind.x / 9, W.wind.y / 9)
     const pu = this.pipeline.uniforms

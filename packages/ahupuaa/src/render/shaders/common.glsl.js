@@ -76,6 +76,34 @@ float metresAt(vec2 xz) {
 // The lighting every lit surface shares. uSunDir points toward the sun; the sun
 // and sky colours already include time of day, so night falls everywhere at
 // once. Terrain shadow and cloud shadow both come in through sunVisibility().
+// Trade cumulus over the open sea, past the island's own simulated weather:
+// shared by the clouds (clouds.js), which draw them, and by the lighting
+// below, which puts their shadows on the water under them.
+export const cumulus = /* glsl */ `
+float seaVn(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  float a = fract(sin(dot(i, vec2(127.1, 311.7))) * 43758.5453);
+  float b = fract(sin(dot(i + vec2(1, 0), vec2(127.1, 311.7))) * 43758.5453);
+  float c = fract(sin(dot(i + vec2(0, 1), vec2(127.1, 311.7))) * 43758.5453);
+  float d = fract(sin(dot(i + vec2(1, 1), vec2(127.1, 311.7))) * 43758.5453);
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+// 0 over the island and its near waters (the land reaches ~125 units from
+// the middle), 1 out on the open sea
+float openSea(vec2 xz) { return smoothstep(135.0, 215.0, length(xz)); }
+// their cover at xz: streets along the wind (wind: how far it has carried
+// them), about a fifth of the sea under them in the trades, closing in for a
+// storm (farCover)
+float tradeCumulus(vec2 xz, vec2 wind, vec2 windDir, float farCover) {
+  vec2 wd = normalize(windDir + vec2(1e-4));
+  vec2 r = xz - wind;
+  vec2 q = vec2(dot(r, wd) / 70.0, dot(r, vec2(-wd.y, wd.x)) / 26.0);
+  float n = seaVn(q) * 0.6 + seaVn(q * 2.1 + 7.0) * 0.3 + seaVn(q * 4.3) * 0.1;
+  return smoothstep(0.6, 0.85, n + (farCover - 0.32) * 0.5) * 0.85;
+}
+`
+
 export const lighting = /* glsl */ `
 uniform vec3 uSunDir;
 uniform vec3 uSunColor;
@@ -89,6 +117,9 @@ uniform sampler2D uWeather;     // r cloud cover, g rain, b top, a base
 uniform vec4 uWeatherRect;      // xy origin, zw size of the weather grid in world
 uniform float uCloudShadowK;
 uniform float uCloudMidY;
+uniform vec2 uCloudWind;        // how far the wind has carried the clouds
+uniform vec2 uCloudWindDir;
+uniform float uFarCover;        // the trade cumulus out over the open sea
 uniform float uWetness;         // 0 dry .. 1 soaked (from recent rain overall)
 uniform sampler2D uSkyMap;      // equirect sky radiance, elevation squashed to the horizon
 
@@ -98,6 +129,7 @@ vec2 dirToSkyUv(vec3 d) {
 }
 vec3 skyMap(vec3 d) { return texture(uSkyMap, dirToSkyUv(d)).rgb; }
 
+${cumulus}
 vec4 weatherAt(vec2 xz) {
   vec2 uv = (xz - uWeatherRect.xy) / uWeatherRect.zw;
   return texture(uWeather, uv);
@@ -112,6 +144,9 @@ float cloudShadow(vec3 p) {
   float c = texture(uWeather, uv).r * inside;
   // break the coarse grid up a little so shadows have ragged edges
   c *= 0.75 + 0.5 * fbm2(xz * 0.22 + uWeatherRect.xy * 0.0);
+  // and out on the open sea, under the cumulus there
+  float open = openSea(xz);
+  if (open > 0.0) c = max(c, tradeCumulus(xz, uCloudWind, uCloudWindDir, uFarCover) * open);
   return exp(-c * uCloudShadowK);
 }
 

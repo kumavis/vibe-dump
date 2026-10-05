@@ -30,7 +30,7 @@
 // shows against dark cloud and shaded rain, as a real one does.
 
 import * as THREE from 'three'
-import { constants, heightFetch } from './shaders/common.glsl.js'
+import { constants, heightFetch, cumulus } from './shaders/common.glsl.js'
 import { fullscreenTriangle } from './pipeline.js'
 
 const fragment = /* glsl */ `
@@ -57,7 +57,7 @@ uniform float uTime;
 uniform float uBase;       // world y of the cloud base
 uniform float uTop;        // world y of the inversion
 uniform float uDensity;
-uniform float uFarCover;   // trade cumulus beyond the simulated patch
+uniform float uFarCover;   // trade cumulus over the open sea
 uniform float uOvercast;   // 0..1, a stratiform deck over everything (Kona storms)
 uniform float uRainbow;    // 1 = rainbows on; also a debug gain
 uniform float uSteps;
@@ -68,6 +68,7 @@ uniform float uFrame;      // frame counter, steps the sample offsets
 uniform sampler2D uBowLUT;  // raindrop light near the bows (x = degrees from antisolar / 64; rows: showers, light rain, drizzle)
 uniform sampler2D uShadow;  // terrain shadow from the sun, top-down
 ${heightFetch}
+${cumulus}
 in vec2 vUv;
 // the transmittance-weighted mean distance of what the ray met, for reprojection
 layout(location = 1) out highp vec4 cloudDepth;
@@ -78,6 +79,8 @@ layout(location = 1) out highp vec4 cloudDepth;
 #define BOW_GAIN 0.3
 // how far (world y) rain shows up inside the cloud above its base
 #define RAIN_REACH 3.2
+// how far out (world units) the march goes
+#define FAR 3000.0
 
 // interleaved gradient noise: neighbouring pixels get well spread offsets
 float ign(vec2 p) { return fract(52.9829189 * fract(dot(p, vec2(0.06711056, 0.00583715)))); }
@@ -92,19 +95,19 @@ float vn(vec2 p) {
 }
 
 // cover, rain, wetness, convective — the simulated patch, fading into
-// procedural trade cumulus beyond it
+// procedural trade cumulus beyond it. Out on the open sea the same cumulus
+// fill in under the simulated cloud too, so the sea is dotted with them out
+// to the horizon rather than clear past the island's own weather.
 vec4 weather(vec2 xz) {
   vec2 uv = (xz - uWeatherRect.xy) / uWeatherRect.zw;
   vec4 w = texture(uWeather, uv);
   float edge = smoothstep(0.38, 0.49, max(abs(uv.x - 0.5), abs(uv.y - 0.5)));
-  if (edge > 0.0) {
+  float open = openSea(xz);
+  if (open > 0.0) {
     // trade cumulus line up in streets along the wind
-    vec2 wd = normalize(uWindDir + vec2(1e-4));
-    vec2 r = xz - uWind;
-    vec2 q = vec2(dot(r, wd) / 70.0, dot(r, vec2(-wd.y, wd.x)) / 26.0);
-    float n = vn(q) * 0.6 + vn(q * 2.1 + 7.0) * 0.3 + vn(q * 4.3) * 0.1;
-    float far = smoothstep(1.0 - uFarCover, 1.0, n) * 0.85;
-    w = mix(w, vec4(far, far > 0.55 ? (far - 0.55) * 0.5 : 0.0, 0.0, 0.0), edge);
+    float far = tradeCumulus(xz, uWind, uWindDir, uFarCover);
+    vec4 f = vec4(far, far > 0.55 ? (far - 0.55) * 0.5 : 0.0, 0.0, 0.0);
+    w = mix(max(w, f * open), f, edge);
   }
   return w;
 }
@@ -218,7 +221,7 @@ void main() {
   vec3 ray = world - uCamPos;
   float sceneDist = depth < 1.0 ? length(ray) : 1e9;
   vec3 rd = normalize(ray);
-  cloudDepth = vec4(min(sceneDist, 2000.0));
+  cloudDepth = vec4(min(sceneDist, FAR));
 
   float yHi = uTop + 0.5;
   float yLo = 0.0;
@@ -226,14 +229,15 @@ void main() {
   float t0, t1;
   if (abs(rd.y) < 1e-5) {
     if (uCamPos.y < yLo || uCamPos.y > yHi) { gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
-    t0 = 0.0; t1 = 2000.0;
+    t0 = 0.0; t1 = FAR;
   } else {
     float ta = (yLo - uCamPos.y) / rd.y;
     float tb = (yHi - uCamPos.y) / rd.y;
     t0 = max(0.0, min(ta, tb));
     t1 = max(ta, tb);
   }
-  t1 = min(t1, min(sceneDist, 1400.0));
+  // (far enough that the cumulus over the sea run on to the horizon)
+  t1 = min(t1, min(sceneDist, FAR));
   if (t1 <= t0) { gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
 
   // a different offset every frame (a golden-ratio walk from each pixel's own
@@ -261,16 +265,17 @@ void main() {
   float lit = 1.0;
   float litT = -1e9;
   vec3 sunL = uSunColor;
-  float fogK = 0.0011;
+  float fogK = 0.0008;
   float detailK = uSteps / 56.0;
   float t = t0 + jitter * clamp(t0 * 0.011 / detailK, 0.22, 7.0);
   // striding over empty air, then stepping back to walk into cloud at the
   // fine step, so where a ray meets cloud doesn't snap to the stride
   float tEmpty = -1.0;
   float tFine = -1.0;
-  for (int i = 0; i < 200; i++) {
+  for (int i = 0; i < 260; i++) {
     if (t >= t1 || T < 0.03) break;
-    float dt = clamp(t * 0.011 / detailK, 0.22, 7.0);
+    // (and coarser still far out, where a cloud is a few pixels across)
+    float dt = clamp(t * 0.011 / detailK, 0.22, max(7.0, t * 0.008));
     vec3 p = uCamPos + rd * t;
     vec4 w = weatherAll(p.xz);
     float b0 = cellBase(w);
