@@ -1,5 +1,6 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from './rules.js'
 import { wait } from './util.js'
+import { rng } from './rng.js'
 
 // ---------------------------------------------------------------------------
 // The opponent. No search, just a general's instincts written as scores:
@@ -129,7 +130,7 @@ function bestSpot(api, u, plan, claimed) {
       if (!isFinite(res.dist[i])) continue
       if (!api.validEnd(plan, i)) continue
       const x = nav.x(i), z = nav.z(i)
-      const sc = score(api, u, x, z, ctx, true) + Math.random() * 0.05
+      const sc = score(api, u, x, z, ctx, true) + rng() * 0.05
       if (sc > best.score) best = { cell: i, score: sc, dist: Math.hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
     }
   }

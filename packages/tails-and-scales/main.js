@@ -11,6 +11,7 @@ import { buildModel, M } from './models.js'
 import { clock, tween, wait, stepTweens, easeOut, easeInOut, wrapAngle, lerp } from './util.js'
 import { aiPhase } from './ai.js'
 import { sfx, unlock, toggleMute, isMuted } from './sfx.js'
+import { rng, seedLogic, rngState } from './rng.js'
 
 // ---------------------------------------------------------------------------
 // Tails & Scales — a pocket-sized Warhammer.
@@ -263,6 +264,10 @@ const friendsOf = (u) => units.filter((e) => e.side === u.side && alive(e) && e 
 const dist = (a, b) => Math.hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)
 const gap = (a, b) => dist(a, b) - a.r - b.r
 const engagedWith = (u) => enemiesOf(u).filter((e) => gap(u, e) <= ENGAGE + 0.05)
+// Where a model stands as far as the rules are concerned: its slot in the
+// formation, not wherever its mesh has animated to this frame.
+const mx = (u, m) => u.pos.x + m.ox
+const mz = (u, m) => u.pos.z + m.oz
 const isEngaged = (u) => engagedWith(u).length > 0
 const human = (side) => S.control[side] === 'human'
 
@@ -409,7 +414,7 @@ function inCover(u) {
   const live = u.models.filter((m) => m.alive)
   if (u.t.fly) return false
   let n = 0
-  for (const m of live) if (nav.cover[nav.index(m.x, m.z)]) n++
+  for (const m of live) if (nav.cover[nav.index(mx(u, m), mz(u, m))]) n++
   return n * 2 >= live.length && n > 0
 }
 
@@ -420,7 +425,7 @@ function sight(a, b, from = a.pos) {
   for (const m of b.models) {
     if (!m.alive) continue
     total++
-    const r = scenery.los(eye, { x: b === a ? m.x : m.x, y: chestY(b), z: m.z })
+    const r = scenery.los(eye, { x: mx(b, m), y: chestY(b), z: mz(b, m) })
     if (!r.blocked) {
       seen++
       if (r.obscure) obsc++
@@ -439,7 +444,7 @@ function controlOf(o) {
   const oc = [0, 0]
   for (const u of units) {
     if (!alive(u)) continue
-    for (const m of u.models) if (m.alive && Math.hypot(m.x - o.x, m.z - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
+    for (const m of u.models) if (m.alive && Math.hypot(mx(u, m) - o.x, mz(u, m) - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
   }
   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
 }
@@ -521,7 +526,12 @@ async function walk(u, pts, { speed = 7, fly = false } = {}) {
     seg.push({ a: pts[i - 1], b: pts[i], s: acc, l })
     acc += l
   }
-  const wrecker = u.t.wrecker
+  // The Brute smashes what it passes at fixed 0.25" samples along the path, so
+  // what breaks (and which way trees fall) never depends on the frame rate.
+  const smash = []
+  if (u.t.wrecker) for (const q of seg) for (let t = 0; t < q.l; t += 0.25) smash.push({ s: q.s + t, x: q.a.x + ((q.b.x - q.a.x) * t) / q.l, z: q.a.z + ((q.b.z - q.a.z) * t) / q.l, dir: Math.atan2(q.b.x - q.a.x, q.b.z - q.a.z) })
+  if (u.t.wrecker) smash.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: seg[seg.length - 1] ? Math.atan2(seg[seg.length - 1].b.x - seg[seg.length - 1].a.x, seg[seg.length - 1].b.z - seg[seg.length - 1].a.z) : u.facing })
+  let smashed = 0
   await tween(L / speed + 0.15, (k) => {
     const d = Math.min(L, k * (L + speed * 0.15))
     const s = seg.find((q) => d <= q.s + q.l) || seg[seg.length - 1]
@@ -530,20 +540,21 @@ async function walk(u, pts, { speed = 7, fly = false } = {}) {
     u.facing = Math.atan2(s.b.x - s.a.x, s.b.z - s.a.z)
     setUnitPos(u, x, z)
     if (fly) for (const m of u.models) m.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)
-    if (wrecker) smashAround(u, x, z)
+    while (smashed < smash.length && smash[smashed].s <= d) smashAround(u, smash[smashed++])
   }, easeInOut)
+  while (smashed < smash.length) smashAround(u, smash[smashed++])
   u.moving = false
   if (fly) for (const m of u.models) (m.flying = false), (m.lift = 0)
   await wait(0.15)
 }
 
 // The Brute ploughs through anything breakable in its way.
-function smashAround(u, x, z) {
+function smashAround(u, { x, z, dir }) {
   for (const c of scenery.chunks) {
     if (!c.alive || !c.destructible) continue
     const s = c.nav || c.shape
     if (Math.hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
-      scenery.hurt(c, 99, { x: x - Math.sin(u.facing), z: z - Math.cos(u.facing) })
+      scenery.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) })
       fx.shake = Math.max(fx.shake, 0.08)
     }
   }
@@ -698,7 +709,7 @@ async function blastVolley(u, target, w, info) {
   log(u.side, `<b>${u.t.short}</b> fire ${w.name} at ${target.t.short} (${info.need}+${info.visible ? '' : ', unseen'}).`)
   for (let k = 0; k < n; k++) {
     if (!alive(target) && k > 0) break
-    const ang = Math.random() * Math.PI * 2, off = Math.random() * target.r * 0.5
+    const ang = rng() * Math.PI * 2, off = rng() * target.r * 0.5
     const aim = { x: target.pos.x + Math.cos(ang) * off, z: target.pos.z + Math.sin(ang) * off }
     const marker = fx.ring(aim.x, aim.z, w.blast, '#ffffff', { hold: true, fill: 0.12 })
     const r = roll(1)
@@ -707,7 +718,7 @@ async function blastVolley(u, target, w, info) {
     let land = aim
     if (!hit) {
       const sc = roll(1)[0] + 1
-      const a = Math.random() * Math.PI * 2
+      const a = rng() * Math.PI * 2
       land = {
         x: Math.max(-W / 2 + 0.3, Math.min(W / 2 - 0.3, aim.x + Math.cos(a) * sc)),
         z: Math.max(-H / 2 + 0.3, Math.min(H / 2 - 0.3, aim.z + Math.sin(a) * sc)),
@@ -780,7 +791,7 @@ async function blastLands(u, land, w) {
   const victims = []
   for (const v of units) {
     if (!alive(v)) continue
-    const under = v.models.filter((m) => m.alive && Math.hypot(m.x - land.x, m.z - land.z) <= w.blast + v.t.base * 0.6)
+    const under = v.models.filter((m) => m.alive && Math.hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
     if (under.length) victims.push({ v, under })
   }
   for (const { v, under } of victims) {
@@ -839,7 +850,8 @@ async function damage(u, n, D, attacker, prefer = null) {
     if (wounded.length) m = wounded[0]
     else {
       // whoever is nearest the attacker takes it
-      m = pool.reduce((a, b) => (Math.hypot(a.x - attacker.pos.x, a.z - attacker.pos.z) < Math.hypot(b.x - attacker.pos.x, b.z - attacker.pos.z) ? a : b))
+      const near = (q) => Math.hypot(mx(u, q) - attacker.pos.x, mz(u, q) - attacker.pos.z)
+      m = pool.reduce((a, b) => (near(a) < near(b) ? a : b))
     }
     m.w -= D
     fx.text({ x: m.x, y: (u.t.big ? 2.3 : 1.3), z: m.z }, `-${Math.min(D, D + Math.min(0, m.w))}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
@@ -1142,6 +1154,7 @@ function face(u, target) {
 const top = (u) => ({ x: u.pos.x, y: u.t.big ? 2.6 : 1.6, z: u.pos.z })
 
 function finishAction() {
+  traceState('act')
   S.busy = false
   for (const u of units) updateLabel(u)
   if (S.sel && !canAct(S.sel)) select(null)
@@ -1239,6 +1252,7 @@ async function playerTurn(side) {
     } else {
       await aiPhase(api, side, ph.key)
     }
+    traceState(`phase ${side}:${ph.key}`)
     checkWipe()
     if (S.wiped !== undefined) return
   }
@@ -1260,6 +1274,7 @@ async function scoreRound() {
   }
   S.vp[0] += held[0]
   S.vp[1] += held[1]
+  traceState(`round ${S.round}`)
   log(-1, `End of round ${S.round}: ${SIDES[0].short} hold ${held[0]} objective${held[0] === 1 ? '' : 's'}, ${SIDES[1].short} hold ${held[1]}. Score ${S.vp[0]}–${S.vp[1]}.`, 'big')
   refreshUI()
   await banner(`End of round ${S.round}`, `VP ${S.vp[0]} – ${S.vp[1]}`)
@@ -1267,6 +1282,7 @@ async function scoreRound() {
 
 function gameOver() {
   for (const p of S.pendingLog.splice(0)) write(...p)
+  traceState('over')
   S.stage = 'over'
   select(null)
   refreshUI()
@@ -1622,7 +1638,17 @@ const tray = {
   },
 }
 
+// A replayable fingerprint of the battle: every log line and the logic-RNG
+// position, plus a state snapshot after each action. Two runs with the same
+// seeds must produce identical traces (that is how refactors are checked).
+const trace = []
+function traceState(tag) {
+  const us = units.map((u) => `${u.id}:${u.pos.x.toFixed(3)},${u.pos.z.toFixed(3)},${u.models.map((m) => m.w).join('/')}`).join(' ')
+  trace.push(`${tag} ${us} chunks:${scenery.chunks.filter((c) => c.alive).length} vp:${S.vp.join('-')} rng:${rngState()}`)
+}
+
 function log(side, html, cls = '') {
+  trace.push(`log ${side} ${html.replace(/<[^>]+>/g, '')} rng:${rngState()}`)
   write(side, html, cls)
   for (const p of S.pendingLog.splice(0)) write(...p)
 }
@@ -1887,6 +1913,10 @@ function setupTable() {
 }
 
 async function start(mode) {
+  // a fresh logic-dice stream per battle; ?dice=N replays one exactly
+  S.dice = Number(params.get('dice')) || ((Math.random() * 1e9) | 0)
+  seedLogic(S.dice)
+  trace.length = 0
   S.control = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }[mode]
   $('#title').classList.add('hidden')
   document.body.classList.add('playing')
@@ -1968,7 +1998,7 @@ function animateUnits(dt, time) {
       }
     }
     // the floating label
-    if (alive(u)) {
+    if (alive(u) && !FAST) {
       tmpV.set(u.pos.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), u.pos.z).project(camera)
       const on = tmpV.z < 1
       u.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`
@@ -1996,8 +2026,14 @@ function animateObjectives(dt, time) {
   }
 }
 
+// ?fast: a test mode that skips drawing and lets game time run effectively
+// instantly, so a whole AI battle replays in about a minute. Logic is
+// unaffected: every animation still resolves, just within a frame.
+const FAST = params.has('fast')
+
 function frame() {
   requestAnimationFrame(frame)
+  if (FAST) clock.speed = 1e4
   const raw = Math.min(timer.getDelta(), 0.05)
   const dt = raw * clock.speed
   clock.time += dt
@@ -2020,7 +2056,7 @@ function frame() {
   const sh = fx.shake
   const off = new THREE.Vector3((Math.random() - 0.5) * sh, (Math.random() - 0.5) * sh, (Math.random() - 0.5) * sh)
   camera.position.add(off)
-  renderer.render(scene, camera)
+  if (!FAST) renderer.render(scene, camera)
   camera.position.sub(off)
 }
 
@@ -2050,7 +2086,7 @@ if (params.has('watch')) start('watch')
 // ?debug exposes the table to the console (and to the test harness)
 if (params.has('debug')) {
   window.__ts = {
-    S, clock, scenery, nav, camera, controls, renderer, validEnd, setUnitPos,
+    S, clock, scenery, nav, camera, controls, renderer, validEnd, setUnitPos, trace,
     get units() {
       return units
     },
