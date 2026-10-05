@@ -188,7 +188,30 @@ html, body {
 }
 #stats .keys { color: var(--ink-3); text-transform: none; letter-spacing: 0.04em; }
 
+/* The mode switch, a plate of its own in the corner the title leaves free:
+   both modes shown, the one in force inked. */
+#mode {
+  position: fixed;
+  right: 24px;
+  top: 22px;
+  display: flex;
+  padding: 0;
+  font: 500 10px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.6s;
+}
+#mode span { padding: 8px 11px; }
+#mode span + span { border-left: 1px solid var(--ink); }
+#mode[aria-pressed='false'] .auto,
+#mode[aria-pressed='true'] .hand { background: var(--ink); color: var(--card); }
+#mode:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+
 body.ready #title,
+body.ready #mode,
 body.ready #legend,
 body.ready #stats { opacity: 1; }
 
@@ -213,6 +236,40 @@ body.ready #stats { opacity: 1; }
 }
 .card.from-right { clip-path: inset(0 0 0 100%); }
 .card.open { clip-path: inset(0 0 0 0); }
+/* In manual mode a note stays until it is closed, so an open one takes the
+   pointer, for its close button. */
+body.manual .card.open { pointer-events: auto; }
+
+/* A cross drawn in two hairlines: the fonts are cut to the characters the
+   app sets, and × isn't one. */
+.card-x {
+  display: none;
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: -6px -8px -6px -2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.card-x::before,
+.card-x::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 1.2px;
+  margin: -0.6px 0 0 -5px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+.card-x::after { transform: rotate(-45deg); }
+.card-x:hover { color: var(--ink); }
+body.manual .card-x { display: block; }
 
 .card-head {
   display: flex;
@@ -312,7 +369,15 @@ body.ready #stats { opacity: 1; }
   #legend { left: 12px; bottom: 12px; padding: 8px 10px; }
   #stats { right: 12px; bottom: 12px; padding: 8px 10px; flex-direction: column; gap: 3px; text-align: right; }
   #stats .keys { display: none; }
+  #mode { right: 12px; top: 12px; }
+  #mode span { padding: 7px 9px; }
   .card { width: 176px; padding: 9px 10px 10px; }
   .card-word { font-size: 32px; }
   .card-hist { display: none; }
+}
+/* On the narrowest phones the switch would reach the title: it folds to the
+   one word, inked while manual mode is on. */
+@media (max-width: 359px) {
+  #mode .auto { display: none; }
+  #mode span + span { border-left: 0; }
 }
