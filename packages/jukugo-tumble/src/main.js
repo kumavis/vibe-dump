@@ -37,6 +37,14 @@ async function boot() {
   const director = new Director({ board, scene, links, notes, ripples })
 
   let reserved = []
+  // The plates the cards keep off. The keys on the stats plate change with
+  // the mode, so this runs on a toggle as well as on resize.
+  function measure() {
+    reserved = ['title', 'mode', 'legend', 'stats'].map((id) => {
+      const r = $(id).getBoundingClientRect()
+      return { x: r.left - 12, y: r.top - 12, w: r.width + 24, h: r.height + 24 }
+    })
+  }
   function resize() {
     const w = innerWidth
     const h = innerHeight
@@ -44,21 +52,24 @@ async function boot() {
     scene.setSize(w, h, dpr)
     floor.resize(w, h, dpr)
     notes.resize(w, h, dpr)
-    reserved = ['title', 'legend', 'stats'].map((id) => {
-      const r = $(id).getBoundingClientRect()
-      return { x: r.left - 12, y: r.top - 12, w: r.width + 24, h: r.height + 24 }
-    })
+    measure()
   }
   addEventListener('resize', resize)
   resize()
 
   // A slow drift over the floor — never still, never fast enough to make the
-  // captions hard to read.
+  // captions hard to read. It keeps a clock of its own, which stands still in
+  // manual mode: the view holds where it is, and back in auto the drift picks
+  // up from there rather than jumping on to where it would have got to.
+  let drift = 0
+  let driftAt = null
   function updateView(now) {
+    if (driftAt != null && !director.manual) drift += now - driftAt
+    driftAt = now
     const w = innerWidth
     const h = innerHeight
     const base = Math.max(34, Math.min(60, Math.min(w, h) / 17))
-    const t = reduceMotion ? 0 : now - t0
+    const t = reduceMotion ? 0 : drift
     view.ppu = base * user.zoom * (1 + 0.035 * Math.sin((t / 53) * Math.PI * 2))
     view.tx = clampX(2.5 * Math.sin((t / 97) * Math.PI * 2) + 1.4 * Math.sin((t / 41) * Math.PI * 2) + user.dx)
     view.tz = clampZ(1.8 * Math.sin((t / 83) * Math.PI * 2 + 1) + user.dz)
@@ -89,6 +100,35 @@ async function boot() {
   })
   director.start(t0)
 
+  // ── manual mode ──────────────────────────────────────────────────────────
+  // Nothing turns, no note opens and the camera holds still (updateView):
+  // a click opens a word's note, and a click on a word with its note up
+  // turns the block clicked. Drag and scroll still move the view. Kept in the
+  // URL (?manual=1), so a reload or a shared link opens the same way.
+  const mode = $('mode')
+  const keys = $('keys')
+  const KEYS = { auto: keys.textContent, manual: 'drag · scroll · click: note, then turn' }
+  function setManual(on) {
+    director.setManual(on, clock())
+    document.body.classList.toggle('manual', on)
+    mode.setAttribute('aria-pressed', String(on))
+    keys.textContent = on ? KEYS.manual : KEYS.auto
+    measure()
+    try {
+      const url = new URL(location.href)
+      if (on) url.searchParams.set('manual', '1')
+      else url.searchParams.delete('manual')
+      history.replaceState(history.state, '', url)
+    } catch {}
+  }
+  mode.addEventListener('click', (e) => {
+    setManual(!director.manual)
+    // A mouse click leaves the button focused, and Space would then press it
+    // rather than pause.
+    if (e.detail) mode.blur()
+  })
+  if (params.has('manual') && params.get('manual') !== '0') setManual(true)
+
   // ── input ────────────────────────────────────────────────────────────────
   const stage = $('stage')
   let drag = null
@@ -117,7 +157,8 @@ async function boot() {
     if (!drag) return
     if (drag.moved < 5) {
       const tile = scene.pick(e.clientX, e.clientY)
-      if (tile) director.poke(board.pairs[tile.pair], clock())
+      if (tile && director.manual) director.press(tile, clock())
+      else if (tile) director.poke(board.pairs[tile.pair], clock())
     }
     drag = null
     stage.classList.remove('dragging')
@@ -135,10 +176,25 @@ async function boot() {
     },
     { passive: false },
   )
+  // In manual mode an open note takes the pointer, for its close button: a
+  // press on it is the note's, not the start of a drag or a click on the block
+  // under it.
+  const cards = $('cards')
+  cards.addEventListener('pointerdown', (e) => e.stopPropagation())
+  cards.addEventListener('click', (e) => {
+    const x = e.target.closest('.card-x')
+    const note = x && notes.list.find((n) => n.el.contains(x))
+    if (note) notes.close(note, clock())
+  })
   addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
+      if (e.target.closest?.('button')) return
       e.preventDefault()
       director.paused = !director.paused
+    } else if (e.code === 'KeyM' && !(e.ctrlKey || e.metaKey || e.altKey)) {
+      setManual(!director.manual)
+    } else if (e.code === 'Escape' && director.manual) {
+      for (const note of notes.list) notes.close(note, clock())
     }
   })
 

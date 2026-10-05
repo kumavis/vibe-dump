@@ -124,9 +124,9 @@ export function isolines(grid, level) → lines                    // marching s
 ```js
 new Board(seed)
   .island, .features (= island.places), .pairs, .tiles, .turnCount
-  .chooseTurn(pair, now, linked)   // POHAKU: fresh-first tiers, root crowding, steering, reach weighting
+  .chooseTurn(pair, now, linked, only)   // POHAKU: fresh-first tiers, root crowding, steering, reach weighting; `only` = one stone
   .turn(pair, choice, now)          // sets pair.turnedAt = now
-  .targets(pair, now)               // the legal turns, best tier only: [{ index, entry, tier }]
+  .targets(pair, now, only)         // the legal turns, best tier only: [{ index, entry, tier }]; `only` = one stone
   .canTurn(pair, now)               // any legal turn at this moment
   .canTurnTwice(pair, now)          // a turn now and a fresh one a card's few seconds later
   .desiredLinks()                   // pair links { key, kind: 'pair', stone, a, b }; field links { key, kind: 'field', pair, feature, end, stub }
@@ -188,6 +188,8 @@ Capacity (`capacity()`), by width and by height:
 
 A clicked stone (`poke`) turns now and gets a card, closing the oldest if the screen is full. A pair with nowhere to go gets neither. Space pauses the Director (`paused`); the cards and lines finish what they were doing.
 
+Manual mode (`manual`, set through `setManual`): neither beat runs, so nothing turns and no card opens by itself, and the camera holds still (`main.js`). Turning it on closes the open cards; turning it off gives any card left open one more turn on the noted words' beat before it retires. A clicked stone (`press`) opens its word's card if it has none, whether or not the word can turn, closing the oldest if the screen is full. With the card up, a click turns the stone that was clicked, through `chooseTurn(pair, Infinity, linked, index)`: no rest before going back to a word shown lately (a fresh word still comes first). A stone with nowhere to go tips and falls back (`nudge`). A card stays until it is closed, by its × or by Escape for all of them, or until its word leaves `inView(-0.05)`.
+
 The caption set on each turn is `{ prev1, prev2, text1: entry.word.toUpperCase(), text2: entry.gloss, t0 }`.
 
 ## `view.js` (new)
@@ -217,7 +219,7 @@ Jukugo's `LinkStore`: `sync(desired, now, { origin, holdUntil })`, `update(now)`
 
 ## `scene3d.js`
 
-Jukugo's API: `setSize`, `setView`, `project`, `floorAffine`, `addTile`, `block(tile)` → `{ dropIn, turn(stone, t0, dur), landsAt, roll, drop }`, `pick`, `update`, `render`.
+Jukugo's API: `setSize`, `setView`, `project`, `floorAffine`, `addTile`, `block(tile)` → `{ dropIn, turn(stone, t0, dur), landsAt, nudge(t0), roll, drop }`, `pick`, `update`, `render`. `nudge` tips a stone about ten degrees forward and lets it fall back, for a stone clicked in manual mode with nothing to turn into.
 
 What changes:
 - Glyphs are drawn from `stoneText(stone)`. Roots run 1–8 letters, including ʻ and macron capitals, on a 1.5 × 1 face. Every root of up to five letters is set at one size, the size at which the widest of them fills the face (84–108 px type on a 384 × 256 texture). Longer roots are condensed, down to 0.6 of their width, and only past that set smaller.
@@ -250,7 +252,8 @@ Jukugo's `Notes` API: `new Notes(root, canvas)`, `resize`, `open(pair, now)`, `c
 - the gloss;
 - the parts row: each stone's spelling, gloss and ancestor, with the turned stone highlighted;
 - one line of the turned stone's cognates;
-- "was" and the previous word.
+- "was" and the previous word;
+- in manual mode, a × in the head. An open card then takes the pointer (`body.manual .card.open`), and `main.js` keeps a press on it from starting a drag or reaching the stone underneath.
 
 A `pending` word carries a small open circle `◦` after it. The legend explains it as "awaiting dictionary check". The cards set Hawaiian in lower case as written, and never use an apostrophe for an ʻokina.
 
@@ -271,15 +274,16 @@ Placement: a card rides rigidly at one of six places round its word: the four co
 
 - Boot waits for all three Alegreya cuts, since every letter is pecked into a texture or drawn on a canvas. `?seed=` (default 1031) picks the board and the island; `?slow=` divides the clock.
 - The opening: the map draws itself (`REVEAL`); from `REVEAL.stones` the stones fall in from the middle of the frame outward, 0.06 s apart within a pair; captions type in a second after; the opening lines are handed to `LinkStore` in the order their stones land. The Director starts 0.15 s before the stones begin to fall, Jukugo's distance.
-- `reserved`, the boxes the cards keep off, are the title, legend and stats plates with 12 px round them, measured on resize, plus the compass's box on screen, taken each frame.
-- Input: drag moves the view (held within `reach`, and clamped again on resize or rotation); the wheel zooms 0.6–1.9; a click on a stone pokes it; Space pauses. With reduced motion the camera holds where its wander begins.
+- `reserved`, the boxes the cards keep off, are the title, mode switch, legend and stats plates with 12 px round them, measured on resize and on a mode toggle, plus the compass's box on screen, taken each frame.
+- Input: drag moves the view (held within `reach`, and clamped again on resize or rotation); the wheel zooms 0.6–1.9; a click on a stone pokes it, or in manual mode presses it; Space pauses; M or the switch at the top right toggles manual mode, which is kept in the URL as `?manual=1`; Escape closes every card in manual mode. With reduced motion the camera holds where its wander begins. In manual mode it holds where it is: the wander runs on a clock of its own that stops while manual mode is on, so back in auto it picks up from where it stood rather than jumping on.
 - `body.ready` is set on the first frame. `body.opened` is set once every line of the opening is in (or has since let go) and the first card has opened. The last opening line arrives about a second after that card's first turn is due, so the card usually shows its word with the one it was. The gallery's thumbnail waits for `body.opened`.
 
 ## Chrome, fonts
 
 - Title plate: **Pōhaku Tumble** (*huaʻōlelo* is not used on the plate until the *hua* ruling, DECISIONS A2), with: "Two-root words cut in stone. A stone turns over to another root, and the word turns into another word."
 - Legend: shared root · field · note · ◦ awaiting dictionary check.
-- Stats: turns · links · words, and the keys (drag · scroll · click a stone · space).
+- Stats: turns · links · words, and the keys (drag · scroll · click a stone · space; in manual mode, drag · scroll · click: card, then turn).
+- Mode switch: a plate of its own at the top right, at the title's inset and inside the top margin: auto | manual, the mode in force inked. Below 360 px wide it folds to the one word. Where the title lies flat and the screen is under 760 px wide, the title's sentence gives way so the two don't meet.
 - One quiet credit line: Wiktionary, Andrews–Parker 1922, POLLEX-Online, Polynesian Voyaging Society.
 - The plates stay outside the Director's band (the top 16% of the frame and the bottom 14%), so a stone it turns is never under one:
   - 920 px high or more: the title stacked, the sentence beneath the name;
@@ -292,4 +296,4 @@ Placement: a card rides rigidly at one of six places round its word: the four co
 - Build: `cd packages/pohaku-tumble && ../../node_modules/.bin/vite build`. This writes `packages/pohaku-tumble/dist/`, which is gitignored. Don't run the repo-root `npm run build` during development.
 - Look: serve `dist/` (`../../node_modules/.bin/vite preview --port 41xx`), then screenshot with Playwright. Use Chromium at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, at 1280×800 DPR 2 (the gallery's), 1920×1080, 390×844 and 844×390. Wait for `body.opened`. Under SwiftShader the page runs at about one frame a second, so a shot can catch a card mid-turn: look before trusting it.
 - Engine: `tools/sim.mjs` runs `Board` and the real `Director` in Node against the real data, through `view.js`'s camera, and prints Jukugo's metrics (research/ENGINE.md §13) for the harness and at 1280×800, 390×844 and 844×390. It adds `faces` (the most stones on one root), `back60` (turns back to a word left under a minute before) and `loop/h` (a pair circling six words or fewer). Then the deal check, on the real list and on lists cut far down: the deal never hangs, no stone or line reaches into the upland, no word stands on the compass, no field line ends under its own word, no connector's name reaches the upland; and how varied each opening is.
-- `package.json` carries the gallery metadata, with the thumbnail at `{ "waitFor": "body.opened", "settle": 3000 }`. The package stays `"status": "wip"` until the fluent read (DESIGN §4.2).
+- `package.json` carries the gallery metadata, with the thumbnail at `{ "waitFor": "body.opened", "settle": 3000 }`. The package is marked `"status": "done"`, at the owner's call (DESIGN §4.2).

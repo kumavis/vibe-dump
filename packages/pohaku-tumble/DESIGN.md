@@ -329,9 +329,11 @@ Every word passes through three reads before it can appear:
 A first pass of these over the 563 two-mora candidates was started but its
 output never landed in `research/`. For option B, the Pukui & Elbert check of
 `research/roots/compounds.tsv` comes first: the three reads only make sense on
-words that are confirmed to exist as spelled. Then, before the app is marked
-`done` in the gallery, **the list is read by a fluent speaker.**
-Until that has happened the package stays `"status": "wip"`.
+words that are confirmed to exist as spelled. The plan was that, before the
+app is marked `done` in the gallery, **the list is read by a fluent speaker**,
+and that the package stays `"status": "wip"` until then. The owner has since
+marked it `done` (October 2026); the fluent read is still listed under
+BUILD-NOTES' *Open for the owner*.
 
 ### 4.3 Exclusion rules
 

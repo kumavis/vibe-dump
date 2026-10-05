@@ -2,6 +2,9 @@
 // and when the lines get rewired. Two rhythms run at once — a background
 // pulse of turns anywhere in view, and the noted words, which turn on a slower
 // beat so each card gets to show its word changing.
+//
+// In manual mode neither rhythm runs: nothing turns and no card opens unless
+// the viewer asks (press()).
 
 const ROLL = 0.86
 
@@ -13,8 +16,24 @@ export class Director {
     this.notes = notes
     this.ripples = ripples
     this.paused = false
+    this.manual = false
     this.lastTurn = new Map()
     this.meta = new Map()
+  }
+
+  // Into manual mode, the cards the Director opened fold away. Back out, any
+  // card the viewer left open takes one more turn on the noted words' beat
+  // and retires, and the background beat gives it a moment first.
+  setManual(on, now) {
+    if (on === this.manual) return
+    this.manual = on
+    if (on) {
+      for (const note of this.notes.list) this.notes.close(note, now)
+      return
+    }
+    for (const note of this.notes.list) if (!note.closing) this.meta.set(note, { nextTurn: now + 1.6, turnsLeft: 1 })
+    this.nextBackground = Math.max(this.nextBackground, now + 1.5)
+    this.nextNoteCheck = Math.max(this.nextNoteCheck, now + 0.9)
   }
 
   start(now) {
@@ -42,11 +61,11 @@ export class Director {
     return pair.tiles.some((t) => this.scene.block(t).roll || this.scene.block(t).drop)
   }
 
-  // Turn one block of `pair` over. Lines on the turning block let go at
-  // once; the new ones wait for it to land.
-  turnPair(pair, now) {
+  // Turn one block of `pair` over — block `only`, if given. Lines on the
+  // turning block let go at once; the new ones wait for it to land.
+  turnPair(pair, now, only = null) {
     if (this.rolling(pair)) return false
-    const choice = this.board.chooseTurn(pair)
+    const choice = this.board.chooseTurn(pair, only)
     if (!choice) return false
     const prev = pair.entry
     const tile = pair.tiles[choice.index]
@@ -80,11 +99,16 @@ export class Director {
     return note
   }
 
+  // Room for one more card: the oldest folds away if the screen is full.
+  makeRoom(now) {
+    const open = this.notes.list.filter((n) => !n.closing)
+    if (open.length >= this.capacity()) this.notes.close(open[0], now)
+  }
+
   // A clicked block turns now, and gets a note if it hasn't one.
   poke(pair, now) {
     if (!this.notes.has(pair)) {
-      const open = this.notes.list.filter((n) => !n.closing)
-      if (open.length >= this.capacity()) this.notes.close(open[0], now)
+      this.makeRoom(now)
       this.openNote(pair, now)
     }
     const note = this.notes.list.find((n) => n.pair === pair && !n.closing)
@@ -96,6 +120,19 @@ export class Director {
     this.turnPair(pair, now)
   }
 
+  // A clicked block in manual mode. The first click on a word opens its card;
+  // once the card is up, each click turns the block that was clicked. A block
+  // with nothing to turn into tips and falls back, so the click still shows.
+  press(tile, now) {
+    const pair = this.board.pairs[tile.pair]
+    if (!this.notes.has(pair)) {
+      this.makeRoom(now)
+      this.openNote(pair, now)
+    } else if (!this.rolling(pair) && !this.turnPair(pair, now, tile.index)) {
+      this.scene.block(tile).nudge(now)
+    }
+  }
+
   update(now) {
     this.ripples.splice(0, this.ripples.length, ...this.ripples.filter((r) => now - r.t0 < r.dur))
     if (this.paused) return
@@ -104,7 +141,8 @@ export class Director {
     const roughlyVisible = new Set(this.inView(-0.05))
 
     // Noted words: turn on their own beat, retire after a couple of turns or
-    // once the camera has drifted off them.
+    // once the camera has drifted off them. In manual mode a card stays until
+    // it is closed, or its word has gone off the screen.
     for (const note of this.notes.list) {
       if (note.closing) continue
       const m = this.meta.get(note)
@@ -112,7 +150,7 @@ export class Director {
         this.notes.close(note, now)
         continue
       }
-      if (now < m.nextTurn) continue
+      if (this.manual || now < m.nextTurn) continue
       if (m.turnsLeft > 0) {
         if (this.turnPair(note.pair, now)) {
           m.turnsLeft--
@@ -126,6 +164,7 @@ export class Director {
         this.notes.close(note, now)
       }
     }
+    if (this.manual) return
 
     if (now >= this.nextNoteCheck) {
       this.nextNoteCheck = now + 0.45

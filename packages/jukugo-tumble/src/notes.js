@@ -39,7 +39,7 @@ export class Notes {
     const el = document.createElement('div')
     el.className = 'card'
     el.innerHTML = `
-      <div class="card-head"><span class="no"></span><span class="rule"></span><span class="field"></span></div>
+      <div class="card-head"><span class="no"></span><span class="rule"></span><span class="field"></span><button class="card-x" type="button" aria-label="Close note"></button></div>
       <div class="card-word"><span class="k"></span><span class="k"></span></div>
       <div class="card-read"><span class="kana"></span><span class="ro"></span></div>
       <div class="card-gloss"></div>
@@ -73,8 +73,9 @@ export class Notes {
     this.fill(note, pair.entry)
     note.no.textContent = `No.${String(pair.id + 1).padStart(3, '0')}`
     this.list.push(note)
-    // The leader draws out first; the card unfolds from where it lands.
-    this.queue.push({ at: now + 0.32, run: () => el.classList.add('open') })
+    // The leader draws out first; the card unfolds from where it lands —
+    // unless it was closed in the meantime, and then it never shows at all.
+    this.queue.push({ at: now + 0.32, run: () => note.closing || el.classList.add('open') })
     return note
   }
 

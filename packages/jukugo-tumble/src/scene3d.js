@@ -204,6 +204,7 @@ class Block {
     this.front = null
     this.roll = null
     this.drop = null
+    this.tip = null
   }
 
   glyph(char, place, color) {
@@ -239,8 +240,14 @@ class Block {
   // Tumble forward onto `char`. Returns when it will land.
   turn(char, t0, dur = 0.86) {
     if (this.roll) this.finishRoll()
+    this.tip = null
     this.roll = { t0, dur, incoming: this.glyph(char, BACK, INK), hop: 0.22 + Math.random() * 0.12 }
     return t0 + dur
+  }
+
+  // Start to tumble and fall back: clicked, with nothing to turn into.
+  nudge(t0, dur = 0.5) {
+    if (!this.roll && !this.drop) this.tip = { t0, dur }
   }
 
   landsAt() {
@@ -297,6 +304,19 @@ class Block {
       this.top.mesh.material.color.copy(INK).lerp(GHOST, smooth(clamp01((t - 0.15) / 0.7)))
       if (this.front) this.front.mesh.material.opacity = 1 - smooth(clamp01(t / 0.5))
       if (t >= 1) this.finishRoll()
+    } else if (this.tip) {
+      // Forward about ten degrees, back down, and a small rock onto the back
+      // edge as it lands.
+      const t = clamp01((now - this.tip.t0) / this.tip.dur)
+      const a = t < 0.6 ? 0.18 * Math.sin(Math.PI * (t / 0.6)) : -0.035 * Math.sin(Math.PI * ((t - 0.6) / 0.4))
+      g.quaternion.setFromAxisAngle(X, a)
+      lift = 0.5 * (Math.abs(Math.cos(a)) + Math.abs(Math.sin(a))) - 0.5
+      g.position.y = 0.5 + lift
+      if (t >= 1) {
+        this.tip = null
+        g.quaternion.identity()
+        g.position.y = 0.5
+      }
     }
     const b = this.blob
     const k = Math.min(1, lift / 1.4)
