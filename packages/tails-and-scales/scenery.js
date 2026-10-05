@@ -364,7 +364,11 @@ export class Scenery {
     const cap = mesh(new THREE.SphereGeometry(r, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat(capCol))
     cap.position.y = h - 0.05
     cap.scale.y = 0.7
-    g.add(stem, cap)
+    // the cap is an open dome: close it with gills, or it casts only a
+    // crescent of shadow and shows its hollow inside from below
+    const gills = mesh(new THREE.CircleGeometry(r, 14).rotateX(Math.PI / 2), mat('#e9dcc0'))
+    gills.position.y = h - 0.05
+    g.add(stem, cap, gills)
     for (let i = 0; i < 6; i++) {
       const a = rng() * 6, e = rr(rng, 0.25, 1.1)
       const dot = mesh(new THREE.SphereGeometry(r * 0.12, 5, 4), mat('#fff6e0'), { shadow: false })

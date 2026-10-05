@@ -134,7 +134,10 @@ export class NavGrid {
   // on the way and only need somewhere to land.
   reach(sx, sz, { r, max, mode = 'walk', forbid = null }) {
     const N = this.N
-    const dist = new Float32Array(N).fill(Infinity)
+    // Float64, not Float32: the heap keys are doubles, and a rounded-down
+    // stored distance made `d > dist[i]` discard live entries, so diagonal
+    // routes went unexplored and reach (and charge `need`) came out short.
+    const dist = new Float64Array(N).fill(Infinity)
     const prev = new Int32Array(N).fill(-1)
     const start = this.index(sx, sz)
     const res = { dist, prev, start, mode, sx, sz }

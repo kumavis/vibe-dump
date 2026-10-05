@@ -26,6 +26,8 @@ const G = {
   cyl: new THREE.CylinderGeometry(1, 1, 1, 10),
   cone: new THREE.ConeGeometry(1, 1, 8),
   cap: new THREE.SphereGeometry(1, 12, 6, 0, Math.PI * 2, 0, Math.PI / 2),
+  // closes a `cap` from underneath: same 12 rim vertices, facing down
+  brim: new THREE.CircleGeometry(1, 12).rotateX(Math.PI / 2),
   oct: new THREE.OctahedronGeometry(1, 0),
 }
 
@@ -78,12 +80,19 @@ function taperTube(points, r0, r1, mat, radial = 8, segs = 40) {
       pos.push(P.x + r * (cx * N.x + sx * Bn.x), P.y + r * (cx * N.y + sx * Bn.y), P.z + r * (cx * N.z + sx * Bn.z))
     }
   }
+  // Each ring winds counter-clockwise about the tangent (three's Frenet
+  // binormal is T×N), so this order puts the front faces on the outside.
   for (let i = 0; i < segs; i++) {
     for (let j = 0; j < radial; j++) {
       const a = i * (radial + 1) + j, b = a + radial + 1
-      idx.push(a, b, a + 1, b, b + 1, a + 1)
+      idx.push(a, a + 1, b, b, a + 1, b + 1)
     }
   }
+  // close the tail tip with a little fan facing back along the curve
+  const tip = curve.getPointAt(0)
+  const c = pos.length / 3
+  pos.push(tip.x, tip.y, tip.z)
+  for (let j = 0; j < radial; j++) idx.push(c, j + 1, j)
   const geo = new THREE.BufferGeometry()
   geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
   geo.setIndex(idx)
@@ -124,8 +133,8 @@ function squirrel({ fur = '#c96a2d', belly = '#f1dcb5', hat = 'acorn', hatColor 
     head.add(tuft)
   }
   if (hat === 'acorn') {
-    const cap = part(G.cap, M(hatColor), 0, 0.07, 0, 0.19, 0.13, 0.19)
-    head.add(cap)
+    head.add(part(G.cap, M(hatColor), 0, 0.07, 0, 0.19, 0.13, 0.19))
+    head.add(part(G.brim, M(hatColor), 0, 0.07, 0, 0.19, 1, 0.19))
     head.add(part(G.cyl, M(shade(hatColor, -0.2)), 0, 0.22, 0, 0.02, 0.06, 0.02))
   }
   // tail: a chain of fluffy lumps along a rising curl
@@ -337,6 +346,7 @@ const BUILDERS = {
     const a = m.userData.anim
     for (const s of [-1, 1]) a.head.add(part(new THREE.TorusGeometry(0.045, 0.015, 4, 10), metal('#c9a24a'), s * 0.07, 0.07, 0.14))
     a.head.add(part(G.cap, M('#6b4a2e'), 0, 0.06, -0.01, 0.18, 0.11, 0.18))
+    a.head.add(part(G.brim, M('#6b4a2e'), 0, 0.06, -0.01, 0.18, 1, 0.18))
     // arms flung wide, the patagium stretched from wrist to ankle
     a.armL.rotation.set(-0.2, 0, -1.25)
     a.armR.rotation.set(-0.2, 0, 1.25)
@@ -439,6 +449,7 @@ const BUILDERS = {
     const m = naga({ scale: '#3f8f4a', belly: '#d9cf86' })
     const a = m.userData.anim
     a.head.add(part(G.cap, metal('#b8862e'), 0, 0.04, 0.01, 0.12, 0.09, 0.15))
+    a.head.add(part(G.brim, metal('#b8862e'), 0, 0.04, 0.01, 0.12, 1, 0.15))
     a.head.add(part(G.box, metal('#b8862e'), 0, 0.12, -0.02, 0.015, 0.06, 0.18))
     hold(a.armR, spear(1.15), 0.9)
     const sh = roundShield(0.2, metal('#a8762a'), metal('#e0b050'))
@@ -517,7 +528,8 @@ const BUILDERS = {
     const arm = new THREE.Group()
     arm.position.set(0, 1.05, -0.1)
     arm.add(part(G.box, W, 0, 0, 0.35, 0.08, 0.08, 0.9))
-    arm.add(part(G.cap, Wd, 0, 0.02, 0.8, 0.14, 0.08, 0.14).rotateX(Math.PI))
+    // an open bowl, seen from its open side: draw the inside too
+    arm.add(part(G.cap, M('#3a2c20', { side: THREE.DoubleSide }), 0, 0.02, 0.8, 0.14, 0.08, 0.14).rotateX(Math.PI))
     const globe = part(G.sph, M('#7dff5a', { emissive: '#4ad02a', emissiveIntensity: 1.1, transparent: true, opacity: 0.85, roughness: 0.15 }), 0, 0.12, 0.8, 0.14)
     globe.userData.keep = true
     arm.add(globe)
@@ -574,6 +586,10 @@ export function buildModel(key, t, sideColor) {
   root.traverse((o) => {
     if (o.isMesh) o.castShadow = true
   })
+  // baking replaced the base's meshes, so re-grant what part() can't know
+  root.children[0].traverse((o) => {
+    if (o.isMesh) o.receiveShadow = true
+  })
   return root
 }
 
@@ -582,6 +598,17 @@ export function buildModel(key, t, sideColor) {
 // (plain, metal, glowing...), so a whole army costs a few hundred draw calls
 // instead of several thousand. Subtrees marked `keep` (a trebuchet's arm, its
 // wheels, a glowing gem) are baked separately and stay movable.
+function flipWinding(geo) {
+  for (const name of ['position', 'normal']) {
+    const a = geo.getAttribute(name)
+    for (let i = 0; i < a.count; i += 3) {
+      const x = a.getX(i + 1), y = a.getY(i + 1), z = a.getZ(i + 1)
+      a.setXYZ(i + 1, a.getX(i + 2), a.getY(i + 2), a.getZ(i + 2))
+      a.setXYZ(i + 2, x, y, z)
+    }
+  }
+}
+
 const classMats = new Map()
 function classKey(m) {
   return [m.metalness, m.roughness, m.emissiveIntensity > 0 ? m.emissive.getHex() : 0, m.emissiveIntensity, m.transparent, m.opacity, m.side, m.flatShading].join('|')
@@ -607,6 +634,9 @@ function bake(root) {
         geo.setAttribute('position', src.getAttribute('position').clone())
         geo.setAttribute('normal', src.getAttribute('normal').clone())
         geo.applyMatrix4(rel.multiplyMatrices(inv, c.matrixWorld))
+        // Baking bakes the transform into the vertices, so three can no longer
+        // flip front faces for a mirrored (negative-scale) part. Do it here.
+        if (rel.determinant() < 0) flipWinding(geo)
         const n = geo.getAttribute('position').count
         const col = new Float32Array(n * 3)
         for (let i = 0; i < n; i++) col.set([m.color.r, m.color.g, m.color.b], i * 3)

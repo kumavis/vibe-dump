@@ -978,7 +978,7 @@ async function doCharge(u, target, { auto = false } = {}) {
   u.flags.chargeTarget = target.id
   fx.text(top(u), 'CHARGE!', SIDES[u.side].color, { size: 22 })
   log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total} vs ${plan.need}. <b>Contact!</b>`)
-  // a human chooses where around the target to end; the AI takes the closest spot
+  // a human chooses where around the target to end; the AI takes the shortest move
   const cell = auto || !human(u.side) ? plan.cell : await pickChargeSpot(u, target, plan, total)
   const pts = nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   await walk(u, pts, { speed: 11, fly: plan.mode === 'fly' })
@@ -989,12 +989,16 @@ async function doCharge(u, target, { auto = false } = {}) {
 
 // Shade every spot the roll reaches and wait for a click on one of them.
 function pickChargeSpot(u, target, plan, rolled) {
-  // same 0.01" grace `need` was rounded with, and the closest spot always
+  // same 0.01" grace `need` was rounded with, and the shortest-move spot always
   // counts, so a roll that made the charge can never leave nowhere to stand
   const ok = new Uint8Array(nav.N)
   for (const s of plan.spots) if (s.d <= rolled + 0.011) ok[s.i] = 1
   ok[plan.cell] = 1
-  paintMask(ok, [255, 150, 60])
+  // the 12" declaration ring is spent; leave the orange to the area itself,
+  // filled strongly enough to see when it's only a cell or two
+  rangeRing.visible = false
+  paintMask(ok, [255, 150, 60], 150)
+  ghostAt(plan.cell, u.r)
   return new Promise((resolve) => {
     S.chargePick = { u, target, plan, rolled, ok, resolve }
     refreshUI()
@@ -1020,6 +1024,7 @@ function placeCharge(i) {
   S.chargePick = null
   clearOverlay()
   ghost.visible = false
+  $('#tooltip').style.display = 'none'
   refreshUI()
   pick.resolve(i)
 }
@@ -1310,6 +1315,12 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   if (moved > 6) return
   click(pick(e))
 })
+renderer.domElement.addEventListener('pointerleave', () => {
+  S.hoverPick = null
+  S.hover = null
+  hover()
+  refreshRings()
+})
 renderer.domElement.addEventListener('pointermove', (e) => {
   S.mouse = { x: e.clientX, y: e.clientY }
   S.hoverPick = pick(e)
@@ -1317,7 +1328,7 @@ renderer.domElement.addEventListener('pointermove', (e) => {
 })
 
 function myTurn() {
-  return (S.stage === 'battle' && human(S.active) && phaseResolve && !S.busy) || S.stage === 'deploy'
+  return (S.stage === 'battle' && human(S.active) && phaseResolve && !S.busy && !S.auto) || S.stage === 'deploy'
 }
 
 async function click({ unit, ground }) {
@@ -1417,7 +1428,7 @@ function paintReach(plan) {
   paintMask(ok, plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255])
 }
 
-function paintMask(ok, col) {
+function paintMask(ok, col, fill = 80) {
   ovData.fill(0)
   for (let i = 0; i < nav.N; i++) {
     if (!ok[i]) continue
@@ -1427,7 +1438,7 @@ function paintMask(ok, col) {
     ovData[o] = col[0]
     ovData[o + 1] = col[1]
     ovData[o + 2] = col[2]
-    ovData[o + 3] = edge ? 210 : nav.diff[i] ? 55 : 80
+    ovData[o + 3] = edge ? 210 : nav.diff[i] ? Math.round(fill * 0.7) : fill
   }
   ovTex.needsUpdate = true
   ovMesh.visible = true
@@ -1459,13 +1470,24 @@ ghost.position.y = 0.05
 ghost.visible = false
 scene.add(ghost)
 
+function ghostAt(i, r) {
+  ghost.position.x = nav.x(i)
+  ghost.position.z = nav.z(i)
+  ghost.scale.setScalar(r)
+  ghost.visible = true
+}
+
 function hover() {
   const tip = $('#tooltip')
   tip.style.display = 'none'
   pathLine.visible = false
   ghost.visible = false
   const h = S.hoverPick
-  if (!h) return
+  if (!h) {
+    // off the board mid-pick: show where "Shortest move" would put the unit
+    if (S.chargePick) ghostAt(S.chargePick.plan.cell, S.chargePick.u.r)
+    return
+  }
   S.hover = h.unit
   let text = ''
   const sel = S.sel
@@ -1661,13 +1683,13 @@ function refreshUI() {
   })
   $('#sideA').classList.toggle('active', S.stage === 'battle' && S.active === 0)
   $('#sideB').classList.toggle('active', S.stage === 'battle' && S.active === 1)
-  const mine = S.stage === 'battle' && human(S.active) && !!phaseResolve
+  const mine = S.stage === 'battle' && human(S.active) && !!phaseResolve && !S.auto
   const sel = S.sel
   const picking = !!S.chargePick
   $('#endPhase').style.display = (mine && !picking) || S.stage === 'deploy' ? '' : 'none'
   $('#closestSpot').style.display = picking ? '' : 'none'
   $('#endPhase').textContent = S.stage === 'deploy' ? 'Begin battle ▸' : `End ${PHASES.find((p) => p.key === S.phase).name} ▸`
-  $('#endPhase').disabled = S.busy
+  $('#endPhase').disabled = S.busy || S.auto
   $('#autoPhase').style.display = mine && !picking ? '' : 'none'
   const adv = $('#advance')
   adv.style.display = mine && S.phase === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(sel) ? '' : 'none'
@@ -1675,7 +1697,7 @@ function refreshUI() {
   if (sel?.t.abilities?.some((a) => a.startsWith('Sidewind'))) adv.textContent = 'Advance (+D6") — can still charge'
   // hint line
   let hint = ''
-  if (picking) hint = `Charge! You rolled ${S.chargePick.rolled}" — click in the orange area to choose where ${S.chargePick.u.t.short} end up.`
+  if (picking) hint = `Charge! You rolled ${S.chargePick.rolled}" — click in the orange area to choose where ${S.chargePick.u.t.short} end up, or take the shortest move.`
   else if (S.stage === 'deploy') hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
   else if (S.stage === 'battle' && !human(S.active)) hint = `${SIDES[S.active].name} (AI) are taking their turn…`
   else if (mine) {
@@ -1691,7 +1713,7 @@ function refreshUI() {
 }
 
 function refreshRings() {
-  const mine = (S.stage === 'battle' && human(S.active) && phaseResolve) || S.stage === 'deploy'
+  const mine = myTurn()
   for (const u of units) {
     if (!alive(u)) continue
     const m = u.ring.material
@@ -1701,6 +1723,9 @@ function refreshRings() {
       col = '#ffe680'
     } else if (S.stage === 'deploy' && u.side === S.deploySide) {
       op = 0.5
+    } else if (S.chargePick && u === S.chargePick.target) {
+      op = 0.95
+      col = '#ffa040'
     } else if (mine && S.stage === 'battle' && canAct(u)) {
       op = 0.75
     } else if (mine && S.sel && S.phase === 'shoot' && u.side !== S.sel.side && shotInfo(S.sel, u).ok) {
@@ -1731,7 +1756,7 @@ $('#endPhase').onclick = () => {
   unlock()
   sfx.click()
   if (S.stage === 'deploy') return S.deployDone?.()
-  if (S.busy || !phaseResolve) return
+  if (S.busy || S.auto || !phaseResolve) return
   select(null)
   phaseResolve()
 }
@@ -1739,18 +1764,26 @@ $('#closestSpot').onclick = () => {
   sfx.click()
   if (S.chargePick) placeCharge(S.chargePick.plan.cell)
 }
+// Every AI action ends by clearing S.busy, so the Auto run holds its own flag:
+// without it a click in the gap between two AI actions could start a manual
+// charge whose pick outlived the phase.
 $('#autoPhase').onclick = async () => {
-  if (S.busy || !phaseResolve) return
+  if (S.busy || S.auto || !phaseResolve) return
   select(null)
+  S.auto = true
   S.busy = true
   refreshUI()
-  await aiPhase(api, S.active, S.phase)
-  S.busy = false
+  try {
+    await aiPhase(api, S.active, S.phase)
+  } finally {
+    S.auto = false
+    S.busy = false
+  }
   phaseResolve?.()
 }
 $('#advance').onclick = async () => {
   const u = S.sel
-  if (!u || S.busy) return
+  if (!u || S.busy || S.auto) return
   await doAdvance(u)
   select(u)
 }
@@ -1847,6 +1880,7 @@ function setupTable() {
   S.busy = false
   S.waiting = false
   S.chargePick = null
+  S.auto = false
   refreshUI()
 }
 
