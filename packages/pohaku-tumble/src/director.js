@@ -1,0 +1,237 @@
+// Decides what happens when: which word turns next, which words carry a note,
+// and when the lines get rewired. Two rhythms run at once — a background
+// pulse of turns anywhere in view, and the noted words, which turn on a slower
+// beat so each card gets to show its word changing.
+
+const ROLL = 0.86
+// Where a card may open: pairs this far inside the frame. Jukugo used 0.2,
+// but here the upland and the compass take their share of the floor the
+// camera drifts over, and no words stand on them; at 0.2 the frame held about
+// five pairs on a desktop and three on a phone, so the cards kept landing on
+// the same two or three words.
+const NOTE_FRAME = 0.15
+// A word whose card has just closed gets no new card for `wait` seconds — a
+// viewer would see one card fold away and the next open on the same stones —
+// and for `rest` it is passed over while anything else in the frame will do.
+// A hard rest of the full length leaves card slots standing empty on a small
+// frame, and slows the piece.
+const RECARD = { wait: 15, rest: 40 }
+// Nor does the background beat take a pair straight back to the word its card
+// showed as "was", for this long after the card closes.
+const RECALL = 180
+// Jukugo's background beat, every 1.5–2.6 s, was set for a view full of
+// words. Here the compass and the upland take their share of the frame, and a
+// phone shows only a handful, so with fewer than this many words in view the
+// beat slows in proportion: each word in view keeps turning about as often,
+// rather than every few seconds, and a beat seldom comes with nothing ready.
+const CROWD = 10
+
+export class Director {
+  constructor({ board, scene, links, notes, ripples }) {
+    this.board = board
+    this.scene = scene
+    this.links = links
+    this.notes = notes
+    this.ripples = ripples
+    this.paused = false
+    // Per card, its beat. Weak, so a card the Notes have let go of — its DOM
+    // with it — isn't kept alive here.
+    this.meta = new WeakMap()
+    // Per pair, when its last card closed.
+    this.carded = new Map()
+  }
+
+  start(now) {
+    this.t0 = now
+    this.nextBackground = now + 3.6
+    this.nextNoteCheck = now + 1.7
+  }
+
+  // How many cards at once. By height as well as width: a phone held
+  // sideways is wide enough for three, but three cards fill it, and the few
+  // words in view would each turn several times a minute.
+  capacity() {
+    const { w, h } = this.scene
+    const byWidth = w < 520 ? 1 : w < 700 ? 2 : w < 1440 ? 3 : 4
+    return h < 520 ? Math.min(byWidth, 1) : h < 700 ? Math.min(byWidth, 2) : byWidth
+  }
+
+  // Pairs whose middle is comfortably on screen.
+  inView(margin = 0.1) {
+    const { w, h } = this.scene
+    return this.board.pairs.filter((p) => {
+      const [x, y] = this.scene.project(p.x, 0.5, p.z)
+      return x > w * margin && x < w * (1 - margin) && y > h * (margin + 0.06) && y < h * (1 - margin - 0.04)
+    })
+  }
+
+  // The share of the pairs in view that sit on a shared-root line. Turns steer
+  // on this rather than on the whole floor: the viewer judges the half-linked
+  // balance by what they can see.
+  linkedInView() {
+    const visible = this.inView()
+    if (!visible.length) return undefined
+    const linked = this.board.linkedPairs()
+    return visible.filter((p) => linked.has(p.id)).length / visible.length
+  }
+
+  // Busy stones: mid-tumble, or still falling in at the start.
+  rolling(pair) {
+    return pair.tiles.some((t) => this.scene.block(t).roll || this.scene.block(t).drop)
+  }
+
+  // Turn one stone of `pair` over. Lines on the turning stone let go at
+  // once; the new ones wait for it to land.
+  turnPair(pair, now) {
+    if (this.rolling(pair)) return false
+    const choice = this.board.chooseTurn(pair, now, this.linkedInView())
+    if (!choice) return false
+    const prev = pair.entry
+    const tile = pair.tiles[choice.index]
+    this.board.turn(pair, choice, now)
+    const start = now + 0.12
+    const land = this.scene.block(tile).turn(tile.stone, start, ROLL)
+    const e = pair.entry
+    const cap = pair.caption
+    pair.caption = {
+      prev1: cap.text1,
+      prev2: cap.text2,
+      text1: e.word.toUpperCase(),
+      text2: e.gloss,
+      t0: start + ROLL * 0.62,
+    }
+    this.notes.turn(pair, choice.index, prev, start + ROLL * 0.32)
+    this.ripples.push({ x: tile.x, z: tile.z, t0: land - 0.1, dur: 0.95 })
+    const landOf = (t) => this.scene.block(t).landsAt()
+    this.links.sync(this.board.desiredLinks(), now, {
+      origin: tile.id,
+      holdUntil: (d) =>
+        d.kind === 'pair' ? Math.max(landOf(d.a), landOf(d.b)) : Math.max(...d.pair.tiles.map(landOf)),
+    })
+    return true
+  }
+
+  openNote(pair, now) {
+    const note = this.notes.open(pair, now)
+    this.meta.set(note, { nextTurn: now + 1.15, turnsLeft: 2 })
+    return note
+  }
+
+  closeNote(note, now) {
+    this.notes.close(note, now)
+    this.carded.set(note.pair, now)
+  }
+
+  // A clicked stone turns now, and gets a note if it hasn't one. A pair with
+  // nowhere to go — resting before it may return — gets no card, rather than
+  // one that opens, turns nothing and retires.
+  poke(pair, now) {
+    if (!this.board.canTurn(pair, now)) return
+    if (!this.notes.has(pair)) {
+      const open = this.notes.list.filter((n) => !n.closing)
+      if (open.length >= this.capacity()) this.closeNote(open[0], now)
+      this.openNote(pair, now)
+    }
+    const note = this.notes.list.find((n) => n.pair === pair && !n.closing)
+    if (note) {
+      const m = this.meta.get(note)
+      m.nextTurn = now + 4.5
+      m.turnsLeft = Math.max(m.turnsLeft, 1)
+    }
+    this.turnPair(pair, now)
+  }
+
+  update(now) {
+    this.ripples.splice(0, this.ripples.length, ...this.ripples.filter((r) => now - r.t0 < r.dur))
+    if (this.paused) return
+
+    const visible = this.inView()
+    const roughlyVisible = new Set(this.inView(-0.05))
+
+    // Noted words: turn on their own beat, retire after a couple of turns or
+    // once the camera has drifted off them.
+    for (const note of this.notes.list) {
+      if (note.closing) continue
+      const m = this.meta.get(note)
+      if (!roughlyVisible.has(note.pair)) {
+        this.closeNote(note, now)
+        continue
+      }
+      if (now < m.nextTurn) continue
+      if (m.turnsLeft > 0) {
+        if (this.turnPair(note.pair, now)) {
+          m.turnsLeft--
+          m.nextTurn = now + (m.turnsLeft > 0 ? 4.2 + Math.random() * 1.6 : 3.4)
+        } else {
+          // Mid-roll: try again shortly. Nowhere left to turn: retire it.
+          m.nextTurn = now + 0.6
+          if (!this.rolling(note.pair)) m.turnsLeft = 0
+        }
+      } else {
+        this.closeNote(note, now)
+      }
+    }
+
+    if (now >= this.nextNoteCheck) {
+      this.nextNoteCheck = now + 0.45
+      const open = this.notes.list.filter((n) => !n.closing)
+      if (open.length < this.capacity()) {
+        const pair = this.pickForNote(visible, open, now)
+        if (pair) {
+          this.openNote(pair, now)
+          this.nextNoteCheck = now + 0.9 + Math.random() * 0.8
+        }
+      }
+    }
+
+    // The background pulse picks only among pairs that have somewhere to go,
+    // so a beat is lost only when nothing in view can turn at all.
+    if (now >= this.nextBackground) {
+      const noted = this.notes.noted()
+      const pool = visible.filter(
+        (p) =>
+          !noted.has(p) && !this.rolling(p) && now - p.turnedAt > 6 && this.board.canTurn(p, now) && !this.recalls(p, now),
+      )
+      if (pool.length) this.turnPair(pool[Math.floor(Math.random() * pool.length)], now)
+      this.nextBackground = now + (1.5 + Math.random() * 1.1) * Math.max(1, CROWD / Math.max(1, visible.length))
+    }
+  }
+
+  // Would turning `p` now only take it back to the word its card, closed a
+  // moment ago, showed as "was"? Only if the card made its last turn.
+  recalls(p, now) {
+    const closed = this.carded.get(p)
+    if (closed == null || now - closed > RECALL || p.turnedAt > closed) return false
+    return this.board.targets(p, now).every((o) => o.tier === 2)
+  }
+
+  // A good word to annotate: well inside the frame, not crowding an existing
+  // note, not one that just turned, and not one whose card just closed. A
+  // card wants two turns to show. A pair whose next word would only be one it
+  // showed lately is passed over while anything else is in the inner frame;
+  // a pair that can't turn twice in a card's few seconds, as it would have to
+  // rest before going back (board.js REST), gets no card at all, rather than
+  // one that turns once, or not at all, and retires.
+  pickForNote(visible, open, now) {
+    const inner = new Set(this.inView(NOTE_FRAME))
+    const anchors = open.map((n) => this.scene.project(n.pair.x, 1, n.pair.z))
+    let best = null
+    let bestScore = -Infinity
+    for (const p of visible) {
+      if (!inner.has(p) || this.notes.has(p) || this.rolling(p) || !this.board.canTurnTwice(p, now)) continue
+      const since = now - (this.carded.get(p) ?? -Infinity)
+      if (since < RECARD.wait) continue
+      const [x, y] = this.scene.project(p.x, 1, p.z)
+      let far = Infinity
+      for (const [ax, ay] of anchors) far = Math.min(far, Math.hypot(ax - x, ay - y))
+      let score = Math.min(far, 420) + Math.random() * 160 - (now - p.turnedAt < 4 ? 300 : 0)
+      if (since < RECARD.rest) score -= 600
+      if (!this.board.targets(p, now).some((o) => o.tier === 0)) score -= 1000
+      if (score > bestScore) {
+        best = p
+        bestScore = score
+      }
+    }
+    return best
+  }
+}

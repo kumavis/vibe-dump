@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pōhaku Tumble</title>
+<meta name="description" content="Two-root Hawaiian words cut in basalt, set out on a hand-drawn island. One stone at a time turns over to another root, the word turns into another word, and the lines between words that share a root re-wire around it.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='%23e8dcc3'/><path d='M4.6 23.6h10.6M17.4 23.4h10.8' stroke='%234a3a2c' stroke-opacity='.35' stroke-width='2' stroke-linecap='round'/><path d='M3.4 13.2l1.3-3.9 9.9-.2.8 4z' fill='%23736b60'/><path d='M3.4 13.2h12l-.3 9.8-.6.5-10.6.2-.5-.7z' fill='%2333302c'/><path d='M16.7 13l.9-3.8 10.2.1.9 3.9z' fill='%23736b60'/><path d='M16.7 13h12l-.2 9.9-.8.4-10.4-.1-.5-.6z' fill='%2333302c'/></svg>">
+<link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="floor"></canvas>
+  <canvas id="gl"></canvas>
+  <canvas id="hud"></canvas>
+  <div id="cards"></div>
+</div>
+
+<header id="title" class="plate">
+  <h1><span class="haw" lang="haw">Pōhaku</span><span class="en">Tumble</span></h1>
+  <p>Two-root words cut in stone. A stone turns over to another root, and the word turns into another word.</p>
+</header>
+
+<div id="foot">
+<aside id="legend" class="plate" aria-label="Legend">
+  <div><i class="sw sw-pair"></i><span>shared root</span></div>
+  <div><i class="sw sw-field"></i><span>field</span></div>
+  <div><i class="sw sw-note"></i><span>note</span></div>
+  <div><i class="sw sw-pending"><i class="ring"></i></i><span>awaiting <span class="long">dictionary </span>check</span></div>
+</aside>
+
+<footer id="stats" class="plate">
+  <div class="counts">
+    <span><b id="st-turns">0000</b> turns</span>
+    <span><b id="st-links">00</b> links</span>
+    <span><b id="st-pairs">00</b> words</span>
+    <span class="keys">drag · scroll · click a stone · space</span>
+  </div>
+  <p class="credit">Wiktionary · Andrews–Parker 1922 · POLLEX-Online · Polynesian Voyaging Society</p>
+</footer>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

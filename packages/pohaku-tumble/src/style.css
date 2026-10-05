@@ -1,0 +1,492 @@
+/* One family for everything, Alegreya in three cuts: warm, literary, with
+   the ʻokina and every kahakō vowel. Registered under its own name so the
+   canvases (palette.js `font()`) and the page draw from the same files. */
+@font-face {
+  font-family: 'PT Alegreya';
+  src: url('./fonts/alegreya-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'PT Alegreya';
+  src: url('./fonts/alegreya-400-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+}
+@font-face {
+  font-family: 'PT Alegreya';
+  src: url('./fonts/alegreya-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+
+/* DESIGN §6. Warm paper and kukui-soot ink; the one red is the map's, for
+   boundaries, so none of it is used here. */
+:root {
+  --paper: #e8dcc3;
+  --card: #efe6d3;
+  --ink: #2a211b;
+  --ink-2: #5a4c40;
+  --ink-3: #8d7d6c;
+  --hair: #cbbca3;
+  --serif: 'PT Alegreya', 'Iowan Old Style', Palatino, Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  /* The sheet under the map: lighter where the light falls, darkening a
+     little toward the edges of the table. */
+  background:
+    radial-gradient(120% 90% at 50% 45%, rgba(250, 244, 230, 0.5), rgba(250, 244, 230, 0) 62%),
+    var(--paper);
+  touch-action: none;
+  cursor: grab;
+}
+#stage.dragging { cursor: grabbing; }
+
+#stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#hud { pointer-events: none; }
+#cards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ── chrome ─────────────────────────────────────────────────────────────── */
+
+/* The fixed chrome sits on small plates of card stock, so the map can run
+   underneath without the text fighting it. */
+.plate {
+  background: rgba(239, 230, 211, 0.94);
+  border: 1px solid var(--ink);
+  box-shadow:
+    0 1px 1px rgba(42, 33, 27, 0.06),
+    0 18px 30px -20px rgba(42, 33, 27, 0.35);
+}
+
+#title {
+  position: fixed;
+  left: 24px;
+  top: 22px;
+  max-width: 300px;
+  padding: 11px 16px 13px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.2s;
+}
+#title h1 {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+#title .haw {
+  font-weight: 600;
+  font-size: 31px;
+  letter-spacing: 0.005em;
+}
+#title .en {
+  font-size: 16px;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.16em;
+  color: var(--ink-2);
+}
+#title p {
+  margin: 7px 0 0;
+  font-size: 13.5px;
+  line-height: 1.42;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* The legend and the stats share the bottom edge: apart on a wide screen,
+   closed up into one plate on an upright phone. */
+#foot {
+  position: fixed;
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  pointer-events: none;
+}
+
+#legend {
+  padding: 9px 14px 10px;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--ink-2);
+  opacity: 0;
+  transition: opacity 0.8s ease 0.4s;
+}
+#legend div { display: flex; align-items: center; gap: 11px; }
+
+/* Each swatch is the mark as the floor draws it. */
+.sw {
+  display: inline-block;
+  flex: none;
+  width: 30px;
+  height: 0;
+  border-top: 1.25px solid var(--ink);
+  position: relative;
+}
+/* A shared root: the line, and the root in a capsule at its middle. */
+.sw-pair::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4.6px;
+  width: 15px;
+  height: 8px;
+  margin-left: -7.5px;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--card);
+}
+/* A word with nothing to share runs a dashed line to its field's place. */
+.sw-field { border-top: 1px dashed var(--ink-2); }
+.sw-field::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: -3.4px;
+  width: 5px;
+  height: 5px;
+  background: var(--ink-2);
+  transform: rotate(45deg);
+}
+.sw-note::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -3.2px;
+  width: 5.5px;
+  height: 5.5px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.sw-pending {
+  border-top: 0;
+  height: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The open circle after a word not yet confirmed in Pukui & Elbert. Drawn,
+   not set: Alegreya has no ◦. */
+.ring {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border: 1.15px solid var(--ink-2);
+  border-radius: 50%;
+}
+
+#stats {
+  padding: 7px 14px 8px;
+  color: var(--ink-2);
+  opacity: 0;
+  transition: opacity 0.8s ease 0.6s;
+}
+#stats .counts {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  font-size: 14px;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+}
+#stats b {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-caps: normal;
+  font-variant-numeric: tabular-nums oldstyle-nums;
+  letter-spacing: 0.02em;
+}
+#stats .keys {
+  color: var(--ink-3);
+  font-variant-caps: normal;
+  letter-spacing: 0.01em;
+  font-size: 12.5px;
+}
+#stats .credit {
+  margin: 4px 0 0;
+  padding-top: 4px;
+  border-top: 1px solid var(--hair);
+  font-size: 11px;
+  font-style: italic;
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+}
+
+body.ready #title,
+body.ready #legend,
+body.ready #stats { opacity: 1; }
+
+/* ── notes ──────────────────────────────────────────────────────────────── */
+
+.card {
+  /* The word's largest size; notes.js scales a long word down from it. */
+  --word: 36px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 238px;
+  padding: 10px 14px 11px;
+  background: var(--card);
+  border: 1px solid var(--ink);
+  /* contact shadow + long soft drop: the note floats a little above the floor */
+  box-shadow:
+    0 1px 1px rgba(42, 33, 27, 0.07),
+    0 6px 12px -6px rgba(42, 33, 27, 0.22),
+    0 26px 40px -22px rgba(42, 33, 27, 0.36);
+  will-change: transform, clip-path;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.45s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.card.from-right { clip-path: inset(0 0 0 100%); }
+.card.open { clip-path: inset(0 0 0 0); }
+
+.card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.card-head .no {
+  font-variant-caps: all-small-caps;
+  font-variant-numeric: oldstyle-nums;
+  letter-spacing: 0.08em;
+}
+.card-head .rule { flex: 1; height: 0; border-top: 1px solid var(--hair); align-self: center; }
+.card-head .field i { font-size: 14px; color: var(--ink); }
+.card-head .field .dot { margin: 0 5px; color: var(--ink-3); }
+.card-head .field .sc { font-variant-caps: all-small-caps; letter-spacing: 0.08em; }
+
+/* The word, one root to a box. The boxes and the size are set by notes.js;
+   a fixed height keeps the card from changing when a long word shrinks. */
+.card-word {
+  display: flex;
+  align-items: flex-end;
+  height: 41px;
+  margin: 5px 0 1px;
+  font-weight: 600;
+  font-size: var(--word);
+  line-height: 1;
+  white-space: nowrap;
+  perspective: 400px;
+}
+/* Each root sits against the join, so while a box glides to its new width
+   the slack opens at the word's outer ends, never inside it. */
+.card-word .k {
+  display: inline-block;
+  flex: none;
+  text-align: left;
+  white-space: pre;
+  transform-origin: 50% 50% -0.5em;
+  backface-visibility: hidden;
+}
+.card-word .k:first-child { text-align: right; }
+/* The join between the roots: a light point, as a dictionary divides a
+   headword, or the space of a word written as two. */
+.card-word .sep {
+  flex: none;
+  white-space: pre;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+.card-word .ring {
+  display: none;
+  flex: none;
+  width: 0.2em;
+  height: 0.2em;
+  margin: 0 0 0.36em 0.16em;
+  border-width: 1.3px;
+}
+.card-word.pending .ring { display: inline-block; }
+
+.card-gloss {
+  font-size: 16px;
+  line-height: 1.22;
+  min-height: 1.22em;
+  color: var(--ink);
+  /* Glosses run to six words; one that needs a second line gets it, never a
+     third. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* The two stones: each one's spelling, its sense and its ancestor. The one
+   that turned last is ruled in ink; the other steps back. */
+.card-parts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+.card-parts > div {
+  min-width: 0;
+  padding-top: 5px;
+  border-top: 1px solid var(--hair);
+  transition: border-color 0.3s ease;
+}
+.card-parts b,
+.card-parts .sense,
+.card-parts .pp {
+  display: block;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-parts b {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+.card-parts .sense {
+  font-size: 12.5px;
+  line-height: 1.3;
+  min-height: 1.3em;
+  color: var(--ink-2);
+}
+.card-parts .pp {
+  font-size: 12px;
+  line-height: 1.3;
+  min-height: 1.3em;
+  color: var(--ink-3);
+}
+.card-parts .code {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+}
+.card-parts > .hot { border-top-color: var(--ink); }
+.card-parts:has(.hot) > div:not(.hot) b,
+.card-parts:has(.hot) > div:not(.hot) .sense { color: var(--ink-3); }
+
+.card-cog,
+.card-hist {
+  font-size: 12px;
+  line-height: 1.3;
+  min-height: 1.3em;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-cog { margin-top: 5px; font-style: italic; }
+.card-hist { margin-top: 3px; }
+.card-hist i { color: var(--ink-2); font-size: 13px; }
+.card-hist .ring { width: 5px; height: 5px; margin: 0 1px 1px 3px; vertical-align: middle; border-width: 1px; }
+
+/* The plates stay in the margins the Director leaves outside its in-view
+   band (director.js `inView`: the top 16% of the frame and the bottom 14%),
+   so a stone it turns is never under one. Stacked, the title and the legend
+   need a screen 920 high for that. On a laptop's screen, or one shorter
+   still, the plates lie flat instead: the sentence beside the name, the
+   legend in two columns, and on a narrow foot the keys give way. */
+@media (min-width: 641px) and (min-height: 521px) and (max-height: 919px) {
+  #title { top: 16px; max-width: none; display: flex; align-items: center; padding: 9px 16px 10px; }
+  #title h1 { flex: none; }
+  #title p {
+    width: 326px;
+    margin: 0 0 0 16px;
+    padding-left: 16px;
+    border-left: 1px solid var(--hair);
+    font-size: 13px;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+  #foot { bottom: 16px; }
+  #legend { grid-template-rows: auto auto; grid-auto-flow: column; gap: 4px 22px; }
+}
+@media (min-width: 641px) and (max-width: 899px) and (min-height: 521px) and (max-height: 919px) {
+  #stats .keys { display: none; }
+}
+
+/* A small screen either way up — a phone, or a phone held sideways, where
+   the desktop's plates would cover half the frame: the title without its
+   sentence, the legend on one line, the stats in two, and the cards a size
+   down. */
+@media (max-width: 640px), (max-height: 520px) {
+  #title { left: 12px; top: 12px; max-width: 240px; padding: 8px 12px 9px; }
+  #title .haw { font-size: 25px; }
+  #title p { display: none; }
+  #foot { left: 12px; right: 12px; bottom: 12px; gap: 6px; }
+  #legend { display: flex; flex-wrap: wrap; gap: 2px 11px; padding: 5px 10px 6px; font-size: 12px; line-height: 1.25; }
+  #legend div { gap: 6px; }
+  #legend .long { display: none; }
+  .sw { width: 20px; }
+  .sw-pair::after { width: 11px; margin-left: -5.5px; }
+  .sw-pending { width: auto; }
+  /* Side by side, the legend gives way first, to two lines, so the credit
+     stays whole; on the narrowest phones it takes two lines itself rather
+     than lose its end. */
+  #stats { flex: none; padding: 4px 10px 5px; }
+  #stats .counts { gap: 14px; font-size: 13px; line-height: 1.2; }
+  #stats .keys { display: none; }
+  #stats .credit { margin-top: 2px; padding-top: 2px; font-size: 10px; line-height: 1.25; text-wrap: balance; }
+  .card { --word: 30px; width: 192px; padding: 8px 11px 9px; }
+  .card-word { height: 34px; }
+  .card-gloss { font-size: 14.5px; }
+  .card-parts { gap: 9px; }
+  .card-hist { display: none; }
+}
+/* Sideways, a phone's frame is so shallow that its margins outside the
+   Director's band are 50–60 px: the plates draw in to the edges and tighten
+   to fit them, and the legend to keep to one line beside the stats. */
+@media (max-height: 520px) {
+  #title { left: 10px; top: 10px; padding: 6px 11px 7px; }
+  #title .haw { font-size: 23px; }
+  #foot { left: 10px; right: 10px; bottom: 9px; }
+  #legend { gap: 1px 8px; padding: 4px 9px 5px; line-height: 1.15; }
+  #legend div { gap: 5px; }
+  .sw { width: 18px; }
+  #stats { padding: 3px 10px 4px; }
+  #stats .counts { line-height: 1.15; }
+  #stats .credit { line-height: 1.2; }
+}
+/* Upright, the legend and the stats close up into one plate across the
+   bottom: the legend's line, the counts, the credit. */
+@media (max-width: 640px) and (orientation: portrait) {
+  #foot { flex-direction: column; align-items: stretch; gap: 0; }
+  #legend { border-bottom: 0; box-shadow: none; padding-bottom: 3px; }
+  #stats { border-top: 0; padding-top: 0; transition-delay: 0.4s; }
+  #stats .counts { padding-top: 3px; border-top: 1px solid var(--hair); }
+}
