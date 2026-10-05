@@ -64,18 +64,26 @@ function broadleaf(rand, { trunkH, crownR, color, trunkColor = '#5a4636', blobs 
   const B = new Builder()
   const tc = col(trunkColor, 0.1, rand)
   B.cyl([0, 0, 0], [0.3, trunkH, 0.1], 0.35, 0.22, tc, MAT.wood, 5)
+  const crowns = []
   for (let k = 0; k < blobs; k++) {
     const a = (k / blobs) * Math.PI * 2 + rand()
     const r = k === 0 ? 0 : crownR * 0.45
     const c = col(color, 0.18, rand)
-    B.blob(0.3 + Math.cos(a) * r, trunkH + crownR * 0.35 * flatten + (k === 0 ? crownR * 0.2 : 0), 0.1 + Math.sin(a) * r, crownR * (k === 0 ? 1 : 0.75), crownR * 0.62 * flatten, crownR * (k === 0 ? 1 : 0.75), c, MAT.leaf, k + rand())
+    const crown = [0.3 + Math.cos(a) * r, trunkH + crownR * 0.35 * flatten + (k === 0 ? crownR * 0.2 : 0), 0.1 + Math.sin(a) * r, crownR * (k === 0 ? 1 : 0.75), crownR * 0.62 * flatten]
+    crowns.push(crown)
+    B.blob(crown[0], crown[1], crown[2], crown[3], crown[4], crown[3], c, MAT.leaf, k + rand())
   }
   if (red > 0) {
-    const rc = col('#9e2a22', 0.15, rand)
+    // lehua: the ʻōhiʻa's red pompom blossoms, dotted in tufts over the outside
+    // of the crown (a few big red balls read as fruit)
     for (let k = 0; k < red; k++) {
+      const [cx, cy, cz, rh, rv] = crowns[Math.floor(rand() * crowns.length)]
       const a = rand() * Math.PI * 2
-      const e = rand() * 0.8
-      B.blob(0.3 + Math.cos(a) * crownR * 0.8, trunkH + crownR * (0.35 + e * 0.45), 0.1 + Math.sin(a) * crownR * 0.8, 0.7, 0.35, 0.7, rc, MAT.leaf, k)
+      const up = 0.15 + rand() * 0.75 // upper half of the crown, where the sun reaches
+      const ring = Math.sqrt(1 - up * up)
+      const rc = col(rand() < 0.8 ? '#b3241c' : '#d8452a', 0.2, rand)
+      const s = 0.22 + rand() * 0.14
+      B.blob(cx + Math.cos(a) * ring * rh * 0.97, cy + up * rv * 0.97, cz + Math.sin(a) * ring * rh * 0.97, s, s * 0.75, s, rc, MAT.leaf, k, true, 0)
     }
   }
   return B.geometry()
@@ -187,7 +195,7 @@ export class Vegetation {
       maia: banana(rand),
       ki: ti(rand, false),
       kiRed: ti(rand, true),
-      ohia: broadleaf(rand, { trunkH: 6, crownR: 5.4, color: '#3a5e2c', trunkColor: '#4d4038', blobs: 5, red: 3 }),
+      ohia: broadleaf(rand, { trunkH: 6, crownR: 5.4, color: '#3a5e2c', trunkColor: '#4d4038', blobs: 5, red: 16 }),
       koa: broadleaf(rand, { trunkH: 10, crownR: 7.5, color: '#5d7449', trunkColor: '#5b4a3a', blobs: 5, flatten: 0.7 }),
       wiliwili: broadleaf(rand, { trunkH: 5, crownR: 3.8, color: '#a3864a', trunkColor: '#8a7255', blobs: 3, flatten: 0.8 }),
       naupaka: shrub(rand, '#5f8a42'),

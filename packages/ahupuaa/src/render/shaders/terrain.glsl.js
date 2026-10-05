@@ -12,21 +12,38 @@ out vec2 vUv;
 out float vMetres;
 
 void main() {
-  vec2 g = position.xz * uGrid;
-  vec2 xz = aNode.xy + position.xz * aNode.z;
-  float h = metresAt(xz) * Y_PER_M;
-  float dist = distance(uCamPos, vec3(xz.x, h, xz.y));
+  vec2 g = floor(position.xz * uGrid + 0.5); // this vertex's grid index in its node
+  float cell = aNode.z / uGrid; // grid spacing, world units
+  vec2 xz = aNode.xy + g * cell;
+  float mt = metresAt(xz);
+  float dist = distance(uCamPos, vec3(xz.x, mt * Y_PER_M, xz.y));
   vec2 m = uMorph[int(aNode.w)];
   float k = clamp((dist - m.x) / (m.y - m.x), 0.0, 1.0);
-  g -= fract(g * 0.5) * 2.0 * k;
-  xz = aNode.xy + g / uGrid * aNode.z;
-  float mt = metresAt(xz);
+  // Geomorph: toward the outer edge of its range a vertex between the
+  // next-coarser grid's vertices blends its height onto that coarser mesh —
+  // the midpoint of the parent edge it sits on, or of the parent cell's
+  // diagonal (which alternates like ours) — so by the hand-over the two levels
+  // are the same surface. Sliding it along the full-detail ground instead
+  // makes ridges ripple as the bands sweep past.
+  vec2 odd = g - 2.0 * floor(g * 0.5);
+  if (k > 0.0 && odd.x + odd.y > 0.5) {
+    vec2 base = aNode.xy + (g - odd) * cell;
+    float hc;
+    if (odd.x > 0.5 && odd.y > 0.5) {
+      vec2 pc = (g - odd) * 0.5;
+      if (mod(pc.x + pc.y, 2.0) > 0.5) hc = 0.5 * (metresAt(base + vec2(2.0, 0.0) * cell) + metresAt(base + vec2(0.0, 2.0) * cell));
+      else hc = 0.5 * (metresAt(base) + metresAt(base + vec2(2.0) * cell));
+    } else {
+      hc = 0.5 * (metresAt(base) + metresAt(base + odd * 2.0 * cell));
+    }
+    mt = mix(mt, hc, k);
+  }
   vMetres = mt;
   // The sea is drawn from the height texture; the seabed under it only needs to
   // be visible in the last few centimetres at the shoreline. Sink it below that
   // so the two surfaces never fight over depth.
   if (mt < 0.0) mt -= 25.0 * smoothstep(0.15, 3.0, -mt);
-  h = mt * Y_PER_M;
+  float h = mt * Y_PER_M;
   vWorld = vec3(xz.x, h, xz.y);
   vUv = worldToUv(xz);
   gl_Position = projectionMatrix * viewMatrix * vec4(vWorld, 1.0);

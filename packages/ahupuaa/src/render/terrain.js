@@ -3,8 +3,9 @@
 // One small grid mesh is instanced over a quadtree of square nodes: big nodes
 // far from the camera, small ones near it, every node the same vertex count.
 // The vertex shader lifts each vertex from the height texture, and near the
-// outer edge of its range it slides odd vertices onto the next-coarser grid, so
-// neighbouring levels meet without cracks and nothing pops as you fly in. The
+// outer edge of its range blends the in-between vertices' heights onto the
+// next-coarser mesh, so neighbouring levels meet without cracks and nothing
+// pops or ripples as you fly in. The
 // result is ~17 m triangles under your feet and a few hundred thousand
 // triangles for the whole island, from a single draw call.
 
@@ -149,8 +150,17 @@ export class Terrain {
     }
   }
 
-  /** Detail knob: distance (world units) the finest level reaches. */
+  /**
+   * Detail knob: distance (world units) the finest level reaches. The quality
+   * governor moves it; the change is eased in update() so the levels slide
+   * rather than jump.
+   */
   setRange(r0) {
+    if (this.rangeGoal === undefined) this.applyRange(r0)
+    this.rangeGoal = r0
+  }
+
+  applyRange(r0) {
     this.range0 = r0
     this.ranges = []
     for (let l = 0; l < LEVELS; l++) this.ranges.push(r0 * 2 ** l)
@@ -158,7 +168,7 @@ export class Terrain {
     for (let l = 0; l < LEVELS; l++) {
       const r = this.ranges[l]
       const prev = l > 0 ? this.ranges[l - 1] : 0
-      const start = prev + (r - prev) * 0.6
+      const start = prev + (r - prev) * 0.5
       this.morph[l].set(start, r * 0.97)
     }
   }
@@ -195,6 +205,8 @@ export class Terrain {
   }
 
   update(camera) {
+    // ease toward the governor's range, a few percent a frame
+    if (Math.abs(this.rangeGoal - this.range0) > 0.01) this.applyRange(this.range0 + (this.rangeGoal - this.range0) * 0.04)
     this._m.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
     this._frustum.setFromProjectionMatrix(this._m)
     this.cam = camera.position
