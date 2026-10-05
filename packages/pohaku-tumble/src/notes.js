@@ -74,7 +74,7 @@ export class Notes {
     const el = document.createElement('div')
     el.className = 'card'
     el.innerHTML = `
-      <div class="card-head"><span class="no"></span><span class="rule"></span><span class="field"></span></div>
+      <div class="card-head"><span class="no"></span><span class="rule"></span><span class="field"></span><button class="card-x" type="button" aria-label="Close card"></button></div>
       <div class="card-word" lang="haw"><span class="k"></span><span class="sep"></span><span class="k"></span><i class="ring"></i></div>
       <div class="card-gloss"></div>
       <div class="card-parts">

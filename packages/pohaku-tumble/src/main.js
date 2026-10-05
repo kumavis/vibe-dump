@@ -38,6 +38,14 @@ async function boot() {
   const director = new Director({ board, scene, links, notes, ripples })
 
   let reserved = []
+  // The plates the cards keep off. The keys on the stats plate change with
+  // the mode, so this runs on a toggle as well as on resize.
+  function measure() {
+    reserved = ['title', 'mode', 'legend', 'stats'].map((id) => {
+      const r = $(id).getBoundingClientRect()
+      return { x: r.left - 12, y: r.top - 12, w: r.width + 24, h: r.height + 24 }
+    })
+  }
   function resize() {
     const w = innerWidth
     const h = innerHeight
@@ -45,10 +53,7 @@ async function boot() {
     scene.setSize(w, h, dpr)
     floor.resize(w, h, dpr)
     notes.resize(w, h, dpr)
-    reserved = ['title', 'legend', 'stats'].map((id) => {
-      const r = $(id).getBoundingClientRect()
-      return { x: r.left - 12, y: r.top - 12, w: r.width + 24, h: r.height + 24 }
-    })
+    measure()
     // A drag is held within the screen's reach (view.js), and resizing the
     // window or turning the phone changes it. Left past the new reach, a drag
     // would pin the view at the edge, and dragging back would do nothing for
@@ -114,6 +119,34 @@ async function boot() {
   // stone landing.
   director.start(drop - 0.15)
 
+  // ── manual mode ──────────────────────────────────────────────────────────
+  // Nothing turns and no card opens by itself: a click opens a word's card,
+  // and a click on a word with its card up turns the stone clicked. Kept in
+  // the URL (?manual=1), so a reload or a shared link opens the same way.
+  const mode = $('mode')
+  const keys = $('keys')
+  const KEYS = { auto: keys.textContent, manual: 'drag · scroll · click: card, then turn' }
+  function setManual(on) {
+    director.setManual(on, clock())
+    document.body.classList.toggle('manual', on)
+    mode.setAttribute('aria-pressed', String(on))
+    keys.textContent = on ? KEYS.manual : KEYS.auto
+    measure()
+    try {
+      const url = new URL(location.href)
+      if (on) url.searchParams.set('manual', '1')
+      else url.searchParams.delete('manual')
+      history.replaceState(history.state, '', url)
+    } catch {}
+  }
+  mode.addEventListener('click', (e) => {
+    setManual(!director.manual)
+    // A mouse click leaves the button focused, and Space would then press it
+    // rather than pause.
+    if (e.detail) mode.blur()
+  })
+  if (params.has('manual') && params.get('manual') !== '0') setManual(true)
+
   // ── input ────────────────────────────────────────────────────────────────
   const stage = $('stage')
   let drag = null
@@ -141,7 +174,8 @@ async function boot() {
     if (!drag) return
     if (drag.moved < 5) {
       const tile = scene.pick(e.clientX, e.clientY)
-      if (tile) director.poke(board.pairs[tile.pair], clock())
+      if (tile && director.manual) director.press(tile, clock())
+      else if (tile) director.poke(board.pairs[tile.pair], clock())
     }
     drag = null
     stage.classList.remove('dragging')
@@ -159,10 +193,25 @@ async function boot() {
     },
     { passive: false },
   )
+  // In manual mode an open card takes the pointer, for its close button: a
+  // press on it is the card's, not the start of a drag or a click on the
+  // stone under it.
+  const cards = $('cards')
+  cards.addEventListener('pointerdown', (e) => e.stopPropagation())
+  cards.addEventListener('click', (e) => {
+    const x = e.target.closest('.card-x')
+    const note = x && notes.list.find((n) => n.el.contains(x))
+    if (note && !note.closing) director.closeNote(note, clock())
+  })
   addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
+      if (e.target.closest?.('button')) return
       e.preventDefault()
       director.paused = !director.paused
+    } else if (e.code === 'KeyM' && !(e.ctrlKey || e.metaKey || e.altKey)) {
+      setManual(!director.manual)
+    } else if (e.code === 'Escape' && director.manual) {
+      for (const note of notes.list) if (!note.closing) director.closeNote(note, clock())
     }
   })
 

@@ -37,8 +37,7 @@ Samuel H. Elbert, ***Hawaiian Dictionary***, revised and enlarged edition
 access, and that was respected, so it was not read for this list. A word
 marked with an open circle on its card (`ev: 'pending'` in the data) has not
 yet been confirmed against it; the legend calls this *awaiting dictionary
-check*. The list has also not yet been read by a fluent speaker, which is why
-the piece stays marked as unfinished in the gallery.
+check*. The list has also not yet been read by a fluent speaker.
 
 ## The map and the star compass
 
