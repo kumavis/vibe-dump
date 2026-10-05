@@ -93,6 +93,12 @@ function taperTube(points, r0, r1, mat, radial = 8, segs = 40) {
   const c = pos.length / 3
   pos.push(tip.x, tip.y, tip.z)
   for (let j = 0; j < radial; j++) idx.push(c, j + 1, j)
+  // and the head end, which only mostly disappears into the torso
+  const end = curve.getPointAt(1)
+  const h = pos.length / 3
+  pos.push(end.x, end.y, end.z)
+  const last = segs * (radial + 1)
+  for (let j = 0; j < radial; j++) idx.push(h, last + j, last + j + 1)
   const geo = new THREE.BufferGeometry()
   geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
   geo.setIndex(idx)
@@ -317,6 +323,7 @@ const BUILDERS = {
     const bomb = new THREE.Group()
     bomb.add(part(G.sph, M('#8a5a2a'), 0, 0, 0, 0.06, 0.07, 0.06))
     bomb.add(part(G.cap, M('#4f3a22'), 0, 0.03, 0, 0.065, 0.04, 0.065))
+    bomb.add(part(G.brim, M('#4f3a22'), 0, 0.03, 0, 0.065, 1, 0.065))
     bomb.add(part(G.sph, glowMat('#ffb030'), 0, 0.1, 0, 0.022))
     hold(a.armR, bomb, 0)
     a.armR.rotation.x = 2.3

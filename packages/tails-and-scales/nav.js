@@ -149,9 +149,12 @@ export class NavGrid {
       }
       return res
     }
-    dist[start] = 0
+    // measure from where the unit actually stands, not its cell's centre, so
+    // a unit nudged off-centre (a pile-in) can't walk further than its roll
+    const d0 = Math.hypot(sx - this.x(start), sz - this.z(start))
+    dist[start] = d0
     const heap = new Heap()
-    heap.push(start, 0)
+    heap.push(start, d0)
     const { nx, nz, cell } = this
     // A unit that starts somewhere cramped (squeezed by a collapse, or after
     // the Brute ploughed in) may wriggle out through its own footprint.
@@ -225,8 +228,19 @@ export class NavGrid {
       if (this.diff[i] !== d0) return false
       if (mode === 'wreck' && this.clearAll[i] < r - 0.06) return false
     }
+    // the raster only samples cell centres; test the enemy discs exactly so a
+    // shortcut can't shave the edge of a base or a 1" bubble
+    if (forbid?.discs) for (const d of forbid.discs) if (segDist(a, b, d) < d.R) return false
     return true
   }
+}
+
+function segDist(a, b, p) {
+  const dx = b.x - a.x, dz = b.z - a.z
+  const L2 = dx * dx + dz * dz
+  let t = L2 > 0 ? ((p.x - a.x) * dx + (p.z - a.z) * dz) / L2 : 0
+  t = t < 0 ? 0 : t > 1 ? 1 : t
+  return Math.hypot(a.x + dx * t - p.x, a.z + dz * t - p.z)
 }
 
 export const pathLength = (pts) => {

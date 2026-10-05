@@ -453,8 +453,10 @@ function moveMode(u) {
 // falling back / charging). `except` is the charge target.
 function forbidMask(u, pad, onlyBodies = []) {
   const f = new Uint8Array(nav.N)
+  f.discs = [] // the exact shapes, for nav.walkable's straight-line shortcuts
   for (const e of enemiesOf(u)) {
     const R = e.r + u.r + (onlyBodies.includes(e) ? 0.02 : pad)
+    f.discs.push({ x: e.pos.x, z: e.pos.z, R: R - 0.02 })
     const i0x = Math.max(0, Math.floor((e.pos.x - R + W / 2) / nav.cell)), i1x = Math.min(nav.nx - 1, Math.floor((e.pos.x + R + W / 2) / nav.cell))
     const i0z = Math.max(0, Math.floor((e.pos.z - R + H / 2) / nav.cell)), i1z = Math.min(nav.nz - 1, Math.floor((e.pos.z + R + H / 2) / nav.cell))
     for (let iz = i0z; iz <= i1z; iz++) for (let ix = i0x; ix <= i1x; ix++) {
@@ -1697,7 +1699,7 @@ function refreshUI() {
   if (sel?.t.abilities?.some((a) => a.startsWith('Sidewind'))) adv.textContent = 'Advance (+D6") — can still charge'
   // hint line
   let hint = ''
-  if (picking) hint = `Charge! You rolled ${S.chargePick.rolled}" — click in the orange area to choose where ${S.chargePick.u.t.short} end up, or take the shortest move.`
+  if (picking) hint = `Charge! Rolled ${S.chargePick.rolled}" — click the orange area to place ${S.chargePick.u.t.short}, or take the shortest move.`
   else if (S.stage === 'deploy') hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
   else if (S.stage === 'battle' && !human(S.active)) hint = `${SIDES[S.active].name} (AI) are taking their turn…`
   else if (mine) {

@@ -187,6 +187,23 @@ body:not(.playing) #hint {
   text-overflow: ellipsis;
 }
 
+/* on desktop the hint wraps between the log and its mirror instead of
+   sliding under the log */
+@media (min-width: 701px) {
+  #hint {
+    width: max-content;
+    max-width: calc(100vw - 2 * 290px);
+    white-space: normal;
+    text-align: center;
+    border-radius: 14px;
+  }
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  #hint {
+    max-width: calc(100vw - 2 * 240px);
+  }
+}
+
 /* ── Unit card ───────────────────────────────────────────────────────── */
 #card {
   position: fixed;
