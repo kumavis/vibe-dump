@@ -71,18 +71,21 @@ export class Board {
   // the floor hovers around half its words being wired to another word — when
   // fewer are, turns that land on a character a neighbour already shows are
   // favoured; when more are, turns that cut a link get a nudge instead.
-  chooseTurn(pair) {
+  //
+  // `only` keeps it to one block, for a block clicked in manual mode. That
+  // block may go back to the word the pair just left, if nothing else will do.
+  chooseTurn(pair, only = null) {
     const linked = this.linkedFraction()
     const prev = pair.history.at(-1)?.word
-    const options = []
-    for (const index of [0, 1]) {
+    let options = []
+    for (const index of only == null ? [0, 1] : [only]) {
       const tile = pair.tiles[index]
       const near = this.tiles.filter(
         (t) => t.pair !== pair.id && Math.hypot(t.x - tile.x, t.z - tile.z) <= LINK_MAX,
       )
       const breaks = near.some((t) => t.char === tile.char)
       for (const entry of turns(pair.entry, index)) {
-        if (this.used.has(entry.word) || entry.word === prev) continue
+        if (this.used.has(entry.word) || (entry.word === prev && only == null)) continue
         const c = index === 0 ? entry.a : entry.b
         const joins = near.some((t) => t.char === c)
         let w = 1
@@ -94,6 +97,7 @@ export class Board {
         options.push({ index, entry, w })
       }
     }
+    if (options.some((o) => o.entry.word !== prev)) options = options.filter((o) => o.entry.word !== prev)
     if (!options.length) return null
     let r = Math.random() * options.reduce((s, o) => s + o.w, 0)
     for (const o of options) if ((r -= o.w) <= 0) return o

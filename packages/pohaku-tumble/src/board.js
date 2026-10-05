@@ -319,12 +319,12 @@ export class Board {
   // it hasn't shown in its last six (tier 0) first; failing those, once it has
   // rested (REST), older words from the six (1); failing those, the word it
   // just left (2). A word on another pair is never a target, so no word shows
-  // twice.
-  targets(pair, now) {
+  // twice. `only` keeps them to one stone's turns.
+  targets(pair, now, only = null) {
     const prev = pair.history.at(-1)?.word
     const rested = now - pair.turnedAt >= REST
     const out = []
-    for (const index of [0, 1]) {
+    for (const index of only == null ? [0, 1] : [only]) {
       for (const entry of turns(pair.entry, index)) {
         if (this.used.has(entry.word)) continue
         let tier = 0
@@ -364,8 +364,9 @@ export class Board {
   // desiredLinks would draw it — not to an unsettled stone, nor across the
   // upland or the compass. Each weight is then scaled by how far the new word
   // can go on from here, so pairs walk into open country, not dead ends.
-  chooseTurn(pair, now, linked = this.linkedFraction()) {
-    let targets = this.targets(pair, now)
+  // `only` keeps it to one stone, for a stone clicked in manual mode.
+  chooseTurn(pair, now, linked = this.linkedFraction(), only = null) {
+    let targets = this.targets(pair, now, only)
     if (!targets.length) return null
     const faces = new Map()
     for (const t of this.tiles) faces.set(t.stone, (faces.get(t.stone) ?? 0) + 1)
