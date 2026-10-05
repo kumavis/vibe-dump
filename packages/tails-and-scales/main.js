@@ -1259,6 +1259,7 @@ async function scoreRound() {
 }
 
 function gameOver() {
+  for (const p of S.pendingLog.splice(0)) write(...p)
   S.stage = 'over'
   select(null)
   refreshUI()
@@ -1837,7 +1838,15 @@ function setupTable() {
   for (const side of [0, 1]) for (const key of ARMIES[side]) units.push(makeUnit(key, side))
   deployArmies()
   for (const u of units) updateLabel(u)
-  for (const o of objectives) o.owner = -1
+  // nothing from the last game carries over: banners, scorch marks, turn state
+  for (const o of objectives) paintObjective(o, -1)
+  fx.clearDecals()
+  S.pendingLog = []
+  S.phase = 'move'
+  S.active = 0
+  S.busy = false
+  S.waiting = false
+  S.chargePick = null
   refreshUI()
 }
 
@@ -1933,14 +1942,17 @@ function animateUnits(dt, time) {
   }
 }
 
+// Flag and ring in the colours of whoever holds the objective (-1: nobody).
+function paintObjective(o, c) {
+  o.owner = c
+  o.flagMat.color.set(c < 0 ? '#e8e0d0' : SIDES[c].color)
+  o.ring.material.color.set(c < 0 ? '#fff3c0' : SIDES[c].color)
+}
+
 function animateObjectives(dt, time) {
   for (const o of objectives) {
     const c = S.stage === 'battle' || S.stage === 'over' ? controlOf(o) : -1
-    if (c !== o.owner) {
-      o.owner = c
-      o.flagMat.color.set(c < 0 ? '#e8e0d0' : SIDES[c].color)
-      o.ring.material.color.set(c < 0 ? '#fff3c0' : SIDES[c].color)
-    }
+    if (c !== o.owner) paintObjective(o, c)
     o.gem.rotation.y = time * 1.2
     o.gem.position.y = 0.45 + Math.sin(time * 2 + o.i) * 0.05
     o.flag.rotation.y = Math.sin(time * 2.2 + o.i) * 0.25

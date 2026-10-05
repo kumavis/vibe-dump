@@ -225,6 +225,14 @@ export class FX {
     return m
   }
 
+  clearDecals() {
+    for (const d of this.decals) {
+      this.scene.remove(d)
+      d.material.dispose()
+    }
+    this.decals = []
+  }
+
   // A ring on the table: blast templates, scatter landings, objective pings.
   ring(x, z, r, color, { life = 1.2, fill = 0.18, hold = false } = {}) {
     const g = new THREE.Group()
