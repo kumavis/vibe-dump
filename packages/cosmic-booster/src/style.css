@@ -118,6 +118,8 @@ body.grab #gl {
 #skip.gone {
   opacity: 0;
   pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.4s, visibility 0s 0.4s;
 }
 
 #caption {
@@ -239,13 +241,16 @@ body.grab #gl {
   gap: 18px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s, transform 0.6s;
+  visibility: hidden;
+  transition: opacity 0.6s, transform 0.6s, visibility 0s 0.6s;
   white-space: nowrap;
 }
 #spreadui.show {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
   transform: translate(-50%, 0);
+  transition: opacity 0.6s, transform 0.6s, visibility 0s;
 }
 #spreadui .count {
   font-size: 11px;
@@ -289,15 +294,27 @@ body.ready #boot {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   #brand .sub {
     display: none;
   }
+}
+
+@media (max-width: 640px) {
   #brand {
     left: 16px;
   }
+  /* chip over meta, so a foil card's caption never runs off a phone */
+  #caption {
+    flex-direction: column;
+    gap: 8px;
+    bottom: calc(env(safe-area-inset-bottom) + 66px);
+  }
   #caption .meta {
     font-size: 16px;
+  }
+  #dots {
+    bottom: calc(env(safe-area-inset-bottom) + 50px);
   }
   #hint {
     font-size: 9.5px;
@@ -311,5 +328,12 @@ body.ready #boot {
     flex-direction: column;
     gap: 12px;
     bottom: calc(env(safe-area-inset-bottom) + 30px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #caption.chase .chip,
+  #boot span {
+    animation: none;
   }
 }

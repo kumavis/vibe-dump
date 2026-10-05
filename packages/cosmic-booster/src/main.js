@@ -30,6 +30,8 @@ camera.position.set(0, 0, CAM_Z)
 // one key light, drifting slowly, that every foil surface reflects
 const light = new THREE.Vector3(-3.5, 4.5, 8)
 
+const reduceMotion = !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
 const backdrop = new Backdrop()
 backdrop.addTo(scene)
 const sparkles = new Sparkles()
@@ -155,6 +157,7 @@ const hud = {
   mute: $('#mute'),
 }
 let hintTimer = 0
+const narrow = () => view.w < 560
 function hint(text, delay = 0) {
   clearTimeout(hintTimer)
   hud.hint.classList.add('off')
@@ -196,21 +199,25 @@ function dots(n, cur) {
   hud.dots.classList.toggle('show', cur >= 0)
 }
 
+// The collection lives in memory and is mirrored to storage when storage is
+// there, so the count stays right in a private window too.
 const COLLECTION_KEY = 'cosmic-booster:collection'
-function collection() {
+const owned = (() => {
   try {
     return new Set(JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]'))
   } catch {
     return new Set()
   }
+})()
+function collection() {
+  return owned
 }
 function collect(id) {
-  const c = collection()
-  c.add(id)
+  owned.add(id)
   try {
-    localStorage.setItem(COLLECTION_KEY, JSON.stringify([...c]))
+    localStorage.setItem(COLLECTION_KEY, JSON.stringify([...owned]))
   } catch {}
-  return c
+  return owned
 }
 
 const SPEAKER_ON = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2.5 6h2.5l3.5-3v10l-3.5-3h-2.5z" fill="currentColor" stroke="none"/><path d="M11 5.2a4 4 0 0 1 0 5.6M12.8 3.4a6.6 6.6 0 0 1 0 9.2"/></svg>`
@@ -300,7 +307,7 @@ function newPack(dropIn) {
   hud.spread.classList.remove('show')
   hud.skip.classList.remove('gone')
   backdrop.tintTarget.setRGB(0.32, 0.2, 0.62)
-  hint(view.w < 560 ? 'Swipe across the top seal  ·  or tap the pack' : 'Drag across the top seal to tear it open  ·  or tap the pack', dropIn ? 700 : 400)
+  hint(narrow() ? 'Swipe across the top seal  ·  or tap the pack' : 'Drag across the top seal to tear it open  ·  or tap the pack', dropIn ? 700 : 400)
   if (dropIn) tween(packPose, { y: 0, rx: 0, rz: 0 }, 1.1, { ease: ease.outBack })
   return gen
 }
@@ -415,7 +422,7 @@ function revealed(i) {
     c.glow = 0
     tween(c, { glow: 0.55 }, 1.2)
     backdrop.tintTarget.setRGB(0.55, 0.32, 0.18)
-    hint('Something is bending the light  ·  tap to turn it over', 300)
+    hint(narrow() ? 'Something bends the light  ·  tap to turn it' : 'Something is bending the light  ·  tap to turn it over', 300)
     return
   }
   state = 'reveal'
@@ -428,7 +435,7 @@ function revealed(i) {
   c.glow = 0
   tween(c, { glow: rank >= 2 || c.pull.foil ? 0.32 : 0.1 }, 0.6)
   cardBurst(c, rank >= 2 || c.pull.foil ? 90 : 45, accent)
-  hint(i === 0 ? 'Tilt it in the light  ·  tap for the next card' : '', 600)
+  hint(i === 0 ? (narrow() ? 'Tilt it  ·  tap for the next card' : 'Tilt it in the light  ·  tap for the next card') : '', 600)
 }
 
 async function next() {
@@ -495,7 +502,7 @@ async function chase() {
   state = 'chaseHold'
   caption(c)
   dots(cards.length, cards.length)
-  hint('Turn it in the light  ·  tap to lay out your pull', 900)
+  hint(narrow() ? 'Turn it in the light  ·  tap for your pull' : 'Turn it in the light  ·  tap to lay out your pull', 900)
 }
 
 async function spread() {
@@ -843,15 +850,36 @@ function advance() {
 }
 
 window.addEventListener('keydown', (e) => {
-  if (e.target.closest?.('button')) return
-  if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') {
+  const activate = e.key === ' ' || e.key === 'Enter'
+  if (activate && e.target.closest?.('button')) return
+  if (state === 'spread') {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault()
+      browse(e.key === 'ArrowRight' ? 1 : -1)
+    } else if (activate && hovered) {
+      e.preventDefault()
+      inspect(hovered)
+    }
+    return
+  }
+  if (activate || e.key === 'ArrowRight') {
     e.preventDefault()
     sfx.unlock()
     if (state === 'pack') autoTear()
-    else if (state === 'spread') return
     else advance()
   } else if (e.key === 'Escape') uninspect()
 })
+
+// Step the highlight through the spread, left to right as the cards lie.
+function browse(dir) {
+  const order = cards.slice().sort((a, b) => a.pose.x - b.pose.x)
+  let i = hovered ? order.indexOf(hovered) : dir > 0 ? -1 : order.length
+  i = (i + dir + order.length) % order.length
+  if (hovered) hovered.hoverTarget = 0
+  hovered = order[i]
+  hovered.hoverTarget = 1
+  sfx.hover()
+}
 
 hud.skip.addEventListener('click', (e) => {
   e.stopPropagation()
@@ -943,15 +971,17 @@ function frame(ms) {
 
   light.set(-3.4 + Math.sin(simT * 0.31) * 1.4, 4.4 + Math.cos(simT * 0.23) * 0.9, 8)
   pointerSmooth.lerp(pointer, 1 - Math.exp(-dt * 4))
-  camera.position.set(pointerSmooth.x * 0.3, pointerSmooth.y * 0.18, CAM_Z)
+  const drift = reduceMotion ? 0 : 1
+  camera.position.set(pointerSmooth.x * 0.3 * drift, pointerSmooth.y * 0.18 * drift, CAM_Z)
   camera.lookAt(0, 0, 0)
 
   const idle = simT - lastMove > 2.5 || (down === null && lastMove < 0)
   const touchHold = down && down.type !== 'mouse'
   const mouseLive = !idle && (!down || down.type === 'mouse')
+  const sway = reduceMotion ? 0.25 : 1
   const aim = (target, kx, ky) => {
     if (mouseLive || touchHold) target.set(-pointer.y * kx, pointer.x * ky)
-    else target.set(Math.sin(simT * 0.7) * kx * 0.42, Math.sin(simT * 0.5 + 1) * ky * 0.5)
+    else target.set(Math.sin(simT * 0.7) * kx * 0.42 * sway, Math.sin(simT * 0.5 + 1) * ky * 0.5 * sway)
   }
 
   // pack
@@ -980,7 +1010,7 @@ function frame(ms) {
     c.pop *= Math.exp(-dt * 7)
     if (c === h && state !== 'inspect') c.offset.y = Math.sin(simT * 1.1) * 0.025 * c.pose.s
     else c.offset.y *= 0.9
-    if (shake.v > 0 && c === h) c.offset.set((Math.random() - 0.5) * shake.v * 0.035, (Math.random() - 0.5) * shake.v * 0.035, 0)
+    if (shake.v > 0 && c === h && !reduceMotion) c.offset.set((Math.random() - 0.5) * shake.v * 0.035, (Math.random() - 0.5) * shake.v * 0.035, 0)
     else c.offset.x = c.offset.z = 0
     c.applyPose()
     c.setTime(simT)
