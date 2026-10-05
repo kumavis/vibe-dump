@@ -362,6 +362,13 @@ body.manual .card-x { display: block; }
 }
 .card-hist b { font-family: var(--serif); font-weight: 400; font-size: 11px; color: var(--ink-2); }
 
+/* Its full line beside the legend, the stats plate needs a screen about
+   750 px wide; narrower than that, down to the phone layout, the keys give
+   way. */
+@media (min-width: 641px) and (max-width: 759px) {
+  #stats .keys { display: none; }
+}
+
 @media (max-width: 640px) {
   #title { left: 12px; top: 12px; max-width: 240px; padding: 9px 12px; }
   #title .ja { font-size: 24px; }
