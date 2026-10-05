@@ -332,6 +332,7 @@ function newPack(dropIn) {
   const gen = ++flowGen
   killTweens()
   tearing = false
+  riding = false
   clearTable()
   sparkles.clear()
   inspected = hovered = null
@@ -396,6 +397,7 @@ function setTear(p) {
 const _v = new THREE.Vector3()
 const _v2 = new THREE.Vector3()
 const _t2 = new THREE.Vector2()
+const _qPack = new THREE.Quaternion()
 function tearSparks(n) {
   pack.tearPoint(_v)
   pack.group.localToWorld(_v)
@@ -426,6 +428,7 @@ function autoTear() {
   }).then(() => (tearing = false))
 }
 let tearing = false
+let riding = false
 
 async function openPack() {
   if (state !== 'pack') return
@@ -433,6 +436,7 @@ async function openPack() {
   const gen = flowGen
   sfx.rip()
   hint(null)
+  riding = true
   const s = packPose.s
 
   // the strip goes, the light comes out
@@ -458,6 +462,7 @@ async function openPack() {
   })
   await after(1.05)
   if (gen !== flowGen) return
+  riding = false
 
   // the pack falls away and the stack comes to your hand
   tween(packPose, { y: -view.visH * 1.25, rz: 0.35, rx: 0.7 }, 1.0, { ease: ease.in })
@@ -649,6 +654,7 @@ function skipToSpread() {
   flowGen++
   killTweens()
   tearing = false
+  riding = false
   if (pack) {
     scene.remove(pack.group)
     pack.dispose()
@@ -1074,9 +1080,8 @@ function frame(ms) {
     if (c === h) aim(c.tiltTarget, 0.42, 0.55)
     else if (state === 'spread' && c === hovered) c.tiltTarget.set(-pointer.y * 0.12, pointer.x * 0.16)
     else c.tiltTarget.set(0, 0)
-    if (state === 'opening') {
-      // riding up inside the pack: lean with it
-      c.tilt.copy(packTilt)
+    if (riding) {
+      c.tilt.set(0, 0)
       c.tiltVel.set(0, 0)
     } else c.stepTilt(dt)
     c.hover += (c.hoverTarget - c.hover) * (1 - Math.exp(-dt * 10))
@@ -1095,6 +1100,13 @@ function frame(ms) {
     c.mesh.renderOrder = flying ? 3 : inHand ? 2 : 0
     c.material.depthFunc = flying || inHand ? THREE.AlwaysDepth : THREE.LessEqualDepth
     c.applyPose()
+    if (riding && pack) {
+      // riding up inside the pack: turn about the pack's own pivot, exactly as
+      // it turns, so no card (face up or face down) leans out through its front
+      _v.subVectors(c.group.position, pack.group.position).applyEuler(pack.group.rotation)
+      c.group.position.copy(pack.group.position).add(_v)
+      c.group.quaternion.premultiply(_qPack.setFromEuler(pack.group.rotation))
+    }
     c.setTime(simT)
   }
 
