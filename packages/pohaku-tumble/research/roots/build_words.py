@@ -209,10 +209,16 @@ for s in ship:
 
 # An ancestor is printed only at a level Hawaiian descends from. POLLEX's EC is
 # Ellicean (the Northern and Equatorial Outliers), SO Samoic-Outlier, TA Tahitic.
-ANCESTRAL = {'PAN', 'PMP', 'POC', 'PEO', 'PCP', 'PPN', 'PNP', 'PCE', 'PEP', 'PMQ'}
+ANCESTRAL = {'PPN', 'PNP', 'PCE', 'PEP', 'PMQ'}
 for v in roots.values():
     if v['pp'] and v['pp'].split()[0] not in ANCESTRAL:
         v['pp'] = ''
+
+# cognates withheld where the same form carries a sensitive sense in that language (fixes.json)
+for sid, fx in (FIXES.get('stones') or {}).items():
+    if sid in roots:
+        drop = {tuple(c) for c in fx.get('drop_cognates', [])}
+        roots[sid]['cog'] = [c for c in roots[sid]['cog'] if tuple(c) not in drop]
 
 # An unresolved stone has no curated spelling: it is spelled as its word writes it
 for s in ship:
@@ -260,6 +266,22 @@ for s in ship:
 used = {x['a'] for x in words} | {x['b'] for x in words}
 roots = {k: v for k, v in roots.items() if k in used}
 ship = [s for s in ship if s.get('shipped')]
+
+# One English spelling (US, as most of the sources write it) across every gloss
+US = {'colour': 'color', 'counsellor': 'counselor', 'favourite': 'favorite', 'savoury': 'savory', 'grey': 'gray',
+      'honour': 'honor', 'harbour': 'harbor', 'neighbour': 'neighbor', 'labour': 'labor', 'behaviour': 'behavior',
+      'centre': 'center', 'plough': 'plow', 'armour': 'armor', 'odour': 'odor', 'vapour': 'vapor', 'rumour': 'rumor'}
+US_RE = re.compile(r'\b(' + '|'.join(US) + r')(s|ed|ing|ish)?\b')
+
+
+def us(g):
+    return US_RE.sub(lambda m: US[m.group(1)] + (m.group(2) or ''), g)
+
+
+for x in words:
+    x['g'] = us(x['g'])
+for v in roots.values():
+    v['g'] = us(v['g'])
 
 # §4.4: no apostrophe of any kind anywhere in the data (an English ’ beside an ʻokina
 # reads as a misspelling at caption size), and everything NFC

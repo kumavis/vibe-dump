@@ -43,7 +43,8 @@ word list is made is in [research/review/README.md](./research/review/README.md)
   - no apostrophe of any kind, and no non-NFC text, in any field: words, stone
     spellings, glosses, ancestors or cognates. Eleven English glosses were
     rephrased to avoid an English ’ beside an ʻokina;
-  - no English from the F1 banned list in any gloss;
+  - no English from the F1 banned list in any gloss, and one (US) spelling
+    across all glosses;
   - ancestors only at the levels Hawaiian descends from: PPN, PNP, PCE, PEP, PMQ.
     POLLEX's EC is Ellicean, so five stones print no ancestor.
 
@@ -67,7 +68,81 @@ Proposed replacements, all confirmed words in the shipped list (owner to choose)
 
 ## Where the build departs from DESIGN
 
-<!-- filled from the polish workflow's owner decisions -->
+These are the build reviews' choices. Each one is measured in `tools/sim.mjs`
+or in Chromium screenshots.
+
+**Board and engine** (DESIGN §1 carries Jukugo's machine over unchanged; these
+are additions on top of it):
+
+- **The upland and the compass are kept clear.** No stone, caption or line
+  enters the upland (DESIGN §3.2 asks this of the drawing). Words keep 1.12 × r
+  from the compass centre. Words round a small place may hide at most 15% of
+  it (20% of the lava). The result is about 40 words on an 8 × 7 grid: 28% of
+  cells stay empty, against Jukugo's 8%. The board is sparser than Jukugo's.
+- **Fewer repeats of one root.** At most 3 stones show one root in the opening.
+  Turns avoid putting a root on a 5th stone when another turn exists
+  (`FACES {deal: 3, turn: 4}`). This is only a preference among legal turns.
+  Full repeats are capped at 1 pair in 16 in the opening, and never side by
+  side.
+- **The rest before a return is 60 s per pair.** ENGINE.md recommended 6 s and
+  its critic 20–30 s. The background beat slows on small screens
+  (`CROWD = 10`): about 35 turns a minute on a phone, against Jukugo's pace.
+  Set CROWD to 0 for Jukugo's absolute pace.
+- **Notes.** A pair that cannot turn twice gets no card.
+- **Sim rating.** `tools/sim.mjs` rates every view JUKUGO-LIKE: harness,
+  1280 × 800, 390 × 844 and 844 × 390. In-view linked share is about .47, a
+  little under Jukugo's .50, which is the cost of the variety rules.
+
+**Camera and chrome:**
+
+- **The camera loops instead of drifting round the middle.** Its centre goes
+  round a rounded rectangle clockwise from the north, past the compass first,
+  with Jukugo's drift on top at 0.4 of its size. A lap takes 330 s or more,
+  with speed capped at 0.35 units/s. Every place comes into view within about
+  4 minutes on every screen; before this, phones never saw the compass. Bare
+  table shows past the sheet's border at the loop's corners.
+- **At laptop height (521–919 px tall) the title plate lies flat.** The
+  sentence sits beside the name, and the legend splits into two columns, so the
+  plates stay out of the band the engine treats as in view. Phones drop the
+  sentence and the cards' "was" line, as in Jukugo. Their legend reads
+  "awaiting check".
+
+**Cards** (DESIGN §1 carries Jukugo's scramble over):
+
+- **Ancestors and cognates fade out and back instead of scrambling.** No
+  false form such as "*afu" shows, even for a frame. English glosses flicker
+  only through a–z, and Hawaiian words only through Hawaiian letters.
+- **A fresh card marks the stone likely to turn first** and shows its
+  cognates.
+- **Empty slots.** An empty sense or cognate line shows "—". A fresh card
+  reads "was —".
+- **Placement.** Each card has six possible places: the four corners, plus
+  level with its word on either side.
+
+**Stones and floor:**
+
+- **The sun.** It is 42° up, from the west and 12° toward the north. One light
+  draws the stones, the letters' inner shadows and the floor shadows (DESIGN
+  §5 "raking"; Jukugo's sun is about 57°). For more rake, 38° is the fallback;
+  35° ran shadows across whole gaps.
+- **Map line weights.** The coast is drawn in ink-2 at 1.2 px, so it doesn't
+  read as a shared-root line. Dashed half-interval contours sit inside the
+  upland, so it reads as a summit rather than a lake. These are still contours
+  only (§3.2).
+
+**Gallery:** the thumbnail waits for `body.opened`, meaning every opening line
+is in and the first card is open, then settles for 3 s. DESIGN §9 named
+`body.ready`.
+
+**Data:**
+
+- **Cognates withheld.** Four cognates are not printed because the same form,
+  in POLLEX's own data for that language, carries an excretory or genital
+  sense: Māori tē and tā, Māori aro, Tongan ʻao and Tongan fulu. Sensitive
+  forms can sit beside an innocent stone this way, so the kumu read should
+  cover the cognates too.
+- **LOLE joins "cloth" and "reversed"** on a hedged Wiktionary etymology. It
+  stays one stone until Pukui & Elbert show whether these are two entries.
 
 ## Open for the owner
 
