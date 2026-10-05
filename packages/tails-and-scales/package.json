@@ -7,7 +7,7 @@
   "dependencies": { "three": "^0.160.0" },
   "gallery": {
     "title": "Tails & Scales",
-    "description": "A pocket Warhammer in Three.js: squirrel clans versus serpent-folk across a seeded modular battlefield — move, shoot, charge, fight and roll morale, while blast templates scatter and blow the scenery apart.",
+    "description": "A pocket tabletop wargame in Three.js: squirrel clans versus serpent-folk across a seeded modular battlefield — move, shoot, charge, fight and roll morale, while blast templates scatter and blow the scenery apart.",
     "tags": ["game"],
     "status": "wip",
     "models": ["Opus 5.5"],

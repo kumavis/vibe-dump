@@ -14,7 +14,7 @@ import { sfx, unlock, toggleMute, isMuted } from './sfx.js'
 import { rng, seedLogic, rngState } from './rng.js'
 
 // ---------------------------------------------------------------------------
-// Tails & Scales — a pocket-sized Warhammer.
+// Tails & Scales — a pocket-sized tabletop wargame.
 //
 // Two armies, alternating player turns, each turn run through five phases:
 // Movement → Shooting → Charge → Fight → Morale. Units are squads of models
