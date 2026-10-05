@@ -233,8 +233,7 @@ export function planFalls(island, opts = {}) {
   const paddyCentres = []
   for (const complex of meta.sites.loi) {
     for (const p of complex.paddies) {
-      const cx = (p.quad[0][0] + p.quad[1][0] + p.quad[2][0] + p.quad[3][0]) / 4
-      const cz = (p.quad[0][1] + p.quad[1][1] + p.quad[2][1] + p.quad[3][1]) / 4
+      const [cx, cz] = p.c
       paddyCentres.push([cx, cz])
       if (p.level < h1(cx, cz) - 25) {
         trench = true

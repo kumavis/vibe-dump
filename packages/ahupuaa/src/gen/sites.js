@@ -8,6 +8,7 @@
 
 import { cellSize, toWorld, distanceTransform, sample, D8X, D8Y, cellIndex } from './grid.js'
 import { mulberry32, smoothstep } from './noise.js'
+import { layTerraces } from './loi.js'
 
 /** Grid helpers over the hydrology-resolution fields. */
 function fields(T, D, N) {
@@ -82,96 +83,6 @@ function trunkFrom(F, T, mouth, maxMetres = 420) {
   return path.map((c) => ({ c, x: toWorld(N, c % N), z: toWorld(N, (c / N) | 0), h: F.h[c], area: area[c] }))
 }
 
-function smoothPath(pts, passes = 3) {
-  let p = pts.map((q) => ({ ...q }))
-  for (let k = 0; k < passes; k++) {
-    const q = p.map((a) => ({ ...a }))
-    for (let i = 1; i < p.length - 1; i++) {
-      q[i].x = (p[i - 1].x + 2 * p[i].x + p[i + 1].x) / 4
-      q[i].z = (p[i - 1].z + 2 * p[i].z + p[i + 1].z) / 4
-    }
-    p = q
-  }
-  return p
-}
-
-/**
- * Loʻi kalo: stone-faced terraces stepping down the valley floor on both banks,
- * fed by an ʻauwai drawn off the stream at the top. Returns paddies as quads
- * (world xz corners) with a water level in metres, plus the ʻauwai line.
- */
-function terraces(F, height, N2, trunk, rand) {
-  const paddies = []
-  const pts = smoothPath(trunk, 4)
-  // resample the trunk evenly, every ~38 m
-  const step = 0.38
-  const line = []
-  let acc = 0
-  for (let i = 1; i < pts.length; i++) {
-    const a = pts[i - 1]
-    const b = pts[i]
-    const seg = Math.hypot(b.x - a.x, b.z - a.z)
-    while (acc <= seg) {
-      const t = acc / seg
-      line.push({ x: a.x + (b.x - a.x) * t, z: a.z + (b.z - a.z) * t, area: a.area + (b.area - a.area) * t })
-      acc += step
-    }
-    acc -= seg
-  }
-  // skip the beach and the village at the mouth
-  const start = Math.round(2.2 / step)
-  const hAt = (x, z) => sample(height, N2, x, z)
-  let lastLevel = Infinity
-  const auwai = []
-  for (let i = start; i < line.length - 1; i++) {
-    const p = line[i]
-    const q = line[i + 1]
-    const dx = q.x - p.x
-    const dz = q.z - p.z
-    const l = Math.hypot(dx, dz) || 1
-    const tx = dx / l
-    const tz = dz / l
-    const nx = -tz
-    const nz = tx
-    const floor = hAt(p.x, p.z)
-    if (floor > 320) break
-    // valley floor half-width: as far out as the ground stays within ~4 m
-    const halfW = (side) => {
-      let w = 0.25
-      for (; w < 2.6; w += 0.12) {
-        const e = hAt(p.x + nx * side * w, p.z + nz * side * w)
-        if (e - floor > 3.5 + w * 1.5) break
-      }
-      return w - 0.12
-    }
-    const level = Math.min(lastLevel - 0.05, floor + 0.15)
-    for (const side of [-1, 1]) {
-      const W = halfW(side)
-      if (W < 0.45) continue
-      // one, two or three paddies across, with a narrow gap for the stream
-      const n = Math.max(1, Math.min(3, Math.floor((W - 0.12) / 0.32)))
-      const w0 = 0.14
-      const wEach = (W - w0) / n
-      for (let k = 0; k < n; k++) {
-        const a0 = w0 + k * wEach
-        const a1 = a0 + wEach - 0.04
-        // each paddy steps up a little away from the stream, as the floor rises
-        const lev = level + k * 0.18 + (rand() - 0.5) * 0.08
-        const quad = [
-          [p.x + nx * side * a0, p.z + nz * side * a0],
-          [q.x + nx * side * a0 - tx * 0.03, q.z + nz * side * a0 - tz * 0.03],
-          [q.x + nx * side * a1 - tx * 0.03, q.z + nz * side * a1 - tz * 0.03],
-          [p.x + nx * side * a1, p.z + nz * side * a1],
-        ]
-        paddies.push({ quad, level: lev, flood: rand() < 0.18 ? 0 : 1, age: rand() })
-      }
-      if (side === 1) auwai.push([p.x + nx * (W + 0.06), p.z + nz * (W + 0.06), level + 0.6])
-    }
-    lastLevel = level
-  }
-  return { paddies, auwai: auwai.reverse() }
-}
-
 /** Best cell by `score` within `r` world units of (x, z). */
 function bestNear(F, x, z, r, score) {
   const N = F.N
@@ -216,7 +127,7 @@ function prominence(F, c, r = 8) {
   return F.h[c] - s / Math.max(1, n)
 }
 
-export function placeSites(T, D, height, N2, ahu, trail, seed) {
+export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
   const N = T.h.length === 1024 * 1024 ? 1024 : Math.sqrt(T.h.length)
   const F = fields(T, D, N)
   const rand = mulberry32(seed + 9001)
@@ -254,6 +165,9 @@ export function placeSites(T, D, height, N2, ahu, trail, seed) {
   const koa = []
   const houses = []
   const surf = []
+  // what the loʻi already cover, so nothing else is built in a paddy
+  const loiAt = []
+  const onLoi = (x, z) => loiAt.some((f) => f(x, z))
 
   for (const a of ahupuaa) {
     const isModel = a === model
@@ -282,15 +196,24 @@ export function placeSites(T, D, height, N2, ahu, trail, seed) {
     // --- loʻi on wet, stream-fed valley floors ---
     const wet = a.rainLow > 1400 && a.mouthArea > 3
     if (wet && a.trunk.length > 12) {
-      const t = terraces(F, height, N2, a.trunk.slice(0, isModel ? 140 : 90), rand)
+      const t = layTerraces({
+        height,
+        N2,
+        trunk: a.trunk.slice(0, isModel ? 140 : 90),
+        lines,
+        houses,
+        label: (x, z) => at(F, F.label, x, z),
+        id: a.id,
+        // (their own dice, so the rest of the land doesn't shift with them)
+        rand: mulberry32(seed + 7001 + a.id),
+      })
       if (t.paddies.length > 6) {
-        loi.push({ id: a.id, model: isModel, ...t })
-        // a farming household or two up among the terraces
+        loiAt.push(t.occupied)
+        loi.push({ id: a.id, model: isModel, paddies: t.paddies, auwai: t.auwai, cut: t.cut })
+        // a farming household or two up among the terraces, on dry ground
         const mid = t.paddies[Math.floor(t.paddies.length * 0.5)]
-        if (mid) {
-          const p = bestNear(F, mid.quad[0][0], mid.quad[0][1], 2.4, (c) => (F.h[c] > 2 && F.slope[c] < 0.2 && F.toStream[c] * F.cs > 1.2 ? -F.slope[c] * 10 - F.toStream[c] * F.cs * 0.3 : -Infinity))
-          if (p) for (let k = 0; k < 2; k++) houses.push({ x: p.x + k * 0.18, z: p.z + k * 0.12, rot: rand() * Math.PI, kind: 'noa', village: a.id, scale: 0.8 })
-        }
+        const p = bestNear(F, mid.c[0], mid.c[1], 2.4, (c, x, z) => (F.h[c] > 2 && F.slope[c] < 0.2 && F.toStream[c] * F.cs > 1.2 && !onLoi(x, z) && !onLoi(x + 0.18, z + 0.12) ? -F.slope[c] * 10 - F.toStream[c] * F.cs * 0.3 : -Infinity))
+        if (p) for (let k = 0; k < 2; k++) houses.push({ x: p.x + k * 0.18, z: p.z + k * 0.12, rot: rand() * Math.PI, kind: 'noa', village: a.id, scale: 0.8 })
       }
     }
 
@@ -298,7 +221,7 @@ export function placeSites(T, D, height, N2, ahu, trail, seed) {
     if (isModel || rand() < 0.45) {
       const hs = bestNear(F, v.x, v.z, isModel ? 14 : 10, (c, x, z) => {
         const h = F.h[c]
-        if (h < 6 || h > 160 || F.label[c] !== a.id || F.slope[c] > 0.16) return -Infinity
+        if (h < 6 || h > 160 || F.label[c] !== a.id || F.slope[c] > 0.16 || onLoi(x, z)) return -Infinity
         return prominence(F, c, 9) * 0.08 - F.slope[c] * 20 - Math.hypot(x - v.x, z - v.z) * 0.12
       })
       if (hs) heiau.push({ x: hs.x, z: hs.z, id: a.id, kind: isModel ? 'luakini' : rand() < 0.5 ? 'mapele' : 'koa-heiau', rot: Math.atan2(v.x - hs.x, v.z - hs.z), model: isModel })

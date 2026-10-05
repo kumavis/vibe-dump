@@ -9,9 +9,13 @@
 // fades back in below it, churned white for a little way.
 
 import * as THREE from 'three'
-import { Y_PER_M, WORLD, HALF, HYDRO_RES } from '../config.js'
+import { Y_PER_M } from '../config.js'
 import { constants, noise, heightFetch, lighting } from '../render/shaders/common.glsl.js'
-import { chaikin } from '../gen/division.js'
+import { layStreams } from '../gen/channels.js'
+
+// (the drawn lines are laid in the generator's terms, so that the beds it cuts
+// and the ribbons drawn here are the same lines)
+export { layStreams }
 
 const vertex = /* glsl */ `
 ${constants}
@@ -82,72 +86,6 @@ void main() {
   gl_FragColor = vec4(col, a);
 }
 `
-
-/**
- * The stream lines as they are drawn: biggest first, each smaller one ending
- * where it meets one already laid (on a flat valley floor D8 runs parallel
- * paths a cell apart, and without this they'd draw as twin lines all the way to
- * the sea), then smoothed. Shared with the waterfall planner, so both agree to
- * the centimetre on where a fall starts along its stream.
- *
- * Each line carries its cumulative length (`along`, world units), the area
- * the generator gave the whole line (`lineA`, which sizes the ribbon), and the
- * drainage area at every point (`area`, for the waterfalls: a traced line only
- * knows the area where it ends, which for a tributary is the junction with
- * something far bigger, so it is read off the grid instead — the best cell
- * around each point, never shrinking downstream).
- */
-export function layStreams(meta, data) {
-  const laid = new Set()
-  const C = 0.2
-  const key = (x, z) => Math.floor(x / C) * 100003 + Math.floor(z / C)
-  const near = (x, z) => {
-    for (let dz = -2; dz <= 2; dz++) for (let dx = -2; dx <= 2; dx++) if (laid.has(key(x + dx * C, z + dz * C))) return true
-    return false
-  }
-  const lay = (pts) => {
-    for (let i = 1; i < pts.length; i++) {
-      const [ax, az] = pts[i - 1]
-      const [bx, bz] = pts[i]
-      const n = Math.ceil(Math.hypot(bx - ax, bz - az) / (C * 0.5))
-      for (let k = 0; k <= n; k++) laid.add(key(ax + ((bx - ax) * k) / n, az + ((bz - az) * k) / n))
-    }
-  }
-  const N = HYDRO_RES
-  const cell = WORLD / N
-  const areaAt = (x, z) => {
-    const ci = Math.floor((x + HALF) / cell)
-    const cj = Math.floor((z + HALF) / cell)
-    let best = 0
-    for (let j = Math.max(0, cj - 1); j <= Math.min(N - 1, cj + 1); j++) for (let i = Math.max(0, ci - 1); i <= Math.min(N - 1, ci + 1); i++) best = Math.max(best, data.area[j * N + i])
-    return best
-  }
-  const out = []
-  const sorted = meta.streams.map((s, k) => ({ s, k })).filter(({ s }) => s.area >= 0.9 && s.pts.length >= 3).sort((a, b) => b.s.area - a.s.area)
-  for (const { s, k } of sorted) {
-    let cut = s.pts.length
-    for (let i = 0; i < s.pts.length; i++) {
-      if (near(s.pts[i][0], s.pts[i][1])) {
-        cut = i + 1 // run on into the confluence
-        break
-      }
-    }
-    if (cut < 3) continue
-    let pts = s.pts.slice(0, cut)
-    lay(pts)
-    pts = chaikin(pts, 2)
-    const along = new Float32Array(pts.length)
-    const area = new Float32Array(pts.length)
-    let run = 0
-    for (let i = 0; i < pts.length; i++) {
-      if (i > 0) along[i] = along[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])
-      run = Math.max(run, areaAt(pts[i][0], pts[i][1]))
-      area[i] = run
-    }
-    out.push({ src: k, pts, along, area, lineA: s.area })
-  }
-  return out
-}
 
 // A cut hides a line between h0 and h1 (where a waterfall is drawn instead),
 // fading it out over r0 before h0 and back in over r1 after h1, so the ribbon
@@ -224,6 +162,13 @@ export class Streams {
       let cap = Infinity // a pool's level, held for a little way below it
       let capUntil = -1
       let prevOk = false
+      // water never climbs: the generator cut every bed to fall all the way
+      // down, so this only irons out what a hero's carve or the last few
+      // centimetres of interpolation leave (each stretch between falls on
+      // its own: below a fall the water starts again from its pool)
+      let run = Infinity
+      let runY = Infinity
+      const runSide = [Infinity, Infinity]
       for (let i = 0; i < pts.length; i++) {
         const a = pts[Math.max(0, i - 1)]
         const b = pts[Math.min(pts.length - 1, i + 1)]
@@ -239,6 +184,7 @@ export class Streams {
         if (hm < -0.5) break
         if (gone[i]) {
           prevOk = false
+          run = runY = runSide[0] = runSide[1] = Infinity
           continue
         }
         for (const c of cuts) {
@@ -251,6 +197,7 @@ export class Streams {
           hm = Math.min(hm, cap)
           cap = hm
         }
+        hm = run = Math.min(hm, run)
         // steepness from the drop over ~60 m downstream
         const ahead = pts[Math.min(pts.length - 1, i + 2)]
         const drop = (hm - T.metresAt(ahead[0], ahead[1])) / Math.max(10, Math.hypot(ahead[0] - x, ahead[1] - z) * 100)
@@ -258,14 +205,19 @@ export class Streams {
         // the water leaves a plunge pool churned white
         for (const s1 of foamAfter) if (along > s1 - 1e-6 && along <= s1 + 0.4) steep = Math.max(steep, 1 - (along - s1) / 0.4)
         const w = half * (1 + steep * 0.4)
-        const y = Math.max(hm, 0) * Y_PER_M + 0.012 + steep * 0.03
+        // (whitewater rides a little higher, but not so it climbs)
+        const y = (runY = Math.min(runY, Math.max(hm, 0) * Y_PER_M + 0.012 + steep * 0.03))
         for (const sd of [-1, 1]) {
           const px = x + nx * w * sd
           const pz = z + nz * w * sd
           // hug the bank: never sink under the ground beside the channel (but
-          // where a fall has cut a notch, don't climb its walls either)
-          let yb = Math.max(y, Math.max(0, T.metresAt(px, pz)) * Y_PER_M + 0.003)
+          // where a fall has cut a notch, don't climb its walls either, and
+          // never climb downstream: where a bank rises the water lies under
+          // its edge)
+          let yb = Math.max(0, T.metresAt(px, pz)) * Y_PER_M + 0.003
           if (cuts.length) yb = Math.min(yb, y + 0.04)
+          const r = (sd + 1) >> 1
+          yb = runSide[r] = Math.max(y, Math.min(yb, runSide[r]))
           pos.push(px, yb, pz)
           flow.push(along, per, steep)
           side.push(sd)

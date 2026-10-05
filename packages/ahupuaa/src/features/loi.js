@@ -1,11 +1,14 @@
 // Loʻi kalo — the irrigated taro terraces.
 //
 // Each paddy is a flat sheet of water held by earthen banks (kuāuna), stepping
-// down the valley floor. The water shader shows the sky in the open water and
+// down the valley floor: an irregular polygon the generator traced to fit the
+// ground (gen/loi.js). The water shader shows the sky in the open water and
 // the taro as a canopy of heart-shaped leaves; every paddy is at a different
 // stage, from fresh-planted huli to a full canopy, with a few lying fallow and
 // flooded — which is what makes a loʻi complex read as a patchwork from above.
-// The ʻauwai, the ditch that feeds them, runs along the valley side.
+// Where a paddy stands above the ground beside it, its bank becomes a
+// stone-faced riser down to that ground. The ʻauwai, the ditches that feed
+// them, run along the valley sides.
 
 import * as THREE from 'three'
 import { Y_PER_M } from '../config.js'
@@ -83,46 +86,62 @@ export class Loi {
     const age = []
     const flood = []
     const B = new Builder()
-    const bank = col('#5f8a3a', 0.15, Math.random)
-    const bankDry = col('#7a7a45', 0.1, Math.random)
+    const bank = col('#557d36', 0.15, Math.random)
+    const bankDry = col('#6e6e42', 0.1, Math.random)
     const lift = 0.06 // metres above the carved floor, to dodge depth fights
+    const v2 = (q) => new THREE.Vector2(q[0], q[1])
     for (const complex of sites.loi) {
       for (const p of complex.paddies) {
         const y = (p.level + lift) * Y_PER_M
-        const q = p.quad
-        // two triangles per paddy (quads are wound either way; double-sided)
-        for (const k of [0, 1, 2, 0, 2, 3]) {
-          pos.push(q[k][0], y, q[k][1])
-          age.push(p.age)
-          flood.push(p.flood)
+        const poly = p.poly
+        for (const [a, b, c] of THREE.ShapeUtils.triangulateShape(poly.map(v2), [])) {
+          for (const k of [a, b, c]) {
+            pos.push(poly[k][0], y, poly[k][1])
+            age.push(p.age)
+            flood.push(p.flood)
+          }
         }
-        // banks around the paddy edge
-        const pts = [...q, q[0]].map((c) => [c[0], y, c[1]])
-        B.wall(pts, 0.011, 0.007, Math.random() < 0.8 ? bank : bankDry, MAT.plain, 0.6)
+        // the bank round it, reaching down to the lowest ground just outside
+        // (on the downhill side that is the riser to the next terrace)
+        const cx = p.c[0]
+        const cz = p.c[1]
+        let floor = p.level
+        for (const q of poly) {
+          const dx = q[0] - cx
+          const dz = q[1] - cz
+          const l = Math.hypot(dx, dz) || 1
+          floor = Math.min(floor, terrain.metresAt(q[0], q[1]), terrain.metresAt(q[0] + (dx / l) * 0.02, q[1] + (dz / l) * 0.02))
+        }
+        const bottom = Math.max(floor, p.level - 5) - 0.25
+        const top = p.level + 0.35
+        const H = (top - bottom) / 1.3
+        const pts = [...poly, poly[0]].map((c) => [c[0], (bottom + 0.3 * H) * Y_PER_M, c[1]])
+        B.wall(pts, 0.009, H * Y_PER_M, Math.random() < 0.8 ? bank : bankDry, MAT.plain, 0.6)
       }
-      // the ʻauwai: a narrow channel of water along the valley side
-      const a = complex.auwai
-      for (let i = 0; i < a.length - 1; i++) {
-        const p0 = a[i]
-        const p1 = a[i + 1]
-        const dx = p1[0] - p0[0]
-        const dz = p1[1] - p0[1]
-        const l = Math.hypot(dx, dz) || 1
-        if (l > 1.2) continue
-        const nx = (-dz / l) * 0.012
-        const nz = (dx / l) * 0.012
-        const y0 = Math.max(terrain.heightAt(p0[0], p0[1]), p0[2] * Y_PER_M) + 0.002
-        const y1 = Math.max(terrain.heightAt(p1[0], p1[1]), p1[2] * Y_PER_M) + 0.002
-        const quad = [
-          [p0[0] - nx, y0, p0[1] - nz],
-          [p1[0] - nx, y1, p1[1] - nz],
-          [p1[0] + nx, y1, p1[1] + nz],
-          [p0[0] + nx, y0, p0[1] + nz],
-        ]
-        for (const k of [0, 1, 2, 0, 2, 3]) {
-          pos.push(...quad[k])
-          age.push(0)
-          flood.push(0)
+      // the ʻauwai: narrow channels of water along the valley sides
+      for (const a of complex.auwai) {
+        for (let i = 0; i < a.length - 1; i++) {
+          const p0 = a[i]
+          const p1 = a[i + 1]
+          const dx = p1[0] - p0[0]
+          const dz = p1[1] - p0[1]
+          const l = Math.hypot(dx, dz) || 1
+          if (l > 1.2) continue
+          const nx = (-dz / l) * 0.008
+          const nz = (dx / l) * 0.008
+          const y0 = Math.max(terrain.heightAt(p0[0], p0[1]), p0[2] * Y_PER_M) + 0.002
+          const y1 = Math.max(terrain.heightAt(p1[0], p1[1]), p1[2] * Y_PER_M) + 0.002
+          const quad = [
+            [p0[0] - nx, y0, p0[1] - nz],
+            [p1[0] - nx, y1, p1[1] - nz],
+            [p1[0] + nx, y1, p1[1] + nz],
+            [p0[0] + nx, y0, p0[1] + nz],
+          ]
+          for (const k of [0, 1, 2, 0, 2, 3]) {
+            pos.push(...quad[k])
+            age.push(0)
+            flood.push(0)
+          }
         }
       }
     }

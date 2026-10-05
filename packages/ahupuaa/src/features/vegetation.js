@@ -16,6 +16,7 @@
 import * as THREE from 'three'
 import { HYDRO_RES, WORLD, HALF } from '../config.js'
 import { mulberry32, hash2 } from '../gen/noise.js'
+import { insidePoly } from '../gen/loi.js'
 import { Builder, MAT, S, col, objectMaterial } from './kit.js'
 
 // --- geometry (metres, trunk base at the origin) -----------------------------
@@ -268,7 +269,12 @@ export class Vegetation {
       for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) m[j * N + i] = 1
     }
     const sites = this.app.island.meta.sites
-    for (const c of sites.loi) for (const p of c.paddies) for (const q of p.quad) stamp(q[0], q[1], 0.05)
+    for (const c of sites.loi) {
+      for (const p of c.paddies) {
+        stamp(p.c[0], p.c[1], 0.05)
+        for (const q of p.poly) stamp(q[0], q[1], 0.03)
+      }
+    }
     for (const h of sites.houses) stamp(h.x, h.z, 0.12)
     for (const h of sites.heiau) stamp(h.x, h.z, 0.5)
     for (const v of sites.villages) stamp(v.x, v.z, 0.3)
@@ -365,20 +371,23 @@ export class Vegetation {
         else if (L.rain < 0.3 && rand() < 0.5) add('aalii', x, z, 0.8)
       }
     }
-    // up the valleys beside the loʻi: kukui and maiʻa on the banks, kī by the paths
+    // up the valleys beside the loʻi: kukui and maiʻa on the banks, kī by the
+    // paths — out past a paddy's edge, wherever that isn't another paddy
     for (const complex of sites.loi) {
-      for (let k = 0; k < complex.paddies.length; k += 2) {
-        const pq = complex.paddies[k].quad
-        const x = (pq[2][0] + pq[3][0]) / 2
-        const z = (pq[2][1] + pq[3][1]) / 2
-        const dx = pq[3][0] - pq[0][0]
-        const dz = pq[3][1] - pq[0][1]
+      const ps = complex.paddies
+      const wet = (x, z, r) => ps.some((p) => Math.abs(p.c[0] - x) < 0.4 && Math.abs(p.c[1] - z) < 0.4 && (insidePoly(p.poly, x, z) || p.poly.some((q) => Math.hypot(q[0] - x, q[1] - z) < r)))
+      for (let k = 0; k < ps.length; k += 2) {
+        const p = ps[k]
+        const q = p.poly[Math.floor(rand() * p.poly.length)]
+        const dx = q[0] - p.c[0]
+        const dz = q[1] - p.c[1]
         const l = Math.hypot(dx, dz) || 1
-        const ox = x + (dx / l) * 0.06
-        const oz = z + (dz / l) * 0.06
+        const ox = q[0] + (dx / l) * 0.04
+        const oz = q[1] + (dz / l) * 0.04
+        if (wet(ox, oz, 0.025)) continue
         const r = rand()
         if (r < 0.3) add('maia', ox, oz)
-        else if (r < 0.5) add('kukui', ox + (dx / l) * 0.1, oz + (dz / l) * 0.1)
+        else if (r < 0.5 && !wet(ox + (dx / l) * 0.1, oz + (dz / l) * 0.1, 0.08)) add('kukui', ox + (dx / l) * 0.1, oz + (dz / l) * 0.1)
         else if (r < 0.75) add(rand() < 0.8 ? 'ki' : 'kiRed', ox, oz, 0.9)
       }
     }

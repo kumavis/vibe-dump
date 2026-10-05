@@ -10,6 +10,7 @@
 
 import * as THREE from 'three'
 import { mulberry32 } from '../gen/noise.js'
+import { insidePoly } from '../gen/loi.js'
 import { Builder, MAT, S, col, objectMaterial } from './kit.js'
 import { waa, kaulua, akuaLoa } from './structures.js'
 
@@ -126,11 +127,12 @@ export class Life {
       for (let k = 0; k < n; k++) {
         const p = l.paddies[Math.floor(rand() * l.paddies.length)]
         if (!p.flood) continue
-        const q = p.quad
-        const u = 0.2 + rand() * 0.6
-        const v = 0.2 + rand() * 0.6
-        const x = q[0][0] + (q[1][0] - q[0][0]) * u + (q[3][0] - q[0][0]) * v
-        const z = q[0][1] + (q[1][1] - q[0][1]) * u + (q[3][1] - q[0][1]) * v
+        // somewhere out in the paddy, between its middle and an edge
+        const q = p.poly[Math.floor(rand() * p.poly.length)]
+        const u = rand() * 0.7
+        let x = p.c[0] + (q[0] - p.c[0]) * u
+        let z = p.c[1] + (q[1] - p.c[1]) * u
+        if (!insidePoly(p.poly, x, z)) [x, z] = p.c
         add('bend', x, z, rand() * 6.28, (p.level - 0.25) * 0.013)
       }
     }

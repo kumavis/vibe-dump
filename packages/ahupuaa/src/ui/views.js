@@ -125,8 +125,18 @@ export function buildViews(app) {
     views.nahele = { target: at(x, z), distance: 9, yaw: makaiYaw + 0.9, pitch: 0.55, hour: 9.5, overlay: [0, 0, 0, 0] }
   }
   if (loi) {
-    const p = loi.paddies[Math.floor(loi.paddies.length * 0.35)].quad[0]
-    views.loi = { target: at(p[0], p[1]), distance: 5.2, yaw: makaiYaw - 0.5, pitch: 0.72, hour: 10.2, overlay: [0, 0, 0, 0] }
+    // where the terraces lie thickest: the paddy with the most paddy around it
+    let p = loi.paddies[0].c
+    let best = -1
+    for (const q of loi.paddies) {
+      let n = 0
+      for (const r of loi.paddies) if (Math.hypot(r.c[0] - q.c[0], r.c[1] - q.c[1]) < 1.6) n++
+      if (n > best) {
+        best = n
+        p = q.c
+      }
+    }
+    views.loi = { target: at(p[0], p[1]), distance: 4.4, yaw: makaiYaw - 0.5, pitch: 0.72, hour: 10.2, overlay: [0, 0, 0, 0] }
   }
   views.kauhale = { target: at(village.x, village.z), distance: 3.2, yaw: makaiYaw + 0.9, pitch: 0.55, hour: 8.8, overlay: [0, 0, 0, 0] }
   if (heiau) views.heiau = { target: at(heiau.x, heiau.z), distance: 2.1, yaw: heiau.rot + 2.2, pitch: 0.42, hour: 11.5, overlay: [0, 0, 0, 0] }
