@@ -86,15 +86,31 @@ function focusBand() {
     bottom: -view.visH / 2 + (view.w <= 640 ? 134 : 104) * px,
   }
 }
-function focusScale() {
+// Card height in hand: a little short of the band, to leave room for the idle
+// sway and bob — but on a screen too short for the band it keeps a usable
+// size and lets the caption overlap rather than shrinking to a speck.
+function focusHeight() {
   const { top, bottom } = focusBand()
-  // a little short of the band, to leave room for the idle sway and bob
-  const h = Math.min(0.64 * view.visH, (top - bottom) * 0.92)
-  return Math.max(0.05, Math.min(h / CARD_ASPECT, 0.8 * view.visW))
+  const band = (top - bottom) * 0.92
+  return { band, h: Math.min(0.64 * view.visH, Math.max(band, 0.45 * view.visH)) }
+}
+function focusScale() {
+  return Math.min(focusHeight().h / CARD_ASPECT, 0.8 * view.visW)
 }
 function focusPose(extra = {}) {
   const { top, bottom } = focusBand()
-  return { x: 0, y: (top + bottom) / 2, z: 0, rx: 0, ry: 0, rz: 0, s: focusScale(), flip: 0, ...extra }
+  const { band, h } = focusHeight()
+  // centred in the band, easing back to the screen centre when it doesn't fit
+  const y = ((top + bottom) / 2) * Math.min(1, Math.max(0, band / h))
+  return { x: 0, y, z: 0, rx: 0, ry: 0, rz: 0, s: focusScale(), flip: 0, ...extra }
+}
+// A spread card picked up to look closer: at the card-in-hand size, but
+// never smaller than it already looked in the spread.
+function inspectPose(c) {
+  const f = focusPose()
+  const p = spreadPose(c.index, cards.length)
+  const looked = (p.s * CAM_Z) / (CAM_Z - p.z)
+  return atDepth({ ...f, s: Math.max(f.s, looked * 1.15) }, 2.2)
 }
 function stackPose(k) {
   // cards waiting under the one in hand, edges just showing
@@ -152,10 +168,17 @@ function spreadPose(k, n) {
     // as big as it can be while its foot stays above the collection bar
     // (which stacks, and so stands taller, at 640 px and under), but never
     // smaller than the crown behind it
-    const y = -view.visH * 0.05
-    const room = y - (-view.visH / 2 + (view.w <= 640 ? 108 : 88) * px)
+    // (also clear of the caption, which takes the bar's place while a card is
+    // picked up)
+    let y = -view.visH * 0.05
+    const floor = -view.visH / 2 + (view.w <= 640 ? 108 : 96) * px
+    const room = y - floor
     const crown = ((0.34 * view.visH) / CARD_ASPECT) * fit
     const s = Math.max(crown * 1.1, Math.min(((0.6 * view.visH) / CARD_ASPECT) * Math.max(fit, 0.75), (2 * room) / CARD_ASPECT))
+    // when the floor on its size wins, lift it so its foot still clears the
+    // bar, as far as the header allows
+    const half = (s * CARD_ASPECT) / 2
+    y = Math.min(Math.max(y, floor + half), Math.max(y, view.visH / 2 - 56 * px - half))
     return atDepth({ x: 0, y, rx: 0, ry: 0, rz: 0, s, flip: 0 }, 0.6)
   }
   const m = n - 1
@@ -579,7 +602,7 @@ function inspect(c) {
   hovered = null
   c.hoverTarget = 0
   sfx.reveal(c.index, RARITY[c.def.rarity].rank)
-  tween(c.pose, atDepth(focusPose(), 2.2), 0.7, { ease: ease.inOut })
+  tween(c.pose, inspectPose(c), 0.7, { ease: ease.inOut })
   tween(c, { glow: c.def.rarity === 'holo' ? 0.45 : 0.3 }, 0.6)
   for (const o of cards) if (o !== c) tween(o.material.uniforms.uDim, { value: 0.3 }, 0.5)
   hud.spread.classList.remove('show')
@@ -975,7 +998,7 @@ function relayout() {
     })
   } else if (state === 'spread' || state === 'inspect') {
     cards.forEach((c, k) => {
-      if (c === inspected) Object.assign(c.pose, atDepth(focusPose(), 2.2))
+      if (c === inspected) Object.assign(c.pose, inspectPose(c))
       else Object.assign(c.pose, spreadPose(k, n))
     })
   }
@@ -1033,7 +1056,8 @@ function frame(ms) {
   if (pack) {
     pack.uniforms.uTime.value = simT
     pack.uniforms.uHover.value = state === 'pack' ? 1 : 0
-    aim(_t2, 0.22, 0.38)
+    if (state === 'pack') aim(_t2, 0.22, 0.38)
+    else _t2.set(0, 0)
     packTilt.lerp(_t2, 1 - Math.exp(-dt * 5))
     pack.group.position.set(packPose.x, packPose.y + Math.sin(simT * 0.9) * 0.05 * packPose.s, packPose.z)
     pack.group.rotation.set(packPose.rx + packTilt.x, packPose.ry + packTilt.y, packPose.rz, 'YXZ')
@@ -1050,7 +1074,11 @@ function frame(ms) {
     if (c === h) aim(c.tiltTarget, 0.42, 0.55)
     else if (state === 'spread' && c === hovered) c.tiltTarget.set(-pointer.y * 0.12, pointer.x * 0.16)
     else c.tiltTarget.set(0, 0)
-    c.stepTilt(dt)
+    if (state === 'opening') {
+      // riding up inside the pack: lean with it
+      c.tilt.copy(packTilt)
+      c.tiltVel.set(0, 0)
+    } else c.stepTilt(dt)
     c.hover += (c.hoverTarget - c.hover) * (1 - Math.exp(-dt * 10))
     c.pop *= Math.exp(-dt * 7)
     if (c === h && state !== 'inspect') c.offset.y = Math.sin(simT * 1.1) * 0.025 * c.pose.s
