@@ -1064,7 +1064,10 @@ function frame(ms) {
     pack.uniforms.uHover.value = state === 'pack' ? 1 : 0
     if (state === 'pack') aim(_t2, 0.22, 0.38)
     else _t2.set(0, 0)
-    packTilt.lerp(_t2, 1 - Math.exp(-dt * 5))
+    // while it opens the lean decays on real time, so it has all but gone by
+    // the time the cards let go of the pack, however slow the frames
+    const leanDt = state === 'opening' ? Math.min(rawDt, 0.5) : dt
+    packTilt.lerp(_t2, 1 - Math.exp(-leanDt * 5))
     pack.group.position.set(packPose.x, packPose.y + Math.sin(simT * 0.9) * 0.05 * packPose.s, packPose.z)
     pack.group.rotation.set(packPose.rx + packTilt.x, packPose.ry + packTilt.y, packPose.rz, 'YXZ')
     pack.group.scale.setScalar(packPose.s)

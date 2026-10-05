@@ -168,6 +168,9 @@ void main() {
   float d = sdRR(p, vec2(.5, .7), .05);
   float g = exp(-max(d, 0.) * 9.) * smoothstep(-.06, .0, d);
   g += exp(-max(d, 0.) * 22.) * .8 * smoothstep(-.02, .0, d);
+  // fade out before the edge of the quad, so it never shows as a faint frame
+  vec2 e = abs(vUv - .5) * 2.;
+  g *= smoothstep(1., .78, max(e.x, e.y));
   float a = atan(p.y, p.x);
   vec3 c = mix(uColor, mix(spectrum(a / 6.28318 + uTime * .15), vec3(1., .92, .8), .22) * .8, uRainbow);
   gl_FragColor = vec4(c * g * uGlow, 1.);
