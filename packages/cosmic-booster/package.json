@@ -15,7 +15,7 @@
     "tags": ["art", "kids"],
     "status": "done",
     "models": ["Opus 5.5"],
-    "thinking": "unknown",
+    "thinking": "ultracode",
     "thumbnail": {
       "waitFor": "body.ready",
       "click": "#skip",
