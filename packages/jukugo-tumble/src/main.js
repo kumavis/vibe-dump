@@ -58,12 +58,18 @@ async function boot() {
   resize()
 
   // A slow drift over the floor — never still, never fast enough to make the
-  // captions hard to read.
+  // captions hard to read. It keeps a clock of its own, which stands still in
+  // manual mode: the view holds where it is, and back in auto the drift picks
+  // up from there rather than jumping on to where it would have got to.
+  let drift = 0
+  let driftAt = null
   function updateView(now) {
+    if (driftAt != null && !director.manual) drift += now - driftAt
+    driftAt = now
     const w = innerWidth
     const h = innerHeight
     const base = Math.max(34, Math.min(60, Math.min(w, h) / 17))
-    const t = reduceMotion ? 0 : now - t0
+    const t = reduceMotion ? 0 : drift
     view.ppu = base * user.zoom * (1 + 0.035 * Math.sin((t / 53) * Math.PI * 2))
     view.tx = clampX(2.5 * Math.sin((t / 97) * Math.PI * 2) + 1.4 * Math.sin((t / 41) * Math.PI * 2) + user.dx)
     view.tz = clampZ(1.8 * Math.sin((t / 83) * Math.PI * 2 + 1) + user.dz)
@@ -95,9 +101,10 @@ async function boot() {
   director.start(t0)
 
   // ── manual mode ──────────────────────────────────────────────────────────
-  // Nothing turns and no note opens by itself: a click opens a word's note,
-  // and a click on a word with its note up turns the block clicked. Kept in
-  // the URL (?manual=1), so a reload or a shared link opens the same way.
+  // Nothing turns, no note opens and the camera holds still (updateView):
+  // a click opens a word's note, and a click on a word with its note up
+  // turns the block clicked. Drag and scroll still move the view. Kept in the
+  // URL (?manual=1), so a reload or a shared link opens the same way.
   const mode = $('mode')
   const keys = $('keys')
   const KEYS = { auto: keys.textContent, manual: 'drag · scroll · click: note, then turn' }

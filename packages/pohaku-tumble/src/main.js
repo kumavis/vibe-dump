@@ -85,8 +85,17 @@ async function boot() {
   }
 
   // The camera's slow drift over the floor (view.js); with reduced motion it
-  // holds where the drift begins.
-  const updateView = (now) => wander(view, reduceMotion ? 0 : now - t0, innerWidth, innerHeight, user)
+  // holds where the drift begins. It keeps a clock of its own, which stands
+  // still in manual mode: the view holds where it is, and back in auto the
+  // drift picks up from there rather than jumping on to where it would have
+  // got to.
+  let drift = 0
+  let driftAt = null
+  function updateView(now) {
+    if (driftAt != null && !director.manual) drift += now - driftAt
+    driftAt = now
+    wander(view, reduceMotion ? 0 : drift, innerWidth, innerHeight, user)
+  }
 
   const t0 = clock()
   updateView(t0)
@@ -120,9 +129,10 @@ async function boot() {
   director.start(drop - 0.15)
 
   // ── manual mode ──────────────────────────────────────────────────────────
-  // Nothing turns and no card opens by itself: a click opens a word's card,
-  // and a click on a word with its card up turns the stone clicked. Kept in
-  // the URL (?manual=1), so a reload or a shared link opens the same way.
+  // Nothing turns, no card opens and the camera holds still (updateView):
+  // a click opens a word's card, and a click on a word with its card up
+  // turns the stone clicked. Drag and scroll still move the view. Kept in the
+  // URL (?manual=1), so a reload or a shared link opens the same way.
   const mode = $('mode')
   const keys = $('keys')
   const KEYS = { auto: keys.textContent, manual: 'drag · scroll · click: card, then turn' }
