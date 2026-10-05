@@ -154,34 +154,54 @@ export class Features {
     const stone = col('#8a817a', 0.12, rand)
     const pts = p.wall
     const n = pts.length
-    // the kuapā, broken by the mākāhā gates
+    // distance along the wall, so each gate opening is the grate's own width
+    // wherever it falls and however long the wall is
+    const cum = [0]
+    for (let k = 1; k < n; k++) cum.push(cum[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]))
+    const total = cum[n - 1]
+    const along = (t) => {
+      const f = t * (n - 1)
+      const i = Math.min(n - 2, Math.floor(f))
+      return cum[i] + (cum[i + 1] - cum[i]) * (f - i)
+    }
+    const at = (d) => {
+      let i = 0
+      while (i < n - 2 && cum[i + 1] < d) i++
+      const f = (d - cum[i]) / Math.max(1e-9, cum[i + 1] - cum[i])
+      return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * f, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * f]
+    }
+    const OPEN = 0.06 // gate opening, world units (a grate ~3.7 m across)
+    const gaps = p.gates.map((g) => along(g)).map((d) => [Math.max(0, d - OPEN / 2), Math.min(total, d + OPEN / 2)])
+    // the kuapā in runs between the mākāhā: each run stops exactly at an
+    // opening's edge, so its capped end is the side of the gate
     let run = []
     const flush = () => {
       if (run.length > 1) B.wall(run, 0.1, 0.024, stone, MAT.stone, 0.72)
       run = []
     }
-    for (let k = 0; k < n; k++) {
-      const t = k / (n - 1)
-      const gate = p.gates.some((g) => Math.abs(g - t) < 0.022)
-      if (gate) {
-        flush()
-        continue
-      }
-      run.push([pts[k][0], 0, pts[k][1]])
+    const push = (xz) => run.push([xz[0], 0, xz[1]])
+    let d = 0
+    for (const [g0, g1] of gaps) {
+      for (let k = 0; k < n; k++) if (cum[k] > d && cum[k] < g0) push(pts[k])
+      push(at(g0))
+      flush()
+      push(at(g1))
+      d = g1
     }
+    for (let k = 0; k < n; k++) if (cum[k] > d) push(pts[k])
     flush()
-    // a wooden grate in each gate, and the pond keeper's hut at the first
+    // a wooden grate filling each opening from side to side, square to the wall
     const w = col(PALETTE.wood, 0.15, rand)
-    for (const g of p.gates) {
-      const k = Math.round(g * (n - 1))
-      const a = pts[Math.max(0, k - 1)]
-      const b = pts[Math.min(n - 1, k + 1)]
+    for (const [g0, g1] of gaps) {
+      const a = at(g0)
+      const b = at(g1)
       const ang = Math.atan2(b[1] - a[1], b[0] - a[0])
-      const x = pts[k][0]
-      const z = pts[k][1]
-      B.at(x, 0, z, ang)
-      for (let s = -3; s <= 3; s++) B.box(s * 0.55, -0.4, 0, 0.12, 1.9, 0.12, w, MAT.wood)
-      B.box(0, 1.25, 0, 4.2, 0.15, 0.2, w, MAT.wood)
+      const span = Math.hypot(b[0] - a[0], b[1] - a[1]) / S // metres
+      B.at((a[0] + b[0]) / 2, 0, (a[1] + b[1]) / 2, ang)
+      const stakes = Math.max(3, Math.round(span / 0.45))
+      for (let k = 0; k <= stakes; k++) B.box(-span / 2 + 0.06 + ((span - 0.12) * k) / stakes, -0.4, 0, 0.12, 1.9, 0.12, w, MAT.wood)
+      B.box(0, 1.25, 0, span, 0.15, 0.2, w, MAT.wood)
+      B.box(0, 0.45, 0, span, 0.1, 0.16, w, MAT.wood)
       B.done()
     }
     const g0 = Math.round(p.gates[0] * (n - 1))
