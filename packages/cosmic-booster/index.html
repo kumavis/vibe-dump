@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cosmic Booster</title>
+<meta name="description" content="Tear open a foil booster of living cosmic trading cards — nebulae, pulsars, ringed giants — ending on a holographic black hole that bends light as you tilt it.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2307051a'/><ellipse cx='16' cy='16' rx='13' ry='3.6' transform='rotate(-8 16 16)' fill='none' stroke='%23ffb35a' stroke-width='2.4'/><path d='M7.5 13.5a9 9 0 0 1 17 0' fill='none' stroke='%23ffd79a' stroke-width='1.6'/><circle cx='16' cy='16' r='5.6' fill='%23000' stroke='%23fff1d6' stroke-width='.9'/><path d='M3.6 17.6a13 3.6 -8 0 0 25 -3.4' fill='none' stroke='%23fff3dd' stroke-width='2.4'/></svg>">
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<header id="brand">
+  <span class="mark">✦</span><span class="name">Cosmos</span><span class="sub">Celestial Trading Cards · Series I</span>
+</header>
+
+<nav id="tools">
+  <button id="skip" type="button">Skip<span class="long"> to the pull</span></button>
+  <button id="mute" type="button" aria-label="Sound on" title="Sound"></button>
+</nav>
+
+<div id="caption" aria-live="polite">
+  <div class="chip"></div>
+  <div class="meta"></div>
+</div>
+
+<ol id="dots" aria-hidden="true"></ol>
+<p id="hint"></p>
+
+<div id="spreadui">
+  <div class="count"></div>
+  <button id="again" type="button">Open another pack</button>
+</div>
+
+<div id="boot"><span>✦</span></div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
