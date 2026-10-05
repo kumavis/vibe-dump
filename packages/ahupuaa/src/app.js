@@ -322,7 +322,7 @@ export class App {
     this.shared.uniforms.uTime.value = this.time
     this.rig.update(this.camDt ?? dt)
     this.terrain.update(this.camera)
-    this.ocean.update(this.camera)
+    this.ocean.update(this.camera, dt)
     this.vegetation.update(this.camera)
     this.weather.step(dt * c.speed, this.light.sunDir.y, c.hour, this.season)
     this.life.update(dt, this.time)

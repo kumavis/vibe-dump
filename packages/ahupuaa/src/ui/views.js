@@ -152,7 +152,24 @@ export function buildViews(app) {
     views.koa = { target: at(koa.x, koa.z), distance: 1.8, yaw: yawFrom(-Math.cos(c.dir), -Math.sin(c.dir)) + 0.3, pitch: 0.2, hour: 6.9, overlay: [0, 0, 0, 0], lookUp: 0.25 }
   }
   // the camera sits out past the break, looking back toward land over the riders
-  if (surf) views.surf = { target: at(surf.x, surf.z), distance: 1.3, yaw: yawFrom(Math.cos(surf.dir + 0.9), Math.sin(surf.dir + 0.9)), pitch: 0.12, hour: 14.5, overlay: [0, 0, 0, 0] }
+  const brk = surf && app.life ? app.life.breakNear(surf.x, surf.z) : null
+  if (brk) {
+    // out in the deep water off the shoulder, down the line from the peak, so
+    // a ride comes across the frame and toward the camera with the white
+    // water peeling behind it, the land beyond, and the lineup left of the
+    // card. The target floats just above the sea, where the riders are, and
+    // the sun is put behind the camera: morning on a coast that faces east.
+    const k = Math.floor(brk.n * 0.5)
+    const ox = brk.nx[k] * 0.8 + brk.tx[k] * 0.65
+    const oz = brk.nz[k] * 0.8 + brk.tz[k] * 0.65
+    const ol = Math.hypot(ox, oz)
+    const target = new THREE.Vector3(brk.x[k] + brk.nx[k] * 0.08 + (oz / ol) * 0.2, 0.04, brk.z[k] + brk.nz[k] * 0.08 - (ox / ol) * 0.2)
+    // (this close, the idle orbit would carry the next ride out of frame
+    // during a long read, so it swings across a short arc instead:
+    // Waterfalls.holdOrbit)
+    const yaw = yawFrom(ox, oz)
+    views.surf = { target, distance: 1, yaw, pitch: 0.13, hour: ox > 0 ? 9.4 : 15.6, overlay: [0, 0, 0, 0], orbit: [yaw - 0.3, yaw + 0.3] }
+  } else if (surf) views.surf = { target: at(surf.x, surf.z), distance: 1.3, yaw: yawFrom(Math.cos(surf.dir + 0.9), Math.sin(surf.dir + 0.9)), pitch: 0.12, hour: 14.5, overlay: [0, 0, 0, 0] }
   views.kula = { target: at(kula[0], kula[1]), distance: 11, yaw: 0.9, pitch: 0.42, hour: 9, overlay: [0, 0, 0, 0] }
   if (ahu) {
     // stand on the slope above the ahu, looking down past it to the shore and
@@ -174,13 +191,25 @@ export function buildViews(app) {
     views.puuhonua = { target: at(p.x - Math.cos(p.dir) * 0.8, p.z - Math.sin(p.dir) * 0.8), distance: 3.4, yaw: yawFrom(Math.cos(p.dir + 0.9), Math.sin(p.dir + 0.9)), pitch: 0.42, hour: 15, overlay: [0, 0, 0, 0] }
   }
   if (s.holua) {
+    // at the foot of the run among the crowd, looking up the track as a sled
+    // comes down the last stretch head first and stops: a sled is only a few
+    // metres long, too small to follow from across the valley (life.js times
+    // a run to arrive just after the camera does). The target is the height
+    // of the riders on the causeway, not the ground under it.
     const h = s.holua
-    const mxh = (h.x0 + h.x1) / 2
-    const mzh = (h.z0 + h.z1) / 2
     const dx = h.x1 - h.x0
     const dz = h.z1 - h.z0
     const l = Math.hypot(dx, dz) || 1
-    views.holua = { target: at(mxh, mzh), distance: 6.5, yaw: yawFrom(-dz / l, dx / l) + 0.25, pitch: 0.33, hour: 16, overlay: [0, 0, 0, 0] }
+    const target = at(h.x1 - (dx / l) * 0.42, h.z1 - (dz / l) * 0.42)
+    target.y += 0.03
+    // (the idle orbit held to a short arc, as at the surf)
+    const yaw = yawFrom(dx / l, dz / l) - 0.45
+    views.holua = { target, distance: 1.05, yaw, pitch: 0.4, hour: 16, overlay: [0, 0, 0, 0], orbit: [yaw - 0.3, yaw + 0.3] }
+    // on a phone held upright, aim so the last stretch is above the card and
+    // the sled does not come to a stop behind it
+    const last = at(h.x1 - (dx / l) * 0.5, h.z1 - (dz / l) * 0.5)
+    last.y += 0.02
+    portraitAim(views.holua, last)
   }
   views.malama = { target: at(cx, cz), distance: 300, yaw: 2.5, pitch: 0.5, hour: 17.4, overlay: [0.6, 0, 0.5, 0] }
 

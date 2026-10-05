@@ -1,11 +1,12 @@
 // Loʻi kalo — the irrigated taro terraces.
 //
 // Each paddy is a flat sheet of water held by earthen banks (kuāuna), stepping
-// down the valley floor: an irregular polygon the generator traced to fit the
-// ground (gen/loi.js). The water shader shows the sky in the open water and
-// the taro as a canopy of heart-shaped leaves; every paddy is at a different
-// stage, from fresh-planted huli to a full canopy, with a few lying fallow and
-// flooded — which is what makes a loʻi complex read as a patchwork from above.
+// down the valley floor: a roughly four-sided polygon the generator laid out
+// along the contours and clipped to the land (gen/loi.js). The water shader
+// shows the sky in the open water and the taro as a canopy of heart-shaped
+// leaves; every paddy is at a different stage, from fresh-planted huli to a
+// full canopy, with a few lying fallow and flooded — which is what makes a
+// loʻi complex read as a patchwork from above.
 // Where a paddy stands above the ground beside it, its bank becomes a
 // stone-faced riser down to that ground. The ʻauwai, the ditches that feed
 // them, run along the valley sides.
@@ -102,17 +103,30 @@ export class Loi {
           }
         }
         // the bank round it, reaching down to the lowest ground just outside
-        // (on the downhill side that is the riser to the next terrace)
-        const cx = p.c[0]
-        const cz = p.c[1]
+        // (on the downhill side that is the riser to the next terrace): read
+        // all along each side, not just at the corners, as a four-sided
+        // paddy's long sides can pass over a dip its corners miss
         let floor = p.level
-        for (const q of poly) {
-          const dx = q[0] - cx
-          const dz = q[1] - cz
-          const l = Math.hypot(dx, dz) || 1
-          floor = Math.min(floor, terrain.metresAt(q[0], q[1]), terrain.metresAt(q[0] + (dx / l) * 0.02, q[1] + (dz / l) * 0.02))
+        const n = poly.length
+        let sa = 0
+        for (let i = 0; i < n; i++) sa += poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1]
+        const sg = sa > 0 ? 1 : -1
+        for (let i = 0; i < n; i++) {
+          const a = poly[i]
+          const b = poly[(i + 1) % n]
+          const l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1
+          // (outward, a metre and two metres)
+          const ox = ((b[1] - a[1]) / l) * sg * 0.01
+          const oz = (-(b[0] - a[0]) / l) * sg * 0.01
+          const k = Math.max(1, Math.ceil(l / 0.04))
+          for (let s = 0; s < k; s++) {
+            const x = a[0] + ((b[0] - a[0]) * s) / k
+            const z = a[1] + ((b[1] - a[1]) * s) / k
+            floor = Math.min(floor, terrain.metresAt(x, z), terrain.metresAt(x + ox, z + oz), terrain.metresAt(x + 2 * ox, z + 2 * oz))
+          }
         }
-        const bottom = Math.max(floor, p.level - 5) - 0.25
+        // (as deep as a stream bed cut in beside it, if need be)
+        const bottom = Math.max(floor, p.level - 8) - 0.25
         const top = p.level + 0.35
         const H = (top - bottom) / 1.3
         const pts = [...poly, poly[0]].map((c) => [c[0], (bottom + 0.3 * H) * Y_PER_M, c[1]])

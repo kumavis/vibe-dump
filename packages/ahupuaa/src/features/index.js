@@ -260,16 +260,89 @@ export class Features {
 
   buildHolua(B, h, rand) {
     const { terrain } = this.app
-    const n = Math.ceil(Math.hypot(h.x1 - h.x0, h.z1 - h.z0) / 0.08)
-    const surface = []
-    for (let k = 0; k <= n; k++) {
-      const t = k / n
-      const x = h.x0 + (h.x1 - h.x0) * t
-      const z = h.z0 + (h.z1 - h.z0) * t
-      surface.push([x, terrain.heightAt(x, z) + 0.004, z])
+    const len = Math.hypot(h.x1 - h.x0, h.z1 - h.z0)
+    const n = Math.ceil(len / 0.08)
+    const ds = len / n
+    const ux = (h.x1 - h.x0) / len
+    const uz = (h.z1 - h.z0) / len
+    const at = (s, o) => [h.x0 + ux * s - uz * o, h.z0 + uz * s + ux * o]
+    // The causeway is laid on the ground as it is drawn up close, not on the
+    // smooth heightAt: down this steep, gullied slope the terrain mesh's flat
+    // triangles stand metres proud of it in places, and swallowed the track.
+    // So its top clears the drawn ground across its whole width everywhere,
+    // and stands at least as high over the ground as it always did; the
+    // profile is eased so a sled rides it without kinks; and its walls reach
+    // down to the ground wherever that leaves it built up off the slope, as
+    // the real ones were built up across hollows.
+    const ground = (x, z) => Math.max(terrain.heightAt(x, z), drawnHeight(terrain, x, z))
+    const TOP = 0.014
+    const SUB = 4
+    const need = []
+    for (let q = 0; q <= n * SUB; q++) {
+      const s = (q / SUB) * ds
+      let m = terrain.heightAt(...at(s, 0)) + 0.018
+      for (let o = -0.041; o < 0.042; o += 0.0205) m = Math.max(m, ground(...at(s, o)) + 0.003)
+      need.push(m - TOP)
     }
-    // a raised stone causeway, its top laid with grass and ti leaves
-    B.wall(surface, 0.11, 0.014, col('#8a817a', 0.1, rand), MAT.stone, 0.75)
+    const y = []
+    for (let k = 0; k <= n; k++) y.push(terrain.heightAt(...at(k * ds, 0)) + 0.004)
+    // raise it wherever the straight run between two samples dips under that
+    const lift = () => {
+      for (let it = 0; it < 8; it++) {
+        let low = false
+        for (let q = 0; q <= n * SUB; q++) {
+          const k = Math.min(n - 1, Math.floor(q / SUB))
+          const f = q / SUB - k
+          const d = need[q] - (y[k] + (y[k + 1] - y[k]) * f)
+          if (d > 1e-6) {
+            low = true
+            y[f < 0.5 ? k : k + 1] += d
+          }
+        }
+        if (!low) break
+      }
+    }
+    lift()
+    for (let pass = 0; pass < 2; pass++) {
+      const prev = y.slice()
+      for (let k = 1; k < n; k++) y[k] = (prev[k - 1] + 2 * prev[k] + prev[k + 1]) / 4
+      lift()
+    }
+    const surface = y.map((v, k) => {
+      const [x, z] = at(k * ds, 0)
+      return [x, v, z]
+    })
+    // a raised stone causeway, battered, its top laid with grass and ti
+    // leaves; a taller stretch spreads wider at its foot
+    const stone = col('#8a817a', 0.1, rand)
+    const rings = y.map((v, k) => {
+      const s = k * ds
+      const r = []
+      for (const sg of [-1, 1]) {
+        const w = 0.055 + 0.6 * Math.max(0, v - 0.0042 - ground(...at(s, sg * 0.055)))
+        let foot = v - 0.0042
+        for (const a of [-0.5, 0, 0.5]) {
+          const [px, pz] = at(s + a * ds, sg * w)
+          foot = Math.min(foot, terrain.heightAt(px, pz) - 0.006, drawnHeight(terrain, px, pz) - 0.006)
+        }
+        const [fx, fz] = at(s, sg * w)
+        r.push([fx, foot, fz])
+      }
+      const [rx, rz] = at(s, 0.041)
+      const [lx, lz] = at(s, -0.041)
+      r.push([rx, v + TOP, rz], [lx, v + TOP, lz])
+      return r
+    })
+    for (let k = 0; k < n; k++) {
+      const [a0, a1, a2, a3] = rings[k]
+      const [b0, b1, b2, b3] = rings[k + 1]
+      B.quad(a3, a2, b2, b3, stone, MAT.stone)
+      B.quad(a1, b1, b2, a2, stone, MAT.stone)
+      B.quad(b0, a0, a3, b3, stone, MAT.stone)
+    }
+    B.quad(...rings[0], stone, MAT.stone)
+    const [e0, e1, e2, e3] = rings[n]
+    B.quad(e1, e0, e3, e2, stone, MAT.stone)
     const top = col('#c2b25e', 0.1, rand)
     for (let k = 0; k < surface.length - 1; k++) {
       const a = surface[k]
@@ -317,3 +390,27 @@ function inside(poly, x, z) {
   return c
 }
 
+/**
+ * The ground as the terrain draws it up close: the finest CDLOD mesh, flat
+ * triangles between vertices fetched bilinearly at the corners of its cells,
+ * the diagonals alternating (render/terrain.js). Where the land is steep and
+ * folded it stands well off the bilinear heightAt in places, so whatever has
+ * to sit on the ground that is seen there reads this.
+ */
+export function drawnHeight(terrain, x, z) {
+  const c = WORLD / terrain.N
+  const fx = (x + HALF) / c
+  const fz = (z + HALF) / c
+  const i = Math.floor(fx)
+  const j = Math.floor(fz)
+  const u = fx - i
+  const v = fz - j
+  const x0 = -HALF + i * c
+  const z0 = -HALF + j * c
+  const h00 = terrain.heightAt(x0, z0)
+  const h10 = terrain.heightAt(x0 + c, z0)
+  const h01 = terrain.heightAt(x0, z0 + c)
+  const h11 = terrain.heightAt(x0 + c, z0 + c)
+  if ((i + j) & 1) return u + v <= 1 ? h00 + (h10 - h00) * u + (h01 - h00) * v : h11 + (h01 - h11) * (1 - u) + (h10 - h11) * (1 - v)
+  return v >= u ? h00 + (h11 - h01) * u + (h01 - h00) * v : h00 + (h10 - h00) * u + (h11 - h10) * v
+}

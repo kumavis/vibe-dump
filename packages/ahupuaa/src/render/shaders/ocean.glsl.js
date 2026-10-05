@@ -1,5 +1,54 @@
 import { constants, noise, heightFetch, lighting, overlay } from './common.glsl.js'
 
+// Swell reaches the reef in sets: three to six waves twelve to sixteen seconds
+// apart, then a lull of a minute or two. Each set's make-up comes from its
+// number through an integer hash that floats compute exactly, so the copy of
+// this schedule in ocean.js (which the surfers ride on) agrees with the
+// breakers here to the frame. `speed` is how fast a wave line crosses the
+// reef, in world units a second; it also sets how fast a break peels.
+export const SWELL = { cycle: 140, speed: 0.05 }
+
+const glf = (v) => v.toFixed(4)
+const swellSets = /* glsl */ `
+uniform float uSwellT;
+float swellHash(float n, float a, float b, float c) {
+  float m = mod(n, 101.0);
+  return mod(m * m * a + m * b + c, 101.0) / 101.0;
+}
+// number of waves, seconds between them, and the first one's arrival in its cycle
+vec3 swellSet(float n) {
+  return vec3(3.0 + floor(swellHash(n, 37.0, 11.0, 5.0) * 4.0), 12.0 + 4.0 * swellHash(n, 23.0, 61.0, 17.0), 12.0 * swellHash(n, 53.0, 7.0, 29.0));
+}
+float swellHeight(float n, float k) {
+  return 0.5 + 0.5 * swellHash(n * 7.0 + k * 13.0, 41.0, 3.0, 71.0);
+}
+// the swell clock where a wave line reaches xz: later the further it has come
+float swellTime(vec2 xz, vec2 sd) {
+  return uSwellT - dot(xz, sd) / ${glf(SWELL.speed)};
+}
+// (seconds since the latest set wave arrived, its height, seconds until the next)
+vec3 swellAt(float t) {
+  const float L = ${glf(SWELL.cycle)};
+  float n = floor(t / L);
+  float u = t - n * L;
+  vec3 s = swellSet(n);
+  float k = floor((u - s.z) / s.y);
+  if (k >= 0.0) {
+    k = min(k, s.x - 1.0);
+    float next = k + 1.0 < s.x ? s.z + (k + 1.0) * s.y - u : L + swellSet(n + 1.0).z - u;
+    return vec3(u - s.z - k * s.y, swellHeight(n, k), next);
+  }
+  vec3 p = swellSet(n - 1.0);
+  return vec3(u + L - p.z - (p.x - 1.0) * p.y, swellHeight(n - 1.0, p.x - 1.0), s.z - u);
+}
+// slope of a set wave's profile against time: a steep face ahead of the crest
+// (a < 0, still to come), a long gentle back behind it
+float swellRidge(float a) {
+  float w = a < 0.0 ? 1.3 : 3.5;
+  return -2.0 * a / (w * w) * exp(-a * a / (w * w));
+}
+`
+
 export const oceanVertex = /* glsl */ `
 ${constants}
 out vec3 vWorld;
@@ -16,6 +65,7 @@ ${noise}
 ${heightFetch}
 ${lighting}
 ${overlay}
+${swellSets}
 uniform vec3 uCamPos;
 uniform vec2 uWind;        // direction the wind blows toward, scaled by strength (0..1+)
 uniform vec2 uSwellDir;    // direction swell travels
@@ -84,6 +134,16 @@ void main() {
   vec2 g = waveSlope(xz, uTime, px) * (0.55 + 0.6 * length(uWind)) * calm;
   // shoaling: steeper chop over the reef flat
   g *= 1.0 + 0.6 * (1.0 - smoothstep(0.5, 6.0, depth));
+  // set waves feel the bottom on the way in: long low lines that rise toward
+  // the reef and are gone once they have broken on it
+  vec2 sd = normalize(uSwellDir + 1e-4);
+  float shoal = smoothstep(1.5, 4.0, depth) * (1.0 - smoothstep(8.0, 45.0, depth)) * (1.0 - sea.r);
+  // (out in deep water, and in the shallows inside the reef, there is nothing to look up)
+  vec3 sw = vec3(99.0, 0.0, 99.0);
+  if (shoal > 0.0) {
+    sw = swellAt(swellTime(xz, sd));
+    g -= sd * (swellRidge(sw.x) * sw.y + swellRidge(-sw.z)) * shoal * (0.014 / ${glf(SWELL.speed)});
+  }
   vec3 N = normalize(vec3(-g.x, 1.0, -g.y));
 
   // --- what's under the surface ------------------------------------------
@@ -134,13 +194,34 @@ void main() {
   float dZ = seaDepth(xz + vec2(0.0, e)) - seaDepth(xz - vec2(0.0, e));
   float drop = length(vec2(dX, dZ)) / (2.0 * e);
   float crest = smoothstep(4.0, 14.0, drop) * (1.0 - smoothstep(0.6, 3.5, depth)) * (1.0 - sea.r);
-  vec2 sd = normalize(uSwellDir + 1e-4);
-  float sets = 0.5 + 0.5 * sin(dot(xz, sd) * 2.2 - uTime * 0.9 + fbm2(xz * 0.8) * 5.0);
-  float breakers = crest * (0.35 + 0.65 * smoothstep(0.4, 0.9, sets)) * (0.6 + uSwell);
+  // between sets, small waves still spill over the crest here and there...
+  float ripple = 0.5 + 0.5 * sin(dot(xz, sd) * 2.2 - uTime * 0.9 + fbm2(xz * 0.8) * 5.0);
+  float small = crest * (0.16 + 0.24 * smoothstep(0.5, 0.95, ripple));
+  // ...and a set wave stands up where the reef edge shoals to about 3 m, as
+  // its line sweeps along it (which is what makes a break peel), and rolls on
+  // in as white water: solid just behind the front, thinning out behind it
+  float edge = smoothstep(2.5, 9.0, drop) * (1.0 - smoothstep(2.6, 3.6, depth)) * (1.0 - sea.r);
+  float age = sw.x;
+  float big = 0.0;
+  if (edge > 0.0) {
+    // a ragged front, not a ruler line: the clock is jittered here at every
+    // scale down to a few metres (the finer ones faded out before they would
+    // shimmer), so the front runs ahead of its line in places as well as
+    // behind it; mostly behind, so whoever rides just ahead of the line
+    // (life.js) stays out in front of the white water
+    float j = (fbm2(xz * 4.0) - 0.5) * 1.6 + (vnoise(xz * 22.0) - 0.5) * 0.5 - 0.5;
+    j += (vnoise(xz * 13.0 + 7.1) - 0.5) * 0.9 * (1.0 - smoothstep(0.015, 0.05, px));
+    j += (vnoise(xz * 55.0 + 3.7) - 0.5) * 0.8 * (1.0 - smoothstep(0.004, 0.012, px));
+    vec3 swj = swellAt(swellTime(xz, sd) + j);
+    age = swj.x;
+    float burst = smoothstep(-0.3, 0.2, age) * (1.0 - smoothstep(1.0, 5.5, age)) * (0.6 + 0.4 * exp(-age * 0.7));
+    big = edge * burst * smoothstep(0.3, 0.8, swj.y) * (0.6 + uSwell) * 1.6;
+  }
+  float breakers = small * (0.6 + uSwell);
   float foamTex = smoothstep(0.35, 0.75, fbm2(xz * 9.0 + vec2(uTime * 0.3, 0.0)));
   // whitecaps when the trades are up
   float caps = smoothstep(0.78, 0.92, fbm2(xz * 0.9 + uWind * uTime * 0.06)) * smoothstep(0.55, 1.1, length(uWind)) * smoothstep(20.0, 60.0, depth);
-  float foam = max(max(shore * swash * 0.9, breakers), caps * 0.5) * mix(1.0, foamTex, 0.5);
+  float foam = max(max(max(shore * swash * 0.9, breakers), caps * 0.5) * mix(1.0, foamTex, 0.5), big * mix(1.0, foamTex, 0.3 + 0.5 * smoothstep(0.8, 4.0, age)));
   vec3 foamC = vec3(0.92) * (uSunColor * max(uSunDir.y, 0.0) * vis + uSkyColor * 1.4);
   col = mix(col, foamC, clamp(foam, 0.0, 1.0));
 
