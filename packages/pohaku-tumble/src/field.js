@@ -10,8 +10,8 @@ export { featureAnchor }
 // play at once out of 1,600; a list of a few hundred spread that thin repeats
 // itself within minutes. So: about one pair for every eight playable words,
 // never fewer than 18 (below that it stops reading as a field), never more
-// than Jukugo's 65, on cells of Jukugo's 9:8 shape. ~8% of cells are left
-// empty by the layout, hence the 0.92.
+// than Jukugo's 65, on cells of Jukugo's 9:8 shape. The layout leaves a few
+// cells empty, hence the 0.92.
 const target = Math.max(18, Math.min(65, Math.round(LEXICON.length / 8)))
 const cells = target / 0.92
 const rows = Math.max(4, Math.round(Math.sqrt(cells / 1.125)))
@@ -37,12 +37,16 @@ export const GAP = { h: 0.12 }
 // corner ticks, the number above, and the caption typed in beneath, its gloss
 // running on to the right. CAPTION is where the caption's second line ends,
 // descenders and all: nothing may clip it, and a card set below the word
-// starts under it.
+// starts under it. `hides` is what the word keeps from the camera: its marks,
+// and behind them the floor its stones, a unit high, stand in front of on
+// screen at the camera's 55° (floor.js keeps its place names out of the same
+// box).
 const HALF_W = GAP.h / 2 + SLAB
 export const CAPTION = 1.45
 export const WORD = {
   slabs: { hx: HALF_W + 0.05, hz: 0.55 },
   marks: { x0: -(HALF_W + 0.24), x1: 2, z0: -0.92, z1: CAPTION },
+  hides: { x0: -(HALF_W + 0.24), x1: 2, z0: -1.3, z1: CAPTION },
 }
 
 export function mulberry32(seed) {
@@ -63,6 +67,10 @@ export function mulberry32(seed) {
 // keeps its cell's centre: a word that can't stand where the jitter put it
 // may move anywhere else within the jitter (board.js).
 export const JITTER = { x: 0.35, z: 0.45 }
+// As in Jukugo, a few cells are left empty so the grid doesn't read as a
+// grid — but only where `whole(cell)` finds the grid round the cell unbroken
+// (board.js).
+const HOLES = 0.08
 
 // Whether two words stand in neighbouring cells, diagonals included. The
 // jitter moves a word well under half a cell, so this can go by position.
@@ -70,14 +78,13 @@ export function beside(p, q) {
   return Math.abs(p.x - q.x) < 1.5 * CELL.w && Math.abs(p.z - q.z) < 1.5 * CELL.h
 }
 
-export function layoutPairs(rng) {
+export function layoutPairs(rng, whole) {
   const { cols, rows } = GRID
   const pairs = []
   for (let j = 0; j < rows; j++) {
     for (let i = 0; i < cols; i++) {
-      // A few holes keep the grid from reading as a grid.
-      if (rng() < 0.08) continue
       const cell = [BOUNDS.x0 + (i + 0.5) * CELL.w, BOUNDS.z0 + (j + 0.5) * CELL.h]
+      if (rng() < HOLES && whole(cell)) continue
       const x = cell[0] + (rng() - 0.5) * 2 * JITTER.x
       const z = cell[1] + (rng() - 0.5) * 2 * JITTER.z
       pairs.push({ x, z, dir: 'h', cell })

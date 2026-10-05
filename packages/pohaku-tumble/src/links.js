@@ -1,12 +1,6 @@
 import { clamp01, inOutCubic } from './ease.js'
 import { linkPath, tileOffsets, WORD } from './field.js'
 
-// A field line longer than this doesn't cross the island to its place: it
-// runs a short way in the right direction and ends in an arrow, an off-page
-// connector.
-const FIELD_REACH = 12.5
-const STUB = 2.6
-
 // Lines live on the floor (y = 0) as polylines in world units. Each one draws
 // on from one end and retracts toward whichever end is staying put, so a line
 // visibly lets go of the stone that turned rather than just vanishing.
@@ -84,22 +78,13 @@ function build(d) {
     link.portB = exitAt(link, footprint(d.b), true)
     return link
   }
-  // A field line lands on its place's outline at `end`, which the board
-  // works out (field.js fieldAnchor): on a circle, a rectangle, or a polyline
-  // such as the stream or the lava front. `room` is how far it may run before
-  // it would reach into the upland; one that would cross the upland to get
-  // there is cut down to a connector that stops short.
-  const { pair, end, room } = d
-  let [ex, ez] = end
-  let stub = false
-  const dist = Math.hypot(ex - pair.x, ez - pair.z)
-  if (dist > Math.min(FIELD_REACH, room)) {
-    const k = Math.min(STUB, room - 0.3) / dist
-    ex = pair.x + (ex - pair.x) * k
-    ez = pair.z + (ez - pair.z) * k
-    stub = true
-  }
-  const link = { ...d, stub, ...measure([[pair.x, pair.z], [ex, ez]]) }
+  // A field line runs straight to `end`, which the board works out
+  // (Board.fieldEnd): on its place's outline — a circle, a rectangle, or a
+  // polyline such as the stream or the lava front — or, for an off-page
+  // connector (`stub`), a short way toward it, where the arrow and the
+  // place's name land on bare floor.
+  const { pair, end } = d
+  const link = { ...d, ...measure([[pair.x, pair.z], end]) }
   link.portA = exitAt(link, { x: pair.x, z: pair.z, ...WORD.slabs }, false)
   return link
 }

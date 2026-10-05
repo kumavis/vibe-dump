@@ -11,6 +11,9 @@ const HALF_W = SLAB + GAP.h / 2
 const HALF_D = 0.5
 // The big field words are set in an ink so pale it is nearly the paper.
 const PALE = mix(PAPER, INK_3, 0.34)
+// The coast's pen, in CSS pixels: the heaviest line of the map, a touch
+// lighter than a shared-root line (1.3, in full ink).
+const COAST = 1.2
 
 // The map draws itself before the stones fall (DESIGN §3.3): the coast as a
 // pen line, then the waterlines and contours, then the ahupuaʻa boundaries
@@ -235,6 +238,7 @@ export class FloorPainter {
       leeward: lines(island.streams.filter((s) => !s.windward)),
       reef: dots(island.reef.dots),
       upland: path([island.upland.ring], true),
+      form: lines(island.upland.form),
       pond: path([island.places.find((p) => p.kind === 'fishpond').line], true),
       cloud: path([island.places.find((p) => p.kind === 'cloud').line], true),
     }
@@ -439,13 +443,14 @@ export class FloorPainter {
         lineCost.get(key).push({ x, z, own, cost })
       }
     }
-    // What a word hides of the floor: its marks and the caption typed in
-    // beneath it (field.js), and behind it the stones themselves, which stand
-    // a unit high and cover the floor beyond them on screen. A long gloss runs
-    // on to the right of the marks: that is a lesser cost.
-    const m = WORD.marks
-    const words = pairs.map((p) => ({ x0: p.x + m.x0, x1: p.x + m.x1, z0: p.z - 1.3, z1: p.z + m.z1 }))
-    const glosses = pairs.map((p) => ({ x0: p.x + m.x1, x1: p.x + m.x1 + 1.6, z0: p.z + 0.85, z1: p.z + m.z1 }))
+    // What a word hides of the floor (field.js WORD.hides, the box the board
+    // keeps its connector names out of too): its marks and the caption typed
+    // in beneath it, and behind it the stones themselves, which stand a unit
+    // high and cover the floor beyond them on screen. A long gloss runs on to
+    // the right of the marks: that is a lesser cost.
+    const h = WORD.hides
+    const words = pairs.map((p) => ({ x0: p.x + h.x0, x1: p.x + h.x1, z0: p.z + h.z0, z1: p.z + h.z1 }))
+    const glosses = pairs.map((p) => ({ x0: p.x + h.x1, x1: p.x + h.x1 + 1.6, z0: p.z + 0.85, z1: p.z + h.z1 }))
 
     // What it costs to set a name in `box`; `air` keeps it that far from the
     // names already set. Every term is a cost, so a candidate is dropped as
@@ -748,8 +753,14 @@ export class FloorPainter {
   }
 
   // Contours (fine, every fifth heavier), then the coast drawn on as one pen
-  // line. Contours run through the upland — they're the only thing that does.
+  // line. Contours run through the upland — they're the only thing that does,
+  // with the dashed half-interval ones that show its gentle rise.
+  //
+  // The coast is the strongest line of the map but in the map's brown, not
+  // black: as in Jukugo, full ink is kept for the lines between words, so
+  // where one crosses the shore it's clear which is which.
   relief(t) {
+    const ctx = this.ctx
     const a = smooth(phase(t, REVEAL.relief))
     if (a > 0) {
       // The floor's smallest scale on screen, in CSS pixels per unit: how far
@@ -764,10 +775,14 @@ export class FloorPainter {
         }
         this.ink(this.paths.major, 1.05, INK_3, a * k * 0.8)
       })
+      ctx.save()
+      this.keepIn(this.paths.upland)
+      this.ink(this.paths.form, 0.7, INK_3, a * 0.4, [4, 3])
+      ctx.restore()
     }
     const c = phase(t, REVEAL.coast)
     if (c >= 1) {
-      this.ink(this.paths.coast, 1.35, INK)
+      this.ink(this.paths.coast, COAST, INK_2)
     } else if (c > 0) {
       const p = new Path2D()
       for (const ring of this.island.coast) {
@@ -775,7 +790,7 @@ export class FloorPainter {
         p.moveTo(...ring.pts[0])
         for (let i = 1; i < n; i++) p.lineTo(...ring.pts[i])
       }
-      this.ink(p, 1.35, INK)
+      this.ink(p, COAST, INK_2)
     }
   }
 
@@ -946,15 +961,17 @@ export class FloorPainter {
         this.cloud(p, rev)
         break
       case 'stream':
-        // The largest stream, heavier, with flow marks running downstream.
-        this.ink(art.line, 1.5, INK_2, rev * 0.9)
+        // The largest stream, heavier than the others but not the coast, with
+        // flow marks running downstream.
+        this.ink(art.line, 1.2, INK_2, rev * 0.9)
         this.ink(art.line, 1.6, INK, rev * 0.7, [1.2, 11], -t * 7)
         break
     }
   }
 
-  // The cloud cap: fine hatching in a band round the upland, thinned by a
-  // slow pattern that drifts round the summit.
+  // The cloud cap: fine hatching in a band round the upland (its ragged inner
+  // edge is island.js's), thinned by a slow pattern that drifts round the
+  // summit.
   cloud(p, rev) {
     const t = this.now
     const ctx = this.ctx

@@ -49,6 +49,13 @@ async function boot() {
       const r = $(id).getBoundingClientRect()
       return { x: r.left - 12, y: r.top - 12, w: r.width + 24, h: r.height + 24 }
     })
+    // A drag is held within the screen's reach (view.js), and resizing the
+    // window or turning the phone changes it. Left past the new reach, a drag
+    // would pin the view at the edge, and dragging back would do nothing for
+    // a while.
+    const r = reach(w, h)
+    user.dx = clamp(user.dx, 0, r.x)
+    user.dz = clamp(user.dz, 0, r.z)
   }
   addEventListener('resize', resize)
   resize()
@@ -185,7 +192,9 @@ async function boot() {
     }
     // The opening is over once every line it drew is in (or has since let
     // go) and the first card has opened: the gallery's thumbnail waits for
-    // this, rather than for a guess at how long the opening takes.
+    // this, rather than for a guess at how long the opening takes. The last
+    // line comes in a second or so after that card's first turn is due, so
+    // the card usually shows a word with the one it was by then.
     if (
       !opened &&
       openingLines.every((l) => l.p >= 1 || l.to === 0) &&

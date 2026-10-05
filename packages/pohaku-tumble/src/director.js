@@ -207,16 +207,18 @@ export class Director {
 
   // A good word to annotate: well inside the frame, not crowding an existing
   // note, not one that just turned, and not one whose card just closed. A
-  // card wants two turns to show, so a pair that can't turn twice without
-  // going back, or whose next word would only be one it showed lately, is
-  // passed over while anything else is in the inner frame.
+  // card wants two turns to show. A pair whose next word would only be one it
+  // showed lately is passed over while anything else is in the inner frame;
+  // a pair that can't turn twice in a card's few seconds, as it would have to
+  // rest before going back (board.js REST), gets no card at all, rather than
+  // one that turns once, or not at all, and retires.
   pickForNote(visible, open, now) {
     const inner = new Set(this.inView(NOTE_FRAME))
     const anchors = open.map((n) => this.scene.project(n.pair.x, 1, n.pair.z))
     let best = null
     let bestScore = -Infinity
     for (const p of visible) {
-      if (!inner.has(p) || this.notes.has(p) || this.rolling(p)) continue
+      if (!inner.has(p) || this.notes.has(p) || this.rolling(p) || !this.board.canTurnTwice(p, now)) continue
       const since = now - (this.carded.get(p) ?? -Infinity)
       if (since < RECARD.wait) continue
       const [x, y] = this.scene.project(p.x, 1, p.z)
@@ -224,7 +226,6 @@ export class Director {
       for (const [ax, ay] of anchors) far = Math.min(far, Math.hypot(ax - x, ay - y))
       let score = Math.min(far, 420) + Math.random() * 160 - (now - p.turnedAt < 4 ? 300 : 0)
       if (since < RECARD.rest) score -= 600
-      if (!this.board.canTurnTwice(p, now)) score -= 1000
       if (!this.board.targets(p, now).some((o) => o.tier === 0)) score -= 1000
       if (score > bestScore) {
         best = p

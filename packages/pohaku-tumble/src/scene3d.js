@@ -51,34 +51,44 @@ export class Scene3D {
     this.scene = scene
     this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 400)
 
-    // Warm light off the paper from below, a pale sky above.
-    scene.add(new THREE.HemisphereLight(0xfaf4ea, 0xbcae95, 1.9))
-    const sun = new THREE.DirectionalLight(0xffeedb, 2.9)
+    // A pale sky above, and warm light thrown back off the sunlit paper,
+    // which reaches the stones' sides more than their tops. Both kept well
+    // under the sun, so that what draws a top is the sun's raking light, not
+    // a wash that would flatten it, while the fronts and the ghosts on them
+    // stay readable.
+    scene.add(new THREE.HemisphereLight(0xf3ebdd, 0xe6d5b3, 1.2))
+    const sun = new THREE.DirectionalLight(0xffeedb, 3.8)
     sun.castShadow = true
     sun.shadow.mapSize.set(1024, 1024)
-    sun.shadow.radius = 4
+    sun.shadow.radius = 3
     sun.shadow.blurSamples = 12
     sun.shadow.bias = -0.0006
     sun.shadow.camera.near = 1
     sun.shadow.camera.far = 120
     scene.add(sun, sun.target)
     this.sun = sun
-    // The sun stands behind and to the left, a little under 60° up, about
-    // where Jukugo's does. High enough that a stone's shadow stays short — a
-    // dark seam along its right side and its foot, not a smear across the next
-    // word — and coming mostly from the side, so what shadow there is runs
-    // along the row rather than down over the captions beneath it. The fronts
-    // are in the fill and read as the dark side of the stone.
-    this.sunDir = new THREE.Vector3(-0.55, 1, -0.35).normalize()
-    // The pecking is read by a lower light from the same quarter, about 38°
-    // up: raking across a face, it lays a thin shadow inside each letter's
-    // edge. Only the stone's shader uses it, so it casts no shadow of its own.
-    this.rake = new THREE.Vector3(-0.74, 0.62, -0.3).normalize()
+    // The sun stands lower than Jukugo's (DESIGN §5), 42° up, so it skims
+    // across a face and picks out the grain, the pits and the sunward edge of
+    // every pecked letter. No lower, though: a stone is a unit high, and its
+    // shadow runs 1/tan(elevation) along the row, while the gap to the next
+    // word is only about 1.5 (a 4.67 cell less a 3.12 word). At 42° the
+    // shadow ends a little over a unit out and leaves a strip of clean paper
+    // before most neighbours, so a row reads as words standing apart, not as
+    // one bar of stone, shadow, stone. It comes from the upper left, as a map
+    // is lit: from the west and a little north — far enough round to the west
+    // that the shadow runs along the row, not down over the captions
+    // beneath; the fronts face away from it and read as the stone's dark
+    // side. The sun's strength is set for this height, so that a top keeps
+    // its dark warm grey.
+    this.sunDir = toward(42, 12)
 
     // The floor is the page itself (the map is on a canvas underneath this
     // one). The GL floor only exists to catch shadows, drawn as a translucent
     // warm brown over whatever is below — light enough that the map reads on
-    // through it.
+    // through it, and that where the layout's jitter sets two words close
+    // enough for one's shadow to reach the other, it lies between them as a
+    // tint, not a dark seam. The contact shadow under each stone is what
+    // keeps it on the floor.
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(400, 400),
       new THREE.ShadowMaterial({ color: new THREE.Color(SHADOW), opacity: 0.2 }),
@@ -182,6 +192,14 @@ export class Scene3D {
   render() {
     this.renderer.render(this.scene, this.camera)
   }
+}
+
+// The direction toward a light `up` degrees above the floor, `north` degrees
+// round from due west toward the north (map north is −z).
+function toward(up, north) {
+  const e = THREE.MathUtils.degToRad(up)
+  const a = THREE.MathUtils.degToRad(north)
+  return new THREE.Vector3(-Math.cos(e) * Math.cos(a), Math.sin(e), -Math.cos(e) * Math.sin(a))
 }
 
 class Block {
@@ -453,13 +471,13 @@ function valueNoise(rng) {
   }
 }
 
-// Each stone's own uniforms: where in the rock it was cut from, the raking
-// light (one vector, shared), and the four faces' pecking.
+// Each stone's own uniforms: where in the rock it was cut from, the sun (one
+// vector, shared), and the four faces' pecking.
 function stoneUniforms(scene3d, rng) {
   const blank = scene3d.glyphs.blank
   return {
     uSeed: { value: new THREE.Vector3(rng() * 40, rng() * 40, rng() * 40) },
-    uSun: { value: scene3d.rake },
+    uSun: { value: scene3d.sunDir },
     uGlyph: { value: [blank, blank, blank, blank] },
     uLift: { value: new THREE.Vector4() },
     uCut: { value: new THREE.Vector4() },

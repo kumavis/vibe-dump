@@ -161,6 +161,18 @@ export function buildIsland(seed, bounds) {
     })
   }
 
+  // The shield is nearly flat on top, so at the full interval only a line or
+  // two crosses the upland, and a pale oval with one ring inside it reads as a
+  // lake. A survey sheet marks gentle summit slopes with supplementary
+  // contours at half the interval, dashed; they are still contours, so the
+  // upland is still drawn with nothing else.
+  const form = []
+  for (let j = 1; j < levels; j++) {
+    const level = (j + 0.5) / levels
+    if (level <= H_UP) continue
+    for (const l of isolines(relief, level)) if (l.pts.length > 4) form.push(smoothLine(l, 1, 0.012 * k))
+  }
+
   const cloud = cloudBand(shape, upland, k, rand)
   const main = mainStream(shape, heightAt, upland, valleys[sites.stream], k)
 
@@ -191,7 +203,7 @@ export function buildIsland(seed, bounds) {
       .map((pts, i) => ({ pts: simplify(chaikin(pts, false, 2), 0.01 * k), windward: valleys[i].windward }))
       .filter((s, i) => i !== sites.lava && i !== sites.stream),
     reef,
-    upland: { x: upland.x, z: upland.z, r: upland.r, ring: upland.ring },
+    upland: { x: upland.x, z: upland.z, r: upland.r, ring: upland.ring, form },
     moku: [
       { name: 'Koʻolau', bearing: wrap(shape.mokuSplit[0] + angleSpan(shape.mokuSplit[0], shape.mokuSplit[1]) / 2) },
       { name: 'Kona', bearing: wrap(shape.mokuSplit[1] + angleSpan(shape.mokuSplit[1], shape.mokuSplit[0]) / 2) },
@@ -244,8 +256,9 @@ export function featureAnchor(place, px, pz) {
 // The compass sits in open water off the island's northeast: the Koʻolau
 // quarter the trade swell comes from, so compass and swell agree (DESIGN
 // §3.4). On screen that is the top right, the one corner no chrome plate
-// covers, and it is pulled in from the floor's corner far enough that the
-// camera's slow wander keeps it in frame. The board keeps its words off it.
+// covers, and it is pulled in from the floor's corner, so it shows whole when
+// the camera's loop (view.js) heads out past it, first thing in every lap.
+// The board keeps its words off it.
 function placeCompass(bounds, u) {
   const r = clamp(0.15 * Math.min(bounds.x1 - bounds.x0, bounds.z1 - bounds.z0), 2.1, 3.6)
   return { x: bounds.x1 - r - 4 * u, z: bounds.z0 + r + 3 * u, r, sx: 1, sz: -1 }
@@ -257,10 +270,10 @@ function placeCompass(bounds, u) {
 // placed to fit the floor, clear of the compass.
 //
 // The summit stands southwest of the island's middle, as the island stands
-// southwest of the floor's, away from the compass. The camera wanders round
-// the floor's centre, so the view opens on the long windward slopes — the
-// valleys, the stream, the loʻi — with the unmarked upland off to one side
-// rather than a blank in the middle of every frame.
+// southwest of the floor's, away from the compass. The camera opens on the
+// floor's centre (view.js), so the first view is of the long windward slopes —
+// the valleys, the stream, the loʻi — with the unmarked upland off to one side
+// rather than a blank in the middle of the frame.
 function shapeIsland(bounds, compass, k, rand) {
   const N = 720
   const m = 2 * k
@@ -625,9 +638,9 @@ function offshore(grid, seaDist, line, reach, k) {
 // valleys, the lava down a leeward gulch, the pond on the wider, sheltered
 // leeward shore, the canoe house and the houses on either. Each in its own
 // ahupuaʻa, with another between them where the island allows. The places on
-// the shore also lean toward the middle of the floor, where the camera
-// wanders, so they are seen; `VIEW` weighs a valley's distance from it
-// against its bearing (radians per island radius).
+// the shore also lean toward the middle of the floor, which the camera opens
+// on (view.js), so they are in the first view; `VIEW` weighs a valley's
+// distance from it against its bearing (radians per island radius).
 const VIEW = 0.8
 function chooseSites(shape, valleys, centre, rand) {
   const n = valleys.length
@@ -1141,8 +1154,16 @@ function contourStep(heightBeside, level, from, o, limit, last) {
 }
 
 // The naʻau place: a band of cloud round the upland — around it, never in it.
+// Its inner edge is ragged: the cloud reaches in toward the summit in a few
+// slow lobes and stops short of them in between, and row by row the strokes
+// end unevenly. An edge kept at a set distance from the upland would run
+// alongside the contour there like waterlining along a shore, and make the
+// upland read as a lake.
 function cloudBand(shape, upland, k, rand) {
-  const inner = (b) => upland.radiusAt(b) + 0.15 * k
+  const p1 = rand() * TAU
+  const p2 = rand() * TAU
+  const lobe = (b) => 0.5 + 0.3 * Math.sin(3 * b + p1) + 0.2 * Math.sin(5 * b + p2)
+  const inner = (b) => upland.radiusAt(b) + (0.12 + 0.3 * lobe(b)) * k
   const outer = (b) => upland.radiusAt(b) + 0.85 * k
   const ring = (f) => {
     const pts = []
@@ -1166,12 +1187,18 @@ function cloudBand(shape, upland, k, rand) {
     const b = bearingOf(dx, dz)
     return { b, f: (Math.hypot(dx, dz) - inner(b)) / (outer(b) - inner(b)) }
   }
+  // How far short of the inner edge a row's strokes stop, as a share of the
+  // band's width: mostly a little, now and then a lot. Drawn afresh each time
+  // a row leaves the band, so neighbouring rows end unevenly.
+  const lip = () => 0.3 * rand() ** 1.5
   for (let z = shape.S[1] - R; z <= shape.S[1] + R; z += 0.085 * k) {
     let start = null
     let len = 0
+    let short = lip()
+    let was = false
     for (let x = shape.S[0] - R; x <= shape.S[0] + R + fine; x += fine) {
       const { f } = at(x, z)
-      const inBand = f >= 0 && f <= 1
+      const inBand = f >= short && f <= 1
       if (inBand && start == null) {
         start = x + rand() * 0.1 * k
         len = (0.18 + 0.4 * rand()) * k
@@ -1182,12 +1209,14 @@ function cloudBand(shape, upland, k, rand) {
         start = inBand ? x + (0.05 + 0.08 * rand()) * k : null
         len = (0.18 + 0.4 * rand()) * k
       }
+      if (was && !inBand) short = lip()
+      was = inBand
     }
   }
   const line = ring(outer)
   let r = 0
   for (const [x, z] of line) r = Math.max(r, Math.hypot(x - shape.S[0], z - shape.S[1]))
-  return { x: shape.S[0], z: shape.S[1], r, line, inner: ring(inner), strokes }
+  return { x: shape.S[0], z: shape.S[1], r, line, strokes }
 }
 
 function starCompassPlace(c, rand) {

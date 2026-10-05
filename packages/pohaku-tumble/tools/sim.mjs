@@ -5,7 +5,7 @@
 // list and on lists cut down far below anything that should ship, and that no
 // stone or line the engine puts down ever reaches into the island's upland,
 // that no word is set on the star compass, and that no field line ends under
-// its own word.
+// its own word; and say how varied each opening is.
 //
 //   node tools/sim.mjs                      harness, Director model, deal check
 //   node tools/sim.mjs --seeds 30 --ticks 6000 --hours 2 --view 1920x1080
@@ -34,8 +34,16 @@
 //   rep24   the same over the pair's last 24 words: the recycling a 6-word
 //           window can't see
 //   return  turns back to the word the pair just left (Director: per hour)
+//   back60  turns landing on a word the pair left less than a minute before:
+//           a stone visibly undoing a turn the viewer just watched
+//   loop/h  runs of 15 turns by one pair among 6 words or fewer inside 5
+//           minutes, an hour: a stone circling a few words while other pairs
+//           hold its ways out, which stuck and strict count as healthy
 //   linked  pairs on a shared-root line: Board.linkedFraction() (harness,
 //           with its 10th–90th percentile), or the share of those in view
+//   faces   the most stones showing one root at once: on the whole floor
+//           (harness, every 10 ticks), or anywhere on screen (Director,
+//           every 10 s)
 //   seen    share of the whole list (not just the playable set) ever shown;
 //           Director: shown on screen, so a word dealt to a corner the camera
 //           never reaches doesn't count
@@ -114,8 +122,8 @@ const { Board } = await import('../src/board.js')
 const { Director } = await import('../src/director.js')
 const { LinkStore, pointAt } = await import('../src/links.js')
 const { touchesUpland } = await import('../src/island.js')
-const { ALL, LEXICON, LINK_MAX, COLLIDE, compSize } = await import('../src/lexicon.js')
-const { GRID, BOUNDS, WORD, layoutPairs, mulberry32 } = await import('../src/field.js')
+const { ALL, FIELDS, LEXICON, LINK_MAX, COLLIDE, compSize } = await import('../src/lexicon.js')
+const { GRID, BOUNDS, WORD, beside, mulberry32 } = await import('../src/field.js')
 const { wander } = await import('../src/view.js')
 const { REVEAL } = await import('../src/floor.js')
 
@@ -123,9 +131,9 @@ if (args.includes('--deal-only')) dealOnly()
 else {
   console.log(`words ${ALL.length} · playable ${LEXICON.length} · grid ${GRID.cols}×${GRID.rows} · floor ${(BOUNDS.x1 * 2).toFixed(1)} × ${(BOUNDS.z1 * 2).toFixed(1)}`)
   console.log(`COLLIDE ${COLLIDE.toFixed(4)} · LINK_MAX ${LINK_MAX.toFixed(2)}\n`)
-  table(`harness: ${SEEDS} seeds × ${TICKS} beats of ${BEAT} s`, ['pairs', 'stall', 'stuck', 'strict', 'repeat', 'rep24', 'return', 'linked', 'lo', 'hi', 'seen'], harness)
+  table(`harness: ${SEEDS} seeds × ${TICKS} beats of ${BEAT} s`, ['pairs', 'stall', 'stuck', 'strict', 'repeat', 'rep24', 'return', 'back60', 'loop/h', 'linked', 'lo', 'hi', 'faces', 'seen'], harness)
   for (const [w, h] of VIEWS) {
-    table(`Director at ${w}×${h}: ${SEEDS} seeds × ${HOURS} h`, ['inview', 'stall', 'stuck', 'strict', 'repeat', 'rep24', 'return/h', 'linked', 'seen', 't/min', 't/pair', 'cards', 'short', 'top3', 'regap', 're15'], (seed) => directed(seed, w, h))
+    table(`Director at ${w}×${h}: ${SEEDS} seeds × ${HOURS} h`, ['inview', 'stall', 'stuck', 'strict', 'repeat', 'rep24', 'return/h', 'back60', 'loop/h', 'linked', 'faces', 'seen', 't/min', 't/pair', 'cards', 'short', 'top3', 'regap', 're15'], (seed) => directed(seed, w, h))
   }
   await dealCheck()
 }
@@ -151,28 +159,52 @@ function table(title, cols, run) {
   console.log(`verdict: ${verdict}\n`)
 }
 
-// Counts to one decimal; shares to three, without the leading zero.
+// Counts to one decimal, loops to two (they are rare); shares to three,
+// without the leading zero.
 function fmt(col, v) {
-  const count = ['pairs', 'inview', 'return/h', 't/min', 't/pair', 'regap'].includes(col)
+  if (col === 'loop/h') return v.toFixed(2).padStart(9)
+  const count = ['pairs', 'inview', 'return/h', 'faces', 't/min', 't/pair', 'regap'].includes(col)
   return (count ? v.toFixed(1) : v.toFixed(3).replace(/^0/, '')).padStart(9)
 }
 
-// Counts what each turn does, just before it is made, whichever driver makes it.
+// Counts what each turn does, just before it is made at `now`, whichever
+// driver makes it.
 function recorder(board) {
   const shown = new Map(board.pairs.map((p) => [p, [p.entry.word]]))
+  const left = new Map(board.pairs.map((p) => [p, new Map()]))
+  const run = new Map(board.pairs.map((p) => [p, []]))
   const seen = new Set(board.pairs.map((p) => p.entry.word))
-  const r = { turns: 0, repeats: 0, rep24: 0, returns: 0, seen }
-  r.count = (pair, choice) => {
+  const r = { turns: 0, repeats: 0, rep24: 0, returns: 0, back60: 0, loops: 0, seen }
+  r.count = (pair, choice, now) => {
     const word = choice.entry.word
     if (pair.history.some((h) => h.word === word)) r.repeats++
     if (pair.history.at(-1)?.word === word) r.returns++
     const mine = shown.get(pair)
     if (mine.slice(-24).includes(word)) r.rep24++
     mine.push(word)
+    const gone = left.get(pair)
+    if (now - (gone.get(word) ?? -Infinity) < 60) r.back60++
+    gone.set(pair.entry.word, now)
+    // A loop is counted once its 15 turns are in, and the next starts afresh.
+    const last = run.get(pair)
+    last.push({ word, now })
+    if (last.length === 15) {
+      if (now - last[0].now <= 300 && new Set(last.map((t) => t.word)).size <= 6) {
+        r.loops++
+        last.length = 0
+      } else last.shift()
+    }
     seen.add(word)
     r.turns++
   }
   return r
+}
+
+// The most stones among `pairs` that show one root.
+function mostOnOne(pairs) {
+  const faces = new Map()
+  for (const p of pairs) for (const t of p.tiles) faces.set(t.stone, (faces.get(t.stone) ?? 0) + 1)
+  return Math.max(0, ...faces.values())
 }
 
 // Can't turn even once rested; or, once rested, could only go back.
@@ -190,7 +222,7 @@ function harness(seed) {
   const rec = recorder(board)
   const last = new Map()
   const linked = []
-  let stalls = 0, stuck = 0, strict = 0, samples = 0
+  let stalls = 0, stuck = 0, strict = 0, samples = 0, faces = 0
   for (let t = 0; t < TICKS; t++) {
     const now = t * BEAT
     const pool = board.pairs.filter((p) => t - (last.get(p) ?? -99) > COOLDOWN && board.canTurn(p, now))
@@ -198,12 +230,13 @@ function harness(seed) {
     else {
       const p = pool[Math.floor(Math.random() * pool.length)]
       const choice = board.chooseTurn(p, now)
-      rec.count(p, choice)
+      rec.count(p, choice, now)
       board.turn(p, choice, now)
       last.set(p, t)
     }
     if (t % 10 === 0) {
       linked.push(board.linkedFraction())
+      faces += mostOnOne(board.pairs)
       for (const p of board.pairs) {
         if (frozen(board, p)) stuck++
         if (returnOnly(board, p)) strict++
@@ -221,9 +254,12 @@ function harness(seed) {
     repeat: rec.repeats / Math.max(1, rec.turns),
     rep24: rec.rep24 / Math.max(1, rec.turns),
     return: rec.returns / Math.max(1, rec.turns),
+    back60: rec.back60 / Math.max(1, rec.turns),
+    'loop/h': rec.loops / ((TICKS * BEAT) / 3600),
     linked: linked.reduce((a, b) => a + b, 0) / linked.length,
     lo: q(0.1),
     hi: q(0.9),
+    faces: faces / linked.length,
     seen: rec.seen.size / ALL.length,
   }
 }
@@ -306,7 +342,7 @@ function directed(seed, w, h) {
   // note whether it was the background beat's (a card's pair is never picked).
   let bgTurned = false
   board.turn = (pair, choice, now) => {
-    rec.count(pair, choice)
+    rec.count(pair, choice, now)
     if (!notes.has(pair)) bgTurned = true
     Board.prototype.turn.call(board, pair, choice, now)
   }
@@ -326,7 +362,7 @@ function directed(seed, w, h) {
   const DUR = HOURS * 3600
   const shown = new Set()
   let beats = 0, lost = 0
-  let linked = 0, linkedN = 0, stuck = 0, strict = 0, stuckN = 0, inview = 0
+  let linked = 0, linkedN = 0, stuck = 0, strict = 0, stuckN = 0, inview = 0, faces = 0
   for (let step = 0; step * DT <= DUR; step++) {
     const now = step * DT
     camera(now)
@@ -353,6 +389,7 @@ function directed(seed, w, h) {
       stuck += Math.max(share(board.pairs, frozen), share(vis, frozen))
       strict += Math.max(share(board.pairs, returnOnly), share(vis, returnOnly))
       inview += vis.length
+      faces += mostOnOne(director.inView(0))
       stuckN++
     }
   }
@@ -366,7 +403,10 @@ function directed(seed, w, h) {
     repeat: rec.repeats / Math.max(1, rec.turns),
     rep24: rec.rep24 / Math.max(1, rec.turns),
     'return/h': rec.returns / HOURS,
+    back60: rec.back60 / Math.max(1, rec.turns),
+    'loop/h': rec.loops / HOURS,
     linked: linked / linkedN,
+    faces: faces / stuckN,
     seen: shown.size / ALL.length,
     't/min': rec.turns / (DUR / 60),
     't/pair': rec.turns / (DUR / 60) / (inview / stuckN),
@@ -381,17 +421,25 @@ function directed(seed, w, h) {
 // Deal 30 boards and check every one: each pair holds a playable word, no
 // word twice, never a nodeal word, never one from a small component, none on
 // the star compass. A pair with nothing left to deal is left out; its cell
-// counts as a hole. Then turn each board 100 times and check that no stone,
+// counts as empty. Then turn each board 100 times and check that no stone,
 // and no line as links.js draws it (stubs included), ever reaches into the
 // upland, that no line crosses the compass's rim on its way somewhere else,
-// and that every field line shows past its word's stones.
+// that every field line shows past its word's stones, and that no off-page
+// connector's name reaches into the upland or onto the compass. Of the
+// openings, report the most stones any one root showed, the share of words
+// that were full repeats, and how many repeats stood side by side; of the
+// connectors, the share whose arrow and name landed clear of every word.
 function dealOnly() {
   const N = 30
-  let holes = 0, pairs = 0
+  let empty = 0, pairs = 0, most = 0, repeats = 0, besides = 0, stubs = 0, bare = 0
   for (let s = 0; s < N; s++) {
     const seed = 1031 + s * 7919
     const board = new Board(seed)
     const words = board.pairs.map((p) => p.entry)
+    most = Math.max(most, mostOnOne(board.pairs))
+    const doubled = board.pairs.filter((p) => p.entry.a === p.entry.b)
+    repeats += doubled.length
+    doubled.forEach((p, i) => (besides += doubled.slice(i + 1).filter((q) => beside(p, q)).length))
     const fail = (why) => {
       console.error(`seed ${seed}: ${why}`)
       process.exit(1)
@@ -418,6 +466,14 @@ function dealOnly() {
           if (l.feature?.kind !== 'compass' && Math.hypot(x - c.x, z - c.z) < c.r * 1.12) fail(`a ${l.kind} line crosses the star compass (${l.key})`)
         }
         if (l.kind === 'field' && l.len - l.portA < 0.15) fail(`a field line ends under its own word (${l.key})`)
+        if (l.stub) {
+          const [[px, pz], [ex, ez]] = [l.pts[0], l.pts.at(-1)]
+          const a = Math.atan2(ez - pz, ex - px)
+          const cover = board.cover([ex, ez], a, FIELDS[l.feature.field].label)
+          if (cover === Infinity) fail(`a connector's name reaches into the upland or the compass (${l.key})`)
+          stubs++
+          if (cover === 0) bare++
+        }
       }
       const movable = board.pairs.filter((p) => board.canTurn(p, k * 2.05))
       if (!movable.length) break
@@ -425,18 +481,20 @@ function dealOnly() {
       board.turn(p, board.chooseTurn(p, k * 2.05), k * 2.05)
     }
     pairs += board.pairs.length
-    holes += layoutPairs(mulberry32(seed)).length - board.pairs.length
+    empty += GRID.cols * GRID.rows - board.pairs.length
   }
   const dealable = LEXICON.filter((e) => !e.nodeal && compSize(e) >= 12).length
   console.log(
     `${String(ALL.length).padStart(3)} words · ${String(LEXICON.length).padStart(3)} playable · ${String(dealable).padStart(3)} dealable · ` +
-      `grid ${GRID.cols}×${GRID.rows} · ${(pairs / N).toFixed(1)} pairs, ${(holes / N).toFixed(1)} cells empty`,
+      `grid ${GRID.cols}×${GRID.rows} · ${(pairs / N).toFixed(1)} pairs, ${(empty / N).toFixed(1)} cells empty · ` +
+      `opening: at most ${most} on a root, ${((100 * repeats) / Math.max(1, pairs)).toFixed(1)}% repeats, ${besides} side by side · ` +
+      `connectors: ${stubs ? `${((100 * bare) / stubs).toFixed(0)}% clear of the words` : 'none'}`,
   )
 }
 
 // Each list runs in its own process (the lexicon is built once, at load), all
 // at once, under a time limit: a deal that hangs fails the check instead of
-// the run. Empty cells include those left over the upland.
+// the run. Empty cells are the layout's few holes and those the island takes.
 async function dealCheck() {
   console.log('deal check: 30 seeds per list, 90 s limit each')
   const cases = [[0, 0], [0, 0.5], [300, 0], [200, 0.3], [128, 0], [90, 0], [60, 0], [40, 0.5], [20, 0]]
