@@ -215,6 +215,7 @@ function collection() {
 function collect(id) {
   owned.add(id)
   try {
+    for (const k of JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]')) owned.add(k)
     localStorage.setItem(COLLECTION_KEY, JSON.stringify([...owned]))
   } catch {}
   return owned
@@ -445,6 +446,7 @@ async function next() {
   c.tiltTarget.set(0, 0)
   tween(c, { glow: 0 }, 0.4)
   tween(c.pose, pilePose(cur), 0.62, { ease: ease.inOut, arc: { z: 0.9 } })
+  c.flyUntil = performance.now() / 1000 + 0.62
   cur++
   const nCard = cards[cur]
   // the next card is lifted to the front of the stack
@@ -520,7 +522,7 @@ async function spread() {
   })
   sfx.swish()
   await after(1.0)
-  if (gen !== flowGen) return
+  if (gen !== flowGen || state !== 'spread') return
   showSpreadUi()
   hint('Pick up any card to look closer', 200)
 }
@@ -535,6 +537,7 @@ function inspect(c) {
   if (state !== 'spread') return
   state = 'inspect'
   inspected = c
+  if (hovered) hovered.hoverTarget = 0
   hovered = null
   c.hoverTarget = 0
   sfx.reveal(c.index, RARITY[c.def.rarity].rank)
@@ -850,6 +853,7 @@ function advance() {
 }
 
 window.addEventListener('keydown', (e) => {
+  if (e.altKey || e.ctrlKey || e.metaKey) return
   const activate = e.key === ' ' || e.key === 'Enter'
   if (activate && e.target.closest?.('button')) return
   if (state === 'spread') {
@@ -872,6 +876,7 @@ window.addEventListener('keydown', (e) => {
 
 // Step the highlight through the spread, left to right as the cards lie.
 function browse(dir) {
+  if (document.activeElement?.closest?.('button')) document.activeElement.blur()
   const order = cards.slice().sort((a, b) => a.pose.x - b.pose.x)
   let i = hovered ? order.indexOf(hovered) : dir > 0 ? -1 : order.length
   i = (i + dir + order.length) % order.length
@@ -1012,6 +1017,13 @@ function frame(ms) {
     else c.offset.y *= 0.9
     if (shake.v > 0 && c === h && !reduceMotion) c.offset.set((Math.random() - 0.5) * shake.v * 0.035, (Math.random() - 0.5) * shake.v * 0.035, 0)
     else c.offset.x = c.offset.z = 0
+    // The card in hand is drawn over the deck waiting a few hundredths behind
+    // it: tilted, its edges would otherwise swing back through those cards.
+    // One on its way to the pile stays over everything until it lands.
+    const flying = c.flyUntil > now
+    const inHand = c === h && state !== 'inspect'
+    c.mesh.renderOrder = flying ? 3 : inHand ? 2 : 0
+    c.material.depthTest = !(flying || inHand)
     c.applyPose()
     c.setTime(simT)
   }

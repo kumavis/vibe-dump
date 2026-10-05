@@ -326,8 +326,14 @@ body.ready #boot {
   }
   #spreadui {
     flex-direction: column;
-    gap: 12px;
-    bottom: calc(env(safe-area-inset-bottom) + 30px);
+    gap: 8px;
+    bottom: calc(env(safe-area-inset-bottom) + 38px);
+  }
+}
+
+@media (max-width: 400px) {
+  #skip .long {
+    display: none;
   }
 }
 

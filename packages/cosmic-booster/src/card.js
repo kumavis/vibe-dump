@@ -279,6 +279,7 @@ export class Card {
     this.hover = 0
     this.hoverTarget = 0
     this.pop = 0
+    this.flyUntil = 0
   }
 
   applyPose() {
