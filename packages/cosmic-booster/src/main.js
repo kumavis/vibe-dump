@@ -95,21 +95,30 @@ function pilePose(i) {
 }
 function spreadPose(k, n) {
   const chase = k === n - 1
+  // world units per CSS pixel, to keep clear of the HUD whatever the height
+  const px = view.visH / view.h
   if (view.aspect < 0.95) {
-    // portrait: the chase card up top, the rest in two rows beneath
+    // portrait: the chase card up top, the rest in two rows beneath, all of
+    // it between the header and the collection bar
+    const top = view.visH / 2 - 56 * px
+    const bottom = -view.visH / 2 + 118 * px
+    const A = top - bottom
+    const hB = A * 0.5
+    const hR = A * 0.205
+    const g = A * 0.045
     if (chase) {
-      const s = Math.min((0.4 * view.visH) / CARD_ASPECT, 0.62 * view.visW)
-      return { x: 0, y: view.visH * 0.2, z: 0.5, rx: 0, ry: 0, rz: 0, s, flip: 0 }
+      const s = Math.min(hB / CARD_ASPECT, 0.62 * view.visW)
+      return { x: 0, y: top - hB / 2, z: 0.5, rx: 0, ry: 0, rz: 0, s, flip: 0 }
     }
     const perRow = Math.ceil((n - 1) / 2)
     const row = k < perRow ? 0 : 1
     const inRow = row ? n - 1 - perRow : perRow
     const col = row ? k - perRow : k
-    const s = Math.min((0.165 * view.visH) / CARD_ASPECT, (0.9 * view.visW) / (perRow + 0.4))
+    const s = Math.min(hR / CARD_ASPECT, (0.9 * view.visW) / (perRow + 0.4))
     const gap = s * 1.08
     return {
       x: (col - (inRow - 1) / 2) * gap,
-      y: -view.visH * (0.085 + row * 0.18),
+      y: top - hB - g - hR / 2 - row * (hR + g),
       z: 0.1 + col * 0.01,
       rx: 0,
       ry: 0,
@@ -121,8 +130,11 @@ function spreadPose(k, n) {
   // landscape: the rest fanned in a crown behind the chase card
   const fit = Math.min(1, view.aspect / 1.62)
   if (chase) {
-    const s = ((0.6 * view.visH) / CARD_ASPECT) * Math.max(fit, 0.75)
-    return { x: 0, y: -view.visH * 0.05, z: 0.6, rx: 0, ry: 0, rz: 0, s, flip: 0 }
+    // as big as it can be while its foot stays above the collection bar
+    const y = -view.visH * 0.05
+    const room = y - (-view.visH / 2 + 88 * px)
+    const s = Math.min(((0.6 * view.visH) / CARD_ASPECT) * Math.max(fit, 0.75), (2 * room) / CARD_ASPECT)
+    return { x: 0, y, z: 0.6, rx: 0, ry: 0, rz: 0, s, flip: 0 }
   }
   const m = n - 1
   const u = m > 1 ? k / (m - 1) : 0.5
@@ -204,7 +216,8 @@ function dots(n, cur) {
 const COLLECTION_KEY = 'cosmic-booster:collection'
 const owned = (() => {
   try {
-    return new Set(JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]'))
+    const stored = JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]')
+    return new Set(Array.isArray(stored) ? stored : [])
   } catch {
     return new Set()
   }
@@ -215,7 +228,8 @@ function collection() {
 function collect(id) {
   owned.add(id)
   try {
-    for (const k of JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]')) owned.add(k)
+    const stored = JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]')
+    if (Array.isArray(stored)) for (const k of stored) owned.add(k)
     localStorage.setItem(COLLECTION_KEY, JSON.stringify([...owned]))
   } catch {}
   return owned
@@ -598,6 +612,7 @@ function skipToSpread() {
   backdrop.starMat.uniforms.uSuck.value = 0
   bloom.strength = BLOOM
   cards.forEach((c, k) => {
+    c.flyUntil = 0
     c.group.visible = true
     Object.assign(c.pose, spreadPose(k, cards.length))
     c.tilt.set(0, 0)
@@ -1019,11 +1034,13 @@ function frame(ms) {
     else c.offset.x = c.offset.z = 0
     // The card in hand is drawn over the deck waiting a few hundredths behind
     // it: tilted, its edges would otherwise swing back through those cards.
-    // One on its way to the pile stays over everything until it lands.
-    const flying = c.flyUntil > now
+    // One on its way to the pile stays over everything until it lands. Both
+    // still write depth, so what lies behind them stays hidden.
+    const dealing = state === 'reveal' || state === 'chaseReady' || state === 'chase' || state === 'chaseHold'
+    const flying = dealing && c.flyUntil > now
     const inHand = c === h && state !== 'inspect'
     c.mesh.renderOrder = flying ? 3 : inHand ? 2 : 0
-    c.material.depthTest = !(flying || inHand)
+    c.material.depthFunc = flying || inHand ? THREE.AlwaysDepth : THREE.LessEqualDepth
     c.applyPose()
     c.setTime(simT)
   }

@@ -1,6 +1,6 @@
-// Tiny tween engine on wall-clock seconds. Tweens own their keys: when a new
-// tween on the same object starts, it takes over any keys an older one was
-// still driving, so interrupted moves never fight.
+// Tiny tween engine on wall-clock seconds. Tweens own their keys: the newest
+// tween on an object takes over any keys an older one was driving or was
+// waiting to drive, so interrupted moves never fight.
 
 export const ease = {
   linear: (t) => t,
@@ -19,6 +19,9 @@ let active = []
 let clock = 0
 
 export function tween(target, to, dur, opts = {}) {
+  // a newer tween owns its keys from now on: an older one still waiting out
+  // its delay must not wake up later and drag them back
+  for (const o of active) if (o.target === target && !o.from) for (const k in to) delete o.to[k]
   return new Promise((resolve) => {
     active.push({
       target,

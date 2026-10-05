@@ -323,6 +323,7 @@ body.ready #boot {
     width: 92vw;
     text-align: center;
     line-height: 1.7;
+    text-wrap: balance;
   }
   #spreadui {
     flex-direction: column;
