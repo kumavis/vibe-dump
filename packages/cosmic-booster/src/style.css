@@ -104,7 +104,7 @@ body.grab #gl {
   outline: 1px solid var(--gold);
   outline-offset: 2px;
 }
-#mute {
+#tools #mute {
   width: 34px;
   padding: 0;
   height: 31px;

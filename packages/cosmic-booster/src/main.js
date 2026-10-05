@@ -71,11 +71,30 @@ const view = { w: 1, h: 1, visW: 1, visH: 1, aspect: 1 }
 function packScale() {
   return Math.min((0.74 * view.visH) / PACK_H, (0.74 * view.visW) / PACK_W)
 }
+// A pose laid out in the z = 0 plane, moved to depth z so that it looks the
+// same size and in the same place on screen.
+function atDepth(p, z) {
+  const f = (CAM_Z - z) / CAM_Z
+  return { ...p, x: p.x * f, y: p.y * f, z, s: p.s * f }
+}
+// The card in hand lives between the header and the caption block, measured
+// in pixels, so a short screen never puts the caption over it.
+function focusBand() {
+  const px = view.visH / view.h
+  return {
+    top: view.visH / 2 - 56 * px,
+    bottom: -view.visH / 2 + (view.w <= 640 ? 134 : 104) * px,
+  }
+}
 function focusScale() {
-  return Math.min((0.64 * view.visH) / CARD_ASPECT, 0.8 * view.visW)
+  const { top, bottom } = focusBand()
+  // a little short of the band, to leave room for the idle sway and bob
+  const h = Math.min(0.64 * view.visH, (top - bottom) * 0.92)
+  return Math.max(0.05, Math.min(h / CARD_ASPECT, 0.8 * view.visW))
 }
 function focusPose(extra = {}) {
-  return { x: 0, y: view.visH * 0.045, z: 0, rx: 0, ry: 0, rz: 0, s: focusScale(), flip: 0, ...extra }
+  const { top, bottom } = focusBand()
+  return { x: 0, y: (top + bottom) / 2, z: 0, rx: 0, ry: 0, rz: 0, s: focusScale(), flip: 0, ...extra }
 }
 function stackPose(k) {
   // cards waiting under the one in hand, edges just showing
@@ -88,8 +107,8 @@ function pilePose(i) {
   const s = fs * 0.36
   const portrait = view.aspect < 0.95
   const gutter = (view.visW - fs) / 2
-  const x = portrait ? -view.visW / 2 + s * 0.35 : -view.visW / 2 + gutter / 2
-  const y = portrait ? -view.visH / 2 + s * 1.0 : -view.visH * 0.06
+  const x = portrait ? -view.visW / 2 + s * 0.18 : -view.visW / 2 + gutter / 2
+  const y = portrait ? -view.visH * 0.02 : -view.visH * 0.06
   const r = ((i * 7919) % 13) / 13 - 0.5
   return { x: x + r * s * 0.12, y: y + i * s * 0.035, z: -0.8 + i * 0.015, rx: 0, ry: 0, rz: 0.16 - i * 0.05 + r * 0.06, s, flip: 0 }
 }
@@ -108,7 +127,7 @@ function spreadPose(k, n) {
     const g = A * 0.045
     if (chase) {
       const s = Math.min(hB / CARD_ASPECT, 0.62 * view.visW)
-      return { x: 0, y: top - hB / 2, z: 0.5, rx: 0, ry: 0, rz: 0, s, flip: 0 }
+      return atDepth({ x: 0, y: top - hB / 2, rx: 0, ry: 0, rz: 0, s, flip: 0 }, 0.5)
     }
     const perRow = Math.ceil((n - 1) / 2)
     const row = k < perRow ? 0 : 1
@@ -131,10 +150,13 @@ function spreadPose(k, n) {
   const fit = Math.min(1, view.aspect / 1.62)
   if (chase) {
     // as big as it can be while its foot stays above the collection bar
+    // (which stacks, and so stands taller, at 640 px and under), but never
+    // smaller than the crown behind it
     const y = -view.visH * 0.05
-    const room = y - (-view.visH / 2 + 88 * px)
-    const s = Math.min(((0.6 * view.visH) / CARD_ASPECT) * Math.max(fit, 0.75), (2 * room) / CARD_ASPECT)
-    return { x: 0, y, z: 0.6, rx: 0, ry: 0, rz: 0, s, flip: 0 }
+    const room = y - (-view.visH / 2 + (view.w <= 640 ? 108 : 88) * px)
+    const crown = ((0.34 * view.visH) / CARD_ASPECT) * fit
+    const s = Math.max(crown * 1.1, Math.min(((0.6 * view.visH) / CARD_ASPECT) * Math.max(fit, 0.75), (2 * room) / CARD_ASPECT))
+    return atDepth({ x: 0, y, rx: 0, ry: 0, rz: 0, s, flip: 0 }, 0.6)
   }
   const m = n - 1
   const u = m > 1 ? k / (m - 1) : 0.5
@@ -286,6 +308,7 @@ function clearTable() {
 function newPack(dropIn) {
   const gen = ++flowGen
   killTweens()
+  tearing = false
   clearTable()
   sparkles.clear()
   inspected = hovered = null
@@ -495,7 +518,8 @@ async function chase() {
 
   // and over
   let flashed = false
-  tween(c.pose, { flip: 0, z: 0.5, s: focusScale() }, 1.0, {
+  const { x: hx, y: hy, z: hz, s: hs } = atDepth(focusPose(), 0.5)
+  tween(c.pose, { flip: 0, x: hx, y: hy, z: hz, s: hs }, 1.0, {
     ease: ease.outBack,
     onUpdate: () => {
       if (!flashed && c.pose.flip < 0.5) {
@@ -555,7 +579,7 @@ function inspect(c) {
   hovered = null
   c.hoverTarget = 0
   sfx.reveal(c.index, RARITY[c.def.rarity].rank)
-  tween(c.pose, { ...focusPose(), z: 2.2, s: focusScale() * 0.97 }, 0.7, { ease: ease.inOut })
+  tween(c.pose, atDepth(focusPose(), 2.2), 0.7, { ease: ease.inOut })
   tween(c, { glow: c.def.rarity === 'holo' ? 0.45 : 0.3 }, 0.6)
   for (const o of cards) if (o !== c) tween(o.material.uniforms.uDim, { value: 0.3 }, 0.5)
   hud.spread.classList.remove('show')
@@ -601,6 +625,7 @@ function skipToSpread() {
   if (state === 'boot' || state === 'spread' || state === 'inspect' || state === 'leaving' || state === 'chase') return
   flowGen++
   killTweens()
+  tearing = false
   if (pack) {
     scene.remove(pack.group)
     pack.dispose()
@@ -945,12 +970,12 @@ function relayout() {
   if (state === 'reveal' || state === 'chaseReady' || state === 'chaseHold') {
     cards.forEach((c, k) => {
       if (k < cur) Object.assign(c.pose, pilePose(k))
-      else if (k === cur) Object.assign(c.pose, focusPose({ flip: c.pose.flip, z: c.pose.z }))
+      else if (k === cur) Object.assign(c.pose, atDepth(focusPose({ flip: c.pose.flip }), c.pose.z))
       else Object.assign(c.pose, stackPose(k - cur))
     })
   } else if (state === 'spread' || state === 'inspect') {
     cards.forEach((c, k) => {
-      if (c === inspected) Object.assign(c.pose, { ...focusPose(), z: 2.2, s: focusScale() * 0.97 })
+      if (c === inspected) Object.assign(c.pose, atDepth(focusPose(), 2.2))
       else Object.assign(c.pose, spreadPose(k, n))
     })
   }

@@ -215,9 +215,12 @@ function footer(ctx, def, pull, metal, y = 1340) {
   let label = `${r.glyph}  ${r.label.toUpperCase()}`
   if (pull.foil && def.rarity !== 'holo') label += '  ·  STARLIGHT'
   tracked(ctx, label, 66, y, 3.5)
-  ctx.font = `500 18px ${SANS}`
-  ctx.fillStyle = '#8f8baa'
-  tracked(ctx, `${SET_NAME.toUpperCase()}  ·  ${SET_SERIES.toUpperCase()}`, CARD_W / 2, y, 6, 'center')
+  // a foil card's longer rarity label takes the set name's place
+  if (!(pull.foil && def.rarity !== 'holo')) {
+    ctx.font = `500 18px ${SANS}`
+    ctx.fillStyle = '#8f8baa'
+    tracked(ctx, `${SET_NAME.toUpperCase()}  ·  ${SET_SERIES.toUpperCase()}`, CARD_W / 2, y, 6, 'center')
+  }
   ctx.font = `500 21px ${SANS}`
   ctx.fillStyle = '#bdb9d6'
   tracked(ctx, `${String(def.no).padStart(2, '0')} / ${SET_SIZE}`, CARD_W - 66, y, 2.5, 'right')
