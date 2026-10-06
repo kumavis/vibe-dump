@@ -26,9 +26,11 @@
 // stat line and weapons, the derived fields, and a seat's `edge`. Those are
 // rule-bearing (RULES_ID hashes them), so testing them is the point.
 //
-// It covers main.js and ai.js (rules code until R4-R6 moves it into core/),
-// the rules.js re-export, and everything under core/ and data/. main.js still
-// holds the view too, so the presentation sites it keeps are listed below,
+// It covers main.js and ai.js (rules code until R5-R6 moves the rest of it
+// into core/), the root rules.js where a checkout has one (the R0 code's, for
+// --self-test; R4 removed the working tree's re-export), and everything under
+// core/ and data/. main.js still holds the view too, so the presentation
+// sites it keeps are listed below,
 // each with why it is presentation. An allowed text excuses only itself: it
 // is cut out of the line and the rest of the line is linted again, so a test
 // added beside an allowed one is still caught. An entry that no longer
@@ -91,9 +93,9 @@ const ALLOW = [
   ['main.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
   ['main.js', "if (ph.key === 'fight')", 1, 'a phase key, not a unit or race key'],
   ['main.js', "} else if (ph.key === 'morale')", 1, 'a phase key, not a unit or race key'],
-  ['main.js', 'PHASES.find((p) => p.key === S.phase)', 1, "a phase key, for the End button's label"],
+  ['main.js', 'PHASES.find((p) => p.key === T.phase)', 1, "a phase key, for the End button's label"],
   ['main.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
-  ['main.js', 'S.phase = ph.key', 1, 'a phase key, not a unit or race key'],
+  ['main.js', 'T.phase = ph.key', 1, 'a phase key, not a unit or race key'],
   ['data/compat.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
   ['data/schema.js', "if (w.fx !== undefined && typeof w.fx !== 'string')", 1, 'validates the field: the data must say what fx is'],
   ['data/schema.js', "if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string'))", 1, 'validates the card text is text'],
@@ -257,7 +259,8 @@ if (args['self-test']) {
 }
 
 const { hits, stale, n } = lint(PKG)
-console.log(`flag-lint: ${n} files (main.js, ai.js, rules.js, core/, data/), ${ALLOW.length} allowed presentation sites`)
+const roots = ['main.js', 'ai.js', 'rules.js'].filter((f) => existsSync(join(PKG, f)))
+console.log(`flag-lint: ${n} files (${[...roots, 'core/', 'data/'].join(', ')}), ${ALLOW.length} allowed presentation sites`)
 for (const h of hits) console.log(`  FAIL ${h.f}:${h.line} ${h.what}: ${h.text}`)
 for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
 for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)

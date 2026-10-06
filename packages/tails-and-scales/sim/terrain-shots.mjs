@@ -16,20 +16,23 @@
 // --disable-gpu-rasterization), where the probe saw 16 loads out of 16 the
 // same, and the mat, the wood and fx's decals stay in the comparison.
 //
-// Then, through the ?debug surface both builds already have (__ts: clock, S,
-// camera, renderer, units, scenery and its scene), the clock is stopped at
-// 0 so every idle animation holds one pose, the camera is put at one fixed
-// pose over the whole table, and a frame is drawn and read back.
+// Then, through the ?debug surface both builds have (__ts: clock, S, camera,
+// renderer, scenery: its chunks, scene and blast), the clock is stopped at 0
+// so every idle animation holds one pose, the camera is put at one fixed
+// pose over the whole table, and a frame is drawn and read back. Figures are
+// found by the mark buildModel puts on every figure's root (userData.fig),
+// which every build since R0 has.
 //
-// Lifetime: R0 to R3 code only. It reads view members the ?debug contract
-// (the comment at the top of main.js's ?debug block) does not promise:
-// clock.speed and clock.time, S.titleSpin, camera, renderer, scenery.scene,
-// scenery.blast and units[].models[].mesh. The contract lists what the
-// parity driver reads, and only that is kept working. The scenery members
-// are the Scenery facade's, which goes at R4, and R7 moves the clock and
-// camera into view/. So R4 ports this to whatever the ?debug block then
-// exposes, or retires it (DESIGN's R3 notes and R4 row). A pixel diff as a
-// gate at R7 is R7's to add, with these members in the contract then.
+// Lifetime: R0 code onward, as long as main.js's ?debug block keeps the
+// members it reads, which its contract comment does not promise (it lists
+// what the parity driver reads, and only that is kept working): clock.speed
+// and clock.time, S.titleSpin, camera, renderer, scenery.scene and
+// scenery.blast. R3's code had them on the Scenery facade; from R4 the
+// ?debug block keeps them in place (scenery.blast is a blast played as
+// blastLands plays one: the terrain's reports drained into the view), and
+// lists them there as screenshot-only. R7 moves the clock and camera into
+// view/: a pixel diff as a gate at R7 is R7's to add, with these members in
+// the contract then.
 //
 // Hidden, because they differ for reasons outside the terrain: the grass
 // tufts and flowers (every InstancedMesh: the tufts, the flowers and fx's
@@ -158,7 +161,10 @@ function shoot(full) {
     scene.traverse((o) => {
       if (o.isInstancedMesh) o.visible = false
     })
-    for (const u of ts.units) for (const m of u.models) m.mesh.visible = false
+    // every figure (buildModel marks its root with the figure inside)
+    scene.traverse((o) => {
+      if (o.userData.fig) o.visible = false
+    })
   }
   cam.clearViewOffset()
   cam.fov = 40
@@ -180,7 +186,8 @@ function shoot(full) {
 
 // the same blasts on both builds: every seventh breakable chunk of the
 // table as generated, Math.random reseeded first; then on to the end of
-// every tween
+// every tween (R0-R3 code blasts through its Scenery, R4 on through the
+// ?debug block's own scenery.blast: the same call)
 async function wreck(page) {
   const n = await page.evaluate(() => {
     let x = 99

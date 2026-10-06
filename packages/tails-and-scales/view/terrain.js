@@ -5,10 +5,11 @@
 // place (shape.x/z, and shape.y for a wall block or cap) and nothing else,
 // and draws nothing from the layout stream: core/terrain/recipes.js has
 // already made every draw and recorded the result in `look`. It plays the
-// terrain's events (core/terrain/terrain.js) as they come: a scuffed chunk
-// darkens and shudders, a broken one shatters, blocks above a gap drop into
-// it, a tree sheds its canopy and keels over, rubble piles up. That
-// randomness is purely cosmetic and stays on Math.random.
+// terrain's events (core/terrain/terrain.js), in order, as the match's out
+// hands them over (main.js drains G.out into play() right after each terrain
+// call): a scuffed chunk darkens and shudders, a broken one shatters, blocks
+// above a gap drop into it, a tree sheds its canopy and keels over, rubble
+// piles up. That randomness is purely cosmetic and stays on Math.random.
 //
 // It is built only by playing those events from a table's terrain.clear on:
 // a fallen log is its tree's mesh keeled over, and a collapsed block is
@@ -18,7 +19,8 @@
 //
 // sim/terrain-check.mjs builds these meshes in Node and holds them to the
 // ones the battlefield was built with before the split (the R0 code), mesh
-// for mesh, and plays destruction on both.
+// for mesh, and plays destruction on both, draining the terrain's reports
+// into play() as main.js does.
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
 import { pick, tween, easeIn, bounce } from '../util.js'
@@ -219,7 +221,7 @@ export class TerrainView {
     this.group = new THREE.Group()
     scene.add(this.group)
     this.items = new Map() // chunk id → { c, obj, canopy?, pieces?, ownMat? }
-    this.onBreak = null // (chunk) => {}: sound
+    this.onBreak = null // (chunk) => {}: main.js's break sound (R7 moves it in here)
   }
 
   // the object a chunk is drawn with
@@ -227,13 +229,18 @@ export class TerrainView {
     return this.items.get(id)?.obj
   }
 
-  // Play one terrain event (core/terrain/terrain.js), as it happens.
+  // Play a terrain call's events (core/terrain/terrain.js), in order.
+  play(events) {
+    for (const e of events) this.apply(e)
+  }
+
+  // Play one terrain event.
   apply(e) {
     switch (e.t) {
       case 'terrain.clear': return this.clear()
       case 'terrain.add': return this.add(e.c)
-      case 'terrain.hurt': return this.hurt(e.c, e.from)
-      case 'terrain.destroy': return this.destroy(e.c, e.from)
+      case 'terrain.hurt': return this.hurt(e.c, e.from, e.at)
+      case 'terrain.destroy': return this.destroy(e.c, e.from, e.at)
       case 'terrain.collapse': return this.collapse(e.drops, e.by)
       case 'terrain.rubble': return this.rubble(e.c, e.from)
     }
@@ -254,8 +261,11 @@ export class TerrainView {
     this.group.add(item.obj)
   }
 
-  // scuffed: darken and shudder
-  hurt(c, from) {
+  // scuffed: darken and shudder, the debris at `at`, where it stood when hit
+  // (a collapse later in the same blast could have lowered it since, though
+  // not with classic's recipes: DESIGN's R4 notes; R5's view reads no live
+  // chunk)
+  hurt(c, from, at) {
     const v = this.items.get(c.id), m = v.obj
     if (m.isMesh) {
       if (!v.ownMat) {
@@ -269,12 +279,12 @@ export class TerrainView {
       const a = (1 - k) * 0.06
       m.position.set(p0.x + (Math.random() - 0.5) * a, p0.y, p0.z + (Math.random() - 0.5) * a)
     }).then(() => m.position.copy(p0))
-    this.fx.debris(c.shape.x, c.shape.y, c.shape.z, [c.look.chip || '#888', '#666'], 3, { from, power: 3, size: 0.08 })
+    this.fx.debris(at.x, at.y, at.z, [c.look.chip || '#888', '#666'], 3, { from, power: 3, size: 0.08 })
   }
 
-  destroy(c, from) {
+  destroy(c, from, at) {
     const v = this.items.get(c.id)
-    const s = c.shape
+    const s = at
     const fx = this.fx
     switch (c.kind) {
       case 'block': {
@@ -309,7 +319,8 @@ export class TerrainView {
     this.onBreak?.(c)
   }
 
-  // blocks above a gap drop into it
+  // blocks above a gap drop into it (the dust reads the block's place when
+  // its fall ends, later than the call: R5 gives it a value of its own)
   collapse(drops, by) {
     for (const { c: b, dy } of drops) {
       const m = this.items.get(b.id).obj

@@ -39,16 +39,25 @@
 //    pairs, an unknown mirror, a spacing rule that isn't a number, an unknown
 //    or missing field. So a slip in a new set (F7's `fortified`) fails at
 //    load, not only on the boards whose draws reach it.
+// 8. Every core/ and data/ module loads as the only entry of a fresh Node
+//    process. core/ has import cycles (match.js with units.js and deploy.js,
+//    for the seat helpers; queries.js with actions/, for canAct). They are
+//    harmless while no module uses an imported binding as it loads; one that
+//    does (a frozen table built from an imported function, `export const x
+//    = alive`) throws a TDZ error that only some entry points reach. A
+//    control cycle that does it must fail from the entry that reaches it.
 //
 //   node sim/data-check.mjs
 //
 // Exit 0 when everything holds, else 1.
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync, readdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
+import { tmpdir } from 'node:os'
 import { pathToFileURL } from 'node:url'
 import { isDeepStrictEqual } from 'node:util'
+import { execFile } from 'node:child_process'
 import { PKG } from './oracle/pin.mjs'
-import { legacyDir, LEGACY_REF } from './lib.mjs'
+import { legacyDir, LEGACY_REF, pool, CPUS } from './lib.mjs'
 
 const LEGACY = legacyDir()
 const imp = (dir, f) => import(pathToFileURL(join(dir, f)).href)
@@ -310,7 +319,10 @@ const deepFrozen = (v, seen = new Set()) => !v || typeof v !== 'object' || seen.
 const consensus = ['core', 'data'].flatMap((d) => readdirSync(join(PKG, d), { recursive: true }).map((f) => `${d}/${f}`))
   .filter((f) => f.endsWith('.js') && !f.startsWith('data/races/'))
 for (const f of consensus) {
-  const tables = Object.entries(await imp(PKG, f)).filter(([, v]) => v && typeof v === 'object')
+  // (a module that doesn't load is section 8's to explain)
+  const mod = await imp(PKG, f).catch((e) => check(false, `${f} loads`, e.message))
+  if (!mod) continue
+  const tables = Object.entries(mod).filter(([, v]) => v && typeof v === 'object')
   const loose = tables.filter(([, v]) => !deepFrozen(v)).map(([k]) => k)
   check(!loose.length, `${f}: ${tables.length ? tables.map(([k]) => k).join(', ') : 'no tables'}`, `not frozen: ${loose.join(', ')}`)
 }
@@ -352,6 +364,32 @@ for (const [what, want, edit] of brokenSets) {
   const err = setError(c)
   check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
 }
+
+// ── 8. each module loads alone ──────────────────────────────────────────────
+console.log('\n8. every core/ and data/ module loads as the only entry of a fresh process')
+// null when the module at `file` loads, else the first line of its error
+const loadAlone = (file) => new Promise((done) => {
+  execFile(process.execPath, ['--input-type=module', '-e', 'await import(process.argv[1])', pathToFileURL(file).href], (err, _, stderr) => {
+    done(err ? (stderr.split('\n').find((l) => /Error/.test(l)) ?? `exit ${err.code}`).trim() : null)
+  })
+})
+// the control: b.js's first import is a.js, which reads b's binding as it
+// loads, so b.js as the entry fails; a.js as the entry loads b.js first, so
+// it passes. A check that loaded every module from one entry would pass both.
+const tmp = mkdtempSync(join(tmpdir(), 'ts-load-'))
+try {
+  writeFileSync(join(tmp, 'a.js'), "import { b } from './b.js'\nexport const early = b + 1\n")
+  writeFileSync(join(tmp, 'b.js'), "import { early } from './a.js'\nexport const b = 1\nexport const late = () => early\n")
+  writeFileSync(join(tmp, 'package.json'), '{ "type": "module" }\n')
+  const [a, b] = await Promise.all([loadAlone(join(tmp, 'a.js')), loadAlone(join(tmp, 'b.js'))])
+  check(a === null && /ReferenceError/.test(b ?? ''), 'control: a cycle read too early fails from the entry that reaches it, and only there', `a.js: ${a ?? 'loads'}; b.js: ${b ?? 'loads'}`)
+} finally {
+  rmSync(tmp, { recursive: true, force: true })
+}
+const modules = ['core', 'data'].flatMap((d) => readdirSync(join(PKG, d), { recursive: true }).map((f) => `${d}/${f}`)).filter((f) => f.endsWith('.js')).sort()
+const loads = await pool(modules, CPUS, (f) => loadAlone(join(PKG, f)))
+const broken = modules.filter((f, i) => loads[i] !== null)
+check(modules.length > 10 && !broken.length, `${modules.length} modules each load alone`, broken.map((f) => `${f}: ${loads[modules.indexOf(f)]}`).join('; '))
 
 console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, and the terrain sets are well formed')
 process.exit(failed ? 1 : 0)

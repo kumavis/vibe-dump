@@ -20,6 +20,15 @@ the commit, and add whatever the work turned up.
   say so in the commit; the re-record moves `sim/oracle/PIN` (its first line)
   to the commit whose code produced the new hashes, in the same push, and
   `node sim/parity.mjs --pin` must pass after it.
+- **Standing checks.** Beside parity, every step runs the checks the steps
+  before it added, each exiting 0: `node sim/self-test.mjs`,
+  `node sim/mutation.mjs`, `node sim/perturb.mjs --fn hypot` (0 battles
+  moved), `node sim/data-check.mjs`, `node sim/flag-lint.mjs` (and
+  `--self-test`), `node sim/mirror-check.mjs`, `node sim/terrain-check.mjs`
+  (and `--self-test`) and, from R4, `node sim/rematch-check.mjs` (two
+  battles in one page don't touch each other, and every terrain report is
+  played). A step that changes what one of them reads ports it in the same
+  step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
   distances with `core/dmath.js`, never the engine's `Math.hypot`; and reads
@@ -130,8 +139,39 @@ step keeps the game playable.
   P-terrain covers one. Both terrain tools drive the `Scenery` facade, so
   when R4 removes it, R4 ports P-terrain to `Terrain` and `TerrainView`
   (it stays a gate) and ports or retires the screenshot diff.
-- [ ] **R4 State and queries.** The game state `G` owns units, terrain, nav,
+- [x] **R4 State and queries.** The game state `G` owns units, terrain, nav,
   turn and journal; queries take `(G, …)`.
+  Landed: `core/match.js` `newState(setup)` builds the match state for every
+  table the title screen shows (the board, both armies deployed, the turn,
+  the trace), and `start()` begins the battle on it with its own dice
+  (`startMatch`), so nothing carries over between battles: unit and chunk
+  ids count from 1 again. The rules' questions are `core/queries.js`, each
+  taking `G`; the read-only halves of moving, shooting and charging moved
+  to `core/actions/`, and `nav.js` to `core/`. The AI reads `G` with those
+  queries. Units are rules data only: their figures, rings, labels and
+  animation state live in main.js's view, by unit id. The terrain reports
+  into an array the caller passes (the match's `out`), which main.js plays
+  into the terrain view straight after each call, so `scenery.js` is gone.
+  The `?debug` surface the parity driver reads is unchanged, mapped onto
+  `G` inside the block. Checks: parity 40/40 in Node and in Chromium;
+  `sim/terrain-check.mjs` (P-terrain) now drives `Terrain` and `TerrainView`
+  directly, boards 1-500 identical; `sim/terrain-shots.mjs` was ported (it
+  finds figures by their own mark) and is pixel-identical to R0, and to R3
+  with figures drawn; the new `sim/rematch-check.mjs` plays every corpus
+  battle twice in one page, with Again between, then a third on a new
+  board in another mode, and requires the same battle both times, the
+  third to be the battle a fresh page plays, and every terrain report
+  played; `sim/data-check.mjs` now loads every `core/` and `data/` module
+  on its own, so an import cycle read too early fails there.
+  Turned up: before R4 a second battle in the same page numbered its units
+  15 to 28, so its trace differed from a fresh page's (no baseline could
+  see it). The R3 note's worry about queued terrain events reading a block
+  a later collapse had lowered can't happen with classic's recipes: a blast
+  walks each column's blocks lowest first, a collapse lowers a block only
+  over a gap, and the only gap below a block walked early is a window, with
+  just one block above it in classic, the column's last (DESIGN's R4 notes
+  have the whole argument, and what F7's pieces could change). The events
+  carry the place anyway, for R5.
 - [ ] **R5 Synchronous actions.** Each `await` becomes an emitted event; a
   transitional `EventPlayer` keeps today's visuals; a mirror for display state.
 - [ ] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as

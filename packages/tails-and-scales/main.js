@@ -1,20 +1,27 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
-  BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, AURA, PHASES,
-  roll, passes, woundNeed, saveNeed, hitNeed, attackCount, expected, p2D6, pD6, d6,
-} from './rules.js'
+  BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, PHASES,
+  roll, passes, woundNeed, saveNeed, hitNeed, attackCount, expected, p2D6, d6,
+} from './core/rules.js'
 import { sidesFor, isMirror, CLASSIC } from './data/compat.js'
 import { RACES } from './data/schema.js'
-import { EDGES, makeSeats, raceOf, edgeOf, ctrl } from './core/match.js'
-import { NavGrid, pathLength } from './nav.js'
-import { Scenery } from './scenery.js'
+import { EDGES, OBJ_POS, NAV_CELL, makeSeats, edgeOf, ctrl, newState, startMatch, refreshNav } from './core/match.js'
+import { relayout, setUnitPos } from './core/units.js'
+import {
+  alive, gap, dist, engagedWith, mx, mz, isEngaged, eyeY, chestY, inCover, leadership, controlOf,
+  canAct, anyCanAct, movePlan, validEnd, nearestValid, freeSpot, shotInfo, shootTargets, chargeTargets, chargePlan, rngState,
+} from './core/queries.js'
+import { traceState, traceLog } from './core/journal.js'
+import { gridSize, pathLength } from './core/nav.js'
+import { TerrainView } from './view/terrain.js'
 import { FX } from './fx.js'
 import { buildModel, M } from './models.js'
 import { clock, tween, wait, stepTweens, easeOut, easeInOut, wrapAngle, lerp } from './util.js'
 import { aiPhase } from './ai.js'
 import { sfx, unlock, toggleMute, isMuted } from './sfx.js'
-import { createRng, draw, rngState } from './core/rng.js'
+// (the blast's aim draws here until R5 moves it into core/actions/shoot.js)
+import { draw } from './core/rng.js'
 import { hypot } from './core/dmath.js'
 
 // ---------------------------------------------------------------------------
@@ -26,10 +33,12 @@ import { hypot } from './core/dmath.js'
 // the dice are shown. Blast weapons drop a template that can scatter, hurts
 // whoever is underneath (friends included) and breaks the scenery.
 //
-// This file is the table: scene, units, the actions both a human and the AI
-// call, the turn loop, and the UI. The rules' constants and dice live in
-// core/rules.js (re-exported by rules.js), the races in data/, movement in
-// nav.js, the battlefield in scenery.js, the AI in ai.js.
+// This file is the table: scene, the units' figures, the actions both a human
+// and the AI call, the turn loop, and the UI. The match state they act on is
+// G (core/match.js): the units, the terrain, the turn, the journal; the
+// rules' questions about it are core/queries.js, its constants and dice
+// core/rules.js, the races data/, movement core/nav.js, the battlefield
+// core/terrain/ (its meshes view/terrain.js), the AI ai.js.
 // ---------------------------------------------------------------------------
 
 const { W, H } = BOARD
@@ -203,14 +212,9 @@ function scatterTufts() {
 }
 
 // ── Objectives ──────────────────────────────────────────────────────────────
-const OBJ_POS = [
-  { x: 0, z: 0 },
-  { x: -9, z: 8 },
-  { x: 9, z: -8 },
-  { x: -9, z: -8 },
-  { x: 9, z: 8 },
-]
-const objectives = OBJ_POS.map((p, i) => {
+// Each objective's marker, flag and ring (the objectives themselves are the
+// match's, G.objectives, at OBJ_POS); `owner` is whose colours it shows.
+const objViews = OBJ_POS.map((p, i) => {
   const g = new THREE.Group()
   g.position.set(p.x, 0, p.z)
   const stone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 0.16, 8), M('#8a8478'))
@@ -229,38 +233,34 @@ const objectives = OBJ_POS.map((p, i) => {
   ring.position.y = 0.03
   g.add(stone, gem, pole, flag, ring)
   scene.add(g)
-  return { ...p, i, g, gem, flag, flagMat, ring, owner: -1 }
+  return { i, g, gem, flag, flagMat, ring, owner: -1 }
 })
 
-// ── Scenery & navigation ────────────────────────────────────────────────────
-const scenery = new Scenery(scene, fx, W, H)
-const nav = new NavGrid(W, H, 0.5)
-scenery.onBreak = (c) => {
+// ── Terrain ─────────────────────────────────────────────────────────────────
+// The battlefield's meshes. The battlefield itself is the match's
+// (G.terrain): each terrain call reports what it built or broke into G.out,
+// and drainTerrain plays that here straight after the call, in order.
+const terrainView = new TerrainView(scene, fx)
+terrainView.onBreak = (c) => {
   if (c.kind === 'block') sfx.crumble()
   else sfx.thwack()
 }
-function refreshNav() {
-  if (!scenery.dirty) return
-  scenery.dirty = false
-  nav.rebuild(scenery.chunks)
+function drainTerrain() {
+  if (G.out.length) terrainView.play(G.out.splice(0))
 }
 
 // ── Game state ──────────────────────────────────────────────────────────────
+// The table's and the screen's own state: the board seed and who plays each
+// seat as the title screen has them, and input and camera state. The match's
+// state (the turn, the score, the units) is G's.
 const S = {
   seed: Number(params.get('seed')) || ((Math.random() * 1e6) | 0),
-  stage: 'title', // title | deploy | battle | over
   control: ['human', 'ai'],
-  round: 1,
-  active: 0,
-  first: 0,
-  phase: 'move',
-  vp: [0, 0],
   busy: false,
   sel: null,
   reach: null,
   hover: null,
   follow: true,
-  pendingLog: [],
 }
 // The races at the table: the classic Bushtails-versus-Coil matchup, or any
 // pair a ?races=<seat 0>,<seat 1> URL names (e.g. ?races=serpent,serpent),
@@ -280,18 +280,27 @@ const RACE_PICK = (() => {
   $('#title .modes').before(note)
   return CLASSIC
 })()
-// The match state the rules read: the dice stream, which start() replaces
-// with a fresh one for every battle, and the seats (race, table edge and
-// controller each), set again by start() for the mode chosen.
-const G = { rng: createRng((Math.random() * 1e9) | 0), seats: makeSeats(RACE_PICK, S.control) }
+// The match (core/match.js): everything the rules read and write. A new one
+// for every table the title screen shows (setupTable); start() begins the
+// battle on it, so nothing carries over from one battle to the next.
+let G = null
+// The dice of the table the title screen shows. Nothing draws from them:
+// start() gives the battle its own. (Drawn once, at load, where the R1-R3
+// code drew its placeholder stream, so the view's own Math.random draws after
+// it keep their order.)
+const TABLE_DICE = (Math.random() * 1e9) | 0
+// Under ?debug every match reports its trace lines here as it writes them,
+// and start() says when a battle begins; only the ?debug block listens (sim/
+// reads one trace for the page's lifetime, emptied as each battle begins).
+// Without ?debug a match has no onTrace.
+let traceListener = null
+const onTrace = params.has('debug') ? (line, g) => traceListener?.line(line, g) : null
 // each seat's name, icon and colours, from its race (data/compat.js)
-let SIDES = sidesFor(G.seats)
-let units = []
-let nextUnitId = 1
+let SIDES = sidesFor(makeSeats(RACE_PICK, S.control))
 
-// Seat the players: the races at the table, with the mode's controllers.
+// Seat the players: the races at the table, with the mode's controllers
+// (startMatch has set G.seats).
 function seatPlayers() {
-  G.seats = makeSeats(RACE_PICK, S.control)
   SIDES = sidesFor(G.seats)
   paintSeats()
 }
@@ -319,90 +328,68 @@ paintSeats()
 // colour; otherwise it keeps its own ('' leaves the stylesheet's).
 const seatInk = (s) => (s >= 0 && isMirror(G.seats) ? SIDES[s].color : '')
 
-const alive = (u) => u.alive > 0
-const enemiesOf = (u) => units.filter((e) => e.side !== u.side && alive(e))
-const friendsOf = (u) => units.filter((e) => e.side === u.side && alive(e) && e !== u)
-const dist = (a, b) => hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)
-const gap = (a, b) => dist(a, b) - a.r - b.r
-const engagedWith = (u) => enemiesOf(u).filter((e) => gap(u, e) <= ENGAGE + 0.05)
-// Where a model stands as far as the rules are concerned: its slot in the
-// formation, not wherever its mesh has animated to this frame.
-const mx = (u, m) => u.pos.x + m.ox
-const mz = (u, m) => u.pos.z + m.oz
-const isEngaged = (u) => engagedWith(u).length > 0
 const human = (side) => ctrl(G, side) === 'human'
 
-// ── Units ───────────────────────────────────────────────────────────────────
-// Formation: one model in the middle and the rest in a ring, or a plain ring
-// for small squads. Recomputed as models fall so squads close ranks.
-function formation(n, base) {
-  const sp = base * 2 + 0.16
-  if (n === 1) return [[0, 0]]
-  if (n <= 4) {
-    const R = n === 2 ? sp / 2 : sp / (2 * Math.sin(Math.PI / n))
-    return Array.from({ length: n }, (_, i) => [Math.cos((i / n) * Math.PI * 2 + 0.4) * R, Math.sin((i / n) * Math.PI * 2 + 0.4) * R])
-  }
-  const k = n - 1
-  const R = Math.max(sp, sp / (2 * Math.sin(Math.PI / k)))
-  return [[0, 0], ...Array.from({ length: k }, (_, i) => [Math.cos((i / k) * Math.PI * 2 + 0.3) * R, Math.sin((i / k) * Math.PI * 2 + 0.3) * R])]
-}
+// ── Units' figures ──────────────────────────────────────────────────────────
+// A unit's view, by unit id: its figures, selection ring, hit cylinder (for
+// picking) and floating label, which way it faces, whether it is walking;
+// and per model (models[k] draws the unit's models[k]) where its figure
+// stands this frame, which way it turns and how it lunges, lifts, flinches,
+// dies or flees. The rules never read any of it: they read the unit (G.units,
+// core/units.js), and the figures follow.
+const views = new Map()
+const V = (u) => views.get(u.id)
+const MV = (u, m) => V(u).models[u.models.indexOf(m)]
+// the figures of a unit's models still standing
+const standing = (u) => V(u).models.filter((_, k) => u.models[k].alive)
 
-function makeUnit(key, side) {
-  const race = raceOf(G, side), t = race.units[key]
-  const u = {
-    id: nextUnitId++, key, t, side, race: race.key, name: t.name,
-    // facing across the table, away from the seat's own edge
-    pos: { x: 0, z: 0 }, facing: -edgeOf(G, side) * Math.PI / 2,
-    models: [], alive: t.models, r: 0, flags: {}, lost: 0, mesmerized: false, moving: false,
-  }
-  for (let i = 0; i < t.models; i++) {
-    const mesh = buildModel(key, t, SIDES[side].color)
+function makeView(u) {
+  // facing across the table, away from the seat's own edge
+  const facing = -edgeOf(G, u.side) * Math.PI / 2
+  const v = { facing, moving: false, models: [] }
+  for (let i = 0; i < u.t.models; i++) {
+    const mesh = buildModel(u.key, u.t, SIDES[u.side].color)
     scene.add(mesh)
-    u.models.push({ mesh, w: t.W, alive: true, ox: 0, oz: 0, x: 0, z: 0, yaw: u.facing, lunge: 0, lungeDir: 0, lift: 0 })
+    v.models.push({ mesh, x: 0, z: 0, yaw: facing, lunge: 0, lungeDir: 0, lift: 0 })
   }
   // selection / status ring
-  u.ring = new THREE.Mesh(new THREE.RingGeometry(0.88, 1, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, toneMapped: false }))
-  u.ring.position.y = 0.04
-  u.ring.renderOrder = 2
-  scene.add(u.ring)
-  u.hit = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1, 12), new THREE.MeshBasicMaterial({ visible: false }))
-  u.hit.userData.unit = u
-  scene.add(u.hit)
-  u.label = document.createElement('div')
-  u.label.className = `ulabel s${side}`
-  overlayEl.appendChild(u.label)
-  relayout(u, true)
-  return u
+  v.ring = new THREE.Mesh(new THREE.RingGeometry(0.88, 1, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, toneMapped: false }))
+  v.ring.position.y = 0.04
+  v.ring.renderOrder = 2
+  scene.add(v.ring)
+  v.hit = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1, 12), new THREE.MeshBasicMaterial({ visible: false }))
+  v.hit.userData.unit = u
+  scene.add(v.hit)
+  v.label = document.createElement('div')
+  v.label.className = `ulabel s${u.side}`
+  overlayEl.appendChild(v.label)
+  views.set(u.id, v)
+  syncView(u)
+  // the figures stand in their slots from the start
+  u.models.forEach((m, k) => {
+    const f = v.models[k]
+    f.x = mx(u, m)
+    f.z = mz(u, m)
+    f.mesh.position.set(f.x, 0, f.z)
+    f.mesh.rotation.y = f.yaw
+  })
 }
 
-function relayout(u, snap = false) {
-  const live = u.models.filter((m) => m.alive)
-  const offs = formation(live.length, u.t.base)
-  // keep each survivor roughly where it was: assign slots greedily by angle
-  live.sort((a, b) => Math.atan2(a.oz, a.ox) - Math.atan2(b.oz, b.ox))
-  offs.forEach(([ox, oz], i) => {
-    live[i].ox = ox
-    live[i].oz = oz
-  })
-  u.r = offs.reduce((m, [ox, oz]) => Math.max(m, hypot(ox, oz)), 0) + u.t.base
-  u.ring.scale.setScalar(u.r + 0.18)
+// The ring and hit cylinder follow the unit's disc: its place and radius.
+function syncView(u) {
+  const v = V(u)
+  v.ring.scale.setScalar(u.r + 0.18)
   const tall = u.t.big ? 2.4 : u.t.fly ? 1.8 : 1.3
-  u.hit.scale.set(u.r, tall, u.r)
-  if (snap) for (const m of u.models) placeModel(u, m)
-  updateLabel(u)
+  v.hit.scale.set(u.r, tall, u.r)
+  v.ring.position.x = v.hit.position.x = u.pos.x
+  v.ring.position.z = v.hit.position.z = u.pos.z
+  v.hit.position.y = v.hit.scale.y / 2
 }
-function placeModel(u, m) {
-  m.x = u.pos.x + m.ox
-  m.z = u.pos.z + m.oz
-  m.mesh.position.set(m.x, 0, m.z)
-  m.mesh.rotation.y = m.yaw
-}
-function setUnitPos(u, x, z) {
-  u.pos.x = x
-  u.pos.z = z
-  u.ring.position.x = u.hit.position.x = x
-  u.ring.position.z = u.hit.position.z = z
-  u.hit.position.y = u.hit.scale.y / 2
+// Put a unit somewhere (the rules' move), its ring and hit cylinder with it;
+// the figures walk there (animateUnits).
+function moveUnit(u, x, z) {
+  setUnitPos(u, x, z)
+  syncView(u)
 }
 
 function updateLabel(u) {
@@ -411,179 +398,30 @@ function updateLabel(u) {
   if (u.t.models > 1) html += `<span class="ct">${u.alive}/${u.t.models}</span>`
   else html += `<span class="ct">${w[0] ? w[0].w : 0}/${u.t.W}♥</span>`
   if (u.mesmerized) html += `<span class="st" title="Mesmerized">🌀</span>`
-  if (alive(u) && isEngaged(u)) html += `<span class="st" title="In combat">⚔</span>`
-  u.label.innerHTML = html
-  u.label.style.display = alive(u) ? '' : 'none'
+  if (alive(u) && isEngaged(G, u)) html += `<span class="st" title="In combat">⚔</span>`
+  const v = V(u)
+  v.label.innerHTML = html
+  v.label.style.display = alive(u) ? '' : 'none'
 }
 
 function clearUnits() {
-  for (const u of units) {
-    for (const m of u.models) scene.remove(m.mesh)
-    scene.remove(u.ring, u.hit)
-    u.label.remove()
+  for (const v of views.values()) {
+    for (const f of v.models) scene.remove(f.mesh)
+    scene.remove(v.ring, v.hit)
+    v.label.remove()
   }
-  units = []
-}
-
-// Pick a spot near (x, z) inside the side's deployment zone: the strip
-// BOARD.deploy deep along its seat's edge.
-function freeSpot(u, x, z, side, others) {
-  let best = null, bd = Infinity
-  const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - BOARD.deploy)
-  const minX = Math.min(outer, inner), maxX = Math.max(outer, inner)
-  for (let i = 0; i < nav.N; i++) {
-    const cx = nav.x(i), cz = nav.z(i)
-    if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) continue
-    if (!nav.standable(i, u.r, 'walk')) continue
-    if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) continue
-    const d = hypot(cx - x, cz - z)
-    if (d < bd) {
-      bd = d
-      best = { x: cx, z: cz }
-    }
-  }
-  return best
-}
-
-function deployArmies() {
-  for (const side of [0, 1]) {
-    const sx = edgeOf(G, side)
-    const list = units.filter((u) => u.side === side)
-    const placed = []
-    const back = list.filter((u) => u.t.deployRow === 'back')
-    const mid = list.filter((u) => u.t.deployRow === 'mid')
-    const front = list.filter((u) => u.t.deployRow === 'front')
-    const rows = [
-      [front, W / 2 - BOARD.deploy + 1.8],
-      [mid, W / 2 - BOARD.deploy + 3.6],
-      [back, W / 2 - 2.4],
-    ]
-    for (const [row, depth] of rows) {
-      row.forEach((u, i) => {
-        // each army lists its units from its own left
-        const z = ((i + 0.5) / row.length - 0.5) * (H - 6) * -sx
-        const p = freeSpot(u, sx * depth, z, side, placed) || { x: sx * depth, z }
-        setUnitPos(u, p.x, p.z)
-        placed.push(u)
-        for (const m of u.models) placeModel(u, m)
-      })
-    }
-  }
-}
-
-// ── Line of sight, cover, control ───────────────────────────────────────────
-const eyeY = (u) => u.t.eye
-const chestY = (u) => u.t.chest
-
-function inCover(u) {
-  const live = u.models.filter((m) => m.alive)
-  if (u.t.fly) return false
-  let n = 0
-  for (const m of live) if (nav.cover[nav.index(mx(u, m), mz(u, m))]) n++
-  return n * 2 >= live.length && n > 0
-}
-
-// Can `a` see `b`? Rays from a's centre to each of b's models.
-function sight(a, b, from = a.pos) {
-  const eye = { x: from.x, y: eyeY(a), z: from.z }
-  let seen = 0, obsc = 0, total = 0
-  for (const m of b.models) {
-    if (!m.alive) continue
-    total++
-    const r = scenery.los(eye, { x: mx(b, m), y: chestY(b), z: mz(b, m) })
-    if (!r.blocked) {
-      seen++
-      if (r.obscure) obsc++
-    }
-  }
-  return { visible: seen > 0, cover: seen > 0 && (obsc > 0 || seen < total || inCover(b)), seen, total }
-}
-
-function leadership(u) {
-  let ld = u.t.Ld
-  for (const f of friendsOf(u)) if (f.t.hero && dist(u, f) <= AURA + u.r) ld = Math.max(ld, f.t.Ld)
-  return ld
-}
-
-function controlOf(o) {
-  const oc = [0, 0]
-  for (const u of units) {
-    if (!alive(u)) continue
-    for (const m of u.models) if (m.alive && hypot(mx(u, m) - o.x, mz(u, m) - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
-  }
-  return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
+  views.clear()
 }
 
 // ── Movement ────────────────────────────────────────────────────────────────
-function moveMode(u) {
-  return u.t.move
-}
-
-// Cells a unit may not enter: within 1" of an enemy (or just their bases when
-// falling back / charging). `except` is the charge target.
-function forbidMask(u, pad, onlyBodies = []) {
-  const f = new Uint8Array(nav.N)
-  f.discs = [] // the exact shapes, for nav.walkable's straight-line shortcuts
-  for (const e of enemiesOf(u)) {
-    const R = e.r + u.r + (onlyBodies.includes(e) ? 0.02 : pad)
-    f.discs.push({ x: e.pos.x, z: e.pos.z, R: R - 0.02 })
-    const i0x = Math.max(0, Math.floor((e.pos.x - R + W / 2) / nav.cell)), i1x = Math.min(nav.nx - 1, Math.floor((e.pos.x + R + W / 2) / nav.cell))
-    const i0z = Math.max(0, Math.floor((e.pos.z - R + H / 2) / nav.cell)), i1z = Math.min(nav.nz - 1, Math.floor((e.pos.z + R + H / 2) / nav.cell))
-    for (let iz = i0z; iz <= i1z; iz++) for (let ix = i0x; ix <= i1x; ix++) {
-      const i = iz * nav.nx + ix
-      if (hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < R) f[i] = 1
-    }
-  }
-  return f
-}
-
-// Everything the movement phase needs for one unit: where it can go and how.
-function movePlan(u, extra = 0) {
-  refreshNav()
-  const fallback = isEngaged(u)
-  const max = u.t.M + extra
-  const mode = moveMode(u)
-  const enemies = enemiesOf(u)
-  // falling back may walk through the 1" bubble but not through bases
-  const forbid = forbidMask(u, ENGAGE + 0.05, fallback ? enemies : [])
-  const endForbid = forbidMask(u, ENGAGE + 0.05)
-  const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max, mode: mode === 'fly' ? 'fly' : mode, forbid: mode === 'fly' ? null : forbid })
-  return { u, res, max, mode, forbid, endForbid, fallback }
-}
-
-function validEnd(plan, i) {
-  const { u, res, mode, endForbid } = plan
-  if (i < 0 || !isFinite(res.dist[i])) return false
-  if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) return false
-  const x = nav.x(i), z = nav.z(i)
-  for (const o of units) if (o !== u && alive(o) && hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false
-  return true
-}
-
-function nearestValid(plan, x, z, within = 2.4) {
-  let best = -1, bd = within
-  const c = nav.index(x, z)
-  if (c < 0) return -1
-  const R = Math.ceil(within / nav.cell)
-  const cx = c % nav.nx, cz = (c / nav.nx) | 0
-  for (let dz = -R; dz <= R; dz++) for (let dx = -R; dx <= R; dx++) {
-    const ix = cx + dx, iz = cz + dz
-    if (ix < 0 || iz < 0 || ix >= nav.nx || iz >= nav.nz) continue
-    const i = iz * nav.nx + ix
-    const d = hypot(nav.x(i) - x, nav.z(i) - z)
-    if (d < bd && validEnd(plan, i)) {
-      bd = d
-      best = i
-    }
-  }
-  return best
-}
-
+// Walk a unit along a path: its place moves along it in game time (the
+// figures follow), smashing what a wrecker passes.
 async function walk(u, pts, { speed = 7, fly = false } = {}) {
   const L = pathLength(pts)
   if (L < 0.05) return
-  u.moving = true
-  if (fly) for (const m of u.models) m.flying = true
+  const v = V(u)
+  v.moving = true
+  if (fly) for (const f of v.models) f.flying = true
   const seg = []
   let acc = 0
   for (let i = 1; i < pts.length; i++) {
@@ -595,31 +433,35 @@ async function walk(u, pts, { speed = 7, fly = false } = {}) {
   // what breaks (and which way trees fall) never depends on the frame rate.
   const smash = []
   if (u.t.wrecker) for (const q of seg) for (let t = 0; t < q.l; t += 0.25) smash.push({ s: q.s + t, x: q.a.x + ((q.b.x - q.a.x) * t) / q.l, z: q.a.z + ((q.b.z - q.a.z) * t) / q.l, dir: Math.atan2(q.b.x - q.a.x, q.b.z - q.a.z) })
-  if (u.t.wrecker) smash.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: seg[seg.length - 1] ? Math.atan2(seg[seg.length - 1].b.x - seg[seg.length - 1].a.x, seg[seg.length - 1].b.z - seg[seg.length - 1].a.z) : u.facing })
+  // (a path of 0.05" or more has a last segment)
+  if (u.t.wrecker) smash.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: Math.atan2(seg[seg.length - 1].b.x - seg[seg.length - 1].a.x, seg[seg.length - 1].b.z - seg[seg.length - 1].a.z) })
   let smashed = 0
   await tween(L / speed + 0.15, (k) => {
     const d = Math.min(L, k * (L + speed * 0.15))
     const s = seg.find((q) => d <= q.s + q.l) || seg[seg.length - 1]
     const f = s.l > 0 ? (d - s.s) / s.l : 1
     const x = lerp(s.a.x, s.b.x, f), z = lerp(s.a.z, s.b.z, f)
-    u.facing = Math.atan2(s.b.x - s.a.x, s.b.z - s.a.z)
-    setUnitPos(u, x, z)
-    if (fly) for (const m of u.models) m.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)
+    v.facing = Math.atan2(s.b.x - s.a.x, s.b.z - s.a.z)
+    moveUnit(u, x, z)
+    if (fly) for (const f of v.models) f.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)
     while (smashed < smash.length && smash[smashed].s <= d) smashAround(u, smash[smashed++])
   }, easeInOut)
   while (smashed < smash.length) smashAround(u, smash[smashed++])
-  u.moving = false
-  if (fly) for (const m of u.models) (m.flying = false), (m.lift = 0)
+  v.moving = false
+  if (fly) for (const f of v.models) (f.flying = false), (f.lift = 0)
   await wait(0.15)
 }
 
-// The Brute ploughs through anything breakable in its way.
+// The Brute ploughs through anything breakable in its way. It walks the
+// live chunk list (DESIGN §4.1 rule 6), so a log a tree it felled leaves in
+// its path is smashed in the same sweep.
 function smashAround(u, { x, z, dir }) {
-  for (const c of scenery.chunks) {
+  for (const c of G.terrain.chunks) {
     if (!c.alive || !c.destructible) continue
     const s = c.nav || c.shape
     if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
-      scenery.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) })
+      G.terrain.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) }, G.out)
+      drainTerrain()
       fx.shake = Math.max(fx.shake, 0.08)
     }
   }
@@ -627,14 +469,14 @@ function smashAround(u, { x, z, dir }) {
 
 async function doMove(u, cell, plan) {
   S.busy = true
-  const pts = nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
+  const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   u.flags.moved = true
   if (plan.fallback) u.flags.fellBack = true
   const L = pathLength(pts)
   log(u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${L.toFixed(1)}".`)
   if (u.t.wrecker && L > 0.1) sfx.boom(0.4)
   await walk(u, pts, { fly: plan.mode === 'fly' })
-  refreshNav()
+  refreshNav(G)
   finishAction()
 }
 
@@ -651,36 +493,10 @@ async function doAdvance(u) {
 }
 
 // ── Shooting ────────────────────────────────────────────────────────────────
-function canShoot(u) {
-  const w = u.t.ranged
-  if (!w || !alive(u) || u.flags.shot) return false
-  if (u.mesmerized || u.flags.fellBack || isEngaged(u)) return false
-  if (u.flags.advanced && !w.assault) return false
-  return true
-}
-
-function shotInfo(u, target) {
-  const w = u.t.ranged
-  const range = gap(u, target)
-  if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${w.range}")` }
-  if (isEngaged(target) && !w.spell) return { ok: false, why: 'locked in combat' }
-  const s = sight(u, target)
-  if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }
-  let mod = 0
-  if (w.heavy && u.flags.moved) mod++
-  if (w.indirect && !s.visible) mod++
-  return { ok: true, range, ...s, mod, need: hitNeed(u.t.BS, mod) }
-}
-
-function shootTargets(u) {
-  if (!canShoot(u)) return []
-  return enemiesOf(u).filter((e) => shotInfo(u, e).ok)
-}
-
 async function doShoot(u, target) {
   S.busy = true
   const w = u.t.ranged
-  const info = shotInfo(u, target)
+  const info = shotInfo(G, u, target)
   u.flags.shot = true
   face(u, target)
   tray.clear(`${u.t.short} → ${target.t.short} · ${w.name}`)
@@ -725,8 +541,8 @@ async function doShoot(u, target) {
 
 // Projectiles for a non-blast volley — a handful, not one per die.
 async function volleyFx(u, target, w) {
-  const shooters = u.models.filter((m) => m.alive)
-  const victims = target.models.filter((m) => m.alive)
+  const shooters = standing(u)
+  const victims = standing(target)
   const flights = []
   const n = Math.min(10, shooters.length * w.shots)
   for (let i = 0; i < n; i++) {
@@ -801,7 +617,7 @@ async function blastVolley(u, target, w, info) {
 }
 
 async function artilleryFire(u, land, w) {
-  const src = u.models.find((m) => m.alive)
+  const src = standing(u)[0]
   const anim = src.mesh.userData.anim
   if (anim?.throwArm) {
     const r0 = anim.rest
@@ -822,7 +638,7 @@ async function artilleryFire(u, land, w) {
 
 async function thornburst(u, target, w) {
   const land = { x: target.pos.x, z: target.pos.z }
-  const gem = u.models[0].mesh.userData.anim.gem
+  const gem = V(u).models[0].mesh.userData.anim.gem
   if (gem) {
     const p = new THREE.Vector3()
     gem.getWorldPosition(p)
@@ -856,7 +672,7 @@ async function blastLands(u, land, w) {
   }
   fx.ring(land.x, land.z, w.blast, w.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2 })
   const victims = []
-  for (const v of units) {
+  for (const v of G.units) {
     if (!alive(v)) continue
     const under = v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
     if (under.length) victims.push({ v, under })
@@ -869,7 +685,7 @@ async function blastLands(u, land, w) {
     const wd = roll(G, hits)
     const wounds = passes(wd, wn)
     await tray.row(`${friendly ? '⚠ ' : ''}${v.t.short}: ${hits} hit${hits > 1 ? 's' : ''} · wound ${wn}+`, wd, wn)
-    const cover = inCover(v)
+    const cover = inCover(G, v)
     const sn = saveNeed(v.t.Sv, w.AP, cover)
     const sv = roll(G, wounds)
     const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
@@ -878,9 +694,10 @@ async function blastLands(u, land, w) {
     log(u.side, `${friendly ? '<b>Friendly fire!</b> ' : ''}${w.name} hits ${v.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   }
   if (!victims.length) await wait(0.25)
-  const broke = scenery.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes })
+  const broke = G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes }, G.out)
+  drainTerrain()
   if (broke.length) log(u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
-  refreshNav()
+  refreshNav(G)
 }
 
 async function mesmerize(u, target) {
@@ -921,12 +738,13 @@ async function damage(u, n, D, attacker, prefer = null) {
       m = pool.reduce((a, b) => (near(a) < near(b) ? a : b))
     }
     m.w -= D
-    fx.text({ x: m.x, y: (u.t.big ? 2.3 : 1.3), z: m.z }, `-${Math.min(D, D + Math.min(0, m.w))}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
+    const f = MV(u, m)
+    fx.text({ x: f.x, y: (u.t.big ? 2.3 : 1.3), z: f.z }, `-${Math.min(D, D + Math.min(0, m.w))}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
     if (m.w <= 0) {
       killModel(u, m, attacker)
       killed++
     } else {
-      m.flash = 0.4
+      f.flash = 0.4
     }
     await wait(0.06)
   }
@@ -942,104 +760,58 @@ async function damage(u, n, D, attacker, prefer = null) {
 // Survivors close ranks — and pile in, so a squad thinned out in melee doesn't
 // shrink out of the fight it was in.
 function closeRanks(u) {
-  const foes = engagedWith(u)
+  const foes = engagedWith(G, u)
   relayout(u)
-  if (!foes.length || isEngaged(u)) return
+  syncView(u)
+  updateLabel(u)
+  if (!foes.length || isEngaged(G, u)) return
   const f = foes.reduce((a, b) => (gap(u, a) < gap(u, b) ? a : b))
   const d = dist(u, f)
   const step = gap(u, f) - (ENGAGE - 0.3)
-  setUnitPos(u, u.pos.x + ((f.pos.x - u.pos.x) / d) * step, u.pos.z + ((f.pos.z - u.pos.z) / d) * step)
+  moveUnit(u, u.pos.x + ((f.pos.x - u.pos.x) / d) * step, u.pos.z + ((f.pos.z - u.pos.z) / d) * step)
 }
 
 function killModel(u, m, attacker) {
+  const f = MV(u, m)
   m.alive = false
   m.w = 0
   u.alive--
-  m.dying = true
+  f.dying = true
   // a squeak or a hiss, and fur or scales flying: the race's own
   const look = RACES[u.race].look
   sfx[look.voice]()
-  const fig = m.mesh.userData.fig
-  const dir = attacker ? Math.atan2(m.x - attacker.pos.x, m.z - attacker.pos.z) - m.yaw : 0
+  const fig = f.mesh.userData.fig
+  const dir = attacker ? Math.atan2(f.x - attacker.pos.x, f.z - attacker.pos.z) - f.yaw : 0
   const side = Math.sin(dir) >= 0 ? 1 : -1
-  fx.debris(m.x, 0.5, m.z, look.gore, 6, { power: 2, size: 0.07 })
+  fx.debris(f.x, 0.5, f.z, look.gore, 6, { power: 2, size: 0.07 })
   tween(0.6, (k) => {
     fig.rotation.z = side * k * 1.45
     fig.position.y = (u.t.big ? 0.09 : 0.06) + Math.sin(k * Math.PI) * 0.15
   }, easeOut)
     .then(() => wait(1.4))
-    .then(() => tween(0.8, (k) => (m.mesh.position.y = -k * 1.4)))
+    .then(() => tween(0.8, (k) => (f.mesh.position.y = -k * 1.4)))
     .then(() => {
-      scene.remove(m.mesh)
-      m.dying = false
+      scene.remove(f.mesh)
+      f.dying = false
     })
   if (!alive(u)) unitDestroyed(u, attacker)
 }
 
 function unitDestroyed(u, by) {
-  u.label.style.display = 'none'
-  u.ring.visible = false
-  u.hit.visible = false
-  scene.remove(u.hit)
+  const v = V(u)
+  v.label.style.display = 'none'
+  v.ring.visible = false
+  v.hit.visible = false
+  scene.remove(v.hit)
   // reported after the attack that did it, not in the middle of it
-  S.pendingLog.push([u.side, `<b>${u.t.name}</b> ${u.t.models > 1 ? 'are' : 'is'} destroyed!`, 'big'])
+  G.journal.pendingLog.push([u.side, `<b>${u.t.name}</b> ${u.t.models > 1 ? 'are' : 'is'} destroyed!`, 'big'])
   fx.text({ x: u.pos.x, y: 2.2, z: u.pos.z }, `${u.t.short} destroyed`, SIDES[by ? by.side : 1 - u.side].color, { size: 20, life: 2 })
 }
 
 // ── Charge & fight ──────────────────────────────────────────────────────────
-function canCharge(u) {
-  if (!alive(u) || u.flags.charged || u.flags.chargeTried) return false
-  if (u.t.noCharge || u.mesmerized || u.flags.fellBack || isEngaged(u)) return false
-  if (u.flags.advanced && !u.t.chargeAfterAdvance) return false
-  return true
-}
-
-function chargeTargets(u) {
-  if (!canCharge(u)) return []
-  return enemiesOf(u).filter((e) => gap(u, e) <= CHARGE_RANGE)
-}
-
-// Every spot a charge could end on: within 1" of the target, not within 1" of
-// any other enemy, not on top of a friend — each with the length of the
-// shortest route there. The closest one sets the distance the dice must beat;
-// a roll that beats it may end on any spot it reaches.
-function chargePlan(u, target) {
-  refreshNav()
-  const others = enemiesOf(u).filter((e) => e !== target)
-  const mode = moveMode(u)
-  // the target's 1" bubble is fine to enter, its base is not
-  const forbid = forbidMask(u, ENGAGE + 0.05, [target])
-  const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max: CHARGE_RANGE + 0.5, mode, forbid: mode === 'fly' ? null : forbid })
-  const spots = []
-  let best = -1, bd = Infinity
-  const want = target.r + u.r + ENGAGE - 0.08
-  const R = Math.ceil((want + 1) / nav.cell)
-  const cx = nav.index(target.pos.x, target.pos.z)
-  const tx = cx % nav.nx, tz = (cx / nav.nx) | 0
-  for (let dz = -R; dz <= R; dz++) for (let dx = -R; dx <= R; dx++) {
-    const ix = tx + dx, iz = tz + dz
-    if (ix < 0 || iz < 0 || ix >= nav.nx || iz >= nav.nz) continue
-    const i = iz * nav.nx + ix
-    const d = res.dist[i]
-    if (!isFinite(d)) continue
-    const dd = hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z)
-    if (dd > want || dd < target.r + u.r + 0.02) continue
-    if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
-    if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
-    if (units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
-    spots.push({ i, d })
-    if (d < bd) {
-      best = i
-      bd = d
-    }
-  }
-  if (best < 0) return null
-  return { cell: best, need: Math.max(2, Math.ceil(bd - 0.01)), res, forbid, mode, dist: bd, spots }
-}
-
 async function doCharge(u, target, { auto = false } = {}) {
   S.busy = true
-  const plan = chargePlan(u, target)
+  const plan = chargePlan(G, u, target)
   u.flags.chargeTried = true
   tray.clear(`${u.t.short} charge ${target.t.short}`)
   if (!plan) {
@@ -1062,9 +834,9 @@ async function doCharge(u, target, { auto = false } = {}) {
   log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total} vs ${plan.need}. <b>Contact!</b>`)
   // a human chooses where around the target to end; the AI takes the shortest move
   const cell = auto || !human(u.side) ? plan.cell : await pickChargeSpot(u, target, plan, total)
-  const pts = nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
+  const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   await walk(u, pts, { speed: 11, fly: plan.mode === 'fly' })
-  refreshNav()
+  refreshNav(G)
   for (const x of [u, target]) updateLabel(x)
   finishAction()
 }
@@ -1073,7 +845,7 @@ async function doCharge(u, target, { auto = false } = {}) {
 function pickChargeSpot(u, target, plan, rolled) {
   // same 0.01" grace `need` was rounded with, and the shortest-move spot always
   // counts, so a roll that made the charge can never leave nowhere to stand
-  const ok = new Uint8Array(nav.N)
+  const ok = new Uint8Array(G.nav.N)
   for (const s of plan.spots) if (s.d <= rolled + 0.011) ok[s.i] = 1
   ok[plan.cell] = 1
   // the 12" declaration ring is spent; leave the orange to the area itself,
@@ -1088,6 +860,7 @@ function pickChargeSpot(u, target, plan, rolled) {
 }
 
 function nearestSpot(pick, x, z, within = 2.4) {
+  const nav = G.nav
   let best = -1, bd = within
   for (let i = 0; i < nav.N; i++) {
     if (!pick.ok[i]) continue
@@ -1113,7 +886,7 @@ function placeCharge(i) {
 
 async function fight(u) {
   if (!alive(u) || u.flags.fought) return
-  const foes = engagedWith(u)
+  const foes = engagedWith(G, u)
   if (!foes.length) return
   u.flags.fought = true
   const target = foes.find((f) => f.id === u.flags.chargeTarget) || foes.reduce((a, b) => (a.alive * a.t.W < b.alive * b.t.W ? a : b))
@@ -1124,9 +897,9 @@ async function fight(u) {
   if (human(u.side) || human(target.side) || S.follow) focus(u.pos.x * 0.5 + target.pos.x * 0.5, u.pos.z * 0.5 + target.pos.z * 0.5)
   tray.clear(`${u.t.short} fight ${target.t.short} · ${w.name}`)
   // lunge!
-  for (const m of u.models) if (m.alive) {
-    m.lunge = 1
-    m.lungeDir = Math.atan2(target.pos.x - m.x, target.pos.z - m.z)
+  for (const f of standing(u)) {
+    f.lunge = 1
+    f.lungeDir = Math.atan2(target.pos.x - f.x, target.pos.z - f.z)
   }
   sfx.thwack()
   const n = attackCount(u, w, true)
@@ -1134,7 +907,7 @@ async function fight(u) {
   const h = passes(hits, need)
   await tray.row(`Hit ${need}+${mod ? ' (mesmerized)' : ''}`, hits, need)
   for (let i = 0; i < Math.min(h, 8); i++) {
-    const v = target.models.filter((m) => m.alive)[i % Math.max(1, target.alive)]
+    const v = standing(target)[i % Math.max(1, target.alive)]
     if (v) for (let k = 0; k < 4; k++) fx.mote({ x: v.x, y: 0.6, z: v.z, vx: (Math.random() - 0.5) * 5, vy: Math.random() * 4, vz: (Math.random() - 0.5) * 5, size: 0.05, color: '#fff2b0', life: 0.3, g: 12 })
   }
   const wn = woundNeed(w.S, target.t.T, w.poison)
@@ -1151,18 +924,18 @@ async function fight(u) {
 }
 
 async function fightPhase(active) {
-  const chargers = units.filter((u) => u.side === active && u.flags.charged && alive(u))
+  const chargers = G.units.filter((u) => u.side === active && u.flags.charged && alive(u))
   for (const u of chargers) await fight(u)
   // then the rest, defender first, alternating
   let side = 1 - active
   for (let guard = 0; guard < 30; guard++) {
-    const next = units.find((u) => u.side === side && alive(u) && !u.flags.fought && isEngaged(u))
-    const other = units.find((u) => u.side === 1 - side && alive(u) && !u.flags.fought && isEngaged(u))
+    const next = G.units.find((u) => u.side === side && alive(u) && !u.flags.fought && isEngaged(G, u))
+    const other = G.units.find((u) => u.side === 1 - side && alive(u) && !u.flags.fought && isEngaged(G, u))
     if (!next && !other) break
     if (next) await fight(next)
     side = 1 - side
   }
-  for (const u of units) {
+  for (const u of G.units) {
     u.flags.fought = false
     updateLabel(u)
   }
@@ -1171,11 +944,11 @@ async function fightPhase(active) {
 // ── Morale ──────────────────────────────────────────────────────────────────
 async function moralePhase() {
   let any = false
-  for (const u of units) {
+  for (const u of G.units) {
     if (!alive(u) || !u.lost || u.t.models === 1) continue
     if (!any) tray.clear('Morale')
     any = true
-    const ld = leadership(u)
+    const ld = leadership(G, u)
     const r = roll(G, 1)
     const total = r[0] + u.lost
     const flee = r[0] === 1 ? 0 : Math.max(0, total - ld)
@@ -1194,54 +967,56 @@ async function moralePhase() {
 }
 
 function flee1(u, m) {
+  const f = MV(u, m)
   m.alive = false
   m.w = 0
   u.alive--
-  m.dying = true
+  f.dying = true
   // off the table over the unit's own edge
   const edge = edgeOf(G, u.side)
   const ex = edge * (W / 2 + 3)
-  const x0 = m.x, z0 = m.z
-  m.fleeing = true
-  fx.text({ x: m.x, y: 1.4, z: m.z }, 'flees!', '#e0e0e0', { size: 14 })
-  m.yaw = edge * Math.PI / 2
+  const x0 = f.x, z0 = f.z
+  f.fleeing = true
+  fx.text({ x: f.x, y: 1.4, z: f.z }, 'flees!', '#e0e0e0', { size: 14 })
+  f.yaw = edge * Math.PI / 2
   tween(2.2, (k) => {
-    m.x = lerp(x0, ex, k)
-    m.z = z0
-    m.mesh.position.set(m.x, Math.abs(Math.sin(k * 30)) * 0.2, m.z)
-    m.mesh.rotation.y = m.yaw
+    f.x = lerp(x0, ex, k)
+    f.z = z0
+    f.mesh.position.set(f.x, Math.abs(Math.sin(k * 30)) * 0.2, f.z)
+    f.mesh.rotation.y = f.yaw
   }).then(() => {
-    scene.remove(m.mesh)
-    m.dying = false
+    scene.remove(f.mesh)
+    f.dying = false
   })
 }
 
 // ── Little helpers used by actions ──────────────────────────────────────────
 function face(u, target) {
-  u.facing = Math.atan2(target.pos.x - u.pos.x, target.pos.z - u.pos.z)
-  for (const m of u.models) m.look = Math.atan2(target.pos.x - m.x, target.pos.z - m.z)
+  const v = V(u)
+  v.facing = Math.atan2(target.pos.x - u.pos.x, target.pos.z - u.pos.z)
+  for (const f of v.models) f.look = Math.atan2(target.pos.x - f.x, target.pos.z - f.z)
 }
 const top = (u) => ({ x: u.pos.x, y: u.t.big ? 2.6 : 1.6, z: u.pos.z })
 
 function finishAction() {
-  traceState('act')
+  traceState(G, 'act')
   S.busy = false
-  for (const u of units) updateLabel(u)
-  if (S.sel && !canAct(S.sel)) select(null)
+  for (const u of G.units) updateLabel(u)
+  if (S.sel && !canAct(G, S.sel)) select(null)
   else if (S.sel) select(S.sel)
   refreshUI()
   checkWipe()
 }
 
 function checkWipe() {
-  for (const s of [0, 1]) if (!units.some((u) => u.side === s && alive(u))) S.wiped = s
+  for (const s of [0, 1]) if (!G.units.some((u) => u.side === s && alive(u))) G.turn.wiped = s
 }
 
 // ── Camera focus for AI turns ───────────────────────────────────────────────
 let focusTween = null
 function focus(x, z) {
-  if (!S.follow || S.stage !== 'battle') return
-  if (human(S.active) && ctrl(G, 0) !== ctrl(G, 1)) return
+  if (!S.follow || G.turn.stage !== 'battle') return
+  if (human(G.turn.active) && ctrl(G, 0) !== ctrl(G, 1)) return
   const t0 = controls.target.clone()
   const d = Math.hypot(x - t0.x, z - t0.z)
   if (d < 6) return
@@ -1255,22 +1030,18 @@ function focus(x, z) {
   }, easeInOut)
 }
 
-// ── API handed to the AI ────────────────────────────────────────────────────
-const api = {
-  G,
-  get units() {
-    return units
-  },
-  objectives, nav, scenery, S, alive, enemiesOf, friendsOf, dist, gap, isEngaged, engagedWith, sight, inCover, controlOf,
-  movePlan, validEnd, doMove, doAdvance, canShoot, shootTargets, shotInfo, doShoot, canCharge, chargeTargets, chargePlan,
-  doCharge, focus, leadership,
-}
+// ── What the AI acts through ────────────────────────────────────────────────
+// (it reads the match itself, with the core queries)
+const act = { doMove, doAdvance, doShoot, doCharge, focus }
 
 // ── Turn loop ───────────────────────────────────────────────────────────────
 let phaseResolve = null
 
+// The battle, on G.turn (one match: G is not replaced while it runs, since
+// only the title screen and the end screen build a new table).
 async function battle() {
-  S.stage = 'battle'
+  const T = G.turn
+  T.stage = 'battle'
   select(null)
   zoneMats.forEach((m) => (m.opacity = 0.05))
   // roll off for first turn
@@ -1282,13 +1053,13 @@ async function battle() {
     await tray.row(SIDES[0].short, a, 0, { sum: true })
     await tray.row(SIDES[1].short, b, 0, { sum: true })
   } while (a[0] === b[0])
-  S.first = a[0] > b[0] ? 0 : 1
-  log(S.first, `<b>${SIDES[S.first].name}</b> win the roll-off and take the first turn.`, 'big')
-  for (S.round = 1; S.round <= ROUNDS; S.round++) {
+  T.first = a[0] > b[0] ? 0 : 1
+  log(T.first, `<b>${SIDES[T.first].name}</b> win the roll-off and take the first turn.`, 'big')
+  for (T.round = 1; T.round <= G.setup.rounds; T.round++) {
     for (let t = 0; t < 2; t++) {
-      S.active = (S.first + t) % 2
-      await playerTurn(S.active)
-      if (S.wiped !== undefined) return gameOver()
+      T.active = (T.first + t) % 2
+      await playerTurn(T.active)
+      if (T.wiped >= 0) return gameOver()
     }
     await scoreRound()
   }
@@ -1296,21 +1067,22 @@ async function battle() {
 }
 
 async function playerTurn(side) {
-  for (const u of units) {
+  const T = G.turn
+  for (const u of G.units) {
     u.lost = 0
     if (u.side === side) u.flags = {}
   }
   for (const ph of PHASES) {
-    S.phase = ph.key
+    T.phase = ph.key
     select(null)
     tray.el.classList.remove('show')
     refreshUI()
     await banner(`${SIDES[side].icon} ${SIDES[side].name}`, ph.name, side)
     if (ph.key === 'fight') {
-      if (units.some((u) => alive(u) && isEngaged(u))) await fightPhase(side)
+      if (G.units.some((u) => alive(u) && isEngaged(G, u))) await fightPhase(side)
     } else if (ph.key === 'morale') {
       await moralePhase()
-    } else if (!anyCanAct(side)) {
+    } else if (!anyCanAct(G, side)) {
       await wait(0.2)
     } else if (human(side)) {
       await new Promise((res) => {
@@ -1321,47 +1093,49 @@ async function playerTurn(side) {
       phaseResolve = null
       S.waiting = false
     } else {
-      await aiPhase(api, side, ph.key)
+      await aiPhase(G, side, ph.key, act)
     }
-    traceState(`phase ${side}:${ph.key}`)
+    traceState(G, `phase ${side}:${ph.key}`)
     checkWipe()
-    if (S.wiped !== undefined) return
+    if (T.wiped >= 0) return
   }
   // mesmerism wears off at the end of the victim's own turn
-  for (const u of units) if (u.side === side && u.mesmerized) {
+  for (const u of G.units) if (u.side === side && u.mesmerized) {
     u.mesmerized = false
     updateLabel(u)
   }
 }
 
 async function scoreRound() {
+  const T = G.turn
   const held = [0, 0]
-  for (const o of objectives) {
-    const c = controlOf(o)
+  for (const o of G.objectives) {
+    const c = controlOf(G, o)
     if (c >= 0) {
       held[c]++
       fx.ring(o.x, o.z, OBJECTIVE_RANGE, SIDES[c].color, { life: 1.6, fill: 0.15 })
     }
   }
-  S.vp[0] += held[0]
-  S.vp[1] += held[1]
-  traceState(`round ${S.round}`)
-  log(-1, `End of round ${S.round}: ${SIDES[0].short} hold ${held[0]} objective${held[0] === 1 ? '' : 's'}, ${SIDES[1].short} hold ${held[1]}. Score ${S.vp[0]}–${S.vp[1]}.`, 'big')
+  T.vp[0] += held[0]
+  T.vp[1] += held[1]
+  traceState(G, `round ${T.round}`)
+  log(-1, `End of round ${T.round}: ${SIDES[0].short} hold ${held[0]} objective${held[0] === 1 ? '' : 's'}, ${SIDES[1].short} hold ${held[1]}. Score ${T.vp[0]}–${T.vp[1]}.`, 'big')
   refreshUI()
-  await banner(`End of round ${S.round}`, `VP ${S.vp[0]} – ${S.vp[1]}`)
+  await banner(`End of round ${T.round}`, `VP ${T.vp[0]} – ${T.vp[1]}`)
 }
 
 function gameOver() {
-  for (const p of S.pendingLog.splice(0)) write(...p)
-  traceState('over')
-  S.stage = 'over'
+  const T = G.turn
+  for (const p of G.journal.pendingLog.splice(0)) write(...p)
+  traceState(G, 'over')
+  T.stage = 'over'
   select(null)
   refreshUI()
   let win
-  if (S.wiped !== undefined) win = 1 - S.wiped
-  else win = S.vp[0] > S.vp[1] ? 0 : S.vp[1] > S.vp[0] ? 1 : -1
+  if (T.wiped >= 0) win = 1 - T.wiped
+  else win = T.vp[0] > T.vp[1] ? 0 : T.vp[1] > T.vp[0] ? 1 : -1
   const t = win < 0 ? 'A bloody draw' : `${SIDES[win].name} win!`
-  const why = S.wiped !== undefined ? `${SIDES[S.wiped].name} have been wiped from the table.` : `Final score ${S.vp[0]} – ${S.vp[1]} after ${ROUNDS} rounds.`
+  const why = T.wiped >= 0 ? `${SIDES[T.wiped].name} have been wiped from the table.` : `Final score ${T.vp[0]} – ${T.vp[1]} after ${G.setup.rounds} rounds.`
   const title = $('#overTitle')
   title.textContent = `${win >= 0 ? SIDES[win].icon + ' ' : ''}${t}`
   title.style.color = seatInk(win)
@@ -1378,22 +1152,11 @@ let downAt = null
 function pick(ev) {
   ptr.set((ev.clientX / innerWidth) * 2 - 1, -(ev.clientY / innerHeight) * 2 + 1)
   ray.setFromCamera(ptr, camera)
-  const hits = ray.intersectObjects(units.filter(alive).map((u) => u.hit), false)
+  const hits = ray.intersectObjects(G.units.filter(alive).map((u) => V(u).hit), false)
   const unit = hits.length ? hits[0].object.userData.unit : null
   const g = ray.intersectObject(board, false)[0]
   return { unit, ground: g ? g.point : null }
 }
-
-function canAct(u) {
-  if (!alive(u) || u.side !== S.active) return false
-  switch (S.phase) {
-    case 'move': return !u.flags.moved
-    case 'shoot': return canShoot(u) && shootTargets(u).length > 0
-    case 'charge': return canCharge(u) && chargeTargets(u).length > 0
-  }
-  return false
-}
-const anyCanAct = (side) => units.some((u) => u.side === side && canAct(u))
 
 renderer.domElement.addEventListener('pointerdown', (e) => {
   unlock()
@@ -1419,12 +1182,14 @@ renderer.domElement.addEventListener('pointermove', (e) => {
 })
 
 function myTurn() {
-  return (S.stage === 'battle' && human(S.active) && phaseResolve && !S.busy && !S.auto) || S.stage === 'deploy'
+  const T = G.turn
+  return (T.stage === 'battle' && human(T.active) && phaseResolve && !S.busy && !S.auto) || T.stage === 'deploy'
 }
 
 async function click({ unit, ground }) {
   $('#tooltip').style.display = 'none'
-  if (S.stage === 'deploy') return deployClick(unit, ground)
+  const T = G.turn
+  if (T.stage === 'deploy') return deployClick(unit, ground)
   if (S.chargePick) {
     // the board under the cursor counts even when it's under a model
     if (ground) placeCharge(nearestSpot(S.chargePick, ground.x, ground.z))
@@ -1435,27 +1200,27 @@ async function click({ unit, ground }) {
     return
   }
   const sel = S.sel
-  if (unit && unit.side === S.active) {
-    if (canAct(unit)) {
+  if (unit && unit.side === T.active) {
+    if (canAct(G, unit)) {
       sfx.click()
       select(unit)
     } else showCard(unit)
     return
   }
-  if (S.phase === 'move' && sel && ground) {
-    const i = nearestValid(S.reach, ground.x, ground.z)
+  if (T.phase === 'move' && sel && ground) {
+    const i = nearestValid(G, S.reach, ground.x, ground.z)
     if (i >= 0) {
       clearOverlay()
       await doMove(sel, i, S.reach)
     }
     return
   }
-  if (S.phase === 'shoot' && sel && unit && unit.side !== sel.side) {
-    if (shotInfo(sel, unit).ok) await doShoot(sel, unit)
+  if (T.phase === 'shoot' && sel && unit && unit.side !== sel.side) {
+    if (shotInfo(G, sel, unit).ok) await doShoot(sel, unit)
     return
   }
-  if (S.phase === 'charge' && sel && unit && unit.side !== sel.side) {
-    if (chargeTargets(sel).includes(unit) && chargePlan(sel, unit)) await doCharge(sel, unit)
+  if (T.phase === 'charge' && sel && unit && unit.side !== sel.side) {
+    if (chargeTargets(G, sel).includes(unit) && chargePlan(G, sel, unit)) await doCharge(sel, unit)
     return
   }
   if (unit) showCard(unit)
@@ -1473,33 +1238,36 @@ function deployClick(unit, ground) {
   }
   if (S.sel && ground) {
     const u = S.sel
-    const others = units.filter((o) => o !== u)
-    const p = freeSpot(u, ground.x, ground.z, side, others)
+    const others = G.units.filter((o) => o !== u)
+    const p = freeSpot(G, u, ground.x, ground.z, side, others)
     if (p && Math.hypot(p.x - ground.x, p.z - ground.z) < 2.5) {
-      setUnitPos(u, p.x, p.z)
+      moveUnit(u, p.x, p.z)
       sfx.click()
-      for (const o of units) updateLabel(o)
+      for (const o of G.units) updateLabel(o)
     }
   }
 }
 
 function select(u) {
+  const T = G.turn
   S.sel = u
   S.reach = null
   clearOverlay()
-  if (u && S.stage === 'battle' && S.phase === 'move' && !u.flags.moved) {
-    S.reach = movePlan(u, u.flags.advanced ? u.flags.advRoll : 0)
+  if (u && T.stage === 'battle' && T.phase === 'move' && !u.flags.moved) {
+    S.reach = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
     paintReach(S.reach)
   }
-  if (u && S.phase === 'shoot' && u.t.ranged) showRange(u, u.t.ranged.range)
-  if (u && S.phase === 'charge') showRange(u, CHARGE_RANGE)
+  if (u && T.phase === 'shoot' && u.t.ranged) showRange(u, u.t.ranged.range)
+  if (u && T.phase === 'charge') showRange(u, CHARGE_RANGE)
   showCard(u)
   refreshUI()
 }
 
 // ── Reach overlay, range ring, path preview ─────────────────────────────────
-const ovData = new Uint8Array(nav.nx * nav.nz * 4)
-const ovTex = new THREE.DataTexture(ovData, nav.nx, nav.nz, THREE.RGBAFormat)
+// one texel per nav cell (every match's grid has this size)
+const OV = gridSize(W, H, NAV_CELL)
+const ovData = new Uint8Array(OV.nx * OV.nz * 4)
+const ovTex = new THREE.DataTexture(ovData, OV.nx, OV.nz, THREE.RGBAFormat)
 ovTex.magFilter = THREE.LinearFilter
 ovTex.minFilter = THREE.LinearFilter
 const ovMesh = new THREE.Mesh(new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: ovTex, transparent: true, depthWrite: false, toneMapped: false }))
@@ -1514,12 +1282,14 @@ scene.add(ovMesh)
 function paintReach(plan) {
   const adv = plan.u.flags.advanced
   const { u, res, mode, endForbid } = plan
+  const nav = G.nav
   const ok = new Uint8Array(nav.N)
   for (let i = 0; i < nav.N; i++) if (isFinite(res.dist[i]) && nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) ok[i] = 1
   paintMask(ok, plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255])
 }
 
 function paintMask(ok, col, fill = 80) {
+  const nav = G.nav
   ovData.fill(0)
   for (let i = 0; i < nav.N; i++) {
     if (!ok[i]) continue
@@ -1548,7 +1318,7 @@ function showRange(u, range) {
   rangeRing.position.x = u.pos.x
   rangeRing.position.z = u.pos.z
   rangeRing.scale.setScalar(u.r + range)
-  rangeRing.material.color.set(S.phase === 'charge' ? '#ffb070' : '#ffffff')
+  rangeRing.material.color.set(G.turn.phase === 'charge' ? '#ffb070' : '#ffffff')
   rangeRing.visible = true
 }
 
@@ -1562,8 +1332,8 @@ ghost.visible = false
 scene.add(ghost)
 
 function ghostAt(i, r) {
-  ghost.position.x = nav.x(i)
-  ghost.position.z = nav.z(i)
+  ghost.position.x = G.nav.x(i)
+  ghost.position.z = G.nav.z(i)
   ghost.scale.setScalar(r)
   ghost.visible = true
 }
@@ -1582,6 +1352,7 @@ function hover() {
   S.hover = h.unit
   let text = ''
   const sel = S.sel
+  const T = G.turn, nav = G.nav
   if (S.chargePick && h.ground) {
     const pk = S.chargePick
     const i = nearestSpot(pk, h.ground.x, h.ground.z)
@@ -1595,9 +1366,9 @@ function hover() {
       ghost.visible = true
       text = `End charge here · ${pk.plan.res.dist[i].toFixed(1)}" of ${pk.rolled}"`
     } else text = `✖ out of reach — pick a spot in the orange area`
-  } else if (S.stage === 'battle' && myTurn() && sel) {
-    if (S.phase === 'move' && S.reach && h.ground && !h.unit) {
-      const i = nearestValid(S.reach, h.ground.x, h.ground.z)
+  } else if (T.stage === 'battle' && myTurn() && sel) {
+    if (T.phase === 'move' && S.reach && h.ground && !h.unit) {
+      const i = nearestValid(G, S.reach, h.ground.x, h.ground.z)
       if (i >= 0) {
         const pts = nav.path(S.reach.res, i, sel.r, S.reach.mode === 'fly' ? null : S.reach.forbid)
         pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
@@ -1608,13 +1379,13 @@ function hover() {
         ghost.visible = true
         text = `${S.reach.res.dist[i].toFixed(1)}" of ${S.reach.max}"`
       }
-    } else if (S.phase === 'shoot' && h.unit && h.unit.side !== sel.side) {
-      const info = shotInfo(sel, h.unit)
+    } else if (T.phase === 'shoot' && h.unit && h.unit.side !== sel.side) {
+      const info = shotInfo(G, sel, h.unit)
       text = info.ok ? oddsText(sel, h.unit, info) : `✖ ${info.why}`
-    } else if (S.phase === 'charge' && h.unit && h.unit.side !== sel.side) {
-      if (!chargeTargets(sel).includes(h.unit)) text = `✖ out of charge range (${gap(sel, h.unit).toFixed(1)}")`
+    } else if (T.phase === 'charge' && h.unit && h.unit.side !== sel.side) {
+      if (!chargeTargets(G, sel).includes(h.unit)) text = `✖ out of charge range (${gap(sel, h.unit).toFixed(1)}")`
       else {
-        const p = chargePlan(sel, h.unit)
+        const p = chargePlan(G, sel, h.unit)
         text = p ? `Charge: need ${p.need}" on 2D6 — ${Math.round(p2D6(p.need) * 100)}%` : '✖ no route'
       }
     }
@@ -1711,19 +1482,13 @@ const tray = {
   },
 }
 
-// A replayable fingerprint of the battle: every log line and the logic-RNG
-// position, plus a state snapshot after each action. Two runs with the same
-// seeds must produce identical traces (that is how refactors are checked).
-const trace = []
-function traceState(tag) {
-  const us = units.map((u) => `${u.id}:${u.pos.x.toFixed(3)},${u.pos.z.toFixed(3)},${u.models.map((m) => m.w).join('/')}`).join(' ')
-  trace.push(`${tag} ${us} chunks:${scenery.chunks.filter((c) => c.alive).length} vp:${S.vp.join('-')} rng:${rngState(G.rng)}`)
-}
-
+// The battle log. Every line is traced as it is logged (core/journal.js:
+// the trace is the match's replayable fingerprint), then written, and the
+// destroyed-unit lines held back until now follow it.
 function log(side, html, cls = '') {
-  trace.push(`log ${side} ${html.replace(/<[^>]+>/g, '')} rng:${rngState(G.rng)}`)
+  traceLog(G, side, html)
   write(side, html, cls)
-  for (const p of S.pendingLog.splice(0)) write(...p)
+  for (const p of G.journal.pendingLog.splice(0)) write(...p)
 }
 function write(side, html, cls) {
   const list = $('#logList')
@@ -1763,8 +1528,8 @@ function showCard(u) {
   if (u.flags.shot) status.push('shot')
   if (u.flags.charged) status.push('charged')
   if (u.mesmerized) status.push('🌀 mesmerized')
-  if (alive(u) && isEngaged(u)) status.push('⚔ in combat')
-  if (alive(u) && inCover(u)) status.push('🛡 in cover')
+  if (alive(u) && isEngaged(G, u)) status.push('⚔ in combat')
+  if (alive(u) && inCover(G, u)) status.push('🛡 in cover')
   const models = t.models > 1 ? `${u.alive}/${t.models} models` : `${u.models[0].w}/${t.W} wounds`
   card.innerHTML = `
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${SIDES[u.side].short} · ${t.role}</span></div>
@@ -1776,37 +1541,38 @@ function showCard(u) {
 }
 
 function refreshUI() {
-  $('#vp0').textContent = S.vp[0]
-  $('#vp1').textContent = S.vp[1]
-  $('#round').textContent = S.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(S.round, ROUNDS)} / ${ROUNDS}`
+  const T = G.turn
+  $('#vp0').textContent = T.vp[0]
+  $('#vp1').textContent = T.vp[1]
+  $('#round').textContent = T.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(T.round, G.setup.rounds)} / ${G.setup.rounds}`
   document.querySelectorAll('#phases .ph').forEach((el) => {
-    el.classList.toggle('on', S.stage === 'battle' && el.dataset.k === S.phase)
+    el.classList.toggle('on', T.stage === 'battle' && el.dataset.k === T.phase)
   })
-  $('#sideA').classList.toggle('active', S.stage === 'battle' && S.active === 0)
-  $('#sideB').classList.toggle('active', S.stage === 'battle' && S.active === 1)
-  const mine = S.stage === 'battle' && human(S.active) && !!phaseResolve && !S.auto
+  $('#sideA').classList.toggle('active', T.stage === 'battle' && T.active === 0)
+  $('#sideB').classList.toggle('active', T.stage === 'battle' && T.active === 1)
+  const mine = T.stage === 'battle' && human(T.active) && !!phaseResolve && !S.auto
   const sel = S.sel
   const picking = !!S.chargePick
-  $('#endPhase').style.display = (mine && !picking) || S.stage === 'deploy' ? '' : 'none'
+  $('#endPhase').style.display = (mine && !picking) || T.stage === 'deploy' ? '' : 'none'
   $('#closestSpot').style.display = picking ? '' : 'none'
-  $('#endPhase').textContent = S.stage === 'deploy' ? 'Begin battle ▸' : `End ${PHASES.find((p) => p.key === S.phase).name} ▸`
+  $('#endPhase').textContent = T.stage === 'deploy' ? 'Begin battle ▸' : `End ${PHASES.find((p) => p.key === T.phase).name} ▸`
   $('#endPhase').disabled = S.busy || S.auto
   $('#autoPhase').style.display = mine && !picking ? '' : 'none'
   const adv = $('#advance')
-  adv.style.display = mine && S.phase === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(sel) ? '' : 'none'
+  adv.style.display = mine && T.phase === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(G, sel) ? '' : 'none'
   adv.textContent = `Advance (+D6") — no ${sel?.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`
   if (sel?.t.chargeAfterAdvance) adv.textContent = 'Advance (+D6") — can still charge'
   // hint line
   let hint = ''
   if (picking) hint = `Charge! Rolled ${S.chargePick.rolled}" — click the orange area to place ${S.chargePick.u.t.short}, or take the shortest move.`
-  else if (S.stage === 'deploy') hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
-  else if (S.stage === 'battle' && !human(S.active)) hint = `${SIDES[S.active].name} (AI) are taking their turn…`
+  else if (T.stage === 'deploy') hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
+  else if (T.stage === 'battle' && !human(T.active)) hint = `${SIDES[T.active].name} (AI) are taking their turn…`
   else if (mine) {
     hint = {
-      move: sel ? (isEngaged(sel) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
+      move: sel ? (isEngaged(G, sel) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
       shoot: sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.',
       charge: sel ? 'Click an enemy within 12" to declare a charge, then roll 2D6.' : 'Charge — pick a unit to charge with.',
-    }[S.phase] || ''
+    }[T.phase] || ''
   }
   $('#hint').textContent = hint
   $('#hint').style.display = hint ? '' : 'none'
@@ -1815,24 +1581,25 @@ function refreshUI() {
 
 function refreshRings() {
   const mine = myTurn()
-  for (const u of units) {
+  const T = G.turn
+  for (const u of G.units) {
     if (!alive(u)) continue
-    const m = u.ring.material
+    const m = V(u).ring.material
     let op = 0, col = '#ffffff'
     if (u === S.sel) {
       op = 1
       col = '#ffe680'
-    } else if (S.stage === 'deploy' && u.side === S.deploySide) {
+    } else if (T.stage === 'deploy' && u.side === S.deploySide) {
       op = 0.5
     } else if (S.chargePick && u === S.chargePick.target) {
       op = 0.95
       col = '#ffa040'
-    } else if (mine && S.stage === 'battle' && canAct(u)) {
+    } else if (mine && T.stage === 'battle' && canAct(G, u)) {
       op = 0.75
-    } else if (mine && S.sel && S.phase === 'shoot' && u.side !== S.sel.side && shotInfo(S.sel, u).ok) {
+    } else if (mine && S.sel && T.phase === 'shoot' && u.side !== S.sel.side && shotInfo(G, S.sel, u).ok) {
       op = 0.95
       col = '#ff5a4a'
-    } else if (mine && S.sel && S.phase === 'charge' && u.side !== S.sel.side && chargeTargets(S.sel).includes(u)) {
+    } else if (mine && S.sel && T.phase === 'charge' && u.side !== S.sel.side && chargeTargets(G, S.sel).includes(u)) {
       op = 0.95
       col = '#ffa040'
     } else if (u === S.hover) {
@@ -1850,14 +1617,14 @@ async function banner(a, b, side = -1) {
   el.classList.remove('show')
   void el.offsetWidth
   el.classList.add('show')
-  await wait(human(S.active) || S.stage !== 'battle' ? 0.9 : 0.6)
+  await wait(human(G.turn.active) || G.turn.stage !== 'battle' ? 0.9 : 0.6)
 }
 
 // ── Buttons ─────────────────────────────────────────────────────────────────
 $('#endPhase').onclick = () => {
   unlock()
   sfx.click()
-  if (S.stage === 'deploy') return S.deployDone?.()
+  if (G.turn.stage === 'deploy') return S.deployDone?.()
   if (S.busy || S.auto || !phaseResolve) return
   select(null)
   phaseResolve()
@@ -1876,7 +1643,7 @@ $('#autoPhase').onclick = async () => {
   S.busy = true
   refreshUI()
   try {
-    await aiPhase(api, S.active, S.phase)
+    await aiPhase(G, G.turn.active, G.turn.phase, act)
   } finally {
     S.auto = false
     S.busy = false
@@ -1927,7 +1694,6 @@ $('#again').onclick = () => {
   $('#over').classList.add('hidden')
   $('#title').classList.remove('hidden')
   document.body.classList.remove('playing')
-  S.stage = 'title'
   S.titleSpin = true
   S.titleAngle -= clock.time * 0.035
   S.viewShift = 1
@@ -1958,27 +1724,27 @@ function panKeys(dt) {
 }
 
 // ── Setup ───────────────────────────────────────────────────────────────────
+// A new table for the title screen: a new match on the board seed, its
+// armies deployed (who plays each seat and the dice come with start()).
 function setupTable() {
+  // the new match first: if building it throws, the last table stays whole
+  const setup = {
+    board: S.seed, dice: TABLE_DICE, terrain: 'classic', rounds: ROUNDS, diceMode: 'shared',
+    seats: RACE_PICK.map((race, i) => ({ race, ctrl: S.control[i] })),
+  }
+  const next = newState(setup, { out: [], onTrace })
   clearUnits()
-  S.vp = [0, 0]
-  S.round = 1
-  S.wiped = undefined
   S.sel = null
   $('#logList').innerHTML = ''
   $('#tray').classList.remove('show')
-  scenery.generate(S.seed, objectives, BOARD.deploy)
-  scenery.dirty = true
-  refreshNav()
+  G = next
+  drainTerrain()
   scatterTufts()
-  for (const side of [0, 1]) for (const key of raceOf(G, side).army) units.push(makeUnit(key, side))
-  deployArmies()
-  for (const u of units) updateLabel(u)
+  for (const u of G.units) makeView(u)
+  for (const u of G.units) updateLabel(u)
   // nothing from the last game carries over: banners, scorch marks, turn state
-  for (const o of objectives) paintObjective(o, -1)
+  for (const o of objViews) paintObjective(o, -1)
   fx.clearDecals()
-  S.pendingLog = []
-  S.phase = 'move'
-  S.active = 0
   S.busy = false
   S.waiting = false
   S.chargePick = null
@@ -1986,14 +1752,21 @@ function setupTable() {
   refreshUI()
 }
 
+// who plays each seat, by the title screen's mode buttons
+const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
+
 async function start(mode) {
+  // an unknown mode changes nothing (S included), so the table stays playable
+  if (!Object.hasOwn(MODES, mode)) throw new Error(`no mode "${mode}" (there are ${Object.keys(MODES).join(', ')})`)
+  const who = MODES[mode]
   // a fresh logic-dice stream per battle; ?dice=N replays one exactly
-  S.dice = Number(params.get('dice')) || ((Math.random() * 1e9) | 0)
-  G.rng = createRng(S.dice)
-  trace.length = 0
-  S.control = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }[mode]
-  // the races were set for the table already on the title screen (setupTable
-  // built their armies); only who plays each seat changes with the mode
+  const dice = Number(params.get('dice')) || ((Math.random() * 1e9) | 0)
+  // the battle is fought on the table the title screen shows (setupTable
+  // built it, armies and all); it gets its dice and who plays each seat
+  startMatch(G, { dice, ctrl: who })
+  S.dice = dice
+  S.control = [...who]
+  traceListener?.begin(G)
   seatPlayers()
   $('#title').classList.add('hidden')
   document.body.classList.add('playing')
@@ -2009,7 +1782,7 @@ async function start(mode) {
   // humans get to adjust their deployment first
   for (const side of [0, 1]) {
     if (!human(side)) continue
-    S.stage = 'deploy'
+    G.turn.stage = 'deploy'
     S.deploySide = side
     zoneMats[side].opacity = 0.2
     log(side, `<b>${SIDES[side].name}</b>: deploy your army.`)
@@ -2029,19 +1802,23 @@ S.titleSpin = true
 S.titleAngle = -1.02
 S.viewShift = 1
 
+// Each figure walks toward its model's slot (the rules' place for it), turns,
+// lunges and idles; dying and fleeing figures play out their own tweens.
 function animateUnits(dt, time) {
-  for (const u of units) {
-    for (const m of u.models) {
-      if (!m.alive && !m.dying) continue
+  for (const u of G.units) {
+    const v = V(u)
+    for (const [i, model] of u.models.entries()) {
+      const m = v.models[i]
+      if (!model.alive && !m.dying) continue
       const a = m.mesh.userData.anim
-      if (m.alive) {
-        const tx = u.pos.x + m.ox, tz = u.pos.z + m.oz
-        const k = 1 - Math.exp(-dt * (u.moving ? 16 : 7))
+      if (model.alive) {
+        const tx = u.pos.x + model.ox, tz = u.pos.z + model.oz
+        const k = 1 - Math.exp(-dt * (v.moving ? 16 : 7))
         const px = m.x, pz = m.z
         m.x += (tx - m.x) * k
         m.z += (tz - m.z) * k
         const sp = Math.hypot(m.x - px, m.z - pz) / Math.max(dt, 1e-4)
-        const want = sp > 0.6 ? Math.atan2(m.x - px, m.z - pz) : m.look ?? u.facing
+        const want = sp > 0.6 ? Math.atan2(m.x - px, m.z - pz) : m.look ?? v.facing
         m.yaw += wrapAngle(want - m.yaw) * (1 - Math.exp(-dt * 8))
         m.moving = sp > 0.6
         let lx = 0, lz = 0
@@ -2054,7 +1831,7 @@ function animateUnits(dt, time) {
         m.mesh.position.set(m.x + lx, m.lift || 0, m.z + lz)
         m.mesh.rotation.y = m.yaw
       }
-      if (!a || !m.alive) continue
+      if (!a || !model.alive) continue
       const t = time + m.mesh.userData.phase
       const fig = m.mesh.userData.fig
       if (a.kind === 'squirrel') {
@@ -2078,9 +1855,9 @@ function animateUnits(dt, time) {
     if (alive(u) && !FAST) {
       tmpV.set(u.pos.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), u.pos.z).project(camera)
       const on = tmpV.z < 1
-      u.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`
-      u.label.style.visibility = on && S.stage !== 'title' ? 'visible' : 'hidden'
-      u.label.classList.toggle('sel', u === S.sel)
+      v.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`
+      v.label.style.visibility = on && G.turn.stage !== 'title' ? 'visible' : 'hidden'
+      v.label.classList.toggle('sel', u === S.sel)
     }
   }
 }
@@ -2093,8 +1870,9 @@ function paintObjective(o, c) {
 }
 
 function animateObjectives(dt, time) {
-  for (const o of objectives) {
-    const c = S.stage === 'battle' || S.stage === 'over' ? controlOf(o) : -1
+  const stage = G.turn.stage
+  for (const o of objViews) {
+    const c = stage === 'battle' || stage === 'over' ? controlOf(G, G.objectives[o.i]) : -1
     if (c !== o.owner) paintObjective(o, c)
     o.gem.rotation.y = time * 1.2
     o.gem.position.y = 0.45 + Math.sin(time * 2 + o.i) * 0.05
@@ -2182,13 +1960,66 @@ if (params.has('debug')) {
   // those. Outside __ts it wraps #logList's prepend (the battle log) and, in
   // Chromium, presses #title's [data-mode] buttons. When internals move,
   // later steps keep this surface working here, inside this block, never by
-  // editing sim/oracle: the PIN and the working tree share a driver (from
-  // now on the members map in place, as rngState already does over G.rng).
-  window.__ts = {
-    S, clock, scenery, nav, camera, controls, renderer, validEnd, setUnitPos, trace,
-    get units() {
-      return units
+  // editing sim/oracle: the PIN and the working tree share a driver.
+  //
+  // Since R4 the state is the match's, G (a new one per table), so the
+  // members map onto whichever G is current: S's turn fields read G.turn
+  // (wiped is undefined until a side is wiped, -1 in G.turn), units, nav and
+  // scenery.chunks are getters, and the queries take the current G
+  // (q.canAct: (u) => canAct(G, u)). The trace is one array for the page's
+  // lifetime, fed by each match's onTrace as it writes a line, and emptied
+  // when start() begins a battle, at the point it always was.
+  // S lists and copies as a plain object would ({...S}, JSON), turn fields
+  // included, though structuredClone refuses it, as it does any Proxy.
+  // Not promised, for sim/terrain-shots.mjs only: clock, camera, renderer,
+  // S.titleSpin, scenery.scene and scenery.blast (a blast played as
+  // blastLands plays one). Nor G, for the console and for
+  // sim/rematch-check.mjs (G.out, which it requires empty after every frame;
+  // it also presses #again, #reroll and #seed's onchange, and reads S.seed).
+  const TURN = new Set(['stage', 'round', 'active', 'first', 'phase', 'vp', 'wiped'])
+  const turn = (k) => (k === 'wiped' ? (G.turn.wiped < 0 ? undefined : G.turn.wiped) : G.turn[k])
+  const legacyS = new Proxy(S, {
+    get: (s, k) => (TURN.has(k) ? turn(k) : s[k]),
+    has: (s, k) => TURN.has(k) || k in s,
+    set: (s, k, v) => {
+      if (TURN.has(k)) throw new Error(`__ts.S.${k} is the match's G.turn.${k}: it can't be set through S`)
+      s[k] = v
+      return true
     },
+    ownKeys: (s) => [...new Set([...Reflect.ownKeys(s), ...TURN])],
+    getOwnPropertyDescriptor: (s, k) =>
+      TURN.has(k) ? { value: turn(k), enumerable: true, configurable: true, writable: false } : Reflect.getOwnPropertyDescriptor(s, k),
+  })
+  const trace = []
+  traceListener = {
+    begin: () => (trace.length = 0),
+    line: (line) => trace.push(line),
+  }
+  window.__ts = {
+    S: legacyS, clock, camera, controls, renderer, trace,
+    get G() {
+      return G
+    },
+    get units() {
+      return G.units
+    },
+    get nav() {
+      return G.nav
+    },
+    scenery: {
+      get chunks() {
+        return G.terrain.chunks
+      },
+      scene,
+      blast(x, z, r, dmg, opts) {
+        const broke = G.terrain.blast(x, z, r, dmg, opts, G.out)
+        drainTerrain()
+        refreshNav(G)
+        return broke
+      },
+    },
+    validEnd: (plan, i) => validEnd(G, plan, i),
+    setUnitPos: moveUnit,
     get phaseResolve() {
       return phaseResolve
     },
@@ -2199,7 +2030,18 @@ if (params.has('debug')) {
     endPhase: () => $('#endPhase').onclick(),
     autoPhase: () => $('#autoPhase').onclick(),
     // read-only rules queries, for choosing legal input (only what sim/ uses)
-    q: { alive, isEngaged, canAct, movePlan, freeSpot, shootTargets, shotInfo, chargeTargets, chargePlan, rngState: () => rngState(G.rng) },
+    q: {
+      alive,
+      isEngaged: (u) => isEngaged(G, u),
+      canAct: (u) => canAct(G, u),
+      movePlan: (u, extra) => movePlan(G, u, extra),
+      freeSpot: (u, x, z, side, others) => freeSpot(G, u, x, z, side, others),
+      shootTargets: (u) => shootTargets(G, u),
+      shotInfo: (u, tg) => shotInfo(G, u, tg),
+      chargeTargets: (u) => chargeTargets(G, u),
+      chargePlan: (u, tg) => chargePlan(G, u, tg),
+      rngState: () => rngState(G.rng),
+    },
     screen(x, y, z) {
       const v = new THREE.Vector3(x, y, z).project(camera)
       return [(v.x * 0.5 + 0.5) * innerWidth, (-v.y * 0.5 + 0.5) * innerHeight]

@@ -1,7 +1,11 @@
-import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from './rules.js'
+import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from './core/rules.js'
 import { wait } from './util.js'
 import { draw } from './core/rng.js'
 import { hypot } from './core/dmath.js'
+import {
+  alive, enemiesOf, friendsOf, gap, isEngaged, engagedWith, sight, controlOf,
+  movePlan, validEnd, canShoot, shootTargets, canCharge, chargeTargets, chargePlan,
+} from './core/queries.js'
 
 // ---------------------------------------------------------------------------
 // The opponent. No search, just a general's instincts written as scores:
@@ -9,16 +13,20 @@ import { hypot } from './core/dmath.js'
 // move within a likely charge, troops want objectives, artillery wants to sit
 // still, heroes want friends around them. It plays through exactly the same
 // actions a human does, so every roll is animated and logged the same way.
+//
+// It reads the match (G) with the core queries, and acts through `act`,
+// main.js's own actions: { doMove, doAdvance, doShoot, doCharge, focus }.
+// AI code is rules code: its tie-breaks draw from the match's dice.
 // ---------------------------------------------------------------------------
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last.
 const ORDER = ['melee', 'raider', 'line', 'shooter', 'hero', 'artillery']
 
-export async function aiPhase(api, side, phase) {
-  if (phase === 'move') await aiMove(api, side)
-  else if (phase === 'shoot') await aiShoot(api, side)
-  else if (phase === 'charge') await aiCharge(api, side)
+export async function aiPhase(G, side, phase, act) {
+  if (phase === 'move') await aiMove(G, side, act)
+  else if (phase === 'shoot') await aiShoot(G, side, act)
+  else if (phase === 'charge') await aiCharge(G, side, act)
 }
 
 const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -29,13 +37,13 @@ function meleeValue(a, d) {
 }
 
 // Expected points of `e` removed by `u` shooting from `from`.
-function shotValue(api, u, e, from, moved) {
+function shotValue(G, u, e, from, moved) {
   const w = u.t.ranged
   if (!w) return 0
   const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
   if (g > w.range) return 0
-  if (api.isEngaged(e) && !w.spell) return 0
-  const s = api.sight(u, e, from)
+  if (isEngaged(G, e) && !w.spell) return 0
+  const s = sight(G, u, e, from)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
   if (w.mesmerize) {
     if (!s.visible) return 0
@@ -53,43 +61,43 @@ function shotValue(api, u, e, from, moved) {
 }
 
 // ── Movement ────────────────────────────────────────────────────────────────
-async function aiMove(api, side) {
-  const mine = api.units.filter((u) => u.side === side && api.alive(u))
+async function aiMove(G, side, act) {
+  const mine = G.units.filter((u) => u.side === side && alive(u))
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   const claimed = new Set()
   for (const u of mine) {
-    if (!api.alive(u) || u.flags.moved) continue
+    if (!alive(u) || u.flags.moved) continue
     const role = u.t.ai
-    if (api.isEngaged(u)) {
+    if (isEngaged(G, u)) {
       // brawlers stay stuck in; anyone else gets out if the fight is going badly
-      const foes = api.engagedWith(u)
+      const foes = engagedWith(G, u)
       const theirs = foes.reduce((s, e) => s + meleeValue(e, u), 0)
       const ours = foes.reduce((s, e) => Math.max(s, meleeValue(u, e)), 0)
       if (role === 'melee' || role === 'line' || ours >= theirs * 0.8) continue
-      const plan = api.movePlan(u)
+      const plan = movePlan(G, u)
       let best = -1, bs = -Infinity
-      for (let i = 0; i < api.nav.N; i += 2) {
-        if (!api.validEnd(plan, i)) continue
-        const x = api.nav.x(i), z = api.nav.z(i)
-        const s = Math.min(...api.enemiesOf(u).map((e) => hypot(e.pos.x - x, e.pos.z - z) - e.r))
+      for (let i = 0; i < G.nav.N; i += 2) {
+        if (!validEnd(G, plan, i)) continue
+        const x = G.nav.x(i), z = G.nav.z(i)
+        const s = Math.min(...enemiesOf(G, u).map((e) => hypot(e.pos.x - x, e.pos.z - z) - e.r))
         if (s > bs) {
           bs = s
           best = i
         }
       }
       if (best >= 0) {
-        api.focus(u.pos.x, u.pos.z)
-        await api.doMove(u, best, plan)
+        act.focus(u.pos.x, u.pos.z)
+        await act.doMove(u, best, plan)
       }
       continue
     }
     // a unit its player already advanced (before pressing Auto) moves on that
     // roll; it never advances twice
-    let plan = api.movePlan(u, u.flags.advanced ? u.flags.advRoll : 0)
-    let pick = bestSpot(api, u, plan, claimed)
+    let plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+    let pick = bestSpot(G, u, plan, claimed)
     // Advance when the extra inches are worth more than what it forfeits:
     // brawlers still far from a charge, shooters with nothing to shoot yet.
-    const nearest = Math.min(...api.enemiesOf(u).map((e) => api.gap(u, e)))
+    const nearest = Math.min(...enemiesOf(G, u).map((e) => gap(u, e)))
     let advance = false
     if (role === 'melee' || role === 'line' || role === 'raider') {
       advance = nearest > u.t.M + 8 && !(role === 'line' && pick.onObjective) && !(role === 'raider' && pick.canShoot)
@@ -97,16 +105,16 @@ async function aiMove(api, side) {
       advance = !pick.canShoot && !pick.onObjective && (u.t.ranged.assault || nearest > u.t.ranged.range + u.t.M + 3)
     }
     if (advance && !u.flags.advanced) {
-      api.focus(u.pos.x, u.pos.z)
-      const r = await api.doAdvance(u)
-      plan = api.movePlan(u, r)
-      const adv = bestSpot(api, u, plan, claimed)
+      act.focus(u.pos.x, u.pos.z)
+      const r = await act.doAdvance(u)
+      plan = movePlan(G, u, r)
+      const adv = bestSpot(G, u, plan, claimed)
       if (adv.cell >= 0) pick = adv
     }
     if (pick.obj >= 0) claimed.add(pick.obj)
     if (pick.cell >= 0 && pick.dist > 0.4) {
-      api.focus(u.pos.x, u.pos.z)
-      await api.doMove(u, pick.cell, plan)
+      act.focus(u.pos.x, u.pos.z)
+      await act.doMove(u, pick.cell, plan)
     } else if (u.flags.advanced) {
       u.flags.moved = true
     }
@@ -114,31 +122,31 @@ async function aiMove(api, side) {
   }
 }
 
-function bestSpot(api, u, plan, claimed) {
-  const { nav } = api
-  const enemies = api.enemiesOf(u)
-  const friends = api.friendsOf(u)
-  const owners = api.objectives.map((o) => api.controlOf(o))
+function bestSpot(G, u, plan, claimed) {
+  const { nav } = G
+  const enemies = enemiesOf(G, u)
+  const friends = friendsOf(G, u)
+  const owners = G.objectives.map((o) => controlOf(G, o))
   const role = u.t.ai
   const ctx = { enemies, friends, owners, claimed, role }
   // stay put is always an option
-  let best = { cell: -1, score: score(api, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
+  let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
   const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
   const res = plan.res
   for (let iz = 0; iz < nav.nz; iz += step) {
     for (let ix = (iz / step) % 2 ? 1 : 0; ix < nav.nx; ix += step) {
       const i = iz * nav.nx + ix
       if (!isFinite(res.dist[i])) continue
-      if (!api.validEnd(plan, i)) continue
+      if (!validEnd(G, plan, i)) continue
       const x = nav.x(i), z = nav.z(i)
-      const sc = score(api, u, x, z, ctx, true) + draw(api.G.rng) * 0.05
+      const sc = score(G, u, x, z, ctx, true) + draw(G.rng) * 0.05
       if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
     }
   }
   return best
 }
 
-function score(api, u, x, z, ctx, moving) {
+function score(G, u, x, z, ctx, moving) {
   const { enemies, friends, owners, claimed, role } = ctx
   const t = u.t
   const from = { x, z }
@@ -149,7 +157,7 @@ function score(api, u, x, z, ctx, moving) {
   if (t.OC > 0) {
     const pull = role === 'line' || role === 'shooter' ? 5 : role === 'melee' ? 2 : 2.5
     let bestObj = 0
-    for (const o of api.objectives) {
+    for (const o of G.objectives) {
       const d = hypot(o.x - x, o.z - z)
       const want = owners[o.i] === u.side ? 0.45 : 1
       const taken = claimed.has(o.i) ? 0.25 : 1
@@ -171,7 +179,7 @@ function score(api, u, x, z, ctx, moving) {
   if (t.ranged && role !== 'melee') {
     let best = 0
     for (const e of enemies) {
-      const v = shotValue(api, u, e, from, moved)
+      const v = shotValue(G, u, e, from, moved)
       if (v > best) best = v
     }
     if (best > 0) canShoot = true
@@ -205,8 +213,8 @@ function score(api, u, x, z, ctx, moving) {
     if (e.t.brawler && g < e.t.M + 7) s -= meleeValue(e, u) * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
   }
   // cover and staying put
-  const ci = api.nav.index(x, z)
-  if (ci >= 0 && api.nav.cover[ci]) s += fragile ? 1.5 : 0.5
+  const ci = G.nav.index(x, z)
+  if (ci >= 0 && G.nav.cover[ci]) s += fragile ? 1.5 : 0.5
   if (role === 'artillery' && moved) s -= 2.5
   // heroes like company
   if (role === 'hero') {
@@ -226,20 +234,20 @@ function score(api, u, x, z, ctx, moving) {
 }
 
 // ── Shooting ────────────────────────────────────────────────────────────────
-async function aiShoot(api, side) {
-  const mine = api.units.filter((u) => u.side === side && api.canShoot(u))
+async function aiShoot(G, side, act) {
+  const mine = G.units.filter((u) => u.side === side && canShoot(G, u))
   mine.sort((a, b) => ORDER.indexOf(b.t.ai) - ORDER.indexOf(a.t.ai))
   for (const u of mine) {
-    if (!api.canShoot(u)) continue
-    const targets = api.shootTargets(u)
+    if (!canShoot(G, u)) continue
+    const targets = shootTargets(G, u)
     let best = null, bv = 0.4
     for (const e of targets) {
-      let v = shotValue(api, u, e, u.pos, u.flags.moved)
+      let v = shotValue(G, u, e, u.pos, u.flags.moved)
       const w = u.t.ranged
       if (w.blast) {
         // count the cost of a scatter landing on our own lads
-        for (const f of api.units) {
-          if (f.side !== u.side || !api.alive(f)) continue
+        for (const f of G.units) {
+          if (f.side !== u.side || !alive(f)) continue
           const g = hypot(f.pos.x - e.pos.x, f.pos.z - e.pos.z) - f.r
           if (g < w.blast + 2.5) v -= worth(f) * 0.25 * (1 - Math.max(0, g) / (w.blast + 2.5))
         }
@@ -251,23 +259,23 @@ async function aiShoot(api, side) {
       }
     }
     if (best) {
-      api.focus((u.pos.x + best.pos.x) / 2, (u.pos.z + best.pos.z) / 2)
-      await api.doShoot(u, best)
+      act.focus((u.pos.x + best.pos.x) / 2, (u.pos.z + best.pos.z) / 2)
+      await act.doShoot(u, best)
       await wait(0.1)
     }
   }
 }
 
 // ── Charges ─────────────────────────────────────────────────────────────────
-async function aiCharge(api, side) {
-  const mine = api.units.filter((u) => u.side === side && api.canCharge(u))
+async function aiCharge(G, side, act) {
+  const mine = G.units.filter((u) => u.side === side && canCharge(G, u))
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   for (const u of mine) {
-    if (!api.canCharge(u)) continue
+    if (!canCharge(G, u)) continue
     const role = u.t.ai
     let best = null, bs = 0
-    for (const e of api.chargeTargets(u)) {
-      const plan = api.chargePlan(u, e)
+    for (const e of chargeTargets(G, u)) {
+      const plan = chargePlan(G, u, e)
       if (!plan) continue
       const p = p2D6(plan.need)
       const gain = meleeValue(u, e) + (e.t.role === 'Artillery' ? 12 : 0) + (e.alive <= 2 ? 6 : 0)
@@ -282,8 +290,8 @@ async function aiCharge(api, side) {
       }
     }
     if (best) {
-      api.focus((u.pos.x + best.pos.x) / 2, (u.pos.z + best.pos.z) / 2)
-      await api.doCharge(u, best, { auto: true })
+      act.focus((u.pos.x + best.pos.x) / 2, (u.pos.z + best.pos.z) / 2)
+      await act.doCharge(u, best, { auto: true })
       await wait(0.1)
     }
   }

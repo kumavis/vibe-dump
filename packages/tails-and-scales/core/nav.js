@@ -1,4 +1,4 @@
-import { hypot } from './core/dmath.js'
+import { hypot } from './dmath.js'
 
 // ---------------------------------------------------------------------------
 // Movement on the tabletop. The board is rasterised into half-inch cells; each
@@ -13,13 +13,18 @@ import { hypot } from './core/dmath.js'
 
 const SQRT2 = Math.SQRT2
 
+// The grid's size in cells for a W×H table (the overlay's texture is sized
+// by it before any match exists)
+export const gridSize = (W, H, cell) => ({ nx: Math.round(W / cell), nz: Math.round(H / cell) })
+
 export class NavGrid {
   constructor(W, H, cell = 0.5) {
     this.W = W
     this.H = H
     this.cell = cell
-    this.nx = Math.round(W / cell)
-    this.nz = Math.round(H / cell)
+    const { nx, nz } = gridSize(W, H, cell)
+    this.nx = nx
+    this.nz = nz
     const N = (this.N = this.nx * this.nz)
     this.hard = new Uint8Array(N) // impassable, indestructible
     this.soft = new Uint8Array(N) // impassable unless you are a Brute

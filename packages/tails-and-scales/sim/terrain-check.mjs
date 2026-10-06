@@ -1,9 +1,12 @@
-// P-terrain (DESIGN §4 R3): the split terrain builds the battlefield the old
-// one did. For every board seed it builds the table twice, with the R0 code's
-// scenery.js (sim/lib.mjs's LEGACY_REF, a fixed commit; it imports three.js
-// for real and gets a no-op fx that records its calls) and with the working
-// tree's (core/terrain + view/terrain.js behind the Scenery facade), and
-// requires, exactly (Object.is on every number, no tolerance):
+// P-terrain (DESIGN §4 R3, R4): the split terrain builds the battlefield the
+// old one did. For every board seed it builds the table twice, with the R0
+// code's scenery.js (sim/lib.mjs's LEGACY_REF, a fixed commit; it imports
+// three.js for real and gets a no-op fx that records its calls) and with the
+// working tree's Terrain (core/terrain/terrain.js) and TerrainView
+// (view/terrain.js), driven as main.js drives them: each terrain call
+// reports into an out array, played into the view straight after the call
+// (main.js drainTerrain). It requires, exactly (Object.is on every number,
+// no tolerance):
 //
 //  1. the layout stream: every mulberry32 the generation makes, its seed and
 //     its draw count, in order (sim/terrain-hooks.mjs counts them);
@@ -36,11 +39,11 @@
 // arguments or a run that checked nothing (no board, or --ops above 0 and
 // not one destruction op run).
 //
-// It drives the working tree through the Scenery facade (scenery.js: `new
-// Scenery`, its generate, blast, hurt and los, and `view.object(id)` for a
-// chunk's mesh), which goes at R4. R4 ports this check to Terrain and
-// TerrainView directly: P-terrain is a standing check (DESIGN §1.1), not an
-// R3-only one.
+// Until R4 it drove the working tree through R3's Scenery facade; R4 removed
+// the facade, and the check now drives Terrain and TerrainView directly
+// (Now, below). It is a standing check (DESIGN §1.1), not an R3-only one.
+// The objectives the boards keep clear of are core/match.js's OBJ_POS, held
+// to the R0 code's main.js.
 import { register } from 'node:module'
 import { parseArgs } from 'node:util'
 import { readFileSync } from 'node:fs'
@@ -79,19 +82,68 @@ const { legacyDir, LEGACY_REF } = await import('./lib.mjs')
 const { PKG } = await import('./oracle/pin.mjs')
 const imp = (dir, f) => import(pathToFileURL(join(dir, f)).href)
 const LEG = legacyDir()
-const legacy = { ...(await imp(LEG, 'scenery.js')), ...(await imp(LEG, 'util.js')) }
-const mine = { ...(await imp(PKG, 'scenery.js')), ...(await imp(PKG, 'util.js')) }
 const { STYLES } = await imp(PKG, 'core/terrain/recipes.js')
 const { BOARD } = await imp(PKG, 'core/rules.js')
 const { hypot } = await imp(PKG, 'core/dmath.js')
 const { distToBox } = await imp(PKG, 'core/terrain/geom.js')
-
-// the objectives generate keeps clear of, as both main.js files have them
-const OBJ_RE = /const OBJ_POS = (\[[^\]]*\])/
-const objText = (dir) => readFileSync(join(dir, 'main.js'), 'utf8').match(OBJ_RE)?.[1]
-if (!objText(LEG) || objText(LEG) !== objText(PKG)) throw new Error('main.js OBJ_POS: not found, or the R0 code and the working tree differ')
-const OBJ_POS = new Function(`return ${objText(PKG)}`)()
+const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
+const { TerrainView } = await imp(PKG, 'view/terrain.js')
+const { OBJ_POS } = await imp(PKG, 'core/match.js')
 const { W, H } = BOARD
+
+// The working tree's battlefield, driven as main.js drives it: the rules'
+// Terrain reports each call's events into `out`, and they are played into
+// the TerrainView straight after the call, in order (main.js drainTerrain).
+// It offers what the R0 code's Scenery does, so one script runs both.
+class Now {
+  constructor(scene, fx) {
+    this.view = new TerrainView(scene, fx)
+    this.terrain = new Terrain(W, H)
+    this.out = []
+  }
+  drain() {
+    this.view.play(this.out.splice(0))
+  }
+  get chunks() {
+    return this.terrain.chunks
+  }
+  get features() {
+    return this.terrain.features
+  }
+  get dirty() {
+    return this.terrain.dirty
+  }
+  get group() {
+    return this.view.group
+  }
+  generate(seed, objectives, deployDepth) {
+    this.terrain.generate(seed, objectives, deployDepth, 'classic', this.out)
+    this.drain()
+  }
+  los(a, b, ignoreR) {
+    return this.terrain.los(a, b, ignoreR)
+  }
+  blast(x, z, r, dmg, opts) {
+    const broke = this.terrain.blast(x, z, r, dmg, opts, this.out)
+    this.drain()
+    return broke
+  }
+  hurt(c, amount, from) {
+    const broke = this.terrain.hurt(c, amount, from, this.out)
+    this.drain()
+    return broke
+  }
+}
+const legacy = { ...(await imp(LEG, 'scenery.js')), ...(await imp(LEG, 'util.js')) }
+legacy.make = (scene, fx) => new legacy.Scenery(scene, fx, W, H)
+const mine = { ...(await imp(PKG, 'util.js')), make: (scene, fx) => new Now(scene, fx) }
+
+// the objectives generate keeps clear of: the R0 code's, in its main.js
+const OBJ_RE = /const OBJ_POS = (\[[^\]]*\])/
+const objText = readFileSync(join(LEG, 'main.js'), 'utf8').match(OBJ_RE)?.[1]
+if (!objText || JSON.stringify(new Function(`return ${objText}`)()) !== JSON.stringify(OBJ_POS)) {
+  throw new Error("OBJ_POS: not found in the R0 code's main.js, or it differs from core/match.js's")
+}
 
 // --seeds N or A-B (whole numbers, A <= B); --ops and --max whole numbers
 function usage(why) {
@@ -238,7 +290,7 @@ function side(code, seed) {
   const fx = recorder()
   const scene = new THREE.Scene()
   Math.random = mulberry(seed)
-  const S = new code.Scenery(scene, fx.proxy, W, H)
+  const S = code.make(scene, fx.proxy)
   return { S, fx, code }
 }
 async function settle(code) {
