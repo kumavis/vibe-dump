@@ -1,9 +1,12 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
-  BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, AURA, SIDES, PHASES, TYPES, ARMIES,
+  BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, AURA, PHASES,
   roll, passes, woundNeed, saveNeed, hitNeed, attackCount, expected, p2D6, pD6, d6,
 } from './rules.js'
+import { sidesFor, isMirror, CLASSIC } from './data/compat.js'
+import { RACES } from './data/schema.js'
+import { EDGES, makeSeats, raceOf, edgeOf, ctrl } from './core/match.js'
 import { NavGrid, pathLength } from './nav.js'
 import { Scenery } from './scenery.js'
 import { FX } from './fx.js'
@@ -24,7 +27,8 @@ import { hypot } from './core/dmath.js'
 // whoever is underneath (friends included) and breaks the scenery.
 //
 // This file is the table: scene, units, the actions both a human and the AI
-// call, the turn loop, and the UI. Rules data lives in rules.js, movement in
+// call, the turn loop, and the UI. The rules' constants and dice live in
+// core/rules.js (re-exported by rules.js), the races in data/, movement in
 // nav.js, the battlefield in scenery.js, the AI in ai.js.
 // ---------------------------------------------------------------------------
 
@@ -154,11 +158,12 @@ scene.add(table)
   scene.add(under)
 }
 
-// deployment zones
-const zoneMats = []
+// deployment zones, one along each seat's edge, in the seat's colour (set by
+// paintSeats once the seats are known)
+const zoneMats = [], zoneLineMats = []
 for (const s of [0, 1]) {
-  const sx = s === 0 ? -1 : 1
-  const mat = new THREE.MeshBasicMaterial({ color: SIDES[s].color, transparent: true, opacity: 0.07, depthWrite: false })
+  const sx = EDGES[s]
+  const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.07, depthWrite: false })
   zoneMats.push(mat)
   const z = new THREE.Mesh(new THREE.PlaneGeometry(BOARD.deploy, H).rotateX(-Math.PI / 2), mat)
   z.position.set(sx * (W / 2 - BOARD.deploy / 2), 0.008, 0)
@@ -166,8 +171,9 @@ for (const s of [0, 1]) {
   scene.add(z)
   const pts = []
   for (let zz = -H / 2; zz < H / 2; zz += 1) pts.push(new THREE.Vector3(sx * (W / 2 - BOARD.deploy), 0.02, zz), new THREE.Vector3(sx * (W / 2 - BOARD.deploy), 0.02, zz + 0.5))
-  const line = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: SIDES[s].color, transparent: true, opacity: 0.5 }))
-  scene.add(line)
+  const lineMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.5 })
+  zoneLineMats.push(lineMat)
+  scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), lineMat))
 }
 
 // grass tufts and flowers, purely for looks
@@ -256,11 +262,62 @@ const S = {
   follow: true,
   pendingLog: [],
 }
-// The match state the rules read: so far just the dice stream, which start()
-// replaces with a fresh one for every battle.
-const G = { rng: createRng((Math.random() * 1e9) | 0) }
+// The races at the table: the classic Bushtails-versus-Coil matchup, or any
+// pair a ?races=<seat 0>,<seat 1> URL names (e.g. ?races=serpent,serpent),
+// until the title screen gets a race picker. A value naming no two races
+// gets the classic matchup and a line on the title card saying why, not a
+// page that never starts (sim/mirror-check.mjs fails a run whose log shows
+// other races than it asked for).
+const RACE_PICK = (() => {
+  if (!params.has('races')) return CLASSIC
+  const pick = params.get('races').split(',').map((r) => r.trim().toLowerCase())
+  if (pick.length === 2 && pick.every((r) => RACES[r])) return pick
+  const msg = `?races= takes two of ${Object.keys(RACES).join(', ')}, comma-separated, not "${params.get('races')}"`
+  console.warn(`${msg}: playing the classic matchup`)
+  const note = document.createElement('p')
+  note.className = 'small'
+  note.textContent = `${msg}, so this is the classic matchup.`
+  $('#title .modes').before(note)
+  return CLASSIC
+})()
+// The match state the rules read: the dice stream, which start() replaces
+// with a fresh one for every battle, and the seats (race, table edge and
+// controller each), set again by start() for the mode chosen.
+const G = { rng: createRng((Math.random() * 1e9) | 0), seats: makeSeats(RACE_PICK, S.control) }
+// each seat's name, icon and colours, from its race (data/compat.js)
+let SIDES = sidesFor(G.seats)
 let units = []
 let nextUnitId = 1
+
+// Seat the players: the races at the table, with the mode's controllers.
+function seatPlayers() {
+  G.seats = makeSeats(RACE_PICK, S.control)
+  SIDES = sidesFor(G.seats)
+  paintSeats()
+}
+// The HUD, unit labels, battle log and card take each seat's colour from
+// --s0/--s1, and the active seat's HUD glow from --s0-glow/--s1-glow
+// (style.css holds the classic pair, which the title screen's copy keeps);
+// the HUD shows each seat's race, and the zones are its colour.
+const seatStyle = document.createElement('style')
+document.body.appendChild(seatStyle)
+const glow = (hex) => `rgba(${[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, 0.45)`
+function paintSeats() {
+  seatStyle.textContent = `#hud, #labels, #log, #card { --s0: ${SIDES[0].color}; --s1: ${SIDES[1].color}; ` +
+    `--s0-glow: ${glow(SIDES[0].color)}; --s1-glow: ${glow(SIDES[1].color)}; }`
+  for (const s of [0, 1]) {
+    const hud = s ? '#sideB' : '#sideA'
+    $(`${hud} .ic`).textContent = SIDES[s].icon
+    $(`${hud} .nm`).textContent = SIDES[s].name
+    zoneMats[s].color.set(SIDES[s].color)
+    zoneLineMats[s].color.set(SIDES[s].color)
+  }
+}
+paintSeats()
+// In a mirror match both seats' names read the same, so text that names a
+// seat outside the HUD (the turn banner, the end screen) takes the seat's
+// colour; otherwise it keeps its own ('' leaves the stylesheet's).
+const seatInk = (s) => (s >= 0 && isMirror(G.seats) ? SIDES[s].color : '')
 
 const alive = (u) => u.alive > 0
 const enemiesOf = (u) => units.filter((e) => e.side !== u.side && alive(e))
@@ -273,7 +330,7 @@ const engagedWith = (u) => enemiesOf(u).filter((e) => gap(u, e) <= ENGAGE + 0.05
 const mx = (u, m) => u.pos.x + m.ox
 const mz = (u, m) => u.pos.z + m.oz
 const isEngaged = (u) => engagedWith(u).length > 0
-const human = (side) => S.control[side] === 'human'
+const human = (side) => ctrl(G, side) === 'human'
 
 // ── Units ───────────────────────────────────────────────────────────────────
 // Formation: one model in the middle and the rest in a ring, or a plain ring
@@ -291,10 +348,11 @@ function formation(n, base) {
 }
 
 function makeUnit(key, side) {
-  const t = TYPES[key]
+  const race = raceOf(G, side), t = race.units[key]
   const u = {
-    id: nextUnitId++, key, t, side, name: t.name,
-    pos: { x: 0, z: 0 }, facing: side === 0 ? Math.PI / 2 : -Math.PI / 2,
+    id: nextUnitId++, key, t, side, race: race.key, name: t.name,
+    // facing across the table, away from the seat's own edge
+    pos: { x: 0, z: 0 }, facing: -edgeOf(G, side) * Math.PI / 2,
     models: [], alive: t.models, r: 0, flags: {}, lost: 0, mesmerized: false, moving: false,
   }
   for (let i = 0; i < t.models; i++) {
@@ -367,10 +425,12 @@ function clearUnits() {
   units = []
 }
 
-// Pick a spot near (x, z) inside the side's deployment zone.
+// Pick a spot near (x, z) inside the side's deployment zone: the strip
+// BOARD.deploy deep along its seat's edge.
 function freeSpot(u, x, z, side, others) {
   let best = null, bd = Infinity
-  const minX = side === 0 ? -W / 2 : W / 2 - BOARD.deploy, maxX = side === 0 ? -W / 2 + BOARD.deploy : W / 2
+  const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - BOARD.deploy)
+  const minX = Math.min(outer, inner), maxX = Math.max(outer, inner)
   for (let i = 0; i < nav.N; i++) {
     const cx = nav.x(i), cz = nav.z(i)
     if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) continue
@@ -387,12 +447,12 @@ function freeSpot(u, x, z, side, others) {
 
 function deployArmies() {
   for (const side of [0, 1]) {
-    const sx = side === 0 ? -1 : 1
+    const sx = edgeOf(G, side)
     const list = units.filter((u) => u.side === side)
     const placed = []
-    const back = list.filter((u) => u.t.role === 'Artillery')
-    const mid = list.filter((u) => u.t.hero)
-    const front = list.filter((u) => !back.includes(u) && !mid.includes(u))
+    const back = list.filter((u) => u.t.deployRow === 'back')
+    const mid = list.filter((u) => u.t.deployRow === 'mid')
+    const front = list.filter((u) => u.t.deployRow === 'front')
     const rows = [
       [front, W / 2 - BOARD.deploy + 1.8],
       [mid, W / 2 - BOARD.deploy + 3.6],
@@ -400,7 +460,8 @@ function deployArmies() {
     ]
     for (const [row, depth] of rows) {
       row.forEach((u, i) => {
-        const z = ((i + 0.5) / row.length - 0.5) * (H - 6) * (side ? -1 : 1)
+        // each army lists its units from its own left
+        const z = ((i + 0.5) / row.length - 0.5) * (H - 6) * -sx
         const p = freeSpot(u, sx * depth, z, side, placed) || { x: sx * depth, z }
         setUnitPos(u, p.x, p.z)
         placed.push(u)
@@ -411,8 +472,8 @@ function deployArmies() {
 }
 
 // ── Line of sight, cover, control ───────────────────────────────────────────
-const eyeY = (u) => (u.t.big ? 1.9 : u.t.fly ? 1.5 : 0.95)
-const chestY = (u) => (u.t.big ? 1.0 : u.t.fly ? 1.0 : 0.55)
+const eyeY = (u) => u.t.eye
+const chestY = (u) => u.t.chest
 
 function inCover(u) {
   const live = u.models.filter((m) => m.alive)
@@ -455,7 +516,7 @@ function controlOf(o) {
 
 // ── Movement ────────────────────────────────────────────────────────────────
 function moveMode(u) {
-  return u.t.fly ? 'fly' : u.t.wrecker ? 'wreck' : 'walk'
+  return u.t.move
 }
 
 // Cells a unit may not enter: within 1" of an enemy (or just their bases when
@@ -817,7 +878,7 @@ async function blastLands(u, land, w) {
     log(u.side, `${friendly ? '<b>Friendly fire!</b> ' : ''}${w.name} hits ${v.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   }
   if (!victims.length) await wait(0.25)
-  const broke = scenery.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: w.fx === 'acid' })
+  const broke = scenery.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes })
   if (broke.length) log(u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
   refreshNav()
 }
@@ -895,12 +956,13 @@ function killModel(u, m, attacker) {
   m.w = 0
   u.alive--
   m.dying = true
-  if (u.side === 0) sfx.squeak()
-  else sfx.hiss()
+  // a squeak or a hiss, and fur or scales flying: the race's own
+  const look = RACES[u.race].look
+  sfx[look.voice]()
   const fig = m.mesh.userData.fig
   const dir = attacker ? Math.atan2(m.x - attacker.pos.x, m.z - attacker.pos.z) - m.yaw : 0
   const side = Math.sin(dir) >= 0 ? 1 : -1
-  fx.debris(m.x, 0.5, m.z, u.side === 0 ? ['#cf6d2a', '#f1dcb5'] : ['#3f8f4a', '#d9cf86'], 6, { power: 2, size: 0.07 })
+  fx.debris(m.x, 0.5, m.z, look.gore, 6, { power: 2, size: 0.07 })
   tween(0.6, (k) => {
     fig.rotation.z = side * k * 1.45
     fig.position.y = (u.t.big ? 0.09 : 0.06) + Math.sin(k * Math.PI) * 0.15
@@ -927,8 +989,8 @@ function unitDestroyed(u, by) {
 // ── Charge & fight ──────────────────────────────────────────────────────────
 function canCharge(u) {
   if (!alive(u) || u.flags.charged || u.flags.chargeTried) return false
-  if (u.t.role === 'Artillery' || u.mesmerized || u.flags.fellBack || isEngaged(u)) return false
-  if (u.flags.advanced && !u.t.abilities?.some((a) => a.startsWith('Sidewind'))) return false
+  if (u.t.noCharge || u.mesmerized || u.flags.fellBack || isEngaged(u)) return false
+  if (u.flags.advanced && !u.t.chargeAfterAdvance) return false
   return true
 }
 
@@ -1136,11 +1198,13 @@ function flee1(u, m) {
   m.w = 0
   u.alive--
   m.dying = true
-  const ex = u.side === 0 ? -W / 2 - 3 : W / 2 + 3
+  // off the table over the unit's own edge
+  const edge = edgeOf(G, u.side)
+  const ex = edge * (W / 2 + 3)
   const x0 = m.x, z0 = m.z
   m.fleeing = true
   fx.text({ x: m.x, y: 1.4, z: m.z }, 'flees!', '#e0e0e0', { size: 14 })
-  m.yaw = u.side === 0 ? -Math.PI / 2 : Math.PI / 2
+  m.yaw = edge * Math.PI / 2
   tween(2.2, (k) => {
     m.x = lerp(x0, ex, k)
     m.z = z0
@@ -1177,7 +1241,7 @@ function checkWipe() {
 let focusTween = null
 function focus(x, z) {
   if (!S.follow || S.stage !== 'battle') return
-  if (human(S.active) && S.control[0] !== S.control[1]) return
+  if (human(S.active) && ctrl(G, 0) !== ctrl(G, 1)) return
   const t0 = controls.target.clone()
   const d = Math.hypot(x - t0.x, z - t0.z)
   if (d < 6) return
@@ -1241,7 +1305,7 @@ async function playerTurn(side) {
     select(null)
     tray.el.classList.remove('show')
     refreshUI()
-    await banner(`${SIDES[side].icon} ${SIDES[side].name}`, ph.name)
+    await banner(`${SIDES[side].icon} ${SIDES[side].name}`, ph.name, side)
     if (ph.key === 'fight') {
       if (units.some((u) => alive(u) && isEngaged(u))) await fightPhase(side)
     } else if (ph.key === 'morale') {
@@ -1298,7 +1362,9 @@ function gameOver() {
   else win = S.vp[0] > S.vp[1] ? 0 : S.vp[1] > S.vp[0] ? 1 : -1
   const t = win < 0 ? 'A bloody draw' : `${SIDES[win].name} win!`
   const why = S.wiped !== undefined ? `${SIDES[S.wiped].name} have been wiped from the table.` : `Final score ${S.vp[0]} – ${S.vp[1]} after ${ROUNDS} rounds.`
-  $('#overTitle').textContent = `${win >= 0 ? SIDES[win].icon + ' ' : ''}${t}`
+  const title = $('#overTitle')
+  title.textContent = `${win >= 0 ? SIDES[win].icon + ' ' : ''}${t}`
+  title.style.color = seatInk(win)
   $('#overWhy').textContent = why
   $('#over').classList.remove('hidden')
   sfx.fanfare()
@@ -1729,7 +1795,7 @@ function refreshUI() {
   const adv = $('#advance')
   adv.style.display = mine && S.phase === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(sel) ? '' : 'none'
   adv.textContent = `Advance (+D6") — no ${sel?.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`
-  if (sel?.t.abilities?.some((a) => a.startsWith('Sidewind'))) adv.textContent = 'Advance (+D6") — can still charge'
+  if (sel?.t.chargeAfterAdvance) adv.textContent = 'Advance (+D6") — can still charge'
   // hint line
   let hint = ''
   if (picking) hint = `Charge! Rolled ${S.chargePick.rolled}" — click the orange area to place ${S.chargePick.u.t.short}, or take the shortest move.`
@@ -1777,9 +1843,10 @@ function refreshRings() {
   }
 }
 
-async function banner(a, b) {
+async function banner(a, b, side = -1) {
   const el = $('#banner')
   el.innerHTML = `<div class="b1">${a}</div><div class="b2">${b}</div>`
+  el.querySelector('.b1').style.color = seatInk(side)
   el.classList.remove('show')
   void el.offsetWidth
   el.classList.add('show')
@@ -1903,7 +1970,7 @@ function setupTable() {
   scenery.dirty = true
   refreshNav()
   scatterTufts()
-  for (const side of [0, 1]) for (const key of ARMIES[side]) units.push(makeUnit(key, side))
+  for (const side of [0, 1]) for (const key of raceOf(G, side).army) units.push(makeUnit(key, side))
   deployArmies()
   for (const u of units) updateLabel(u)
   // nothing from the last game carries over: banners, scorch marks, turn state
@@ -1925,6 +1992,9 @@ async function start(mode) {
   G.rng = createRng(S.dice)
   trace.length = 0
   S.control = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }[mode]
+  // the races were set for the table already on the title screen (setupTable
+  // built their armies); only who plays each seat changes with the mode
+  seatPlayers()
   $('#title').classList.add('hidden')
   document.body.classList.add('playing')
   S.titleSpin = false
@@ -2049,7 +2119,7 @@ function frame() {
   animateUnits(dt, clock.time)
   animateObjectives(dt, clock.time)
   if (S.titleSpin) {
-    // a slow drift from behind the Bushtail lines, across toward the Coil
+    // a slow drift from behind seat 0's lines (the west edge), across toward seat 1's
     const a = S.titleAngle + clock.time * 0.035
     camera.position.set(-5 + Math.sin(a) * 25, 13, Math.cos(a) * 25)
     controls.target.set(-5, 0, 0)
@@ -2068,7 +2138,7 @@ function frame() {
 }
 
 // Landscape looks across the table; portrait looks down its length from
-// behind the Bushtail lines, so the 28" width is what has to fit the screen.
+// behind seat 0's lines, so the 28" width is what has to fit the screen.
 function defaultView() {
   if (innerWidth >= innerHeight) return { pos: new THREE.Vector3(0, 30, 31), target: new THREE.Vector3(0, 0, 1.5) }
   return { pos: new THREE.Vector3(-36, 46, 0), target: new THREE.Vector3(-1, 0, 0) }

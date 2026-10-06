@@ -6,6 +6,8 @@
   --edge: rgba(255, 230, 180, 0.16);
   --s0: #ec8a34;
   --s1: #46c27a;
+  --s0-glow: rgba(236, 138, 52, 0.45);
+  --s1-glow: rgba(70, 194, 122, 0.45);
   --gold: #ffd36e;
 }
 
@@ -113,11 +115,11 @@ body:not(.playing) #hint {
 }
 #hud .s0.active {
   border-color: var(--s0);
-  box-shadow: 0 0 18px rgba(236, 138, 52, 0.45);
+  box-shadow: 0 0 18px var(--s0-glow);
 }
 #hud .s1.active {
   border-color: var(--s1);
-  box-shadow: 0 0 18px rgba(70, 194, 122, 0.45);
+  box-shadow: 0 0 18px var(--s1-glow);
 }
 #hud .mid {
   background: var(--panel);

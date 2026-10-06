@@ -11,10 +11,8 @@ import { hypot } from './core/dmath.js'
 // actions a human does, so every roll is animated and logged the same way.
 // ---------------------------------------------------------------------------
 
-const ROLE = {
-  nutkin: 'shooter', grenadier: 'shooter', oakguard: 'melee', glider: 'raider', trebuchet: 'artillery', elder: 'hero',
-  scaleguard: 'line', spitter: 'shooter', sidewinder: 'melee', brute: 'melee', engine: 'artillery', hierophant: 'hero',
-}
+// Each unit type names its AI role in the race data (`t.ai`); the roles act
+// in this order, brawlers first and the guns last.
 const ORDER = ['melee', 'raider', 'line', 'shooter', 'hero', 'artillery']
 
 export async function aiPhase(api, side, phase) {
@@ -57,11 +55,11 @@ function shotValue(api, u, e, from, moved) {
 // ── Movement ────────────────────────────────────────────────────────────────
 async function aiMove(api, side) {
   const mine = api.units.filter((u) => u.side === side && api.alive(u))
-  mine.sort((a, b) => ORDER.indexOf(ROLE[a.key]) - ORDER.indexOf(ROLE[b.key]))
+  mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   const claimed = new Set()
   for (const u of mine) {
     if (!api.alive(u) || u.flags.moved) continue
-    const role = ROLE[u.key]
+    const role = u.t.ai
     if (api.isEngaged(u)) {
       // brawlers stay stuck in; anyone else gets out if the fight is going badly
       const foes = api.engagedWith(u)
@@ -121,7 +119,7 @@ function bestSpot(api, u, plan, claimed) {
   const enemies = api.enemiesOf(u)
   const friends = api.friendsOf(u)
   const owners = api.objectives.map((o) => api.controlOf(o))
-  const role = ROLE[u.key]
+  const role = u.t.ai
   const ctx = { enemies, friends, owners, claimed, role }
   // stay put is always an option
   let best = { cell: -1, score: score(api, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
@@ -204,8 +202,7 @@ function score(api, u, x, z, ctx, moving) {
   const fragile = role === 'shooter' || role === 'artillery' || role === 'hero'
   for (const e of enemies) {
     const g = hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
-    const brawler = !e.t.ranged || e.t.wrecker || e.key === 'sidewinder' || e.key === 'oakguard'
-    if (brawler && g < e.t.M + 7) s -= meleeValue(e, u) * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
+    if (e.t.brawler && g < e.t.M + 7) s -= meleeValue(e, u) * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
   }
   // cover and staying put
   const ci = api.nav.index(x, z)
@@ -231,7 +228,7 @@ function score(api, u, x, z, ctx, moving) {
 // ── Shooting ────────────────────────────────────────────────────────────────
 async function aiShoot(api, side) {
   const mine = api.units.filter((u) => u.side === side && api.canShoot(u))
-  mine.sort((a, b) => ORDER.indexOf(ROLE[b.key]) - ORDER.indexOf(ROLE[a.key]))
+  mine.sort((a, b) => ORDER.indexOf(b.t.ai) - ORDER.indexOf(a.t.ai))
   for (const u of mine) {
     if (!api.canShoot(u)) continue
     const targets = api.shootTargets(u)
@@ -264,10 +261,10 @@ async function aiShoot(api, side) {
 // ── Charges ─────────────────────────────────────────────────────────────────
 async function aiCharge(api, side) {
   const mine = api.units.filter((u) => u.side === side && api.canCharge(u))
-  mine.sort((a, b) => ORDER.indexOf(ROLE[a.key]) - ORDER.indexOf(ROLE[b.key]))
+  mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   for (const u of mine) {
     if (!api.canCharge(u)) continue
-    const role = ROLE[u.key]
+    const role = u.t.ai
     let best = null, bs = 0
     for (const e of api.chargeTargets(u)) {
       const plan = api.chargePlan(u, e)

@@ -84,7 +84,10 @@ async function runOne(browser, url, job) {
     const fns = [shadowString, shadowParts, shadowOf, instrument, missingHooks, humanDriver].join('\n')
     await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(job)}, ${JSON.stringify(mode)})` })
     const t0 = Date.now()
-    const href = `${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}`
+    // a job's optional seat races go on the URL as for the Node oracle (code
+    // from R2 on reads ?races; the PIN ignores it)
+    const races = job.races ? `&races=${job.races.join(',')}` : ''
+    const href = `${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}${races}`
     const res = await page.goto(href)
     if (!res?.ok()) throw new Error(`${href}: HTTP ${res?.status()}`)
     // main.js publishes __ts as it loads, so by now it is there (with every
@@ -132,7 +135,7 @@ async function runOne(browser, url, job) {
   }
 }
 
-// Run `jobs` (as for run-legacy.mjs, minus bot play) on `parallel` browsers;
+// Run `jobs` (as for run-legacy.mjs, minus bot play, `races` included) on `parallel` browsers;
 // results keep job order, and the array's `chromium` is the browser version.
 // `each(result, job, i)` reports as they finish.
 export async function runBrowser(jobs, { dist = DIST, parallel = Number(process.env.PARALLEL || 3), each = () => {} } = {}) {

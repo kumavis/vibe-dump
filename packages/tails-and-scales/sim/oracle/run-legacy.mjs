@@ -8,6 +8,8 @@
 //        job: { seed, dice }                         AI vs AI
 //             { setup, entries }                     replay a human log
 //             { setup, bot: { policy, seed } }       play the humans with a policy
+//             any of these plus races: [r0, r1]     the seat races, passed on as
+//                  ?races=r0,r1 (code from R2 on reads it; the PIN ignores it)
 //   --dir <packageDir> | --ref <git ref|WORKTREE>    which code (default: the PIN,
 //        sim/oracle/PIN, i.e. the frozen reference; --ref WORKTREE for yours).
 //        A ref must be the PIN commit or later: older code has no input hooks.
@@ -78,7 +80,8 @@ Object.defineProperty(globalThis, '__ts', {
     if (!missing.length) rec = instrument(v, say)
   },
 })
-globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}` }
+const races = job.races ? `&races=${job.races.join(',')}` : ''
+globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}${races}` }
 console.log = console.info = console.debug = console.error
 await import(pathToFileURL(join(dir, 'main.js')).href)
 if (!ts) throw new Error(`${dir}/main.js published no window.__ts under ?debug`)

@@ -76,8 +76,32 @@ step keeps the game playable.
   matched `Math.hypot` on 5M samples each, so both landed and every rules
   call uses them. `node sim/perturb.mjs --fn hypot` nudges `Math.hypot` by
   an ULP: 24/24 AI battles move on the R0 code, 0/40 on R1.
-- [ ] **R2 Race data and seats.** `data/` race definitions; seats with race,
+- [x] **R2 Race data and seats.** `data/` race definitions; seats with race,
   edge and controller; ability flags instead of text checks; `RULES_ID`.
+  Landed: the two races are data (`data/races/*.js`), checked and frozen
+  by `data/schema.js`. `G.seats` holds race, edge and controller, and every
+  side-hard-wired site reads the edge. The flags `chargeAfterAdvance`,
+  `corrodes`, `noCharge` and `brawler` and the AI's `t.ai` replace the
+  key, text and fx tests. Names, colours, voices and gore come from the
+  seat's race, and a mirror match paints seat 1 in the race's alternate
+  colour, a clearly different hue (and the turn banner and end screen take
+  the seat's colour, since the names read the same). `?races=a,b` picks the
+  races for a page. Every table `core/` and `data/` export is frozen.
+  `RULES_ID` is in `core/version.js`, and the ruleset moved to
+  `core/rules.js` (the root `rules.js` re-exports it). Checks:
+  `sim/data-check.mjs` (the types against the R0 code's, flags from the
+  legacy tests; seats refuse `Object.prototype` names; `RULES_ID` moves on
+  a stat, not on a name), `sim/flag-lint.mjs` (no unit or race key, name,
+  ability-text or fx tests in rules code) and `sim/mirror-check.mjs`
+  (serpent v serpent, squirrel v squirrel and swapped seats, AI and bot,
+  each finish twice identically with each seat on its own edge; no
+  baseline). data-check and flag-lint's self-test read the legacy code
+  from the R0 commit (`LEGACY_REF` in `sim/lib.mjs`), which never moves:
+  a re-record moves the PIN and leaves them alone. Left for R7/F6: the
+  title screen's copy and mode-button colours, the HUD's VP pill ink, seat
+  names that read the same in a mirror match (the tray's roll-off rows,
+  several log lines, the AI hint), and a stronger mirror cue on the table
+  than the base rim.
 - [ ] **R3 Terrain split.** `core/terrain/*` logic and recipes separated from
   `view/terrain.js` meshes.
 - [ ] **R4 State and queries.** The game state `G` owns units, terrain, nav,
@@ -105,6 +129,9 @@ step keeps the game playable.
   online play works from GitHub Pages or a local server.)
 - [ ] **N3** Spectating, rejoin, scrubbing, replay export, tamper alarm.
 - [ ] **F6** Race selection with a mini 3D diorama of each race's figures.
+  It makes mirror matches reachable from the title, so it also takes R2's
+  leftovers: seat names that read the same in a mirror (roll-off rows, log
+  lines, AI hint) and a stronger mirror cue on the table.
 - [ ] **F5** New races: insectoids (burrow, swarm) and bird-people (fly,
   swoop).
 - [ ] **F7** More terrain: climbable fortifications (2.5D elevation).

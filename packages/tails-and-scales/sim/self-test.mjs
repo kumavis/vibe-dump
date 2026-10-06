@@ -121,11 +121,15 @@ if (quiet) {
 // ── 5. The title screen, in Chromium ────────────────────────────────────────
 if (a.browser) {
   console.log('5. P-browser fails a build whose title-screen buttons start nothing')
-  const dead = mutant('title', 'main.js', '    start(b.dataset.mode)\n', '    // MUTANT: the title-screen buttons start nothing\n')
-  if (dead) {
+  // one corpus battle per button the verdict names, taken from the corpus so
+  // a re-record can't leave this asking for a battle that is gone
+  const ids = ['watch', 'hotseat'].map((m) => items.find((it) => it.mode === m)?.id)
+  const dead = ids.every(Boolean) && mutant('title', 'main.js', '    start(b.dataset.mode)\n', '    // MUTANT: the title-screen buttons start nothing\n')
+  if (!ids.every(Boolean)) verdictLine(false, 'the mutant title screen', `the corpus has no ${['watch', 'hotseat'].filter((m, i) => !ids[i]).join(' or ')} battle to start`)
+  else if (dead) {
     const dist = await buildApp(dead, join(work, 'title-dist'))
-    const r = parity(PARITY, ['--browser', '--dist', dist, '--only', '64-89,hotseat-late-3'])
-    verdictLine(r.status === 1 && /\[data-mode="watch"\] button did not start/.test(r.out) && /\[data-mode="hotseat"\] button did not start/.test(r.out), 'the mutant title screen', `exit ${r.status}, ${(r.out.match(/the title screen's .* did not start[^\n]*/) ?? [last(r.out)])[0].slice(0, 110)}`)
+    const r = parity(PARITY, ['--browser', '--dist', dist, '--only', ids.join(',')])
+    verdictLine(r.status === 1 && /\[data-mode="watch"\] button did not start/.test(r.out) && /\[data-mode="hotseat"\] button did not start/.test(r.out), `the mutant title screen (${ids.join(', ')})`, `exit ${r.status}, ${(r.out.match(/the title screen's .* did not start[^\n]*/) ?? [last(r.out)])[0].slice(0, 110)}`)
   }
 }
 

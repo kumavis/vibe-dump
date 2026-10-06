@@ -14,10 +14,31 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { cpus } from 'node:os'
 import { legacyMode } from './oracle/human-bot.mjs'
+import { codeDir } from './oracle/pin.mjs'
 
 export const SIM = fileURLToPath(new URL('./', import.meta.url))
 export const BASE = join(SIM, 'baselines')
 const RUNNER = join(SIM, 'oracle', 'run-legacy.mjs')
+
+// ── The legacy rules ────────────────────────────────────────────────────────
+// The R0 commit: the first with the ?debug hooks. It and every commit before
+// R2 hold the unit types, armies and sides in rules.js, and the key,
+// ability-text and fx tests R2 replaced with flags in main.js and ai.js, with
+// the same unit data throughout; sim/data-check.mjs and flag-lint's
+// --self-test compare against it. It is named here rather than read from
+// sim/oracle/PIN, because the PIN moves at every deliberate re-record (N0's
+// CORE_VERSION 2, the F4, F5 and F7 baselines) to code that has none of
+// this. It never moves (nor does PIN's `hooks` line, but that one belongs to
+// hooks-inert.mjs).
+export const LEGACY_REF = 'cacf5f5ade9c38720875b428a7dd82f6a386efdc'
+export function legacyDir() {
+  const dir = codeDir(LEGACY_REF)
+  // a wrong sha here must fail loudly, not compare against the wrong code
+  if (!/^export const TYPES = \{/m.test(readFileSync(join(dir, 'rules.js'), 'utf8'))) {
+    throw new Error(`the legacy anchor ${LEGACY_REF.slice(0, 12)} has no TYPES in rules.js: it must name the R0 commit`)
+  }
+  return dir
+}
 
 export const h10 = (s) => createHash('sha256').update(s).digest('hex').slice(0, 10)
 export const hashLines = (lines) => lines.map(h10).join(' ')
