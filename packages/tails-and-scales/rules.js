@@ -8,7 +8,7 @@
 // Distances are inches; one world unit is one inch on the table.
 // ---------------------------------------------------------------------------
 
-import { rng } from './rng.js'
+import { draw } from './core/rng.js'
 
 export const BOARD = { W: 40, H: 28, deploy: 8 }
 export const ENGAGE = 1 // inches, base edge to base edge, that counts as "in combat"
@@ -130,8 +130,9 @@ export const ARMIES = [
 ]
 
 // ── Dice ────────────────────────────────────────────────────────────────────
-export const d6 = () => 1 + Math.floor(rng() * 6)
-export const roll = (n) => Array.from({ length: n }, d6)
+// every die comes off the match's own stream, G.rng
+export const d6 = (G) => 1 + Math.floor(draw(G.rng) * 6)
+export const roll = (G, n) => Array.from({ length: n }, () => d6(G))
 export const passes = (dice, need) => dice.filter((d) => d >= need).length
 export const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
 

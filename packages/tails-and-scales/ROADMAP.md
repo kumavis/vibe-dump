@@ -21,8 +21,10 @@ the commit, and add whatever the work turned up.
   to the commit whose code produced the new hashes, in the same push, and
   `node sim/parity.mjs --pin` must pass after it.
 - **Determinism.** Everything that can change an outcome draws from the logic
-  RNG (`rng.js`), never `Math.random`, and reads logical positions, never
-  animated ones. Visual randomness stays on `Math.random`.
+  RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
+  distances with `core/dmath.js`, never the engine's `Math.hypot`; and reads
+  logical positions, never animated ones. Visual randomness stays on
+  `Math.random`.
 - **Copy.** Call it a tabletop wargame. Don't name other games or companies in
   docs, in-game copy, code comments or commit messages.
 - **Repo conventions** (see the root `CLAUDE.md`): `npm run build` and
@@ -67,7 +69,13 @@ step keeps the game playable.
   - DESIGN.md's R0 notes record the spec changes R0 made and the lead's
     decisions on them, plus two hooks later steps need (`log.at`,
     `createMatch`'s `onTrace`).
-- [ ] **R1 Per-match RNG and `hypot`.** `core/rng.js` instances; `dmath.hypot`.
+- [x] **R1 Per-match RNG and `hypot`.** `core/rng.js` instances; `dmath.hypot`.
+  Landed: the dice are a plain-data generator in `G.rng`, fresh per battle,
+  that `d6(G)`/`roll(G, n)`, the blast aim and the AI's tie-break draw from;
+  `core/dmath.js` holds V8's two- and three-argument `hypot` formulas, which
+  matched `Math.hypot` on 5M samples each, so both landed and every rules
+  call uses them. `node sim/perturb.mjs --fn hypot` nudges `Math.hypot` by
+  an ULP: 24/24 AI battles move on the R0 code, 0/40 on R1.
 - [ ] **R2 Race data and seats.** `data/` race definitions; seats with race,
   edge and controller; ability flags instead of text checks; `RULES_ID`.
 - [ ] **R3 Terrain split.** `core/terrain/*` logic and recipes separated from

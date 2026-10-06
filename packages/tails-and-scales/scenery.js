@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { mulberry32, pick, rr, tween, easeIn, bounce } from './util.js'
+import { hypot, hypot3 } from './core/dmath.js'
 
 // ---------------------------------------------------------------------------
 // The modular battlefield.
@@ -76,7 +77,7 @@ export class Scenery {
       los: null, cover: false, navKind: null, ...def,
     }
     const s = c.shape
-    s.reach = Math.hypot(s.hx, s.hz) + 0.05
+    s.reach = hypot(s.hx, s.hz) + 0.05
     if (c.mesh) this.group.add(c.mesh)
     this.chunks.push(c)
     return c
@@ -127,12 +128,12 @@ export class Scenery {
       const x = rr(rng, -W / 2 + r + 0.5, W / 2 - r - 0.5)
       const z = rr(rng, -H / 2 + r + 0.5, H / 2 - r - 0.5)
       // a feature and its mirror image mustn't overlap each other
-      if (Math.hypot(x, z) < r + 1.4) continue
+      if (hypot(x, z) < r + 1.4) continue
       const inDeploy = Math.abs(x) > W / 2 - deployDepth - 1
       if (inDeploy && (r > 2.1 || name === 'forest')) continue
-      if (objectives.some((o) => Math.hypot(o.x - x, o.z - z) < r + 2.2)) continue
+      if (objectives.some((o) => hypot(o.x - x, o.z - z) < r + 2.2)) continue
       const gap = 2.1
-      if (placed.some((p) => Math.hypot(p.x - x, p.z - z) < p.r + r + gap || Math.hypot(p.x + x, p.z + z) < p.r + r + gap)) continue
+      if (placed.some((p) => hypot(p.x - x, p.z - z) < p.r + r + gap || hypot(p.x + x, p.z + z) < p.r + r + gap)) continue
       const yaw = rng() * Math.PI * 2
       const s = (rng() * 1e9) | 0
       this.build(name, { x, z, yaw }, s)
@@ -465,7 +466,7 @@ export class Scenery {
     for (let tries = 0; tries < 60 && pts.length < n; tries++) {
       const a = rng() * Math.PI * 2, d = Math.sqrt(rng()) * 2.2
       const x = Math.cos(a) * d, z = Math.sin(a) * d
-      if (pts.some((p) => Math.hypot(p.x - x, p.z - z) < 1.55)) continue
+      if (pts.some((p) => hypot(p.x - x, p.z - z) < 1.55)) continue
       pts.push({ x, z })
     }
     for (const p of pts) this.tree(F, rng, p.x, p.z, species)
@@ -503,7 +504,7 @@ export class Scenery {
     for (let tries = 0; tries < 40 && pts.length < n; tries++) {
       const a = rng() * 6, d = Math.sqrt(rng()) * 1.5
       const x = Math.cos(a) * d, z = Math.sin(a) * d
-      if (pts.some((p) => Math.hypot(p.x - x, p.z - z) < 0.9)) continue
+      if (pts.some((p) => hypot(p.x - x, p.z - z) < 0.9)) continue
       pts.push({ x, z })
       this.mushroom(F, rng, x, z)
     }
@@ -533,7 +534,7 @@ export class Scenery {
       if (px * px + pz * pz > s.reach * s.reach) continue
       if (!segmentHitsBox(a, dx, dy, dz, s)) continue
       if (c.los === 'block') return { blocked: true, obscure }
-      if (Math.hypot(s.x - a.x, s.z - a.z) < ignoreR + s.reach * 0.5) continue
+      if (hypot(s.x - a.x, s.z - a.z) < ignoreR + s.reach * 0.5) continue
       obscure++
     }
     return { blocked: obscure >= 2, obscure }
@@ -664,7 +665,7 @@ export class Scenery {
   topple(c, from) {
     const s = c.shape
     let dx = s.x - (from?.x ?? s.x - 1), dz = s.z - (from?.z ?? s.z)
-    const L = Math.hypot(dx, dz) || 1
+    const L = hypot(dx, dz) || 1
     dx /= L
     dz /= L
     // the canopy goes up in a cloud of leaves; the trunk keels over into a log
@@ -725,5 +726,5 @@ function distToBox(x, y, z, s) {
   const ox = x - s.x, oy = y - s.y, oz = z - s.z
   const lx = ox * c - oz * sn, lz = ox * sn + oz * c
   const qx = Math.max(0, Math.abs(lx) - s.hx), qy = Math.max(0, Math.abs(oy) - s.hy), qz = Math.max(0, Math.abs(lz) - s.hz)
-  return Math.hypot(qx, qy, qz)
+  return hypot3(qx, qy, qz)
 }

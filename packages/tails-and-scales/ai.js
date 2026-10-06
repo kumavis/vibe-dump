@@ -1,6 +1,7 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from './rules.js'
 import { wait } from './util.js'
-import { rng } from './rng.js'
+import { draw } from './core/rng.js'
+import { hypot } from './core/dmath.js'
 
 // ---------------------------------------------------------------------------
 // The opponent. No search, just a general's instincts written as scores:
@@ -33,7 +34,7 @@ function meleeValue(a, d) {
 function shotValue(api, u, e, from, moved) {
   const w = u.t.ranged
   if (!w) return 0
-  const g = Math.hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
+  const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
   if (g > w.range) return 0
   if (api.isEngaged(e) && !w.spell) return 0
   const s = api.sight(u, e, from)
@@ -72,7 +73,7 @@ async function aiMove(api, side) {
       for (let i = 0; i < api.nav.N; i += 2) {
         if (!api.validEnd(plan, i)) continue
         const x = api.nav.x(i), z = api.nav.z(i)
-        const s = Math.min(...api.enemiesOf(u).map((e) => Math.hypot(e.pos.x - x, e.pos.z - z) - e.r))
+        const s = Math.min(...api.enemiesOf(u).map((e) => hypot(e.pos.x - x, e.pos.z - z) - e.r))
         if (s > bs) {
           bs = s
           best = i
@@ -132,8 +133,8 @@ function bestSpot(api, u, plan, claimed) {
       if (!isFinite(res.dist[i])) continue
       if (!api.validEnd(plan, i)) continue
       const x = nav.x(i), z = nav.z(i)
-      const sc = score(api, u, x, z, ctx, true) + rng() * 0.05
-      if (sc > best.score) best = { cell: i, score: sc, dist: Math.hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
+      const sc = score(api, u, x, z, ctx, true) + draw(api.G.rng) * 0.05
+      if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
     }
   }
   return best
@@ -143,7 +144,7 @@ function score(api, u, x, z, ctx, moving) {
   const { enemies, friends, owners, claimed, role } = ctx
   const t = u.t
   const from = { x, z }
-  const moved = moving && Math.hypot(x - u.pos.x, z - u.pos.z) > 0.3
+  const moved = moving && hypot(x - u.pos.x, z - u.pos.z) > 0.3
   let s = 0
   let onObjective = false, obj = -1
   // objectives — troops lean on them hardest
@@ -151,7 +152,7 @@ function score(api, u, x, z, ctx, moving) {
     const pull = role === 'line' || role === 'shooter' ? 5 : role === 'melee' ? 2 : 2.5
     let bestObj = 0
     for (const o of api.objectives) {
-      const d = Math.hypot(o.x - x, o.z - z)
+      const d = hypot(o.x - x, o.z - z)
       const want = owners[o.i] === u.side ? 0.45 : 1
       const taken = claimed.has(o.i) ? 0.25 : 1
       let v
@@ -184,7 +185,7 @@ function score(api, u, x, z, ctx, moving) {
   if (role === 'melee' || role === 'line' || role === 'raider' || role === 'hero') {
     let best = 0
     for (const e of enemies) {
-      const g = Math.hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
+      const g = hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
       if (g > CHARGE_RANGE) continue
       const p = g <= 1 ? 1 : p2D6(Math.ceil(g))
       const back = meleeValue(e, u) * 0.4
@@ -195,14 +196,14 @@ function score(api, u, x, z, ctx, moving) {
     s += best * w
     // far from everything: just close the distance
     if (best === 0 && role !== 'hero') {
-      const near = Math.min(...enemies.map((e) => Math.hypot(e.pos.x - x, e.pos.z - z)))
+      const near = Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
       s -= near * (role === 'melee' ? 0.12 : 0.05)
     }
   }
   // danger: enemy brawlers who could reach here next turn, guns that can see us
   const fragile = role === 'shooter' || role === 'artillery' || role === 'hero'
   for (const e of enemies) {
-    const g = Math.hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
+    const g = hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
     const brawler = !e.t.ranged || e.t.wrecker || e.key === 'sidewinder' || e.key === 'oakguard'
     if (brawler && g < e.t.M + 7) s -= meleeValue(e, u) * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
   }
@@ -213,14 +214,14 @@ function score(api, u, x, z, ctx, moving) {
   // heroes like company
   if (role === 'hero') {
     let n = 0
-    for (const f of friends) if (Math.hypot(f.pos.x - x, f.pos.z - z) <= AURA + f.r) n++
+    for (const f of friends) if (hypot(f.pos.x - x, f.pos.z - z) <= AURA + f.r) n++
     s += Math.min(3, n) * 0.9
-    const front = Math.min(...enemies.map((e) => Math.hypot(e.pos.x - x, e.pos.z - z)))
+    const front = Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
     if (front < 8) s -= (8 - front) * 0.6
   }
   // don't bunch up for the blast templates
   for (const f of friends) {
-    const g = Math.hypot(f.pos.x - x, f.pos.z - z) - f.r - u.r
+    const g = hypot(f.pos.x - x, f.pos.z - z) - f.r - u.r
     if (g < 1.5) s -= (1.5 - g) * 0.6
   }
   ctx.last = { onObjective, obj, canShoot }
@@ -242,7 +243,7 @@ async function aiShoot(api, side) {
         // count the cost of a scatter landing on our own lads
         for (const f of api.units) {
           if (f.side !== u.side || !api.alive(f)) continue
-          const g = Math.hypot(f.pos.x - e.pos.x, f.pos.z - e.pos.z) - f.r
+          const g = hypot(f.pos.x - e.pos.x, f.pos.z - e.pos.z) - f.r
           if (g < w.blast + 2.5) v -= worth(f) * 0.25 * (1 - Math.max(0, g) / (w.blast + 2.5))
         }
       }

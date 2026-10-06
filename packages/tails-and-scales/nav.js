@@ -1,3 +1,4 @@
+import { hypot } from './core/dmath.js'
 // ---------------------------------------------------------------------------
 // Movement on the tabletop. The board is rasterised into half-inch cells; each
 // unit is treated as a disc, so instead of inflating obstacles per unit size we
@@ -61,7 +62,7 @@ export class NavGrid {
   }
 
   raster(s, pad, arr) {
-    const reach = Math.hypot(s.hx, s.hz) + pad
+    const reach = hypot(s.hx, s.hz) + pad
     const c = Math.cos(s.yaw), sn = Math.sin(s.yaw)
     const ix0 = Math.max(0, Math.floor((s.x - reach + this.W / 2) / this.cell))
     const ix1 = Math.min(this.nx - 1, Math.floor((s.x + reach + this.W / 2) / this.cell))
@@ -144,14 +145,14 @@ export class NavGrid {
     if (start < 0) return res
     if (mode === 'fly') {
       for (let i = 0; i < N; i++) {
-        const d = Math.hypot(this.x(i) - sx, this.z(i) - sz)
+        const d = hypot(this.x(i) - sx, this.z(i) - sz)
         if (d <= max) dist[i] = d
       }
       return res
     }
     // measure from where the unit actually stands, not its cell's centre, so
     // a unit nudged off-centre (a pile-in) can't walk further than its roll
-    const d0 = Math.hypot(sx - this.x(start), sz - this.z(start))
+    const d0 = hypot(sx - this.x(start), sz - this.z(start))
     dist[start] = d0
     const heap = new Heap()
     heap.push(start, d0)
@@ -171,7 +172,7 @@ export class NavGrid {
           const j = jz * nx + jx
           if (forbid && forbid[j]) continue
           const cl = this.clearance(j, mode === 'wreck' ? 'wreck' : 'all')
-          if (cl < r - 0.06 && !(escape && cl > 0.05 && Math.hypot(this.x(j) - sx, this.z(j) - sz) < escape)) continue
+          if (cl < r - 0.06 && !(escape && cl > 0.05 && hypot(this.x(j) - sx, this.z(j) - sz) < escape)) continue
           let mul = this.diff[j] ? 2 : 1
           if (mode === 'wreck' && this.clearAll[j] < r - 0.06) mul = 2
           const nd = d + (ox && oz ? SQRT2 : 1) * cell * mul
@@ -215,7 +216,7 @@ export class NavGrid {
   }
 
   walkable(a, b, r, mode, forbid) {
-    const len = Math.hypot(b.x - a.x, b.z - a.z)
+    const len = hypot(b.x - a.x, b.z - a.z)
     const steps = Math.ceil(len / (this.cell * 0.5))
     const d0 = this.diff[this.index(a.x, a.z)]
     for (let s = 1; s < steps; s++) {
@@ -240,12 +241,12 @@ function segDist(a, b, p) {
   const L2 = dx * dx + dz * dz
   let t = L2 > 0 ? ((p.x - a.x) * dx + (p.z - a.z) * dz) / L2 : 0
   t = t < 0 ? 0 : t > 1 ? 1 : t
-  return Math.hypot(a.x + dx * t - p.x, a.z + dz * t - p.z)
+  return hypot(a.x + dx * t - p.x, a.z + dz * t - p.z)
 }
 
 export const pathLength = (pts) => {
   let L = 0
-  for (let i = 1; i < pts.length; i++) L += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
+  for (let i = 1; i < pts.length; i++) L += hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
   return L
 }
 

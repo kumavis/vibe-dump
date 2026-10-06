@@ -11,7 +11,8 @@ import { buildModel, M } from './models.js'
 import { clock, tween, wait, stepTweens, easeOut, easeInOut, wrapAngle, lerp } from './util.js'
 import { aiPhase } from './ai.js'
 import { sfx, unlock, toggleMute, isMuted } from './sfx.js'
-import { rng, seedLogic, rngState } from './rng.js'
+import { createRng, draw, rngState } from './core/rng.js'
+import { hypot } from './core/dmath.js'
 
 // ---------------------------------------------------------------------------
 // Tails & Scales — a pocket-sized tabletop wargame.
@@ -255,13 +256,16 @@ const S = {
   follow: true,
   pendingLog: [],
 }
+// The match state the rules read: so far just the dice stream, which start()
+// replaces with a fresh one for every battle.
+const G = { rng: createRng((Math.random() * 1e9) | 0) }
 let units = []
 let nextUnitId = 1
 
 const alive = (u) => u.alive > 0
 const enemiesOf = (u) => units.filter((e) => e.side !== u.side && alive(e))
 const friendsOf = (u) => units.filter((e) => e.side === u.side && alive(e) && e !== u)
-const dist = (a, b) => Math.hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)
+const dist = (a, b) => hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)
 const gap = (a, b) => dist(a, b) - a.r - b.r
 const engagedWith = (u) => enemiesOf(u).filter((e) => gap(u, e) <= ENGAGE + 0.05)
 // Where a model stands as far as the rules are concerned: its slot in the
@@ -322,7 +326,7 @@ function relayout(u, snap = false) {
     live[i].ox = ox
     live[i].oz = oz
   })
-  u.r = offs.reduce((m, [ox, oz]) => Math.max(m, Math.hypot(ox, oz)), 0) + u.t.base
+  u.r = offs.reduce((m, [ox, oz]) => Math.max(m, hypot(ox, oz)), 0) + u.t.base
   u.ring.scale.setScalar(u.r + 0.18)
   const tall = u.t.big ? 2.4 : u.t.fly ? 1.8 : 1.3
   u.hit.scale.set(u.r, tall, u.r)
@@ -371,8 +375,8 @@ function freeSpot(u, x, z, side, others) {
     const cx = nav.x(i), cz = nav.z(i)
     if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) continue
     if (!nav.standable(i, u.r, 'walk')) continue
-    if (others.some((o) => Math.hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) continue
-    const d = Math.hypot(cx - x, cz - z)
+    if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) continue
+    const d = hypot(cx - x, cz - z)
     if (d < bd) {
       bd = d
       best = { x: cx, z: cz }
@@ -444,7 +448,7 @@ function controlOf(o) {
   const oc = [0, 0]
   for (const u of units) {
     if (!alive(u)) continue
-    for (const m of u.models) if (m.alive && Math.hypot(mx(u, m) - o.x, mz(u, m) - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
+    for (const m of u.models) if (m.alive && hypot(mx(u, m) - o.x, mz(u, m) - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
   }
   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
 }
@@ -466,7 +470,7 @@ function forbidMask(u, pad, onlyBodies = []) {
     const i0z = Math.max(0, Math.floor((e.pos.z - R + H / 2) / nav.cell)), i1z = Math.min(nav.nz - 1, Math.floor((e.pos.z + R + H / 2) / nav.cell))
     for (let iz = i0z; iz <= i1z; iz++) for (let ix = i0x; ix <= i1x; ix++) {
       const i = iz * nav.nx + ix
-      if (Math.hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < R) f[i] = 1
+      if (hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < R) f[i] = 1
     }
   }
   return f
@@ -491,7 +495,7 @@ function validEnd(plan, i) {
   if (i < 0 || !isFinite(res.dist[i])) return false
   if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) return false
   const x = nav.x(i), z = nav.z(i)
-  for (const o of units) if (o !== u && alive(o) && Math.hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false
+  for (const o of units) if (o !== u && alive(o) && hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false
   return true
 }
 
@@ -505,7 +509,7 @@ function nearestValid(plan, x, z, within = 2.4) {
     const ix = cx + dx, iz = cz + dz
     if (ix < 0 || iz < 0 || ix >= nav.nx || iz >= nav.nz) continue
     const i = iz * nav.nx + ix
-    const d = Math.hypot(nav.x(i) - x, nav.z(i) - z)
+    const d = hypot(nav.x(i) - x, nav.z(i) - z)
     if (d < bd && validEnd(plan, i)) {
       bd = d
       best = i
@@ -522,7 +526,7 @@ async function walk(u, pts, { speed = 7, fly = false } = {}) {
   const seg = []
   let acc = 0
   for (let i = 1; i < pts.length; i++) {
-    const l = Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
+    const l = hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
     seg.push({ a: pts[i - 1], b: pts[i], s: acc, l })
     acc += l
   }
@@ -553,7 +557,7 @@ function smashAround(u, { x, z, dir }) {
   for (const c of scenery.chunks) {
     if (!c.alive || !c.destructible) continue
     const s = c.nav || c.shape
-    if (Math.hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
+    if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
       scenery.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) })
       fx.shake = Math.max(fx.shake, 0.08)
     }
@@ -576,7 +580,7 @@ async function doMove(u, cell, plan) {
 async function doAdvance(u) {
   S.busy = true
   tray.clear(`${u.t.short} — Advance`)
-  const r = roll(1)
+  const r = roll(G, 1)
   await tray.row('Advance D6', r, 0, { sum: true, note: `+${r[0]}"` })
   u.flags.advanced = true
   u.flags.advRoll = r[0]
@@ -620,7 +624,7 @@ async function doShoot(u, target) {
   face(u, target)
   tray.clear(`${u.t.short} → ${target.t.short} · ${w.name}`)
   if (w.spell) {
-    const c = roll(2)
+    const c = roll(G, 2)
     const ok = c[0] + c[1] >= w.spell
     await tray.row(`Cast ${w.spell}+ (2D6)`, c, 0, { sum: true, pass: ok })
     if (!ok) {
@@ -642,15 +646,15 @@ async function doShoot(u, target) {
   // a plain volley
   const n = attackCount(u, w, false)
   await volleyFx(u, target, w)
-  const hits = roll(n)
+  const hits = roll(G, n)
   const h = passes(hits, info.need)
   await tray.row(`Hit ${info.need}+`, hits, info.need)
   const wn = woundNeed(w.S, target.t.T, w.poison)
-  const wd = roll(h)
+  const wd = roll(G, h)
   const wounds = passes(wd, wn)
   if (h) await tray.row(`Wound ${wn}+`, wd, wn)
   const sn = saveNeed(target.t.Sv, w.AP, info.cover)
-  const sv = roll(wounds)
+  const sv = roll(G, wounds)
   const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
   if (wounds) await tray.row(sn > 6 ? 'No save' : `Save ${sn}+${info.cover ? ' (cover)' : ''}`, sn > 6 ? [] : sv, sn, { save: true })
   const killed = await damage(target, unsaved, w.D, u)
@@ -711,16 +715,16 @@ async function blastVolley(u, target, w, info) {
     // a template that wiped out its own unit ends the volley: nobody is left to throw
     if (!alive(u)) break
     if (!alive(target) && k > 0) break
-    const ang = rng() * Math.PI * 2, off = rng() * target.r * 0.5
+    const ang = draw(G.rng) * Math.PI * 2, off = draw(G.rng) * target.r * 0.5
     const aim = { x: target.pos.x + Math.cos(ang) * off, z: target.pos.z + Math.sin(ang) * off }
     const marker = fx.ring(aim.x, aim.z, w.blast, '#ffffff', { hold: true, fill: 0.12 })
-    const r = roll(1)
+    const r = roll(G, 1)
     const hit = r[0] >= info.need
     await tray.row(n > 1 ? `Template ${k + 1}: hit ${info.need}+` : `Hit ${info.need}+`, r, info.need)
     let land = aim
     if (!hit) {
-      const sc = roll(1)[0] + 1
-      const a = rng() * Math.PI * 2
+      const sc = roll(G, 1)[0] + 1
+      const a = draw(G.rng) * Math.PI * 2
       land = {
         x: Math.max(-W / 2 + 0.3, Math.min(W / 2 - 0.3, aim.x + Math.cos(a) * sc)),
         z: Math.max(-H / 2 + 0.3, Math.min(H / 2 - 0.3, aim.z + Math.sin(a) * sc)),
@@ -793,20 +797,20 @@ async function blastLands(u, land, w) {
   const victims = []
   for (const v of units) {
     if (!alive(v)) continue
-    const under = v.models.filter((m) => m.alive && Math.hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
+    const under = v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
     if (under.length) victims.push({ v, under })
   }
   for (const { v, under } of victims) {
     let hits = under.length
-    if (v.t.big) hits = Math.ceil(d6() / 2) + 1
+    if (v.t.big) hits = Math.ceil(d6(G) / 2) + 1
     const friendly = v.side === u.side
     const wn = woundNeed(w.S, v.t.T, w.poison)
-    const wd = roll(hits)
+    const wd = roll(G, hits)
     const wounds = passes(wd, wn)
     await tray.row(`${friendly ? '⚠ ' : ''}${v.t.short}: ${hits} hit${hits > 1 ? 's' : ''} · wound ${wn}+`, wd, wn)
     const cover = inCover(v)
     const sn = saveNeed(v.t.Sv, w.AP, cover)
-    const sv = roll(wounds)
+    const sv = roll(G, wounds)
     const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
     if (wounds && sn <= 6) await tray.row(`Save ${sn}+${cover ? ' (cover)' : ''}`, sv, sn, { save: true })
     const killed = await damage(v, unsaved, w.D, u, under)
@@ -827,7 +831,7 @@ async function mesmerize(u, target) {
   }
   await Promise.all(beam)
   for (let i = 0; i < 3; i++) fx.ring(target.pos.x, target.pos.z, target.r * (0.6 + i * 0.35), '#c070ff', { life: 1.2 + i * 0.3, fill: 0.08 })
-  const mw = Math.ceil(d6() / 2)
+  const mw = Math.ceil(d6(G) / 2)
   await tray.row('Mortal wounds D3', [mw], 0, { sum: true, note: `${mw}` })
   const killed = await damage(target, mw, 1, u)
   target.mesmerized = true
@@ -852,7 +856,7 @@ async function damage(u, n, D, attacker, prefer = null) {
     if (wounded.length) m = wounded[0]
     else {
       // whoever is nearest the attacker takes it
-      const near = (q) => Math.hypot(mx(u, q) - attacker.pos.x, mz(u, q) - attacker.pos.z)
+      const near = (q) => hypot(mx(u, q) - attacker.pos.x, mz(u, q) - attacker.pos.z)
       m = pool.reduce((a, b) => (near(a) < near(b) ? a : b))
     }
     m.w -= D
@@ -956,11 +960,11 @@ function chargePlan(u, target) {
     const i = iz * nav.nx + ix
     const d = res.dist[i]
     if (!isFinite(d)) continue
-    const dd = Math.hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z)
+    const dd = hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z)
     if (dd > want || dd < target.r + u.r + 0.02) continue
     if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
-    if (others.some((e) => Math.hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
-    if (units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && Math.hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
+    if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
+    if (units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
     spots.push({ i, d })
     if (d < bd) {
       best = i
@@ -980,7 +984,7 @@ async function doCharge(u, target, { auto = false } = {}) {
     log(u.side, `<b>${u.t.short}</b> can't find a way to ${target.t.short}.`)
     return finishAction()
   }
-  const r = roll(2)
+  const r = roll(G, 2)
   const total = r[0] + r[1]
   const ok = total >= plan.need
   await tray.row(`Charge ${plan.need}" (2D6)`, r, 0, { sum: true, pass: ok })
@@ -1025,7 +1029,7 @@ function nearestSpot(pick, x, z, within = 2.4) {
   let best = -1, bd = within
   for (let i = 0; i < nav.N; i++) {
     if (!pick.ok[i]) continue
-    const d = Math.hypot(nav.x(i) - x, nav.z(i) - z)
+    const d = hypot(nav.x(i) - x, nav.z(i) - z)
     if (d < bd) {
       bd = d
       best = i
@@ -1064,7 +1068,7 @@ async function fight(u) {
   }
   sfx.thwack()
   const n = attackCount(u, w, true)
-  const hits = roll(n)
+  const hits = roll(G, n)
   const h = passes(hits, need)
   await tray.row(`Hit ${need}+${mod ? ' (mesmerized)' : ''}`, hits, need)
   for (let i = 0; i < Math.min(h, 8); i++) {
@@ -1072,11 +1076,11 @@ async function fight(u) {
     if (v) for (let k = 0; k < 4; k++) fx.mote({ x: v.x, y: 0.6, z: v.z, vx: (Math.random() - 0.5) * 5, vy: Math.random() * 4, vz: (Math.random() - 0.5) * 5, size: 0.05, color: '#fff2b0', life: 0.3, g: 12 })
   }
   const wn = woundNeed(w.S, target.t.T, w.poison)
-  const wd = roll(h)
+  const wd = roll(G, h)
   const wounds = passes(wd, wn)
   if (h) await tray.row(`Wound ${wn}+`, wd, wn)
   const sn = saveNeed(target.t.Sv, w.AP, false)
-  const sv = roll(wounds)
+  const sv = roll(G, wounds)
   const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
   if (wounds) await tray.row(sn > 6 ? 'No save' : `Save ${sn}+`, sn > 6 ? [] : sv, sn, { save: true })
   const killed = await damage(target, unsaved, w.D, u)
@@ -1110,7 +1114,7 @@ async function moralePhase() {
     if (!any) tray.clear('Morale')
     any = true
     const ld = leadership(u)
-    const r = roll(1)
+    const r = roll(G, 1)
     const total = r[0] + u.lost
     const flee = r[0] === 1 ? 0 : Math.max(0, total - ld)
     await tray.row(`${u.t.short}: D6 + ${u.lost} lost vs Ld ${ld}`, r, 0, { sum: true, pass: flee === 0, note: `${total}` })
@@ -1189,6 +1193,7 @@ function focus(x, z) {
 
 // ── API handed to the AI ────────────────────────────────────────────────────
 const api = {
+  G,
   get units() {
     return units
   },
@@ -1208,8 +1213,8 @@ async function battle() {
   tray.clear('Roll-off for the first turn')
   let a, b
   do {
-    a = roll(1)
-    b = roll(1)
+    a = roll(G, 1)
+    b = roll(G, 1)
     await tray.row(SIDES[0].short, a, 0, { sum: true })
     await tray.row(SIDES[1].short, b, 0, { sum: true })
   } while (a[0] === b[0])
@@ -1646,11 +1651,11 @@ const tray = {
 const trace = []
 function traceState(tag) {
   const us = units.map((u) => `${u.id}:${u.pos.x.toFixed(3)},${u.pos.z.toFixed(3)},${u.models.map((m) => m.w).join('/')}`).join(' ')
-  trace.push(`${tag} ${us} chunks:${scenery.chunks.filter((c) => c.alive).length} vp:${S.vp.join('-')} rng:${rngState()}`)
+  trace.push(`${tag} ${us} chunks:${scenery.chunks.filter((c) => c.alive).length} vp:${S.vp.join('-')} rng:${rngState(G.rng)}`)
 }
 
 function log(side, html, cls = '') {
-  trace.push(`log ${side} ${html.replace(/<[^>]+>/g, '')} rng:${rngState()}`)
+  trace.push(`log ${side} ${html.replace(/<[^>]+>/g, '')} rng:${rngState(G.rng)}`)
   write(side, html, cls)
   for (const p of S.pendingLog.splice(0)) write(...p)
 }
@@ -1917,7 +1922,7 @@ function setupTable() {
 async function start(mode) {
   // a fresh logic-dice stream per battle; ?dice=N replays one exactly
   S.dice = Number(params.get('dice')) || ((Math.random() * 1e9) | 0)
-  seedLogic(S.dice)
+  G.rng = createRng(S.dice)
   trace.length = 0
   S.control = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }[mode]
   $('#title').classList.add('hidden')
@@ -2108,7 +2113,7 @@ if (params.has('debug')) {
   // Chromium, presses #title's [data-mode] buttons. When internals move,
   // later steps keep this surface working here, inside this block, never by
   // editing sim/oracle: the PIN and the working tree share a driver (from
-  // R4 the members map in place, e.g. rngState: () => q.rngState(G.rng)).
+  // now on the members map in place, as rngState already does over G.rng).
   window.__ts = {
     S, clock, scenery, nav, camera, controls, renderer, validEnd, setUnitPos, trace,
     get units() {
@@ -2124,7 +2129,7 @@ if (params.has('debug')) {
     endPhase: () => $('#endPhase').onclick(),
     autoPhase: () => $('#autoPhase').onclick(),
     // read-only rules queries, for choosing legal input (only what sim/ uses)
-    q: { alive, isEngaged, canAct, movePlan, freeSpot, shootTargets, shotInfo, chargeTargets, chargePlan, rngState },
+    q: { alive, isEngaged, canAct, movePlan, freeSpot, shootTargets, shotInfo, chargeTargets, chargePlan, rngState: () => rngState(G.rng) },
     screen(x, y, z) {
       const v = new THREE.Vector3(x, y, z).project(camera)
       return [(v.x * 0.5 + 0.5) * innerWidth, (-v.y * 0.5 + 0.5) * innerHeight]
