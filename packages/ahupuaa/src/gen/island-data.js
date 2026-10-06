@@ -5,6 +5,7 @@ import { buildTerrain } from './terrain.js'
 import { placeCones, routeAroundCones, finalHeight, packNormals, ambientOcclusion } from './finalize.js'
 import { divideLand, boundaryLines, shoreTrail, ahuSites, MOKU } from './division.js'
 import { placeSites } from './sites.js'
+import { settleSites } from './footing.js'
 import { carveTerraces } from './loi.js'
 import { layStreams, cutBeds } from './channels.js'
 import { regionMap, lineMap, profiles } from './maps.js'
@@ -21,9 +22,9 @@ export function generateIsland(seed, progress = () => {}) {
   progress('detail', 0)
   // the cones keep off the streams (and the streams go round the one too big
   // to keep off), then the streams as they will be drawn
-  const cones = placeCones(T.h, HYDRO_RES, seed, layStreams({ streams: T.streams }, { area: T.route.area }))
+  const cones = placeCones(T.h, HYDRO_RES, seed, layStreams({ streams: T.streams }, { area: T.route.area, height1024: T.h }))
   routeAroundCones(T.streams, cones, T.h, HYDRO_RES, T.route)
-  const laid = layStreams({ streams: T.streams }, { area: T.route.area })
+  const laid = layStreams({ streams: T.streams }, { area: T.route.area, height1024: T.h })
   const height = finalHeight(T.h, HYDRO_RES, cones, seed)
   // clean beds before anyone reads the valley floors...
   cutBeds(height, HEIGHT_RES, laid)
@@ -33,6 +34,8 @@ export function generateIsland(seed, progress = () => {}) {
   carveTerraces(height, sites.loi)
   // ...and once more after the last edit to the ground: no stream climbs
   cutBeds(height, HEIGHT_RES, laid)
+  // every building onto the ground as it now is
+  settleSites(sites.ground, sites, ahu)
   const region = regionMap(T, D, sites.fieldMask)
   const lineTex = lineMap(lines, trail, HEIGHT_RES)
   const prof = profiles(sites, T, D, region.zone, height, HEIGHT_RES)
@@ -58,7 +61,7 @@ export function generateIsland(seed, progress = () => {}) {
     cloudShape: cn.shape,
     cloudDetail: cn.detail,
   }
-  const { fieldMask, ...siteMeta } = sites
+  const { fieldMask, ground, ...siteMeta } = sites
   const meta = {
     seed,
     cones,
@@ -73,6 +76,7 @@ export function generateIsland(seed, progress = () => {}) {
     streams: T.streams.map((s) => ({ area: s.area, mouth: s.mouth, pts: s.pts.map((p) => [p[0], p[1]]) })),
   }
   void fieldMask
+  void ground
   const transfer = Object.values(data).map((a) => a.buffer)
   progress('done', 1)
   return { data, meta, transfer }

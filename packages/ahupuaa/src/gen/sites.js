@@ -9,6 +9,7 @@
 import { cellSize, toWorld, distanceTransform, sample, D8X, D8Y, cellIndex } from './grid.js'
 import { mulberry32, smoothstep } from './noise.js'
 import { layTerraces } from './loi.js'
+import { HEIAU, HOUSE, Placer, keepOut, addLoi, addPond, addHolua, drawnMetres, paepae, heiauHalf } from './footing.js'
 
 /** Grid helpers over the hydrology-resolution fields. */
 function fields(T, D, N) {
@@ -168,6 +169,18 @@ export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
   // what the loʻi already cover, so nothing else is built in a paddy
   const loiAt = []
   const onLoi = (x, z) => loiAt.some((f) => f(x, z))
+  // the ground as it will be drawn, and what is on it so far, for the heiau
+  // (each building is settled onto the final ground once it's all made: see
+  // footing.js; a heiau's site has to be chosen with it in mind)
+  const ground = new Placer((x, z) => drawnMetres(height, N2, x, z), keepOut(lines))
+  let blocked = 0
+  const stand = (list) => {
+    for (const h of list) {
+      const [L, W] = HOUSE[h.kind] || HOUSE.noa
+      const [hx, hz] = paepae(L * (h.scale || 1), W * (h.scale || 1))
+      ground.block(h.x, h.z, h.rot, hx, hz)
+    }
+  }
 
   for (const a of ahupuaa) {
     const isModel = a === model
@@ -210,6 +223,7 @@ export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
       if (t.paddies.length > 6) {
         loiAt.push(t.occupied)
         loi.push({ id: a.id, model: isModel, paddies: t.paddies, auwai: t.auwai, cut: t.cut })
+        addLoi(ground.K, t)
         // a farming household or two up among the terraces, on dry ground
         const mid = t.paddies[Math.floor(t.paddies.length * 0.5)]
         const p = bestNear(F, mid.c[0], mid.c[1], 2.4, (c, x, z) => (F.h[c] > 2 && F.slope[c] < 0.2 && F.toStream[c] * F.cs > 1.2 && !onLoi(x, z) && !onLoi(x + 0.18, z + 0.12) ? -F.slope[c] * 10 - F.toStream[c] * F.cs * 0.3 : -Infinity))
@@ -217,14 +231,17 @@ export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
       }
     }
 
-    // --- heiau: a commanding spot near the village ---
+    // --- heiau: a commanding spot near the village, set back from the brink ---
+    stand(houses.slice(blocked))
+    blocked = houses.length
     if (isModel || rand() < 0.45) {
-      const hs = bestNear(F, v.x, v.z, isModel ? 14 : 10, (c, x, z) => {
-        const h = F.h[c]
-        if (h < 6 || h > 160 || F.label[c] !== a.id || F.slope[c] > 0.16 || onLoi(x, z)) return -Infinity
-        return prominence(F, c, 9) * 0.08 - F.slope[c] * 20 - Math.hypot(x - v.x, z - v.z) * 0.12
-      })
-      if (hs) heiau.push({ x: hs.x, z: hs.z, id: a.id, kind: isModel ? 'luakini' : rand() < 0.5 ? 'mapele' : 'koa-heiau', rot: Math.atan2(v.x - hs.x, v.z - hs.z), model: isModel })
+      const hs = heiauSite(F, ground, a.id, v, isModel, onLoi)
+      if (hs) {
+        const kind = isModel ? 'luakini' : rand() < 0.5 ? 'mapele' : 'koa-heiau'
+        // (the model's heiau is a tour stop: it stands even if nowhere quite
+        // serves, and is settled as best it can be later)
+        if (hs.fits || isModel) heiau.push({ x: hs.x, z: hs.z, id: a.id, kind, rot: hs.rot, model: isModel })
+      }
     }
 
     // --- fishpond: walled off from the reef flat beside the stream mouth ---
@@ -238,7 +255,10 @@ export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
           pond = pond || fishpond(F, T, mx, mz, a.id, r, rand, side, isModel ? 5.5 : 3.2)
         }
       }
-      if (pond) ponds.push({ ...pond, id: a.id, model: isModel })
+      if (pond) {
+        ponds.push({ ...pond, id: a.id, model: isModel })
+        addPond(ground.K, pond)
+      }
     }
 
     // --- canoes drawn up on the beach, a canoe house, and the fishing shrine ---
@@ -286,7 +306,10 @@ export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
     const sc = cellIndex(N, sx - Math.cos(dir) * 0.3, sz - Math.sin(dir) * 0.3)
     if (sc < 0 || F.h[sc] <= 0) continue
     const pond = fishpond(F, T, sx - Math.cos(dir) * 0.3, sz - Math.sin(dir) * 0.3, F.label[sc], 1.6 + rand() * 1.4, rand)
-    if (pond) ponds.push({ ...pond, id: F.label[sc], model: false })
+    if (pond) {
+      ponds.push({ ...pond, id: F.label[sc], model: false })
+      addPond(ground.K, pond)
+    }
   }
 
   // --- the chiefly centre on the leeward coast ---
@@ -340,6 +363,7 @@ export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
     if (top) {
       const dir = seaward(F, top.c)
       holua = { x0: top.x, z0: top.z, x1: top.x + Math.cos(dir) * 11, z1: top.z + Math.sin(dir) * 11 }
+      addHolua(ground.K, holua)
     }
     // salt pans on the dry shore beside the bay
     for (let k = 0; k < 2; k++) {
@@ -365,7 +389,75 @@ export function placeSites(T, D, height, N2, ahu, trail, seed, lines = []) {
     fieldMask[c] = Math.round(255 * k)
   }
 
-  return { model: model ? model.id : 1, ahupuaa: ahupuaa.map(({ trunk, ...a }) => ({ ...a, trunk: trunk.filter((_, i) => i % 3 === 0).map((p) => [p.x, p.z, p.h]) })), villages, loi, heiau, ponds, canoes, koa, houses, surf, alii, puuhonua, holua, saltpans, fieldMask }
+  return { ground, model: model ? model.id : 1, ahupuaa: ahupuaa.map(({ trunk, ...a }) => ({ ...a, trunk: trunk.filter((_, i) => i % 3 === 0).map((p) => [p.x, p.z, p.h]) })), villages, loi, heiau, ponds, canoes, koa, houses, surf, alii, puuhonua, holua, saltpans, fieldMask }
+}
+
+/**
+ * A heiau's site near the village: the most commanding ground (standing well
+ * above what's around it, and close by) where its platform fits as the ground
+ * will be drawn: off the water and the paddies, its relief within what a
+ * terraced platform takes up, and back from any brink. Null if there's no
+ * ground for one at all; `fits` false if there is but none of it serves (the
+ * best of it, then).
+ */
+function heiauSite(F, ground, id, v, isModel, onLoi) {
+  const N = F.N
+  const cs = F.cs
+  const ci = Math.round((v.x + 180) / cs - 0.5)
+  const cj = Math.round((v.z + 180) / cs - 0.5)
+  const R = Math.ceil((isModel ? 14 : 10) / cs)
+  const cands = []
+  for (let dj = -R; dj <= R; dj++) {
+    for (let di = -R; di <= R; di++) {
+      if (di * di + dj * dj > R * R) continue
+      const i = ci + di
+      const j = cj + dj
+      if (i < 1 || j < 1 || i >= N - 1 || j >= N - 1) continue
+      const c = j * N + i
+      const x = toWorld(N, i)
+      const z = toWorld(N, j)
+      const h = F.h[c]
+      if (h < 6 || h > 160 || F.label[c] !== id || F.slope[c] > 0.16 || onLoi(x, z)) continue
+      cands.push({ x, z, s: prominence(F, c, 9) * 0.08 - F.slope[c] * 20 - Math.hypot(x - v.x, z - v.z) * 0.12 })
+    }
+  }
+  if (!cands.length) return null
+  cands.sort((a, b) => b.s - a.s)
+  const big = isModel
+  const [hx, hz] = heiauHalf(big)
+  const rise = (big ? HEIAU.big : HEIAU.small).rise
+  // (of the first few that fit, the one that asks least of its builders: a
+  // heiau on a shoulder of level ground over one terraced up a knoll, and
+  // one with a tall sheer wall left on a side without terraces least of all)
+  const g = ground.g
+  let best = null
+  let fits = 0
+  for (let k = 0; k < Math.min(cands.length, 400) && fits < 6; k++) {
+    const { x, z, s } = cands[k]
+    // facing the village, or near it; or turned square to the slope, its long
+    // sides along the contours, where it has least to make up and the one
+    // side that faces down the slope takes the terraces
+    const face = Math.atan2(v.x - x, v.z - z)
+    let square = Math.atan2(g(x + 0.25, z) - g(x - 0.25, z), g(x, z - 0.25) - g(x, z + 0.25))
+    if (Math.cos(square - face) < 0) square += Math.PI
+    let here = null
+    for (const rot of [face, face + 0.3, face - 0.3, square, face + Math.PI / 2]) {
+      const f = ground.fit(big ? 'luakini' : 'heiau', x, z, rot, hx, hz, { rise })
+      if (!f) continue
+      const score = s - f.relief * 0.35 - f.wall * 0.2
+      if (!here || score > here.score) here = { f, score }
+    }
+    if (!here) continue
+    fits++
+    if (!best || here.score > best.score) best = here
+  }
+  if (best) {
+    const { f } = best
+    ground.take(f)
+    return { x: f.x, z: f.z, rot: f.rot, fits: true }
+  }
+  const { x, z } = cands[0]
+  return { x, z, rot: Math.atan2(v.x - x, v.z - z), fits: false }
 }
 
 /** Direction (radians, atan2 z/x) from a land cell toward the nearest sea. */

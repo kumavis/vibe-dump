@@ -55,6 +55,13 @@ export class Terrain {
       uMorph: { value: this.morph },
       uCamPos: { value: new THREE.Vector3() },
       uDebug: { value: 0 },
+      // the hero falls, filled in by Waterfalls: the amphitheatre each one
+      // cut, and where its sheet and spray keep the rock wet
+      uFallA: { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) },
+      uFallB: { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) },
+      uFallC: { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) },
+      uFallD: { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) },
+      uFalls: { value: 0 },
     }
     this.uniforms = uniforms
     this.group = new THREE.Group()

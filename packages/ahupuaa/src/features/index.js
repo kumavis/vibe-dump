@@ -1,19 +1,13 @@
 // Puts everything people built onto the island, from the generator's sites.
 
 import * as THREE from 'three'
-import { HYDRO_RES, WORLD, HALF } from '../config.js'
+import { HYDRO_RES, WORLD, HALF, Y_PER_M } from '../config.js'
 import { mulberry32 } from '../gen/noise.js'
+import { planFootings, drawnMetres, PAEPAE_TOP } from '../gen/footing.js'
+import { layStreams } from './streams.js'
 import { Builder, MAT, S, col, objectMaterial } from './kit.js'
 import { hale, placeHeiau, waa, kaulua, halau, ahu, koa, imu, kii, PALETTE } from './structures.js'
 import { Loi } from './loi.js'
-
-const HOUSE = {
-  noa: [7, 4.6, 5.2],
-  mua: [8, 5, 5.6],
-  aina: [6, 4.2, 4.6],
-  kuku: [5, 3.6, 4.0],
-  alii: [12, 7, 7.5],
-}
 
 export class Features {
   constructor(app) {
@@ -28,28 +22,21 @@ export class Features {
     const B = new Builder()
     const ground = (x, z) => Math.max(terrain.heightAt(x, z), 0)
 
-    // --- kauhale -----------------------------------------------------------
-    for (const h of sites.houses) {
-      const [L, W, H] = HOUSE[h.kind] || HOUSE.noa
-      const sc = h.scale || 1
-      B.at(h.x, ground(h.x, h.z), h.z, h.rot)
-      hale(B, rand, L * sc, W * sc, H * sc)
-      B.done()
-    }
-    // an imu by each village
-    for (const v of sites.villages) {
-      const a = rand() * Math.PI * 2
-      const x = v.x + Math.cos(a) * 0.35
-      const z = v.z + Math.sin(a) * 0.35
-      B.at(x, ground(x, z), z, 0)
-      imu(B, rand)
-      B.done()
-    }
+    // Every building stands where the generator settled it, on a platform
+    // reaching the ground as it is drawn: after the hero falls cut their
+    // headwalls, so one they undercut is found new ground (gen/footing.js).
+    const lines = app.wailele?.lines || layStreams(meta, app.island.data)
+    const plan = planFootings(app.island, lines).list
+    // (every platform's outline, for whatever else must keep off them)
+    this.footings = plan
 
-    // --- heiau ---------------------------------------------------------------
-    for (const h of sites.heiau) {
-      placeHeiau(B, h.x, ground(h.x, h.z), h.z, h.rot, rand, h.kind === 'luakini', S)
-    }
+    // --- kauhale (and the pond keepers' and the puʻuhonua's houses) ---------------
+    for (const f of plan) if (f.kind === 'house') buildFooting(B, f, rand)
+    // an imu by each village
+    for (const f of plan) if (f.kind === 'imu') buildFooting(B, f, rand)
+
+    // --- heiau (the puʻuhonua's among them) ----------------------------------------
+    for (const f of plan) if (f.kind === 'heiau' || f.kind === 'luakini') buildFooting(B, f, rand)
 
     // --- canoes on the beach, and their sheds ------------------------------------
     this.beaches = []
@@ -65,15 +52,10 @@ export class Features {
         waa(B, rand, 7 + rand() * 4)
         B.done()
       }
-      if (c.house) {
-        const x = c.x - Math.cos(dir) * 0.32
-        const z = c.z - Math.sin(dir) * 0.32
-        B.at(x, ground(x, z), z, dir)
-        halau(B, rand)
-        B.done()
-      }
       this.beaches.push(c)
     }
+    // the canoe sheds, following the beach up from the water along their length
+    for (const f of plan) if (f.kind === 'halau') buildFooting(B, f, rand)
     // a voyaging canoe drawn up at the chief's landing
     if (sites.alii) {
       const c = sites.canoes.find((cc) => cc.village === sites.alii.id)
@@ -87,19 +69,8 @@ export class Features {
       }
     }
 
-    // --- koʻa ------------------------------------------------------------------
-    for (const k of sites.koa) {
-      B.at(k.x, ground(k.x, k.z), k.z, rand() * 6)
-      koa(B, rand)
-      B.done()
-    }
-
-    // --- ahu where the trail crosses each boundary --------------------------------
-    for (const a of meta.ahu) {
-      B.at(a.x, ground(a.x, a.z), a.z, rand() * 6)
-      ahu(B, rand, true)
-      B.done()
-    }
+    // --- koʻa, and the ahu where the trail crosses each boundary ---------------------
+    for (const f of plan) if (f.kind === 'koa' || f.kind === 'ahu') buildFooting(B, f, rand)
 
     // --- fishponds ------------------------------------------------------------------
     this.ponds = sites.ponds
@@ -111,7 +82,7 @@ export class Features {
     // --- the hōlua slide ------------------------------------------------------------------
     if (sites.holua) this.buildHolua(B, sites.holua, rand)
     // --- salt pans ----------------------------------------------------------------------
-    for (const sp of sites.saltpans) this.buildSalt(B, sp, rand)
+    for (const f of plan) if (f.kind === 'salt') buildFooting(B, f, rand)
 
     this.material = objectMaterial(shared, { fade: [70, 110] })
     this.structures = new THREE.Mesh(B.geometry(), this.material)
@@ -204,12 +175,6 @@ export class Features {
       B.box(0, 0.45, 0, span, 0.1, 0.16, w, MAT.wood)
       B.done()
     }
-    const g0 = Math.round(p.gates[0] * (n - 1))
-    const hx = pts[g0][0] - p.ax * 0.12
-    const hz = pts[g0][1] - p.az * 0.12
-    B.at(hx, 0.004, hz, rand() * 3)
-    hale(B, rand, 4, 3, 3.4)
-    B.done()
   }
 
   buildPuuhonua(B, site, rand) {
@@ -236,23 +201,14 @@ export class Features {
     }
     const stone = col(PALETTE.stoneDark, 0.1, rand)
     B.wall(pts, 0.08, 0.06, stone, MAT.stone, 0.8)
-    // a heiau inside, kiʻi facing the sea, a few houses for the refugees
-    const hx = site.x - dx * 0.5
-    const hz = site.z - dz * 0.5
-    placeHeiau(B, hx, Math.max(0, terrain.heightAt(hx, hz)), hz, dir, rand, false, S)
+    // (a heiau inside and a few houses for the refugees are built with the
+    // others) and kiʻi facing the sea
     for (let k = 0; k < 6; k++) {
       const t = (k - 2.5) * 0.12
       const x = site.x + px * t - dx * 0.05
       const z = site.z + pz * t - dz * 0.05
-      B.at(x, Math.max(0, terrain.heightAt(x, z)), z, dir)
+      B.at(x, Math.max(0, drawnHeight(terrain, x, z)), z, dir)
       kii(B, 0, 0, 4, rand)
-      B.done()
-    }
-    for (let k = 0; k < 3; k++) {
-      const x = cx + dx * 0.5 + px * (k - 1) * 0.6
-      const z = cz + dz * 0.5 + pz * (k - 1) * 0.6
-      B.at(x, Math.max(0, terrain.heightAt(x, z)), z, dir + Math.PI / 2)
-      hale(B, rand, 6, 4, 4.2)
       B.done()
     }
     this.puuhonuaWall = { a: pts[0], b: pts[pts.length - 1] }
@@ -358,25 +314,75 @@ export class Features {
     }
     this.holuaPath = surface
   }
+}
 
-  buildSalt(B, sp, rand) {
-    const { terrain } = this.app
-    const ang = sp.dir + Math.PI / 2
-    const salt = col(PALETTE.salt, 0.06, rand)
-    const clay = col('#7d5b44', 0.12, rand)
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 3; j++) {
-        const lx = (i - 1.5) * 0.11
-        const lz = (j - 1) * 0.09
-        const x = sp.x + Math.cos(ang) * lx - Math.sin(ang) * lz
-        const z = sp.z + Math.sin(ang) * lx + Math.cos(ang) * lz
-        const y = Math.max(terrain.heightAt(x, z), 0.004)
-        B.at(x, y, z, ang)
-        B.box(0, -0.3, 0, 6.6, 0.5, 5.4, clay, MAT.plain)
+/**
+ * One building on its footing (gen/footing.js), as it is drawn: its platform
+ * reaching the ground and what stands on it. (tools/audit-sites.mjs builds
+ * them through this too, to measure what is drawn rather than what was meant.)
+ */
+export function buildFooting(B, f, rand) {
+  switch (f.kind) {
+    case 'house': {
+      const [L, W, H] = f.dims
+      const y = f.top - PAEPAE_TOP * S
+      B.at(f.x, y, f.z, f.rot)
+      hale(B, rand, L, W, H, true, (y - f.base) / S)
+      B.done()
+      break
+    }
+    case 'imu':
+      B.at(f.x, f.top - 0.5 * S, f.z, 0)
+      imu(B, rand)
+      B.done()
+      break
+    case 'heiau':
+    case 'luakini':
+      placeHeiau(B, f, rand, S)
+      break
+    case 'halau':
+      B.at(f.x, f.top - 0.3 * S, f.z, f.rot)
+      lean(B, f.lean)
+      halau(B, rand)
+      B.done()
+      break
+    case 'koa':
+      B.at(f.x, f.top - 0.5 * S, f.z, f.rot)
+      koa(B, rand, (f.top - 0.5 * S - f.base) / S)
+      B.done()
+      break
+    case 'ahu': {
+      // (a smaller cairn where the ground is steep: f.size)
+      const k = S * (f.size || 1)
+      B.at(f.x, f.top, f.z, f.rot, k)
+      ahu(B, rand, true, (f.top - f.base) / k)
+      B.done()
+      break
+    }
+    case 'salt': {
+      // clay basins on the dry shore, each level, set on its own patch of ground
+      const salt = col(PALETTE.salt, 0.06, rand)
+      const clay = col('#7d5b44', 0.12, rand)
+      for (const p of f.pans) {
+        const y = p.top - 0.2 * S
+        B.at(p.x, y, p.z, f.rot)
+        B.box(0, (p.base - y) / S, 0, 6.6, (p.top - p.base) / S, 5.4, clay, MAT.plain)
         B.box(0, 0.05, 0, 5.8, 0.18, 4.6, rand() < 0.7 ? salt : col('#d9c2b4', 0.05, rand), MAT.kapa)
         B.done()
       }
+      break
     }
+  }
+}
+
+/** Lean the frame just placed with B.at: it rises `k` world units per unit along its own x. */
+function lean(B, k) {
+  if (!k) return
+  const xf = B.xf
+  B.xf = (p) => {
+    const q = xf(p)
+    q[1] += k * p[0] * S
+    return q
   }
 }
 
@@ -398,19 +404,5 @@ function inside(poly, x, z) {
  * to sit on the ground that is seen there reads this.
  */
 export function drawnHeight(terrain, x, z) {
-  const c = WORLD / terrain.N
-  const fx = (x + HALF) / c
-  const fz = (z + HALF) / c
-  const i = Math.floor(fx)
-  const j = Math.floor(fz)
-  const u = fx - i
-  const v = fz - j
-  const x0 = -HALF + i * c
-  const z0 = -HALF + j * c
-  const h00 = terrain.heightAt(x0, z0)
-  const h10 = terrain.heightAt(x0 + c, z0)
-  const h01 = terrain.heightAt(x0, z0 + c)
-  const h11 = terrain.heightAt(x0 + c, z0 + c)
-  if ((i + j) & 1) return u + v <= 1 ? h00 + (h10 - h00) * u + (h01 - h00) * v : h11 + (h01 - h11) * (1 - u) + (h10 - h11) * (1 - v)
-  return v >= u ? h00 + (h11 - h01) * u + (h01 - h00) * v : h00 + (h10 - h00) * u + (h11 - h10) * v
+  return drawnMetres(terrain.heights, terrain.N, x, z) * Y_PER_M
 }

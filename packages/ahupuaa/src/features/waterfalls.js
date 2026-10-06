@@ -20,8 +20,9 @@
 // the camera about its own axis (so it reads as a column of falling water
 // from any side), and shaded in flight time: the pattern at depth d belongs
 // to water that left the lip T(d) seconds ago, so it crawls over the brink
-// and races near the foot, as real falls do. Pools, wet rock and the mist
-// share the same few buffers; the whole system is two draw calls.
+// and races near the foot, as real falls do. Pools and the mist share the
+// same few buffers; the whole system is two draw calls. (The rock behind a
+// hero, wet and bare, is the terrain's own: render/shaders/terrain.glsl.js.)
 
 import * as THREE from 'three'
 import { WORLD, HALF, HEIGHT_RES, HYDRO_RES, Y_PER_M } from '../config.js'
@@ -382,7 +383,7 @@ export function planFalls(island, opts = {}) {
       face: [c.ux, c.uz],
       pool: [px, water, pz],
       poolR: shape.poolR,
-      carve: { faceRun: shape.faceRun, faceFrac: shape.faceFrac, wFace: shape.wFace, sLand: shape.sLand, yF: yB + (1 - shape.faceFrac) * (yL - yB) },
+      carve: { faceRun: shape.faceRun, faceFrac: shape.faceFrac, wFace: shape.wFace, wBase: shape.wBase, sLand: shape.sLand, yF: yB + (1 - shape.faceFrac) * (yL - yB) },
     })
   }
   const tCarve = performance.now()
@@ -834,7 +835,8 @@ void main() {
   float dist0 = length(cameraPosition - position);
   // (after a storm the windward pali streaming with threads is a sight from
   // across a valley, so they carry nearly as far as the stream falls; their
-  // coverage fade below keeps them from shimmering out there)
+  // coverage fade below keeps them from shimmering out there; the last
+  // range is the stream curtains' and the pools')
   float fade = 1.0 - (kind < 0.5 ? smoothstep(100.0, 150.0, dist0) : (kind > 1.5 && kind < 2.5) ? smoothstep(65.0, 100.0, dist0) : smoothstep(70.0, 110.0, dist0));
   if (fade <= 0.0) {
     // out of range: skip the rest (most of the island's falls, most frames)
@@ -1000,42 +1002,6 @@ void main() {
     gl_FragColor = vec4(mix(water, white, cover), shore * mix(0.7, 1.0, cover) * fade);
     return;
   }
-  if (kind > 2.5) {
-    // a hero's headwall: dark basalt laid down flow on flow, so it is banded
-    // across with ledges where moss and ferns take hold, and fluted down by
-    // the water; fading out at the rim, the flanks and the foot
-    vec3 N = normalize(vN);
-    float lat = vA.x;
-    float dM = vA.y;
-    float xm = lat * vA.w;
-    float flow0 = vnoise(vec2(xm * 0.02 + vB.y * 7.0, dM * 0.09));
-    float layer = smoothstep(0.35, 0.65, flow0);
-    float ledge = smoothstep(0.02, 0.1, abs(fract(dM * 0.09 + flow0 * 0.6) - 0.5) - 0.38);
-    float flute = vnoise(vec2(xm * 0.35, dM * 0.012)) * 0.6 + vnoise(vec2(xm * 1.1 + 3.0, dM * 0.04)) * 0.4;
-    // (out toward the flanks, out of the spray's reach, the ferns win, as the
-    // terrain's own green pali do; the edge wanders)
-    float side = abs(lat) + (vnoise(vec2(dM * 0.04, lat * 2.0 + vB.y * 5.0)) - 0.5) * 0.35;
-    float moss = clamp(smoothstep(0.5, 0.75, vnoise(vec2(xm * 0.08 + 11.0, dM * 0.05)) + ledge * 0.35) + ledge * 0.4 + smoothstep(0.25, 0.85, side) * 0.7, 0.0, 1.0);
-    // (the water keeps the rock behind the sheet bare)
-    float wetZ = 1.0 - smoothstep(0.6, 1.0, abs(lat) / max(vA.z, 1e-3));
-    moss *= 1.0 - wetZ * 0.9;
-    vec3 rock = mix(vec3(0.028, 0.025, 0.023), vec3(0.06, 0.052, 0.045), layer * 0.6 + flute * 0.4);
-    vec3 albedo = mix(rock, vec3(0.04, 0.095, 0.025), moss * 0.9);
-    vec3 lit = albedo * (sun * max(dot(N, uSunDir), 0.0) + ambientLight(N) + uMoonColor * max(dot(N, uMoonDir), 0.0));
-    float aRock = vB.z * (1.0 - smoothstep(0.4, 1.0, side)) * smoothstep(0.0, 8.0, dM) * smoothstep(0.0, 15.0, vC.z) * 0.85;
-    // and in a strip behind the sheet, wet: darker, glistening at grazing angles
-    // (a thin sheen, not a mirror: wet rock is rough)
-    vec3 Rf = reflect(-V, N);
-    float Fr = 0.03 + 0.97 * pow(1.0 - max(dot(N, V), 0.0), 5.0);
-    vec3 cw = vec3(0.012, 0.018, 0.012) * ambientLight(N) + skyMap(Rf) * min(Fr, 0.25) * 0.25 + sun * pow(max(dot(Rf, uSunDir), 0.0), 40.0) * 0.12;
-    // (by night there's no sheen to tell wet rock from dry)
-    float aw = (1.0 - smoothstep(0.5, 1.0, abs(lat) / max(vA.z, 1e-3))) * 0.5 * max(flow, vD.z) * day * smoothstep(0.0, 4.0, dM);
-    float A = aRock + aw * (1.0 - aRock);
-    vec3 c = (lit * aRock * (1.0 - aw) + cw * aw) / max(A, 1e-4);
-    if (uDebug == 4) { c = vec3(2.0, 2.0, 0.0) * aRock; A = 1.0; }
-    gl_FragColor = vec4(c, A * fade);
-    return;
-  }
   float along = vC.w;
   float front = vD.y;
   if (along > front) discard; // the water hasn't got this far yet
@@ -1099,7 +1065,13 @@ void main() {
     // drying it breaks into dashes and drips
     float seg = smoothstep(0.47, 0.6, vnoise(vec2(seed * 13.0 + 3.7, s * 0.022)) * 0.75 + vnoise(vec2(seed * 5.0, s * 0.08)) * 0.25);
     a0 *= mix(0.03, 1.0, seg) * smoothstep(0.0, 40.0, vC.z) * mix(0.45, 1.0, smoothstep(0.25, 0.75, vnoise(vec2(seed * 7.0, tau * 1.7))) * k1 + 0.5 * (1.0 - k1)) * (0.55 + 0.45 * fract(seed * 7.31));
-    a0 *= smoothstep(1.0 - flow * 1.6, 1.15 - flow * 1.6, vnoise(vec2(seed * 13.0, along * 22.0 - uWaterTime * (1.0 + 2.0 * along))));
+    // (the drips ride down in flight time too, crowded off the lip and
+    // strung out near the foot, so they never seem to climb however long it
+    // has run; where they crowd finer than a pixel or two, their average)
+    float pd = s * 0.05 - tau * 1.2;
+    float thr = 1.0 - flow * 1.6;
+    float kd = 1.0 - smoothstep(0.35, 0.7, fwidth(pd));
+    a0 *= mix(smoothstep(thr - 0.2, thr + 0.35, 0.5), smoothstep(thr, thr + 0.15, vnoise(vec2(seed * 13.0, pd))), kd);
   }
   vec3 L = uSunDir;
   float uc = clamp(u, -1.0, 1.0);
@@ -1336,6 +1308,24 @@ export class Waterfalls {
     }
     this.hero = this.heroes[0] || null
     this.heroView = null
+    // hand the terrain each hero's amphitheatre, as carveHero cut it, so it
+    // can draw the rock there, and wet it where the sheet runs and the spray
+    // drifts (how wet, in uFallC.w, follows the fall in update())
+    const tu = app.terrain.uniforms
+    this.wallWet = []
+    if (tu.uFallA && plan.carved.length) {
+      for (const h of this.heroes.slice(0, tu.uFallA.value.length)) {
+        const f = this.list[h.index]
+        const k = this.wallWet.length
+        const len = Math.hypot(f.base[0] - f.lip[0], f.base[2] - f.lip[2])
+        tu.uFallA.value[k].set(f.lip[0], f.lip[2], f.face[0], f.face[1])
+        tu.uFallB.value[k].set(f.lip[1], f.pool[1], 1.1 * f.W0, f.carve.sLand)
+        tu.uFallC.value[k].set(len, f.drop, f.carve.wFace, this.wet[h.index])
+        tu.uFallD.value[k].set(f.carve.wBase, RIM_BEND, HALF_TEX, clamp(0.5 + 0.002 * f.drop, 0.6, 1.1))
+        this.wallWet.push(tu.uFallC.value[k])
+      }
+      tu.uFalls.value = this.wallWet.length
+    }
     this.lastStop = -1
     this.frustum = new THREE.Frustum()
     this.projView = new THREE.Matrix4()
@@ -1782,7 +1772,6 @@ export class Waterfalls {
       }
       return nv++
     }
-    const iDecal = []
     const iPool = []
     const iHero = []
     const iStream = []
@@ -1857,84 +1846,6 @@ export class Waterfalls {
         const gl = Math.hypot(this.fine(P[0] + e, P[1]) - this.fine(P[0] - e, P[1]), this.fine(P[0], P[1] + e) - this.fine(P[0], P[1] - e)) / (2 * e * 100)
         if (gl < 0.35) pool(id, seed + 0.37, P[0], P[1], R * 0.6, P[2], P[3])
       }
-      // the headwall itself: a skin over the carved face (the terrain's own
-      // shading, all in plan, smears down a face this steep into a smooth
-      // panel), dark basalt in lava-flow layers with moss on the ledges,
-      // and wet, glistening rock in a strip behind the sheet
-      if (f.kind === 0) {
-        const Fx = -f.face[1]
-        const Fz = f.face[0]
-        const rows = []
-        const dMax = f.lip[1] - f.carve.yF
-        const cMax = 0.6 * f.carve.wFace
-        const COLS = 13
-        const wetFrac = (1.1 * sp.W0) / cMax
-        for (let d = 0; d <= dMax + 1e-6; d += 8) {
-          const y = sp.yL - d * Y_PER_M
-          sp.at(sp.sigmaT(y), P)
-          const row = []
-          for (let ci = 0; ci < COLS; ci++) {
-            const l = (ci / (COLS - 1)) * 2 - 1
-            let x = P[0] + Fx * l * cMax
-            let z = P[1] + Fz * l * cMax
-            // find the rock face at this height (round the horseshoe it lies
-            // further downstream the further out it is)
-            const inside = this.fine(x, z) * Y_PER_M >= y
-            const dir = inside ? 1 : -1
-            let lx = x
-            let lz = z
-            let found = false
-            for (let q = 0; q < 200; q++) {
-              const nx = x + f.face[0] * 0.005 * dir
-              const nz = z + f.face[1] * 0.005 * dir
-              const nIn = this.fine(nx, nz) * Y_PER_M >= y
-              if (dir < 0) {
-                if (nIn) {
-                  found = true
-                  break
-                }
-                lx = nx
-                lz = nz
-              } else if (!nIn) {
-                lx = nx
-                lz = nz
-                found = true
-                break
-              }
-              x = nx
-              z = nz
-            }
-            if (!found) {
-              row.push(-1)
-              continue
-            }
-            const e = 0.02
-            const gx = ((this.fine(lx + e, lz) - this.fine(lx - e, lz)) * Y_PER_M) / (2 * e)
-            const gz = ((this.fine(lx, lz + e) - this.fine(lx, lz - e)) * Y_PER_M) / (2 * e)
-            const nl = Math.hypot(gx, 1, gz)
-            const n = [-gx / nl, 1 / nl, -gz / nl]
-            const vxp = lx + n[0] * 0.004
-            const vyp = y + n[1] * 0.004
-            const vzp = lz + n[2] * 0.004
-            const lift = [0, 0, 0, 0]
-            for (let L = 0; L < 4; L++) lift[L] = Math.max(0, this.coarse(L, vxp, vzp) * Y_PER_M + 0.01 - vyp)
-            // (s: metres below the brink; T: the wet strip's half-width, as a
-            // fraction of the skin's; contact: how much of a face it is here)
-            row.push(vtx(vxp, vyp, vzp, n[0], n[1], n[2], f.face[0], f.face[1], d, wetFrac, cMax, 3, id, seed, l, 1 - smooth(0.5, 0.8, n[1]), d / f.drop, f.drop - d, lift))
-          }
-          rows.push(row)
-        }
-        for (let r = 1; r < rows.length; r++) {
-          for (let c = 0; c < COLS - 1; c++) {
-            const a = rows[r - 1][c]
-            const b = rows[r - 1][c + 1]
-            const cc = rows[r][c]
-            const dd = rows[r][c + 1]
-            if (a < 0 || b < 0 || cc < 0 || dd < 0) continue
-            iDecal.push(a, b, cc, b, dd, cc)
-          }
-        }
-      }
       this.mistSrc.push({ id, f, sp, ox, oz })
     }
     for (let k = 0; k < this.threads.length; k++) {
@@ -1945,17 +1856,16 @@ export class Waterfalls {
       curtain(sp, id, hash01(id * 3.77 + 0.3), iThread, 2)
     }
     threadStart.push(iThread.length)
-    // draw order: wet rock, pools, heroes, streams, then the threads by
-    // priority (so a quality level is just a shorter draw range)
-    const total = iDecal.length + iPool.length + iHero.length + iStream.length + iThread.length
+    // draw order: pools, heroes, streams, then the threads by priority (so
+    // a quality level is just a shorter draw range)
+    const total = iPool.length + iHero.length + iStream.length + iThread.length
     const index = nv > 65535 ? new Uint32Array(total) : new Uint16Array(total)
     let o = 0
-    for (const part of [iDecal, iPool, iHero, iStream, iThread]) {
+    for (const part of [iPool, iHero, iStream, iThread]) {
       index.set(part, o)
       o += part.length
     }
     const base = total - iThread.length
-    this.decalIdx = iDecal.length // (the headwalls come first, so the slowest level can skip them)
     this.threadIdx = threadStart.map((s) => base + s)
     const g = new THREE.BufferGeometry()
     g.setAttribute('position', new THREE.BufferAttribute(B.pos.slice(0, nv * 3), 3))
@@ -2348,6 +2258,7 @@ export class Waterfalls {
       }
     }
     if (dirty) this.stateTex.needsUpdate = true
+    for (let k = 0; k < this.wallWet.length; k++) this.wallWet[k].w = this.wet[this.heroes[k].index]
     const u = this.uniforms
     const cam = app.camera
     u.uLodRange.value = app.terrain.range0
@@ -2396,12 +2307,11 @@ export class Waterfalls {
     rig.autoOrbit = dir * (v.distance < 60 ? 0.012 : 0.02) * (0.15 + 0.85 * smooth(0, 0.12, room))
   }
 
-  /** Fewer threads and puffs on slower machines, and no headwall skin on the slowest (draw ranges only). */
+  /** Fewer threads and puffs on slower machines (draw ranges only). */
   setQuality(level) {
     const L = clamp(level | 0, 0, 3)
     const nT = Math.min(THREADS_BY_LEVEL[L], this.threads.length)
-    const start = L === 0 ? this.decalIdx : 0
-    this.mesh.geometry.setDrawRange(start, this.threadIdx[nT] - start)
+    this.mesh.geometry.setDrawRange(0, this.threadIdx[nT])
     this.mist.geometry.instanceCount = Math.round(this.nMist * MIST_BY_LEVEL[L])
   }
 

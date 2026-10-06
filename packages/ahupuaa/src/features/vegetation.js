@@ -328,10 +328,22 @@ export class Vegetation {
     const out = Object.fromEntries(KINDS.map((k) => [k, []]))
     const houses = sites.houses
     const clearOf = (x, z, r) => !houses.some((h) => Math.abs(h.x - x) < r && Math.abs(h.z - z) < r && Math.hypot(h.x - x, h.z - z) < r)
-    const add = (kind, x, z, scale = 1) => {
+    // nor through anything built: every platform's outline (features/index.js),
+    // and `m` past it for a tree's trunk and lower fronds
+    const built = this.app.features?.footings || []
+    const onBuilt = (x, z, m) =>
+      built.some(({ box: b }) => {
+        const dx = x - b.x
+        const dz = z - b.z
+        return Math.abs(dx * b.c + dz * b.s) < b.hx + m && Math.abs(dz * b.c - dx * b.s) < b.hz + m
+      })
+    const add = (kind, x, z, scale = 1, m = 0.025) => {
       const y = terrain.heightAt(x, z)
       if (y <= 0.003) return false
-      out[kind].push({ x, y, z, rot: rand() * Math.PI * 2, s: S * scale * (0.8 + rand() * 0.45), c: 0.85 + rand() * 0.3 })
+      const t = { x, y, z, rot: rand() * Math.PI * 2, s: S * scale * (0.8 + rand() * 0.45), c: 0.85 + rand() * 0.3 }
+      // (drawn either way, so leaving one out moves no other)
+      if (onBuilt(x, z, m)) return false
+      out[kind].push(t)
       return true
     }
     // around each kauhale
@@ -351,7 +363,7 @@ export class Vegetation {
         const h = houses[Math.floor(rand() * houses.length)]
         if (h.village !== v.id) continue
         const a = rand() * Math.PI * 2
-        add(rand() < 0.75 ? 'ki' : 'kiRed', h.x + Math.cos(a) * 0.08, h.z + Math.sin(a) * 0.08, 0.9)
+        add(rand() < 0.75 ? 'ki' : 'kiRed', h.x + Math.cos(a) * 0.08, h.z + Math.sin(a) * 0.08, 0.9, 0.005)
       }
     }
     // along the shore: coconut and hala, naupaka on the sand
@@ -388,7 +400,7 @@ export class Vegetation {
         const r = rand()
         if (r < 0.3) add('maia', ox, oz)
         else if (r < 0.5 && !wet(ox + (dx / l) * 0.1, oz + (dz / l) * 0.1, 0.08)) add('kukui', ox + (dx / l) * 0.1, oz + (dz / l) * 0.1)
-        else if (r < 0.75) add(rand() < 0.8 ? 'ki' : 'kiRed', ox, oz, 0.9)
+        else if (r < 0.75) add(rand() < 0.8 ? 'ki' : 'kiRed', ox, oz, 0.9, 0.005)
       }
     }
     return out

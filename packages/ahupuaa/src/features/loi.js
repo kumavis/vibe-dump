@@ -205,24 +205,25 @@ export class Loi {
     g.setAttribute('aAge', new THREE.Float32BufferAttribute(age, 1))
     g.setAttribute('aFlood', new THREE.Float32BufferAttribute(flood, 1))
     g.computeBoundingSphere()
-    this.material = new THREE.ShaderMaterial({
-      vertexShader: paddyVertex,
-      fragmentShader: paddyFragment,
-      uniforms: { ...shared.uniforms },
-      side: THREE.DoubleSide,
-      polygonOffset: true,
-      polygonOffsetFactor: -1,
-      polygonOffsetUnits: -2,
-    })
+    const water = (defines) =>
+      new THREE.ShaderMaterial({
+        vertexShader: paddyVertex,
+        fragmentShader: paddyFragment,
+        uniforms: { ...shared.uniforms },
+        defines,
+        side: THREE.DoubleSide,
+        polygonOffset: true,
+        polygonOffsetFactor: -1,
+        polygonOffsetUnits: -2,
+      })
+    this.material = water({})
     this.paddies = new THREE.Mesh(g, this.material)
     this.group.add(this.paddies)
     const dg = new THREE.BufferGeometry()
     dg.setAttribute('position', new THREE.Float32BufferAttribute(ditch, 3))
     dg.setAttribute('aSide', new THREE.Float32BufferAttribute(side, 1))
     dg.computeBoundingSphere()
-    this.ditchMaterial = this.material.clone()
-    this.ditchMaterial.uniforms = this.material.uniforms
-    this.ditchMaterial.defines = { AUWAI: 1 }
+    this.ditchMaterial = water({ AUWAI: 1 })
     this.ditches = new THREE.Mesh(dg, this.ditchMaterial)
     this.group.add(this.ditches)
     this.banksGeometry = B.geometry()

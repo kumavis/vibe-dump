@@ -5,6 +5,7 @@
 // canoes with an ama float, walls of dry-stacked stone.
 
 import { MAT, col } from './kit.js'
+import { HEIAU } from '../gen/footing.js'
 
 export const PALETTE = {
   thatch: '#b79560',
@@ -19,12 +20,16 @@ export const PALETTE = {
   sand: '#d9c9a3',
 }
 
-/** A hale: stone paepae, low thatched walls, steep gable roof, door at +x. */
-export function hale(B, rand, L = 7, W = 4.6, H = 5.2, door = true) {
+/**
+ * A hale: stone paepae, low thatched walls, steep gable roof, door at +x. The
+ * paepae's top is 0.45 m up; it reaches `foot` metres down, to the lowest
+ * ground under it.
+ */
+export function hale(B, rand, L = 7, W = 4.6, H = 5.2, door = true, foot = 0.6) {
   const th = col(PALETTE.thatch, 0.18, rand)
   const thD = col(PALETTE.thatchDark, 0.15, rand)
   const st = col(PALETTE.stone, 0.15, rand)
-  B.box(0, -0.6, 0, L + 1.8, 1.05, W + 1.8, st, MAT.stone)
+  B.box(0, -foot, 0, L + 1.8, 0.45 + foot, W + 1.8, st, MAT.stone)
   const y0 = 0.45
   const eave = y0 + 1.05
   B.box(0, y0, 0, L, eave - y0, W, th, MAT.thatch)
@@ -82,21 +87,39 @@ export function lele(B, x, z, rand) {
 
 /**
  * Heiau: a stepped stone platform with a walled upper court, the ʻanuʻu, a
- * crescent of kiʻi, a lele and a hale mana. `big` for a luakini.
+ * crescent of kiʻi, a lele and a hale mana; a luakini (`f.big`) is the larger.
+ * `f` is its footing (gen/footing.js): the base tier's top clears the highest
+ * ground under it and its walls reach the lowest, and where that leaves a tall
+ * face the platform is built out in front of it in terraces, the last
+ * standing on the lowest ground.
  */
-export function placeHeiau(B, x, gy, z, rot, rand, big, S) {
+export function placeHeiau(B, f, rand, S) {
   const st = col(PALETTE.stone, 0.12, rand)
   const stD = col(PALETTE.stoneDark, 0.12, rand)
-  const L = big ? 44 : 26
-  const W = big ? 30 : 18
-  const tiers = big ? 3 : 2
+  const d = f.big ? HEIAU.big : HEIAU.small
+  const { L, W, tiers, rise } = d
+  const big = f.big
+  const { x, z, rot } = f
+  // the frame's floor is where the base tier's top is a tier's rise above
+  const gy = f.top - rise * S
+  const local = (y) => (y - gy) / S
   B.at(x, gy, z, rot, S)
-  let y = -1.5
-  for (let t = 0; t < tiers; t++) {
+  // the terraces, the lowest first, each standing down into the one below
+  // (all of the base tier's stone: where one stands into the next their side
+  // faces share a plane, and two colours there would flicker)
+  for (let k = f.steps.length - 1; k >= 0; k--) {
+    const step = f.steps[k]
+    const [a, b, c, e] = step.ext.map((v) => v / S)
+    const foot = local(step.bottom)
+    B.box((b - a) / 2, foot, (e - c) / 2, L + a + b, local(step.top) - foot, W + c + e, st, MAT.stone)
+  }
+  const foot = local(f.bottom)
+  B.box(0, foot, 0, L, rise - foot, W, st, MAT.stone)
+  let y = rise
+  for (let t = 1; t < tiers; t++) {
     const k = 1 - t * 0.14
-    const h = (big ? 1.6 : 1.2) + (t === 0 ? 1.5 : 0)
-    B.box(0, y, 0, L * k, h, W * k, t % 2 ? stD : st, MAT.stone)
-    y += h
+    B.box(0, y, 0, L * k, rise, W * k, t % 2 ? stD : st, MAT.stone)
+    y += rise
   }
   const k = 1 - (tiers - 1) * 0.14
   const lx = (L * k) / 2
@@ -176,9 +199,13 @@ export function halau(B, rand, L = 16, W = 6) {
   B.cyl([ox, 0, 0], [ox, ridge, 0], 0.15, 0.12, w, MAT.wood, 5)
 }
 
-/** Ahu: the boundary cairn, with the carved puaʻa image set on it. */
-export function ahu(B, rand, withPig = true) {
+/**
+ * Ahu: the boundary cairn, with the carved puaʻa image set on it, on a stone
+ * footing that reaches `foot` metres down to the lowest ground under it.
+ */
+export function ahu(B, rand, withPig = true, foot = 0.3) {
   const st = col(PALETTE.stone, 0.2, rand)
+  B.box(0, -foot, 0, 3.2, foot + 0.1, 3.2, st, MAT.stone, 0, 0.92)
   for (let i = 0; i < 9; i++) {
     const a = rand() * Math.PI * 2
     const r = 1.4 * (1 - i / 10)
@@ -208,10 +235,13 @@ export function akuaLoa(B, rand, h = 7) {
   B.blob(0, h + 0.2, 0, 0.35, 0.45, 0.35, col('#3d2c1f', 0.1, rand), MAT.wood, 2)
 }
 
-/** Koʻa: a fisherman's shrine of stacked stones topped with white coral. */
-export function koa(B, rand) {
+/**
+ * Koʻa: a fisherman's shrine of stacked stones topped with white coral, its
+ * base 0.5 m up and reaching `foot` metres down to the lowest ground.
+ */
+export function koa(B, rand, foot = 0.3) {
   const st = col(PALETTE.stone, 0.2, rand)
-  B.box(0, -0.3, 0, 3.2, 0.8, 2.4, st, MAT.stone, 0, 0.85)
+  B.box(0, -foot, 0, 3.2, 0.5 + foot, 2.4, st, MAT.stone, 0, 0.85)
   for (let i = 0; i < 5; i++) B.blob((rand() - 0.5) * 1.4, 0.7 + i * 0.25, (rand() - 0.5) * 1.0, 0.45, 0.3, 0.4, st, MAT.stone, i)
   B.blob(0, 2.0, 0, 0.45, 0.35, 0.45, col('#f3efe6', 0.05, rand), MAT.kapa, 3)
 }
