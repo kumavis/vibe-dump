@@ -84,7 +84,7 @@ export function runOracle(job, dir, { ms = ORACLE_TIMEOUT_MS } = {}) {
       if (late) return stopped(`no result after ${ms / 1000} s, so it was killed: a loop that never yields? It had written ${part.trace.length} trace lines (ORACLE_TIMEOUT_MS sets the limit)`)
       if (code !== 0) return stopped(err.trim().split('\n').slice(0, 6).join('\n') || `oracle exited with ${code}`)
       try {
-        resolve(JSON.parse(out))
+        resolve({ ...JSON.parse(out), stderr: err })
       } catch (e) {
         reject(new Error(`the oracle printed something besides its result (${e.message}): ${out.slice(0, 120)}`))
       }

@@ -1,7 +1,7 @@
 // The game's own dice, one stream per match. Everything that can change the
 // outcome of a battle (dice, scatter, aim, the AI's tie-breaks) draws from
-// here; purely visual randomness (debris, flock, particles) keeps using
-// Math.random. With a seed, a battle replays exactly, which is what the trace
+// here; purely visual randomness (debris, flock, particles) stays off this
+// stream, in the view. With a seed, a battle replays exactly, which is what the trace
 // and the parity tests lean on. The count and running hash fingerprint the
 // stream for those traces.
 //

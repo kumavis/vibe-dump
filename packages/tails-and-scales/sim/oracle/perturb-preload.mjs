@@ -3,7 +3,8 @@
 // ULP away from zero, before the game's code loads. Rules code that still
 // calls one of them then plays a slightly different battle; code that goes
 // through core/dmath.js doesn't notice. The count of nudged calls is written
-// to fd 2 at exit, so a probe that never fired can't pass as "no change".
+// to fd 2 at exit, and perturb.mjs refuses a run without it, so a probe that
+// never fired can't pass as "no change".
 const f64 = new Float64Array(1), i64 = new BigInt64Array(f64.buffer)
 const nudge = (v) => {
   if (v === 0 || !Number.isFinite(v)) return v

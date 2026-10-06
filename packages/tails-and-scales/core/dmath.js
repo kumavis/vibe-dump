@@ -1,7 +1,8 @@
-// Deterministic maths for rules code. Math.hypot is implementation-defined:
-// these are V8's own formulas (src/builtins/math.tq, FastMathHypot) in plain
-// JS over exact IEEE operations, so every engine computes the same bits, and
-// they match V8's Math.hypot bit for bit, so the switch changes no battle.
+// Deterministic maths for rules code. The engine's own hypot is
+// implementation-defined: these are V8's formulas (src/builtins/math.tq,
+// FastMathHypot) in plain JS over exact IEEE operations, so every engine
+// computes the same bits, and they match V8's own bit for bit, so the switch
+// changes no battle.
 
 export function hypot(x, y) {
   const a = Math.abs(x), b = Math.abs(y)

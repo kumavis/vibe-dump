@@ -1,4 +1,5 @@
 import { hypot } from './core/dmath.js'
+
 // ---------------------------------------------------------------------------
 // Movement on the tabletop. The board is rasterised into half-inch cells; each
 // unit is treated as a disc, so instead of inflating obstacles per unit size we

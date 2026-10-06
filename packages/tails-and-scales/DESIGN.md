@@ -142,7 +142,7 @@ packages/tails-and-scales/
 ├─ input/                         human.js (derived input mode, selection), picking.js, tools/{deploy,move,shoot,charge,charge-end}.js
 ├─ ui/                            hud, actions, tray, log, card, tooltip, banner, netbadge, theme, screens/{title,races,lobby,result,help}
 └─ sim/                           Node only, never bundled, run by hand
-   ├─ oracle/                     fakedom.mjs, three-shim.mjs, orbit-stub.mjs, register.mjs, hooks.mjs, run-legacy.mjs, human-bot.mjs, shadow.mjs (the frozen parity shadow and battle-log formats), pin.mjs, PIN
+   ├─ oracle/                     fakedom.mjs, three-shim.mjs, orbit-stub.mjs, register.mjs, hooks.mjs, run-legacy.mjs, human-bot.mjs, shadow.mjs (the frozen parity shadow and battle-log formats), pin.mjs, PIN, perturb-preload.mjs (perturb.mjs's nudge, preloaded into the oracle child)
    ├─ run.mjs, parity.mjs         headless fold CLI · all baselines, first divergence with context (`--browser`: the same in Chromium, on a fresh build)
    ├─ chromium.mjs, browser.mjs   the Chromium runner (library) · its one-battle CLI
    ├─ corpus.mjs, lib.mjs         builds the corpus, admitting only what Node and Chromium agree on · shared plumbing (oracle runs with a deadline, verdicts)

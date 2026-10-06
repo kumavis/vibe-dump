@@ -10,7 +10,8 @@
 // --fn takes a comma-separated list (hypot, or sin,cos,atan,atan2 for N0).
 // Unless --no-control, the same nudge first runs on the PIN code, which still
 // calls Math everywhere, to show the probe has teeth there: at least one PIN
-// battle must move, or the check is inconclusive (exit 2). Exit 0 when no
+// battle must move, or the check is inconclusive (exit 2), as it is when any
+// run reports no nudged call (the preload didn't load). Exit 0 when no
 // battle of the code under test moves, else 1.
 import { parseArgs } from 'node:util'
 import { pathToFileURL } from 'node:url'
@@ -36,8 +37,12 @@ const dir = a.dir ? resolve(a.dir) : codeDir(a.ref ?? 'WORKTREE')
 process.env.PERTURB = a.fn
 process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS ?? ''} --import ${pathToFileURL(join(SIM, 'oracle', 'perturb-preload.mjs')).href}`.trim()
 
+// every child must say how many results it nudged: a run where the preload
+// never loaded, or nothing called the functions, proves nothing either way
+let silent = 0
 const moved = async (code) => {
   const res = await pool(items, CPUS, (it) => runOracle(it.job, code).catch((e) => ({ trace: [], error: e.message })))
+  for (const r of res) if (!r.error && !(Number(r.stderr?.match(/perturb: (\d+) nudged calls/)?.[1]) > 0)) silent++
   return items.map((it, i) => ({ it, r: res[i], v: verdict(it, res[i]) }))
 }
 const show = (rows) => {
@@ -60,6 +65,10 @@ if (!a['no-control']) {
 console.log(`\n${a.dir ? dir : a.ref ? `ref ${a.ref}` : 'the working tree'}:`)
 const n = show(await moved(dir))
 console.log(`  ${n}/${items.length} move`)
+if (silent) {
+  console.log(`\nperturb INCONCLUSIVE: ${silent} run(s) report no nudged call to Math.${a.fn}, so the probe never fired there.`)
+  process.exit(2)
+}
 if (!teeth) {
   console.log(`\nperturb INCONCLUSIVE: the nudge moved no battle even on the PIN code, so it shows nothing about the code under test; pick another --fn or --only.`)
   process.exit(2)
