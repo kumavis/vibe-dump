@@ -1,7 +1,38 @@
-// Small pure helpers for consensus code. Everything here is exact integer or
-// string work, so every engine computes the same result. (mulberry32, lerp,
-// pick and rr join from the root util.js when the terrain and view split;
-// the tween clock stays with the view.)
+// Small pure helpers for consensus code. Everything here is exact integer,
+// IEEE or string work, so every engine computes the same result. The tween
+// clock and the easings stay with the view (the root util.js, which
+// re-exports `lerp` for main.js and wraps `pick` for the view).
+
+// A seeded generator (the battlefield's layout stream: core/terrain draws
+// every board from it, so a board seed gives the same table everywhere).
+// The match's dice are a separate stream, core/rng.js.
+export function mulberry32(seed) {
+  let a = seed >>> 0
+  return function () {
+    a |= 0
+    a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+export const lerp = (a, b, t) => a + (b - a) * t
+// one draw from `rng` picks an element; consensus code always names its
+// stream (the view's pick, in the root util.js, defaults to the engine's own
+// unseeded random)
+export const pick = (arr, rng) => arr[Math.floor(rng() * arr.length)]
+export const rr = (rng, a, b) => a + rng() * (b - a)
+
+// Freeze a table and everything in it, so no importer can change what a
+// later match reads (DESIGN §4.1 rule 13).
+export function deepFreeze(o) {
+  if (o && typeof o === 'object' && !Object.isFrozen(o)) {
+    Object.freeze(o)
+    for (const v of Object.values(o)) deepFreeze(v)
+  }
+  return o
+}
 
 // cyrb53: a fast 53-bit string hash (public domain, bryc). Only Math.imul,
 // xor and shifts, so it is the same on every engine.

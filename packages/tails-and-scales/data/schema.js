@@ -35,6 +35,7 @@
 //   chest    = big ? 1.0 : fly ? 1.0 : 0.55
 // ---------------------------------------------------------------------------
 
+import { deepFreeze } from '../core/util.js'
 import squirrel from './races/squirrel.js'
 import serpent from './races/serpent.js'
 
@@ -142,14 +143,6 @@ function unitType(race, key, def) {
   return t
 }
 
-function freeze(o) {
-  if (o && typeof o === 'object' && !Object.isFrozen(o)) {
-    Object.freeze(o)
-    for (const v of Object.values(o)) freeze(v)
-  }
-  return o
-}
-
 // Check a race definition and normalise it: { key, name, short, icon, look,
 // army, units: { [key]: type } }, deeply frozen. Throws, naming the race and
 // unit, on anything malformed, so a typo in a race file fails at load
@@ -176,7 +169,7 @@ export function defineRace(def) {
   }
   if (!Array.isArray(def.army) || !def.army.length) throw bad('needs an army list')
   for (const k of def.army) if (!units[k]) throw bad(`army lists "${k}", which is not one of its units`)
-  return freeze({
+  return deepFreeze({
     key, name: def.name, short: def.short, icon: def.icon,
     look: { ...look, gore: [...look.gore] },
     army: [...def.army],
@@ -195,7 +188,7 @@ export function raceRegistry(defs) {
   const keys = races.map((r) => r.key)
   const twice = keys.find((k, i) => keys.indexOf(k) !== i)
   if (twice !== undefined) throw new Error(`two races use the key "${twice}"`)
-  return freeze(Object.assign(Object.create(null), Object.fromEntries(races.map((r) => [r.key, r]))))
+  return deepFreeze(Object.assign(Object.create(null), Object.fromEntries(races.map((r) => [r.key, r]))))
 }
 
 // Every playable race, by key. Seat races (G.seats[s].race) name one of

@@ -25,11 +25,20 @@
 //    from a URL now and from a lobby a peer writes later.
 // 5. RULES_ID (core/version.js) moves when anything rule-bearing changes (a
 //    stat, a weapon, a flag, the army, a constant, the phase order, a unit
-//    or race whose key happens to be a presentation word) and stays put when
+//    or race whose key happens to be a presentation word, the terrain sets:
+//    a feature's weight or footprint, the centre rule, the pair count, a
+//    spacing rule, a feature table reordered, a new set) and stays put when
 //    only presentation does (names, shorts, icon, ability text, look, a
 //    weapon's name or fx).
 // 6. Every table core/ and data/ export is deeply frozen: no module-level
 //    mutable state in consensus code (DESIGN §1.2, §4.1 rule 13).
+// 7. The terrain sets: checkSet (core/terrain/recipes.js, which sets.js runs
+//    on every set as it loads) passes classic and refuses a set with a broken
+//    field, one at a time: a feature or centre piece that doesn't exist, a
+//    radius, weight or threshold out of range, falling thresholds, bad
+//    pairs, an unknown mirror, a spacing rule that isn't a number, an unknown
+//    or missing field. So a slip in a new set (F7's `fortified`) fails at
+//    load, not only on the boards whose draws reach it.
 //
 //   node sim/data-check.mjs
 //
@@ -48,7 +57,9 @@ const legacyMain = readFileSync(join(LEGACY, 'main.js'), 'utf8')
 const legacyAi = readFileSync(join(LEGACY, 'ai.js'), 'utf8')
 const { TYPES, ARMIES, SIDES, CLASSIC } = await imp(PKG, 'data/compat.js')
 const { RACES, AI_ROLES, defineRace, raceRegistry } = await imp(PKG, 'data/schema.js')
-const { RULES_ID, rulesId, CONSTANTS } = await imp(PKG, 'core/version.js')
+const { RULES_ID, rulesId, rulesData, CONSTANTS } = await imp(PKG, 'core/version.js')
+const { SETS } = await imp(PKG, 'core/terrain/sets.js')
+const { checkSet } = await imp(PKG, 'core/terrain/recipes.js')
 const { makeSeats } = await imp(PKG, 'core/match.js')
 const raw = { squirrel: (await imp(PKG, 'data/races/squirrel.js')).default, serpent: (await imp(PKG, 'data/races/serpent.js')).default }
 
@@ -222,6 +233,12 @@ check(/controller "robot"/.test(seatError(['squirrel', 'serpent'], ['human', 'ro
 // ── 5. RULES_ID ─────────────────────────────────────────────────────────────
 console.log(`\n5. RULES_ID (${RULES_ID})`)
 check(typeof RULES_ID === 'string' && RULES_ID === rulesId(), 'is a string and recomputes the same')
+// the classic terrain set with one edit (a copy: the real one is frozen)
+const classic = (edit) => {
+  const c = structuredClone(SETS.classic)
+  edit(c)
+  return rulesId({ sets: { ...SETS, classic: c } })
+}
 const variant = (race, edit) => {
   const def = structuredClone(raw[race])
   edit(def)
@@ -241,8 +258,18 @@ const moves = [
   ['a constant (AURA 6 → 7)', () => rulesId({ constants: { ...CONSTANTS, AURA: 7 } })],
   ['the board (deploy 8 → 9)', () => rulesId({ constants: { ...CONSTANTS, BOARD: { ...CONSTANTS.BOARD, deploy: 9 } } })],
   ['the phase order', () => rulesId({ phases: ['move', 'charge', 'shoot', 'fight', 'morale'] })],
+  // the terrain sets (R3): every number in them places scenery
+  ['a terrain feature weight (classic ruin 4 → 5)', () => classic((c) => (c.kinds[0][2] = 5))],
+  ['a terrain feature footprint (classic wall 3.6 → 3.7)', () => classic((c) => (c.kinds[1][1] = 3.7))],
+  ['the terrain feature order (classic wall before ruin)', () => classic((c) => c.kinds.unshift(...c.kinds.splice(1, 1)))],
+  ['the centre rule (classic tower under 0.55 → 0.6)', () => classic((c) => (c.centre[0][1] = 0.6))],
+  ['the feature pairs (classic 6 + D3 → 7 + D3)', () => classic((c) => (c.pairs[0] = 7))],
+  ['a spacing rule (classic gap 2.1 → 2.0)', () => classic((c) => (c.gap = 2.0))],
+  ['the forest kept out of deployment no more', () => classic((c) => (c.notInDeploy = []))],
+  ['a new terrain set', () => rulesId({ sets: { ...SETS, fortified: structuredClone(SETS.classic) } })],
 ]
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
+check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
 // a unit or race whose key is a presentation word is rules all the same:
 // RULES_ID strips fields from records, never keys from the race and unit maps
 const retune = (t) => (t.stats = t.stats.replace('M6', 'M7'))
@@ -267,6 +294,8 @@ const stays = [
   ['the look', () => variant('serpent', (d) => (d.look = { ...d.look, team: '#000000', voice: 'squeak' }))],
   ['a weapon name', () => variant('squirrel', (d) => (d.units.trebuchet.ranged = { ...d.units.trebuchet.ranged, name: 'Pinecone of doom' }))],
   ['a weapon fx', () => variant('serpent', (d) => (d.units.engine.ranged.fx = 'bomb'))],
+  // the control for the set edits above: a copy of the sets hashes the same
+  ['an unchanged copy of the terrain sets', () => classic(() => {})],
 ]
 for (const [what, id] of stays) check(id() === RULES_ID, `stays on ${what}`)
 
@@ -286,5 +315,43 @@ for (const f of consensus) {
   check(!loose.length, `${f}: ${tables.length ? tables.map(([k]) => k).join(', ') : 'no tables'}`, `not frozen: ${loose.join(', ')}`)
 }
 
-console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, and RULES_ID tracks exactly the rules')
+// ── 7. Terrain sets ─────────────────────────────────────────────────────────
+console.log('\n7. checkSet passes the terrain sets and refuses broken ones')
+const setError = (S) => {
+  try {
+    checkSet('test', S)
+    return null
+  } catch (e) {
+    return e.message
+  }
+}
+for (const name of Object.keys(SETS)) check(setError(SETS[name]) === null, `passes ${name}`, setError(SETS[name]))
+const brokenSets = [
+  ['a feature that does not exist', /no feature "keep"/, (c) => (c.kinds[0][0] = 'keep')],
+  ['a feature named by an Object.prototype member', /no feature "toString"/, (c) => (c.kinds[2][0] = 'toString')],
+  ['a feature entry without its weight', /kinds\[1\] must be/, (c) => c.kinds[1].pop()],
+  ['a footprint of 0', /radius 0/, (c) => (c.kinds[3][1] = 0)],
+  ['a weight that is not a number', /weight 2/, (c) => (c.kinds[4][2] = '2')],
+  ['a negative weight', /weight -1/, (c) => (c.kinds[5][2] = -1)],
+  ['no features at all', /at least one feature/, (c) => (c.kinds = [])],
+  ['a centre piece that does not exist', /no centre piece "keep"/, (c) => (c.centre[0][0] = 'keep')],
+  ['a centre threshold above 1', /threshold 1.2/, (c) => (c.centre[1][1] = 1.2)],
+  ['centre thresholds that fall', /must rise/, (c) => c.centre.reverse()],
+  ['fractional pairs', /pairs must be/, (c) => (c.pairs[1] = 2.5)],
+  ['one pair count only', /pairs must be/, (c) => c.pairs.pop()],
+  ['attempts that are not a whole number', /attempts/, (c) => (c.attempts = Infinity)],
+  ['an unknown mirror', /mirror "line"/, (c) => (c.mirror = 'line')],
+  ['a spacing rule that is not a number', /gap NaN/, (c) => (c.gap = NaN)],
+  ['notInDeploy naming no feature', /notInDeploy: no feature "orchard"/, (c) => c.notInDeploy.push('orchard')],
+  ['a misspelt field', /unknown field "gapp"/, (c) => (c.gapp = 2.1)],
+  ['a missing field', /no "selfGap"/, (c) => delete c.selfGap],
+]
+for (const [what, want, edit] of brokenSets) {
+  const c = structuredClone(SETS.classic)
+  edit(c)
+  const err = setError(c)
+  check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, and the terrain sets are well formed')
 process.exit(failed ? 1 : 0)

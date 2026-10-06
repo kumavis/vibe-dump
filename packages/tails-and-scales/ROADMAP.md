@@ -102,8 +102,34 @@ step keeps the game playable.
   names that read the same in a mirror match (the tray's roll-off rows,
   several log lines, the AI hint), and a stronger mirror cue on the table
   than the base rim.
-- [ ] **R3 Terrain split.** `core/terrain/*` logic and recipes separated from
+- [x] **R3 Terrain split.** `core/terrain/*` logic and recipes separated from
   `view/terrain.js` meshes.
+  Landed: `core/terrain/` holds the battlefield as rules data. `terrain.js`
+  has the chunks, line of sight and destruction. `recipes.js` has the
+  modules and features, which make every layout draw in the old order and
+  record what they decided in each chunk's `look`. `sets.js` holds the
+  classic set's selection table and centre rule as data, and `geom.js` the
+  box maths. `view/terrain.js` builds the meshes from the looks and plays
+  breaks, falls, topples and rubble as the terrain reports them. That
+  reporting is synchronous, through a plain sink; R4 moves the reports into
+  the match's `out`, and R5 makes them the event stream. `scenery.js` is a facade with the old API, so main.js is
+  untouched. `mulberry32`, `pick` and `rr` moved to `core/util.js`. The
+  terrain sets joined `RULES_ID`. Checks: `sim/terrain-check.mjs` (P-terrain)
+  holds boards 1-500 to the R0 code, exactly, on four counts: every layout
+  draw, every chunk, every mesh, and a seeded run of blasts and wrecker
+  sweeps. Its `--self-test` shows nine kinds of slip fail it, a single
+  extra layout draw among them.
+  `sim/terrain-shots.mjs` diffs rendered tables against the R0 build in
+  Chromium, fresh and after identical blasts, and finds them pixel-identical.
+  It runs Chromium's canvas 2D on the CPU, because the accelerated path
+  painted main.js's mat slightly differently on some page loads (one run
+  failed on that alone, with the code unchanged). A board that differs is
+  shot again, and a difference that does not repeat is reported as noise
+  rather than failed.
+  Turned up: none of the parity corpus's boards has a log wall, so only
+  P-terrain covers one. Both terrain tools drive the `Scenery` facade, so
+  when R4 removes it, R4 ports P-terrain to `Terrain` and `TerrainView`
+  (it stays a gate) and ports or retires the screenshot diff.
 - [ ] **R4 State and queries.** The game state `G` owns units, terrain, nav,
   turn and journal; queries take `(G, …)`.
 - [ ] **R5 Synchronous actions.** Each `await` becomes an emitted event; a

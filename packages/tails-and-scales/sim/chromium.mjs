@@ -23,7 +23,10 @@ import { shadowString, shadowParts, shadowOf, instrument } from './oracle/shadow
 import { humanDriver, legacyMode, setupFor, missingHooks, MODES } from './oracle/human-bot.mjs'
 
 export const DIST = fileURLToPath(new URL('../dist', import.meta.url))
-const IDLE_MS = 120000 // a whole battle takes 25-45 s here
+// how long a page may go without progress (a whole battle takes 25-45 s
+// here; a page load under SwiftShader with another Chromium busy can take
+// over 30 s): every browser harness in sim/ waits this long
+export const IDLE_MS = 120000
 const CAP_MS = 900000
 
 // Runs in the page, before main.js: catch window.__ts as it is published,
