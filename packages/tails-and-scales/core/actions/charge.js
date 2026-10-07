@@ -1,12 +1,29 @@
-// Charging's rules: who may charge whom, and the spots a charge can end on.
-// (Its read-only half; the charge itself is still main.js's doCharge, awaited
-// by its dice, its walk and a human's pick of a spot, until R5 and R6 split
-// it here into declareCharge and finishCharge.)
-import { CHARGE_RANGE, ENGAGE } from '../rules.js'
+// Charging (DESIGN §1.1, §2.2): who may charge whom, the spots a charge can
+// end on, and the charge itself, split where a human picks the spot:
+// declareCharge rolls the 2D6, and finishCharge moves the charger to the
+// spot picked (the shortest move's, for the AI).
+//
+// Synchronous, like damage.js: the tray's title and the roll are events
+// (`tray.open`, `dice`), and so is what the view shows as its own event (the
+// charger turning, the roll's verdict, its move), in the old order (DESIGN
+// §2.3, §4.1 rule 3). Nothing is drawn between the two halves: the pick is
+// input, and finishCharge recomputes the plan from the unchanged match (nav
+// is never dirty between them: the plan has just refreshed it).
+//
+//   unit.face     { u, tg }       u turns to face tg
+//   charge.result { u, tg, ok }   the roll made the charge (ok) or fell short
+//   (and the move: actions/move.js's resolveWalk, `unit.move`)
+//
+// Neither half ends the action (its state line in the trace, the flags and
+// the labels): through R5 main.js's finishAction does, once these events
+// have played, so no state line is written while the view is behind (the
+// ?debug trace's hold: DESIGN's R5a and R5b notes); from R6 the engine's.
+import { CHARGE_RANGE, ENGAGE, roll } from '../rules.js'
 import { hypot } from '../dmath.js'
+import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, isEngaged } from '../queries.js'
-import { moveMode, forbidMask } from './move.js'
+import { moveMode, forbidMask, resolveWalk } from './move.js'
 
 export function canCharge(G, u) {
   if (!alive(u) || u.flags.charged || u.flags.chargeTried) return false
@@ -58,4 +75,60 @@ export function chargePlan(G, u, target) {
   }
   if (best < 0) return null
   return { cell: best, need: Math.max(2, Math.ceil(bd - 0.01)), res, forbid, mode, dist: bd, spots }
+}
+
+// The spots a roll of `rolled` reaches, by nav cell (1: the charge may end
+// there). The same 0.01" grace `need` was rounded with, and the shortest
+// move's spot always counts, so a roll that made the charge never leaves
+// nowhere to stand.
+export function chargeSpots(plan, rolled) {
+  const ok = new Uint8Array(plan.res.dist.length)
+  for (const s of plan.spots) if (s.d <= rolled + 0.011) ok[s.i] = 1
+  ok[plan.cell] = 1
+  return ok
+}
+
+// `u` declares a charge on `target` and rolls 2D6 against the distance to
+// the nearest spot (DESIGN §2.2). Short: the charge has failed. Contact:
+// `via` 'ai' (an AI seat, or a human's Auto) goes straight on to the
+// shortest move (finishCharge); a seat's human picks the spot first, from
+// what this returns: { plan, rolled }. Null once the charge is over.
+export function declareCharge(G, u, target, via) {
+  const plan = chargePlan(G, u, target)
+  u.flags.chargeTried = true
+  emit(G, 'tray.open', { title: `${u.t.short} charge ${target.t.short}` })
+  if (!plan) {
+    // (defensive: every caller checks chargePlan first, DESIGN §0.1)
+    log(G, u.side, `<b>${u.t.short}</b> can't find a way to ${target.t.short}.`)
+    return null
+  }
+  const r = roll(G, 2)
+  const total = r[0] + r[1]
+  const ok = total >= plan.need
+  emit(G, 'dice', { label: `Charge ${plan.need}" (2D6)`, dice: r, need: 0, sum: true, pass: ok })
+  emit(G, 'unit.face', { u: u.id, tg: target.id })
+  if (!ok) {
+    emit(G, 'charge.result', { u: u.id, tg: target.id, ok })
+    log(G, u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total}, needed ${plan.need}. Failed.`)
+    return null
+  }
+  u.flags.charged = true
+  u.flags.chargeTarget = target.id
+  emit(G, 'charge.result', { u: u.id, tg: target.id, ok })
+  log(G, u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total} vs ${plan.need}. <b>Contact!</b>`)
+  if (via !== 'ai') return { plan, rolled: total }
+  finishCharge(G, u, target, plan.cell, plan)
+  return null
+}
+
+// The charge made: `u` moves to `cell` (one of chargeSpots), by the
+// shortest route there, smashing what a wrecker passes, and the nav grid
+// follows. `plan` is declareCharge's, or the same plan made again (a pick
+// comes back with only the cell). No pile-in: the old charge ended at its
+// walk (the only pile-in is damage.js closeRanks's, after losses).
+export function finishCharge(G, u, target, cell, plan = chargePlan(G, u, target)) {
+  const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
+  resolveWalk(G, u, pts, { speed: 11, fly: plan.mode === 'fly' })
+  // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
+  refreshNav(G)
 }

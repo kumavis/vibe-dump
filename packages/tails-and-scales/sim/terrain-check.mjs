@@ -24,12 +24,14 @@
 //     type, colour and settings; and which meshes share a geometry or a
 //     material (material ids decide the draw order);
 //  4. then the same seeded run of destruction on both: blasts (some acid)
-//     and wrecker sweeps that walk the live chunk list as main.js's
-//     smashAround does, with the tweens stepped to the end and Math.random
-//     seeded alike on both sides: after every one, the chunks (the rubble and
-//     logs they make included), what blast returns, `dirty`, every fx call
-//     and, at the end, the whole scenery group (rubble pieces, fallen logs,
-//     collapsed blocks), plus line-of-sight queries before and after.
+//     and wrecker sweeps that walk the live chunk list (the working tree's
+//     through core/actions/move.js's smashAround itself, the R0 side
+//     through a restatement of its main.js's), with the tweens stepped to
+//     the end and Math.random seeded alike on both sides: after every one,
+//     the chunks (the rubble and logs they make included), what blast
+//     returns, `dirty`, every fx call and, at the end, the whole scenery
+//     group (rubble pieces, fallen logs, collapsed blocks), plus
+//     line-of-sight queries before and after.
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -75,7 +77,7 @@ if (args['self-test']) {
   const { MUTATIONS } = await import('./terrain-hooks.mjs')
   let missed = 0
   for (const name of Object.keys(MUTATIONS)) {
-    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '1-25', '--max', '1'], { env: { ...process.env, TERRAIN_MUTATE: name }, encoding: 'utf8' })
+    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', MUTATIONS[name][3] ?? '1-25', '--max', '1'], { env: { ...process.env, TERRAIN_MUTATE: name }, encoding: 'utf8' })
     const caught = r.status === 1 && /MISMATCH/.test(r.stdout)
     if (!caught) missed++
     const first = r.stdout.split('\n').find((l) => l.startsWith('  seed')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
@@ -100,6 +102,7 @@ const { distToBox } = await imp(PKG, 'core/terrain/geom.js')
 const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
 const { TerrainView } = await imp(PKG, 'view/terrain.js')
 const { blankMirror, applyEvent } = await imp(PKG, 'present/mirror.js')
+const { smashAround } = await imp(PKG, 'core/actions/move.js')
 const { OBJ_POS } = await imp(PKG, 'core/match.js')
 const { W, H } = BOARD
 
@@ -150,7 +153,24 @@ class Now {
 }
 const legacy = { ...(await imp(LEG, 'scenery.js')), ...(await imp(LEG, 'util.js')) }
 legacy.make = (scene, fx) => new legacy.Scenery(scene, fx, W, H)
+// One sample of a wrecker's walk, by a unit of radius r at (x, z) heading
+// `dir`. The R0 side restates the R0 code's main.js smashAround (walking the
+// live list; its table shake is main.js's, not the scenery's, so it is left
+// out on both sides); the working tree's is core/actions/move.js's own,
+// reporting into the out drained after it, as resolveWalk keeps a sample's
+// events and the view plays them in order.
+legacy.smash = (S, x, z, dir, r) => {
+  for (const c of S.chunks) {
+    if (!c.alive || !c.destructible) continue
+    const s = c.nav || c.shape
+    if (hypot(s.x - x, s.z - z) < r + Math.max(s.hx, s.hz) * 0.8) S.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) })
+  }
+}
 const mine = { ...(await imp(PKG, 'util.js')), make: (scene, fx) => new Now(scene, fx) }
+mine.smash = (S, x, z, dir, r) => {
+  smashAround({ terrain: S.terrain }, { r }, { x, z, dir }, S.out)
+  S.drain()
+}
 
 // the objectives generate keeps clear of: the R0 code's, in its main.js
 const OBJ_RE = /const OBJ_POS = (\[[^\]]*\])/
@@ -314,14 +334,6 @@ async function settle(code) {
     await new Promise((r) => setImmediate(r))
   }
 }
-function smash(S, x, z, dir, r) {
-  // main.js smashAround, walking the live list
-  for (const c of S.chunks) {
-    if (!c.alive || !c.destructible) continue
-    const s = c.nav || c.shape
-    if (hypot(s.x - x, s.z - z) < r + Math.max(s.hx, s.hz) * 0.8) S.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) })
-  }
-}
 function losProbe(S, rand) {
   const out = []
   for (let i = 0; i < 24; i++) {
@@ -389,7 +401,7 @@ async function board(seed) {
       else {
         const [x0, z0, dir, r] = op.smash
         // a short walk through the target, sampled every 0.25"
-        for (let d = 0; d <= 2; d += 0.25) smash(s.S, x0 - Math.sin(dir) * (1 - d), z0 - Math.cos(dir) * (1 - d), dir, r)
+        for (let d = 0; d <= 2; d += 0.25) s.code.smash(s.S, x0 - Math.sin(dir) * (1 - d), z0 - Math.cos(dir) * (1 - d), dir, r)
       }
       const dirty = s.S.dirty
       await settle(s.code)

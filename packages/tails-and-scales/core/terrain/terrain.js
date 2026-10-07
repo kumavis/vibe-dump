@@ -131,7 +131,7 @@ export class Terrain {
   // (half that out at the rim). Returns the chunks that broke. It walks a
   // copy of the chunk list (DESIGN §4.1 rule 6), so the rubble and logs it
   // makes are not hit by the same blast; a wrecker's smashing walks the live
-  // list instead (main.js smashAround).
+  // list instead (core/actions/move.js smashAround).
   blast(x, z, r, dmg, { acid = false } = {}, out = null) {
     const broken = []
     for (const c of [...this.chunks]) {

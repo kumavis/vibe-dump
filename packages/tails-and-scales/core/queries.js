@@ -15,7 +15,7 @@ import { canCharge, chargeTargets } from './actions/charge.js'
 
 export { moveMode, forbidMask, movePlan, validEnd, nearestValid } from './actions/move.js'
 export { canShoot, shotInfo, shootTargets } from './actions/shoot.js'
-export { canCharge, chargeTargets, chargePlan } from './actions/charge.js'
+export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/charge.js'
 export { freeSpot } from './deploy.js'
 export { rngState } from './rng.js'
 

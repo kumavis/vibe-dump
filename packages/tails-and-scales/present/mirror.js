@@ -53,6 +53,12 @@ export function applyEvent(M, e) {
     case 'unit.place':
       u.pos = { x: e.x, z: e.z }
       break
+    // a walk: where it ends, and what it smashed on the way (the view breaks
+    // each as the walker passes it; the mirror holds them all at once)
+    case 'unit.move':
+      u.pos = { x: e.to.x, z: e.to.z }
+      for (const { ev } of e.smashes) for (const x of ev) applyEvent(M, x)
+      break
     case 'unit.formation':
       u.pos = { x: e.pos.x, z: e.pos.z }
       u.r = e.r

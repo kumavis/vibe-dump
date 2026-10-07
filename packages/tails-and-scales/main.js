@@ -2,19 +2,22 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
   BOARD, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, PHASES,
-  roll, passes, woundNeed, saveNeed, hitNeed, attackCount, expected, p2D6, d6,
+  roll, passes, woundNeed, saveNeed, attackCount, expected, p2D6, d6,
 } from './core/rules.js'
 import { sidesFor, isMirror, CLASSIC } from './data/compat.js'
 import { RACES } from './data/schema.js'
 import { EDGES, OBJ_POS, NAV_CELL, makeSeats, edgeOf, ctrl, newState, startMatch, refreshNav } from './core/match.js'
 import { setUnitPos } from './core/units.js'
 import {
-  alive, gap, engagedWith, mx, mz, isEngaged, eyeY, chestY, inCover, controlOf, ownersOf, statusOf,
+  alive, gap, mx, mz, isEngaged, eyeY, chestY, inCover, controlOf, ownersOf, statusOf,
   canAct, anyCanAct, movePlan, validEnd, nearestValid, freeSpot, shotInfo, shootTargets, chargeTargets, chargePlan, rngState,
 } from './core/queries.js'
 import { emit, drain, log as logLine, flush, traceState } from './core/journal.js'
 import { damage } from './core/actions/damage.js'
 import { moralePhase } from './core/actions/morale.js'
+import { fightPhase } from './core/actions/fight.js'
+import { declareCharge, finishCharge, chargeSpots } from './core/actions/charge.js'
+import { smashAround } from './core/actions/move.js'
 import { gridSize, pathLength } from './core/nav.js'
 import { project } from './present/mirror.js'
 import { PACE } from './present/pace.js'
@@ -360,7 +363,8 @@ function makeView(u) {
   // figure runs off over it)
   const edge = edgeOf(G, u.side)
   const facing = -edge * Math.PI / 2
-  const v = { u, edge, facing, moving: false, models: [] }
+  // (at: where a walk has got to while a unit.move plays; null otherwise)
+  const v = { u, edge, facing, moving: false, at: null, models: [] }
   for (let i = 0; i < u.t.models; i++) {
     const mesh = buildModel(u.key, u.t, SIDES[u.side].color)
     scene.add(mesh)
@@ -390,27 +394,28 @@ function makeView(u) {
   })
 }
 
-// The ring and hit cylinder follow the unit's disc as shown: its place and
-// radius.
+// The ring and hit cylinder follow the unit's disc as shown: its place (or,
+// while it walks a unit.move, where the walk has got to: v.at) and radius.
 function syncView(u) {
-  const v = V(u), mu = shown(u)
+  const v = V(u), mu = shown(u), p = v.at ?? mu.pos
   v.ring.scale.setScalar(mu.r + 0.18)
   const tall = u.t.big ? 2.4 : u.t.fly ? 1.8 : 1.3
   v.hit.scale.set(mu.r, tall, mu.r)
-  v.ring.position.x = v.hit.position.x = mu.pos.x
-  v.ring.position.z = v.hit.position.z = mu.pos.z
+  v.ring.position.x = v.hit.position.x = p.x
+  v.ring.position.z = v.hit.position.z = p.z
   v.hit.position.y = v.hit.scale.y / 2
 }
-// Put a unit somewhere (the rules' move, and the deployment's), and show it
-// there: its ring and hit cylinder go at once, the figures walk
+// Put a unit somewhere (the old walk's move, and the deployment's), and
+// show it there: its ring and hit cylinder go at once, the figures walk
 // (animateUnits).
 function moveUnit(u, x, z) {
   setUnitPos(u, x, z)
   emit(G, 'unit.place', { u: u.id, x, z })
-  // Transitional, until R5c's resolveWalk: in battle the flags change on
-  // the frame a walking unit takes or loses an objective, as they always
-  // have (the player is idle here, so its mirror's owners are the ones
-  // shown).
+  // Transitional, until R5c puts the movement phase's move on resolveWalk
+  // (a charge's is there already, and turns the flags as its walk ends): in
+  // battle the flags change on the frame a walking unit takes or loses an
+  // objective, as they always have (the player is idle here, so its
+  // mirror's owners are the ones shown).
   if (G.turn.stage === 'battle') {
     const owners = ownersOf(G)
     if (owners.some((c, i) => c !== player.mirror.owners[i])) emit(G, 'objectives', { owners })
@@ -458,6 +463,8 @@ const HANDLERS = {
   'tray.open': (e) => tray.clear(e.title),
   dice: (e) => tray.row(e.label, e.dice, e.need, e),
   pause: (e) => wait(PACE.pause(e.s)),
+  // the camera, when it follows the action
+  focus: (e) => focus(e.x, e.z),
   // the figures
   'unit.place': (e) => syncView(unitOf(e.u)),
   'unit.formation': (e) => {
@@ -469,6 +476,10 @@ const HANDLERS = {
   'unit.slain': (e, M) => slain(e, M),
   'unit.flee': (e) => fled(e),
   'unit.destroyed': (e, M) => destroyed(e, M),
+  'unit.face': (e) => face(unitOf(e.u), unitOf(e.tg)),
+  'unit.move': (e, M) => walked(e, M),
+  melee: (e) => lunge(e),
+  'charge.result': (e) => shout(e),
   // what the labels, flags and score show: read off the mirror, which these
   // have just updated (the flags repaint each frame, animateObjectives)
   status: () => {
@@ -566,9 +577,80 @@ function destroyed(e, M) {
   fx.text({ x: p.x, y: 2.2, z: p.z }, `${u.t.short} destroyed`, SIDES[e.by !== null ? unitOf(e.by).side : 1 - u.side].color, { size: 20, life: 2 })
 }
 
+// A melee: the attackers lunge at their target (a thwack), and as the hit
+// row settles (the next event: the core emits the dice straight after
+// this, and the old code threw the sparks once that row had waited) sparks
+// fly over the models it hit.
+function lunge(e) {
+  const u = unitOf(e.u), target = unitOf(e.tg), tv = V(target)
+  const at = shown(target).pos
+  for (const f of standing(u)) {
+    f.lunge = 1
+    f.lungeDir = Math.atan2(at.x - f.x, at.z - f.z)
+  }
+  sfx.thwack()
+  if (!e.hits) return
+  wait(PACE.dice(e.n)).then(() => {
+    // (nothing of a table since replaced)
+    if (views.get(target.id) !== tv) return
+    for (let i = 0; i < Math.min(e.hits, 8); i++) {
+      const v = standing(target)[i % Math.max(1, shown(target).alive)]
+      if (v) for (let k = 0; k < 4; k++) fx.mote({ x: v.x, y: 0.6, z: v.z, vx: (Math.random() - 0.5) * 5, vy: Math.random() * 4, vz: (Math.random() - 0.5) * 5, size: 0.05, color: '#fff2b0', life: 0.3, g: 12 })
+    }
+  })
+}
+
 // ── Movement ────────────────────────────────────────────────────────────────
-// Walk a unit along a path: its place moves along it in game time (the
-// figures follow), smashing what a wrecker passes.
+// A unit walks its path (unit.move, from core/actions/move.js's
+// resolveWalk): its disc goes along it in game time, the figures following,
+// as the old walk below moved the unit itself, and what a wrecker smashed
+// breaks as the walker passes each sample (the terrain events the sample
+// made); then a breath. The mirror already holds where the walk ends, so
+// until it gets there the view draws the disc at v.at, where the walk has
+// got to.
+async function walked(e, M) {
+  const u = unitOf(e.u), v = V(u)
+  const { path: pts, L, speed, fly, smashes } = e
+  v.moving = true
+  if (fly) for (const f of v.models) f.flying = true
+  const seg = []
+  let acc = 0
+  for (let i = 1; i < pts.length; i++) {
+    const l = hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
+    seg.push({ a: pts[i - 1], b: pts[i], s: acc, l })
+    acc += l
+  }
+  let next = 0
+  const smash = ({ ev }) => {
+    for (const x of ev) terrainView.apply(x, M)
+    fx.shake = Math.max(fx.shake, 0.08)
+  }
+  // (nothing of a table since replaced: its unit ids count from 1 again)
+  const gone = () => views.get(e.u) !== v
+  await tween(L / speed + 0.15, (k) => {
+    if (gone()) return
+    const d = Math.min(L, k * (L + speed * 0.15))
+    const s = seg.find((q) => d <= q.s + q.l) || seg[seg.length - 1]
+    const f = s.l > 0 ? (d - s.s) / s.l : 1
+    v.facing = Math.atan2(s.b.x - s.a.x, s.b.z - s.a.z)
+    v.at = { x: lerp(s.a.x, s.b.x, f), z: lerp(s.a.z, s.b.z, f) }
+    syncView(u)
+    if (fly) for (const f of v.models) f.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)
+    while (next < smashes.length && smashes[next].s <= d) smash(smashes[next++])
+  }, easeInOut)
+  if (gone()) return
+  while (next < smashes.length) smash(smashes[next++])
+  // there: drawn where the mirror has it from now on
+  v.at = null
+  syncView(u)
+  v.moving = false
+  if (fly) for (const f of v.models) (f.flying = false), (f.lift = 0)
+  await wait(0.15)
+}
+
+// Walk a unit along a path the old way (the movement phase's move, until
+// R5c puts it on resolveWalk too): its place moves along it in game time
+// (the figures follow), smashing what a wrecker passes.
 async function walk(u, pts, { speed = 7, fly = false } = {}) {
   const L = pathLength(pts)
   if (L < 0.05) return
@@ -597,9 +679,9 @@ async function walk(u, pts, { speed = 7, fly = false } = {}) {
     v.facing = Math.atan2(s.b.x - s.a.x, s.b.z - s.a.z)
     moveUnit(u, x, z)
     if (fly) for (const f of v.models) f.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)
-    while (smashed < smash.length && smash[smashed].s <= d) smashAround(u, smash[smashed++])
+    while (smashed < smash.length && smash[smashed].s <= d) smashNow(u, smash[smashed++])
   }, easeInOut)
-  while (smashed < smash.length) smashAround(u, smash[smashed++])
+  while (smashed < smash.length) smashNow(u, smash[smashed++])
   // (?debug) the flags as the walk left them, before its action's end
   // re-emits them
   checkpoint(['owners'])
@@ -608,18 +690,12 @@ async function walk(u, pts, { speed = 7, fly = false } = {}) {
   await wait(0.15)
 }
 
-// The Brute ploughs through anything breakable in its way. It walks the
-// live chunk list (DESIGN §4.1 rule 6), so a log a tree it felled leaves in
-// its path is smashed in the same sweep.
-function smashAround(u, { x, z, dir }) {
-  for (const c of G.terrain.chunks) {
-    if (!c.alive || !c.destructible) continue
-    const s = c.nav || c.shape
-    if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
-      G.terrain.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) }, G.out)
-      show()
-      fx.shake = Math.max(fx.shake, 0.08)
-    }
+// One sample of the old walk's smashing (core/actions/move.js's
+// smashAround), shown at once.
+function smashNow(u, sample) {
+  if (smashAround(G, u, sample, G.out)) {
+    show()
+    fx.shake = Math.max(fx.shake, 0.08)
   }
 }
 
@@ -877,46 +953,29 @@ async function mesmerize(u, target) {
   finishAction()
 }
 
-// ── Charge & fight ──────────────────────────────────────────────────────────
+// ── Charge ──────────────────────────────────────────────────────────────────
+// The charge is core/actions/charge.js's: declareCharge rolls, and on
+// contact moves the charger on (an AI seat's, or Auto's, shortest move) or
+// hands back what a human picks the spot from; finishCharge moves it to the
+// spot picked. Here: the pick, and the action's end once the charge's
+// events have played, so its `act` line is written with nothing left to
+// show (under ?debug no state line waits in the trace's hold).
 async function doCharge(u, target, { auto = false } = {}) {
   S.busy = true
-  const plan = chargePlan(G, u, target)
-  u.flags.chargeTried = true
-  tray.clear(`${u.t.short} charge ${target.t.short}`)
-  if (!plan) {
-    log(u.side, `<b>${u.t.short}</b> can't find a way to ${target.t.short}.`)
-    return finishAction()
+  const pick = await played(declareCharge(G, u, target, auto || !human(u.side) ? 'ai' : 'seat'))
+  // a human chooses where around the target to end
+  if (pick) {
+    const cell = await pickChargeSpot(u, target, pick.plan, pick.rolled)
+    await played(finishCharge(G, u, target, cell))
   }
-  const r = roll(G, 2)
-  const total = r[0] + r[1]
-  const ok = total >= plan.need
-  await tray.row(`Charge ${plan.need}" (2D6)`, r, 0, { sum: true, pass: ok })
-  face(u, target)
-  if (!ok) {
-    fx.text(top(u), 'Charge failed', '#d0d0d0')
-    log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total}, needed ${plan.need}. Failed.`)
-    return finishAction()
-  }
-  u.flags.charged = true
-  u.flags.chargeTarget = target.id
-  fx.text(top(u), 'CHARGE!', SIDES[u.side].color, { size: 22 })
-  log(u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total} vs ${plan.need}. <b>Contact!</b>`)
-  // a human chooses where around the target to end; the AI takes the shortest move
-  const cell = auto || !human(u.side) ? plan.cell : await pickChargeSpot(u, target, plan, total)
-  const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
-  await walk(u, pts, { speed: 11, fly: plan.mode === 'fly' })
-  refreshNav(G)
-  // (the labels' ⚔ comes with finishAction's `status`)
+  // (the charger's ⚔ came with its walk's own `status`, as the walk ended:
+  // the moment finishAction's showed it before)
   finishAction()
 }
 
 // Shade every spot the roll reaches and wait for a click on one of them.
 function pickChargeSpot(u, target, plan, rolled) {
-  // same 0.01" grace `need` was rounded with, and the shortest-move spot always
-  // counts, so a roll that made the charge can never leave nowhere to stand
-  const ok = new Uint8Array(G.nav.N)
-  for (const s of plan.spots) if (s.d <= rolled + 0.011) ok[s.i] = 1
-  ok[plan.cell] = 1
+  const ok = chargeSpots(plan, rolled)
   // the 12" declaration ring is spent; leave the orange to the area itself,
   // filled strongly enough to see when it's only a cell or two
   rangeRing.visible = false
@@ -953,63 +1012,6 @@ function placeCharge(i) {
   pick.resolve(i)
 }
 
-async function fight(u) {
-  if (!alive(u) || u.flags.fought) return
-  const foes = engagedWith(G, u)
-  if (!foes.length) return
-  u.flags.fought = true
-  const target = foes.find((f) => f.id === u.flags.chargeTarget) || foes.reduce((a, b) => (a.alive * a.t.W < b.alive * b.t.W ? a : b))
-  const w = u.t.melee
-  const mod = u.mesmerized ? 1 : 0
-  const need = hitNeed(u.t.WS, mod)
-  face(u, target)
-  if (human(u.side) || human(target.side) || S.follow) focus(u.pos.x * 0.5 + target.pos.x * 0.5, u.pos.z * 0.5 + target.pos.z * 0.5)
-  tray.clear(`${u.t.short} fight ${target.t.short} · ${w.name}`)
-  // lunge!
-  for (const f of standing(u)) {
-    f.lunge = 1
-    f.lungeDir = Math.atan2(target.pos.x - f.x, target.pos.z - f.z)
-  }
-  sfx.thwack()
-  const n = attackCount(u, w, true)
-  const hits = roll(G, n)
-  const h = passes(hits, need)
-  await tray.row(`Hit ${need}+${mod ? ' (mesmerized)' : ''}`, hits, need)
-  for (let i = 0; i < Math.min(h, 8); i++) {
-    const v = standing(target)[i % Math.max(1, target.alive)]
-    if (v) for (let k = 0; k < 4; k++) fx.mote({ x: v.x, y: 0.6, z: v.z, vx: (Math.random() - 0.5) * 5, vy: Math.random() * 4, vz: (Math.random() - 0.5) * 5, size: 0.05, color: '#fff2b0', life: 0.3, g: 12 })
-  }
-  const wn = woundNeed(w.S, target.t.T, w.poison)
-  const wd = roll(G, h)
-  const wounds = passes(wd, wn)
-  if (h) await tray.row(`Wound ${wn}+`, wd, wn)
-  const sn = saveNeed(target.t.Sv, w.AP, false)
-  const sv = roll(G, wounds)
-  const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
-  if (wounds) await tray.row(sn > 6 ? 'No save' : `Save ${sn}+`, sn > 6 ? [] : sv, sn, { save: true })
-  const killed = await played(damage(G, target, unsaved, w.D, u))
-  log(u.side, `<b>${u.t.short}</b> fight ${target.t.short}: ${h} hit, ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
-  await wait(0.3)
-}
-
-async function fightPhase(active) {
-  const chargers = G.units.filter((u) => u.side === active && u.flags.charged && alive(u))
-  for (const u of chargers) await fight(u)
-  // then the rest, defender first, alternating
-  let side = 1 - active
-  for (let guard = 0; guard < 30; guard++) {
-    const next = G.units.find((u) => u.side === side && alive(u) && !u.flags.fought && isEngaged(G, u))
-    const other = G.units.find((u) => u.side === 1 - side && alive(u) && !u.flags.fought && isEngaged(G, u))
-    if (!next && !other) break
-    if (next) await fight(next)
-    side = 1 - side
-  }
-  for (const u of G.units) u.flags.fought = false
-  // every label, now the fighting is over
-  emit(G, 'status', statusOf(G))
-  show()
-}
-
 // ── Morale ──────────────────────────────────────────────────────────────────
 // (the test is core/actions/morale.js; here, how a fleeing model looks:
 // off the table over its unit's own edge)
@@ -1034,12 +1036,24 @@ function fled(e) {
 }
 
 // ── Little helpers used by actions ──────────────────────────────────────────
+// `u` turns to face `target`, as both are shown (a unit.face event's, or
+// the old code's with the player idle, when the two agree).
 function face(u, target) {
-  const v = V(u)
-  v.facing = Math.atan2(target.pos.x - u.pos.x, target.pos.z - u.pos.z)
-  for (const f of v.models) f.look = Math.atan2(target.pos.x - f.x, target.pos.z - f.z)
+  const v = V(u), at = shown(target).pos, from = shown(u).pos
+  v.facing = Math.atan2(at.x - from.x, at.z - from.z)
+  for (const f of v.models) f.look = Math.atan2(at.x - f.x, at.z - f.z)
 }
-const top = (u) => ({ x: u.pos.x, y: u.t.big ? 2.6 : 1.6, z: u.pos.z })
+// over a unit's head, as shown
+const top = (u) => {
+  const p = shown(u).pos
+  return { x: p.x, y: u.t.big ? 2.6 : 1.6, z: p.z }
+}
+// A charge roll's verdict, over the charger's head.
+function shout(e) {
+  const u = unitOf(e.u)
+  if (e.ok) fx.text(top(u), 'CHARGE!', SIDES[u.side].color, { size: 22 })
+  else fx.text(top(u), 'Charge failed', '#d0d0d0')
+}
 
 // An action's end: its state line in the trace, then what the table shows
 // of it (who holds each objective; every label), and the `act` itself,
@@ -1063,10 +1077,13 @@ function checkWipe() {
 }
 
 // ── Camera focus for AI turns ───────────────────────────────────────────────
+// (the stage and the seat to act as shown: a focus event plays while the
+// match may have run ahead; the AI's own calls come with the player idle)
 let focusTween = null
 function focus(x, z) {
-  if (!S.follow || G.turn.stage !== 'battle') return
-  if (human(G.turn.active) && ctrl(G, 0) !== ctrl(G, 1)) return
+  const M = player.mirror
+  if (!S.follow || M.stage !== 'battle') return
+  if (human(M.active) && ctrl(G, 0) !== ctrl(G, 1)) return
   const t0 = controls.target.clone()
   const d = Math.hypot(x - t0.x, z - t0.z)
   if (d < 6) return
@@ -1135,7 +1152,7 @@ async function playerTurn(side) {
     refreshUI()
     await banner(`${SIDES[side].icon} ${SIDES[side].name}`, ph.name, side)
     if (ph.key === 'fight') {
-      if (G.units.some((u) => alive(u) && isEngaged(G, u))) await fightPhase(side)
+      if (G.units.some((u) => alive(u) && isEngaged(G, u))) await played(fightPhase(G, side))
     } else if (ph.key === 'morale') {
       await played(moralePhase(G))
     } else if (!anyCanAct(G, side)) {
@@ -1891,13 +1908,14 @@ S.viewShift = 1
 function animateUnits(dt, time) {
   const M = player.mirror
   for (const u of G.units) {
-    const v = V(u), mu = M.units[u.id]
+    // (a unit walking a unit.move is drawn where its walk has got to)
+    const v = V(u), mu = M.units[u.id], p = v.at ?? mu.pos
     for (const [i, model] of mu.models.entries()) {
       const m = v.models[i]
       if (!model.alive && !m.dying) continue
       const a = m.mesh.userData.anim
       if (model.alive) {
-        const tx = mu.pos.x + model.ox, tz = mu.pos.z + model.oz
+        const tx = p.x + model.ox, tz = p.z + model.oz
         const k = 1 - Math.exp(-dt * (v.moving ? 16 : 7))
         const px = m.x, pz = m.z
         m.x += (tx - m.x) * k
@@ -1938,7 +1956,7 @@ function animateUnits(dt, time) {
     }
     // the floating label
     if (mu.alive > 0 && !FAST) {
-      tmpV.set(mu.pos.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), mu.pos.z).project(camera)
+      tmpV.set(p.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), p.z).project(camera)
       const on = tmpV.z < 1
       v.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`
       v.label.style.visibility = on && M.stage !== 'title' ? 'visible' : 'hidden'
@@ -2069,14 +2087,17 @@ if (params.has('debug')) {
   // `at` before the entry is written, which carries it too, as data-at), or
   // when the player goes idle. sim/ then records every write at the trace
   // length it always did, and takes each state line's shadow as it joins:
-  // the converted actions write only log lines while the player is behind,
-  // so no state line waits. A state line that does wait is only right if
+  // the converted actions write only log lines while the player is behind
+  // (a charge's `act` line is finishAction's, here, once the charge's
+  // events have played; the fight's `phase` line follows its played()), so
+  // no state line waits. A state line that does wait is only right if
   // the match hasn't moved by the time it joins (sim/oracle's shadow reads
   // the live match then), so it waits with a fingerprint of what that
   // shadow reads, and joining throws, naming the line, if the fingerprint
-  // has moved. A step that converts an action that writes a state line
-  // while the player is behind (R5b's, R6's whole AI turn) carries the
-  // state with the line instead (DESIGN's R5a notes and R6's row).
+  // has moved. The step that writes state lines while the player is behind
+  // (R6, whose engine ends actions in core and runs a whole AI turn ahead)
+  // carries the state with the line instead (DESIGN's R5a and R5b notes,
+  // R6's row).
   //
   // Not promised, for sim/terrain-shots.mjs only: clock, camera, renderer,
   // S.titleSpin, scenery.scene and scenery.blast (a blast played as

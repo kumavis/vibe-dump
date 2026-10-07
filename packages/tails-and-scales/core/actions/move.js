@@ -1,10 +1,15 @@
-// Movement's rules: where a unit may go this phase and how it gets there.
-// (Its read-only half; the move itself is still main.js's doMove, awaited
-// by its animation, until R5 makes it synchronous here.)
+// Movement's rules: where a unit may go this phase and how it gets there,
+// and the walk itself (resolveWalk), which a charge's move takes. (The
+// movement phase's move is still main.js's doMove, awaited by its old
+// walk, until R5c puts it on resolveWalk too.)
 import { BOARD, ENGAGE } from '../rules.js'
 import { hypot } from '../dmath.js'
+import { lerp } from '../util.js'
+import { emit } from '../journal.js'
 import { refreshNav } from '../match.js'
-import { alive, enemiesOf, isEngaged } from '../queries.js'
+import { setUnitPos } from '../units.js'
+import { pathLength } from '../nav.js'
+import { alive, enemiesOf, isEngaged, ownersOf, statusOf } from '../queries.js'
 
 export function moveMode(u) {
   return u.t.move
@@ -73,4 +78,76 @@ export function nearestValid(G, plan, x, z, within = 2.4) {
     }
   }
   return best
+}
+
+// ── The walk ────────────────────────────────────────────────────────────────
+// A unit goes along `pts` (DESIGN §2.3's resolveWalk, §4.1 rule 7), all at
+// once: a wrecker smashes what it passes at fixed 0.25" samples along the
+// path plus its end point, in order, so what breaks (and which way trees
+// fall) never depends on the frame rate; then the unit stands where the
+// walk's last frame always put it (the k=1 lerp along the path, not
+// pts.at(-1)). A path under 0.05" moves nothing and smashes nothing.
+//
+//   unit.move { u, path: [{ x, z }], L, speed, fly, smashes: [{ s, ev }], to: { x, z } }
+//
+// The view walks the unit along `path` (L long, at `speed` inches a second,
+// flying or not) and breaks what each sample smashed (`ev`, its terrain
+// events) as the walker comes `s` along; `to` is where the unit stands.
+// Then `objectives` and `status`: the flags and labels as the walk left
+// them (the old walk turned a flag the frame it crossed; this turns it as
+// the walk ends).
+// (Through R5b only a charge moves this way: main.js's doMove still walks
+// the old way until R5c.)
+export function resolveWalk(G, u, pts, { speed = 7, fly = false } = {}) {
+  const L = pathLength(pts)
+  if (L < 0.05) return
+  const seg = []
+  let acc = 0
+  for (let i = 1; i < pts.length; i++) {
+    const l = hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
+    seg.push({ a: pts[i - 1], b: pts[i], s: acc, l })
+    acc += l
+  }
+  const smashes = []
+  if (u.t.wrecker) {
+    const samples = []
+    for (const q of seg) for (let t = 0; t < q.l; t += 0.25) samples.push({ s: q.s + t, x: q.a.x + ((q.b.x - q.a.x) * t) / q.l, z: q.a.z + ((q.b.z - q.a.z) * t) / q.l, dir: Math.atan2(q.b.x - q.a.x, q.b.z - q.a.z) })
+    // (a path of 0.05" or more has a last segment)
+    const last = seg[seg.length - 1]
+    samples.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: Math.atan2(last.b.x - last.a.x, last.b.z - last.a.z) })
+    // (a quiet run, G.out null, keeps no events: the smashing is the same)
+    for (const p of samples) {
+      const ev = G.out ? [] : null
+      if (smashAround(G, u, p, ev) && ev) smashes.push({ s: p.s, ev })
+    }
+  }
+  // the walk's last frame: k = 1, so the distance along is L itself
+  const end = seg.find((q) => L <= q.s + q.l) || seg[seg.length - 1]
+  const f = end.l > 0 ? (L - end.s) / end.l : 1
+  setUnitPos(u, lerp(end.a.x, end.b.x, f), lerp(end.a.z, end.b.z, f))
+  // the walk, then the flags (who holds what) and the labels (who is in
+  // combat) as it left them
+  if (G.out) {
+    emit(G, 'unit.move', { u: u.id, path: pts.map((p) => ({ x: p.x, z: p.z })), L, speed, fly, smashes, to: { x: u.pos.x, z: u.pos.z } })
+    emit(G, 'objectives', { owners: ownersOf(G) })
+    emit(G, 'status', statusOf(G))
+  }
+}
+
+// The Brute ploughs through anything breakable in its way, at one sample of
+// its walk ({ x, z, dir }: where, and which way it is heading). It walks the
+// live chunk list (§4.1 rule 6), so a log a tree it felled leaves in its
+// path is smashed in the same sweep. The terrain's events go into `out`
+// (nowhere when it is null). Returns how many chunks it hit.
+export function smashAround(G, u, { x, z, dir }, out) {
+  let n = 0
+  for (const c of G.terrain.chunks) {
+    if (!c.alive || !c.destructible) continue
+    const s = c.nav || c.shape
+    if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
+      G.terrain.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) }, out)
+      n++
+    }
+  }
+  return n
 }

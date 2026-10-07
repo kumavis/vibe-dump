@@ -212,9 +212,40 @@ step keeps the game playable.
     and morale): the review rounds changed the seam both files share, so
     no damage-only state of the final code was gated on its own (DESIGN's
     R5a notes).
-  - [ ] **R5b** fight, then charge (split at the spot pick).
-  - [ ] **R5c** shoot, then move (`resolveWalk`), then P-browser over the
-    whole corpus.
+  - [x] **R5b** landed: `core/actions/fight.js` (`fight`, `fightPhase`)
+    and the charge split in `core/actions/charge.js` (`chargeSpots`,
+    `declareCharge`, `finishCharge`), synchronous, each wait an event in
+    its old place (a lunge is a `melee` event, a turn to face `unit.face`,
+    the camera's swing `focus`, the roll's verdict `charge.result`). A
+    human still picks the charge's end spot in main.js (the orange area, a
+    click, Shortest move) until R6's `chargeEnd`. A charge's move is
+    `resolveWalk` (with `smashAround`, now in `core/actions/move.js`),
+    brought forward from R5c because `finishCharge` walks: the walk is
+    resolved at once and played back by the view, which draws the unit
+    along its path while the mirror already holds where it ends. Checks:
+    parity 40/40 and every standing check after each file; P-present's
+    self-test drops the charge's walk, its smashes, and its flags and
+    labels (20 drops in all, every one caught); a battle watched rendered
+    on R5a and on each pass writes every battle-log line at the same trace
+    length and the same game time into the battle (the runs' starts sat a
+    frame or less apart), a human log's charge picks included, and
+    played again with the picks made by the mouse (a click on the spot,
+    and the Shortest move button) writes the same battle. After review,
+    P-present also holds the fight's and the charge's own events, which
+    the mirror can't see (a lunge and its hit row, a turn to face, a
+    charge's verdict, the beat after a fight), to their order (27 drops
+    and moves in its self-test, every one caught); terrain-check's sweeps
+    go through core's `smashAround` itself; and a walk in a quiet run
+    keeps no events.
+    Turned up: the charge's `act` line need not wait (the R5a follow-up):
+    main.js ends the action once the charge's events have played, so no
+    state line is written while the view is behind until R6 ends actions
+    in core. A charge's flags now turn as its walk ends rather than the
+    frame it crosses (a move's still turn mid-walk until R5c). The fight
+    phase's closing label refresh repeats its last fight's, so P-present
+    cannot see it go (DESIGN's R5b notes).
+  - [ ] **R5c** shoot, then move (`doMove` onto the `resolveWalk` the
+    charge already uses), then P-browser over the whole corpus.
 - [ ] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as
   generators, `LocalStore` + `Session`; the core runs headless in Node.
 - [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,

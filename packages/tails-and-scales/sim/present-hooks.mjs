@@ -1,14 +1,24 @@
 // Module hooks for sim/present-check.mjs's --self-test (registered by its
 // child, beside the oracle's three.js resolution). With PRESENT_MUTATE set,
 // one named edit is applied to the code under test as it loads: each drops
-// or bends one event the mirror is folded from, and the check must fail on
-// it. Code under sim/oracle's PIN checkout is never edited. The flags' and
-// labels' events inside an action (no-dmg-*, no-morale-*), the walking
-// unit's flags (no-walk-owners) and the stage events (no-stage-*) are
-// caught only at a `check`, the checkpoint main.js's checkpoint() emits
-// under ?debug: the action's end re-emits the flags and labels before its
-// `act`, and a stage lost would be put right by the next stage event
-// before any act.
+// or bends one event (one the mirror is folded from, or one of the fight's
+// or the charge's own, below), and the check must fail on it. Code under sim/oracle's PIN checkout is never edited. The flags' and
+// labels' events inside an action (no-dmg-*, no-morale-*, no-move-owners,
+// no-move-status), the walking unit's flags (no-walk-owners) and the stage
+// events (no-stage-*) are caught only at a `check`, the checkpoint
+// main.js's checkpoint() emits under ?debug: the action's end re-emits the
+// flags and labels before its `act`, and a stage lost would be put right by
+// the next stage event before any act.
+//
+// The fight's and the charge's own events (core/actions/fight.js: a lunge,
+// a turn to face, a pause; charge.js: a turn to face, charge.result) change
+// nothing in the mirror, so their drops and moves (no-melee and on) are
+// caught by the check's event order instead (present-check.mjs's
+// eventOrder), each where the next event or line breaks it.
+//
+// Not here, because nothing the check can see depends on it: the `status`
+// at the fight phase's end, which repeats the last damage's (each fight
+// ends in one), so dropping it leaves every check passing (probed at R5b).
 
 // [file suffix, text, replacement]
 export const MUTATIONS = {
@@ -31,6 +41,34 @@ export const MUTATIONS = {
   'no-morale-owners': ['/core/actions/morale.js', "        emit(G, 'objectives',", "        if (false) emit(G, 'objectives',"],
   // the labels' state after a flight never reported
   'no-morale-status': ['/core/actions/morale.js', "        emit(G, 'status',", "        if (false) emit(G, 'status',"],
+  // a walk (a charge's move: resolveWalk) never reported: the charger
+  // stays where it was in the mirror
+  'no-move': ['/core/actions/move.js', "  emit(G, 'unit.move',", "  if (false) emit(G, 'unit.move',"],
+  // what a charging wrecker smashed on its way never reported: the chunks
+  // stand on in the mirror
+  'no-move-smash': ['/core/actions/move.js', 'fly, smashes, to:', 'fly, smashes: [], to:'],
+  // the flags as a walk left them never reported (its action's end
+  // re-reports them before its act: only the charge's check sees this)
+  'no-move-owners': ['/core/actions/move.js', "    emit(G, 'objectives',", "    if (false) emit(G, 'objectives',"],
+  // the labels as a walk left them (the charger now in combat) never
+  // reported (likewise re-reported at the action's end)
+  'no-move-status': ['/core/actions/move.js', "    emit(G, 'status',", "    if (false) emit(G, 'status',"],
+  // a fight's lunge never reported: no fighter lunges, no sparks fly
+  'no-melee': ['/core/actions/fight.js', "  emit(G, 'melee',", "  if (false) emit(G, 'melee',"],
+  // the lunge after its hit row: the sparks, timed PACE.dice(n) from the
+  // lunge, would fly a row late
+  'melee-after-dice': ['/core/actions/fight.js', "  emit(G, 'melee', { u: u.id, tg: target.id, n, hits: h })\n  emit(G, 'dice', { label: `Hit ${need}+${mod ? ' (mesmerized)' : ''}`, dice: hits, need })", "  emit(G, 'dice', { label: `Hit ${need}+${mod ? ' (mesmerized)' : ''}`, dice: hits, need })\n  emit(G, 'melee', { u: u.id, tg: target.id, n, hits: h })"],
+  // a fighter never turns to its foe
+  'no-fight-face': ['/core/actions/fight.js', "  emit(G, 'unit.face',", "  if (false) emit(G, 'unit.face',"],
+  // no beat after a fight
+  'no-fight-pause': ['/core/actions/fight.js', "  emit(G, 'pause', { s: 0.3 })", '  // (dropped)'],
+  // a charger never turns to its target
+  'no-charge-face': ['/core/actions/charge.js', "  emit(G, 'unit.face',", "  if (false) emit(G, 'unit.face',"],
+  // a charge that made it: no "CHARGE!" (the first charge.result in the
+  // file, at its deeper indent, is the failed one's: this is the second)
+  'no-charge-result': ['/core/actions/charge.js', "\n  emit(G, 'charge.result',", "\n  if (false) emit(G, 'charge.result',"],
+  // a charge that fell short: no "Charge failed"
+  'no-charge-failed': ['/core/actions/charge.js', "    emit(G, 'charge.result',", "    if (false) emit(G, 'charge.result',"],
   // a unit's place, as the old walk moves it, never reported
   'no-place': ['/main.js', "  emit(G, 'unit.place', { u: u.id, x, z })", '  // (dropped)'],
   // the flags a walking unit turns never reported (its action's end

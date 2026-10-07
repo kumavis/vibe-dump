@@ -5,8 +5,9 @@
 // function wrapped, so every generator it makes logs { seed, n } into
 // globalThis.__layoutDraws while that is an array. The values drawn are
 // untouched. With TERRAIN_MUTATE set (the check's --self-test), one named
-// edit is applied to the working tree's terrain code as it loads, to show
-// the check fails on it.
+// edit is applied to the working tree's terrain code (or the smashing that
+// walks it, core/actions/move.js's smashAround) as it loads, to show the
+// check fails on it.
 //
 // One edit is always made, to the R0 code's scenery.js (R5_DUST): a dropped
 // block's dust takes its height as the drop happens, where R0 read it when
@@ -30,7 +31,8 @@ export function mulberry32(seed) {
 `
 const HEAD = 'export function mulberry32(seed) {'
 
-// --self-test's edits: [file suffix, text, replacement]
+// --self-test's edits: [file suffix, text, replacement, the seeds to run it
+// on (when not 1-25)]
 export const MUTATIONS = {
   // two layout draws swapped: a boulder's colour before its height
   'draw-order': ['/core/terrain/recipes.js', 'const sy = rr(rng, 0.65, 1.25)\n  const color = pick(STONE, rng)', 'const color = pick(STONE, rng)\n  const sy = rr(rng, 0.65, 1.25)'],
@@ -42,6 +44,11 @@ export const MUTATIONS = {
   'material': ['/view/terrain.js', "const band = mesh(BOX, mat('#5f3e24'))", 'const band = mesh(BOX, mat(look.color))'],
   // blast walks the live list instead of a copy
   'live-blast': ['/core/terrain/terrain.js', 'for (const c of [...this.chunks]) {', 'for (const c of this.chunks) {'],
+  // a wrecker's smashing walks a copy instead of the live list: a log a
+  // tree it felled in its path is spared by that sample (the next sample
+  // mostly smashes it all the same, from a step further on: the first
+  // board where that shows is 88)
+  'copy-smash': ['/core/actions/move.js', 'for (const c of G.terrain.chunks) {', 'for (const c of [...G.terrain.chunks]) {', '80-100'],
   // a log's shape a hair off
   'log-shape': ['/core/terrain/terrain.js', 'hz: c.trunkR + 0.05,', 'hz: c.trunkR + 0.051,'],
   // the rubble pile's pieces spill toward the blast, not away
