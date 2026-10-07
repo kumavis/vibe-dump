@@ -62,7 +62,8 @@ void main() {
   // but the mesh through the texel corners can't show a cut that narrow),
   // draw it over the ridge rather than under it
   lift += aJoin.w * 1.3 * dc / max(toCam.y, 0.25 * dc);
-  wp.xyz += toCam / max(dc, 1e-3) * lift;
+  // (never so far it reaches the eye, close up and nearly level with it)
+  wp.xyz += toCam / max(dc, 1e-3) * min(lift, dc * 0.8);
   vFlow = aFlow;
   vSide = aSide;
   vFade = aFade;

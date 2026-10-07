@@ -227,15 +227,17 @@ export class App {
 
   applyQuality() {
     const L = [
-      { clouds: 0.25, steps: 26, light: 2, range: 12, dpr: 1 },
-      { clouds: 0.33, steps: 34, light: 2, range: 16, dpr: 1.25 },
-      { clouds: 0.42, steps: 44, light: 3, range: 19, dpr: 1.5 },
-      { clouds: 0.5, steps: 56, light: 4, range: 22, dpr: 2 },
+      { clouds: 0.25, steps: 26, light: 2, range: 12, dpr: 1, far: 2000, march: 200 },
+      { clouds: 0.33, steps: 34, light: 2, range: 16, dpr: 1.25, far: 2400, march: 220 },
+      { clouds: 0.42, steps: 44, light: 3, range: 19, dpr: 1.5, far: 3000, march: 260 },
+      { clouds: 0.5, steps: 56, light: 4, range: 22, dpr: 2, far: 3000, march: 260 },
     ][Math.max(0, Math.min(3, this.quality.level))]
     this.qset = L
     this.clouds.setScale(L.clouds)
     this.clouds.uniforms.uSteps.value = L.steps
     this.clouds.uniforms.uLightSteps.value = L.light
+    this.clouds.uniforms.uFar.value = L.far
+    this.clouds.uniforms.uMarch.value = L.march
     this.terrain.setRange(L.range)
     this.waterfalls?.setQuality(this.quality.level)
     if (this.sized) this.resize()

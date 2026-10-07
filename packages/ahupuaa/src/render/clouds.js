@@ -62,6 +62,8 @@ uniform float uOvercast;   // 0..1, a stratiform deck over everything (Kona stor
 uniform float uRainbow;    // 1 = rainbows on; also a debug gain
 uniform float uSteps;
 uniform float uLightSteps;
+uniform float uFar;        // how far out (world units) the march goes
+uniform float uMarch;      // and the most steps it may take getting there
 uniform float uFlash;      // lightning
 uniform vec3 uFlashPos;
 uniform float uFrame;      // frame counter, steps the sample offsets
@@ -79,8 +81,6 @@ layout(location = 1) out highp vec4 cloudDepth;
 #define BOW_GAIN 0.3
 // how far (world y) rain shows up inside the cloud above its base
 #define RAIN_REACH 3.2
-// how far out (world units) the march goes
-#define FAR 3000.0
 
 // interleaved gradient noise: neighbouring pixels get well spread offsets
 float ign(vec2 p) { return fract(52.9829189 * fract(dot(p, vec2(0.06711056, 0.00583715)))); }
@@ -105,7 +105,8 @@ vec4 weather(vec2 xz) {
   float open = openSea(xz);
   if (open > 0.0) {
     // trade cumulus line up in streets along the wind
-    float far = tradeCumulus(xz, uWind, uWindDir, uFarCover);
+    // (none right on top of the camera, where one would fill a tour view)
+    float far = tradeCumulus(xz, uWind, uWindDir, uFarCover) * smoothstep(20.0, 50.0, distance(xz, uCamPos.xz));
     vec4 f = vec4(far, far > 0.55 ? (far - 0.55) * 0.5 : 0.0, 0.0, 0.0);
     w = mix(max(w, f * open), f, edge);
   }
@@ -221,7 +222,7 @@ void main() {
   vec3 ray = world - uCamPos;
   float sceneDist = depth < 1.0 ? length(ray) : 1e9;
   vec3 rd = normalize(ray);
-  cloudDepth = vec4(min(sceneDist, FAR));
+  cloudDepth = vec4(min(sceneDist, uFar));
 
   float yHi = uTop + 0.5;
   float yLo = 0.0;
@@ -229,7 +230,7 @@ void main() {
   float t0, t1;
   if (abs(rd.y) < 1e-5) {
     if (uCamPos.y < yLo || uCamPos.y > yHi) { gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
-    t0 = 0.0; t1 = FAR;
+    t0 = 0.0; t1 = uFar;
   } else {
     float ta = (yLo - uCamPos.y) / rd.y;
     float tb = (yHi - uCamPos.y) / rd.y;
@@ -237,7 +238,7 @@ void main() {
     t1 = max(ta, tb);
   }
   // (far enough that the cumulus over the sea run on to the horizon)
-  t1 = min(t1, min(sceneDist, FAR));
+  t1 = min(t1, min(sceneDist, uFar));
   if (t1 <= t0) { gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
 
   // a different offset every frame (a golden-ratio walk from each pixel's own
@@ -273,7 +274,7 @@ void main() {
   float tEmpty = -1.0;
   float tFine = -1.0;
   for (int i = 0; i < 260; i++) {
-    if (t >= t1 || T < 0.03) break;
+    if (t >= t1 || T < 0.03 || float(i) >= uMarch) break;
     // (and coarser still far out, where a cloud is a few pixels across)
     float dt = clamp(t * 0.011 / detailK, 0.22, max(7.0, t * 0.008));
     vec3 p = uCamPos + rd * t;
@@ -723,6 +724,8 @@ export class Clouds {
       uHeight: { value: null },
       uSteps: { value: 56 },
       uLightSteps: { value: 4 },
+      uFar: { value: 3000 },
+      uMarch: { value: 260 },
       uFlash: { value: 0 },
       uFlashPos: { value: new THREE.Vector3() },
       uFrame: { value: 0 },
