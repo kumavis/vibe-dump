@@ -25,10 +25,12 @@ the commit, and add whatever the work turned up.
   `node sim/mutation.mjs`, `node sim/perturb.mjs --fn hypot` (0 battles
   moved), `node sim/data-check.mjs`, `node sim/flag-lint.mjs` (and
   `--self-test`), `node sim/mirror-check.mjs`, `node sim/terrain-check.mjs`
-  (and `--self-test`) and, from R4, `node sim/rematch-check.mjs` (two
-  battles in one page don't touch each other, and every terrain report is
-  played). A step that changes what one of them reads ports it in the same
-  step (DESIGN's §4 rows and notes say which).
+  (and `--self-test`), from R4 `node sim/rematch-check.mjs` (two battles
+  in one page don't touch each other, and every event is played), and from
+  R5 `node sim/present-check.mjs` (and `--self-test`: what the table shows,
+  folded from the match's events, is the match at every action). A step
+  that changes what one of them reads ports it in the same step (DESIGN's
+  §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
   distances with `core/dmath.js`, never the engine's `Math.hypot`; and reads
@@ -174,6 +176,45 @@ step keeps the game playable.
   carry the place anyway, for R5.
 - [ ] **R5 Synchronous actions.** Each `await` becomes an emitted event; a
   transitional `EventPlayer` keeps today's visuals; a mirror for display state.
+  In three passes: R5a (the seam, damage, morale), R5b (fight, charge),
+  R5c (shoot, move, then the whole corpus in Chromium).
+  - [x] **R5a** landed: `core/journal.js` emits events into the match's
+    `out` (`emit`, `emitTo`, `drain`; a battle-log line is now a traced
+    `log` event, `at` its place in the trace); `present/mirror.js` (the
+    match as shown: `project`, `applyEvent`) and `present/pace.js`;
+    `view/player.js`, the transitional `EventPlayer` whose handlers in
+    main.js are the old visuals; `core/actions/damage.js` (`damage`,
+    `closeRanks`, `killModel`, `unitDestroyed`) and
+    `core/actions/morale.js` (`moralePhase`, `flee`), synchronous. The
+    figures, labels, objective flags, score and round now read the mirror,
+    not the match. The terrain reports its events by chunk id, and its view
+    never reads a live chunk. Checks: the new `sim/present-check.mjs`
+    (P-present: the mirror is the match at every action's end, after
+    every converted action's events, which is what catches a flag or
+    label event an action forgets, after the stage events main.js emits,
+    and, for the flags, at the old walk's end; with a self-test that drops
+    one event at a time); parity 40/40 after each file; `rematch-check`
+    waits for the player to be idle; `terrain-check` folds the terrain's
+    events into a mirror too; a battle watched rendered in Chromium on R4
+    and on each pass writes every log line at the same trace length and
+    game time (to within the watch harness's own frame or two of jitter
+    from run to run, which R4 shows too).
+    Turned up: the oracle stamps each battle-log write with the live trace
+    length, not `data-at`, so under `?debug` the page's trace keeps pace
+    with the player (DESIGN's R5a notes); R5b must keep that true for the
+    state lines its actions write, and R6 must carry the state with them
+    (until then a state line that waits throws if the match has moved). A
+    wall block dropped twice by one blast is drawn a level too high, as it
+    always was (view only). The flags at the battle's start are checked,
+    but no corpus battle has an objective held then, so dropping them
+    passes P-present: covering them needs a human log that deploys onto an
+    objective (a corpus change). R5a lands as one commit (the seam, damage
+    and morale): the review rounds changed the seam both files share, so
+    no damage-only state of the final code was gated on its own (DESIGN's
+    R5a notes).
+  - [ ] **R5b** fight, then charge (split at the spot pick).
+  - [ ] **R5c** shoot, then move (`resolveWalk`), then P-browser over the
+    whole corpus.
 - [ ] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as
   generators, `LocalStore` + `Session`; the core runs headless in Node.
 - [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,

@@ -88,6 +88,9 @@ export function runOracle(job, dir, { ms = ORACLE_TIMEOUT_MS } = {}) {
       late = true
       p.kill('SIGKILL')
     }, ms)
+    // decoded as streams: a character split across two chunks (an em dash
+    // in a battle-log line) stays whole
+    for (const s of [p.stdout, p.stderr, p.stdio[3]]) s.setEncoding('utf8')
     p.stdout.on('data', (d) => (out += d))
     p.stderr.on('data', (d) => (err += d))
     p.stdio[3].on('data', (d) => {

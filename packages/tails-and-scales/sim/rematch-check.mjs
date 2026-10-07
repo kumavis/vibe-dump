@@ -18,17 +18,22 @@
 // switches to one of the other three modes and policies by its index, so
 // the run covers every mode switch.
 //
-// It also checks that the terrain's reports are all played: after every
-// frame of all three battles, and after each new table, the match's out
-// (G.out) must be empty, since main.js drains it into the view straight
-// after each terrain call.
+// It also checks that the match's events are all played (DESIGN §4 R5):
+// whenever the page's EventPlayer is idle (main.js's ?debug `player`), after
+// any frame of all three battles, the match's out (G.out) must be empty,
+// and so must it, with the player idle, before and after each new table. The
+// rules leave their events in G.out and main.js drains them into the player,
+// straight after each terrain call and each converted action; while the
+// player is still playing, G.out may hold what the rules emitted since (from
+// R6 a whole AI turn), so the check waits for idle. Code without a player
+// (before R5) is held to an empty G.out after every frame, as R4 had it.
 //
 //   node sim/rematch-check.mjs [--only ai,hotseat,4242-99] [--ref <ref> | --dir <packageDir>]
 //
 // One page per corpus battle (a child process each, as the oracle runs
 // them), plus one fresh page for its third battle, up to one per CPU. Exit 0
 // when every battle replays identically the second time, the third is the
-// fresh page's, and every report is drained; 1 otherwise, 2 on bad arguments.
+// fresh page's, and every event is played; 1 otherwise, 2 on bad arguments.
 import { parseArgs } from 'node:util'
 import { spawn } from 'node:child_process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -82,8 +87,8 @@ async function page(dir) {
       if (!f) throw new Error('no frame queued')
       f()
       if (driver) driver.tick()
-      // (code before R4 has no G: nothing to check there)
-      if (ts.G?.out?.length) undrained++
+      // (code before R4 has no G: nothing to check there; before R5 no player)
+      if (ts.G?.out?.length && (ts.player?.idle ?? true)) undrained++
       if (++frames > 200000) throw new Error(`still at stage ${ts.S.stage} after ${frames} frames`)
       await new Promise((r) => setImmediate(r))
     }
@@ -91,10 +96,16 @@ async function page(dir) {
     return { trace: ts.trace.slice(), shadow: rec.shadow.slice(from.shadow), written: rec.written.slice(from.written), undrained, frames }
   }
   const out = { first: null, second: null, third: null, board: null, error: null }
+  // everything the match emitted has been played
+  const settled = (when) => {
+    if (ts.player && !ts.player.idle) throw new Error(`${when}, the player is still playing`)
+    if (ts.G?.out?.length) throw new Error(`${when}, the match's out holds ${ts.G.out.length} event(s) never played`)
+  }
   const again = () => {
+    settled('at the game\'s end')
     // back to the title, as a player presses the end screen's button
     document.querySelector('#again').onclick()
-    if (ts.G?.out?.length) throw new Error('the new table left terrain reports unplayed')
+    settled('on the new table')
   }
   try {
     out.first = await play(mode, { entries: job.entries })
@@ -107,7 +118,7 @@ async function page(dir) {
       document.querySelector('#seed').value = String(sw.board)
       document.querySelector('#seed').onchange()
     } else document.querySelector('#reroll').onclick()
-    if (ts.G?.out?.length) throw new Error('the new battlefield left terrain reports unplayed')
+    settled('on the new battlefield')
     out.board = ts.S.seed
     out.third = await play(sw.mode, { choose: makePolicy(sw.policy, sw.seed) })
   } catch (e) {
@@ -130,6 +141,9 @@ async function parent() {
     return new Promise((done) => {
       const p = spawn(process.execPath, [self, '--child', dir], { stdio: ['pipe', 'pipe', 'pipe'] })
       let out = '', err = ''
+      // decoded as a stream: a character split across two chunks stays whole
+      p.stdout.setEncoding('utf8')
+      p.stderr.setEncoding('utf8')
       p.stdout.on('data', (d) => (out += d))
       p.stderr.on('data', (d) => (err += d))
       p.on('close', (code) => {
@@ -175,7 +189,7 @@ async function parent() {
       const d = firstDiffer(r.first, r.second)
       if (!v.ok) why = `the first battle differs from the corpus (trace line ${v.line}, shadow ${v.shadow}, write ${v.written})`
       else if (d) why = `the second battle's ${d.k} differs at ${d.i}: first ${String(d.x).slice(0, 90)} | second ${String(d.y).slice(0, 90)}`
-      else if (r.first.undrained || r.second.undrained || r.third.undrained) why = `terrain reports left unplayed after ${r.first.undrained} + ${r.second.undrained} + ${r.third.undrained} frames`
+      else if (r.first.undrained || r.second.undrained || r.third.undrained) why = `events left unplayed with the player idle after ${r.first.undrained} + ${r.second.undrained} + ${r.third.undrained} frames`
       else if (sw.how === 'seed' && r.board !== sw.board) why = `the seed box asked for board ${sw.board}, and the table has ${r.board}`
     }
     // the third battle against the same setup and bot on a fresh page
@@ -192,6 +206,6 @@ async function parent() {
     const n3 = r.third ? `; then ${sw.mode} on board ${r.board} (${sw.how}), ${sw.mode === 'watch' ? 'no' : sw.policy} bot: ${r.third.trace.length} lines as a fresh page` : ''
     console.log(`  ${it.kind.padEnd(5)} ${it.id.padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 260)}` : `same twice (${n})${n3}`}`)
   })
-  console.log(failed ? `\nrematch-check FAILED: ${failed} of ${items.length}` : `\nrematch-check passed: every battle played twice in one page is the same battle, a third on a new board in another mode is the battle a fresh page plays, and every terrain report was played (${Math.round((Date.now() - t0) / 1000)} s)`)
+  console.log(failed ? `\nrematch-check FAILED: ${failed} of ${items.length}` : `\nrematch-check passed: every battle played twice in one page is the same battle, a third on a new board in another mode is the battle a fresh page plays, and every event was played (${Math.round((Date.now() - t0) / 1000)} s)`)
   process.exit(failed ? 1 : 0)
 }

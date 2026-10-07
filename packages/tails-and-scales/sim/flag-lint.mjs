@@ -96,6 +96,7 @@ const ALLOW = [
   ['main.js', 'PHASES.find((p) => p.key === T.phase)', 1, "a phase key, for the End button's label"],
   ['main.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
   ['main.js', 'T.phase = ph.key', 1, 'a phase key, not a unit or race key'],
+  ['main.js', "line.startsWith('log ')", 1, "a trace line's tag, in the ?debug block (a waiting state line keeps a fingerprint): not a unit or race key"],
   ['data/compat.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
   ['data/schema.js', "if (w.fx !== undefined && typeof w.fx !== 'string')", 1, 'validates the field: the data must say what fx is'],
   ['data/schema.js', "if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string'))", 1, 'validates the card text is text'],

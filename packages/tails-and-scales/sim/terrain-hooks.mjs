@@ -7,6 +7,14 @@
 // untouched. With TERRAIN_MUTATE set (the check's --self-test), one named
 // edit is applied to the working tree's terrain code as it loads, to show
 // the check fails on it.
+//
+// One edit is always made, to the R0 code's scenery.js (R5_DUST): a dropped
+// block's dust takes its height as the drop happens, where R0 read it when
+// the fall's tween ended. That is R5's rule (DESIGN §2.3: the view reads the
+// block's resting place from the mirror as the collapse is played), and the
+// two differ only when a later collapse lowered the block again before its
+// first fall ended; globalThis.__dustMoved counts those puffs (of
+// globalThis.__dustAll).
 const WRAP = `
 export function mulberry32(seed) {
   const f = mulberry32__raw(seed)
@@ -45,6 +53,12 @@ export const MUTATIONS = {
   'draw-extra': ['/core/terrain/recipes.js', 'if (rng() < 0.7) boulder(T, F, rng, 1.0, 0.4, 0.4)\n}', 'if (rng() < 0.7) boulder(T, F, rng, 1.0, 0.4, 0.4)\n  rng()\n}'],
 }
 
+// [the R0 text, the edit]: both lines must be found, or the hook throws
+const R5_DUST = [
+  ['const y0 = b.mesh.position.y, y1 = y0 - drop\n', 'const y0 = b.mesh.position.y, y1 = y0 - drop, rest__ = b.shape.y\n'],
+  ['this.fx.debris(b.shape.x, b.shape.y - col.style.by / 2, b.shape.z,', 'globalThis.__dustAll = (globalThis.__dustAll ?? 0) + 1\n          if (rest__ !== b.shape.y) globalThis.__dustMoved = (globalThis.__dustMoved ?? 0) + 1\n          this.fx.debris(b.shape.x, rest__ - col.style.by / 2, b.shape.z,'],
+]
+
 export async function load(url, ctx, next) {
   const r = await next(url, ctx)
   if (r.format !== 'module' || r.source == null) return r
@@ -53,6 +67,12 @@ export async function load(url, ctx, next) {
   if (m && url.endsWith(m[0]) && !url.includes('tails-and-scales-oracle')) {
     if (!src.includes(m[1])) throw new Error(`terrain-hooks: mutation ${process.env.TERRAIN_MUTATE} found nothing to edit in ${url}`)
     src = src.replace(m[1], m[2])
+  }
+  if (url.endsWith('/scenery.js') && src.includes('collapse(col) {')) {
+    for (const [from, to] of R5_DUST) {
+      if (!src.includes(from)) throw new Error(`terrain-hooks: R5's dust edit found no "${from.trim()}" in ${url}`)
+      src = src.replace(from, to)
+    }
   }
   if (url.endsWith('/util.js') && src.includes(HEAD)) src = src.replace(HEAD, 'function mulberry32__raw(seed) {') + WRAP
   return src === String(r.source) ? r : { ...r, source: src, shortCircuit: true }

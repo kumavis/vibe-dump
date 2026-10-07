@@ -5,11 +5,16 @@
 // place (shape.x/z, and shape.y for a wall block or cap) and nothing else,
 // and draws nothing from the layout stream: core/terrain/recipes.js has
 // already made every draw and recorded the result in `look`. It plays the
-// terrain's events (core/terrain/terrain.js), in order, as the match's out
-// hands them over (main.js drains G.out into play() right after each terrain
-// call): a scuffed chunk darkens and shudders, a broken one shatters, blocks
-// above a gap drop into it, a tree sheds its canopy and keels over, rubble
-// piles up. That randomness is purely cosmetic and stays on Math.random.
+// terrain's events (core/terrain/terrain.js), in order, as main.js's
+// EventPlayer hands them over (apply(e, M), M the mirror with e folded in):
+// a scuffed chunk darkens and shudders, a broken one shatters, blocks above
+// a gap drop into it, a tree sheds its canopy and keels over, rubble piles
+// up. That randomness is purely cosmetic and stays on Math.random.
+//
+// It never reads a live chunk: each chunk's place and look come from its
+// terrain.add (the def, a copy taken as it joined), a hurt or broken chunk's
+// debris from the event's `at`, and where a dropped block comes to rest
+// from the mirror as its collapse is played (present/mirror.js).
 //
 // It is built only by playing those events from a table's terrain.clear on:
 // a fallen log is its tree's mesh keeled over, and a collapsed block is
@@ -19,8 +24,8 @@
 //
 // sim/terrain-check.mjs builds these meshes in Node and holds them to the
 // ones the battlefield was built with before the split (the R0 code), mesh
-// for mesh, and plays destruction on both, draining the terrain's reports
-// into play() as main.js does.
+// for mesh, and plays destruction on both, folding the terrain's reports
+// into a mirror and applying them here one by one, as main.js's player does.
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
 import { pick, tween, easeIn, bounce } from '../util.js'
@@ -220,8 +225,8 @@ export class TerrainView {
     this.fx = fx
     this.group = new THREE.Group()
     scene.add(this.group)
-    this.items = new Map() // chunk id → { c, obj, canopy?, pieces?, ownMat? }
-    this.onBreak = null // (chunk) => {}: main.js's break sound (R7 moves it in here)
+    this.items = new Map() // chunk id → { c (its def), obj, canopy?, pieces?, ownMat? }
+    this.onBreak = null // (def) => {}, a broken chunk's: main.js's break sound (R7 moves it in here)
   }
 
   // the object a chunk is drawn with
@@ -229,20 +234,15 @@ export class TerrainView {
     return this.items.get(id)?.obj
   }
 
-  // Play a terrain call's events (core/terrain/terrain.js), in order.
-  play(events) {
-    for (const e of events) this.apply(e)
-  }
-
-  // Play one terrain event.
-  apply(e) {
+  // Play one terrain event; M is the mirror with it folded in.
+  apply(e, M) {
     switch (e.t) {
       case 'terrain.clear': return this.clear()
-      case 'terrain.add': return this.add(e.c)
-      case 'terrain.hurt': return this.hurt(e.c, e.from, e.at)
-      case 'terrain.destroy': return this.destroy(e.c, e.from, e.at)
-      case 'terrain.collapse': return this.collapse(e.drops, e.by)
-      case 'terrain.rubble': return this.rubble(e.c, e.from)
+      case 'terrain.add': return this.add(e.def)
+      case 'terrain.hurt': return this.hurt(this.items.get(e.id).c, e.from, e.at)
+      case 'terrain.destroy': return this.destroy(this.items.get(e.id).c, e.from, e.at)
+      case 'terrain.collapse': return this.collapse(e.drops, e.by, M)
+      case 'terrain.rubble': return this.rubble(this.items.get(e.id).c, e.from)
     }
     throw new Error(`TerrainView: no handler for ${e.t}`)
   }
@@ -262,9 +262,6 @@ export class TerrainView {
   }
 
   // scuffed: darken and shudder, the debris at `at`, where it stood when hit
-  // (a collapse later in the same blast could have lowered it since, though
-  // not with classic's recipes: DESIGN's R4 notes; R5's view reads no live
-  // chunk)
   hurt(c, from, at) {
     const v = this.items.get(c.id), m = v.obj
     if (m.isMesh) {
@@ -319,14 +316,17 @@ export class TerrainView {
     this.onBreak?.(c)
   }
 
-  // blocks above a gap drop into it (the dust reads the block's place when
-  // its fall ends, later than the call: R5 gives it a value of its own)
-  collapse(drops, by) {
-    for (const { c: b, dy } of drops) {
-      const m = this.items.get(b.id).obj
+  // blocks above a gap drop into it; each one's dust, when its fall ends, is
+  // where this drop leaves it (the mirror's height as the collapse is
+  // played: a later collapse in the same blast may lower it again, and that
+  // one raises its own dust)
+  collapse(drops, by, M) {
+    for (const { id, dy } of drops) {
+      const { c: b, obj: m } = this.items.get(id)
+      const rest = M.chunks[id].y
       const y0 = m.position.y, y1 = y0 - dy
       tween(0.18 + dy * 0.15, (k) => (m.position.y = y0 + (y1 - y0) * k), bounce).then(() => {
-        this.fx.debris(b.shape.x, b.shape.y - by / 2, b.shape.z, ['#8a8478'], 3, { power: 2, size: 0.07 })
+        this.fx.debris(b.shape.x, rest - by / 2, b.shape.z, ['#8a8478'], 3, { power: 2, size: 0.07 })
       })
     }
   }

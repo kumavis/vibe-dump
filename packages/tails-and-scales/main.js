@@ -1,20 +1,25 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
-  BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, PHASES,
+  BOARD, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, PHASES,
   roll, passes, woundNeed, saveNeed, hitNeed, attackCount, expected, p2D6, d6,
 } from './core/rules.js'
 import { sidesFor, isMirror, CLASSIC } from './data/compat.js'
 import { RACES } from './data/schema.js'
 import { EDGES, OBJ_POS, NAV_CELL, makeSeats, edgeOf, ctrl, newState, startMatch, refreshNav } from './core/match.js'
-import { relayout, setUnitPos } from './core/units.js'
+import { setUnitPos } from './core/units.js'
 import {
-  alive, gap, dist, engagedWith, mx, mz, isEngaged, eyeY, chestY, inCover, leadership, controlOf,
+  alive, gap, engagedWith, mx, mz, isEngaged, eyeY, chestY, inCover, controlOf, ownersOf, statusOf,
   canAct, anyCanAct, movePlan, validEnd, nearestValid, freeSpot, shotInfo, shootTargets, chargeTargets, chargePlan, rngState,
 } from './core/queries.js'
-import { traceState, traceLog } from './core/journal.js'
+import { emit, drain, log as logLine, flush, traceState } from './core/journal.js'
+import { damage } from './core/actions/damage.js'
+import { moralePhase } from './core/actions/morale.js'
 import { gridSize, pathLength } from './core/nav.js'
+import { project } from './present/mirror.js'
+import { PACE } from './present/pace.js'
 import { TerrainView } from './view/terrain.js'
+import { EventPlayer } from './view/player.js'
 import { FX } from './fx.js'
 import { buildModel, M } from './models.js'
 import { clock, tween, wait, stepTweens, easeOut, easeInOut, wrapAngle, lerp } from './util.js'
@@ -34,11 +39,16 @@ import { hypot } from './core/dmath.js'
 // whoever is underneath (friends included) and breaks the scenery.
 //
 // This file is the table: scene, the units' figures, the actions both a human
-// and the AI call, the turn loop, and the UI. The match state they act on is
-// G (core/match.js): the units, the terrain, the turn, the journal; the
-// rules' questions about it are core/queries.js, its constants and dice
-// core/rules.js, the races data/, movement core/nav.js, the battlefield
-// core/terrain/ (its meshes view/terrain.js), the AI ai.js.
+// and the AI call (those not yet in core/actions/), the turn loop, the UI,
+// and how each of the match's events looks (the EventPlayer's handlers). The
+// match state they act on is G (core/match.js): the units, the terrain, the
+// turn, the journal; the rules' questions about it are core/queries.js, its
+// constants and dice core/rules.js, the races data/, movement core/nav.js,
+// the battlefield core/terrain/ (its meshes view/terrain.js), the AI ai.js.
+// The rules report what happens as events in G.out (DESIGN §2.3), which the
+// player (view/player.js) plays here at the table's pace, folding each into
+// the mirror (present/mirror.js): the match as shown, which the figures,
+// labels, flags and score read, never G.
 // ---------------------------------------------------------------------------
 
 const { W, H } = BOARD
@@ -239,14 +249,12 @@ const objViews = OBJ_POS.map((p, i) => {
 // ── Terrain ─────────────────────────────────────────────────────────────────
 // The battlefield's meshes. The battlefield itself is the match's
 // (G.terrain): each terrain call reports what it built or broke into G.out,
-// and drainTerrain plays that here straight after the call, in order.
+// and the player plays that (the terrain.* handlers) straight after the
+// call, in order.
 const terrainView = new TerrainView(scene, fx)
 terrainView.onBreak = (c) => {
   if (c.kind === 'block') sfx.crumble()
   else sfx.thwack()
-}
-function drainTerrain() {
-  if (G.out.length) terrainView.play(G.out.splice(0))
 }
 
 // ── Game state ──────────────────────────────────────────────────────────────
@@ -294,7 +302,8 @@ const TABLE_DICE = (Math.random() * 1e9) | 0
 // reads one trace for the page's lifetime, emptied as each battle begins).
 // Without ?debug a match has no onTrace.
 let traceListener = null
-const onTrace = params.has('debug') ? (line, g) => traceListener?.line(line, g) : null
+const DEBUG = params.has('debug')
+const onTrace = DEBUG ? (line, g) => traceListener?.line(line, g) : null
 // each seat's name, icon and colours, from its race (data/compat.js)
 let SIDES = sidesFor(makeSeats(RACE_PICK, S.control))
 
@@ -335,18 +344,23 @@ const human = (side) => ctrl(G, side) === 'human'
 // picking) and floating label, which way it faces, whether it is walking;
 // and per model (models[k] draws the unit's models[k]) where its figure
 // stands this frame, which way it turns and how it lunges, lifts, flinches,
-// dies or flees. The rules never read any of it: they read the unit (G.units,
-// core/units.js), and the figures follow.
+// dies or flees. The rules never read any of it. It follows the unit as
+// shown (the mirror's record of it, `shown(u)`: its place, its slots, who
+// still stands), and of the unit itself reads only what never changes in a
+// match (`v.u`: its type, its seat, its race).
 const views = new Map()
 const V = (u) => views.get(u.id)
-const MV = (u, m) => V(u).models[u.models.indexOf(m)]
+const unitOf = (id) => views.get(id).u
+const shown = (u) => player.mirror.units[u.id]
 // the figures of a unit's models still standing
-const standing = (u) => V(u).models.filter((_, k) => u.models[k].alive)
+const standing = (u) => V(u).models.filter((_, k) => shown(u).models[k].alive)
 
 function makeView(u) {
-  // facing across the table, away from the seat's own edge
-  const facing = -edgeOf(G, u.side) * Math.PI / 2
-  const v = { facing, moving: false, models: [] }
+  // facing across the table, away from the seat's own edge (kept: a fleeing
+  // figure runs off over it)
+  const edge = edgeOf(G, u.side)
+  const facing = -edge * Math.PI / 2
+  const v = { u, edge, facing, moving: false, models: [] }
   for (let i = 0; i < u.t.models; i++) {
     const mesh = buildModel(u.key, u.t, SIDES[u.side].color)
     scene.add(mesh)
@@ -366,42 +380,57 @@ function makeView(u) {
   views.set(u.id, v)
   syncView(u)
   // the figures stand in their slots from the start
-  u.models.forEach((m, k) => {
+  const mu = shown(u)
+  mu.models.forEach((m, k) => {
     const f = v.models[k]
-    f.x = mx(u, m)
-    f.z = mz(u, m)
+    f.x = mu.pos.x + m.ox
+    f.z = mu.pos.z + m.oz
     f.mesh.position.set(f.x, 0, f.z)
     f.mesh.rotation.y = f.yaw
   })
 }
 
-// The ring and hit cylinder follow the unit's disc: its place and radius.
+// The ring and hit cylinder follow the unit's disc as shown: its place and
+// radius.
 function syncView(u) {
-  const v = V(u)
-  v.ring.scale.setScalar(u.r + 0.18)
+  const v = V(u), mu = shown(u)
+  v.ring.scale.setScalar(mu.r + 0.18)
   const tall = u.t.big ? 2.4 : u.t.fly ? 1.8 : 1.3
-  v.hit.scale.set(u.r, tall, u.r)
-  v.ring.position.x = v.hit.position.x = u.pos.x
-  v.ring.position.z = v.hit.position.z = u.pos.z
+  v.hit.scale.set(mu.r, tall, mu.r)
+  v.ring.position.x = v.hit.position.x = mu.pos.x
+  v.ring.position.z = v.hit.position.z = mu.pos.z
   v.hit.position.y = v.hit.scale.y / 2
 }
-// Put a unit somewhere (the rules' move), its ring and hit cylinder with it;
-// the figures walk there (animateUnits).
+// Put a unit somewhere (the rules' move, and the deployment's), and show it
+// there: its ring and hit cylinder go at once, the figures walk
+// (animateUnits).
 function moveUnit(u, x, z) {
   setUnitPos(u, x, z)
-  syncView(u)
+  emit(G, 'unit.place', { u: u.id, x, z })
+  // Transitional, until R5c's resolveWalk: in battle the flags change on
+  // the frame a walking unit takes or loses an objective, as they always
+  // have (the player is idle here, so its mirror's owners are the ones
+  // shown).
+  if (G.turn.stage === 'battle') {
+    const owners = ownersOf(G)
+    if (owners.some((c, i) => c !== player.mirror.owners[i])) emit(G, 'objectives', { owners })
+  }
+  show()
 }
 
+// The label: the unit as shown (models standing or wounds left, mesmerized,
+// in combat).
 function updateLabel(u) {
-  const w = u.models.filter((m) => m.alive)
+  const mu = shown(u)
+  const w = mu.models.filter((m) => m.alive)
   let html = `<span class="nm">${u.t.short}</span>`
-  if (u.t.models > 1) html += `<span class="ct">${u.alive}/${u.t.models}</span>`
+  if (u.t.models > 1) html += `<span class="ct">${mu.alive}/${u.t.models}</span>`
   else html += `<span class="ct">${w[0] ? w[0].w : 0}/${u.t.W}♥</span>`
-  if (u.mesmerized) html += `<span class="st" title="Mesmerized">🌀</span>`
-  if (alive(u) && isEngaged(G, u)) html += `<span class="st" title="In combat">⚔</span>`
+  if (mu.mesmerized) html += `<span class="st" title="Mesmerized">🌀</span>`
+  if (mu.alive > 0 && mu.engaged) html += `<span class="st" title="In combat">⚔</span>`
   const v = V(u)
   v.label.innerHTML = html
-  v.label.style.display = alive(u) ? '' : 'none'
+  v.label.style.display = mu.alive > 0 ? '' : 'none'
 }
 
 function clearUnits() {
@@ -411,6 +440,130 @@ function clearUnits() {
     v.label.remove()
   }
   views.clear()
+}
+
+// ── Playing the match's events ──────────────────────────────────────────────
+// The rules run ahead and leave what happened in G.out (DESIGN §2.3); the
+// player plays it here at the table's pace, each kind of event with the old
+// code's visuals, after folding it into the mirror (present/mirror.js), the
+// match as shown. Through R5 each action core/actions/ holds is called as
+// `fn(G, …)` and its events played before the old code goes on
+// (`await played(fn(G, …))`); the old code's own events (a figure placed, a
+// phase begun, an action's end) are played as it emits them (`show()`),
+// which takes no time when the player is idle, so a terrain call's reports
+// are played straight after it, as they always were.
+const HANDLERS = {
+  // the battle log, the dice tray, and the beats between
+  log: (e) => write(e.side, e.html, e.cls, e.at),
+  'tray.open': (e) => tray.clear(e.title),
+  dice: (e) => tray.row(e.label, e.dice, e.need, e),
+  pause: (e) => wait(PACE.pause(e.s)),
+  // the figures
+  'unit.place': (e) => syncView(unitOf(e.u)),
+  'unit.formation': (e) => {
+    const u = unitOf(e.u)
+    syncView(u)
+    updateLabel(u)
+  },
+  'unit.wound': (e) => wounded(e),
+  'unit.slain': (e, M) => slain(e, M),
+  'unit.flee': (e) => fled(e),
+  'unit.destroyed': (e, M) => destroyed(e, M),
+  // what the labels, flags and score show: read off the mirror, which these
+  // have just updated (the flags repaint each frame, animateObjectives)
+  status: () => {
+    for (const v of views.values()) updateLabel(v.u)
+  },
+  objectives: () => {},
+  'round.scored': () => {},
+  'phase.start': () => {},
+  stage: () => {},
+  act: () => {},
+  // (?debug) a checkpoint for sim/present-check.mjs
+  check: () => {},
+  // the battlefield
+  'terrain.clear': (e, M) => terrainView.apply(e, M),
+  'terrain.add': (e, M) => terrainView.apply(e, M),
+  'terrain.hurt': (e, M) => terrainView.apply(e, M),
+  'terrain.destroy': (e, M) => terrainView.apply(e, M),
+  'terrain.collapse': (e, M) => terrainView.apply(e, M),
+  'terrain.rubble': (e, M) => terrainView.apply(e, M),
+  // an event this table has no visuals for yet: its text over the unit (or
+  // the place) it names, then a beat
+  fallback: (e, M) => {
+    const at = e.u !== undefined && M.units[e.u] ? M.units[e.u].pos : { x: e.x ?? 0, z: e.z ?? 0 }
+    if (e.text) fx.text({ x: at.x, y: 1.6, z: at.z }, e.text, '#ffffff')
+    return wait(e.beat ?? PACE.beat)
+  },
+}
+// Under ?debug the page's trace keeps pace with the player (the ?debug
+// block's listener): told when the player has played everything.
+const player = new EventPlayer({ handlers: HANDLERS, onIdle: () => traceListener?.idle() })
+// play what the rules have emitted since the last drain
+const show = () => player.play(drain(G))
+// show(), and under ?debug end what it plays with a `check` carrying
+// project(G) as the match stands, which sim/present-check.mjs holds the
+// mirror to once it has played (only `keys` of it, when given: the fields
+// that must be fresh there). The checkpoints: after a converted action's
+// events (played(), below: the flags' and labels' events inside an action
+// included, which the next action's end would otherwise refresh before its
+// `act`), after the stage events main.js emits (a deployment's, the
+// battle's start: a lost one shows until the next stage event, which can
+// come before any `act`), and the flags at the old walk's end (its
+// per-frame `objectives`).
+function checkpoint(keys) {
+  if (DEBUG) emit(G, 'check', keys ? { proj: project(G), keys } : { proj: project(G) })
+  return show()
+}
+// A converted action's result, once its events have played (and been
+// checked, under ?debug).
+async function played(result) {
+  await checkpoint()
+  return result
+}
+
+// A wound that leaves the model standing: the number, and a flinch.
+function wounded(e) {
+  const u = unitOf(e.u), f = V(u).models[e.m]
+  fx.text({ x: f.x, y: (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
+  f.flash = 0.4
+}
+
+// A model slain: the number, a squeak or a hiss, fur or scales flying, and
+// the figure keels over away from whoever did it, then sinks out of sight.
+function slain(e, M) {
+  const u = unitOf(e.u), f = V(u).models[e.m]
+  fx.text({ x: f.x, y: (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
+  f.dying = true
+  // the race's own voice and gore
+  const look = RACES[u.race].look
+  sfx[look.voice]()
+  const fig = f.mesh.userData.fig
+  const by = e.by === null ? null : M.units[e.by]
+  const dir = by ? Math.atan2(f.x - by.pos.x, f.z - by.pos.z) - f.yaw : 0
+  const side = Math.sin(dir) >= 0 ? 1 : -1
+  fx.debris(f.x, 0.5, f.z, look.gore, 6, { power: 2, size: 0.07 })
+  tween(0.6, (k) => {
+    fig.rotation.z = side * k * 1.45
+    fig.position.y = (u.t.big ? 0.09 : 0.06) + Math.sin(k * Math.PI) * 0.15
+  }, easeOut)
+    .then(() => wait(1.4))
+    .then(() => tween(0.8, (k) => (f.mesh.position.y = -k * 1.4)))
+    .then(() => {
+      scene.remove(f.mesh)
+      f.dying = false
+    })
+}
+
+// A unit gone: its label, ring and hit cylinder go, and the table says so in
+// the colours of whoever did it.
+function destroyed(e, M) {
+  const u = unitOf(e.u), v = V(u), p = M.units[e.u].pos
+  v.label.style.display = 'none'
+  v.ring.visible = false
+  v.hit.visible = false
+  scene.remove(v.hit)
+  fx.text({ x: p.x, y: 2.2, z: p.z }, `${u.t.short} destroyed`, SIDES[e.by !== null ? unitOf(e.by).side : 1 - u.side].color, { size: 20, life: 2 })
 }
 
 // ── Movement ────────────────────────────────────────────────────────────────
@@ -447,6 +600,9 @@ async function walk(u, pts, { speed = 7, fly = false } = {}) {
     while (smashed < smash.length && smash[smashed].s <= d) smashAround(u, smash[smashed++])
   }, easeInOut)
   while (smashed < smash.length) smashAround(u, smash[smashed++])
+  // (?debug) the flags as the walk left them, before its action's end
+  // re-emits them
+  checkpoint(['owners'])
   v.moving = false
   if (fly) for (const f of v.models) (f.flying = false), (f.lift = 0)
   await wait(0.15)
@@ -461,7 +617,7 @@ function smashAround(u, { x, z, dir }) {
     const s = c.nav || c.shape
     if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
       G.terrain.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) }, G.out)
-      drainTerrain()
+      show()
       fx.shake = Math.max(fx.shake, 0.08)
     }
   }
@@ -534,7 +690,7 @@ async function doShoot(u, target) {
   const sv = roll(G, wounds)
   const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
   if (wounds) await tray.row(sn > 6 ? 'No save' : `Save ${sn}+${info.cover ? ' (cover)' : ''}`, sn > 6 ? [] : sv, sn, { save: true })
-  const killed = await damage(target, unsaved, w.D, u)
+  const killed = await played(damage(G, target, unsaved, w.D, u))
   log(u.side, `<b>${u.t.short}</b> shoot ${target.t.short}: ${h} hit, ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   finishAction()
 }
@@ -690,12 +846,12 @@ async function blastLands(u, land, w) {
     const sv = roll(G, wounds)
     const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
     if (wounds && sn <= 6) await tray.row(`Save ${sn}+${cover ? ' (cover)' : ''}`, sv, sn, { save: true })
-    const killed = await damage(v, unsaved, w.D, u, under)
+    const killed = await played(damage(G, v, unsaved, w.D, u, under))
     log(u.side, `${friendly ? '<b>Friendly fire!</b> ' : ''}${w.name} hits ${v.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   }
   if (!victims.length) await wait(0.25)
   const broke = G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes }, G.out)
-  drainTerrain()
+  show()
   if (broke.length) log(u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
   refreshNav(G)
 }
@@ -711,101 +867,14 @@ async function mesmerize(u, target) {
   for (let i = 0; i < 3; i++) fx.ring(target.pos.x, target.pos.z, target.r * (0.6 + i * 0.35), '#c070ff', { life: 1.2 + i * 0.3, fill: 0.08 })
   const mw = Math.ceil(d6(G) / 2)
   await tray.row('Mortal wounds D3', [mw], 0, { sum: true, note: `${mw}` })
-  const killed = await damage(target, mw, 1, u)
+  const killed = await played(damage(G, target, mw, 1, u))
   target.mesmerized = true
-  updateLabel(target)
+  // its label says so
+  emit(G, 'status', statusOf(G))
+  show()
   fx.text(top(target), 'Mesmerized!', '#e0a0ff', { size: 20 })
   log(u.side, `<b>${u.t.short}</b> mesmerizes ${target.t.short}: ${mw} mortal wound${mw > 1 ? 's' : ''}${killed ? `, <b>${killed} slain</b>` : ''}. It can't shoot or charge next turn.`)
   finishAction()
-}
-
-// ── Damage ──────────────────────────────────────────────────────────────────
-// Allocate `n` wounds of `D` damage to `u`, finishing off wounded models first
-// and preferring the models actually under a template. Returns models slain.
-async function damage(u, n, D, attacker, prefer = null) {
-  let killed = 0
-  for (let i = 0; i < n; i++) {
-    const live = u.models.filter((m) => m.alive)
-    if (!live.length) break
-    let pool = prefer ? live.filter((m) => prefer.includes(m)) : []
-    if (!pool.length) pool = live
-    const wounded = pool.filter((m) => m.w < u.t.W)
-    let m
-    if (wounded.length) m = wounded[0]
-    else {
-      // whoever is nearest the attacker takes it
-      const near = (q) => hypot(mx(u, q) - attacker.pos.x, mz(u, q) - attacker.pos.z)
-      m = pool.reduce((a, b) => (near(a) < near(b) ? a : b))
-    }
-    m.w -= D
-    const f = MV(u, m)
-    fx.text({ x: f.x, y: (u.t.big ? 2.3 : 1.3), z: f.z }, `-${Math.min(D, D + Math.min(0, m.w))}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
-    if (m.w <= 0) {
-      killModel(u, m, attacker)
-      killed++
-    } else {
-      f.flash = 0.4
-    }
-    await wait(0.06)
-  }
-  if (killed) {
-    u.lost += killed
-    await wait(0.25)
-    if (alive(u)) closeRanks(u)
-  }
-  updateLabel(u)
-  return killed
-}
-
-// Survivors close ranks — and pile in, so a squad thinned out in melee doesn't
-// shrink out of the fight it was in.
-function closeRanks(u) {
-  const foes = engagedWith(G, u)
-  relayout(u)
-  syncView(u)
-  updateLabel(u)
-  if (!foes.length || isEngaged(G, u)) return
-  const f = foes.reduce((a, b) => (gap(u, a) < gap(u, b) ? a : b))
-  const d = dist(u, f)
-  const step = gap(u, f) - (ENGAGE - 0.3)
-  moveUnit(u, u.pos.x + ((f.pos.x - u.pos.x) / d) * step, u.pos.z + ((f.pos.z - u.pos.z) / d) * step)
-}
-
-function killModel(u, m, attacker) {
-  const f = MV(u, m)
-  m.alive = false
-  m.w = 0
-  u.alive--
-  f.dying = true
-  // a squeak or a hiss, and fur or scales flying: the race's own
-  const look = RACES[u.race].look
-  sfx[look.voice]()
-  const fig = f.mesh.userData.fig
-  const dir = attacker ? Math.atan2(f.x - attacker.pos.x, f.z - attacker.pos.z) - f.yaw : 0
-  const side = Math.sin(dir) >= 0 ? 1 : -1
-  fx.debris(f.x, 0.5, f.z, look.gore, 6, { power: 2, size: 0.07 })
-  tween(0.6, (k) => {
-    fig.rotation.z = side * k * 1.45
-    fig.position.y = (u.t.big ? 0.09 : 0.06) + Math.sin(k * Math.PI) * 0.15
-  }, easeOut)
-    .then(() => wait(1.4))
-    .then(() => tween(0.8, (k) => (f.mesh.position.y = -k * 1.4)))
-    .then(() => {
-      scene.remove(f.mesh)
-      f.dying = false
-    })
-  if (!alive(u)) unitDestroyed(u, attacker)
-}
-
-function unitDestroyed(u, by) {
-  const v = V(u)
-  v.label.style.display = 'none'
-  v.ring.visible = false
-  v.hit.visible = false
-  scene.remove(v.hit)
-  // reported after the attack that did it, not in the middle of it
-  G.journal.pendingLog.push([u.side, `<b>${u.t.name}</b> ${u.t.models > 1 ? 'are' : 'is'} destroyed!`, 'big'])
-  fx.text({ x: u.pos.x, y: 2.2, z: u.pos.z }, `${u.t.short} destroyed`, SIDES[by ? by.side : 1 - u.side].color, { size: 20, life: 2 })
 }
 
 // ── Charge & fight ──────────────────────────────────────────────────────────
@@ -837,7 +906,7 @@ async function doCharge(u, target, { auto = false } = {}) {
   const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   await walk(u, pts, { speed: 11, fly: plan.mode === 'fly' })
   refreshNav(G)
-  for (const x of [u, target]) updateLabel(x)
+  // (the labels' ⚔ comes with finishAction's `status`)
   finishAction()
 }
 
@@ -918,7 +987,7 @@ async function fight(u) {
   const sv = roll(G, wounds)
   const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
   if (wounds) await tray.row(sn > 6 ? 'No save' : `Save ${sn}+`, sn > 6 ? [] : sv, sn, { save: true })
-  const killed = await damage(target, unsaved, w.D, u)
+  const killed = await played(damage(G, target, unsaved, w.D, u))
   log(u.side, `<b>${u.t.short}</b> fight ${target.t.short}: ${h} hit, ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   await wait(0.3)
 }
@@ -935,45 +1004,19 @@ async function fightPhase(active) {
     if (next) await fight(next)
     side = 1 - side
   }
-  for (const u of G.units) {
-    u.flags.fought = false
-    updateLabel(u)
-  }
+  for (const u of G.units) u.flags.fought = false
+  // every label, now the fighting is over
+  emit(G, 'status', statusOf(G))
+  show()
 }
 
 // ── Morale ──────────────────────────────────────────────────────────────────
-async function moralePhase() {
-  let any = false
-  for (const u of G.units) {
-    if (!alive(u) || !u.lost || u.t.models === 1) continue
-    if (!any) tray.clear('Morale')
-    any = true
-    const ld = leadership(G, u)
-    const r = roll(G, 1)
-    const total = r[0] + u.lost
-    const flee = r[0] === 1 ? 0 : Math.max(0, total - ld)
-    await tray.row(`${u.t.short}: D6 + ${u.lost} lost vs Ld ${ld}`, r, 0, { sum: true, pass: flee === 0, note: `${total}` })
-    if (flee) {
-      const n = Math.min(flee, u.alive)
-      const runners = u.models.filter((m) => m.alive).slice(-n)
-      for (const m of runners) flee1(u, m)
-      log(u.side, `<b>${u.t.short}</b> lose their nerve — <b>${n} flee</b>.`)
-      if (!alive(u)) unitDestroyed(u, null)
-      else closeRanks(u)
-      updateLabel(u)
-      await wait(0.5)
-    } else log(u.side, `<b>${u.t.short}</b> hold firm (${total} vs Ld ${ld}).`)
-  }
-}
-
-function flee1(u, m) {
-  const f = MV(u, m)
-  m.alive = false
-  m.w = 0
-  u.alive--
+// (the test is core/actions/morale.js; here, how a fleeing model looks:
+// off the table over its unit's own edge)
+function fled(e) {
+  const u = unitOf(e.u), v = V(u), f = v.models[e.m]
   f.dying = true
-  // off the table over the unit's own edge
-  const edge = edgeOf(G, u.side)
+  const edge = v.edge
   const ex = edge * (W / 2 + 3)
   const x0 = f.x, z0 = f.z
   f.fleeing = true
@@ -998,10 +1041,17 @@ function face(u, target) {
 }
 const top = (u) => ({ x: u.pos.x, y: u.t.big ? 2.6 : 1.6, z: u.pos.z })
 
+// An action's end: its state line in the trace, then what the table shows
+// of it (who holds each objective; every label), and the `act` itself,
+// which under ?debug carries the match as it should now be shown
+// (sim/present-check.mjs holds the mirror to it).
 function finishAction() {
   traceState(G, 'act')
+  emit(G, 'objectives', { owners: ownersOf(G) })
+  emit(G, 'status', statusOf(G))
+  emit(G, 'act', DEBUG ? { tag: 'act', proj: project(G) } : { tag: 'act' })
+  show()
   S.busy = false
-  for (const u of G.units) updateLabel(u)
   if (S.sel && !canAct(G, S.sel)) select(null)
   else if (S.sel) select(S.sel)
   refreshUI()
@@ -1042,6 +1092,10 @@ let phaseResolve = null
 async function battle() {
   const T = G.turn
   T.stage = 'battle'
+  // the flags show who holds what from now on
+  emit(G, 'stage', { stage: 'battle' })
+  emit(G, 'objectives', { owners: ownersOf(G) })
+  checkpoint()
   select(null)
   zoneMats.forEach((m) => (m.opacity = 0.05))
   // roll off for first turn
@@ -1074,6 +1128,8 @@ async function playerTurn(side) {
   }
   for (const ph of PHASES) {
     T.phase = ph.key
+    emit(G, 'phase.start', { side, phase: T.phase, round: T.round })
+    show()
     select(null)
     tray.el.classList.remove('show')
     refreshUI()
@@ -1081,7 +1137,7 @@ async function playerTurn(side) {
     if (ph.key === 'fight') {
       if (G.units.some((u) => alive(u) && isEngaged(G, u))) await fightPhase(side)
     } else if (ph.key === 'morale') {
-      await moralePhase()
+      await played(moralePhase(G))
     } else if (!anyCanAct(G, side)) {
       await wait(0.2)
     } else if (human(side)) {
@@ -1100,10 +1156,9 @@ async function playerTurn(side) {
     if (T.wiped >= 0) return
   }
   // mesmerism wears off at the end of the victim's own turn
-  for (const u of G.units) if (u.side === side && u.mesmerized) {
-    u.mesmerized = false
-    updateLabel(u)
-  }
+  for (const u of G.units) if (u.side === side && u.mesmerized) u.mesmerized = false
+  emit(G, 'status', statusOf(G))
+  show()
 }
 
 async function scoreRound() {
@@ -1120,15 +1175,21 @@ async function scoreRound() {
   T.vp[1] += held[1]
   traceState(G, `round ${T.round}`)
   log(-1, `End of round ${T.round}: ${SIDES[0].short} hold ${held[0]} objective${held[0] === 1 ? '' : 's'}, ${SIDES[1].short} hold ${held[1]}. Score ${T.vp[0]}–${T.vp[1]}.`, 'big')
+  emit(G, 'round.scored', { round: T.round, held: [...held], vp: [...T.vp], owners: ownersOf(G) })
+  show()
   refreshUI()
   await banner(`End of round ${T.round}`, `VP ${T.vp[0]} – ${T.vp[1]}`)
 }
 
 function gameOver() {
   const T = G.turn
-  for (const p of G.journal.pendingLog.splice(0)) write(...p)
+  // the destroyed-unit lines still held back
+  flush(G)
+  show()
   traceState(G, 'over')
   T.stage = 'over'
+  emit(G, 'stage', { stage: 'over' })
+  show()
   select(null)
   refreshUI()
   let win
@@ -1152,7 +1213,9 @@ let downAt = null
 function pick(ev) {
   ptr.set((ev.clientX / innerWidth) * 2 - 1, -(ev.clientY / innerHeight) * 2 + 1)
   ray.setFromCamera(ptr, camera)
-  const hits = ray.intersectObjects(G.units.filter(alive).map((u) => V(u).hit), false)
+  // the units the table shows standing (while the player is behind, the
+  // match may have slain some of them already)
+  const hits = ray.intersectObjects(G.units.filter((u) => shown(u).alive > 0).map((u) => V(u).hit), false)
   const unit = hits.length ? hits[0].object.userData.unit : null
   const g = ray.intersectObject(board, false)[0]
   return { unit, ground: g ? g.point : null }
@@ -1390,7 +1453,11 @@ function hover() {
       }
     }
   }
-  if (!text && h.unit) text = `${h.unit.t.name} · ${h.unit.t.models > 1 ? `${h.unit.alive}/${h.unit.t.models} models` : `${h.unit.models[0].w}/${h.unit.t.W} wounds`}`
+  if (!text && h.unit) {
+    // the unit as shown, like its label
+    const mu = shown(h.unit)
+    text = `${h.unit.t.name} · ${h.unit.t.models > 1 ? `${mu.alive}/${h.unit.t.models} models` : `${mu.models[0].w}/${h.unit.t.W} wounds`}`
+  }
   if (text && S.mouse) {
     tip.innerHTML = text
     tip.style.display = 'block'
@@ -1478,23 +1545,30 @@ const tray = {
     row.appendChild(res)
     this.el.appendChild(row)
     while (this.el.children.length > 7) this.el.children[1].remove()
-    await wait(0.38 + Math.min(dice.length, 14) * 0.035)
+    await wait(PACE.dice(dice.length))
   },
 }
 
 // The battle log. Every line is traced as it is logged (core/journal.js:
-// the trace is the match's replayable fingerprint), then written, and the
-// destroyed-unit lines held back until now follow it.
+// the trace is the match's replayable fingerprint), then shown (its `log`
+// event, played here by write), and the destroyed-unit lines held back
+// until now follow it.
 function log(side, html, cls = '') {
-  traceLog(G, side, html)
-  write(side, html, cls)
-  for (const p of G.journal.pendingLog.splice(0)) write(...p)
+  logLine(G, side, html, cls)
+  show()
 }
-function write(side, html, cls) {
+// A line into the battle log. `at` is the trace's length when it was logged
+// (or flushed); under ?debug the entry carries it (data-at), and the page's
+// trace has reached it before the entry lands (the ?debug block's listener).
+function write(side, html, cls, at) {
   const list = $('#logList')
   const e = document.createElement('div')
   e.className = `entry s${side} ${cls}`
   e.innerHTML = html
+  if (traceListener) {
+    traceListener.reach(at)
+    e.dataset.at = at
+  }
   list.prepend(e)
   while (list.children.length > 80) list.lastChild.remove()
 }
@@ -1523,17 +1597,20 @@ function showCard(u) {
     if (w.assault) bits.push('assault')
     return `<div class="wpn"><span>${icon} ${w.name}</span><em>${bits.join(' · ')}</em></div>`
   }
+  // what stands, what wounds are left, mesmerized and in combat: as shown,
+  // like the label
+  const mu = shown(u)
   const status = []
   if (u.flags.moved) status.push(u.flags.fellBack ? 'fell back' : u.flags.advanced ? `advanced +${u.flags.advRoll}"` : 'moved')
   if (u.flags.shot) status.push('shot')
   if (u.flags.charged) status.push('charged')
-  if (u.mesmerized) status.push('🌀 mesmerized')
-  if (alive(u) && isEngaged(G, u)) status.push('⚔ in combat')
-  if (alive(u) && inCover(G, u)) status.push('🛡 in cover')
-  const models = t.models > 1 ? `${u.alive}/${t.models} models` : `${u.models[0].w}/${t.W} wounds`
+  if (mu.mesmerized) status.push('🌀 mesmerized')
+  if (mu.alive > 0 && mu.engaged) status.push('⚔ in combat')
+  if (mu.alive > 0 && inCover(G, u)) status.push('🛡 in cover')
+  const models = t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`
   card.innerHTML = `
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${SIDES[u.side].short} · ${t.role}</span></div>
-    <div class="card-sub">${alive(u) ? models : 'destroyed'}${status.length ? ' · ' + status.join(' · ') : ''}</div>
+    <div class="card-sub">${mu.alive > 0 ? models : 'destroyed'}${status.length ? ' · ' + status.join(' · ') : ''}</div>
     <table class="stats"><tr>${statKeys.map((k) => `<th>${k}</th>`).join('')}</tr><tr>${statKeys.map((k) => `<td>${fmt(k)}</td>`).join('')}</tr></table>
     ${wpn(t.ranged, t.ranged?.spell ? '✦' : '➹')}${wpn({ ...t.melee, range: 0 }, '⚔')}
     <ul class="abil">${(t.abilities || []).map((a) => `<li>${a}</li>`).join('')}</ul>`
@@ -1541,10 +1618,11 @@ function showCard(u) {
 }
 
 function refreshUI() {
-  const T = G.turn
-  $('#vp0').textContent = T.vp[0]
-  $('#vp1').textContent = T.vp[1]
-  $('#round').textContent = T.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(T.round, G.setup.rounds)} / ${G.setup.rounds}`
+  const T = G.turn, M = player.mirror
+  // the score and the round as shown
+  $('#vp0').textContent = M.vp[0]
+  $('#vp1').textContent = M.vp[1]
+  $('#round').textContent = M.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(M.round, G.setup.rounds)} / ${G.setup.rounds}`
   document.querySelectorAll('#phases .ph').forEach((el) => {
     el.classList.toggle('on', T.stage === 'battle' && el.dataset.k === T.phase)
   })
@@ -1617,7 +1695,7 @@ async function banner(a, b, side = -1) {
   el.classList.remove('show')
   void el.offsetWidth
   el.classList.add('show')
-  await wait(human(G.turn.active) || G.turn.stage !== 'battle' ? 0.9 : 0.6)
+  await wait(PACE.phaseStart(human(G.turn.active), G.turn.stage))
 }
 
 // ── Buttons ─────────────────────────────────────────────────────────────────
@@ -1738,7 +1816,10 @@ function setupTable() {
   $('#logList').innerHTML = ''
   $('#tray').classList.remove('show')
   G = next
-  drainTerrain()
+  // the table as shown starts as the match stands, and the board is played
+  // from its terrain.clear
+  player.reset(project(G))
+  show()
   scatterTufts()
   for (const u of G.units) makeView(u)
   for (const u of G.units) updateLabel(u)
@@ -1783,6 +1864,8 @@ async function start(mode) {
   for (const side of [0, 1]) {
     if (!human(side)) continue
     G.turn.stage = 'deploy'
+    emit(G, 'stage', { stage: 'deploy' })
+    checkpoint()
     S.deploySide = side
     zoneMats[side].opacity = 0.2
     log(side, `<b>${SIDES[side].name}</b>: deploy your army.`)
@@ -1802,17 +1885,19 @@ S.titleSpin = true
 S.titleAngle = -1.02
 S.viewShift = 1
 
-// Each figure walks toward its model's slot (the rules' place for it), turns,
-// lunges and idles; dying and fleeing figures play out their own tweens.
+// Each figure walks toward its model's slot as shown (the mirror's place
+// for it), turns, lunges and idles; dying and fleeing figures play out their
+// own tweens.
 function animateUnits(dt, time) {
+  const M = player.mirror
   for (const u of G.units) {
-    const v = V(u)
-    for (const [i, model] of u.models.entries()) {
+    const v = V(u), mu = M.units[u.id]
+    for (const [i, model] of mu.models.entries()) {
       const m = v.models[i]
       if (!model.alive && !m.dying) continue
       const a = m.mesh.userData.anim
       if (model.alive) {
-        const tx = u.pos.x + model.ox, tz = u.pos.z + model.oz
+        const tx = mu.pos.x + model.ox, tz = mu.pos.z + model.oz
         const k = 1 - Math.exp(-dt * (v.moving ? 16 : 7))
         const px = m.x, pz = m.z
         m.x += (tx - m.x) * k
@@ -1852,11 +1937,11 @@ function animateUnits(dt, time) {
       }
     }
     // the floating label
-    if (alive(u) && !FAST) {
-      tmpV.set(u.pos.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), u.pos.z).project(camera)
+    if (mu.alive > 0 && !FAST) {
+      tmpV.set(mu.pos.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), mu.pos.z).project(camera)
       const on = tmpV.z < 1
       v.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`
-      v.label.style.visibility = on && G.turn.stage !== 'title' ? 'visible' : 'hidden'
+      v.label.style.visibility = on && M.stage !== 'title' ? 'visible' : 'hidden'
       v.label.classList.toggle('sel', u === S.sel)
     }
   }
@@ -1869,10 +1954,12 @@ function paintObjective(o, c) {
   o.ring.material.color.set(c < 0 ? '#fff3c0' : SIDES[c].color)
 }
 
+// Each flag shows its holder as shown (the mirror's owners: nobody before the
+// battle).
 function animateObjectives(dt, time) {
-  const stage = G.turn.stage
+  const owners = player.mirror.owners
   for (const o of objViews) {
-    const c = stage === 'battle' || stage === 'over' ? controlOf(G, G.objectives[o.i]) : -1
+    const c = owners[o.i]
     if (c !== o.owner) paintObjective(o, c)
     o.gem.rotation.y = time * 1.2
     o.gem.position.y = 0.45 + Math.sin(time * 2 + o.i) * 0.05
@@ -1971,11 +2058,46 @@ if (params.has('debug')) {
   // when start() begins a battle, at the point it always was.
   // S lists and copies as a plain object would ({...S}, JSON), turn fields
   // included, though structuredClone refuses it, as it does any Proxy.
+  //
+  // Since R5 the rules run ahead of the view: what they emit in G.out is
+  // played by the EventPlayer at the table's pace (view/player.js), and a
+  // battle-log entry lands when its `log` event is played. So the trace
+  // keeps pace with the player: a line the match writes while the player is
+  // behind it (events emitted and not yet played) joins `trace` when the
+  // player reaches it: at the log event that shows it (each carries `at`,
+  // the trace's length when it was logged, and `trace` is brought up to
+  // `at` before the entry is written, which carries it too, as data-at), or
+  // when the player goes idle. sim/ then records every write at the trace
+  // length it always did, and takes each state line's shadow as it joins:
+  // the converted actions write only log lines while the player is behind,
+  // so no state line waits. A state line that does wait is only right if
+  // the match hasn't moved by the time it joins (sim/oracle's shadow reads
+  // the live match then), so it waits with a fingerprint of what that
+  // shadow reads, and joining throws, naming the line, if the fingerprint
+  // has moved. A step that converts an action that writes a state line
+  // while the player is behind (R5b's, R6's whole AI turn) carries the
+  // state with the line instead (DESIGN's R5a notes and R6's row).
+  //
   // Not promised, for sim/terrain-shots.mjs only: clock, camera, renderer,
   // S.titleSpin, scenery.scene and scenery.blast (a blast played as
   // blastLands plays one). Nor G, for the console and for
-  // sim/rematch-check.mjs (G.out, which it requires empty after every frame;
-  // it also presses #again, #reroll and #seed's onchange, and reads S.seed).
+  // sim/rematch-check.mjs (G.out, which it requires empty whenever the
+  // player is idle and before each new table; it also presses #again,
+  // #reroll and #seed's onchange, and reads S.seed), nor player, which it
+  // reads for that (player.idle). Nor, for sim/present-check.mjs,
+  // present.listen(observer), G (it folds its own mirror from project(G)
+  // as the page loads and at each new table, and holds it to project(G) at
+  // the game's end) and player.idle (at the game's end): the observer's
+  // reset(M) hears each new table's mirror and event(e, M) every event as
+  // the player plays it, so it can fold its own mirror and hold it to each
+  // act's `proj` (project(G) when the action ended, which only ?debug's act
+  // events carry) and to each `check {proj, keys?}`, an event only ?debug
+  // emits (main.js's checkpoint(): after a converted action's events, after
+  // main.js's own stage events, and with keys ['owners'] at the old walk's
+  // end), with project(G) as the match then stood. The M it is handed is
+  // the player's own, folded in place (present/mirror.js): an observer
+  // reads it and never folds into it, or every event would be applied
+  // twice.
   const TURN = new Set(['stage', 'round', 'active', 'first', 'phase', 'vp', 'wiped'])
   const turn = (k) => (k === 'wiped' ? (G.turn.wiped < 0 ? undefined : G.turn.wiped) : G.turn[k])
   const legacyS = new Proxy(S, {
@@ -1990,15 +2112,51 @@ if (params.has('debug')) {
     getOwnPropertyDescriptor: (s, k) =>
       TURN.has(k) ? { value: turn(k), enumerable: true, configurable: true, writable: false } : Reflect.getOwnPropertyDescriptor(s, k),
   })
-  const trace = []
+  const trace = [], held = []
+  // the player is behind the match: events emitted and not yet played
+  const behind = (g) => !!g.out?.length || !player.idle
+  // what sim/oracle's shadow reads of the match (shadowParts: the turn, the
+  // dice, every unit, every chunk), as one string
+  const reads = (g) => JSON.stringify([g.turn, rngState(g.rng),
+    g.units.map((u) => [u.id, u.pos, u.r, u.alive, u.lost, u.mesmerized, u.flags, u.models.map((m) => [m.alive, m.w, m.ox, m.oz])]),
+    g.terrain.chunks.map((c) => [c.alive, c.hp, c.shape.x, c.shape.y, c.shape.z, c.shape.yaw])])
+  // a waiting line joins the trace; a state line only if the match is as it
+  // was when the line was written (else its shadow would be taken against
+  // a later match: the hold is no longer enough, see above)
+  const join = () => {
+    const [line, g, was] = held.shift()
+    if (was !== undefined && (g !== G || reads(g) !== was)) throw new Error(`?debug trace: the state line '${line.slice(0, 60)}…' waited for the player, and the match moved before it joined the trace, so its shadow would be wrong`)
+    trace.push(line)
+  }
   traceListener = {
-    begin: () => (trace.length = 0),
-    line: (line) => trace.push(line),
+    begin: () => {
+      trace.length = 0
+      held.length = 0
+    },
+    line: (line, g) => {
+      if (held.length || behind(g)) held.push(line.startsWith('log ') ? [line, g] : [line, g, reads(g)])
+      else trace.push(line)
+    },
+    // the log entry about to be written was logged at trace length `at`
+    reach: (at) => {
+      while (trace.length < at && held.length) join()
+    },
+    idle: () => {
+      while (held.length) join()
+    },
   }
   window.__ts = {
     S: legacyS, clock, camera, controls, renderer, trace,
     get G() {
       return G
+    },
+    get player() {
+      return player
+    },
+    present: {
+      listen(observer) {
+        player.observer = observer
+      },
     },
     get units() {
       return G.units
@@ -2013,7 +2171,7 @@ if (params.has('debug')) {
       scene,
       blast(x, z, r, dmg, opts) {
         const broke = G.terrain.blast(x, z, r, dmg, opts, G.out)
-        drainTerrain()
+        show()
         refreshNav(G)
         return broke
       },

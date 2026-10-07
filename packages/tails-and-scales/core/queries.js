@@ -75,6 +75,15 @@ export function controlOf(G, o) {
   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
 }
 
+// What the table shows at the end of an action (DESIGN §2.3's `objectives`
+// and `status` events): who holds each objective, and which units are in
+// combat or mesmerized (by id).
+export const ownersOf = (G) => G.objectives.map((o) => controlOf(G, o))
+export const statusOf = (G) => ({
+  engaged: G.units.filter((u) => alive(u) && isEngaged(G, u)).map((u) => u.id),
+  mesmerized: G.units.filter((u) => u.mesmerized).map((u) => u.id),
+})
+
 // ── Who can act ─────────────────────────────────────────────────────────────
 // Something left to do for `u` in the current phase of its own turn.
 export function canAct(G, u) {

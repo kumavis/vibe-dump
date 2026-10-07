@@ -4,8 +4,9 @@
 // three.js for real and gets a no-op fx that records its calls) and with the
 // working tree's Terrain (core/terrain/terrain.js) and TerrainView
 // (view/terrain.js), driven as main.js drives them: each terrain call
-// reports into an out array, played into the view straight after the call
-// (main.js drainTerrain). It requires, exactly (Object.is on every number,
+// reports into an out array, and straight after the call each report is
+// folded into a mirror (present/mirror.js) and applied to the view, in order
+// (main.js's EventPlayer). It requires, exactly (Object.is on every number,
 // no tolerance):
 //
 //  1. the layout stream: every mulberry32 the generation makes, its seed and
@@ -29,6 +30,16 @@
 //     logs they make included), what blast returns, `dirty`, every fx call
 //     and, at the end, the whole scenery group (rubble pieces, fallen logs,
 //     collapsed blocks), plus line-of-sight queries before and after.
+//
+// One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
+// dust a dropped block raises when its fall ends. R0 read the block's place
+// at that moment, so when a later collapse in the same blast or sweep had
+// lowered it again, the dust came from the lower place; R5's view reads no
+// live chunk and puts it where that drop left the block (the mirror as the
+// collapse is played). sim/terrain-hooks.mjs makes the R0 code take its
+// dust's height there too, as the drop happens (an edit in memory, like its
+// draw counter), and counts the puffs that moved; every other number of
+// every fx call is still R0's own.
 //
 //   node sim/terrain-check.mjs [--seeds 1-500 | 42] [--ops 8] [--max 10]
 //   node sim/terrain-check.mjs --self-test     each edit in terrain-hooks.mjs's
@@ -88,21 +99,24 @@ const { hypot } = await imp(PKG, 'core/dmath.js')
 const { distToBox } = await imp(PKG, 'core/terrain/geom.js')
 const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
 const { TerrainView } = await imp(PKG, 'view/terrain.js')
+const { blankMirror, applyEvent } = await imp(PKG, 'present/mirror.js')
 const { OBJ_POS } = await imp(PKG, 'core/match.js')
 const { W, H } = BOARD
 
 // The working tree's battlefield, driven as main.js drives it: the rules'
-// Terrain reports each call's events into `out`, and they are played into
-// the TerrainView straight after the call, in order (main.js drainTerrain).
-// It offers what the R0 code's Scenery does, so one script runs both.
+// Terrain reports each call's events into `out`, and straight after the
+// call each is folded into the mirror and applied to the TerrainView, in
+// order (main.js's EventPlayer). It offers what the R0 code's Scenery does,
+// so one script runs both.
 class Now {
   constructor(scene, fx) {
     this.view = new TerrainView(scene, fx)
     this.terrain = new Terrain(W, H)
     this.out = []
+    this.mirror = blankMirror()
   }
   drain() {
-    this.view.play(this.out.splice(0))
+    for (const e of this.out.splice(0)) this.view.apply(e, applyEvent(this.mirror, e))
   }
   get chunks() {
     return this.terrain.chunks
@@ -318,7 +332,7 @@ function losProbe(S, rand) {
   return out
 }
 
-const stats = { chunks: 0, meshes: 0, draws: 0, streams: 0, ops: 0, broke: 0, logs: 0, freshLogSmashed: 0, logSparedByBlast: 0, rubble: 0 }
+const stats = { chunks: 0, meshes: 0, draws: 0, streams: 0, ops: 0, broke: 0, logs: 0, freshLogSmashed: 0, logSparedByBlast: 0, rubble: 0, mirrorChunks: 0 }
 const pieces = {}
 const count = (o) => 1 + o.children.reduce((n, c) => n + count(c), 0)
 
@@ -396,6 +410,15 @@ async function board(seed) {
       if (op.blast && c.hp === c.maxHp && distToBox(op.blast[0], 0.5, op.blast[1], c.shape) <= op.blast[2]) stats.logSparedByBlast++
     }
   }
+  // the mirror the events folded into is the terrain as it stands
+  for (const c of M.S.chunks) {
+    const m = M.S.mirror.chunks[c.id]
+    if (!m) differ(`${where} mirror chunk ${c.id}`, 'present', 'missing')
+    same(`${where} mirror chunk ${c.id} alive`, c.alive, m.alive)
+    same(`${where} mirror chunk ${c.id} y`, c.shape.y, m.y)
+    stats.mirrorChunks++
+  }
+  same(`${where} mirror chunk count`, M.S.chunks.length, Object.keys(M.S.mirror.chunks).length)
   if (ops.length) {
     sameObject(`${where} scenery group after destruction`, L.S.group, M.S.group, share)
     deep(`${where} los after destruction`, losProbe(L.S, mulberry(rseed ^ 0x106)), losProbe(M.S, mulberry(rseed ^ 0x106)))
@@ -421,6 +444,7 @@ console.log(`P-terrain: boards ${lo}-${hi}, R0 code ${LEGACY_REF.slice(0, 9)} ag
 console.log(`  ${stats.chunks} chunks and ${stats.meshes} scene objects built; ${stats.streams} layout streams, ${stats.draws} draws`)
 console.log(`  pieces: ${Object.entries(pieces).map(([k, n]) => `${k} ${n}`).join(', ')}`)
 console.log(`  ${stats.ops} destruction ops: ${stats.broke} chunks broken by blasts, ${stats.rubble} rubble piles, ${stats.logs} fallen logs (${stats.freshLogSmashed} smashed in the same sweep that felled them, ${stats.logSparedByBlast} in range of the blast that felled them and spared)`)
+console.log(`  the mirror the events folded into matched ${stats.mirrorChunks} chunks (standing, height); ${globalThis.__dustMoved ?? 0} of ${globalThis.__dustAll ?? 0} collapse dust puffs rise where their own drop left the block, not lower where a later drop in the same op took it (R5's rule; R0 read the place when the fall ended)`)
 if (failedSeeds) {
   console.log(`MISMATCH on ${failedSeeds} board(s):`)
   for (const s of shown) console.log(`  ${s}`)

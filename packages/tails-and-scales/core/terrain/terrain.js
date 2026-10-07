@@ -11,47 +11,49 @@
 // This is consensus code: no meshes, no clock, and no randomness but the
 // board's layout stream. Destruction is instant here (a block's fall lowers
 // shape.y at once, a toppled tree's log exists at once); what happened is
-// reported, in order, as plain events pushed onto the `out` array the caller
-// passes (the match's G.out; none, null, for a quiet run), and the view
-// (view/terrain.js) plays them: shudder, debris, the fall, the topple, the
-// rubble pieces. Nothing is stored here to report through: the Terrain lives
-// in the match state, which holds no closures (DESIGN §0.2 #12).
+// reported, in order, as plain events (DESIGN §2.3) pushed onto the `out`
+// array the caller passes (the match's G.out; none, null, for a quiet run),
+// and the view (view/terrain.js) plays them: shudder, debris, the fall, the
+// topple, the rubble pieces. Nothing is stored here to report through: the
+// Terrain lives in the match state, which holds no closures (DESIGN §0.2
+// #12).
 //
-//   terrain.clear    {}                    a new table
-//   terrain.add      { c }                 a chunk joined (a board's, a rubble
-//                                          pile's, a fallen tree's log)
-//   terrain.hurt     { c, from, at }       it took damage and stands
-//   terrain.destroy  { c, from, at }       it broke (then its consequences)
-//   terrain.collapse { drops: [{ c, dy }], by }   blocks fell into a gap
-//   terrain.rubble   { c, from }           more rubble on a pile
+//   terrain.clear    {}                         a new table
+//   terrain.add      { def }                    a chunk joined (a board's, a
+//                                               rubble pile's, a fallen tree's
+//                                               log): def is { id, kind,
+//                                               shape, look }, a copy of its
+//                                               place and look as it joined
+//   terrain.hurt     { id, from, at }           it took damage and stands
+//   terrain.destroy  { id, kind, from, at }     it broke (then its consequences)
+//   terrain.collapse { drops: [{ id, dy }], by }   blocks fell into a gap
+//   terrain.rubble   { id, from }               more rubble on a pile
 //
-// The caller plays a call's events after the call returns (main.js drains
-// G.out into the view right after each terrain call), so an event carries
-// what the view reads that a later event of the same call could change: `at`
-// is where the chunk stood when it was hit. A block scuffed early in a blast
-// could be lowered by a collapse later in it, though not with classic's
-// recipes (DESIGN's R4 notes), so today `at` is the live place; it is there
-// so the event stands on its own for R5, whose view reads no live chunk. The
-// rest the view reads off the chunk as it plays an event is fixed for the
-// call (its look, kind and id; a rubble pile's or a log's place). One read
-// is later than that: a collapse's debris, when the block's fall tween
-// ends, reads the block's place then, and a later blast in the same volley
-// may have lowered it again (cosmetic, and as it always was; R5 replaces it
-// with a value the event or the mirror carries, DESIGN §2.3). R5 makes these
-// the match's event stream (DESIGN §2.3), by id and with the values the view
-// needs. Chunk ids count from 1 on every new table.
+// The events name chunks by id and carry what the view needs as values, so
+// the view never reads a live chunk: it keeps each chunk's place and look
+// from its add (a chunk never moves sideways; a collapse only lowers it),
+// takes `at` (where a hurt or broken chunk stood when it was hit) for its
+// debris, and reads whether a chunk stands and its height from the mirror
+// (present/mirror.js), folded from these same events: a collapse's dust is
+// where the block comes to rest after that drop. Chunk ids count from 1 on
+// every new table.
+//
+// The Terrain takes the out per call (R5 kept that rather than emit(G, …),
+// which would make it take the match): it is a rules object of its own,
+// which sim/terrain-check.mjs drives without any match, and reporting
+// through journal.js's emitTo is the same rule emit applies to G.out.
 // ---------------------------------------------------------------------------
 import { hypot } from '../dmath.js'
+import { emitTo } from '../journal.js'
 import { SETS } from './sets.js'
 import { scatter } from './recipes.js'
 import { segmentHitsBox, distToBox } from './geom.js'
 
-// one report, onto the caller's out (nothing when it passed none)
-function report(out, t, payload) {
-  if (out) out.push({ t, ...payload })
-}
 // where a chunk stands now, as a report carries it
 const place = (c) => ({ x: c.shape.x, y: c.shape.y, z: c.shape.z })
+// a chunk as it joins: what the view draws it from (a copy, so a later
+// collapse lowering the chunk can't reach back into an event)
+const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })
 
 export class Terrain {
   constructor(W, H) {
@@ -68,7 +70,7 @@ export class Terrain {
     this.features = []
     this.nextId = 1
     this.dirty = true
-    report(out, 'terrain.clear', {})
+    emitTo(out, 'terrain.clear', {})
   }
 
   add(def, out = null) {
@@ -79,7 +81,7 @@ export class Terrain {
     const s = c.shape
     s.reach = hypot(s.hx, s.hz) + 0.05
     this.chunks.push(c)
-    report(out, 'terrain.add', { c })
+    emitTo(out, 'terrain.add', { def: defOf(c) })
     return c
   }
 
@@ -151,7 +153,7 @@ export class Terrain {
       broken.push(c)
     } else {
       // scuffed (the view darkens and shudders it)
-      report(out, 'terrain.hurt', { c, from, at: place(c) })
+      emitTo(out, 'terrain.hurt', { id: c.id, from, at: place(c) })
     }
     return broken
   }
@@ -159,7 +161,7 @@ export class Terrain {
   destroy(c, from, out = null) {
     c.alive = false
     this.dirty = true
-    report(out, 'terrain.destroy', { c, from, at: place(c) })
+    emitTo(out, 'terrain.destroy', { id: c.id, kind: c.kind, from, at: place(c) })
     switch (c.kind) {
       case 'block':
         this.collapse(c.col, out)
@@ -181,11 +183,11 @@ export class Terrain {
         const drop = (b.level - next) * col.by
         b.level = next
         b.shape.y -= drop
-        drops.push({ c: b, dy: drop })
+        drops.push({ id: b.id, dy: drop })
       }
       next = b.level + 1
     }
-    if (drops.length) report(out, 'terrain.collapse', { drops, by: col.by })
+    if (drops.length) emitTo(out, 'terrain.collapse', { drops, by: col.by })
   }
 
   // A pile of rubble at the column's foot: one chunk per column, made by the
@@ -202,7 +204,7 @@ export class Terrain {
       }, out)
       this.dirty = true
     }
-    report(out, 'terrain.rubble', { c: r, from })
+    emitTo(out, 'terrain.rubble', { id: r.id, from })
   }
 
   // The tree keels over, away from the blow, into a log lying where it fell.
