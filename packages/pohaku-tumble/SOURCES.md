@@ -33,11 +33,29 @@ in `research/review/`. Each word was read against these sources:
 
 The authority for Hawaiian spelling and sense is Mary Kawena Pukui and
 Samuel H. Elbert, ***Hawaiian Dictionary***, revised and enlarged edition
-(University of Hawaiʻi Press, 1986). Its online home refuses automated
-access, and that was respected, so it was not read for this list. A word
-marked with an open circle on its card (`ev: 'pending'` in the data) has not
-yet been confirmed against it; the legend calls this *awaiting dictionary
-check*. The list has also not yet been read by a fluent speaker.
+(University of Hawaiʻi Press, 1986). wehewehe.org, its online home, refuses
+automated access, and that was respected: nothing in the build reads it.
+
+That check has since been done by hand, word by word, through
+**[Wehe²wiki²](https://wehe.hilo.hawaii.edu/)** (University of Hawaiʻi at
+Hilo / Ulukau), which serves the same dictionaries with per-entry attribution
+and was not challenged — by **LEILANI**, the ʻŌlelo Hawaiʻi reviewer of Shaka
+Leikaumaka's ʻohana of agents, in October 2026. All 370 circled words were
+looked up, plus a spot check of the 228 already clear; her letter, the full
+worksheet, the source line for every word and what the build does and does
+not apply are in
+[`research/review/pe-check/`](./research/review/pe-check). Of the 370, 313
+were already right. Short definitions are quoted and attributed entry by
+entry, as lexicographic citation; the dictionary itself is neither
+reproduced nor redistributed.
+
+A word still marked with an open circle on its card (`ev: 'pending'` in the
+data) is one that check could not settle: three the dictionaries do not
+support, and eight whose spelling waits on a decision that would respell a
+stone other words share. The legend calls this *awaiting dictionary check*.
+
+That is a dictionary check, not a kumu's reading: **the list has still not
+been read by a fluent speaker**, and that invitation stands.
 
 ## The map and the star compass
 
