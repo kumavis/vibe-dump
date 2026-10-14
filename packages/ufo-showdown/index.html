@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UFO Showdown</title>
+<meta name="description" content="Slide your starfighter side to side, dodge alien saucers, pop power-up bubbles and take down the Mothership's Commander — solo or two players on one keyboard.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23090620'/><ellipse cx='16' cy='13' rx='6' ry='6' fill='%239ff0ff' opacity='.85'/><circle cx='16' cy='12' r='3' fill='%2373e05a'/><ellipse cx='16' cy='17' rx='13' ry='4.6' fill='%23b9c7d8'/><circle cx='9' cy='18' r='1.3' fill='%23ffe23d'/><circle cx='16' cy='19.6' r='1.3' fill='%23ffe23d'/><circle cx='23' cy='18' r='1.3' fill='%23ffe23d'/></svg>">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<canvas id="game" aria-label="UFO Showdown play field"></canvas>
+
+<section id="menu" class="screen show" aria-label="Home screen">
+  <div class="panel menu">
+    <h1 class="logo"><span class="l1">UFO</span><span class="l2">Showdown</span></h1>
+    <p class="tag">Dodge the saucers · pop the bubbles · beat the Mothership</p>
+
+    <div class="choices" role="group" aria-label="How many players?">
+      <button type="button" class="choice sel" data-players="1">
+        <span class="big">1</span><span class="what">Player</span>
+      </button>
+      <button type="button" class="choice" data-players="2">
+        <span class="big">2</span><span class="what">Players</span>
+      </button>
+    </div>
+
+    <div class="pads">
+      <div class="pad p1">
+        <canvas class="shipicon" data-player="0" width="64" height="72"></canvas>
+        <div>
+          <div class="who">Player 1</div>
+          <div class="keys">
+            <span class="row"><kbd>W</kbd></span>
+            <span class="row"><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>
+          </div>
+        </div>
+      </div>
+      <div class="pad p2">
+        <canvas class="shipicon" data-player="1" width="64" height="72"></canvas>
+        <div>
+          <div class="who">Player 2</div>
+          <div class="keys">
+            <span class="row"><kbd aria-label="Up"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(0deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd></span>
+            <span class="row"><kbd aria-label="Left"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(-90deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd><kbd aria-label="Down"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(180deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd><kbd aria-label="Right"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(90deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="legend" aria-label="Power-up bubbles"></ul>
+
+    <p class="hint">Your ship fires on its own — you just steer and dodge! <span class="nowrap"><kbd class="sm">P</kbd> pause</span> <span class="nowrap"><kbd class="sm">M</kbd> sound</span></p>
+  </div>
+</section>
+
+<div id="banner" aria-live="polite"><div class="sub"></div><div class="title"></div></div>
+
+<section id="pause" class="screen" aria-label="Paused">
+  <div class="panel small">
+    <h2>Paused</h2>
+    <div class="buttons">
+      <button type="button" data-act="resume" class="sel">Resume</button>
+      <button type="button" data-act="home">Home</button>
+    </div>
+    <p class="hint"><kbd class="sm">P</kbd> resume · <kbd class="sm">H</kbd> home</p>
+  </div>
+</section>
+
+<section id="over" class="screen" aria-label="Game over">
+  <div class="panel small">
+    <h2 class="bad">Game Over</h2>
+    <p class="lead">The aliens got away this time…</p>
+    <div class="scores"></div>
+    <div class="buttons">
+      <button type="button" data-act="again" class="sel">Try again</button>
+      <button type="button" data-act="home">Home</button>
+    </div>
+    <p class="hint"><kbd class="sm">Enter</kbd> try again · <kbd class="sm">H</kbd> home</p>
+  </div>
+</section>
+
+<section id="win" class="screen" aria-label="You win">
+  <div class="panel small">
+    <h2 class="good">You saved the galaxy!</h2>
+    <p class="lead">The Commander is beaten and the Mothership is space dust.</p>
+    <div class="scores"></div>
+    <div class="buttons">
+      <button type="button" data-act="again" class="sel">Play again</button>
+      <button type="button" data-act="home">Home</button>
+    </div>
+    <p class="hint"><kbd class="sm">Enter</kbd> play again · <kbd class="sm">H</kbd> home</p>
+  </div>
+</section>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
