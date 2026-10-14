@@ -55,7 +55,7 @@ export function gradeSubject(m, P = PHOTO) {
   else if (m.fill <= F.sweet[1]) fill = 1
   else if (m.fill <= F.big) fill = 1 - ((1 - F.bigScore) * (m.fill - F.sweet[1])) / (F.big - F.sweet[1])
   else fill = Math.max(F.hugeScore, F.bigScore - ((F.bigScore - F.hugeScore) * (m.fill - F.big)) / F.big)
-  const vis = clamp(m.vis, 0, 1)
+  const vis = clamp((m.vis - P.visFloor) / (1 - P.visFloor), 0, 1)
   const crop = Math.pow(clamp(m.inFrame, 0, 1), 1.5) * (m.headIn ? 1 : P.cropHeadOut)
   // composition: dead centre is fine, a rule-of-thirds point is better
   const T = P.thirds
@@ -79,9 +79,11 @@ export function gradeSubject(m, P = PHOTO) {
 // The weakest factor of a graded subject, as advice for the viewfinder.
 export function hintFor(m, P = PHOTO) {
   const q = m.parts
+  const hidden = m.blocked > 0.4 ? 'Blocked from view' : m.screened > 0.3 ? 'Something is in the way' : 'Partly hidden'
+  if (q.vis < 0.3) return hidden // nothing else matters while it cannot be seen
   if (m.fill < P.fill.sweet[0] && q.fill < 0.6) return 'Get closer or zoom in'
   if (m.fill > P.fill.big) return 'Too close — zoom out'
-  if (q.vis < 0.6) return m.blocked > 0.4 ? 'Blocked from view' : m.screened > 0.3 ? 'Something is in the way' : 'Partly hidden'
+  if (q.vis < 0.6) return hidden
   if (q.crop < 0.7) return m.headIn ? 'Cropped' : 'Head out of frame'
   if (q.steady < 0.8) return 'Hold still'
   if (m.fill > P.fill.sweet[1] && q.fill < 0.9) return 'A little tight'

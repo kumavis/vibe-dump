@@ -132,6 +132,7 @@ export const PHOTO = {
   stars: [40, 70], // quality for two and three stars (one star from minQuality)
   fill: { min: 0.02, sweet: [0.25, 0.6], big: 1.2, bigScore: 0.55, hugeScore: 0.3 },
   headWeight: 2, // in the visibility sample (head, neck, chest, hips, tail, two legs)
+  visFloor: 0.15, // a glimpse this small of an animal is not a photo of it
   idBuffer: { w: 320 }, // the small ID render that sees plants without colliders
   cropHeadOut: 0.65,
   thirds: { centre: 0.9, falloff: 0.32, weight: 0.4 },
