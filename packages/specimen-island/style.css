@@ -804,6 +804,17 @@ body.playing #title {
   margin: 0 0 20px;
   opacity: 0.9;
 }
+#title .kbd-note {
+  display: none;
+  color: var(--accent);
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+@media (pointer: coarse) {
+  #title .kbd-note {
+    display: block;
+  }
+}
 #title .controls {
   margin-top: 14px;
   font-size: 12px;
