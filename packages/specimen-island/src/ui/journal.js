@@ -1,5 +1,6 @@
 import { SPECIES, SPECIES_ORDER } from '../data/species.js'
 import { WEAPONS } from '../data/weapons.js'
+import { doseCard } from './dose.js'
 
 // Field journal: the species catalogue (filled in by scanning), what you have
 // collected from each, and the Foundation's running ledger of your conduct.
@@ -40,10 +41,11 @@ export class Journal {
           continue
         }
         const marks = ['blood', 'measure', 'tag', 'tissue'].map((k) => `<span class="${s[k] ? 'done' : ''}">${k}${s[k] > 1 ? ' ×' + s[k] : ''}</span>`).join('')
+        const dose = doseCard(sp.sedation)
         body += `<div class="card t-${sp.temperament}"><h3>${sp.name}</h3><em>${sp.latin}</em><p>${sp.blurb}</p>
           <dl><dt>Temperament</dt><dd>${sp.temperament}</dd><dt>Mass</dt><dd>${sp.mass.toLocaleString()} kg</dd>
-          <dt>Knockout</dt><dd>${sp.sedation.ko}u ≈ ${Math.ceil(sp.sedation.ko / WEAPONS.rifle.dose)} rifle darts</dd>
-          <dt>Overdose</dt><dd>${sp.sedation.lethal}u</dd>
+          <dt>Knockout</dt><dd>${dose.ko}</dd>
+          <dt>Overdose</dt><dd>${dose.od}</dd>
           <dt>Blood value</dt><dd>${sp.science.blood} pts</dd><dt>Kill penalty</dt><dd class="bad">−${sp.killPenalty}</dd></dl>
           <div class="sci">${marks}</div>${s.kills ? `<div class="bad">Killed: ${s.kills}</div>` : ''}</div>`
       }

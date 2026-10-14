@@ -31,6 +31,7 @@ import { HUD } from './ui/hud.js'
 import { MapView, paintRelief, reliefTexture } from './ui/map.js'
 import { Journal } from './ui/journal.js'
 import { Menus, QUALITY } from './ui/menus.js'
+import { buildLadder, detectRung, readGpuInfo, TierController } from './core/quality.js'
 
 // Composition root. Builds every service onto one shared context `G`, then
 // runs the frame loop. Systems only know each other through G and the event
@@ -118,15 +119,63 @@ async function boot() {
   G.input = input
 
   // ---- settings
+  // Graphics is a manual tier, or Auto: a first guess from the GPU, screen and
+  // core count, then a controller that watches frame times through the title
+  // and the first 20 s of play and steps the tier/pixel ratio (core/quality.js).
+  const ladder = buildLadder(devicePixelRatio)
+  const gpu = readGpuInfo(renderer.getContext())
+  const guess = detectRung({ ...gpu, width: innerWidth, height: innerHeight, dpr: devicePixelRatio }, ladder)
+  G.gfx = { gpu, guess, ladder, auto: null, autoIndex: guess.index, tier: null, pixelRatio: 0 }
+  let playClock = 0
+  const applyQuality = (tier, pixelRatio) => {
+    if (G.gfx.tier !== tier) {
+      const q = QUALITY[tier]
+      G.sky.setShadowSize(q.shadows)
+      G.veg.setQuality(q)
+      G.gfx.tier = tier
+    }
+    if (G.gfx.pixelRatio !== pixelRatio) {
+      G.gfx.pixelRatio = pixelRatio
+      renderer.setPixelRatio(pixelRatio)
+      resize()
+    }
+  }
+  const showAutoTier = () => {
+    const r = ladder[G.gfx.autoIndex]
+    G.menus.setAutoLabel(QUALITY[r.tier].label + (r.pixelRatio < 1 ? ` · ${Math.round(r.pixelRatio * 100)}% res` : ''))
+  }
   const applySettings = (s) => {
-    const q = QUALITY[s.quality] || QUALITY.medium
-    renderer.setPixelRatio(Math.min(devicePixelRatio, q.pixelRatio))
-    G.sky.setShadowSize(q.shadows)
-    G.veg.setQuality(q)
+    if (s.quality !== 'auto' && QUALITY[s.quality]) {
+      G.gfx.auto = null // a manual choice ends adaptation
+      applyQuality(s.quality, Math.min(devicePixelRatio, QUALITY[s.quality].pixelRatio))
+    } else {
+      if (!G.gfx.auto) {
+        G.gfx.auto = new TierController(ladder, G.gfx.autoIndex)
+        G.gfx.auto.startedAt = playClock
+      }
+      const r = G.gfx.auto.rung
+      applyQuality(r.tier, r.pixelRatio)
+    }
+    showAutoTier()
     input.sensitivity = 0.0022 * s.sensitivity
     input.invertY = s.invertY
     G.audio.setVolume(s.volume)
-    resize()
+  }
+  // Auto's frame clock: its own rAF callback sees the same frame intervals as
+  // the game loop without touching it.
+  let probeLast = 0
+  const probe = (now) => {
+    requestAnimationFrame(probe)
+    const ms = probeLast ? now - probeLast : 0
+    probeLast = now
+    const ctl = G.gfx.auto
+    if (!ctl || !ms || document.hidden) return
+    if (G.mode === 'play' && !G.paused) playClock += ms / 1000
+    if (!ctl.settled && playClock - ctl.startedAt > 20) ctl.settle()
+    if (!ctl.sample(ms)) return
+    G.gfx.autoIndex = ctl.index
+    applyQuality(ctl.rung.tier, ctl.rung.pixelRatio)
+    showAutoTier()
   }
   const resize = () => {
     renderer.setSize(innerWidth, innerHeight)
@@ -151,6 +200,8 @@ async function boot() {
       G.journal.toggle(false)
     }
     if (!anyOverlay()) setPaused(false)
+    // a menu button left focused would take Space/Enter meant for the game
+    document.activeElement?.blur?.()
     input.lock()
     G.audio.init()
   }
@@ -197,6 +248,7 @@ async function boot() {
     },
   })
   applySettings(G.menus.settings)
+  requestAnimationFrame(probe)
 
   input.onLockChange = (locked) => {
     if (!locked && G.mode === 'play' && !G.paused && !anyOverlay()) pause()

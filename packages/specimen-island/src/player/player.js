@@ -92,6 +92,25 @@ export class Player {
     this.teleport(pos, yaw, 1.2)
   }
 
+  // What the feet are on, for the footstep sound: a deck's material, else the
+  // island's own grids — shallow water, road gravel, undergrowth, grass, sand.
+  surface() {
+    const isl = this.G.island
+    const { x, z } = this.pos
+    if (this.swimming) return 'swim'
+    if (this.wading > 0.1) return 'water'
+    const under = this.G.physics.groundInfo(x, z, this.pos.y + 0.1)
+    // decks without a material are the old wooden kind (bridges, crates)
+    if (under.collider && this.pos.y - under.y < 0.2) return under.collider.material || 'wood'
+    if (isl.sample(isl.road, x, z) > 0.5) return 'gravel'
+    const cover = isl.coverAt(x, z)
+    if (cover > 0.45) return 'brush'
+    if (isl.sample(isl.w.rock, x, z) > 0.5) return 'rock'
+    if (isl.sample(isl.w.beach, x, z) > 0.5) return 'sand'
+    if (cover > 0.12) return 'grass'
+    return 'dirt'
+  }
+
   update(dt, input) {
     const G = this.G
     const isl = G.island
@@ -215,7 +234,7 @@ export class Player {
         if (!this.crouching && cover > 0.45) r *= 1.35 // crashing through undergrowth
         if (this.wading > 0.2 || this.swimming) r = Math.max(r, 14)
         G.events.emit('noise', { x: this.pos.x, y: this.pos.y, z: this.pos.z, radius: r, source: 'player', kind: 'step' })
-        G.audio?.step(this.swimming || this.wading > 0.2 ? 'water' : cover > 0.45 ? 'brush' : isl.sample(isl.road, this.pos.x, this.pos.z) > 0.5 ? 'gravel' : 'ground', sprinting ? 1 : this.crouching ? 0.35 : 0.65)
+        G.audio?.step(this.surface(), sprinting ? 1 : this.crouching ? 0.35 : 0.65)
       }
       this.bob += hs * dt * (sprinting ? 1.6 : 1.9)
     } else this.bob = damp(this.bob, Math.round(this.bob / Math.PI) * Math.PI, 6, dt)

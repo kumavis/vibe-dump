@@ -54,6 +54,23 @@ body {
   font-size: 18px;
   padding: 14px 26px;
 }
+.btn.ghost {
+  background: rgba(10, 14, 8, 0.45);
+  border-color: rgba(242, 234, 210, 0.35);
+}
+.btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+/* keyboard focus is always visible on menus and the settings sheet */
+.btn:focus-visible,
+.settings select:focus-visible,
+.settings input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.btn.primary:focus-visible {
+  outline-color: var(--ink);
+}
 
 /* ---------------------------------------------------------------- hud */
 #hud {
@@ -660,9 +677,9 @@ body.playing #hud {
 .settings {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 8px 12px;
+  gap: 12px 16px;
   align-items: center;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--dim);
   margin: 6px 0;
 }
@@ -671,10 +688,80 @@ body.playing #hud {
   width: 100%;
 }
 .settings select {
+  font: 14px var(--font);
   background: #1a1f16;
   color: var(--ink);
   border: 1px solid var(--line);
-  padding: 4px;
+  padding: 7px 6px;
+}
+.settings input {
+  accent-color: var(--accent);
+}
+.settings input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+.settings .range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.settings output {
+  min-width: 3.4em;
+  text-align: right;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* the settings sheet: opened from the title and from the pause menu */
+#settings {
+  z-index: 12;
+}
+.overlay .sheet {
+  width: min(520px, 94vw);
+  padding: 18px 22px 20px;
+  border-top: 3px solid var(--accent);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  background: rgba(16, 20, 14, 0.94);
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.overlay .sheet-head h2 {
+  margin: 0;
+}
+.btn.close {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1;
+}
+.sheet h3 {
+  margin: 18px 0 6px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.sheet .controls {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1.85;
+}
+.sheet .controls b {
+  color: var(--ink);
+}
+.sheet-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
 }
 .tabs {
   display: flex;
@@ -823,14 +910,10 @@ body.playing #title {
     display: block;
   }
 }
-#title .controls {
-  margin-top: 14px;
-  font-size: 12px;
-  color: var(--dim);
-  line-height: 1.8;
-}
-#title .controls b {
-  color: var(--ink);
+#title .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 #boot {
   position: fixed;

@@ -1,5 +1,7 @@
 import { SPECIES, SPECIES_ORDER } from '../data/species.js'
+import { ENCOUNTERS } from '../data/encounters.js'
 import { Rng } from '../core/rng.js'
+import { wrapAngle } from '../core/mathx.js'
 import { Creature } from './creature.js'
 import { Vitals } from './vitals.js'
 
@@ -60,20 +62,68 @@ export class Ecology {
         this.addHerd(id, best.x, best.z, rng)
       }
     }
-    // a first, harmless encounter by the road up from the dock
     const st = isl.poi.station
-    this.addHerd('compsognathus', (dock.x + st.x) / 2 + 40, (dock.z + st.z) / 2, rng)
     this.addHerd('gallimimus', st.x + 160, st.z - 120, rng)
+    // The early encounters used to be a compy gang halfway up the road plus
+    // this gallimimus flock (kept as an ordinary herd): both sat in jungle
+    // 140-350 m from where the player looks, wandered a 35-40 m home range and
+    // bolted at first sight, so most players met nothing until well inland.
+    // These are placed in sight of the pier and the station door, on a short
+    // leash (data/encounters.js).
+    for (const e of ENCOUNTERS) this.placeEncounter(e, rng)
   }
 
-  addHerd(id, x, z, rng) {
+  placeEncounter(e, rng) {
+    const G = this.G
+    const isl = G.island
+    let view
+    if (e.view === 'spawn') {
+      const sp = isl.poi.dock.spawn
+      view = { x: sp.pos.x, y: sp.pos.y + 1.6, z: sp.pos.z, yaw: sp.yaw }
+    } else {
+      const st = isl.poi.station
+      const x = st.x + Math.sin(st.yaw) * 7
+      const z = st.z + Math.cos(st.yaw) * 7
+      view = { x, y: G.physics.groundAt(x, z, st.y + 3) + 1.6, z, yaw: null }
+    }
+    const mid = (e.ring[0] + e.ring[1]) / 2
+    const half = (e.ring[1] - e.ring[0]) / 2
+    let best = null
+    let bestScore = 0
+    for (let i = 0; i < 400; i++) {
+      // yaw convention: facing `a` looks along (-sin a, -cos a)
+      const a = view.yaw == null ? rng.range(-Math.PI, Math.PI) : view.yaw + rng.range(-e.arc, e.arc)
+      const r = rng.range(e.ring[0], e.ring[1])
+      const x = view.x - Math.sin(a) * r
+      const z = view.z - Math.cos(a) * r
+      if (!isl.isLand(x, z, -0.6)) continue
+      const cover = isl.coverAt(x, z)
+      if (cover > e.cover || isl.sample(isl.road, x, z) > 0.3 || isl.sample(isl.slope, x, z) > 0.6) continue
+      const trees = Math.min(1, isl.sample(isl.d.canopy, x, z) + isl.sample(isl.d.broadleaf, x, z) + isl.sample(isl.d.palm, x, z))
+      if (!G.physics.lineOfSight(view.x, view.y, view.z, x, isl.heightAt(x, z) + e.eye, z)) continue
+      let score = (1 - cover) * (1 - 0.8 * trees) * (1 - 0.5 * (Math.abs(r - mid) / half)) * (1 + isl.habitat(x, z, e.like || {}))
+      if (view.yaw != null) score *= 1 - 0.5 * (Math.abs(wrapAngle(a - view.yaw)) / e.arc)
+      // a POI's yard is fine to stand in, but herds never pick goals there
+      if (isl.sample(isl.clear, x, z) > 0.5) score *= 0.6
+      score *= 0.9 + rng.next() * 0.2
+      if (score > bestScore) {
+        bestScore = score
+        best = { x, z }
+      }
+    }
+    if (!best) best = { x: view.x - Math.sin(view.yaw ?? 0) * mid, z: view.z - Math.cos(view.yaw ?? 0) * mid }
+    return this.addHerd(e.species, best.x, best.z, rng, { count: rng.int(e.count[0], e.count[1]), radius: e.radius })
+  }
+
+  // opts: { count, radius } override the species' herd size and home range
+  addHerd(id, x, z, rng, opts = {}) {
     const sp = SPECIES[id]
-    const n = rng.int(sp.herd[0], sp.herd[1])
+    const n = opts.count ?? rng.int(sp.herd[0], sp.herd[1])
     const herd = {
       id: this.herds.length,
       species: id,
       home: { x, z },
-      radius: 30 + sp.radius * 18,
+      radius: opts.radius ?? 30 + sp.radius * 18,
       x,
       z,
       goal: { x, z },

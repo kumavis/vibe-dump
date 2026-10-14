@@ -78,6 +78,25 @@ export class Physics {
     return g
   }
 
+  // groundAt plus what is underfoot: { y, collider }. The collider is the deck
+  // box you stand on (structures give it a `material` for footsteps), or null
+  // on bare terrain.
+  groundInfo(x, z, maxY = Infinity) {
+    let y = this.island.heightAt(x, z)
+    let collider = null
+    const list = this.grid.cellItems(Math.floor(x / 16), Math.floor(z / 16))
+    if (!list) return { y, collider }
+    for (const c of list) {
+      if (c.type !== 'box' || !c.walkable || c.y1 <= y || c.y1 > maxY) continue
+      const [lx, lz] = this.toLocal(c, x, z)
+      if (Math.abs(lx) <= c.hx && Math.abs(lz) <= c.hz) {
+        y = c.y1
+        collider = c
+      }
+    }
+    return { y, collider }
+  }
+
   // Lowest ceiling above y at (x, z) — keeps heads out of roofs.
   ceilingAt(x, z, y) {
     let ceil = Infinity

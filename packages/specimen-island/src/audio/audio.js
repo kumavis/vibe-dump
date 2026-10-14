@@ -1,3 +1,5 @@
+import { playStep, makeNoise } from './footsteps.js'
+
 // Procedural sound: every gunshot, footstep, roar and cricket is synthesised
 // with Web Audio at runtime — no samples. Positional sounds get distance
 // attenuation, stereo pan and distance muffling from the listener's pose.
@@ -290,13 +292,20 @@ export class Audio {
     }
   }
 
+  // The player's own footstep (audio/footsteps.js): heel, toe and the surface
+  // underfoot, alternating feet. `intensity` is 0.35 crouched … 1 sprinting.
   step(surface, intensity) {
     if (!this.ctx || !this.enabled) return
-    const v = 0.08 + intensity * 0.14
-    if (surface === 'brush') this.burst({ dur: 0.16, type: 'bandpass', freq: 2600, q: 0.8, vol: v * 1.4 })
-    else if (surface === 'water') this.burst({ dur: 0.22, type: 'bandpass', freq: 800, q: 1, vol: v * 1.4, sweep: 0.5 })
-    else if (surface === 'gravel') this.burst({ dur: 0.07, type: 'bandpass', freq: 1900, q: 1.5, vol: v })
-    else this.burst({ dur: 0.07, type: 'lowpass', freq: 650, vol: v * 1.1 })
+    this.stepSide = this.stepSide > 0 ? -1 : 1
+    playStep(this.ctx, this.master, this.noise, surface, { intensity, side: this.stepSide })
+  }
+
+  // Test hook: the same footstep rendered offline, to measure its envelope.
+  renderStep(surface, intensity = 0.65, seconds = 0.5) {
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext
+    const ctx = new OAC(2, Math.ceil(44100 * seconds), 44100)
+    playStep(ctx, ctx.destination, makeNoise(ctx), surface, { intensity, side: 1, t: 0.01 })
+    return ctx.startRendering()
   }
 
   // Dinosaur voices from a few synthesis recipes, pitched by body size.
