@@ -6,13 +6,16 @@
   "scripts": { "dev": "vite", "build": "vite build" },
   "gallery": {
     "title": "SloshOS",
-    "description": "Frutiger-aero toy desktop where every window is liquid-filled glass — a duck pond, a glitter flask, a blue lava lamp and a ring clock that all slosh when dragged.",
+    "description": "A 2004-skinned toy OS where every app is a custom-shaped Winamp-style skin full of real particle liquid — a chiptune player whose goo dances to the beat, a water ring-toss puzzle, a lava lamp and a ring clock — over a DeviantArt-abstract wallpaper. Throw them at the walls.",
     "tags": [
       "art",
+      "game",
+      "simulation",
       "kids"
     ],
     "status": "wip",
-    "models": [],
-    "thinking": "unknown"
+    "models": ["Opus 5.5"],
+    "thinking": "unknown",
+    "thumbnail": { "waitFor": "body.ready", "settle": 2200 }
   }
 }
