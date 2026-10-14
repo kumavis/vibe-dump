@@ -66,6 +66,9 @@ export function makeAmp(goo, chip) {
   const spec = new Float32Array(12)
   let kickFlash = 0
   chip.on((e) => {
+    // a minimised amp's liquid isn't stepped, so jets would just pile up
+    // velocity and erupt on restore
+    if (skin.state !== 'open') return
     const vf = viz.fluid, ff = flask.fluid
     const strong = chip.mode === 'play' ? 0.75 : 0.55
     if (e.type === 'kick') {
@@ -130,10 +133,11 @@ export function makeAmp(goo, chip) {
     const m = chip.toggle()
     play.sprite = m === 'play' ? pauseSprite : playSprite
     if (was === 'demo') chip.elapsed = 0
-    viz.fluid.burst(VIZ.w / 2, VIZ.h - 10, 90, 700)
+    if (skin.state === 'open') viz.fluid.burst(VIZ.w / 2, VIZ.h - 10, 90, 700)
   }
   // the tray duck pokes the real ones
   skin.hop = () => {
+    if (skin.state !== 'open') return
     for (const d of ducks) viz.fluid.impulse(d.x, d.y + 10, 26, 0, -700)
   }
   const play = skin.button({ x: 482, y: 64, r: 16, sprite: playSprite, press: () => skin.togglePlay() })
@@ -186,6 +190,17 @@ export function makeAmp(goo, chip) {
 
   // ---- per frame ----
   let mq = 0
+  // the marquee is rendered once into a strip and slid along under the clip
+  const MQ_W = textWidth(TITLE, 2) + 12, MQ_PAD = 2
+  const mqStrip = document.createElement('canvas')
+  mqStrip.width = Math.ceil((MQ_W + MQ_PAD * 2) * RES)
+  mqStrip.height = Math.ceil((14 + MQ_PAD * 2) * RES)
+  {
+    const s = mqStrip.getContext('2d')
+    s.setTransform(RES, 0, 0, RES, MQ_PAD * RES, MQ_PAD * RES)
+    drawText(s, TITLE, 0, 0, { px: 2, color: '#7dffc0', glow: '#7dffc0', lcd: 0.4 })
+  }
+  const mqSW = mqStrip.width / RES, mqSH = mqStrip.height / RES
   skin.drawUnder = null
   skin.drawOver = (ctx, t, dt) => {
     // ducks + bubbles in the goo
@@ -219,10 +234,10 @@ export function makeAmp(goo, chip) {
     }
     // marquee
     mq += dt * 34
-    const tw = textWidth(TITLE, 2) + 12
-    const off = mq % tw
+    const off = mq % MQ_W
     for (let k = 0; k < 2; k++) {
-      drawText(ctx, TITLE, 214 - off + k * tw, 104, { px: 2, color: on, glow: on, lcd: 0.4 })
+      const x = Math.round((214 - off + k * MQ_W - MQ_PAD) * RES) / RES
+      if (x < LCD.x + LCD.w && x + mqSW > LCD.x) ctx.drawImage(mqStrip, x, 104 - MQ_PAD, mqSW, mqSH)
     }
     ctx.restore()
     kickFlash *= Math.exp(-6 * dt)

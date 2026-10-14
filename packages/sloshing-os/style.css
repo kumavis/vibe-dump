@@ -56,17 +56,9 @@ canvas#wp-fx { z-index: 3; }
   mask-image: radial-gradient(ellipse 45% 50% at 0% 0%, #000 0%, transparent 70%);
 }
 
-#desktop { position: fixed; inset: 0; z-index: 10; }
-
-canvas#scroller {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: env(safe-area-inset-bottom, 0px);
-  width: 100%;
-  z-index: 5;
-  pointer-events: none;
-}
+/* the desktop layer and each skin's box let clicks through; only a skin's
+   silhouette-shaped hit div catches them */
+#desktop { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
 
 .skin {
   position: absolute;
@@ -74,11 +66,13 @@ canvas#scroller {
   top: 0;
   transform-origin: 0 0;
   will-change: transform;
+  pointer-events: none;
 }
 .skin > canvas { position: absolute; pointer-events: none; }
 .skin > .hit {
   position: absolute;
   inset: 0;
+  pointer-events: auto;
   cursor: grab;
   touch-action: none;
 }
@@ -88,8 +82,8 @@ canvas#scroller {
 
 #icons {
   position: fixed;
-  left: 10px;
-  top: 82px;
+  left: calc(10px + env(safe-area-inset-left, 0px));
+  top: calc(82px + env(safe-area-inset-top, 0px));
   z-index: 6;
   display: flex;
   flex-direction: column;
@@ -140,7 +134,7 @@ canvas#goobar {
   left: 0;
   right: 0;
   top: 0;
-  height: 60px;
+  height: calc(60px + env(safe-area-inset-top, 0px));
   pointer-events: auto;
   cursor: pointer;
 }
@@ -244,12 +238,14 @@ canvas#goobar {
 
 #startmenu {
   position: fixed;
-  left: 8px;
-  top: 74px;
-  z-index: 950;
+  left: calc(8px + env(safe-area-inset-left, 0px));
+  top: calc(74px + env(safe-area-inset-top, 0px));
+  z-index: 970;
   width: min(440px, calc(100vw - 16px));
   border-radius: 14px 14px 10px 10px;
-  overflow: hidden;
+  max-height: calc(100vh - 82px - env(safe-area-inset-top, 0px));
+  max-height: calc(100dvh - 82px - env(safe-area-inset-top, 0px));
+  overflow: hidden auto;
   color: #fff;
   font-family: 'Trebuchet MS', Tahoma, sans-serif;
   border: 1px solid rgba(190, 235, 255, 0.85);
@@ -344,8 +340,8 @@ canvas#goobar {
 
 #balloon {
   position: fixed;
-  right: 14px;
-  top: 74px;
+  right: calc(14px + env(safe-area-inset-right, 0px));
+  top: calc(74px + env(safe-area-inset-top, 0px));
   z-index: 960;
   width: min(290px, calc(100vw - 28px));
   padding: 10px 28px 11px 13px;
@@ -411,9 +407,68 @@ canvas#goobar {
 #shutdown.show { opacity: 1; pointer-events: auto; }
 #shutdown.boot { opacity: 0; transition: opacity 1.5s 0.1s; }
 
+/* pills drop their labels when they have to share a narrow bar (shell.js
+   decides from the room actually left), and the tray sheds two icons */
+#topbar.compact .task { padding: 0; justify-content: center; }
+#topbar.compact .task .label { display: none; }
+#topbar.tight .tray .ti:nth-child(2), #topbar.tight .tray .ti:nth-child(3) { display: none; }
 @media (max-width: 640px) {
-  .task { padding: 0; justify-content: center; }
-  .task .label { display: none; }
-  .tray .ti:nth-child(2), .tray .ti:nth-child(3) { display: none; }
   #startmenu .sm-app small { display: none; }
+}
+
+/* ---------- boot screen ---------- */
+
+body:not(.ready) #desktop,
+body:not(.ready) #topbar,
+body:not(.ready) #icons,
+body:not(.ready) canvas#goobar { visibility: hidden; }
+
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  color: #dff8ff;
+  font-family: 'Trebuchet MS', Tahoma, sans-serif;
+  background: radial-gradient(60% 50% at 50% 50%, rgba(10, 20, 70, 0.55), rgba(2, 3, 16, 0.85));
+  transition: opacity 0.6s, visibility 0s 0.6s;
+}
+body.ready #boot { opacity: 0; visibility: hidden; pointer-events: none; }
+.bt-logo {
+  font: italic 800 clamp(40px, 9vw, 76px)/1 'Trebuchet MS', Tahoma, sans-serif;
+  letter-spacing: -1px;
+  background: linear-gradient(180deg, #ffffff 0%, #bfefff 42%, #2a7bff 50%, #36f0ff 72%, #a98bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 0 rgba(10, 0, 50, 0.6)) drop-shadow(0 0 18px rgba(80, 230, 255, 0.45));
+}
+.bt-sub { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; }
+.bt-bar {
+  width: min(320px, 70vw);
+  height: 18px;
+  margin-top: 14px;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid rgba(200, 240, 255, 0.7);
+  background: linear-gradient(180deg, rgba(0, 10, 40, 0.8), rgba(20, 30, 90, 0.6));
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 16px rgba(80, 220, 255, 0.3);
+}
+.bt-bar i {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 9px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.1) 45%, transparent 55%),
+    linear-gradient(90deg, #7b3dff, #36f0ff);
+  box-shadow: 0 0 10px rgba(90, 240, 255, 0.8);
+  transition: width 0.35s cubic-bezier(.3, 1.4, .5, 1);
+}
+.bt-msg { font-size: 12px; opacity: 0.7; min-height: 1.2em; }
+@media (prefers-reduced-motion: reduce) {
+  .bt-bar i, #startmenu, #balloon { transition: none; }
 }

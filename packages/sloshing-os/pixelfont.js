@@ -159,7 +159,33 @@ function segPath(ctx, k, x, y, w, h, t) {
   }
 }
 
-export function drawSeg(ctx, str, x, y, { w = 11, h = 20, t = 3, gap = 6, on = '#7dffb0', off = 'rgba(125,255,176,0.08)', glow = null } = {}) {
+// Glowing readouts are cached per string: shadow blur is far too costly to
+// redo every frame for text that changes once a second.
+const segCache = new Map()
+
+export function drawSeg(ctx, str, x, y, opts = {}) {
+  if (!opts.glow) return drawSegRaw(ctx, String(str), x, y, opts)
+  const sc = ctx.getTransform().a || 1
+  const key = `${str}|${sc}|${opts.w}|${opts.h}|${opts.t}|${opts.gap}|${opts.on}|${opts.off}|${opts.glow}`
+  const pad = 8
+  let c = segCache.get(key)
+  if (!c) {
+    const { w = 11, h = 20, t = 3, gap = 6 } = opts
+    let width = 0
+    for (const ch of String(str)) width += ch === ':' ? t + gap : w + gap
+    c = document.createElement('canvas')
+    c.width = Math.ceil((width + pad * 2) * sc)
+    c.height = Math.ceil((h + pad * 2) * sc)
+    const cc = c.getContext('2d')
+    cc.setTransform(sc, 0, 0, sc, pad * sc, pad * sc)
+    drawSegRaw(cc, String(str), 0, 0, opts)
+    if (segCache.size > 48) segCache.delete(segCache.keys().next().value)
+    segCache.set(key, c)
+  }
+  ctx.drawImage(c, x - pad, y - pad, c.width / sc, c.height / sc)
+}
+
+function drawSegRaw(ctx, str, x, y, { w = 11, h = 20, t = 3, gap = 6, on = '#7dffb0', off = 'rgba(125,255,176,0.08)', glow = null } = {}) {
   let cx = x
   for (const ch of String(str)) {
     if (ch === ':') {

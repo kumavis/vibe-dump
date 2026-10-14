@@ -22,8 +22,9 @@ const smooth = (a, b, t) => {
 }
 
 export class GooBar {
-  constructor(res) {
+  constructor(res, top = 0) {
     this.res = res
+    this.top = top // safe-area inset: the slab hangs below a notch
     const max = 9000
     this.src = {
       n: 0, max, s: S, splat: S * 2,
@@ -31,10 +32,12 @@ export class GooBar {
       vx: new Float32Array(max), vy: new Float32Array(max),
       tint: new Float32Array(max), scale: new Float32Array(max),
     }
-    this.goo = new Goo(res)
+    this.goo = new Goo(res, { overlay: true })
     this.vessel = this.goo.add({
       fluid: this.src, x: 0, y: 0, w: innerWidth, h: innerHeight, full: true, pad: 0,
       inside: () => -1,
+      // only shade where goo can be: the slab band, hanging drips, falling drops
+      clip: () => this.clipRects(),
       look: { a: rgb('#7b3dff'), b: rgb('#36f0ff'), glow: rgb('#a8f8ff'), glowAmt: 0.6, caustics: 0.35, alpha: 0.9, alphaEdge: 0.97, deep: 0.55, foam: 0.6, foamSpeed: 1600 },
     })
     // WebGL: the renderer's own canvas is the overlay. Without it, the flat
@@ -54,9 +57,10 @@ export class GooBar {
     this.H = innerHeight
     this.vessel.w = this.W
     this.vessel.h = this.H
-    // one tile the size of the screen: keep it inside the texture limit
+    // one tile the size of the screen: keep it inside the texture limit. The
+    // goo is soft, so 1.5x is plenty even on a 3x phone.
     const cap = (this.goo.maxTex || 4096) - 2
-    this.goo.setRes(Math.min(this.res, cap / this.W, cap / this.H))
+    this.goo.setRes(Math.min(this.res, 1.5, cap / this.W, cap / this.H))
     this.goo.finalize()
     const c = this.view
     if (!this.goo.gl) {
@@ -66,22 +70,48 @@ export class GooBar {
     }
     c.style.width = this.W + 'px'
     c.style.height = this.H + 'px'
+    // keep the wave across resizes (stretched to the new width)
     const n = Math.ceil(this.W / COLS) + 2
+    const oh = this.wh, ov = this.wv
     this.wh = new Float32Array(n)
     this.wv = new Float32Array(n)
-    // drip sites spread along the underside, a few per 300 px
+    if (oh) {
+      for (let i = 0; i < n; i++) {
+        const j = Math.min(oh.length - 1, Math.round((i / n) * oh.length))
+        this.wh[i] = oh[j]
+        this.wv[i] = ov[j]
+      }
+    }
+    // drip sites spread along the underside, one per ~120 px. Existing drips
+    // keep their state and slide to their new homes.
     const count = Math.max(4, Math.round(this.W / 120))
+    const old = this.drips
     this.drips = Array.from({ length: count }, (_, k) => {
+      const home = ((k + 0.5) / count) * this.W
+      const prev = old[k]
+      if (prev) return Object.assign(prev, { home, x: home + (prev.x - prev.home) })
       // start mid-life so the bar is already dripping on the first frame
-      const d = this.newDrip(((k + Math.random()) / count) * this.W, 0)
+      const d = this.newDrip(home, home + rand(-30, 30), 0)
       d.state = 'grow'
       d.L = rand(0.1, 0.85) * d.Lmax
       return d
     })
   }
 
-  newDrip(x, wait = rand(0.6, 4)) {
-    return { x, L: 0, Lmax: rand(30, 130), speed: rand(9, 26), wait, state: 'wait', sway: rand(0, 6.28) }
+  // each site wobbles around its own home, so drips never wander off or clump
+  newDrip(home, x = home + rand(-30, 30), wait = rand(0.6, 4)) {
+    x = Math.min(this.W - 8, Math.max(8, x))
+    return { home, x, L: 0, Lmax: rand(30, 130), speed: rand(9, 26), wait, state: 'wait', sway: rand(0, 6.28) }
+  }
+
+  // screen rects (CSS px) the shading pass has to cover this frame
+  clipRects() {
+    const m = 3 * S
+    let bot = this.top + GOO_D + 30
+    for (const d of this.drips) if (d.L > 1) bot = Math.max(bot, this.surface(d.x) + d.L)
+    const r = [[0, 0, this.W, bot + m]]
+    for (const p of this.drops) r.push([p.x - m, p.y - 16 - m, 2 * m, 16 + 2 * m])
+    return r
   }
 
   // bulge the underside down at screen-x (amount ~ px/s of wave velocity)
@@ -92,8 +122,9 @@ export class GooBar {
       const d = (i - c) / w
       this.wv[i] += amount * Math.exp(-d * d)
     }
-    // hard hits shake drops loose
-    for (let k = 0; k < Math.min(8, amount / 60); k++) {
+    // hard hits shake drops loose; hovering and gentle bumps only wobble
+    const shed = Math.min(8, Math.floor((amount - 60) / 60))
+    for (let k = 0; k < shed; k++) {
       const dx = x + (Math.random() - 0.5) * width * 2
       this.drops.push({ x: dx, y: this.surface(dx) + 4, vy: rand(0, 200), r: rand(0.6, 1.05), vx: (Math.random() - 0.5) * 60 })
     }
@@ -112,7 +143,7 @@ export class GooBar {
   // y of the slab's underside at x
   surface(x) {
     const t = this.t
-    return GOO_D + this.wave(x) + Math.sin(x * 0.045 + t * 1.3) * 1.6 + Math.sin(x * 0.11 - t * 2.1) * 0.9
+    return this.top + GOO_D + this.wave(x) + Math.sin(x * 0.045 + t * 1.3) * 1.6 + Math.sin(x * 0.11 - t * 2.1) * 0.9
   }
 
   slope(x) {
@@ -160,7 +191,7 @@ export class GooBar {
         }
       } else if (d.state === 'snap') {
         d.L -= 90 * dt
-        if (d.L <= 0) Object.assign(d, this.newDrip(d.x + rand(-40, 40)))
+        if (d.L <= 0) Object.assign(d, this.newDrip(d.home))
       }
     }
     for (let i = this.drops.length - 1; i >= 0; i--) {
@@ -186,13 +217,14 @@ export class GooBar {
     }
     // the slab: hex rows down to just above the underside, plus one skin
     // particle per column riding the surface exactly, so the edge is smooth
-    for (let j = 0, py = 3; py < GOO_D + 32; j++, py += S * 0.866) {
+    const deep = this.top + GOO_D
+    for (let j = 0, py = 3; py < deep + 32; j++, py += S * 0.866) {
       for (let px = (j & 1) * S * 0.5; px <= this.W + S; px += S) {
         if (n >= max) break
         const sy = this.surface(px)
         if (py > sy - S * 0.55) continue
         if (this.blocked(px, py)) continue
-        put(px, py, 1, Math.min(1, py / GOO_D))
+        put(px, py, 1, Math.min(1, py / deep))
       }
     }
     for (let px = 0; px <= this.W + S; px += S * 0.8) {

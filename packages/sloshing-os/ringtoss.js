@@ -37,13 +37,15 @@ export function makeRingToss(goo, { onWin, onScore } = {}) {
   const tank = skin.vessel({
     ...TANK,
     inside: rect(4, 4, TANK.w - 8, TANK.h - 8, 30),
-    fluid: { spacing: 8, max: 1100, gravity: 1400, tension: 0.9 },
+    // a deep full tank boils under stiff, heavy settings: softer and lighter
+    // water settles back into a calm pool after every pump
+    fluid: { spacing: 8, max: 1100, gravity: 1000, tension: 0.9, stiffness: 0.5, nearStiffness: 1 },
     fill: (x, y) => y > 64,
     tint: (x, y) => y / TANK.h,
     look: { a: rgb('#6ff2ff'), b: rgb('#2a7bff'), glow: rgb('#c8f9ff'), glowAmt: 0.3, caustics: 0.6, alpha: 0.55, alphaEdge: 0.85, foam: 1.3 },
   })
   const f = tank.fluid
-  f.settle(1.5)
+  f.settle(0.9)
   const bubbles = new Bubbles(f, { rate: 2.5, size: [1, 3] })
   const confetti = new Glitter(f, 70)
   let party = 0
@@ -102,7 +104,7 @@ export function makeRingToss(goo, { onWin, onScore } = {}) {
       const sub = Math.min(1, (cnt / expected) * 1.3)
       // rings are barely denser than water: they drift down, and ride the flow
       const drag = Math.min(1, 9 * DT) * sub
-      const g = f.gravity * (1 - 0.93 * sub)
+      const g = 1400 * (1 - 0.93 * sub)
       if (cnt) { r.vx += (svx / cnt - r.vx) * drag; r.vy += (svy / cnt - r.vy) * drag }
       r.vy += g * DT
       r.vx *= Math.exp(-0.6 * DT)
@@ -232,13 +234,17 @@ export function makeRingToss(goo, { onWin, onScore } = {}) {
 
   addEventListener('keydown', (e) => {
     if (e.repeat) return
-    if (e.key === 'ArrowLeft' || e.key === 'a') pump(0, true)
-    if (e.key === 'ArrowRight' || e.key === 'd') pump(1, true)
+    const k = e.key.toLowerCase()
+    if (k === 'arrowleft' || k === 'a') pump(0, true)
+    if (k === 'arrowright' || k === 'd') pump(1, true)
   })
   addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowLeft' || e.key === 'a') pump(0, false)
-    if (e.key === 'ArrowRight' || e.key === 'd') pump(1, false)
+    const k = e.key.toLowerCase()
+    if (k === 'arrowleft' || k === 'a') pump(0, false)
+    if (k === 'arrowright' || k === 'd') pump(1, false)
   })
+  // a keyup we never see (window switched, Cmd held) must not latch a pump on
+  addEventListener('blur', () => { pump(0, false); pump(1, false) })
 
   // ---- paint ----
   const purple = hex('#8a3dff')

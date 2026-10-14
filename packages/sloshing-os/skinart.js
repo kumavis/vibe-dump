@@ -170,10 +170,17 @@ export class Painter {
     const gh = (bb.y1 - bb.y0) * (opts.gloss ?? 0.42)
     const ga = opts.glossAlpha ?? 0.3
     const e = 0.5
+    // only the rim band and the gloss sheet get any shine: cull the rest
+    // with the same coarse Lipschitz bound part() uses
+    const coarse = this.coarse(f, i0, i1, j0, j1)
+    const gy1 = bb.y0 + gh
     for (let j = j0; j <= j1; j++) {
       const y = (j + 0.5) / res - m
       for (let i = i0; i <= i1; i++) {
         const x = (i + 0.5) / res - m
+        const d0 = coarse.at(i, j)
+        if (d0 > coarse.r + 1) continue
+        if (d0 < -(bev + coarse.r + 1.5) && (ga <= 0 || y >= gy1)) continue
         const d = f(x, y)
         const cov = clamp01(0.5 - d * res)
         if (cov <= 0) continue
@@ -235,9 +242,14 @@ export class Painter {
   // Punch a part out (for holes that must show the desktop through).
   erase(f) {
     const { res, m, W, H, buf } = this
-    for (let j = 0; j < H; j++) {
+    const bb = this.box(f)
+    const i0 = Math.max(0, Math.floor((bb.x0 + m) * res) - 1)
+    const i1 = Math.min(W - 1, Math.ceil((bb.x1 + m) * res) + 1)
+    const j0 = Math.max(0, Math.floor((bb.y0 + m) * res) - 1)
+    const j1 = Math.min(H - 1, Math.ceil((bb.y1 + m) * res) + 1)
+    for (let j = j0; j <= j1; j++) {
       const y = (j + 0.5) / res - m
-      for (let i = 0; i < W; i++) {
+      for (let i = i0; i <= i1; i++) {
         const x = (i + 0.5) / res - m
         const cov = clamp01(0.5 - f(x, y) * res)
         if (cov <= 0) continue

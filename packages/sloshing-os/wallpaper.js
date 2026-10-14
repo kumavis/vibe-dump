@@ -40,14 +40,35 @@ export class Wallpaper {
     const tall = H > W
     this.hud = tall ? { x: W * 0.24, y: H * 0.76, r: Math.min(W, H) * 0.22 } : { x: Math.max(210, W * 0.19), y: H * 0.7, r: Math.min(120, H * 0.16) }
     this.flare = tall ? { x: W * 0.82, y: H * 0.08 } : { x: W * 0.8, y: H * 0.72 }
+    // ribbon gradients only depend on the width
+    this.grads = BUNDLES.map((b) => {
+      const g = this.gctx.createLinearGradient(0, 0, W, 0)
+      g.addColorStop(0, b.c[0])
+      g.addColorStop(0.5, b.c[1])
+      g.addColorStop(1, b.c[2])
+      return g
+    })
+    // text that never changes is baked once instead of drawn every frame
+    const st = (this.still = document.createElement('canvas'))
+    st.width = this.fx.width
+    st.height = this.fx.height
+    const c = st.getContext('2d')
+    c.setTransform(this.res, 0, 0, this.res, 0, 0)
+    const { x, y, r } = this.hud
+    drawText(c, 'LIQUID.SYS', x - 29, y - r * 0.2, { px: 1, color: 'rgba(140,230,255,0.75)' })
+    drawText(c, 'DUCK UPLINK ......... OK', x + r * 0.55, y + r * 1.12, { px: 1, color: 'rgba(140,230,255,0.45)' })
+    drawText(c, 'GOO PRESSURE ...... 4.2 BAR', x + r * 0.55, y + r * 1.12 + 11, { px: 1, color: 'rgba(140,230,255,0.45)' })
+    // the artist's signature, as every wallpaper had
+    c.font = 'italic 600 15px "Brush Script MT", "Segoe Script", cursive'
+    c.fillStyle = 'rgba(190,230,255,0.4)'
+    c.textAlign = 'right'
+    c.fillText('~ sloshboy 2004', W - 18, H - 16)
+    this.frame = 0
+    this.glowDt = 0
   }
 
-  ribbon(ctx, b, t, W, H) {
+  ribbon(ctx, b, g, t, W, H) {
     const steps = 64
-    const g = ctx.createLinearGradient(0, 0, W, 0)
-    g.addColorStop(0, b.c[0])
-    g.addColorStop(0.5, b.c[1])
-    g.addColorStop(1, b.c[2])
     const yAt = (u, i) => {
       const twist = Math.cos(u * Math.PI * 1.3 + t * b.speed * 3 + b.ph)
       return H * (b.y0 + b.slope * u + b.amp * Math.sin(TAU * b.freq * u + b.ph + t * b.speed)) +
@@ -80,9 +101,18 @@ export class Wallpaper {
     ctx.globalAlpha = 1
   }
 
+  // the soft layer drifts slowly enough to redraw at half rate
   render(t, dt) {
-    const { W, H, gctx: g, fctx: f, res } = this
-    // ---- soft layer ----
+    this.glowDt += dt
+    if ((this.frame++ & 1) === 0) {
+      this.renderGlow(t, this.glowDt)
+      this.glowDt = 0
+    }
+    this.renderFx(t, dt)
+  }
+
+  renderGlow(t, dt) {
+    const { W, H, gctx: g } = this
     g.clearRect(0, 0, W, H)
     g.globalCompositeOperation = 'lighter'
     for (const b of this.bokeh) {
@@ -106,7 +136,7 @@ export class Wallpaper {
         g.fillRect(x - b.r, y - b.r, b.r * 2, b.r * 2)
       }
     }
-    for (const b of BUNDLES) this.ribbon(g, b, t, W, H)
+    BUNDLES.forEach((b, k) => this.ribbon(g, b, this.grads[k], t, W, H))
     // flare core + ghosts
     const fl = this.flare
     const pulse = 1 + Math.sin(t * 0.8) * 0.06
@@ -130,8 +160,12 @@ export class Wallpaper {
       g.fill()
     }
     g.globalCompositeOperation = 'source-over'
+  }
 
-    // ---- crisp layer ----
+  renderFx(t, dt) {
+    const { W, H, fctx: f, res } = this
+    const fl = this.flare
+    let rg
     f.setTransform(res, 0, 0, res, 0, 0)
     f.clearRect(0, 0, W, H)
     f.globalCompositeOperation = 'lighter'
@@ -183,12 +217,8 @@ export class Wallpaper {
     }
     f.globalAlpha = 1
     f.globalCompositeOperation = 'source-over'
-    // the artist's signature, as every wallpaper had
-    f.font = 'italic 600 15px "Brush Script MT", "Segoe Script", cursive'
-    f.fillStyle = 'rgba(190,230,255,0.4)'
-    f.textAlign = 'right'
-    f.fillText('~ sloshboy 2004', W - 18, H - 16)
-    f.textAlign = 'left'
+    f.setTransform(1, 0, 0, 1, 0, 0)
+    f.drawImage(this.still, 0, 0)
   }
 
   drawHud(f, t) {
@@ -242,10 +272,7 @@ export class Wallpaper {
     f.moveTo(0, r * 0.5); f.lineTo(0, r * 1.25)
     f.stroke()
     const level = 96 + Math.sin(t * 0.7) * 3
-    drawText(f, 'LIQUID.SYS', -29, -r * 0.2, { px: 1, color: 'rgba(140,230,255,0.75)' })
     drawText(f, `${level.toFixed(1)}%`, -17, -r * 0.2 + 12, { px: 1, color: 'rgba(255,140,230,0.8)' })
     f.restore()
-    drawText(f, 'DUCK UPLINK ......... OK', x + r * 0.55, y + r * 1.12, { px: 1, color: 'rgba(140,230,255,0.45)' })
-    drawText(f, 'GOO PRESSURE ...... 4.2 BAR', x + r * 0.55, y + r * 1.12 + 11, { px: 1, color: 'rgba(140,230,255,0.45)' })
   }
 }

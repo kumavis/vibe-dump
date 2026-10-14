@@ -4,7 +4,7 @@
 // with balloon tips, a start menu that oozes out of the orb, desktop icons,
 // and an honest-to-goodness "It's now safe to turn off your computer."
 
-import { desk, skins, RES } from './skin.js'
+import { desk, skins, RES, safe, readSafe } from './skin.js'
 import { Fluid } from './fluid.js'
 import { Grid, circle } from './sdf.js'
 import { Painter, withShadow } from './skinart.js'
@@ -111,7 +111,7 @@ export class Shell {
     this.layout = layout
     this.onShake = onShake
     this.focused = null
-    desk.ceil = TOP
+    desk.ceil = TOP + safe.t
     desk.onFocus = (s) => this.setFocus(s)
     desk.onState = () => this.syncTasks()
 
@@ -183,7 +183,7 @@ export class Shell {
   // ---- the goo bar --------------------------------------------------------
 
   buildBar() {
-    this.goobar = new GooBar(RES)
+    this.goobar = new GooBar(RES, safe.t)
     const bar = (this.bar = el('div'))
     bar.id = 'topbar'
     // poking the goo itself (anywhere the pills aren't) makes it wobble
@@ -224,10 +224,20 @@ export class Shell {
       b.appendChild(canvasIcon(24, (ctx, s) => ctx.drawImage(skin.icon(s), 0, 0, s, s)))
       b.appendChild(el('span', 'label', skin.title))
       b.title = skin.title
-      b.addEventListener('click', () => this.taskClick(skin))
-      b.addEventListener('pointerdown', (e) => this.goobar.splash(e.clientX, 180, 40))
+      // splash on click, not on press: a press-splash bobs the pill out from
+      // under the pointer and the click never lands
+      b.addEventListener('click', (e) => {
+        this.goobar.splash(e.clientX, 180, 40)
+        this.taskClick(skin)
+      })
       this.tasks.appendChild(b)
       this.taskBtns.set(skin, b)
+      // the jelly orbs on the skin itself
+      skin.onMinimize = () => {
+        const r = b.getBoundingClientRect()
+        skin.minimize(r.left + r.width / 2, r.top + r.height / 2)
+      }
+      skin.onClose = () => skin.close()
     }
 
     const tray = (this.tray = el('div', 'tray'))
@@ -251,9 +261,16 @@ export class Shell {
     bar.appendChild(tray)
     document.body.appendChild(bar)
     this.trayW = 0
+    // resizing rebuilds the full-screen goo targets: do it once things settle
+    let rt = 0
     addEventListener('resize', () => {
-      this.goobar.resize()
-      this.trayW = 0
+      clearTimeout(rt)
+      rt = setTimeout(() => {
+        readSafe()
+        this.goobar.top = safe.t
+        this.goobar.resize()
+        this.trayW = 0
+      }, 160)
     })
   }
 
@@ -262,34 +279,55 @@ export class Shell {
     if (x < 120) this.orbVessel.fluid.burst(ORB / 2, ORB - 10, 30, amount * 1.2)
   }
 
-  // pills, orb and tray bob in the goo; the goo flows around them
+  // pills, orb and tray bob in the goo; the goo flows around them. Pills
+  // share whatever room the orb and tray leave, dropping their labels when
+  // it gets tight.
   float(dt) {
     const g = this.goobar
-    const narrow = innerWidth < 640
-    const pw = narrow ? 44 : 156
-    const gap = narrow ? 6 : 10
+    const top = safe.t
+    const tight = innerWidth - safe.l - safe.r < 520
+    if (tight !== this.tight) {
+      this.tight = tight
+      this.bar.classList.toggle('tight', tight)
+      this.trayW = 0
+    }
+    if (!this.trayW) this.trayW = this.tray.offsetWidth
+    const tw = this.trayW
+    const tx = innerWidth - safe.r - tw - 10
+    const x0 = safe.l + 92
+    const pills = [...this.taskBtns.values()].filter((b) => !b.hidden)
+    const n = Math.max(1, pills.length)
+    const room = tx - 10 - x0
+    let gap = 10
+    let pw = Math.min(156, (room - gap * (n - 1)) / n)
+    const compact = pw < 112
+    if (compact) {
+      gap = 6
+      pw = Math.max(30, Math.min(46, (room - gap * (n - 1)) / n))
+    }
+    if (compact !== this.compact) {
+      this.compact = compact
+      this.bar.classList.toggle('compact', compact)
+    }
     const obs = []
-    const ob = g.wave(44) * 0.5 + Math.sin(g.t * 1.3) * 1.5
-    this.start.style.transform = `translate(0px,${ob}px)`
-    obs.push({ x: 44, y: 30 + ob, r: 30 })
-    let x = narrow ? 80 : 94
-    for (const b of this.taskBtns.values()) {
-      if (b.hidden) continue
+    const ob = top + g.wave(safe.l + 44) * 0.5 + Math.sin(g.t * 1.3) * 1.5
+    this.start.style.transform = `translate(${safe.l}px,${ob}px)`
+    obs.push({ x: safe.l + 44, y: 30 + ob, r: 30 })
+    let x = x0
+    for (const b of pills) {
       let px = this.pillX.get(b) ?? x
       px += (x - px) * Math.min(1, 8 * dt)
       this.pillX.set(b, px)
       const cx = px + pw / 2
-      const y = 9 + g.wave(cx) * 0.45 + Math.sin(g.t * 1.6 + px * 0.02) * 1.6
+      const y = top + 9 + g.wave(cx) * 0.45 + Math.sin(g.t * 1.6 + px * 0.02) * 1.6
       const rot = g.slope(cx) * 0.35 + Math.sin(g.t * 1.1 + px * 0.03) * 0.012
-      if (b.style.width !== pw + 'px') b.style.width = pw + 'px'
+      const wpx = pw.toFixed(1) + 'px'
+      if (b.style.width !== wpx) b.style.width = wpx
       b.style.transform = `translate(${px}px,${y}px) rotate(${rot}rad)`
       obs.push({ x: px, y, w: pw, h: 34 })
       x += pw + gap
     }
-    if (!this.trayW) this.trayW = this.tray.offsetWidth
-    const tw = this.trayW
-    const tx = innerWidth - tw - 10
-    const ty = 9 + g.wave(tx + tw / 2) * 0.45 + Math.sin(g.t * 1.4 + 2) * 1.2
+    const ty = top + 9 + g.wave(tx + tw / 2) * 0.45 + Math.sin(g.t * 1.4 + 2) * 1.2
     this.tray.style.transform = `translate(${tx}px,${ty}px)`
     obs.push({ x: tx, y: ty, w: tw, h: 34 })
     g.obstacles = obs
@@ -400,13 +438,20 @@ export class Shell {
     off.addEventListener('click', () => { this.toggleMenu(false); this.shutdown() })
     foot.appendChild(off)
     m.appendChild(foot)
+    m.inert = true
     document.body.appendChild(m)
   }
 
   toggleMenu(open = !this.menuOpen) {
     this.menuOpen = open
     this.menu.classList.toggle('open', open)
+    // a closed menu must not keep focus, or Space re-fires its last item
+    this.menu.inert = !open
     this.start.classList.toggle('on', open)
+    if (open) {
+      clearTimeout(this.ballT)
+      this.ball?.classList.remove('show')
+    }
   }
 
   // ---- desktop icons ------------------------------------------------------

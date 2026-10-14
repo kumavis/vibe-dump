@@ -62,6 +62,7 @@ const SHADE_FS = (precision) => `
 precision ${precision} float;
 uniform sampler2D uField;
 uniform sampler2D uMask;
+uniform float uNoMask;
 uniform vec2 uFieldSize;
 uniform vec2 uCanvas;
 uniform vec2 uLocalSize;
@@ -99,7 +100,7 @@ float caustic(vec2 p, float t) {
 }
 
 void main() {
-  float mask = texture2D(uMask, vAtlas / uCanvas).a;
+  float mask = uNoMask > 0.5 ? 1.0 : texture2D(uMask, vAtlas / uCanvas).a;
   if (mask < 0.004) { gl_FragColor = vec4(0.0); return; }
   vec4 S = field(vAtlas);
   float f = S.r;
@@ -184,8 +185,11 @@ function program(gl, vs, fs) {
 }
 
 export class Goo {
-  constructor(res) {
+  // overlay: the canvas is shown directly instead of copied out of with
+  // drawImage, so its drawing buffer need not be preserved between frames
+  constructor(res, { overlay = false } = {}) {
     this.res = res
+    this.overlay = overlay
     this.fieldRes = Math.min(1, res * 0.5) // field px per CSS px
     this.vessels = []
     this.canvas = document.createElement('canvas')
@@ -194,10 +198,22 @@ export class Goo {
       console.warn('SloshOS: WebGL liquid unavailable, using flat blobs —', err.message)
       this.gl = null
     }
+    // a GPU reset loses every texture and program: rebuild them on restore
+    this.lost = false
+    this.canvas.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault()
+      this.lost = true
+    })
+    this.canvas.addEventListener('webglcontextrestored', () => {
+      this.maskTex = this.fieldTex = this.fieldFb = null
+      try { this.initGL() } catch (err) { this.gl = null }
+      this.lost = false
+      this.finalize()
+    })
   }
 
   initGL() {
-    const opts = { alpha: true, premultipliedAlpha: true, antialias: false, preserveDrawingBuffer: true, depth: false, stencil: false }
+    const opts = { alpha: true, premultipliedAlpha: true, antialias: false, preserveDrawingBuffer: !this.overlay, depth: false, stencil: false }
     let gl = this.canvas.getContext('webgl2', opts)
     this.webgl2 = !!gl
     if (!gl) gl = this.canvas.getContext('webgl', opts)
@@ -247,16 +263,21 @@ export class Goo {
     this.canvas.width = this.W
     this.canvas.height = this.H
 
-    // masks: each vessel's inside, antialiased, at output resolution
+    // masks: each vessel's inside, antialiased, at output resolution. A
+    // full-coverage vessel skips the mask in the shader, so with WebGL alone
+    // an atlas of only those needs no mask canvas at all.
+    const needMask = !this.gl || this.vessels.some((v) => !v.full)
     const mc = document.createElement('canvas')
-    mc.width = this.W
-    mc.height = this.H
+    mc.width = needMask ? this.W : 1
+    mc.height = needMask ? this.H : 1
     const mctx = mc.getContext('2d')
     for (const v of this.vessels) {
       const { x: rx, y: ry, w, h } = v.rect
       if (v.full) {
-        mctx.fillStyle = '#fff'
-        mctx.fillRect(rx, ry, w, h)
+        if (needMask) {
+          mctx.fillStyle = '#fff'
+          mctx.fillRect(rx, ry, w, h)
+        }
         continue
       }
       const img = mctx.createImageData(w, h)
@@ -341,7 +362,13 @@ export class Goo {
     this.mask = null
   }
 
+  // a skin that's minimised or closed isn't drawn, so neither is its liquid
+  static hidden(v) {
+    return v.skin && v.skin.state !== 'open' && !v.skin.anim
+  }
+
   render(time) {
+    if (this.lost) return
     if (!this.gl) return this.renderFallback()
     const gl = this.gl
     const fs = this.fieldRes
@@ -351,6 +378,7 @@ export class Goo {
     let k = 0
     const d = this.pdata
     for (const v of this.vessels) {
+      if (Goo.hidden(v)) continue
       const f = v.fluid
       const ox = v.rect.x * fpo, oy = v.rect.y * fpo
       const size = Math.min(this.pointMax, f.splat * 2 * fs)
@@ -410,7 +438,9 @@ export class Goo {
     gl.uniform1f(sh.u.uInv, 1 / this.scale)
     gl.uniform1f(sh.u.uTime, time)
     for (const v of this.vessels) {
+      if (Goo.hidden(v)) continue
       const L = v.look
+      gl.uniform1f(sh.u.uNoMask, v.full ? 1 : 0)
       gl.uniform4f(sh.u.uRect, v.rect.x, v.rect.y, v.rect.w, v.rect.h)
       gl.uniform2f(sh.u.uLocalSize, v.w, v.h)
       gl.uniform1f(sh.u.uGradK, 0.8 * v.fluid.s * fs)
@@ -423,13 +453,24 @@ export class Goo {
       gl.uniform1f(sh.u.uCaustics, L.caustics ?? 0.5)
       gl.uniform1f(sh.u.uFoam, L.foam ?? 1)
       gl.uniform1f(sh.u.uDeep, L.deep ?? 0.42)
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+      // a vessel can limit shading to where it knows liquid can be
+      const rects = v.clip?.()
+      if (rects) {
+        const r = this.res
+        gl.enable(gl.SCISSOR_TEST)
+        for (const [x, y, w, h] of rects) {
+          gl.scissor(Math.floor(v.rect.x + x * r), Math.floor(this.H - (v.rect.y + (y + h) * r)), Math.ceil(w * r), Math.ceil(h * r))
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+        }
+        gl.disable(gl.SCISSOR_TEST)
+      } else gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
     }
     gl.disableVertexAttribArray(sh.a.aCorner)
   }
 
   renderFallback() {
     for (const v of this.vessels) {
+      if (Goo.hidden(v)) continue
       const f = v.fluid
       const c = v.flat.getContext('2d')
       const res = this.res
@@ -454,6 +495,7 @@ export class Goo {
 
   // Copy a vessel's liquid into a skin's 2-D context at (x, y) in CSS px.
   blit(ctx, v, x, y) {
+    if (this.lost) return
     if (this.gl) ctx.drawImage(this.canvas, v.rect.x, v.rect.y, v.rect.w, v.rect.h, x, y, v.rect.w / this.res, v.rect.h / this.res)
     else ctx.drawImage(v.flat, x, y, v.rect.w / this.res, v.rect.h / this.res)
   }

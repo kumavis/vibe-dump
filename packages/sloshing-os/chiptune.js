@@ -54,6 +54,12 @@ export class Chip {
     if (this.mode === 'play') { this.mode = 'pause'; this.ac?.suspend(); return this.mode }
     if (!this.ac) this.initAudio()
     this.ac.resume()
+    if (this.ac.state !== 'running') {
+      // a touch pointerdown isn't user activation: start the context on the
+      // release instead (unless pause was pressed in between)
+      const kick = () => { if (this.mode === 'play') this.ac.resume() }
+      for (const ev of ['pointerup', 'touchend', 'click', 'keydown']) addEventListener(ev, kick, { once: true, capture: true })
+    }
     this.mode = 'play'
     this.next = this.ac.currentTime + 0.06
     this.pending.length = 0

@@ -24,7 +24,24 @@ export const skins = all
 // tell when focus or window state changes
 export const desk = { ceil: 0, onFocus: null, onState: null }
 
+// safe-area insets (notches, home bars), read through a probe element since
+// env() is only visible to CSS
+export const safe = { t: 0, l: 0, r: 0, b: 0 }
+const probe = document.createElement('div')
+probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;' +
+  'padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)'
+document.documentElement.appendChild(probe)
+export function readSafe() {
+  const cs = getComputedStyle(probe)
+  safe.t = parseFloat(cs.paddingTop) || 0
+  safe.r = parseFloat(cs.paddingRight) || 0
+  safe.b = parseFloat(cs.paddingBottom) || 0
+  safe.l = parseFloat(cs.paddingLeft) || 0
+}
+readSafe()
+
 const lerp = (a, b, t) => a + (b - a) * t
+const coarse = matchMedia('(pointer: coarse)').matches
 const easeIn = (t) => t * t * t
 const easeOutBack = (t) => 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2)
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
@@ -108,11 +125,17 @@ export class Skin {
     return [(cx - this.x) / this.S, (cy - this.y) / this.S]
   }
 
+  // nearest round button within reach; fingers get at least a 14 px radius
   buttonAt(lx, ly) {
+    const minR = coarse ? 14 / this.S : 0
+    let best = null, bd = Infinity
     for (const b of this.buttons) {
-      if (b.r ? Math.hypot(lx - b.x, ly - b.y) < b.r + 3 : lx > b.x && lx < b.x + b.w && ly > b.y && ly < b.y + b.h) return b
+      if (b.r) {
+        const d = Math.hypot(lx - b.x, ly - b.y)
+        if (d < Math.max(b.r + 3, minR) && d < bd) { best = b; bd = d }
+      } else if (lx > b.x && lx < b.x + b.w && ly > b.y && ly < b.y + b.h) return b
     }
-    return null
+    return best
   }
 
   vesselAt(lx, ly) {
@@ -213,7 +236,8 @@ export class Skin {
 
   wireInput() {
     const hit = this.hit
-    let grabX = 0, grabY = 0, moved = 0, hist = [], last = null, pressed = null
+    let grabX = 0, grabY = 0, moved = 0, hist = [], last = null, dragId = null
+    const pressed = new Map() // pointerId → button, so two thumbs can hold two pumps
     hit.addEventListener('pointerdown', (e) => {
       e.preventDefault()
       if (this.anim) return
@@ -222,13 +246,15 @@ export class Skin {
       const [lx, ly] = this.toLocal(e.clientX, e.clientY)
       const b = this.buttonAt(lx, ly)
       if (b) {
-        pressed = b
+        pressed.set(e.pointerId, b)
         b.down = true
         b.squish = 1
         b.press?.(lx, ly)
         return
       }
+      if (this.dragging) return // a second finger can't steal the drag
       this.dragging = true
+      dragId = e.pointerId
       grabX = e.clientX - this.x
       grabY = e.clientY - this.y
       moved = 0
@@ -236,10 +262,12 @@ export class Skin {
     })
     hit.addEventListener('pointermove', (e) => {
       const [lx, ly] = this.toLocal(e.clientX, e.clientY)
-      if (pressed) { pressed.drag?.(lx, ly); return }
+      const pb = pressed.get(e.pointerId)
+      if (pb) { pb.drag?.(lx, ly); return }
       if (this.dragging) {
+        if (e.pointerId !== dragId) return
         const S = this.S
-        const nx = clamp(e.clientX - grabX, -this.w * S * 0.6, innerWidth - this.w * S * 0.4)
+        const nx = clamp(e.clientX - grabX, safe.l - this.w * S * 0.6, innerWidth - safe.r - this.w * S * 0.4)
         const ny = clamp(e.clientY - grabY, desk.ceil - this.h * S * 0.3, innerHeight - this.h * S * 0.3)
         moved += Math.hypot(nx - this.x, ny - this.y)
         this.x = nx
@@ -261,14 +289,19 @@ export class Skin {
       last = [lx, ly, e.timeStamp]
     })
     const up = (e) => {
-      if (pressed) {
-        pressed.down = false
-        pressed.release?.()
-        pressed = null
+      const pb = pressed.get(e.pointerId)
+      if (pb) {
+        pressed.delete(e.pointerId)
+        // another finger may still be holding the same button
+        if (![...pressed.values()].includes(pb)) {
+          pb.down = false
+          pb.release?.()
+        }
         return
       }
-      if (!this.dragging) return
+      if (!this.dragging || e.pointerId !== dragId) return
       this.dragging = false
+      dragId = null
       const [lx, ly] = this.toLocal(e.clientX, e.clientY)
       if (moved < 5) {
         this.click(lx, ly)
@@ -340,21 +373,23 @@ export class Skin {
       const fr = Math.exp(-2.4 * dt)
       this.tvx *= fr
       this.tvy *= fr
-      const maxX = Math.max(0, innerWidth - this.w * S)
-      const maxY = Math.max(desk.ceil, innerHeight - this.h * S)
+      const maxX = Math.max(safe.l, innerWidth - safe.r - this.w * S)
+      const maxY = Math.max(desk.ceil, innerHeight - safe.b - this.h * S)
+      // past an edge: bounce if moving out, then ease back in over a few
+      // frames rather than snapping (a skin let go deep under the goo)
       const edge = (pos, vel, lo, hi, axis) => {
         if (pos < lo) {
           if (vel < -60) { this.impact(-vel, axis); vel = -vel * 0.55 }
-          vel += (lo - pos) * 40 * dt
-          pos = Math.max(pos, lo - 2)
+          vel += Math.min(lo - pos, 4) * 40 * dt
+          pos = Math.max(pos, lo - 2 - (lo - 2 - pos) * Math.exp(-12 * dt))
         } else if (pos > hi) {
           if (vel > 60) { this.impact(vel, axis); vel = -vel * 0.55 }
-          vel += (hi - pos) * 40 * dt
-          pos = Math.min(pos, hi + 2)
+          vel += Math.max(hi - pos, -4) * 40 * dt
+          pos = Math.min(pos, hi + 2 + (pos - hi - 2) * Math.exp(-12 * dt))
         }
         return [pos, vel]
       }
-      ;[this.x, this.tvx] = edge(this.x, this.tvx, 0, maxX, 'x')
+      ;[this.x, this.tvx] = edge(this.x, this.tvx, safe.l, maxX, 'x')
       ;[this.y, this.tvy] = edge(this.y, this.tvy, desk.ceil, maxY, 'y')
     }
     const nvx = (this.x - this.px) / dt
