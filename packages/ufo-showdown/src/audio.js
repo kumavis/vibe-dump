@@ -77,6 +77,17 @@ function noise({ dur, vol = 0.4, freq = 1200, to = 200, q = 0.8, at = 0 }) {
   src.stop(t0 + dur + 0.05)
 }
 
+// For content packs that want a sound of their own. Both are no-ops while
+// muted or before the first key press.
+export const synth = {
+  tone(opts, name, gap) {
+    if (ready(name ?? 'synth-tone', gap ?? 0.03)) tone(opts)
+  },
+  noise(opts, name, gap) {
+    if (ready(name ?? 'synth-noise', gap ?? 0.03)) noise(opts)
+  },
+}
+
 export const sfx = {
   select() {
     if (!ready('select', 0.03)) return
@@ -147,6 +158,15 @@ export const sfx = {
   revive() {
     if (!ready('revive')) return
     ;[392, 523, 659, 784].forEach((f, i) => tone({ type: 'sine', from: f, dur: 0.2, vol: 0.16, at: i * 0.08 }))
+  },
+  buy() {
+    if (!ready('buy', 0.08)) return
+    ;[880, 1175, 1568].forEach((f, i) => tone({ type: 'triangle', from: f, dur: 0.12, vol: 0.16, at: i * 0.06 }))
+    tone({ type: 'sine', from: 2093, dur: 0.3, vol: 0.08, at: 0.18 })
+  },
+  deny() {
+    if (!ready('deny', 0.12)) return
+    tone({ type: 'square', from: 220, to: 160, dur: 0.18, vol: 0.08 })
   },
   clear() {
     if (!ready('clear')) return

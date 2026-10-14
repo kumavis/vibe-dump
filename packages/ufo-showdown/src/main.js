@@ -5,7 +5,6 @@ import {
   PLAYER_COLORS,
   POWERS,
   SAUCERS,
-  drawShip,
   drawShieldBubble,
   drawSaucer,
   drawBlorp,
@@ -18,7 +17,16 @@ import {
   drawPuff,
   MOTHER,
 } from './art.js'
-import { SLOTTED, MAX_SLOTS, FIRE_DELAY, SHIP_SPEED, SPREADS, addPower, tickPowers, powerLevel, absorbHit } from './powers.js'
+import { SLOTTED, FIRE_DELAY, SHIP_SPEED, SPREADS, addPower, tickPowers, powerLevel, absorbHit } from './powers.js'
+import { MISSIONS, missionIndex } from './missions.js'
+import { starReward, loadout } from './catalog.js'
+import { loadSave, writeSave } from './save.js'
+import { drawShipModel, drawDrone } from './ships.js'
+import { openStore, storeKey } from './store/store.js'
+import asteroidsPack from './content/asteroids/index.js'
+import racePack from './content/race/index.js'
+import nebulaPack from './content/nebula/index.js'
+import ionPack from './content/ion/index.js'
 
 const TAU = Math.PI * 2
 const rand = (a, b) => a + Math.random() * (b - a)
@@ -64,35 +72,14 @@ const playerTop = () => H * 0.5
 
 // ================================================================ game data
 
-const STAGES = [
-  {
-    name: 'The Outer Rim',
-    tint: ['#3b1f7a', '#0f3a6e'],
-    waves: ['snake', 'rain', 'sweep', 'snake', 'rain', 'sweep', 'snake'],
-    fire: 0.6,
-    boss: 'zorb',
-  },
-  {
-    name: 'Saucer Storm',
-    tint: ['#6e1f5a', '#1f2f7a'],
-    waves: ['vee', 'snake', 'divers', 'sweep', 'vee', 'divers', 'rain', 'vee'],
-    fire: 0.85,
-    boss: 'blorp',
-  },
-  {
-    name: 'The Mothership',
-    tint: ['#1f6e5a', '#4a1f7a'],
-    waves: ['gunners', 'snake', 'divers', 'vee', 'gunners', 'sweep', 'divers', 'vee', 'gunners'],
-    fire: 1,
-    boss: 'mothership',
-  },
-]
-
+// Enemy types. The saucers here move along the formation paths in
+// updateEnemy(); content packs add types with their own update/draw (see
+// src/content/README.md).
 const ENEMY = {
   scout: { hp: 1, r: 28, score: 100 },
   zigzag: { hp: 2, r: 26, score: 150 },
   diver: { hp: 2, r: 28, score: 200 },
-  gunner: { hp: 5, r: 36, score: 300 },
+  gunner: { hp: 5, r: 36, score: 300, boom: 1.2 },
 }
 
 const P1_KEYS = { up: 'KeyW', left: 'KeyA', down: 'KeyS', right: 'KeyD' }
@@ -100,9 +87,18 @@ const P2_KEYS = { up: 'ArrowUp', left: 'ArrowLeft', down: 'ArrowDown', right: 'A
 
 // ================================================================ state
 
-let mode = 'menu' // menu | play | pause | over | win
+let mode = 'menu' // menu | map | store | play | pause | over | done | win
 let numPlayers = 1
 let menuSel = 0
+let menuRow = 0 // 0: how many players, 1: the store button
+let mapSel = 0
+let save = loadSave()
+let mission = MISSIONS[0]
+let missionIdx = 0
+let level = null // the running level's definition
+let run = { deaths: 0, finished: false }
+let lastReward = null
+let storeReturn = 'menu'
 let players = []
 let enemies = []
 let pShots = []
@@ -114,12 +110,8 @@ let texts = []
 let lasers = []
 let pending = [] // spawns scheduled a beat apart, so formations string out
 let boss = null
-let stage = 0
-let phase = 'intro' // intro | waves | warning | boss | clear | victory
+let phase = 'intro' // intro | main | warning | boss | clear | victory
 let phaseT = 0
-let waveIndex = 0
-let waveTimer = 0
-let waveCooldown = 0
 let bubbleTimer = 0
 let shake = 0
 let flash = 0
@@ -173,8 +165,81 @@ function popText(x, y, text, color = '#ffffff', size = 18, life = 1.1) {
 
 function addScore(owner, pts, x, y) {
   const p = players[owner] || players[0]
+  if (!p) return
   p.score += pts
   if (x !== undefined) popText(x, y, '+' + pts, p.pal.light, 15, 0.8)
+}
+
+const persist = () => writeSave(save)
+
+// ================================================================ the game API
+//
+// Content packs (src/content/*) get this object as `g`: everything a level,
+// boss or enemy type needs to read the world and act on it. The arrays are
+// replaced every frame as dead things are filtered out, so read them through
+// `g` each time rather than holding on to one. See src/content/README.md.
+const g = {
+  ctx,
+  sfx,
+  rand,
+  pick,
+  clamp,
+  near,
+  TAU,
+  FONT,
+  get W() { return W },
+  get H() { return H },
+  get time() { return time },
+  get phase() { return phase },
+  get phaseT() { return phaseT },
+  get mission() { return mission },
+  get difficulty() { return mission.difficulty },
+  get numPlayers() { return numPlayers },
+  get players() { return players },
+  get enemies() { return enemies },
+  get eShots() { return eShots },
+  set eShots(v) { eShots = v },
+  get pShots() { return pShots },
+  get bubbles() { return bubbles },
+  get lasers() { return lasers },
+  get boss() { return boss },
+  playerTop,
+  alive,
+  nearestPlayer,
+  later,
+  spawn,
+  shoot,
+  aimed,
+  fan,
+  ringShot,
+  popText,
+  addScore,
+  explode,
+  sparks,
+  splash,
+  dropBubble,
+  damageEnemy,
+  damageBoss,
+  startBossDeath,
+  bossEnter,
+  hpMult,
+  hurtPlayer,
+  banner,
+  shake(n) { shake = Math.max(shake, n) },
+  flash(n) { flash = Math.max(flash, n) },
+  // The level's main part is over: on to the boss, or straight to the finish.
+  levelDone() {
+    if (phase !== 'main') return
+    phaseT = 0
+    if (mission.boss) {
+      const def = BOSSES[mission.boss]
+      phase = 'warning'
+      banner(def.warnSub ?? 'Warning!', def.name, 'warn')
+      sfx.siren()
+    } else {
+      phase = 'clear'
+    }
+  },
 }
 
 // ================================================================ particles
@@ -240,25 +305,50 @@ function splash(x, y, color) {
 
 // ================================================================ players
 
+// A ship as it leaves the hangar: hull, paint and upgrades from the save
+// (catalog.js `loadout`), with its starter power-ups already loaded.
 function makePlayer(id) {
-  return {
+  const lo = loadout(save, id)
+  const p = {
     id,
-    pal: PLAYER_COLORS[id],
+    pal: PLAYER_COLORS[id], // team colour: HUD, labels, lasers
+    paint: lo.paint, // what the hull is painted
+    ship: lo.ship,
+    lo,
     x: numPlayers === 1 ? W / 2 : W * (id ? 0.62 : 0.38),
     y: H - 110,
     vx: 0,
     vy: 0,
     tilt: 0,
-    lives: 3,
+    lives: lo.lives,
     alive: true,
     out: false,
     respawn: 0,
     invuln: 2,
     fireCd: 0.4,
-    powers: [], // up to three slots — see powers.js
+    hitR: lo.hitR,
+    maxSlots: lo.slots,
+    powers: [], // see powers.js
+    phoenix: lo.phoenix,
+    carry: null, // something a level has the ship hauling (see content/README.md)
+    droneCd: 0.5,
     score: 0,
     touch: null,
   }
+  for (const st of lo.starters) for (let i = 0; i < st.level; i++) addPower(p.powers, st.type, p.maxSlots)
+  if (lo.lifeShield) addPower(p.powers, 'shield', p.maxSlots)
+  return p
+}
+
+// Where a ship's helper drones fly: off each wingtip, bobbing.
+function dronePositions(p) {
+  const n = p.lo.drones.count
+  const out = []
+  for (let i = 0; i < n; i++) {
+    const side = n === 1 ? -1 : i ? 1 : -1
+    out.push([p.x + side * 48, p.y + 6 + Math.sin(time * 4 + i * 2) * 5])
+  }
+  return out
 }
 
 function steer(p) {
@@ -284,12 +374,13 @@ function updatePlayer(p, dt) {
         p.y = H - 110
         p.vx = p.vy = 0
         p.invuln = 2.5
+        if (p.lo.lifeShield) addPower(p.powers, 'shield', p.maxSlots)
       }
     }
     return
   }
   const top = playerTop()
-  const sp = SHIP_SPEED[powerLevel(p.powers, 'speed')]
+  const sp = SHIP_SPEED[powerLevel(p.powers, 'speed')] * p.lo.speed * (p.carry ? p.carry.slow ?? 0.8 : 1)
   let tvx
   let tvy
   if (p.touch) {
@@ -310,19 +401,47 @@ function updatePlayer(p, dt) {
   p.invuln = Math.max(0, p.invuln - dt)
   tickPowers(p.powers, dt)
 
+  const firing = phase !== 'victory' && !level?.noFire
   p.fireCd -= dt
-  if (p.fireCd <= 0 && phase !== 'victory') {
+  if (p.fireCd <= 0 && firing) {
     p.fireCd = FIRE_DELAY[powerLevel(p.powers, 'rapid')]
     const spd = 900
+    const pierce = p.lo.pierce
     for (const a of SPREADS[powerLevel(p.powers, 'triple')]) {
-      pShots.push({ x: p.x + a * 40, y: p.y - (a ? 30 : 34), vx: Math.sin(a) * spd, vy: -Math.cos(a) * spd, owner: p.id })
+      const x = p.x + a * 40
+      const y = p.y - (a ? 30 : 34)
+      const vx = Math.sin(a) * spd
+      const vy = -Math.cos(a) * spd
+      if (p.lo.twin) {
+        // side by side, square to the direction of travel
+        const ox = Math.cos(a) * 8
+        const oy = Math.sin(a) * 8
+        pShots.push({ x: x - ox, y: y - oy, vx, vy, owner: p.id, pierce })
+        pShots.push({ x: x + ox, y: y + oy, vx, vy, owner: p.id, pierce })
+      } else pShots.push({ x, y, vx, vy, owner: p.id, pierce })
     }
     sfx.zap()
   }
+
+  // helper drones keep up a steady fire of their own
+  if (p.lo.drones.count && firing) {
+    p.droneCd -= dt
+    if (p.droneCd <= 0) {
+      p.droneCd = p.lo.drones.delay
+      for (const [dx, dy] of dronePositions(p)) pShots.push({ x: dx, y: dy - 12, vx: 0, vy: -820, owner: p.id, drone: true })
+    }
+  }
+}
+
+function dropCarry(p) {
+  if (!p.carry) return
+  const c = p.carry
+  p.carry = null
+  c.onDrop?.(p)
 }
 
 function hurtPlayer(p) {
-  if (!p.alive || p.invuln > 0 || phase === 'victory') return
+  if (!p.alive || p.invuln > 0 || phase === 'victory' || phase === 'clear') return
   if (absorbHit(p.powers)) {
     p.invuln = 1.2
     sfx.shieldPop()
@@ -331,6 +450,16 @@ function hurtPlayer(p) {
     popText(p.x, p.y - 50, left ? `Shield blocked it! ×${left} left` : 'Shield saved you!', POWERS.shield.color, 15)
     return
   }
+  if (p.phoenix) {
+    // the Phoenix shrugs off one crash per mission in a blaze of light
+    p.phoenix = false
+    p.invuln = 2.2
+    nova(p)
+    popText(p.x, p.y - 60, 'The Phoenix rises!', '#ffb02e', 20, 1.6)
+    return
+  }
+  run.deaths++
+  dropCarry(p)
   p.lives--
   p.alive = false
   p.powers.length = 0
@@ -355,6 +484,7 @@ function revive(p, by) {
   p.x = clamp(by ? by.x + (p.id ? 70 : -70) : W / 2, 60, W - 60)
   p.y = H - 110
   p.vx = p.vy = 0
+  if (p.lo.lifeShield) addPower(p.powers, 'shield', p.maxSlots)
   sfx.revive()
   splash(p.x, p.y, p.pal.main)
   popText(p.x, p.y - 60, `${p.pal.name} is back!`, p.pal.light, 18, 1.6)
@@ -389,7 +519,7 @@ function collect(p, b) {
   splash(b.x, b.y, info.color)
   let label = info.label + '!'
   if (SLOTTED.has(b.type)) {
-    const { slot, capped, dropped } = addPower(p.powers, b.type)
+    const { slot, capped, dropped } = addPower(p.powers, b.type, p.maxSlots)
     if (capped && b.type === 'shield') {
       addScore(p.id, 250)
       label = 'Max shield! +250'
@@ -403,7 +533,7 @@ function collect(p, b) {
       if (down) {
         revive(down, p)
         label = 'Rescue!'
-      } else if (p.lives < 5) {
+      } else if (p.lives < Math.max(5, p.lo.lives)) {
         p.lives++
         label = '+1 life!'
       } else {
@@ -427,7 +557,7 @@ function nova(p) {
   for (const s of eShots) sparks(s.x, s.y, '#e6c2ff', 3)
   eShots = []
   for (const e of enemies) damageEnemy(e, 4, p.id)
-  if (boss && boss.def.nova) boss.def.nova(boss, p.id)
+  if (boss && !boss.dying && boss.def.nova) boss.def.nova(boss, p.id, g)
 }
 
 // ================================================================ enemies
@@ -461,7 +591,7 @@ function launchWave(kind) {
       break
     }
     case 'rain': {
-      const n = 5 + stage
+      const n = 4 + mission.difficulty
       for (let i = 0; i < n; i++) later(i * 0.45, () => spawn('scout', rand(60, W - 60), -40, { path: 'fall', speed: rand(120, 170) }))
       break
     }
@@ -480,7 +610,7 @@ function launchWave(kind) {
       break
     }
     case 'divers': {
-      const n = stage > 1 ? 3 : 2
+      const n = mission.difficulty >= 4 ? 3 : 2
       for (let i = 0; i < n; i++) later(i * 0.5, () => spawn('diver', (W * (i + 1)) / (n + 1), -40, { path: 'dive', state: 'enter', hoverY: rand(120, 220) }))
       break
     }
@@ -491,8 +621,19 @@ function launchWave(kind) {
   }
 }
 
+const enemyLight = (e) => ENEMY[e.type]?.light ?? SAUCERS[e.type]?.light ?? '#ffffff'
+
 function updateEnemy(e, dt) {
   e.t += dt
+  e.flash = Math.max(0, e.flash - dt * 6)
+  const def = ENEMY[e.type]
+  if (def.update) {
+    // a content pack's own enemy: it moves, shoots and leaves on its own terms
+    def.update(e, dt, g)
+    if (!e.entered && e.y > 0) e.entered = true
+    if (!def.keepOffscreen && e.entered && (e.y > H + 120 || e.y < -200 || e.x < -160 || e.x > W + 160)) e.gone = true
+    return
+  }
   const px = e.x
   switch (e.path) {
     case 'sine':
@@ -548,12 +689,11 @@ function updateEnemy(e, dt) {
       break
   }
   if (dt > 0) e.tilt += (clamp((e.x - px) / dt / 900, -0.25, 0.25) - e.tilt) * Math.min(1, dt * 8)
-  e.flash = Math.max(0, e.flash - dt * 6)
   if (!e.entered && e.y > 0) e.entered = true
 
   // shooting back
   if (e.entered && e.y > 20 && e.y < H * 0.62 && !e.leaving && e.path !== 'dive' && phase !== 'victory') {
-    e.fireT -= dt * STAGES[stage].fire
+    e.fireT -= dt * mission.fire
     if (e.fireT <= 0) {
       if (e.type === 'gunner') {
         aimed(e.x, e.y + 20, 3, 0.16, 250, '#ffb02e', nearestPlayer(e.x, e.y))
@@ -573,14 +713,22 @@ function updateEnemy(e, dt) {
 
 function damageEnemy(e, dmg, owner) {
   if (e.dead) return
+  const def = ENEMY[e.type]
+  if (def.armored?.(e, g)) {
+    sparks(e.x, e.y, '#ffffff', 2)
+    sfx.ting()
+    return
+  }
   e.hp -= dmg
   e.flash = 1
   if (e.hp <= 0) {
     e.dead = true
-    addScore(owner, ENEMY[e.type].score, e.x, e.y - 20)
-    explode(e.x, e.y, SAUCERS[e.type].light, e.type === 'gunner' ? 1.2 : 0.8)
-    sfx.pop(e.type === 'gunner' ? 1.2 : 0.7)
-    if (Math.random() < 0.09) dropBubble(e.x, e.y)
+    if (def.score) addScore(owner, def.score, e.x, e.y - 20)
+    const boom = def.boom ?? 0.8
+    explode(e.x, e.y, enemyLight(e), boom)
+    sfx.pop(boom + (boom > 1 ? 0 : -0.1))
+    if (Math.random() < (def.drop ?? 0.09)) dropBubble(e.x, e.y)
+    def.onDeath?.(e, g, owner)
   } else {
     sfx.hitTick()
   }
@@ -588,7 +736,9 @@ function damageEnemy(e, dmg, owner) {
 
 // ================================================================ bosses
 
-const hpMult = () => (numPlayers === 2 ? 1.5 : 1)
+function hpMult() {
+  return numPlayers === 2 ? 1.5 : 1
+}
 
 function bossEnter(b, dt) {
   if (!b.entering) return false
@@ -620,8 +770,9 @@ function startBossDeath(b) {
   lasers = []
   for (const e of enemies) {
     e.dead = true
-    explode(e.x, e.y, SAUCERS[e.type].light, 0.8)
+    explode(e.x, e.y, enemyLight(e), 0.8)
   }
+  for (const p of players) dropCarry(p)
   shake = Math.max(shake, 10)
 }
 
@@ -814,6 +965,8 @@ const BOSSES = {
 
   mothership: {
     name: 'The Mothership',
+    warnSub: 'Here comes the',
+    hudName: (b) => (b.stage === 1 ? 'Mothership — knock out the turrets!' : 'Supreme Commander Zyx'),
     create() {
       const w = Math.min(W - 40, 980)
       const th = Math.round(35 * hpMult())
@@ -1036,7 +1189,7 @@ const BOSSES = {
 
 function spawnBoss(kind) {
   const def = BOSSES[kind]
-  boss = { kind, def, t: 0, flash: 0, hurt: 0, tilt: 0, entering: true, dying: 0, ...def.create() }
+  boss = { kind, def, t: 0, flash: 0, hurt: 0, tilt: 0, entering: true, dying: 0, ...def.create(g) }
 }
 
 function updateBoss(dt) {
@@ -1060,11 +1213,11 @@ function updateBoss(dt) {
     if (b.dying <= 0) bossDefeated(b)
     return
   }
-  b.def.update(b, dt)
+  b.def.update(b, dt, g)
 }
 
 function bossDefeated(b) {
-  const final = b.kind === 'mothership'
+  const final = !!mission.final
   explode(b.x, b.y, '#ffffff', final ? 5 : 3.5)
   for (let i = 0; i < (final ? 6 : 3); i++) {
     const [ex, ey] = b.def.explodeAt(b)
@@ -1073,18 +1226,19 @@ function bossDefeated(b) {
   sfx.boom()
   flash = 0.8
   shake = 22
-  const bonus = [5000, 8000, 15000][stage]
-  for (const p of players) if (!p.out) addScore(p.id, bonus)
-  popText(W / 2, H * 0.42, `Boss bonus +${bonus}`, '#ffd54a', 26, 2.2)
+  const bonus = mission.bonus
+  if (bonus) {
+    for (const p of players) if (!p.out) addScore(p.id, bonus)
+    popText(W / 2, H * 0.42, `Boss bonus +${bonus}`, '#ffd54a', 26, 2.2)
+  }
+  b.def.defeated?.(b, g)
   boss = null
+  phaseT = 0
   if (final) {
     phase = 'victory'
-    phaseT = 0
     sfx.win()
   } else {
     phase = 'clear'
-    phaseT = 0
-    for (let i = 0; i < 4; i++) later(0.3 + i * 0.35, () => dropBubble(rand(W * 0.2, W * 0.8), -30))
   }
 }
 
@@ -1099,16 +1253,52 @@ function banner(sub, title, cls = '') {
   el.className = ('show ' + cls).trim()
 }
 
-// `?stage=3` starts on a later stage and `?boss` skips straight to its boss —
-// handy for practising a fight without flying the whole run again.
-const params = new URLSearchParams(location.search)
-const startAt = clamp((Number(params.get('stage')) || 1) - 1, 0, STAGES.length - 1)
+// ---------------------------------------------------------------- levels
+//
+// The classic level: saucer formations, one after another, until the list is
+// done and the screen is clear. Content packs bring the others.
+let waveIndex = 0
+let waveTimer = 0
+let waveCooldown = 0
 
-function startGame(n) {
-  numPlayers = n
-  document.body.classList.toggle('solo', n === 1)
-  players = []
-  for (let i = 0; i < n; i++) players.push(makePlayer(i))
+const WAVES_LEVEL = {
+  start() {
+    waveIndex = 0
+    waveTimer = 0
+    waveCooldown = 0
+  },
+  update(_, dt) {
+    if (phase !== 'main') return
+    const waves = mission.waves
+    const live = enemies.length + pending.length
+    waveTimer -= dt
+    waveCooldown -= dt
+    if (waveIndex < waves.length) {
+      if (waveCooldown <= 0 && (waveTimer <= 0 || live === 0)) {
+        launchWave(waves[waveIndex++])
+        waveTimer = 7.3 - mission.difficulty * 0.3
+        waveCooldown = 1.6
+      }
+    } else if (live === 0 || waveTimer < -6) g.levelDone()
+  },
+  progress: () => waveIndex / mission.waves.length,
+}
+
+const LEVELS = { waves: WAVES_LEVEL }
+
+// Each pack adds its levels, bosses and enemy types to the registries.
+for (const pack of [asteroidsPack, racePack, nebulaPack, ionPack]) {
+  Object.assign(LEVELS, pack.levels ?? {})
+  Object.assign(BOSSES, pack.bosses ?? {})
+  Object.assign(ENEMY, pack.enemies ?? {})
+}
+
+// `?mission=belt` jumps straight into a mission from the player choice, and
+// `?boss` skips to its boss — for practising one fight. (Query strings don't
+// survive the artifact viewer, so this only works on the deployed page.)
+const params = new URLSearchParams(location.search)
+
+function clearWorld() {
   enemies = []
   pShots = []
   eShots = []
@@ -1119,78 +1309,59 @@ function startGame(n) {
   lasers = []
   pending = []
   boss = null
-  stage = startAt
-  endTimer = -1
-  mode = 'play'
-  showScreen(null)
-  sfx.start()
-  startStage()
 }
 
-function startStage() {
-  const s = STAGES[stage]
+function startMission(idx) {
+  missionIdx = clamp(idx, 0, MISSIONS.length - 1)
+  mission = MISSIONS[missionIdx]
+  level = LEVELS[mission.level] ?? WAVES_LEVEL
+  document.body.classList.toggle('solo', numPlayers === 1)
+  clearWorld()
+  players = []
+  for (let i = 0; i < numPlayers; i++) players.push(makePlayer(i))
+  run = { deaths: 0, finished: false }
+  endTimer = -1
+  mode = 'play'
   phase = 'intro'
   phaseT = 0
-  waveIndex = 0
-  waveTimer = 0
-  waveCooldown = 0
   bubbleTimer = 5
   stars.targetSpeed = 1
-  stars.setTint(...s.tint)
-  banner(`Stage ${stage + 1}`, s.name)
+  stars.setTint(...mission.tint)
+  showScreen(null)
+  sfx.start()
+  banner(`Mission ${missionIdx + 1}`, mission.name)
+  level.setup?.(g)
 }
 
 function updateFlow(dt) {
   phaseT += dt
-  const s = STAGES[stage]
-  const live = enemies.length + pending.length
+  level.update?.(g, dt)
 
   if (phase === 'intro' && phaseT > 2.4) {
-    phase = 'waves'
+    phase = 'main'
     phaseT = 0
-    if (params.has('boss')) waveIndex = s.waves.length
-  } else if (phase === 'waves') {
-    waveTimer -= dt
-    waveCooldown -= dt
-    if (waveIndex < s.waves.length) {
-      if (waveCooldown <= 0 && (waveTimer <= 0 || live === 0)) {
-        launchWave(s.waves[waveIndex++])
-        waveTimer = 7 - stage * 0.6
-        waveCooldown = 1.6
-      }
-    } else if (live === 0 || waveTimer < -6) {
-      phase = 'warning'
-      phaseT = 0
-      banner(STAGES[stage].boss === 'mothership' ? 'Here comes the' : 'Warning!', bossTitle(s.boss), 'warn')
-      sfx.siren()
-    }
+    level.start?.(g)
+    if (params.has('boss')) g.levelDone()
   } else if (phase === 'warning' && phaseT > 2.8) {
     phase = 'boss'
     phaseT = 0
-    spawnBoss(s.boss)
+    spawnBoss(mission.boss)
   } else if (phase === 'clear') {
     if (phaseT > 0.6 && phaseT - dt <= 0.6) {
-      banner('Stage clear!', stage === 1 ? 'Next: the Mothership' : 'Great flying!', 'clear')
+      banner(mission.boss ? 'Mission complete!' : 'Bonus round complete!', 'Great flying!', 'clear')
       sfx.clear()
       const flying = players.find((q) => !q.out)
       if (flying) for (const p of players) if (p.out) revive(p, flying)
     }
-    if (phaseT > 3.2) stars.targetSpeed = 9
-    if (phaseT > 5) {
-      stage++
-      startStage()
-    }
+    if (phaseT > 3 && phaseT - dt <= 3) stars.targetSpeed = 7
+    if (phaseT > 4.4) endMission(true)
   } else if (phase === 'victory') {
     if (phaseT > 1 && phaseT - dt <= 1) stars.targetSpeed = 0.4
-    if (phaseT > 3 && mode === 'play') {
-      mode = 'win'
-      fillScores('win')
-      showScreen('win')
-    }
+    if (phaseT > 3) endMission(true)
   }
 
   // bubbles drift down on their own every so often
-  if (phase === 'waves' || phase === 'boss') {
+  if ((phase === 'main' || phase === 'boss') && !level.noBubbles) {
     bubbleTimer -= dt
     if (bubbleTimer <= 0) {
       dropBubble(rand(60, W - 60), -30)
@@ -1199,8 +1370,39 @@ function updateFlow(dt) {
   }
 }
 
-function bossTitle(kind) {
-  return BOSSES[kind].name
+// ---------------------------------------------------------------- the payout
+//
+// Every run pays stars, won or lost — less for each ship lost along the way.
+function payOut(cleared) {
+  if (run.finished) return lastReward
+  run.finished = true
+  const score = players.reduce((sum, p) => sum + p.score, 0)
+  const reward = starReward({ score, deaths: run.deaths, cleared, difficulty: mission.difficulty })
+  save.stars += reward.total
+  save.earned += reward.total
+  const best = save.missions.best
+  best[mission.id] = Math.max(best[mission.id] ?? 0, score)
+  if (cleared) {
+    save.missions.cleared[mission.id] = true
+    save.missions.unlocked = Math.max(save.missions.unlocked, Math.min(MISSIONS.length, missionIdx + 2))
+  }
+  persist()
+  lastReward = { ...reward, score, wallet: save.stars, missionId: mission.id }
+  return lastReward
+}
+
+function endMission(cleared) {
+  if (mode !== 'play') return
+  payOut(cleared)
+  const screen = !cleared ? 'over' : mission.final ? 'win' : 'done'
+  mode = screen
+  stars.targetSpeed = 1
+  if (cleared) {
+    if (mission.final) sfx.win()
+  } else sfx.lose()
+  fillEndScreen(screen)
+  showScreen(screen)
+  updateWallet()
 }
 
 // ================================================================ update
@@ -1211,7 +1413,7 @@ function update(dt) {
   shake = Math.max(0, shake - dt * 30)
   flash = Math.max(0, flash - dt * 1.6)
 
-  if (mode === 'menu') {
+  if (inMenus()) {
     updateMenu(dt)
     return
   }
@@ -1272,7 +1474,8 @@ function update(dt) {
 
   // lasers
   for (const L of lasers) {
-    if (L.boss) {
+    if (L.track) L.track(L, g)
+    else if (L.boss) {
       L.x = L.boss.x + L.side * L.boss.podX
       L.y0 = L.boss.y + L.boss.podY + 18
     }
@@ -1289,11 +1492,28 @@ function update(dt) {
   }
   lasers = lasers.filter((L) => !L.dead)
 
-  // bubbles
+  // bubbles drift down and wobble — unless a ship's magnet has hold of them
   for (const b of bubbles) {
     b.t += dt
-    b.y += b.vy * dt
-    b.x = clamp(b.x0 + Math.sin(b.t * 1.6) * 24, 30, W - 30)
+    b.pulledBy = null
+    let best = Infinity
+    for (const p of players) {
+      if (!p.alive || !p.lo.magnet) continue
+      const d = Math.hypot(p.x - b.x, p.y - b.y)
+      if (d < p.lo.magnet && d < best) {
+        best = d
+        b.pulledBy = p
+      }
+    }
+    const p = b.pulledBy
+    b.wob = clamp((b.wob ?? 1) + (p ? -dt * 3 : dt), 0, 1)
+    if (p && best > 1) {
+      const pull = 260 + 380 * (1 - best / p.lo.magnet)
+      const step = Math.min(best, pull * dt)
+      b.x0 += ((p.x - b.x) / best) * step
+      b.y += ((p.y - b.y) / best) * step
+    } else b.y += b.vy * dt
+    b.x = clamp(b.x0 + Math.sin(b.t * 1.6) * 24 * b.wob, 30, W - 30)
     if (b.y > H + 40) b.dead = true
   }
 
@@ -1355,15 +1575,10 @@ function update(dt) {
   texts = texts.filter((t) => t.life > 0)
 
   // game over once nobody is left flying
-  if (mode === 'play' && players.every((p) => p.out)) {
+  if (mode === 'play' && players.every((p) => p.out) && phase !== 'clear' && phase !== 'victory') {
     if (endTimer < 0) endTimer = 2
     endTimer -= dt
-    if (endTimer <= 0) {
-      mode = 'over'
-      sfx.lose()
-      fillScores('over')
-      showScreen('over')
-    }
+    if (endTimer <= 0) endMission(false)
   } else endTimer = -1
 
   // fireworks over the victory screen
@@ -1380,6 +1595,10 @@ function update(dt) {
 }
 
 // ================================================================ menu scene
+
+// The home screen, the mission map and the store share a backdrop of idling
+// saucers; everything else draws the battle.
+const inMenus = () => mode === 'menu' || mode === 'map' || mode === 'store'
 
 function initMenuScene() {
   const kinds = ['scout', 'zigzag', 'diver', 'gunner', 'scout', 'zigzag']
@@ -1415,7 +1634,7 @@ function draw() {
   ctx.setTransform(S * DPR, 0, 0, S * DPR, 0, 0)
   stars.draw(ctx)
 
-  if (mode === 'menu') {
+  if (inMenus()) {
     drawMenu()
     return
   }
@@ -1423,23 +1642,56 @@ function draw() {
   ctx.save()
   if (shake > 0) ctx.translate(rand(-shake, shake) * 0.5, rand(-shake, shake) * 0.5)
 
-  if (boss) boss.def.draw(boss)
-  for (const e of enemies) drawSaucer(ctx, e.x, e.y, e.r, e.type, time + e.seed, { flash: e.flash, tilt: e.tilt })
-  for (const b of bubbles) drawBubble(ctx, b.x, b.y, b.r, b.type, b.t)
+  // a level paints in layers: behind everything, over the enemies (where a fog
+  // hides them) and over the whole field
+  level?.drawBack?.(g, ctx)
+  if (boss) boss.def.draw(boss, g, ctx)
+  for (const e of enemies) {
+    const def = ENEMY[e.type]
+    if (def.draw) def.draw(e, g, ctx)
+    else drawSaucer(ctx, e.x, e.y, e.r, e.type, time + e.seed, { flash: e.flash, tilt: e.tilt })
+  }
+  level?.drawMid?.(g, ctx)
+  for (const b of bubbles) {
+    if (b.pulledBy) {
+      // the magnet's tractor beam
+      const p = b.pulledBy
+      ctx.strokeStyle = hexA(POWERS[b.type].color, 0.35 + 0.15 * Math.sin(time * 20))
+      ctx.lineWidth = 3
+      ctx.setLineDash([6, 6])
+      ctx.lineDashOffset = -time * 60
+      ctx.beginPath()
+      ctx.moveTo(p.x, p.y - 20)
+      ctx.lineTo(b.x, b.y)
+      ctx.stroke()
+      ctx.setLineDash([])
+    }
+    drawBubble(ctx, b.x, b.y, b.r, b.type, b.t)
+  }
 
   ctx.globalCompositeOperation = 'lighter'
-  for (const s of pShots) drawPlayerShot(ctx, s, PLAYER_COLORS[s.owner])
+  for (const s of pShots) {
+    if (!s.drone) drawPlayerShot(ctx, s, PLAYER_COLORS[s.owner])
+    else {
+      ctx.save()
+      ctx.translate(s.x, s.y)
+      ctx.scale(0.6, 0.6)
+      drawPlayerShot(ctx, { x: 0, y: 0, vx: s.vx, vy: s.vy }, PLAYER_COLORS[s.owner])
+      ctx.restore()
+    }
+  }
   ctx.globalCompositeOperation = 'source-over'
 
   for (const p of players) drawPlayer(p)
 
-  for (const L of lasers) drawLaser(ctx, L, H, time)
+  for (const L of lasers) (L.draw ?? drawLaser)(ctx, L, H, time)
   ctx.globalCompositeOperation = 'lighter'
   for (const s of eShots) if (s.kind !== 'mine') drawEnemyShot(ctx, s, time)
   ctx.globalCompositeOperation = 'source-over'
   for (const s of eShots) if (s.kind === 'mine') drawEnemyShot(ctx, s, time)
 
   drawParticles()
+  level?.drawTop?.(g, ctx)
   drawTexts()
   ctx.restore()
 
@@ -1454,8 +1706,10 @@ function drawPlayer(p) {
   if (!p.alive) return
   if (p.invuln > 0 && Math.floor(time * 14) % 2 === 0) ctx.globalAlpha = 0.35
   const moving = Math.min(1, Math.hypot(p.vx, p.vy) / 400)
-  drawShip(ctx, p.x, p.y, p.pal, { tilt: p.tilt, t: time + p.id, thrust: 0.4 + moving * 0.6 - Math.max(0, p.vy / 800) })
+  for (const [dx, dy] of dronePositions(p)) drawDrone(ctx, dx, dy, p.paint, time + p.id)
+  drawShipModel(ctx, p.x, p.y, p.ship, p.paint, { tilt: p.tilt, t: time + p.id, thrust: 0.4 + moving * 0.6 - Math.max(0, p.vy / 800) })
   ctx.globalAlpha = 1
+  p.carry?.draw?.(ctx, p, time)
   const shield = powerLevel(p.powers, 'shield')
   if (shield) drawShieldBubble(ctx, p.x, p.y, time, POWERS.shield.color, shield)
   const speed = powerLevel(p.powers, 'speed')
@@ -1539,19 +1793,22 @@ function drawHUD() {
   if (boss && !boss.entering) {
     const bw = Math.min(W * 0.46, 520)
     const frac = Math.max(0, boss.hp / boss.maxHp)
-    let name = boss.def.name
-    if (boss.kind === 'mothership') name = boss.stage === 1 ? 'Mothership — knock out the turrets!' : 'Supreme Commander Zyx'
+    const name = boss.def.hudName?.(boss) ?? boss.def.name
     ctx.font = `15px ${FONT}`
     ctx.fillStyle = '#ffb3b3'
     ctx.fillText(name, cx, 28)
     drawBar(cx - bw / 2, 38, bw, 14, frac, boss.rage ? '#ff3b3b' : '#ff5a6a')
-  } else if (phase === 'waves' || phase === 'intro') {
-    const s = STAGES[stage]
-    const bw = Math.min(W * 0.3, 280)
-    ctx.font = `13px ${FONT}`
-    ctx.fillStyle = '#a9b3d6'
-    ctx.fillText(`Stage ${stage + 1} · ${s.name}`, cx, 26)
-    drawBar(cx - bw / 2, 34, bw, 8, waveIndex / s.waves.length, '#7d8cff')
+    boss.def.hud?.(boss, g, ctx)
+  } else if (phase === 'main' || phase === 'intro') {
+    if (level.hud) level.hud(g, ctx)
+    else {
+      const bw = Math.min(W * 0.3, 280)
+      ctx.font = `13px ${FONT}`
+      ctx.fillStyle = '#a9b3d6'
+      ctx.textAlign = 'center'
+      ctx.fillText(`Mission ${missionIdx + 1} · ${mission.name}`, cx, 26)
+      drawBar(cx - bw / 2, 34, bw, 8, clamp(level.progress?.(g) ?? 0, 0, 1), '#7d8cff')
+    }
   }
 
   ctx.font = `11px ${FONT}`
@@ -1597,12 +1854,19 @@ function drawPlayerHUD(p) {
     ctx.fillText(numPlayers === 2 ? 'Down! Partner: grab a heart' : 'Out of ships', x, 80)
     return
   }
-  // lives as tiny ships
-  for (let i = 0; i < p.lives; i++) {
-    drawShip(ctx, x + dir * (12 + i * 24), 82, p.pal, { scale: 0.32, t: time, thrust: 0.2 })
+  // lives as tiny ships, with a count once there are too many to draw
+  const shown = Math.min(p.lives, 5)
+  for (let i = 0; i < shown; i++) {
+    drawShipModel(ctx, x + dir * (12 + i * 24), 82, p.ship, p.paint, { scale: 0.32, t: time, thrust: 0.2 })
   }
-  // the three power-up slots, oldest first, each with its timer ring and stack
-  for (let k = 0; k < MAX_SLOTS; k++) {
+  if (p.lives > shown) {
+    ctx.font = `13px ${FONT}`
+    ctx.textAlign = align
+    ctx.fillStyle = '#ffffff'
+    ctx.fillText(`+${p.lives - shown}`, x + dir * (12 + shown * 24 - 6), 88)
+  }
+  // the power-up slots, oldest first, each with its timer ring and stack
+  for (let k = 0; k < p.maxSlots; k++) {
     const slot = p.powers[k]
     const ix = x + dir * (16 + k * 36)
     const iy = 114
@@ -1649,34 +1913,59 @@ function drawPlayerHUD(p) {
 
 const screens = {
   menu: document.getElementById('menu'),
+  map: document.getElementById('map'),
+  store: document.getElementById('store'),
   pause: document.getElementById('pause'),
   over: document.getElementById('over'),
+  done: document.getElementById('done'),
   win: document.getElementById('win'),
 }
+const walletEl = document.getElementById('wallet')
+const toastEl = document.getElementById('toast')
 
 function showScreen(name) {
   for (const k in screens) screens[k].classList.toggle('show', k === name)
-  if (name && name !== 'menu') selectButton(screens[name], 0)
+  if (name && screens[name].querySelector('.buttons')) selectButton(screens[name], 0)
+  // the wallet rides along everywhere except mid-flight
+  walletEl.classList.toggle('show', !!name && name !== 'pause')
+}
+
+function updateWallet() {
+  walletEl.querySelector('.n').textContent = save.stars.toLocaleString()
+  document.querySelectorAll('[data-wallet]').forEach((el) => (el.textContent = save.stars.toLocaleString()))
+}
+
+let toastTimer = 0
+function toast(text) {
+  toastEl.textContent = text
+  toastEl.classList.remove('show')
+  void toastEl.offsetWidth
+  toastEl.classList.add('show')
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600)
 }
 
 function selectButton(screen, i) {
-  const btns = [...screen.querySelectorAll('.buttons button')]
+  const btns = [...screen.querySelectorAll('.buttons button:not([hidden])')]
   btns.forEach((b, j) => b.classList.toggle('sel', j === i))
 }
 
 function moveButton(screen, d) {
-  const btns = [...screen.querySelectorAll('.buttons button')]
+  const btns = [...screen.querySelectorAll('.buttons button:not([hidden])')]
   const i = btns.findIndex((b) => b.classList.contains('sel'))
   selectButton(screen, (i + d + btns.length) % btns.length)
   sfx.select()
 }
 
 function activeButton(screen) {
-  return screen.querySelector('.buttons button.sel')
+  return screen.querySelector('.buttons button.sel:not([hidden])')
 }
 
-function fillScores(name) {
-  const box = screens[name].querySelector('.scores')
+// Scores and what the run paid, on the game-over, mission-complete and
+// victory screens.
+function fillEndScreen(name) {
+  const sc = screens[name]
+  const box = sc.querySelector('.scores')
   box.innerHTML = ''
   const card = (cls, who, pts) => {
     const d = document.createElement('div')
@@ -1692,30 +1981,204 @@ function fillScores(name) {
     card('p2', 'Player 2', players[1].score)
     card('team', 'Team', players[0].score + players[1].score)
   }
+
+  const r = lastReward
+  const list = sc.querySelector('.reward')
+  list.innerHTML = ''
+  const line = (label, value, cls = '') => {
+    const li = document.createElement('li')
+    li.className = cls
+    li.innerHTML = '<span class="k"></span><span class="v"></span>'
+    li.querySelector('.k').textContent = label
+    li.querySelector('.v').textContent = value
+    list.appendChild(li)
+  }
+  line(`Score ${r.score.toLocaleString()}`, `★ ${r.base}`)
+  if (r.deaths) {
+    line(`${r.deaths} ${r.deaths === 1 ? 'ship' : 'ships'} lost (−${Math.round(r.penalty * 100)}%)`, `★ ${r.kept}`, 'minus')
+  }
+  if (r.clearBonus) line('Mission cleared', `+★ ${r.clearBonus}`, 'plus')
+  line('Stars earned', `+★ ${r.total}`, 'total')
+  sc.querySelector('.wallet-line').textContent = `You have ★ ${r.wallet.toLocaleString()}`
+
+  if (name === 'done') {
+    sc.querySelector('h2').textContent = mission.boss ? 'Mission complete!' : 'Bonus round complete!'
+    const next = MISSIONS[missionIdx + 1]
+    const btn = sc.querySelector('[data-act="next"]')
+    btn.hidden = !next
+    if (next) btn.textContent = `Next: ${next.name}`
+  }
+  if (name === 'over') sc.querySelector('.lead').textContent = run.deaths ? 'Every ship got knocked out — but you still earned stars!' : 'The aliens got away this time…'
 }
+
+// ---------------------------------------------------------------- home
 
 function setMenuSel(i) {
   if (i !== menuSel) sfx.select()
   menuSel = i
-  document.querySelectorAll('.choice').forEach((b, j) => b.classList.toggle('sel', j === i))
+  numPlayers = i + 1
+  save.players = numPlayers
+  document.querySelectorAll('.choice').forEach((b, j) => b.classList.toggle('sel', j === i && menuRow === 0))
   document.body.classList.toggle('solo', i === 0)
+}
+
+function setMenuRow(r) {
+  if (r !== menuRow) sfx.select()
+  menuRow = r
+  document.getElementById('storeBtn').classList.toggle('sel', r === 1)
+  setMenuSel(menuSel)
 }
 
 function goHome() {
   mode = 'menu'
+  clearWorld()
   players = []
-  boss = null
-  enemies = []
-  eShots = []
-  pShots = []
-  lasers = []
-  bubbles = []
-  pending = []
   stars.targetSpeed = 1
   document.getElementById('banner').className = ''
+  menuRow = 0
+  setMenuRow(0)
+  paintMenuArt()
   showScreen('menu')
-  setMenuSel(menuSel)
+  updateWallet()
 }
+
+// ---------------------------------------------------------------- mission map
+
+function goMap(select) {
+  mode = 'map'
+  clearWorld()
+  players = []
+  stars.targetSpeed = 1
+  document.getElementById('banner').className = ''
+  persist()
+  const open = save.missions.unlocked
+  mapSel = clamp(select ?? Math.min(open - 1, MISSIONS.length - 1), 0, open - 1)
+  renderMap()
+  showScreen('map')
+  updateWallet()
+}
+
+function renderMap() {
+  const grid = screens.map.querySelector('.missions')
+  grid.innerHTML = ''
+  MISSIONS.forEach((m, i) => {
+    const locked = i >= save.missions.unlocked
+    const cleared = !!save.missions.cleared[m.id]
+    const card = document.createElement('button')
+    card.type = 'button'
+    card.className = 'mission' + (locked ? ' locked' : '') + (cleared ? ' cleared' : '') + (i === mapSel ? ' sel' : '')
+    card.dataset.idx = i
+    card.innerHTML = `
+      <canvas class="micon" width="160" height="100" aria-hidden="true"></canvas>
+      <span class="mnum"></span>
+      <span class="mname"></span>
+      <span class="danger" aria-label=""></span>
+      <span class="mblurb"></span>
+      <span class="mbest"></span>`
+    card.querySelector('.mnum').textContent = m.boss ? `Mission ${i + 1}` : `Mission ${i + 1} · Bonus`
+    card.querySelector('.mname').textContent = locked ? '???' : m.name
+    const danger = card.querySelector('.danger')
+    danger.setAttribute('aria-label', `Danger ${m.difficulty} of 5`)
+    for (let k = 0; k < 5; k++) {
+      const pip = document.createElement('i')
+      if (k < m.difficulty) pip.className = 'on'
+      danger.appendChild(pip)
+    }
+    card.querySelector('.mblurb').textContent = locked ? `Clear mission ${i} to unlock` : m.blurb
+    const best = save.missions.best[m.id]
+    card.querySelector('.mbest').textContent = cleared ? `Cleared · best ${best.toLocaleString()}` : best ? `Best ${best.toLocaleString()}` : ''
+    card.addEventListener('mouseenter', () => selectMission(i))
+    card.addEventListener('click', () => {
+      unlockAudio()
+      if (!locked) startMission(i)
+    })
+    grid.appendChild(card)
+    paintMissionIcon(card.querySelector('canvas'), m, locked)
+  })
+}
+
+function selectMission(i) {
+  i = clamp(i, 0, MISSIONS.length - 1)
+  if (i === mapSel) return
+  mapSel = i
+  sfx.select()
+  screens.map.querySelectorAll('.mission').forEach((c, j) => c.classList.toggle('sel', j === i))
+  screens.map.querySelector('.mission.sel')?.scrollIntoView({ block: 'nearest' })
+}
+
+// How many cards sit in one row of the map grid right now.
+function mapColumns() {
+  const cards = [...screens.map.querySelectorAll('.mission')]
+  if (cards.length < 2) return 1
+  const top = cards[0].offsetTop
+  const n = cards.findIndex((c) => c.offsetTop !== top)
+  return n < 0 ? cards.length : n
+}
+
+function paintMissionIcon(canvas, m, locked) {
+  const c = canvas.getContext('2d')
+  c.setTransform(2, 0, 0, 2, 0, 0)
+  const w = 80
+  const h = 50
+  c.fillStyle = '#0b0726'
+  c.fillRect(0, 0, w, h)
+  const lv = LEVELS[m.level]
+  if (lv?.icon && m.level !== 'waves') lv.icon(c, w, h)
+  else {
+    // the classic missions show their boss's ship
+    if (m.boss === 'mothership') {
+      c.fillStyle = '#7a70b8'
+      c.beginPath()
+      c.ellipse(40, 22, 36, 9, 0, 0, TAU)
+      c.fill()
+      c.fillStyle = '#a49bcf'
+      c.beginPath()
+      c.ellipse(40, 18, 18, 7, 0, Math.PI, TAU)
+      c.fill()
+      c.fillStyle = 'rgba(160,255,240,0.7)'
+      c.beginPath()
+      c.arc(40, 30, 7, 0, TAU)
+      c.fill()
+    } else drawSaucer(c, 40, 30, 26, m.boss === 'blorp' ? 'blorp' : 'zorb', 1.3)
+  }
+  if (locked) {
+    c.fillStyle = 'rgba(8,5,24,0.72)'
+    c.fillRect(0, 0, w, h)
+    c.fillStyle = '#a9b3d6'
+    c.fillRect(33, 24, 14, 11)
+    c.strokeStyle = '#a9b3d6'
+    c.lineWidth = 2.2
+    c.beginPath()
+    c.arc(40, 24, 5, Math.PI, TAU)
+    c.stroke()
+  }
+}
+
+// ---------------------------------------------------------------- store
+
+function goStore(from) {
+  storeReturn = from
+  mode = 'store'
+  showScreen('store')
+  updateWallet()
+  openStore({
+    root: screens.store,
+    save,
+    numPlayers,
+    persist() {
+      persist()
+      updateWallet()
+    },
+    sfx,
+    onClose() {
+      persist()
+      if (storeReturn === 'map') goMap(mapSel)
+      else goHome()
+    },
+  })
+}
+
+// ---------------------------------------------------------------- in flight
 
 function pause() {
   if (mode !== 'play') return
@@ -1730,42 +2193,81 @@ function resume() {
   last = performance.now()
 }
 
+// Leaving mid-mission still pays for what you did.
+function quitMission() {
+  if (mode !== 'pause' && mode !== 'play') return
+  mode = 'play'
+  const r = payOut(false)
+  goMap(missionIdx)
+  if (r.total) toast(`You earned ★ ${r.total}`)
+}
+
 function act(name) {
   if (name === 'resume') resume()
+  else if (name === 'quit') quitMission()
   else if (name === 'home') goHome()
-  else if (name === 'again') startGame(numPlayers)
+  else if (name === 'map') goMap(missionIdx)
+  else if (name === 'store') goStore(mode === 'menu' ? 'menu' : 'map')
+  else if (name === 'again') startMission(missionIdx)
+  else if (name === 'next') startMission(missionIdx + 1)
 }
 
 const keys = new Set()
 const GAME_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'])
-const LEFTISH = new Set(['KeyA', 'ArrowLeft', 'KeyW', 'ArrowUp'])
-const RIGHTISH = new Set(['KeyD', 'ArrowRight', 'KeyS', 'ArrowDown'])
+const LEFT = new Set(['KeyA', 'ArrowLeft'])
+const RIGHT = new Set(['KeyD', 'ArrowRight'])
+const UP = new Set(['KeyW', 'ArrowUp'])
+const DOWN = new Set(['KeyS', 'ArrowDown'])
+const OK = new Set(['Enter', 'Space', 'NumpadEnter'])
+
+function chooseFromMenu() {
+  if (menuRow === 1) return goStore('menu')
+  const direct = missionIndex(params.get('mission') ?? '')
+  if (direct >= 0) startMission(direct)
+  else goMap()
+}
 
 window.addEventListener('keydown', (e) => {
   unlockAudio()
-  if (GAME_KEYS.has(e.code)) e.preventDefault()
+  if (GAME_KEYS.has(e.code) && mode !== 'store') e.preventDefault()
   keys.add(e.code)
-  if (e.repeat) return
-  if (e.code === 'KeyM') toggleMute()
+  if (e.repeat && mode !== 'map' && mode !== 'store') return
+  if (e.code === 'KeyM' && mode !== 'store') toggleMute()
 
   if (mode === 'menu') {
-    if (LEFTISH.has(e.code)) setMenuSel(0)
-    else if (RIGHTISH.has(e.code)) setMenuSel(1)
-    else if (e.code === 'Digit1' || e.code === 'Numpad1') startGame(1)
-    else if (e.code === 'Digit2' || e.code === 'Numpad2') startGame(2)
-    else if (e.code === 'Enter' || e.code === 'Space') startGame(menuSel + 1)
+    if (LEFT.has(e.code)) menuRow === 0 ? setMenuSel(0) : setMenuRow(0)
+    else if (RIGHT.has(e.code)) menuRow === 0 ? setMenuSel(1) : setMenuRow(0)
+    else if (DOWN.has(e.code)) setMenuRow(1)
+    else if (UP.has(e.code)) setMenuRow(0)
+    else if (e.code === 'Digit1' || e.code === 'Numpad1') (setMenuSel(0), goMap())
+    else if (e.code === 'Digit2' || e.code === 'Numpad2') (setMenuSel(1), goMap())
+    else if (e.code === 'KeyT') goStore('menu')
+    else if (OK.has(e.code)) chooseFromMenu()
+  } else if (mode === 'map') {
+    const cols = mapColumns()
+    if (LEFT.has(e.code)) selectMission(mapSel - 1)
+    else if (RIGHT.has(e.code)) selectMission(mapSel + 1)
+    else if (UP.has(e.code)) selectMission(mapSel - cols)
+    else if (DOWN.has(e.code)) selectMission(mapSel + cols)
+    else if (e.code === 'KeyT') goStore('map')
+    else if (e.code === 'Escape' || e.code === 'Backspace' || e.code === 'KeyH') goHome()
+    else if (OK.has(e.code) && mapSel < save.missions.unlocked) startMission(mapSel)
+    if (GAME_KEYS.has(e.code)) e.preventDefault()
+  } else if (mode === 'store') {
+    storeKey(e)
   } else if (mode === 'play') {
     if (e.code === 'KeyP' || e.code === 'Escape') pause()
   } else if (mode === 'pause') {
     if (e.code === 'KeyP' || e.code === 'Escape') resume()
-    else if (e.code === 'KeyH') goHome()
-    else if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'KeyA' || e.code === 'KeyD') moveButton(screens.pause, 1)
-    else if (e.code === 'Enter' || e.code === 'Space') act(activeButton(screens.pause).dataset.act)
-  } else if (mode === 'over' || mode === 'win') {
+    else if (e.code === 'KeyQ') quitMission()
+    else if (LEFT.has(e.code) || RIGHT.has(e.code)) moveButton(screens.pause, LEFT.has(e.code) ? -1 : 1)
+    else if (OK.has(e.code)) act(activeButton(screens.pause).dataset.act)
+  } else if (mode === 'over' || mode === 'done' || mode === 'win') {
     const sc = screens[mode]
-    if (e.code === 'KeyH' || e.code === 'Escape') goHome()
-    else if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'KeyA' || e.code === 'KeyD') moveButton(sc, 1)
-    else if (e.code === 'Enter' || e.code === 'Space') act(activeButton(sc).dataset.act)
+    if (e.code === 'Escape' || e.code === 'KeyH') goMap(missionIdx)
+    else if (e.code === 'KeyT') goStore('map')
+    else if (LEFT.has(e.code) || RIGHT.has(e.code)) moveButton(sc, LEFT.has(e.code) ? -1 : 1)
+    else if (OK.has(e.code)) act(activeButton(sc).dataset.act)
   }
 })
 window.addEventListener('keyup', (e) => keys.delete(e.code))
@@ -1778,11 +2280,21 @@ document.addEventListener('visibilitychange', () => {
 })
 
 document.querySelectorAll('.choice').forEach((b, i) => {
-  b.addEventListener('mouseenter', () => setMenuSel(i))
+  b.addEventListener('mouseenter', () => {
+    menuRow = 0
+    setMenuRow(0)
+    setMenuSel(i)
+  })
   b.addEventListener('click', () => {
     unlockAudio()
-    startGame(Number(b.dataset.players))
+    menuRow = 0
+    setMenuSel(i)
+    chooseFromMenu()
   })
+})
+document.getElementById('storeBtn').addEventListener('click', () => {
+  unlockAudio()
+  goStore('menu')
 })
 document.querySelectorAll('.buttons button').forEach((b) => {
   b.addEventListener('click', () => {
@@ -1816,15 +2328,50 @@ canvas.addEventListener('pointercancel', release)
 
 // ================================================================ boot
 
+// `?debug` puts a handle on the window for playtesting from a script: god mode,
+// handing out power-ups, jumping into a mission or editing the save.
+if (params.has('debug')) {
+  window.__ufo = {
+    g,
+    get mode() { return mode },
+    get save() { return save },
+    start(id, n = 1) {
+      numPlayers = n
+      startMission(Math.max(0, missionIndex(id)))
+    },
+    god(on = true) { for (const p of players) p.invuln = on ? 1e9 : 0 },
+    give(i, type) {
+      const p = players[i]
+      if (p) collect(p, { type, x: p.x, y: p.y - 60 })
+    },
+    steer(i, x, y) {
+      const p = players[i]
+      if (p) p.touch = x == null ? null : { id: -1, x, y: y ?? H - 40 }
+    },
+    skip() { g.levelDone() },
+    setSave(patch) {
+      Object.assign(save, patch)
+      persist()
+      paintMenuArt()
+      updateWallet()
+    },
+  }
+}
+
+// The home screen's ships show what each player has equipped in the store.
 function paintMenuArt() {
   for (const c of document.querySelectorAll('.shipicon')) {
-    const g = c.getContext('2d')
     const id = Number(c.dataset.player)
+    const lo = loadout(save, id)
     c.width = 96
     c.height = 108
-    g.scale(1.5, 1.5)
-    drawShip(g, 32, 38, PLAYER_COLORS[id], { thrust: 0.6 })
+    const g2 = c.getContext('2d')
+    g2.scale(1.5, 1.5)
+    drawShipModel(g2, 32, 38, lo.ship, lo.paint, { thrust: 0.6, t: 0 })
   }
+}
+
+function paintLegend() {
   const list = document.querySelector('.legend')
   for (const [type, info] of Object.entries(POWERS)) {
     const li = document.createElement('li')
@@ -1855,6 +2402,10 @@ function frame(now) {
 resize()
 initMenuScene()
 paintMenuArt()
-setMenuSel(0)
+paintLegend()
+setMenuSel(save.players - 1)
+setMenuRow(0)
+updateWallet()
+showScreen('menu')
 document.fonts.load(`16px ${FONT}`).finally(() => document.body.classList.add('ready'))
 requestAnimationFrame(frame)

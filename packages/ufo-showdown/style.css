@@ -248,6 +248,167 @@ kbd.sm { font-size: 11px; min-width: 22px; height: 22px; border-width: 1.5px; bo
 .score.p2 .who { color: var(--p2); }
 .score.team .who { color: var(--gold); }
 
+/* ---------- wallet, toast, store button ---------- */
+
+#wallet {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  border-radius: 999px;
+  background: rgba(14, 10, 42, 0.8);
+  border: 1px solid rgba(255, 213, 74, 0.45);
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+#wallet.show { opacity: 1; visibility: visible; transition: opacity 0.3s ease; }
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 6;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border-radius: 14px;
+  background: rgba(14, 10, 42, 0.92);
+  border: 1px solid rgba(255, 213, 74, 0.5);
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: 18px;
+  pointer-events: none;
+  opacity: 0;
+}
+#toast.show { animation: toast 2.6s ease both; }
+@keyframes toast {
+  0% { opacity: 0; transform: translate(-50%, 12px); }
+  10%, 80% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -6px); }
+}
+
+.store-btn {
+  font: inherit;
+  font-family: var(--display);
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 213, 74, 0.35);
+  background: rgba(40, 28, 10, 0.55);
+  color: var(--gold);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.store-btn .bal {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255, 213, 74, 0.15);
+  font-variant-numeric: tabular-nums;
+}
+.store-btn:hover, .store-btn.sel {
+  transform: scale(1.04);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(255, 213, 74, 0.18);
+}
+.store-btn:focus-visible { outline: none; }
+.hint .star { color: var(--gold); font-weight: 400; }
+
+/* ---------- mission map ---------- */
+
+.panel.map { max-width: 1040px; }
+.panel.map > .lead { margin-bottom: 18px; }
+.missions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  text-align: left;
+}
+.mission {
+  font: inherit;
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "icon icon"
+    "num danger"
+    "name name"
+    "blurb blurb"
+    "best best";
+  gap: 4px 8px;
+  align-content: start;
+  padding: 10px 12px 12px;
+  border-radius: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: rgba(14, 10, 42, 0.78);
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.mission:focus-visible { outline: none; }
+.mission .micon { grid-area: icon; width: 100%; height: auto; aspect-ratio: 8 / 5; border-radius: 10px; margin-bottom: 4px; }
+.mission .mnum { grid-area: num; font-size: 12px; color: var(--dim); letter-spacing: 0.06em; text-transform: uppercase; }
+.mission .mname { grid-area: name; font-family: var(--display); font-size: 18px; line-height: 1.15; }
+.mission .mblurb { grid-area: blurb; font-size: 13px; color: var(--dim); line-height: 1.35; }
+.mission .mbest { grid-area: best; font-size: 12px; color: var(--gold); min-height: 1em; }
+.mission .danger { grid-area: danger; display: flex; gap: 3px; align-items: center; }
+.mission .danger i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+}
+.mission .danger i.on { background: #ff6a6a; box-shadow: 0 0 6px rgba(255, 90, 90, 0.6); }
+.mission.sel, .mission:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(255, 213, 74, 0.16), 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+.mission.cleared .mnum::after { content: ' ✓'; color: #7dff8a; }
+.mission.locked { cursor: not-allowed; }
+.mission.locked .mname, .mission.locked .mblurb { color: rgba(169, 179, 214, 0.55); }
+.mission.locked.sel, .mission.locked:hover { border-color: rgba(169, 179, 214, 0.4); box-shadow: none; }
+
+/* ---------- end-of-mission stars ---------- */
+
+.reward {
+  list-style: none;
+  margin: 16px auto 0;
+  padding: 10px 14px;
+  max-width: 340px;
+  border-radius: 14px;
+  background: rgba(255, 213, 74, 0.06);
+  border: 1px solid rgba(255, 213, 74, 0.22);
+  text-align: left;
+}
+.reward li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+  font-size: 15px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+.reward li .v { color: var(--ink); font-family: var(--display); font-size: 14px; white-space: nowrap; }
+.reward li.minus .v { color: #ff9a9a; }
+.reward li.plus .v { color: #9cff9a; }
+.reward li.total { margin-top: 6px; padding-top: 8px; border-top: 1px solid rgba(255, 213, 74, 0.25); color: var(--ink); }
+.reward li.total .v { color: var(--gold); font-size: 20px; }
+.wallet-line { margin: 8px 0 0; color: var(--gold); font-size: 14px; }
+
 /* ---------- stage banner ---------- */
 
 #banner {
