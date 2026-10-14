@@ -740,10 +740,19 @@ function activate(n) {
   say(st.act === 'max' ? `${c.item.name} is all maxed out!` : `Player ${who + 1} already has ${c.item.name}.`)
 }
 
+// A purchase can't be undone, so a second activation of the same item hard on
+// the heels of the first — a double-click or double-tap, which kids do out of
+// habit — is swallowed instead of buying the next level too.
+let lastBuy = { key: '', at: -Infinity }
+
 function buy(c, st) {
   const s = opts.save
   const { kind, id, def } = c.item
+  const key = `${kind}:${id}`
+  const now = performance.now()
+  if (key === lastBuy.key && now - lastBuy.at < 700) return
   if (s.stars < st.price) return deny(c, { ...st, need: st.price - s.stars })
+  lastBuy = { key, at: now }
   s.stars = Math.max(0, s.stars - st.price)
   let text
   if (kind === 'ship') {

@@ -728,9 +728,13 @@ export function updateFight(g, dt) {
 
   if (f.over) return
 
-  // floating cores glide to where they'll wait
+  // floating cores glide to where they'll wait. The spot is re-fitted to the
+  // world every frame, so a window resized or a phone turned mid-fight can't
+  // leave a core stranded out of the ships' reach (and Krax waiting forever)
   for (const c of f.cores) {
     c.t += dt
+    c.tx = Math.max(70, Math.min(g.W - 70, c.tx))
+    c.ty = Math.max(top + 50, Math.min(g.H - 215, c.ty))
     const dx = c.tx - c.x
     const dy = c.ty - c.y
     const d = Math.hypot(dx, dy)

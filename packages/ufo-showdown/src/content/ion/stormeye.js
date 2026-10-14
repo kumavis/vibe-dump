@@ -310,6 +310,11 @@ function updateBeacons(b, dt, g) {
     }
     const k = s.beacon
     k.age += dt
+    // keep it on the floor of the ship zone even if the window changed shape
+    // since it was placed: an unreachable beacon would never charge
+    const [x0, x1, y0, y1] = beaconBounds(b, b.slots.indexOf(s), g)
+    k.x = g.clamp(k.x, x0, x1)
+    k.y = g.clamp(k.y, y0, y1)
     let n = 0
     let who = null
     for (const p of g.players) {
@@ -339,11 +344,17 @@ function updateBeacons(b, dt, g) {
 // beacons were and not right under a ship (some flying is the point), but not
 // clear across the screen either. With two players each beacon keeps to its
 // own side, P1's on the left and P2's on the right.
-function placeBeacon(b, slot, g) {
+// Where beacon `slot` may sit: [x0, x1, y0, y1].
+function beaconBounds(b, slot, g) {
   const top = g.playerTop()
   const two = b.slots.length > 1
   const x0 = two && slot === 1 ? g.W / 2 + 70 : 100
   const x1 = two && slot === 0 ? g.W / 2 - 70 : g.W - 100
+  return [x0, x1, top + 85, g.H - 105]
+}
+
+function placeBeacon(b, slot, g) {
+  const [x0, x1, y0, y1] = beaconBounds(b, slot, g)
   const avoid = []
   for (const o of b.slots) {
     if (o.beacon) avoid.push(o.beacon)
@@ -354,7 +365,7 @@ function placeBeacon(b, slot, g) {
   let bestScore = -Infinity
   for (let i = 0; i < 18; i++) {
     const x = g.rand(x0, x1)
-    const y = g.rand(top + 85, g.H - 105)
+    const y = g.rand(y0, y1)
     let score = 0
     for (const a of avoid) score += Math.min(380, Math.hypot(a.x - x, a.y - y)) - (Math.hypot(a.x - x, a.y - y) < 240 ? 300 : 0)
     for (const p of ships) {

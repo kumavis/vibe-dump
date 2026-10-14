@@ -65,6 +65,7 @@ function resize() {
     p.x = clamp(p.x, 34, W - 34)
     p.y = clamp(p.y, playerTop(), H - 48)
   }
+  if (mode === 'map') renderMap()
 }
 window.addEventListener('resize', resize)
 
@@ -1454,8 +1455,15 @@ function update(dt) {
       continue
     }
     for (const e of enemies) {
-      if (!e.dead && near(s.x, s.y, e.x, e.y, e.r + 4)) {
-        damageEnemy(e, 1, s.owner)
+      // a piercing laser remembers what it has been through, so it can't hit
+      // the same saucer — or a rock fragment split off under it — twice
+      if (e.dead || s.hit?.has(e) || !near(s.x, s.y, e.x, e.y, e.r + 4)) continue
+      damageEnemy(e, 1, s.owner)
+      if (s.pierce > 0) {
+        s.pierce--
+        ;(s.hit ??= new Set()).add(e)
+        for (const f of enemies) if (f !== e && near(f.x, f.y, e.x, e.y, e.r)) s.hit.add(f)
+      } else {
         s.dead = true
         break
       }
@@ -1540,7 +1548,7 @@ function update(dt) {
     }
     if (p.invuln > 0) continue
     for (const s of eShots) {
-      if (!s.dead && near(p.x, p.y - 2, s.x, s.y, s.r + 10)) {
+      if (!s.dead && near(p.x, p.y - 2, s.x, s.y, s.r + p.hitR)) {
         s.dead = true
         hurtPlayer(p)
         break
@@ -1556,7 +1564,7 @@ function update(dt) {
     }
     if (!p.alive || p.invuln > 0) continue
     for (const L of lasers) {
-      if (L.warn <= 0 && L.active > 0.05 && p.y > L.y0 && Math.abs(p.x - L.x) < L.w * 0.4 + 8) {
+      if (L.warn <= 0 && L.active > 0.05 && p.y > L.y0 && Math.abs(p.x - L.x) < L.w * 0.4 + p.hitR * 0.8) {
         hurtPlayer(p)
         break
       }
@@ -1587,7 +1595,9 @@ function update(dt) {
   texts = texts.filter((t) => t.life > 0)
 
   // game over once nobody is left flying
-  if (mode === 'play' && players.every((p) => p.out) && phase !== 'clear' && phase !== 'victory') {
+  // (not while a boss is blowing up, either: the last ship can go down to the
+  // very shot that finished it, and that's still a win)
+  if (mode === 'play' && players.every((p) => p.out) && phase !== 'clear' && phase !== 'victory' && !(boss && boss.dying > 0)) {
     if (endTimer < 0) endTimer = 2
     endTimer -= dt
     if (endTimer <= 0) endMission(false)
@@ -1861,9 +1871,13 @@ function drawPlayerHUD(p) {
   ctx.fillText(String(p.score).padStart(6, '0'), x, 56)
 
   if (p.out) {
+    // drawn where the power-up slots would be, clear of any boss hint lines
     ctx.font = `12px ${FONT}`
     ctx.fillStyle = '#ff8a8a'
-    ctx.fillText(numPlayers === 2 ? 'Down! Partner: grab a heart' : 'Out of ships', x, 80)
+    if (numPlayers === 2) {
+      ctx.fillText('Down!', x, 100)
+      ctx.fillText('Partner: grab a heart', x, 118)
+    } else ctx.fillText('Out of ships', x, 100)
     return
   }
   // lives as tiny ships, with a count once there are too many to draw
@@ -1938,9 +1952,10 @@ const toastEl = document.getElementById('toast')
 function showScreen(name) {
   for (const k in screens) screens[k].classList.toggle('show', k === name)
   if (name && screens[name].querySelector('.buttons')) selectButton(screens[name], 0)
-  // the wallet rides along everywhere except mid-flight and the store, which
-  // shows its own big balance
-  walletEl.classList.toggle('show', !!name && name !== 'pause' && name !== 'store')
+  // the wallet pill rides along on the home screen and the map; the store and
+  // the end-of-mission panels show the balance themselves, and over a battle
+  // it would sit on Player 2's score
+  walletEl.classList.toggle('show', name === 'menu' || name === 'map')
 }
 
 function updateWallet() {
@@ -2129,8 +2144,13 @@ function mapColumns() {
 }
 
 function paintMissionIcon(canvas, m, locked) {
+  // painted at the card's real pixel size so it stays crisp on phones and
+  // retina screens
+  const k = clamp(Math.ceil(((canvas.clientWidth || 160) / 80) * (window.devicePixelRatio || 1)), 2, 10)
+  canvas.width = 80 * k
+  canvas.height = 50 * k
   const c = canvas.getContext('2d')
-  c.setTransform(2, 0, 0, 2, 0, 0)
+  c.setTransform(k, 0, 0, k, 0, 0)
   const w = 80
   const h = 50
   c.fillStyle = '#0b0726'
@@ -2202,10 +2222,12 @@ function resume() {
   last = performance.now()
 }
 
-// Leaving mid-mission still pays for what you did.
+// Leaving mid-mission still pays for what you did — and once the boss is
+// beaten, skipping the celebration still counts as winning.
 function quitMission() {
   if (mode !== 'pause' && mode !== 'play') return
   mode = 'play'
+  if (phase === 'clear' || phase === 'victory' || (boss && boss.dying > 0)) return endMission(true)
   const r = payOut(false)
   goMap(missionIdx)
   if (r.total) toast(`You earned ★ ${r.total}`)
@@ -2367,8 +2389,10 @@ if (params.has('debug')) {
   }
 }
 
-// The home screen's ships show what each player has equipped in the store.
+// The home screen's ships show what each player has equipped in the store,
+// and its tip counts the slots the Cargo Bay has bought.
 function paintMenuArt() {
+  document.querySelector('.stack-note b').textContent = loadout(save, 0).slots
   for (const c of document.querySelectorAll('.shipicon')) {
     const id = Number(c.dataset.player)
     const lo = loadout(save, id)
