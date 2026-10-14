@@ -185,20 +185,21 @@ export function loadout(save, playerId) {
   const equip = save.equip[playerId] ?? save.equip[0]
   const ship = SHIPS.find((s) => s.id === equip.ship) ?? SHIPS[0]
   const st = ship.stats
-  const up = save.upgrades
+  // levels past what the store sells (an edited save) count as the top level
+  const up = Object.fromEntries(UPGRADES.map((u) => [u.id, Math.min(save.upgrades[u.id] ?? 0, u.prices.length)]))
   return {
     ship: ship.id,
     paint: resolvePaint(equip.paint, playerId),
     speed: st.speed ?? 1,
     hitR: st.hitR ?? 10,
-    lives: 3 + (st.lives ?? 0) + (up.armor ?? 0),
+    lives: 3 + (st.lives ?? 0) + up.armor,
     lifeShield: !!st.lifeShield,
     twin: !!st.twin,
     pierce: st.pierce ?? 0,
     phoenix: !!st.phoenix,
-    slots: MAX_SLOTS + (up.cargo ?? 0),
-    magnet: MAGNET_RADIUS[up.magnet ?? 0],
-    drones: DRONES[up.drones ?? 0],
+    slots: MAX_SLOTS + up.cargo,
+    magnet: MAGNET_RADIUS[up.magnet],
+    drones: DRONES[up.drones],
     starters: STARTERS.filter((s) => (save.starters[s.id] ?? 0) > 0 && save.startersOn[s.id] !== false).map((s) => ({
       type: s.id,
       level: save.starters[s.id],
