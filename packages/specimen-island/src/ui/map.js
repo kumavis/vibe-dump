@@ -146,9 +146,21 @@ export class MapView {
       ctx.arc(x, y, 16 + Math.sin(performance.now() / 200) * 2, 0, Math.PI * 2)
       ctx.stroke()
     }
-    // the player
-    const pp = G.heli?.piloted ? G.heli.pos : G.player.pos
-    const yaw = G.heli?.piloted ? G.heli.yaw : G.player.yaw
+    // parked vehicles, so you can find your way back to them
+    ctx.font = '700 10px system-ui, sans-serif'
+    for (const v of G.vehicles || []) {
+      if (v.occupied) continue
+      const [x, y] = this.w2m(v.pos.x, v.pos.z)
+      ctx.fillStyle = v.destroyed ? '#ff7a50' : '#bfe8ff'
+      ctx.strokeStyle = '#000'
+      ctx.lineWidth = 2
+      ctx.fillRect(x - 5, y - 5, 10, 10)
+      ctx.strokeRect(x - 5, y - 5, 10, 10)
+      ctx.fillText(v.kind === 'heli' ? 'HELI' : 'JEEP', x, y - 9)
+    }
+    // the player (or the vehicle they are in)
+    const pp = G.vehicle ? G.vehicle.pos : G.player.pos
+    const yaw = G.vehicle ? G.vehicle.yaw : G.player.yaw
     const [px, py] = this.w2m(pp.x, pp.z)
     ctx.save()
     ctx.translate(px, py)

@@ -49,7 +49,7 @@ export class Science {
   procedures() {
     const G = this.G
     const out = []
-    if (G.heli?.piloted) return out
+    if (G.vehicle) return out // no fieldwork from the driving seat
     const p = G.player.pos
     for (const c of G.ecology.active) {
       if (c.vitals.conscious) continue

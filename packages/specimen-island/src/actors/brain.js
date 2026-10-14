@@ -94,7 +94,7 @@ export class Brain {
     }
 
     const aw = P.awareness
-    const player = G.heli && G.heli.piloted ? G.heli.pos : G.player.pos
+    const player = G.vehicle ? G.vehicle.pos : G.player.pos
     const dPlayer = Math.hypot(player.x - c.pos.x, player.z - c.pos.z)
 
     if (aw >= 1) {

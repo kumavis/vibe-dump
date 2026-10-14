@@ -25,6 +25,7 @@ import { Weapons } from './player/weapons.js'
 import { Projectiles } from './player/projectiles.js'
 import { Science } from './player/science.js'
 import { Helicopter } from './vehicles/helicopter.js'
+import { Jeep } from './vehicles/jeep.js'
 import { Audio } from './audio/audio.js'
 import { HUD } from './ui/hud.js'
 import { MapView, paintRelief, reliefTexture } from './ui/map.js'
@@ -48,6 +49,7 @@ async function boot() {
     species: SPECIES,
     discovered: new Set(),
     godMode: params.has('god'),
+    vehicle: null, // the vehicle the player is in, if any
     events: new EventBus(),
   }
   window.__G = G
@@ -102,6 +104,8 @@ async function boot() {
   G.objectives = new Objectives(G)
   const lab = G.island.poi.fieldlab
   G.heli = new Helicopter(G, lab.pad, lab.padYaw)
+  G.jeep = Jeep.atStation(G)
+  G.vehicles = [G.heli, G.jeep]
   G.audio = new Audio()
   G.hud = new HUD(G)
   G.map = new MapView(G, document.getElementById('map'))
@@ -179,6 +183,7 @@ async function boot() {
     resume,
     respawn: () => {
       G.menus.show('death', false)
+      G.vehicle?.exit(true)
       const st = G.island.poi.station
       const p = new THREE.Vector3(st.x + Math.sin(st.yaw) * 7, 0, st.z + Math.cos(st.yaw) * 7)
       p.y = G.physics.groundAt(p.x, p.z, st.y + 3)
@@ -253,18 +258,20 @@ async function boot() {
 
     if (playing && !G.paused) {
       G.time += dt
-      const flying = G.heli.piloted
-      if (!flying) G.player.update(dt, input)
-      G.heli.update(dt, input)
-      if (flying) G.heli.updateCamera(camera, dt)
+      // read once: the E that steps you out of a vehicle must not board it again
+      const riding = G.vehicle
+      if (!riding) G.player.update(dt, input)
+      for (const v of G.vehicles) v.update(dt, input)
+      if (G.vehicle) G.vehicle.updateCamera(camera, dt)
       G.weapons.update(dt, input)
-      if (!flying && G.player.alive) G.interact.update(dt, G.player.eye, G.player.look, input.pressed('interact'), input.down('interact'))
+      if (!riding && G.player.alive) G.interact.update(dt, G.player.eye, G.player.look, input.pressed('interact'), input.down('interact'))
       if (G.menus.noteOpen) G.noteFrame = G.frame + 1
       G.projectiles.update(dt)
       G.stealth.update(dt)
-      const focus = flying ? G.heli.pos : G.player.pos
-      G.ecology.loadRadius = flying ? 300 : 220
-      G.ecology.unloadRadius = flying ? 360 : 280
+      const veh = G.vehicle
+      const focus = veh ? veh.pos : G.player.pos
+      G.ecology.loadRadius = veh ? veh.tune.load.radius : 220
+      G.ecology.unloadRadius = veh ? veh.tune.load.unload : 280
       G.ecology.update(dt, focus)
       G.objectives.update(dt)
       discoverT -= dt
@@ -313,16 +320,16 @@ async function boot() {
     const wa = G.wind.angle + Math.sin(G.time / 90) * 0.5
     G.wind.x = Math.cos(wa)
     G.wind.z = Math.sin(wa)
-    const flyingNow = G.heli.piloted
+    const flyingNow = G.vehicle?.kind === 'heli'
     const alt = flyingNow ? G.heli.pos.y - G.island.heightAt(G.heli.pos.x, G.heli.pos.z) : 0
     G.sky.fogBoost = smoothstep(0.2, 0.8, G.island.sample(G.island.d.canopy, cam.x, cam.z)) * (flyingNow ? 0 : 1)
-    tmpFocus.copy(playing ? (flyingNow ? G.heli.pos : G.player.pos) : cam)
+    tmpFocus.copy(playing ? (G.vehicle ? G.vehicle.pos : G.player.pos) : cam)
     G.sky.update(playing && !G.paused ? dt : dt * 0.2, tmpFocus, { altitude: alt, camera: cam })
     G.veg.update(dt, cam, 0.8 + 0.4 * Math.sin(G.time * 0.3) * G.wind.strength)
     water.uniforms.uTime.value += dt
     G.fx.update(G.paused ? 0 : dt)
     if (G.boat) G.boat.position.y = Math.sin(G.time * 0.9) * 0.12 - 0.05
-    G.audio.setListener(cam, flyingNow && G.heli.view !== 'cockpit' ? G.heli.camYaw : G.player.yaw)
+    G.audio.setListener(cam, G.vehicle ? G.vehicle.camYaw : G.player.yaw)
     G.audio.update(dt, G)
     if (playing) G.hud.update(dt)
     input.endFrame()
@@ -331,7 +338,7 @@ async function boot() {
   function draw() {
     renderer.clear()
     renderer.render(scene, camera)
-    if (G.mode === 'play' && !G.heli.piloted && G.player.alive) G.weapons.vm.render(renderer)
+    if (G.mode === 'play' && !G.vehicle && G.player.alive) G.weapons.vm.render(renderer)
   }
 
   function frame(now) {

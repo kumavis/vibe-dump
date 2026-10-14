@@ -474,7 +474,8 @@ export function buildFieldLab(G, poi, rng, yaw) {
   kit.interact(
     {
       id: 'fuelPump',
-      label: () => (G.heli && G.heli.fuel > 0.98 ? 'Helicopter tank is full' : 'Run fuel pump (refuel helicopter)'),
+      // the pad's service point: a full tank and a sound airframe
+      label: () => (G.heli && G.heli.fuel > 0.98 && G.heli.health >= G.heli.tune.hull ? 'Helicopter serviced — tank full, hull 100%' : 'Service helicopter (refuel + repair)'),
       hold: 2.5,
       radius: 2.4,
       enabled: (G) => {
@@ -483,10 +484,16 @@ export function buildFieldLab(G, poi, rng, yaw) {
         return true
       },
       onUse: (G) => {
-        G.heli.fuel = 1
+        const h = G.heli
+        const hurt = h.health < h.tune.hull
+        h.service()
+        // a jeep parked by the pad gets seen to as well
+        const jeep = G.jeep && !G.jeep.occupied && G.jeep.health < G.jeep.tune.hull && G.jeep.pos.distanceTo(poi.pad) < 22 ? G.jeep : null
+        if (jeep) jeep.repair()
         G.flags.set('heliFueled')
-        G.toast('Helicopter refuelled. Climb aboard with E.', 'info')
+        G.toast(`Helicopter ${hurt ? 'repaired to 100% and refuelled' : 'refuelled'}${jeep ? ', jeep patched up' : ''}. Climb aboard with E.`, 'info')
         G.audio?.play('pump', { pos: poi.pad })
+        if (hurt || jeep) G.audio?.play('repair', { pos: poi.pad })
       },
     },
     pad.x + 10,

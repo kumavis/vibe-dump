@@ -8,6 +8,14 @@ import { wrapAngle, yawTo } from '../core/mathx.js'
 // noticed plainly (no stealth between dinosaurs).
 
 const _heard = []
+const _vehicleEye = { x: 0, y: 0, z: 0 }
+// Where an animal looks for someone in a vehicle: its cab, not its wheels.
+function vehicleEye(v) {
+  _vehicleEye.x = v.pos.x
+  _vehicleEye.y = v.pos.y + 1.4
+  _vehicleEye.z = v.pos.z
+  return _vehicleEye
+}
 
 export class Perception {
   constructor(creature, rng) {
@@ -41,14 +49,14 @@ export class Perception {
     let stimulus = false
     this.sees = false
 
-    // --- the player (or the helicopter they are flying)
-    const piloting = G.heli && G.heli.piloted
-    const target = piloting ? G.heli.pos : G.player.eye
+    // --- the player (or the vehicle they are in)
+    const piloting = G.vehicle
+    const target = piloting ? vehicleEye(piloting) : G.player.eye
     const dx = target.x - eye.x
     const dy = target.y - eye.y
     const dz = target.z - eye.z
     const d = Math.hypot(dx, dy, dz)
-    const range = S.sight * (0.45 + 0.55 * G.sky.light) * (G.player.flashlight && !piloting ? 1.3 : 1)
+    const range = S.sight * (0.45 + 0.55 * G.sky.light) * ((piloting ? piloting.lights : G.player.flashlight) ? 1.3 : 1)
     if (d < range && G.player.alive) {
       const look = c.yaw + c.anim.s.lookYaw
       const ang = Math.abs(wrapAngle(yawTo(eye.x, eye.z, target.x, target.z) - look))

@@ -536,6 +536,14 @@ body.playing #hud {
   color: var(--dim);
   font-size: 11px;
 }
+/* a fresh hit: the hull readout flashes red */
+#heliHud .hull.hit {
+  background: linear-gradient(to left, rgba(200, 24, 10, 0.55), transparent);
+}
+#heliHud b.flash {
+  color: #fff;
+  text-shadow: 0 0 6px #ff2a10, 0 0 14px #ff2a10;
+}
 #scope {
   position: absolute;
   inset: 0;

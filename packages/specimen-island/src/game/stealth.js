@@ -29,8 +29,9 @@ export class Stealth {
     while (this.noises.length && now - this.noises[0].t > 1.0) this.noises.shift()
     this.playerNoise = Math.max(0, this.playerNoise - dt * 30)
     const p = G.player
-    if (G.heli && G.heli.piloted) {
-      this.visibility = 2
+    // in a vehicle you are about as subtle as a brass band
+    if (G.vehicle) {
+      this.visibility = G.vehicle.visibility
       this.cover = 0
       this.moving = 1
       return

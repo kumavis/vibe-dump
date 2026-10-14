@@ -1,4 +1,5 @@
 import { WEAPONS } from '../data/weapons.js'
+import { VEHICLE_FX } from '../data/vehicles.js'
 import { clamp, wrapAngle, yawTo, formatTime } from '../core/mathx.js'
 
 // The heads-up display. Reads game state each frame and writes the DOM only
@@ -72,8 +73,9 @@ export class HUD {
     const G = this.G
     const p = G.player
     const W = G.weapons
-    const flying = G.heli?.piloted
-    const camYaw = flying ? (G.heli.view === 'cockpit' ? G.heli.yaw : G.heli.camYaw) : p.yaw
+    const veh = G.vehicle
+    const flying = !!veh // in any vehicle, the helicopter or the jeep
+    const camYaw = veh ? veh.camYaw : p.yaw
 
     // vitals
     this.set('hp', this.el.health, `${clamp(p.health, 0, 100)}%`, 'style.width')
@@ -84,12 +86,12 @@ export class HUD {
     this.set('eyeOpen', this.el.eye, `scaleY(${open.toFixed(2)})`, 'style.transform')
     const col = vis < 0.25 ? '#6fd08c' : vis < 0.6 ? '#d8d070' : '#ff7a50'
     this.set('eyeCol', this.el.eye, col, 'style.background')
-    this.set('eyeLbl', this.el.eyeLabel, flying ? 'AIRBORNE' : vis < 0.25 ? 'HIDDEN' : vis < 0.6 ? 'LOW PROFILE' : 'EXPOSED')
+    this.set('eyeLbl', this.el.eyeLabel, flying ? (veh.kind === 'heli' ? 'AIRBORNE' : 'DRIVING') : vis < 0.25 ? 'HIDDEN' : vis < 0.6 ? 'LOW PROFILE' : 'EXPOSED')
     this.set('noise', this.el.noise, `${clamp(G.stealth.playerNoise / 25, 0, 1) * 100}%`, 'style.width')
 
     // weapon
     const def = W.def
-    this.set('wname', this.el.weaponName, flying ? 'HELICOPTER' : def.name)
+    this.set('wname', this.el.weaponName, flying ? veh.hudName : def.name)
     let ammo = ''
     if (!flying && def.ammo) ammo = `${W.mag[def.id]} <span>/ ${G.inventory.count(def.ammo)}</span>${W.reloadT > 0 ? ' <em>RELOADING</em>' : ''}`
     else if (!flying && def.kind === 'scanner') ammo = `<span>${G.science.catalogue.size} species</span>`
@@ -141,13 +143,9 @@ export class HUD {
     this.el.hurtArrow.style.opacity = hurtRecent ? 1 - (G.time - p.lastHurt) / 1.2 : 0
     this.el.hurtArrow.style.transform = `translate(-50%,-50%) rotate(${-wrapAngle(p.hurtDir)}rad)`
 
-    // helicopter
-    this.el.heliHud.classList.toggle('show', !!flying)
-    if (flying) {
-      const h = G.heli
-      const agl = h.pos.y - Math.max(G.island.heightAt(h.pos.x, h.pos.z), G.island.waterAt(h.pos.x, h.pos.z))
-      this.set('heli', this.el.heliHud, `<div>ALT <b>${Math.round(agl)}</b> m</div><div>SPD <b>${Math.round(Math.hypot(h.vel.x, h.vel.z) * 3.6)}</b> km/h</div><div>FUEL <b class="${h.fuel < 0.2 ? 'warn' : ''}">${Math.round(h.fuel * 100)}%</b></div><div>HULL <b class="${h.health < 40 ? 'warn' : ''}">${Math.round(h.health)}%</b></div><div class="hint">${h.onGround ? 'E: exit · ' : ''}V: camera</div>`, 'html')
-    }
+    // vehicle panel (helicopter or jeep)
+    this.el.heliHud.classList.toggle('show', flying)
+    if (flying) this.set('veh', this.el.heliHud, this.vehiclePanel(veh), 'html')
 
     this.drawDetection(camYaw)
     this.targetTimer -= dt
@@ -155,6 +153,21 @@ export class HUD {
       this.targetTimer = 0.1
       this.updateTarget()
     }
+  }
+
+  // Speed, hull and (for the helicopter) altitude and fuel. A fresh hit flashes
+  // the hull readout red; a failing hull keeps blinking.
+  vehiclePanel(v) {
+    const G = this.G
+    const blink = (hz) => Math.sin(G.time * hz * Math.PI * 2) > 0
+    const hullCls = v.flash > 0 ? (blink(6) ? 'flash' : 'warn') : v.health < VEHICLE_FX.warnBelow ? (blink(1.5) ? 'warn' : '') : v.health < VEHICLE_FX.smokeBelow ? 'warn' : ''
+    const hull = `<div class="hull${v.flash > 0 ? ' hit' : ''}">HULL <b class="${hullCls}">${Math.round(v.health)}%</b></div>`
+    const spd = `<div>SPD <b>${Math.round(v.speed * 3.6)}</b> km/h</div>`
+    if (v.kind === 'heli') {
+      const agl = v.pos.y - Math.max(G.island.heightAt(v.pos.x, v.pos.z), G.island.waterAt(v.pos.x, v.pos.z))
+      return `<div>ALT <b>${Math.round(agl)}</b> m</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}<div class="hint">${v.onGround ? 'E: exit · ' : ''}V: camera</div>`
+    }
+    return `${spd}${hull}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? 'E: exit · ' : ''}Space: handbrake · F: lights · V: camera</div>`
   }
 
   updateCompass(camYaw) {
@@ -172,7 +185,7 @@ export class HUD {
       t.style.opacity = Math.abs(a) > 1.05 ? 0 : 1
     }
     // markers: objective(s) and discovered places
-    const pos = G.heli?.piloted ? G.heli.pos : G.player.pos
+    const pos = G.vehicle ? G.vehicle.pos : G.player.pos
     const want = []
     for (const o of G.objectives.active()) {
       const m = G.objectives.marker(o)
@@ -207,7 +220,7 @@ export class HUD {
     const ctx = this.detectCtx
     const S = this.el.detect.width
     ctx.clearRect(0, 0, S, S)
-    const p = G.heli?.piloted ? G.heli.pos : G.player.pos
+    const p = G.vehicle ? G.vehicle.pos : G.player.pos
     for (const c of G.ecology.active) {
       if (!c.vitals.conscious) continue
       const aw = c.perception.awareness
@@ -235,7 +248,7 @@ export class HUD {
   updateTarget() {
     const G = this.G
     const el = this.el.target
-    if (G.heli?.piloted || !G.player.alive) {
+    if (G.vehicle || !G.player.alive) {
       this.set('tgt', el, '', 'html')
       return
     }

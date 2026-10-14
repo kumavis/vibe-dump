@@ -36,7 +36,7 @@ export class Objectives {
     const d = o.done
     if (d.reach) {
       const p = G.island.poi[d.reach]
-      const pos = G.heli?.piloted ? G.heli.pos : G.player.pos
+      const pos = G.vehicle ? G.vehicle.pos : G.player.pos
       return Math.hypot(p.x - pos.x, p.z - pos.z) < d.radius
     }
     if (d.flag) return G.flags.get(d.flag)

@@ -249,6 +249,37 @@ export class Audio {
       case 'pump':
         this.tone({ type: 'sawtooth', f0: 70, f1: 95, dur: 2.2, vol: 0.12, filter: 500, pos, max: 40 })
         break
+      // ---- vehicles
+      case 'crash': {
+        // a metallic crunch: body thump, tearing panel, rattling bits
+        const k = opts.intensity ?? 0.6
+        this.burst({ dur: 0.22 + k * 0.35, type: 'lowpass', freq: 1100, vol: 0.45 + k * 0.55, pos, max: 160, sweep: 0.25, echo: 0.35 * k })
+        this.burst({ dur: 0.15 + k * 0.25, type: 'bandpass', freq: 2300, q: 2.2, vol: 0.3 + k * 0.4, pos, max: 160, delay: 0.01 })
+        this.tone({ type: 'square', f0: 110, f1: 38, dur: 0.22 + k * 0.15, vol: 0.12 + k * 0.25, pos, max: 160, filter: 700 })
+        for (let i = 0, n = 2 + Math.round(k * 4); i < n; i++) {
+          const f = 1500 + Math.random() * 3200
+          this.tone({ type: 'triangle', f0: f, f1: f * (0.55 + Math.random() * 0.3), dur: 0.08 + Math.random() * 0.25, vol: 0.05 + 0.07 * k, pos, max: 120, delay: 0.03 + i * 0.045 + Math.random() * 0.04 })
+        }
+        break
+      }
+      case 'warning':
+        // master-caution chirp; faster and higher when critical
+        this.tone({ type: 'square', f0: opts.level ? 1040 : 880, dur: 0.11, vol: 0.07, filter: 3000 })
+        this.tone({ type: 'square', f0: opts.level ? 780 : 660, dur: 0.11, vol: 0.07, filter: 3000, delay: 0.15 })
+        break
+      case 'sputter':
+        this.burst({ dur: 0.12, type: 'lowpass', freq: 320, vol: 0.5, pos, max: 120 })
+        this.tone({ type: 'sawtooth', f0: 70, f1: 32, dur: 0.18, vol: 0.18, pos, max: 120, filter: 400 })
+        break
+      case 'ignition':
+        // starter cranking, then the engine catching
+        for (let i = 0; i < 4; i++) this.burst({ dur: 0.09, type: 'bandpass', freq: 380, q: 2, vol: 0.25, pos, max: 60, delay: i * 0.13 })
+        this.tone({ type: 'sawtooth', f0: 40, f1: 75, dur: 0.5, vol: 0.2, pos, max: 60, filter: 500, delay: 0.5 })
+        break
+      case 'repair':
+        for (let i = 0; i < 5; i++) this.burst({ dur: 0.04, type: 'bandpass', freq: 2600 + Math.random() * 900, q: 7, vol: 0.2, pos, max: 40, delay: i * 0.11 })
+        this.tone({ type: 'triangle', f0: 1800, f1: 1500, dur: 0.3, vol: 0.06, pos, max: 40, delay: 0.6 })
+        break
       case 'heartbeat':
         this.tone({ f0: 62, f1: 40, dur: 0.12, vol: 0.35 })
         this.tone({ f0: 58, f1: 38, dur: 0.12, vol: 0.25, delay: 0.22 })
@@ -380,6 +411,63 @@ export class Audio {
     r.whine.frequency.setTargetAtTime(300 + rpm * 900, ctx.currentTime, 0.3)
   }
 
+  // The jeep's engine: two saws an octave apart and a lumpy noise rumble,
+  // pitched by rpm, opened up by throttle, with a lope at idle.
+  setEngine(rpm, load, pos, inside) {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    if (!this.engine) {
+      const am = ctx.createGain()
+      am.gain.value = 0.8
+      const lope = ctx.createOscillator()
+      lope.frequency.value = 7
+      const lg = ctx.createGain()
+      lg.gain.value = 0.25
+      lope.connect(lg).connect(am.gain)
+      const o1 = ctx.createOscillator()
+      o1.type = 'sawtooth'
+      const o2 = ctx.createOscillator()
+      o2.type = 'sawtooth'
+      const g1 = ctx.createGain()
+      g1.gain.value = 0.5
+      const g2 = ctx.createGain()
+      g2.gain.value = 0.6
+      o1.connect(g1).connect(am)
+      o2.connect(g2).connect(am)
+      const src = ctx.createBufferSource()
+      src.buffer = this.noise
+      src.loop = true
+      const nf = ctx.createBiquadFilter()
+      nf.type = 'bandpass'
+      nf.frequency.value = 160
+      nf.Q.value = 1.2
+      const ng = ctx.createGain()
+      ng.gain.value = 0.7
+      src.connect(nf).connect(ng).connect(am)
+      const f = ctx.createBiquadFilter()
+      f.type = 'lowpass'
+      f.Q.value = 1.5
+      const g = ctx.createGain()
+      g.gain.value = 0
+      const p = ctx.createStereoPanner()
+      am.connect(f).connect(g).connect(p).connect(this.master)
+      for (const n of [lope, o1, o2, src]) n.start()
+      this.engine = { g, f, p, o1, o2, lope, nf }
+    }
+    const e = this.engine
+    const t = ctx.currentTime
+    const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, 170)
+    const fire = 26 + rpm * 100
+    e.o1.frequency.setTargetAtTime(fire, t, 0.06)
+    e.o2.frequency.setTargetAtTime(fire * 0.5, t, 0.06)
+    e.lope.frequency.setTargetAtTime(5 + rpm * 30, t, 0.1)
+    e.nf.frequency.setTargetAtTime(120 + rpm * 260, t, 0.1)
+    e.f.frequency.setTargetAtTime(260 + rpm * 900 + load * 700, t, 0.08)
+    const vol = rpm > 0.01 ? 0.1 + rpm * 0.22 + load * 0.12 : 0
+    e.g.gain.setTargetAtTime(vol * s.gain * (inside ? 0.85 : 1.3), t, 0.08)
+    e.p.pan.setTargetAtTime(s.pan, t, 0.1)
+  }
+
   startAmbience() {
     const ctx = this.ctx
     const mk = (type, freq, q, vol) => {
@@ -413,7 +501,7 @@ export class Audio {
     if (!this.ctx || this.ctx.state !== 'running') return
     const t = this.ctx.currentTime
     const day = G.sky.light
-    const alt = G.heli?.piloted ? G.heli.pos.y - G.island.heightAt(G.heli.pos.x, G.heli.pos.z) : 0
+    const alt = G.vehicle?.kind === 'heli' ? G.heli.pos.y - G.island.heightAt(G.heli.pos.x, G.heli.pos.z) : 0
     this.wind.g.gain.setTargetAtTime(0.03 + 0.03 * Math.sin(t * 0.13) + 0.02 * Math.sin(t * 0.41) + Math.min(0.08, alt / 2000), t, 0.5)
     this.insects.g.gain.setTargetAtTime((1.4 - day) * 0.014, t, 1)
     const L = this.listener

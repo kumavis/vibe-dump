@@ -114,8 +114,15 @@ export class Creature {
     this.flushVitals(G)
   }
 
+  // A blow aimed at the player lands on whatever vehicle they are in — unless
+  // it is a helicopter hovering out of reach.
   strikePlayer(G, damage, knock) {
-    if (G.heli && G.heli.piloted) return G.heli.damage(damage * 0.5)
+    const v = G.vehicle
+    if (v) {
+      if (v.pos.y > this.pos.y + this.sp.body.hipH * this.scale * 2 + 1) return
+      v.shove(this.pos, knock * 0.4)
+      return v.damage(damage * v.tune.strikeMul, this.center())
+    }
     G.player.damage(damage, this.pos, knock)
   }
 
