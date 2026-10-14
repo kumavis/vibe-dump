@@ -153,7 +153,7 @@ function vertexColors(island) {
       add(tmp, w.beach[id])
       // river banks and lake shore go muddy
       const rv = island.riverD[id]
-      if (rv < 2.2) acc.lerp(PAL.mud, (1 - smoothstep(1, 2.2, rv)) * 0.8)
+      if (rv < 2.2) acc.lerp(PAL.mud, (1 - smoothstep(1, 2.2, rv)) * 0.8 * (1 - 0.75 * island.riverE[id])) // sand at the mouth
       const road = island.road[id]
       if (road > 0) {
         tmp.copy(PAL.road).multiplyScalar(0.9 + jitter * 0.12)

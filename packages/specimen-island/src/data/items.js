@@ -33,12 +33,22 @@ export const CACHES = {
   relayHut: { items: { rifleDart: 6, medkit: 1, flare: 1 }, flag: 'relayHut' },
 }
 
-// Random supply crates scattered at towers and wrecks.
+// Random supply crates scattered at towers and wrecks. A crate is packed when
+// it is opened, from what the player can still carry: each entry with room in
+// the pack is weighted by `w`, more so the emptier that stack is, and less for
+// ammunition of a gun not found yet (`for`). `n` is the [min, max] amount.
 export const LOOT = [
-  { w: 3, items: { pistolDart: 6 } },
-  { w: 3, items: { rifleDart: 3 } },
-  { w: 1.5, items: { shell: 4 } },
-  { w: 1.5, items: { rifleRound: 3 } },
-  { w: 2, items: { medkit: 1 } },
-  { w: 2, items: { flare: 1, stone: 3 } },
+  { item: 'pistolDart', w: 3, n: [5, 9] },
+  { item: 'rifleDart', w: 3, n: [3, 5], for: 'rifle' },
+  { item: 'shell', w: 1.5, n: [3, 6], for: 'shotgun' },
+  { item: 'rifleRound', w: 1.5, n: [3, 5], for: 'hunting' },
+  { item: 'medkit', w: 2.2, n: [1, 2] },
+  { item: 'flare', w: 1.6, n: [1, 2] },
+  { item: 'stone', w: 1, n: [2, 4] },
 ]
+
+export const CRATE = {
+  picks: [2, 3], // different things in one crate
+  lowBoost: 1.6, // extra weight for an empty stack vs a nearly full one
+  unownedAmmo: 0.35, // weight factor for ammo of a gun not yet carried
+}

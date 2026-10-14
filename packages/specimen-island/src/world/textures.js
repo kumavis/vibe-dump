@@ -169,6 +169,31 @@ export function paintedMetal(tint = [200, 120, 40]) {
   })
 }
 
+// Paint that has been left out in the jungle for a decade: rust blooms eat
+// through the colour, streak down from the edges and pit what is left.
+export function rustedPaint(tint = [84, 104, 70]) {
+  return cached('rusted' + tint.join(), () => {
+    const size = 256
+    const n = fractal(size, 61, 5, 4)
+    const bloom = fractal(size, 67, 4, 3)
+    const pit = fractal(size, 71, 2, 48)
+    const streak = fractal(size, 73, 3, 16)
+    return toTexture(
+      paint(size, (x, y, i) => {
+        const fade = 0.72 + 0.28 * n[i] // sun-bleached, uneven
+        let c = [tint[0] * fade, tint[1] * fade, tint[2] * fade]
+        // rust runs down: sample the streak field stretched vertically
+        const run = streak[(Math.floor(y / 6) * size + x) % streak.length]
+        const r = Math.max(0, Math.min(1, (bloom[i] - 0.5) * 4.5 + (run - 0.55) * 2.2 + (pit[i] > 0.7 ? 0.6 : 0)))
+        const rust = [120 + 60 * n[i], 58 + 30 * n[i], 28 + 12 * n[i]]
+        c = c.map((v, k) => v * (1 - r) + rust[k] * r)
+        const dirt = 0.82 + 0.18 * pit[i]
+        return c.map((v) => v * dirt)
+      }),
+    )
+  })
+}
+
 // A soft round sprite for particles and glows.
 export function softDot() {
   return cached('dot', () => {
@@ -184,31 +209,87 @@ export function softDot() {
   })
 }
 
-// Painted text on a plank or plate — signs around the preserve.
-export function signTexture(lines, { bg = '#6b5236', fg = '#efe6c8', w = 512, h = 256 } = {}) {
-  const c = makeCanvas(w, h)
+// Painted text on a plank or plate — signs around the preserve. The first line
+// is the title and the rest are smaller. Every line is measured: the board
+// widens to fit (within limits), then a line that still does not fit inside
+// the margins shrinks, and wraps onto two lines rather than shrinking to
+// nothing. Returns the texture and the board size in metres.
+const SIGN_FONT = '"Trebuchet MS", "Segoe UI", sans-serif'
+const SIGN_PX = 240 // texels per metre of board
+export function signBoard(lines, { bg = '#6b5236', fg = '#efe6c8', minWidth = 1.6, maxWidth = 3.4, minHeight = 0.85, maxHeight = 1.5 } = {}) {
+  const probe = makeCanvas(8, 8).getContext('2d')
+  const measure = (text, size) => {
+    probe.font = `bold ${size}px ${SIGN_FONT}`
+    return probe.measureText(text).width
+  }
+  const mx = 0.1 * SIGN_PX
+  const my = 0.09 * SIGN_PX
+  const nominal = (i) => (i === 0 ? 0.3 : 0.17) * SIGN_PX
+  // widen the board for the widest line at its nominal size
+  const want = Math.max(...lines.map((ln, i) => measure(ln, nominal(i)))) / SIGN_PX + 0.2
+  const width = Math.min(maxWidth, Math.max(minWidth, want))
+  const avail = width * SIGN_PX - 2 * mx
+  // fit each line: shrink, or wrap at the space nearest the middle
+  const rows = []
+  lines.forEach((ln, i) => {
+    const size = nominal(i)
+    const w = measure(ln, size)
+    if (w <= avail) return rows.push({ text: ln, size })
+    const fit = (size * avail) / w
+    const spaces = [...ln.matchAll(/ /g)].map((m) => m.index)
+    if (fit < size * 0.72 && spaces.length) {
+      const cut = spaces.reduce((b, k) => (Math.abs(k - ln.length / 2) < Math.abs(b - ln.length / 2) ? k : b))
+      const parts = [ln.slice(0, cut), ln.slice(cut + 1)]
+      const s2 = Math.min(size * 0.9, ...parts.map((t) => (size * 0.9 * avail) / Math.max(1, measure(t, size * 0.9))))
+      for (const t of parts) rows.push({ text: t, size: s2 })
+    } else rows.push({ text: ln, size: Math.floor(fit) })
+  })
+  // the board grows to hold the rows, then everything scales to fit it
+  const lead = 1.18
+  const textH = rows.reduce((a, r) => a + r.size * lead, 0)
+  const height = Math.min(maxHeight, Math.max(minHeight, (textH + 2 * my) / SIGN_PX + 0.1))
+  const hpx = Math.round(height * SIGN_PX)
+  const wpx = Math.round(width * SIGN_PX)
+  const k = Math.min(1, (hpx - 2 * my) / textH)
+  for (const r of rows) r.size = Math.floor(r.size * k)
+
+  const c = makeCanvas(wpx, hpx)
   const ctx = c.getContext('2d')
   ctx.fillStyle = bg
-  ctx.fillRect(0, 0, w, h)
+  ctx.fillRect(0, 0, wpx, hpx)
   const rand = mulberry32(lines.join('').length * 977)
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < (400 * wpx) / 512; i++) {
     ctx.fillStyle = `rgba(0,0,0,${rand() * 0.15})`
-    ctx.fillRect(rand() * w, rand() * h, rand() * 40, 2)
+    ctx.fillRect(rand() * wpx, rand() * hpx, rand() * 40, 2)
   }
+  // a painted border, a hand's width in from the edge
+  ctx.strokeStyle = fg
+  ctx.globalAlpha = 0.55
+  ctx.lineWidth = 4
+  ctx.strokeRect(mx * 0.45, my * 0.45, wpx - mx * 0.9, hpx - my * 0.9)
+  ctx.globalAlpha = 1
   ctx.fillStyle = fg
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  const size = Math.floor(h / (lines.length + 1))
-  ctx.font = `bold ${size}px "Trebuchet MS", sans-serif`
-  lines.forEach((ln, i) => ctx.fillText(ln, w / 2, (h / (lines.length + 1)) * (i + 1)))
+  const used = rows.reduce((a, r) => a + r.size * lead, 0)
+  let y = (hpx - used) / 2
+  for (const r of rows) {
+    ctx.font = `bold ${r.size}px ${SIGN_FONT}`
+    ctx.fillText(r.text, wpx / 2, y + (r.size * lead) / 2, avail)
+    y += r.size * lead
+  }
   // weathering
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < (60 * wpx) / 512; i++) {
     ctx.fillStyle = `rgba(40,30,20,${rand() * 0.35})`
     ctx.beginPath()
-    ctx.arc(rand() * w, rand() * h, rand() * 14, 0, Math.PI * 2)
+    ctx.arc(rand() * wpx, rand() * hpx, rand() * 14, 0, Math.PI * 2)
     ctx.fill()
   }
-  return toTexture(c, { repeat: false })
+  return { texture: toTexture(c, { repeat: false }), width, height, rows }
+}
+
+export function signTexture(lines, opts) {
+  return signBoard(lines, opts).texture
 }
 
 // Dinosaur skin: dorsal colour wrapping to a pale belly (u runs round the

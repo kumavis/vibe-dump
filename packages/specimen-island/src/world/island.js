@@ -11,6 +11,20 @@ export const BIOME_NAMES = ['beach', 'grass', 'jungle', 'swamp', 'highland', 'ro
 
 const NO_WATER = -1e4
 
+// The river mouth, overridable per island as cfg.river.mouth: the last `tidal`
+// m before the coast sit at sea level, the surface comes down to it at
+// `grade`, and over `length` m upstream of that the channel widens
+// (×1+widen), shoals, and its banks lie back to `opens` half-widths as low
+// sand instead of levees; the meander shrinks to `meander` of its swing.
+const MOUTH = { tidal: 35, length: 130, grade: 0.045, widen: 1.2, shoal: 0.35, opens: 7, meander: 0.35 }
+
+// cumulative distance along a polyline of [x, z] points
+function alongOf(pts) {
+  const out = new Float32Array(pts.length)
+  for (let k = 1; k < pts.length; k++) out[k] = out[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1])
+  return out
+}
+
 export class Island {
   constructor(cfg) {
     this.cfg = cfg
@@ -26,6 +40,7 @@ export class Island {
     this.water = new Float32Array(N).fill(NO_WATER)
     this.riverD = new Float32Array(N).fill(1e4) // distance to river centre / half width
     this.riverM = new Float32Array(N).fill(1e4) // distance to river centre in metres
+    this.riverE = f() // 1 where the river opens into its estuary (sandy, no levees)
     this.moist = f()
     this.slope = f()
     this.road = f()
@@ -217,27 +232,81 @@ export class Island {
       }
     }
     path.push(pts[pts.length - 1].slice())
-    // meander perpendicular to the flow
+    const sea = this.sea
+    const M = { ...MOUTH, ...cfg.mouth }
+    const tidal = M.tidal
+    const flare = M.length
+    const opensTo = M.opens
+    // meander perpendicular to the flow. Offsets are taken off the smooth
+    // spline, not the already-shifted points (which fed back into a zig-zag
+    // of blobs), and relax near the coast so the mouth runs out fairly straight.
+    const base = path.map((p) => p.slice())
+    const alongBase = alongOf(base)
+    let seaB = base.findIndex(([x, z]) => this.heightAt(x, z) < sea)
+    if (seaB < 0) seaB = base.length - 1
     let acc = 0
     for (let k = 1; k < path.length - 1; k++) {
-      const dx = path[k + 1][0] - path[k - 1][0]
-      const dz = path[k + 1][1] - path[k - 1][1]
+      const dx = base[k + 1][0] - base[k - 1][0]
+      const dz = base[k + 1][1] - base[k - 1][1]
       const l = Math.hypot(dx, dz) || 1
       acc += 6
-      const off = this.noiseB.noise(acc * 0.006, 3.3) * 28
+      const relax = lerp(M.meander, 1, smoothstep(0, 160, alongBase[seaB] - alongBase[k]))
+      const off = this.noiseB.noise(acc * 0.006, 3.3) * 28 * relax
       path[k][0] += (-dz / l) * off
       path[k][1] += (dx / l) * off
     }
-    // surface profile: always downhill, at least a metre below the land
+    // The channel ends a little past the coast, once the seabed is deeper than
+    // its bed — carving on out to the last control point only built levees
+    // across the seabed.
+    let line = path.map(([x, z]) => this.heightAt(x, z))
+    let coast = line.findIndex((h) => h < sea)
+    if (coast >= 0) {
+      let end = coast
+      while (end < path.length - 1 && line[end] > sea - cfg.depth - 1.5) end++
+      path.length = Math.min(path.length, end + 3)
+      line = line.slice(0, path.length)
+    } else coast = path.length - 1
     const K = path.length
+    const along = alongOf(path)
+    // estuary factor: 0 upstream, 1 over the last `tidal` metres to the coast
+    const est = new Float32Array(K)
+    for (let k = 0; k < K; k++) est[k] = 1 - smoothstep(tidal, tidal + flare, along[coast] - along[k])
+
+    const widths = new Float32Array(K)
+    for (let k = 0; k < K; k++) {
+      widths[k] = lerp(cfg.widthStart, cfg.widthEnd, k / (K - 1)) * (1 + 0.25 * this.noise.noise(k * 0.05, 9.1))
+      widths[k] *= 1 + M.widen * est[k] * est[k] // the mouth flares
+    }
+
+    // surface profile: always downhill, at least a metre below the land
     const surf = new Float32Array(K)
+    const cap = new Float32Array(K)
     let prev = Infinity
     for (let k = 0; k < K; k++) {
-      const h = this.heightAt(path[k][0], path[k][1])
-      prev = Math.min(prev - 0.03, h - 1.2)
-      surf[k] = Math.max(prev, this.sea)
+      prev = Math.min(prev - 0.03, line[k] - 1.2)
+      surf[k] = Math.max(prev, sea)
+      // near the coast the river comes down to the sea on a steady grade
+      // instead of dropping off the coastal bluff, and never sits above its
+      // own banks (which used to need levees across the beach)
+      cap[k] = sea + Math.max(0, along[coast] - along[k] - tidal) * M.grade
+      if (est[k] > 0.01) {
+        const kk = Math.min(K - 1, k + 1)
+        const k0 = Math.max(0, k - 1)
+        const dx = path[kk][0] - path[k0][0]
+        const dz = path[kk][1] - path[k0][1]
+        const l = Math.hypot(dx, dz) || 1
+        let low = Infinity
+        for (const side of [-1, 1]) {
+          for (const nd of [1.15, 1.5, 1.9]) {
+            const o = (side * nd * widths[k]) / 2
+            low = Math.min(low, this.heightAt(path[k][0] - (dz / l) * o, path[k][1] + (dx / l) * o))
+          }
+        }
+        cap[k] = Math.min(cap[k], Math.max(sea, low - 0.3))
+      }
+      surf[k] = Math.min(surf[k], cap[k])
     }
-    // smooth, then re-impose monotonicity
+    // smooth, then re-impose the caps and monotonicity
     const sm = new Float32Array(K)
     for (let k = 0; k < K; k++) {
       let s = 0
@@ -248,22 +317,28 @@ export class Island {
         s += surf[kk]
         c++
       }
-      sm[k] = s / c
+      sm[k] = Math.min(s / c, cap[k])
     }
     for (let k = 1; k < K; k++) sm[k] = Math.min(sm[k], sm[k - 1] - 0.01)
-    for (let k = 0; k < K; k++) sm[k] = Math.max(sm[k], this.sea)
-
-    const widths = new Float32Array(K)
+    for (let k = 0; k < K; k++) sm[k] = Math.max(sm[k], sea)
+    // While the river still runs above the sea its bed stays above sea level (a
+    // sandy riffle), so its water never doubles up over the sea's; past that
+    // the estuary pool deepens again.
+    const floor = new Float32Array(K).fill(-1e4)
+    let above = -1
     for (let k = 0; k < K; k++) {
-      widths[k] = lerp(cfg.widthStart, cfg.widthEnd, k / (K - 1)) * (1 + 0.25 * this.noise.noise(k * 0.05, 9.1))
+      if (sm[k] > sea + 0.005) above = k
+      if (above >= 0) floor[k] = sea + 0.06 - (along[k] - along[above]) * 0.09
     }
 
     const best = new Float32Array(this.n * this.n).fill(NO_WATER)
+    const bestF = new Float32Array(this.n * this.n)
+    const bestE = this.riverE
     for (let k = 0; k < K - 1; k++) {
       const [ax, az] = path[k]
       const [bx, bz] = path[k + 1]
       const hw = Math.max(widths[k], widths[k + 1]) / 2
-      const reach = hw * 4 + 10
+      const reach = hw * lerp(4, opensTo, Math.max(est[k], est[k + 1])) + 10
       this.forEachInBox(Math.min(ax, bx) - reach, Math.min(az, bz) - reach, Math.max(ax, bx) + reach, Math.max(az, bz) + reach, (id, x, z) => {
         const { d, t } = segDist(x, z, ax, az, bx, bz)
         const w = lerp(widths[k], widths[k + 1], t) / 2
@@ -272,26 +347,39 @@ export class Island {
           this.riverD[id] = nd
           this.riverM[id] = d
           best[id] = lerp(sm[k], sm[k + 1], t)
+          bestE[id] = lerp(est[k], est[k + 1], t)
+          bestF[id] = lerp(floor[k], floor[k + 1], t)
         }
       })
     }
     for (let id = 0; id < best.length; id++) {
       const nd = this.riverD[id]
-      if (nd > 4.5) continue
+      const e = bestE[id]
+      // the valley sides lie back further at the mouth
+      const reach = lerp(4.5, opensTo, e)
+      if (nd > reach) {
+        bestE[id] = 0
+        continue
+      }
       const s = best[id]
-      let h = this.h[id]
+      const h0 = this.h[id]
+      let h = h0
       if (nd < 1) {
-        const bed = s - cfg.depth * (1 - nd * nd) - 0.25
-        h = Math.min(h, bed)
+        // the bed shoals as the channel opens into the estuary
+        const bed = s - cfg.depth * (1 - M.shoal * e) * (1 - nd * nd) - 0.25
+        h = Math.min(h, Math.max(bed, bestF[id]))
       } else {
-        const bank = s + 0.35 + (nd - 1) * 0.9
-        h = Math.min(h, lerp(bank, h, smoothstep(1, 4.5, nd)))
-        if (nd < 1.6) h = Math.max(h, s + 0.2)
+        // banks: steep and muddy upstream, a low sandy shelf at the mouth
+        const bank = s + lerp(0.35, 0.12, e) + (nd - 1) * lerp(0.9, 0.4, e)
+        h = Math.min(h, lerp(bank, h, smoothstep(1, reach, nd)))
+        // a low levee keeps a perched river in its bed; it fades out as the
+        // surface comes down to the sea and never builds on beach or seabed
+        if (nd < 1.6 && h0 > sea && h < s + 0.2) h = lerp(h, s + 0.2, smoothstep(0.05, 0.8, s - sea))
       }
       this.h[id] = h
-      if (nd < 1.3 && s > this.sea + 0.01) this.water[id] = s
+      if (nd < 1.3 && s > sea + 0.01) this.water[id] = s
     }
-    this.river = { path, surf: sm, widths }
+    this.river = { path, surf: sm, widths, est, coast }
   }
 
   carveLake() {
@@ -434,6 +522,52 @@ export class Island {
         }
         prof[k] = Math.max(c ? s / c : raw[k], this.sea + 1.2)
       }
+      // Bridges: contiguous runs of road over the water. Each gets one flat
+      // deck height between its two banks, and the road profile ramps to it on
+      // both sides (a cutting into the high bank, an embankment on the low one)
+      // so the deck meets the road at both ends.
+      const spans = []
+      let run = null
+      for (let k = 0; k < K; k++) {
+        const wet = riverAt[k] < 1.4
+        if (wet && !run) run = { a: k, b: k }
+        else if (wet) run.b = k
+        if ((!wet || k === K - 1) && run) {
+          if (run.a > 0 && run.b < K - 1) spans.push(run)
+          run = null
+        }
+      }
+      const deckAt = new Float32Array(K).fill(NaN)
+      for (const sp of spans) {
+        let iA = sp.a
+        while (iA > 0 && riverAt[iA] < 2.6) iA--
+        let iB = sp.b
+        while (iB < K - 1 && riverAt[iB] < 2.6) iB++
+        let water = this.sea
+        for (let k = iA; k <= iB; k++) water = Math.max(water, this.waterAt(pts[k][0], pts[k][1]))
+        const H = Math.max(water + 1.6, (prof[iA] + prof[iB]) / 2)
+        for (const [k0, dir] of [
+          [iA, -1],
+          [iB, 1],
+        ]) {
+          // a level landing at deck height, then a ramp back to the natural
+          // profile, long enough to stay under ~9 % at its steepest
+          const land = 2
+          let dev = 0
+          for (let q = 1; q <= 40 && k0 + dir * q >= 0 && k0 + dir * q < K; q++) dev = Math.max(dev, Math.abs(prof[k0 + dir * q] - H))
+          const n = clamp(Math.ceil((1.5 * dev) / (0.09 * 4)), 3, 40)
+          for (let q = 1; q <= land + n; q++) {
+            const k = k0 + dir * q
+            if (k < 0 || k >= K) break
+            prof[k] = lerp(prof[k], H, 1 - smoothstep(land, land + n, q))
+          }
+        }
+        for (let k = iA; k <= iB; k++) {
+          prof[k] = H
+          if (k < iB) deckAt[k] = H
+        }
+        Object.assign(sp, { iA, iB, H, water })
+      }
       const hw = 3.2
       const shoulder = 7
       for (let k = 0; k < K - 1; k++) {
@@ -444,33 +578,49 @@ export class Island {
           const { d, t } = segDist(x, z, ax, az, bx, bz)
           if (d > hw + shoulder) return
           this.clear[id] = Math.max(this.clear[id], 1 - smoothstep(hw, hw + 4, d))
-          if (this.riverD[id] < 2.6) return
+          if (this.riverD[id] < 2.6) {
+            // under a deck: keep the bank clear of the planks
+            if (!Number.isNaN(deckAt[k]) && d < hw + 1.5) this.h[id] = Math.min(this.h[id], deckAt[k] - 0.45)
+            return
+          }
           const target = lerp(prof[k], prof[k + 1], t)
           const kk = 1 - smoothstep(hw, hw + shoulder, d)
           this.h[id] = lerp(this.h[id], target, kk)
           this.road[id] = Math.max(this.road[id], 1 - smoothstep(hw - 1, hw + 0.8, d))
         })
       }
-      // bridges: contiguous runs of road over the channel
-      let run = null
-      for (let k = 0; k < K; k++) {
-        const wet = riverAt[k] < 2.2
-        if (wet && !run) run = { a: k, b: k }
-        else if (wet) run.b = k
-        if ((!wet || k === K - 1) && run) {
-          const a = Math.max(0, run.a - 2)
-          const b = Math.min(K - 1, run.b + 2)
-          const [ax, az] = pts[a]
-          const [bx, bz] = pts[b]
-          this.bridges.push({
-            x: (ax + bx) / 2,
-            z: (az + bz) / 2,
-            yaw: Math.atan2(-(bx - ax), -(bz - az)),
-            length: Math.hypot(bx - ax, bz - az) + 4,
-            y: Math.max(prof[a], prof[b]) + 0.15,
-          })
-          run = null
+      // Span each deck from where the road leaves deck height on one bank to
+      // where it regains it on the other, plus a bearing on solid ground.
+      for (const sp of spans) {
+        const [ax, az] = pts[sp.iA]
+        const [bx, bz] = pts[sp.iB]
+        const len = Math.hypot(bx - ax, bz - az) || 1
+        const ux = (bx - ax) / len
+        const uz = (bz - az) / len
+        const mx = (ax + bx) / 2
+        const mz = (az + bz) / 2
+        const out = (sign) => {
+          for (let s = 1; s < len / 2 + 16; s += 0.5) {
+            if (this.heightAt(mx + ux * s * sign, mz + uz * s * sign) >= sp.H - 0.08) return { s, solid: true }
+          }
+          return { s: len / 2 + 16, solid: false }
         }
+        const A = out(-1)
+        const B = out(1)
+        const bear = 1.6
+        const s0 = -A.s - bear
+        const s1 = B.s + bear
+        const end = (s, e) => ({ x: mx + ux * s, z: mz + uz * s, solid: e.solid, ground: this.heightAt(mx + ux * s, mz + uz * s) })
+        this.bridges.push({
+          x: mx + ux * ((s0 + s1) / 2),
+          z: mz + uz * ((s0 + s1) / 2),
+          yaw: Math.atan2(-ux, -uz),
+          length: s1 - s0,
+          y: sp.H,
+          water: sp.water,
+          // where the banks start to fall away under the deck (abutments go here)
+          ends: [end(-A.s, A), end(B.s, B)],
+        })
       }
       this.roads.push({ pts, prof })
     }
@@ -516,7 +666,7 @@ export class Island {
           rem -= t
           return t
         }
-        const beach = h > this.sea - 1 ? (1 - smoothstep(1.4, 3.6, h)) * (this.riverD[id] > 1.4 ? 1 : 0.3) : 1
+        const beach = h > this.sea - 1 ? (1 - smoothstep(1.4, 3.6, h)) * lerp(this.riverD[id] > 1.4 ? 1 : 0.3, 1, this.riverE[id]) : 1
         this.w.beach[id] = take(beach)
         this.w.rock[id] = take(smoothstep(0.85, 1.25, s) + smoothstep(170, 195, h))
         this.w.highland[id] = take(smoothstep(70, 105, h))
@@ -554,7 +704,8 @@ export class Island {
         d.fern[id] = open * bank * (w.jungle[id] * clamp(0.75 + 0.4 * patch2, 0, 1) + w.swamp[id] * 0.25)
         d.bush[id] = open * (w.jungle[id] * 0.45 + w.grass[id] * smoothstep(0.2, 0.6, patch2) * 0.4 + w.highland[id] * 0.25)
         d.grass[id] = open * bank * (w.grass[id] * smoothstep(-0.25, 0.25, patch + 0.3 * patch2) + w.highland[id] * 0.35 * smoothstep(0, 0.5, patch2) + w.jungle[id] * 0.1)
-        d.reed[id] = dry * (1 - this.road[id]) * (w.swamp[id] * 0.85 + (rv > 1.15 && rv < 2.6 ? 0.85 : 0) + (h < 2.6 && w.beach[id] < 0.5 ? 0.2 : 0))
+        const reedBank = rv > 1.15 && rv < 2.6 ? 0.85 * (1 - 0.8 * this.riverE[id]) : 0 // thins out on the estuary sand
+        d.reed[id] = dry * (1 - this.road[id]) * (w.swamp[id] * 0.85 + reedBank + (h < 2.6 && w.beach[id] < 0.5 ? 0.2 : 0))
         d.rock[id] = open * (w.rock[id] * 0.6 + w.highland[id] * 0.12 + w.beach[id] * 0.04 + w.grass[id] * 0.02 + w.jungle[id] * 0.02)
         d.bigleaf[id] = open * bank * (w.jungle[id] * smoothstep(-0.1, 0.5, patch2) * 0.6 + w.swamp[id] * 0.3)
         d.log[id] = open * w.jungle[id] * 0.25
