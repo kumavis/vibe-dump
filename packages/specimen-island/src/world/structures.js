@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { concrete, planks, corrugated, paintedMetal, signTexture } from './textures.js'
+import { concrete, planks, corrugated, paintedMetal, rustedPaint, signBoard } from './textures.js'
 import { Rng } from '../core/rng.js'
-import { CACHES, LOOT } from '../data/items.js'
+import { CACHES, CRATE, ITEMS, LOOT } from '../data/items.js'
 import { LORE } from '../data/lore.js'
 
 // The preserve's tired infrastructure, built from a tiny prefab kit. A Kit is a
@@ -32,6 +32,14 @@ function mats() {
     vine: L({ color: 0x3a6526, side: THREE.DoubleSide }),
     bulb: L({ color: 0x444033, emissive: 0x000000 }),
     helipad: L({ map: helipadTexture() }),
+    // wrecks
+    rustGreen: L({ map: rustedPaint([82, 102, 70]) }),
+    rustOrange: L({ map: rustedPaint([178, 100, 46]) }),
+    rustWhite: L({ map: rustedPaint([200, 196, 182]) }),
+    rustBlue: L({ map: rustedPaint([70, 88, 104]) }),
+    tire: L({ color: 0x1a1918 }),
+    seat: L({ color: 0x3a2e24 }),
+    moss: L({ color: 0x4a6a2c, side: THREE.DoubleSide }),
   }
   return MATS
 }
@@ -198,6 +206,38 @@ export class Kit {
 
 // ---------------------------------------------------------------- shared bits
 
+// What a supply crate holds, decided when it is opened: a fixed bundle's items
+// that still fit, else a few picks from LOOT among what the pack has room for,
+// favouring whatever the player is short of. Empty only if the pack is full.
+function packCrate(G, rng, fixed) {
+  const inv = G.inventory
+  const room = (id) => (ITEMS[id] ? ITEMS[id].max : 99) - inv.count(id)
+  const items = {}
+  for (const [id, n] of Object.entries(fixed?.items || {})) if (room(id) > 0) items[id] = Math.min(n, room(id))
+  if (Object.keys(items).length) return items
+  const pool = LOOT.filter((e) => room(e.item) > 0)
+  for (let p = rng.int(CRATE.picks[0], CRATE.picks[1]); p > 0 && pool.length; p--) {
+    const weights = pool.map((e) => {
+      const full = inv.count(e.item) / ITEMS[e.item].max
+      return e.w * (1 + CRATE.lowBoost * (1 - full)) * (e.for && !inv.weapons.has(e.for) ? CRATE.unownedAmmo : 1)
+    })
+    const e = rng.weighted(pool, weights)
+    pool.splice(pool.indexOf(e), 1)
+    items[e.item] = Math.min(rng.int(e.n[0], e.n[1]), room(e.item))
+  }
+  return items
+}
+
+// "+6 pistol darts, +1 medkit"
+function lootLine(got) {
+  return Object.entries(got)
+    .map(([id, n]) => {
+      const name = (ITEMS[id]?.name || id).toLowerCase()
+      return `+${n} ${n === 1 ? name.replace(/s$/, '') : name}`
+    })
+    .join(', ')
+}
+
 function crate(G, kit, lx, lz, id, bundle, rng, ly = null) {
   const y = ly ?? kit.ground(lx, lz)
   const mesh = new THREE.Mesh(boxGeo(1.1, 0.75, 0.75, 1), mats().wood)
@@ -212,13 +252,24 @@ function crate(G, kit, lx, lz, id, bundle, rng, ly = null) {
       id,
       label: 'Search supply crate',
       hold: 0.7,
-      once: true,
       radius: 2.2,
       onUse: (G) => {
-        const lines = G.inventory.grant(bundle || rng.weighted(LOOT).items)
-        G.toast(lines.length ? `Found: ${lines.join(', ')}` : 'Crate is empty — you are carrying all you can.', 'loot')
+        const items = packCrate(G, rng, bundle)
+        const pos = mesh.getWorldPosition(new THREE.Vector3())
+        if (!Object.keys(items).length) {
+          // nothing it could hold fits: leave it shut for later
+          G.toast('Pack is full — leave this crate for later.', 'info')
+          G.audio?.play('click')
+          return
+        }
+        const before = Object.fromEntries(Object.keys(items).map((k) => [k, G.inventory.count(k)]))
+        G.inventory.grant({ items })
+        const got = {}
+        for (const k in items) if (G.inventory.count(k) > before[k]) got[k] = G.inventory.count(k) - before[k]
+        G.toast(`Crate: ${lootLine(got)}`, 'loot')
         mesh.material = mats().darkWood
-        G.audio?.play('crate', { pos: mesh.getWorldPosition(new THREE.Vector3()) })
+        G.audio?.play('crate', { pos })
+        G.interact.remove(id)
       },
     },
     lx,
@@ -272,20 +323,18 @@ function lore(G, kit, id, label, lx, ly, lz) {
   )
 }
 
+// A painted board between two posts. The board is sized to its text
+// (signBoard), and the posts flank its ends, clear of the lettering.
 function sign(G, kit, lines, lx, lz, ry = 0, opts = {}) {
   const g = kit.ground(lx, lz)
-  kit.box(0.14, 2.2, 0.14, 'darkWood', lx - 0.9, g + 1.1, lz, { ry })
-  kit.box(0.14, 2.2, 0.14, 'darkWood', lx + 0.9, g + 1.1, lz, { ry })
-  const tex = signTexture(lines, opts)
-  const board = new THREE.Mesh(new THREE.BoxGeometry(2.3, 1.05, 0.08), [
-    mats().darkWood,
-    mats().darkWood,
-    mats().darkWood,
-    mats().darkWood,
-    new THREE.MeshLambertMaterial({ map: tex }),
-    new THREE.MeshLambertMaterial({ map: tex }),
-  ])
-  board.position.set(lx, g + 1.75, lz)
+  const { texture, width, height } = signBoard(lines, opts)
+  const bottom = 1.2
+  const px = width / 2 + 0.07
+  for (const s of [-1, 1]) kit.post(0.14, g + bottom + height + 0.06, 'darkWood', lx + Math.cos(ry) * px * s, lz - Math.sin(ry) * px * s, { ry })
+  const face = new THREE.MeshLambertMaterial({ map: texture })
+  const board = new THREE.Mesh(new THREE.BoxGeometry(width, height, 0.08), [mats().darkWood, mats().darkWood, mats().darkWood, mats().darkWood, face, face])
+  board.name = 'sign'
+  board.position.set(lx, g + bottom + height / 2, lz)
   board.rotation.set(opts.tilt || 0.04, ry, opts.lean || 0.05)
   board.castShadow = true
   kit.add(board)
@@ -766,48 +815,298 @@ export function buildRelay(G, poi, rng) {
   return kit
 }
 
+// A plank road bridge. Island.buildRoads levels the road on both banks to the
+// deck height and measures the span between them, so the deck rests on the
+// road at each end; concrete abutments hold it where the banks fall away.
 export function buildBridge(G, b, rng) {
   const kit = new Kit(G, b.x, b.y, b.z, b.yaw, 'bridge')
   const L = b.length
-  for (let z = -L / 2; z < L / 2; z += 1.2) {
-    if (rng.chance(0.06)) continue
-    kit.box(4.6, 0.18, 1.0, 'wood', 0, -0.09, z + 0.6, { collide: false, tex: 1.5 })
+  // planks, a few missing mid-span (the walkable deck below is continuous)
+  for (let z = -L / 2; z < L / 2 - 0.05; z += 1.2) {
+    const l = Math.min(1.0, L / 2 - z)
+    if (Math.abs(z) < L / 2 - 5 && rng.chance(0.06)) continue
+    kit.box(4.6, 0.18, l, 'wood', 0, -0.09, z + l / 2, { collide: false, tex: 1.5 })
   }
-  G.physics.addBox(b.x, b.z, 2.3, L / 2, b.yaw, b.y - 0.5, b.y)
+  G.physics.addBox(b.x, b.z, 2.3, L / 2, b.yaw, b.y - 0.5, b.y, { material: 'wood' })
   for (const x of [-2.4, 2.4]) {
     kit.box(0.4, 0.5, L, 'darkWood', x, -0.4, 0, { collide: false })
     for (let z = -L / 2; z <= L / 2; z += 3) kit.box(0.12, 1.1, 0.12, 'darkWood', x, 0.55, z)
     kit.box(0.1, 0.1, L, 'darkWood', x, 1.05, 0, { collide: false })
-    G.physics.addBox(...kit.world(x, 0), 0.08, L / 2, b.yaw, b.y, b.y + 1.1, { walkable: false })
+    G.physics.addBox(...kit.world(x, 0), 0.08, L / 2, b.yaw, b.y, b.y + 1.1, { walkable: false, material: 'wood' })
   }
-  for (let z = -L / 2 + 6; z < L / 2 - 4; z += 9) {
+  // abutments where each bank starts to drop away under the deck
+  const local = (x, z) => {
+    const dx = x - b.x
+    const dz = z - b.z
+    return [dx * kit.cos - dz * kit.sin, dx * kit.sin + dz * kit.cos]
+  }
+  const seats = (b.ends || []).map((e) => local(e.x, e.z)[1])
+  for (const lz of seats) {
+    const toward = -Math.sign(lz) // toward mid-span
+    const cz = lz + toward * 0.7
+    let low = Infinity
+    for (const x of [-2.7, 0, 2.7]) for (const dz of [-0.7, 0.7]) low = Math.min(low, kit.ground(x, cz + dz))
+    const top = -0.18
+    const bottom = low - 0.6
+    if (top - bottom > 0.3) kit.box(5.6, top - bottom, 1.4, 'concrete', 0, (top + bottom) / 2, cz, { tex: 2 })
+  }
+  // a bank that never came up to deck height gets a plank ramp down to it
+  ;(b.ends || []).forEach((e, i) => {
+    if (e.solid) return
+    const out = Math.sign(seats[i]) || 1
+    const z0 = (out * L) / 2
+    const drop = Math.max(0, -kit.ground(0, z0 + out * 2))
+    if (drop < 0.3) return
+    const run = drop * 4
+    const n = Math.ceil(run / 0.8)
+    for (let k = 0; k < n; k++) {
+      const top = b.y - (drop * (k + 1)) / n
+      G.physics.addBox(...kit.world(0, z0 + out * (k + 0.5) * (run / n)), 2.3, run / n / 2, b.yaw, top - 0.5, top, { material: 'wood' })
+    }
+    kit.box(4.6, 0.18, Math.hypot(run, drop), 'wood', 0, -drop / 2 - 0.09, z0 + (out * run) / 2, { rx: out * Math.atan2(drop, run), collide: false, tex: 1.5 })
+  })
+  // trestle piers between the abutments wherever the deck stands clear
+  const span = seats.length === 2 ? Math.abs(seats[0] - seats[1]) : L - 8
+  const mid = seats.length === 2 ? (seats[0] + seats[1]) / 2 : 0
+  const bays = Math.max(1, Math.round(span / 9))
+  for (let i = 1; i < bays; i++) {
+    const z = mid - span / 2 + (i * span) / bays
+    let low = Infinity
     for (const x of [-2.2, 2.2]) {
       const g = kit.ground(x, z)
+      low = Math.min(low, g)
       if (g > -0.8) continue
       kit.box(0.4, -g + 0.5, 0.4, 'darkWood', x, g / 2 - 0.25, z, { collide: true })
     }
+    if (low < -1.2) kit.box(4.8, 0.25, 0.3, 'darkWood', 0, -0.78, z, { collide: false })
   }
   kit.finish()
   return kit
 }
 
-export function buildWreck(G, x, z, yaw, rng, withCrate) {
-  const y = G.island.heightAt(x, z)
-  const kit = new Kit(G, x, y, z, yaw, 'wreck')
-  const tilt = rng.range(-0.08, 0.08)
-  kit.box(1.9, 0.8, 4.1, rng.chance(0.5) ? 'orange' : 'green', 0, 0.8, 0, { rz: tilt, collide: false })
-  kit.box(1.8, 0.5, 1.6, 'metal', 0, 1.45, -0.2, { rz: tilt, collide: false })
-  kit.box(1.85, 0.08, 1.5, 'black', 0, 1.75, 0.9, { collide: false, rx: -0.3 })
-  for (const [wx, wz] of [
-    [-0.95, 1.3],
-    [0.95, 1.3],
-    [-0.95, -1.3],
-  ])
-    kit.cyl(0.42, 0.3, 'black', wx, 0.42, wz, { rz: Math.PI / 2, collide: false, seg: 10 })
-  G.physics.addBox(x, z, 0.95, 2.05, yaw, y, y + 1.6)
-  kit.vines(0, 1.5, 2.06, 1.6, 1.0, 0, rng)
-  if (withCrate) crate(G, kit, 2.2, -0.5, `crate:wreck:${Math.round(x)}:${Math.round(z)}`, null, rng)
+// Abandoned vehicles at real scale: the station's expedition 4x4 (≈4.4 m,
+// hardtop or open with a roll bar) and an old flatbed supply truck (≈6 m).
+// Each has lost or broken a wheel, so the body sits tilted on that corner;
+// everything above the chassis is pushed through one tilt matrix so the parts
+// stay together. Colliders are the untilted footprints.
+const WRECKS = {
+  jeep: {
+    length: 4.4,
+    width: 1.9,
+    wheelR: 0.44,
+    axles: [1.32, -1.22],
+    track: 0.8,
+    paints: ['rustGreen', 'rustOrange', 'rustWhite'],
+  },
+  truck: {
+    length: 6.0,
+    width: 2.2,
+    wheelR: 0.48,
+    axles: [2.0, -1.55],
+    track: 0.86,
+    paints: ['rustBlue', 'rustGreen', 'rustOrange'],
+  },
+}
+
+export function buildWreck(G, x, z, yaw, rng, withCrate, kind = 'jeep') {
+  const spec = WRECKS[kind]
+  const isl = G.island
+  // sit on the average of the four wheel contact points
+  const cs = Math.cos(yaw)
+  const sn = Math.sin(yaw)
+  let gy = 0
+  for (const az of spec.axles) for (const sx of [-1, 1]) gy += isl.heightAt(x + sx * spec.track * cs + az * sn, z - sx * spec.track * sn + az * cs) / 4
+  const kit = new Kit(G, x, gy - 0.04, z, yaw, 'wreck')
+  const paint = rng.pick(spec.paints)
+  // which corner gave out: [side -1 left / +1 right, axle 0 front / 1 rear]
+  const lostSide = rng.sign()
+  const lostAxle = rng.int(0, 1)
+  const drop = kind === 'jeep' ? 0.3 : 0.22
+  const tiltZ = lostSide < 0 ? drop / (spec.track * 2) : -drop / (spec.track * 2)
+  const tiltX = (lostAxle === 0 ? 1 : -1) * (drop / (spec.axles[0] - spec.axles[1])) * 0.9
+  const TILT = new THREE.Matrix4().compose(new THREE.Vector3(0, -drop * 0.35, 0), new THREE.Quaternion().setFromEuler(new THREE.Euler(tiltX, 0, tiltZ)), new THREE.Vector3(1, 1, 1))
+  const LM = new THREE.Matrix4()
+  const part = (mat, geo, lx, ly, lz, rx = 0, ry = 0, rz = 0, tilted = true) => {
+    LM.compose(V4.set(lx, ly, lz), Q4.setFromEuler(E4.set(rx, ry, rz)), S4)
+    geo.applyMatrix4(LM)
+    if (tilted) geo.applyMatrix4(TILT)
+    ;(kit.buckets[mat] ||= []).push(geo)
+  }
+  const box = (w, h, d, mat, lx, ly, lz, rx = 0, ry = 0, rz = 0, tex = 2) => part(mat, boxGeo(w, h, d, tex), lx, ly, lz, rx, ry, rz)
+  const wheel = (r, w, lx, ly, lz, rz = Math.PI / 2, rx = 0, tilted = true) => {
+    part('tire', new THREE.CylinderGeometry(r, r, w, 14), lx, ly, lz, rx, 0, rz, tilted)
+    part('metal', new THREE.CylinderGeometry(r * 0.55, r * 0.55, w + 0.02, 8), lx, ly, lz, rx, 0, rz, tilted)
+  }
+  // the wheels: one gone (lying in the grass nearby), one buckled
+  const R = spec.wheelR
+  const wheels = []
+  spec.axles.forEach((az, ai) => {
+    for (const sx of [-1, 1]) wheels.push({ sx, az, ai, lost: sx === lostSide && ai === lostAxle })
+  })
+  const buckled = wheels.find((w) => !w.lost && w.ai !== lostAxle && w.sx === -lostSide) || wheels[0]
+  for (const w of wheels) {
+    if (w.lost) {
+      // bare hub resting on the ground
+      part('metal', new THREE.CylinderGeometry(0.16, 0.16, 0.2, 8), w.sx * (spec.track - 0.05), R - 0.05, w.az, 0, 0, Math.PI / 2)
+      continue
+    }
+    const camber = w === buckled ? -w.sx * 0.32 : 0
+    const tw = kind === 'truck' && w.ai === 1 ? 0.3 : 0.32
+    wheel(R, tw, w.sx * spec.track, R, w.az, Math.PI / 2 + camber)
+    // dual rear wheels on the truck (the outer one on the lost corner went too)
+    if (kind === 'truck' && w.ai === 1) wheel(R, tw, w.sx * (spec.track + 0.32), R, w.az)
+  }
+  {
+    // the missing wheel, lying flat or leaning on the body
+    const lx = lostSide * (spec.width / 2 + rng.range(0.9, 1.8))
+    const lz = spec.axles[lostAxle] + rng.range(-0.8, 0.8)
+    const g = kit.ground(lx, lz)
+    if (rng.chance(0.5)) wheel(R, 0.3, lx, g + 0.16, lz, 0, 0, false)
+    else wheel(R, 0.3, lostSide * (spec.width / 2 + 0.25), g + R + 0.02, lz, Math.PI / 2 + lostSide * 0.35, 0, false)
+  }
+
+  const body = kind === 'jeep' ? buildJeepBody(box, part, paint, rng) : buildTruckBody(box, part, paint, rng)
+
+  // overgrowth: vines over the edges, moss on flat panels, weeds round the base
+  const top = kind === 'jeep' ? 1.2 : 2.45
+  for (let i = 0; i < (kind === 'jeep' ? 7 : 11); i++) {
+    const side = rng.sign()
+    const lz = rng.range(-spec.length / 2 + 0.3, spec.length / 2 - 0.3)
+    const len = rng.range(0.4, kind === 'jeep' ? 0.9 : 1.6)
+    const g = new THREE.PlaneGeometry(rng.range(0.18, 0.4), len, 1, 3)
+    const p = g.attributes.position
+    for (let k = 0; k < p.count; k++) p.setX(k, p.getX(k) + (rng.next() - 0.5) * 0.2)
+    g.translate(0, -len / 2, 0)
+    part('vine', g, side * (spec.width / 2 + 0.03), (kind === 'truck' && rng.chance(0.5) ? 1.6 : top) + 0.02, lz, 0, Math.PI / 2, 0)
+  }
+  for (let i = 0; i < 4; i++) {
+    const g = new THREE.CircleGeometry(rng.range(0.2, 0.45), 6)
+    const [my, mz, mr] = kind === 'jeep' ? [1.265, 1.4, 0.55] : [2.505, 1.2, 0.4]
+    part('moss', g, rng.range(-0.6, 0.6), my + i * 0.002, mz + rng.range(-mr, mr), -Math.PI / 2, 0, 0)
+  }
+  // tufts of tall grass blades round the base
+  const blades = []
+  for (let i = 0; i < 18; i++) {
+    const a = rng.range(0, Math.PI * 2)
+    const tx = Math.cos(a) * (spec.width / 2 + rng.range(-0.15, 0.4))
+    const tz = Math.sin(a) * (spec.length / 2 + rng.range(-0.3, 0.3))
+    const ty = kit.ground(tx, tz) - 0.03
+    for (let k = 0; k < 7; k++) {
+      const ba = rng.range(0, Math.PI * 2)
+      const h = rng.range(0.4, 1.0)
+      const lean = rng.range(0.05, 0.35)
+      const w = 0.045
+      const bx = tx + rng.range(-0.15, 0.15)
+      const bz = tz + rng.range(-0.15, 0.15)
+      blades.push(bx - Math.sin(ba) * w, ty, bz + Math.cos(ba) * w, bx + Math.sin(ba) * w, ty, bz - Math.cos(ba) * w, bx + Math.cos(ba) * lean, ty + h, bz + Math.sin(ba) * lean)
+    }
+  }
+  const grass = new THREE.BufferGeometry()
+  grass.setAttribute('position', new THREE.Float32BufferAttribute(blades, 3))
+  grass.computeVertexNormals()
+  part('moss', grass, 0, 0, 0, 0, 0, 0, false)
+
+  // colliders: the untilted footprint of each block
+  const P = G.physics
+  const col = (lx, lz, hx, hz, y1) => P.addBox(...kit.world(lx, lz), hx, hz, yaw, kit.y - 0.3, kit.y + y1)
+  let crateAt = [spec.width / 2 + 1.1, -0.5, null]
+  if (kind === 'jeep') {
+    col(0, 0.05, 0.95, 2.2, 1.18)
+    if (body.hardtop) P.addBox(...kit.world(0, -0.78), 0.95, 1.36, yaw, kit.y + 1.18, kit.y + 1.95)
+  } else {
+    col(0, 2.45, 0.85, 0.6, 1.45) // bonnet
+    col(0, 1.2, 1.0, 0.68, 2.4) // cab
+    col(0, -1.3, 1.1, 1.85, 1.24) // bed
+    // on the bed, wherever the tilt has left it
+    const onBed = new THREE.Vector3(rng.range(-0.3, 0.3), 1.25, -1.9).applyMatrix4(TILT)
+    crateAt = [onBed.x, onBed.z, onBed.y]
+  }
+  if (withCrate) crate(G, kit, crateAt[0], crateAt[1], `crate:wreck:${Math.round(x)}:${Math.round(z)}`, null, rng, crateAt[2])
   kit.finish()
+  return kit
+}
+
+function buildJeepBody(box, part, paint, rng) {
+  // chassis and the tub below the beltline, with open wheel arches
+  box(0.14, 0.2, 4.0, 'black', -0.45, 0.48, 0.05)
+  box(0.14, 0.2, 4.0, 'black', 0.45, 0.48, 0.05)
+  box(1.3, 0.5, 4.3, paint, 0, 0.73, 0.05)
+  for (const sx of [-1, 1]) {
+    box(0.3, 0.5, 1.5, paint, sx * 0.8, 0.73, 0.05) // sills between the arches
+    box(0.3, 0.5, 0.36, paint, sx * 0.8, 0.73, 2.02)
+    box(0.3, 0.5, 0.36, paint, sx * 0.8, 0.73, -1.92)
+  }
+  // beltline, flat-topped wings and bonnet
+  box(1.9, 0.22, 4.3, paint, 0, 1.09, 0.05)
+  box(1.6, 0.06, 1.55, rng.chance(0.4) ? 'rust' : paint, 0, 1.23, 1.4, -0.02, 0, 0, 1.5)
+  // grille, lamps, bumpers
+  box(1.3, 0.42, 0.06, 'metal', 0, 0.94, 2.21)
+  for (const sx of [-1, 1]) part('glass', new THREE.CylinderGeometry(0.1, 0.1, 0.06, 10), sx * 0.66, 0.98, 2.22, Math.PI / 2, 0, 0)
+  box(1.95, 0.16, 0.18, 'black', 0, 0.52, 2.3)
+  box(1.9, 0.16, 0.16, 'black', 0, 0.52, -2.18)
+  // windscreen frame (the glass long gone, a shard left in one corner)
+  for (const sx of [-1, 1]) box(0.06, 0.62, 0.06, 'black', sx * 0.88, 1.5, 0.58, -0.18)
+  box(1.82, 0.06, 0.06, 'black', 0, 1.8, 0.53, -0.18)
+  part('glass', new THREE.PlaneGeometry(0.6, 0.35), -0.5, 1.37, 0.6, -0.18, 0, 0.2)
+  // seats and wheel
+  for (const sx of [-1, 1]) {
+    box(0.52, 0.18, 0.5, 'seat', sx * 0.42, 1.27, -0.15)
+    box(0.52, 0.55, 0.12, 'seat', sx * 0.42, 1.55, -0.42, -0.12)
+  }
+  part('black', new THREE.TorusGeometry(0.19, 0.025, 4, 12), -0.42, 1.52, 0.28, -0.9, 0, 0)
+  const hardtop = rng.chance(0.5)
+  if (hardtop) {
+    // hardtop: pillars, roof and a solid rear tub
+    for (const sx of [-1, 1]) {
+      box(0.08, 0.66, 0.08, 'rustWhite', sx * 0.9, 1.53, -0.6)
+      box(0.08, 0.66, 0.08, 'rustWhite', sx * 0.9, 1.53, -2.08)
+      box(0.04, 0.42, 1.38, 'rustWhite', sx * 0.92, 1.42, -1.34) // lower rear quarter
+    }
+    box(1.9, 0.08, 2.75, 'rustWhite', 0, 1.9, -0.75, 0.01)
+    box(1.84, 0.62, 0.05, 'rustWhite', 0, 1.53, -2.15)
+  } else {
+    // open, with a roll bar braced to the rear corners
+    for (const sx of [-1, 1]) {
+      box(0.08, 0.82, 0.08, 'black', sx * 0.85, 1.6, -0.75)
+      box(0.07, 0.07, 1.45, 'black', sx * 0.85, 1.6, -1.42, -0.5)
+    }
+    box(1.78, 0.08, 0.08, 'black', 0, 2.0, -0.75)
+  }
+  // spare wheel on the tailgate
+  part('tire', new THREE.CylinderGeometry(0.42, 0.42, 0.26, 14), 0, 1.25, -2.36, Math.PI / 2, 0, 0)
+  return { hardtop }
+}
+
+function buildTruckBody(box, part, paint, rng) {
+  box(0.16, 0.24, 5.6, 'black', -0.5, 0.62, -0.1)
+  box(0.16, 0.24, 5.6, 'black', 0.5, 0.62, -0.1)
+  // bonnet and front wings over the front wheels
+  box(1.5, 0.6, 1.15, paint, 0, 1.2, 2.45)
+  for (const sx of [-1, 1]) box(0.36, 0.2, 1.25, paint, sx * 0.9, 1.14, 2.05)
+  box(1.4, 0.5, 0.06, 'metal', 0, 1.15, 3.04)
+  box(2.1, 0.2, 0.22, 'black', 0, 0.66, 3.08)
+  for (const sx of [-1, 1]) part('glass', new THREE.CylinderGeometry(0.11, 0.11, 0.08, 10), sx * 0.9, 1.32, 2.68, Math.PI / 2, 0, 0)
+  // cab: dark window bands where the glass is grimed or gone
+  box(2.0, 1.45, 1.35, paint, 0, 1.7, 1.2)
+  box(1.8, 0.55, 0.04, 'black', 0, 2.05, 1.89)
+  for (const sx of [-1, 1]) box(0.04, 0.5, 0.85, 'black', sx * 1.01, 2.05, 1.3)
+  box(2.06, 0.08, 1.42, paint, 0, 2.46, 1.2)
+  for (const sx of [-1, 1]) box(0.06, 0.06, 0.5, 'black', sx * 1.08, 1.95, 1.75, 0, 0.25) // mirror arms
+  // fuel tank
+  part('rust', new THREE.CylinderGeometry(0.26, 0.26, 1.0, 10), 0.85, 0.72, 0.0, Math.PI / 2, 0, 0)
+  // the flatbed: rotten planks on rusted bearers, a headboard, side boards
+  box(2.2, 0.12, 3.7, 'darkWood', 0, 1.19, -1.3, 0, 0, 0, 1.5)
+  for (const z of [-2.9, -1.8, -0.7, 0.3]) box(2.2, 0.12, 0.14, 'rust', 0, 1.07, z)
+  box(2.2, 0.95, 0.08, 'rust', 0, 1.72, 0.5, 0, 0, 0, 3)
+  for (const sx of [-1, 1]) {
+    if (rng.chance(0.75)) box(0.06, 0.38, 3.6, 'darkWood', sx * 1.08, 1.44, -1.3, 0, 0, sx * rng.range(0, 0.25), 1.5)
+  }
+  // tailgate hanging open
+  box(2.1, 0.38, 0.06, 'darkWood', 0, 0.95, -3.18, 0.35, 0, 0, 1.5)
+  // a sapling has rooted in the bed
+  part('darkWood', new THREE.CylinderGeometry(0.04, 0.07, 1.6, 5), 0.6, 2.0, -2.6, 0.05, 0, -0.08)
+  part('vine', new THREE.IcosahedronGeometry(0.55, 0), 0.68, 2.85, -2.6)
+  return {}
 }
 
 // Power poles along a road polyline, some leaning, as one merged mesh.
@@ -867,13 +1166,13 @@ export function buildStructures(G) {
   buildPoles(G, isl.roads[1], rng)
   // wrecks along the roads
   const wrecks = [
-    [0, 0.55, true],
-    [1, 0.22, false],
-    [1, 0.62, true],
-    [2, 0.5, true],
-    [3, 0.6, false],
+    [0, 0.55, true, 'truck'],
+    [1, 0.22, false, 'jeep'],
+    [1, 0.62, true, 'jeep'],
+    [2, 0.5, true, 'truck'],
+    [3, 0.6, false, 'jeep'],
   ]
-  for (const [ri, f, withCrate] of wrecks) {
+  for (const [ri, f, withCrate, kind] of wrecks) {
     const r = isl.roads[ri]
     if (!r) continue
     const k = Math.floor(r.pts.length * f)
@@ -883,6 +1182,7 @@ export function buildStructures(G) {
     const dz = bz - az
     const l = Math.hypot(dx, dz) || 1
     const side = rng.sign()
-    buildWreck(G, ax + (-dz / l) * 6 * side, az + (dx / l) * 6 * side, Math.atan2(dx, dz) + rng.range(-0.6, 0.6), rng, withCrate)
+    const off = kind === 'truck' ? 7.5 : 6.2
+    buildWreck(G, ax + (-dz / l) * off * side, az + (dx / l) * off * side, Math.atan2(dx, dz) + rng.range(-0.45, 0.45), rng, withCrate, kind)
   }
 }
