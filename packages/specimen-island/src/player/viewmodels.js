@@ -3,7 +3,8 @@ import { damp } from '../core/mathx.js'
 
 // First-person weapon models, drawn in their own little scene over the world
 // so they never clip into walls. Built from primitives; animated procedurally
-// (bob, sway, recoil, reload dip, switch). The scanner has a live screen.
+// (bob, sway, recoil, reload dip, switch). The scanner and the field camera
+// have live screens.
 
 function L(color, extra = {}) {
   return new THREE.MeshLambertMaterial({ color, ...extra })
@@ -115,6 +116,39 @@ function scanner() {
   return { g, muzzle: new THREE.Vector3(0, 0, -0.1), hip: new THREE.Vector3(0.12, -0.15, -0.32), ads: new THREE.Vector3(0.0, -0.1, -0.26), canvas, tex }
 }
 
+// A rugged field camera held at chest height, its back screen tilted up at the
+// eye. Raising it (aim) hands over to the DOM viewfinder.
+function fieldCamera() {
+  const g = new THREE.Group()
+  const canvas = document.createElement('canvas')
+  canvas.width = 192
+  canvas.height = 120
+  const tex = new THREE.CanvasTexture(canvas)
+  tex.colorSpace = THREE.SRGBColorSpace
+  const body = new THREE.Group()
+  body.rotation.x = -0.42
+  g.add(body)
+  body.add(box(0.14, 0.085, 0.05, MAT.gun, 0, 0, 0))
+  body.add(box(0.034, 0.09, 0.064, MAT.glove, 0.058, -0.002, -0.006)) // grip
+  body.add(box(0.05, 0.026, 0.044, MAT.gun, -0.012, 0.054, 0.002)) // viewfinder hump
+  body.add(box(0.016, 0.009, 0.016, MAT.orange, 0.054, 0.047, -0.004)) // shutter
+  body.add(box(0.024, 0.01, 0.024, MAT.steel, 0.026, 0.047, 0.004)) // mode dial
+  body.add(box(0.03, 0.012, 0.02, MAT.yellow, -0.04, 0.047, -0.008)) // flash shoe
+  body.add(cyl(0.034, 0.08, MAT.steel, -0.012, 0, -0.064, 14)) // lens barrel
+  body.add(cyl(0.039, 0.024, MAT.gun, -0.012, 0, -0.1, 14)) // focus ring
+  body.add(cyl(0.028, 0.004, MAT.lens, -0.012, 0, -0.113, 14))
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.084, 0.0525), new THREE.MeshBasicMaterial({ map: tex, toneMapped: false }))
+  screen.position.set(-0.012, -0.004, 0.0256)
+  body.add(screen)
+  // right hand on the grip, left hand cradling the lens from below
+  body.add(box(0.045, 0.085, 0.065, MAT.glove, 0.082, -0.018, 0.0, 0, 0, 0.15))
+  body.add(box(0.06, 0.065, 0.24, MAT.sleeve, 0.1, -0.075, 0.14, 0.5, -0.15, 0))
+  body.add(box(0.055, 0.035, 0.075, MAT.glove, -0.016, -0.05, -0.066, 0, 0, -0.1))
+  body.add(box(0.06, 0.06, 0.24, MAT.sleeve, -0.04, -0.12, 0.04, 0.9, 0.25, 0))
+  g.scale.setScalar(0.8)
+  return { g, muzzle: new THREE.Vector3(0, 0, -0.1), hip: new THREE.Vector3(0.11, -0.15, -0.34), ads: new THREE.Vector3(0, -0.06, -0.2), canvas, tex }
+}
+
 export class ViewModels {
   constructor(G) {
     this.G = G
@@ -126,7 +160,7 @@ export class ViewModels {
     this.scene.add(this.hemi, this.dir)
     this.root = new THREE.Group()
     this.scene.add(this.root)
-    this.models = { pistol: pistol(), rifle: tranqRifle(), hunting: huntingRifle(), shotgun: shotgun(), scanner: scanner() }
+    this.models = { pistol: pistol(), rifle: tranqRifle(), hunting: huntingRifle(), shotgun: shotgun(), scanner: scanner(), camera: fieldCamera() }
     for (const m of Object.values(this.models)) {
       m.g.visible = false
       this.root.add(m.g)
@@ -140,6 +174,7 @@ export class ViewModels {
     this.lower = 1
     this.reloadDip = 0
     this.screenState = ''
+    this.camScreenState = ''
   }
 
   show(id) {
@@ -189,6 +224,53 @@ export class ViewModels {
     c.fillStyle = '#6dfcb0'
     c.font = '13px monospace'
     c.fillText(info.line3 || '', 12, 146)
+    m.tex.needsUpdate = true
+  }
+
+  // The camera's back screen: live subject and stars, or the last frame shot
+  // (info.review is that shot's id, info.snap the canvas holding it).
+  drawCameraScreen(info) {
+    const key = info.review ? `review${info.review}` : `${info.line1}|${info.stars}|${info.zoom}`
+    if (key === this.camScreenState) return
+    this.camScreenState = key
+    const m = this.models.camera
+    const c = m.canvas.getContext('2d')
+    const W = m.canvas.width
+    const H = m.canvas.height
+    c.fillStyle = '#0c0f12'
+    c.fillRect(0, 0, W, H)
+    if (info.review && info.snap) {
+      c.drawImage(info.snap, 0, 0, W, H)
+      c.fillStyle = 'rgba(0,0,0,0.55)'
+      c.fillRect(0, H - 24, W, 24)
+      c.fillStyle = '#ffd36a'
+      c.font = 'bold 18px monospace'
+      c.fillText(info.stars ? '★'.repeat(info.stars) + '☆'.repeat(3 - info.stars) : '—', 8, H - 6)
+    } else {
+      c.strokeStyle = 'rgba(255,255,255,0.18)'
+      c.lineWidth = 1
+      for (const t of [1 / 3, 2 / 3]) {
+        c.beginPath()
+        c.moveTo(W * t, 0)
+        c.lineTo(W * t, H)
+        c.moveTo(0, H * t)
+        c.lineTo(W, H * t)
+        c.stroke()
+      }
+      c.fillStyle = '#e8f0f4'
+      c.font = 'bold 15px monospace'
+      c.fillText(info.line1, 8, 22)
+      c.fillStyle = '#ffd36a'
+      c.font = 'bold 22px monospace'
+      c.fillText(info.stars ? '★'.repeat(info.stars) + '☆'.repeat(3 - info.stars) : '', 8, 54)
+      c.fillStyle = '#9fb4c0'
+      c.font = '14px monospace'
+      c.fillText(`${info.zoom}×`, W - 52, H - 10)
+      c.fillStyle = '#ff4a3a'
+      c.beginPath()
+      c.arc(14, H - 15, 5, 0, Math.PI * 2)
+      c.fill()
+    }
     m.tex.needsUpdate = true
   }
 

@@ -41,6 +41,10 @@ export class Stats {
     events.on('creature:ko', () => this.bump('knockouts'))
     events.on('weapon:fired', ({ weapon }) => this.bump(`shots:${weapon}`))
     events.on('creature:detected', () => this.bump('detections'))
+    events.on('photo:taken', ({ species, first }) => {
+      this.bump('photos')
+      if (first) this.addToSet('speciesPhotographed', species)
+    })
   }
   get(name) {
     if (this.sets[name]) return this.sets[name].size

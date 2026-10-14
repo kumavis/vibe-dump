@@ -1,8 +1,11 @@
 import { SPECIES, SPECIES_ORDER } from '../data/species.js'
 import { WEAPONS } from '../data/weapons.js'
+import { starHtml } from '../player/photos.js'
+import { formatTime } from '../core/mathx.js'
 
 // Field journal: the species catalogue (filled in by scanning), what you have
-// collected from each, and the Foundation's running ledger of your conduct.
+// collected from each, the photo album (each species' best shot), and the
+// Foundation's running ledger of your conduct.
 
 export class Journal {
   constructor(G, el) {
@@ -28,7 +31,8 @@ export class Journal {
   render() {
     const G = this.G
     const sum = G.science.summary()
-    const tabs = `<div class="tabs"><button data-tab="species" class="${this.tab === 'species' ? 'on' : ''}">Species</button><button data-tab="ledger" class="${this.tab === 'ledger' ? 'on' : ''}">Ledger</button><button data-tab="help" class="${this.tab === 'help' ? 'on' : ''}">Field manual</button></div>`
+    const tab = (id, label) => `<button data-tab="${id}" class="${this.tab === id ? 'on' : ''}">${label}</button>`
+    const tabs = `<div class="tabs">${tab('species', 'Species')}${tab('photos', 'Photos')}${tab('ledger', 'Ledger')}${tab('help', 'Field manual')}</div>`
     let body = ''
     if (this.tab === 'species') {
       body = '<div class="cards">'
@@ -48,10 +52,12 @@ export class Journal {
           <div class="sci">${marks}</div>${s.kills ? `<div class="bad">Killed: ${s.kills}</div>` : ''}</div>`
       }
       body += '</div>'
+    } else if (this.tab === 'photos') {
+      body = this.photos()
     } else if (this.tab === 'ledger') {
       const L = G.scoring.ledger.slice(-40).reverse()
       body = `<div class="ledger"><div class="tot">${G.scoring.total} pts — <b>${G.scoring.rank()}</b></div>
-        <div class="cats">Science ${G.scoring.byCategory.science || 0} · Objectives ${G.scoring.byCategory.bonus || 0} · Penalties ${G.scoring.byCategory.penalty || 0}</div>
+        <div class="cats">Science ${G.scoring.byCategory.science || 0} · Photos ${G.scoring.byCategory.photo || 0} · Objectives ${G.scoring.byCategory.bonus || 0} · Penalties ${G.scoring.byCategory.penalty || 0}</div>
         ${L.map((e) => `<div class="row ${e.delta < 0 ? 'bad' : ''}"><span>${e.reason}</span><b>${e.delta > 0 ? '+' : ''}${e.delta}</b></div>`).join('') || '<p>No entries yet.</p>'}
         <div class="cats">Shots fired: ${G.stats.get('shots:pistol') + G.stats.get('shots:rifle')} darts · ${G.stats.get('shots:hunting') + G.stats.get('shots:shotgun')} lethal · Knockouts ${G.stats.get('knockouts')} · Times spotted ${G.stats.get('detections')}</div></div>`
     } else {
@@ -64,5 +70,24 @@ export class Journal {
         <h3>Temperaments</h3><p>Skittish animals bolt and take the herd with them. Defensive ones threaten inside their personal space and charge if you push — or shoot. Aggressive ones hunt you. Passive giants ignore you; do not stand underfoot.</p></div>`
     }
     this.el.querySelector('.inner').innerHTML = `<h2>Field Journal</h2>${tabs}${body}<div class="foot">[J] / [Tab] close</div>`
+  }
+
+  // The album: one frame per species, its best photo or an empty frame.
+  photos() {
+    const G = this.G
+    const P = G.photos
+    let html = `<div class="ledger"><div class="cats">${P.count}/${SPECIES_ORDER.length} species photographed · ${G.scoring.byCategory.photo || 0} pts · ${P.shots} shot${P.shots === 1 ? '' : 's'} taken. A species pays its photo value once, scaled by quality — a retake pays only the improvement.</div></div><div class="album">`
+    for (const id of SPECIES_ORDER) {
+      const sp = SPECIES[id]
+      const a = P.album[id]
+      if (!a) {
+        html += `<div class="pcard empty"><div class="pframe"><span>?</span></div><h3>${G.science.known(id) ? sp.name : 'Not yet photographed'}</h3><p>Worth up to ${sp.science.photo} pts</p></div>`
+        continue
+      }
+      const name = G.science.known(id) ? sp.name : 'Unknown animal'
+      const img = a.image ? `<img src="${a.image}" alt="${name}" />` : '<span>developing…</span>'
+      html += `<div class="pcard"><div class="pframe">${img}</div><h3>${name} <span class="st">${starHtml(a.stars)}</span></h3><p>${a.pose} · ${a.dist} m · ${formatTime(a.hours)}</p><p>quality ${a.quality} · ${a.points}/${sp.science.photo} pts</p></div>`
+    }
+    return html + '</div>'
   }
 }

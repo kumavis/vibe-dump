@@ -28,6 +28,7 @@ export const DEFAULT_BINDINGS = {
   slot3: ['Digit3'],
   slot4: ['Digit4'],
   slot5: ['Digit5'],
+  slot6: ['Digit6'],
   nextWeapon: ['WheelDown'],
   prevWeapon: ['WheelUp'],
   // helicopter

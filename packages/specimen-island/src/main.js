@@ -24,6 +24,7 @@ import { Interaction } from './player/interaction.js'
 import { Weapons } from './player/weapons.js'
 import { Projectiles } from './player/projectiles.js'
 import { Science } from './player/science.js'
+import { Photos } from './player/photos.js'
 import { Helicopter } from './vehicles/helicopter.js'
 import { Audio } from './audio/audio.js'
 import { HUD } from './ui/hud.js'
@@ -98,6 +99,7 @@ async function boot() {
   // ---- player-side systems
   G.weapons = new Weapons(G)
   G.science = new Science(G)
+  G.photos = new Photos(G)
   G.scoring = new Scoring(G)
   G.objectives = new Objectives(G)
   const lab = G.island.poi.fieldlab
@@ -331,6 +333,7 @@ async function boot() {
   function draw() {
     renderer.clear()
     renderer.render(scene, camera)
+    if (G.photos.pending.length) G.photos.capture(renderer.domElement) // photo = scene only, no view model
     if (G.mode === 'play' && !G.heli.piloted && G.player.alive) G.weapons.vm.render(renderer)
   }
 

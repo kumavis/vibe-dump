@@ -213,6 +213,12 @@ export class Audio {
         this.tone({ f0: 880, dur: 0.08, vol: 0.12 })
         this.tone({ f0: 1320, dur: 0.12, vol: 0.12, delay: 0.1 })
         break
+      case 'shutter':
+        // mirror slap, then the curtain closing
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 4200, q: 3, vol: 0.3 })
+        this.tone({ type: 'square', f0: 1900, f1: 1300, dur: 0.018, vol: 0.04 })
+        this.burst({ dur: 0.05, type: 'bandpass', freq: 2300, q: 2.5, vol: 0.22, delay: 0.075 })
+        break
       case 'sample':
         this.tone({ f0: 660, dur: 0.25, vol: 0.14 })
         this.tone({ f0: 990, dur: 0.4, vol: 0.12, delay: 0.12 })

@@ -4,8 +4,9 @@ import { damp } from '../core/mathx.js'
 import { ViewModels } from './viewmodels.js'
 
 // The weapon system: selection, aiming, firing, reloading, the scanner's
-// hold-to-scan, thrown stones and flares, medkits. Every shot announces itself
-// on the bus as a noise — loud guns are heard across half the island.
+// hold-to-scan, the field camera (player/photos.js grades the shots), thrown
+// stones and flares, medkits. Every shot announces itself on the bus as a
+// noise — loud guns are heard across half the island.
 
 const _dir = new THREE.Vector3()
 const _right = new THREE.Vector3()
@@ -25,6 +26,8 @@ export class Weapons {
     this.scan = { target: null, progress: 0 }
     this.throwCool = 0
     this.baseFov = 72
+    this.camZoom = WEAPONS.camera.zoom // the camera's zoom when raised; the wheel sets it
+    this.camZoomNow = this.camZoom // ...and where the zoom ring actually is
     G.events.on('weapon:gained', ({ weapon }) => {
       if (this.mag[weapon] === 0 && weapon !== 'scanner') {
         const def = WEAPONS[weapon]
@@ -56,7 +59,13 @@ export class Weapons {
 
   zoomFactor() {
     const d = this.def
-    return 1 + ((d.zoom || 1) - 1) * this.aim
+    const max = d.kind === 'camera' ? this.camZoomNow : d.zoom || 1
+    return 1 + (max - 1) * this.aim
+  }
+
+  // The camera is up at the eye: the DOM viewfinder replaces the view model.
+  raised() {
+    return this.def.kind === 'camera' && this.aim > 0.55 && this.switchT <= 0
   }
 
   scoped() {
@@ -65,7 +74,7 @@ export class Weapons {
 
   canFire() {
     const p = this.G.player
-    return p.alive && !p.swimming && !this.G.heli?.piloted && this.switchT <= 0 && this.reloadT <= 0
+    return p.alive && !p.swimming && !this.G.vehicle && this.switchT <= 0 && this.reloadT <= 0
   }
 
   update(dt, input) {
@@ -73,13 +82,18 @@ export class Weapons {
     const p = G.player
     this.fireCool -= dt
     this.throwCool -= dt
-    const active = p.alive && !G.heli?.piloted
+    const active = p.alive && !G.vehicle
 
     if (active) {
       // selection
       const list = this.owned()
       for (const w of list) if (input.pressed('slot' + w.slot)) this.select(w.id)
-      if (input.pressed('nextWeapon') || input.pressed('prevWeapon')) {
+      // with the camera raised the wheel is the zoom ring
+      const zoomRing = this.def.kind === 'camera' && this.aim > 0.5 && !this.pending
+      if (zoomRing && (input.pressed('nextWeapon') || input.pressed('prevWeapon'))) {
+        const d = this.def
+        this.camZoom = Math.min(d.zoom, Math.max(d.zoomMin, this.camZoom + (input.pressed('prevWeapon') ? d.zoomStep : -d.zoomStep)))
+      } else if (input.pressed('nextWeapon') || input.pressed('prevWeapon')) {
         const i = list.findIndex((w) => w.id === (this.pending || this.current))
         const n = list.length
         const j = (i + (input.pressed('nextWeapon') ? 1 : -1) + n) % n
@@ -96,7 +110,8 @@ export class Weapons {
 
     const def = this.def
     const wantAim = active && input.down('aim') && this.switchT <= 0 && !p.swimming
-    this.aim = damp(this.aim, wantAim ? 1 : 0, 12, dt)
+    this.aim = damp(this.aim, wantAim ? 1 : 0, def.aimRate || 12, dt)
+    this.camZoomNow = damp(this.camZoomNow, this.camZoom, 6, dt)
     G.camera.fov = this.baseFov / this.zoomFactor()
     G.camera.updateProjectionMatrix()
 
@@ -113,6 +128,7 @@ export class Weapons {
 
     // fire
     if (def.kind === 'scanner') this.updateScanner(dt, input, active)
+    else if (def.kind === 'camera') G.photos.update(dt, input, active && this.switchT <= 0 && !p.swimming)
     else if (active && input.pressed('fire') && this.fireCool <= 0) {
       if (!this.canFire()) {
         /* busy */
@@ -140,7 +156,7 @@ export class Weapons {
     // view model
     const hs = Math.hypot(p.vel.x, p.vel.z)
     this.vm.update(dt, {
-      id: G.heli?.piloted ? null : this.current,
+      id: G.vehicle ? null : this.current,
       aim: this.aim,
       bob: p.bob,
       moving: p.onGround ? Math.min(1, hs / 5) : 0,
@@ -148,7 +164,7 @@ export class Weapons {
       look: p.lastLook || { dx: 0, dy: 0 },
       reloading: this.reloadT > 0,
       switching: this.switchT > 0,
-      hidden: !p.alive || p.swimming || this.scoped(),
+      hidden: !p.alive || p.swimming || this.scoped() || this.raised(),
       loaded: this.mag.rifle > 0 && this.reloadT <= 0,
       light: G.sky.light,
     })
