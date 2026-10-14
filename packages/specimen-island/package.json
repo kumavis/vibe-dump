@@ -20,7 +20,7 @@
     "models": [
       "Opus 5.5"
     ],
-    "thinking": "unknown",
+    "thinking": "ultracode",
     "thumbnail": {
       "waitFor": "!#boot",
       "settle": 4000

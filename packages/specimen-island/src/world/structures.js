@@ -99,6 +99,9 @@ const E4 = new THREE.Euler()
 const V4 = new THREE.Vector3()
 const S4 = new THREE.Vector3(1, 1, 1)
 
+// What a kit material sounds like underfoot (player footsteps via physics.groundInfo).
+const SURFACE = { wood: 'wood', darkWood: 'wood', concrete: 'concrete', helipad: 'concrete', metal: 'metal', rust: 'metal', roof: 'metal', orange: 'metal', yellow: 'metal', green: 'metal', white: 'metal', black: 'metal' }
+
 export class Kit {
   constructor(G, x, y, z, yaw = 0, name = 'prefab') {
     this.G = G
@@ -137,7 +140,8 @@ export class Kit {
     this.push(matKey, boxGeo(w, h, d, tex), lx, ly, lz, rx, ry, rz)
     if (collide && !rx && !rz) {
       const [x, z] = this.world(lx, lz)
-      this.G.physics.addBox(x, z, w / 2, d / 2, this.yaw + ry, this.y + ly - h / 2, this.y + ly + h / 2, { walkable })
+      const c = this.G.physics.addBox(x, z, w / 2, d / 2, this.yaw + ry, this.y + ly - h / 2, this.y + ly + h / 2, { walkable })
+      c.material = SURFACE[matKey]
     }
   }
   cyl(r, h, matKey, lx, ly, lz, opts = {}) {
@@ -355,7 +359,7 @@ export function buildDock(G, poi, rng) {
     const l = Math.min(3.4, end - z)
     kit.box(4, 0.25, l, 'wood', 0, deckY - 0.125, z + l / 2, { collide: false, tex: 1.5 })
   }
-  G.physics.addBox(...kit.world(0, start + len / 2), 2, len / 2, kit.yaw, deckY - 0.4, deckY)
+  G.physics.addBox(...kit.world(0, start + len / 2), 2, len / 2, kit.yaw, deckY - 0.4, deckY).material = 'wood'
   for (let z = start + 1; z <= end; z += 4) {
     for (const x of [-1.9, 1.9]) kit.cyl(0.16, 6.5, 'darkWood', x, deckY - 3, z, { collide: false, seg: 6 })
   }

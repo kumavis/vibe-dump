@@ -1,5 +1,6 @@
 import { WEAPONS } from '../data/weapons.js'
 import { clamp, wrapAngle, yawTo, formatTime } from '../core/mathx.js'
+import { doseReadout } from './dose.js'
 
 // The heads-up display. Reads game state each frame and writes the DOM only
 // when something changed. Deus Ex-ish information: an eye that shows how
@@ -268,12 +269,10 @@ export class HUD {
       const cur = (c.rec.sedative / L) * 100
       const pend = (c.rec.pending / L) * 100
       const ko = (sp.ko / L) * 100
-      const toKo = Math.max(0, sp.ko - c.rec.sedative - c.rec.pending)
-      const toLethal = Math.max(0, L - c.rec.sedative - c.rec.pending)
-      const rd = WEAPONS.rifle.dose
-      const pd = WEAPONS.pistol.dose
       html += `<div class="sedbar"><i style="width:${cur.toFixed(1)}%"></i><u style="left:${cur.toFixed(1)}%;width:${pend.toFixed(1)}%"></u><b style="left:${ko.toFixed(1)}%"></b></div>`
-      html += `<div class="dose">KO in ~${Math.ceil(toKo / rd)} rifle / ${Math.ceil(toKo / pd)} pistol · overdose after ${Math.floor(toLethal / rd)} rifle</div>`
+      html += doseReadout(sp, v.state, c.rec.sedative, c.rec.pending)
+        .map((l) => `<div class="dose">${l.warn ? `<span class="bad">${l.text}</span>` : l.text}</div>`)
+        .join('')
     } else if (!known) html += `<div class="dose">Scan [1] to learn its tolerances</div>`
     const s = c.rec.science
     if (known) html += `<div class="sci">${['blood', 'measure', 'tag'].map((k) => `<span class="${s[k] ? 'done' : ''}">${k}</span>`).join('')}</div>`
