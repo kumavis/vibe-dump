@@ -210,6 +210,8 @@ kbd.sm { font-size: 11px; min-width: 22px; height: 22px; border-width: 1.5px; bo
 }
 .legend canvas { width: 34px; height: 34px; }
 .legend b { color: var(--ink); font-weight: 600; }
+.stack-note { margin: 0 0 6px; font-size: 14px; color: var(--dim); }
+.stack-note b { font-family: var(--display); font-weight: 400; color: var(--gold); }
 
 .hint { color: var(--dim); font-size: 14px; margin: 8px 0 0; line-height: 1.9; }
 .hint .nowrap { white-space: nowrap; margin-left: 8px; }
@@ -289,7 +291,7 @@ kbd.sm { font-size: 11px; min-width: 22px; height: 22px; border-width: 1.5px; bo
 @media (max-height: 700px) {
   .tag { margin: 6px 0 14px; }
   .pads { margin: 14px 0 10px; }
-  .legend { display: none; }
+  .legend, .stack-note { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

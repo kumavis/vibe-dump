@@ -12,8 +12,8 @@ export const PLAYER_COLORS = [
 ]
 
 export const POWERS = {
-  shield: { color: '#4da6ff', label: 'Shield', blurb: 'blocks one hit' },
-  triple: { color: '#ff9d2e', label: 'Triple shot', blurb: 'three lasers' },
+  shield: { color: '#4da6ff', label: 'Shield', blurb: 'blocks a hit' },
+  triple: { color: '#ff9d2e', label: 'Triple shot', blurb: 'more lasers' },
   rapid: { color: '#ffe23d', label: 'Rapid fire', blurb: 'shoot faster' },
   speed: { color: '#4dff88', label: 'Speed', blurb: 'zoom!' },
   heart: { color: '#ff4d7a', label: 'Heart', blurb: 'extra life' },
@@ -116,7 +116,15 @@ export function drawShip(ctx, x, y, pal, { tilt = 0, t = 0, thrust = 0.5, scale 
   ctx.restore()
 }
 
-export function drawShieldBubble(ctx, x, y, t, color) {
+// A stacked shield wears one extra shell per level it has left.
+export function drawShieldBubble(ctx, x, y, t, color, level = 1) {
+  for (let i = level - 1; i > 0; i--) {
+    ctx.strokeStyle = hexA(color, 0.55 - i * 0.12)
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.arc(x, y, 42 + i * 7 + Math.sin(t * 6 + i) * 1.5, 0, TAU)
+    ctx.stroke()
+  }
   const r = 42 + Math.sin(t * 6) * 1.5
   const g = ctx.createRadialGradient(x, y, r * 0.55, x, y, r)
   g.addColorStop(0, hexA(color, 0))

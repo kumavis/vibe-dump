@@ -18,6 +18,7 @@ import {
   drawPuff,
   MOTHER,
 } from './art.js'
+import { SLOTTED, MAX_SLOTS, FIRE_DELAY, SHIP_SPEED, SPREADS, addPower, tickPowers, powerLevel, absorbHit } from './powers.js'
 
 const TAU = Math.PI * 2
 const rand = (a, b) => a + Math.random() * (b - a)
@@ -93,8 +94,6 @@ const ENEMY = {
   diver: { hp: 2, r: 28, score: 200 },
   gunner: { hp: 5, r: 36, score: 300 },
 }
-
-const POWER_TIME = { triple: 12, rapid: 12, speed: 10 }
 
 const P1_KEYS = { up: 'KeyW', left: 'KeyA', down: 'KeyS', right: 'KeyD' }
 const P2_KEYS = { up: 'ArrowUp', left: 'ArrowLeft', down: 'ArrowDown', right: 'ArrowRight' }
@@ -256,10 +255,7 @@ function makePlayer(id) {
     respawn: 0,
     invuln: 2,
     fireCd: 0.4,
-    shield: 0,
-    triple: 0,
-    rapid: 0,
-    speed: 0,
+    powers: [], // up to three slots — see powers.js
     score: 0,
     touch: null,
   }
@@ -293,7 +289,7 @@ function updatePlayer(p, dt) {
     return
   }
   const top = playerTop()
-  const sp = p.speed > 0 ? 640 : 440
+  const sp = SHIP_SPEED[powerLevel(p.powers, 'speed')]
   let tvx
   let tvy
   if (p.touch) {
@@ -312,18 +308,14 @@ function updatePlayer(p, dt) {
   p.tilt += (p.vx / sp - p.tilt) * Math.min(1, dt * 10)
 
   p.invuln = Math.max(0, p.invuln - dt)
-  for (const k2 of ['triple', 'rapid', 'speed']) p[k2] = Math.max(0, p[k2] - dt)
+  tickPowers(p.powers, dt)
 
   p.fireCd -= dt
   if (p.fireCd <= 0 && phase !== 'victory') {
-    p.fireCd = p.rapid > 0 ? 0.1 : 0.2
+    p.fireCd = FIRE_DELAY[powerLevel(p.powers, 'rapid')]
     const spd = 900
-    if (p.triple > 0) {
-      for (const a of [-0.2, 0, 0.2]) {
-        pShots.push({ x: p.x + a * 40, y: p.y - 30, vx: Math.sin(a) * spd, vy: -Math.cos(a) * spd, owner: p.id })
-      }
-    } else {
-      pShots.push({ x: p.x, y: p.y - 34, vx: 0, vy: -spd, owner: p.id })
+    for (const a of SPREADS[powerLevel(p.powers, 'triple')]) {
+      pShots.push({ x: p.x + a * 40, y: p.y - (a ? 30 : 34), vx: Math.sin(a) * spd, vy: -Math.cos(a) * spd, owner: p.id })
     }
     sfx.zap()
   }
@@ -331,17 +323,17 @@ function updatePlayer(p, dt) {
 
 function hurtPlayer(p) {
   if (!p.alive || p.invuln > 0 || phase === 'victory') return
-  if (p.shield > 0) {
-    p.shield = 0
+  if (absorbHit(p.powers)) {
     p.invuln = 1.2
     sfx.shieldPop()
     splash(p.x, p.y, POWERS.shield.color)
-    popText(p.x, p.y - 50, 'Shield saved you!', POWERS.shield.color, 15)
+    const left = powerLevel(p.powers, 'shield')
+    popText(p.x, p.y - 50, left ? `Shield blocked it! ×${left} left` : 'Shield saved you!', POWERS.shield.color, 15)
     return
   }
   p.lives--
   p.alive = false
-  p.triple = p.rapid = p.speed = 0
+  p.powers.length = 0
   explode(p.x, p.y, p.pal.main, 1.6)
   sfx.hurt()
   shake = Math.max(shake, 16)
@@ -396,15 +388,16 @@ function collect(p, b) {
   sfx.bubble()
   splash(b.x, b.y, info.color)
   let label = info.label + '!'
+  if (SLOTTED.has(b.type)) {
+    const { slot, capped, dropped } = addPower(p.powers, b.type)
+    if (capped && b.type === 'shield') {
+      addScore(p.id, 250)
+      label = 'Max shield! +250'
+    } else if (capped) label = `${info.label} ×3 — more time!`
+    else if (slot.level > 1) label = `${info.label} ×${slot.level}!`
+    if (dropped) popText(b.x, b.y - 4, `${POWERS[dropped.type].label} dropped`, '#a9b3d6', 13, 1.2)
+  }
   switch (b.type) {
-    case 'shield':
-      p.shield = 1
-      break
-    case 'triple':
-    case 'rapid':
-    case 'speed':
-      p[b.type] = POWER_TIME[b.type]
-      break
     case 'heart': {
       const down = players.find((q) => q !== p && q.out)
       if (down) {
@@ -1463,10 +1456,12 @@ function drawPlayer(p) {
   const moving = Math.min(1, Math.hypot(p.vx, p.vy) / 400)
   drawShip(ctx, p.x, p.y, p.pal, { tilt: p.tilt, t: time + p.id, thrust: 0.4 + moving * 0.6 - Math.max(0, p.vy / 800) })
   ctx.globalAlpha = 1
-  if (p.shield > 0) drawShieldBubble(ctx, p.x, p.y, time, POWERS.shield.color)
-  if (p.speed > 0) {
+  const shield = powerLevel(p.powers, 'shield')
+  if (shield) drawShieldBubble(ctx, p.x, p.y, time, POWERS.shield.color, shield)
+  const speed = powerLevel(p.powers, 'speed')
+  if (speed) {
     ctx.fillStyle = hexA(POWERS.speed.color, 0.5)
-    for (const d of [-1, 1]) ctx.fillRect(p.x + d * 22 - 1.5, p.y + 26, 3, 18 + Math.sin(time * 30 + d) * 6)
+    for (const d of [-1, 1]) ctx.fillRect(p.x + d * 22 - 1.5, p.y + 26, 3, 12 + speed * 6 + Math.sin(time * 30 + d) * 6)
   }
   if (numPlayers === 2) {
     ctx.font = `12px ${FONT}`
@@ -1606,29 +1601,47 @@ function drawPlayerHUD(p) {
   for (let i = 0; i < p.lives; i++) {
     drawShip(ctx, x + dir * (12 + i * 24), 82, p.pal, { scale: 0.32, t: time, thrust: 0.2 })
   }
-  // active power-ups with a timer ring
-  let k = 0
-  const icons = []
-  if (p.shield > 0) icons.push(['shield', 1])
-  for (const type of ['triple', 'rapid', 'speed']) if (p[type] > 0) icons.push([type, p[type] / POWER_TIME[type]])
-  for (const [type, frac] of icons) {
-    const ix = x + dir * (14 + k * 32)
-    const iy = 112
-    const col = POWERS[type].color
+  // the three power-up slots, oldest first, each with its timer ring and stack
+  for (let k = 0; k < MAX_SLOTS; k++) {
+    const slot = p.powers[k]
+    const ix = x + dir * (16 + k * 36)
+    const iy = 114
     ctx.fillStyle = 'rgba(10,8,34,0.7)'
     ctx.beginPath()
-    ctx.arc(ix, iy, 13, 0, TAU)
+    ctx.arc(ix, iy, 14, 0, TAU)
     ctx.fill()
+    if (!slot) {
+      ctx.strokeStyle = 'rgba(169,179,214,0.28)'
+      ctx.lineWidth = 1.5
+      ctx.setLineDash([3, 4])
+      ctx.stroke()
+      ctx.setLineDash([])
+      continue
+    }
+    const col = POWERS[slot.type].color
+    // blink the last three seconds so a ship knows it's about to lose it
+    const ending = slot.time < 3 && Math.floor(time * 6) % 2 === 0
     ctx.save()
     ctx.translate(ix, iy)
-    drawIcon(ctx, type, 7, col)
+    if (ending) ctx.globalAlpha = 0.4
+    drawIcon(ctx, slot.type, 7.5, col)
     ctx.restore()
+    const frac = Number.isFinite(slot.time) ? slot.time / slot.full : 1
     ctx.strokeStyle = col
     ctx.lineWidth = 2.5
     ctx.beginPath()
-    ctx.arc(ix, iy, 13, -Math.PI / 2, -Math.PI / 2 + TAU * frac)
+    ctx.arc(ix, iy, 14, -Math.PI / 2, -Math.PI / 2 + TAU * frac)
     ctx.stroke()
-    k++
+    if (slot.level > 1) {
+      ctx.font = `10px ${FONT}`
+      ctx.textAlign = 'center'
+      ctx.lineJoin = 'round'
+      ctx.strokeStyle = 'rgba(10,6,30,0.9)'
+      ctx.lineWidth = 3
+      ctx.strokeText(`×${slot.level}`, ix + 11, iy + 16)
+      ctx.fillStyle = col
+      ctx.fillText(`×${slot.level}`, ix + 11, iy + 16)
+    }
   }
 }
 
