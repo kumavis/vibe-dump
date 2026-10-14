@@ -13,7 +13,7 @@ export const ITEMS = {
 }
 
 export const START_KIT = {
-  weapons: ['scanner', 'pistol'],
+  weapons: ['scanner', 'pistol', 'camera'],
   items: { pistolDart: 12, stone: 5, flare: 1, medkit: 1 },
 }
 

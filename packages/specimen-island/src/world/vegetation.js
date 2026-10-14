@@ -624,6 +624,9 @@ export class Vegetation {
           const s = rng.range(t.scale[0], t.scale[1])
           const yaw = rng.range(0, Math.PI * 2)
           if (roll >= d) continue
+          // the density grid is 5 m coarse, so its bilinear blur can still
+          // stand a trunk on a road; keep carriageways and verges drivable
+          if (isl.sample(isl.road, px, pz) > 0.02 || isl.sample(isl.clear, px, pz) > 0.35) continue
           const y = isl.heightAt(px, pz) - t.sink * s
           const meta = this.meta[name][v]
           const inst = { x: px, y, z: pz, yaw, s, v, tilt: t.tilt ? [rng.range(-0.4, 0.4), rng.range(-0.4, 0.4)] : null }

@@ -15,12 +15,17 @@ export class Scoring {
     this.G = G
     this.total = 0
     this.ledger = []
-    this.byCategory = { science: 0, bonus: 0, penalty: 0 }
+    this.byCategory = { science: 0, bonus: 0, penalty: 0, photo: 0 }
     const ev = G.events
     ev.on('science:scan', ({ creature, points, first }) => this.add(points, `${first ? 'Catalogued' : 'Logged'} ${creature.sp.name}`, 'science'))
     ev.on('science:done', ({ creature, procedure, points, ghost }) => {
       const what = { blood: 'Blood sample', measure: 'Measurements', tag: 'Tracking tag', tissue: 'Tissue sample' }[procedure]
       this.add(points, `${what}: ${creature.sp.name}${ghost ? ' (unseen ×1.5)' : ''}`, 'science')
+    })
+    // photos pay per species: the first shot by quality, retakes only the improvement
+    ev.on('photo:taken', ({ species, stars, points }) => {
+      const name = G.science.known(species) ? G.species[species].name : 'Unknown animal'
+      this.add(points, `Photo: ${name} ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`, 'photo')
     })
     ev.on('creature:died', ({ creature, cause }) => {
       if (cause === 'predation' || !creature.rec.hitByPlayer) return

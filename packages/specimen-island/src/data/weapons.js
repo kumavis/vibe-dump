@@ -5,6 +5,8 @@
 //   projectile  physical dart with travel time and drop; carries `dose`
 //   hitscan     instant bullet(s); carries `damage` — lethal, and costs points
 //   scanner     hold fire on a creature to catalogue it
+//   camera      aim zooms, fire takes a photograph (scored by player/photos.js
+//               with the PHOTO table below)
 //
 // noise is the radius (m) at which creatures hear the shot.
 
@@ -95,6 +97,65 @@ export const WEAPONS = {
     range: 70,
     lethal: true,
   },
+  camera: {
+    slot: 6,
+    name: 'Field Camera',
+    short: 'CAM',
+    kind: 'camera',
+    zoom: 4, // RMB glides 1x -> zoom; the wheel sets it while aiming
+    zoomMin: 1.5,
+    zoomStep: 0.5,
+    aimRate: 3.2, // slower than a gun's snap to sights: a lens zooming
+    rof: 1.0, // shutter cooldown
+    noise: 4,
+    range: 180,
+    lethal: false,
+  },
+}
+
+// Wildlife photography: how player/photos.js grades a frame. A shot's quality
+// (0-100) is the product of the core factors times (1 + bonuses):
+//   fill     subject size relative to the frame (bounding box of its hit spheres)
+//   vis      share of sampled body spheres in plain view (physics ray + ID render)
+//   crop     share of the subject's box inside the frame (head out costs extra)
+//   comp     centred, or better, on a rule-of-thirds point
+//   steady   the camera turning or the photographer moving blurs the shot
+// Bonuses: what the animal is doing, herd-mates of the same species in frame,
+// and an animal that has not noticed you.
+export const PHOTO = {
+  frame: { aspect: 1.6, fill: 0.84 }, // the viewfinder rectangle, share of the screen
+  image: { w: 320, h: 200, quality: 0.82 }, // album JPEGs
+  preview: 2.5, // seconds the polaroid stays up
+  liveRate: 0.2, // seconds between viewfinder estimates
+  scale: 0.82, // a technically perfect shot of an animal doing nothing
+  minQuality: 6, // below this there is nothing recognisable in frame
+  stars: [40, 70], // quality for two and three stars (one star from minQuality)
+  fill: { min: 0.02, sweet: [0.25, 0.6], big: 1.2, bigScore: 0.55, hugeScore: 0.3 },
+  headWeight: 2, // in the visibility sample (head, neck, chest, hips, tail, two legs)
+  visFloor: 0.15, // a glimpse this small of an animal is not a photo of it
+  idBuffer: { w: 320 }, // the small ID render that sees plants without colliders
+  cropHeadOut: 0.65,
+  thirds: { centre: 0.9, falloff: 0.32, weight: 0.4 },
+  steady: { turn: 0.5, move: 0.12, walk: 0.8, floor: 0.3 },
+  pose: {
+    roar: 0.3,
+    charge: 0.3,
+    attack: 0.3,
+    spit: 0.3,
+    threaten: 0.25,
+    hunt: 0.2,
+    running: 0.18,
+    flee: 0.15,
+    feed: 0.15,
+    graze: 0.1,
+    alert: 0.05,
+    investigate: 0.05,
+    groggy: -0.15,
+    down: -0.5,
+    dead: -0.75,
+  },
+  group: { each: 0.08, max: 0.24, minFill: 0.04, minVis: 0.4 },
+  unaware: 0.15,
 }
 
 // How a hit lands on each body zone. Darts in armour break and do nothing.

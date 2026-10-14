@@ -2,6 +2,7 @@ import { WEAPONS } from '../data/weapons.js'
 import { VEHICLE_FX } from '../data/vehicles.js'
 import { clamp, wrapAngle, yawTo, formatTime } from '../core/mathx.js'
 import { doseReadout } from './dose.js'
+import { Viewfinder } from './viewfinder.js'
 
 // The heads-up display. Reads game state each frame and writes the DOM only
 // when something changed. Deus Ex-ish information: an eye that shows how
@@ -28,6 +29,7 @@ export class HUD {
     G.events.on('score', (e) => this.toast(`${e.delta > 0 ? '+' : ''}${e.delta}  ${e.reason}`, e.delta > 0 ? 'score' : 'penalty'))
     G.events.on('player:damaged', ({ amount }) => (this.vignette = Math.min(1, this.vignette + amount / 25)))
     this.buildCompass()
+    this.viewfinder = new Viewfinder(G)
   }
 
   set(key, el, value, prop = 'textContent') {
@@ -96,6 +98,7 @@ export class HUD {
     let ammo = ''
     if (!flying && def.ammo) ammo = `${W.mag[def.id]} <span>/ ${G.inventory.count(def.ammo)}</span>${W.reloadT > 0 ? ' <em>RELOADING</em>' : ''}`
     else if (!flying && def.kind === 'scanner') ammo = `<span>${G.science.catalogue.size} species</span>`
+    else if (!flying && def.kind === 'camera') ammo = `${G.photos.count} <span>/ ${Object.keys(G.species).length} species photographed</span>`
     this.set('ammo', this.el.ammo, ammo, 'html')
     const slots = W.owned()
       .map((w) => `<b class="${w.id === W.current ? 'on' : ''}">${w.slot}</b>`)
@@ -109,6 +112,7 @@ export class HUD {
     this.el.crosshair.style.opacity = scoped ? 0 : 1
     this.hitT -= dt
     if (this.hitT <= 0) this.el.hitmarker.className = ''
+    this.viewfinder.update(dt)
 
     // score / clock
     this.set('score', this.el.score, `${G.scoring.total} <span>pts</span>`, 'html')

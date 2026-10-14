@@ -38,6 +38,7 @@ export class Physics {
       walkable: opts.walkable !== false,
       tag: opts.tag || 'static',
       ref: opts.ref || null,
+      material: opts.material || null,
     }
     const ex = Math.abs(hx * c.cos) + Math.abs(hz * c.sin)
     const ez = Math.abs(hx * c.sin) + Math.abs(hz * c.cos)

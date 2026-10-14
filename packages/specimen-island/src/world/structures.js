@@ -510,7 +510,7 @@ export function buildFieldLab(G, poi, rng, yaw) {
   disc.position.set(pad.x, 0.17, pad.z)
   disc.receiveShadow = true
   kit.add(disc)
-  G.physics.addBox(...kit.world(pad.x, pad.z), 5.8, 5.8, yaw, kit.y - 0.5, kit.y + 0.35)
+  G.physics.addBox(...kit.world(pad.x, pad.z), 5.8, 5.8, yaw, kit.y - 0.5, kit.y + 0.35, { material: 'concrete' })
   const padLights = []
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2

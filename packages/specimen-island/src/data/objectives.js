@@ -94,4 +94,13 @@ export const OBJECTIVES = [
     done: { reach: 'dock', radius: 14 },
     final: true,
   },
+
+  // side objectives: run alongside the expedition, listed after it on the HUD
+  {
+    id: 'photosafari',
+    after: ['landfall'],
+    title: 'Photo Safari',
+    text: 'Photograph 4 different species with the Field Camera [6].',
+    done: { stat: 'speciesPhotographed', n: 4 },
+  },
 ]
