@@ -160,7 +160,9 @@ function ringShot(x, y, n, speed, color, offset = 0, r = 6) {
 }
 
 function popText(x, y, text, color = '#ffffff', size = 18, life = 1.1) {
-  texts.push({ x, y, text, color, size, life, max: life })
+  const t = { x, y, text, color, size, life, max: life, rise: 36 }
+  texts.push(t)
+  return t
 }
 
 function addScore(owner, pts, x, y) {
@@ -203,7 +205,9 @@ const g = {
   get bubbles() { return bubbles },
   get lasers() { return lasers },
   get boss() { return boss },
+  get debug() { return params.has('debug') },
   playerTop,
+  canFire,
   alive,
   nearestPlayer,
   later,
@@ -226,6 +230,8 @@ const g = {
   hurtPlayer,
   banner,
   shake(n) { shake = Math.max(shake, n) },
+  // how fast the starfield streams past; 1 is cruising, 6+ is warp
+  warp(n) { stars.targetSpeed = n },
   flash(n) { flash = Math.max(flash, n) },
   // The level's main part is over: on to the boss, or straight to the finish.
   levelDone() {
@@ -621,6 +627,12 @@ function launchWave(kind) {
   }
 }
 
+// Whether a formation saucer is in a spot to shoot: on screen, above the
+// ships, not diving or leaving. Packs use it to telegraph a shot (g.canFire).
+function canFire(e) {
+  return e.entered && e.y > 20 && e.y < H * 0.62 && !e.leaving && e.path !== 'dive' && phase !== 'victory'
+}
+
 const enemyLight = (e) => ENEMY[e.type]?.light ?? SAUCERS[e.type]?.light ?? '#ffffff'
 
 function updateEnemy(e, dt) {
@@ -692,7 +704,7 @@ function updateEnemy(e, dt) {
   if (!e.entered && e.y > 0) e.entered = true
 
   // shooting back
-  if (e.entered && e.y > 20 && e.y < H * 0.62 && !e.leaving && e.path !== 'dive' && phase !== 'victory') {
+  if (canFire(e)) {
     e.fireT -= dt * mission.fire
     if (e.fireT <= 0) {
       if (e.type === 'gunner') {
@@ -1448,7 +1460,7 @@ function update(dt) {
         break
       }
     }
-    if (!s.dead && boss && !boss.dying && boss.def.shot(boss, s.x, s.y, s.owner)) s.dead = true
+    if (!s.dead && boss && !boss.dying && boss.def.shot(boss, s.x, s.y, s.owner, g)) s.dead = true
   }
   pShots = pShots.filter((s) => !s.dead)
 
@@ -1550,7 +1562,7 @@ function update(dt) {
       }
     }
     if (!p.alive || p.invuln > 0) continue
-    if (boss && !boss.dying && !boss.entering && boss.def.hits(boss, p)) hurtPlayer(p)
+    if (boss && !boss.dying && !boss.entering && boss.def.hits(boss, p, g)) hurtPlayer(p)
   }
 
   eShots = eShots.filter((s) => !s.dead)
@@ -1569,7 +1581,7 @@ function update(dt) {
   for (const r of rings) r.r += r.speed * dt
   rings = rings.filter((r) => r.r < r.max)
   for (const t of texts) {
-    t.y -= 36 * dt
+    t.y -= t.rise * dt
     t.life -= dt
   }
   texts = texts.filter((t) => t.life > 0)
@@ -1793,7 +1805,7 @@ function drawHUD() {
   if (boss && !boss.entering) {
     const bw = Math.min(W * 0.46, 520)
     const frac = Math.max(0, boss.hp / boss.maxHp)
-    const name = boss.def.hudName?.(boss) ?? boss.def.name
+    const name = boss.def.hudName?.(boss, g) ?? boss.def.name
     ctx.font = `15px ${FONT}`
     ctx.fillStyle = '#ffb3b3'
     ctx.fillText(name, cx, 28)
@@ -1926,8 +1938,9 @@ const toastEl = document.getElementById('toast')
 function showScreen(name) {
   for (const k in screens) screens[k].classList.toggle('show', k === name)
   if (name && screens[name].querySelector('.buttons')) selectButton(screens[name], 0)
-  // the wallet rides along everywhere except mid-flight
-  walletEl.classList.toggle('show', !!name && name !== 'pause')
+  // the wallet rides along everywhere except mid-flight and the store, which
+  // shows its own big balance
+  walletEl.classList.toggle('show', !!name && name !== 'pause' && name !== 'store')
 }
 
 function updateWallet() {
@@ -2086,7 +2099,7 @@ function renderMap() {
     }
     card.querySelector('.mblurb').textContent = locked ? `Clear mission ${i} to unlock` : m.blurb
     const best = save.missions.best[m.id]
-    card.querySelector('.mbest').textContent = cleared ? `Cleared · best ${best.toLocaleString()}` : best ? `Best ${best.toLocaleString()}` : ''
+    card.querySelector('.mbest').textContent = cleared ? `Cleared · best ${(best ?? 0).toLocaleString()}` : best ? `Best ${best.toLocaleString()}` : ''
     card.addEventListener('mouseenter', () => selectMission(i))
     card.addEventListener('click', () => {
       unlockAudio()
@@ -2127,18 +2140,14 @@ function paintMissionIcon(canvas, m, locked) {
   else {
     // the classic missions show their boss's ship
     if (m.boss === 'mothership') {
-      c.fillStyle = '#7a70b8'
-      c.beginPath()
-      c.ellipse(40, 22, 36, 9, 0, 0, TAU)
-      c.fill()
-      c.fillStyle = '#a49bcf'
-      c.beginPath()
-      c.ellipse(40, 18, 18, 7, 0, Math.PI, TAU)
-      c.fill()
-      c.fillStyle = 'rgba(160,255,240,0.7)'
-      c.beginPath()
-      c.arc(40, 30, 7, 0, TAU)
-      c.fill()
+      // the real thing, shrunk until its wingtips just kiss the card's edges
+      const w = 980
+      const tur = (side) => ({ ox: side * w * MOTHER.turretX, oy: MOTHER.turretY, hp: 1, aim: Math.PI / 2, flash: 0 })
+      c.save()
+      c.translate(40, 17)
+      c.scale(0.088, 0.088)
+      drawMothership(c, { x: 0, y: 0, w, turrets: [tur(-1), tur(1)], shield: 1, hangarOpen: 0, coreFlash: 0, flash: 0, hurt: 0, rage: false }, 1.3)
+      c.restore()
     } else drawSaucer(c, 40, 30, 26, m.boss === 'blorp' ? 'blorp' : 'zorb', 1.3)
   }
   if (locked) {
@@ -2363,11 +2372,12 @@ function paintMenuArt() {
   for (const c of document.querySelectorAll('.shipicon')) {
     const id = Number(c.dataset.player)
     const lo = loadout(save, id)
-    c.width = 96
+    // 80 x 72 units, wide enough for the Bulwark's wingtips
+    c.width = 120
     c.height = 108
     const g2 = c.getContext('2d')
     g2.scale(1.5, 1.5)
-    drawShipModel(g2, 32, 38, lo.ship, lo.paint, { thrust: 0.6, t: 0 })
+    drawShipModel(g2, 40, 38, lo.ship, lo.paint, { thrust: 0.6, t: 0 })
   }
 }
 

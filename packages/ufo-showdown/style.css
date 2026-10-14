@@ -173,7 +173,7 @@ h2.good { color: var(--gold); text-shadow: 0 0 22px rgba(255, 200, 60, 0.55); fo
 .pad.p2 kbd { border-color: var(--p2); color: var(--p2); }
 /* In one-player mode either key set steers the one ship. */
 body.solo .pad.p2 { opacity: 0.45; filter: saturate(0.4); }
-.shipicon { width: 48px; height: 54px; }
+.shipicon { width: 60px; height: 54px; }
 
 kbd {
   font-family: var(--display);

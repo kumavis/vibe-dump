@@ -31,6 +31,7 @@ passed to every hook as `g`.
 | `g.players` | ships: `{ id, x, y, vx, vy, alive, out, invuln, hitR, lives, score, powers, carry, pal, paint }` |
 | `g.enemies`, `g.eShots`, `g.pShots`, `g.bubbles`, `g.lasers` | live arrays. **Re-read them through `g` every frame**: they're replaced as dead things are filtered out. `g.eShots = []` clears enemy bullets. |
 | `g.boss` | the boss object while one is up, else `null` |
+| `g.debug` | `true` when the page was opened with `?debug` |
 | `g.alive()`, `g.nearestPlayer(x, y)` | ships currently flying; the closest one (or `null`) |
 | `g.spawn(type, x, y, fields)` | add an enemy of a registered type; `fields` are copied onto it |
 | `g.later(seconds, fn)` | run `fn` after a delay (dropped if the mission ends first) |
@@ -44,7 +45,9 @@ passed to every hook as `g`.
 | `g.bossEnter(b, dt)` | slides `b.y` down to `b.ty`; returns `true` while still arriving (the boss is invulnerable then) |
 | `g.hpMult()` | 1.5 with two players; scale boss hp by it |
 | `g.addScore(owner, pts, x?, y?)` | points for player `owner` (with a pop-up when x/y are given) |
-| `g.popText(x, y, text, color, size = 18, life = 1.1)` | floating text |
+| `g.popText(x, y, text, color, size = 18, life = 1.1)` | floating text; returns it, so you can change its `rise` speed (36 units/s) |
+| `g.canFire(e)` | whether a formation saucer is in a spot to shoot, for telegraphing it |
+| `g.warp(n)` | starfield speed: 1 is cruising, 6+ is warp. Reset it in `setup` |
 | `g.explode(x, y, color, size = 1)`, `g.sparks(x, y, color, n)`, `g.splash(x, y, color)` | effects |
 | `g.dropBubble(x, y, type?)` | a power-up bubble (`shield` `triple` `rapid` `speed` `heart` `nova`, random if omitted) |
 | `g.banner(sub, title, cls?)` | big centre banner; `cls` is `''`, `'warn'` or `'clear'` |
@@ -53,6 +56,9 @@ passed to every hook as `g`.
 | `g.sfx` | sounds from `../../audio.js` `sfx`: `zap hitTick ting pop(size) boom hurt shieldPop bubble nova laserWarn laser siren revive clear win lose select start buy deny` |
 | `g.ctx`, `g.FONT` | the canvas context (already in world units) and the Bungee font stack |
 | `g.rand(a, b)`, `g.pick(arr)`, `g.clamp(v, a, b)`, `g.near(ax, ay, bx, by, r)`, `g.TAU` | maths |
+
+Bungee only has Latin glyphs. Arrows and other symbols fall back to a thin
+system font, so spell them out (`>>>`) or draw them.
 
 For a sound of your own: `import { synth } from '../../audio.js'`, then
 `synth.tone({ type, from, to, dur, vol, at })` or `synth.noise({ dur, vol, freq, to })`.
