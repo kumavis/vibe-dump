@@ -13,7 +13,7 @@
       "simulation",
       "kids"
     ],
-    "status": "wip",
+    "status": "done",
     "models": ["Opus 5.5"],
     "thinking": "ultracode",
     "thumbnail": { "waitFor": "body.ready", "settle": 2200 }

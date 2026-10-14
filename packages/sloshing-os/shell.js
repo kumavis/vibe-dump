@@ -46,25 +46,6 @@ const SVG = {
     <ellipse cx="9.6" cy="13" rx="1.4" ry="2.6" fill="#fff" opacity=".9" transform="rotate(20 9.6 13)"/></svg>`,
 }
 
-function pondIcon(size) {
-  return canvasIcon(size, (ctx, s) => {
-    const g = ctx.createRadialGradient(s * 0.4, s * 0.55, 2, s * 0.5, s * 0.62, s * 0.5)
-    g.addColorStop(0, '#bff6ff')
-    g.addColorStop(0.45, '#2fb8ff')
-    g.addColorStop(1, '#0a3d9a')
-    ctx.fillStyle = g
-    ctx.beginPath()
-    ctx.ellipse(s / 2, s * 0.64, s * 0.46, s * 0.27, 0, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.strokeStyle = 'rgba(255,255,255,0.8)'
-    ctx.lineWidth = 1.5
-    ctx.beginPath()
-    ctx.ellipse(s / 2, s * 0.64, s * 0.46, s * 0.27, 0, Math.PI * 1.1, Math.PI * 1.7)
-    ctx.stroke()
-    drawDuck(ctx, s * 0.52, s * 0.52, s * 0.17, -0.1)
-  })
-}
-
 function drainIcon(size) {
   return canvasIcon(size, (ctx, s) => {
     const c = s / 2
@@ -433,7 +414,6 @@ export class Shell {
       it.addEventListener('click', () => { this.toggleMenu(false); fn() })
       right.appendChild(it)
     }
-    place('My Pond', pondIcon(22), () => this.pond())
     place('Drain', drainIcon(22), () => this.drain())
     right.appendChild(el('hr'))
     place('Shake Desktop', null, () => this.shake())
@@ -482,7 +462,6 @@ export class Shell {
       if (skin) this.iconFor.set(skin, d)
     }
     for (const { skin } of this.apps) add(skin.title, canvasIcon(48, (ctx, s) => ctx.drawImage(skin.icon(s), 0, 0, s, s)), () => this.open(skin), skin)
-    add('My Pond', pondIcon(48), () => this.pond())
     add('Drain', drainIcon(48), () => this.drain())
     document.body.appendChild(box)
   }
@@ -506,11 +485,6 @@ export class Shell {
       const p = spots.get(s)
       if (p) s.glide(p.x, p.y, p.S)
     }
-  }
-
-  pond() {
-    this.shake()
-    this.balloon('My Pond', 'Moisture levels nominal. Everything has been agitated, as requested.')
   }
 
   drain() {

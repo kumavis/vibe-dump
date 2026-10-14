@@ -34,8 +34,8 @@ function layout() {
   const W = innerWidth - safe.l - safe.r
   const free = innerHeight - top - safe.b
   const L = W / free < 1.05 ? TALL : WIDE
-  // the icon column needs ~600 px of height; short landscape phones skip it
-  const icons = L === WIDE && innerWidth >= 760 && innerHeight >= 600
+  // the icon column needs ~500 px of height; short landscape phones skip it
+  const icons = L === WIDE && innerWidth >= 760 && innerHeight >= 520
   document.body.classList.toggle('no-icons', !icons)
   const S = clamp(Math.min(W / L.w, free / L.h), 0.36, 1)
   // a roomier screen spreads the skins out rather than leaving an empty corner
