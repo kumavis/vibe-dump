@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "vite", "build": "vite build" },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "standalone": "vite build && node tools/standalone.mjs"
+  },
   "dependencies": {
     "@fontsource/bungee": "^5.3.0"
   },

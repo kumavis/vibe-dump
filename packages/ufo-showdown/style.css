@@ -1,4 +1,6 @@
+/* One look on purpose: a night-sky arcade, whatever the host's theme. */
 :root {
+  color-scheme: dark;
   --bg: #070418;
   --ink: #eef3ff;
   --dim: #a9b3d6;
