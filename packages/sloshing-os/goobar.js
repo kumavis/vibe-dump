@@ -134,7 +134,7 @@ export class GooBar {
   }
 
   wave(x) {
-    const f = Math.max(0, x / COLS)
+    const f = Math.min(this.wh.length - 1, Math.max(0, x / COLS))
     const i = Math.min(this.wh.length - 2, Math.floor(f))
     const k = f - i
     return this.wh[i] * (1 - k) + this.wh[i + 1] * k

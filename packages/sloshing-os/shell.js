@@ -224,8 +224,9 @@ export class Shell {
       b.appendChild(canvasIcon(24, (ctx, s) => ctx.drawImage(skin.icon(s), 0, 0, s, s)))
       b.appendChild(el('span', 'label', skin.title))
       b.title = skin.title
-      // splash on click, not on press: a press-splash bobs the pill out from
-      // under the pointer and the click never lands
+      // splash on click, not on press, and capture the press: the goo bobs
+      // pills around, and a click must land even if this one moved under it
+      b.addEventListener('pointerdown', (e) => { if (e.button === 0) b.setPointerCapture(e.pointerId) })
       b.addEventListener('click', (e) => {
         this.goobar.splash(e.clientX, 180, 40)
         this.taskClick(skin)
@@ -261,16 +262,21 @@ export class Shell {
     bar.appendChild(tray)
     document.body.appendChild(bar)
     this.trayW = 0
-    // resizing rebuilds the full-screen goo targets: do it once things settle
-    let rt = 0
+    // resizing rebuilds the full-screen goo targets: refit at once (a
+    // rotation), then at most every 160 ms during a drag, then once at the end
+    let rt = 0, lastFit = 0
+    const fit = () => {
+      rt = 0
+      lastFit = performance.now()
+      readSafe()
+      this.goobar.top = safe.t
+      this.goobar.resize()
+      this.trayW = 0
+    }
     addEventListener('resize', () => {
       clearTimeout(rt)
-      rt = setTimeout(() => {
-        readSafe()
-        this.goobar.top = safe.t
-        this.goobar.resize()
-        this.trayW = 0
-      }, 160)
+      if (performance.now() - lastFit > 160) fit()
+      rt = setTimeout(fit, 160)
     })
   }
 
@@ -302,8 +308,10 @@ export class Shell {
     let pw = Math.min(156, (room - gap * (n - 1)) / n)
     const compact = pw < 112
     if (compact) {
-      gap = 6
-      pw = Math.max(30, Math.min(46, (room - gap * (n - 1)) / n))
+      pw = Math.max(30, Math.min(46, (room - 6 * (n - 1)) / n))
+      // no room even at the floor: overlap the pills like cards rather than
+      // pushing the last ones under the tray
+      gap = n > 1 ? Math.min(6, (room - pw * n) / (n - 1)) : 6
     }
     if (compact !== this.compact) {
       this.compact = compact

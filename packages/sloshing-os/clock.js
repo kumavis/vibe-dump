@@ -86,7 +86,7 @@ export function makeClock(goo) {
     const hh = String(now.getHours()).padStart(2, '0')
     const mm = String(now.getMinutes()).padStart(2, '0')
     const on = '#ffb347'
-    drawSeg(ctx, `${hh}${Math.floor(s) % 2 ? ':' : ' '}${mm}`, 102, 247, { w: 9, h: 17, t: 2.6, gap: 5, on, off: 'rgba(255,170,70,0.08)', glow: on })
+    drawSeg(ctx, `${hh}${Math.floor(s) % 2 ? ':' : ';'}${mm}`, 102, 247, { w: 9, h: 17, t: 2.6, gap: 5, on, off: 'rgba(255,170,70,0.08)', glow: on })
   }
   skin.tick = (dt) => {
     bubbles.ambient(dt, () => {

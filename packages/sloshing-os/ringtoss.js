@@ -233,17 +233,19 @@ export function makeRingToss(goo, { onWin, onScore } = {}) {
   })
 
   addEventListener('keydown', (e) => {
-    if (e.repeat) return
+    if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return
     const k = e.key.toLowerCase()
     if (k === 'arrowleft' || k === 'a') pump(0, true)
     if (k === 'arrowright' || k === 'd') pump(1, true)
   })
   addEventListener('keyup', (e) => {
+    // macOS drops keyups for keys released while Cmd is down: let go on Cmd-up
+    if (e.key === 'Meta') { pump(0, false); pump(1, false); return }
     const k = e.key.toLowerCase()
     if (k === 'arrowleft' || k === 'a') pump(0, false)
     if (k === 'arrowright' || k === 'd') pump(1, false)
   })
-  // a keyup we never see (window switched, Cmd held) must not latch a pump on
+  // a keyup we never see (window switched) must not latch a pump on
   addEventListener('blur', () => { pump(0, false); pump(1, false) })
 
   // ---- paint ----

@@ -48,21 +48,34 @@ export class Wallpaper {
       g.addColorStop(1, b.c[2])
       return g
     })
-    // text that never changes is baked once instead of drawn every frame
-    const st = (this.still = document.createElement('canvas'))
-    st.width = this.fx.width
-    st.height = this.fx.height
-    const c = st.getContext('2d')
-    c.setTransform(this.res, 0, 0, this.res, 0, 0)
+    // text that never changes is baked once, into canvases just big enough
+    // for it, placed on whole device pixels so the blit is pixel-exact
+    const res = this.res
+    const bake = (x0, y0, w, h, paint) => {
+      const dx = Math.floor(x0 * res), dy = Math.floor(y0 * res)
+      const cv = document.createElement('canvas')
+      cv.width = Math.max(1, Math.ceil((x0 + w) * res) - dx)
+      cv.height = Math.max(1, Math.ceil((y0 + h) * res) - dy)
+      const c = cv.getContext('2d')
+      c.setTransform(res, 0, 0, res, -dx, -dy)
+      paint(c)
+      return { cv, dx, dy }
+    }
     const { x, y, r } = this.hud
-    drawText(c, 'LIQUID.SYS', x - 29, y - r * 0.2, { px: 1, color: 'rgba(140,230,255,0.75)' })
-    drawText(c, 'DUCK UPLINK ......... OK', x + r * 0.55, y + r * 1.12, { px: 1, color: 'rgba(140,230,255,0.45)' })
-    drawText(c, 'GOO PRESSURE ...... 4.2 BAR', x + r * 0.55, y + r * 1.12 + 11, { px: 1, color: 'rgba(140,230,255,0.45)' })
-    // the artist's signature, as every wallpaper had
-    c.font = 'italic 600 15px "Brush Script MT", "Segoe Script", cursive'
-    c.fillStyle = 'rgba(190,230,255,0.4)'
-    c.textAlign = 'right'
-    c.fillText('~ sloshboy 2004', W - 18, H - 16)
+    this.still = [
+      bake(x - 29, y - r * 0.2, 60, 8, (c) => drawText(c, 'LIQUID.SYS', x - 29, y - r * 0.2, { px: 1, color: 'rgba(140,230,255,0.75)' })),
+      bake(x + r * 0.55, y + r * 1.12, 164, 19, (c) => {
+        drawText(c, 'DUCK UPLINK ......... OK', x + r * 0.55, y + r * 1.12, { px: 1, color: 'rgba(140,230,255,0.45)' })
+        drawText(c, 'GOO PRESSURE ...... 4.2 BAR', x + r * 0.55, y + r * 1.12 + 11, { px: 1, color: 'rgba(140,230,255,0.45)' })
+      }),
+      // the artist's signature, as every wallpaper had
+      bake(W - 220, H - 40, 220, 40, (c) => {
+        c.font = 'italic 600 15px "Brush Script MT", "Segoe Script", cursive'
+        c.fillStyle = 'rgba(190,230,255,0.4)'
+        c.textAlign = 'right'
+        c.fillText('~ sloshboy 2004', W - 18, H - 16)
+      }),
+    ]
     this.frame = 0
     this.glowDt = 0
   }
@@ -218,7 +231,7 @@ export class Wallpaper {
     f.globalAlpha = 1
     f.globalCompositeOperation = 'source-over'
     f.setTransform(1, 0, 0, 1, 0, 0)
-    f.drawImage(this.still, 0, 0)
+    for (const { cv, dx, dy } of this.still) f.drawImage(cv, dx, dy)
   }
 
   drawHud(f, t) {

@@ -172,7 +172,7 @@ export function drawSeg(ctx, str, x, y, opts = {}) {
   if (!c) {
     const { w = 11, h = 20, t = 3, gap = 6 } = opts
     let width = 0
-    for (const ch of String(str)) width += ch === ':' ? t + gap : w + gap
+    for (const ch of String(str)) width += ch === ':' || ch === ';' ? t + gap : w + gap
     c = document.createElement('canvas')
     c.width = Math.ceil((width + pad * 2) * sc)
     c.height = Math.ceil((h + pad * 2) * sc)
@@ -188,10 +188,13 @@ export function drawSeg(ctx, str, x, y, opts = {}) {
 function drawSegRaw(ctx, str, x, y, { w = 11, h = 20, t = 3, gap = 6, on = '#7dffb0', off = 'rgba(125,255,176,0.08)', glow = null } = {}) {
   let cx = x
   for (const ch of String(str)) {
-    if (ch === ':') {
-      ctx.fillStyle = on
-      ctx.fillRect(cx + 1, y + h * 0.28, t, t)
-      ctx.fillRect(cx + 1, y + h * 0.68, t, t)
+    // ':' is a colon, ';' a colon-width blank (a blinking colon's off beat)
+    if (ch === ':' || ch === ';') {
+      if (ch === ':') {
+        ctx.fillStyle = on
+        ctx.fillRect(cx + 1, y + h * 0.28, t, t)
+        ctx.fillRect(cx + 1, y + h * 0.68, t, t)
+      }
       cx += t + gap
       continue
     }

@@ -131,7 +131,16 @@ addEventListener('resize', () => {
   for (const [s, p] of next) {
     const o = spots.get(s)
     const k = p.S / o.S
-    if (s.state === 'open') {
+    const a = s.anim
+    if (a) {
+      // mid-animation: remap where it will come back to, and retarget an
+      // animation that is heading somewhere on the desktop
+      const h = s.home || o
+      s.home = { x: p.x + (h.x - o.x) * k, y: p.y + (h.y - o.y) * k, S: p.S }
+      if (a.kind !== 'min' && a.kind !== 'close') {
+        a.to = { ...a.to, x: p.x + (a.to.x - o.x) * k, y: p.y + (a.to.y - o.y) * k, S: p.S }
+      }
+    } else if (s.state === 'open') {
       s.place(
         clamp(p.x + (s.x - o.x) * k, safe.l, innerWidth - safe.r - 60),
         clamp(p.y + (s.y - o.y) * k, desk.ceil, innerHeight - 60), p.S)
@@ -146,7 +155,8 @@ addEventListener('resize', () => {
 // goo drops falling off the bar land in the liquid of whatever skin they hit
 // first, topmost first; a drop over a skin's body just slides past it
 const probe = new Int32Array(8)
-const byDepth = (a, b) => (+b.el.style.zIndex || 0) - (+a.el.style.zIndex || 0)
+// ties (never-focused skins) paint in creation order, so later counts as higher
+const byDepth = (a, b) => (+b.el.style.zIndex || 0) - (+a.el.style.zIndex || 0) || skins.indexOf(b) - skins.indexOf(a)
 function dripInto() {
   const drops = shell.goobar.drops
   if (!drops.length) return

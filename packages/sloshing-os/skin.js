@@ -125,14 +125,17 @@ export class Skin {
     return [(cx - this.x) / this.S, (cy - this.y) / this.S]
   }
 
-  // nearest round button within reach; fingers get at least a 14 px radius
+  // nearest round button within reach; fingers get at least a 14 px radius.
+  // A finger that could mean either orb gets the reversible one: close has
+  // to be clearly nearer than minimise.
   buttonAt(lx, ly) {
     const minR = coarse ? 14 / this.S : 0
     let best = null, bd = Infinity
     for (const b of this.buttons) {
       if (b.r) {
         const d = Math.hypot(lx - b.x, ly - b.y)
-        if (d < Math.max(b.r + 3, minR) && d < bd) { best = b; bd = d }
+        const rank = d + (coarse && b.risky ? 5 / this.S : 0)
+        if (d < Math.max(b.r + 3, minR) && rank < bd) { best = b; bd = rank }
       } else if (lx > b.x && lx < b.x + b.w && ly > b.y && ly < b.y + b.h) return b
     }
     return best
@@ -157,21 +160,23 @@ export class Skin {
       p.part(circle(ox + r, oy + r, r - 0.4), { type: 'plastic', color: down ? col.map((c) => c * 0.7) : col, bevel: r, pillow: 0.2 })
     }
     const ink = (ctx) => { ctx.strokeStyle = 'rgba(60,20,0,0.75)'; ctx.lineWidth = 1.4; ctx.lineCap = 'round' }
+    // the orbs act on release, so a grab that starts on (or near) one still
+    // drags the skin
     this.button({
-      x: min[0], y: min[1], r,
+      x: min[0], y: min[1], r, tap: true,
       sprite: buttonSprites(r * 2, r * 2, orb(hex('#ffc21a')), (ctx, x, y) => {
         ink(ctx); ctx.beginPath(); ctx.moveTo(x - r * 0.45, y + 0.5); ctx.lineTo(x + r * 0.45, y + 0.5); ctx.stroke()
       }),
-      press: () => this.onMinimize?.(),
+      fire: () => this.onMinimize?.(),
     })
     this.button({
-      x: close[0], y: close[1], r,
+      x: close[0], y: close[1], r, tap: true, risky: true,
       sprite: buttonSprites(r * 2, r * 2, orb(hex('#ff3d5a')), (ctx, x, y) => {
         ink(ctx)
         const k = r * 0.38
         ctx.beginPath(); ctx.moveTo(x - k, y - k); ctx.lineTo(x + k, y + k); ctx.moveTo(x + k, y - k); ctx.lineTo(x - k, y + k); ctx.stroke()
       }),
-      press: () => this.onClose?.(),
+      fire: () => this.onClose?.(),
     })
   }
 
@@ -236,7 +241,7 @@ export class Skin {
 
   wireInput() {
     const hit = this.hit
-    let grabX = 0, grabY = 0, moved = 0, hist = [], last = null, dragId = null
+    let grabX = 0, grabY = 0, moved = 0, hist = [], last = null, dragId = null, tapB = null
     const pressed = new Map() // pointerId → button, so two thumbs can hold two pumps
     hit.addEventListener('pointerdown', (e) => {
       e.preventDefault()
@@ -245,7 +250,7 @@ export class Skin {
       hit.setPointerCapture(e.pointerId)
       const [lx, ly] = this.toLocal(e.clientX, e.clientY)
       const b = this.buttonAt(lx, ly)
-      if (b) {
+      if (b && !b.tap) {
         pressed.set(e.pointerId, b)
         b.down = true
         b.squish = 1
@@ -255,6 +260,8 @@ export class Skin {
       if (this.dragging) return // a second finger can't steal the drag
       this.dragging = true
       dragId = e.pointerId
+      tapB = b
+      if (b) { b.down = true; b.squish = 1 }
       grabX = e.clientX - this.x
       grabY = e.clientY - this.y
       moved = 0
@@ -270,6 +277,7 @@ export class Skin {
         const nx = clamp(e.clientX - grabX, safe.l - this.w * S * 0.6, innerWidth - safe.r - this.w * S * 0.4)
         const ny = clamp(e.clientY - grabY, desk.ceil - this.h * S * 0.3, innerHeight - this.h * S * 0.3)
         moved += Math.hypot(nx - this.x, ny - this.y)
+        if (tapB && moved >= 5) { tapB.down = false; tapB = null }
         this.x = nx
         this.y = ny
         hist.push([e.clientX, e.clientY, e.timeStamp])
@@ -302,8 +310,16 @@ export class Skin {
       if (!this.dragging || e.pointerId !== dragId) return
       this.dragging = false
       dragId = null
+      const tb = tapB
+      tapB = null
+      if (tb) tb.down = false
       const [lx, ly] = this.toLocal(e.clientX, e.clientY)
       if (moved < 5) {
+        if (tb) {
+          if (e.type === 'pointerup') tb.fire()
+          this.tvx = this.tvy = 0
+          return
+        }
         this.click(lx, ly)
         this.tvx = this.tvy = 0
         return
