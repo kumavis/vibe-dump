@@ -14,6 +14,20 @@ import { clamp } from '../core/mathx.js'
 
 export const STATE = { OK: 'ok', DROWSY: 'drowsy', OUT: 'unconscious', DEAD: 'dead' }
 
+// One step of absorption and clearance on { sedative, pending }. Pending dose
+// soaks in at 55%/s (never slower than 5% of the knockout dose per second)
+// while the absorbed sedative clears at the species' metabolic rate. The dart
+// readout (ui/dose.js) runs this same step forward to predict where a dose
+// will peak, so the two can never disagree.
+export function absorb(sed, r, dt) {
+  if (r.pending > 0) {
+    const take = Math.min(r.pending, Math.max(sed.ko * 0.05, r.pending * 0.55) * dt)
+    r.pending -= take
+    r.sedative += take
+  }
+  r.sedative = Math.max(0, r.sedative - sed.metab * dt)
+}
+
 export class Vitals {
   constructor(species, rec) {
     this.sp = species
@@ -69,12 +83,7 @@ export class Vitals {
     const r = this.rec
     if (r.state === STATE.DEAD) return
     const sed = this.sp.sedation
-    if (r.pending > 0) {
-      const take = Math.min(r.pending, Math.max(sed.ko * 0.05, r.pending * 0.55) * dt)
-      r.pending -= take
-      r.sedative += take
-    }
-    r.sedative = Math.max(0, r.sedative - sed.metab * dt)
+    absorb(sed, r, dt)
     if (r.sedative >= sed.lethal) {
       this.die('overdose')
       return

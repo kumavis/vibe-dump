@@ -1,54 +1,143 @@
-import { WEAPONS } from '../data/weapons.js'
+import { WEAPONS, ZONES } from '../data/weapons.js'
+import { absorb } from '../actors/vitals.js'
 
 // Dart arithmetic for the target readout and the journal, said in whole darts
 // still to come — no '~' or '≈' that reads as a minus at HUD size, never a
 // negative, and no knockout count once enough sedative is already on board.
-// Counts assume body hits; head and neck carry more, legs and tail less.
+//
+// Every verdict runs the animal's own sedation model forward (absorb() in
+// actors/vitals.js). Sedative keeps clearing while a dart is still soaking in,
+// so darts that add up to the knockout line on paper peak below it: "wait" and
+// "fatal" are only said of a dose whose projected peak crosses the line, and
+// the knockout counts fire darts at a steady pace until it does.
+//
+// Counts assume body hits (leg hits on an animal whose body is armoured). The
+// zone under the crosshair adds a warning when one dart there would overdose.
+
+const STEP = 1 / 60 // integration step: one frame, as the game runs it
+const MAX = 99 // darts before a count gives up
+// The game integrates at its frame rate, which moves a peak by up to ~0.07% of
+// the line between 20 and 240 fps: knockouts are promised a hair above the
+// line and overdoses warned of a hair below it.
+const TOL = 0.001
+const koLine = (sed) => sed.ko * (1 + TOL)
+const odLine = (sed) => sed.lethal * (1 - TOL)
+
+// A steady rate of fire: each dart's share of emptying a magazine and
+// reloading it (player/weapons.js starts the reload 0.35 s after the last).
+const pace = (w) => (w.rof * (w.mag - 1) + 0.35 + w.reload) / w.mag
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
 
-// Darts of `dose` it takes to bring `have` units up to `line` (at least one).
-export function dartsTo(line, have, dose) {
-  return Math.max(1, Math.ceil((line - have) / dose - 1e-6))
+// Highest absorbed sedative the dose on board reaches if nothing else lands.
+export function projectedPeak(sed, sedative, pending) {
+  const r = { sedative, pending }
+  let peak = sedative
+  for (let i = 0; r.pending > 0 && i < 6000; i++) {
+    absorb(sed, r, STEP)
+    if (r.sedative > peak) peak = r.sedative
+  }
+  return peak
 }
 
-// Target readout lines for a living animal: [{ text, warn }].
-export function doseReadout(sed, state, sedative, pending) {
+// Darts of `dose`, one now and then one every `gap` seconds, until the
+// projected peak reaches `line`: { n, peak }. n is Infinity when the animal
+// clears sedative faster than the darts bring it.
+function paced(sed, sedative, pending, dose, gap, line) {
+  const r = { sedative, pending }
+  for (let n = 1; n <= MAX; n++) {
+    r.pending += dose
+    // nothing peaks above what is on board, so only project once it could
+    if (r.sedative + r.pending >= line) {
+      const peak = projectedPeak(sed, r.sedative, r.pending)
+      if (peak >= line) return { n, peak }
+    }
+    for (let t = 0; t < gap; t += STEP) absorb(sed, r, STEP)
+  }
+  return { n: Infinity, peak: 0 }
+}
+
+// Darts of `dose` landing together that take the projected peak to `line`:
+// the fewest that could do it, which is what an overdose warning wants.
+function atOnce(sed, sedative, pending, dose, line) {
+  let n = Math.max(1, Math.ceil((line - sedative - pending) / dose - 1e-6))
+  while (n < MAX && projectedPeak(sed, sedative, pending + n * dose) < line) n++
+  return n
+}
+
+// The zone the counts assume, and how the readout names zones.
+const refZone = (sp) => (sp.armor?.includes('torso') ? 'limb' : 'torso')
+const ZONE_WORD = { head: 'head', neck: 'neck', torso: 'body', limb: 'legs', tail: 'tail' }
+const where = (sp) => (refZone(sp) === 'torso' ? '' : ` in the ${ZONE_WORD.limb}`)
+// "neck or legs", "neck, legs or body"
+const openZones = (sp) => {
+  const w = ['neck', 'limb', 'torso'].filter((z) => !sp.armor?.includes(z)).map((z) => ZONE_WORD[z])
+  return w.length > 1 ? `${w.slice(0, -1).join(', ')} or ${w[w.length - 1]}` : w[0]
+}
+
+// Target readout lines for a living animal: [{ text, warn }]. `zone` is the
+// hit zone under the crosshair ('neck', 'armor', ...), if any.
+export function doseReadout(sp, state, sedative, pending, zone) {
+  const sed = sp.sedation
+  const peak = projectedPeak(sed, sedative, pending)
+  if (peak >= odLine(sed)) return [{ text: 'Fatal overdose absorbing — it will die', warn: true }]
+  const k = ZONES[refZone(sp)].dose
   const rifle = WEAPONS.rifle.dose
   const pistol = WEAPONS.pistol.dose
-  const have = sedative + pending
-  if (have >= sed.lethal) return [{ text: 'Lethal dose absorbing — it will not wake', warn: true }]
+  const odRifle = atOnce(sed, sedative, pending, rifle * k, odLine(sed))
+  const odPistol = atOnce(sed, sedative, pending, pistol * k, odLine(sed))
+  // a neck or head dart carries more than the counts assume
+  const zm = ZONES[zone]?.dose ?? 0
+  let zoneOd = null
+  if (zm > k) {
+    if (odPistol > 1 && projectedPeak(sed, sedative, pending + pistol * zm) >= odLine(sed)) zoneOd = 'any'
+    else if (odRifle > 1 && projectedPeak(sed, sedative, pending + rifle * zm) >= odLine(sed)) zoneOd = 'rifle'
+  }
+  const zoneWord = ZONE_WORD[zone]
   const lines = []
+  let toldRifle = false
   if (state === 'unconscious') lines.push({ text: 'Out cold — no more darts needed' })
-  else if (have >= sed.ko) lines.push({ text: 'Enough sedative absorbing — wait' })
-  else lines.push(knockout(sed, have, true))
-  const odRifle = dartsTo(sed.lethal, have, rifle)
-  const odPistol = dartsTo(sed.lethal, have, pistol)
-  lines.push({
-    text: `Overdose: ${plural(odRifle, 'more rifle dart')} (or ${odPistol} pistol)`,
-    warn: odRifle <= 1,
-  })
+  else if (peak >= koLine(sed)) lines.push({ text: 'Enough sedative absorbing — wait' })
+  else if (zone === 'armor') lines.push({ text: `Armour — darts won't take. Aim for the ${openZones(sp)}`, warn: true })
+  else {
+    lines.push(knockout(sp, sedative, pending, true, zoneOd === 'rifle' ? zoneWord : null))
+    toldRifle = zoneOd === 'rifle'
+  }
+  lines.push({ text: `Overdose: ${plural(odRifle, 'more rifle dart')}${where(sp)} (or ${odPistol} pistol)`, warn: odRifle <= 1 })
+  if (zoneOd === 'any') lines.push({ text: `Any dart in the ${zoneWord} would overdose`, warn: true })
+  else if (zoneOd === 'rifle' && !toldRifle) lines.push({ text: `A rifle dart in the ${zoneWord} would overdose`, warn: true })
   return lines
 }
 
 // "Knockout: 2 more rifle darts (or 5 pistol)", or the pistol alone when a
-// rifle dart that knocks it out would also kill it (a compy, say).
-function knockout(sed, have, more) {
-  const rifle = WEAPONS.rifle.dose
-  const pistol = WEAPONS.pistol.dose
+// rifle dart that knocks it out would also kill it (a compy, say) — or would
+// in the zone being aimed at (`risky` names it).
+function knockout(sp, sedative, pending, more, risky = null) {
+  const sed = sp.sedation
+  const k = ZONES[refZone(sp)].dose
   const m = more ? 'more ' : ''
-  const koRifle = dartsTo(sed.ko, have, rifle)
-  const koPistol = dartsTo(sed.ko, have, pistol)
-  const rifleSafe = koRifle < dartsTo(sed.lethal, have, rifle)
-  const pistolSafe = koPistol < dartsTo(sed.lethal, have, pistol)
-  if (rifleSafe) return { text: `Knockout: ${plural(koRifle, m + 'rifle dart')} (or ${koPistol} pistol)` }
-  if (pistolSafe) return { text: `Knockout: ${plural(koPistol, m + 'pistol dart')}${more ? '; a rifle dart would overdose' : ' (a rifle dart overdoses)'}` }
+  const R = paced(sed, sedative, pending, WEAPONS.rifle.dose * k, pace(WEAPONS.rifle), koLine(sed))
+  const P = paced(sed, sedative, pending, WEAPONS.pistol.dose * k, pace(WEAPONS.pistol), koLine(sed))
+  // a course of darts is safe when the one that tips it over doesn't overshoot
+  const rifleSafe = R.n < Infinity && R.peak < odLine(sed) && !risky
+  const pistolSafe = P.n < Infinity && P.peak < odLine(sed)
+  const pistolAlt = P.n < Infinity ? `${P.n} pistol` : "pistol darts can't keep up"
+  if (rifleSafe && pistolSafe && P.n === 1) return { text: `Knockout: ${plural(1, m + 'pistol dart')}${where(sp)} (or ${R.n} rifle)` }
+  if (rifleSafe) return { text: `Knockout: ${plural(R.n, m + 'rifle dart')}${where(sp)} (or ${pistolAlt})` }
+  if (pistolSafe) {
+    const why = risky ? `a rifle dart in the ${risky} would overdose` : 'a rifle dart overdoses'
+    return { text: `Knockout: ${plural(P.n, m + 'pistol dart')}${where(sp)}${more ? `; ${why}` : ` (${why})`}`, warn: !!risky }
+  }
+  if (R.n === Infinity && P.n === Infinity) return { text: "Darts can't outpace its metabolism", warn: true }
   return { text: 'Too close to an overdose to dart safely', warn: true }
 }
 
 // Journal card: knockout and overdose for an animal with no sedative in it.
-export function doseCard(sed) {
-  const ko = knockout(sed, 0, false).text.replace('Knockout: ', '')
-  const od = `${plural(dartsTo(sed.lethal, 0, WEAPONS.rifle.dose), 'rifle dart')} (or ${dartsTo(sed.lethal, 0, WEAPONS.pistol.dose)} pistol)`
-  return { ko: `${ko} · ${sed.ko}u`, od: `${od} · ${sed.lethal}u` }
+export function doseCard(sp) {
+  const sed = sp.sedation
+  const k = ZONES[refZone(sp)].dose
+  const ko = knockout(sp, 0, 0, false).text.replace('Knockout: ', '')
+  const odRifle = atOnce(sed, 0, 0, WEAPONS.rifle.dose * k, odLine(sed))
+  const odPistol = atOnce(sed, 0, 0, WEAPONS.pistol.dose * k, odLine(sed))
+  return { ko: `${ko} · ${sed.ko}u`, od: `${plural(odRifle, 'rifle dart')}${where(sp)} (or ${odPistol} pistol) · ${sed.lethal}u` }
 }
