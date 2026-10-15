@@ -8,26 +8,42 @@ import { Rng, hash2 } from '../core/rng.js'
 //   small ferns, grass, reeds, bushes — streamed in chunks around the camera;
 //         no colliders, but they are the cover the stealth model counts
 //
-// LOD changes never pop: each instance picks its LOD by its own distance to
-// the camera, and neighbouring LODs overlap in a band where one dithers out as
-// the other dithers in (see vegMaterial). The LODs of a plant share one shape,
-// so the cross-fade only changes how finely it is cut.
+// LOD changes never pop: each instance picks its LOD by the camera's distance
+// to its crown, and neighbouring LODs overlap in a band where one dithers out
+// as the other dithers in (see vegMaterial). The LODs of a plant share one
+// shape (LOD0's thin extras dissolve first), so the cross-fade only changes
+// how finely it is cut. Shadows are thrown by whatever lies inside the sun's
+// shadow box, at the LOD it is drawn at.
 //
 // Every type is one entry in TYPES; add a plant by writing a builder for it.
 
 // ------------------------------------------------------------ geometry builder
 
+// Plants are drawn front faces only (crowns, trunks, rocks and bushes are
+// closed shells, and culling the far side of every crown roughly halves what
+// they cost to rasterize), so their flat parts — fronds, vines, blades — are
+// emitted twice, once per side (`both`). LOD0-only details carry `detail`, so
+// they can go before the crowns cross-fade to LOD1: 1 dissolves, 2 folds in
+// towards the trunk.
 class Builder {
   constructor() {
     this.pos = []
     this.col = []
     this.sway = []
+    this.det = []
+    this.both = false
+    this.detail = 0
   }
   tri(a, b, c, col, sa = 0, sb = sa, sc = sa) {
-    this.pos.push(...a, ...b, ...c)
     const cols = Array.isArray(col) ? col : [col, col, col]
-    for (const k of cols) this.col.push(k.r, k.g, k.b)
+    this.push(a, b, c, cols[0], cols[1], cols[2], sa, sb, sc)
+    if (this.both) this.push(a, c, b, cols[0], cols[2], cols[1], sa, sc, sb)
+  }
+  push(a, b, c, ca, cb, cc, sa, sb, sc) {
+    this.pos.push(...a, ...b, ...c)
+    this.col.push(ca.r, ca.g, ca.b, cb.r, cb.g, cb.b, cc.r, cc.g, cc.b)
     this.sway.push(sa, sb, sc)
+    this.det.push(this.detail, this.detail, this.detail)
   }
   quad(a, b, c, d, col, sa = 0, sb = sa, sc = sa, sd = sa) {
     // a-b-c-d counter-clockwise when seen from the front
@@ -61,13 +77,15 @@ class Builder {
     geo.setAttribute('position', new THREE.Float32BufferAttribute(this.pos, 3))
     geo.setAttribute('color', new THREE.Float32BufferAttribute(this.col, 3))
     geo.setAttribute('aSway', new THREE.Float32BufferAttribute(this.sway, 1))
+    geo.setAttribute('aDetail', new THREE.Float32BufferAttribute(this.det, 1))
+    // the point LOD distance is measured to; Vegetation sets it per type
+    geo.setAttribute('aPivot', new THREE.Float32BufferAttribute(new Float32Array(this.sway.length), 1))
     geo.computeVertexNormals()
     geo.computeBoundingSphere()
     return geo
   }
 }
 
-const M = new THREE.Matrix4()
 const Q = new THREE.Quaternion()
 const E = new THREE.Euler()
 const V = new THREE.Vector3()
@@ -80,6 +98,15 @@ function col(hex, rng, v = 0.08) {
   const c = new THREE.Color(hex)
   const k = 1 + (rng.next() * 2 - 1) * v
   return c.multiplyScalar(k)
+}
+
+// A face's shade: its part's tone, varied a little by where the face sits
+// (not by the colour stream, which the LODs would consume differently), so
+// where two LODs of a crown overlap their faces differ only by lighting and
+// a few percent.
+function shade(hex, k, cx, cy, cz, v = 0.05) {
+  const h = hash2(Math.round(cx * 4) + Math.imul(Math.round(cz * 4), 7919), Math.round(cy * 4), 77)
+  return new THREE.Color(hex).multiplyScalar(k * (1 + (h * 2 - 1) * v))
 }
 
 // Push each vertex by a hash of its position, so the corners a coarse
@@ -96,9 +123,14 @@ function jitterVerts(geo, seed, amt) {
   return geo
 }
 
+// A detail-0 icosahedron's flat faces sit inside the detail-1 hull it is
+// cut from; grown by this much (after the shared jitter) its silhouette
+// matches the finer one's instead of shrinking inside it.
+const ICO0_GROW = 1.08
+
 // Builders draw a plant's shape (sizes, crown layout, frond angles) first and
-// identically at every LOD; colours and LOD-only details then come from a
-// second stream, so a coarser LOD cannot drift into a different tree.
+// identically at every LOD; colours then come from a second stream, drawn up
+// front for every part, so a coarser LOD cannot drift into a different tree.
 const detailRng = (rng) => new Rng(rng.int(1, 2e9))
 
 // A leaf/frond strip from `base` along horizontal direction `dir`, arching by
@@ -148,44 +180,54 @@ function canopyTree(rng, lod) {
   const branches = [0, 1, 2].map(() => [rng.range(0, Math.PI * 2), H * rng.range(0.55, 0.72)])
   const vines = [0, 1, 2, 3, 4].map(() => [rng.range(0, Math.PI * 2), rng.range(1.5, 3.4), rng.range(4, 9)])
   const d = detailRng(rng)
-  const bark = new THREE.Color('#5c4c3a')
-  const trunk = new THREE.CylinderGeometry(0.3, 0.55, H * 0.8, [7, 5, 4][lod], lod ? 1 : 4, true)
+  const tone = crowns.map(() => 1 + (d.next() * 2 - 1) * 0.1)
+  const bark = col('#5c4c3a', d, 0.1)
+  const vineCol = vines.map(() => col('#3d5f22', d))
+  // the trunk keeps enough rings at LOD1 to follow LOD0's bow
+  const trunk = new THREE.CylinderGeometry(0.3, 0.55, H * 0.8, [7, 5, 4][lod], [4, 2, 1][lod], true)
   trunk.translate(0, H * 0.4, 0)
   const p = trunk.attributes.position
   for (let i = 0; i < p.count; i++) p.setX(i, p.getX(i) + Math.sin((p.getY(i) / H) * Math.PI) * bend)
-  b.add(trunk, new THREE.Matrix4(), (nx, ny, nz, cx, cy) => col('#5c4c3a', d, 0.1).lerp(new THREE.Color('#7a6a52'), cy / H))
+  b.add(trunk, new THREE.Matrix4(), (nx, ny, nz, cx, cy, cz) => shade('#5c4c3a', 1, cx, cy, cz, 0.08).lerp(new THREE.Color('#7a6a52'), cy / H))
   if (!lod) {
+    b.detail = 2 // the buttresses fold into the trunk rather than dissolve
     for (const a of fins) {
       const fin = new THREE.BoxGeometry(0.14, 2.4, 1.5)
       fin.translate(0, 1.0, 0.75)
       b.add(fin, mat(0, 0, 0, -0.18, a, 0), bark.clone().multiplyScalar(0.85))
     }
+    b.detail = 1
     for (const [a, y] of branches) {
       const br = new THREE.CylinderGeometry(0.08, 0.16, 3.6, 4, 1, true)
       br.translate(0, 1.8, 0)
       b.add(br, mat(Math.sin(0.65 * Math.PI) * bend, y, 0, 0.95, a, 0), bark)
     }
+    b.detail = 0
   }
   // the same five crowns at every LOD: finer near, an octahedron each far out
-  for (const c of crowns) {
+  crowns.forEach((c, k) => {
     const geo = lod === 2 ? new THREE.OctahedronGeometry(c.r * 1.2, 0) : new THREE.IcosahedronGeometry(c.r, lod ? 0 : 1)
     jitterVerts(geo, c.seed, 0.6)
+    if (lod === 1) geo.scale(ICO0_GROW, ICO0_GROW, ICO0_GROW)
     b.add(
       geo,
       mat(Math.cos(c.a) * c.off + bend * 0.3, c.y, Math.sin(c.a) * c.off, 0, c.ry, 0, 1, c.sy, 1),
-      (nx, ny) => col(ny > 0.3 ? '#3f7a2a' : '#2c5a20', d, 0.12),
+      (nx, ny, nz, cx, cy, cz) => shade(ny > 0.3 ? '#3f7a2a' : '#2c5a20', tone[k], cx, cy, cz),
       (x, y) => Math.max(0, (y - H * 0.7) / (H * 0.3)) * 0.3,
     )
-  }
+  })
   if (!lod) {
-    for (const [a, r, len] of vines) {
+    b.detail = 1
+    b.both = true
+    vines.forEach(([a, r, len], k) => {
       const x = Math.cos(a) * r
       const z = Math.sin(a) * r
       const top = H * 0.78
       const w = 0.07
-      const c = col('#3d5f22', d)
-      b.quad([x - w, top - len, z], [x + w, top - len, z], [x + w, top, z], [x - w, top, z], c, 0.7, 0.7, 0.2, 0.2)
-    }
+      b.quad([x - w, top - len, z], [x + w, top - len, z], [x + w, top, z], [x - w, top, z], vineCol[k], 0.7, 0.7, 0.2, 0.2)
+    })
+    b.both = false
+    b.detail = 0
   }
   return { geo: b.build(), r: 0.55, h: H }
 }
@@ -197,6 +239,9 @@ function palm(rng, lod) {
   const fronds = []
   for (let k = 0; k < 10; k++) fronds.push({ a: (k / 10) * Math.PI * 2 + rng.range(-0.2, 0.2), L: rng.range(3.2, 4.4), droop: rng.range(1.8, 2.8) })
   const d = detailRng(rng)
+  const frondCol = fronds.map(() => [col('#4a7f2a', d, 0.1), col('#79a845', d, 0.1)])
+  const ringCol = [col('#6e5c40', d, 0.05), col('#8a7550', d, 0.05)]
+  const nutCol = col('#4a3a1a', d)
   const segs = [8, 4, 2][lod]
   const pt = (t) => [lean * H * t * t, H * t, 0]
   for (let i = 0; i < segs; i++) {
@@ -207,13 +252,15 @@ function palm(rng, lod) {
     const len = Math.hypot(dx, dy)
     const cyl = new THREE.CylinderGeometry(0.17, 0.2, len, lod ? 4 : 6, 1, true)
     cyl.translate(0, len / 2, 0)
-    b.add(cyl, mat(a[0], a[1], 0, 0, 0, -Math.atan2(dx, dy)), col(i % 2 ? '#8a7550' : '#6e5c40', d, 0.05), () => (i / segs) * 0.15)
+    b.add(cyl, mat(a[0], a[1], 0, 0, 0, -Math.atan2(dx, dy)), ringCol[i % 2], () => (i / segs) * 0.15)
   }
   const top = pt(1)
   // far out, every other frond, wider, keeps the same starburst
   const keep = lod === 2 ? fronds.filter((f, k) => k % 2 === 0) : fronds
   const wide = lod === 2 ? 1.45 : 1
+  b.both = true
   for (const f of keep) {
+    const [ca, cb] = frondCol[fronds.indexOf(f)]
     strip(
       b,
       top,
@@ -223,17 +270,20 @@ function palm(rng, lod) {
       [6, 3, 2][lod],
       (s) => f.L * (0.45 * s) - f.droop * s * s,
       (s) => (0.6 * Math.pow(Math.sin(Math.PI * Math.min(1, s * 0.9 + 0.08)), 0.7) + 0.04) * wide,
-      col('#4a7f2a', d, 0.1),
-      col('#79a845', d, 0.1),
+      ca,
+      cb,
       lod ? 0 : 0.35,
       1,
     )
   }
+  b.both = false
   if (!lod) {
+    b.detail = 1
     for (let k = 0; k < 3; k++) {
       const a = (k / 3) * Math.PI * 2
-      b.add(new THREE.IcosahedronGeometry(0.16, 0), mat(top[0] + Math.cos(a) * 0.25, top[1] - 0.25, Math.sin(a) * 0.25), col('#4a3a1a', d))
+      b.add(new THREE.IcosahedronGeometry(0.16, 0), mat(top[0] + Math.cos(a) * 0.25, top[1] - 0.25, Math.sin(a) * 0.25), nutCol)
     }
+    b.detail = 0
   }
   return { geo: b.build(), r: 0.28, h: H }
 }
@@ -247,19 +297,21 @@ function broadleaf(rng, lod, variant) {
     crowns.push({ r: flat ? rng.range(2.6, 3.4) : rng.range(1.8, 2.6), a: rng.range(0, Math.PI * 2), off: k ? rng.range(1, 2) : 0, dy: k ? rng.range(-0.6, 0.8) : 0, seed: rng.int(1, 1e6) })
   }
   const d = detailRng(rng)
+  const tone = crowns.map(() => 1 + (d.next() * 2 - 1) * 0.1)
   const trunk = new THREE.CylinderGeometry(0.16, 0.3, H * 0.7, lod ? 4 : 6, 1, true)
   trunk.translate(0, H * 0.35, 0)
   b.add(trunk, new THREE.Matrix4(), col('#5e4e3c', d))
-  for (const c of crowns) {
+  crowns.forEach((c, k) => {
     const geo = lod === 2 ? new THREE.OctahedronGeometry(c.r * 1.2, 0) : new THREE.IcosahedronGeometry(c.r, lod ? 0 : 1)
     jitterVerts(geo, c.seed, 0.4)
+    if (lod === 1) geo.scale(ICO0_GROW, ICO0_GROW, ICO0_GROW)
     b.add(
       geo,
       mat(Math.cos(c.a) * c.off, H * (flat ? 0.88 : 0.78) + c.dy, Math.sin(c.a) * c.off, 0, c.a, 0, 1, flat ? 0.32 : 0.75, 1),
-      (nx, ny) => col(ny > 0.2 ? (flat ? '#6f8a3a' : '#4f8034') : flat ? '#4e6a2a' : '#365e26', d, 0.1),
+      (nx, ny, nz, cx, cy, cz) => shade(ny > 0.2 ? (flat ? '#6f8a3a' : '#4f8034') : flat ? '#4e6a2a' : '#365e26', tone[k], cx, cy, cz),
       (x, y) => Math.max(0, y / H - 0.6) * 0.5,
     )
-  }
+  })
   return { geo: b.build(), r: 0.3, h: H }
 }
 
@@ -268,16 +320,18 @@ function pine(rng, lod) {
   const H = rng.range(7, 12)
   const spins = [0, 1, 2, 3, 4].map(() => rng.range(0, 3))
   const d = detailRng(rng)
+  const tone = spins.map(() => 1 + (d.next() * 2 - 1) * 0.08)
   const trunk = new THREE.CylinderGeometry(0.12, 0.25, H, lod === 2 ? 4 : 5, 1, true)
   trunk.translate(0, H / 2, 0)
   b.add(trunk, new THREE.Matrix4(), col('#4e3e30', d))
-  // five tiers near; far out three taller ones fill the same cone
+  // five tiers near; far out three taller ones fill the same cone. Each tier
+  // is capped underneath, since only front faces are drawn.
   const tiers = lod === 2 ? [0, 2, 4] : [0, 1, 2, 3, 4]
   for (const k of tiers) {
     const t = k / 5
     const r = 2.4 * (1 - t * 0.75)
-    const cone = new THREE.ConeGeometry(r, H * 0.38 * (lod === 2 ? 1.35 : 1), [7, 5, 4][lod], 1, true)
-    b.add(cone, mat(0, H * (0.3 + t * 0.62), 0, 0, spins[k], 0), (nx, ny) => col(ny > 0.4 ? '#36583a' : '#24402a', d, 0.08), (x, y) => (y / H) * 0.25)
+    const cone = new THREE.ConeGeometry(r, H * 0.38 * (lod === 2 ? 1.35 : 1), [7, 5, 4][lod], 1, false)
+    b.add(cone, mat(0, H * (0.3 + t * 0.62), 0, 0, spins[k], 0), (nx, ny, nz, cx, cy, cz) => shade(ny > 0.4 ? '#36583a' : '#24402a', tone[k], cx, cy, cz), (x, y) => (y / H) * 0.25)
   }
   return { geo: b.build(), r: 0.28, h: H }
 }
@@ -287,13 +341,16 @@ function rock(rng, lod) {
   const pose = mat(0, 0.25, 0, rng.range(0, 3), rng.range(0, 3), 0, rng.range(1.1, 1.6), rng.range(0.6, 0.9), rng.range(0.9, 1.3))
   const seed = rng.int(1, 1e6)
   const d = detailRng(rng)
+  const tone = 1 + (d.next() * 2 - 1) * 0.1
   const ico = jitterVerts(new THREE.IcosahedronGeometry(1, lod ? 0 : 1), seed, 0.45)
-  b.add(ico, pose, (nx, ny) => (ny > 0.55 ? col('#5e6a3c', d, 0.12) : col('#7a766c', d, 0.12)))
+  if (lod) ico.scale(ICO0_GROW, ICO0_GROW, ICO0_GROW)
+  b.add(ico, pose, (nx, ny, nz, cx, cy, cz) => shade(ny > 0.55 ? '#5e6a3c' : '#7a766c', tone, cx, cy, cz, 0.1))
   return { geo: b.build(), r: 1.1, h: 1.2 }
 }
 
 function fern(rng) {
   const b = new Builder()
+  b.both = true
   const n = rng.int(7, 10)
   const size = rng.range(0.8, 1.35)
   for (let k = 0; k < n; k++) {
@@ -335,6 +392,7 @@ function grass(rng) {
   const tall = rng.range(0.75, 1.35)
   const base = new THREE.Color('#5d6e2a')
   const tip = new THREE.Color(rng.chance(0.5) ? '#c2bc62' : '#a8b452')
+  b.both = true
   for (let k = 0; k < n; k++) {
     const a = rng.range(0, Math.PI * 2)
     const r = rng.range(0, 0.35)
@@ -362,8 +420,10 @@ function reed(rng) {
     const w = 0.035
     const lx = rng.range(-0.15, 0.15)
     const lz = rng.range(-0.15, 0.15)
+    b.both = true
     b.tri([x - w, 0, z], [x + w, 0, z], [x + lx, h, z + lz], [base, base, tip], 0, 0, 1)
     b.tri([x, 0, z - w], [x, 0, z + w], [x + lx, h, z + lz], [base, base, tip], 0, 0, 1)
+    b.both = false
     if (k < 3) {
       const cat = new THREE.CylinderGeometry(0.04, 0.04, 0.26, 4)
       b.add(cat, mat(x + lx * 0.9, h * 0.9, z + lz * 0.9), new THREE.Color('#4a3420'), () => 0.9)
@@ -385,6 +445,7 @@ function bigleaf(rng) {
     stalk.translate(0, h / 2, 0)
     b.add(stalk, mat(0, 0, 0, Math.sin(a) * 0.3, 0, -Math.cos(a) * 0.3), new THREE.Color('#4a7a30'), (x, y) => y / h)
     const L = rng.range(0.8, 1.3)
+    b.both = true
     strip(
       b,
       [tx, h, tz],
@@ -399,6 +460,7 @@ function bigleaf(rng) {
       0.25,
       1,
     )
+    b.both = false
   }
   return { geo: b.build() }
 }
@@ -417,15 +479,16 @@ function log(rng) {
 // ---------------------------------------------------------------- type table
 
 // spacing: jitter-grid cell size at density 1 (m). sink: push into ground.
+// pivot: where on the plant (fraction of its height) LOD distance is measured
+// to — the crown, so a canopy seen from a helicopter above it counts as near.
 // noFar: no LOD2 — the type just fades out at the draw distance (boulders
-// are a few pixels by then). farMerge: one LOD2 shape for both variants (they
-// differ little past the draw distance), which halves the far draw calls.
+// are a few pixels by then).
 const TYPES = {
-  canopy: { builder: canopyTree, tier: 'big', spacing: 8.5, scale: [0.8, 1.25], sink: 0.4, variants: 2, shadow: true, farMerge: true },
-  palm: { builder: palm, tier: 'big', spacing: 9.5, scale: [0.85, 1.2], sink: 0.2, variants: 2, shadow: true, farMerge: true },
-  broadleaf: { builder: broadleaf, tier: 'big', spacing: 13, scale: [0.8, 1.25], sink: 0.2, variants: 2, shadow: true },
-  pine: { builder: pine, tier: 'big', spacing: 9, scale: [0.8, 1.3], sink: 0.2, variants: 2, shadow: true, farMerge: true },
-  rock: { builder: rock, tier: 'big', spacing: 15, scale: [0.6, 2.6], sink: 0.35, variants: 2, shadow: true, tilt: true, noFar: true },
+  canopy: { builder: canopyTree, tier: 'big', spacing: 8.5, scale: [0.8, 1.25], sink: 0.4, variants: 2, shadow: true, pivot: 0.75 },
+  palm: { builder: palm, tier: 'big', spacing: 9.5, scale: [0.85, 1.2], sink: 0.2, variants: 2, shadow: true, pivot: 0.8 },
+  broadleaf: { builder: broadleaf, tier: 'big', spacing: 13, scale: [0.8, 1.25], sink: 0.2, variants: 2, shadow: true, pivot: 0.7 },
+  pine: { builder: pine, tier: 'big', spacing: 9, scale: [0.8, 1.3], sink: 0.2, variants: 2, shadow: true, pivot: 0.55 },
+  rock: { builder: rock, tier: 'big', spacing: 15, scale: [0.6, 2.6], sink: 0.35, variants: 2, shadow: true, tilt: true, noFar: true, pivot: 0.35 },
   fern: { builder: fern, tier: 'small', spacing: 2.3, scale: [0.75, 1.3], sink: 0, variants: 2 },
   bigleaf: { builder: bigleaf, tier: 'small', spacing: 3.2, scale: [0.8, 1.4], sink: 0, variants: 2 },
   bush: { builder: bush, tier: 'small', spacing: 4.2, scale: [0.7, 1.4], sink: 0.1, variants: 2 },
@@ -434,42 +497,64 @@ const TYPES = {
   log: { builder: log, tier: 'small', spacing: 14, scale: [0.8, 1.2], sink: 0.15, variants: 2 },
 }
 
+// LOD bands in metres. near: LOD0 hands over to LOD1; mid: LOD1 to LOD2 ends
+// at the quality's draw distance; far: LOD2 thins into the fog; small: the
+// streamed undergrowth fades in at the edge of its radius; detail: LOD0's
+// vines, fins and branches go over this many metres before the near band,
+// so the crowns cross-fade between matching shapes.
+// margin: the slack each per-instance LOD list keeps beyond its band, so it
+// only needs rebuilding every margin / 2 of camera travel — tight round the
+// near band (whose spare instances are full-detail trees), looser further out.
+// farFog: the far distance follows the fog, clamp(k / density, min, max), so
+// from the air the forest reaches the coast before the fog swallows it.
+// shadowSlack: metres the sun's shadow box is grown by when picking casters,
+// so the picks only need rebuilding every slack / 2 the box moves.
+const FADE = { near: [30, 38], mid: 18, far: 100, small: 14, detail: 8, margin: { near: 4, far: 8 }, farFog: [1.4, 1100, 1450], shadowSlack: 6 }
+
 // ---------------------------------------------------------------- material
 
 // Wind sway, parting where something pushes through, and the LOD fade. Each
 // material owns a band (in0, in1, out0, out1): an instance fades in between
 // in0 and in1 metres from the camera and out between out0 and out1, measured
-// from its own origin (instanceMatrix), so a whole plant fades as one. The
-// fade is an ordered 8x8 Bayer dither with discard; a fade-in uses the
+// from its pivot (aPivot up its own axis), so a whole plant fades as one; the
+// undergrowth (uFlat 0) measures it across the ground, as it is streamed.
+// The fade is an ordered 8x8 Bayer dither with discard, shifted per instance
+// so neighbouring plants don't share one screen-door; a fade-in uses the
 // complement of the threshold, so where one LOD fades out over a band and the
 // next fades in over the same band they split the pixels between them —
-// never both, never neither. The depth (shadow) pass runs the same code, so
-// shadows cross-fade with the trees that cast them.
-function vegShader(shader, u, band) {
+// never both, never neither. An instance wholly outside its band is moved
+// out of the view volume in the vertex shader, so the list slack costs no
+// fragments. The depth (shadow) pass runs the same code, so shadows
+// cross-fade with the trees that cast them.
+function vegShader(shader, u, band, flat) {
   shader.uniforms.uTime = u.uTime
   shader.uniforms.uWind = u.uWind
   shader.uniforms.uPush = u.uPush
   shader.uniforms.uCam = u.uCam
   shader.uniforms.uBand = band
+  shader.uniforms.uFlat = flat
   shader.vertexShader = shader.vertexShader
     .replace(
       '#include <common>',
       `#include <common>
        attribute float aSway;
+       attribute float aPivot;
+       attribute float aDetail;
        uniform float uTime;
        uniform float uWind;
        uniform vec4 uPush;
        uniform vec3 uCam;
        uniform vec4 uBand;
-       varying vec2 vLodFade;`,
+       uniform float uFlat;
+       varying vec3 vLod;`,
     )
     .replace(
       '#include <begin_vertex>',
       `#include <begin_vertex>
        #ifdef USE_INSTANCING
-         vec3 iw = (modelMatrix * instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+         vec3 iw = (modelMatrix * instanceMatrix * vec4(0.0, aPivot, 0.0, 1.0)).xyz;
        #else
-         vec3 iw = (modelMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+         vec3 iw = (modelMatrix * vec4(0.0, aPivot, 0.0, 1.0)).xyz;
        #endif
        vec2 ip = iw.xz;
        float ph = ip.x * 0.37 + ip.y * 0.23;
@@ -481,39 +566,49 @@ function vegShader(shader, u, band) {
        float pd = length(away);
        float pk = aSway * uPush.w * (1.0 - smoothstep(0.0, uPush.z, pd));
        transformed.xz += normalize(away + 0.001) * pk * 0.5 * position.y;
-       float camD = distance(iw, uCam);
-       vLodFade = vec2(smoothstep(uBand.x, uBand.y, camD), 1.0 - smoothstep(uBand.z, uBand.w, camD));`,
+       vec3 toCam = iw - uCam;
+       toCam.y *= uFlat;
+       float camD = length(toCam);
+       float fadeOut = 1.0 - smoothstep(uBand.z, uBand.w, camD);
+       // LOD0-only details go just before the near band: thin ones dissolve,
+       // solid ones (aDetail 2) fold into the trunk
+       float detailGone = smoothstep(uBand.z - ${FADE.detail.toFixed(1)}, uBand.z, camD);
+       if (aDetail > 1.5) transformed.xz *= 1.0 - detailGone;
+       else fadeOut = min(fadeOut, 1.0 - aDetail * detailGone);
+       vLod = vec3(smoothstep(uBand.x, uBand.y, camD), fadeOut, fract(sin(dot(floor(ip * 4.0), vec2(12.9898, 78.233))) * 43758.5453));`,
+    )
+    .replace(
+      '#include <project_vertex>',
+      `#include <project_vertex>
+       if (vLod.x <= 0.0 || vLod.y <= 0.0) gl_Position = vec4(0.0, 0.0, -2.0, 1.0);`,
     )
   shader.fragmentShader = shader.fragmentShader
     .replace(
       '#include <common>',
       `#include <common>
-       varying vec2 vLodFade;
+       varying vec3 vLod;
        float bayer2(vec2 a) { a = floor(a); return fract(a.x * 0.5 + a.y * a.y * 0.75); }
        float bayer8(vec2 a) { return bayer2(a) + bayer2(0.5 * a) * 0.25 + bayer2(0.25 * a) * 0.0625; }`,
     )
     .replace(
       'void main() {',
       `void main() {
-       float lodT = bayer8(gl_FragCoord.xy) + 0.0078125;
-       if (vLodFade.y <= lodT || vLodFade.x <= 1.0 - lodT) discard;`,
+       if (vLod.x < 1.0 || vLod.y < 1.0) {
+         float h = vLod.z * 8.0;
+         float lodT = bayer8(gl_FragCoord.xy + vec2(floor(h), floor(fract(h) * 8.0))) + 0.0078125;
+         if (vLod.y <= lodT || vLod.x <= 1.0 - lodT) discard;
+       }`,
     )
 }
 
-function vegMaterial(u, band) {
-  const mat = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide })
-  mat.onBeforeCompile = (shader) => vegShader(shader, u, band)
-  const depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, side: THREE.DoubleSide })
-  depth.onBeforeCompile = (shader) => vegShader(shader, u, band)
+// Front faces only (see Builder), and one shader for every tier and LOD.
+function vegMaterial(u, band, flat) {
+  const mat = new THREE.MeshLambertMaterial({ vertexColors: true })
+  mat.onBeforeCompile = (shader) => vegShader(shader, u, band, flat)
+  const depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking })
+  depth.onBeforeCompile = (shader) => vegShader(shader, u, band, flat)
   return { mat, depth }
 }
-
-// LOD bands in metres. near: LOD0 hands over to LOD1; mid: LOD1 to LOD2 ends
-// at the quality's draw distance; far: LOD2 thins into the fog; small: the
-// streamed undergrowth fades in at the edge of its radius. `margin` is the
-// slack the per-instance LOD lists keep so they only need rebuilding every
-// margin / 2 of camera travel.
-const FADE = { near: [30, 42], mid: 18, far: 100, small: 14, margin: 8 }
 
 // ---------------------------------------------------------------- system
 
@@ -528,16 +623,22 @@ export class Vegetation {
     this.group.name = 'vegetation'
     scene.add(this.group)
     this.drawDist = 330
-    this.farDist = 1100
+    this.farDist = FADE.farFog[1]
     this.smallRadius = 95
     this.shadowDist = 110
     this.bands = {}
     this.mats = {}
     for (const k of ['near', 'mid', 'far', 'small']) {
       this.bands[k] = { value: new THREE.Vector4() }
-      this.mats[k] = vegMaterial(this.uniforms, this.bands[k])
+      this.mats[k] = vegMaterial(this.uniforms, this.bands[k], { value: k === 'small' ? 0 : 1 })
     }
     this.setBands()
+
+    // The sun's shadow box decides which trees cast. The sky (built before
+    // the vegetation) owns the light and re-centres it every frame.
+    this.sun = scene.children.find((o) => o.isDirectionalLight && o.castShadow) || null
+    this.sunCam = new THREE.Camera()
+    this.sunBox = { e: null, l: 0, r: 0, b: 0, t: 0, n: 0, f: 0, focus: new THREE.Vector3(), dir: new THREE.Vector3(), epoch: 0 }
 
     // geometry library: geos[type][variant][lod]
     this.geos = {}
@@ -559,8 +660,14 @@ export class Vegetation {
           lods.push(out.geo)
           if (!meta) meta = out
         }
+        // pivot height, and how far the plant reaches from it (shadow picks)
+        const py = (t.pivot || 0) * (meta.h || 0)
+        let reach = 0
+        const pos = lods[0].attributes.position
+        for (let i = 0; i < pos.count; i++) reach = Math.max(reach, Math.hypot(pos.getX(i), pos.getY(i) - py, pos.getZ(i)))
+        for (const g of lods) g.attributes.aPivot.array.fill(py)
         this.geos[name].push(lods)
-        this.meta[name].push({ r: meta.r || 0, h: meta.h || 1 })
+        this.meta[name].push({ r: meta.r || 0, h: meta.h || 1, py, reach })
       }
     }
 
@@ -601,7 +708,27 @@ export class Vegetation {
       const k = cx * 1000 + cz
       let c = chunkOf.get(k)
       if (!c) {
-        c = { cx, cz, x: (cx + 0.5) * this.bigChunk, z: (cz + 0.5) * this.bigChunk, lists: {}, parts: [], fars: [], minY: Infinity, maxY: -Infinity, key: null, at: null }
+        c = {
+          cx,
+          cz,
+          x: (cx + 0.5) * this.bigChunk,
+          z: (cz + 0.5) * this.bigChunk,
+          lists: {},
+          parts: [],
+          minY: Infinity, // ground and canopy top (shadow box tests)
+          topY: -Infinity,
+          minPY: Infinity, // pivot heights (LOD distances)
+          maxPY: -Infinity,
+          reach: 0,
+          key: null,
+          at: { x: 0, y: 0, z: 0 },
+          sf: { x: 0, y: 0, z: 0 },
+          epoch: -1,
+          shadowed: false,
+          // chunks refill at slightly different travel distances, so the
+          // ones a band boundary crosses don't all refill on one frame
+          pace: 0.6 + 0.4 * hash2(cx, cz, 911),
+        }
         chunkOf.set(k, c)
       }
       return c
@@ -629,7 +756,7 @@ export class Vegetation {
           if (isl.sample(isl.road, px, pz) > 0.02 || isl.sample(isl.clear, px, pz) > 0.35) continue
           const y = isl.heightAt(px, pz) - t.sink * s
           const meta = this.meta[name][v]
-          const inst = { x: px, y, z: pz, yaw, s, v, tilt: t.tilt ? [rng.range(-0.4, 0.4), rng.range(-0.4, 0.4)] : null }
+          const inst = { x: px, y, z: pz, py: y + meta.py * s, reach: meta.reach * s, yaw, s, v, tilt: t.tilt ? [rng.range(-0.4, 0.4), rng.range(-0.4, 0.4)] : null }
           const c = getChunk(px, pz)
           ;(c.lists[name] ||= []).push(inst)
           if (meta.r > 0) {
@@ -639,12 +766,9 @@ export class Vegetation {
         }
       }
     }
-    // per chunk: an LOD1 mesh per type and variant, and LOD2 meshes over the
-    // same instances — one per type where the variants read alike that far
-    // out (farMerge: variant 1 is drawn as variant 0 scaled to its height),
-    // else one per variant. update() picks which instances each one draws.
+    // per chunk and type variant: an LOD1 and an LOD2 mesh over the same
+    // instances; update() picks which instances each one draws
     const m4 = new THREE.Matrix4()
-    const sc = new THREE.Matrix4()
     for (const c of chunkOf.values()) {
       for (const [name, list] of Object.entries(c.lists)) {
         const t = TYPES[name]
@@ -652,11 +776,12 @@ export class Vegetation {
           E.set(it.tilt ? it.tilt[0] : 0, it.yaw, it.tilt ? it.tilt[1] : 0)
           m4.compose(V.set(it.x, it.y, it.z), Q.setFromEuler(E), S.set(it.s, it.s, it.s))
           it.matrix = m4.clone()
-          const k = this.meta[name][it.v].h / this.meta[name][0].h
-          it.farMatrix = t.farMerge && it.v ? m4.clone().multiply(sc.makeScale(k, k, k)) : it.matrix
           it.type = name
           c.minY = Math.min(c.minY, it.y)
-          c.maxY = Math.max(c.maxY, it.y)
+          c.topY = Math.max(c.topY, it.y + this.meta[name][it.v].h * it.s)
+          c.minPY = Math.min(c.minPY, it.py)
+          c.maxPY = Math.max(c.maxPY, it.py)
+          c.reach = Math.max(c.reach, it.reach)
           const key = Math.floor(it.x / 32) * 1000 + Math.floor(it.z / 32)
           let cell = this.nearGrid.get(key)
           if (!cell) this.nearGrid.set(key, (cell = []))
@@ -665,24 +790,21 @@ export class Vegetation {
         for (let v = 0; v < t.variants; v++) {
           const items = list.filter((it) => it.v === v)
           if (!items.length) continue
-          const mid = this.chunkMesh(this.geos[name][v][1], this.mats.mid.mat, items, 'matrix', name, v)
-          mid.customDepthMaterial = this.mats.mid.depth
-          mid.userData.shadowCount = 0
-          mid.onBeforeShadow = shadowPrefix
-          mid.onAfterShadow = shadowRestore
-          c.parts.push({ type: name, items, mid })
-          if (!t.noFar && !t.farMerge) c.fars.push({ items, key: 'matrix', far: this.chunkMesh(this.geos[name][v][2], this.mats.far.mat, items, 'matrix', name, v) })
+          const lods = this.geos[name][v]
+          const mid = this.chunkMesh(lods[1], this.mats.mid, items)
+          const far = t.noFar ? null : this.chunkMesh(lods[2], this.mats.far, items)
+          c.parts.push({ type: name, items, mid, far, flags: new Uint8Array(items.length) })
         }
-        if (t.farMerge) c.fars.push({ items: list, key: 'farMatrix', far: this.chunkMesh(this.geos[name][0][2], this.mats.far.mat, list, 'farMatrix', name, 0) })
       }
       delete c.lists
       this.chunks.push(c)
     }
+    this.chunkAt = chunkOf
   }
 
-  chunkMesh(geo, material, items, key, type, v) {
-    const m = new THREE.InstancedMesh(geo, material, items.length)
-    items.forEach((it, i) => m.setMatrixAt(i, it[key]))
+  chunkMesh(geo, mats, items) {
+    const m = new THREE.InstancedMesh(geo, mats.mat, items.length)
+    items.forEach((it, i) => m.setMatrixAt(i, it.matrix))
     m.computeBoundingSphere()
     m.boundingSphere.radius += 25
     m.count = 0
@@ -690,7 +812,11 @@ export class Vegetation {
     m.castShadow = false
     m.receiveShadow = false
     m.matrixAutoUpdate = false
-    m.userData = { type, v }
+    // the shadow pass draws only the casters, which each fill lists first
+    m.customDepthMaterial = mats.depth
+    m.userData.shadowCount = 0
+    m.onBeforeShadow = shadowPrefix
+    m.onAfterShadow = shadowRestore
     this.group.add(m)
     return m
   }
@@ -699,33 +825,63 @@ export class Vegetation {
     this.uniforms.uTime.value += dt
     this.uniforms.uWind.value = wind
     this.uniforms.uCam.value.copy(cam)
+    // the far edge follows the fog (in 25 m steps); every chunk re-checks
+    const fog = this.scene.fog
+    if (fog && fog.density > 0) {
+      const [k, lo, hi] = FADE.farFog
+      const fd = Math.round(Math.min(hi, Math.max(lo, k / fog.density)) / 25) * 25
+      if (fd !== this.farDist) {
+        this.farDist = fd
+        this.setBands()
+        for (const c of this.chunks) c.key = null
+      }
+    }
+    const shadows = this.shadowDist > 0 && !!this.sun && this.sun.castShadow
+    if (shadows) this.updateSunBox()
     // big tier: each chunk's LOD1/LOD2 meshes draw the instances whose own
-    // distance falls in (or near) that LOD's band. A chunk no band boundary
-    // cuts through is all one or the other and is only refilled when that
-    // changes; the chunks a boundary crosses are refilled as the camera moves.
-    const M = FADE.margin
-    const lo1 = FADE.near[0] - M
-    const hi1 = this.drawDist + M
-    const lo2 = this.drawDist - FADE.mid - M
-    const hi2 = this.farDist + M
+    // distance falls in (or near) that LOD's band, shadow casters (inside the
+    // sun's shadow box) first. A chunk no band boundary or shadow box cuts
+    // through is all one or the other and is only refilled when that
+    // changes; the others are refilled as the camera and the box move.
+    const Mn = FADE.margin.near
+    const Mf = FADE.margin.far
+    const lo1 = FADE.near[0] - Mn
+    const hi1 = this.drawDist + Mf
+    const lo2 = this.drawDist - FADE.mid - Mf
+    const hi2 = this.farDist + Mf
     const half = this.bigChunk / 2
+    const box = this.sunBox
+    const step = FADE.shadowSlack / 2
     for (const c of this.chunks) {
       const ax = Math.abs(c.x - cam.x)
       const az = Math.abs(c.z - cam.z)
-      const dmin = Math.hypot(Math.max(0, ax - half), Math.max(0, az - half), Math.max(0, c.minY - cam.y, cam.y - c.maxY))
-      const dmax = Math.hypot(ax + half, az + half, Math.max(Math.abs(cam.y - c.minY), Math.abs(cam.y - c.maxY)))
-      const cut = (b) => b > dmin && b < dmax
-      const sr = this.shadowDist + M
+      const dmin = Math.hypot(Math.max(0, ax - half), Math.max(0, az - half), Math.max(0, c.minPY - cam.y, cam.y - c.maxPY))
+      const dmax = Math.hypot(ax + half, az + half, Math.max(Math.abs(cam.y - c.minPY), Math.abs(cam.y - c.maxPY)))
+      const nearCut = lo1 > dmin && lo1 < dmax
+      const farCut = (hi1 > dmin && hi1 < dmax) || (lo2 > dmin && lo2 < dmax) || (hi2 > dmin && hi2 < dmax)
+      const shadowCut = shadows && this.chunkInSunBox(c)
       let key
-      if (cut(lo1) || cut(hi1) || cut(lo2) || cut(hi2) || (this.shadowDist && cut(sr))) {
+      if (nearCut || farCut || shadowCut) {
         key = 'mixed'
-        if (c.key !== key || Math.hypot(cam.x - c.at.x, cam.y - c.at.y, cam.z - c.at.z) > M / 2) this.fillChunk(c, cam, lo1, hi1, lo2, hi2)
+        const travel = (nearCut ? Mn : Mf) * 0.5 * c.pace
+        const stale =
+          c.key !== key ||
+          dist3(cam, c.at) > travel ||
+          shadowCut !== c.shadowed ||
+          (shadowCut && (c.epoch !== box.epoch || dist3(box.focus, c.sf) > step * c.pace))
+        if (stale) this.fillChunk(c, cam, lo1, hi1, lo2, hi2, shadowCut)
       } else {
-        key = (dmax > lo1 && dmin < hi1 ? 'L1' : '') + (dmax > lo2 && dmin < hi2 ? 'L2' : '') + (dmax < sr ? 'S' : '')
-        if (c.key !== key) this.fillWhole(c, key.includes('L1'), key.includes('L2'), key.includes('S'))
+        // a whole chunk never casts: the shadow box is smaller than a chunk,
+        // so any chunk it reaches is cut by it
+        key = (dmax > lo1 && dmin < hi1 ? 'L1' : '') + (dmax > lo2 && dmin < hi2 ? 'L2' : '')
+        if (c.key !== key) this.fillWhole(c, key.includes('L1'), key.includes('L2'))
       }
       c.key = key
-      for (const p of c.parts) p.mid.castShadow = this.shadowDist > 0 && TYPES[p.type].shadow && p.mid.userData.shadowCount > 0
+      for (const p of c.parts) {
+        const cast = shadows && TYPES[p.type].shadow
+        p.mid.castShadow = cast && p.mid.userData.shadowCount > 0
+        if (p.far) p.far.castShadow = cast && p.far.userData.shadowCount > 0
+      }
     }
     // ...while the trees right around the camera are drawn at full detail
     this.updateNear(cam)
@@ -767,50 +923,133 @@ export class Vegetation {
     }
   }
 
-  // Write each part's instances into its LOD1 / LOD2 buffers: those whose
-  // distance lies in [lo, hi] of each LOD. LOD1 lists the instances inside
-  // the shadow range first, so the shadow pass can draw just those.
-  fillChunk(c, cam, lo1, hi1, lo2, hi2) {
-    const sr = this.shadowDist + FADE.margin
-    const dist = (it) => Math.hypot(it.x - cam.x, it.y - cam.y, it.z - cam.z)
-    for (const p of c.parts) {
-      const a = p.mid.instanceMatrix.array
-      const later = []
-      let n = 0
-      for (const it of p.items) {
-        const d = dist(it)
-        if (d <= lo1 || d >= hi1) continue
-        if (d < sr) it.matrix.toArray(a, 16 * n++)
-        else later.push(it)
-      }
-      p.mid.userData.shadowCount = n
-      for (const it of later) it.matrix.toArray(a, 16 * n++)
-      setCount(p.mid, n)
+  // Where the sun's shadow camera looks this frame (the sky re-aimed the
+  // light at its focus just before us): its view matrix and box, and an
+  // epoch that ticks whenever the light has swung enough to matter.
+  updateSunBox() {
+    const sun = this.sun
+    const box = this.sunBox
+    const sc = sun.shadow.camera
+    this.sunCam.position.copy(sun.position)
+    this.sunCam.lookAt(sun.target.position)
+    this.sunCam.updateMatrixWorld()
+    box.e = this.sunCam.matrixWorldInverse.elements
+    const g = FADE.shadowSlack
+    box.l = sc.left - g
+    box.r = sc.right + g
+    box.b = sc.bottom - g
+    box.t = sc.top + g
+    box.n = sc.near - g
+    box.f = sc.far + g
+    box.focus.copy(sun.target.position)
+    V.subVectors(sun.position, sun.target.position).normalize()
+    if (V.dot(box.dir) < 0.99998) {
+      box.dir.copy(V)
+      box.epoch++
     }
-    for (const f of c.fars) {
-      const b = f.far.instanceMatrix.array
-      let n = 0
-      for (const it of f.items) {
-        const d = dist(it)
-        if (d > lo2 && d < hi2) it[f.key].toArray(b, 16 * n++)
-      }
-      setCount(f.far, n)
-    }
-    c.at = { x: cam.x, y: cam.y, z: cam.z }
   }
 
-  // A chunk wholly inside or outside each LOD (and the shadow range): all of
-  // its instances or none.
-  fillWhole(c, lod1, lod2, shadow) {
-    const all = (m, items, key, on) => {
-      if (on && m.count !== items.length) items.forEach((it, i) => it[key].toArray(m.instanceMatrix.array, 16 * i))
+  // Does a sphere (world centre, radius) reach into the grown shadow box?
+  inSunBox(x, y, z, r) {
+    const { e, l, r: rt, b, t, n, f } = this.sunBox
+    const lx = e[0] * x + e[4] * y + e[8] * z + e[12]
+    if (lx < l - r || lx > rt + r) return false
+    const ly = e[1] * x + e[5] * y + e[9] * z + e[13]
+    if (ly < b - r || ly > t + r) return false
+    const lz = -(e[2] * x + e[6] * y + e[10] * z + e[14])
+    return lz > n - r && lz < f + r
+  }
+
+  // Does a chunk's bounding box (trees and their reach) touch the shadow box?
+  chunkInSunBox(c) {
+    const { e, l, r, b, t, n, f } = this.sunBox
+    const half = this.bigChunk / 2 + c.reach
+    let x0 = Infinity
+    let x1 = -Infinity
+    let y0 = Infinity
+    let y1 = -Infinity
+    let z0 = Infinity
+    let z1 = -Infinity
+    for (let k = 0; k < 8; k++) {
+      const x = c.x + (k & 1 ? half : -half)
+      const y = k & 2 ? c.topY + c.reach : c.minY - c.reach
+      const z = c.z + (k & 4 ? half : -half)
+      const lx = e[0] * x + e[4] * y + e[8] * z + e[12]
+      const ly = e[1] * x + e[5] * y + e[9] * z + e[13]
+      const lz = -(e[2] * x + e[6] * y + e[10] * z + e[14])
+      x0 = Math.min(x0, lx)
+      x1 = Math.max(x1, lx)
+      y0 = Math.min(y0, ly)
+      y1 = Math.max(y1, ly)
+      z0 = Math.min(z0, lz)
+      z1 = Math.max(z1, lz)
+    }
+    return x1 > l && x0 < r && y1 > b && y0 < t && z1 > n && z0 < f
+  }
+
+  // Write each part's instances into its LOD1 / LOD2 buffers: those whose
+  // distance lies in (lo, hi) of each LOD, the ones inside the sun's shadow
+  // box first, so the shadow pass can draw just those. Two passes over the
+  // instances, no allocation.
+  fillChunk(c, cam, lo1, hi1, lo2, hi2, shadow) {
+    const cx = cam.x
+    const cy = cam.y
+    const cz = cam.z
+    for (const p of c.parts) {
+      const items = p.items
+      const fl = p.flags
+      const a1 = p.mid.instanceMatrix.array
+      const a2 = p.far ? p.far.instanceMatrix.array : null
+      let n1 = 0
+      let n2 = 0
+      for (let i = 0; i < items.length; i++) {
+        const it = items[i]
+        const dx = it.x - cx
+        const dy = it.py - cy
+        const dz = it.z - cz
+        const d = Math.sqrt(dx * dx + dy * dy + dz * dz)
+        let f = (d > lo1 && d < hi1 ? 1 : 0) | (a2 && d > lo2 && d < hi2 ? 2 : 0)
+        if (f && shadow && this.inSunBox(it.x, it.py, it.z, it.reach)) {
+          if (f & 1) it.matrix.toArray(a1, 16 * n1++)
+          if (f & 2) it.matrix.toArray(a2, 16 * n2++)
+          f = 0
+        }
+        fl[i] = f
+      }
+      p.mid.userData.shadowCount = n1
+      if (p.far) p.far.userData.shadowCount = n2
+      for (let i = 0; i < items.length; i++) {
+        const f = fl[i]
+        if (f & 1) items[i].matrix.toArray(a1, 16 * n1++)
+        if (f & 2) items[i].matrix.toArray(a2, 16 * n2++)
+      }
+      setCount(p.mid, n1)
+      if (p.far) setCount(p.far, n2)
+    }
+    c.at.x = cx
+    c.at.y = cy
+    c.at.z = cz
+    c.shadowed = shadow
+    if (shadow) {
+      c.sf.x = this.sunBox.focus.x
+      c.sf.y = this.sunBox.focus.y
+      c.sf.z = this.sunBox.focus.z
+      c.epoch = this.sunBox.epoch
+    }
+  }
+
+  // A chunk wholly inside or outside each LOD: all of its instances or none.
+  fillWhole(c, lod1, lod2) {
+    const all = (m, items, on) => {
+      if (on && m.count !== items.length) items.forEach((it, i) => it.matrix.toArray(m.instanceMatrix.array, 16 * i))
       setCount(m, on ? items.length : 0)
+      m.userData.shadowCount = 0
     }
     for (const p of c.parts) {
-      all(p.mid, p.items, 'matrix', lod1)
-      p.mid.userData.shadowCount = lod1 && shadow ? p.items.length : 0
+      all(p.mid, p.items, lod1)
+      if (p.far) all(p.far, p.items, lod2)
     }
-    for (const f of c.fars) all(f.far, f.items, f.key, lod2)
+    c.shadowed = false
   }
 
   initNear() {
@@ -835,12 +1074,24 @@ export class Vegetation {
 
   // The LOD0 set: every big instance close enough to be anywhere in the
   // near band, redrawn at full detail on top of (and dithered against) LOD1.
+  // All of it lies well inside the shadow box, so all of it casts.
   updateNear(cam) {
-    const M = FADE.margin
-    if (Math.hypot(cam.x - this.nearAt.x, cam.y - this.nearAt.y, cam.z - this.nearAt.z) < M / 2) return
-    this.nearAt = { x: cam.x, y: cam.y, z: cam.z }
+    const M = FADE.margin.near
+    if (dist3(cam, this.nearAt) < M / 2) return
+    this.nearAt.x = cam.x
+    this.nearAt.y = cam.y
+    this.nearAt.z = cam.z
     const R = FADE.near[1] + M
     for (const list of Object.values(this.nearMeshes)) for (const m of list) m.count = 0
+    // flying well above every crown around: nothing to list
+    let top = -Infinity
+    for (let cx = Math.floor((cam.x - R) / this.bigChunk); cx <= Math.floor((cam.x + R) / this.bigChunk); cx++) {
+      for (let cz = Math.floor((cam.z - R) / this.bigChunk); cz <= Math.floor((cam.z + R) / this.bigChunk); cz++) top = Math.max(top, this.chunkAt.get(cx * 1000 + cz)?.maxPY ?? -Infinity)
+    }
+    if (cam.y - top > R) {
+      for (const list of Object.values(this.nearMeshes)) for (const m of list) setCount(m, 0)
+      return
+    }
     const c0x = Math.floor((cam.x - R) / 32)
     const c1x = Math.floor((cam.x + R) / 32)
     const c0z = Math.floor((cam.z - R) / 32)
@@ -850,7 +1101,7 @@ export class Vegetation {
         const cell = this.nearGrid.get(cx * 1000 + cz)
         if (!cell) continue
         for (const it of cell) {
-          if (Math.hypot(it.x - cam.x, it.y - cam.y, it.z - cam.z) >= R) continue
+          if (Math.hypot(it.x - cam.x, it.py - cam.y, it.z - cam.z) >= R) continue
           const m = this.nearMeshes[it.type][it.v]
           if (m.count >= 700) continue
           it.matrix.toArray(m.instanceMatrix.array, 16 * m.count++)
@@ -919,8 +1170,10 @@ export class Vegetation {
   }
 }
 
-// The shadow pass only needs the LOD1 instances near enough to throw a
-// shadow into the map; fillChunk lists those first.
+const dist3 = (a, b) => Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z)
+
+// The shadow pass only needs the instances inside the sun's shadow box;
+// fillChunk lists those first.
 function shadowPrefix() {
   this.userData.drawCount = this.count
   this.count = this.userData.shadowCount

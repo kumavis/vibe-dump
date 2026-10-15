@@ -35,8 +35,9 @@ export const CACHES = {
 
 // Random supply crates scattered at towers and wrecks. A crate is packed when
 // it is opened, from what the player can still carry: each entry with room in
-// the pack is weighted by `w`, more so the emptier that stack is, and less for
-// ammunition of a gun not found yet (`for`). `n` is the [min, max] amount.
+// the pack is weighted by `w`, more so the emptier that stack is; ammunition
+// for a gun not found yet (`for`) keeps just a fraction of `w` and no boost.
+// `n` is the [min, max] amount.
 export const LOOT = [
   { item: 'pistolDart', w: 3, n: [5, 9] },
   { item: 'rifleDart', w: 3, n: [3, 5], for: 'rifle' },
@@ -50,5 +51,6 @@ export const LOOT = [
 export const CRATE = {
   picks: [2, 3], // different things in one crate
   lowBoost: 1.6, // extra weight for an empty stack vs a nearly full one
-  unownedAmmo: 0.35, // weight factor for ammo of a gun not yet carried
+  unownedAmmo: 0.35, // weight factor (on `w`, no boost) for ammo of a gun not yet carried
+  bundleKeep: 0.5, // a fixed bundle that fits less than this share of itself is topped up from LOOT
 }

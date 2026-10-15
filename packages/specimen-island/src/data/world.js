@@ -56,5 +56,16 @@ export const WORLD = {
     ['station', [200, 520], 'southtower'],
   ],
 
+  // Abandoned vehicles by the roads: which road, how far along it (0..1), what,
+  // and whether a supply crate sits by it. Each takes a dry, level spot on
+  // either verge near there, cleared of trees (Island.placeWrecks).
+  wrecks: [
+    { road: 0, at: 0.55, kind: 'truck', crate: true },
+    { road: 1, at: 0.22, kind: 'jeep', crate: false },
+    { road: 1, at: 0.62, kind: 'jeep', crate: true },
+    { road: 2, at: 0.5, kind: 'truck', crate: true },
+    { road: 3, at: 0.6, kind: 'jeep', crate: false },
+  ],
+
   wind: { angle: 0.6, strength: 0.6 }, // radians; gusts wobble around this
 }

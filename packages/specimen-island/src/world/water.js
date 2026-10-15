@@ -1,9 +1,12 @@
 import * as THREE from 'three'
 import { depthTexture } from './terrain.js'
+import { smoothstep } from '../core/mathx.js'
 
 // One water material for the sea, the river and the lake. It reads a depth
 // texture of the whole island so shallows go turquoise and foam hugs the shore
-// wherever land meets water — no per-body special cases.
+// wherever land meets water — no per-body special cases. A per-vertex `aFade`
+// (1 on the sea) lets the inland sheet thin out where it reaches the sea, so
+// the two surfaces never stack into a hard double-alpha edge at the mouth.
 
 export function buildWater(island) {
   const group = new THREE.Group()
@@ -29,11 +32,14 @@ export function buildWater(island) {
         '#include <common>',
         `#include <common>
          uniform float uTime;
+         attribute float aFade;
+         varying float vFade;
          varying vec3 vWorldPos;`,
       )
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
+         vFade = aFade;
          vec4 wp0 = modelMatrix * vec4(transformed, 1.0);
          transformed.y += sin(wp0.x * 0.08 + uTime * 1.1) * 0.06 + cos(wp0.z * 0.11 + uTime * 0.9) * 0.05;`,
       )
@@ -51,6 +57,7 @@ export function buildWater(island) {
          uniform float uHalf;
          uniform float uCell;
          uniform float uN;
+         varying float vFade;
          varying vec3 vWorldPos;
          float wHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
          float wNoise(vec2 p) {
@@ -76,7 +83,7 @@ export function buildWater(island) {
          wc = mix(wc, vec3(0.92, 0.95, 0.93), clamp(foam, 0.0, 1.0) * 0.7);
          float alpha = mix(0.35, 0.93, smoothstep(0.0, 2.6, depth));
          alpha = max(alpha, foam * 0.75);
-         vec4 diffuseColor = vec4(wc, alpha);`,
+         vec4 diffuseColor = vec4(wc, alpha * vFade);`,
       )
       .replace(
         '#include <normal_fragment_begin>',
@@ -92,7 +99,9 @@ export function buildWater(island) {
   }
 
   // The sea: one big plane. Fog swallows its edge long before the far plane.
-  const sea = new THREE.Mesh(new THREE.PlaneGeometry(16000, 16000, 64, 64).rotateX(-Math.PI / 2), mat)
+  const seaGeo = new THREE.PlaneGeometry(16000, 16000, 64, 64).rotateX(-Math.PI / 2)
+  seaGeo.setAttribute('aFade', new THREE.Float32BufferAttribute(new Float32Array(seaGeo.attributes.position.count).fill(1), 1))
+  const sea = new THREE.Mesh(seaGeo, mat)
   sea.position.y = island.sea
   sea.renderOrder = 2
   group.add(sea)
@@ -114,6 +123,7 @@ function inlandGeometry(island) {
   const wet = (id) => W[id] > sea + 0.01
   const map = new Int32Array(n * n).fill(-1)
   const pos = []
+  const fade = []
   const index = []
   const vert = (i, j) => {
     const id = j * n + i
@@ -139,6 +149,8 @@ function inlandGeometry(island) {
     }
     map[id] = pos.length / 3
     pos.push(island.xOf(i), y, island.xOf(j))
+    // a borrowed corner out over the seabed fades the sheet into the sea
+    fade.push(wet(id) ? 1 : smoothstep(sea - 0.3, sea + 0.05, island.h[id]))
     return map[id]
   }
   for (let j = 0; j < n - 1; j++) {
@@ -155,6 +167,7 @@ function inlandGeometry(island) {
   if (!index.length) return null
   const geo = new THREE.BufferGeometry()
   geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  geo.setAttribute('aFade', new THREE.Float32BufferAttribute(fade, 1))
   geo.setIndex(index)
   const nor = new Float32Array(pos.length)
   for (let i = 1; i < nor.length; i += 3) nor[i] = 1
