@@ -26,6 +26,8 @@ const COLS = 64 // timing ticks across ±½ UI
 const ROWS = 48 // Vref steps across ≈ ±130 mV
 
 const clamp01 = (x) => Math.max(0, Math.min(1, x))
+// Each eye's full pass/fail raster, painted once; the sweep reveals it.
+const GRIDS = new Map()
 const smoothstep = (a, b, x) => {
   const t = clamp01((x - a) / (b - a))
   return t * t * (3 - 2 * t)
@@ -117,9 +119,37 @@ export function drawEye(canvas, spec, p, time) {
   const p1 = clamp01(p / 0.16)
   const p2 = clamp01((p - 0.16) / 0.14)
   const p3 = clamp01((p - 0.3) / 0.55)
-  // 2-D raster (drawn first so the 1-D scans stay on top)
+  // 2-D raster (drawn first so the 1-D scans stay on top). It fills row by
+  // row from the bottom, so what's done so far is a block of whole rows plus
+  // part of the next one: copy those from the pre-painted grid.
   const n3 = Math.floor(p3 * COLS * ROWS)
-  for (let n = 0; n < n3; n++) cell(n % COLS, Math.floor(n / COLS), at(n % COLS, Math.floor(n / COLS)))
+  if (n3 > 0) {
+    const key = `${spec.kind}:${spec.seed || 7}:${W}x${H}`
+    let grid = GRIDS.get(key)
+    if (!grid) {
+      grid = document.createElement('canvas')
+      grid.width = W
+      grid.height = H
+      const gg = grid.getContext('2d')
+      for (let j = 0; j < ROWS; j++) {
+        for (let i = 0; i < COLS; i++) {
+          gg.fillStyle = at(i, j) ? 'rgba(79, 224, 138, 0.42)' : 'rgba(255, 70, 90, 0.16)'
+          gg.fillRect(X(0) + i * cw + 0.5, Y(1) + (ROWS - 1 - j) * ch + 0.5, cw - 1, ch - 1)
+        }
+      }
+      GRIDS.set(key, grid)
+    }
+    const full = Math.floor(n3 / COLS)
+    const rem = n3 % COLS
+    if (full > 0) {
+      const y = Y(1) + (ROWS - full) * ch
+      g.drawImage(grid, X(0), y, pw, full * ch, X(0), y, pw, full * ch)
+    }
+    if (rem > 0) {
+      const y = Y(1) + (ROWS - 1 - full) * ch
+      g.drawImage(grid, X(0), y, rem * cw, ch, X(0), y, rem * cw, ch)
+    }
+  }
   const n1 = Math.floor(p1 * COLS)
   for (let i = 0; i < n1; i++) cell(i, nomRow, at(i, nomRow))
   // centre column from the 1-D timing scan

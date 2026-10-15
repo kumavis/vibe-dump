@@ -436,8 +436,10 @@ vec3 dieGrade(vec3 lin) {
     setPhoto(photo) {
       photo.colorSpace = THREE.SRGBColorSpace
       photo.anisotropy = anisotropy
+      const old = top.map
       top.map = photo
       top.emissiveMap = photo
+      if (old && old !== photo) old.dispose()
       top.emissiveIntensity = 0.05
       top.roughness = 0.5
       top.metalness = 0.2
@@ -513,7 +515,8 @@ vec3 dieGrade(vec3 lin) {
       lp.targetColor = MODE_COLORS[mode] || MODE_COLORS.off
       lp.targetLevel = mode === 'off' ? 0 : level
     },
-    update(dt, time) {
+    // `animDt` drives motion (packets); it is 0 while paused so the scene holds still.
+    update(dt, time, animDt = dt) {
       const k = 1 - Math.exp(-dt * 7)
       for (const b of blocks.values()) {
         b.level += (b.target - b.level) * k
@@ -549,7 +552,7 @@ vec3 dieGrade(vec3 lin) {
           streams.delete(key)
           continue
         }
-        s.acc += dt * s.rate
+        s.acc += animDt * s.rate
         while (s.acc >= 1 && packets.length < MAXP) {
           s.acc -= 1
           packets.push({ pts: s.pts, len: s.len, d: 0, speed: s.speed * (0.85 + Math.random() * 0.3), color: s.color.clone() })
@@ -559,7 +562,7 @@ vec3 dieGrade(vec3 lin) {
       let n = 0
       for (let i = packets.length - 1; i >= 0; i--) {
         const p = packets[i]
-        p.d += p.speed * dt
+        p.d += p.speed * animDt
         if (p.d >= p.len) {
           packets.splice(i, 1)
           continue

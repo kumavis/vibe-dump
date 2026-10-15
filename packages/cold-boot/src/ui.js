@@ -36,8 +36,8 @@ export class UI {
     this.lastStep = -1
     this.codeLines = []
     this.labelEls = new Map()
-    this.speeds = [0.5, 1, 2, 4]
-    this.speedIdx = 1
+    this.speeds = [0.25, 0.5, 1, 2, 4]
+    this.speedIdx = 2
     this.onSpeed = onSpeed
     this.buildStages()
     this.buildTimeline()
@@ -146,8 +146,15 @@ export class UI {
       this.speedIdx = (this.speedIdx + 1) % this.speeds.length
       const s = this.speeds[this.speedIdx]
       $('#speed').textContent = `${s}×`
+      $('#speed').setAttribute('aria-label', `Playback speed ${s}×`)
       this.onSpeed?.(s)
     })
+    // Reading the panel pauses playback: autoplay moves faster than anyone reads.
+    for (const ev of ['pointerdown', 'wheel', 'touchstart']) {
+      $('#panel').addEventListener(ev, () => {
+        if (this.tl.playing) this.tl.pause()
+      }, { passive: true })
+    }
     const track = $('#track')
     let dragging = false
     const seek = (e) => {
@@ -177,19 +184,45 @@ export class UI {
     })
     track.addEventListener('pointerleave', () => (tip.hidden = true))
     track.addEventListener('pointerup', () => (dragging = false))
+    track.addEventListener('pointercancel', () => (dragging = false))
+    track.addEventListener('lostpointercapture', () => (dragging = false))
+    // Slider keys: arrows step, Home/End jump to the ends, PageUp/PageDown
+    // jump a whole stage.
+    const stageStart = (dir) => {
+      const steps = this.tl.steps
+      const cur = steps[this.tl.i].stage
+      if (dir > 0) {
+        const k = steps.findIndex((s) => s.stage > cur)
+        return k < 0 ? steps.length - 1 : k
+      }
+      // back: to the start of this stage, or of the previous one if already there
+      const first = steps.findIndex((s) => s.stage === cur)
+      if (first < this.tl.i) return first
+      return Math.max(0, steps.findIndex((s) => s.stage === cur - 1))
+    }
     track.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') this.tl.next()
-      else if (e.key === 'ArrowLeft') this.tl.prev()
+      const n = this.tl.steps.length
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') this.tl.next()
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') this.tl.prev()
+      else if (e.key === 'Home') this.tl.go(0)
+      else if (e.key === 'End') this.tl.go(n - 1)
+      else if (e.key === 'PageUp') this.tl.go(stageStart(1))
+      else if (e.key === 'PageDown') this.tl.go(stageStart(-1))
       else return
       e.preventDefault()
     })
     window.addEventListener('keydown', (e) => {
-      if (e.target.closest?.('input, textarea')) return
+      const t = e.target
+      if (t.closest?.('input, textarea, select')) return
       if (e.key === ' ') {
+        // Space presses a focused control, except ⏻ and ▶ (focus stays on them
+        // after a mouse click, and Space should keep meaning play/pause).
+        if (t.closest?.('button') && !t.closest('#play, #power')) return
         e.preventDefault()
-        this.tl.toggle()
-      } else if (e.key === 'ArrowRight' && e.target !== track) this.tl.next()
-      else if (e.key === 'ArrowLeft' && e.target !== track) this.tl.prev()
+        if (document.body.classList.contains('intro')) $('#power').click()
+        else this.tl.toggle()
+      } else if (e.key === 'ArrowRight' && t !== track) this.tl.next()
+      else if (e.key === 'ArrowLeft' && t !== track) this.tl.prev()
     })
   }
 
@@ -238,7 +271,21 @@ export class UI {
     this.stageBtns.forEach((b, k) => {
       b.classList.toggle('on', k === st.stage)
       b.classList.toggle('past', k < st.stage)
+      if (k === st.stage) b.setAttribute('aria-current', 'step')
+      else b.removeAttribute('aria-current')
     })
+    // the timeline slider's value, and one short line for screen readers
+    // (debounced so scrubbing doesn't queue every step)
+    const n = this.tl.steps.length
+    const tr = $('#track')
+    tr.setAttribute('aria-valuemin', '1')
+    tr.setAttribute('aria-valuemax', String(n))
+    tr.setAttribute('aria-valuenow', String(i + 1))
+    tr.setAttribute('aria-valuetext', `Step ${i + 1} of ${n}: ${st.title} (${stage.name})`)
+    clearTimeout(this.srT)
+    this.srT = setTimeout(() => {
+      $('#sr-step').textContent = `Step ${i + 1} of ${n}: ${st.title}`
+    }, 400)
     this.tickEls.forEach((t, k) => t.classList.toggle('on', k === i))
     $('#eye').hidden = !st.eye
     if (st.eye) {
@@ -346,7 +393,10 @@ export class UI {
         root.appendChild(el)
         this.labelEls.set(it.id, el)
       }
-      if (el.textContent !== it.text) el.textContent = it.text
+      if (el.textContent !== it.text) {
+        el.textContent = it.text
+        el.bw = null // re-measure only when the text changes
+      }
       el.classList.toggle('hot', !!it.hot)
       if (it.color) el.style.setProperty('--lc', it.color)
       else el.style.removeProperty('--lc')
@@ -355,7 +405,11 @@ export class UI {
       const y = ((1 - v.y) / 2) * h - 10
       const vis = v.z < 1 && x > -20 && x < right + 20 && y > 16 && y < bottom
       el.style.opacity = vis ? (it.dim ? 0.55 : 1) : 0
-      placed.push({ el, x, y, vis, hot: !!it.hot, bw: el.offsetWidth, bh: el.offsetHeight })
+      if (el.bw == null) {
+        el.bw = el.offsetWidth
+        el.bh = el.offsetHeight
+      }
+      placed.push({ el, x, y, vis, hot: !!it.hot, bw: el.bw, bh: el.bh })
     }
     // Keep each box on screen and off its neighbours: hot labels claim their
     // spot first, the rest slide up out of the way. The leader line stretches
@@ -394,7 +448,11 @@ export class UI {
       return
     }
     el.hidden = false
-    el.innerHTML = `<b>${info.title}</b>${info.sub ? `<span>${info.sub}</span>` : ''}`
+    const html = `<b>${info.title}</b>${info.sub ? `<span>${info.sub}</span>` : ''}`
+    if (html !== this.tipHtml) {
+      this.tipHtml = html
+      el.innerHTML = html
+    }
     const r = el.getBoundingClientRect()
     el.style.left = `${Math.min(window.innerWidth - r.width - 8, x + 14)}px`
     el.style.top = `${Math.min(window.innerHeight - r.height - 8, y + 14)}px`

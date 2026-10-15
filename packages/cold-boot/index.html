@@ -21,7 +21,9 @@
 
 <nav id="stages" aria-label="Stages"></nav>
 
-<aside id="panel" aria-live="polite">
+<div id="sr-step" class="sr-only" role="status" aria-atomic="true"></div>
+
+<aside id="panel">
   <div id="stepmeta"></div>
   <h2 id="title"></h2>
   <div id="ladder"></div>
@@ -53,7 +55,7 @@
     <button id="prev" type="button" title="Previous step (←)" aria-label="Previous step">⏮</button>
     <button id="play" type="button" title="Play / pause (space)" aria-label="Play">▶</button>
     <button id="next" type="button" title="Next step (→)" aria-label="Next step">⏭</button>
-    <button id="speed" type="button" title="Playback speed">1×</button>
+    <button id="speed" type="button" title="Playback speed" aria-label="Playback speed 1×">1×</button>
   </div>
   <div id="track" role="slider" aria-label="Boot timeline" tabindex="0">
     <div id="segments"></div>
@@ -80,6 +82,23 @@
 
 <div id="boot"><span>⏻</span></div>
 
+<script>
+  // If the 3D view can't start (no WebGL, or the module fails to load or run
+  // before the first frame), say so on the title card rather than leaving the
+  // boot screen pulsing forever.
+  window.__coldbootNoGl = function () {
+    var b = document.body
+    if (b.classList.contains('ready') || b.classList.contains('nogl')) return
+    b.classList.add('nogl')
+    document.getElementById('boot').classList.add('gone')
+    document.getElementById('power').hidden = true
+    document.querySelector('#intro .press').textContent = 'This walkthrough needs WebGL and a current browser, and couldn’t start here.'
+  }
+  window.addEventListener('error', function (e) {
+    if (!document.body.classList.contains('ready') && ((e.target && e.target.tagName === 'SCRIPT') || e.error)) window.__coldbootNoGl()
+  }, true)
+</script>
+<script nomodule>window.__coldbootNoGl()</script>
 <script type="module" src="./src/main.js"></script>
 </body>
 </html>

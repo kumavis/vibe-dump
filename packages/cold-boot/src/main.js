@@ -15,8 +15,28 @@ import { UI } from './ui.js'
 import { MODE_COLORS, smooth } from './util.js'
 
 const canvas = document.getElementById('gl')
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' })
-renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1))
+// No WebGL: say so (index.html's inline script owns the message) rather than
+// leave the boot screen pulsing forever. The main view goes through the
+// composer's non-multisampled target, so canvas MSAA would buy nothing.
+let renderer
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' })
+} catch (err) {
+  window.__coldbootNoGl?.()
+  throw err
+}
+// A software rasterizer (SwiftShader, llvmpipe — also how the gallery thumbnail
+// is shot) takes many seconds per frame at DPR 2, so it renders at DPR 1.
+const gl = renderer.getContext()
+const glInfo = gl.getExtension('WEBGL_debug_renderer_info')
+const softwareGL = /SwiftShader|llvmpipe|softpipe|Software/i.test(String(gl.getParameter(glInfo ? glInfo.UNMASKED_RENDERER_WEBGL : gl.RENDERER)))
+const pixelRatio = () => Math.min(softwareGL ? 1 : 2, window.devicePixelRatio || 1)
+renderer.setPixelRatio(pixelRatio())
+// Post-processing renders into half-float targets; a few devices can't.
+const glExt = renderer.extensions
+const floatRT = renderer.capabilities.isWebGL2
+  ? glExt.has('EXT_color_buffer_float') || glExt.has('EXT_color_buffer_half_float')
+  : glExt.has('OES_texture_half_float') && glExt.has('EXT_color_buffer_half_float')
 renderer.toneMapping = THREE.ACESFilmicToneMapping
 renderer.toneMappingExposure = 1.05
 renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -24,8 +44,17 @@ renderer.outputColorSpace = THREE.SRGBColorSpace
 const scene = new THREE.Scene()
 scene.background = new THREE.Color('#05060b')
 scene.fog = new THREE.Fog('#05060b', 600, 1400)
-const pmrem = new THREE.PMREMGenerator(renderer)
-scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture
+// Image-based lighting. It lives in a render target, so it has to be baked
+// again if the GL context is lost and restored (mobile browsers do that).
+function bakeEnvironment() {
+  const pmrem = new THREE.PMREMGenerator(renderer)
+  const room = new RoomEnvironment(renderer)
+  scene.environment = pmrem.fromScene(room, 0.04).texture
+  room.dispose?.()
+  pmrem.dispose()
+}
+bakeEnvironment()
+canvas.addEventListener('webglcontextrestored', bakeEnvironment)
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.3, 4000)
 
@@ -39,11 +68,19 @@ const rim = new THREE.DirectionalLight('#ffb070', 0.55)
 rim.position.set(220, 80, -200)
 scene.add(rim)
 
+// Ask for the die photo first, so the download overlaps building the scene.
+// (The callback is always asynchronous: `die` and `trueColor` exist by then.)
+new THREE.TextureLoader().load(dieUrl, (t) => {
+  die.setPhoto(t)
+  die.setTrueColor(trueColor)
+})
+
 const maxTex = renderer.capabilities.maxTextureSize
 const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy())
 const board = buildBoard({ anisotropy: aniso })
 scene.add(board.group)
-const die = buildDie(FLOORPLAN, { maxTexture: Math.min(4096, maxTex), anisotropy: aniso })
+// The procedural die is only a stand-in until the photo arrives.
+const die = buildDie(FLOORPLAN, { maxTexture: Math.min(2048, maxTex), anisotropy: aniso })
 die.group.position.copy(board.socketWorld)
 // In the socket the die's long axis runs along the DIMM slots and its DDR PHY
 // edge (the top of the photo) faces the DIMMs.
@@ -52,11 +89,6 @@ scene.add(die.group)
 die.group.updateMatrixWorld(true)
 const dieCenter = board.socketWorld.clone()
 
-// The real die photograph replaces the procedural stand-in once it loads.
-new THREE.TextureLoader().load(dieUrl, (t) => {
-  die.setPhoto(t)
-  die.setTrueColor(trueColor)
-})
 // The photo is colour-graded to sit in the scene; this shows it as shot.
 const trueBtn = document.getElementById('truecolor')
 let trueColor = false
@@ -113,11 +145,26 @@ const director = new Director(camera, renderer.domElement, shots)
 const ui = new UI({ timeline, stages: STAGES, lpLayout: die.lps, onSpeed: (s) => (timeline.speed = s) })
 
 // --- post -------------------------------------------------------------------
-const composer = new EffectComposer(renderer)
-composer.addPass(new RenderPass(scene, camera))
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.7, 0.5, 0.84)
-composer.addPass(bloom)
-composer.addPass(new OutputPass())
+// Without float render targets, skip post-processing and draw straight to the
+// canvas (materials then tone-map and encode sRGB themselves).
+const composer = floatRT ? new EffectComposer(renderer) : null
+if (composer) {
+  composer.addPass(new RenderPass(scene, camera))
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.7, 0.5, 0.84))
+  composer.addPass(new OutputPass())
+}
+// The picture-in-picture inset goes through the same linear pipeline (minus
+// bloom), so materials don't flip shader variants every frame between the two.
+const insetCam = new THREE.PerspectiveCamera(40, 1.6, 0.3, 4000)
+const insetEl = document.getElementById('inset')
+let insetName = null
+let insetRect = null // measured when the inset appears and on resize, not every frame
+let insetSize = ''
+const insetComposer = floatRT ? new EffectComposer(renderer) : null
+if (insetComposer) {
+  insetComposer.addPass(new RenderPass(scene, insetCam))
+  insetComposer.addPass(new OutputPass())
+}
 
 // The side panel and timeline sit over the canvas, so the camera's optical
 // centre is shifted into the uncovered part of the screen: render a window of
@@ -126,22 +173,23 @@ function resize() {
   const w = window.innerWidth
   const h = window.innerHeight
   // Browser zoom or a move to another screen changes the pixel ratio.
-  const pr = Math.min(2, window.devicePixelRatio || 1)
+  const pr = pixelRatio()
   if (pr !== renderer.getPixelRatio()) {
     renderer.setPixelRatio(pr)
-    composer.setPixelRatio(pr)
+    composer?.setPixelRatio(pr)
+    insetComposer?.setPixelRatio(pr)
   }
   renderer.setSize(w, h, false)
-  composer.setSize(w, h)
+  composer?.setSize(w, h)
   const panel = document.getElementById('panel').getBoundingClientRect()
   const tl = document.getElementById('timeline').getBoundingClientRect()
   let ox = 0
   let oy = 0
-  if (w > 900) {
-    ox = w - panel.left // panel covers the right edge
+  if (panel.left > w * 0.3) {
+    ox = w - panel.left // a right-hand column (desktop, landscape phones)
     oy = h - tl.top
   } else {
-    oy = h - Math.min(panel.top, tl.top)
+    oy = h - Math.min(panel.top, tl.top) // a bottom sheet (portrait phones)
   }
   if (document.body.classList.contains('intro')) {
     ox = 0
@@ -154,6 +202,7 @@ function resize() {
   camera.updateProjectionMatrix()
   // The part of the canvas not covered by the panel or the timeline.
   ui.view = { right: w - ox, bottom: h - oy }
+  if (insetName) insetRect = insetEl.getBoundingClientRect()
   director.setFrame((h - oy) / fh, (w - ox) / fh)
   // Backed-off shots sit farther away; keep the fog where it was relative to them.
   scene.fog.near = 600 * director.backoff
@@ -265,13 +314,25 @@ const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').mat
 // --- intro / attract mode ---------------------------------------------------------
 let introOn = true
 const intro = document.getElementById('intro')
+// While the title card is up, the chrome behind it is invisible: keep it out of
+// the tab order and the accessibility tree, so ⏻ is the first stop.
+const chrome = ['stages', 'panel', 'timeline', 'lps', 'eye', 'inset'].map((id) => document.getElementById(id))
+for (const el of chrome) el.inert = true
 director.go('attract', { instant: true })
-function startBoot() {
-  if (!introOn) return
+function dismissIntro() {
+  if (!introOn) return false
   introOn = false
   intro.classList.add('gone')
   document.body.classList.remove('intro')
+  for (const el of chrome) el.inert = false
+  const focused = document.activeElement
+  intro.inert = true
+  if (!focused || focused === document.body || intro.contains(focused)) document.getElementById('play').focus({ preventScroll: true })
   resize()
+  return true
+}
+function startBoot() {
+  if (!dismissIntro()) return
   timeline.go(0)
   timeline.play()
 }
@@ -303,9 +364,7 @@ function attract(time) {
 // --- picture-in-picture inset ----------------------------------------------------
 // A second camera rendered into a scissored corner, for steps where the action
 // spans both scales at once (a core on the die fetching from a chip on the board).
-const insetEl = document.getElementById('inset')
-const insetCam = new THREE.PerspectiveCamera(40, 1.6, 0.3, 4000)
-let insetName = null
+
 const insetTarget = new THREE.Vector3()
 function renderInset(st, dt) {
   const want = introOn ? null : typeof st.inset === 'object' && st.inset ? st.inset.shot : st.inset || null
@@ -318,11 +377,12 @@ function renderInset(st, dt) {
       insetCam.position.copy(s.pos)
       insetTarget.copy(s.target)
       insetCam.fov = s.fov
+      insetRect = insetEl.getBoundingClientRect()
     }
   }
   if (!want) return
-  const r = insetEl.getBoundingClientRect()
-  if (r.width < 4) return
+  const r = insetRect
+  if (!r || r.width < 4) return
   const s = shots[want]()
   insetCam.position.lerp(s.pos, Math.min(1, dt * 3))
   insetTarget.lerp(s.target, Math.min(1, dt * 3))
@@ -334,8 +394,19 @@ function renderInset(st, dt) {
   renderer.setScissor(r.left, H - r.bottom, r.width, r.height)
   renderer.setViewport(r.left, H - r.bottom, r.width, r.height)
   renderer.setClearColor('#070912', 1)
-  renderer.clear(true, true)
-  renderer.render(scene, insetCam)
+  if (insetComposer) {
+    // The scene renders into the inset composer's own target; only its final
+    // full-screen pass lands on the canvas, inside this viewport and scissor.
+    const size = `${r.width}x${r.height}`
+    if (size !== insetSize) {
+      insetSize = size
+      insetComposer.setSize(r.width, r.height)
+    }
+    insetComposer.render()
+  } else {
+    renderer.clear(true, true)
+    renderer.render(scene, insetCam)
+  }
   renderer.setScissorTest(false)
   renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
 }
@@ -379,7 +450,11 @@ function shotAt(st, p) {
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000)
   last = now
-  time += dt
+  // Motion (shader time, packets) runs only while playing — Pause freezes the
+  // scene — and in the attract loop unless reduced motion is asked for. Level
+  // fades and camera moves still use dt.
+  const animDt = timeline.playing || (introOn && !reduceMotion) ? dt : 0
+  time += animDt
   timeline.update(dt)
   const st = timeline.step
   const p = timeline.p
@@ -410,8 +485,8 @@ function frame(now) {
   })
   board.ihs.visible = ls < 0.99
 
-  die.update(dt, time)
-  board.update(dt, time)
+  die.update(dt, time, animDt)
+  board.update(dt, time, animDt)
   director.update(dt)
   // OrbitControls' lookAt leaves the matrices half-updated until render; labels
   // and hover picking project through them first.
@@ -423,7 +498,8 @@ function frame(now) {
   ui.labels(introOn ? [] : labelItems(st, p), camera, window.innerWidth, window.innerHeight)
   ui.tip(hoverInfo(), hover?.x ?? 0, hover?.y ?? 0)
 
-  composer.render()
+  if (composer) composer.render()
+  else renderer.render(scene, camera)
   renderInset(st, dt)
   requestAnimationFrame(frame)
 }
@@ -435,12 +511,7 @@ timeline.on((kind) => {
     return
   }
   if (kind === 'step' || kind === 'seek') {
-    if (introOn) {
-      introOn = false
-      intro.classList.add('gone')
-      document.body.classList.remove('intro')
-      resize()
-    }
+    dismissIntro()
     // Re-centre the camera when the user jumps around the timeline. An
     // automatic advance keeps any orbit the user made until the shot changes.
     if (kind === 'seek') director.current = null
@@ -450,6 +521,11 @@ timeline.on((kind) => {
 requestAnimationFrame((t) => {
   last = t
   frame(t)
+  // Compile every shader now, behind the boot screen — including the overlays
+  // that are still invisible on this first frame — instead of stalling later.
+  renderer.setRenderTarget(composer ? composer.readBuffer : null)
+  renderer.compile(scene, camera)
+  renderer.setRenderTarget(null)
   document.getElementById('boot').classList.add('gone')
   document.body.classList.add('ready')
 })

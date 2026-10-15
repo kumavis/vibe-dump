@@ -339,7 +339,8 @@ export function buildBoard({ anisotropy = 8 } = {}) {
         }
       }
     },
-    update(dt, time) {
+    // `animDt` drives motion (packets); it is 0 while paused so the scene holds still.
+    update(dt, time, animDt = dt) {
       const k = 1 - Math.exp(-dt * 7)
       for (const c of comps.values()) {
         c.level += (c.target - c.level) * k
@@ -377,7 +378,7 @@ export function buildBoard({ anisotropy = 8 } = {}) {
           streams.delete(key)
           continue
         }
-        s.acc += dt * s.rate
+        s.acc += animDt * s.rate
         while (s.acc >= 1 && packets.length < MAXP) {
           s.acc -= 1
           const lane = s.lanes[Math.floor(Math.random() * s.lanes.length)]
@@ -387,7 +388,7 @@ export function buildBoard({ anisotropy = 8 } = {}) {
       let n = 0
       for (let i = packets.length - 1; i >= 0; i--) {
         const p = packets[i]
-        p.d += p.speed * dt
+        p.d += p.speed * animDt
         if (p.d >= p.len) packets.splice(i, 1)
       }
       for (const p of packets) {
