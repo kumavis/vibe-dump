@@ -339,7 +339,7 @@ export class UI {
         $('#regs').innerHTML = `<h3>${R.title || 'State'}<span>${R.note || ''}</span></h3><div class="grid">${R.rows
           .map(([k, v, flags = '']) => {
             const changed = prev && prev[k] !== undefined && prev[k] !== v ? ' flash' : ''
-            const wide = String(k).length + String(v).length > 25 && !flags.includes('wide') ? ' wide' : ''
+            const wide = String(k).length + String(v).length > 20 && !flags.includes('wide') ? ' wide' : ''
             return `<div class="r ${flags}${wide}${changed}"><span class="k">${k}</span><span class="v" title="${v}">${v}</span></div>`
           })
           .join('')}</div>`
@@ -383,7 +383,13 @@ export class UI {
       this.lpMiniText = mini
       this.lpMini.textContent = mini
     }
-    if (step.eye) drawEye($('#eyecanvas'), step.eye, p, time)
+    if (step.eye) {
+      const cap = drawEye($('#eyecanvas'), step.eye, p, time)
+      if (cap !== this.eyeCap) {
+        this.eyeCap = cap
+        $('#eye .eyeaxes span').textContent = cap
+      }
+    }
   }
 
   // HTML labels pinned to 3-D anchors. `items`: [{id, text, pos (Vector3), hot, color}]

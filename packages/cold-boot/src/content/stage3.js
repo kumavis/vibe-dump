@@ -422,7 +422,6 @@ export const STAGE3 = [
       A.die('kind:ecore_cluster', 0.12, '#7d7fb8', 'breathe')
     },
     labels: [
-      { id: 'gpu', text: 'option ROM found — deferred', to: 0.8 },
       { id: 'pcore0', text: 'End of DXE → SMM Ready To Lock', hot: true, from: 0.15 },
     ],
   },

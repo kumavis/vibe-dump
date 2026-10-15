@@ -33,16 +33,31 @@ const smoothstep = (a, b, x) => {
   return t * t * (3 - 2 * t)
 }
 
+// Draw at the size the canvas is shown (CSS px, sharp at the device pixel
+// ratio) so the 10–11 px labels stay readable on a 200–300 px wide card.
+function fit(canvas) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1)
+  const W = Math.max(180, Math.round(canvas.clientWidth || 280))
+  const H = Math.round((W * 300) / 560)
+  if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) {
+    canvas.width = Math.round(W * dpr)
+    canvas.height = Math.round(H * dpr)
+  }
+  const g = canvas.getContext('2d')
+  g.setTransform(dpr, 0, 0, dpr, 0, 0)
+  return { g, W, H, dpr }
+}
+const MONO = 'ui-monospace, Menlo, monospace'
+
+// Returns the caption shown under the canvas.
 export function drawEye(canvas, spec, p, time) {
   if (spec.kind === 'flyby') return drawFlyby(canvas, spec, p, time)
-  const g = canvas.getContext('2d')
-  const W = canvas.width
-  const H = canvas.height
+  const { g, W, H, dpr } = fit(canvas)
   g.fillStyle = '#05070d'
   g.fillRect(0, 0, W, H)
-  const padL = 38
-  const padB = 22
-  const padT = 8
+  const padL = 20
+  const padB = 16
+  const padT = 6
   const pw = W - padL - 10
   const ph = H - padB - padT
   const X = (u) => padL + u * pw // u: 0..1 across one UI, eye centred at 0.5
@@ -125,29 +140,32 @@ export function drawEye(canvas, spec, p, time) {
   const n3 = Math.floor(p3 * COLS * ROWS)
   if (n3 > 0) {
     const key = `${spec.kind}:${spec.seed || 7}:${W}x${H}`
-    let grid = GRIDS.get(key)
+    let grid = GRIDS.get(`${key}@${dpr}`)
     if (!grid) {
       grid = document.createElement('canvas')
-      grid.width = W
-      grid.height = H
+      grid.width = Math.round(W * dpr)
+      grid.height = Math.round(H * dpr)
       const gg = grid.getContext('2d')
+      gg.setTransform(dpr, 0, 0, dpr, 0, 0)
       for (let j = 0; j < ROWS; j++) {
         for (let i = 0; i < COLS; i++) {
           gg.fillStyle = at(i, j) ? 'rgba(79, 224, 138, 0.42)' : 'rgba(255, 70, 90, 0.16)'
           gg.fillRect(X(0) + i * cw + 0.5, Y(1) + (ROWS - 1 - j) * ch + 0.5, cw - 1, ch - 1)
         }
       }
-      GRIDS.set(key, grid)
+      GRIDS.set(`${key}@${dpr}`, grid)
     }
+    // drawImage's source rect is in the grid's device pixels
+    const blit = (x, y, w, h) => g.drawImage(grid, x * dpr, y * dpr, w * dpr, h * dpr, x, y, w, h)
     const full = Math.floor(n3 / COLS)
     const rem = n3 % COLS
     if (full > 0) {
       const y = Y(1) + (ROWS - full) * ch
-      g.drawImage(grid, X(0), y, pw, full * ch, X(0), y, pw, full * ch)
+      blit(X(0), y, pw, full * ch)
     }
     if (rem > 0) {
       const y = Y(1) + (ROWS - 1 - full) * ch
-      g.drawImage(grid, X(0), y, rem * cw, ch, X(0), y, rem * cw, ch)
+      blit(X(0), y, rem * cw, ch)
     }
   }
   const n1 = Math.floor(p1 * COLS)
@@ -197,83 +215,77 @@ export function drawEye(canvas, spec, p, time) {
     g.strokeStyle = `rgba(255, 207, 107, ${a})`
     g.lineWidth = 2
     g.beginPath()
-    g.moveTo(x - 12, y)
-    g.lineTo(x + 12, y)
-    g.moveTo(x, y - 12)
-    g.lineTo(x, y + 12)
+    g.moveTo(x - 8, y)
+    g.lineTo(x + 8, y)
+    g.moveTo(x, y - 8)
+    g.lineTo(x, y + 8)
     g.stroke()
     g.fillStyle = `rgba(255, 207, 107, ${a})`
-    g.font = '600 12px ui-monospace, Menlo, monospace'
+    g.font = `600 11px ${MONO}`
     g.textAlign = 'left'
-    g.fillText('centre → saved', Math.min(W - 112, x + mw / 2 + 6), y - 6)
-    g.fillStyle = `rgba(255, 255, 255, ${0.7 * a})`
-    g.font = '10.5px ui-monospace, Menlo, monospace'
-    if (spec.kind === 'write') g.fillText('JEDEC min eye', Math.min(W - 98, x + mw / 2 + 6), y + 14)
+    g.fillText('centre → saved', Math.min(W - 98, x + mw / 2 + 4), y - 5)
+    g.fillStyle = `rgba(255, 255, 255, ${0.75 * a})`
+    g.font = `10px ${MONO}`
+    if (spec.kind === 'write') g.fillText('JEDEC min eye', Math.min(W - 84, x + mw / 2 + 4), y + 12)
   }
-  // phase caption
-  g.fillStyle = 'rgba(200,210,235,0.85)'
-  g.font = '11px ui-monospace, Menlo, monospace'
-  g.textAlign = 'right'
-  const phase = p < 0.16 ? '1-D: timing at nominal Vref' : p < 0.3 ? '1-D: Vref at timing centre' : p < 0.85 ? '2-D raster: each point = one test burst' : 'parked in the middle'
-  g.fillText(phase, W - 12, padT + 13)
   // axes
-  g.fillStyle = 'rgba(160,170,200,0.8)'
+  g.fillStyle = 'rgba(160,170,200,0.85)'
+  g.font = `10px ${MONO}`
   g.textAlign = 'center'
   g.save()
-  g.translate(13, Y(0.5))
+  g.translate(9, Y(0.5))
   g.rotate(-Math.PI / 2)
-  g.fillText(spec.kind === 'write' ? 'DRAM VrefDQ' : 'host Vref', 0, 0)
+  g.fillText(spec.kind === 'write' ? 'DRAM VrefDQ' : 'host Vref', 0, 3)
   g.restore()
-  g.fillText('−½ UI', X(0) + 16, H - 6)
-  g.fillText('1 UI = 178.6 ps', X(0.5), H - 6)
-  g.fillText('+½ UI', X(1) - 16, H - 6)
+  g.fillText('−½ UI', X(0) + 16, H - 4)
+  g.fillText('+½ UI', X(1) - 16, H - 4)
+  const phase = p < 0.16 ? '1-D: timing at nominal Vref' : p < 0.3 ? '1-D: Vref at the timing centre' : p < 0.85 ? '2-D raster: each point is one test burst' : 'parked in the middle'
+  return `${phase} · strobe delay across 1 UI = 178.6 ps`
 }
 
 // Write leveling across a fly-by bus: four x8 DRAM chips of one sub-channel.
 function drawFlyby(canvas, spec, p, time) {
-  const g = canvas.getContext('2d')
-  const W = canvas.width
-  const H = canvas.height
+  const { g, W, H } = fit(canvas)
   g.fillStyle = '#05070d'
   g.fillRect(0, 0, W, H)
   const chips = 4
-  const left = 70
-  const right = W - 20
+  const left = 44
+  const right = W - 10
   const gap = (right - left) / chips
-  const busY = 34
+  const busY = 22
   // CK / CA fly-by bus from the controller, visiting each chip in turn
   g.strokeStyle = 'rgba(255, 181, 71, 0.75)'
   g.lineWidth = 2
   g.beginPath()
-  g.moveTo(14, busY)
+  g.moveTo(8, busY)
   g.lineTo(right, busY)
   g.stroke()
   g.fillStyle = 'rgba(255, 181, 71, 0.9)'
-  g.font = '11px ui-monospace, Menlo, monospace'
+  g.font = `10px ${MONO}`
   g.textAlign = 'left'
-  g.fillText('CK + CA (fly-by)', 14, busY - 10)
+  g.fillText('CK + CA (fly-by)', 8, busY - 7)
   // a clock edge travelling along the bus
   const travel = (time * 0.6) % 1
   g.fillStyle = '#ffcf6b'
   g.beginPath()
-  g.arc(14 + travel * (right - 14), busY, 4, 0, Math.PI * 2)
+  g.arc(8 + travel * (right - 8), busY, 3, 0, Math.PI * 2)
   g.fill()
   // per chip: arrival of the clock edge vs. the DQS strobe being slid later
-  const rowTop = 64
-  const rowH = (H - rowTop - 26) / chips
-  const tl = left + 30
-  const tr = W - 20
+  const rowTop = 42
+  const rowH = (H - rowTop - 4) / chips
+  const tl = left + 4
+  const tr = W - 10
   const TX = (t) => tl + t * (tr - tl)
   for (let k = 0; k < chips; k++) {
     const y = rowTop + k * rowH
     const cxp = left + gap * (k + 0.5)
     // chip on the bus
     g.fillStyle = '#1a1f2c'
-    g.fillRect(cxp - 16, busY + 6, 32, 14)
+    g.fillRect(cxp - 18, busY + 4, 36, 13)
     g.fillStyle = '#8aa0c8'
-    g.font = '10px ui-monospace, Menlo, monospace'
+    g.font = `9.5px ${MONO}`
     g.textAlign = 'center'
-    g.fillText(`DRAM ${k}`, cxp, busY + 16)
+    g.fillText(`DRAM ${k}`, cxp, busY + 14)
     // timeline row
     g.strokeStyle = 'rgba(120,130,170,0.25)'
     g.beginPath()
@@ -300,10 +312,7 @@ function drawFlyby(canvas, spec, p, time) {
     g.fillRect(TX(pos) - 3, y + rowH * 0.35, 6, rowH * 0.5)
     g.fillStyle = locked ? '#4fe08a' : 'rgba(200,210,235,0.7)'
     g.textAlign = 'left'
-    g.fillText(locked ? 'feedback 0→1 ✓' : 'feedback 0', TX(Math.min(0.78, pos)) + 8, y + rowH * 0.55)
+    g.fillText(locked ? '0→1 ✓' : '0', TX(Math.min(0.86, pos)) + 6, y + rowH * 0.62)
   }
-  g.fillStyle = 'rgba(160,170,200,0.8)'
-  g.textAlign = 'center'
-  g.font = '10.5px ui-monospace, Menlo, monospace'
-  g.fillText('orange: clock edge as each chip sees it · blue: write strobe (DQS) delay', W / 2, H - 8)
+  return 'orange: the clock edge as each chip sees it · blue: that byte’s write strobe (DQS), slid later until the chip’s feedback flips 0 → 1'
 }

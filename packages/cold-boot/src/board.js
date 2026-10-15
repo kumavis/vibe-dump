@@ -222,7 +222,7 @@ export function buildBoard({ anisotropy = 8 } = {}) {
   gpu.position.copy(W(125, 172, 11 + 56))
   group.add(gpu)
   const gpuParts = { body: gpuMat, edges: edges.material, rings: gpu.children.filter((c) => c.isMesh && c !== gpuBody).map((c) => c.material) }
-  glowPad('gpu', 125, 172, 200, 40, 11 + 112.5, 'Discrete GPU (PCIe 5.0-capable x16 slot)')
+  glowPad('gpu', 75, 150, 89, 7.5, 11.4, 'Discrete GPU (PCIe 5.0-capable x16 slot)')
 
   // --- rear I/O shield -------------------------------------------------------
   box(18, 30, 130, mats.darkMetal, 12, 88, 0)
@@ -440,16 +440,17 @@ function buildDimm(mats, r) {
       const chip = new THREE.Mesh(new THREE.BoxGeometry(1.1, 9.5, 11), mat)
       chip.position.set(side * 1.15, DIMM_H * 0.55, z)
       group.add(chip)
-      chips.push({ mesh: chip, mat, rank: side < 0 ? 0 : 1, sub, i: i % 4, level: 0, target: 0, color: new THREE.Color() })
+      // rank 0 on the face the DIMM cameras see; rank 1 on the back
+      chips.push({ mesh: chip, mat, rank: side > 0 ? 0 : 1, sub, i: i % 4, level: 0, target: 0, color: new THREE.Color() })
     }
   }
   // PMIC + SPD hub (front side, centre). Their own materials so they can glow.
   const partMat = () => new THREE.MeshStandardMaterial({ color: '#141418', roughness: 0.45, metalness: 0.2, emissive: new THREE.Color('#000') })
   const pmic = new THREE.Mesh(new THREE.BoxGeometry(1, 5, 5), partMat())
-  pmic.position.set(-1.1, DIMM_H * 0.62, 6)
+  pmic.position.set(1.1, DIMM_H * 0.62, 6)
   group.add(pmic)
   const spd = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2.2, 2.2), partMat())
-  spd.position.set(-1.05, DIMM_H * 0.3, 6)
+  spd.position.set(1.05, DIMM_H * 0.3, 6)
   group.add(spd)
   const part = (mesh) => ({ mesh, mat: mesh.material, level: 0, target: 0, color: new THREE.Color() })
   return { group, chips, parts: { pmic: part(pmic), spd: part(spd) } }

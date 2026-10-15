@@ -171,7 +171,7 @@ export const STAGE0 = [
     dur: 9,
     real: 0.05,
     mode: 'reset',
-    shot: [[0, 'socket'], [0.38, 'die']],
+    shot: [[0, 'pcie'], [0.2, 'die']],
     narration: [
       'Every supply reports good. The chipset raises <code>CPUPWRGD</code> and releases <code>PLTRST#</code>, the platform reset — which also reaches the GPU and SSD as PCIe <code>PERST#</code>, after their guaranteed 100 ms of stable power.',
       'Inside the CPU, in steps Intel doesn’t publish, its power-control firmware brings up clocks and voltages and every core runs its reset microcode. Then one hardware thread becomes the <em>bootstrap processor</em> (BSP). The other 31 halt in <em>wait-for-SIPI</em>: powered, listening, and executing nothing until software sends them a start-up message.',

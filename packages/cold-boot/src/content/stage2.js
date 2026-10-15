@@ -581,6 +581,8 @@ export const STAGE2 = [
       A.bus('smbus', 1, ACT.mgmt, { rate: 10, speed: 30 })
       A.bus('smbus', 0.8, ACT.mgmt, { rate: 6, speed: 30, dir: -1 })
       A.dimmPart('spd', 0.6 + 0.4 * Math.sin(t * 9), ACT.mgmt)
+      A.board('dimmA', 0.3, ACT.mgmt, 'scan')
+      A.board('dimmB', 0.3, ACT.mgmt, 'scan')
     },
     labels: [{ id: 'pch', text: 'SMBus controller (00:1F.4)' }, { id: 'dimmA', text: 'SPD hub: 1 KiB of “what am I”', hot: true }, 'dimmB'],
   },

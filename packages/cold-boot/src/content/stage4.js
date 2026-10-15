@@ -173,7 +173,7 @@ export const STAGE4 = [
     dur: 10,
     real: 0.02,
     mode: 'long',
-    shot: 'dieRight',
+    shot: 'die',
     narration: [
       'Now in 64-bit mode with kernel page tables, each AP finds its own CPU number by reading its APIC ID, takes its own idle stack, and releases the trampoline’s lock for the next one.',
       'Then the per-thread chores: check its microcode (skipped if current; a newer patch from the initramfs is loaded here, once per core), program its Local APIC, and ask CPUID leaf 1Ah what it is — <code>40h</code> for a Core (P-core), <code>20h</code> for an Atom (E-core). Finally it marks itself online and drops into the idle loop. Once the last thread is up, all 32 re-sync their memory-type registers with the boot CPU in one pass.',
