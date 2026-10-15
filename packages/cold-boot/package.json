@@ -9,10 +9,11 @@
   },
   "gallery": {
     "title": "Cold Boot",
-    "description": "Press the power button and watch an x86 PC replay forty-five years of CPU history in a few seconds — real mode, cache-as-RAM, DDR5 training, long mode, then 31 sleeping cores — lit up on a real Raptor Lake die. After LaurieWired's thread.",
+    "description": "Press the power button and watch an x86 PC climb from a 1978 8086 to a 2003 AMD64 — real mode, cache-as-RAM, DDR5 training, long mode, then 31 sleeping threads — lit up on a real Raptor Lake die. After LaurieWired's thread.",
     "tags": ["tutorial", "simulation", "art"],
     "status": "wip",
     "models": ["Opus 5.5"],
-    "thinking": "ultracode"
+    "thinking": "ultracode",
+    "thumbnail": { "waitFor": "body.ready", "settle": 2500 }
   }
 }
