@@ -134,11 +134,12 @@ const SPD_READ = [
   'static void smbus_read_spd5(u8 *spd, u8 spd_addr, u16 size)',
   '{',
   '	u8 page = ~0;',
-  '	u32 max_page_size = MAX_SPD_PAGE_SIZE_SPD5;   /* 128 */',
+  { i: '	u32 max_page_size = MAX_SPD_PAGE_SIZE_SPD5;', why: 'MAX_SPD_PAGE_SIZE_SPD5 = 128: the hub shows 128 bytes at a time' },
+  '	...',
   '	for (int i = 0; i < size; i++) {',
   '		u8 next_page = (u8) (i / max_page_size);',
   '		if (next_page != page) {',
-  '			switch_page(spd_addr, next_page);   /* hub MR11 */',
+  { i: '			switch_page(spd_addr, next_page);', why: 'writes the page number into the hub’s MR11' },
   '			page = next_page;',
   '		}',
   '		unsigned int byte_addr = SPD_HUB_MEMREG(i % max_page_size);',
@@ -171,29 +172,40 @@ const JWRL = [
   '	const uint16_t wl_start = 192;',
   '	const uint16_t wl_stop  = 192 + 128;',
   '	const uint16_t wl_step  = 2;',
+  '	...                         # for each rank:',
   '	for (uint16_t wl_delay = wl_start; wl_delay < wl_stop; wl_delay += wl_step) {',
-  '		for (uint8_t byte = 0; byte < ctrl->lanes; byte++)',
-  '			update_txt(ctrl, channel, rank, byte, TXT_TXDQS, wl_delay);',
+  '		...                       # for each channel with this rank:',
+  '		for (uint8_t byte = 0; byte < ctrl->lanes; byte++) {',
+  '			update_txt(ctrl, channel, rank, byte, TXT_TXDQS,',
+  '				wl_delay);',
+  '		}',
+  '		...',
   '		io_reset();',
   '		udelay(wait_time_us);',
+  '		...                       # for each channel with this rank:',
   '		for (uint8_t byte = 0; byte < ctrl->lanes; byte++) {',
   '			const uint32_t feedback =',
   '				get_data_train_feedback(channel, byte);',
   '			const bool pass = (feedback & 0x1ff) >= 16;',
+  '			...',
   '			phase_record_pass(&region_data[channel][byte],',
   '				pass, wl_delay, wl_start, wl_step);',
   '		}',
+  '		...',
   '	}',
 ]
 
 const MARGIN_1D = [
   '	for (int32_t offset = m_start; offset <= m_stop; offset += m_step) {',
+  '		...',
   '		change_1d_margin_multicast(ctrl, param, offset, 0, false,',
   '			REG_FILE_USE_START);',
   '		run_io_test(ctrl, chanmask, ctrl->dq_pat, 1);',
   '		for (uint8_t channel = 0; channel < NUM_CHANNELS; channel++) {',
+  '			...',
   '			/* Read out byte group error results and update limit */',
   '			const uint16_t result = get_byte_group_errors(channel);',
+  '			...',
   '			for (uint8_t byte = 0; byte < ctrl->lanes; byte++) {',
   '				const bool pass = !(result & BIT(byte));',
   '				printk(MARGIN_1D_PLOT, pass ? ". " : "# ");',
@@ -205,7 +217,9 @@ const MARGIN_1D = [
 ]
 
 const RPL_STEPS = [
-  '/* Raptor Lake-S FSP-M training switches (FspmUpd.h) — about 50 in all */',
+  '/* Raptor Lake-S FSP-M training switches (FspmUpd.h): */',
+  '/* a selection from ~50, shared with DDR4/LPDDR; */',
+  '/* run order isn’t public */',
   'ECT        Early Command Training',
   'SOT        SenseAmp Offset Training',
   'ERDMPRTC2D Early ReadMPR Timing Centering 2D',
@@ -338,7 +352,7 @@ const SIPI_C = SIPI_VECTOR.length - 4
 
 // Steps that only run on a first boot (or after a change): on a normal boot
 // the saved results are restored instead, so they take ~no time.
-const FIRST_ONLY = { tag: 'Normal boot', html: 'This step runs on a <em>first</em> boot, or after new DIMMs, a BIOS update, changed memory settings or a CMOS clear. On a normal boot the saved results are written straight back instead — use the <b>normal boot / first boot</b> switch by the clock to compare.' }
+const FIRST_ONLY = { tag: 'Normal boot', html: 'This step runs on a <em>first</em> boot, or after new DIMMs, a BIOS update, changed memory settings or a CMOS clear. On a normal boot the saved results are written straight back instead — use the <b>normal boot / first boot</b> switch by the clock to compare (how first-boot time splits across these steps is our estimate).' }
 
 // The training choreography shared by the DRAM steps.
 function trainingGlow(A, p, t, { chips, phy = 1 } = {}) {
@@ -442,7 +456,7 @@ export const STAGE2 = [
         ['CR0', p > 0.85 ? '…CD=0 NW=0 (caches on)' : '60000011 (CD=1 NW=1)', p > 0.85 ? 'hot wide' : 'wide'],
       ],
     }),
-    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_MTRR, at: (p) => Math.min(CAR_MTRR.length - 1, walk(p, [[0.05, 0], [0.3, 14], [0.4, 17], [0.62, 18], [0.7, 22], [0.85, 27]])) },
+    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://github.com/coreboot/coreboot/blob/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_MTRR, at: (p) => Math.min(CAR_MTRR.length - 1, walk(p, [[0.05, 0], [0.3, 14], [0.4, 17], [0.62, 18], [0.7, 22], [0.85, 27]])) },
     mem: { on: ['flash', 'lapic', 'car'], hit: ['car'], note: 'a window with nothing behind it' },
     sources: [SRC.adlKconfig, SRC.sdm],
     lps: () => bsp('prot'),
@@ -485,7 +499,7 @@ export const STAGE2 = [
         ['lines filled', `${Math.floor(span(p, 0.42, 0.75) * 12288).toLocaleString('en-US')} / 12,288`, p > 0.42 && p < 0.76 ? 'hot' : ''],
       ],
     }),
-    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_ENEM, at: (p) => Math.min(CAR_ENEM.length - 1, walk(p, [[0, 0], [0.05, 5], [0.08, 6], [0.16, 7], [0.2, 11], [0.23, 12], [0.27, 15], [0.33, 20], [0.4, 26], [0.42, 27], [0.75, 28], [0.78, 33], [0.8, 34], [0.85, 42]])) },
+    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://github.com/coreboot/coreboot/blob/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_ENEM, at: (p) => Math.min(CAR_ENEM.length - 1, walk(p, [[0, 0], [0.05, 5], [0.08, 6], [0.16, 7], [0.2, 11], [0.23, 12], [0.27, 15], [0.33, 20], [0.4, 26], [0.42, 27], [0.75, 28], [0.78, 33], [0.8, 34], [0.85, 42]])) },
     mem: { on: ['flash', 'lapic', 'car'], hit: ['car'], note: 'cache pinned as RAM' },
     sources: [SRC.adlKconfig, SRC.sdm],
     lps: () => bsp('prot'),
@@ -521,7 +535,7 @@ export const STAGE2 = [
       ['Code', 'executes in place from flash, cached WP'],
       ['Time on a normal boot', 'FSP-M with saved training ≈ 46–105 ms (Meteor Lake Chromebook)'],
     ],
-    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_DONE, at: (p) => Math.min(CAR_DONE.length - 1, Math.floor(span(p, 0.05, 0.6) * CAR_DONE.length)) },
+    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://github.com/coreboot/coreboot/blob/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_DONE, at: (p) => Math.min(CAR_DONE.length - 1, Math.floor(span(p, 0.05, 0.6) * CAR_DONE.length)) },
     mem: MEM_PRE,
     sources: [SRC.adlKconfig, SRC.fspapi],
     lps: () => bsp('prot'),
@@ -554,7 +568,7 @@ export const STAGE2 = [
       ['Read cost', 'coreboot reads 512 B: ≈ 0.2 s per DIMM at 100 kHz (estimate); with its SPD cache, later boots read just the serial number'],
       ['This system', '2 DIMMs · 4 sub-channels · 128 DQ lines'],
     ],
-    code: { src: 'coreboot …/smbus/smbuslib.c', href: SRC.smbuslib[1], lines: SPD_READ, at: (p) => Math.min(SPD_READ.length - 1, 4 + Math.floor(span(p, 0.1, 0.9) * 8)) },
+    code: { src: 'coreboot …/smbus/smbuslib.c', href: SRC.smbuslib[1], lines: SPD_READ, at: (p) => Math.min(SPD_READ.length - 1, 5 + Math.floor(span(p, 0.1, 0.9) * 8)) },
     mem: MEM_PRE,
     sources: [SRC.smbuslib, SRC.rambus, SRC.micron],
     lps: () => bsp('prot'),
@@ -578,11 +592,11 @@ export const STAGE2 = [
     mode: 'prot',
     shot: 'fetch',
     narration: [
-      'Training results — thousands of delay, voltage and equalizer settings — are saved in the flash chip after a successful boot (Chromebooks reserve a 64 KB slot for them; EDK2 keeps them in a UEFI variable). If a matching copy exists, the firmware hands it to Intel’s memory code with the instruction “assume nothing changed”.',
-      'New DIMMs, a different BIOS version, changed memory settings or a cleared CMOS invalidate it, and the full training below runs instead. That — not the CPU — is what makes a first boot with new memory sit on a black screen; coreboot even prints a “memory training” message so you don’t think it hung.',
+      'Training results — thousands of delay, voltage and equalizer settings — are saved in the flash chip after a successful boot (Chromebooks reserve a 64 KB slot for them; Intel’s open EDK2 platform code keeps them in a UEFI variable). If a matching copy exists, the firmware hands it to Intel’s memory code with the instruction “assume nothing changed”.',
+      'New DIMMs, a different BIOS version, changed memory settings or a cleared CMOS invalidate it, and the full training below runs instead. That — not the CPU — is what makes a first boot with new memory sit on a black screen; coreboot’s optional early-display mode even puts up a wait message (“Please wait for RAM to be initialized...”) so you don’t think it hung.',
     ],
     facts: [
-      ['Saved where', 'SPI flash (coreboot RW_MRC_CACHE; EDK2 “FspNvsBuffer” variable)'],
+      ['Saved where', 'SPI flash (coreboot RW_MRC_CACHE; Intel EDK2 MinPlatform “FspNvsBuffer” variable; AMI’s isn’t public)'],
       ['Retrain triggers', 'DIMM change, BIOS/FSP update, setting change, CMOS/RTC power loss'],
     ],
     regs: (p, ctx) => ({
@@ -644,7 +658,7 @@ export const STAGE2 = [
     shot: 'dimms',
     inset: { shot: 'imc', label: 'MEMORY CONTROLLERS + DDR5 PHY' },
     narration: [
-      'At DDR5-5600 a bit lasts 178.6 picoseconds — about the time light takes to cross 5 cm, and a signal on a circuit board covers roughly half that. The controller doesn’t yet know where inside each clock period the chips actually sample its commands, so even its configuration writes are unreliable.',
+      'At DDR5-5600 a data bit lasts 178.6 picoseconds — about the time light takes to cross 5 cm, and a signal on a circuit board covers roughly half that. The chips sample command pins once per 357 ps clock, but the controller doesn’t yet know where inside that clock they sample, so even its configuration writes are unreliable.',
       'DDR5 provides loop-back modes for this. In <em>CS training</em> and <em>CA training</em> the DRAM samples the chip-select and address pins and echoes the result back on its data pins; the controller slides its command timing (and the reference voltage the chips compare against) until the echoes come back right.',
     ],
     note: FIRST_ONLY,
@@ -672,10 +686,10 @@ export const STAGE2 = [
     shot: 'dimms',
     inset: { shot: 'imc', label: 'MEMORY CONTROLLERS + DDR5 PHY' },
     narration: [
-      'Writes can’t be checked until reads work, and reads can’t be checked without known data. DDR5 solves the chicken-and-egg with a pattern generator in every chip: an 8-bit LFSR (x⁸+x⁶+x⁵+x⁴+1) the controller can seed and read back through mode register 31 — pseudo-random enough to stress crosstalk between neighbouring data lines.',
-      'A read-preamble mode makes the chip toggle its strobe only around real data, so the controller can find exactly when read data starts arriving and open its receivers (“receive enable”) at the right moment. Only then can it centre its sampling point inside each bit.',
+      'Writes can’t be checked until reads work, and reads can’t be checked without known data. DDR5 solves the chicken-and-egg with a pattern generator in every chip: two 8-bit LFSRs (x⁸+x⁶+x⁵+x⁴+1), seeded through MR26/MR27 and read out with a mode-register read of MR31 — pseudo-random enough to stress crosstalk between neighbouring data lines.',
+      'A read-preamble mode makes the chip hold its strobe steady between reads and toggle it only for a short preamble plus the data, so the controller can find exactly when read data starts arriving and open its receivers (“receive enable”) at the right moment. Only then can it centre its sampling point inside each bit.',
     ],
-    note: { tag: 'Order', html: 'JEDEC fixes the order only up to command training. After that each vendor chooses; Intel’s open memory code gates the reads (receive enable, read pattern) before write leveling. Raptor Lake’s DDR5 order isn’t public. ' + FIRST_ONLY.html },
+    note: { tag: 'Order', html: 'JEDEC fixes the order only up to command training. After that each vendor chooses; coreboot’s open re-implementation of Intel’s Haswell memory code runs the reads (receive enable, read pattern) before write leveling. Raptor Lake’s DDR5 order isn’t public. ' + FIRST_ONLY.html },
     facts: [
       ['LFSR seeds', 'MR26 = 0x5A, MR27 = 0x3C (defaults)'],
       ['Intel’s names', 'RCVET Receive Enable · RDMPRT Read MPR · SOT SenseAmp Offset'],
@@ -684,7 +698,8 @@ export const STAGE2 = [
     sources: [SRC.micron, SRC.fspm],
     lps: () => bsp('prot'),
     act(p, A, t) {
-      trainingGlow(A, p, t, { chips: (d, r, s, i) => (Math.sin(t * 11 + i * 1.3 + s + d * 2) > 0.4 ? 0.9 : 0.2) })
+      // one rank at a time, both channels in parallel
+      trainingGlow(A, p, t, { chips: (d, r, s, i) => (r !== Math.min(1, Math.floor(p * 2)) ? 0.06 : Math.sin(t * 11 + i * 1.3 + s + d * 2) > 0.4 ? 0.9 : 0.2) })
       A.bus('ddrA', 1, ACT.dram, { rate: 30, speed: 90, dir: -1 })
       A.bus('ddrB', 1, ACT.dram, { rate: 30, speed: 90, dir: -1 })
     },
@@ -697,7 +712,7 @@ export const STAGE2 = [
     real: { normal: 0, first: 5 },
     mode: 'prot',
     shot: 'dimms',
-    eye: { kind: 'flyby', title: 'Write leveling — one sub-channel', sub: 'x8 chips, rank 0' },
+    eye: { kind: 'flyby', title: 'Write leveling — one sub-channel', sub: 'x8 chips, one rank at a time' },
     narration: [
       'On a DIMM the clock and command wires visit the chips one after another — a “fly-by” route that keeps the bus clean but means each chip sees its clock edge a little later than the last. Every byte’s write strobe must be delayed by just the right amount to meet <em>its</em> chip’s clock.',
       'So the controller puts the DRAMs in write-leveling mode, sends writes, and nudges each byte’s strobe later in small steps; the chip reports what it saw on a data pin, and the controller locks onto the moment that report flips from 0 to 1. DDR5 adds a second, internal leveling pass for delays inside the chip. One rank at a time.',
@@ -707,7 +722,7 @@ export const STAGE2 = [
       ['Sweep (open Haswell code)', '64 delay points per byte lane per rank'],
       ['Intel’s name', 'JWRL — Jedec Write Leveling'],
     ],
-    code: { src: 'coreboot haswell/native_raminit (open DDR3 analogue)', href: SRC.hswraminit[1], lines: JWRL, at: (p) => Math.min(JWRL.length - 1, 3 + Math.floor(((p * 9) % 1) * (JWRL.length - 3))) },
+    code: { src: 'coreboot haswell/native_raminit (open DDR3 analogue)', href: SRC.hswraminit[1], lines: JWRL, at: (p) => Math.min(JWRL.length - 1, 4 + Math.floor(((p * 9) % 1) * (JWRL.length - 4))) },
     mem: MEM_PRE,
     sources: [SRC.micron, SRC.hswraminit, SRC.fspm],
     lps: () => bsp('prot'),
@@ -716,8 +731,9 @@ export const STAGE2 = [
       trainingGlow(A, p, t, {
         chips: (d, r, s, i) => {
           if (r !== Math.min(1, Math.floor(p * 2))) return 0.06
-          const k = s * 4 + i
-          const front = (t * 1.6) % 9
+          // each sub-channel is its own fly-by; A and B level in parallel
+          const k = i
+          const front = (t * 1.6) % 5
           return Math.abs(front - k) < 0.8 ? 1 : 0.15
         },
       })
@@ -731,15 +747,14 @@ export const STAGE2 = [
     real: { normal: 0, first: 25 },
     mode: 'prot',
     shot: 'imc',
-    eye: { kind: 'read', title: 'Read eye — one byte lane', sub: 'DIMM A · sub-channel A · rank 0 · byte 2', seed: 5 },
+    eye: { kind: 'read', title: 'Read eye — one byte lane', sub: 'DIMM A · sub-channel A · byte 2 · each rank in turn', seed: 5 },
     narration: [
       'Now the heart of it. For every byte lane, firmware sweeps the sampling delay and the reference voltage, and at each point fires a burst of test traffic generated by hardware in the memory controller — a pattern generator and checker (Intel’s names for it include REUT and CPGC). Pass or fail. The passing region is an <em>eye</em>; the setting is parked in its middle, for the most margin on every side.',
-      'All lanes are tested in parallel by hardware, but settings are stepped one by one — in the open re-implementation of Intel’s Haswell code, 63 timing points or 109 voltage points per sweep, and at each point 256 loops of 128 cache lines written and read back: about 2 MiB of test traffic. Then again for writes, for every rank.',
+      'All lanes are tested in parallel by hardware, but settings are stepped one by one — in the open re-implementation of Intel’s Haswell code, 63 timing points or 109 voltage points per sweep, and at each point 256 loops of 128 cache lines written and read back: 2 MiB each way, per channel. Then again for writes, for every rank.',
     ],
     note: { tag: 'Thread check', html: '“Tens of millions of instructions” — nobody has published an instruction count for memory training, and it’s the wrong yardstick: the time goes to hardware — MMIO polls, JEDEC-mandated waits, and test bursts the memory controller generates itself. The core mostly waits.' },
     facts: [
       ['Each point', 'one hardware test burst, pass / fail'],
-      ['JEDEC minimum eye, DDR5-5600', '0.235 UI (≈ 42 ps) × 60 mV at the DRAM'],
       ['Shape shown', 'illustrative — real eyes vary per lane, that’s the point'],
     ],
     code: { src: 'coreboot haswell/native_raminit train_1d_margins.c', href: SRC.hswraminit[1], lines: MARGIN_1D, at: (p) => Math.min(MARGIN_1D.length - 1, Math.floor(((p * 14) % 1) * MARGIN_1D.length)) },
@@ -747,7 +762,8 @@ export const STAGE2 = [
     sources: [SRC.hswraminit, SRC.micron, SRC.fspm],
     lps: () => bsp('prot'),
     act(p, A, t) {
-      trainingGlow(A, p, t, { chips: (d, r, s, i) => (Math.sin(t * 13 + i * 0.9 + s * 2.1 + d) > 0.1 ? 0.8 : 0.15) })
+      // one rank at a time, both channels in parallel
+      trainingGlow(A, p, t, { chips: (d, r, s, i) => (r !== Math.min(1, Math.floor(p * 2)) ? 0.06 : Math.sin(t * 13 + i * 0.9 + s * 2.1 + d) > 0.1 ? 0.8 : 0.15) })
     },
     labels: [{ id: 'ddrphy', text: 'DDR5 PHY: per-lane delay & Vref', hot: true }, { id: 'imc0', text: 'memory controller 0' }, { id: 'imc1', text: 'memory controller 1' }],
   },
@@ -760,17 +776,18 @@ export const STAGE2 = [
     shot: 'dimms',
     eye: { kind: 'write', title: 'Write eye — DRAM receiver', sub: 'after DFE · DIMM B · rank 1 · byte 5', seed: 9 },
     narration: [
-      'Past about 3,000 MT/s, JEDEC expects the data eye at a DDR5 chip’s pins to be <em>closed</em>: echoes of earlier bits smear into later ones. So every DDR5 receiver has a 4-tap decision-feedback equalizer that subtracts those echoes, plus duty-cycle adjusters, termination and drive-strength settings — each another set of knobs to sweep, each change needing the eye re-measured.',
-      'Intel’s Raptor Lake memory code lists about fifty separately switchable training steps. Multiply by every rank, every byte lane, tens to hundreds of settings per sweep, megabytes of test traffic per setting — and, with dynamic memory frequency enabled, up to four memory speeds. First-time DDR5 training typically takes tens of seconds and can run to minutes on large or dual-rank kits. A normal boot restores the saved results instead — on the one Intel platform with published numbers, a laptop, the whole memory init then took 46–105 ms.',
+      'Past about 3,000 MT/s, JEDEC expects the data eye at a DDR5 chip’s pins to be <em>closed</em>: echoes of earlier bits smear into later ones. So every DDR5 chip’s data receivers have a 4-tap decision-feedback equalizer that subtracts those echoes, plus duty-cycle adjusters, termination and drive-strength settings — each another set of knobs to sweep, each change needing the eye re-measured.',
+      'Intel’s Raptor Lake memory code lists about fifty separately switchable training steps. Multiply by every rank, tens to hundreds of settings per sweep, a burst of hardware test traffic at each setting — and, with dynamic memory frequency enabled, up to four memory speeds. First-time DDR5 training typically takes tens of seconds and can run to minutes on large or dual-rank kits. A normal boot restores the saved results instead: on an Intel Meteor Lake Chromebook reference board (soldered LPDDR5X, not DIMMs), coreboot logs show the whole memory init taking 46–105 ms. We found no published figure for desktop DDR5 DIMMs.',
     ],
     note: { tag: 'Thread check', html: '“Takes forever on DDR5 with memory training” — on a first boot or after a change, yes. LaurieWired’s jet-engine start-cart image fits nicely: a small self-contained system (the cache scratchpad) gets the big one running and is then disconnected. The cache supplies a place to run the training code, not energy. On AMD the “start cart” is literally a separate ARM processor.' },
     facts: [
       ['DFE tap 1', '+50 … −200 mV in ~5 mV steps (≈ 50 codes)'],
       ['DCA', '−7 … +7 global, −3 … +3 per pin'],
-      ['Normal boot', 'restore + JEDEC init + checks: FSP-M ≈ 46–105 ms (Meteor Lake example)'],
+      ['JEDEC minimum eye, DDR5-5600', '0.235 UI (≈ 42 ps) × 60 mV diamond at the DRAM’s receiver, after DFE (writes)'],
+      ['Normal boot', 'restore + JEDEC init + checks: FSP-M ≈ 46–105 ms (Meteor Lake Chromebook, soldered LPDDR5X)'],
       ['First boot', 'tens of seconds to minutes (board-vendor and memory-maker reports)'],
     ],
-    code: { src: 'Intel FSP RaptorLakeS FspmUpd.h (switch names)', href: SRC.fspm[1], lines: RPL_STEPS, at: (p) => Math.min(RPL_STEPS.length - 1, 1 + Math.floor(span(p, 0.05, 0.95) * (RPL_STEPS.length - 1))) },
+    code: { src: 'Intel FSP RaptorLakeS FspmUpd.h (switch names)', href: SRC.fspm[1], lines: RPL_STEPS, at: (p) => Math.min(RPL_STEPS.length - 1, 3 + Math.floor(span(p, 0.05, 0.95) * (RPL_STEPS.length - 3))) },
     mem: MEM_PRE,
     sources: [SRC.micron, SRC.fspm, SRC.thread],
     lps: () => bsp('prot'),
@@ -828,7 +845,7 @@ export const STAGE2 = [
       ['INVD vs WBINVD', 'discard vs write back — writing back 768 KiB to nowhere is pointless or harmful'],
       ['New MTRRs', 'write-back: TSEG + the 32 MiB below cbmem_top · flash write-protect'],
     ],
-    code: { src: 'coreboot exit_car.S (arch + soc)', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/arch/x86/exit_car.S', lines: EXIT_CAR, at: (p) => Math.min(EXIT_CAR.length - 1, Math.floor(span(p, 0.05, 0.95) * EXIT_CAR.length)) },
+    code: { src: 'coreboot exit_car.S (arch + soc)', href: 'https://github.com/coreboot/coreboot/blob/main/src/arch/x86/exit_car.S', lines: EXIT_CAR, at: (p) => Math.min(EXIT_CAR.length - 1, Math.floor(span(p, 0.05, 0.95) * EXIT_CAR.length)) },
     mem: (() => ({ on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['dram'], note: 'CAR gone' }))(),
     sources: [SRC.sdm, SRC.fspapi],
     lps: () => bsp('prot'),

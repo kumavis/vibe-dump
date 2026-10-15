@@ -420,7 +420,19 @@ function codeLine(l, lang = 'c') {
 function fmtCode(line, lang = 'c') {
   const esc = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   if (/^\s*#\s*(include|if|ifdef|ifndef|endif|else|elif|define|undef)\b/.test(esc)) return esc
-  const m = (lang === 'nasm' ? /^(.*?)(;.*)$/ : /^(.*?)((?:\/\*|\/\/|#).*)$/).exec(esc)
-  if (m) return `${m[1]}<span class="c">${m[2]}</span>`
+  // First comment marker outside a string literal.
+  let q = null
+  for (let i = 0; i < esc.length; i++) {
+    const c = esc[i]
+    if (q) {
+      if (c === '\\') i++
+      else if (c === q) q = null
+      continue
+    }
+    if (c === '"' || (c === "'" && lang !== 'nasm')) q = c
+    else if (lang === 'nasm' ? c === ';' : c === '#' || (c === '/' && (esc[i + 1] === '*' || esc[i + 1] === '/'))) {
+      return `${esc.slice(0, i)}<span class="c">${esc.slice(i)}</span>`
+    }
+  }
   return esc
 }
