@@ -102,3 +102,13 @@ export function wave(p, a, b, seq, { before = 'wfs', bspMode = null, spread = 0.
   }
 }
 
+// Walk a code excerpt in step with the animation: knots are [p, line] pairs and
+// the highlight moves linearly between them, so the line that writes a register
+// lands when regs()/act() show the write.
+export function walk(p, knots) {
+  let k = 0
+  while (k < knots.length - 2 && p >= knots[k + 1][0]) k++
+  const [p0, l0] = knots[k]
+  const [p1, l1] = knots[k + 1]
+  return Math.floor(l0 + span(p, p0, p1) * (l1 - l0))
+}

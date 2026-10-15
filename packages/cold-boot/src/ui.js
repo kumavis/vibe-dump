@@ -314,14 +314,15 @@ export class UI {
     $('#play').setAttribute('aria-label', this.tl.playing ? 'Pause' : 'Play')
     // clock
     $('#clockmain').textContent = realT <= 0 ? 't = 0' : `t ≈ ${fmtTime(realT)}`
-    $('#clocksub').textContent = resetT == null ? 'since the power button' : `since power button · ${fmtTime(resetT)} since 1st instruction`
+    $('#clocksub').textContent = resetT == null ? 'since the power button' : `since power button · ${fmtTime(resetT)} since the reset vector`
     // mode ladder (the BSP's mode; a step may change it part-way through)
     const mode = typeof step.mode === 'function' ? step.mode(p) : step.mode
     if (mode !== this.ladderMode) {
       this.ladderMode = mode
       const rank = RANK[mode] ?? -1
       $('#ladder').innerHTML = RUNGS.map((r, k) => {
-        const cls = k === rank ? 'on' : k < rank ? 'done' : ''
+        // Stage 0's ACM runs 32-bit before any 16-bit code, so nothing is 'done' yet
+        const cls = k === rank ? 'on' : k < rank && step.stage >= 1 ? 'done' : ''
         return `<div class="rung ${cls}" style="--c:${r.c}"><b>${r.bits}</b>${r.era}</div>`
       }).join('')
       $('#ladder').title = rank < 0 ? 'No BIOS instruction has executed yet' : ''

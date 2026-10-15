@@ -22,11 +22,11 @@ const TRAMPOLINE = [
   '...',
   { i: '.code32', era: '' , why: '' },
   '...                     # startup_32: data segments, SME check',
-  { i: 'movl  pa_tr_cr4, %eax ; movl %eax, %cr4', era: 'P6', why: 'Enable PAE — physical address extension, a Pentium Pro (1995) feature long mode requires.' },
+  { i: 'movl  pa_tr_cr4, %eax ; movl %eax, %cr4', era: 'P5', why: 'Enable PAE — physical address extension, a Pentium Pro (1995) feature long mode requires.' },
   { i: 'movl  $pa_trampoline_pgd, %eax ; movl %eax, %cr3', era: '386', why: 'Point CR3 at the trampoline’s 4-level page tables.' },
-  { i: 'movl  $MSR_EFER, %ecx ; rdmsr ; … ; wrmsr', era: 'AMD64', why: 'Set EFER.LME, the long-mode enable bit, in AMD’s Extended Feature Enable Register.' },
-  { i: 'movl  $CR0_STATE, %eax ; movl %eax, %cr0', era: 'AMD64', why: 'Turn paging on. With LME set, this activates long mode — in 32-bit compatibility mode until CS is reloaded.' },
-  { i: 'ljmpl $__KERNEL_CS, $pa_startup_64', era: 'AMD64', why: 'Load a code segment with L = 1. The AP is now a 64-bit AMD64 processor (2003).' },
+  { i: 'movl  $MSR_EFER, %ecx ; rdmsr ; … ; wrmsr', era: 'P5', why: 'Set EFER.LME, the long-mode enable bit, in AMD’s Extended Feature Enable Register.' },
+  { i: 'movl  $CR0_STATE, %eax ; movl %eax, %cr0', era: '386', why: 'Turn paging on. With LME set, this activates long mode — in 32-bit compatibility mode until CS is reloaded.' },
+  { i: 'ljmpl $__KERNEL_CS, $pa_startup_64', era: '386', why: 'Load a code segment with L = 1. The AP is now a 64-bit AMD64 processor (2003).' },
   '...',
   { i: '.code64', era: '', why: '' },
   '...',
@@ -96,7 +96,7 @@ export const STAGE4 = [
     mode: 'long',
     shot: 'die',
     narration: [
-      'At hand-off the firmware leaves the 31 other threads halted in a tiny loop, in memory the OS has promised not to touch. The OS learns they exist from ACPI’s MADT table, which lists every APIC ID, the boot processor first.',
+      'At hand-off the firmware leaves the 31 other threads halted in a tiny loop, in memory the OS has promised not to touch. The OS learns they exist from ACPI’s MADT table, which lists every APIC ID, by convention the boot processor first.',
       'Then, for each AP in turn, Linux writes the boot CPU’s Local APIC Interrupt Command Register — the MMIO register at <code>FEE0_0300h</code>, or MSR <code>830h</code> when the kernel runs the APICs in x2APIC mode, as it often does on modern Intel: an <em>INIT</em>, which drops the AP straight back to its reset state, and two <em>Start-up IPIs</em> carrying a one-byte page number. The AP will begin executing in real mode at that page × 4096, a trampoline the kernel copied below 1 MiB.',
     ],
     note: { tag: 'What INIT keeps', html: 'INIT resets the registers and the APIC, but leaves caches, MTRRs, most MSRs and the SMM base the firmware set alone (SDM Table 12-1, §34.11). The ladder restarts; the housekeeping mostly doesn’t.' },
@@ -119,7 +119,7 @@ export const STAGE4 = [
     mem: { on: ['dram', 'mmio', 'lapic', 'flash', 'high'], hit: ['lapic'], note: 'ICR is an APIC register' },
     sources: [SRC.smpboot, SRC.acpi, SRC.sdm],
     // One AP shown (as in the regs panel): P-core 1's first thread, the first AP osBringup kicks.
-    lps: (p) => (i) => (i === 0 ? 'os' : i === 2 && p > 0.4 ? 'wfs' : 'park'),
+    lps: (p) => (i) => (i === 0 ? 'os' : i === 2 ? (p > 0.85 ? 'real' : p > 0.15 ? 'wfs' : 'park') : 'park'),
     act(p, A) {
       A.die('pcore0', 0.7, ACT.dram, 'glow')
       A.die('sub:pcore0:l2', 0.3, ACT.dram, 'glow')
@@ -140,10 +140,10 @@ export const STAGE4 = [
     mode: 'long',
     shot: [[0, 'die'], [0.55, 'dieRight']],
     narration: [
-      'Each AP wakes as an 8086 in the kernel’s trampoline; some eighty instructions later (sixty of them a CPU check, still in 16-bit mode) it is a 386, and about twenty more make it an AMD64. Watch the era tags again: <code>wbinvd</code> from the 486, PAE from the Pentium Pro, <code>EFER.LME</code> and RIP-relative jumps from AMD64.',
+      'Each AP wakes as an 8086 in the kernel’s trampoline; some eighty instructions later (sixty of them a CPU check, still in 16-bit mode) it is a 386, and about twenty more make it an AMD64. Watch the era tags again: <code>wbinvd</code> from the 486, CR4 and MSR access from the Pentium, RIP-relative jumps from AMD64 — PAE and <code>EFER.LME</code> are newer bits, written with older instructions.',
       'They take turns. The BSP kicks each AP in quick succession without waiting for it, but the trampoline shares one real-mode stack, guarded by a lock: kicked APs spin on it in 16-bit code, and each climbs to 64-bit only when its turn comes, releasing the lock once it is on its own kernel stack. Since Linux 6.5, what overlaps is each AP’s early startup, microcode load included, up to an “alive” checkpoint; the BSP then releases them to finish one at a time. And all the primary threads (seven other P-core first threads and all sixteen E-cores) are online before the eight P-core sibling threads are even kicked, so a core’s microcode update is done before its second thread starts.',
     ],
-    note: { tag: 'Thread check', html: '“Every single core has to go through the same process” — every <em>thread</em> climbs the same mode ladder, and not just once: on a typical UEFI PC, once in 32-bit PEI, again for its SMM relocation, again in 64-bit DXE, and again here. But no AP ever runs the reset vector, cache-as-RAM, DRAM training or PCIe enumeration. They are fast mostly because they skip all that, and because they run side by side.' },
+    note: { tag: 'Thread check', html: '“Every single core has to go through the same process” — every <em>thread</em> climbs the same mode ladder, and not just once: on a typical UEFI PC, once in 32-bit PEI, again for its SMM relocation, again in 64-bit DXE, and again here. But no AP ever runs the reset vector, cache-as-RAM, DRAM training or PCIe enumeration. They are fast mostly because they skip all that. Firmware wakes all 31 at once, and Linux overlaps their early startup.' },
     facts: [
       ['Order', '23 primary threads (7 P + 16 E), then 8 P-core siblings'],
       ['Climb', 'one AP at a time (trampoline lock); only early startup, to “alive”, overlaps'],

@@ -240,7 +240,8 @@ export function drawEye(canvas, spec, p, time) {
   g.fillText('−½ UI', X(0) + 16, H - 4)
   g.fillText('+½ UI', X(1) - 16, H - 4)
   const phase = p < 0.16 ? '1-D: timing at nominal Vref' : p < 0.3 ? '1-D: Vref at the timing centre' : p < 0.85 ? '2-D raster: each point is one test burst' : 'parked in the middle'
-  return `${phase} · strobe delay across 1 UI = 178.6 ps`
+  // a narrow card (phones) gets the short form
+  return W < 240 ? `${phase} · 1 UI = 178.6 ps` : `${phase} · strobe delay across 1 UI = 178.6 ps`
 }
 
 // Write leveling across a fly-by bus: four x8 DRAM chips of one sub-channel.
@@ -314,5 +315,6 @@ function drawFlyby(canvas, spec, p, time) {
     g.textAlign = 'left'
     g.fillText(locked ? '0→1 ✓' : '0', TX(Math.min(0.86, pos)) + 6, y + rowH * 0.62)
   }
+  if (W < 240) return 'orange: clock edge at each chip · blue: that byte’s strobe (DQS)'
   return 'orange: the clock edge as each chip sees it · blue: that byte’s write strobe (DQS), slid later until the chip’s feedback flips 0 → 1'
 }

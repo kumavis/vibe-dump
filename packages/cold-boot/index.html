@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cold Boot</title>
-<meta name="description" content="Press the power button and follow an x86 PC from the first fetch at the reset vector through real mode, cache-as-RAM, DDR5 training, long mode and the wake-up of every secondary core — on a real Raptor Lake die floorplan.">
+<meta name="description" content="Press the power button and follow an x86 PC from standby power through real mode, cache-as-RAM, DDR5 training and long mode, and the repeated wake-ups of its 31 other hardware threads — on a real Raptor Lake die floorplan.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0c14'/><path d='M10.2 9.6a9 9 0 1 0 11.6 0' fill='none' stroke='%23ffb547' stroke-width='2.8' stroke-linecap='round'/><path d='M16 5.5v10' stroke='%2358a6ff' stroke-width='2.8' stroke-linecap='round'/></svg>">
 <link rel="stylesheet" href="./style.css">
 </head>
@@ -73,7 +73,7 @@
   <div class="card">
     <div class="kicker">x86 power-on, instruction by instruction</div>
     <h1>Cold Boot</h1>
-    <p class="lede">Every time an x86 PC starts, its processor wakes up pretending to be a 1978 Intel 8086, promotes itself to a 1985 386, borrows its own cache as memory while it teaches the DDR5 how to talk, becomes a 2003 AMD64 — and then wakes 31 more threads, each of which climbs from 8086 to AMD64 in a few dozen instructions.</p>
+    <p class="lede">Every time an x86 PC starts, its processor wakes up pretending to be a 1978 Intel 8086, promotes itself to a 1985 386, borrows its own cache as memory while it teaches the DDR5 how to talk, becomes a 2003 AMD64 — waking its 31 other threads again and again along the way, each time starting over as an 8086.</p>
     <button id="power" type="button" aria-label="Press the power button"><span aria-hidden="true">⏻</span></button>
     <div class="press">press the power button</div>
     <p class="fine">Built on LaurieWired's <a href="https://bsky.app/profile/lauriewired.bsky.social/post/3mxwk6hqb622v" target="_blank" rel="noopener">thread on the stages of x86 boot</a>, expanded and fact-checked against Intel's manuals and the coreboot, EDK2 and Linux sources. <span class="kbd-hint">Space plays and pauses, ← → step, T shows the die photo in true colour, drag to look around.</span><span class="touch-hint">Tap ▶ to play, drag the timeline to scrub, tap “true colour” for the photo as shot, drag the scene to look around.</span></p>

@@ -47,6 +47,7 @@ scene.fog = new THREE.Fog('#05060b', 600, 1400)
 // Image-based lighting. It lives in a render target, so it has to be baked
 // again if the GL context is lost and restored (mobile browsers do that).
 function bakeEnvironment() {
+  if (!floatRT) return // PMREM renders into half-float targets too
   const pmrem = new THREE.PMREMGenerator(renderer)
   const room = new RoomEnvironment(renderer)
   scene.environment = pmrem.fromScene(room, 0.04).texture
@@ -145,8 +146,9 @@ const director = new Director(camera, renderer.domElement, shots)
 const ui = new UI({ timeline, stages: STAGES, lpLayout: die.lps, onSpeed: (s) => (timeline.speed = s) })
 
 // --- post -------------------------------------------------------------------
-// Without float render targets, skip post-processing and draw straight to the
-// canvas (materials then tone-map and encode sRGB themselves).
+// Without float render targets there is no post-processing and no image-based
+// lighting: the scene draws straight to the canvas (every material, including
+// the custom overlay shaders, tone-maps and encodes sRGB itself) and is darker.
 const composer = floatRT ? new EffectComposer(renderer) : null
 if (composer) {
   composer.addPass(new RenderPass(scene, camera))
@@ -160,6 +162,7 @@ const insetEl = document.getElementById('inset')
 let insetName = null
 let insetRect = null // measured when the inset appears and on resize, not every frame
 let insetSize = ''
+let insetLabel = null
 const insetComposer = floatRT ? new EffectComposer(renderer) : null
 if (insetComposer) {
   insetComposer.addPass(new RenderPass(scene, insetCam))
@@ -214,7 +217,14 @@ function resize() {
   // Backed-off shots sit farther away; keep the fog where it was relative to them.
   scene.fog.near = 600 * director.backoff
   scene.fog.far = 1400 * director.backoff
-  if (director.current && !director.userMoved && !director.flight) director.go(director.current, { instant: true })
+  if (director.current && !director.userMoved) {
+    if (director.flight) {
+      // mid-flight: aim the flight at the shot as framed for the new size
+      const s = director.shotFor(director.current)
+      director.flight.toPos.copy(s.pos)
+      director.flight.toTarget.copy(s.target)
+    } else director.go(director.current, { instant: true })
+  }
 }
 window.addEventListener('resize', resize)
 resize()
@@ -323,7 +333,7 @@ let introOn = true
 const intro = document.getElementById('intro')
 // While the title card is up, the chrome behind it is invisible: keep it out of
 // the tab order and the accessibility tree, so ⏻ is the first stop.
-const chrome = ['stages', 'panel', 'timeline', 'lps', 'eye', 'inset'].map((id) => document.getElementById(id))
+const chrome = ['brand', 'stages', 'panel', 'timeline', 'lps', 'eye', 'inset'].map((id) => document.getElementById(id))
 for (const el of chrome) el.inert = true
 director.go('attract', { instant: true })
 function dismissIntro() {
@@ -380,13 +390,19 @@ function renderInset(st, dt) {
     insetEl.hidden = !want
     ui.obstaclesDirty = true
     if (want) {
-      insetEl.querySelector('.lbl').textContent = st.inset.label || ''
       const s = shots[want]()
       insetCam.position.copy(s.pos)
       insetTarget.copy(s.target)
       insetCam.fov = s.fov
       insetRect = insetEl.getBoundingClientRect()
     }
+  }
+  // steps can share an inset shot but caption it differently
+  const label = (typeof st.inset === 'object' && st.inset?.label) || ''
+  if (want && label !== insetLabel) {
+    insetLabel = label
+    insetEl.querySelector('.lbl').textContent = label
+    ui.obstaclesDirty = true
   }
   if (!want) return
   const r = insetRect

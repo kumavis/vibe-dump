@@ -76,7 +76,7 @@ export const STAGE1 = [
     regs: (p) => resetRegs(0),
     code: { src: 'coreboot entry16.S', href: SRC.entry16[1], lines: RESET16, at: () => 0, title: 'Next to execute' },
     mem: { on: ['flash', 'lapic'], hit: [], note: 'no writable memory anywhere' },
-    sources: [SRC.sdm, SRC.rplds],
+    sources: [SRC.sdm, SRC.rplds, SRC.amd17],
     lps: () => bsp('real'),
     act(p, A) {
       A.die('pcore0', 0.55, ACT.fetch, 'breathe')

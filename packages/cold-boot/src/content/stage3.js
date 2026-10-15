@@ -5,7 +5,7 @@
 // then enumerates PCIe, locks SMM down (End of DXE), runs the GPU's own driver,
 // finishes the ACPI tables and boots the OS loader.
 
-import { ACT, span, win, SRC, wave } from './common.js'
+import { ACT, span, win, SRC, wave, walk } from './common.js'
 
 const ALL_CORES = ['pcore1', 'pcore2', 'pcore3', 'pcore4', 'pcore5', 'pcore6', 'pcore7', 'ecl0', 'ecl1', 'ecl2', 'ecl3']
 const MEM_RAM = { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['dram'] }
@@ -210,7 +210,7 @@ export const STAGE3 = [
     mode: (p) => (inLong(p) ? 'long' : 'prot'),
     shot: 'dieLeft',
     narration: [
-      'On this platform everything since the reset code left 16-bit real mode — cache-as-RAM, DDR5 training, even Intel’s silicon init — ran as 32-bit code. We checked a real retail Z790 BIOS image: every SEC and PEI module is 32-bit x86 except one used only for firmware updates, and all 263 DXE drivers are 64-bit. On a normal boot the CPU flips into long mode once, at the hand-off from PEI to DXE.',
+      'On this platform everything since the reset code left 16-bit real mode — cache-as-RAM, DDR5 training, even Intel’s silicon init — ran as 32-bit code. We checked a real retail Z790 BIOS image: every SEC and PEI module is 32-bit x86 except one used only for firmware updates, and all 263 DXE drivers are 64-bit. On a normal boot the boot processor’s main flow flips into long mode once, here at the hand-off from PEI to DXE. From here on, every SMI and every wake of the other 31 threads repeats the climb.',
       'The recipe: build identity-mapped page tables in DRAM (every address maps to itself, so the code flipping the switch keeps running), point CR3 at them, set CR4.PAE, set EFER.LME, then turn on paging. That lands the CPU in <em>compatibility mode</em> — long mode, still running 32-bit code. One far return to a code segment marked L = 1 and it is a 2003 AMD64.',
     ],
     note: { tag: 'Not universal', html: 'Other designs switch earlier. coreboot runs 64-bit from just after cache-as-RAM — before DRAM exists — on Panther Lake and some Meteor Lake Chromebooks, and Intel ships 64-bit FSP builds starting with Meteor Lake. EDK2’s generic X64 reset vector reaches long mode before its first line of C — after a short scan of flash for the SEC core — using page tables stored in flash. On AMD Zen an on-die ARM security processor has trained DRAM before the x86 cores run a single instruction.' },
@@ -222,7 +222,7 @@ export const STAGE3 = [
     regs: longRegs,
     code: { src: 'EDK2 MdePkg BaseLib Ia32/EnablePaging64.nasm', href: SRC.enablepaging[1], lines: ENABLE_PAGING64, at: (p) => Math.min(ENABLE_PAGING64.length - 1, pagingK(p)) },
     mem: MEM_RAM,
-    sources: [SRC.enablepaging, SRC.dxeipl, SRC.sdm, SRC.msibios, SRC.fspm],
+    sources: [SRC.enablepaging, SRC.dxeipl, SRC.sdm, SRC.msibios, SRC.fspm, SRC.amd17],
     lps: (p) => (i) => (i === 0 ? (inLong(p) ? 'long' : 'prot') : 'park'),
     act(p, A) {
       const k = pagingK(p)
@@ -237,9 +237,41 @@ export const STAGE3 = [
   },
   {
     stage: 3,
+    title: 'Wake the cores again — all the way to 64-bit',
+    dur: 13,
+    real: 0.03,
+    mode: 'long',
+    shot: 'die',
+    narration: [
+      'The APs were last woken from 32-bit PEI, so DXE’s CPU driver — among the first drivers DXE runs — can’t simply hand them 64-bit work: it sends INIT-SIPI-SIPI again. Every thread restarts in 16-bit real mode at a page below 1 MiB and climbs the whole ladder in a trampoline of about fifty instructions — real, protected, then long mode, into code, descriptor tables and page tables the BSP already built in RAM.',
+      'In EDK2’s default “HLT loop” parking mode, each later request for AP work repeats the INIT-SIPI-SIPI too. Counting the SMM relocation, that’s at least the third climb for every AP this boot, and more are coming.',
+    ],
+    facts: [
+      ['Why again', 'PEI (32-bit) and DXE (64-bit) differ in mode'],
+      ['Trampoline', '≈ 50 instructions from the SIPI vector to the first 64-bit one'],
+    ],
+    code: { src: 'EDK2 UefiCpuPkg MpInitLib X64/MpFuncs.nasm', href: SRC.mpfuncs[1], lines: MPFUNCS, at: (p) => Math.min(MPFUNCS.length - 1, walk(p, [[0, 0], [0.21, 0], [0.335, 4], [0.458, 11], [0.582, 29], [0.705, 30]])) },
+    mem: { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['lapic', 'dram'] },
+    sources: [SRC.mpfuncs, SRC.mplib, SRC.sdm],
+    lps: (p) => wave(p, 0.12, 0.92, ['wfs', 'real', 'prot', 'long', 'park'], { before: 'park', bspMode: 'long', spread: 0.3 }),
+    act(p, A) {
+      A.die('pcore0', 0.6, '#58a6ff', 'glow')
+      const ipi = win(p, 0.04, 0.2)
+      if (ipi > 0) {
+        A.ring(0.9 * ipi, ACT.ipi)
+        for (const id of ALL_CORES) A.flow(`ipi-${id}`, 'pcore0', id, 3 * ipi, ACT.ipi, 8)
+      }
+      const run = win(p, 0.18, 0.88)
+      A.die('kind:pcore', 0.1 + run * 0.3, '#7fd8ff', 'sparkle')
+      A.die('kind:ecore_cluster', 0.1 + run * 0.3, '#7fd8ff', 'sparkle')
+    },
+    labels: [{ id: 'ecl0', text: 'every AP: 16 → 32 → 64 again', from: 0.3 }],
+  },
+  {
+    stage: 3,
     title: 'A firmware operating system',
     dur: 12,
-    real: 1.0,
+    real: { normal: 1.0, first: 1.29 },
     mode: 'long',
     shot: 'fetch',
     inset: { shot: 'bsp', label: 'ONE THREAD DOES THE WORK' },
@@ -249,6 +281,7 @@ export const STAGE3 = [
       'And it all runs on one thread of one P-core. The UEFI specification defines boot services as uniprocessor: drivers are serviced by polling, and the only interrupt is the boot-services timer.',
     ],
     facts: [
+      ['First boot only', 'a DXE driver (SaveMemoryConfig on this board) also writes the new memory-training results to flash'],
       ['DXE volume', '5,513,321 B compressed → 18,284,560 B'],
       ['Modules', '263 DXE · 63 SMM · 101 PEIM · 3 UEFI apps'],
       ['Execution model', 'one processor, 64-bit, identity-mapped, polled drivers, a timer interrupt (UEFI §2.3.4)'],
@@ -274,38 +307,6 @@ export const STAGE3 = [
       A.ring(0.6, '#58a6ff')
     },
     labels: [{ id: 'spi', text: 'DXE volume: 5.5 MB LZMA', hot: true, to: 0.3 }],
-  },
-  {
-    stage: 3,
-    title: 'Wake the cores again — all the way to 64-bit',
-    dur: 13,
-    real: 0.03,
-    mode: 'long',
-    shot: 'die',
-    narration: [
-      'The APs were last woken from 32-bit PEI, so DXE’s CPU driver can’t simply hand them 64-bit work: it sends INIT-SIPI-SIPI again. Every thread restarts in 16-bit real mode at a page below 1 MiB and climbs the whole ladder in a trampoline of about fifty instructions — real, protected, then long mode, into code, descriptor tables and page tables the BSP already built in RAM.',
-      'In EDK2’s default “HLT loop” parking mode, each later request for AP work repeats the INIT-SIPI-SIPI too. That’s the second climb for every AP this boot, at least.',
-    ],
-    facts: [
-      ['Why again', 'PEI (32-bit) and DXE (64-bit) differ in mode'],
-      ['Trampoline', '≈ 50 instructions from the SIPI vector to the first 64-bit one'],
-    ],
-    code: { src: 'EDK2 UefiCpuPkg MpInitLib X64/MpFuncs.nasm', href: SRC.mpfuncs[1], lines: MPFUNCS, at: (p) => Math.min(MPFUNCS.length - 1, Math.floor(span(p, 0.15, 0.85) * MPFUNCS.length)) },
-    mem: { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['lapic', 'dram'] },
-    sources: [SRC.mpfuncs, SRC.mplib, SRC.sdm],
-    lps: (p) => wave(p, 0.12, 0.92, ['wfs', 'real', 'prot', 'long', 'park'], { before: 'park', bspMode: 'long', spread: 0.3 }),
-    act(p, A) {
-      A.die('pcore0', 0.6, '#58a6ff', 'glow')
-      const ipi = win(p, 0.04, 0.2)
-      if (ipi > 0) {
-        A.ring(0.9 * ipi, ACT.ipi)
-        for (const id of ALL_CORES) A.flow(`ipi-${id}`, 'pcore0', id, 3 * ipi, ACT.ipi, 8)
-      }
-      const run = win(p, 0.18, 0.88)
-      A.die('kind:pcore', 0.1 + run * 0.3, '#7fd8ff', 'sparkle')
-      A.die('kind:ecore_cluster', 0.1 + run * 0.3, '#7fd8ff', 'sparkle')
-    },
-    labels: [{ id: 'ecl0', text: 'every AP: 16 → 32 → 64 again', from: 0.3 }],
   },
   {
     stage: 3,

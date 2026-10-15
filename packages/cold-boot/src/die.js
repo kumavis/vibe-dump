@@ -55,6 +55,8 @@ void main() {
     a = 0.05 + rim * 0.35 + band * (0.9 + 0.5 * hatch);
   }
   gl_FragColor = vec4(uColor * a * uLevel, 1.0);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
 }`
 
 const RING_FRAG = /* glsl */ `
@@ -67,6 +69,8 @@ void main() {
   float across = 1.0 - abs(vUv.y - 0.5) * 2.0;
   float a = (0.18 + dash * 0.9) * across * uLevel;
   gl_FragColor = vec4(uColor * a, 1.0);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
 }`
 
 export const LED_FRAG = /* glsl */ `
@@ -83,6 +87,8 @@ void main() {
   float halo = smoothstep(1.0, 0.2, r) * 0.28;
   float b = mix(1.0, 0.45 + 0.4 * sin(uTime * 2.2 + uSeed), uBreath);
   gl_FragColor = vec4(uColor * (core + ring + halo) * uLevel * b, 1.0);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
 }`
 
 export function overlayMaterial(w, h, seed) {
@@ -500,7 +506,7 @@ vec3 dieGrade(vec3 lin) {
       if (!s) {
         const pts = route(fromId, toId)
         if (!pts) return
-        s = { pts, acc: 0, rate, color: new THREE.Color(color), speed, live: true, len: polyLen(pts) }
+        s = { pts, acc: 0, rate, color: new THREE.Color(color), speed, live: true, len: polyLen(pts), fresh: true }
         streams.set(key, s)
       }
       s.rate = rate
@@ -552,10 +558,17 @@ vec3 dieGrade(vec3 lin) {
           streams.delete(key)
           continue
         }
+        // A stream that first appears while paused (stepping through a paused
+        // walkthrough) is shown in its steady state, spread along the route.
+        if (s.fresh && animDt === 0) {
+          const n = Math.min(MAXP - packets.length, Math.round((s.rate * s.len) / s.speed))
+          for (let k = 0; k < n; k++) packets.push({ key, pts: s.pts, len: s.len, d: ((k + 0.5) / n) * s.len, speed: s.speed, color: s.color.clone() })
+        }
+        s.fresh = false
         s.acc += animDt * s.rate
         while (s.acc >= 1 && packets.length < MAXP) {
           s.acc -= 1
-          packets.push({ pts: s.pts, len: s.len, d: 0, speed: s.speed * (0.85 + Math.random() * 0.3), color: s.color.clone() })
+          packets.push({ key, pts: s.pts, len: s.len, d: 0, speed: s.speed * (0.85 + Math.random() * 0.3), color: s.color.clone() })
         }
       }
       // advance
@@ -563,7 +576,8 @@ vec3 dieGrade(vec3 lin) {
       for (let i = packets.length - 1; i >= 0; i--) {
         const p = packets[i]
         p.d += p.speed * animDt
-        if (p.d >= p.len) {
+        // while paused, packets of a stream that has ended can't finish their trip
+        if (p.d >= p.len || (animDt === 0 && !streams.has(p.key))) {
           packets.splice(i, 1)
           continue
         }

@@ -318,7 +318,7 @@ export function buildBoard({ anisotropy = 8 } = {}) {
         const key = `${name}:${dir}`
         let s = streams.get(key)
         if (!s) {
-          s = { lanes: dir > 0 ? p.lanes : p.lanes.map((l) => [...l].reverse()), len: p.len, acc: 0, color: new THREE.Color() }
+          s = { lanes: dir > 0 ? p.lanes : p.lanes.map((l) => [...l].reverse()), len: p.len, acc: 0, color: new THREE.Color(), fresh: true }
           streams.set(key, s)
         }
         s.rate = rate
@@ -386,18 +386,24 @@ export function buildBoard({ anisotropy = 8 } = {}) {
           streams.delete(key)
           continue
         }
+        // first seen while paused: show the steady state along the wire
+        if (s.fresh && animDt === 0) {
+          const n = Math.min(MAXP - packets.length, Math.round((s.rate * s.len) / s.speed))
+          for (let k = 0; k < n; k++) packets.push({ key, pts: s.lanes[k % s.lanes.length], len: s.len, d: ((k + 0.5) / n) * s.len, speed: s.speed, color: s.color.clone() })
+        }
+        s.fresh = false
         s.acc += animDt * s.rate
         while (s.acc >= 1 && packets.length < MAXP) {
           s.acc -= 1
           const lane = s.lanes[Math.floor(Math.random() * s.lanes.length)]
-          packets.push({ pts: lane, len: s.len, d: 0, speed: s.speed * (0.85 + Math.random() * 0.3), color: s.color.clone() })
+          packets.push({ key, pts: lane, len: s.len, d: 0, speed: s.speed * (0.85 + Math.random() * 0.3), color: s.color.clone() })
         }
       }
       let n = 0
       for (let i = packets.length - 1; i >= 0; i--) {
         const p = packets[i]
         p.d += p.speed * animDt
-        if (p.d >= p.len) packets.splice(i, 1)
+        if (p.d >= p.len || (animDt === 0 && !streams.has(p.key))) packets.splice(i, 1)
       }
       for (const p of packets) {
         const q = pointAlong(p.pts, p.d)
@@ -482,6 +488,8 @@ void main() {
   vec3 copper = vec3(0.42, 0.30, 0.16);
   vec3 col = mix(copper * 0.55, uColor * (0.5 + dash * 1.2), hot);
   gl_FragColor = vec4(col * smoothstep(0.0, 0.5, across) * (0.6 + hot), 1.0);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
 }`
 
 function traceMesh(lanes) {

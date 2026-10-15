@@ -8,22 +8,12 @@
 // loops shown are from coreboot's open re-implementation of Intel's Haswell
 // (DDR3) memory code, which keeps Intel's step names.
 
-import { ACT, span, win, SRC, bsp, wave } from './common.js'
+import { ACT, span, win, SRC, bsp, wave, walk } from './common.js'
 
 const LLC = ['llc0', 'llc1', 'llc2', 'llc3', 'llc4', 'llc5', 'llc6', 'llc7', 'llc8', 'llc9', 'llc10', 'llc11']
 const ALL_CORES = ['pcore1', 'pcore2', 'pcore3', 'pcore4', 'pcore5', 'pcore6', 'pcore7', 'ecl0', 'ecl1', 'ecl2', 'ecl3']
 const MEM_PRE = { on: ['flash', 'lapic', 'car'], hit: ['car', 'flash'], note: 'no DRAM yet' }
 
-// Walk a code excerpt in step with the animation: knots are [p, line] pairs and
-// the highlight moves linearly between them, so the line that writes a register
-// lands when regs()/act() show the write.
-function walk(p, knots) {
-  let k = 0
-  while (k < knots.length - 2 && p >= knots[k + 1][0]) k++
-  const [p0, l0] = knots[k]
-  const [p1, l1] = knots[k + 1]
-  return Math.floor(l0 + span(p, p0, p1) * (l1 - l0))
-}
 
 // ---- code excerpts (verbatim, trimmed) -----------------------------------------
 const EARLY_RESET = [
@@ -443,7 +433,7 @@ export const STAGE2 = [
     facts: [
       ['CAR window', 'FEF00000–FEFBFFFF (768 KiB, coreboot on ADL/RPL)'],
       ['Elsewhere', 'Intel’s FSP and EDK2 reference: 1 MiB at the same base'],
-      ['Physical address bits', '46 on an i9-13900K (CPUID 80000008h)'],
+      ['Physical address bits', '46 on a typical i9-13900K (CPUID 80000008h; some systems report fewer)'],
     ],
     regs: (p) => ({
       title: 'MSRs written (i9-13900K, coreboot defaults)',
@@ -501,7 +491,7 @@ export const STAGE2 = [
     }),
     code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://github.com/coreboot/coreboot/blob/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_ENEM, at: (p) => Math.min(CAR_ENEM.length - 1, walk(p, [[0, 0], [0.05, 5], [0.08, 6], [0.16, 7], [0.2, 11], [0.23, 12], [0.27, 15], [0.33, 20], [0.4, 26], [0.42, 27], [0.75, 28], [0.78, 33], [0.8, 34], [0.85, 42]])) },
     mem: { on: ['flash', 'lapic', 'car'], hit: ['car'], note: 'cache pinned as RAM' },
-    sources: [SRC.adlKconfig, SRC.sdm],
+    sources: [SRC.amd17, SRC.adlKconfig, SRC.sdm],
     lps: () => bsp('prot'),
     act(p, A) {
       A.die('pcore0', 0.7, '#4fe08a', 'glow')
@@ -594,7 +584,7 @@ export const STAGE2 = [
     mode: 'prot',
     shot: 'fetch',
     narration: [
-      'Training results — thousands of delay, voltage and equalizer settings — are saved in the flash chip after a successful boot (Chromebooks reserve a 64 KB slot for them; Intel’s open EDK2 platform code keeps them in a UEFI variable). If a matching copy exists, the firmware hands it to Intel’s memory code with the instruction “assume nothing changed”.',
+      'Training results — thousands of delay, voltage and equalizer settings — are saved in the flash chip later in any boot whose training succeeded (Chromebooks reserve a 64 KB slot for them; Intel’s open EDK2 platform code keeps them in a UEFI variable). If a matching copy exists, the firmware hands it to Intel’s memory code with the instruction “assume nothing changed”.',
       'New DIMMs, a different BIOS version, changed memory settings or a cleared CMOS invalidate it, and the full training below runs instead. That — not the CPU — is what makes a first boot with new memory sit on a black screen; coreboot’s optional early-display mode even puts up a wait message (“Please wait for RAM to be initialized...”) so you don’t think it hung.',
     ],
     facts: [
@@ -756,6 +746,7 @@ export const STAGE2 = [
     ],
     note: { tag: 'Thread check', html: '“Tens of millions of instructions” — nobody has published an instruction count for memory training, and it’s the wrong yardstick: the time goes to hardware — MMIO polls, JEDEC-mandated waits, and test bursts the memory controller generates itself. The core mostly waits.' },
     facts: [
+      ['Normal boot', 'skipped: the saved results are written straight back (switch to “first boot” by the clock)'],
       ['Each point', 'one hardware test burst, pass / fail'],
       ['Shape shown', 'illustrative — real eyes vary per lane, that’s the point'],
     ],
@@ -802,16 +793,16 @@ export const STAGE2 = [
     stage: 2,
     title: 'DRAM online: carving up the map',
     dur: 12,
-    real: { normal: 0.005, first: 0.3 },
+    real: { normal: 0.005, first: 0.01 },
     mode: 'prot',
     shot: 'memory',
     narration: [
-      'Memory works. The training data is written to flash (skipped if it hasn’t changed), and the memory controller’s map is programmed: DRAM from address 0 up to <em>TOLUD</em>, then a hole below 4 GiB for device registers and PCIe — with the DRAM that would have sat in the hole remapped above 4 GiB, up to <em>TOUUD</em>.',
+      'Memory works. The fresh training results stay in RAM for now: they are written to flash later in this boot, and only if they changed (this board’s BIOS does it from a 64-bit DXE driver, SaveMemoryConfig; coreboot after PCI enumeration). The memory controller’s map is programmed: DRAM from address 0 up to <em>TOLUD</em>, then a hole below 4 GiB for device registers and PCIe — with the DRAM that would have sat in the hole remapped above 4 GiB, up to <em>TOUUD</em>.',
       'Slices are fenced off before anyone else can see them: <em>TSEG</em> for System Management Mode, stolen memory for the integrated GPU, a region for the security engine, protected ranges for DMA and for the cores’ C6 save area (PRMRR; this chip has no SGX). Each region gets its memory type when the MTRRs are rewritten.',
     ],
     facts: [
       ['Host-bridge registers', 'TOLUD BCh · TOUUD A8h · TSEG B8h · BDSM B0h'],
-      ['TSEG size (FSP default)', '4 MB release / 16 MB debug'],
+      ['TSEG size (FSP default)', '4 MiB release / 16 MiB debug'],
     ],
     code: { src: 'coreboot …/systemagent/memmap.c (comment)', href: SRC.memmap[1], lines: MEMMAP_ART, at: (p) => Math.min(MEMMAP_ART.length - 1, Math.floor(span(p, 0.05, 0.95) * MEMMAP_ART.length)) },
     mem: { on: ['flash', 'lapic', 'car', 'dram', 'mmio', 'high'], hit: ['dram', 'high'], note: 'DRAM exists' },
@@ -826,8 +817,6 @@ export const STAGE2 = [
       A.bus('ddrA', 0.8, ACT.dram, { rate: 14, speed: 90 })
       A.bus('ddrB', 0.8, ACT.dram, { rate: 14, speed: 90 })
       A.chips(() => 0.3, ACT.dram)
-      A.bus('spi', win(p, 0.05, 0.3), ACT.fetch, { rate: 8, speed: 25 })
-      A.board('spi', win(p, 0.05, 0.3), ACT.fetch, 'scan')
     },
     labels: ['dimmA', 'dimmB'],
   },
@@ -869,7 +858,7 @@ export const STAGE2 = [
     stage: 2,
     title: 'Thirty-one sleepers get a doorbell',
     dur: 14,
-    real: 0.03,
+    real: 0.05,
     mode: 'prot',
     shot: 'die',
     narration: [
@@ -882,7 +871,7 @@ export const STAGE2 = [
       ['AP entry', 'CS = 3000h, IP = 0 → 30000h (coreboot)'],
       ['In parallel?', 'yes — one broadcast; EDK2’s default then waits a fixed 50 ms to count them unless the platform sets its CPU count'],
     ],
-    code: { src: 'coreboot src/cpu/x86/sipi_vector.S', href: SRC.sipi[1], lines: SIPI_VECTOR, at: (p) => Math.min(SIPI_C, Math.floor(span(p, 0.2, 0.9) * (SIPI_C + 1))) },
+    code: { src: 'coreboot src/cpu/x86/sipi_vector.S', href: SRC.sipi[1], lines: SIPI_VECTOR, at: (p) => Math.min(SIPI_C, walk(p, [[0.27, 0], [0.45, 20], [0.63, SIPI_C]])) },
     mem: { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['lapic', 'dram'] },
     sources: [SRC.sipi, SRC.mpinit, SRC.mplib, SRC.sdm],
     lps: (p) => wave(p, 0.18, 0.9, ['real', 'prot', 'park'], { before: 'wfs', bspMode: 'prot', spread: 0.35 }),
@@ -937,9 +926,10 @@ export const STAGE2 = [
       const order = i === 0 ? 31 : i - 1
       const k = span(p, 0.06, 0.94) * 32
       const rest = i === 0 ? 'prot' : 'park'
-      if (k < order) return rest
-      if (k < order + 0.4) return 'real'
-      if (k < order + 0.9) return 'prot'
+      // the SMI lands after SendSmiIpi; the BSP spins on mRebased meanwhile
+      if (k < order + 0.45) return rest
+      if (k < order + 0.7) return 'real'
+      if (k < order + 0.95) return 'prot'
       return rest
     },
     act(p, A) {
