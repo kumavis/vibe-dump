@@ -90,7 +90,9 @@ export function buildWater(island) {
          float foamBand = 1.0 - smoothstep(0.0, 0.4, depth + (n1 - 0.5) * 0.25);
          float foam = foamBand * smoothstep(0.35, 0.65, n2 + 0.25 * sin(depth * 9.0 - uTime * 2.2));
          float churn = wNoise(vWorldPos.xz * 0.8 + vec2(uTime * 0.9, -uTime * 1.3));
-         foam = max(foam, vRush * smoothstep(0.4, 0.75, churn * 0.55 + n2 * 0.55));
+         // white water needs water under it: it thins out toward the banks, so
+         // its own edge is soft and the waterline stays the plain shallow one
+         foam = max(foam, vRush * smoothstep(0.3, 1.2, depth) * smoothstep(0.4, 0.75, churn * 0.55 + n2 * 0.55));
          wc = mix(wc, vec3(0.92, 0.95, 0.93), clamp(foam, 0.0, 1.0) * 0.7);
          float alpha = mix(0.35, 0.93, smoothstep(0.0, 2.6, depth));
          alpha = max(alpha, foam * 0.75);

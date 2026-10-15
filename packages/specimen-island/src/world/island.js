@@ -20,14 +20,22 @@ const MOUTH = { tidal: 35, length: 130, grade: 0.045, widen: 1.2, shoal: 0.35, o
 
 // River water stands on grid vertices within WET half-widths of the centre;
 // the surface keeps BANK m under the lower bank, cutting down at most to its
-// own level CUT m downstream (see carveRiver).
+// own level CUT m downstream, and the cut changes by at most EASE of the
+// profile's own fall a sample (see carveRiver).
 const WET = 1.3
 const BANK = 0.4
 const CUT = 20
+const EASE = 0.25
 
 // The inland sheet's dry corners sit this far under their own ground, so the
 // sheet always ends against the bank, waves and all (water.js: ±0.11 m).
 const SINK = 0.15
+
+// The levee settleWater banks a dry corner of the sheet up to: `height` m over
+// the water, and on the river's banks (within `reach` half-widths of its
+// centre) `rise` m more per half-width past the last wet corner, at most
+// `most` m more: the slope carveRiver gives the river's own banks.
+const LEVEE = { height: 0.2, rise: 0.9, most: 0.6, reach: 4.5 }
 
 // A wreck's lot beside the road (see world/structures.js WRECKS for the
 // models): how far off the centreline it sits, and its body's footprint.
@@ -312,19 +320,23 @@ export class Island {
     // reaches grid corners well past its bank, and where the land falls away
     // across the flow (it slants down the mountain's flank) those corners stood
     // below the surface and the water spilled out over them. So the surface
-    // also keeps under the lower bank, out to the farthest corner a wet cell
+    // also holds under the lower bank, out to the farthest corner a wet cell
     // reaches, and the river cuts into the hillside instead of perching on it,
-    // but never deeper than its own level CUT m downstream: a steep reach
-    // swallows the cut within a few metres and the gentle plains below keep
-    // their level. What that leaves (the outside of the bend at the foot of the
-    // mountain lies lower than even the plains river) settleWater banks up. The
-    // estuary has its own, gentler bank cap below.
+    // but never deeper than its own level CUT m downstream, so a steep reach
+    // takes up most of the cut. It holds wherever a bank is that low, plains
+    // included: on the home island the cut is over before them, on other seeds
+    // it can lower a stretch of the plains river. What it leaves (the outside
+    // of the bend at the foot of the mountain lies lower than even the plains
+    // river) settleWater banks up. The estuary has its own, gentler bank cap
+    // below.
     const natural = new Float32Array(K)
     let run = Infinity
     for (let k = 0; k < K; k++) natural[k] = run = Math.min(run - 0.03, line[k] - 1.2)
     const hold = new Float32Array(K).fill(Infinity)
+    const downOf = new Int32Array(K) // the sample CUT m downstream
     for (let k = 0, down = 0; k < K; k++) {
       while (down < K - 1 && along[down] < along[k] + CUT) down++
+      downOf[k] = down
       if (est[k] > 0.01) continue
       const kk = Math.min(K - 1, k + 1)
       const k0 = Math.max(0, k - 1)
@@ -340,7 +352,7 @@ export class Island {
         }
       }
       // ...plus the 3 cm a sample the profile falls anyway, so the cut rejoins it
-      // exactly there and nothing below moves
+      // there
       hold[k] = Math.max(low - BANK, natural[down] + (down - k) * 0.03)
     }
 
@@ -350,7 +362,7 @@ export class Island {
     const cap = new Float32Array(K)
     let prev = Infinity
     for (let k = 0; k < K; k++) {
-      prev = Math.min(prev - 0.03, line[k] - 1.2, hold[k])
+      prev = Math.min(prev - 0.03, line[k] - 1.2)
       surf[k] = nat[k] = Math.max(prev, sea)
       // near the coast the river comes down to the sea on a steady grade
       // instead of dropping off the coastal bluff, and never sits above its
@@ -395,8 +407,29 @@ export class Island {
         s += surf[kk]
         c++
       }
-      sm[k] = Math.min(s / c, cap[k], hold[k])
+      sm[k] = Math.min(s / c, cap[k])
     }
+    // Then the bank hold, as a cut under that profile. Taken sample by sample a
+    // low bank dropped the water metres in one step and the profile ran flat
+    // until it caught up: a cliff into a pool, with a straight crease across
+    // the stream. So the cut eases: it changes by at most EASE of the
+    // profile's own fall a sample (0.1 m where that is flat), coming in above a
+    // low bank and going out below it, so the reach keeps falling on something
+    // like its own grade. Easing never takes the water under what it is held to
+    // in the next CUT m, so where a steep reach meets a gentle one, the gentle
+    // one keeps its level.
+    const cut = new Float32Array(K)
+    for (let k = 0; k < K; k++) cut[k] = Math.max(0, sm[k] - hold[k])
+    const most = new Float32Array(K)
+    for (let k = 0; k < K; k++) {
+      let below = Infinity
+      for (let j = k + 1; j <= downOf[k]; j++) below = Math.min(below, sm[j] - cut[j] + (j - k) * 0.03)
+      most[k] = Math.max(cut[k], sm[k] - below)
+    }
+    const ease = (k, from, fall) => Math.min(most[k], Math.max(cut[k], cut[from] - Math.max(0.1, EASE * fall)))
+    for (let k = 1; k < K; k++) cut[k] = ease(k, k - 1, sm[k - 1] - sm[k])
+    for (let k = K - 2; k >= 0; k--) cut[k] = ease(k, k + 1, sm[k] - sm[k + 1])
+    for (let k = 0; k < K; k++) sm[k] -= cut[k]
     for (let k = 1; k < K; k++) sm[k] = Math.min(sm[k], sm[k - 1] - 0.01)
     for (let k = 0; k < K; k++) sm[k] = Math.max(sm[k], sea)
     // While the river still runs above the sea its bed stays above sea level (a
@@ -495,12 +528,17 @@ export class Island {
   // The inland water as drawn and as the physics reads it. Every grid cell with
   // a wet corner carries the sheet (water.js), so its dry corners have to hold
   // the water: one that sat under the water beside it let the sheet float out
-  // over the lower ground and end in a straight cell edge. Such a corner is
-  // banked up to the water, the river's low levee at the grid's own resolution
-  // (faded out as the surface comes down to the sea, never on the seabed or
-  // the estuary's open sand), and every dry corner of the sheet then sits at
-  // the water's level but never above its own ground less SINK: the sheet
-  // always runs into the bank, so its edge is the terrain's.
+  // over the lower ground and end in a straight cell edge. So every dry corner
+  // is banked up to a low LEVEE at the grid's own resolution, on the river or
+  // the lake shore (faded out as the surface comes down to the sea, never on
+  // the seabed or the estuary's open sand), and either can gain a few raised
+  // corners here. Beside the river the levee also rises with the corner's
+  // distance from the channel: banked level, a narrow reach's dry corners all
+  // stood the same few centimetres over the water, so its waterline hugged
+  // them, ran along the grid and jogged a whole cell where it changed column.
+  // Every dry corner of the sheet then sits at the water's level but never
+  // above its own ground less SINK: the sheet always runs into the bank, so
+  // its edge is the terrain's.
   settleWater() {
     const n = this.n
     const W = this.water
@@ -539,7 +577,9 @@ export class Island {
           }
         level = s / c
       }
-      if (h[id] > sea && h[id] < level) h[id] = lerp(h[id], level + 0.2, smoothstep(0.05, 0.8, level - sea) * (1 - this.riverE[id]))
+      const nd = this.riverD[id]
+      const top = level + LEVEE.height + (nd < LEVEE.reach ? Math.min(LEVEE.most, Math.max(0, nd - WET) * LEVEE.rise) : 0)
+      if (h[id] > sea && h[id] < top) h[id] = lerp(h[id], top, smoothstep(0.05, 0.8, level - sea) * (1 - this.riverE[id]))
       // out over the seabed the sheet stays level and fades into the sea instead
       S[id] = h[id] < sea ? level : Math.max(sea, Math.min(level, h[id] - SINK))
     }
