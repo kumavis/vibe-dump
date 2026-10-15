@@ -458,7 +458,7 @@ export function buildStation(G, poi, rng) {
     [8.6, 3.6],
   ])
     kit.box(0.12, 2.7, 0.12, 'metal', x, 1.35, z)
-  sign(G, kit, ['RANGER STATION', 'ALPHA'], -3.5, 9.5, 0)
+  sign(G, kit, ['RANGER STATION', 'ALPHA'], -3.5, 7.5, 0) // set back off the dock road's edge
   crate(G, kit, 6.2, 5.0, 'crate:station', null, rng)
   kit.finish()
   return kit
@@ -608,14 +608,15 @@ export function buildFieldLab(G, poi, rng, yaw) {
     gs.cz + 0.9,
   )
 
-  // light poles + power-on behaviour
+  // light poles + power-on behaviour, clear of the roads that meet at the
+  // yard's centre and leave along its +Z axis
   const bulbs = [genLamp, ...padLights]
   const lights = []
   for (const [x, z] of [
-    [0, 0],
+    [-6, -1],
     [-4, -20],
     [24, -6],
-    [4, 16],
+    [-6, 16],
   ]) {
     kit.cyl(0.12, 7, 'metal', x, 3.5, z, { seg: 6 })
     kit.box(1.2, 0.08, 0.08, 'metal', x + 0.5, 6.9, z, { collide: false })
@@ -625,7 +626,7 @@ export function buildFieldLab(G, poi, rng, yaw) {
     bulbs.push(b)
   }
   for (const [x, z] of [
-    [2, 0],
+    [-5, -1],
     [15, 7],
   ]) {
     const l = new THREE.PointLight(0xffd8a0, 0, 26, 1.6)
@@ -1162,7 +1163,8 @@ export function buildPoles(G, road, rng) {
     const px = bx + (-dz / l) * 5.5
     const pz = bz + (dx / l) * 5.5
     const lean = rng.chance(0.25) ? rng.range(0.1, 0.35) * rng.sign() : 0
-    if (isl.depthAt(px, pz) > -0.3 || isl.sample(isl.riverD, px, pz) < 2.6 || byBridge(px, pz)) continue
+    // beside this road can still be on another one where roads fork or bend back
+    if (isl.depthAt(px, pz) > -0.3 || isl.sample(isl.riverD, px, pz) < 2.6 || byBridge(px, pz) || isl.sample(isl.road, px, pz) > 0.02) continue
     acc = 0
     const g = isl.heightAt(px, pz)
     const ry = Math.atan2(dx, dz)
