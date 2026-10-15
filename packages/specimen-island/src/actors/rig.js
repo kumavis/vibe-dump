@@ -58,6 +58,7 @@ const WHITE = new THREE.Color(1, 1, 1)
 const _p = new THREE.Vector3()
 const _n = new THREE.Vector3()
 const _m3 = new THREE.Matrix3()
+const ONE = new THREE.Vector3(1, 1, 1)
 
 // rings: [{ m: Matrix4 (ring lies in local XY, axis +Z), rx, ry, v, w: weights }]
 function tube(g, rings, sides, { capStart = true, capEnd = true, color = WHITE } = {}) {
@@ -301,12 +302,17 @@ function headBack(H, jawAt) {
 
 // The neck's cross-section at s in [0, n] (bone index + fraction along it):
 // its own taper out of the chest, eased into the back of the head, its centre
-// drifting to the head section's. Shared by the skin, the quills and the hit
-// spheres so the three agree.
+// drifting to the head section's. The ease runs over the last stretch only,
+// eight times as long as the girth it has to lose (a gentle cone) and never
+// shorter than the last bone; eased along the whole neck, the long necks
+// slimmed all the way up, and their dart zone with them. Shared by the skin,
+// the quills and the hit spheres so the three agree.
 function neckSection(B, T, s) {
-  const t = s / T.neck.length
-  const e = smoothstep(0, 1, t)
+  const n = T.neck.length
+  const t = s / n
   const hb = T.headBack
+  const drop = Math.max(0, B.neck.r * 0.9 - hb.rx, B.neck.r - hb.ry)
+  const e = smoothstep(Math.max(0, Math.min(1 - 1 / n, 1 - (drop * 8) / B.neck.len)), 1, t)
   return {
     rx: lerp(B.neck.r * (1.3 - 0.4 * t), hb.rx, e),
     ry: lerp(B.neck.r * (1.45 - 0.45 * t), hb.ry, e),
@@ -334,10 +340,25 @@ function buildGeometry(species, T) {
   const frontY = (quad ? B.shoulderH + B.torsoH * 0.22 : B.hipH + B.torsoH * 0.12) + 0
   const deep = B.torsoH * (quad ? 1 : 1.05)
   const tailR = B.tail.r / Math.max(B.torsoR, B.torsoH)
-  // The front end is the neck's base section, on each axis: one ratio for
+  // A ring of the neck's skin at s (bone index + fraction along it).
+  const nN = T.neck.length
+  const neckRing = (s) => {
+    const i = Math.min(nN - 1, Math.floor(s))
+    const sec = neckSection(B, T, s)
+    return {
+      m: W(T.neck[i]).clone().multiply(M(0, sec.y, (s - i) * (B.neck.len / nN))),
+      rx: sec.rx,
+      ry: sec.ry,
+      v: 0.55 + (s / nN) * 0.2,
+      w: chainWeights(s, nN, (j) => I[T.neck[j]], I.chest, I.head),
+    }
+  }
+  // the torso hands over to the neck half a bone up it (see the sweep below)
+  const HAND = 0.5
+  const hand = neckRing(HAND)
+  // The front end is the neck's section there, on each axis: one ratio for
   // both left a narrow body's shoulders inside a rounder neck, which stood
   // out of them like a sleeve.
-  const neckBase = neckSection(B, T, 0)
   const profile = (front) => [
     [0, Math.max(0.3, tailR * 1.2)],
     [0.2, 0.86],
@@ -346,8 +367,8 @@ function buildGeometry(species, T) {
     [0.88, 0.75],
     [1, Math.max(0.28, front)],
   ]
-  const profX = profile(neckBase.rx / B.torsoR)
-  const profY = profile(neckBase.ry / deep)
+  const profX = profile(hand.rx / B.torsoR)
+  const profY = profile(hand.ry / deep)
   const shape = (t, prof) => {
     for (let i = 0; i < prof.length - 1; i++) {
       if (t <= prof[i + 1][0]) {
@@ -359,9 +380,6 @@ function buildGeometry(species, T) {
     return prof[prof.length - 1][1]
   }
   const torsoT = (z) => Math.max(0, Math.min(1, (z - z0) / (z1 - z0)))
-  const torsoY = (z) => hipY + (frontY - hipY) * torsoT(z)
-  const torsoTop = (z) => torsoY(z) + deep * shape(torsoT(z), profY)
-  const torsoSide = (z) => B.torsoR * shape(torsoT(z), profX)
   const torsoBone = (z) => (z < chestZ * 0.55 ? I.hips : I.chest)
   const torsoWeights = (z) => {
     const wChest = Math.max(0, Math.min(1, (z - chestZ * 0.15) / (chestZ * 0.85)))
@@ -370,23 +388,66 @@ function buildGeometry(species, T) {
       [I.chest, wChest],
     ]
     if (z < -B.pelvisLen * 0.4) w.push([I.tail0, ((-B.pelvisLen * 0.4 - z) / (B.pelvisLen * 0.6)) * 0.4])
-    if (z > B.torsoLen * 0.9) w.push([I.neck0, ((z - B.torsoLen * 0.9) / (B.torsoLen * 0.15)) * 0.35])
+    if (z > B.torsoLen * 0.9) w.push([I.neck0, Math.min(1, (z - B.torsoLen * 0.9) / (B.torsoLen * 0.15)) * 0.35])
     return w
   }
-  const rings = []
-  const N = 10
-  for (let r = 0; r <= N; r++) {
-    const t = r / N
-    const z = z0 + (z1 - z0) * t
-    rings.push({ m: M(0, torsoY(z), z), rx: B.torsoR * shape(t, profX), ry: deep * shape(t, profY), v: 0.12 + t * 0.4, w: torsoWeights(z) })
+  // Over its front part the torso's rings sweep along a curve into that neck
+  // ring, turning with it, so the chest runs up into the throat and the back
+  // into the nape, and the last ring is the neck's own. The neck used to plug
+  // in above the torso's rounded front: a pipe on a ball from below, worst on
+  // the upright bipeds, whose neck rises from high on the chest.
+  const SWEEP = 0.7
+  const zAt = (t) => z0 + (z1 - z0) * t
+  const yAt = (t) => hipY + (frontY - hipY) * t
+  const p0 = new THREE.Vector3(0, yAt(SWEEP), zAt(SWEEP))
+  const p3 = new THREE.Vector3().setFromMatrixPosition(hand.m)
+  const q3 = new THREE.Quaternion().setFromRotationMatrix(hand.m)
+  const reach = p0.distanceTo(p3) / 3
+  const p1 = p0.clone().addScaledVector(new THREE.Vector3(0, frontY - hipY, z1 - z0).normalize(), reach)
+  const p2 = p3.clone().addScaledVector(new THREE.Vector3(0, 0, 1).applyQuaternion(q3), -reach)
+  const torsoRing = (t) => {
+    const ring = { rx: B.torsoR * shape(t, profX), ry: deep * shape(t, profY), v: 0.12 + t * 0.4 }
+    if (t <= SWEEP) return { ...ring, m: M(0, yAt(t), zAt(t)), w: torsoWeights(zAt(t)) }
+    if (t >= 1) return hand
+    const u = (t - SWEEP) / (1 - SWEEP)
+    const k = 1 - u
+    const p = p0.clone().multiplyScalar(k * k * k).addScaledVector(p1, 3 * k * k * u).addScaledVector(p2, 3 * k * u * u).addScaledVector(p3, u * u * u)
+    const e = smoothstep(0, 1, u)
+    // the neck takes the skin over late, so the shoulders still ride the chest
+    const w = mixWeights(torsoWeights(p.z), hand.w, smoothstep(0.5, 1, u))
+    return { ...ring, m: new THREE.Matrix4().compose(p, new THREE.Quaternion().slerp(q3, e), ONE), v: lerp(ring.v, hand.v, e), w }
   }
-  tube(g, rings, sides)
+  const rings = []
+  for (let r = 0; r <= 7; r++) rings.push(torsoRing(r / 10))
+  for (let r = 1; r <= 12; r++) rings.push(torsoRing(SWEEP + (r / 12) * (1 - SWEEP)))
+  // The torso's surface by z, for what sits on it or grows out of it: the
+  // centre, top and half-width of the ring there, swept rings included.
+  const along = []
+  for (let r = 0; r <= 48; r++) {
+    const ring = torsoRing(SWEEP + (r / 48) * (1 - SWEEP))
+    const c = new THREE.Vector3().setFromMatrixPosition(ring.m)
+    along.push({ z: c.z, y: c.y, top: c.y + new THREE.Vector3(0, 1, 0).transformDirection(ring.m).y * ring.ry, side: ring.rx })
+  }
+  const torsoAt = (z) => {
+    const t = torsoT(z)
+    if (t <= SWEEP) return { y: yAt(t), top: yAt(t) + deep * shape(t, profY), side: B.torsoR * shape(t, profX) }
+    let i = 0
+    while (i < along.length - 2 && along[i + 1].z < z) i++
+    const a = along[i]
+    const b = along[i + 1]
+    const f = Math.max(0, Math.min(1, (z - a.z) / (b.z - a.z)))
+    return { y: lerp(a.y, b.y, f), top: lerp(a.top, b.top, f), side: lerp(a.side, b.side, f) }
+  }
+  const torsoY = (z) => torsoAt(z).y
+  const torsoTop = (z) => torsoAt(z).top
+  const torsoSide = (z) => torsoAt(z).side
 
-  // ---- neck chain, blending into the chest and on into the head
+  // ---- neck chain, on from the chest's sweep into the head: one tube with
+  // the torso, so the ring they share is one set of vertices, not two
+  // polygons that leave slivers between them
   {
     const rs = []
-    const n = T.neck.length
-    const nL = B.neck.len / n
+    const n = nN
     const per = n > 3 ? 2 : 3
     const hb = T.headBack
     // the last ring is the head's own back section, carried mostly by the
@@ -394,17 +455,13 @@ function buildGeometry(species, T) {
     const neckEnd = [[I.head, 0.7], [I[T.neck[n - 1]], 0.3]]
     for (let i = 0; i < n; i++) {
       for (let k = 0; k < per; k++) {
-        const u = (k / per) * nL
         const s = i + k / per
-        const t = s / n
-        const w = chainWeights(s, n, (j) => I[T.neck[j]], I.chest, I.head)
-        const sec = neckSection(B, T, s)
-        rs.push({ m: W(T.neck[i]).clone().multiply(M(0, sec.y, u)), rx: sec.rx, ry: sec.ry, v: 0.55 + t * 0.2, w })
+        if (s > HAND) rs.push(neckRing(s))
       }
     }
     rs.push({ m: W('head').clone().multiply(M(0, hb.y, 0)), rx: hb.rx, ry: hb.ry, v: 0.75, w: neckEnd })
     // capped inside the head: the jaw's rounded back leaves the end open to view
-    tube(g, rs, 10, { capStart: false, capEnd: true })
+    tube(g, [...rings, ...rs], sides)
   }
 
   // ---- head and jaw
@@ -501,7 +558,9 @@ function buildGeometry(species, T) {
       }
     }
     rs.push({ m: W(T.tail[n - 1]).clone().multiply(M(0, 0, -tL, 0, Math.PI, 0)), rx: B.tail.r * 0.05, ry: B.tail.r * 0.06, v: 0.01, w: [[I[T.tail[n - 1]], 1]] })
-    tube(g, rs, 10, { capStart: false })
+    // as many sides as the torso, so the ring they share is the same polygon
+    // (turned half round, it maps onto itself) and leaves no slivers open
+    tube(g, rs, sides, { capStart: false })
     if (B.features.includes('club')) {
       rigid(g, new THREE.SphereGeometry(B.tail.r * 1.4, 10, 8), W(T.tail[n - 1]).clone().multiply(M(0, 0, -tL * 0.8, 0, 0, 0, 1.3, 0.7, 1)), I[T.tail[n - 1]], stripe)
     }
@@ -662,6 +721,20 @@ function chainWeights(s, n, boneOf, parentIdx, childIdx) {
   out.push([boneOf(j), 1 - f])
   out.push([boneOf(j + 1), f])
   return out
+}
+
+// Two weight lists blended, each normalised first: f = 0 is all a, 1 all b.
+// Heaviest first, since a vertex keeps four.
+function mixWeights(a, b, f) {
+  const out = new Map()
+  for (const [list, k] of [
+    [a, 1 - f],
+    [b, f],
+  ]) {
+    const sum = list.reduce((acc, [, w]) => acc + w, 0) || 1
+    for (const [i, w] of list) out.set(i, (out.get(i) || 0) + (w / sum) * k)
+  }
+  return [...out].filter(([, w]) => w > 0).sort((x, y) => y[1] - x[1])
 }
 
 // Ray-cast spheres riding the bones: [{ bone, offset, r, zone }]
