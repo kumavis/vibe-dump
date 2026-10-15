@@ -31,6 +31,7 @@ export class Stats {
       this.bump(procedure)
       this.bump(`${procedure}:${creature.species.id}`)
       if (procedure === 'blood') this.addToSet('speciesBlood', creature.species.id)
+      if (procedure === 'tissue') this.addToSet('speciesTissue', creature.species.id)
     })
     events.on('creature:died', ({ creature, cause }) => {
       if (cause === 'predation') return this.bump('predation')

@@ -36,6 +36,7 @@ export class HUD {
     })
     this.buildCompass()
     this.viewfinder = new Viewfinder(G)
+    addEventListener('resize', () => this.placeToasts())
   }
 
   set(key, el, value, prop = 'textContent') {
@@ -50,12 +51,20 @@ export class HUD {
     const d = document.createElement('div')
     d.className = 'toast ' + kind
     d.textContent = text
+    this.placeToasts()
     this.el.toasts.prepend(d)
     while (this.el.toasts.children.length > 6) this.el.toasts.lastChild.remove()
     setTimeout(() => d.classList.add('out'), seconds * 1000)
     setTimeout(() => d.remove(), seconds * 1000 + 600)
     if (kind === 'objective') this.G.audio?.play('objective')
     else if (kind === 'penalty') this.G.audio?.play('penalty')
+  }
+
+  // Toasts stack under the objective list, which the survey's "Still needed"
+  // lines make tall enough to reach 38% on a laptop screen: never over it.
+  placeToasts() {
+    const bottom = this.el.objectives.getBoundingClientRect().bottom
+    this.el.toasts.style.top = `max(38%, ${Math.ceil(bottom) + 8}px)`
   }
 
   hit(e) {
@@ -128,9 +137,11 @@ export class HUD {
     const objs = G.objectives
       .active()
       .slice(0, 4)
-      .map((o) => `<div class="obj"><b>${o.title}</b>${objs_progress(G, o)}<br><span>${o.text}</span></div>`)
+      .map((o) => `<div class="obj"><b>${o.title}</b>${objs_progress(G, o)}<br><span>${o.text}</span>${objs_missing(G, o)}</div>`)
       .join('')
+    const relaid = this.cache.objs !== objs
     this.set('objs', this.el.objectives, objs, 'html')
+    if (relaid) this.placeToasts()
 
     // compass
     this.updateCompass(camYaw)
@@ -311,4 +322,10 @@ export class HUD {
 function objs_progress(G, o) {
   const pr = G.objectives.progress(o)
   return pr ? ` <em>${pr}</em>` : ''
+}
+
+// which species an all-species objective still wants (the journal has the rest)
+function objs_missing(G, o) {
+  const left = G.objectives.missingText(o, 3)
+  return left ? `<small>Still needed: ${left}</small>` : ''
 }

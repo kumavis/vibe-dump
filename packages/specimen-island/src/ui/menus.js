@@ -1,3 +1,6 @@
+import { MISSIONS } from '../data/objectives.js'
+import { SPECIES_ORDER } from '../data/species.js'
+
 // Title, pause, death, debrief and lore-note screens, plus the settings sheet
 // that both the title and the pause menu open.
 
@@ -156,23 +159,31 @@ export class Menus {
     this.hooks.resume(true)
   }
 
-  showDebrief() {
+  // The end of a mission: the score, what the island has given up so far, and
+  // this mission's ledger. A mission with a `next` offers to carry straight on.
+  showDebrief(mission = MISSIONS.expedition) {
     const G = this.G
     const S = G.scoring
+    const n = SPECIES_ORDER.length
     const el = $('debrief').querySelector('.inner')
-    const species = G.science.catalogue.size
-    el.innerHTML = `<h2>Expedition debrief</h2>
+    const since = G.objectives.startedAt(mission.id)
+    const rows = S.ledger.filter((e) => e.time >= since)
+    const earned = rows.reduce((a, e) => a + e.delta, 0)
+    const next = mission.next && !G.objectives.isStarted(mission.next) ? MISSIONS[mission.next] : null
+    const rowHtml = (e) => `<div class="row ${e.delta < 0 ? 'bad' : ''}"><span>${e.reason}</span><b>${e.delta > 0 ? '+' : ''}${e.delta}</b></div>`
+    el.innerHTML = `<h2>${mission.debrief}</h2>
       <p style="font-size:28px;margin:4px 0"><b>${S.total}</b> pts — <span style="color:var(--accent)">${S.rank()}</span></p>
-      <p style="color:var(--dim)">Species catalogued ${species}/10 · Blood samples ${G.stats.get('blood')} · Tags ${G.stats.get('tag')} · Animals killed ${G.stats.get('kills')} (overdoses ${G.stats.get('overdoses')}) · Times spotted ${G.stats.get('detections')}</p>
-      <div class="ledger">${S.ledger
-        .slice(-14)
-        .reverse()
-        .map((e) => `<div class="row ${e.delta < 0 ? 'bad' : ''}"><span>${e.reason}</span><b>${e.delta > 0 ? '+' : ''}${e.delta}</b></div>`)
-        .join('')}</div>
-      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn primary" id="keepGoing">Keep exploring</button><button class="btn" id="newGame">New expedition</button></div>`
+      ${since > 0 ? `<p style="margin:0">${mission.title}: <b>${earned > 0 ? '+' : ''}${earned}</b> pts</p>` : ''}
+      <p style="color:var(--dim)">Species catalogued ${G.science.catalogue.size}/${n} · Blood from ${G.stats.get('speciesBlood')}/${n} species (${G.stats.get('blood')} samples) · Photographed ${G.photos.count}/${n} · Tags ${G.stats.get('tag')} · Animals killed ${G.stats.get('kills')} (overdoses ${G.stats.get('overdoses')}) · Times spotted ${G.stats.get('detections')}</p>
+      <div class="ledger">${rows.slice(-14).reverse().map(rowHtml).join('')}</div>
+      ${next ? `<p class="brief"><b>${next.title}.</b> ${next.brief}</p>` : ''}
+      <div style="display:flex;gap:10px;margin-top:12px">${
+        next ? `<button class="btn primary" id="nextMission">Continue — ${next.title}</button>` : '<button class="btn primary" id="keepGoing">Keep exploring</button>'
+      }<button class="btn" id="newGame">New expedition</button></div>`
     this.show('debrief')
-    el.querySelector('#keepGoing').onclick = () => {
+    el.querySelector(next ? '#nextMission' : '#keepGoing').onclick = () => {
       this.show('debrief', false)
+      if (next) G.objectives.start(next.id)
       this.hooks.resume()
     }
     el.querySelector('#newGame').onclick = () => location.reload()

@@ -284,9 +284,9 @@ async function boot() {
     } else if (!G.paused) pause()
   })
   G.events.on('player:died', () => setTimeout(() => G.menus.show('death'), 2200))
-  G.events.on('expedition:complete', () =>
+  G.events.on('mission:complete', ({ mission }) =>
     setTimeout(() => {
-      G.menus.showDebrief()
+      G.menus.showDebrief(mission)
       setPaused(true)
       input.unlock()
     }, 2500),

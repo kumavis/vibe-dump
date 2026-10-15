@@ -34,6 +34,7 @@ export class Scoring {
     })
     ev.on('player:died', () => this.add(-250, 'Medical evacuation', 'penalty'))
     ev.on('objective:done', ({ objective }) => this.add(objective.final ? 500 : 100, `Objective: ${objective.title}`, 'bonus'))
+    ev.on('mission:complete', ({ mission }) => this.add(mission.bonus || 0, `${mission.title} complete`, 'bonus'))
   }
 
   add(delta, reason, category) {

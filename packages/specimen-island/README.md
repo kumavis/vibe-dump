@@ -38,6 +38,22 @@ Scoring lives in `src/game/scoring.js`: scans and procedures earn points (×1.25
 scaled by quality (a better retake pays only the difference), and every kill or
 overdose costs the species' penalty.
 
+### After the expedition: the Full Survey
+
+Extraction at the Supply Dock ends the expedition with a debrief. **Continue — Full
+Survey** carries on where you stand with a second objective chain: scan every
+species, draw blood from every species (everything collected on the expedition
+counts), fetch the keeper's jumbo syringe from Paddock C for the brachiosaurs,
+then get the sample set into the Field Lab's cold store. The HUD counts each set
+("Blood Bank 6/10") and names what is still missing; the journal's Species tab
+marks what each animal still owes the survey (with a scan / blood / photo check
+on every card) and, for species you have not met, gives the Foundation's sighting
+notes — size, company and haunts — instead of the name. Nothing restocks the
+island, so a species wiped out before its blood was drawn owes a tissue sample
+from a carcass instead, and the HUD and journal say so. Finishing pays a bonus
+into the ledger and opens a second debrief, "Survey complete". **New expedition**
+on either debrief starts over.
+
 ## Architecture
 
 The game is built as **data + services + systems**, so most iteration is editing
@@ -63,7 +79,8 @@ src/
                      colliders, feedback, surfaces, spawn, ecology streaming
     encounters.js    guaranteed early herds in sight of the pier and the station
     items.js         inventory caps, start kit, caches, loot tables
-    objectives.js    the expedition, as unlock/complete rules
+    objectives.js    the missions (the expedition, then the Full Survey) as
+                     unlock/complete rules
     world.js         island layout: mountain, river, lake, POIs, roads
     lore.js          notes left by the last team (each teaches a system)
   world/
@@ -91,7 +108,7 @@ src/
     photos.js        the Field Camera: framing, visibility (physics rays + a small
                      ID render), grading, the album, the shutter's payout
     science.js interaction.js inventory.js
-  game/              stealth model, flags/stats, scoring, objectives runner
+  game/              stealth model, flags/stats, scoring, the missions/objectives runner
   vehicles/
     vehicle.js       the shared base: boarding/exit, colliders, cameras, AI noise,
                      damage feedback, field repair
@@ -130,8 +147,17 @@ src/
   `G.vehicles`; boarding, exit, damage feedback, field repair and the map marker
   come from the base class. The HUD's vehicle panel switches on `kind`.
 - **Add an objective:** append to `data/objectives.js`; `done` is a `reach`,
-  `flag`, `item` or `stat` test. Anything can set a flag (`G.flags.set`) and the
-  stats counters are derived from bus events in `game/state.js`.
+  `flag`, `item` or `stat` test, `allSpecies` (every species in a stats set such
+  as `speciesBlood`; the HUD counts it and its `need` labels what each missing
+  species still owes in the journal; `extinct` names a second set that counts
+  for a species with none left alive, labelled by `needExtinct`) or `any` of
+  several. Anything can set a flag (`G.flags.set`) and the stats counters are
+  derived from bus events in `game/state.js`.
+- **Add a mission:** an entry in `MISSIONS` and objectives tagged with its id in
+  `mission`, one of them `final`. Its objectives stay locked until
+  `G.objectives.start(id)` — a mission's debrief offers its `next` as the
+  Continue button — and are then tested against everything earned before.
+  Completing it emits `mission:complete`, pays its `bonus` and opens its debrief.
 - **Add a building:** write a prefab in `world/structures.js` with the `Kit`
   (boxes become merged geometry and colliders; `kit.interact()` registers E
   actions) and place it from `buildStructures`, or add a POI in `data/world.js`.
@@ -167,6 +193,7 @@ simulation without rendering, which is how the headless playtests drive it.
 `?play` skips the title screen, `?god` makes the player invulnerable, `?seed=N`
 grows a different island. `__G.gfx` holds the autodetect's state (`gpu`,
 `guess`, `ladder`, `auto` — the live TierController — and the current `tier` and
-`pixelRatio`). `__G.photos.evaluate()` grades the current view as the shutter
-would, and `__G.audio.renderStep(surface)` renders one footstep offline so its
-envelope can be measured.
+`pixelRatio`). `__G.objectives.start('survey')` takes up the Full Survey
+without finishing the expedition first. `__G.photos.evaluate()` grades the
+current view as the shutter would, and `__G.audio.renderStep(surface)` renders
+one footstep offline so its envelope can be measured.

@@ -7,6 +7,23 @@ import { formatTime } from '../core/mathx.js'
 // collected from each, the photo album (each species' best shot), and the
 // Foundation's running ledger of your conduct.
 
+const BIOMES = { jungle: 'jungle', beach: 'the beaches', swamp: 'swamp', grass: 'grassland', highland: 'the highlands' }
+
+// What the Foundation's old records say about a species nobody has scanned yet:
+// enough to go looking for it, not its name. Derived from the species data, so
+// a new species gets one for free.
+function sightingNote(sp) {
+  const size = sp.mass < 20 ? 'Tiny' : sp.mass < 150 ? 'Small' : sp.mass < 1000 ? 'Mid-sized' : sp.mass < 10000 ? 'Large' : 'Giant'
+  const [lo, hi] = sp.herd
+  const group = hi <= 1 ? 'solitary' : hi === 2 ? 'alone or in pairs' : `groups of ${lo}–${hi}`
+  const where = Object.entries(sp.habitat)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2)
+    .map(([b]) => BIOMES[b] || b)
+    .join(' and ')
+  return `${size} ${sp.diet}, ${group}; last recorded in ${where}.`
+}
+
 export class Journal {
   constructor(G, el) {
     this.G = G
@@ -35,22 +52,33 @@ export class Journal {
     const tabs = `<div class="tabs">${tab('species', 'Species')}${tab('photos', 'Photos')}${tab('ledger', 'Ledger')}${tab('help', 'Field manual')}</div>`
     let body = ''
     if (this.tab === 'species') {
-      body = '<div class="cards">'
+      const n = SPECIES_ORDER.length
+      const O = G.objectives
+      // what the active objectives still want from each species (the Full Survey)
+      const open = O.active().filter((o) => o.need && O.missing(o).length)
+      const needs = {}
+      for (const o of open) for (const id of O.missing(o)) (needs[id] ||= []).push(O.need(o, id))
+      const needLine = (id) => (needs[id] ? `<div class="need">Still needed: ${needs[id].join(', ')}${O.extinct(id) ? ' — none left alive' : ''}</div>` : '')
+      const photo = (id) => `<span class="${G.photos.album[id] ? 'done' : ''}">photo</span>`
+      body = `<div class="ledger"><div class="cats">Catalogued ${G.science.catalogue.size}/${n} · Blood from ${G.stats.get('speciesBlood')}/${n} species · Photographed ${G.photos.count}/${n}${open
+        .map((o) => `<br><b>${o.title} ${O.progress(o)}</b> — still needed: ${O.missingText(o)}`)
+        .join('')}</div></div><div class="cards">`
       for (const id of SPECIES_ORDER) {
         const sp = SPECIES[id]
         const s = sum[id]
         if (!s.scanned) {
-          body += `<div class="card unknown"><h3>Unknown species</h3><p>Catalogue it with the Field Scanner to unlock its file.</p></div>`
+          const note = needs[id] ? `<p class="sighting">Foundation records: ${sightingNote(sp)}</p>` : ''
+          body += `<div class="card unknown${needs[id] ? ' needed' : ''}"><h3>Unknown species</h3><p>Catalogue it with the Field Scanner to unlock its file.</p>${note}<div class="sci"><span>scan</span>${photo(id)}</div>${needLine(id)}</div>`
           continue
         }
-        const marks = ['blood', 'measure', 'tag', 'tissue'].map((k) => `<span class="${s[k] ? 'done' : ''}">${k}${s[k] > 1 ? ' ×' + s[k] : ''}</span>`).join('')
+        const marks = ['blood', 'measure', 'tag', 'tissue'].map((k) => `<span class="${s[k] ? 'done' : ''}">${k}${s[k] > 1 ? ' ×' + s[k] : ''}</span>`).join('') + photo(id)
         const dose = doseCard(sp)
-        body += `<div class="card t-${sp.temperament}"><h3>${sp.name}</h3><em>${sp.latin}</em><p>${sp.blurb}</p>
+        body += `<div class="card t-${sp.temperament}${needs[id] ? ' needed' : ''}"><h3>${sp.name}</h3><em>${sp.latin}</em><p>${sp.blurb}</p>
           <dl><dt>Temperament</dt><dd>${sp.temperament}</dd><dt>Mass</dt><dd>${sp.mass.toLocaleString()} kg</dd>
           <dt>Knockout</dt><dd>${dose.ko}</dd>
           <dt>Overdose</dt><dd>${dose.od}</dd>
           <dt>Blood value</dt><dd>${sp.science.blood} pts</dd><dt>Kill penalty</dt><dd class="bad">−${sp.killPenalty}</dd></dl>
-          <div class="sci">${marks}</div>${s.kills ? `<div class="bad">Killed: ${s.kills}</div>` : ''}</div>`
+          <div class="sci">${marks}</div>${needLine(id)}${s.kills ? `<div class="bad">Killed: ${s.kills}</div>` : ''}</div>`
       }
       body += '</div>'
     } else if (this.tab === 'photos') {
@@ -70,6 +98,7 @@ export class Journal {
         <h3>Field Camera</h3><p>[6] Hold right mouse to raise it to your eye; the wheel turns the zoom ring; left mouse takes the picture (then a second to wind on). A photo is graded on how much of the frame the animal fills, how much of it you can actually see — leaves and grass count — whether its head is in, a rule-of-thirds point over dead centre, a steady hand, and what it is doing: a roar or a charge beats a nap, and an animal that never noticed you is worth more. Each species pays its photo value once, scaled by quality; a better retake pays only the difference. The album is the Photos tab.</p>
         <h3>Vehicles</h3><p>Walk up to a door of the station jeep or the helicopter and press [E]; [E] again gets you out once it has stopped or landed, and [V] switches the camera. Jeep: [W]/[S] drive, [A]/[D] steer, [Space] handbrake, [F] headlights. It fords water up to the axles and no deeper, and anything small under the bull bar counts as a kill. Helicopter: [Space]/[Shift] climb and descend, [W]/[S] pitch, [A]/[D] slide, the mouse turns; it burns fuel, and a hard landing costs hull. A wreck can be patched up where it lies — hold [E] on it — enough to limp home; the pump on the lab helipad refuels and repairs properly.</p>
         <h3>Tools</h3><p>[G] throws a stone — a noise somewhere else. [T] lights a flare — animals will not come near it for twenty seconds. [H] uses a medkit. [R] reloads, right mouse aims. [J] or [Tab] opens this journal, [M] the map.</p>
+        <h3>Full Survey</h3><p>When the expedition is over its debrief offers a second season: scan every species and draw blood from every one of them. Everything collected on the expedition counts, and a species wiped out before you drew its blood will have to make do with a carcass’s tissue. The Species tab marks what each animal still owes the survey, and for species you have not met yet it gives the Foundation’s old sighting notes — size, company and haunts. A brachiosaur goes through rifle darts faster than you can find them; the keeper’s jumbo syringe at Paddock C was made for it.</p>
         <h3>Temperaments</h3><p>Skittish animals bolt and take the herd with them. Defensive ones threaten inside their personal space and charge if you push — or shoot. Aggressive ones hunt you. Passive giants ignore you; do not stand underfoot.</p></div>`
     }
     this.el.querySelector('.inner').innerHTML = `<h2>Field Journal</h2>${tabs}${body}<div class="foot">[J] / [Tab] close</div>`
