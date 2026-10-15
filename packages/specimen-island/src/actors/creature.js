@@ -115,13 +115,13 @@ export class Creature {
   }
 
   // A blow aimed at the player lands on whatever vehicle they are in — unless
-  // it is a helicopter hovering out of reach.
+  // it is a helicopter hovering out of reach. The vehicle decides how much of
+  // it gets through to them (Vehicle.strike).
   strikePlayer(G, damage, knock) {
     const v = G.vehicle
     if (v) {
       if (v.pos.y > this.pos.y + this.sp.body.hipH * this.scale * 2 + 1) return
-      v.shove(this.pos, knock * 0.4)
-      return v.damage(damage * v.tune.strikeMul, this.center())
+      return v.strike(damage, knock, this.pos, this.center())
     }
     G.player.damage(damage, this.pos, knock)
   }

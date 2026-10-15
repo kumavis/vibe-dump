@@ -3,14 +3,17 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { clamp, damp, dampAngle, lerp, segDist, yawDirX, yawDirZ, yawTo } from '../core/mathx.js'
 import { paintedMetal } from '../world/textures.js'
 import { JEEP } from '../data/vehicles.js'
+import { SHAKE } from '../data/shake.js'
 import { Vehicle } from './vehicle.js'
 
 // The station's ranger jeep: an open-top 4x4 at real scale. Arcade but
 // grounded — W/S throttle, brake and reverse, A/D steer (less at speed),
-// Space handbrake, F headlights. Quick on the dirt roads, slower and bumpier
-// across country; it climbs what its engine can, fords up to 0.8 m of water
-// and stops dead at anything deeper. Every wheel samples its own patch of
-// ground, and the body rides springs over the four of them.
+// Space handbrake (the tail slides), F headlights. Quick on the dirt roads and
+// bridge decks, slower and bumpier across country; it climbs what its engine
+// can, fords up to 0.8 m of water and won't drive any deeper, though it can
+// always back out. If it does get stuck, the board prompt winches it free.
+// Every wheel samples its own patch of ground, and the body rides springs
+// over the four of them.
 //
 // It shares the island with the animals: small ones go under the bull bar
 // (which the Foundation counts as killing them), big ones stop it cold and
@@ -48,11 +51,15 @@ export class Jeep extends Vehicle {
     this.liftV = 0
     this.spinAngle = 0
     this.lights = false
+    this.warmedFor = null
     this.lookIdle = 0
     this.wetToastT = -99
+    this.stuckT = 0 // seconds the driver has been asking to move and getting nowhere
+    this.stuckToast = false
     this.engineQuiet = true
     this.wheelH = [pos.y, pos.y, pos.y, pos.y]
     this.surface = { road: 1, cover: 0, wading: 0, top: JEEP.top.road }
+    this.winchAction = { label: 'Winch the jeep out onto firm ground', hold: JEEP.winch.hold, use: () => this.winchOut() }
     this.buildModel()
     this.settle()
     this.park()
@@ -61,6 +68,39 @@ export class Jeep extends Vehicle {
 
   boardLabel() {
     return 'Drive jeep'
+  }
+
+  // A wreck gets the field repair; a jeep its last driver couldn't move (bogged
+  // in a river, wedged on a bank) gets winched out.
+  recovery() {
+    if (this.destroyed) return this.fieldRepairAction
+    return this.stuckT > this.tune.winch.stuckAfter ? this.winchAction : null
+  }
+
+  // Haul it onto the nearest clear, dry, level patch, facing away from
+  // wherever it was stuck.
+  winchOut() {
+    const G = this.G
+    const spot = findWinchSpot(G, this.pos, this.tune.winch.range)
+    if (!spot) {
+      // let the driver have another go rather than lock them out of it
+      this.stuckT = 0
+      G.toast('Nothing firm within reach to winch against', 'warn')
+      return
+    }
+    this.unpark()
+    this.pos.copy(spot.pos)
+    this.yaw = spot.yaw
+    this.camYaw = spot.yaw
+    this.vel.set(0, 0, 0)
+    this.vy = 0
+    this.pitchV = this.rollV = 0
+    this.stuckT = 0
+    this.stuckToast = false
+    this.settle()
+    this.park()
+    G.audio?.play('pump', { pos: this.pos })
+    G.toast('Winched clear — back on firm ground.', 'info')
   }
 
   // ------------------------------------------------------------ model
@@ -167,15 +207,16 @@ export class Jeep extends Vehicle {
     // headlamp lenses and their lights
     const lens = new THREE.Mesh(mergeGeometries([-0.47, 0.47].map((x) => new THREE.CylinderGeometry(0.105, 0.105, 0.02, 14).rotateX(Math.PI / 2).translate(x, 1.0, -2.105))), this.lensMat)
     g.add(lens)
+    // One beam from between the lamps, in the scene only while it's on: a
+    // light that exists at intensity 0 still costs every lit pixel on the
+    // island (three.js loops over every visible light).
     const Lt = T.lights
-    this.headlights = []
-    for (const x of [-0.47, 0.47]) {
-      const l = new THREE.SpotLight(0xfff0d0, 0, Lt.range, Lt.angle, Lt.penumbra, Lt.decay)
-      l.position.set(x, 1.0, -2.15)
-      l.target.position.set(x * 0.6, 0, -22)
-      g.add(l, l.target)
-      this.headlights.push(l)
-    }
+    const beam = new THREE.SpotLight(0xfff0d0, Lt.intensity, Lt.range, Lt.angle, Lt.penumbra, Lt.decay)
+    beam.position.set(0, 1.0, -2.15)
+    beam.target.position.set(0, 0, -22)
+    beam.visible = false
+    g.add(beam, beam.target)
+    this.headlight = beam
     // stencilled doors
     const decal = new THREE.MeshLambertMaterial({ map: doorDecal(), transparent: true, depthWrite: false })
     for (const s of [-1, 1]) {
@@ -256,24 +297,40 @@ export class Jeep extends Vehicle {
   // ------------------------------------------------------------ in and out
   onEnter() {
     const G = this.G
+    this.warmLights()
     if (G.sky && G.sky.light < 0.35 && !this.lights) this.setLights(true)
     G.audio?.play('ignition', { pos: this.pos })
     G.toast('W/S: drive · A/D: steer · Space: handbrake · F: headlights · V: camera · Mouse: look · E: exit (stopped)', 'info', 7)
   }
 
-  onExit() {
-    this.vel.set(0, 0, 0)
-    this.vy = 0
+  // Climbing out of a stopped jeep leaves it parked (Vehicle.exit). Thrown
+  // out of a moving one, it rolls on under the handbrake until it stops.
+  onExit(force) {
+    if (!force) this.vy = 0
     this.steer = 0
     if (this.lights) this.setLights(false)
   }
 
   setLights(on) {
     this.lights = on
-    for (const l of this.headlights) l.intensity = on ? this.tune.lights.intensity : 0
+    this.headlight.visible = on
     this.lensMat.emissive.setHex(on ? 0xfff0c8 : 0x000000)
     this.tailMat.emissive.setHex(on ? 0x701008 : 0x000000)
     this.G.audio?.play('click')
+  }
+
+  // Switching the beam on adds a light to every lit shader, and the first
+  // time that would stall while they all recompile. So compile those
+  // variants ahead, in the background, once the player comes near — and
+  // again after a quality change, which rebuilds the shaders anyway.
+  warmLights() {
+    const G = this.G
+    const tier = G.gfx?.tier ?? 'default'
+    if (this.warmedFor === tier || this.lights || !G.renderer?.compileAsync) return
+    this.warmedFor = tier
+    this.headlight.visible = true
+    G.renderer.compileAsync(G.scene, G.camera).catch(() => {})
+    this.headlight.visible = false
   }
 
   // ------------------------------------------------------------ per frame
@@ -302,15 +359,21 @@ export class Jeep extends Vehicle {
     }
     if (this.parked && !this.occupied) {
       // parked: nothing moves but the engine winding down
+      const p = G.player.pos
+      if (Math.hypot(p.x - this.pos.x, p.z - this.pos.z) < this.tune.lights.warmRange) this.warmLights()
       this.rpm = damp(this.rpm, 0, 3, dt)
       this.engineAudio(0)
       this.updateCommon(dt, 0)
+      this.sync()
       return
     }
     this.drive(dt, throttle, steerIn, handbrake)
   }
 
   drive(dt, throttle, steerIn, handbrake) {
+    // a zero-length frame (two rAF callbacks with one timestamp) would divide
+    // by zero below and leave the body NaN for good
+    if (!(dt > 0)) return
     const G = this.G
     const T = this.tune
     const W = T.wheel
@@ -319,8 +382,10 @@ export class Jeep extends Vehicle {
     const alive = !this.destroyed
     const grounded = this.onGround
 
-    // ---- what we are driving on
-    const road = clamp(isl.sample(isl.road, this.pos.x, this.pos.z), 0, 1)
+    // ---- what we are driving on: a deck (bridge planks, the helipad) rides like road
+    let road = clamp(isl.sample(isl.road, this.pos.x, this.pos.z), 0, 1)
+    const deck = ph.groundInfo(this.pos.x, this.pos.z, this.pos.y + 0.3)
+    if (deck.collider && Math.abs(this.pos.y - deck.y) < 0.3) road = 1
     const offroad = 1 - road
     const cover = clamp(isl.coverAt(this.pos.x, this.pos.z), 0, 1)
     const wading = clamp((isl.waterAt(this.pos.x, this.pos.z) - this.pos.y) / T.wade, 0, 1)
@@ -328,8 +393,8 @@ export class Jeep extends Vehicle {
     this.surface = { road, cover, wading, top }
 
     // ---- longitudinal: engine, brakes, slope, rolling resistance
-    let s = Math.sin(this.yaw)
-    let c = Math.cos(this.yaw)
+    const s = Math.sin(this.yaw)
+    const c = Math.cos(this.yaw)
     let vf = this.vel.x * -s + this.vel.z * -c
     let vr = this.vel.x * c + this.vel.z * -s
     if (grounded) {
@@ -338,7 +403,7 @@ export class Jeep extends Vehicle {
         else if (vf < top) vf += T.accel * throttle * (1 - 0.65 * (vf / top) ** 2) * dt
       } else if (alive && throttle < 0) {
         if (vf > 0.3) vf = Math.max(0, vf - T.brake * dt)
-        else if (vf > -T.top.reverse) vf -= T.accel * 0.6 * dt
+        else if (vf > -T.top.reverse) vf -= T.reverseAccel * dt
       }
       vf -= 9.8 * Math.sin(this.slope || 0) * dt
       let drag = lerp(T.rolling.offroad, T.rolling.road, road) + cover * offroad * 1.5 + wading * 3
@@ -353,23 +418,33 @@ export class Jeep extends Vehicle {
     this.steer = damp(this.steer, steerIn * steerMax, T.steer.rate, dt)
     let yawRate = grounded ? (vf * Math.tan(this.steer)) / (2 * W.z) : 0
     if (handbrake && grounded && Math.abs(vf) > 3) yawRate += steerIn * T.handbrakeYaw * clamp(Math.abs(vf) / 10, 0, 1)
-    this.yaw += yawRate * dt
     this.yawRate = yawRate
-    // tyres kill sideways slide — far less with the rear wheels locked
-    if (grounded) vr *= Math.exp(-(handbrake ? T.grip.handbrake : lerp(T.grip.offroad, T.grip.road, road)) * dt)
-    s = Math.sin(this.yaw)
-    c = Math.cos(this.yaw)
+    // ---- tyres: they kill sideways slip and turn most of it back into
+    // forward speed (a rolling tyre steers the jeep rather than scrubbing it),
+    // the less the more sideways it is going. The locked rear wheels of a
+    // handbrake turn hold almost nothing, so the tail steps out.
+    if (grounded) {
+      const vr0 = vr
+      vr *= Math.exp(-(handbrake ? T.grip.handbrake : lerp(T.grip.offroad, T.grip.road, road)) * dt)
+      const keep = handbrake ? 0 : (T.grip.redirect * vf * vf) / (vf * vf + vr0 * vr0 + 1e-9)
+      vf = Math.sign(vf) * Math.sqrt(vf * vf + (vr0 * vr0 - vr * vr) * keep)
+    }
+    // The velocity stays in the world; only the body turns. Next frame the
+    // turn shows up as sideways slip for the tyres to deal with.
     this.vel.x = -s * vf + c * vr
     this.vel.z = -c * vf - s * vr
+    this.yaw += yawRate * dt
 
-    // ---- move, refusing water deeper than it can ford
+    // ---- move, refusing to drive deeper into water than it can ford — but
+    // always letting it climb back out, whichever way it is pointing
+    const endZ = vf >= 0 ? -T.halfLength : T.halfLength
+    const depthBefore = this.endDepth(endZ)
     const px = this.pos.x
     const pz = this.pos.z
     this.pos.x += this.vel.x * dt
     this.pos.z += this.vel.z * dt
-    const lp = this.toWorld(0, vf >= 0 ? -T.halfLength : T.halfLength, _c)
-    const lg = ph.groundAt(lp.x, lp.z, this.pos.y + T.stepUp)
-    if (isl.waterAt(lp.x, lp.z) - lg > T.wade) {
+    const depthAfter = this.endDepth(endZ)
+    if (depthAfter > T.wade && depthAfter > depthBefore) {
       this.pos.x = px
       this.pos.z = pz
       this.vel.x += s * vf
@@ -384,6 +459,18 @@ export class Jeep extends Vehicle {
 
     this.collideStatics()
     this.collideCreatures()
+
+    // ---- stuck: the driver keeps asking to go and it isn't going anywhere
+    if (this.occupied && alive && throttle !== 0 && this.speed < 0.3) {
+      this.stuckT += dt
+      if (this.stuckT > T.winch.stuckAfter && !this.stuckToast) {
+        this.stuckToast = true
+        G.toast(T.toasts.stuck, 'warn', 7)
+      }
+    } else if (this.speed > 1.5) {
+      this.stuckT = 0
+      this.stuckToast = false
+    }
 
     // ---- ground: four contacts, springs between them and the body
     const maxY = this.pos.y + T.stepUp
@@ -403,15 +490,18 @@ export class Jeep extends Vehicle {
     this.slope = Math.atan2(hF - hR, 2 * W.z)
     this.vy -= 9.8 * dt
     this.pos.y += this.vy * dt
+    const gndRate = (gnd - this.lastGnd) / dt
     if (this.pos.y <= gnd) {
       if (!this.onGround) {
+        // measured against the ground's own fall: rolling down a slope is no landing
         const L = T.landing
-        if (-this.vy > L.min) this.damage((-this.vy - L.min) * L.k, new THREE.Vector3(this.pos.x, gnd + 0.3, this.pos.z))
+        const hit = gndRate - this.vy
+        if (hit > L.min) this.damage((hit - L.min) * L.k, new THREE.Vector3(this.pos.x, gnd + 0.3, this.pos.z))
         this.liftV += this.vy * 0.35
       }
       this.pos.y = gnd
-      // ride the ground's own climb, so a crest taken fast throws you
-      this.vy = clamp((gnd - this.lastGnd) / dt, -3, 3)
+      // ride the ground's own fall or climb; a crest taken fast throws you
+      this.vy = clamp(gndRate, -T.follow.down, T.follow.up)
       this.onGround = true
     } else this.onGround = this.pos.y - gnd < 0.08
     this.lastGnd = gnd
@@ -542,7 +632,7 @@ export class Jeep extends Vehicle {
           cr.pos.z += nz * fling
           this.vel.x -= nx * closing * share
           this.vel.z -= nz * closing * share
-          this.shake = Math.min(1, this.shake + 0.2)
+          if (this.occupied) G.shake?.add(SHAKE.bump)
           G.fx?.blood(contact)
           G.audio?.play('fleshHit', { pos: contact })
           // deliberately on the player's account: it scores as a kill
@@ -599,6 +689,7 @@ export class Jeep extends Vehicle {
 
   chaseCamera(cam, dt) {
     const G = this.G
+    const ph = G.physics
     const C = this.tune.chase
     this.camYaw = dampAngle(this.camYaw, this.yaw + this.lookYaw, C.follow, dt)
     const fx = this.pos.x
@@ -607,18 +698,54 @@ export class Jeep extends Vehicle {
     const dx = -yawDirX(this.camYaw) * C.back
     const dz = -yawDirZ(this.camYaw) * C.back
     const dy = C.up - 1.5 - this.lookPitch * 4
-    // pull in rather than look through a wall, a boulder or a hillside
+    // Pull in rather than look through a wall, a boulder or a hillside. One
+    // ray slips through a window, so cast a fan round the camera spot (the
+    // extra ones skip terrain, which the height clamp below handles).
     const L = Math.hypot(dx, dy, dz)
-    const hit = G.physics.raycast(fx, fy, fz, dx / L, dy / L, dz / L, L, { ignoreTag: 'tree' })
-    const k = hit ? Math.max(1.2, hit.t - 0.35) / L : 1
+    const rx = Math.cos(this.camYaw)
+    const rz = -Math.sin(this.camYaw)
+    let t = L
+    for (const [side, up] of CAM_FAN) {
+      const ex = dx + rx * side
+      const ey = dy + up
+      const ez = dz + rz * side
+      const l = Math.hypot(ex, ey, ez)
+      const hit = ph.raycast(fx, fy, fz, ex / l, ey / l, ez / l, l, side || up ? RAY_FAN : RAY_MAIN)
+      if (hit) t = Math.min(t, (hit.t / l) * L)
+    }
+    let k = t < L ? Math.max(1.2, t - 0.35) / L : 1
+    // A doorway lets every ray through, so also back the camera out from
+    // under any roof the jeep itself isn't under.
+    const roofed = (x, y, z) => ph.ceilingAt(x, z, y) < y + 4
+    if (!roofed(fx, fy, fz)) while (k * L > 1.2 && roofed(fx + dx * k, fy + dy * k, fz + dz * k)) k = Math.max(1.2 / L, k - 0.5 / L)
     const cx = fx + dx * k
     const cz = fz + dz * k
     const cy = Math.max(fy + dy * k, G.island.heightAt(cx, cz) + 0.7, G.island.waterAt(cx, cz) + 0.4)
-    const f = Math.min(1, dt * 10)
+    // easing in from a pulled-in spot would pass through the wall for a few
+    // frames, so pulling in snaps; following and easing back out stay smooth
+    const cur = Math.hypot(cam.position.x - fx, cam.position.y - fy, cam.position.z - fz)
+    const f = k < 1 && cur > k * L + 0.05 ? 1 : Math.min(1, dt * 10)
     cam.position.set(lerp(cam.position.x, cx, f), lerp(cam.position.y, cy, f), lerp(cam.position.z, cz, f))
     cam.lookAt(fx + yawDirX(this.camYaw) * C.lookAhead, fy + 0.2, fz + yawDirZ(this.camYaw) * C.lookAhead)
   }
+
+  // Water depth under one end of the jeep (local z), from the ground it would stand on.
+  endDepth(lz) {
+    const e = this.toWorld(0, lz, _c)
+    return this.G.island.waterAt(e.x, e.z) - this.G.physics.groundAt(e.x, e.z, this.pos.y + this.tune.stepUp)
+  }
 }
+
+// The chase camera's ray fan: offsets (right, up) in metres at the camera spot.
+const RAY_MAIN = { ignoreTag: 'tree' }
+const RAY_FAN = { ignoreTag: 'tree', terrain: false }
+const CAM_FAN = [
+  [0, 0],
+  [0, 0.6],
+  [0, -0.6],
+  [0.5, 0],
+  [-0.5, 0],
+]
 
 // ---------------------------------------------------------------- building
 
@@ -773,6 +900,24 @@ function footprintClear(G, x, z, yaw, floorY) {
     }
   }
   return true
+}
+
+// The nearest clear, dry, level patch a jeep fits on within `range` of
+// `from`, out from under any roof, facing away from `from`.
+function findWinchSpot(G, from, range) {
+  for (let r = 4; r <= range; r += 2) {
+    const n = Math.max(12, Math.round(r * 1.5))
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2
+      const x = from.x + Math.sin(a) * r
+      const z = from.z + Math.cos(a) * r
+      const y = G.island.heightAt(x, z)
+      if (G.island.depthAt(x, z) > 0.05 || G.physics.ceilingAt(x, z, y + 0.5) < y + 3) continue
+      const yaw = yawTo(from.x, from.z, x, z)
+      if (footprintClear(G, x, z, yaw, y)) return { pos: new THREE.Vector3(x, y, z), yaw }
+    }
+  }
+  return null
 }
 
 function findStationSpot(G) {

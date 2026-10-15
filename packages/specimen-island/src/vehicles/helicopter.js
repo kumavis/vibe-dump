@@ -6,18 +6,23 @@ import { Vehicle } from './vehicle.js'
 
 // The station's old helicopter. Arcade flight: Space/Shift collective, W/S
 // pitch to fly forward/back, A/D slide, mouse yaws. It needs fuel (the pad's
-// pump needs the lab generator), lands on anything flat, and is very loud —
-// every animal for 150 m hears it coming.
+// pump needs the lab generator), lands on anything flat — a healthy rotor
+// cushions the last few metres, so holding Shift sets you down — and is very
+// loud: every animal for 150 m hears it coming.
 //
 // Parked, it is a cabin + boom + tail of colliders traced off the model; in
-// flight the cabin, the boom and the tail rotor each test the trunks and walls
-// they pass, so clipping a tree with the tail hurts and spins you. Damage is
-// loud and visible (see Vehicle.damage); below 20% hull the engine sputters,
-// at 0 it autorotates. The pad pump services it back to new.
+// flight the cabin, the whole boom and the tail rotor test the trunks and
+// walls they pass, so clipping a tree with the tail hurts and spins you.
+// Damage is loud and visible (see Vehicle.damage); below 20% hull the engine
+// sputters, at 0 it autorotates. The pad pump services it back to new; dry
+// anywhere else, its reserve tank can be hand-pumped through to limp home.
 
 const _c = { x: 0, z: 0 }
 const _n = new THREE.Vector3()
 const _seat = new THREE.Vector3()
+const _contacts = new Map()
+let _only = null
+const onlyThat = (c) => c === _only
 
 export class Helicopter extends Vehicle {
   constructor(G, pos, yaw) {
@@ -28,17 +33,32 @@ export class Helicopter extends Vehicle {
     this.sputter = 0
     this.sputterT = 0
     this.rotorAngle = 0
+    this.reserveAction = { label: 'Tank dry — hand-pump the reserve tank through', hold: HELI.reserve.hold, use: () => this.pumpReserve() }
     this.buildModel()
     this.park()
     this.registerBoard('heli')
   }
 
   boardLabel() {
-    return this.fuel > 0.02 ? 'Board helicopter' : 'Helicopter — tank is dry'
+    return this.fuel > this.tune.dry ? 'Board helicopter' : 'Helicopter — tank is dry'
   }
   canBoard() {
-    if (this.fuel <= 0.02) return this.G.flags.get('labPower') ? 'Refuel at the pad pump' : 'No fuel — the pump needs power'
+    if (this.fuel <= this.tune.dry) return this.G.flags.get('labPower') ? 'Refuel at the pad pump' : 'No fuel — the pump needs power'
     return true
+  }
+  onPad() {
+    return this.pos.distanceTo(this.G.island.poi.fieldlab.pad) <= this.tune.serviceRange
+  }
+  // Wrecked: the field repair. Dry anywhere but the pad: the reserve tank.
+  recovery() {
+    if (this.destroyed) return this.fieldRepairAction
+    return this.fuel <= this.tune.dry && !this.onPad() ? this.reserveAction : null
+  }
+  pumpReserve() {
+    const R = this.tune.reserve
+    this.fuel = Math.max(this.fuel, R.fuel)
+    this.G.audio?.play('pump', { pos: this.pos })
+    this.G.toast(`Reserve tank pumped through — about ${Math.round(R.fuel / this.tune.fuelBurn)} s of flying. Head for the pad.`, 'info', 6)
   }
 
   buildModel() {
@@ -133,9 +153,12 @@ export class Helicopter extends Vehicle {
   }
 
   // The pad pump: a full tank and a sound airframe.
+  needsService() {
+    return super.needsService() || this.fuel < 0.98
+  }
   service() {
     this.fuel = 1
-    this.repair()
+    super.service()
   }
 
   update(dt, input) {
@@ -174,7 +197,8 @@ export class Helicopter extends Vehicle {
       this.lookPitch = clamp(this.lookPitch - look.dy, -0.9, 0.6)
       if (input.pressed('camera')) this.toggleView()
       if (input.pressed('interact')) this.exit()
-      this.fuel = Math.max(0, this.fuel - dt * T.fuelBurn)
+      // fuel burns while the rotor is turning, not while you sit in a wreck
+      if (working && this.rpm > 0.3) this.fuel = Math.max(0, this.fuel - dt * T.fuelBurn)
       if (this.fuel <= 0 && working) G.toast('Out of fuel!', 'warn')
     }
     if (this.parked && !this.occupied && this.rpm < 0.01) {
@@ -204,6 +228,13 @@ export class Helicopter extends Vehicle {
     this.vel.x += (ax - this.vel.x * 0.33) * dt
     this.vel.z += (az - this.vel.z * 0.33) * dt
     this.vel.y += (ay - this.vel.y * 1.1) * dt
+    // ground cushion: near the ground a healthy rotor eases the sink rate, so
+    // holding Shift all the way down is a landing, not a crash
+    const C = T.cushion
+    if (working && this.rpm > C.rpm && !this.onGround && this.vel.y < 0) {
+      const below = this.pos.y - Math.max(G.physics.groundAt(this.pos.x, this.pos.z, this.pos.y + 1.5), isl.waterAt(this.pos.x, this.pos.z) - 0.2)
+      if (below < C.agl) this.vel.y = Math.max(this.vel.y, -lerp(C.sink, C.from, Math.max(0, below) / C.agl))
+    }
     this.pos.addScaledVector(this.vel, dt)
     this.pos.y = Math.min(this.pos.y, 430)
     this.pos.x = clamp(this.pos.x, -isl.half + 30, isl.half - 30)
@@ -219,13 +250,13 @@ export class Helicopter extends Vehicle {
       if (onTerrain) isl.normalAt(this.pos.x, this.pos.z, _n)
       else _n.set(0, 1, 0)
       const closing = -this.vel.dot(_n)
+      this.pos.y = gnd
+      this.onGround = true // before the damage, so a wreck on touchdown says so
       const I = T.impact.terrain
       if (closing > I.min) this.damage((closing - I.min) * I.k, new THREE.Vector3(this.pos.x, gnd + 0.2, this.pos.z))
-      this.pos.y = gnd
       if (this.vel.y < 0) this.vel.y = 0
       this.vel.x *= Math.max(0, 1 - dt * 4)
       this.vel.z *= Math.max(0, 1 - dt * 4)
-      this.onGround = true
     } else this.onGround = this.pos.y - gnd < 0.05
     const agl = this.pos.y - gnd
     if (this.occupied && agl > 8 && !G.flags.get('heliFlown')) G.flags.set('heliFlown')
@@ -243,51 +274,115 @@ export class Helicopter extends Vehicle {
   }
 
   // Trunks, walls, masts — tested by the cabin, the boom and the tail rotor.
+  // Each group of parts resolves only its deepest contact per frame: one
+  // push, one bounce, one damage.
   collideStatics() {
-    const G = this.G
-    const I = this.tune.impact
+    _contacts.clear()
     for (const s of this.tune.flight) {
-      const w = this.toWorld(s.x, s.z)
-      const ox = w.x
-      const oz = w.z
+      const c = s.z0 !== undefined ? this.capsuleContact(s) : this.circleContact(s)
+      if (!c) continue
+      const prev = _contacts.get(s.group)
+      if (!prev || c.depth > prev.depth) _contacts.set(s.group, c)
+    }
+    for (const c of _contacts.values()) this.resolveContact(c)
+  }
+
+  // A circle part: where it is, and the push that clears it.
+  circleContact(s) {
+    const w = this.toWorld(s.x, s.z)
+    const ox = w.x
+    const oz = w.z
+    _c.x = ox
+    _c.z = oz
+    if (!this.G.physics.collideCircle(_c, s.r, this.pos.y + s.y0, this.pos.y + s.y1, this.ownCollider)) return null
+    const px = _c.x - ox
+    const pz = _c.z - oz
+    const depth = Math.hypot(px, pz)
+    return depth < 1e-6 ? null : { s, ox, oz, px, pz, depth, r: s.r }
+  }
+
+  // The boom as a capsule tapering from r0 at z0 to r1 at z1: for each
+  // nearby static, the point along the boom that digs into it deepest, then
+  // the same push a circle there would get.
+  capsuleContact(s) {
+    const ph = this.G.physics
+    const y0 = this.pos.y + s.y0
+    const y1 = this.pos.y + s.y1
+    const a = this.toWorld(0, s.z0)
+    const ax = a.x
+    const az = a.z
+    const b = this.toWorld(0, s.z1)
+    const ex = b.x - ax
+    const ez = b.z - az
+    const len2 = ex * ex + ez * ez
+    let best = null
+    const list = ph.nearby(ax + ex / 2, az + ez / 2, Math.sqrt(len2) / 2 + s.r0 + 2).slice()
+    for (const col of list) {
+      if (col.y1 <= y0 || col.y0 >= y1 || col.ref === this) continue
+      // the boom point nearest the static: exact for a trunk, sampled for a box
+      let t = 0
+      if (col.type === 'cyl') t = clamp(((col.x - ax) * ex + (col.z - az) * ez) / len2, 0, 1)
+      else {
+        let worst = Infinity
+        for (let i = 0; i <= 12; i++) {
+          const ti = i / 12
+          const [lx, lz] = ph.toLocal(col, ax + ex * ti, az + ez * ti)
+          const d = Math.hypot(Math.max(0, Math.abs(lx) - col.hx), Math.max(0, Math.abs(lz) - col.hz)) - lerp(s.r0, s.r1, ti)
+          if (d < worst) {
+            worst = d
+            t = ti
+          }
+        }
+      }
+      const r = lerp(s.r0, s.r1, t)
+      const ox = ax + ex * t
+      const oz = az + ez * t
       _c.x = ox
       _c.z = oz
-      if (!G.physics.collideCircle(_c, s.r, this.pos.y + s.y0, this.pos.y + s.y1, this.ownCollider)) continue
+      _only = col
+      if (!ph.collideCircle(_c, r, y0, y1, onlyThat)) continue
       const px = _c.x - ox
       const pz = _c.z - oz
-      const pl = Math.hypot(px, pz)
-      if (pl < 1e-6) continue
-      const nx = px / pl
-      const nz = pz / pl
-      // velocity of this part, including any spin about the mast
-      const lx = ox - this.pos.x
-      const lz = oz - this.pos.z
-      const vx = this.vel.x + this.spin * lz
-      const vz = this.vel.z - this.spin * lx
-      const closing = -(vx * nx + vz * nz)
-      if (s.part === 'cabin') {
-        this.pos.x += px
-        this.pos.z += pz
-      } else {
-        // a struck tail mostly swings aside: part translation, part yaw
-        this.pos.x += px * 0.4
-        this.pos.z += pz * 0.4
-        const r2 = lx * lx + lz * lz || 1
-        const dYaw = (px * 0.6 * lz - pz * 0.6 * lx) / r2
-        this.yaw += dYaw
-        if (closing > 0.5) this.spin += Math.sign(dYaw || 1) * I.spin * Math.min(1, closing / 6)
-      }
-      const vn = this.vel.x * nx + this.vel.z * nz
-      if (vn < 0) {
-        this.vel.x -= nx * vn * (1 + I.bounce)
-        this.vel.z -= nz * vn * (1 + I.bounce)
-      }
-      const k = I[s.part]
-      this.lastHitPart = s.part
-      if (closing > k.min) {
-        const at = new THREE.Vector3(_c.x - nx * s.r, this.pos.y + (s.y0 + s.y1) / 2, _c.z - nz * s.r)
-        this.damage(Math.min(I.maxHit, (closing - k.min) * k.k), at)
-      }
+      const depth = Math.hypot(px, pz)
+      if (depth > 1e-6 && (!best || depth > best.depth)) best = { s, ox, oz, px, pz, depth, r }
+    }
+    _only = null
+    return best
+  }
+
+  // Push out, bounce, and charge the hit. The cabin takes the whole push; a
+  // struck tail mostly swings aside — part translation, part yaw and spin.
+  resolveContact({ s, ox, oz, px, pz, depth, r }) {
+    const I = this.tune.impact
+    const nx = px / depth
+    const nz = pz / depth
+    // velocity of this part, including any spin about the mast
+    const lx = ox - this.pos.x
+    const lz = oz - this.pos.z
+    const vx = this.vel.x + this.spin * lz
+    const vz = this.vel.z - this.spin * lx
+    const closing = -(vx * nx + vz * nz)
+    if (s.part === 'cabin') {
+      this.pos.x += px
+      this.pos.z += pz
+    } else {
+      this.pos.x += px * 0.4
+      this.pos.z += pz * 0.4
+      const r2 = lx * lx + lz * lz || 1
+      const dYaw = (px * 0.6 * lz - pz * 0.6 * lx) / r2
+      this.yaw += dYaw
+      if (closing > 0.5) this.spin += Math.sign(dYaw || 1) * I.spin * Math.min(1, closing / 6)
+    }
+    const vn = this.vel.x * nx + this.vel.z * nz
+    if (vn < 0) {
+      this.vel.x -= nx * vn * (1 + I.bounce)
+      this.vel.z -= nz * vn * (1 + I.bounce)
+    }
+    const k = I[s.part]
+    this.lastHitPart = s.part
+    if (closing > k.min) {
+      const at = new THREE.Vector3(ox + px - nx * r, this.pos.y + (s.y0 + s.y1) / 2, oz + pz - nz * r)
+      this.damage(Math.min(I.maxHit, (closing - k.min) * k.k), at)
     }
   }
 
@@ -301,7 +396,7 @@ export class Helicopter extends Vehicle {
     const s = this.tune.seat
     _seat.set(s[0], s[1], s[2]).applyEuler(this.model.rotation).add(this.pos)
     cam.position.copy(_seat)
-    cam.rotation.set(this.pitch * 0.6 + this.lookPitch * 0.8, this.yaw, -this.roll * 0.8)
+    cam.rotation.set(-this.pitch * 0.6 + this.lookPitch * 0.8, this.yaw, -this.roll * 0.8)
     this.camYaw = this.yaw
   }
 

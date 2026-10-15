@@ -13,6 +13,7 @@ import { Sky } from './world/sky.js'
 import { Vegetation } from './world/vegetation.js'
 import { buildStructures } from './world/structures.js'
 import { FX } from './world/fx.js'
+import { CameraShake } from './core/shake.js'
 import { Flags, Stats } from './game/state.js'
 import { Stealth } from './game/stealth.js'
 import { Scoring } from './game/scoring.js'
@@ -87,6 +88,7 @@ async function boot() {
   await nextFrame()
   G.veg = new Vegetation(G.island, G.physics, scene, cfg.seed)
   G.fx = new FX(scene, camera)
+  G.shake = new CameraShake(G.events)
   G.player = new Player(G)
   G.ui = { showNote: (entry) => showNote(entry) }
   G.toast = (text, kind, seconds) => G.hud?.toast(text, kind, seconds)
@@ -193,6 +195,8 @@ async function boot() {
   const anyOverlay = () => G.map.open || G.journal.open || G.menus.noteOpen
   const setPaused = (p) => {
     G.paused = p
+    // the engine and rotor loops hold their last level until the vehicle next updates
+    if (p) G.audio.pauseVehicles()
   }
   const resume = (fromOverlay) => {
     if (G.mode === 'title') return
@@ -400,7 +404,9 @@ async function boot() {
     requestAnimationFrame(frame)
     const dt = Math.min(0.05, (now - last) / 1000)
     last = now
-    simulate(dt)
+    // two callbacks with one timestamp (clamped-precision clocks), or a first
+    // frame stamped before boot: nothing to simulate, the input edges wait
+    if (dt > 0) simulate(dt)
     draw()
     if (booted < 4 && ++booted === 4) document.getElementById('boot')?.remove()
   }

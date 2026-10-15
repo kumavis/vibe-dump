@@ -426,6 +426,15 @@ export class Audio {
     r.whine.frequency.setTargetAtTime(300 + rpm * 900, ctx.currentTime, 0.3)
   }
 
+  // Paused (menu, map, journal): the engine and rotor loops go quiet. The
+  // vehicles set them again on their next update.
+  pauseVehicles() {
+    if (!this.ctx) return
+    const t = this.ctx.currentTime
+    if (this.rotor) this.rotor.g.gain.setTargetAtTime(0, t, 0.05)
+    if (this.engine) this.engine.g.gain.setTargetAtTime(0, t, 0.05)
+  }
+
   // The jeep's engine: two saws an octave apart and a lumpy noise rumble,
   // pitched by rpm, opened up by throttle, with a lope at idle.
   setEngine(rpm, load, pos, inside) {

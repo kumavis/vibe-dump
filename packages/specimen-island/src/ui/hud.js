@@ -28,6 +28,13 @@ export class HUD {
     G.events.on('dart:hit', (e) => this.hit(e))
     G.events.on('score', (e) => this.toast(`${e.delta > 0 ? '+' : ''}${e.delta}  ${e.reason}`, e.delta > 0 ? 'score' : 'penalty'))
     G.events.on('player:damaged', ({ amount }) => (this.vignette = Math.min(1, this.vignette + amount / 25)))
+    // the vehicle you are in reports its own hits: pulse the vignette, flash the hull readout
+    this.hullFlash = 0
+    G.events.on('vehicle:damaged', ({ vehicle, amount }) => {
+      if (!vehicle.occupied) return
+      this.vignette = Math.min(1, this.vignette + amount * VEHICLE_FX.vignettePerHp)
+      this.hullFlash = VEHICLE_FX.flashTime
+    })
     this.buildCompass()
     this.viewfinder = new Viewfinder(G)
   }
@@ -149,6 +156,7 @@ export class HUD {
     this.el.hurtArrow.style.transform = `translate(-50%,-50%) rotate(${-wrapAngle(p.hurtDir)}rad)`
 
     // vehicle panel (helicopter or jeep)
+    this.hullFlash = Math.max(0, this.hullFlash - dt)
     this.el.heliHud.classList.toggle('show', flying)
     if (flying) this.set('veh', this.el.heliHud, this.vehiclePanel(veh), 'html')
 
@@ -160,17 +168,21 @@ export class HUD {
     }
   }
 
-  // Speed, hull and (for the helicopter) altitude and fuel. A fresh hit flashes
-  // the hull readout red; a failing hull keeps blinking.
+  // Speed, hull and (for the helicopter) altitude, climb rate and fuel. A
+  // fresh hit flashes the hull readout red; a failing hull keeps blinking.
   vehiclePanel(v) {
     const G = this.G
     const blink = (hz) => Math.sin(G.time * hz * Math.PI * 2) > 0
-    const hullCls = v.flash > 0 ? (blink(6) ? 'flash' : 'warn') : v.health < VEHICLE_FX.warnBelow ? (blink(1.5) ? 'warn' : '') : v.health < VEHICLE_FX.smokeBelow ? 'warn' : ''
-    const hull = `<div class="hull${v.flash > 0 ? ' hit' : ''}">HULL <b class="${hullCls}">${Math.round(v.health)}%</b></div>`
+    const hit = this.hullFlash > 0
+    const hullCls = hit ? (blink(6) ? 'flash' : 'warn') : v.health < VEHICLE_FX.warnBelow ? (blink(1.5) ? 'warn' : '') : v.health < VEHICLE_FX.smokeBelow ? 'warn' : ''
+    const hull = `<div class="hull${hit ? ' hit' : ''}">HULL <b class="${hullCls}">${Math.round(v.health)}%</b></div>`
     const spd = `<div>SPD <b>${Math.round(v.speed * 3.6)}</b> km/h</div>`
     if (v.kind === 'heli') {
       const agl = v.pos.y - Math.max(G.island.heightAt(v.pos.x, v.pos.z), G.island.waterAt(v.pos.x, v.pos.z))
-      return `<div>ALT <b>${Math.round(agl)}</b> m</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}<div class="hint">${v.onGround ? 'E: exit · ' : ''}V: camera</div>`
+      // sinking faster than a skid landing can take, close to the ground: red
+      const vs = v.onGround ? 0 : v.vel.y
+      const sinkCls = vs < -v.tune.impact.terrain.min && agl < 15 ? 'warn' : ''
+      return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}<div class="hint">${v.onGround ? 'E: exit · ' : ''}V: camera</div>`
     }
     return `${spd}${hull}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? 'E: exit · ' : ''}Space: handbrake · F: lights · V: camera</div>`
   }

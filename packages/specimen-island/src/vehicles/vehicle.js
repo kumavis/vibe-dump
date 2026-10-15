@@ -3,23 +3,30 @@ import { clamp, lerp } from '../core/mathx.js'
 import { VEHICLE_FX } from '../data/vehicles.js'
 
 // What every ride on the island shares: getting in and out, the parked
-// colliders, the board prompt, seat / chase cameras, noise for the AI, and
-// damage that you can actually feel — crunch, shake, sparks, a flashing hull
-// readout, smoke, warning beeps.
+// colliders, the board prompt (which turns into a recovery when the vehicle
+// is wrecked or stranded), noise for the AI, and damage that you can
+// actually feel — crunch, sparks, smoke, warning beeps. The camera shake and
+// the HUD's flashing hull readout hear about hits through 'vehicle:damaged'.
 //
 // While someone is aboard, `G.vehicle` is this vehicle and the player's body
 // rides along (player.pos follows the seat), so anything that targets "the
-// player" — a charging trike, a stalking raptor — targets the vehicle. On
-// exit the player is set down on clear, walkable ground beside it.
+// player" — a charging trike, a stalking raptor — targets the vehicle, and its
+// blows go through strike(). On exit the player is set down on clear,
+// walkable ground beside it.
 //
-// Subclasses provide buildModel(), update(dt, input), boardLabel(), and may
-// override canBoard(), canExit(), seatCamera(), chaseCamera(), onEnter(),
-// onExit(), onDestroyed().
+// Subclasses provide buildModel(), update(dt, input), seatCamera(cam, dt) and
+// chaseCamera(cam, dt), and may override boardLabel(), canBoard(), canExit(),
+// recovery(), service(), onEnter(), onExit(force), onDestroyed().
+//
+// `pitch` and `roll` belong to each subclass's own flight or suspension
+// model, and so does their sign (the heli keeps +pitch nose down, the jeep
+// nose up); read `model.rotation` for the attitude actually drawn.
 
 const _door = new THREE.Vector3()
 const _w = { x: 0, z: 0 }
 const _probe = { x: 0, z: 0 }
 const _v = new THREE.Vector3()
+const _spark = new THREE.Vector3()
 
 export class Vehicle {
   constructor(G, tune, pos, yaw) {
@@ -41,13 +48,16 @@ export class Vehicle {
     this.lookYaw = 0
     this.lookPitch = 0
     this.visibility = tune.visibility
-    this.shake = 0
-    this.flash = 0
     this.noiseT = 0
     this.smokeT = 0
     this.warnT = 0
     this.colliders = []
     this.ownCollider = (c) => c.ref !== this
+    this.fieldRepairAction = {
+      label: `Field repair — patch the ${tune.name} up enough to limp home`,
+      hold: VEHICLE_FX.fieldRepair.hold,
+      use: () => this.fieldRepair(),
+    }
     // dying inside a vehicle throws you clear of it
     G.events.on('player:died', () => {
       if (this.occupied) this.exit(true)
@@ -99,7 +109,8 @@ export class Vehicle {
 
   // ------------------------------------------------------------ boarding
   // One prompt that sits at whichever door you are standing nearest. When the
-  // vehicle is wrecked the same prompt becomes a field repair.
+  // vehicle can't be used where it is (wrecked, stuck, out of fuel) the same
+  // prompt becomes the way to recover it.
   registerBoard(id) {
     const G = this.G
     const d = this.tune.door
@@ -112,12 +123,16 @@ export class Vehicle {
         const w = this.toWorld(side * d.x, d.z)
         return _door.set(w.x, this.pos.y + d.y, w.z)
       },
-      label: () => (this.destroyed ? `Field repair — patch the ${this.tune.name} up enough to limp home` : this.boardLabel()),
-      enabled: () => (this.occupied ? 'In use' : this.destroyed ? true : this.canBoard()),
-      onUse: () => (this.destroyed ? this.fieldRepair() : this.enter()),
+      label: () => this.recovery()?.label ?? this.boardLabel(),
+      enabled: () => (this.occupied ? 'In use' : this.recovery() ? true : this.canBoard()),
+      onUse: () => {
+        const r = this.recovery()
+        if (r) r.use()
+        else this.enter()
+      },
     })
-    // a wrecked vehicle wants a long hold, a working one a tap
-    Object.defineProperty(it, 'hold', { get: () => (this.destroyed ? VEHICLE_FX.fieldRepair.hold : 0), enumerable: true, configurable: true })
+    // a recovery wants a long hold, boarding a tap
+    Object.defineProperty(it, 'hold', { get: () => this.recovery()?.hold ?? 0, enumerable: true, configurable: true })
     this.board = it
   }
   boardLabel() {
@@ -125,6 +140,12 @@ export class Vehicle {
   }
   canBoard() {
     return true
+  }
+  // What the board prompt offers instead of boarding: { label, hold, use },
+  // or null when the vehicle is fine to board. A wreck gets a field repair;
+  // subclasses add their own ways of being stranded.
+  recovery() {
+    return this.destroyed ? this.fieldRepairAction : null
   }
 
   enter() {
@@ -141,6 +162,9 @@ export class Vehicle {
     p.crouching = false
     p.flashlight = false // player.update() is what dims it, and it won't run
     if (p.light) p.light.intensity = 0
+    // lower whatever was raised: weapons.update() only eases the aim down, and
+    // a raised Field Camera's zoom would carry into the vehicle camera
+    if (G.weapons) G.weapons.aim = 0
     this.ridePlayer(0)
     G.events.emit('vehicle:enter', { vehicle: this })
     G.events.emit(this.kind + ':enter', {})
@@ -172,9 +196,10 @@ export class Vehicle {
     G.player.pitch = 0
     G.events.emit('vehicle:exit', { vehicle: this })
     G.events.emit(this.kind + ':exit', {})
-    this.onExit()
+    this.onExit(force)
     return true
   }
+  // `force`: thrown clear (death) rather than climbing out of a stopped vehicle
   onExit() {}
 
   // Clear, walkable ground beside the vehicle: the door sides first, then a
@@ -221,35 +246,68 @@ export class Vehicle {
     // timers player.update() would otherwise run down
     p.blindT = Math.max(0, p.blindT - dt)
     p.fade = Math.max(0, p.fade - dt)
-    p.shake = Math.max(0, p.shake - dt * 2)
   }
 
   // ------------------------------------------------------------ damage
-  // Every hit is loud, shaky, sparky and on the HUD. `at` is the contact point.
-  damage(amount, at = null) {
+  // Every hit is loud and sparky, and announced on the bus: the camera shake
+  // and the HUD (vignette, flashing hull readout) listen for 'vehicle:damaged'.
+  // `at` is the contact point. `injure`: a hard enough smash hurts whoever is
+  // inside (strike() does its own accounting for animal blows).
+  damage(amount, at = null, injure = true) {
     const G = this.G
     const F = VEHICLE_FX
     if (!(amount > 0)) return
     const before = this.health
     this.health = Math.max(0, this.health - amount)
-    this.shake = Math.min(F.shakeMax, this.shake + amount * F.shakePerHp)
-    this.flash = F.flashTime
-    if (this.occupied && G.hud) G.hud.vignette = Math.min(1, (G.hud.vignette || 0) + amount * F.vignettePerHp)
     const p = at || this.modelPoint([0, 1.2, 0], new THREE.Vector3())
-    const bursts = clamp(Math.round(amount * F.sparksPerHp), 1, 6)
-    for (let i = 0; i < bursts; i++) G.fx?.sparks(p)
+    this.impactSparks(p, clamp(Math.round(amount * F.sparksPerHp), 1, 6))
     G.audio?.play('crash', { pos: p, intensity: clamp(amount / 35, 0.15, 1) })
     G.events.emit('vehicle:damaged', { vehicle: this, amount, hull: this.health, at: p })
-    for (const m of F.milestones) if (before > m && this.health <= m && this.health > 0) G.toast(this.tune.toasts[m], 'warn', 6)
+    // the hull toasts are for whoever is aboard, not for a wreck rolling on alone
+    const T = this.tune.toasts
+    if (this.occupied) for (const m of F.milestones) if (before > m && this.health <= m && this.health > 0) G.toast(T[m], 'warn', 6)
     if (before > 0 && this.health <= 0) {
-      G.toast(this.tune.toasts[0], 'warn', 7)
+      if (this.occupied) G.toast(this.onGround && T.grounded ? T.grounded : T[0], 'warn', 7)
       G.events.emit('vehicle:destroyed', { vehicle: this })
       this.onDestroyed()
     }
-    // a hard enough smash hurts whoever is inside
-    if (this.occupied && amount > F.injury.above) G.player.damage(Math.round((amount - F.injury.above) * F.injury.k), null)
+    if (injure && this.occupied && amount > F.injury.above) G.player.damage(Math.round((amount - F.injury.above) * F.injury.k), null)
   }
   onDestroyed() {}
+
+  // An animal's blow aimed at whoever is inside. The hull soaks it at
+  // strikeMul; an open cab still lets strikeThrough of it reach the rider,
+  // and whatever the hull can no longer soak (a wreck soaks nothing) lands
+  // on them at full, on-foot weight.
+  strike(damage, knock, from, at) {
+    const T = this.tune
+    const soaked = Math.min(damage, this.health / T.strikeMul)
+    this.shove(from, knock * 0.4)
+    this.damage(damage * T.strikeMul, at, false)
+    const hurt = damage - soaked + soaked * (T.strikeThrough || 0)
+    if (this.occupied && hurt > 0) this.G.player.damage(hurt, from, 0)
+  }
+
+  // Sparks you can see from the chase camera: born just outside the hull
+  // (the contact sits on a collision circle, often inside the bodywork),
+  // flung up over the cabin, with a brief flash on whatever is nearby.
+  impactSparks(at, bursts) {
+    const fx = this.G.fx
+    if (!fx) return
+    const S = VEHICLE_FX.sparks
+    const dx = at.x - this.pos.x
+    const dz = at.z - this.pos.z
+    const d = Math.hypot(dx, dz)
+    const p = d > 1e-3 ? _spark.set(at.x + (dx / d) * S.push, at.y, at.z + (dz / d) * S.push) : _spark.copy(at)
+    for (let i = 0; i < bursts; i++) fx.burst(fx.add, p, S.n, S.spread, S.up, S.life, S.size, [1, 0.62, 0.22], S.gravity)
+    // the same flash a muzzle uses, so trunks and foliage light up even when
+    // the sparks themselves are behind the cabin
+    if (fx.flashLight) {
+      fx.flashLight.position.copy(p)
+      fx.flashLight.intensity = Math.max(fx.flashLight.intensity, S.flash * Math.min(1, bursts / 3))
+      fx.flashT = Math.max(fx.flashT, S.flashTime)
+    }
+  }
 
   // A charge or kick from something big.
   shove(from, amount) {
@@ -262,24 +320,30 @@ export class Vehicle {
 
   repair(to = this.tune.hull) {
     this.health = Math.max(this.health, to)
-    this.flash = 0
+  }
+
+  // What the pad pump does for it: the hull back to new (the heli also fills up).
+  needsService() {
+    return this.health < this.tune.hull
+  }
+  service() {
+    this.repair()
+    this.G.events.emit('vehicle:repaired', { vehicle: this, field: false })
   }
 
   fieldRepair() {
     const G = this.G
     this.repair(VEHICLE_FX.fieldRepair.to)
     G.audio?.play('repair', { pos: this.pos })
-    G.toast(`Field repair done — hull ${Math.round(this.health)}%. Get it to the pad pump for a proper service.`, 'info', 6)
+    G.toast(`Field repair done — hull ${Math.round(this.health)}%. ${this.tune.toasts.fieldRepaired}`, 'info', 6)
     G.events.emit('vehicle:repaired', { vehicle: this, field: true })
   }
 
   // ------------------------------------------------------------ per frame
-  // Shake, smoke, warning beeps, AI noise, the rider. Call once per update.
+  // Smoke, warning beeps, AI noise, the rider. Call once per update.
   updateCommon(dt, noiseRadius) {
     const G = this.G
     const F = VEHICLE_FX
-    this.shake = Math.max(0, this.shake - dt * F.shakeDecay)
-    this.flash = Math.max(0, this.flash - dt)
     const hull = this.health
     // black smoke pours out of a hurt engine, thicker the worse it gets
     if (hull < F.smokeBelow) {
@@ -306,7 +370,10 @@ export class Vehicle {
     }
     if (this.occupied) this.ridePlayer(dt)
     // abandoned while moving (the driver died): park once it comes to rest
-    else if (!this.parked && this.onGround && Math.hypot(this.vel.x, this.vel.y, this.vel.z) < 0.3) this.park()
+    else if (!this.parked && this.onGround && Math.hypot(this.vel.x, this.vel.y, this.vel.z) < 0.3) {
+      this.vel.set(0, 0, 0)
+      this.park()
+    }
   }
 
   emitSmoke(sev) {
@@ -337,20 +404,7 @@ export class Vehicle {
     cam.rotation.order = 'YXZ'
     if (this.view === 'chase') this.chaseCamera(cam, dt)
     else this.seatCamera(cam, dt)
-    this.applyShake(cam)
+    this.G.shake?.apply(cam, this.view === 'chase' ? 'chase' : 'seat', dt)
     cam.updateMatrixWorld()
-  }
-
-  // Shake proportional to recent damage, in both cameras.
-  applyShake(cam) {
-    const s = this.shake
-    if (s <= 0.001) return
-    const amp = (this.view === 'chase' ? 0.45 : 0.1) * s
-    cam.position.x += (Math.random() - 0.5) * amp
-    cam.position.y += (Math.random() - 0.5) * amp
-    cam.position.z += (Math.random() - 0.5) * amp
-    cam.rotateX((Math.random() - 0.5) * 0.05 * s)
-    cam.rotateY((Math.random() - 0.5) * 0.05 * s)
-    cam.rotateZ((Math.random() - 0.5) * 0.07 * s)
   }
 }

@@ -30,7 +30,6 @@ export class Player {
     this.hurtDir = 0
     this.bob = 0
     this.stepAcc = 0
-    this.shake = 0
     this.fade = 0
     this.recoil = 0
     this.frozen = false
@@ -57,7 +56,6 @@ export class Player {
     if (!this.alive || this.G.godMode) return
     this.health -= amount
     this.lastHurt = this.G.time
-    this.shake = Math.min(1, this.shake + amount / 30)
     if (from) {
       const dx = this.pos.x - from.x
       const dz = this.pos.z - from.z
@@ -116,7 +114,6 @@ export class Player {
     const isl = G.island
     this.blindT = Math.max(0, this.blindT - dt)
     this.fade = Math.max(0, this.fade - dt)
-    this.shake = Math.max(0, this.shake - dt * 2)
     this.recoil = damp(this.recoil, 0, 9, dt)
     if (this.alive && G.time - this.lastHurt > 9) this.heal(dt * 2.5)
 
@@ -244,12 +241,11 @@ export class Player {
     const cam = G.camera
     const bobAmp = this.onGround ? clamp(hs / 7, 0, 1) * (this.crouching ? 0.5 : 1) : 0
     this.eye.set(this.pos.x, this.pos.y + this.height - 0.12, this.pos.z)
-    const sx = (Math.random() - 0.5) * this.shake * 0.12
-    const sy = (Math.random() - 0.5) * this.shake * 0.12
-    cam.position.set(this.eye.x + Math.cos(this.yaw) * Math.sin(this.bob) * 0.035 * bobAmp + sx, this.eye.y + Math.abs(Math.cos(this.bob)) * 0.045 * bobAmp + sy, this.eye.z - Math.sin(this.yaw) * Math.sin(this.bob) * 0.035 * bobAmp)
+    cam.position.set(this.eye.x + Math.cos(this.yaw) * Math.sin(this.bob) * 0.035 * bobAmp, this.eye.y + Math.abs(Math.cos(this.bob)) * 0.045 * bobAmp, this.eye.z - Math.sin(this.yaw) * Math.sin(this.bob) * 0.035 * bobAmp)
     if (!this.alive) cam.position.y = lerp(cam.position.y, this.pos.y + 0.3, 0.5)
     cam.rotation.order = 'YXZ'
     cam.rotation.set(this.pitch + this.recoil, this.yaw, Math.sin(this.bob) * 0.006 * bobAmp + (this.alive ? 0 : 0.6))
+    G.shake?.apply(cam, 'eye', dt) // hits rattle the view (core/shake.js)
     cam.updateMatrixWorld()
     this.look.set(0, 0, -1).applyQuaternion(cam.quaternion)
     this.light.intensity = this.flashlight ? 60 : 0

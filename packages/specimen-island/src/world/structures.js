@@ -524,29 +524,47 @@ export function buildFieldLab(G, poi, rng, yaw) {
   kit.box(0.3, 0.3, 0.3, 'black', pad.x + 10, 1.3, pad.z - 4.6, { collide: false })
   poi.pad = kit.point(pad.x, 0.35, pad.z)
   poi.padYaw = yaw + Math.PI * 0.75
+  // The pad's service point, for whatever vehicle is parked on or by the pad:
+  // a full tank and a sound hull. It names what it will service.
+  const atPad = () => (G.vehicles || []).filter((v) => !v.occupied && v.pos.distanceTo(poi.pad) <= v.tune.serviceRange)
+  const names = (list) => list.map((v) => v.tune.name).join(' + ')
+  const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1)
   kit.interact(
     {
       id: 'fuelPump',
-      // the pad's service point: a full tank and a sound airframe
-      label: () => (G.heli && G.heli.fuel > 0.98 && G.heli.health >= G.heli.tune.hull ? 'Helicopter serviced — tank full, hull 100%' : 'Service helicopter (refuel + repair)'),
+      label: () => {
+        const here = atPad()
+        const todo = here.filter((v) => v.needsService())
+        if (!todo.length) return here.length ? `${cap(names(here))} ready — nothing to service` : 'Vehicle service pump'
+        return `Service ${names(todo)} (${todo.some((v) => v === G.heli) ? 'refuel + repair' : 'repair'})`
+      },
       hold: 2.5,
       radius: 2.4,
       enabled: (G) => {
         if (!G.flags.get('labPower')) return 'Pump is dead — no power'
-        if (!G.heli || G.heli.pos.distanceTo(poi.pad) > 14) return 'Helicopter is not on the pad'
+        const here = atPad()
+        if (!here.length) return 'Bring a vehicle onto the pad'
+        if (!here.some((v) => v.needsService())) return 'Nothing to service'
         return true
       },
       onUse: (G) => {
-        const h = G.heli
-        const hurt = h.health < h.tune.hull
-        h.service()
-        // a jeep parked by the pad gets seen to as well
-        const jeep = G.jeep && !G.jeep.occupied && G.jeep.health < G.jeep.tune.hull && G.jeep.pos.distanceTo(poi.pad) < 22 ? G.jeep : null
-        if (jeep) jeep.repair()
-        G.flags.set('heliFueled')
-        G.toast(`Helicopter ${hurt ? 'repaired to 100% and refuelled' : 'refuelled'}${jeep ? ', jeep patched up' : ''}. Climb aboard with E.`, 'info')
+        const done = []
+        let repaired = false
+        let heli = false
+        for (const v of atPad()) {
+          if (!v.needsService()) continue
+          const hurt = v.health < v.tune.hull
+          repaired ||= hurt
+          v.service()
+          if (v === G.heli) {
+            heli = true
+            G.flags.set('heliFueled')
+            done.push(hurt ? 'helicopter repaired and refuelled' : 'helicopter refuelled')
+          } else done.push(`${v.tune.name} repaired to 100%`)
+        }
+        G.toast(`${cap(done.join(', '))}.${heli ? ' Climb aboard with E.' : ''}`, 'info')
         G.audio?.play('pump', { pos: poi.pad })
-        if (hurt || jeep) G.audio?.play('repair', { pos: poi.pad })
+        if (repaired) G.audio?.play('repair', { pos: poi.pad })
       },
     },
     pad.x + 10,

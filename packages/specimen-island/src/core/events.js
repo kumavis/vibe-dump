@@ -21,6 +21,11 @@
 //   poi:reached        {poi}
 //   objective:done     {objective}
 //   heli:enter / heli:exit / heli:landed {poi?}
+//   jeep:enter / jeep:exit {}
+//   vehicle:enter / vehicle:exit {vehicle}
+//   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
+//   vehicle:destroyed  {vehicle}
+//   vehicle:repaired   {vehicle, field}                  field repair or the pad pump
 //   toast              {text, kind}
 
 export class EventBus {
