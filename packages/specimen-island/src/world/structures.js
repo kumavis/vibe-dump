@@ -649,10 +649,13 @@ export function buildFieldLab(G, poi, rng, yaw) {
   ])
     kit.box(0.2, 6, 0.2, 'metal', -30 + x, 3, 18 + z)
   kit.cyl(2.2, 3, 'rust', -30, 7.5, 18, { seg: 12 })
+  // the back fence: a walk-through gap, and a gate wherever a road crosses it
+  const onRoad = (lx, lz) => G.island.sample(G.island.road, ...kit.world(lx, lz)) > 0.02
+  const open = (i) => i < 0 || i > 8 || i === 3 || [0, 1.5, 3, 4.5, 6].some((t) => onRoad(-36 + i * 6 + t, -30))
   for (let i = 0; i < 9; i++) {
-    if (i === 3 || i === 6) continue
     const x = -36 + i * 6
-    kit.post(0.12, 2.2, 'metal', x, -30)
+    if (!open(i) || !open(i - 1)) kit.post(0.12, 2.2, 'metal', x, -30)
+    if (open(i)) continue
     kit.box(6, 2, 0.05, 'roof', x + 3, kit.ground(x + 3, -30) + 1.2, -30, { tex: 1, collide: i !== 8 })
   }
   sign(G, kit, ['FOUNDATION FIELD LAB', 'AUTHORIZED PERSONNEL ONLY'], 6, 28, 0, { bg: '#2f4a3a' })

@@ -5,6 +5,9 @@ import { wrapAngle, yawTo } from '../core/mathx.js'
 import { Creature } from './creature.js'
 import { Vitals } from './vitals.js'
 
+// is any road's centreline within r of (x, z)?
+const nearRoad = (isl, x, z, r) => isl.roads.some((rd) => rd.pts.some(([px, pz]) => Math.abs(px - x) < r && Math.abs(pz - z) < r && Math.hypot(px - x, pz - z) < r))
+
 // The island's population. Every animal has a persistent record; herds near the
 // player (or the attract camera) are "loaded" as full Creatures, distant herds
 // are simulated cheaply as a drifting centre. Walk away from a darted trike and
@@ -46,6 +49,9 @@ export class Ecology {
           const minDock = sp.temperament === 'aggressive' ? 380 : sp.mass < 10 ? 70 : 170
           if (dDock < minDock) continue
           if (id === 'tyrannosaurus' && z > -100) continue
+          // a herd may wander across a road, but not live on one: the jeep
+          // met the east plains trikes head-on on every drive
+          if (nearRoad(isl, x, z, 30)) score *= 0.3
           if (sp.nearWater) score *= 1 + 1.5 * Math.exp(-isl.sample(isl.riverM, x, z) / 60) + (Math.hypot(x - isl.lake.x, z - isl.lake.z) < 220 ? 0.8 : 0)
           for (const o of this.herds) {
             const d = Math.hypot(o.home.x - x, o.home.z - z)
@@ -145,7 +151,6 @@ export class Ecology {
     const foot = e.radius * 0.5
     const around = [[0, 0], [foot, 0], [-foot, 0], [0, foot], [0, -foot]]
     const seen = (v, x, z) => around.every(([ox, oz]) => G.physics.lineOfSight(v.x, v.y, v.z, x + ox, isl.heightAt(x + ox, z + oz) + e.eye, z + oz))
-    const nearRoad = (x, z, r) => isl.roads.some((rd) => rd.pts.some(([px, pz]) => Math.abs(px - x) < r && Math.abs(pz - z) < r && Math.hypot(px - x, pz - z) < r))
     let best = null
     let bestScore = 0
     for (let i = 0; i < 600; i++) {
@@ -158,7 +163,7 @@ export class Ecology {
       if (!isl.isLand(x, z, -0.6)) continue
       const cover = isl.coverAt(x, z)
       if (cover > e.cover + relax.cover || isl.sample(isl.road, x, z) > 0.3 || isl.sample(isl.slope, x, z) > 0.6) continue
-      if (e.offRoad && nearRoad(x, z, e.offRoad)) continue
+      if (e.offRoad && nearRoad(isl, x, z, e.offRoad)) continue
       if (!seen(view, x, z)) continue
       if (!relax.also.every((v) => Math.abs(wrapAngle(yawTo(v.x, v.z, x, z) - v.yaw)) < CONE && seen(v, x, z))) continue
       const trees = Math.min(1, isl.sample(isl.d.canopy, x, z) + isl.sample(isl.d.broadleaf, x, z) + isl.sample(isl.d.palm, x, z))
