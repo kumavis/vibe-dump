@@ -60,6 +60,13 @@ export const WORLD = {
     [{ at: 'station', local: [12, 14] }, [200, 520], { at: 'southtower', stop: 12 }],
   ],
 
+  // Cleared lots for small prefabs beside a POI: plants are kept off a circle
+  // of radius `r` before anything grows, and world/structures.js builds on it.
+  // { at, gate: true } stands outside a fenced POI's gate, `along` metres
+  // round from the gate's middle (+ is the way its fence segments count) and
+  // `out` metres beyond the fence, facing out along the road that comes in.
+  lots: [{ id: 'keeperShed', at: 'paddock', gate: true, along: 10.5, out: 9, r: 5 }],
+
   // Abandoned vehicles by the roads: which road, how far along it (0..1), what,
   // and whether a supply crate sits by it. Each takes a dry, level spot on
   // either verge near there, cleared of trees (Island.placeWrecks).

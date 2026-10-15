@@ -1,5 +1,6 @@
 import { SPECIES, SPECIES_ORDER } from '../data/species.js'
-import { doseCard } from './dose.js'
+import { WEAPONS } from '../data/weapons.js'
+import { doseCard, jabCard } from './dose.js'
 import { starHtml } from '../player/photos.js'
 import { formatTime } from '../core/mathx.js'
 
@@ -63,6 +64,8 @@ export class Journal {
       body = `<div class="ledger"><div class="cats">Catalogued ${G.science.catalogue.size}/${n} · Blood from ${G.stats.get('speciesBlood')}/${n} species · Photographed ${G.photos.count}/${n}${open
         .map((o) => `<br><b>${o.title} ${O.progress(o)}</b> — still needed: ${O.missingText(o)}`)
         .join('')}</div></div><div class="cards">`
+      // each melee syringe carried gets its own row of jabs
+      const melee = Object.values(WEAPONS).filter((w) => w.kind === 'melee' && G.inventory.weapons.has(w.id))
       for (const id of SPECIES_ORDER) {
         const sp = SPECIES[id]
         const s = sum[id]
@@ -77,6 +80,7 @@ export class Journal {
           <dl><dt>Temperament</dt><dd>${sp.temperament}</dd><dt>Mass</dt><dd>${sp.mass.toLocaleString()} kg</dd>
           <dt>Knockout</dt><dd>${dose.ko}</dd>
           <dt>Overdose</dt><dd>${dose.od}</dd>
+          ${melee.map((w) => `<dt>${w.name}</dt><dd>${jabCard(sp, w)}</dd>`).join('')}
           <dt>Blood value</dt><dd>${sp.science.blood} pts</dd><dt>Kill penalty</dt><dd class="bad">−${sp.killPenalty}</dd></dl>
           <div class="sci">${marks}</div>${needLine(id)}${s.kills ? `<div class="bad">Killed: ${s.kills}</div>` : ''}</div>`
       }
@@ -95,6 +99,7 @@ export class Journal {
         <h3>Staying unseen</h3><p>The eye in the corner is how visible you are. Crouch [C] in ferns, reeds and tall grass; move slowly; keep the wind (see map) blowing from them to you — downwind animals smell you. Night hides you, the flashlight [F] does not. Arcs around the reticle show who has noticed you: white curious, yellow suspicious, red alerted.</p>
         <h3>Darting</h3><p>Darts take a few seconds to soak in — a darted predator can still reach you — and the animal keeps clearing sedative all the while, so the knockout counts on the target readout allow for what it burns off at a steady rate of fire. Neck and head carry more dose; legs and tail less; armour stops darts cold. Too much sedative is an overdose: a red line on the readout means the next dart there would kill. Scan a species to see its lines.</p>
         <h3>Procedures</h3><p>Stand over a sedated animal and hold [E]: blood, then measurements, then a tracking tag (tagged animals show on the map). Watch for “waking soon”. Dead animals yield only a tissue sample.</p>
+        <h3>Jumbo syringe</h3><p>The old keepers dosed the sauropods by hand, with a pole syringe kept in a shed at Paddock C's gate. [7] selects it; left mouse thrusts the needle along your aim, and only an animal within reach — under three metres, IN REACH on the readout — takes it. A hit empties one whole cartridge into the animal wherever the needle goes in (armour still turns it); a miss costs only the swing. It is quiet, but you have to stand beside the animal: UNDERFOOT on the readout means a sauropod will trample you as soon as it walks, and a jabbed predator turns on you while the next cartridge goes in. Two jabs drop an adult brachiosaur, one a stegosaur, trike or anky — and one kills anything smaller. With the generator running, the Field Lab's cold store restocks the cartridges.</p>
         <h3>Field Camera</h3><p>[6] Hold right mouse to raise it to your eye; the wheel turns the zoom ring; left mouse takes the picture (then a second to wind on). A photo is graded on how much of the frame the animal fills, how much of it you can actually see — leaves and grass count — whether its head is in, a rule-of-thirds point over dead centre, a steady hand, and what it is doing: a roar or a charge beats a nap, and an animal that never noticed you is worth more. Each species pays its photo value once, scaled by quality; a better retake pays only the difference. The album is the Photos tab.</p>
         <h3>Vehicles</h3><p>Walk up to a door of the station jeep or the helicopter and press [E]; [E] again gets you out once it has stopped or landed, and [V] switches the camera. Jeep: [W]/[S] drive, [A]/[D] steer, [Space] handbrake, [F] headlights. It fords water up to the axles and no deeper, and anything small under the bull bar counts as a kill. Helicopter: [Space]/[Shift] climb and descend, [W]/[S] pitch, [A]/[D] slide, the mouse turns; it burns fuel, and a hard landing costs hull. A wreck can be patched up where it lies — hold [E] on it — enough to limp home; the pump on the lab helipad refuels and repairs properly.</p>
         <h3>Tools</h3><p>[G] throws a stone — a noise somewhere else. [T] lights a flare — animals will not come near it for twenty seconds. [H] uses a medkit. [R] reloads, right mouse aims. [J] or [Tab] opens this journal, [M] the map.</p>

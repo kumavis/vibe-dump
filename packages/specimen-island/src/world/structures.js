@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { concrete, planks, corrugated, paintedMetal, rustedPaint, signBoard, helipad } from './textures.js'
 import { Rng } from '../core/rng.js'
-import { CACHES, CRATE, ITEMS, LOOT } from '../data/items.js'
+import { CACHES, CRATE, ITEMS, LOOT, RESTOCKS } from '../data/items.js'
 import { LORE } from '../data/lore.js'
 
 // The preserve's tired infrastructure, built from a tiny prefab kit. A Kit is a
@@ -31,6 +31,7 @@ function mats() {
     tank: new THREE.MeshPhongMaterial({ color: 0x6aa08a, transparent: true, opacity: 0.4, shininess: 60, depthWrite: false }),
     vine: L({ color: 0x3a6526, side: THREE.DoubleSide }),
     bulb: L({ color: 0x444033, emissive: 0x000000 }),
+    serum: L({ color: 0xe8a826, emissive: 0x3a2400 }),
     helipad: L({ map: helipad() }),
     // wrecks
     rustGreen: L({ map: rustedPaint([82, 102, 70]) }),
@@ -285,6 +286,36 @@ function cache(G, kit, id, label, lx, ly, lz, opts = {}) {
   )
 }
 
+// A store that tops an item back up to its cap (data/items.js RESTOCKS), as
+// often as you come back.
+function restock(G, kit, id, lx, ly, lz) {
+  const def = RESTOCKS[id]
+  const item = ITEMS[def.item]
+  const pos = kit.point(lx, ly, lz)
+  return kit.interact(
+    {
+      id,
+      label: () => (G.inventory.weapons.has(def.weapon) ? `Restock ${item.name.toLowerCase()}` : def.title),
+      hold: 1.0,
+      radius: 2.2,
+      enabled: (G) => {
+        if (def.flag && !G.flags.get(def.flag)) return def.off
+        if (def.weapon && !G.inventory.weapons.has(def.weapon)) return def.before
+        if (G.inventory.count(def.item) >= item.max) return `${item.name} full`
+        return true
+      },
+      onUse: (G) => {
+        const got = G.inventory.add(def.item, item.max)
+        G.toast(`${def.title}: ${lootLine({ [def.item]: got })}`, 'loot')
+        G.audio?.play('locker', { pos })
+      },
+    },
+    lx,
+    ly,
+    lz,
+  )
+}
+
 function lore(G, kit, id, label, lx, ly, lz) {
   const entry = LORE[id]
   kit.interact(
@@ -483,6 +514,14 @@ export function buildFieldLab(G, poi, rng, yaw) {
   cache(G, kit, 'labArmory', 'Open armory locker', lab.cx + 7.5, 1.3, lab.cz - 5.2, { title: 'Armory' })
   kit.box(1.1, 1.0, 0.7, 'metal', lab.cx + 6, 0.8, lab.cz + 4.5)
   lore(G, kit, 'labTerminal', 'Read terminal', lab.cx + 6, 1.4, lab.cz + 4.1)
+  // the cold store: spare jumbo-syringe cartridges, kept while the generator
+  // runs (data/items.js RESTOCKS)
+  kit.box(1.1, 1.9, 0.65, 'white', lab.cx + 5, 1.25, lab.cz - 5.85)
+  kit.box(0.05, 0.6, 0.05, 'black', lab.cx + 5.45, 1.4, lab.cz - 5.5, { collide: false })
+  const coldLamp = new THREE.Mesh(new THREE.SphereGeometry(0.035, 6, 4), mats().bulb.clone())
+  coldLamp.position.set(lab.cx + 4.65, 2.0, lab.cz - 5.51)
+  kit.add(coldLamp)
+  restock(G, kit, 'coldStore', lab.cx + 5, 1.3, lab.cz - 5.3)
 
   // helipad
   const pad = { x: 15, z: 7 }
@@ -637,6 +676,7 @@ export function buildFieldLab(G, poi, rng, yaw) {
   G.events.on('flag', ({ flag }) => {
     if (flag !== 'labPower') return
     for (const b of bulbs) b.material.emissive.setHex(0xffcc77)
+    coldLamp.material.emissive.setHex(0x40e070)
     for (const l of lights) l.intensity = 40
     G.audio?.loopAt('generator', poi.generator)
   })
@@ -777,6 +817,96 @@ export function buildPaddock(G, poi, rng) {
   crate(G, kit, -12.5, -3.5, 'crate:paddock', { items: { rifleDart: 4, flare: 1 } }, rng)
   kit.finish()
   return kit
+}
+
+// The sauropod keepers' shed outside Paddock C's gate, on its cleared lot
+// (data/world.js lots): a plank lean-to on stilts over the slope, open to the
+// road, with the jumbo syringe across a rack on its back wall and the keeper's
+// card beside it.
+export function buildKeeperShed(G, lot, rng) {
+  const kit = new Kit(G, lot.x, G.island.heightAt(lot.x, lot.z), lot.z, lot.yaw, 'keepershed')
+  const W = 3.6
+  const D = 3.0
+  const hF = 2.5 // front posts; the roof falls to the back
+  const hB = 2.15
+  // the floor clears the highest corner of the slope
+  const corners = [-1, 1].flatMap((sx) => [-1, 1].map((sz) => kit.ground((sx * W) / 2, (sz * D) / 2)))
+  const F = Math.max(...corners) + 0.3
+  kit.box(W, 0.12, D, 'wood', 0, F - 0.06, 0, { tex: 1.5 })
+  for (const x of [-W / 2 + 0.1, 0, W / 2 - 0.1]) for (const z of [-D / 2 + 0.1, D / 2 - 0.1]) kit.post(0.16, F - 0.12, 'darkWood', x, z)
+  // steps down from the open front. Each one added reaches further down the
+  // slope, which keeps falling away, so add them until the lowest is no more
+  // than RISE above the ground a player climbs it from (circle touching its
+  // face, anywhere across it): the player steps up 0.44 m at most, and only
+  // once its centre is over the next tread, so a tread must be well wider
+  // than its 0.35 m radius or the step after that blocks it first
+  const TREAD = 0.45
+  const RISE = 0.4
+  const foot = (n) => Math.min(...[-0.55, -0.25, 0, 0.25, 0.55].map((x) => kit.ground(x, D / 2 + n * TREAD + 0.35)))
+  let n = 0
+  while (n < 10 && (F - foot(n)) / (n + 1) > RISE) n++
+  const gF = foot(n)
+  for (let i = 1; i <= n; i++) {
+    const top = F - ((F - gF) * i) / (n + 1)
+    const z = D / 2 + (i - 0.5) * TREAD
+    const bottom = Math.min(kit.ground(-0.6, z), kit.ground(0.6, z)) - 0.3
+    kit.box(1.2, top - bottom, TREAD, 'darkWood', 0, (top + bottom) / 2, z)
+  }
+  // frame, plank walls (the right one has lost its lower boards) and a tin roof
+  for (const sx of [-1, 1]) {
+    kit.box(0.12, hF, 0.12, 'darkWood', sx * (W / 2 - 0.06), F + hF / 2, D / 2 - 0.06)
+    kit.box(0.12, hB, 0.12, 'darkWood', sx * (W / 2 - 0.06), F + hB / 2, -D / 2 + 0.06)
+  }
+  kit.box(W, hB, 0.06, 'wood', 0, F + hB / 2, -D / 2 + 0.03)
+  kit.box(0.06, hB, D, 'wood', -W / 2 + 0.03, F + hB / 2, 0)
+  kit.box(0.06, hB - 0.9, D, 'wood', W / 2 - 0.03, F + 0.9 + (hB - 0.9) / 2, 0)
+  kit.box(0.06, 0.3, D, 'wood', W / 2 - 0.03, F + 0.15, 0)
+  kit.box(W + 0.5, 0.06, D + 0.6, 'rust', 0, F + (hF + hB) / 2 + 0.06, 0, { rx: -Math.atan2(hF - hB, D), tex: 3 })
+  const { texture, width, height } = signBoard(['SAUROPOD KEEPERS'], { bg: '#4b5a3c', minWidth: 2.2, maxWidth: W - 0.4, minHeight: 0.42, maxHeight: 0.5 })
+  const face = new THREE.MeshLambertMaterial({ map: texture })
+  const board = new THREE.Mesh(new THREE.BoxGeometry(width, height, 0.05), [mats().darkWood, mats().darkWood, mats().darkWood, mats().darkWood, face, face])
+  board.position.set(0, F + hF - height / 2 - 0.04, D / 2 + 0.03)
+  board.rotation.z = 0.03
+  kit.add(board)
+  // a shelf with the cartridge crate, and the card pinned up by the door
+  kit.box(0.36, 0.04, 1.3, 'darkWood', -W / 2 + 0.24, F + 1.0, -0.55, { collide: false })
+  kit.box(0.3, 0.22, 0.42, 'white', -W / 2 + 0.24, F + 1.13, -0.75, { collide: false })
+  kit.box(0.31, 0.05, 0.43, 'orange', -W / 2 + 0.24, F + 1.16, -0.75, { collide: false })
+  kit.box(0.02, 0.34, 0.25, 'white', -W / 2 + 0.07, F + 1.5, 0.75, { collide: false, rx: 0.06 })
+  lore(G, kit, 'keeperCard', 'Read keeper’s card', -W / 2 + 0.3, F + 1.45, 0.75)
+  // the rack: two brackets and the syringe lying across them
+  for (const x of [-1.05, 0.95]) kit.box(0.06, 0.06, 0.2, 'metal', x, F + 1.42, -D / 2 + 0.16, { collide: false })
+  const pole = jumboOnRack()
+  pole.position.set(0, F + 1.49, -D / 2 + 0.2)
+  kit.add(pole)
+  cache(G, kit, 'jumboRack', 'Take jumbo syringe', 0, F + 1.4, -D / 2 + 0.45, { title: 'Keeper’s rack', after: () => (pole.visible = false) })
+  kit.vines(-W / 2 - 0.05, F + hB, -0.3, D * 0.6, hB * 0.75, Math.PI / 2, rng)
+  kit.vines(0.6, F + hB, -D / 2 - 0.05, W * 0.45, hB * 0.6, 0, rng)
+  kit.finish()
+  return kit
+}
+
+// The jumbo syringe at rest, lying along +X: pole, grip, the barrel with its
+// cartridge showing, and the needle.
+function jumboOnRack() {
+  const g = new THREE.Group()
+  const M = mats()
+  const part = (r, len, mat, x, r2 = r) => {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r2, len, 10), mat)
+    m.rotation.z = Math.PI / 2 // top (r) towards -X, bottom (r2) towards +X
+    m.position.x = x
+    m.castShadow = true
+    g.add(m)
+  }
+  part(0.018, 2.0, M.metal, -0.15)
+  part(0.026, 0.32, M.black, -1.0)
+  part(0.022, 0.06, M.orange, 0.35)
+  part(0.055, 0.05, M.black, 0.87)
+  part(0.034, 0.26, M.serum, 1.05)
+  part(0.05, 0.32, M.glass, 1.05)
+  part(0.045, 0.06, M.metal, 1.24, 0.012)
+  part(0.004, 0.2, M.metal, 1.37, 0.0015)
+  return g
 }
 
 export function buildRelay(G, poi, rng) {
@@ -1201,6 +1331,8 @@ export function buildStructures(G) {
   buildFieldLab(G, P.fieldlab, rng, roadFacing(isl, P.fieldlab))
   for (const id of ['easttower', 'westtower', 'southtower']) buildTower(G, P[id], rng, roadFacing(isl, P[id]))
   buildPaddock(G, P.paddock, rng)
+  // its own stream, like the poles, so the shed never reshuffles the wrecks
+  if (isl.lots.keeperShed) buildKeeperShed(G, isl.lots.keeperShed, new Rng(isl.cfg.seed + 507))
   buildRelay(G, P.summit, rng)
   for (const b of isl.bridges) buildBridge(G, b, rng)
   // the poles draw from their own streams, so moving one never reshuffles

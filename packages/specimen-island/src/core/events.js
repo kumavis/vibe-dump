@@ -8,7 +8,8 @@
 //                      step | shot | gunshot | shutter | distraction | impact | vehicle
 //   weapon:fired       {weapon}
 //   weapon:gained      {weapon}
-//   dart:hit           {creature, zone, dose | damage}   a hit-marker label ('NECK', 'ARMOUR')
+//   dart:hit           {creature, zone, dose | damage}   a hit-marker label ('NECK', 'ARMOUR');
+//                      darts, bullets and the syringe's jab alike
 //   creature:hit       {creature, zone, dose, damage, weapon}
 //   creature:ko        {creature}
 //   creature:woke      {creature}

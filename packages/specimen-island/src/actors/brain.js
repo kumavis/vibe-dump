@@ -438,22 +438,30 @@ export class Brain {
     const tgt = tObj ? tObj.pos : G.player.pos
     c.halt()
     if (a.kind !== 'tail') c.face(tgt.x, tgt.z)
-    const wind = 0.28
-    if (a.lunge && this.t < wind + 0.15) c.nudge(tgt, a.lunge * dt)
-    c.intent.attack = this.t < wind ? this.t / wind : this.t < wind + 0.25 ? 1 : Math.max(0, 1 - (this.t - wind - 0.25) * 3)
     c.intent.look = tgt
-    if (!this.data.struck && this.t >= wind) {
+    const ang = Math.abs(wrapAngle(yawTo(c.pos.x, c.pos.z, tgt.x, tgt.z) - c.yaw))
+    // it wheels round to a target outside its arc before winding up (for a
+    // while), or someone at its hip — a jumbo syringe's reach — could never be
+    // bitten; a tail swings at what is behind it already
+    if (this.data.windup == null) {
+      if (a.kind !== 'tail' && ang > 1.1 && this.t < 1.6) return
+      this.data.windup = this.t
+    }
+    const t = this.t - this.data.windup
+    const wind = 0.28
+    if (a.lunge && t < wind + 0.15) c.nudge(tgt, a.lunge * dt)
+    c.intent.attack = t < wind ? t / wind : t < wind + 0.25 ? 1 : Math.max(0, 1 - (t - wind - 0.25) * 3)
+    if (!this.data.struck && t >= wind) {
       this.data.struck = true
       c.vocalize('attack')
       const d = Math.hypot(tgt.x - c.pos.x, tgt.z - c.pos.z)
-      const ang = Math.abs(wrapAngle(yawTo(c.pos.x, c.pos.z, tgt.x, tgt.z) - c.yaw))
       const inArc = a.kind === 'tail' ? ang > 1.2 : ang < 1.3
       if (d < a.range + c.radius + 0.6 && inArc) {
         if (tObj) tObj.takeHit(G, { damage: a.damage * 3, zone: 'neck', from: c.pos, cause: 'predation' })
         else c.strikePlayer(G, a.damage, a.kind === 'tail' ? 10 : 5)
       }
     }
-    if (this.t > 0.9) {
+    if (t > 0.9) {
       this.cool = a.cooldown * this.rng.range(0.8, 1.3)
       if (tObj && !tObj.vitals.alive) return this.set('feed', { carcass: tObj })
       this.set(c.sp.temperament === 'defensive' ? 'threaten' : 'hunt', { target: this.data.target || 'player' })

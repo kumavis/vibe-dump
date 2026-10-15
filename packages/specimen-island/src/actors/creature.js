@@ -43,6 +43,7 @@ export class Creature {
     this.avoid = { yaw: 0, until: 0 }
     this.stuck = { t: 0, x: rec.x, z: rec.z, detour: 0, until: 0 }
     this.trampleCool = 0
+    this.underT = 0 // how long the player has been under its feet
     this.disposed = false
 
     this.vitals = new Vitals(this.sp, rec)
@@ -87,6 +88,12 @@ export class Creature {
   }
   center() {
     return new THREE.Vector3(this.pos.x, this.pos.y + this.sp.body.hipH * this.scale, this.pos.z)
+  }
+  // Is `p` under the feet of an animal that tramples — inside the ring where it
+  // hurts you whenever it walks? (The HUD warns of it too.)
+  underfoot(p) {
+    if (this.sp.attack?.kind !== 'trample') return false
+    return Math.hypot(p.x - this.pos.x, p.z - this.pos.z) < this.radius * 1.3 && p.y < this.pos.y + 2
   }
 
   vocalize(kind) {
@@ -156,14 +163,12 @@ export class Creature {
     this.applyIntent(dt)
     this.anim.update(dt)
     this.syncMesh(dt)
-    // brachiosaurus feet and other accidents
-    if (this.sp.attack?.kind === 'trample' && this.speed > 0.4 && this.trampleCool <= 0) {
-      const p = G.player.pos
-      const d = Math.hypot(p.x - this.pos.x, p.z - this.pos.z)
-      if (d < this.radius * 1.3 && p.y < this.pos.y + 2) {
-        this.trampleCool = this.sp.attack.cooldown
-        this.strikePlayer(G, this.sp.attack.damage, 8)
-      }
+    // brachiosaurus feet and other accidents: stay underfoot of a walking giant
+    // for its `grace` (the HUD says UNDERFOOT all the while) and a foot finds you
+    this.underT = this.underfoot(G.player.pos) ? this.underT + dt : 0
+    if (this.underT > (this.sp.attack?.grace ?? 0) && this.speed > 0.4 && this.trampleCool <= 0) {
+      this.trampleCool = this.sp.attack.cooldown
+      this.strikePlayer(G, this.sp.attack.damage, 8)
     }
     this.rec.x = this.pos.x
     this.rec.z = this.pos.z
@@ -332,11 +337,13 @@ export class Creature {
     return this.rig.hits
   }
 
-  // Ray vs this animal's hit spheres. Returns { t, zone, hit } or null.
-  raycast(o, d, maxDist) {
+  // Ray vs this animal's hit spheres. Returns { t, zone, hit } or null. `pad`
+  // fattens the ray (a melee jab finds a leg that swung a hand's width off it)
+  // and then counts an eye already inside a padded sphere as touching it.
+  raycast(o, d, maxDist, pad = 0) {
     // broad phase against a sphere around the whole body
     const c = this.center()
-    const R = (this.sp.body.torsoLen + this.sp.body.tail.len + this.sp.body.neck.len + this.sp.body.head.len) * this.scale
+    const R = (this.sp.body.torsoLen + this.sp.body.tail.len + this.sp.body.neck.len + this.sp.body.head.len) * this.scale + pad
     const ocx = c.x - o.x
     const ocy = c.y - o.y
     const ocz = c.z - o.z
@@ -352,9 +359,10 @@ export class Creature {
       const tc = lx * d.x + ly * d.y + lz * d.z
       if (tc < 0) continue
       const dd = lx * lx + ly * ly + lz * lz - tc * tc
-      const r2 = h.rWorld * h.rWorld
+      const r2 = (h.rWorld + pad) * (h.rWorld + pad)
       if (dd > r2) continue
-      const t = tc - Math.sqrt(r2 - dd)
+      let t = tc - Math.sqrt(r2 - dd)
+      if (t < 0 && pad) t = 0
       if (t >= 0 && t <= maxDist && (!best || t < best.t)) best = { t, zone: h.zone, hit: h }
     }
     return best

@@ -7,6 +7,8 @@
 //   scanner     hold fire on a creature to catalogue it
 //   camera      aim zooms, fire takes a photograph (scored by player/photos.js
 //               with the PHOTO table below)
+//   melee       fire thrusts within `reach` (m, from the eye); carries `dose`
+//               and spends one round of `ammo` only on a hit
 //
 // noise is the radius (m) at which creatures hear the shot.
 
@@ -109,6 +111,45 @@ export const WEAPONS = {
     rof: 1.0, // shutter cooldown
     noise: 4,
     range: 180,
+    lethal: false,
+  },
+  // The old keepers' pole syringe for the sauropods. The needle goes in
+  // `thrust` s after the click, along wherever the view points by then (and
+  // finds anything within `pad` m of that line — a walking leg swings), and
+  // the swing takes `recover` s more; a whiff costs only that. zones: false —
+  // a needle driven in by hand seats its whole charge wherever it lands (on a
+  // brachiosaur that is a leg, all you can reach from the ground), so the zone
+  // multipliers don't apply. Armour still turns it, and keeps the cartridge.
+  //
+  // 250u: two jabs drop an adult brachiosaurus (ko 420) if the second lands
+  // within ~20 s of the first, as it clears 2.21u/s (peaks 478 at the
+  // syringe's 4.7 s pace, 444 at 20 s, 422 at 30 s), and only four at once
+  // overdose it (900). One leaves a T. rex drowsy at 0.93 of its line and two
+  // drop it (485, lethal 560), so the price there is the bite: no dose fits a
+  // two-jab brachiosaur and a three-jab rex (its ko is lower), so `reload`
+  // does it instead. Seating a cartridge at the end of a three-metre pole
+  // takes 4 s, and in that time a jabbed rex wheels round and bites, and its
+  // next bite usually lands before the second jab can (55 each): stand your
+  // ground and it kills you; sprint clear while it turns, or finish it with
+  // darts. A brachiosaur walks off for longer than that after a jab anyway.
+  // One knocks out a stegosaur, trike or anky and two kill them; one is a
+  // fatal overdose for everything from a parasaurolophus down.
+  syringe: {
+    slot: 7,
+    name: 'Jumbo Syringe',
+    short: 'JUMBO',
+    kind: 'melee',
+    dose: 250,
+    zones: false,
+    reach: 2.8,
+    pad: 0.2,
+    thrust: 0.35,
+    recover: 0.75,
+    mag: 1, // the cartridge seated in the barrel
+    ammo: 'jumboDart',
+    reload: 4,
+    noise: 3,
+    zoom: 1.1,
     lethal: false,
   },
 }

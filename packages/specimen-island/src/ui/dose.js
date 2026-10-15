@@ -13,6 +13,10 @@ import { absorb } from '../actors/vitals.js'
 //
 // Counts assume body hits (leg hits on an animal whose body is armoured). The
 // zone under the crosshair adds a warning when one dart there would overdose.
+//
+// With a melee syringe in hand (data/weapons.js kind 'melee') the same
+// verdicts are said in jabs: the same simulation, its whole-cartridge dose and
+// its own cadence.
 
 const STEP = 1 / 60 // integration step: one frame, as the game runs it
 const MAX = 99 // darts before a count gives up
@@ -25,7 +29,9 @@ const odLine = (sed) => sed.lethal * (1 - TOL)
 
 // A steady rate of fire: each dart's share of emptying a magazine and
 // reloading it (player/weapons.js starts the reload 0.35 s after the last).
-const pace = (w) => (w.rof * (w.mag - 1) + 0.35 + w.reload) / w.mag
+// A syringe seats a fresh cartridge after every jab that lands, and the next
+// one lands `thrust` into its swing.
+const pace = (w) => (w.kind === 'melee' ? w.thrust + Math.max(w.recover, 0.35 + w.reload) : (w.rof * (w.mag - 1) + 0.35 + w.reload) / w.mag)
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
 
@@ -75,12 +81,18 @@ const openZones = (sp) => {
   return w.length > 1 ? `${w.slice(0, -1).join(', ')} or ${w[w.length - 1]}` : w[0]
 }
 
+// What one jab carries: the whole cartridge wherever it goes in (zones:
+// false), else what it would in the zone the counts assume.
+const jabDose = (sp, w) => w.dose * (w.zones === false ? 1 : ZONES[refZone(sp)].dose)
+
 // Target readout lines for a living animal: [{ text, warn }]. `zone` is the
-// hit zone under the crosshair ('neck', 'armor', ...), if any.
-export function doseReadout(sp, state, sedative, pending, zone) {
+// hit zone under the crosshair ('neck', 'armor', ...), if any; `held` the
+// weapon in hand, if it changes how the dose is said (a melee syringe).
+export function doseReadout(sp, state, sedative, pending, zone, held) {
   const sed = sp.sedation
   const peak = projectedPeak(sed, sedative, pending)
   if (peak >= odLine(sed)) return [{ text: 'Fatal overdose absorbing — it will die', warn: true }]
+  if (held?.kind === 'melee') return jabReadout(sp, state, sedative, pending, zone, held, peak)
   const k = ZONES[refZone(sp)].dose
   const rifle = WEAPONS.rifle.dose
   const pistol = WEAPONS.pistol.dose
@@ -132,6 +144,23 @@ function knockout(sp, sedative, pending, more, risky = null) {
   return { text: 'Too close to an overdose to dart safely', warn: true }
 }
 
+// The readout with a syringe in hand: the jabs that knock it out at the
+// syringe's own pace, or why not, then how many at once would overdose. A
+// single jab that kills is the whole verdict.
+function jabReadout(sp, state, sedative, pending, zone, w, peak) {
+  const sed = sp.sedation
+  const dose = jabDose(sp, w)
+  const od = atOnce(sed, sedative, pending, dose, odLine(sed))
+  const odText = { text: `Overdose: ${plural(od, 'more jab')}`, warn: od <= 1 }
+  if (state === 'unconscious') return [{ text: 'Out cold — no more jabs needed' }, odText]
+  if (peak >= koLine(sed)) return [{ text: 'Enough sedative absorbing — wait' }, odText]
+  if (zone === 'armor') return [{ text: `Armour — the needle won't go in. Jab the ${openZones(sp)}`, warn: true }, odText]
+  const J = paced(sed, sedative, pending, dose, pace(w), koLine(sed))
+  if (J.n === Infinity) return [{ text: "Jabs can't outpace its metabolism", warn: true }, odText]
+  if (J.peak >= odLine(sed)) return od <= 1 ? [{ text: 'One jab is a fatal overdose — dart it instead', warn: true }] : [{ text: 'Too close to an overdose to jab safely', warn: true }, odText]
+  return [{ text: `Knockout: ${plural(J.n, 'more jab')}` }, odText]
+}
+
 // Journal card: knockout and overdose for an animal with no sedative in it.
 export function doseCard(sp) {
   const sed = sp.sedation
@@ -140,4 +169,16 @@ export function doseCard(sp) {
   const odRifle = atOnce(sed, 0, 0, WEAPONS.rifle.dose * k, odLine(sed))
   const odPistol = atOnce(sed, 0, 0, WEAPONS.pistol.dose * k, odLine(sed))
   return { ko: `${ko} · ${sed.ko}u`, od: `${plural(odRifle, 'rifle dart')}${where(sp)} (or ${odPistol} pistol) · ${sed.lethal}u` }
+}
+
+// Journal card row for a melee syringe `w`: its jabs to knock out and to
+// overdose an animal with no sedative in it.
+export function jabCard(sp, w) {
+  const sed = sp.sedation
+  const dose = jabDose(sp, w)
+  const J = paced(sed, 0, 0, dose, pace(w), koLine(sed))
+  const od = atOnce(sed, 0, 0, dose, odLine(sed))
+  if (J.peak >= odLine(sed)) return 'One jab is a fatal overdose'
+  if (J.n === Infinity) return "Jabs can't outpace its metabolism"
+  return `${plural(J.n, 'jab')} to knock out · ${plural(od, 'jab')} overdose`
 }

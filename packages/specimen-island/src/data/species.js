@@ -376,7 +376,8 @@ export const SPECIES = {
     habitat: { jungle: 0.8, swamp: 0.6, grass: 0.4 },
     nearWater: true,
     herds: 2,
-    attack: { kind: 'trample', damage: 40, range: 3.2, cooldown: 1.5 },
+    // grace: seconds underfoot (Creature.underfoot) before a foot finds you
+    attack: { kind: 'trample', damage: 40, range: 3.2, cooldown: 1.5, grace: 0.6 },
     browse: true,
     science: { blood: 300, measure: 100, tag: 150, scan: 40, photo: 60 },
     killPenalty: 800,

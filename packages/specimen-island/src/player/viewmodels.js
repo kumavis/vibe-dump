@@ -3,8 +3,8 @@ import { damp } from '../core/mathx.js'
 
 // First-person weapon models, drawn in their own little scene over the world
 // so they never clip into walls. Built from primitives; animated procedurally
-// (bob, sway, recoil, reload dip, switch). The scanner and the field camera
-// have live screens.
+// (bob, sway, recoil, reload dip, switch, the syringe's thrust). The scanner
+// and the field camera have live screens.
 
 function L(color, extra = {}) {
   return new THREE.MeshLambertMaterial({ color, ...extra })
@@ -19,6 +19,8 @@ const MAT = {
   sleeve: L(0x7a7350),
   lens: new THREE.MeshPhongMaterial({ color: 0x3060a0, shininess: 100, specular: 0x88aaff }),
   fletch: L(0xff5a20),
+  serum: L(0xe8a826, { emissive: 0x3a2400 }),
+  glass: new THREE.MeshPhongMaterial({ color: 0xd8eef2, transparent: true, opacity: 0.32, shininess: 90, depthWrite: false }),
 }
 
 function box(w, h, d, mat, x, y, z, rx = 0, ry = 0, rz = 0) {
@@ -149,6 +151,45 @@ function fieldCamera() {
   return { g, muzzle: new THREE.Vector3(0, 0, -0.1), hip: new THREE.Vector3(0.11, -0.15, -0.34), ads: new THREE.Vector3(0, -0.06, -0.2), canvas, tex }
 }
 
+// The keepers' jumbo syringe: a pole held low in both hands and angled in
+// across the view, so the fat glass barrel on its far end is seen side-on and
+// the needle rests just under the reticle. The seated cartridge (`dart`) shows
+// through the glass. `lunge` is where a thrust drives it (along the pole, up
+// towards the reticle); `sway` a heavy pole's idle drift.
+function jumboSyringe() {
+  const g = new THREE.Group()
+  const pole = new THREE.Group()
+  pole.rotation.set(0.073, 0.2, 0)
+  g.add(pole)
+  pole.add(cyl(0.025, 0.26, MAT.glove, 0, 0, -0.02)) // rubber grip
+  pole.add(cyl(0.017, 0.95, MAT.steel, 0, 0, -0.38)) // shaft
+  pole.add(cyl(0.023, 0.16, MAT.gun, 0, 0, -0.42)) // fore grip
+  pole.add(cyl(0.02, 0.05, MAT.orange, 0, 0, -0.7)) // hazard band
+  pole.add(cyl(0.017, 0.13, MAT.yellow, 0.036, -0.01, -0.58)) // gas bottle
+  pole.add(box(0.03, 0.02, 0.04, MAT.gun, 0.02, -0.005, -0.58))
+  pole.add(cyl(0.03, 0.06, MAT.gun, 0, 0, -0.85)) // adapter
+  pole.add(cyl(0.063, 0.02, MAT.steel, 0, 0, -0.885)) // barrel rings
+  pole.add(cyl(0.063, 0.02, MAT.steel, 0, 0, -1.255))
+  const dart = new THREE.Group()
+  dart.add(cyl(0.04, 0.3, MAT.serum, 0, 0, 0))
+  for (const z of [-0.155, 0.155]) dart.add(cyl(0.043, 0.014, MAT.steel, 0, 0, z))
+  dart.position.z = -1.07
+  pole.add(dart)
+  pole.add(cyl(0.06, 0.38, MAT.glass, 0, 0, -1.07)) // barrel
+  pole.add(cyl(0.06, 0.07, MAT.steel, 0, 0, -1.295, 10, 0.014)) // hub
+  pole.add(cyl(0.0045, 0.2, MAT.steel, 0, 0, -1.43, 6, 0.0015)) // needle
+  // right hand on the grip, left hand forward on the pole, forearms falling away
+  pole.add(box(0.065, 0.09, 0.11, MAT.glove, 0.004, -0.012, -0.02, 0, 0, 0.15))
+  pole.add(box(0.075, 0.075, 0.5, MAT.sleeve, 0.08, -0.155, 0.17, 0.64, 0.32, 0))
+  pole.add(box(0.07, 0.065, 0.1, MAT.glove, -0.004, -0.014, -0.42, 0, 0, 0.25))
+  pole.add(box(0.075, 0.075, 0.6, MAT.sleeve, -0.163, -0.089, -0.177, 0.3, -0.56, 0))
+  // the barrel rests left of the target readout; a thrust ends on the reticle
+  const lunge = new THREE.Vector3(0.02, 0.1, -0.38)
+  return { g, muzzle: new THREE.Vector3(0, 0, -1.5), hip: new THREE.Vector3(0.25, -0.29, -0.22), ads: new THREE.Vector3(0.23, -0.26, -0.24), dart, lunge, sway: 1 }
+}
+
+const ZERO = new THREE.Vector3()
+
 export class ViewModels {
   constructor(G) {
     this.G = G
@@ -160,7 +201,7 @@ export class ViewModels {
     this.scene.add(this.hemi, this.dir)
     this.root = new THREE.Group()
     this.scene.add(this.root)
-    this.models = { pistol: pistol(), rifle: tranqRifle(), hunting: huntingRifle(), shotgun: shotgun(), scanner: scanner(), camera: fieldCamera() }
+    this.models = { pistol: pistol(), rifle: tranqRifle(), hunting: huntingRifle(), shotgun: shotgun(), scanner: scanner(), camera: fieldCamera(), syringe: jumboSyringe() }
     for (const m of Object.values(this.models)) {
       m.g.visible = false
       this.root.add(m.g)
@@ -175,16 +216,38 @@ export class ViewModels {
     this.reloadDip = 0
     this.screenState = ''
     this.camScreenState = ''
+    this.t = 0
+    this.jab = null // a thrust under way: { t, lunge, cycle }
   }
 
   show(id) {
     if (this.current) this.models[this.current].g.visible = false
     this.current = id
+    this.jab = null
     if (id) this.models[id].g.visible = true
   }
 
   fire(strength) {
     this.kick = Math.min(1.5, this.kick + strength)
+  }
+
+  // A melee thrust: out over `lunge` seconds, a beat at full reach while the
+  // cartridge empties, then back over the rest of `cycle`.
+  thrust(lunge, cycle) {
+    this.jab = { t: 0, lunge, cycle }
+  }
+
+  // How far out the thrust is, 0..1: accelerating out, so it lands with weight.
+  reach(dt) {
+    const j = this.jab
+    if (!j) return 0
+    j.t += dt
+    const hold = 0.12
+    if (j.t >= j.cycle) this.jab = null
+    if (j.t < j.lunge) return (j.t / j.lunge) ** 2
+    if (j.t < j.lunge + hold) return 1
+    const back = Math.min(1, (j.t - j.lunge - hold) / Math.max(0.05, j.cycle - j.lunge - hold))
+    return 1 - back * back * (3 - 2 * back)
   }
 
   setAspect(a) {
@@ -287,12 +350,20 @@ export class ViewModels {
     const aim = s.aim
     const base = m.hip.clone().lerp(m.ads, aim)
     const bobK = s.moving * (1 - aim * 0.85) * (s.sprint ? 1.6 : 1)
+    // a thrust drives the model out along its `lunge`
+    const r = this.reach(dt)
+    const L = m.lunge || ZERO
+    // a long pole never quite holds still
+    this.t += dt
+    const drift = (m.sway || 0) * (1 - aim * 0.6) * (1 - this.lower)
+    const dx = (Math.sin(this.t * 0.83) * 0.006 + Math.sin(this.t * 2.1) * 0.0015) * drift
+    const dy = Math.sin(this.t * 1.17 + 1) * 0.004 * drift
     this.root.position.set(
-      base.x + Math.sin(s.bob) * 0.012 * bobK + this.swayX * 0.02,
-      base.y + Math.abs(Math.cos(s.bob)) * 0.01 * bobK - this.lower * 0.35 - this.reloadDip * 0.08 + this.swayY * 0.02 - (s.sprint ? 0.04 : 0),
-      base.z + this.kick * 0.05,
+      base.x + Math.sin(s.bob) * 0.012 * bobK + this.swayX * 0.02 + dx + L.x * r,
+      base.y + Math.abs(Math.cos(s.bob)) * 0.01 * bobK - this.lower * 0.35 - this.reloadDip * 0.08 + this.swayY * 0.02 - (s.sprint ? 0.04 : 0) + dy + L.y * r,
+      base.z + this.kick * 0.05 + L.z * r,
     )
-    this.root.rotation.set(this.kick * 0.18 - this.reloadDip * 0.6 + (s.sprint ? -0.25 : 0), this.swayX * 0.05 + (s.sprint ? 0.5 : 0), this.reloadDip * 0.35 + this.swayX * 0.05)
+    this.root.rotation.set(this.kick * 0.18 - this.reloadDip * 0.6 + (s.sprint ? -0.25 : 0), this.swayX * 0.05 + (s.sprint ? 0.5 : 0), this.reloadDip * 0.35 + this.swayX * 0.05 + Math.sin(this.t * 0.6) * 0.012 * drift)
     if (m.dart) m.dart.visible = s.loaded
     this.hemi.intensity = 0.4 + s.light * 1.0
     this.dir.intensity = 0.3 + s.light * 1.5
