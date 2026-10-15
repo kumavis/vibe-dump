@@ -13,6 +13,11 @@
 //
 // A light is { x, y, r, a = 1, rim? }: `r` is the pool's radius in world
 // units, `a` how much it clears, `rim` a colour the fog glows at its edge.
+//
+// Ink is the Gloomtopus's trick: { k, x, y, age } billows out of (x, y) and
+// thickens the fog to near black for a while. It goes into the same small
+// canvas before the pools are cut, so the pools still part it (the level
+// shrinks them while it's about).
 
 import { hexA } from '../../stars.js'
 
@@ -36,6 +41,7 @@ let base = null
 let clouds = []
 let sprites = null
 let pool = null
+let inkBlob = null
 const rims = new Map()
 
 // A small seeded random, so the fog has the same shape every time it rolls in.
@@ -122,6 +128,43 @@ function bakeSprites() {
   g.addColorStop(1, 'rgba(0,0,0,0)')
   x.fillStyle = g
   x.fillRect(0, 0, s, s)
+
+  // a puff of ink: dark violet-black, soft all the way out
+  inkBlob = canvasOf(s, s)
+  const ix = inkBlob.getContext('2d')
+  const ig = ix.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2)
+  ig.addColorStop(0, 'rgba(6,2,18,0.95)')
+  ig.addColorStop(0.5, 'rgba(10,3,28,0.7)')
+  ig.addColorStop(1, 'rgba(12,4,32,0)')
+  ix.fillStyle = ig
+  ix.fillRect(0, 0, s, s)
+}
+
+// Where the puffs of a squirt of ink go: out from where it came from, fast
+// at first and then drifting, until they've filled the screen.
+const INK_PUFFS = Array.from({ length: 14 }, (_, i) => ({
+  a: (i / 14) * TAU + Math.sin(i * 7.3) * 0.3,
+  reach: 0.35 + 0.65 * ((i * 0.618) % 1),
+  size: 0.8 + 0.4 * ((i * 0.37) % 1),
+  spin: (i % 2 ? 1 : -1) * 0.12,
+}))
+
+function drawInk(W, H, ink) {
+  const k = Math.min(1, ink.k)
+  fx.globalCompositeOperation = 'source-over'
+  fx.globalAlpha = 0.55 * k
+  fx.fillStyle = '#07021a'
+  fx.fillRect(-M, -M, W + 2 * M, H + 2 * M)
+  const grow = 1 - Math.exp(-ink.age * 2.6)
+  const span = Math.hypot(W, H) * 0.62
+  for (const p of INK_PUFFS) {
+    const a = p.a + ink.age * p.spin
+    const d = span * p.reach * grow
+    const r = (90 + 420 * grow) * p.size
+    fx.globalAlpha = k * 0.9
+    fx.drawImage(inkBlob, ink.x + Math.cos(a) * d - r, ink.y + Math.sin(a) * d * 0.8 - r, r * 2, r * 2)
+  }
+  fx.globalAlpha = 1
 }
 
 // The fog lit up round the edge of a pool, in the colour of what's shining.
@@ -225,7 +268,7 @@ function paintClouds(W, H, t) {
   clx.globalAlpha = 1
 }
 
-export function drawFog(ctx, g, lights, amount = 1) {
+export function drawFog(ctx, g, lights, amount = 1, ink = null) {
   if (amount <= 0.002) return
   const W = g.W
   const H = g.H
@@ -242,6 +285,7 @@ export function drawFog(ctx, g, lights, amount = 1) {
   fx.drawImage(clv, 0, 0, clv.width, clv.height, 0, 0, (clv.width / CS) * FS, (clv.height / CS) * FS)
 
   fx.setTransform(FS, 0, 0, FS, M * FS, M * FS)
+  if (ink && ink.k > 0.01) drawInk(W, H, ink)
   fx.globalCompositeOperation = 'lighter'
   for (const L of lights) {
     if (!L.rim) continue

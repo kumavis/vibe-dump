@@ -25,12 +25,14 @@ export const PALS = [
 export const CRYSTAL = ['#ff6bd6', '#b98cff', '#ffcf4a']
 export const CORE = '#62f6ff'
 
-// How each size of rock behaves. `next` is what it splits into.
+// How each size of rock behaves. `next` is what it splits into. A big rock
+// shot all the way down is seven kills, so the drop chances are kept small:
+// the crystal rocks are where the prizes are.
 export const SIZES = {
   giant: { r: 78, hp: 12, score: 400, boom: 1.4, drop: 0.35, chunks: 12, lumps: 13, craters: 6, speed: 45, spin: 0.35, next: 'big' },
-  big: { r: 52, hp: 5, score: 150, boom: 1.0, drop: 0.06, chunks: 9, lumps: 11, craters: 4, speed: 64, spin: 0.6, next: 'mid' },
-  mid: { r: 33, hp: 2, score: 100, boom: 0.7, drop: 0.05, chunks: 6, lumps: 9, craters: 3, speed: 82, spin: 0.9, next: 'small' },
-  small: { r: 19, hp: 1, score: 50, boom: 0.45, drop: 0.04, chunks: 4, lumps: 8, craters: 1, speed: 104, spin: 1.4, next: null },
+  big: { r: 52, hp: 5, score: 150, boom: 1.0, drop: 0.035, chunks: 9, lumps: 11, craters: 4, speed: 64, spin: 0.6, next: 'mid' },
+  mid: { r: 33, hp: 2, score: 100, boom: 0.7, drop: 0.025, chunks: 6, lumps: 9, craters: 3, speed: 82, spin: 0.9, next: 'small' },
+  small: { r: 19, hp: 1, score: 50, boom: 0.45, drop: 0.015, chunks: 4, lumps: 8, craters: 1, speed: 104, spin: 1.4, next: null },
 }
 
 // ---------------------------------------------------------------- sprites

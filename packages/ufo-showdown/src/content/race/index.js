@@ -1,177 +1,200 @@
-// Mission 3, the Ring Race: a bonus round with nothing to shoot. For a minute,
-// glowing rings stream down through the ships' half of the screen in lines,
-// S-curves, zig-zags and staircases (patterns.js). Fly through one to score
-// it. Rings in a row build a combo, a missed one ends it, and now and then a
-// big gold ring is worth five. A few floating buoys drift down beside the
-// racing line: bumping one knocks a ship dizzy and ends its combo, but never
-// costs a life. In the last ten seconds the pace picks up.
+// Mission 3, the Hyperspace Run. The ships are flying through hyperspace,
+// faster and faster: the course starts quick and keeps speeding up for a
+// minute and a quarter, to about twice the speed by the finish gate. Glowing
+// rings come down the tunnel in trails, and every so often the trail splits
+// into two or three lanes with a badge of stars over each one. The gold lane
+// is worth the most and is the hardest to fly; the green one is easy and
+// worth the least. There's about a second to choose (course.js).
 //
-// With two players both ships can take every ring, the points are each
-// ship's own, and a ring only counts as missed if nobody flew through it.
+// Fly through a ring to score it. Rings in a row build a combo, and every
+// ring is worth more the faster the course is going. A missed ring ends the
+// combo, but only one in the lane you picked: the lanes you didn't take
+// don't count against you.
+//
+// Nothing to shoot here. Space bombs sit in the lanes and saucers come
+// swooping, parking, streaking and bombing through (hazards.js), and they all
+// knock a ship out like anything else in the game, so the race can be lost.
+//
+// With two players both ships can take every ring and the points are each
+// ship's own. A trail ring only counts as missed if nobody flew through it.
 
 import { synth } from '../../audio.js'
-import { SQUASH, choosePattern, planPattern, planGold, planBuoys } from './patterns.js'
-import { RING_PALS, GOLD_PAL, drawRingHalf, drawBurst, drawSparkles, drawSpeedLines, drawBuoy, drawDizzy, drawIcon } from './draw.js'
+import { V0, V1, FINISH, INTRO, SQUASH, speedAt, distAt, newCourse, planNext, latest } from './course.js'
+import { lv, yRef, yOf, sAt } from './state.js'
+import { bomb, saucer, launch } from './hazards.js'
+import {
+  RING_PALS,
+  GOLD_PAL,
+  LANE_COL,
+  depth,
+  makeStreak,
+  moveStreak,
+  drawHyperspace,
+  drawRingHalf,
+  drawBurst,
+  drawSparkles,
+  drawSign,
+  drawArrow,
+  drawDivider,
+  drawPaint,
+  drawFinishHalf,
+  drawIcon,
+} from './draw.js'
 
 const TAU = Math.PI * 2
 const rand = (a, b) => a + Math.random() * (b - a)
 const pick = (arr) => arr[(Math.random() * arr.length) | 0]
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 
-const DURATION = 60 // seconds on the clock
-const RUSH = 10 // the last stretch, when everything speeds up
-const LEAD = 2 // the course starts falling this long before the clock starts, so the first rings arrive soon after "go"
-const SPEED = [170, 190, 245] // how fast the course falls: the opening, the middle, the rush
-const GOLD_EVERY = 8.5 // seconds between gold rings, give or take a pattern
-
-// No new rings this close to the end: they'd never reach the ships in time.
-// A taller window (a phone held upright) has further for them to fall.
-const stopAt = (g) => DURATION - (g.H - 60) / SPEED[2]
-
-// Scoring. About 90 rings come by in the minute. A good run takes most of
-// them with a few slips and lands around 8–15k (the stars it pays are about
-// score / 100); a flawless one tops out near 19k.
-const BASE = 40 // points for a ring, times the combo
-const GOLD = 5 // a gold ring is worth this many rings
+// Scoring. About 130 rings come down in a run for a ship that keeps to one
+// route. A good run lands around 8–15k (the stars it pays are about score /
+// 100): sticking to the easy lanes gets about 8–10k, braving every gold lane
+// and living to tell the tale about 16k.
+const BASE = 16 // points for a ring at the starting speed, times the combo
+const GOLD = 4 // a gold ring is worth this many rings
 const STEP = 5 // rings in a row for each step up the combo
 const MAX_MULT = 4
-const PERFECT = 150 // every ring of a pattern (four or more) without a slip
+const PATH = 250 // every ring of a gold lane without a slip (times the speed)
 const SLACK = 6 // a ship's centre may be this far onto the rim and still count
-const BUMP_R = 18 // how close (beyond a buoy's radius) a ship's centre bumps it
-const WOBBLE = 0.75 // seconds a bump leaves a ship wobbling
-
-const lv = { rings: [], buoys: [], fx: [], sparks: [], lines: [], queue: [], ships: [] }
-
-// With `?debug` (see main.js) a probe can read the course and wind the clock
-// on by setting `__race.lv.clock`.
-if (new URLSearchParams(globalThis.location?.search ?? '').has('debug')) globalThis.__race = { lv, DURATION, RUSH }
+const PAD = 150 // course items appear this far above the top of the screen
 
 const multOf = (streak) => Math.min(MAX_MULT, 1 + Math.floor(streak / STEP))
+// rings are worth more the faster the course is going: double at the finish
+const speedK = (v) => 1 + clamp((v - V0) / (V1 - V0), 0, 1)
+const round5 = (n) => Math.round(n / 5) * 5
 
 function reset(g) {
-  lv.clock = -2.4 // the intro banner runs 2.4 s; the clock reads 0 at "go"
-  lv.t = 0
-  lv.v = SPEED[0]
-  lv.boost = 0
-  lv.fade = 1
+  lv.clock = -INTRO
+  lv.v = speedAt(lv.clock)
+  lv.D = distAt(lv.clock)
+  lv.done = false
+  lv.course = newCourse(g.W)
   lv.queue = []
-  lv.endAt = -LEAD
-  lv.planned = 0
-  lv.closed = false
-  lv.lastKind = null
-  lv.lastX = g.W / 2
-  lv.lastGold = 0
-  lv.pal = 0
-  lv.rowN = 0
-  lv.rows = new Map()
-  lv.pats = new Map()
+  lv.events = []
   lv.rings = []
-  lv.buoys = []
+  lv.deco = []
   lv.fx = []
   lv.sparks = []
-  lv.ships = [0, 1].map(() => ({ rings: 0, streak: 0, best: 0, bumps: 0, wob: 0, kx: 0, cool: 0, perfect: 0 }))
-  lv.rushed = false
-  lv.beep = 6
-  lv.done = false
-  lv.hinted = false
+  lv.bubbles = []
+  lv.forks = new Map()
+  lv.finish = null
+  lv.finishAt = FINISH
+  lv.ships = [0, 1].map(() => ({ rings: 0, streak: 0, best: 0, gold: 0, paths: 0, crashes: 0, alive: true }))
   lv.said = []
   lv.w = g.W
-  lv.lines = []
-  for (let i = 0; i < 34; i++) lv.lines.push(speedLine(g, rand(-150, g.H)))
+  lv.fade = 1
+  lv.lines = Array.from({ length: 70 }, () => makeStreak(true))
+  lv.warpN = Math.floor(V0 / 100)
+  lv.flashT = 0
+  lv.signFork = 0
+  enqueue(lv.course.items.slice())
+  g.warp(1.2 + lv.v / 160)
+  if (g.debug) globalThis.__race = { lv, speedAt, distAt, FINISH, yOf: (s) => yOf(g, s) }
 }
 
 // ---------------------------------------------------------------- the course
 
-// Plan the next pattern and queue up its rings and buoys on the clock.
-function plan(g) {
-  const at = lv.endAt
-  const stage = at >= DURATION - RUSH - 1 ? 2 : at < 16 ? 0 : 1
-  const W = g.W
-  let p
-  if (lv.planned && lv.lastKind !== 'gold' && at - lv.lastGold > GOLD_EVERY && at < stopAt(g) - 1) {
-    p = planGold({ W, cx: lv.lastX })
-    lv.lastGold = at
-  } else {
-    const kind = choosePattern(stage, lv.lastKind, g.numPlayers === 2)
-    p = planPattern(kind, { W, cx: lv.lastX + rand(-160, 160), stage, pace: stage === 2 ? 0.85 : 1 })
-  }
-
-  // time to get across to it, on top of a breather between patterns
-  const first = p.rings.filter((r) => r.at === p.rings[0].at)
-  const travel = Math.min(...first.map((r) => Math.max(0, Math.abs(r.x - lv.lastX) - r.rx * 0.6)))
-  const start = lv.planned ? at + (p.kind === 'gold' ? 0.75 : 0.95) + travel / 400 : at
-  lv.planned++
-  lv.lastKind = p.kind
-  lv.lastX = p.exitX
-  lv.endAt = start + p.dur
-  if (start > stopAt(g)) {
-    lv.closed = true
-    return
-  }
-
-  const id = lv.planned
-  const pal = lv.pal++ % RING_PALS.length
-  const rowOf = new Map()
-  let rows = 0
-  for (const r of p.rings) {
-    const t = start + r.at
-    if (t > stopAt(g)) continue
-    if (!rowOf.has(r.at)) {
-      const row = ++lv.rowN
-      rowOf.set(r.at, row)
-      lv.rows.set(row, { rings: [], taken: false, done: false, pat: id })
-      rows++
-    }
-    lv.queue.push({ at: t, ring: { x: r.x, rx: r.rx, gold: r.gold, pal, row: rowOf.get(r.at), pat: id } })
-  }
-  lv.pats.set(id, { rows, took: [0, 0] })
-
-  // buoys beside the racing line, from a few seconds in
-  if (p.kind !== 'gold' && start > 5) {
-    const count = stage === 0 ? (Math.random() < 0.5 ? 1 : 0) : stage === 1 ? (Math.random() < 0.35 ? 2 : 1) : 1
-    for (const b of planBuoys(p, { W, v: SPEED[stage], count })) {
-      const t = start + b.at
-      if (t < stopAt(g)) lv.queue.push({ at: t, buoy: { x: b.x } })
-    }
+// Planned items wait in a queue, in arrival order, until they come into view.
+function enqueue(items) {
+  for (const it of items) {
+    it.s = distAt(it.at)
+    if (it.at1 !== undefined) it.s1 = distAt(it.at1)
+    if (it.kind === 'fork') {
+      lv.forks.set(it.id, { xs: it.xs, types: it.types, counts: it.counts, took: [it.types.map(() => 0), it.types.map(() => 0)] })
+    } else lv.queue.push(it)
   }
   lv.queue.sort((a, b) => a.at - b.at)
+  const ev = lv.course.events.splice(0)
+  if (ev.length) {
+    lv.events.push(...ev)
+    lv.events.sort((a, b) => a.at - b.at)
+  }
 }
 
-function spawnRing(g, q, late) {
-  const r = q.ring
-  r.y = -r.rx * SQUASH - 26 + lv.v * late
-  r.got = [false, false]
-  r.rel = [null, null]
-  r.miss = false
-  r.alpha = 1
-  r.flash = 0
-  r.fading = false
-  lv.rows.get(r.row).rings.push(r)
-  lv.rings.push(r)
+function spawnItem(g, it) {
+  const y = yOf(g, it.s)
+  switch (it.kind) {
+    case 'ring':
+      lv.rings.push({
+        s: it.s,
+        x: it.x,
+        y,
+        rx: it.rx,
+        gold: it.gold,
+        pal: it.pal,
+        fork: it.fork ?? null,
+        lane: it.lane ?? null,
+        got: [false, false],
+        rel: [null, null],
+        miss: false,
+        done: false,
+        alpha: 1,
+        flash: 0,
+        fading: false,
+      })
+      break
+    case 'bomb':
+      g.spawn('raceBomb', it.drift ? it.x0 : it.x, y, {
+        s: it.s,
+        cx: it.x,
+        sway: it.sway ?? 0,
+        role: it.role,
+        ...(it.drift ? { x0: it.x0, x1: it.x } : {}),
+      })
+      break
+    case 'bubble': {
+      // a power-up in the easy lane: a heart if anyone's in trouble, else a shield
+      const needy = g.players.some((p) => p.out || p.lives <= 1)
+      g.dropBubble(it.x, y, needy ? 'heart' : 'shield')
+      const b = g.bubbles[g.bubbles.length - 1]
+      b.raceS = it.s
+      lv.bubbles.push(b)
+      break
+    }
+    case 'finish':
+      lv.finish = { s: it.s, x: it.x, y, alpha: 1 }
+      lv.finishAt = it.at
+      break
+    case 'sign':
+      if (lv.signFork !== it.at) {
+        // ding-dong: a fork is coming
+        lv.signFork = it.at
+        synth.tone({ type: 'triangle', from: 1175, dur: 0.16, vol: 0.12 }, 'race-sign', 0.3)
+        synth.tone({ type: 'triangle', from: 880, dur: 0.26, vol: 0.12, at: 0.15 }, 'race-sign2', 0.3)
+      }
+      lv.deco.push({ ...it, y })
+      break
+    default:
+      lv.deco.push({ ...it, y, y1: it.s1 !== undefined ? yOf(g, it.s1) : y })
+  }
 }
 
-function spawnBuoy(g, q, late) {
-  const sat = Math.random() < 0.4
-  lv.buoys.push({
-    x: q.buoy.x,
-    y: -40 + lv.v * late,
-    r: sat ? 17 : 20,
-    kind: sat ? 'sat' : 'float',
-    rot: 0,
-    spin: rand(-0.7, 0.7),
-    vx: rand(-8, 8),
-    t: rand(0, 6),
-    hit: false,
-    warn: 0,
-  })
+// A wider or narrower window: slide everything on the course to match.
+function rescale(g) {
+  const k = g.W / lv.w
+  const sx = (o) => {
+    for (const key of ['x', 'x0', 'x1', 'cx', 'lx', 'xs', 'xe']) if (typeof o[key] === 'number') o[key] *= k
+  }
+  for (const r of lv.rings) sx(r)
+  for (const d of lv.deco) sx(d)
+  for (const q of lv.queue) sx(q)
+  for (const ev of lv.events) sx(ev)
+  for (const b of lv.bubbles) sx(b)
+  for (const f of lv.forks.values()) f.xs = f.xs.map((x) => x * k)
+  for (const e of g.enemies) if (e.type === 'raceBomb' || e.type === 'raceSaucer') sx(e)
+  const c = lv.course
+  c.W = g.W
+  for (const e of c.exits) e.x *= k
+  for (const it of c.items) sx(it)
+  if (lv.finish) lv.finish.x = g.W / 2
+  lv.w = g.W
 }
 
 // ---------------------------------------------------------------- scoring
 
-function shipState(p) {
-  return lv.ships[p.id]
-}
+const ship = (p) => lv.ships[p.id]
 
-// Where a ship's pop-up words go: over the ship, or nudged out to its own side
+// Where a ship's pop-up words go: next to it, or nudged out to its own side
 // when the other ship is right alongside, so two scores don't print as one.
 function textX(g, p) {
   const o = g.players.find((q) => q !== p && q.alive)
@@ -180,73 +203,73 @@ function textX(g, p) {
   return (p.x + o.x) / 2 + side * 54
 }
 
-// Words (rather than points) go out through here. Two ships side by side
-// earning the same word in the same moment get it said once, and words that
-// land close together (a Perfect, then a gold ring, then a combo step) stack
-// up instead of printing over each other. Pop-up text rises 36 units a second
-// (main.js), which is how far an earlier word has floated.
-const RISE = 36
-function say(g, p, dy, word, color, size, life) {
+// Pop-ups go under the ship, never up the screen where the course is coming
+// from, and sink away behind it as if left behind. Words that land close
+// together (a combo step, then a gold path) stack downward instead of
+// printing over each other, and two ships earning the same word in the same
+// moment get it said once.
+function say(g, p, word, color, size = 18, life = 1.1) {
   const now = g.time
   lv.said = lv.said.filter((s) => now - s.t < s.life)
   if (lv.said.some((s) => s.word === word && now - s.t < 0.5 && Math.abs(s.px - p.x) < 220)) return
   const x = textX(g, p)
-  let y = p.y + dy
-  for (let tries = 0; tries < 4; tries++) {
-    const near = lv.said.find((s) => Math.abs(s.x - x) < 150 && Math.abs(s.y - RISE * (now - s.t) - y) < 26)
+  let y = Math.min(p.y + 66, g.H - 34)
+  for (let tries = 0; tries < 3; tries++) {
+    const near = lv.said.find((s) => Math.abs(s.x - x) < 160 && Math.abs(s.y + 30 * (now - s.t) - y) < 24)
     if (!near) break
-    y = near.y - RISE * (now - near.t) - 26
+    y = Math.min(g.H - 16, y + 24)
   }
   lv.said.push({ word, t: now, life, px: p.x, x, y })
-  g.popText(x, y, word, color, size, life)
+  const t = g.popText(x, y, word, color, size, life)
+  t.rise = -30
 }
 
 function score(g, r, p) {
-  const st = shipState(p)
+  const st = ship(p)
   r.got[p.id] = true
-  const row = lv.rows.get(r.row)
-  row.taken = true
   const before = multOf(st.streak)
   st.streak++
   st.rings++
+  if (r.gold) st.gold++
   st.best = Math.max(st.best, st.streak)
   const mult = multOf(st.streak)
-  const pts = BASE * (r.gold ? GOLD : 1) * mult
+  const pts = round5(BASE * (r.gold ? GOLD : 1) * mult * speedK(lv.v))
   g.addScore(p.id, pts)
-  const tx = textX(g, p)
-  g.popText(tx, p.y - 48, `+${pts}`, r.gold ? '#ffe23d' : p.pal.light, r.gold ? 24 : 17, 0.9)
-  if (r.gold) say(g, p, -80, 'Gold ring!', '#ffd54a', 20, 1.1)
+  const t = g.popText(textX(g, p), p.y + 38, `+${pts}`, r.gold ? '#ffe23d' : p.pal.light, r.gold ? 22 : 16, 0.75)
+  t.rise = -70
   if (mult > before) {
-    say(g, p, r.gold ? -108 : -78, `Combo ×${mult}!`, '#ffe23d', 21, 1.2)
+    say(g, p, `Combo ×${mult}!`, '#ffe23d', 20, 1.1)
     synth.tone({ type: 'square', from: 784, dur: 0.07, vol: 0.06, at: 0.1 }, 'race-up', 0)
     synth.tone({ type: 'square', from: 1175, dur: 0.12, vol: 0.06, at: 0.17 }, 'race-up2', 0)
   }
   chime(st.streak, r.gold)
 
-  // a whole pattern without a slip
-  const pat = lv.pats.get(r.pat)
-  if (pat && ++pat.took[p.id] === pat.rows && pat.rows >= 4) {
-    st.perfect++
-    g.addScore(p.id, PERFECT)
-    const word = g.numPlayers === 1 ? `Perfect! +${PERFECT}` : 'Perfect!'
-    g.later(0.3, () => say(g, p, -104, word, '#9ff0ff', 22, 1.3))
+  // every ring of a gold lane without a slip
+  const f = r.fork && lv.forks.get(r.fork)
+  if (f) {
+    const n = ++f.took[p.id][r.lane]
+    if (f.types[r.lane] === 'gold' && n === f.counts[r.lane]) {
+      st.paths++
+      const bonus = round5(PATH * speedK(lv.v))
+      g.addScore(p.id, bonus)
+      g.later(0.25, () => say(g, p, g.numPlayers === 1 ? `Gold path! +${bonus}` : 'Gold path!', '#ffd54a', 21, 1.4))
+      ;[1047, 1319, 1568, 2093, 2637].forEach((n, i) => synth.tone({ type: 'triangle', from: n, dur: 0.14, vol: 0.1, at: 0.25 + i * 0.06 }, 'race-path' + i, 0))
+    }
   }
 
   // the pop: a burst of light and sparkles flying off the rim
   const pal = r.gold ? GOLD_PAL : RING_PALS[r.pal % RING_PALS.length]
-  lv.fx.push({ x: r.x, y: r.y, rx: r.rx, gold: r.gold, pal: r.pal, t: 0, max: 0.45 })
-  const n = r.gold ? 22 : 12
+  lv.fx.push({ x: r.x, y: r.y, rx: r.rx, gold: r.gold, pal: r.pal, t: 0, max: 0.4 })
+  const n = r.gold ? 18 : 10
   for (let i = 0; i < n; i++) {
     const a = (i / n) * TAU + rand(-0.2, 0.2)
-    const ex = Math.cos(a) * r.rx
-    const ey = Math.sin(a) * r.rx * SQUASH
     const sp = rand(60, 160)
-    const life = rand(0.45, 0.8)
+    const life = rand(0.4, 0.7)
     lv.sparks.push({
-      x: r.x + ex,
-      y: r.y + ey,
+      x: r.x + Math.cos(a) * r.rx,
+      y: r.y + Math.sin(a) * r.rx * SQUASH,
       vx: Math.cos(a) * sp,
-      vy: Math.sin(a) * sp * 0.6 - 40,
+      vy: Math.sin(a) * sp * 0.6,
       life,
       max: life,
       size: rand(4, r.gold ? 9 : 7),
@@ -254,7 +277,7 @@ function score(g, r, p) {
       color: pick([pal.main, pal.light, '#ffffff']),
     })
   }
-  g.sparks(p.x, p.y - 10, pal.light, 5)
+  g.sparks(p.x, p.y - 10, pal.light, 4)
   // the ring flashes white and carries on past the ship as it fades, so the
   // ship is seen to fly right through it (with two players, it stays half
   // there until the other ship has had its go)
@@ -263,161 +286,132 @@ function score(g, r, p) {
   else r.alpha = 0.6
 }
 
-// A ring row has gone past everyone. If nobody flew through any ring in it,
-// whoever was nearest missed it.
-function resolveRow(g, id) {
-  const row = lv.rows.get(id)
-  if (!row || row.done) return
-  row.done = true
-  if (row.taken) return
-  const blamed = new Set()
-  for (const r of row.rings) {
-    r.miss = true
-    let best = null
-    let bd = Infinity
-    for (const p of g.players) {
-      if (!p.alive) continue
-      const d = Math.abs(p.x - r.x)
-      if (d < bd) {
-        bd = d
-        best = p
-      }
-    }
-    if (best) blamed.add(best)
-  }
-  for (const p of blamed) {
-    const pat = lv.pats.get(row.pat)
-    if (pat) pat.took[p.id] = -99 // no Perfect for this pattern now
-    endCombo(g, p)
-  }
+// The lane of a fork a ship is in: whichever it's nearest.
+function laneOf(f, x) {
+  let best = 0
+  for (let k = 1; k < f.xs.length; k++) if (Math.abs(f.xs[k] - x) < Math.abs(f.xs[best] - x)) best = k
+  return best
 }
 
-// `quiet` for a bump, which has its own "Bonk!" and doesn't need a second line.
-function endCombo(g, p, quiet = false) {
-  const st = shipState(p)
-  if (st.streak >= STEP && !quiet) {
-    // up where "Combo ×n!" goes: the two can never land at once
-    say(g, p, -80, 'Combo over', '#b8bde0', 17, 1)
+// A ring has gone past everyone. If nobody flew through it, it's a miss for
+// whoever it was meant for: the nearest ship on a trail, or in a fork any
+// ship that picked that lane.
+function resolveRing(g, r) {
+  r.done = true
+  if (r.got[0] || r.got[1]) return
+  r.miss = true
+  const ships = g.alive()
+  let blamed = []
+  if (r.fork) {
+    const f = lv.forks.get(r.fork)
+    if (f) blamed = ships.filter((p) => laneOf(f, p.x) === r.lane)
+    for (const p of blamed) f.took[p.id][r.lane] = -99
+  } else if (ships.length) {
+    blamed = [ships.reduce((a, b) => (Math.abs(a.x - r.x) <= Math.abs(b.x - r.x) ? a : b))]
+  }
+  for (const p of blamed) endCombo(g, p)
+}
+
+function endCombo(g, p) {
+  const st = ship(p)
+  if (st.streak >= STEP) {
+    say(g, p, 'Combo over', '#b8bde0', 16, 1)
     synth.tone({ type: 'triangle', from: 440, to: 210, dur: 0.32, vol: 0.1 }, 'race-lost', 0.2)
   }
   st.streak = 0
-}
-
-function bump(g, b, p) {
-  const st = shipState(p)
-  const dir = Math.sign(p.x - b.x) || 1
-  st.wob = WOBBLE
-  st.kx = dir * 320
-  st.cool = 1
-  st.bumps++
-  b.hit = true
-  b.vx = -dir * 170
-  b.spin = -dir * 7
-  g.sparks((p.x + b.x) / 2, (p.y + b.y) / 2, '#ffe23d', 9)
-  g.shake(7)
-  say(g, p, -62, 'Bonk!', '#ffb36a', 22, 0.9)
-  synth.noise({ dur: 0.14, vol: 0.3, freq: 1500, to: 260 }, 'race-bonk', 0.1)
-  synth.tone({ type: 'sine', from: 170, to: 560, dur: 0.22, vol: 0.18 }, 'race-boing', 0.1)
-  endCombo(g, p, true)
-  // no Perfect for whatever pattern the ship was in the middle of (not the
-  // ones still coming down from the top)
-  for (const r of lv.rings) {
-    const pat = r.y > p.y - 150 && r.y < p.y + 60 && lv.pats.get(r.pat)
-    if (pat) pat.took[p.id] = -99
-  }
 }
 
 // Up a pentatonic scale as the streak grows, so a long run sings.
 const NOTES = [523, 587, 659, 784, 880, 1047, 1175, 1319, 1568, 1760, 2093]
 function chime(streak, gold) {
   const f = NOTES[Math.min(streak - 1, NOTES.length - 1)]
-  synth.tone({ type: 'triangle', from: f, dur: 0.22, vol: 0.14 }, 'race-chime', 0.02)
-  synth.tone({ type: 'sine', from: f * 2, dur: 0.34, vol: 0.06, at: 0.04 }, 'race-chime-hi', 0.02)
-  if (gold) {
-    ;[1047, 1319, 1568, 2093].forEach((n, i) => synth.tone({ type: 'triangle', from: n, dur: 0.16, vol: 0.1, at: 0.08 + i * 0.06 }, 'race-gold' + i, 0))
-  }
+  synth.tone({ type: 'triangle', from: f, dur: 0.2, vol: 0.13 }, 'race-chime', 0.02)
+  synth.tone({ type: 'sine', from: f * 2, dur: 0.3, vol: 0.05, at: 0.04 }, 'race-chime-hi', 0.02)
+  if (gold) synth.tone({ type: 'triangle', from: 2093, dur: 0.14, vol: 0.07, at: 0.07 }, 'race-gold', 0.02)
+}
+
+// ---------------------------------------------------------------- the finish
+
+function finish(g) {
+  lv.done = true
+  g.levelDone()
+  g.flash(0.55)
+  g.shake(8)
+  g.warp(1.2)
+  g.popText(g.W / 2, g.H - 60, 'Finish!', '#ffe23d', 34, 1.6).rise = -10
+  ;[784, 988, 1175, 1568].forEach((f, i) => synth.tone({ type: 'square', from: f, dur: i === 3 ? 0.5 : 0.12, vol: 0.08, at: i * 0.1 }, 'race-fin' + i, 0))
+  synth.noise({ dur: 1.2, vol: 0.25, freq: 5000, to: 200 }, 'race-drop-out', 0)
+  // every bomb left on the course goes pop, like fireworks
+  const bombs = g.enemies.filter((e) => e.type === 'raceBomb' && !e.dead)
+  bombs.forEach((e, i) =>
+    g.later(0.15 + i * 0.06, () => {
+      if (e.dead) return
+      e.dead = true
+      g.explode(e.x, e.y, pick(['#ff7bd8', '#ffd54a', '#9ff0ff']), 0.6)
+    }),
+  )
 }
 
 // ---------------------------------------------------------------- per frame
 
-function speedLine(g, y) {
-  return {
-    u: rand(-1, 1),
-    y,
-    len: rand(50, 150),
-    k: rand(0.1, 0.26),
-    w: rand(1, 2.6),
-    sp: rand(2.4, 4.4),
-    col: pick(['#9ff0ff', '#c9b3ff', '#ffffff', '#9ff0ff']),
-  }
-}
-
-// A wider or narrower window: slide everything on the course to match.
-function rescale(g) {
-  const k = g.W / lv.w
-  for (const r of lv.rings) r.x *= k
-  for (const b of lv.buoys) b.x *= k
-  for (const q of lv.queue) (q.ring ?? q.buoy).x *= k
-  lv.lastX *= k
-  lv.w = g.W
-}
-
 function update(g, dt) {
   if (g.W !== lv.w) rescale(g)
   const racing = (g.phase === 'intro' || g.phase === 'main') && !lv.done
-  if (racing) lv.clock += dt
-  lv.t = Math.max(0, lv.clock)
-  const left = DURATION - lv.t
+  if (racing) {
+    lv.clock += dt
+    lv.v = speedAt(lv.clock)
+    lv.D = distAt(lv.clock)
+    g.warp(1.2 + lv.v / 160)
+    if (Math.floor(lv.v / 100) > lv.warpN) {
+      lv.warpN = Math.floor(lv.v / 100)
+      lv.flashT = 1
+      synth.noise({ dur: 0.9, vol: 0.2, freq: 300, to: 4500 }, 'race-warp', 0.5)
+    }
+  } else {
+    // dropping out of hyperspace: the course slows to a drift
+    lv.v = Math.max(80, lv.v - dt * 500)
+    lv.D += lv.v * dt
+  }
+  lv.flashT = Math.max(0, lv.flashT - dt * 1.5)
+  lv.fade = lv.done ? Math.max(0, lv.fade - dt * 0.9) : 1
 
-  if (g.phase === 'main' && !lv.done) {
-    if (left <= RUSH && !lv.rushed) {
-      lv.rushed = true
-      g.popText(g.W / 2, g.H * 0.3, 'Faster!', '#ffb02e', 32, 1.6)
-      g.popText(g.W / 2, g.H * 0.3 + 38, '10 seconds left', '#ffe23d', 18, 1.6)
-      synth.noise({ dur: 0.8, vol: 0.22, freq: 300, to: 4000 }, 'race-whoosh')
-    }
-    if (left <= 5 && Math.ceil(left) < lv.beep) {
-      lv.beep = Math.ceil(left)
-      synth.tone({ type: 'square', from: 880, dur: 0.08, vol: 0.07 }, 'race-beep', 0.3)
-    }
-    if (left <= 0) {
-      lv.done = true
-      g.popText(g.W / 2, g.H * 0.22, "Time's up!", '#ffffff', 34, 1.4)
-      synth.tone({ type: 'square', from: 1320, dur: 0.45, vol: 0.08 }, 'race-end', 0)
-      synth.tone({ type: 'square', from: 990, dur: 0.45, vol: 0.06 }, 'race-end2', 0)
-      g.levelDone()
+  // plan far enough ahead to cover the whole screen, then bring things on
+  // as they come into view
+  if (racing) {
+    const ahead = (g.H + PAD) / Math.max(lv.v, 100) + 1.5
+    while (!lv.course.done && latest(lv.course) < lv.clock + ahead) enqueue(planNext(lv.course))
+    while (lv.queue.length && yOf(g, lv.queue[0].s) > -PAD) spawnItem(g, lv.queue.shift())
+    while (lv.events.length && lv.events[0].at <= lv.clock) {
+      const ev = lv.events.shift()
+      if (g.phase === 'main') launch(g, ev)
     }
   }
 
-  // the course: plan ahead, then let it fall
-  const target = lv.rushed ? SPEED[2] : lv.t < 16 ? SPEED[0] : SPEED[1]
-  lv.v += (target - lv.v) * Math.min(1, dt * 1.5)
-  lv.boost += ((lv.rushed && !lv.done ? 1 : 0) - lv.boost) * Math.min(1, dt * 2)
-  // the streaks die away once the race is over; the starfield does the warp out
-  lv.fade = lv.done ? Math.max(0, lv.fade - dt * 0.8) : 1
-  if (racing && lv.clock >= -LEAD) {
-    while (!lv.closed && lv.clock >= lv.endAt - 1.2) plan(g)
-    while (lv.queue.length && lv.queue[0].at <= lv.clock) {
-      const q = lv.queue.shift()
-      if (q.ring) spawnRing(g, q, lv.clock - q.at)
-      else spawnBuoy(g, q, lv.clock - q.at)
+  // ships knocked out lose their combo
+  for (const p of g.players) {
+    const st = ship(p)
+    if (st.alive && !p.alive) {
+      st.crashes++
+      endCombo(g, p)
+      for (const f of lv.forks.values()) for (let k = 0; k < f.took[p.id].length; k++) f.took[p.id][k] = -99
     }
+    st.alive = p.alive
   }
 
   let lowY = -Infinity
   for (const p of g.players) if (p.alive) lowY = Math.max(lowY, p.y)
-  lowY = Math.min(g.H + 30, lowY + 46)
+  lowY = Math.min(g.H + 30, (lowY === -Infinity ? yRef(g) : lowY) + 46)
 
   for (const r of lv.rings) {
-    r.y += lv.v * dt
+    r.y = yOf(g, r.s)
     r.flash = Math.max(0, r.flash - dt * 2.2)
     if (lv.done || r.fading) {
-      // flown through by everyone, or time's up: it melts away
+      // flown through by everyone, or the race is over: it melts away
       r.alpha -= dt * 2.3
       if (r.alpha <= 0) r.dead = true
       continue
     }
-    if (!r.miss) {
+    if (!r.done) {
       for (const p of g.players) {
         if (!p.alive || r.got[p.id]) continue
         const rel = r.y - p.y
@@ -425,49 +419,36 @@ function update(g, dt) {
         r.rel[p.id] = rel
         if (prev !== null && prev < 0 && rel >= 0 && Math.abs(p.x - r.x) <= r.rx + SLACK) score(g, r, p)
       }
-      if (!r.dead && r.y > lowY) resolveRow(g, r.row)
+      if (r.y > lowY) resolveRing(g, r)
     }
     if (r.y > g.H + 60) r.dead = true
   }
   lv.rings = lv.rings.filter((r) => !r.dead)
 
-  for (const b of lv.buoys) {
-    b.t += dt
-    b.y += lv.v * dt
-    b.x += b.vx * dt
-    if (b.hit) {
-      b.vx *= 1 - Math.min(1, dt * 0.8)
-      b.spin *= 1 - Math.min(1, dt * 1.2)
-    }
-    b.rot = b.kind === 'sat' || b.hit ? b.rot + b.spin * dt : Math.sin(b.t * 1.7) * 0.22
-    b.warn = Math.min(1, Math.max(0, (b.y - g.playerTop() + 160) / 120))
-    // the first one gets a word of warning as it comes down to the ships
-    if (!lv.hinted && b.y > g.playerTop() - 170 && g.phase === 'main') {
-      lv.hinted = true
-      g.popText(b.x, b.y - 44, "Don't bump the buoys!", '#ffb36a', 17, 2.2)
-    }
-    if (!b.hit && !lv.done) {
-      for (const p of g.players) {
-        if (!p.alive || shipState(p).cool > 0) continue
-        if (g.near(p.x, p.y, b.x, b.y, b.r + BUMP_R)) {
-          bump(g, b, p)
-          break
-        }
-      }
-    }
-    if (b.y > g.H + 60 || b.x < -80 || b.x > g.W + 80) b.dead = true
+  for (const d of lv.deco) {
+    d.y = yOf(g, d.s)
+    if (d.s1 !== undefined) d.y1 = yOf(g, d.s1)
+    if ((d.y1 ?? d.y) > g.H + 140) d.dead = true
   }
-  lv.buoys = lv.buoys.filter((b) => !b.dead)
+  lv.deco = lv.deco.filter((d) => !d.dead)
 
-  // a bumped ship skids sideways and wobbles for a moment
-  for (const p of g.players) {
-    const st = shipState(p)
-    st.cool = Math.max(0, st.cool - dt)
-    if (st.wob <= 0 || !p.alive) continue
-    st.wob = Math.max(0, st.wob - dt)
-    const k = st.wob / WOBBLE
-    p.x = g.clamp(p.x + st.kx * k * dt, 34, g.W - 34)
-    p.tilt = Math.sin(st.wob * 26) * 1.7 * k
+  // power-up bubbles ride along with the course (unless a magnet has them)
+  lv.bubbles = lv.bubbles.filter((b) => !b.dead && g.bubbles.includes(b))
+  for (const b of lv.bubbles) {
+    if (b.pulledBy) b.raceS = sAt(g, b.y)
+    else if (dt > 0) b.vy = (yOf(g, b.raceS) - b.y) / dt
+  }
+
+  // the finish gate: through it, and the race is won (as long as somebody's
+  // still in it; a gate flying past a wrecked team doesn't count)
+  if (lv.finish) {
+    const f = lv.finish
+    f.y = yOf(g, f.s)
+    if (!lv.done) {
+      const ships = g.alive()
+      const line = ships.length ? Math.min(...ships.map((p) => p.y)) : yRef(g)
+      if (f.y >= line && g.phase === 'main' && g.players.some((p) => !p.out)) finish(g)
+    } else f.alpha = Math.max(0, f.alpha - dt * 1.2)
   }
 
   for (const f of lv.fx) {
@@ -477,126 +458,194 @@ function update(g, dt) {
   lv.fx = lv.fx.filter((f) => f.t < f.max)
   for (const s of lv.sparks) {
     s.x += s.vx * dt
-    s.y += s.vy * dt
+    s.y += (s.vy + lv.v * 0.6) * dt
     s.vx *= 1 - Math.min(1, dt * 2.5)
-    s.vy = s.vy * (1 - Math.min(1, dt * 2.5)) + 30 * dt
+    s.vy *= 1 - Math.min(1, dt * 2.5)
     s.rot += dt * 3
     s.life -= dt
   }
   lv.sparks = lv.sparks.filter((s) => s.life > 0)
 
   for (const l of lv.lines) {
-    l.y += lv.v * l.sp * (1 + lv.boost * 0.9) * dt
-    if (l.y - l.len * 2 > g.H) Object.assign(l, speedLine(g, rand(-140, -10)))
+    moveStreak(l, lv.v, g.H, dt)
+    if (l.z - l.len > 1.1) Object.assign(l, makeStreak(false))
   }
 }
 
 // ---------------------------------------------------------------- drawing
 
 function drawBack(g, ctx) {
-  if (lv.fade > 0) drawSpeedLines(ctx, lv.lines, g.W, g.H, lv.boost, lv.fade)
-  // farthest (newest, highest) first, so nearer rings paint over them
+  const heat = clamp(lv.clock / lv.finishAt, 0, 1)
+  drawHyperspace(ctx, g.W, g.H, { lines: lv.lines, D: lv.D, v: lv.v, heat, fade: lv.fade }, g.time)
   const top = g.playerTop()
+  const fadeIn = (y) => clamp((y + 90) / 140, 0, 1)
+  // painted on the course: words, lane markings and the arrows at a fork
+  for (const d of lv.deco) {
+    if (d.kind === 'paint') drawPaint(ctx, d.text, d.x, d.y, d.color, d.big, g.FONT, fadeIn(d.y) * clamp((g.H - d.y) / 200, 0, 1) * lv.fade)
+    else if (d.kind === 'divider') drawDivider(ctx, d.x, d.y, d.y1, g.time, lv.fade)
+    else if (d.kind === 'arrow') drawArrow(ctx, d.x0, d.y, d.x, d.y1, LANE_COL[d.type], g.time, fadeIn(d.y1) * lv.fade)
+  }
+  if (lv.finish) drawFinishHalf(ctx, lv.finish, false, g.W, g.time, g.FONT)
+  // farthest (newest, highest) first, so nearer rings paint over them
   for (let i = lv.rings.length - 1; i >= 0; i--) drawRingHalf(ctx, lv.rings[i], false, g.time, top)
-}
-
-function drawMid(g, ctx) {
-  for (const b of lv.buoys) drawBuoy(ctx, b, g.time, b.warn)
+  // each lane's badge floats over its entry ring
+  for (const d of lv.deco) {
+    if (d.kind !== 'sign') continue
+    const { s, a } = depth(d.y, top)
+    // shrinks less than its ring with distance: it's there to be read early
+    const k = 0.75 + 0.25 * s
+    drawSign(ctx, d.x, d.y - d.rx * SQUASH * s - 28 * k, k, d.tier, d.type, g.time, a * lv.fade)
+  }
 }
 
 function drawTop(g, ctx) {
   const top = g.playerTop()
   for (let i = lv.rings.length - 1; i >= 0; i--) drawRingHalf(ctx, lv.rings[i], true, g.time, top)
+  if (lv.finish) drawFinishHalf(ctx, lv.finish, true, g.W, g.time, g.FONT)
   for (const f of lv.fx) drawBurst(ctx, f)
   drawSparkles(ctx, lv.sparks)
-  for (const p of g.players) {
-    const st = shipState(p)
-    if (p.alive && st.wob > 0) drawDizzy(ctx, p.x, p.y - 44, g.time, st.wob / WOBBLE)
-  }
   if (g.phase === 'clear') drawResults(g, ctx)
 }
 
-// The clock is a ring too: it empties as the minute runs down.
+// ---------------------------------------------------------------- the HUD
+
+// A speedometer in the middle, the rings and combo to its left, the distance
+// to the finish to its right (or, with two players, a ship's rings and combo
+// either side), and a strip under it all counting down to the finish flag.
 function hud(g, ctx) {
   const cx = g.W / 2
-  const left = Math.max(0, DURATION - lv.t)
-  const rush = left <= RUSH && g.phase === 'main'
-  const col = left <= 5 ? '#ff5a5a' : rush ? '#ffb02e' : '#3cf2c8'
-  const pulse = rush ? 1 + 0.08 * Math.max(0, Math.sin(g.time * 12)) : 1
-  const R = 22
-  const cy = 33
-
+  const span = Math.min(g.W * 0.46, 520)
   ctx.save()
-  ctx.fillStyle = 'rgba(10,8,34,0.6)'
-  ctx.beginPath()
-  ctx.arc(cx, cy, R + 6, 0, TAU)
-  ctx.fill()
-  ctx.lineWidth = 6
-  ctx.strokeStyle = 'rgba(255,255,255,0.13)'
-  ctx.beginPath()
-  ctx.arc(cx, cy, R, 0, TAU)
-  ctx.stroke()
-  ctx.strokeStyle = col
-  ctx.lineCap = 'round'
-  ctx.beginPath()
-  ctx.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + TAU * (left / DURATION))
-  ctx.stroke()
-  ctx.translate(cx, cy)
-  ctx.scale(pulse, pulse)
-  ctx.font = `${left >= 9.5 ? 17 : 20}px ${g.FONT}`
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillStyle = rush ? col : '#ffffff'
-  ctx.fillText(String(Math.ceil(left)), 0, 1)
-  ctx.restore()
-
-  ctx.save()
+  gauge(g, ctx, cx, 31)
   ctx.textBaseline = 'alphabetic'
   if (g.numPlayers === 1) {
     const st = lv.ships[0]
-    group(g, ctx, cx - 44, -1, 'Rings', '#a9b3d6', String(st.rings), '#ffffff', null)
-    group(g, ctx, cx + 44, 1, 'Combo', '#a9b3d6', `×${multOf(st.streak)}`, multOf(st.streak) > 1 ? '#ffe23d' : '#ffffff', st)
+    group(g, ctx, cx - 42, -1, `${st.rings} ${st.rings === 1 ? 'ring' : 'rings'}`, '#a9b3d6', `×${multOf(st.streak)}`, multOf(st.streak) > 1 ? '#ffe23d' : '#ffffff', st)
+    const left = Math.max(0, distAt(lv.finishAt) - lv.D) / 1000
+    group(g, ctx, cx + 42, 1, 'To the finish', '#a9b3d6', `${left.toFixed(1)} km`, left < 5 ? '#ffb02e' : '#ffffff', null)
   } else {
     for (const p of g.players) {
-      const st = shipState(p)
+      const st = ship(p)
       const dir = p.id ? 1 : -1
       const label = `${p.pal.name} · ${st.rings} ${st.rings === 1 ? 'ring' : 'rings'}`
-      group(g, ctx, cx + dir * 44, dir, label, p.pal.main, `×${multOf(st.streak)}`, multOf(st.streak) > 1 ? '#ffe23d' : '#ffffff', st)
+      group(g, ctx, cx + dir * 42, dir, label, p.pal.main, `×${multOf(st.streak)}`, multOf(st.streak) > 1 ? '#ffe23d' : '#ffffff', st)
     }
   }
+  track(g, ctx, cx - span / 2 + 10, cx + span / 2 - 10, 57)
   ctx.restore()
 }
 
-// A label over a big number, reading outward from the clock. With a ship's
+// A dial that sweeps round as the course speeds up, reading out the warp.
+function gauge(g, ctx, cx, cy) {
+  const R = 23
+  const k = clamp((lv.v - 150) / (V1 - 150), 0, 1)
+  const a0 = Math.PI * 0.8
+  const a1 = Math.PI * 2.2
+  const col = lv.v > 560 ? '#ff5a5a' : lv.v > 450 ? '#ffb02e' : '#3cf2c8'
+  const pulse = 1 + lv.flashT * 0.12
+  ctx.save()
+  ctx.translate(cx, cy)
+  ctx.scale(pulse, pulse)
+  ctx.fillStyle = 'rgba(10,8,34,0.66)'
+  ctx.beginPath()
+  ctx.arc(0, 0, R + 7, 0, TAU)
+  ctx.fill()
+  ctx.lineCap = 'round'
+  ctx.lineWidth = 5
+  ctx.strokeStyle = 'rgba(255,255,255,0.14)'
+  ctx.beginPath()
+  ctx.arc(0, 0, R, a0, a1)
+  ctx.stroke()
+  ctx.strokeStyle = col
+  ctx.beginPath()
+  ctx.arc(0, 0, R, a0, a0 + (a1 - a0) * k)
+  ctx.stroke()
+  // the needle
+  const an = a0 + (a1 - a0) * k + Math.sin(g.time * 40) * 0.02 * k
+  ctx.strokeStyle = '#ffffff'
+  ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.moveTo(Math.cos(an) * 6, Math.sin(an) * 6)
+  ctx.lineTo(Math.cos(an) * (R - 4), Math.sin(an) * (R - 4))
+  ctx.stroke()
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.font = `14px ${g.FONT}`
+  ctx.fillStyle = lv.flashT > 0 ? '#ffe23d' : '#ffffff'
+  ctx.fillText((lv.v / 100).toFixed(1), 0, 2)
+  ctx.font = `8px ${g.FONT}`
+  ctx.fillStyle = '#a9b3d6'
+  ctx.fillText('WARP', 0, R - 1)
+  ctx.restore()
+}
+
+// A label over a big number, reading outward from the dial. With a ship's
 // state it also shows pips filling toward the next combo step.
 function group(g, ctx, x, dir, label, labelCol, big, bigCol, st) {
   ctx.textAlign = dir > 0 ? 'left' : 'right'
   ctx.font = `11px ${g.FONT}`
   ctx.fillStyle = labelCol
-  ctx.fillText(label, x, 22)
-  ctx.font = `24px ${g.FONT}`
+  ctx.fillText(label, x, 19)
+  ctx.font = `22px ${g.FONT}`
   ctx.fillStyle = bigCol
-  ctx.fillText(big, x, 50)
+  ctx.fillText(big, x, 44)
   if (!st) return
   const w = ctx.measureText(big).width
   const mult = multOf(st.streak)
   const fill = mult >= MAX_MULT ? STEP : st.streak % STEP
   for (let i = 0; i < STEP; i++) {
-    const px = x + dir * (w + 12 + i * 11)
+    const px = x + dir * (w + 11 + i * 10)
     ctx.fillStyle = i < fill ? (mult >= MAX_MULT ? '#ffe23d' : '#9ff0ff') : 'rgba(255,255,255,0.18)'
     ctx.beginPath()
-    ctx.arc(px, 42, 3.8, 0, TAU)
+    ctx.arc(px, 36, 3.4, 0, TAU)
     ctx.fill()
   }
 }
 
-// Under the "Bonus round complete!" banner: how the race went.
+// The run from start to finish: a strip with the ships on it and a
+// chequered flag at the end.
+function track(g, ctx, x0, x1, y) {
+  const k = clamp(lv.D / distAt(lv.finishAt), 0, 1)
+  ctx.fillStyle = 'rgba(255,255,255,0.12)'
+  ctx.beginPath()
+  ctx.roundRect(x0, y - 2, x1 - x0, 4, 2)
+  ctx.fill()
+  const grad = ctx.createLinearGradient(x0, 0, x1, 0)
+  grad.addColorStop(0, '#3cf2c8')
+  grad.addColorStop(0.6, '#ffb02e')
+  grad.addColorStop(1, '#ff5a5a')
+  ctx.fillStyle = grad
+  ctx.beginPath()
+  ctx.roundRect(x0, y - 2, Math.max(4, (x1 - x0) * k), 4, 2)
+  ctx.fill()
+  // the flag
+  const fx = x1 + 3
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 2; j++) {
+      ctx.fillStyle = (i + j) % 2 ? '#1a1830' : '#ffffff'
+      ctx.fillRect(fx + i * 3, y - 6 + j * 3, 3, 3)
+    }
+  }
+  ctx.fillStyle = '#c9cfe6'
+  ctx.fillRect(fx - 1, y - 6, 1.5, 11)
+  // a pip for where the ships are
+  const px = x0 + (x1 - x0) * k
+  ctx.fillStyle = '#ffffff'
+  ctx.beginPath()
+  ctx.moveTo(px, y - 6)
+  ctx.lineTo(px + 4, y + 3)
+  ctx.lineTo(px - 4, y + 3)
+  ctx.closePath()
+  ctx.fill()
+}
+
+// Under the "You made it through!" banner: how the run went.
 function drawResults(g, ctx) {
   const k = Math.min(1, Math.max(0, (g.phaseT - 0.8) * 3))
   if (k <= 0) return
   const two = g.numPlayers === 2
-  const w = Math.min(g.W - 32, two ? 480 : 340)
-  const h = 78
+  const w = Math.min(g.W - 32, two ? 500 : 360)
+  const h = 84
   const x = g.W / 2 - w / 2
   const y = g.H * 0.585 + (1 - k) * 16
   ctx.save()
@@ -609,14 +658,17 @@ function drawResults(g, ctx) {
   ctx.fill()
   ctx.stroke()
   ctx.textAlign = 'center'
+  const forks = [...lv.forks.keys()].length
   const col = (p, cx) => {
-    const st = shipState(p)
+    const st = ship(p)
     ctx.font = `24px ${g.FONT}`
     ctx.fillStyle = two ? p.pal.main : '#ffd54a'
-    ctx.fillText(`${st.rings} ${st.rings === 1 ? 'ring' : 'rings'}`, cx, y + 36)
+    ctx.fillText(`${st.rings} ${st.rings === 1 ? 'ring' : 'rings'}`, cx, y + 34)
     ctx.font = `12px ${g.FONT}`
-    ctx.fillStyle = '#c9cff0'
-    ctx.fillText(`Best streak ${st.best}`, cx, y + 60)
+    ctx.fillStyle = '#c9cfe6'
+    ctx.fillText(`Best streak ${st.best}`, cx, y + 56)
+    ctx.fillStyle = st.paths ? '#ffd54a' : '#a9b3d6'
+    ctx.fillText(`Gold paths ${st.paths} of ${forks}`, cx, y + 73)
   }
   if (two) {
     col(g.players[0], g.W / 2 - w / 4)
@@ -631,18 +683,21 @@ export default {
       setup: reset,
       start(g) {
         lv.clock = 0
-        g.popText(g.W / 2, g.H * 0.44, 'Fly through the rings!', '#9ff0ff', 24, 2.2)
+        // punch it: the jump to full speed
+        g.flash(0.3)
+        synth.noise({ dur: 1, vol: 0.3, freq: 250, to: 5000, q: 1.5 }, 'race-punch', 0)
+        // the hint goes under the ships, where it won't hide the first rings
+        g.popText(g.W / 2, Math.min(g.H - 40, yRef(g) + 78), 'Fly through the rings!', '#9ff0ff', 22, 2.6).rise = -6
       },
       update,
-      progress: () => lv.t / DURATION,
+      progress: () => clamp(lv.clock / lv.finishAt, 0, 1),
       hud,
       drawBack,
-      drawMid,
       drawTop,
       icon: drawIcon,
       noFire: true,
       noBubbles: true,
     },
   },
-  enemies: {},
+  enemies: { raceBomb: bomb, raceSaucer: saucer },
 }

@@ -2,11 +2,15 @@
 // ships, then Krax the rock hauler and the Ion Cannon (krax.js).
 //
 // Rocks split when they're shot, big into two medium into two small, and
-// hurt on contact but never shoot. The field thickens gently, and a channel
-// that wanders slowly from side to side is always kept clear of new rocks, so
-// there's a way through even for a ship that can't shoot fast enough. Along
-// the way: crystal rocks full of prizes, two rock walls with a gap, two
-// meteor showers with their lanes lit up first, and one giant.
+// hurt on contact but never shoot. A ship's own lasers clear the rocks right
+// above it, so what keeps it moving is everything else: saucers drifting down
+// with the rocks (the pink ones aim), and hot rocks that glow hotter and pop
+// into a fan of pebbles aimed at the nearest ship unless they're shot first.
+// The field gets thick, but a channel that wanders slowly from side to side
+// is always kept clear of new rocks, so there's a way through even for a ship
+// that can't shoot fast enough. Along the way: crystal rocks full of prizes,
+// two rock walls with a gap, three meteor showers with their lanes lit up
+// first, and one giant.
 
 import { missionIndex } from '../../missions.js'
 import { hexA } from '../../stars.js'
@@ -30,8 +34,10 @@ if (new URLSearchParams(location.search).has('debug')) globalThis.__belt = { lv,
 function reset(g) {
   lv.t = 0
   lv.spawnT = 1.4
-  lv.scoutT = 10
+  lv.scoutT = 8
   lv.crystalT = 8
+  lv.hotT = 6
+  lv.toldHot = false
   lv.ev = 0
   lv.quiet = 0
   lv.ended = false
@@ -77,11 +83,11 @@ function pickX(g, r) {
 
 function spawnOne(g, ramp) {
   const roll = Math.random()
-  const size = roll < 0.16 + 0.22 * ramp ? 'big' : roll < 0.64 ? 'mid' : 'small'
+  const size = roll < 0.2 + 0.24 * ramp ? 'big' : roll < 0.66 ? 'mid' : 'small'
   const S = SIZES[size]
   const x = pickX(g, S.r)
   if (x == null) return
-  spawnRock(g, size, x, -S.r - 12, { vx: rand(-14, 14), vy: S.speed * rand(0.88, 1.12) * (1 + 0.15 * ramp) })
+  spawnRock(g, size, x, -S.r - 12, { vx: rand(-14, 14), vy: S.speed * rand(0.88, 1.12) * (1 + 0.2 * ramp) })
 }
 
 function rockWall(g) {
@@ -97,7 +103,7 @@ function rockWall(g) {
   lv.quiet = 3.4
 }
 
-function meteorShower(g) {
+function meteorShower(g, n = 3) {
   g.popText(g.W / 2, g.H * 0.36, 'Meteor shower!', '#ff9a6a', 24, 2)
   const lanes = Math.max(2, Math.min(4, Math.floor(g.W / 300)))
   for (let i = 0; i < lanes; i++) {
@@ -106,13 +112,27 @@ function meteorShower(g) {
     if (Math.abs(x - lv.gapX) < GAP + 40) x = lv.gapX + Math.sign(x - lv.gapX || 1) * (GAP + 40)
     if (x < 30 || x > g.W - 30) continue
     lv.warns.push({ x, t: 0, dur: 1.6 })
-    for (let k = 0; k < 3; k++) {
-      g.later(1.6 + k * 0.3, () => spawnRock(g, 'small', x + rand(-8, 8), -30, { vx: 0, vy: 330, trail: true, spin: 5, pal: 3 }))
+    for (let k = 0; k < n; k++) {
+      g.later(1.6 + k * 0.28, () => spawnRock(g, 'small', x + rand(-8, 8), -30, { vx: 0, vy: 340, trail: true, spin: 5, pal: 3 }))
     }
   }
   synth.tone({ type: 'square', from: 990, to: 740, dur: 0.12, vol: 0.06 }, 'belt-warn', 0)
   synth.tone({ type: 'square', from: 990, to: 740, dur: 0.12, vol: 0.06, at: 0.22 }, 'belt-warn2', 0)
   lv.quiet = 2.6
+}
+
+// A hot rock's fuse runs out about a third of the way down the screen, well
+// above the ships, so its pebbles have room to be dodged.
+function hotRock(g) {
+  const x = pickX(g, 60)
+  if (x == null) return false
+  const vy = rand(70, 82)
+  spawnRock(g, 'big', x, -70, { kind: 'hot', vx: rand(-10, 10), vy, hot: (g.H * 0.34 + 70) / vy })
+  if (!lv.toldHot) {
+    lv.toldHot = true
+    g.popText(g.clamp(x, 200, g.W - 200), 130, 'Hot rock! Shoot it before it pops!', '#ff9a4d', 18, 2.6)
+  }
+  return true
 }
 
 function giantRock(g) {
@@ -124,11 +144,12 @@ function giantRock(g) {
 
 const EVENTS = [
   { at: 0.5, run: (g) => g.popText(g.W / 2, g.H * 0.4, 'Blast the rocks!', '#ffd7a0', 28, 2.2) },
-  { at: 20, run: rockWall },
-  { at: 30, run: meteorShower },
-  { at: 38, run: giantRock },
-  { at: 45, run: rockWall },
-  { at: 52, run: meteorShower },
+  { at: 13, run: meteorShower },
+  { at: 21, run: rockWall },
+  { at: 29, run: meteorShower },
+  { at: 36, run: giantRock },
+  { at: 44, run: rockWall },
+  { at: 51, run: (g) => meteorShower(g, 4) },
 ]
 
 function updateField(g, dt) {
@@ -156,14 +177,14 @@ function updateField(g, dt) {
 
   while (lv.ev < EVENTS.length && t >= EVENTS[lv.ev].at) EVENTS[lv.ev++].run(g)
 
-  // the field fills in over the first fifty seconds and eases off at the end
-  const ramp = Math.min(1, t / 48)
+  // the field fills in over the first forty-odd seconds and eases off at the end
+  const ramp = Math.min(1, t / 44)
   const taper = t > DURATION - 5 ? 1.6 : 1
   lv.quiet -= dt
   lv.spawnT -= dt
   if (lv.spawnT <= 0 && lv.quiet <= 0) {
     spawnOne(g, ramp)
-    lv.spawnT = (1.35 - 0.62 * ramp) * (g.numPlayers === 2 ? 0.88 : 1) * taper
+    lv.spawnT = (1.15 - 0.55 * ramp) * (g.numPlayers === 2 ? 0.85 : 1) * taper
   }
 
   if ((lv.crystalT -= dt) <= 0) {
@@ -178,13 +199,21 @@ function updateField(g, dt) {
     lv.crystalT = rand(9, 12)
   }
 
-  if (t > 9 && (lv.scoutT -= dt) <= 0) {
-    const n = ramp > 0.6 ? 2 : 1
+  if (t > 7 && (lv.scoutT -= dt) <= 0) {
+    const n = ramp > 0.45 ? 2 : 1
     for (let i = 0; i < n; i++) {
       const x = pickX(g, 30)
-      if (x != null) g.spawn('scout', x, -40 - i * 50, { path: 'fall', speed: rand(105, 135) })
+      // the pink zigzag saucers aim their shots; scouts just drop theirs
+      const type = ramp > 0.3 && Math.random() < 0.45 ? 'zigzag' : 'scout'
+      if (x != null) g.spawn(type, x, -40 - i * 50, { path: 'fall', speed: rand(110, 140) })
     }
-    lv.scoutT = rand(7, 9) - ramp * 1.5
+    lv.scoutT = rand(6, 7.5) - ramp * 1.5
+  }
+
+  // a hot rock waits for a wall or a shower to pass rather than piling on;
+  // with no room up top this moment, it tries again in a beat
+  if (t > 10 && t < DURATION - 6 && (lv.hotT -= dt) <= 0 && lv.quiet <= 0) {
+    lv.hotT = hotRock(g) ? rand(6.5, 8) - ramp * 1.5 : 0.3
   }
 }
 

@@ -1,6 +1,8 @@
-// The nebula's own art: the Phantom and its echoes, the lurker saucer, the
-// space fireflies and the map icon. Same rules as ../../art.js: plain canvas
-// paths, centred on (x, y), leaving the context as they found it.
+// The nebula's small art: the soft glows everything that shines through the
+// fog is made of, the lurker saucer, the luminous crystals and the map icon.
+// The Gloomtopus has a file of its own (octoart.js). Same rules as
+// ../../art.js: plain canvas paths, centred on (x, y), leaving the context as
+// they found it.
 
 import { hexA } from '../../stars.js'
 
@@ -41,182 +43,38 @@ export function stamp(ctx, color, x, y, r, a = 1, core = true) {
   ctx.drawImage(glow(color, core), x - r, y - r, r * 2, r * 2)
 }
 
-// ---------------------------------------------------------------- the Phantom
-
-// The Phantom is a ghost wearing a flying saucer round its middle: a sheet
-// with a ragged, rippling hem, a ring of running lights, and big eyes that
-// are the one part of it you can always see through the fog.
-//
-// `warp` (0..1) squeezes it thin and tall as it teleports away.
-export const EYE = { x: 0.25, y: -0.42 }
-
-export function ghostEyes(x, y, r, warp = 0) {
-  const sx = 1 - warp * 0.85
-  const sy = 1 + warp * 0.5
-  return [-1, 1].map((d) => [x + d * EYE.x * r * sx, y + EYE.y * r * sy])
-}
-
-export function drawGhost(ctx, x, y, r, t, o = {}) {
-  const { alpha = 1, warp = 0, flash = 0, hurt = 0, charge = 0, chargeColor = '#ff7bd8', angry = false, echo = false, blink = false } = o
-  const a = alpha * (1 - warp)
-  if (a <= 0.01) return
-  ctx.save()
-  ctx.translate(x, y)
-  if (hurt > 0) ctx.translate(Math.sin(t * 90) * 3 * hurt, 0)
-  ctx.scale(1 - warp * 0.85, 1 + warp * 0.5)
-  ctx.globalAlpha = a
-
-  // a cold aura, so it looks lit from inside when the fog parts
-  ctx.globalCompositeOperation = 'lighter'
-  ctx.globalAlpha = a * (echo ? 0.25 : 0.4)
-  ctx.drawImage(glow('#9d8cff', false), -r * 1.5, -r * 1.6, r * 3, r * 3)
-  ctx.globalCompositeOperation = 'source-over'
-  ctx.globalAlpha = a
-
-  // the saucer disc goes on first; its front rim is drawn again over the
-  // sheet below, so the ghost looks like it's wearing it
-  const dy = r * 0.16
-  const ring = (front) => {
-    const hg = ctx.createLinearGradient(0, dy - r * 0.26, 0, dy + r * 0.26)
-    hg.addColorStop(0, echo ? '#b6a8ee' : '#a99cf0')
-    hg.addColorStop(0.5, echo ? '#6b5cc0' : '#5a4aa8')
-    hg.addColorStop(1, '#1f1648')
-    ctx.fillStyle = hg
-    ctx.beginPath()
-    if (front) {
-      ctx.ellipse(0, dy, r, r * 0.26, 0, 0, Math.PI)
-      ctx.ellipse(0, dy, r, r * 0.07, 0, Math.PI, 0, true)
-    } else ctx.ellipse(0, dy, r, r * 0.26, 0, 0, TAU)
-    ctx.fill()
-  }
-  ring(false)
-
-  // the sheet
-  const top = -r
-  const hem = r * 0.62
-  const side = r * 0.66
+// A four-point twinkle, the sparkle on crystals and cloaks.
+export function twinkle(ctx, x, y, r, color = '#ffffff') {
+  ctx.fillStyle = color
   ctx.beginPath()
-  ctx.moveTo(-side - r * 0.06, hem)
-  ctx.bezierCurveTo(-side - r * 0.02 + Math.sin(t * 2) * r * 0.03, hem * 0.4, -side, -r * 0.2, -side, top + side)
-  ctx.arc(0, top + side, side, Math.PI, TAU)
-  ctx.bezierCurveTo(side, -r * 0.2, side + r * 0.02 + Math.sin(t * 2 + 1) * r * 0.03, hem * 0.4, side + r * 0.06, hem)
-  const n = 4
-  const span = (side + r * 0.06) * 2
-  for (let i = 0; i < n; i++) {
-    const x0 = side + r * 0.06 - (span * i) / n
-    const x1 = side + r * 0.06 - (span * (i + 1)) / n
-    const wob = Math.sin(t * 3.2 + i * 1.9) * r * 0.07
-    ctx.quadraticCurveTo((x0 + x1) / 2 + wob * 0.5, hem + r * 0.26 + wob, x1, hem)
-  }
-  ctx.closePath()
-  const sg = ctx.createLinearGradient(0, top, 0, hem + r * 0.3)
-  sg.addColorStop(0, echo ? 'rgba(236,228,255,0.85)' : 'rgba(248,244,255,0.97)')
-  sg.addColorStop(0.45, echo ? 'rgba(206,192,255,0.7)' : 'rgba(222,212,255,0.9)')
-  sg.addColorStop(1, 'rgba(150,130,255,0.15)')
-  ctx.fillStyle = sg
+  ctx.moveTo(x, y - r)
+  ctx.quadraticCurveTo(x, y, x + r, y)
+  ctx.quadraticCurveTo(x, y, x, y + r)
+  ctx.quadraticCurveTo(x, y, x - r, y)
+  ctx.quadraticCurveTo(x, y, x, y - r)
   ctx.fill()
-  ctx.strokeStyle = 'rgba(255,255,255,0.5)'
-  ctx.lineWidth = Math.max(1.5, r * 0.025)
-  ctx.stroke()
-
-  // a sheen across the top of the head
-  ctx.fillStyle = 'rgba(255,255,255,0.45)'
-  ctx.beginPath()
-  ctx.ellipse(-r * 0.26, top + r * 0.3, r * 0.14, r * 0.07, -0.6, 0, TAU)
-  ctx.fill()
-
-  // eyes: dark hollows with a glowing light in each
-  const eyeCol = charge > 0.05 ? chargeColor : '#7dfcff'
-  for (const d of [-1, 1]) {
-    ctx.save()
-    ctx.translate(d * EYE.x * r, EYE.y * r)
-    ctx.rotate(d * (angry ? 0.35 : 0.12))
-    ctx.fillStyle = '#251447'
-    ctx.beginPath()
-    ctx.ellipse(0, 0, r * 0.13, blink ? r * 0.025 : r * 0.17, 0, 0, TAU)
-    ctx.fill()
-    if (!blink) {
-      ctx.fillStyle = eyeCol
-      ctx.beginPath()
-      ctx.ellipse(0, r * 0.02, r * 0.075, r * 0.1, 0, 0, TAU)
-      ctx.fill()
-      ctx.fillStyle = '#ffffff'
-      ctx.beginPath()
-      ctx.arc(-r * 0.025, -r * 0.03, r * 0.032, 0, TAU)
-      ctx.fill()
-    }
-    ctx.restore()
-  }
-  if (angry) {
-    ctx.strokeStyle = '#3a1f6e'
-    ctx.lineWidth = r * 0.045
-    ctx.lineCap = 'round'
-    for (const d of [-1, 1]) {
-      ctx.beginPath()
-      ctx.moveTo(d * r * 0.42, EYE.y * r - r * 0.22)
-      ctx.lineTo(d * r * 0.12, EYE.y * r - r * 0.13)
-      ctx.stroke()
-    }
-  }
-
-  // the mouth: a wobbly grin, or a round "Boo!" when it's about to shoot
-  const my = -r * 0.12
-  if (charge > 0.05 || hurt > 0.3) {
-    const mr = r * (0.05 + 0.07 * Math.max(charge, hurt * 0.6))
-    ctx.fillStyle = '#251447'
-    ctx.beginPath()
-    ctx.ellipse(0, my + r * 0.02, mr * 0.85, mr, 0, 0, TAU)
-    ctx.fill()
-    if (charge > 0.05) {
-      ctx.fillStyle = hexA(chargeColor, 0.5 + 0.5 * charge)
-      ctx.beginPath()
-      ctx.ellipse(0, my + r * 0.02, mr * 0.5, mr * 0.6, 0, 0, TAU)
-      ctx.fill()
-    }
-  } else {
-    ctx.strokeStyle = '#3a1f6e'
-    ctx.lineWidth = Math.max(1.5, r * 0.035)
-    ctx.lineCap = 'round'
-    ctx.beginPath()
-    for (let i = 0; i <= 8; i++) {
-      const u = i / 8 - 0.5
-      ctx.lineTo(u * r * 0.32, my + Math.sin(u * 9 + t * 4) * r * 0.025 + u * u * r * 0.1)
-    }
-    ctx.stroke()
-  }
-
-  // the front of the saucer ring, with lights chasing round it
-  ring(true)
-  const lights = echo ? 7 : 11
-  const lc = charge > 0.05 ? chargeColor : '#7dfcff'
-  for (let i = 0; i < lights; i++) {
-    const u = (i / (lights - 1)) * 2 - 1
-    const on = Math.sin(t * 7 - i * 0.8) > 0.1
-    ctx.fillStyle = on ? lc : hexA(lc, 0.3)
-    ctx.beginPath()
-    ctx.arc(u * r * 0.86, dy + r * 0.1 + (1 - u * u) * r * 0.06, Math.max(1.6, r * 0.04), 0, TAU)
-    ctx.fill()
-  }
-
-  if (flash > 0) {
-    ctx.globalAlpha = a * Math.min(1, flash) * 0.6
-    ctx.fillStyle = '#ffffff'
-    ctx.beginPath()
-    ctx.arc(0, top + side, side, Math.PI, TAU)
-    ctx.lineTo(side, hem)
-    ctx.lineTo(-side, hem)
-    ctx.fill()
-  }
-  ctx.restore()
 }
 
 // ---------------------------------------------------------------- the lurker
 
+const PINK = '#ff5fd2'
+
+// The lens-shaped hull, pointed at the ends.
+function lens(ctx, r) {
+  ctx.beginPath()
+  ctx.moveTo(-r * 1.15, 0)
+  ctx.quadraticCurveTo(0, -r * 0.5, r * 1.15, 0)
+  ctx.quadraticCurveTo(0, r * 0.52, -r * 1.15, 0)
+}
+
 // A stealth saucer: a dark lens of a hull with one big eye in its dome. It
-// lights up pink only when it's about to shoot.
+// lights up pink only when it's about to shoot. `e.cloak` (0..1) fades it to a
+// ripple of bent light; `e.big` is the Shroud, with fins and a second eye.
 export function drawLurker(ctx, e, t) {
   const r = e.r
   const lit = e.glow || 0
+  const cloak = e.cloak || 0
+  const solid = 1 - cloak * 0.92
   ctx.save()
   ctx.translate(e.x, e.y)
   ctx.rotate(e.tilt || 0)
@@ -224,130 +82,233 @@ export function drawLurker(ctx, e, t) {
   if (lit > 0.02) {
     ctx.globalCompositeOperation = 'lighter'
     ctx.globalAlpha = lit * 0.7
-    ctx.drawImage(glow('#ff5fd2', false), -r * 1.6, -r * 1.4, r * 3.2, r * 3.2)
+    ctx.drawImage(glow(PINK, false), -r * 1.6, -r * 1.4, r * 3.2, r * 3.2)
     ctx.globalCompositeOperation = 'source-over'
-    ctx.globalAlpha = 1
   }
 
-  // dome
-  const dr = r * 0.48
-  const dg = ctx.createLinearGradient(0, -dr * 1.2, 0, 0)
-  dg.addColorStop(0, '#6d5fb0')
-  dg.addColorStop(1, '#241650')
-  ctx.fillStyle = dg
-  ctx.beginPath()
-  ctx.ellipse(0, -r * 0.08, dr, dr, 0, Math.PI, TAU)
-  ctx.fill()
-  // the eye
-  const ey = -r * 0.24
-  ctx.fillStyle = '#12082a'
-  ctx.beginPath()
-  ctx.ellipse(0, ey, dr * 0.62, dr * 0.42, 0, 0, TAU)
-  ctx.fill()
-  ctx.fillStyle = lit > 0.1 ? '#ff5fd2' : '#8a3a8f'
-  ctx.beginPath()
-  ctx.ellipse(Math.sin(t * 1.3) * dr * 0.2, ey, dr * 0.28, dr * 0.3 * (0.4 + 0.6 * Math.max(lit, 0.5)), 0, 0, TAU)
-  ctx.fill()
-  ctx.fillStyle = '#ffffff'
-  ctx.beginPath()
-  ctx.arc(Math.sin(t * 1.3) * dr * 0.2 - dr * 0.08, ey - dr * 0.08, dr * 0.08, 0, TAU)
-  ctx.fill()
-
-  // the lens-shaped hull, pointed at the ends
-  const hg = ctx.createLinearGradient(0, -r * 0.3, 0, r * 0.3)
-  hg.addColorStop(0, '#8d80c8')
-  hg.addColorStop(0.45, '#3d2d7a')
-  hg.addColorStop(1, '#140b33')
-  ctx.fillStyle = hg
-  ctx.beginPath()
-  ctx.moveTo(-r * 1.15, 0)
-  ctx.quadraticCurveTo(0, -r * 0.5, r * 1.15, 0)
-  ctx.quadraticCurveTo(0, r * 0.52, -r * 1.15, 0)
-  ctx.fill()
-  ctx.strokeStyle = hexA('#ff5fd2', 0.25 + 0.6 * lit)
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(-r * 1.1, 0.5)
-  ctx.quadraticCurveTo(0, r * 0.3, r * 1.1, 0.5)
-  ctx.stroke()
-  for (const d of [-1, 1]) {
-    ctx.fillStyle = lit > 0.1 || Math.sin(t * 3 + d) > 0.6 ? '#ff5fd2' : '#5a2a6e'
+  if (solid > 0.03) {
+    ctx.globalAlpha = solid
+    if (e.big) {
+      // the Shroud's swept fins
+      ctx.fillStyle = '#2a1c5e'
+      for (const d of [-1, 1]) {
+        ctx.beginPath()
+        ctx.moveTo(d * r * 0.5, -r * 0.1)
+        ctx.quadraticCurveTo(d * r * 1.1, -r * 0.55, d * r * 1.45, -r * 0.62)
+        ctx.quadraticCurveTo(d * r * 1.05, -r * 0.2, d * r * 0.95, r * 0.02)
+        ctx.fill()
+      }
+    }
+    // dome
+    const dr = r * 0.48
+    const dg = ctx.createLinearGradient(0, -dr * 1.2, 0, 0)
+    dg.addColorStop(0, '#6d5fb0')
+    dg.addColorStop(1, '#241650')
+    ctx.fillStyle = dg
     ctx.beginPath()
-    ctx.arc(d * r * 0.72, r * 0.06, 2.6, 0, TAU)
+    ctx.ellipse(0, -r * 0.08, dr, dr, 0, Math.PI, TAU)
     ctx.fill()
+    // the eye (two on the Shroud), glancing about
+    const ey = -r * 0.24
+    const look = Math.sin(t * 1.3) * dr * 0.2
+    const eyes = e.big ? [-dr * 0.42, dr * 0.42] : [0]
+    const ew = e.big ? 0.36 : 0.62
+    for (const ex of eyes) {
+      ctx.fillStyle = '#12082a'
+      ctx.beginPath()
+      ctx.ellipse(ex, ey, dr * ew, dr * 0.42, 0, 0, TAU)
+      ctx.fill()
+      ctx.fillStyle = lit > 0.1 ? PINK : '#8a3a8f'
+      ctx.beginPath()
+      ctx.ellipse(ex + look * ew, ey, dr * ew * 0.45, dr * 0.3 * (0.4 + 0.6 * Math.max(lit, 0.5)), 0, 0, TAU)
+      ctx.fill()
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.arc(ex + look * ew - dr * 0.08, ey - dr * 0.08, dr * 0.08, 0, TAU)
+      ctx.fill()
+    }
+
+    const hg = ctx.createLinearGradient(0, -r * 0.3, 0, r * 0.3)
+    hg.addColorStop(0, '#8d80c8')
+    hg.addColorStop(0.45, '#3d2d7a')
+    hg.addColorStop(1, '#140b33')
+    ctx.fillStyle = hg
+    lens(ctx, r)
+    ctx.fill()
+    ctx.strokeStyle = hexA(PINK, 0.25 + 0.6 * lit)
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(-r * 1.1, 0.5)
+    ctx.quadraticCurveTo(0, r * 0.3, r * 1.1, 0.5)
+    ctx.stroke()
+    const lights = e.big ? [-0.86, -0.45, 0.45, 0.86] : [-0.72, 0.72]
+    for (const u of lights) {
+      ctx.fillStyle = lit > 0.1 || Math.sin(t * 3 + u * 2) > 0.6 ? PINK : '#5a2a6e'
+      ctx.beginPath()
+      ctx.arc(u * r, r * 0.06 + (1 - u * u) * r * 0.08, 2.6, 0, TAU)
+      ctx.fill()
+    }
+  }
+
+  if (cloak > 0.05) {
+    // the cloak: light bending round where the hull is, in a slow ripple
+    ctx.globalAlpha = cloak * (0.3 + 0.18 * Math.sin(t * 4))
+    ctx.strokeStyle = '#d8ecff'
+    ctx.lineWidth = 1.6
+    ctx.setLineDash([9, 13])
+    ctx.lineDashOffset = -t * 36
+    lens(ctx, r)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.ellipse(0, -r * 0.08, r * 0.48, r * 0.48, 0, Math.PI * 1.05, Math.PI * 1.95)
+    ctx.stroke()
+    ctx.setLineDash([])
   }
 
   if (e.flash > 0) {
     ctx.globalAlpha = Math.min(1, e.flash) * 0.75
     ctx.fillStyle = '#ffffff'
-    ctx.beginPath()
-    ctx.moveTo(-r * 1.15, 0)
-    ctx.quadraticCurveTo(0, -r * 0.5, r * 1.15, 0)
-    ctx.quadraticCurveTo(0, r * 0.52, -r * 1.15, 0)
+    lens(ctx, r)
     ctx.fill()
   }
   ctx.restore()
 }
 
-// ---------------------------------------------------------------- fireflies
+// A cloaked lurker as crystal light shows it: its outline traced in bright
+// pink-white, drawn over the fog.
+export function drawLurkerOutline(ctx, e, a) {
+  ctx.save()
+  ctx.translate(e.x, e.y)
+  ctx.rotate(e.tilt || 0)
+  ctx.globalAlpha = Math.min(1, a)
+  ctx.strokeStyle = '#ffd6f4'
+  ctx.lineWidth = 2
+  lens(ctx, e.r)
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.ellipse(0, -e.r * 0.08, e.r * 0.48, e.r * 0.48, 0, Math.PI, TAU)
+  ctx.stroke()
+  ctx.restore()
+}
 
-// A space firefly: catch one and your light grows big for a while.
-export function drawFirefly(ctx, x, y, t, s = 1) {
+// ---------------------------------------------------------------- crystals
+
+// A luminous crystal: a cluster of glowing quartz shards fanned out of one
+// bright heart. The shards are baked once (at twice the size, so they stay
+// crisp on a sharp screen); each frame just rocks the sprite gently and winks
+// sparkles round it.
+const CW = 92
+const CH = 78
+const BASE = 0.86 // where the heart sits, down the sprite
+let crystal = null
+
+function shard(x, a, len, w, shade, lit) {
+  x.save()
+  x.rotate(a)
+  const h = w * 0.62 // where the sides start to taper to the point
+  // two facets either side of the ridge, one lit and one in shade
+  x.fillStyle = shade
+  x.beginPath()
+  x.moveTo(0, 3)
+  x.lineTo(-w / 2, -2)
+  x.lineTo(-w / 2, -len + h)
+  x.lineTo(0, -len)
+  x.closePath()
+  x.fill()
+  x.fillStyle = lit
+  x.beginPath()
+  x.moveTo(0, 3)
+  x.lineTo(w / 2, -2)
+  x.lineTo(w / 2, -len + h)
+  x.lineTo(0, -len)
+  x.closePath()
+  x.fill()
+  x.strokeStyle = 'rgba(20,10,60,0.55)'
+  x.lineWidth = 1.2
+  x.beginPath()
+  x.moveTo(-w / 2, -2)
+  x.lineTo(-w / 2, -len + h)
+  x.lineTo(0, -len)
+  x.lineTo(w / 2, -len + h)
+  x.lineTo(w / 2, -2)
+  x.stroke()
+  x.strokeStyle = 'rgba(255,255,255,0.9)'
+  x.lineWidth = 1.3
+  x.beginPath()
+  x.moveTo(0, 0)
+  x.lineTo(0, -len)
+  x.stroke()
+  // a glint up the lit face
+  x.fillStyle = 'rgba(255,255,255,0.6)'
+  x.beginPath()
+  x.moveTo(w * 0.12, -len * 0.22)
+  x.lineTo(w * 0.32, -len * 0.26)
+  x.lineTo(w * 0.32, -len * 0.58)
+  x.lineTo(w * 0.12, -len * 0.66)
+  x.closePath()
+  x.fill()
+  x.restore()
+}
+
+function bakeCrystal() {
+  const s = 2
+  const c = document.createElement('canvas')
+  c.width = CW * s
+  c.height = CH * s
+  const x = c.getContext('2d')
+  x.scale(s, s)
+  x.translate(CW / 2, CH * BASE)
+  // back to front: the short outer shards, then the inner, the tallest last
+  shard(x, -0.95, 27, 13, '#4a33b8', '#a58cff')
+  shard(x, 0.92, 25, 12, '#1d7fae', '#86eaff')
+  shard(x, -0.45, 42, 17, '#2a7fd0', '#a6f6ff')
+  shard(x, 0.42, 38, 16, '#5a3fd8', '#c9b4ff')
+  shard(x, 0.04, 56, 21, '#2f9fe0', '#d4fcff')
+  // the heart they grow out of
+  const g = x.createRadialGradient(0, 0, 0, 0, 0, 16)
+  g.addColorStop(0, '#ffffff')
+  g.addColorStop(0.45, 'rgba(200,250,255,0.85)')
+  g.addColorStop(1, 'rgba(125,252,255,0)')
+  x.fillStyle = g
+  x.beginPath()
+  x.arc(0, 0, 16, 0, TAU)
+  x.fill()
+  crystal = c
+}
+
+// (x, y) is the middle of the cluster.
+export function drawCrystal(ctx, x, y, t, s = 1) {
+  if (!crystal) bakeCrystal()
+  const pulse = 0.75 + 0.25 * Math.sin(t * 3.2)
   ctx.save()
   ctx.translate(x, y)
   ctx.scale(s, s)
-  const pulse = 0.75 + 0.25 * Math.sin(t * 6)
   ctx.globalCompositeOperation = 'lighter'
   ctx.globalAlpha = 0.55 * pulse
-  ctx.drawImage(glow('#ffe65a', false), -44, -44, 88, 88)
+  ctx.drawImage(glow('#7dfcff', false), -54, -54, 108, 108)
+  ctx.globalAlpha = 0.35 * pulse
+  ctx.drawImage(glow('#c9a4ff', false), -34, -30, 68, 68)
   ctx.globalCompositeOperation = 'source-over'
   ctx.globalAlpha = 1
-  // wings, fluttering
-  const flap = 0.35 + 0.65 * Math.abs(Math.sin(t * 22))
-  ctx.fillStyle = 'rgba(220,240,255,0.75)'
-  for (const d of [-1, 1]) {
-    ctx.save()
-    ctx.rotate(d * 0.5)
-    ctx.beginPath()
-    ctx.ellipse(d * 9, -7, 9, 5 * flap, d * 0.3, 0, TAU)
-    ctx.fill()
-    ctx.restore()
-  }
-  // body: a dark head and a glowing tail
-  ctx.fillStyle = '#3a2f5a'
-  ctx.beginPath()
-  ctx.arc(0, -8, 5, 0, TAU)
-  ctx.fill()
-  const tg = ctx.createRadialGradient(0, 4, 1, 0, 4, 10)
-  tg.addColorStop(0, '#ffffff')
-  tg.addColorStop(0.4, '#fff59a')
-  tg.addColorStop(1, '#ffc93d')
-  ctx.fillStyle = tg
-  ctx.beginPath()
-  ctx.ellipse(0, 4, 7, 10, 0, 0, TAU)
-  ctx.fill()
-  ctx.fillStyle = '#ffffff'
-  for (const d of [-1, 1]) {
-    ctx.beginPath()
-    ctx.arc(d * 2, -9, 1.3, 0, TAU)
-    ctx.fill()
-  }
-  ctx.strokeStyle = '#3a2f5a'
-  ctx.lineWidth = 1.5
-  ctx.lineCap = 'round'
-  for (const d of [-1, 1]) {
-    ctx.beginPath()
-    ctx.moveTo(d * 2, -12)
-    ctx.quadraticCurveTo(d * 4, -18, d * 7, -18)
-    ctx.stroke()
+  ctx.save()
+  ctx.translate(0, 22)
+  ctx.rotate(Math.sin(t * 0.9) * 0.12)
+  ctx.drawImage(crystal, -CW / 2, -CH * BASE, CW, CH)
+  ctx.restore()
+  // sparkles winking in and out round it
+  for (let i = 0; i < 5; i++) {
+    const k = Math.sin(t * 2.4 + i * 1.7)
+    if (k < 0.2) continue
+    const a = t * 0.7 + (i * TAU) / 5
+    twinkle(ctx, Math.cos(a) * 40, -4 + Math.sin(a) * 30, 3 + 5 * k, i % 2 ? '#ffffff' : '#dffcff')
   }
   ctx.restore()
 }
 
 // ---------------------------------------------------------------- map icon
 
-// Fog in three colours, a ship in its pool of light, and a pair of eyes up
-// in the murk.
+// Fog in three colours, a ship in its pool of light, a crystal, and two big
+// golden eyes up in the murk with an arm curling out of it.
 export function drawNebulaIcon(ctx, w, h) {
   const blob = (x, y, r, color, a) => {
     const g = ctx.createRadialGradient(x, y, 0, x, y, r)
@@ -364,8 +325,19 @@ export function drawNebulaIcon(ctx, w, h) {
   blob(72, 42, 22, '#2fe0c0', 0.4)
   blob(6, 44, 20, '#5a7dff', 0.45)
 
+  // an arm curling down out of the fog
+  ctx.strokeStyle = 'rgba(214,107,255,0.75)'
+  ctx.lineCap = 'round'
+  for (const [x0, w0, d] of [[62, 3.2, 1], [46, 2.6, -1]]) {
+    ctx.lineWidth = w0
+    ctx.beginPath()
+    ctx.moveTo(x0, 22)
+    ctx.bezierCurveTo(x0 + d * 4, 32, x0 + d * 12, 34, x0 + d * 10, 28)
+    ctx.stroke()
+  }
+
   // the pool of light round the ship
-  const px = 30
+  const px = 26
   const py = 42
   const g = ctx.createRadialGradient(px, py, 0, px, py, 17)
   g.addColorStop(0, 'rgba(8,5,26,1)')
@@ -379,8 +351,7 @@ export function drawNebulaIcon(ctx, w, h) {
   ctx.arc(px, py, 13, 0, TAU)
   ctx.stroke()
   ctx.fillStyle = '#ffffff'
-  for (const [sx, sy] of [[24, 36], [37, 39], [27, 48]]) ctx.fillRect(sx, sy, 0.8, 0.8)
-  // a tiny ship
+  for (const [sx, sy] of [[20, 36], [33, 39], [23, 48]]) ctx.fillRect(sx, sy, 0.8, 0.8)
   ctx.fillStyle = '#1475b8'
   ctx.beginPath()
   ctx.moveTo(px, py - 4)
@@ -396,18 +367,41 @@ export function drawNebulaIcon(ctx, w, h) {
   ctx.closePath()
   ctx.fill()
 
-  // the eyes in the fog
+  // a crystal glinting off to the side
+  ctx.save()
+  ctx.translate(72, 30)
+  const cg = ctx.createRadialGradient(0, 0, 0, 0, 0, 8)
+  cg.addColorStop(0, 'rgba(125,252,255,0.8)')
+  cg.addColorStop(1, 'rgba(125,252,255,0)')
+  ctx.fillStyle = cg
+  ctx.fillRect(-8, -8, 16, 16)
+  ctx.fillStyle = '#c8fbff'
+  ctx.beginPath()
+  ctx.moveTo(0, -5)
+  ctx.lineTo(2, -2)
+  ctx.lineTo(2, 3)
+  ctx.lineTo(-2, 3)
+  ctx.lineTo(-2, -2)
+  ctx.closePath()
+  ctx.fill()
+  ctx.restore()
+
+  // the eyes in the fog: gold, with sideways pupils
   for (const d of [-1, 1]) {
-    const ex = 54 + d * 5
-    const ey = 17
-    const eg = ctx.createRadialGradient(ex, ey, 0, ex, ey, 7)
-    eg.addColorStop(0, 'rgba(125,252,255,0.85)')
-    eg.addColorStop(1, 'rgba(125,252,255,0)')
+    const ex = 54 + d * 6
+    const ey = 15
+    const eg = ctx.createRadialGradient(ex, ey, 0, ex, ey, 8)
+    eg.addColorStop(0, 'rgba(255,216,74,0.9)')
+    eg.addColorStop(1, 'rgba(255,216,74,0)')
     ctx.fillStyle = eg
-    ctx.fillRect(ex - 7, ey - 7, 14, 14)
-    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(ex - 8, ey - 8, 16, 16)
+    ctx.fillStyle = '#ffe36b'
     ctx.beginPath()
-    ctx.ellipse(ex, ey, 1.6, 2.3, d * 0.3, 0, TAU)
+    ctx.arc(ex, ey, 3, 0, TAU)
+    ctx.fill()
+    ctx.fillStyle = '#1a0838'
+    ctx.beginPath()
+    ctx.ellipse(ex, ey + 0.3, 2.2, 0.9, 0, 0, TAU)
     ctx.fill()
   }
 }

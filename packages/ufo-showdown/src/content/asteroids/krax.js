@@ -1,18 +1,24 @@
 // Krax the rock hauler: an armoured mining barge with a pilot in a hard hat,
 // a hopper full of rocks and two claw arms to throw them with. Lasers just
 // bounce off its plating. What hurts it is the Ion Cannon, a friendly turret
-// pad down by the ships that fires a huge beam whenever a ship flies a glowing
-// power core into it.
+// that rises out of the ground by the ships and fires a huge beam whenever a
+// ship flies a glowing power core into it.
 //
-// Krax's armour plates come off one beam at a time. Power cores arrive inside
-// glowing rocks Krax throws (shoot one open, or let it crack by itself above
-// the ships) and, if none turn up for a while, drifting in from the side.
+// Krax's armour plates come off one beam at a time. Every power core comes out
+// of a glowing rock Krax throws, and only cracks out when a ship shoots the
+// rock open: one that's missed falls away with its core. So Krax never runs
+// dry: whenever no core is floating, carried or on its way, its next move is
+// always another glowing rock.
 //
-// The fight's own pieces (cores, pad, beam) live in `fight`. The Asteroid Belt
-// level ticks and draws them through its hooks, so the beam can be drawn over
-// everything and outlast Krax by a moment.
+// The first time Krax shows up, a short cutscene introduces the cannon (see
+// "the intro" below): lasers pinging off the armour, the cannon rising into a
+// spotlight, and the three steps that crack Krax, acted out.
+//
+// The fight's own pieces (cores, pad, beam, the intro) live in `fight`. The
+// Asteroid Belt level ticks and draws them through its hooks, so the beam can
+// be drawn over everything and outlast Krax by a moment.
 
-import { drawAlien, drawStar } from '../../art.js'
+import { drawAlien, drawStar, drawPlayerShot } from '../../art.js'
 import { hexA } from '../../stars.js'
 import { synth } from '../../audio.js'
 import { spawnRock, moveRock, rockSprite, drawRock, drawHalo, burstDebris, CORE, PALS } from './rocks.js'
@@ -21,11 +27,17 @@ const TAU = Math.PI * 2
 const rand = (a, b) => a + Math.random() * (b - a)
 const pick = (arr) => arr[(Math.random() * arr.length) | 0]
 
-const BEAM = 25 // damage per Ion Cannon shot: a quarter of Krax's hp with one player
+const BEAM = 25 // damage per Ion Cannon shot: five shots crack Krax with one player
 const CHARGE = 1.0 // seconds the cannon hums before it fires
 const BEAM_T = 0.95
 const GRAB_R = 58 // how close a ship has to fly to scoop up a core
 const PAD_R = 92 // and how close to the cannon to load it
+const DRIFT = 92 // how fast a glowing rock falls once it's settled: time to get under it
+const LIFT = 52 // how far the cannon stands up out of the letterbox bar in the intro
+
+// The intro's beats, in seconds: lasers bounce off, the cannon rises, then the
+// three steps one at a time (the ghost rock is lobbed at `toss`), then the fight.
+const INTRO = { cannon: 2.0, step1: 3.9, toss: 4.25, step2: 5.0, step3: 5.7, end: 6.7 }
 
 const SKIN = '#8be04e'
 const HAT = '#ffd23d'
@@ -52,9 +64,12 @@ function newFight(g, hp) {
     loads: [], // flying from a ship into the cannon
     motes: [], // charge sparkles drawn into the muzzle
     pad: { x: g.W / 2, y: g.H + 100, rise: 0, slide: 0, state: 'idle', st: 0, queue: [], aim: -Math.PI / 2, glow: 0, recoil: 0 },
+    raised: false, // the cannon stays underground until the intro calls it up
+    lift: 0, // follows the letterbox bars, so the cannon stands on top of them
+    intro: null,
     beam: null,
-    shortT: 0,
     bounceT: -99,
+    misses: 0, // glowing rocks that fell past unopened
     told: {},
     over: false,
   }
@@ -137,7 +152,7 @@ export const krax = {
       rattle: 0,
       stun: 0,
       reel: 0,
-      scoutT: 13,
+      scoutT: 10,
       plates: makePlates(),
       heap: makeHeap(),
       angry: false,
@@ -160,6 +175,13 @@ export const krax = {
     b.reel = Math.max(0, b.reel - dt * 1.4)
     b.tilt = Math.sin(b.t * 24) * 0.05 * b.reel
     if (g.bossEnter(b, dt)) return
+    // the moment Krax pulls up, the intro: it holds its fire and the sky stays
+    // empty until the show is over or skipped
+    if (!f.intro) startIntro(b, g, f)
+    if (!f.intro.done) {
+      runIntro(b, g, f, dt)
+      return
+    }
 
     b.angry = b.hp < b.maxHp * 0.5
     const hi = swayRange(g)[1]
@@ -188,8 +210,8 @@ export const krax = {
     } else runAttack(b, g, f, dt)
 
     if ((b.scoutT -= dt) <= 0) {
-      for (const fx of [0.18, 0.82]) g.spawn('scout', g.W * fx, -40, { path: 'fall', speed: 115 })
-      b.scoutT = b.angry ? 11 : 15
+      for (const fx of [0.18, 0.82]) g.spawn('scout', g.W * fx, -40, { path: 'fall', speed: 120 })
+      b.scoutT = b.angry ? 9 : 12
     }
   },
 
@@ -203,7 +225,7 @@ export const krax = {
     g.sparks(x, y, '#fff3b0', 3)
     g.sfx.ting()
     const f = b.fight
-    if (f && !b.entering && f.t - f.bounceT > 9) {
+    if (f && !b.entering && !showing(f) && f.t - f.bounceT > 9) {
       f.bounceT = f.t
       g.popText(x, y + 40, 'Lasers bounce off!', '#ffd7a0', 16, 1.3)
     }
@@ -248,11 +270,21 @@ export const krax = {
 // ---------------------------------------------------------------- attacks
 
 function startAttack(b, g, f) {
-  let kind = b.firstCore ? 'throw' : SEQ[b.seqI++ % SEQ.length]
+  // With no core anywhere (none floating, carried or on its way) Krax always
+  // reaches for another glowing rock, whatever was due next: the fight can't
+  // stall, however many rocks get away.
+  const dry = !b.firstCore && supply(f, g) === 0 && f.delivered < f.needed
+  const must = b.firstCore || dry
+  let kind = must ? 'throw' : SEQ[b.seqI++ % SEQ.length]
   if (kind === 'spill' && !b.angry) kind = 'volley'
   let arm = null
   if (kind === 'throw') {
     arm = b.arms.find((a) => a.has && a.side === b.nextSide) ?? b.arms.find((a) => a.has)
+    if (!arm && must) {
+      // both claws still reloading: the glowing rock is a moment away
+      b.rest = 0.2
+      return
+    }
     if (!arm) kind = 'volley'
   }
   b.attack = kind
@@ -261,13 +293,17 @@ function startAttack(b, g, f) {
   if (kind === 'throw') {
     b.nextSide = -arm.side
     b.arm = arm
-    const core = b.firstCore || short(f, g)
+    const core = must || short(f, g)
     b.firstCore = false
-    setRockKind(arm, core ? 'core' : b.angry && Math.random() < 0.5 ? 'hot' : 'plain')
+    setRockKind(arm, core ? 'core' : Math.random() < (b.angry ? 0.55 : 0.25) ? 'hot' : 'plain')
     arm.want = 1
     arm.fast = false
     b.tgt = core ? coreLanding(g) : shipTarget(g)
     if (core) synth.tone({ type: 'sine', from: 660, to: 990, dur: 0.25, vol: 0.08 }, 'krax-core', 0.2)
+    if (dry && f.misses) {
+      const [rx, ry] = heldRock(b, arm)
+      g.popText(g.clamp(rx, 140, g.W - 140), ry + 70, 'Another glowing rock!', CORE, 18, 1.6)
+    }
   } else if (kind === 'volley') {
     synth.tone({ type: 'square', from: 220, to: 520, dur: 0.6, vol: 0.05 }, 'krax-charge', 0.3)
   } else if (kind === 'laser') {
@@ -301,7 +337,7 @@ function runAttack(b, g, f, dt) {
   b.at += dt
   const done = () => {
     b.attack = null
-    b.rest = b.angry ? 0.9 : 1.4
+    b.rest = b.angry ? 0.75 : 1.15
   }
   switch (b.attack) {
     case 'throw': {
@@ -316,8 +352,8 @@ function runAttack(b, g, f, dt) {
         b.step = 1
         const o = { spr: arm.spr, pal: arm.kind === 'core' ? 2 : arm.pal, k: arm.k, rot: arm.rot, vx, vy, entered: true }
         if (arm.kind === 'core') {
-          spawnRock(g, 'mid', rx, ry, { ...o, kind: 'core', spin: 0.8 })
-          tell(f, g, 'shoot', rx, ry + 60, 'Shoot the glowing rock!', CORE, 20)
+          spawnRock(g, 'mid', rx, ry, { ...o, kind: 'core', spin: 0.8, tx: b.tgt.x })
+          tell(f, g, 'shoot', g.clamp(b.tgt.x, 160, g.W - 160), g.playerTop() + 20, 'Shoot it open!', CORE, 22)
         } else spawnRock(g, 'big', rx, ry, { ...o, kind: arm.kind, hot: arm.kind === 'hot' ? 1.5 : undefined })
         arm.has = false
         arm.reload = 1.3
@@ -333,23 +369,31 @@ function runAttack(b, g, f, dt) {
       break
     }
     case 'volley': {
-      const n = b.angry ? 4 : 3
+      const n = b.angry ? 5 : 4
       b.gun = b.at < 0.7 ? b.at / 0.7 : 1
-      if (b.at >= 0.7 + b.step * 0.42 && b.step < n) {
+      if (b.at >= 0.7 + b.step * 0.4 && b.step < n) {
         const side = b.step % 2 ? 1 : -1
         const [gx, gy] = gunPos(b, side)
-        g.aimed(gx, gy, 3, 0.17, 235, '#ffb02e', g.nearestPlayer(gx, gy))
+        const p = g.nearestPlayer(gx, gy)
+        // every other burst leads the ship, aimed a little ahead of where
+        // it's flying: a ship that keeps to one straight line gets caught
+        let aim = p
+        if (p && b.step % 2) {
+          const t = Math.hypot(p.x - gx, p.y - gy) / 263
+          aim = { x: p.x + p.vx * t * 0.7, y: p.y + p.vy * t * 0.7 }
+        }
+        g.aimed(gx, gy, 3, 0.17, 235, '#ffb02e', aim)
         b.gunFlash[side > 0 ? 1 : 0] = 1
         b.step++
       }
-      if (b.at > 0.7 + n * 0.42 + 0.2) done()
+      if (b.at > 0.7 + n * 0.4 + 0.2) done()
       break
     }
     case 'laser':
       b.emit = Math.min(1, b.at / 1.3)
       if (b.at >= 1.3 && b.at < 3.3) {
         const [lo, hi] = swayRange(g)
-        b.x = Math.max(lo, Math.min(hi, b.x + b.sweep * 105 * dt))
+        b.x = Math.max(lo, Math.min(hi, b.x + b.sweep * 122 * dt))
       }
       if (b.at > 3.45) {
         b.laser = null
@@ -360,8 +404,8 @@ function runAttack(b, g, f, dt) {
       if (b.step === 0 && b.at >= 0.85) {
         b.step = 1
         // the hopper coughs up a spray of pebbles that rain down spread out
-        for (let i = 0; i < 6; i++) {
-          const u = i / 5 - 0.5
+        for (let i = 0; i < 7; i++) {
+          const u = i / 6 - 0.5
           spawnRock(g, 'small', b.x + u * 150, b.y - 80, { vx: u * 330 + rand(-15, 15), vy: rand(-160, -110), grav: 300, vmax: 140, damp: 0.25, entered: true })
         }
         g.sfx.pop(0.7)
@@ -371,16 +415,12 @@ function runAttack(b, g, f, dt) {
   }
 }
 
-// A rock goes straight at its target. A core rock is lobbed instead: it always
-// drops at the same gentle pace, so it reaches the ships' half quickly however
-// far across the screen it's headed.
+// A rock goes straight at its target. A glowing rock is lobbed instead: it
+// swings across to its column and settles into a slow fall through the ships'
+// half (see belt-core-rock), so there's time to get under it and shoot.
 function throwVel(b, g, arm, rx, ry) {
-  if (arm.kind === 'core') {
-    const vy = 150
-    const time = Math.max(0.7, (g.playerTop() - 70 - ry) / vy)
-    return [Math.max(-240, Math.min(240, (b.tgt.x - rx) / time)), vy]
-  }
-  const sp = b.angry ? 220 : 190
+  if (arm.kind === 'core') return [Math.max(-380, Math.min(380, (b.tgt.x - rx) * 1.5)), 240]
+  const sp = b.angry ? 235 : 205
   const a = Math.atan2(b.tgt.y - ry, b.tgt.x - rx)
   return [Math.cos(a) * sp, Math.sin(a) * sp]
 }
@@ -389,7 +429,13 @@ function throwVel(b, g, arm, rx, ry) {
 function interrupt(b) {
   if (b.laser) b.laser.dead = true
   b.laser = null
-  if (b.attack === 'throw' && b.arm && b.step === 0) b.arm.want = 0
+  if (b.attack === 'throw' && b.arm && b.step === 0) {
+    // the claw fumbles its rock in the blast and grabs a plain one, so a
+    // glowing rock never sits in a claw that isn't about to throw it
+    b.arm.want = 0
+    b.arm.pop = 1
+    newRock(b.arm)
+  }
   b.attack = null
   b.rest = 1
   b.gun = 0
@@ -435,6 +481,214 @@ function wanted(f, g) {
 
 const short = (f, g) => supply(f, g) < wanted(f, g)
 
+// ---------------------------------------------------------------- the intro
+//
+// About seven seconds, skippable with Enter or a tap. Krax holds its fire,
+// the ships hold still, and three beats explain the fight: practice lasers
+// ping off the armour; the Ion Cannon rises out of the ground into a
+// spotlight; then Krax holds up a glowing rock while a ghost of the whole
+// trick plays out: the rock is lobbed, shot open, and its core flown into the
+// cannon. The real first glowing rock follows the moment it's over.
+
+const showing = (f) => !!f.intro && !f.intro.done
+const padRange = (g) => Math.max(0, Math.min(g.W * 0.3, g.W / 2 - 130))
+
+function startIntro(b, g, f) {
+  f.intro = { t: 0, done: false, beat: 0, bolts: [], fireT: 0, shot: 0, arm: null, demo: null }
+  // a finger already on the glass the moment the show starts shouldn't skip it
+  // by accident, so a skip only counts once the "skip" hint is up
+  g.cutscene(true, { onSkip: () => f.intro.t > 0.6 && endIntro(b, g, f) })
+  // anything still in the air fizzles, so the ships get their controls back
+  // to a clear sky
+  for (const s of g.eShots) g.sparks(s.x, s.y, '#ffffff', 2)
+  g.eShots = []
+  // the cannon comes up where the ships aren't, so they don't hide it
+  const ships = g.alive()
+  let best = 1.2
+  let far = -1
+  for (const s of [-1.2, -0.7, 0.7, 1.2]) {
+    const x = g.W / 2 + Math.sin(s) * padRange(g)
+    const d = ships.length ? Math.min(...ships.map((p) => Math.abs(p.x - x))) : Math.abs(s)
+    if (d > far + 1) {
+      far = d
+      best = s
+    }
+  }
+  f.pad.slide = best
+}
+
+// Has the intro passed `at` this frame for beat number `n`? Each beat's one-off
+// work (a sound, a burst) runs once.
+function beat(I, n, at) {
+  if (I.beat >= n || I.t < at) return false
+  I.beat = n
+  return true
+}
+
+function runIntro(b, g, f, dt) {
+  const I = f.intro
+  const pad = f.pad
+  I.t += dt
+  b.y = b.ty + Math.sin(b.t * 1.2) * 8
+  b.gun = Math.max(0, b.gun - dt * 3)
+  b.emit = Math.max(0, b.emit - dt * 3)
+  // stray saucers from the field hold their fire too
+  for (const e of g.enemies) if (e.fireT != null) e.fireT = Math.max(e.fireT, 1)
+
+  // beat 1: practice lasers at the armour, pinging off
+  if (I.t > 0.35 && I.t < INTRO.cannon - 0.4 && (I.fireT -= dt) <= 0) {
+    I.fireT = 0.12
+    const ships = g.alive()
+    const p = ships[I.shot++ % Math.max(1, ships.length)]
+    if (p) {
+      const tx = b.x + g.clamp(p.x - b.x, -130, 130) + rand(-25, 25)
+      const ty = b.y + rand(-10, 40)
+      const a = Math.atan2(ty - (p.y - 34), tx - p.x)
+      I.bolts.push({ x: p.x, y: p.y - 34, vx: Math.cos(a) * 900, vy: Math.sin(a) * 900, pal: p.pal, life: 1, hit: false, tgt: null })
+    }
+  }
+
+  // beat 2: the cannon rises out of the ground
+  if (beat(I, 1, INTRO.cannon)) {
+    f.raised = true
+    g.shake(8)
+    burstDebris(pad.x, g.H - 84, 46, 0, 12, 0, -260)
+    synth.noise({ dur: 1.2, vol: 0.32, freq: 500, to: 60 }, 'krax-rumble', 0)
+    synth.tone({ type: 'sawtooth', from: 70, to: 160, dur: 1.1, vol: 0.1, attack: 0.2 }, 'krax-rise', 0)
+  }
+  if (I.beat === 1 && pad.rise < 1 && Math.random() < dt * 30) g.sparks(pad.x + rand(-80, 80), g.H - 80, '#d8c4a8', 1)
+  if (beat(I, 2, INTRO.cannon + 1.15)) {
+    pad.glow = 1
+    g.flash(0.12)
+    ;[523, 784, 1047].forEach((fr, i) => synth.tone({ type: 'triangle', from: fr, dur: 0.18, vol: 0.12, at: i * 0.07 }, 'krax-ready' + i, 0))
+  }
+
+  // beat 3: Krax holds up a glowing rock...
+  if (beat(I, 3, INTRO.step1)) {
+    const side = pad.x >= b.x ? 1 : -1
+    const arm = b.arms.find((a) => a.side === side)
+    arm.has = true
+    arm.pop = 1
+    setRockKind(arm, 'core')
+    arm.want = 0.6
+    arm.fast = false
+    I.arm = arm
+    synth.tone({ type: 'sine', from: 660, to: 990, dur: 0.25, vol: 0.08 }, 'krax-core', 0.2)
+  }
+  // ...and a ghost of it acts out the trick: lobbed, shot open...
+  if (beat(I, 4, INTRO.toss)) {
+    const arm = I.arm
+    const [rx, ry] = heldRock(b, arm)
+    const spot = demoSpot(b, g, f)
+    I.demo = { x: rx, y: ry, x0: rx, y0: ry, sx: spot[0], sy: spot[1], t: 0, hits: 0, core: false, spr: arm.spr, k: arm.k, rot: arm.rot }
+    arm.has = false
+    arm.reload = 1.6
+    arm.want = -0.3
+    arm.fast = true
+    synth.noise({ dur: 0.3, vol: 0.2, freq: 1400, to: 200 }, 'krax-whoosh', 0.1)
+  }
+  const D = I.demo
+  if (D) {
+    D.t += dt
+    if (!D.core) {
+      const u = Math.min(1, D.t / 0.45)
+      const e = 1 - (1 - u) ** 2
+      D.x = D.x0 + (D.sx - D.x0) * e
+      D.y = D.y0 + (D.sy - D.y0) * e - Math.sin(u * Math.PI) * 50
+      D.rot += dt * 2
+      // three practice shots from the nearest ship crack it open
+      if (D.t > 0.25 && D.t < 0.58 && (I.fireT -= dt) <= 0) {
+        I.fireT = 0.1
+        const p = g.nearestPlayer(D.sx, D.sy)
+        if (p) {
+          const a = Math.atan2(D.sy - (p.y - 34), D.sx - p.x)
+          I.bolts.push({ x: p.x, y: p.y - 34, vx: Math.cos(a) * 900, vy: Math.sin(a) * 900, pal: p.pal, life: 1, hit: false, tgt: D })
+        }
+      }
+      if (D.hits >= 3 || D.t > 1.1) {
+        D.core = true
+        D.ct = 0
+        burstDebris(D.x, D.y, 40, 2, 8, 0, 60)
+        g.sparks(D.x, D.y, CORE, 10)
+        synth.tone({ type: 'triangle', from: 880, to: 1760, dur: 0.18, vol: 0.12 }, 'krax-crack', 0.05)
+      }
+    } else {
+      D.ct += dt
+      // ...grabbed, and flown into the cannon
+      if (I.t >= INTRO.step3) {
+        const k = Math.min(1, dt * 5)
+        D.x += (pad.x - D.x) * k
+        D.y += (pad.y - 10 - D.y) * k
+        if (!D.loaded && g.near(D.x, D.y, pad.x, pad.y - 10, 24)) {
+          D.loaded = true
+          pad.glow = 1
+          g.popText(pad.x, pad.y - 120, 'Loaded!', CORE, 22, 1)
+          ;[784, 988, 1319].forEach((fr, i) => synth.tone({ type: 'triangle', from: fr, dur: 0.12, vol: 0.13, at: i * 0.06 }, 'krax-load' + i, 0))
+        }
+      }
+    }
+  }
+
+  // the practice lasers fly, ping off the armour or crack the ghost rock
+  let j = 0
+  for (const s of I.bolts) {
+    s.x += s.vx * dt
+    s.y += s.vy * dt
+    if (s.hit) s.life -= dt * 3
+    else if (s.tgt) {
+      if (g.near(s.x, s.y, s.tgt.x, s.tgt.y, 34)) {
+        s.life = 0
+        s.tgt.hits++
+        g.sparks(s.x, s.y, CORE, 4)
+        g.sfx.hitTick()
+      }
+    } else if (((s.x - b.x) / 165) ** 2 + ((s.y - b.y - 8) / 68) ** 2 <= 1) {
+      s.hit = true
+      s.vx = Math.sign(s.x - b.x || 1) * rand(260, 480)
+      s.vy = rand(120, 360)
+      g.sparks(s.x, s.y, '#fff3b0', 4)
+      g.sfx.ting()
+      if (I.shot % 4 === 1) g.popText(s.x, s.y + 30, 'Ting!', '#fff3b0', 15, 0.6)
+    }
+    if (s.life > 0 && s.y > -40 && s.y < g.H + 40) I.bolts[j++] = s
+  }
+  I.bolts.length = j
+
+  if (I.t >= INTRO.end) endIntro(b, g, f)
+}
+
+// Where the ghost rock is cracked open in the intro: in from the cannon
+// toward the middle and up a little, so the core's trip to the cannon reads
+// as a trip.
+function demoSpot(b, g, f) {
+  const x = f.pad.x + (g.W / 2 - f.pad.x) * 0.42
+  return [g.clamp(x, 110, g.W - 110), g.H - 270]
+}
+
+// The show's over, played out or skipped: the cannon is up (or on its way),
+// the claws are back to normal, and the first real glowing rock comes next.
+function endIntro(b, g, f) {
+  const I = f.intro
+  if (!I || I.done) return
+  I.done = true
+  I.bolts.length = 0
+  I.demo = null
+  f.raised = true
+  for (const arm of b.arms) {
+    arm.want = 0
+    arm.fast = false
+    if (!arm.has) {
+      arm.has = true
+      arm.pop = 1
+      newRock(arm)
+    }
+  }
+  b.firstCore = true
+  b.attack = null
+  b.rest = 0.35
+  g.cutscene(false)
+}
+
 // ---------------------------------------------------------------- geometry
 
 // How far Krax roams: far enough to keep the ships moving, never so far that
@@ -474,10 +728,11 @@ const gunPos = (b, side) => [b.x + side * GUN.x, b.y + GUN.y]
 // ---------------------------------------------------------------- the fight's pieces
 
 export const KRAX_ENEMIES = {
-  // a glowing rock with a power core inside. Shoot it open, or it cracks open
-  // on its own before it can reach the ships.
+  // A glowing rock with a power core inside: the only place cores come from.
+  // Shoot it open and the core floats free; let it fall past and the core goes
+  // with it, and Krax throws another.
   'belt-core-rock': {
-    hp: 3,
+    hp: 4,
     r: 40,
     score: 200,
     light: CORE,
@@ -493,11 +748,17 @@ export const KRAX_ENEMIES = {
         e.vy = e.vy ?? 120
         e.pal = 2
       }
+      // the lob: swing across to its column, then settle into a slow fall
+      if (e.tx != null) {
+        e.tx = g.clamp(e.tx, 90, g.W - 90)
+        e.vx += ((e.tx - e.x) * 2 - e.vx) * Math.min(1, dt * 3)
+      }
+      e.vy += (DRIFT - e.vy) * Math.min(1, dt * 0.9)
       moveRock(e, dt, g)
       if (Math.random() < dt * 6) g.sparks(e.x + rand(-20, 20), e.y + rand(-20, 20), CORE, 1)
-      if (e.y > g.playerTop() - 70) {
+      if (e.y > g.H + e.r * 0.4) {
         e.gone = true
-        crackCore(e, g)
+        lostCore(e, g)
       }
     },
     draw(e, g, ctx) {
@@ -505,11 +766,34 @@ export const KRAX_ENEMIES = {
       drawHalo(ctx, e.x, e.y, e.r * 2.6, CORE, 0.55 + 0.3 * Math.sin(g.time * 8))
       ctx.globalCompositeOperation = 'source-over'
       drawRock(ctx, e)
+      if (fight && !fight.over) label(ctx, g, e.x, e.y - e.r - 16 + Math.sin(g.time * 6) * 3, 'Shoot it!')
     },
     onDeath(e, g) {
       crackCore(e, g)
     },
   },
+}
+
+// A little word over something the ships should go for.
+function label(ctx, g, x, y, text) {
+  ctx.font = `13px ${g.FONT}`
+  ctx.textAlign = 'center'
+  ctx.lineJoin = 'round'
+  ctx.lineWidth = 4
+  ctx.strokeStyle = 'rgba(10,6,30,0.9)'
+  ctx.strokeText(text, x, y)
+  ctx.fillStyle = '#ffffff'
+  ctx.fillText(text, x, y)
+}
+
+// A glowing rock fell past the ships unopened: its core is gone, and Krax will
+// reach for another (startAttack).
+function lostCore(e, g) {
+  const f = fight
+  if (!f || f.over) return
+  f.misses++
+  g.popText(g.clamp(e.x, 150, g.W - 150), g.H - 150, 'It got away!', '#ffc58a', 20, 1.4)
+  synth.tone({ type: 'triangle', from: 660, to: 330, dur: 0.3, vol: 0.1 }, 'krax-miss', 0.2)
 }
 
 function crackCore(e, g) {
@@ -531,15 +815,6 @@ function addCore(f, g, x, y, tx = x, ty = y) {
     ty: Math.max(top + 50, Math.min(g.H - 215, ty < top + 50 ? rand(top + 50, top + 150) : ty)),
     t: rand(0, 6),
   })
-}
-
-// Nothing on its way for a while: a core drifts in from the side.
-function driftCore(f, g) {
-  const side = Math.random() < 0.5 ? -1 : 1
-  const y = rand(g.playerTop() + 60, g.H - 220)
-  const tx = side < 0 ? rand(g.W * 0.14, g.W * 0.3) : rand(g.W * 0.7, g.W * 0.86)
-  addCore(f, g, side < 0 ? -40 : g.W + 40, y, tx, y)
-  g.popText(tx, y - 50, 'A power core!', CORE, 18, 1.4)
 }
 
 function grab(f, g, p, c) {
@@ -635,22 +910,25 @@ export function updateFight(g, dt) {
   const pad = f.pad
   const top = g.playerTop()
 
-  // the pad rises out of the ground, slides about, and sinks again at the end
+  // the pad rises out of the ground when the intro calls it, slides about, and
+  // sinks again at the end. While the letterbox bars are in it stands on top
+  // of the bottom one rather than behind it
   if (f.over) {
     pad.rise = Math.max(0, pad.rise - dt * 1.2)
     if (pad.rise <= 0 && !f.beam) {
       fight = null
       return
     }
-  } else pad.rise = Math.min(1, pad.rise + dt * 0.9)
+  } else if (f.raised) pad.rise = Math.min(1, pad.rise + dt * 0.9)
+  f.lift += ((g.inCutscene && showing(f) ? 1 : 0) - f.lift) * Math.min(1, dt * 5)
   const e = 1 - (1 - pad.rise) ** 3
-  pad.y = g.H - 72 + (1 - e) * 180
+  pad.y = g.H - 72 - LIFT * f.lift + (1 - e) * 180
   pad.glow = Math.max(0, pad.glow - dt * 1.5)
   pad.recoil = Math.max(0, pad.recoil - dt * 2.5)
   if (pad.state === 'idle') {
-    pad.slide += dt * 0.28
-    const range = Math.max(0, Math.min(g.W * 0.3, g.W / 2 - 130))
-    pad.x = g.W / 2 + Math.sin(pad.slide) * range
+    // it holds still for its close-up in the intro
+    if (!showing(f)) pad.slide += dt * 0.28
+    pad.x = g.W / 2 + Math.sin(pad.slide) * padRange(g)
   }
   const want = b ? Math.atan2(b.y - (pad.y - 22), b.x - pad.x) : -Math.PI / 2
   pad.aim += (want - pad.aim) * Math.min(1, dt * (pad.state === 'charge' ? 10 : 4))
@@ -761,13 +1039,6 @@ export function updateFight(g, dt) {
     }
   }
 
-  if (short(f, g)) {
-    f.shortT += dt
-    if (f.shortT > 5) {
-      f.shortT = 0
-      driftCore(f, g)
-    }
-  } else f.shortT = 0
 }
 
 // ================================================================ drawing
@@ -1523,6 +1794,7 @@ function drawSign(ctx, f, g, t) {
 export function drawFightBack(g, ctx) {
   const f = fight
   if (!f) return
+  if (f.intro && f.lift > 0.02) drawSpotlight(ctx, g, f)
   drawPad(ctx, f, g.time)
 }
 
@@ -1547,7 +1819,7 @@ export function drawFightMid(g, ctx) {
       ctx.stroke()
       ctx.setLineDash([])
     }
-    drawSign(ctx, f, g, t)
+    if (!showing(f) && pad.rise > 0.5) drawSign(ctx, f, g, t)
   }
   for (const c of f.cores) {
     const y = c.y + Math.sin(c.t * 2.5) * 5
@@ -1619,15 +1891,290 @@ export function drawFightTop(g, ctx) {
     drawHalo(ctx, B.x1, B.y1, 120 * fade, '#ffffff', 1)
   }
   ctx.globalCompositeOperation = 'source-over'
+  if (showing(f) && g.boss) drawIntro(ctx, g, f, g.boss)
+}
+
+// ---------------------------------------------------------------- the intro's layers
+
+// A stage light leaning in from the middle of the sky onto the cannon, with
+// the pool of light it throws on the ground. It fades out with the bars.
+function drawSpotlight(ctx, g, f) {
+  const a = Math.max(0, Math.min(1, (f.intro.t - INTRO.cannon) / 0.4)) * f.lift
+  if (a <= 0) return
+  const pad = f.pad
+  const bx = pad.x
+  const by = pad.y + 26
+  const sx = pad.x + (pad.x < g.W / 2 ? 1 : -1) * Math.min(180, g.W * 0.14)
+  ctx.save()
+  ctx.globalCompositeOperation = 'lighter'
+  const gr = ctx.createLinearGradient(0, 0, 0, by)
+  gr.addColorStop(0, 'rgba(191,249,255,0)')
+  gr.addColorStop(0.6, `rgba(191,249,255,${0.05 * a})`)
+  gr.addColorStop(1, `rgba(191,249,255,${0.16 * a})`)
+  ctx.fillStyle = gr
+  // a wide soft cone with a brighter one inside it, for a soft edge; both run
+  // on behind the letterbox bar
+  const k = g.H / by
+  for (const [top, bottom] of [[22, 150], [10, 95]]) {
+    const cx = sx + (bx - sx) * k
+    const hw = top + (bottom - top) * k
+    ctx.beginPath()
+    ctx.moveTo(sx - top, 0)
+    ctx.lineTo(sx + top, 0)
+    ctx.lineTo(cx + hw, g.H)
+    ctx.lineTo(cx - hw, g.H)
+    ctx.closePath()
+    ctx.fill()
+  }
+  ctx.translate(bx, by)
+  ctx.scale(1, 0.24)
+  drawHalo(ctx, 0, 0, 170, '#bff9ff', 0.7 * a)
+  ctx.restore()
+}
+
+const WHITE = '#ffffff'
+const WARM = '#ffb36b'
+
+// The words, a few at a time. Coloured words are the things to look for.
+const CAPTIONS = [
+  { from: 0.15, to: INTRO.cannon - 0.08, lines: [[["Krax's armour is ", WHITE], ['too thick', WARM], [' for lasers!', WHITE]]] },
+  { from: INTRO.cannon + 0.05, to: INTRO.step1 - 0.08, lines: [[['Your ', WHITE], ['Ion Cannon', CORE], [' can crack it!', WHITE]]] },
+  {
+    from: INTRO.step1,
+    to: INTRO.end + 1,
+    at: [INTRO.step1, INTRO.step2, INTRO.step3],
+    lines: [
+      [['Shoot the ', WHITE], ['glowing rocks', CORE], [' Krax throws,', WHITE]],
+      [['grab the ', WHITE], ['power core', CORE], [' inside,', WHITE]],
+      [['and fly it to the ', WHITE], ['cannon!', CORE]],
+    ],
+  },
+]
+
+function drawIntro(ctx, g, f, b) {
+  const I = f.intro
+  const t = I.t
+  const time = g.time
+  const pad = f.pad
+
+  // the practice lasers
+  ctx.globalCompositeOperation = 'lighter'
+  for (const s of I.bolts) {
+    ctx.globalAlpha = Math.max(0, Math.min(1, s.life))
+    drawPlayerShot(ctx, s, s.pal)
+  }
+  ctx.globalAlpha = 1
+  ctx.globalCompositeOperation = 'source-over'
+
+  // beat 2: a big arrow and a name over the cannon as it comes up
+  const call = Math.min(1, Math.max(0, (t - INTRO.cannon - 0.45) / 0.3), Math.max(0, (INTRO.step1 - t) / 0.25))
+  if (call > 0) callout(ctx, g, pad.x, pad.y - 84, 'Ion Cannon', call)
+
+  drawCaptions(ctx, g, f, b)
+
+  // beat 3: the trick acted out, each step numbered to match the caption
+  if (t < INTRO.step1 || !I.arm) return
+  const D = I.demo
+  const spot = D ? [D.sx, D.sy] : demoSpot(b, g, f)
+  const from = D ? [D.x0, D.y0] : I.arm.has ? heldRock(b, I.arm) : null
+  if (from) guide(ctx, time, from, spot, Math.min(1, (t - INTRO.step1) / 0.3))
+  if (t >= INTRO.step2) guide(ctx, time, spot, [pad.x, pad.y - 20], Math.min(1, (t - INTRO.step2) / 0.3))
+  if (!D && I.arm.has) {
+    const [rx, ry] = heldRock(b, I.arm)
+    ring(ctx, rx, ry, 52, time)
+    badge(ctx, g, rx, ry - 66, 1)
+  }
+  if (D && !D.core) {
+    ctx.globalCompositeOperation = 'lighter'
+    drawHalo(ctx, D.x, D.y, 100, CORE, 0.7)
+    ctx.globalCompositeOperation = 'source-over'
+    drawRock(ctx, { x: D.x, y: D.y, k: D.k, rot: D.rot, spr: D.spr, flash: D.hits * 0.3 })
+    ring(ctx, D.x, D.y, 52, time)
+    badge(ctx, g, D.x, D.y - 66, 1)
+  }
+  if (D && D.core && !D.loaded) {
+    const bob = t < INTRO.step3 ? Math.sin(D.ct * 5) * 4 : 0
+    drawCore(ctx, D.x, D.y + bob, time, 0.9)
+    if (t < INTRO.step3) label(ctx, g, D.x, D.y - 40 + bob, 'Grab!')
+    badge(ctx, g, D.x + 46, D.y - 30 + bob, 2)
+  }
+  if (t >= INTRO.step3) {
+    ring(ctx, pad.x, pad.y - 16, 70, time)
+    badge(ctx, g, pad.x + 72, pad.y - 70, 3)
+  }
+}
+
+// A bouncing arrow pointing down at (x, y) with a name over it.
+function callout(ctx, g, x, y, text, a) {
+  const bob = Math.sin(g.time * 7) * 7
+  ctx.save()
+  ctx.globalAlpha = a
+  ctx.translate(x, y + bob)
+  ctx.fillStyle = HAT
+  ctx.strokeStyle = '#3a2a08'
+  ctx.lineWidth = 3.5
+  ctx.lineJoin = 'round'
+  ctx.beginPath()
+  ctx.moveTo(-14, -52)
+  ctx.lineTo(14, -52)
+  ctx.lineTo(14, -24)
+  ctx.lineTo(32, -24)
+  ctx.lineTo(0, 0)
+  ctx.lineTo(-32, -24)
+  ctx.lineTo(-14, -24)
+  ctx.closePath()
+  ctx.fill()
+  ctx.stroke()
+  ctx.font = `26px ${g.FONT}`
+  ctx.textAlign = 'center'
+  const w = ctx.measureText(text).width
+  const tx = g.clamp(x, 24 + w / 2, g.W - 24 - w / 2) - x
+  ctx.lineWidth = 7
+  ctx.strokeStyle = 'rgba(10,6,30,0.92)'
+  ctx.strokeText(text, tx, -66)
+  ctx.fillStyle = CORE
+  ctx.fillText(text, tx, -66)
+  ctx.restore()
+}
+
+// A dotted line marching from one point to the next, fading in.
+function guide(ctx, t, [ax, ay], [bx, by], a) {
+  ctx.save()
+  ctx.globalAlpha = a * 0.8
+  ctx.strokeStyle = CORE
+  ctx.lineWidth = 4
+  ctx.lineCap = 'round'
+  ctx.setLineDash([2, 13])
+  ctx.lineDashOffset = -t * 45
+  ctx.beginPath()
+  ctx.moveTo(ax, ay)
+  ctx.lineTo(bx, by)
+  ctx.stroke()
+  ctx.restore()
+}
+
+// A pulsing target ring.
+function ring(ctx, x, y, r, t) {
+  const u = (t * 1.6) % 1
+  ctx.strokeStyle = hexA(CORE, 0.85)
+  ctx.lineWidth = 3
+  ctx.setLineDash([10, 7])
+  ctx.lineDashOffset = t * 30
+  ctx.beginPath()
+  ctx.arc(x, y, r, 0, TAU)
+  ctx.stroke()
+  ctx.setLineDash([])
+  ctx.strokeStyle = hexA(CORE, 0.6 * (1 - u))
+  ctx.beginPath()
+  ctx.arc(x, y, r + u * 26, 0, TAU)
+  ctx.stroke()
+}
+
+// A numbered badge, matching a numbered line of the caption.
+function badge(ctx, g, x, y, n, r = 15) {
+  ctx.fillStyle = CORE
+  ctx.strokeStyle = 'rgba(10,6,30,0.9)'
+  ctx.lineWidth = 3
+  ctx.beginPath()
+  ctx.arc(x, y, r, 0, TAU)
+  ctx.fill()
+  ctx.stroke()
+  ctx.fillStyle = '#0a1a2e'
+  ctx.font = `${Math.round(r * 1.2)}px ${g.FONT}`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText(String(n), x, y + r * 0.08)
+  ctx.textBaseline = 'alphabetic'
+}
+
+// The caption plate between Krax and the ships: one line, or a numbered list
+// that grows a line at a time. While the trick is acted out on one side, the
+// list keeps to the other side if the screen is wide enough, so nothing hides
+// the demo; on a narrow screen it stays in the middle and the demo is drawn
+// over it.
+function drawCaptions(ctx, g, f, b) {
+  const I = f.intro
+  const t = I.t
+  const cap = CAPTIONS.find((c) => t >= c.from && t < c.to)
+  if (!cap) return
+  const fade = Math.max(0, Math.min(1, (t - cap.from) / 0.2, (cap.to - t) / 0.15))
+  const list = !!cap.at
+  const pad = 22
+  let size = 30
+  ctx.font = `${size}px ${g.FONT}`
+  const widths = cap.lines.map((line) => line.reduce((w, [text]) => w + ctx.measureText(text).width, 0))
+  const badgeW = list ? size * 1.45 : 0
+  const widest = Math.max(...widths) + badgeW
+
+  let cx = g.W / 2
+  let room = Math.min(g.W - 40, 940) - pad * 2
+  if (list && I.arm) {
+    // the demo runs between the claw and the cannon
+    const xs = [f.pad.x, heldRock(b, I.arm)[0], demoSpot(b, g, f)[0]]
+    const left = f.pad.x < g.W / 2
+    const edge = left ? Math.max(...xs) + 100 : Math.min(...xs) - 100
+    const side = left ? g.W - 20 - edge : edge - 20
+    if (side - pad * 2 >= widest * 0.78) {
+      room = side - pad * 2
+      cx = left ? edge + side / 2 : 20 + side / 2
+    }
+  }
+  const k = Math.min(1, room / widest)
+  size *= k
+  const lineH = size * 1.55
+  const w = widest * k + pad * 2
+  const fullH = cap.lines.length * lineH + pad * 1.1
+  // just under Krax's claws, and a little lower on a tall screen
+  const top = b.y + 145 + Math.max(0, g.H - 800) * 0.35
+  const shown = list ? cap.at.reduce((n, at) => n + Math.max(0, Math.min(1, (t - at) / 0.25)), 0) : 1
+  const h = shown * lineH + pad * 1.1
+  const rise = (1 - fade) * 10
+
+  ctx.save()
+  ctx.globalAlpha = fade
+  ctx.fillStyle = 'rgba(12,8,40,0.74)'
+  ctx.strokeStyle = hexA(CORE, 0.5)
+  ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.roundRect(cx - w / 2, top + rise, w, Math.min(h, fullH), 16)
+  ctx.fill()
+  ctx.stroke()
+  // a new line is revealed as the plate grows to fit it
+  ctx.clip()
+  ctx.lineJoin = 'round'
+  cap.lines.forEach((line, i) => {
+    const a = list ? Math.max(0, Math.min(1, (t - cap.at[i]) / 0.25)) : 1
+    if (a <= 0) return
+    const y = top + pad * 0.55 + lineH * (i + 0.5) + rise + (1 - a) * 8
+    let x = list ? cx - w / 2 + pad + badgeW * k : cx - (widths[i] * k) / 2
+    ctx.globalAlpha = fade * a
+    if (list) badge(ctx, g, x - badgeW * k * 0.55, y, i + 1, size * 0.52)
+    ctx.font = `${size}px ${g.FONT}`
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    for (const [text, col] of line) {
+      ctx.lineWidth = Math.max(3, size * 0.2)
+      ctx.strokeStyle = 'rgba(10,6,30,0.9)'
+      ctx.strokeText(text, x, y)
+      ctx.fillStyle = col
+      ctx.fillText(text, x, y)
+      x += ctx.measureText(text).width
+    }
+  })
+  ctx.restore()
+  ctx.textBaseline = 'alphabetic'
 }
 
 // Under the boss bar: what to do next, and how many cores are in.
 function drawHint(b, g, ctx) {
   const f = b.fight
-  if (!f || f.over) return
+  if (!f || f.over || showing(f)) return
   const cx = g.W / 2
   const carrying = g.players.some((p) => p.alive && p.carry?.krax)
-  const rock = g.enemies.some((e) => e.type === 'belt-core-rock') || (b.attack === 'throw' && b.arm?.kind === 'core')
+  const rock = g.enemies.some((e) => e.type === 'belt-core-rock' && !e.dead)
+  const winding = b.attack === 'throw' && b.step === 0 && b.arm?.kind === 'core'
+  // the last line only shows with no core anywhere, and then it's true:
+  // Krax's next move is always another glowing rock (startAttack)
   const hint = carrying
     ? 'Fly the core to the Ion Cannon!'
     : f.pad.state === 'charge'
@@ -1635,10 +2182,12 @@ function drawHint(b, g, ctx) {
       : f.pad.state === 'fire'
         ? 'Great shot! Get another core!'
         : f.cores.length
-        ? 'Grab a glowing power core!'
-        : rock
-          ? 'Shoot the glowing rock!'
-          : 'Lasers bounce off! Watch for a glowing rock.'
+          ? 'Grab the glowing power core!'
+          : rock
+            ? 'Shoot the glowing rock open!'
+            : winding
+              ? 'Here comes a glowing rock!'
+              : 'Krax is grabbing another glowing rock...'
   ctx.textAlign = 'center'
   ctx.lineJoin = 'round'
   ctx.font = `13px ${g.FONT}`

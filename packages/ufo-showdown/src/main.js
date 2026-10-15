@@ -247,7 +247,7 @@ const g = {
   // can't be hurt), the HUD steps aside for letterbox bars, and Enter or a tap
   // calls onSkip — which should wrap the scene up and call g.cutscene(false).
   cutscene(on, opts = {}) {
-    cutscene = on ? { onSkip: opts.onSkip ?? null, t: 0 } : null
+    cutscene = on ? { onSkip: opts.onSkip ?? null, minSkip: opts.minSkip ?? 0.6, t: 0 } : null
   },
   get inCutscene() { return !!cutscene },
   // how fast the starfield streams past; 1 is cruising, 6+ is warp
@@ -275,13 +275,14 @@ function explode(x, y, color, size = 1) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * TAU
     const sp = rand(80, 340) * Math.sqrt(size)
+    const life = rand(0.35, 0.9) * (0.7 + size * 0.3)
     particles.push({
       x,
       y,
       vx: Math.cos(a) * sp,
       vy: Math.sin(a) * sp,
-      life: rand(0.35, 0.9) * (0.7 + size * 0.3),
-      max: 1,
+      life,
+      max: life,
       color: pick([color, color, '#ffffff', '#ffd54a']),
       size: rand(1.6, 3.6) * Math.sqrt(size),
       kind: 'spark',
@@ -291,13 +292,14 @@ function explode(x, y, color, size = 1) {
   for (let i = 0; i < 4 * size; i++) {
     const a = Math.random() * TAU
     const sp = rand(10, 60) * size
+    const life = rand(0.5, 1.1)
     particles.push({
       x: x + rand(-10, 10) * size,
       y: y + rand(-10, 10) * size,
       vx: Math.cos(a) * sp,
       vy: Math.sin(a) * sp,
-      life: rand(0.5, 1.1),
-      max: 1,
+      life,
+      max: life,
       color: '#8a7fb8',
       size: rand(10, 22) * size,
       kind: 'puff',
@@ -306,7 +308,6 @@ function explode(x, y, color, size = 1) {
   }
   particles.push({ x, y, vx: 0, vy: 0, life: 0.18, max: 0.18, color: '#ffffff', size: 30 * size, kind: 'glow', drag: 0 })
   rings.push({ x, y, r: 6, max: 70 * size, speed: 300 * Math.sqrt(size), color, w: 4 * Math.sqrt(size) })
-  for (const p of particles) if (p.max === 1) p.max = p.life
   if (particles.length > 900) particles.splice(0, particles.length - 900)
 }
 
@@ -401,6 +402,7 @@ function updatePlayer(p, dt) {
         p.vx = p.vy = 0
         p.invuln = 2.2
         if (p.lo.lifeShield) addPower(p.powers, 'shield', p.maxSlots)
+        level?.onRespawn?.(g, p)
       }
     }
     return
@@ -493,6 +495,7 @@ function hurtPlayer(p) {
   p.lives--
   p.alive = false
   p.powers.length = 0
+  level?.onShipDown?.(g, p)
   explode(p.x, p.y, p.pal.main, 1.6)
   sfx.hurt()
   shake = Math.max(shake, 16)
@@ -763,8 +766,11 @@ function damageEnemy(e, dmg, owner) {
     e.dead = true
     if (def.score) addScore(owner, def.score, e.x, e.y - 20)
     const boom = def.boom ?? 0.8
-    explode(e.x, e.y, enemyLight(e), boom)
-    sfx.pop(boom + (boom > 1 ? 0 : -0.1))
+    if (def.pop) def.pop(e, g)
+    else {
+      explode(e.x, e.y, enemyLight(e), boom)
+      sfx.pop(boom + (boom > 1 ? 0 : -0.1))
+    }
     if (Math.random() < (def.drop ?? 0.07)) dropBubble(e.x, e.y)
     def.onDeath?.(e, g, owner)
   } else {
@@ -1532,7 +1538,7 @@ function update(dt) {
     }
     if (L.warn > 0) {
       L.warn -= dt
-      if (L.warn <= 0) {
+      if (L.warn <= 0 && !L.quiet) {
         sfx.laser()
         shake = Math.max(shake, 4)
       }
@@ -1765,8 +1771,8 @@ function drawBars() {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, W, h)
   ctx.fillRect(0, H - h, W, h)
-  if (cutscene?.onSkip && cutscene.t > 0.6) {
-    ctx.globalAlpha = Math.min(1, (cutscene.t - 0.6) * 2) * (0.55 + 0.25 * Math.sin(time * 4))
+  if (cutscene?.onSkip && cutscene.t > cutscene.minSkip) {
+    ctx.globalAlpha = Math.min(1, (cutscene.t - cutscene.minSkip) * 2) * (0.55 + 0.25 * Math.sin(time * 4))
     ctx.font = `13px ${FONT}`
     ctx.textAlign = 'right'
     ctx.fillStyle = '#a9b3d6'
@@ -2339,7 +2345,7 @@ window.addEventListener('keydown', (e) => {
     storeKey(e)
   } else if (mode === 'play') {
     if (e.code === 'KeyP' || e.code === 'Escape') pause()
-    else if (cutscene?.onSkip && OK.has(e.code)) cutscene.onSkip()
+    else if (cutscene?.onSkip && cutscene.t >= cutscene.minSkip && OK.has(e.code)) cutscene.onSkip()
   } else if (mode === 'pause') {
     if (e.code === 'KeyP' || e.code === 'Escape') resume()
     else if (e.code === 'KeyQ') quitMission()
@@ -2394,7 +2400,7 @@ function toWorld(e) {
 canvas.addEventListener('pointerdown', (e) => {
   if (mode !== 'play') return
   unlockAudio()
-  if (cutscene?.onSkip) return cutscene.onSkip()
+  if (cutscene?.onSkip) return cutscene.t >= cutscene.minSkip && cutscene.onSkip()
   const pt = toWorld(e)
   const p = numPlayers === 2 && pt.x > W / 2 ? players[1] : players[0]
   if (!p) return

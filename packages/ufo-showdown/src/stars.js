@@ -34,7 +34,10 @@ export class Starfield {
 
   setTint(a, b) {
     this.tint = [a, b]
-    this.clouds.forEach((c, i) => (c.color = i % 2 ? b : a))
+    this.clouds.forEach((c, i) => {
+      c.color = i % 2 ? b : a
+      c.sprite = null
+    })
   }
 
   makeStar(y) {
@@ -59,6 +62,7 @@ export class Starfield {
       color: this.tint[i % 2],
       vel: 6 + Math.random() * 4,
       alpha: 0.18 + Math.random() * 0.12,
+      sprite: null, // drawn on first use; a recycled cloud gets a new one
     }
   }
 
@@ -118,20 +122,24 @@ export class Starfield {
   }
 
   draw(ctx) {
-    const g = ctx.createLinearGradient(0, 0, 0, this.h)
-    g.addColorStop(0, '#05030f')
-    g.addColorStop(0.55, '#0a0626')
-    g.addColorStop(1, '#130a33')
-    ctx.fillStyle = g
+    // The sky gradient and the nebula clouds are the biggest fills on screen
+    // every frame, so they're built once — the gradient per screen height, each
+    // cloud as a small soft sprite that scales up smoothly — instead of anew.
+    if (this.bgFor !== ctx || this.bgH !== this.h) {
+      const g = ctx.createLinearGradient(0, 0, 0, this.h)
+      g.addColorStop(0, '#05030f')
+      g.addColorStop(0.55, '#0a0626')
+      g.addColorStop(1, '#130a33')
+      this.bg = g
+      this.bgFor = ctx
+      this.bgH = this.h
+    }
+    ctx.fillStyle = this.bg
     ctx.fillRect(0, 0, this.w, this.h)
 
     for (const c of this.clouds) {
-      const rg = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r)
-      rg.addColorStop(0, hexA(c.color, c.alpha))
-      rg.addColorStop(0.6, hexA(c.color, c.alpha * 0.4))
-      rg.addColorStop(1, hexA(c.color, 0))
-      ctx.fillStyle = rg
-      ctx.fillRect(c.x - c.r, c.y - c.r, c.r * 2, c.r * 2)
+      c.sprite ??= cloudSprite(c.color, c.alpha)
+      ctx.drawImage(c.sprite, c.x - c.r, c.y - c.r, c.r * 2, c.r * 2)
     }
 
     if (this.planet) drawPlanet(ctx, this.planet)
@@ -171,6 +179,22 @@ export class Starfield {
       ctx.stroke()
     }
   }
+}
+
+const CLOUD_PX = 128
+
+function cloudSprite(color, alpha) {
+  const c = document.createElement('canvas')
+  c.width = c.height = CLOUD_PX
+  const g = c.getContext('2d')
+  const h = CLOUD_PX / 2
+  const rg = g.createRadialGradient(h, h, 0, h, h, h)
+  rg.addColorStop(0, hexA(color, alpha))
+  rg.addColorStop(0.6, hexA(color, alpha * 0.4))
+  rg.addColorStop(1, hexA(color, 0))
+  g.fillStyle = rg
+  g.fillRect(0, 0, CLOUD_PX, CLOUD_PX)
+  return c
 }
 
 function drawPlanet(ctx, p) {

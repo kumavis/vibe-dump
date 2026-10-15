@@ -43,7 +43,7 @@ passed to every hook as `g`.
 | `g.damageBoss(b, dmg, owner, x, y)` | hits a boss; it dies at 0 hp |
 | `g.startBossDeath(b)` | kill a boss outright; plays its death sequence |
 | `g.bossEnter(b, dt)` | slides `b.y` down to `b.ty`; returns `true` while still arriving (the boss is invulnerable then) |
-| `g.hpMult()` | 1.5 with two players; scale boss hp by it |
+| `g.hpMult()` | 1.25 solo, 1.85 with two players; scale boss hp by it |
 | `g.addScore(owner, pts, x?, y?)` | points for player `owner` (with a pop-up when x/y are given) |
 | `g.popText(x, y, text, color, size = 18, life = 1.1)` | floating text; returns it, so you can change its `rise` speed (36 units/s) |
 | `g.canFire(e)` | whether a formation saucer is in a spot to shoot, for telegraphing it |
@@ -52,7 +52,7 @@ passed to every hook as `g`.
 | `g.dropBubble(x, y, type?)` | a power-up bubble (`shield` `triple` `rapid` `speed` `heart` `nova`, random if omitted) |
 | `g.banner(sub, title, cls?)` | big centre banner; `cls` is `''`, `'warn'` or `'clear'` |
 | `g.shake(n)`, `g.flash(n)` | screen shake (try 6–20) and white flash (0–1) |
-| `g.cutscene(on, { onSkip })`, `g.inCutscene` | a scripted moment: while on, ships ignore their controls, don't shoot and can't be hurt; the HUD gives way to letterbox bars; Enter or a tap calls `onSkip`, which should wrap the scene up and call `g.cutscene(false)`. Enemies keep running, so hold your own fire during it |
+| `g.cutscene(on, { onSkip, minSkip = 0.6 })`, `g.inCutscene` | a scripted moment: while on, ships ignore their controls, don't shoot and can't be hurt; the HUD gives way to letterbox bars; after `minSkip` seconds Enter or a tap calls `onSkip`, which should wrap the scene up and call `g.cutscene(false)`. Enemies keep running, so hold your own fire during it |
 | `g.levelDone()` | the level's main part is finished: on to the boss, or to the finish if there isn't one |
 | `g.sfx` | sounds from `../../audio.js` `sfx`: `zap hitTick ting pop(size) boom hurt shieldPop bubble nova laserWarn laser siren revive clear win lose select start buy deny` |
 | `g.ctx`, `g.FONT` | the canvas context (already in world units) and the Bungee font stack |
@@ -92,6 +92,8 @@ resets it in `setup`. The same level runs again on retry.
   drawTop(g, ctx) {},   // over everything except floating text and the HUD
   icon(ctx, w, h) {},   // the mission-map picture, w = 80, h = 50 units (drawn
                         // at 2x); fill the whole box, the background is #0b0726
+  onShipDown(g, p) {},  // a ship just lost a life (it's already p.alive = false)
+  onRespawn(g, p) {},   // a ship just came back after losing a life
   noFire: false,        // ships don't shoot (and neither do drones)
   noBubbles: false,     // no power-up bubbles drift down on their own
 }
@@ -142,6 +144,8 @@ does not call `update`, `shot` or `hits`. The HUD bar shows `b.hp / b.maxHp`.
                            // e.gone = true to remove it quietly
   draw(e, g, ctx) {},      // optional; default is a saucer
   onDeath(e, g, owner) {}, // e.g. split a rock into smaller ones
+  pop(e, g) {},            // optional: your own death effect and sound in place of
+                           // the default explosion — for enemies that die by the hundred
   armored(e, g) {},        // optional: return true to make a laser bounce off
   keepOffscreen: false,    // true: don't auto-remove when it wanders off screen
 }
@@ -170,6 +174,7 @@ then hurts for `active` seconds. Optional extras:
 
 - `track(L, g)` moves it every frame.
 - `draw(ctx, L, H, t)` replaces the red look. Check `L.warn > 0` for the warning stage.
+- `quiet: true` skips the game's laser zap and shake when it goes live, for a pack that plays its own.
 
 ## Testing a pack
 
