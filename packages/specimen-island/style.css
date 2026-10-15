@@ -1026,6 +1026,12 @@ body.playing #hud {
   padding-left: 10px;
   border-left: 3px solid var(--accent);
 }
+/* the ledger gives up height first: on a short screen it scrolls on its own
+   instead of pushing the debrief's buttons out of the panel */
+#debrief .ledger {
+  min-height: 90px;
+  overflow-y: auto;
+}
 .card h3 {
   margin: 0;
   font-size: 15px;
