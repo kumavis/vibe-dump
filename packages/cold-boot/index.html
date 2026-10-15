@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cold Boot</title>
+<meta name="description" content="Press the power button and follow an x86 PC from the first fetch at the reset vector through real mode, cache-as-RAM, DDR5 training, long mode and the wake-up of every secondary core — on a real Raptor Lake die floorplan.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0c14'/><path d='M10.2 9.6a9 9 0 1 0 11.6 0' fill='none' stroke='%23ffb547' stroke-width='2.8' stroke-linecap='round'/><path d='M16 5.5v10' stroke='%2358a6ff' stroke-width='2.8' stroke-linecap='round'/></svg>">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body class="intro">
+<canvas id="gl"></canvas>
+<div id="labels" aria-hidden="true"></div>
+
+<header id="brand">
+  <div class="name"><span class="pw" aria-hidden="true">⏻</span> Cold Boot</div>
+  <div class="sub">An x86 PC, from power button to OS, on a real Raptor Lake die</div>
+  <a class="credit" href="https://bsky.app/profile/lauriewired.bsky.social/post/3mxwk6hqb622v" target="_blank" rel="noopener">after a thread by LaurieWired ↗</a>
+</header>
+
+<nav id="stages" aria-label="Stages"></nav>
+
+<aside id="panel" aria-live="polite">
+  <div id="stepmeta"></div>
+  <h2 id="title"></h2>
+  <div id="ladder"></div>
+  <div id="narration"></div>
+  <div id="note"></div>
+  <dl id="facts"></dl>
+  <section id="memmap" hidden>
+    <h3>Physical address space <span id="memnote"></span></h3>
+    <div class="bar"></div>
+    <div class="axis"><span>0</span><span class="four">4 GiB</span><span>→</span></div>
+  </section>
+  <section id="regs"></section>
+  <section id="code"></section>
+  <div id="sources"></div>
+</aside>
+
+<div id="lps" aria-label="Logical processors"></div>
+
+<div id="inset" hidden><span class="lbl"></span></div>
+
+<div id="eye" hidden>
+  <div class="eyehead"><span id="eyetitle">Read DQ eye — 2-D sweep</span><span id="eyesub"></span></div>
+  <canvas id="eyecanvas" width="560" height="300"></canvas>
+  <div class="eyeaxes"><span>← earlier · strobe delay · later →</span></div>
+</div>
+
+<footer id="timeline">
+  <div class="controls">
+    <button id="prev" type="button" title="Previous step (←)" aria-label="Previous step">⏮</button>
+    <button id="play" type="button" title="Play / pause (space)" aria-label="Play">▶</button>
+    <button id="next" type="button" title="Next step (→)" aria-label="Next step">⏭</button>
+    <button id="speed" type="button" title="Playback speed">1×</button>
+  </div>
+  <div id="track" role="slider" aria-label="Boot timeline" tabindex="0">
+    <div id="segments"></div>
+    <div id="ticks"></div>
+    <div id="playhead"></div>
+    <div id="tracktip" hidden></div>
+  </div>
+  <button id="bootkind" type="button" title="DDR5 training: a normal boot restores saved results; the first boot with new memory trains from scratch">normal boot</button>
+  <div id="clock"><span id="clockmain"></span><span id="clocksub"></span></div>
+</footer>
+
+<div id="tip" hidden></div>
+
+<div id="intro">
+  <div class="card">
+    <div class="kicker">x86 power-on, instruction by instruction</div>
+    <h1>Cold Boot</h1>
+    <p class="lede">Every time an x86 PC starts, its processor wakes up pretending to be a 1978 Intel 8086, promotes itself to a 1985 386, borrows its own cache as memory while it teaches the DDR5 how to talk, becomes a 2003 AMD64 — and then does the same dance on every other core.</p>
+    <button id="power" type="button" aria-label="Press the power button"><span aria-hidden="true">⏻</span></button>
+    <div class="press">press the power button</div>
+    <p class="fine">Built on LaurieWired's <a href="https://bsky.app/profile/lauriewired.bsky.social/post/3mxwk6hqb622v" target="_blank" rel="noopener">thread on the stages of x86 boot</a>, expanded and fact-checked against Intel's manuals and the coreboot, EDK2 and Linux sources. Space plays and pauses, ← → step, drag to look around.</p>
+  </div>
+</div>
+
+<div id="boot"><span>⏻</span></div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
