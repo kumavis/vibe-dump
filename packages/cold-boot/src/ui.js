@@ -231,7 +231,9 @@ export class UI {
     const stage = this.stages[st.stage]
     const meta = $('#stepmeta')
     meta.style.setProperty('--c', stage.color)
-    meta.innerHTML = `<span class="stage">Stage ${st.stage} · ${stage.name}</span><span>${i + 1} / ${this.tl.steps.length}</span>`
+    meta.innerHTML = `<span class="stage">Stage ${st.stage} · ${stage.name}</span><span class="lpmini" title="logical processors executing"></span><span>${i + 1} / ${this.tl.steps.length}</span>`
+    this.lpMini = meta.querySelector('.lpmini')
+    this.lpMiniText = null
     $('#title').textContent = st.title
     this.ladderMode = null
     $('#narration').innerHTML = (st.narration || []).map((p) => `<p>${p}</p>`).join('')
@@ -288,6 +290,7 @@ export class UI {
     }, 400)
     this.tickEls.forEach((t, k) => t.classList.toggle('on', k === i))
     $('#eye').hidden = !st.eye
+    this.obstaclesDirty = true
     if (st.eye) {
       $('#eyetitle').textContent = st.eye.title
       $('#eyesub').textContent = st.eye.sub || ''
@@ -374,6 +377,12 @@ export class UI {
       if (m === 'real' || m === 'prot' || m === 'long' || m === 'os') running++
     })
     this.lpCount.textContent = `${running} of ${lpModes.length} logical processors executing`
+    // phones hide the LP strip; the panel header keeps the count
+    const mini = `${running}/${lpModes.length} threads`
+    if (mini !== this.lpMiniText) {
+      this.lpMiniText = mini
+      this.lpMini.textContent = mini
+    }
     if (step.eye) drawEye($('#eyecanvas'), step.eye, p, time)
   }
 
@@ -411,15 +420,42 @@ export class UI {
       }
       placed.push({ el, x, y, vis, hot: !!it.hot, bw: el.bw, bh: el.bh })
     }
-    // Keep each box on screen and off its neighbours: hot labels claim their
-    // spot first, the rest slide up out of the way. The leader line stretches
-    // (and leans) so it still ends on the true point.
+    // Chrome drawn over the canvas that labels must not hide under: the brand
+    // block, stage chips, LP strip, inset and eye card. Their rects only change
+    // on resize or when the inset / eye appear, so they're cached.
+    if (this.obstaclesDirty || !this.obstacles) {
+      this.obstaclesDirty = false
+      this.obstacles = ['#brand', '#stages', '#lps', '#inset', '#eye']
+        .map((sel) => $(sel))
+        .filter((el) => el && !el.hidden && getComputedStyle(el).display !== 'none')
+        .map((el) => el.getBoundingClientRect())
+        .filter((r) => r.width > 0 && r.height > 0)
+    }
+    const obstacles = document.body.classList.contains('intro') ? [] : this.obstacles
+    const hits = (cx, top, L) => obstacles.find((o) => cx + L.bw / 2 > o.left - 2 && cx - L.bw / 2 < o.right + 2 && top > o.top - 2 && top - L.bh < o.bottom + 2)
+    // Keep each box on screen, off the chrome and off its neighbours: hot
+    // labels claim their spot first, the rest slide up out of the way. The
+    // leader line stretches (and leans) so it still ends on the true point.
     placed.sort((a, b) => b.hot - a.hot || b.y - a.y)
     const boxes = []
     for (const L of placed) {
       const half = L.bw / 2 + 6
-      const cx = Math.max(half, Math.min(right - half, L.x))
+      let cx = Math.max(half, Math.min(right - half, L.x))
       let top = L.y
+      const o = L.vis && hits(cx, top, L)
+      if (o) {
+        // try beside the obstacle, then below it, then above it
+        const tries = [
+          [o.right + half + 2, top],
+          [o.left - half - 2, top],
+          [cx, o.bottom + L.bh + 4],
+          [cx, o.top - 4],
+        ]
+        const ok = tries.find(([x, t]) => x >= half && x <= right - half && t - L.bh >= 16 && t <= bottom && !hits(x, t, L))
+        if (ok) [cx, top] = ok
+        // nowhere to go: a secondary label gives way; a hot one stays put
+        else if (!L.hot) L.el.style.opacity = 0
+      }
       if (L.vis) {
         for (let pass = 0; pass < 6; pass++) {
           const hit = boxes.find((b) => Math.abs(b.cx - cx) < (b.bw + L.bw) / 2 + 4 && top - L.bh < b.top + 2 && b.top - b.bh < top + 2)
@@ -432,6 +468,10 @@ export class UI {
       L.el.style.top = `${top}px`
       L.el.style.setProperty('--dx', `${Math.max(-half + 6, Math.min(half - 6, L.x - cx))}px`)
       L.el.style.setProperty('--dy', `${Math.max(0, L.y - top)}px`)
+      // moved below its anchor: the leader runs up from the box instead
+      const below = top - L.bh > L.y + 10
+      L.el.classList.toggle('below', below)
+      if (below) L.el.style.setProperty('--up', `${top - L.bh - (L.y + 10)}px`)
     }
     for (const [id, el] of this.labelEls) {
       if (!seen.has(id)) {

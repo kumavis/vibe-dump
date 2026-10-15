@@ -57,7 +57,8 @@ button { font: inherit; color: inherit; }
   scrollbar-width: thin; scrollbar-color: #333a55 transparent;
 }
 #stepmeta { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: 0.04em; text-transform: uppercase; display: flex; justify-content: space-between; gap: 8px; }
-#stepmeta .stage { color: var(--c, var(--accent)); }
+#stepmeta .stage { color: var(--c, var(--accent)); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+#stepmeta span { white-space: nowrap; }
 #title { margin: 6px 0 10px; font-size: 21px; line-height: 1.2; font-weight: 720; }
 #ladder { display: flex; gap: 4px; margin-bottom: 12px; }
 #ladder .rung { flex: 1; border-radius: 7px; padding: 5px 7px; border: 1px solid var(--line); font-size: 10.5px; color: var(--faint); line-height: 1.25; transition: all 0.4s; }
@@ -128,7 +129,7 @@ button { font: inherit; color: inherit; }
 #segments { position: absolute; left: 0; right: 0; top: 13px; height: 8px; display: flex; gap: 2px; }
 #segments .seg { position: relative; height: 100%; border-radius: 3px; background: color-mix(in srgb, var(--c) 28%, #11131c); }
 #segments .seg .fill { position: absolute; inset: 0; width: 0; border-radius: 3px; background: var(--c); }
-#segments .seg .lbl { position: absolute; top: -14px; left: 2px; font-size: 10px; font-family: var(--mono); color: var(--faint); white-space: nowrap; overflow: hidden; max-width: 100%; }
+#segments .seg .lbl { position: absolute; top: -14px; left: 2px; font-size: 10px; font-family: var(--mono); color: var(--faint); white-space: nowrap; overflow: hidden; max-width: calc(100% - 6px); text-overflow: ellipsis; }
 #ticks { position: absolute; left: 0; right: 0; top: 23px; height: 6px; }
 #ticks i { position: absolute; top: 0; width: 1px; height: 5px; background: rgba(255, 255, 255, 0.22); }
 #ticks i.on { background: #fff; height: 7px; }
@@ -141,6 +142,7 @@ button { font: inherit; color: inherit; }
 #labels { position: fixed; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
 #labels .l { position: absolute; transform: translate(-50%, -100%); font-size: 11.5px; padding: 2px 7px; border-radius: 6px; background: rgba(8, 10, 18, 0.72); border: 1px solid var(--line); color: var(--ink); white-space: nowrap; transition: opacity 0.35s; }
 #labels .l::after { content: ''; position: absolute; left: calc(50% + var(--dx, 0px)); top: 100%; width: 1px; height: calc(10px + var(--dy, 0px)); background: rgba(255, 255, 255, 0.35); }
+#labels .l.below::after { top: auto; bottom: 100%; height: var(--up, 10px); }
 #labels .l.hot { border-color: var(--lc, var(--accent)); color: #fff; box-shadow: 0 0 12px color-mix(in srgb, var(--lc, var(--accent)) 40%, transparent); }
 #tip { position: fixed; z-index: 9; pointer-events: none; font-size: 12px; padding: 5px 9px; border-radius: 7px; background: rgba(8, 10, 18, 0.92); border: 1px solid var(--line); max-width: 280px; line-height: 1.4; }
 #tip b { display: block; font-size: 12.5px; }
@@ -185,10 +187,36 @@ button { font: inherit; color: inherit; }
   #timeline { gap: 8px; padding: 0 8px; left: 8px; right: 8px; bottom: 8px; }
   #timeline button { width: 32px; height: 32px; }
   #timeline #play { width: 38px; }
-  #clock { min-width: 0; }
+  #clock { min-width: 0; flex: 0 0 auto; width: 10ch; font-size: 12px; }
   #clocksub { display: none; }
   #clockmain { font-size: 12px; }
   #segments .seg .lbl { display: none; }
+  /* clear of the brand block (photo credit + true-colour toggle end at ~70px) */
+  #eye { top: 76px; }
+  /* a tighter header so more narration fits in the bottom sheet */
+  #ladder { margin-bottom: 8px; }
+  #ladder .rung { padding: 3px 6px; font-size: 10px; }
+  #ladder .rung b { font-size: 10.5px; white-space: nowrap; }
+  #title { margin: 4px 0 8px; }
+}
+#stepmeta .lpmini { display: none; }
+@media (max-width: 900px) {
+  #stepmeta .lpmini { display: inline; color: var(--dim); }
+}
+#bootkind .short, .touch-hint { display: none; }
+@media (max-width: 520px) {
+  #bootkind .long { display: none; }
+  #bootkind .short { display: inline; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .kbd-hint { display: none; }
+  .touch-hint { display: inline; }
+}
+/* mid-size screens (small laptops, tablets, big phones in landscape): the
+   desktop layout, with the inset dropped below the brand block */
+@media (min-width: 901px) and (max-width: 1150px) {
+  #brand .sub { display: none; }
+  #eye { top: max(270px, 50%); }
 }
 /* phones: the scrubber gets its own full-width row, buttons go underneath */
 @media (max-width: 520px) {
@@ -235,7 +263,13 @@ body.intro #panel, body.intro #timeline, body.intro #lps, body.intro #stages, bo
 #inset .lbl { position: absolute; left: 8px; top: 6px; font-family: var(--mono); font-size: 10.5px; color: var(--ink); background: rgba(8, 10, 18, 0.7); padding: 1px 6px; border-radius: 5px; letter-spacing: 0.04em; }
 body.intro #inset { opacity: 0; }
 @media (max-width: 900px) {
-  #inset { right: 12px; top: 52px; width: 156px; height: 104px; }
+  /* clear of the brand block (photo credit + true-colour toggle end at ~70px);
+     the caption goes under the picture rather than over it */
+  #inset { right: 12px; top: 76px; width: 156px; height: 104px; }
+  #inset .lbl { top: 100%; left: 0; right: 0; margin-top: 3px; font-size: 9.5px; letter-spacing: 0; text-align: center; }
+}
+@media (min-width: 901px) and (max-width: 1150px) {
+  #inset { top: 100px; }
 }
 
 #regs .r.flash { animation: regflash 1.2s ease-out; }

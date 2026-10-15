@@ -181,29 +181,36 @@ function resize() {
   }
   renderer.setSize(w, h, false)
   composer?.setSize(w, h)
-  const panel = document.getElementById('panel').getBoundingClientRect()
-  const tl = document.getElementById('timeline').getBoundingClientRect()
+  // The free part of the screen: left of a right-hand panel (desktop,
+  // landscape phones) and above the timeline, or between the brand block and
+  // the stage chips over a bottom sheet (portrait phones).
+  const rect = (id) => document.getElementById(id).getBoundingClientRect()
+  const panel = rect('panel')
+  const tl = rect('timeline')
   let ox = 0
-  let oy = 0
-  if (panel.left > w * 0.3) {
-    ox = w - panel.left // a right-hand column (desktop, landscape phones)
-    oy = h - tl.top
-  } else {
-    oy = h - Math.min(panel.top, tl.top) // a bottom sheet (portrait phones)
+  let top = 0
+  let bottom = h
+  if (!document.body.classList.contains('intro')) {
+    if (panel.left > w * 0.3) {
+      ox = w - panel.left
+      bottom = tl.top
+    } else {
+      top = rect('brand').bottom
+      bottom = Math.min(panel.top, tl.top, rect('stages').top)
+    }
   }
-  if (document.body.classList.contains('intro')) {
-    ox = 0
-    oy = 0
-  }
+  // Put the optical centre in the middle of that area: render a window of a
+  // larger virtual frustum whose centre lands there.
+  const d = h / 2 - (top + bottom) / 2
   const fw = w + ox
-  const fh = h + oy
+  const fh = h + 2 * Math.abs(d)
   camera.aspect = fw / fh
-  camera.setViewOffset(fw, fh, ox, oy, w, h)
+  camera.setViewOffset(fw, fh, ox, d > 0 ? 2 * d : 0, w, h)
   camera.updateProjectionMatrix()
-  // The part of the canvas not covered by the panel or the timeline.
-  ui.view = { right: w - ox, bottom: h - oy }
+  ui.view = { right: w - ox, bottom }
+  ui.obstaclesDirty = true
   if (insetName) insetRect = insetEl.getBoundingClientRect()
-  director.setFrame((h - oy) / fh, (w - ox) / fh)
+  director.setFrame((bottom - top) / fh, (w - ox) / fh)
   // Backed-off shots sit farther away; keep the fog where it was relative to them.
   scene.fog.near = 600 * director.backoff
   scene.fog.far = 1400 * director.backoff
@@ -371,6 +378,7 @@ function renderInset(st, dt) {
   if (want !== insetName) {
     insetName = want
     insetEl.hidden = !want
+    ui.obstaclesDirty = true
     if (want) {
       insetEl.querySelector('.lbl').textContent = st.inset.label || ''
       const s = shots[want]()
@@ -433,7 +441,7 @@ computeClock()
 const bootBtn = document.getElementById('bootkind')
 bootBtn.addEventListener('click', () => {
   bootKind = bootKind === 'normal' ? 'first' : 'normal'
-  bootBtn.textContent = bootKind === 'normal' ? 'normal boot' : 'first boot · new DIMMs'
+  bootBtn.innerHTML = bootKind === 'normal' ? '<span class="long">normal boot</span><span class="short">normal</span>' : '<span class="long">first boot · new DIMMs</span><span class="short">1st boot</span>'
   bootBtn.classList.toggle('first', bootKind === 'first')
   computeClock()
 })
