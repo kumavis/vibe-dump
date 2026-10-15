@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Specimen Island</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-DrGfyA3t.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DUvlNakW.css">
+    <script type="module" crossorigin src="./assets/index-S43EwyeJ.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BHFPSrBH.css">
   </head>
   <body>
     <canvas id="game"></canvas>
@@ -34,12 +34,15 @@
       <div id="heliHud"></div>
 
       <div id="scope"><div class="reticle"></div></div>
+      <div id="viewfinder"><div class="vf-frame"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><div class="vf-focus"></div><div class="vf-top"><span class="vf-rec">● FIELD CAMERA</span><span class="vf-count"></span><span class="vf-zoom"></span></div><div class="vf-subject"></div></div></div>
+      <div id="photoFlash"></div>
+      <div id="photoCard"><img alt="" /><div class="pc-cap"></div></div>
       <div id="blind"></div>
       <div id="vignette"></div>
     </div>
     <div id="fade"></div>
 
-    <div id="map" class="overlay"><div class="inner"><h2>Island Map</h2><canvas width="720" height="720"></canvas><div class="foot">[M] close · ◆ objective · yellow dots: tagged animals</div></div></div>
+    <div id="map" class="overlay"><div class="inner"><h2>Island Map</h2><canvas width="720" height="720"></canvas><div class="foot">[M] close · ◆ objective · yellow dots: tagged animals · HELI / JEEP: parked vehicles (orange: wrecked)</div></div></div>
     <div id="journal" class="overlay"><div class="inner"></div></div>
     <div id="note" class="overlay"><div class="inner paper"><h2></h2><p></p><button class="btn" data-close>Close</button></div></div>
 
@@ -47,7 +50,7 @@
       <div class="inner menu">
         <h2>Paused</h2>
         <button class="btn primary" id="resume">Resume</button>
-        <div class="settings"></div>
+        <button class="btn" data-settings>Settings</button>
         <button class="btn" id="openJournal">Field journal</button>
       </div>
     </div>
@@ -66,14 +69,34 @@
         <h1>Specimen<br />Island</h1>
         <p class="lede">The last field team left eleven years ago. The animals stayed. Sneak, sedate and sample them — or go loud, and answer for every carcass.</p>
         <p class="kbd-note">Specimen Island is played with a keyboard and mouse.</p>
-        <button class="btn primary big" id="start">Begin expedition</button>
-        <div class="settings"></div>
-        <div class="controls">
-          <div><b>WASD</b> move · <b>Shift</b> sprint · <b>C</b> crouch · <b>Space</b> jump</div>
-          <div><b>Mouse</b> aim/fire · <b>R</b> reload · <b>1–5</b> weapons · <b>E</b> interact (hold)</div>
-          <div><b>G</b> stone · <b>T</b> flare · <b>H</b> medkit · <b>F</b> flashlight</div>
-          <div><b>M</b> map · <b>J</b> journal · <b>Esc</b> pause</div>
+        <div class="actions">
+          <button class="btn primary big" id="start">Begin expedition</button>
+          <button class="btn big ghost" data-settings>Settings</button>
         </div>
+      </div>
+    </div>
+    <div id="settings" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="inner sheet">
+        <div class="sheet-head">
+          <h2 id="settingsTitle">Settings</h2>
+          <button class="btn close" data-close aria-label="Close settings">×</button>
+        </div>
+        <div class="settings"></div>
+        <h3>Controls</h3>
+        <div class="controls">
+          <div><span><b>WASD</b> move</span> · <span><b>Shift</b> sprint</span> · <span><b>C</b> crouch</span> · <span><b>Space</b> jump</span></div>
+          <div><span><b>Mouse</b> look</span> · <span><b>LMB</b> fire</span> · <span><b>RMB</b> aim</span> · <span><b>R</b> reload</span> · <span><b>1–6</b>, <b>wheel</b> weapons</span></div>
+          <div><span><b>6</b> Field Camera:</span> <span><b>RMB</b> raise</span> · <span><b>wheel</b> zoom</span> · <span><b>LMB</b> shoot</span></div>
+          <div><span><b>E</b> interact (hold)</span> · <span><b>G</b> stone</span> · <span><b>T</b> flare</span> · <span><b>H</b> medkit</span> · <span><b>F</b> flashlight</span></div>
+          <div><span><b>M</b> map</span> · <span><b>J</b> / <b>Tab</b> journal</span> · <span><b>Esc</b> pause</span></div>
+        </div>
+        <h3>Vehicles</h3>
+        <div class="controls">
+          <div><span><b>E</b> board at a door</span> · <span><b>E</b> exit, once stopped or landed</span> · <span><b>V</b> camera</span></div>
+          <div><span>Jeep:</span> <span><b>W/S</b> drive</span> · <span><b>A/D</b> steer</span> · <span><b>Space</b> handbrake</span> · <span><b>F</b> headlights</span> · <span><b>Mouse</b> look</span></div>
+          <div><span>Helicopter:</span> <span><b>Space</b> climb</span> · <span><b>Shift</b> descend</span> · <span><b>W/S</b> pitch</span> · <span><b>A/D</b> slide</span> · <span><b>Mouse</b> turn</span></div>
+        </div>
+        <div class="sheet-foot"><button class="btn primary" data-close>Done</button></div>
       </div>
     </div>
     <div id="boot"><div><div class="spin"></div>Growing the island…</div></div>
