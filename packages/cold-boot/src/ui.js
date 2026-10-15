@@ -224,7 +224,7 @@ export class UI {
     const code = $('#code')
     if (st.code) {
       const src = st.code.href ? `<a href="${st.code.href}" target="_blank" rel="noopener">${st.code.src}</a>` : st.code.src || ''
-      code.innerHTML = `<h3>${st.code.title || 'Executing'}<span>${src}</span></h3><pre>${st.code.lines.map((l) => codeLine(l)).join('')}</pre><div class="explain"></div>`
+      code.innerHTML = `<h3>${st.code.title || 'Executing'}<span>${src}</span></h3><pre>${st.code.lines.map((l) => codeLine(l, codeLang(st.code))).join('')}</pre><div class="explain"></div>`
       this.codeLines = [...code.querySelectorAll('.ln')]
       this.codeExplain = code.querySelector('.explain')
       this.lastOn = null
@@ -405,16 +405,22 @@ const ERA = { 8086: '#ffb547', 8087: '#ffb547', 186: '#ffa040', 286: '#ff8a3d', 
 
 // A code line is either a plain string (source shown verbatim) or an object
 // {a: address, b: bytes, i: instruction, era, why}.
-function codeLine(l) {
-  if (typeof l === 'string') return `<span class="ln">${fmtCode(l)}</span>`
+// NASM uses ';' for comments. In C and in GNU as (AT&T syntax) ';' ends or
+// separates statements, and comments are /* */, // or a '#' that isn't a
+// preprocessor line.
+const codeLang = (code) => code.lang || (/\.nasm\b/i.test(code.src || '') ? 'nasm' : 'c')
+
+function codeLine(l, lang = 'c') {
+  if (typeof l === 'string') return `<span class="ln">${fmtCode(l, lang)}</span>`
   const era = l.era ? `<span class="era" style="--e:${ERA[l.era] || '#888'}" title="oldest CPU with this instruction form">${l.era}</span>` : ''
-  return `<span class="ln" title="${esc(l.why || '')}">${l.a ? `<span class="ad">${l.a}</span>` : ''}<span class="in">${fmtCode(l.i)}</span>${era}</span>`
+  return `<span class="ln" title="${esc(l.why || '')}">${l.a ? `<span class="ad">${l.a}</span>` : ''}<span class="in">${fmtCode(l.i, lang)}</span>${era}</span>`
 }
 
-// Light syntax colouring for assembly: comments dimmed.
-function fmtCode(line) {
+// Light syntax colouring: comments dimmed.
+function fmtCode(line, lang = 'c') {
   const esc = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  const m = /^(.*?)((?:;|\/\*|\/\/|#(?!\s*define)).*)$/.exec(esc)
-  if (m && !/^\s*#(include|if|endif|else|define)/.test(esc)) return `${m[1]}<span class="c">${m[2]}</span>`
+  if (/^\s*#\s*(include|if|ifdef|ifndef|endif|else|elif|define|undef)\b/.test(esc)) return esc
+  const m = (lang === 'nasm' ? /^(.*?)(;.*)$/ : /^(.*?)((?:\/\*|\/\/|#).*)$/).exec(esc)
+  if (m) return `${m[1]}<span class="c">${m[2]}</span>`
   return esc
 }

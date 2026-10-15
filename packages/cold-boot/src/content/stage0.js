@@ -151,7 +151,7 @@ export const STAGE0 = [
       ['Also', 'holds the Boot Guard key hash in fuses'],
     ],
     regs: (p) => signals(p, 3),
-    sources: [SRC.csme, SRC.cseTelemetry, SRC.cseCommit],
+    sources: [SRC.csme, SRC.cseTelemetry, SRC.cseCommit, SRC.cseCommit2],
     lps: () => all('off'),
     act(p, A) {
       A.board('pch', 0.7 + 0.3 * win(p, 0.1, 0.9), ACT.mgmt, 'sparkle')
@@ -219,7 +219,7 @@ export const STAGE0 = [
     ],
     regs: { title: 'Top of the 4 GiB address space', note: 'all of it is the flash chip', rows: [['FFFFFFFC', 'CBFS header pointer (coreboot)', 'wide'], ['FFFFFFF0', 'reset vector (16 bytes)', 'wide'], ['FFFFFFC0', 'FIT pointer — same 64-byte line', 'wide hot'], ['FFFF0000–FFFFFFFF', 'top 64 KiB: real-mode reach', 'wide'], ['FF000000–FFFFFFFF', '16 MiB BIOS decode window', 'wide']] },
     mem: { on: ['flash', 'lapic'], hit: ['flash'], note: 'no DRAM, no cache' },
-    sources: [SRC.fit, SRC.sdm, SRC.ucode, SRC.cseCommit, SRC.bootblockld],
+    sources: [SRC.fit, SRC.sdm, SRC.ucode, SRC.cseCommit, SRC.cseCommit2, SRC.bootblockld],
     lps: () => bsp('reset'),
     act(p, A) {
       A.die('pcore0', 0.6, '#ffffff', 'scan')

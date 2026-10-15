@@ -16,6 +16,7 @@ export const SRC = {
   csme: ['Intel CSME security white paper', 'https://www.intel.com/content/dam/www/public/us/en/security-advisory/documents/intel-csme-security-white-paper.pdf'],
   cseTelemetry: ['coreboot cse_telemetry_v1.h', 'https://github.com/coreboot/coreboot/blob/main/src/soc/intel/common/block/include/intelblocks/cse_telemetry_v1.h'],
   cseCommit: ['coreboot commit 860672e9 (measured CSME timings)', 'https://github.com/coreboot/coreboot/commit/860672e9879e52820d453e3bc41d151116facb1a'],
+  cseCommit2: ['coreboot change 79768 (CSME timings, Alder Lake-N)', 'https://review.coreboot.org/c/coreboot/+/79768'],
   fit: ['Intel FIT BIOS specification', 'https://www.intel.com/content/dam/www/public/us/en/documents/guides/fit-bios-specification.pdf'],
   txt: ['coreboot: Intel TXT / ACM docs', 'https://github.com/coreboot/coreboot/blob/main/Documentation/security/intel/txt.md'],
   ermolov: ['Ermolov, “Safeguarding rootkits: Intel BootGuard” (2016)', 'https://papers.put.as/papers/firmware/2016/Intel_BootGuard_final.pdf'],
@@ -74,6 +75,7 @@ export const SRC = {
   uefiexec: ['UEFI 2.11 §2.3.4: x64 platforms (calling conventions, execution model)', 'https://uefi.org/specs/UEFI/2.11/02_Overview.html'],
   smmcpu: ['EDK2 PiSmmCpuDxeSmm PiSmmCpuCommon.c', 'https://github.com/tianocore/edk2/blob/master/UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuCommon.c'],
   ms7e06: ['coreboot mainboard msi/ms7e06 (PRO Z790-P WIFI)', 'https://github.com/coreboot/coreboot/tree/main/src/mainboard/msi/ms7e06'],
+  ucodeLinux: ['Linux arch/x86/kernel/cpu/microcode/intel.c', 'https://github.com/torvalds/linux/blob/master/arch/x86/kernel/cpu/microcode/intel.c'],
   fritz: ['Die photo: Fritzchens Fritz, CC0 (Wikimedia Commons)', 'https://commons.wikimedia.org/wiki/File:Intel@intel7(10nmESF)@RaptorLake@RPL(8P%2B16E)@i9-13900K@ES_DSCx05_poly@5xExt.jpg'],
 }
 

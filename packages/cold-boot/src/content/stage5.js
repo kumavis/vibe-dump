@@ -25,7 +25,7 @@ export const STAGE5 = [
       ['Cache-as-RAM, “NEM”', '✓ on Intel; AMD Zen trains DRAM on its ARM security processor before x86 runs at all'],
       ['Every core repeats the process', '≈ every thread climbs the mode ladder again and again (PEI wake, SMM relocation, DXE wake, the OS); none repeat CAR, training or PCIe'],
       ['Secondary cores wake in “Stage 4+”', '✗ first woken at the end of Stage 2, right after DRAM and before Stage 3’s PCIe work; again in DXE and by the OS'],
-      ['Faster because RAM is warm','≈ mostly because they skip the slow work and run in parallel'],
+      ['Faster because RAM is warm', '≈ mostly because they skip the slow work and run in parallel'],
     ],
     sources: [SRC.thread, SRC.fritz, SRC.sdm, SRC.entry16, SRC.tramp],
     lps: () => () => 'os',

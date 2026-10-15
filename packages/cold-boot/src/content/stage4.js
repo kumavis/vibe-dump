@@ -3,9 +3,6 @@
 
 import { ACT, span, win, SRC, isPrimary, isSibling } from './common.js'
 
-// Not in common.js's SRC (outside this file's scope); move it there when convenient.
-const UCODE_LINUX = ['Linux arch/x86/kernel/cpu/microcode/intel.c', 'https://github.com/torvalds/linux/blob/master/arch/x86/kernel/cpu/microcode/intel.c']
-
 // Linux's AP trampoline, verbatim highlights (arch/x86/realmode/rm/trampoline_64.S).
 const TRAMPOLINE = [
   { i: 'cli', era: '8086', why: 'Woken by a Start-up IPI, the AP is in 16-bit real mode at CS = VV00h, IP = 0 — the page number the IPI carried.' },
@@ -188,7 +185,7 @@ export const STAGE4 = [
     ],
     regs: { title: 'What each thread reports', rows: [['P-core thread', 'core type 40h (Core)'], ['E-core', 'core type 20h (Atom)'], ['P-cores', '8 × 2 threads'], ['E-cores', '16 × 1 thread'], ['Online', '32 of 32', 'hot']] },
     mem: { on: ['dram', 'mmio', 'lapic', 'flash', 'high'], hit: ['dram'] },
-    sources: [SRC.head64, SRC.smpboot, UCODE_LINUX, SRC.sdm],
+    sources: [SRC.head64, SRC.smpboot, SRC.ucodeLinux, SRC.sdm],
     lps: (p) => (i) => {
       if (i === 0) return 'os'
       if (isPrimary(i)) return p > 0.05 + ((i < 16 ? i / 2 - 1 : i - 9) / 23) * 0.42 ? 'os' : 'long' // released one by one

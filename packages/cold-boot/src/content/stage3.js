@@ -24,7 +24,7 @@ const ENABLE_PAGING64 = [
   { i: 'bts   eax, 31', era: '386', why: 'CR0.PG: paging.' },
   { i: 'mov   cr0, eax', era: '386', why: 'Paging on with LME set: the CPU sets EFER.LMA. It is now in IA-32e “compatibility mode” — still running 32-bit code, like a 32-bit app on a 64-bit OS.' },
   { i: 'retf', era: '386', why: 'A far return pops a code selector whose descriptor has L = 1, D = 0. This is the instant the CPU becomes a true 64-bit AMD64 machine.' },
-  { i: '.0:', era: '', why: 'The label the second line pushed: the far return lands here.' },
+  { i: '.0:', era: '', why: 'The label the second line put on the stack: the far return lands here.' },
   { i: 'BITS 64', era: '', why: '' },
   { i: 'mov   rbx, [esp]', era: 'AMD64', why: 'The DXE core’s entry point, read as a full 64-bit value.' },
   { i: 'mov   rcx, [esp + 8]', era: 'AMD64', why: 'First argument: the HOB list — everything PEI learned, the one thing DXE needs.' },
@@ -54,8 +54,10 @@ const DISPATCHER = [
 ]
 
 const MPFUNCS = [
-  ';RendezvousFunnelProc  procedure follows. All APs execute their procedure.',
-  '; ... It must be noted that APs arrive here very raw...ie: real mode, no stack.',
+  ';RendezvousFunnelProc  procedure follows. All APs execute their procedure. This',
+  ';procedure serializes all the AP processors through an Init sequence. It must be',
+  ';noted that APs arrive here very raw...ie: real mode, no stack.',
+  '...',
   'BITS 16',
   '    ...',
   'o32 lgdt       [cs:si]',
@@ -288,7 +290,7 @@ export const STAGE3 = [
       ['Why again', 'PEI (32-bit) and DXE (64-bit) differ in mode'],
       ['Trampoline', '≈ 50 instructions from the SIPI vector to the first 64-bit one'],
     ],
-    code: { src: 'EDK2 UefiCpuPkg MpInitLib X64/MpFuncs.nasm', href: SRC.mpfuncs[1], lines: MPFUNCS, at: (p) => Math.min(MPFUNCS.length - 1, Math.floor(span(p, 0.2, 0.85) * MPFUNCS.length)) },
+    code: { src: 'EDK2 UefiCpuPkg MpInitLib X64/MpFuncs.nasm', href: SRC.mpfuncs[1], lines: MPFUNCS, at: (p) => Math.min(MPFUNCS.length - 1, Math.floor(span(p, 0.15, 0.85) * MPFUNCS.length)) },
     mem: { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['lapic', 'dram'] },
     sources: [SRC.mpfuncs, SRC.mplib, SRC.sdm],
     lps: (p) => wave(p, 0.12, 0.92, ['wfs', 'real', 'prot', 'long', 'park'], { before: 'park', bspMode: 'long', spread: 0.3 }),
