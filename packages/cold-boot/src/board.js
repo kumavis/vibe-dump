@@ -304,16 +304,18 @@ export function buildBoard({ anisotropy = 8 } = {}) {
         p.target = level
         p.mesh.material.uniforms.uColor.value.set(color)
       }
-      if (rate > 0) {
+      // Packets only flow while the wire itself is lit: content often passes a
+      // windowed level with a constant rate.
+      if (rate > 0 && level > 0.02) {
         const key = `${name}:${dir}`
         let s = streams.get(key)
         if (!s) {
-          s = { lanes: dir > 0 ? p.lanes : p.lanes.map((l) => [...l].reverse()), len: p.len, acc: 0 }
+          s = { lanes: dir > 0 ? p.lanes : p.lanes.map((l) => [...l].reverse()), len: p.len, acc: 0, color: new THREE.Color() }
           streams.set(key, s)
         }
         s.rate = rate
         s.speed = speed
-        s.color = new THREE.Color(color)
+        s.color.set(color)
         s.live = true
       }
     },
@@ -379,7 +381,7 @@ export function buildBoard({ anisotropy = 8 } = {}) {
         while (s.acc >= 1 && packets.length < MAXP) {
           s.acc -= 1
           const lane = s.lanes[Math.floor(Math.random() * s.lanes.length)]
-          packets.push({ pts: lane, len: s.len, d: 0, speed: s.speed * (0.85 + Math.random() * 0.3), color: s.color })
+          packets.push({ pts: lane, len: s.len, d: 0, speed: s.speed * (0.85 + Math.random() * 0.3), color: s.color.clone() })
         }
       }
       let n = 0

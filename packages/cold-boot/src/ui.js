@@ -306,7 +306,9 @@ export class UI {
       if (on && on !== this.lastOn) {
         this.lastOn = on
         const pre = on.parentElement
-        pre.scrollTop = on.offsetTop - pre.clientHeight / 2
+        // Both offsets are measured from #panel, so their difference is the
+        // line's position inside the listing.
+        pre.scrollTop = on.offsetTop - pre.offsetTop - (pre.clientHeight - on.offsetHeight) / 2
         const line = step.code.lines[at]
         const why = typeof line === 'object' ? line.why : ''
         this.codeExplain.innerHTML = why ? `<b>${esc(typeof line === 'object' ? line.i : line)}</b> — ${why}` : ''
@@ -347,6 +349,7 @@ export class UI {
       if (el.textContent !== it.text) el.textContent = it.text
       el.classList.toggle('hot', !!it.hot)
       if (it.color) el.style.setProperty('--lc', it.color)
+      else el.style.removeProperty('--lc')
       const v = it.pos.clone().project(camera)
       const x = ((v.x + 1) / 2) * w
       const y = ((1 - v.y) / 2) * h - 10

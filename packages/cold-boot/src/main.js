@@ -53,7 +53,10 @@ die.group.updateMatrixWorld(true)
 const dieCenter = board.socketWorld.clone()
 
 // The real die photograph replaces the procedural stand-in once it loads.
-new THREE.TextureLoader().load(dieUrl, (t) => die.setPhoto(t))
+new THREE.TextureLoader().load(dieUrl, (t) => {
+  die.setPhoto(t)
+  die.setTrueColor(trueColor)
+})
 // The photo is colour-graded to sit in the scene; this shows it as shot.
 const trueBtn = document.getElementById('truecolor')
 let trueColor = false
@@ -122,6 +125,12 @@ composer.addPass(new OutputPass())
 function resize() {
   const w = window.innerWidth
   const h = window.innerHeight
+  // Browser zoom or a move to another screen changes the pixel ratio.
+  const pr = Math.min(2, window.devicePixelRatio || 1)
+  if (pr !== renderer.getPixelRatio()) {
+    renderer.setPixelRatio(pr)
+    composer.setPixelRatio(pr)
+  }
   renderer.setSize(w, h, false)
   composer.setSize(w, h)
   const panel = document.getElementById('panel').getBoundingClientRect()
@@ -145,6 +154,10 @@ function resize() {
   camera.updateProjectionMatrix()
   // The part of the canvas not covered by the panel or the timeline.
   ui.view = { right: w - ox, bottom: h - oy }
+  director.setFrame((h - oy) / fh, (w - ox) / fh)
+  // Backed-off shots sit farther away; keep the fog where it was relative to them.
+  scene.fog.near = 600 * director.backoff
+  scene.fog.far = 1400 * director.backoff
   if (director.current && !director.userMoved && !director.flight) director.go(director.current, { instant: true })
 }
 window.addEventListener('resize', resize)
@@ -276,7 +289,7 @@ function attract(time) {
   die.light('kind:ddr_phy', 0.5, '#ff8a3d', 'sparkle')
   die.light('kind:imc', 0.35, '#ff8a3d', 'sparkle')
   die.ringLevel(0.7, '#bfb6ff')
-  die.stream('a1', 'pcore0', 'imc', 3, '#7cf2ff', 5)
+  die.stream('a1', 'pcore0', 'imc0', 3, '#7cf2ff', 5)
   const c = director.shotFor('attract')
   const ang = time * 0.06
   const off = c.pos.clone().sub(c.target)
@@ -330,7 +343,8 @@ function renderInset(st, dt) {
 // --- loop -------------------------------------------------------------------------
 let last = performance.now()
 let time = 0
-let lid = 0
+// The page opens in attract mode, with the lid already off.
+let lid = 1
 // Real-time offsets: each step's start in seconds since the power button. A
 // step's `real` may differ between a normal boot (saved memory-training results
 // restored) and the first boot with new DIMMs (full training).
@@ -392,13 +406,16 @@ function frame(now) {
   const ls = smooth(Math.min(1, lid * 1.8))
   board.ihs.position.y = board.socketWorld.y - 0.4 + ls * 14
   board.ihs.traverse((o) => {
-    if (o.material) o.material.opacity = 1 - ls
+    for (const m of [].concat(o.material || [])) m.opacity = 1 - ls
   })
   board.ihs.visible = ls < 0.99
 
   die.update(dt, time)
   board.update(dt, time)
   director.update(dt)
+  // OrbitControls' lookAt leaves the matrices half-updated until render; labels
+  // and hover picking project through them first.
+  camera.updateMatrixWorld()
 
   const real = clock.realBase[timeline.i] + realOf(st) * p
   const resetT = resetIndex >= 0 && timeline.i >= resetIndex ? real - clock.realBase[resetIndex] : null
@@ -411,8 +428,12 @@ function frame(now) {
   requestAnimationFrame(frame)
 }
 
-// Re-centre the camera when the user jumps around the timeline.
 timeline.on((kind) => {
+  // Play (Space) from the intro starts the boot from the top, like ⏻.
+  if (kind === 'play' && introOn) {
+    startBoot()
+    return
+  }
   if (kind === 'step' || kind === 'seek') {
     if (introOn) {
       introOn = false
@@ -420,7 +441,9 @@ timeline.on((kind) => {
       document.body.classList.remove('intro')
       resize()
     }
-    director.current = null
+    // Re-centre the camera when the user jumps around the timeline. An
+    // automatic advance keeps any orbit the user made until the shot changes.
+    if (kind === 'seek') director.current = null
   }
 })
 

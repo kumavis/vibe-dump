@@ -14,11 +14,14 @@ export class Director {
     this.controls.enableDamping = true
     this.controls.dampingFactor = 0.08
     this.controls.minDistance = 4
-    this.controls.maxDistance = 900
+    // Portrait and landscape phones back every shot off (see setFrame), so
+    // leave plenty of room.
+    this.controls.maxDistance = 2000
     this.controls.maxPolarAngle = Math.PI * 0.49
     this.controls.zoomSpeed = 0.8
     this.flight = null
     this.current = null
+    this.backoff = 1
     this.userMoved = false
     this.controls.addEventListener('start', () => {
       this.flight = null
@@ -31,13 +34,16 @@ export class Director {
     const raw = this.shots[name]
     if (!raw) return null
     const s = typeof raw === 'function' ? raw() : { ...raw, pos: raw.pos.clone(), target: raw.target.clone() }
-    const aspect = this.camera.aspect || 1.6
-    const k = this.backoffFor(aspect)
+    const k = this.backoff
     if (k !== 1) s.pos.sub(s.target).multiplyScalar(k).add(s.target)
     return s
   }
-  backoffFor(aspect) {
-    return aspect < 1.45 ? Math.pow(1.45 / aspect, 0.85) : 1
+  // How far to back every shot off so its subject fits the part of the screen
+  // the panel and timeline leave uncovered. rV / rH are that window's height /
+  // width as fractions of the virtual frustum's height; the constants are the
+  // same ratios in the 1280×800 desktop layout the shots were composed for.
+  setFrame(rV, rH) {
+    this.backoff = Math.max(1, 0.826 / rV, 0.99 / rH)
   }
   // Fly to a named shot. `instant` jumps (used on load and when scrubbing).
   go(name, { duration = 1.8, instant = false } = {}) {
@@ -87,7 +93,7 @@ export class Director {
   // Measured in landscape terms: a portrait screen backs every shot off, and a
   // die close-up should still count as close there.
   dieCloseness(dieCenter) {
-    const d = this.camera.position.distanceTo(dieCenter) / this.backoffFor(this.camera.aspect || 1.6)
+    const d = this.camera.position.distanceTo(dieCenter) / this.backoff
     return THREE.MathUtils.clamp((140 - d) / 90, 0, 1)
   }
 }

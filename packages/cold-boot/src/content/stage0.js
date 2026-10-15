@@ -238,7 +238,7 @@ export const STAGE0 = [
         A.die('kind:ecore_cluster', patch * 0.3, '#ffffff', 'scan')
       }
     },
-    labels: [{ id: 'spi', text: 'FIT → microcode update', hot: true }, { id: 'dmi', text: 'DMI ×8 to the chipset' }],
+    labels: [{ id: 'spi', text: 'FIT → microcode update', hot: true }, { id: 'dmi', text: 'DMI ×8 to the chipset', always: true }],
   },
   {
     stage: 0,
