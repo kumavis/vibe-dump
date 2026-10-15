@@ -10,6 +10,7 @@
 
 import * as THREE from 'three'
 import { overlayMaterial, STYLE, glowSprite, pointAlong, polyLen } from './die.js'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { rng } from './util.js'
 
 export const BOARD = { w: 305, h: 244 }
@@ -270,6 +271,13 @@ export function buildBoard({ anisotropy = 8 } = {}) {
       chipLights.push(c)
     }
   })
+
+  // ~150 of the board's meshes are static boxes sharing a handful of materials;
+  // drawn one by one they cost a phone's CPU most of its frame budget. Bake them
+  // into one mesh per material. Anything that lights up, fades or moves (glow
+  // pads, traces, DRAM chips, SPD/PMIC parts, the heat-spreader, the GPU
+  // ghost) has a material of its own and is left alone.
+  mergeStatic(group, new Set(Object.values(mats).filter((m) => m !== mats.pcb)), ihs)
 
   const api = {
     group,
@@ -627,4 +635,33 @@ function paintIhs() {
   tex.center.set(0.5, 0.5)
   tex.rotation = Math.PI / 2
   return tex
+}
+
+function mergeStatic(root, palette, skip) {
+  root.updateMatrixWorld(true)
+  const toRoot = new THREE.Matrix4().copy(root.matrixWorld).invert()
+  const byMat = new Map()
+  root.traverse((o) => {
+    if (!o.isMesh || !palette.has(o.material)) return
+    for (let a = o.parent; a && a !== root; a = a.parent) if (a === skip) return
+    if (!byMat.has(o.material)) byMat.set(o.material, [])
+    byMat.get(o.material).push(o)
+  })
+  for (const [mat, meshes] of byMat) {
+    if (meshes.length < 2) continue
+    const geoms = meshes.map((m) => {
+      const g = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone()
+      for (const k of Object.keys(g.attributes)) if (!['position', 'normal', 'uv'].includes(k)) g.deleteAttribute(k)
+      g.clearGroups()
+      return g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(toRoot, m.matrixWorld))
+    })
+    const merged = mergeGeometries(geoms)
+    for (const g of geoms) g.dispose()
+    if (!merged) continue
+    for (const m of meshes) {
+      m.parent.remove(m)
+      m.geometry.dispose()
+    }
+    root.add(new THREE.Mesh(merged, mat))
+  }
 }

@@ -531,4 +531,4 @@ requestAnimationFrame((t) => {
 })
 
 // Exposed for debugging and for scripted screenshots.
-window.__coldboot = { timeline, director, die, board, MODE_COLORS, bootKind: () => bootKind }
+window.__coldboot = { timeline, director, die, board, renderer, MODE_COLORS, bootKind: () => bootKind }
