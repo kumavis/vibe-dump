@@ -680,6 +680,9 @@ body.playing #hud {
 .vf-top .vf-rec {
   color: #ff6a5a;
 }
+.vf-top .vf-rec.wind {
+  color: var(--dim);
+}
 .vf-top small {
   color: var(--dim);
   font-size: 10px;
@@ -907,7 +910,8 @@ body.playing #hud {
   padding: 18px 22px 20px;
   border-top: 3px solid var(--accent);
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
-  background: rgba(16, 20, 14, 0.94);
+  /* opaque: on a narrow screen the sheet covers the title text */
+  background: #10140e;
 }
 .sheet-head {
   display: flex;
@@ -941,6 +945,10 @@ body.playing #hud {
 }
 .sheet .controls b {
   color: var(--ink);
+}
+/* a key stays on the line with what it does */
+.sheet .controls span {
+  white-space: nowrap;
 }
 .sheet-foot {
   display: flex;

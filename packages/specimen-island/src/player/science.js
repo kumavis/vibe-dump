@@ -1,4 +1,5 @@
 import { SPECIES } from '../data/species.js'
+import { OBLIVIOUS } from '../actors/perception.js'
 
 // Field science — the point of the expedition. Scanning catalogues a species
 // (and unlocks its vitals readout); a sedated animal offers procedures you hold
@@ -30,7 +31,7 @@ export class Science {
     c.rec.scanned = true
     const first = !this.catalogue.has(c.sp.id)
     this.catalogue.add(c.sp.id)
-    const unaware = c.perception.awareness < 0.35 && c.vitals.conscious
+    const unaware = c.perception.awareness < OBLIVIOUS && c.vitals.conscious
     let points = first ? c.sp.science.scan : Math.round(c.sp.science.scan * 0.3)
     if (unaware) points = Math.round(points * 1.25)
     G.events.emit('science:scan', { creature: c, first, points, unaware })

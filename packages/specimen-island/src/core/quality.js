@@ -36,8 +36,10 @@ export const GPU_CLASSES = {
 const TIER_ORDER = ['low', 'medium', 'high']
 
 // Frame-time rules. Times are frame intervals in milliseconds; a window is
-// judged by its mean with the slowest tenth trimmed off (so a hitch doesn't
-// count, but a 16/33 ms vsync stutter does) and by its 90th percentile.
+// judged by its mean with the slowest tenth trimmed off (so a 16/33 ms vsync
+// stutter counts) and by its 90th percentile. Hitches — frames many times the
+// window's median, a GC pause or a shader compile rather than a GPU that is
+// too slow every frame — are dropped first, however many there are.
 export const ADAPT = {
   warmup: 20, // frames ignored at start and after every change (shader compiles, vegetation rebuilds)
   minFrames: 40, // a measuring window needs this many frames…
@@ -48,6 +50,8 @@ export const ADAPT = {
   verySlowMs: 55, // mean above this (under ~18 fps) steps down two rungs
   fastMs: 18.5, // 90th percentile under this (~54 fps and steady) counts toward the one upgrade
   fastWindows: 2, // consecutive fast windows before upgrading
+  holdMs: 20.5, // after the upgrade, a 90th percentile above this (one frame in ten missing a 60 Hz vsync) reverts it
+  hitch: 4, // a frame over this many times the window's median is a hitch, not load
   helped: 0.92, // a downgrade is kept only if the mean dropped below this fraction
   severeMs: 45, // once settled, only a mean above this (under ~22 fps)…
   severeWindows: 2, // …for this many windows in a row still steps down
@@ -75,14 +79,22 @@ export function classifyGpu(renderer = '', vendor = '', mobile = false) {
   const apple = s.match(/apple m(\d+)\s*(pro|max|ultra)?/)
   if (apple) return apple[2] ? 'discrete' : 'integrated'
   if (/apple gpu|apple/.test(s)) return mobile ? 'mobile' : 'integrated'
-  const adreno = s.match(/adreno\D*(\d+)/)
-  if (adreno) return Number(adreno[1]) >= 700 ? 'mobile' : 'mobileLow'
-  if (/immortalis|mali-?g7\d/.test(s)) return 'mobile'
+  if (/adreno/.test(s)) {
+    // Snapdragon X laptops ("Adreno X1-85") are a modern laptop iGPU
+    if (/adreno\D*x\d/.test(s)) return 'integrated'
+    const n = Number(s.match(/adreno\D*(\d{3})/)?.[1] || 0)
+    // older Windows-on-ARM laptops (8cx: Adreno 680/690) fill a laptop screen
+    if (!mobile) return 'integratedLow'
+    return n >= 640 ? 'mobile' : 'mobileLow'
+  }
+  // Mali-G76..G79 and the G6xx-G9xx generations; G71/G72 (2016-17) are not
+  if (/immortalis|mali-?g(7[6-9](?!\d)|[6-9]\d\d)/.test(s)) return 'mobile'
   if (/mali|powervr|img tec|videocore|vivante|tegra/.test(s)) return 'mobileLow'
   if (/nvidia|geforce|quadro|rtx|gtx|tesla/.test(s)) return /\bmx\s?\d|geforce\s?(gt\s|\d{3}m\b)|\bnvs\b|\bion\b/.test(s) ? 'integrated' : 'discrete'
   if (/intel/.test(s)) {
-    if (/\barc\b/.test(s)) return 'discrete'
-    if (/iris/.test(s)) return 'integrated'
+    // only the Arc A/B cards are discrete; "Arc Graphics" and 1x0V are iGPUs
+    if (/\barc(\(tm\))?\s*[ab]\d{3}/.test(s)) return 'discrete'
+    if (/iris|\barc\b/.test(s)) return 'integrated'
     return 'integratedLow'
   }
   if (/radeon|amd|\bati\b/.test(s)) {
@@ -148,7 +160,8 @@ export function readGpuInfo(gl) {
 // null. Rules, in order:
 //   - after a downgrade, keep it only if the mean improved; otherwise go back
 //     up and stop for good (a 30 fps cap or a CPU-bound scene isn't the GPU)
-//   - after the one upgrade, go back down and stop if the frames got slow
+//   - after the one upgrade, go back down and stop unless the frames stayed
+//     steady (it only ever happens with headroom, so losing 60 fps is a loss)
 //   - slow windows step down (two rungs if very slow); a downgrade also spends
 //     the upgrade, since a higher rung was just shown to be too slow
 //   - fast, steady windows earn the one upgrade
@@ -194,11 +207,16 @@ export class TierController {
     const n = this.samples.length
     if (!((n >= o.minFrames && this.seconds >= o.minSeconds) || (n >= o.slowFrames && this.seconds >= o.maxSeconds))) return null
     const sorted = this.samples.sort((a, b) => a - b)
-    const keep = Math.max(1, Math.floor(n * 0.9))
+    // drop hitches, then trim the slowest tenth of what is left
+    const cap = sorted[n >> 1] * o.hitch
+    let m = n
+    while (m > 1 && sorted[m - 1] > cap) m--
+    if (m < (n >= o.minFrames ? o.minFrames : o.slowFrames)) return null // mostly hitches: keep measuring
+    const keep = Math.max(1, Math.floor(m * 0.9))
     let sum = 0
     for (let i = 0; i < keep; i++) sum += sorted[i]
     const mean = sum / keep
-    const p90 = sorted[Math.min(n - 1, keep)]
+    const p90 = sorted[Math.min(m - 1, keep)]
     this.samples = []
     this.seconds = 0
     this.last = { mean, p90 }
@@ -211,7 +229,7 @@ export class TierController {
     this.pending = null
     if (judged) {
       if (judged.dir < 0 && mean > judged.mean * o.helped) return this.stop(judged.from, 'downgrade did not help')
-      if (judged.dir > 0 && mean > o.slowMs) return this.stop(judged.from, 'upgrade did not hold')
+      if (judged.dir > 0 && (mean > o.slowMs || p90 > o.holdMs)) return this.stop(judged.from, 'upgrade did not hold')
     }
     if (this.settled) {
       this.severe = mean > o.severeMs ? this.severe + 1 : 0

@@ -4,25 +4,28 @@
 // cares about something is one `on()` call — nothing else has to change.
 //
 // Event catalogue (payloads are plain objects):
-//   noise              {x, y, z, radius, kind, source}   anything audible
-//   weapon:fired       {weapon, origin, dir}
+//   noise              {x, y, z, radius, kind, source}   anything audible; kind is
+//                      step | shot | gunshot | shutter | distraction | impact | vehicle
+//   weapon:fired       {weapon}
+//   weapon:gained      {weapon}
+//   dart:hit           {creature, zone, dose | damage}   a hit-marker label ('NECK', 'ARMOUR')
 //   creature:hit       {creature, zone, dose, damage, weapon}
 //   creature:ko        {creature}
 //   creature:woke      {creature}
 //   creature:died      {creature, cause}                 'weapon' | 'overdose' | 'predation'
 //   creature:detected  {creature}                        first time it spots the player
-//   science:done       {creature, procedure, points}
-//   science:scan       {creature, first, points}
+//   science:done       {creature, procedure, points, ghost}
+//   science:scan       {creature, first, points, unaware}
+//   photo:taken        {creature, species, quality, stars, points, first}
 //   score              {delta, reason, category}
 //   player:damaged     {amount, from}
 //   player:died        {}
 //   item:gained        {item, count}
 //   flag               {flag, value}
-//   poi:reached        {poi}
 //   objective:done     {objective}
-//   heli:enter / heli:exit / heli:landed {poi?}
-//   jeep:enter / jeep:exit {}
-//   vehicle:enter / vehicle:exit {vehicle}
+//   expedition:complete {}
+//   vehicle:enter / vehicle:exit       {vehicle}         the helicopter or the jeep
+//   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
 //   vehicle:destroyed  {vehicle}
 //   vehicle:repaired   {vehicle, field}                  field repair or the pad pump

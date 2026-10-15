@@ -126,7 +126,8 @@ export const PHOTO = {
   frame: { aspect: 1.6, fill: 0.84 }, // the viewfinder rectangle, share of the screen
   image: { w: 320, h: 200, quality: 0.82 }, // album JPEGs
   preview: 2.5, // seconds the polaroid stays up
-  liveRate: 0.2, // seconds between viewfinder estimates
+  liveRate: 0.2, // seconds between viewfinder estimates (physics rays only, at the hip)
+  idRate: 0.35, // seconds between ID renders while the camera is raised
   scale: 0.82, // a technically perfect shot of an animal doing nothing
   minQuality: 6, // below this there is nothing recognisable in frame
   stars: [40, 70], // quality for two and three stars (one star from minQuality)

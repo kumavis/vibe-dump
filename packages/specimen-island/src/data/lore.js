@@ -1,5 +1,5 @@
 // Notes left behind by the last field team. They double as tutorials: each
-// one quietly teaches a system (wind, dosing, power, the relay).
+// one quietly teaches a system (wind, dosing, power, flying, the relay).
 
 export const LORE = {
   stationRadio: {
@@ -30,10 +30,11 @@ export const LORE = {
   hangarClipboard: {
     title: 'Hangar clipboard',
     text:
-      'Tail rotor rebuilt, main gearbox good. Fuel pump on the pad runs off the lab generator — if the genny ' +
-      'is dry there is a jerrycan in the parts crate.\n\n' +
-      'Flight: Space climbs, Shift descends, W/S pitch, A/D slide, mouse turns. Land soft or you will be ' +
-      'walking home.',
+      'Tail rotor rebuilt, main gearbox good. The pump on the pad runs off the lab generator — it fills her ' +
+      'up and sorts out any dents. If the genny is dry there is a jerrycan in the parts crate.\n\n' +
+      'Flight: Space climbs, Shift descends, W/S pitch, A/D slide, mouse turns, V for the outside view, E to ' +
+      'get out once she is down. Settle her onto the skids — every hard landing costs hull. Bend her out in ' +
+      'the bush and the kit behind the seat will patch her up enough to limp back to the pad.',
   },
   relayLog: {
     title: 'Relay maintenance log',

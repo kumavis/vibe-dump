@@ -41,7 +41,7 @@
     </div>
     <div id="fade"></div>
 
-    <div id="map" class="overlay"><div class="inner"><h2>Island Map</h2><canvas width="720" height="720"></canvas><div class="foot">[M] close · ◆ objective · yellow dots: tagged animals</div></div></div>
+    <div id="map" class="overlay"><div class="inner"><h2>Island Map</h2><canvas width="720" height="720"></canvas><div class="foot">[M] close · ◆ objective · yellow dots: tagged animals · HELI / JEEP: parked vehicles (orange: wrecked)</div></div></div>
     <div id="journal" class="overlay"><div class="inner"></div></div>
     <div id="note" class="overlay"><div class="inner paper"><h2></h2><p></p><button class="btn" data-close>Close</button></div></div>
 
@@ -83,10 +83,17 @@
         <div class="settings"></div>
         <h3>Controls</h3>
         <div class="controls">
-          <div><b>WASD</b> move · <b>Shift</b> sprint · <b>C</b> crouch · <b>Space</b> jump</div>
-          <div><b>Mouse</b> aim/fire · <b>R</b> reload · <b>1–6</b> weapons &amp; camera · <b>E</b> interact (hold)</div>
-          <div><b>G</b> stone · <b>T</b> flare · <b>H</b> medkit · <b>F</b> flashlight</div>
-          <div><b>M</b> map · <b>J</b> journal · <b>Esc</b> pause</div>
+          <div><span><b>WASD</b> move</span> · <span><b>Shift</b> sprint</span> · <span><b>C</b> crouch</span> · <span><b>Space</b> jump</span></div>
+          <div><span><b>Mouse</b> look</span> · <span><b>LMB</b> fire</span> · <span><b>RMB</b> aim</span> · <span><b>R</b> reload</span> · <span><b>1–6</b>, <b>wheel</b> weapons</span></div>
+          <div><span><b>6</b> Field Camera:</span> <span><b>RMB</b> raise</span> · <span><b>wheel</b> zoom</span> · <span><b>LMB</b> shoot</span></div>
+          <div><span><b>E</b> interact (hold)</span> · <span><b>G</b> stone</span> · <span><b>T</b> flare</span> · <span><b>H</b> medkit</span> · <span><b>F</b> flashlight</span></div>
+          <div><span><b>M</b> map</span> · <span><b>J</b> / <b>Tab</b> journal</span> · <span><b>Esc</b> pause</span></div>
+        </div>
+        <h3>Vehicles</h3>
+        <div class="controls">
+          <div><span><b>E</b> board at a door</span> · <span><b>E</b> exit, once stopped or landed</span> · <span><b>V</b> camera</span></div>
+          <div><span>Jeep:</span> <span><b>W/S</b> drive</span> · <span><b>A/D</b> steer</span> · <span><b>Space</b> handbrake</span> · <span><b>F</b> headlights</span> · <span><b>Mouse</b> look</span></div>
+          <div><span>Helicopter:</span> <span><b>Space</b> climb</span> · <span><b>Shift</b> descend</span> · <span><b>W/S</b> pitch</span> · <span><b>A/D</b> slide</span> · <span><b>Mouse</b> turn</span></div>
         </div>
         <div class="sheet-foot"><button class="btn primary" data-close>Done</button></div>
       </div>

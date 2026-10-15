@@ -7,6 +7,10 @@ import { wrapAngle, yawTo } from '../core/mathx.js'
 // hearing reads the noise bus; scent works only downwind. Other animals are
 // noticed plainly (no stealth between dinosaurs).
 
+// Awareness below this: the animal has not noticed anyone (photos and scans
+// of an unaware animal earn a bonus).
+export const OBLIVIOUS = 0.35
+
 const _heard = []
 const _vehicleEye = { x: 0, y: 0, z: 0 }
 // Where an animal looks for someone in a vehicle: its cab, not its wheels.
@@ -90,7 +94,7 @@ export class Perception {
       const fromPlayer = h.n.source === 'player'
       const gain = h.strength * (h.n.radius > 60 ? 1.6 : 0.7)
       if (fromPlayer) this.awareness += gain
-      else this.awareness = Math.min(0.85, Math.max(this.awareness, 0.35) + gain * 0.8)
+      else this.awareness = Math.min(0.85, Math.max(this.awareness, OBLIVIOUS) + gain * 0.8)
       const err = h.d * 0.08
       this.lastKnown = { x: h.n.x + (Math.random() - 0.5) * err, y: h.n.y, z: h.n.z + (Math.random() - 0.5) * err }
       if (!fromPlayer) this.distractedBy = { ...this.lastKnown, t: G.time }

@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { WEAPONS, PHOTO } from '../data/weapons.js'
 import { clamp, damp, smoothstep } from '../core/mathx.js'
+import { OBLIVIOUS } from '../actors/perception.js'
 
 // Wildlife photography with the Field Camera. The shutter asks evaluate() what
 // is in the viewfinder: every loaded animal in range is projected through the
@@ -12,12 +13,23 @@ import { clamp, damp, smoothstep } from '../core/mathx.js'
 // PHOTO table in data/weapons.js — turns that into quality 0-100 and 1-3
 // stars. The best subject is the photo's subject.
 //
+// The ID render is a second pass over the scene, so the live estimate only
+// pays for it while the camera is raised to the eye, at PHOTO.idRate, for
+// animals that could make a photo at all, and reads the pixels back a frame
+// later (WebGL2 pixel-pack buffer + fence) instead of stalling the GPU. At the
+// hip the estimate uses the physics rays alone. The shutter always grades with
+// a fresh ID render.
+//
 // Each species' first photo pays its science.photo value scaled by quality;
 // a retake pays only the improvement on that species' best, so a species is
 // worth at most its photo value. Photos do not catalogue anything — the
 // scanner stays the way to learn a species. The album keeps every species'
 // best frame as a small JPEG read off the WebGL canvas right after the scene
 // renders and before the view models draw (main.js draw() calls capture()).
+
+// Frames an asynchronous ID read may wait for its fence before it is taken
+// anyway (a test stepping the simulation without rendering never sees one).
+const MAX_POLLS = 6
 
 const _v = new THREE.Vector3()
 const _fwd = new THREE.Vector3()
@@ -79,6 +91,7 @@ export function gradeSubject(m, P = PHOTO) {
 // The weakest factor of a graded subject, as advice for the viewfinder.
 export function hintFor(m, P = PHOTO) {
   const q = m.parts
+  if (m.quality >= 100) return '' // nothing left to improve
   const hidden = m.blocked > 0.4 ? 'Blocked from view' : m.screened > 0.3 ? 'Something is in the way' : 'Partly hidden'
   if (q.vis < 0.3) return hidden // nothing else matters while it cannot be seen
   if (m.fill < P.fill.sweet[0] && q.fill < 0.6) return 'Get closer or zoom in'
@@ -131,6 +144,23 @@ function sampleSpheres(hits) {
   return [hits[0], neck[neck.length >> 1], by('chest')[0], by('hips')[0], tail[1] || tail[0], limbs[0], limbs[limbs.length - 1]].filter(Boolean)
 }
 
+// Worth a place in the ID render: it could make a photo if it were in plain
+// view, or count as a herd-mate in another's.
+function scorable(m) {
+  const Gp = PHOTO.group
+  if (m.fill >= Gp.minFill && m.inFrame >= 0.5) return true
+  return gradeSubject({ ...m, vis: 1, group: Gp.max / Gp.each }).quality >= PHOTO.minQuality
+}
+
+// Window glass, the rotor disc, particles: things you can see an animal
+// through. Water (transparent, but opaque in the ID render) stays solid, so a
+// submerged leg still counts as hidden.
+function seeThrough(o) {
+  const mat = o.material
+  if (!mat || Array.isArray(mat) || !mat.transparent) return false
+  return o.isPoints || (o.isMesh && mat.opacity < 0.6)
+}
+
 // Does the ID render show animal `id` within a pixel of NDC (nx, ny)?
 function idAt(ids, nx, ny, id) {
   const { buf, w, h } = ids
@@ -158,6 +188,8 @@ export class Photos {
     this.last = null // latest shot, for the preview card
     this.pending = [] // shots waiting for the next rendered frame
     this.snap = null // the 2D canvas the last frame was copied into
+    this.raisedNow = false
+    this.job = null // an ID render being read back asynchronously
   }
 
   get count() {
@@ -170,22 +202,55 @@ export class Photos {
     this.cool -= dt
     // how fast the view is swinging, for motion blur
     _fwd.set(0, 0, -1).applyQuaternion(G.camera.quaternion)
-    if (this.lastFrame === G.frame - 1 && dt > 0) this.turn = damp(this.turn, _prevFwd.angleTo(_fwd) / dt, 10, dt)
+    const carried = this.lastFrame === G.frame - 1
+    if (carried && dt > 0) this.turn = damp(this.turn, _prevFwd.angleTo(_fwd) / dt, 10, dt)
     else this.turn = 0
     _prevFwd.copy(_fwd)
     this.lastFrame = G.frame
 
-    this.liveT -= dt
-    if (this.liveT <= 0) {
-      this.liveT = PHOTO.liveRate
-      this.live = active ? this.evaluate() : null
+    const raised = active && G.weapons.raised()
+    if (!carried || raised !== this.raisedNow) {
+      // just taken out, raised or lowered: re-grade now, the right way
+      this.raisedNow = raised
+      this.cancelId()
+      this.liveT = 0
     }
-    if (active && input.pressed('fire') && this.cool <= 0) this.take()
+    this.pollId()
+    this.liveT -= dt
+    if (!active) {
+      this.cancelId()
+      this.live = null
+    } else if (this.liveT <= 0 && !this.job) {
+      this.liveT = raised ? PHOTO.idRate : PHOTO.liveRate
+      if (raised) this.evaluateLive()
+      else this.live = this.evaluate(false)
+    }
+    if (active && input.pressed('fire')) {
+      if (this.cool <= 0) this.take()
+      else G.audio?.play('click') // still winding on: a dry click, no photo
+    }
     this.drawScreen(active)
   }
 
-  // Grade everything in the viewfinder; returns { best, subjects, zoom }.
-  evaluate() {
+  // Grade everything in the viewfinder now; returns { best, subjects, zoom }.
+  // `useIds` adds the ID render, read back on the spot.
+  evaluate(useIds = true) {
+    const subjects = this.measureAll()
+    return this.grade(subjects, useIds ? this.idPass(subjects.filter(scorable)) : null)
+  }
+
+  // The raised live estimate: like evaluate(), but the ID pixels come back a
+  // frame or two later (pollId() finishes the job) where WebGL2 allows.
+  evaluateLive() {
+    const subjects = this.measureAll()
+    const want = subjects.filter(scorable)
+    const ids = want.length ? this.idPass(want, true) : null
+    if (this.job) this.job.subjects = subjects
+    else this.live = this.grade(subjects, ids)
+  }
+
+  // Project every loaded animal into the frame (see measure()).
+  measureAll() {
     const G = this.G
     const cam = G.camera
     const tanY = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2))
@@ -199,15 +264,23 @@ export class Photos {
       fv: fr.h,
       range: WEAPONS.camera.range,
     }
+    const zoom = G.weapons.zoomFactor()
+    const speed = Math.hypot(G.player.vel.x, G.player.vel.z)
     const subjects = []
     for (const c of G.ecology.active) {
       const m = this.measure(c, V)
-      if (m) subjects.push(m)
+      if (!m) continue
+      m.turn = this.turn
+      m.zoom = zoom
+      m.speed = speed
+      subjects.push(m)
     }
-    const ids = subjects.length ? this.idPass(subjects) : null
+    return subjects
+  }
+
+  // Visibility (with the ID pixels, if any), herd-mates, grade and hint.
+  grade(subjects, ids) {
     for (const m of subjects) this.resolveVisibility(m, ids)
-    const zoom = G.weapons.zoomFactor()
-    const speed = Math.hypot(G.player.vel.x, G.player.vel.z)
     const Gp = PHOTO.group
     let best = null
     for (const m of subjects) {
@@ -215,14 +288,11 @@ export class Photos {
       for (const o of subjects) {
         if (o !== m && o.species === m.species && o.fill >= Gp.minFill && o.vis >= Gp.minVis && o.inFrame >= 0.5) m.group++
       }
-      m.turn = this.turn
-      m.zoom = zoom
-      m.speed = speed
       Object.assign(m, gradeSubject(m))
       m.hint = hintFor(m)
       if (!best || m.quality > best.quality) best = m
     }
-    return { best, subjects, zoom }
+    return { best, subjects, zoom: this.G.weapons.zoomFactor() }
   }
 
   // Project one animal into the frame. null when it is out of range or view.
@@ -298,6 +368,7 @@ export class Photos {
       creature: c,
       species: c.sp.id,
       dist,
+      reach: dist + R, // the far side of it, for the ID render's far plane
       fill: Math.max(u1 - u0, v1 - v0),
       inFrame,
       headIn,
@@ -307,13 +378,15 @@ export class Photos {
       samples,
       pose,
       poseLabel: poseLabel(pose, c.sp),
-      unaware: c.vitals.conscious && c.perception.awareness < 0.35,
+      unaware: c.vitals.conscious && c.perception.awareness < OBLIVIOUS,
     }
   }
 
   // Weighted share of samples in plain view: the physics ray is clear and the
   // ID render shows this animal at (or right next to) the sample's pixel.
+  // An animal left out of the ID render goes by the physics rays alone.
   resolveVisibility(m, ids) {
+    const useIds = ids && m.id
     let total = 0
     let seen = 0
     let blocked = 0
@@ -321,48 +394,63 @@ export class Photos {
     for (const s of m.samples) {
       total += s.w
       if (!s.clear) blocked += s.w
-      else if (ids && !idAt(ids, s.nx, s.ny, m.id)) screened += s.w
+      else if (useIds && !idAt(ids, s.nx, s.ny, m.id)) screened += s.w
       else seen += s.w
     }
     m.vis = total ? seen / total : 0
     m.blocked = total ? blocked / total : 0
     m.screened = total ? screened / total : 0
-    m.pixels = ids ? ids.count[m.id] || 0 : -1
+    m.pixels = useIds ? ids.count[m.id] || 0 : -1
   }
 
   // Render the view small: everything black, each candidate animal in its own
   // ID colour on top, depth-tested against the rest — what survives is what
-  // the lens sees. Returns { buf, w, h, count } or null.
-  idPass(subjects) {
+  // the lens sees. Returns { buf, w, h, count }, or null on failure — and
+  // also when `async`, where WebGL2 lets the read finish later (this.job).
+  idPass(subjects, async = false) {
     const G = this.G
     const R = G.renderer
-    if (!R) return null
+    if (!R || !subjects.length) return null
     const cam = G.camera
     const w = PHOTO.idBuffer.w
     const h = Math.max(32, Math.round(w / cam.aspect))
     if (!this.rt || this.rt.height !== h) {
+      this.cancelId()
       this.rt?.dispose()
       this.rt = new THREE.WebGLRenderTarget(w, h)
       this.idBuf = new Uint8Array(w * h * 4)
       // double-sided: a grass blade seen from behind still hides what is behind it
       this.black ||= new THREE.MeshBasicMaterial({ color: 0x000000, fog: false, toneMapped: false, side: THREE.DoubleSide })
       this.idMats ||= []
+      this.twins ||= new Map()
     }
     const scene = G.scene
+    const plants = G.veg?.group
     const prev = { target: R.getRenderTarget(), alpha: R.getClearAlpha(), override: scene.overrideMaterial, background: scene.background, shadows: R.shadowMap.autoUpdate, far: cam.far }
     R.getClearColor(_clear)
     const n = Math.min(subjects.length, 254)
+    let far = 0
+    for (let i = 0; i < n; i++) far = Math.max(far, subjects[i].reach)
+    const hidden = []
     try {
       R.shadowMap.autoUpdate = false
       scene.background = null
-      cam.far = WEAPONS.camera.range + 40
+      // nothing beyond the farthest subject can hide it
+      cam.far = Math.min(WEAPONS.camera.range + 40, far + 2)
       cam.updateProjectionMatrix()
       R.setRenderTarget(this.rt)
       R.setClearColor(0x000000, 1)
       R.clear()
+      // glass and the like hide nothing; the plants are drawn on their own
+      scene.traverseVisible((o) => {
+        if (o === plants || seeThrough(o)) hidden.push(o)
+      })
+      for (const o of hidden) o.visible = false
       scene.overrideMaterial = this.black
       R.render(scene, cam)
       scene.overrideMaterial = prev.override
+      for (const o of hidden) o.visible = true
+      if (plants) this.renderPlants(plants, cam)
       for (let i = 0; i < n; i++) {
         const m = subjects[i]
         m.id = i + 1
@@ -372,11 +460,17 @@ export class Photos {
         R.render(mesh, cam)
         mesh.material = mat
       }
+      if (async && R.capabilities.isWebGL2) {
+        this.readAsync(R, w, h)
+        return null
+      }
       R.readRenderTargetPixels(this.rt, 0, 0, w, h, this.idBuf)
     } catch (err) {
       console.warn('photo ID pass failed', err)
+      this.cancelId()
       return null
     } finally {
+      for (const o of hidden) o.visible = true
       scene.overrideMaterial = prev.override
       scene.background = prev.background
       R.shadowMap.autoUpdate = prev.shadows
@@ -385,10 +479,86 @@ export class Photos {
       R.setRenderTarget(prev.target)
       R.setClearColor(_clear, prev.alpha)
     }
+    return this.idsFrom(w, h)
+  }
+
+  // The plants, each in a black twin of its own material: same sway, parting
+  // and LOD dither (the twin reuses the plant's onBeforeCompile), so a fern
+  // hides an animal exactly where it does on screen — and undergrowth that
+  // has dithered away in the distance hides nothing.
+  renderPlants(plants, cam) {
+    const swapped = []
+    for (const m of plants.children) {
+      if (!m.isMesh || !m.visible) continue
+      swapped.push(m, m.material)
+      m.material = this.twin(m.material)
+    }
+    try {
+      this.G.renderer.render(plants, cam)
+    } finally {
+      for (let i = 0; i < swapped.length; i += 2) swapped[i].material = swapped[i + 1]
+    }
+  }
+
+  twin(mat) {
+    let t = this.twins.get(mat)
+    if (!t) {
+      t = new THREE.MeshBasicMaterial({ color: 0x000000, fog: false, toneMapped: false, side: THREE.DoubleSide })
+      t.onBeforeCompile = mat.onBeforeCompile
+      this.twins.set(mat, t)
+    }
+    return t
+  }
+
+  idsFrom(w, h) {
     const count = new Uint32Array(256)
     const buf = this.idBuf
     for (let i = 0; i < buf.length; i += 4) count[buf[i]]++
     return { buf, w, h, count }
+  }
+
+  // WebGL2: copy the ID target into a pixel-pack buffer behind a fence, so
+  // the GPU gets to it in its own time instead of being drained now.
+  readAsync(R, w, h) {
+    const gl = R.getContext()
+    const size = w * h * 4
+    this.pbo ||= gl.createBuffer()
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.pbo)
+    if (this.pboSize !== size) {
+      gl.bufferData(gl.PIXEL_PACK_BUFFER, size, gl.STREAM_READ)
+      this.pboSize = size
+    }
+    gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, 0)
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null)
+    const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0)
+    gl.flush()
+    this.job = { sync, subjects: [], w, h, polls: 0 } // evaluateLive() fills in the subjects
+  }
+
+  // Finish an asynchronous read once its fence has passed (or MAX_POLLS
+  // frames on, regardless) and grade the subjects it was rendered for.
+  pollId() {
+    const job = this.job
+    if (!job) return
+    const gl = this.G.renderer.getContext()
+    if (gl.isContextLost()) {
+      this.job = null
+      return
+    }
+    if (gl.getSyncParameter(job.sync, gl.SYNC_STATUS) !== gl.SIGNALED && ++job.polls < MAX_POLLS) return
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.pbo)
+    gl.getBufferSubData(gl.PIXEL_PACK_BUFFER, 0, this.idBuf)
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null)
+    gl.deleteSync(job.sync)
+    this.job = null
+    this.live = this.grade(job.subjects, this.idsFrom(job.w, job.h))
+  }
+
+  cancelId() {
+    if (!this.job) return
+    const gl = this.G.renderer?.getContext()
+    if (gl && !gl.isContextLost()) gl.deleteSync(this.job.sync)
+    this.job = null
   }
 
   idMat(id) {
@@ -406,6 +576,7 @@ export class Photos {
     const def = WEAPONS.camera
     const p = G.player
     this.cool = def.rof
+    this.cancelId()
     const res = this.evaluate()
     this.live = res
     this.liveT = PHOTO.liveRate
@@ -419,11 +590,14 @@ export class Photos {
       const prev = this.album[id]
       const prevQuality = prev ? prev.quality : 0
       const first = !prev
-      const points = Math.round((s.creature.sp.science.photo * Math.max(0, s.quality - prevQuality)) / 100)
+      // the species has paid round(value x best quality) so far; a retake
+      // pays what that rises by, so the total never passes the photo value
+      const due = Math.round((s.creature.sp.science.photo * Math.max(s.quality, prevQuality)) / 100)
+      const points = Math.max(0, due - (prev ? prev.points : 0))
       Object.assign(shot, { species: id, quality: s.quality, stars: s.stars, points, first, prevQuality, pose: s.poseLabel, dist: s.dist })
       if (s.quality > prevQuality) {
         shot.best = true
-        shot.entry = { species: id, quality: s.quality, stars: s.stars, pose: s.poseLabel, dist: Math.round(s.dist), image: prev ? prev.image : null, hours: G.sky.hours, points: (prev ? prev.points : 0) + points }
+        shot.entry = { species: id, quality: s.quality, stars: s.stars, pose: s.poseLabel, dist: Math.round(s.dist), image: prev ? prev.image : null, hours: G.sky.hours, points: Math.max(due, prev ? prev.points : 0) }
         this.album[id] = shot.entry
       }
       G.events.emit('photo:taken', { creature: s.creature, species: id, quality: s.quality, stars: s.stars, points, first })

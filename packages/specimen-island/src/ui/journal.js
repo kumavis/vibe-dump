@@ -1,5 +1,4 @@
 import { SPECIES, SPECIES_ORDER } from '../data/species.js'
-import { WEAPONS } from '../data/weapons.js'
 import { doseCard } from './dose.js'
 import { starHtml } from '../player/photos.js'
 import { formatTime } from '../core/mathx.js'
@@ -45,7 +44,7 @@ export class Journal {
           continue
         }
         const marks = ['blood', 'measure', 'tag', 'tissue'].map((k) => `<span class="${s[k] ? 'done' : ''}">${k}${s[k] > 1 ? ' ×' + s[k] : ''}</span>`).join('')
-        const dose = doseCard(sp.sedation)
+        const dose = doseCard(sp)
         body += `<div class="card t-${sp.temperament}"><h3>${sp.name}</h3><em>${sp.latin}</em><p>${sp.blurb}</p>
           <dl><dt>Temperament</dt><dd>${sp.temperament}</dd><dt>Mass</dt><dd>${sp.mass.toLocaleString()} kg</dd>
           <dt>Knockout</dt><dd>${dose.ko}</dd>
@@ -66,9 +65,11 @@ export class Journal {
       body = `<div class="manual">
         <h3>The charter</h3><p>Scan, sedate, sample, release. Science earns points; every animal that dies by your hand — bullet or overdose — costs points. A procedure on an animal that never noticed you is worth half again.</p>
         <h3>Staying unseen</h3><p>The eye in the corner is how visible you are. Crouch [C] in ferns, reeds and tall grass; move slowly; keep the wind (see map) blowing from them to you — downwind animals smell you. Night hides you, the flashlight [F] does not. Arcs around the reticle show who has noticed you: white curious, yellow suspicious, red alerted.</p>
-        <h3>Darting</h3><p>Darts take a few seconds to work — a darted predator can still reach you. Neck and head carry more dose; legs and tail less; armour stops darts cold. Too much sedative is an overdose. Scan a species to see its knockout and overdose lines on the target readout.</p>
+        <h3>Darting</h3><p>Darts take a few seconds to soak in — a darted predator can still reach you — and the animal keeps clearing sedative all the while, so the knockout counts on the target readout allow for what it burns off at a steady rate of fire. Neck and head carry more dose; legs and tail less; armour stops darts cold. Too much sedative is an overdose: a red line on the readout means the next dart there would kill. Scan a species to see its lines.</p>
         <h3>Procedures</h3><p>Stand over a sedated animal and hold [E]: blood, then measurements, then a tracking tag (tagged animals show on the map). Watch for “waking soon”. Dead animals yield only a tissue sample.</p>
-        <h3>Tools</h3><p>[G] throws a stone — a noise somewhere else. [T] lights a flare — animals will not come near it for twenty seconds. [H] uses a medkit. [R] reloads, right mouse aims.</p>
+        <h3>Field Camera</h3><p>[6] Hold right mouse to raise it to your eye; the wheel turns the zoom ring; left mouse takes the picture (then a second to wind on). A photo is graded on how much of the frame the animal fills, how much of it you can actually see — leaves and grass count — whether its head is in, a rule-of-thirds point over dead centre, a steady hand, and what it is doing: a roar or a charge beats a nap, and an animal that never noticed you is worth more. Each species pays its photo value once, scaled by quality; a better retake pays only the difference. The album is the Photos tab.</p>
+        <h3>Vehicles</h3><p>Walk up to a door of the station jeep or the helicopter and press [E]; [E] again gets you out once it has stopped or landed, and [V] switches the camera. Jeep: [W]/[S] drive, [A]/[D] steer, [Space] handbrake, [F] headlights. It fords water up to the axles and no deeper, and anything small under the bull bar counts as a kill. Helicopter: [Space]/[Shift] climb and descend, [W]/[S] pitch, [A]/[D] slide, the mouse turns; it burns fuel, and a hard landing costs hull. A wreck can be patched up where it lies — hold [E] on it — enough to limp home; the pump on the lab helipad refuels and repairs properly.</p>
+        <h3>Tools</h3><p>[G] throws a stone — a noise somewhere else. [T] lights a flare — animals will not come near it for twenty seconds. [H] uses a medkit. [R] reloads, right mouse aims. [J] or [Tab] opens this journal, [M] the map.</p>
         <h3>Temperaments</h3><p>Skittish animals bolt and take the herd with them. Defensive ones threaten inside their personal space and charge if you push — or shoot. Aggressive ones hunt you. Passive giants ignore you; do not stand underfoot.</p></div>`
     }
     this.el.querySelector('.inner').innerHTML = `<h2>Field Journal</h2>${tabs}${body}<div class="foot">[J] / [Tab] close</div>`

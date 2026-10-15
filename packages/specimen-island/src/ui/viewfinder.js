@@ -4,8 +4,9 @@ import { frameRect, starHtml } from '../player/photos.js'
 // The Field Camera's viewfinder, a pure view over G.photos: frame corners and
 // a thirds grid matching exactly the rectangle the album crops, a focus box
 // that snaps to the subject the camera would grade, the live estimate and the
-// zoom, the shutter flash, and a polaroid of the last shot. Driven by game
-// time from the HUD, so a paused game holds the card.
+// zoom, the shutter flash, and a polaroid of the last shot. The polaroid sits
+// over the right of the frame, so with the camera at the eye it leaves as soon
+// as the shutter is ready again. Its timers stop while the game is paused.
 
 const $ = (id) => document.getElementById(id)
 
@@ -20,6 +21,7 @@ export class Viewfinder {
       focus: vf.querySelector('.vf-focus'),
       subject: vf.querySelector('.vf-subject'),
       zoom: vf.querySelector('.vf-zoom'),
+      rec: vf.querySelector('.vf-rec'),
       count: vf.querySelector('.vf-count'),
       flash: $('photoFlash'),
       card: $('photoCard'),
@@ -39,8 +41,9 @@ export class Viewfinder {
     apply(value)
   }
 
-  update(dt) {
+  update(realDt) {
     const G = this.G
+    const dt = G.paused ? 0 : realDt
     const W = G.weapons
     const P = G.photos
     const p = G.player
@@ -77,6 +80,11 @@ export class Viewfinder {
       const z = W.zoomFactor()
       this.set('zoom', `${z.toFixed(1)}× <small>${raised ? 'wheel: zoom' : 'RMB: raise'}</small>`, (v) => (el.zoom.innerHTML = v))
       this.set('count', `${P.count}/${Object.keys(G.species).length} species`, (v) => (el.count.textContent = v))
+      // the shutter cooldown: a press now only clicks
+      this.set('wind', P.cool > 0, (v) => {
+        el.rec.textContent = v ? '◌ WINDING ON' : '● FIELD CAMERA'
+        el.rec.classList.toggle('wind', v)
+      })
     }
 
     // shutter: flash and the polaroid
@@ -95,6 +103,7 @@ export class Viewfinder {
     }
     this.flashT = Math.max(0, this.flashT - dt * 4)
     this.cardT = Math.max(0, this.cardT - dt)
+    if (raised && P.cool <= 0) this.cardT = 0 // framing the next shot
     this.set('flash', this.flashT.toFixed(2), (v) => (el.flash.style.opacity = (v * 0.85).toFixed(2)))
     this.set('card', this.cardT > 0, (v) => el.card.classList.toggle('show', v))
   }

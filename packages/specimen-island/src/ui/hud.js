@@ -1,4 +1,3 @@
-import { WEAPONS } from '../data/weapons.js'
 import { VEHICLE_FX } from '../data/vehicles.js'
 import { clamp, wrapAngle, yawTo, formatTime } from '../core/mathx.js'
 import { doseReadout } from './dose.js'
@@ -299,7 +298,7 @@ export class HUD {
       const pend = (c.rec.pending / L) * 100
       const ko = (sp.ko / L) * 100
       html += `<div class="sedbar"><i style="width:${cur.toFixed(1)}%"></i><u style="left:${cur.toFixed(1)}%;width:${pend.toFixed(1)}%"></u><b style="left:${ko.toFixed(1)}%"></b></div>`
-      html += doseReadout(sp, v.state, c.rec.sedative, c.rec.pending)
+      html += doseReadout(c.sp, v.state, c.rec.sedative, c.rec.pending, hit.zone)
         .map((l) => `<div class="dose">${l.warn ? `<span class="bad">${l.text}</span>` : l.text}</div>`)
         .join('')
     } else if (!known) html += `<div class="dose">Scan [1] to learn its tolerances</div>`
