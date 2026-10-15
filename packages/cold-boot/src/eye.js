@@ -1,15 +1,19 @@
 // The inset shown during DDR5 training. Two views:
 //
 // 'eye'   — behind: an oscilloscope persistence view of many bits overlaid on
-//           one unit interval (UI = 178.6 ps at DDR5-5600). In front: the
-//           training sweep the way memory reference code does it — a 1-D scan
+//           one unit interval (UI = 178.6 ps at DDR5-5600). In front: a
+//           training sweep in the style of memory reference code — a 1-D scan
 //           of strobe delay at nominal Vref finds the left/right edges, a Vref
-//           scan at that centre finds top/bottom, a 2-D raster maps the
-//           contour, and the setting is parked in the middle. Each point is a
-//           burst of hardware-generated test traffic: pass or fail. The small
-//           rectangle is JEDEC's minimum DDR5-5600 eye at the DRAM receiver
-//           (0.235 UI × 60 mV), which the trained point must leave room for.
-//           The eye's shape is illustrative, not a measurement.
+//           scan at that centre finds top/bottom (1-D scans as in the open
+//           Haswell code), then a 2-D raster maps the contour (Intel's MRC
+//           has 2-D centering steps, but their algorithm isn't public; the
+//           raster is illustrative), and the setting is parked in the middle.
+//           Each point is a burst of hardware-generated test traffic: pass or
+//           fail. The small dashed diamond is JEDEC's DDR5-5600 Rx
+//           stressed-eye mask at the DRAM receiver (0.235 UI × 60 mV, at the
+//           slicer after DFE), so it is drawn on the write eye only; the
+//           trained point must leave room for it. The eye's shape is
+//           illustrative, not a measurement.
 //
 // 'flyby' — write leveling: the clock and command bus visit the DRAM chips of
 //           a DIMM one after another ("fly-by"), so each chip sees its clock
@@ -140,17 +144,26 @@ export function drawEye(canvas, spec, p, time) {
     g.lineWidth = 1.5
     g.strokeRect(X(0) + cur[0] * cw, Y(1) + (ROWS - 1 - cur[1]) * ch, cw, ch)
   }
-  // trained centre + the JEDEC minimum eye that must fit around it
+  // trained centre (+ on writes, the JEDEC Rx stressed-eye diamond that must fit around it)
   if (p > 0.85) {
     const a = smoothstep(0.85, 0.93, p)
     const x = X(cx)
     const y = Y(cy)
     const mw = 0.235 * pw
     const mh = (60 / 260) * ph // ±130 mV window
-    g.strokeStyle = `rgba(255, 255, 255, ${0.8 * a})`
-    g.setLineDash([3, 3])
-    g.strokeRect(x - mw / 2, y - mh / 2, mw, mh)
-    g.setLineDash([])
+    if (spec.kind === 'write') {
+      // JEDEC's Rx stressed-eye mask is for the DRAM receiver, i.e. writes
+      g.strokeStyle = `rgba(255, 255, 255, ${0.8 * a})`
+      g.setLineDash([3, 3])
+      g.beginPath()
+      g.moveTo(x - mw / 2, y)
+      g.lineTo(x, y - mh / 2)
+      g.lineTo(x + mw / 2, y)
+      g.lineTo(x, y + mh / 2)
+      g.closePath()
+      g.stroke()
+      g.setLineDash([])
+    }
     g.strokeStyle = `rgba(255, 207, 107, ${a})`
     g.lineWidth = 2
     g.beginPath()
@@ -165,7 +178,7 @@ export function drawEye(canvas, spec, p, time) {
     g.fillText('centre → saved', Math.min(W - 112, x + mw / 2 + 6), y - 6)
     g.fillStyle = `rgba(255, 255, 255, ${0.7 * a})`
     g.font = '10.5px ui-monospace, Menlo, monospace'
-    g.fillText('JEDEC min eye', Math.min(W - 98, x + mw / 2 + 6), y + 14)
+    if (spec.kind === 'write') g.fillText('JEDEC min eye', Math.min(W - 98, x + mw / 2 + 6), y + 14)
   }
   // phase caption
   g.fillStyle = 'rgba(200,210,235,0.85)'

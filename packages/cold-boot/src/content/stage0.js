@@ -62,14 +62,15 @@ export const STAGE0 = [
     stage: 0,
     title: 'Press',
     dur: 8,
-    real: 0.02,
+    real: 0.08,
     mode: 'off',
     shot: 'standby',
     narration: [
-      'Pressing the button just pulls a wire to ground. The Super I/O passes it on to the chipset’s <code>PWRBTN#</code> pin, which by default waits out a 16 ms debounce in case it was a glitch.',
+      'Pressing the button just pulls a wire to ground. The Super I/O has its own debounce filter (62 ms by default on a Nuvoton NCT6796D), then passes the press to the chipset’s <code>PWRBTN#</code> pin, which by default waits out a further 16 ms in case it was a glitch.',
       'Satisfied, the PMC leaves S5 by releasing its sleep signals (<code>SLP_S5#</code>, <code>SLP_S4#</code>, <code>SLP_S3#</code>). The Super I/O turns <code>SLP_S3#</code> into <code>PS_ON#</code> — the green wire in the 24-pin cable that tells the power supply to switch on.',
     ],
     facts: [
+      ['Super I/O filter', '62.4 ms default on PSIN# (NCT6796D; delay inferred)'],
       ['Debounce', '16 ms on PWRBTN# (PCH datasheet)'],
       ['SLP_S3# → PS_ON#', '0–200 ns on a Nuvoton NCT6796D'],
     ],
@@ -89,7 +90,7 @@ export const STAGE0 = [
       A.bus('siopch', win(p, 0.55, 0.75), ACT.power, { rate: 10, speed: 12, dir: -1 })
       A.bus('pson', win(p, 0.65, 1), ACT.power, { rate: 14, speed: 40 })
     },
-    labels: [{ id: 'fpanel', hot: true, to: 0.45 }, { id: 'sio', text: 'Super I/O → PWRBTN#, then PS_ON#' }, { id: 'pch', text: 'PMC: 16 ms debounce, leave S5', from: 0.25 }, { id: 'atx24', text: 'PS_ON# low → PSU on', from: 0.7 }],
+    labels: [{ id: 'fpanel', hot: true, to: 0.45 }, { id: 'sio', text: 'Super I/O: debounce → PWRBTN#, then PS_ON#' }, { id: 'pch', text: 'PMC: 16 ms debounce, leave S5', from: 0.25 }, { id: 'atx24', text: 'PS_ON# low → PSU on', from: 0.7 }],
   },
   {
     stage: 0,
@@ -99,12 +100,12 @@ export const STAGE0 = [
     mode: 'off',
     shot: 'power',
     narration: [
-      'The supply ramps +12 V, +5 V and +3.3 V — then deliberately waits. <code>PWR_OK</code> may only rise 100–250 ms after the rails are in regulation: the PSU’s promise that the power is stable. It is the longest single wait before the CPU runs anything.',
+      'The supply ramps +12 V, +5 V and +3.3 V — then deliberately waits. On a current ATX supply, <code>PWR_OK</code> — the PSU’s promise that the power is stable — rises 100–250 ms after the rails are in regulation (pre-2020 designs: up to 500 ms). It is the longest single wait before the CPU runs anything.',
       'The motherboard’s regulators turn 12 V into the processor’s own rails. The big multi-phase core regulator will take its voltage orders from the CPU itself over a three-wire bus called SVID. DIMMs, the GPU and the SSD get power too, but are held in reset.',
     ],
     facts: [
       ['PSU power-on (T1)', '< 200 ms (ATX 3 required)'],
-      ['PWR_OK delay (T3)', '100–250 ms after rails are good'],
+      ['PWR_OK delay (T3)', '100–250 ms after rails are good (ATX 3 required)'],
       ['CPU rails', 'VccCORE, VccGT (SVID), VccIN_AUX, VDD2 (memory controller), 1.05 V sustain'],
     ],
     regs: (p) => signals(p, 2),
@@ -141,9 +142,9 @@ export const STAGE0 = [
     shot: 'pch',
     narration: [
       'Inside the chipset sits another processor: the <em>Converged Security and Management Engine</em>, a 32-bit core “based on Intel 486 architecture” with its own SRAM and an unchangeable boot ROM. It starts climbing its own ladder — from reset into protected mode with paging — before the main CPU executes anything.',
-      'Its ROM pulls signed firmware out of the CSME region of the same SPI flash chip that holds the BIOS, patches the chipset’s power controller, and sets up the clocks, including the 100 MHz reference clock the CPU will run from. The CPU stays in reset until this engine tells the PMC the host may boot.',
+      'Its ROM pulls signed firmware out of the CSME region of the same SPI flash chip that holds the BIOS, and that firmware patches the chipset’s power controller and sets up the clocks, including the 100 MHz reference clock the CPU will run from. The CPU stays in reset until this engine tells the PMC the host may boot.',
     ],
-    note: { tag: 'In parallel', html: 'The CSME works while the power supply is still proving itself; the clock here adds them up one after the other, so treat it as ± a few hundred ms. Intel’s own telemetry on Alder Lake laptops: CSME ROM start → “Host BIOS Prep Done” ≈ 80–90 ms; → CPU reset acknowledged ≈ 240–280 ms.' },
+    note: { tag: 'In parallel', html: 'The CSME works while the power supply is still proving itself; the clock here adds them up one after the other, so treat it as ± a few hundred ms. Intel’s own telemetry on Alder Lake Chromebooks: CSME ROM start → “Host BIOS Prep Done” ≈ 50–90 ms; → “CPU Reset Done Ack” ≈ 170–280 ms.' },
     facts: [
       ['CSME core', '32-bit, 486-class, 512 KB–1.9 MB SRAM'],
       ['Firmware', 'CSME region of the SPI flash'],
@@ -173,13 +174,14 @@ export const STAGE0 = [
     shot: [[0, 'socket'], [0.38, 'die']],
     narration: [
       'Every supply reports good. The chipset raises <code>CPUPWRGD</code> and releases <code>PLTRST#</code>, the platform reset — which also reaches the GPU and SSD as PCIe <code>PERST#</code>, after their guaranteed 100 ms of stable power.',
-      'Inside the CPU, its power-control firmware brings up clocks and voltages and every core runs its reset microcode. Then one hardware thread becomes the <em>bootstrap processor</em> (BSP). The other 31 halt in <em>wait-for-SIPI</em>: powered, listening, and executing nothing until software sends them a start-up message.',
+      'Inside the CPU, in steps Intel doesn’t publish, its power-control firmware brings up clocks and voltages and every core runs its reset microcode. Then one hardware thread becomes the <em>bootstrap processor</em> (BSP). The other 31 halt in <em>wait-for-SIPI</em>: powered, listening, and executing nothing until software sends them a start-up message.',
     ],
     note: { tag: 'Which thread?', html: 'On modern Intel parts the BSP is picked by a platform-specific mix of hardware and configuration (SDM §11.4). Linux’s CPU 0 on Alder/Raptor Lake is a P-core thread; which <em>physical</em> P-core it is isn’t documented, so the one lit here is illustrative.' },
     facts: [
       ['Logical processors', '8 P-cores × 2 threads + 16 E-cores = 32'],
       ['BSP', '1 (IA32_APIC_BASE bit 8 set)'],
       ['APs', '31, in wait-for-SIPI'],
+      ['Duration', 'unpublished; the clock’s 50 ms is an estimate'],
     ],
     regs: (p) => signals(p, 4),
     sources: [SRC.pchds, SRC.sdm, SRC.rplds],
@@ -208,12 +210,12 @@ export const STAGE0 = [
     inset: { shot: 'die', label: 'ON THE DIE' },
     narration: [
       'Before running a single BIOS instruction, the BSP’s microcode reads a pointer stored 64 bytes below the 4 GiB mark (<code>FFFFFFC0</code>) to find the <em>Firmware Interface Table</em> in flash.',
-      'The table lists microcode updates. The CPU loads the newest one that matches and applies it to every thread in the package — every boot, because a microcode update “is cleared from the processor upon a hard reset”. The chip you bought is being patched by the flash chip before it runs anything.',
+      'The table lists microcode updates. The CPU loads the newest one that matches and applies it to every thread in the package — every boot, because “the effects of a loaded update are cleared from the processor upon a hard reset”. The chip you bought is being patched by the flash chip before it runs anything.',
     ],
     facts: [
       ['FIT pointer', 'FFFFFFC0h (4 GiB − 40h)'],
       ['Microcode', 'type-1 FIT entry; RPL-S B0 = 06-b7-01, ≈241 KB'],
-      ['Reset acknowledged → first BIOS code', '49–89 ms on Alder Lake laptops (what fills it isn’t documented)'],
+      ['Reset acknowledged → first BIOS code', '28–89 ms on Alder Lake Chromebooks (what fills it isn’t documented)'],
     ],
     regs: { title: 'Top of the 4 GiB address space', note: 'all of it is the flash chip', rows: [['FFFFFFFC', 'CBFS header pointer (coreboot)', 'wide'], ['FFFFFFF0', 'reset vector (16 bytes)', 'wide'], ['FFFFFFC0', 'FIT pointer — same 64-byte line', 'wide hot'], ['FFFF0000–FFFFFFFF', 'top 64 KiB: real-mode reach', 'wide'], ['FF000000–FFFFFFFF', '16 MiB BIOS decode window', 'wide']] },
     mem: { on: ['flash', 'lapic'], hit: ['flash'], note: 'no DRAM, no cache' },
@@ -246,16 +248,16 @@ export const STAGE0 = [
     mode: 'prot',
     shot: 'dieLeft',
     narration: [
-      'On PCs with <em>Intel Boot Guard</em> provisioned, the FIT also lists an Intel-signed <em>Startup ACM</em>, and the CPU runs it before the reset vector — from inside its own cache, in what is believed to be 32-bit protected mode. So on those machines the first x86 code to run isn’t 16-bit at all: the “386” runs before the “8086”.',
-      'The ACM checks the PC maker’s key manifest against a key hash fused into the chipset, then hashes the BIOS’s Initial Boot Block before letting it execute. It leaves that boot block sitting in cache, in the same No-Eviction Mode that comes back in Stage 2.',
+      'If the FIT also lists an Intel-signed <em>Startup ACM</em> (as on every <em>Intel Boot Guard</em> PC), the CPU runs it before the reset vector — from inside its own cache, in what is believed to be 32-bit protected mode. So on those machines the first x86 code to run isn’t 16-bit at all: the “386” runs before the “8086”.',
+      'With Boot Guard provisioned, the ACM checks the PC maker’s key manifest against a key hash fused into the chipset, then hashes the BIOS’s Initial Boot Block before letting it execute. It leaves that boot block sitting in cache, in the same No-Eviction Mode that comes back in Stage 2.',
     ],
-    note: { tag: 'Not every PC', html: 'Boot Guard has to be provisioned — fused — by the PC or board maker, and whether it is varies by vendor and model. Without a Startup ACM to run, the BSP goes straight to the reset vector.' },
+    note: { tag: 'Not every PC', html: 'This step happens only if the FIT lists a Startup ACM, which Boot Guard (fused in by the PC maker) requires. MSI’s PRO Z790-P WIFI BIOS (7E06vAK) lists none, so on that board the BSP goes straight to the reset vector; this step and its estimated 10 ms never happen.' },
     facts: [
       ['FIT type', '0x02 Startup ACM, 0x0B Key Manifest, 0x0C Boot Policy Manifest'],
       ['Runs in', 'cache (“AC RAM”); 32-bit protected mode, paging off (believed — not documented for the reset-time launch)'],
       ['Leaves behind', 'MSR 0x13A bit 0 = NEM enabled'],
     ],
-    mem: { on: ['flash', 'lapic', 'car'], hit: ['car', 'flash'], note: 'Boot Guard only' },
+    mem: { on: ['flash', 'lapic', 'car'], hit: ['car', 'flash'], note: 'only with a Startup ACM' },
     sources: [SRC.fit, SRC.txt, SRC.ermolov, SRC.csme],
     lps: () => bsp('prot'),
     act(p, A) {

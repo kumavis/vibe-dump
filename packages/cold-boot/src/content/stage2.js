@@ -14,29 +14,45 @@ const LLC = ['llc0', 'llc1', 'llc2', 'llc3', 'llc4', 'llc5', 'llc6', 'llc7', 'll
 const ALL_CORES = ['pcore1', 'pcore2', 'pcore3', 'pcore4', 'pcore5', 'pcore6', 'pcore7', 'ecl0', 'ecl1', 'ecl2', 'ecl3']
 const MEM_PRE = { on: ['flash', 'lapic', 'car'], hit: ['car', 'flash'], note: 'no DRAM yet' }
 
+// Walk a code excerpt in step with the animation: knots are [p, line] pairs and
+// the highlight moves linearly between them, so the line that writes a register
+// lands when regs()/act() show the write.
+function walk(p, knots) {
+  let k = 0
+  while (k < knots.length - 2 && p >= knots[k + 1][0]) k++
+  const [p0, l0] = knots[k]
+  const [p1, l1] = knots[k + 1]
+  return Math.floor(l0 + span(p, p0, p1) * (l1 - l0))
+}
+
 // ---- code excerpts (verbatim, trimmed) -----------------------------------------
 const EARLY_RESET = [
   'check_mtrr:',
   '	/* Use the MTRR default type MSR as a proxy for detecting INIT#.',
-  '	 * Reset the system if any known bits are set in that MSR. */',
+  '	 * Reset the system if any known bits are set in that MSR. That is',
+  '	 * an indication of the CPU not being properly reset. */',
   'check_for_clean_reset:',
   '	movl	$MTRR_DEF_TYPE_MSR, %ecx',
   '	rdmsr',
   '	andl	$(MTRR_DEF_TYPE_EN | MTRR_DEF_TYPE_FIX_EN), %eax',
   '	cmp	$0, %eax',
   '	jnz	warm_reset',
-  '	jmp	*%esp          # "return": the caller put its address in ESP',
+  { i: '	jmp	*%esp', why: '“return”: the caller put its return address in ESP — there is no stack yet' },
 ]
 
 const CAR_MTRR = [
   '	/* Configure default memory type to uncacheable (UC) */',
   '	mov	$MTRR_DEF_TYPE_MSR, %ecx',
   '	rdmsr',
+  '	/* Clear enable bits and set default type to UC. */',
   '	and	$~(MTRR_DEF_TYPE_MASK | MTRR_DEF_TYPE_EN | \\',
   '		 MTRR_DEF_TYPE_FIX_EN), %eax',
   '	wrmsr',
+  '	...',
+  { i: '	find_free_mtrr', why: 'macro: leaves ECX = first free variable MTRR (200h after the wipe)' },
+  '	...',
   '	/* Configure CAR region as write-back (WB) */',
-  '	mov	$CONFIG_DCACHE_RAM_BASE, %eax     # 0xFEF00000',
+  { i: '	mov	$CONFIG_DCACHE_RAM_BASE, %eax', why: 'CONFIG_DCACHE_RAM_BASE = 0xFEF00000 on Alder/Raptor Lake' },
   '	or	$MTRR_TYPE_WRBACK, %eax',
   '	xor	%edx,%edx',
   '	wrmsr',
@@ -58,25 +74,43 @@ const CAR_MTRR = [
 const CAR_ENEM = [
   'car_nem_enhanced:',
   '	/* Disable cache eviction (setup stage) */',
-  '	mov	$MSR_EVICT_CTL, %ecx           # MSR 2E0h',
+  '	mov	$MSR_EVICT_CTL, %ecx',
   '	rdmsr',
   '	or	$0x1, %eax',
   '	wrmsr',
-  '	...                                  # size the LLC, pick data ways',
+  '	...                                  # size the LLC, pick data ways, SF masks',
   '	/* Set MSR 0xC85 L3_Protected_ways = ((1 << data ways) - 1) */',
+  '	mov	%esi, %eax',
+  '	xorl	%edx, %edx',
   '	mov	$IA32_L3_PROTECTED_WAYS, %ecx',
   '	wrmsr',
-  '	movl	$IA32_L3_MASK_1, %ecx            # every way but the data way',
-  '	movl	$IA32_L3_MASK_2, %ecx            # only the data way',
-  '	movl	$IA32_PQR_ASSOC, %ecx',
-  '	movl	$0x02, %edx                      # class of service 2',
+  '	...                                  # EAX = every way but the data way',
+  '	movl	$IA32_L3_MASK_1, %ecx',
+  '	xorl	%edx, %edx',
   '	wrmsr',
-  '	clear_car                            # rep stosl over 768 KiB',
-  '	movl	$IA32_PQR_ASSOC, %ecx',
-  '	movl	$0x01, %edx                      # class of service 1',
+  '	...',
+  '	mov	%esi, %eax',
+  '	movl	$IA32_L3_MASK_2, %ecx',
+  '	xorl	%edx, %edx',
   '	wrmsr',
-  '	/* Enable No-Eviction Mode Run State by setting',
-  '	 * NO_EVICT_MODE MSR 2E0h bit [1] = \'1\'. */',
+  '	...',
+  '	movl	$IA32_PQR_ASSOC, %ecx',
+  '	...',
+  { i: '	movl	$0x02, %edx', why: 'class of service 2: fills may use only the data way' },
+  '	...',
+  '	wrmsr',
+  { i: '	clear_car', why: 'macro: rep stosl of zeros over the 768 KiB window' },
+  '	...',
+  '	movl	$IA32_PQR_ASSOC, %ecx',
+  '	...',
+  { i: '	movl	$0x01, %edx', why: 'class of service 1: every way but the data way' },
+  '	...',
+  '	wrmsr',
+  '	...',
+  '	/*',
+  '	 * Enable No-Eviction Mode Run State by setting',
+  '	 * NO_EVICT_MODE MSR 2E0h bit [1] = \'1\'.',
+  '	 */',
   '	movl	$MSR_EVICT_CTL, %ecx',
   '	rdmsr',
   '	orl	$0x02, %eax',
@@ -93,7 +127,7 @@ const CAR_DONE = [
   '#include <cpu/x86/copy_data_section.inc>',
   'before_carstage:',
   '	post_code(POSTCODE_SOC_BEFORE_CARSTAGE)',
-  '	call	bootblock_c_entry          # the first CALL of the boot',
+  { i: '	call	bootblock_c_entry', why: 'the firmware’s first CALL since the reset vector' },
 ]
 
 const SPD_READ = [
@@ -201,11 +235,15 @@ const RPL_STEPS = [
 const MEMMAP_ART = [
   ' * +---------------------------+ TOUUD',
   ' * |                           |',
+  ' * +---------------------------+ TOM (if mem > 4GB)',
+  ' * | CSME UMA (if mem > 4 GiB) |',
+  ' * +---------------------------+ TOUUD',
+  ' * |                           |',
   ' * +---------------------------+ 4GiB',
   ' * | PCI Address Space         |',
   ' * +---------------------------+ TOM (if mem < 4GB)',
   ' * | CSME UMA (if mem < 4 GiB) |',
-  ' * +---------------------------+ TOLUD',
+  ' * +---------------------------+ TOLUD (also maps into MC address space)',
   ' * | iGD / DSM                 |',
   ' * +---------------------------+ BDSM',
   ' * | GTT / GSM                 |',
@@ -222,45 +260,64 @@ const MEMMAP_ART = [
 
 const EXIT_CAR = [
   '	/* Make sure _cbmem_top_ptr hits dram before invd */',
+  '	...',
   '	clflush	_cbmem_top_ptr',
+  '	...',
   '	/* chipset_teardown_car() is expected to disable cache-as-ram. */',
   '	call	chipset_teardown_car',
-  '	/* Disable MTRRs. */          # (inside chipset_teardown_car)',
+  '	...                          # inside it (soc exit_car.S):',
+  '	/* Disable MTRRs. */',
+  '	...',
   '	/* invalidate cache contents. */',
   '	invd',
   '	/* Knock down bit 1 then bit 0 of NEM control not combining steps. */',
+  '	mov	$(MSR_EVICT_CTL), %ecx',
+  '	rdmsr',
   '	and	$(~(1 << 1)), %eax',
   '	wrmsr',
   '	and	$(~(1 << 0)), %eax',
   '	wrmsr',
+  '	...                          # CLOS 0, C85h = 0, return',
   '	/* Enable caching if not already enabled. */',
+  '	...                          # 64-bit build variant',
+  '	mov	%cr0, %eax',
   '	and	$(~(CR0_CD | CR0_NW)), %eax',
   '	mov	%eax, %cr0',
+  '	...',
   '	/* Ensure cache is clean. */',
   '	invd',
-  '	movl	$_estack, %esp       # the stack moves into DRAM',
+  { i: '	movl	$_estack, %esp', why: 'the stack moves into DRAM' },
+  '	...',
   '	call	postcar_mtrr_setup',
+  '	...',
   '	call main',
 ]
 
 const SIPI_VECTOR = [
   '.code16',
+  '.global _start',
   '_start:',
   '	cli',
   '	xorl	%eax, %eax',
   '	movl	%eax, %cr3    /* Invalidate TLB*/',
   '	/* On hyper threaded cpus, invalidating the cache here is',
   '	 * very very bad.  Don\'t. */',
+  '	/* setup the data segment */',
   '	movw	%cs, %ax',
   '	movw	%ax, %ds',
+  '	...',
+  '	movl	$(gdtaddr), %ebx',
+  '	sub	$(_start), %ebx',
   '	lgdtl	(%ebx)',
   '	movl	%cr0, %eax',
   '	andl	$~CR0_CLEAR_FLAGS, %eax',
-  '	orl	$CR0_SET_FLAGS, %eax     # PE=1, CD and NW still set',
+  { i: '	orl	$CR0_SET_FLAGS, %eax', why: 'CR0_SET_FLAGS = PE | CD | NW: protected mode on, caches explicitly kept off' },
   '	movl	%eax, %cr0',
   '	ljmpl	$GDT_CODE_SEG, $1f',
   '1:',
   '	.code32',
+  '	...                         # flat data segments, IDT',
+  '1:',
   '	/* Obtain CPU number. */',
   '	movl	ap_count, %ecx',
   '	inc	%ecx',
@@ -269,11 +326,14 @@ const SIPI_VECTOR = [
   '	/* Setup stacks for each CPU. */',
   '	...                         # microcode check, copy BSP MTRRs',
   '	/* Enable caching. */',
-  '	...',
+  '	...                         # then call into C: ap_init()',
   'halt_jump:',
   '	hlt',
   '	jmp	halt_jump',
 ]
+// coreboot's APs leave for C (ap_init) and stop there; they never come back to
+// halt_jump, so the highlight ends on the line that calls into C.
+const SIPI_C = SIPI_VECTOR.length - 4
 
 // Steps that only run on a first boot (or after a change): on a normal boot
 // the saved results are restored instead, so they take ~no time.
@@ -334,8 +394,8 @@ export const STAGE2 = [
     mode: 'prot',
     shot: 'dieLeft',
     narration: [
-      'The far jump lands in 32-bit flat protected mode: one segment spanning all 4 GiB, base 0. It is a 386 now — but it still has no RAM. The DIMMs are untrained, flash is read-only, and every fetch still crawls in from the SPI chip uncached.',
-      'So the early code is written without a stack. coreboot saves the self-test result and the timestamp counter in <em>MMX registers</em>, and “calls” its sanity checks by first loading the return address into ESP and ending them with <code>jmp *%esp</code>. Here it checks that this was a genuine power-on reset: if the MTRRs were already enabled, something did a warm INIT instead, so it resets the platform properly through port <code>CF9h</code>.',
+      'The far jump lands in 32-bit flat protected mode: one segment spanning all 4 GiB, base 0. It is a 386 now — but it still has no RAM. The DIMMs are untrained, flash is read-only, and — unless a Boot Guard ACM left this code in cache — every fetch crawls in from the SPI chip uncached.',
+      'So the early code is written without a stack. coreboot saves the self-test result and the timestamp counter in <em>MMX registers</em>, and “calls” its sanity checks by first loading the return address into ESP and ending them with <code>jmp *%esp</code>. Here it checks that the CPU really was reset: if the MTRRs were already enabled, something did a warm INIT instead, so it resets the platform properly through port <code>CF9h</code>.',
     ],
     facts: [
       ['Segments', 'flat: base 0, limit 4 GiB, 32-bit'],
@@ -348,7 +408,7 @@ export const STAGE2 = [
     lps: () => bsp('prot'),
     act(p, A) {
       A.die('pcore0', 0.7, '#4fe08a', 'glow')
-      A.die('sub:pcore0:decode|l1i|branch|ucode_opcache', 0.8, ACT.fetch, 'scan')
+      A.die('sub:pcore0:decode|l1i_ctl|branch|ucode_opcache', 0.8, ACT.fetch, 'scan')
       A.ring(0.5, ACT.fetch)
       A.flow('f', 'pcore0', 'dmi', 3, ACT.fetch, 5)
     },
@@ -375,19 +435,19 @@ export const STAGE2 = [
       rows: [
         ['MTRR_DEF_TYPE (2FFh)', p > 0.7 ? 'E=1 · default UC' : 'E=0 · UC', p > 0.7 && p < 0.85 ? 'hot wide' : 'wide'],
         ['PHYSBASE0 (200h)', p > 0.3 ? '00000000_FEF00006 (WB)' : '0', p > 0.3 && p < 0.5 ? 'hot wide' : 'wide'],
-        ['PHYSMASK0 (201h)', p > 0.3 ? '00003FFF_FFF80800 (512 KiB)' : '0', 'wide'],
+        ['PHYSMASK0 (201h)', p > 0.4 ? '00003FFF_FFF80800 (512 KiB)' : '0', 'wide'],
         ['PHYSBASE1 (202h)', p > 0.5 ? '00000000_FEF80006 (WB)' : '0', p > 0.5 && p < 0.7 ? 'hot wide' : 'wide'],
         ['PHYSMASK1 (203h)', p > 0.5 ? '00003FFF_FFFC0800 (256 KiB)' : '0', 'wide'],
         ['CR0', p > 0.85 ? '…CD=0 NW=0 (caches on)' : '60000011 (CD=1 NW=1)', p > 0.85 ? 'hot wide' : 'wide'],
       ],
     }),
-    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_MTRR, at: (p) => Math.min(CAR_MTRR.length - 1, Math.floor(span(p, 0.05, 0.95) * CAR_MTRR.length)) },
+    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_MTRR, at: (p) => Math.min(CAR_MTRR.length - 1, walk(p, [[0.05, 0], [0.3, 14], [0.4, 17], [0.62, 18], [0.7, 22], [0.85, 27]])) },
     mem: { on: ['flash', 'lapic', 'car'], hit: ['car'], note: 'a window with nothing behind it' },
     sources: [SRC.adlKconfig, SRC.sdm],
     lps: () => bsp('prot'),
     act(p, A) {
       A.die('pcore0', 0.7, '#4fe08a', 'glow')
-      A.die('sub:pcore0:decode|l1i|branch|ucode_opcache', 0.6, ACT.fetch, 'scan')
+      A.die('sub:pcore0:decode|l1i_ctl|branch|ucode_opcache', 0.6, ACT.fetch, 'scan')
       const on = span(p, 0.85, 1)
       for (const id of LLC) A.die(id, 0.12 + on * 0.15, ACT.car, 'breathe')
       A.die('sub:pcore0:l1d|l2', 0.2 + on * 0.3, ACT.car, 'breathe')
@@ -415,15 +475,16 @@ export const STAGE2 = [
       title: 'MSRs written, in order',
       note: 'most are model-specific, not in the SDM',
       rows: [
-        ['2E0h NEM', p > 0.85 ? 'setup + RUN' : p > 0.05 ? 'setup' : '0', p > 0.05 && p < 0.2 ? 'hot' : p > 0.85 ? 'hot' : ''],
-        ['C85h L3 protected ways', p > 0.2 ? '0x001' : '—', p > 0.2 && p < 0.35 ? 'hot' : ''],
-        ['C91h L3 mask 1', p > 0.3 ? '0xFFE (code ways)' : '—'],
-        ['C92h L3 mask 2', p > 0.3 ? '0x001 (data way)' : '—'],
-        ['C8Fh PQR_ASSOC', p > 0.75 ? 'CLOS 1' : p > 0.4 ? 'CLOS 2 (fill)' : '—', p > 0.4 && p < 0.8 ? 'hot' : ''],
+        ['2E0h NEM', p > 0.85 ? 'setup + RUN' : p > 0.05 ? 'setup' : '0', p > 0.05 && p < 0.12 ? 'hot' : p > 0.85 ? 'hot' : ''],
+        ['1892h / 1891h SF masks', p > 0.12 ? '0x001 · other snoop-filter ways' : '—', p > 0.12 && p < 0.2 ? 'hot' : ''],
+        ['C85h L3 protected ways', p > 0.2 ? '0x001' : '—', p > 0.2 && p < 0.27 ? 'hot' : ''],
+        ['C91h L3 mask 1', p > 0.27 ? '0xFFE (code ways)' : '—', p > 0.27 && p < 0.33 ? 'hot' : ''],
+        ['C92h L3 mask 2', p > 0.33 ? '0x001 (data way)' : '—', p > 0.33 && p < 0.4 ? 'hot' : ''],
+        ['C8Fh PQR_ASSOC', p > 0.78 ? 'CLOS 1' : p > 0.4 ? 'CLOS 2 (fill)' : '—', p > 0.4 && p < 0.8 ? 'hot' : ''],
         ['lines filled', `${Math.floor(span(p, 0.42, 0.75) * 12288).toLocaleString('en-US')} / 12,288`, p > 0.42 && p < 0.76 ? 'hot' : ''],
       ],
     }),
-    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_ENEM, at: (p) => Math.min(CAR_ENEM.length - 1, Math.floor(span(p, 0.05, 0.95) * CAR_ENEM.length)) },
+    code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_ENEM, at: (p) => Math.min(CAR_ENEM.length - 1, walk(p, [[0, 0], [0.05, 5], [0.08, 6], [0.16, 7], [0.2, 11], [0.23, 12], [0.27, 15], [0.33, 20], [0.4, 26], [0.42, 27], [0.75, 28], [0.78, 33], [0.8, 34], [0.85, 42]])) },
     mem: { on: ['flash', 'lapic', 'car'], hit: ['car'], note: 'cache pinned as RAM' },
     sources: [SRC.adlKconfig, SRC.sdm],
     lps: () => bsp('prot'),
@@ -451,13 +512,13 @@ export const STAGE2 = [
     mode: 'prot',
     shot: 'dieLeft',
     narration: [
-      'Now there is RAM — 768 KiB of it, made of cache. The stack pointer is set to the top of the window and, for the first time since the button was pressed, the CPU executes a <code>call</code>. From here on it is C.',
-      'The first C code marks the BIOS region of flash <em>write-protect</em> cacheable, so code finally stops crawling in a line at a time: it streams into the eleven free L3 ways and can be dropped and refetched at will. Everything before memory exists now lives on this borrowed stack — coreboot’s bootblock and romstage, or UEFI’s SEC and PEI, and Intel’s memory-training code, which alone wants half a megabyte of stack.',
+      'Now there is RAM — 768 KiB of it, made of cache. The stack pointer is set to the top of its 544 KiB slice of the window and, for the first time since the reset vector, the CPU executes a <code>call</code>. From here on it is C.',
+      'The first C code marks the BIOS region of flash <em>write-protect</em> cacheable, so code finally stops crawling in a line at a time: it streams into the eleven free L3 ways and can be dropped and refetched at will. Everything before memory exists now lives on this borrowed stack — coreboot’s bootblock and romstage, or UEFI’s SEC and PEI, and Intel’s memory-training code, which needs at least 284 KB of stack (coreboot budgets 512 KiB).',
     ],
     facts: [
       ['CAR budget (coreboot ADL/RPL)', '544 KiB stack · 128 KiB FSP-M heap · console, timestamps, caches'],
       ['Code', 'executes in place from flash, cached WP'],
-      ['Time on a warm boot', 'FSP-M with saved training ≈ 46–105 ms (Meteor Lake Chromebook)'],
+      ['Time on a normal boot', 'FSP-M with saved training ≈ 46–105 ms (Meteor Lake Chromebook)'],
     ],
     code: { src: 'coreboot …/car/cache_as_ram.S', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/soc/intel/common/block/cpu/car/cache_as_ram.S', lines: CAR_DONE, at: (p) => Math.min(CAR_DONE.length - 1, Math.floor(span(p, 0.05, 0.6) * CAR_DONE.length)) },
     mem: MEM_PRE,
@@ -726,7 +787,7 @@ export const STAGE2 = [
     shot: 'memory',
     narration: [
       'Memory works. The training data is written to flash (skipped if it hasn’t changed), and the memory controller’s map is programmed: DRAM from address 0 up to <em>TOLUD</em>, then a hole below 4 GiB for device registers and PCIe — with the DRAM that would have sat in the hole remapped above 4 GiB, up to <em>TOUUD</em>.',
-      'Slices are fenced off before anyone else can see them: <em>TSEG</em> for System Management Mode, stolen memory for the integrated GPU, a region for the security engine, protected ranges for DMA and SGX. Each region gets its memory type when the MTRRs are rewritten.',
+      'Slices are fenced off before anyone else can see them: <em>TSEG</em> for System Management Mode, stolen memory for the integrated GPU, a region for the security engine, protected ranges for DMA and for the cores’ C6 save area (PRMRR; this chip has no SGX). Each region gets its memory type when the MTRRs are rewritten.',
     ],
     facts: [
       ['Host-bridge registers', 'TOLUD BCh · TOUUD A8h · TSEG B8h · BDSM B0h'],
@@ -761,10 +822,10 @@ export const STAGE2 = [
       'Time to give the cache back. Everything worth keeping — logs, timestamps, the next stage’s code — has been written into DRAM, which is still mapped uncached, so none of it is sitting only in the cache. Then the firmware does something no normal program ever should: <code>INVD</code>, which throws the entire cache away <em>without</em> writing anything back. The scratch data had no home in memory anyway; writing it back would mean writing to addresses where nothing exists.',
       'Intel’s manual names this exact use: INVD for when “the cache is used as temporary memory”. The No-Eviction bits are cleared (run first, then setup), the way masks released, and the stack pointer leaps from the cache window into real DRAM. The cache goes back to its day job.',
     ],
-    note: { tag: 'Boot Guard', html: 'On Boot Guard systems this teardown is a security moment: once the verified code is no longer pinned in cache it would be re-read from flash, which can be swapped after verification. EDK2 therefore migrates firmware volumes into DRAM before tearing NEM down.' },
+    note: { tag: 'Boot Guard', html: 'On Boot Guard systems this teardown is a security moment: once the verified code is no longer pinned in cache it would be re-read from flash, which can be swapped after verification. EDK2 can migrate firmware volumes into DRAM before tearing NEM down, but only if the platform turns it on (PcdMigrateTemporaryRamFirmwareVolumes is off by default).' },
     facts: [
       ['INVD vs WBINVD', 'discard vs write back — writing back 768 KiB to nowhere is pointless or harmful'],
-      ['New MTRRs', 'DRAM write-back · flash write-protect · TSEG'],
+      ['New MTRRs', 'write-back: TSEG + the 32 MiB below cbmem_top · flash write-protect'],
     ],
     code: { src: 'coreboot exit_car.S (arch + soc)', href: 'https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/main/src/arch/x86/exit_car.S', lines: EXIT_CAR, at: (p) => Math.min(EXIT_CAR.length - 1, Math.floor(span(p, 0.05, 0.95) * EXIT_CAR.length)) },
     mem: (() => ({ on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['dram'], note: 'CAR gone' }))(),
@@ -793,15 +854,15 @@ export const STAGE2 = [
     shot: 'die',
     narration: [
       'With DRAM up — and before any PCIe work — the firmware wakes the other 31 hardware threads for the first time. The BSP writes its Local APIC’s Interrupt Command Register: an INIT and then a single <em>Start-up IPI</em> to “all excluding self”, carrying a page number. Every AP starts at once in 16-bit real mode at that page — coreboot uses vector 30h, so <code>CS = 3000h, IP = 0</code>: physical 30000h, in freshly trained DRAM.',
-      'Each climbs the ladder in a dozen instructions, takes a ticket for its own stack with one <code>lock cmpxchg</code>, checks its microcode (already loaded for every thread by the FIT, so usually a no-op), copies the BSP’s MTRRs, turns its caches on, reports its APIC ID and core type, and parks in <code>hlt</code>. In a typical UEFI BIOS this first wake is from 32-bit PEI, so they only climb to protected mode.',
+      'Each climbs the ladder in a dozen instructions, takes a ticket for its own stack with one <code>lock cmpxchg</code>, checks its microcode (already loaded for every thread by the FIT, so usually a no-op), copies the BSP’s MTRRs, turns its caches on, reports its APIC ID and core type, and parks — by default in <code>hlt</code> under EDK2; coreboot first has it relocate its SMM base, then spin waiting for work. In a typical UEFI BIOS this first wake comes from 32-bit PEI — as INIT-SIPI-SIPI, or a bare SIPI under EDK2’s default — so they only climb to protected mode.',
     ],
     note: { tag: 'Thread check', html: 'LaurieWired’s “Stage 4” starts here — before Stage 3’s PCIe and GPU work, not after it. And the APs never touch the reset vector, cache-as-RAM or training: they start at a 4 KiB page below 1 MiB that the BSP filled in.' },
     facts: [
       ['ICR (FEE0_0300h)', 'INIT 000C4500h · SIPI 000C4630h (all-excluding-self, vector 30h)'],
       ['AP entry', 'CS = 3000h, IP = 0 → 30000h (coreboot)'],
-      ['In parallel?', 'yes — one broadcast; EDK2 waits up to 50 ms by default to count them'],
+      ['In parallel?', 'yes — one broadcast; EDK2’s default then waits a fixed 50 ms to count them unless the platform sets its CPU count'],
     ],
-    code: { src: 'coreboot src/cpu/x86/sipi_vector.S', href: SRC.sipi[1], lines: SIPI_VECTOR, at: (p) => Math.min(SIPI_VECTOR.length - 1, Math.floor(span(p, 0.2, 0.9) * SIPI_VECTOR.length)) },
+    code: { src: 'coreboot src/cpu/x86/sipi_vector.S', href: SRC.sipi[1], lines: SIPI_VECTOR, at: (p) => Math.min(SIPI_C, Math.floor(span(p, 0.2, 0.9) * (SIPI_C + 1))) },
     mem: { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['lapic', 'dram'] },
     sources: [SRC.sipi, SRC.mpinit, SRC.mplib, SRC.sdm],
     lps: (p) => wave(p, 0.18, 0.9, ['real', 'prot', 'park'], { before: 'wfs', bspMode: 'prot', spread: 0.35 }),
@@ -830,7 +891,7 @@ export const STAGE2 = [
       '<em>System Management Mode</em> is a hidden CPU mode with its own walled-off slice of DRAM, TSEG, carved out a moment ago. An SMI drops a thread into it, and every thread starts out assuming its SMM area is at <code>30000h</code> — so if two took an SMI at once they would trample each other’s saved state. The BSP therefore sends each of the other 31 threads an SMI, one after another, and has each move its base to a private tile; then it does itself.',
       'Entering SMM clears CR0’s PE and PG bits, putting the thread in an environment “similar to real-address mode”; this relocation handler climbs straight back to 32-bit protected mode. Once DXE has installed the 64-bit SMM code, every later SMI climbs all the way to long mode — 1978 to 2003 again, on every SMI, for as long as the machine runs.',
     ],
-    note: { tag: 'When', html: 'Current EDK2 relocates here, at the end of PEI — its SMM CPU driver now refuses to start if this hasn’t happened. Older EDK2 did it in DXE; which one this retail BIOS does isn’t public. coreboot relocates during its own multiprocessor init, and on AMD it simply writes each thread’s SMM_BASE MSR — no SMI needed.' },
+    note: { tag: 'When', html: 'Current EDK2 relocates here in PEI, as soon as the MP services are up — its SMM CPU driver now refuses to start if this hasn’t happened. Older EDK2 did it in DXE; which one this retail BIOS does isn’t public. coreboot relocates during its own multiprocessor init, and on AMD it simply writes each thread’s SMM_BASE MSR — no SMI needed.' },
     facts: [
       ['Default SMBASE', '30000h; handler at SMBASE + 8000h = 38000h'],
       ['TSEG', 'FSP default 4 MiB (16 MiB debug); coreboot ADL/RPL: 8 MiB'],

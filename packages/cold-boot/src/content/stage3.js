@@ -13,22 +13,33 @@ const MEM_RAM = { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['dram'] 
 const ENABLE_PAGING64 = [
   { i: 'cli', era: '8086', why: 'Interrupts off for the switch (SDM §12.8.5.2). DxeIpl has already loaded an IDT in the 64-bit format while still in 32-bit mode, and turned paging off.' },
   { i: 'mov   DWORD [esp], .0', era: '386', why: 'Put the 64-bit landing address on the stack for the far return below — the stack is real DRAM now.' },
-  { i: 'mov   eax, cr4', era: '386', why: '' },
-  { i: 'or    al, (1 << 5)', era: '386', why: 'CR4.PAE: physical address extension (Pentium Pro, 1995) — long mode requires it.' },
-  { i: 'mov   cr4, eax', era: 'P6', why: 'PAE on.' },
+  { i: 'mov   eax, cr4', era: 'P5', why: '' },
+  { i: 'or    al, (1 << 5)', era: '8086', why: 'CR4.PAE: physical address extension (Pentium Pro, 1995) — long mode requires it.' },
+  { i: 'mov   cr4, eax', era: 'P5', why: 'PAE on.' },
   { i: 'mov   ecx, 0xc0000080', era: '386', why: 'IA32_EFER, AMD’s Extended Feature Enable Register.' },
   { i: 'rdmsr', era: 'P5', why: 'Read a model-specific register (Pentium).' },
-  { i: 'or    ah, 1', era: '386', why: 'Bit 8: LME, long-mode enable.' },
-  { i: 'wrmsr', era: 'AMD64', why: 'Long mode is enabled — but not yet active.' },
+  { i: 'or    ah, 1', era: '8086', why: 'Bit 8: LME, long-mode enable.' },
+  { i: 'wrmsr', era: 'P5', why: 'Long mode is enabled — but not yet active.' },
   { i: 'mov   eax, cr0', era: '386', why: '' },
   { i: 'bts   eax, 31', era: '386', why: 'CR0.PG: paging.' },
-  { i: 'mov   cr0, eax', era: 'AMD64', why: 'Paging on with LME set: the CPU sets EFER.LMA. It is now in IA-32e “compatibility mode” — still running 32-bit code, like a 32-bit app on a 64-bit OS.' },
-  { i: 'retf', era: 'AMD64', why: 'A far return pops a code selector whose descriptor has L = 1, D = 0. This is the instant the CPU becomes a true 64-bit AMD64 machine.' },
+  { i: 'mov   cr0, eax', era: '386', why: 'Paging on with LME set: the CPU sets EFER.LMA. It is now in IA-32e “compatibility mode” — still running 32-bit code, like a 32-bit app on a 64-bit OS.' },
+  { i: 'retf', era: '386', why: 'A far return pops a code selector whose descriptor has L = 1, D = 0. This is the instant the CPU becomes a true 64-bit AMD64 machine.' },
+  { i: '.0:', era: '', why: 'The label the second line pushed: the far return lands here.' },
   { i: 'BITS 64', era: '', why: '' },
-  { i: 'mov   rbx, [esp]', era: 'AMD64', why: '64-bit registers: RBX, RCX, RDX, RSP, R8–R15.' },
+  { i: 'mov   rbx, [esp]', era: 'AMD64', why: 'The DXE core’s entry point, read as a full 64-bit value.' },
+  { i: 'mov   rcx, [esp + 8]', era: 'AMD64', why: 'First argument: the HOB list — everything PEI learned, the one thing DXE needs.' },
+  { i: 'mov   rdx, [esp + 0x10]', era: 'AMD64', why: 'Second argument (unused, 0).' },
   { i: 'mov   rsp, [esp + 0x18]', era: 'AMD64', why: 'Switch to the DXE stack.' },
-  { i: 'call  rbx', era: 'AMD64', why: 'Into the DXE core. Apart from trips into System Management Mode, the boot processor stays in 64-bit mode from here into the kernel.' },
+  { i: 'add   rsp, -0x20', era: 'AMD64', why: '32 bytes of “shadow space” the x64 calling convention reserves.' },
+  { i: 'call  rbx', era: 'AMD64', why: 'Into the DXE core. Apart from trips into System Management Mode (and legacy-BIOS thunks, if CSM is on), the boot processor stays in 64-bit mode from here into the kernel.' },
 ]
+
+// Which ENABLE_PAGING64 line the BSP is on at p, and the p at which line k
+// lights. The code panel, registers, mode ladder and die colour all key off
+// these, so they flip together: line 12 (retf) = compatibility mode, 13+ = 64-bit.
+const pagingK = (p) => Math.floor(span(p, 0.05, 0.85) * ENABLE_PAGING64.length)
+const pagingP = (k) => 0.05 + (0.8 * k) / ENABLE_PAGING64.length
+const inLong = (p) => pagingK(p) >= 13
 
 const DISPATCHER = [
   'Step #1 - When a FV protocol is added to the system every driver in the',
@@ -46,12 +57,20 @@ const MPFUNCS = [
   ';RendezvousFunnelProc  procedure follows. All APs execute their procedure.',
   '; ... It must be noted that APs arrive here very raw...ie: real mode, no stack.',
   'BITS 16',
+  '    ...',
   'o32 lgdt       [cs:si]',
   '    mov        eax, cr0                    ; Get control register 0',
   '    or         eax, 000000003h             ; Set PE bit (bit #0) & MP',
   '    mov        cr0, eax',
+  'o32 jmp far    [cs:di]',
   'BITS 32',
   'Flat32Start:                                   ; protected mode entry point',
+  '    ...',
+  '    mov        eax, cr4',
+  '    bts        eax, 5',
+  '    ...',
+  '    mov        cr4, eax',
+  '    ...',
   '    mov        cr3, ecx                    ; Load CR3',
   '    mov        ecx, 0c0000080h             ; EFER MSR number',
   '    rdmsr                                  ; Read EFER',
@@ -60,6 +79,7 @@ const MPFUNCS = [
   '    mov        eax, cr0                    ; Read CR0',
   '    bts        eax, 31                     ; Set PG=1',
   '    mov        cr0, eax                    ; Write CR0',
+  '    ...',
   '    jmp far    [edi]',
   'BITS 64',
   'LongModeStart:',
@@ -79,7 +99,7 @@ const LSPCI = [
   '00:14.0  USB xHCI controller             (PCH, via DMI)',
   '00:16.0  CSME interface (HECI)           (PCH)',
   '00:17.0  SATA controller                 (PCH)',
-  '00:1c.x  PCH PCIe root ports             (PCH)',
+  '00:1a–1d PCH PCIe root ports             (PCH)',
   '00:1f.0  eSPI / LPC bridge               (PCH)',
   '00:1f.3  HD audio                        (PCH)',
   '00:1f.4  SMBus                           (PCH)',
@@ -123,7 +143,8 @@ const EXIT_BS = [
   '		 * The memory map changed between efi_get_memory_map() and',
   '		 * exit_boot_services().  Per the UEFI Spec v2.6, Section 6.4:',
   '		 * EFI_BOOT_SERVICES.ExitBootServices we need to get the',
-  '		 * updated map, and try again.',
+  '		 * updated map, and try again.  The spec implies one retry',
+  '		 * ...',
   '		 */',
   '	...',
   'static void __noreturn enter_kernel(unsigned long kernel_addr,',
@@ -134,7 +155,7 @@ const EXIT_BS = [
 ]
 
 const longRegs = (p) => {
-  const k = Math.floor(span(p, 0.05, 0.85) * ENABLE_PAGING64.length)
+  const k = pagingK(p)
   return {
     title: 'BSP control state',
     note: 'SDM §12.8.5',
@@ -184,32 +205,33 @@ export const STAGE3 = [
     title: 'Into 64 bits: the PEI → DXE hand-off',
     dur: 13,
     real: 0.005,
-    mode: (p) => (p < 0.78 ? 'prot' : 'long'),
+    mode: (p) => (inLong(p) ? 'long' : 'prot'),
     shot: 'dieLeft',
     narration: [
-      'On this platform everything so far — the reset code, cache-as-RAM, DDR5 training, even Intel’s silicon init — ran as 32-bit code. We checked a real retail Z790 BIOS image: every SEC and PEI module is 32-bit x86 except one used only for firmware updates, and all 263 DXE drivers are 64-bit. On a normal boot the CPU flips into long mode once, at the hand-off from PEI to DXE.',
+      'On this platform everything since the reset code left 16-bit real mode — cache-as-RAM, DDR5 training, even Intel’s silicon init — ran as 32-bit code. We checked a real retail Z790 BIOS image: every SEC and PEI module is 32-bit x86 except one used only for firmware updates, and all 263 DXE drivers are 64-bit. On a normal boot the CPU flips into long mode once, at the hand-off from PEI to DXE.',
       'The recipe: build identity-mapped page tables in DRAM (every address maps to itself, so the code flipping the switch keeps running), point CR3 at them, set CR4.PAE, set EFER.LME, then turn on paging. That lands the CPU in <em>compatibility mode</em> — long mode, still running 32-bit code. One far return to a code segment marked L = 1 and it is a 2003 AMD64.',
     ],
-    note: { tag: 'Not universal', html: 'Other designs switch earlier. coreboot runs 64-bit from just after cache-as-RAM — before DRAM exists — on Panther Lake and some Meteor Lake Chromebooks, and Intel ships 64-bit FSP builds starting with Meteor Lake. EDK2’s generic X64 reset vector is in long mode within a few dozen instructions, using page tables stored in flash. On AMD Zen an on-die ARM security processor has trained DRAM before the x86 cores run a single instruction.' },
+    note: { tag: 'Not universal', html: 'Other designs switch earlier. coreboot runs 64-bit from just after cache-as-RAM — before DRAM exists — on Panther Lake and some Meteor Lake Chromebooks, and Intel ships 64-bit FSP builds starting with Meteor Lake. EDK2’s generic X64 reset vector reaches long mode before its first line of C — after a short scan of flash for the SEC core — using page tables stored in flash. On AMD Zen an on-die ARM security processor has trained DRAM before the x86 cores run a single instruction.' },
     facts: [
       ['Measured (MSI Z790, AMI)', 'SEC 4/4 and PEI 100/101 modules 32-bit · DXE 263/263 and SMM 63/63 64-bit'],
-      ['Raptor Lake FSP', 'FSP 2.3, 32-bit API'],
+      ['Raptor Lake FSP', '32-bit API · spec 2.4 in this MSI image (Intel’s public RPL-S release: 2.3)'],
       ['Identity map', 'EDK2: the CPU’s whole physical address width (46 bits on a typical 13900K), 2 MiB or 1 GiB pages, built in DRAM'],
     ],
     regs: longRegs,
-    code: { src: 'EDK2 MdePkg BaseLib Ia32/EnablePaging64.nasm', href: SRC.enablepaging[1], lines: ENABLE_PAGING64, at: (p) => Math.min(ENABLE_PAGING64.length - 1, Math.floor(span(p, 0.05, 0.85) * ENABLE_PAGING64.length)) },
+    code: { src: 'EDK2 MdePkg BaseLib Ia32/EnablePaging64.nasm', href: SRC.enablepaging[1], lines: ENABLE_PAGING64, at: (p) => Math.min(ENABLE_PAGING64.length - 1, pagingK(p)) },
     mem: MEM_RAM,
     sources: [SRC.enablepaging, SRC.dxeipl, SRC.sdm, SRC.msibios, SRC.fspm],
-    lps: (p) => (i) => (i === 0 ? (p < 0.78 ? 'prot' : 'long') : 'park'),
+    lps: (p) => (i) => (i === 0 ? (inLong(p) ? 'long' : 'prot') : 'park'),
     act(p, A) {
-      const jump = span(p, 0.75, 0.85)
-      A.die('pcore0', 0.7 + jump * 0.3, jump > 0.5 ? '#58a6ff' : '#4fe08a', jump > 0 ? 'scan' : 'glow')
+      const k = pagingK(p)
+      const jump = span(p, pagingP(12), pagingP(13))
+      A.die('pcore0', 0.7 + jump * 0.3, k >= 13 ? '#58a6ff' : '#4fe08a', k >= 12 ? 'scan' : 'glow')
       A.die('sub:pcore0:decode|l1i|branch|ucode_opcache', 0.6, '#58a6ff', 'scan')
       A.die('imc0', 0.4, ACT.dram, 'scan')
       A.flow('pt', 'pcore0', 'imc0', 4 * win(p, 0.0, 0.3), ACT.dram, 6)
       A.ring(0.4, ACT.dram)
     },
-    labels: [{ id: 'pcore0', text: 'BSP: compatibility mode → 64-bit', hot: true, color: '#58a6ff', from: 0.6 }],
+    labels: [{ id: 'pcore0', text: 'BSP: compatibility mode → 64-bit', hot: true, color: '#58a6ff', from: pagingP(12) }],
   },
   {
     stage: 3,
@@ -220,8 +242,8 @@ export const STAGE3 = [
     shot: 'fetch',
     inset: { shot: 'bsp', label: 'ONE THREAD DOES THE WORK' },
     narration: [
-      'DXE — the Driver Execution Environment — is a small operating system in its own right: memory allocation, events and timers, boot and runtime services, and a dispatcher that runs each driver as soon as the protocols it depends on appear. Order is emergent, not a fixed list.',
-      'On the MSI board we measured, the main DXE volume is stored LZMA-compressed — 5.5 MB in flash — and inflated into 18.3 MB of DRAM before dispatch: 263 DXE drivers and 63 System Management Mode drivers, from CPU and timer drivers to USB, NVMe, FAT, a network stack, Secure Boot, the setup UI and the board vendor’s overclocking menus.',
+      'DXE — the Driver Execution Environment — is a small operating system in its own right: memory allocation, events and timers, boot and runtime services, and a dispatcher that runs each driver as soon as the protocols it depends on appear. Order is mostly emergent — only a short “apriori” list (14 drivers on this board) runs first, in a fixed order.',
+      'On the MSI board we measured, the main DXE volume is stored LZMA-compressed — 5.5 MB in flash — and inflated into 18.3 MB of DRAM before dispatch: 260 DXE drivers (Intel’s FSP volume adds 3 more) and 63 System Management Mode drivers, from CPU and timer drivers to USB, NVMe, FAT, a network stack, Secure Boot, the setup UI and the board vendor’s overclocking menus.',
       'And it all runs on one thread of one P-core. The UEFI specification defines boot services as uniprocessor: drivers are serviced by polling, and the only interrupt is the boot-services timer.',
     ],
     facts: [
@@ -237,17 +259,19 @@ export const STAGE3 = [
     act(p, A, t) {
       A.die('pcore0', 0.9, '#58a6ff', 'sparkle')
       A.die('sub:pcore0:l1d|l2|load_store|int_exec', 0.6, '#58a6ff', 'sparkle')
-      A.flow('fv', 'dmi', 'pcore0', 5, ACT.fetch, 7)
+      // Drivers load from the inflated copy in DRAM; flash gets only a brief touch.
+      const fv = win(p, 0, 0.15)
+      A.flow('fv', 'dmi', 'pcore0', 5 * fv, ACT.fetch, 7)
       A.flow('ram', 'pcore0', 'imc0', 6, ACT.dram, 7)
       A.flow('ram2', 'pcore0', 'imc1', 4, ACT.dram, 7)
-      A.bus('spi', 0.9, ACT.fetch, { rate: 12, speed: 25, dir: -1 })
-      A.bus('dmi', 0.8, ACT.fetch, { rate: 10, speed: 80, dir: -1 })
-      A.board('spi', 0.8, ACT.fetch, 'scan')
+      A.bus('spi', 0.9 * fv, ACT.fetch, { rate: 12 * fv, speed: 25, dir: -1 })
+      A.bus('dmi', 0.8 * fv, ACT.fetch, { rate: 10 * fv, speed: 80, dir: -1 })
+      A.board('spi', 0.8 * fv, ACT.fetch, 'scan')
       A.bus('ddrA', 0.6, ACT.dram, { rate: 10, speed: 90 })
       A.bus('ddrB', 0.6, ACT.dram, { rate: 10, speed: 90 })
       A.ring(0.6, '#58a6ff')
     },
-    labels: [{ id: 'spi', text: 'DXE volume: 5.5 MB LZMA', hot: true }],
+    labels: [{ id: 'spi', text: 'DXE volume: 5.5 MB LZMA', hot: true, to: 0.3 }],
   },
   {
     stage: 3,
@@ -291,7 +315,7 @@ export const STAGE3 = [
     inset: { shot: 'sa', label: 'ROOT PORTS ON THE DIE' },
     narration: [
       'When the dispatcher runs out of drivers, the boot manager (BDS) starts <em>connecting</em> devices — and connecting the PCI root bridge is what sets the PCI bus driver scanning. Configuration space is reached through a memory window (ECAM): 4 KiB per bus/device/function. Firmware reads the first four bytes of every possible device; all ones — <code>FFFFFFFF</code> — means nobody is home, anything else is a vendor and device ID. Finding a bridge, it hands the link behind it the next free bus number, scans it depth-first, then records the highest bus number found below so future requests route correctly.',
-      'The chipset is invisible here: DMI is transparent to configuration software, so the PCH’s USB, SATA, audio and SPI controllers show up on bus 0 alongside the CPU’s own devices. The links themselves train in hardware — up to 32 GT/s per lane on the CPU’s Gen5 ×16 graphics port — while firmware waits for “link up”: at least 100 ms, and a full second before declaring a device broken. (Intel’s FSP configured the CPU’s root ports back in 32-bit PEI; this finds what is behind them.)',
+      'The chipset is invisible here: DMI is transparent to configuration software, so the PCH’s USB, SATA, audio and SPI controllers show up on bus 0 alongside the CPU’s own devices. The links themselves train in hardware — up to 32 GT/s per lane on the CPU’s Gen5 ×16 graphics port — before this scan begins. The PCIe rule: wait at least 100 ms after a link trains before the first configuration request, and allow a device a full second before declaring it broken. (Intel’s FSP configured the CPU’s root ports back in 32-bit PEI; this finds what is behind them.)',
     ],
     facts: [
       ['ECAM address', 'base + (bus << 20 | dev << 15 | fn << 12 | reg)'],
@@ -330,8 +354,8 @@ export const STAGE3 = [
     mode: 'long',
     shot: 'pcie',
     narration: [
-      'Each device says how much address space it wants through its Base Address Registers, and the trick for asking is lovely: write all ones, read it back. Bits the device can’t change stay zero, and the lowest bit that moved gives the size. (coreboot also writes zeros and XORs the two answers, to find exactly the bits that move.) A GPU answering <code>F000000C</code> wants 256 MiB, 64-bit, prefetchable — or, with Resizable BAR enabled, all of its VRAM in one window above 4 GiB.',
-      'Then the allocator packs every request into the address holes — I/O ports, 32-bit MMIO below 4 GiB, 64-bit prefetchable MMIO above — largest first, programs each bridge’s windows, and switches on memory decoding and bus mastering.',
+      'Each device says how much address space it wants through its Base Address Registers, and the trick for asking is lovely: write all ones, read it back. Address bits below the window’s size stay zero, and the lowest bit that moved gives the size. (coreboot also writes zeros and XORs the two answers, to find exactly the bits that move.) A GPU answering <code>F000000C</code> wants 256 MiB, 64-bit, prefetchable — or, with Resizable BAR enabled, all of its VRAM in one window above 4 GiB.',
+      'Then the allocator packs every request into the address holes — I/O ports, 32-bit MMIO below 4 GiB, 64-bit prefetchable MMIO above — largest first, programs each bridge’s windows and switches the bridges on. A device’s own bus mastering — its licence to DMA — waits for its driver (in EDK2, its memory decoding does too).',
     ],
     regs: (p) => ({
       title: 'Sizing one BAR (worked example)',
@@ -366,8 +390,8 @@ export const STAGE3 = [
     mode: 'long',
     shot: 'die',
     narration: [
-      'Up to now every instruction came from the board maker’s own flash. The next code to run comes from somewhere else — the graphics card’s ROM — so the firmware locks up first. It signals <em>End of DXE</em>, then installs <em>SMM Ready To Lock</em>: SMRAM is closed and locked until the next reset, and the SMM code stops accepting new handlers.',
-      'The PI specification makes the order a rule: before running any driver or application that isn’t from the platform manufacturer, or connecting a console, the platform signals End of DXE and immediately locks SMM. EDK2 enforces it — an option ROM found during enumeration is <em>deferred</em>, not run, until this moment.',
+      'Up to now every instruction came from the board maker’s own flash. The next code to run comes from somewhere else — the graphics card’s ROM — so the firmware locks up first. It signals <em>End of DXE</em>, then installs <em>SMM Ready To Lock</em>: SMRAM is closed and locked until the next reset, and SMM stops loading new drivers.',
+      'The PI specification asks for this order: before running any driver or application that isn’t from the platform manufacturer, or connecting consoles, the platform should signal End of DXE and immediately install SMM Ready To Lock. EDK2 enforces it — an option ROM found during enumeration is <em>deferred</em>, not run, until this moment.',
     ],
     note: { tag: 'Also around here', html: 'A retail BIOS typically also write-protects its own flash and turns on pre-boot DMA protection. This MSI image carries modules for BIOS Guard, VT-d DMA protection and the CSME hand-off; we checked they are present, not exactly when each one runs. The order shown is EDK2’s reference platform; AMI’s is not public.' },
     facts: [
@@ -438,8 +462,8 @@ export const STAGE3 = [
     mode: 'long',
     shot: 'die',
     narration: [
-      'Before handing over, firmware writes down what it found. ACPI tables: the RSDP points to the XSDT, which lists the rest — the FADT and DSDT (device descriptions in AML bytecode), the <em>MADT</em> with one entry for each of the 32 hardware threads (by convention the boot thread comes first), MCFG saying where ECAM lives, HPET, DMAR for the IOMMU, the boot-performance and boot-logo tables, TPM2.',
-      'SMBIOS describes the board, the processor and each DIMM; the UEFI memory map tells the OS which RAM is free and which it must never touch. Then the firmware is ready to go looking for something to boot.',
+      'Before handing over, firmware writes down what it found. ACPI tables: the RSDP points to the XSDT, which lists the rest — the FADT (which in turn points to the DSDT, device descriptions in AML bytecode), the <em>MADT</em> with one entry for each of the 32 hardware threads (by convention the boot thread comes first), MCFG saying where ECAM lives, HPET, DMAR for the IOMMU, the boot-performance and boot-logo tables, TPM2.',
+      'SMBIOS describes the board, the processor and each DIMM; the UEFI memory map tells the OS which RAM is free and which it must never touch. Most of it is written as drivers load; the boot-logo table waits for ReadyToBoot, once a boot option is picked, and the boot-timing record is stamped right up to ExitBootServices.',
     ],
     facts: [
       ['RSDP signature', '“RSD PTR ” (with the trailing space)'],
@@ -496,7 +520,7 @@ export const STAGE3 = [
     shot: 'die',
     narration: [
       'Linux’s EFI stub — the kernel image pretending to be a UEFI application — decompresses the kernel while firmware services are still available, grabs the final memory map and calls <code>ExitBootServices</code> with that map’s key. If anything allocated memory in between, the firmware refuses and the loader must fetch the map and try again.',
-      'After that the OS owns all memory; firmware keeps only a few runtime services (variables, time, reset). The stub jumps to the kernel’s <code>startup_64</code> with a pointer to its boot parameters in RSI. Apart from brief trips into SMM, the boot processor has stayed in 64-bit mode since DXE began — but the other 31 threads are sitting in a tiny halt loop the firmware copied into reserved memory, waiting to be woken again.',
+      'After that the OS owns all available memory; firmware keeps only a few runtime services (variables, time, reset). The stub jumps to the kernel’s <code>startup_64</code> with a pointer to its boot parameters in RSI. Apart from brief trips into SMM (and legacy-BIOS thunks, if CSM is on), the boot processor has stayed in 64-bit mode since DXE began. The other 31 threads — woken one last time at ExitBootServices (in EDK2) to move there — sit in a tiny halt loop the firmware copied into reserved memory, waiting to be woken again.',
     ],
     note: { tag: 'Thread check', html: '“Hundreds of millions of instructions” for this stage — plausible as a floor, but unmeasured: nobody publishes it. Retail desktops typically spend a few seconds in firmware (Windows shows it as “Last BIOS time”); with turbo-clocked busy-waits the true count could be in the billions.' },
     facts: [
