@@ -42,6 +42,17 @@ export const LORE = {
       'Junction board swapped, needs a proper reseat. Once the relay is up the old collar frequencies come ' +
       'back through — including Matron’s. Bring darts.',
   },
+  keeperCard: {
+    title: 'Keeper’s card — sauropod section',
+    text:
+      'Brachios take a dozen rifle darts and burn them off nearly as fast as you can load. Use the jumbo: walk ' +
+      'up while she browses, put the needle in above a knee and lean on it — it empties the whole cartridge ' +
+      'wherever it goes in. Two drop an adult if the second goes in within twenty seconds of the first. Then ' +
+      'get out from under her feet while it takes.\n\n' +
+      'One cartridge puts down a stego, a trike or an anky; two kill them. It kills anything smaller outright — ' +
+      'never on the paras, the raptors or the little ones.\n\n' +
+      'Spare cartridges are in the lab cold store. No generator, no cold store.',
+  },
   'tower:easttower': {
     title: 'Field notes — East Plains Tower',
     text:

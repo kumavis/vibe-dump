@@ -22,6 +22,9 @@ const MOUTH = { tidal: 35, length: 130, grade: 0.045, widen: 1.2, shoal: 0.35, o
 // models): how far off the centreline it sits, and its body's footprint.
 const WRECK_LOT = { jeep: { off: 6.2, length: 4.4, width: 1.9 }, truck: { off: 7.5, length: 6.0, width: 2.2 } }
 
+// the bearing of a fenced POI's gate from its centre (data/world.js `fence`)
+export const gateAngle = (f) => ((f.gate + 0.5) / f.sides) * Math.PI * 2
+
 // cumulative distance along a polyline of [x, z] points
 function alongOf(pts) {
   const out = new Float32Array(pts.length)
@@ -63,6 +66,7 @@ export class Island {
     this.roads = []
     this.bridges = []
     this.wrecks = []
+    this.lots = {}
     this.river = null
     this.lake = null
 
@@ -71,6 +75,7 @@ export class Island {
     this.carveLake()
     this.placePois()
     this.buildRoads()
+    this.placeLots()
     this.computeSlope()
     this.computeBiomes()
     this.computeDensities()
@@ -518,7 +523,7 @@ export class Island {
       }
       if (p.gate) {
         const f = poi.def.fence
-        const a = ((f.gate + 0.5) / f.sides) * Math.PI * 2
+        const a = gateAngle(f)
         const r = f.radius + 8
         return [poi.x + Math.cos(a) * r, poi.z + Math.sin(a) * r]
       }
@@ -763,6 +768,29 @@ export class Island {
 
         this.cover[id] = clamp(d.fern[id] * 0.85 + d.grass[id] * 0.95 + d.bush[id] * 0.5 + d.reed[id] * 0.85 + d.bigleaf[id] * 0.5, 0, 1)
       }
+    }
+  }
+
+  // Cleared lots beside POIs (cfg.lots): where each stands and which way it
+  // faces, with plants kept off it — before the densities, so undergrowth
+  // too. Prefabs read this.lots[id].
+  placeLots() {
+    for (const def of this.cfg.lots || []) {
+      const poi = this.poi[def.at]
+      const f = poi.def.fence
+      if (!def.gate || !f) continue
+      const ga = gateAngle(f)
+      const r = f.radius + def.out
+      const a = ga + def.along / r
+      const x = poi.x + Math.cos(a) * r
+      const z = poi.z + Math.sin(a) * r
+      // face a point out along the gate's approach, where the road comes from
+      const yaw = Math.atan2(poi.x + Math.cos(ga) * (r + 14) - x, poi.z + Math.sin(ga) * (r + 14) - z)
+      const reach = def.r + 4
+      this.forEachInBox(x - reach, z - reach, x + reach, z + reach, (id, px, pz) => {
+        this.clear[id] = Math.max(this.clear[id], 1 - smoothstep(def.r, reach, Math.hypot(px - x, pz - z)))
+      })
+      this.lots[def.id] = { x, z, yaw, r: def.r }
     }
   }
 

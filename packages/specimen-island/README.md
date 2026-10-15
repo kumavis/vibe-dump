@@ -17,8 +17,9 @@ and animated from data), textures and sound. No assets are downloaded.
 | C | crouch (toggle) — the stealth stance |
 | Mouse, RMB | look, aim (scopes on the rifles) |
 | LMB | fire; hold on an animal with the scanner |
-| 1–6, wheel | scanner, tranq pistol, tranq rifle, hunting rifle, shotgun, Field Camera |
+| 1–7, wheel | scanner, tranq pistol, tranq rifle, hunting rifle, shotgun, Field Camera, jumbo syringe |
 | Field Camera [6] | RMB raises it to the eye, the wheel is then the zoom ring, LMB takes the photo (1 s to wind on) |
+| Jumbo syringe [7] | from the keeper's shed at Paddock C's gate: LMB thrusts the needle into whatever is within reach (under 3 m), emptying one cartridge into it; a miss costs only the swing. The Field Lab's cold store restocks cartridges once the lab has power |
 | R | reload |
 | E (hold) | interact: lockers, ladders, generator, procedures on sedated animals, field repair of a wreck |
 | G / T / H / F | throw stone (distraction) / flare (deterrent) / medkit / flashlight |
@@ -57,14 +58,14 @@ src/
                      and screen, then a frame-time TierController (pure, testable)
   data/              everything a designer touches
     species.js       body plan, temperament, senses, sedation, science values
-    weapons.js       guns, darts, the Field Camera, hit zones, throwables, and
-                     PHOTO (how a photograph is graded)
+    weapons.js       guns, darts, the Field Camera, the jumbo syringe, hit zones,
+                     throwables, and PHOTO (how a photograph is graded)
     vehicles.js      the helicopter's and jeep's tune tables: hull and damage,
                      colliders, feedback, surfaces, spawn, ecology streaming
     encounters.js    guaranteed early herds in sight of the pier and the station
     items.js         inventory caps, start kit, caches, loot tables
     objectives.js    the expedition, as unlock/complete rules
-    world.js         island layout: mountain, river, lake, POIs, roads
+    world.js         island layout: mountain, river, lake, POIs, roads, cleared lots
     lore.js          notes left by the last team (each teaches a system)
   world/
     island.js        heightfield + water + biomes + vegetation density + cover
@@ -73,7 +74,8 @@ src/
     vegetation.js    instanced plants: big-tier LODs and streamed undergrowth,
                      dithered LOD fades, wind sway and parting in the shader
     structures.js    prefabs built with the Kit (merged geometry + colliders +
-                     E actions): dock, station, lab, towers, bridge, wrecks…
+                     E actions): dock, station, lab, towers, keeper's shed,
+                     bridge, wrecks…
     physics.js       heightfield + cylinders + rotated boxes; boxes double as floors
   actors/
     rig.js           species body plan -> bones + one skinned mesh
@@ -102,7 +104,8 @@ src/
     footsteps.js     synthesised footsteps per surface
   ui/
     hud.js           HUD: visibility eye, awareness arcs, target readout, vehicle panel
-    dose.js          dart arithmetic for the target readout and the journal
+    dose.js          dart (and jab) arithmetic for the target readout and the
+                     journal
     viewfinder.js    the camera's frame, focus box, live estimate and polaroid
     map.js journal.js menus.js
 ```
@@ -117,10 +120,12 @@ src/
   counts from it by running `actors/vitals.js` forward); `science.photo` is what
   its best photograph can earn.
 - **Add a weapon:** an entry in `data/weapons.js`; `kind: 'projectile'` darts
-  carry `dose`, `kind: 'hitscan'` bullets carry `damage`, `kind: 'scanner'` and
-  `kind: 'camera'` are the two tools (the camera's grading lives in `PHOTO`).
-  Add a view model in `player/viewmodels.js` and a sound case in
-  `audio/audio.js`.
+  carry `dose`, `kind: 'hitscan'` bullets carry `damage`, `kind: 'melee'`
+  thrusts (the jumbo syringe) inject `dose` into an animal within `reach` and
+  spend their `ammo` only on a hit, `kind: 'scanner'` and `kind: 'camera'` are
+  the two tools (the camera's grading lives in `PHOTO`). Add a view model in
+  `player/viewmodels.js`, a sound case in `audio/audio.js` and a `slotN`
+  binding in `core/input.js`; `ui/dose.js` says a melee syringe's dose in jabs.
 - **Add a vehicle:** subclass `Vehicle` (`vehicles/vehicle.js`) with a tune
   table in `data/vehicles.js` (`kind`, `hull`, `door`, colliders, `load`, …).
   Implement `buildModel()`, `boardLabel()` and `update(dt, input)` — read input
@@ -134,7 +139,9 @@ src/
   stats counters are derived from bus events in `game/state.js`.
 - **Add a building:** write a prefab in `world/structures.js` with the `Kit`
   (boxes become merged geometry and colliders; `kit.interact()` registers E
-  actions) and place it from `buildStructures`, or add a POI in `data/world.js`.
+  actions) and place it from `buildStructures`, or add a POI in `data/world.js`
+  — or, for a small prefab beside one, a cleared lot (`lots`), which keeps the
+  plants off it before anything grows and tells the prefab where to stand.
 - **Add a plant:** a builder plus a `TYPES` row in `world/vegetation.js`, and a
   density grid in `Island.computeDensities` (which also feeds stealth cover).
 
