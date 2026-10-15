@@ -248,7 +248,7 @@ export class UI {
   }
 
   // Per-frame updates.
-  frame({ realT, resetT, lpModes, step, p, time }) {
+  frame({ realT, resetT, lpModes, step, p, time, ctx }) {
     const i = this.tl.i
     if (i !== this.lastStep) {
       this.lastStep = i
@@ -279,7 +279,7 @@ export class UI {
     // registers: static, or a function of progress (values change as the
     // instructions that change them execute)
     if (step.regs) {
-      const R = typeof step.regs === 'function' ? step.regs(p) : step.regs
+      const R = typeof step.regs === 'function' ? step.regs(p, ctx) : step.regs
       const key = JSON.stringify(R)
       if (key !== this.regsKey) {
         const prev = this.regsPrev && this.regsStep === i ? this.regsPrev : null
@@ -332,6 +332,9 @@ export class UI {
   labels(items, camera, w, h) {
     const root = $('#labels')
     const seen = new Set()
+    const right = this.view?.right ?? w
+    const bottom = this.view?.bottom ?? h
+    const placed = []
     for (const it of items) {
       seen.add(it.id)
       let el = this.labelEls.get(it.id)
@@ -342,13 +345,36 @@ export class UI {
         this.labelEls.set(it.id, el)
       }
       if (el.textContent !== it.text) el.textContent = it.text
-      const v = it.pos.clone().project(camera)
-      const vis = v.z < 1 && v.x > -1.1 && v.x < 1.1 && v.y > -1.1 && v.y < 1.1
-      el.style.opacity = vis ? (it.dim ? 0.55 : 1) : 0
-      el.style.left = `${((v.x + 1) / 2) * w}px`
-      el.style.top = `${((1 - v.y) / 2) * h - 10}px`
       el.classList.toggle('hot', !!it.hot)
       if (it.color) el.style.setProperty('--lc', it.color)
+      const v = it.pos.clone().project(camera)
+      const x = ((v.x + 1) / 2) * w
+      const y = ((1 - v.y) / 2) * h - 10
+      const vis = v.z < 1 && x > -20 && x < right + 20 && y > 16 && y < bottom
+      el.style.opacity = vis ? (it.dim ? 0.55 : 1) : 0
+      placed.push({ el, x, y, vis, hot: !!it.hot, bw: el.offsetWidth, bh: el.offsetHeight })
+    }
+    // Keep each box on screen and off its neighbours: hot labels claim their
+    // spot first, the rest slide up out of the way. The leader line stretches
+    // (and leans) so it still ends on the true point.
+    placed.sort((a, b) => b.hot - a.hot || b.y - a.y)
+    const boxes = []
+    for (const L of placed) {
+      const half = L.bw / 2 + 6
+      const cx = Math.max(half, Math.min(right - half, L.x))
+      let top = L.y
+      if (L.vis) {
+        for (let pass = 0; pass < 6; pass++) {
+          const hit = boxes.find((b) => Math.abs(b.cx - cx) < (b.bw + L.bw) / 2 + 4 && top - L.bh < b.top + 2 && b.top - b.bh < top + 2)
+          if (!hit) break
+          top = hit.top - hit.bh - 3
+        }
+        boxes.push({ cx, top, bw: L.bw, bh: L.bh })
+      }
+      L.el.style.left = `${cx}px`
+      L.el.style.top = `${top}px`
+      L.el.style.setProperty('--dx', `${Math.max(-half + 6, Math.min(half - 6, L.x - cx))}px`)
+      L.el.style.setProperty('--dy', `${Math.max(0, L.y - top)}px`)
     }
     for (const [id, el] of this.labelEls) {
       if (!seen.has(id)) {

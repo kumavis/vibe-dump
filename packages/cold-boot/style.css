@@ -30,9 +30,14 @@ button { font: inherit; color: inherit; }
 #brand .sub { font-size: 12.5px; color: var(--dim); margin-top: 2px; }
 #brand .credit { pointer-events: auto; font-size: 12px; color: var(--accent); text-decoration: none; opacity: 0.9; }
 #brand .credit:hover { text-decoration: underline; }
+#brand .photo { margin-top: 3px; font-size: 11px; color: var(--faint); }
+#brand .photo a { pointer-events: auto; color: var(--dim); }
+#brand .photo button { all: unset; pointer-events: auto; cursor: pointer; color: var(--dim); border: 1px solid var(--line); border-radius: 5px; padding: 0 6px; font-size: 10.5px; }
+#brand .photo button:hover { color: var(--ink); }
+#brand .photo button[aria-pressed='true'] { color: #fff; border-color: var(--accent); }
 
 /* ---- stage chips --------------------------------------------------------- */
-#stages { position: fixed; left: 18px; top: 84px; z-index: 5; display: flex; flex-direction: column; gap: 4px; }
+#stages { position: fixed; left: 18px; top: 104px; z-index: 5; display: flex; flex-direction: column; gap: 4px; }
 #stages button { all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--faint); padding: 3px 8px 3px 6px; border-radius: 6px; transition: color 0.3s, background 0.3s; }
 #stages button .n { font-family: var(--mono); font-size: 11px; width: 16px; height: 16px; border-radius: 4px; display: grid; place-items: center; border: 1px solid currentColor; }
 #stages button.past { color: var(--dim); }
@@ -131,7 +136,7 @@ button { font: inherit; color: inherit; }
 /* ---- 3D labels / tooltip --------------------------------------------------------- */
 #labels { position: fixed; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
 #labels .l { position: absolute; transform: translate(-50%, -100%); font-size: 11.5px; padding: 2px 7px; border-radius: 6px; background: rgba(8, 10, 18, 0.72); border: 1px solid var(--line); color: var(--ink); white-space: nowrap; transition: opacity 0.35s; }
-#labels .l::after { content: ''; position: absolute; left: 50%; top: 100%; width: 1px; height: 10px; background: rgba(255, 255, 255, 0.35); }
+#labels .l::after { content: ''; position: absolute; left: calc(50% + var(--dx, 0px)); top: 100%; width: 1px; height: calc(10px + var(--dy, 0px)); background: rgba(255, 255, 255, 0.35); }
 #labels .l.hot { border-color: var(--lc, var(--accent)); color: #fff; box-shadow: 0 0 12px color-mix(in srgb, var(--lc, var(--accent)) 40%, transparent); }
 #tip { position: fixed; z-index: 9; pointer-events: none; font-size: 12px; padding: 5px 9px; border-radius: 7px; background: rgba(8, 10, 18, 0.92); border: 1px solid var(--line); max-width: 280px; line-height: 1.4; }
 #tip b { display: block; font-size: 12.5px; }
@@ -161,6 +166,7 @@ button { font: inherit; color: inherit; }
   #brand { left: 12px; top: 10px; }
   #brand .name { font-size: 18px; }
   #brand .sub { display: none; }
+  #brand .photo { font-size: 10px; }
   #stages { top: auto; left: 12px; right: 12px; bottom: calc(var(--tl-h) + 16px + 40vh); flex-direction: row; gap: 2px; }
   #stages button { padding: 2px 4px; font-size: 0; gap: 0; }
   #stages button .n { font-size: 11px; }

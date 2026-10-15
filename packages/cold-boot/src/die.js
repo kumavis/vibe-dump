@@ -45,9 +45,14 @@ void main() {
     vec2 cell = floor(vUv * uSize * 3.0);
     float n = hash(cell + floor(uTime * 14.0));
     a = 0.16 + rim * 0.7 + step(0.86, n) * 1.1;
-  } else {
+  } else if (uStyle < 4.5) {
     // breathe: slow pulse (waiting / parked / powered but idle)
     a = (0.25 + 0.2 * sin(uTime * 2.4 + uSeed)) + rim * 0.6;
+  } else {
+    // stripe: one way of a 12-way cache pinned — a thin hatched band
+    float band = smoothstep(0.455, 0.47, vUv.y) * smoothstep(0.545, 0.53, vUv.y);
+    float hatch = step(0.5, fract((vUv.x * uSize.x - vUv.y * uSize.y) * 3.0 + uTime * 0.3));
+    a = 0.05 + rim * 0.35 + band * (0.9 + 0.5 * hatch);
   }
   gl_FragColor = vec4(uColor * a * uLevel, 1.0);
 }`
@@ -98,7 +103,7 @@ export function overlayMaterial(w, h, seed) {
   })
 }
 
-export const STYLE = { glow: 0, scan: 1, pinned: 2, sparkle: 3, breathe: 4 }
+export const STYLE = { glow: 0, scan: 1, pinned: 2, sparkle: 3, breathe: 4, stripe: 5 }
 
 export function buildDie(fp, { maxTexture = 4096, anisotropy = 8 } = {}) {
   const W = fp.die_mm.w
@@ -126,6 +131,28 @@ export function buildDie(fp, { maxTexture = 4096, anisotropy = 8 } = {}) {
     emissiveMap: tex,
     emissiveIntensity: 0.06,
   })
+  // The real die photo arrives later (setPhoto). It is shown through a
+  // duotone grade — navy shadows, violet mids, pale-gold highlights — so the
+  // activity glow reads against it; uGrade = 0 shows the photo's true colour.
+  const grade = { value: 0 }
+  top.onBeforeCompile = (shader) => {
+    shader.uniforms.uGrade = grade
+    const fn = `
+uniform float uGrade;
+vec3 dieGrade(vec3 lin) {
+  vec3 s = pow(max(lin, vec3(0.0)), vec3(1.0 / 2.2));
+  float l = dot(s, vec3(0.299, 0.587, 0.114));
+  vec3 c0 = vec3(0.020, 0.024, 0.059);
+  vec3 c1 = vec3(0.200, 0.150, 0.370);
+  vec3 c2 = vec3(0.700, 0.600, 0.430);
+  vec3 duo = l < 0.588 ? mix(c0, c1, l / 0.588) : mix(c1, c2, (l - 0.588) / 0.412);
+  return mix(lin * 0.32, pow(duo, vec3(2.2)) * 0.5, uGrade);
+}`
+    shader.fragmentShader = shader.fragmentShader
+      .replace('void main() {', fn + '\nvoid main() {')
+      .replace('#include <map_fragment>', '#include <map_fragment>\ndiffuseColor.rgb = dieGrade(diffuseColor.rgb);')
+      .replace('#include <emissivemap_fragment>', '#ifdef USE_EMISSIVEMAP\ntotalEmissiveRadiance *= dieGrade(texture2D(emissiveMap, vEmissiveMapUv).rgb);\n#endif')
+  }
   const side = new THREE.MeshStandardMaterial({ color: '#2a2a33', roughness: 0.6, metalness: 0.4 })
   const THICK = 0.78 // die thickness in mm (thinned silicon is ~0.3–0.8 mm)
   const slab = new THREE.Mesh(new THREE.BoxGeometry(W, THICK, H), [side, side, top, side, side, side])
@@ -405,6 +432,23 @@ export function buildDie(fp, { maxTexture = 4096, anisotropy = 8 } = {}) {
     group,
     W,
     H,
+    // Swap in the real die photograph (graded) once it has loaded.
+    setPhoto(photo) {
+      photo.colorSpace = THREE.SRGBColorSpace
+      photo.anisotropy = anisotropy
+      top.map = photo
+      top.emissiveMap = photo
+      top.emissiveIntensity = 0.05
+      top.roughness = 0.5
+      top.metalness = 0.2
+      top.clearcoat = 0.12
+      top.iridescence = 0.3
+      grade.value = 1
+      top.needsUpdate = true
+    },
+    setTrueColor(on) {
+      grade.value = on ? 0 : 1
+    },
     blocks,
     lps,
     stops,
@@ -433,9 +477,11 @@ export function buildDie(fp, { maxTexture = 4096, anisotropy = 8 } = {}) {
         return [...blocks.values()].filter((b) => b.kind === k && !b.parent)
       }
       if (sel.startsWith('sub:')) {
-        // sub:pcore0:l2 -> pcore0.l2 ; sub:*:l2 -> every core's l2
+        // sub:pcore0:l2 -> pcore0.l2 ; sub:*:l2 -> every core's l2 ;
+        // sub:pcore0:decode|l1i -> both
         const [, owner, sub] = sel.split(':')
-        return [...blocks.values()].filter((b) => b.parent && (owner === '*' || b.parent === owner) && b.id.endsWith(`.${sub}`))
+        const want = sub.split('|')
+        return [...blocks.values()].filter((b) => b.parent && (owner === '*' || b.parent === owner) && want.includes(b.id.slice(b.id.indexOf('.') + 1)))
       }
       return []
     },

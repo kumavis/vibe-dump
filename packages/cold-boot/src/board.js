@@ -14,7 +14,8 @@ import { rng } from './util.js'
 
 export const BOARD = { w: 305, h: 244 }
 export const SOCKET = { x: 120, y: 72 } // centre of the CPU package
-export const PACKAGE = { w: 45, h: 37.5, z: 1.15 } // LGA1700 package is 45 x 37.5 mm
+// LGA1700 package: 37.5 x 45 mm, long side along the DIMM slots like the die.
+export const PACKAGE = { w: 37.5, h: 45, z: 1.15 }
 const W = (x, y, h = 0) => new THREE.Vector3(x - BOARD.w / 2, h, y - BOARD.h / 2)
 
 const DIMM_X = [190, 200, 210, 220] // slot centre lines (A1, A2, B1, B2)
@@ -40,15 +41,15 @@ const ROUTES = {
   eps: { lanes: 3, pts: [[44, 18], [62, 26], [82, 30]] },
   vrm: { lanes: 4, pts: [[124, 36], [124, 50]] },
   vrm2: { lanes: 4, pts: [[80, 72], [96, 72]] },
-  dmi: { lanes: 4, pts: [[138, 91], [160, 113], [160, 165], [174, 178], [226, 186]] },
+  dmi: { lanes: 4, pts: [[136, 95], [160, 113], [160, 165], [174, 178], [226, 186]] },
   // Sideband wires between PCH and CPU: PLTRST#, PROCPWRGD, and friends.
-  sideband: { lanes: 1, pts: [[142, 88], [167, 108], [167, 160], [180, 172], [226, 180]] },
+  sideband: { lanes: 1, pts: [[139, 90], [167, 108], [167, 160], [180, 172], [226, 180]] },
   spi: { lanes: 1, pts: [[232, 203], [232, 214], [214, 228], [210, 232]] },
   smbus: { lanes: 1, pts: [[247, 177], [247, 160], [222, 156], [200, 156]] },
-  ddrA: { lanes: 6, pts: [[143, 60], [168, 52], [196, 52]] },
-  ddrB: { lanes: 6, pts: [[143, 78], [172, 92], [216, 92]] },
-  pcie16: { lanes: 4, pts: [[114, 91], [117, 104], [117, 128], [110, 145]] },
-  pcie4: { lanes: 2, pts: [[102, 91], [104, 100], [112, 106], [112, 110]] },
+  ddrA: { lanes: 6, pts: [[139, 62], [168, 52], [196, 52]] },
+  ddrB: { lanes: 6, pts: [[139, 80], [172, 92], [216, 92]] },
+  pcie16: { lanes: 4, pts: [[114, 95], [117, 104], [117, 128], [110, 145]] },
+  pcie4: { lanes: 2, pts: [[104, 95], [106, 100], [112, 106], [112, 110]] },
   cmos: { lanes: 1, pts: [[172, 205], [204, 205], [228, 196]] },
 }
 
@@ -66,7 +67,7 @@ export function buildBoard({ anisotropy = 8 } = {}) {
     gold: new THREE.MeshStandardMaterial({ color: '#d6a640', roughness: 0.3, metalness: 1 }),
     chip: new THREE.MeshStandardMaterial({ color: '#111114', roughness: 0.42, metalness: 0.2 }),
     dimmPcb: new THREE.MeshStandardMaterial({ color: '#0f3a2a', roughness: 0.55, metalness: 0.15 }),
-    substrate: new THREE.MeshStandardMaterial({ color: '#0f2a24', roughness: 0.55, metalness: 0.2 }),
+    substrate: new THREE.MeshStandardMaterial({ color: '#0a1916', roughness: 0.6, metalness: 0.15 }),
     choke: new THREE.MeshStandardMaterial({ color: '#4b4d55', roughness: 0.45, metalness: 0.6 }),
     white: new THREE.MeshStandardMaterial({ color: '#7d7a72', roughness: 0.7 }),
   }
@@ -104,25 +105,25 @@ export function buildBoard({ anisotropy = 8 } = {}) {
   // Load plate frame
   const frame = new THREE.Group()
   group.add(frame)
-  box(60, 1.4, 4, mats.darkMetal, S.x, S.y - 26, 0, frame)
-  box(60, 1.4, 4, mats.darkMetal, S.x, S.y + 26, 0, frame)
-  box(4, 1.4, 48, mats.darkMetal, S.x - 28, S.y, 0, frame)
-  box(4, 1.4, 48, mats.darkMetal, S.x + 28, S.y, 0, frame)
+  box(52, 1.4, 4, mats.darkMetal, S.x, S.y - 30, 0, frame)
+  box(52, 1.4, 4, mats.darkMetal, S.x, S.y + 30, 0, frame)
+  box(4, 1.4, 56, mats.darkMetal, S.x - 24, S.y, 0, frame)
+  box(4, 1.4, 56, mats.darkMetal, S.x + 24, S.y, 0, frame)
   // retention lever
-  const lever = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 54, 10), mats.darkMetal)
+  const lever = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 62, 10), mats.darkMetal)
   lever.rotation.x = Math.PI / 2
-  lever.position.copy(W(S.x + 33, S.y, 1.2))
+  lever.position.copy(W(S.x + 29, S.y, 1.2))
   group.add(lever)
-  box(52, 2.6, 44, mats.plastic, S.x, S.y, 0) // socket body
+  box(44, 2.6, 52, mats.plastic, S.x, S.y, 0) // socket body
   const pkgY = 2.6
   box(PACKAGE.w, PACKAGE.z, PACKAGE.h, mats.substrate, S.x, S.y, pkgY)
   // land-side caps around the die
   for (let i = 0; i < 26; i++) {
     const side = i % 4
     const t = (Math.floor(i / 4) + 0.5) / 7
-    const px = side < 2 ? S.x - 18 + t * 36 : side === 2 ? S.x - 20 : S.x + 20
-    const py = side < 2 ? (side === 0 ? S.y - 15.5 : S.y + 15.5) : S.y - 12 + t * 24
-    box(1, 0.5, 0.5, mats.darkMetal, px, py, pkgY + PACKAGE.z)
+    const px = side < 2 ? S.x - 12 + t * 24 : side === 2 ? S.x - 16 : S.x + 16
+    const py = side < 2 ? (side === 0 ? S.y - 19.5 : S.y + 19.5) : S.y - 15 + t * 30
+    box(0.5, 0.5, 1, mats.darkMetal, px, py, pkgY + PACKAGE.z)
   }
   const dieTop = pkgY + PACKAGE.z + 0.78 // die sits on the substrate; 0.78 mm thick
   // IHS — the lid. Lifted away when the camera dives onto the die.
@@ -130,12 +131,12 @@ export function buildBoard({ anisotropy = 8 } = {}) {
   const ihsMat = new THREE.MeshStandardMaterial({ map: paintIhs(), roughness: 0.36, metalness: 0.9, color: '#c8cad0', transparent: true })
   const ihsSide = mats.metal.clone()
   ihsSide.transparent = true
-  const ihsTop = new THREE.Mesh(new THREE.BoxGeometry(40, 1.9, 29), [ihsSide, ihsSide, ihsMat, ihsSide, ihsSide, ihsSide])
+  const ihsTop = new THREE.Mesh(new THREE.BoxGeometry(29, 1.9, 40), [ihsSide, ihsSide, ihsMat, ihsSide, ihsSide, ihsSide])
   ihsTop.position.y = 0.95
   ihs.add(ihsTop)
-  for (const sx of [-1, 1]) {
-    const ear = new THREE.Mesh(new THREE.BoxGeometry(3, 0.8, 18), ihsSide)
-    ear.position.set(sx * 21.3, 0.4, 0)
+  for (const sz of [-1, 1]) {
+    const ear = new THREE.Mesh(new THREE.BoxGeometry(18, 0.8, 3), ihsSide)
+    ear.position.set(0, 0.4, sz * 21.3)
     ihs.add(ear)
   }
   ihs.position.copy(W(S.x, S.y, pkgY + PACKAGE.z + 0.4))
@@ -571,8 +572,8 @@ function paintPcb(r) {
     g.fillText(t, 0, 0)
     g.restore()
   }
-  rect(SOCKET.x, SOCKET.y, 62, 54)
-  text('LGA1700', SOCKET.x - 22, SOCKET.y + 30, 2.6, 'left')
+  rect(SOCKET.x, SOCKET.y, 54, 66)
+  text("LGA1700", SOCKET.x - 26, SOCKET.y + 36, 2.6, "left")
   rect(240, 190, 29, 28)
   text('PCH', 240, 206.5, 2.6)
   rect(210, 233, 10, 9)
@@ -619,5 +620,8 @@ function paintIhs() {
   g.fillText('reset vector: FFFFFFF0h', 90, 420)
   const tex = new THREE.CanvasTexture(c)
   tex.colorSpace = THREE.SRGBColorSpace
+  // The lid's long side runs along z, so the artwork is turned to match.
+  tex.center.set(0.5, 0.5)
+  tex.rotation = Math.PI / 2
   return tex
 }

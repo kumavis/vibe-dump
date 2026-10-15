@@ -7,6 +7,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { buildBoard } from './board.js'
 import { buildDie } from './die.js'
 import { FLOORPLAN } from './floorplan.js'
+import dieUrl from './assets/raptor-lake-die.jpg'
 import { STEPS, STAGES } from './steps.js'
 import { Timeline } from './timeline.js'
 import { Director } from './camera.js'
@@ -44,13 +45,39 @@ const board = buildBoard({ anisotropy: aniso })
 scene.add(board.group)
 const die = buildDie(FLOORPLAN, { maxTexture: Math.min(4096, maxTex), anisotropy: aniso })
 die.group.position.copy(board.socketWorld)
+// In the socket the die's long axis runs along the DIMM slots and its DDR PHY
+// edge (the top of the photo) faces the DIMMs.
+die.group.rotation.y = -Math.PI / 2
 scene.add(die.group)
+die.group.updateMatrixWorld(true)
 const dieCenter = board.socketWorld.clone()
+
+// The real die photograph replaces the procedural stand-in once it loads.
+new THREE.TextureLoader().load(dieUrl, (t) => die.setPhoto(t))
+// The photo is colour-graded to sit in the scene; this shows it as shot.
+const trueBtn = document.getElementById('truecolor')
+let trueColor = false
+function toggleTrueColor() {
+  trueColor = !trueColor
+  die.setTrueColor(trueColor)
+  trueBtn.setAttribute('aria-pressed', String(trueColor))
+}
+trueBtn.addEventListener('click', toggleTrueColor)
+window.addEventListener('keydown', (e) => {
+  if ((e.key === 't' || e.key === 'T') && !e.metaKey && !e.ctrlKey && !e.altKey) toggleTrueColor()
+})
 
 // Named camera shots. Positions are relative to the things they frame, so
 // moving a component moves its shot with it.
 const V = (x, y, z) => new THREE.Vector3(x, y, z)
 const at = (target, offset, fov = 40) => () => ({ target: target.clone(), pos: target.clone().add(offset), fov })
+// A shot framed in the die's own frame (x along the long edge, z towards the
+// bottom edge of the photo), so it follows the die however it sits.
+const onDie = (target, offset, fov = 40) => () => {
+  const t = die.group.localToWorld(target.clone())
+  return { target: t, pos: die.group.localToWorld(target.clone().add(offset)), fov }
+}
+const blockCenter = (id) => die.blocks.get(id).center.clone()
 const comp = (id) => board.comps.get(id).anchor.clone()
 const mid = (...pts) => pts.reduce((a, p) => a.add(p), V(0, 0, 0)).multiplyScalar(1 / pts.length)
 const shots = {
@@ -58,17 +85,25 @@ const shots = {
   standby: at(mid(comp('atx24'), comp('pch'), comp('fpanel')).setY(0), V(-30, 150, 170), 40),
   power: at(mid(comp('atx24'), comp('vrm'), comp('pch')).setY(0), V(-20, 230, 220), 40),
   pch: at(comp('pch').setY(0), V(-10, 70, 85), 38),
-  socket: at(dieCenter, V(0, 62, 72), 38),
-  die: at(dieCenter, V(0, 23, 15), 40),
-  dieLow: at(dieCenter.clone().add(V(-2, 0, 0)), V(-8, 11, 19), 38),
-  dieLeft: at(dieCenter.clone().add(V(-6, 0, 0)), V(-4, 17, 14), 38),
-  dieRight: at(dieCenter.clone().add(V(6, 0, 0)), V(4, 17, 14), 38),
+  socket: onDie(V(0, 0, 0), V(0, 62, 72), 38),
+  die: onDie(V(0, 0, 0.6), V(0, 30.5, 21.5), 40),
+  dieLow: onDie(V(-2, 0, 0), V(-8, 11, 19), 38),
+  dieLeft: onDie(V(-5.5, 0, 0.4), V(-3, 17, 13.5), 38),
+  dieRight: onDie(V(5.5, 0, 0.4), V(3, 17, 13.5), 38),
+  bsp: onDie(blockCenter('pcore0').add(V(0.6, 0, 1.2)), V(-1.5, 7.5, 6), 38),
+  sa: onDie(V(-8.5, 0, -0.6), V(-2.5, 11, 10), 38),
   fetch: at(mid(dieCenter.clone(), comp('spi')).setY(0), V(-10, 190, 190), 40),
   dimms: at(V(dieCenter.x + 62, 14, dieCenter.z + 18), V(150, 105, 150), 40),
   memory: at(V(dieCenter.x + 40, 0, dieCenter.z + 5), V(10, 150, 140), 40),
   pcie: at(mid(dieCenter.clone(), comp('nvme'), comp('gpu').setY(0)).setY(0), V(20, 210, 200), 40),
-  attract: at(dieCenter, V(-9, 12, 17), 36),
+  attract: onDie(V(0, 0, 0), V(-9, 12, 17), 36),
+  imc: onDie(V(-8.2, 0, -3.0), V(-1.5, 10, 9.5), 38),
+  llc: onDie(V(-1.5, 0, 0), V(0, 13, 10), 38),
+  spd: at(V(30, 0, 5), V(55, 190, 175), 40),
 }
+
+// Shots framed on the die itself: the heat-spreader must be off for these.
+const DIE_SHOTS = new Set(['die', 'dieLow', 'dieLeft', 'dieRight', 'bsp', 'sa', 'imc', 'llc', 'attract'])
 
 const timeline = new Timeline(STEPS)
 const director = new Director(camera, renderer.domElement, shots)
@@ -108,6 +143,8 @@ function resize() {
   camera.aspect = fw / fh
   camera.setViewOffset(fw, fh, ox, oy, w, h)
   camera.updateProjectionMatrix()
+  // The part of the canvas not covered by the panel or the timeline.
+  ui.view = { right: w - ox, bottom: h - oy }
   if (director.current && !director.userMoved && !director.flight) director.go(director.current, { instant: true })
 }
 window.addEventListener('resize', resize)
@@ -339,6 +376,7 @@ function frame(now) {
     attract(time)
   } else {
     if (st.lps) A.lps(st.lps(p))
+    A.bootKind = bootKind
     st.act?.(p, A, time)
     const s = shotAt(st, p)
     if (s && s !== director.current) director.go(s, { instant: reduceMotion })
@@ -347,7 +385,7 @@ function frame(now) {
 
   // Heat-spreader: lifted off whenever the camera is near the die or the step asks.
   const close = director.dieCloseness(dieCenter)
-  const insetOnDie = typeof st.inset === 'object' && st.inset && /^die/.test(st.inset.shot)
+  const insetOnDie = typeof st.inset === 'object' && st.inset && DIE_SHOTS.has(st.inset.shot)
   const wantLid = introOn ? 1 : st.lid === false || insetOnDie || close > 0.25 ? 1 : 0
   lid += (wantLid - lid) * Math.min(1, dt * 3)
   // It lifts a little and fades out rather than hovering over the scene.
@@ -364,7 +402,7 @@ function frame(now) {
 
   const real = clock.realBase[timeline.i] + realOf(st) * p
   const resetT = resetIndex >= 0 && timeline.i >= resetIndex ? real - clock.realBase[resetIndex] : null
-  ui.frame({ realT: real, resetT, lpModes, step: st, p, time })
+  ui.frame({ realT: real, resetT, lpModes, step: st, p, time, ctx: { bootKind } })
   ui.labels(introOn ? [] : labelItems(st, p), camera, window.innerWidth, window.innerHeight)
   ui.tip(hoverInfo(), hover?.x ?? 0, hover?.y ?? 0)
 

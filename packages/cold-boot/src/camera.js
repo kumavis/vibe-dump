@@ -32,9 +32,12 @@ export class Director {
     if (!raw) return null
     const s = typeof raw === 'function' ? raw() : { ...raw, pos: raw.pos.clone(), target: raw.target.clone() }
     const aspect = this.camera.aspect || 1.6
-    const k = aspect < 1.45 ? Math.pow(1.45 / aspect, 0.85) : 1
+    const k = this.backoffFor(aspect)
     if (k !== 1) s.pos.sub(s.target).multiplyScalar(k).add(s.target)
     return s
+  }
+  backoffFor(aspect) {
+    return aspect < 1.45 ? Math.pow(1.45 / aspect, 0.85) : 1
   }
   // Fly to a named shot. `instant` jumps (used on load and when scrubbing).
   go(name, { duration = 1.8, instant = false } = {}) {
@@ -81,8 +84,10 @@ export class Director {
   }
   // How "zoomed onto the die" the camera is: 0 at board scale, 1 close to the
   // silicon. Drives the heat-spreader lift and label density.
+  // Measured in landscape terms: a portrait screen backs every shot off, and a
+  // die close-up should still count as close there.
   dieCloseness(dieCenter) {
-    const d = this.camera.position.distanceTo(dieCenter)
+    const d = this.camera.position.distanceTo(dieCenter) / this.backoffFor(this.camera.aspect || 1.6)
     return THREE.MathUtils.clamp((140 - d) / 90, 0, 1)
   }
 }
