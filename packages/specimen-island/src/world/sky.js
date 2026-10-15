@@ -94,7 +94,7 @@ export class Sky {
     sc.top = 75
     sc.bottom = -75
     sc.near = 1
-    sc.far = 600
+    sc.far = 1000 // the focus can be a helicopter 430 m above the ground
     this.sun.shadow.bias = -0.0004
     this.sun.shadow.normalBias = 0.6
     scene.add(this.sun)

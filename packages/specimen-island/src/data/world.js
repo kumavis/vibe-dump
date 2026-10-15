@@ -43,17 +43,21 @@ export const WORLD = {
     { id: 'easttower', name: 'East Plains Tower', x: 330, z: -30, flat: 10, icon: 'tower' },
     { id: 'westtower', name: 'West Jungle Tower', x: -480, z: -80, flat: 10, icon: 'tower' },
     { id: 'southtower', name: 'Marsh Tower', x: 300, z: 470, flat: 10, icon: 'tower' },
-    { id: 'paddock', name: 'Old Paddock C', x: 210, z: -280, flat: 0, icon: 'fence' },
+    { id: 'paddock', name: 'Old Paddock C', x: 210, z: -280, flat: 0, icon: 'fence', fence: { radius: 58, sides: 16, gate: 2 } },
     { id: 'summit', name: 'Summit Relay', summit: true, flat: 16, icon: 'relay' },
   ],
 
-  // Dirt roads as POI ids and bare waypoints. Bridges are dropped automatically
-  // wherever a road crosses the river.
+  // Dirt roads, as control points: a POI id (its centre), a bare [x, z]
+  // waypoint, or an anchor so a road meets a place at its doorstep instead of
+  // driving into it — { at, local: [x, z] } in the POI's own frame (+Z is the
+  // side it faces), { at, stop: m } pulls up that far short of its centre, and
+  // { at, gate: true } ends outside a fenced POI's gate. Bridges are dropped
+  // automatically wherever a road crosses the river.
   roads: [
-    ['dock', 'station', [-60, 470], [-170, 300], 'fieldlab'],
-    ['station', [120, 470], [250, 340], [330, 180], [345, 60], 'easttower', [290, -150], 'paddock'],
-    ['fieldlab', [-380, 40], 'westtower'],
-    ['station', [200, 520], 'southtower'],
+    ['dock', { at: 'station', local: [0, 18] }, { at: 'station', local: [-22, 10] }, [-60, 470], [-170, 300], 'fieldlab'],
+    [{ at: 'station', local: [12, 14] }, [120, 470], [250, 340], [330, 180], [345, 60], [352, -30], [290, -150], { at: 'paddock', gate: true }],
+    ['fieldlab', [-380, 40], { at: 'westtower', stop: 12 }],
+    [{ at: 'station', local: [12, 14] }, [200, 520], { at: 'southtower', stop: 12 }],
   ],
 
   // Abandoned vehicles by the roads: which road, how far along it (0..1), what,

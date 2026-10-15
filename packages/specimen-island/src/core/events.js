@@ -29,7 +29,6 @@
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
 //   vehicle:destroyed  {vehicle}
 //   vehicle:repaired   {vehicle, field}                  field repair or the pad pump
-//   toast              {text, kind}
 
 export class EventBus {
   constructor() {

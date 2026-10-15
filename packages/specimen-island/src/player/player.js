@@ -74,6 +74,12 @@ export class Player {
     }
   }
 
+  // Slow natural healing once you've been left alone for a while. Also ticked
+  // by the main loop while you sit in a vehicle, where update() doesn't run.
+  regen(dt) {
+    if (this.alive && this.G.time - this.lastHurt > 9) this.heal(dt * 2.5)
+  }
+
   heal(n) {
     this.health = Math.min(100, this.health + n)
   }
@@ -123,7 +129,7 @@ export class Player {
     this.blindT = Math.max(0, this.blindT - dt)
     this.fade = Math.max(0, this.fade - dt)
     this.recoil = damp(this.recoil, 0, 9, dt)
-    if (this.alive && G.time - this.lastHurt > 9) this.heal(dt * 2.5)
+    this.regen(dt)
 
     const look = input.look()
     this.lastLook = look

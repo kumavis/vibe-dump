@@ -454,7 +454,7 @@ export class Island {
   placePois() {
     const byId = {}
     for (const def of this.cfg.pois) {
-      const poi = { id: def.id, name: def.name, icon: def.icon, x: def.x ?? 0, z: def.z ?? 0, yaw: 0, flat: def.flat }
+      const poi = { id: def.id, name: def.name, icon: def.icon, x: def.x ?? 0, z: def.z ?? 0, yaw: 0, flat: def.flat, def }
       if (def.coast) {
         const [dx, dz] = def.coast.dir
         const c = this.findCoast(def.coast.x, 0, dx, dz)
@@ -505,9 +505,40 @@ export class Island {
     this.poi = byId
   }
 
+  // Resolve a road's control points (see data/world.js roads) to [x, z].
+  roadControls(def) {
+    const first = def.map((p) => {
+      if (Array.isArray(p)) return p
+      if (typeof p === 'string') return [this.poi[p].x, this.poi[p].z]
+      const poi = this.poi[p.at]
+      if (p.local) {
+        const c = Math.cos(poi.yaw)
+        const s = Math.sin(poi.yaw)
+        return [poi.x + p.local[0] * c + p.local[1] * s, poi.z - p.local[0] * s + p.local[1] * c]
+      }
+      if (p.gate) {
+        const f = poi.def.fence
+        const a = ((f.gate + 0.5) / f.sides) * Math.PI * 2
+        const r = f.radius + 8
+        return [poi.x + Math.cos(a) * r, poi.z + Math.sin(a) * r]
+      }
+      return [poi.x, poi.z]
+    })
+    // `stop` anchors pull back toward their neighbour on the road
+    return first.map((pt, k) => {
+      const p = def[k]
+      if (!p || typeof p !== 'object' || Array.isArray(p) || !p.stop) return pt
+      const nb = first[k > 0 ? k - 1 : k + 1]
+      const dx = nb[0] - pt[0]
+      const dz = nb[1] - pt[1]
+      const l = Math.hypot(dx, dz) || 1
+      return [pt[0] + (dx / l) * p.stop, pt[1] + (dz / l) * p.stop]
+    })
+  }
+
   buildRoads() {
     for (const def of this.cfg.roads) {
-      const ctrl = def.map((p) => (typeof p === 'string' ? [this.poi[p].x, this.poi[p].z] : p))
+      const ctrl = this.roadControls(def)
       // resample with Catmull-Rom every ~4 m
       const pts = []
       for (let k = 0; k < ctrl.length - 1; k++) {

@@ -721,8 +721,9 @@ export function buildTower(G, poi, rng, yaw) {
 
 export function buildPaddock(G, poi, rng) {
   const kit = new Kit(G, poi.x, 0, poi.z, 0, 'paddock')
-  const R = 58
-  const sides = 16
+  // radius, sides and gate segment come from data/world.js, where the road
+  // reads them too so it ends outside the gate
+  const { radius: R, sides, gate: gateSeg } = poi.def.fence
   const postGeo = []
   for (let k = 0; k < sides; k++) {
     const a0 = (k / sides) * Math.PI * 2
@@ -731,8 +732,8 @@ export function buildPaddock(G, poi, rng) {
     const z0 = Math.sin(a0) * R
     const x1 = Math.cos(a1) * R
     const z1 = Math.sin(a1) * R
-    const broken = rng.chance(0.3) || k === 4
-    const gate = k === 12
+    const gate = k === gateSeg
+    const broken = !gate && (rng.chance(0.3) || k === (gateSeg + 8) % sides)
     const len = Math.hypot(x1 - x0, z1 - z0)
     const spans = Math.ceil(len / 4.5)
     const ry = -Math.atan2(z1 - z0, x1 - x0)
@@ -763,7 +764,7 @@ export function buildPaddock(G, poi, rng) {
     }
   }
   // gate signage and a feeding trough
-  const ga = (12.5 / sides) * Math.PI * 2
+  const ga = ((gateSeg + 0.5) / sides) * Math.PI * 2
   sign(G, kit, ['PADDOCK C', 'DANGER 10,000 V'], Math.cos(ga) * (R + 4), Math.sin(ga) * (R + 4), -ga + Math.PI / 2, { bg: '#8a6a20', fg: '#1a1a1a' })
   const tx = 8
   const tz = 6

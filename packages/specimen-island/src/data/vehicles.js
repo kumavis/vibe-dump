@@ -1,5 +1,7 @@
-// Vehicle tuning: everything a designer would tweak about the helicopter and
-// the ranger jeep. vehicles/*.js only read these tables.
+// Vehicle tuning: the numbers a designer would tweak about the helicopter and
+// the ranger jeep (handling, damage, hitboxes, sounds, recovery). The flight
+// and suspension models in vehicles/*.js read these tables; only small
+// smoothing constants stay inline there.
 //
 // Local frames match the models: forward is -Z, +X is the right-hand side,
 // y = 0 is where the wheels / skids touch the ground. Parked boxes are

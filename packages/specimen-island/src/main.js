@@ -344,6 +344,7 @@ async function boot() {
       // read once: the E that steps you out of a vehicle must not board it again
       const riding = G.vehicle
       if (!riding) G.player.update(dt, input)
+      else G.player.regen(dt)
       for (const v of G.vehicles) v.update(dt, input)
       if (G.vehicle) G.vehicle.updateCamera(camera, dt)
       G.weapons.update(dt, input)
@@ -435,6 +436,14 @@ async function boot() {
     draw()
     if (booted < 4 && ++booted === 4) document.getElementById('boot')?.remove()
   }
+  // Compile the shaders while the boot overlay is still up — in parallel where
+  // the driver supports it — so the first seconds of play don't hitch on them.
+  try {
+    await Promise.race([renderer.compileAsync(scene, camera), new Promise((r) => setTimeout(r, 8000))])
+  } catch {
+    /* older drivers compile lazily on first draw, as before */
+  }
+  last = performance.now()
   requestAnimationFrame(frame)
   // test hook: fast-forward the simulation without rendering
   window.__step = (seconds, dt = 1 / 30) => {
