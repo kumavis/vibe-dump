@@ -323,11 +323,12 @@ export class Ecology {
     h.loaded.length = 0
   }
 
-  // Nearest creature hit by a ray: { creature, t, zone } or null.
-  raycast(o, d, maxDist) {
+  // Nearest creature hit by a ray: { creature, t, zone } or null. `pad`
+  // fattens the ray (Creature.raycast).
+  raycast(o, d, maxDist, pad = 0) {
     let best = null
     for (const c of this.active) {
-      const h = c.raycast(o, d, maxDist)
+      const h = c.raycast(o, d, maxDist, pad)
       if (h && (!best || h.t < best.t)) best = { creature: c, t: h.t, zone: h.zone, sphere: h.hit }
     }
     return best

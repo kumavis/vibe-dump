@@ -179,6 +179,17 @@ export class Audio {
         this.burst({ dur: 0.06, type: 'bandpass', freq: 1400, q: 3, vol: 0.2, delay: 0.42 })
         this.burst({ dur: 0.06, type: 'bandpass', freq: 1100, q: 3, vol: 0.2, delay: 0.55 })
         break
+      case 'syringe':
+        // the pole driven forward: a heavy swish and the clink of the barrel
+        this.burst({ dur: 0.28, type: 'bandpass', freq: 380, q: 1.3, vol: 0.18, attack: 0.07, sweep: 2.6 })
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 2900, q: 7, vol: 0.06, delay: 0.05 })
+        break
+      case 'inject':
+        // the needle thumps in, then the gas charge hisses the cartridge empty
+        this.tone({ f0: 170, f1: 70, dur: 0.09, vol: 0.35, pos, max: 40 })
+        this.burst({ dur: 0.75, type: 'highpass', freq: 3400, vol: 0.2, attack: 0.04, sweep: 0.55, pos, max: 30, delay: 0.05 })
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 2500, q: 6, vol: 0.16, pos, max: 30, delay: 0.82 })
+        break
       case 'reload':
         for (let i = 0; i < 3; i++) this.burst({ dur: 0.04, type: 'bandpass', freq: 2200 + i * 400, q: 6, vol: 0.18, delay: i * 0.28 + 0.1 })
         break

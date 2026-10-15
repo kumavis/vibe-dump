@@ -4,9 +4,10 @@ import { damp } from '../core/mathx.js'
 import { ViewModels } from './viewmodels.js'
 
 // The weapon system: selection, aiming, firing, reloading, the scanner's
-// hold-to-scan, the field camera (player/photos.js grades the shots), thrown
-// stones and flares, medkits. Every shot announces itself on the bus as a
-// noise — loud guns are heard across half the island.
+// hold-to-scan, the field camera (player/photos.js grades the shots), the
+// jumbo syringe's jab, thrown stones and flares, medkits. Every shot
+// announces itself on the bus as a noise — loud guns are heard across half the
+// island.
 
 const _dir = new THREE.Vector3()
 const _right = new THREE.Vector3()
@@ -16,7 +17,11 @@ export class Weapons {
   constructor(G) {
     this.G = G
     this.current = 'scanner'
-    this.mag = { pistol: WEAPONS.pistol.mag, rifle: 0, hunting: 0, shotgun: 0 }
+    // rounds loaded in each weapon that takes ammo: the pistol comes loaded,
+    // the rest load from whatever is found with them
+    this.mag = Object.fromEntries(Object.values(WEAPONS).filter((w) => w.ammo).map((w) => [w.id, 0]))
+    this.mag.pistol = WEAPONS.pistol.mag
+    this.jabT = 0 // a jab in flight: seconds until the needle goes in
     this.aim = 0
     this.fireCool = 0
     this.reloadT = 0
@@ -53,6 +58,7 @@ export class Weapons {
     this.pending = id
     this.switchT = 0.32
     this.reloadT = 0
+    this.jabT = 0
     this.scan.progress = 0
     this.G.audio?.play('switch')
   }
@@ -132,11 +138,17 @@ export class Weapons {
     else if (active && input.pressed('fire') && this.fireCool <= 0) {
       if (!this.canFire()) {
         /* busy */
-      } else if (this.mag[def.id] > 0) this.fire(def)
-      else {
+      } else if (this.mag[def.id] > 0) {
+        if (def.kind === 'melee') this.jab(def)
+        else this.fire(def)
+      } else {
         G.audio?.play('empty')
         this.startReload()
       }
+    }
+    if (this.jabT > 0) {
+      this.jabT -= dt
+      if (this.jabT <= 0 && active && def.kind === 'melee') this.landJab(def)
     }
 
     // gadgets
@@ -165,7 +177,7 @@ export class Weapons {
       reloading: this.reloadT > 0,
       switching: this.switchT > 0,
       hidden: !p.alive || p.swimming || this.scoped() || this.raised(),
-      loaded: this.mag.rifle > 0 && this.reloadT <= 0,
+      loaded: this.mag[this.current] > 0 && this.reloadT <= 0,
       light: G.sky.light,
     })
   }
@@ -221,7 +233,57 @@ export class Weapons {
     G.audio?.play(def.id, { pos: p.pos })
     G.events.emit('noise', { x: p.pos.x, y: p.pos.y, z: p.pos.z, radius: def.noise, source: 'player', kind: def.noise > 60 ? 'gunshot' : 'shot' })
     G.events.emit('weapon:fired', { weapon: def.id })
-    if (this.mag[def.id] === 0 && G.inventory.count(def.ammo) > 0) setTimeout(() => this.current === def.id && this.startReload(), 350)
+    this.autoReload(def)
+  }
+
+  // an emptied weapon reloads itself a beat later, if there is more ammo
+  autoReload(def) {
+    if (this.mag[def.id] === 0 && this.G.inventory.count(def.ammo) > 0) setTimeout(() => this.current === def.id && this.startReload(), 350)
+  }
+
+  // A thrust of the jumbo syringe. The pole swings out and the needle goes in
+  // `thrust` seconds later, wherever the view points by then (landJab); the
+  // swing itself is all a whiff costs.
+  jab(def) {
+    const G = this.G
+    const p = G.player
+    this.fireCool = def.thrust + def.recover
+    this.jabT = def.thrust
+    this.vm.thrust(def.thrust, def.thrust + def.recover)
+    G.audio?.play(def.id, { pos: p.pos })
+    G.events.emit('noise', { x: p.pos.x, y: p.pos.y, z: p.pos.z, radius: def.noise, source: 'player', kind: 'shot' })
+    G.events.emit('weapon:fired', { weapon: def.id })
+  }
+
+  // The needle at full reach: an animal on the view ray within reach takes the
+  // whole cartridge (or the zone's share, for a melee weapon with zones). It
+  // lands as a dart does — the same takeHit and dart:hit — so hit markers, the
+  // animal's sting-and-flee, stats and scoring need nothing new.
+  landJab(def) {
+    const G = this.G
+    const o = G.camera.position
+    const dir = this.aimRay(0)
+    const hit = G.ecology.raycast(o, dir, def.reach, def.pad)
+    if (!hit || !hit.creature.vitals.alive || G.physics.raycast(o.x, o.y, o.z, dir.x, dir.y, dir.z, hit.t)) return
+    const c = hit.creature
+    const p = o.clone().addScaledVector(dir, hit.t)
+    const zone = hit.zone === 'armor' ? ARMOR : ZONES[hit.zone]
+    if (zone.dose <= 0) {
+      // the needle skids off the plates: nothing goes in and the cartridge is
+      // kept, but the animal felt it
+      G.fx.sparks(p)
+      G.audio?.play('ricochet', { pos: p })
+      c.perception.alertTo(G.player.pos, c.perception.awareness + 0.5)
+      G.events.emit('dart:hit', { creature: c, zone: zone.label, dose: 0 })
+      return
+    }
+    const dose = def.dose * (def.zones === false ? 1 : zone.dose)
+    this.mag[def.id]--
+    c.takeHit(G, { dose, zone: hit.zone, weapon: def.id, from: G.player.pos })
+    G.events.emit('dart:hit', { creature: c, zone: zone.label, dose })
+    G.fx.dartHit(p)
+    G.audio?.play('inject', { pos: p })
+    this.autoReload(def)
   }
 
   hitscan(def, dir) {

@@ -290,7 +290,10 @@ export class HUD {
     else if (P.awareness >= 0.35) state = 'SUSPICIOUS'
     else state = 'UNAWARE'
     if (v.alive && v.state === 'drowsy') state += ' · DROWSY'
-    let html = `<div class="tname">${known ? c.sp.name : 'Unknown species'}<small>${Math.round(hit.t)} m · ${hit.zone === 'armor' ? 'ARMOUR' : hit.zone.toUpperCase()}</small></div><div class="tstate s-${state.split(' ')[0].toLowerCase()}">${state}</div>`
+    // a melee weapon says when the animal is within its reach
+    const held = G.weapons.def
+    const reach = held.kind === 'melee' && hit.t <= held.reach ? ' · IN REACH' : ''
+    let html = `<div class="tname">${known ? c.sp.name : 'Unknown species'}<small>${Math.round(hit.t)} m · ${hit.zone === 'armor' ? 'ARMOUR' : hit.zone.toUpperCase()}${reach}</small></div><div class="tstate s-${state.split(' ')[0].toLowerCase()}">${state}</div>`
     if (known && v.alive) {
       const sp = c.sp.sedation
       const L = sp.lethal
@@ -298,7 +301,7 @@ export class HUD {
       const pend = (c.rec.pending / L) * 100
       const ko = (sp.ko / L) * 100
       html += `<div class="sedbar"><i style="width:${cur.toFixed(1)}%"></i><u style="left:${cur.toFixed(1)}%;width:${pend.toFixed(1)}%"></u><b style="left:${ko.toFixed(1)}%"></b></div>`
-      html += doseReadout(c.sp, v.state, c.rec.sedative, c.rec.pending, hit.zone)
+      html += doseReadout(c.sp, v.state, c.rec.sedative, c.rec.pending, hit.zone, held)
         .map((l) => `<div class="dose">${l.warn ? `<span class="bad">${l.text}</span>` : l.text}</div>`)
         .join('')
     } else if (!known) html += `<div class="dose">Scan [1] to learn its tolerances</div>`

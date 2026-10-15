@@ -7,6 +7,8 @@
 //   scanner     hold fire on a creature to catalogue it
 //   camera      aim zooms, fire takes a photograph (scored by player/photos.js
 //               with the PHOTO table below)
+//   melee       fire thrusts within `reach` (m, from the eye); carries `dose`
+//               and spends one round of `ammo` only on a hit
 //
 // noise is the radius (m) at which creatures hear the shot.
 
@@ -109,6 +111,39 @@ export const WEAPONS = {
     rof: 1.0, // shutter cooldown
     noise: 4,
     range: 180,
+    lethal: false,
+  },
+  // The old keepers' pole syringe for the sauropods. The needle goes in
+  // `thrust` s after the click, along wherever the view points by then (and
+  // finds anything within `pad` m of that line — a walking leg swings), and
+  // the swing takes `recover` s more; a whiff costs only that. zones: false —
+  // a needle driven in by hand seats its whole charge wherever it lands (on a
+  // brachiosaur that is a leg, all you can reach from the ground), so the zone
+  // multipliers don't apply. Armour still turns it, and keeps the cartridge.
+  //
+  // 250u: two jabs drop an adult brachiosaurus (ko 420) if the second lands
+  // within ~20 s of the first, as it clears 2.21u/s (peaks 481 at 3 s apart,
+  // 444 at 20 s, 422 at 30 s), and only four at once overdose it (900). One
+  // leaves a T. rex drowsy at 0.93 of its line and two drop it (487, lethal
+  // 560): the cartridges are not the price, standing inside its bite is. One
+  // knocks out a stegosaur, trike or anky and two kill them; one is a fatal
+  // overdose for everything from a parasaurolophus down.
+  syringe: {
+    slot: 7,
+    name: 'Jumbo Syringe',
+    short: 'JUMBO',
+    kind: 'melee',
+    dose: 250,
+    zones: false,
+    reach: 2.8,
+    pad: 0.2,
+    thrust: 0.35,
+    recover: 0.75,
+    mag: 1, // the cartridge seated in the barrel
+    ammo: 'jumboDart',
+    reload: 2.2,
+    noise: 3,
+    zoom: 1.1,
     lethal: false,
   },
 }
