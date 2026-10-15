@@ -13,6 +13,6 @@ import { phantom, phantomEcho } from './phantom.js'
 
 export default {
   levels: { nebula: nebulaLevel },
-  bosses: { phantom },
+  bosses: { phantom, octopus: phantom }, // octopus: stand-in until the octopus boss lands
   enemies: { nebulaLurker: lurker, phantomEcho },
 }

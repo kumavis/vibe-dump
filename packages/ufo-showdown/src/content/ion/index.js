@@ -96,13 +96,13 @@ const ion = {
     waveCd -= dt
     if (t < LENGTH - 8 && waveCd <= 0 && (waveT <= 0 || live === 0)) {
       launch(g, WAVES[waveI++ % WAVES.length])
-      waveT = 6.1
+      waveT = 5.2
       waveCd = 1.6
     }
 
     if ((boltT -= dt) <= 0 && t < LENGTH - 2) {
       lightning(g, t)
-      boltT = 3.4 - 1.6 * Math.min(1, t / 60)
+      boltT = 3 - 1.6 * Math.min(1, t / 55)
     }
 
     if (t >= LENGTH && (live === 0 || t > LENGTH + 8)) g.levelDone()

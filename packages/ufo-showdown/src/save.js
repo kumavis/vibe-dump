@@ -5,7 +5,12 @@
 // write (private windows, blocked site data, an embedded preview), so every
 // read and write is guarded and the game simply plays on from memory then.
 
+import { PAINTS } from './catalog.js'
+
 const KEY = 'ufo-showdown/save/v1'
+
+// Free paint jobs belong to everyone, including saves from before they existed.
+const FREE_PAINTS = PAINTS.filter((p) => p.price === 0).map((p) => p.id)
 
 export function defaultSave() {
   return {
@@ -13,7 +18,7 @@ export function defaultSave() {
     stars: 0,
     earned: 0, // every star ever won, for bragging rights
     ships: ['striker'],
-    paints: ['team'],
+    paints: [...FREE_PAINTS],
     upgrades: { cargo: 0, armor: 0, magnet: 0, drones: 0 },
     starters: { speed: 0, rapid: 0, triple: 0, shield: 0 }, // level owned
     startersOn: { speed: true, rapid: true, triple: true, shield: true },

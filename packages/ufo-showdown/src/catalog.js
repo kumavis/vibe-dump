@@ -76,6 +76,16 @@ export const SHIPS = [
 // over the base colours by the ship art; `rainbow` and `galaxy` animate.
 export const PAINTS = [
   { id: 'team', name: 'Team Colors', price: 0 },
+  // the basics are free and every hangar starts with them
+  { id: 'red', name: 'Red', price: 0, colors: { main: '#ff3b3b', dark: '#a01616', light: '#ffd0d0', flame: '#ff9a6a' } },
+  { id: 'orange', name: 'Orange', price: 0, colors: { main: '#ff8a1f', dark: '#a84a00', light: '#ffe0c0', flame: '#ffc46a' } },
+  { id: 'yellow', name: 'Yellow', price: 0, colors: { main: '#ffe23d', dark: '#a88a00', light: '#fff8c8', flame: '#fff1a0' } },
+  { id: 'green', name: 'Green', price: 0, colors: { main: '#3ddc4a', dark: '#16781f', light: '#d4ffd8', flame: '#9cff8a' } },
+  { id: 'blue', name: 'Blue', price: 0, colors: { main: '#3b7dff', dark: '#163c9e', light: '#d0e0ff', flame: '#8ab8ff' } },
+  { id: 'purple', name: 'Purple', price: 0, colors: { main: '#9a4dff', dark: '#4b1a9e', light: '#e6d4ff', flame: '#c79aff' } },
+  { id: 'pink', name: 'Pink', price: 0, colors: { main: '#ff7ad1', dark: '#a8287a', light: '#ffe0f4', flame: '#ffb3e6' } },
+  { id: 'white', name: 'White', price: 0, colors: { main: '#eef1f8', dark: '#7d86a3', light: '#ffffff', flame: '#bfe8ff' } },
+  { id: 'black', name: 'Black', price: 0, colors: { main: '#3a3d4a', dark: '#14151c', light: '#8a8fa3', flame: '#9ab0ff' } },
   { id: 'ruby', name: 'Ruby', price: 150, colors: { main: '#ff4d5e', dark: '#9e1b2c', light: '#ffd3d8', flame: '#ff9a8a' } },
   { id: 'emerald', name: 'Emerald', price: 150, colors: { main: '#3ee08a', dark: '#16794a', light: '#d4ffe6', flame: '#8affc0' } },
   { id: 'sunburst', name: 'Sunburst', price: 200, colors: { main: '#ffb02e', dark: '#a35a00', light: '#fff0c2', flame: '#ffd27a' } },

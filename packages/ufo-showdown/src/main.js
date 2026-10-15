@@ -27,6 +27,7 @@ import asteroidsPack from './content/asteroids/index.js'
 import racePack from './content/race/index.js'
 import nebulaPack from './content/nebula/index.js'
 import ionPack from './content/ion/index.js'
+import swarmPack from './content/swarm/index.js'
 
 const TAU = Math.PI * 2
 const rand = (a, b) => a + Math.random() * (b - a)
@@ -94,6 +95,11 @@ let menuSel = 0
 let menuRow = 0 // 0: how many players, 1: the store button
 let mapSel = 0
 let save = loadSave()
+// Missions get added to the map over time; anything after the furthest one a
+// player has already cleared stays open to them.
+MISSIONS.forEach((m, i) => {
+  if (save.missions.cleared[m.id]) save.missions.unlocked = Math.max(save.missions.unlocked, Math.min(MISSIONS.length, i + 2))
+})
 let mission = MISSIONS[0]
 let missionIdx = 0
 let level = null // the running level's definition
@@ -119,6 +125,8 @@ let flash = 0
 let time = 0
 let endTimer = -1
 let fireworkT = 0
+let cutscene = null // { onSkip, t } while a level plays a scripted moment
+let bars = 0 // letterbox bars, 0..1
 let menuUfos = []
 
 // ================================================================ helpers
@@ -143,7 +151,11 @@ function later(delay, fn) {
   pending.push({ t: delay, fn })
 }
 
+// Every enemy bullet flies a little faster than the number it was fired with.
+const BULLET_SPEED = 1.12
+
 function shoot(x, y, a, speed, color, r = 6) {
+  speed *= BULLET_SPEED
   eShots.push({ x, y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, r, color, kind: 'bolt' })
 }
 
@@ -231,6 +243,13 @@ const g = {
   hurtPlayer,
   banner,
   shake(n) { shake = Math.max(shake, n) },
+  // A short scripted moment: ships stop taking orders and stop shooting (and
+  // can't be hurt), the HUD steps aside for letterbox bars, and Enter or a tap
+  // calls onSkip — which should wrap the scene up and call g.cutscene(false).
+  cutscene(on, opts = {}) {
+    cutscene = on ? { onSkip: opts.onSkip ?? null, t: 0 } : null
+  },
+  get inCutscene() { return !!cutscene },
   // how fast the starfield streams past; 1 is cruising, 6+ is warp
   warp(n) { stars.targetSpeed = n },
   flash(n) { flash = Math.max(flash, n) },
@@ -380,7 +399,7 @@ function updatePlayer(p, dt) {
         p.x = clamp(p.x, 60, W - 60)
         p.y = H - 110
         p.vx = p.vy = 0
-        p.invuln = 2.5
+        p.invuln = 2.2
         if (p.lo.lifeShield) addPower(p.powers, 'shield', p.maxSlots)
       }
     }
@@ -390,7 +409,11 @@ function updatePlayer(p, dt) {
   const sp = SHIP_SPEED[powerLevel(p.powers, 'speed')] * p.lo.speed * (p.carry ? p.carry.slow ?? 0.8 : 1)
   let tvx
   let tvy
-  if (p.touch) {
+  if (cutscene) {
+    tvx = 0
+    tvy = 0
+    p.invuln = Math.max(p.invuln, 0.4)
+  } else if (p.touch) {
     tvx = clamp((p.touch.x - p.x) * 9, -sp, sp)
     tvy = clamp((p.touch.y - 70 - p.y) * 9, -sp, sp)
   } else {
@@ -408,7 +431,7 @@ function updatePlayer(p, dt) {
   p.invuln = Math.max(0, p.invuln - dt)
   tickPowers(p.powers, dt)
 
-  const firing = phase !== 'victory' && !level?.noFire
+  const firing = phase !== 'victory' && !level?.noFire && !cutscene
   p.fireCd -= dt
   if (p.fireCd <= 0 && firing) {
     p.fireCd = FIRE_DELAY[powerLevel(p.powers, 'rapid')]
@@ -448,7 +471,7 @@ function dropCarry(p) {
 }
 
 function hurtPlayer(p) {
-  if (!p.alive || p.invuln > 0 || phase === 'victory' || phase === 'clear') return
+  if (!p.alive || p.invuln > 0 || phase === 'victory' || phase === 'clear' || cutscene) return
   if (absorbHit(p.powers)) {
     p.invuln = 1.2
     sfx.shieldPop()
@@ -594,11 +617,11 @@ function launchWave(kind) {
     case 'snake': {
       const x0 = rand(W * 0.3, W * 0.7)
       const amp = Math.min(W * 0.28, 260)
-      for (let i = 0; i < 6; i++) later(i * 0.3, () => spawn('scout', x0, -40, { path: 'sine', x0, amp, freq: 1.5, speed: 130 }))
+      for (let i = 0; i < 7; i++) later(i * 0.28, () => spawn('scout', x0, -40, { path: 'sine', x0, amp, freq: 1.5, speed: 140 }))
       break
     }
     case 'rain': {
-      const n = 4 + mission.difficulty
+      const n = 5 + mission.difficulty
       for (let i = 0; i < n; i++) later(i * 0.45, () => spawn('scout', rand(60, W - 60), -40, { path: 'fall', speed: rand(120, 170) }))
       break
     }
@@ -613,16 +636,18 @@ function launchWave(kind) {
     case 'vee': {
       const cx = rand(W * 0.3, W * 0.7)
       const slots = [[0, 0], [-60, -50], [60, -50], [-120, -100], [120, -100]]
+      if (mission.difficulty >= 3) slots.push([-180, -150], [180, -150])
       for (const [ox, oy] of slots) spawn('zigzag', cx + ox, -40 + oy, { path: 'zig', speed: 110, vx: ox < 0 ? -150 : 150, zt: 0 })
       break
     }
     case 'divers': {
-      const n = mission.difficulty >= 4 ? 3 : 2
+      const n = mission.difficulty >= 3 ? 3 : 2
       for (let i = 0; i < n; i++) later(i * 0.5, () => spawn('diver', (W * (i + 1)) / (n + 1), -40, { path: 'dive', state: 'enter', hoverY: rand(120, 220) }))
       break
     }
     case 'gunners': {
-      for (const fx of [0.28, 0.72]) spawn('gunner', W * fx, -50, { path: 'gun', hoverY: rand(140, 210), life: 9, fireT: rand(1, 2) })
+      const spots = mission.difficulty >= 5 ? [0.2, 0.5, 0.8] : [0.28, 0.72]
+      for (const fx of spots) spawn('gunner', W * fx, -50, { path: 'gun', hoverY: rand(140, 210), life: 9, fireT: rand(1, 2) })
       break
     }
   }
@@ -740,7 +765,7 @@ function damageEnemy(e, dmg, owner) {
     const boom = def.boom ?? 0.8
     explode(e.x, e.y, enemyLight(e), boom)
     sfx.pop(boom + (boom > 1 ? 0 : -0.1))
-    if (Math.random() < (def.drop ?? 0.09)) dropBubble(e.x, e.y)
+    if (Math.random() < (def.drop ?? 0.07)) dropBubble(e.x, e.y)
     def.onDeath?.(e, g, owner)
   } else {
     sfx.hitTick()
@@ -749,8 +774,10 @@ function damageEnemy(e, dmg, owner) {
 
 // ================================================================ bosses
 
+// Bosses take more punishment than they used to — and more again with a
+// second ship pouring lasers into them.
 function hpMult() {
-  return numPlayers === 2 ? 1.5 : 1
+  return numPlayers === 2 ? 1.85 : 1.25
 }
 
 function bossEnter(b, dt) {
@@ -808,11 +835,11 @@ const BOSSES = {
 
       if ((b.fanT -= dt) <= 0) {
         fan(b.x, b.y + 30, angry ? 9 : 7, 1.2, 210, '#7dff5a')
-        b.fanT = angry ? 2.1 : 2.8
+        b.fanT = angry ? 1.8 : 2.4
       }
       if ((b.aimT -= dt) <= 0) {
         aimed(b.x, b.y + 30, 3, 0.18, 270, '#ffe23d')
-        b.aimT = angry ? 1.4 : 1.9
+        b.aimT = angry ? 1.2 : 1.6
       }
       if (angry && (b.ringT -= dt) <= 0) {
         ringShot(b.x, b.y, 14, 150, '#9ff0ff', b.t)
@@ -899,7 +926,7 @@ const BOSSES = {
         b.at += dt
         const done = () => {
           b.attack = null
-          b.rest = angry ? 0.9 : 1.6
+          b.rest = angry ? 0.75 : 1.3
         }
         switch (b.attack) {
           case 'laser':
@@ -1047,7 +1074,7 @@ const BOSSES = {
             const bx = tx + Math.cos(t.aim) * 44
             const by = ty + Math.sin(t.aim) * 44
             for (let i = 0; i < 3; i++) shoot(bx, by, t.aim + (i - 1) * 0.15, 260, '#ffb02e')
-            t.fireT = b.turrets.some((o) => o !== t && o.hp <= 0) ? 1.3 : 2.1
+            t.fireT = b.turrets.some((o) => o !== t && o.hp <= 0) ? 1.1 : 1.8
           }
         }
         if ((b.hangarT -= dt) <= 0) {
@@ -1289,7 +1316,7 @@ const WAVES_LEVEL = {
     if (waveIndex < waves.length) {
       if (waveCooldown <= 0 && (waveTimer <= 0 || live === 0)) {
         launchWave(waves[waveIndex++])
-        waveTimer = 7.3 - mission.difficulty * 0.3
+        waveTimer = 6.4 - mission.difficulty * 0.35
         waveCooldown = 1.6
       }
     } else if (live === 0 || waveTimer < -6) g.levelDone()
@@ -1300,7 +1327,7 @@ const WAVES_LEVEL = {
 const LEVELS = { waves: WAVES_LEVEL }
 
 // Each pack adds its levels, bosses and enemy types to the registries.
-for (const pack of [asteroidsPack, racePack, nebulaPack, ionPack]) {
+for (const pack of [asteroidsPack, racePack, nebulaPack, ionPack, swarmPack]) {
   Object.assign(LEVELS, pack.levels ?? {})
   Object.assign(BOSSES, pack.bosses ?? {})
   Object.assign(ENEMY, pack.enemies ?? {})
@@ -1312,6 +1339,8 @@ for (const pack of [asteroidsPack, racePack, nebulaPack, ionPack]) {
 const params = new URLSearchParams(location.search)
 
 function clearWorld() {
+  cutscene = null
+  bars = 0
   enemies = []
   pShots = []
   eShots = []
@@ -1361,7 +1390,7 @@ function updateFlow(dt) {
     spawnBoss(mission.boss)
   } else if (phase === 'clear') {
     if (phaseT > 0.6 && phaseT - dt <= 0.6) {
-      banner(mission.boss ? 'Mission complete!' : 'Bonus round complete!', 'Great flying!', 'clear')
+      banner(mission.doneTitle ?? (mission.boss ? 'Mission complete!' : 'Bonus round complete!'), 'Great flying!', 'clear')
       sfx.clear()
       const flying = players.find((q) => !q.out)
       if (flying) for (const p of players) if (p.out) revive(p, flying)
@@ -1374,11 +1403,12 @@ function updateFlow(dt) {
   }
 
   // bubbles drift down on their own every so often
-  if ((phase === 'main' || phase === 'boss') && !level.noBubbles) {
+  if (cutscene) cutscene.t += dt
+  if ((phase === 'main' || phase === 'boss') && !level.noBubbles && !cutscene) {
     bubbleTimer -= dt
     if (bubbleTimer <= 0) {
       dropBubble(rand(60, W - 60), -30)
-      bubbleTimer = phase === 'boss' ? rand(8, 11) : rand(7, 10)
+      bubbleTimer = phase === 'boss' ? rand(10, 13) : rand(9, 12)
     }
   }
 }
@@ -1423,6 +1453,7 @@ function endMission(cleared) {
 function update(dt) {
   time += dt
   stars.update(dt)
+  bars += ((cutscene ? 1 : 0) - bars) * Math.min(1, dt * 5)
   shake = Math.max(0, shake - dt * 30)
   flash = Math.max(0, flash - dt * 1.6)
 
@@ -1721,7 +1752,27 @@ function draw() {
     ctx.fillStyle = `rgba(255,255,255,${flash * 0.6})`
     ctx.fillRect(0, 0, W, H)
   }
-  drawHUD()
+  if (bars > 0.5) drawBars()
+  else {
+    drawHUD()
+    if (bars > 0.01) drawBars()
+  }
+}
+
+// Cinema bars for a cutscene, with a reminder that it can be skipped.
+function drawBars() {
+  const h = 74 * bars
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, W, h)
+  ctx.fillRect(0, H - h, W, h)
+  if (cutscene?.onSkip && cutscene.t > 0.6) {
+    ctx.globalAlpha = Math.min(1, (cutscene.t - 0.6) * 2) * (0.55 + 0.25 * Math.sin(time * 4))
+    ctx.font = `13px ${FONT}`
+    ctx.textAlign = 'right'
+    ctx.fillStyle = '#a9b3d6'
+    ctx.fillText('Enter or tap: skip', W - 20, H - h / 2 + 5)
+    ctx.globalAlpha = 1
+  }
 }
 
 function drawPlayer(p) {
@@ -2030,7 +2081,7 @@ function fillEndScreen(name) {
   sc.querySelector('.wallet-line').textContent = `You have ★ ${r.wallet.toLocaleString()}`
 
   if (name === 'done') {
-    sc.querySelector('h2').textContent = mission.boss ? 'Mission complete!' : 'Bonus round complete!'
+    sc.querySelector('h2').textContent = mission.doneTitle ?? (mission.boss ? 'Mission complete!' : 'Bonus round complete!')
     const next = MISSIONS[missionIdx + 1]
     const btn = sc.querySelector('[data-act="next"]')
     btn.hidden = !next
@@ -2103,7 +2154,7 @@ function renderMap() {
       <span class="danger" aria-label=""></span>
       <span class="mblurb"></span>
       <span class="mbest"></span>`
-    card.querySelector('.mnum').textContent = m.boss ? `Mission ${i + 1}` : `Mission ${i + 1} · Bonus`
+    card.querySelector('.mnum').textContent = m.boss ? `Mission ${i + 1}` : `Mission ${i + 1} · ${m.tag ?? 'Bonus'}`
     card.querySelector('.mname').textContent = locked ? '???' : m.name
     const danger = card.querySelector('.danger')
     danger.setAttribute('aria-label', `Danger ${m.difficulty} of 5`)
@@ -2288,6 +2339,7 @@ window.addEventListener('keydown', (e) => {
     storeKey(e)
   } else if (mode === 'play') {
     if (e.code === 'KeyP' || e.code === 'Escape') pause()
+    else if (cutscene?.onSkip && OK.has(e.code)) cutscene.onSkip()
   } else if (mode === 'pause') {
     if (e.code === 'KeyP' || e.code === 'Escape') resume()
     else if (e.code === 'KeyQ') quitMission()
@@ -2342,6 +2394,7 @@ function toWorld(e) {
 canvas.addEventListener('pointerdown', (e) => {
   if (mode !== 'play') return
   unlockAudio()
+  if (cutscene?.onSkip) return cutscene.onSkip()
   const pt = toWorld(e)
   const p = numPlayers === 2 && pt.x > W / 2 ? players[1] : players[0]
   if (!p) return

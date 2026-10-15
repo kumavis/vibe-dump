@@ -52,6 +52,7 @@ passed to every hook as `g`.
 | `g.dropBubble(x, y, type?)` | a power-up bubble (`shield` `triple` `rapid` `speed` `heart` `nova`, random if omitted) |
 | `g.banner(sub, title, cls?)` | big centre banner; `cls` is `''`, `'warn'` or `'clear'` |
 | `g.shake(n)`, `g.flash(n)` | screen shake (try 6–20) and white flash (0–1) |
+| `g.cutscene(on, { onSkip })`, `g.inCutscene` | a scripted moment: while on, ships ignore their controls, don't shoot and can't be hurt; the HUD gives way to letterbox bars; Enter or a tap calls `onSkip`, which should wrap the scene up and call `g.cutscene(false)`. Enemies keep running, so hold your own fire during it |
 | `g.levelDone()` | the level's main part is finished: on to the boss, or to the finish if there isn't one |
 | `g.sfx` | sounds from `../../audio.js` `sfx`: `zap hitTick ting pop(size) boom hurt shieldPop bubble nova laserWarn laser siren revive clear win lose select start buy deny` |
 | `g.ctx`, `g.FONT` | the canvas context (already in world units) and the Bungee font stack |

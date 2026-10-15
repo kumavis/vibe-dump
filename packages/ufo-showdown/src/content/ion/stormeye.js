@@ -12,11 +12,11 @@ import { sky, strike, walk, thunder, glow, boltPath, strokeBolt, boltSign } from
 const TAU = Math.PI * 2
 const GOLD = '#ffe66b'
 
-const CHARGE_TIME = 1.6 // seconds for one ship to fill a beacon
-const DRAIN = 0.3 // what a beacon loses per second with nobody in it
+const CHARGE_TIME = 1.9 // seconds for one ship to fill a beacon
+const DRAIN = 0.45 // what a beacon loses per second with nobody in it
 const BEACON_R = 66
 const ZAPS = 5 // rounds of beacons to finish it
-const GUST = 150 // how hard the wind shoves, against a ship speed of 440
+const GUST = 175 // how hard the wind shoves, against a ship speed of 440
 const WINDUP = 0.6 // the eye glows this long before each attack
 
 // main.js hands `g` to most boss hooks but not to shot() and hits(), so the
@@ -144,7 +144,7 @@ export const stormeye = {
     b.at += dt
     const done = () => {
       b.attack = null
-      b.rest = angry ? 0.9 : 1.4
+      b.rest = angry ? 0.7 : 1.15
     }
     if (b.at < WINDUP) return
     const t = b.at - WINDUP
