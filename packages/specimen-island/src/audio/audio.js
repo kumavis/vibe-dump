@@ -299,18 +299,20 @@ export class Audio {
   }
 
   // The player's own footstep (audio/footsteps.js): heel, toe and the surface
-  // underfoot, alternating feet. `intensity` is 0.35 crouched … 1 sprinting.
-  step(surface, intensity) {
+  // underfoot. `intensity` is 0.35 crouched … 1 sprinting; `side` is the foot
+  // that lands (-1 left, 1 right; alternates if not given); `tune` keeps one
+  // deck or bench at one pitch.
+  step(surface, intensity, side, tune) {
     if (!this.ctx || !this.enabled) return
-    this.stepSide = this.stepSide > 0 ? -1 : 1
-    playStep(this.ctx, this.master, this.noise, surface, { intensity, side: this.stepSide })
+    this.stepSide = side ?? (this.stepSide > 0 ? -1 : 1)
+    playStep(this.ctx, this.master, this.noise, surface, { intensity, side: this.stepSide, tune })
   }
 
   // Test hook: the same footstep rendered offline, to measure its envelope.
-  renderStep(surface, intensity = 0.65, seconds = 0.5) {
+  renderStep(surface, intensity = 0.65, seconds = 0.5, tune) {
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext
     const ctx = new OAC(2, Math.ceil(44100 * seconds), 44100)
-    playStep(ctx, ctx.destination, makeNoise(ctx), surface, { intensity, side: 1, t: 0.01 })
+    playStep(ctx, ctx.destination, makeNoise(ctx), surface, { intensity, side: 1, t: 0.01, tune })
     return ctx.startRendering()
   }
 

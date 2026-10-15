@@ -21,6 +21,7 @@ export class Brain {
     this.anger = 0
     this.roarCool = rng.range(2, 6)
     this.idleTimer = rng.range(2, 8)
+    this.alarmSeen = -1 // the herd alarm a bold herd last scattered for
   }
 
   set(state, data = {}) {
@@ -88,9 +89,19 @@ export class Brain {
     }
     // herd alarm
     const h = c.herd
+    // a habituated herd (data/encounters.js `bold`), unless a gun just went off
+    const bold = h?.bold && G.time - G.stealth.lastLoud > 4 ? h.bold : null
     if (h && h.alarm && G.time - h.alarm.t < 4 && temper === 'skittish' && s !== 'flee') {
-      this.fleeFrom(h.alarm, 6 + this.rng.next() * 3)
-      return
+      if (!bold) {
+        this.fleeFrom(h.alarm, 6 + this.rng.next() * 3)
+        return
+      }
+      // the gang scatters with whoever called, once per call
+      if (this.alarmSeen !== h.alarm.t) {
+        this.alarmSeen = h.alarm.t
+        this.fleeFrom(h.alarm, bold.scatter, true)
+        return
+      }
     }
 
     const aw = P.awareness
@@ -99,6 +110,7 @@ export class Brain {
 
     if (aw >= 1) {
       if (temper === 'skittish') {
+        if (bold) return this.boldReact(G, player, bold)
         if (s !== 'flee') {
           this.fleeFrom(player, 7 + this.rng.next() * 4)
           this.alarmHerd(G, player)
@@ -142,6 +154,7 @@ export class Brain {
 
     if (aw >= 0.35 && P.lastKnown) {
       if (temper === 'skittish' && aw > 0.7) {
+        if (bold) return this.boldReact(G, P.lastKnown, bold)
         if (s !== 'flee') {
           this.fleeFrom(P.lastKnown, 5)
           this.alarmHerd(G, P.lastKnown)
@@ -172,6 +185,29 @@ export class Brain {
 
   fleeFrom(from, time, slow = false) {
     this.set('flee', { from: { x: from.x, z: from.z }, time, slow, force: true })
+  }
+
+  // A habituated herd keeps an eye on a person beyond `tolerate` metres (half
+  // that if they come crouched), trots a few metres off (calling) inside it,
+  // and darts if they keep coming, so it stays in view instead of vanishing
+  // over the next rise.
+  boldReact(G, from, bold) {
+    const c = this.c
+    const s = this.state
+    const d = Math.hypot(from.x - c.pos.x, from.z - c.pos.z)
+    const tolerate = bold.tolerate * (!G.vehicle && G.player.crouching ? 0.5 : 1)
+    if (d < tolerate) {
+      const dart = d < tolerate * 0.6
+      if (s !== 'flee' || this.t > this.data.time || (dart && this.data.slow)) {
+        this.fleeFrom(from, dart ? bold.scatter * 0.6 : bold.scatter, !dart)
+        this.alarmHerd(G, from)
+        c.vocalize('alarm')
+      }
+    } else if (s === 'flee') {
+      if (this.t > this.data.time) this.set('alert')
+    } else if (s === 'alert') {
+      if (this.t > 3) this.set('graze')
+    } else if (this.rng.next() < 0.04) this.set('alert') // look up now and then
   }
 
   alarmHerd(G, pos) {

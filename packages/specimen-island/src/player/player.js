@@ -94,14 +94,22 @@ export class Player {
 
   // What the feet are on, for the footstep sound: a deck's material, else the
   // island's own grids — shallow water, road gravel, undergrowth, grass, sand.
+  // On a deck it also sets `footTune`, a 0–1 hashed from where that deck
+  // stands, so one pier or bench keeps one pitch step after step.
   surface() {
     const isl = this.G.island
     const { x, z } = this.pos
+    this.footTune = undefined
     if (this.swimming) return 'swim'
     if (this.wading > 0.1) return 'water'
     const under = this.G.physics.groundInfo(x, z, this.pos.y + 0.1)
     // decks without a material are the old wooden kind (bridges, crates)
-    if (under.collider && this.pos.y - under.y < 0.2) return under.collider.material || 'wood'
+    if (under.collider && this.pos.y - under.y < 0.2) {
+      const c = under.collider
+      const h = Math.sin(c.x * 12.9898 + c.z * 78.233) * 43758.5453
+      this.footTune = h - Math.floor(h)
+      return c.material || 'wood'
+    }
     if (isl.sample(isl.road, x, z) > 0.5) return 'gravel'
     const cover = isl.coverAt(x, z)
     if (cover > 0.45) return 'brush'
@@ -222,9 +230,11 @@ export class Player {
     }
     this._fall = this.vel.y
 
-    // ---- footsteps make noise
+    // ---- footsteps: noise for the animals, sound for you
     const hs = Math.hypot(this.vel.x, this.vel.z)
     if ((this.onGround || this.swimming) && hs > 0.5) {
+      // the noise bus keeps its own short stride: stealth is balanced on how
+      // often animals hear you, not on what a step sounds like
       this.stepAcc += hs * dt
       const stride = sprinting ? 1.05 : this.crouching ? 0.6 : 0.8
       if (this.stepAcc > stride) {
@@ -234,9 +244,15 @@ export class Player {
         if (!this.crouching && cover > 0.45) r *= 1.35 // crashing through undergrowth
         if (this.wading > 0.2 || this.swimming) r = Math.max(r, 14)
         G.events.emit('noise', { x: this.pos.x, y: this.pos.y, z: this.pos.z, radius: r, source: 'player', kind: 'step' })
-        G.audio?.step(this.surface(), sprinting ? 1 : this.crouching ? 0.35 : 0.65)
       }
+      // the step you hear lands with the head bob: a foot plants as the head
+      // bottoms out (|cos bob| = 0 at bob = (k + 1/2) pi), on the side the head
+      // sways to — about 2.5 steps a second walking, 3.7 sprinting
+      const was = Math.floor(this.bob / Math.PI + 0.5)
       this.bob += hs * dt * (sprinting ? 1.6 : 1.9)
+      if (Math.floor(this.bob / Math.PI + 0.5) !== was) {
+        G.audio?.step(this.surface(), sprinting ? 1 : this.crouching ? 0.35 : 0.65, Math.sin(this.bob) > 0 ? 1 : -1, this.footTune)
+      }
     } else this.bob = damp(this.bob, Math.round(this.bob / Math.PI) * Math.PI, 6, dt)
     G.veg?.setPush(this.pos.x, this.pos.z, 1.6, hs > 0.3 ? 1 : 0.4)
 

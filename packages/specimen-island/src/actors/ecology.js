@@ -1,7 +1,7 @@
 import { SPECIES, SPECIES_ORDER } from '../data/species.js'
 import { ENCOUNTERS } from '../data/encounters.js'
 import { Rng } from '../core/rng.js'
-import { wrapAngle } from '../core/mathx.js'
+import { wrapAngle, yawTo } from '../core/mathx.js'
 import { Creature } from './creature.js'
 import { Vitals } from './vitals.js'
 
@@ -69,40 +69,102 @@ export class Ecology {
     // 140-350 m from where the player looks, wandered a 35-40 m home range and
     // bolted at first sight, so most players met nothing until well inland.
     // These are placed in sight of the pier and the station door, on a short
-    // leash (data/encounters.js).
+    // leash, and are bold enough to stay in view (data/encounters.js).
     for (const e of ENCOUNTERS) this.placeEncounter(e, rng)
   }
 
-  placeEncounter(e, rng) {
+  // Where an encounter is watched from: an eye position and the way it faces.
+  viewpoint(name) {
     const G = this.G
     const isl = G.island
-    let view
-    if (e.view === 'spawn') {
-      const sp = isl.poi.dock.spawn
-      view = { x: sp.pos.x, y: sp.pos.y + 1.6, z: sp.pos.z, yaw: sp.yaw }
-    } else {
-      const st = isl.poi.station
-      const x = st.x + Math.sin(st.yaw) * 7
-      const z = st.z + Math.cos(st.yaw) * 7
-      view = { x, y: G.physics.groundAt(x, z, st.y + 3) + 1.6, z, yaw: null }
+    // the player's standing eye height above whatever is underfoot
+    const at = (x, z, above, yaw) => ({ x, y: G.physics.groundAt(x, z, above) + 1.63, z, yaw })
+    const sp = isl.poi.dock.spawn
+    const st = isl.poi.station
+    if (name === 'spawn') return at(sp.pos.x, sp.pos.z, sp.pos.y + 0.5, sp.yaw)
+    if (name === 'pierFoot') {
+      // walk inland from the spawn until the deck gives way to ground
+      let x = sp.pos.x
+      let z = sp.pos.z
+      for (let i = 0; i < 160 && G.physics.groundInfo(x, z, sp.pos.y + 0.5).collider; i++) {
+        x -= Math.sin(sp.yaw) * 0.5
+        z -= Math.cos(sp.yaw) * 0.5
+      }
+      return at(x, z, isl.heightAt(x, z) + 1, sp.yaw)
     }
-    const mid = (e.ring[0] + e.ring[1]) / 2
-    const half = (e.ring[1] - e.ring[0]) / 2
+    if (name === 'door') return at(st.x + Math.sin(st.yaw) * 7, st.z + Math.cos(st.yaw) * 7, st.y + 3, st.yaw + Math.PI)
+    if (name === 'approach') {
+      // the road from the dock, 120 m back down it from the station (the top of
+      // the dock yard, where the road comes over the rise), facing up it
+      const d = (p, o) => Math.hypot(p[0] - o.x, p[1] - o.z)
+      const road = isl.roads.reduce((b, r) => (d(r.pts[0], isl.poi.dock) < d(b.pts[0], isl.poi.dock) ? r : b)).pts
+      let i = road.reduce((b, p, k) => (d(p, st) < d(road[b], st) ? k : b), 0)
+      for (let left = 120; i > 0 && left > 0; i--) left -= Math.hypot(road[i][0] - road[i - 1][0], road[i][1] - road[i - 1][1])
+      const [x, z] = road[i]
+      const [nx, nz] = road[i + 1]
+      return at(x, z, isl.heightAt(x, z) + 1, Math.atan2(x - nx, z - nz))
+    }
+    throw new Error(`unknown encounter viewpoint '${name}'`)
+  }
+
+  placeEncounter(e, rng) {
+    const view = this.viewpoint(e.at)
+    const also = (e.also || []).map((n) => this.viewpoint(n))
+    // As specified first; if this island has no such spot, a wider ring and
+    // scruffier ground, then without the extra viewpoints. Never an unchecked
+    // spot: a herd dropped blind can land in the sea or behind a building.
+    const passes = [
+      { ring: 1, arc: 0, cover: 0, also },
+      { ring: 1.3, arc: 0.4, cover: 0.15, also },
+      { ring: 1.6, arc: 0.8, cover: 0.3, also: [] },
+    ]
+    for (const p of passes) {
+      const spot = this.findSpot(e, view, p, rng)
+      if (!spot) continue
+      return this.addHerd(e.species, spot.x, spot.z, rng, { count: rng.int(e.count[0], e.count[1]), radius: e.radius, bold: e.bold })
+    }
+    console.warn(`encounter ${e.species} at ${e.at}: no open ground in sight, skipped`)
+    return null
+  }
+
+  // Best-scoring open spot in the ring around `view` that it (and every `also`
+  // viewpoint, near the middle of its screen) can see; null if there is none.
+  findSpot(e, view, relax, rng) {
+    const G = this.G
+    const isl = G.island
+    const CONE = 0.65 // radians off-centre an `also` viewpoint still frames comfortably
+    const r0 = e.ring[0]
+    const r1 = e.ring[1] * relax.ring
+    const arc = Math.min(Math.PI, e.arc + relax.arc)
+    const aim = e.aim || 0
+    const mid = (r0 + r1) / 2
+    const half = (r1 - r0) / 2
+    // the herd mills about its home, so the viewpoint has to see the ground a
+    // few metres around it too, not just the one spot (a terrace lip hides half
+    // a gang standing a step too far back)
+    const foot = e.radius * 0.5
+    const around = [[0, 0], [foot, 0], [-foot, 0], [0, foot], [0, -foot]]
+    const seen = (v, x, z) => around.every(([ox, oz]) => G.physics.lineOfSight(v.x, v.y, v.z, x + ox, isl.heightAt(x + ox, z + oz) + e.eye, z + oz))
+    const nearRoad = (x, z, r) => isl.roads.some((rd) => rd.pts.some(([px, pz]) => Math.abs(px - x) < r && Math.abs(pz - z) < r && Math.hypot(px - x, pz - z) < r))
     let best = null
     let bestScore = 0
-    for (let i = 0; i < 400; i++) {
+    for (let i = 0; i < 600; i++) {
       // yaw convention: facing `a` looks along (-sin a, -cos a)
-      const a = view.yaw == null ? rng.range(-Math.PI, Math.PI) : view.yaw + rng.range(-e.arc, e.arc)
-      const r = rng.range(e.ring[0], e.ring[1])
+      const off = rng.range(-arc, arc)
+      const a = view.yaw + off
+      const r = rng.range(r0, r1)
       const x = view.x - Math.sin(a) * r
       const z = view.z - Math.cos(a) * r
       if (!isl.isLand(x, z, -0.6)) continue
       const cover = isl.coverAt(x, z)
-      if (cover > e.cover || isl.sample(isl.road, x, z) > 0.3 || isl.sample(isl.slope, x, z) > 0.6) continue
+      if (cover > e.cover + relax.cover || isl.sample(isl.road, x, z) > 0.3 || isl.sample(isl.slope, x, z) > 0.6) continue
+      if (e.offRoad && nearRoad(x, z, e.offRoad)) continue
+      if (!seen(view, x, z)) continue
+      if (!relax.also.every((v) => Math.abs(wrapAngle(yawTo(v.x, v.z, x, z) - v.yaw)) < CONE && seen(v, x, z))) continue
       const trees = Math.min(1, isl.sample(isl.d.canopy, x, z) + isl.sample(isl.d.broadleaf, x, z) + isl.sample(isl.d.palm, x, z))
-      if (!G.physics.lineOfSight(view.x, view.y, view.z, x, isl.heightAt(x, z) + e.eye, z)) continue
-      let score = (1 - cover) * (1 - 0.8 * trees) * (1 - 0.5 * (Math.abs(r - mid) / half)) * (1 + isl.habitat(x, z, e.like || {}))
-      if (view.yaw != null) score *= 1 - 0.5 * (Math.abs(wrapAngle(a - view.yaw)) / e.arc)
+      // less undergrowth is better, relative to what this animal can stand in
+      let score = (1 - (0.5 * cover) / (e.cover + relax.cover)) * (1 - 0.8 * trees) * (1 - 0.5 * (Math.abs(r - mid) / half)) * (1 + isl.habitat(x, z, e.like || {}))
+      score *= 1 - 0.5 * (Math.abs(Math.abs(off) - aim) / arc)
       // a POI's yard is fine to stand in, but herds never pick goals there
       if (isl.sample(isl.clear, x, z) > 0.5) score *= 0.6
       score *= 0.9 + rng.next() * 0.2
@@ -111,11 +173,11 @@ export class Ecology {
         best = { x, z }
       }
     }
-    if (!best) best = { x: view.x - Math.sin(view.yaw ?? 0) * mid, z: view.z - Math.cos(view.yaw ?? 0) * mid }
-    return this.addHerd(e.species, best.x, best.z, rng, { count: rng.int(e.count[0], e.count[1]), radius: e.radius })
+    return best
   }
 
-  // opts: { count, radius } override the species' herd size and home range
+  // opts: { count, radius } override the species' herd size and home range;
+  // `bold` makes it a habituated herd (data/encounters.js, Brain.think)
   addHerd(id, x, z, rng, opts = {}) {
     const sp = SPECIES[id]
     const n = opts.count ?? rng.int(sp.herd[0], sp.herd[1])
@@ -131,6 +193,7 @@ export class Ecology {
       records: [],
       loaded: [],
       alarm: null,
+      bold: opts.bold || null,
       rng: rng.fork(this.herds.length + 1),
     }
     for (let i = 0; i < n; i++) {
