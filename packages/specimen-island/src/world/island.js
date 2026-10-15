@@ -18,9 +18,31 @@ const NO_WATER = -1e4
 // sand instead of levees; the meander shrinks to `meander` of its swing.
 const MOUTH = { tidal: 35, length: 130, grade: 0.045, widen: 1.2, shoal: 0.35, opens: 7, meander: 0.35 }
 
+// River water stands on grid vertices within WET half-widths of the centre;
+// the surface keeps BANK m under the lower bank, cutting down at most to its
+// own level CUT m downstream (see carveRiver).
+const WET = 1.3
+const BANK = 0.4
+const CUT = 20
+
+// The inland sheet's dry corners sit this far under their own ground, so the
+// sheet always ends against the bank, waves and all (water.js: ±0.11 m).
+const SINK = 0.15
+
 // A wreck's lot beside the road (see world/structures.js WRECKS for the
 // models): how far off the centreline it sits, and its body's footprint.
 const WRECK_LOT = { jeep: { off: 6.2, length: 4.4, width: 1.9 }, truck: { off: 7.5, length: 6.0, width: 2.2 } }
+
+// A grid value inside cell (i, j) at (fx, fz), linear on the cell's two
+// triangles — the split the terrain mesh draws (see terrain.js winding).
+function triangle(arr, n, i, j, fx, fz) {
+  const a = arr[j * n + i]
+  const b = arr[(j + 1) * n + i]
+  const c = arr[j * n + i + 1]
+  const d = arr[(j + 1) * n + i + 1]
+  if (fx + fz <= 1) return a + (c - a) * fx + (b - a) * fz
+  return d + (b - d) * (1 - fx) + (c - d) * (1 - fz)
+}
 
 // cumulative distance along a polyline of [x, z] points
 function alongOf(pts) {
@@ -42,6 +64,8 @@ export class Island {
     const f = () => new Float32Array(N)
     this.h = f()
     this.water = new Float32Array(N).fill(NO_WATER)
+    this.level = new Float32Array(N).fill(NO_WATER) // surface of the nearest inland water, over its valley
+    this.surface = new Float32Array(N).fill(NO_WATER) // the inland water sheet as drawn (settleWater)
     this.riverD = new Float32Array(N).fill(1e4) // distance to river centre / half width
     this.riverM = new Float32Array(N).fill(1e4) // distance to river centre in metres
     this.riverE = f() // 1 where the river opens into its estuary (sandy, no levees)
@@ -69,8 +93,10 @@ export class Island {
     this.generateBase()
     this.carveRiver()
     this.carveLake()
+    this.settleWater()
     this.placePois()
     this.buildRoads()
+    this.settleWater() // the roads re-shape some banks
     this.computeSlope()
     this.computeBiomes()
     this.computeDensities()
@@ -102,16 +128,7 @@ export class Island {
     if (gx < 0 || gz < 0 || gx >= this.seg || gz >= this.seg) return -30
     const i = Math.floor(gx)
     const j = Math.floor(gz)
-    const fx = gx - i
-    const fz = gz - j
-    const n = this.n
-    const h = this.h
-    const a = h[j * n + i]
-    const b = h[(j + 1) * n + i]
-    const c = h[j * n + i + 1]
-    const d = h[(j + 1) * n + i + 1]
-    if (fx + fz <= 1) return a + (c - a) * fx + (b - a) * fz
-    return d + (b - d) * (1 - fx) + (c - d) * (1 - fz)
+    return triangle(this.h, this.n, i, j, gx - i, gz - j)
   }
 
   sample(arr, x, z) {
@@ -129,8 +146,11 @@ export class Island {
     return lerp(lerp(a, b, fx), lerp(c, d, fx), fz)
   }
 
-  // Water surface at a point, or -Infinity on dry land. The ocean is everywhere
-  // at sea level; rivers and the lake sit above it on their own surfaces.
+  // Water surface at a point. The ocean is everywhere at sea level; rivers and
+  // the lake sit above it on their own surfaces. Inland that is the sheet the
+  // player sees (settleWater), on the same triangles as the ground, so the
+  // depth is the water's own: zero exactly at the drawn waterline, and on a
+  // steep reach the surface the swimmer floats on is the one sliding past.
   waterAt(x, z) {
     const gx = (x + this.half) / this.cell
     const gz = (z + this.half) / this.cell
@@ -140,8 +160,11 @@ export class Island {
       const j = Math.floor(gz)
       const n = this.n
       const w = this.water
-      const m = Math.max(w[j * n + i], w[j * n + i + 1], w[(j + 1) * n + i], w[(j + 1) * n + i + 1])
-      if (m > s) s = m
+      const a = j * n + i
+      if (Math.max(w[a], w[a + 1], w[a + n], w[a + n + 1]) > s + 0.01) {
+        const m = triangle(this.surface, n, i, j, gx - i, gz - j)
+        if (m > s) s = m
+      }
     }
     return s
   }
@@ -284,13 +307,50 @@ export class Island {
       widths[k] *= 1 + M.widen * est[k] * est[k] // the mouth flares
     }
 
+    // The channel has to hold its water at the grid's resolution, not just on
+    // its centreline. Upstream the river is narrower than a cell, so a wet cell
+    // reaches grid corners well past its bank, and where the land falls away
+    // across the flow (it slants down the mountain's flank) those corners stood
+    // below the surface and the water spilled out over them. So the surface
+    // also keeps under the lower bank, out to the farthest corner a wet cell
+    // reaches, and the river cuts into the hillside instead of perching on it,
+    // but never deeper than its own level CUT m downstream: a steep reach
+    // swallows the cut within a few metres and the gentle plains below keep
+    // their level. What that leaves (the outside of the bend at the foot of the
+    // mountain lies lower than even the plains river) settleWater banks up. The
+    // estuary has its own, gentler bank cap below.
+    const natural = new Float32Array(K)
+    let run = Infinity
+    for (let k = 0; k < K; k++) natural[k] = run = Math.min(run - 0.03, line[k] - 1.2)
+    const hold = new Float32Array(K).fill(Infinity)
+    for (let k = 0, down = 0; k < K; k++) {
+      while (down < K - 1 && along[down] < along[k] + CUT) down++
+      if (est[k] > 0.01) continue
+      const kk = Math.min(K - 1, k + 1)
+      const k0 = Math.max(0, k - 1)
+      const dx = path[kk][0] - path[k0][0]
+      const dz = path[kk][1] - path[k0][1]
+      const l = Math.hypot(dx, dz) || 1
+      const hw = widths[k] / 2
+      const far = hw * WET + this.cell * Math.SQRT2
+      let low = Infinity
+      for (const side of [-1, 1]) {
+        for (let o = hw; o <= far; o += 1.5) {
+          low = Math.min(low, this.heightAt(path[k][0] - (dz / l) * o * side, path[k][1] + (dx / l) * o * side))
+        }
+      }
+      // ...plus the 3 cm a sample the profile falls anyway, so the cut rejoins it
+      // exactly there and nothing below moves
+      hold[k] = Math.max(low - BANK, natural[down] + (down - k) * 0.03)
+    }
+
     // surface profile: always downhill, at least a metre below the land
     const surf = new Float32Array(K)
     const nat = new Float32Array(K)
     const cap = new Float32Array(K)
     let prev = Infinity
     for (let k = 0; k < K; k++) {
-      prev = Math.min(prev - 0.03, line[k] - 1.2)
+      prev = Math.min(prev - 0.03, line[k] - 1.2, hold[k])
       surf[k] = nat[k] = Math.max(prev, sea)
       // near the coast the river comes down to the sea on a steady grade
       // instead of dropping off the coastal bluff, and never sits above its
@@ -335,7 +395,7 @@ export class Island {
         s += surf[kk]
         c++
       }
-      sm[k] = Math.min(s / c, cap[k])
+      sm[k] = Math.min(s / c, cap[k], hold[k])
     }
     for (let k = 1; k < K; k++) sm[k] = Math.min(sm[k], sm[k - 1] - 0.01)
     for (let k = 0; k < K; k++) sm[k] = Math.max(sm[k], sea)
@@ -397,8 +457,9 @@ export class Island {
       this.h[id] = h
       // river water only over ground it can stand on: where the bed has
       // dropped below the sea, the sea's surface takes over
-      if (nd < 1.3 && s > sea + 0.01 && h >= sea) this.water[id] = s
+      if (nd < WET && s > sea + 0.01 && h >= sea) this.water[id] = s
     }
+    this.level.set(best)
     this.river = { path, surf: sm, widths, est, coast }
   }
 
@@ -426,8 +487,62 @@ export class Island {
       }
       this.h[id] = h
       if (nd < 1.2) this.water[id] = Math.max(this.water[id], level)
+      if (nd < 1.9) this.level[id] = Math.max(this.level[id], level)
     })
     this.lake = { x: L.x, z: L.z, radius: L.radius, level }
+  }
+
+  // The inland water as drawn and as the physics reads it. Every grid cell with
+  // a wet corner carries the sheet (water.js), so its dry corners have to hold
+  // the water: one that sat under the water beside it let the sheet float out
+  // over the lower ground and end in a straight cell edge. Such a corner is
+  // banked up to the water, the river's low levee at the grid's own resolution
+  // (faded out as the surface comes down to the sea, never on the seabed or
+  // the estuary's open sand), and every dry corner of the sheet then sits at
+  // the water's level but never above its own ground less SINK: the sheet
+  // always runs into the bank, so its edge is the terrain's.
+  settleWater() {
+    const n = this.n
+    const W = this.water
+    const S = this.surface
+    const h = this.h
+    const sea = this.sea
+    const wet = (id) => W[id] > sea + 0.01
+    const edge = new Uint8Array(n * n)
+    S.fill(NO_WATER)
+    for (let j = 0; j < n - 1; j++) {
+      for (let i = 0; i < n - 1; i++) {
+        const a = j * n + i
+        if (!(wet(a) || wet(a + 1) || wet(a + n) || wet(a + n + 1))) continue
+        for (const id of [a, a + 1, a + n, a + n + 1]) {
+          if (wet(id)) S[id] = W[id]
+          else edge[id] = 1
+        }
+      }
+    }
+    for (let id = 0; id < n * n; id++) {
+      if (!edge[id]) continue
+      let level = this.level[id]
+      if (level <= NO_WATER) {
+        // no water body claims it: the wet neighbours' mean
+        const i = id % n
+        const j = (id - i) / n
+        let s = 0
+        let c = 0
+        for (let dj = -1; dj <= 1; dj++)
+          for (let di = -1; di <= 1; di++) {
+            const ii = i + di
+            const jj = j + dj
+            if (ii < 0 || jj < 0 || ii >= n || jj >= n || !wet(jj * n + ii)) continue
+            s += W[jj * n + ii]
+            c++
+          }
+        level = s / c
+      }
+      if (h[id] > sea && h[id] < level) h[id] = lerp(h[id], level + 0.2, smoothstep(0.05, 0.8, level - sea) * (1 - this.riverE[id]))
+      // out over the seabed the sheet stays level and fades into the sea instead
+      S[id] = h[id] < sea ? level : Math.max(sea, Math.min(level, h[id] - SINK))
+    }
   }
 
   // Walk from a point along a direction until the ground dips under the sea.

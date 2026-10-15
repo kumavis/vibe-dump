@@ -1,12 +1,17 @@
 import * as THREE from 'three'
 import { depthTexture } from './terrain.js'
-import { smoothstep } from '../core/mathx.js'
+import { clamp, smoothstep } from '../core/mathx.js'
 
 // One water material for the sea, the river and the lake. It reads a depth
 // texture of the whole island so shallows go turquoise and foam hugs the shore
 // wherever land meets water — no per-body special cases. A per-vertex `aFade`
 // (1 on the sea) lets the inland sheet thin out where it reaches the sea, so
-// the two surfaces never stack into a hard double-alpha edge at the mouth.
+// the two surfaces never stack into a hard double-alpha edge at the mouth, and
+// `aRush` (0 on the sea) churns white water into a steep reach so its slope
+// reads as rapids.
+
+// White water fades in as the river's surface falls between these grades.
+const RAPIDS = [0.08, 0.3]
 
 export function buildWater(island) {
   const group = new THREE.Group()
@@ -33,13 +38,16 @@ export function buildWater(island) {
         `#include <common>
          uniform float uTime;
          attribute float aFade;
+         attribute float aRush;
          varying float vFade;
+         varying float vRush;
          varying vec3 vWorldPos;`,
       )
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
          vFade = aFade;
+         vRush = aRush;
          vec4 wp0 = modelMatrix * vec4(transformed, 1.0);
          transformed.y += sin(wp0.x * 0.08 + uTime * 1.1) * 0.06 + cos(wp0.z * 0.11 + uTime * 0.9) * 0.05;`,
       )
@@ -58,6 +66,7 @@ export function buildWater(island) {
          uniform float uCell;
          uniform float uN;
          varying float vFade;
+         varying float vRush;
          varying vec3 vWorldPos;
          float wHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
          float wNoise(vec2 p) {
@@ -80,6 +89,8 @@ export function buildWater(island) {
          float n2 = wNoise(vWorldPos.xz * 0.9 - vec2(uTime * 0.31, 0.0));
          float foamBand = 1.0 - smoothstep(0.0, 0.4, depth + (n1 - 0.5) * 0.25);
          float foam = foamBand * smoothstep(0.35, 0.65, n2 + 0.25 * sin(depth * 9.0 - uTime * 2.2));
+         float churn = wNoise(vWorldPos.xz * 0.8 + vec2(uTime * 0.9, -uTime * 1.3));
+         foam = max(foam, vRush * smoothstep(0.4, 0.75, churn * 0.55 + n2 * 0.55));
          wc = mix(wc, vec3(0.92, 0.95, 0.93), clamp(foam, 0.0, 1.0) * 0.7);
          float alpha = mix(0.35, 0.93, smoothstep(0.0, 2.6, depth));
          alpha = max(alpha, foam * 0.75);
@@ -101,6 +112,7 @@ export function buildWater(island) {
   // The sea: one big plane. Fog swallows its edge long before the far plane.
   const seaGeo = new THREE.PlaneGeometry(16000, 16000, 64, 64).rotateX(-Math.PI / 2)
   seaGeo.setAttribute('aFade', new THREE.Float32BufferAttribute(new Float32Array(seaGeo.attributes.position.count).fill(1), 1))
+  seaGeo.setAttribute('aRush', new THREE.Float32BufferAttribute(new Float32Array(seaGeo.attributes.position.count), 1))
   const sea = new THREE.Mesh(seaGeo, mat)
   sea.position.y = island.sea
   sea.renderOrder = 2
@@ -116,41 +128,41 @@ export function buildWater(island) {
   return { group, uniforms }
 }
 
+// The inland sheet covers every grid cell with a wet corner, at the heights
+// Island.settleWater gives it: the water where wet, and at a dry corner the
+// level of the water beside it, dipped just under that corner's ground — so
+// the sheet runs flat under the bank and the visible edge is wherever it meets
+// the terrain, never a cell's straight side. Its triangles are the terrain's
+// own, so that meeting line is exact.
 function inlandGeometry(island) {
   const n = island.n
   const W = island.water
+  const S = island.surface
   const sea = island.sea
   const wet = (id) => W[id] > sea + 0.01
   const map = new Int32Array(n * n).fill(-1)
+  const L = island.level
   const pos = []
   const fade = []
+  const rush = []
   const index = []
+  // how fast the water's own level falls here (the river's profile, not the
+  // sheet, which dips under its banks); a missing neighbour reads as level
+  const fall = (i, j) => {
+    const at = (ii, jj) => {
+      const v = L[clamp(jj, 0, n - 1) * n + clamp(ii, 0, n - 1)]
+      return v >= sea ? v : L[j * n + i]
+    }
+    return Math.hypot(at(i + 1, j) - at(i - 1, j), at(i, j + 1) - at(i, j - 1)) / (2 * island.cell)
+  }
   const vert = (i, j) => {
     const id = j * n + i
     if (map[id] >= 0) return map[id]
-    let y = W[id]
-    if (!wet(id)) {
-      // dry corner of a wet cell: borrow the neighbours' surface so the sheet
-      // runs flat under the bank instead of tilting down to nothing
-      let s = 0
-      let c = 0
-      for (let dj = -1; dj <= 1; dj++)
-        for (let di = -1; di <= 1; di++) {
-          const ii = i + di
-          const jj = j + dj
-          if (ii < 0 || jj < 0 || ii >= n || jj >= n) continue
-          const k = jj * n + ii
-          if (wet(k)) {
-            s += W[k]
-            c++
-          }
-        }
-      y = c ? s / c : island.h[id]
-    }
     map[id] = pos.length / 3
-    pos.push(island.xOf(i), y, island.xOf(j))
-    // a borrowed corner out over the seabed fades the sheet into the sea
+    pos.push(island.xOf(i), S[id], island.xOf(j))
+    // a dry corner out over the seabed fades the sheet into the sea
     fade.push(wet(id) ? 1 : smoothstep(sea - 0.3, sea + 0.05, island.h[id]))
+    rush.push(L[id] >= sea ? smoothstep(RAPIDS[0], RAPIDS[1], fall(i, j)) : 0)
     return map[id]
   }
   for (let j = 0; j < n - 1; j++) {
@@ -168,6 +180,7 @@ function inlandGeometry(island) {
   const geo = new THREE.BufferGeometry()
   geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
   geo.setAttribute('aFade', new THREE.Float32BufferAttribute(fade, 1))
+  geo.setAttribute('aRush', new THREE.Float32BufferAttribute(rush, 1))
   geo.setIndex(index)
   const nor = new Float32Array(pos.length)
   for (let i = 1; i < nor.length; i += 3) nor[i] = 1

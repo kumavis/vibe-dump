@@ -177,7 +177,9 @@ export function depthTexture(island) {
   const n = island.n
   const data = new Uint8Array(n * n)
   for (let id = 0; id < n * n; id++) {
-    const wl = Math.max(island.sea, island.water[id])
+    // the inland sheet's own heights, so its banks read their true (negative)
+    // depth and the shore foam sits on the drawn waterline
+    const wl = Math.max(island.sea, island.surface[id])
     const d = clamp(wl - island.h[id], -2, 14)
     data[id] = Math.round(((d + 2) / 16) * 255)
   }
