@@ -127,7 +127,15 @@ async function boot() {
   const ladder = buildLadder(devicePixelRatio)
   const gpu = readGpuInfo(renderer.getContext())
   const guess = detectRung({ ...gpu, width: innerWidth, height: innerHeight, dpr: devicePixelRatio }, ladder)
-  G.gfx = { gpu, guess, ladder, auto: null, autoIndex: guess.index, tier: null, pixelRatio: 0 }
+  // An automated browser (the gallery's thumbnail shot, headless playtests)
+  // renders in software, where Auto would pick Low and keep stepping down.
+  // Pin it to the rung most players see — Medium — and don't adapt.
+  let mediumRung = guess.index
+  ladder.forEach((r, i) => {
+    if (r.tier === 'medium') mediumRung = i
+  })
+  const pinned = navigator.webdriver === true
+  G.gfx = { gpu, guess, ladder, auto: null, autoIndex: pinned ? mediumRung : guess.index, pinned, tier: null, pixelRatio: 0 }
   let playClock = 0
   const applyQuality = (tier, pixelRatio) => {
     if (G.gfx.tier !== tier) {
@@ -142,20 +150,23 @@ async function boot() {
       resize()
     }
   }
+  // "Auto · Low · 50% res": the share of the screen's native resolution (per
+  // axis) the rung renders at, said only when it is below native
   const showAutoTier = () => {
     const r = ladder[G.gfx.autoIndex]
-    G.menus.setAutoLabel(QUALITY[r.tier].label + (r.pixelRatio < 1 ? ` · ${Math.round(r.pixelRatio * 100)}% res` : ''))
+    const native = r.pixelRatio / devicePixelRatio
+    G.menus.setAutoLabel(QUALITY[r.tier].label + (native < 0.99 ? ` · ${Math.round(native * 100)}% res` : ''))
   }
   const applySettings = (s) => {
     if (s.quality !== 'auto' && QUALITY[s.quality]) {
       G.gfx.auto = null // a manual choice ends adaptation
       applyQuality(s.quality, Math.min(devicePixelRatio, QUALITY[s.quality].pixelRatio))
     } else {
-      if (!G.gfx.auto) {
+      if (!G.gfx.auto && !G.gfx.pinned) {
         G.gfx.auto = new TierController(ladder, G.gfx.autoIndex)
         G.gfx.auto.startedAt = playClock
       }
-      const r = G.gfx.auto.rung
+      const r = G.gfx.auto ? G.gfx.auto.rung : ladder[G.gfx.autoIndex]
       applyQuality(r.tier, r.pixelRatio)
     }
     showAutoTier()
@@ -227,6 +238,7 @@ async function boot() {
     const tips = [
       ['Day 1, 07:30. The boat leaves at dusk the day you call for it. Make the trip count.', 'info', 7],
       ['Field Scanner [1] catalogues species. Tranq Pistol [2] for small animals. J opens the journal.', 'info', 9],
+      ['Compys scavenge the beach where the pier comes ashore. Field Camera [6]: hold RMB to raise it, wheel zooms, click shoots.', 'info', 10],
       ['Crouch [C] in ferns and tall grass. The eye bottom-left shows how visible you are.', 'info', 10],
     ]
     tips.forEach(([t, k, s], i) => setTimeout(() => G.toast(t, k, s), 1500 + i * 3500))
@@ -282,9 +294,22 @@ async function boot() {
     .filter((h) => h.species === 'triceratops')
     .sort((a, b) => Math.hypot(a.home.x - plains.x, a.home.z - plains.z) - Math.hypot(b.home.x - plains.x, b.home.z - plains.z))[0] || G.ecology.herds[0]
   const attract = { angle: 1.3, focus: { x: showcase.home.x, z: showcase.home.z } }
-  for (const r of showcase.records) {
-    r.x = showcase.home.x + r.offset.dx * 6
-    r.z = showcase.home.z + r.offset.dz * 6
+  // Lay the herd out for the opening frame (and the gallery thumbnail): a
+  // staggered line about a body length apart, all grazing side-on to the
+  // camera's first position, so it reads as animals rather than a pile.
+  {
+    const n = showcase.records.length
+    const len = SPECIES[showcase.species].radius * 4
+    const ax = Math.cos(attract.angle) // from the herd towards the camera
+    const az = Math.sin(attract.angle)
+    const yaw = Math.atan2(az, -ax) // side-on, facing screen-left (-az, ax): into the frame
+    showcase.records.forEach((r, i) => {
+      const along = (i - (n - 1) / 2) * len * 0.6
+      const depth = (i % 2 ? 0.4 : -0.4) * len
+      r.x = showcase.home.x + az * along + ax * depth
+      r.z = showcase.home.z - ax * along + az * depth
+      r.yaw = yaw + (((i * 7) % 5) - 2) * 0.1
+    })
   }
   if (params.has('play')) start()
 
