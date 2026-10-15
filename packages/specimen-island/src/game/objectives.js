@@ -68,7 +68,7 @@ export class Objectives {
     if (d.flag) return G.flags.get(d.flag)
     if (d.item) return G.inventory.has(d.item)
     if (d.stat) return G.stats.get(d.stat) >= d.n
-    if (d.allSpecies) return SPECIES_ORDER.every((id) => G.stats.has(d.allSpecies, id))
+    if (d.allSpecies) return SPECIES_ORDER.every((id) => this.owns(d, id))
     if (d.any) return d.any.some((t) => this.test(o, t))
     return false
   }
@@ -121,18 +121,40 @@ export class Objectives {
     return ''
   }
 
+  // Whether an all-species test has what it wants from this species: its own
+  // set, or the `extinct` fallback once none of the species is left alive.
+  owns(d, id) {
+    const S = this.G.stats
+    return S.has(d.allSpecies, id) || (!!d.extinct && this.extinct(id) && S.has(d.extinct, id))
+  }
+
+  extinct(id) {
+    return !this.G.ecology.living(id)
+  }
+
   // The species an all-species objective is still waiting on.
   missing(o) {
-    const set = o.done.allSpecies
-    return set ? SPECIES_ORDER.filter((id) => !this.G.stats.has(set, id)) : []
+    const d = o.done
+    return d.allSpecies ? SPECIES_ORDER.filter((id) => !this.owns(d, id)) : []
+  }
+
+  // What a missing species still owes this objective (the journal's cards).
+  need(o, id) {
+    return o.done.extinct && o.needExtinct && this.extinct(id) ? o.needExtinct : o.need
   }
 
   // Those species as text: named once catalogued, otherwise only counted.
-  // `max` caps how many names are listed ("…, 2 more").
+  // `max` caps how many names are listed ("…, 2 more"). A species owing the
+  // fallback says so, or the player goes on hunting for one that is not there.
   missingText(o, max = Infinity) {
     const G = this.G
     const miss = this.missing(o)
-    const named = miss.filter((id) => G.science.known(id)).map((id) => G.species[id].name)
+    const named = miss
+      .filter((id) => G.science.known(id))
+      .map((id) => {
+        const need = this.need(o, id)
+        return need === o.need ? G.species[id].name : `${G.species[id].name} (${need})`
+      })
     const parts = named.slice(0, max)
     if (named.length > max) parts.push(`${named.length - max} more`)
     if (miss.length > named.length) parts.push(`${miss.length - named.length} unidentified`)

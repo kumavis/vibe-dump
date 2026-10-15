@@ -10,6 +10,8 @@
 //   { allSpecies: set }             every species in SPECIES_ORDER is in that
 //                                   stats set (speciesScanned, speciesBlood...);
 //                                   `need` names what each missing one still owes
+//     extinct: set                  ...or, for a species with none left alive,
+//                                   in this set instead (`needExtinct` names it)
 //   { any: [test, ...] }            any one of these tests passes
 //
 // `marker` points the compass and map: a POI id, or { interactable: id } (no
@@ -131,8 +133,11 @@ export const OBJECTIVES = [
     mission: 'survey',
     title: 'Blood Bank',
     text: 'Sedate and draw blood from every species.',
-    done: { allSpecies: 'speciesBlood' },
+    // nothing restocks the island: once a species is wiped out, blood is gone
+    // for good and a carcass's tissue has to stand in
+    done: { allSpecies: 'speciesBlood', extinct: 'speciesTissue' },
     need: 'blood sample',
+    needExtinct: 'tissue sample',
   },
   {
     id: 'biggame',

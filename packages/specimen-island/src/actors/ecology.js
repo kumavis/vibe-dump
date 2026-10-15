@@ -232,6 +232,14 @@ export class Ecology {
     return this.herds.filter((h) => h.species === id)
   }
 
+  // How many of a species are still alive, sedated ones included. Nothing
+  // restocks the island, so a species at 0 only has carcasses left to give.
+  living(id) {
+    let n = 0
+    for (const h of this.herds) if (h.species === id) for (const r of h.records) if (r.state !== 'dead') n++
+    return n
+  }
+
   update(dt, focus) {
     const G = this.G
     this.focus = focus

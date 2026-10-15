@@ -48,7 +48,9 @@ then get the sample set into the Field Lab's cold store. The HUD counts each set
 ("Blood Bank 6/10") and names what is still missing; the journal's Species tab
 marks what each animal still owes the survey (with a scan / blood / photo check
 on every card) and, for species you have not met, gives the Foundation's sighting
-notes — size, company and haunts — instead of the name. Finishing pays a bonus
+notes — size, company and haunts — instead of the name. Nothing restocks the
+island, so a species wiped out before its blood was drawn owes a tissue sample
+from a carcass instead, and the HUD and journal say so. Finishing pays a bonus
 into the ledger and opens a second debrief, "Survey complete". **New expedition**
 on either debrief starts over.
 
@@ -147,9 +149,10 @@ src/
 - **Add an objective:** append to `data/objectives.js`; `done` is a `reach`,
   `flag`, `item` or `stat` test, `allSpecies` (every species in a stats set such
   as `speciesBlood`; the HUD counts it and its `need` labels what each missing
-  species still owes in the journal) or `any` of several. Anything can set a flag
-  (`G.flags.set`) and the stats counters are derived from bus events in
-  `game/state.js`.
+  species still owes in the journal; `extinct` names a second set that counts
+  for a species with none left alive, labelled by `needExtinct`) or `any` of
+  several. Anything can set a flag (`G.flags.set`) and the stats counters are
+  derived from bus events in `game/state.js`.
 - **Add a mission:** an entry in `MISSIONS` and objectives tagged with its id in
   `mission`, one of them `final`. Its objectives stay locked until
   `G.objectives.start(id)` — a mission's debrief offers its `next` as the
