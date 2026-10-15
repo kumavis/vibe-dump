@@ -122,12 +122,18 @@ export const WEAPONS = {
   // multipliers don't apply. Armour still turns it, and keeps the cartridge.
   //
   // 250u: two jabs drop an adult brachiosaurus (ko 420) if the second lands
-  // within ~20 s of the first, as it clears 2.21u/s (peaks 481 at 3 s apart,
-  // 444 at 20 s, 422 at 30 s), and only four at once overdose it (900). One
-  // leaves a T. rex drowsy at 0.93 of its line and two drop it (487, lethal
-  // 560): the cartridges are not the price, standing inside its bite is. One
-  // knocks out a stegosaur, trike or anky and two kill them; one is a fatal
-  // overdose for everything from a parasaurolophus down.
+  // within ~20 s of the first, as it clears 2.21u/s (peaks 478 at the
+  // syringe's 4.7 s pace, 444 at 20 s, 422 at 30 s), and only four at once
+  // overdose it (900). One leaves a T. rex drowsy at 0.93 of its line and two
+  // drop it (485, lethal 560), so the price there is the bite: no dose fits a
+  // two-jab brachiosaur and a three-jab rex (its ko is lower), so `reload`
+  // does it instead. Seating a cartridge at the end of a three-metre pole
+  // takes 4 s, and in that time a jabbed rex wheels round and bites, and its
+  // next bite usually lands before the second jab can (55 each): stand your
+  // ground and it kills you; sprint clear while it turns, or finish it with
+  // darts. A brachiosaur walks off for longer than that after a jab anyway.
+  // One knocks out a stegosaur, trike or anky and two kill them; one is a
+  // fatal overdose for everything from a parasaurolophus down.
   syringe: {
     slot: 7,
     name: 'Jumbo Syringe',
@@ -141,7 +147,7 @@ export const WEAPONS = {
     recover: 0.75,
     mag: 1, // the cartridge seated in the barrel
     ammo: 'jumboDart',
-    reload: 2.2,
+    reload: 4,
     noise: 3,
     zoom: 1.1,
     lethal: false,

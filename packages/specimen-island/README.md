@@ -19,7 +19,7 @@ and animated from data), textures and sound. No assets are downloaded.
 | LMB | fire; hold on an animal with the scanner |
 | 1–7, wheel | scanner, tranq pistol, tranq rifle, hunting rifle, shotgun, Field Camera, jumbo syringe |
 | Field Camera [6] | RMB raises it to the eye, the wheel is then the zoom ring, LMB takes the photo (1 s to wind on) |
-| Jumbo syringe [7] | from the keeper's shed at Paddock C's gate: LMB thrusts the needle into whatever is within reach (under 3 m), emptying one cartridge into it; a miss costs only the swing. The Field Lab's cold store restocks cartridges once the lab has power |
+| Jumbo syringe [7] | from the keeper's shed at Paddock C's gate: LMB thrusts the needle into whatever is within reach (under 3 m), emptying one cartridge into it; a miss costs only the swing, a fresh cartridge takes 4 s. UNDERFOOT on the readout: a sauropod tramples you when it walks. The Field Lab's cold store restocks cartridges once the lab has power |
 | R | reload |
 | E (hold) | interact: lockers, ladders, generator, procedures on sedated animals, field repair of a wreck |
 | G / T / H / F | throw stone (distraction) / flare (deterrent) / medkit / flashlight |
@@ -63,7 +63,7 @@ src/
     vehicles.js      the helicopter's and jeep's tune tables: hull and damage,
                      colliders, feedback, surfaces, spawn, ecology streaming
     encounters.js    guaranteed early herds in sight of the pier and the station
-    items.js         inventory caps, start kit, caches, loot tables
+    items.js         inventory caps, start kit, caches, restocking stores, loot tables
     objectives.js    the expedition, as unlock/complete rules
     world.js         island layout: mountain, river, lake, POIs, roads, cleared lots
     lore.js          notes left by the last team (each teaches a system)

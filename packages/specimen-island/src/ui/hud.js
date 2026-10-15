@@ -290,10 +290,13 @@ export class HUD {
     else if (P.awareness >= 0.35) state = 'SUSPICIOUS'
     else state = 'UNAWARE'
     if (v.alive && v.state === 'drowsy') state += ' · DROWSY'
-    // a melee weapon says when the animal is within its reach
+    // a melee weapon says when the animal is within its reach, and anyone
+    // standing under a trampler's feet hears about it before it walks
     const held = G.weapons.def
-    const reach = held.kind === 'melee' && hit.t <= held.reach ? ' · IN REACH' : ''
+    const under = v.conscious && !G.vehicle && c.underfoot(G.player.pos)
+    const reach = (held.kind === 'melee' && hit.t <= held.reach ? ' · IN REACH' : '') + (under ? ' · <span class="bad">UNDERFOOT</span>' : '')
     let html = `<div class="tname">${known ? c.sp.name : 'Unknown species'}<small>${Math.round(hit.t)} m · ${hit.zone === 'armor' ? 'ARMOUR' : hit.zone.toUpperCase()}${reach}</small></div><div class="tstate s-${state.split(' ')[0].toLowerCase()}">${state}</div>`
+    if (under) html += `<div class="dose"><span class="bad">Underfoot — it tramples you when it walks. Back off</span></div>`
     if (known && v.alive) {
       const sp = c.sp.sedation
       const L = sp.lethal

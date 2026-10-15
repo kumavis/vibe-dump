@@ -33,8 +33,22 @@ export const CACHES = {
   hangarCrate: { items: { fuelcan: 1, flare: 1 }, flag: 'hangarCrate' },
   relayHut: { items: { rifleDart: 6, medkit: 1, flare: 1 }, flag: 'relayHut' },
   // the keeper's shed at Paddock C's gate; the Field Lab's cold store restocks
-  // the darts while the lab has power
+  // the darts while the lab has power (RESTOCKS)
   jumboRack: { weapons: ['syringe'], items: { jumboDart: 4 }, flag: 'jumboSyringe' },
+}
+
+// Stores that top an item back up to its cap as often as you come back (see
+// world/structures.js): once you carry `weapon`, the thing it feeds (`before`
+// says where that is until then), and while `flag` holds (`off` otherwise).
+export const RESTOCKS = {
+  coldStore: {
+    title: 'Cold store',
+    item: 'jumboDart',
+    weapon: 'syringe',
+    before: 'Sauropod cartridges — the syringe is kept at Paddock C',
+    flag: 'labPower',
+    off: 'Cold store is dead — no power',
+  },
 }
 
 // Random supply crates scattered at towers and wrecks. A crate is packed when

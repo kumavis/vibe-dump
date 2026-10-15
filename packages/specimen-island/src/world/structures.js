@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { concrete, planks, corrugated, paintedMetal, rustedPaint, signBoard, helipad } from './textures.js'
 import { Rng } from '../core/rng.js'
-import { CACHES, CRATE, ITEMS, LOOT } from '../data/items.js'
+import { CACHES, CRATE, ITEMS, LOOT, RESTOCKS } from '../data/items.js'
 import { LORE } from '../data/lore.js'
 
 // The preserve's tired infrastructure, built from a tiny prefab kit. A Kit is a
@@ -286,6 +286,36 @@ function cache(G, kit, id, label, lx, ly, lz, opts = {}) {
   )
 }
 
+// A store that tops an item back up to its cap (data/items.js RESTOCKS), as
+// often as you come back.
+function restock(G, kit, id, lx, ly, lz) {
+  const def = RESTOCKS[id]
+  const item = ITEMS[def.item]
+  const pos = kit.point(lx, ly, lz)
+  return kit.interact(
+    {
+      id,
+      label: () => (G.inventory.weapons.has(def.weapon) ? `Restock ${item.name.toLowerCase()}` : def.title),
+      hold: 1.0,
+      radius: 2.2,
+      enabled: (G) => {
+        if (def.flag && !G.flags.get(def.flag)) return def.off
+        if (def.weapon && !G.inventory.weapons.has(def.weapon)) return def.before
+        if (G.inventory.count(def.item) >= item.max) return `${item.name} full`
+        return true
+      },
+      onUse: (G) => {
+        const got = G.inventory.add(def.item, item.max)
+        G.toast(`${def.title}: ${lootLine({ [def.item]: got })}`, 'loot')
+        G.audio?.play('locker', { pos })
+      },
+    },
+    lx,
+    ly,
+    lz,
+  )
+}
+
 function lore(G, kit, id, label, lx, ly, lz) {
   const entry = LORE[id]
   kit.interact(
@@ -485,35 +515,13 @@ export function buildFieldLab(G, poi, rng, yaw) {
   kit.box(1.1, 1.0, 0.7, 'metal', lab.cx + 6, 0.8, lab.cz + 4.5)
   lore(G, kit, 'labTerminal', 'Read terminal', lab.cx + 6, 1.4, lab.cz + 4.1)
   // the cold store: spare jumbo-syringe cartridges, kept while the generator
-  // runs. It tops the pack up as often as you come back.
+  // runs (data/items.js RESTOCKS)
   kit.box(1.1, 1.9, 0.65, 'white', lab.cx + 5, 1.25, lab.cz - 5.85)
   kit.box(0.05, 0.6, 0.05, 'black', lab.cx + 5.45, 1.4, lab.cz - 5.5, { collide: false })
   const coldLamp = new THREE.Mesh(new THREE.SphereGeometry(0.035, 6, 4), mats().bulb.clone())
   coldLamp.position.set(lab.cx + 4.65, 2.0, lab.cz - 5.51)
   kit.add(coldLamp)
-  const jumboMax = ITEMS.jumboDart.max
-  kit.interact(
-    {
-      id: 'coldStore',
-      label: () => (G.inventory.weapons.has('syringe') ? 'Restock jumbo darts' : 'Cold store'),
-      hold: 1.0,
-      radius: 2.2,
-      enabled: (G) => {
-        if (!G.flags.get('labPower')) return 'Cold store is dead — no power'
-        if (!G.inventory.weapons.has('syringe')) return 'Sauropod cartridges — the syringe is kept at Paddock C'
-        if (G.inventory.count('jumboDart') >= jumboMax) return 'Jumbo darts full'
-        return true
-      },
-      onUse: (G) => {
-        const got = G.inventory.add('jumboDart', jumboMax)
-        G.toast(`Cold store: ${lootLine({ jumboDart: got })}`, 'loot')
-        G.audio?.play('locker', { pos: kit.point(lab.cx + 5, 1.3, lab.cz - 5.3) })
-      },
-    },
-    lab.cx + 5,
-    1.3,
-    lab.cz - 5.3,
-  )
+  restock(G, kit, 'coldStore', lab.cx + 5, 1.3, lab.cz - 5.3)
 
   // helipad
   const pad = { x: 15, z: 7 }
@@ -826,14 +834,23 @@ export function buildKeeperShed(G, lot, rng) {
   const F = Math.max(...corners) + 0.3
   kit.box(W, 0.12, D, 'wood', 0, F - 0.06, 0, { tex: 1.5 })
   for (const x of [-W / 2 + 0.1, 0, W / 2 - 0.1]) for (const z of [-D / 2 + 0.1, D / 2 - 0.1]) kit.post(0.16, F - 0.12, 'darkWood', x, z)
-  // steps down from the open front, however far the slope falls away there
-  const gF = kit.ground(0, D / 2 + 0.6)
-  const n = Math.max(0, Math.ceil((F - gF) / 0.4) - 1)
+  // steps down from the open front. Each one added reaches further down the
+  // slope, which keeps falling away, so add them until the lowest is no more
+  // than RISE above the ground a player climbs it from (circle touching its
+  // face, anywhere across it): the player steps up 0.44 m at most, and only
+  // once its centre is over the next tread, so a tread must be well wider
+  // than its 0.35 m radius or the step after that blocks it first
+  const TREAD = 0.45
+  const RISE = 0.4
+  const foot = (n) => Math.min(...[-0.55, -0.25, 0, 0.25, 0.55].map((x) => kit.ground(x, D / 2 + n * TREAD + 0.35)))
+  let n = 0
+  while (n < 10 && (F - foot(n)) / (n + 1) > RISE) n++
+  const gF = foot(n)
   for (let i = 1; i <= n; i++) {
     const top = F - ((F - gF) * i) / (n + 1)
-    const z = D / 2 + 0.2 + (i - 0.5) * 0.4
-    const bottom = kit.ground(0, z) - 0.3
-    kit.box(1.2, top - bottom, 0.4, 'darkWood', 0, (top + bottom) / 2, z)
+    const z = D / 2 + (i - 0.5) * TREAD
+    const bottom = Math.min(kit.ground(-0.6, z), kit.ground(0.6, z)) - 0.3
+    kit.box(1.2, top - bottom, TREAD, 'darkWood', 0, (top + bottom) / 2, z)
   }
   // frame, plank walls (the right one has lost its lower boards) and a tin roof
   for (const sx of [-1, 1]) {

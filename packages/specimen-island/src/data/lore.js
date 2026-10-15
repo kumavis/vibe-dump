@@ -50,7 +50,8 @@ export const LORE = {
       'wherever it goes in. Two drop an adult if the second goes in within twenty seconds of the first. Then ' +
       'get out from under her feet while it takes.\n\n' +
       'One cartridge puts down a stego, a trike or an anky; two kill them. It kills anything smaller outright — ' +
-      'never on the paras, the raptors or the little ones.\n\n' +
+      'never on the paras, the raptors or the little ones. Two will drop the rex too, but she turns on you before ' +
+      'you can seat the second cartridge. Jab and get clear.\n\n' +
       'Spare cartridges are in the lab cold store. No generator, no cold store.',
   },
   'tower:easttower': {

@@ -43,6 +43,7 @@ export class Creature {
     this.avoid = { yaw: 0, until: 0 }
     this.stuck = { t: 0, x: rec.x, z: rec.z, detour: 0, until: 0 }
     this.trampleCool = 0
+    this.underT = 0 // how long the player has been under its feet
     this.disposed = false
 
     this.vitals = new Vitals(this.sp, rec)
@@ -87,6 +88,12 @@ export class Creature {
   }
   center() {
     return new THREE.Vector3(this.pos.x, this.pos.y + this.sp.body.hipH * this.scale, this.pos.z)
+  }
+  // Is `p` under the feet of an animal that tramples — inside the ring where it
+  // hurts you whenever it walks? (The HUD warns of it too.)
+  underfoot(p) {
+    if (this.sp.attack?.kind !== 'trample') return false
+    return Math.hypot(p.x - this.pos.x, p.z - this.pos.z) < this.radius * 1.3 && p.y < this.pos.y + 2
   }
 
   vocalize(kind) {
@@ -156,14 +163,12 @@ export class Creature {
     this.applyIntent(dt)
     this.anim.update(dt)
     this.syncMesh(dt)
-    // brachiosaurus feet and other accidents
-    if (this.sp.attack?.kind === 'trample' && this.speed > 0.4 && this.trampleCool <= 0) {
-      const p = G.player.pos
-      const d = Math.hypot(p.x - this.pos.x, p.z - this.pos.z)
-      if (d < this.radius * 1.3 && p.y < this.pos.y + 2) {
-        this.trampleCool = this.sp.attack.cooldown
-        this.strikePlayer(G, this.sp.attack.damage, 8)
-      }
+    // brachiosaurus feet and other accidents: stay underfoot of a walking giant
+    // for its `grace` (the HUD says UNDERFOOT all the while) and a foot finds you
+    this.underT = this.underfoot(G.player.pos) ? this.underT + dt : 0
+    if (this.underT > (this.sp.attack?.grace ?? 0) && this.speed > 0.4 && this.trampleCool <= 0) {
+      this.trampleCool = this.sp.attack.cooldown
+      this.strikePlayer(G, this.sp.attack.damage, 8)
     }
     this.rec.x = this.pos.x
     this.rec.z = this.pos.z

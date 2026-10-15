@@ -161,22 +161,24 @@ function jabReadout(sp, state, sedative, pending, zone, w, peak) {
   return [{ text: `Knockout: ${plural(J.n, 'more jab')}` }, odText]
 }
 
-// Journal card: knockout and overdose for an animal with no sedative in it,
-// and with `melee` (the syringe, once carried) its jabs.
-export function doseCard(sp, melee = null) {
+// Journal card: knockout and overdose for an animal with no sedative in it.
+export function doseCard(sp) {
   const sed = sp.sedation
   const k = ZONES[refZone(sp)].dose
   const ko = knockout(sp, 0, 0, false).text.replace('Knockout: ', '')
   const odRifle = atOnce(sed, 0, 0, WEAPONS.rifle.dose * k, odLine(sed))
   const odPistol = atOnce(sed, 0, 0, WEAPONS.pistol.dose * k, odLine(sed))
-  const card = { ko: `${ko} · ${sed.ko}u`, od: `${plural(odRifle, 'rifle dart')}${where(sp)} (or ${odPistol} pistol) · ${sed.lethal}u` }
-  if (melee) {
-    const dose = jabDose(sp, melee)
-    const J = paced(sed, 0, 0, dose, pace(melee), koLine(sed))
-    const od = atOnce(sed, 0, 0, dose, odLine(sed))
-    if (J.peak >= odLine(sed)) card.jab = 'One jab is a fatal overdose'
-    else if (J.n === Infinity) card.jab = "Jabs can't outpace its metabolism"
-    else card.jab = `${plural(J.n, 'jab')} to knock out · ${plural(od, 'jab')} overdose`
-  }
-  return card
+  return { ko: `${ko} · ${sed.ko}u`, od: `${plural(odRifle, 'rifle dart')}${where(sp)} (or ${odPistol} pistol) · ${sed.lethal}u` }
+}
+
+// Journal card row for a melee syringe `w`: its jabs to knock out and to
+// overdose an animal with no sedative in it.
+export function jabCard(sp, w) {
+  const sed = sp.sedation
+  const dose = jabDose(sp, w)
+  const J = paced(sed, 0, 0, dose, pace(w), koLine(sed))
+  const od = atOnce(sed, 0, 0, dose, odLine(sed))
+  if (J.peak >= odLine(sed)) return 'One jab is a fatal overdose'
+  if (J.n === Infinity) return "Jabs can't outpace its metabolism"
+  return `${plural(J.n, 'jab')} to knock out · ${plural(od, 'jab')} overdose`
 }
