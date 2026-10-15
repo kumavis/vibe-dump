@@ -128,7 +128,7 @@ export class HUD {
     const objs = G.objectives
       .active()
       .slice(0, 4)
-      .map((o) => `<div class="obj"><b>${o.title}</b>${objs_progress(G, o)}<br><span>${o.text}</span></div>`)
+      .map((o) => `<div class="obj"><b>${o.title}</b>${objs_progress(G, o)}<br><span>${o.text}</span>${objs_missing(G, o)}</div>`)
       .join('')
     this.set('objs', this.el.objectives, objs, 'html')
 
@@ -311,4 +311,10 @@ export class HUD {
 function objs_progress(G, o) {
   const pr = G.objectives.progress(o)
   return pr ? ` <em>${pr}</em>` : ''
+}
+
+// which species an all-species objective still wants (the journal has the rest)
+function objs_missing(G, o) {
+  const left = G.objectives.missingText(o, 3)
+  return left ? `<small>Still needed: ${left}</small>` : ''
 }

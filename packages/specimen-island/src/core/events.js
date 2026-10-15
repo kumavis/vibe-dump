@@ -23,7 +23,11 @@
 //   item:gained        {item, count}
 //   flag               {flag, value}
 //   objective:done     {objective}
-//   expedition:complete {}
+//   expedition:complete {}                              the expedition's final objective
+//   mission:start      {mission}                        a MISSIONS entry (data/objectives.js)
+//                                                       taken up: the debrief's Continue
+//   mission:complete   {mission}                        its final objective done (the
+//                                                       expedition's too); main.js shows its debrief
 //   vehicle:enter / vehicle:exit       {vehicle}         the helicopter or the jeep
 //   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
