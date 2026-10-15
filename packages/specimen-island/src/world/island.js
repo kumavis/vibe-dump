@@ -18,6 +18,10 @@ const NO_WATER = -1e4
 // sand instead of levees; the meander shrinks to `meander` of its swing.
 const MOUTH = { tidal: 35, length: 130, grade: 0.045, widen: 1.2, shoal: 0.35, opens: 7, meander: 0.35 }
 
+// A wreck's lot beside the road (see world/structures.js WRECKS for the
+// models): how far off the centreline it sits, and its body's footprint.
+const WRECK_LOT = { jeep: { off: 6.2, length: 4.4, width: 1.9 }, truck: { off: 7.5, length: 6.0, width: 2.2 } }
+
 // cumulative distance along a polyline of [x, z] points
 function alongOf(pts) {
   const out = new Float32Array(pts.length)
@@ -58,6 +62,7 @@ export class Island {
     this.pois = []
     this.roads = []
     this.bridges = []
+    this.wrecks = []
     this.river = null
     this.lake = null
 
@@ -69,6 +74,7 @@ export class Island {
     this.computeSlope()
     this.computeBiomes()
     this.computeDensities()
+    this.placeWrecks()
   }
 
   // ---------------------------------------------------------------- grid utils
@@ -280,11 +286,12 @@ export class Island {
 
     // surface profile: always downhill, at least a metre below the land
     const surf = new Float32Array(K)
+    const nat = new Float32Array(K)
     const cap = new Float32Array(K)
     let prev = Infinity
     for (let k = 0; k < K; k++) {
       prev = Math.min(prev - 0.03, line[k] - 1.2)
-      surf[k] = Math.max(prev, sea)
+      surf[k] = nat[k] = Math.max(prev, sea)
       // near the coast the river comes down to the sea on a steady grade
       // instead of dropping off the coastal bluff, and never sits above its
       // own banks (which used to need levees across the beach)
@@ -305,6 +312,17 @@ export class Island {
         cap[k] = Math.min(cap[k], Math.max(sea, low - 0.3))
       }
       surf[k] = Math.min(surf[k], cap[k])
+    }
+    // ...but only on the coastal reach where the grade actually bites. Walking
+    // up from the coast, the cap is lifted from the first sample above the
+    // estuary where the natural profile already runs under it; the two meet
+    // there, so the hand-off is level, and the upper river keeps its own bed
+    // instead of being sunk into a gorge down the mountain.
+    let lift = Math.min(coast, K - 1)
+    while (lift > 0 && !(nat[lift] <= cap[lift] && est[lift] <= 0.01)) lift--
+    for (let k = 0; k <= lift; k++) {
+      cap[k] = Infinity
+      surf[k] = nat[k]
     }
     // smooth, then re-impose the caps and monotonicity
     const sm = new Float32Array(K)
@@ -377,7 +395,9 @@ export class Island {
         if (nd < 1.6 && h0 > sea && h < s + 0.2) h = lerp(h, s + 0.2, smoothstep(0.05, 0.8, s - sea))
       }
       this.h[id] = h
-      if (nd < 1.3 && s > sea + 0.01) this.water[id] = s
+      // river water only over ground it can stand on: where the bed has
+      // dropped below the sea, the sea's surface takes over
+      if (nd < 1.3 && s > sea + 0.01 && h >= sea) this.water[id] = s
     }
     this.river = { path, surf: sm, widths, est, coast }
   }
@@ -712,6 +732,66 @@ export class Island {
 
         this.cover[id] = clamp(d.fern[id] * 0.85 + d.grass[id] * 0.95 + d.bush[id] * 0.5 + d.reed[id] * 0.85 + d.bigleaf[id] * 0.5, 0, 1)
       }
+    }
+  }
+
+  // Abandoned vehicles (cfg.wrecks): each takes the first spot near its place
+  // on the road, on either verge, whose footprint is dry, off the river and
+  // other roads, and fairly level, then keeps the big trees off it (through
+  // the clear mask, after the undergrowth densities, which it leaves alone).
+  placeWrecks() {
+    const rng = new Rng(this.cfg.seed + 404)
+    for (const def of this.cfg.wrecks || []) {
+      const road = this.roads[def.road]
+      const lot = WRECK_LOT[def.kind]
+      if (!road || !lot) continue
+      const K = road.pts.length
+      const k0 = Math.floor(K * def.at)
+      const side0 = rng.sign()
+      const jitter = rng.range(-0.45, 0.45)
+      let best = null
+      for (let t = 0; t < 11 && !(best && best.bad === 0); t++) {
+        const k = clamp(k0 + (t % 2 ? 1 : -1) * Math.ceil(t / 2) * 3, 0, K - 2)
+        const [ax, az] = road.pts[k]
+        const [bx, bz] = road.pts[k + 1]
+        const l = Math.hypot(bx - ax, bz - az) || 1
+        for (const side of [side0, -side0]) {
+          const x = ax + (-(bz - az) / l) * lot.off * side
+          const z = az + ((bx - ax) / l) * lot.off * side
+          const yaw = Math.atan2(bx - ax, bz - az) + jitter
+          const c = Math.cos(yaw)
+          const sn = Math.sin(yaw)
+          let lo = Infinity
+          let hi = -Infinity
+          let bad = 0
+          for (const [sx, sz] of [[0, 0], [-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+            const lx = (sx * lot.width) / 2
+            const lz = (sz * lot.length) / 2
+            const px = x + lx * c + lz * sn
+            const pz = z - lx * sn + lz * c
+            const h = this.heightAt(px, pz)
+            lo = Math.min(lo, h)
+            hi = Math.max(hi, h)
+            if (this.depthAt(px, pz) > -0.3 || this.sample(this.riverD, px, pz) < 2.6) bad += 2
+            if (this.sample(this.road, px, pz) > 0.02) bad += 1
+          }
+          bad += Math.max(0, hi - lo - 1) // over a metre of fall across the body
+          if (!best || bad < best.bad) best = { x, z, yaw, roadSide: side, bad }
+          if (bad === 0) break
+        }
+      }
+      const { x, z, yaw, roadSide } = best
+      // ...and the body, its loose wheel and crate, stand clear of trunks
+      const c = Math.cos(yaw)
+      const sn = Math.sin(yaw)
+      const r = Math.hypot(lot.width, lot.length) / 2 + 4
+      this.forEachInBox(x - r, z - r, x + r, z + r, (id, px, pz) => {
+        const dx = px - x
+        const dz = pz - z
+        const out = Math.hypot(Math.max(0, Math.abs(dx * c - dz * sn) - lot.width / 2), Math.max(0, Math.abs(dx * sn + dz * c) - lot.length / 2))
+        this.clear[id] = Math.max(this.clear[id], 1 - smoothstep(2, 5, out))
+      })
+      this.wrecks.push({ x, z, yaw, roadSide, kind: def.kind, crate: !!def.crate })
     }
   }
 

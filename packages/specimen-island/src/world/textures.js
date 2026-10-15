@@ -288,8 +288,40 @@ export function signBoard(lines, { bg = '#6b5236', fg = '#efe6c8', minWidth = 1.
   return { texture: toTexture(c, { repeat: false }), width, height, rows }
 }
 
-export function signTexture(lines, opts) {
-  return signBoard(lines, opts).texture
+// The field lab's pad: weathered concrete, a yellow ring and a white H.
+export function helipad() {
+  return cached('helipad', () => {
+    const rand = mulberry32(61)
+    const c = makeCanvas(512, 512)
+    const ctx = c.getContext('2d')
+    ctx.fillStyle = '#7a7a74'
+    ctx.fillRect(0, 0, 512, 512)
+    for (let i = 0; i < 3000; i++) {
+      ctx.fillStyle = `rgba(${rand() < 0.5 ? '40,40,30' : '200,200,190'},${rand() * 0.12})`
+      ctx.fillRect(rand() * 512, rand() * 512, rand() * 6, rand() * 6)
+    }
+    ctx.strokeStyle = '#d8c850'
+    ctx.lineWidth = 18
+    ctx.beginPath()
+    ctx.arc(256, 256, 210, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.fillStyle = '#e8e4d8'
+    ctx.fillRect(160, 130, 50, 252)
+    ctx.fillRect(302, 130, 50, 252)
+    ctx.fillRect(160, 230, 192, 50)
+    // grime and cracks
+    ctx.strokeStyle = 'rgba(30,30,20,0.5)'
+    ctx.lineWidth = 2
+    for (let i = 0; i < 14; i++) {
+      ctx.beginPath()
+      let x = rand() * 512
+      let y = rand() * 512
+      ctx.moveTo(x, y)
+      for (let k = 0; k < 6; k++) ctx.lineTo((x += (rand() - 0.5) * 60), (y += (rand() - 0.5) * 60))
+      ctx.stroke()
+    }
+    return toTexture(c, { repeat: false })
+  })
 }
 
 // Dinosaur skin: dorsal colour wrapping to a pale belly (u runs round the

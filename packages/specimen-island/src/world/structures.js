@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { concrete, planks, corrugated, paintedMetal, rustedPaint, signBoard } from './textures.js'
+import { concrete, planks, corrugated, paintedMetal, rustedPaint, signBoard, helipad } from './textures.js'
 import { Rng } from '../core/rng.js'
 import { CACHES, CRATE, ITEMS, LOOT } from '../data/items.js'
 import { LORE } from '../data/lore.js'
@@ -31,7 +31,7 @@ function mats() {
     tank: new THREE.MeshPhongMaterial({ color: 0x6aa08a, transparent: true, opacity: 0.4, shininess: 60, depthWrite: false }),
     vine: L({ color: 0x3a6526, side: THREE.DoubleSide }),
     bulb: L({ color: 0x444033, emissive: 0x000000 }),
-    helipad: L({ map: helipadTexture() }),
+    helipad: L({ map: helipad() }),
     // wrecks
     rustGreen: L({ map: rustedPaint([82, 102, 70]) }),
     rustOrange: L({ map: rustedPaint([178, 100, 46]) }),
@@ -42,41 +42,6 @@ function mats() {
     moss: L({ color: 0x4a6a2c, side: THREE.DoubleSide }),
   }
   return MATS
-}
-
-function helipadTexture() {
-  const c = document.createElement('canvas')
-  c.width = c.height = 512
-  const ctx = c.getContext('2d')
-  ctx.fillStyle = '#7a7a74'
-  ctx.fillRect(0, 0, 512, 512)
-  for (let i = 0; i < 3000; i++) {
-    ctx.fillStyle = `rgba(${Math.random() < 0.5 ? '40,40,30' : '200,200,190'},${Math.random() * 0.12})`
-    ctx.fillRect(Math.random() * 512, Math.random() * 512, Math.random() * 6, Math.random() * 6)
-  }
-  ctx.strokeStyle = '#d8c850'
-  ctx.lineWidth = 18
-  ctx.beginPath()
-  ctx.arc(256, 256, 210, 0, Math.PI * 2)
-  ctx.stroke()
-  ctx.fillStyle = '#e8e4d8'
-  ctx.fillRect(160, 130, 50, 252)
-  ctx.fillRect(302, 130, 50, 252)
-  ctx.fillRect(160, 230, 192, 50)
-  // grime and cracks
-  ctx.strokeStyle = 'rgba(30,30,20,0.5)'
-  ctx.lineWidth = 2
-  for (let i = 0; i < 14; i++) {
-    ctx.beginPath()
-    let x = Math.random() * 512
-    let y = Math.random() * 512
-    ctx.moveTo(x, y)
-    for (let k = 0; k < 6; k++) ctx.lineTo((x += (Math.random() - 0.5) * 60), (y += (Math.random() - 0.5) * 60))
-    ctx.stroke()
-  }
-  const t = new THREE.CanvasTexture(c)
-  t.colorSpace = THREE.SRGBColorSpace
-  return t
 }
 
 // Box with UVs scaled to its real size so textures keep their scale.
@@ -138,9 +103,11 @@ export class Kit {
     const [x, z] = this.world(lx, lz)
     return this.G.island.heightAt(x, z) - this.y
   }
-  push(matKey, geo, lx, ly, lz, rx = 0, ry = 0, rz = 0) {
+  // place a geometry in the kit's frame, then through `post` if given
+  push(matKey, geo, lx, ly, lz, rx = 0, ry = 0, rz = 0, post = null) {
     M4.compose(V4.set(lx, ly, lz), Q4.setFromEuler(E4.set(rx, ry, rz)), S4)
     geo.applyMatrix4(M4)
+    if (post) geo.applyMatrix4(post)
     ;(this.buckets[matKey] ||= []).push(geo)
   }
   box(w, h, d, matKey, lx, ly, lz, opts = {}) {
@@ -210,24 +177,38 @@ export class Kit {
 
 // ---------------------------------------------------------------- shared bits
 
-// What a supply crate holds, decided when it is opened: a fixed bundle's items
-// that still fit, else a few picks from LOOT among what the pack has room for,
-// favouring whatever the player is short of. Empty only if the pack is full.
+// What a supply crate holds, decided when it is opened from what the pack
+// still has room for: a fixed bundle's items first (as much as fits), topped
+// up from LOOT when most of the bundle no longer fits, else a few picks from
+// LOOT favouring whatever the player is short of. Empty only if the pack is
+// full, which crateRoom() tells the prompt up front.
+const roomFor = (G, id) => (ITEMS[id] ? ITEMS[id].max : 99) - G.inventory.count(id)
+const crateRoom = (G, fixed) => LOOT.some((e) => roomFor(G, e.item) > 0) || Object.keys(fixed?.items || {}).some((id) => roomFor(G, id) > 0)
 function packCrate(G, rng, fixed) {
   const inv = G.inventory
-  const room = (id) => (ITEMS[id] ? ITEMS[id].max : 99) - inv.count(id)
   const items = {}
-  for (const [id, n] of Object.entries(fixed?.items || {})) if (room(id) > 0) items[id] = Math.min(n, room(id))
-  if (Object.keys(items).length) return items
-  const pool = LOOT.filter((e) => room(e.item) > 0)
-  for (let p = rng.int(CRATE.picks[0], CRATE.picks[1]); p > 0 && pool.length; p--) {
+  let nominal = 0
+  let got = 0
+  for (const [id, n] of Object.entries(fixed?.items || {})) {
+    nominal += n
+    const k = Math.min(n, roomFor(G, id))
+    if (k <= 0) continue
+    items[id] = k
+    got += k
+  }
+  if (nominal && got >= nominal * CRATE.bundleKeep) return items
+  const pool = LOOT.filter((e) => roomFor(G, e.item) > 0 && !(e.item in items))
+  let picks = rng.int(CRATE.picks[0], CRATE.picks[1])
+  if (nominal) picks = Math.max(1, picks - Object.keys(items).length)
+  for (; picks > 0 && pool.length; picks--) {
     const weights = pool.map((e) => {
-      const full = inv.count(e.item) / ITEMS[e.item].max
-      return e.w * (1 + CRATE.lowBoost * (1 - full)) * (e.for && !inv.weapons.has(e.for) ? CRATE.unownedAmmo : 1)
+      // ammo for a gun not found yet gets no boost for its (always empty) stack
+      if (e.for && !inv.weapons.has(e.for)) return e.w * CRATE.unownedAmmo
+      return e.w * (1 + CRATE.lowBoost * (1 - inv.count(e.item) / ITEMS[e.item].max))
     })
     const e = rng.weighted(pool, weights)
     pool.splice(pool.indexOf(e), 1)
-    items[e.item] = Math.min(rng.int(e.n[0], e.n[1]), room(e.item))
+    items[e.item] = Math.min(rng.int(e.n[0], e.n[1]), roomFor(G, e.item))
   }
   return items
 }
@@ -250,22 +231,19 @@ function crate(G, kit, lx, lz, id, bundle, rng, ly = null) {
   mesh.castShadow = mesh.receiveShadow = true
   kit.add(mesh)
   const [wx, wz] = kit.world(lx, lz)
-  G.physics.addBox(wx, wz, 0.55, 0.375, kit.yaw + mesh.rotation.y, kit.y + y, kit.y + y + 0.75)
+  G.physics.addBox(wx, wz, 0.55, 0.375, kit.yaw + mesh.rotation.y, kit.y + y, kit.y + y + 0.75, { material: 'wood' })
   kit.interact(
     {
       id,
       label: 'Search supply crate',
       hold: 0.7,
       radius: 2.2,
+      // nothing it could hold fits: it stays shut for later
+      enabled: (G) => (crateRoom(G, bundle) ? true : 'Pack is full — leave it for later'),
       onUse: (G) => {
         const items = packCrate(G, rng, bundle)
         const pos = mesh.getWorldPosition(new THREE.Vector3())
-        if (!Object.keys(items).length) {
-          // nothing it could hold fits: leave it shut for later
-          G.toast('Pack is full — leave this crate for later.', 'info')
-          G.audio?.play('click')
-          return
-        }
+        if (!Object.keys(items).length) return
         const before = Object.fromEntries(Object.keys(items).map((k) => [k, G.inventory.count(k)]))
         G.inventory.grant({ items })
         const got = {}
@@ -342,6 +320,8 @@ function sign(G, kit, lines, lx, lz, ry = 0, opts = {}) {
   board.rotation.set(opts.tilt || 0.04, ry, opts.lean || 0.05)
   board.castShadow = true
   kit.add(board)
+  // the board is a wall at head height between the posts
+  G.physics.addBox(...kit.world(lx, lz), width / 2, 0.06, kit.yaw + ry, kit.y + g + bottom, kit.y + g + bottom + height, { walkable: false, material: 'wood' })
 }
 
 // A simple rectangular building with a doorway in the front (+Z) wall and
@@ -430,7 +410,7 @@ export function buildDock(G, poi, rng) {
   boat.traverse((o) => (o.castShadow = true))
   boat.position.set(3.8, 0, end - 6)
   kit.add(boat)
-  G.physics.addBox(...kit.world(3.8, end - 6), 1.2, 3.25, kit.yaw, -0.5, 1.0)
+  G.physics.addBox(...kit.world(3.8, end - 6), 1.2, 3.25, kit.yaw, -0.5, 1.0, { material: 'metal' })
   crate(G, kit, -1, end - 9, 'crate:dock', { items: { pistolDart: 6, stone: 2 } }, rng, deckY)
   kit.box(1.2, 0.9, 1.2, 'wood', 1.0, deckY + 0.45, end - 11)
   sign(G, kit, ['SUPPLY DOCK', 'FOUNDATION PRESERVE'], 3.5, start - 3, 0)
@@ -586,7 +566,7 @@ export function buildFieldLab(G, poi, rng, yaw) {
   const hc = new THREE.Mesh(boxGeo(1.4, 0.9, 0.9, 1), mats().green)
   hc.position.set(hg.cx + 1, 0.7, hg.cz - 3.6)
   kit.add(hc)
-  G.physics.addBox(...kit.world(hg.cx + 1, hg.cz - 3.6), 0.7, 0.45, yaw, poi.y, poi.y + 1.15)
+  G.physics.addBox(...kit.world(hg.cx + 1, hg.cz - 3.6), 0.7, 0.45, yaw, poi.y, poi.y + 1.15, { material: 'metal' })
   cache(G, kit, 'hangarCrate', 'Search parts crate', hg.cx + 1, 1.2, hg.cz - 3.0, { title: 'Parts crate', hold: 1.0 })
 
   // generator shed
@@ -915,9 +895,11 @@ export function buildBridge(G, b, rng) {
 
 // Abandoned vehicles at real scale: the station's expedition 4x4 (≈4.4 m,
 // hardtop or open with a roll bar) and an old flatbed supply truck (≈6 m).
-// Each has lost or broken a wheel, so the body sits tilted on that corner;
-// everything above the chassis is pushed through one tilt matrix so the parts
-// stay together. Colliders are the untilted footprints.
+// Each sits on the slope under its wheels and has lost or broken a wheel, so
+// the body also drops on that corner; everything above the chassis is pushed
+// through one tilt matrix so the parts stay together. Colliders are the
+// untilted footprints. The site (a dry, level verge cleared of trees) comes
+// from Island.placeWrecks; `roadSide` is the local x side the road lies on.
 const WRECKS = {
   jeep: {
     length: 4.4,
@@ -937,14 +919,22 @@ const WRECKS = {
   },
 }
 
-export function buildWreck(G, x, z, yaw, rng, withCrate, kind = 'jeep') {
+export function buildWreck(G, x, z, yaw, rng, withCrate, kind = 'jeep', roadSide = 1) {
   const spec = WRECKS[kind]
   const isl = G.island
-  // sit on the average of the four wheel contact points
+  // sit on the four wheel contact points: their average height, and the
+  // pitch and roll of the ground under them
   const cs = Math.cos(yaw)
   const sn = Math.sin(yaw)
-  let gy = 0
-  for (const az of spec.axles) for (const sx of [-1, 1]) gy += isl.heightAt(x + sx * spec.track * cs + az * sn, z - sx * spec.track * sn + az * cs) / 4
+  const [a0, a1] = spec.axles
+  const contact = (sx, az) => isl.heightAt(x + sx * spec.track * cs + az * sn, z - sx * spec.track * sn + az * cs)
+  const fl = contact(-1, a0)
+  const fr = contact(1, a0)
+  const rl = contact(-1, a1)
+  const rr = contact(1, a1)
+  const gy = (fl + fr + rl + rr) / 4
+  const slopeZ = Math.atan2((fr + rr - fl - rl) / 2, spec.track * 2)
+  const slopeX = -Math.atan2((fl + fr - rl - rr) / 2, a0 - a1)
   const kit = new Kit(G, x, gy - 0.04, z, yaw, 'wreck')
   const paint = rng.pick(spec.paints)
   // which corner gave out: [side -1 left / +1 right, axle 0 front / 1 rear]
@@ -953,14 +943,10 @@ export function buildWreck(G, x, z, yaw, rng, withCrate, kind = 'jeep') {
   const drop = kind === 'jeep' ? 0.3 : 0.22
   const tiltZ = lostSide < 0 ? drop / (spec.track * 2) : -drop / (spec.track * 2)
   const tiltX = (lostAxle === 0 ? 1 : -1) * (drop / (spec.axles[0] - spec.axles[1])) * 0.9
-  const TILT = new THREE.Matrix4().compose(new THREE.Vector3(0, -drop * 0.35, 0), new THREE.Quaternion().setFromEuler(new THREE.Euler(tiltX, 0, tiltZ)), new THREE.Vector3(1, 1, 1))
-  const LM = new THREE.Matrix4()
-  const part = (mat, geo, lx, ly, lz, rx = 0, ry = 0, rz = 0, tilted = true) => {
-    LM.compose(V4.set(lx, ly, lz), Q4.setFromEuler(E4.set(rx, ry, rz)), S4)
-    geo.applyMatrix4(LM)
-    if (tilted) geo.applyMatrix4(TILT)
-    ;(kit.buckets[mat] ||= []).push(geo)
-  }
+  const TILT = new THREE.Matrix4()
+    .makeRotationFromEuler(new THREE.Euler(slopeX, 0, slopeZ))
+    .multiply(new THREE.Matrix4().compose(new THREE.Vector3(0, -drop * 0.35, 0), new THREE.Quaternion().setFromEuler(new THREE.Euler(tiltX, 0, tiltZ)), new THREE.Vector3(1, 1, 1)))
+  const part = (mat, geo, lx, ly, lz, rx = 0, ry = 0, rz = 0, tilted = true) => kit.push(mat, geo, lx, ly, lz, rx, ry, rz, tilted ? TILT : null)
   const box = (w, h, d, mat, lx, ly, lz, rx = 0, ry = 0, rz = 0, tex = 2) => part(mat, boxGeo(w, h, d, tex), lx, ly, lz, rx, ry, rz)
   const wheel = (r, w, lx, ly, lz, rz = Math.PI / 2, rx = 0, tilted = true) => {
     part('tire', new THREE.CylinderGeometry(r, r, w, 14), lx, ly, lz, rx, 0, rz, tilted)
@@ -986,8 +972,9 @@ export function buildWreck(G, x, z, yaw, rng, withCrate, kind = 'jeep') {
     if (kind === 'truck' && w.ai === 1) wheel(R, tw, w.sx * (spec.track + 0.32), R, w.az)
   }
   {
-    // the missing wheel, lying flat or leaning on the body
-    const lx = lostSide * (spec.width / 2 + rng.range(0.9, 1.8))
+    // the missing wheel, lying flat or leaning on the body — close in on the
+    // road side, so it never lies on the carriageway
+    const lx = lostSide * (spec.width / 2 + (lostSide === roadSide ? rng.range(0.45, 0.7) : rng.range(0.9, 1.8)))
     const lz = spec.axles[lostAxle] + rng.range(-0.8, 0.8)
     const g = kit.ground(lx, lz)
     if (rng.chance(0.5)) wheel(R, 0.3, lx, g + 0.16, lz, 0, 0, false)
@@ -1035,17 +1022,24 @@ export function buildWreck(G, x, z, yaw, rng, withCrate, kind = 'jeep') {
   grass.computeVertexNormals()
   part('moss', grass, 0, 0, 0, 0, 0, 0, false)
 
-  // colliders: the untilted footprint of each block
+  // colliders: the untilted footprint of each block (painted steel
+  // underfoot, but for the truck's plank bed), thin walls for the frames
   const P = G.physics
-  const col = (lx, lz, hx, hz, y1) => P.addBox(...kit.world(lx, lz), hx, hz, yaw, kit.y - 0.3, kit.y + y1)
-  let crateAt = [spec.width / 2 + 1.1, -0.5, null]
+  const col = (lx, lz, hx, hz, y0, y1, material = 'metal', walkable = true) => P.addBox(...kit.world(lx, lz), hx, hz, yaw, kit.y + y0, kit.y + y1, { material, walkable })
+  let crateAt = [-roadSide * (spec.width / 2 + 1.1), -0.5, null]
   if (kind === 'jeep') {
-    col(0, 0.05, 0.95, 2.2, 1.18)
-    if (body.hardtop) P.addBox(...kit.world(0, -0.78), 0.95, 1.36, yaw, kit.y + 1.18, kit.y + 1.95)
+    col(0, 0.05, 0.95, 2.2, -0.3, 1.18)
+    if (body.hardtop) col(0, -0.78, 0.95, 1.36, 1.18, 1.95)
+    else {
+      col(0, 0.55, 0.91, 0.05, 1.18, 1.83, 'metal', false) // windscreen frame
+      col(0, -0.42, 0.68, 0.08, 1.18, 1.83, 'metal', false) // seat backs
+      col(0, -0.75, 0.89, 0.05, 1.18, 2.04, 'metal', false) // roll bar
+    }
   } else {
-    col(0, 2.45, 0.85, 0.6, 1.45) // bonnet
-    col(0, 1.2, 1.0, 0.68, 2.4) // cab
-    col(0, -1.3, 1.1, 1.85, 1.24) // bed
+    col(0, 2.45, 0.85, 0.6, -0.3, 1.45) // bonnet
+    col(0, 1.2, 1.0, 0.68, -0.3, 2.4) // cab
+    col(0, -1.3, 1.1, 1.85, -0.3, 1.24, 'wood') // bed
+    P.addCylinder(...kit.world(0.6, -2.6), 0.1, kit.y + 1.24, kit.y + 2.8) // the sapling
     // on the bed, wherever the tilt has left it
     const onBed = new THREE.Vector3(rng.range(-0.3, 0.3), 1.25, -1.9).applyMatrix4(TILT)
     crateAt = [onBed.x, onBed.z, onBed.y]
@@ -1138,23 +1132,35 @@ function buildTruckBody(box, part, paint, rng) {
   return {}
 }
 
-// Power poles along a road polyline, some leaning, as one merged mesh.
+// Power poles along a road polyline, some leaning, as one merged mesh. A
+// pole never stands in water or the river channel, nor beside a bridge deck:
+// it moves along to the next dry road vertex.
 export function buildPoles(G, road, rng) {
+  const isl = G.island
   const kit = new Kit(G, 0, 0, 0, 0, 'poles')
+  const byBridge = (x, z) =>
+    isl.bridges.some((b) => {
+      const dx = x - b.x
+      const dz = z - b.z
+      const along = -dx * Math.sin(b.yaw) - dz * Math.cos(b.yaw)
+      const across = dx * Math.cos(b.yaw) - dz * Math.sin(b.yaw)
+      return Math.abs(along) < b.length / 2 + 4 && Math.abs(across) < 10
+    })
   let acc = 0
   for (let k = 1; k < road.pts.length; k++) {
     const [ax, az] = road.pts[k - 1]
     const [bx, bz] = road.pts[k]
     acc += Math.hypot(bx - ax, bz - az)
     if (acc < 36) continue
-    acc = 0
     const dx = bx - ax
     const dz = bz - az
     const l = Math.hypot(dx, dz) || 1
     const px = bx + (-dz / l) * 5.5
     const pz = bz + (dx / l) * 5.5
-    const g = G.island.heightAt(px, pz)
     const lean = rng.chance(0.25) ? rng.range(0.1, 0.35) * rng.sign() : 0
+    if (isl.depthAt(px, pz) > -0.3 || isl.sample(isl.riverD, px, pz) < 2.6 || byBridge(px, pz)) continue
+    acc = 0
+    const g = isl.heightAt(px, pz)
     const ry = Math.atan2(dx, dz)
     kit.cyl(0.13, 8, 'darkWood', px, g + 3.6, pz, { seg: 6, rx: lean, collide: !lean })
     if (lean) G.physics.addCylinder(px, pz, 0.2, g - 1, g + 1.5)
@@ -1191,27 +1197,10 @@ export function buildStructures(G) {
   buildPaddock(G, P.paddock, rng)
   buildRelay(G, P.summit, rng)
   for (const b of isl.bridges) buildBridge(G, b, rng)
-  buildPoles(G, isl.roads[0], rng)
-  buildPoles(G, isl.roads[1], rng)
-  // wrecks along the roads
-  const wrecks = [
-    [0, 0.55, true, 'truck'],
-    [1, 0.22, false, 'jeep'],
-    [1, 0.62, true, 'jeep'],
-    [2, 0.5, true, 'truck'],
-    [3, 0.6, false, 'jeep'],
-  ]
-  for (const [ri, f, withCrate, kind] of wrecks) {
-    const r = isl.roads[ri]
-    if (!r) continue
-    const k = Math.floor(r.pts.length * f)
-    const [ax, az] = r.pts[k]
-    const [bx, bz] = r.pts[Math.min(r.pts.length - 1, k + 1)]
-    const dx = bx - ax
-    const dz = bz - az
-    const l = Math.hypot(dx, dz) || 1
-    const side = rng.sign()
-    const off = kind === 'truck' ? 7.5 : 6.2
-    buildWreck(G, ax + (-dz / l) * off * side, az + (dx / l) * off * side, Math.atan2(dx, dz) + rng.range(-0.45, 0.45), rng, withCrate, kind)
-  }
+  // the poles draw from their own streams, so moving one never reshuffles
+  // the wrecks
+  buildPoles(G, isl.roads[0], new Rng(isl.cfg.seed + 505))
+  buildPoles(G, isl.roads[1], new Rng(isl.cfg.seed + 506))
+  // wrecks along the roads, where Island.placeWrecks found room for them
+  for (const w of isl.wrecks) buildWreck(G, w.x, w.z, w.yaw, rng, w.crate, w.kind, w.roadSide)
 }
