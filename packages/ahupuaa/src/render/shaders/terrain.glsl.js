@@ -179,17 +179,45 @@ vec2 flutes(float u, float h, float k) {
   return f;
 }
 
-// A noise on the face of a cliff itself, fourteen metres or so across:
-// value noise on the two vertical planes along x and along z, with height in
-// metres up both, each weighted by how squarely the face looks along it. So
-// unlike anything mapped in plan it never smears down a wall, and unlike
-// anything mapped across the face it never swirls as the wall turns or
-// breaks where one plane hands over to the next. (Where the two blend,
-// their mean is flatter than either; its contrast is put back.)
-float faceNoise(vec2 xz, float hm, vec2 nxz) {
-  float w = smoothstep(0.25, 0.75, nxz.x * nxz.x / max(dot(nxz, nxz), 1e-6));
-  float a = vnoise(vec2(xz.y * 7.0, hm * 0.07));
-  float b = vnoise(vec2(xz.x * 7.0 + 31.7, hm * 0.07 + 5.3));
+// A value noise along a line (o shifts it, so that different lines read
+// differently).
+float vnoise1(float x) {
+  float i = floor(x);
+  float f = fract(x);
+  return mix(hash12(vec2(i, 0.37)), hash12(vec2(i + 1.0, 0.37)), f * f * (3.0 - 2.0 * f));
+}
+
+// How squarely a face looks along x rather than along z (n: its normal), as
+// faceNoise weighs its two planes.
+float faceW(vec2 nxz) {
+  return smoothstep(0.25, 0.75, nxz.x * nxz.x / max(dot(nxz, nxz), 1e-6));
+}
+
+// A noise on the face of a cliff itself: value noise on the two vertical
+// planes along x and along z, ku cells to the unit across and v up both
+// (height in metres, scaled), each weighted (w, from faceW) by how squarely
+// the face looks along it. So unlike anything mapped in plan it never
+// smears down a wall, and unlike anything mapped across the face it never
+// swirls as the wall turns or breaks where one plane hands over to the
+// next. (Where the two blend, their mean is flatter than either; its
+// contrast is put back. Most faces look squarely enough along one that the
+// other is never worked out: in an if, as a compiler may well work out both
+// sides of a ?: whichever it picks, and here and below that's no saving.)
+float faceNoise(vec2 xz, float v, float w, float ku) {
+  float a = 0.5;
+  float b = 0.5;
+  if (w > 0.0) a = vnoise(vec2(xz.y * ku, v));
+  if (w < 1.0) b = vnoise(vec2(xz.x * ku + 31.7, v + 5.3));
+  return 0.5 + (mix(b, a, w) - 0.5) * (1.0 + 1.66 * w * (1.0 - w));
+}
+
+// faceNoise along a level line across the face only (o shifts it), for
+// what runs along a contact.
+float faceNoise1(vec2 xz, float o, float w, float ku) {
+  float a = 0.5;
+  float b = 0.5;
+  if (w > 0.0) a = vnoise1(xz.y * ku + o);
+  if (w < 1.0) b = vnoise1(xz.x * ku + 31.7 + o);
   return 0.5 + (mix(b, a, w) - 0.5) * (1.0 + 1.66 * w * (1.0 - w));
 }
 
@@ -205,10 +233,11 @@ struct Fall {
                // the edge of the rock)
   float zone;  // whether this lies in or around the amphitheatre at all
   float hide;  // how much of the sky its walls hide here
+  float under; // how near the middle of its headwall, under the brink
 };
 
 Fall fallAt(float metres) {
-  Fall f = Fall(0.0, 0.0, 9.0, 0.0, 0.0);
+  Fall f = Fall(0.0, 0.0, 9.0, 0.0, 0.0, 0.0);
   vec4 B = vFallB;
   vec4 C = vFallC;
   vec4 D = vFallD;
@@ -235,9 +264,23 @@ Fall fallAt(float metres) {
   // it all, where the fern holds the ground (no outcrops of the ordinary
   // pali's rock stand about just beyond its edge)
   float rim = s - D.z - D.y * c * c;
-  float across = abs(c) / (C.z + (D.x - C.z) * clamp(s / C.x, 0.0, 1.0));
+  float wide = C.z + (D.x - C.z) * clamp(s / C.x, 0.0, 1.0);
+  float across = abs(c) / wide;
   f.zone = smoothstep(-0.9, -0.6, rim) * (1.0 - smoothstep(C.x + 0.4, C.x + 0.8, s)) * (1.0 - smoothstep(1.6, 2.0, across)) * smoothstep(B.y, B.y + 15.0, metres);
-  f.edge = max(max(across / 1.25, 0.8 - (rim + 0.22) * 2.0), max((s - B.w) / 0.7, (metres - B.x + 30.0) / 30.0));
+  f.under = 1.0 - smoothstep(0.2, 1.0, across);
+  // (its outline ragged, in tongues and bays a few tens of metres across,
+  // so that no stretch of it runs straight down a wall or along a rim:
+  // each wall's edge pushed in and out as it runs down, the brink's and the
+  // rim's as they run across. Each moves only along its own edge, so the
+  // rock and the fern never break off into islands.)
+  if (f.zone > 0.0) {
+    float side = c < 0.0 ? 13.0 : 0.0;
+    float aw = abs(c / wide + 0.6 * (vnoise(vec2(metres * 0.036, s * 4.0 + side)) - 0.5));
+    float rw = vnoise(vec2(c * 5.5, metres * 0.031 + 3.7)) - 0.5;
+    float sw = 0.2 * rw;
+    float mw = 18.0 * rw;
+    f.edge = max(max(aw / 1.25, 0.8 - (rim + sw + 0.22) * 2.0), max((s + sw - B.w) / 0.7, (metres + mw - B.x + 30.0) / 30.0));
+  }
   // (and deep in it, its walls hide much of the sky)
   f.hide = 0.2 * f.zone * smoothstep(-0.3, 0.0, rim) * (1.0 - smoothstep(0.4, 1.0, across)) * smoothstep(0.1, 0.7, down);
   return f;
@@ -260,7 +303,16 @@ void main() {
   vec2 dY = dFdy(xz);
   vec2 fwXZ = abs(dX) + abs(dY);
   float px = length(fwXZ); // world units per pixel
+  // metres per pixel. On a steep face fwidth jumps from one long thin
+  // triangle to the next, and so would every width and fade it sets, in
+  // faint seams along their edges; there the normal map's slope gives the
+  // same measure smoothly (held within a factor of two of the drawn one,
+  // which it stands in for)
   float fwM = fwidth(metres);
+  if (slope > 0.2) {
+    vec2 gM = n.xz / (max(n.y, 0.05) * Y_PER_M);
+    fwM = mix(fwM, clamp(abs(dot(gM, dX)) + abs(dot(gM, dY)), 0.5 * fwM, 2.0 * fwM), smoothstep(0.2, 0.45, slope));
+  }
   // (fbm2's first three octaves and the fourth's mean: the fourth, 35 m
   // across, moves the rain it shifts by no more than 0.004)
   vec2 bp = xz * 0.35;
@@ -282,8 +334,11 @@ void main() {
 
   float r = rain + (nBig - 0.5) * 0.12;
   // (the steep ground below covers this entirely on the pali, and nothing
-  // mapped in plan is worth working out there)
-  float steep = smoothstep(0.32, 0.62, slope);
+  // mapped in plan is worth working out there; nor deep in a hero's
+  // amphitheatre, all new-cut rock however the normal map eases off, where
+  // the forest mapped in plan would stand in lenses down its walls)
+  Fall fall = fallAt(metres);
+  float steep = max(smoothstep(0.32, 0.62, slope), fall.zone * (1.0 - smoothstep(0.55, 0.8, fall.edge)));
   vec3 col = vec3(0.0);
   float nMid = 0.5;
   if (steep < 1.0) {
@@ -294,19 +349,22 @@ void main() {
     canopyC = mix(canopyC, wet, smoothstep(0.55, 0.8, r));
     canopyC = mix(canopyC, cloudF, smoothstep(1150.0, 1500.0, metres));
 
-    // tree crowns: each cell a sunlit dome, faded to an average when they'd alias
-    vec2 vc = crowns(xz * 6.0);
+    // tree crowns: each cell a sunlit dome, faded to an average when they'd
+    // alias (and only that average worked out once they have)
     float crownFade = 1.0 - smoothstep(0.02, 0.07, px);
-    float dome = sqrt(max(0.0, 1.0 - vc.x * vc.x * 1.6));
-    // fake per-crown normal: bulge away from the cell centre
-    vec2 toC = (xz * 6.0 - (floor(xz * 6.0) + 0.5));
-    float lightSide = dot(normalize(vec3(-toC.x, 0.6, -toC.y)), uSunDir) * 0.5 + 0.5;
-    float crown = mix(0.84, (0.62 + 0.45 * dome) * (0.78 + 0.4 * lightSide), crownFade);
-    vec3 tint = mix(vec3(0.88, 0.97, 0.86), vec3(1.12, 1.06, 0.88), vc.y);
-    canopyC *= mix(vec3(1.0), tint, crownFade * 0.7) * crown;
-    // ʻōhiʻa in bloom: a sprinkle of lehua red on the upper forest
-    float lehua = step(0.93, hash12(floor(xz * 6.0) + 0.3)) * smoothstep(700.0, 1100.0, metres) * crownFade;
-    canopyC = mix(canopyC, srgb(vec3(0.62, 0.12, 0.08)), lehua * 0.35 * smoothstep(0.0, 0.5, dome));
+    if (crownFade > 0.0) {
+      vec2 vc = crowns(xz * 6.0);
+      float dome = sqrt(max(0.0, 1.0 - vc.x * vc.x * 1.6));
+      // fake per-crown normal: bulge away from the cell centre
+      vec2 toC = (xz * 6.0 - (floor(xz * 6.0) + 0.5));
+      float lightSide = dot(normalize(vec3(-toC.x, 0.6, -toC.y)), uSunDir) * 0.5 + 0.5;
+      float crown = mix(0.84, (0.62 + 0.45 * dome) * (0.78 + 0.4 * lightSide), crownFade);
+      vec3 tint = mix(vec3(0.88, 0.97, 0.86), vec3(1.12, 1.06, 0.88), vc.y);
+      canopyC *= mix(vec3(1.0), tint, crownFade * 0.7) * crown;
+      // ʻōhiʻa in bloom: a sprinkle of lehua red on the upper forest
+      float lehua = step(0.93, hash12(floor(xz * 6.0) + 0.3)) * smoothstep(700.0, 1100.0, metres) * crownFade;
+      canopyC = mix(canopyC, srgb(vec3(0.62, 0.12, 0.08)), lehua * 0.35 * smoothstep(0.0, 0.5, dome));
+    } else canopyC *= 0.84;
     // riparian strips: kukui's pale silvery green along the gulches
     canopyC = mix(canopyC, srgb(vec3(0.52, 0.60, 0.42)), rip * 0.55 * smoothstep(0.35, 0.6, r));
     // grass: no cells, just tussocky variation at a few scales (fbm2's
@@ -318,7 +376,8 @@ void main() {
     gF += vnoise(gp) * 0.25;
     gp = gp * 2.03 + 17.1;
     gF += vnoise(gp) * 0.125 + 0.03125;
-    float gN = gF * 0.6 + vnoise(xz * 90.0) * 0.4 * (1.0 - smoothstep(0.004, 0.02, px));
+    float gN = gF * 0.6;
+    if (px < 0.02) gN += vnoise(xz * 90.0) * 0.4 * (1.0 - smoothstep(0.004, 0.02, px));
     ground *= 0.82 + 0.36 * gN;
     col = mix(ground, canopyC, forest);
 
@@ -349,21 +408,31 @@ void main() {
   // plane the face looks along, so they run down any wall and never swirl as
   // it turns, and a grain on the face itself (faceNoise) that breaks up all
   // the rest.
-  Fall fall = fallAt(metres);
   float spray = fall.spray;
+  float wetF = spray; // how wet the rock's skin runs, for its sheen
   vec3 nb = n; // the normal, with the flutes pressed in
   if (steep > 0.0) {
     float wetSide = smoothstep(0.25, 0.5, r);
     // the walls of a hero's amphitheatre stand near vertical; the ordinary
     // pali, steep as they are, hold a skin of soil
     float sheer = 1.0 - smoothstep(0.12, 0.3, n.y);
+    float fw = faceW(n.xz);
     // the flows, level across a face and dipping gently over hundreds of
     // metres
     float hm = metres + (nBig - 0.5) * 40.0;
     // the grain: clumps of fern, patches of moss, the rock's own blotches;
     // drawn while a clump is several pixels across, and its mean beyond
     float kG = smoothstep(2.5, 5.0, min(0.14 / max(px, 1e-5), 14.0 / max(fwM, 1e-4)));
-    float grain = kG > 0.0 ? mix(0.5, faceNoise(xz, hm, n.xz), kG) : 0.5;
+    float grain = 0.5;
+    if (kG > 0.0) grain = mix(0.5, faceNoise(xz, hm * 0.07, fw, 7.0), kG);
+    // how much rock shows. Windward, a sheer wall is rock with moss and
+    // ferns on its ledges; the ordinary pali hold a velvet of fern,
+    // thinning out as the wall steepens. Leeward the rock shows on much
+    // gentler slopes, the ledges holding what soil there is. (Where none of
+    // it can show, which is most of the windward pali, none of what the rock
+    // is made of is worked out: it would all be weighed at nothing.)
+    float rockW = smoothstep(0.25, 0.8, sheer + (grain - 0.5) * 0.5);
+    bool rocky = rockW > 0.0 || wetSide < 1.0 || fall.zone > 0.0 || fall.sheet > 0.0;
     // the flutes, mapped on whichever of sixteen vertical planes (facing
     // every 22.5 degrees round) the face looks along most squarely, so on
     // any face they run within a few degrees of the fall line; they ease
@@ -386,72 +455,124 @@ void main() {
     // the flow below it a ledge for moss and ferns, wider in a fall's spray.
     // How deep each is cut and how much grows there differs contact by
     // contact (a smooth pāhoehoe flow leaves hardly any) and comes and goes
-    // along the face with the grain, so a ledge thins out to nothing rather
-    // than ending in a cut. Drawn while a pixel holds less than a few metres
-    // of them, and their mean further off, where none of it is worked out.
+    // along the face over tens of metres, each contact in its own stretches,
+    // so a ledge tapers out to nothing rather than ending in a cut, and the
+    // ledges of one wall never line up. Drawn while a pixel holds less than
+    // a few metres of them, and their mean further off, where none of it is
+    // worked out.
     float soak = spray * (1.0 - fall.sheet);
     float kS = smoothstep(1.5, 4.0, 4.0 / max(fwM, 1e-4));
     float tone = 0.5; // the flow's own shade
     float notch = 0.1;
     float ledge = 0.08 + 0.1 * soak;
-    if (kS > 0.0) {
-      vec4 fq = flowsAt(hm);
-      float fi = fq.z * 8.0 + floor(fq.x);
+    float reach = 0.5; // how far round an amphitheatre's rim the fern follows this contact in
+    if (kS > 0.0 && rocky) {
+      // (each contact wanders up and down along the face by a few metres,
+      // so the flows thicken, thin and pinch out rather than running level
+      // and even like planks)
+      vec4 fq = flowsAt(hm + (faceNoise(xz, hm * 0.04, fw, 3.0) - 0.5) * 9.0);
       // (how far from the nearest contact between two flows, in metres: up
       // into the recess above it, or down over the lip of the flow below.
       // One at the top of a cell is numbered as the next cell's first, so
       // both sides of it agree.)
       float bk = floor(fq.x + 0.5);
       float dm = (fq.x - bk) * fq.y;
-      vec2 cut = hash22(vec2(fq.z * 8.0 + (bk < fq.w ? bk : 8.0), 1.7));
+      float ci = fq.z * 8.0 + (bk < fq.w ? bk : 8.0);
+      vec2 cut = hash22(vec2(ci, 1.7));
       float deep = smoothstep(0.1, 0.5, cut.x);
       float pxM = 1.5 * fwM + 0.01; // a pixel and a half
-      float moss = deep * smoothstep(0.35, 0.75, grain + 0.4 * (cut.y - 0.5) + 0.35 * soak);
+      float run = faceNoise1(xz, ci * 7.31, fw, 2.2);
+      float moss = deep * smoothstep(0.35, 0.75, 0.7 * run + 0.3 * grain + 0.4 * (cut.y - 0.5) + 0.35 * soak - 0.1 * (1.0 - wetSide));
       float rw = moss * (2.2 + 2.5 * soak);
       float l = clamp((rw - (dm > 0.0 ? dm : -2.5 * dm)) / max(0.5 * rw, pxM), 0.0, 1.0);
       float o = deep * (0.6 + 0.8 * grain) * smoothstep(-pxM, 0.0, dm) * (1.0 - smoothstep(0.2, 1.4 + grain + pxM, dm));
-      tone = mix(tone, hash12(vec2(fi, 4.3)), kS);
+      // the flows' own shades either side of the contact, eased across it
+      // over a metre (or a pixel and a half) so it never steps from one
+      // pixel to the next. (The flow above a contact shares its number;
+      // below the first contact of a cell lies the top flow of the cell
+      // beneath.)
+      float ew = max(0.75 * fwM, 0.5);
+      float up = smoothstep(-ew, ew, dm);
+      float t = up > 0.0 ? hash12(vec2(ci, 4.3)) : 0.0;
+      if (up < 1.0) {
+        float below = fq.z * 8.0 + bk - 1.0;
+        if (bk < 0.5) {
+          float hp = hash22(vec2(fq.z - 1.0, 2.9)).x;
+          below = fq.z * 8.0 - 9.0 + floor(1.0 + hp * hp * 5.0);
+        }
+        t = mix(hash12(vec2(below, 4.3)), t, up);
+      }
+      tone = mix(tone, t, kS);
       notch = mix(notch, o, kS);
       ledge = mix(ledge, l, kS);
+      reach = mix(reach, hash12(vec2(ci, 6.1)), kS);
     }
-    // how much rock shows. Windward, a sheer wall is rock with moss and
-    // ferns on its ledges; the ordinary pali hold a velvet of fern,
-    // thinning out as the wall steepens. Leeward the rock shows on much
-    // gentler slopes, the grooves and ledges holding what soil there is.
-    float rockW = smoothstep(0.25, 0.8, sheer + (grain - 0.5) * 0.5);
     float bareW = rockW * (1.0 - min(ledge * 1.3 + smoothstep(0.72, 0.9, grain) * 0.3, 1.0));
     // A hero's amphitheatre is new-cut rock, bare round the fall and all
     // down its face and walls, whatever the slope there. Toward the rim of
     // its walls, the brink and the mouth of the cut the fern takes it back,
-    // in a ragged edge: out along the ledges, down the grooves, onto anything
-    // less steep, in clumps and tongues with the grain. None of that reaches
+    // in a ragged edge (fallAt): out along a ledge here and there, down the
+    // grooves, onto anything less steep, in clumps and tongues with the
+    // grain, the rock going over to moss on the way. None of that reaches
     // deep into the rock or out into the fern, so no islands of either stand
     // apart.
+    float Pz = 0.0;
     if (fall.zone > 0.0) {
       float e = fall.edge;
-      float P = e + (0.8 * (grain - 0.5) + 0.3 * ledge + 0.12 * (FLUTE_MEAN.x - g) + 0.15 * smoothstep(0.15, 0.45, n.y) + 0.6 * (nBig - 0.5)) * smoothstep(0.35, 0.65, e) * (1.0 - smoothstep(0.78, 1.0, e));
-      float rz = (1.0 - smoothstep(0.66, 0.9, P)) * smoothstep(0.38, 0.6, slope);
+      // (all of it held to a band round the edge, so it frays the edge but
+      // never sets fern down in the middle of the rock; what's mapped in
+      // plan, which runs straight down a wall, least of all)
+      float P = e + (0.7 * (grain - 0.5) + 0.3 * ledge * smoothstep(0.6, 0.85, e) * (0.3 + 1.4 * reach) + 0.12 * (FLUTE_MEAN.x - g) + 0.1 * smoothstep(0.15, 0.45, n.y) + 0.2 * (nBig - 0.5)) * smoothstep(0.55, 0.78, e) * (1.0 - smoothstep(0.85, 1.05, e));
+      // (deep in it the rock stays bare however the ground eases off; only
+      // toward the rim does a gentler slope hold fern)
+      float rz = (1.0 - smoothstep(0.66, 0.9, P)) * mix(1.0, smoothstep(0.38, 0.6, slope), smoothstep(0.6, 0.85, e));
       rockW = mix(rockW, rz, fall.zone);
       bareW = mix(bareW, rz * (1.0 - min(ledge * 1.3, 1.0)), fall.zone);
+      Pz = P;
     }
-    // (leeward the grass takes the ledges, tapering as they do, and a
-    // little of the grooves; and behind a fall's sheet the water keeps the
-    // rock bare)
-    float exposedDry = smoothstep(0.3, 0.7, 1.0 - smoothstep(0.3, 0.62, n.y) - (1.0 - g) * 0.4) * (1.0 - 0.7 * ledge);
+    // (leeward the grass takes the ledges, tapering as they do; and behind
+    // a fall's sheet the water keeps the rock bare)
+    float exposedDry = smoothstep(0.3, 0.7, 1.0 - smoothstep(0.3, 0.62, n.y)) * (1.0 - 0.7 * ledge);
     float bareWet = smoothstep(0.3, 0.6, fall.sheet + (grain - 0.5) * 0.5);
     float exposed = max(mix(exposedDry, bareW, wetSide), bareWet);
+    // a finer grain on the rock, four metres or so across, so that no
+    // stretch of it is ever one flat colour close up
+    float kF = exposed > 0.0 ? smoothstep(2.5, 5.0, min(0.04 / max(px, 1e-5), 4.0 / max(fwM, 1e-4))) : 0.0;
+    float fine = 0.5;
+    if (kF > 0.0) fine = mix(0.5, faceNoise(xz, hm * 0.25, fw, 25.0), kF);
+    // (round a hero's rim, the rock going over to moss before the fern)
+    float mossy = fall.zone > 0.0 ? fall.zone * smoothstep(0.52, 0.8, Pz + 0.15 * (fine - 0.5)) : 0.0;
     // press the ribs into the normal: a couple of metres deep in the fern,
-    // and hardly at all on rock, where they're the streaks the water stains
-    vec2 bxz = F.y * ax * 0.0175 * (1.0 - 0.85 * rockW);
+    // and hardly at all on the ordinary pali's rock, where they're the
+    // streaks the water stains; a little more on a headwall the water cut
+    vec2 bxz = F.y * ax * 0.0175 * (1.0 - 0.85 * rockW * (1.0 - 0.4 * fall.zone));
     vec3 bump = vec3(bxz.x, 0.0, bxz.y);
     nb = normalize(n - (bump - n * dot(n, bump)) * steep);
-    // basalt, flow by flow: dark grey to grey-brown windward, darker still
-    // where the spray wets it and darkest behind the sheet; leeward the
-    // weathered flows run grey, tan and red-brown, the clinker redder
-    vec3 basalt = mix(srgb(vec3(0.235, 0.24, 0.23)), srgb(vec3(0.30, 0.295, 0.28)), smoothstep(0.15, 0.85, tone)) * (1.0 - 0.25 * spray - 0.15 * fall.sheet);
-    vec3 basaltDry = mix(rock, mix(soil, srgb(vec3(0.55, 0.42, 0.30)), smoothstep(0.5, 0.9, tone)), smoothstep(0.25, 0.75, tone) * 0.8);
-    basaltDry = mix(basaltDry, srgb(vec3(0.48, 0.25, 0.16)), notch * 0.5);
-    basalt = mix(basaltDry, basalt, wetSide) * (0.9 + 0.2 * grain) * (1.0 - 0.35 * notch);
+    // basalt, flow by flow: dark grey windward, one flow a shade or two
+    // from the next; leeward the weathered flows run grey-brown to red-brown,
+    // the clinker redder
+    vec3 basalt = mix(srgb(vec3(0.24, 0.244, 0.234)), srgb(vec3(0.292, 0.288, 0.274)), smoothstep(0.15, 0.85, tone));
+    vec3 basaltDry = mix(rock, srgb(vec3(0.49, 0.315, 0.22)), 0.25 + 0.35 * smoothstep(0.1, 0.9, tone));
+    basaltDry = mix(basaltDry, srgb(vec3(0.48, 0.25, 0.16)), notch * 0.4);
+    basalt = mix(basaltDry, basalt, wetSide) * (0.86 + 0.16 * grain + 0.14 * fine) * (1.0 - 0.35 * notch);
+    if (fall.zone > 0.0) {
+      // A hero's headwall runs wet all over, darker and cooler than any
+      // dry rock, darker still in its spray and darkest behind its sheet;
+      // streaked down from the brink with water stains, dark and faintly
+      // green, densest under it and thinning out sideways (drawn while a
+      // streak is several pixels across, and their mean beyond)
+      float soakW = fall.zone * (0.15 + 0.2 * vFallC.w);
+      basalt *= (1.0 - max(soakW, 0.45 * spray) - 0.15 * fall.sheet) * mix(vec3(1.0), vec3(0.87, 0.95, 1.07), fall.zone);
+      float kT = smoothstep(2.5, 5.0, min(0.05 / max(px, 1e-5), 50.0 / max(fwM, 1e-4)));
+      float streak = 0.3;
+      if (kT > 0.0 && exposed > 0.0) streak = mix(0.3, smoothstep(0.42, 0.72, faceNoise(xz, hm * 0.016, fw, 15.0)), kT);
+      basalt = mix(basalt, basalt * vec3(0.62, 0.68, 0.6), streak * fall.zone * (0.15 + 0.85 * fall.under));
+      // and round its rim the rock going over to moss before the fern
+      basalt = mix(basalt, srgb(vec3(0.22, 0.36, 0.14)) * (0.8 + 0.4 * fine), mossy * 0.75);
+      // (and its film of water gives back as sheen much of the skylight its
+      // darker rock loses, so in shade it reads wet rather than black)
+      wetF = max(spray, 2.2 * soakW * exposed);
+    }
     // fern velvet, clump by clump; moss on the rock and in the spray, deep
     // and wet; dry grass and shrub on the leeward
     vec3 fern = mix(srgb(vec3(0.20, 0.34, 0.14)), srgb(vec3(0.29, 0.41, 0.18)), grain);
@@ -477,10 +598,10 @@ void main() {
   ao *= 1.0 - fall.hide; // (deep in a hero's amphitheatre, less sky)
   float vis = sunVisibility(vWorld);
   vec3 lit = shade(col, nb, vWorld, ao, vis);
-  if (spray > 0.0) {
+  if (wetF > 0.0) {
     // and glistening: a rough wet sheen of sky (a film of water on rock
-    // reflects some of it from any angle, more toward grazing), and the
-    // sun's glint, strongest on the rock the sheet runs over
+    // reflects some of it from any angle, more toward grazing), and in the
+    // spray the sun's glint, strongest on the rock the sheet runs over
     vec3 V = normalize(cameraPosition - vWorld);
     float e = 1.0 - max(dot(nb, V), 0.0);
     float F = 0.06 + 0.94 * e * e * e * e * e;
@@ -489,7 +610,9 @@ void main() {
     glint *= glint;
     glint *= glint;
     glint *= glint;
-    lit += spray * (1.0 + fall.sheet) * (uSkyColor * min(F, 0.3) * 0.4 * ao + uSunColor * vis * glint * glint * 0.08);
+    // (the film on a headwall out of the spray thinner, so it brightens
+    // less toward grazing)
+    lit += (1.0 + fall.sheet) * (wetF * uSkyColor * min(F, 0.15 + 0.15 * spray / wetF) * 0.4 * ao + spray * uSunColor * vis * glint * glint * 0.08);
   }
   vec3 lightLevel = uSunColor * max(dot(n, uSunDir), 0.0) * vis + uSkyColor;
   lit = applyOverlay(lit, xz, px, 0.0, lightLevel * 0.5);
