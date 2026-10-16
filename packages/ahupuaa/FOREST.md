@@ -6,7 +6,7 @@ This is the research behind the app's forest: which native and Polynesian-introd
 - **(S)**: a colour sampled from real photographs. These are on-screen sRGB values, so treat them as ±15%.
 - **(E)**: an estimate made from published colour words.
 
-**Where the island numbers come from.** Every number about the island itself was measured by generating the default seed (20261004) in node.
+**Where the island numbers come from.** Every number about the island itself was measured by generating the default seed (20261004) in node; `node tools/island-stats.mjs [seed…]` reports them (rain by elevation band, the share of land in each class below, where the sites stand).
 
 ---
 
