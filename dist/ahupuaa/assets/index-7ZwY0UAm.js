@@ -3849,23 +3849,51 @@ vec3 applyOverlay(vec3 col, vec2 xz, float px, float water, vec3 light) {
   float dM = lineDist(ln.g);
   float dT = lineDist(ln.b);
   float dO = lineDist(ln.a);
+  // The ahupuaʻa map is in cells 35 m across, read as they are. Out at sea,
+  // where each one's fishery ends against the open ocean, its tint would stop
+  // in a staircase of cells, so near that limit it follows the smooth
+  // contour through them instead (the cells' coverage, interpolated).
+  float inside = id > 0.5 ? 1.0 : 0.0;
+  if (dO < 0.8) {
+    ivec2 hi = textureSize(uRegion, 0) - 1;
+    vec2 f = uv * vec2(hi + 1) - 0.5;
+    ivec2 c0 = ivec2(floor(f));
+    vec2 fr = f - floor(f);
+    vec4 t00 = texelFetch(uRegion, clamp(c0, ivec2(0), hi), 0);
+    vec4 t10 = texelFetch(uRegion, clamp(c0 + ivec2(1, 0), ivec2(0), hi), 0);
+    vec4 t01 = texelFetch(uRegion, clamp(c0 + ivec2(0, 1), ivec2(0), hi), 0);
+    vec4 t11 = texelFetch(uRegion, clamp(c0 + ivec2(1, 1), ivec2(0), hi), 0);
+    const float e = 0.5 / 255.0;
+    float cov = mix(mix(step(e, t00.r), step(e, t10.r), fr.x), mix(step(e, t01.r), step(e, t11.r), fr.x), fr.y);
+    // (soft over about a pixel, however near or far)
+    float k = clamp(px / (WORLD / float(hi.x + 1)), 0.03, 0.5);
+    inside = smoothstep(0.5 - k, 0.5 + k, cov);
+    // just outside the cells, take the ahupuaʻa whose edge this is
+    if (id < 0.5) {
+      vec4 t = t00.r > t10.r ? t00 : t10;
+      t = t.r > t01.r ? t : t01;
+      t = t.r > t11.r ? t : t11;
+      id = floor(t.r * 255.0 + 0.5);
+      moku = floor(t.g * 255.0 + 0.5);
+    }
+  }
   float w = max(px * 0.35, 0.012);
   float edgeFade = smoothstep(w * 1.5, w * 1.5 + 0.35 + px, dA);
   bool hovered = id > 0.5 && abs(id - uHover) < 0.5;
   bool focused = id > 0.5 && abs(id - uFocus) < 0.5;
   // dim the other ahupuaʻa (the open sea beyond them is left alone)
-  if (uFocus > 0.5 && !focused && id > 0.5) {
+  if (uFocus > 0.5 && !focused && inside > 0.0) {
     float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
-    col = mix(col, vec3(l) * 0.7, 0.55 * uFocusK);
+    col = mix(col, vec3(l) * 0.7, 0.55 * uFocusK * inside);
   }
   // moku tint and zone bands
-  if (id > 0.5) {
+  if (inside > 0.0) {
     int m = int(moku + 0.5);
     vec3 mc = uMokuColors[m];
     float tint = uOverlay.z * 0.22 + (hovered ? 0.2 : 0.0) + (focused ? 0.12 * uFocusK : 0.0);
-    col = mix(col, mc * (light * 0.6 + 0.25), tint * edgeFade);
+    col = mix(col, mc * (light * 0.6 + 0.25), tint * edgeFade * inside);
     vec3 zc = texture(uZoneTex, uv).rgb;
-    col = mix(col, zc * (light * 0.55 + 0.3), uOverlay.y * 0.62 * (0.4 + 0.6 * edgeFade));
+    col = mix(col, zc * (light * 0.55 + 0.3), uOverlay.y * 0.62 * (0.4 + 0.6 * edgeFade) * inside);
   }
   // boundary lines, with a soft glow; moku lines wider and warmer
   float a = (1.0 - smoothstep(w, w + px * 0.9, dA));
