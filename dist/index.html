@@ -14,18 +14,27 @@
     </header>
     <nav class="filters" id="filters" aria-label="Filter apps">
         <button class="chip" data-tag="game" aria-pressed="false">game<span class="chip__n">8</span></button>
-        <button class="chip" data-tag="simulation" aria-pressed="false">simulation<span class="chip__n">10</span></button>
+        <button class="chip" data-tag="simulation" aria-pressed="false">simulation<span class="chip__n">11</span></button>
         <button class="chip" data-tag="tool" aria-pressed="false">tool<span class="chip__n">7</span></button>
-        <button class="chip" data-tag="art" aria-pressed="false">art<span class="chip__n">27</span></button>
+        <button class="chip" data-tag="art" aria-pressed="false">art<span class="chip__n">28</span></button>
         <button class="chip" data-tag="kids" aria-pressed="false">kids<span class="chip__n">18</span></button>
-        <button class="chip" data-tag="tutorial" aria-pressed="false">tutorial<span class="chip__n">5</span></button>
+        <button class="chip" data-tag="tutorial" aria-pressed="false">tutorial<span class="chip__n">6</span></button>
       <span class="filters__sep" role="separator"></span>
       <button class="chip chip--status" data-status="wip" aria-pressed="false">wip<span class="chip__n">9</span></button>
-      <button class="chip chip--status" data-status="done" aria-pressed="false">done<span class="chip__n">33</span></button>
+      <button class="chip chip--status" data-status="done" aria-pressed="false">done<span class="chip__n">34</span></button>
       <button class="chip chip--clear" id="clear" hidden>clear</button>
       <output class="filters__count" id="count"></output>
     </nav>
     <main class="grid" id="grid">
+      <a class="card" href="./cold-boot/" data-tags="tutorial simulation art" data-status="done">
+        <img class="thumb" src="./cold-boot/thumbnail.jpg" alt="Screenshot of Cold Boot" loading="lazy" />
+        <div class="card__body">
+          <h2 class="card__title">Cold Boot</h2>
+          <p class="card__desc">Press the power button and watch an x86 PC climb from a 1978 8086 to a 2003 AMD64 — real mode, cache-as-RAM, DDR5 training, long mode, and 31 other threads woken again and again — lit up on a real Raptor Lake die. After LaurieWired&#39;s thread.</p>
+          <p class="card__credits">Opus 5.5 · ultracode effort</p>
+          <div class="card__tags"><span class="tag">tutorial</span><span class="tag">simulation</span><span class="tag">art</span></div>
+        </div>
+      </a>
       <a class="card" href="./sloshing-os/" data-tags="art game simulation kids" data-status="done">
         <img class="thumb" src="./sloshing-os/thumbnail.jpg" alt="Screenshot of SloshOS" loading="lazy" />
         <div class="card__body">
