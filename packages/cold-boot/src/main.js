@@ -118,8 +118,8 @@ const comp = (id) => board.comps.get(id).anchor.clone()
 const mid = (...pts) => pts.reduce((a, p) => a.add(p), V(0, 0, 0)).multiplyScalar(1 / pts.length)
 const shots = {
   overview: at(V(0, 0, 8), V(0, 330, 330), 40),
-  standby: at(mid(comp('atx24'), comp('pch'), comp('fpanel')).setY(0), V(-30, 150, 170), 40),
-  power: at(mid(comp('atx24'), comp('vrm'), comp('pch')).setY(0), V(-20, 230, 220), 40),
+  standby: at(mid(comp('cmos'), comp('atx24')).setY(0).add(V(3, 0, 28.5)), V(-25, 185, 200), 40),
+  power: at(V(30, 0, 10), V(-10, 270, 255), 40),
   pch: at(mid(comp('pch'), comp('spi')).setY(0), V(-10, 85, 100), 38),
   socket: onDie(V(0, 0, 0), V(0, 62, 72), 38),
   die: onDie(V(0, 0, 0.6), V(0, 30.5, 21.5), 40),
@@ -134,12 +134,14 @@ const shots = {
   pcie: at(mid(dieCenter.clone(), comp('nvme'), comp('gpu').setY(0), comp('pch')).setY(0).add(V(12, 0, 6)), V(20, 260, 240), 40),
   attract: onDie(V(0, 0, 0), V(-9, 12, 17), 36),
   imc: onDie(V(-8.2, 0, -3.0), V(-1.5, 10, 9.5), 38),
-  llc: onDie(V(-1.5, 0, 0), V(0, 13, 10), 38),
-  spd: at(V(30, 0, 5), V(55, 190, 175), 40),
+  // the memory controllers with room on the left for the eye card
+  imcEye: onDie(V(-10.5, 0, -2.5), V(-1.5, 10, 9.5), 38),
+  llc: onDie(V(-0.8, 0, 0.6), V(0, 21, 16), 38),
+  spd: at(V(50, 0, -10), V(-20, 215, 215), 40),
 }
 
 // Shots framed on the die itself: the heat-spreader must be off for these.
-const DIE_SHOTS = new Set(['die', 'dieLow', 'dieLeft', 'dieRight', 'bsp', 'sa', 'imc', 'llc', 'attract'])
+const DIE_SHOTS = new Set(['die', 'dieLow', 'dieLeft', 'dieRight', 'bsp', 'sa', 'imc', 'imcEye', 'llc', 'attract'])
 
 const timeline = new Timeline(STEPS)
 const director = new Director(camera, renderer.domElement, shots)
@@ -197,6 +199,8 @@ function resize() {
     if (panel.left > w * 0.3) {
       ox = w - panel.left
       bottom = tl.top
+      // on a short (landscape-phone) screen the brand block takes a real slice
+      if (h <= 520) top = rect('brand').bottom
     } else {
       top = rect('brand').bottom
       bottom = Math.min(panel.top, tl.top, rect('stages').top)

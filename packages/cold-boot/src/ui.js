@@ -435,7 +435,14 @@ export class UI {
       this.obstacles = ['#brand', '#stages', '#lps', '#inset', '#eye']
         .map((sel) => $(sel))
         .filter((el) => el && !el.hidden && getComputedStyle(el).display !== 'none')
-        .map((el) => el.getBoundingClientRect())
+        .map((el) => {
+          const r = el.getBoundingClientRect()
+          if (el.id !== 'inset') return r
+          // on phones the caption sits under the picture: one obstacle
+          const c = el.querySelector('.lbl').getBoundingClientRect()
+          const left = Math.min(r.left, c.left)
+          return new DOMRect(left, r.top, Math.max(r.right, c.right) - left, Math.max(r.bottom, c.bottom) - r.top)
+        })
         .filter((r) => r.width > 0 && r.height > 0)
     }
     const obstacles = document.body.classList.contains('intro') ? [] : this.obstacles
@@ -464,11 +471,20 @@ export class UI {
         else if (!L.hot) L.el.style.opacity = 0
       }
       if (L.vis) {
+        // slide up past neighbours; once the chrome blocks that, only down
+        const clash = (t) => boxes.find((b) => Math.abs(b.cx - cx) < (b.bw + L.bw) / 2 + 4 && t - L.bh < b.top + 2 && b.top - b.bh < t + 2)
+        let down = false
         for (let pass = 0; pass < 6; pass++) {
-          const hit = boxes.find((b) => Math.abs(b.cx - cx) < (b.bw + L.bw) / 2 + 4 && top - L.bh < b.top + 2 && b.top - b.bh < top + 2)
+          const hit = clash(top)
           if (!hit) break
-          top = hit.top - hit.bh - 3
+          const up = hit.top - hit.bh - 3
+          if (!down && up - L.bh >= 16 && !hits(cx, up, L)) top = up
+          else {
+            down = true
+            top = hit.top + L.bh + 3
+          }
         }
+        if (!L.hot && (hits(cx, top, L) || clash(top) || top > bottom)) L.el.style.opacity = 0
         boxes.push({ cx, top, bw: L.bw, bh: L.bh })
       }
       L.el.style.left = `${cx}px`

@@ -11,7 +11,7 @@
     "title": "Cold Boot",
     "description": "Press the power button and watch an x86 PC climb from a 1978 8086 to a 2003 AMD64 — real mode, cache-as-RAM, DDR5 training, long mode, and 31 other threads woken again and again — lit up on a real Raptor Lake die. After LaurieWired's thread.",
     "tags": ["tutorial", "simulation", "art"],
-    "status": "wip",
+    "status": "done",
     "models": ["Opus 5.5"],
     "thinking": "ultracode",
     "thumbnail": { "waitFor": "body.ready", "settle": 2500 }
