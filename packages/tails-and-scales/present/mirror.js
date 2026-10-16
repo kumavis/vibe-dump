@@ -14,7 +14,7 @@
 // (a new table, or a snap); applyEvent(M, e) folds one event into it. Once
 // every event is played the two agree: sim/present-check.mjs folds every
 // corpus battle's events and holds the result to project(G) at every
-// action's end (`act`), and after every converted action's events and
+// action's end (`act`), and after every action's events and
 // main.js's own stage changes (`check`, ?debug only), so an event the rules
 // forget to emit is a failing check, not a figure left standing. Pure in
 // what it reads: no rendering, no DOM, the match only through core's

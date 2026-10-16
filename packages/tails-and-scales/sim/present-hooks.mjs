@@ -1,20 +1,27 @@
 // Module hooks for sim/present-check.mjs's --self-test (registered by its
 // child, beside the oracle's three.js resolution). With PRESENT_MUTATE set,
 // one named edit is applied to the code under test as it loads: each drops
-// or bends one event (one the mirror is folded from, or one of the fight's
-// or the charge's own, below), and the check must fail on it. Code under sim/oracle's PIN checkout is never edited. The flags' and
-// labels' events inside an action (no-dmg-*, no-morale-*, no-move-owners,
-// no-move-status), the walking unit's flags (no-walk-owners) and the stage
-// events (no-stage-*) are caught only at a `check`, the checkpoint
-// main.js's checkpoint() emits under ?debug: the action's end re-emits the
-// flags and labels before its `act`, and a stage lost would be put right by
-// the next stage event before any act.
+// or bends one event (one the mirror is folded from, or one of an action's
+// own, below), and the check must fail on it. Code under sim/oracle's PIN
+// checkout is never edited. The flags' and labels' events inside an action
+// (no-dmg-*, no-morale-*, no-move-owners, no-move-status, and the mirror's
+// side of no-gaze-status) and the stage events (no-stage-*) are caught only
+// at a `check`, the checkpoint main.js's checkpoint() emits under ?debug:
+// the action's end re-emits the flags and labels before its `act`, and a
+// stage lost would be put right by the next stage event before any act.
 //
-// The fight's and the charge's own events (core/actions/fight.js: a lunge,
-// a turn to face, a pause; charge.js: a turn to face, charge.result) change
-// nothing in the mirror, so their drops and moves (no-melee and on) are
-// caught by the check's event order instead (present-check.mjs's
-// eventOrder), each where the next event or line breaks it.
+// The actions' own events that change nothing in the mirror, and the look
+// fields of those that do (the move's, move.js: a walk's stomp, flight and
+// pace, the advance roll; the fight's, core/actions/fight.js: a lunge, a
+// turn to face, a pause; the charge's, charge.js: a turn to face,
+// charge.result; the shot's, shoot.js: a turn to face, a volley, a
+// template's aim, scatter, throw and landing, the beat after one that
+// caught nobody, a spell cast or fizzling, thorns erupting and fading, a
+// gaze, the "Mesmerized!", and the shot's look and who throws) are caught
+// by the check's event order instead (present-check.mjs's eventOrder),
+// each where the next event or line breaks it: no-stomp through
+// walk-speed, and no-melee through land-fx. The rest (no-formation
+// through no-move-status, no-place and on) are caught by the mirror.
 //
 // Not here, because nothing the check can see depends on it: the `status`
 // at the fight phase's end, which repeats the last damage's (each fight
@@ -41,18 +48,29 @@ export const MUTATIONS = {
   'no-morale-owners': ['/core/actions/morale.js', "        emit(G, 'objectives',", "        if (false) emit(G, 'objectives',"],
   // the labels' state after a flight never reported
   'no-morale-status': ['/core/actions/morale.js', "        emit(G, 'status',", "        if (false) emit(G, 'status',"],
-  // a walk (a charge's move: resolveWalk) never reported: the charger
-  // stays where it was in the mirror
+  // a walk (resolveWalk: a move, an advance's move, a fall back, a
+  // charge's move) never reported: the walker stays where it was in the
+  // mirror
   'no-move': ['/core/actions/move.js', "  emit(G, 'unit.move',", "  if (false) emit(G, 'unit.move',"],
-  // what a charging wrecker smashed on its way never reported: the chunks
-  // stand on in the mirror
-  'no-move-smash': ['/core/actions/move.js', 'fly, smashes, to:', 'fly, smashes: [], to:'],
+  // what a wrecker smashed on its way never reported: the chunks stand on
+  // in the mirror
+  'no-move-smash': ['/core/actions/move.js', 'stomp, smashes, to:', 'stomp, smashes: [], to:'],
   // the flags as a walk left them never reported (its action's end
-  // re-reports them before its act: only the charge's check sees this)
+  // re-reports them before its act: only the move's or the charge's check
+  // sees this)
   'no-move-owners': ['/core/actions/move.js', "    emit(G, 'objectives',", "    if (false) emit(G, 'objectives',"],
-  // the labels as a walk left them (the charger now in combat) never
-  // reported (likewise re-reported at the action's end)
+  // the labels as a walk left them (a charger now in combat, a unit fallen
+  // back out of one) never reported (likewise re-reported at the action's
+  // end)
   'no-move-status': ['/core/actions/move.js', "    emit(G, 'status',", "    if (false) emit(G, 'status',"],
+  // a wrecker never stomps off on its move
+  'no-stomp': ['/core/actions/move.js', "stomp: u.t.wrecker && L > 0.1 })", 'stomp: false })'],
+  // an advance's roll never shown: the line comes with no dice before it
+  'no-advance-roll': ['/core/actions/move.js', "  emit(G, 'dice', { label: 'Advance D6',", "  if (false) emit(G, 'dice', { label: 'Advance D6',"],
+  // a flier's move walks along the ground: no lift
+  'walk-no-fly': ['/core/actions/move.js', "resolveWalk(G, u, pts, { fly: plan.mode === 'fly', stomp:", 'resolveWalk(G, u, pts, { fly: false, stomp:'],
+  // a move walks at a charge's pace
+  'walk-speed': ['/core/actions/move.js', '{ speed = 7, fly = false, stomp = false } = {}', '{ speed = 11, fly = false, stomp = false } = {}'],
   // a fight's lunge never reported: no fighter lunges, no sparks fly
   'no-melee': ['/core/actions/fight.js', "  emit(G, 'melee',", "  if (false) emit(G, 'melee',"],
   // the lunge after its hit row: the sparks, timed PACE.dice(n) from the
@@ -69,11 +87,50 @@ export const MUTATIONS = {
   'no-charge-result': ['/core/actions/charge.js', "\n  emit(G, 'charge.result',", "\n  if (false) emit(G, 'charge.result',"],
   // a charge that fell short: no "Charge failed"
   'no-charge-failed': ['/core/actions/charge.js', "    emit(G, 'charge.result',", "    if (false) emit(G, 'charge.result',"],
-  // a unit's place, as the old walk moves it, never reported
+  // a shooter never turns to its target
+  'no-shoot-face': ['/core/actions/shoot.js', "  emit(G, 'unit.face',", "  if (false) emit(G, 'unit.face',"],
+  // a volley never flies: the dice roll with nothing thrown
+  'no-volley': ['/core/actions/shoot.js', "  emit(G, 'volley',", "  if (false) emit(G, 'volley',"],
+  // the volley after its hit row: the shots would fly once they had hit
+  'volley-after-dice': ['/core/actions/shoot.js', "  emit(G, 'volley', { u: u.id, tg: target.id, fx: w.fx, n })\n  const hits = roll(G, n)\n  const h = passes(hits, info.need)\n  emit(G, 'dice', { label: `Hit ${info.need}+`, dice: hits, need: info.need })", "  const hits = roll(G, n)\n  const h = passes(hits, info.need)\n  emit(G, 'dice', { label: `Hit ${info.need}+`, dice: hits, need: info.need })\n  emit(G, 'volley', { u: u.id, tg: target.id, fx: w.fx, n })"],
+  // a template never aimed: no marker before its hit roll
+  'no-blast-aim': ['/core/actions/shoot.js', "    emit(G, 'blast.aim',", "    if (false) emit(G, 'blast.aim',"],
+  // a missed template never scatters: it would fly from its aim to where
+  // it lands with no marker sliding there
+  'no-blast-scatter': ['/core/actions/shoot.js', "      emit(G, 'blast.scatter',", "      if (false) emit(G, 'blast.scatter',"],
+  // a template never thrown: it lands with nothing flying
+  'no-blast-fire': ['/core/actions/shoot.js', "    emit(G, 'blast.fire',", "    if (false) emit(G, 'blast.fire',"],
+  // a template never lands: no explosion, no ring
+  'no-blast-land': ['/core/actions/shoot.js', "  emit(G, 'blast.land',", "  if (false) emit(G, 'blast.land',"],
+  // a cast roll that made it, with no spell cast (no sound)
+  'no-spell-cast': ['/core/actions/shoot.js', "    emit(G, 'spell.cast',", "    if (false) emit(G, 'spell.cast',"],
+  // a cast roll that missed, with no fizzle
+  'no-spell-fizzle': ['/core/actions/shoot.js', "      emit(G, 'spell.fizzle',", "      if (false) emit(G, 'spell.fizzle',"],
+  // an eruption with no thorns bursting up
+  'no-thorns': ['/core/actions/shoot.js', "  emit(G, 'spell.thorns',", "  if (false) emit(G, 'spell.thorns',"],
+  // the thorns never sink back: they stand on the table for good
+  'no-fade': ['/core/actions/shoot.js', "  emit(G, 'spell.fade',", "  if (false) emit(G, 'spell.fade',"],
+  // a mesmerize with no gaze before its D3
+  'no-gaze': ['/core/actions/shoot.js', "  emit(G, 'spell.gaze',", "  if (false) emit(G, 'spell.gaze',"],
+  // the target's label never says it is mesmerized (its action's end
+  // re-reports the labels before its act, so of the mirror only the shot's
+  // check sees this; and the "Mesmerized!" then comes straight after the
+  // damage's own status, which has the target as it was, not mesmerized
+  // unless it already was, which the event order sees too)
+  'no-gaze-status': ['/core/actions/shoot.js', "  if (G.out) emit(G, 'status', statusOf(G))\n  emit(G, 'spell.mesmerized',", "  emit(G, 'spell.mesmerized',"],
+  // no "Mesmerized!" over the target
+  'no-mesmerized': ['/core/actions/shoot.js', "  emit(G, 'spell.mesmerized',", "  if (false) emit(G, 'spell.mesmerized',"],
+  // no beat after a template that caught nobody
+  'no-blast-pause': ['/core/actions/shoot.js', "  if (!victims.length) emit(G, 'pause', { s: 0.25 })", "  if (false) emit(G, 'pause', { s: 0.25 })"],
+  // a template thrown by its target: the throw comes from the wrong figure
+  'blast-fire-u': ['/core/actions/shoot.js', "emit(G, 'blast.fire', { u: u.id,", "emit(G, 'blast.fire', { u: target.id,"],
+  // every volley flies acorns, whatever the weapon
+  'volley-fx': ['/core/actions/shoot.js', "emit(G, 'volley', { u: u.id, tg: target.id, fx: w.fx, n })", "emit(G, 'volley', { u: u.id, tg: target.id, fx: 'acorn', n })"],
+  // every template lands as a bomb: fire where acid or thorns should be
+  'land-fx': ['/core/actions/shoot.js', "emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: w.fx })", "emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: 'bomb' })"],
+  // a deployment's placement never reported: the unit stands where the
+  // title screen put it in the mirror (caught at the battle's start)
   'no-place': ['/main.js', "  emit(G, 'unit.place', { u: u.id, x, z })", '  // (dropped)'],
-  // the flags a walking unit turns never reported (its action's end
-  // re-reports them before its act: only the walk's check sees this)
-  'no-walk-owners': ['/main.js', "    if (owners.some((c, i) => c !== player.mirror.owners[i])) emit(G, 'objectives', { owners })", '    // (dropped)'],
   // a deployment's stage never reported: the HUD reads "Round 1 / 5" and
   // the labels stay hidden while a human deploys
   'no-stage-deploy': ['/main.js', "    emit(G, 'stage', { stage: 'deploy' })", '    // (dropped)'],

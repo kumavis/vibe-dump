@@ -1,11 +1,23 @@
-// Movement's rules: where a unit may go this phase and how it gets there,
-// and the walk itself (resolveWalk), which a charge's move takes. (The
-// movement phase's move is still main.js's doMove, awaited by its old
-// walk, until R5c puts it on resolveWalk too.)
-import { BOARD, ENGAGE } from '../rules.js'
+// Movement (DESIGN §1.1): where a unit may go this phase and how it gets
+// there; the movement phase's actions (a move, which is also an advance's
+// move and a fall back, and the advance roll itself); and the walk
+// (resolveWalk), which both a move and a charge take.
+//
+// Synchronous, like damage.js: what the old code waited on is an event in
+// the match's out at the same place (DESIGN §2.3, §4.1 rule 3): the advance
+// roll's tray and dice (`tray.open`, `dice`), and the walk (`unit.move`,
+// which the view plays back along its path). No logic moves across an
+// emit, and building an event draws nothing and changes nothing.
+//
+// Neither action ends itself (its state line in the trace, the flags, the
+// labels): through R5 main.js's finishAction does, once these events have
+// played, so no state line is written while the view is behind (the ?debug
+// trace's hold: DESIGN's R5a and R5b notes); from R6 the engine's. The
+// advance roll writes no `act` line at all (§4.1 rule 8).
+import { BOARD, ENGAGE, roll } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { lerp } from '../util.js'
-import { emit } from '../journal.js'
+import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { setUnitPos } from '../units.js'
 import { pathLength } from '../nav.js'
@@ -80,6 +92,50 @@ export function nearestValid(G, plan, x, z, within = 2.4) {
   return best
 }
 
+// ── The movement phase's actions ────────────────────────────────────────────
+// `u` moves to `cell`, one validEnd accepts of `plan` (movePlan's, made with
+// the advance roll when the unit advanced): by the shortest route there,
+// smashing what a wrecker passes, and the nav grid follows. An engaged unit's
+// plan is a fall back. The log line gives the route's length before the
+// walk, as it always has; a wrecker setting off on a move of more than 0.1"
+// stomps (`stomp`: the old boom, the view's), which its charge never did.
+// With no `plan`, it is made afresh from the unit's flags, as R6's `move`
+// command, which carries only the unit and the cell, will make it (and as
+// every move through main.js is made already, so parity holds each corpus
+// move made on the remade plan to the old move, made on the plan the seat
+// or the AI picked from; a one-off probe at R5c found the plans
+// deep-equal too).
+export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)) {
+  const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
+  u.flags.moved = true
+  if (plan.fallback) u.flags.fellBack = true
+  const L = pathLength(pts)
+  log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${L.toFixed(1)}".`)
+  resolveWalk(G, u, pts, { fly: plan.mode === 'fly', stomp: u.t.wrecker && L > 0.1 })
+  // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
+  refreshNav(G)
+}
+
+// `u` advances: a D6 more inches for its move this phase (its move is a
+// doMove on movePlan(G, u, roll)), at the price the rules set (no shooting
+// unless assault, no charge unless it may charge after advancing). Returns
+// the roll. No `act` line: the move that follows writes it (§4.1 rule 8).
+export function doAdvance(G, u) {
+  emit(G, 'tray.open', { title: `${u.t.short} — Advance` })
+  const r = roll(G, 1)
+  emit(G, 'dice', { label: 'Advance D6', dice: r, need: 0, sum: true, note: `+${r[0]}"` })
+  u.flags.advanced = true
+  u.flags.advRoll = r[0]
+  log(G, u.side, `<b>${u.t.short}</b> advance: +${r[0]}".`)
+  return r[0]
+}
+
+// An advanced unit the AI leaves where it is: its move is spent (the AI's
+// own, never a seat's command: DESIGN §2.2). No event and no line, as ever.
+export function hold(G, u) {
+  u.flags.moved = true
+}
+
 // ── The walk ────────────────────────────────────────────────────────────────
 // A unit goes along `pts` (DESIGN §2.3's resolveWalk, §4.1 rule 7), all at
 // once: a wrecker smashes what it passes at fixed 0.25" samples along the
@@ -88,17 +144,16 @@ export function nearestValid(G, plan, x, z, within = 2.4) {
 // walk's last frame always put it (the k=1 lerp along the path, not
 // pts.at(-1)). A path under 0.05" moves nothing and smashes nothing.
 //
-//   unit.move { u, path: [{ x, z }], L, speed, fly, smashes: [{ s, ev }], to: { x, z } }
+//   unit.move { u, path: [{ x, z }], L, speed, fly, stomp, smashes: [{ s, ev }], to: { x, z } }
 //
 // The view walks the unit along `path` (L long, at `speed` inches a second,
-// flying or not) and breaks what each sample smashed (`ev`, its terrain
-// events) as the walker comes `s` along; `to` is where the unit stands.
-// Then `objectives` and `status`: the flags and labels as the walk left
-// them (the old walk turned a flag the frame it crossed; this turns it as
-// the walk ends).
-// (Through R5b only a charge moves this way: main.js's doMove still walks
-// the old way until R5c.)
-export function resolveWalk(G, u, pts, { speed = 7, fly = false } = {}) {
+// flying or not, stomping off as it sets out when `stomp`: all three are
+// how it looks, which the caller says) and breaks what each sample smashed
+// (`ev`, its terrain events) as the walker comes `s` along; `to` is where
+// the unit stands. Then `objectives` and `status`: the flags and labels as
+// the walk left them (the old walk turned a flag the frame it crossed; this
+// turns it as the walk ends).
+export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false } = {}) {
   const L = pathLength(pts)
   if (L < 0.05) return
   const seg = []
@@ -128,7 +183,7 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false } = {}) {
   // the walk, then the flags (who holds what) and the labels (who is in
   // combat) as it left them
   if (G.out) {
-    emit(G, 'unit.move', { u: u.id, path: pts.map((p) => ({ x: p.x, z: p.z })), L, speed, fly, smashes, to: { x: u.pos.x, z: u.pos.z } })
+    emit(G, 'unit.move', { u: u.id, path: pts.map((p) => ({ x: p.x, z: p.z })), L, speed, fly, stomp, smashes, to: { x: u.pos.x, z: u.pos.z } })
     emit(G, 'objectives', { owners: ownersOf(G) })
     emit(G, 'status', statusOf(G))
   }

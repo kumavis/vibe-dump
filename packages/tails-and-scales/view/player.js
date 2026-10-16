@@ -14,7 +14,7 @@
 // before play() returns, as the old code did. An event with no handler goes
 // to `fallback`.
 //
-// Transitional (R5): through R5 main.js wraps each action it has converted
+// Transitional (R5): through R5 main.js wraps each action (core/actions/'s)
 // as `fn(G, …); await player.play(drain(G))`, and its own code emits and
 // plays the flow events (phase starts, scores, action ends) the step machine
 // will emit from R6. R7's player adds snap(G) (it needs TerrainView.sync);

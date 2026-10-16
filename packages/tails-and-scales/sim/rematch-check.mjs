@@ -23,10 +23,11 @@
 // any frame of all three battles, the match's out (G.out) must be empty,
 // and so must it, with the player idle, before and after each new table. The
 // rules leave their events in G.out and main.js drains them into the player,
-// straight after each terrain call and each converted action; while the
-// player is still playing, G.out may hold what the rules emitted since (from
-// R6 a whole AI turn), so the check waits for idle. Code without a player
-// (before R5) is held to an empty G.out after every frame, as R4 had it.
+// straight after each terrain call and each action (core/actions/'s, played
+// by played()); while the player is still playing, G.out may hold what the
+// rules emitted since (from R6 a whole AI turn), so the check waits for
+// idle. Code without a player (before R5) is held to an empty G.out after
+// every frame, as R4 had it.
 //
 //   node sim/rematch-check.mjs [--only ai,hotseat,4242-99] [--ref <ref> | --dir <packageDir>]
 //

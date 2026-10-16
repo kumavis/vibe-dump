@@ -6,6 +6,7 @@ import {
   alive, enemiesOf, friendsOf, gap, isEngaged, engagedWith, sight, controlOf,
   movePlan, validEnd, canShoot, shootTargets, canCharge, chargeTargets, chargePlan,
 } from './core/queries.js'
+import { hold } from './core/actions/move.js'
 
 // ---------------------------------------------------------------------------
 // The opponent. No search, just a general's instincts written as scores:
@@ -87,7 +88,7 @@ async function aiMove(G, side, act) {
       }
       if (best >= 0) {
         act.focus(u.pos.x, u.pos.z)
-        await act.doMove(u, best, plan)
+        await act.doMove(u, best)
       }
       continue
     }
@@ -114,9 +115,10 @@ async function aiMove(G, side, act) {
     if (pick.obj >= 0) claimed.add(pick.obj)
     if (pick.cell >= 0 && pick.dist > 0.4) {
       act.focus(u.pos.x, u.pos.z)
-      await act.doMove(u, pick.cell, plan)
+      await act.doMove(u, pick.cell)
     } else if (u.flags.advanced) {
-      u.flags.moved = true
+      // an advanced unit staying put has spent its move all the same
+      hold(G, u)
     }
     await wait(0.05)
   }

@@ -174,10 +174,11 @@ step keeps the game playable.
   just one block above it in classic, the column's last (DESIGN's R4 notes
   have the whole argument, and what F7's pieces could change). The events
   carry the place anyway, for R5.
-- [ ] **R5 Synchronous actions.** Each `await` becomes an emitted event; a
+- [x] **R5 Synchronous actions.** Each `await` becomes an emitted event; a
   transitional `EventPlayer` keeps today's visuals; a mirror for display state.
   In three passes: R5a (the seam, damage, morale), R5b (fight, charge),
-  R5c (shoot, move, then the whole corpus in Chromium).
+  R5c (built move first, then shoot, the lead's order; then the whole
+  corpus in Chromium).
   - [x] **R5a** landed: `core/journal.js` emits events into the match's
     `out` (`emit`, `emitTo`, `drain`; a battle-log line is now a traced
     `log` event, `at` its place in the trace); `present/mirror.js` (the
@@ -244,8 +245,63 @@ step keeps the game playable.
     frame it crosses (a move's still turn mid-walk until R5c). The fight
     phase's closing label refresh repeats its last fight's, so P-present
     cannot see it go (DESIGN's R5b notes).
-  - [ ] **R5c** shoot, then move (`doMove` onto the `resolveWalk` the
-    charge already uses), then P-browser over the whole corpus.
+  - [x] **R5c** landed: the movement phase's actions in
+    `core/actions/move.js` (`doMove`, also an advance's move and a fall
+    back, now on the `resolveWalk` the charge already used; `doAdvance`,
+    the roll, which writes no `act` line; `hold`, the AI's spent move) and
+    the shot in `core/actions/shoot.js` (`doShoot`, `blastVolley`,
+    `eruption`, `blastLands`, `mesmerize`), synchronous, each wait an event
+    in its old place: a volley, a template's aim, scatter, throw and
+    landing, a spell cast or fizzling, thorns erupting and fading, a gaze
+    and its "Mesmerized!", and a wrecker's stomp on its walk. No rules
+    action awaits anything now; main.js plays each action's events with
+    the old visuals (projectiles, the war machines' throws, the thorn
+    spikes, the gaze beam, explosions and scorch marks) and then ends it.
+    The old per-frame walk is gone, and with it its flag hack and its
+    checkpoint: every figure's place on the table comes from the events.
+    Checks: parity 40/40 and the step's gates after each file (DESIGN's
+    R5c notes list them);
+    P-present now holds the move's and the shot's own events to their
+    order too (42 drops and moves in its self-test, every one caught, and
+    `--mutations` to run a few); one battle that shows every weapon,
+    friendly fire, wrecked scenery, the Brute's wrecking move and a fall
+    back, watched rendered on R5b, on the move and on the shot, writes the
+    same trace and battle log at the same game time and draws the same
+    frames (but for the two below); every weapon's look caught on screen
+    as its events play; a game played without `?debug` (an Advance, a
+    move and a shot with the mouse, a vs-AI game on Auto to its end); and
+    P-browser over the whole corpus, 40/40.
+    Turned up: a move's objective flags now turn as its walk ends rather
+    than the frame it crosses, and a block a wrecker's move drops twice
+    raises its dust where the whole walk left it (both as a charge's have
+    since R5b): the only differences the watched frames show. The watch
+    harness's screenshots differ wherever a CSS animation is on screen
+    (the turn banner, the dice rolling in), which runs on the wall clock,
+    not the virtual one, so builds are compared frame for frame with CSS
+    animations ended at once. Two events joined §2.3 (`spell.fade`,
+    `spell.mesmerized`) and `unit.move` gained `stomp` (DESIGN's R5c
+    notes, for approval).
+    After review: P-present's "held none" rule is the whole corpus's (a
+    `--only` run just notes the kinds it lacks), and its self-test runs
+    the check unmutated first and counts only a battle's own failure as a
+    catch; the "Mesmerized!" rule now needs a `status` with the target
+    mesmerized; core's `doMove` remakes its plan from the unit's flags
+    when given none, as R6's `move {u, c}` will, and every move goes that
+    way now, so parity holds all 1,751 corpus moves made on the remade
+    plan to the old ones (a one-off probe found the plans deep-equal
+    too); `check` lost its unused `keys`. R5c lands as one commit, as R5a
+    and R5b did (the review changed what the move's half and the shot's
+    half share), for approval (DESIGN's R5c notes).
+    After the second review: P-present also holds the look the view reads
+    off those events (a walk's flight and pace, the beat after a template
+    that caught nobody, who throws, each weapon's `fx`: six more edits in
+    its self-test, 48 in all); the shot's handlers that go on after a
+    wait do nothing more once their table is replaced, as the walk's and
+    the lunge's; a `?debug` `setUnitPos` in battle turns the flags and
+    labels with it; and DESIGN says a snap must take away the template's
+    marker and the thorns, view state outside the mirror. Every gate ran
+    again on the fixed tree, P-browser over the whole corpus last, 40/40
+    (DESIGN's R5c notes).
 - [ ] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as
   generators, `LocalStore` + `Session`; the core runs headless in Node.
 - [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,
