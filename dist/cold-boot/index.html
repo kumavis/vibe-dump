@@ -6,8 +6,8 @@
 <title>Cold Boot</title>
 <meta name="description" content="Press the power button and follow an x86 PC from standby power through real mode, cache-as-RAM, DDR5 training and long mode, and the repeated wake-ups of its 31 other hardware threads — on a real Raptor Lake die floorplan.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0c14'/><path d='M10.2 9.6a9 9 0 1 0 11.6 0' fill='none' stroke='%23ffb547' stroke-width='2.8' stroke-linecap='round'/><path d='M16 5.5v10' stroke='%2358a6ff' stroke-width='2.8' stroke-linecap='round'/></svg>">
-  <script type="module" crossorigin src="./assets/index-CnsVG7Wa.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-B7N3Q2pN.css">
+  <script type="module" crossorigin src="./assets/index-BMgyJa54.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B6k_cK5Y.css">
 </head>
 <body class="intro">
 <canvas id="gl"></canvas>
@@ -17,7 +17,7 @@
   <div class="name"><span class="pw" aria-hidden="true">⏻</span> Cold Boot</div>
   <div class="sub">An x86 PC, from power button to OS, on a real Raptor Lake die</div>
   <a class="credit" href="https://bsky.app/profile/lauriewired.bsky.social/post/3mxwk6hqb622v" target="_blank" rel="noopener">after a thread by LaurieWired ↗</a>
-  <div class="photo">die: i9-13900K, photo by <a href="https://commons.wikimedia.org/wiki/File:Intel@intel7(10nmESF)@RaptorLake@RPL(8P%2B16E)@i9-13900K@ES_DSCx05_poly@5xExt.jpg" target="_blank" rel="noopener">Fritzchens Fritz</a> (CC0) · <button id="truecolor" type="button" aria-pressed="false" title="Show the photograph in its own colours (T)">true colour</button></div>
+  <div class="photo">die: i9-13900K, photo by <a href="https://commons.wikimedia.org/wiki/File:Intel@intel7(10nmESF)@RaptorLake@RPL(8P%2B16E)@i9-13900K@ES_DSCx05_poly@5xExt.jpg" target="_blank" rel="noopener">Fritzchens Fritz</a> (CC0)<span class="tc"> · <button id="truecolor" type="button" aria-pressed="false" title="Show the photograph in its own colours (T)">true colour</button></span></div>
 </header>
 
 <nav id="stages" aria-label="Stages"></nav>
@@ -69,6 +69,9 @@
 </footer>
 
 <div id="tip" hidden></div>
+<!-- video mode (?video) only: where we are, and the narration as captions -->
+<div id="vhud" hidden aria-hidden="true"><div class="st"></div><div class="mode"></div><div class="clk"></div></div>
+<div id="vcap" hidden aria-hidden="true"><span></span></div>
 
 <div id="intro">
   <div class="card">

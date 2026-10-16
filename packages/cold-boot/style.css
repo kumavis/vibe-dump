@@ -97,6 +97,9 @@ button { font: inherit; color: inherit; }
 #code .ln .c { color: #7f86a6; }
 #code .ln.on { background: rgba(255, 207, 107, 0.14); color: #fff; box-shadow: inset 3px 0 0 var(--accent); }
 #code .ln.done { color: #d4d8ea; }
+/* a quoted comment, not running code: no cursor, and the comment text is the content */
+#code.ref pre { border-left: 3px solid #4a5070; }
+#code.ref .ln, #code.ref .ln .c { color: #c3c8dc; }
 #sources:empty { display: none; }
 #sources { margin-top: 14px; font-size: 11.5px; color: var(--faint); line-height: 1.5; }
 #sources a { color: #8f97c0; word-break: break-word; }
@@ -317,3 +320,22 @@ body.intro #inset { opacity: 0; }
   #eye .eyeaxes { display: none; }
   body:has(#eye:not([hidden])) #stages { visibility: hidden; }
 }
+
+/* ---- video mode (?video): no panels — a small HUD and one caption line ---- */
+#vhud, #vcap { position: fixed; z-index: 6; pointer-events: none; }
+#vhud[hidden], #vcap[hidden] { display: none; }
+body.video #panel, body.video #timeline, body.video #stages, body.video #lps, body.video #intro, body.video #boot, body.video #tip, body.video .tc { display: none !important; }
+/* nothing may run on the wall clock: frames are rendered at whatever speed the machine manages */
+body.video *, body.video *::before, body.video *::after { transition: none !important; animation: none !important; }
+body.video #brand { left: 40px; top: 30px; }
+body.video #brand .name { font-size: 30px; }
+body.video #brand .sub, body.video #brand .photo { font-size: 16px; }
+#vhud { right: 44px; top: 34px; text-align: right; }
+#vhud .st { font: 600 15px/1 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--c, var(--dim)); }
+#vhud .mode { font-size: 27px; font-weight: 650; margin-top: 9px; }
+#vhud .clk { font: 500 17px/1 var(--mono); color: var(--dim); margin-top: 11px; }
+#vcap { left: 50%; bottom: 50px; transform: translateX(-50%); width: min(1480px, 84vw); text-align: center; opacity: 0; }
+#vcap span { font-size: 35px; line-height: 1.42; font-weight: 520; color: #f4f6ff; background: rgba(5, 6, 11, 0.76); padding: 5px 18px; border-radius: 10px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+body.video #inset { right: 44px; top: auto; bottom: 180px; width: 480px; height: 300px; }
+body.video #inset .lbl { font-size: 14px; left: 10px; top: 8px; padding: 2px 8px; }
+#inset .lbl:empty { display: none; }

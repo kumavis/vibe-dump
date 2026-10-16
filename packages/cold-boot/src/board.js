@@ -42,16 +42,29 @@ const ROUTES = {
   eps: { lanes: 3, pts: [[44, 18], [62, 26], [82, 30]] },
   vrm: { lanes: 4, pts: [[124, 36], [124, 50]] },
   vrm2: { lanes: 4, pts: [[80, 72], [96, 72]] },
-  dmi: { lanes: 4, pts: [[136, 95], [160, 113], [160, 165], [174, 178], [226, 186]] },
+  // These five start where the die's interfaces reach the package edge (main.js
+  // re-bases them on the die's exits); the first point here is approximate.
+  dmi: { lanes: 4, pts: [[124, 95], [160, 113], [160, 165], [174, 178], [226, 186]] },
   // Sideband wires between PCH and CPU: PLTRST#, PROCPWRGD, and friends.
   sideband: { lanes: 1, pts: [[139, 90], [167, 108], [167, 160], [180, 172], [226, 180]] },
   spi: { lanes: 1, pts: [[232, 203], [232, 214], [214, 228], [210, 232]] },
   smbus: { lanes: 1, pts: [[247, 177], [247, 160], [222, 156], [200, 156]] },
-  ddrA: { lanes: 6, pts: [[139, 62], [168, 52], [196, 52]] },
-  ddrB: { lanes: 6, pts: [[139, 80], [172, 92], [216, 92]] },
-  pcie16: { lanes: 4, pts: [[114, 95], [117, 104], [117, 128], [110, 145]] },
-  pcie4: { lanes: 2, pts: [[104, 95], [106, 100], [112, 106], [112, 110]] },
+  // Channel A's half of the DDR PHY is the one nearer the I/O corner, so on
+  // this mirrored mount it leaves the package lower down the east edge.
+  ddrA: { lanes: 6, pts: [[139, 79], [170, 92], [196, 92]] },
+  ddrB: { lanes: 6, pts: [[139, 72], [168, 52], [216, 52]] },
+  pcie16: { lanes: 4, pts: [[110, 95], [110, 128], [108, 145]] },
+  pcie4: { lanes: 2, pts: [[101, 74], [88, 74], [88, 96], [113, 98], [115, 103]] },
   cmos: { lanes: 1, pts: [[172, 205], [204, 205], [228, 196]] },
+}
+
+// Where an interface's lands sit on the package when that isn't straight out
+// from the die (Intel's LGA1700 ballout, ATX top view): the PCIe 5.0 x16 lanes
+// fill the south-west corner, the PCIe 4.0 x4 sits on the west edge. Board mm,
+// a point on the package edge and the way the trace leaves it.
+const LANDS = {
+  pcie16: { at: [110, SOCKET.y + PACKAGE.h / 2], dir: [0, 1] },
+  pcie4: { at: [SOCKET.x - PACKAGE.w / 2, 73.6], dir: [-1, 0] },
 }
 
 export function buildBoard({ anisotropy = 8 } = {}) {
@@ -205,7 +218,10 @@ export function buildBoard({ anisotropy = 8 } = {}) {
   box(16, 1.2, 14, mats.chip, 54, 113, 2.3)
   glowPad('nvme', 72, 113, 80, 22, 3.6, 'NVMe SSD (PCIe 4.0 x4 from the CPU)')
 
-  // --- PCIe x16 slot + GPU (ghosted so it doesn't hide the board) -------------
+  // --- PCIe x16 slot + GPU ------------------------------------------------------
+  // The card stands 112 mm off the board right in front of the socket, so it
+  // stays folded into its slot until a step talks to it, then rises as a ghost
+  // and fades further whenever it is between the camera and what it frames.
   box(89, 11, 7.5, mats.plastic, 75, 150, 0)
   const gpu = new THREE.Group()
   const gpuMat = new THREE.MeshStandardMaterial({ color: '#8a90a8', roughness: 0.5, metalness: 0.4, transparent: true, opacity: 0.04, depthWrite: false })
@@ -219,8 +235,15 @@ export function buildBoard({ anisotropy = 8 } = {}) {
     ring.position.set(fx, 0, 20.1)
     gpu.add(ring)
   }
-  gpu.position.copy(W(125, 172, 11 + 56))
+  const GPU_BASE = W(125, 172, 11)
+  gpu.position.copy(GPU_BASE)
+  gpu.visible = false
   group.add(gpu)
+  const gpuBox = new THREE.Box3().setFromCenterAndSize(W(125, 172, 11 + 56), new THREE.Vector3(200, 112, 40))
+  const gpuState = { rise: 0, occ: 1 }
+  const view = { cam: new THREE.Vector3(), target: new THREE.Vector3(), set: false }
+  const _ray = new THREE.Ray()
+  const _hit = new THREE.Vector3()
   const gpuParts = { body: gpuMat, edges: edges.material, rings: gpu.children.filter((c) => c.isMesh && c !== gpuBody).map((c) => c.material) }
   glowPad('gpu', 75, 150, 89, 7.5, 11.4, 'Discrete GPU (PCIe 5.0-capable x16 slot)')
 
@@ -288,6 +311,33 @@ export function buildBoard({ anisotropy = 8 } = {}) {
     dieTop,
     socketWorld: W(S.x, S.y, dieTop),
     W,
+    points,
+    land(name) {
+      const L = LANDS[name]
+      return L ? { at: W(L.at[0], L.at[1], 0), dir: new THREE.Vector3(L.dir[0], 0, L.dir[1]) } : null
+    },
+    // Start a bus where the die's interface reaches the edge of the package
+    // (`dir` points away from the die), leaving square to that edge before it
+    // heads off along its route — so packets hand over from die to board.
+    startAt(name, start, dir) {
+      const p = paths.get(name)
+      if (!p) return
+      const a = start.clone().setY(0.06)
+      // clear of the socket frame (~10 mm past the package edge) before turning
+      const b = a.clone().addScaledVector(dir, 12)
+      const pts = [a, b, ...ROUTES[name].pts.slice(1).map(([x, y]) => W(x, y, 0.06))]
+      const lanes = []
+      for (let l = 0; l < ROUTES[name].lanes; l++) lanes.push(offsetPolyline(pts, (l - (ROUTES[name].lanes - 1) / 2) * 1.3))
+      p.mesh.geometry.dispose()
+      p.mesh.geometry = traceGeometry(lanes)
+      Object.assign(p, { pts, lanes, len: polyLen(pts) })
+    },
+    // Where the camera is and what it looks at, so the GPU can get out of the way.
+    setView(cam, target) {
+      view.cam.copy(cam)
+      view.target.copy(target)
+      view.set = true
+    },
     begin() {
       for (const c of comps.values()) c.target = 0
       for (const p of paths.values()) p.target = 0
@@ -321,7 +371,9 @@ export function buildBoard({ anisotropy = 8 } = {}) {
           s = { lanes: dir > 0 ? p.lanes : p.lanes.map((l) => [...l].reverse()), len: p.len, acc: 0, color: new THREE.Color(), fresh: true }
           streams.set(key, s)
         }
-        s.rate = rate
+        // several callers in one frame (content, and die flows leaving the
+        // chip): the busiest sets the pace
+        s.rate = s.live ? Math.max(s.rate, rate) : rate
         s.speed = speed
         s.color.set(color)
         s.live = true
@@ -360,11 +412,24 @@ export function buildBoard({ anisotropy = 8 } = {}) {
         u.uStyle.value = c.style
         c.mesh.visible = c.level > 0.003
       }
-      // The GPU is a ghost until something talks to it.
+      // The GPU rises out of its slot while something talks to it.
       const gl = comps.get('gpu').level
-      gpuParts.body.opacity = 0.015 + gl * 0.05
-      gpuParts.edges.opacity = 0.07 + gl * 0.35
-      for (const m of gpuParts.rings) m.opacity = 0.05 + gl * 0.25
+      gpuState.rise += ((gl > 0.2 ? 1 : 0) - gpuState.rise) * Math.min(1, dt * 3)
+      let occluding = false
+      if (view.set) {
+        _ray.origin.copy(view.cam)
+        _ray.direction.subVectors(view.target, view.cam).normalize()
+        occluding = !!_ray.intersectBox(gpuBox, _hit) && _hit.distanceTo(view.cam) < view.cam.distanceTo(view.target)
+      }
+      gpuState.occ += ((occluding ? 0.1 : 1) - gpuState.occ) * Math.min(1, dt * 4)
+      const rise = gpuState.rise
+      gpu.visible = rise > 0.01
+      gpu.scale.y = Math.max(0.01, rise)
+      gpu.position.y = GPU_BASE.y + 56 * gpu.scale.y
+      const f = gpuState.occ * Math.min(1, rise * 1.5)
+      gpuParts.body.opacity = (0.015 + gl * 0.05) * f
+      gpuParts.edges.opacity = (0.05 + gl * 0.35) * f
+      for (const m of gpuParts.rings) m.opacity = (0.04 + gl * 0.25) * f
       for (const p of paths.values()) {
         p.level += (p.target - p.level) * k
         const u = p.mesh.material.uniforms
@@ -493,6 +558,21 @@ void main() {
 }`
 
 function traceMesh(lanes) {
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uColor: { value: new THREE.Color('#ffffff') }, uLevel: { value: 0.18 }, uTime: { value: 0 } },
+    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader: TRACE_FRAG,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  })
+  const m = new THREE.Mesh(traceGeometry(lanes), mat)
+  m.renderOrder = 1
+  return m
+}
+
+function traceGeometry(lanes) {
   const pos = []
   const uv = []
   const idx = []
@@ -519,18 +599,7 @@ function traceMesh(lanes) {
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
   g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
   g.setIndex(idx)
-  const mat = new THREE.ShaderMaterial({
-    uniforms: { uColor: { value: new THREE.Color('#ffffff') }, uLevel: { value: 0.18 }, uTime: { value: 0 } },
-    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: TRACE_FRAG,
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    side: THREE.DoubleSide,
-  })
-  const m = new THREE.Mesh(g, mat)
-  m.renderOrder = 1
-  return m
+  return g
 }
 
 // Matte black PCB with silkscreen and a haze of background copper.

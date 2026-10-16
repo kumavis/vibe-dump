@@ -230,7 +230,7 @@ export const STAGE3 = [
       A.die('pcore0', 0.7 + jump * 0.3, k >= 13 ? '#58a6ff' : '#4fe08a', k >= 12 ? 'scan' : 'glow')
       A.die('sub:pcore0:decode|l1i|branch|ucode_opcache', 0.6, '#58a6ff', 'scan')
       A.die('imc0', 0.4, ACT.dram, 'scan')
-      A.flow('pt', 'pcore0', 'imc0', 4 * win(p, 0.0, 0.3), ACT.dram, 6)
+      A.flow('pt', 'pcore0', 'dram0', 4 * win(p, 0.0, 0.3), ACT.dram, 6)
       A.ring(0.4, ACT.dram)
     },
     labels: [{ id: 'pcore0', text: 'BSP: compatibility mode → 64-bit', hot: true, color: '#58a6ff', from: pagingP(12) }],
@@ -287,7 +287,7 @@ export const STAGE3 = [
       ['Execution model', 'one processor, 64-bit, identity-mapped, polled drivers, a timer interrupt (UEFI §2.3.4)'],
       ['Idle', 'the BSP HLTs when no event is pending'],
     ],
-    code: { src: 'EDK2 MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c (header)', href: SRC.dispatcher[1], lines: DISPATCHER, at: (p) => Math.min(DISPATCHER.length - 1, Math.floor(span(p, 0.05, 0.9) * DISPATCHER.length)), title: 'How DXE decides what runs next' },
+    code: { src: 'EDK2 MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c (header comment)', href: SRC.dispatcher[1], lines: DISPATCHER, ref: true, title: 'How DXE decides what runs next' },
     mem: { on: ['flash', 'lapic', 'dram', 'mmio', 'high'], hit: ['flash', 'dram'] },
     sources: [SRC.pispec, SRC.dispatcher, SRC.uefiexec, SRC.msibios],
     lps: () => (i) => (i === 0 ? 'long' : 'park'),
@@ -297,8 +297,8 @@ export const STAGE3 = [
       // Drivers load from the inflated copy in DRAM; flash gets only a brief touch.
       const fv = win(p, 0, 0.15)
       A.flow('fv', 'dmi', 'pcore0', 5 * fv, ACT.fetch, 7)
-      A.flow('ram', 'pcore0', 'imc0', 6, ACT.dram, 7)
-      A.flow('ram2', 'pcore0', 'imc1', 4, ACT.dram, 7)
+      A.flow('ram', 'pcore0', 'dram0', 6, ACT.dram, 7)
+      A.flow('ram2', 'pcore0', 'dram1', 4, ACT.dram, 7)
       A.bus('spi', 0.9 * fv, ACT.fetch, { rate: 12 * fv, speed: 25, dir: -1 })
       A.bus('dmi', 0.8 * fv, ACT.fetch, { rate: 10 * fv, speed: 80, dir: -1 })
       A.board('spi', 0.8 * fv, ACT.fetch, 'scan')
@@ -478,7 +478,7 @@ export const STAGE3 = [
     lps: () => (i) => (i === 0 ? 'long' : 'park'),
     act(p, A) {
       A.die('pcore0', 0.7, '#58a6ff', 'sparkle')
-      A.flow('acpi', 'pcore0', 'imc1', 4, ACT.dram, 6)
+      A.flow('acpi', 'pcore0', 'dram1', 4, ACT.dram, 6)
       A.die('kind:pcore', 0.18, '#7d7fb8', 'breathe')
       A.die('kind:ecore_cluster', 0.18, '#7d7fb8', 'breathe')
     },
@@ -535,8 +535,8 @@ export const STAGE3 = [
     lps: () => (i) => (i === 0 ? 'long' : 'park'),
     act(p, A) {
       A.die('pcore0', 0.85, '#58a6ff', 'sparkle')
-      A.flow('k', 'pcore0', 'imc0', 6, ACT.dram, 7)
-      A.flow('k2', 'pcore0', 'imc1', 6, ACT.dram, 7)
+      A.flow('k', 'pcore0', 'dram0', 6, ACT.dram, 7)
+      A.flow('k2', 'pcore0', 'dram1', 6, ACT.dram, 7)
       A.ring(0.7, ACT.dram)
       A.bus('ddrA', 0.7, ACT.dram, { rate: 14, speed: 100 })
       A.bus('ddrB', 0.7, ACT.dram, { rate: 14, speed: 100 })

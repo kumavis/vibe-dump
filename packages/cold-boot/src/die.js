@@ -111,7 +111,15 @@ export function overlayMaterial(w, h, seed) {
 
 export const STYLE = { glow: 0, scan: 1, pinned: 2, sparkle: 3, breathe: 4, stripe: 5 }
 
-export function buildDie(fp, { maxTexture = 4096, anisotropy = 8 } = {}) {
+// The die's fine detail (block glows, thread LEDs, lit wires) lives on its own
+// layer, so a far-away view such as the picture-in-picture can skip drawing
+// a hundred things smaller than a pixel.
+export const DETAIL_LAYER = 1
+
+const MODE_COLOR = Object.fromEntries(Object.entries(MODE_COLORS).map(([k, v]) => [k, new THREE.Color(v)]))
+
+export function buildDie(fp, opts = {}) {
+  const { maxTexture = 4096, anisotropy = 8 } = opts
   const W = fp.die_mm.w
   const H = fp.die_mm.h
   const group = new THREE.Group()
@@ -178,6 +186,7 @@ vec3 dieGrade(vec3 lin) {
     const c = toLocal(nx + nw / 2, ny + nh / 2, 0.012 + (parent ? 0.004 : 0))
     mesh.position.copy(c)
     mesh.renderOrder = parent ? 3 : 2
+    mesh.layers.set(DETAIL_LAYER)
     group.add(mesh)
     const rec = {
       id,
@@ -228,28 +237,7 @@ vec3 dieGrade(vec3 lin) {
   if (ringPts.length > 1) {
     const closed = fp.ring.closed !== false
     const pts = closed ? [...ringPts, ringPts[0]] : ringPts
-    const width = fp.ring.width_mm || 0.22
-    const pos = []
-    const uv = []
-    const idx = []
-    let dist = 0
-    for (let i = 0; i < pts.length; i++) {
-      const a = pts[Math.max(0, i - 1)]
-      const b = pts[Math.min(pts.length - 1, i + 1)]
-      const t = new THREE.Vector3().subVectors(b, a).setY(0).normalize()
-      const n = new THREE.Vector3(-t.z, 0, t.x).multiplyScalar(width / 2)
-      if (i > 0) dist += pts[i].distanceTo(pts[i - 1])
-      pos.push(pts[i].x + n.x, pts[i].y, pts[i].z + n.z, pts[i].x - n.x, pts[i].y, pts[i].z - n.z)
-      uv.push(dist, 0, dist, 1)
-      if (i > 0) {
-        const k = i * 2
-        idx.push(k - 2, k - 1, k, k - 1, k + 1, k)
-      }
-    }
-    const g = new THREE.BufferGeometry()
-    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
-    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
-    g.setIndex(idx)
+    const g = ribbon(pts, fp.ring.width_mm || 0.22)
     const mat = new THREE.ShaderMaterial({
       uniforms: { uColor: { value: new THREE.Color('#bfb6ff') }, uLevel: { value: 0 }, uTime: { value: 0 } },
       vertexShader: OVERLAY_VERT,
@@ -320,36 +308,160 @@ vec3 dieGrade(vec3 lin) {
     return ring.pts[0].clone()
   }
 
-  // A route between two blocks: out of the block to its ring stop, round the
-  // ring the short way, off at the destination's stop, into the block.
+  // --- wiring -----------------------------------------------------------------
+  // Packets follow wires, not straight lines. fp.wiring is a graph of axis-
+  // aligned segments through the uncore's channels; the ring is a loop with its
+  // stops on it; each core, LLC slice and E-cluster drops straight to its own
+  // stop. An interface that leaves the chip (DMI, PCIe, a DDR5 channel) is an
+  // exit: its path runs on to the die edge and across the package substrate to
+  // where the board's traces begin.
+  const WY = 0.06
+  const SUBSTRATE = -0.74 // the package surface, just under the die's 0.78 mm
+  const graph = new Map()
+  const gnode = (id, p) => {
+    let n = graph.get(id)
+    if (!n) graph.set(id, (n = { id, p, adj: new Map() }))
+    return n
+  }
+  const glink = (a, b) => {
+    const A = graph.get(a)
+    const B = graph.get(b)
+    if (!A || !B || a === b) return
+    const d = A.p.distanceTo(B.p)
+    A.adj.set(b, d)
+    B.adj.set(a, d)
+  }
+  if (ring) {
+    const total = ringLen[ringLen.length - 1]
+    const along = []
+    for (let i = 0; i < ring.pts.length - (ring.closed ? 1 : 0); i++) along.push({ id: `ring:${i}`, d: ringLen[i], p: ring.pts[i].clone().setY(WY) })
+    for (const s of stops.values()) {
+      const q = projectRing(s.p)
+      along.push({ id: `stop:${s.id}`, d: q.dist % total, p: q.point.clone().setY(WY) })
+    }
+    along.sort((a, b) => a.d - b.d)
+    for (const a of along) gnode(a.id, a.p)
+    for (let i = 1; i < along.length; i++) glink(along[i - 1].id, along[i].id)
+    if (ring.closed) glink(along[along.length - 1].id, along[0].id)
+  }
+  const wiring = fp.wiring || {}
+  const ref = (x) => (/^(stop|ring):/.test(x) ? x : `w:${x}`)
+  for (const [id, [x, y]] of Object.entries(wiring.nodes || {})) gnode(`w:${id}`, toLocal(x, y, WY))
+  for (const [a, b] of wiring.edges || []) glink(ref(a), ref(b))
+  const ports = new Map() // block id -> graph node
+  for (const [id, n] of Object.entries(wiring.ports || {})) ports.set(id, ref(n))
+  for (const s of stops.values()) {
+    for (const id of s.serves || []) {
+      const b = blocks.get(id)
+      if (!b || ports.has(id)) continue
+      // straight down (or up) from the block to its stop
+      const pid = `port:${id}`
+      gnode(pid, new THREE.Vector3(graph.get(`stop:${s.id}`).p.x, WY, b.center.z))
+      glink(pid, `stop:${s.id}`)
+      ports.set(id, pid)
+    }
+  }
+  // Exits: the path from the PHY's node out through the die edge to the edge of
+  // the package. `pkg` is the package's half-size in the die's own frame.
+  const pkg = opts.package || { x: W / 2 + 6, z: H / 2 + 6 }
+  const exits = new Map()
+  for (const [name, e] of Object.entries(wiring.exits || {})) {
+    const n = graph.get(ref(e.node))
+    if (!n) continue
+    const a = n.p.clone()
+    // to the die edge, down its side onto the substrate, out to the package edge
+    const edge = e.edge === 'left' ? a.clone().setX(-W / 2) : e.edge === 'right' ? a.clone().setX(W / 2) : e.edge === 'top' ? a.clone().setZ(-H / 2) : a.clone().setZ(H / 2)
+    const far = e.edge === 'left' ? edge.clone().setX(-pkg.x) : e.edge === 'right' ? edge.clone().setX(pkg.x) : e.edge === 'top' ? edge.clone().setZ(-pkg.z) : edge.clone().setZ(pkg.z)
+    const out = [edge, edge.clone().setY(SUBSTRATE), far.setY(SUBSTRATE)]
+    exits.set(name, { name, node: ref(e.node), via: e.via, out, label: e.label, bus: e.bus, level: 0, target: 0, color: new THREE.Color() })
+  }
+
+  // Shortest path between two graph nodes (the graph is ~100 nodes).
+  const shortest = (a, b) => {
+    const dist = new Map([[a, 0]])
+    const prev = new Map()
+    const open = new Set([a])
+    while (open.size) {
+      let u = null
+      for (const k of open) if (u === null || dist.get(k) < dist.get(u)) u = k
+      open.delete(u)
+      if (u === b) break
+      for (const [v, w] of graph.get(u).adj) {
+        const d = dist.get(u) + w
+        if (d < (dist.get(v) ?? Infinity)) {
+          dist.set(v, d)
+          prev.set(v, u)
+          open.add(v)
+        }
+      }
+    }
+    if (!dist.has(b)) return null
+    const ids = [b]
+    while (ids[0] !== a) ids.unshift(prev.get(ids[0]))
+    return ids.map((id) => graph.get(id).p.clone())
+  }
+
+  // One end of a route: an exit (off the chip), or a block's port. A block on
+  // a stop starts at its centre, which is level with its port.
+  const end = (id) => {
+    const ex = exits.get(id)
+    if (ex) return { node: ex.node, ext: ex.out, exit: id }
+    const base = id.split('.')[0]
+    const b = blocks.get(base)
+    const node = ports.get(base)
+    if (!b || !node) return null
+    return { node, ext: node.startsWith('port:') ? [b.center.clone().setY(WY)] : [], block: b }
+  }
+
   const routeCache = new Map()
   const route = (fromId, toId) => {
     const key = `${fromId}>${toId}`
     if (routeCache.has(key)) return routeCache.get(key)
-    const A = blocks.get(fromId)
-    const B = blocks.get(toId)
-    if (!A || !B) return null
-    const a = A.center.clone().setY(0.06)
-    const b = B.center.clone().setY(0.06)
-    let pts = [a, b]
-    if (ring) {
-      const sa = stopFor(fromId)
-      const sb = stopFor(toId)
-      const pa = projectRing(sa ? sa.p : a)
-      const pb = projectRing(sb ? sb.p : b)
-      const total = ringLen[ringLen.length - 1]
-      let d = pb.dist - pa.dist
-      if (ring.closed) {
-        if (d > total / 2) d -= total
-        if (d < -total / 2) d += total
-      }
-      const n = Math.max(2, Math.ceil(Math.abs(d) / 0.5))
-      const mid = []
-      for (let i = 0; i <= n; i++) mid.push(ringPointAt(pa.dist + (d * i) / n).setY(0.06))
-      pts = [a, ...mid, b]
+    const A = end(fromId)
+    const B = end(toId)
+    let pts = null
+    if (A && B) {
+      const mid = shortest(A.node, B.node)
+      if (mid) pts = [...[...A.ext].reverse(), ...mid, ...B.ext]
     }
-    routeCache.set(key, pts)
-    return pts
+    if (!pts) {
+      // no wiring for one end: straight to the centres (legacy fallback)
+      const a = blocks.get(fromId.split('.')[0])
+      const b = blocks.get(toId.split('.')[0])
+      if (!a || !b) return null
+      pts = [a.center.clone().setY(WY), b.center.clone().setY(WY)]
+    }
+    // drop zero-length steps (a port that sits on its stop, say)
+    pts = pts.filter((p, i) => i === 0 || p.distanceToSquared(pts[i - 1]) > 1e-8)
+    const r = { pts, exits: [A?.exit, B?.exit].filter(Boolean) }
+    routeCache.set(key, r)
+    return r
+  }
+
+  // A lit wire under each live stream (and the package traces of its exits):
+  // a ribbon with dashes running the way the packets go.
+  const wireMat = (color) =>
+    new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: new THREE.Color(color) }, uLevel: { value: 0 }, uTime: { value: 0 } },
+      vertexShader: OVERLAY_VERT,
+      fragmentShader: RING_FRAG,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    })
+  const wireGeoCache = new Map()
+  const wireFor = (rk, pts, color) => {
+    let g = wireGeoCache.get(rk)
+    if (!g) wireGeoCache.set(rk, (g = ribbon(pts.filter((p) => p.y > 0), 0.16)))
+    const mat = wireMat(color)
+    const mesh = new THREE.Mesh(g, mat)
+    mesh.renderOrder = 4
+    mesh.layers.set(DETAIL_LAYER)
+    group.add(mesh)
+    const w = { mesh, mat, level: 0, target: 0 }
+    wires.set(rk, w)
+    return w
   }
 
   // --- per-thread status LEDs ---------------------------------------------
@@ -368,6 +480,7 @@ vec3 dieGrade(vec3 lin) {
     mesh.rotation.x = -Math.PI / 2
     mesh.position.set(x, 0.05, z)
     mesh.renderOrder = 5
+    mesh.layers.set(DETAIL_LAYER)
     group.add(mesh)
     const led = { mesh, mat, color: new THREE.Color(MODE_COLORS.off), level: 0 }
     leds.push(led)
@@ -431,7 +544,16 @@ vec3 dieGrade(vec3 lin) {
   points.renderOrder = 6
   group.add(points)
   const packets = []
-  const streams = new Map() // key -> {pts, rate, color, acc, speed, live}
+  const streams = new Map() // key -> {pts, exits, rate, color, acc, speed, live, wire}
+  const wires = new Map() // route key -> {mesh, mat, level, target}
+  // The package traces each exit runs on, from the die edge outwards.
+  for (const e of exits.values()) {
+    e.mat = wireMat('#ffffff')
+    e.mesh = new THREE.Mesh(ribbon(e.out.slice(1), 0.5), e.mat)
+    e.mesh.renderOrder = 4
+    e.mesh.visible = false
+    group.add(e.mesh)
+  }
 
   // ------------------------------------------------------------------------
   const api = {
@@ -461,12 +583,15 @@ vec3 dieGrade(vec3 lin) {
     lps,
     stops,
     route,
+    points,
     toLocal,
     // Called at the start of every frame: everything decays unless re-asserted.
     begin() {
       for (const b of blocks.values()) b.target = 0
       if (ring) ring.target = 0
       for (const s of streams.values()) s.live = false
+      for (const w of wires.values()) w.target = 0
+      for (const e of exits.values()) e.target = 0
     },
     // Light a block (or every block of a kind, or a sub-block "pcore0.l2").
     light(sel, level, color, style = 'glow') {
@@ -500,20 +625,49 @@ vec3 dieGrade(vec3 lin) {
         ring.mat.uniforms.uColor.value.set(color)
       }
     },
-    // A steady stream of packets along a route.
+    // A steady stream of packets along a route, over a lit wire.
     stream(key, fromId, toId, rate, color, speed = 6) {
+      // Not flowing: nothing to build. begin() already marked any old stream of
+      // this key dead, so it is dropped and its wire fades out.
+      if (!(rate > 0)) return null
       let s = streams.get(key)
       if (!s) {
-        const pts = route(fromId, toId)
-        if (!pts) return
-        s = { pts, acc: 0, rate, color: new THREE.Color(color), speed, live: true, len: polyLen(pts), fresh: true }
+        const r = route(fromId, toId)
+        if (!r) return
+        s = { pts: r.pts, rk: `${fromId}>${toId}`, exits: r.exits, acc: 0, rate, color: new THREE.Color(color), speed, live: true, len: polyLen(r.pts), fresh: true, wire: null }
         streams.set(key, s)
       }
+      if (!s.wire) s.wire = wires.get(s.rk) || wireFor(s.rk, s.pts, color)
       s.rate = rate
       s.color.set(color)
       s.speed = speed
       s.live = true
+      {
+        s.wire.target = Math.max(s.wire.target, Math.min(1, 0.35 + rate * 0.08))
+        s.wire.mat.uniforms.uColor.value.copy(s.color)
+        for (const x of s.exits) {
+          const ex = exits.get(x)
+          ex.target = 1
+          ex.color.copy(s.color)
+        }
+      }
+      return s
     },
+    // Re-route an exit across the package: from its die-edge point via `pts`
+    // (die-local; heights are put on the substrate) — to its lands.
+    setExitOut(name, pts) {
+      const ex = exits.get(name)
+      if (!ex) return
+      ex.out = [ex.out[0], ex.out[1], ...pts.map((p) => p.clone().setY(SUBSTRATE))]
+      ex.mesh.geometry.dispose()
+      ex.mesh.geometry = ribbon(ex.out.slice(1), 0.5)
+      routeCache.clear()
+    },
+    // Interfaces with traffic on them right now, for labelling the die edge.
+    liveExits() {
+      return [...exits.values()].filter((e) => e.level > 0.2)
+    },
+    exits,
     setLp(i, mode, level = 1) {
       const lp = lps[i]
       if (!lp) return
@@ -540,10 +694,29 @@ vec3 dieGrade(vec3 lin) {
         ring.mat.uniforms.uTime.value = time
         ring.mesh.visible = ring.level > 0.003
       }
+      for (const [rk, w] of wires) {
+        w.level += ((w.target || 0) - w.level) * k
+        w.mat.uniforms.uLevel.value = w.level * 0.55
+        w.mat.uniforms.uTime.value = time
+        w.mesh.visible = w.level > 0.01
+        // a wire nobody has used for a while goes away entirely
+        if (w.level < 0.002 && !w.target) {
+          group.remove(w.mesh)
+          w.mat.dispose()
+          wires.delete(rk)
+          for (const s of streams.values()) if (s.wire === w) s.wire = null
+        }
+      }
+      for (const e of exits.values()) {
+        e.level += (e.target - e.level) * k
+        e.mat.uniforms.uLevel.value = e.level * 0.8
+        e.mat.uniforms.uColor.value.copy(e.color)
+        e.mat.uniforms.uTime.value = time
+        e.mesh.visible = e.level > 0.01
+      }
       for (const lp of lps) {
         const led = lp.led
-        const tc = new THREE.Color(lp.targetColor || MODE_COLORS.off)
-        led.color.lerp(tc, k)
+        led.color.lerp(MODE_COLOR[lp.mode] || MODE_COLOR.off, k)
         led.level += ((lp.targetLevel ?? 0) - led.level) * k
         const u = led.mat.uniforms
         u.uColor.value.copy(led.color)
@@ -613,6 +786,33 @@ vec3 dieGrade(vec3 lin) {
     },
   }
   return api
+}
+
+// A flat strip along a polyline in the XZ plane; uv.x is distance along it
+// (for dashes that run the way it goes), uv.y across it.
+export function ribbon(pts, width) {
+  const pos = []
+  const uv = []
+  const idx = []
+  let dist = 0
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[Math.max(0, i - 1)]
+    const b = pts[Math.min(pts.length - 1, i + 1)]
+    const t = new THREE.Vector3().subVectors(b, a).setY(0).normalize()
+    const n = new THREE.Vector3(-t.z, 0, t.x).multiplyScalar(width / 2)
+    if (i > 0) dist += pts[i].distanceTo(pts[i - 1])
+    pos.push(pts[i].x + n.x, pts[i].y, pts[i].z + n.z, pts[i].x - n.x, pts[i].y, pts[i].z - n.z)
+    uv.push(dist, 0, dist, 1)
+    if (i > 0) {
+      const k = i * 2
+      idx.push(k - 2, k - 1, k, k - 1, k + 1, k)
+    }
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
+  g.setIndex(idx)
+  return g
 }
 
 function idNum(id) {

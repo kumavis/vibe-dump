@@ -994,5 +994,754 @@ export const FLOORPLAN = {
     ]
    }
   ]
+ },
+ "wiring": {
+  "nodes": {
+   "sa": [
+    0.15469,
+    0.3948
+   ],
+   "sa_ring": [
+    0.1836,
+    0.3948
+   ],
+   "sa_w": [
+    0.13073,
+    0.3948
+   ],
+   "sa_mem": [
+    0.15469,
+    0.3371
+   ],
+   "mf_w": [
+    0.12279,
+    0.3371
+   ],
+   "mf_e": [
+    0.17474,
+    0.3371
+   ],
+   "imc0": [
+    0.12279,
+    0.19994
+   ],
+   "imc1": [
+    0.17474,
+    0.19994
+   ],
+   "imc0_up": [
+    0.12279,
+    0.05628
+   ],
+   "imc1_up": [
+    0.17474,
+    0.05628
+   ],
+   "ddrA_s": [
+    0.13516,
+    0.05628
+   ],
+   "ddrB_s": [
+    0.43281,
+    0.05628
+   ],
+   "ddr_a": [
+    0.13516,
+    0.02687
+   ],
+   "ddr_b": [
+    0.43281,
+    0.02687
+   ],
+   "io_j": [
+    0.13073,
+    0.45136
+   ],
+   "io_hub": [
+    0.0625,
+    0.45136
+   ],
+   "io_p5": [
+    0.0625,
+    0.43326
+   ],
+   "io_p5a": [
+    0.0625,
+    0.34219
+   ],
+   "io_dmi": [
+    0.0625,
+    0.1431
+   ],
+   "io_p5b": [
+    0.0625,
+    0.52432
+   ],
+   "io_p4": [
+    0.0625,
+    0.67704
+   ],
+   "dmi": [
+    0.02917,
+    0.1431
+   ],
+   "pcie5": [
+    0.03177,
+    0.43326
+   ],
+   "pcie5_a": [
+    0.03177,
+    0.34219
+   ],
+   "pcie5_b": [
+    0.03177,
+    0.52432
+   ],
+   "pcie4": [
+    0.02917,
+    0.67704
+   ],
+   "um": [
+    0.13073,
+    0.57466
+   ],
+   "um2_w": [
+    0.13073,
+    0.63801
+   ],
+   "um2": [
+    0.18151,
+    0.63801
+   ],
+   "disp_n": [
+    0.13073,
+    0.6776
+   ],
+   "disp": [
+    0.13073,
+    0.80713
+   ],
+   "dphy_n": [
+    0.13073,
+    0.92081
+   ],
+   "dphy": [
+    0.13073,
+    0.95673
+   ],
+   "gt": [
+    0.86224,
+    0.5305
+   ],
+   "media0": [
+    0.86224,
+    0.28281
+   ],
+   "media1": [
+    0.86224,
+    0.78054
+   ],
+   "gc": [
+    0.90104,
+    0.5305
+   ],
+   "gs": [
+    0.92943,
+    0.5305
+   ],
+   "gs_eu0": [
+    0.92943,
+    0.13122
+   ],
+   "gs_tmu0": [
+    0.92943,
+    0.26075
+   ],
+   "gl3t": [
+    0.92943,
+    0.20928
+   ],
+   "gl3b": [
+    0.92943,
+    0.8224
+   ],
+   "gs_tmu1": [
+    0.92943,
+    0.75113
+   ],
+   "gs_eu1": [
+    0.92943,
+    0.88122
+   ],
+   "gpu_eu0": [
+    0.9668,
+    0.13122
+   ],
+   "gpu_tmu0": [
+    0.9668,
+    0.26075
+   ],
+   "gpu_tmu1": [
+    0.9668,
+    0.75113
+   ],
+   "gpu_eu1": [
+    0.9668,
+    0.88122
+   ],
+   "pcore0": [
+    0.2288,
+    0.21833
+   ],
+   "llc0": [
+    0.2288,
+    0.42364
+   ],
+   "pcore1": [
+    0.3254,
+    0.21833
+   ],
+   "llc1": [
+    0.3254,
+    0.42364
+   ],
+   "pcore2": [
+    0.422,
+    0.21833
+   ],
+   "llc2": [
+    0.422,
+    0.42364
+   ],
+   "pcore3": [
+    0.5186,
+    0.21833
+   ],
+   "llc3": [
+    0.5186,
+    0.42364
+   ],
+   "pcore4": [
+    0.2707,
+    0.84163
+   ],
+   "llc4": [
+    0.2707,
+    0.63716
+   ],
+   "pcore5": [
+    0.3673,
+    0.84163
+   ],
+   "llc5": [
+    0.3673,
+    0.63716
+   ],
+   "pcore6": [
+    0.4639,
+    0.84163
+   ],
+   "llc6": [
+    0.4639,
+    0.63716
+   ],
+   "pcore7": [
+    0.5605,
+    0.84163
+   ],
+   "llc7": [
+    0.5605,
+    0.63716
+   ],
+   "ecluster0": [
+    0.65104,
+    0.23614
+   ],
+   "e0_g": [
+    0.65104,
+    0.39423
+   ],
+   "e0_s": [
+    0.6166,
+    0.39423
+   ],
+   "llc8": [
+    0.6166,
+    0.44174
+   ],
+   "ecluster1": [
+    0.77786,
+    0.23614
+   ],
+   "e1_g": [
+    0.77786,
+    0.39423
+   ],
+   "e1_s": [
+    0.7421,
+    0.39423
+   ],
+   "llc9": [
+    0.7421,
+    0.44174
+   ],
+   "ecluster2": [
+    0.65208,
+    0.82551
+   ],
+   "e2_g": [
+    0.65208,
+    0.66686
+   ],
+   "e2_s": [
+    0.6587,
+    0.66686
+   ],
+   "llc10": [
+    0.6587,
+    0.61963
+   ],
+   "ecluster3": [
+    0.77878,
+    0.82551
+   ],
+   "e3_g": [
+    0.77878,
+    0.66686
+   ],
+   "e3_s": [
+    0.785,
+    0.66686
+   ],
+   "llc11": [
+    0.785,
+    0.61963
+   ]
+  },
+  "edges": [
+   [
+    "stop:stop_sa",
+    "sa_ring"
+   ],
+   [
+    "sa_ring",
+    "sa"
+   ],
+   [
+    "sa",
+    "sa_w"
+   ],
+   [
+    "sa",
+    "sa_mem"
+   ],
+   [
+    "sa_mem",
+    "mf_w"
+   ],
+   [
+    "sa_mem",
+    "mf_e"
+   ],
+   [
+    "mf_w",
+    "imc0"
+   ],
+   [
+    "mf_e",
+    "imc1"
+   ],
+   [
+    "imc0",
+    "imc0_up"
+   ],
+   [
+    "imc1",
+    "imc1_up"
+   ],
+   [
+    "imc0_up",
+    "ddrA_s"
+   ],
+   [
+    "imc1_up",
+    "ddrB_s"
+   ],
+   [
+    "ddrA_s",
+    "ddr_a"
+   ],
+   [
+    "ddrB_s",
+    "ddr_b"
+   ],
+   [
+    "sa_w",
+    "io_j"
+   ],
+   [
+    "io_j",
+    "io_hub"
+   ],
+   [
+    "io_hub",
+    "io_p5"
+   ],
+   [
+    "io_p5",
+    "io_p5a"
+   ],
+   [
+    "io_p5a",
+    "io_dmi"
+   ],
+   [
+    "io_hub",
+    "io_p5b"
+   ],
+   [
+    "io_p5b",
+    "io_p4"
+   ],
+   [
+    "io_dmi",
+    "dmi"
+   ],
+   [
+    "io_p5",
+    "pcie5"
+   ],
+   [
+    "io_p4",
+    "pcie4"
+   ],
+   [
+    "io_p5a",
+    "pcie5_a"
+   ],
+   [
+    "io_p5b",
+    "pcie5_b"
+   ],
+   [
+    "pcie5",
+    "pcie5_a"
+   ],
+   [
+    "pcie5",
+    "pcie5_b"
+   ],
+   [
+    "io_j",
+    "um"
+   ],
+   [
+    "um",
+    "um2_w"
+   ],
+   [
+    "um2_w",
+    "disp_n"
+   ],
+   [
+    "um2_w",
+    "um2"
+   ],
+   [
+    "disp_n",
+    "disp"
+   ],
+   [
+    "disp",
+    "dphy_n"
+   ],
+   [
+    "dphy_n",
+    "dphy"
+   ],
+   [
+    "stop:stop_gt",
+    "gt"
+   ],
+   [
+    "gt",
+    "media0"
+   ],
+   [
+    "gt",
+    "media1"
+   ],
+   [
+    "gt",
+    "gc"
+   ],
+   [
+    "gc",
+    "gs"
+   ],
+   [
+    "gs",
+    "gs_tmu0"
+   ],
+   [
+    "gs_tmu0",
+    "gl3t"
+   ],
+   [
+    "gl3t",
+    "gs_eu0"
+   ],
+   [
+    "gs",
+    "gs_tmu1"
+   ],
+   [
+    "gs_tmu1",
+    "gl3b"
+   ],
+   [
+    "gl3b",
+    "gs_eu1"
+   ],
+   [
+    "gs_eu0",
+    "gpu_eu0"
+   ],
+   [
+    "gs_tmu0",
+    "gpu_tmu0"
+   ],
+   [
+    "gs_tmu1",
+    "gpu_tmu1"
+   ],
+   [
+    "gs_eu1",
+    "gpu_eu1"
+   ],
+   [
+    "pcore0",
+    "llc0"
+   ],
+   [
+    "llc0",
+    "stop:stop_pcore0"
+   ],
+   [
+    "pcore1",
+    "llc1"
+   ],
+   [
+    "llc1",
+    "stop:stop_pcore1"
+   ],
+   [
+    "pcore2",
+    "llc2"
+   ],
+   [
+    "llc2",
+    "stop:stop_pcore2"
+   ],
+   [
+    "pcore3",
+    "llc3"
+   ],
+   [
+    "llc3",
+    "stop:stop_pcore3"
+   ],
+   [
+    "pcore4",
+    "llc4"
+   ],
+   [
+    "llc4",
+    "stop:stop_pcore4"
+   ],
+   [
+    "pcore5",
+    "llc5"
+   ],
+   [
+    "llc5",
+    "stop:stop_pcore5"
+   ],
+   [
+    "pcore6",
+    "llc6"
+   ],
+   [
+    "llc6",
+    "stop:stop_pcore6"
+   ],
+   [
+    "pcore7",
+    "llc7"
+   ],
+   [
+    "llc7",
+    "stop:stop_pcore7"
+   ],
+   [
+    "ecluster0",
+    "e0_g"
+   ],
+   [
+    "e0_g",
+    "e0_s"
+   ],
+   [
+    "e0_s",
+    "llc8"
+   ],
+   [
+    "llc8",
+    "stop:stop_ecluster0"
+   ],
+   [
+    "ecluster1",
+    "e1_g"
+   ],
+   [
+    "e1_g",
+    "e1_s"
+   ],
+   [
+    "e1_s",
+    "llc9"
+   ],
+   [
+    "llc9",
+    "stop:stop_ecluster1"
+   ],
+   [
+    "ecluster2",
+    "e2_g"
+   ],
+   [
+    "e2_g",
+    "e2_s"
+   ],
+   [
+    "e2_s",
+    "llc10"
+   ],
+   [
+    "llc10",
+    "stop:stop_ecluster2"
+   ],
+   [
+    "ecluster3",
+    "e3_g"
+   ],
+   [
+    "e3_g",
+    "e3_s"
+   ],
+   [
+    "e3_s",
+    "llc11"
+   ],
+   [
+    "llc11",
+    "stop:stop_ecluster3"
+   ]
+  ],
+  "ports": {
+   "sa": "sa",
+   "imc0": "imc0",
+   "imc1": "imc1",
+   "ddrphy": "ddr_a",
+   "dmi": "dmi",
+   "pcie5": "pcie5",
+   "pcie4": "pcie4",
+   "pcie_ctrl": "io_hub",
+   "display": "disp",
+   "display_phy": "dphy",
+   "igpu": "gt",
+   "gpu_global": "gt",
+   "media0": "media0",
+   "media1": "media1",
+   "gpu_common": "gc",
+   "gpu_l3_top": "gl3t",
+   "gpu_l3_bot": "gl3b",
+   "gpu_eu0": "gpu_eu0",
+   "gpu_eu1": "gpu_eu1",
+   "gpu_tmu0": "gpu_tmu0",
+   "gpu_tmu1": "gpu_tmu1",
+   "uncore_misc": "um",
+   "uncore_misc2": "um2",
+   "pcore0": "pcore0",
+   "pcore1": "pcore1",
+   "pcore2": "pcore2",
+   "pcore3": "pcore3",
+   "pcore4": "pcore4",
+   "pcore5": "pcore5",
+   "pcore6": "pcore6",
+   "pcore7": "pcore7",
+   "llc0": "llc0",
+   "llc1": "llc1",
+   "llc2": "llc2",
+   "llc3": "llc3",
+   "llc4": "llc4",
+   "llc5": "llc5",
+   "llc6": "llc6",
+   "llc7": "llc7",
+   "llc8": "llc8",
+   "llc9": "llc9",
+   "llc10": "llc10",
+   "llc11": "llc11",
+   "ecl0": "ecluster0",
+   "ecl1": "ecluster1",
+   "ecl2": "ecluster2",
+   "ecl3": "ecluster3"
+  },
+  "exits": {
+   "dmi": {
+    "node": "dmi",
+    "edge": "left",
+    "label": "DMI ×8 → chipset",
+    "bus": "dmi"
+   },
+   "pcie5": {
+    "node": "pcie5",
+    "edge": "left",
+    "label": "PCIe 5.0 ×16 → graphics card",
+    "bus": "pcie16"
+   },
+   "pcie4": {
+    "node": "pcie4",
+    "edge": "left",
+    "label": "PCIe 4.0 ×4 → NVMe SSD",
+    "bus": "pcie4"
+   },
+   "dram0": {
+    "node": "ddr_a",
+    "edge": "top",
+    "label": "DDR5 channel A → DIMM",
+    "bus": "ddrA"
+   },
+   "dram1": {
+    "node": "ddr_b",
+    "edge": "top",
+    "label": "DDR5 channel B → DIMM",
+    "bus": "ddrB"
+   },
+   "display": {
+    "node": "dphy",
+    "edge": "bottom",
+    "label": "DisplayPort / HDMI → monitor"
+   }
+  },
+  "notes": "Schematic of logical paths through physical channels: the wires themselves are in metal layers a poly-layer photo can't show. Cores drop through their LLC slice/CBo to their ring agent; the SA reaches MC0/MC1 through the memory fabric and each MC its own half of the DDR PHY; the I/O fabric runs from the SA to the PCIe/DMI controller column. Measured and argued in research/audit2/interconnect/wiring.json."
+ },
+ "mounting": {
+  "mirrored": true,
+  "note": "Flip-chip: seen from above, the layout is the photo mirrored (transposed across its anti-diagonal). DDR edge faces the DIMMs, the DMI/PCIe end faces the PCIe x16 slot and the PCH, the GPU end faces the VRM. Verified against Intel's LGA1700 ballout (datasheets 655258 / 743844).",
+  "die_center_offset_mm": {
+   "east": 0,
+   "north": 1.8
+  }
  }
 }

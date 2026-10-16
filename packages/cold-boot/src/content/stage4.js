@@ -160,8 +160,8 @@ export const STAGE4 = [
       const we = win(p, 0.04, 0.9) // …then the sixteen E-cores, through most of the window
       A.die('kind:ecore_cluster', 0.2 + we * 0.5, '#7fd8ff', 'sparkle')
       A.die('kind:pcore', 0.15 + wp * 0.4, '#7fd8ff', 'sparkle')
-      for (const id of P_IDS) A.flow(`tr-${id}`, id, 'imc0', 0.8 * wp, ACT.dram, 6)
-      for (const id of E_IDS) A.flow(`tr-${id}`, id, 'imc0', 0.8 * we, ACT.dram, 6)
+      P_IDS.forEach((id, k) => A.flow(`tr-${id}`, id, k % 2 ? 'dram1' : 'dram0', 0.8 * wp, ACT.dram, 6))
+      E_IDS.forEach((id, k) => A.flow(`tr-${id}`, id, k % 2 ? 'dram1' : 'dram0', 0.8 * we, ACT.dram, 6))
       A.die('kind:imc', 0.5 * we, ACT.dram, 'scan')
       A.ring(0.6 * we, ACT.dram)
     },

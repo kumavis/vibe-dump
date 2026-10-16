@@ -355,6 +355,9 @@ function trainingGlow(A, p, t, { chips, phy = 1 } = {}) {
   A.ring(0.35, ACT.train)
   A.flow('mmio0', 'pcore0', 'imc0', 3, ACT.train, 6)
   A.flow('mmio1', 'pcore0', 'imc1', 3, ACT.train, 6)
+  // the controllers themselves drive the training patterns out to the DIMMs
+  A.flow('trainA', 'imc0', 'dram0', 5 * phy, ACT.train, 6)
+  A.flow('trainB', 'imc1', 'dram1', 5 * phy, ACT.train, 6)
   A.bus('ddrA', 0.9 * phy, ACT.train, { rate: 26, speed: 80 })
   A.bus('ddrB', 0.9 * phy, ACT.train, { rate: 26, speed: 80 })
   if (chips) A.chips(chips, ACT.train)
@@ -398,6 +401,7 @@ export const STAGE2 = [
     real: 2e-5,
     mode: 'prot',
     shot: 'dieLeft',
+    inset: { shot: 'fetch', label: 'OUT OVER DMI → CHIPSET → SPI FLASH' },
     narration: [
       'The far jump lands in 32-bit flat protected mode: one segment spanning all 4 GiB, base 0. It is a 386 now — but it still has no RAM. The DIMMs are untrained, flash is read-only, and — unless a Boot Guard ACM left this code in cache — every fetch crawls in from the SPI chip uncached.',
       'So the early code is written without a stack. coreboot saves the self-test result and the timestamp counter in <em>MMX registers</em>, and “calls” its sanity checks by first loading the return address into ESP and ending them with <code>jmp *%esp</code>. Here it checks that the CPU really was reset: if the MTRRs were already enabled, something did a warm INIT instead, so it resets the platform properly through port <code>CF9h</code>.',
@@ -516,6 +520,7 @@ export const STAGE2 = [
     real: 0.012,
     mode: 'prot',
     shot: 'dieLeft',
+    inset: { shot: 'fetch', label: 'OUT OVER DMI → CHIPSET → SPI FLASH' },
     narration: [
       'Now there is RAM — 768 KiB of it, made of cache. The stack pointer is set to the top of its 544 KiB slice of the window and, for the first time since the reset vector, the CPU executes a <code>call</code>. From here on it is C.',
       'The first C code marks the BIOS region of flash <em>write-protect</em> cacheable, so code finally stops crawling in a line at a time: it streams into the eleven free L3 ways and can be dropped and refetched at will. Everything before memory exists now lives on this borrowed stack — coreboot’s bootblock and romstage, or UEFI’s SEC and PEI, and Intel’s memory-training code, which needs at least 284 KB of stack (coreboot budgets 512 KiB).',
@@ -780,7 +785,7 @@ export const STAGE2 = [
       ['Normal boot', 'restore + JEDEC init + checks: FSP-M ≈ 46–105 ms (Meteor Lake Chromebook, soldered LPDDR5X)'],
       ['First boot', 'tens of seconds to minutes (board-vendor and memory-maker reports)'],
     ],
-    code: { src: 'Intel FSP RaptorLakeS FspmUpd.h (switch names)', href: SRC.fspm[1], lines: RPL_STEPS, at: (p) => Math.min(RPL_STEPS.length - 1, 3 + Math.floor(span(p, 0.05, 0.95) * (RPL_STEPS.length - 3))) },
+    code: { src: 'Intel FSP RaptorLakeS FspmUpd.h (switch names)', href: SRC.fspm[1], lines: RPL_STEPS, ref: true, title: 'Training steps it can run' },
     mem: MEM_PRE,
     sources: [SRC.micron, SRC.fspm, SRC.thread],
     lps: () => bsp('prot'),
@@ -804,7 +809,7 @@ export const STAGE2 = [
       ['Host-bridge registers', 'TOLUD BCh · TOUUD A8h · TSEG B8h · BDSM B0h'],
       ['TSEG size (FSP default)', '4 MiB release / 16 MiB debug'],
     ],
-    code: { src: 'coreboot …/systemagent/memmap.c (comment)', href: SRC.memmap[1], lines: MEMMAP_ART, at: (p) => Math.min(MEMMAP_ART.length - 1, Math.floor(span(p, 0.05, 0.95) * MEMMAP_ART.length)) },
+    code: { src: 'coreboot …/systemagent/memmap.c (comment)', href: SRC.memmap[1], lines: MEMMAP_ART, ref: true },
     mem: { on: ['flash', 'lapic', 'car', 'dram', 'mmio', 'high'], hit: ['dram', 'high'], note: 'DRAM exists' },
     sources: [SRC.memmap, SRC.fspm],
     lps: () => bsp('prot'),
@@ -848,8 +853,8 @@ export const STAGE2 = [
       const dram = span(p, 0.55, 0.8)
       A.die('imc0', 0.3 + dram * 0.4, ACT.dram, 'scan')
       A.die('imc1', 0.3 + dram * 0.4, ACT.dram, 'scan')
-      A.flow('stk', 'pcore0', 'imc0', 1 + dram * 4, ACT.dram, 6)
-      if (p < 0.3) A.flow('copy', 'llc2', 'imc0', 4, ACT.car, 6)
+      A.flow('stk', 'pcore0', 'dram0', 1 + dram * 4, ACT.dram, 6)
+      if (p < 0.3) A.flow('copy', 'llc2', 'dram0', 4, ACT.car, 6)
       A.ring(0.4, ACT.dram)
     },
     labels: [{ id: 'llc2', text: 'INVD: the scratch RAM evaporates', hot: true, from: 0.28, to: 0.6 }],
@@ -885,7 +890,7 @@ export const STAGE2 = [
       const run = win(p, 0.2, 0.85)
       A.die('kind:pcore', 0.1 + run * 0.35, '#ffcf6b', 'sparkle')
       A.die('kind:ecore_cluster', 0.1 + run * 0.35, '#ffcf6b', 'sparkle')
-      if (run > 0) for (const id of ALL_CORES) A.flow(`tr-${id}`, id, 'imc0', 0.6 * run, ACT.dram, 6)
+      if (run > 0) ALL_CORES.forEach((id, k) => A.flow(`tr-${id}`, id, k % 2 ? 'dram1' : 'dram0', 0.6 * run, ACT.dram, 6))
     },
     labels: [{ id: 'pcore0', text: 'BSP: INIT, then SIPI to all-but-self', hot: true, to: 0.3 }],
   },

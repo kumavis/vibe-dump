@@ -259,12 +259,21 @@ export class UI {
     const code = $('#code')
     if (st.code) {
       const src = st.code.href ? `<a href="${st.code.href}" target="_blank" rel="noopener">${st.code.src}</a>` : st.code.src || ''
-      code.innerHTML = `<h3>${st.code.title || 'Executing'}<span>${src}</span></h3><pre>${st.code.lines.map((l) => codeLine(l, codeLang(st.code))).join('')}</pre><div class="explain"></div>`
+      const lang = codeLang(st.code)
+      this.codeKinds = lineKinds(st.code.lines, lang)
+      this.codeIndent = st.code.lines.map((l) => indentOf(typeof l === 'string' ? l : l.i ?? ''))
+      // A listing with nothing runnable in it (a comment quoted for what it
+      // explains) is shown as a quotation, with no execution cursor.
+      this.codeRef = !!st.code.ref || !this.codeKinds.includes('code')
+      const title = st.code.title || (this.codeRef ? 'From the source' : 'Executing')
+      code.classList.toggle('ref', this.codeRef)
+      code.innerHTML = `<h3>${title}<span>${src}</span></h3><pre>${st.code.lines.map((l) => codeLine(l, lang)).join('')}</pre><div class="explain"></div>`
       this.codeLines = [...code.querySelectorAll('.ln')]
       this.codeExplain = code.querySelector('.explain')
       this.lastOn = null
     } else {
       code.innerHTML = ''
+      code.classList.remove('ref')
       this.codeLines = []
     }
     $('#sources').innerHTML = st.sources?.length ? 'Sources: ' + st.sources.map(([t, u]) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`).join(' · ') : ''
@@ -347,8 +356,8 @@ export class UI {
       }
     }
     // code line
-    if (this.codeLines.length && step.code?.at) {
-      const at = step.code.at(p)
+    if (this.codeLines.length && step.code?.at && !this.codeRef) {
+      const at = runnableLine(this.codeKinds, this.codeIndent, step.code.at(p))
       this.codeLines.forEach((el, k) => {
         el.classList.toggle('on', k === at)
         el.classList.toggle('done', k < at)
@@ -432,7 +441,7 @@ export class UI {
     // on resize or when the inset / eye appear, so they're cached.
     if (this.obstaclesDirty || !this.obstacles) {
       this.obstaclesDirty = false
-      this.obstacles = ['#brand', '#stages', '#lps', '#inset', '#eye']
+      this.obstacles = ['#brand', '#stages', '#lps', '#inset', '#eye', '#vhud', '#vcap']
         .map((sel) => $(sel))
         .filter((el) => el && !el.hidden && getComputedStyle(el).display !== 'none')
         .map((el) => {
@@ -538,6 +547,64 @@ function codeLine(l, lang = 'c') {
   if (typeof l === 'string') return `<span class="ln">${fmtCode(l, lang)}</span>`
   const era = l.era ? `<span class="era" style="--e:${ERA[l.era] || '#888'}" title="oldest CPU with this instruction form">${l.era}</span>` : ''
   return `<span class="ln" title="${esc(l.why || '')}">${l.a ? `<span class="ad">${l.a}</span>` : ''}<span class="in">${fmtCode(l.i, lang)}</span>${era}</span>`
+}
+
+// What each listing line is: 'code', 'comment', 'elision' ('...') or 'blank'.
+// Comments are tracked across lines, so the middle of a /* */ block counts too.
+function lineKinds(lines, lang) {
+  let inBlock = false
+  return lines.map((l) => {
+    const s = (typeof l === 'string' ? l : l.i ?? '').trim()
+    if (s === '...') return 'elision'
+    if (!s) return inBlock ? 'comment' : 'blank'
+    if (lang === 'nasm') return s.startsWith(';') ? 'comment' : 'code'
+    if (/^#\s*(include|if|ifdef|ifndef|endif|else|elif|define|undef)\b/.test(s)) return 'code'
+    // an excerpt can start inside a block comment: ' * text' / ' */'
+    if (!inBlock && /^\*(\s|\/|$)/.test(s)) inBlock = true
+    let code = false
+    let q = null
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i]
+      if (inBlock) {
+        if (c === '*' && s[i + 1] === '/') {
+          inBlock = false
+          i++
+        }
+        continue
+      }
+      if (q) {
+        if (c === '\\') i++
+        else if (c === q) q = null
+        continue
+      }
+      if (c === '/' && s[i + 1] === '*') {
+        inBlock = true
+        i++
+      } else if ((c === '/' && s[i + 1] === '/') || c === '#') break
+      else if (!/\s/.test(c)) {
+        code = true
+        if (c === '"' || c === "'") q = c
+      }
+    }
+    return code ? 'code' : 'comment'
+  })
+}
+
+const indentOf = (t) => /^\s*/.exec(t.replace(/\t/g, '    '))[0].length
+
+// The cursor only ever rests on code. On a comment, a blank or a '...' it moves
+// to the code that line belongs to: the code that follows when the line heads
+// it, or the code above when the line sits deeper inside that code's block
+// (e.g. a comment inside an if that the excerpt then leaves).
+function runnableLine(kinds, indent, at) {
+  if (kinds[at] === 'code') return at
+  let next = -1
+  let prev = -1
+  for (let k = at + 1; k < kinds.length && next < 0; k++) if (kinds[k] === 'code') next = k
+  for (let k = at - 1; k >= 0 && prev < 0; k--) if (kinds[k] === 'code') prev = k
+  if (next < 0) return prev < 0 ? at : prev
+  if (prev < 0) return next
+  return indent[at] > indent[next] ? prev : next
 }
 
 // Light syntax colouring: comments dimmed.

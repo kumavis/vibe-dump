@@ -247,6 +247,7 @@ export const STAGE0 = [
     real: 0.01,
     mode: 'prot',
     shot: 'dieLeft',
+    inset: { shot: 'fetch', label: 'OUT OVER DMI → CHIPSET → SPI FLASH' },
     narration: [
       'If the FIT also lists an Intel-signed <em>Startup ACM</em> (as on every <em>Intel Boot Guard</em> PC), the CPU runs it before the reset vector — from inside its own cache, in what is believed to be 32-bit protected mode. So on those machines the first x86 code to run isn’t 16-bit at all: the “386” runs before the “8086”.',
       'With Boot Guard provisioned, the ACM checks the PC maker’s key manifest against a key hash fused into the chipset, then hashes the BIOS’s Initial Boot Block before letting it execute. It leaves that boot block sitting in cache, in the same No-Eviction Mode that comes back in Stage 2.',

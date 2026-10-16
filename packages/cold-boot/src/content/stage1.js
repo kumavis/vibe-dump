@@ -160,6 +160,7 @@ export const STAGE1 = [
     real: 2e-5,
     mode: (p) => (p < 0.86 ? 'real' : 'prot'),
     shot: 'dieLeft',
+    inset: { shot: 'fetch', label: 'OUT OVER DMI → CHIPSET → SPI FLASH' },
     narration: [
       'Load a tiny table from flash — the GDT — describing flat 4 GiB code and data segments (plus a 64-bit code segment it won’t use here). Set bit 0 of CR0, <em>Protection Enable</em>. Then make the first far jump: selector <code>08h</code> is looked up in the new table, and CS becomes base 0, limit 4 GiB, 32-bit.',
       'That’s it — real mode is over after about twenty instructions. LaurieWired’s “15–30 instructions” is right on: 21 in coreboot, 17 in EDK2’s generic reset vector, 29 in Intel’s Alder Lake reference code.',

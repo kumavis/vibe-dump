@@ -4,8 +4,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
-import { buildBoard } from './board.js'
-import { buildDie } from './die.js'
+import { buildBoard, PACKAGE } from './board.js'
+import { buildDie, DETAIL_LAYER } from './die.js'
 import { FLOORPLAN } from './floorplan.js'
 import dieUrl from './assets/raptor-lake-die.jpg'
 import { STEPS, STAGES } from './steps.js'
@@ -13,6 +13,12 @@ import { Timeline } from './timeline.js'
 import { Director } from './camera.js'
 import { UI } from './ui.js'
 import { MODE_COLORS, smooth } from './util.js'
+import { VideoMode } from './video.js'
+
+// ?video: the narrated cut — no panels, captions instead, and frames rendered
+// on demand by a capture script rather than by requestAnimationFrame.
+const VIDEO = new URLSearchParams(location.search).has('video')
+if (VIDEO) document.body.classList.add('video')
 
 const canvas = document.getElementById('gl')
 // No WebGL: say so (index.html's inline script owns the message) rather than
@@ -30,7 +36,10 @@ try {
 const gl = renderer.getContext()
 const glInfo = gl.getExtension('WEBGL_debug_renderer_info')
 const softwareGL = /SwiftShader|llvmpipe|softpipe|Software/i.test(String(gl.getParameter(glInfo ? glInfo.UNMASKED_RENDERER_WEBGL : gl.RENDERER)))
-const pixelRatio = () => Math.min(softwareGL ? 1 : 2, window.devicePixelRatio || 1)
+// ?video&pr=0.75 renders the 3-D at 75 % and lets the page scale it up, so a
+// software-rendered video costs less while its captions stay sharp.
+const videoPR = VIDEO ? Number(new URLSearchParams(location.search).get('pr')) || 0 : 0
+const pixelRatio = () => videoPR || Math.min(softwareGL ? 1 : 2, window.devicePixelRatio || 1)
 renderer.setPixelRatio(pixelRatio())
 // Post-processing renders into half-float targets; a few devices can't.
 const glExt = renderer.extensions
@@ -71,9 +80,12 @@ scene.add(rim)
 
 // Ask for the die photo first, so the download overlaps building the scene.
 // (The callback is always asynchronous: `die` and `trueColor` exist by then.)
+let photoLoaded
+const photoReady = new Promise((r) => (photoLoaded = r))
 new THREE.TextureLoader().load(dieUrl, (t) => {
   die.setPhoto(t)
   die.setTrueColor(trueColor)
+  photoLoaded()
 })
 
 const maxTex = renderer.capabilities.maxTextureSize
@@ -81,14 +93,39 @@ const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy())
 const board = buildBoard({ anisotropy: aniso })
 scene.add(board.group)
 // The procedural die is only a stand-in until the photo arrives.
-const die = buildDie(FLOORPLAN, { maxTexture: Math.min(2048, maxTex), anisotropy: aniso })
+// The package is 37.5 x 45 mm with its long side along the die's; packets that
+// leave the die run across it to where the board's traces start.
+const die = buildDie(FLOORPLAN, { maxTexture: Math.min(2048, maxTex), anisotropy: aniso, package: { x: PACKAGE.h / 2, z: PACKAGE.w / 2 } })
 die.group.position.copy(board.socketWorld)
+// The die isn't centred in the package: it sits ~1.8 mm towards its GPU end.
+const dieOff = FLOORPLAN.mounting?.die_center_offset_mm
+if (dieOff) die.group.position.add(new THREE.Vector3(dieOff.east || 0, 0, -(dieOff.north || 0)))
 // In the socket the die's long axis runs along the DIMM slots and its DDR PHY
 // edge (the top of the photo) faces the DIMMs.
 die.group.rotation.y = -Math.PI / 2
+// Flip-chip: the transistors face down into the package, so seen from above
+// (through the silicon) the layout is the mirror image of a die photograph.
+if (FLOORPLAN.mounting?.mirrored) die.group.scale.x = -1
 scene.add(die.group)
 die.group.updateMatrixWorld(true)
-const dieCenter = board.socketWorld.clone()
+// The board's DMI, PCIe and DDR5 traces start where the die's interfaces
+// reach the edge of the package.
+// (The die is off-centre in the package, so the package edge is found in the
+// world rather than measured from the die.)
+for (const ex of die.exits.values()) {
+  const edge = die.group.localToWorld(ex.out[0].clone())
+  const dir = die.group.localToWorld(ex.out[ex.out.length - 1].clone()).sub(edge).setY(0).normalize()
+  const sk = board.socketWorld
+  const far = edge.clone()
+  if (Math.abs(dir.x) > Math.abs(dir.z)) far.x = sk.x + Math.sign(dir.x) * (PACKAGE.w / 2)
+  else far.z = sk.z + Math.sign(dir.z) * (PACKAGE.h / 2)
+  const land = ex.bus && board.land(ex.bus)
+  // across the substrate: a short stub out of the die, then over to its lands
+  const pts = land ? [edge.clone().addScaledVector(dir, 2), land.at] : [far]
+  die.setExitOut(ex.name, pts.map((p) => die.group.worldToLocal(p.clone())))
+  if (ex.bus) board.startAt(ex.bus, land ? land.at : far, land ? land.dir : dir)
+}
+const dieCenter = die.group.position.clone()
 
 // The photo is colour-graded to sit in the scene; this shows it as shot.
 const trueBtn = document.getElementById('truecolor')
@@ -135,7 +172,7 @@ const shots = {
   attract: onDie(V(0, 0, 0), V(-9, 12, 17), 36),
   imc: onDie(V(-8.2, 0, -3.0), V(-1.5, 10, 9.5), 38),
   // the memory controllers with room on the left for the eye card
-  imcEye: onDie(V(-10.5, 0, -2.5), V(-1.5, 10, 9.5), 38),
+  imcEye: onDie(V(-5.9, 0, -2.5), V(1.5, 10, 9.5), 38),
   llc: onDie(V(-0.8, 0, 0.6), V(0, 21, 16), 38),
   spd: at(V(50, 0, -10), V(-20, 215, 215), 40),
 }
@@ -160,6 +197,7 @@ if (composer) {
 // The picture-in-picture inset goes through the same linear pipeline (minus
 // bloom), so materials don't flip shader variants every frame between the two.
 const insetCam = new THREE.PerspectiveCamera(40, 1.6, 0.3, 4000)
+camera.layers.enable(DETAIL_LAYER)
 const insetEl = document.getElementById('inset')
 let insetName = null
 let insetRect = null // measured when the inset appears and on resize, not every frame
@@ -195,7 +233,10 @@ function resize() {
   let ox = 0
   let top = 0
   let bottom = h
-  if (!document.body.classList.contains('intro')) {
+  if (VIDEO) {
+    // the captions (up to two lines) sit along the bottom
+    bottom = h * 0.82
+  } else if (!document.body.classList.contains('intro')) {
     if (panel.left > w * 0.3) {
       ox = w - panel.left
       bottom = tl.top
@@ -238,7 +279,16 @@ const lpModes = die.lps.map(() => 'off')
 const A = {
   die: (sel, level, color, style) => die.light(sel, level, color, style),
   ring: (level, color) => die.ringLevel(level, color),
-  flow: (key, from, to, rate, color, speed) => die.stream(key, from, to, rate, color, speed),
+  // A flow that leaves the chip carries on along the board trace its exit
+  // feeds (DMI to the chipset, a DDR5 channel to its DIMM, PCIe to a slot).
+  flow: (key, from, to, rate, color, speed) => {
+    const s = die.stream(key, from, to, rate, color, speed)
+    if (!s || !(rate > 0)) return
+    for (const x of s.exits) {
+      const bus = die.exits.get(x).bus
+      if (bus) board.bus(bus, Math.min(1, 0.55 + rate * 0.08), color, { rate: rate * 3, speed: 80, dir: x === to ? 1 : -1 })
+    }
+  },
   board: (id, level, color, style) => board.light(id, level, color, style),
   bus: (name, level, color, opts) => board.bus(name, level, color, opts),
   chips: (fn, color) => board.chips(fn, color),
@@ -266,6 +316,16 @@ function labelItems(st, p) {
       tmp.copy(b.center)
       die.group.localToWorld(tmp)
       out.push({ id: spec.id, text: spec.text || b.label || spec.id, pos: tmp.clone().setY(tmp.y + 0.2), hot: spec.hot, color: spec.color })
+    }
+  }
+  // Where traffic leaves the die: name the interface at the edge it crosses.
+  if (!introOn && director.dieCloseness(dieCenter) > 0.45) {
+    const named = new Set((st.labels || []).map((L) => (typeof L === 'string' ? L : L.id)))
+    for (const e of die.liveExits()) {
+      if (named.has(e.name)) continue
+      tmp.copy(e.out[0])
+      die.group.localToWorld(tmp)
+      out.push({ id: `exit:${e.name}`, text: e.label, pos: tmp.clone(), color: `#${e.color.getHexString()}` })
     }
   }
   return out
@@ -387,8 +447,16 @@ function attract(time) {
 // spans both scales at once (a core on the die fetching from a chip on the board).
 
 const insetTarget = new THREE.Vector3()
+// A step's inset ({shot, label} or a shot name); the video cut can override it.
+function insetOf(st) {
+  const s = video && video.inset !== undefined ? video.inset : st.inset
+  if (!s) return null
+  return typeof s === 'object' ? s : { shot: s, label: '' }
+}
+const POINT_MATS = [die.points.material, board.points.material]
+for (const m of POINT_MATS) m.userData.size = m.size
 function renderInset(st, dt) {
-  const want = introOn ? null : typeof st.inset === 'object' && st.inset ? st.inset.shot : st.inset || null
+  const want = introOn ? null : insetOf(st)?.shot || null
   if (want !== insetName) {
     insetName = want
     insetEl.hidden = !want
@@ -396,13 +464,16 @@ function renderInset(st, dt) {
     if (want) {
       const s = shots[want]()
       insetCam.position.copy(s.pos)
+      // a board-scale inset can't resolve the die's block glows and LEDs
+      if (DIE_SHOTS.has(want)) insetCam.layers.enable(DETAIL_LAYER)
+      else insetCam.layers.disable(DETAIL_LAYER)
       insetTarget.copy(s.target)
       insetCam.fov = s.fov
       insetRect = insetEl.getBoundingClientRect()
     }
   }
   // steps can share an inset shot but caption it differently
-  const label = (typeof st.inset === 'object' && st.inset?.label) || ''
+  const label = insetOf(st)?.label || ''
   if (want && label !== insetLabel) {
     insetLabel = label
     insetEl.querySelector('.lbl').textContent = label
@@ -422,6 +493,11 @@ function renderInset(st, dt) {
   renderer.setScissor(r.left, H - r.bottom, r.width, r.height)
   renderer.setViewport(r.left, H - r.bottom, r.width, r.height)
   renderer.setClearColor('#070912', 1)
+  // three.js sizes attenuated points against the whole canvas height, not the
+  // viewport, so in this small window they would come out several times too
+  // big. Scale them down to the inset's height while it renders.
+  const k = r.height / H
+  for (const m of POINT_MATS) m.size = m.userData.size * k
   if (insetComposer) {
     // The scene renders into the inset composer's own target; only its final
     // full-screen pass lands on the canvas, inside this viewport and scissor.
@@ -435,11 +511,13 @@ function renderInset(st, dt) {
     renderer.clear(true, true)
     renderer.render(scene, insetCam)
   }
+  for (const m of POINT_MATS) m.size = m.userData.size
   renderer.setScissorTest(false)
   renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
 }
 
 // --- loop -------------------------------------------------------------------------
+let video = null // the VideoMode in ?video
 let last = performance.now()
 let time = 0
 // The page opens in attract mode, with the lid already off.
@@ -476,7 +554,8 @@ function shotAt(st, p) {
 }
 
 function frame(now) {
-  const dt = Math.min(0.05, (now - last) / 1000)
+  // (video frames come at the cut's own rate, however slowly they render)
+  const dt = VIDEO ? (now - last) / 1000 : Math.min(0.05, (now - last) / 1000)
   last = now
   // Motion (shader time, packets) runs only while playing — Pause freezes the
   // scene — and in the attract loop unless reduced motion is asked for. Level
@@ -495,14 +574,14 @@ function frame(now) {
     if (st.lps) A.lps(st.lps(p))
     A.bootKind = bootKind
     st.act?.(p, A, time)
-    const s = shotAt(st, p)
+    const s = video?.shot || shotAt(st, p)
     if (s && s !== director.current) director.go(s, { instant: reduceMotion })
   }
   for (let i = 0; i < lpModes.length; i++) die.setLp(i, lpModes[i], lpModes[i] === 'off' ? 0 : 1)
 
   // Heat-spreader: lifted off whenever the camera is near the die or the step asks.
   const close = director.dieCloseness(dieCenter)
-  const insetOnDie = typeof st.inset === 'object' && st.inset && DIE_SHOTS.has(st.inset.shot)
+  const insetOnDie = DIE_SHOTS.has(insetOf(st)?.shot)
   const wantLid = introOn ? 1 : st.lid === false || insetOnDie || close > 0.25 ? 1 : 0
   lid += (wantLid - lid) * Math.min(1, dt * 3)
   // It lifts a little and fades out rather than hovering over the scene.
@@ -514,8 +593,10 @@ function frame(now) {
   board.ihs.visible = ls < 0.99
 
   die.update(dt, time, animDt)
+  board.setView(camera.position, director.controls.target)
   board.update(dt, time, animDt)
   director.update(dt)
+  video?.afterCamera(dt)
   // OrbitControls' lookAt leaves the matrices half-updated until render; labels
   // and hover picking project through them first.
   camera.updateMatrixWorld()
@@ -529,7 +610,7 @@ function frame(now) {
   if (composer) composer.render()
   else renderer.render(scene, camera)
   renderInset(st, dt)
-  requestAnimationFrame(frame)
+  if (!VIDEO) requestAnimationFrame(frame)
 }
 
 timeline.on((kind) => {
@@ -560,3 +641,19 @@ requestAnimationFrame((t) => {
 
 // Exposed for debugging and for scripted screenshots.
 window.__coldboot = { timeline, director, die, board, renderer, MODE_COLORS, bootKind: () => bootKind }
+if (VIDEO) {
+  video = new VideoMode({
+    timeline,
+    director,
+    camera,
+    stages: STAGES,
+    steps: STEPS,
+    dismissIntro,
+    shotAt,
+    hasShot: (name) => typeof shots[name] === 'function',
+    ready: photoReady,
+    realAt: (i, p) => clock.realBase[i] + realOf(STEPS[i]) * p,
+    renderFrame: (ms) => frame(last + ms),
+  })
+  window.__coldboot.video = video
+}
