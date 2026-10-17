@@ -1,0 +1,59 @@
+{
+  "title": "Cold Boot — narrated cut",
+  "fps": 30,
+  "size": [
+    1920,
+    1080
+  ],
+  "voice": "af_heart",
+  "speed": 1.0,
+  "lead": 0.7,
+  "gap": 0.35,
+  "tail": 1.1,
+  "segments": [
+    {
+      "name": "first-fetch",
+      "step": 8,
+      "p0": 0.0,
+      "p1": 0.999,
+      "shot": [
+        [
+          0,
+          "bsp"
+        ],
+        [
+          "@2",
+          "fetch"
+        ]
+      ],
+      "inset": [
+        [
+          0,
+          null
+        ],
+        [
+          "@2",
+          {
+            "shot": "dieLeft",
+            "label": "ON THE DIE: CORE → RING → DMI"
+          }
+        ]
+      ],
+      "drift": 1.2,
+      "say": [
+        [
+          "The reset is over. One thread, on one core, starts out in 16-bit real mode, just like an 8086 from 1978.",
+          "The reset is over. One thread, on one core, starts out in sixteen-bit real mode, just like an eighty eighty-six from nineteen seventy-eight."
+        ],
+        [
+          "Its first instruction sits sixteen bytes below 4 GiB.",
+          "Its first instruction sits sixteen bytes below four gigabytes."
+        ],
+        [
+          "There's no RAM yet, and the caches are off. So the fetch leaves the die, crosses to the chipset, and is read out of the flash chip that holds the firmware.",
+          "There's no ram yet, and the caches are off. So the fetch leaves the die, crosses to the chipset, and is read out of the flash chip that holds the firmware."
+        ]
+      ]
+    }
+  ]
+}

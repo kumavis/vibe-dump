@@ -1,0 +1,549 @@
+{
+ "alapiʻi": {
+  "decision": "A4",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A4 keeps PIʻI (the vulgar sense is Wiktionary-only; POLLEX gives P&E piʻi as \"climb, ascend\"), defaulting to keep but gated on the P&E check, so keep-pending. Named by A4 for restoring. Two sources, attested spelling; word break still open.",
+  "verdict": "keep-pending"
+ },
+ "anilā": {
+  "decision": "C5",
+  "reason": "Default ruling (owner has not ruled): C5: anilā is out unless the kumu approves it (publicly opposed by a kumu as made to fit English thinking).",
+  "verdict": "drop"
+ },
+ "halekaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "halelāʻau": {
+  "decision": "A3",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A3 keeps the LĀʻAU stone; on its own evidence (two sources, attested two-word spelling) it returns, pending P&E on whether hale lāʻau is a sub-entry or a free phrase (C2).",
+  "verdict": "keep-pending"
+ },
+ "hanupaʻa": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (illness (a head cold)). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "hoakaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "hoakoa": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words. Not in E3's list, but its card sense is a war word (soldier).",
+  "verdict": "keep-pending"
+ },
+ "hoewaʻa": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 requires a P&E headword or sub-entry; this two-word keep has none in hand (Andrews plus modern use only), and its own record asks whether P&E lists it as a unit. Still ships, marked pending.",
+  "verdict": "keep-pending"
+ },
+ "holokaʻa": {
+  "decision": "A8",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A8 clears KAʻA (\"take effect as a cathartic\" is not excretory). Re-judged on its other problem, as A8 asks: probably a free phrase, so it waits on a P&E sub-entry (C2).",
+  "verdict": "doubtful"
+ },
+ "hopepoʻo": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 requires a P&E headword or sub-entry; this two-word keep has none in hand (Andrews plus modern use only), and its own record asks whether P&E lists it as a unit. Still ships, marked pending. The blind second reading also had keep-pending.",
+  "verdict": "keep-pending"
+ },
+ "hualiʻi": {
+  "decision": "A2",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A2 keeps the HUA (fruit/egg) stone, so the root-level testicle flag lifts. The blind second reading dropped it only on that flag (\"on lexical grounds alone it would be keep-pending\"); the first reading was keep-pending. Card shows the fruit sense only, never Andrews' \"runt\".",
+  "verdict": "keep-pending"
+ },
+ "hunakaua": {
+  "decision": "A10, E3",
+  "exclude": false,
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): A10 clears huna#0 (*fuga); named by A10 for clearing. Andrews-only, so pending P&E. E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "hunawai": {
+  "decision": "A10",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A10 clears huna#0 (*fuga \"crumb, spray\"); the genital euphemism belongs to huna \"hide\" (*funa). The record: only the HUNA ruling and the P&E headword kept it from keep.",
+  "verdict": "keep-pending"
+ },
+ "hōkūao": {
+  "decision": "D2",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): D2 allows star names and nothing else; held only on the star-name policy and a P&E Lit. Form is capitalised in review.tsv (Hōkūao); lower-case it unless the kumu prefers the capital (§4.4, B12).",
+  "verdict": "keep-pending"
+ },
+ "hōkūloa": {
+  "decision": "D2",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): D2 allows star names and nothing else. D2 and B1: settle the Lit. (\"great\" = intensive loa, or \"long-staying\") before its LOA stone links; keep that stone unresolved until then. Form is capitalised (Hōkūloa) in review.tsv.",
+  "verdict": "keep-pending"
+ },
+ "hōʻakakeʻa": {
+  "decision": "A5",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A5 drops KEʻA compounds: the breeding/virile sense is P&E's (POLLEX TEKA.2), and option 1 drops the cross-piece words too. ",
+  "verdict": "drop"
+ },
+ "iwipona": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (named by E1 among words about the dead). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "kaihulu": {
+  "decision": "P1",
+  "reason": "Default ruling (owner has not ruled): P1 phantom (CRITIC §6): Andrews prints Kaiahulu (OCR l.36634/36638), not kaihulu; the candidate is the pipeline's, the same failure the adjudicators ruled drop for ahihonua.",
+  "verdict": "drop"
+ },
+ "kaipiʻi": {
+  "decision": "A4",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A4 keeps PIʻI (the vulgar sense is Wiktionary-only; POLLEX gives P&E piʻi as \"climb, ascend\"), defaulting to keep but gated on the P&E check, so keep-pending. Named by A4 for restoring. P&E spelling via POLLEX (< PCE *tai-pii); held only by the piʻi flag.",
+  "verdict": "keep-pending"
+ },
+ "kanikau": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (dirge for the dead). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep"
+ },
+ "kaniwāwae": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words. Not in E3's list, but its card sense is a war word (soldier).",
+  "verdict": "keep-pending"
+ },
+ "kapakahi": {
+  "decision": "A13",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A13 clears KAPA (\"labia\" is POLLEX TAPA.2, a separate etymon; never printed). The record: \"On the language evidence a keep (W + A, attested, transparent). Held only for the KAPA root ruling.\"",
+  "verdict": "keep"
+ },
+ "kapakomo": {
+  "decision": "A13",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A13 clears KAPA (\"labia\" is a separate etymon). One source, corroborated spelling; P&E to say sub-entry or free phrase.",
+  "verdict": "keep-pending"
+ },
+ "kapuahihao": {
+  "decision": "A17",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A17 excludes kapuahi (Andrews n. 5 in the same entry; one low-value word).",
+  "verdict": "drop"
+ },
+ "kaʻakaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "kaʻalewa": {
+  "decision": "P1",
+  "reason": "Default ruling (owner has not ruled): P1 phantom (DECISIONS P1, CRITIC §6): the attested word is Kaalelewa; the two-stone spelling is the pipeline's. Same ruling as ahihonua.",
+  "verdict": "drop"
+ },
+ "kaʻawale": {
+  "decision": "B1",
+  "reason": "Default ruling (owner has not ruled): B1: no particle is a stone. Its record identifies the wale as the postposed particle \"only, alone, without cause\" (Wiktionary particle entry; P&E via POLLEX), and the reviewer held it only for this policy. As mapped, its WALE stone would fall back to wale \"mucus\". Returns if the owner admits a particle WALE stone (B1 option 2).",
+  "verdict": "drop"
+ },
+ "keʻapua": {
+  "decision": "A5",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A5 drops KEʻA compounds: the breeding/virile sense is P&E's (POLLEX TEKA.2), and option 1 drops the cross-piece words too. The kumu may restore keʻa pua (the Makahiki dart game) if they judge the other sense unheard. This also settles its second-reading split.",
+  "verdict": "drop"
+ },
+ "kinowailua": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (spirit of the dead). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "kiowai": {
+  "decision": "A17",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A17: exclude kiʻo unless P&E separates \"pool\" (POLLEX gives P&E kiʻo only as \"excrete, evacuate\" < *tiko). The default is exclude; a P&E entry for kiʻo \"pool\" without the excretory sense would bring kiʻowai back.",
+  "verdict": "drop"
+ },
+ "kiʻikālai": {
+  "decision": "P1",
+  "reason": "Default ruling (owner has not ruled): P1 phantom (CRITIC §6): Andrews prints Kiikalaiia (l.43946), the passive phrase kiʻi kālai ʻia, not a two-root headword. Settles its second-reading split.",
+  "verdict": "drop"
+ },
+ "kualana": {
+  "decision": "E3",
+  "reason": "Default ruling (owner has not ruled): E3 drops epithets for persons and names this word among card senses that put a person down. (Paired character words such as naʻaupō / naʻauao stay.)",
+  "verdict": "drop"
+ },
+ "kuanui": {
+  "decision": "E3",
+  "reason": "Default ruling (owner has not ruled): E3 drops epithets for persons and names this word among card senses that put a person down. (Paired character words such as naʻaupō / naʻauao stay.)",
+  "verdict": "drop"
+ },
+ "kuapuʻu": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (named by E1 (hump; a person's disability)). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep"
+ },
+ "kumualakaʻi": {
+  "decision": "B6",
+  "reason": "Default ruling (owner has not ruled): B6 names it: its stone ALAKAʻI is itself dealt as a two-stone word (alakaʻi), so one word would appear both as one stone and as a pair.",
+  "verdict": "drop"
+ },
+ "kumukūʻai": {
+  "decision": "B6",
+  "reason": "Default ruling (owner has not ruled): B6 names it: its stone KŪʻAI is itself dealt as a two-stone word (kūʻai), so one word would appear both as one stone and as a pair.",
+  "verdict": "drop"
+ },
+ "kumulāʻau": {
+  "decision": "A3",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A3 keeps the LĀʻAU stone. Both readings called it a clean keep held only by the lāʻau flag (Wiktionary headword, transparent); the second reader: \"if the owner rules no, flip to keep\".",
+  "verdict": "keep"
+ },
+ "kālāʻau": {
+  "decision": "A3",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A3 keeps the LĀʻAU stone. The record: \"If the root flag is cleared, this becomes keep-pending.\" P&E still to settle kālāʻau vs kālaʻau.",
+  "verdict": "keep-pending"
+ },
+ "kānemake": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (widowed). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "lapuwale": {
+  "decision": "B1",
+  "reason": "Default ruling (owner has not ruled): B1: no particle is a stone. The record: \"held back only by the design question of whether a particle may be a stone\" (wale = particle \"only\"; as mapped it links to wale \"mucus\").",
+  "verdict": "drop"
+ },
+ "laumake": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (poisonous plant; dead leaf). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "laupapa": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (named by E1 (Kalaupapa)). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "laweola": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (manslaughter). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "laʻamake": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (MAKE \"die\" stone; plants dying back). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "leihala": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (hala \"pass away\"; its record, citing Ka Wai Ola and the Bishop Museum, notes the lei hala is held unlucky at beginnings and proper at completions, and an opening deal is a beginning). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep"
+ },
+ "lelehāuli": {
+  "decision": "P1",
+  "reason": "Default ruling (owner has not ruled): P1 phantom (DECISIONS P1, CRITIC §6): the attested word is Lelekahauli, with the article ka; the two-stone spelling is the pipeline's. Same ruling as ahihonua.",
+  "verdict": "drop"
+ },
+ "lelepali": {
+  "decision": "E1",
+  "reason": "Default ruling (owner has not ruled): E1 names it as grim-only: Andrews' only sense ties it to suicide.",
+  "verdict": "drop"
+ },
+ "leopaʻa": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (loss of voice). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "lolokaʻa": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (illness (dizziness)). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "luapō": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (the grave). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "lunakaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "lunakoa": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "lāhuikaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "lāʻaukeʻa": {
+  "decision": "A5",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A5 drops KEʻA compounds: the breeding/virile sense is P&E's (POLLEX TEKA.2), and option 1 drops the cross-piece words too. ",
+  "verdict": "drop"
+ },
+ "lāʻaukia": {
+  "decision": "A3",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A3 keeps the LĀʻAU stone. The record: \"Without the root-level lāʻau flag this would be keep-pending.\"",
+  "verdict": "keep-pending"
+ },
+ "lāʻaukū": {
+  "decision": "A3",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A3 names lāʻau kū \"standing wood\" as a compound whose literal reading invites the excluded sense.",
+  "verdict": "drop"
+ },
+ "lāʻauluaʻi": {
+  "decision": "A11",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A11 excludes luaʻi \"vomit\" (bodily expulsion, the root's main sense).",
+  "verdict": "drop"
+ },
+ "makaluku": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "makamomi": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (eye disease). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "makapaʻa": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (blindness). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "makapō": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (blindness). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep"
+ },
+ "makuawahine": {
+  "decision": "P1",
+  "reason": "Default ruling (owner has not ruled): P1 phantom (DECISIONS P1, CRITIC §6): the attested word is Makuahine; the two-stone spelling is the pipeline's. Same ruling as ahihonua.",
+  "verdict": "drop"
+ },
+ "manamanalima": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 requires a P&E headword or sub-entry; this two-word keep has none in hand (Andrews plus modern use only), and its own record asks whether P&E lists it as a unit. Still ships, marked pending.",
+  "verdict": "keep-pending"
+ },
+ "manamananui": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 requires a P&E headword or sub-entry; this two-word keep has none in hand (Andrews plus modern use only), and its own record asks whether P&E lists it as a unit. Still ships, marked pending.",
+  "verdict": "keep-pending"
+ },
+ "manamanawāwae": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 requires a P&E headword or sub-entry; this two-word keep has none in hand (Andrews plus modern use only), and its own record asks whether P&E lists it as a unit. Still ships, marked pending.",
+  "verdict": "keep-pending"
+ },
+ "manuhelekū": {
+  "decision": "B6",
+  "reason": "Default ruling (owner has not ruled): B6 names it: its stone HELEKŪ is itself dealt as a two-stone word (helekū), so one word would appear both as one stone and as a pair.",
+  "verdict": "drop"
+ },
+ "maʻaleʻa": {
+  "decision": "A14",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A14 excludes LEʻA (\"orgasm\", Wiktionary). Modern spelling is maʻalea in any case (no leʻa).",
+  "verdict": "drop"
+ },
+ "meaʻē": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 excludes mea + X as a class (a MEA stone would over-link).",
+  "verdict": "drop"
+ },
+ "mokukaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep"
+ },
+ "nohoaloha": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 excludes noho + state as a class; its record: \"behaves as a free phrase (noho + state)\".",
+  "verdict": "drop"
+ },
+ "nohopaʻa": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 excludes noho + state as a class (a NOHO stone would over-link like hoʻo-). Its record already asked whether P&E lists it or it is \"just noho + paʻa used freely\".",
+  "verdict": "drop"
+ },
+ "nohopio": {
+  "decision": "C2",
+  "reason": "Default ruling (owner has not ruled): C2 excludes noho + state as a class; Andrews himself gives it as a phrase example under noho.",
+  "verdict": "drop"
+ },
+ "olokeʻa": {
+  "decision": "A5",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A5 drops KEʻA compounds: the breeding/virile sense is P&E's (POLLEX TEKA.2), and option 1 drops the cross-piece words too. ",
+  "verdict": "drop"
+ },
+ "oneʻā": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words. As glossed (gunpowder); the CRITIC notes P&E's sense is black ʻaʻā sand, which would make it an ʻāina word and lift this.",
+  "verdict": "keep-pending"
+ },
+ "pakakahi": {
+  "decision": "A1",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A1 working rule (etymon plus ear): a sensitive sense excludes only within the same etymon. paka \"bugger\" is an English loan homograph, not the paka \"raindrops\" root used here. The record: \"If that ruling is lenient it becomes keep-pending.\" Andrews-only.",
+  "verdict": "keep-pending"
+ },
+ "palaholo": {
+  "decision": "A12",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A12 excludes PALA: P&E (POLLEX PALA.1A/1C) puts \"dab of excreta\" in the same set as \"ripe, soft\", and PALA.3 is a form of syphilis. The PALAPALA stone is unaffected.",
+  "verdict": "drop"
+ },
+ "palakea": {
+  "decision": "A12",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A12 excludes PALA: P&E (POLLEX PALA.1A/1C) puts \"dab of excreta\" in the same set as \"ripe, soft\", and PALA.3 is a form of syphilis. The PALAPALA stone is unaffected.",
+  "verdict": "drop"
+ },
+ "palalauhala": {
+  "decision": "A12",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A12 excludes PALA: P&E (POLLEX PALA.1A/1C) puts \"dab of excreta\" in the same set as \"ripe, soft\", and PALA.3 is a form of syphilis. The PALAPALA stone is unaffected.",
+  "verdict": "drop"
+ },
+ "palaloli": {
+  "decision": "A12",
+  "exclude": true,
+  "reason": "Default ruling (owner has not ruled): A12 excludes PALA: P&E (POLLEX PALA.1A/1C) puts \"dab of excreta\" in the same set as \"ripe, soft\", and PALA.3 is a form of syphilis. The PALAPALA stone is unaffected.",
+  "verdict": "drop"
+ },
+ "palekaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "panipū": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "poʻokepa": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (mourning haircut). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "punikoko": {
+  "decision": "E3",
+  "reason": "Default ruling (owner has not ruled): E3 drops epithets for persons and names this word among card senses that put a person down. (Paired character words such as naʻaupō / naʻauao stay.)",
+  "verdict": "drop"
+ },
+ "puniwaiwai": {
+  "decision": "E3",
+  "reason": "Default ruling (owner has not ruled): E3 drops epithets for persons and names this word among card senses that put a person down. (Paired character words such as naʻaupō / naʻauao stay.)",
+  "verdict": "drop"
+ },
+ "puʻukaua": {
+  "decision": "E3",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E3: keep war words, but not as opening words.",
+  "verdict": "keep-pending"
+ },
+ "puʻukoko": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (named by E1 among puʻu- swellings (blood clot)). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "pālāʻau": {
+  "decision": "A3",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A3 keeps the LĀʻAU stone. The record: \"If the LĀʻAU family is cleared, this becomes keep-pending.\" Note for the kumu: Pālāʻau is also the state park above Kalaupapa; caption the common noun (wooden fence) only.",
+  "verdict": "keep-pending"
+ },
+ "ululāʻau": {
+  "decision": "A3",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A3 keeps the LĀʻAU stone. The record: \"On the evidence this is a keep … If lāʻau is cleared, promote to keep.\" Word break (ululāʻau or ulu lāʻau) still to be set by P&E.",
+  "verdict": "keep"
+ },
+ "wahapaʻa": {
+  "decision": "E3",
+  "reason": "Default ruling (owner has not ruled): E3 drops epithets for persons and names this word among card senses that put a person down. (Paired character words such as naʻaupō / naʻauao stay.)",
+  "verdict": "drop"
+ },
+ "wailana": {
+  "decision": "E1",
+  "nodeal": true,
+  "reason": "Default ruling (owner has not ruled): E1: none as opening words (named by E1 (living sense \"to banish\", the Kalaupapa exile)). Ships, but is never dealt; may still be turned into.",
+  "verdict": "keep-pending"
+ },
+ "waipiʻi": {
+  "decision": "A4",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A4 keeps PIʻI (the vulgar sense is Wiktionary-only; POLLEX gives P&E piʻi as \"climb, ascend\"), defaulting to keep but gated on the P&E check, so keep-pending. Held only by the piʻi flag: the first reading says it \"becomes keep-pending\" if piʻi is cleared, and the second reader dropped it on that flag alone.",
+  "verdict": "keep-pending"
+ },
+ "waiūpaʻa": {
+  "decision": "B6",
+  "reason": "Default ruling (owner has not ruled): B6 names it: its stone WAIŪ is itself dealt as a two-stone word (waiū), so one word would appear both as one stone and as a pair.",
+  "verdict": "drop"
+ },
+ "ʻakahenehene": {
+  "decision": "E3",
+  "reason": "Default ruling (owner has not ruled): E3 drops epithets for persons and names this word among card senses that put a person down. (Paired character words such as naʻaupō / naʻauao stay.)",
+  "verdict": "drop"
+ },
+ "ʻukukapa": {
+  "decision": "A13",
+  "exclude": false,
+  "reason": "Default ruling (owner has not ruled): A13 clears KAPA (\"labia\" is a separate etymon). Andrews-only, inferred two-word spelling.",
+  "verdict": "keep-pending"
+ },
+ "ʻulakoko": {
+  "decision": "P1",
+  "reason": "Default ruling (owner has not ruled): P1 phantom (DECISIONS P1, CRITIC §6): the attested word is Ulaokoko, with the connective o; the two-stone spelling is the pipeline's. Same ruling as ahihonua.",
+  "verdict": "drop"
+ },
+ "ʻōpūhao": {
+  "decision": "P1",
+  "reason": "Default ruling (owner has not ruled): P1/P2 (CRITIC §6): its bracket and the gloss \"dropsy\" belong to Andrews' Opuohao (l.78120); Andrews' real Opuhao (l.77981) is \"a pain in the stomach caused by prolonged fasting\", with no bracket. Held until it is re-glossed from the real headword (or dropped).",
+  "verdict": "doubtful"
+ }
+}

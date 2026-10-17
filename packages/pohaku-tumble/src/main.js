@@ -1,0 +1,270 @@
+import { Board } from './board.js'
+import { Scene3D } from './scene3d.js'
+import { FloorPainter, REVEAL } from './floor.js'
+import { LinkStore } from './links.js'
+import { Notes } from './notes.js'
+import { Director } from './director.js'
+import { clamp, reach, wander } from './view.js'
+import { SERIF } from './palette.js'
+
+const $ = (id) => document.getElementById(id)
+// ?slow=8 runs the whole piece at an eighth of the speed — for watching a
+// stone tumble, or a line let go and find somewhere else to land.
+const SLOW = Number(new URLSearchParams(location.search).get('slow')) || 1
+const clock = () => performance.now() / 1000 / SLOW
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+async function boot() {
+  // Every letter is pecked into a texture or drawn onto a canvas, and a canvas
+  // won't wait for a web font — so wait here, once, for all three cuts.
+  const sample = 'Pōhaku ʻāina'
+  await Promise.all([
+    document.fonts.load(`400 16px ${SERIF}`, sample),
+    document.fonts.load(`italic 400 16px ${SERIF}`, sample),
+    document.fonts.load(`600 16px ${SERIF}`, sample),
+  ]).catch(() => {})
+
+  const params = new URLSearchParams(location.search)
+  const seed = Number(params.get('seed')) || 1031
+  const board = new Board(seed)
+
+  const scene = new Scene3D($('gl'))
+  const floor = new FloorPainter($('floor'))
+  const notes = new Notes($('cards'), $('hud'))
+  const links = new LinkStore()
+  const ripples = []
+  const view = { tx: 0, tz: 0, yaw: 0, pitch: 1, ppu: 50 }
+  const user = { dx: 0, dz: 0, zoom: 1 }
+  const director = new Director({ board, scene, links, notes, ripples })
+
+  let reserved = []
+  // The plates the cards keep off. The keys on the stats plate change with
+  // the mode, so this runs on a toggle as well as on resize.
+  function measure() {
+    reserved = ['title', 'mode', 'legend', 'stats'].map((id) => {
+      const r = $(id).getBoundingClientRect()
+      return { x: r.left - 12, y: r.top - 12, w: r.width + 24, h: r.height + 24 }
+    })
+  }
+  function resize() {
+    const w = innerWidth
+    const h = innerHeight
+    const dpr = Math.min(devicePixelRatio || 1, 2)
+    scene.setSize(w, h, dpr)
+    floor.resize(w, h, dpr)
+    notes.resize(w, h, dpr)
+    measure()
+    // A drag is held within the screen's reach (view.js), and resizing the
+    // window or turning the phone changes it. Left past the new reach, a drag
+    // would pin the view at the edge, and dragging back would do nothing for
+    // a while.
+    const r = reach(w, h)
+    user.dx = clamp(user.dx, 0, r.x)
+    user.dz = clamp(user.dz, 0, r.z)
+  }
+  addEventListener('resize', resize)
+  resize()
+  // The star compass is the one place whose drawing is the point, so a card
+  // weighs sitting on it as it does sitting on the chrome. It moves with the
+  // camera, so its box on screen is taken each frame.
+  const compass = board.island.compass
+  const compassBox = () => {
+    let x0 = Infinity
+    let y0 = Infinity
+    let x1 = -Infinity
+    let y1 = -Infinity
+    for (let i = 0; i < 16; i++) {
+      const a = (i / 16) * Math.PI * 2
+      const [x, y] = scene.project(compass.x + Math.cos(a) * compass.r, 0, compass.z + Math.sin(a) * compass.r)
+      x0 = Math.min(x0, x)
+      y0 = Math.min(y0, y)
+      x1 = Math.max(x1, x)
+      y1 = Math.max(y1, y)
+    }
+    return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }
+  }
+
+  // The camera's slow drift over the floor (view.js); with reduced motion it
+  // holds where the drift begins. It keeps a clock of its own, which stands
+  // still in manual mode: the view holds where it is, and back in auto the
+  // drift picks up from there rather than jumping on to where it would have
+  // got to.
+  let drift = 0
+  let driftAt = null
+  function updateView(now) {
+    if (driftAt != null && !director.manual) drift += now - driftAt
+    driftAt = now
+    wander(view, reduceMotion ? 0 : drift, innerWidth, innerHeight, user)
+  }
+
+  const t0 = clock()
+  updateView(t0)
+  scene.setView(view)
+
+  // The opening: the map draws itself first (floor.js), then the stones fall
+  // in from the middle of the frame outward, lines draw between them as they
+  // land, captions type in after.
+  const drop = t0 + REVEAL.stones
+  for (const p of board.pairs) {
+    const d = Math.hypot(p.x - view.tx, p.z - view.tz)
+    const start = drop + d * 0.035 + Math.random() * 0.12
+    for (const t of p.tiles) scene.addTile(t).dropIn(start + t.index * 0.06)
+    const e = p.entry
+    p.caption = { prev1: '', prev2: '', text1: e.word.toUpperCase(), text2: e.gloss, t0: start + 1.0 }
+  }
+  // Each line waits for its stones to land, and LinkStore starts new lines a
+  // beat apart in the order it is handed them, so hand them over in the order
+  // their stones land: from the middle of the frame out. In the board's own
+  // order they would start from the top-left corner, long after the middle
+  // had landed.
+  const landed = (d) => {
+    const tiles = d.kind === 'pair' ? [d.a, d.b] : d.pair.tiles
+    return Math.max(...tiles.map((t) => scene.block(t).drop.t0 + scene.block(t).drop.dur)) + 0.1
+  }
+  const opening = [...board.desiredLinks()].sort(([, a], [, b]) => landed(a) - landed(b))
+  links.sync(new Map(opening), t0, { holdUntil: landed })
+  const openingLines = [...links.links.values()]
+  // The first card and the first turn keep Jukugo's distance from the first
+  // stone landing.
+  director.start(drop - 0.15)
+
+  // ── manual mode ──────────────────────────────────────────────────────────
+  // Nothing turns, no card opens and the camera holds still (updateView):
+  // a click opens a word's card, and a click on a word with its card up
+  // turns the stone clicked. Drag and scroll still move the view. Kept in the
+  // URL (?manual=1), so a reload or a shared link opens the same way.
+  const mode = $('mode')
+  const keys = $('keys')
+  const KEYS = { auto: keys.textContent, manual: 'drag · scroll · click: card, then turn' }
+  function setManual(on) {
+    director.setManual(on, clock())
+    document.body.classList.toggle('manual', on)
+    mode.setAttribute('aria-pressed', String(on))
+    keys.textContent = on ? KEYS.manual : KEYS.auto
+    measure()
+    try {
+      const url = new URL(location.href)
+      if (on) url.searchParams.set('manual', '1')
+      else url.searchParams.delete('manual')
+      history.replaceState(history.state, '', url)
+    } catch {}
+  }
+  mode.addEventListener('click', (e) => {
+    setManual(!director.manual)
+    // A mouse click leaves the button focused, and Space would then press it
+    // rather than pause.
+    if (e.detail) mode.blur()
+  })
+  if (params.has('manual') && params.get('manual') !== '0') setManual(true)
+
+  // ── input ────────────────────────────────────────────────────────────────
+  const stage = $('stage')
+  let drag = null
+  stage.addEventListener('pointerdown', (e) => {
+    drag = { x: e.clientX, y: e.clientY, moved: 0, id: e.pointerId }
+    stage.setPointerCapture(e.pointerId)
+  })
+  stage.addEventListener('pointermove', (e) => {
+    if (!drag) return
+    const dx = e.clientX - drag.x
+    const dy = e.clientY - drag.y
+    drag.moved += Math.abs(dx) + Math.abs(dy)
+    drag.x = e.clientX
+    drag.y = e.clientY
+    if (drag.moved > 4) stage.classList.add('dragging')
+    // Screen delta back to a floor delta through the inverse of the floor's
+    // affine map.
+    const [a, b, c, d] = scene.floorAffine()
+    const det = a * d - b * c
+    const r = reach(innerWidth, innerHeight)
+    user.dx = clamp(user.dx - (d * dx - c * dy) / det, 0, r.x)
+    user.dz = clamp(user.dz - (-b * dx + a * dy) / det, 0, r.z)
+  })
+  const end = (e) => {
+    if (!drag) return
+    if (drag.moved < 5) {
+      const tile = scene.pick(e.clientX, e.clientY)
+      if (tile && director.manual) director.press(tile, clock())
+      else if (tile) director.poke(board.pairs[tile.pair], clock())
+    }
+    drag = null
+    stage.classList.remove('dragging')
+  }
+  stage.addEventListener('pointerup', end)
+  stage.addEventListener('pointercancel', () => {
+    drag = null
+    stage.classList.remove('dragging')
+  })
+  stage.addEventListener(
+    'wheel',
+    (e) => {
+      e.preventDefault()
+      user.zoom = Math.max(0.6, Math.min(1.9, user.zoom * Math.exp(-e.deltaY * 0.0012)))
+    },
+    { passive: false },
+  )
+  // In manual mode an open card takes the pointer, for its close button: a
+  // press on it is the card's, not the start of a drag or a click on the
+  // stone under it.
+  const cards = $('cards')
+  cards.addEventListener('pointerdown', (e) => e.stopPropagation())
+  cards.addEventListener('click', (e) => {
+    const x = e.target.closest('.card-x')
+    const note = x && notes.list.find((n) => n.el.contains(x))
+    if (note && !note.closing) director.closeNote(note, clock())
+  })
+  addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      if (e.target.closest?.('button')) return
+      e.preventDefault()
+      director.paused = !director.paused
+    } else if (e.code === 'KeyM' && !(e.ctrlKey || e.metaKey || e.altKey)) {
+      setManual(!director.manual)
+    } else if (e.code === 'Escape' && director.manual) {
+      for (const note of notes.list) if (!note.closing) director.closeNote(note, clock())
+    }
+  })
+
+  // ── frame ────────────────────────────────────────────────────────────────
+  const st = { turns: $('st-turns'), links: $('st-links'), pairs: $('st-pairs') }
+  st.pairs.textContent = String(board.pairs.length)
+  let last = clock()
+  let ready = false
+  let opened = false
+  function frame() {
+    const now = clock()
+    const dt = Math.min(0.1, now - last)
+    last = now
+    updateView(now)
+    scene.setView(view)
+    director.update(now)
+    links.update(now)
+    scene.update(now)
+    scene.render()
+    floor.draw({ A: scene.floorAffine(), board, links, ripples, now, intro: now - t0, noted: notes.noted() })
+    notes.update(scene, now, dt, [...reserved, compassBox()])
+    st.turns.textContent = String(board.turnCount).padStart(4, '0')
+    st.links.textContent = String(links.count()).padStart(2, '0')
+    if (!ready) {
+      ready = true
+      document.body.classList.add('ready')
+    }
+    // The opening is over once every line it drew is in (or has since let
+    // go) and the first card has opened: the gallery's thumbnail waits for
+    // this, rather than for a guess at how long the opening takes. The last
+    // line comes in a second or so after that card's first turn is due, so
+    // the card usually shows a word with the one it was by then.
+    if (
+      !opened &&
+      openingLines.every((l) => l.p >= 1 || l.to === 0) &&
+      notes.list.some((n) => n.el.classList.contains('open'))
+    ) {
+      opened = true
+      document.body.classList.add('opened')
+    }
+    requestAnimationFrame(frame)
+  }
+  requestAnimationFrame(frame)
+}
+
+boot()

@@ -1,0 +1,3 @@
+# Downloaded sources and intermediates — fetch_sources.sh and build.sh recreate them.
+.cache/
+sim/.build/
