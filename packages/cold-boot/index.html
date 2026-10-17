@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cold Boot</title>
+<meta name="description" content="Press the power button and follow an x86 PC from standby power through real mode, cache-as-RAM, DDR5 training and long mode, and the repeated wake-ups of its 31 other hardware threads — on a real Raptor Lake die floorplan.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0c14'/><path d='M10.2 9.6a9 9 0 1 0 11.6 0' fill='none' stroke='%23ffb547' stroke-width='2.8' stroke-linecap='round'/><path d='M16 5.5v10' stroke='%2358a6ff' stroke-width='2.8' stroke-linecap='round'/></svg>">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body class="intro">
+<canvas id="gl"></canvas>
+<div id="labels" aria-hidden="true"></div>
+
+<header id="brand">
+  <div class="name"><span class="pw" aria-hidden="true">⏻</span> Cold Boot</div>
+  <div class="sub">An x86 PC, from power button to OS, on a real Raptor Lake die</div>
+  <a class="credit" href="https://bsky.app/profile/lauriewired.bsky.social/post/3mxwk6hqb622v" target="_blank" rel="noopener">after a thread by LaurieWired ↗</a>
+  <div class="photo">die: i9-13900K, photo by <a href="https://commons.wikimedia.org/wiki/File:Intel@intel7(10nmESF)@RaptorLake@RPL(8P%2B16E)@i9-13900K@ES_DSCx05_poly@5xExt.jpg" target="_blank" rel="noopener">Fritzchens Fritz</a> (CC0)<span class="tc"> · <button id="truecolor" type="button" aria-pressed="false" title="Show the photograph in its own colours (T)">true colour</button></span></div>
+</header>
+
+<nav id="stages" aria-label="Stages"></nav>
+
+<div id="sr-step" class="sr-only" role="status" aria-atomic="true"></div>
+
+<aside id="panel">
+  <div id="stepmeta"></div>
+  <h2 id="title"></h2>
+  <div id="ladder"></div>
+  <div id="narration"></div>
+  <section id="code"></section>
+  <section id="regs"></section>
+  <div id="note"></div>
+  <dl id="facts"></dl>
+  <section id="memmap" hidden>
+    <h3>Physical address space <span id="memnote"></span></h3>
+    <div class="bar"></div>
+    <div class="axis"><span>0</span><span class="four">4 GiB</span><span>→</span></div>
+  </section>
+  <div id="sources"></div>
+</aside>
+
+<div id="lps" aria-label="Logical processors"></div>
+
+<div id="inset" hidden><span class="lbl"></span></div>
+
+<div id="eye" hidden>
+  <div class="eyehead"><span id="eyetitle">Read DQ eye — 2-D sweep</span><span id="eyesub"></span></div>
+  <canvas id="eyecanvas" width="560" height="300"></canvas>
+  <div class="eyeaxes"><span>← earlier · strobe delay · later →</span></div>
+</div>
+
+<footer id="timeline">
+  <div class="controls">
+    <button id="prev" type="button" title="Previous step (←)" aria-label="Previous step">⏮</button>
+    <button id="play" type="button" title="Play / pause (space)" aria-label="Play">▶</button>
+    <button id="next" type="button" title="Next step (→)" aria-label="Next step">⏭</button>
+    <button id="speed" type="button" title="Playback speed" aria-label="Playback speed 1×">1×</button>
+  </div>
+  <div id="track" role="slider" aria-label="Boot timeline" tabindex="0">
+    <div id="segments"></div>
+    <div id="ticks"></div>
+    <div id="playhead"></div>
+    <div id="tracktip" hidden></div>
+  </div>
+  <button id="bootkind" type="button" title="DDR5 training: a normal boot restores saved results; the first boot with new memory trains from scratch"><span class="long">normal boot</span><span class="short">normal</span></button>
+  <div id="clock"><span id="clockmain"></span><span id="clocksub"></span></div>
+</footer>
+
+<div id="tip" hidden></div>
+<!-- video mode (?video) only: where we are, and the narration as captions -->
+<div id="vhud" hidden aria-hidden="true"><div class="st"></div><div class="mode"></div><div class="clk"></div></div>
+<div id="vcap" hidden aria-hidden="true"><span></span></div>
+
+<div id="intro">
+  <div class="card">
+    <div class="kicker">x86 power-on, instruction by instruction</div>
+    <h1>Cold Boot</h1>
+    <p class="lede">Every time an x86 PC starts, its processor wakes up pretending to be a 1978 Intel 8086, promotes itself to a 1985 386, borrows its own cache as memory while it teaches the DDR5 how to talk, becomes a 2003 AMD64 — waking its 31 other threads again and again along the way, each time starting over as an 8086.</p>
+    <button id="power" type="button" aria-label="Press the power button"><span aria-hidden="true">⏻</span></button>
+    <div class="press">press the power button</div>
+    <p class="fine">Built on LaurieWired's <a href="https://bsky.app/profile/lauriewired.bsky.social/post/3mxwk6hqb622v" target="_blank" rel="noopener">thread on the stages of x86 boot</a>, expanded and fact-checked against Intel's manuals and the coreboot, EDK2 and Linux sources. <span class="kbd-hint">Space plays and pauses, ← → step, T shows the die photo in true colour, drag to look around.</span><span class="touch-hint">Tap ▶ to play, drag the timeline to scrub, tap “true colour” for the photo as shot, drag the scene to look around.</span></p>
+  </div>
+</div>
+
+<div id="boot"><span>⏻</span></div>
+
+<script>
+  // If the 3D view can't start (no WebGL, or the module fails to load or run
+  // before the first frame), say so on the title card rather than leaving the
+  // boot screen pulsing forever.
+  window.__coldbootNoGl = function () {
+    var b = document.body
+    if (b.classList.contains('ready') || b.classList.contains('nogl')) return
+    b.classList.add('nogl')
+    document.getElementById('boot').classList.add('gone')
+    document.getElementById('power').hidden = true
+    document.querySelector('#intro .press').textContent = 'This walkthrough needs WebGL and a current browser, and couldn’t start here.'
+  }
+  window.addEventListener('error', function (e) {
+    if (!document.body.classList.contains('ready') && ((e.target && e.target.tagName === 'SCRIPT') || e.error)) window.__coldbootNoGl()
+  }, true)
+</script>
+<script nomodule>window.__coldbootNoGl()</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
