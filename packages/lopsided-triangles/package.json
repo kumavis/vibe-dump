@@ -1,0 +1,22 @@
+{
+  "name": "@vibe-dump/lopsided-triangles",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "gallery": {
+    "title": "Lopsided Triangles",
+    "description": "An interactive tour of the October 2026 algorithm, found by Claude, that refutes the 3SUM and APSP hypotheses: the web of reductions it topples, Schönhage's ten-product identity, and a recursion pruned to only the wanted entries, run live and checked entry by entry.",
+    "tags": [
+      "tutorial"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5.5"
+    ],
+    "thinking": "max"
+  }
+}
