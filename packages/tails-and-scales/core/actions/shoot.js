@@ -26,10 +26,13 @@
 //
 // Units go by id. `fx` is the weapon's look, which the rules carry to the
 // view and never test. Nothing here ends the action (its state line in the
-// trace, the flags, the labels): through R5 main.js's finishAction does,
-// once these events have played; from R6 the engine's. The orders of §4.1
-// rule 4 (a template's draws; a blast's victims; the gaze's D3) and rule 5
-// (the dice roll even when there is no save to make) are kept exactly.
+// trace, the flags, the labels) or calls finishAction: until R6b main.js's
+// own finishAction ends it for the shipped game, once these events have
+// played; in the core, the `shoot` handler (core/commands.js) calls
+// core/engine.js's finishAction after doShoot (DESIGN §2.2's (R6a) note).
+// The orders of §4.1 rule 4 (a template's draws; a blast's victims; the
+// gaze's D3) and rule 5 (the dice roll even when there is no save to make)
+// are kept exactly.
 import { BOARD, hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot } from '../dmath.js'

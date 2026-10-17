@@ -16,6 +16,7 @@
 // "side 0 goes left" reads the edge instead, so any race can sit in either
 // seat and a mirror match is still a fair, mirrored table.
 import { RACES } from '../data/schema.js'
+import { MISSIONS } from '../data/mission.js'
 import { BOARD } from './rules.js'
 import { createRng } from './rng.js'
 import { deepFreeze } from './util.js'
@@ -26,15 +27,10 @@ import { deployArmies } from './deploy.js'
 
 export const EDGES = Object.freeze([-1, 1])
 
-// The objectives: the centre and four more, one pair in each half. (The
-// mission's own data, until a mission module holds it and RULES_ID hashes it.)
-export const OBJ_POS = deepFreeze([
-  { x: 0, z: 0 },
-  { x: -9, z: 8 },
-  { x: 9, z: -8 },
-  { x: -9, z: -8 },
-  { x: 9, z: 8 },
-])
+// The mission `setup` is fought for (data/mission.js): its objectives, its
+// default rounds and its deployment depth. Every setup plays `classic`
+// until a setup field picks another.
+export const missionOf = (setup) => MISSIONS.classic
 
 // the nav grid's cell, in inches
 export const NAV_CELL = 0.5
@@ -58,13 +54,15 @@ export const ctrl = (G, s) => G.seats[s].ctrl
 
 // A new match on a new table:
 //   setup  { board, dice, terrain: 'classic', rounds, diceMode, seats: [{ race, ctrl }, …] }
+//          (core/index.js's createMatch fills in the defaults and checks it)
 //   out    where the terrain reports what it builds and breaks (main.js plays
 //          them; null for a quiet run)
 //   onTrace(line, G)  hears every trace line as it is written (sim/ and
 //          ?debug only: it never draws and nothing reads it back)
-// The board is scattered, the nav grid built from it, and both armies made
-// and deployed, seat 0's first. The turn starts at the title: the stage is
-// 'title' until start() in main.js begins the battle on this table.
+// The board is scattered around the mission's objectives, the nav grid built
+// from it, and both armies made and deployed, seat 0's first. The turn starts
+// at the title: the stage is 'title' until start() in main.js begins the
+// battle on this table (or createMatch moves it on to the deployment).
 export function newState(setup, { out = null, onTrace = null } = {}) {
   const { W, H } = BOARD
   const G = {
@@ -73,20 +71,31 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
     seats: makeSeats(setup.seats.map((s) => s.race), setup.seats.map((s) => s.ctrl)),
     units: [],
     nextUnitId: 1,
-    objectives: OBJ_POS.map((p, i) => ({ i, x: p.x, z: p.z })),
+    objectives: missionOf(setup).objectives.map((p, i) => ({ i, x: p.x, z: p.z })),
     terrain: new Terrain(W, H),
     // derived from the terrain; rebuilt only at refreshNav's call sites
     nav: new NavGrid(W, H, NAV_CELL),
-    // stage 'title' | 'deploy' | 'battle' | 'over'; wiped: the seat wiped
-    // off the table, -1 for none
-    turn: { stage: 'title', round: 1, active: 0, first: 0, phase: 'move', vp: [0, 0], wiped: -1 },
+    // stage 'title' | 'deploy' | 'battle' | 'over'; step: where the engine's
+    // step machine stands (core/engine.js; null for a table main.js's own
+    // turn loop plays, until R6b); round and t: the round and which of its two
+    // turns; active: the seat whose turn it is; first: who won the roll-off;
+    // ph: the phase, by its index in PHASES (phaseKey); wiped: the seat
+    // wiped off the table, -1 for none; result: { win, why } once over;
+    // overtime: rounds played past setup.rounds (F4)
+    turn: { stage: 'title', step: null, round: 1, t: 0, active: 0, first: 0, ph: 0, vp: [0, 0], wiped: -1, result: null, overtime: 0 },
+    // the decision the match waits on, a human seat's (core/engine.js;
+    // DESIGN §2.1), null while the engine runs on or once the battle is over
+    pending: null,
     // the trace (the battle's fingerprint, sim/'s parity stream) and the
     // destroyed-unit lines held back until the attack that caused them ends
     journal: { trace: [], pendingLog: [] },
     out,
     onTrace,
+    // sim/'s P-prop: judge each AI command with legal() before it is applied
+    // (core/index.js's createMatch sets it; I/O, never read by the rules)
+    strict: false,
   }
-  G.terrain.generate(setup.board, G.objectives, BOARD.deploy, setup.terrain, out)
+  G.terrain.generate(setup.board, G.objectives, missionOf(setup).deploy, setup.terrain, out)
   refreshNav(G)
   for (const side of [0, 1]) for (const key of raceOf(G, side).army) G.units.push(makeUnit(G, key, side))
   deployArmies(G)

@@ -19,6 +19,9 @@ import { codeDir } from './oracle/pin.mjs'
 export const SIM = fileURLToPath(new URL('./', import.meta.url))
 export const BASE = join(SIM, 'baselines')
 const RUNNER = join(SIM, 'oracle', 'run-legacy.mjs')
+// the headless fold of the pure core (R6), which takes the same jobs and
+// reports the same way (sim/run.mjs)
+export const CORE_RUNNER = join(SIM, 'run.mjs')
 
 // ── The legacy rules ────────────────────────────────────────────────────────
 // The R0 commit: the first with the ?debug hooks. It and every commit before
@@ -66,8 +69,9 @@ let reaper = false
 // streams every trace line, shadow and battle-log write on fd 3 as it takes
 // them, so a run that crashes or is stopped at the deadline still reports
 // how far it got: { trace, shadow, written, error }, like any run that
-// stopped short, and parity names the battle and the line.
-export function runOracle(job, dir, { ms = ORACLE_TIMEOUT_MS } = {}) {
+// stopped short, and parity names the battle and the line. `runner` is the
+// legacy page under the fake DOM by default, or CORE_RUNNER, the pure core.
+export function runOracle(job, dir, { ms = ORACLE_TIMEOUT_MS, runner = RUNNER } = {}) {
   if (!reaper) {
     // killing the parent alone (timeout, kill) must not leave children spinning
     reaper = true
@@ -79,7 +83,7 @@ export function runOracle(job, dir, { ms = ORACLE_TIMEOUT_MS } = {}) {
     }
   }
   return new Promise((resolve, reject) => {
-    const p = spawn(process.execPath, [RUNNER, '--job', '-', '--dir', dir, '--progress', '3'], { stdio: ['pipe', 'pipe', 'pipe', 'pipe'] })
+    const p = spawn(process.execPath, [runner, '--job', '-', '--dir', dir, '--progress', '3'], { stdio: ['pipe', 'pipe', 'pipe', 'pipe'] })
     live.add(p)
     const part = { trace: [], shadow: [], written: [] }
     const KEY = { l: 'trace', s: 'shadow', w: 'written' }

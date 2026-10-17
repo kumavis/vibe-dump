@@ -41,7 +41,8 @@ import serpent from './races/serpent.js'
 
 export const STATS = Object.freeze(['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC'])
 export const ROLES = Object.freeze(['Troops', 'Elite', 'Fast', 'Hero', 'Monster', 'Artillery'])
-// the AI's unit roles (the order ai.js sorts its units by is its own)
+// the AI's unit roles (the order the AI plays its units in is its own:
+// core/ai/policy.js's ORDER)
 export const AI_ROLES = Object.freeze(['melee', 'raider', 'line', 'shooter', 'hero', 'artillery'])
 // unit flags; each is a boolean on every normalised type
 export const FLAGS = Object.freeze(['fly', 'big', 'hero', 'wrecker', 'burrow', 'chargeAfterAdvance', 'noCharge', 'brawler'])

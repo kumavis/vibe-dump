@@ -2,22 +2,46 @@
 // its seat's deployment.
 import { BOARD } from './rules.js'
 import { hypot } from './dmath.js'
-import { edgeOf } from './match.js'
+import { edgeOf, missionOf } from './match.js'
 import { setUnitPos } from './units.js'
 
-// Pick a spot near (x, z) inside the side's deployment zone: the strip
-// BOARD.deploy deep along its seat's edge. Cell centres only; null when
-// nowhere fits.
+// The deployment zone of seat `side`: the strip the mission's depth deep
+// along its seat's edge, as x bounds.
+function zone(G, side) {
+  const { W } = BOARD
+  const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - missionOf(G.setup).deploy)
+  return { minX: Math.min(outer, inner), maxX: Math.max(outer, inner) }
+}
+
+// May `u` be put on nav cell i during seat `side`'s deployment, with
+// `others` where they stand? Inside the zone, standable, and clear of every
+// other unit by 0.4". (freeSpot's test, cell by cell; the `place` command's
+// legality, core/commands.js.)
+function fits(G, u, i, { minX, maxX }, others) {
+  const nav = G.nav
+  const cx = nav.x(i), cz = nav.z(i)
+  if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) return false
+  if (!nav.standable(i, u.r, 'walk')) return false
+  if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false
+  return true
+}
+
+// May `u` be put on nav cell `c` in its own seat's zone, the other units
+// standing where they are? (The 2.5" a click may land from the cell is the
+// UI's own tolerance, not a rule.)
+export function placeOk(G, u, c) {
+  return Number.isInteger(c) && c >= 0 && c < G.nav.N && fits(G, u, c, zone(G, u.side), G.units.filter((o) => o !== u))
+}
+
+// Pick a spot near (x, z) inside the side's deployment zone. Cell centres
+// only; null when nowhere fits.
 export function freeSpot(G, u, x, z, side, others) {
-  const { W } = BOARD, nav = G.nav
+  const nav = G.nav
   let best = null, bd = Infinity
-  const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - BOARD.deploy)
-  const minX = Math.min(outer, inner), maxX = Math.max(outer, inner)
+  const box = zone(G, side)
   for (let i = 0; i < nav.N; i++) {
+    if (!fits(G, u, i, box, others)) continue
     const cx = nav.x(i), cz = nav.z(i)
-    if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) continue
-    if (!nav.standable(i, u.r, 'walk')) continue
-    if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) continue
     const d = hypot(cx - x, cz - z)
     if (d < bd) {
       bd = d
@@ -38,9 +62,10 @@ export function deployArmies(G) {
     const back = list.filter((u) => u.t.deployRow === 'back')
     const mid = list.filter((u) => u.t.deployRow === 'mid')
     const front = list.filter((u) => u.t.deployRow === 'front')
+    const deploy = missionOf(G.setup).deploy
     const rows = [
-      [front, W / 2 - BOARD.deploy + 1.8],
-      [mid, W / 2 - BOARD.deploy + 3.6],
+      [front, W / 2 - deploy + 1.8],
+      [mid, W / 2 - deploy + 3.6],
       [back, W / 2 - 2.4],
     ]
     for (const [row, depth] of rows) {

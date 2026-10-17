@@ -10,10 +10,13 @@
 // emit, and building an event draws nothing and changes nothing.
 //
 // Neither action ends itself (its state line in the trace, the flags, the
-// labels): through R5 main.js's finishAction does, once these events have
+// labels), and neither ever calls finishAction. Until R6b, main.js's own
+// finishAction ends the action for the shipped game, once these events have
 // played, so no state line is written while the view is behind (the ?debug
-// trace's hold: DESIGN's R5a and R5b notes); from R6 the engine's. The
-// advance roll writes no `act` line at all (§4.1 rule 8).
+// trace's hold: DESIGN's R5a and R5b notes); in the core, the command's
+// handler (core/commands.js) calls core/engine.js's finishAction after the
+// action (DESIGN §2.2's (R6a) note). The advance roll writes no `act` line
+// at all (§4.1 rule 8).
 import { BOARD, ENGAGE, roll } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { lerp } from '../util.js'
@@ -147,7 +150,7 @@ export function hold(G, u) {
 //   unit.move { u, path: [{ x, z }], L, speed, fly, stomp, smashes: [{ s, ev }], to: { x, z } }
 //
 // The view walks the unit along `path` (L long, at `speed` inches a second,
-// flying or not, stomping off as it sets out when `stomp`: all three are
+// flying or not, stomping off as it sets out when `stomp`: each of them is
 // how it looks, which the caller says) and breaks what each sample smashed
 // (`ev`, its terrain events) as the walker comes `s` along; `to` is where
 // the unit stands. Then `objectives` and `status`: the flags and labels as

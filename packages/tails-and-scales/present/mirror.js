@@ -21,7 +21,7 @@
 // read-only queries. But applyEvent folds in place: whoever keeps a mirror
 // across events copies it, and whoever is handed the player's (a handler,
 // an observer) only reads it.
-import { alive, isEngaged, controlOf } from '../core/queries.js'
+import { alive, isEngaged, controlOf, phaseKey } from '../core/queries.js'
 
 // who holds each objective, as the table shows it: nobody before the battle
 const owners = (G) => G.objectives.map((o) => (G.turn.stage === 'battle' || G.turn.stage === 'over' ? controlOf(G, o) : -1))
@@ -38,7 +38,7 @@ export function project(G) {
   }
   const chunks = {}
   for (const c of G.terrain.chunks) chunks[c.id] = { alive: c.alive, y: c.shape.y }
-  return { units, chunks, owners: owners(G), vp: [...T.vp], round: T.round, active: T.active, phase: T.phase, stage: T.stage }
+  return { units, chunks, owners: owners(G), vp: [...T.vp], round: T.round, active: T.active, phase: phaseKey(G), stage: T.stage }
 }
 
 // An empty mirror: no units, no chunks (sim/terrain-check.mjs folds the

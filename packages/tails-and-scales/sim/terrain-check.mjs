@@ -55,8 +55,9 @@
 // Until R4 it drove the working tree through R3's Scenery facade; R4 removed
 // the facade, and the check now drives Terrain and TerrainView directly
 // (Now, below). It is a standing check (DESIGN §1.1), not an R3-only one.
-// The objectives the boards keep clear of are core/match.js's OBJ_POS, held
-// to the R0 code's main.js.
+// The objectives the boards keep clear of, and the deployment depth, are
+// the classic mission's (data/mission.js; core/match.js's OBJ_POS through
+// R5), the objectives held to the R0 code's main.js.
 import { register } from 'node:module'
 import { parseArgs } from 'node:util'
 import { readFileSync } from 'node:fs'
@@ -103,7 +104,8 @@ const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
 const { TerrainView } = await imp(PKG, 'view/terrain.js')
 const { blankMirror, applyEvent } = await imp(PKG, 'present/mirror.js')
 const { smashAround } = await imp(PKG, 'core/actions/move.js')
-const { OBJ_POS } = await imp(PKG, 'core/match.js')
+const { MISSIONS } = await imp(PKG, 'data/mission.js')
+const OBJ_POS = MISSIONS.classic.objectives
 const { W, H } = BOARD
 
 // The working tree's battlefield, driven as main.js drives it: the rules'
@@ -176,7 +178,7 @@ mine.smash = (S, x, z, dir, r) => {
 const OBJ_RE = /const OBJ_POS = (\[[^\]]*\])/
 const objText = readFileSync(join(LEG, 'main.js'), 'utf8').match(OBJ_RE)?.[1]
 if (!objText || JSON.stringify(new Function(`return ${objText}`)()) !== JSON.stringify(OBJ_POS)) {
-  throw new Error("OBJ_POS: not found in the R0 code's main.js, or it differs from core/match.js's")
+  throw new Error("OBJ_POS: not found in the R0 code's main.js, or it differs from data/mission.js's classic objectives")
 }
 
 // --seeds N or A-B (whole numbers, A <= B); --ops and --max whole numbers
@@ -358,7 +360,7 @@ async function board(seed) {
   const drawsL = globalThis.__layoutDraws
   globalThis.__layoutDraws = []
   const M = side(mine, rseed)
-  M.S.generate(seed, OBJ_POS, BOARD.deploy)
+  M.S.generate(seed, OBJ_POS, MISSIONS.classic.deploy)
   const drawsM = globalThis.__layoutDraws
   globalThis.__layoutDraws = null
   same(`${where} layout streams`, drawsL.length, drawsM.length)

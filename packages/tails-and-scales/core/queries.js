@@ -8,7 +8,7 @@
 // This module is also the query set the ?debug surface and the AI reach for:
 // it re-exports the move, shoot, charge and deploy queries and the dice
 // stream's fingerprint (rngState).
-import { ENGAGE, AURA, OBJECTIVE_RANGE } from './rules.js'
+import { ENGAGE, AURA, OBJECTIVE_RANGE, PHASES } from './rules.js'
 import { hypot } from './dmath.js'
 import { canShoot, shootTargets } from './actions/shoot.js'
 import { canCharge, chargeTargets } from './actions/charge.js'
@@ -85,10 +85,15 @@ export const statusOf = (G) => ({
 })
 
 // ── Who can act ─────────────────────────────────────────────────────────────
+// The key of the turn's phase ('move' … 'morale'). G.turn.ph is its index in
+// PHASES; once a turn's last phase is over (the engine's turn end and round
+// scoring) it is one past the end, and the phase is still the last one run.
+export const phaseKey = (G) => PHASES[Math.min(G.turn.ph, PHASES.length - 1)].key
+
 // Something left to do for `u` in the current phase of its own turn.
 export function canAct(G, u) {
   if (!alive(u) || u.side !== G.turn.active) return false
-  switch (G.turn.phase) {
+  switch (phaseKey(G)) {
     case 'move': return !u.flags.moved
     case 'shoot': return canShoot(G, u) && shootTargets(G, u).length > 0
     case 'charge': return canCharge(G, u) && chargeTargets(G, u).length > 0

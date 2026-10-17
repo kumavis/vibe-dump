@@ -15,8 +15,9 @@
 //    drifted from the test it replaced fails here, by unit and field.
 // 2. The races: names, shorts, icons, colours, the death voice and gore, and
 //    armies as the legacy SIDES, ARMIES and killModel had them; every race's
-//    voice is a sound sfx.js can play; the AI roles are the ones ai.js
-//    orders by.
+//    voice is a sound sfx.js can play; the AI roles are the ones the AI
+//    orders by (core/ai/policy.js's ORDER since R6a, ai.js's before), in the
+//    legacy ai.js's order.
 // 3. defineRace refuses malformed race data (one broken field at a time),
 //    and the registry refuses two races with one key.
 // 4. Seats: makeSeats seats any race in either seat, gives the edge by seat
@@ -27,11 +28,15 @@
 //    stat, a weapon, a flag, the army, a constant, the phase order, a unit
 //    or race whose key happens to be a presentation word, the terrain sets:
 //    a feature's weight or footprint, the centre rule, the pair count, a
-//    spacing rule, a feature table reordered, a new set) and stays put when
-//    only presentation does (names, shorts, icon, ability text, look, a
-//    weapon's name or fx).
+//    spacing rule, a feature table reordered, a new set; from R6a the
+//    missions: an objective moved, the default rounds, the deployment depth,
+//    a new mission) and stays put when only presentation does (names,
+//    shorts, icon, ability text, look, a weapon's name or fx). The classic
+//    mission's rounds and depth are the ruleset's ROUNDS and BOARD.deploy.
 // 6. Every table core/ and data/ export is deeply frozen: no module-level
-//    mutable state in consensus code (DESIGN §1.2, §4.1 rule 13).
+//    mutable state in consensus code (DESIGN §1.2, §4.1 rule 13). (A
+//    module namespace re-exported whole, core/index.js's `q`, counts as
+//    frozen when everything in it is: no importer can assign its bindings.)
 // 7. The terrain sets: checkSet (core/terrain/recipes.js, which sets.js runs
 //    on every set as it loads) passes classic and refuses a set with a broken
 //    field, one at a time: a feature or centre piece that doesn't exist, a
@@ -68,6 +73,8 @@ const { TYPES, ARMIES, SIDES, CLASSIC } = await imp(PKG, 'data/compat.js')
 const { RACES, AI_ROLES, defineRace, raceRegistry } = await imp(PKG, 'data/schema.js')
 const { RULES_ID, rulesId, rulesData, CONSTANTS } = await imp(PKG, 'core/version.js')
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
+const { MISSIONS } = await imp(PKG, 'data/mission.js')
+const { BOARD, ROUNDS } = await imp(PKG, 'core/rules.js')
 const { checkSet } = await imp(PKG, 'core/terrain/recipes.js')
 const { makeSeats } = await imp(PKG, 'core/match.js')
 const raw = { squirrel: (await imp(PKG, 'data/races/squirrel.js')).default, serpent: (await imp(PKG, 'data/races/serpent.js')).default }
@@ -175,9 +182,10 @@ for (const side of [0, 1]) {
 const kit = [...(/^const S = \{\n([\s\S]*?)^\}/m.exec(readFileSync(join(PKG, 'sfx.js'), 'utf8'))?.[1] ?? '').matchAll(/^ {2}(\w+)\(/gm)].map((m) => m[1])
 const mute = Object.values(RACES).filter((r) => !kit.includes(r.look.voice))
 check(kit.length && !mute.length, `every race's voice is a sound sfx.js plays (${Object.values(RACES).map((r) => `${r.key} ${r.look.voice}`).join(', ')})`, kit.length ? mute.map((r) => `${r.key}: no "${r.look.voice}" in ${kit.join(', ')}`).join('; ') : "no `const S = {` kit in sfx.js")
-const order = literal(readFileSync(join(PKG, 'ai.js'), 'utf8'), 'ORDER')
-check(isDeepStrictEqual(order, literal(legacyAi, 'ORDER')), "ai.js's ORDER is unchanged")
-check(isDeepStrictEqual([...AI_ROLES].sort(), [...order].sort()), 'the schema accepts exactly the AI roles ai.js orders by', `${AI_ROLES} v ${order}`)
+const { ORDER } = await imp(PKG, 'core/ai/policy.js')
+const order = [...ORDER]
+check(isDeepStrictEqual(order, literal(legacyAi, 'ORDER')), "the AI's role order (core/ai/policy.js ORDER) is the legacy ai.js's")
+check(isDeepStrictEqual([...AI_ROLES].sort(), [...order].sort()), 'the schema accepts exactly the AI roles the AI orders by', `${AI_ROLES} v ${order}`)
 
 // ── 3. validation ───────────────────────────────────────────────────────────
 console.log('\n3. defineRace refuses malformed data')
@@ -248,6 +256,12 @@ const classic = (edit) => {
   edit(c)
   return rulesId({ sets: { ...SETS, classic: c } })
 }
+// the classic mission with one edit (a copy: the real one is frozen)
+const mission = (edit) => {
+  const m = structuredClone(MISSIONS.classic)
+  edit(m)
+  return rulesId({ missions: { ...MISSIONS, classic: m } })
+}
 const variant = (race, edit) => {
   const def = structuredClone(raw[race])
   edit(def)
@@ -276,9 +290,18 @@ const moves = [
   ['a spacing rule (classic gap 2.1 → 2.0)', () => classic((c) => (c.gap = 2.0))],
   ['the forest kept out of deployment no more', () => classic((c) => (c.notInDeploy = []))],
   ['a new terrain set', () => rulesId({ sets: { ...SETS, fortified: structuredClone(SETS.classic) } })],
+  // the missions (R6a): where the objectives stand, the rounds, the zones
+  ['an objective moved (classic centre 0,0 → 0,1)', () => mission((m) => (m.objectives[0].z = 1))],
+  ['an objective added', () => mission((m) => m.objectives.push({ x: 0, z: 10 }))],
+  ['the objectives reordered', () => mission((m) => m.objectives.reverse())],
+  ['the default rounds (classic 5 → 6)', () => mission((m) => (m.rounds = 6))],
+  ['the deployment depth (classic 8 → 9)', () => mission((m) => (m.deploy = 9))],
+  ['a new mission', () => rulesId({ missions: { ...MISSIONS, raid: structuredClone(MISSIONS.classic) } })],
 ]
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
 check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
+check(rulesData().missions === MISSIONS, 'hashes the missions (data/mission.js)')
+check(MISSIONS.classic.rounds === ROUNDS && MISSIONS.classic.deploy === BOARD.deploy, "the classic mission's rounds and depth are the ruleset's ROUNDS and BOARD.deploy")
 // a unit or race whose key is a presentation word is rules all the same:
 // RULES_ID strips fields from records, never keys from the race and unit maps
 const retune = (t) => (t.stats = t.stats.replace('M6', 'M7'))
@@ -305,6 +328,8 @@ const stays = [
   ['a weapon fx', () => variant('serpent', (d) => (d.units.engine.ranged.fx = 'bomb'))],
   // the control for the set edits above: a copy of the sets hashes the same
   ['an unchanged copy of the terrain sets', () => classic(() => {})],
+  // and for the mission edits
+  ['an unchanged copy of the missions', () => mission(() => {})],
 ]
 for (const [what, id] of stays) check(id() === RULES_ID, `stays on ${what}`)
 
@@ -312,8 +337,9 @@ for (const [what, id] of stays) check(id() === RULES_ID, `stays on ${what}`)
 console.log('\n6. every table core/ and data/ export is deeply frozen')
 // (not data/races/*.js: a race file's definition is defineRace's input, which
 // it copies; RACES holds the frozen copy, and nothing else reads them)
+const isNamespace = (v) => Object.prototype.toString.call(v) === '[object Module]'
 const deepFrozen = (v, seen = new Set()) => !v || typeof v !== 'object' || seen.has(v) ||
-  (seen.add(v), Object.isFrozen(v) && Object.values(v).every((x) => deepFrozen(x, seen)))
+  (seen.add(v), (Object.isFrozen(v) || isNamespace(v)) && Object.values(v).every((x) => deepFrozen(x, seen)))
 // every module at any depth under core/ and data/, so a new subdirectory
 // can't drop out of the check
 const consensus = ['core', 'data'].flatMap((d) => readdirSync(join(PKG, d), { recursive: true }).map((f) => `${d}/${f}`))

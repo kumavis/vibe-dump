@@ -27,7 +27,8 @@
 // rule-bearing (RULES_ID hashes them), so testing them is the point.
 //
 // It covers main.js and ai.js (rules code until R5-R6 moves the rest of it
-// into core/), the root rules.js where a checkout has one (the R0 code's, for
+// into core/; R6a moved ai.js to core/ai/, so only an older checkout has
+// one), the root rules.js where a checkout has one (the R0 code's, for
 // --self-test; R4 removed the working tree's re-export), and everything under
 // core/ and data/. main.js still holds the view too, so the presentation
 // sites it keeps are listed below,
@@ -93,9 +94,7 @@ const ALLOW = [
   ['main.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
   ['main.js', "if (ph.key === 'fight')", 1, 'a phase key, not a unit or race key'],
   ['main.js', "} else if (ph.key === 'morale')", 1, 'a phase key, not a unit or race key'],
-  ['main.js', 'PHASES.find((p) => p.key === T.phase)', 1, "a phase key, for the End button's label"],
   ['main.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
-  ['main.js', 'T.phase = ph.key', 1, 'a phase key, not a unit or race key'],
   ['main.js', "line.startsWith('log ')", 1, "a trace line's tag, in the ?debug block (a waiting state line keeps a fingerprint): not a unit or race key"],
   ['core/actions/shoot.js', 'fx: w.fx', 3, "the weapon's look, carried to the view in the volley, blast.fire and blast.land events and never tested there: presentation"],
   ['data/compat.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],

@@ -4,15 +4,17 @@
 // with its army and unit types (stat lines, weapons, flags and the derived
 // fields), minus what is only presentation (`name`, `short`, `icon`,
 // `look`, `abilities` text and a weapon's `fx`), plus the table constants,
-// the phase order and the terrain sets (core/terrain/sets.js: the feature
+// the phase order, the terrain sets (core/terrain/sets.js: the feature
 // table, the centre rule and the spacing rules every board is scattered
-// by). A stat retune changes it, so a match started under other rules can be
-// told apart instead of silently playing differently; a renamed unit
-// doesn't. (CORE_VERSION, the manual number for changes to the rules code
-// itself, recipes included, joins it here at R8; the mission's objectives
-// join the hash when they move to data/.)
+// by) and the missions (data/mission.js: the objectives, the default rounds
+// and the deployment depth). A stat retune changes it, so a match started
+// under other rules can be told apart instead of silently playing
+// differently; a renamed unit doesn't. (CORE_VERSION, the manual number for
+// changes to the rules code itself, recipes and AI included, joins it here
+// at R8.)
 import { BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, AURA, PHASES } from './rules.js'
 import { RACES } from '../data/schema.js'
+import { MISSIONS } from '../data/mission.js'
 import { SETS } from './terrain/sets.js'
 import { cyrb53, canonicalJSON } from './util.js'
 
@@ -30,10 +32,11 @@ export const CONSTANTS = Object.freeze({ BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_
 // show that a change to the rules moves the hash and a rename doesn't.
 // The races and each race's units are maps keyed by race and unit key: only
 // their records lose presentation fields, never a key (a unit keyed 'look' is
-// rules like any other). The terrain sets are rules through and through
-// (every number in them places scenery), so they go in whole.
-export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key), sets = SETS } = {}) {
-  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets }
+// rules like any other). The terrain sets and the missions are rules through
+// and through (every number in them places scenery, an objective or a
+// zone), so they go in whole.
+export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key), sets = SETS, missions = MISSIONS } = {}) {
+  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets, missions }
 }
 
 export const rulesId = (opts) => cyrb53(canonicalJSON(rulesData(opts))).toString(36)

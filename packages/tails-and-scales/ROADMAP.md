@@ -28,7 +28,12 @@ the commit, and add whatever the work turned up.
   (and `--self-test`), from R4 `node sim/rematch-check.mjs` (two battles
   in one page don't touch each other, and every event is played), and from
   R5 `node sim/present-check.mjs` (and `--self-test`: what the table shows,
-  folded from the match's events, is the match at every action). A step
+  folded from the match's events, is the match at every action), and from
+  R6a `node sim/parity.mjs --core` (the pure core folds the whole corpus
+  headless, exactly, with three.js and the fake DOM refused),
+  `node sim/mutation.mjs --core` (one swapped die fails that gate too) and
+  `node sim/property.mjs` (and `--self-test`: P-prop, what holds for any
+  play of the core). A step
   that changes what one of them reads ports it in the same step (DESIGN's
   §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
@@ -304,6 +309,85 @@ step keeps the game playable.
     (DESIGN's R5c notes).
 - [ ] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as
   generators, `LocalStore` + `Session`; the core runs headless in Node.
+  In two passes, the engine built beside the old loop and switched only at
+  full parity: R6a (the pure core, proved headless), R6b (the game onto it
+  through `LocalStore` and `Session`, the legacy pieces retired).
+  - [x] **R6a** landed: `core/engine.js` (the battle loop unrolled into
+    a step machine: the roll-off, the turns and their phases, the score,
+    the end, the AI played inside it), `core/commands.js` (what each seat
+    may send, `legal()` with the dice locked, and the handlers),
+    `core/index.js` (`createMatch`, `legal`, `apply`, `pendingSeats`,
+    `preview`, `q`), the AI as generators in `core/ai/` (ai.js is gone:
+    the shipped game's old loop drives the same generators, so the game
+    and the fold run one AI), and `data/mission.js` (the objectives, the
+    rounds and the deployment depth, now in `RULES_ID`). The turn has its
+    final shape in both loops (`ph`, read through `phaseKey`). Checks: the
+    new `node sim/parity.mjs --core` folds every corpus battle through the
+    pure core in plain Node (`sim/run.mjs` refuses three.js and the fake
+    DOM), 40/40 the same, the battle log and the full-precision shadows
+    rebuilt from the match; a battle takes 0.21 s folded cold in a fresh
+    process, 0.07 s warm; `node sim/mutation.mjs --core` shows one
+    swapped die fails it at the right line (33 of 40 battles); the new
+    `sim/property.mjs` (P-prop: asking `legal()` or a preview never rolls
+    or changes the match, the AI never sends an illegal command, random
+    legal play never throws, two matches in one process never touch, and
+    a quiet fold, with no events kept, plays the same battle; its
+    self-test catches thirteen broken cores: six from the first pass, two
+    added in review round 1, three in round 2 and two in round 3); and
+    every standing check, the
+    page's parity included, plus P-browser over the whole corpus, since
+    the shipped game's AI now comes from the generators (run before the
+    review fixes, and again after fixer rounds 2 and 3, 40/40).
+    Turned up: the engine's round stops at the last round where the old
+    loop overshot by one, which only the legacy shadow sees (the G adapter
+    keeps the quirk); a preview has to lock the dice through the core,
+    since nothing above it may touch them (`preview`, for R6b's Session);
+    and the charge's decision is opened by its handler, so the actions
+    never touch the pending decision (DESIGN's R6a notes, for approval,
+    with the list of what R6b must do).
+    Review fixes (fixer round 1): the charge proposal is marked in the R6
+    row and in §2.2's charge bullets, with what R6b does either way, for
+    the lead's decision now; P-prop also folds the engine's own events
+    into the mirror and holds it to the match at every act, decision and
+    end (the engine's stream had no check until R6b's Session); `legal()`
+    refuses a body carrying a field its kind doesn't take, and a
+    concession once a side is wiped out (which handed the win to an army
+    with nothing standing); the AI's phase decision is no longer stored
+    in the pending decision while it plays; `pendingSeats` answers a
+    copy, a setup's empty fields take their defaults, main.js's zone
+    meshes read the mission's depth, the headless guard names what it
+    refused, and DESIGN says where the battle log comes from now (a quiet
+    fold has none, for R6b and R8 to keep).
+    Review fixes (fixer round 2): the headless fold held a concession to
+    the seat the match was waiting on, so a hotseat log in which the other
+    player concedes (legal at any time) would not fold; it now lets
+    `legal()` judge a concession alone, as the Folder will. P-prop applies
+    such concessions (in random hotseat games, and in a fixed case in the
+    deployment and in the battle), folds every random game's log again
+    through the headless fold, checks that asking emits no event and that
+    the game-over event says the result and the rounds played (0 for a
+    concession in the deployment, which said 1); its self-test catches
+    three more broken cores. The setup keeps its own key order, DESIGN's API
+    listing names `fullSetup`, the actions' headers say who ends an action
+    until R6b and after, and the record of checks says which tree each ran
+    on.
+    Review fixes (fixer round 3): DESIGN's Folder (§2.6) handed `legal()`
+    the whole log entry, envelope and all, which the strict `legal()`
+    would refuse at its first field; it now hands it the body,
+    `match/envelope.js` `bodyOf(e)` (the entry less the envelope's fixed
+    `ENVELOPE_KEYS`, so a stray field still reaches `legal()` and is
+    refused), with R8's row and R6b's store saying the same. The match's
+    state holds its pending decision (null) and `strict` from the start,
+    so an all-AI battle never runs with the key missing; a setup asking
+    for more than 99 rounds is refused, since `createMatch` plays an
+    all-AI battle to its end before it returns; P-prop checks the setups
+    the core refuses and the state's shape (two more broken cores caught);
+    the API listings mark what joins at R8.
+  - [ ] **R6b**: the Session and `LocalStore`, input as commands, the
+    `?debug` surface over the Session (carrying the state with each
+    waiting state line), P-present over the Session, `data/compat.js`
+    deleted, `sim/boundaries.mjs`, parity's default on the core, P-browser
+    over the whole corpus.
 - [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,
   input tools, `ui/*`, HUD model, template cache.
 - [ ] **R8 Netplay seams.** `stateHash`, envelopes, `Folder` (the replicated

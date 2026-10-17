@@ -7,6 +7,8 @@
 // the PIN commit can still run the gate.
 //
 //   npm run parity -w @vibe-dump/tails-and-scales     the working tree, in Node
+//   node sim/parity.mjs --core                        the working tree's pure core, folded
+//                                                     headless (sim/run.mjs: no fake DOM, no three)
 //   node sim/parity.mjs --browser                     the same in Chromium (P-browser)
 //   node sim/parity.mjs --pin | --ref <ref> | --dir <packageDir>   other code
 //   node sim/parity.mjs --only ai,hotseat,4242-99     a subset: kinds, modes or ids
@@ -22,6 +24,13 @@
 // to. An --only token that names no battle is an error (exit 2), never an
 // empty pass.
 //
+// --core (R6a) replays the corpus through the pure core instead of the page:
+// each AI pair is createMatch from its seeds, each human log createMatch
+// then its entries applied for the seats they name, and the three streams
+// rebuilt from the match (the G adapter, sim/run.mjs), judged exactly as
+// the page's are. It takes --only, --dump, --dir and --ref; R6b, which
+// switches the game onto the core, makes it the default.
+//
 // Re-record only for a change that is *meant* to alter play, and say so in
 // the commit: first in Node, then with --browser, which records only
 // Chromium's shadow (`webShadow`, where it differs from Node's) and refuses
@@ -32,15 +41,21 @@ import { parseArgs } from 'node:util'
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
-import { loadCorpus, select, savePairs, saveHuman, humanRecord, runOracle, pool, CPUS, firstDiff, hashLines, verdict, explain, tag, buildApp } from './lib.mjs'
+import { loadCorpus, select, savePairs, saveHuman, humanRecord, runOracle, pool, CPUS, firstDiff, hashLines, verdict, explain, tag, buildApp, CORE_RUNNER } from './lib.mjs'
 import { codeDir, readPin, PKG } from './oracle/pin.mjs'
 
 const { values: a } = parseArgs({
   options: {
     browser: { type: 'boolean' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' },
-    only: { type: 'string' }, dump: { type: 'string' }, record: { type: 'boolean' }, dist: { type: 'string' },
+    only: { type: 'string' }, dump: { type: 'string' }, record: { type: 'boolean' }, dist: { type: 'string' }, core: { type: 'boolean' },
   },
 })
+// the pure core is folded in Node, never recorded from (until R6b moves the
+// references onto it), and the PIN's code has none
+if (a.core && (a.browser || a.record || a.pin)) {
+  console.error('parity: --core folds the pure core in Node; it takes no --browser, --record or --pin')
+  process.exit(2)
+}
 const { pairs, items: all } = loadCorpus()
 const items = select(all, a.only)
 if (!items.length) {
@@ -50,7 +65,7 @@ if (!items.length) {
 const pin = readPin()
 const dir = a.dir ? resolve(a.dir) : codeDir(a.pin ? pin : a.ref ?? 'WORKTREE')
 const code = a.dir ? dir : a.pin ? `the PIN (${pin})` : a.ref ? `ref ${a.ref}` : 'the working tree'
-const what = a.browser ? `Chromium on ${a.dist ? resolve(a.dist) : `a fresh build of ${code}`}` : code
+const what = a.browser ? `Chromium on ${a.dist ? resolve(a.dist) : `a fresh build of ${code}`}` : a.core ? `the pure core of ${code}, folded headless` : code
 console.log(`parity: ${items.length} battles (${items.filter((i) => i.kind === 'ai').length} AI, ${items.filter((i) => i.kind === 'human').length} human) on ${what}`)
 if (pin === 'WORKTREE') console.log('  (sim/oracle/PIN is still WORKTREE, so references come from the working tree, not frozen code)')
 const engines = pairs.engines ?? {}
@@ -86,7 +101,7 @@ if (a.browser) {
     console.error(`not recording: the corpus's shadow comes from Node ${engines.node}, this is ${running}; re-record all of it (no --only), or use that Node`)
     process.exit(2)
   }
-  results = await pool(items, CPUS, (it) => runOracle(it.job, dir).catch((e) => ({ trace: [], shadow: [], written: [], error: e.message }))
+  results = await pool(items, CPUS, (it) => runOracle(it.job, dir, a.core ? { runner: CORE_RUNNER } : {}).catch((e) => ({ trace: [], shadow: [], written: [], error: e.message }))
     .then((r) => (report(r, it), r)))
 }
 if (tmpBuild) rmSync(tmpBuild, { recursive: true, force: true })

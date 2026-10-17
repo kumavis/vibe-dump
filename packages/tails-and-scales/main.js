@@ -1,15 +1,16 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
-  BOARD, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, PHASES,
+  BOARD, CHARGE_RANGE, OBJECTIVE_RANGE, PHASES,
   roll, passes, woundNeed, saveNeed, attackCount, expected, p2D6,
 } from './core/rules.js'
 import { sidesFor, isMirror, CLASSIC } from './data/compat.js'
 import { RACES } from './data/schema.js'
-import { EDGES, OBJ_POS, NAV_CELL, makeSeats, edgeOf, ctrl, newState, startMatch, refreshNav } from './core/match.js'
+import { MISSIONS } from './data/mission.js'
+import { EDGES, NAV_CELL, makeSeats, edgeOf, ctrl, newState, startMatch, refreshNav } from './core/match.js'
 import { setUnitPos } from './core/units.js'
 import {
-  alive, gap, isEngaged, eyeY, chestY, inCover, controlOf, ownersOf, statusOf,
+  alive, gap, isEngaged, eyeY, chestY, inCover, controlOf, ownersOf, statusOf, phaseKey,
   canAct, anyCanAct, movePlan, validEnd, nearestValid, freeSpot, shotInfo, shootTargets, chargeTargets, chargePlan, rngState,
 } from './core/queries.js'
 import { emit, drain, log as logLine, flush, traceState } from './core/journal.js'
@@ -26,7 +27,7 @@ import { EventPlayer } from './view/player.js'
 import { FX } from './fx.js'
 import { buildModel, M } from './models.js'
 import { clock, tween, wait, stepTweens, easeOut, easeInOut, wrapAngle, lerp } from './util.js'
-import { aiPhase } from './ai.js'
+import { aiPhase } from './core/ai/policy.js'
 import { sfx, unlock, toggleMute, isMuted } from './sfx.js'
 import { hypot } from './core/dmath.js'
 
@@ -46,7 +47,8 @@ import { hypot } from './core/dmath.js'
 // match state they act on is G (core/match.js): the units, the terrain, the
 // turn, the journal; the rules' questions about it are core/queries.js, its
 // constants and dice core/rules.js, the races data/, movement core/nav.js,
-// the battlefield core/terrain/ (its meshes view/terrain.js), the AI ai.js.
+// the battlefield core/terrain/ (its meshes view/terrain.js), the AI
+// core/ai/ (its generators, played here by aiTurn).
 // The rules report what happens as events in G.out (DESIGN §2.3), which the
 // player (view/player.js) plays here at the table's pace, folding each into
 // the mirror (present/mirror.js): the match as shown, which the figures,
@@ -180,18 +182,20 @@ scene.add(table)
 }
 
 // deployment zones, one along each seat's edge, in the seat's colour (set by
-// paintSeats once the seats are known)
+// paintSeats once the seats are known), as deep as the mission's (the rules'
+// zone, core/deploy.js)
 const zoneMats = [], zoneLineMats = []
+const DEPLOY = MISSIONS.classic.deploy
 for (const s of [0, 1]) {
   const sx = EDGES[s]
   const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.07, depthWrite: false })
   zoneMats.push(mat)
-  const z = new THREE.Mesh(new THREE.PlaneGeometry(BOARD.deploy, H).rotateX(-Math.PI / 2), mat)
-  z.position.set(sx * (W / 2 - BOARD.deploy / 2), 0.008, 0)
+  const z = new THREE.Mesh(new THREE.PlaneGeometry(DEPLOY, H).rotateX(-Math.PI / 2), mat)
+  z.position.set(sx * (W / 2 - DEPLOY / 2), 0.008, 0)
   z.renderOrder = 1
   scene.add(z)
   const pts = []
-  for (let zz = -H / 2; zz < H / 2; zz += 1) pts.push(new THREE.Vector3(sx * (W / 2 - BOARD.deploy), 0.02, zz), new THREE.Vector3(sx * (W / 2 - BOARD.deploy), 0.02, zz + 0.5))
+  for (let zz = -H / 2; zz < H / 2; zz += 1) pts.push(new THREE.Vector3(sx * (W / 2 - DEPLOY), 0.02, zz), new THREE.Vector3(sx * (W / 2 - DEPLOY), 0.02, zz + 0.5))
   const lineMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.5 })
   zoneLineMats.push(lineMat)
   scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), lineMat))
@@ -225,8 +229,9 @@ function scatterTufts() {
 
 // ── Objectives ──────────────────────────────────────────────────────────────
 // Each objective's marker, flag and ring (the objectives themselves are the
-// match's, G.objectives, at OBJ_POS); `owner` is whose colours it shows.
-const objViews = OBJ_POS.map((p, i) => {
+// match's, G.objectives, where the classic mission puts them:
+// data/mission.js); `owner` is whose colours it shows.
+const objViews = MISSIONS.classic.objectives.map((p, i) => {
   const g = new THREE.Group()
   g.position.set(p.x, 0, p.z)
   const stone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 0.16, 8), M('#8a8478'))
@@ -1015,9 +1020,28 @@ function focus(x, z) {
   }, easeInOut)
 }
 
-// ── What the AI acts through ────────────────────────────────────────────────
-// (it reads the match itself, with the core queries)
-const act = { doMove, doAdvance, doShoot, doCharge, focus }
+// ── The AI ──────────────────────────────────────────────────────────────────
+// An AI phase is core/ai/policy.js's generator, which reads the match with
+// the core queries and yields each command it decides on (units by id,
+// places by nav cell). Each is played here through the same actions a click
+// makes, ended once its events have played, before the generator is asked
+// for the next; what it shows on the way (a camera swing, the beats between
+// units: `focus` and `pause` events) is played before each command and
+// after the last. The draws stay between the same actions as ever. (R6b:
+// core/engine.js's runAI drives the same generators inside the fold.)
+const unitById = (id) => G.units.find((u) => u.id === id)
+async function aiTurn(side, phase) {
+  for (const cmd of aiPhase(G, side, phase)) {
+    await show()
+    const u = unitById(cmd.u)
+    if (cmd.t === 'advance') await doAdvance(u)
+    else if (cmd.t === 'move') await doMove(u, cmd.c)
+    else if (cmd.t === 'shoot') await doShoot(u, unitById(cmd.tg))
+    else if (cmd.t === 'charge') await doCharge(u, unitById(cmd.tg), { auto: true })
+    else throw new Error(`the AI asked for "${cmd.t}", which no seat can play`)
+  }
+  await show()
+}
 
 // ── Turn loop ───────────────────────────────────────────────────────────────
 let phaseResolve = null
@@ -1061,9 +1085,9 @@ async function playerTurn(side) {
     u.lost = 0
     if (u.side === side) u.flags = {}
   }
-  for (const ph of PHASES) {
-    T.phase = ph.key
-    emit(G, 'phase.start', { side, phase: T.phase, round: T.round })
+  for (const [i, ph] of PHASES.entries()) {
+    T.ph = i
+    emit(G, 'phase.start', { side, phase: phaseKey(G), round: T.round })
     show()
     select(null)
     tray.el.classList.remove('show')
@@ -1084,7 +1108,7 @@ async function playerTurn(side) {
       phaseResolve = null
       S.waiting = false
     } else {
-      await aiPhase(G, side, ph.key, act)
+      await aiTurn(side, phaseKey(G))
     }
     traceState(G, `phase ${side}:${ph.key}`)
     checkWipe()
@@ -1205,7 +1229,7 @@ async function click({ unit, ground }) {
     } else showCard(unit)
     return
   }
-  if (T.phase === 'move' && sel && ground) {
+  if (phaseKey(G) === 'move' && sel && ground) {
     const i = nearestValid(G, S.reach, ground.x, ground.z)
     if (i >= 0) {
       clearOverlay()
@@ -1213,11 +1237,11 @@ async function click({ unit, ground }) {
     }
     return
   }
-  if (T.phase === 'shoot' && sel && unit && unit.side !== sel.side) {
+  if (phaseKey(G) === 'shoot' && sel && unit && unit.side !== sel.side) {
     if (shotInfo(G, sel, unit).ok) await doShoot(sel, unit)
     return
   }
-  if (T.phase === 'charge' && sel && unit && unit.side !== sel.side) {
+  if (phaseKey(G) === 'charge' && sel && unit && unit.side !== sel.side) {
     if (chargeTargets(G, sel).includes(unit) && chargePlan(G, sel, unit)) await doCharge(sel, unit)
     return
   }
@@ -1251,12 +1275,12 @@ function select(u) {
   S.sel = u
   S.reach = null
   clearOverlay()
-  if (u && T.stage === 'battle' && T.phase === 'move' && !u.flags.moved) {
+  if (u && T.stage === 'battle' && phaseKey(G) === 'move' && !u.flags.moved) {
     S.reach = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
     paintReach(S.reach)
   }
-  if (u && T.phase === 'shoot' && u.t.ranged) showRange(u, u.t.ranged.range)
-  if (u && T.phase === 'charge') showRange(u, CHARGE_RANGE)
+  if (u && phaseKey(G) === 'shoot' && u.t.ranged) showRange(u, u.t.ranged.range)
+  if (u && phaseKey(G) === 'charge') showRange(u, CHARGE_RANGE)
   showCard(u)
   refreshUI()
 }
@@ -1316,7 +1340,7 @@ function showRange(u, range) {
   rangeRing.position.x = u.pos.x
   rangeRing.position.z = u.pos.z
   rangeRing.scale.setScalar(u.r + range)
-  rangeRing.material.color.set(G.turn.phase === 'charge' ? '#ffb070' : '#ffffff')
+  rangeRing.material.color.set(phaseKey(G) === 'charge' ? '#ffb070' : '#ffffff')
   rangeRing.visible = true
 }
 
@@ -1365,7 +1389,7 @@ function hover() {
       text = `End charge here · ${pk.plan.res.dist[i].toFixed(1)}" of ${pk.rolled}"`
     } else text = `✖ out of reach — pick a spot in the orange area`
   } else if (T.stage === 'battle' && myTurn() && sel) {
-    if (T.phase === 'move' && S.reach && h.ground && !h.unit) {
+    if (phaseKey(G) === 'move' && S.reach && h.ground && !h.unit) {
       const i = nearestValid(G, S.reach, h.ground.x, h.ground.z)
       if (i >= 0) {
         const pts = nav.path(S.reach.res, i, sel.r, S.reach.mode === 'fly' ? null : S.reach.forbid)
@@ -1377,10 +1401,10 @@ function hover() {
         ghost.visible = true
         text = `${S.reach.res.dist[i].toFixed(1)}" of ${S.reach.max}"`
       }
-    } else if (T.phase === 'shoot' && h.unit && h.unit.side !== sel.side) {
+    } else if (phaseKey(G) === 'shoot' && h.unit && h.unit.side !== sel.side) {
       const info = shotInfo(G, sel, h.unit)
       text = info.ok ? oddsText(sel, h.unit, info) : `✖ ${info.why}`
-    } else if (T.phase === 'charge' && h.unit && h.unit.side !== sel.side) {
+    } else if (phaseKey(G) === 'charge' && h.unit && h.unit.side !== sel.side) {
       if (!chargeTargets(G, sel).includes(h.unit)) text = `✖ out of charge range (${gap(sel, h.unit).toFixed(1)}")`
       else {
         const p = chargePlan(G, sel, h.unit)
@@ -1559,7 +1583,7 @@ function refreshUI() {
   $('#vp1').textContent = M.vp[1]
   $('#round').textContent = M.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(M.round, G.setup.rounds)} / ${G.setup.rounds}`
   document.querySelectorAll('#phases .ph').forEach((el) => {
-    el.classList.toggle('on', T.stage === 'battle' && el.dataset.k === T.phase)
+    el.classList.toggle('on', T.stage === 'battle' && el.dataset.k === phaseKey(G))
   })
   $('#sideA').classList.toggle('active', T.stage === 'battle' && T.active === 0)
   $('#sideB').classList.toggle('active', T.stage === 'battle' && T.active === 1)
@@ -1568,11 +1592,11 @@ function refreshUI() {
   const picking = !!S.chargePick
   $('#endPhase').style.display = (mine && !picking) || T.stage === 'deploy' ? '' : 'none'
   $('#closestSpot').style.display = picking ? '' : 'none'
-  $('#endPhase').textContent = T.stage === 'deploy' ? 'Begin battle ▸' : `End ${PHASES.find((p) => p.key === T.phase).name} ▸`
+  $('#endPhase').textContent = T.stage === 'deploy' ? 'Begin battle ▸' : `End ${PHASES[Math.min(T.ph, PHASES.length - 1)].name} ▸`
   $('#endPhase').disabled = S.busy || S.auto
   $('#autoPhase').style.display = mine && !picking ? '' : 'none'
   const adv = $('#advance')
-  adv.style.display = mine && T.phase === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(G, sel) ? '' : 'none'
+  adv.style.display = mine && phaseKey(G) === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(G, sel) ? '' : 'none'
   adv.textContent = `Advance (+D6") — no ${sel?.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`
   if (sel?.t.chargeAfterAdvance) adv.textContent = 'Advance (+D6") — can still charge'
   // hint line
@@ -1585,7 +1609,7 @@ function refreshUI() {
       move: sel ? (isEngaged(G, sel) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
       shoot: sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.',
       charge: sel ? 'Click an enemy within 12" to declare a charge, then roll 2D6.' : 'Charge — pick a unit to charge with.',
-    }[T.phase] || ''
+    }[phaseKey(G)] || ''
   }
   $('#hint').textContent = hint
   $('#hint').style.display = hint ? '' : 'none'
@@ -1609,10 +1633,10 @@ function refreshRings() {
       col = '#ffa040'
     } else if (mine && T.stage === 'battle' && canAct(G, u)) {
       op = 0.75
-    } else if (mine && S.sel && T.phase === 'shoot' && u.side !== S.sel.side && shotInfo(G, S.sel, u).ok) {
+    } else if (mine && S.sel && phaseKey(G) === 'shoot' && u.side !== S.sel.side && shotInfo(G, S.sel, u).ok) {
       op = 0.95
       col = '#ff5a4a'
-    } else if (mine && S.sel && T.phase === 'charge' && u.side !== S.sel.side && chargeTargets(G, S.sel).includes(u)) {
+    } else if (mine && S.sel && phaseKey(G) === 'charge' && u.side !== S.sel.side && chargeTargets(G, S.sel).includes(u)) {
       op = 0.95
       col = '#ffa040'
     } else if (u === S.hover) {
@@ -1656,7 +1680,7 @@ $('#autoPhase').onclick = async () => {
   S.busy = true
   refreshUI()
   try {
-    await aiPhase(G, G.turn.active, G.turn.phase, act)
+    await aiTurn(G.turn.active, phaseKey(G))
   } finally {
     S.auto = false
     S.busy = false
@@ -1742,7 +1766,7 @@ function panKeys(dt) {
 function setupTable() {
   // the new match first: if building it throws, the last table stays whole
   const setup = {
-    board: S.seed, dice: TABLE_DICE, terrain: 'classic', rounds: ROUNDS, diceMode: 'shared',
+    board: S.seed, dice: TABLE_DICE, terrain: 'classic', rounds: MISSIONS.classic.rounds, diceMode: 'shared',
     seats: RACE_PICK.map((race, i) => ({ race, ctrl: S.control[i] })),
   }
   const next = newState(setup, { out: [], onTrace })
@@ -1993,7 +2017,8 @@ if (params.has('debug')) {
   //
   // Since R4 the state is the match's, G (a new one per table), so the
   // members map onto whichever G is current: S's turn fields read G.turn
-  // (wiped is undefined until a side is wiped, -1 in G.turn), units, nav and
+  // (wiped is undefined until a side is wiped, -1 in G.turn; since R6a the
+  // phase is the key of G.turn.ph, its index in PHASES), units, nav and
   // scenery.chunks are getters, and the queries take the current G
   // (q.canAct: (u) => canAct(G, u)). The trace is one array for the page's
   // lifetime, fed by each match's onTrace as it writes a line, and emptied
@@ -2045,12 +2070,12 @@ if (params.has('debug')) {
   // reads it and never folds into it, or every event would be applied
   // twice.
   const TURN = new Set(['stage', 'round', 'active', 'first', 'phase', 'vp', 'wiped'])
-  const turn = (k) => (k === 'wiped' ? (G.turn.wiped < 0 ? undefined : G.turn.wiped) : G.turn[k])
+  const turn = (k) => (k === 'wiped' ? (G.turn.wiped < 0 ? undefined : G.turn.wiped) : k === 'phase' ? phaseKey(G) : G.turn[k])
   const legacyS = new Proxy(S, {
     get: (s, k) => (TURN.has(k) ? turn(k) : s[k]),
     has: (s, k) => TURN.has(k) || k in s,
     set: (s, k, v) => {
-      if (TURN.has(k)) throw new Error(`__ts.S.${k} is the match's G.turn.${k}: it can't be set through S`)
+      if (TURN.has(k)) throw new Error(`__ts.S.${k} is the match's ${k === 'phase' ? 'G.turn.ph (phaseKey)' : `G.turn.${k}`}: it can't be set through S`)
       s[k] = v
       return true
     },
