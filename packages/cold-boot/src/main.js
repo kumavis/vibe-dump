@@ -341,7 +341,7 @@ const KIND_INFO = {
   ecore_cluster: 'Four Gracemont efficiency cores (one thread each) sharing a 4 MB L2',
   llc_slice: 'One 3 MB slice of the 36 MB shared L3 / last-level cache',
   ring: 'The ring bus (“compute fabric”): cores, L3 slices, system agent and GPU all sit on it',
-  imc: 'Integrated memory controller: two DDR5 channels',
+  imc: 'Integrated memory controller (one of two): one DDR5 channel — two 32-bit sub-channels',
   ddr_phy: 'DDR5/DDR4 PHY: the analog transceivers memory training tunes',
   pcie_phy: 'PCIe PHY lanes',
   dmi: 'DMI 4.0 ×8 — the CPU’s link to the chipset, and so to the BIOS flash',

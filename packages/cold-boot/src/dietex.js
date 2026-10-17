@@ -234,15 +234,19 @@ function ringBus(R, x, y, w, h) {
 
 // One core or cluster from sub-blocks normalised inside its rect.
 function internals(R, X, Y, W, H, subs, r, mirror) {
-  for (const s of subs) {
-    let sx = s.x
-    let sy = s.y
-    if (mirror?.x) sx = 1 - s.x - s.w
-    if (mirror?.y) sy = 1 - s.y - s.h
+  // a notched sub-block is painted rect by rect, so it doesn't cover its
+  // neighbours' corners
+  const pieces = []
+  for (const s of subs) for (const [px, py, pw, ph] of s.outline_rects || [[s.x, s.y, s.w, s.h]]) pieces.push({ s, px, py, pw, ph })
+  for (const { s, px, py, pw, ph } of pieces) {
+    let sx = px
+    let sy = py
+    if (mirror?.x) sx = 1 - px - pw
+    if (mirror?.y) sy = 1 - py - ph
     const x = X + sx * W
     const y = Y + sy * H
-    const w = s.w * W
-    const h = s.h * H
+    const w = pw * W
+    const h = ph * H
     const k = `${s.kind || ''} ${s.id || ''}`.toLowerCase()
     if (/\bl2\b|l1|cache|sram|\brf\b|tlb|btb|uop/.test(k)) {
       const ar = w / Math.max(1, h)

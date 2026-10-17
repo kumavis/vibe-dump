@@ -5129,7 +5129,7 @@
   },
   {
    "id": "analog0",
-   "kind": "other",
+   "kind": "fivr",
    "label": "FIVR (fully integrated voltage regulator), single instance on the top edge; rail unidentified",
    "x": 0.599,
    "y": 0.0147,
@@ -5213,7 +5213,7 @@
   },
   {
    "id": "analog1",
-   "kind": "other",
+   "kind": "fivr",
    "label": "FIVR pair (2 mirrored instances) on the top edge, probably the E-core L2 rail",
    "x": 0.6656,
    "y": 0.0147,
@@ -5313,7 +5313,7 @@
   },
   {
    "id": "analog2",
-   "kind": "other",
+   "kind": "fivr",
    "label": "FIVR pair (2 mirrored instances) on the top edge, probably the E-core L2 rail",
    "x": 0.7922,
    "y": 0.0147,
@@ -5704,7 +5704,45 @@
       0.464
      ]
     ],
-    "notes": "Extended up to y 0.337 (drawn under ucode_opcache) to fill the pockets Nemez marks as decoder; the left edge stays 0.66 above y 0.464 so it does not overlap int_regs (outline). Rect = bbox."
+    "notes": "Extended up to y 0.337 (drawn under ucode_opcache) to fill the pockets Nemez marks as decoder; the left edge stays 0.66 above y 0.464 so it does not overlap int_regs (outline). Rect = bbox.",
+    "outline_rects": [
+     [
+      0.66,
+      0.4625,
+      0.34,
+      0.0015
+     ],
+     [
+      0.66,
+      0.337,
+      0.0637,
+      0.1255
+     ],
+     [
+      0.8423,
+      0.337,
+      0.1577,
+      0.1255
+     ],
+     [
+      0.616,
+      0.464,
+      0.384,
+      0.127
+     ],
+     [
+      0.705,
+      0.591,
+      0.295,
+      0.008
+     ],
+     [
+      0.705,
+      0.599,
+      0.125,
+      0.026
+     ]
+    ]
    },
    {
     "id": "int_exec",
@@ -7227,7 +7265,7 @@
   "ecluster": "ecluster0/1 = top row, left to right; ecluster2/3 = bottom row, left to right.",
   "children": "Child blocks carry 'parent' and tile or sit inside their container, which keeps its id, kind and rect: ddr_phy -> ddr_phy_a / ddr_phy_common / ddr_phy_b; pcie5_phy -> pcie5_phy_x8a / x8b; pcie_ctrl -> pcie_ctrl_upper / mid / lower; display_phy -> display_phy_a / display_pll / display_phy_b; gpu_common -> gpu_unslice. New siblings: imc_shared (carved from imc0/imc1), fivr_sa / fivr_disp_l / fivr_disp_r (kind fivr)."
  },
- "notes": "Reconciled from two independent extractions (fp-a, fp-b) by re-measuring the photo: gutter profiles, mirror and rotation correlations, lane counts. Both used the same chip and photo. B's normalization (photo frame) is adopted because Fritz's mm figures match the photo frame. A's coordinates (seal-ring frame) were converted before comparing. Not on this die: Thunderbolt/TCSS, IPU. Empty fill (v3: see the unidentified \"other\" blocks added for the macros inside these gaps): most of the top strip right of the DDR PHY, the gaps between the E-columns of the ring band, and the strip between the ring end and the iGPU. Unlocated: PCU (inside the SA) (inside the SA), GNA, fuses, PLLs, thermal sensors. audit2 (v2): 4 verified audit workflows applied (see changelog): FIVRs located (5 macros + the 3 top-edge ones relabelled), DDR PHY / PCIe 5.0 / display PHY / PCIe-controller children, IMC lower group, stepped SA and ring-stop outlines, P-core corner piece, GPU subslice/L3/common extents, refined core internals, mounting (flip-chip mirror) and the app's interconnect wiring. Blocks with an outline also carry outline_px3840 and outline_rects (the outline decomposed into rects, normalized x,y,w,h, for rect-only renderers). Remaining unassigned: x 138-181 / y 1290-1404 (fill + loose logic), small macros at x 742-777 / y 1625-1754, two squares below ring_stop_gt, macros in the gap before the iGPU, the inter-column ring-band blocks and thin strips beside them.",
+ "notes": "Reconciled from two independent extractions (fp-a, fp-b) by re-measuring the photo: gutter profiles, mirror and rotation correlations, lane counts. Both used the same chip and photo. B's normalization (photo frame) is adopted because Fritz's mm figures match the photo frame. A's coordinates (seal-ring frame) were converted before comparing. Not on this die: Thunderbolt/TCSS, IPU. Empty fill: most of the top strip right of the DDR PHY, and the rest of the E-column gaps in the ring band and of the gap between the ring end and the iGPU (the macros inside them are the low-confidence \"other\" blocks). Unlocated: PCU (inside the SA), GNA, fuses, core/ring PLLs, thermal sensors (the 4 display LC-PLLs are display_pll; the PCIe/DMI/DDR PLLs sit in their PHY common blocks). audit2 (v2): 4 verified audit workflows applied (see changelog): FIVRs: 3 new blocks (fivr_sa, fivr_disp_l, fivr_disp_r) plus the 3 top-edge blocks analog0-2 (5 macros: single, pair, pair), DDR PHY / PCIe 5.0 / display PHY / PCIe-controller children, IMC lower group, stepped SA and ring-stop outlines, P-core corner piece, GPU subslice/L3/common extents, refined core internals, mounting (flip-chip mirror) and the app's interconnect wiring. Blocks with an outline also carry outline_px3840 and outline_rects (the outline decomposed into rects, normalized x,y,w,h, for rect-only renderers). Remaining unassigned: x 138-181 / y 1290-1404 (fill + loose logic), small macros at x 742-777 / y 1625-1754, the 3091.5-3099 strip beside ring_stop_gt, and the ring-band blocks and strips in the gaps between the P-core columns (x ~1127-1158, 1497-1529, 1866-1900). Evidence paths of the form audit2/... name working files of the audit (crops, scripts), which are not in the repository.",
  "mounting": {
   "mirrored": true,
   "note": "Flip-chip: seen from above, the layout is the photo mirrored (transposed across its anti-diagonal). DDR edge faces the DIMMs, the DMI/PCIe end faces the PCIe x16 slot and the PCH, the GPU end faces the VRM. Verified against Intel's LGA1700 ballout (datasheets 655258 / 743844).",
@@ -8070,8 +8108,8 @@
    "gs": "GPU spine junction [px3840 3569.0, 937.9]",
    "gs_eu0": "gs_eu0 [px3840 3569.0, 232.0]",
    "gs_tmu0": "gs_tmu0 [px3840 3569.0, 461.0]",
-   "gl3t": "GPU L3 bank (top) [px3840 3569.0, 370.0]",
-   "gl3b": "GPU L3 bank (bottom) [px3840 3569.0, 1454.0]",
+   "gl3t": "GPU L3 bank (top), between the GTI spine and the samplers [px3840 3569.0, 560.0]",
+   "gl3b": "GPU L3 bank (bottom), between the GTI spine and the samplers [px3840 3569.0, 1230.0]",
    "gs_tmu1": "gs_tmu1 [px3840 3569.0, 1328.0]",
    "gs_eu1": "gs_eu1 [px3840 3569.0, 1558.0]",
    "gpu_eu0": "gpu_eu0 [px3840 3712.5, 232.0]",
@@ -8790,16 +8828,9 @@
    "blocks": [
     "(v3)"
    ],
-   "change": "Completeness-critic fixes: ring.stops.stop_sa y 0.5305 -> 0.5059 (critic-left: avoids a route backtrack along the ring end segment); wiring.node_notes: PCIe 5.0 x8 units no longer numbered by position (ballout suggests the reverse order); uncore_misc: outline excludes the empty band above the display (x 330-530, y 1162.5-1232); misc_io / misc_io_b: probable identity from Intel 743844 ballout land proximity (low confidence kept); core_internals.ecore_cluster: 32 Gracemont sub-blocks (8 units x 4 cores), low confidence; wiring: GPU spine reordered so sampler and EU traffic both pass the L3 (Xe-LP); media0/1: labels no longer imply two video-enhancement engines; 10 unidentified macros added as kind other, confidence low (GT-end gap, ring-band column gaps); gpu_global: outline takes the GTI logic column, excluding fill and a separate macro; media0/1 trimmed to match; pcie_ctrl_lower: rect = its core [250,588,330,1162]; the outline keeps the extensions; wiring.exits.display: bus 'ddi' (ballout: DDI A-E lands on the west package edge, board y 62-70); wiring.exits dram0/dram1: labels no longer name a channel (half-to-channel mapping unknown); docs: mirror chirality moved to inferred; changelog lists pcie4_phy; DDR/display children use units; parents say whether children tile them",
+   "change": "Completeness-critic fixes: ring.stops.stop_sa y 0.5305 -> 0.5059 (critic-left: avoids a route backtrack along the ring end segment); wiring.node_notes: PCIe 5.0 x8 units no longer numbered by position (ballout suggests the reverse order); uncore_misc: outline excludes the empty band above the display (x 330-530, y 1162.5-1232); misc_io / misc_io_b: probable identity from Intel 743844 ballout land proximity (low confidence kept); core_internals.ecore_cluster: 32 Gracemont sub-blocks (8 units x 4 cores), low confidence; wiring: GPU spine reordered so sampler and EU traffic both pass the L3 (Xe-LP); media0/1: labels no longer imply two video-enhancement engines; 10 unidentified macros added as kind other, confidence low (GT-end gap, ring-band column gaps); gpu_global: outline takes the GTI logic column, excluding fill and a separate macro; media0/1 trimmed to match; pcie_ctrl_lower: rect = its core [250,588,330,1162]; the outline keeps the extensions; wiring.exits.display: bus 'ddi' (ballout: DDI A-E lands on the west package edge, board y 62-70); wiring.exits dram0/dram1: labels no longer name a channel (half-to-channel mapping unknown); docs: mirror chirality moved to inferred; changelog lists pcie4_phy; DDR/display children use units; parents say whether children tile them; analog0-2: kind 'fivr' (they are FIVR macros); notes say what is still unassigned; validation_v2 dropped (v2-only); core_internals.pcore.decode: outline_rects exclude ucode_opcache (they overlapped by 73% of the uop cache)",
    "evidence": "audit2/critic-left, critic-right, critic-whole",
    "sources": []
   }
- ],
- "validation_v2": {
-  "problems": [],
-  "missing_required_ports": [],
-  "ports_outside_their_block": [],
-  "leaf_overlaps_px": [],
-  "overlap_method": "leaf blocks (no containers/parents) rasterised at 3840 px from their outlines, eroded by 1 px so shared edges do not count"
- }
+ ]
 }

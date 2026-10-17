@@ -106,7 +106,7 @@ export const STAGE1 = [
     sources: [SRC.sdm, SRC.pchds, SRC.flash, SRC.entry16, SRC.bootblockld],
     lps: () => bsp('real'),
     act(p, A) {
-      A.die('sub:pcore0:decode|l1i_ctl|branch|ucode_opcache', 1, ACT.fetch, 'scan')
+      A.die('sub:pcore0:decode|branch|ucode_opcache', 1, ACT.fetch, 'scan')
       A.die('pcore0', 0.5, ACT.fetch, 'glow')
       A.ring(0.8, ACT.fetch)
       A.flow('f', 'pcore0', 'dmi', 5, ACT.fetch, 5)
@@ -140,7 +140,7 @@ export const STAGE1 = [
     sources: [SRC.entry16, SRC.vtf0, SRC.adlSec, SRC.sdm],
     lps: () => bsp('real'),
     act(p, A, t) {
-      A.die('sub:pcore0:decode|l1i_ctl|branch|ucode_opcache', 0.9, ACT.fetch, 'scan')
+      A.die('sub:pcore0:decode|branch|ucode_opcache', 0.9, ACT.fetch, 'scan')
       A.die('pcore0', 0.5, ACT.fetch, 'glow')
       A.ring(0.6, ACT.fetch)
       A.flow('f', 'pcore0', 'dmi', 3, ACT.fetch, 5)
@@ -178,7 +178,7 @@ export const STAGE1 = [
     act(p, A) {
       const jump = span(p, 0.84, 0.95)
       A.die('pcore0', 0.6 + jump * 0.4, jump > 0.5 ? '#4fe08a' : ACT.fetch, jump > 0 ? 'scan' : 'glow')
-      A.die('sub:pcore0:decode|l1i_ctl|branch|ucode_opcache', 0.8, ACT.fetch, 'scan')
+      A.die('sub:pcore0:decode|branch|ucode_opcache', 0.8, ACT.fetch, 'scan')
       A.ring(0.5, ACT.fetch)
       A.flow('f', 'pcore0', 'dmi', 3, ACT.fetch, 5)
     },

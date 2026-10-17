@@ -417,7 +417,7 @@ export const STAGE2 = [
     lps: () => bsp('prot'),
     act(p, A) {
       A.die('pcore0', 0.7, '#4fe08a', 'glow')
-      A.die('sub:pcore0:decode|l1i_ctl|branch|ucode_opcache', 0.8, ACT.fetch, 'scan')
+      A.die('sub:pcore0:decode|branch|ucode_opcache', 0.8, ACT.fetch, 'scan')
       A.ring(0.5, ACT.fetch)
       A.flow('f', 'pcore0', 'dmi', 3, ACT.fetch, 5)
     },
@@ -456,7 +456,7 @@ export const STAGE2 = [
     lps: () => bsp('prot'),
     act(p, A) {
       A.die('pcore0', 0.7, '#4fe08a', 'glow')
-      A.die('sub:pcore0:decode|l1i_ctl|branch|ucode_opcache', 0.6, ACT.fetch, 'scan')
+      A.die('sub:pcore0:decode|branch|ucode_opcache', 0.6, ACT.fetch, 'scan')
       const on = span(p, 0.85, 1)
       for (const id of LLC) A.die(id, 0.12 + on * 0.15, ACT.car, 'breathe')
       A.die('sub:pcore0:l1d|l2', 0.2 + on * 0.3, ACT.car, 'breathe')

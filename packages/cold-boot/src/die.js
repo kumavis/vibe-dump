@@ -116,6 +116,8 @@ export const STYLE = { glow: 0, scan: 1, pinned: 2, sparkle: 3, breathe: 4, stri
 // a hundred things smaller than a pixel.
 export const DETAIL_LAYER = 1
 
+const COMPANIONS = { imc0: ['imc_shared'], imc1: ['imc_shared'] }
+
 const MODE_COLOR = Object.fromEntries(Object.entries(MODE_COLORS).map(([k, v]) => [k, new THREE.Color(v)]))
 
 export function buildDie(fp, opts = {}) {
@@ -234,7 +236,10 @@ vec3 dieGrade(vec3 lin) {
       // block-relative -> die coords, through the block's mirroring
       const abs = ([x, y, w, h]) => [b.x + (b.mirror?.x ? 1 - x - w : x) * b.w, b.y + (b.mirror?.y ? 1 - y - h : y) * b.h, w * b.w, h * b.h]
       const [ax, ay, aw, ah] = abs([s.x, s.y, s.w, s.h])
-      const rec = addOverlay(`${b.id}.${s.id}`, s.kind || s.id, ax, ay, aw, ah, b.id, s.outline_rects ? s.outline_rects.map(abs) : null)
+      // Cores share one sub-block map, but a bottom-row core's corner piece is
+      // a hair shorter: clip each sub-block to its own core's outline.
+      const pieces = clipRects((s.outline_rects || [[s.x, s.y, s.w, s.h]]).map(abs), b.outline_rects || [[b.x, b.y, b.w, b.h]])
+      const rec = addOverlay(`${b.id}.${s.id}`, s.kind || s.id, ax, ay, aw, ah, b.id, pieces)
       rec.label = s.label
     }
   }
@@ -606,12 +611,16 @@ vec3 dieGrade(vec3 lin) {
       for (const e of exits.values()) e.target = 0
     },
     // Light a block (or every block of a kind, or a sub-block "pcore0.l2").
+    // Blocks that are part of another light with it (the controllers' shared
+    // logic with either memory controller).
     light(sel, level, color, style = 'glow') {
       for (const b of api.select(sel)) {
-        if (level >= b.target) {
-          b.target = level
-          b.targetColor.set(color)
-          b.style = STYLE[style] ?? 0
+        for (const x of [b, ...(COMPANIONS[b.id] || []).map((id) => blocks.get(id)).filter(Boolean)]) {
+          if (level >= x.target) {
+            x.target = level
+            x.targetColor.set(color)
+            x.style = STYLE[style] ?? 0
+          }
         }
       }
     },
@@ -800,6 +809,21 @@ vec3 dieGrade(vec3 lin) {
     },
   }
   return api
+}
+
+// The parts of `rects` that lie inside `within` (both [x, y, w, h] lists).
+function clipRects(rects, within) {
+  const out = []
+  for (const [x, y, w, h] of rects) {
+    for (const [cx, cy, cw, ch] of within) {
+      const x0 = Math.max(x, cx)
+      const y0 = Math.max(y, cy)
+      const x1 = Math.min(x + w, cx + cw)
+      const y1 = Math.min(y + h, cy + ch)
+      if (x1 - x0 > 1e-6 && y1 - y0 > 1e-6) out.push([x0, y0, x1 - x0, y1 - y0])
+    }
+  }
+  return out.length ? out : rects
 }
 
 // Flat rects (normalized die coords, inside the bounding box bx..bx+bw,

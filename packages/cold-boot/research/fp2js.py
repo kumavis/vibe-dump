@@ -90,7 +90,9 @@ def subs(lst):
     out = []
     for s in lst or []:
         o = {k: (r4(v) if k in 'xywh' and len(k) == 1 else v) for k, v in s.items() if k in ('id', 'label', 'x', 'y', 'w', 'h', 'kind')}
-        if s.get('outline'):
+        if s.get('outline_rects'):
+            o['outline_rects'] = [[r4(x) for x in r] for r in s['outline_rects']]
+        elif s.get('outline'):
             o['outline_rects'] = poly_rects(s['outline'])
         out.append(o)
     return out

@@ -1588,7 +1588,7 @@ export const FLOORPLAN = {
   },
   {
    "id": "analog0",
-   "kind": "other",
+   "kind": "fivr",
    "label": "FIVR (fully integrated voltage regulator), single instance on the top edge; rail unidentified",
    "x": 0.599,
    "y": 0.0147,
@@ -1612,7 +1612,7 @@ export const FLOORPLAN = {
   },
   {
    "id": "analog1",
-   "kind": "other",
+   "kind": "fivr",
    "label": "FIVR pair (2 mirrored instances) on the top edge, probably the E-core L2 rail",
    "x": 0.6656,
    "y": 0.0147,
@@ -1636,7 +1636,7 @@ export const FLOORPLAN = {
   },
   {
    "id": "analog2",
-   "kind": "other",
+   "kind": "fivr",
    "label": "FIVR pair (2 mirrored instances) on the top edge, probably the E-core L2 rail",
    "x": 0.7922,
    "y": 0.0147,
@@ -1819,9 +1819,21 @@ export const FLOORPLAN = {
     "outline_rects": [
      [
       0.66,
-      0.337,
+      0.4625,
       0.34,
-      0.127
+      0.0015
+     ],
+     [
+      0.66,
+      0.337,
+      0.0637,
+      0.1255
+     ],
+     [
+      0.8423,
+      0.337,
+      0.1577,
+      0.1255
      ],
      [
       0.616,
