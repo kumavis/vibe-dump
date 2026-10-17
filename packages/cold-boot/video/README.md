@@ -40,6 +40,16 @@ node video/capture.mjs out/cut/timed.json out/cut/audio.wav out/cut
 #   --pr 0.75      render the 3-D at 75 % resolution
 ```
 
+If `tts.py` prints `Error processing file '/Users/runner/…/phontab'` and voices
+nothing, the venv's path is too long for espeak-ng's fixed path buffer (about
+160 characters), and it fell back to the data path baked in where its wheel was
+built. Give it a short path to the same data:
+
+```bash
+ln -s "$(venv/bin/python -c 'import espeakng_loader; print(espeakng_loader.get_data_path())')" /tmp/espeak-ng-data
+ESPEAK_DATA_PATH=/tmp/espeak-ng-data venv/bin/python video/tts.py video/cut.json out/cut --models <model dir>
+```
+
 Nothing runs on the wall clock in video mode, so a slow renderer only makes the
 capture slower, never choppier. Without a GPU (headless Chromium falls back to
 SwiftShader) a 1920×1080 frame takes about 3 s; `--pr 0.75` renders the
