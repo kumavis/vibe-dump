@@ -321,8 +321,11 @@ function labelItems(st, p) {
   // Where traffic leaves the die: name the interface at the edge it crosses.
   if (!introOn && director.dieCloseness(dieCenter) > 0.45) {
     const named = new Set((st.labels || []).map((L) => (typeof L === 'string' ? L : L.id)))
+    const said = new Set()
     for (const e of die.liveExits()) {
-      if (named.has(e.name)) continue
+      // (both DDR5 halves carry the same label: say it once)
+      if (named.has(e.name) || said.has(e.label)) continue
+      said.add(e.label)
       tmp.copy(e.out[0])
       die.group.localToWorld(tmp)
       out.push({ id: `exit:${e.name}`, text: e.label, pos: tmp.clone(), color: `#${e.color.getHexString()}` })
@@ -348,6 +351,16 @@ const KIND_INFO = {
   igpu: 'Intel UHD Graphics 770 (32 execution units)',
   media: 'Media engine (video encode / decode)',
   system_agent: 'System agent: the uncore glue between the ring and the outside world',
+  ddr_phy_channel: 'One half of the DDR5 PHY: five 16-bit data units and two command/address units',
+  ddr_phy_common: 'DDR PHY common block: clocking and calibration shared by both halves',
+  imc_common: 'Logic shared by the two memory controllers',
+  fivr: 'FIVR — a fully integrated voltage regulator: an on-die switching power stage feeding one of the chip’s internal rails',
+  pcie_ctrl_cluster: 'PCIe/DMI controller logic (which cluster serves DMI and which PCIe isn’t known)',
+  pcie_phy_unit: 'Eight PCIe 5.0 lanes — half of the ×16 graphics port',
+  display_phy_port: 'Display PHY ports (DisplayPort/HDMI combo PHYs)',
+  display_pll: 'Display PLLs: the clocks for the display ports',
+  gpu_unslice: 'GPU “unslice”: the fixed-function front end shared by the whole GPU',
+  other: 'Unidentified logic',
   whole: 'Raptor Lake-S 8P+16E die',
 }
 const ray = new THREE.Raycaster()

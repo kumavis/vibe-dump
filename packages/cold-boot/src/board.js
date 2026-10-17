@@ -49,22 +49,27 @@ const ROUTES = {
   sideband: { lanes: 1, pts: [[139, 90], [167, 108], [167, 160], [180, 172], [226, 180]] },
   spi: { lanes: 1, pts: [[232, 203], [232, 214], [214, 228], [210, 232]] },
   smbus: { lanes: 1, pts: [[247, 177], [247, 160], [222, 156], [200, 156]] },
-  // Channel A's half of the DDR PHY is the one nearer the I/O corner, so on
-  // this mirrored mount it leaves the package lower down the east edge.
+  // Intel's ballout spreads both channels' lands along the whole east edge;
+  // here each DDR trace simply starts where its half of the die's DDR PHY
+  // reaches that edge.
   ddrA: { lanes: 6, pts: [[139, 79], [170, 92], [196, 92]] },
   ddrB: { lanes: 6, pts: [[139, 72], [168, 52], [216, 52]] },
   pcie16: { lanes: 4, pts: [[110, 95], [110, 128], [108, 145]] },
   pcie4: { lanes: 2, pts: [[101, 74], [88, 74], [88, 96], [113, 98], [115, 103]] },
   cmos: { lanes: 1, pts: [[172, 205], [204, 205], [228, 196]] },
+  // the display ports (DDI A-E) leave the package's west edge for the rear I/O
+  ddi: { lanes: 4, pts: [[101, 66], [24, 66]] },
 }
 
 // Where an interface's lands sit on the package when that isn't straight out
 // from the die (Intel's LGA1700 ballout, ATX top view): the PCIe 5.0 x16 lanes
-// fill the south-west corner, the PCIe 4.0 x4 sits on the west edge. Board mm,
+// fill the south-west corner, the PCIe 4.0 x4 and the display ports sit on the
+// west edge. Board mm,
 // a point on the package edge and the way the trace leaves it.
 const LANDS = {
   pcie16: { at: [110, SOCKET.y + PACKAGE.h / 2], dir: [0, 1] },
   pcie4: { at: [SOCKET.x - PACKAGE.w / 2, 73.6], dir: [-1, 0] },
+  ddi: { at: [SOCKET.x - PACKAGE.w / 2, 66], dir: [-1, 0] },
 }
 
 export function buildBoard({ anisotropy = 8 } = {}) {

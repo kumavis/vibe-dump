@@ -266,7 +266,7 @@ export function paintDie(fp, W, H) {
   logic(R, 0, 0, W, H, r, [250, 22, 14], { macros: 0, rowH: 3 })
 
   const px = (b) => [b.x * W, b.y * H, b.w * W, b.h * H]
-  const order = ['other', 'misc_io', 'system_agent', 'pmu', 'ring', 'llc_slice', 'imc', 'ddr_phy', 'pcie_ctrl', 'pcie_phy', 'dmi', 'display', 'display_phy', 'media', 'igpu', 'thunderbolt', 'ecore_cluster', 'pcore']
+  const order = ['other', 'misc_io', 'system_agent', 'pmu', 'ring', 'llc_slice', 'imc', 'imc_common', 'ddr_phy', 'ddr_phy_channel', 'ddr_phy_common', 'pcie_ctrl', 'pcie_ctrl_cluster', 'pcie_phy', 'pcie_phy_unit', 'dmi', 'display', 'display_phy', 'display_phy_port', 'display_pll', 'fivr', 'media', 'igpu', 'gpu_unslice', 'thunderbolt', 'ecore_cluster', 'pcore']
   const blocks = [...fp.blocks].sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind))
   const pInt = fp.core_internals?.pcore
   const eInt = fp.core_internals?.ecore_cluster
@@ -289,11 +289,14 @@ export function paintDie(fp, W, H) {
         ringBus(R, x, y, w, h)
         break
       case 'ddr_phy':
+      case 'ddr_phy_channel':
       case 'pcie_phy':
+      case 'pcie_phy_unit':
       case 'display_phy':
+      case 'display_phy_port':
       case 'dmi':
       case 'thunderbolt':
-        phy(R, x, y, w, h, r, { lanes: b.lanes })
+        phy(R, x, y, w, h, r, { lanes: b.lanes || b.units })
         break
       case 'igpu':
         gpu(R, x, y, w, h, r, { cols: b.cols || (w > h ? 8 : 4), rows: b.rows || (w > h ? 4 : 8) })

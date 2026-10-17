@@ -26,7 +26,7 @@ float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7)) + uSeed) * 4375
 void main() {
   if (uLevel < 0.002) discard;
   vec2 d = min(vUv, 1.0 - vUv) * uSize;
-  float edge = min(d.x, d.y);
+  float edge = max(0.0, min(d.x, d.y));
   float rim = exp(-edge * 9.0);
   float a;
   if (uStyle < 0.5) {
@@ -177,15 +177,27 @@ vec3 dieGrade(vec3 lin) {
   const blocks = new Map()
   const toLocal = (nx, ny, y = 0) => new THREE.Vector3((nx - 0.5) * W, y, (ny - 0.5) * H)
   let seed = 1
-  const addOverlay = (id, kind, nx, ny, nw, nh, parent = null) => {
+  // `parent`: the core a sub-block belongs to. `rects`: a notched block's
+  // outline as rects (normalized die coords) inside its bounding box; `above`
+  // lifts a block that sits on top of a container block.
+  const addOverlay = (id, kind, nx, ny, nw, nh, parent = null, rects = null, above = false) => {
+    // An outline may reach past the block's rect (a P-core's corner piece):
+    // the overlay spans both.
+    if (rects) {
+      const x1 = Math.max(nx + nw, ...rects.map((r) => r[0] + r[2]))
+      const y1 = Math.max(ny + nh, ...rects.map((r) => r[1] + r[3]))
+      nx = Math.min(nx, ...rects.map((r) => r[0]))
+      ny = Math.min(ny, ...rects.map((r) => r[1]))
+      nw = x1 - nx
+      nh = y1 - ny
+    }
     const w = nw * W
     const h = nh * H
     const mat = overlayMaterial(w, h, seed++ * 1.37)
-    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat)
-    mesh.rotation.x = -Math.PI / 2
-    const c = toLocal(nx + nw / 2, ny + nh / 2, 0.012 + (parent ? 0.004 : 0))
+    const mesh = new THREE.Mesh(flatRects(rects || [[nx, ny, nw, nh]], nx, ny, nw, nh, W, H), mat)
+    const c = toLocal(nx + nw / 2, ny + nh / 2, 0.012 + (parent || above ? 0.004 : 0))
     mesh.position.copy(c)
-    mesh.renderOrder = parent ? 3 : 2
+    mesh.renderOrder = parent || above ? 3 : 2
     mesh.layers.set(DETAIL_LAYER)
     group.add(mesh)
     const rec = {
@@ -193,6 +205,7 @@ vec3 dieGrade(vec3 lin) {
       kind,
       parent,
       rect: { x: nx, y: ny, w: nw, h: nh },
+      rects,
       center: c.clone().setY(0),
       size: [w, h],
       mesh,
@@ -209,7 +222,7 @@ vec3 dieGrade(vec3 lin) {
   // A whole-die overlay for die-wide events (power-good, reset).
   addOverlay('die', 'whole', 0, 0, 1, 1).label = fp.chip
   for (const b of fp.blocks) {
-    const rec = addOverlay(b.id, b.kind, b.x, b.y, b.w, b.h)
+    const rec = addOverlay(b.id, b.kind, b.x, b.y, b.w, b.h, null, b.outline_rects || null, !!b.parent)
     rec.label = b.label
     rec.data = b
   }
@@ -218,11 +231,10 @@ vec3 dieGrade(vec3 lin) {
   const subOf = (b, list) => {
     if (!list) return
     for (const s of list) {
-      let sx = s.x
-      let sy = s.y
-      if (b.mirror?.x) sx = 1 - s.x - s.w
-      if (b.mirror?.y) sy = 1 - s.y - s.h
-      const rec = addOverlay(`${b.id}.${s.id}`, s.kind || s.id, b.x + sx * b.w, b.y + sy * b.h, s.w * b.w, s.h * b.h, b.id)
+      // block-relative -> die coords, through the block's mirroring
+      const abs = ([x, y, w, h]) => [b.x + (b.mirror?.x ? 1 - x - w : x) * b.w, b.y + (b.mirror?.y ? 1 - y - h : y) * b.h, w * b.w, h * b.h]
+      const [ax, ay, aw, ah] = abs([s.x, s.y, s.w, s.h])
+      const rec = addOverlay(`${b.id}.${s.id}`, s.kind || s.id, ax, ay, aw, ah, b.id, s.outline_rects ? s.outline_rects.map(abs) : null)
       rec.label = s.label
     }
   }
@@ -779,6 +791,8 @@ vec3 dieGrade(vec3 lin) {
         const r = b.rect
         if (b.kind === 'whole') continue
       if (nx >= r.x && nx <= r.x + r.w && ny >= r.y && ny <= r.y + r.h) {
+          // a notched block only owns the points inside its outline
+          if (b.rects && !b.rects.some(([x, y, w, h]) => nx >= x && nx <= x + w && ny >= y && ny <= y + h)) continue
           if (!best || (b.parent && !best.parent) || r.w * r.h < best.rect.w * best.rect.h) best = b
         }
       }
@@ -786,6 +800,30 @@ vec3 dieGrade(vec3 lin) {
     },
   }
   return api
+}
+
+// Flat rects (normalized die coords, inside the bounding box bx..bx+bw,
+// by..by+bh) as one geometry in the XZ plane, centred on the box and facing
+// up; uv spans the box the way a PlaneGeometry's would, so the overlay shader
+// draws a notched block as one piece.
+function flatRects(rects, bx, by, bw, bh, W, H) {
+  const pos = []
+  const uv = []
+  const idx = []
+  for (const [x, y, w, h] of rects) {
+    const k = pos.length / 3
+    for (const [px, py] of [[x, y], [x, y + h], [x + w, y], [x + w, y + h]]) {
+      pos.push((px - bx - bw / 2) * W, 0, (py - by - bh / 2) * H)
+      uv.push((px - bx) / bw, 1 - (py - by) / bh)
+    }
+    idx.push(k, k + 1, k + 2, k + 2, k + 1, k + 3)
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
+  g.setAttribute('normal', new THREE.Float32BufferAttribute(rects.flatMap(() => [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0]), 3))
+  g.setIndex(idx)
+  return g
 }
 
 // A flat strip along a polyline in the XZ plane; uv.x is distance along it
