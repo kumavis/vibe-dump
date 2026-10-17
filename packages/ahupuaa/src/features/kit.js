@@ -14,6 +14,11 @@ import { constants, noise, heightFetch, lighting } from '../render/shaders/commo
 export const S = 0.016
 
 export const MAT = { plain: 0, thatch: 1, stone: 2, leaf: 3, water: 4, kapa: 5, wood: 6, skin: 7, sand: 8 }
+// Accents (9–17): flowers, fruit, new leaves, a deciduous crown. Shaded as
+// leaf, but each vertex collapses onto its instance's origin (so its triangles
+// vanish) unless that instance's hash falls under the group's uAccent value —
+// one geometry, with each tree flowering or leafing out in its own season.
+for (let g = 0; g < 9; g++) MAT['accent' + g] = 9 + g
 
 export class Builder {
   constructor() {
@@ -271,6 +276,8 @@ uniform float uFadeFar;
 uniform vec2 uFadeIn;
 uniform float uFadeClose;
 uniform float uSway;
+uniform float uAccent[9];
+uniform float uWoodTint;
 out vec3 vWorld;
 out vec3 vNormal;
 out vec3 vColor;
@@ -289,7 +296,10 @@ void main() {
   vec3 origin = (mm * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
   vec3 c = color;
   #ifdef USE_INSTANCING_COLOR
-  c *= instanceColor;
+  // (uWoodTint < 1 keeps bark nearer its own colour under a leaf tint: only
+  // the tint's brightness reaches it, and only that share of it, so a hairy
+  // grey-blue leaf tint never turns a trunk lilac)
+  c *= aMat > 5.5 && aMat < 6.5 && uWoodTint < 1.0 ? mix(vec3(1.0), vec3(dot(instanceColor, vec3(0.299, 0.587, 0.114))), uWoodTint) : instanceColor;
   #endif
   if (uSway > 0.0) {
     // A plant sways as one piece: phase and gusts come from where it stands,
@@ -301,11 +311,26 @@ void main() {
     float ph = uTime * 1.3 + origin.x * 37.0 + origin.z * 23.0;
     float gust = 0.6 + 0.4 * sin(uTime * 0.55 + origin.x * 2.1 + origin.z * 1.7);
     wp.xz += uWindVec * (0.55 + 0.45 * sin(ph)) * gust * bend;
-    if (aMat > 2.5 && aMat < 3.5) {
+    if ((aMat > 2.5 && aMat < 3.5) || aMat > 8.5) {
       // and the leaves flutter a few centimetres on their own
       float f = uTime * 5.0 + dot(p, vec3(1.7, 2.3, 1.1));
       wp.xyz += vec3(sin(f), 0.5 * sin(f * 1.3 + 1.0), cos(f * 0.9)) * (0.05 * min(h, 4.0) / 4.0) * scale * length(uWindVec) * uSway;
     }
+  }
+  if (aMat > 8.5) {
+    // (after the sway, which bends by each vertex's own height and would pull
+    // collapsed vertices apart into slivers). The hash is sin-free, so it
+    // holds at island-sized coordinates on low-precision GPUs too.
+    int g = int(aMat - 9.0 + 0.5);
+    vec3 p3 = fract(origin.xzx * vec3(61.31, 47.77, 61.31) * 0.1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    float hs = fract((p3.x + p3.y) * p3.z);
+    // group 2 is the complement of group 3: a wiliwili is bare or in leaf
+    // (and group 8, its flowers, only ever on a bare one)
+    if (g == 2 || g == 8) hs = 1.0 - hs;
+    if (hs >= uAccent[g]) wp.xyz = origin;
+    // flowers keep their own colour: the instance tint is for leaf and bark
+    c = color * (0.9 + 0.2 * fract(hs * 7.31));
   }
   vWorld = wp.xyz;
   vNormal = normalize(mat3(mm) * normal);
@@ -359,7 +384,7 @@ void main() {
     vec2 sp = vWorld.xz * 260.0 + vec2(vWorld.y * 190.0, -vWorld.y * 170.0);
     vec3 v = voronoi(fract(sp / 512.0) * 512.0);
     a *= (0.7 + 0.5 * v.y) * (0.55 + 0.45 * smoothstep(0.0, 0.12, v.z));
-  } else if (m == 3) {
+  } else if (m == 3 || m >= 9) {
     a *= 0.8 + 0.4 * vnoise(vWorld.xz * 600.0 + vLocal.y * 30.0);
   } else if (m == 6) {
     a *= 0.85 + 0.25 * vnoise(vec2(vLocal.y * 40.0, vWorld.x * 300.0));
@@ -370,7 +395,7 @@ void main() {
   float vis = sunVisibility(vWorld);
   vec3 lit = shade(a, n, vWorld, 1.0, vis);
   // a little wrap and translucency for leaves
-  if (m == 3) lit += a * uSunColor * max(dot(-n, uSunDir), 0.0) * 0.25 * vis;
+  if (m == 3 || m >= 9) lit += a * uSunColor * max(dot(-n, uSunDir), 0.0) * 0.25 * vis;
   if (m == 5) lit += a * uSkyColor * 0.15;
   if (uObjDebug == 1) lit = a * 3.0;
   if (uObjDebug == 2) lit = n * 0.5 + 0.5;
@@ -388,7 +413,10 @@ void main() {
  * to dither out over; `opts.fadeIn` = [near, far] to dither in over (the far
  * level of detail of something whose near model fades out over the same band);
  * `opts.close` dithers out whole instances nearer the camera than that;
- * `opts.sway` bends instances with the wind (plants).
+ * `opts.sway` bends instances with the wind (plants); `opts.woodTint` (default
+ * 1) is how much of the instance colour reaches bark. Accent geometry reads
+ * `uAccent` from the shared uniforms once vegetation.js has put it there (with
+ * none, every accent stays hidden).
  */
 export function objectMaterial(shared, opts = {}) {
   const [near, far] = opts.fade || [120, 160]
@@ -405,6 +433,8 @@ export function objectMaterial(shared, opts = {}) {
       uFadeClose: { value: opts.close || 0 },
       uFadeIn: { value: new THREE.Vector2(...(opts.fadeIn || [0, 0])) },
       uSway: { value: opts.sway || 0 },
+      uAccent: shared.uniforms.uAccent || { value: new Float32Array(9) },
+      uWoodTint: { value: opts.woodTint ?? 1 },
       uObjDebug: { value: 0 },
     },
   })

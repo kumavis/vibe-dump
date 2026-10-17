@@ -46,7 +46,7 @@ export const STOPS = [
     zone: 0,
     text: [
       'The cloud-wrapped heights are left largely to the gods. People once came only for special purposes — feathers, choice woods, stone for adzes — and with care.',
-      'Yet this is the source: mist and rain combed from the clouds by mossy ʻōhiʻa forest feed every spring and stream below. Keep the uplands whole, and water keeps flowing to everyone downstream.',
+      'Yet this is the source: mist and rain combed from the clouds by low, mossy ʻōhiʻa and ʻōlapa forest feed every spring and stream below. Keep the uplands whole, and water keeps flowing to everyone downstream.',
     ],
   },
   {
@@ -56,7 +56,7 @@ export const STOPS = [
     gloss: 'the forest',
     zone: 1,
     text: [
-      'Below the clouds grow koa and ʻōhiʻa. A kahuna kālai waʻa, a master canoe builder, chose a koa tree here, felled it with stone koʻi (adzes), and shaped the hull before it was hauled down to the shore.',
+      'Below the clouds grows ʻōhiʻa lehua forest, with hāpuʻu tree ferns beneath and koa where the ground drains well. Down the valley, kukui and ʻōhiʻa ʻai (mountain apple) mark planted land. A kahuna kālai waʻa, a master canoe builder, chose a koa tree here, felled it with stone koʻi (adzes), and shaped the hull before it was hauled down to the shore.',
       'Kia manu, bird catchers, gathered feathers for the cloaks and helmets of the aliʻi. From the ʻōʻō they took only a few yellow feathers and let the bird go.',
     ],
   },
@@ -67,7 +67,7 @@ export const STOPS = [
     gloss: 'irrigated taro terraces',
     zone: 2,
     text: [
-      'Kalo (taro) is the staff of life, cooked and pounded into poi. Terraces step down the valley floor, fed by an ʻauwai — a ditch that takes part of the stream at a dam and returns it below. The water has to keep moving: cool, flowing water keeps the kalo healthy.',
+      'Kalo (taro) is the staff of life, cooked and pounded into poi. Terraces step down the valley floor, fed by an ʻauwai — a ditch that takes part of the stream at a dam and returns it below. The water has to keep moving: cool, flowing water keeps the kalo healthy. Kī and maiʻa grow on the banks.',
       'In tradition the first kalo grew from Hāloa, elder brother of the Hawaiian people, so caring for kalo is caring for family.',
     ],
   },
@@ -79,7 +79,7 @@ export const STOPS = [
     zone: 4,
     text: [
       'A home here is a cluster of hale, each with its purpose: the hale noa, where the family sleeps; the mua, an eating house for men with the family shrine; a separate eating house for women; a house for beating kapa; a canoe house.',
-      'Under the ʻai kapu, men and women ate apart. Houses are framed in hardwood, lashed with cordage and thatched with pili grass, on a raised stone paepae.',
+      'Under the ʻai kapu, men and women ate apart. Houses are framed in hardwood, lashed with cordage and thatched with pili grass (in wetter places, lau hala or kī leaves), on a raised stone paepae.',
     ],
   },
   {
@@ -145,7 +145,7 @@ export const STOPS = [
     zone: 3,
     text: [
       'Where rain is too scarce for loʻi, families farm the open kula: ʻuala (sweet potato) in mounds, dryland kalo, ipu (gourds) and kō (sugarcane).',
-      'Long low walls run across the slopes to break the wind and hold soil and moisture. The great leeward field systems cover tens of square kilometres.',
+      'Long low walls run across the slopes to break the wind and hold soil and moisture. The great leeward field systems cover tens of square kilometres. Between the fields, fire keeps the pili grass open; ʻaʻaliʻi and lama hold the rocky gulches, with a few wiliwili.',
     ],
   },
   {

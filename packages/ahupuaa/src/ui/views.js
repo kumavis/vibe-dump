@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { windVector, Y_PER_M } from '../config.js'
 import { REGIMES } from '../weather/sim.js'
 import { astronomy } from '../render/sky.js'
+import { FOREST_KINDS } from '../features/vegetation.js'
 
 const yawFrom = (dx, dz) => Math.atan2(dx, dz) // camera offset direction → yaw
 const azimuthYaw = (deg) => {
@@ -122,7 +123,7 @@ export function buildViews(app) {
   }
   {
     const [x, z] = trunkAtHeight(520)
-    views.nahele = { target: at(x, z), distance: 9, yaw: makaiYaw + 0.9, pitch: 0.55, hour: 9.5, overlay: [0, 0, 0, 0] }
+    views.nahele = forestView(app, T, model, x, z) || { target: at(x, z), distance: 9, yaw: makaiYaw + 0.9, pitch: 0.55, hour: 9.5, overlay: [0, 0, 0, 0] }
   }
   if (loi) {
     // where the terraces lie thickest: the paddy with the most paddy around it
@@ -228,7 +229,7 @@ export function buildViews(app) {
   // where markers sit in explore mode (the thing itself, not the camera)
   const anchors = {
     akua: [model.topX, model.topZ],
-    nahele: trunkAtHeight(520),
+    nahele: [views.nahele.target.x, views.nahele.target.z],
     loi: views.loi ? [views.loi.target.x, views.loi.target.z] : null,
     kauhale: [village.x, village.z],
     heiau: heiau ? [heiau.x, heiau.z] : null,
@@ -635,6 +636,152 @@ function pickFallView(app, T, views, cands) {
   const r2 = (x) => Math.round(x * 100) / 100
   const rel = (arc) => arc && arc.map((y) => r2(y - v.yaw))
   return { view: v, h, info: { score: r2(best.final), open: c.open, arc: rel(v.orbit), arcP: rel(v.orbitPortrait), acc: Math.round(best.acc), accNext: Math.round(best.accNext) } }
+}
+
+// The forest stop. Its ʻōhiʻa forest, with hāpuʻu beneath and koa where the
+// ground drains, grows above the gardens on the model valley's sides, and in
+// the trades the cloud sits on it from about 650 m (a camera over the closed
+// forest higher up would stand in fog), so the camera stands just under the
+// cloud base, over the trees on the valley's side above the loʻi.
+// Of the places there (round the head of the valley's trunk stream) it takes
+// the one whose frame, left of the tour card, holds the most forest near the
+// camera — counted on the trees exactly as they will stand (vegetation.js
+// buildTile): the forest trees for it, the planted lowland ones against —
+// with the valley's great fall in sight where it can be, and a stretch of
+// orbit to idle across with the camera kept under the cloud and off the
+// ground (Waterfalls.holdOrbit; and, where it fits, on a phone held upright).
+const FOREST_WORTH = { ohia: 1, ohiaKrumm: 0.35, koa: 1, hapuu: 0.7, lama: 0.2, aalii: -0.2, kukui: -0.6, ohiaai: -0.4, hau: -0.4, hala: -0.6, wiliwili: -0.5 }
+const NAHELE_DIST = 4.5
+const NAHELE_PITCH = [0.15, 0.25]
+const NAHELE_R = 9 // how far round the valley head to look (world units)
+const NAHELE_REACH = 6 // and how far from the camera a tree counts
+function forestView(app, T, model, x0, z0) {
+  const veg = app.vegetation
+  if (!veg || !veg.buildTile) return null
+  const ground = groundOf(T)
+  const ceiling = CLOUD_BASE - 0.6
+  const region = app.island.data.region
+  const N = Math.sqrt(region.length / 4)
+  const inModel = (x, z) => {
+    const i = Math.floor(((x + 180) / 360) * N)
+    const j = Math.floor(((z + 180) / 360) * N)
+    return i >= 0 && j >= 0 && i < N && j < N && region[(j * N + i) * 4] === model.id
+  }
+  // a tile's trees, grown as the forest will grow them, as [x, crown y, z, worth]
+  // (only the tiles some camera reaches: a tile takes a fraction of a millisecond)
+  const worth = FOREST_KINDS.map((k) => FOREST_WORTH[k] || 0)
+  const tiles = new Map()
+  const treesOf = (i, j) => {
+    const key = i * 8192 + j
+    let list = tiles.get(key)
+    if (list) return list
+    const t = veg.buildTile(i, j)
+    list = []
+    for (let k = 0; k < worth.length; k++) {
+      for (let q = t.off[k]; q < t.off[k + 1]; q++) {
+        const sc = t.mat[q * 16 + 5]
+        // (a tall ʻōhiʻa counts for more than a stunted one; the crown's middle is ~8 m up)
+        const w = worth[k] * (FOREST_KINDS[k] === 'ohia' ? Math.min(1, sc / 0.016) : 1)
+        if (w) list.push(t.mat[q * 16 + 12], t.mat[q * 16 + 13] + sc * 8, t.mat[q * 16 + 14], w)
+      }
+    }
+    tiles.set(key, list)
+    return list
+  }
+  const hero = app.waterfalls?.heroes?.[0]
+  const cam = new THREE.Vector3()
+  const f = new THREE.Vector3()
+  const r = new THREE.Vector3()
+  const u = new THREE.Vector3()
+  const up = new THREE.Vector3(0, 1, 0)
+  const proj = (x, y, z, out) => {
+    const dx = x - cam.x
+    const dy = y - cam.y
+    const dz = z - cam.z
+    const zf = dx * f.x + dy * f.y + dz * f.z
+    if (zf <= 0.05) return false
+    out[0] = (dx * r.x + dy * r.y + dz * r.z) / zf / (TAN_V * 1.6)
+    out[1] = (dx * u.x + dy * u.y + dz * u.z) / zf / TAN_V
+    out[2] = zf
+    return true
+  }
+  const pa = [0, 0, 0]
+  const pb = [0, 0, 0]
+  // a good place for the camera: under the cloud, clear of the ground, and
+  // nothing between it and the target
+  const ok = (t, yaw, dist, pitch) => {
+    placeCam(cam, t, yaw, dist, pitch)
+    return cam.y <= ceiling && cam.y >= ground(cam.x, cam.z) + rigFloor(dist) && clearLine(ground, cam, t.x, t.y, t.z, 24, 0.03)
+  }
+  const arcOf = (t, yaw, dist, pitch) => {
+    let a = 0
+    let b = 0
+    while (a > -0.6 && ok(t, yaw + a - YAW_STEP, dist, pitch)) a -= YAW_STEP
+    while (b < 0.6 && ok(t, yaw + b + YAW_STEP, dist, pitch)) b += YAW_STEP
+    return [a, b]
+  }
+  // the forest in the frame, left of the card: the nearest trees, drawn as
+  // full models, most
+  const forestIn = (t) => {
+    f.subVectors(t, cam).normalize()
+    r.crossVectors(f, up).normalize()
+    u.crossVectors(r, f)
+    let score = 0
+    for (let i = Math.floor((cam.x - NAHELE_REACH) / 2); i <= Math.floor((cam.x + NAHELE_REACH) / 2); i++) {
+      for (let j = Math.floor((cam.z - NAHELE_REACH) / 2); j <= Math.floor((cam.z + NAHELE_REACH) / 2); j++) {
+        // (only the tiles that reach into that part of the frame: 0.62 is the
+        // half-width of the view at unit depth, 0.25 the card's edge)
+        const fw = (i * 2 + 1 - cam.x) * f.x + (j * 2 + 1 - cam.z) * f.z
+        const lt = (i * 2 + 1 - cam.x) * r.x + (j * 2 + 1 - cam.z) * r.z
+        if (fw < -1.5 || lt > 0.25 * fw + 1.5 || lt < -0.62 * fw - 1.5) continue
+        const list = treesOf(i, j)
+        for (let q = 0; q < list.length; q += 4) {
+          if (!proj(list[q], list[q + 1], list[q + 2], pa) || pa[0] > 0.4 || pa[0] < -1 || pa[1] > 1 || pa[1] < -1 || pa[2] > NAHELE_REACH) continue
+          score += (list[q + 3] * (pa[2] < 4.4 ? 2 : 1)) / Math.max(1, pa[2])
+        }
+      }
+    }
+    return score
+  }
+  let best = null
+  const t = new THREE.Vector3()
+  const consider = (yaw, pitch) => {
+    if (!ok(t, yaw, NAHELE_DIST, pitch)) return
+    let score = forestIn(t)
+    if (best && score + 40 < best.score) return
+    // the valley's great fall in sight, left of the card
+    if (hero && proj(hero.lip.x, hero.lip.y, hero.lip.z, pa) && proj(hero.base.x, hero.base.y, hero.base.z, pb)) {
+      if (pa[0] > -0.9 && pa[0] < 0.4 && pa[1] < 0.95 && pb[1] > -0.95 && sightClear(ground, cam, hero.lip)) score += 25
+    }
+    const arc = arcOf(t, yaw, NAHELE_DIST, pitch)
+    score += 20 * Math.min(0.6, arc[1] - arc[0])
+    if (!best || score > best.score) best = { score, x: t.x, z: t.z, yaw, pitch, arc }
+  }
+  for (let tz = z0 - NAHELE_R; tz <= z0 + NAHELE_R; tz += 0.75) {
+    for (let tx = x0 - NAHELE_R; tx <= x0 + NAHELE_R; tx += 0.75) {
+      if (Math.hypot(tx - x0, tz - z0) > NAHELE_R || !inModel(tx, tz)) continue
+      const m = T.metresAt(tx, tz)
+      if (m < 460 || m > 640) continue
+      t.set(tx, ground(tx, tz), tz)
+      for (const pitch of NAHELE_PITCH) for (let yi = 0; yi < 12; yi++) consider((yi / 12) * Math.PI * 2, pitch)
+    }
+  }
+  // (then the turns between, round the best)
+  if (best) {
+    const b = best
+    t.set(b.x, ground(b.x, b.z), b.z)
+    for (const pitch of NAHELE_PITCH) for (const dy of [-0.26, -0.13, 0.13, 0.26]) consider(b.yaw + dy, pitch)
+  }
+  if (!best || best.arc[1] - best.arc[0] < 0.1) return null
+  const target = new THREE.Vector3(best.x, ground(best.x, best.z), best.z)
+  const v = { target, distance: NAHELE_DIST, yaw: best.yaw, pitch: best.pitch, hour: 9.5, overlay: [0, 0, 0, 0] }
+  v.orbit = [best.yaw + best.arc[0], best.yaw + best.arc[1]]
+  // (a phone held upright stands further back along the same line)
+  if (ok(target, best.yaw, NAHELE_DIST * PORTRAIT, best.pitch)) {
+    const arcP = arcOf(target, best.yaw, NAHELE_DIST * PORTRAIT, best.pitch)
+    v.orbitPortrait = [best.yaw + Math.max(arcP[0], best.arc[0]), best.yaw + Math.min(arcP[1], best.arc[1])]
+  }
+  return v
 }
 
 // A stop whose frame cuts a hero fall off at the top tilts up just enough to

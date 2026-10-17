@@ -96,6 +96,8 @@ ${overlay}
 uniform sampler2D uNormal;
 uniform sampler2D uLand;  // r rain (log), g sand, b riparian, a cultivation
 uniform int uDebug;
+uniform float uKau;   // the season: 0 in hoʻoilo, 1 in kau (vegetation.js season(), from the day of the year)
+uniform float uLehua; // how many ʻōhiʻa are in bloom, 1 at the kau peak (as uAccent[0])
 in vec3 vWorld;
 in vec2 vUv;
 in float vMetres;
@@ -122,6 +124,14 @@ vec2 crowns(vec2 p) {
     if (d < d1) { d1 = d; best = n + g; }
   }
   return vec2(sqrt(d1), hash12(best + 3.7));
+}
+
+// The planted groves' patches (vegetation.js groveNoise: keep them in step):
+// value noise, its lookup wandered by a finer noise of its own, so a patch's
+// edge meanders instead of tracing the noise's lattice in boxes.
+float groveNoise(vec2 p) {
+  vec2 w = vec2(vnoise(p * 2.7 + vec2(5.2, 1.3)), vnoise(p * 2.7 + vec2(9.7, 6.1))) - 0.5;
+  return vnoise(p + 0.8 * w);
 }
 
 // The lava flows stacked in a pali (hm: height in metres). Every 30 m or so
@@ -323,10 +333,7 @@ void main() {
   nBig += vnoise(bp) * 0.125 + 0.03125;
   vec3 grassDry = srgb(vec3(0.70, 0.60, 0.38));
   vec3 grassGreen = srgb(vec3(0.47, 0.55, 0.28));
-  vec3 shrub = srgb(vec3(0.42, 0.45, 0.25));
-  vec3 mesic = srgb(vec3(0.26, 0.41, 0.17));
-  vec3 wet = srgb(vec3(0.15, 0.32, 0.13));
-  vec3 cloudF = srgb(vec3(0.17, 0.30, 0.18));
+  vec3 shrub = srgb(vec3(0.42, 0.45, 0.25)); // (the leeward pali's dry shrub)
   vec3 soil = srgb(vec3(0.52, 0.29, 0.17));
   vec3 rock = srgb(vec3(0.33, 0.29, 0.26));
   vec3 lava = srgb(vec3(0.17, 0.16, 0.155));
@@ -342,16 +349,113 @@ void main() {
   vec3 col = vec3(0.0);
   float nMid = 0.5;
   if (steep < 1.0) {
+    // The canopy beyond the streamed trees (vegetation.js), zone by zone as
+    // they're planted there: each albedo the linear mix of the trees that
+    // grow in it (sRGB 0..1, as authored; srgb() linearises). Most of the
+    // change from wet to dry is in hue, from the olive of the ʻōhiʻa to the
+    // yellow-green of the dry scrub, with kukui the one pale tree.
+    vec3 scrubC = srgb(mix(vec3(0.41, 0.48, 0.28), vec3(0.44, 0.47, 0.29), uKau)); // ʻaʻaliʻi, lama, dry ʻōhiʻa, wiliwili (bare in kau)
+    vec3 mesic = srgb(vec3(0.37, 0.41, 0.25)); // ʻōhiʻa (partly hairy), koa, lama
+    vec3 wet = srgb(vec3(0.33, 0.37, 0.21)); // ʻōhiʻa olive over a little hāpuʻu and ʻōlapa
+    vec3 cloudF = srgb(vec3(0.33, 0.38, 0.22)); // stunted ʻōhiʻa, ʻōlapa, moss
+    vec3 kukuiC = srgb(vec3(0.44, 0.47, 0.33)); // kukui's pale silvery grey-green (as its far crowns, shaded below and floury on top)
+    vec3 floorC = srgb(vec3(0.33, 0.43, 0.20)); // ʻōhiʻa ʻai (near-black green) and hau (bright)
+    vec3 uluheC = srgb(vec3(0.49, 0.62, 0.31)); // uluhe: matte yellow-green fern
+    vec3 bogC = srgb(vec3(0.43, 0.44, 0.27)); // summit bog: sedge, moss, knee-high ʻōhiʻa
     nMid = fbm2(xz * 2.1 + 5.0);
     vec3 ground = mix(grassDry, grassGreen, smoothstep(0.18, 0.42, r + nMid * 0.08));
+    // (the leeward pili, straw in kau, greens toward a pale blue-green in the
+    // hoʻoilo rains: leeward meaning drier than the island's middle for its
+    // height, so the windward coast, nearly as dry, keeps its own green)
+    float lee = 1.0 - smoothstep(-0.04, 0.04, r - 0.22 - 0.00043 * metres);
+    ground = mix(ground, srgb(vec3(0.54, 0.62, 0.50)), 0.3 * (1.0 - uKau) * lee);
     float forest = smoothstep(0.30, 0.52, r + (nMid - 0.5) * 0.2);
-    vec3 canopyC = mix(shrub, mesic, smoothstep(0.32, 0.55, r));
-    canopyC = mix(canopyC, wet, smoothstep(0.55, 0.8, r));
-    canopyC = mix(canopyC, cloudF, smoothstep(1150.0, 1500.0, metres));
+    // c. 1700 the lowland below about 460 m was farmed and burned, and native
+    // forest stood untouched only above about 760 m. On the moist side the
+    // interfluves lie open in fallow grass and fern, the trees in the gulches
+    // and on the steep lower slopes; on the dry side trees keep to the gulches.
+    float cult = 1.0 - smoothstep(420.0, 760.0, metres + (nBig - 0.5) * 120.0);
+    float gul = smoothstep(0.08, 0.3, rip);
+    float moistLow = cult * smoothstep(0.30, 0.40, r);
+    // (eased over a wide band of slope: a narrow one cuts the open fallow from
+    // the wooded slopes along the slope's own contours, in hard-edged patches)
+    forest *= mix(1.0, 0.35 + 0.65 * max(gul, smoothstep(0.17, 0.34, slope)), moistLow);
+    forest = max(forest, gul * 0.45 * (1.0 - smoothstep(0.30, 0.40, r)));
+    vec3 canopyC = mix(scrubC, mesic, smoothstep(0.36, 0.46, r));
+    canopyC = mix(canopyC, wet, smoothstep(0.54, 0.64, r));
+    canopyC = mix(canopyC, cloudF, smoothstep(1150.0, 1450.0, metres));
+    // (none of the planted or open-ground tints in or round a hero's
+    // amphitheatre, see below, nor round its pool and a way down the gorge
+    // below, which its spray keeps wild: pale groves there would muddy the
+    // foot of the fall)
+    float foot = 0.0;
+    if (abs(vFall.z - floor(vFall.z + 0.5)) < 1e-3) foot = 1.0 - smoothstep(1.2, 2.2, length(vec2((vFall.x - vFallB.w) * 0.7, vFall.y)));
+    float wild = 1.0 - max(fall.zone, foot);
+    // groves and gaps, a few tens of metres across: nMid's patches, eased to
+    // their mean once a pixel spans one, where they'd only sparkle
+    float grove = mix(smoothstep(0.35, 0.65, nMid), 0.5, smoothstep(0.1, 0.3, px));
+    // Within about 13 units of the camera the trees themselves stand on this
+    // ground (vegetation.js, whose simple crowns dither out over 10 to 13.5),
+    // and what's mapped here is what shows between them: there the crowns'
+    // own marks (kukui's pallor, the lehua and liko specks) would only lie
+    // on the ground like dead grass and spilt paint, so they come in as the
+    // trees go
+    float treesGo = smoothstep(9.5, 13.0, distance(cameraPosition, vWorld));
+    // The planted groves come in patches a couple of hundred metres across,
+    // the same ones the trees are planted by (vegetation.js kukuiPatch and
+    // aiGrove: keep them in step): kukui's big pale groves, and ʻōhiʻa ʻai's
+    // nearly pure dark ones in the moist valleys below about 550 m
+    // (worked out only where either can grow: low and moist enough)
+    // (their edges eased a little more here than the planting's, about the
+    // same middle contour, so the trees thin out across the tint's edge)
+    float kp = 0.0;
+    float ai = 0.0;
+    float offCrest = 1.0;
+    if (metres < 690.0 && r > 0.32) {
+      kp = smoothstep(0.36, 0.64, groveNoise(xz * 0.5 + vec2(13.1, 7.7)));
+      // (its dry edge as soft as the trees', whose rain is jittered tree by tree)
+      ai = smoothstep(0.57, 0.71, groveNoise(xz * 0.55 + vec2(41.3, 3.9)))
+         * smoothstep(0.38, 0.50, r) * (1.0 - smoothstep(520.0, 560.0, metres)) * cult * wild;
+      // Neither grove stands on the farmed lowland's gentler crests, where
+      // its trees are ʻōhiʻa, koa and hala (vegetation.js: a ridge stands
+      // 20–60 m over a ring ~250 m round it, with no water gathering on it;
+      // the steep flanks below, walls to the trees, keep theirs)
+      if (ai > 0.01 || (kp > 0.01 && slope > 0.24 && slope < 0.36)) {
+        float ring = 0.25 * (metresAt(xz + vec2(2.46, 0.0)) + metresAt(xz - vec2(2.46, 0.0)) + metresAt(xz + vec2(0.0, 2.46)) + metresAt(xz - vec2(0.0, 2.46)));
+        offCrest = 1.0 - smoothstep(20.0, 60.0, metres - ring) * (1.0 - smoothstep(0.05, 0.2, rip)) * (1.0 - smoothstep(0.28, 0.36, slope));
+        ai *= offCrest;
+      }
+    }
+    // kukui: pale streaks down the gulches and, in the farmed band, groves on
+    // the steep lower walls (steep as the trees take it, from about 0.32: on
+    // the gentler fallow they stand scattered, and their pallor painted there
+    // lies on the open slope in patches); gone above about 680 m and where the
+    // rain passes about 4,000 mm
+    float kuk = max(gul * (1.0 - smoothstep(0.55, 0.85, rip)) * (0.45 + 0.55 * kp), smoothstep(0.24, 0.40, slope) * kp * cult * offCrest)
+              * (1.0 - smoothstep(450.0, 680.0, metres)) * smoothstep(0.32, 0.40, r) * (1.0 - smoothstep(0.66, 0.74, r)) * wild * (1.0 - 0.9 * ai);
+    canopyC = mix(canopyC, kukuiC * (0.9 + 0.2 * nMid), kuk * mix(0.3, 0.8, treesGo));
+    // (dark ground under the dark groves reads as their shade, so this one
+    // holds inside the ring too)
+    canopyC = mix(canopyC, srgb(vec3(0.24, 0.32, 0.155)), ai * 0.7);
+    // valley floors: ʻōhiʻa ʻai groves and hau along the stream (the loʻi
+    // themselves are clearings) — the broad floors, and the flat drained
+    // hollows of the moist lowland, where the loʻi valleys' floors carry
+    // little blurred drainage (as vegetation.js reads its floors)
+    float flo = max(smoothstep(0.55, 0.85, rip) * (1.0 - smoothstep(0.10, 0.22, slope)),
+                    (1.0 - smoothstep(0.03, 0.08, slope)) * smoothstep(0.15, 0.3, rip) * moistLow)
+              * (1.0 - smoothstep(450.0, 560.0, metres)) * smoothstep(0.34, 0.40, r) * wild;
+    canopyC = mix(canopyC, floorC, flo * 0.7);
+    // and round a hero's amphitheatre the fern holds the ground (fallAt),
+    // the same velvet as on its walls, so the rock stands framed in it
+    canopyC = mix(canopyC, mix(srgb(vec3(0.20, 0.34, 0.14)), srgb(vec3(0.29, 0.41, 0.18)), nMid), fall.zone);
+    forest = max(forest, 1.0 - wild);
 
     // tree crowns: each cell a sunlit dome, faded to an average when they'd
-    // alias (and only that average worked out once they have)
-    float crownFade = 1.0 - smoothstep(0.02, 0.07, px);
+    // alias (and only that average worked out once they have), and inside
+    // the streamed trees' ring, where it would only lie on the ground between
+    // their trunks as a lattice of cobbles
+    vec3 canopyFlat = canopyC * 0.84;
+    float crownFade = (1.0 - smoothstep(0.02, 0.07, px)) * smoothstep(8.5, 12.0, distance(cameraPosition, vWorld));
     if (crownFade > 0.0) {
       vec2 vc = crowns(xz * 6.0);
       float dome = sqrt(max(0.0, 1.0 - vc.x * vc.x * 1.6));
@@ -359,14 +463,22 @@ void main() {
       vec2 toC = (xz * 6.0 - (floor(xz * 6.0) + 0.5));
       float lightSide = dot(normalize(vec3(-toC.x, 0.6, -toC.y)), uSunDir) * 0.5 + 0.5;
       float crown = mix(0.84, (0.62 + 0.45 * dome) * (0.78 + 0.4 * lightSide), crownFade);
-      vec3 tint = mix(vec3(0.88, 0.97, 0.86), vec3(1.12, 1.06, 0.88), vc.y);
+      // neighbouring ʻōhiʻa run from glossy green to hairy grey: olive to
+      // grey, not green to yellow
+      vec3 tint = mix(vec3(0.92, 0.96, 0.90), vec3(1.10, 1.06, 1.00), vc.y);
       canopyC *= mix(vec3(1.0), tint, crownFade * 0.7) * crown;
-      // ʻōhiʻa in bloom: a sprinkle of lehua red on the upper forest
-      float lehua = step(0.93, hash12(floor(xz * 6.0) + 0.3)) * smoothstep(700.0, 1100.0, metres) * crownFade;
-      canopyC = mix(canopyC, srgb(vec3(0.62, 0.12, 0.08)), lehua * 0.35 * smoothstep(0.0, 0.5, dome));
+      // ʻōhiʻa country only: lehua a sparse red speck on a few crowns, more
+      // of them in kau, and the red flush of new leaves (liko) on others —
+      // whole crowns (keyed to the crown's own id), on the top of the dome,
+      // and only while a crown is several pixels across, beyond which they
+      // would add up to a rash
+      float ohiaShare = smoothstep(0.38, 0.5, r) * smoothstep(380.0, 700.0, metres) * (1.0 - kuk) * (1.0 - flo) * (1.0 - ai)
+                      * crownFade * treesGo * (1.0 - smoothstep(0.006, 0.018, px));
+      float lehua = step(1.0 - 0.035 * uLehua, fract(vc.y * 13.7)) * ohiaShare;
+      canopyC = mix(canopyC, srgb(vec3(0.72, 0.20, 0.16)), lehua * 0.75 * smoothstep(0.78, 0.92, dome));
+      float liko = step(0.96, fract(vc.y * 7.31 + 0.5)) * ohiaShare;
+      canopyC = mix(canopyC, srgb(vec3(0.62, 0.23, 0.17)), liko * 0.12 * smoothstep(0.5, 0.9, dome));
     } else canopyC *= 0.84;
-    // riparian strips: kukui's pale silvery green along the gulches
-    canopyC = mix(canopyC, srgb(vec3(0.52, 0.60, 0.42)), rip * 0.55 * smoothstep(0.35, 0.6, r));
     // grass: no cells, just tussocky variation at a few scales (fbm2's
     // first three octaves and the fourth's mean: the fourth, under a metre
     // across and a few per cent, is the next term's job)
@@ -380,6 +492,30 @@ void main() {
     if (px < 0.02) gN += vnoise(xz * 90.0) * 0.4 * (1.0 - smoothstep(0.004, 0.02, px));
     ground *= 0.82 + 0.36 * gN;
     col = mix(ground, canopyC, forest);
+    // Under the streamed trees, within ~13 units, what shows between the
+    // trunks of the forest above the farmed lowland is its floor, in their
+    // shade (the trees cast none on the ground): dark moss, fern and litter
+    // in the wet and cloud forest, a shaded version of the canopy in the
+    // mesic. It hands back to the sunlit canopy as the trees dither out.
+    // (over a wider band than the crowns' own hand-over, and no darker than
+    // the trees standing on it can make up for, so no ring shows where the
+    // canopy takes over)
+    // (the wet floor a moss green that stays green in the warm low sun, not
+    // khaki; the mesic one the canopy's mean, without its crown cells)
+    float under = (1.0 - smoothstep(8.0, 13.0, distance(cameraPosition, vWorld))) * smoothstep(340.0, 520.0, metres) * smoothstep(0.36, 0.46, r) * wild;
+    if (under > 0.0) {
+      vec3 floorShade = mix(canopyFlat * 0.68, srgb(vec3(0.19, 0.27, 0.12)) * (0.75 + 0.3 * nMid + 0.3 * gN), smoothstep(0.52, 0.62, r));
+      col = mix(col, floorShade, under);
+    }
+    // uluhe: matte yellow-green fern where the wet forest opens up on the
+    // steeper slopes under the pali (whose fern velvet carries on above),
+    // lowland to low montane; never down in the gulches, nor under the kukui
+    float ulu = smoothstep(0.55, 0.65, r) * smoothstep(0.18, 0.34, slope) * smoothstep(120.0, 300.0, metres)
+              * (1.0 - smoothstep(1000.0, 1300.0, metres)) * grove * (1.0 - gul) * (1.0 - kuk) * wild;
+    col = mix(col, uluheC * (0.85 + 0.3 * gN), ulu * 0.6);
+    // summit bogs: the flat, sodden ground near the top
+    float bog = smoothstep(1320.0, 1420.0, metres) * (1.0 - smoothstep(0.03, 0.08, slope)) * smoothstep(0.80, 0.88, r);
+    col = mix(col, bogC * (0.85 + 0.3 * nMid), bog * 0.85);
 
     // kula field system: low walls along the contours, rows of ʻuala mounds,
     // plots in different stages
