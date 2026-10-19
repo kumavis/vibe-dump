@@ -6,8 +6,9 @@
 // score at each round's end, and the game's end.
 //
 // It is the old battle loop (main.js's battle() and playerTurn(), which
-// plays the shipped game until R6b) unrolled into resumable steps, with
-// every statement in its old order, so the trace lines up line for line:
+// R6b retired: every mode plays this through a Session) unrolled into
+// resumable steps, with every statement in its old order, so the trace
+// lines up line for line:
 //
 //   rolloff    the stage, the flags, the roll-off (do…while: §4.1 rule 4)
 //   turnStart  the active seat, its units' flags reset, the first phase
@@ -136,9 +137,11 @@ export function endMesmerism(G, side) {
 
 // An action's end: its state line in the trace, then what the table shows of
 // it (who holds each objective; every label), the `act` itself, and whether
-// a side is gone. (Under ?debug main.js's `act` carries the match as it
-// should be shown, project(G), which core can't compute: present/ is above
-// it. R6b's Session sink adds it.)
+// a side is gone. (Under ?debug the `act` the view plays carries the match
+// as it should be shown, project(G), which core can't compute: present/ is
+// above it. main.js's ?debug block adds it, taking project(G) in its
+// onTrace as the act line is written, and its Session sink puts it on the
+// event: sim/present-check.mjs's checkpoints.)
 export function finishAction(G) {
   traceState(G, 'act')
   if (G.out) {

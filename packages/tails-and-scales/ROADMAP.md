@@ -8,10 +8,12 @@ the commit, and add whatever the work turned up.
 - **Behaviour parity.** Refactors must not change how a battle plays.
   `npm run parity -w @vibe-dump/tails-and-scales` replays the corpus in
   `sim/baselines` (seeded AI-vs-AI battles and human command logs) with the
-  working tree's code in Node, and checks every trace line, every
-  full-precision shadow snapshot and every battle-log write against the
-  recorded hashes; a failure names the first diverging line, with context
-  from the frozen code in `sim/oracle/PIN`. `node sim/parity.mjs --browser`
+  working tree's pure core, folded headless in Node (since R6b; `--page`
+  plays the page itself under a fake DOM instead), and checks every trace
+  line, every full-precision shadow snapshot and every battle-log write
+  against the recorded hashes; a failure names the first diverging line,
+  with context from the frozen code in `sim/oracle/PIN` (by that code's own
+  runner: its page today). `node sim/parity.mjs --browser`
   builds the app and does the same in Chromium, starting each battle from its
   title-screen button; set `CHROMIUM_PATH` to the pre-installed Chromium if
   Playwright's own isn't installed. `node sim/self-test.mjs` checks the
@@ -30,10 +32,15 @@ the commit, and add whatever the work turned up.
   R5 `node sim/present-check.mjs` (and `--self-test`: what the table shows,
   folded from the match's events, is the match at every action), and from
   R6a `node sim/parity.mjs --core` (the pure core folds the whole corpus
-  headless, exactly, with three.js and the fake DOM refused),
+  headless, exactly, with three.js and the fake DOM refused; since R6b
+  the default, with `node sim/parity.mjs --page` the page's run),
   `node sim/mutation.mjs --core` (one swapped die fails that gate too) and
   `node sim/property.mjs` (and `--self-test`: P-prop, what holds for any
-  play of the core). A step
+  play of the core, the Session included since R6b), and from R6b
+  `node sim/boundaries.mjs` (and `--self-test`: the layer rules, which
+  code may import what, the core's surface that keeps the dice out of the
+  layers above it, and what the consensus code must never contain).
+  A step
   that changes what one of them reads ports it in the same step (DESIGN's
   §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
@@ -307,7 +314,7 @@ step keeps the game playable.
     marker and the thorns, view state outside the mirror. Every gate ran
     again on the fixed tree, P-browser over the whole corpus last, 40/40
     (DESIGN's R5c notes).
-- [ ] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as
+- [x] **R6 Engine and commands.** Step machine, `legal`/`apply`, AI as
   generators, `LocalStore` + `Session`; the core runs headless in Node.
   In two passes, the engine built beside the old loop and switched only at
   full parity: R6a (the pure core, proved headless), R6b (the game onto it
@@ -383,11 +390,75 @@ step keeps the game playable.
     all-AI battle to its end before it returns; P-prop checks the setups
     the core refuses and the state's shape (two more broken cores caught);
     the API listings mark what joins at R8.
-  - [ ] **R6b**: the Session and `LocalStore`, input as commands, the
-    `?debug` surface over the Session (carrying the state with each
-    waiting state line), P-present over the Session, `data/compat.js`
-    deleted, `sim/boundaries.mjs`, parity's default on the core, P-browser
-    over the whole corpus.
+  - [x] **R6b** landed: every mode (watch, vs. the AI from either seat,
+    hotseat) is a `Session` (`match/session.js`) over a `LocalStore`
+    (`match/store.js`), the match created from the whole setup when a mode
+    is chosen; the old battle loop in main.js is gone (the battle, the
+    turns, the score, the end, the action's end, the AI's turn), and the
+    page plays the core's events (the roll-off's dice, each phase's banner,
+    the score's rings, the end screen worded from how it ended). The title
+    shows a backdrop, a match on the board seed that is never played, whose
+    meshes and figures the battle keeps. Clicks and buttons are commands
+    (units by id, places by nav cell) sent only if the match takes them,
+    the previews ask with the dice locked, and the charge's end is
+    `input/tools/charge-end.js`. End, Auto and Advance now look disabled
+    while the table plays, not just ignore clicks. The `?debug` surface is
+    derived from the Session (sim/oracle unchanged), each waiting state
+    line carrying a snapshot of the match as it was written, since one End
+    now computes a whole AI turn first. P-present's checkpoints come from
+    the trace as the match writes it. `data/compat.js` is gone (the seats'
+    look in `ui/theme.js`, the classic matchup in `data/mission.js`);
+    `sim/boundaries.mjs` checks the layer rules; parity's default is the
+    pure core, the page kept as `--page`, and the PIN rule stays, with
+    references from the PIN's own runner (DESIGN's R6b notes). Checks:
+    parity 40/40 on the core and on the page, P-browser over the whole
+    corpus 40/40, P-present 40/40 (and its self-test), P-prop with the
+    Session (and its self-test, two more broken copies caught), every
+    standing check, and the shipped page played rendered in Chromium
+    without `?debug` or `?fast`: a watched battle to its end screen and back
+    to a new battlefield, vs. the AI from each seat with real clicks, and
+    hotseat.
+    Review fixes (fixer round 1): through the roll-off the HUD no longer
+    shows seat 0's movement (End, Auto and the hint wait for the first
+    phase's banner); a click off the orange area during a charge's pick
+    does nothing again (it ended the charge with Shortest move); every seed
+    the page takes is wrapped as the generators always did (`?seed=-5`, a
+    seed box of -5 or `?dice=2.5` broke the page or every start), drawing the
+    same boards and dice as before; `sim/boundaries.mjs` bans `core/rng.js`
+    from match/, present/ and net/ too, and catches `export let` and empty
+    Sets; a battle always starts on its own table; the sink binds the
+    Session it is handed; `?debug` `scenery.blast` is title-only and every
+    hook throws on a refused command; the dead `play()` and `drain()` went;
+    P-present holds the roll-off's order; data-check holds the seats' look;
+    flag-lint runs through a symlinked path; P-prop requires the Session
+    whenever `match/` exists; `sim/terrain-shots.mjs` run (identical to R0,
+    with `--full` too). Every check again, P-browser over the whole corpus
+    and the rendered runs included (DESIGN's R6b notes).
+    Review fixes (fixer round 2): `sim/boundaries.mjs` now keeps the dice
+    themselves out of the layers above the consensus code, not just their
+    module: each imports from `core/` only its surface (no `d6`/`roll`, no
+    engine, commands, actions or AI; `apply` only from `match/`), the
+    surface's doors pass on nothing that draws but the listed queries,
+    statements are read across lines and re-exports followed through
+    `export const` and aliases (75 self-test cases); the unit card no longer
+    tells of moves, shots, charges and cover the table hasn't played yet
+    (only while the player is idle; P-present reads every card at every
+    checkpoint); stale R5/R6a headers rewritten; a seat "played here" is the
+    Session's `localSeats`; a `?debug` charge hook abandoned mid-pick no
+    longer breaks the next table. Every check again, P-browser over the
+    whole corpus and the rendered runs included (DESIGN's R6b notes).
+    Review fixes (fixer round 3): P-prop holds the events the Session hands
+    its view to the ones the core leaves, batch by batch (a Session that
+    dropped the `pending` events passed it; one more broken copy caught);
+    End and Auto stay up, disabled, through a contact charge's roll and its
+    walk, hidden only while the pick waits; `sim/boundaries.mjs` also bans
+    `Math` other than as `Math.<member>`, the timers, `crypto`, `process`
+    and `globalThis` from the consensus code, and no longer loses a line's
+    code after a `//` inside a string (86 self-test cases); `CLASSIC`
+    documented as the page's default races (no setup takes it by default);
+    the two changes players can see (hotseat's deploy lines at once, the
+    zones' opacity on the title after a battle) listed for approval; stale
+    headers rewritten. Every check again (DESIGN's R6b notes).
 - [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,
   input tools, `ui/*`, HUD model, template cache.
 - [ ] **R8 Netplay seams.** `stateHash`, envelopes, `Folder` (the replicated

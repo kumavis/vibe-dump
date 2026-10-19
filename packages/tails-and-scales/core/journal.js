@@ -10,11 +10,13 @@
 // and ?debug only), which may read G but never change it.
 //
 // The events (DESIGN §2.3): what happened, as plain data, pushed onto G.out
-// in the order it happened, for the view to play at its own pace (main.js's
-// EventPlayer). The rules never wait for them: what the old code waited on (a
-// dice row, a beat after a wound) is an event in the same place (§4.1 rule
-// 3), and building one never draws a die or changes the match. G.out is null
-// for a quiet run (nothing is kept) and [] when someone will present.
+// in the order it happened, for the view to play at its own pace (the
+// Session, match/session.js, takes them out of G.out after each entry it
+// folds and hands them to the view's EventPlayer). The rules never wait for
+// them: what the old code waited on (a dice row, a beat after a wound) is an
+// event in the same place (§4.1 rule 3), and building one never draws a die
+// or changes the match. G.out is null for a quiet run (nothing is kept) and
+// [] when someone will present.
 //
 // The battle log: a line is traced (its text), then shown (a `log` event
 // carrying `at`, the trace's length at that moment), and the lines held back
@@ -30,11 +32,6 @@ export function emitTo(out, t, payload) {
 }
 export function emit(G, t, payload = {}) {
   emitTo(G.out, t, payload)
-}
-// Every event emitted since the last drain, in order, taken out of G.out
-// ([] for a quiet run).
-export function drain(G) {
-  return G.out ? G.out.splice(0) : []
 }
 
 export function trace(G, line) {

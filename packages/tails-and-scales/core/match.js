@@ -4,10 +4,11 @@
 // setup it was made from, the dice stream, the seats, the units, the
 // objectives, the terrain and its nav grid, the turn, and the journal (the
 // trace and the log lines held back until an attack is over). A fresh one
-// is built for every table (newState), so nothing carries over from one
-// match to the next: unit ids and chunk ids both count from 1 again. The
-// view keeps its own state beside it (main.js: each unit's figures by unit
-// id, the terrain's meshes by chunk id), and the rules never read that.
+// is built for every match (newState, which core/index.js's createMatch
+// calls with the whole setup), so nothing carries over from one match to
+// the next: unit ids and chunk ids both count from 1 again. The view keeps
+// its own state beside it (main.js: each unit's figures by unit id, the
+// terrain's meshes by chunk id), and the rules never read that.
 //
 // A match has two seats; each plays a race and is played by a human or the
 // AI. The table edge a seat deploys on is fixed by the seat, never by the
@@ -55,14 +56,15 @@ export const ctrl = (G, s) => G.seats[s].ctrl
 // A new match on a new table:
 //   setup  { board, dice, terrain: 'classic', rounds, diceMode, seats: [{ race, ctrl }, …] }
 //          (core/index.js's createMatch fills in the defaults and checks it)
-//   out    where the terrain reports what it builds and breaks (main.js plays
-//          them; null for a quiet run)
+//   out    where the match's events go, the terrain's reports of what it
+//          builds and breaks among them (the view plays them; null for a
+//          quiet run)
 //   onTrace(line, G)  hears every trace line as it is written (sim/ and
 //          ?debug only: it never draws and nothing reads it back)
 // The board is scattered around the mission's objectives, the nav grid built
-// from it, and both armies made and deployed, seat 0's first. The turn starts
-// at the title: the stage is 'title' until start() in main.js begins the
-// battle on this table (or createMatch moves it on to the deployment).
+// from it, and both armies made and deployed, seat 0's first. The turn
+// starts at the deployment, the engine's next step the roll-off
+// (createMatch asks the human seats to adjust their deployment first).
 export function newState(setup, { out = null, onTrace = null } = {}) {
   const { W, H } = BOARD
   const G = {
@@ -75,14 +77,13 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
     terrain: new Terrain(W, H),
     // derived from the terrain; rebuilt only at refreshNav's call sites
     nav: new NavGrid(W, H, NAV_CELL),
-    // stage 'title' | 'deploy' | 'battle' | 'over'; step: where the engine's
-    // step machine stands (core/engine.js; null for a table main.js's own
-    // turn loop plays, until R6b); round and t: the round and which of its two
-    // turns; active: the seat whose turn it is; first: who won the roll-off;
-    // ph: the phase, by its index in PHASES (phaseKey); wiped: the seat
-    // wiped off the table, -1 for none; result: { win, why } once over;
+    // stage 'deploy' | 'battle' | 'over'; step: where the engine's step
+    // machine stands (core/engine.js); round and t: the round and which of
+    // its two turns; active: the seat whose turn it is; first: who won the
+    // roll-off; ph: the phase, by its index in PHASES (phaseKey); wiped: the
+    // seat wiped off the table, -1 for none; result: { win, why } once over;
     // overtime: rounds played past setup.rounds (F4)
-    turn: { stage: 'title', step: null, round: 1, t: 0, active: 0, first: 0, ph: 0, vp: [0, 0], wiped: -1, result: null, overtime: 0 },
+    turn: { stage: 'deploy', step: 'rolloff', round: 1, t: 0, active: 0, first: 0, ph: 0, vp: [0, 0], wiped: -1, result: null, overtime: 0 },
     // the decision the match waits on, a human seat's (core/engine.js;
     // DESIGN §2.1), null while the engine runs on or once the battle is over
     pending: null,
@@ -100,17 +101,6 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
   for (const side of [0, 1]) for (const key of raceOf(G, side).army) G.units.push(makeUnit(G, key, side))
   deployArmies(G)
   return G
-}
-
-// Begin the battle on the table built for it: the title screen builds the
-// table before the mode is chosen, so the dice and who plays each seat come
-// now. Refused once the table's battle is under way (main.js's start() moves
-// the stage on from 'title' straight after this, before anything else runs).
-export function startMatch(G, { dice, ctrl: who }) {
-  if (G.turn.stage !== 'title') throw new Error(`this table's battle has begun already (stage ${G.turn.stage})`)
-  G.setup = deepFreeze({ ...copySetup(G.setup), dice, seats: G.setup.seats.map((s, i) => ({ ...s, ctrl: who[i] })) })
-  G.rng = createRng(dice)
-  G.seats = makeSeats(G.setup.seats.map((s) => s.race), who)
 }
 
 // The nav grid follows the terrain: rebuilt when a chunk changed shape since

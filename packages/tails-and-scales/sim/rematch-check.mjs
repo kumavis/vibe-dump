@@ -22,12 +22,17 @@
 // whenever the page's EventPlayer is idle (main.js's ?debug `player`), after
 // any frame of all three battles, the match's out (G.out) must be empty,
 // and so must it, with the player idle, before and after each new table. The
-// rules leave their events in G.out and main.js drains them into the player,
-// straight after each terrain call and each action (core/actions/'s, played
-// by played()); while the player is still playing, G.out may hold what the
-// rules emitted since (from R6 a whole AI turn), so the check waits for
-// idle. Code without a player (before R5) is held to an empty G.out after
-// every frame, as R4 had it.
+// rules leave their events in G.out for the view to take. From R6b every
+// battle is a Session over a LocalStore (main.js's ?debug `session`), which
+// hands each entry's events to the player as it folds the entry, a whole AI
+// turn after an `end`, a whole watched battle at its start: so with a
+// Session G.out must be empty after every frame, idle or not, and the
+// Session must have refused no entry of the battle's log. Before R6b
+// main.js drained G.out after each terrain call and action, and G.out could
+// hold what the rules emitted since while the player was still playing, so
+// that code is held to it only when the player is idle; code without a
+// player (before R5) after every frame, as R4 had it. The per-table G went
+// with R6b: on the title there is no match (G null), only the backdrop.
 //
 //   node sim/rematch-check.mjs [--only ai,hotseat,4242-99] [--ref <ref> | --dir <packageDir>]
 //
@@ -88,12 +93,14 @@ async function page(dir) {
       if (!f) throw new Error('no frame queued')
       f()
       if (driver) driver.tick()
-      // (code before R4 has no G: nothing to check there; before R5 no player)
-      if (ts.G?.out?.length && (ts.player?.idle ?? true)) undrained++
+      // (code before R4 has no G: nothing to check there; before R5 no
+      // player; from R6b a Session, which leaves nothing in G.out)
+      if (ts.G?.out?.length && ('session' in ts || (ts.player?.idle ?? true))) undrained++
       if (++frames > 200000) throw new Error(`still at stage ${ts.S.stage} after ${frames} frames`)
       await new Promise((r) => setImmediate(r))
     }
     if (driver?.unused) throw new Error(`the battle ended with ${driver.unused} log entries unplayed`)
+    if (ts.session?.rejected.length) throw new Error(`the Session refused ${ts.session.rejected.length} entries of the battle's log: ${JSON.stringify(ts.session.rejected[0])}`)
     return { trace: ts.trace.slice(), shadow: rec.shadow.slice(from.shadow), written: rec.written.slice(from.written), undrained, frames }
   }
   const out = { first: null, second: null, third: null, board: null, error: null }

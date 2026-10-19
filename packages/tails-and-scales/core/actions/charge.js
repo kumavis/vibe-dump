@@ -15,13 +15,12 @@
 //   (and the move: actions/move.js's resolveWalk, `unit.move`)
 //
 // Neither half ends the action (its state line in the trace, the flags and
-// the labels) or touches G.pending, and neither calls finishAction. Until
-// R6b, main.js's own finishAction ends the action for the shipped game, once
-// these events have played, so no state line is written while the view is
-// behind (the ?debug trace's hold: DESIGN's R5a and R5b notes); in the core,
-// the `charge` and `chargeEnd` handlers (core/commands.js) open and close
-// the chargeEnd decision and call core/engine.js's finishAction (DESIGN
-// §2.2's (R6a) note, proposed to stay so at R6b).
+// the labels) or touches G.pending, and neither calls finishAction: the
+// `charge` and `chargeEnd` handlers (core/commands.js), the only path to
+// them, open and close the chargeEnd decision and call core/engine.js's
+// finishAction (DESIGN §2.2's (R6a) note; the split the lead approved at
+// R6b). The AI's charge takes the same `charge` handler inside the fold,
+// where declareCharge finishes it the shortest way, opening no decision.
 import { CHARGE_RANGE, ENGAGE, roll } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit, log } from '../journal.js'

@@ -19,9 +19,16 @@ import { codeDir } from './oracle/pin.mjs'
 export const SIM = fileURLToPath(new URL('./', import.meta.url))
 export const BASE = join(SIM, 'baselines')
 const RUNNER = join(SIM, 'oracle', 'run-legacy.mjs')
+// the page under the fake DOM (sim/oracle's driver): the runner of code
+// older than R6, of P-browser's Node twin and of every check that plays the
+// page (present-check, rematch-check, perturb)
+export const PAGE_RUNNER = RUNNER
 // the headless fold of the pure core (R6), which takes the same jobs and
-// reports the same way (sim/run.mjs)
+// reports the same way (sim/run.mjs): parity's default from R6b
 export const CORE_RUNNER = join(SIM, 'run.mjs')
+// The runner a package's own code is judged by: its pure core when it has
+// one (core/index.js, R6a on), else its page.
+export const runnerOf = (dir) => (existsSync(join(dir, 'core', 'index.js')) ? CORE_RUNNER : RUNNER)
 
 // ── The legacy rules ────────────────────────────────────────────────────────
 // The R0 commit: the first with the ?debug hooks. It and every commit before

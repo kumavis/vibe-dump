@@ -1,6 +1,7 @@
 // The core's public API (DESIGN §2.2): a battle is a pure function of its
-// setup and the commands its seats played. sim/ (and, from R6b, the
-// Session that every mode plays through) reaches the core through here only.
+// setup and the commands its seats played. sim/ and the Session that every
+// mode plays through (match/session.js) reach the core through here; the
+// view reads the queries (q) and asks through preview().
 //
 //   createMatch(setup, { out, onTrace, strict })  a new match, run on to the
 //       first decision a human seat makes: the deployment, or (with no human
@@ -72,11 +73,9 @@ export function fullSetup(setup) {
 // to adjust its deployment (all at once, a "deploy your army" line each, in
 // seat order: §4.1 rule 8) or, with none, straight on into the battle.
 export function createMatch(setup, { out = null, onTrace = null, strict = false } = {}) {
+  // (newState stands the turn at the deployment, the roll-off next)
   const G = newState(fullSetup(setup), { out, onTrace })
   G.strict = strict
-  const T = G.turn
-  T.stage = 'deploy'
-  T.step = 'rolloff'
   const humans = humanSeats(G)
   if (humans.length) {
     emit(G, 'stage', { stage: 'deploy' })
@@ -91,7 +90,7 @@ export function createMatch(setup, { out = null, onTrace = null, strict = false 
 // what a seat's tools show before it commits (a move's reach and path, a
 // shot's odds, a charge's spots), the HUD, any question that must never
 // roll a die. Nothing above core/ touches the dice stream itself (§1.2), so
-// the Session's preview (R6b) is this. Leaves the lock as it found it.
+// the Session's preview is this. Leaves the lock as it found it.
 export function preview(G, fn) {
   const was = G.rng.locked
   lock(G.rng)

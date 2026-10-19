@@ -28,3 +28,13 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     deploy: BOARD.deploy,
   },
 }))
+
+// The classic matchup: the Bushtails in seat 0, the Coil in seat 1. The
+// page's default seat races (main.js names them in every title-screen mode's
+// setup unless ?races= picks another pair; data-check pairs the legacy
+// sides with them), beside the mission they are fought over. Presentation's
+// default, not a rule: a setup names its seats' races itself, and
+// createMatch (core/index.js fullSetup) refuses one that doesn't rather than
+// fill them in from here; sim/'s corpus setups name theirs too. RULES_ID
+// hashes the races' data and the missions, never this pairing.
+export const CLASSIC = Object.freeze(['squirrel', 'serpent'])

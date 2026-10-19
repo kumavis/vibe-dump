@@ -1,39 +1,51 @@
-// P-present (DESIGN §2.4, §4 R5): what the table shows is the match. From
-// R5 the rules run ahead and the view plays their events later, reading a
-// mirror folded from those events (present/mirror.js) instead of G. Here
-// every corpus battle is played in Node, as the parity oracle plays it,
-// while a mirror of its own is folded from every event the page's player
-// plays, starting from project(G) of the table. At every checkpoint the
-// folded mirror must equal the match's projection there exactly: every
-// unit's place, radius, models (wounds, standing, slots), count standing,
-// mesmerized and in combat; every chunk standing and its height; the
-// objectives' owners, the score, the round, the seat and phase, the stage.
-// The player's own mirror must equal it too. The checkpoints:
-//   - each action's end, its `act` event (under ?debug it carries
-//     project(G) as the action ended);
-//   - a `check` event, which only ?debug emits (main.js's checkpoint()),
-//     carrying project(G) as the match then stood: after each action's
-//     events (core/actions/, run by main.js's played(): a move, an advance
-//     roll, a shot, a morale phase, a fight phase, each half of a charge);
-//     and after the stage events main.js emits itself (each deployment's,
-//     and the battle's start with its flags: a lost one would show until
-//     the next stage event, which can come before any act). An action's
-//     end emits the flags' and labels' events (`objectives`, `status`)
-//     straight before its `act`, so at an act those are always fresh; the
-//     checks are what hold the actions' own (a damage that slew, a flight,
-//     the ⚔ going as a damage ends, a flag a walk took, a unit
-//     mesmerized) to the match.
+// P-present (DESIGN §2.4, §4 R5, R6b): what the table shows is the match.
+// The match runs ahead (from R6b one `end` computes a whole AI turn, a
+// watched battle the whole battle, before the first die is shown) and the
+// view plays its events later, reading a mirror folded from those events
+// (present/mirror.js) instead of G. Here every corpus battle is played in
+// Node, as the parity oracle plays it, while a mirror of its own is folded
+// from every event the page's player plays, starting from the mirror the
+// player is reset to as the battle starts (the table as shown: from R6b the
+// backdrop, the battle's own table before anything happens). At every
+// checkpoint the folded mirror must equal the match's projection there
+// exactly: every unit's place, radius, models (wounds, standing, slots),
+// count standing, mesmerized and in combat; every chunk standing and its
+// height; the objectives' owners, the score, the round, the seat and phase,
+// the stage. The player's own mirror must equal it too. (R6b's fixer,
+// round 2) And the unit card of every unit, as the page shows it then (the
+// ?debug block's present.card), must read only what the mirror holds: its
+// models or wounds, mesmerized, in combat; nothing the unit did this turn
+// and no cover, which read the match and so show only once the player has
+// caught up with it (§2.4). The checkpoints,
+// which only ?debug puts in the events (main.js's ?debug block: the core
+// can't project, so it takes project(G) as the match writes each `act`,
+// `phase` and `over` trace line, and as it stops after each entry the
+// Session folds):
+//   - each action's end, its `act` event, carrying project(G) as the act
+//     line was written;
+//   - a `check` event carrying project(G) as the match then stood: where
+//     each `act` line was written (after the action's own events, before
+//     its end re-reports the flags and labels), where each `phase` line was
+//     (after a fight or a morale phase, or a phase's last action), where the
+//     `over` line was, and at the end of each entry's events (as the match
+//     stops for the next decision: after a deployment's stage, a placement,
+//     a charge declared, an advance; or ends). An action's end emits the
+//     flags' and labels' events (`objectives`, `status`) straight before its
+//     `act`, so at an act those are always fresh; the checks before them
+//     are what hold the actions' own (a damage that slew, a flight, the ⚔
+//     going as a damage ends, a flag a walk took, a unit mesmerized) to the
+//     match.
 // So an event the rules forget to emit (a model that fell, a block that
 // dropped, a flag a kill turned) is a failing check, not a figure left
 // standing on the table. Not covered:
-//   - main.js's own `status` events outside the actions (a
-//     mesmerism's, a turn's end), which the next action's end repeats
-//     before any checkpoint; they move into core at R6, where a played()
-//     checkpoint covers them;
+//   - the `status` after a turn's mesmerism wears off (core/engine.js's
+//     turn end), which the next action's end repeats before any checkpoint
+//     when that comes first (a `phase` line's check comes first only when
+//     the next turn's first phase has nothing to do);
 //   - the fight phase's closing `status`, which repeats its last fight's
 //     damage's (every fight ends in one), so a lost one changes nothing a
-//     check sees; and, since a whole fight phase (or a whole shot) is one
-//     played(), a damage's flags or labels lost mid-phase (or between two
+//     check sees; and, since a whole fight phase (or a whole shot) has one
+//     checkpoint, a damage's flags or labels lost mid-phase (or between two
 //     templates' victims) where a later damage in it puts them right;
 //   - the flags at the battle's start: a check follows them, but no corpus
 //     battle deploys a model within reach of an objective (the deployment
@@ -45,12 +57,14 @@
 //
 // It also requires one act event per `act` line of the trace, at least one
 // check per battle (every turn's morale phase has one), and at the game's
-// end the mirror to equal project(G) once more (all but the round, which
-// the old battle loop leaves one past the last on a battle that ran its
-// course), and each battle's trace, shadows and battle log to match the
-// corpus, so the events are tapped from the battle parity checks.
+// end the mirror to equal project(G) once more (the round too from R6b,
+// whose engine never runs it one past the last as the old battle loop did
+// on a battle that ran its course), and each battle's trace, shadows and
+// battle log to match the corpus, so the events are tapped from the battle
+// parity checks.
 //
-// And the events the mirror ignores, the actions' own (core/actions/:
+// And the events the mirror ignores, the roll-off's (R6b's, in the stream
+// before the first turn) and the actions' own (core/actions/:
 // fight.js's lunge, turn to face, camera, tray and beat after a fight;
 // charge.js's turn to face and verdict; move.js's stomp and advance roll;
 // shoot.js's turn to face, volley, templates and spells), are held to their
@@ -58,6 +72,12 @@
 // mirror holds would show one lost or moved; and so is the look the view
 // reads off a walk or a shot (a walk's flight and pace, a shot's `fx` and
 // who throws), which neither the mirror nor the trace holds:
+//   - the roll-off: its tray ("Roll-off for the first turn") straight after
+//     the battle's `stage` and its flags (`objectives`), then its one-die
+//     rows in pairs, seat 0's then seat 1's (each pair's labels the first
+//     pair's), every pair but the last a tie, then straight on to the line
+//     naming the higher roller of the last ("… win the roll-off and take
+//     the first turn.", that seat's);
 //   - a fight: `unit.face` for the pair, `focus`, the tray (`tray.open`,
 //     "<u> fight <tg> · …"), then `melee`, then straight on to its hit row,
 //     a `dice` "Hit …" of `n` dice of which `hits` pass (the view's sparks
@@ -103,7 +123,8 @@
 // kinds (a line whose text changed would match nothing, and the order it
 // should hold would go unchecked; nor may the walks of flying units or the
 // templates that caught nobody be missing), so it fails on code older than
-// R5c, which emits none of the move's and the shot's. A run on a selection
+// R5c, which emits none of the move's and the shot's (and, for the roll-off,
+// on code older than R6b). A run on a selection
 // (--only) just notes the kinds it held none of: one battle may well have
 // no fizzle, no gaze or no eruption.
 //
@@ -119,9 +140,10 @@
 // reach is missed, not caught.
 //
 // It reads the page through the ?debug block's present.listen, and reads
-// its G (project(G) as the page loads, at each new table and at the game's
-// end) and player.idle (main.js's contract comment), none of which
-// sim/oracle uses. One child process per battle, up to one per CPU. Exit 0
+// its G (project(G) at the game's end; the per-table G of code older than
+// R6b as the page loads too), player.mirror (as the page loads, R6b on: the
+// backdrop as shown) and player.idle (main.js's contract comment), none of
+// which sim/oracle uses. One child process per battle, up to one per CPU. Exit 0
 // when every battle's mirror is the match at every checkpoint (the
 // self-test: when every mutation is caught), 1 otherwise, 2 on bad
 // arguments.
@@ -182,17 +204,21 @@ async function page(dir) {
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))
-  const out = { trace: [], shadow: [], written: [], acts: 0, checks: 0, events: 0, kinds: {}, ordered: null, mismatch: null, error: null }
+  const out = { trace: [], shadow: [], written: [], acts: 0, checks: 0, cards: 0, events: 0, kinds: {}, ordered: null, mismatch: null, error: null }
   try {
     await import(pathToFileURL(join(dir, 'main.js')).href)
     if (!ts?.present?.listen) throw new Error('main.js offers no ?debug present.listen: code older than R5?')
-    // the table is up (main.js built it as it loaded): fold from it
-    let M = project(ts.G)
+    // the table is up (main.js built it as it loaded): fold from it (R6b on,
+    // no match exists before a start, so from the backdrop as shown; each
+    // battle then starts with a reset to its table)
+    let M = ts.G ? project(ts.G) : structuredClone(ts.player.mirror)
     const miss = (why) => (out.mismatch ??= why)
     const order = eventOrder((id) => ts.G.units.find((u) => u.id === id))
     ts.present.listen({
-      reset: () => {
-        M = project(ts.G)
+      // a new table: the mirror it is shown from (a copy: the player's own
+      // is folded in place)
+      reset: (shown) => {
+        M = structuredClone(shown)
         order.reset()
       },
       event: (e, shown) => {
@@ -214,6 +240,21 @@ async function page(dir) {
         if (d) return miss(`${where}: the folded mirror differs from the match: ${d}`)
         const p = differ(shown, e.proj)
         if (p) miss(`${where}: the player's mirror differs from the match: ${p}`)
+        // the unit card, every unit's, as the player plays (behind the
+        // match): only what the mirror holds, nothing the unit did this
+        // turn and no cover (they read the match: §2.4)
+        if (!ts.present.card) return
+        for (const u of ts.G.units) {
+          const mu = M.units[u.id], t = u.t
+          const want = [
+            mu.alive > 0 ? (t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`) : 'destroyed',
+            ...(mu.mesmerized ? ['🌀 mesmerized'] : []),
+            ...(mu.alive > 0 && mu.engaged ? ['⚔ in combat'] : []),
+          ].join(' · ')
+          const got = ts.present.card(u)
+          out.cards++
+          if (got !== want) return miss(`${where}: the card of ${t.short} (unit ${u.id}) reads "${got}" while the table is behind, not the mirror's "${want}"`)
+        }
       },
     })
     const driver = mode === 'watch' ? null : humanDriver(ts, { entries: job.entries })
@@ -230,9 +271,12 @@ async function page(dir) {
     }
     if (fatal) throw fatal
     if (driver?.unused) throw new Error(`the battle ended with ${driver.unused} log entries unplayed`)
-    // the end: everything played, the mirror is the match (bar the round)
+    // the end: everything played, the mirror is the match (the round too,
+    // R6b on: the old loop left it one past the last, which code before R6b
+    // is excused)
     if (!ts.player.idle) out.mismatch ??= 'the battle is over and the player is still playing'
-    const end = { ...project(ts.G), round: null }, folded = { ...M, round: null }
+    const old = !('session' in ts)
+    const end = { ...project(ts.G), round: old ? null : ts.G.turn.round }, folded = { ...M, round: old ? null : M.round }
     const d = differ(folded, end)
     if (d) out.mismatch ??= `at the game's end: ${d}`
     const lines = ts.trace.filter((l) => l.startsWith('act ')).length
@@ -259,13 +303,13 @@ async function page(dir) {
 // its weapon's look).
 function eventOrder(unitOf) {
   const nameOf = (id) => unitOf(id)?.t.short
-  let p1, p2, p3, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot
+  let p1, p2, p3, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, roll
   // how many lines (or templates, or walks) of each kind were held to their
   // events: `flights` the walks of units that fly, `beats` the templates
   // that caught nobody
-  const seen = { fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0 }
+  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0 }
   const reset = () => {
-    p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = null
+    p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = roll = null
     melees = 0
     pause = false
   }
@@ -279,6 +323,26 @@ function eventOrder(unitOf) {
   const event = (e) => {
     let why = ''
     const held = e.t === 'log' && !e.traced
+    // ── the roll-off: its tray after the battle's stage and flags, its rows
+    // in pairs until one isn't a tie, then the line naming the winner ──
+    if (e.t === 'tray.open' && e.title === 'Roll-off for the first turn') {
+      if (!(p2?.t === 'stage' && p2.stage === 'battle' && p1?.t === 'objectives')) why ||= `the roll-off's tray not straight after the battle's stage and its flags (${[p2, p1].map((x) => x?.t).join(', ')})`
+      roll = { rows: [], won: -1 }
+    } else if (roll) {
+      const rows = () => roll.rows.map((r) => r.dice.join('')).join(' ')
+      if (e.t === 'dice' && roll.won < 0) {
+        const k = roll.rows.push(e)
+        if (e.dice.length !== 1 || (k > 2 && e.label !== roll.rows[(k - 1) % 2].label)) why ||= `a roll-off row "${e.label}" of ${e.dice.length} dice, not one die for seat ${(k - 1) % 2} as the first pair had it`
+        const [a, b] = roll.rows.slice(-2)
+        if (k % 2 === 0 && a.dice[0] !== b.dice[0]) roll.won = a.dice[0] > b.dice[0] ? 0 : 1
+      } else {
+        const line = e.t === 'log' && e.traced && / win the roll-off and take the first turn\.$/.test(text(e.html))
+        if (roll.won < 0 || !line || e.side !== roll.won) {
+          why ||= `the roll-off (rows ${rows() || 'none'}) not followed straight by the line naming ${roll.won < 0 ? 'a winner (no pair decided it)' : `its winner, seat ${roll.won}`} (${e.t}${e.t === 'log' ? ` "${text(e.html)}" of seat ${e.side}` : e.label ? ` "${e.label}"` : ''})`
+        } else seen.rolloffs++
+        roll = null
+      }
+    }
     // ── the shot's: what must come straight after an event ──
     if (p1?.t === 'volley' && !(e.t === 'dice' && /^Hit \d\+$/.test(e.label) && e.dice.length === p1.n)) {
       why ||= `a volley (${pair(p1)}, ${p1.n} shots) not followed straight by its hit row (${e.t}${e.label ? ` "${e.label}"` : ''})`
@@ -452,7 +516,7 @@ function eventOrder(unitOf) {
     p1 = e
     return why
   }
-  const end = () => (melees ? `${melees} melee event(s) with no fight line after them` : '')
+  const end = () => (melees ? `${melees} melee event(s) with no fight line after them` : roll ? 'a roll-off with no line naming its winner' : '')
   return { event, reset, end, seen }
 }
 
@@ -496,7 +560,7 @@ async function parent({ env = process.env, quiet = false } = {}) {
   const say = quiet ? () => {} : console.log
   say(`present-check (P-present): ${items.length} battles, the mirror folded from each one's events held to the match at every act and check; on ${a.dir ? dir : a.ref ? `ref ${a.ref}` : 'the working tree'}`)
   const t0 = Date.now()
-  const total = { acts: 0, checks: 0, events: 0, kinds: {}, ordered: {} }
+  const total = { acts: 0, checks: 0, cards: 0, events: 0, kinds: {}, ordered: {} }
   let failed = 0
   await pool(items, CPUS, async (it) => {
     const r = await child(dir, it.job, env)
@@ -505,11 +569,12 @@ async function parent({ env = process.env, quiet = false } = {}) {
       const v = verdict(it, r)
       if (!v.ok) why = `the battle itself differs from the corpus (trace line ${v.line}, shadow ${v.shadow}, write ${v.written})`
       else if (!r.acts) why = 'no act was checked'
-      else if (!r.checks) why = 'no action was checked (no check event: main.js without a played() checkpoint?)'
+      else if (!r.checks) why = 'no action was checked (no check event: a ?debug block that puts no checkpoints in?)'
     }
     if (why) failed++
     total.acts += r.acts ?? 0
     total.checks += r.checks ?? 0
+    total.cards += r.cards ?? 0
     total.events += r.events ?? 0
     for (const [k, n] of Object.entries(r.ordered ?? {})) total.ordered[k] = (total.ordered[k] ?? 0) + n
     for (const [k, n] of Object.entries(r.kinds ?? {})) total.kinds[k] = (total.kinds[k] ?? 0) + n
@@ -517,7 +582,7 @@ async function parent({ env = process.env, quiet = false } = {}) {
   })
   const kinds = Object.entries(total.kinds).filter(([k]) => /^(unit|terrain|blast|spell)\.|^(smashed|melee|charge\.result|volley)$/.test(k)).sort().map(([k, n]) => `${k} ${n}`).join(', ')
   const ordered = Object.entries(total.ordered)
-  say(`  folded ${total.events} events (${kinds}) and compared ${total.acts} acts and ${total.checks} checks; held to their events' order: ${ordered.map(([k, n]) => `${n} ${k}`).join(', ')}`)
+  say(`  folded ${total.events} events (${kinds}) and compared ${total.acts} acts and ${total.checks} checks (${total.cards} unit cards read at them); held to their events' order: ${ordered.map(([k, n]) => `${n} ${k}`).join(', ')}`)
   // (a check that held nothing proves nothing: the corpus has every kind,
   // so over the whole of it a kind that held none is a line whose text
   // changed; a selection may simply have none of it)

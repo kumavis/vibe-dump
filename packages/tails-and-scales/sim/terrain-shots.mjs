@@ -30,18 +30,23 @@
 // scenery.blast. R3's code had them on the Scenery facade; from R4 the
 // ?debug block keeps them in place (scenery.blast is a blast played as
 // blastLands plays one: the terrain's reports drained into the view), and
-// lists them there as screenshot-only. R7 moves the clock and camera into
-// view/: a pixel diff as a gate at R7 is R7's to add, with these members in
-// the contract then.
+// lists them there as screenshot-only. From R6b no match exists on the
+// title, and scenery.chunks and scenery.blast read the title's backdrop
+// (the match that is never played, which the title draws), which is all
+// this shoots; a blast there throws once a battle is on. R7 moves the clock
+// and camera into view/: a pixel diff as a gate at R7 is R7's to add, with
+// these members in the contract then.
 //
-// Hidden, because they differ for reasons outside the terrain: the grass
-// tufts and flowers (every InstancedMesh: the tufts, the flowers and fx's
-// particle pools), and the figures. Since R1, main.js draws one Math.random
-// at load (the placeholder dice seed) after the mat is painted, so every
-// later Math.random (tuft placement, each figure's idle phase and fur
-// jitter) is shifted by one between R0 and later code. With --full nothing
-// is hidden: for comparing against a ref with the same draws at load (the
-// commit before this one).
+// Hidden by default: the grass tufts and flowers (every InstancedMesh: the
+// tufts, the flowers and fx's particle pools), and the figures, which
+// differed from R0's for reasons outside the terrain from R1 to R6a: main.js
+// drew one Math.random at load (the placeholder dice seed, TABLE_DICE) after
+// the mat was painted, so every later Math.random (tuft placement, each
+// figure's idle phase and fur jitter) was shifted by one. R6b removed it, and
+// the draws at load line up with R0's again: with --full nothing is hidden,
+// and the working tree drew the same as R0 everything included (boards 4242
+// and 1, at R6b's review fixes). --full is also for comparing against a ref
+// with the same draws at load (the commit before this one).
 //
 // Two shots per board: `table` as generated, and `wrecked` after the same
 // blasts on both (some acid; Math.random reseeded alike just before them),

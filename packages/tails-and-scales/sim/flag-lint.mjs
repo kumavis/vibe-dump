@@ -26,18 +26,21 @@
 // stat line and weapons, the derived fields, and a seat's `edge`. Those are
 // rule-bearing (RULES_ID hashes them), so testing them is the point.
 //
-// It covers main.js and ai.js (rules code until R5-R6 moves the rest of it
+// It covers main.js and ai.js (rules code until R5-R6 moved the rest of it
 // into core/; R6a moved ai.js to core/ai/, so only an older checkout has
 // one), the root rules.js where a checkout has one (the R0 code's, for
-// --self-test; R4 removed the working tree's re-export), and everything under
-// core/ and data/. main.js still holds the view too, so the presentation
-// sites it keeps are listed below,
-// each with why it is presentation. An allowed text excuses only itself: it
-// is cut out of the line and the rest of the line is linted again, so a test
-// added beside an allowed one is still caught. An entry that no longer
-// matches exactly its count of lines fails, so the list can't go stale. (From
-// R6, sim/boundaries.mjs runs this ban, allow-list included, over core/ and
-// data/; data/schema.js names .fx and .abilities to validate them.)
+// --self-test; R4 removed the working tree's re-export), everything under
+// core/ and data/, and (R6b) the Session's match/, the input tools' input/
+// and ui/, where the seats' look (ui/theme.js's isMirror) moved with
+// data/compat.js. main.js and ui/ are view code, so the presentation sites
+// they keep are listed below, each with why it is presentation. An allowed
+// text excuses only itself: it is cut out of the line and the rest of the
+// line is linted again, so a test added beside an allowed one is still
+// caught. An entry that no longer matches exactly its count of lines fails,
+// so the list can't go stale. sim/boundaries.mjs (R6b) runs this ban,
+// allow-list included, over core/ and data/ (data/schema.js names .fx and
+// .abilities to validate them): it imports BANNED, ALLOW and lintSource
+// from here, which runs as a CLI only when it is the script run.
 //
 //   node sim/flag-lint.mjs               lint the working tree
 //   node sim/flag-lint.mjs --self-test   lint the R0 code (sim/lib.mjs's
@@ -49,16 +52,17 @@
 //                                        flagged
 //
 // Exit 0 clean (self-test: every case gets its verdict), else 1.
-import { readFileSync, readdirSync, existsSync } from 'node:fs'
+import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
+import { fileURLToPath } from 'node:url'
 import { PKG } from './oracle/pin.mjs'
 import { legacyDir, LEGACY_REF } from './lib.mjs'
 
 // a member path such as u, u.t, G.seats[s], e?.t or raceOf(G, s)
 const P = String.raw`[\w$.?\[\]]*(?:\([^()]*\)[\w$.?\[\]]*)*`
 // (every comparison is strict or loose: [!=]==? is ===, !==, == or !=)
-const BANNED = [
+export const BANNED = [
   [new RegExp(String.raw`\.key\s*[!=]==?|[!=]==?\s*${P}\.key\b`), 'a key test'],
   [/(?<![\w$.]|typeof\s)key\s*[!=]==?\s*['"`]|['"`]\s*[!=]==?\s*key\b/, 'a key test'],
   [new RegExp(String.raw`\.race\s*[!=]==?|[!=]==?\s*${P}\.race\b`), 'a race test'],
@@ -85,19 +89,16 @@ const BANNED = [
 ]
 
 // [file, exact text on the line, how many lines hold it, why it is allowed]
-const ALLOW = [
+export const ALLOW = [
   ['main.js', 'projectileStyle(e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
   ['main.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
   ['main.js', "if (e.fx !== 'thorns') {", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own'],
   ['main.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire')", 1, "the explosion's look: presentation"],
   ['main.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
   ['main.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
-  ['main.js', "if (ph.key === 'fight')", 1, 'a phase key, not a unit or race key'],
-  ['main.js', "} else if (ph.key === 'morale')", 1, 'a phase key, not a unit or race key'],
   ['main.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
-  ['main.js', "line.startsWith('log ')", 1, "a trace line's tag, in the ?debug block (a waiting state line keeps a fingerprint): not a unit or race key"],
   ['core/actions/shoot.js', 'fx: w.fx', 3, "the weapon's look, carried to the view in the volley, blast.fire and blast.land events and never tested there: presentation"],
-  ['data/compat.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
+  ['ui/theme.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
   ['data/schema.js', "if (w.fx !== undefined && typeof w.fx !== 'string')", 1, 'validates the field: the data must say what fx is'],
   ['data/schema.js', "if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string'))", 1, 'validates the card text is text'],
   ['data/schema.js', 'abilities: [...def.abilities]', 1, 'copies the card text into the normalised type'],
@@ -113,8 +114,7 @@ function files(dir) {
       else if (e.name.endsWith('.js')) out.push(join(d, e.name))
     }
   }
-  walk('core')
-  walk('data')
+  for (const d of ['core', 'data', 'match', 'input', 'ui']) walk(d)
   return out
 }
 
@@ -123,7 +123,7 @@ const code = (l) => l.replace(/(^|\s)\/\/.*$/, '')
 
 // Lint one file's text as `f` (its path in the package, which picks its
 // allow entries); each allow entry that excuses a line adds one to `used`.
-function lintSource(f, text, used) {
+export function lintSource(f, text, used) {
   const hits = []
   let inBlock = false
   text.split('\n').forEach((raw, i) => {
@@ -163,8 +163,18 @@ function lint(dir) {
   return { hits, stale, n: fs.length }
 }
 
-const { values: args } = parseArgs({ options: { 'self-test': { type: 'boolean' } } })
-if (args['self-test']) {
+// (run, not imported: by real paths, since Node gives the main module its
+// real path while argv keeps a symlinked one)
+const real = (f) => {
+  try {
+    return realpathSync(f)
+  } catch {
+    return null
+  }
+}
+const main = !!process.argv[1] && real(process.argv[1]) === real(fileURLToPath(import.meta.url))
+const { values: args } = main ? parseArgs({ options: { 'self-test': { type: 'boolean' } } }) : { values: {} }
+if (main && args['self-test']) {
   let bad = 0
   const say = (ok, what) => {
     if (!ok) bad++
@@ -210,7 +220,7 @@ if (args['self-test']) {
     ['main.js', "if (u.key === 'x') f() // projectileStyle(w.fx)"],
     ['core/actions/shoot.js', "emit(G, 'volley', { u: u.id, tg: target.id, fx: w.fx, n }); if (w.fx === 'acid') corrode()"],
     ['core/actions/shoot.js', "const look = w.fx"],
-    ['data/compat.js', "const mirror = seats[0].race === seats[1].race && seats[0].race === 'serpent'"],
+    ['ui/theme.js', "const mirror = seats[0].race === seats[1].race && seats[0].race === 'serpent'"],
     ['main.js', "if (u.key == 'sidewinder') a()"],
     ['main.js', "if (e.race != 'serpent') b()"],
     ['main.js', "if (key == 'oakguard') c()"],
@@ -233,7 +243,7 @@ if (args['self-test']) {
   const PASS = [
     ['main.js', 'const look = RACES[u.race].look'],
     ['core/match.js', 'export const raceOf = (G, s) => RACES[G.seats[s].race]'],
-    ['data/compat.js', 'export const isMirror = (seats) => seats.length === 2 && seats[0].race === seats[1].race'],
+    ['ui/theme.js', 'export const isMirror = (seats) => seats.length === 2 && seats[0].race === seats[1].race'],
     ['main.js', "if (a.kind === 'squirrel') {"],
     ['main.js', 'const enemiesOf = (u) => units.filter((e) => e.side === 1 - u.side)'],
     ['main.js', 'if (u.t.noCharge || u.mesmerized || u.flags.fellBack || isEngaged(u)) return false'],
@@ -262,12 +272,14 @@ if (args['self-test']) {
   process.exit(bad ? 1 : 0)
 }
 
-const { hits, stale, n } = lint(PKG)
-const roots = ['main.js', 'ai.js', 'rules.js'].filter((f) => existsSync(join(PKG, f)))
-console.log(`flag-lint: ${n} files (${[...roots, 'core/', 'data/'].join(', ')}), ${ALLOW.length} allowed presentation sites`)
-for (const h of hits) console.log(`  FAIL ${h.f}:${h.line} ${h.what}: ${h.text}`)
-for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
-for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
-const bad = hits.length + stale.length
-console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx')
-process.exit(bad ? 1 : 0)
+if (main && !args['self-test']) {
+  const { hits, stale, n } = lint(PKG)
+  const roots = ['main.js', 'ai.js', 'rules.js'].filter((f) => existsSync(join(PKG, f)))
+  console.log(`flag-lint: ${n} files (${[...roots, 'core/', 'data/', 'match/', 'input/', 'ui/'].join(', ')}), ${ALLOW.length} allowed presentation sites`)
+  for (const h of hits) console.log(`  FAIL ${h.f}:${h.line} ${h.what}: ${h.text}`)
+  for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
+  for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
+  const bad = hits.length + stale.length
+  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx')
+  process.exit(bad ? 1 : 0)
+}

@@ -2,32 +2,24 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
   BOARD, CHARGE_RANGE, OBJECTIVE_RANGE, PHASES,
-  roll, passes, woundNeed, saveNeed, attackCount, expected, p2D6,
+  passes, woundNeed, saveNeed, attackCount, expected, p2D6,
 } from './core/rules.js'
-import { sidesFor, isMirror, CLASSIC } from './data/compat.js'
 import { RACES } from './data/schema.js'
-import { MISSIONS } from './data/mission.js'
-import { EDGES, NAV_CELL, makeSeats, edgeOf, ctrl, newState, startMatch, refreshNav } from './core/match.js'
-import { setUnitPos } from './core/units.js'
-import {
-  alive, gap, isEngaged, eyeY, chestY, inCover, controlOf, ownersOf, statusOf, phaseKey,
-  canAct, anyCanAct, movePlan, validEnd, nearestValid, freeSpot, shotInfo, shootTargets, chargeTargets, chargePlan, rngState,
-} from './core/queries.js'
-import { emit, drain, log as logLine, flush, traceState } from './core/journal.js'
-import { moralePhase } from './core/actions/morale.js'
-import { fightPhase } from './core/actions/fight.js'
-import { declareCharge, finishCharge, chargeSpots } from './core/actions/charge.js'
-import { doMove as coreMove, doAdvance as coreAdvance } from './core/actions/move.js'
-import { doShoot as coreShoot } from './core/actions/shoot.js'
+import { MISSIONS, CLASSIC } from './data/mission.js'
+import { EDGES, NAV_CELL, edgeOf, ctrl, refreshNav } from './core/match.js'
+import { createMatch, fullSetup, preview, q } from './core/index.js'
 import { gridSize } from './core/nav.js'
+import { Session } from './match/session.js'
+import { LocalStore } from './match/store.js'
 import { project } from './present/mirror.js'
 import { PACE } from './present/pace.js'
 import { TerrainView } from './view/terrain.js'
 import { EventPlayer } from './view/player.js'
+import { chargePick, nearestSpot, endAt, SHORTEST } from './input/tools/charge-end.js'
+import { sidesFor, isMirror } from './ui/theme.js'
 import { FX } from './fx.js'
 import { buildModel, M } from './models.js'
 import { clock, tween, wait, stepTweens, easeOut, easeInOut, wrapAngle, lerp } from './util.js'
-import { aiPhase } from './core/ai/policy.js'
 import { sfx, unlock, toggleMute, isMuted } from './sfx.js'
 import { hypot } from './core/dmath.js'
 
@@ -40,20 +32,28 @@ import { hypot } from './core/dmath.js'
 // the dice are shown. Blast weapons drop a template that can scatter, hurts
 // whoever is underneath (friends included) and breaks the scenery.
 //
-// This file is the table: scene, the units' figures, the actions both a human
-// and the AI call (each core/actions/'s, ended here once its events have
-// played), the turn loop, the UI, and how each of the match's events looks
-// (the EventPlayer's handlers). The
-// match state they act on is G (core/match.js): the units, the terrain, the
-// turn, the journal; the rules' questions about it are core/queries.js, its
-// constants and dice core/rules.js, the races data/, movement core/nav.js,
-// the battlefield core/terrain/ (its meshes view/terrain.js), the AI
-// core/ai/ (its generators, played here by aiTurn).
-// The rules report what happens as events in G.out (DESIGN §2.3), which the
-// player (view/player.js) plays here at the table's pace, folding each into
-// the mirror (present/mirror.js): the match as shown, which the figures,
-// labels, flags and score read, never G.
+// This file is the table: the scene, the units' figures, how each of the
+// match's events looks (the EventPlayer's handlers), the input and the UI.
+// The battle itself is the core's (core/index.js): a pure function of its
+// setup and the commands its seats send. Every mode plays one through a
+// Session (match/session.js) over a LocalStore (match/store.js): the title
+// screen's button makes the setup, the Session creates the match from it,
+// the AI plays inside the match (core/engine.js, core/ai/), and a human
+// seat's clicks become commands (units by id, places by nav cell) that the
+// Session folds into it. The match runs ahead, to the next decision a human
+// makes, and reports what happened as events (DESIGN §2.3), which the player
+// (view/player.js) plays here at the table's pace, folding each into the
+// mirror (present/mirror.js): the match as shown, which the figures, labels,
+// flags and score read. Input and the HUD read the match itself (G) only once
+// the player has played everything (§2.4), and what a tool shows before a
+// seat commits it asks through the Session's preview, with the dice locked.
 // ---------------------------------------------------------------------------
+
+// the read-only queries (core/queries.js, through the core's API)
+const {
+  alive, isEngaged, eyeY, chestY, inCover, phaseKey,
+  canAct, movePlan, validEnd, freeSpot, shotInfo, shootTargets, chargeTargets, chargePlan, rngState,
+} = q
 
 const { W, H } = BOARD
 const $ = (s) => document.querySelector(s)
@@ -256,8 +256,9 @@ const objViews = MISSIONS.classic.objectives.map((p, i) => {
 // ── Terrain ─────────────────────────────────────────────────────────────────
 // The battlefield's meshes. The battlefield itself is the match's
 // (G.terrain): each terrain call reports what it built or broke into G.out,
-// and the player plays that (the terrain.* handlers) straight after the
-// call, in order.
+// among the events of the entry the Session folds, and the player plays
+// each report (the terrain.* handlers) when it reaches it in those events,
+// in order (a wrecker's smashes as its walk passes them).
 const terrainView = new TerrainView(scene, fx)
 terrainView.onBreak = (c) => {
   if (c.kind === 'block') sfx.crumble()
@@ -266,23 +267,25 @@ terrainView.onBreak = (c) => {
 
 // ── Game state ──────────────────────────────────────────────────────────────
 // The table's and the screen's own state: the board seed and who plays each
-// seat as the title screen has them, and input and camera state. The match's
-// state (the turn, the score, the units) is G's.
+// seat as the title screen has them, and input and camera state. The
+// match's state (the turn, the score, the units) is G's.
+// (Every seed the page takes is made a whole number from 0 to 2^32 - 1, as
+// a setup's must be, with `>>> 0`: what the board's and the dice's
+// generators always did with a seed, so ?seed=-5 is still the board -5 drew.)
 const S = {
-  seed: Number(params.get('seed')) || ((Math.random() * 1e6) | 0),
+  seed: (Number(params.get('seed')) || ((Math.random() * 1e6) | 0)) >>> 0,
   control: ['human', 'ai'],
-  busy: false,
   sel: null,
   reach: null,
   hover: null,
   follow: true,
 }
-// The races at the table: the classic Bushtails-versus-Coil matchup, or any
-// pair a ?races=<seat 0>,<seat 1> URL names (e.g. ?races=serpent,serpent),
-// until the title screen gets a race picker. A value naming no two races
-// gets the classic matchup and a line on the title card saying why, not a
-// page that never starts (sim/mirror-check.mjs fails a run whose log shows
-// other races than it asked for).
+// The races at the table: the classic Bushtails-versus-Coil matchup
+// (data/mission.js), or any pair a ?races=<seat 0>,<seat 1> URL names (e.g.
+// ?races=serpent,serpent), until the title screen gets a race picker. A
+// value naming no two races gets the classic matchup and a line on the title
+// card saying why, not a page that never starts (sim/mirror-check.mjs fails
+// a run whose log shows other races than it asked for).
 const RACE_PICK = (() => {
   if (!params.has('races')) return CLASSIC
   const pick = params.get('races').split(',').map((r) => r.trim().toLowerCase())
@@ -295,29 +298,41 @@ const RACE_PICK = (() => {
   $('#title .modes').before(note)
   return CLASSIC
 })()
-// The match (core/match.js): everything the rules read and write. A new one
-// for every table the title screen shows (setupTable); start() begins the
-// battle on it, so nothing carries over from one battle to the next.
+// The battle being played: its Session (match/session.js), which folds the
+// battle's log (a LocalStore) through the core, and the match itself,
+// session.G. Both null on the title screen: no battle exists before a mode
+// is chosen, and start() makes a new one from the whole setup, so nothing
+// carries over from one battle to the next.
+let session = null
 let G = null
-// The dice of the table the title screen shows. Nothing draws from them:
-// start() gives the battle its own. (Drawn once, at load, where the R1-R3
-// code drew its placeholder stream, so the view's own Math.random draws after
-// it keep their order.)
-const TABLE_DICE = (Math.random() * 1e9) | 0
-// Under ?debug every match reports its trace lines here as it writes them,
-// and start() says when a battle begins; only the ?debug block listens (sim/
-// reads one trace for the page's lifetime, emptied as each battle begins).
-// Without ?debug a match has no onTrace.
+// The table the title screen shows (showTable): a match on the board seed
+// that is never played. Both its seats are human, so it stops at its
+// deployment having drawn nothing; it is only drawn (its board, and the
+// armies where any battle on this board deploys them), and lends the title
+// its nav grid's geometry. A battle on the same board and races starts on
+// exactly this table, so its figures and meshes are kept (start()).
+let backdrop = null
+// false once the backdrop's board has been changed since it was drawn (the
+// ?debug block's scenery.blast, for sim/terrain-shots.mjs): it is then no
+// battle's table, and start() draws a fresh one
+let backdropAsDrawn = true
+// the match the table shows: the battle's, or on the title the backdrop
+const atTable = () => G ?? backdrop
+// Under ?debug every battle reports its trace lines here as it writes them
+// (createMatch's onTrace, which the Session passes), and start() says when
+// a battle begins; only the ?debug block listens (sim/ reads one trace for
+// the page's lifetime, emptied as each battle begins). Without ?debug a
+// battle has no onTrace.
 let traceListener = null
 const DEBUG = params.has('debug')
 const onTrace = DEBUG ? (line, g) => traceListener?.line(line, g) : null
-// each seat's name, icon and colours, from its race (data/compat.js)
-let SIDES = sidesFor(makeSeats(RACE_PICK, S.control))
+// each seat's name, icon and colours, from its race (ui/theme.js)
+const seatsOf = (races) => races.map((race, seat) => ({ seat, race }))
+let SIDES = sidesFor(seatsOf(RACE_PICK))
 
-// Seat the players: the races at the table, with the mode's controllers
-// (startMatch has set G.seats).
-function seatPlayers() {
-  SIDES = sidesFor(G.seats)
+// Seat the players: the races at the table.
+function seatPlayers(seats) {
+  SIDES = sidesFor(seats)
   paintSeats()
 }
 // The HUD, unit labels, battle log and card take each seat's colour from
@@ -342,9 +357,14 @@ paintSeats()
 // In a mirror match both seats' names read the same, so text that names a
 // seat outside the HUD (the turn banner, the end screen) takes the seat's
 // colour; otherwise it keeps its own ('' leaves the stylesheet's).
-const seatInk = (s) => (s >= 0 && isMirror(G.seats) ? SIDES[s].color : '')
+const seatInk = (s) => (s >= 0 && isMirror(atTable().seats) ? SIDES[s].color : '')
 
 const human = (side) => ctrl(G, side) === 'human'
+// a seat played here (the Session's local seats: a human seat may be another
+// device's from R8, which this page only watches)
+const local = (side) => !!session?.localSeats.includes(side)
+// a phase's name by its key ('move' → 'Movement')
+const PHASE_NAME = Object.fromEntries(PHASES.map((p) => [p.key, p.name]))
 
 // ── Units' figures ──────────────────────────────────────────────────────────
 // A unit's view, by unit id: its figures, selection ring, hit cylinder (for
@@ -362,10 +382,11 @@ const shown = (u) => player.mirror.units[u.id]
 // the figures of a unit's models still standing
 const standing = (u) => V(u).models.filter((_, k) => shown(u).models[k].alive)
 
-function makeView(u) {
+// (`at`: the match the unit is in, for its seat's edge)
+function makeView(u, at) {
   // facing across the table, away from the seat's own edge (kept: a fleeing
   // figure runs off over it)
-  const edge = edgeOf(G, u.side)
+  const edge = edgeOf(at, u.side)
   const facing = -edge * Math.PI / 2
   // (at: where a walk has got to while a unit.move plays; null otherwise)
   const v = { u, edge, facing, moving: false, at: null, models: [] }
@@ -409,22 +430,6 @@ function syncView(u) {
   v.ring.position.z = v.hit.position.z = p.z
   v.hit.position.y = v.hit.scale.y / 2
 }
-// Put a unit somewhere (a deployment's placement, and ?debug's setUnitPos),
-// and show it there: its ring and hit cylinder go at once, the figures walk
-// (animateUnits). (A move or a charge walks: core/actions/move.js's
-// resolveWalk, a unit.move event.) In battle, which only ?debug's
-// setUnitPos reaches, the flags and labels go with it as a walk's do, so
-// the table shows who holds what and who is in combat at once.
-function moveUnit(u, x, z) {
-  setUnitPos(u, x, z)
-  emit(G, 'unit.place', { u: u.id, x, z })
-  if (G.turn.stage === 'battle') {
-    emit(G, 'objectives', { owners: ownersOf(G) })
-    emit(G, 'status', statusOf(G))
-  }
-  show()
-}
-
 // The label: the unit as shown (models standing or wounds left, mesmerized,
 // in combat).
 function updateLabel(u) {
@@ -449,16 +454,31 @@ function clearUnits() {
   views.clear()
 }
 
+// A battle's units are the backdrop's, id for id (start() makes sure the
+// backdrop is the battle's table: the same board, terrain and races deploy
+// the same armies the same way, newState being a pure function of the
+// setup, and neither who plays a seat nor the dice move a unit before the
+// battle starts), so their figures stay on the table: each view now follows
+// the battle's unit. A unit the table has no figure for is a bug in that
+// (the mirror the player was reset to is the backdrop's too), so it throws.
+function bindViews(at) {
+  const differs = (u) => !views.has(u.id) || views.get(u.id).u.t !== u.t || views.get(u.id).u.side !== u.side
+  const bad = at.units.find(differs)
+  if (bad || at.units.length !== views.size) throw new Error(`the battle's units are not the table's (${bad ? `unit ${bad.id}, ${bad.key} of seat ${bad.side}` : `${at.units.length} units, ${views.size} figures`}): a battle starts on its own table (start())`)
+  for (const u of at.units) {
+    const v = views.get(u.id)
+    v.u = u
+    v.hit.userData.unit = u
+    updateLabel(u)
+  }
+}
+
 // ── Playing the match's events ──────────────────────────────────────────────
-// The rules run ahead and leave what happened in G.out (DESIGN §2.3); the
-// player plays it here at the table's pace, each kind of event with the old
-// code's visuals, after folding it into the mirror (present/mirror.js), the
-// match as shown. Every action is core/actions/'s, and none of them awaits
-// anything: until R6's engine runs them, each is called here as
-// `fn(G, …)` and its events played before the turn loop goes on
-// (`await played(fn(G, …))`); this file's own events (a deployment's
-// placement, a phase begun, an action's end) are played as it emits them
-// (`show()`), which takes no time when the player is idle.
+// The match runs ahead to the next decision a human makes and reports what
+// happened as events (DESIGN §2.3), which the Session hands over entry by
+// entry (the sink, below); the player plays them here at the table's pace,
+// each kind of event with the old code's visuals, after folding it into the
+// mirror (present/mirror.js), the match as shown.
 const HANDLERS = {
   // the battle log, the dice tray, and the beats between
   log: (e) => write(e.side, e.html, e.cls, e.at),
@@ -507,10 +527,14 @@ const HANDLERS = {
     for (const v of views.values()) updateLabel(v.u)
   },
   objectives: () => {},
-  'round.scored': () => {},
-  'phase.start': () => {},
-  stage: () => {},
   act: () => {},
+  // the flow: a stage of the battle, a phase begun, a round scored, the end
+  stage: (e) => staged(e),
+  'phase.start': (e) => phaseBegun(e),
+  'round.scored': (e) => scored(e),
+  'game.over': (e) => over(e),
+  // (what the match waits on: the table asks once it has played everything)
+  pending: () => {},
   // (?debug) a checkpoint for sim/present-check.mjs
   check: () => {},
   // the battlefield
@@ -528,28 +552,35 @@ const HANDLERS = {
     return wait(e.beat ?? PACE.beat)
   },
 }
-// Under ?debug the page's trace keeps pace with the player (the ?debug
-// block's listener): told when the player has played everything.
-const player = new EventPlayer({ handlers: HANDLERS, onIdle: () => traceListener?.idle() })
-// play what the rules have emitted since the last drain
-const show = () => player.play(drain(G))
-// show(), and under ?debug end what it plays with a `check` carrying
-// project(G) as the match stands, which sim/present-check.mjs holds the
-// mirror to once it has played. The checkpoints: after an action's events
-// (played(), below: the flags' and labels' events inside an action
-// included, which the next action's end would otherwise refresh before its
-// `act`), and after the stage events main.js emits (a deployment's, the
-// battle's start: a lost one shows until the next stage event, which can
-// come before any `act`).
-function checkpoint() {
-  if (DEBUG) emit(G, 'check', { proj: project(G) })
-  return show()
-}
-// An action's result (core/actions/'s), once its events have played (and
-// been checked, under ?debug).
-async function played(result) {
-  await checkpoint()
-  return result
+// Told when it has played everything: the table catches up (idled, below).
+const player = new EventPlayer({ handlers: HANDLERS, onIdle: () => idled() })
+
+// What the Session hands over after each entry it folds: the events that
+// entry made happen, played in order. A battle's first entry, its start,
+// begins with the match's board (its terrain.clear and an add per chunk),
+// which the backdrop already shows chunk for chunk: start() asks for those
+// to be dropped (boardShown), so the meshes stay. Under ?debug the
+// checkpoints P-present holds the mirror to go in first (the ?debug block).
+let boardShown = false
+const sink = {
+  // (`ses`, the Session handing them over: a Session over a store that holds
+  // entries already folds them as it is made, before start() has it)
+  events(events, ses) {
+    if (G !== ses.G) {
+      G = ses.G
+      bindViews(G)
+    }
+    if (traceListener) events = traceListener.present(events, G)
+    if (boardShown) {
+      boardShown = false
+      if (events[0]?.t === 'terrain.clear') {
+        let k = 1
+        while (events[k]?.t === 'terrain.add') k++
+        events = events.slice(k)
+      }
+    }
+    player.push(events)
+  },
 }
 
 // A wound that leaves the model standing: the number, and a flinch.
@@ -669,41 +700,9 @@ async function walked(e, M) {
   await wait(0.15)
 }
 
-// The movement phase's actions are core/actions/move.js's (a move, which is
-// also an advance's move and a fall back; the advance roll): here, the
-// action's end once their events have played, so its `act` line is
-// written with nothing left to show. The advance roll writes none (DESIGN
-// §4.1 rule 8): the move after it does. A move takes the unit and the
-// cell only, as R6's `move` command will (the ?debug hook's third argument,
-// sim/oracle's S.reach, goes unused): core makes the plan afresh from the
-// unit's flags, and parity holds every corpus move made on it to the old
-// move, made on the plan its cell was picked from (a click's S.reach, the
-// AI's own); a one-off probe at R5c also found the two plans deep-equal at
-// every corpus move.
-async function doMove(u, cell) {
-  S.busy = true
-  await played(coreMove(G, u, cell))
-  finishAction()
-}
-
-async function doAdvance(u) {
-  S.busy = true
-  const r = await played(coreAdvance(G, u))
-  S.busy = false
-  return r
-}
-
 // ── Shooting ────────────────────────────────────────────────────────────────
-// The shot is core/actions/shoot.js's (a volley, a blast weapon's
-// templates, a spell): here, the action's end once its events have played,
-// so its `act` line is written with nothing left to show, and how each of
-// those events looks.
-async function doShoot(u, target) {
-  S.busy = true
-  await played(coreShoot(G, u, target))
-  finishAction()
-}
-
+// How a shot's events look (core/actions/shoot.js: a volley, a blast
+// weapon's templates, a spell).
 // A volley: projectiles for a non-blast volley — a handful, not one per
 // shot (e.n), from the shooters standing to the figures they shoot at.
 async function volley(e) {
@@ -758,7 +757,7 @@ function projectileStyle(kind) {
 // until the template is thrown (blast.aim); on a miss, its scatter
 // (blast.scatter); the throw (blast.fire); then where it lands (blast.land).
 // The marker is view state the mirror doesn't hold: a new table takes it
-// away (setupTable), and a snap must too (DESIGN §2.4), since it drops the
+// away (showTable), and a snap must too (DESIGN §2.4), since it drops the
 // blast.fire that would have.
 let blastMarker = null
 function aimed(e) {
@@ -822,7 +821,7 @@ function landed(e) {
 // turf over the template, and their own explosion; they stand until the
 // spell is done (spell.fade), then sink away. Like the marker, the spikes
 // are view state the mirror doesn't hold: a new table takes them away
-// (setupTable), and a snap must too (DESIGN §2.4), since it drops the
+// (showTable), and a snap must too (DESIGN §2.4), since it drops the
 // spell.fade that would have.
 const spikesOf = new Map()
 async function thorns(e) {
@@ -878,63 +877,8 @@ async function gaze(e) {
 }
 
 // ── Charge ──────────────────────────────────────────────────────────────────
-// The charge is core/actions/charge.js's: declareCharge rolls, and on
-// contact moves the charger on (an AI seat's, or Auto's, shortest move) or
-// hands back what a human picks the spot from; finishCharge moves it to the
-// spot picked. Here: the pick, and the action's end once the charge's
-// events have played, so its `act` line is written with nothing left to
-// show (under ?debug no state line waits in the trace's hold).
-async function doCharge(u, target, { auto = false } = {}) {
-  S.busy = true
-  const pick = await played(declareCharge(G, u, target, auto || !human(u.side) ? 'ai' : 'seat'))
-  // a human chooses where around the target to end
-  if (pick) {
-    const cell = await pickChargeSpot(u, target, pick.plan, pick.rolled)
-    await played(finishCharge(G, u, target, cell))
-  }
-  // (the charger's ⚔ came with its walk's own `status`, as the walk ended:
-  // the moment finishAction's showed it before)
-  finishAction()
-}
-
-// Shade every spot the roll reaches and wait for a click on one of them.
-function pickChargeSpot(u, target, plan, rolled) {
-  const ok = chargeSpots(plan, rolled)
-  // the 12" declaration ring is spent; leave the orange to the area itself,
-  // filled strongly enough to see when it's only a cell or two
-  rangeRing.visible = false
-  paintMask(ok, [255, 150, 60], 150)
-  ghostAt(plan.cell, u.r)
-  return new Promise((resolve) => {
-    S.chargePick = { u, target, plan, rolled, ok, resolve }
-    refreshUI()
-  })
-}
-
-function nearestSpot(pick, x, z, within = 2.4) {
-  const nav = G.nav
-  let best = -1, bd = within
-  for (let i = 0; i < nav.N; i++) {
-    if (!pick.ok[i]) continue
-    const d = hypot(nav.x(i) - x, nav.z(i) - z)
-    if (d < bd) {
-      bd = d
-      best = i
-    }
-  }
-  return best
-}
-
-function placeCharge(i) {
-  const pick = S.chargePick
-  if (!pick || i < 0 || !pick.ok[i]) return
-  S.chargePick = null
-  clearOverlay()
-  ghost.visible = false
-  $('#tooltip').style.display = 'none'
-  refreshUI()
-  pick.resolve(i)
-}
+// (the charge is core/actions/charge.js's; where a seat's ends is picked
+// with input/tools/charge-end.js, below)
 
 // ── Morale ──────────────────────────────────────────────────────────────────
 // (the test is core/actions/morale.js; here, how a fleeing model looks:
@@ -978,35 +922,16 @@ function shout(e) {
   else fx.text(top(u), 'Charge failed', '#d0d0d0')
 }
 
-// An action's end: its state line in the trace, then what the table shows
-// of it (who holds each objective; every label), and the `act` itself,
-// which under ?debug carries the match as it should now be shown
-// (sim/present-check.mjs holds the mirror to it).
-function finishAction() {
-  traceState(G, 'act')
-  emit(G, 'objectives', { owners: ownersOf(G) })
-  emit(G, 'status', statusOf(G))
-  emit(G, 'act', DEBUG ? { tag: 'act', proj: project(G) } : { tag: 'act' })
-  show()
-  S.busy = false
-  if (S.sel && !canAct(G, S.sel)) select(null)
-  else if (S.sel) select(S.sel)
-  refreshUI()
-  checkWipe()
-}
-
-function checkWipe() {
-  for (const s of [0, 1]) if (!G.units.some((u) => u.side === s && alive(u))) G.turn.wiped = s
-}
-
 // ── Camera focus for AI turns ───────────────────────────────────────────────
 // (the stage and the seat to act as shown: a focus event plays while the
-// match may have run ahead; the AI's own calls come with the player idle)
+// match has run ahead, a whole AI turn or more)
 let focusTween = null
 function focus(x, z) {
   const M = player.mirror
   if (!S.follow || M.stage !== 'battle') return
-  if (human(M.active) && ctrl(G, 0) !== ctrl(G, 1)) return
+  // (never during the decision of the one seat played here: hotseat's two
+  // seats and a spectator's none both follow)
+  if (local(M.active) && session.localSeats.length === 1) return
   const t0 = controls.target.clone()
   const d = Math.hypot(x - t0.x, z - t0.z)
   if (d < 6) return
@@ -1020,148 +945,158 @@ function focus(x, z) {
   }, easeInOut)
 }
 
-// ── The AI ──────────────────────────────────────────────────────────────────
-// An AI phase is core/ai/policy.js's generator, which reads the match with
-// the core queries and yields each command it decides on (units by id,
-// places by nav cell). Each is played here through the same actions a click
-// makes, ended once its events have played, before the generator is asked
-// for the next; what it shows on the way (a camera swing, the beats between
-// units: `focus` and `pause` events) is played before each command and
-// after the last. The draws stay between the same actions as ever. (R6b:
-// core/engine.js's runAI drives the same generators inside the fold.)
-const unitById = (id) => G.units.find((u) => u.id === id)
-async function aiTurn(side, phase) {
-  for (const cmd of aiPhase(G, side, phase)) {
-    await show()
-    const u = unitById(cmd.u)
-    if (cmd.t === 'advance') await doAdvance(u)
-    else if (cmd.t === 'move') await doMove(u, cmd.c)
-    else if (cmd.t === 'shoot') await doShoot(u, unitById(cmd.tg))
-    else if (cmd.t === 'charge') await doCharge(u, unitById(cmd.tg), { auto: true })
-    else throw new Error(`the AI asked for "${cmd.t}", which no seat can play`)
-  }
-  await show()
-}
+// ── The flow ────────────────────────────────────────────────────────────────
+// What the table shows as the battle moves on: a stage (the deployment, the
+// battle, its end), each phase's banner, each round's score, the end screen.
+// The match decides all of it (core/engine.js); these are its events played.
 
-// ── Turn loop ───────────────────────────────────────────────────────────────
-let phaseResolve = null
+// Whether the table has shown a phase begin (its phase.start played) since
+// the stage it shows began. Until one has, the mirror's turn fields are a
+// table's before the battle (seat 0's movement in round 1), which say
+// nothing about whose turn it is: through the roll-off the HUD shows no
+// seat's phase, whoever moves first. (View state: the mirror is held to
+// project(G) by P-present, so this stays out of it.)
+let phaseShown = false
+// Whether End and Auto are up for the seat whose phase the table shows: they
+// come up once the player has caught up to that phase (idle), and stay up,
+// disabled, while the table plays the seat's own actions (a charge's roll
+// and its walk too, though the match waits on its end in between) until an
+// End or an Auto moves the decision on. (View state, like phaseShown.)
+let buttonsUp = false
 
-// The battle, on G.turn (one match: G is not replaced while it runs, since
-// only the title screen and the end screen build a new table).
-async function battle() {
-  const T = G.turn
-  T.stage = 'battle'
-  // the flags show who holds what from now on
-  emit(G, 'stage', { stage: 'battle' })
-  emit(G, 'objectives', { owners: ownersOf(G) })
-  checkpoint()
-  select(null)
-  zoneMats.forEach((m) => (m.opacity = 0.05))
-  // roll off for first turn
-  tray.clear('Roll-off for the first turn')
-  let a, b
-  do {
-    a = roll(G, 1)
-    b = roll(G, 1)
-    await tray.row(SIDES[0].short, a, 0, { sum: true })
-    await tray.row(SIDES[1].short, b, 0, { sum: true })
-  } while (a[0] === b[0])
-  T.first = a[0] > b[0] ? 0 : 1
-  log(T.first, `<b>${SIDES[T.first].name}</b> win the roll-off and take the first turn.`, 'big')
-  for (T.round = 1; T.round <= G.setup.rounds; T.round++) {
-    for (let t = 0; t < 2; t++) {
-      T.active = (T.first + t) % 2
-      await playerTurn(T.active)
-      if (T.wiped >= 0) return gameOver()
-    }
-    await scoreRound()
-  }
-  gameOver()
-}
-
-async function playerTurn(side) {
-  const T = G.turn
-  for (const u of G.units) {
-    u.lost = 0
-    if (u.side === side) u.flags = {}
-  }
-  for (const [i, ph] of PHASES.entries()) {
-    T.ph = i
-    emit(G, 'phase.start', { side, phase: phaseKey(G), round: T.round })
-    show()
-    select(null)
-    tray.el.classList.remove('show')
-    refreshUI()
-    await banner(`${SIDES[side].icon} ${SIDES[side].name}`, ph.name, side)
-    if (ph.key === 'fight') {
-      if (G.units.some((u) => alive(u) && isEngaged(G, u))) await played(fightPhase(G, side))
-    } else if (ph.key === 'morale') {
-      await played(moralePhase(G))
-    } else if (!anyCanAct(G, side)) {
-      await wait(0.2)
-    } else if (human(side)) {
-      await new Promise((res) => {
-        phaseResolve = res
-        S.waiting = true
-        refreshUI()
-      })
-      phaseResolve = null
-      S.waiting = false
-    } else {
-      await aiTurn(side, phaseKey(G))
-    }
-    traceState(G, `phase ${side}:${ph.key}`)
-    checkWipe()
-    if (T.wiped >= 0) return
-  }
-  // mesmerism wears off at the end of the victim's own turn
-  for (const u of G.units) if (u.side === side && u.mesmerized) u.mesmerized = false
-  emit(G, 'status', statusOf(G))
-  show()
-}
-
-async function scoreRound() {
-  const T = G.turn
-  const held = [0, 0]
-  for (const o of G.objectives) {
-    const c = controlOf(G, o)
-    if (c >= 0) {
-      held[c]++
-      fx.ring(o.x, o.z, OBJECTIVE_RANGE, SIDES[c].color, { life: 1.6, fill: 0.15 })
-    }
-  }
-  T.vp[0] += held[0]
-  T.vp[1] += held[1]
-  traceState(G, `round ${T.round}`)
-  log(-1, `End of round ${T.round}: ${SIDES[0].short} hold ${held[0]} objective${held[0] === 1 ? '' : 's'}, ${SIDES[1].short} hold ${held[1]}. Score ${T.vp[0]}–${T.vp[1]}.`, 'big')
-  emit(G, 'round.scored', { round: T.round, held: [...held], vp: [...T.vp], owners: ownersOf(G) })
-  show()
+// A stage begins: the zones dim for the battle, and nothing stays selected.
+function staged(e) {
+  phaseShown = false
+  if (e.stage !== 'deploy') select(null)
   refreshUI()
-  await banner(`End of round ${T.round}`, `VP ${T.vp[0]} – ${T.vp[1]}`)
 }
 
-function gameOver() {
-  const T = G.turn
-  // the destroyed-unit lines still held back
-  flush(G)
-  show()
-  traceState(G, 'over')
-  T.stage = 'over'
-  emit(G, 'stage', { stage: 'over' })
-  show()
+// A phase begins: its banner, which the table waits on.
+function phaseBegun(e) {
+  phaseShown = true
+  select(null)
+  tray.el.classList.remove('show')
+  refreshUI()
+  return banner(`${SIDES[e.side].icon} ${SIDES[e.side].name}`, PHASE_NAME[e.phase], e.side)
+}
+
+// A round scored: a ring in the holder's colours on each objective held,
+// then the score's banner.
+function scored(e) {
+  e.owners.forEach((c, i) => {
+    const o = MISSIONS.classic.objectives[i]
+    if (c >= 0) fx.ring(o.x, o.z, OBJECTIVE_RANGE, SIDES[c].color, { life: 1.6, fill: 0.15 })
+  })
+  refreshUI()
+  return banner(`End of round ${e.round}`, `VP ${e.vp[0]} – ${e.vp[1]}`)
+}
+
+// The end: who won and why, worded from `why` and the rounds played (0 for
+// a battle that ended in its deployment).
+function over({ win, why, vp, rounds }) {
   select(null)
   refreshUI()
-  let win
-  if (T.wiped >= 0) win = 1 - T.wiped
-  else win = T.vp[0] > T.vp[1] ? 0 : T.vp[1] > T.vp[0] ? 1 : -1
   const t = win < 0 ? 'A bloody draw' : `${SIDES[win].name} win!`
-  const why = T.wiped >= 0 ? `${SIDES[T.wiped].name} have been wiped from the table.` : `Final score ${T.vp[0]} – ${T.vp[1]} after ${G.setup.rounds} rounds.`
+  const when = rounds ? `in round ${rounds}` : 'in the deployment'
+  const line = why === 'wipe' ? `${SIDES[1 - win].name} have been wiped from the table ${when}.`
+    : why === 'concede' ? `${SIDES[1 - win].name} conceded ${when}.`
+    : `Final score ${vp[0]} – ${vp[1]} after ${rounds} round${rounds === 1 ? '' : 's'}.`
   const title = $('#overTitle')
   title.textContent = `${win >= 0 ? SIDES[win].icon + ' ' : ''}${t}`
   title.style.color = seatInk(win)
-  $('#overWhy').textContent = why
+  $('#overWhy').textContent = line
   $('#over').classList.remove('hidden')
   sfx.fanfare()
+}
+
+// ── Commands ────────────────────────────────────────────────────────────────
+// What a seat played here sends (DESIGN §2.5): each click or button becomes
+// a command body (units by id, places by nav cell, picked with the core's
+// own queries: nearestValid, freeSpot, the charge-end tool), sent through
+// the Session only if the match takes it now. The Session folds it at once:
+// the match runs on to the next decision a human makes, and the table plays
+// what happened. Whether a seat may act is derived, never stored: from the
+// decision the match waits on and whether the player has played everything.
+
+// the seat played here that the match waits on, or -1
+const localSeat = () => (session ? session.decisionFor() : -1)
+// that seat's decision, null for none
+const localDecision = () => (localSeat() >= 0 ? G.pending : null)
+// the seat deploying here, or -1 (a placement plays at once: the deployment
+// never waits on the player)
+const deploySeat = () => (localDecision()?.k === 'deploy' ? localSeat() : -1)
+// a seat played here is in a phase of its own turn, and the table has shown
+// everything up to now
+const myTurn = () => player.idle && localDecision()?.k === 'phase'
+// a charge's end to pick, here and now (input/tools/charge-end.js)
+const picking = () => (player.idle && localDecision()?.k === 'chargeEnd' ? chargePick(session) : null)
+// a question the tools ask the match: with the dice locked (§4.1 rule 2)
+const ask = (fn) => session.preview(fn)
+
+// Send `body` for the seat played here, if the match takes it now. Returns
+// null once sent, else why not (and sends nothing).
+function send(seat, body) {
+  const why = session ? session.legal(seat, body) : 'no battle'
+  if (why) return why
+  session.submit(seat, body)
+  // (the buttons go disabled at once, while the table plays it)
+  refreshUI()
+  return null
+}
+const moveTo = (u, c) => {
+  clearOverlay()
+  return send(localSeat(), { t: 'move', u: u.id, c })
+}
+const advance = (u) => send(localSeat(), { t: 'advance', u: u.id })
+const shoot = (u, tg) => send(localSeat(), { t: 'shoot', u: u.id, tg: tg.id })
+const charge = (u, tg) => send(localSeat(), { t: 'charge', u: u.id, tg: tg.id })
+
+// End the charge on cell c, a spot the roll reaches (a click's, nearestSpot's:
+// its -1 for "no spot" is no command, though the wire's Shortest move is -1
+// too, so that takes its own path, takeShortest).
+function placeCharge(c) {
+  const pk = picking()
+  if (!pk) return 'no charge to end'
+  if (!(c >= 0 && pk.ok[c])) return `cell ${c} is no spot the roll reaches`
+  return endCharge(pk, c)
+}
+// End the charge with the shortest move (SHORTEST: the plan's own cell).
+function takeShortest() {
+  const pk = picking()
+  if (!pk) return 'no charge to end'
+  return endCharge(pk, SHORTEST)
+}
+function endCharge(pk, c) {
+  pickShown = null
+  clearOverlay()
+  ghost.visible = false
+  $('#tooltip').style.display = 'none'
+  return send(pk.seat, endAt(c))
+}
+
+// The table has played everything: the trace catches up (?debug), a card
+// still open catches up with the table (the unit its figure shows now: the
+// battle's start rebinds the figures), the selected unit stays selected
+// while it can still act (a move or a shot spent it; an advance didn't), a
+// charge waiting for its end shades the spots its roll reaches, and the HUD
+// follows.
+let pickShown = null
+function idled() {
+  traceListener?.idle()
+  const cu = carded && views.get(carded.id)?.u
+  if (cu && cu.t === carded.t && cu.side === carded.side && $('#card').classList.contains('show')) showCard(cu)
+  if (S.sel && myTurn()) select(ask((G, q) => q.canAct(G, S.sel)) ? S.sel : null)
+  const pk = picking()
+  if (pk && pickShown !== pk) {
+    pickShown = pk
+    // the 12" declaration ring is spent; leave the orange to the area itself,
+    // filled strongly enough to see when it's only a cell or two
+    rangeRing.visible = false
+    paintMask(pk.ok, [255, 150, 60], 150)
+    ghostAt(pk.cell, pk.u.r)
+  }
+  refreshUI()
+  traceListener?.settled()
 }
 
 // ── Human input ─────────────────────────────────────────────────────────────
@@ -1174,7 +1109,7 @@ function pick(ev) {
   ray.setFromCamera(ptr, camera)
   // the units the table shows standing (while the player is behind, the
   // match may have slain some of them already)
-  const hits = ray.intersectObjects(G.units.filter((u) => shown(u).alive > 0).map((u) => V(u).hit), false)
+  const hits = ray.intersectObjects([...views.values()].filter((v) => shown(v.u).alive > 0).map((v) => v.hit), false)
   const unit = hits.length ? hits[0].object.userData.unit : null
   const g = ray.intersectObject(board, false)[0]
   return { unit, ground: g ? g.point : null }
@@ -1203,84 +1138,94 @@ renderer.domElement.addEventListener('pointermove', (e) => {
   hover()
 })
 
-function myTurn() {
-  const T = G.turn
-  return (T.stage === 'battle' && human(T.active) && phaseResolve && !S.busy && !S.auto) || T.stage === 'deploy'
-}
-
-async function click({ unit, ground }) {
+// A click on the table: a unit, or the ground under the pointer (or both).
+// On a seat's own turn it selects, moves, shoots or charges; while a charge
+// waits for its end it picks the spot; in the deployment it places; any
+// other time it shows the unit's card.
+function click({ unit, ground }) {
   $('#tooltip').style.display = 'none'
-  const T = G.turn
-  if (T.stage === 'deploy') return deployClick(unit, ground)
-  if (S.chargePick) {
-    // the board under the cursor counts even when it's under a model
-    if (ground) placeCharge(nearestSpot(S.chargePick, ground.x, ground.z))
+  if (deploySeat() >= 0) return deployClick(unit, ground)
+  const pk = picking()
+  if (pk) {
+    // the board under the cursor counts even when it's under a model; a
+    // click outside the orange area (no spot within reach of it) does nothing
+    if (ground) {
+      const i = nearestSpot(G.nav, pk.ok, ground.x, ground.z)
+      if (i >= 0) placeCharge(i)
+    }
     return
   }
   if (!myTurn()) {
     if (unit) showCard(unit)
     return
   }
-  const sel = S.sel
-  if (unit && unit.side === T.active) {
-    if (canAct(G, unit)) {
+  const sel = S.sel, ph = phaseKey(G)
+  if (unit && unit.side === localSeat()) {
+    if (ask((G, q) => q.canAct(G, unit))) {
       sfx.click()
       select(unit)
     } else showCard(unit)
     return
   }
-  if (phaseKey(G) === 'move' && sel && ground) {
-    const i = nearestValid(G, S.reach, ground.x, ground.z)
-    if (i >= 0) {
-      clearOverlay()
-      await doMove(sel, i)
-    }
+  if (ph === 'move' && sel && ground) {
+    const i = ask((G, q) => q.nearestValid(G, S.reach, ground.x, ground.z))
+    if (i >= 0) moveTo(sel, i)
     return
   }
-  if (phaseKey(G) === 'shoot' && sel && unit && unit.side !== sel.side) {
-    if (shotInfo(G, sel, unit).ok) await doShoot(sel, unit)
-    return
-  }
-  if (phaseKey(G) === 'charge' && sel && unit && unit.side !== sel.side) {
-    if (chargeTargets(G, sel).includes(unit) && chargePlan(G, sel, unit)) await doCharge(sel, unit)
-    return
-  }
+  // (the match judges the shot and the charge: in range, in sight, a way
+  // there; a click it refuses does nothing)
+  if (ph === 'shoot' && sel && unit && unit.side !== sel.side) return void shoot(sel, unit)
+  if (ph === 'charge' && sel && unit && unit.side !== sel.side) return void charge(sel, unit)
   if (unit) showCard(unit)
-  else if (!unit && ground) select(null)
+  else if (ground) select(null)
 }
 
+// The deployment: a click on one of the deploying seat's units picks it up,
+// a click inside its zone puts it on the free spot nearest the click (within
+// 2.5", the UI's tolerance; the cell is freeSpot's, a cell centre, so the
+// command carries its index). Returns why a placement it sent was refused
+// (null for anything else: a click too far from a free spot does nothing).
 function deployClick(unit, ground) {
-  const side = S.deploySide
+  const side = deploySeat()
+  if (side < 0) return 'no seat deploying here'
   if (unit && unit.side === side) {
     sfx.click()
     S.sel = unit
     showCard(unit)
     refreshRings()
-    return
+    return null
   }
   if (S.sel && ground) {
     const u = S.sel
-    const others = G.units.filter((o) => o !== u)
-    const p = freeSpot(G, u, ground.x, ground.z, side, others)
+    const p = ask((G, q) => q.freeSpot(G, u, ground.x, ground.z, side, G.units.filter((o) => o !== u)))
     if (p && Math.hypot(p.x - ground.x, p.z - ground.z) < 2.5) {
-      moveUnit(u, p.x, p.z)
-      sfx.click()
-      for (const o of G.units) updateLabel(o)
+      const why = send(side, { t: 'place', u: u.id, c: G.nav.index(p.x, p.z) })
+      if (!why) {
+        sfx.click()
+        for (const v of views.values()) updateLabel(v.u)
+      }
+      return why
     }
   }
+  return null
 }
 
+// Pick up a unit (null: none). On a seat's own turn its move shows where it
+// can go (the move's plan, which the click snaps to), and its shot or charge
+// the range ring.
 function select(u) {
-  const T = G.turn
   S.sel = u
   S.reach = null
   clearOverlay()
-  if (u && T.stage === 'battle' && phaseKey(G) === 'move' && !u.flags.moved) {
-    S.reach = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
-    paintReach(S.reach)
+  if (u && G) {
+    const ph = phaseKey(G)
+    if (G.turn.stage === 'battle' && ph === 'move' && !u.flags.moved) {
+      S.reach = ask((G, q) => q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0))
+      paintReach(S.reach)
+    }
+    if (ph === 'shoot' && u.t.ranged) showRange(u, u.t.ranged.range)
+    if (ph === 'charge') showRange(u, CHARGE_RANGE)
   }
-  if (u && phaseKey(G) === 'shoot' && u.t.ranged) showRange(u, u.t.ranged.range)
-  if (u && phaseKey(G) === 'charge') showRange(u, CHARGE_RANGE)
   showCard(u)
   refreshUI()
 }
@@ -1360,57 +1305,57 @@ function ghostAt(i, r) {
   ghost.visible = true
 }
 
+// What the pointer is over: a unit's line, or on a seat's own turn what its
+// selected unit would do there (the path and inches of a move, a shot's
+// odds, a charge's), or where a charge would end. Asked with the dice
+// locked; while the player is behind, the units are as shown.
 function hover() {
   const tip = $('#tooltip')
   tip.style.display = 'none'
   pathLine.visible = false
   ghost.visible = false
   const h = S.hoverPick
+  const pk = picking()
   if (!h) {
     // off the board mid-pick: show where "Shortest move" would put the unit
-    if (S.chargePick) ghostAt(S.chargePick.plan.cell, S.chargePick.u.r)
+    if (pk) ghostAt(pk.cell, pk.u.r)
     return
   }
   S.hover = h.unit
   let text = ''
   const sel = S.sel
-  const T = G.turn, nav = G.nav
-  if (S.chargePick && h.ground) {
-    const pk = S.chargePick
-    const i = nearestSpot(pk, h.ground.x, h.ground.z)
+  // a path, drawn with its end's ghost
+  const path = (pts, i, r) => {
+    pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
+    pathLine.visible = true
+    ghostAt(i, r)
+  }
+  if (pk && h.ground) {
+    const i = nearestSpot(G.nav, pk.ok, h.ground.x, h.ground.z)
     if (i >= 0) {
-      const pts = nav.path(pk.plan.res, i, pk.u.r, pk.plan.mode === 'fly' ? null : pk.plan.forbid)
-      pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
-      pathLine.visible = true
-      ghost.position.x = nav.x(i)
-      ghost.position.z = nav.z(i)
-      ghost.scale.setScalar(pk.u.r)
-      ghost.visible = true
+      path(ask((G) => G.nav.path(pk.plan.res, i, pk.u.r, pk.plan.mode === 'fly' ? null : pk.plan.forbid)), i, pk.u.r)
       text = `End charge here · ${pk.plan.res.dist[i].toFixed(1)}" of ${pk.rolled}"`
     } else text = `✖ out of reach — pick a spot in the orange area`
-  } else if (T.stage === 'battle' && myTurn() && sel) {
-    if (phaseKey(G) === 'move' && S.reach && h.ground && !h.unit) {
-      const i = nearestValid(G, S.reach, h.ground.x, h.ground.z)
-      if (i >= 0) {
-        const pts = nav.path(S.reach.res, i, sel.r, S.reach.mode === 'fly' ? null : S.reach.forbid)
-        pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
-        pathLine.visible = true
-        ghost.position.x = nav.x(i)
-        ghost.position.z = nav.z(i)
-        ghost.scale.setScalar(sel.r)
-        ghost.visible = true
-        text = `${S.reach.res.dist[i].toFixed(1)}" of ${S.reach.max}"`
+  } else if (myTurn() && sel) {
+    text = ask((G, q) => {
+      const ph = q.phaseKey(G), nav = G.nav
+      if (ph === 'move' && S.reach && h.ground && !h.unit) {
+        const i = q.nearestValid(G, S.reach, h.ground.x, h.ground.z)
+        if (i < 0) return ''
+        path(nav.path(S.reach.res, i, sel.r, S.reach.mode === 'fly' ? null : S.reach.forbid), i, sel.r)
+        return `${S.reach.res.dist[i].toFixed(1)}" of ${S.reach.max}"`
       }
-    } else if (phaseKey(G) === 'shoot' && h.unit && h.unit.side !== sel.side) {
-      const info = shotInfo(G, sel, h.unit)
-      text = info.ok ? oddsText(sel, h.unit, info) : `✖ ${info.why}`
-    } else if (phaseKey(G) === 'charge' && h.unit && h.unit.side !== sel.side) {
-      if (!chargeTargets(G, sel).includes(h.unit)) text = `✖ out of charge range (${gap(sel, h.unit).toFixed(1)}")`
-      else {
-        const p = chargePlan(G, sel, h.unit)
-        text = p ? `Charge: need ${p.need}" on 2D6 — ${Math.round(p2D6(p.need) * 100)}%` : '✖ no route'
+      if (ph === 'shoot' && h.unit && h.unit.side !== sel.side) {
+        const info = q.shotInfo(G, sel, h.unit)
+        return info.ok ? oddsText(sel, h.unit, info) : `✖ ${info.why}`
       }
-    }
+      if (ph === 'charge' && h.unit && h.unit.side !== sel.side) {
+        if (!q.chargeTargets(G, sel).includes(h.unit)) return `✖ out of charge range (${q.gap(sel, h.unit).toFixed(1)}")`
+        const p = q.chargePlan(G, sel, h.unit)
+        return p ? `Charge: need ${p.need}" on 2D6 — ${Math.round(p2D6(p.need) * 100)}%` : '✖ no route'
+      }
+      return ''
+    })
   }
   if (!text && h.unit) {
     // the unit as shown, like its label
@@ -1509,13 +1454,9 @@ const tray = {
 }
 
 // The battle log. Every line is traced as it is logged (core/journal.js:
-// the trace is the match's replayable fingerprint), then shown (its `log`
-// event, played here by write), and the destroyed-unit lines held back
-// until now follow it.
-function log(side, html, cls = '') {
-  logLine(G, side, html, cls)
-  show()
-}
+// the trace is the match's replayable fingerprint), then shown: its `log`
+// event, played here by write, the destroyed-unit lines held back until an
+// attack ends following it.
 // A line into the battle log. `at` is the trace's length when it was logged
 // (or flushed); under ?debug the entry carries it (data-at), and the page's
 // trace has reached it before the entry lands (the ?debug block's listener).
@@ -1533,8 +1474,11 @@ function write(side, html, cls, at) {
 }
 
 const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
+// the unit the open card shows (idled() redraws it as the table catches up)
+let carded = null
 function showCard(u) {
   const card = $('#card')
+  carded = u
   if (!u) {
     card.classList.remove('show')
     return
@@ -1557,15 +1501,20 @@ function showCard(u) {
     return `<div class="wpn"><span>${icon} ${w.name}</span><em>${bits.join(' · ')}</em></div>`
   }
   // what stands, what wounds are left, mesmerized and in combat: as shown,
-  // like the label
-  const mu = shown(u)
+  // like the label. What it has done this turn and whether it stands in
+  // cover have no shown source yet (the mirror holds neither: R7's HUD
+  // model), so they read the match, and only once the table has caught up
+  // with it: while the player is behind (the AI's turn, a watched battle)
+  // they are left off, or the card would tell of moves and dice the table
+  // hasn't played (§2.4). (The title's backdrop is never behind.)
+  const mu = shown(u), live = player.idle
   const status = []
-  if (u.flags.moved) status.push(u.flags.fellBack ? 'fell back' : u.flags.advanced ? `advanced +${u.flags.advRoll}"` : 'moved')
-  if (u.flags.shot) status.push('shot')
-  if (u.flags.charged) status.push('charged')
+  if (live && u.flags.moved) status.push(u.flags.fellBack ? 'fell back' : u.flags.advanced ? `advanced +${u.flags.advRoll}"` : 'moved')
+  if (live && u.flags.shot) status.push('shot')
+  if (live && u.flags.charged) status.push('charged')
   if (mu.mesmerized) status.push('🌀 mesmerized')
   if (mu.alive > 0 && mu.engaged) status.push('⚔ in combat')
-  if (mu.alive > 0 && inCover(G, u)) status.push('🛡 in cover')
+  if (live && mu.alive > 0 && inCover(atTable(), u)) status.push('🛡 in cover')
   const models = t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`
   card.innerHTML = `
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${SIDES[u.side].short} · ${t.role}</span></div>
@@ -1576,69 +1525,104 @@ function showCard(u) {
   card.classList.add('show')
 }
 
+// The HUD: the score, round, phase and seat as shown (the mirror), and what
+// a seat played here can do now. Its buttons show while a local seat's
+// decision is the one on the table, and go disabled (not just deaf) while
+// the table plays: a seat's own action, or anything else. While the player
+// is behind they keep what they showed, so they never read the match before
+// the table has caught up with it; they hide once the decision has moved on
+// (an End or an Auto hands the phase over).
 function refreshUI() {
-  const T = G.turn, M = player.mirror
+  const M = player.mirror, at = atTable()
+  const rounds = at.setup.rounds
   // the score and the round as shown
   $('#vp0').textContent = M.vp[0]
   $('#vp1').textContent = M.vp[1]
-  $('#round').textContent = M.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(M.round, G.setup.rounds)} / ${G.setup.rounds}`
+  $('#round').textContent = M.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(M.round, rounds)} / ${rounds}`
   document.querySelectorAll('#phases .ph').forEach((el) => {
-    el.classList.toggle('on', T.stage === 'battle' && el.dataset.k === phaseKey(G))
+    el.classList.toggle('on', M.stage === 'battle' && el.dataset.k === M.phase)
   })
-  $('#sideA').classList.toggle('active', T.stage === 'battle' && T.active === 0)
-  $('#sideB').classList.toggle('active', T.stage === 'battle' && T.active === 1)
-  const mine = T.stage === 'battle' && human(T.active) && !!phaseResolve && !S.auto
-  const sel = S.sel
-  const picking = !!S.chargePick
-  $('#endPhase').style.display = (mine && !picking) || T.stage === 'deploy' ? '' : 'none'
-  $('#closestSpot').style.display = picking ? '' : 'none'
-  $('#endPhase').textContent = T.stage === 'deploy' ? 'Begin battle ▸' : `End ${PHASES[Math.min(T.ph, PHASES.length - 1)].name} ▸`
-  $('#endPhase').disabled = S.busy || S.auto
-  $('#autoPhase').style.display = mine && !picking ? '' : 'none'
-  const adv = $('#advance')
-  adv.style.display = mine && phaseKey(G) === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !isEngaged(G, sel) ? '' : 'none'
-  adv.textContent = `Advance (+D6") — no ${sel?.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`
-  if (sel?.t.chargeAfterAdvance) adv.textContent = 'Advance (+D6") — can still charge'
-  // hint line
-  let hint = ''
-  if (picking) hint = `Charge! Rolled ${S.chargePick.rolled}" — click the orange area to place ${S.chargePick.u.t.short}, or take the shortest move.`
-  else if (T.stage === 'deploy') hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
-  else if (T.stage === 'battle' && !human(T.active)) hint = `${SIDES[T.active].name} (AI) are taking their turn…`
-  else if (mine) {
+  $('#sideA').classList.toggle('active', M.stage === 'battle' && M.active === 0)
+  $('#sideB').classList.toggle('active', M.stage === 'battle' && M.active === 1)
+  const idle = player.idle, P = localDecision(), sel = S.sel
+  const deploying = P?.k === 'deploy'
+  // the seat's own phase, which the table has reached (its banner played:
+  // the mirror's turn fields are the last phase.start's)
+  const mine = phaseShown && P?.k === 'phase' && M.stage === 'battle' && M.active === P.seats[0] && M.phase === P.phase && M.round === G.turn.round
+  // (the same seat's charge, waiting on its end: still its own phase)
+  const charging = phaseShown && P?.k === 'chargeEnd' && M.stage === 'battle' && M.active === P.seats[0] && M.phase === 'charge' && M.round === G.turn.round
+  const pk = picking()
+  const end = $('#endPhase'), auto = $('#autoPhase'), adv = $('#advance')
+  if (!mine && !charging) buttonsUp = false
+  else if (idle) buttonsUp = true
+  // (the pick hides them: Shortest move stands in their place)
+  const up = buttonsUp && !pk
+  end.style.display = deploying || up ? '' : 'none'
+  auto.style.display = up ? '' : 'none'
+  $('#closestSpot').style.display = pk ? '' : 'none'
+  if (deploying) end.textContent = 'Begin battle ▸'
+  else if (mine) end.textContent = `End ${PHASE_NAME[P.phase]} ▸`
+  end.disabled = auto.disabled = adv.disabled = !idle
+  if (!mine) adv.style.display = 'none'
+  else if (idle) adv.style.display = P.phase === 'move' && sel && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) ? '' : 'none'
+  if (sel) {
+    adv.textContent = `Advance (+D6") — no ${sel.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`
+    if (sel.t.chargeAfterAdvance) adv.textContent = 'Advance (+D6") — can still charge'
+  }
+  // the deploying seat's zone is lit; in battle both dim
+  const dep = deploySeat()
+  for (const s of [0, 1]) zoneMats[s].opacity = M.stage === 'battle' || M.stage === 'over' ? 0.05 : s === dep ? 0.2 : 0.07
+  // hint line (a picked-up unit's kept as it was while the table plays its
+  // action: the match has moved on already)
+  let hint = $('#hint').textContent
+  if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
+  else if (deploying) hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
+  else if (G && phaseShown && M.stage === 'battle' && !human(M.active)) hint = `${SIDES[M.active].name} (AI) are taking their turn…`
+  else if (mine && (idle || !sel)) {
     hint = {
-      move: sel ? (isEngaged(G, sel) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
+      move: sel ? (ask((G, q) => q.isEngaged(G, sel)) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
       shoot: sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.',
       charge: sel ? 'Click an enemy within 12" to declare a charge, then roll 2D6.' : 'Charge — pick a unit to charge with.',
-    }[phaseKey(G)] || ''
-  }
+    }[P.phase] || ''
+  } else if (!mine) hint = ''
   $('#hint').textContent = hint
   $('#hint').style.display = hint ? '' : 'none'
   refreshRings()
 }
 
+// Each unit's ring: the one picked up, the deploying seat's, a charge's
+// target, and on a seat's own turn who can act and what the picked-up unit
+// can shoot or charge (asked of the match, so only once the table has
+// caught up); the one under the pointer.
 function refreshRings() {
-  const mine = myTurn()
-  const T = G.turn
-  for (const u of G.units) {
-    if (!alive(u)) continue
-    const m = V(u).ring.material
+  const mine = myTurn(), dep = deploySeat(), pk = picking(), sel = S.sel
+  // (unit id → [colour, opacity]) for what the match says, on a seat's turn
+  const lit = !mine ? new Map() : ask((G, q) => {
+    const ph = q.phaseKey(G), out = new Map()
+    for (const u of G.units) {
+      if (!q.alive(u) || u === sel) continue
+      if (q.canAct(G, u)) out.set(u.id, ['#ffffff', 0.75])
+      else if (sel && ph === 'shoot' && u.side !== sel.side && q.shotInfo(G, sel, u).ok) out.set(u.id, ['#ff5a4a', 0.95])
+      else if (sel && ph === 'charge' && u.side !== sel.side && q.chargeTargets(G, sel).includes(u)) out.set(u.id, ['#ffa040', 0.95])
+    }
+    return out
+  })
+  for (const v of views.values()) {
+    const u = v.u
+    // (the units the table shows standing)
+    if (!(shown(u).alive > 0)) continue
+    const m = v.ring.material
     let op = 0, col = '#ffffff'
-    if (u === S.sel) {
+    if (u === sel) {
       op = 1
       col = '#ffe680'
-    } else if (T.stage === 'deploy' && u.side === S.deploySide) {
+    } else if (dep >= 0 && u.side === dep) {
       op = 0.5
-    } else if (S.chargePick && u === S.chargePick.target) {
+    } else if (pk && u === pk.tg) {
       op = 0.95
       col = '#ffa040'
-    } else if (mine && T.stage === 'battle' && canAct(G, u)) {
-      op = 0.75
-    } else if (mine && S.sel && phaseKey(G) === 'shoot' && u.side !== S.sel.side && shotInfo(G, S.sel, u).ok) {
-      op = 0.95
-      col = '#ff5a4a'
-    } else if (mine && S.sel && phaseKey(G) === 'charge' && u.side !== S.sel.side && chargeTargets(G, S.sel).includes(u)) {
-      op = 0.95
-      col = '#ffa040'
+    } else if (lit.has(u.id)) {
+      [col, op] = lit.get(u.id)
     } else if (u === S.hover) {
       op = 0.35
     }
@@ -1654,44 +1638,50 @@ async function banner(a, b, side = -1) {
   el.classList.remove('show')
   void el.offsetWidth
   el.classList.add('show')
-  await wait(PACE.phaseStart(human(G.turn.active), G.turn.stage))
+  // (longer when the seat shown is played here, or outside the battle)
+  const M = player.mirror
+  await wait(PACE.phaseStart(local(M.active), M.stage))
 }
 
 // ── Buttons ─────────────────────────────────────────────────────────────────
+// End: in the deployment, the deploying seat is done (the last seat done
+// starts the battle); on a seat's own turn, the phase ends.
+// (Each button's handler returns why it sent nothing, null once it sent:
+// for the ?debug block's hooks, which press them.)
 $('#endPhase').onclick = () => {
   unlock()
   sfx.click()
-  if (G.turn.stage === 'deploy') return S.deployDone?.()
-  if (S.busy || S.auto || !phaseResolve) return
+  if (deploySeat() >= 0) {
+    const why = send(deploySeat(), { t: 'deployed' })
+    if (!why) {
+      S.sel = null
+      showCard(null)
+      refreshUI()
+    }
+    return why
+  }
+  if (!myTurn()) return 'no phase of a seat played here to end now'
   select(null)
-  phaseResolve()
+  return send(localSeat(), { t: 'end' })
 }
+// Shortest move: the charge ends where the AI's would.
 $('#closestSpot').onclick = () => {
   sfx.click()
-  if (S.chargePick) placeCharge(S.chargePick.plan.cell)
+  return takeShortest()
 }
-// Every AI action ends by clearing S.busy, so the Auto run holds its own flag:
-// without it a click in the gap between two AI actions could start a manual
-// charge whose pick outlived the phase.
-$('#autoPhase').onclick = async () => {
-  if (S.busy || S.auto || !phaseResolve) return
+// Auto: the AI plays the rest of the phase for the seat, then ends it (one
+// command: the match plays it all at once, the table at its pace).
+$('#autoPhase').onclick = () => {
+  if (!myTurn()) return 'no phase of a seat played here to play out now'
   select(null)
-  S.auto = true
-  S.busy = true
-  refreshUI()
-  try {
-    await aiTurn(G.turn.active, phaseKey(G))
-  } finally {
-    S.auto = false
-    S.busy = false
-  }
-  phaseResolve?.()
+  return send(localSeat(), { t: 'auto' })
 }
-$('#advance').onclick = async () => {
+// Advance: a D6 more inches for the unit picked up (it stays picked up, its
+// move now as far as the roll allows: idled).
+$('#advance').onclick = () => {
   const u = S.sel
-  if (!u || S.busy || S.auto) return
-  await doAdvance(u)
-  select(u)
+  if (!u || !myTurn()) return 'no unit of a seat played here to advance now'
+  return advance(u)
 }
 const SPEEDS = [1, 2, 4]
 $('#speed').onclick = () => {
@@ -1714,11 +1704,14 @@ $('#seed').value = S.seed
 $('#reroll').onclick = () => {
   S.seed = (Math.random() * 1e6) | 0
   $('#seed').value = S.seed
-  setupTable()
+  showTable(S.seed)
 }
 $('#seed').onchange = () => {
-  S.seed = Number($('#seed').value) || 1
-  setupTable()
+  // (the table first: should it throw, S.seed still names the one on show)
+  const seed = (Number($('#seed').value) || 1) >>> 0
+  showTable(seed)
+  S.seed = seed
+  $('#seed').value = seed
 }
 document.querySelectorAll('[data-mode]').forEach((b) => {
   b.onclick = () => {
@@ -1734,7 +1727,7 @@ $('#again').onclick = () => {
   S.titleSpin = true
   S.titleAngle -= clock.time * 0.035
   S.viewShift = 1
-  setupTable()
+  showTable(S.seed)
 }
 
 // keyboard panning
@@ -1742,7 +1735,7 @@ const keys = new Set()
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return
   keys.add(e.key.toLowerCase())
-  if (e.key === 'Escape' && !S.chargePick) select(null)
+  if (e.key === 'Escape' && !picking()) select(null)
 })
 addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()))
 function panKeys(dt) {
@@ -1761,27 +1754,39 @@ function panKeys(dt) {
 }
 
 // ── Setup ───────────────────────────────────────────────────────────────────
-// A new table for the title screen: a new match on the board seed, its
-// armies deployed (who plays each seat and the dice come with start()).
-function setupTable() {
-  // the new match first: if building it throws, the last table stays whole
-  const setup = {
-    board: S.seed, dice: TABLE_DICE, terrain: 'classic', rounds: MISSIONS.classic.rounds, diceMode: 'shared',
-    seats: RACE_PICK.map((race, i) => ({ race, ctrl: S.control[i] })),
-  }
-  const next = newState(setup, { out: [], onTrace })
+// The title screen's table for a board seed: its board and both armies where
+// any battle on it deploys them, drawn from a match that is never played
+// (both seats human, so it waits at its deployment having drawn nothing, and
+// its dice, 0, are never rolled). The battle a mode starts is a match of its
+// own (start()), on this table when it is the battle's (tableOf: the title's
+// is the classic terrain set and the races at the table, RACE_PICK).
+function showTable(board, { terrain = 'classic', races = RACE_PICK } = {}) {
+  // the new table first: if building it throws, the last one stays whole
+  const next = createMatch({ board, dice: 0, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: [] })
+  session?.close()
+  session = null
+  G = null
+  backdrop = next
+  backdropAsDrawn = true
+  // (the figures take their seat's colours as they are made)
+  seatPlayers(seatsOf(races))
   clearUnits()
   S.sel = null
+  S.reach = null
+  pickShown = null
+  phaseShown = false
+  buttonsUp = false
+  clearOverlay()
   $('#logList').innerHTML = ''
   $('#tray').classList.remove('show')
-  G = next
-  // the table as shown starts as the match stands, and the board is played
-  // from its terrain.clear
-  player.reset(project(G))
-  show()
+  // the table as shown: its units where they stand, nobody's flags, the
+  // title's stage; the board played from its terrain.clear (the rest of
+  // what the match reported, its deployment's lines, is no battle's)
+  player.reset({ ...project(next), stage: 'title' })
+  player.push(next.out.splice(0).filter((e) => /^terrain\./.test(e.t)))
   scatterTufts()
-  for (const u of G.units) makeView(u)
-  for (const u of G.units) updateLabel(u)
+  for (const u of next.units) makeView(u, next)
+  for (const u of next.units) updateLabel(u)
   // nothing from the last game carries over: banners, scorch marks, turn state
   for (const o of objViews) paintObjective(o, -1)
   fx.clearDecals()
@@ -1791,29 +1796,69 @@ function setupTable() {
   blastMarker = null
   for (const spikes of spikesOf.values()) for (const s of spikes) scene.remove(s)
   spikesOf.clear()
-  S.busy = false
-  S.waiting = false
-  S.chargePick = null
-  S.auto = false
   refreshUI()
 }
 
 // who plays each seat, by the title screen's mode buttons
 const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
 
-async function start(mode) {
+// What of a setup the table shows before its battle: the board, the terrain
+// set and the races at it (a mission too, once a setup names one). Who plays
+// a seat, the dice and the rounds draw nothing on it.
+const tableOf = (setup) => {
+  const s = fullSetup(setup)
+  return { board: s.board, terrain: s.terrain, races: s.seats.map((x) => x.race) }
+}
+const sameTable = (a, b) => JSON.stringify(tableOf(a)) === JSON.stringify(tableOf(b))
+
+// A battle: the whole setup (the board on the title screen, a fresh dice
+// stream, who plays each seat), a LocalStore whose first entry starts it,
+// and a Session over it for the seats played here. The match runs on at
+// once: to each human seat's deployment, or (watch) to its end, and the
+// table plays it from there.
+function start(mode) {
   // an unknown mode changes nothing (S included), so the table stays playable
   if (!Object.hasOwn(MODES, mode)) throw new Error(`no mode "${mode}" (there are ${Object.keys(MODES).join(', ')})`)
   const who = MODES[mode]
+  // (a battle starts on a fresh table: a second start without the end
+  // screen's Back would find the last battle's on show)
+  if (session) showTable(S.seed)
   // a fresh logic-dice stream per battle; ?dice=N replays one exactly
-  const dice = Number(params.get('dice')) || ((Math.random() * 1e9) | 0)
-  // the battle is fought on the table the title screen shows (setupTable
-  // built it, armies and all); it gets its dice and who plays each seat
-  startMatch(G, { dice, ctrl: who })
-  S.dice = dice
+  const dice = (Number(params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
+  const setup = {
+    board: S.seed, dice, terrain: 'classic', rounds: MISSIONS.classic.rounds, diceMode: 'shared',
+    seats: RACE_PICK.map((race, i) => ({ race, ctrl: who[i] })),
+  }
+  // The battle starts on the table shown, which must be its own: the
+  // backdrop, on the same board and terrain with the same races and untouched
+  // since it was drawn, is that match's table before anything has happened
+  // (else it is drawn afresh from the battle's setup first: today the title's
+  // always is the battle's). So the mirror starts from it, and the match's own
+  // board events, which would rebuild the meshes chunk for chunk, are dropped
+  // (P-present holds the table to the match at every checkpoint).
+  if (!backdropAsDrawn || !sameTable(backdrop.setup, setup)) showTable(setup.board, tableOf(setup))
   S.control = [...who]
-  traceListener?.begin(G)
-  seatPlayers()
+  S.sel = null
+  S.reach = null
+  seatPlayers(seatsOf(setup.seats.map((s) => s.race)))
+  // the page's trace starts afresh (?debug), before the match's first line
+  traceListener?.begin()
+  player.reset(structuredClone(player.mirror))
+  boardShown = true
+  const store = new LocalStore()
+  session = new Session({ store, localSeats: who.flatMap((c, s) => (c === 'human' ? [s] : [])), sink, onTrace })
+  store.append({ s: -1, t: 'start', setup })
+  if (session.status === 'refused') {
+    // no battle: the title's table again, drawn afresh from the board it
+    // showed (built once already, so it builds again), and no refused
+    // Session left behind
+    const why = session.error
+    session.close()
+    session = null
+    boardShown = false
+    showTable(backdrop.setup.board, tableOf(backdrop.setup))
+    throw new Error(`the battle could not start: ${why}`)
+  }
   $('#title').classList.add('hidden')
   document.body.classList.add('playing')
   S.titleSpin = false
@@ -1825,22 +1870,7 @@ async function start(mode) {
     camera.position.lerpVectors(p0, view.pos, k)
     controls.target.lerpVectors(t0, view.target, k)
   }, easeInOut)
-  // humans get to adjust their deployment first
-  for (const side of [0, 1]) {
-    if (!human(side)) continue
-    G.turn.stage = 'deploy'
-    emit(G, 'stage', { stage: 'deploy' })
-    checkpoint()
-    S.deploySide = side
-    zoneMats[side].opacity = 0.2
-    log(side, `<b>${SIDES[side].name}</b>: deploy your army.`)
-    refreshUI()
-    await new Promise((res) => (S.deployDone = res))
-    zoneMats[side].opacity = 0.07
-    S.sel = null
-    showCard(null)
-  }
-  battle()
+  refreshUI()
 }
 
 // ── Frame loop ──────────────────────────────────────────────────────────────
@@ -1855,9 +1885,9 @@ S.viewShift = 1
 // own tweens.
 function animateUnits(dt, time) {
   const M = player.mirror
-  for (const u of G.units) {
+  for (const v of views.values()) {
     // (a unit walking a unit.move is drawn where its walk has got to)
-    const v = V(u), mu = M.units[u.id], p = v.at ?? mu.pos
+    const u = v.u, mu = M.units[u.id], p = v.at ?? mu.pos
     for (const [i, model] of mu.models.entries()) {
       const m = v.models[i]
       if (!model.alive && !m.dying) continue
@@ -1988,12 +2018,12 @@ addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight)
 })
 
-setupTable()
+showTable(S.seed)
 frame()
 if (params.has('watch')) start('watch')
 // ?debug exposes the table to the console (and to the test harness)
 if (params.has('debug')) {
-  // The input hooks are the very calls a click or a button makes, so sim/ can
+  // The input hooks are the calls a click or a button makes, so sim/ can
   // play a human seat headlessly; without ?debug none of this exists.
   // What sim/ reads (oracle/human-bot.mjs, oracle/shadow.mjs, chromium.mjs):
   // S.{stage,deploySide,phase,active,round,first,vp,wiped,busy,auto,reach,
@@ -2015,111 +2045,217 @@ if (params.has('debug')) {
   // later steps keep this surface working here, inside this block, never by
   // editing sim/oracle: the PIN and the working tree share a driver.
   //
-  // Since R4 the state is the match's, G (a new one per table), so the
-  // members map onto whichever G is current: S's turn fields read G.turn
-  // (wiped is undefined until a side is wiped, -1 in G.turn; since R6a the
-  // phase is the key of G.turn.ph, its index in PHASES), units, nav and
-  // scenery.chunks are getters, and the queries take the current G
-  // (q.canAct: (u) => canAct(G, u)). The trace is one array for the page's
-  // lifetime, fed by each match's onTrace as it writes a line, and emptied
-  // when start() begins a battle, at the point it always was.
-  // S lists and copies as a plain object would ({...S}, JSON), turn fields
-  // included, though structuredClone refuses it, as it does any Proxy.
+  // Since R6b the surface is derived from the battle's Session (no battle on
+  // the title: its members read the backdrop there, and S.stage says
+  // 'title'). The hooks are wrappers that build a command body and send it
+  // through the Session (main.js's own command functions: moveTo, shoot, …),
+  // returning a promise settled once the player has played everything again
+  // (doCharge's: once no charge waits for its end either, so it stays
+  // pending until the chargeEnd is placed, as the old pick did); a hook's
+  // command the match refuses throws, since the driver checked it as the UI
+  // does, and so does a button pressed when it can't send (every hook's:
+  // deployClick's placement and the buttons' too). deployClick keeps its
+  // pick-up-then-place pair, ending in a `place` for freeSpot's cell (a spot
+  // too far from the click is still the UI's no-op, which the driver sees
+  // for itself); placeCharge takes a cell the roll reaches, never Shortest
+  // move's -1 (the driver sends the plan's own cell for that, as a click
+  // on it would); endPhase and autoPhase press the buttons. Derived,
+  // never stored: phaseResolve is truthy while a seat played here holds a
+  // phase decision and the player is idle (main.js's myTurn); chargePick is
+  // {u, plan, ok} while one holds a chargeEnd and the player is idle (the
+  // charge-end tool's pick: plan.cell the shortest move's, ok a 1 per cell
+  // the roll reaches); S.busy and S.auto are !player.idle; S.deploySide is
+  // the seat deploying here. S's turn fields read the match (G.turn; wiped
+  // undefined until a side is wiped, -1 in G.turn; the phase the key of
+  // G.turn.ph), except that S.stage says 'over' only once the page has
+  // shown the end (the player idle, every trace line joined), since sim/
+  // stops reading there; until then 'battle'. units, nav and scenery.chunks
+  // are the match's, and the queries take it (q.canAct: (u) => canAct(G,
+  // u)), asked with the dice locked. S lists and copies as a plain object
+  // would ({...S}, JSON), turn fields included, though structuredClone
+  // refuses it, as it does any Proxy.
   //
-  // Since R5 the rules run ahead of the view: what they emit in G.out is
-  // played by the EventPlayer at the table's pace (view/player.js), and a
-  // battle-log entry lands when its `log` event is played. So the trace
-  // keeps pace with the player: a line the match writes while the player is
-  // behind it (events emitted and not yet played) joins `trace` when the
-  // player reaches it: at the log event that shows it (each carries `at`,
-  // the trace's length when it was logged, and `trace` is brought up to
-  // `at` before the entry is written, which carries it too, as data-at), or
-  // when the player goes idle. sim/ then records every write at the trace
-  // length it always did, and takes each state line's shadow as it joins:
-  // the actions write only log lines while the player is behind (every
-  // `act` line is finishAction's, here, once the action's events have
-  // played; a fight or morale phase's `phase` line follows its played()),
-  // so no state line waits. A state line that does wait is only right if
-  // the match hasn't moved by the time it joins (sim/oracle's shadow reads
-  // the live match then), so it waits with a fingerprint of what that
-  // shadow reads, and joining throws, naming the line, if the fingerprint
-  // has moved. The step that writes state lines while the player is behind
-  // (R6, whose engine ends actions in core and runs a whole AI turn ahead)
-  // carries the state with the line instead (DESIGN's R5a and R5b notes,
-  // R6's row).
+  // The trace is one array for the page's lifetime, fed by each battle's
+  // onTrace (createMatch's, which the Session passes) as the match writes
+  // a line, and emptied when start() begins a battle. The match runs ahead
+  // of the view: one `end` computes a whole AI turn, a watched battle the
+  // whole battle, before its first die is shown. So the trace keeps pace
+  // with the player: a line the match writes while the player is behind it
+  // (events not yet played) joins `trace` when the player reaches it: at the
+  // log event that shows it (each carries `at`, the trace's length when it
+  // was logged, and `trace` is brought up to `at` before the entry is
+  // written, which carries it too, as data-at), or when the player goes
+  // idle. sim/ then records every write at the trace length it always did.
+  // It takes a state line's shadow as the line joins (oracle/shadow.mjs
+  // reads S, q.rngState(), units and scenery.chunks then), when the match
+  // has long moved on; so each state line carries a snapshot of what that
+  // shadow reads, taken as the match writes the line (the turn as the
+  // legacy shadow has it, the dice, every unit, every chunk), and while the
+  // line is pushed those members serve the snapshot. (The legacy round
+  // quirk too: one past the last on the `over` line of a battle that ran its
+  // course, as sim/run.mjs's shadowPartsG has it.)
   //
   // Not promised, for sim/terrain-shots.mjs only: clock, camera, renderer,
   // S.titleSpin, scenery.scene and scenery.blast (a blast played as
   // core/actions/shoot.js's blastLands plays one: its reports played, the
-  // nav refreshed). Nor G, for the console and for
-  // sim/rematch-check.mjs (G.out, which it requires empty whenever the
-  // player is idle and before each new table; it also presses #again,
-  // #reroll and #seed's onchange, and reads S.seed), nor player, which it
-  // reads for that (player.idle). Nor, for sim/present-check.mjs,
-  // present.listen(observer), G (it folds its own mirror from project(G)
-  // as the page loads and at each new table, and holds it to project(G) at
-  // the game's end) and player.idle (at the game's end): the observer's
-  // reset(M) hears each new table's mirror and event(e, M) every event as
-  // the player plays it, so it can fold its own mirror and hold it to each
-  // act's `proj` (project(G) when the action ended, which only ?debug's act
-  // events carry) and to each `check {proj}`, an event only ?debug emits
-  // (main.js's checkpoint(): after an action's events, and after
-  // main.js's own stage events), with project(G) as the match then stood.
-  // The M it is handed is
+  // nav refreshed; on the title only, on the backdrop, which a start() then
+  // draws afresh: with a battle on it throws, the battle's board changing
+  // only through its commands). Nor G and session, for
+  // the console and for sim/rematch-check.mjs (G.out, which it requires
+  // empty whenever the player is idle and before each new table: the
+  // Session hands every event over as it folds an entry; it also presses
+  // #again, #reroll and #seed's onchange, and reads S.seed), nor player,
+  // which it reads for that (player.idle). Nor, for sim/present-check.mjs,
+  // present.listen(observer), present.card(u) (the unit card's status line
+  // as it shows u now: it holds the card to the mirror while the player is
+  // behind), G (at the game's end it holds its mirror to project(G)) and
+  // player.idle (at the game's end): the observer's
+  // reset(M) hears each new table's mirror (the backdrop's, and a battle's
+  // as it starts, which it folds its own from) and event(e, M) every event
+  // as the player plays it, so it can hold its mirror to each act's `proj`
+  // and to each `check {proj}`, which only ?debug carries: P-present's
+  // checkpoints, put into each entry's events before the player gets them
+  // (present(), below). The core can't project (present/ is above it), so
+  // onTrace takes project(G) as the match writes each `act`, `phase` and
+  // `over` line, where it stands in the events so far: a `check` there
+  // (after an action's own events, before its end re-reports the flags and
+  // labels; after a fight or morale phase; before the end), the `act`
+  // event's `proj` the act line's; and a `check` at the end of each entry's
+  // events, as the match stops for a decision or ends. The M it is handed is
   // the player's own, folded in place (present/mirror.js): an observer
   // reads it and never folds into it, or every event would be applied
   // twice.
   const TURN = new Set(['stage', 'round', 'active', 'first', 'phase', 'vp', 'wiped'])
-  const turn = (k) => (k === 'wiped' ? (G.turn.wiped < 0 ? undefined : G.turn.wiped) : k === 'phase' ? phaseKey(G) : G.turn[k])
+  const DERIVED = {
+    busy: () => !player.idle,
+    auto: () => !player.idle,
+    deploySide: () => (deploySeat() < 0 ? undefined : deploySeat()),
+  }
+  const trace = [], held = []
+  // the state a state line carries, while it is pushed
+  let serving = null
+  // the page has shown everything: the player idle, every line joined
+  const caughtUp = () => player.idle && !held.length
+  const turn = (k) => {
+    if (serving) return serving.turn[k]
+    const g = atTable(), T = g.turn
+    if (k === 'stage') return !G ? 'title' : T.stage === 'over' && !caughtUp() ? 'battle' : T.stage
+    return k === 'wiped' ? (T.wiped < 0 ? undefined : T.wiped) : k === 'phase' ? phaseKey(g) : T[k]
+  }
   const legacyS = new Proxy(S, {
-    get: (s, k) => (TURN.has(k) ? turn(k) : s[k]),
-    has: (s, k) => TURN.has(k) || k in s,
+    get: (s, k) => (TURN.has(k) ? turn(k) : Object.hasOwn(DERIVED, k) ? DERIVED[k]() : s[k]),
+    has: (s, k) => TURN.has(k) || Object.hasOwn(DERIVED, k) || k in s,
     set: (s, k, v) => {
       if (TURN.has(k)) throw new Error(`__ts.S.${k} is the match's ${k === 'phase' ? 'G.turn.ph (phaseKey)' : `G.turn.${k}`}: it can't be set through S`)
+      if (Object.hasOwn(DERIVED, k)) throw new Error(`__ts.S.${k} is derived from the Session and the player: it can't be set`)
       s[k] = v
       return true
     },
-    ownKeys: (s) => [...new Set([...Reflect.ownKeys(s), ...TURN])],
+    ownKeys: (s) => [...new Set([...Reflect.ownKeys(s), ...TURN, ...Object.keys(DERIVED)])],
     getOwnPropertyDescriptor: (s, k) =>
-      TURN.has(k) ? { value: turn(k), enumerable: true, configurable: true, writable: false } : Reflect.getOwnPropertyDescriptor(s, k),
+      TURN.has(k) ? { value: turn(k), enumerable: true, configurable: true, writable: false }
+      : Object.hasOwn(DERIVED, k) ? { value: DERIVED[k](), enumerable: true, configurable: true, writable: false }
+      : Reflect.getOwnPropertyDescriptor(s, k),
   })
-  const trace = [], held = []
   // the player is behind the match: events emitted and not yet played
   const behind = (g) => !!g.out?.length || !player.idle
-  // what sim/oracle's shadow reads of the match (shadowParts: the turn, the
-  // dice, every unit, every chunk), as one string
-  const reads = (g) => JSON.stringify([g.turn, rngState(g.rng),
-    g.units.map((u) => [u.id, u.pos, u.r, u.alive, u.lost, u.mesmerized, u.flags, u.models.map((m) => [m.alive, m.w, m.ox, m.oz])]),
-    g.terrain.chunks.map((c) => [c.alive, c.hp, c.shape.x, c.shape.y, c.shape.z, c.shape.yaw])])
-  // a waiting line joins the trace; a state line only if the match is as it
-  // was when the line was written (else its shadow would be taken against
-  // a later match: the hold is no longer enough, see above)
-  const join = () => {
-    const [line, g, was] = held.shift()
-    if (was !== undefined && (g !== G || reads(g) !== was)) throw new Error(`?debug trace: the state line '${line.slice(0, 60)}…' waited for the player, and the match moved before it joined the trace, so its shadow would be wrong`)
-    trace.push(line)
+  // What sim/oracle's shadow reads of the match as state line `line` is
+  // written: the turn as the legacy shadow has it, the dice, every unit,
+  // every chunk (copies: the match moves on).
+  const snapshot = (g, line) => {
+    const T = g.turn
+    // (the old loop's `for` left the round one past the last on a battle
+    // that ran its course: the engine ends one at its score step)
+    const ranOut = /^over /.test(line) && T.step === 'score'
+    return {
+      turn: { stage: T.stage, round: ranOut ? T.round + 1 : T.round, active: T.active, phase: phaseKey(g), first: T.first, vp: [...T.vp], wiped: T.wiped < 0 ? undefined : T.wiped },
+      rng: rngState(g.rng),
+      units: g.units.map((u) => ({ ...u, pos: { ...u.pos }, flags: { ...u.flags }, models: u.models.map((m) => ({ ...m })) })),
+      chunks: g.terrain.chunks.map((c) => ({ id: c.id, kind: c.kind, alive: c.alive, hp: c.hp, shape: { ...c.shape } })),
+    }
   }
+  // a line joins the trace, a state line with the state it carries
+  const push = (line, snap) => {
+    serving = snap
+    try {
+      trace.push(line)
+    } finally {
+      serving = null
+    }
+  }
+  // P-present's checkpoints in the events so far: { at, proj, act }
+  const marks = []
+  // the hooks' promises, settled once the player is idle and `until()` holds
+  const waiters = []
+  const settle = (until = () => true) => new Promise((resolve) => {
+    waiters.push({ until, resolve })
+    traceListener.settled()
+  })
   traceListener = {
     begin: () => {
       trace.length = 0
       held.length = 0
+      marks.length = 0
+      // a hook's promise left waiting by the battle a start() abandons is
+      // settled now (its battle is gone), never left to wait on the next
+      for (const w of waiters.splice(0)) w.resolve()
     },
     line: (line, g) => {
-      if (held.length || behind(g)) held.push(line.startsWith('log ') ? [line, g] : [line, g, reads(g)])
-      else trace.push(line)
+      const snap = /^log /.test(line) ? null : snapshot(g, line)
+      if (/^(act|phase|over) /.test(line)) marks.push({ at: g.out.length, proj: project(g), act: /^act /.test(line) })
+      if (held.length || behind(g)) held.push([line, snap])
+      else push(line, snap)
     },
     // the log entry about to be written was logged at trace length `at`
     reach: (at) => {
-      while (trace.length < at && held.length) join()
+      while (trace.length < at && held.length) push(...held.shift())
     },
     idle: () => {
-      while (held.length) join()
+      while (held.length) push(...held.shift())
+    },
+    settled: () => {
+      if (!player.idle) return
+      for (const w of waiters.splice(0)) {
+        // (a test that throws settles its promise: this runs as the player
+        // goes idle, inside whatever made it, a new table's drawing too)
+        let done = true
+        try {
+          done = w.until()
+        } catch {}
+        if (done) w.resolve()
+        else waiters.push(w)
+      }
+    },
+    // An entry's events, with P-present's checkpoints put in: a `check` at
+    // each mark, the act events given their act line's projection, and a
+    // `check` with the match as it stops.
+    present: (events, g) => {
+      const out = [], projs = marks.filter((m) => m.act).map((m) => m.proj)
+      let m = 0
+      events.forEach((e, i) => {
+        while (m < marks.length && marks[m].at <= i) out.push({ t: 'check', proj: marks[m++].proj })
+        out.push(e.t === 'act' ? { ...e, proj: projs.shift() } : e)
+      })
+      while (m < marks.length) out.push({ t: 'check', proj: marks[m++].proj })
+      out.push({ t: 'check', proj: project(g) })
+      marks.length = 0
+      return out
     },
   }
+  // a hook's command must be one the match takes: the driver checked it as
+  // the UI does, so a refusal is a bug, not a click to ignore
+  const must = (why, what) => {
+    if (why) throw new Error(`?debug ${what}: ${why}`)
+  }
+  // a question with the dice locked, of the match shown
+  const asked = (fn) => preview(atTable(), fn)
   window.__ts = {
     S: legacyS, clock, camera, controls, renderer, trace,
     get G() {
       return G
+    },
+    get session() {
+      return session
     },
     get player() {
       return player
@@ -2128,48 +2264,90 @@ if (params.has('debug')) {
       listen(observer) {
         player.observer = observer
       },
+      // the unit card's status line as it shows `u` now (it opens the card)
+      card(u) {
+        showCard(u)
+        return /class="card-sub">([^<]*)</.exec($('#card').innerHTML)?.[1] ?? null
+      },
     },
     get units() {
-      return G.units
+      return serving ? serving.units : atTable().units
     },
     get nav() {
-      return G.nav
+      return atTable().nav
     },
     scenery: {
       get chunks() {
-        return G.terrain.chunks
+        return serving ? serving.chunks : atTable().terrain.chunks
       },
       scene,
+      // (the title's table only: a battle's board changes only through its
+      // commands, the log being the whole truth of it; and a table blasted
+      // here is no battle's, so the next start() draws a fresh one)
       blast(x, z, r, dmg, opts) {
-        const broke = G.terrain.blast(x, z, r, dmg, opts, G.out)
-        show()
-        refreshNav(G)
+        if (G) throw new Error('?debug scenery.blast: only on the title screen (no battle)')
+        const out = []
+        const broke = backdrop.terrain.blast(x, z, r, dmg, opts, out)
+        backdropAsDrawn = false
+        player.push(out)
+        refreshNav(backdrop)
         return broke
       },
     },
-    validEnd: (plan, i) => validEnd(G, plan, i),
-    setUnitPos: moveUnit,
+    validEnd: (plan, i) => asked((g) => validEnd(g, plan, i)),
     get phaseResolve() {
-      return phaseResolve
+      return myTurn() || null
     },
     get chargePick() {
-      return S.chargePick
+      const pk = picking()
+      return pk && { u: pk.u, plan: pk.plan, ok: pk.ok }
     },
-    start, select, doMove, doAdvance, doShoot, doCharge, placeCharge, deployClick,
-    endPhase: () => $('#endPhase').onclick(),
-    autoPhase: () => $('#autoPhase').onclick(),
+    start,
+    select,
+    doMove: (u, c) => {
+      must(moveTo(u, c), 'doMove')
+      return settle()
+    },
+    doAdvance: (u) => {
+      must(advance(u), 'doAdvance')
+      return settle()
+    },
+    doShoot: (u, tg) => {
+      must(shoot(u, tg), 'doShoot')
+      return settle()
+    },
+    doCharge: (u, tg) => {
+      must(charge(u, tg), 'doCharge')
+      // (the battle it was sent in: a new table, or another battle, ends the
+      // wait)
+      const s = session
+      return settle(() => s !== session || s.G.pending?.k !== 'chargeEnd')
+    },
+    placeCharge: (c) => {
+      must(placeCharge(c), 'placeCharge')
+      return settle()
+    },
+    deployClick: (unit, ground) => must(deployClick(unit, ground), 'deployClick'),
+    endPhase: () => {
+      must($('#endPhase').onclick(), 'endPhase')
+      return settle()
+    },
+    autoPhase: () => {
+      must($('#autoPhase').onclick(), 'autoPhase')
+      return settle()
+    },
     // read-only rules queries, for choosing legal input (only what sim/ uses)
     q: {
       alive,
-      isEngaged: (u) => isEngaged(G, u),
-      canAct: (u) => canAct(G, u),
-      movePlan: (u, extra) => movePlan(G, u, extra),
-      freeSpot: (u, x, z, side, others) => freeSpot(G, u, x, z, side, others),
-      shootTargets: (u) => shootTargets(G, u),
-      shotInfo: (u, tg) => shotInfo(G, u, tg),
-      chargeTargets: (u) => chargeTargets(G, u),
-      chargePlan: (u, tg) => chargePlan(G, u, tg),
-      rngState: () => rngState(G.rng),
+      isEngaged: (u) => asked((g) => isEngaged(g, u)),
+      canAct: (u) => asked((g) => canAct(g, u)),
+      movePlan: (u, extra) => asked((g) => movePlan(g, u, extra)),
+      freeSpot: (u, x, z, side, others) => asked((g) => freeSpot(g, u, x, z, side, others)),
+      shootTargets: (u) => asked((g) => shootTargets(g, u)),
+      shotInfo: (u, tg) => asked((g) => shotInfo(g, u, tg)),
+      chargeTargets: (u) => asked((g) => chargeTargets(g, u)),
+      chargePlan: (u, tg) => asked((g) => chargePlan(g, u, tg)),
+      rngState: () => (serving ? serving.rng : rngState(atTable().rng)),
     },
     screen(x, y, z) {
       const v = new THREE.Vector3(x, y, z).project(camera)

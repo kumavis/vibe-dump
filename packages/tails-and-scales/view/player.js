@@ -1,25 +1,23 @@
 // The EventPlayer (DESIGN §2.4): plays the match's events, in order, at the
-// view's pace. The rules run ahead synchronously and leave their events in
-// G.out; main.js drains them into play() and awaits it, so the view shows
-// what happened one event at a time, while the mirror (present/mirror.js)
-// folds each event as it is played: the state as shown, which the figures,
-// labels, flags and score read instead of G.
+// view's pace. The match runs ahead synchronously, to the next decision a
+// human makes, and the Session (match/session.js) hands main.js each
+// entry's events, which it push()es here; so the view shows what happened
+// one event at a time, while the mirror (present/mirror.js) folds each
+// event as it is played: the state as shown, which the figures, labels,
+// flags and score read instead of G. When everything queued has played the
+// player is idle and tells onIdle, and the table catches up (main.js reads
+// G, the match itself, only then).
 //
 // A handler is the old code's visuals for one kind of event, verbatim (a
 // dice row in the tray, a figure's fall, a line in the battle log), called
 // with the event and the mirror just after the event is folded in. It
 // returns a promise when the next event must wait for it (a dice row, a
-// pause), else nothing; events whose handlers take no time play at once, so
-// draining a terrain call's reports while the player is idle plays them
-// before play() returns, as the old code did. An event with no handler goes
-// to `fallback`.
+// pause), else nothing; events whose handlers take no time play at once,
+// inside push(), when the player is idle (a title's board: showTable). An
+// event with no handler goes to `fallback`.
 //
-// Transitional (R5): through R5 main.js wraps each action (core/actions/'s)
-// as `fn(G, …); await player.play(drain(G))`, and its own code emits and
-// plays the flow events (phase starts, scores, action ends) the step machine
-// will emit from R6. R7's player adds snap(G) (it needs TerrainView.sync);
-// backlog() and catch-up are N2's. Here a new table only resets the mirror
-// (reset).
+// R7's player adds snap(G) (it needs TerrainView.sync); backlog() and
+// catch-up are N2's. Here a new table only resets the mirror (reset).
 import { applyEvent } from '../present/mirror.js'
 
 export class EventPlayer {
@@ -34,7 +32,6 @@ export class EventPlayer {
     this.observer = null
     this.q = []
     this.running = false
-    this.waiters = []
     // which table's events are playing: reset() starts a new one, and a
     // handler's promise from the last table resumes nothing
     this.table = 0
@@ -50,26 +47,17 @@ export class EventPlayer {
     if (!this.running) this.run()
   }
 
-  // Queue events; resolves once everything queued has played.
-  play(events) {
-    this.push(events)
-    if (this.idle) return Promise.resolve()
-    return new Promise((resolve, reject) => this.waiters.push({ resolve, reject }))
-  }
-
   // A new table: the mirror becomes `mirror` (project(G) of a match that
-  // hasn't run ahead), and nothing queued is played. Today a table is only
-  // replaced while the player is idle (from the title or the end screen),
-  // but should one be replaced mid-playback, nothing of the old one carries
-  // on: a handler still running (a dice row, a pause) resumes nothing when
-  // it settles, the new table's events play at once, and whoever awaited
-  // the old table's events is left waiting with it, never resumed against
-  // the new match (their play() promises are dropped, not settled).
+  // hasn't run ahead, or the table on show a battle starts on), and nothing
+  // queued is played. Today a table is only replaced while the player is
+  // idle (from the title or the end screen), but should one be replaced
+  // mid-playback, nothing of the old one carries on: a handler still running
+  // (a dice row, a pause) resumes nothing when it settles, and the new
+  // table's events play at once.
   reset(mirror) {
     this.table++
     this.q.length = 0
     this.running = false
-    this.waiters.length = 0
     this.mirror = mirror
     this.observer?.reset?.(mirror)
   }
@@ -93,15 +81,13 @@ export class EventPlayer {
     }
     this.running = false
     this.onIdle?.()
-    for (const w of this.waiters.splice(0)) w.resolve()
   }
 
-  // A handler threw: nothing more is played, whoever waits hears why, and
-  // the error goes on up (a bug in a handler must not pass quietly).
+  // A handler threw: nothing more is played, and the error goes on up (a
+  // bug in a handler must not pass quietly).
   fail(err) {
     this.running = false
     this.q.length = 0
-    for (const w of this.waiters.splice(0)) w.reject(err)
     throw err
   }
 }

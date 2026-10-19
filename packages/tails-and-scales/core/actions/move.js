@@ -10,13 +10,10 @@
 // emit, and building an event draws nothing and changes nothing.
 //
 // Neither action ends itself (its state line in the trace, the flags, the
-// labels), and neither ever calls finishAction. Until R6b, main.js's own
-// finishAction ends the action for the shipped game, once these events have
-// played, so no state line is written while the view is behind (the ?debug
-// trace's hold: DESIGN's R5a and R5b notes); in the core, the command's
-// handler (core/commands.js) calls core/engine.js's finishAction after the
-// action (DESIGN §2.2's (R6a) note). The advance roll writes no `act` line
-// at all (§4.1 rule 8).
+// labels), and neither ever calls finishAction: the command's handler
+// (core/commands.js), the only path to them, calls core/engine.js's
+// finishAction after the action (DESIGN §2.2's (R6a) note). The advance
+// roll writes no `act` line at all (§4.1 rule 8).
 import { BOARD, ENGAGE, roll } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { lerp } from '../util.js'
@@ -102,12 +99,11 @@ export function nearestValid(G, plan, x, z, within = 2.4) {
 // plan is a fall back. The log line gives the route's length before the
 // walk, as it always has; a wrecker setting off on a move of more than 0.1"
 // stomps (`stomp`: the old boom, the view's), which its charge never did.
-// With no `plan`, it is made afresh from the unit's flags, as R6's `move`
-// command, which carries only the unit and the cell, will make it (and as
-// every move through main.js is made already, so parity holds each corpus
-// move made on the remade plan to the old move, made on the plan the seat
-// or the AI picked from; a one-off probe at R5c found the plans
-// deep-equal too).
+// With no `plan`, it is made afresh from the unit's flags, as the `move`
+// command (core/commands.js), which carries only the unit and the cell,
+// makes it: the only path a move takes, so parity holds each corpus move
+// made on the remade plan to the old move, made on the plan the seat or the
+// AI picked from (a one-off probe at R5c found the plans deep-equal too).
 export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)) {
   const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   u.flags.moved = true

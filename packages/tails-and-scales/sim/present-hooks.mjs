@@ -6,9 +6,11 @@
 // checkout is never edited. The flags' and labels' events inside an action
 // (no-dmg-*, no-morale-*, no-move-owners, no-move-status, and the mirror's
 // side of no-gaze-status) and the stage events (no-stage-*) are caught only
-// at a `check`, the checkpoint main.js's checkpoint() emits under ?debug:
-// the action's end re-emits the flags and labels before its `act`, and a
-// stage lost would be put right by the next stage event before any act.
+// at a `check`, the checkpoints main.js's ?debug block puts in the events
+// (where an `act` or `phase` line was written, and as the match stops after
+// each entry): the action's end re-emits the flags and labels before its
+// `act`, and a stage lost would be put right by the next stage event before
+// any act.
 //
 // The actions' own events that change nothing in the mirror, and the look
 // fields of those that do (the move's, move.js: a walk's stomp, flight and
@@ -17,11 +19,14 @@
 // charge.result; the shot's, shoot.js: a turn to face, a volley, a
 // template's aim, scatter, throw and landing, the beat after one that
 // caught nobody, a spell cast or fizzling, thorns erupting and fading, a
-// gaze, the "Mesmerized!", and the shot's look and who throws) are caught
-// by the check's event order instead (present-check.mjs's eventOrder),
-// each where the next event or line breaks it: no-stomp through
-// walk-speed, and no-melee through land-fx. The rest (no-formation
-// through no-move-status, no-place and on) are caught by the mirror.
+// gaze, the "Mesmerized!", and the shot's look and who throws), and the
+// roll-off's rows, are caught by the check's event order instead
+// (present-check.mjs's eventOrder), each where the next event or line
+// breaks it: no-stomp through walk-speed, no-melee through land-fx, and
+// no-rolloff-row. The rest (no-formation through no-move-status, no-place
+// and on) are caught by the mirror. And one edit of main.js, not an event:
+// card-reads-match, the unit card telling of what the match did ahead of
+// the table, caught by the check's card test at a checkpoint.
 //
 // Not here, because nothing the check can see depends on it: the `status`
 // at the fight phase's end, which repeats the last damage's (each fight
@@ -37,7 +42,8 @@ export const MUTATIONS = {
   // a model that falls never reported: it stands on in the mirror
   'no-slain': ['/core/actions/damage.js', "  emit(G, 'unit.slain',", "  if (false) emit(G, 'unit.slain',"],
   // the flags after a damage that slew never reported (each action's end
-  // re-reports them before its act: only the played() checks see this)
+  // re-reports them before its act: only the checks the ?debug block puts
+  // in see this)
   'no-dmg-owners': ['/core/actions/damage.js', "    if (G.out) emit(G, 'objectives',", "    if (false) emit(G, 'objectives',"],
   // the labels' state (in combat, mesmerized) at a damage's end never
   // reported (likewise re-reported at the action's end)
@@ -129,24 +135,31 @@ export const MUTATIONS = {
   // every template lands as a bomb: fire where acid or thorns should be
   'land-fx': ['/core/actions/shoot.js', "emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: w.fx })", "emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: 'bomb' })"],
   // a deployment's placement never reported: the unit stands where the
-  // title screen put it in the mirror (caught at the battle's start)
-  'no-place': ['/main.js', "  emit(G, 'unit.place', { u: u.id, x, z })", '  // (dropped)'],
+  // title screen put it in the mirror (caught as the match stops after it)
+  'no-place': ['/core/commands.js', "    emit(G, 'unit.place', { u,", "    if (false) emit(G, 'unit.place', { u,"],
   // a deployment's stage never reported: the HUD reads "Round 1 / 5" and
   // the labels stay hidden while a human deploys
-  'no-stage-deploy': ['/main.js', "    emit(G, 'stage', { stage: 'deploy' })", '    // (dropped)'],
+  'no-stage-deploy': ['/core/index.js', "    emit(G, 'stage', { stage: 'deploy' })", '    // (dropped)'],
   // the battle's start never reported: the stage shown stays the title's or
   // the deployment's (the labels hidden through the roll-off in a watched
   // battle)
-  'no-stage-battle': ['/main.js', "  emit(G, 'stage', { stage: 'battle' })", '  // (dropped)'],
+  'no-stage-battle': ['/core/engine.js', "        emit(G, 'stage', { stage: 'battle' })", '        // (dropped)'],
+  // the roll-off's second row never shown: seat 1's die (the line naming
+  // the winner then follows seat 0's alone)
+  'no-rolloff-row': ['/core/engine.js', "    emit(G, 'dice', { label: raceOf(G, 1).short,", "    if (false) emit(G, 'dice', { label: raceOf(G, 1).short,"],
   // a phase's start never reported: the round, the seat and the phase shown
   // stay where they were
-  'no-phase-start': ['/main.js', "    emit(G, 'phase.start',", "    if (false) emit(G, 'phase.start',"],
+  'no-phase-start': ['/core/engine.js', "        emit(G, 'phase.start',", "        if (false) emit(G, 'phase.start',"],
   // a round's score never reported: the VP shown stay where they were
-  'no-score': ['/main.js', "  emit(G, 'round.scored',", "  if (false) emit(G, 'round.scored',"],
+  'no-score': ['/core/engine.js', "  emit(G, 'round.scored',", "  if (false) emit(G, 'round.scored',"],
   // a chunk destroyed never reported: it stands on in the mirror
   'no-destroy': ['/core/terrain/terrain.js', "    emitTo(out, 'terrain.destroy',", "    if (false) emitTo(out, 'terrain.destroy',"],
   // blocks that fall into a gap never reported: they hang where they were
   'no-collapse': ['/core/terrain/terrain.js', "if (drops.length) emitTo(out, 'terrain.collapse',", "if (false) emitTo(out, 'terrain.collapse',"],
+  // (R6b's fixer, round 2) the unit card reads the match while the table is
+  // behind: it tells of moves, shots, charges and cover not yet played
+  // (main.js; caught by the card check at a checkpoint, not by an event)
+  'card-reads-match': ['/main.js', 'const mu = shown(u), live = player.idle', 'const mu = shown(u), live = true'],
 }
 
 export async function load(url, ctx, next) {

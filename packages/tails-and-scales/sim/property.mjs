@@ -58,11 +58,12 @@
 //    quietly and must write the same trace and the same shadow at every
 //    state line as its presented fold.
 // 6. The match's own events show the match (§2.4's mirror, for the engine's
-//    stream: P-present holds only main.js's loop until R6b). Every corpus
-//    battle and random game folds its events, the engine's flow events and
-//    the AI's included, into a mirror (present/mirror.js, sim/run.mjs
-//    mirrorTap) from the table before the first one, which must equal
-//    project(G) at every `act`, at every decision and at the end.
+//    stream: P-present held only main.js's loop before R6b, and plays the
+//    Session since). Every corpus battle and random game folds its events,
+//    the engine's flow events and the AI's included, into a mirror
+//    (present/mirror.js, sim/run.mjs mirrorTap) from the table before the
+//    first one, which must equal project(G) at every `act`, at every
+//    decision and at the end.
 // 7. A concession out of band, whatever the seed: in a hotseat match the
 //    seat the match isn't waiting on (seat 0 in the deployment, having sent
 //    `deployed`; the seat whose turn it isn't at the first phase decision)
@@ -76,6 +77,24 @@
 //    takes the edges of what they can. And G has §2.1's shape from the
 //    start: `pending` null, never missing, at every trace line of an all-AI
 //    battle (the engine's runs never set it), and `strict` a boolean.
+// 9. The Session (R6b: match/session.js over match/store.js's LocalStore,
+//    which every mode plays through) folds a log as the core does. Each
+//    corpus battle is played again through one, the human logs' entries
+//    sent with submit() for their seats as the UI sends them (the Session's
+//    legal() must take each, decisionFor() must name the first seat played
+//    here that the match waits on), beside a spectator Session (no seat)
+//    on the same store: both must write the trace foldJob wrote, end over,
+//    refuse nothing, hand the sink every event (after the start and after
+//    each entry, exactly the batch the same log folded straight through the
+//    core leaves in G.out then: none dropped, added or reordered, the
+//    `pending` ones included; one act per act line), and leave G.out empty
+//    after each entry. A body the match refuses (and, for
+//    the spectator, any body) is refused before anything is appended, and
+//    submit() throws on it. The log then replayed: a fresh Session over a
+//    store holding the whole log, with a junk entry slipped in before each
+//    of three (a body with a stray field, the seat not waited on, a second
+//    start), must refuse exactly those, record why, and play the same
+//    battle.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -94,10 +113,10 @@ import { parseArgs } from 'node:util'
 import { spawn } from 'node:child_process'
 import { join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
-import { readFileSync, writeFileSync, rmSync } from 'node:fs'
+import { readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadCorpus, select, verdict, pool, CPUS, copyCode, h10 } from './lib.mjs'
-import { foldJob, shadowPartsG, mirrorTap } from './run.mjs'
+import { foldJob, shadowPartsG, mirrorTap, jobSetup } from './run.mjs'
 import { shadowString } from './oracle/shadow.mjs'
 import { mulberry32 } from './oracle/human-bot.mjs'
 import { codeDir, PKG } from './oracle/pin.mjs'
@@ -324,7 +343,7 @@ function lockCheck(core, rng, G, where) {
 
 // A corpus battle, probed at each entry and folded strict, its events held
 // to the mirror, must still replay.
-function corpusTask(core, rng, mirror, it) {
+function corpusTask(core, rng, mirror, it, match) {
   const rand = mulberry32(it.id.length * 7919 + 17)
   const counts = { probes: 0, aiStrict: 1 }
   const r = foldJob(core, it.job, {
@@ -358,7 +377,102 @@ function corpusTask(core, rng, mirror, it) {
   if (line >= 0 || snap >= 0) throw new Error(`${it.id}: folded quietly (G.out null) it plays another battle: trace line ${line + 1}, shadow ${snap + 1} (${(quiet.trace[line] ?? r.trace[line] ?? '').slice(0, 80)})`)
   counts.quiet = 1
   counts.mirrored = r.mirrored
+  // 9. through the Session (code from R6b on)
+  if (match) Object.assign(counts, sessionTask(core, match, it, r.trace))
   return counts
+}
+
+// 9. A corpus battle through the Session (match/'s modules, `M`), against
+// the trace foldJob wrote for it (`trace`, its lines) and the events the
+// same log leaves in G.out folded straight through the core.
+function sessionTask(core, M, it, trace) {
+  const setup = jobSetup(it.job), entries = it.job.entries ?? []
+  const humans = setup.seats.flatMap((x, i) => (x.ctrl === 'human' ? [i] : []))
+  const where = `${it.id} through the Session`
+  // the batches the sink must get, one after the start and one after each
+  // entry, each written down as it is taken (an event is plain data)
+  const direct = core.createMatch(setup, { out: [] })
+  const stream = [direct.out.splice(0).map((e) => JSON.stringify(e))]
+  for (const { s, ...body } of entries) {
+    core.apply(direct, s, body)
+    stream.push(direct.out.splice(0).map((e) => JSON.stringify(e)))
+  }
+  const store = new M.LocalStore()
+  const lines = [], seen = { batches: [], acts: 0 }
+  const sink = {
+    events(events, ses) {
+      if (ses.G.out.length) throw new Error(`${where}: the Session handed the sink its events and left ${ses.G.out.length} in G.out`)
+      seen.batches.push(events.map((e) => JSON.stringify(e)))
+      seen.acts += events.filter((e) => e.t === 'act').length
+    },
+  }
+  const ses = new M.Session({ store, localSeats: humans, sink, onTrace: (l) => lines.push(l) })
+  const watcher = new M.Session({ store, localSeats: [] })
+  if (ses.G !== null || ses.status !== 'lobby') throw new Error(`${where}: a Session over an empty store has a match (${ses.status})`)
+  store.append({ s: -1, t: 'start', setup })
+  for (const [k, e] of entries.entries()) {
+    const at = `${where}, entry ${k} ${JSON.stringify(e)}`
+    const { s, ...body } = e
+    const want = ses.G.pending?.seats.find((x) => humans.includes(x)) ?? -1
+    if (ses.decisionFor() !== want) throw new Error(`${at}: decisionFor() says ${ses.decisionFor()}, not ${want}`)
+    if (watcher.decisionFor() !== -1 || watcher.legal(s, body) === null) throw new Error(`${at}: a spectator Session may send it`)
+    const n = store.entries().length
+    const junk = { t: 'move', u: 999, c: -1 }
+    if (ses.legal(s, junk) === null) throw new Error(`${at}: the Session takes ${JSON.stringify(junk)}`)
+    let threw = false
+    try {
+      ses.submit(s, junk)
+    } catch {
+      threw = true
+    }
+    if (!threw || store.entries().length !== n) throw new Error(`${at}: submit() of a body the match refuses ${threw ? 'appended it' : "didn't throw"}`)
+    const why = ses.legal(s, body)
+    if (why !== null) throw new Error(`${at}: the Session refuses the corpus's own entry: ${why}`)
+    ses.submit(s, body)
+  }
+  const same = (got, name) => {
+    if (got.join('\n') !== trace.join('\n')) {
+      const i = got.findIndex((l, j) => l !== trace[j])
+      throw new Error(`${where}: ${name} traces another battle from line ${i + 1}: ${(got[i] ?? '(ended)').slice(0, 80)}`)
+    }
+  }
+  same(lines, 'the Session')
+  same(watcher.G.journal.trace, 'the spectator Session')
+  for (const [x, name] of [[ses, 'the Session'], [watcher, 'the spectator Session']]) {
+    if (x.status !== 'over' || x.rejected.length) throw new Error(`${where}: ${name} ends ${x.status}, having refused ${JSON.stringify(x.rejected)}`)
+  }
+  const actLines = trace.filter((l) => /^act /.test(l)).length
+  if (seen.acts !== actLines) throw new Error(`${where}: the sink got ${seen.acts} act events for ${actLines} act lines`)
+  // every event, batch by batch, as the core left them
+  if (seen.batches.length !== stream.length) throw new Error(`${where}: the sink was handed ${seen.batches.length} batches of events for the start and ${entries.length} entries`)
+  for (const [k, batch] of stream.entries()) {
+    const got = seen.batches[k], n = Math.max(batch.length, got.length)
+    let i = 0
+    while (i < n && got[i] === batch[i]) i++
+    if (i < n) throw new Error(`${where}: after ${k ? `entry ${k - 1}` : 'the start'} the sink got ${got.length} events where the core left ${batch.length}, apart from event ${i + 1}: ${(got[i] ?? '(none)').slice(0, 60)} for ${(batch[i] ?? '(none)').slice(0, 60)}`)
+  }
+  // the replay, with junk slipped in before three entries: the first gets
+  // a stray field, the middle one (in the battle, where one seat is waited
+  // on, in every corpus log) the other seat, the last a second start
+  const log = store.entries()
+  const bad = [
+    (e) => ({ ...e, stray: 1 }),
+    (e) => ({ ...e, s: 1 - e.s }),
+    () => ({ s: -1, t: 'start', setup }),
+  ]
+  const spiked = [log[0]], slots = new Set([1, Math.floor(log.length / 2), log.length - 1].filter((k) => k > 0))
+  let j = 0
+  for (const [k, e] of log.entries()) {
+    if (!k) continue
+    if (slots.has(k)) spiked.push(bad[j++ % bad.length](e))
+    spiked.push(e)
+  }
+  const replay = new M.Session({ store: new M.LocalStore(spiked), localSeats: [] })
+  same(replay.G?.journal.trace ?? [], 'the replay with junk slipped in')
+  if (replay.status !== 'over' || replay.rejected.length !== spiked.length - log.length) {
+    throw new Error(`${where}: the replay with ${spiked.length - log.length} junk entries ends ${replay.status}, refusing ${JSON.stringify(replay.rejected)}`)
+  }
+  return { sessions: 1, junk: replay.rejected.length, handed: stream.reduce((n, b) => n + b.length, 0) }
 }
 
 // A random game: a random setup, its human seats played at random among
@@ -589,11 +703,16 @@ if (a.child) {
   const rng = await import(pathToFileURL(join(dir, 'core', 'rng.js')).href)
   const { RACES } = await import(pathToFileURL(join(dir, 'data', 'schema.js')).href)
   const mirror = await import(pathToFileURL(join(dir, 'present', 'mirror.js')).href)
+  // the Session and the stores (R6b on; null for older code, which has no
+  // match/: any other failure to load them fails the run)
+  const match = existsSync(join(dir, 'match'))
+    ? Object.assign({}, ...(await Promise.all(['session', 'store'].map((m) => import(pathToFileURL(join(dir, 'match', `${m}.js`)).href)))))
+    : null
   let out
   try {
     if (task.kind === 'corpus') {
       const it = loadCorpus().items.find((x) => x.id === task.id)
-      out = { ok: true, counts: corpusTask(core, rng, mirror, it) }
+      out = { ok: true, counts: corpusTask(core, rng, mirror, it, match) }
     } else if (task.kind === 'random') {
       const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed)
       out = { ok: true, counts: r.counts, game: { setup: r.setup, log: r.log, trace: r.trace } }
@@ -677,12 +796,16 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   const probes = res.reduce((s, r) => s + (r.counts?.probes ?? 0), 0)
   const quietly = res.reduce((s, r) => s + (r.counts?.quiet ?? 0), 0)
   const refolded = res.reduce((s, r) => s + (r.counts?.refolded ?? 0), 0)
+  const sessions = res.reduce((s, r) => [s[0] + (r.counts?.sessions ?? 0), s[1] + (r.counts?.junk ?? 0), s[2] + (r.counts?.handed ?? 0)], [0, 0, 0])
   const mirrored = res.reduce((s, r) => [s[0] + (r.counts?.mirrored?.acts ?? 0), s[1] + (r.counts?.mirrored?.stops ?? 0)], [0, 0])
+  // (code with match/ plays every corpus battle through the Session too)
+  const corpusOk = res.filter((r, i) => r.ok && tasks[i].kind === 'corpus').length
+  if (existsSync(join(pkg, 'match')) && sessions[0] !== corpusOk) bad.push({ error: `the code has match/, but ${sessions[0]} of ${corpusOk} corpus battles went through the Session` })
   if (coverage && games >= 8) {
     const never = Object.entries(reached).filter(([, n]) => !n).map(([k]) => k)
     if (never.length) bad.push({ error: `the random games never reached: ${never.join(', ')} (more --games?)` })
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well, the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well, the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay) (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -693,7 +816,9 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
 // reaches them), `score-silent`, `legal-emits`, `over-rounds` (no such
 // event is recorded), `extra-field` (no log carries one), `pending-unset`
 // (nothing reads the missing key: (8) alone) or `rounds-unbounded` (every
-// battle recorded lasts 5 rounds).
+// battle recorded lasts 5 rounds); nor, being the Session's, `session-keeps-out`
+// (parity folds through foldJob), `session-folds-junk` (no log holds junk) or
+// `session-drops-event` (nor does P-present: the view plays `pending` as nothing).
 const MUTATIONS = {
   // a preview the fold never runs draws a die (a tool's nearest valid end)
   'preview-draws': ['core/actions/move.js', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n  roll(G, 1)\n'],
@@ -727,6 +852,14 @@ const MUTATIONS = {
   // fullSetup takes any number of rounds, so createMatch plays an all-AI
   // battle for as long as a typo asks
   'rounds-unbounded': ['core/index.js', ' || s.rounds > MAX_ROUNDS', ''],
+  // the Session hands the sink the events and leaves them in G.out too (a
+  // view would play them twice, the next entry's sink again)
+  'session-keeps-out': ['match/session.js', 'this.sink?.events?.(this.G.out.splice(0), this)', 'this.sink?.events?.(this.G.out.slice(), this)'],
+  // the Session folds an entry legal() refuses (a replay's junk, a peer's)
+  'session-folds-junk': ['match/session.js', '      if (why) return this.reject(k, why)\n', ''],
+  // the Session filters what it hands the sink: the `pending` events, which
+  // nothing the eye sees plays yet (N2's waiting line will)
+  'session-drops-event': ['match/session.js', 'this.sink?.events?.(this.G.out.splice(0), this)', "this.sink?.events?.(this.G.out.splice(0).filter((e) => e.t !== 'pending'), this)"],
 }
 
 if (a['self-test']) {

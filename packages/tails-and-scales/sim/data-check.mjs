@@ -5,8 +5,9 @@
 // PIN: the PIN moves at every deliberate re-record (N0, F4, F5, F7) to code
 // that has none of this, so this check never follows it.
 //
-// 1. Every unit type the race data normalises (data/compat.js's TYPES view)
-//    deep-equals the legacy TYPES, minus `side`, plus its key, race and AI
+// 1. Every unit type the race data normalises (the TYPES view built below
+//    from RACES, in the legacy shape) deep-equals the legacy TYPES, minus
+//    `side`, plus its key, race and AI
 //    role and the derived fields. The expected flags are computed with the
 //    legacy code's own tests, each of which must still be in its source word
 //    for word: Sidewind ability text (charge after advancing), role Artillery
@@ -14,7 +15,8 @@
 //    moveMode, the deploy rows, the eye and chest heights. So a flag that
 //    drifted from the test it replaced fails here, by unit and field.
 // 2. The races: names, shorts, icons, colours, the death voice and gore, and
-//    armies as the legacy SIDES, ARMIES and killModel had them; every race's
+//    armies as the legacy SIDES, ARMIES and killModel had them (the classic
+//    matchup, data/mission.js's CLASSIC, seat by seat); every race's
 //    voice is a sound sfx.js can play; the AI roles are the ones the AI
 //    orders by (core/ai/policy.js's ORDER since R6a, ai.js's before), in the
 //    legacy ai.js's order.
@@ -44,8 +46,8 @@
 //    pairs, an unknown mirror, a spacing rule that isn't a number, an unknown
 //    or missing field. So a slip in a new set (F7's `fortified`) fails at
 //    load, not only on the boards whose draws reach it.
-// 8. Every core/ and data/ module loads as the only entry of a fresh Node
-//    process. core/ has import cycles (match.js with units.js and deploy.js,
+// 8. Every core/, data/ and match/ module loads as the only entry of a
+//    fresh Node process. core/ has import cycles (match.js with units.js and deploy.js,
 //    for the seat helpers; queries.js with actions/, for canAct). They are
 //    harmless while no module uses an imported binding as it loads; one that
 //    does (a frozen table built from an imported function, `export const x
@@ -69,15 +71,23 @@ const imp = (dir, f) => import(pathToFileURL(join(dir, f)).href)
 const legacy = await imp(LEGACY, 'rules.js')
 const legacyMain = readFileSync(join(LEGACY, 'main.js'), 'utf8')
 const legacyAi = readFileSync(join(LEGACY, 'ai.js'), 'utf8')
-const { TYPES, ARMIES, SIDES, CLASSIC } = await imp(PKG, 'data/compat.js')
 const { RACES, AI_ROLES, defineRace, raceRegistry } = await imp(PKG, 'data/schema.js')
 const { RULES_ID, rulesId, rulesData, CONSTANTS } = await imp(PKG, 'core/version.js')
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
-const { MISSIONS } = await imp(PKG, 'data/mission.js')
+const { MISSIONS, CLASSIC } = await imp(PKG, 'data/mission.js')
 const { BOARD, ROUNDS } = await imp(PKG, 'core/rules.js')
 const { checkSet } = await imp(PKG, 'core/terrain/recipes.js')
 const { makeSeats } = await imp(PKG, 'core/match.js')
 const raw = { squirrel: (await imp(PKG, 'data/races/squirrel.js')).default, serpent: (await imp(PKG, 'data/races/serpent.js')).default }
+
+// The legacy-shaped views of the race data, as the R0 rules.js had them:
+// every unit type by key (the keys are unique across races today: a race
+// that reuses one fails here, and its types must then be compared by race),
+// the classic matchup's armies, and each classic seat's SIDES record.
+const ALL = Object.values(RACES).flatMap((r) => Object.values(r.units))
+const TYPES = Object.fromEntries(ALL.map((t) => [t.key, t]))
+const ARMIES = CLASSIC.map((r) => RACES[r].army)
+const SIDES = CLASSIC.map((r) => ({ name: RACES[r].name, short: RACES[r].short, icon: RACES[r].icon, color: RACES[r].look.team, dark: RACES[r].look.dark }))
 
 let failed = 0
 const check = (ok, what, why = '') => {
@@ -143,6 +153,7 @@ function expected(key, L) {
   }
 }
 const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = Object.keys(TYPES).sort()
+check(new Set(ALL.map((t) => t.key)).size === ALL.length, 'no two races share a unit key', 'look their types up by race')
 check(isDeepStrictEqual(keys, legacyKeys), `the same ${legacyKeys.length} unit keys`, `got ${keys.join(',')}`)
 for (const key of legacyKeys) {
   const L = legacy.TYPES[key], t = TYPES[key]
@@ -176,6 +187,17 @@ for (const side of [0, 1]) {
   check(Object.values(r.units).every((t) => legacy.TYPES[t.key]?.side === side), `seat ${side}: every unit was side ${side}'s`)
   const view = { name: SIDES[side].name, short: SIDES[side].short, icon: SIDES[side].icon, color: SIDES[side].color, dark: SIDES[side].dark }
   check(!diffPath(view, wantSide), `seat ${side}: the classic SIDES view`, diffPath(view, wantSide))
+}
+// The seats' look the page paints (ui/theme.js, main.js's SIDES) held to
+// that legacy view for the classic matchup; and a mirror match, which paints
+// seat 1 in its race's alternate colour
+const { sidesFor, isMirror } = await imp(PKG, 'ui/theme.js')
+const seated = (races) => sidesFor(races.map((race, seat) => ({ seat, race })))
+check(isDeepStrictEqual(seated(CLASSIC).map((s) => ({ ...s })), SIDES) && !isMirror(CLASSIC.map((race, seat) => ({ seat, race }))), "ui/theme.js's sidesFor paints the classic seats as the legacy SIDES (and it is no mirror match)", diffPath(seated(CLASSIC).map((s) => ({ ...s })), SIDES))
+for (const race of Object.keys(RACES)) {
+  const twin = [race, race], r = RACES[race], got = seated(twin)
+  const want = [0, 1].map((seat) => ({ name: r.name, short: r.short, icon: r.icon, color: seat ? r.look.alt : r.look.team, dark: r.look.dark }))
+  check(isMirror(twin.map((race, seat) => ({ seat, race }))) && isDeepStrictEqual(got.map((s) => ({ ...s })), want) && r.look.alt !== r.look.team, `a mirror match of ${race}: seat 1 in its alternate colour (${r.look.alt}), seat 0 in its own (${r.look.team})`, diffPath(got.map((s) => ({ ...s })), want) ?? (r.look.alt === r.look.team ? 'the alternate colour is the team colour' : 'isMirror says no'))
 }
 // killModel plays sfx[look.voice](), and sfx.js's proxy turns a name it
 // lacks into silence: so every race's voice must be one of the kit's sounds
@@ -392,7 +414,7 @@ for (const [what, want, edit] of brokenSets) {
 }
 
 // ── 8. each module loads alone ──────────────────────────────────────────────
-console.log('\n8. every core/ and data/ module loads as the only entry of a fresh process')
+console.log('\n8. every core/, data/ and match/ module loads as the only entry of a fresh process')
 // null when the module at `file` loads, else the first line of its error
 const loadAlone = (file) => new Promise((done) => {
   execFile(process.execPath, ['--input-type=module', '-e', 'await import(process.argv[1])', pathToFileURL(file).href], (err, _, stderr) => {
@@ -412,7 +434,8 @@ try {
 } finally {
   rmSync(tmp, { recursive: true, force: true })
 }
-const modules = ['core', 'data'].flatMap((d) => readdirSync(join(PKG, d), { recursive: true }).map((f) => `${d}/${f}`)).filter((f) => f.endsWith('.js')).sort()
+// (match/, R6b: the Session and the stores, pure like the core they fold)
+const modules = ['core', 'data', 'match'].flatMap((d) => readdirSync(join(PKG, d), { recursive: true }).map((f) => `${d}/${f}`)).filter((f) => f.endsWith('.js')).sort()
 const loads = await pool(modules, CPUS, (f) => loadAlone(join(PKG, f)))
 const broken = modules.filter((f, i) => loads[i] !== null)
 check(modules.length > 10 && !broken.length, `${modules.length} modules each load alone`, broken.map((f) => `${f}: ${loads[modules.indexOf(f)]}`).join('; '))

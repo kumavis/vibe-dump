@@ -20,6 +20,8 @@
 // Runs the frozen PIN code: the mutants are copies of it, so their exact-text
 // edits keep applying while the working tree is refactored (until the PIN
 // moves; then a mutation that no longer applies is reported, not thrown).
+// The PIN's code has no pure core, so parity plays the mutants' pages
+// (--page; the pure core is parity's default since R6b).
 // Exit 0 when every case gets the verdict it must, else 1.
 import { parseArgs } from 'node:util'
 import { readFileSync, writeFileSync, rmSync, symlinkSync, mkdirSync } from 'node:fs'
@@ -90,7 +92,7 @@ const link = join(work, 'linked-package')
 symlinkSync(PKG, link)
 const dice = mutant('dice', 'rules.js', 'export const d6 = () => 1 + Math.floor(rng() * 6)', 'export const d6 = () => 6 - Math.floor(rng() * 6) // MUTANT')
 if (dice) {
-  const r = parity(join(link, 'sim', 'parity.mjs'), ['--dir', dice, '--only', '64-89'])
+  const r = parity(join(link, 'sim', 'parity.mjs'), ['--page', '--dir', dice, '--only', '64-89'])
   verdictLine(r.status === 1 && /DIVERGES at trace line \d+/.test(r.out), 'a dice mutant, via the link', `exit ${r.status}, ${last(r.out)}`)
 }
 
@@ -104,7 +106,7 @@ const spin = mutant('spin', 'main.js',
 if (spin) writeFileSync(join(spin, 'main.js'), readFileSync(join(spin, 'main.js'), 'utf8').replace('    if (next) await fight(next)\n', '    if (next) fight(next) // MUTANT: not awaited\n'))
 if (spin) {
   const t0 = Date.now()
-  const r = parity(PARITY, ['--dir', spin, '--only', '64-89'], { ORACLE_TIMEOUT_MS: '10000' })
+  const r = parity(PARITY, ['--page', '--dir', spin, '--only', '64-89'], { ORACLE_TIMEOUT_MS: '10000' })
   const secs = Math.round((Date.now() - t0) / 1000)
   verdictLine(!r.hung && r.status === 1 && /ai\s+64-89 .* STOPPED/.test(r.out) && /killed/.test(r.out), `the spinning mutant, with a 10 s deadline (${secs} s)`, r.hung ? 'parity hung' : `exit ${r.status}, ${(r.out.match(/STOPPED before trace line \d+ of \d+/) ?? [last(r.out)])[0]}`)
 }
@@ -113,7 +115,7 @@ if (spin) {
 console.log('4. a battle log missing its destroyed-unit lines fails, traces unchanged')
 const quiet = mutant('quiet', 'main.js', "  S.pendingLog.push([u.side, `<b>${u.t.name}</b> ${u.t.models > 1 ? 'are' : 'is'} destroyed!`, 'big'])\n", '  // MUTANT: the destroyed line is never written\n')
 if (quiet) {
-  const r = parity(PARITY, ['--dir', quiet, '--only', '64-89,hotseat-aggressive-909'])
+  const r = parity(PARITY, ['--page', '--dir', quiet, '--only', '64-89,hotseat-aggressive-909'])
   const both = ['64-89', 'hotseat-aggressive-909'].every((id) => new RegExp(`${id} .* LOG DIFFERS`).test(r.out))
   verdictLine(r.status === 1 && both && !/DIVERGES|SHADOW DIFFERS/.test(r.out), 'the mutant that drops "… destroyed!"', `exit ${r.status}, ${(r.out.match(/BATTLE LOG DIFFERS at write \d+ of \d+/) ?? [last(r.out)])[0]}`)
 }

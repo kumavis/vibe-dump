@@ -6,14 +6,28 @@
 // regenerated on demand. Passing needs only the hashes, so a clone without
 // the PIN commit can still run the gate.
 //
-//   npm run parity -w @vibe-dump/tails-and-scales     the working tree, in Node
-//   node sim/parity.mjs --core                        the working tree's pure core, folded
-//                                                     headless (sim/run.mjs: no fake DOM, no three)
-//   node sim/parity.mjs --browser                     the same in Chromium (P-browser)
+//   npm run parity -w @vibe-dump/tails-and-scales     the working tree's pure core, folded
+//   node sim/parity.mjs                               headless (sim/run.mjs: no fake DOM, no three)
+//   node sim/parity.mjs --page                        the working tree's page instead: main.js
+//                                                     under the fake DOM, through sim/oracle's driver
+//   node sim/parity.mjs --browser                     the page in Chromium (P-browser)
 //   node sim/parity.mjs --pin | --ref <ref> | --dir <packageDir>   other code
 //   node sim/parity.mjs --only ai,hotseat,4242-99     a subset: kinds, modes or ids
 //   node sim/parity.mjs --dump <dir>                  also write every full trace, shadow and log
 //   node sim/parity.mjs --record [--browser]          rewrite the hashes from the code under test
+//
+// The runner (R6b). By default the code under test is its pure core, folded
+// headless: each AI pair is createMatch from its seeds, each human log
+// createMatch then its entries applied for the seats they name, and the
+// three streams rebuilt from the match (the G adapter, sim/run.mjs), judged
+// exactly as the page's are (`--core` says so explicitly). --page plays the
+// page instead (sim/oracle/run-legacy.mjs, the driver the PIN and the
+// working tree share), as --browser does in Chromium; code with no pure core
+// (older than R6, the PIN today) runs only that way, so --dir or --ref to
+// such code needs --page, and --pin takes the PIN's own runner. The
+// references (a failure's context, mutation.mjs's) come from the PIN by its
+// own runner too: its pure core once the PIN names a commit that has one,
+// its page until then (DESIGN's R6b notes: the PIN rule, revisited).
 //
 // --browser builds the code under test first and runs that build: the
 // working tree with this package's own Vite config (into dist/), other code
@@ -24,36 +38,28 @@
 // to. An --only token that names no battle is an error (exit 2), never an
 // empty pass.
 //
-// --core (R6a) replays the corpus through the pure core instead of the page:
-// each AI pair is createMatch from its seeds, each human log createMatch
-// then its entries applied for the seats they name, and the three streams
-// rebuilt from the match (the G adapter, sim/run.mjs), judged exactly as
-// the page's are. It takes --only, --dump, --dir and --ref; R6b, which
-// switches the game onto the core, makes it the default.
-//
 // Re-record only for a change that is *meant* to alter play, and say so in
-// the commit: first in Node, then with --browser, which records only
-// Chromium's shadow (`webShadow`, where it differs from Node's) and refuses
-// if any trace or battle-log write differs from Node's. A re-record moves
-// sim/oracle/PIN to the commit whose code produced the new hashes (see its
-// header), and `node sim/parity.mjs --pin` must pass after it.
+// the commit: first in Node (the pure core, or --page), then with --browser,
+// which records only Chromium's shadow (`webShadow`, where it differs from
+// Node's) and refuses if any trace or battle-log write differs from Node's.
+// A re-record moves sim/oracle/PIN to the commit whose code produced the new
+// hashes (see its header), and `node sim/parity.mjs --pin` must pass after it.
 import { parseArgs } from 'node:util'
-import { mkdirSync, writeFileSync, rmSync } from 'node:fs'
+import { mkdirSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
-import { loadCorpus, select, savePairs, saveHuman, humanRecord, runOracle, pool, CPUS, firstDiff, hashLines, verdict, explain, tag, buildApp, CORE_RUNNER } from './lib.mjs'
+import { loadCorpus, select, savePairs, saveHuman, humanRecord, runOracle, pool, CPUS, firstDiff, hashLines, verdict, explain, tag, buildApp, CORE_RUNNER, PAGE_RUNNER, runnerOf } from './lib.mjs'
 import { codeDir, readPin, PKG } from './oracle/pin.mjs'
 
 const { values: a } = parseArgs({
   options: {
     browser: { type: 'boolean' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' },
-    only: { type: 'string' }, dump: { type: 'string' }, record: { type: 'boolean' }, dist: { type: 'string' }, core: { type: 'boolean' },
+    only: { type: 'string' }, dump: { type: 'string' }, record: { type: 'boolean' }, dist: { type: 'string' }, core: { type: 'boolean' }, page: { type: 'boolean' },
   },
 })
-// the pure core is folded in Node, never recorded from (until R6b moves the
-// references onto it), and the PIN's code has none
-if (a.core && (a.browser || a.record || a.pin)) {
-  console.error('parity: --core folds the pure core in Node; it takes no --browser, --record or --pin')
+// (the pure core is folded in Node; Chromium plays the page)
+if ((a.core && a.page) || ((a.core || a.page) && a.browser)) {
+  console.error('parity: one runner at a time: the pure core (the default, --core), the page in Node (--page) or the page in Chromium (--browser)')
   process.exit(2)
 }
 const { pairs, items: all } = loadCorpus()
@@ -65,7 +71,14 @@ if (!items.length) {
 const pin = readPin()
 const dir = a.dir ? resolve(a.dir) : codeDir(a.pin ? pin : a.ref ?? 'WORKTREE')
 const code = a.dir ? dir : a.pin ? `the PIN (${pin})` : a.ref ? `ref ${a.ref}` : 'the working tree'
-const what = a.browser ? `Chromium on ${a.dist ? resolve(a.dist) : `a fresh build of ${code}`}` : a.core ? `the pure core of ${code}, folded headless` : code
+// the Node runner: the page when asked (or the PIN's own, for --pin), else
+// the pure core, which code older than R6 doesn't have
+const runner = a.page ? PAGE_RUNNER : a.pin && !a.core ? runnerOf(dir) : CORE_RUNNER
+if (!a.browser && runner === CORE_RUNNER && !existsSync(join(dir, 'core', 'index.js'))) {
+  console.error(`parity: ${code} has no pure core (core/index.js): code older than R6 runs as its page, with --page`)
+  process.exit(2)
+}
+const what = a.browser ? `Chromium on ${a.dist ? resolve(a.dist) : `a fresh build of ${code}`}` : runner === CORE_RUNNER ? `the pure core of ${code}, folded headless` : `the page of ${code}, under the fake DOM`
 console.log(`parity: ${items.length} battles (${items.filter((i) => i.kind === 'ai').length} AI, ${items.filter((i) => i.kind === 'human').length} human) on ${what}`)
 if (pin === 'WORKTREE') console.log('  (sim/oracle/PIN is still WORKTREE, so references come from the working tree, not frozen code)')
 const engines = pairs.engines ?? {}
@@ -101,7 +114,7 @@ if (a.browser) {
     console.error(`not recording: the corpus's shadow comes from Node ${engines.node}, this is ${running}; re-record all of it (no --only), or use that Node`)
     process.exit(2)
   }
-  results = await pool(items, CPUS, (it) => runOracle(it.job, dir, a.core ? { runner: CORE_RUNNER } : {}).catch((e) => ({ trace: [], shadow: [], written: [], error: e.message }))
+  results = await pool(items, CPUS, (it) => runOracle(it.job, dir, { runner }).catch((e) => ({ trace: [], shadow: [], written: [], error: e.message }))
     .then((r) => (report(r, it), r)))
 }
 if (tmpBuild) rmSync(tmpBuild, { recursive: true, force: true })
@@ -162,7 +175,8 @@ if (bad.length) {
   }
 }
 for (const { it, r, v } of bad) {
-  let ref = !pinDir || (!a.browser && dir === pinDir) ? null : await runOracle(it.job, pinDir).catch(() => null)
+  // (by the PIN's own runner: its pure core if it has one, else its page)
+  let ref = !pinDir || (!a.browser && dir === pinDir && runner === runnerOf(pinDir)) ? null : await runOracle(it.job, pinDir, { runner: runnerOf(pinDir) }).catch(() => null)
   // context only from a PIN that still reproduces this battle's hashes
   const pinStale = ref && !verdict(it, ref).ok
   if (pinStale) ref = null

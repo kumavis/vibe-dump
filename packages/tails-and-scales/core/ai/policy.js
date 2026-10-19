@@ -1,10 +1,11 @@
 // The opponent (DESIGN §2.2's "AI inside the fold", §2.5): for each phase,
 // a generator that looks at the match and yields the commands it decides on,
 // one at a time, as a seat's would be (`{ t: 'advance' | 'move' | 'shoot' |
-// 'charge', u, c | tg }`, units by id, places by nav cell). Whoever runs it
-// applies each command before asking for the next (core/engine.js's runAI
-// in the fold, which every peer runs; main.js's old turn loop until R6b),
-// so the generator reads the match as each of its commands left it. An AI
+// 'charge', u, c | tg }`, units by id, places by nav cell). core/engine.js's
+// runAI, the only driver, applies each command before asking for the next,
+// in the fold, which every peer runs (an AI seat's phase, and a human's
+// `auto`), so the generator reads the match as each of its commands left
+// it. An AI
 // seat appends nothing to a match's log: the AI's play is a function of the
 // match.
 //

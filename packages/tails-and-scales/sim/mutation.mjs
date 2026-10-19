@@ -7,7 +7,9 @@
 //   node sim/mutation.mjs [--die 40] [--only ai,hotseat,…] [--browser | --core]
 //
 // --browser also builds the mutant and checks three battles in Chromium.
-// --core (R6a) judges the headless gate instead, `parity.mjs --core`: the
+// --core (R6a) judges the headless gate instead, `parity.mjs --core` (the
+// default runner since R6b; without --core the mutant is the PIN's, which
+// has no pure core, so its CLI line runs `parity.mjs --page`): the
 // mutant is a copy of the working tree with the swap in its core, folded
 // by sim/run.mjs, and the reference is the working tree's own core (the
 // PIN's code has none), which must reproduce the corpus first. A human log
@@ -104,8 +106,9 @@ if (!changed) {
 const one = items.find((it, i) => !verdict(it, mut[i]).ok)
 let cli = true
 if (one) {
-  const p = spawnSync(process.execPath, [join(SIM, 'parity.mjs'), ...(a.core ? ['--core'] : []), '--dir', mutant, '--only', one.id], { encoding: 'utf8' })
-  console.log(`\n$ node sim/parity.mjs${a.core ? ' --core' : ''} --dir <mutant> --only ${one.id}   (exit ${p.status})\n${p.stdout.trim()}`)
+  // (the PIN's mutant has no pure core: parity plays its page, --page)
+  const p = spawnSync(process.execPath, [join(SIM, 'parity.mjs'), a.core ? '--core' : '--page', '--dir', mutant, '--only', one.id], { encoding: 'utf8' })
+  console.log(`\n$ node sim/parity.mjs ${a.core ? '--core' : '--page'} --dir <mutant> --only ${one.id}   (exit ${p.status})\n${p.stdout.trim()}`)
   // (a human log the swap makes illegal stops at that entry under --core)
   cli = p.status === 1 && (a.core ? /(DIVERGES at|STOPPED before) trace line \d+/ : /DIVERGES at trace line \d+/).test(p.stdout)
 }
