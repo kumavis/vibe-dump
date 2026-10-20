@@ -279,3 +279,286 @@ the genealogies name chiefs, not districts.
 - Fornander's racial and origin theories are long discredited. He is cited only for the
   traditions he recorded and for the 1770s–1795 wars, where he wrote from survivors and
   contemporaries.
+
+## 8. Routes
+
+A second pass, October 2026, added `routes.json`: 20 routes over the sea, the far view's
+"voyaging and fleet routes, ship tracks" (DATA.md "Routes" has the schema and the rules).
+It also added eight places that the routes name as ends, and a `routes` list on the sixteen
+events the routes belong to; no event was otherwise changed. No source was added: every
+route rests on sources already in `sources.json`, re-read for this purpose at the pages
+below. Run `tools/check-data.mjs` as before; it now checks the routes too.
+
+### What was read
+
+| source | read for the routes |
+| --- | --- |
+| `cook-1784-v2` | Bk. III ch. XI, pp. 191–221 (18 January – 2 February 1778), and the last chapter, pp. 529–549 (25 November 1778 – 17 January 1779), in the Internet Archive full text. Every printed position used was checked against the page scans. |
+| `king-1784-v3` | P. 3; bk. V ch. II, pp. 30–34 (4–11 February 1779); ch. V, pp. 82–95 (22 February – 8 March); bk. VI ch. I (15–16 March); the table of the islands' positions in ch. VI. Scans checked for 24 and 27 February. |
+| `fornander-v2` | Pp. 33–36 (Pāʻao), 49–58 (Moʻikeha, Kila, Laʻa), 150–157 (Kalaniʻōpuʻu on Maui), 222 (1783), 235–238 (1790), 243–247 (1791), 343–348 (1795). |
+| `kamakau-ruling-chiefs` | Pp. 84–91, 135–136, 147–149, 160–162, 171–174, 186–189, 195–196: the djvu text of the same Internet Archive item, with pages taken from its running heads. |
+| `dibble-1843` | Pp. 64, 71, 72. |
+| `jarves-1847` | Pp. 96–97; ch. VII, the passage before Broughton's visit; the whaling table. |
+| `bingham-1847` | Pp. 79–92 (the Thaddeus), 134 and 358 (the whale ships). |
+| `merlin-1990-sandalwood` | Pp. 50–52. |
+| `ks-kealaikahiki-2020` | Pp. 1–2. |
+| `usgs-gnis` | About sixty headlands, landings and bays, to fix Cook's bearings and to draw the coasts the routes pass (queried 2026-10-20). |
+| `state-gis-moku`, `-ahupuaa` | The coastline the routes keep off, and the centroids of the new moku and ahupuaʻa places. |
+
+### What each route rests on
+
+| route | points | rests on | what the points are |
+| --- | --- | --- | --- |
+| `first-canoes-from-kahiki` | schematic | `athens-2014`, `wilmshurst-2011` (dates, as in the event), `ks-kealaikahiki-2020` | a bearing in from the `kahiki` marker, past Ka Lae and up the Kealaikahiki channel to the middle of the chain; no source gives a landfall |
+| `paao-voyage` | schematic | Fornander pp. 33–36 | Kahiki, off Puna, along Hilo and Hāmākua, to ʻUpolu by Puʻuepa; only the districts are sourced |
+| `moikeha-voyages` | schematic | Fornander pp. 49–54 | Waipiʻo to Kahiki, then back past Kaʻū, Honuaʻula and Makapuʻu to Wailua; the companions' places are named, not ordered |
+| `kila-laa-voyages` | schematic | Fornander pp. 54–58 | Wailua down the chain to the south point, Kahiki, then to Kualoa; Laʻa's windward approach is drawn only so the line reaches Kualoa by sea |
+| `kalaehohoa-1775` | narrative | Fornander pp. 150–151, Kamakau p. 84 | Hāna to Kalaeokaʻīlio and back |
+| `kakanilua-1776-fleet` | narrative | Fornander pp. 152–153, Kamakau pp. 85–86 | Hawaiʻi (place not named; dashed from the Kohala coast), Keoneʻōʻio, Mākena, Kiheipukoʻa |
+| `kalaniopuu-maui-1778` | narrative | Fornander pp. 156–157, Kamakau pp. 89–91, Cook p. 532, King p. 3 | Mokulau, Kahoʻolawe, Lahaina, Lānaʻi, the Pailolo channel, Honokōhau, Kahakuloa, Hāmākualoa, Koʻolau |
+| `cook-1778-kauai` | journal | Cook pp. 191–221 | 18 January to 2 February 1778, day by day; in from the south and away north dashed |
+| `cook-1778-79-hawaii` | journal | Cook pp. 529–549, King pp. 30–34 | 26 November 1778 to 11 February 1779, including the run to Kohala and back; in from the east dashed |
+| `clerke-1779-leeward` | journal | King pp. 82–95, bk. VI ch. I | 22 February to 15 March 1779 |
+| `kahekili-oahu-1783` | narrative | Kamakau p. 135, Fornander p. 222 | Lahaina, north of Lānaʻi, the Molokaʻi shore, the open sea, Waikīkī |
+| `kamehameha-maui-1790` | narrative | Fornander pp. 235–238, Kamakau pp. 147–149 | Kohala, Hāna, the north coast to Halehaku, Kahului, Kaunakakai |
+| `kepuwahaulaula-1791` | narrative | Kamakau pp. 160–162, Fornander pp. 243–244, Dibble p. 64 | Mokulau, Hālawa in Kohala, Waipiʻo, off Waimanu, back to Hāna |
+| `nuuanu-1795-fleet` | narrative | Fornander pp. 343–347, Kamakau pp. 171–172 | Hawaiʻi (dashed from Kohala), Lahaina, the Molokaʻi shore, the Kaʻiwi channel, Waiʻalae and Waikīkī |
+| `kaieiewaho-1796` | narrative | Kamakau p. 173, Jarves ch. VII | Waiʻanae to mid-channel, there and back |
+| `peleleu-1802` | narrative | Kamakau pp. 187–189, Dibble p. 71, Jarves pp. 96–97 | Hilo (dashed to Kīpahulu), Kīpahulu, Kaupō, Lahaina, Oʻahu |
+| `kaumualii-1810` | narrative | Kamakau pp. 195–196 | Waimea (dashed), the Kaʻieʻiewaho channel, the sea of Māmala, there and back |
+| `thaddeus-1820` | narrative | Bingham pp. 79–92 | the dated places of the brig's approach, Kailua, and the passage outside the islands to Honolulu |
+| `iliahi-lane` | schematic | Merlin pp. 50–52 | Kawaihae to Honolulu and on west towards Canton |
+| `whaling-lane` | schematic | Bingham pp. 134, 358; Jarves's table | from the west (the Japan grounds) to Honolulu and Lahaina, and back |
+
+### Cook's and King's positions
+
+- **The rule.** A noon position printed in the journal is used as printed when it falls
+  at sea in the waters the day's text describes (18 January 1778; 26 November and
+  24 December 1778; 24 February 1779). Otherwise the point is fixed from that day's
+  bearings and distances to land, taken from GNIS points (the Waimea and Niʻihau
+  anchorages, 19 and 24 January, 1, 18, 20 and 22 December, 10 January, 7 February with its
+  observed latitude, Waimea on Oʻahu). Days with only words ("five leagues farther up the
+  coast", "a mile from the shore") are placed by the words. Each waypoint says which.
+- **The fixes close.** The two bearings Cook gives at the Niʻihau anchorage (the south-east
+  point and the other extreme) put the ships about a kilometre off Kahāʻino; from there his
+  third bearing, Kaʻula at S61°W, comes out at S61°W. The fix of 1 December from Maui and
+  ʻUpolu puts Waipiʻo exactly on the S22°E he gives for Hawaiʻi's east extreme.
+- **Where print and bearings part, the bearings win.** The time-keeper longitudes printed
+  for 7, 8 and 13 January 1779 (203° 26′, 203° 13′, 203° 40′ E) lie 50–70 km west of the
+  coast that the same days' bearings place the ships "two leagues" and "two miles" off.
+  The scans show the figures are printed so; they are not OCR slips. King's longitude of
+  27 February lies about 25 km east of the north point of Oʻahu he says the ship was
+  abreast of. Both are given in the tellings. On 26 November the bearing of the isthmus
+  would move the ship about 15 km west of the printed longitude; there the printed
+  position, which lies at sea off the coast described, is kept.
+- **The ships' own frame.** King's table puts Hawaiʻi's points 0.05–0.1° west of GNIS
+  (Kealakekua at 204° 0′ E, against 155° 55.7′ W), and the tracks are not corrected for it,
+  so a journal point may sit up to about 10 km west of where the ship was. At the far zoom
+  where routes show, that is a few pixels.
+- **The lines between points are joins.** The ships tacked between them. Cook's seven weeks
+  beating to windward round Hawaiʻi make that track a tangle, which is what the journal
+  records.
+- **Dates** are as the journals print them, which are the dates the gazetteer already uses
+  for Cook (18 January 1778, 14 February 1779).
+
+### Which routes are schematic, and why
+
+- **The four voyaging routes.** The traditions name districts and capes, never a course, and
+  Kahiki lies off the map; the `kahiki` marker stands for it. Each summary says so.
+- **The two trade lanes.** They join the ports the sources name, Kawaihae and Honolulu for
+  sandalwood (Merlin, quoting Ellis and Kotzebue), Honolulu and Lahaina for the whalers
+  (Bingham, Jarves), and point west, towards Canton and the Japan grounds. No ship's course
+  was read for either.
+- **Dashed stretches inside other routes.** Cook's approaches (from the south in January
+  1778, on the bearing between two noon positions; from the east in November 1778, on the
+  latitude of the 25th) and his departure north on 2 February 1778; the Thaddeus's approach
+  from the east; and the departures no source places: Kalaniʻōpuʻu's fleet in 1776 and
+  Kamehameha's in 1795 (drawn from the Kohala coast nearest Maui), the peleleu fleet (from
+  Hilo, after Dibble's "forests of Hilo"), and Kaumualiʻi in 1810 (from Waimea, where ships
+  calling at Kauaʻi met him).
+
+### What could not be sourced, or was left out
+
+- **Places of departure and landing** not named in any source read: those above, and where
+  the peleleu fleet landed on Oʻahu (the line ends at Waikīkī). Fornander has Kamehameha
+  gather in Kohala in 1790, so that start is narrative, not dashed, though the landing
+  within Kohala is not named either.
+- **Kepuwahaʻulaʻula** is told three ways: off the Waimanu cliffs (Kamakau), off the Pali
+  Hulaʻana of Waimanu (Fornander), off Kohala (Dibble). The line follows the invaders;
+  Kaʻeokūlani's crossing from Hāna and Kamehameha's fleet from Kona are in the summary,
+  not drawn.
+- **Kaʻiana's turn** for the Koʻolau side of Oʻahu in 1795 is in the summary only:
+  Fornander says neither the landing nor the time of day was ever stated.
+- **Readings to check.** Kamakau p. 135 has the 1783 canoes off Molokaʻi reaching "from
+  Ho‘olehta to Kaluakoʻi" in the scan read; "Hoʻolehua" is a guess, not used on any card.
+  "Puna harbor on Kauai" (p. 173), the target of 1796, names a district, not a harbour, so
+  the line stops where the canoes turned. Spellings for a speaker: Kalaeokaʻīlio (the
+  kahakō is supplied; GNIS writes "Kailio Point"), Kiheipukoʻa (as Kamakau's edition prints
+  it), Ka-ʻopua-kiʻikiʻi (as printed), Kawaʻanui (Kamakau's "Ka-waʻa-nui"), Kaneʻolaelae
+  (left out of the card for that reason).
+- **Not drawn.** Hōkūleʻa's voyage of 1976 (the article read gives the departure and the
+  arrival, not the track); Vancouver's visits of 1792–94 (his volumes were not opened); the
+  Jackal and Prince Lee Boo, seized and retaken off Oʻahu in January 1795; the wars of
+  Alapaʻinui; the brig Kaʻahumanu's voyage to Canton in 1817, which leaves the map.
+- **Two routes have no event**: the Kaupō raid of about 1775 and Kalaniʻōpuʻu's 1778–79
+  circuit of Maui. Both are well told (Fornander and Kamakau) and could become events.
+
+### Where the schema grew
+
+The brief's schema gained `from` and `to` (the places the ends stand for, so the check can
+hold an end to its place), `schematicSegments` (a dashed stretch inside a solid route),
+`waypoints` (a date and a note per point; the journal routes' days), a `course` key in
+`confidence`, and `routes` on events. The check allows a named end within 10 km of an
+ahupuaʻa centroid, because Wailua's shore lies 8 km from its own, and lets a route meet its
+event at a landing within 20 km of the battle (Kiheipukoʻa and Kakanilua).
+
+## 9. Era layers
+
+The record behind `public/data/layers/` (DATA.md, "Era layers"): cultivation,
+settlement and forest masks for every island at four keyframes, 1778, 1853, 1896
+and 2020. Baked in October 2026 with
+`node packages/holo-i-ke-au/tools/bake-layers.mjs --all`. The manifest carries
+every rule and source in full; this section says what the sources turned out to
+be, what was read where, how the models were checked, and where they are weak.
+
+### Sources used, and what each turned out to be
+
+| source | what it is | used for |
+| --- | --- | --- |
+| USGS Carbon Assessment of Hawaiʻi land cover (Jacobi et al. 2017, ScienceBase) | one 30 m GeoTIFF of the main islands, NAD83 UTM 4, 48 classes from imagery of about 2007–2012, built on HI-GAP with NOAA C-CAP 2005 land use; it separates native from alien forest, which C-CAP alone does not. Registers on the packs to within a texel. Public domain. | forest now; developed land for spreading the 2020 census; the 1778 forest floor |
+| State GIS 2020 Agricultural Land Use (Perroy and Collier 2021) | 4,836 polygons, 15 crop categories from 2018–2020 imagery. Pasture is 765,578 acres of it and is left out; taro is 805 acres, aquaculture 670. | cultivation now |
+| State GIS Historical Sugarcane Lands 1900, Pineapple Lands 1900 | 55 cane polygons (about 1,200 km²) and one pineapple polygon, digitised in 2006 for the Department of Health from the 1939 Territorial Planning Board land utilization maps. Layers for 1920 and 1937 also exist. Final QA was never done, says the metadata. | cultivation 1896; plantation camps in the 1896 settlement; forest 1896 |
+| State GIS Reserves, forest reserve units | 144 polygons, boundaries as of March 2026 fitted to tax maps; no proclamation dates. | forest 1896 (reserves keep more of their forest) |
+| State GIS Geologic Units (Sherrod et al., USGS 2007) | 2,632 units downloaded: flows younger than about 1,500 years, historic ones with their year, and the alluvium, lagoon, lacustrine and fill units. | lava age for the 1778 and 1896 forest; the ground under the valley-floor loʻi rule |
+| Traditional Agriculture (Kurashima, with Kirch and Kamehameha Schools, 2012; ArcGIS Online) | 11 multipolygons of high potential for loʻi, dryland and agroforestry, a published GIS model on soils, rain, substrate, slope and water, checked by its authors against archaeology. Covers Hawaiʻi, Maui County, Oʻahu and Kauaʻi, not Niʻihau or Kahoʻolawe. Its dryland zones are the leeward Kohala, Kona and Kaʻū field systems and upcountry and Kahikinui on Maui. No licence stated on the item. | cultivation 1778, and reduced in 1853 and 1896 |
+| Land Commission Awards (OHA's Kīpuka, ArcGIS Online `LCA_State`) | 17,146 award polygons statewide, Māhele and kuleana awards with later grants. The `land_use` field is filled for 39 of them, so parcels are used by size: 13,977 under 5 ha count as kuleana. Digitising is uneven: Hawaiʻi Island has far fewer than Oʻahu, Maui or Kauaʻi. No licence stated; used only as a density at hundreds of metres. Hawaiʻi County publishes its own layer of 1,033 awards; it was not needed. | calibration; cultivation and settlement 1853; part of 1778 and 1896 |
+| Census 2020 block groups (TIGERweb) | 1,083 block groups with POP100. The Census API itself did not answer from here. | settlement now |
+| King 1784, vol. III, pp. 126–128 | King's estimate island by island, read in the archive.org text and checked by its sum: Hawaiʻi 150,000, Maui 65,400, Oʻahu 60,200, Kauaʻi 54,000, Molokaʻi 36,000, Lānaʻi 20,400, Niʻihau 10,000, "Oreehoua" (Lehua) 4,000; 400,000 in all; no Kahoʻolawe. | settlement 1778 |
+| Thrum, *Hawaiian Annual* for 1890, p. 11 | "Comparative Table of Population of the Hawaiian Islands", estimate 1823 and censuses 1832–1884 by island, read on the page image; the 1832, 1836 and 1853 columns sum to their printed totals. | settlement 1853; Kahoʻolawe's 1778 back-cast (80 people in 1832) |
+| Census of 1896, Table II | population by island and district, 1896 and 1890, read on the page image (the OCR garbles it). Molokaʻi 2,307 and Lānaʻi 105 are separate in 1896 only; Niʻihau 164. | settlement 1896 |
+| NPS, A Brief History of Kalaupapa | "over 1,100 people" at Kalawao in 1888–1902 | the Kalaupapa share of Molokaʻi's 1896 count |
+
+### Checked, and not used
+
+- **The Government Survey maps on the State GIS** (`Historic_Maps`: Oʻahu 1881 and
+  1899, Maui 1885, a 1900s islands sheet; `SoH_Maps`: USGS topographic sheets of
+  1910–1943) are already georeferenced image services. The 1881, 1885 and 1899 sheets
+  colour land tenure (crown, government, private), not land use, so they give
+  neither loʻi nor forest without reading by hand. They are the obvious next source
+  for a hand-digitised 1880s layer.
+- **Land Use / Land Cover 1976** (USGS GIRAS, State GIS) is there and would give a
+  1970s keyframe for the start of the coda.
+- **NOAA C-CAP** was not fetched on its own: the CAH map already folds in C-CAP 2005
+  and separates native forest.
+- **Fishponds** have no statewide inventory (DESIGN §7.2). A University of Hawaiʻi
+  class layer has 55 present-day ponds as points, and the Hawaiʻi Conservation
+  Alliance's layer needs a login. Ponds are modelled instead (below).
+- **The leeward Kohala and Kona field systems** were not found as open GIS
+  footprints; the Kurashima–Kirch dryland zones stand in for them and match their
+  published locations by eye.
+- **The 1850 census by island** was not found in an open source; Thrum's table
+  starts after the Māhele with 1853, which is why the keyframe is 1853.
+
+### What is modelled, and by what rule
+
+The full rules are in `methods` in the manifest; in short:
+
+- **1778 cultivation**: the largest of the Kurashima–Kirch zones (loʻi 1, dryland
+  0.75, agroforestry 0.5), a valley-floor loʻi rule read from each pack (flat,
+  under about 300 m, on alluvium, lagoon deposits or fill, within 8–25 m of a stream
+  whose catchment averages 1,200–2,000 mm or more; flow routed on the pack heights),
+  the kuleana parcels, and a fishpond shore (low coast behind a reef flat, at 0.5).
+  The valley rule exists because the published zones run on modern soils and stop at
+  a straight line where Honolulu and Waikīkī are mapped as urban land or fill; with
+  it, Waikīkī, Kalihi, Mānoa, Kawainui and the Pearl Harbor stream mouths come back.
+- **1778 settlement**: weights from fields, coast, rain and kuleana, scaled per island
+  to King. **1778 forest**: rain (700–1,500 mm ramp), tree line (1,900–2,700 m),
+  lava age, then Kirch's clearing as FOREST.md gives it (below 460 m mostly farmed or
+  burned, untouched above 760 m), never less than the native forest standing now.
+- **1853**: kuleana mapped; the contact zones kept at 0.25–0.9 (loʻi more where
+  kuleana were claimed); people per island from the census, spread 0.6 by kuleana and
+  0.4 by the contact weights. No forest.
+- **1896**: cane and pineapple of 1900 mapped; loʻi kept at 0.3–0.7, dryland at 0.1,
+  ponds at 360/488; people per census district, with town shares (an assumption,
+  except Kalaupapa's head count), cane camps, kuleana and the contact pattern. Forest
+  between the contact forest less cane and new lava and the forest standing now:
+  0.85 of the way up inside forest reserves, 0.4 outside.
+- **2020**: mapped throughout.
+
+### How the models meet the kuleana
+
+The share of kuleana-sized award area (parcels under 5 ha, on each island's own
+texels) inside the published zones, inside the valley rule, and inside either, at
+0.5 or more:
+
+| island | kuleana km² | in the zones | in the valley rule | in either | zones km² | of which loʻi | valley rule loʻi km² |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Hawaiʻi | 28.4 | 34% | 2% | 34% | 438.5 | 5.5 | 3.9 |
+| Maui | 33.0 | 22% | 4% | 22% | 136.7 | 11.0 | 5.6 |
+| Lānaʻi | 1.1 | 2% | 0% | 2% | 3.1 | 0 | 0 |
+| Molokaʻi | 7.3 | 48% | 18% | 50% | 32.4 | 8.5 | 4.2 |
+| Oʻahu | 19.7 | 73% | 25% | 74% | 316.4 | 65.6 | 35.9 |
+| Kauaʻi | 15.5 | 36% | 21% | 37% | 110.3 | 38.5 | 23.4 |
+
+Oʻahu fits best. On Maui and Hawaiʻi Island most kuleana lie outside both models:
+upcountry Kula and the Hāna and Kaupō coasts on Maui, Hilo, Hāmākua and Puna on
+Hawaiʻi Island, where people farmed kula and wet uplands that no model maps as
+intensive, and Keʻanae, whose loʻi stand on lava, not alluvium. That is why the
+parcels themselves enter every pre-1900 cultivation layer.
+
+### The figures, and what the layers hold
+
+| island | 1778 King | 1853 census | 1896 census | 2020 census (from the layer) |
+| --- | --- | --- | --- | --- |
+| Hawaiʻi | 150,000 | 24,450 | 33,285 | 200,639 |
+| Maui | 65,400 | 17,574 | 17,726 | 154,136 |
+| Oʻahu | 60,200 | 19,126 | 40,205 | 1,015,858 |
+| Kauaʻi | 54,000 | 6,991 | 15,228 | 73,165 |
+| Molokaʻi | 36,000 | 3,607 | 2,307 | 7,372 |
+| Lānaʻi | 20,400 | 600 | 105 | 3,398 |
+| Niʻihau | 10,000 | 790 | 164 | 84 |
+| Kahoʻolawe | 250 (back-cast) | none listed | not counted apart; the bake joins it to Makawao | 0 |
+
+Each layer reproduces its island's figure within the log rounding (Lānaʻi's 105
+people of 1896, spread over 364 km², come back as 111). Cultivation, as area, from
+1778 to now: Hawaiʻi 355, 142, 588, 163 km²; Oʻahu 218, 126, 269, 94; Maui 141, 81,
+277, 31; Kauaʻi 93, 56, 205, 85. Native forest from 1778 through 1896 to now:
+Hawaiʻi 3,857, 2,690, 1,991 km²; Kauaʻi 446, 333, 210; Maui 567, 414, 263; Oʻahu 235,
+182, 130.
+
+### Where the layers are weak
+
+- **The 1778 figures are King's.** The estimates run from 200,000 to 1,000,000 (§3);
+  every density scales with the choice. King's Lānaʻi (20,400) and Niʻihau (10,000)
+  are high against everything after.
+- **East Hawaiʻi and windward East Maui are thin in 1778** for the reason above. The
+  published zones show nothing there and the awards are thinly digitised on Hawaiʻi
+  Island.
+- **The modern land runs under the old**: the packs' DEM is a 2010s snapshot, so the
+  Honolulu reef runway, Kakaʻako and other fill on the reef are land and carry 1778
+  and 1853 values. (Waikīkī's ponds and marsh, filled in the 20th century, rightly
+  show as cultivated in 1778.)
+- **Ponds are a shore rule**, not ponds: it marks the reef-flat coasts (Molokaʻi's
+  south shore, Kāneʻohe, Pearl Harbor, much of Oʻahu) where a wall could be built.
+- **The 1896 town shares and forest fractions are the bake's assumptions**, written in
+  the manifest; the reserve boundaries are today's.
+- **Lava**: flows after 1778 are drawn as whatever the rules give the ground beneath
+  them in 1778, which nobody knows; flows of 1778–1896 are bare in 1896.
+- **Before about 1450 the 1778 layers overstate the land in use**; the keyframe note
+  says so and the app should thin them.
+- Kona coffee (which the 1896 census credits for Kona's growth), rice as its own crop,
+  and ranching are in no layer.
+
+### Still needs people
+
+- **Kalaupapa.** The 1896 settlement layer shows the people exiled there for Hansen's
+  disease as a density on the peninsula, from the NPS count. How the app labels that
+  should be reviewed with the community, as the gazetteer's Kalaupapa event is.
+- **Licences.** OHA's award layer and the Kamehameha Schools agriculture model carry no
+  licence on their ArcGIS Online items. Both are used only through smoothed rasters at
+  hundreds of metres, with credit; ask both before release.
+- **An archaeologist** to set the 1778 zone weights (0.75 for dryland, 0.5 for
+  agroforestry) and the 1853 and 1896 retention against survey, island by island.
+- **A historian** with Schmitt's *Demographic Statistics* for the 1850 census and for
+  district figures before 1896, and with the Government Survey sheets for an 1880s
+  layer drawn by hand.

@@ -287,3 +287,222 @@ pack's land must match the ahupuaʻa polygons (IoU 0.98–0.999). Rain must be w
 and dry in the right places, and every boundary feature must have its
 properties and valid, non-crossing rings. It lists every file under
 `public/data/` and fails over 40 MB.
+
+## Routes
+
+`public/data/routes.json`: the lines the far view draws over the sea, the
+"voyaging and fleet routes, ship tracks" of `DESIGN.md` §2. An array of routes,
+hand-written like the gazetteer (§4), checked by `tools/check-data.mjs` and drawn
+by `src/render/routes.js`. RESEARCH.md "Routes" says what each one rests on.
+
+```jsonc
+{ "id": "cook-1778-kauai",                  // kebab-case ASCII, unique
+  "title": "Cook at Kauaʻi and Niʻihau",
+  "gloss": "the ships’ track from the journal, January 1778",
+  "kind": "ship",                            // voyage | fleet | ship | trade | schematic
+  "when": { "from": "1778-01-18", "to": "1778-02-02", "precision": "day" },   // as events (§4)
+  "era": "kalaniopuu",                       // an era in eras.json
+  "event": "cook-waimea-1778",               // an event in events.json, or null
+  "from": null, "to": null,                  // the places its two ends stand for; null is the open sea
+  "points": [[-158.594, 18.95], [-159.3167, 21.2], [-159.33, 21.82]],   // [lon, lat], three or more
+  "pointPrecision": "journal",               // journal | narrative | schematic
+  "direction": "oneway",                     // oneway | return
+  "schematicSegments": [0, 14],              // optional: stretches that are only a bearing; 0 is points 0 → 1
+  "waypoints": [ { "at": 1, "date": "1778-01-18", "note": "noon, as printed; Oʻahu and Kauaʻi in sight" } ],
+  "summary": "one paragraph",
+  "sources": [ { "id": "cook-1784-v2", "where": "bk. III, chs. XI–XII, pp. 191–221" } ],
+  "confidence": { "date": "firm", "place": "firm", "course": "firm" },
+  "tellings": [ { "source": "cook-1784-v2", "says": "Noon, 18 January: “latitude … 21° 12′ North; and longitude 200° 41′ East” …" } ] }
+```
+
+- **kind** says what moved. `voyage`: canoes of the voyaging traditions;
+  `fleet`: a war fleet; `ship`: a foreign ship; `trade`: a lane that ships
+  used again and again; `schematic`: a line standing for many voyages that were
+  never recorded one by one (the first arrivals). A `schematic` kind always has
+  schematic points.
+- **pointPrecision** says how the points are known, and the renderer draws by it.
+  - `journal`: positions written down at sea by someone aboard. A point is the
+    day's noon latitude and longitude where the journal prints them, and is
+    otherwise fixed from the bearings and distances of land it gives that day.
+    The straight lines between points are joins, not the tacks the ship made.
+    Drawn solid.
+  - `narrative`: the places a narrative names, in its order, joined over open
+    water a few kilometres off the coasts. A narrative point stands for a named
+    shore, not a position. Drawn solid and finer.
+  - `schematic`: a bearing, or a link between places; the line says only which
+    way, or that the places were connected. The summary must say so, and the
+    line is drawn dashed.
+- **schematicSegments**, inside a journal or narrative route, marks the
+  stretches that are only a bearing: an approach from off the map, or a
+  departure from a place the sources do not name. They are drawn dashed.
+- **direction**: `oneway` is travelled from the first point to the last;
+  `return` is travelled out along the line and back along it, as the fleet that
+  turned back in the Kaʻieʻiewaho channel. A round trip whose two legs differ is
+  one `oneway` line that comes back.
+- **from / to** name the place each end stands for, or `null` for the open sea.
+  A named end must lie within a radius set by the place's precision: exact
+  3 km, ahupuaʻa 10 km (the shore of a long ahupuaʻa like Wailua lies 8 km from
+  its centroid), moku 30, island 90, sea 60. A `null` end must lie at sea.
+- **waypoints** date and annotate single points; on a journal route they are
+  the days. `at` indexes `points`, in order. Notes are provenance for the card,
+  and like summaries carry no numbers: printed positions, bearings and counts
+  go in `tellings`.
+- **confidence** keys are `date`, `place` and `course`, each `firm | soft |
+  contested`. A schematic course is never firm.
+- **events** may list their routes in `routes: [ids]`; each listed route must
+  exist and name that event back.
+
+Rules, enforced by `tools/check-data.mjs`:
+
+- ids, kinds, precisions and directions as above; `when` as for events (a
+  precision for every date, the date written to that precision, from before to);
+  `era` exists, with a warning when the dates fall outside it; `event` exists or
+  is `null`.
+- at least three points, every one inside the archipelago box (18.5–22.5° N,
+  161–154.5° W), which also holds the `kahiki` marker; no point repeats the one
+  before it.
+- the line keeps to the sea: it is sampled every 250 m against the moku polygons
+  of `boundaries/moku.geojson`. Land is allowed within 1.5 km of either end (a
+  landing, a harbour) and up to 200 m inside the simplified coast elsewhere.
+- the ends as above. A route with an `event` must meet it: an end names one of
+  the event's places, or the line passes through one, or a named end lies
+  within 20 km of one (a landing for a battle fought inland, as at Kakanilua).
+- `schematicSegments` are segment indices; waypoint dates parse and fall within
+  `when`. A journal route has at least three dated waypoints and cites an
+  opened source that is not tertiary.
+- the summary keeps the Hawaiian spelling and the no-numbers rule of §4; a
+  schematic route says "schematic" in it; only a journal route may call itself a
+  journal track in its gloss.
+- every source exists and at least one was opened; tellings cite sources.
+
+Places added for the routes, which they name as ends: `hawaii-island`,
+`kohala-hawaii`, `upolu-point`, `kualoa`, `kalaeokailio`, `mokulau`,
+`kiheipukoa`, `koolau-maui`.
+
+`src/render/routes.js` draws the routes whose dates overlap the stretch of years
+around the chosen one (the same half-an-era window as the pins), over the sea and
+draped on the land at their ends, fading in as the view widens past a single
+island. Its header says how `src/app.js` constructs and calls it.
+
+## Era layers
+
+The cultivation, settlement and forest overlays of `DESIGN.md` §2 and §5.5, per
+island and keyframe, under `public/data/layers/`. Written by
+`tools/bake-layers.mjs` from the island packs above and from the open sources
+named in its manifest; nothing else writes there. RESEARCH.md §9
+says what each source turned out to be and what is modelled.
+
+### Files
+
+`layers/<island>/<keyframe>-<layer>.png`, one per island pack, keyframe and
+layer: 8 islands, 88 masks, about 4.9 MB with the manifest.
+
+- **Registration.** Each mask has exactly the `bounds` and `size` of its island
+  pack in `manifest.json`, so texel `(i, j)` is the same ground as in that
+  pack's `height.png` (texel registration above). Nothing is resampled or
+  halved. A pack holds the slivers of neighbours that fall in its box (north
+  Kahoʻolawe and Molokini in Maui's), and the masks cover them too.
+- **Format.** 8-bit greyscale PNG, non-interlaced, as `lib/png.mjs` writes it.
+  0 everywhere the pack is sea (height ≤ 0). Unlike the height image, a mask
+  is one byte per value, so the app may sample it as a filtered texture.
+- **cultivation** and **forest**: `value / 255` is the share of the texel
+  cultivated (loʻi, dryland fields, crops; a fishpond counts with the shore it
+  sits on) or under native forest canopy.
+- **settlement**: people per km² on a log scale,
+  `d = d0 × (exp(value / 255 × ln(1 + dMax / d0)) − 1)` with `d0 = 2` and
+  `dMax = 50000`. So 1 ≈ 0.08, 45 ≈ 10, 99 ≈ 100, 157 ≈ 1,000 and 214 ≈ 10,000
+  people per km²; 255 is 50,000 or more. Blending bytes linearly between
+  keyframes blends density geometrically, which suits a population that fell by
+  halves. Each island's masks sum to its figure for the keyframe, within the
+  rounding of the log steps (a few per cent where a few hundred people are
+  spread over a whole island).
+
+### Keyframes
+
+| id | year | layers | eras that use it directly |
+| --- | --- | --- | --- |
+| `contact` | 1778 | cultivation, settlement, forest | voyaging (with the growth note), mailikukahi, umi, alapai, kalaniopuu |
+| `mahele` | 1853 | cultivation, settlement | none exactly; kahekili to kauikeaouli and kamehameha-iv-v to liliuokalani interpolate through it |
+| `kingdom` | 1896 | cultivation, settlement, forest | none exactly; liliuokalani sits at t = 0.98 toward it |
+| `now` | 2020 | cultivation, settlement, forest | coda |
+
+`mahele` has no forest: nothing maps the forest of the 1850s, so forest
+interpolates from `contact` to `kingdom` across it. The `eras` object in the
+manifest gives, for every era in `eras.json` and every layer, either
+`{ keyframe }` or `{ from, to, t }` with `t` linear in years. It is computed
+from `eras.json` at bake time, so re-bake (or recompute from the keyframe
+years) if the eras move.
+
+### `layers/manifest.json`
+
+```jsonc
+{
+  "about": "...",
+  "encoding": { "cultivation": "...", "forest": "...", "settlement": { "kind": "log density", "d0": 2, "dMax": 50000, "decode": "..." } },
+  "keyframes": [ { "id": "contact", "year": 1778, "yearPrecision": 30, "label": "on the eve of contact, c. 1778",
+                   "layers": ["cultivation", "settlement", "forest"], "note": "..." } ],
+  "eras": { "kamehameha": { "year": 1807, "cultivation": { "from": "contact", "to": "mahele", "t": 0.387 }, "forest": { ... } } },
+  "methods": {                       // per keyframe and layer, the same for every island
+    "contact": { "cultivation": { "method": "modelled", "rule": "the rule written out", "sources": [ { "id", "title", "url", "fetched", "licence", "note" } ] } },
+    "kingdom": { "settlement": { "method": "mixed", "rule": "...", "districts": [ ... ], "towns": [ ... ], "sources": [ ... ] } }
+  },
+  "islands": {
+    "oahu": { "pack": "oahu", "size": [1024, 801], "bounds": [...],
+              "layers": { "contact": { "cultivation": { "file": "oahu/contact-cultivation.png", "method": "modelled",
+                                                        "stats": { "landFraction": 0.139, "overHalf": 0.19, "areaKm2": 218.3 } } } } }
+  },
+  "stats": { "files": 88, "bytes": 5011149 },
+  "baked": { "tool": "tools/bake-layers.mjs", "calibration": { "oahu": { "kuleanaKm2": 19.65, "kuleanaInEither": 0.74, ... } } }
+}
+```
+
+- **`method`** is `mapped` (read from a dataset of that time), `modelled` (a rule
+  applied to the land; `rule` writes it out) or `mixed` (both; `rule` says which
+  part is which). The app labels anything not `mapped`.
+- **`stats`** per mask, over the pack's land: `landFraction` (mean value as a
+  share; for settlement the mean byte), `overHalf` and `areaKm2` for
+  cultivation and forest, and `people`, `peakPerKm2` and `over10PerKm2` for
+  settlement.
+- **Sources** sit inline in each `methods` entry, with the URL, the date the
+  ledger recorded and the licence, as the pack manifest does. The population
+  figures are in `methods.<keyframe>.settlement.populations` (or `districts`
+  and `towns` for 1896).
+
+| keyframe | cultivation | settlement | forest |
+| --- | --- | --- | --- |
+| contact 1778 | modelled: the Kurashima–Kirch traditional agriculture zones, a valley-floor loʻi rule read from the pack, the 1848–1855 kuleana parcels, a fishpond-shore rule | modelled: fields, coast and kuleana, scaled per island to King's 1779 estimate | modelled: rain, elevation and lava age, cleared below 460–760 m after Kirch, never less than the native forest standing now |
+| mahele 1853 | mixed: kuleana parcels mapped, the contact zones kept at reduced weight | mixed: the 1853 census by island, spread by kuleana parcels and the contact weights | none (interpolate) |
+| kingdom 1896 | mixed: 1900 cane and pineapple mapped, loʻi kept at 0.3–0.7 | mixed: the 1896 census by district, towns, cane camps, kuleana | mixed: between the contact forest less cane and new lava, and the forest standing now; forest reserves keep more |
+| now 2020 | mapped: 2020 agricultural baseline crops | mapped: 2020 census block groups spread over CAH developed land | mapped: CAH native forest classes |
+
+### How to bake the layers
+
+Run the pack bake first; this reads `manifest.json`, each island's
+`height.png` and `rain.png`, `boundaries/` and `eras.json`, and writes only
+`public/data/layers/`.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-layers.mjs --all                  # download, bake, check, delete the downloads (~1.5 min)
+node packages/holo-i-ke-au/tools/bake-layers.mjs --preview /tmp/layers  # tinted previews, per island and keyframe
+```
+
+or `--download` (~490 MB, nearly all of it the 30 m CAH GeoTIFF), `--bake`
+(about 50 s), `--check`, `--clean`. `--downloads DIR` (or
+`$HOLO_LAYERS_DOWNLOADS`) moves the downloads from
+`<os tmpdir>/holo-i-ke-au-bake/layers-downloads`; keep them outside the repo.
+Same needs as the pack bake: Node 22, `curl`, the `geotiff` devDependency. A
+re-bake from the same downloads gives the same masks; only `fetched` dates move.
+
+The preview writes, per island, `<island>-<keyframe>.png` (forest green,
+cultivation amber, settlement red over shaded relief, moku lines),
+`<island>.png` (the keyframes side by side) and `<island>-layers.png` (a row per
+keyframe, a column per layer).
+
+### What the layers check covers
+
+`--check` reads every mask back: greyscale, the pack's exact size, nothing over
+sea, and `stats` equal to what the image holds. Every keyframe layer must have
+a method from the three, a written rule unless mapped, and sources with title,
+URL and licence; every era must map to a keyframe for each layer. It prints
+coverage and people per island and keyframe, and fails if `public/data/layers/`
+passes 8 MB.

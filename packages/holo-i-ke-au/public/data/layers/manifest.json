@@ -1,0 +1,2027 @@
+{
+  "about": "Per-era land-use masks for each island pack (DESIGN.md §2 and §5.5), for blending over the terrain at far and mid zoom. Each mask is an 8-bit greyscale PNG with exactly the bounds and size of its island pack in ../manifest.json, so it is sampled with the same texel registration (DATA.md); 0 over sea. Where a layer is modelled rather than mapped, `method` says so and `methods` writes the rule out; the app labels it.",
+  "encoding": {
+    "cultivation": "value / 255 = share of the texel cultivated (loʻi, dryland fields, crops; fishponds counted with their shore)",
+    "forest": "value / 255 = share of the texel under native forest canopy",
+    "settlement": {
+      "kind": "log density",
+      "d0": 2,
+      "dMax": 50000,
+      "decode": "people per km² = d0 × (exp(value / 255 × ln(1 + dMax / d0)) − 1); 0 is nobody, 255 is dMax or more"
+    }
+  },
+  "keyframes": [
+    {
+      "id": "contact",
+      "year": 1778,
+      "yearPrecision": 30,
+      "label": "on the eve of contact, c. 1778",
+      "layers": [
+        "cultivation",
+        "settlement",
+        "forest"
+      ],
+      "note": "The florescence of the chiefdoms: the windward valleys in loʻi, the leeward field systems at their widest, the lowland forest mostly gone to fields and fire. It also stands for the chiefly eras before it, which had less of everything: the windward irrigated valleys came first, the leeward dryland field systems were laid out and spread after about 1400 and were subdivided and intensified into the 1700s, and fishponds and the great luakini came later still (after Kirch and after Ladefoged and Graves on the Kohala field system; not read for this bake, verify before it reaches a card). The app may fade the dryland part of the cultivation for eras before about 1450 and thin the settlement with it."
+    },
+    {
+      "id": "mahele",
+      "year": 1853,
+      "yearPrecision": 5,
+      "label": "at the Māhele, c. 1848–1855",
+      "layers": [
+        "cultivation",
+        "settlement"
+      ],
+      "note": "The Land Commission Awards of 1846–1855 are a map of where people still lived and farmed, and the 1853 census counts them by island. Seventy-five years of epidemics have emptied much of the land. No forest is baked for this keyframe: nothing maps it, so the app interpolates forest between contact and the end of the kingdom."
+    },
+    {
+      "id": "kingdom",
+      "year": 1896,
+      "yearPrecision": 4,
+      "label": "at the end of the kingdom, c. 1896–1900",
+      "layers": [
+        "cultivation",
+        "settlement",
+        "forest"
+      ],
+      "note": "Sugar across the plains and lower slopes, loʻi in rice or taro or abandoned, the leeward field systems long empty, cattle and fire pushing the forest line up; Honolulu a city. The 1896 census counts by district; the cane lands are those mapped for 1900."
+    },
+    {
+      "id": "now",
+      "year": 2020,
+      "yearPrecision": 10,
+      "label": "now, c. 2010–2020",
+      "layers": [
+        "cultivation",
+        "settlement",
+        "forest"
+      ],
+      "note": "For the coda. Mapped from land cover of about 2010, the 2020 agricultural baseline and the 2020 census."
+    }
+  ],
+  "eras": {
+    "voyaging": {
+      "year": 1200,
+      "cultivation": {
+        "keyframe": "contact",
+        "note": "before the leeward field systems: see the contact keyframe note"
+      },
+      "settlement": {
+        "keyframe": "contact",
+        "note": "before the leeward field systems: see the contact keyframe note"
+      },
+      "forest": {
+        "keyframe": "contact",
+        "note": "before the leeward field systems: see the contact keyframe note"
+      }
+    },
+    "mailikukahi": {
+      "year": 1480,
+      "cultivation": {
+        "keyframe": "contact"
+      },
+      "settlement": {
+        "keyframe": "contact"
+      },
+      "forest": {
+        "keyframe": "contact"
+      }
+    },
+    "umi": {
+      "year": 1560,
+      "cultivation": {
+        "keyframe": "contact"
+      },
+      "settlement": {
+        "keyframe": "contact"
+      },
+      "forest": {
+        "keyframe": "contact"
+      }
+    },
+    "alapai": {
+      "year": 1745,
+      "cultivation": {
+        "keyframe": "contact"
+      },
+      "settlement": {
+        "keyframe": "contact"
+      },
+      "forest": {
+        "keyframe": "contact"
+      }
+    },
+    "kalaniopuu": {
+      "year": 1772,
+      "cultivation": {
+        "keyframe": "contact"
+      },
+      "settlement": {
+        "keyframe": "contact"
+      },
+      "forest": {
+        "keyframe": "contact"
+      }
+    },
+    "kahekili": {
+      "year": 1788,
+      "cultivation": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.133
+      },
+      "settlement": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.133
+      },
+      "forest": {
+        "from": "contact",
+        "to": "kingdom",
+        "t": 0.085
+      }
+    },
+    "kamehameha": {
+      "year": 1807,
+      "cultivation": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.387
+      },
+      "settlement": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.387
+      },
+      "forest": {
+        "from": "contact",
+        "to": "kingdom",
+        "t": 0.246
+      }
+    },
+    "kaahumanu": {
+      "year": 1826,
+      "cultivation": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.64
+      },
+      "settlement": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.64
+      },
+      "forest": {
+        "from": "contact",
+        "to": "kingdom",
+        "t": 0.407
+      }
+    },
+    "kauikeaouli": {
+      "year": 1844,
+      "cultivation": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.88
+      },
+      "settlement": {
+        "from": "contact",
+        "to": "mahele",
+        "t": 0.88
+      },
+      "forest": {
+        "from": "contact",
+        "to": "kingdom",
+        "t": 0.559
+      }
+    },
+    "kamehameha-iv-v": {
+      "year": 1864,
+      "cultivation": {
+        "from": "mahele",
+        "to": "kingdom",
+        "t": 0.256
+      },
+      "settlement": {
+        "from": "mahele",
+        "to": "kingdom",
+        "t": 0.256
+      },
+      "forest": {
+        "from": "contact",
+        "to": "kingdom",
+        "t": 0.729
+      }
+    },
+    "kalakaua": {
+      "year": 1882,
+      "cultivation": {
+        "from": "mahele",
+        "to": "kingdom",
+        "t": 0.674
+      },
+      "settlement": {
+        "from": "mahele",
+        "to": "kingdom",
+        "t": 0.674
+      },
+      "forest": {
+        "from": "contact",
+        "to": "kingdom",
+        "t": 0.881
+      }
+    },
+    "liliuokalani": {
+      "year": 1895,
+      "cultivation": {
+        "from": "mahele",
+        "to": "kingdom",
+        "t": 0.977
+      },
+      "settlement": {
+        "from": "mahele",
+        "to": "kingdom",
+        "t": 0.977
+      },
+      "forest": {
+        "from": "contact",
+        "to": "kingdom",
+        "t": 0.992
+      }
+    },
+    "coda": {
+      "year": 2000,
+      "cultivation": {
+        "keyframe": "now"
+      },
+      "settlement": {
+        "keyframe": "now"
+      },
+      "forest": {
+        "keyframe": "now"
+      }
+    }
+  },
+  "methods": {
+    "contact": {
+      "cultivation": {
+        "method": "modelled",
+        "rule": "The largest of: the Traditional Agriculture zones: loʻi counted at 1, dryland at 0.75, agroforestry at 0.5 of the texel; valley-floor and coastal-plain loʻi read from the pack, counted at 1, because the published zones run on modern soils and stop where those are mapped as urban land or fill (Waikīkī and Honolulu fall outside them): ground on alluvium, lagoon deposits or fill (the geologic map's units, blurred 60 m, times 1.5), below 200–350 m, flatter than 0.06–0.15, no more than 8–25 m above the stream it drains to, where that stream gathers 3–20 million m³ of rain a year from a catchment averaging 1200–2000 mm (each range a smooth ramp; the flow is routed over the pack heights after filling pits); Land Commission Award parcels under 5 ha (kuleana size), as the share of each texel they cover, blurred with a 120 m Gaussian and multiplied by 1.5 (capped at 1) (the parcels claimed in 1848–1855 were lands long in use; how well each model finds them is in baked.calibration); fishpond shore: land within 250 m of the sea and below 6 m where the sea within about 350 m is mostly no deeper than 3 m (a reef flat or sheltered shallows; share 0.5–0.85 ramps 0–1), counted at 0.5: where a loko kuapā could be walled off, not a map of ponds (no statewide inventory exists). Niʻihau and Kahoʻolawe lie outside the agriculture model, so only the pond shore and the few awards there mark them.",
+        "sources": [
+          {
+            "id": "ksbe-traditional-agriculture",
+            "title": "Traditional Agriculture: modelled areas of high potential for loʻi, dryland and agroforestry (Kamehameha Schools)",
+            "url": "https://services1.arcgis.com/mWZnFht59JsTeUQW/arcgis/rest/services/Traditional_Agriculture/FeatureServer/21",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Natalie Kurashima, 2012. Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools Land Assets Division\"; methods in Kurashima and Kirch (2011), Geospatial modeling of pre-contact Hawaiian production systems on Moloka‘i Island, Journal of Archaeological Science 38:3662–3674",
+            "credit": "Natalie Kurashima, 2012 Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools -Land Assets Division.",
+            "note": "a published GIS model, not a survey: each zone is where soil, rain, substrate, slope, elevation and water would support the system, checked by its authors against archaeological and ethnohistoric data; it covers Hawaiʻi, Maui County, Oʻahu and Kauaʻi, not Niʻihau"
+          },
+          {
+            "id": "hawaii-gis-geologic-units",
+            "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): young lava and wet-ground sediments only",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+            "query": "(age_group >= 1 AND age_group <= 3) OR name IN ('Alluvium','Lagoon and reef deposits','Lagoon deposits','Lacustrine deposits','Fill')",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+            "note": "flows younger than about 1,500 years, with their age_range (calendar years for historic flows); and the alluvium, lagoon, lacustrine and fill units, the ground under valley-floor and coastal loʻi (much of the fill was laid over ponds and marsh in the 20th century)"
+          },
+          {
+            "id": "oha-kipuka-land-commission-awards",
+            "title": "Land Commission Awards, statewide (Office of Hawaiian Affairs, Kīpuka database), parcels under about 100 ha",
+            "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+            "query": "Shape__Area < 1000000",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Office of Hawaiian Affairs\"; used only as a smoothed density at hundreds of metres, no parcel is redistributed",
+            "note": "Māhele and kuleana awards of 1846–1855 with later grants; the large konohiki and aliʻi awards (whole ahupuaʻa) are left out by the area filter. Coverage differs by island: Hawaiʻi Island is thinly digitised"
+          }
+        ]
+      },
+      "settlement": {
+        "method": "modelled",
+        "rule": "A weight per texel, 0.5 × cultivation blurred at 400 m (people lived among their fields) + 0.35 × a coastal band exp(−distance to sea / 600 m), fading out between 60 and 150 m elevation, times 0.4–1.0 by rain (500–1500 mm) + 0.15 × the kuleana parcels + 0.03 × the rain factor everywhere (people lived thinly on all habitable land); times habitability (none on slopes steeper than about 35°, fading out between 800 and 1,600 m) and 0.3 on lava younger than 50–200 years. Each island’s weights are scaled so that the island holds King’s figure. Kahoʻolawe, which King leaves out, is back-cast from the 80 people the 1832 census counted there by the ratio of King’s 400,000 to the 1832 total of 130,313: 250 people.",
+        "populations": {
+          "hawaii": 150000,
+          "maui": 65400,
+          "oahu": 60200,
+          "kauai": 54000,
+          "molokai": 36000,
+          "lanai": 20400,
+          "niihau": 10000,
+          "kahoolawe": 250
+        },
+        "sources": [
+          {
+            "id": "king-1784-v3",
+            "title": "James King, A Voyage to the Pacific Ocean, vol. III (1784), Book V, pp. 126–128",
+            "url": "https://archive.org/details/bim_eighteenth-century_a-voyage-to-the-pacific-_cook-james_1784_3",
+            "licence": "public domain",
+            "note": "King’s 1779 estimate island by island, from houses counted around Kealakekua and applied to each coast: 400,000 in all. Estimates for 1778 run from about 200,000 to 1,000,000 (Swanson 2019, Exhibit 1, tabulates them; his own is 683,200), so King’s figures sit inside the range, and every density here scales with whichever total is preferred. King lists no figure for Kahoʻolawe; his 4,000 for \"Oreehoua\" (Lehua, a bare islet off Niʻihau) is left out."
+          },
+          {
+            "id": "thrum-1890-annual",
+            "title": "Thomas G. Thrum, Hawaiian Almanac and Annual for 1890, p. 11, Comparative Table of Population of the Hawaiian Islands",
+            "url": "https://archive.org/details/acp0143.1890.001.umich.edu",
+            "licence": "public domain",
+            "note": "the 1832 census by island (Kahoʻolawe 80, all islands 130,313), read on the page image"
+          },
+          {
+            "id": "holo-boundaries",
+            "title": "boundaries/moku.geojson and boundaries/ahupuaa.geojson (State GIS layers, as baked by tools/bake.mjs)",
+            "url": "boundaries/",
+            "note": "island and moku of every land texel, for scaling the counts"
+          }
+        ]
+      },
+      "forest": {
+        "method": "modelled",
+        "rule": "Closed native forest where the rain allows it (0 at 700 mm a year rising to full at 1,500 mm: the bake’s ramp, set so that Cuddihy and Stone’s line between dry and mesic forest, 1,250 mm as packages/ahupuaa/FOREST.md uses it, falls near its top, since dry forest was mostly open), below the tree line (full to 1,900 m, none by 2,700 m), back from the shore (30–250 m), and on lava old enough to have grown forest (wet ground in 60–300 years, dry ground in 400–2,000). Then cleared as FOREST.md §1 has it from Kirch: below 460 m mostly farmed or burned (0.12 kept, rising to 0.5 where the nearest field is 1.5–6 km away), essentially untouched above 760 m, a ramp between; and never on cultivated ground. Wherever native forest still stands today (CAH) on ground no lava has covered since 1778, it stood then too, so the layer is never less than that. Niʻihau has no rain grid and is taken as dry.",
+        "sources": [
+          {
+            "id": "usgs-cah-landcover-2017",
+            "title": "Carbon Assessment of Hawaii Land Cover Map (CAH_LandCover), 30 m GeoTIFF, NAD83 UTM zone 4",
+            "url": "https://www.sciencebase.gov/catalog/item/592dee56e4b092b266efeb6b",
+            "fetched": "2026-10-20",
+            "licence": "public domain (U.S. Geological Survey data release); cite Jacobi, J.D., Price, J.P., Fortini, L.B., Gon III, S.M., and Berkowitz, P., 2017, Carbon Assessment of Hawaii: U.S. Geological Survey data release, doi:10.5066/F7DB80B9",
+            "note": "land cover from imagery of about 2007–2012, built on the HI-GAP map with NOAA C-CAP (2005) land use and bare ground, Census roads, and corrections against very-high-resolution imagery; 48 classes; used here as a floor: native forest standing now stood in 1778"
+          },
+          {
+            "id": "hawaii-gis-geologic-units",
+            "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): young lava and wet-ground sediments only",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+            "query": "(age_group >= 1 AND age_group <= 3) OR name IN ('Alluvium','Lagoon and reef deposits','Lagoon deposits','Lacustrine deposits','Fill')",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+            "note": "flows younger than about 1,500 years, with their age_range (calendar years for historic flows); and the alluvium, lagoon, lacustrine and fill units, the ground under valley-floor and coastal loʻi (much of the fill was laid over ponds and marsh in the 20th century)"
+          },
+          {
+            "id": "ksbe-traditional-agriculture",
+            "title": "Traditional Agriculture: modelled areas of high potential for loʻi, dryland and agroforestry (Kamehameha Schools)",
+            "url": "https://services1.arcgis.com/mWZnFht59JsTeUQW/arcgis/rest/services/Traditional_Agriculture/FeatureServer/21",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Natalie Kurashima, 2012. Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools Land Assets Division\"; methods in Kurashima and Kirch (2011), Geospatial modeling of pre-contact Hawaiian production systems on Moloka‘i Island, Journal of Archaeological Science 38:3662–3674",
+            "credit": "Natalie Kurashima, 2012 Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools -Land Assets Division.",
+            "note": "a published GIS model, not a survey: each zone is where soil, rain, substrate, slope, elevation and water would support the system, checked by its authors against archaeological and ethnohistoric data; it covers Hawaiʻi, Maui County, Oʻahu and Kauaʻi, not Niʻihau"
+          },
+          {
+            "id": "oha-kipuka-land-commission-awards",
+            "title": "Land Commission Awards, statewide (Office of Hawaiian Affairs, Kīpuka database), parcels under about 100 ha",
+            "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+            "query": "Shape__Area < 1000000",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Office of Hawaiian Affairs\"; used only as a smoothed density at hundreds of metres, no parcel is redistributed",
+            "note": "Māhele and kuleana awards of 1846–1855 with later grants; the large konohiki and aliʻi awards (whole ahupuaʻa) are left out by the area filter. Coverage differs by island: Hawaiʻi Island is thinly digitised"
+          }
+        ]
+      }
+    },
+    "mahele": {
+      "cultivation": {
+        "method": "mixed",
+        "rule": "Mapped: Land Commission Award parcels under 5 ha (kuleana size), as the share of each texel they cover, blurred with a 120 m Gaussian and multiplied by 1.5 (capped at 1). Modelled: the contact loʻi kept at 0.35–0.9 (more where kuleana were claimed within about a kilometre), dryland zones at 0.25, agroforestry at 0.3, the fishpond shore at 0.87 of its contact weight (between the 488 ponds thought to have stood before contact and the 360 of the 1901 inventory, both as the 2025 fishpond bill HB309 gives them). The largest of these.",
+        "sources": [
+          {
+            "id": "oha-kipuka-land-commission-awards",
+            "title": "Land Commission Awards, statewide (Office of Hawaiian Affairs, Kīpuka database), parcels under about 100 ha",
+            "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+            "query": "Shape__Area < 1000000",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Office of Hawaiian Affairs\"; used only as a smoothed density at hundreds of metres, no parcel is redistributed",
+            "note": "Māhele and kuleana awards of 1846–1855 with later grants; the large konohiki and aliʻi awards (whole ahupuaʻa) are left out by the area filter. Coverage differs by island: Hawaiʻi Island is thinly digitised"
+          },
+          {
+            "id": "ksbe-traditional-agriculture",
+            "title": "Traditional Agriculture: modelled areas of high potential for loʻi, dryland and agroforestry (Kamehameha Schools)",
+            "url": "https://services1.arcgis.com/mWZnFht59JsTeUQW/arcgis/rest/services/Traditional_Agriculture/FeatureServer/21",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Natalie Kurashima, 2012. Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools Land Assets Division\"; methods in Kurashima and Kirch (2011), Geospatial modeling of pre-contact Hawaiian production systems on Moloka‘i Island, Journal of Archaeological Science 38:3662–3674",
+            "credit": "Natalie Kurashima, 2012 Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools -Land Assets Division.",
+            "note": "a published GIS model, not a survey: each zone is where soil, rain, substrate, slope, elevation and water would support the system, checked by its authors against archaeological and ethnohistoric data; it covers Hawaiʻi, Maui County, Oʻahu and Kauaʻi, not Niʻihau"
+          },
+          {
+            "id": "hawaii-gis-geologic-units",
+            "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): young lava and wet-ground sediments only",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+            "query": "(age_group >= 1 AND age_group <= 3) OR name IN ('Alluvium','Lagoon and reef deposits','Lagoon deposits','Lacustrine deposits','Fill')",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+            "note": "flows younger than about 1,500 years, with their age_range (calendar years for historic flows); and the alluvium, lagoon, lacustrine and fill units, the ground under valley-floor and coastal loʻi (much of the fill was laid over ponds and marsh in the 20th century)"
+          }
+        ]
+      },
+      "settlement": {
+        "method": "mixed",
+        "rule": "Mapped: the 1853 census by island. Modelled: within each island, 0.6 of the people spread in proportion to the kuleana parcels (where the 1848–1855 claimants lived and farmed) and 0.4 by the contact weights (where the awards are thinly digitised, as on Hawaiʻi Island, this carries the pattern). Kahoʻolawe has no 1853 entry and is left empty.",
+        "populations": {
+          "hawaii": 24450,
+          "maui": 17574,
+          "oahu": 19126,
+          "kauai": 6991,
+          "molokai": 3607,
+          "lanai": 600,
+          "niihau": 790,
+          "kahoolawe": 0
+        },
+        "sources": [
+          {
+            "id": "thrum-1890-annual",
+            "title": "Thomas G. Thrum, Hawaiian Almanac and Annual for 1890, p. 11, Comparative Table of Population of the Hawaiian Islands",
+            "url": "https://archive.org/details/acp0143.1890.001.umich.edu",
+            "licence": "public domain",
+            "note": "census of 1853 by island, read on the page image; the column sums to the printed total of 73,138. Kahoʻolawe has no entry for 1853."
+          },
+          {
+            "id": "oha-kipuka-land-commission-awards",
+            "title": "Land Commission Awards, statewide (Office of Hawaiian Affairs, Kīpuka database), parcels under about 100 ha",
+            "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+            "query": "Shape__Area < 1000000",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Office of Hawaiian Affairs\"; used only as a smoothed density at hundreds of metres, no parcel is redistributed",
+            "note": "Māhele and kuleana awards of 1846–1855 with later grants; the large konohiki and aliʻi awards (whole ahupuaʻa) are left out by the area filter. Coverage differs by island: Hawaiʻi Island is thinly digitised"
+          },
+          {
+            "id": "holo-boundaries",
+            "title": "boundaries/moku.geojson and boundaries/ahupuaa.geojson (State GIS layers, as baked by tools/bake.mjs)",
+            "url": "boundaries/",
+            "note": "island and moku of every land texel, for scaling the counts"
+          }
+        ]
+      }
+    },
+    "kingdom": {
+      "cultivation": {
+        "method": "mixed",
+        "rule": "Mapped: the 1900 sugar cane and pineapple lands, as the share of the texel. Modelled: the contact loʻi kept at 0.3–0.7 (more where kuleana were claimed nearby; this counts loʻi turned to rice as cultivated), the dryland zones at 0.1 (the leeward field systems were long abandoned), agroforestry at 0.15, the fishpond shore at 0.74 of its contact weight (360 of 488 ponds, HB309, 2025). The largest of these. Pasture is not cultivation and is left out; Kona coffee, which the 1896 census credits with Kona’s growth, has no map and is left out.",
+        "sources": [
+          {
+            "id": "hawaii-gis-sugarcane-1900",
+            "title": "State of Hawaiʻi GIS, Historical Sugarcane Lands 1900 (LandUseLandCover MapServer layer 23)",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/23",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Hawaii State Department of Health, Hazard Evaluation and Emergency Response Branch; Tetra Tech EM, Inc",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/sugarcane_historical.pdf",
+            "note": "lands in sugar cane in 1900, digitised in 2006 for the State Department of Health from the land utilization maps in the Territorial Planning Board’s Historic Inventory of the Physical, Social, Economic & Industrial Resources of the Territory of Hawaii (First Progress Report, 1939), on USGS 1:24,000 bases; the metadata says final QA/QC was not done"
+          },
+          {
+            "id": "hawaii-gis-pineapple-1900",
+            "title": "State of Hawaiʻi GIS, Historical Pineapple Lands 1900 (LandUseLandCover MapServer layer 20)",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/20",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Hawaii State Department of Health, Hazard Evaluation and Emergency Response Branch; Tetra Tech EM, Inc",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/pineapple_historical.pdf",
+            "note": "one polygon, from the same 1939 Territorial Planning Board maps as the cane lands"
+          },
+          {
+            "id": "ksbe-traditional-agriculture",
+            "title": "Traditional Agriculture: modelled areas of high potential for loʻi, dryland and agroforestry (Kamehameha Schools)",
+            "url": "https://services1.arcgis.com/mWZnFht59JsTeUQW/arcgis/rest/services/Traditional_Agriculture/FeatureServer/21",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Natalie Kurashima, 2012. Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools Land Assets Division\"; methods in Kurashima and Kirch (2011), Geospatial modeling of pre-contact Hawaiian production systems on Moloka‘i Island, Journal of Archaeological Science 38:3662–3674",
+            "credit": "Natalie Kurashima, 2012 Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools -Land Assets Division.",
+            "note": "a published GIS model, not a survey: each zone is where soil, rain, substrate, slope, elevation and water would support the system, checked by its authors against archaeological and ethnohistoric data; it covers Hawaiʻi, Maui County, Oʻahu and Kauaʻi, not Niʻihau"
+          },
+          {
+            "id": "hawaii-gis-geologic-units",
+            "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): young lava and wet-ground sediments only",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+            "query": "(age_group >= 1 AND age_group <= 3) OR name IN ('Alluvium','Lagoon and reef deposits','Lagoon deposits','Lacustrine deposits','Fill')",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+            "note": "flows younger than about 1,500 years, with their age_range (calendar years for historic flows); and the alluvium, lagoon, lacustrine and fill units, the ground under valley-floor and coastal loʻi (much of the fill was laid over ponds and marsh in the 20th century)"
+          },
+          {
+            "id": "oha-kipuka-land-commission-awards",
+            "title": "Land Commission Awards, statewide (Office of Hawaiian Affairs, Kīpuka database), parcels under about 100 ha",
+            "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+            "query": "Shape__Area < 1000000",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Office of Hawaiian Affairs\"; used only as a smoothed density at hundreds of metres, no parcel is redistributed",
+            "note": "Māhele and kuleana awards of 1846–1855 with later grants; the large konohiki and aliʻi awards (whole ahupuaʻa) are left out by the area filter. Coverage differs by island: Hawaiʻi Island is thinly digitised"
+          }
+        ]
+      },
+      "settlement": {
+        "method": "mixed",
+        "rule": "Mapped: the 1896 census by district, joined to moku (exactly on Oʻahu and Hawaiʻi Island, approximately on Maui and Kauaʻi). Modelled: within each district, the towns take a share into a soft disc (Honolulu 0.6 of its district, Hilo 0.3, Lahaina 0.4, Wailuku 0.2 and Kahului 0.1, Līhuʻe 0.15, Waimea 0.15, Kailua 0.1: the bake’s assumption) and Kalaupapa 1,100 people (NPS: \"over 1,100\" at Kalawao in 1888–1902); the rest spreads 0.4 by nearness to the 1900 cane (plantation camps and mills, within about a kilometre), 0.35 by the kuleana parcels and 0.25 by the contact weights, renormalised where a district has no cane.",
+        "districts": [
+          {
+            "name": "Honolulu",
+            "pop": 29920,
+            "moku": [
+              "oahu:Kona"
+            ]
+          },
+          {
+            "name": "Ewa",
+            "pop": 3067,
+            "moku": [
+              "oahu:ʻEwa"
+            ]
+          },
+          {
+            "name": "Waianae",
+            "pop": 1281,
+            "moku": [
+              "oahu:Waiʻanae"
+            ]
+          },
+          {
+            "name": "Waialua",
+            "pop": 1349,
+            "moku": [
+              "oahu:Waialua"
+            ]
+          },
+          {
+            "name": "Koolauloa",
+            "pop": 1835,
+            "moku": [
+              "oahu:Koʻolauloa"
+            ]
+          },
+          {
+            "name": "Koolaupoko",
+            "pop": 2753,
+            "moku": [
+              "oahu:Koʻolaupoko"
+            ]
+          },
+          {
+            "name": "Hilo",
+            "pop": 12878,
+            "moku": [
+              "hawaii:Hilo"
+            ]
+          },
+          {
+            "name": "Puna",
+            "pop": 1748,
+            "moku": [
+              "hawaii:Puna"
+            ]
+          },
+          {
+            "name": "Kau",
+            "pop": 2908,
+            "moku": [
+              "hawaii:Kaʻū"
+            ]
+          },
+          {
+            "name": "North and South Kona",
+            "pop": 5388,
+            "moku": [
+              "hawaii:Kona"
+            ]
+          },
+          {
+            "name": "North and South Kohala",
+            "pop": 4683,
+            "moku": [
+              "hawaii:Kohala"
+            ]
+          },
+          {
+            "name": "Hamakua",
+            "pop": 5680,
+            "moku": [
+              "hawaii:Hāmākua"
+            ]
+          },
+          {
+            "name": "Molokai",
+            "pop": 2307,
+            "moku": [
+              "molokai:Kona",
+              "molokai:Koʻolau"
+            ]
+          },
+          {
+            "name": "Lanai",
+            "pop": 105,
+            "moku": [
+              "lanai:Lāhainā"
+            ]
+          },
+          {
+            "name": "Lahaina",
+            "pop": 2398,
+            "moku": [
+              "maui:Lāhainā",
+              "maui:Kāʻanapali"
+            ]
+          },
+          {
+            "name": "Wailuku",
+            "pop": 6072,
+            "moku": [
+              "maui:Pūʻali Komohana"
+            ]
+          },
+          {
+            "name": "Makawao",
+            "pop": 5464,
+            "moku": [
+              "maui:Hāmākuapoko",
+              "maui:Hāmākualoa",
+              "maui:Kula",
+              "maui:Honuaʻula"
+            ]
+          },
+          {
+            "name": "Hana",
+            "pop": 3792,
+            "moku": [
+              "maui:Koʻolau",
+              "maui:Hāna",
+              "maui:Kīpahulu",
+              "maui:Kaupō",
+              "maui:Kahikinui"
+            ]
+          },
+          {
+            "name": "Niihau",
+            "pop": 164,
+            "moku": [
+              "niihau:Kona"
+            ]
+          },
+          {
+            "name": "Waimea and Koloa",
+            "pop": 6266,
+            "moku": [
+              "kauai:Kona"
+            ]
+          },
+          {
+            "name": "Lihue and Kawaihau",
+            "pop": 6187,
+            "moku": [
+              "kauai:Puna",
+              "kauai:Koʻolau"
+            ]
+          },
+          {
+            "name": "Hanalei",
+            "pop": 2775,
+            "moku": [
+              "kauai:Haleleʻa",
+              "kauai:Nāpali"
+            ]
+          }
+        ],
+        "towns": [
+          {
+            "name": "Honolulu",
+            "lon": -157.85835,
+            "lat": 21.30695,
+            "sigma": 1800,
+            "district": "Honolulu",
+            "share": 0.6
+          },
+          {
+            "name": "Hilo",
+            "lon": -155.08684,
+            "lat": 19.72248,
+            "sigma": 1000,
+            "district": "Hilo",
+            "share": 0.3
+          },
+          {
+            "name": "Wailuku",
+            "lon": -156.50107,
+            "lat": 20.88961,
+            "sigma": 900,
+            "district": "Wailuku",
+            "share": 0.2
+          },
+          {
+            "name": "Kahului",
+            "lon": -156.47361,
+            "lat": 20.88203,
+            "sigma": 700,
+            "district": "Wailuku",
+            "share": 0.1
+          },
+          {
+            "name": "Lahaina",
+            "lon": -156.67664,
+            "lat": 20.87429,
+            "sigma": 700,
+            "district": "Lahaina",
+            "share": 0.4
+          },
+          {
+            "name": "Līhuʻe",
+            "lon": -159.36492,
+            "lat": 21.97409,
+            "sigma": 800,
+            "district": "Lihue and Kawaihau",
+            "share": 0.15
+          },
+          {
+            "name": "Waimea",
+            "lon": -159.66894,
+            "lat": 21.95707,
+            "sigma": 700,
+            "district": "Waimea and Koloa",
+            "share": 0.15
+          },
+          {
+            "name": "Kailua",
+            "lon": -155.99025,
+            "lat": 19.63928,
+            "sigma": 600,
+            "district": "North and South Kona",
+            "share": 0.1
+          },
+          {
+            "name": "Kalaupapa",
+            "lon": -156.98178,
+            "lat": 21.18947,
+            "sigma": 900,
+            "district": "Molokai",
+            "people": 1100,
+            "source": "nps-kalaupapa"
+          }
+        ],
+        "sources": [
+          {
+            "id": "census-1896",
+            "title": "Report of the General Superintendent of the Census, 1896 (A. T. Atkinson), Table II, Comparative Summary of Population by Island and District",
+            "url": "https://archive.org/details/reportgeneralsu00atkigoog",
+            "licence": "public domain",
+            "note": "the 1896 count by island and district (109,020 in all), read on the page image; totals include every nationality"
+          },
+          {
+            "id": "nps-kalaupapa",
+            "title": "National Park Service, A Brief History of Kalaupapa",
+            "url": "https://www.nps.gov/kala/learn/historyculture/a-brief-history-of-kalaupapa.htm",
+            "licence": "public domain (U.S. National Park Service)",
+            "note": "\"During the years 1888 to 1902 … the population at Kalawao swelled to over 1,100 people\""
+          },
+          {
+            "id": "hawaii-gis-sugarcane-1900",
+            "title": "State of Hawaiʻi GIS, Historical Sugarcane Lands 1900 (LandUseLandCover MapServer layer 23)",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/23",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Hawaii State Department of Health, Hazard Evaluation and Emergency Response Branch; Tetra Tech EM, Inc",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/sugarcane_historical.pdf",
+            "note": "lands in sugar cane in 1900, digitised in 2006 for the State Department of Health from the land utilization maps in the Territorial Planning Board’s Historic Inventory of the Physical, Social, Economic & Industrial Resources of the Territory of Hawaii (First Progress Report, 1939), on USGS 1:24,000 bases; the metadata says final QA/QC was not done"
+          },
+          {
+            "id": "oha-kipuka-land-commission-awards",
+            "title": "Land Commission Awards, statewide (Office of Hawaiian Affairs, Kīpuka database), parcels under about 100 ha",
+            "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+            "query": "Shape__Area < 1000000",
+            "fetched": "2026-10-20",
+            "licence": "no licence stated on the ArcGIS Online item; credit \"Office of Hawaiian Affairs\"; used only as a smoothed density at hundreds of metres, no parcel is redistributed",
+            "note": "Māhele and kuleana awards of 1846–1855 with later grants; the large konohiki and aliʻi awards (whole ahupuaʻa) are left out by the area filter. Coverage differs by island: Hawaiʻi Island is thinly digitised"
+          },
+          {
+            "id": "holo-boundaries",
+            "title": "boundaries/moku.geojson and boundaries/ahupuaa.geojson (State GIS layers, as baked by tools/bake.mjs)",
+            "url": "boundaries/",
+            "note": "island and moku of every land texel, for scaling the counts"
+          }
+        ]
+      },
+      "forest": {
+        "method": "mixed",
+        "rule": "Between two bounds. Upper: the contact forest less the 1900 cane and pineapple lands and less lava erupted from 1778 to 1896. Lower: the native forest standing now (CAH), which cannot have been absent in 1896. Inside the forest reserves (proclaimed from 1904 on around the forest still standing) the layer takes 0.85 of the way from lower to upper; outside them 0.4, for the cattle, fire and clearing of the century. The reserve boundaries are today’s, fitted to modern tax maps.",
+        "sources": [
+          {
+            "id": "hawaii-gis-sugarcane-1900",
+            "title": "State of Hawaiʻi GIS, Historical Sugarcane Lands 1900 (LandUseLandCover MapServer layer 23)",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/23",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Hawaii State Department of Health, Hazard Evaluation and Emergency Response Branch; Tetra Tech EM, Inc",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/sugarcane_historical.pdf",
+            "note": "lands in sugar cane in 1900, digitised in 2006 for the State Department of Health from the land utilization maps in the Territorial Planning Board’s Historic Inventory of the Physical, Social, Economic & Industrial Resources of the Territory of Hawaii (First Progress Report, 1939), on USGS 1:24,000 bases; the metadata says final QA/QC was not done"
+          },
+          {
+            "id": "hawaii-gis-pineapple-1900",
+            "title": "State of Hawaiʻi GIS, Historical Pineapple Lands 1900 (LandUseLandCover MapServer layer 20)",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/20",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Hawaii State Department of Health, Hazard Evaluation and Emergency Response Branch; Tetra Tech EM, Inc",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/pineapple_historical.pdf",
+            "note": "one polygon, from the same 1939 Territorial Planning Board maps as the cane lands"
+          },
+          {
+            "id": "hawaii-gis-reserves",
+            "title": "State of Hawaiʻi GIS, Reserves (Terrestrial MapServer layer 1), forest reserve units only",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/1",
+            "query": "type LIKE 'fr%'",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Compiled in 2002 by SOH, DLNR, DOFAW from various sources including the data provided by U.S. Fish and Wildllife Refuges, U.S. National Park Service, Division of State Parks, County parcel boundaries and The Nature Conservancy with input from State foresters and others familiar with the reserve boundaries. The boundaries in this layer are not final; they are updated frequently. This dataset was compiled from various data sources and is updated frequently. No warranty is made that the GIS data or any subsequent update will be error free, and no waranty is made regarding the positional or thematic accuracy of the GIS data. The features are graphic representation of managed areas for planning purposes and do not represent or confer any legal rights, privileges, benefits, boundaries, or claims of any kind. DOFAW encourages GIS data users to verify the suitability of the data before use. Please report any discrepancies or errors to the point of contact.",
+            "note": "boundaries as of March 2026, fitted to the county tax maps; the layer carries no proclamation dates, and the forest reserve system it descends from was proclaimed from 1904 on"
+          },
+          {
+            "id": "hawaii-gis-geologic-units",
+            "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): young lava and wet-ground sediments only",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+            "query": "(age_group >= 1 AND age_group <= 3) OR name IN ('Alluvium','Lagoon and reef deposits','Lagoon deposits','Lacustrine deposits','Fill')",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+            "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+            "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+            "note": "flows younger than about 1,500 years, with their age_range (calendar years for historic flows); and the alluvium, lagoon, lacustrine and fill units, the ground under valley-floor and coastal loʻi (much of the fill was laid over ponds and marsh in the 20th century)"
+          },
+          {
+            "id": "usgs-cah-landcover-2017",
+            "title": "Carbon Assessment of Hawaii Land Cover Map (CAH_LandCover), 30 m GeoTIFF, NAD83 UTM zone 4",
+            "url": "https://www.sciencebase.gov/catalog/item/592dee56e4b092b266efeb6b",
+            "fetched": "2026-10-20",
+            "licence": "public domain (U.S. Geological Survey data release); cite Jacobi, J.D., Price, J.P., Fortini, L.B., Gon III, S.M., and Berkowitz, P., 2017, Carbon Assessment of Hawaii: U.S. Geological Survey data release, doi:10.5066/F7DB80B9",
+            "note": "land cover from imagery of about 2007–2012, built on the HI-GAP map with NOAA C-CAP (2005) land use and bare ground, Census roads, and corrections against very-high-resolution imagery; 48 classes"
+          }
+        ]
+      }
+    },
+    "now": {
+      "cultivation": {
+        "method": "mapped",
+        "rule": "The 2020 agricultural land use baseline, as the share of the texel in crops: every category except Pasture, Commercial Forestry, Dairy. Taro and aquaculture count.",
+        "sources": [
+          {
+            "id": "hawaii-gis-agriculture-2020",
+            "title": "State of Hawaiʻi GIS, 2020 Agricultural Land Use (Statewide Agricultural Land Use Baseline update), LandUseLandCover MapServer layer 19",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/19",
+            "fetched": "2026-10-20",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy; cite Perroy, R. and Collier, E. (2021), 2020 Update to the Hawaiʻi Statewide Agricultural Land Use Baseline, Hawaiʻi State Department of Agriculture",
+            "credit": "Please acknowledge Perroy, R., & Collier, E. (2021). 2020 Update to the Hawaiʻi Statewide Agricultural Land Use Baseline. Hawaii State Department of Agriculture, as a source when this data is used in the preparation of reports, papers, publications, maps, and other products.",
+            "note": "commercial agriculture digitised from 2018–2020 WorldView imagery; field crops_2020"
+          }
+        ]
+      },
+      "settlement": {
+        "method": "mapped",
+        "rule": "The 2020 census count of each block group, spread over its developed land by the CAH classes (high intensity 1, medium 0.6, low 0.3, open space 0.05; a block group with no developed land spreads evenly).",
+        "sources": [
+          {
+            "id": "census-2020-block-groups",
+            "title": "U.S. Census Bureau TIGERweb, Census 2020 block groups for Hawaiʻi with POP100",
+            "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/8",
+            "query": "STATE='15'",
+            "fetched": "2026-10-20",
+            "licence": "public domain (U.S. Census Bureau)",
+            "credit": "Source: U.S. Census Bureau",
+            "note": "2020 census resident population (POP100) per block group"
+          },
+          {
+            "id": "usgs-cah-landcover-2017",
+            "title": "Carbon Assessment of Hawaii Land Cover Map (CAH_LandCover), 30 m GeoTIFF, NAD83 UTM zone 4",
+            "url": "https://www.sciencebase.gov/catalog/item/592dee56e4b092b266efeb6b",
+            "fetched": "2026-10-20",
+            "licence": "public domain (U.S. Geological Survey data release); cite Jacobi, J.D., Price, J.P., Fortini, L.B., Gon III, S.M., and Berkowitz, P., 2017, Carbon Assessment of Hawaii: U.S. Geological Survey data release, doi:10.5066/F7DB80B9",
+            "note": "land cover from imagery of about 2007–2012, built on the HI-GAP map with NOAA C-CAP (2005) land use and bare ground, Census roads, and corrections against very-high-resolution imagery; 48 classes"
+          }
+        ]
+      },
+      "forest": {
+        "method": "mapped",
+        "rule": "Native forest in the CAH land cover, as canopy share: closed native forest 1, low-stature wet ʻōhiʻa 0.8, open native forest 0.6, mixed native–alien forest 0.5, native woodland and mesic–dry forest–shrubland 0.4. Alien forest and plantations count 0.",
+        "classes": {
+          "1": 1,
+          "2": 1,
+          "3": 0.8,
+          "4": 0.6,
+          "5": 0.6,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 0.6,
+          "10": 0.6,
+          "11": 1,
+          "12": 0.4,
+          "13": 0.6,
+          "14": 0.6,
+          "15": 0.4,
+          "16": 0.5,
+          "17": 0.5,
+          "18": 0.5
+        },
+        "sources": [
+          {
+            "id": "usgs-cah-landcover-2017",
+            "title": "Carbon Assessment of Hawaii Land Cover Map (CAH_LandCover), 30 m GeoTIFF, NAD83 UTM zone 4",
+            "url": "https://www.sciencebase.gov/catalog/item/592dee56e4b092b266efeb6b",
+            "fetched": "2026-10-20",
+            "licence": "public domain (U.S. Geological Survey data release); cite Jacobi, J.D., Price, J.P., Fortini, L.B., Gon III, S.M., and Berkowitz, P., 2017, Carbon Assessment of Hawaii: U.S. Geological Survey data release, doi:10.5066/F7DB80B9",
+            "note": "land cover from imagery of about 2007–2012, built on the HI-GAP map with NOAA C-CAP (2005) land use and bare ground, Census roads, and corrections against very-high-resolution imagery; 48 classes"
+          }
+        ]
+      }
+    }
+  },
+  "islands": {
+    "hawaii": {
+      "pack": "hawaii",
+      "size": [
+        896,
+        1024
+      ],
+      "bounds": [
+        -156.0808839,
+        18.892604,
+        -154.7874248,
+        20.286571
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "hawaii/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0343,
+              "overHalf": 0.0405,
+              "areaKm2": 355.2
+            }
+          },
+          "settlement": {
+            "file": "hawaii/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.1244,
+              "people": 150203,
+              "peakPerKm2": 252,
+              "over10PerKm2": 0.3693
+            }
+          },
+          "forest": {
+            "file": "hawaii/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.3722,
+              "overHalf": 0.3873,
+              "areaKm2": 3857.2
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "hawaii/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0137,
+              "overHalf": 0.0009,
+              "areaKm2": 141.7
+            }
+          },
+          "settlement": {
+            "file": "hawaii/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0325,
+              "people": 24418,
+              "peakPerKm2": 407,
+              "over10PerKm2": 0.0397
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "hawaii/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0568,
+              "overHalf": 0.0531,
+              "areaKm2": 588.3
+            }
+          },
+          "settlement": {
+            "file": "hawaii/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.036,
+              "people": 33264,
+              "peakPerKm2": 1293,
+              "over10PerKm2": 0.069
+            }
+          },
+          "forest": {
+            "file": "hawaii/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.2595,
+              "overHalf": 0.2257,
+              "areaKm2": 2689.7
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "hawaii/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0157,
+              "overHalf": 0.0156,
+              "areaKm2": 163.1
+            }
+          },
+          "settlement": {
+            "file": "hawaii/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0376,
+              "people": 200639,
+              "peakPerKm2": 5408,
+              "over10PerKm2": 0.0965
+            }
+          },
+          "forest": {
+            "file": "hawaii/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.1921,
+              "overHalf": 0.2026,
+              "areaKm2": 1990.8
+            }
+          }
+        }
+      }
+    },
+    "maui": {
+      "pack": "maui",
+      "size": [
+        1024,
+        708
+      ],
+      "bounds": [
+        -156.7164101,
+        20.5562628,
+        -155.9598279,
+        21.049547
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "maui/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0729,
+              "overHalf": 0.0784,
+              "areaKm2": 140.9
+            }
+          },
+          "settlement": {
+            "file": "maui/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.1939,
+              "people": 65563,
+              "peakPerKm2": 361,
+              "over10PerKm2": 0.5377
+            }
+          },
+          "forest": {
+            "file": "maui/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.2937,
+              "overHalf": 0.2727,
+              "areaKm2": 567.3
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "maui/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0422,
+              "overHalf": 0.0176,
+              "areaKm2": 81.4
+            }
+          },
+          "settlement": {
+            "file": "maui/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.082,
+              "people": 17562,
+              "peakPerKm2": 347,
+              "over10PerKm2": 0.1526
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "maui/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.1432,
+              "overHalf": 0.1376,
+              "areaKm2": 276.7
+            }
+          },
+          "settlement": {
+            "file": "maui/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0881,
+              "people": 17671,
+              "peakPerKm2": 539,
+              "over10PerKm2": 0.2234
+            }
+          },
+          "forest": {
+            "file": "maui/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.2141,
+              "overHalf": 0.1946,
+              "areaKm2": 413.5
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "maui/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0161,
+              "overHalf": 0.0162,
+              "areaKm2": 31
+            }
+          },
+          "settlement": {
+            "file": "maui/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0701,
+              "people": 154136,
+              "peakPerKm2": 14597,
+              "over10PerKm2": 0.1578
+            }
+          },
+          "forest": {
+            "file": "maui/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.1361,
+              "overHalf": 0.1546,
+              "areaKm2": 263
+            }
+          }
+        }
+      }
+    },
+    "kahoolawe": {
+      "pack": "kahoolawe",
+      "size": [
+        1024,
+        730
+      ],
+      "bounds": [
+        -156.7198501,
+        20.4827242,
+        -156.5125214,
+        20.6221009
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "kahoolawe/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0025,
+              "overHalf": 0.0003,
+              "areaKm2": 0.3
+            }
+          },
+          "settlement": {
+            "file": "kahoolawe/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.059,
+              "people": 250,
+              "peakPerKm2": 11,
+              "over10PerKm2": 0.0209
+            }
+          },
+          "forest": {
+            "file": "kahoolawe/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "kahoolawe/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0022,
+              "overHalf": 0,
+              "areaKm2": 0.3
+            }
+          },
+          "settlement": {
+            "file": "kahoolawe/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0,
+              "people": 0,
+              "peakPerKm2": 0,
+              "over10PerKm2": 0
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "kahoolawe/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0018,
+              "overHalf": 0,
+              "areaKm2": 0.2
+            }
+          },
+          "settlement": {
+            "file": "kahoolawe/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.024,
+              "people": 74,
+              "peakPerKm2": 3,
+              "over10PerKm2": 0
+            }
+          },
+          "forest": {
+            "file": "kahoolawe/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "kahoolawe/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          },
+          "settlement": {
+            "file": "kahoolawe/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0,
+              "people": 0,
+              "peakPerKm2": 0,
+              "over10PerKm2": 0
+            }
+          },
+          "forest": {
+            "file": "kahoolawe/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          }
+        }
+      }
+    },
+    "lanai": {
+      "pack": "lanai",
+      "size": [
+        1024,
+        860
+      ],
+      "bounds": [
+        -157.0814354,
+        20.713664,
+        -156.7861411,
+        20.9475269
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "lanai/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0118,
+              "overHalf": 0.0132,
+              "areaKm2": 4.3
+            }
+          },
+          "settlement": {
+            "file": "lanai/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.2809,
+              "people": 20374,
+              "peakPerKm2": 712,
+              "over10PerKm2": 0.9418
+            }
+          },
+          "forest": {
+            "file": "lanai/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0286,
+              "overHalf": 0.0315,
+              "areaKm2": 10.5
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "lanai/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0096,
+              "overHalf": 0.0003,
+              "areaKm2": 3.5
+            }
+          },
+          "settlement": {
+            "file": "lanai/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0307,
+              "people": 597,
+              "peakPerKm2": 156,
+              "over10PerKm2": 0.0274
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "lanai/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0043,
+              "overHalf": 0,
+              "areaKm2": 1.6
+            }
+          },
+          "settlement": {
+            "file": "lanai/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0097,
+              "people": 111,
+              "peakPerKm2": 27,
+              "over10PerKm2": 0.0048
+            }
+          },
+          "forest": {
+            "file": "lanai/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0282,
+              "overHalf": 0.0315,
+              "areaKm2": 10.3
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "lanai/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0012,
+              "overHalf": 0.0012,
+              "areaKm2": 0.4
+            }
+          },
+          "settlement": {
+            "file": "lanai/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0231,
+              "people": 3398,
+              "peakPerKm2": 5197,
+              "over10PerKm2": 0.0604
+            }
+          },
+          "forest": {
+            "file": "lanai/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0289,
+              "overHalf": 0.0343,
+              "areaKm2": 10.6
+            }
+          }
+        }
+      }
+    },
+    "molokai": {
+      "pack": "molokai",
+      "size": [
+        1024,
+        365
+      ],
+      "bounds": [
+        -157.330056,
+        21.0276437,
+        -156.6906621,
+        21.24256
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "molokai/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0475,
+              "overHalf": 0.0514,
+              "areaKm2": 32.5
+            }
+          },
+          "settlement": {
+            "file": "molokai/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.2457,
+              "people": 36000,
+              "peakPerKm2": 632,
+              "over10PerKm2": 0.8762
+            }
+          },
+          "forest": {
+            "file": "molokai/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.2352,
+              "overHalf": 0.2248,
+              "areaKm2": 160.6
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "molokai/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0316,
+              "overHalf": 0.0149,
+              "areaKm2": 21.6
+            }
+          },
+          "settlement": {
+            "file": "molokai/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0599,
+              "people": 3608,
+              "peakPerKm2": 321,
+              "over10PerKm2": 0.076
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "molokai/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0141,
+              "overHalf": 0.0031,
+              "areaKm2": 9.7
+            }
+          },
+          "settlement": {
+            "file": "molokai/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0361,
+              "people": 2305,
+              "peakPerKm2": 334,
+              "over10PerKm2": 0.0543
+            }
+          },
+          "forest": {
+            "file": "molokai/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.1862,
+              "overHalf": 0.1677,
+              "areaKm2": 127.2
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "molokai/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.023,
+              "overHalf": 0.0232,
+              "areaKm2": 15.7
+            }
+          },
+          "settlement": {
+            "file": "molokai/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0316,
+              "people": 7372,
+              "peakPerKm2": 3782,
+              "over10PerKm2": 0.0868
+            }
+          },
+          "forest": {
+            "file": "molokai/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.1447,
+              "overHalf": 0.1472,
+              "areaKm2": 98.8
+            }
+          }
+        }
+      }
+    },
+    "oahu": {
+      "pack": "oahu",
+      "size": [
+        1024,
+        801
+      ],
+      "bounds": [
+        -158.3000505,
+        21.2364436,
+        -157.6294454,
+        21.7311041
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "oahu/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.1394,
+              "overHalf": 0.1903,
+              "areaKm2": 218.3
+            }
+          },
+          "settlement": {
+            "file": "oahu/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.2385,
+              "people": 60218,
+              "peakPerKm2": 273,
+              "over10PerKm2": 0.7196
+            }
+          },
+          "forest": {
+            "file": "oahu/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.1503,
+              "overHalf": 0.1072,
+              "areaKm2": 235.4
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "oahu/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0806,
+              "overHalf": 0.0193,
+              "areaKm2": 126.2
+            }
+          },
+          "settlement": {
+            "file": "oahu/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.1068,
+              "people": 19122,
+              "peakPerKm2": 607,
+              "over10PerKm2": 0.1946
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "oahu/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.1718,
+              "overHalf": 0.1395,
+              "areaKm2": 269.1
+            }
+          },
+          "settlement": {
+            "file": "oahu/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.1206,
+              "people": 40210,
+              "peakPerKm2": 6092,
+              "over10PerKm2": 0.2346
+            }
+          },
+          "forest": {
+            "file": "oahu/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.1159,
+              "overHalf": 0.0952,
+              "areaKm2": 181.5
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "oahu/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.06,
+              "overHalf": 0.061,
+              "areaKm2": 94
+            }
+          },
+          "settlement": {
+            "file": "oahu/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.1824,
+              "people": 1015858,
+              "peakPerKm2": 50000,
+              "over10PerKm2": 0.3125
+            }
+          },
+          "forest": {
+            "file": "oahu/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0829,
+              "overHalf": 0.084,
+              "areaKm2": 129.8
+            }
+          }
+        }
+      }
+    },
+    "kauai": {
+      "pack": "kauai",
+      "size": [
+        1024,
+        815
+      ],
+      "bounds": [
+        -159.8072936,
+        21.850076,
+        -159.2732356,
+        22.2509001
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "kauai/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0636,
+              "overHalf": 0.0745,
+              "areaKm2": 92.6
+            }
+          },
+          "settlement": {
+            "file": "kauai/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.2249,
+              "people": 54018,
+              "peakPerKm2": 407,
+              "over10PerKm2": 0.6998
+            }
+          },
+          "forest": {
+            "file": "kauai/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.3062,
+              "overHalf": 0.2695,
+              "areaKm2": 445.5
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "kauai/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0386,
+              "overHalf": 0.0133,
+              "areaKm2": 56.2
+            }
+          },
+          "settlement": {
+            "file": "kauai/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0619,
+              "people": 6988,
+              "peakPerKm2": 284,
+              "over10PerKm2": 0.0653
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "kauai/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.1407,
+              "overHalf": 0.1272,
+              "areaKm2": 204.7
+            }
+          },
+          "settlement": {
+            "file": "kauai/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.101,
+              "people": 15229,
+              "peakPerKm2": 497,
+              "over10PerKm2": 0.2369
+            }
+          },
+          "forest": {
+            "file": "kauai/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.2289,
+              "overHalf": 0.2185,
+              "areaKm2": 333
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "kauai/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0587,
+              "overHalf": 0.0587,
+              "areaKm2": 85.4
+            }
+          },
+          "settlement": {
+            "file": "kauai/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0536,
+              "people": 73165,
+              "peakPerKm2": 10210,
+              "over10PerKm2": 0.1187
+            }
+          },
+          "forest": {
+            "file": "kauai/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.1443,
+              "overHalf": 0.1617,
+              "areaKm2": 210
+            }
+          }
+        }
+      }
+    },
+    "niihau": {
+      "pack": "niihau",
+      "size": [
+        797,
+        1024
+      ],
+      "bounds": [
+        -160.2663097,
+        21.7608545,
+        -160.0301183,
+        22.0470175
+      ],
+      "layers": {
+        "contact": {
+          "cultivation": {
+            "file": "niihau/contact-cultivation.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.0037,
+              "overHalf": 0.0019,
+              "areaKm2": 0.7
+            }
+          },
+          "settlement": {
+            "file": "niihau/contact-settlement.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0.2869,
+              "people": 10009,
+              "peakPerKm2": 262,
+              "over10PerKm2": 0.9669
+            }
+          },
+          "forest": {
+            "file": "niihau/contact-forest.png",
+            "method": "modelled",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          }
+        },
+        "mahele": {
+          "cultivation": {
+            "file": "niihau/mahele-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0032,
+              "overHalf": 0,
+              "areaKm2": 0.6
+            }
+          },
+          "settlement": {
+            "file": "niihau/mahele-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0938,
+              "people": 793,
+              "peakPerKm2": 21,
+              "over10PerKm2": 0.1206
+            }
+          }
+        },
+        "kingdom": {
+          "cultivation": {
+            "file": "niihau/kingdom-cultivation.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0027,
+              "overHalf": 0,
+              "areaKm2": 0.5
+            }
+          },
+          "settlement": {
+            "file": "niihau/kingdom-settlement.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0.0314,
+              "people": 163,
+              "peakPerKm2": 4,
+              "over10PerKm2": 0
+            }
+          },
+          "forest": {
+            "file": "niihau/kingdom-forest.png",
+            "method": "mixed",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          }
+        },
+        "now": {
+          "cultivation": {
+            "file": "niihau/now-cultivation.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          },
+          "settlement": {
+            "file": "niihau/now-settlement.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0.0028,
+              "people": 84,
+              "peakPerKm2": 138,
+              "over10PerKm2": 0.0085
+            }
+          },
+          "forest": {
+            "file": "niihau/now-forest.png",
+            "method": "mapped",
+            "stats": {
+              "landFraction": 0,
+              "overHalf": 0,
+              "areaKm2": 0
+            }
+          }
+        }
+      },
+      "note": "no rain image; every land texel is taken as 500 mm a year (dry), so no closed forest is modelled"
+    }
+  },
+  "stats": {
+    "files": 88,
+    "bytes": 5011149
+  },
+  "baked": {
+    "tool": "tools/bake-layers.mjs",
+    "packManifest": "manifest.json",
+    "kuleanaParcels": 13977,
+    "calibration": {
+      "hawaii": {
+        "kuleanaKm2": 28.42,
+        "kuleanaInPublishedZones": 0.341,
+        "kuleanaInValleyRule": 0.023,
+        "kuleanaInEither": 0.341,
+        "publishedZonesKm2": 438.5,
+        "publishedLoiKm2": 5.5,
+        "valleyRuleLoiKm2": 3.9
+      },
+      "maui": {
+        "kuleanaKm2": 33.01,
+        "kuleanaInPublishedZones": 0.218,
+        "kuleanaInValleyRule": 0.035,
+        "kuleanaInEither": 0.223,
+        "publishedZonesKm2": 136.7,
+        "publishedLoiKm2": 11,
+        "valleyRuleLoiKm2": 5.6
+      },
+      "kahoolawe": {
+        "kuleanaKm2": 0,
+        "kuleanaInPublishedZones": null,
+        "kuleanaInValleyRule": null,
+        "kuleanaInEither": null,
+        "publishedZonesKm2": 0,
+        "publishedLoiKm2": 0,
+        "valleyRuleLoiKm2": 0
+      },
+      "lanai": {
+        "kuleanaKm2": 1.13,
+        "kuleanaInPublishedZones": 0.018,
+        "kuleanaInValleyRule": 0,
+        "kuleanaInEither": 0.018,
+        "publishedZonesKm2": 3.1,
+        "publishedLoiKm2": 0,
+        "valleyRuleLoiKm2": 0
+      },
+      "molokai": {
+        "kuleanaKm2": 7.34,
+        "kuleanaInPublishedZones": 0.481,
+        "kuleanaInValleyRule": 0.183,
+        "kuleanaInEither": 0.5,
+        "publishedZonesKm2": 32.4,
+        "publishedLoiKm2": 8.5,
+        "valleyRuleLoiKm2": 4.2
+      },
+      "oahu": {
+        "kuleanaKm2": 19.65,
+        "kuleanaInPublishedZones": 0.725,
+        "kuleanaInValleyRule": 0.245,
+        "kuleanaInEither": 0.74,
+        "publishedZonesKm2": 316.4,
+        "publishedLoiKm2": 65.6,
+        "valleyRuleLoiKm2": 35.9
+      },
+      "kauai": {
+        "kuleanaKm2": 15.46,
+        "kuleanaInPublishedZones": 0.358,
+        "kuleanaInValleyRule": 0.214,
+        "kuleanaInEither": 0.368,
+        "publishedZonesKm2": 110.3,
+        "publishedLoiKm2": 38.5,
+        "valleyRuleLoiKm2": 23.4
+      },
+      "niihau": {
+        "kuleanaKm2": 0,
+        "kuleanaInPublishedZones": null,
+        "kuleanaInValleyRule": null,
+        "kuleanaInEither": null,
+        "publishedZonesKm2": 0,
+        "publishedLoiKm2": 0,
+        "valleyRuleLoiKm2": 0
+      }
+    },
+    "calibrationNote": "For each island, the area of Land Commission Award parcels under 5 ha (kuleana size) and the share of it lying where the published Traditional Agriculture zones, the valley-floor loʻi rule, or either reach 0.5. The parcels are 1848–1855 evidence of land in use; much of what they miss is kula (dryland) and house lots outside both models."
+  }
+}
