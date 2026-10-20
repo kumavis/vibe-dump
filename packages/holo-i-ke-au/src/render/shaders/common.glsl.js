@@ -218,3 +218,75 @@ vec3 applyPolity(vec3 col, vec2 xz, vec3 light) {
   return mix(col, tint, clamp(k, 0.0, 1.0));
 }
 `
+
+// The far view's land mode: cultivation, settlement and native forest in the
+// chosen year (overlay/land.js), laid on the ground's colour before it is lit,
+// so the relief and the light read through the layers as they do through the
+// forest itself. The ground's own vegetation is a model of about 1700; under
+// the data it would read as a fourth layer, so it is quietened toward a dry,
+// pale ground first, the way a map's base is. Then, bottom to top: forest a
+// deep canopy green, cultivation gold, and settlement red, from a faint wash
+// where few people lived, through scattered specks, to solid town.
+export const land = /* glsl */ `
+uniform sampler2D uArchLandA; // over the archipelago, the keyframe before: r cultivation, g settlement (log), b forest
+uniform sampler2D uArchLandB; // and after
+uniform float uLandT;         // between them
+uniform float uLandK;         // overall strength: the land view, faded close in and as the layers arrive
+uniform float uLandEarly;     // 0 before about 1100 .. 1 by 1450: the 1778 layers whole
+
+// Settlement as specks: a dot in some cells of a grid about five pixels
+// across at any zoom (the power-of-two cell nearest that, the two nearest
+// levels crossfaded), fixed to the ground so they hold still as the camera
+// moves. area is the share of the ground they cover: below a quarter, more
+// cells take a small dot (each fading in, not popping, as the year moves);
+// above it the dots grow until they merge into solid town.
+float speckLevel(vec2 xz, float level, float area, float px) {
+  float cell = exp2(level);
+  vec2 p = xz / cell;
+  vec2 id = floor(p);
+  // (placed and sized at random within the cell, so a dense town isn't a halftone screen)
+  vec2 o = id + 0.15 + 0.7 * hash22(id + level * 13.7);
+  float present = clamp((area * 4.0 - hash12(id + level * 7.3 + 5.1)) / 0.08, 0.0, 1.0);
+  float r = mix(0.28, 1.1, smoothstep(0.25, 1.0, area)) * (0.75 + 0.5 * hash12(id + level * 3.1 + 9.2));
+  float aa = px / cell;
+  float speck = present * (1.0 - smoothstep(r - aa, r + aa, length(p - o)));
+  return max(speck, smoothstep(0.7, 0.95, area));
+}
+float landSpecks(vec2 xz, float px, float area) {
+  float lv = log2(max(px, 1e-4) * 5.0);
+  float l0 = floor(lv);
+  return mix(speckLevel(xz, l0, area, px), speckLevel(xz, l0 + 1.0, area, px), lv - l0);
+}
+
+vec3 applyLand(vec3 col, vec3 m, float rain, vec2 xz, float px, float metres) {
+  float k = uLandK * smoothstep(0.0, 2.0, metres);
+  // before the leeward field systems: the 1778 cultivation with its dry
+  // fields faded and its people thinned (the contact keyframe's note)
+  float cult = m.r * mix(0.12 + 0.88 * smoothstep(0.24, 0.46, rain), 1.0, uLandEarly);
+  float sv = max(0.0, m.g - 0.1 * (1.0 - uLandEarly));
+  float forest = m.b;
+  float lum = dot(col, vec3(0.2126, 0.7152, 0.0722));
+  vec3 c = mix(col, vec3(lum) * vec3(1.10, 1.0, 0.84) * 1.08, 0.6);
+  // the canopy keeps a little of the ground's own light and dark, so it isn't a flat sheet
+  vec3 canopy = pow(vec3(0.15, 0.31, 0.13), vec3(2.2)) * (0.75 + 0.5 * clamp(lum / 0.12, 0.0, 1.2));
+  c = mix(c, canopy, smoothstep(0.03, 0.85, forest) * 0.88);
+  // (rising steeply from a little, since a fifth of the ground in fields is
+  // a lot of fields, and at the chain's half-kilometre texels the scattered
+  // kuleana of 1853 are each a fifth of one)
+  vec3 gold = pow(vec3(0.86, 0.64, 0.22), vec3(2.2));
+  c = mix(c, gold, pow(clamp((cult - 0.01) / 0.7, 0.0, 1.0), 0.65) * 0.85);
+  // settlement (the bytes are log density, DATA.md): a faint wash from
+  // about 8 to 110 people a km², and specks from about 30, covering a
+  // tenth of the ground at 100, half at 1,000, merged into solid town by
+  // about 10,000
+  // (with the whole chain in view a shore's villages are a pixel or two
+  // wide, so the specks are let to cover more of it there)
+  vec3 red = pow(vec3(0.80, 0.19, 0.13), vec3(2.2));
+  float far = smoothstep(1.0, 5.0, px);
+  float wash = mix(0.2, 0.28, far) * smoothstep(0.15, 0.40, sv);
+  float cover = clamp((sv - 0.28) / 0.56, 0.0, 1.0);
+  float speck = landSpecks(xz, px, pow(cover, 1.5 - 0.6 * far));
+  c = mix(c, red, max(wash, speck * 0.95));
+  return mix(col, c, k);
+}
+`

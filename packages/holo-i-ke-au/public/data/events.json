@@ -1734,7 +1734,8 @@
     ],
     "routes": [
       "iliahi-lane"
-    ]
+    ],
+    "view": "land"
   },
   {
     "id": "kamehameha-death-1819",
@@ -2028,7 +2029,8 @@
         "source": "nps-koloa-mill",
         "says": "The 980 acres were leased from the royal governor of Kauaʻi, Kaikioʻewa."
       }
-    ]
+    ],
+    "view": "land"
   },
   {
     "id": "restoration-1843",
@@ -2361,7 +2363,8 @@
         "source": "asce-hamakua-ditch",
         "says": "The Old Hāmākua Ditch was 17 miles long, carried 60 million gallons a day and cost $80,000."
       }
-    ]
+    ],
+    "view": "land"
   },
   {
     "id": "bayonet-1887",

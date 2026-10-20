@@ -14,6 +14,12 @@
 // and the next step flies from wherever they are. The timeline stays free;
 // dragging it leaves the tour, and the next Next picks the tour up at the
 // chapter nearest the year it was left on.
+//
+// Each step also picks what the far view shows, by the event's kind: the
+// land for laws, epidemics and restorations (what happened to the land and
+// the people on it), the chiefdoms for everything else, an era's own card
+// included. An event may name its view outright (`view: "land"`). Once the
+// viewer has used the switch themselves, the tour leaves it alone.
 
 import { geometryPoint } from '../geo.js'
 import { eventSpan, eventStart } from '../time.js'
@@ -25,6 +31,16 @@ export const ZOOM = { far: 2600, island: 520, near: 70 }
 const DEPTH = { far: 0, island: 1, near: 2 }
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
+
+// the kinds (DATA.md §4) whose story is the land; every other kind, and an
+// era's card, shows the chiefdoms
+export const LAND_KINDS = new Set(['law', 'epidemic', 'restoration'])
+
+/** The far view a step asks for: an event's own `view`, else by its kind; null is an era's card. */
+export function viewFor(ev) {
+  if (ev?.view === 'land' || ev?.view === 'chiefdoms') return ev.view
+  return ev && LAND_KINDS.has(ev.kind) ? 'land' : 'chiefdoms'
+}
 
 /** The name a chapter goes by: "in the time of Kahekili and the rise of Kamehameha" → "Kahekili". */
 export function chapterName(era) {
@@ -237,8 +253,14 @@ export class Tour {
     this.notify()
   }
 
+  /** The step's view, unless the viewer has chosen their own. */
+  applyView(ev) {
+    if (!this.app.viewChosen) this.app.setView(viewFor(ev))
+  }
+
   showEra(ch, jump) {
     const ui = this.ui
+    this.applyView(null)
     ui.pins.activeEvent = null
     ui.pins.setStopPlace(null)
     ui.card.openEra(ch)
@@ -248,6 +270,7 @@ export class Tour {
 
   showEvent(ev, { jump, gentle }) {
     const ui = this.ui
+    this.applyView(ev)
     ui.pins.activeEvent = ev
     ui.pins.setStopPlace(null)
     ui.card.open(ev)
@@ -267,6 +290,7 @@ export class Tour {
     const ui = this.ui
     this.active = true
     this.stop = i
+    this.applyView(ev)
     ui.pins.activeEvent = ev
     if (ui.card.ev !== ev) ui.card.open(ev)
     ui.card.setStop(i)

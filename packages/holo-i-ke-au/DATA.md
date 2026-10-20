@@ -135,6 +135,7 @@ Coordinates are `[lon, lat]` (GeoJSON order). Ids are kebab-case ASCII.
   "stops": [ { "text": "...", "place": "puiwa", "zoom": "near", "year": 1795 } ],   // camera details are added by the app later
   "sources": [ { "id": "kamakau-ruling-chiefs", "where": "ch. 12" } ],
   "confidence": { "date": "firm", "place": "firm", "numbers": "soft" },
+  "view": "land",                   // optional: the far view the tour shows for this event (land | chiefdoms); by default the tour picks by kind
   "tellings": [ { "source": "fornander-v2", "says": "..." } ] }
 ```
 

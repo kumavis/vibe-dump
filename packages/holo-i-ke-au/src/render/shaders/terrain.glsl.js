@@ -7,14 +7,15 @@
 // a 17 m heightmap. What it adds: the mountains above the ahupuaʻa island's
 // 1,700 m (subalpine shrub, then cinder and bare lava on the summits), noise
 // faded by pixel size so a 600 km view doesn't sparkle, normals rebuilt at the
-// exaggeration of the moment, and the far-view polity overlay.
+// exaggeration of the moment, and the far view's two overlays: the polity
+// of each moku, and the land in use (cultivation, settlement, forest).
 //
 // One material per pack. The archipelago's (uSelf = -1) draws wherever no
 // island slot owns the ground; an island's (uSelf = its slot) draws only where
 // it does, blending its own heights, normals and land over the archipelago's
 // by its slot weight, so the hand-over is a geomorph, not a swap.
 
-import { constants, noise, world, lighting, polity } from './common.glsl.js'
+import { constants, noise, world, lighting, polity, land } from './common.glsl.js'
 
 const own = /* glsl */ `
 uniform sampler2D uOwnH;
@@ -80,11 +81,14 @@ ${world}
 ${own}
 ${lighting}
 ${polity}
+${land}
 uniform sampler2D uArchN;  // normals at NORMAL_E (rgb), ambient occlusion (a)
 uniform sampler2D uArchL;  // r rain (log), g sand, b riparian, a reserved
 uniform sampler2D uOwnN;
 uniform sampler2D uOwnL;
 uniform sampler2D uOwnS;   // this pack's cast shadows (shadow.js), over its rect
+uniform sampler2D uOwnLandA; // this island's era layers, the keyframe before and after (overlay/land.js)
+uniform sampler2D uOwnLandB;
 uniform float uOwnRain;    // 0: this pack has no rain image, so the archipelago's stands
 uniform float uKau;        // the season, 0 hoʻoilo .. 1 kau
 uniform int uDebug;
@@ -255,6 +259,15 @@ void main() {
   col = mix(col, seabed, under);
   col *= 1.0 - 0.25 * smoothstep(1.5, 0.0, metres) * (1.0 - under);
 
+  // the land view: the archipelago's combined layers, and an island's own
+  // over them by its weight, as the maps above (both conditions are
+  // uniform, so the mipmapped lookups stay in uniform control flow)
+  if (uLandK > 0.002) {
+    vec3 lm = mix(texture(uArchLandA, uvA).rgb, texture(uArchLandB, uvA).rgb, uLandT);
+    if (uSelf >= 0) lm = mix(lm, mix(texture(uOwnLandA, uvO).rgb, texture(uOwnLandB, uvO).rgb, uLandT), kSelf);
+    col = applyLand(col, lm, rain, xz, px, metres);
+  }
+
   // (an island's shadow map already holds its blend with the archipelago)
   float vis = texture(uOwnS, uvO).r;
   vec3 lit = shade(col, n, vWorld, ao, vis);
@@ -265,6 +278,7 @@ void main() {
   if (uDebug == 3) lit = vec3(ao);
   if (uDebug == 4) lit = vec3(rain, sand, rip);
   if (uDebug == 5) lit = uSelf < 0 ? vec3(0.2, 0.2, 0.8) : mix(vec3(0.2, 0.2, 0.8), vec3(0.9, 0.3, 0.1), kSelf);
+  if (uDebug == 6) lit = mix(texture(uArchLandA, uvA).rgb, texture(uArchLandB, uvA).rgb, uLandT);
   gl_FragColor = vec4(lit, 1.0);
 }
 `

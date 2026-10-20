@@ -1,9 +1,11 @@
 // Dev-only: boot the built app (dist/) in headless Chromium and drive it with
 // real pointer and key input (the wheel from the whole chain down to a
-// valley, drags, the year slider and its ticks, the layer toggles, the
-// chapter tour's Next and Back, an event's stops, the pins and the clusters
+// valley, drags, the year slider and its ticks, the layer toggles, the far
+// view's switch between the chiefdoms and the land, the chapter tour's Next
+// and Back and the view it picks, an event's stops, the pins and the clusters
 // they gather into, and their cards) to catch anything that stops input
-// reaching what's on screen, and any console error on the way. Run
+// reaching what's on screen, and any console error on the way; then what the
+// page costs in heap and frame time. Run
 // `npm run build -w @vibe-dump/holo-i-ke-au` first.
 //
 //   node tools/smoke.mjs                 (real data if public/data has events, else test-data/)
@@ -329,6 +331,27 @@ if (chapters > 1) {
     })
   } else console.log('  - no event with stops: the stop walk is skipped')
 
+  // (before anything presses the switch: once the viewer has, the tour leaves the view alone)
+  const kinds = await ui(`(() => {
+    const evs = app.tour.chapters.flatMap((ch) => ch.events)
+    const land = evs.find((e) => ['law', 'epidemic', 'restoration'].includes(e.kind) && !e.view)
+    const other = evs.find((e) => e.kind === 'battle' && !e.view)
+    return land && other ? [land.id, other.id] : null
+  })()`)
+  if (kinds) {
+    await check('the tour picks the far view by kind, until the viewer picks one', async () => {
+      const go = (id) => run(`const at = app.tour.locate(app.data.events.find((e) => e.id === '${id}')); app.tour.goTo(at[0], at[1]); app.settle()`)
+      await expect('app.viewChosen', false)
+      await go(kinds[0])
+      await expect('app.view', 'land')
+      await go(kinds[1])
+      await expect('app.view', 'chiefdoms')
+      await run(`const at = app.tour.locate(app.data.events.find((e) => e.id === '${kinds[0]}')); app.tour.goTo(at[0], -1); app.settle()`)
+      await expect('app.view', 'chiefdoms')
+      console.log(`      ${kinds[0]} → land, ${kinds[1]} → chiefdoms, an era's card → chiefdoms`)
+    })
+  }
+
   // two events on near views of different islands, one after the other
   const hop = await ui(`(() => {
     const T = app.tour
@@ -370,7 +393,7 @@ if (chapters > 1) {
   }
 } else console.log('  - fewer than two chapters: tour checks skipped')
 
-for (const t of ['polity', 'lines', 'pins']) {
+for (const t of ['lines', 'routes', 'pins']) {
   await check(`toggle ${t}`, async () => {
     const was = await ui(`app.overlay.${t}`)
     await page.click(`.tools [data-tool="${t}"]`, opts)
@@ -379,6 +402,168 @@ for (const t of ['polity', 'lines', 'pins']) {
     await expect(`app.overlay.${t}`, was)
   })
 }
+
+const routeCount = await ui('app.routes.lines.length')
+/** Fly the camera to a view (an expression for one) and land everything. */
+const view = (expr) => run(`const v = ${expr}; app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
+const shownRoutes = () => ui('app.routes.visibleRoutes().map((r) => r.id)')
+if (routeCount) {
+  await check('the routes toggle hides and shows the routes', async () => {
+    await run('app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(1779.1); app.ui.timeline.finish()')
+    await view('app.tour.chainView()')
+    await frames(2)
+    const on = await shownRoutes()
+    if (!on.length) throw new Error('no routes over the chain in 1779')
+    await page.click('.tools [data-tool="routes"]', opts)
+    await run('app.settle()')
+    await frames(2)
+    const off = await shownRoutes()
+    if (off.length) throw new Error(`still showing with the toggle off: ${off.join(', ')}`)
+    await page.click('.tools [data-tool="routes"]', opts)
+    await run('app.settle()')
+    await frames(2)
+    if (!(await shownRoutes()).length) throw new Error('not back with the toggle on')
+    console.log(`      1779 over the chain: ${on.join(', ')}`)
+  })
+  await check('routes are gone once one island fills the screen, all but the tour’s own', async () => {
+    await view("app.tour.islandView('hawaii', 0)")
+    await frames(2)
+    const [d, fill] = await ui('[app.rig.state.distance, app.islandFill()]')
+    const left = await shownRoutes()
+    if (left.length) throw new Error(`over Hawaiʻi Island at ${d.toFixed(0)} (fill ${fill.toFixed(2)}): ${left.join(', ')}`)
+    console.log(`      Hawaiʻi Island fills ${(fill * 100).toFixed(0)}% at ${d.toFixed(0)}: no routes`)
+    const step = await ui("(() => { const ev = app.data.events.find((e) => e.id === 'mokuohai-1782'); return ev ? app.tour.locate(ev) : null })()")
+    if (step) {
+      await run(`app.tour.goTo(${step[0]}, ${step[1]}); app.settle()`)
+      await frames(2)
+      const [d2, fill2] = await ui('[app.rig.state.distance, app.islandFill()]')
+      const at = await shownRoutes()
+      if (at.length) throw new Error(`at the Mokuʻōhai step (${d2.toFixed(0)}, fill ${fill2.toFixed(2)}): ${at.join(', ')}`)
+      console.log(`      the Mokuʻōhai step at ${d2.toFixed(0)} (fill ${fill2.toFixed(2)}): no routes`)
+    }
+    // an event's own route stays on its island view
+    const own = await ui(`(() => {
+      for (const ch of app.tour.chapters) for (let s = 0; s < ch.events.length; s++) {
+        const ev = ch.events[s]
+        if (ev.routes?.length && !ev.stops?.length && !ev.zoom?.includes('near') && ev.zoom?.includes('island')) return [ch.index, s, ev.id]
+      }
+      return null
+    })()`)
+    if (own) {
+      await run(`app.tour.goTo(${own[0]}, ${own[1]}); app.settle()`)
+      await frames(2)
+      const [d3, fill3] = await ui('[app.rig.state.distance, app.islandFill()]')
+      const r = await ui(`app.routes.visibleRoutes().filter((r) => r.event === '${own[2]}').map((r) => r.id)`)
+      if (!r.length && fill3 > 0.4) throw new Error(`${own[2]}'s own route is gone from its step (${d3.toFixed(0)}, fill ${fill3.toFixed(2)})`)
+      console.log(`      ${own[2]} at ${d3.toFixed(0)} (fill ${fill3.toFixed(2)}) keeps ${r.join(', ') || 'none'}`)
+    }
+  })
+} else console.log('  - no routes: route checks skipped')
+
+await page.waitForFunction(() => window.__app.land.available !== null, null, { timeout: 120000 })
+if (await ui('app.land.available')) {
+  const landReady = () => page.waitForFunction(() => window.__app.land.ready, null, { timeout: 300000 })
+  await check('the switch turns the far view to the land, and the legend with it', async () => {
+    await run('app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(1778); app.ui.timeline.finish()')
+    await view('app.tour.chainView()')
+    await frames(2)
+    await expect('!!document.querySelector(".legend.show")', true)
+    await expect('document.querySelector(\'.legend [data-view="chiefdoms"]\').getAttribute("aria-pressed")', 'true')
+    await page.click('.legend [data-view="land"]', opts)
+    await expect('app.view', 'land')
+    await expect('app.viewChosen', true)
+    await expect('document.querySelector(\'.legend [data-view="land"]\').getAttribute("aria-pressed")', 'true')
+    const text = await ui("document.querySelector('.legend .lg-body').textContent")
+    for (const w of ['Cultivation', 'Settlement', 'Native forest']) if (!text.includes(w)) throw new Error(`the legend reads “${text}”`)
+    // pressing the one that is on turns the overlay off; the other way back on
+    await page.click('.legend [data-view="land"]', opts)
+    await expect('app.view', null)
+    await page.click('.legend [data-view="chiefdoms"]', opts)
+    await expect('app.view', 'chiefdoms')
+    await expect("document.querySelector('.legend .lg-body').textContent.includes('Cultivation')", false)
+    await page.click('.legend [data-view="land"]', opts)
+    await expect('app.view', 'land')
+    console.log(`      ${text.replace(/\s+/g, ' ').trim()}`)
+  })
+  await check('the tour leaves the viewer’s choice alone', async () => {
+    const battle = await ui("app.tour.chapters.flatMap((ch) => ch.events).find((e) => e.kind === 'battle')?.id ?? null")
+    if (!battle) return
+    await run(`const at = app.tour.locate(app.data.events.find((e) => e.id === '${battle}')); app.tour.goTo(at[0], at[1]); app.settle()`)
+    await expect('app.view', 'land')
+    await run('app.ui.card.close(); app.ui.onScrub()')
+  })
+  await check('the land shows at the chain and island zooms, not over a valley', async () => {
+    await run('app.timeline.setYear(1778); app.ui.timeline.finish()')
+    await landReady()
+    const k = {}
+    for (const [name, v] of [['chain', 'app.tour.chainView()'], ['oahu', "app.tour.islandView('oahu', 0)"], ['lanai', "app.tour.islandView('lanai', 0)"]]) {
+      await view(v)
+      await frames(2)
+      k[name] = await ui('[Math.round(app.rig.state.distance), +app.shared.uniforms.uLandK.value.toFixed(3)]')
+    }
+    await run("const p = app.tour.places.get('nuuanu') || app.tour.placeOf(app.data.events[0]); const v = app.tour.pointView(p, 60); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()")
+    await frames(2)
+    k.valley = await ui('[Math.round(app.rig.state.distance), +app.shared.uniforms.uLandK.value.toFixed(3)]')
+    if (!(k.chain[1] > 0.9 && k.oahu[1] > 0.9 && k.lanai[1] > 0.5)) throw new Error(`strength ${JSON.stringify(k)}`)
+    if (k.valley[1] !== 0) throw new Error(`strength over a valley ${JSON.stringify(k.valley)}`)
+    await expect('app.shared.uniforms.uPolityK.value', 0)
+    console.log(`      [distance, strength] ${JSON.stringify(k)}`)
+  })
+  await check('the layers move with the year, between the keyframes either side', async () => {
+    await view("app.tour.islandView('oahu', 0)")
+    const at = async (y) => {
+      await run(`app.timeline.setYear(${y}); app.ui.timeline.finish()`)
+      await frames(1)
+      await landReady()
+      await run('app.settle()')
+      await frames(1)
+      return ui('[app.land.bound.a, app.land.bound.b, +app.shared.uniforms.uLandT.value.toFixed(3), document.querySelector(".legend .lg-note")?.textContent, [...document.querySelectorAll(".legend .lg-land em")].map((e) => e.textContent).join(",")]')
+    }
+    const rows = {}
+    // (the eras' own years: kalaniopuu stands at contact, kamehameha at 0.387 of
+    // the way to the Māhele, and so on, as the manifest maps them; 1816 falls
+    // between two eras, by year)
+    for (const y of [1772, 1807, 1816, 1844, 1864, 1895, 2000]) rows[y] = await at(y)
+    const near = (a, b) => Math.abs(a - b) < 0.02
+    const ok =
+      rows[1772][2] === 0 &&
+      near(rows[1816][2], (1816 - 1778) / 75) &&
+      rows[1807][0] === 'contact' && rows[1807][1] === 'mahele' && near(rows[1807][2], 0.387) &&
+      rows[1844][0] === 'contact' && near(rows[1844][2], 0.88) &&
+      rows[1864][0] === 'mahele' && rows[1864][1] === 'kingdom' && near(rows[1864][2], 0.256) &&
+      rows[1895][1] === 'kingdom' && near(rows[1895][2], 0.977)
+    for (const [y, r] of Object.entries(rows)) console.log(`      ${y}: ${r[0]}/${r[1]} t ${r[2]} · ${r[3]} · ${r[4] || 'all mapped'}`)
+    if (!ok) throw new Error('the keyframes or the weights are not the manifest’s')
+    if (!/modelled/.test(rows[1772][4])) throw new Error('1778 is not marked modelled in the legend')
+    if (rows[2000][4]) throw new Error(`the coda, mapped throughout, is marked “${rows[2000][4]}”`)
+  })
+  await check('hovering land in the land view names what the layers hold', async () => {
+    await run('app.timeline.setYear(1778); app.ui.timeline.finish()')
+    await view("app.tour.islandView('oahu', 0)")
+    await landReady()
+    await frames(2)
+    const pt = await page.evaluate(() => {
+      const app = window.__app
+      for (let y = 160; y < innerHeight - 160; y += 19) {
+        for (let x = 80; x < innerWidth - 80; x += 19) {
+          if (document.elementFromPoint(x, y)?.id !== 'scene') continue
+          const p = app.rig.pickGround(x, y)
+          const v = p && app.world.metresAt(p.x, p.z) > 5 ? app.land.valuesAt(p.x, p.z) : null
+          if (v && v.cultivation > 0.2 && app.polity.mokuAt(p.x, p.z)) return [x, y]
+        }
+      }
+      return null
+    })
+    if (!pt) throw new Error('no cultivated land on screen')
+    await page.mouse.move(pt[0] - 4, pt[1])
+    await page.waitForTimeout(250)
+    await page.mouse.move(pt[0], pt[1])
+    await page.waitForFunction(() => /fields/.test(document.querySelector('.inspector.show')?.textContent || ''), null, { timeout: 10000 })
+    console.log(`      ${(await ui("document.querySelector('.inspector').textContent")).replace(/\s+/g, ' ').trim()}`)
+    await page.mouse.move(5, 400)
+  })
+  await run("app.setView('chiefdoms')")
+} else console.log('  - no land layers: land checks skipped')
 await check('help opens and closes', async () => {
   await page.click('.tools [data-tool="help"]', opts)
   await expect("document.querySelector('.help').classList.contains('hidden')", false)
@@ -502,6 +687,58 @@ if (evs) {
     })
   } else console.log('  - no two events at one spot: cluster checks skipped')
 } else console.log('  - no events: pin checks skipped')
+
+// What the page costs, for comparing builds: the JS heap after a collection,
+// and the frame time held still over the whole chain and over one island, in
+// each view of the far map the build has. (Under the software renderer the
+// frame times are the CPU's, so compare them only with each other.)
+await check('perf', async () => {
+  await run('app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(1778); app.ui.timeline.finish()')
+  const cdp = await page.context().newCDPSession(page)
+  // (the JS heap, and apart from it the typed arrays' backing stores, where the pack and layer grids live)
+  const heapMB = async () => {
+    await cdp.send('HeapProfiler.collectGarbage')
+    const { usedSize, backingStorageSize } = await cdp.send('Runtime.getHeapUsage')
+    const mb = (v) => (v === undefined ? null : +(v / 1048576).toFixed(1))
+    return { js: mb(usedSize), buffers: mb(backingStorageSize) }
+  }
+  const frameMs = (n) =>
+    page.evaluate(
+      (n) =>
+        new Promise((resolve) => {
+          // wall time over n of the app's frames (its own frameMs clamps each
+          // frame at 100 ms, and a software frame here takes seconds)
+          const app = window.__app
+          const f0 = app.frames + 1
+          let t0 = 0
+          const tick = () => {
+            if (!t0 && app.frames >= f0) t0 = performance.now()
+            if (t0 && app.frames >= f0 + n) return resolve(+((performance.now() - t0) / n).toFixed(1))
+            requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        }),
+      n,
+    )
+  // (a build without the land view, or data without its layers, measures the chiefdoms alone)
+  const modes = (await ui("typeof app.setView === 'function' && !!app.land?.available")) ? ['chiefdoms', 'land'] : ['chiefdoms']
+  if (modes.includes('land')) await page.waitForFunction(() => window.__app.land?.ready, null, { timeout: 300000 }).catch(() => {})
+  const out = { heapMB: await heapMB() }
+  for (const mode of modes) {
+    if (mode !== 'chiefdoms' || modes.length > 1) await run(`app.setView('${mode}')`)
+    for (const [name, view] of [['chain', 'app.tour.chainView()'], ['oahu', "app.tour.islandView('oahu', 0)"]]) {
+      await run(`const v = ${view}; app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
+      await frames(4)
+      out[`${mode}.${name}.ms`] = await frameMs(6)
+    }
+  }
+  if (modes.length > 1) await run("app.setView('chiefdoms')")
+  out.heapAfterMB = await heapMB()
+  out.textures = await ui('app.renderer.info.memory.textures')
+  const land = await ui('app.land?.stats?.() ?? null')
+  if (land) out.land = land
+  console.log('      perf', JSON.stringify(out))
+})
 
 const stats = await ui('app.stats()')
 console.log('stats', JSON.stringify(stats))

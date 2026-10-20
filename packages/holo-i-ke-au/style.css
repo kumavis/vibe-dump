@@ -104,6 +104,26 @@ button { font: inherit; color: inherit; }
 .lg { display: flex; align-items: center; gap: 9px; margin: 4px 0; }
 .lg i { width: 12px; height: 12px; border-radius: 3px; flex: none; }
 .lg b { font-family: var(--serif); font-weight: 600; font-size: 14px; }
+/* the far view's two modes, as a switch heading the legend */
+.lg-switch {
+  display: flex; gap: 2px; width: max-content; padding: 2px; margin: 0 0 8px -4px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line);
+}
+.legend.show .lg-switch { pointer-events: auto; }
+.lg-switch button {
+  height: 26px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; transition: background 0.2s, color 0.2s;
+}
+.lg-switch button:hover:not(:disabled) { color: var(--ink); }
+.lg-switch button.on { background: var(--gold); color: #1a1206; }
+.lg-switch button:disabled { opacity: 0.35; cursor: default; }
+.lg-body:empty { display: none; }
+.lg-land em { margin-left: auto; padding-left: 12px; font-size: 11px; font-style: italic; color: var(--faint); white-space: nowrap; }
+.lg-note { margin-top: 6px; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--faint); }
+/* the land layers' tints, as they come out on lit ground */
+.lg i.sw-cultivation { background: #d6a03c; }
+.lg i.sw-forest { background: #2e5a2b; }
+.lg i.sw-settlement { background: radial-gradient(circle, #c9382a 0 1.5px, transparent 2px) 0 0 / 4px 4px, rgba(201, 56, 42, 0.32); }
 
 /* --- timeline ------------------------------------------------------------------- */
 .timeline {

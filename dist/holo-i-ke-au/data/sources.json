@@ -545,8 +545,9 @@
     "author": "Thomas G. Thrum",
     "year": 1910,
     "access": "open",
-    "opened": false,
-    "note": "Not read: eVols and HathiTrust refused automated access and the volume is not on the Internet Archive. Wikipedia cites p. 100 for the size of Kamehameha's army in 1795."
+    "opened": true,
+    "note": "Public domain; University of Michigan copy on the Internet Archive (the earlier pass did not find it there). P. 100 is in “John Young: Companion of Kamehameha”, pp. 93–105. It credits Young with the cannon at Nuʻuanu and quotes Kamakau on Puʻiwa and Lāʻimi; it gives no size for Kamehameha’s army, so the figure Wikipedia prints beside its citation of this page does not come from it.",
+    "url": "https://archive.org/details/acp0143.1911.001.umich.edu"
   },
   {
     "id": "schmitt-1969-mortality",
@@ -619,5 +620,95 @@
     "access": "print",
     "opened": false,
     "note": "Not read. The main study of the 1897 petitions, known as the Kūʻē petitions, and of the two associations behind them."
+  },
+  {
+    "id": "hgs-1881-oahu",
+    "title": "Oahu, Hawaiian Islands (Hawaiian Government Survey), scale 1:60,000",
+    "author": "C. J. Lyons, from surveys by W. D. Alexander, C. J. Lyons, J. F. Brown, M. D. Monsarrat and W. Webster; finished by Richard Covington",
+    "year": 1881,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+    "access": "open",
+    "opened": true,
+    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1881), exported over the district on 2026-10-20 and checked against GNIS points (Punchbowl, Queen Emma’s summer house, the Pali). Writes land names (Laimi, Luakaha, Kuwili, Apili, Pahounui, Mokauea, Waolani, Puunui) and Land Commission Award numbers; its notes define stations, acres, grants, awards and patents but not the ruled hatching it puts on valley floors and shore flats, which is read here as wet land."
+  },
+  {
+    "id": "hgs-1899-oahu",
+    "title": "Oahu, Hawaiian Islands, compiled from maps of Government Surveys and other reliable sources",
+    "author": "T. D. Beasley, under the supervision of James T. Taylor",
+    "year": 1899,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+    "access": "open",
+    "opened": true,
+    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1899), exported over the district on 2026-10-20. Writes PUIWA on the Nuʻuanu valley floor, Kuwili by the railway depot, and ponds and rice at Kālia and Mōʻiliʻili. Its georeferencing is a few hundred metres looser than the 1881 sheet’s."
+  },
+  {
+    "id": "usgs-topo-1927-oahu",
+    "title": "Topographic quadrangles of Oʻahu, 1927 edition (Honolulu sheet), as the State GIS mosaic oahu_topo_1927",
+    "author": "U.S. Geological Survey",
+    "year": 1927,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/oahu_topo_1927/ImageServer",
+    "access": "open",
+    "opened": true,
+    "note": "Exported over Kalihi Kai and Kālia on 2026-10-20. Names and outlines Apili, Pahou, Pahouiki, Auiki and Ananoho ponds on the Kalihi shore; shows Kālia and Iwilei already filled."
+  },
+  {
+    "id": "oha-kipuka-sites",
+    "title": "Historical Sites (polygon, line and point layers), Kīpuka database",
+    "author": "Office of Hawaiian Affairs",
+    "year": 2026,
+    "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/H_Sites_Polygon/FeatureServer/0",
+    "access": "open",
+    "opened": true,
+    "note": "Queried over the district on 2026-10-20: State Inventory of Historic Places site numbers and names, each marked Public, Private or PlaceName. Only Public sites that are not burials were used, and only fishpond outlines were copied; burials, caves and heiau in the layer were neither copied nor used to place anything. No licence is stated on the item."
+  },
+  {
+    "id": "state-gis-streams-dar",
+    "title": "Streams (DAR), FreshWater MapServer layer 1",
+    "author": "State of Hawaiʻi Statewide GIS Program; DLNR Division of Aquatic Resources",
+    "year": 2013,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/FreshWater/MapServer/1",
+    "access": "open",
+    "opened": true,
+    "note": "Fetched 2026-10-20: perennial and non-perennial streams as of 2008 with 2013 name corrections, from USGS line graphs. Modern courses; the lower reaches in Honolulu are channelled."
+  },
+  {
+    "id": "census-tiger-roads",
+    "title": "TIGERweb Transportation (local and secondary roads)",
+    "author": "U.S. Census Bureau",
+    "year": 2026,
+    "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Transportation/MapServer",
+    "access": "open",
+    "opened": true,
+    "note": "Queried 2026-10-20 for the streets that keep old land names in Nuʻuanu (Puiwa Road and Lane, Laimi Road, Kawananakoa Place, Kuwili Street) and for the line of Nuʻuanu Avenue, the Pali Highway and Nuʻuanu Pali Drive."
+  },
+  {
+    "id": "thrum-annual-1907",
+    "title": "Hawaiian Almanac and Annual for 1907",
+    "author": "Thomas G. Thrum",
+    "year": 1906,
+    "url": "https://archive.org/details/acp0143.1907.001.umich.edu",
+    "access": "open",
+    "opened": true,
+    "note": "Public domain; University of Michigan copy on the Internet Archive. “Heiaus and Heiau Sites throughout the Hawaiian Islands”, pp. 36–48; Oʻahu’s list begins on p. 44, and the Honolulu and Nuʻuanu heiau are on pp. 44–45."
+  },
+  {
+    "id": "johnstone-1908",
+    "title": "Storied Nuuanu",
+    "author": "Arthur Johnstone",
+    "year": 1907,
+    "url": "https://archive.org/details/acp0143.1908.001.umich.edu",
+    "access": "open",
+    "opened": true,
+    "note": "In Thrum’s Hawaiian Almanac and Annual for 1908, pp. 160–167 (University of Michigan copy on the Internet Archive). A newspaperman’s sketch from an unnamed antiquary’s notes: a popular account written a century after the battle, useful for what was “generally believed” in Honolulu, not as a primary source."
+  },
+  {
+    "id": "pacific-worlds-nuuanu",
+    "title": "Nuʻuanu, Oʻahu: A Native Place, Battle of Nuʻuanu",
+    "author": "Pacific Worlds",
+    "year": 2007,
+    "url": "https://web.archive.org/web/20070608000600/http://www.pacificworlds.com/nuuanu/native/native2.cfm",
+    "access": "open",
+    "opened": true,
+    "note": "An educational site built from interviews; this page follows the battle with a teacher of lua and others. Read in the Wayback Machine copy of 8 June 2007. Its account is a modern oral reconstruction and cites nothing on the page; Wikipedia links it beside James’s map."
   }
 ]

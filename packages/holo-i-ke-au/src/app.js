@@ -1,6 +1,13 @@
 // Wires the loaded data into a running scene: the ground (archipelago and
-// island packs), the sea, the sky, the boundary lines and the polity overlay,
-// under one camera that runs from the whole chain to a single valley.
+// island packs), the sea, the sky, the boundary lines, the routes and the far
+// view's two overlays, under one camera that runs from the whole chain to a
+// single valley.
+//
+// The far view shows one of two things at a time (`view`): the chiefdoms,
+// each moku in the colour of the polity that held it (overlay/polity.js), or
+// the land, how it was used in the chosen year (overlay/land.js). The viewer
+// picks with the switch on the legend; the tour may pick for a step until
+// they have (ui/tour.js).
 
 import * as THREE from 'three'
 import { World } from './render/world.js'
@@ -11,12 +18,18 @@ import { CameraRig } from './render/camera.js'
 import { Boundaries } from './render/lines.js'
 import { Routes, loadRoutes } from './render/routes.js'
 import { PolityOverlay } from './overlay/polity.js'
+import { LandOverlay } from './overlay/land.js'
 import { Timeline } from './time.js'
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
   return t * t * (3 - 2 * t)
 }
+
+/** The polity overlay's strength at a camera distance. */
+export const polityZoom = (d) => smooth(260, 900, d)
+/** The land overlay's: full at the island zooms, gone over a valley. */
+export const landZoom = (d) => smooth(90, 300, d)
 
 export class App {
   constructor(canvas, data, { warn = console.warn } = {}) {
@@ -45,7 +58,8 @@ export class App {
       night: 0,
     }
     // One bag of uniforms that every surface shares by reference: the light,
-    // the ground (World adds its own), and the polity overlay.
+    // the ground (World adds its own), and the two overlays (the land's add
+    // their own too).
     this.shared = {
       uniforms: {
         uSunDir: { value: this.light.sunDir },
@@ -69,8 +83,16 @@ export class App {
     this.world.uniforms = this.shared.uniforms
     this.timeline = new Timeline(data.eras)
     this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
-    this.overlay = { polity: true, lines: true, pins: true, routes: true }
+    this.land = new LandOverlay(this)
+    this.overlay = { lines: true, pins: true, routes: true }
+    // 'chiefdoms', 'land', or null for neither; ?view= asks for one, and
+    // counts as the viewer's choice
+    const v = this.params.get('view')
+    this.view = v === 'land' ? 'land' : v === 'none' ? null : 'chiefdoms'
+    this.viewChosen = v === 'land' || v === 'chiefdoms' || v === 'none'
+    this.viewListeners = []
     this.polityK = 0
+    this.landK = 0
 
     this.sky = new Sky()
     this.scene.add(this.sky.group)
@@ -130,9 +152,52 @@ export class App {
     requestAnimationFrame(this.frame)
   }
 
+  /**
+   * What the far view shows: 'chiefdoms', 'land' or null. `user` marks the
+   * viewer's own choice, which the tour leaves alone from then on.
+   */
+  setView(v, { user = false } = {}) {
+    if (user) this.viewChosen = true
+    const next = v === 'chiefdoms' || v === 'land' ? v : null
+    if (next === this.view) return
+    this.view = next
+    for (const f of this.viewListeners) f(next)
+  }
+
+  onView(f) {
+    this.viewListeners.push(f)
+  }
+
+  /** How much of the screen the island under the camera's target fills: 0 over open sea, about 1 edge to edge. */
+  islandFill() {
+    const s = this.rig.state
+    const t = s.target
+    let best = null
+    let e0 = 0
+    for (const p of this.world.islandPacks) {
+      const q = p.rect
+      const e = Math.min(t.x - q.x0, q.x1 - t.x, t.z - q.z0, q.z1 - t.z)
+      if (e > e0) {
+        e0 = e
+        best = p
+      }
+    }
+    if (!best) return 0
+    const h = 2 * s.distance * Math.tan((this.camera.fov * Math.PI) / 360)
+    const q = best.rect
+    return Math.max((q.x1 - q.x0) / (h * this.camera.aspect), (q.z1 - q.z0) / h)
+  }
+
+  /** What the routes need to know of the tour and the view, besides the year. */
+  routeOptions(extra) {
+    const tour = this.tour
+    return { window: this.timeline.window, fill: this.islandFill(), focus: tour?.active ? (tour.event?.id ?? null) : null, ...extra }
+  }
+
   /** An island pack, decoded in the background. */
   addIsland(pack) {
     const t = this.world.addIsland(pack)
+    this.land.attach(t)
     t.applyRange(this.qset.range)
     if (this.params.get('debug')) t.uniforms.uDebug.value = Number(this.params.get('debug'))
   }
@@ -151,13 +216,16 @@ export class App {
     this.world.update(this.camera, g.distance, 0)
     this.world.settle(this.camera)
     this.rig.jump({ x: g.target.x, z: g.target.z })
-    this.polityK = this.overlay.polity ? smooth(260, 900, g.distance) : 0
-    this.routes?.settle(this.timeline.year, g.distance, { window: this.timeline.window })
+    this.polityK = this.view === 'chiefdoms' ? polityZoom(g.distance) : 0
+    this.landK = this.view === 'land' ? landZoom(g.distance) : 0
+    this.shared.uniforms.uPolityK.value = this.polityK
+    this.land.settle(this.landK)
+    this.routes?.settle(this.timeline.year, g.distance, this.routeOptions())
   }
 
   stats() {
     const info = this.renderer.info
-    return { ...this.world.stats(), frameMs: +(this.frameAvg ?? 0).toFixed(1), calls: info.render.calls, triangles: info.render.triangles, textures: info.memory.textures, quality: this.quality.level }
+    return { ...this.world.stats(), view: this.view, frameMs: +(this.frameAvg ?? 0).toFixed(1), calls: info.render.calls, triangles: info.render.triangles, textures: info.memory.textures, quality: this.quality.level }
   }
 
   syncEras() {
@@ -232,17 +300,23 @@ export class App {
     const d = this.rig.state.distance
     this.world.update(this.camera, d, dt)
     this.ocean.update(this.camera)
-    // the polity overlay belongs to the far view: full over the chain, gone
-    // by the time one island fills the screen
-    const pk = this.overlay.polity ? smooth(260, 900, d) : 0
-    this.polityK += (pk - this.polityK) * (1 - Math.exp(-dt * 5))
+    // the two overlays of the far view, crossfading as the view changes: the
+    // polity full over the chain and gone well before the valleys; the land
+    // full at the chain and the island zooms, gone as the camera closes on a
+    // valley (where the near view will carry the land itself)
+    const ease = 1 - Math.exp(-dt * 5)
+    const pk = this.view === 'chiefdoms' ? polityZoom(d) : 0
+    this.polityK += (pk - this.polityK) * ease
     this.shared.uniforms.uPolityK.value = this.polityK
+    const lk = this.view === 'land' ? landZoom(d) : 0
+    this.landK += (lk - this.landK) * ease
+    this.land.update(dt, this.landK)
     this.lines.visible = this.overlay.lines
     const L = this.light
     const lightLevel = Math.min(1, 0.25 + (L.sunColor.r + L.skyColor.r) * 0.35)
     this.lines.update(this.camera, this.renderer, d, lightLevel)
     this.routes.visible = this.overlay.routes !== false
-    this.routes.update(this.timeline.year, d, { window: this.timeline.window, light: lightLevel })
+    this.routes.update(this.timeline.year, d, this.routeOptions({ light: lightLevel }))
     for (const u of this.updaters) u(dt, this.time)
     const pu = this.pipeline.uniforms
     pu.uSunDir.value.copy(L.sunDir)

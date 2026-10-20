@@ -14,15 +14,18 @@
 //
 //   // in update(dt), after this.lines.update(...):
 //   this.routes.visible = this.overlay.routes !== false
-//   this.routes.update(this.timeline.year, d, { window: this.timeline.window, light: lightLevel })
+//   this.routes.update(this.timeline.year, d, { window: this.timeline.window, light: lightLevel, fill, focus })
 //
 //   // in settle(), so a screenshot doesn't catch a route halfway faded in:
-//   this.routes?.settle(this.timeline.year, g.distance, { window: this.timeline.window })
+//   this.routes?.settle(this.timeline.year, g.distance, { window: this.timeline.window, fill, focus })
 //
 //   // and on teardown: this.routes.dispose()
 //
 // `window` is the stretch of years whose events show (time.js); without it the
 // module works out the same half-an-era-either-side window from the eras.
+// `fill` is how much of the screen the island under the camera's target fills
+// (0 over open sea, about 1 edge to edge; app.islandFill()), and `focus` the id
+// of the event the tour stands on, whose own routes are its story and stay.
 //
 // The lines are drawn as lines.js draws the boundaries: instanced quads
 // widened in screen space and draped on whatever ground is showing, so a
@@ -34,13 +37,16 @@
 // direction of travel, out and back again for a return; dashes march the same
 // way, except on a return. The whole layer belongs to the far view:
 // it fades in as the chain comes into frame and is gone by the time one
-// island fills the screen.
+// island fills the screen (by that island's size, not a fixed distance, since
+// Hawaiʻi fills the screen from four times as far out as Lānaʻi), all but
+// the routes of the event the tour stands on.
 
 import * as THREE from 'three'
 import { constants, world, ground } from './shaders/common.glsl.js'
 
 const MAX_SEG = 4 // world units (400 m): long sea crossings need few vertices; the ends still follow the land
 const ZOOM_IN = [300, 1000] // camera distance over which routes fade in as the view widens
+const FILL_OUT = [0.4, 0.7] // share of the screen one island fills over which the routes fade out
 const PULSE_PERIOD = 9 // seconds for the brightening to run a route end to end
 
 // in the family of the boundary lines (lines.js), in the scene's linear light:
@@ -363,26 +369,27 @@ export class Routes {
 
   /**
    * Once a frame. `year` is the timeline's year, `cameraDistance` the rig's
-   * distance from its target; `window` (time.js) and `light` (0..1, the level
-   * the boundary lines are lit by) are optional.
+   * distance from its target; `window` (time.js), `light` (0..1, the level
+   * the boundary lines are lit by), `fill` and `focus` (see the top) are optional.
    */
-  update(year, cameraDistance, { window, light = 1 } = {}) {
+  update(year, cameraDistance, { window, light = 1, fill = 0, focus = null } = {}) {
     const now = performance.now() / 1000
     const dt = this._last === null ? 1 : Math.max(0, Math.min(0.1, now - this._last))
     this._last = now
-    this.apply(year, cameraDistance, window, light, now, 1 - Math.exp(-dt * 4))
+    this.apply(year, cameraDistance, { win: window, light, fill, focus }, now, 1 - Math.exp(-dt * 4))
   }
 
   /** Every route straight to the fade the view and the year ask for (tools, screenshots). */
-  settle(year, cameraDistance, { window, light = 1 } = {}) {
-    this.apply(year, cameraDistance, window, light, performance.now() / 1000, 1)
+  settle(year, cameraDistance, { window, light = 1, fill = 0, focus = null } = {}) {
+    this.apply(year, cameraDistance, { win: window, light, fill, focus }, performance.now() / 1000, 1)
   }
 
-  apply(year, d, win, light, now, ease) {
+  apply(year, d, { win, light, fill, focus }, now, ease) {
     const [wa, wb] = win || this.windowAt(year)
     this.renderer.getDrawingBufferSize(this._res)
     const dpr = this.renderer.getPixelRatio()
     const zoom = this.visible ? smooth(ZOOM_IN[0], ZOOM_IN[1], d) : 0
+    const away = 1 - smooth(FILL_OUT[0], FILL_OUT[1], fill)
     const wide = 1 - smooth(800, 4000, d) // a little wider over an island group than over the whole chain
     for (const l of this.lines) {
       const [a, b] = l.span
@@ -391,7 +398,8 @@ export class Routes {
       if (Math.abs(on - l.k) < 0.003) l.k = on
       // a route whose own dates hold the year stands out from its neighbours in the window
       const inYear = year >= a && year <= b ? 1 : 0.55
-      const alpha = l.style.opacity * l.k * zoom * inYear
+      const mine = focus !== null && l.route.event === focus
+      const alpha = l.style.opacity * l.k * zoom * (mine ? 1 : away) * inYear
       l.mesh.visible = alpha > 0.01
       if (!l.mesh.visible) continue
       const u = l.uniforms

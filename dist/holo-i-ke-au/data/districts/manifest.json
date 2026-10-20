@@ -1,0 +1,1023 @@
+{
+  "projection": {
+    "lat0": 20.5,
+    "lon0": -157.5
+  },
+  "districts": [
+    {
+      "id": "nuuanu",
+      "name": "Nuʻuanu",
+      "island": "oahu",
+      "parent": "oahu",
+      "bounds": [
+        -157.8970085,
+        21.269,
+        -157.7789915,
+        21.381
+      ],
+      "size": [
+        2035,
+        2048
+      ],
+      "metresPerTexel": [
+        6.047,
+        6.047
+      ],
+      "height": {
+        "file": "nuuanu/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "nuuanu/rain.png"
+      },
+      "patches": [
+        {
+          "keyframe": "contact",
+          "until": 1850,
+          "file": "nuuanu/patch-contact.png",
+          "source": "the fill unit, cut with the 1881 shore",
+          "note": "land today that the geologic map calls fill and the 1881 Government Survey map shows as sea or reef flat: Sand Island (but for Quarantine Island), the reef under the piers of the inner harbour and Kapālama, Kakaʻako makai and the Kewalo waterfront, Ala Moana and Magic Island, and the made ground at Kālia by the Ala Wai boat harbour. Fill the 1881 map shows as land (the Kewalo ponds and Kakaʻako salt pans, the Waikīkī wetland under the Ala Wai, the Kalihi and Moanalua ponds) stays land. The 1881 shore is the earliest surveyed; at the harbour front it already includes made ground of unknown date"
+        },
+        {
+          "keyframe": "kingdom",
+          "until": 1900,
+          "file": "nuuanu/patch-kingdom.png",
+          "source": "the fill unit, cut with the 1881 shore",
+          "note": "land today that the geologic map calls fill and the 1881 Government Survey map shows as sea or reef flat: Sand Island (but for Quarantine Island), the reef under the piers of the inner harbour and Kapālama, Kakaʻako makai and the Kewalo waterfront, Ala Moana and Magic Island, and the made ground at Kālia by the Ala Wai boat harbour. Fill the 1881 map shows as land (the Kewalo ponds and Kakaʻako salt pans, the Waikīkī wetland under the Ala Wai, the Kalihi and Moanalua ponds) stays land. The same mask as the contact patch: the 1899 sheet shows the same waterfront within its registration, so the filling the patch covers came after it"
+        }
+      ],
+      "features": "nuuanu/features.json",
+      "files": [
+        {
+          "file": "nuuanu/shoreline-1881.geojson",
+          "kind": "shoreline",
+          "year": 1881,
+          "note": "the 1881 coast (LineString, sea to its south-west) and its islets (Polygons), in lon/lat; the line both patches are cut with"
+        }
+      ],
+      "breaches": [
+        {
+          "name": "Nuʻuanu Stream at 21.3576 N 157.8036 W",
+          "points": [
+            [
+              -157.80361,
+              21.357566
+            ],
+            [
+              -157.803842,
+              21.357457
+            ],
+            [
+              -157.804016,
+              21.357238
+            ],
+            [
+              -157.804074,
+              21.35702
+            ],
+            [
+              -157.804074,
+              21.356801
+            ],
+            [
+              -157.804132,
+              21.356582
+            ],
+            [
+              -157.80419,
+              21.356363
+            ],
+            [
+              -157.80419,
+              21.356145
+            ],
+            [
+              -157.80419,
+              21.355926
+            ],
+            [
+              -157.80419,
+              21.355707
+            ],
+            [
+              -157.80419,
+              21.355488
+            ],
+            [
+              -157.80419,
+              21.35527
+            ],
+            [
+              -157.80419,
+              21.355051
+            ],
+            [
+              -157.80419,
+              21.354832
+            ],
+            [
+              -157.80419,
+              21.354613
+            ],
+            [
+              -157.80419,
+              21.354395
+            ],
+            [
+              -157.804248,
+              21.354176
+            ],
+            [
+              -157.804422,
+              21.353957
+            ],
+            [
+              -157.804654,
+              21.353738
+            ],
+            [
+              -157.804886,
+              21.35352
+            ],
+            [
+              -157.805118,
+              21.353301
+            ],
+            [
+              -157.80535,
+              21.353082
+            ],
+            [
+              -157.805524,
+              21.352863
+            ],
+            [
+              -157.80564,
+              21.352645
+            ],
+            [
+              -157.805872,
+              21.352426
+            ],
+            [
+              -157.806104,
+              21.352207
+            ],
+            [
+              -157.806335,
+              21.351988
+            ],
+            [
+              -157.806567,
+              21.35177
+            ],
+            [
+              -157.806683,
+              21.351551
+            ],
+            [
+              -157.806625,
+              21.351332
+            ],
+            [
+              -157.806741,
+              21.351113
+            ],
+            [
+              -157.806973,
+              21.350895
+            ],
+            [
+              -157.807147,
+              21.350676
+            ],
+            [
+              -157.807321,
+              21.350457
+            ],
+            [
+              -157.807437,
+              21.350348
+            ]
+          ],
+          "why": "the reservoir in upper Nuʻuanu: its basin and dam stand in the bare earth, and the trunk ponded 4.8 m deep here",
+          "texels": 163,
+          "cutMetres": 6.9
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3546 N 157.8042 W",
+          "points": [
+            [
+              -157.80419,
+              21.354559
+            ],
+            [
+              -157.80419,
+              21.35434
+            ],
+            [
+              -157.804306,
+              21.354121
+            ],
+            [
+              -157.80448,
+              21.353902
+            ],
+            [
+              -157.804712,
+              21.353684
+            ],
+            [
+              -157.804944,
+              21.353465
+            ],
+            [
+              -157.805176,
+              21.353246
+            ],
+            [
+              -157.805408,
+              21.353027
+            ],
+            [
+              -157.805524,
+              21.352809
+            ],
+            [
+              -157.805698,
+              21.35259
+            ],
+            [
+              -157.80593,
+              21.352371
+            ],
+            [
+              -157.806162,
+              21.352152
+            ],
+            [
+              -157.806393,
+              21.351934
+            ],
+            [
+              -157.806567,
+              21.351715
+            ],
+            [
+              -157.806683,
+              21.351496
+            ],
+            [
+              -157.806625,
+              21.351277
+            ],
+            [
+              -157.806799,
+              21.351059
+            ],
+            [
+              -157.807031,
+              21.35084
+            ],
+            [
+              -157.807147,
+              21.350621
+            ],
+            [
+              -157.807379,
+              21.350402
+            ],
+            [
+              -157.807437,
+              21.350348
+            ]
+          ],
+          "why": "the reservoir in upper Nuʻuanu: its basin and dam stand in the bare earth, and the trunk ponded 4.3 m deep here",
+          "texels": 93,
+          "cutMetres": 7.3
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3535 N 157.8049 W",
+          "points": [
+            [
+              -157.804886,
+              21.35352
+            ],
+            [
+              -157.805118,
+              21.353301
+            ],
+            [
+              -157.80535,
+              21.353082
+            ],
+            [
+              -157.805524,
+              21.352863
+            ],
+            [
+              -157.80564,
+              21.352645
+            ],
+            [
+              -157.805814,
+              21.35248
+            ]
+          ],
+          "why": "the reservoir in upper Nuʻuanu: its basin and dam stand in the bare earth, and the trunk ponded 2.5 m deep here",
+          "texels": 26,
+          "cutMetres": 0.1
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3524 N 157.8059 W",
+          "points": [
+            [
+              -157.805872,
+              21.352426
+            ],
+            [
+              -157.806104,
+              21.352207
+            ],
+            [
+              -157.806335,
+              21.351988
+            ],
+            [
+              -157.806567,
+              21.35177
+            ],
+            [
+              -157.806683,
+              21.351551
+            ],
+            [
+              -157.806625,
+              21.351332
+            ],
+            [
+              -157.806741,
+              21.351113
+            ],
+            [
+              -157.806973,
+              21.350895
+            ],
+            [
+              -157.807147,
+              21.350676
+            ],
+            [
+              -157.807321,
+              21.350457
+            ],
+            [
+              -157.807379,
+              21.350402
+            ]
+          ],
+          "why": "the reservoir in upper Nuʻuanu: its basin and dam stand in the bare earth, and the trunk ponded 3.8 m deep here",
+          "texels": 50,
+          "cutMetres": 3.4
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3346 N 157.8332 W",
+          "points": [
+            [
+              -157.833245,
+              21.334598
+            ],
+            [
+              -157.833476,
+              21.334434
+            ],
+            [
+              -157.833708,
+              21.334215
+            ],
+            [
+              -157.83394,
+              21.333996
+            ],
+            [
+              -157.833998,
+              21.333887
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.8 m deep behind it",
+          "texels": 19,
+          "cutMetres": 4.7
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3339 N 157.8343 W",
+          "points": [
+            [
+              -157.834288,
+              21.333887
+            ],
+            [
+              -157.83452,
+              21.333941
+            ],
+            [
+              -157.834752,
+              21.333996
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 11,
+          "cutMetres": 2.3
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3331 N 157.8385 W",
+          "points": [
+            [
+              -157.838464,
+              21.333121
+            ],
+            [
+              -157.838696,
+              21.333066
+            ],
+            [
+              -157.838928,
+              21.333066
+            ],
+            [
+              -157.839044,
+              21.333012
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.3 m deep behind it",
+          "texels": 13,
+          "cutMetres": 3.4
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3316 N 157.8410 W",
+          "points": [
+            [
+              -157.841016,
+              21.331645
+            ],
+            [
+              -157.841248,
+              21.33148
+            ],
+            [
+              -157.84148,
+              21.331426
+            ],
+            [
+              -157.841712,
+              21.331371
+            ],
+            [
+              -157.841944,
+              21.331262
+            ],
+            [
+              -157.842118,
+              21.331043
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 30,
+          "cutMetres": 2.3
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3291 N 157.8432 W",
+          "points": [
+            [
+              -157.843219,
+              21.329074
+            ],
+            [
+              -157.843451,
+              21.328855
+            ],
+            [
+              -157.843509,
+              21.328746
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.0 m deep behind it",
+          "texels": 8,
+          "cutMetres": 3.4
+        },
+        {
+          "name": "Nuʻuanu Stream at 21.3209 N 157.8516 W",
+          "points": [
+            [
+              -157.851571,
+              21.320871
+            ],
+            [
+              -157.851802,
+              21.320871
+            ],
+            [
+              -157.852034,
+              21.320816
+            ],
+            [
+              -157.85215,
+              21.320707
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 14,
+          "cutMetres": 3
+        },
+        {
+          "name": "Kapālama Stream at 21.3510 N 157.8360 W",
+          "points": [
+            [
+              -157.83597,
+              21.351004
+            ],
+            [
+              -157.836202,
+              21.350895
+            ],
+            [
+              -157.83626,
+              21.35084
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 8,
+          "cutMetres": 5.1
+        },
+        {
+          "name": "Kapālama Stream at 21.3464 N 157.8488 W",
+          "points": [
+            [
+              -157.848787,
+              21.346355
+            ],
+            [
+              -157.848961,
+              21.346301
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 3,
+          "cutMetres": 3.1
+        },
+        {
+          "name": "Kapālama Stream at 21.3394 N 157.8656 W",
+          "points": [
+            [
+              -157.865605,
+              21.33941
+            ],
+            [
+              -157.865837,
+              21.339191
+            ],
+            [
+              -157.865895,
+              21.339082
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 7,
+          "cutMetres": 2
+        },
+        {
+          "name": "Kalihi Stream at 21.3649 N 157.8415 W",
+          "points": [
+            [
+              -157.84148,
+              21.364895
+            ],
+            [
+              -157.841712,
+              21.364676
+            ],
+            [
+              -157.841828,
+              21.364566
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 8,
+          "cutMetres": 3.5
+        },
+        {
+          "name": "Kalihi Stream at 21.3372 N 157.8755 W",
+          "points": [
+            [
+              -157.875522,
+              21.337168
+            ],
+            [
+              -157.875754,
+              21.337059
+            ],
+            [
+              -157.875986,
+              21.336949
+            ],
+            [
+              -157.876218,
+              21.336785
+            ],
+            [
+              -157.876276,
+              21.33673
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.8 m deep behind it",
+          "texels": 21,
+          "cutMetres": 5.3
+        },
+        {
+          "name": "Kalihi Stream at 21.3369 N 157.8760 W",
+          "points": [
+            [
+              -157.876044,
+              21.336895
+            ],
+            [
+              -157.876218,
+              21.336785
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.3 m deep behind it",
+          "texels": 6,
+          "cutMetres": 0.2
+        },
+        {
+          "name": "Kalihi Stream at 21.3366 N 157.8765 W",
+          "points": [
+            [
+              -157.87645,
+              21.336566
+            ],
+            [
+              -157.876682,
+              21.336348
+            ],
+            [
+              -157.876914,
+              21.336129
+            ],
+            [
+              -157.877146,
+              21.33591
+            ],
+            [
+              -157.877204,
+              21.335691
+            ],
+            [
+              -157.87732,
+              21.335582
+            ],
+            [
+              -157.877552,
+              21.335527
+            ],
+            [
+              -157.877784,
+              21.335527
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 4.5 m deep behind it",
+          "texels": 29,
+          "cutMetres": 6.3
+        },
+        {
+          "name": "Kalihi Stream at 21.3355 N 157.8779 W",
+          "points": [
+            [
+              -157.8779,
+              21.335527
+            ],
+            [
+              -157.878132,
+              21.335363
+            ],
+            [
+              -157.878364,
+              21.335145
+            ],
+            [
+              -157.878596,
+              21.33498
+            ],
+            [
+              -157.878828,
+              21.334926
+            ],
+            [
+              -157.879059,
+              21.334762
+            ],
+            [
+              -157.879291,
+              21.334543
+            ],
+            [
+              -157.879523,
+              21.334324
+            ],
+            [
+              -157.879755,
+              21.334215
+            ],
+            [
+              -157.879987,
+              21.334215
+            ],
+            [
+              -157.880219,
+              21.33427
+            ],
+            [
+              -157.880451,
+              21.334434
+            ],
+            [
+              -157.880683,
+              21.334652
+            ],
+            [
+              -157.880915,
+              21.334707
+            ],
+            [
+              -157.881147,
+              21.334598
+            ],
+            [
+              -157.881263,
+              21.334488
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.3 m deep behind it",
+          "texels": 78,
+          "cutMetres": 3.1
+        },
+        {
+          "name": "Mānoa Stream at 21.3242 N 157.8020 W",
+          "points": [
+            [
+              -157.801986,
+              21.324152
+            ],
+            [
+              -157.802102,
+              21.323934
+            ],
+            [
+              -157.802276,
+              21.323715
+            ],
+            [
+              -157.802392,
+              21.323496
+            ],
+            [
+              -157.802508,
+              21.323277
+            ],
+            [
+              -157.802334,
+              21.323059
+            ],
+            [
+              -157.802334,
+              21.32284
+            ],
+            [
+              -157.80245,
+              21.322621
+            ],
+            [
+              -157.802508,
+              21.322402
+            ],
+            [
+              -157.802682,
+              21.322184
+            ],
+            [
+              -157.80274,
+              21.321965
+            ],
+            [
+              -157.802798,
+              21.32191
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.0 m deep behind it",
+          "texels": 59,
+          "cutMetres": 4
+        },
+        {
+          "name": "Mānoa Stream at 21.3236 N 157.8024 W",
+          "points": [
+            [
+              -157.802392,
+              21.323551
+            ],
+            [
+              -157.802508,
+              21.323332
+            ],
+            [
+              -157.802334,
+              21.323113
+            ],
+            [
+              -157.802334,
+              21.322895
+            ],
+            [
+              -157.802392,
+              21.322676
+            ],
+            [
+              -157.802508,
+              21.322457
+            ],
+            [
+              -157.802566,
+              21.322293
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.3 m deep behind it",
+          "texels": 30,
+          "cutMetres": 4.1
+        }
+      ],
+      "streams": [
+        {
+          "name": "Nuʻuanu Stream",
+          "mapped": "Nuuanu / Nuuanu",
+          "from": [
+            -157.795839,
+            21.355816
+          ],
+          "outlet": [
+            -157.858298,
+            21.317699
+          ],
+          "mouth": [
+            -157.865624,
+            21.313559
+          ],
+          "outletOffStreamMetres": 6,
+          "outletFromMouthMetres": 891,
+          "withinMappedShare": 0.904,
+          "lengthKm": 10.608,
+          "catchmentKm2": 20.96,
+          "deepestPitMetres": 0.8,
+          "ok": true
+        },
+        {
+          "name": "Kapālama Stream",
+          "mapped": "Kapalama / Kapalama",
+          "from": [
+            -157.829533,
+            21.357621
+          ],
+          "outlet": [
+            -157.867055,
+            21.327598
+          ],
+          "mouth": [
+            -157.877656,
+            21.320044
+          ],
+          "outletOffStreamMetres": 9,
+          "outletFromMouthMetres": 1385,
+          "withinMappedShare": 0.922,
+          "lengthKm": 6.643,
+          "catchmentKm2": 3.6,
+          "deepestPitMetres": 1.5,
+          "ok": true
+        },
+        {
+          "name": "Kalihi Stream",
+          "mapped": "Kalihi / Kalihi",
+          "from": [
+            -157.811091,
+            21.36916
+          ],
+          "outlet": [
+            -157.886077,
+            21.33416
+          ],
+          "mouth": [
+            -157.891312,
+            21.330691
+          ],
+          "outletOffStreamMetres": 6,
+          "outletFromMouthMetres": 667,
+          "withinMappedShare": 0.965,
+          "lengthKm": 11.507,
+          "catchmentKm2": 14.11,
+          "deepestPitMetres": 1.5,
+          "ok": true
+        },
+        {
+          "name": "Mānoa Stream",
+          "mapped": "Ala Wai / Manoa",
+          "from": [
+            -157.800826,
+            21.326723
+          ],
+          "outlet": [
+            -157.817702,
+            21.287621
+          ],
+          "mouth": [
+            -157.840467,
+            21.287504
+          ],
+          "outletOffStreamMetres": 14,
+          "outletFromMouthMetres": 2374,
+          "withinMappedShare": 0.911,
+          "lengthKm": 5.725,
+          "catchmentKm2": 21.56,
+          "deepestPitMetres": 1,
+          "ok": true
+        }
+      ],
+      "stats": {
+        "landFraction": 0.8477,
+        "minMetres": -356.75,
+        "maxMetres": 954.75,
+        "rainCoverage": 1,
+        "lidarShare": 0.9321,
+        "datumShiftMetres": 0.72
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA",
+          "collected": "2023-01-11 to 2023-07-07",
+          "note": "564 tiles (USGS_OPR_HI_NOAAMauiOahu_2020_B20_4QFJ140560 … USGS_OPR_HI_NOAAMauiOahu_2020_B20_4QFJ265645, part HI_NOAAMauiOahu_2_B20); every 0.5 m cell counts toward the texel its centre falls in. The survey's zero is 0.72 m below mean sea level (measured against the CUDEM on flat ground; residual 0.00 m) and is moved to it. A cell is land above +0.2 m, because water inside the coast is flattened to the level of the day it was flown (−0.35 to +0.1 m); a texel is land when at least half its cells are, and holds their mean (never below 0.25 m). 112 of the 676 squares over the box have no tile: open sea, and the windward face of the pali (see the CUDEM)"
+        },
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-20",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "tile ncei19_n21x50_w158x00_2021v1, about 3 m cells. Sea texels: the area-weighted mean of the cells below mean sea level, never shallower than -1 m (628553 texels; the reef flats from topobathymetric lidar, the harbour and channels from NOAA surveys); 6386 texels of water inside the coast that the CUDEM holds as land (the Ala Wai, the tidal reaches of the streams, lagoons) are a flat -1 m. Land: 239839 texels (5.8% of the pack) on the windward face of the pali, where the lidar has no tile, are the CUDEM's land there (the 2013 NOAA Oʻahu lidar on the lower slopes, the USGS 1/3 arc-second DEM on the cliffs, per its spatial metadata) plus a smooth correction that meets the lidar along the seam (seam difference median -0.8 m)"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells; interpolated onto the pack (the cells are 40 times the texel), 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        },
+        {
+          "id": "hawaii-gis-geologic-units-fill",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) in the district box",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-20",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "13 polygons in and around the box; a texel counts as fill when at least half of it is. artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-20",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "exported over the box at 5 m in EPSG:26904 (2720x2760 px); the shore the patches are cut with, traced by hand (shoreline-1881.geojson); its georeferencing as the State serves it, within about 25 m at Puowaina"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-10-20",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "exported over the box at 5 m in EPSG:26904 (2720x2760 px); read against the 1881 shore: allowing for its misregistration (about 100 m at Puowaina), the same waterfront, so it adds no separate kingdom shore"
+        },
+        {
+          "id": "hawaii-gis-streams-dar",
+          "title": "State of Hawaiʻi GIS, Streams (DAR), FreshWater MapServer layer 1, in the district box",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/FreshWater/MapServer/1",
+          "fetched": "2026-10-20",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "note": "246 lines; the Division of Aquatic Resources stream lines (stream_nam, trib_nam); used only to check the routed trunks, never baked"
+        }
+      ]
+    }
+  ]
+}

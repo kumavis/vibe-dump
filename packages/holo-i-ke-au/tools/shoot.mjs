@@ -3,8 +3,10 @@
 // `npm run build -w @vibe-dump/holo-i-ke-au` first.
 //
 //   node tools/shoot.mjs <outdir> '<json array of shots>' [extra query]
-//   shot = { name, cam: [x, z, distance, yaw, pitch], year, frames, wait, eval, keys, click, hover, settle }
+//   shot = { name, cam: [x, z, distance, yaw, pitch], year, frames, wait, eval, until, keys, click, hover, settle, element }
 //     eval: a function body run in the page with `app` (app.tour.goTo(6, 0), say)
+//     until: an expression waited on before the settle (app.land.ready, say)
+//     element: a selector to shoot alone instead of the page (.legend, say)
 //     keys: keys to press, in order (["ArrowRight", "ArrowRight"])
 //     click / hover: a selector to click, or to rest the pointer on (after the settle)
 //     settle: snap the camera's flight, the year and the island packs to where they're going (default true)
@@ -83,6 +85,7 @@ for (const s of shots) {
   // a frame to move the camera, then let the packs and the camera's target settle
   const f0 = await page.evaluate(() => window.__app.frames)
   await page.waitForFunction((f0) => window.__app.frames > f0 + 1, f0, { timeout: 300000 })
+  if (s.until) await page.waitForFunction(new Function(`const app = window.__app; return ${s.until}`), null, { timeout: 300000 })
   if (s.settle !== false) await page.evaluate(() => window.__app.settle())
   const f1 = await page.evaluate(() => window.__app.frames)
   await page.waitForFunction(([f1, n]) => window.__app.frames > f1 + n, [f1, s.frames ?? 3], { timeout: 300000 })
@@ -93,11 +96,12 @@ for (const s of shots) {
   }
   if (s.wait) await page.waitForTimeout(s.wait)
   const t = Date.now()
-  await page.screenshot({ path: join(outDir, (s.name || 'shot') + '.png'), timeout: 180000 })
+  if (s.element) await page.locator(s.element).screenshot({ path: join(outDir, (s.name || 'shot') + '.png'), timeout: 180000 })
+  else await page.screenshot({ path: join(outDir, (s.name || 'shot') + '.png'), timeout: 180000 })
   const info = await page.evaluate(() => {
     const a = window.__app
     const tour = a.tour?.state
-    return { d: Math.round(a.rig.state.distance), exag: a.world.exag.toFixed(2), slots: a.world.slots.map((t) => (t ? `${t.pack.id}:${t.k.toFixed(2)}` : '-')).join(' '), year: Math.round(a.timeline.year), tour, clusters: a.ui?.pins.groups().map((g) => g.ids.join('+')) }
+    return { d: Math.round(a.rig.state.distance), view: a.view, land: a.land?.stats?.(), fill: a.islandFill ? +a.islandFill().toFixed(2) : undefined, routes: a.routes?.visibleRoutes().map((r) => r.id), exag: a.world.exag.toFixed(2), slots: a.world.slots.map((t) => (t ? `${t.pack.id}:${t.k.toFixed(2)}` : '-')).join(' '), year: Math.round(a.timeline.year), tour, clusters: a.ui?.pins.groups().map((g) => g.ids.join('+')) }
   })
   console.log('shot', s.name, 'in', Date.now() - t, 'ms', JSON.stringify(info))
 }

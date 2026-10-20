@@ -69,6 +69,8 @@ async function loadIslands(app, ui, decoder) {
   )
   decoder.dispose()
   app.islandsLoaded = true
+  // then the land layers, in their own worker, behind everything else
+  app.land.load()
 }
 
 start().catch((err) => {
