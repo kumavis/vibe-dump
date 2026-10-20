@@ -125,7 +125,7 @@ Coordinates are `[lon, lat]` (GeoJSON order). Ids are kebab-case ASCII.
 `events.json`:
 
 ```jsonc
-{ "id": "nuuanu-1795", "title": "Kaleleakaʻanae", "gloss": "the battle of Nuʻuanu",
+{ "id": "nuuanu-1795", "title": "Kalelekaʻanae", "gloss": "the battle of Nuʻuanu",
   "when": { "from": "1795-04", "to": "1795-05", "precision": "month" },   // precision: day | month | year | decade | generation | century
   "era": "kamehameha",              // the era keyframe it belongs to
   "where": [ { "place": "waikiki", "role": "landing" }, { "place": "nuuanu", "role": "battle" } ],
@@ -166,6 +166,15 @@ Rules, enforced by `tools/check-data.mjs`:
 - numbers appear only inside `tellings`, each with its source, never as a single
   figure in `summary`
 - a source with `"opened": false` is marked `verify` in the card
+
+The first dataset found places where this schema ran short; RESEARCH.md §6
+lists them. The additions it made are accepted as part of the contract: a
+`note` on a place, `about`, `notes` and per-era `sources` in `polities.json`,
+the confidence vocabulary `firm | soft | contested`, an `all-islands` place
+for archipelago-wide events and a `kahiki` sea marker for arrivals from off
+the map, and `tertiary: true` on a source that is only a finding aid.
+`tools/check-data.mjs` is the enforcement and reads the moku keys from
+`boundaries/moku.geojson`.
 
 ## How to bake
 

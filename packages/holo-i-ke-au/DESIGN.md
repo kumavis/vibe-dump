@@ -86,9 +86,9 @@ year.
 
 ### 3.1 The span
 
-Settlement of Hawaiʻi is now dated to roughly 1000 to 1200 CE (the revised
-short chronology; *verify the current consensus before quoting a range*), so
-the whole span is about nine centuries. Eras are keyframes, not a slider of
+Settlement of Hawaiʻi is now dated to roughly 1000 to 1300 CE: the two
+radiocarbon schools give about 940–1130 and about 1190–1290 (RESEARCH.md §3
+has the papers), so the whole span is eight or nine centuries. Eras are keyframes, not a slider of
 years. For the pre-contact centuries, index time by reigns, not years: the dates
 are genealogical estimates anyway, and "in the time of ʻUmi, about 1600" is both
 more honest and more Hawaiian than a bare number.
@@ -122,10 +122,11 @@ out: pins, boundaries, villages going dark, the forest line retreating, with a
 few close-ups where the land itself changed (Honolulu, Lahaina, Kalaupapa).
 
 **Depopulation is the spine of that century** and has to be shown, because it is
-why the loʻi are empty. Estimates at contact run from about 300,000 to over
-800,000 and are contested; the 1890 census counted about 40,000 Native
-Hawaiians (*verify exact figures and cite both schools*). It is heavy, and the
-zoomed-out view can carry it honestly as settlement fading.
+why the loʻi are empty. Estimates at contact run from about 200,000 to a
+million and are contested; the 1890 census counted about 34,000 Hawaiians and
+a further 6,000 part-Hawaiians (sources in RESEARCH.md and in the
+`depopulation` event's tellings). It is heavy, and the zoomed-out view can
+carry it honestly as settlement fading.
 
 **The coda is nearly free and gives the arc an ending.** At archipelago scale the
 Hawaiian Renaissance is a handful of pins. Restoration brings the camera back
@@ -410,19 +411,23 @@ The campaign at three zooms, which is the thesis in one place:
   failed crossing to Kauaʻi (1796).
 - **Island.** Landing between Waiʻalae and Waikīkī; the march through Kou, which
   is Honolulu; up the valley, with the Oʻahu forces drawn up above.
-- **Valley.** Puʻiwa and Lāʻimi, the cannon under Young and Davis, Kaʻiana's
-  death, the retreat to the pali and the notch. Honolulu in 1795 is a village at
-  Kou with fishponds along the shore, and the valley floor is loʻi well past
-  Lāʻimi.
+- **Valley.** Puʻiwa and Lāʻimi, Kamehameha's guns, Kaʻiana's death, the
+  retreat to the pali and the notch. Honolulu in 1795 is a village at Kou with
+  fishponds along the shore, and the valley floor is loʻi well past Lāʻimi.
+  The sources read so far put Young and Davis at the guns at Kepaniwai in
+  1790; who served the guns at Nuʻuanu is not established. The battle's name
+  is spelled *Kalelekaʻanae* in the one source that gives it; a speaker should
+  confirm.
 
 | firm | soft |
 | --- | --- |
 | year and season; the place names; the general line of advance; the cannon; the ending at the pali | every number: fleet, army and the dead vary by a factor of two or more between tellings |
 | the valley has 0.5 m lidar; 1880s survey maps still show the loʻi | exact positions of the lines are unknowable |
-| | how many went over the pali; the 1898 road cut turned up remains (*verify the account and its source*) |
+| | how many went over the pali, and whether any did: Fornander says so, Kamakau does not mention it. The story that the 1898 road cut turned up remains has so far been traced only to a travel guide; no newspaper of the time was reachable. |
 
-**Sources.** Kamakau is the main Hawaiian account (free on Ulukau). Fornander's
-second volume is public domain. ʻĪʻī's *Fragments* is print only. There was no
+**Sources.** Kamakau is the main Hawaiian account (read in the publisher's free
+PDF; the Ulukau copy itself was not reachable from the build container).
+Fornander's second volume is public domain. ʻĪʻī's *Fragments* is print only. There was no
 European eyewitness; the ship journals of the following year are secondhand.
 
 **Tone is the first decision.** The life system is built for work, not war.
@@ -523,9 +528,11 @@ Considered and set aside:
 - *Moku Kahe*, "flowing islands": *moku* and *kahe* both also mean to cut, so it
   can read as a sliced district. Rejected.
 
-*Au* has a public history as a title: *Ke Au ʻOkoʻa* and *Ke Au Hou* were
-Hawaiian-language newspapers (*verify dates*). All of the above are coinages
-apart from the dictionary senses; a speaker should look at the final one.
+*Au* has a public history as a title: *Ke Au ʻOkoʻa* ran 1865–1873 and John
+H. Wise's *Ke Au Hou* 1910–1912, and part of Kamakau's history first appeared
+in *Ke Au ʻOkoʻa*, so the name connects to the app's main source. All of the
+above are coinages apart from the dictionary senses; a speaker should look at
+the final one.
 
 Draft gallery card, for `package.json` when there is an app:
 
