@@ -506,3 +506,51 @@ a method from the three, a written rule unless mapped, and sources with title,
 URL and licence; every era must map to a keyframe for each layer. It prints
 coverage and people per island and keyframe, and fails if `public/data/layers/`
 passes 8 MB.
+
+## District packs
+
+The close-up of one district (DESIGN.md §3.3, §3.4, §8): a finer pack that
+takes over from its island pack as the camera comes down, with the patches
+and features that let one valley be drawn in a chosen year. Under
+`public/data/districts/`, with its own `manifest.json` (bake.mjs never
+touches it). The first district is `nuuanu`: Honolulu's harbour and plain,
+Nuʻuanu to the pali, with Kalihi and Mānoa at the edges.
+
+```jsonc
+// public/data/districts/manifest.json
+{ "districts": [ {
+    "id": "nuuanu", "name": "Nuʻuanu", "island": "oahu",
+    "bounds": [west, south, east, north], "size": [W, H], "metresPerTexel": [mx, mz],
+    "height": { "file": "nuuanu/height.png", "scale": 0.25, "offset": -6000 },   // as §2, split bytes
+    "rain":   { "file": "nuuanu/rain.png" },                                      // as §2
+    "patches": [ { "keyframe": "contact", "until": 1850, "file": "nuuanu/patch-contact.png" } ],
+    "features": "nuuanu/features.json",
+    "sources": [ ... ] } ] }
+```
+
+- **Grid**: regular in lon/lat like an island pack, at most 2048 on the long
+  side, from the finest open elevation (the 2022–23 lidar for Oʻahu, else
+  3DEP 1/3 arc-second), area-averaged down; the same land and sea rules as
+  the islands. Bounds are outer texel edges.
+- **Patches**: an 8-bit greyscale mask on the pack's grid, 255 where a texel
+  that is land today was sea or reef flat in the keyframe's year (modern fill:
+  the harbour, Sand Island, Kakaʻako, the Ala Wai, the reef runway). The app
+  lowers those texels to a shallow reef flat when the chosen year is before
+  `until`. Source the fill from the State geologic units' fill polygons and
+  the georeferenced Government Survey maps; say which in `sources`.
+- **Features** (`features.json`): a GeoJSON FeatureCollection in lon/lat of
+  what stood in the district, each with `properties`:
+  `kind` (`loi | fishpond | village | heiau | trail | stream | force | line | label`),
+  `name` (with diacritics, or null), `from` and `to` (years the feature
+  applies; open ends null), `precision` (`exact | mapped | inferred | schematic`),
+  `role` (for `force`: `oahu | hawaii`; for `line`: `advance | stand | retreat`),
+  `sources` (ids in `sources.json`) and an optional `note`. Loʻi and fishponds
+  are polygons; the village is a polygon or a point with a `households`
+  estimate in a telling, never a figure in `note`; a `force` is a polyline
+  with a `when` (ISO date or month) so the battle can be shown as masses
+  moving, never as individuals; a `heiau` obeys §4's precision rule
+  (ahupuaʻa precision unless an established public landmark).
+- **Stops** for an event in this district carry, besides `place`, `zoom` and
+  `year`, an optional `camera`: `{ "bearing": compass degrees the camera
+  looks toward, "pitch": 0..1, "distance": world units }`, so the walk can
+  frame the valley the way the text reads it.
