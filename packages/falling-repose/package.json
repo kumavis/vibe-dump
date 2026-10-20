@@ -1,0 +1,16 @@
+{
+  "name": "@vibe-dump/falling-repose",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "gallery": {
+    "title": "Falling Repose",
+    "description": "A figure falls through time in repose — a black cutout pouring volumetric light into a haze like sun in deep water, motes streaking past slow but fast, over a Shepard tone that never stops descending. Press and hold to hold time.",
+    "tags": ["art"],
+    "status": "wip",
+    "models": ["Opus 5.5"],
+    "thinking": "unknown",
+    "thumbnail": { "waitFor": "body.ready", "settle": 2500 }
+  }
+}
