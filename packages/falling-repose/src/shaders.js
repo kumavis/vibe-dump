@@ -392,7 +392,9 @@ void main() {
   // nothing right against the lens: it would be a blurred pane, not a mote
   float near = smoothstep(0.7, 1.5, depth);
   vColor = (vec3(0.07, 0.11, 0.13) + lit * 3.4) * aB.z * energy * edge * fog * near;
-  vBehind = depth > uFigureDepth ? 1.0 : 0.0;
+  // how far behind the body's plane: a soft crossfade rather than a hard
+  // test, or a mote crossing that plane over the cut-out pops on or off
+  vBehind = smoothstep(uFigureDepth - 0.25, uFigureDepth + 0.25, depth);
 
   gl_Position = vec4(pos / uRes * 2.0 - 1.0, 0.0, 1.0);
 }`
@@ -423,9 +425,9 @@ void main() {
   } else {
     a = exp(-dist * dist / max(vRad * vRad * 0.45, 0.25)) * tail * (vHalfLen > 0.5 ? 1.6 : 1.0);
   }
-  if (vBehind > 0.5) {
+  if (vBehind > 0.0) {
     float d = sdfDecode(texture(uSdf, gl_FragCoord.xy / uRes).x);
-    a *= clamp(0.5 + d / uAA, 0.0, 1.0);
+    a *= mix(1.0, clamp(0.5 + d / uAA, 0.0, 1.0), vBehind);
   }
   o = vec4(vColor * a, 1.0);
 }`

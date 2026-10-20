@@ -358,21 +358,27 @@ export class Figure {
         const dy = -R[4], dz = -R[7]
         return dy + 0.12 * dz - 0.04 * (Math.abs(x - sh.rot[0]) + Math.abs(z - sh.rot[2]))
       }
-      for (let x = -3.0; x <= 0.6; x += 0.2)
-        for (let z = -0.2; z <= 2.6; z += 0.2) {
-          const v = score(x, z)
-          if (v > bestScore) (bestScore = v), (best = [x, z])
-        }
-      for (const step of [0.08, 0.03])
+      // Search the whole range once, when the reach begins; after that, only
+      // refine from where it already is. The range covers the sphere of arm
+      // directions twice, so a fresh search can hop between two far-apart
+      // answers of nearly equal score — and the arm would whip between them.
+      if (!this.reachGoal) {
+        for (let x = -3.0; x <= 0.6; x += 0.2)
+          for (let z = -0.2; z <= 2.6; z += 0.2) {
+            const v = score(x, z)
+            if (v > bestScore) (bestScore = v), (best = [x, z])
+          }
+      } else {
+        best = this.reachGoal.slice()
+        bestScore = score(best[0], best[1])
+      }
+      for (const step of [0.08, 0.08, 0.03, 0.03])
         for (const dx of [-step, 0, step])
           for (const dz of [-step, 0, step]) {
             const v = score(best[0] + dx, best[1] + dz)
             if (v > bestScore) (bestScore = v), (best = [best[0] + dx, best[1] + dz])
           }
-      // Hysteresis: two poses can score almost the same, and as the body turns
-      // the winner flips between them. Only change course for a clearly
-      // better one, and travel there at a pace set in seconds, not frames.
-      if (!this.reachGoal || bestScore > score(this.reachGoal[0], this.reachGoal[1]) + 0.05) this.reachGoal = best
+      this.reachGoal = best
       const ease = 1 - Math.exp(-dt / 0.45)
       this.reachAim[0] += (this.reachGoal[0] - this.reachAim[0]) * ease
       this.reachAim[2] += (this.reachGoal[1] - this.reachAim[2]) * ease
