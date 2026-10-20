@@ -69,14 +69,16 @@ cookieCam.update()
   cookieCam.update()
 }
 
-// The light changes over minutes — afternoon gold, a white noon, a rose
-// evening, then moonlight — and the hall takes the colour of whatever is
-// pouring in. Linear RGB: the sun's irradiance square on, the sky's radiance
-// through the opening, and the air's own faint glow.
+// The light changes over minutes. It opens on a cold blue-white, then a white
+// noon, an afternoon gold, a rose evening and moonlight, and round again; the
+// hall takes the colour of whatever is pouring in. Linear RGB: the sun's
+// irradiance square on, the sky's radiance through the opening, and the air's
+// own faint glow.
 const SUN_I = 40
 const PALETTES = [
-  { sun: [1.0, 0.8, 0.58], sky: [0.5, 0.6, 0.74], fog: [0.02, 0.021, 0.024] },
+  { sun: [0.69, 0.75, 0.92], sky: [0.27, 0.35, 0.54], fog: [0.015, 0.017, 0.024] },
   { sun: [1.0, 0.96, 0.9], sky: [0.46, 0.6, 0.86], fog: [0.02, 0.022, 0.026] },
+  { sun: [1.0, 0.8, 0.58], sky: [0.5, 0.6, 0.74], fog: [0.02, 0.021, 0.024] },
   { sun: [1.0, 0.6, 0.44], sky: [0.66, 0.5, 0.6], fog: [0.024, 0.019, 0.022] },
   { sun: [0.62, 0.74, 1.0], sky: [0.22, 0.3, 0.5], fog: [0.014, 0.017, 0.024] },
 ]
@@ -86,7 +88,8 @@ const PALETTE_SPAN = 95 // seconds per colour
 function palette(t) {
   const x = (t / PALETTE_SPAN) % PALETTES.length
   const i = Math.floor(x)
-  let f = x - i
+  // each colour holds for most of its span, then turns into the next
+  let f = Math.max(0, (x - i - 0.6) / 0.4)
   f = f * f * (3 - 2 * f)
   const a = PALETTES[i], b = PALETTES[(i + 1) % PALETTES.length]
   const mix = (k, s) => a[k].map((v, j) => (v + (b[k][j] - v) * f) * s)
@@ -543,7 +546,7 @@ function step(dt) {
     focus: 45,
     dust: !params.has('nodust'),
     exposure: pin('exp', 2.5) * (1.0 + 0.2 * clock.swell),
-    palette: palette(T + 20),
+    palette: palette(T),
     fade: fade * fade,
     bloom: 0.06,
     pr,

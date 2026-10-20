@@ -311,7 +311,7 @@ vec3 beamIntensity(float area) { return uSunColor * (uSun.y * area * BEAM_SCATTE
 
 // The eye adapts in a dark hall, and the light that bounces round and round
 // it is more than one bounce can say: this lifts it so the concrete reads.
-const float BOUNCE_GAIN = 2.4;
+const float BOUNCE_GAIN = 1.0;
 
 // all the light that comes back off the floor and down from the sky
 vec3 bounce(vec3 p, vec3 n, vec3 skyC, vec3 poolC, float area) {
@@ -330,7 +330,7 @@ vec3 bounce(vec3 p, vec3 n, vec3 skyC, vec3 poolC, float area) {
   }
   vec3 pr = poolRadiance();
   // and the faint second bounce off everything else, without direction
-  return uSkyColor * sky + BOUNCE_GAIN * (pr * pool + beamIntensity(area) * beam + (uSkyColor * 0.004 + pr * 0.02) * (0.6 + 0.4 * n.y));
+  return uSkyColor * sky + BOUNCE_GAIN * (pr * pool + beamIntensity(area) * beam + (uSkyColor * 0.002 + pr * 0.008) * (0.6 + 0.4 * n.y));
 }
 
 // ---- the hall's surfaces ---------------------------------------------------
@@ -447,30 +447,38 @@ Surf concrete(vec3 p, vec3 n, int mat, float fp) {
     s.ao = (1.0 - 0.55 * exp(-dw / 1.6)) * (1.0 - 0.5 * exp(-dp / 1.2));
     return s;
   }
+  // Walls, piers and ceiling: concrete the way Tadao Ando casts it, against
+  // varnished formwork, into one smooth and nearly even grey with only the
+  // softest cloudiness of the pour. The ceiling is left at that: it is meant
+  // to be lost in the dark.
   vec2 uv = mat == 1 ? p.xz : faceUV(p, n);
-  vec2 cell = mat == 1 ? vec2(2.4, 2.4) : vec2(2.4, 1.2);
+  float cloud = fbm2(uv * 0.16 + float(mat) * 5.0);
+  vec3 base = vec3(0.34, 0.335, 0.325) * mix(0.93, 1.05, cloud);
+  s.rough = 0.85;
+  if (mat == 1) {
+    s.albedo = base;
+    s.ao = 1.0 - 0.35 * exp(-min(ROOM_HALF_W - abs(p.x), min(p.z - ROOM_Z0, ROOM_Z1 - p.z)) / 2.0);
+    return s;
+  }
+  // The walls and piers keep the marks of the formwork and nothing else:
+  // panels of 1.8 m by 0.9 m, the tatami module, each a hair different from its
+  // neighbours, with hairline joints between them and the six tie holes each
+  // one leaves, so the holes run in one even grid down the whole wall.
+  vec2 cell = vec2(1.8, 0.9);
   vec2 id = floor(uv / cell);
   vec2 f = uv - (id + 0.5) * cell;
-  float pour = hash12(id + float(mat) * 17.0);
-  float mott = fbm2(uv * vec2(0.6, 0.35) + float(mat) * 5.0);
-  // rain of a century of damp, streaking down the walls
-  float streak = mat == 1 ? 0.5 : fbm2(vec2(uv.x * 1.4, uv.y * 0.08));
-  vec3 base = vec3(0.3, 0.295, 0.285) * mix(0.82, 1.1, pour) * mix(0.8, 1.15, mott) * mix(1.08, 0.78, smoothstep(0.4, 0.8, streak));
-  vec2 g = abs(f) - cell * 0.5;
-  float seam = max(line(-g.x, 0.005, fp), line(-g.y, 0.005, fp));
-  // tie holes: three across, two up, each panel
-  vec2 tq = mod(uv, cell) - cell * vec2(0.5 / 3.0, 0.25);
+  base *= 0.985 + 0.03 * hash12(id + float(mat) * 17.0);
+  vec2 g = cell * 0.5 - abs(f);
+  float joint = max(line(g.x, 0.0015, fp), line(g.y, 0.0015, fp));
+  // tie holes: three across, two up, each panel, at its sixths and quarters
   vec2 tc = vec2(cell.x / 3.0, cell.y * 0.5);
-  tq = mod(tq + tc * 0.5, tc) - tc * 0.5;
-  float hole = 1.0 - smoothstep(0.022 - fp, 0.022 + fp, length(tq));
-  s.albedo = base * (1.0 - 0.35 * seam) * (1.0 - 0.75 * hole);
-  s.rough = 0.85;
-  s.ao = 1.0 - 0.6 * hole;
-  if (mat == 3 || mat == 2) {
-    // darker toward the floor where they meet it, and at the ceiling
-    s.ao *= (1.0 - 0.45 * exp(-p.y / 1.4)) * (1.0 - 0.3 * exp(-(ROOM_H - p.y) / 1.5));
-  }
-  if (mat == 1) s.ao *= 1.0 - 0.35 * exp(-min(ROOM_HALF_W - abs(p.x), min(p.z - ROOM_Z0, ROOM_Z1 - p.z)) / 2.0);
+  vec2 tq = mod(uv - tc * 0.5, tc) - tc * 0.5;
+  float r = 0.014, W = max(r, fp);
+  float hole = (r / W) * (r / W) * (1.0 - smoothstep(W * 0.6, W * 1.4, length(tq)));
+  s.albedo = base * (1.0 - 0.12 * joint) * (1.0 - 0.6 * hole);
+  s.ao = 1.0 - 0.5 * hole;
+  // darker toward the floor where they meet it, and at the ceiling
+  s.ao *= (1.0 - 0.45 * exp(-p.y / 1.4)) * (1.0 - 0.3 * exp(-(ROOM_H - p.y) / 1.5));
   return s;
 }
 
