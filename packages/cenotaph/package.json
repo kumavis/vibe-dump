@@ -1,0 +1,16 @@
+{
+  "name": "@vibe-dump/cenotaph",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "gallery": {
+    "title": "Cenotaph",
+    "description": "A vast, dark brutalist hall of board-formed concrete, so big it keeps its own weather. High in the ceiling the falling figure from Falling Repose is cut clean through the slab, still turning, and sunlight pours through the hole in its shape: shafts slanting down through the haze to a bright pool on the polished floor, which mirrors it all back. Press and hold to hold time; drag to look around, scroll or pinch to walk.",
+    "tags": ["art"],
+    "status": "wip",
+    "models": ["Opus 5.5"],
+    "thinking": "ultracode",
+    "thumbnail": { "waitFor": "body.ready", "settle": 2500 }
+  }
+}
