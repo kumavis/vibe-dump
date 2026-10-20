@@ -562,3 +562,260 @@ Hawaiʻi 3,857, 2,690, 1,991 km²; Kauaʻi 446, 333, 210; Maui 567, 414, 263; O�
 - **A historian** with Schmitt's *Demographic Statistics* for the 1850 census and for
   district figures before 1896, and with the Government Survey sheets for an 1880s
   layer drawn by hand.
+
+## 10. Nuʻuanu 1795
+
+The record behind the first close-up (DATA.md "District packs"): the gazetteer
+entries the near view needs to draw Nuʻuanu and Honolulu in 1795,
+`public/data/districts/nuuanu/features.json`, the cameras on the stops of
+`nuuanu-1795`, and the same treatment at smaller scale for Kaheiki, 1783. Made in
+October 2026. The district's heights, rain, fill patch and `districts/manifest.json`
+are a separate bake and are not described here. `tools/check-data.mjs` now reads the
+features file named in the manifest (or, with no manifest, `districts/*/features.json`
+against a fallback box) and the stop cameras; it is clean.
+
+| file | change |
+| --- | --- |
+| `places.json` | 82 places (was 65): Puʻiwa and Lāʻimi placed apart, Kou moved to the harbour, Pauoa's note corrected, 17 added |
+| `events.json` | `nuuanu-1795`: seven more places, cameras on stops 4–8, eight more sources, eight more tellings, the Thrum and Wikipedia tellings corrected. `kaheiki-1783`: placed at Kaheiki, near zoom, three stops with cameras, three tellings |
+| `sources.json` | 73 (was 64): nine added, `thrum-annual-1911` now opened |
+| `districts/nuuanu/features.json` | 61 features: loʻi 7, fishpond 13, village 1, heiau 5, stream 6, trail 2, label 9, force 13, line 5 |
+
+### What was read
+
+| source | what, and where |
+| --- | --- |
+| `kamakau-ruling-chiefs` | Pp. 135–137 (Kaheiki, 1783), 171–174 (Nuʻuanu), 192 (Kamehameha's cultivation of Honolulu, Kapālama and upper Nuʻuanu), 197 (houses burned from Honolulu to Kalihi), 271–273 (Honolulu in Liholiho's time: Kikihale, Pākākā, Honuakaha, the ponds of Kahoʻikekanaka), 291–292 (Boki's roads: Pauoa stream, Kaheiki, ʻAlekoki, Kawānanakoa; the old road from Kahapaʻakai; the guardian stone Hoʻeu; Boki's taro to Makuku), 419 (Pākākā to Kakaʻako). The djvu text of the same Internet Archive item, pages from the running heads. |
+| `fornander-v2` | Pp. 222–225 (Kaheiki), 342–349 (Nuʻuanu). |
+| `ellis-1827` | Pp. 11–17: the plain of Honolulu, the valley "a complete garden", "about three miles through one unbroken series of plantations", the path over the pali and the stone figures at its head, his telling of the battle, the town of the 1820s. |
+| `jarves-1847` | Ch. VII, the Nuʻuanu passage (the running heads are not legible enough to give pages). |
+| `bingham-1847` | P. 47. |
+| `dibble-1843` | P. 71. |
+| `thrum-annual-1907` | "Heiaus and Heiau Sites throughout the Hawaiian Islands", pp. 44–45 (Honolulu and Nuʻuanu). On the Internet Archive as `acp0143.1907.001.umich.edu`. |
+| `johnstone-1908` | "Storied Nuuanu", in the Annual for 1908, pp. 160–167; and the same volume's tables of road distances and heights (Nuʻuanu Road to the Pali). |
+| `thrum-annual-1911` | "John Young: Companion of Kamehameha", pp. 93–105, p. 100 in full. The earlier pass found no copy; it is `acp0143.1911.001.umich.edu`. |
+| `pacific-worlds-nuuanu` | The battle page, in the Wayback Machine copy of 8 June 2007. |
+| `wikipedia-battle-of-nuuanu` | The wikitext, to see what its citations sit beside. |
+| `hgs-1881-oahu`, `hgs-1899-oahu` | The State GIS georeferenced image services, exported at about 5 m over the district and read window by window with a lon/lat grid drawn on; the 1881 sheet's title block and notes. |
+| `usgs-topo-1927-oahu` | The State GIS mosaic, over Kalihi Kai and Kālia. |
+| `oha-kipuka-sites` | Historic site polygons and points in the district box (74 polygons, 676 points, 2 lines). |
+| `state-gis-streams-dar` | 179 stream segments in the box. |
+| `census-tiger-roads` | Streets with old land names; the line of the Nuʻuanu road. |
+| OHA `LCA_State`, `Ili_State`, `LocationIndex` | Queried over the box for kuleana and ʻili (below). Not cited by any entry, because they turned out to hold nothing for Nuʻuanu. |
+| USGS GNIS | 300 names in the box, for Kapena, Pūowaina, ʻĀlewa, Pauoa Flats, Mānoa and checks on the maps' registration. |
+| `boundaries/ahupuaa.geojson` | Area-weighted centroids: Honolulu (−157.83197, 21.33149), Kapālama, Kalihi; point-in-polygon for every new place. |
+
+### What could not be reached
+
+- **McAllister, *Archaeology of Oahu* (1933).** The Internet Archive copy (`archaeologyofoah0000mcal`, the 1971 Kraus reprint) is lending-only and its search-inside endpoint refused; the Biodiversity Heritage Library answered with a Cloudflare challenge; the Bishop Museum's list of bulletin PDFs has none for no. 104; the tDAR record is restricted. No site description of McAllister's was read. The State site numbers in the Kīpuka layer are cited as the layer gives them; whether the low numbers repeat McAllister's was not checked, and nothing here relies on it.
+- **ʻĪʻī's *Fragments*** (print). Its description of the Honolulu–Nuʻuanu trail of about 1810 is the obvious next source for the trail and for the ʻili of the valley.
+- **James, *The Battle of Nuʻuanu* (2004)**, the map behind Wikipedia's account and probably behind the oral account (print).
+- A report titled "Archaeology, Legends and Oral History of Nuʻuanu" on historichawaii.org answered 404.
+- Wikimedia Commons' API rate-limited the search for early harbour charts (the 1825 chart of the Blonde's survey would show the ponds of the shore thirty years after the battle); Google Books' API was over quota.
+
+### How each place was fixed
+
+| place | precision | how |
+| --- | --- | --- |
+| `puiwa` Puʻiwa | exact (a neighbourhood) | The 1899 map writes PUIWA on the valley floor just above Queen Emma's summer house (Hānaiakamalama); Puiwa Road and Puiwa Lane (TIGER) run beside it. The point is between the two. |
+| `laimi` Lāʻimi | exact (a neighbourhood) | The 1881 Government Survey sheet writes Laimi across the valley floor just above "Queen Emma's Gardens"; the point is that label. Johnstone puts the decisive point "a little above the Queen Emma place". Laimi Road lies about a kilometre lower, west of the stream. |
+| `kou` Kou | exact | Moved from GNIS's Honolulu point (the palace grounds) to the middle of the village outline below. |
+| `pakaka` Pākākā | exact | "Pakaka [the end of Fort Street]" (Kamakau p. 272); the foot of Fort Street drawn back toward the old shore. It lies seaward of the State layer's coast, so its moku is set by hand. |
+| `luakaha` Luakaha | exact | The 1881 label across the flats ("Luakaha Crown"). |
+| `kawananakoa` Kawānanakoa | ahupuaʻa | Above Puʻiwa and below Luakaha in both lists of posts; "in the upper part of Nuuanu valley" (Fornander). A marker on the valley road between Lāʻimi and Luakaha. |
+| `kahapaakai` Kahapaʻakai | ahupuaʻa | Above Luakaha in both lists; a marker just above the Luakaha label. |
+| `kaheiki` Kaheiki (battlefield) | ahupuaʻa | Between Pauoa and Nuʻuanu: Boki's road runs from the Pauoa stream down Kaheiki and up to ʻAlekoki (Kamakau p. 291); the defence stood on the ridge facing Pauoa down to Kapena (p. 136). A point on that ridge above Kapena. |
+| `kaheiki-heiau` | ahupuaʻa, at the Honolulu centroid | Thrum: site undiscovered. Never a point. |
+| `kapena`, `puowaina`, `alewa`, `pauoa-flats`, `manoa` | exact | GNIS (Kapena Pool, Punchbowl, ʻĀlewa Heights, Pauoa Flats, Mānoa Valley). |
+| `kapalama`, `kalihi` | ahupuaʻa | Centroids of the State layer. |
+| `nuuanu-pali-trail` | exact (within a few hundred metres) | The 1881 road to the gap, then schematic down the windward face. |
+| `kuwili` | exact | The 1881 label on the shore west of Iwilei. Not the Loko Kuwili of Kālia. |
+| `kalia-fishponds`, `kalihi-fishponds` | exact | Middle of each group of pond outlines below. |
+
+**Why the street names seemed to break the order, and why they don't.** §6 set Puʻiwa
+and Lāʻimi aside because "the surviving street names do not keep the old order up the
+valley". The trouble was Kawānanakoa: Kawananakoa Place lies near Mauna ʻAla, below Puiwa
+Road, while both lists put Kawānanakoa above Puʻiwa. Kawananakoa Place is not used; the
+two survey maps put Puʻiwa and Lāʻimi side by side above Queen Emma's place, mid-valley
+rather than at its mouth, and Lāʻimi lies above Puʻiwa as the battle needs. The brief's
+"Lāʻimi by Mauna ʻAla" is not borne out: the mausoleum stands about two kilometres
+lower, close to where the oral account puts Kaʻiana's death.
+
+Neither map can be read as a bound: the 1899 sheet's registration is a few hundred
+metres looser than the 1881 one's, and both write a land's name across its middle. The
+schema still has nothing between `exact` and `ahupuaa` (§6); these two are `exact` to a
+neighbourhood, and their notes say so.
+
+### What the kuleana parcels showed
+
+Nothing for Nuʻuanu. OHA's `LCA_State` has 69 parcels that reach into the district
+box: 17 in upper Kalihi (all "Missing Helu" of unknown award type), 10 in Waikīkī (Kālia
+and Pāwaʻa), 25 with no ahupuaʻa (Makiki, Pāwaʻa and later grants), 15 windward below the
+pali and two in ʻEwa. There is no award in Nuʻuanu, Pauoa or Kapālama, and `land_use` is
+filled for two parcels (both "Loi", at Kālia). OHA's ʻili
+layer has three ʻili in Honolulu ahupuaʻa (Kaʻākaukukui, Kukuluāeʻo, Anuenue) and none in
+Nuʻuanu; its location index has five Honolulu rows, and its one Puiwa is a government
+land in Kāneʻohe. So the awards that would map the loʻi of 1848 were not available, and
+the loʻi below are outlines of the valley floors, not parcels. The Honolulu awards are
+in the Land Commission records (Waihona ʻĀina, the Māhele Award Book), which a person
+can read.
+
+The 1881 sheet has no taro labels in these valleys. It rules the valley floors and the
+shore flats with the same fine horizontal hatching, and its notes do not define it; it is
+read here as wet land. The 1899 sheet writes "Rice" and "Ponds" at Kālia and Mōʻiliʻili,
+not in the valleys.
+
+### How the features were made
+
+All coordinates lie inside the manifest's box (−157.897 to −157.779 W, 21.269 to
+21.381 N). A feature's `to` is the last year a source read shows it, not a sourced end:
+the near view needs some end, and none of these has a recorded one.
+
+- **Loʻi** (`inferred`): ground within a set distance of the stream, gentler than a set
+  slope and below a set height, inside the ahupuaʻa, on a 12 m grid with the Oʻahu
+  pack's heights (68 m, bilinear) and the DAR streams, traced, rings under 1.5 ha
+  dropped, simplified at 18 m. Per valley (distance, slope, height, latitudes): lower
+  Nuʻuanu 230 m, 12 %, 230 m, 21.317–21.351 (the valley mouth to about Kahapaʻakai);
+  upper Nuʻuanu 200 m, 15 %, 330 m, 21.351–21.3605; Pauoa 200 m, 12 %, 140 m;
+  Kapālama 200 m, 12 %, 120 m; Kalihi 230 m, 12 %, 200 m; Mānoa 450 m, 10 %, 150 m.
+  Each later valley excludes ground already claimed. The reservoirs' gap in the
+  Nuʻuanu stream line is joined straight. Areas: lower Nuʻuanu 186 ha, upper 70,
+  Pauoa 77, Kapālama 62 and 10, Kalihi 102, Mānoa 213. Checked by eye against the 1881
+  hatching; 69 % of their area lies where the baked 1778 cultivation layer is 0.5 or
+  more (Pauoa 97 %, Kapālama 95 %, Mānoa 89 %, Kalihi 59 %, lower Nuʻuanu 48 %, upper
+  Nuʻuanu 28 %: the layer's 68 m texels miss much of the narrow upper valley). The upper
+  Nuʻuanu patches begin in 1796, because Kamakau credits them to Kamehameha's years on
+  Oʻahu (p. 192) and to Boki in 1829 (p. 292) and says nothing of them before.
+- **Fishponds**: the six Kālia ponds and two Kalihi ponds are the State site record's
+  outlines as the Kīpuka layer publishes them (`mapped`, with the site number in `site`);
+  Apili, Pahou and ʻAuiki are traced from the 1927 sheet, which names all five Kalihi
+  ponds (`mapped`); the two site outlines match the 1927 Pahouiki and Ananoho. Kuwili
+  (Iwilei) is `schematic`: the 1881 sheet gives the name and ruled wet ground but no
+  walls. Kahoʻikekanaka is `schematic`, from Kamakau's "makai of Honuakaha" alone. No
+  pond named Kaʻākaukukui, Kawa or Mokauea was found in any source read: Kaʻākaukukui is an
+  ʻili at Kakaʻako (OHA) where the 1881 sheet has salt works, Mokauea is a land award and
+  an island, and the only Kawa in the box is a windward stream. The burials, caves and
+  heiau in the same layer were not copied.
+- **Village**: Kou, an outline between the Nuʻuanu stream mouth, Pākākā and about King
+  Street (`inferred`, to 1820). The households are a telling: no source read counts them
+  for 1795; Kamakau says Honolulu "was seldom used in Ka-lani-ku-pule's day", and Ellis
+  gives the 1820s town 6,000 or 7,000 people after the shipping trade had grown it. No
+  estimate is made.
+- **Heiau**: Kaheiki, Pākākā, Kawaluna (Waolani), Makuku and Kaahaimauli from Thrum's
+  list, all at the Honolulu centroid with `placePrecision: ahupuaa`. The check holds each
+  to within 300 m of the centroid.
+- **Streams**: the DAR courses of Nuʻuanu, Pauoa, Waolani, Kapālama, Kalihi and Mānoa
+  (`mapped`, modern); Mānoa stops at the valley mouth because the Ala Wai is modern.
+- **Trail**: Kou to the gap along the road of the 1881 sheet as today's streets keep it
+  (`inferred`; to 1828, when Keanini widened it); the windward descent `schematic`.
+- **Forces and lines**, each with `event`, `when` (1795-04; 1783-01) and `step`:
+  0 Kaʻiana's people cross from Koʻolau; 1 the Oʻahu posts from Puʻiwa up the valley,
+  and the landing from Waiʻalae to Waikīkī (drawn behind Lēʻahi, whose coast is outside
+  the box); 2 the march past Kou and up the valley road; 3 the lines at Puʻiwa (Oʻahu
+  `stand`, Hawaiʻi `advance`); 4 the fall-back to Lāʻimi and the lines there; 5 the
+  retreat to the head of the valley, the pursuit, and the escapes west over ʻĀlewa into
+  Kalihi and east toward Pauoa; 6 down the old path to Koʻolau (the oral account only).
+  Nothing is drawn at the edge of the pali: the retreat ends at the gap, and the one line
+  beyond it is people going down the path. For 1783, Kahekili's three columns by
+  Pūowaina, Pauoa and Kapena (role `maui`) and Kahahana's defence from the ridge facing
+  Pauoa down to Kapena. Only the landing and the fall-back are `inferred`; everything
+  else is `schematic`, and the notes say which places the sources name. The month is
+  April for both sides of 1795; Bingham's "after three months" from February points to
+  May, so the month is soft.
+
+### The stop cameras
+
+`bearing` is the compass direction the camera looks; the camera stands the other way
+from the place. Distances are world units (100 m).
+
+| event | stop | place | bearing | pitch | distance | frames |
+| --- | --- | --- | --- | --- | --- | --- |
+| nuuanu-1795 | 4 | `waikiki` | 15 | 0.5 | 60 | from offshore, the beaches from Waiʻalae to Waikīkī with the plain and the valleys behind |
+| nuuanu-1795 | 5 | `kou` | 45 | 0.6 | 40 | from above the harbour, up Nuʻuanu |
+| nuuanu-1795 | 6 | `puiwa` | 42 | 0.38 | 16 | up the valley from below Puʻiwa |
+| nuuanu-1795 | 7 | `laimi` | 42 | 0.38 | 13 | likewise, closer, from below Lāʻimi |
+| nuuanu-1795 | 8 | `nuuanu-pali` | 50 | 0.15 | 18 | the gap from low on the valley floor below it |
+| kaheiki-1783 | 1 | `waikiki` | 20 | 0.5 | 50 | the landing |
+| kaheiki-1783 | 2 | `puowaina` | 30 | 0.55 | 25 | past Pūowaina toward Pauoa and Nuʻuanu |
+| kaheiki-1783 | 3 | `kaheiki` | 40 | 0.45 | 14 | the ridge between Pauoa and Nuʻuanu |
+
+DATA.md gives pitch as 0..1 without a unit; the camera rig's pitch is radians (0.06 to
+1.52, easing to 0.6 over a valley). These values read sensibly either way, but DATA.md
+should say which. The check holds bearings to 0–360, pitch to 0..1 and distance to the
+rig's 8–9000, warns when a near stop stands more than 15 km back, and warns when a near
+stop whose place lies in a district has no camera.
+
+### Where the tellings diverge
+
+1. **The guns.** Fornander credits "the superiority of Kamehameha's artillery, the number
+   of his guns, and the better practice of his soldiers" and names no one (p. 348).
+   Kamakau mentions no cannon in the fight; he says the ships gave Kamehameha
+   Kalanikūpule's "munitions of war", and has the orators say the island was won only
+   because of it (pp. 171, 173). Jarves (1847) has "a field-piece, which Young had brought
+   to bear" kill Kaʻiana; the 1911 Annual (p. 100) says Young "is said to have had charge
+   of the cannon" and is credited with that shot; Johnstone (1908) says the same. No
+   source read puts Isaac Davis at Nuʻuanu. Settled as far as the open sources go: **John
+   Young served at least one gun at Nuʻuanu, by Jarves's account and those after it; the
+   Hawaiian historians name no gunner**. DESIGN §8's "who served the guns at Nuʻuanu is
+   not established" can now say so, and §3's note on the cannon is answered.
+2. **Kaʻiana's death.** At Lāʻimi, where the Oʻahu side was routed (Kamakau); early in the
+   battle (Fornander); at a stone wall on a hillside about three miles above the town, by
+   Young's field-piece (Jarves); slain in battle (Bingham); a little above Queen Emma's
+   place, by Young's cannon (Johnstone, the 1911 Annual); making a stand at the edge of the
+   pali (Ellis); near today's Oʻahu Cemetery (the oral account). Kamakau's and Johnstone's
+   agree on the place, since the 1881 sheet puts Lāʻimi just above Queen Emma's.
+3. **The pali.** Kamakau does not mention it. Fornander: "a large number"; Dibble: "many";
+   Bingham: numbers "are said to have been"; Jarves: "some"; Ellis: "it is said four
+   hundred"; Johnstone: "the rest". The oral account has a rear guard hold near Luakaha so
+   that the main body could get away over the ridges and down the pali paths, and reads
+   the name as saying something other than men forced off the cliff. The remains said to
+   have been found when the road was cut are now told as 1898 (Wikipedia, from a travel
+   guide) or 1897 (the oral account), still without a contemporary report.
+4. **Kalanikūpule.** Hides "a little over a year" (Kamakau) or "several months" (Fornander)
+   and is caught above Waipiʻo; Jarves and Ellis have him die in the battle.
+5. **The date.** No earlier than mid-April 1795 (Fornander); three months after the
+   February landing on Maui (Bingham); "probably in the year 1794" (Dibble); "in or about
+   the year 1790" (Ellis); May (Wikipedia).
+6. **The army.** Bingham gives "16,000 strong" for the Maui campaign. The 1911 Annual gives
+   no figure: the "about 12,000 men and 1,200 war canoes" Wikipedia prints next to its
+   citation of p. 100 is not on that page, and the earlier telling that cited Thrum for it
+   is corrected.
+7. **The first engagement.** At Puʻiwa (Kamakau, Fornander); at the foot of Pūowaina, with
+   Kamehameha's guns in lower Nuʻuanu and flanking parties over Pauoa Flats (the oral
+   account, and Wikipedia's account, which follows James's map).
+8. **The name.** *Kalelekaʻanae* (James, through Wikipedia), "Ka-lele-a-ke-anae" (the oral
+   account), *Kaleleakaʻanae* (DESIGN). A speaker should decide.
+9. **Kaheiki, 1783.** Three columns by Pūowaina, Pauoa and Kapena (Fornander) or two
+   companies, one behind Pūowaina and one from Hekili to Kahehuna and ʻAuwaiolimu
+   (Kamakau). Kamakau's account of the stream running with the dead is left out of the
+   cards.
+
+### Where the schema grew
+
+- A force's `role` may be `maui`, for Kahekili's army of 1783; DATA.md names only the two
+  sides of 1795.
+- Features carry an `id`; forces and lines carry `event`, `when` and `step`; lines carry
+  `side`; any feature may name its gazetteer `place`; heiau carry `placePrecision` and
+  `ahupuaa`; the village carries `tellings`; ponds from the site record carry `site`.
+- `to` is the last year a source read shows the feature (above).
+- Notes and names in features.json are held to the numbers rule, as summaries are.
+
+### Still needs a reader, a library card, or a cultural reviewer
+
+- **A reader of Hawaiian**: Kamakau's own Nuʻuanu chapter (*Ka Nupepa Kuokoa*, 1 and 8 June
+  1867) for the posts and for whatever it says of guns; every spelling here (Puʻiwa,
+  Lāʻimi, Kaumuʻohena, Kaukahōkū, Kapaʻeli, Kanoneakapueo, which Fornander's scan reads
+  Kamoniakapueo, Kahapaʻakai, Keawawapuʻahanui, Kahoʻikekanaka, Kaahaimauli, Auiki,
+  Ananoho, Pahou, Paweo, Kaipuni, Kapuuiki, Kaihikapu, Pūowaina or Puʻowaina) and the
+  battle's name.
+- **A library**: McAllister for the Honolulu ponds and heiau; ʻĪʻī for the trail and the
+  ʻili; James's map; Sterling and Summers; the Land Commission records for the Nuʻuanu,
+  Pauoa and Kapālama kuleana, which would replace the stream-band loʻi with parcels; the
+  Government Survey's registered maps of Nuʻuanu at large scale, for Puʻiwa's and Lāʻimi's
+  bounds; the 1890s papers for the Pali road find.
+- **A cultural reviewer**: the decision to draw nothing at the edge of the pali and to end
+  the retreat at the gap; the five heiau held together at the Honolulu centroid; the Kaheiki
+  battlefield point on the ridge, below where tradition puts the heiau; the use of the Kālia
+  site area, whose record also holds burials (only the pond outlines were taken); Pūowaina
+  as a place, now a national cemetery; and how to credit the oral account's speakers, who
+  are living people.

@@ -1,18 +1,20 @@
 #!/usr/bin/env node
-// Checks the hand-written gazetteer against the rules in DATA.md §4 and
-// "Routes".
+// Checks the hand-written gazetteer against the rules in DATA.md §4,
+// "Routes" and "District packs".
 //
 //   node packages/holo-i-ke-au/tools/check-data.mjs [data-dir]
 //
 // Reads public/data/{eras,places,events,sources,polities,routes}.json and, when
 // it exists, public/data/boundaries/moku.geojson (for its mokuKey values, and
-// for the coastline the routes must keep to the sea of).
+// for the coastline the routes must keep to the sea of), and each district's
+// features.json named in districts/manifest.json (or, with no manifest,
+// districts/*/features.json), with boundaries/ahupuaa.geojson for the heiau rule.
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies. Exits 1 with a list of problems, or prints counts when clean.
 // Warnings are printed but do not fail the check.
 
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -91,12 +93,28 @@ const LANDING_KM = 20 // a route may end at a landing this far from the battle i
 const ROUTE_END_KM = 1.5 // a route may touch land this close to either end (a landing, a harbour)
 const COAST_TOLERANCE_M = 200 // and elsewhere this far inside the simplified coastline
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+// district packs (DATA.md "District packs")
+const FEATURE_KINDS = new Set(['loi', 'fishpond', 'village', 'heiau', 'trail', 'stream', 'force', 'line', 'label'])
+const FEATURE_PRECISION = new Set(['exact', 'mapped', 'inferred', 'schematic'])
+// the sides a force moves for: DATA.md names oahu and hawaii (1795); maui is Kahekili's army of 1783
+const FORCE_ROLES = new Set(['oahu', 'hawaii', 'maui'])
+const LINE_ROLES = new Set(['advance', 'stand', 'retreat'])
+const COARSE = new Set(['ahupuaa', 'moku', 'island']) // what a heiau may be held at
+const HEIAU_CENTROID_KM = 0.3 // a heiau at ahupuaʻa precision stands at its ahupuaʻa's centroid, within this
+// the box tools/lib/district-sources.mjs bakes, used only when districts/manifest.json is absent
+const FALLBACK_DISTRICTS = { nuuanu: { island: 'oahu', bounds: [-157.897, 21.269, -157.779, 21.381] } }
+// stop cameras: bearing in compass degrees, pitch 0..1, distance in world units (100 m) within the
+// camera rig's range (src/config.js MIN_DISTANCE and MAX_DISTANCE)
+const CAMERA_DISTANCE = [8, 9000]
+const NEAR_CAMERA_MAX = 150 // 15 km: a near stop standing farther back than this is suspect
 const MONTHS = 'January|February|March|April|May|June|July|August|September|October|November|December'
 
 const problems = []
 const warnings = []
 const bad = (where, msg) => problems.push(`${where}: ${msg}`)
 const warn = (where, msg) => warnings.push(`${where}: ${msg}`)
+const districtCounts = [] // filled by checkDistrict, printed by finish
+let ahupuaaCentroids // undefined until read; null when boundaries/ahupuaa.geojson is absent
 
 // ---------------------------------------------------------------------------
 // Load
@@ -339,6 +357,7 @@ for (const ev of events) {
     else usedPlaces.add(s.place)
     if (!ZOOMS.has(s.zoom)) bad(sat, `zoom “${s.zoom}” is not far | island | near`)
     if (!Number.isInteger(s.year)) bad(sat, 'year must be an integer')
+    if ('camera' in s) checkCamera(sat, s)
   }
   // sources, confidence, tellings
   if (!Array.isArray(ev.sources) || !ev.sources.length) bad(at, 'cites no source')
@@ -661,6 +680,207 @@ function seaHits(pts, land) {
 }
 
 // ---------------------------------------------------------------------------
+// District packs (DATA.md "District packs"): what stood in a district, and the
+// battles as masses and lines
+const districts = loadDistricts()
+for (const d of districts) checkDistrict(d)
+// a near stop whose place lies in a district should frame it with a camera
+for (const ev of events) {
+  for (const [i, s] of (ev.stops || []).entries()) {
+    const p = P.get(s.place)
+    const c = p && placePoint(p)
+    if (s.zoom !== 'near' || !c || s.camera) continue
+    const d = districts.find((x) => x.bounds && inBounds(c, x.bounds))
+    if (d) warn(`events.json ${ev.id} stop ${i + 1}`, `a near stop in district ${d.id} has no camera`)
+  }
+}
+
+function checkCamera(at, s) {
+  const c = s.camera
+  if (!c || typeof c !== 'object' || Array.isArray(c)) { bad(at, 'camera must be { bearing, pitch, distance }'); return }
+  for (const k of Object.keys(c)) if (!['bearing', 'pitch', 'distance'].includes(k)) bad(at, `camera has an unknown key “${k}”`)
+  if (!(Number.isFinite(c.bearing) && c.bearing >= 0 && c.bearing < 360)) bad(at, `camera bearing ${c.bearing} is not compass degrees from 0 to under 360`)
+  if (!(Number.isFinite(c.pitch) && c.pitch >= 0 && c.pitch <= 1)) bad(at, `camera pitch ${c.pitch} is not within 0..1`)
+  if (!(Number.isFinite(c.distance) && c.distance >= CAMERA_DISTANCE[0] && c.distance <= CAMERA_DISTANCE[1])) bad(at, `camera distance ${c.distance} is outside the rig's ${CAMERA_DISTANCE.join('–')} world units`)
+  else if (s.zoom === 'near' && c.distance > NEAR_CAMERA_MAX) warn(at, `a near stop's camera stands ${c.distance} units (${c.distance / 10} km) back`)
+}
+
+function inBounds([lon, lat], [w, s, e, n]) { return lon >= w && lon <= e && lat >= s && lat <= n }
+
+function loadDistricts() {
+  const out = []
+  const dir = join(DATA, 'districts')
+  const manPath = join(dir, 'manifest.json')
+  if (existsSync(manPath)) {
+    let man = null
+    try { man = JSON.parse(readFileSync(manPath, 'utf8')) } catch (e) { bad('districts/manifest.json', `does not parse: ${e.message}`) }
+    if (man && !Array.isArray(man.districts)) bad('districts/manifest.json', 'districts must be a list')
+    for (const d of man?.districts || []) {
+      const at = `districts/manifest.json ${d.id}`
+      const b = d.bounds
+      if (!(Array.isArray(b) && b.length === 4 && b.every(Number.isFinite) && b[0] < b[2] && b[1] < b[3])) { bad(at, 'bounds must be [west, south, east, north]'); continue }
+      if (!d.features) { warn(at, 'names no features file'); continue }
+      out.push({ id: d.id, island: d.island, bounds: b, file: `districts/${d.features}`, from: 'districts/manifest.json' })
+    }
+  } else if (existsSync(dir)) {
+    for (const id of readdirSync(dir)) {
+      if (!existsSync(join(dir, id, 'features.json'))) continue
+      const fb = FALLBACK_DISTRICTS[id]
+      if (!fb) warn(`districts/${id}`, 'no manifest and no fallback box, so its coordinates are not held to a box')
+      out.push({ id, island: fb?.island, bounds: fb?.bounds || null, file: `districts/${id}/features.json`, from: 'the fallback box in this script' })
+    }
+  }
+  return out
+}
+
+/** Area-weighted centroids of the ahupuaʻa layer, keyed islandId:name (cached in ahupuaaCentroids). */
+function ahupuaaCentroid(island, name) {
+  if (ahupuaaCentroids === undefined) {
+    ahupuaaCentroids = null
+    const path = join(DATA, 'boundaries', 'ahupuaa.geojson')
+    if (existsSync(path)) {
+      ahupuaaCentroids = new Map()
+      const g = JSON.parse(readFileSync(path, 'utf8'))
+      for (const f of g.features || []) {
+        const geo = f.geometry
+        if (!geo || !f.properties?.name) continue
+        const kx = Math.cos((21 * Math.PI) / 180)
+        let A = 0, X = 0, Y = 0
+        for (const poly of geo.type === 'Polygon' ? [geo.coordinates] : geo.type === 'MultiPolygon' ? geo.coordinates : []) {
+          for (const r of poly) for (let i = 0; i + 1 < r.length; i++) {
+            const c = r[i][0] * kx * r[i + 1][1] - r[i + 1][0] * kx * r[i][1]
+            A += c; X += (r[i][0] + r[i + 1][0]) * kx * c; Y += (r[i][1] + r[i + 1][1]) * c
+          }
+        }
+        const key = `${f.properties.islandId}:${f.properties.name}`
+        const prev = ahupuaaCentroids.get(key) // a name can repeat (two Hālawa on Oʻahu): keep the larger
+        if (A && (!prev || Math.abs(A) > prev.area)) ahupuaaCentroids.set(key, { area: Math.abs(A), c: [X / (3 * A) / kx, Y / (3 * A)] })
+      }
+    }
+  }
+  return ahupuaaCentroids && ahupuaaCentroids.get(`${island}:${name}`)?.c
+}
+
+function segmentsCross(a, b, c, d) {
+  const o = (p, q, r) => Math.sign((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]))
+  return o(a, b, c) * o(a, b, d) < 0 && o(c, d, a) * o(c, d, b) < 0
+}
+
+function checkRing(at, ring, outer) {
+  if (!Array.isArray(ring) || ring.length < 4) { bad(at, 'a ring needs at least four positions'); return false }
+  const first = ring[0], last = ring.at(-1)
+  if (first[0] !== last[0] || first[1] !== last[1]) bad(at, 'a ring must close on its first position')
+  let area = 0
+  for (let i = 0; i + 1 < ring.length; i++) area += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1]
+  if (!area) bad(at, 'a ring has no area')
+  else if (outer && area < 0) warn(at, 'the outer ring runs clockwise; RFC 7946 wants it counter-clockwise')
+  const n = ring.length - 1
+  for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) {
+    if (i === 0 && j === n - 1) continue // the closing edge meets the first
+    if (segmentsCross(ring[i], ring[i + 1], ring[j], ring[j + 1])) { bad(at, `the ring crosses itself between positions ${i} and ${j}`); return false }
+  }
+  return true
+}
+
+function checkDistrict(d) {
+  const path = join(DATA, d.file)
+  if (!existsSync(path)) { bad(d.file, `is named by ${d.from} but missing`); return }
+  let fc
+  try { fc = JSON.parse(readFileSync(path, 'utf8')) } catch (e) { bad(d.file, `does not parse: ${e.message}`); return }
+  if (fc?.type !== 'FeatureCollection' || !Array.isArray(fc.features)) { bad(d.file, 'must be a GeoJSON FeatureCollection'); return }
+  const seen = new Set()
+  const kinds = {}
+  for (const [i, f] of fc.features.entries()) {
+    const at = `${d.file} ${f?.id ?? `#${i}`}`
+    if (f?.type !== 'Feature' || !f.properties || typeof f.properties !== 'object') { bad(at, 'must be a Feature with properties'); continue }
+    if (f.id === undefined) warn(at, 'has no id')
+    else {
+      if (typeof f.id !== 'string' || !ID.test(f.id)) bad(at, 'id is not kebab-case ASCII')
+      if (seen.has(f.id)) bad(at, 'id is not unique')
+      seen.add(f.id)
+    }
+    const p = f.properties
+    kinds[p.kind] = (kinds[p.kind] || 0) + 1
+    if (!FEATURE_KINDS.has(p.kind)) { bad(at, `kind “${p.kind}” is not loi | fishpond | village | heiau | trail | stream | force | line | label`); continue }
+    if (!(p.name === null || (typeof p.name === 'string' && p.name))) bad(at, 'name must be a name or null')
+    checkHawaiian(`${at} name`, p.name)
+    checkHawaiian(`${at} note`, p.note)
+    checkNoNumbers(`${at} name`, p.name)
+    checkNoNumbers(`${at} note`, p.note)
+    for (const k of ['from', 'to']) if (!(p[k] === null || Number.isInteger(p[k]))) bad(at, `${k} must be a year or null`)
+    if (Number.isInteger(p.from) && Number.isInteger(p.to) && p.from > p.to) bad(at, `from ${p.from} is after to ${p.to}`)
+    if (!FEATURE_PRECISION.has(p.precision)) bad(at, `precision “${p.precision}” is not exact | mapped | inferred | schematic`)
+    if (!Array.isArray(p.sources) || !p.sources.length) bad(at, 'cites no source')
+    for (const s of p.sources || []) useSource(at, s)
+    if (Array.isArray(p.sources) && p.sources.length && !p.sources.some((s) => S.get(s)?.opened)) bad(at, 'none of its sources has been opened')
+    if (p.place !== undefined) {
+      if (!P.has(p.place)) bad(at, `place “${p.place}” is not in places.json`)
+      else usedPlaces.add(p.place)
+    }
+    for (const t of p.tellings || []) {
+      if (!t.source || !t.says) bad(at, 'a telling needs a source and says')
+      else { useSource(`${at} telling`, t.source); checkHawaiian(`${at} telling`, t.says) }
+    }
+    if (p.kind === 'village' && !(p.tellings || []).length) bad(at, 'a village carries its households in a telling (none here)')
+
+    // geometry: the type the kind wants, valid, inside the district's box
+    const g = f.geometry
+    const want = ['loi', 'fishpond'].includes(p.kind) ? ['Polygon'] : p.kind === 'village' ? ['Polygon', 'Point'] : ['heiau', 'label'].includes(p.kind) ? ['Point'] : ['LineString']
+    if (!g || !want.includes(g.type)) { bad(at, `a ${p.kind} must be a ${want.join(' or ')}`); continue }
+    const positions = g.type === 'Point' ? [g.coordinates] : g.type === 'LineString' ? g.coordinates : g.coordinates.flat()
+    if (!positions.every((c) => Array.isArray(c) && c.length === 2 && c.every(Number.isFinite))) { bad(at, 'has a position that is not [lon, lat]'); continue }
+    if (d.bounds) {
+      const out = positions.find((c) => !inBounds(c, d.bounds))
+      if (out) bad(at, `position ${out} is outside the district box ${d.bounds.join(', ')}`)
+    }
+    if (g.type === 'LineString') {
+      if (g.coordinates.length < 2) bad(at, 'a line needs at least two positions')
+      for (let k = 1; k < g.coordinates.length; k++) if (g.coordinates[k][0] === g.coordinates[k - 1][0] && g.coordinates[k][1] === g.coordinates[k - 1][1]) bad(at, `position ${k} repeats the one before it`)
+    }
+    if (g.type === 'Polygon') {
+      if (!g.coordinates.length) bad(at, 'a polygon needs a ring')
+      g.coordinates.forEach((r, k) => checkRing(`${at} ring ${k}`, r, k === 0))
+    }
+
+    // the battle as masses and lines: a side or a role, a date, an event
+    if (p.kind === 'force' || p.kind === 'line') {
+      if (p.kind === 'force' && !FORCE_ROLES.has(p.role)) bad(at, `a force's role “${p.role}” is not ${[...FORCE_ROLES].join(' | ')}`)
+      if (p.kind === 'line' && !LINE_ROLES.has(p.role)) bad(at, `a line's role “${p.role}” is not advance | stand | retreat`)
+      if (p.kind === 'line' && p.side !== undefined && !FORCE_ROLES.has(p.side)) bad(at, `side “${p.side}” is not ${[...FORCE_ROLES].join(' | ')}`)
+      const w = typeof p.when === 'string' ? parseDate(p.when) : null
+      if (!w || w.parts < 2) bad(at, `a ${p.kind} needs a when, an ISO month or date (YYYY-MM or YYYY-MM-DD)`)
+      if (p.step !== undefined && !(Number.isInteger(p.step) && p.step >= 0)) bad(at, 'step must be a whole number (the order within its event)')
+      if (p.event !== undefined) {
+        const ev = V.get(p.event)
+        if (!ev) bad(at, `event “${p.event}” is not in events.json`)
+        else if (w) {
+          const a = parseDate(ev.when?.from), b = parseDate(ev.when?.to ?? ev.when?.from)
+          if (a && b && (w.end < a.start - 1 / 12 || w.start > b.end + 1 / 12)) bad(at, `when ${p.when} falls outside event ${ev.id} (${ev.when.from}–${ev.when.to})`)
+        }
+      } else warn(at, `a ${p.kind} names no event`)
+    } else if (p.role !== undefined) bad(at, `a ${p.kind} has no role`)
+
+    // heiau: ahupuaʻa precision unless an established public landmark (DATA.md §4, DESIGN.md §7.4)
+    if (p.kind === 'heiau') {
+      if (!p.placePrecision || p.placePrecision === 'exact') {
+        if (p.landmark !== true) bad(at, 'a heiau may be exact only as an established public landmark ("landmark": true); otherwise give placePrecision ahupuaa or coarser')
+        else if (!(p.sources || []).some(sourceShowsPublicSite)) bad(at, 'is a landmark but cites no source showing an established public site')
+      } else if (!COARSE.has(p.placePrecision)) bad(at, `placePrecision “${p.placePrecision}” is not exact | ahupuaa | moku | island`)
+      else if (p.placePrecision === 'ahupuaa') {
+        if (!p.ahupuaa) bad(at, 'a heiau at ahupuaʻa precision must name its ahupuaa')
+        else {
+          const c = ahupuaaCentroid(d.island, p.ahupuaa)
+          if (c === undefined && ahupuaaCentroids === null) warn(at, 'no boundaries/ahupuaa.geojson, so its point is not held to the centroid')
+          else if (!c) bad(at, `ahupuaa “${p.ahupuaa}” is not in the ${d.island} ahupuaʻa layer`)
+          else if (g.type === 'Point' && kmBetween(g.coordinates, c) > HEIAU_CENTROID_KM) bad(at, `stands ${kmBetween(g.coordinates, c).toFixed(2)} km from the ${p.ahupuaa} centroid; a heiau at ahupuaʻa precision is drawn there, never as a found point`)
+        }
+      }
+    }
+  }
+  districtCounts.push({ id: d.id, n: fc.features.length, kinds, from: d.from })
+}
+
+// ---------------------------------------------------------------------------
 // Unused entries (warnings)
 for (const p of places) if (!usedPlaces.has(p.id)) warn(`places.json ${p.id}`, 'is not used by any event')
 for (const s of sources) if (!usedSources.has(s.id)) warn(`sources.json ${s.id}`, 'is not cited anywhere')
@@ -687,5 +907,8 @@ function finish() {
     console.log(`  routes    ${routes.length} (${fmt(count(routes, (r) => r.pointPrecision))}; ${fmt(count(routes, (r) => r.kind))})`)
     console.log(`            ${routes.reduce((s, r) => s + r.points.length, 0)} points, ${routes.filter((r) => r.event).length} tied to an event, ${routes.filter((r) => r.waypoints?.some((w) => w.date)).length} with dated waypoints${mokuGeo ? '; all at sea between their ends' : ''}`)
   }
+  for (const d of districtCounts) console.log(`  district  ${d.id}: ${d.n} features (${fmt(d.kinds)}), box from ${d.from}`)
+  const cams = events.reduce((n, e) => n + (e.stops || []).filter((s) => s.camera).length, 0)
+  if (cams) console.log(`  cameras   ${cams} stops carry a camera`)
   if (warnings.length) console.log(`  warnings  ${warnings.length}`)
 }

@@ -566,9 +566,7 @@
   {
     "id": "pauoa",
     "name": "Pauoa",
-    "alt": [
-      "Kaheiki"
-    ],
+    "alt": [],
     "kind": "ahupuaa",
     "island": "oahu",
     "moku": "Kona",
@@ -586,7 +584,7 @@
       "kamakau-ruling-chiefs",
       "fornander-v2"
     ],
-    "note": "A land within Honolulu in the State layer; the point is GNIS's land-division point for Pauoa. The heiau of Kaheiki is not placed."
+    "note": "A land within Honolulu in the State layer; the point is GNIS’s land-division point for Pauoa. The battlefield and the heiau of Kaheiki are separate entries."
   },
   {
     "id": "kilauea",
@@ -762,17 +760,17 @@
     "geometry": {
       "type": "Point",
       "coordinates": [
-        -157.85835,
-        21.30695
+        -157.8625,
+        21.3098
       ]
     },
     "placePrecision": "exact",
     "sources": [
-      "usgs-gnis",
       "kamakau-ruling-chiefs",
-      "fornander-v2"
+      "fornander-v2",
+      "census-tiger-roads"
     ],
-    "note": "The village at the harbor, now downtown Honolulu. The point is GNIS's for Honolulu; the village's extent is not known."
+    "note": "The village at the harbour, between the mouth of Nuʻuanu Stream (Kikihale) and Pākākā, now downtown Honolulu about Fort Street and Nuʻuanu Avenue. The point is the middle of the village outline in districts/nuuanu/features.json, inferred from Kamakau’s account of Honolulu about 1820; the earlier point was GNIS’s for Honolulu, at the palace grounds east of the old village."
   },
   {
     "id": "honolulu",
@@ -822,7 +820,8 @@
     "id": "puiwa",
     "name": "Puʻiwa",
     "alt": [
-      "Puiwa"
+      "Puiwa",
+      "Puaiwa"
     ],
     "kind": "other",
     "island": "oahu",
@@ -831,24 +830,27 @@
     "geometry": {
       "type": "Point",
       "coordinates": [
-        -157.8319,
-        21.3316
+        -157.836,
+        21.336
       ]
     },
-    "placePrecision": "ahupuaa",
+    "placePrecision": "exact",
     "sources": [
-      "state-gis-ahupuaa",
+      "hgs-1899-oahu",
+      "census-tiger-roads",
       "kamakau-ruling-chiefs",
-      "fornander-v2"
+      "fornander-v2",
+      "thrum-annual-1911"
     ],
-    "note": "A land in lower Nuʻuanu where the fighting began. Its bounds are not established from an opened source. A street named Puiwa Road survives in Nuʻuanu but is not used, because the street names do not keep the old order up the valley. Rendered at the Honolulu ahupuaʻa centroid."
+    "note": "A land in Nuʻuanu: the lowest of Kalanikūpule’s posts in 1795 and where the fighting began. The 1899 map of Oʻahu writes PUIWA on the valley floor just above Queen Emma’s summer house, and Puiwa Road and Puiwa Lane keep the name beside it; the point stands between the two. The land’s bounds are not surveyed in any source read, so read the point as a neighbourhood, not a bound. It is mid-valley, not at the mouth of the valley."
   },
   {
     "id": "laimi",
     "name": "Lāʻimi",
     "alt": [
       "Laʻimi",
-      "Laimi"
+      "Laimi",
+      "Laimii"
     ],
     "kind": "other",
     "island": "oahu",
@@ -857,16 +859,19 @@
     "geometry": {
       "type": "Point",
       "coordinates": [
-        -157.8319,
-        21.3316
+        -157.8335,
+        21.3393
       ]
     },
-    "placePrecision": "ahupuaa",
+    "placePrecision": "exact",
     "sources": [
-      "state-gis-ahupuaa",
-      "kamakau-ruling-chiefs"
+      "hgs-1881-oahu",
+      "kamakau-ruling-chiefs",
+      "johnstone-1908",
+      "thrum-annual-1911",
+      "census-tiger-roads"
     ],
-    "note": "Where the Oʻahu line broke, above Puʻiwa in Kamakau's telling. Not located from an opened source; rendered at the Honolulu ahupuaʻa centroid."
+    "note": "Where the Oʻahu line broke in 1795 and, in Kamakau’s telling, where Kaʻiana died. The 1881 Government Survey map writes Laimi across the valley floor just above Queen Emma’s gardens, and Johnstone (1908) puts the decisive point of the battle a little above Queen Emma’s place; the point is the 1881 label. Laimi Road, about a kilometre lower and west of the stream, keeps the name. The bounds are not surveyed in any source read. It is not by Mauna ʻAla: the mausoleum stands lower in the valley, near where one oral account places Kaʻiana’s death."
   },
   {
     "id": "nuuanu-pali",
@@ -891,6 +896,440 @@
       "fornander-v2"
     ],
     "note": "The gap at the head of the valley (GNIS \"Nuʻuanu Pali\", gap). The dead of 1795 are a burial matter: no remains or find-spots are placed."
+  },
+  {
+    "id": "kaheiki",
+    "name": "Kaheiki",
+    "alt": [
+      "Kahe-iki"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8425,
+        21.3245
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The battlefield of January 1783: the small stream of Kaheiki between Pauoa and Nuʻuanu (Fornander), where Kahahana’s defence held the ridge facing Pauoa down to Kapena (Kamakau). Kamakau’s account of Boki’s road of 1829 runs from the Pauoa stream down Kaheiki and up to ʻAlekoki, which puts the stream between the two valleys. The point is on that ridge above Kapena; the stream is not identified on any map read, so the place is held at ahupuaʻa precision. The heiau of the same name is a separate entry."
+  },
+  {
+    "id": "kaheiki-heiau",
+    "name": "Kaheiki",
+    "alt": [
+      "heiau of Kaheiki"
+    ],
+    "kind": "heiau",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.83197,
+        21.33149
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "thrum-annual-1907",
+      "fornander-v2"
+    ],
+    "note": "A heiau of Menehune building in tradition; Thrum (1907) lists its site as undiscovered. Kahahana’s defence stood behind it in 1783, and Kamakau names its guardian stone by the stream. Rendered at the Honolulu ahupuaʻa centroid with a soft radius, never as a point."
+  },
+  {
+    "id": "kawananakoa",
+    "name": "Kawānanakoa",
+    "alt": [
+      "Kawananakoa",
+      "Ka-wanana-koa"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8255,
+        21.3465
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "Kahahana’s residence in 1783, “in the upper part of Nuuanu valley” (Fornander), and one of the Oʻahu posts in 1795, above Puʻiwa and below Luakaha in both lists. Not located on any map read; the point is a marker on the valley road between Lāʻimi and Luakaha, held at ahupuaʻa precision. Kawananakoa Place, near Mauna ʻAla below Puʻiwa, does not fit the order of the posts and is not used."
+  },
+  {
+    "id": "kahapaakai",
+    "name": "Kahapaʻakai",
+    "alt": [
+      "Kahapaakai"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.815,
+        21.356
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "One of the Oʻahu posts in 1795, above Luakaha and below Kanoneakapueo in both lists. Kamakau begins the old road’s gardens here, and says many heiau stood between it and the mouth of the valley. Not located on any map read; the point is a marker just above the 1881 label for Luakaha, held at ahupuaʻa precision."
+  },
+  {
+    "id": "luakaha",
+    "name": "Luakaha",
+    "alt": [],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8145,
+        21.354
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "hgs-1881-oahu",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "Crown land on the flats near the head of the valley; the 1881 sheet writes Luakaha across them, and the point is that label. One of the Oʻahu posts in 1795. Bounds as the sheet draws them, not surveyed here."
+  },
+  {
+    "id": "pakaka",
+    "name": "Pākākā",
+    "alt": [
+      "Pakaka"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8645,
+        21.3079
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "census-tiger-roads"
+    ],
+    "note": "The point at the harbour of Kou where Fort Street now ends (“Pakaka [the end of Fort Street]”, Kamakau), where Liholiho and his chiefs lived near the fort. The point is the foot of Fort Street drawn back toward the old shore; the shore itself has been filled. The heiau of the same name is not placed."
+  },
+  {
+    "id": "kapalama",
+    "name": "Kapālama",
+    "alt": [
+      "Kapalama"
+    ],
+    "kind": "ahupuaa",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Kapālama",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8602,
+        21.3362
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The ahupuaʻa between Kalihi and Honolulu; the point is its area-weighted centroid in the State layer. Kamakau names it among the lands Kamehameha cleared and planted."
+  },
+  {
+    "id": "kalihi",
+    "name": "Kalihi",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Kalihi",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.84776,
+        21.35714
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2",
+      "pacific-worlds-nuuanu"
+    ],
+    "note": "The ahupuaʻa west of Nuʻuanu and Kapālama; the point is its area-weighted centroid in the State layer. Where, in the oral account, most of the Oʻahu fighters who got away in 1795 went, over ʻĀlewa."
+  },
+  {
+    "id": "manoa",
+    "name": "Mānoa",
+    "alt": [
+      "Manoa"
+    ],
+    "kind": "valley",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Waikīkī",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.82165,
+        21.3008
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis"
+    ],
+    "note": "GNIS’s point for Mānoa Valley. The State layer counts Mānoa within Waikīkī ahupuaʻa."
+  },
+  {
+    "id": "kapena",
+    "name": "Kapena",
+    "alt": [
+      "Kapena Pool"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.84413,
+        21.32798
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The pool on Nuʻuanu Stream (GNIS: Kapena Pool). In 1783 one of Kahekili’s columns marched by Kapena, and Kahahana’s defence ran from the ridge facing Pauoa down to it."
+  },
+  {
+    "id": "puowaina",
+    "name": "Pūowaina",
+    "alt": [
+      "Puʻowaina",
+      "Punchbowl"
+    ],
+    "kind": "peak",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.84863,
+        21.31528
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The crater behind the town (GNIS: Punchbowl). Hueu’s company stood behind it in 1783. Kamakau’s edition prints Puʻowaina, the 1783 event Pūowaina; a speaker should settle the spelling."
+  },
+  {
+    "id": "alewa",
+    "name": "ʻĀlewa",
+    "alt": [
+      "Alewa",
+      "ʻĀlewa Heights"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.84819,
+        21.34051
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "pacific-worlds-nuuanu"
+    ],
+    "note": "The ridge between Nuʻuanu and Kapālama; the point is GNIS’s for ʻĀlewa Heights, the neighbourhood on it. In the oral account most of the Oʻahu fighters who got away in 1795 went over ʻĀlewa into Kalihi."
+  },
+  {
+    "id": "pauoa-flats",
+    "name": "Pauoa Flats",
+    "alt": [],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.81506,
+        21.33979
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "pacific-worlds-nuuanu",
+      "fornander-v2"
+    ],
+    "note": "The saddle at the head of Pauoa on the ridge east of Nuʻuanu (GNIS). The oral account puts Kamehameha’s riflemen here, firing on the Oʻahu forces as they fell back up the valley, and sends flanking parties this way from Mānoa and Tantalus toward the Oʻahu guns above the pali."
+  },
+  {
+    "id": "nuuanu-pali-trail",
+    "name": "The pali trail",
+    "alt": [
+      "the old path over the Nuʻuanu Pali"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          -157.80423,
+          21.36076
+        ],
+        [
+          -157.7967,
+          21.36424
+        ],
+        [
+          -157.79415,
+          21.36587
+        ],
+        [
+          -157.79334,
+          21.36685
+        ],
+        [
+          -157.7915,
+          21.369
+        ],
+        [
+          -157.7895,
+          21.3715
+        ],
+        [
+          -157.787,
+          21.3745
+        ]
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "ellis-1827",
+      "hgs-1881-oahu"
+    ],
+    "note": "The old path over the gap at the head of Nuʻuanu, which Ellis climbed from Koʻolau in the early 1820s. Drawn on the 1881 road up to the gap and schematically down the windward face, so read it as within a few hundred metres; the stone figures Ellis saw at the head of the pass are not placed."
+  },
+  {
+    "id": "kuwili",
+    "name": "Kuwili",
+    "alt": [],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Kapālama",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8762,
+        21.3213
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "hgs-1881-oahu",
+      "hgs-1899-oahu",
+      "census-tiger-roads"
+    ],
+    "note": "The fishponds of Kuwili on the harbour shore west of Iwilei: the 1881 sheet writes the name there over ruled wet ground, the 1899 sheet beside the railway depot, and Kuwili Street keeps it nearby. No outline was found. Not the Loko Kuwili of Kālia, a different pond of the same name."
+  },
+  {
+    "id": "kalia-fishponds",
+    "name": "Ponds of Kālia",
+    "alt": [
+      "Kālia"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Waikīkī",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8337,
+        21.2848
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "oha-kipuka-sites",
+      "hgs-1899-oahu"
+    ],
+    "note": "Loko Kuwili, Kaipuni, Paweo, Kaihikapu and Kapuuiki on the Kālia shore of Waikīkī, outlined in the State historic site record; the 1899 sheet still draws ponds here and the 1927 sheet shows them filled. The point is the middle of the group."
+  },
+  {
+    "id": "kalihi-fishponds",
+    "name": "Ponds of Kalihi",
+    "alt": [],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Kalihi",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8885,
+        21.3232
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-topo-1927-oahu",
+      "oha-kipuka-sites",
+      "hgs-1881-oahu"
+    ],
+    "note": "Apili, Pahou, Pahouiki, Auiki and Ananoho on the Kalihi shore, named and outlined on the 1927 sheet; two are State historic sites. The 1881 sheet writes Apili, Pahounui, Kaluapulu and Mokauea as lands along this shore. The point is the middle of the group."
   },
   {
     "id": "waianae",

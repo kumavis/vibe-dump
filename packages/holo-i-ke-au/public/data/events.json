@@ -784,28 +784,49 @@
     "era": "kahekili",
     "where": [
       {
-        "place": "pauoa",
+        "place": "kaheiki",
         "role": "battle"
       },
       {
         "place": "waikiki",
         "role": "landing"
+      },
+      {
+        "place": "pauoa",
+        "role": "march"
+      },
+      {
+        "place": "puowaina",
+        "role": "march"
+      },
+      {
+        "place": "kapena",
+        "role": "march"
+      },
+      {
+        "place": "kawananakoa",
+        "role": "residence"
       }
     ],
     "zoom": [
       "far",
-      "island"
+      "island",
+      "near"
     ],
     "kind": "battle",
-    "summary": "Kahekili of Maui lands at Waikīkī and marches on Kahahana, the ruler of Oʻahu. After several clashes, the decisive battle comes in January 1783 behind Pūowaina, along the stream of Kaheiki and the ridge toward Pauoa and Kapena. Kahahana’s army breaks, and he and his wife Kekuapoʻi flee to the mountains. Oʻahu and Molokaʻi pass to Kahekili. When the Oʻahu chiefs later conspire against him, his reprisals are remembered for their cruelty.",
+    "summary": "Kahekili of Maui lands at Waikīkī and marches on Kahahana, the ruler of Oʻahu, who is living at Kawānanakoa in Nuʻuanu. After several clashes, the decisive battle comes in January 1783 along the small stream of Kaheiki, between Pauoa and Nuʻuanu: Kahekili’s columns come by Pūowaina, Pauoa and Kapena against Kahahana’s defence on the ridge facing Pauoa. Kahahana’s army breaks, and he and his wife Kekuapoʻi flee to the mountains. Oʻahu and Molokaʻi pass to Kahekili. When the Oʻahu chiefs later conspire against him, his reprisals are remembered for their cruelty.",
     "sources": [
       {
         "id": "kamakau-ruling-chiefs",
-        "where": "ch. XI, pp. 128–141 (pp. 136–137)"
+        "where": "ch. XI, pp. 135–137; pp. 291–292 (Kaheiki on Boki’s road)"
       },
       {
         "id": "fornander-v2",
-        "where": "pp. 224–225"
+        "where": "pp. 222–225"
+      },
+      {
+        "id": "thrum-annual-1907",
+        "where": "p. 45 (the heiau)"
       }
     ],
     "confidence": {
@@ -820,10 +841,57 @@
       {
         "source": "kamakau-ruling-chiefs",
         "says": "January 1783, with Kahekili’s forces in two companies, one under Hueu behind Pūowaina (p. 136)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Hueu’s company stands at Kanelaʻau and Kapapakōlea behind Puʻowaina, and Kahekili’s own from above Hekili to Kahehuna and ʻAuwaiolimu; another attack comes on the ridge facing Pauoa and down to Kapena, against the defence “stationed back of the heiau of Kahe-iki” (p. 136). Kahahana was then living at Ka-wanana-koa in Nuʻuanu (p. 135)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Kahahana was at Kawānanakoa (the scan reads “Kaiuananahoa”), “in the upper part of Nuuanu valley”, when Kahekili landed (p. 223); the battle was “near the small stream of Kaheiki” (p. 224)."
+      },
+      {
+        "source": "thrum-annual-1907",
+        "says": "Lists Kaheiki, Honolulu, as a heiau “of traditional Menehune construction, site of same undiscovered” (p. 45)."
       }
     ],
     "routes": [
       "kahekili-oahu-1783"
+    ],
+    "stops": [
+      {
+        "text": "Kahekili’s canoes come in to Waikīkī and lie along the shore from Kaʻalāwai to Kawehewehe. Kahahana, at Kawānanakoa in Nuʻuanu, rallies his warriors.",
+        "place": "waikiki",
+        "zoom": "island",
+        "year": 1783,
+        "camera": {
+          "bearing": 20,
+          "pitch": 0.5,
+          "distance": 50
+        }
+      },
+      {
+        "text": "After several clashes on the plain, Kahekili marches inland in columns by Pūowaina, Pauoa and Kapena.",
+        "place": "puowaina",
+        "zoom": "near",
+        "year": 1783,
+        "camera": {
+          "bearing": 30,
+          "pitch": 0.55,
+          "distance": 25
+        }
+      },
+      {
+        "text": "The decisive battle is fought along the small stream of Kaheiki, where Kahahana’s defence holds the ridge facing Pauoa down to Kapena. It breaks, and Kahahana and Kekuapoʻi flee to the mountains.",
+        "place": "kaheiki",
+        "zoom": "near",
+        "year": 1783,
+        "camera": {
+          "bearing": 40,
+          "pitch": 0.45,
+          "distance": 14
+        }
+      }
     ]
   },
   {
@@ -1210,6 +1278,34 @@
       {
         "place": "laimi",
         "role": "battle"
+      },
+      {
+        "place": "kawananakoa",
+        "role": "post"
+      },
+      {
+        "place": "luakaha",
+        "role": "post"
+      },
+      {
+        "place": "kahapaakai",
+        "role": "post"
+      },
+      {
+        "place": "alewa",
+        "role": "escape"
+      },
+      {
+        "place": "kalihi",
+        "role": "escape"
+      },
+      {
+        "place": "pauoa-flats",
+        "role": "flank"
+      },
+      {
+        "place": "nuuanu-pali-trail",
+        "role": "path"
       }
     ],
     "zoom": [
@@ -1242,37 +1338,62 @@
         "text": "The army comes ashore along the beaches from Waiʻalae to Waikīkī and spends a few days putting itself in order.",
         "place": "waikiki",
         "zoom": "island",
-        "year": 1795
+        "year": 1795,
+        "camera": {
+          "bearing": 15,
+          "pitch": 0.5,
+          "distance": 60
+        }
       },
       {
         "text": "It marches inland past Kou, the village at the harbor, toward the mouth of Nuʻuanu. The Oʻahu forces hold the valley above, from Puʻiwa upward through a line of named places to the head of the valley.",
         "place": "kou",
         "zoom": "island",
-        "year": 1795
+        "year": 1795,
+        "camera": {
+          "bearing": 45,
+          "pitch": 0.6,
+          "distance": 40
+        }
       },
       {
         "text": "The fighting begins at Puʻiwa. For a while it is hotly contested; then Kamehameha’s guns, more of them and better served, turn the day.",
         "place": "puiwa",
         "zoom": "near",
-        "year": 1795
+        "year": 1795,
+        "camera": {
+          "bearing": 42,
+          "pitch": 0.38,
+          "distance": 16
+        }
       },
       {
         "text": "At Lāʻimi the Oʻahu line gives way. Kaʻiana falls here, by Kamakau’s telling. The Oʻahu forces fall back up the valley, some escaping over the ridges on either side.",
         "place": "laimi",
         "zoom": "near",
-        "year": 1795
+        "year": 1795,
+        "camera": {
+          "bearing": 42,
+          "pitch": 0.38,
+          "distance": 13
+        }
       },
       {
         "text": "The retreat ends at the head of the valley, where the land drops away at the pali. Many of the Oʻahu fighters die there. Their remains are a burial matter for their descendants, and this app does not place them.",
         "place": "nuuanu-pali",
         "zoom": "near",
-        "year": 1795
+        "year": 1795,
+        "camera": {
+          "bearing": 50,
+          "pitch": 0.15,
+          "distance": 18
+        }
       }
     ],
     "sources": [
       {
         "id": "kamakau-ruling-chiefs",
-        "where": "ch. XIV, pp. 171–172"
+        "where": "ch. XIV, pp. 171–173; p. 192 (cultivation); pp. 271–272 (Kou); pp. 291–292 (the old road)"
       },
       {
         "id": "fornander-v2",
@@ -1288,7 +1409,7 @@
       },
       {
         "id": "thrum-annual-1911",
-        "where": "p. 100, not read"
+        "where": "p. 100"
       },
       {
         "id": "schmitt-1969-mortality",
@@ -1297,6 +1418,38 @@
       {
         "id": "wikipedia-battle-of-nuuanu",
         "where": "finding aid"
+      },
+      {
+        "id": "jarves-1847",
+        "where": "ch. VII, the Nuʻuanu passage"
+      },
+      {
+        "id": "bingham-1847",
+        "where": "p. 47"
+      },
+      {
+        "id": "dibble-1843",
+        "where": "p. 71"
+      },
+      {
+        "id": "ellis-1827",
+        "where": "pp. 12–17"
+      },
+      {
+        "id": "johnstone-1908",
+        "where": "pp. 160–162"
+      },
+      {
+        "id": "pacific-worlds-nuuanu",
+        "where": "the battle page"
+      },
+      {
+        "id": "hgs-1881-oahu",
+        "where": "Laimi, Luakaha"
+      },
+      {
+        "id": "hgs-1899-oahu",
+        "where": "Puiwa"
       }
     ],
     "confidence": {
@@ -1311,11 +1464,11 @@
       },
       {
         "source": "thrum-annual-1911",
-        "says": "Cited for an army of about 12,000 men in about 1,200 canoes (p. 100; not yet read)."
+        "says": "Read now. P. 100, in “John Young: Companion of Kamehameha”, says Young “is said to have had charge of the cannon” in Kamehameha’s battles and at Nuʻuanu “is credited with firing the shot that put an end to Kaiana”, and quotes Kamakau that the battle “began at Puaiwa, thence to Laimii”. It gives no size for the army: the 12,000 men in 1,200 canoes that Wikipedia prints beside its citation of this page are not on it."
       },
       {
         "source": "wikipedia-battle-of-nuuanu",
-        "says": "Gives 10,000–16,000 for Kamehameha’s army without a source, and dates the battle to May 1795."
+        "says": "Gives 10,000–16,000 for Kamehameha’s army in its infobox and “about 12,000 men and 1,200 war canoes” in its text, the second beside a citation of Thrum’s Annual for 1911, p. 100, which does not carry it; dates the battle to May 1795."
       },
       {
         "source": "schmitt-1969-mortality",
@@ -1326,8 +1479,16 @@
         "says": "Kamakau has Kaʻiana die at Lāʻimi, where the Oʻahu side was routed, and does not mention the pali in this passage. He has Kalanikūpule hide in the uplands for “a little over a year” before he is caught above Waipiʻo in ʻEwa (p. 172)."
       },
       {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kalanikūpule’s chiefs are stationed “at strategic points in Nuʻuanu at Kanoneakapueo, Kahapaʻakai, Luakaha, Kawananakoa, Kaukahoku, Kapaʻeli, Kaumuʻohena, and Puʻiwa, where the fighting began” (p. 172). Kamakau mentions no cannon in the fight and names no gunner. He says the ships handed Kalanikūpule’s “munitions of war” to Kamehameha, and has the orators tell Kamehameha that the island was won “only because the foreigners carried off the munitions of war” (pp. 171, 173)."
+      },
+      {
         "source": "fornander-v2",
         "says": "Fornander has Kaʻiana and his brother Nahiolea killed early in the battle, “a large number” driven over the pali, and Kalanikūpule caught after “several months” (p. 348)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "At Puʻiwa “for a while the victory was hotly contested; but the superiority of Kamehameha’s artillery, the number of his guns, and the better practice of his soldiers, soon turned the day”. He names no gunner. He lists the Oʻahu posts “from Puiwa upwards”: Kaumuohena, Kapaeli, Kaukahoku, Kawananakoa, Luakaha, Kahapaakai, Kamoniakapueo (as the scan reads) and Nuuanu (p. 348)."
       },
       {
         "source": "wikipedia-battle-of-nuuanu",
@@ -1336,6 +1497,30 @@
       {
         "source": "james-2004-nuuanu",
         "says": "Cited for the name Kalelekaʻanae, “the leaping ʻanae (mullet)” (not yet read; the design notes spell it Kaleleakaʻanae)."
+      },
+      {
+        "source": "jarves-1847",
+        "says": "Kaʻiana and Kalanikūpule hold “the steep side of a hill, about three miles in the rear of the present town of Honolulu”, behind a stone wall. “A field-piece, which Young had brought to bear upon them” kills Kaʻiana and breaks their ranks; the rest are driven to the end of the valley, and some over its brink. “Three hundred perished in the fight.” Jarves has Kalanikūpule die fighting there, against Kamakau and Fornander (ch. VII)."
+      },
+      {
+        "source": "bingham-1847",
+        "says": "Gives “the whole Hawaiian army, 16,000 strong” in the Maui campaign of February 1795. Three months later the forces meet “between the village of Honolulu and the precipice of Nuuanu”; “Kaiana was slain in battle with some three hundred men”, and numbers trying to escape through the gorge “are said to have been precipitated down the precipice” (p. 47)."
+      },
+      {
+        "source": "dibble-1843",
+        "says": "Many of the Oʻahu side “were precipitated down the precipice at the termination of the valley”; Dibble dates the battle “probably in the year 1794” (p. 71)."
+      },
+      {
+        "source": "ellis-1827",
+        "says": "The last battle is fought “about two miles from the Pari”; Kaʻiana makes a stand at the edge of the pali and defends it “till he fell”, and “it is said four hundred” are driven over. Ellis has the king of Oʻahu killed in the battle and dates the conquest “in or about the year 1790” (pp. 16–17)."
+      },
+      {
+        "source": "johnstone-1908",
+        "says": "“It is generally believed” that the decisive point lay “just a little above the Queen Emma place”, where “a well-directed shot from John Young’s cannon” killed Kaʻiana and scattered the Oʻahu forces, some to the hills and the rest over the pali (pp. 161–162). In the old days, “before and since” the battle, taro patches filled the floor of the valley “like the inlaying of a continuous mosaic”, with grass houses throughout its length (p. 161)."
+      },
+      {
+        "source": "pacific-worlds-nuuanu",
+        "says": "An oral account puts the first engagement at the foot of Pūowaina, Kaʻiana’s death near today’s Oʻahu Cemetery, Kamehameha’s guns in lower Nuʻuanu, flanking parties over Tantalus and Pauoa Flats to silence Oʻahu guns in the notches above the pali, and a rear guard near Luakaha so that the main body could escape over ʻĀlewa into Kalihi and down the pali trails. It gives the name as “Ka-lele-a-ke-anae”, the leaping of the ʻanae, and says the name tells something other than the men forced off the cliff. It repeats the find of about 800 skulls in 1897 without a source."
       }
     ],
     "routes": [
