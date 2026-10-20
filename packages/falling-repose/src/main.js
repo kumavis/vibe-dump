@@ -9,7 +9,7 @@ const soundBtn = document.getElementById('sound')
 const resetBtn = document.getElementById('reset')
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Development aids, read from the query string and otherwise invisible:
+// Development aids, read from the query string and otherwise invisible.
 //   ?t=95        start the clock at 95 s (skips the fade)
 //   ?still       freeze the clock
 //   ?fig         draw only the silhouette, black on paper
@@ -22,7 +22,24 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 //   ?govern      let the frame-rate governor run even under automation
 //   ?zoom=3 &vyaw=1 &vpitch=0.8   start the viewer's camera somewhere else
 //   ?look=face   aim at face, hair, handL, handR, footL, footR or any joint
+// They also read from the hash, because some places (an artifact link) pass
+// only a plain #anchor through to the page: there, write ~ between settings
+// and _ for =, as in #solid~look_face~zoom_0.2. Changing them reloads.
+const DEV_KEYS = ['t', 'still', 'fig', 'solid', 'pose', 'roll', 'twist', 'yaw', 'tilt', 'reach', 'sdf8', 'rung', 'govern', 'zoom', 'vyaw', 'vpitch', 'look']
+// the development settings a hash carries, as [key, value] pairs
+function hashSettings(hash) {
+  const h = decodeURIComponent(hash.slice(1))
+  const q = /[=&]/.test(h) ? h : h.split('~').map((t) => t.replace('_', '=')).join('&')
+  return [...new URLSearchParams(q)].filter(([k]) => DEV_KEYS.includes(k))
+}
 const params = new URLSearchParams(location.search)
+for (const [k, v] of hashSettings(location.hash)) params.set(k, v)
+// a host may set a hash of its own; reload only when ours change
+const settingsOf = (hash) => JSON.stringify(hashSettings(hash).sort())
+const startSettings = settingsOf(location.hash)
+addEventListener('hashchange', () => {
+  if (settingsOf(location.hash) !== startSettings) location.reload()
+})
 const pin = (name, value) => (params.has(name) ? +params.get(name) : value)
 const look = params.get('look')
 const solid = params.has('solid')

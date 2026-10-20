@@ -12,12 +12,13 @@ import { mul3, apply3, euler, add3, sub3, scale3, norm3 } from './mat.js'
 
 const MAX_PRIMS = 190
 
-// index, middle, ring, little: knuckle z, two phalanx lengths (m)
+// index, middle, ring, little: knuckle z, two phalanx lengths (m). The outer
+// knuckles sit just inside the palm's rounded edge, not beyond it.
 const FINGERS = [
-  [0.027, 0.044, 0.04],
-  [0.009, 0.048, 0.045],
-  [-0.01, 0.045, 0.041],
-  [-0.027, 0.035, 0.031],
+  [0.023, 0.044, 0.04],
+  [0.008, 0.048, 0.045],
+  [-0.0085, 0.045, 0.041],
+  [-0.023, 0.035, 0.031],
 ]
 
 // [name, parent, offset in the parent's frame (m)]
@@ -54,11 +55,13 @@ function shapes() {
   const cap = (j, a, b, ra, rb, k, g) => S.push({ type: 0, j, a, b, ra, rb, k, g })
   const ell = (j, c, r, k, g, e) => S.push({ type: 1, j, c, r, k, g, e })
 
-  // torso, back to front so the big masses land first
+  // torso, back to front so the big masses land first. The waist is long and
+  // flat-sided and a little narrower than chest and hips, so the outline goes
+  // out, in, out without a bulge of its own in the middle.
   ell('pelvis', [0, 0, -0.005], [0.16, 0.11, 0.105], 0.05, 'torso')
   ell('pelvis', [0, -0.06, -0.05], [0.145, 0.1, 0.085], 0.04, 'torso')
   ell('pelvis', [0, 0.03, 0.035], [0.13, 0.09, 0.07], 0.04, 'torso')
-  ell('spine', [0, 0.08, 0], [0.13, 0.13, 0.088], 0.05, 'torso')
+  ell('spine', [0, 0.09, -0.004], [0.122, 0.19, 0.086], 0.05, 'torso')
   ell('chest', [0, 0.12, -0.005], [0.148, 0.16, 0.102], 0.05, 'torso')
   ell('chest', [0, 0.165, 0.035], [0.145, 0.08, 0.075], 0.03, 'torso')
   ell('chest', [0, 0.17, -0.048], [0.145, 0.09, 0.07], 0.03, 'torso')
@@ -69,8 +72,8 @@ function shapes() {
   ell('head', [0, 0.1, -0.015], [0.074, 0.095, 0.1], 0.02, 'head')
   ell('head', [0, 0.052, 0.042], [0.062, 0.075, 0.062], 0.02, 'head')
   ell('head', [0, 0.004, 0.068], [0.042, 0.028, 0.034], 0.015, 'head')
-  ell('head', [0, 0.112, 0.082], [0.058, 0.018, 0.022], 0.012, 'head')
-  cap('head', [0, 0.092, 0.098], [0, 0.056, 0.121], 0.01, 0.0115, 0.008, 'head')
+  ell('head', [0, 0.112, 0.076], [0.058, 0.018, 0.019], 0.012, 'head') // brow
+  cap('head', [0, 0.09, 0.094], [0, 0.062, 0.11], 0.0095, 0.011, 0.008, 'head') // nose
   ell('head', [0, 0.03, 0.094], [0.024, 0.014, 0.013], 0.008, 'head')
   ell('head', [0, 0.105, -0.06], [0.082, 0.092, 0.082], 0.02, 'head') // hair over the occiput
 
@@ -82,7 +85,7 @@ function shapes() {
     cap('elbow' + s, [0, 0, 0], [0, -0.25, 0], 0.034, 0.022, 0.02, arm)
     ell('elbow' + s, [0, -0.07, 0], [0.033, 0.09, 0.038], 0.02, arm)
 
-    ell('wrist' + s, [0, -0.05, 0], [0.015, 0.05, 0.04], 0.012, hand)
+    ell('wrist' + s, [0, -0.05, 0], [0.015, 0.05, 0.042], 0.012, hand)
     ell('wrist' + s, [-0.004, -0.036, 0.024], [0.016, 0.03, 0.02], 0.01, hand)
     FINGERS.forEach(([, l1, l2], i) => {
       const r = i === 3 ? 0.0075 : 0.0088
@@ -96,8 +99,12 @@ function shapes() {
     ell('hip' + s, [0, -0.17, 0.015], [0.072, 0.19, 0.078], 0.03, leg)
     cap('knee' + s, [0, 0, 0], [0, -0.41, 0], 0.048, 0.029, 0.025, leg)
     ell('knee' + s, [0, -0.12, -0.028], [0.046, 0.13, 0.052], 0.02, leg)
-    ell('ankle' + s, [0, -0.035, -0.025], [0.032, 0.035, 0.04], 0.015, leg)
-    cap('ankle' + s, [0, -0.045, -0.01], [0, -0.068, 0.155], 0.032, 0.021, 0.015, leg)
+    // the foot: the heel, and one long body that arches forward and thins to
+    // a softly widened ball — blended loosely, so a pointed foot reads as one
+    // taper rather than a string of beads
+    ell('ankle' + s, [0, -0.045, -0.016], [0.028, 0.027, 0.03], 0.025, leg)
+    ell('ankle' + s, [0, -0.048, 0.06], [0.035, 0.03, 0.1], 0.025, leg, [0.12, 0, 0])
+    ell('ankle' + s, [0, -0.06, 0.13], [0.04, 0.017, 0.05], 0.025, leg)
   }
   return S
 }
@@ -128,6 +135,12 @@ function hairRoots() {
   }
   return roots
 }
+
+// How generously a hair segment blends into what is already there. The first
+// segment of each lock blends wide, so the locks gather into one mass at the
+// scalp. After that, segments meet end to end exactly and need almost none:
+// any more and every joint swells, and the strand reads as a string of beads.
+const hairBlend = (i, r) => (i === 0 ? Math.max(0.0025, r * 1.5) : Math.max(0.0006, r * 0.2))
 
 // Slow, smooth, deterministic wandering — a sum of incommensurate sines.
 function drift(seed, t) {
@@ -421,7 +434,7 @@ export class Figure {
       for (let i = 1; i <= K; i++) {
         const f = i / K
         const ph = s * 3.1 + wave - f * 3.4
-        const amp = (0.25 + 0.95 * f) * (0.6 + 0.35 * (1 - Math.min(1, pull)))
+        const amp = (0.15 + 0.57 * f) * (0.6 + 0.35 * (1 - Math.min(1, pull)))
         const swing = add3(scale3(a1, Math.sin(ph) * amp), scale3(a2, Math.sin(ph * 0.73 + s) * amp * 0.8))
         const raw = add3(add3(scale3(n, 0.7 * (1 - f) + 0.1), scale3(up, pull * (0.7 + 1.1 * f))), swing)
         // A root pointing down with little pull could cancel the lift to
@@ -484,7 +497,7 @@ export class Figure {
       const rad = (f) => width * Math.pow(1 - f, 1.4) + 0.0016
       for (let i = 0; i < m; i++) {
         const r0 = rad(i / m), r1 = rad((i + 1) / m)
-        push('hair', [[...pts[i], r0], [...pts[i + 1], r1], [Math.max(0.0025, r0 * 1.5), 2, 0, -1], [0, 0, 0, 0]], [[pts[i], r0], [pts[i + 1], r1]])
+        push('hair', [[...pts[i], r0], [...pts[i + 1], r1], [hairBlend(i, r0), 2, 0, -1], [0, 0, 0, 0]], [[pts[i], r0], [pts[i + 1], r1]])
       }
     }
     this.count3 = n
@@ -605,9 +618,7 @@ export class Figure {
       const rad = (f) => width * Math.pow(1 - f, 1.4) + 0.0016
       for (let i = 0; i < m; i++) {
         const r0 = rad(i / m), r1 = rad((i + 1) / m)
-        // blend generously near the scalp so the locks read as one mass, and
-        // barely at all toward the tips, where blending would bead the strand
-        capsule(pts[i], pts[i + 1], r0, r1, Math.max(0.0025, r0 * 1.5), 'hair', true)
+        capsule(pts[i], pts[i + 1], r0, r1, hairBlend(i, r0), 'hair', true)
       }
     }
 
