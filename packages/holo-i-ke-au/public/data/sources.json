@@ -1,0 +1,623 @@
+[
+  {
+    "id": "kamakau-ruling-chiefs",
+    "title": "Ruling Chiefs of Hawaii (revised edition)",
+    "author": "Samuel Mānaiakalani Kamakau",
+    "year": 1992,
+    "url": "https://shops.kamehamehapublishing.org/products/978-0-87336-014-2",
+    "access": "open",
+    "opened": true,
+    "note": "Translated from Kamakau's series in Ka Nupepa Kuokoa and Ke Au Okoa, 1866–1871 (first English edition 1961). The publisher states the book is free to read on Ulukau; Ulukau refused automated access, so it was read in the publisher's free PDF as re-hosted on the Internet Archive (item chiefs_202607). Page numbers are the 1992 edition's. Passages in square brackets are the editors' additions, not Kamakau's words."
+  },
+  {
+    "id": "fornander-v2",
+    "title": "An Account of the Polynesian Race, vol. II",
+    "author": "Abraham Fornander",
+    "year": 1880,
+    "url": "https://archive.org/details/accountofpolynes00v2forn",
+    "access": "open",
+    "opened": true,
+    "note": "Public domain (London: Trübner). Read in full text with printed page numbers. Fornander counts thirty years to a generation, which puts his pre-contact dates earlier than later reckonings, and his theories of Polynesian origins are long superseded; his summaries of Hawaiian traditions and of the 1770s–1795 wars remain a main open source."
+  },
+  {
+    "id": "cook-1784-v2",
+    "title": "A Voyage to the Pacific Ocean, vol. II",
+    "author": "James Cook",
+    "year": 1784,
+    "url": "https://archive.org/details/bim_eighteenth-century_a-voyage-to-the-pacific-_cook-james_1784_2",
+    "access": "open",
+    "opened": true,
+    "note": "The official quarto edition. Book III, chapters XI–XII cover Kauaʻi and Niʻihau in January–February 1778; the end of the volume covers the approach to Kealakekua in January 1779."
+  },
+  {
+    "id": "king-1784-v3",
+    "title": "A Voyage to the Pacific Ocean, vol. III",
+    "author": "James King",
+    "year": 1784,
+    "url": "https://archive.org/details/bim_eighteenth-century_a-voyage-to-the-pacific-_cook-james_1784_3",
+    "access": "open",
+    "opened": true,
+    "note": "King's continuation after Cook's death. Book V, chapters I–IV cover Kealakekua, January–February 1779; pp. 126–128 give his estimate of the islands' population."
+  },
+  {
+    "id": "dibble-1843",
+    "title": "History of the Sandwich Islands",
+    "author": "Sheldon Dibble",
+    "year": 1843,
+    "url": "https://archive.org/details/historysandwich00dibbgoog",
+    "access": "open",
+    "opened": true,
+    "note": "Printed at Lahainaluna; drawn from accounts gathered by Hawaiian students there. Mission viewpoint throughout."
+  },
+  {
+    "id": "ellis-1827",
+    "title": "Narrative of a Tour through Hawaii, or Owhyhee",
+    "author": "William Ellis",
+    "year": 1827,
+    "url": "https://archive.org/details/b29319419",
+    "access": "open",
+    "opened": true,
+    "note": "London edition of 1827; records traditions heard on the 1823 tour."
+  },
+  {
+    "id": "bingham-1847",
+    "title": "A Residence of Twenty-One Years in the Sandwich Islands",
+    "author": "Hiram Bingham",
+    "year": 1847,
+    "url": "https://archive.org/details/residenceoftwent00bing",
+    "access": "open",
+    "opened": true,
+    "note": "The leader of the first mission company; mission viewpoint."
+  },
+  {
+    "id": "jarves-1847",
+    "title": "History of the Hawaiian Islands",
+    "author": "James Jackson Jarves",
+    "year": 1847,
+    "url": "https://archive.org/details/historyhawaiian01jarvgoog",
+    "access": "open",
+    "opened": true,
+    "note": "Page numbers are not legible in this scan for some passages, so citations name the passage or table."
+  },
+  {
+    "id": "liliuokalani-1898",
+    "title": "Hawaii's Story by Hawaii's Queen",
+    "author": "Liliʻuokalani",
+    "year": 1898,
+    "url": "https://archive.org/details/hawaiisstorybyh00lili",
+    "access": "open",
+    "opened": true,
+    "note": "The Queen's own account; a participant's view of 1874–1898."
+  },
+  {
+    "id": "census-1896",
+    "title": "Report of the General Superintendent of the Census, 1896",
+    "author": "Alatau T. Atkinson",
+    "year": 1897,
+    "url": "https://archive.org/details/reportgeneralsu00atkigoog",
+    "access": "open",
+    "opened": true,
+    "note": "Compares the 1896 count with that of 1890; the scan does not show page numbers clearly, so citations name the section."
+  },
+  {
+    "id": "nara-kue-1897",
+    "title": "The 1897 Petition Against the Annexation of Hawaii",
+    "author": "U.S. National Archives",
+    "url": "https://www.archives.gov/education/lessons/hawaii-petition",
+    "access": "open",
+    "opened": true,
+    "note": "Educator page with the petition. Its description of the organising groups is loose and should be checked against Silva."
+  },
+  {
+    "id": "pl-103-150",
+    "title": "Public Law 103-150 (the Apology Resolution), 107 Stat. 1510",
+    "author": "United States Congress",
+    "year": 1993,
+    "url": "https://www.govinfo.gov/content/pkg/STATUTE-107/pdf/STATUTE-107-Pg1510.pdf",
+    "access": "open",
+    "opened": true,
+    "note": "Its preamble sets out the events of 1893–1898 as Congress acknowledged them."
+  },
+  {
+    "id": "hi-constitution",
+    "title": "Constitution of the State of Hawaiʻi",
+    "author": "Legislative Reference Bureau, State of Hawaiʻi",
+    "year": 1978,
+    "url": "https://lrb.hawaii.gov/constitution",
+    "access": "open",
+    "opened": true,
+    "note": "Article XII sections 5–7 and Article XV section 4 carry the note \"Add Const Con 1978 and election Nov 7, 1978\"."
+  },
+  {
+    "id": "hi-leg-sr50-2007",
+    "title": "Senate Resolution 50 (2007)",
+    "author": "Hawaiʻi State Legislature",
+    "year": 2007,
+    "url": "https://data.capitol.hawaii.gov/sessions/session2007/Bills/sr50_.pdf",
+    "access": "open",
+    "opened": true,
+    "note": "Quotes the full title of the 1850 act, L. 1850, p. 202."
+  },
+  {
+    "id": "hi-leg-scr57-2021",
+    "title": "Senate Concurrent Resolution 57 (2021)",
+    "author": "Hawaiʻi State Legislature",
+    "year": 2021,
+    "url": "https://data.capitol.hawaii.gov/sessions/session2021/Bills/SCR57_.PDF",
+    "access": "open",
+    "opened": true,
+    "note": "Dates the Kuleana Act to 6 August 1850 and its amendment to 11 July 1851."
+  },
+  {
+    "id": "hi-leg-hcr232-2014",
+    "title": "House Concurrent Resolution 232 (2014)",
+    "author": "Hawaiʻi State Legislature",
+    "year": 2014,
+    "url": "https://data.capitol.hawaii.gov/sessions/session2014/Bills/HCR232_.PDF",
+    "access": "open",
+    "opened": true,
+    "note": "Describes the ʻOnipaʻa Centennial Observance of 13–17 January 1993."
+  },
+  {
+    "id": "hhfdc-waiahole-plan",
+    "title": "Waiāhole Valley Community Strategic Plan (board draft)",
+    "author": "Hawaiʻi Housing Finance and Development Corporation",
+    "year": 2019,
+    "url": "https://dbedt.hawaii.gov/hhfdc/files/2019/03/Waiahole-Valley-Community-Strategic-Plan-Board-Draft-without-Appendices.pdf",
+    "access": "open",
+    "opened": true,
+    "note": "Its history section covers 1974–1977."
+  },
+  {
+    "id": "wilmshurst-2011",
+    "title": "High-precision radiocarbon dating shows recent and rapid initial human colonization of East Polynesia",
+    "author": "J. M. Wilmshurst, T. L. Hunt, C. P. Lipo, A. J. Anderson",
+    "year": 2011,
+    "url": "https://doi.org/10.1073/pnas.1015876108",
+    "access": "open",
+    "opened": true,
+    "note": "PNAS 108:1815–1820. Read the abstract (Europe PMC); the full text is open at PMC3033267 but was not read."
+  },
+  {
+    "id": "athens-2014",
+    "title": "A Paleoenvironmental and Archaeological Model-Based Age Estimate for the Colonization of Hawaiʻi",
+    "author": "J. S. Athens, T. M. Rieth, T. S. Dye",
+    "year": 2014,
+    "url": "https://doi.org/10.7183/0002-7316.79.1.144",
+    "access": "paywalled",
+    "opened": true,
+    "note": "American Antiquity 79(1):144–155. Read the abstract only."
+  },
+  {
+    "id": "dye-2011",
+    "title": "A model-based age estimate for Polynesian colonization of Hawai'i",
+    "author": "T. S. Dye",
+    "year": 2011,
+    "url": "https://doi.org/10.1002/j.1834-4453.2011.tb00107.x",
+    "access": "paywalled",
+    "opened": true,
+    "note": "Archaeology in Oceania 46:130–138. Read the abstract only."
+  },
+  {
+    "id": "kirch-sharp-2005",
+    "title": "Coral 230Th dating of the imposition of a ritual control hierarchy in precontact Hawaii",
+    "author": "P. V. Kirch, W. D. Sharp",
+    "year": 2005,
+    "url": "https://doi.org/10.1126/science.1105432",
+    "access": "paywalled",
+    "opened": true,
+    "note": "Science 307:102–104. Read the abstract only."
+  },
+  {
+    "id": "kirch-ruggles-2019",
+    "title": "Heiau, ʻĀina, Lani: The Hawaiian Temple System in Ancient Kahikinui and Kaupō, Maui",
+    "author": "P. V. Kirch, C. L. N. Ruggles",
+    "year": 2019,
+    "url": "https://www.uhpress.hawaii.edu/title/heiau-aina-lani-the-hawaiian-temple-system-in-ancient-kahikinui-and-kaupo-maui/",
+    "access": "print",
+    "opened": false,
+    "note": "Not read. Believed to give the full coral-dated sequence for the 78 heiau of Kahikinui and Kaupō."
+  },
+  {
+    "id": "mcphie-1990",
+    "title": "Phreatomagmatic and phreatic fall and surge deposits from explosions at Kilauea volcano, Hawaii, 1790 A.D.: Keanakakoi Ash Member",
+    "author": "J. McPhie, G. P. L. Walker, R. L. Christiansen",
+    "year": 1990,
+    "url": "https://pubs.usgs.gov/publication/70016249",
+    "access": "paywalled",
+    "opened": true,
+    "note": "Bulletin of Volcanology. Read the abstract on the USGS Publications Warehouse."
+  },
+  {
+    "id": "swanson-2012-keanakakoi",
+    "title": "Keanakākoʻi Tephra produced by 300 years of explosive eruptions following collapse of Kīlauea's caldera in about 1500 CE",
+    "author": "D. A. Swanson, T. R. Rose, R. S. Fiske, J. P. McGeehin",
+    "year": 2012,
+    "url": "https://doi.org/10.1016/j.jvolgeores.2011.11.009",
+    "access": "paywalled",
+    "opened": false,
+    "note": "Not read; cited for its title, which places the 1790 explosions at the end of a long explosive period."
+  },
+  {
+    "id": "usgs-volcano-watch-2008",
+    "title": "Volcano Watch: Footprints in Kaʻū were probably made in 1790, but not by Keōua's party",
+    "author": "USGS Hawaiian Volcano Observatory",
+    "year": 2008,
+    "url": "https://www.usgs.gov/observatories/hvo/news/volcano-watch-footprints-kau-were-probably-made-1790-not-keouas-party",
+    "access": "open",
+    "opened": false,
+    "note": "Not read: usgs.gov refused or timed out. Search summaries say it questions whether the Kaʻū Desert footprints were made by Keōua's warriors and gives a wide range for the dead."
+  },
+  {
+    "id": "swanson-2019-hulili",
+    "title": "A New Estimate of the Hawaiian Population for 1778, the Year of First European Contact",
+    "author": "David A. Swanson",
+    "year": 2019,
+    "url": "https://kamehamehapublishing.org/wp-content/uploads/sites/42/2020/09/Hulili_Vol11.2_Swanson.pdf",
+    "access": "open",
+    "opened": true,
+    "note": "Hūlili 11(2):203–222. Exhibit 1 (p. 205) tabulates the earlier estimates with their sources."
+  },
+  {
+    "id": "merlin-1990-sandalwood",
+    "title": "The History of Human Impact on the Genus Santalum in Hawaiʻi",
+    "author": "Mark Merlin, Dan VanRavenswaay",
+    "year": 1990,
+    "url": "https://www.fs.usda.gov/psw/publications/documents/psw_gtr122/psw_gtr122_merlin.pdf",
+    "access": "open",
+    "opened": true,
+    "note": "In Proceedings of the Symposium on Sandalwood in the Pacific, USDA Forest Service Gen. Tech. Rep. PSW-122, pp. 46–60."
+  },
+  {
+    "id": "nps-kalaupapa",
+    "title": "A Brief History of Kalaupapa",
+    "author": "National Park Service",
+    "url": "https://www.nps.gov/kala/learn/historyculture/a-brief-history-of-kalaupapa.htm",
+    "access": "open",
+    "opened": true,
+    "note": "With the park's history index page, which gives the overall number sent."
+  },
+  {
+    "id": "nps-koloa-mill",
+    "title": "Old Sugar Mill of Kōloa",
+    "author": "National Park Service",
+    "url": "https://www.nps.gov/places/old-sugar-mill-of-koloa.htm",
+    "access": "open",
+    "opened": true,
+    "note": "National Historic Landmark page."
+  },
+  {
+    "id": "nrhp-koloa-mill",
+    "title": "Old Sugar Mill of Koloa, National Register nomination",
+    "author": "National Park Service",
+    "url": "https://npgallery.nps.gov/NRHP/GetAsset/NHLS/66000296_text",
+    "access": "open",
+    "opened": true,
+    "note": "Draws on A. C. Alexander, Koloa Plantation 1835–1935."
+  },
+  {
+    "id": "nps-puukohola",
+    "title": "Puʻukoholā Heiau National Historic Site",
+    "author": "National Park Service",
+    "url": "https://www.nps.gov/puhe/index.htm",
+    "access": "open",
+    "opened": true,
+    "note": "States the heiau was built 1790–91 and the site is open all year."
+  },
+  {
+    "id": "asce-hamakua-ditch",
+    "title": "East Maui Irrigation System (historic civil engineering landmark listing)",
+    "author": "Invention & Technology / ASCE",
+    "url": "https://www.inventionandtech.com/landmark_landing/80479",
+    "access": "open",
+    "opened": true,
+    "note": "Landmark listing page; dates the Old Hāmākua Ditch to 1876–1878."
+  },
+  {
+    "id": "wilcox-1996-sugar-water",
+    "title": "Sugar Water: Hawaii's Plantation Ditches",
+    "author": "Carol Wilcox",
+    "year": 1996,
+    "url": "https://www.jstor.org/stable/j.ctt6wr4h0",
+    "access": "paywalled",
+    "opened": false,
+    "note": "Not read. The standard history of the ditches."
+  },
+  {
+    "id": "kirc-history",
+    "title": "Kahoʻolawe history",
+    "author": "Kahoʻolawe Island Reserve Commission",
+    "url": "https://kahoolawe.hawaii.gov/history.shtml",
+    "access": "open",
+    "opened": true,
+    "note": "Timeline from 1941 to 2003."
+  },
+  {
+    "id": "noaa-heeia-nerr",
+    "title": "Heʻeia National Estuarine Research Reserve",
+    "author": "NOAA Office for Coastal Management",
+    "url": "https://coast.noaa.gov/nerrs/reserves/hawaii.html",
+    "access": "open",
+    "opened": true
+  },
+  {
+    "id": "paepae-o-heeia",
+    "title": "About Paepae o Heʻeia",
+    "author": "Paepae o Heʻeia",
+    "url": "https://paepaeoheeia.org/about-us",
+    "access": "open",
+    "opened": true
+  },
+  {
+    "id": "hcda-heeia",
+    "title": "About Heʻeia",
+    "author": "Hawaiʻi Community Development Authority",
+    "url": "https://dbedt.hawaii.gov/hcda/discover-heeia",
+    "access": "open",
+    "opened": true
+  },
+  {
+    "id": "hcda-2026-newsletter",
+    "title": "Community Connection, May 2026",
+    "author": "Hawaiʻi Community Development Authority",
+    "year": 2026,
+    "url": "https://dbedt.hawaii.gov/hcda/files/2026/05/May-2026-Community-Connection.pdf",
+    "access": "open",
+    "opened": true,
+    "note": "Its Heʻeia article covers the 1991 land exchange, the 2010 lease and the Mahuahua ʻAi o Hoi restoration."
+  },
+  {
+    "id": "ks-kealaikahiki-2020",
+    "title": "Kealaikahiki: Sea Road between Hawaiʻi and Kahiki (He Kama Na Kahiki Symposium final report)",
+    "author": "Kaʻiwakīloumoku, Kamehameha Schools",
+    "year": 2020,
+    "url": "https://kaiwakiloumoku.ksbe.edu/assets/img/content/moananuiakea/Kealaikahiki-He_Kama_Na_Kahiki_Report-pdf_download.pdf",
+    "access": "open",
+    "opened": true,
+    "note": "Report of a 2019 symposium of Hawaiian practitioners, navigators and educators."
+  },
+  {
+    "id": "staradvertiser-2019-kahikinui",
+    "title": "Kahikinui's lonely landscape reveals a network of temples at the heart of ancient farming settlements",
+    "author": "Timothy Hurley, Honolulu Star-Advertiser",
+    "year": 2019,
+    "url": "https://www.staradvertiser.com/2019/11/03/hawaii-news/kahikinuis-lonely-landscape-reveals-a-network-of-temples-at-the-heart-of-ancient-farming-settlements/",
+    "access": "paywalled",
+    "opened": true,
+    "note": "3 November 2019; reports Kirch and Ruggles's findings."
+  },
+  {
+    "id": "staradvertiser-2021-kalama",
+    "title": "Kalama Valley protests of 1971 commemorated",
+    "author": "Leila Fujimori, Honolulu Star-Advertiser",
+    "year": 2021,
+    "url": "https://staradvertiser.com/?p=1034966",
+    "access": "paywalled",
+    "opened": true,
+    "note": "12 May 2021."
+  },
+  {
+    "id": "staradvertiser-2026-hokulea",
+    "title": "50 years after Hokule'a's first voyage, the canoe continues to reshape Hawaii",
+    "author": "Victoria Budiono, Honolulu Star-Advertiser (via Hawaiʻi Tribune-Herald)",
+    "year": 2026,
+    "url": "https://www.hawaiitribune-herald.com/2026/05/04/hawaii-news/50-years-after-hokuleas-first-voyage-the-canoe-continues-to-reshape-hawaii/",
+    "access": "open",
+    "opened": true,
+    "note": "4 May 2026."
+  },
+  {
+    "id": "uh-news-2026-kahoolawe",
+    "title": "Kahoʻolawe, 50 years",
+    "author": "Moanikeʻala Nabarro, University of Hawaiʻi News",
+    "year": 2026,
+    "url": "https://www.hawaii.edu/news/2026/01/04/kahoolawe-50-years/",
+    "access": "open",
+    "opened": true,
+    "note": "4 January 2026."
+  },
+  {
+    "id": "hpr-2022-limu",
+    "title": "Community works to restore a turtle pond and revive limu growth in Waimānalo",
+    "author": "Catherine Cruz, Hawaiʻi Public Radio",
+    "year": 2022,
+    "url": "https://www.hawaiipublicradio.org/the-conversation/2022-12-21/community-works-to-restore-a-turtle-pond-and-revive-limu-growth-in-waimanalo",
+    "access": "open",
+    "opened": true,
+    "note": "21 December 2022."
+  },
+  {
+    "id": "khon-pahonu",
+    "title": "Ancient turtle pond in Waimānalo being restored",
+    "author": "Kamaka Pili, KHON2",
+    "url": "https://www.khon2.com/local-news/ancient-turtle-pond-in-waimanalo-being-restored/amp/",
+    "access": "open",
+    "opened": true,
+    "note": "Undated on the page (\"6 years ago\" as read in 2026)."
+  },
+  {
+    "id": "civilbeat-2026-limu",
+    "title": "Replanting limu: a civic ritual to save the species, and ourselves",
+    "author": "Makana Eyre, Honolulu Civil Beat",
+    "year": 2026,
+    "url": "https://civilbeat.org/2026/04/replanting-limu-a-civic-ritual-to-save-the-species-and-ourselves/",
+    "access": "open",
+    "opened": true,
+    "note": "26 April 2026."
+  },
+  {
+    "id": "aas-ke-au-okoa",
+    "title": "Ke Au Okoa (catalogue entry)",
+    "author": "American Antiquarian Society",
+    "url": "https://americanantiquarian.org/node/13036",
+    "access": "open",
+    "opened": true,
+    "note": "Gives the run 1865–1873, Honolulu, weekly."
+  },
+  {
+    "id": "state-gis-moku",
+    "title": "Moku (Historic Land Divisions), HistoricCultural MapServer layer 3",
+    "author": "State of Hawaiʻi Statewide GIS Program; SHPD; OHA",
+    "year": 2026,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/HistoricCultural/MapServer/3",
+    "access": "open",
+    "opened": true,
+    "note": "Fetched 2026-10-20: 33 features. Description dated SHPD December 2020 with a July 2026 update moving Maunalua and Kuliʻouʻou into Kona. Not legal boundaries."
+  },
+  {
+    "id": "state-gis-ahupuaa",
+    "title": "Ahupuaa (Historic Land Divisions), HistoricCultural MapServer layer 1",
+    "author": "State of Hawaiʻi Statewide GIS Program; SHPD; OHA",
+    "year": 2026,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/HistoricCultural/MapServer/1",
+    "access": "open",
+    "opened": true,
+    "note": "Fetched 2026-10-20: 727 features. Centroids in places.json were computed from this layer's polygons. Some units combine several ahupuaʻa."
+  },
+  {
+    "id": "usgs-gnis",
+    "title": "Geographic Names Information System, via The National Map Gazetteer service",
+    "author": "U.S. Geological Survey",
+    "year": 2026,
+    "url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer",
+    "access": "open",
+    "opened": true,
+    "note": "Queried 2026-10-20; coordinates for named natural features and populated places."
+  },
+  {
+    "id": "wikipedia-battle-of-nuuanu",
+    "title": "Battle of Nuʻuanu",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Battle_of_Nu%CA%BBuanu",
+    "access": "open",
+    "opened": true,
+    "tertiary": true,
+    "note": "Read as a finding aid on 2026-10-20; its figures are reported only with their attribution."
+  },
+  {
+    "id": "wikipedia-iolani-palace",
+    "title": "ʻIolani Palace",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/%CA%BBIolani_Palace",
+    "access": "open",
+    "opened": true,
+    "tertiary": true,
+    "note": "Coordinates only."
+  },
+  {
+    "id": "wikipedia-thomas-square",
+    "title": "Thomas Square",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Thomas_Square",
+    "access": "open",
+    "opened": true,
+    "tertiary": true,
+    "note": "Coordinates only."
+  },
+  {
+    "id": "wikipedia-kukaniloko",
+    "title": "Kūkaniloko Birth Site",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/K%C5%ABkaniloko_Birth_Site",
+    "access": "open",
+    "opened": true,
+    "tertiary": true,
+    "note": "Coordinates, and its statement that the site was listed on the National Register in 1973 and became a state monument."
+  },
+  {
+    "id": "wikipedia-kamakahonu",
+    "title": "Kamakahonu",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Kamakahonu",
+    "access": "open",
+    "opened": true,
+    "tertiary": true,
+    "note": "Its statement that Kamakahonu is a National Historic Landmark."
+  },
+  {
+    "id": "thrum-annual-1911",
+    "title": "Hawaiian Almanac and Annual for 1911",
+    "author": "Thomas G. Thrum",
+    "year": 1910,
+    "access": "open",
+    "opened": false,
+    "note": "Not read: eVols and HathiTrust refused automated access and the volume is not on the Internet Archive. Wikipedia cites p. 100 for the size of Kamehameha's army in 1795."
+  },
+  {
+    "id": "schmitt-1969-mortality",
+    "title": "Catastrophic Mortality in Hawaii",
+    "author": "Robert C. Schmitt and others",
+    "year": 1969,
+    "access": "open",
+    "opened": false,
+    "note": "Hawaiian Journal of History 3. Not read (eVols refused automated access). Wikipedia cites pp. 67–68 for battle deaths."
+  },
+  {
+    "id": "james-2004-nuuanu",
+    "title": "The Battle of Nuʻuanu",
+    "author": "Rob James",
+    "year": 2004,
+    "access": "print",
+    "opened": false,
+    "note": "Kamehameha Schools Press. Not read. Wikipedia cites it for the name Kalelekaʻanae, \"the leaping ʻanae (mullet)\"."
+  },
+  {
+    "id": "ii-fragments",
+    "title": "Fragments of Hawaiian History",
+    "author": "John Papa ʻĪʻī",
+    "year": 1959,
+    "access": "print",
+    "opened": false,
+    "note": "Not read. ʻĪʻī's account of Nuʻuanu and of Kamehameha's court should be checked against every card in that era."
+  },
+  {
+    "id": "obeyesekere-1992",
+    "title": "The Apotheosis of Captain Cook",
+    "author": "Gananath Obeyesekere",
+    "year": 1992,
+    "access": "print",
+    "opened": false,
+    "note": "Not read. Argues that the idea that Hawaiians took Cook for the god Lono is a European construction."
+  },
+  {
+    "id": "sahlins-1995",
+    "title": "How \"Natives\" Think: About Captain Cook, For Example",
+    "author": "Marshall Sahlins",
+    "year": 1995,
+    "access": "print",
+    "opened": false,
+    "note": "Not read. Replies to Obeyesekere, defending the reading that Cook was received within the Makahiki rites of Lono."
+  },
+  {
+    "id": "kuykendall-1938-v1",
+    "title": "The Hawaiian Kingdom, vol. I: 1778–1854",
+    "author": "Ralph S. Kuykendall",
+    "year": 1938,
+    "access": "paywalled",
+    "opened": false,
+    "note": "Not read (no open copy found). Merlin and VanRavenswaay quote it, pp. 88–89, for Kamakau on the sandalwood famine."
+  },
+  {
+    "id": "stannard-1989",
+    "title": "Before the Horror: The Population of Hawaiʻi on the Eve of Western Contact",
+    "author": "David E. Stannard",
+    "year": 1989,
+    "access": "print",
+    "opened": false,
+    "note": "Not read; its estimate is taken from Swanson's table (p. 205), which cites Stannard p. 50."
+  },
+  {
+    "id": "silva-2004",
+    "title": "Aloha Betrayed: Native Hawaiian Resistance to American Colonialism",
+    "author": "Noenoe K. Silva",
+    "year": 2004,
+    "access": "print",
+    "opened": false,
+    "note": "Not read. The main study of the 1897 petitions, known as the Kūʻē petitions, and of the two associations behind them."
+  }
+]

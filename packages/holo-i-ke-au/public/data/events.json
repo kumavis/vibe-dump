@@ -1,0 +1,2718 @@
+[
+  {
+    "id": "first-canoes",
+    "title": "The first canoes",
+    "gloss": "settlement from the south",
+    "when": {
+      "from": "0940",
+      "to": "1290",
+      "precision": "century"
+    },
+    "era": "voyaging",
+    "where": [
+      {
+        "place": "pae-aina",
+        "role": "landfall"
+      },
+      {
+        "place": "kahiki",
+        "role": "origin"
+      }
+    ],
+    "zoom": [
+      "far"
+    ],
+    "kind": "arrival",
+    "summary": "Voyaging canoes from Kahiki, the islands to the south, reach a chain of high islands where no one has lived. The date comes from radiocarbon: from charcoal and pollen in cores, which show when people began to burn and clear the land, and from the oldest dated sites. The models disagree by a century or two, and older readings of the genealogies put the arrival much earlier.",
+    "sources": [
+      {
+        "id": "athens-2014",
+        "where": "abstract"
+      },
+      {
+        "id": "wilmshurst-2011",
+        "where": "abstract"
+      },
+      {
+        "id": "dye-2011",
+        "where": "abstract"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "pp. 2–3"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "pp. 1–2"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "athens-2014",
+        "says": "A model built on lake and swamp cores and archaeological dates puts first settlement between AD 940 and 1130 (95 per cent), most probably between 1000 and 1100."
+      },
+      {
+        "source": "wilmshurst-2011",
+        "says": "A review of 1,434 radiocarbon dates across East Polynesia, keeping only short-lived samples, puts the Society Islands first, about 1025–1120, and the rest, Hawaiʻi among them, in one pulse about 1190–1290."
+      },
+      {
+        "source": "dye-2011",
+        "says": "A model using cores and Polynesian-introduced materials puts colonization late in the first millennium AD."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Reading the genealogies at thirty years a generation, Fornander put the first arrival of the oldest chiefly line in the sixth century AD (pp. 2–3). Radiocarbon has set this aside."
+      }
+    ]
+  },
+  {
+    "id": "paao",
+    "title": "Pāʻao",
+    "gloss": "a priest from Kahiki",
+    "when": {
+      "from": "1100",
+      "to": "1400",
+      "precision": "century"
+    },
+    "era": "voyaging",
+    "where": [
+      {
+        "place": "puna-hawaii",
+        "role": "landfall"
+      },
+      {
+        "place": "kahiki",
+        "role": "origin"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "arrival",
+    "summary": "In the traditions, Pāʻao is a kahuna (priest) from Kahiki who sails north after a quarrel with his brother Lonopele. He makes his first landfall in Puna on Hawaiʻi Island and builds a heiau (temple) there, Wahaʻula. When Hawaiʻi is left without a ruling chief of high enough rank, he advises sending to the south for one, and Pili Kaʻaiea comes to rule, with Pāʻao’s line as his priests. Centuries later the rule for building a luakini, a temple of state, is still called the rule of the kahuna class of Pāʻao.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 20, 33–36"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "p. 155"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "p. 2"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "The version Malo collected has Pāʻao come from “Wawau”; Kamakau’s version from “Upolo”, though with lands in Wawau. Fornander reads both as Samoa (pp. 33–35)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander’s genealogical reckoning places Pāʻao among the migrations he dates to the eleventh and twelfth centuries; under the radiocarbon dates for settlement, any such voyage must be later. The range given here is a placeholder, not a date from a source."
+      }
+    ]
+  },
+  {
+    "id": "moikeha",
+    "title": "Moʻikeha and Laʻamaikahiki",
+    "gloss": "the long voyages, and their end",
+    "when": {
+      "from": "1100",
+      "to": "1400",
+      "precision": "century"
+    },
+    "era": "voyaging",
+    "where": [
+      {
+        "place": "wailua-kauai",
+        "role": "home"
+      },
+      {
+        "place": "kealaikahiki",
+        "role": "sea road"
+      },
+      {
+        "place": "kahiki",
+        "role": "destination"
+      }
+    ],
+    "zoom": [
+      "far"
+    ],
+    "kind": "voyage",
+    "summary": "Moʻikeha sails from Hawaiʻi to Kahiki with his brother Olopana and their families, then comes home and settles on Kauaʻi at Wailua, where he marries into the chiefly Puna family. He sends his son Kila back across the ocean to fetch Laʻamaikahiki, who sails north, visits the islands, and returns south, bringing, the traditions say, the great drum of coconut wood and sharkskin. With Laʻa the long two-way voyages end: no later chief is remembered as sailing to Kahiki, and none arrives from there. The sea road is remembered in the name Kealaikahiki, the way to Kahiki, at the western point of Kahoʻolawe.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 45–62 (p. 58 for the end of the voyages; p. 62 for the drum)"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "pp. 1–2"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft"
+    }
+  },
+  {
+    "id": "mailikukahi",
+    "title": "Māʻilikūkahi",
+    "gloss": "a chief who marks out the land",
+    "when": {
+      "from": "1410",
+      "to": "1550",
+      "precision": "generation"
+    },
+    "era": "mailikukahi",
+    "where": [
+      {
+        "place": "waikiki",
+        "role": "seat"
+      },
+      {
+        "place": "kukaniloko",
+        "role": "birthplace"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "founding",
+    "summary": "Born at Kūkaniloko, the sacred birthplace of Oʻahu’s chiefs, Māʻilikūkahi is chosen by the chiefs in council as mōʻī (ruler) of Oʻahu and makes Waikīkī his seat, as it stays for the island’s rulers for centuries. He has the island surveyed and the boundaries between its divisions and lands marked out for good, so that neighbouring chiefs and landholders stop quarrelling over them. He makes theft a capital crime, honours the priests and turns away from human sacrifice. Oʻahu grows populous and prosperous in his reign.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 88–90"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Fornander places Māʻilikūkahi three generations before the chiefess Kūkaniloko, a contemporary of Piʻilani of Maui (pp. 89–91); at his thirty years a generation that is the 1400s. With the shorter generations of later reckonings he falls nearer 1500."
+      }
+    ]
+  },
+  {
+    "id": "umi",
+    "title": "ʻUmi-a-Līloa",
+    "gloss": "Hawaiʻi Island made one",
+    "when": {
+      "from": "1490",
+      "to": "1600",
+      "precision": "generation"
+    },
+    "era": "umi",
+    "where": [
+      {
+        "place": "waipio-valley",
+        "role": "seat"
+      },
+      {
+        "place": "kailua-kona",
+        "role": "later seat"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "founding",
+    "summary": "ʻUmi is a son of the sacred chief Līloa by a woman of lower rank. He rises against his half-brother Hākau, the heir, and then brings the districts of Hawaiʻi Island under one rule by war, keeping the war god Kūkāʻilimoku. He rules from Waipiʻo and later from Kona, where the climate is warm. He sets people to the work each knows best, chiefs, priests, readers of omens, farmers, fishermen, canoe makers, and works the land himself, building loʻi (taro terraces) in Waipiʻo and farming in Kona. Every commoner of Hawaiʻi, Kamakau writes, can count ʻUmi among their ancestors.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. I, pp. 1–20 (pp. 1, 18–20)"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "p. 108"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Counting thirty years a generation back from Kalākaua (born 1836), Fornander puts the birth of ʻUmi’s eldest son at 1496–1506 and ʻUmi’s death about 1521–1526 (p. 108)."
+      },
+      {
+        "source": "staradvertiser-2019-kahikinui",
+        "says": "Kirch dates the consolidation of Maui under Piʻilani and his son Kiha, ʻUmi’s in-laws and allies, to the period 1550–1700 from coral offerings in Kahikinui heiau, which would put ʻUmi later than Fornander does."
+      }
+    ]
+  },
+  {
+    "id": "piilani",
+    "title": "Piʻilani and Kiha-a-Piʻilani",
+    "gloss": "Maui made one",
+    "when": {
+      "from": "1490",
+      "to": "1600",
+      "precision": "generation"
+    },
+    "era": "umi",
+    "where": [
+      {
+        "place": "kauiki",
+        "role": "battle"
+      },
+      {
+        "place": "lahaina",
+        "role": "seat"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "founding",
+    "summary": "Piʻilani makes Maui a power. In his reign the chiefs of Hāna, long apart, acknowledge the mōʻī (ruler) of Maui, and he tours his districts keeping order. His daughter Piʻikea marries ʻUmi of Hawaiʻi. After Piʻilani dies at Lahaina his sons quarrel; the younger, Kiha-a-Piʻilani, flees, and comes back with ʻUmi’s war fleet to take the fort on Kaʻuiki hill above Hāna. Kiha rules a peaceful Maui and has paths paved over the pali (cliffs) of Kaupō, Hāna and Koʻolau, still pointed out in the 1870s as the kīpapa (paving) of Kiha-a-Piʻilani.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 87, 205–206"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. II, pp. 21–32"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Another version Fornander heard has Lono-a-Piʻilani already dead when ʻUmi arrives, and his son Kalanikupua holding Kaʻuiki; ʻUmi would have spared him but Piʻikea urged the war on. Fornander gives it “under reserve” (p. 206)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "In Kamakau, Lono-a-Piʻilani dies of fear on hearing that Kaʻuiki has fallen, and his bones are hidden so well that the victors never find them (pp. 31–32)."
+      },
+      {
+        "source": "staradvertiser-2019-kahikinui",
+        "says": "Kirch places the consolidation of Maui under Piʻilani and Kiha between about 1550 and 1700, later than Fornander’s genealogies."
+      }
+    ]
+  },
+  {
+    "id": "kahikinui-heiau",
+    "title": "The heiau of Kahikinui",
+    "gloss": "temples dated by coral",
+    "when": {
+      "from": "1580",
+      "to": "1640",
+      "precision": "decade"
+    },
+    "era": "umi",
+    "where": [
+      {
+        "place": "kahikinui",
+        "role": "district"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "construction",
+    "summary": "On the dry southern slopes of Haleakalā, in Kahikinui, people live in scattered farming settlements. Here the chiefs of a consolidating Maui raise a network of heiau (temples) at the heart of the settlements, in a short burst of building. Pieces of branch coral set on the heiau as dedicatory offerings can be dated by uranium and thorium to within about a decade. They give calendar dates where the genealogies give only generations, and they tie the heiau to the rule of Piʻilani and Kiha. The heiau themselves are not placed on the map.",
+    "sources": [
+      {
+        "id": "kirch-sharp-2005",
+        "where": "abstract"
+      },
+      {
+        "id": "staradvertiser-2019-kahikinui",
+        "where": "whole article"
+      },
+      {
+        "id": "kirch-ruggles-2019",
+        "where": "not read"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kirch-sharp-2005",
+        "says": "Thorium-230 dates, good to about 10 years, show the Kahikinui temple system was built within 60 years, between 1580 and 1640, far faster than radiocarbon had suggested."
+      },
+      {
+        "source": "staradvertiser-2019-kahikinui",
+        "says": "Reporting Kirch and Ruggles’s later survey of 78 heiau in Kahikinui and Kaupō: with an improved coral method, most were built between 1550 and 1700."
+      }
+    ]
+  },
+  {
+    "id": "alapai-wars",
+    "title": "The wars of Alapaʻinui",
+    "gloss": "Hawaiʻi against Maui and Oʻahu",
+    "when": {
+      "from": "1736",
+      "to": "1740",
+      "precision": "decade"
+    },
+    "era": "alapai",
+    "where": [
+      {
+        "place": "kawela-molokai",
+        "role": "battle"
+      },
+      {
+        "place": "wailuku",
+        "role": "battle"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Alapaʻinui, ruler of Hawaiʻi Island, carries war across the channels. On Molokaʻi he defeats the chiefs of Oʻahu in a battle at Kawela, where Oʻahu’s ruler falls. He tries to land on Oʻahu and is turned back along its southern shore, then lands at Kailua on the windward side. On Maui he takes the side of his kinsman Kamehamehanui in a war for the rule, against a rival backed by Peleioholani, the new ruler of Oʻahu. The wars end with Maui under Kamehamehanui and with each island still under its own chiefs.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 136–144"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. VI, pp. 66–76 (pp. 70–72)"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Fornander dates the second Maui expedition to “say 1738” (p. 138) and Kekaulike’s death, which opened the Maui war, to 1736–40 (p. 211). These are reckonings, not recorded years."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau tells of a meeting between Alapaʻi and Peleioholani at Naonealaʻa, where the two rulers agree to stay the battle (pp. 70–72)."
+      }
+    ]
+  },
+  {
+    "id": "kauiki-1759",
+    "title": "Kaʻuiki",
+    "gloss": "Hawaiʻi holds Hāna",
+    "when": {
+      "from": "1759",
+      "to": "1782",
+      "precision": "year"
+    },
+    "era": "kalaniopuu",
+    "where": [
+      {
+        "place": "kauiki",
+        "role": "fort"
+      },
+      {
+        "place": "hana-bay",
+        "role": "district"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kalaniʻōpuʻu of Hawaiʻi takes the East Maui districts of Hāna and Kīpahulu, with the fort on Kaʻuiki hill above Hāna Bay, and sets his own governors over them. Maui’s ruler Kamehamehanui tries to take the fort back and fails. Hāna stays a Hawaiʻi possession for a generation, until Kahekili besieges Kaʻuiki, cuts off the springs that water it, and takes it back early in 1782.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 146–149, 213–217"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "The date of the conquest is “approximately, and probably correctly, fixed at 1759” (p. 146); the surrender of Kaʻuiki “may be dated as of the early part of 1782” (p. 217)."
+      }
+    ]
+  },
+  {
+    "id": "kakanilua-1776",
+    "title": "Kakanilua",
+    "gloss": "a Hawaiʻi army broken on Maui",
+    "when": {
+      "from": "1776",
+      "to": "1776",
+      "precision": "year"
+    },
+    "era": "kalaniopuu",
+    "where": [
+      {
+        "place": "kamaomao",
+        "role": "battle"
+      },
+      {
+        "place": "wailuku",
+        "role": "objective"
+      }
+    ],
+    "zoom": [
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kalaniʻōpuʻu lands his army in Honuaʻula and sends his finest troops, the ʻAlapa, across the isthmus toward Wailuku, where Kahekili rules Maui, vowing to drink the waters of Wailuku that day. Kahekili’s warriors wait in the sandhills between Waikapū and Wailuku and close on them from two sides. The ʻAlapa are destroyed. The Wailuku dunes hold many burials, and this app does not place the battle more closely than the ahupuaʻa.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 152–153"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "pp. 85–87"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "The ʻAlapa regiment mustered 800 men, and only 2 escaped alive; Fornander gives the battle’s name as “Ahulau ka piipii i Kakanilua” (pp. 152–153)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau gives no figure. He has Kahahana of Oʻahu and Molokaʻi come to Kahekili’s aid, and the Hawaiʻi army, expecting to fight at Kakanilua, meets a divided front in the sandhills of Kamaʻomaʻo (p. 86)."
+      }
+    ]
+  },
+  {
+    "id": "cook-waimea-1778",
+    "title": "Cook at Waimea",
+    "gloss": "the first recorded European ships",
+    "when": {
+      "from": "1778-01-18",
+      "to": "1778-02-02",
+      "precision": "day"
+    },
+    "era": "kalaniopuu",
+    "where": [
+      {
+        "place": "waimea-kauai",
+        "role": "anchorage"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "arrival",
+    "summary": "Two British ships under James Cook, sailing north across the Pacific, sight Oʻahu and Kauaʻi and anchor off Waimea on Kauaʻi. People ashore see masts and sails like a great stingray and marvel at the iron along the ships’ sides; a kahuna says the ship is a heiau of Lono. When Cook steps ashore at Waimea the crowd on the beach lies face down, as before a high chief. Trade begins, iron and nails for pigs and ʻuala (sweet potato), and the ships move on to Niʻihau before sailing north. Before Cook lands, one of his boat parties has already shot and killed a man.",
+    "sources": [
+      {
+        "id": "cook-1784-v2",
+        "where": "bk. III, chs. XI–XII, pp. 190–220"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. VIII, pp. 92–94"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "cook-1784-v2",
+        "says": "Cook writes that Lieutenant Williamson, looking for water, fired into a crowd pressing on his boat and killed one man, which Cook learned only after leaving the island (p. 198)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "In Kamakau the ship is first seen from Waialua and Waiʻanae on Oʻahu; the kahuna Kū-ʻohu calls it the heiau of Lono, and the people call Cook Lono, after the god who had gone away promising to return (pp. 92–93)."
+      },
+      {
+        "source": "obeyesekere-1992",
+        "says": "Argues that the belief that Hawaiians took Cook for the god Lono is a European myth (not yet read)."
+      },
+      {
+        "source": "sahlins-1995",
+        "says": "Replies that Cook was received within the rites of Lono’s season, the Makahiki (not yet read)."
+      }
+    ]
+  },
+  {
+    "id": "depopulation",
+    "title": "Depopulation",
+    "gloss": "a nation emptied by disease",
+    "when": {
+      "from": "1778",
+      "to": "1896",
+      "precision": "century"
+    },
+    "era": "kalakaua",
+    "where": [
+      {
+        "place": "pae-aina",
+        "role": "everywhere"
+      }
+    ],
+    "zoom": [
+      "far"
+    ],
+    "kind": "epidemic",
+    "summary": "New diseases come with the ships: the ʻōkuʻu of 1804, measles, smallpox and others. The population falls decade after decade. Writing in the 1860s, Kamakau says the land has become empty and the old villages lie silent in a tangle of bushes and vines. No count of the people at contact is settled, and the estimates differ widely, but every one of them describes a nation reduced to a small part of its former size by the 1890s.",
+    "sources": [
+      {
+        "id": "swanson-2019-hulili",
+        "where": "Exhibit 1, p. 205; results, p. 207"
+      },
+      {
+        "id": "king-1784-v3",
+        "where": "pp. 126–128"
+      },
+      {
+        "id": "census-1896",
+        "where": "First summary by nationalities"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "p. 416"
+      },
+      {
+        "id": "stannard-1989",
+        "where": "p. 50, not read"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "king-1784-v3",
+        "says": "King, with Cook in 1779, reckoned about 400,000 people in the islands from the houses around Kealakekua (pp. 126–128)."
+      },
+      {
+        "source": "swanson-2019-hulili",
+        "says": "Swanson’s table of earlier estimates runs from 200,000 (Dixon, 1787) and 200,000–250,000 (Schmitt, 1971) to 800,000–1,000,000 (Stannard, 1989)."
+      },
+      {
+        "source": "swanson-2019-hulili",
+        "says": "Swanson’s own backward projection from the 1910 census gives about 683,200 in 1778, falling by about 47 per cent by 1800, 71 per cent by 1820 and 84 per cent by 1840."
+      },
+      {
+        "source": "census-1896",
+        "says": "The 1890 census counted 34,436 Hawaiians and 6,186 part-Hawaiians; that of 1896, 31,019 and 8,485."
+      }
+    ]
+  },
+  {
+    "id": "cook-kealakekua-1779",
+    "title": "Cook at Kealakekua",
+    "gloss": "the death of Captain Cook",
+    "when": {
+      "from": "1779-01-17",
+      "to": "1779-02-23",
+      "precision": "day"
+    },
+    "era": "kalaniopuu",
+    "where": [
+      {
+        "place": "kealakekua-bay",
+        "role": "anchorage"
+      },
+      {
+        "place": "kaawaloa",
+        "role": "death"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island",
+      "near"
+    ],
+    "kind": "death",
+    "summary": "A year later Cook returns and anchors in Kealakekua Bay among a great crowd of canoes. Priests receive him with ceremony at the heiau at the head of the bay and keep the ships supplied. The ships sail, a mast is damaged in a gale, and they come back. Tempers fray; a ship’s boat is stolen. Cook goes ashore at Kaʻawaloa to take the ruling chief Kalaniʻōpuʻu aboard as a hostage until it is returned. Word comes that a chief has been shot on the bay, Kalaniʻōpuʻu’s people draw him back, and in the fight at the water’s edge Cook is killed. Some of his bones are later given back to the ships.",
+    "sources": [
+      {
+        "id": "cook-1784-v2",
+        "where": "end of vol. II (16–17 January 1779)"
+      },
+      {
+        "id": "king-1784-v3",
+        "where": "bk. V, chs. I–IV, pp. 1–53"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. VIII, pp. 98–104"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "cook-1784-v2",
+        "says": "On the morning before they anchored, Cook counted “not fewer than a thousand” canoes about the two ships."
+      },
+      {
+        "source": "king-1784-v3",
+        "says": "King dates the landing for the hostage to Sunday 14 February 1779 and has the trouble begin with the theft of the Discovery’s cutter (ch. III)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau has Cook land at ʻAwili in Kaʻawaloa on 24 January, names Palea as the chief who took the boat, and names Kalanimanookahoʻowaha as the chief who struck Cook down (pp. 101–103)."
+      },
+      {
+        "source": "obeyesekere-1992",
+        "says": "Whether Hawaiians took Cook for Lono, and whether his return out of season doomed him, is argued at length (not yet read)."
+      },
+      {
+        "source": "sahlins-1995",
+        "says": "The opposing case, that his arrival and departure followed the Makahiki circuit of Lono (not yet read)."
+      }
+    ]
+  },
+  {
+    "id": "mokuohai-1782",
+    "title": "Mokuʻōhai",
+    "gloss": "the first battle for Hawaiʻi Island",
+    "when": {
+      "from": "1782-07",
+      "to": "1782-07",
+      "precision": "month"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "keei",
+        "role": "battle"
+      },
+      {
+        "place": "kealakekua-bay",
+        "role": "camp"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kalaniʻōpuʻu dies, and his son Kīwalaʻō inherits the rule of Hawaiʻi Island. A quarrel over the division of the lands drives the Kona chiefs to his cousin Kamehameha. The armies meet at Keʻei, south of Kealakekua; Kīwalaʻō is killed, and the Hilo chief Keawemauhili is captured and escapes. The island breaks three ways: Kamehameha holds Kona, Kohala and part of Hāmākua; Keawemauhili holds Hilo with part of Hāmākua and Puna; Keōua Kūʻahuʻula holds Kaʻū and lower Puna.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 302, 309–311"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. X, pp. 117–127 (p. 120)"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Fornander puts the battle on “a morning in July 1782”, at Hauiki in Keʻei (p. 309). He dates Kalaniʻōpuʻu’s death to January 1782 and notes that Jarves gives April (p. 204)."
+      }
+    ]
+  },
+  {
+    "id": "kaheiki-1783",
+    "title": "Kaheiki",
+    "gloss": "Kahekili takes Oʻahu",
+    "when": {
+      "from": "1783-01",
+      "to": "1783-01",
+      "precision": "month"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "pauoa",
+        "role": "battle"
+      },
+      {
+        "place": "waikiki",
+        "role": "landing"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kahekili of Maui lands at Waikīkī and marches on Kahahana, the ruler of Oʻahu. After several clashes, the decisive battle comes in January 1783 behind Pūowaina, along the stream of Kaheiki and the ridge toward Pauoa and Kapena. Kahahana’s army breaks, and he and his wife Kekuapoʻi flee to the mountains. Oʻahu and Molokaʻi pass to Kahekili. When the Oʻahu chiefs later conspire against him, his reprisals are remembered for their cruelty.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XI, pp. 128–141 (pp. 136–137)"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "pp. 224–225"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "“In the beginning of 1783 — some say it was in the month of January”; Kahekili marched in three columns by Pūowaina, Pauoa and Kapena (p. 224)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "January 1783, with Kahekili’s forces in two companies, one under Hueu behind Pūowaina (p. 136)."
+      }
+    ]
+  },
+  {
+    "id": "kepaniwai-1790",
+    "title": "Kepaniwai",
+    "gloss": "the damming of the waters",
+    "when": {
+      "from": "1790-06",
+      "to": "1790-09",
+      "precision": "month"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "iao-valley",
+        "role": "battle"
+      },
+      {
+        "place": "wailuku",
+        "role": "battle"
+      },
+      {
+        "place": "hana-bay",
+        "role": "landing"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island",
+      "near"
+    ],
+    "kind": "battle",
+    "summary": "Kamehameha’s war canoes beach at Hāna and fight their way around East Maui to Kahului. The decisive fight is at Wailuku and up ʻĪao Valley, where the Maui army under Kalanikūpule, Kahekili’s son, holds the narrow pass. Kamehameha has a cannon, Lopaka, hauled up the valley and served by two foreigners in his service, John Young and Isaac Davis. The Maui army is driven up the valley walls. The battle is remembered as Kepaniwai, the damming of the waters, and as Kaʻuwaʻupali, clawed off the cliff. Kalanikūpule escapes to Oʻahu.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XII, pp. 147–149"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "pp. 235–237"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau calls it a great slaughter, “mostly among the commoners”, with no important chief killed (p. 148)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander dates the campaign to the summer of 1790 and says he spoke with survivors: the women, children and old people were sent up the valley sides, where they watched the fighting below (pp. 235–237)."
+      }
+    ]
+  },
+  {
+    "id": "keanakakoi-1790",
+    "title": "Kīlauea, 1790",
+    "gloss": "Keōua’s people and the explosive eruption",
+    "when": {
+      "from": "1790",
+      "to": "1790",
+      "precision": "year"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "kilauea",
+        "role": "eruption"
+      },
+      {
+        "place": "kapapala",
+        "role": "road"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "eruption",
+    "summary": "Keōua Kūʻahuʻula, holding Kaʻū against Kamehameha, marches his people home from Hilo by the inland road past the summit of Kīlauea. The volcano explodes: a column of ash and stones rises above the mountain and falls across the land to the south-west. One company on the march, women and children among them, dies where it walks. Survivors carry the story. The explosions leave a sheet of ash around the caldera, called the Keanakākoʻi ash. Where the people died is not placed.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XII, pp. 151–152"
+      },
+      {
+        "id": "dibble-1843",
+        "where": "pp. 64–66"
+      },
+      {
+        "id": "ellis-1827",
+        "where": "p. 199"
+      },
+      {
+        "id": "mcphie-1990",
+        "where": "abstract"
+      },
+      {
+        "id": "swanson-2012-keanakakoi",
+        "where": "title only"
+      },
+      {
+        "id": "usgs-volcano-watch-2008",
+        "where": "not read"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau dates it to November 1790 and says it was the division at the rear that was destroyed; an eyewitness, Mona, said their own group was spared because they carried kapu flags (p. 152)."
+      },
+      {
+        "source": "dibble-1843",
+        "says": "Dibble, from people who were there, has the army march in three companies over three days of eruptions; the centre company died and the rear, nearest the crater, was spared (pp. 64–66)."
+      },
+      {
+        "source": "ellis-1827",
+        "says": "Ellis heard that the eruption “destroyed the warriors of two small villages, in all about eighty men” (p. 199)."
+      },
+      {
+        "source": "mcphie-1990",
+        "says": "The deaths most likely came in the last, steam-driven phase of an eruption that may have lasted weeks or months, “in or around 1790”."
+      },
+      {
+        "source": "usgs-volcano-watch-2008",
+        "says": "A Volcano Watch column is reported to argue that the footprints in the Kaʻū Desert were probably made in 1790 but not by Keōua’s party, and to give a very wide range for the dead (not yet read)."
+      }
+    ]
+  },
+  {
+    "id": "puukohola-1791",
+    "title": "Puʻukoholā",
+    "gloss": "a house for the god, and Keōua’s death",
+    "when": {
+      "from": "1790",
+      "to": "1791",
+      "precision": "year"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "puukohola",
+        "role": "heiau"
+      },
+      {
+        "place": "kawaihae",
+        "role": "landing"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island",
+      "near"
+    ],
+    "kind": "construction",
+    "summary": "A seer from Kauaʻi tells Kamehameha that if he builds a great house for his god Kūkāʻilimoku on the hill of Puʻukoholā at Kawaihae, the rule of the islands will be his without a scratch to his skin. Everyone carries stone, chiefs too, Kamehameha among them. When the heiau is finished, two of Kamehameha’s counsellors go to Kaʻū and bring Keōua Kūʻahuʻula to Kawaihae by canoe, to make peace. Keōua seems to know what waits for him. He is killed as he comes ashore, and Hawaiʻi Island has one ruler. The heiau stands today in a national historic site.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XII, pp. 150, 154–157"
+      },
+      {
+        "id": "nps-puukohola",
+        "where": "home page"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "p. 329"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Malo, without a year, puts Keōua’s death before the sea battle Kepuwahaʻulaʻula; Dibble puts it soon after the Kīlauea eruption, in the latter part of 1791 (p. 329)."
+      },
+      {
+        "source": "nps-puukohola",
+        "says": "The Park Service gives the heiau as built in 1790–91."
+      }
+    ]
+  },
+  {
+    "id": "kepuwahaulaula-1791",
+    "title": "Kepuwahaʻulaʻula",
+    "gloss": "the red-mouthed gun",
+    "when": {
+      "from": "1791",
+      "to": "1791",
+      "precision": "year"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "waipio-valley",
+        "role": "raid"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kahekili of Maui and his brother Kaʻeo of Kauaʻi bring a joint fleet to Hawaiʻi and raid Waipiʻo. Kamehameha meets them at sea off the Hāmākua coast with canoes carrying guns, and foreigners to work them. The allied fleet breaks and scatters, and the battle takes its name from the cannon: Kepuwahaʻulaʻula, the red-mouthed gun.",
+    "sources": [
+      {
+        "id": "dibble-1843",
+        "where": "pp. 63–64"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "pp. 247, 329"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "dibble-1843",
+        "says": "Dibble puts the sea fight “off Kohala” and says most of the allied canoes were lost (p. 64)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander puts it off the Pali Hulaʻana on the Hāmākua coast (p. 247)."
+      }
+    ]
+  },
+  {
+    "id": "cattle-1793",
+    "title": "Pipi",
+    "gloss": "the first cattle",
+    "when": {
+      "from": "1793-02",
+      "to": "1793-02",
+      "precision": "month"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "kawaihae",
+        "role": "landing"
+      },
+      {
+        "place": "waimea-hawaii",
+        "role": "herds"
+      }
+    ],
+    "zoom": [
+      "island"
+    ],
+    "kind": "arrival",
+    "summary": "On his second visit the British captain George Vancouver gives Kamehameha a bull and a heifer brought from Monterey in California. Because the beasts stare so strangely, people call them puaʻa-bipi, pig-beef. Left to roam, they are the beginning of the wild herds of Waimea and Mauna Kea.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XIII, pp. 164–165"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft"
+    }
+  },
+  {
+    "id": "kalauao-1794",
+    "title": "Kukiʻiahu",
+    "gloss": "the battle of Kalauao",
+    "when": {
+      "from": "1794-11-16",
+      "to": "1795-01-05",
+      "precision": "day"
+    },
+    "era": "kahekili",
+    "where": [
+      {
+        "place": "kalauao",
+        "role": "battle"
+      },
+      {
+        "place": "honolulu-harbor",
+        "role": "ships"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "When Kahekili dies, his brother Kaʻeo of Kauaʻi and his son Kalanikūpule of Oʻahu fall out. Kaʻeo’s army wins the first fights and marches through ʻEwa toward Waikīkī. Two British ships lying in the harbor of Kou, the first ever to enter it, take Kalanikūpule’s side: their boats guard the shore while his army holds the heights of Kalauao and ʻAiea. Kaʻeo is hemmed in and killed in a ravine below ʻAiea. Weeks later Kalanikūpule’s men seize the ships and kill their captain, Brown, and set out to invade Hawaiʻi. The crews retake the ships at sea, put Kalanikūpule ashore, and sail to Kamehameha with the arms meant for the invasion.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XIV, pp. 168–171"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "p. 343"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau dates the war from 16 November to 12 December 1794, names the ships Jackal and Prince Lee Boo, and says Captain Brown was hired for 400 hogs (pp. 168–169). He dates Kahekili’s death to 1793 (p. 168)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander lists Kahekili’s death among the events of 1794 (p. 343)."
+      }
+    ]
+  },
+  {
+    "id": "nuuanu-1795",
+    "title": "Kalelekaʻanae",
+    "gloss": "the battle of Nuʻuanu",
+    "when": {
+      "from": "1795-04",
+      "to": "1795-05",
+      "precision": "month"
+    },
+    "era": "kamehameha",
+    "where": [
+      {
+        "place": "waikiki",
+        "role": "landing"
+      },
+      {
+        "place": "nuuanu",
+        "role": "battle"
+      },
+      {
+        "place": "nuuanu-pali",
+        "role": "end"
+      },
+      {
+        "place": "lahaina",
+        "role": "gathering"
+      },
+      {
+        "place": "kaunakakai",
+        "role": "gathering"
+      },
+      {
+        "place": "kaiwi-channel",
+        "role": "crossing"
+      },
+      {
+        "place": "waialae",
+        "role": "landing"
+      },
+      {
+        "place": "kou",
+        "role": "march"
+      },
+      {
+        "place": "puiwa",
+        "role": "battle"
+      },
+      {
+        "place": "laimi",
+        "role": "battle"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island",
+      "near"
+    ],
+    "kind": "battle",
+    "summary": "Armed with the guns that Kalanikūpule lost with the ships, Kamehameha gathers the largest fleet the islands have seen. It lands at Lahaina and lies along the Molokaʻi shore, crosses the Kaʻiwi channel, and comes ashore along the beaches from Waiʻalae to Waikīkī; on the way the chief Kaʻiana deserts to the Oʻahu side. The army marches inland past Kou and up Nuʻuanu, where Kalanikūpule holds a line of strong points from Puʻiwa upward. Kamehameha’s guns break the line, and the Oʻahu forces are driven up the valley to the pali (cliff). Oʻahu, Molokaʻi and Lānaʻi are now his; only Kauaʻi remains.",
+    "stops": [
+      {
+        "text": "In February 1795 the war canoes leave Hawaiʻi. At Lahaina they cover the sand from Launiupoko to Mala, and the fleet takes what it needs from the town and its fields.",
+        "place": "lahaina",
+        "zoom": "far",
+        "year": 1795
+      },
+      {
+        "text": "The fleet lies along the Molokaʻi shore from Kalamaʻula to Kawela. Kamehameha holds his councils at Kaunakakai, and the chief Kaʻiana, left out of them, believes his death is being planned.",
+        "place": "kaunakakai",
+        "zoom": "far",
+        "year": 1795
+      },
+      {
+        "text": "The canoes cross the Kaʻiwi channel. Partway over, Kaʻiana takes his leave of his wife and turns away with his people for Koʻolau, to join Kalanikūpule.",
+        "place": "kaiwi-channel",
+        "zoom": "far",
+        "year": 1795
+      },
+      {
+        "text": "The army comes ashore along the beaches from Waiʻalae to Waikīkī and spends a few days putting itself in order.",
+        "place": "waikiki",
+        "zoom": "island",
+        "year": 1795
+      },
+      {
+        "text": "It marches inland past Kou, the village at the harbor, toward the mouth of Nuʻuanu. The Oʻahu forces hold the valley above, from Puʻiwa upward through a line of named places to the head of the valley.",
+        "place": "kou",
+        "zoom": "island",
+        "year": 1795
+      },
+      {
+        "text": "The fighting begins at Puʻiwa. For a while it is hotly contested; then Kamehameha’s guns, more of them and better served, turn the day.",
+        "place": "puiwa",
+        "zoom": "near",
+        "year": 1795
+      },
+      {
+        "text": "At Lāʻimi the Oʻahu line gives way. Kaʻiana falls here, by Kamakau’s telling. The Oʻahu forces fall back up the valley, some escaping over the ridges on either side.",
+        "place": "laimi",
+        "zoom": "near",
+        "year": 1795
+      },
+      {
+        "text": "The retreat ends at the head of the valley, where the land drops away at the pali. Many of the Oʻahu fighters die there. Their remains are a burial matter for their descendants, and this app does not place them.",
+        "place": "nuuanu-pali",
+        "zoom": "near",
+        "year": 1795
+      }
+    ],
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XIV, pp. 171–172"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "pp. 343–349"
+      },
+      {
+        "id": "james-2004-nuuanu",
+        "where": "not read (the name)"
+      },
+      {
+        "id": "ii-fragments",
+        "where": "not read"
+      },
+      {
+        "id": "thrum-annual-1911",
+        "where": "p. 100, not read"
+      },
+      {
+        "id": "schmitt-1969-mortality",
+        "where": "pp. 67–68, not read"
+      },
+      {
+        "id": "wikipedia-battle-of-nuuanu",
+        "where": "finding aid"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "The strength of Kamehameha’s army “has never been definitely stated by native historians”, though it was “unprecedentedly large” (p. 343). The battle “could not possibly have been fought much earlier than the middle of April 1795” (p. 348)."
+      },
+      {
+        "source": "thrum-annual-1911",
+        "says": "Cited for an army of about 12,000 men in about 1,200 canoes (p. 100; not yet read)."
+      },
+      {
+        "source": "wikipedia-battle-of-nuuanu",
+        "says": "Gives 10,000–16,000 for Kamehameha’s army without a source, and dates the battle to May 1795."
+      },
+      {
+        "source": "schmitt-1969-mortality",
+        "says": "Cited for about 5,000 to 12,000 dead on both sides together, with a warning that battle-death figures are “notoriously unreliable” (pp. 67–68; not yet read)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau has Kaʻiana die at Lāʻimi, where the Oʻahu side was routed, and does not mention the pali in this passage. He has Kalanikūpule hide in the uplands for “a little over a year” before he is caught above Waipiʻo in ʻEwa (p. 172)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander has Kaʻiana and his brother Nahiolea killed early in the battle, “a large number” driven over the pali, and Kalanikūpule caught after “several months” (p. 348)."
+      },
+      {
+        "source": "wikipedia-battle-of-nuuanu",
+        "says": "Says over 700 went over the pali, without a source, and that in 1898 road workers found the remains of about 800 people below the cliff, citing a 2008 travel guide. No contemporary report of the find has been read."
+      },
+      {
+        "source": "james-2004-nuuanu",
+        "says": "Cited for the name Kalelekaʻanae, “the leaping ʻanae (mullet)” (not yet read; the design notes spell it Kaleleakaʻanae)."
+      }
+    ]
+  },
+  {
+    "id": "kaieiewaho-1796",
+    "title": "Kaʻieʻiewaho",
+    "gloss": "the failed crossing to Kauaʻi",
+    "when": {
+      "from": "1796",
+      "to": "1796",
+      "precision": "year"
+    },
+    "era": "kamehameha",
+    "where": [
+      {
+        "place": "kaieiewaho-channel",
+        "role": "crossing"
+      },
+      {
+        "place": "waianae",
+        "role": "departure"
+      }
+    ],
+    "zoom": [
+      "far"
+    ],
+    "kind": "voyage",
+    "summary": "With Oʻahu won, Kamehameha turns to Kauaʻi. He dedicates the heiau of his war god at ʻEwa, gathers the fleet at Waiʻanae, and puts to sea at midnight to land at dawn on Kauaʻi. In the middle of the Kaʻieʻiewaho channel a strong wind, the Kulepe, overturns the leading canoes, and those that go to help are swamped too. The fleet turns back to Oʻahu, and the expedition takes its name from the channel.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XIV, p. 173"
+      },
+      {
+        "id": "jarves-1847",
+        "where": "the passage following Nuʻuanu"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau gives no year on the page and says the fleet then stayed on Oʻahu for over a year (p. 173)."
+      },
+      {
+        "source": "jarves-1847",
+        "says": "Jarves tells of a violent wind driving the fleet back just before describing Broughton’s visit of January 1796, which would put the attempt earlier than the usual date of 1796."
+      }
+    ]
+  },
+  {
+    "id": "okuu-1804",
+    "title": "Maʻi ʻōkuʻu",
+    "gloss": "the pestilence of 1804",
+    "when": {
+      "from": "1804",
+      "to": "1804",
+      "precision": "year"
+    },
+    "era": "kamehameha",
+    "where": [
+      {
+        "place": "oahu",
+        "role": "outbreak"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "epidemic",
+    "summary": "Kamehameha builds a new war fleet of peleleu, large canoes lashed together and rigged with sail, and brings his whole court to Oʻahu to strike at Kauaʻi again. Before it sails, a pestilence the people call ʻōkuʻu sweeps the island. It kills within a day: people die on the road before they can reach home. Kamehameha falls ill and lives, but many of his counsellors and chiefs die, Keʻeaumoku among them, and Keaweaheulu, the last of the war leaders who had made him king. The invasion is never launched.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XV–XVI, pp. 186–190, 236"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau gives no count of the dead; he calls it “the severe pestilence of 1804 when so many chiefs and commoners” died (p. 236), and describes the court households on Oʻahu as running into the thousands (p. 189)."
+      }
+    ]
+  },
+  {
+    "id": "kauai-1810",
+    "title": "Kauaʻi",
+    "gloss": "the meeting at Māmala",
+    "when": {
+      "from": "1810",
+      "to": "1810",
+      "precision": "year"
+    },
+    "era": "kamehameha",
+    "where": [
+      {
+        "place": "honolulu-harbor",
+        "role": "meeting"
+      },
+      {
+        "place": "waimea-kauai",
+        "role": "home"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "treaty",
+    "summary": "After years of messages and gifts, Kaumualiʻi, ruling chief of Kauaʻi, sails to Oʻahu on an American trader’s ship. Kamehameha goes out to meet him at sea off Honolulu, in a fleet bright with feather cloaks. Kaumualiʻi offers his island, its chiefs and its people, from mountain to sea. Kamehameha will not take it: he tells Kaumualiʻi to go home and rule it, under him. Kauaʻi joins the kingdom without a battle, and every island now acknowledges one ruler.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XVI, pp. 194–197"
+      },
+      {
+        "id": "dibble-1843",
+        "where": "p. 72"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau puts the meeting “in the seventh year of Kamehameha’s occupation of Oahu”, before his letter to George III of 1810, and names the ship’s captain as Winship (pp. 196–197)."
+      },
+      {
+        "source": "dibble-1843",
+        "says": "Dibble says Kaumualiʻi “surrendered his island, without a contest” (p. 72)."
+      }
+    ]
+  },
+  {
+    "id": "sandalwood",
+    "title": "ʻIliahi",
+    "gloss": "the sandalwood trade",
+    "when": {
+      "from": "1810",
+      "to": "1840",
+      "precision": "decade"
+    },
+    "era": "kaahumanu",
+    "where": [
+      {
+        "place": "waimea-hawaii",
+        "role": "cutting"
+      },
+      {
+        "place": "kawaihae",
+        "role": "shipping"
+      },
+      {
+        "place": "honolulu-harbor",
+        "role": "shipping"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "other",
+    "summary": "Merchants in Canton pay well for ʻiliahi, the fragrant sandalwood of the dry forests. Kamehameha, and after him the chiefs, send the people into the mountains to cut it. Men carry the logs down on their backs, tied with kī (ti) leaves, until their shoulders harden; the farms are left untended and famine follows, until Kamehameha sends people home and puts a kapu on young trees. Under his son the chiefs buy ships and goods on credit, and in 1826 the kingdom’s first written law makes every man deliver sandalwood to pay those debts. Pits the size of a ship’s hold, lua moku ʻiliahi, are dug to measure the loads. By about 1840 the trade is over and the trees are nearly gone.",
+    "sources": [
+      {
+        "id": "merlin-1990-sandalwood",
+        "where": "pp. 50–55"
+      },
+      {
+        "id": "kuykendall-1938-v1",
+        "where": "pp. 88–89, not read"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "merlin-1990-sandalwood",
+        "says": "From the Canton figures: about 19,000 piculs in 1812–13 and nearly 27,000 in 1821–22 (a picul is 133⅓ lb); by October 1827 the tax had gathered 20,000 piculs."
+      },
+      {
+        "source": "merlin-1990-sandalwood",
+        "says": "Quoting Ellis: between 2,000 and 3,000 men carrying wood from Waimea down to the storehouse at Kawaihae in one morning."
+      }
+    ]
+  },
+  {
+    "id": "kamehameha-death-1819",
+    "title": "Kamehameha",
+    "gloss": "his death at Kamakahonu",
+    "when": {
+      "from": "1819-05-08",
+      "to": "1819-05-08",
+      "precision": "day"
+    },
+    "era": "kamehameha",
+    "where": [
+      {
+        "place": "kamakahonu",
+        "role": "death"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "death",
+    "summary": "Kamehameha dies at night at Kamakahonu, his residence on the shore at Kailua in Kona. He had fought for years to unite the islands and ruled them for a generation after. His bones are prepared in the old way for a sacred chief; this app does not place them. His son Liholiho becomes ruler as Kamehameha II, with Kaʻahumanu, Kamehameha’s favourite wife, as kuhina nui, the co-ruler.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XVII, p. 210; ch. XVIII, pp. 218–219"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau gives his birth as 1736 at Kapaʻakai, Kokoiki, in Kohala and his age at death as 83 (p. 210)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander puts his birth between 1736 and 1740, “probably nearer the former” (p. 135)."
+      }
+    ]
+  },
+  {
+    "id": "ai-noa-1819",
+    "title": "ʻAi noa",
+    "gloss": "free eating: the kapu set aside",
+    "when": {
+      "from": "1819-05",
+      "to": "1819-11",
+      "precision": "month"
+    },
+    "era": "kaahumanu",
+    "where": [
+      {
+        "place": "kailua-kona",
+        "role": "feast"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "law",
+    "summary": "Under the ʻai kapu men and women eat apart, and some foods are forbidden to women. The day after Kamehameha’s death the sacred chiefess Keōpūolani eats with men, saying that he who guarded the god is dead. Months later, at Kailua, the young ruler Liholiho walks to the women’s table and eats with them. The cry goes up that the kapu is broken. The high priest Hewahewa consents, the state worship ends, and the heiau are abandoned. Many chiefs and commoners do not consent.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XVIII, pp. 222–225"
+      },
+      {
+        "id": "jarves-1847",
+        "where": "the passage on November 1819"
+      },
+      {
+        "id": "bingham-1847",
+        "where": "pp. 73–74"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau credits Keōpūolani: “it was through her influence alone that the eating tabu was freed” (p. 224)."
+      },
+      {
+        "source": "jarves-1847",
+        "says": "Jarves credits Kaʻahumanu, who in November sent word that she would cast aside the king’s god, and describes Liholiho’s feast."
+      }
+    ]
+  },
+  {
+    "id": "kuamoo-1819",
+    "title": "Kuamoʻo",
+    "gloss": "the battle for the old religion",
+    "when": {
+      "from": "1819-11",
+      "to": "1820-01",
+      "precision": "month"
+    },
+    "era": "kaahumanu",
+    "where": [
+      {
+        "place": "kuamoo",
+        "role": "battle"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "battle",
+    "summary": "Kekuaokalani, Kamehameha’s nephew and keeper of the war god, refuses the free eating and gathers the chiefs and priests who want the kapu kept. Envoys sent to bring him to Kailua fail. Kalanimoku leads the government’s forces south from Kailua; the two sides meet on the lava at Kuamoʻo, by the stone wall of Lekeleke, with armed canoes firing from the sea. Kekuaokalani falls, and his wife Manono beside him. The old religion has lost its last army. The dead were buried where they fell; this app does not place the graves.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XVIII, pp. 226–228"
+      },
+      {
+        "id": "bingham-1847",
+        "where": "pp. 75–76"
+      },
+      {
+        "id": "jarves-1847",
+        "where": "the passage following November 1819"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "jarves-1847",
+        "says": "Jarves tells the rising and the battle after the November feast; none of the opened sources gives the day."
+      },
+      {
+        "source": "bingham-1847",
+        "says": "Bingham, following Ellis, says the battle lasted from the forenoon to near sunset (p. 76)."
+      }
+    ]
+  },
+  {
+    "id": "missionaries-1820",
+    "title": "The missionaries",
+    "gloss": "the brig Thaddeus",
+    "when": {
+      "from": "1820-04-04",
+      "to": "1820-04-14",
+      "precision": "day"
+    },
+    "era": "kaahumanu",
+    "where": [
+      {
+        "place": "kailua-kona",
+        "role": "landing"
+      },
+      {
+        "place": "honolulu-harbor",
+        "role": "landing"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "arrival",
+    "summary": "The brig Thaddeus brings the first company of American Protestant missionaries, sent from Boston. They anchor off Kailua and ask the young king Liholiho for leave to stay. He lets some of them land at Kailua and the rest go on to Honolulu, on trial. They find the kapu system already fallen. Descendants of the mission will be among the men who overthrow the monarchy in 1893.",
+    "sources": [
+      {
+        "id": "bingham-1847",
+        "where": "chs. III–IV, pp. 81–95"
+      },
+      {
+        "id": "pl-103-150",
+        "where": "preamble"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "bingham-1847",
+        "says": "Anchored off Kailua on the morning of 4 April 1820, 163 days from Boston; anchored off Honolulu on 14 April (pp. 85, 94)."
+      }
+    ]
+  },
+  {
+    "id": "whaling",
+    "title": "Whaling ports",
+    "gloss": "Lahaina and Honolulu",
+    "when": {
+      "from": "1820",
+      "to": "1846",
+      "precision": "decade"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "lahaina",
+        "role": "port"
+      },
+      {
+        "place": "honolulu-harbor",
+        "role": "port"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "other",
+    "summary": "From about 1820 the Pacific whaling fleets, most of them American, put in at the islands for food, water and men. Lahaina and Honolulu become their ports, with Hilo and Hanalei as the other ports of entry, and by the 1840s their anchorages are crowded every season. Ships and seamen bring much of the kingdom’s trade into the two towns.",
+    "sources": [
+      {
+        "id": "jarves-1847",
+        "where": "table “Arrivals at Honolulu and Lahaina”, 1843–1846, and the passage before it"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "jarves-1847",
+        "says": "As early as 1823, “from forty to sixty whale ships” could be seen in Honolulu harbor at one time."
+      },
+      {
+        "source": "jarves-1847",
+        "says": "Whaler arrivals at Honolulu and Lahaina together: 318 in 1843, 467 in 1844, 540 in 1845, 595 in 1846, counting ships that called more than once; seamen ashore 15,000 to 25,000 a year."
+      }
+    ]
+  },
+  {
+    "id": "koloa-1835",
+    "title": "Kōloa",
+    "gloss": "the first sugar plantation",
+    "when": {
+      "from": "1835",
+      "to": "1835",
+      "precision": "year"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "koloa",
+        "role": "plantation"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "founding",
+    "summary": "Ladd & Company, a Honolulu trading firm, leases land at Kōloa on Kauaʻi and plants sugar cane to grind and sell. It is the first sugar plantation in the islands to succeed on a large scale. The stone ruins of its second mill are a National Historic Landmark.",
+    "sources": [
+      {
+        "id": "nps-koloa-mill",
+        "where": "whole page"
+      },
+      {
+        "id": "nrhp-koloa-mill",
+        "where": "statement of significance"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "nrhp-koloa-mill",
+        "says": "The firm leased 980 acres from King Kamehameha III at $300 a year, and laid out its first 12 acres on 12 September 1835."
+      },
+      {
+        "source": "nps-koloa-mill",
+        "says": "The 980 acres were leased from the royal governor of Kauaʻi, Kaikioʻewa."
+      }
+    ]
+  },
+  {
+    "id": "restoration-1843",
+    "title": "Cession and restoration",
+    "gloss": "the Paulet affair, 1843",
+    "when": {
+      "from": "1843-02-25",
+      "to": "1843-07-31",
+      "precision": "day"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "thomas-square",
+        "role": "restoration"
+      },
+      {
+        "place": "honolulu-harbor",
+        "role": "warship"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "treaty",
+    "summary": "A British captain, Lord George Paulet, arrives in Honolulu over the claims of British residents and backs his demands with the threat of his frigate’s guns. To spare the town, Kauikeaouli cedes the kingdom to Britain under protest and appeals to London. For five months the British flag flies over the islands. Then Rear Admiral Richard Thomas arrives from Valparaíso, disowns the seizure, and on the plain east of the town the Hawaiian flag is raised again with salutes from the ships in the harbor. The plain is now a park named for him, Thomas Square.",
+    "sources": [
+      {
+        "id": "jarves-1847",
+        "where": "chapter on the cession, the restoration on p. 184"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    }
+  },
+  {
+    "id": "mahele-1848",
+    "title": "Ka Māhele",
+    "gloss": "the division of the lands",
+    "when": {
+      "from": "1848-01",
+      "to": "1848-03",
+      "precision": "month"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "council"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "law",
+    "summary": "Early in 1848 Kauikeaouli and the chiefs divide the lands of the kingdom between them: the Māhele, the division. The king’s share is split again into crown lands and government lands, and chiefs give up part of their lands to the government to hold the rest outright. A land commission travels the islands to hear claims; Kamakau is one of its commissioners. The rights of the people who work the land come after, in the Kuleana Act. For the first time land in Hawaiʻi can be owned as property.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XXX, pp. 403, 410"
+      },
+      {
+        "id": "hi-leg-scr57-2021",
+        "where": "preamble"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "In a passage the editors added in brackets: the king came out with about half the land and the chiefs the other half, and the chiefs’ commutations added about a third of their lands to the government by 1850 (p. 403)."
+      }
+    ]
+  },
+  {
+    "id": "epidemics-1848",
+    "title": "Measles",
+    "gloss": "the epidemic of 1848–49",
+    "when": {
+      "from": "1848-09",
+      "to": "1849-12",
+      "precision": "month"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "hilo",
+        "role": "outbreak"
+      },
+      {
+        "place": "honolulu",
+        "role": "spread"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "epidemic",
+    "summary": "An American warship brings measles to Hilo in September 1848. With dysentery it spreads to Maui, to Lahaina, to Oʻahu where people fall in masses, and on to Kauaʻi and Niʻihau, through the following year. The old suffer most. Chiefs die with commoners, among them heirs of the governing families.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XXX, pp. 410–411"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“Several thousand died” (p. 410)."
+      }
+    ]
+  },
+  {
+    "id": "kuleana-1850",
+    "title": "The Kuleana Act",
+    "gloss": "land for those who work it",
+    "when": {
+      "from": "1850-08-06",
+      "to": "1850-08-06",
+      "precision": "day"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "law"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "law",
+    "summary": "A law of 6 August 1850, confirming resolutions of the King and Privy Council from the previous December, lets the makaʻāinana, the common people, claim title to the land they actually cultivate and the house lots they live on, carved from the lands of the king, the government and the chiefs. Claims are heard before the land commissioners, and the awarded lands are surveyed. Many families claim; many never do, out of cost, distrust or loyalty to their konohiki (land agent). Over the following century much kuleana land passes out of the families that won it.",
+    "sources": [
+      {
+        "id": "hi-leg-sr50-2007",
+        "where": "preamble"
+      },
+      {
+        "id": "hi-leg-scr57-2021",
+        "where": "preamble"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XXX, pp. 403, 410"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "hi-leg-scr57-2021",
+        "says": "“Several thousand native tenants” filed for and were granted title under the act."
+      }
+    ]
+  },
+  {
+    "id": "smallpox-1853",
+    "title": "Smallpox",
+    "gloss": "the epidemic of 1853",
+    "when": {
+      "from": "1853-05",
+      "to": "1853-12",
+      "precision": "month"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "outbreak"
+      }
+    ],
+    "zoom": [
+      "island"
+    ],
+    "kind": "epidemic",
+    "summary": "A ship comes into Honolulu flying the yellow flag of disease. The chiefs would send it away, but give way to the foreign ministers, and a sick man is landed. Months later smallpox breaks out in a yard on the north-west side of town, where the family hides it. Quarantine comes too late: people who came to watch the infected house burned carry the disease home to Maui, Hawaiʻi and Kauaʻi, and to the country districts of Oʻahu. Kamakau, who treated the sick himself, writes of mourning and lamentation everywhere.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XXXI, pp. 416–418"
+      },
+      {
+        "id": "aas-ke-au-okoa",
+        "where": "the paper in which this part of Kamakau first ran, 9 September 1869 (per Kamakau p. 418)"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    }
+  },
+  {
+    "id": "kalaupapa-1866",
+    "title": "Kalaupapa",
+    "gloss": "exile for Hansen’s disease",
+    "when": {
+      "from": "1866-01-06",
+      "to": "1866-01-06",
+      "precision": "day"
+    },
+    "era": "kamehameha-iv-v",
+    "where": [
+      {
+        "place": "kalawao",
+        "role": "settlement"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "law",
+    "summary": "Under a law of 1865, people found to have leprosy, now called Hansen’s disease, are taken from their families and sent to the Kalaupapa peninsula on Molokaʻi’s north shore, cut off by sea cliffs. The first are put ashore in January 1866 near the mouth of Waikolu Valley and left to make what life they can at Kalawao. The Hawaiians who had lived on the peninsula for centuries are bought out and moved away. Father Damien arrives in 1873. The isolation laws stand until 1969. The peninsula holds the graves of those who died there; this app does not place them.",
+    "sources": [
+      {
+        "id": "nps-kalaupapa",
+        "where": "whole page"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "nps-kalaupapa",
+        "says": "The first group was nine men and three women; by October 1866, 101 men and 41 women had been left at Kalawao. The park puts the total sent at almost 8,000."
+      }
+    ]
+  },
+  {
+    "id": "election-riot-1874",
+    "title": "The election riot",
+    "gloss": "Kalākaua chosen over Emma",
+    "when": {
+      "from": "1874-02-12",
+      "to": "1874-02-12",
+      "precision": "day"
+    },
+    "era": "kalakaua",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "courthouse"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "protest",
+    "summary": "When King Lunalilo dies, the Legislative Assembly must choose his successor. The candidates are David Kalākaua and Queen Emma, widow of Kamehameha IV, whose partisans are strong in Honolulu. When the vote in the old courthouse goes to Kalākaua, Emma’s partisans storm the building, wreck it and beat the legislators they find inside.",
+    "sources": [
+      {
+        "id": "liliuokalani-1898",
+        "where": "ch. VII, pp. 45–47"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "liliuokalani-1898",
+        "says": "The vote was 39 for Kalākaua to 6 for Emma. Liliʻuokalani, Kalākaua’s sister, calls the attack “merely the madness of a mob incited by disappointed partisans” and not “an expression of the Hawaiian people” (pp. 45–47)."
+      }
+    ]
+  },
+  {
+    "id": "hamakua-ditch-1876",
+    "title": "The Hāmākua Ditch",
+    "gloss": "water carried to the cane",
+    "when": {
+      "from": "1876",
+      "to": "1878",
+      "precision": "year"
+    },
+    "era": "kalakaua",
+    "where": [
+      {
+        "place": "maui-isthmus",
+        "role": "fields"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "construction",
+    "summary": "Sugar needs far more water than the dry isthmus of central Maui receives. Planters led by Henry Baldwin dig a ditch to carry water from the wet windward slopes of Haleakalā across the gulches to the cane. Built and paid for privately, it is the first link in a system of ditches and tunnels that comes to gather the streams of East Maui for the plantations of the isthmus.",
+    "sources": [
+      {
+        "id": "asce-hamakua-ditch",
+        "where": "landmark page"
+      },
+      {
+        "id": "wilcox-1996-sugar-water",
+        "where": "not read"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "asce-hamakua-ditch",
+        "says": "The Old Hāmākua Ditch was 17 miles long, carried 60 million gallons a day and cost $80,000."
+      }
+    ]
+  },
+  {
+    "id": "bayonet-1887",
+    "title": "The Bayonet Constitution",
+    "gloss": "the king’s power taken",
+    "when": {
+      "from": "1887-07",
+      "to": "1887-07",
+      "precision": "month"
+    },
+    "era": "kalakaua",
+    "where": [
+      {
+        "place": "iolani-palace",
+        "role": "signing"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "law",
+    "summary": "Opponents of the king, whom Liliʻuokalani calls the missionary party, with armed companies behind them, force King Kalākaua to sign a new constitution, first drafted for a republic. It takes most of the ruler’s power. Liliʻuokalani writes that it was well named for the armed men who enforced it.",
+    "sources": [
+      {
+        "id": "liliuokalani-1898",
+        "where": "ch. XXIX, pp. 177–184"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    }
+  },
+  {
+    "id": "wilcox-1889",
+    "title": "The Wilcox rising",
+    "gloss": "an attempt to restore the king’s power",
+    "when": {
+      "from": "1889-07",
+      "to": "1889-07",
+      "precision": "month"
+    },
+    "era": "kalakaua",
+    "where": [
+      {
+        "place": "iolani-palace",
+        "role": "rising"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "protest",
+    "summary": "Robert Wilcox, a young Hawaiian sent abroad by Kalākaua to be educated for the kingdom’s service and recalled after 1887, leads an armed company into the grounds of ʻIolani Palace before dawn, aiming to undo the 1887 constitution. The government’s rifle companies gather and the firing begins by mid-morning. By evening, deserted by many of his men, Wilcox surrenders.",
+    "sources": [
+      {
+        "id": "liliuokalani-1898",
+        "where": "chs. XXXI–XXXII, pp. 191–201"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    }
+  },
+  {
+    "id": "overthrow-1893",
+    "title": "The overthrow",
+    "gloss": "of Queen Liliʻuokalani",
+    "when": {
+      "from": "1893-01-14",
+      "to": "1893-01-17",
+      "precision": "day"
+    },
+    "era": "liliuokalani",
+    "where": [
+      {
+        "place": "iolani-palace",
+        "role": "seat of government"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island",
+      "near"
+    ],
+    "kind": "other",
+    "summary": "Queen Liliʻuokalani moves toward a new constitution, as many Hawaiians have petitioned her to. A Committee of Safety, sugar planters, descendants of missionaries and financiers, moves against her with the support of the United States Minister, John L. Stevens, who brings armed naval forces ashore near the government buildings and the palace. On the afternoon of 17 January the committee proclaims a Provisional Government, which Stevens recognises at once. To avoid bloodshed the Queen yields, under protest, to the United States, not to the Provisional Government, until it should undo the act of its representative.",
+    "sources": [
+      {
+        "id": "pl-103-150",
+        "where": "preamble"
+      },
+      {
+        "id": "liliuokalani-1898",
+        "where": "chs. XXXVIII–XL, pp. 226–251"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "pl-103-150",
+        "says": "President Cleveland’s investigator, James Blount, found the United States’ diplomatic and military representatives responsible, and Cleveland called the landing an “act of war”; a Senate committee under John Morgan then heard the Provisional Government justify it."
+      }
+    ]
+  },
+  {
+    "id": "counter-revolution-1895",
+    "title": "The 1895 rising",
+    "gloss": "and the Queen’s forced abdication",
+    "when": {
+      "from": "1895-01-06",
+      "to": "1895-01-24",
+      "precision": "day"
+    },
+    "era": "liliuokalani",
+    "where": [
+      {
+        "place": "leahi",
+        "role": "rising"
+      },
+      {
+        "place": "iolani-palace",
+        "role": "imprisonment"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "protest",
+    "summary": "Royalists gather at Lēʻahi (Diamond Head) to restore Liliʻuokalani. On the evening of 6 January police sent to a house there exchange shots with them, and in the days that follow the Republic’s forces put the rising down. Liliʻuokalani is arrested and held in ʻIolani Palace, and on 24 January, a prisoner, she is forced to sign an abdication.",
+    "sources": [
+      {
+        "id": "liliuokalani-1898",
+        "where": "chs. XLII–XLIV, pp. 262–277"
+      },
+      {
+        "id": "pl-103-150",
+        "where": "preamble"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    }
+  },
+  {
+    "id": "kue-1897",
+    "title": "Petitions against annexation",
+    "gloss": "the voice of the people",
+    "when": {
+      "from": "1897",
+      "to": "1897",
+      "precision": "year"
+    },
+    "era": "liliuokalani",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "organising"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "protest",
+    "summary": "With a treaty of annexation before the United States Senate, Hawaiian political associations go from island to island collecting signatures against it, from women and men alike. Delegates carry the petition to Washington, where in December it is read into the Senate’s record. The treaty fails.",
+    "sources": [
+      {
+        "id": "nara-kue-1897",
+        "where": "whole page"
+      },
+      {
+        "id": "silva-2004",
+        "where": "not read"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "nara-kue-1897",
+        "says": "Signed by 21,269 Native Hawaiians, over half of the 39,000 Native Hawaiians and part-Hawaiians in the census; read to the Senate on 9 December 1897."
+      }
+    ]
+  },
+  {
+    "id": "annexation-1898",
+    "title": "Annexation",
+    "gloss": "the Newlands Resolution",
+    "when": {
+      "from": "1898-07-07",
+      "to": "1898-07-07",
+      "precision": "day"
+    },
+    "era": "liliuokalani",
+    "where": [
+      {
+        "place": "iolani-palace",
+        "role": "seat of government"
+      }
+    ],
+    "zoom": [
+      "far"
+    ],
+    "kind": "treaty",
+    "summary": "With the United States at war with Spain, Congress annexes Hawaiʻi by a joint resolution, the Newlands Resolution, which needs only a simple majority where the treaty had failed. The Republic of Hawaiʻi cedes the islands, and the crown and government lands of the kingdom, to the United States, without the consent of the Native Hawaiian people.",
+    "sources": [
+      {
+        "id": "pl-103-150",
+        "where": "preamble"
+      },
+      {
+        "id": "nara-kue-1897",
+        "where": "whole page"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "pl-103-150",
+        "says": "The Republic ceded 1,800,000 acres of crown, government and public lands."
+      }
+    ]
+  },
+  {
+    "id": "kalama-valley-1971",
+    "title": "Kalama Valley",
+    "gloss": "an eviction that started a movement",
+    "when": {
+      "from": "1971-05-11",
+      "to": "1971-05-11",
+      "precision": "day"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "kalama-valley",
+        "role": "protest"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "protest",
+    "summary": "In Kalama Valley on Oʻahu’s south-east shore, families keep pig farms and small holdings on Bishop Estate land. When the valley is cleared for a Henry J. Kaiser housing development, the activists of Kōkua Hawaiʻi move in beside the last families, camping on a pig farmer’s land. On 11 May 1971 police arrest them as the bulldozers clear the last houses. The eviction goes ahead, but the stand is remembered as one of the first land struggles in generations, a spark for the movements that follow.",
+    "sources": [
+      {
+        "id": "staradvertiser-2021-kalama",
+        "where": "whole article"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "staradvertiser-2021-kalama",
+        "says": "32 activists of Kōkua Hawaiʻi were arrested on 11 May 1971."
+      }
+    ]
+  },
+  {
+    "id": "waiahole-1977",
+    "title": "Waiāhole–Waikāne",
+    "gloss": "a valley kept in farms",
+    "when": {
+      "from": "1974",
+      "to": "1977",
+      "precision": "year"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "waiahole",
+        "role": "valley"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "protest",
+    "summary": "In the windward valleys of Waiāhole and Waikāne, tenant families farm and live on land rented month to month. When the landowner agrees to sell to a developer with plans for a large subdivision, the tenants form a community association in 1974 and fight the evictions. In 1977 the State buys much of Waiāhole Valley, under threat of condemnation, to keep it rural and agricultural, and leases it back on long terms, first to the families who were there.",
+    "sources": [
+      {
+        "id": "hhfdc-waiahole-plan",
+        "where": "history section"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "hhfdc-waiahole-plan",
+        "says": "The developer planned to upzone the valleys for about 4,000 homes; the Hawaiʻi Housing Authority bought 795 acres for $6 million in 1977."
+      }
+    ]
+  },
+  {
+    "id": "kahoolawe-1976",
+    "title": "Kahoʻolawe",
+    "gloss": "the landing that stopped the bombing",
+    "when": {
+      "from": "1976-01-04",
+      "to": "1976-01-04",
+      "precision": "day"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "kahoolawe",
+        "role": "landing"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "protest",
+    "summary": "Since the attack on Pearl Harbor the United States Navy has used Kahoʻolawe, the island of Kanaloa, as a bombing range. On 4 January 1976 a small group led by George Helm and Emmett Aluli slips past a Coast Guard blockade and lands at Kūheʻeia. The landing gives birth to the Protect Kahoʻolawe ʻOhana and to the modern aloha ʻāina (love of the land) movement. The ʻOhana goes back again and again and takes the Navy to court; the bombing stops in 1990, and in 1994 the island is returned to the State, to be held in trust for a future Native Hawaiian sovereign entity.",
+    "sources": [
+      {
+        "id": "uh-news-2026-kahoolawe",
+        "where": "whole article"
+      },
+      {
+        "id": "kirc-history",
+        "where": "timeline"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "p. 2"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "uh-news-2026-kahoolawe",
+        "says": "Helm, Aluli and seven others landed on 4 January 1976."
+      }
+    ]
+  },
+  {
+    "id": "hokulea-1976",
+    "title": "Hōkūleʻa",
+    "gloss": "a canoe sails to Tahiti by the stars",
+    "when": {
+      "from": "1976-05-01",
+      "to": "1976-06-04",
+      "precision": "day"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "honolua-bay",
+        "role": "departure"
+      },
+      {
+        "place": "kahiki",
+        "role": "destination"
+      }
+    ],
+    "zoom": [
+      "far"
+    ],
+    "kind": "voyage",
+    "summary": "The voyaging canoe Hōkūleʻa sails from Honolua Bay on Maui for Tahiti. Mau Piailug, a master navigator from Satawal in Micronesia, guides her by stars, swells and other signs of sea and sky, with no modern instruments. She sights Mataiva in the Tuamotu and reaches Papeʻete in June to a crowd that fills the harbor. The voyage becomes a catalyst for what is called the Hawaiian Renaissance.",
+    "sources": [
+      {
+        "id": "staradvertiser-2026-hokulea",
+        "where": "whole article"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "p. 58"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "pp. 1–2"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "staradvertiser-2026-hokulea",
+        "says": "Thirty-one days out the crew sighted Mataiva; more than 17,000 people met the canoe at Papeʻete on 4 June."
+      }
+    ]
+  },
+  {
+    "id": "concon-1978",
+    "title": "The 1978 Constitutional Convention",
+    "gloss": "Hawaiian rights written into the constitution",
+    "when": {
+      "from": "1978-11-07",
+      "to": "1978-11-07",
+      "precision": "day"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "convention"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "law",
+    "summary": "Delegates to the State’s constitutional convention write new articles that the voters ratify on 7 November 1978. They create the Office of Hawaiian Affairs, to hold land and revenue in trust for Native Hawaiians; protect the customary rights of ahupuaʻa tenants descended from the people who lived here before 1778, to gather and to practise their culture; and make Hawaiian an official language of the State, beside English.",
+    "sources": [
+      {
+        "id": "hi-constitution",
+        "where": "art. XII, §§5–7; art. XV, §4"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft"
+    }
+  },
+  {
+    "id": "onipaa-1993",
+    "title": "ʻOnipaʻa",
+    "gloss": "the centennial of the overthrow",
+    "when": {
+      "from": "1993-01-13",
+      "to": "1993-11-23",
+      "precision": "day"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "iolani-palace",
+        "role": "observance"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "protest",
+    "summary": "For five days in January 1993, the centennial of the overthrow, Hawaiians gather at ʻIolani Palace for the ʻOnipaʻa Centennial Observance; ʻonipaʻa means steadfast. Governor John Waiheʻe orders that only the Hawaiian flag, Ka Hae Hawaiʻi, fly over the palace and the state buildings around it. In November Congress passes, and the President signs, a resolution apologising to Native Hawaiians for the part the United States played in the overthrow.",
+    "sources": [
+      {
+        "id": "hi-leg-hcr232-2014",
+        "where": "preamble"
+      },
+      {
+        "id": "pl-103-150",
+        "where": "whole text"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    }
+  },
+  {
+    "id": "heeia-restoration",
+    "title": "Heʻeia",
+    "gloss": "a fishpond and a wetland brought back",
+    "when": {
+      "from": "2001",
+      "to": "2017",
+      "precision": "year"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "heeia-fishpond",
+        "role": "fishpond"
+      },
+      {
+        "place": "heeia-wetlands",
+        "role": "wetland"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "restoration",
+    "summary": "At Heʻeia on Kāneʻohe Bay, a group of young Hawaiians founds Paepae o Heʻeia in 2001 to care for the old Heʻeia fishpond, in partnership with the landowner, Kamehameha Schools. Inland, on wetland the State acquired in 1991, Kākoʻo ʻŌiwi takes a long lease in 2010 to restore the Heʻeia wetlands to a working agricultural and cultural district: invasive growth is cleared, the old ʻauwai (irrigation ditches) are opened again, and loʻi kalo (taro terraces) return. In 2017 the southern bay, the fishpond and the heritage lands become a National Estuarine Research Reserve.",
+    "sources": [
+      {
+        "id": "paepae-o-heeia",
+        "where": "about page"
+      },
+      {
+        "id": "hcda-heeia",
+        "where": "about page"
+      },
+      {
+        "id": "hcda-2026-newsletter",
+        "where": "Heʻeia article"
+      },
+      {
+        "id": "noaa-heeia-nerr",
+        "where": "reserve page"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "hcda-heeia",
+        "says": "About 400 acres acquired in 1991; the lease to Kākoʻo ʻŌiwi runs 38 years from 1 January 2010."
+      },
+      {
+        "source": "noaa-heeia-nerr",
+        "says": "The reserve covers 1,385 acres, most of it water."
+      }
+    ]
+  },
+  {
+    "id": "pahonu-limu",
+    "title": "Pāhonu and the Limu Hui",
+    "gloss": "a turtle pond and its seaweed",
+    "when": {
+      "from": "2017",
+      "to": "2026",
+      "precision": "year"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "pahonu",
+        "role": "pond"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "restoration",
+    "summary": "On the Waimānalo shore lies Pāhonu, a pond walled in stone that, in tradition, a chief named Kukui had built to keep honu (sea turtles). In 2017, when kūpuna (elders) asked to see limu (seaweed) grow again, the Waimānalo Limu Hui was born. Under a permit from the State its volunteers gather each month at Kaiona Beach Park to rebuild the pond’s walls and plant limu along them. They report more fish, and limu washing ashore that had not been seen for years.",
+    "sources": [
+      {
+        "id": "khon-pahonu",
+        "where": "whole article"
+      },
+      {
+        "id": "hpr-2022-limu",
+        "where": "whole article"
+      },
+      {
+        "id": "civilbeat-2026-limu",
+        "where": "whole article"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft"
+    }
+  }
+]
