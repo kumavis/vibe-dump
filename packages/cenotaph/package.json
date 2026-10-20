@@ -6,7 +6,7 @@
   "scripts": { "dev": "vite", "build": "vite build" },
   "gallery": {
     "title": "Cenotaph",
-    "description": "A vast, dark brutalist hall of smooth cast concrete, so big the air in it glows. The falling figure from Falling Repose is cut through the ceiling slab, still turning, and sunlight pours through the hole in its shape, slanting through the haze to a pool on the polished floor that mirrors it back. Press and hold to hold time; drag to look, scroll or pinch to walk.",
+    "description": "A vast, dark brutalist hall of smooth cast concrete, so big the air in it glows. The falling figure from Falling Repose is cut through the ceiling slab, still turning, and sunlight pours through the hole in its shape, slanting through the haze to a pool on the polished floor, over a score lost in the hall's long reverb. Press and hold to hold time; drag to look, scroll or pinch to walk.",
     "tags": ["art"],
     "status": "wip",
     "models": ["Opus 5.5"],

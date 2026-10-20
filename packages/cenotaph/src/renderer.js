@@ -1,5 +1,5 @@
 import { createContext, program, target, dispose, bindTarget, bindTex, fullscreen } from './gl.js'
-import { roomDefines } from './room.js'
+import { ROOM, roomDefines } from './room.js'
 import { norm3, cross3 } from './mat.js'
 import * as S from './shaders.js'
 
@@ -93,7 +93,19 @@ export class Renderer {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 400, 1, 0, gl.RGBA, gl.FLOAT, null)
 
     this.cookie = target(gl, COOKIE, COOKIE, { float: this.floatOk, channels: this.floatOk ? 2 : 4 })
-    this.emitters = target(gl, 4, 4, { float: this.floatOk, linear: false })
+    // (8 bits is plenty for a diffuse bounce, and reads back the same everywhere)
+    this.emitters = target(gl, 4, 4, { float: false, linear: false })
+    // The emitters are the same for every pixel, so rather than every pixel
+    // fetching all sixteen, they are read back — a frame or two late, through
+    // a buffer, so nothing waits — and handed to the hall as uniforms.
+    this.emitPBO = gl.createBuffer()
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.emitPBO)
+    gl.bufferData(gl.PIXEL_PACK_BUFFER, 64, gl.STREAM_READ)
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null)
+    this.emitBytes = new Uint8Array(64)
+    this.emitFence = null
+    this.emitRead = false
+    this.patches = new Float32Array(64)
     // the eye's adaptation: one texel holding the log of how bright the frame
     // has lately been, kept from frame to frame (float targets only: it is a
     // logarithm, and can be negative)
@@ -220,10 +232,55 @@ export class Renderer {
     gl.uniform1f(u.uAspect, this.w / this.h)
   }
 
+  // The sixteen cells of the opening as patches of light: where each one's
+  // open part is, under this frame's turn of the opening, and how big. The
+  // sunlit floor shines with the sun's light at that angle, through the haze,
+  // off concrete of albedo 0.24.
+  emitUniforms(u, F) {
+    const gl = this.gl
+    const b = this.emitBytes
+    const span = ROOM.HOLE_SPAN
+    const c = Math.cos(F.cookieRot), s = Math.sin(F.cookieRot)
+    let n = 0, ax = 0, az = 0, area = 0
+    for (let i = 0; i < 16; i++) {
+      const A = (b[i * 4] / 255) * (span / 4) ** 2
+      if (A < 0.01) continue
+      const lx = (((i & 3) + b[i * 4 + 1] / 255) / 4 - 0.5) * span
+      const lz = (((i >> 2) + b[i * 4 + 2] / 255) / 4 - 0.5) * span
+      const x = ROOM.HOLE_X + c * lx - s * lz
+      const z = ROOM.HOLE_Z + s * lx + c * lz
+      this.patches.set([x, z, A, 0], n * 4)
+      n++
+      ax += x * A
+      az += z * A
+      area += A
+    }
+    const [sx, sy, sz] = F.sun
+    const X = area > 0 ? ax / area : ROOM.HOLE_X, Z = area > 0 ? az / area : ROOM.HOLE_Z
+    gl.uniform4fv(u.uPatch, this.patches)
+    gl.uniform1i(u.uPatchN, n)
+    gl.uniform3f(u.uSkyC, X, ROOM.H, Z)
+    gl.uniform3f(u.uPoolC, X - (sx / sy) * ROOM.H, 0, Z - (sz / sy) * ROOM.H)
+    gl.uniform1f(u.uArea, area)
+    const t = F.tune, H = ROOM.H, HF = t.fogHeight
+    const tau = (t.fogBase * H) / sy + t.fogLow * (HF / sy) * (1 - Math.exp(-H / HF))
+    const k = ((sy * 0.24) / Math.PI) * Math.exp(-tau)
+    gl.uniform3f(u.uPoolRad, F.palette.sun[0] * k, F.palette.sun[1] * k, F.palette.sun[2] * k)
+  }
+
   render(F) {
     const gl = this.gl
     const { w, h } = this
     const fig = F.figure
+
+    // the emitters read back on an earlier frame, if they have arrived
+    if (this.emitFence && gl.clientWaitSync(this.emitFence, 0, 0) !== gl.TIMEOUT_EXPIRED) {
+      gl.deleteSync(this.emitFence)
+      this.emitFence = null
+      gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.emitPBO)
+      gl.getBufferSubData(gl.PIXEL_PACK_BUFFER, 0, this.emitBytes)
+      gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null)
+    }
 
     // 1 · the figure, flat, cut into the ceiling
     gl.bindTexture(gl.TEXTURE_2D, this.primTex)
@@ -246,13 +303,24 @@ export class Renderer {
     gl.useProgram(this.pEmit.p)
     bindTex(gl, 0, this.cookie.tex, this.pEmit.u.uCookie)
     this.quad()
+    // the first frame reads at once, so the hall never starts unlit; after
+    // that, through the buffer, a frame or two behind
+    if (!this.emitRead) {
+      gl.readPixels(0, 0, 4, 4, gl.RGBA, gl.UNSIGNED_BYTE, this.emitBytes)
+      this.emitRead = true
+    } else if (!this.emitFence) {
+      gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.emitPBO)
+      gl.readPixels(0, 0, 4, 4, gl.RGBA, gl.UNSIGNED_BYTE, 0)
+      gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null)
+      this.emitFence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0)
+    }
 
     // 3 · the hall
     bindTarget(gl, this.cur)
     gl.useProgram(this.pHall.p)
     let u = this.pHall.u
     bindTex(gl, 0, this.cookie.tex, u.uCookie)
-    bindTex(gl, 1, this.emitters.tex, u.uEmitters)
+    this.emitUniforms(u, F)
     gl.activeTexture(gl.TEXTURE2)
     gl.bindTexture(gl.TEXTURE_3D, this.noise)
     gl.uniform1i(u.uNoise, 2)
@@ -292,7 +360,6 @@ export class Renderer {
     gl.useProgram(this.pDust.p)
     u = this.pDust.u
     bindTex(gl, 0, this.cookie.tex, u.uCookie)
-    bindTex(gl, 1, this.emitters.tex, u.uEmitters)
     bindTex(gl, 3, this.cur.tex, u.uScene)
     this.hallUniforms(u, F)
     gl.uniformMatrix4fv(u.uViewProj, false, F.cam.viewProj())
@@ -360,7 +427,7 @@ export class Renderer {
     bindTex(gl, 1, this.bloom[0].tex, u.uBloom)
     bindTex(gl, 2, this.cookie.tex, u.uCookie)
     bindTex(gl, 3, this.dust.tex, u.uDust)
-    bindTex(gl, 4, (adapted ?? this.emitters).tex, u.uAdapt)
+    bindTex(gl, 4, (adapted ?? this.cookie).tex, u.uAdapt)
     gl.uniform1i(u.uAdaptOn, adapted ? 1 : 0)
     gl.uniform1f(u.uKey, F.adaptKey)
     gl.uniform2f(u.uRes, w, h)

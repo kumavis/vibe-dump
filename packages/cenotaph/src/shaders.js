@@ -131,7 +131,10 @@ float sdEllipse(vec2 p, vec2 c, vec2 cs, vec2 r) {
 
 void main() {
   vec2 p = gl_FragCoord.xy;
-  float d = 1e5;
+  // texels: nothing reads the field further from the edge than this (the
+  // widest penumbra is a few dozen), and starting here lets the group cull
+  // below skip every part of the body further off than that
+  float d = 64.0;
   float hair = 0.0;
   for (int g = 0; g < 12; g++) {
     if (g >= uGroupCount) break;
@@ -195,7 +198,16 @@ void main() {
 // further the light has fallen from the edge, the softer the edge it draws.
 const HALL = /* glsl */ `
 uniform sampler2D uCookie;
-uniform sampler2D uEmitters;
+// the opening as patches of light, worked out once a frame on the CPU from
+// the emitter pass (see renderer.js): xz, area; how many; the area-weighted
+// centres of the sky in the ceiling and the sun on the floor; their total;
+// and the radiance of the sunlit floor
+uniform vec4 uPatch[16];
+uniform int uPatchN;
+uniform vec3 uSkyC;
+uniform vec3 uPoolC;
+uniform float uArea;
+uniform vec3 uPoolRad;
 uniform highp sampler3D uNoise;
 uniform vec2 uCookieRot; // cos, sin of the opening's turn in the ceiling
 uniform float uCookieM; // metres per cookie texel
@@ -247,7 +259,8 @@ float holeSdf(vec2 xz) {
   vec2 uv = cookieUV(xz);
   float d = sdfDecode(textureLod(uCookie, clamp(uv, 0.0, 1.0), 0.0)) * uCookieM;
   float outside = length(max(abs(uv - 0.5) - 0.5, 0.0)) * SPAN;
-  return outside > 0.0 ? max(d, 0.0) + outside : d;
+  // past the square's edge, a true lower bound (the shaft march skips by it)
+  return outside > 0.0 ? length(vec2(max(d, 0.0), outside)) : d;
 }
 
 // how much of the sun reaches p, through the opening
@@ -298,20 +311,15 @@ float phase(float c) { return mix(hg(c, uPhaseG), hg(c, -0.25), 0.22); }
 // The emitters: sixteen patches of the opening. Each is a patch of sky in the
 // ceiling shining down, and the same patch of sun thrown onto the floor
 // shining up — the floor's bounce is most of what lights this hall.
-const float FLOOR_ALBEDO = 0.24;
-const float CELL = SPAN / 4.0;
 
 struct Patch { vec3 sky; vec3 pool; float area; };
 
 Patch emitter(int i) {
-  ivec2 c = ivec2(i & 3, i >> 2);
-  vec4 e = texelFetch(uEmitters, c, 0);
-  vec2 local = ((vec2(c) + e.gb) / 4.0 - 0.5) * SPAN;
-  vec2 xz = HOLE_C + rot(local, uCookieRot);
+  vec4 e = uPatch[i];
   Patch P;
-  P.sky = vec3(xz.x, ROOM_H, xz.y);
-  P.pool = vec3(xz.x - uSunXZ.x * ROOM_H, 0.0, xz.y - uSunXZ.y * ROOM_H);
-  P.area = e.r * CELL * CELL;
+  P.sky = vec3(e.x, ROOM_H, e.y);
+  P.pool = vec3(e.x - uSunXZ.x * ROOM_H, 0.0, e.y - uSunXZ.y * ROOM_H);
+  P.area = e.z;
   return P;
 }
 
@@ -325,7 +333,7 @@ float patchE(vec3 p, vec3 n, vec3 e, vec3 ne, float A) {
 }
 
 // the radiance of the sunlit floor, as an emitter
-vec3 poolRadiance() { return uSunColor * (uSun.y * FLOOR_ALBEDO / PI) * exp(-opticalDepth(vec3(0.0), uSun, ROOM_H / uSun.y)); }
+vec3 poolRadiance() { return uPoolRad; }
 
 // The shaft itself is a light: what the haze scatters out of it sideways
 // glows on everything near. Four points down its axis, from the opening to the
@@ -342,8 +350,8 @@ vec3 beamIntensity(float area) { return uSunColor * (uSun.y * area * BEAM_SCATTE
 vec3 bounce(vec3 p, vec3 n, vec3 skyC, vec3 poolC, float area) {
   float sky = 0.0, pool = 0.0;
   for (int i = 0; i < 16; i++) {
+    if (i >= uPatchN) break;
     Patch P = emitter(i);
-    if (P.area < 0.01) continue;
     sky += patchE(p, n, P.sky, vec3(0, -1, 0), P.area);
     pool += patchE(p, n, P.pool, vec3(0, 1, 0), P.area);
   }
@@ -566,15 +574,28 @@ vec3 shafts(vec3 o, vec3 d, float tEnd, int steps, float jit) {
   // transmittance back to the eye, from the closed form at each end and
   // interpolated between (it changes slowly)
   float tau0 = opticalDepth(o, d, t0), tau1 = opticalDepth(o, d, t1);
+  // Most of the prism is dark. The spot on the ceiling a sample looks up
+  // through moves stepM per step, and the cookie is a distance field, so a
+  // sample that far outside the edge rules out every later one that can't
+  // have closed the gap: skip them, and the lit samples are the same.
+  float stepM = max(length(sd) * dt, 1e-4);
+  float penMax = 0.02 + ROOM_H * SUN_SPREAD / uSun.y;
   float acc = 0.0;
-  for (int i = 0; i < 128; i++) {
+  int i = 0;
+  for (int it = 0; it < 128; it++) {
     if (i >= steps) break;
     float f = (float(i) + jit) / float(steps);
     float t = mix(t0, t1, f);
     vec3 p = o + d * t;
-    float v = sunVis(p);
-    if (v <= 0.0) continue;
+    float dd = holeSdf(so + sd * t); // where p looks up through the ceiling
+    float pen = 0.02 + (ROOM_H - p.y) * SUN_SPREAD / uSun.y;
+    if (dd >= pen) {
+      i += clamp(int((dd - penMax) * 0.9 / stepM), 1, steps);
+      continue;
+    }
+    float v = 1.0 - smoothstep(-pen, pen, dd);
     acc += v * fogDensity(p) * dust(p) * sunPath(p) * exp(-mix(tau0, tau1, f));
+    i++;
   }
   return uSunColor * (acc * dt * phase(dot(d, uSun)));
 }
@@ -686,7 +707,9 @@ vec3 look(vec3 ro, vec3 rd, Hit h, int steps, float jit, float fp, bool primary,
   if (h.mat == 1) {
     // the ceiling — or, inside the opening, whatever is up through it
     float d = holeSdf(p.xz);
-    float cov = clamp(0.5 - d / max(fp, 1e-3), 0.0, 1.0);
+    // (the field stops 64 texels out, about 2.6 m: a footprint wider than 5 m
+    // would read that as near the edge)
+    float cov = clamp(0.5 - d / clamp(fp, 1e-3, 5.0), 0.0, 1.0);
     vec3 up = cov > 0.0 ? opening(p, rd, primary) : vec3(0.0);
     s = concrete(p, h.n, 1, fp);
     vec3 spec;
@@ -717,16 +740,8 @@ void main() {
   float jit = fract(ign(gl_FragCoord.xy) + float(uFrame % 64) * 0.618034);
 
   // the opening's totals, for the air's glow
-  vec3 skyC = vec3(0.0), poolC = vec3(0.0);
-  float area = 0.0;
-  for (int i = 0; i < 16; i++) {
-    Patch P = emitter(i);
-    skyC += P.sky * P.area;
-    poolC += P.pool * P.area;
-    area += P.area;
-  }
-  skyC /= max(area, 1e-3);
-  poolC /= max(area, 1e-3);
+  vec3 skyC = uSkyC, poolC = uPoolC;
+  float area = uArea;
 
   Hit h = traceHall(ro, rd);
   float pixAngle = 2.0 / (uRes.y * uFocal);
