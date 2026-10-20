@@ -1,0 +1,21 @@
+{
+  "name": "@vibe-dump/holo-i-ke-au",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Holo i ke Au",
+    "description": "The Hawaiian Islands as they were, from the first canoes to 1898. Zoom out to watch the chiefdoms and the cultivated land change across the centuries; zoom in to stand in a real valley in a chosen year.",
+    "tags": ["simulation", "tutorial", "art"],
+    "status": "wip",
+    "models": ["Opus 5.5"],
+    "thinking": "unknown"
+  }
+}

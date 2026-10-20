@@ -11,6 +11,9 @@ packages/*/public/vendor/
 .DS_Store
 *.log
 packages/*/tools/shots/
+# holo-i-ke-au's synthetic development dataset (tools/fake-data.mjs); the real
+# baked data lives in public/data/ and is committed
+packages/holo-i-ke-au/test-data/
 # cold-boot's narrated-cut renders: gigabytes of frames, plus the narration and mp4
 packages/cold-boot/out/
 # scratch harnesses used while verifying a change in a real browser
