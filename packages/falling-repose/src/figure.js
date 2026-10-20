@@ -1,4 +1,4 @@
-import { mul3, apply3, euler, add3, sub3, scale3, norm3, rotY, rotZ, rotX } from './mat.js'
+import { mul3, apply3, euler, add3, sub3, scale3, norm3 } from './mat.js'
 
 // The figure is never rendered in 3D. It's a skeleton of joints dressed in
 // capsules and ellipsoids, and each frame every shape is projected flat: a
@@ -11,6 +11,14 @@ import { mul3, apply3, euler, add3, sub3, scale3, norm3, rotY, rotZ, rotX } from
 // Right-side joints are written in left-side terms and mirrored.
 
 const MAX_PRIMS = 190
+
+// index, middle, ring, little: knuckle z, two phalanx lengths (m)
+const FINGERS = [
+  [0.027, 0.044, 0.04],
+  [0.009, 0.048, 0.045],
+  [-0.01, 0.045, 0.041],
+  [-0.027, 0.035, 0.031],
+]
 
 // [name, parent, offset in the parent's frame (m)]
 const SKELETON = [
@@ -31,22 +39,13 @@ for (const s of ['L', 'R']) {
     ['knee' + s, 'hip' + s, [0, -0.43, 0]],
     ['ankle' + s, 'knee' + s, [0, -0.42, 0]],
   )
-  // index, middle, ring, little: knuckle z, two phalanx lengths
-  const fingers = [
-    [0.027, 0.044, 0.04],
-    [0.009, 0.048, 0.045],
-    [-0.01, 0.045, 0.041],
-    [-0.027, 0.035, 0.031],
-  ]
-  fingers.forEach(([z, l1], i) => {
+  FINGERS.forEach(([z, l1], i) => {
     SKELETON.push([`f${i}a${s}`, 'wrist' + s, [0, -0.092 + Math.abs(z) * 0.18, z]])
     SKELETON.push([`f${i}b${s}`, `f${i}a${s}`, [0, -l1, 0]])
   })
   SKELETON.push(['thumbA' + s, 'wrist' + s, [-0.006 * m, -0.022, 0.03]])
   SKELETON.push(['thumbB' + s, 'thumbA' + s, [0, -0.046, 0]])
 }
-
-const FINGER_LEN2 = [0.04, 0.045, 0.041, 0.031]
 
 // Shapes, in their joint's frame. cap: [joint, a, b, ra, rb, k, group];
 // ell: [joint, centre, radii, k, group, euler?]. k is the blend radius (m).
@@ -85,12 +84,11 @@ function shapes() {
 
     ell('wrist' + s, [0, -0.05, 0], [0.015, 0.05, 0.04], 0.012, hand)
     ell('wrist' + s, [-0.004, -0.036, 0.024], [0.016, 0.03, 0.02], 0.01, hand)
-    for (let i = 0; i < 4; i++) {
-      const l2 = FINGER_LEN2[i]
+    FINGERS.forEach(([, l1, l2], i) => {
       const r = i === 3 ? 0.0075 : 0.0088
-      cap(`f${i}a${s}`, [0, 0, 0], [0, -0.04 - i * 0.0, 0], r, r * 0.86, 0.005, hand)
+      cap(`f${i}a${s}`, [0, 0, 0], [0, -l1, 0], r, r * 0.86, 0.005, hand)
       cap(`f${i}b${s}`, [0, 0, 0], [0, -l2, 0], r * 0.86, r * 0.62, 0.004, hand)
-    }
+    })
     cap('thumbA' + s, [0, 0, 0], [0, -0.046, 0], 0.012, 0.0095, 0.008, hand)
     cap('thumbB' + s, [0, 0, 0], [0, -0.034, 0], 0.0095, 0.007, 0.004, hand)
 
@@ -117,12 +115,15 @@ function hairRoots() {
     const phi = Math.sin(i * 2.399) * 1.15
     const dir = norm3([Math.sin(phi), Math.cos(theta), -Math.sin(theta) * Math.cos(phi) * 0.9])
     const p = [c[0] + dir[0] * r[0] * 0.9, c[1] + dir[1] * r[1] * 0.9, c[2] + dir[2] * r[2] * 0.9]
+    // neighbouring locks share most of their phase, so they move in clumps
+    // that merge near the scalp and come apart into strands at the ends
+    const clump = Math.floor(i / 3)
     roots.push({
       p,
       n: dir,
-      len: 0.32 + 0.18 * ((i * 0.618) % 1),
-      width: 0.016 + 0.01 * ((i * 0.382) % 1),
-      seed: i * 1.913 + 0.7,
+      len: 0.26 + 0.3 * ((i * 0.618 + clump * 0.3) % 1),
+      width: 0.015 + 0.011 * ((i * 0.382) % 1),
+      seed: clump * 2.71 + (i % 3) * 0.23 + 0.7,
     })
   }
   return roots
@@ -131,9 +132,9 @@ function hairRoots() {
 // Slow, smooth, deterministic wandering — a sum of incommensurate sines.
 function drift(seed, t) {
   return (
-    Math.sin(t * 0.071 + seed * 1.7) * 0.5 +
-    Math.sin(t * 0.131 + seed * 3.1) * 0.3 +
-    Math.sin(t * 0.217 + seed * 5.3) * 0.2
+    Math.sin(t * 0.097 + seed * 1.7) * 0.5 +
+    Math.sin(t * 0.181 + seed * 3.1) * 0.3 +
+    Math.sin(t * 0.293 + seed * 5.3) * 0.2
   )
 }
 
@@ -153,8 +154,8 @@ const OPEN = {
   hipL: [-0.3, 0.1, 0.2],
   kneeL: [0.7, 0, 0],
   ankleL: [1.0, 0, 0],
-  hipR: [-0.55, 0.75, 0.3],
-  kneeR: [1.3, 0, 0],
+  hipR: [-0.8, 0.75, 0.3],
+  kneeR: [1.55, 0, 0],
   ankleR: [0.95, 0, 0],
 }
 const CURL = {
@@ -203,7 +204,7 @@ const SURRENDER = {
 function poseKeys(t) {
   if (typeof t === 'string') return { open: t === 'open' ? 1 : 0, curl: t === 'curl' ? 1 : 0, surrender: t === 'surrender' ? 1 : 0 }
   const c = 0.5 + 0.5 * Math.sin(t / 53 - 1.4)
-  const a = 0.5 + 0.5 * Math.sin(t / 71 + 2.2)
+  const a = 0.5 + 0.5 * Math.sin(t / 71 - 1.57)
   const curl = Math.pow(c, 3) * 0.85
   const surrender = Math.pow(a, 3) * 0.85 * (1 - curl)
   return { open: 1 - curl - surrender, curl, surrender }
@@ -226,7 +227,6 @@ export class Figure {
     this.data = new Float32Array(MAX_PRIMS * 8)
     this.groups = []
     this.count = 0
-    this.center = [0, 0, 0]
     this.hair = []
   }
 
@@ -317,8 +317,7 @@ export class Figure {
     const c = [0, 0, 0]
     for (const k of key) for (let i = 0; i < 3; i++) c[i] += J[k].p[i] / key.length
     for (const j of this.joints) j.p = sub3(j.p, c)
-    this.center = [0, 0, 0]
-    this.torso = add3(scale3(add3(J.chest.p, J.pelvis.p), 0.5), [0, 0, 0])
+    this.torso = scale3(add3(J.chest.p, J.pelvis.p), 0.5)
 
     this.poseHair(t, w)
   }
@@ -401,7 +400,7 @@ export class Figure {
       for (let i = 1; i <= K; i++) {
         const f = i / K
         const ph = s * 3.1 + t * (0.9 + 0.5 * pull) - f * 3.4
-        const amp = (0.25 + 0.75 * f) * (0.55 + 0.35 * (1 - Math.min(1, pull)))
+        const amp = (0.25 + 0.95 * f) * (0.6 + 0.35 * (1 - Math.min(1, pull)))
         const swing = add3(scale3(a1, Math.sin(ph) * amp), scale3(a2, Math.sin(ph * 0.73 + s) * amp * 0.8))
         const target = norm3(add3(add3(scale3(n, 0.7 * (1 - f) + 0.1), scale3(up, pull * (0.7 + 1.1 * f))), swing))
         dir = norm3(add3(scale3(dir, 0.35), scale3(target, 0.65 + 0.3 * f)))
@@ -441,8 +440,8 @@ export class Figure {
       G.maxY = Math.max(G.maxY, y + r)
     }
 
-    const depthRef = cam.project(this.center)[2]
-    this.pxPerM = cam.pxPerUnit / depthRef
+    // the body hangs at the origin; its scale on screen is set by that depth
+    this.pxPerM = cam.pxPerUnit / cam.project([0, 0, 0])[2]
 
     const capsule = (pa, pb, ra, rb, k, g, hair) => {
       const A = cam.project(pa)

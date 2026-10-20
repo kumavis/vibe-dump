@@ -208,7 +208,7 @@ function step(dt) {
   // Dolly zoom: in a suspension the lens narrows and the camera backs away,
   // so the figure holds its size while the world behind it flattens.
   const aspect = w / h
-  const halfH = Math.max(1.36, 1.3 / aspect)
+  const halfH = Math.max(1.36, 1.5 / aspect)
   const fov = 0.68 - 0.24 * clock.susp + 0.14 * clock.rush - 0.08 * clock.hold
   const dist = halfH / Math.tan(fov / 2)
   const yaw = 0.1 * Math.sin(T / 41) + pointer.sx * 0.08
@@ -221,15 +221,16 @@ function step(dt) {
   cam.update()
 
   // The body turns slowly in the fall: a lazy roll in the picture plane, a
-  // turn about its own spine that takes it from open-fronted to profile, and a
-  // little yaw and tilt so it is never quite square to us.
+  // slow spin about its own spine — open-fronted, profile, back, profile — and
+  // a little yaw and tilt so it is never quite square to us. Story time drives
+  // it all, so when time stops the spin stops.
   const s = clock.story
   // (kept near the horizontal: a body plunging head-first reads as a
   // particular, real fall rather than this one)
-  const roll = pin('roll', 1.72 + 0.4 * Math.sin(s / 47) + 0.12 * Math.sin(s / 19 + 1))
-  const twist = pin('twist', 0.45 + 0.75 * Math.sin(s / 41 + 0.3))
-  const fyaw = pin('yaw', 0.25 * Math.sin(s / 37 + 0.5))
-  const tilt = pin('tilt', -0.2 + 0.2 * Math.sin(s / 29 + 2))
+  const roll = pin('roll', 1.72 + 0.36 * Math.sin(s / 31) + 0.12 * Math.sin(s / 13 + 1))
+  const twist = pin('twist', 1.0 + (s * Math.PI * 2) / 75 + 0.45 * Math.sin(s / 17))
+  const fyaw = pin('yaw', 0.25 * Math.sin(s / 21 + 0.5))
+  const tilt = pin('tilt', -0.2 + 0.2 * Math.sin(s / 17 + 2))
   const orient = mul3(rotY(fyaw), mul3(rotX(tilt), mul3(rotZ(roll), rotY(twist))))
   const wind = 0.35 + 0.6 * Math.min(2, Math.max(0, clock.blur))
   figure.pose(s, { wind, reach: pin('reach', clock.reach), wall: T, orient, preset: params.get('pose') })

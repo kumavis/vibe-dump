@@ -248,8 +248,6 @@ uniform sampler2D uHaze;
 uniform vec2 uRes;
 uniform vec2 uLight;
 uniform float uPxPerM;
-uniform float uTime;
-uniform float uFall;
 uniform float uExposure;
 uniform vec3 uBgTop;
 uniform vec3 uBgBot;

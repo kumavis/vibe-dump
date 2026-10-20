@@ -33,11 +33,15 @@ function envelope(t, start, a, h, r) {
 }
 
 export const FALL_SPEED = 1.7
+// Story time is arbitrary — the body's turn, its drift, the hair — so it
+// starts where the body happens to open into its best shape: profile, hair
+// streaming, one arm let go.
+const STORY_START = 27
 
 export class Clock {
   constructor(start = 0) {
     this.wall = start
-    this.story = start * 0.9
+    this.story = STORY_START + start * 0.9
     this.fall = start * FALL_SPEED
     this.rate = 1
     this.blur = 1

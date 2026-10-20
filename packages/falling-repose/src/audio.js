@@ -319,13 +319,24 @@ export class Score {
     this.voices = []
 
     // sub
-    this.sub = ctx.createOscillator()
-    this.sub.type = 'sine'
-    this.sub.frequency.value = mtof(CHORDS[0].bass)
+    // the walking bass: an octave up where small speakers can carry it, and
+    // its true pitch underneath for anyone who can feel it. Both only ever
+    // step down, until the cadence lifts them home.
     this.subGain = g(0)
-    this.sub.connect(this.subGain).connect(this.dry)
-    this.tapeBus.connect(this.sub.detune)
-    this.sub.start(now)
+    this.subGain.connect(this.dry)
+    this.subs = [
+      [12, 0.62],
+      [0, 0.5],
+    ].map(([shift, level]) => {
+      const o = ctx.createOscillator()
+      o.type = 'sine'
+      o.frequency.value = mtof(CHORDS[0].bass + shift)
+      const lv = g(level)
+      o.connect(lv).connect(this.subGain)
+      this.tapeBus.connect(o.detune)
+      o.start(now)
+      return { o, shift }
+    })
 
     // air choir
     const noise = noiseBuffer(ctx)
@@ -443,7 +454,7 @@ export class Score {
       this.voices.push({ env, osc })
     })
     // the bass glides down to its next step
-    this.sub.frequency.setTargetAtTime(mtof(C.bass < 36 ? C.bass + 12 : C.bass), at, 0.9)
+    for (const { o, shift } of this.subs) o.frequency.setTargetAtTime(mtof(C.bass + shift), at, 0.9)
     // the choir retunes to the upper chord tones
     this.air.forEach((bp, k) => {
       const m = C.notes[k % C.notes.length] + 12
@@ -548,7 +559,7 @@ export class Score {
     const swell = clock.swell
     const cutoff = (650 + 700 * (0.5 + 0.5 * Math.sin(T / 23)) + 1300 * swell + 900 * clock.rush) * (1 - 0.45 * clock.hold)
     set(this.padFilter.frequency, cutoff, 0.8)
-    set(this.subGain.gain, 0.11 + 0.05 * swell, 1)
+    set(this.subGain.gain, 0.15 + 0.06 * swell, 1)
     set(this.airBus.gain, 0.05 + 0.12 * swell + 0.03 * Math.max(0, Math.sin(T / 31)), 1.5)
 
     // tape: hold sags the pitch and deepens the wobble
