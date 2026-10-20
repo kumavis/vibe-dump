@@ -97,13 +97,17 @@ function shapes() {
 
     cap('hip' + s, [0, 0, 0], [0, -0.43, 0], 0.082, 0.05, 0.04, leg)
     ell('hip' + s, [0, -0.17, 0.015], [0.072, 0.19, 0.078], 0.03, leg)
-    cap('knee' + s, [0, 0, 0], [0, -0.41, 0], 0.048, 0.029, 0.025, leg)
+    cap('knee' + s, [0, 0, 0], [0, -0.41, 0], 0.048, 0.03, 0.025, leg)
     ell('knee' + s, [0, -0.12, -0.028], [0.046, 0.13, 0.052], 0.02, leg)
-    // the foot: the heel, and one long body that arches forward and thins to
-    // a softly widened ball — blended loosely, so a pointed foot reads as one
-    // taper rather than a string of beads
+    // the Achilles tendon, in the shin's frame: pointing the foot lifts the
+    // heel up into it, the way a real heel rises toward the calf
+    cap('knee' + s, [0, -0.29, -0.024], [0, -0.425, -0.034], 0.017, 0.02, 0.02, leg)
+    // the foot: a touch of ankle bone at the joint, the heel, and one long body
+    // that rises to meet the front of the shin and arches forward to a softly
+    // widened ball — blended loosely, so it reads as one form, not parts
+    ell('ankle' + s, [0, -0.004, 0], [0.033, 0.024, 0.028], 0.022, leg)
     ell('ankle' + s, [0, -0.045, -0.016], [0.028, 0.027, 0.03], 0.025, leg)
-    ell('ankle' + s, [0, -0.048, 0.06], [0.035, 0.03, 0.1], 0.025, leg, [0.12, 0, 0])
+    ell('ankle' + s, [0, -0.038, 0.058], [0.035, 0.032, 0.1], 0.03, leg, [0.17, 0, 0])
     ell('ankle' + s, [0, -0.06, 0.13], [0.04, 0.017, 0.05], 0.025, leg)
   }
   return S
