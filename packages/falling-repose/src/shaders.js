@@ -146,7 +146,7 @@ uniform vec2 uRes;
 uniform vec2 uLight;
 uniform float uPxPerM;
 uniform float uTime;
-uniform float uFall;
+uniform float uDrift;
 uniform vec3 uCore;
 uniform vec3 uHalo;
 uniform float uSwell;
@@ -176,7 +176,7 @@ void main() {
   float flicker = 0.18 + 1.3 * a1 * a1 + 1.5 * a2 * a2 * a2 + 0.35 * a3;
 
   // silt: clouds of it drifting up past a falling body
-  float med = fbm(vec3(q * 1.2 + vec2(0.0, uFall * 0.3), uTime * 0.05));
+  float med = fbm(vec3(q * 1.2 + vec2(0.0, uDrift * 0.3), uTime * 0.05));
   med = smoothstep(0.22, 0.8, med);
 
   vec3 col = uCore * (rim * 1.4 + core * 0.55 * (0.7 + 0.3 * uSwell)) + uHalo * (aura * 0.45 + far * 0.08);
@@ -223,7 +223,7 @@ uniform vec2 uRes;
 uniform vec2 uLight;
 uniform float uPxPerM;
 uniform float uTime;
-uniform float uFall;
+uniform float uDrift;
 in vec2 vUv;
 out vec4 o;
 void main() {
@@ -233,7 +233,7 @@ void main() {
   vec2 rdir = rel / max(rq, 1e-4);
   float flow = fbm(vec3(rdir * 3.5, log(1.0 + rq * 4.0) * 2.2 - uTime * 0.3));
   vec2 sq = vec2((vUv.x - 0.5) * uRes.x / uRes.y, vUv.y);
-  float murk = fbm(vec3(sq * 1.3 + vec2(0.0, uFall * 0.05), uTime * 0.02 + 3.0));
+  float murk = fbm(vec3(sq * 1.3 + vec2(0.0, uDrift * 0.05), uTime * 0.02 + 3.0));
   float ripple = fbm(vec3(sq * vec2(2.5, 6.0) + vec2(0.0, -uTime * 0.03), uTime * 0.04));
   o = vec4(flow, murk, ripple, 1.0);
 }`
@@ -289,16 +289,27 @@ void main() {
 // Particles: each instance is a capsule from where it was a shutter-length ago
 // to where it is now, so speed reads as streak length. The two are driven
 // separately — streaks can stay long while the motes barely move.
+//
+// Every mote lives in a box that wraps round a point ahead of the camera, so
+// the field never runs out however the camera turns or pulls back. Three
+// layers: near motes, a wide sparse layer for when the camera is far out, and
+// a few soft discs right in front of the lens.
+//
+// Everything a mote does is periodic in the fall distance the CPU hands over
+// (it is reduced mod 960): rise speeds are eighths and every box height
+// divides 120, and the sideways wander is a whole number of cycles. So the
+// reduction never makes the field jump.
 export const vsParticles = /* glsl */ `${HEAD}
 layout(location = 0) in vec2 aCorner;
-layout(location = 1) in vec4 aA; // x, y0, z, seed
+layout(location = 1) in vec4 aA; // box position (0..1)^3, seed
 layout(location = 2) in vec4 aB; // speed, size, brightness, kind
 uniform mat4 uViewProj;
 uniform vec2 uRes;
 uniform float uFall;
 uniform float uShutter;
 uniform float uTime;
-uniform float uWrap;
+uniform vec3 uBoxSize[3];
+uniform vec3 uBoxCenter[3];
 uniform float uFocus;
 uniform float uAperture;
 uniform float uPxPerUnit;
@@ -312,27 +323,35 @@ out vec3 vColor;
 out float vBehind;
 out float vKind;
 
-// each mote rises at its own speed and slides a little sideways — water is
-// never still — so the streaks fan rather than fall like rain
-vec2 slide() {
-  float a = aA.w * 37.7;
-  return vec2(cos(a), sin(a)) * (0.06 + 0.22 * fract(aA.w * 13.1));
-}
+const float PERIOD = 960.0;
+const float TAU = 6.2831853;
 
-vec3 world(float fall) {
-  float y = mod(aA.y + fall * aB.x + uWrap * 0.5, uWrap) - uWrap * 0.5;
-  vec2 sl = slide() * fall * aB.x;
-  float x = mod(aA.x + sl.x + 8.0, 16.0) - 8.0;
-  float sway = sin(uTime * (0.21 + aA.w * 0.05) + aA.w * 6.28) * 0.06 * aB.y * 40.0;
-  return vec3(x + sway, y, aA.z + sin(sl.y * 0.7 + aA.w * 6.28) * 0.6);
+// the sideways wander: whole cycles per period, so it closes on itself
+vec2 wander(float fall) {
+  float s = aA.w;
+  vec2 m = floor(fract(vec2(s * 7.13, s * 3.71)) * 24.0) + 6.0;
+  vec2 ph = vec2(s * 41.3, s * 17.9);
+  float amp = (0.25 + 0.9 * fract(s * 5.37)) * (aB.w > 1.5 ? 2.5 : 1.0);
+  return amp * sin(TAU * m * fall / PERIOD + ph);
 }
 
 void main() {
-  vec3 cur = world(uFall);
-  // unwrapped previous position, so a mote that just wrapped doesn't streak
-  // across the whole screen
-  vec2 sl = slide();
-  vec3 prev = cur - vec3(sl.x, 1.0, 0.0) * uShutter * aB.x;
+  int kind = int(aB.w + 0.5);
+  vec3 S = uBoxSize[kind];
+  vec3 C = uBoxCenter[kind];
+  // the soft discs at the lens barely streak: a long blurred pill reads as a
+  // smear on the glass, not a mote in the water
+  float shutter = kind == 1 ? uShutter * 0.2 : uShutter;
+  vec2 w0 = wander(uFall);
+  vec2 w1 = wander(uFall - shutter);
+  vec3 raw = S * (aA.xyz - 0.5) + vec3(w0.x, uFall * aB.x, w0.y);
+  vec3 cur = C + mod(raw - C + S * 0.5, S) - S * 0.5;
+  // a little time-driven sway on top, too small to need wrapping
+  cur.x += sin(uTime * (0.21 + aA.w * 0.05) + aA.w * TAU) * 0.06 * aB.y * 40.0;
+  // the previous position is unwrapped, so a mote that just crossed a box
+  // face doesn't streak across the whole screen
+  vec3 prev = cur - vec3(w0.x - w1.x, shutter * aB.x, w0.y - w1.y);
+
   vec4 c0 = uViewProj * vec4(cur, 1.0);
   vec4 c1 = uViewProj * vec4(prev, 1.0);
   vKind = aB.w;
@@ -346,7 +365,7 @@ void main() {
 
   float core = max(aB.y * uPxPerUnit / depth, 0.7);
   float coc = uAperture * uPxPerUnit * abs(depth - uFocus) / (depth * uFocus);
-  float rad = sqrt(core * core + coc * coc);
+  float rad = min(sqrt(core * core + coc * coc), uRes.y * 0.25);
 
   vec2 ax = s0 - s1;
   float len = length(ax);
@@ -365,8 +384,14 @@ void main() {
   float energy = (core * core) / (rad * rad); // defocus spreads the same light
   energy *= (2.0 * rad) / (len + 2.0 * rad) * 0.7 + 0.3; // and so does motion
   // but a lens-close disc of silt should still be there, faintly
-  if (aB.w > 0.5) energy = max(energy, 0.03);
-  vColor = (vec3(0.07, 0.11, 0.13) + lit * 3.4) * aB.z * energy;
+  if (kind == 1) energy = max(energy, 0.015);
+  // fade out toward the faces of its box, where it wraps, and into the murk
+  vec3 q = abs(cur - C) / (S * 0.5);
+  float edge = 1.0 - smoothstep(0.72, 0.98, max(q.x, max(q.y, q.z)));
+  float fog = 0.3 + 0.7 * exp(-depth / 16.0);
+  // nothing right against the lens: it would be a blurred pane, not a mote
+  float near = smoothstep(0.7, 1.5, depth);
+  vColor = (vec3(0.07, 0.11, 0.13) + lit * 3.4) * aB.z * energy * edge * fog * near;
   vBehind = depth > uFigureDepth ? 1.0 : 0.0;
 
   gl_Position = vec4(pos / uRes * 2.0 - 1.0, 0.0, 1.0);

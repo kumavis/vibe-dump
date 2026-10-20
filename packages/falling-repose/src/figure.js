@@ -309,7 +309,7 @@ export class Figure {
     }
 
     this.fk(orient)
-    if (preset !== 'stand') this.aimReach(reach)
+    if (preset !== 'stand') this.aimReach(reach, wall)
 
     // Recentre on the torso so the figure hangs in the middle of the frame and
     // the light can sit squarely behind it.
@@ -341,9 +341,11 @@ export class Figure {
   // During the reach the near arm lifts toward world-up — back toward where
   // the body fell from — whichever way the body happens to be turned. A coarse
   // search over the shoulder, eased between frames so the arm never snaps.
-  aimReach(reach) {
+  aimReach(reach, wall) {
     const J = this.byName
     const sh = J.shoulderR
+    const dt = this.reachWall === undefined ? 0 : Math.min(0.1, Math.max(0, wall - this.reachWall))
+    this.reachWall = wall
     if (!this.reachAim) this.reachAim = sh.rot.slice()
     if (reach > 0.001) {
       const C = J.clavR.R
@@ -367,11 +369,16 @@ export class Figure {
             const v = score(best[0] + dx, best[1] + dz)
             if (v > bestScore) (bestScore = v), (best = [best[0] + dx, best[1] + dz])
           }
-      const ease = 0.06
-      this.reachAim[0] += (best[0] - this.reachAim[0]) * ease
-      this.reachAim[2] += (best[1] - this.reachAim[2]) * ease
+      // Hysteresis: two poses can score almost the same, and as the body turns
+      // the winner flips between them. Only change course for a clearly
+      // better one, and travel there at a pace set in seconds, not frames.
+      if (!this.reachGoal || bestScore > score(this.reachGoal[0], this.reachGoal[1]) + 0.05) this.reachGoal = best
+      const ease = 1 - Math.exp(-dt / 0.45)
+      this.reachAim[0] += (this.reachGoal[0] - this.reachAim[0]) * ease
+      this.reachAim[2] += (this.reachGoal[1] - this.reachAim[2]) * ease
     } else {
       this.reachAim = sh.rot.slice()
+      this.reachGoal = null
     }
     const r = reach * reach * (3 - 2 * reach)
     sh.rot = [sh.rot[0] + (this.reachAim[0] - sh.rot[0]) * r, sh.rot[1], sh.rot[2] + (this.reachAim[2] - sh.rot[2]) * r]
@@ -385,21 +392,29 @@ export class Figure {
   poseHair(t, wind) {
     const head = this.byName.head
     const up = [0, 1, 0]
+    // The wave swings across the wind along two fixed world axes. Anything
+    // derived from the head's own frame flips sign somewhere in the body's
+    // spin, and the hair would snap.
+    const a1 = [1, 0, 0]
+    const a2 = [0, 0, 1]
     const K = 7
+    const pull = Math.min(1.4, wind)
+    // The wave travels faster when the fall pulls harder. Its phase is
+    // integrated, not t × speed: with t in the thousands, multiplying would
+    // turn every change of speed into a lurch.
+    const dt = this.hairT === undefined ? 0 : Math.max(0, t - this.hairT)
+    this.hairT = t
+    this.hairPhase = (this.hairPhase ?? t) + dt * (0.9 + 0.5 * pull)
+    const wave = this.hairPhase
     this.hair = this.roots.map((root) => {
       const pts = [add3(head.p, apply3(head.R, root.p))]
       const n = apply3(head.R, root.n)
-      // two axes across the wind for the wave to swing along
-      let a1 = norm3([n[0] - up[0] * n[1], 0, n[2]])
-      if (!isFinite(a1[0]) || Math.hypot(a1[0], a1[2]) < 1e-3) a1 = [1, 0, 0]
-      const a2 = [-a1[2], 0, a1[0]]
       const seg = root.len / K
       const s = root.seed
-      const pull = Math.min(1.4, wind)
       let dir = n
       for (let i = 1; i <= K; i++) {
         const f = i / K
-        const ph = s * 3.1 + t * (0.9 + 0.5 * pull) - f * 3.4
+        const ph = s * 3.1 + wave - f * 3.4
         const amp = (0.25 + 0.95 * f) * (0.6 + 0.35 * (1 - Math.min(1, pull)))
         const swing = add3(scale3(a1, Math.sin(ph) * amp), scale3(a2, Math.sin(ph * 0.73 + s) * amp * 0.8))
         const target = norm3(add3(add3(scale3(n, 0.7 * (1 - f) + 0.1), scale3(up, pull * (0.7 + 1.1 * f))), swing))

@@ -67,6 +67,11 @@ export class Camera {
     this.pxPerUnit = (this.focal * this.h) / 2 // pixels per world unit at depth 1
   }
 
+  // unit vector the camera looks along
+  forward() {
+    return [-this.R[6], -this.R[7], -this.R[8]]
+  }
+
   toCam(p) {
     return apply3(this.R, sub3(p, this.pos))
   }

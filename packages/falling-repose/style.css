@@ -23,9 +23,11 @@ body.idle {
   cursor: none;
 }
 
-/* The one control: a speaker glyph that breathes until sound begins, then
-   settles into the dark. No words. */
-#sound {
+/* The controls: a speaker glyph that breathes until sound begins, then
+   settles into the dark, and a return-to-view glyph that only appears once the
+   camera has been moved. No words. */
+#sound,
+#reset {
   position: fixed;
   right: max(18px, env(safe-area-inset-right));
   bottom: max(16px, env(safe-area-inset-bottom));
@@ -62,7 +64,33 @@ body.ready #sound:focus-visible {
   outline: none;
 }
 
-#sound svg {
+#reset {
+  right: calc(max(18px, env(safe-area-inset-right)) + 44px);
+  pointer-events: none;
+}
+
+body.ready.moved #reset {
+  opacity: 0.32;
+  pointer-events: auto;
+}
+
+body.ready.moved.idle #reset {
+  opacity: 0;
+}
+
+body.ready.moved #reset:hover,
+body.ready.moved #reset:focus-visible {
+  opacity: 0.75;
+  outline: none;
+}
+
+#reset .dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+#sound svg,
+#reset svg {
   width: 100%;
   height: 100%;
   fill: none;

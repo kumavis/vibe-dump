@@ -6,7 +6,7 @@ const BLOOM_LEVELS = 5
 // The whole frame, pass by pass. `render(frame)` takes everything that moves —
 // the projected figure, the camera, the clocks, the palette — and draws it.
 export class Renderer {
-  constructor(canvas, { particleCount = 5200, bokehCount = 40, force8 = false } = {}) {
+  constructor(canvas, { force8 = false } = {}) {
     const ctx = createContext(canvas)
     if (!ctx) throw new Error('webgl2')
     this.gl = ctx.gl
@@ -33,44 +33,39 @@ export class Renderer {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 400, 1, 0, gl.RGBA, gl.FLOAT, null)
 
-    this.initParticles(particleCount, bokehCount)
+    this.initParticles()
     console.info(`falling-repose: ${this.floatOk ? 'float' : '8-bit'} targets`)
     this.w = 0
     this.h = 0
   }
 
-  initParticles(n, nb) {
+  // Three layers of motes, each wrapping round its own box ahead of the camera
+  // (see vsParticles). Box heights divide 120 so the fall can be reduced mod
+  // 960 without a jump; the layer is the instance's `kind`.
+  initParticles() {
     const gl = this.gl
-    const total = n + nb
+    this.layers = [
+      { count: 4600, size: [14, 10, 14], ahead: 6 }, // near motes
+      { count: 40, size: [4, 4, 4], ahead: 2.9 }, // soft discs near the lens
+      { count: 5200, size: [36, 24, 36], ahead: 14 }, // wide and sparse, for far out
+    ]
+    const total = this.layers.reduce((n, l) => n + l.count, 0)
     const A = new Float32Array(total * 4)
     const B = new Float32Array(total * 4)
     let seed = 12345
     const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
-    this.wrap = 10
-    for (let i = 0; i < total; i++) {
-      const bokeh = i >= n
-      let x, z
-      if (bokeh) {
-        // close to the lens and soft
-        z = 0.8 + rnd() * 2.0
-        x = (rnd() - 0.5) * 3.2
-      } else {
-        // denser around the figure's depth, thinning out into the distance
-        const t = rnd()
-        z = 3.2 - Math.pow(t, 0.8) * 13
-        x = (rnd() - 0.5) * (5 + (4 - z) * 0.9)
+    let i = 0
+    this.layers.forEach((layer, kind) => {
+      for (let k = 0; k < layer.count; k++, i++) {
+        A.set([rnd(), rnd(), rnd(), rnd()], i * 4)
+        // rise speed is a whole number of eighths
+        const speed = (5 + Math.floor(rnd() * 8)) / 8
+        const size =
+          kind === 1 ? 0.004 + rnd() * 0.006 : kind === 2 ? 0.005 + Math.pow(rnd(), 2) * 0.012 : 0.0025 + Math.pow(rnd(), 3) * 0.006
+        const bright = kind === 1 ? 0.5 + rnd() * 0.5 : 0.35 + Math.pow(rnd(), 2) * 1.4
+        B.set([speed, size, bright, kind], i * 4)
       }
-      A[i * 4] = x
-      A[i * 4 + 1] = (rnd() - 0.5) * this.wrap
-      A[i * 4 + 2] = z
-      A[i * 4 + 3] = rnd()
-      // speed is a multiple of 1/8 so the fall distance can be reduced mod
-      // 8 × wrap on the CPU without the field ever jumping
-      B[i * 4] = (5 + Math.floor(rnd() * 8)) / 8
-      B[i * 4 + 1] = bokeh ? 0.004 + rnd() * 0.006 : 0.0025 + Math.pow(rnd(), 3) * 0.006
-      B[i * 4 + 2] = bokeh ? 0.5 + rnd() * 0.5 : 0.35 + Math.pow(rnd(), 2) * 1.4
-      B[i * 4 + 3] = bokeh ? 1 : 0
-    }
+    })
     this.particleTotal = total
     this.vao = gl.createVertexArray()
     gl.bindVertexArray(this.vao)
@@ -93,15 +88,21 @@ export class Renderer {
     gl.bindVertexArray(null)
   }
 
-  resize(w, h) {
-    if (w === this.w && h === this.h) return
+  // `sdfDiv` is how many pixels share one texel of the silhouette's distance
+  // field: 1 at full quality, 2 when the frame-rate governor needs it back.
+  resize(w, h, sdfDiv = 2) {
+    if (w === this.w && h === this.h && sdfDiv === this.sdfDiv) return
     const gl = this.gl
     this.w = w
     this.h = h
+    this.sdfDiv = sdfDiv
     for (const t of [this.sdf, this.emit, this.ra, this.rb, this.haze, this.scene, ...(this.bloom ?? [])]) dispose(gl, t)
     const hw = Math.max(1, Math.ceil(w / 2)), hh = Math.max(1, Math.ceil(h / 2))
     const f = { float: this.floatOk }
-    this.sdf = target(gl, hw, hh, f)
+    this.sdf = target(gl, Math.max(1, Math.ceil(w / sdfDiv)), Math.max(1, Math.ceil(h / sdfDiv)), {
+      float: this.floatOk,
+      channels: this.floatOk ? 2 : 4,
+    })
     this.emit = target(gl, hw, hh, f)
     this.ra = target(gl, hw, hh, f)
     this.rb = target(gl, hw, hh, f)
@@ -148,7 +149,7 @@ export class Renderer {
     gl.uniform2f(u.uLight, light[0], light[1])
     gl.uniform1f(u.uPxPerM, fig.pxPerM)
     gl.uniform1f(u.uTime, F.story)
-    gl.uniform1f(u.uFall, F.fallSmall)
+    gl.uniform1f(u.uDrift, F.drift)
     gl.uniform3fv(u.uCore, F.palette.core)
     gl.uniform3fv(u.uHalo, F.palette.halo)
     gl.uniform1f(u.uSwell, F.swell)
@@ -180,7 +181,7 @@ export class Renderer {
     gl.uniform2f(u.uLight, light[0], light[1])
     gl.uniform1f(u.uPxPerM, fig.pxPerM)
     gl.uniform1f(u.uTime, F.story)
-    gl.uniform1f(u.uFall, F.fallSmall)
+    gl.uniform1f(u.uDrift, F.drift)
     this.quad()
 
     bindTarget(gl, this.scene)
@@ -211,7 +212,14 @@ export class Renderer {
     gl.uniform1f(u.uFall, F.fallSmall)
     gl.uniform1f(u.uShutter, F.shutter)
     gl.uniform1f(u.uTime, F.story)
-    gl.uniform1f(u.uWrap, this.wrap)
+    const sizes = [], centers = []
+    const fwd = F.cam.forward()
+    for (const l of this.layers) {
+      sizes.push(...l.size)
+      centers.push(...F.cam.pos.map((c, k) => c + fwd[k] * l.ahead))
+    }
+    gl.uniform3fv(u.uBoxSize, sizes)
+    gl.uniform3fv(u.uBoxCenter, centers)
     gl.uniform1f(u.uFocus, F.focus)
     gl.uniform1f(u.uAperture, F.aperture)
     gl.uniform1f(u.uPxPerUnit, F.cam.pxPerUnit)
