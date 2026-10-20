@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
   BOARD, CHARGE_RANGE, OBJECTIVE_RANGE, PHASES,
   passes, woundNeed, saveNeed, attackCount, expected, p2D6,
@@ -13,15 +12,21 @@ import { Session } from './match/session.js'
 import { LocalStore } from './match/store.js'
 import { project } from './present/mirror.js'
 import { PACE } from './present/pace.js'
+import { battleView } from './present/camera-presets.js'
+import { Stage } from './view/stage.js'
+import { CameraRig } from './view/camera.js'
+import { Table } from './view/table.js'
+import { ObjectivesView } from './view/objectives.js'
 import { TerrainView } from './view/terrain.js'
+import { UnitViews } from './view/units.js'
+import { Overlay } from './view/overlay.js'
+import { FX } from './view/effects/fx.js'
+import { Shots } from './view/effects/shots.js'
 import { EventPlayer } from './view/player.js'
+import { clock, wait } from './view/clock.js'
+import { sfx, unlock, toggleMute, isMuted } from './view/sfx.js'
 import { chargePick, nearestSpot, endAt, SHORTEST } from './input/tools/charge-end.js'
 import { sidesFor, isMirror } from './ui/theme.js'
-import { FX } from './fx.js'
-import { buildModel, M } from './models.js'
-import { clock, tween, wait, stepTweens, easeOut, easeInOut, wrapAngle, lerp } from './util.js'
-import { sfx, unlock, toggleMute, isMuted } from './sfx.js'
-import { hypot } from './core/dmath.js'
 
 // ---------------------------------------------------------------------------
 // Tails & Scales — a pocket-sized tabletop wargame.
@@ -32,8 +37,13 @@ import { hypot } from './core/dmath.js'
 // the dice are shown. Blast weapons drop a template that can scatter, hurts
 // whoever is underneath (friends included) and breaks the scenery.
 //
-// This file is the table: the scene, the units' figures, how each of the
-// match's events looks (the EventPlayer's handlers), the input and the UI.
+// This file is the table's input and UI, and where the view is put
+// together: the stage, the camera, the table, the objectives, the
+// battlefield, the figures, the shooting's effects and the overlay are
+// view/'s modules (R7a), which this makes, in order, and wires to the
+// match's events (the EventPlayer's handlers); the clicks, the HUD, the
+// tray, the log, the card and the screens are still here (R7b moves them to
+// input/ and ui/, and this file down to its boot).
 // The battle itself is the core's (core/index.js): a pure function of its
 // setup and the commands its seats send. Every mode plays one through a
 // Session (match/session.js) over a LocalStore (match/store.js): the title
@@ -51,7 +61,7 @@ import { hypot } from './core/dmath.js'
 
 // the read-only queries (core/queries.js, through the core's API)
 const {
-  alive, isEngaged, eyeY, chestY, inCover, phaseKey,
+  alive, isEngaged, inCover, phaseKey,
   canAct, movePlan, validEnd, freeSpot, shotInfo, shootTargets, chargeTargets, chargePlan, rngState,
 } = q
 
@@ -59,216 +69,40 @@ const { W, H } = BOARD
 const $ = (s) => document.querySelector(s)
 const params = new URLSearchParams(location.search)
 
-// ── Renderer, camera, light ─────────────────────────────────────────────────
-const renderer = new THREE.WebGLRenderer({ antialias: true })
-renderer.setPixelRatio(params.has('lowfi') ? 0.5 : Math.min(devicePixelRatio, 2))
-renderer.setSize(innerWidth, innerHeight)
-renderer.shadowMap.enabled = !params.has('lowfi')
-renderer.shadowMap.type = THREE.PCFSoftShadowMap
-renderer.toneMapping = THREE.ACESFilmicToneMapping
-renderer.toneMappingExposure = 1.05
-document.body.prepend(renderer.domElement)
+// ?fast: a test mode that skips drawing and lets game time run effectively
+// instantly (view/stage.js)
+const FAST = params.has('fast')
 
-const scene = new THREE.Scene()
-scene.background = new THREE.Color('#1c1712')
-scene.fog = new THREE.Fog('#1c1712', 70, 140)
-
-const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 400)
-camera.position.set(0, 30, 31)
-const controls = new OrbitControls(camera, renderer.domElement)
-controls.target.set(0, 0, 1.5)
-controls.enableDamping = true
-controls.dampingFactor = 0.08
-controls.maxPolarAngle = 1.32
-controls.minDistance = 5
-controls.maxDistance = 75
-controls.screenSpacePanning = false
-controls.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN }
-
-scene.add(new THREE.HemisphereLight('#d6e6ff', '#3b2a1a', 0.85))
-const sun = new THREE.DirectionalLight('#fff0d6', 2.3)
-sun.position.set(-16, 34, 20)
-sun.castShadow = true
-sun.shadow.mapSize.set(2048, 2048)
-Object.assign(sun.shadow.camera, { left: -27, right: 27, top: 22, bottom: -22, near: 5, far: 90 })
-sun.shadow.bias = -0.0004
-sun.shadow.normalBias = 0.02
-scene.add(sun)
-const fill = new THREE.DirectionalLight('#9fb8ff', 0.35)
-fill.position.set(18, 12, -16)
-scene.add(fill)
-
-const overlayEl = $('#labels')
-const fx = new FX(scene, camera, overlayEl)
-
-// ── The table ───────────────────────────────────────────────────────────────
-function paintMat() {
-  const c = document.createElement('canvas')
-  c.width = 2048
-  c.height = Math.round((2048 * H) / W)
-  const g = c.getContext('2d')
-  g.fillStyle = '#5b7a36'
-  g.fillRect(0, 0, c.width, c.height)
-  const blot = (cols, n, rmin, rmax, alpha) => {
-    for (let i = 0; i < n; i++) {
-      g.globalAlpha = alpha * (0.4 + Math.random() * 0.6)
-      g.fillStyle = cols[(Math.random() * cols.length) | 0]
-      g.beginPath()
-      g.ellipse(Math.random() * c.width, Math.random() * c.height, rmin + Math.random() * (rmax - rmin), rmin + Math.random() * (rmax - rmin), Math.random() * 3, 0, Math.PI * 2)
-      g.fill()
-    }
-  }
-  blot(['#6a8a40', '#4f6c2c', '#729347', '#55742f', '#7f964c'], 700, 20, 90, 0.35)
-  blot(['#7d6b45', '#6e5d3a', '#8a7650'], 40, 30, 110, 0.22)
-  blot(['#8fa65a', '#a4b46a'], 300, 4, 14, 0.4)
-  for (let i = 0; i < 14000; i++) {
-    g.globalAlpha = 0.35
-    g.fillStyle = Math.random() < 0.5 ? '#3f5a24' : '#8fae5a'
-    g.fillRect(Math.random() * c.width, Math.random() * c.height, 2, 4 + Math.random() * 4)
-  }
-  g.globalAlpha = 1
-  const t = new THREE.CanvasTexture(c)
-  t.colorSpace = THREE.SRGBColorSpace
-  t.anisotropy = renderer.capabilities.getMaxAnisotropy()
-  return t
-}
-function paintWood() {
-  const c = document.createElement('canvas')
-  c.width = c.height = 512
-  const g = c.getContext('2d')
-  g.fillStyle = '#4a3020'
-  g.fillRect(0, 0, 512, 512)
-  for (let i = 0; i < 260; i++) {
-    g.strokeStyle = Math.random() < 0.5 ? 'rgba(30,18,10,0.35)' : 'rgba(110,70,40,0.25)'
-    g.lineWidth = 1 + Math.random() * 3
-    const y = Math.random() * 512
-    g.beginPath()
-    g.moveTo(0, y)
-    for (let x = 0; x <= 512; x += 32) g.lineTo(x, y + Math.sin(x * 0.02 + i) * 4)
-    g.stroke()
-  }
-  const t = new THREE.CanvasTexture(c)
-  t.colorSpace = THREE.SRGBColorSpace
-  t.wrapS = t.wrapT = THREE.RepeatWrapping
-  t.repeat.set(6, 6)
-  return t
-}
-
-const boardMat = new THREE.MeshStandardMaterial({ map: paintMat(), roughness: 0.95 })
-const board = new THREE.Mesh(new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2), boardMat)
-board.receiveShadow = true
-scene.add(board)
-const table = new THREE.Mesh(new THREE.PlaneGeometry(220, 220).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ map: paintWood(), roughness: 0.7 }))
-table.position.y = -0.62
-table.receiveShadow = true
-scene.add(table)
-{
-  const frameMat = new THREE.MeshStandardMaterial({ color: '#5a3a22', roughness: 0.6 })
-  const parts = [
-    [W + 1.6, 0.8, 0.8, 0, -H / 2 - 0.4],
-    [W + 1.6, 0.8, 0.8, 0, H / 2 + 0.4],
-    [0.8, 0.8, H, -W / 2 - 0.4, 0],
-    [0.8, 0.8, H, W / 2 + 0.4, 0],
-  ]
-  for (const [w, h, d, x, z] of parts) {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), frameMat)
-    m.position.set(x, -0.22, z)
-    m.castShadow = m.receiveShadow = true
-    scene.add(m)
-  }
-  const under = new THREE.Mesh(new THREE.BoxGeometry(W, 0.6, H), frameMat)
-  under.position.y = -0.31
-  scene.add(under)
-}
-
-// deployment zones, one along each seat's edge, in the seat's colour (set by
-// paintSeats once the seats are known), as deep as the mission's (the rules'
-// zone, core/deploy.js)
-const zoneMats = [], zoneLineMats = []
-const DEPLOY = MISSIONS.classic.deploy
-for (const s of [0, 1]) {
-  const sx = EDGES[s]
-  const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.07, depthWrite: false })
-  zoneMats.push(mat)
-  const z = new THREE.Mesh(new THREE.PlaneGeometry(DEPLOY, H).rotateX(-Math.PI / 2), mat)
-  z.position.set(sx * (W / 2 - DEPLOY / 2), 0.008, 0)
-  z.renderOrder = 1
-  scene.add(z)
-  const pts = []
-  for (let zz = -H / 2; zz < H / 2; zz += 1) pts.push(new THREE.Vector3(sx * (W / 2 - DEPLOY), 0.02, zz), new THREE.Vector3(sx * (W / 2 - DEPLOY), 0.02, zz + 0.5))
-  const lineMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.5 })
-  zoneLineMats.push(lineMat)
-  scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), lineMat))
-}
-
-// grass tufts and flowers, purely for looks
-const tufts = new THREE.InstancedMesh(new THREE.ConeGeometry(0.035, 0.13, 3), new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 1 }), 700)
-const flowers = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.05, 0), new THREE.MeshStandardMaterial({ roughness: 0.6 }), 140)
-scene.add(tufts, flowers)
-function scatterTufts() {
-  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler()
-  const col = new THREE.Color()
-  for (let i = 0; i < tufts.count; i++) {
-    const x = (Math.random() - 0.5) * (W - 0.4), z = (Math.random() - 0.5) * (H - 0.4)
-    const s = 0.6 + Math.random() * 1.2
-    q.setFromEuler(e.set((Math.random() - 0.5) * 0.5, 0, (Math.random() - 0.5) * 0.5))
-    m.compose(new THREE.Vector3(x, 0.08 * s, z), q, new THREE.Vector3(s, s, s))
-    tufts.setMatrixAt(i, m)
-    tufts.setColorAt(i, col.set(['#9cba5a', '#a8c464', '#b4c86e', '#8fae50'][i % 4]))
-  }
-  const fc = ['#f4f0e0', '#f2d14a', '#d77ad0', '#e8e8ff']
-  for (let i = 0; i < flowers.count; i++) {
-    const x = (Math.random() - 0.5) * (W - 0.4), z = (Math.random() - 0.5) * (H - 0.4)
-    m.compose(new THREE.Vector3(x, 0.08, z), q.identity(), new THREE.Vector3(1, 0.6, 1))
-    flowers.setMatrixAt(i, m)
-    flowers.setColorAt(i, col.set(fc[i % fc.length]))
-  }
-  tufts.instanceMatrix.needsUpdate = flowers.instanceMatrix.needsUpdate = true
-  tufts.instanceColor.needsUpdate = flowers.instanceColor.needsUpdate = true
-}
-
-// ── Objectives ──────────────────────────────────────────────────────────────
-// Each objective's marker, flag and ring (the objectives themselves are the
-// match's, G.objectives, where the classic mission puts them:
-// data/mission.js); `owner` is whose colours it shows.
-const objViews = MISSIONS.classic.objectives.map((p, i) => {
-  const g = new THREE.Group()
-  g.position.set(p.x, 0, p.z)
-  const stone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 0.16, 8), M('#8a8478'))
-  stone.position.y = 0.08
-  stone.castShadow = stone.receiveShadow = true
-  const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.2, 0), new THREE.MeshStandardMaterial({ color: '#fff3c0', emissive: '#ffd060', emissiveIntensity: 0.8, flatShading: true }))
-  gem.position.y = 0.42
-  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 2.1, 6), M('#5a3d24'))
-  pole.position.set(0.35, 1.1, 0)
-  pole.castShadow = true
-  const flagMat = new THREE.MeshStandardMaterial({ color: '#e8e0d0', side: THREE.DoubleSide, roughness: 0.8 })
-  const flag = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.5, 6, 1).translate(0.4, 0, 0), flagMat)
-  flag.position.set(0.35, 1.85, 0)
-  flag.castShadow = true
-  const ring = new THREE.Mesh(new THREE.RingGeometry(OBJECTIVE_RANGE - 0.06, OBJECTIVE_RANGE, 64).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#fff3c0', transparent: true, opacity: 0.35, depthWrite: false }))
-  ring.position.y = 0.03
-  g.add(stone, gem, pole, flag, ring)
-  scene.add(g)
-  return { i, g, gem, flag, flagMat, ring, owner: -1 }
-})
-
-// ── Terrain ─────────────────────────────────────────────────────────────────
+// ── The view (view/), made in its old order ─────────────────────────────────
+// The renderer and scene, the camera and its controls, the lights, the
+// effects, the table, the objectives and the battlefield, then (below) the
+// figures, the shooting's effects and the overlay: the same three.js
+// objects, materials and Math.random draws as before R7, in the same order
+// (sim/terrain-shots.mjs and sim/title-shot.mjs hold the title, drawn from a
+// seeded Math.random, to the code before, pixel for pixel, but for the
+// figures' flocks and idle phases, which the template cache draws from
+// another point of the stream: view/models/cache.js).
+const stage = new Stage({ lowfi: params.has('lowfi'), fast: FAST })
+const { renderer, scene } = stage
+const rig = new CameraRig(renderer)
+const { camera, controls } = rig
+stage.light()
+const fx = new FX(scene, camera, stage.overlay)
+const table = new Table(scene, renderer, { W, H, deploy: MISSIONS.classic.deploy, edges: EDGES })
+// (each flag in its holder's colours: the seats' look, below)
+const objectives = new ObjectivesView(scene, MISSIONS.classic.objectives, OBJECTIVE_RANGE, (s) => SIDES[s].color)
 // The battlefield's meshes. The battlefield itself is the match's
 // (G.terrain): each terrain call reports what it built or broke into G.out,
 // among the events of the entry the Session folds, and the player plays
 // each report (the terrain.* handlers) when it reaches it in those events,
 // in order (a wrecker's smashes as its walk passes them).
 const terrainView = new TerrainView(scene, fx)
-terrainView.onBreak = (c) => {
-  if (c.kind === 'block') sfx.crumble()
-  else sfx.thwack()
-}
 
 // ── Game state ──────────────────────────────────────────────────────────────
 // The table's and the screen's own state: the board seed and who plays each
-// seat as the title screen has them, and input and camera state. The
-// match's state (the turn, the score, the units) is G's.
+// seat as the title screen has them, and input state (the camera's is the
+// rig's, view/camera.js). The match's state (the turn, the score, the
+// units) is G's.
 // (Every seed the page takes is made a whole number from 0 to 2^32 - 1, as
 // a setup's must be, with `>>> 0`: what the board's and the dice's
 // generators always did with a seed, so ?seed=-5 is still the board -5 drew.)
@@ -278,7 +112,6 @@ const S = {
   sel: null,
   reach: null,
   hover: null,
-  follow: true,
 }
 // The races at the table: the classic Bushtails-versus-Coil matchup
 // (data/mission.js), or any pair a ?races=<seat 0>,<seat 1> URL names (e.g.
@@ -324,6 +157,9 @@ const atTable = () => G ?? backdrop
 // the page's lifetime, emptied as each battle begins). Without ?debug a
 // battle has no onTrace.
 let traceListener = null
+// (?debug only) what a checkpoint does besides nothing: sim/snap-check.mjs
+// compares the table there
+let checkHook = null
 const DEBUG = params.has('debug')
 const onTrace = DEBUG ? (line, g) => traceListener?.line(line, g) : null
 // each seat's name, icon and colours, from its race (ui/theme.js)
@@ -338,7 +174,8 @@ function seatPlayers(seats) {
 // The HUD, unit labels, battle log and card take each seat's colour from
 // --s0/--s1, and the active seat's HUD glow from --s0-glow/--s1-glow
 // (style.css holds the classic pair, which the title screen's copy keeps);
-// the HUD shows each seat's race, and the zones are its colour.
+// the HUD shows each seat's race, and the zones (view/table.js) are its
+// colour.
 const seatStyle = document.createElement('style')
 document.body.appendChild(seatStyle)
 const glow = (hex) => `rgba(${[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, 0.45)`
@@ -349,9 +186,8 @@ function paintSeats() {
     const hud = s ? '#sideB' : '#sideA'
     $(`${hud} .ic`).textContent = SIDES[s].icon
     $(`${hud} .nm`).textContent = SIDES[s].name
-    zoneMats[s].color.set(SIDES[s].color)
-    zoneLineMats[s].color.set(SIDES[s].color)
   }
+  table.paint(SIDES.map((x) => x.color))
 }
 paintSeats()
 // In a mirror match both seats' names read the same, so text that names a
@@ -366,166 +202,70 @@ const local = (side) => !!session?.localSeats.includes(side)
 // a phase's name by its key ('move' → 'Movement')
 const PHASE_NAME = Object.fromEntries(PHASES.map((p) => [p.key, p.name]))
 
-// ── Units' figures ──────────────────────────────────────────────────────────
-// A unit's view, by unit id: its figures, selection ring, hit cylinder (for
-// picking) and floating label, which way it faces, whether it is walking;
-// and per model (models[k] draws the unit's models[k]) where its figure
-// stands this frame, which way it turns and how it lunges, lifts, flinches,
-// dies or flees. The rules never read any of it. It follows the unit as
-// shown (the mirror's record of it, `shown(u)`: its place, its slots, who
-// still stands), and of the unit itself reads only what never changes in a
-// match (`v.u`: its type, its seat, its race).
-const views = new Map()
-const V = (u) => views.get(u.id)
-const unitOf = (id) => views.get(id).u
-const shown = (u) => player.mirror.units[u.id]
-// the figures of a unit's models still standing
-const standing = (u) => V(u).models.filter((_, k) => shown(u).models[k].alive)
-
-// (`at`: the match the unit is in, for its seat's edge)
-function makeView(u, at) {
-  // facing across the table, away from the seat's own edge (kept: a fleeing
-  // figure runs off over it)
-  const edge = edgeOf(at, u.side)
-  const facing = -edge * Math.PI / 2
-  // (at: where a walk has got to while a unit.move plays; null otherwise)
-  const v = { u, edge, facing, moving: false, at: null, models: [] }
-  for (let i = 0; i < u.t.models; i++) {
-    const mesh = buildModel(u.key, u.t, SIDES[u.side].color)
-    scene.add(mesh)
-    v.models.push({ mesh, x: 0, z: 0, yaw: facing, lunge: 0, lungeDir: 0, lift: 0 })
-  }
-  // selection / status ring
-  v.ring = new THREE.Mesh(new THREE.RingGeometry(0.88, 1, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, toneMapped: false }))
-  v.ring.position.y = 0.04
-  v.ring.renderOrder = 2
-  scene.add(v.ring)
-  v.hit = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1, 12), new THREE.MeshBasicMaterial({ visible: false }))
-  v.hit.userData.unit = u
-  scene.add(v.hit)
-  v.label = document.createElement('div')
-  v.label.className = `ulabel s${u.side}`
-  overlayEl.appendChild(v.label)
-  views.set(u.id, v)
-  syncView(u)
-  // the figures stand in their slots from the start
-  const mu = shown(u)
-  mu.models.forEach((m, k) => {
-    const f = v.models[k]
-    f.x = mu.pos.x + m.ox
-    f.z = mu.pos.z + m.oz
-    f.mesh.position.set(f.x, 0, f.z)
-    f.mesh.rotation.y = f.yaw
-  })
-}
-
-// The ring and hit cylinder follow the unit's disc as shown: its place (or,
-// while it walks a unit.move, where the walk has got to: v.at) and radius.
-function syncView(u) {
-  const v = V(u), mu = shown(u), p = v.at ?? mu.pos
-  v.ring.scale.setScalar(mu.r + 0.18)
-  const tall = u.t.big ? 2.4 : u.t.fly ? 1.8 : 1.3
-  v.hit.scale.set(mu.r, tall, mu.r)
-  v.ring.position.x = v.hit.position.x = p.x
-  v.ring.position.z = v.hit.position.z = p.z
-  v.hit.position.y = v.hit.scale.y / 2
-}
-// The label: the unit as shown (models standing or wounds left, mesmerized,
-// in combat).
-function updateLabel(u) {
-  const mu = shown(u)
-  const w = mu.models.filter((m) => m.alive)
-  let html = `<span class="nm">${u.t.short}</span>`
-  if (u.t.models > 1) html += `<span class="ct">${mu.alive}/${u.t.models}</span>`
-  else html += `<span class="ct">${w[0] ? w[0].w : 0}/${u.t.W}♥</span>`
-  if (mu.mesmerized) html += `<span class="st" title="Mesmerized">🌀</span>`
-  if (mu.alive > 0 && mu.engaged) html += `<span class="st" title="In combat">⚔</span>`
-  const v = V(u)
-  v.label.innerHTML = html
-  v.label.style.display = mu.alive > 0 ? '' : 'none'
-}
-
-function clearUnits() {
-  for (const v of views.values()) {
-    for (const f of v.models) scene.remove(f.mesh)
-    scene.remove(v.ring, v.hit)
-    v.label.remove()
-  }
-  views.clear()
-}
-
-// A battle's units are the backdrop's, id for id (start() makes sure the
-// backdrop is the battle's table: the same board, terrain and races deploy
-// the same armies the same way, newState being a pure function of the
-// setup, and neither who plays a seat nor the dice move a unit before the
-// battle starts), so their figures stay on the table: each view now follows
-// the battle's unit. A unit the table has no figure for is a bug in that
-// (the mirror the player was reset to is the backdrop's too), so it throws.
-function bindViews(at) {
-  const differs = (u) => !views.has(u.id) || views.get(u.id).u.t !== u.t || views.get(u.id).u.side !== u.side
-  const bad = at.units.find(differs)
-  if (bad || at.units.length !== views.size) throw new Error(`the battle's units are not the table's (${bad ? `unit ${bad.id}, ${bad.key} of seat ${bad.side}` : `${at.units.length} units, ${views.size} figures`}): a battle starts on its own table (start())`)
-  for (const u of at.units) {
-    const v = views.get(u.id)
-    v.u = u
-    v.hit.userData.unit = u
-    updateLabel(u)
-  }
-}
+// ── The figures, the shooting, the overlay (view/) ──────────────────────────
+// The units' figures (view/units.js: each unit's view by unit id, following
+// the unit as shown, `player.mirror`), how the shooting looks
+// (view/effects/shots.js) and what a seat's tools draw on the table
+// (view/overlay.js: one texel per nav cell, every match's grid having this
+// size).
+const units = new UnitViews({ scene, labels: stage.overlay, fx, mirror: () => player.mirror, colorOf: (s) => SIDES[s].color, W })
+const shots = new Shots({ scene, fx, units })
+const overlay = new Overlay(scene, { W, H, grid: gridSize(W, H, NAV_CELL) })
+// a unit of the match the table shows, by id (what a click or the pointer
+// finds is the figure's unit: its view keeps only the id and the unit's
+// look, the same in every match on this table)
+const unitById = (id) => atTable().units.find((u) => u.id === id)
+// a unit as shown (the mirror's record of it)
+const shown = (u) => units.shown(u.id)
 
 // ── Playing the match's events ──────────────────────────────────────────────
 // The match runs ahead to the next decision a human makes and reports what
 // happened as events (DESIGN §2.3), which the Session hands over entry by
 // entry (the sink, below); the player plays them here at the table's pace,
-// each kind of event with the old code's visuals, after folding it into the
-// mirror (present/mirror.js), the match as shown.
+// each kind of event with the old code's visuals (view/'s), after folding it
+// into the mirror (present/mirror.js), the match as shown.
 const HANDLERS = {
   // the battle log, the dice tray, and the beats between
   log: (e) => write(e.side, e.html, e.cls, e.at),
   'tray.open': (e) => tray.clear(e.title),
   dice: (e) => tray.row(e.label, e.dice, e.need, e),
   pause: (e) => wait(PACE.pause(e.s)),
-  // the camera, when it follows the action
-  focus: (e) => focus(e.x, e.z),
+  // the camera, when it follows the action (the stage and the seat to act
+  // as shown: a focus event plays while the match has run ahead, a whole AI
+  // turn or more; never during the turn of the one seat played here)
+  focus: (e) => rig.focus(e.x, e.z, { stage: player.mirror.stage, active: player.mirror.active, localSeats: session?.localSeats ?? [] }),
   // the figures
-  'unit.place': (e) => syncView(unitOf(e.u)),
+  'unit.place': (e) => units.disc(e.u),
   'unit.formation': (e) => {
-    const u = unitOf(e.u)
-    syncView(u)
-    updateLabel(u)
+    units.disc(e.u)
+    units.label(e.u)
   },
-  'unit.wound': (e) => wounded(e),
-  'unit.slain': (e, M) => slain(e, M),
-  'unit.flee': (e) => fled(e),
-  'unit.destroyed': (e, M) => destroyed(e, M),
-  'unit.face': (e) => face(unitOf(e.u), unitOf(e.tg)),
-  'unit.move': (e, M) => walked(e, M),
-  melee: (e) => lunge(e),
-  'charge.result': (e) => shout(e),
+  'unit.wound': (e) => units.wounded(e),
+  'unit.slain': (e, M) => units.slain(e, M),
+  'unit.flee': (e) => units.fled(e),
+  'unit.destroyed': (e, M) => units.destroyed(e, M),
+  'unit.face': (e) => units.face(e),
+  // (what a wrecker smashed breaks as the walker passes it)
+  'unit.move': (e, M) => units.walk(e, M, (ev) => {
+    for (const x of ev) terrainView.apply(x, M)
+  }),
+  melee: (e) => units.lunge(e),
+  'charge.result': (e) => units.shout(e),
   // the shooting
-  volley: (e) => volley(e),
-  'blast.aim': (e) => aimed(e),
-  'blast.scatter': (e) => scattered(e),
-  'blast.fire': (e) => fired(e),
-  'blast.land': (e) => landed(e),
-  'spell.cast': () => {
-    sfx.magic()
-  },
-  'spell.fizzle': (e) => {
-    sfx.fizzle()
-    fx.text(top(unitOf(e.u)), 'Fizzle…', '#c8b8ff')
-  },
-  'spell.thorns': (e) => thorns(e),
-  'spell.fade': (e) => faded(e),
-  'spell.gaze': (e) => gaze(e),
-  'spell.mesmerized': (e) => {
-    fx.text(top(unitOf(e.tg)), 'Mesmerized!', '#e0a0ff', { size: 20 })
-  },
+  volley: (e) => shots.volley(e),
+  'blast.aim': (e) => shots.aimed(e),
+  'blast.scatter': (e) => shots.scattered(e),
+  'blast.fire': (e) => shots.fired(e),
+  'blast.land': (e) => shots.landed(e),
+  'spell.cast': () => shots.cast(),
+  'spell.fizzle': (e) => shots.fizzled(e),
+  'spell.thorns': (e) => shots.thorns(e),
+  'spell.fade': (e) => shots.faded(e),
+  'spell.gaze': (e) => shots.gaze(e),
+  'spell.mesmerized': (e) => shots.mesmerized(e),
   // what the labels, flags and score show: read off the mirror, which these
-  // have just updated (the flags repaint each frame, animateObjectives)
-  status: () => {
-    for (const v of views.values()) updateLabel(v.u)
-  },
+  // have just updated (the flags repaint each frame, view/objectives.js)
+  status: () => units.labelAll(),
   objectives: () => {},
   act: () => {},
   // the flow: a stage of the battle, a phase begun, a round scored, the end
@@ -535,8 +275,9 @@ const HANDLERS = {
   'game.over': (e) => over(e),
   // (what the match waits on: the table asks once it has played everything)
   pending: () => {},
-  // (?debug) a checkpoint for sim/present-check.mjs
-  check: () => {},
+  // (?debug) a checkpoint for sim/present-check.mjs (and, should the ?debug
+  // block's view.pauseAtChecks ask, a pause there for sim/snap-check.mjs)
+  check: (e) => checkHook?.(e),
   // the battlefield
   'terrain.clear': (e, M) => terrainView.apply(e, M),
   'terrain.add': (e, M) => terrainView.apply(e, M),
@@ -552,397 +293,60 @@ const HANDLERS = {
     return wait(e.beat ?? PACE.beat)
   },
 }
+// The table made to show a match as it stands (the player's snap): the
+// battlefield from its chunks, the figures from its units, and what the
+// view holds outside the mirror taken away: the shooting's (a template's
+// marker, an eruption's thorns) and fx's scorch and acid marks (a snap back
+// to an earlier point, or onto another match, would keep them from a
+// timeline it left). `M` is the player's contract (view/player.js's
+// view.rebuild(G, M)); the views read the mirror themselves (their
+// mirror(), the player's, which it has set to M by now). Into the page's
+// views, unless `to` names others: the ?debug snap check makes its fresh
+// snap with this same function, into views off the table (and at a
+// checkpoint, `chunks` G's as they stood).
+function rebuild(g, M, to = {}) {
+  const { chunks = g.terrain.chunks, terrain = terrainView, units: uv = units, shots: sh = shots, effects: marks = fx } = to
+  terrain.sync(chunks)
+  uv.sync(g.units, (s) => edgeOf(g, s))
+  sh.clear()
+  marks.clearDecals()
+}
 // Told when it has played everything: the table catches up (idled, below).
-const player = new EventPlayer({ handlers: HANDLERS, onIdle: () => idled() })
+const player = new EventPlayer({ handlers: HANDLERS, view: { rebuild }, onIdle: (how) => idled(how) })
 
 // What the Session hands over after each entry it folds: the events that
 // entry made happen, played in order. A battle's first entry, its start,
-// begins with the match's board (its terrain.clear and an add per chunk),
-// which the backdrop already shows chunk for chunk: start() asks for those
-// to be dropped (boardShown), so the meshes stay. Under ?debug the
-// checkpoints P-present holds the mirror to go in first (the ?debug block).
-let boardShown = false
+// begins with the match's board (its terrain.clear and an add per chunk);
+// start() has snapped the table to the backdrop, the battle's table as it
+// stood before anything happened (the same board, terrain and races), so
+// the board's adds take back the meshes on show (view/terrain.js) and the
+// battle's events play on from there. Under
+// ?debug the checkpoints P-present holds the mirror to go in first (the
+// ?debug block).
 const sink = {
   // (`ses`, the Session handing them over: a Session over a store that holds
   // entries already folds them as it is made, before start() has it)
   events(events, ses) {
     if (G !== ses.G) {
       G = ses.G
-      bindViews(G)
+      sameUnits(G)
     }
     if (traceListener) events = traceListener.present(events, G)
-    if (boardShown) {
-      boardShown = false
-      if (events[0]?.t === 'terrain.clear') {
-        let k = 1
-        while (events[k]?.t === 'terrain.add') k++
-        events = events.slice(k)
-      }
-    }
     player.push(events)
   },
 }
-
-// A wound that leaves the model standing: the number, and a flinch.
-function wounded(e) {
-  const u = unitOf(e.u), f = V(u).models[e.m]
-  fx.text({ x: f.x, y: (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
-  f.flash = 0.4
-}
-
-// A model slain: the number, a squeak or a hiss, fur or scales flying, and
-// the figure keels over away from whoever did it, then sinks out of sight.
-function slain(e, M) {
-  const u = unitOf(e.u), f = V(u).models[e.m]
-  fx.text({ x: f.x, y: (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
-  f.dying = true
-  // the race's own voice and gore
-  const look = RACES[u.race].look
-  sfx[look.voice]()
-  const fig = f.mesh.userData.fig
-  const by = e.by === null ? null : M.units[e.by]
-  const dir = by ? Math.atan2(f.x - by.pos.x, f.z - by.pos.z) - f.yaw : 0
-  const side = Math.sin(dir) >= 0 ? 1 : -1
-  fx.debris(f.x, 0.5, f.z, look.gore, 6, { power: 2, size: 0.07 })
-  tween(0.6, (k) => {
-    fig.rotation.z = side * k * 1.45
-    fig.position.y = (u.t.big ? 0.09 : 0.06) + Math.sin(k * Math.PI) * 0.15
-  }, easeOut)
-    .then(() => wait(1.4))
-    .then(() => tween(0.8, (k) => (f.mesh.position.y = -k * 1.4)))
-    .then(() => {
-      scene.remove(f.mesh)
-      f.dying = false
-    })
-}
-
-// A unit gone: its label, ring and hit cylinder go, and the table says so in
-// the colours of whoever did it.
-function destroyed(e, M) {
-  const u = unitOf(e.u), v = V(u), p = M.units[e.u].pos
-  v.label.style.display = 'none'
-  v.ring.visible = false
-  v.hit.visible = false
-  scene.remove(v.hit)
-  fx.text({ x: p.x, y: 2.2, z: p.z }, `${u.t.short} destroyed`, SIDES[e.by !== null ? unitOf(e.by).side : 1 - u.side].color, { size: 20, life: 2 })
-}
-
-// A melee: the attackers lunge at their target (a thwack), and as the hit
-// row settles (the next event: the core emits the dice straight after
-// this, and the old code threw the sparks once that row had waited) sparks
-// fly over the models it hit.
-function lunge(e) {
-  const u = unitOf(e.u), target = unitOf(e.tg), tv = V(target)
-  const at = shown(target).pos
-  for (const f of standing(u)) {
-    f.lunge = 1
-    f.lungeDir = Math.atan2(at.x - f.x, at.z - f.z)
-  }
-  sfx.thwack()
-  if (!e.hits) return
-  wait(PACE.dice(e.n)).then(() => {
-    // (nothing of a table since replaced)
-    if (views.get(target.id) !== tv) return
-    for (let i = 0; i < Math.min(e.hits, 8); i++) {
-      const v = standing(target)[i % Math.max(1, shown(target).alive)]
-      if (v) for (let k = 0; k < 4; k++) fx.mote({ x: v.x, y: 0.6, z: v.z, vx: (Math.random() - 0.5) * 5, vy: Math.random() * 4, vz: (Math.random() - 0.5) * 5, size: 0.05, color: '#fff2b0', life: 0.3, g: 12 })
-    }
-  })
-}
-
-// ── Movement ────────────────────────────────────────────────────────────────
-// A unit walks its path (unit.move, from core/actions/move.js's
-// resolveWalk: a move, an advance's move, a fall back, a charge): a wrecker
-// setting off on a move stomps (`stomp`), then its disc goes along the path
-// in game time, the figures following, as the old walk moved the unit
-// itself, and what a wrecker smashed breaks as the walker passes each
-// sample (the terrain events the sample made); then a breath. The mirror
-// already holds where the walk ends, so until it gets there the view draws
-// the disc at v.at, where the walk has got to.
-async function walked(e, M) {
-  const u = unitOf(e.u), v = V(u)
-  const { path: pts, L, speed, fly, smashes } = e
-  if (e.stomp) sfx.boom(0.4)
-  v.moving = true
-  if (fly) for (const f of v.models) f.flying = true
-  const seg = []
-  let acc = 0
-  for (let i = 1; i < pts.length; i++) {
-    const l = hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
-    seg.push({ a: pts[i - 1], b: pts[i], s: acc, l })
-    acc += l
-  }
-  let next = 0
-  const smash = ({ ev }) => {
-    for (const x of ev) terrainView.apply(x, M)
-    fx.shake = Math.max(fx.shake, 0.08)
-  }
-  // (nothing of a table since replaced: its unit ids count from 1 again)
-  const gone = () => views.get(e.u) !== v
-  await tween(L / speed + 0.15, (k) => {
-    if (gone()) return
-    const d = Math.min(L, k * (L + speed * 0.15))
-    const s = seg.find((q) => d <= q.s + q.l) || seg[seg.length - 1]
-    const f = s.l > 0 ? (d - s.s) / s.l : 1
-    v.facing = Math.atan2(s.b.x - s.a.x, s.b.z - s.a.z)
-    v.at = { x: lerp(s.a.x, s.b.x, f), z: lerp(s.a.z, s.b.z, f) }
-    syncView(u)
-    if (fly) for (const f of v.models) f.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)
-    while (next < smashes.length && smashes[next].s <= d) smash(smashes[next++])
-  }, easeInOut)
-  if (gone()) return
-  while (next < smashes.length) smash(smashes[next++])
-  // there: drawn where the mirror has it from now on
-  v.at = null
-  syncView(u)
-  v.moving = false
-  if (fly) for (const f of v.models) (f.flying = false), (f.lift = 0)
-  await wait(0.15)
-}
-
-// ── Shooting ────────────────────────────────────────────────────────────────
-// How a shot's events look (core/actions/shoot.js: a volley, a blast
-// weapon's templates, a spell).
-// A volley: projectiles for a non-blast volley — a handful, not one per
-// shot (e.n), from the shooters standing to the figures they shoot at.
-async function volley(e) {
-  const u = unitOf(e.u), target = unitOf(e.tg), uv = V(u)
-  // (nothing of a table since replaced)
-  const gone = () => views.get(e.u) !== uv
-  const shooters = standing(u)
-  const victims = standing(target)
-  const flights = []
-  const n = Math.min(10, e.n)
-  for (let i = 0; i < n; i++) {
-    const s = shooters[i % shooters.length]
-    const v = victims[(Math.random() * victims.length) | 0]
-    const a = { x: s.x, y: eyeY(u) * 0.8 + s.lift, z: s.z }
-    const b = { x: v.x + (Math.random() - 0.5) * 0.6, y: chestY(target) * 0.8, z: v.z + (Math.random() - 0.5) * 0.6 }
-    flights.push(wait(i * 0.06).then(() => {
-      if (gone()) return
-      sfx.shot()
-      return fx.projectile(a, b, projectileStyle(e.fx))
-    }).then(() => {
-      if (gone()) return
-      for (let k = 0; k < 5; k++) fx.mote({ x: b.x, y: b.y, z: b.z, vx: (Math.random() - 0.5) * 4, vy: Math.random() * 3, vz: (Math.random() - 0.5) * 4, size: 0.05, color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0', life: 0.35, g: 10 })
-    }))
-  }
-  await Promise.all(flights)
-}
-
-const projGeo = {
-  acorn: new THREE.SphereGeometry(0.07, 6, 5),
-  dart: new THREE.ConeGeometry(0.03, 0.3, 4).rotateX(Math.PI / 2),
-  javelin: new THREE.CylinderGeometry(0.02, 0.02, 0.9, 4).rotateX(Math.PI / 2),
-  spit: new THREE.IcosahedronGeometry(0.08, 0),
-  bomb: new THREE.SphereGeometry(0.11, 8, 6),
-  pinecone: new THREE.ConeGeometry(0.2, 0.42, 7),
-  acid: new THREE.SphereGeometry(0.24, 12, 8),
-}
-function projectileStyle(kind) {
-  const glow = (c) => new THREE.MeshBasicMaterial({ color: c, toneMapped: false })
-  switch (kind) {
-    case 'acorn': return { mesh: new THREE.Mesh(projGeo.acorn, M('#8a5a2a')), arc: 0.08, speed: 28 }
-    case 'dart': return { mesh: new THREE.Mesh(projGeo.dart, M('#4a6a2a')), arc: 0.03, speed: 34, spin: 0 }
-    case 'javelin': return { mesh: new THREE.Mesh(projGeo.javelin, M('#8a6a3a')), arc: 0.18, speed: 20, spin: 0 }
-    case 'spit': return { mesh: new THREE.Mesh(projGeo.spit, glow('#9aff5a')), arc: 0.12, speed: 18, trail: (p) => fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.04, color: '#7aef4a', life: 0.4, g: 6 }) }
-    case 'bomb': return { mesh: new THREE.Mesh(projGeo.bomb, M('#7a4a22')), arc: 0.45, speed: 14, trail: (p) => fx.mote({ x: p.x, y: p.y + 0.1, z: p.z, size: 0.05, color: '#ffb030', life: 0.3, g: -1 }) }
-    case 'pinecone': return { mesh: new THREE.Mesh(projGeo.pinecone, M('#6b4a26', { emissive: '#ff5a10', emissiveIntensity: 0.6 })), arc: 0.55, speed: 18, trail: (p) => { fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.12, color: Math.random() < 0.5 ? '#ff8a2a' : '#ffd36e', life: 0.4, g: -2 }); fx.smoke({ x: p.x, y: p.y, z: p.z, size: 0.14, color: '#3a3430', life: 0.9 }) } }
-    case 'acid': return { mesh: new THREE.Mesh(projGeo.acid, glow('#8aff5a')), arc: 0.5, speed: 15, trail: (p) => fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.1, color: Math.random() < 0.5 ? '#5be04a' : '#c8ff8a', life: 0.5, g: 8 }) }
-  }
-  return { mesh: new THREE.Mesh(projGeo.acorn, M('#888')) }
-}
-
-// Blast weapons: the template's marker where it is aimed, held on the table
-// until the template is thrown (blast.aim); on a miss, its scatter
-// (blast.scatter); the throw (blast.fire); then where it lands (blast.land).
-// The marker is view state the mirror doesn't hold: a new table takes it
-// away (showTable), and a snap must too (DESIGN §2.4), since it drops the
-// blast.fire that would have.
-let blastMarker = null
-function aimed(e) {
-  blastMarker = fx.ring(e.x, e.z, e.r, '#ffffff', { hold: true, fill: 0.12 })
-}
-
-// (it moves its own marker only: a table since replaced has taken that away)
-async function scattered(e) {
-  const marker = blastMarker
-  fx.text({ x: e.from.x, y: 1.5, z: e.from.z }, `scatter ${e.d}"`, '#ffd36e', { size: 15 })
-  await tween(0.35, (t) => marker?.position.set(lerp(e.from.x, e.to.x, t), 0.05, lerp(e.from.z, e.to.z, t)), easeOut)
-}
-
-async function fired(e) {
-  const v = V(unitOf(e.u))
-  await artilleryFire(e)
-  // (nothing of a table since replaced, whose marker went with it)
-  if (views.get(e.u) !== v) return
-  blastMarker?.userData.remove()
-  blastMarker = null
-}
-
-// The throw: a war machine's arm (or the acid engine's globe) swings, a
-// grenadier winds up, and the shot flies from the first figure standing.
-async function artilleryFire(e) {
-  const u = unitOf(e.u), v = V(u), land = e.to
-  // (nothing of a table since replaced)
-  const gone = () => views.get(e.u) !== v
-  const src = standing(u)[0]
-  const anim = src.mesh.userData.anim
-  if (anim?.throwArm) {
-    const r0 = anim.rest
-    sfx.thwack()
-    tween(0.25, (k) => (anim.throwArm.rotation.x = r0 - 2.1 * easeOut(k))).then(() => tween(0.8, (k) => (anim.throwArm.rotation.x = r0 - 2.1 * (1 - k))))
-    if (anim.globe) anim.globe.visible = false
-    await wait(0.15)
-    if (gone()) return
-  } else {
-    // a grenadier winds up
-    src.lunge = 1
-    src.lungeDir = Math.atan2(land.x - src.x, land.z - src.z)
-  }
-  const a = { x: src.x, y: u.t.big ? 1.8 : 0.9, z: src.z }
-  sfx.shot()
-  await fx.projectile(a, { x: land.x, y: 0.15, z: land.z }, projectileStyle(e.fx))
-  if (gone()) return
-  if (anim?.globe) anim.globe.visible = true
-}
-
-// Where a template lands: an explosion and a boom (a thornburst's thorns
-// have made their own), and the template's ring, which fades.
-function landed(e) {
-  if (e.fx !== 'thorns') {
-    fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire')
-    sfx.boom(e.r / 2)
-  }
-  fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2 })
-}
-
-// A thornburst: motes from the caster's gem, thorns bursting up through the
-// turf over the template, and their own explosion; they stand until the
-// spell is done (spell.fade), then sink away. Like the marker, the spikes
-// are view state the mirror doesn't hold: a new table takes them away
-// (showTable), and a snap must too (DESIGN §2.4), since it drops the
-// spell.fade that would have.
-const spikesOf = new Map()
-async function thorns(e) {
-  const cv = V(unitOf(e.u))
-  const gem = cv.models[0].mesh.userData.anim.gem
-  if (gem) {
-    const p = new THREE.Vector3()
-    gem.getWorldPosition(p)
-    for (let i = 0; i < 20; i++) fx.mote({ x: p.x, y: p.y, z: p.z, vx: (Math.random() - 0.5) * 3, vy: Math.random() * 3, vz: (Math.random() - 0.5) * 3, size: 0.06, color: '#9aff7a', life: 0.8, g: -1 })
-  }
-  // thorns burst up through the turf
-  const spikes = []
-  const geo = new THREE.ConeGeometry(0.12, 1, 5)
-  for (let i = 0; i < 26; i++) {
-    const a = Math.random() * Math.PI * 2, d = Math.sqrt(Math.random()) * e.r
-    const s = new THREE.Mesh(geo, M(i % 3 ? '#5a7a2a' : '#7a5a2a'))
-    s.position.set(e.x + Math.cos(a) * d, -0.6, e.z + Math.sin(a) * d)
-    s.rotation.set((Math.random() - 0.5) * 0.6, 0, (Math.random() - 0.5) * 0.6)
-    s.scale.set(1, 0.6 + Math.random() * 1.1, 1)
-    s.castShadow = true
-    scene.add(s)
-    spikes.push(s)
-  }
-  spikesOf.set(e.u, spikes)
-  await tween(0.3, (k) => spikes.forEach((s) => (s.position.y = -0.6 + easeOut(k) * (0.3 + s.scale.y * 0.4))))
-  // (nothing of a table since replaced: no scorch mark on the new one)
-  if (views.get(e.u) !== cv) return
-  fx.explode(e.x, e.z, e.r, 'thorns')
-}
-
-function faded(e) {
-  const spikes = spikesOf.get(e.u) ?? []
-  spikesOf.delete(e.u)
-  tween(1.2, (k) => spikes.forEach((s) => (s.position.y -= 0.02 * k))).then(() => spikes.forEach((s) => scene.remove(s)))
-}
-
-// A mesmerizing gaze: a beam of motes from the caster's head to the
-// target's, then rings around the target.
-async function gaze(e) {
-  const target = unitOf(e.tg), tv = V(target)
-  // (nothing of a table since replaced)
-  const gone = () => views.get(e.tg) !== tv
-  const from = top(unitOf(e.u)), to = top(target)
-  const beam = []
-  for (let i = 0; i <= 16; i++) {
-    const k = i / 16
-    beam.push(wait(k * 0.3).then(() => gone() || fx.mote({ x: lerp(from.x, to.x, k), y: lerp(from.y, to.y, k) + Math.sin(k * Math.PI) * 0.8, z: lerp(from.z, to.z, k), size: 0.09, color: '#c070ff', life: 0.7, g: 0 })))
-  }
-  await Promise.all(beam)
-  if (gone()) return
-  const at = shown(target)
-  for (let i = 0; i < 3; i++) fx.ring(at.pos.x, at.pos.z, at.r * (0.6 + i * 0.35), '#c070ff', { life: 1.2 + i * 0.3, fill: 0.08 })
-}
-
-// ── Charge ──────────────────────────────────────────────────────────────────
-// (the charge is core/actions/charge.js's; where a seat's ends is picked
-// with input/tools/charge-end.js, below)
-
-// ── Morale ──────────────────────────────────────────────────────────────────
-// (the test is core/actions/morale.js; here, how a fleeing model looks:
-// off the table over its unit's own edge)
-function fled(e) {
-  const u = unitOf(e.u), v = V(u), f = v.models[e.m]
-  f.dying = true
-  const edge = v.edge
-  const ex = edge * (W / 2 + 3)
-  const x0 = f.x, z0 = f.z
-  f.fleeing = true
-  fx.text({ x: f.x, y: 1.4, z: f.z }, 'flees!', '#e0e0e0', { size: 14 })
-  f.yaw = edge * Math.PI / 2
-  tween(2.2, (k) => {
-    f.x = lerp(x0, ex, k)
-    f.z = z0
-    f.mesh.position.set(f.x, Math.abs(Math.sin(k * 30)) * 0.2, f.z)
-    f.mesh.rotation.y = f.yaw
-  }).then(() => {
-    scene.remove(f.mesh)
-    f.dying = false
-  })
-}
-
-// ── View helpers the handlers share ─────────────────────────────────────────
-// `u` turns to face `target`, as both are shown (a unit.face event's).
-function face(u, target) {
-  const v = V(u), at = shown(target).pos, from = shown(u).pos
-  v.facing = Math.atan2(at.x - from.x, at.z - from.z)
-  for (const f of v.models) f.look = Math.atan2(at.x - f.x, at.z - f.z)
-}
-// over a unit's head, as shown
-const top = (u) => {
-  const p = shown(u).pos
-  return { x: p.x, y: u.t.big ? 2.6 : 1.6, z: p.z }
-}
-// A charge roll's verdict, over the charger's head.
-function shout(e) {
-  const u = unitOf(e.u)
-  if (e.ok) fx.text(top(u), 'CHARGE!', SIDES[u.side].color, { size: 22 })
-  else fx.text(top(u), 'Charge failed', '#d0d0d0')
-}
-
-// ── Camera focus for AI turns ───────────────────────────────────────────────
-// (the stage and the seat to act as shown: a focus event plays while the
-// match has run ahead, a whole AI turn or more)
-let focusTween = null
-function focus(x, z) {
-  const M = player.mirror
-  if (!S.follow || M.stage !== 'battle') return
-  // (never during the decision of the one seat played here: hotseat's two
-  // seats and a spectator's none both follow)
-  if (local(M.active) && session.localSeats.length === 1) return
-  const t0 = controls.target.clone()
-  const d = Math.hypot(x - t0.x, z - t0.z)
-  if (d < 6) return
-  const off = camera.position.clone().sub(t0)
-  const tgt = new THREE.Vector3(lerp(t0.x, x, 0.6), 0, lerp(t0.z, z, 0.6))
-  const id = (focusTween = {})
-  tween(0.9, (k) => {
-    if (focusTween !== id) return
-    controls.target.lerpVectors(t0, tgt, k)
-    camera.position.copy(controls.target).add(off)
-  }, easeInOut)
+// A battle's units are its table's, id for id (start() snaps the table to
+// the backdrop, on the battle's board and terrain with its races: those
+// deploy the same armies the same way, newState being a pure function of
+// the setup, and neither who plays a seat nor the dice move a unit before
+// the battle starts), so the figures on show are its figures. A unit the
+// table has no figure for is a bug in that, so it throws. (By type and seat
+// only: G has run on past its start by now, a watched battle's to its end,
+// so where its units stood then is no longer in it.)
+function sameUnits(at) {
+  const differs = (u) => !units.get(u.id) || units.unit(u.id).t !== u.t || units.unit(u.id).side !== u.side
+  const bad = at.units.find(differs)
+  if (bad || at.units.length !== units.views.size) throw new Error(`the battle's units are not the table's (${bad ? `unit ${bad.id}, ${bad.key} of seat ${bad.side}` : `${at.units.length} units, ${units.views.size} figures`}): a battle starts on its own table (start())`)
 }
 
 // ── The flow ────────────────────────────────────────────────────────────────
@@ -1044,7 +448,7 @@ function send(seat, body) {
   return null
 }
 const moveTo = (u, c) => {
-  clearOverlay()
+  overlay.clear()
   return send(localSeat(), { t: 'move', u: u.id, c })
 }
 const advance = (u) => send(localSeat(), { t: 'advance', u: u.id })
@@ -1068,22 +472,28 @@ function takeShortest() {
 }
 function endCharge(pk, c) {
   pickShown = null
-  clearOverlay()
-  ghost.visible = false
+  overlay.clear()
+  overlay.ghost.visible = false
   $('#tooltip').style.display = 'none'
   return send(pk.seat, endAt(c))
 }
 
 // The table has played everything: the trace catches up (?debug), a card
-// still open catches up with the table (the unit its figure shows now: the
-// battle's start rebinds the figures), the selected unit stays selected
+// still open catches up with the table (the unit of the match on it now: a
+// battle's start puts its own match on the backdrop's table), the selected
+// unit stays selected
 // while it can still act (a move or a shot spent it; an advance didn't), a
 // charge waiting for its end shades the spots its roll reaches, and the HUD
-// follows.
+// follows. After a snap (`snap`: a new table, a battle's start) an open
+// card is left as it was, as before R7, when a new table made its figures
+// after its idle and a start had no idle. (In play no card is open then:
+// the end screen closes it, and the title and the end screen cover the
+// table. Under ?debug a start mid-battle draws a new table first; N2's
+// snaps mid-battle are ui/card.js's to decide: DESIGN's R7a notes.)
 let pickShown = null
-function idled() {
+function idled({ snap = false } = {}) {
   traceListener?.idle()
-  const cu = carded && views.get(carded.id)?.u
+  const cu = !snap && carded && unitById(carded.id)
   if (cu && cu.t === carded.t && cu.side === carded.side && $('#card').classList.contains('show')) showCard(cu)
   if (S.sel && myTurn()) select(ask((G, q) => q.canAct(G, S.sel)) ? S.sel : null)
   const pk = picking()
@@ -1091,9 +501,9 @@ function idled() {
     pickShown = pk
     // the 12" declaration ring is spent; leave the orange to the area itself,
     // filled strongly enough to see when it's only a cell or two
-    rangeRing.visible = false
-    paintMask(pk.ok, [255, 150, 60], 150)
-    ghostAt(pk.cell, pk.u.r)
+    overlay.rangeRing.visible = false
+    overlay.mask(pk.ok, [255, 150, 60], G.nav, 150)
+    overlay.ghostAt(G.nav, pk.cell, pk.u.r)
   }
   refreshUI()
   traceListener?.settled()
@@ -1109,9 +519,9 @@ function pick(ev) {
   ray.setFromCamera(ptr, camera)
   // the units the table shows standing (while the player is behind, the
   // match may have slain some of them already)
-  const hits = ray.intersectObjects([...views.values()].filter((v) => shown(v.u).alive > 0).map((v) => v.hit), false)
-  const unit = hits.length ? hits[0].object.userData.unit : null
-  const g = ray.intersectObject(board, false)[0]
+  const hits = ray.intersectObjects(units.pickables(), false)
+  const unit = hits.length ? unitById(hits[0].object.userData.id) : null
+  const g = ray.intersectObject(table.board, false)[0]
   return { unit, ground: g ? g.point : null }
 }
 
@@ -1202,7 +612,7 @@ function deployClick(unit, ground) {
       const why = send(side, { t: 'place', u: u.id, c: G.nav.index(p.x, p.z) })
       if (!why) {
         sfx.click()
-        for (const v of views.values()) updateLabel(v.u)
+        units.labelAll()
       }
       return why
     }
@@ -1216,12 +626,12 @@ function deployClick(unit, ground) {
 function select(u) {
   S.sel = u
   S.reach = null
-  clearOverlay()
+  overlay.clear()
   if (u && G) {
     const ph = phaseKey(G)
     if (G.turn.stage === 'battle' && ph === 'move' && !u.flags.moved) {
       S.reach = ask((G, q) => q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0))
-      paintReach(S.reach)
+      overlay.reach(S.reach, G.nav)
     }
     if (ph === 'shoot' && u.t.ranged) showRange(u, u.t.ranged.range)
     if (ph === 'charge') showRange(u, CHARGE_RANGE)
@@ -1230,79 +640,9 @@ function select(u) {
   refreshUI()
 }
 
-// ── Reach overlay, range ring, path preview ─────────────────────────────────
-// one texel per nav cell (every match's grid has this size)
-const OV = gridSize(W, H, NAV_CELL)
-const ovData = new Uint8Array(OV.nx * OV.nz * 4)
-const ovTex = new THREE.DataTexture(ovData, OV.nx, OV.nz, THREE.RGBAFormat)
-ovTex.magFilter = THREE.LinearFilter
-ovTex.minFilter = THREE.LinearFilter
-const ovMesh = new THREE.Mesh(new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: ovTex, transparent: true, depthWrite: false, toneMapped: false }))
-ovMesh.position.y = 0.035
-ovMesh.renderOrder = 2
-ovMesh.visible = false
-scene.add(ovMesh)
-
-// The shaded area is everywhere the unit could stand; spots overlapping a
-// friend are still shaded (a click there snaps to the nearest legal spot), so
-// the region reads as one shape instead of a sieve.
-function paintReach(plan) {
-  const adv = plan.u.flags.advanced
-  const { u, res, mode, endForbid } = plan
-  const nav = G.nav
-  const ok = new Uint8Array(nav.N)
-  for (let i = 0; i < nav.N; i++) if (isFinite(res.dist[i]) && nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) ok[i] = 1
-  paintMask(ok, plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255])
-}
-
-function paintMask(ok, col, fill = 80) {
-  const nav = G.nav
-  ovData.fill(0)
-  for (let i = 0; i < nav.N; i++) {
-    if (!ok[i]) continue
-    const ix = i % nav.nx, iz = (i / nav.nx) | 0
-    const edge = ix === 0 || iz === 0 || ix === nav.nx - 1 || iz === nav.nz - 1 || !ok[i - 1] || !ok[i + 1] || !ok[i - nav.nx] || !ok[i + nav.nx]
-    const o = ((nav.nz - 1 - iz) * nav.nx + ix) * 4
-    ovData[o] = col[0]
-    ovData[o + 1] = col[1]
-    ovData[o + 2] = col[2]
-    ovData[o + 3] = edge ? 210 : nav.diff[i] ? Math.round(fill * 0.7) : fill
-  }
-  ovTex.needsUpdate = true
-  ovMesh.visible = true
-}
-function clearOverlay() {
-  ovMesh.visible = false
-  pathLine.visible = false
-  rangeRing.visible = false
-}
-
-const rangeRing = new THREE.Mesh(new THREE.RingGeometry(0.985, 1, 96).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.6, depthWrite: false, toneMapped: false }))
-rangeRing.position.y = 0.04
-rangeRing.visible = false
-scene.add(rangeRing)
+// The range ring of a shot or a charge, around the unit picked up.
 function showRange(u, range) {
-  rangeRing.position.x = u.pos.x
-  rangeRing.position.z = u.pos.z
-  rangeRing.scale.setScalar(u.r + range)
-  rangeRing.material.color.set(phaseKey(G) === 'charge' ? '#ffb070' : '#ffffff')
-  rangeRing.visible = true
-}
-
-const pathLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.9, toneMapped: false }))
-pathLine.visible = false
-pathLine.renderOrder = 4
-scene.add(pathLine)
-const ghost = new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.8, depthWrite: false, toneMapped: false }))
-ghost.position.y = 0.05
-ghost.visible = false
-scene.add(ghost)
-
-function ghostAt(i, r) {
-  ghost.position.x = G.nav.x(i)
-  ghost.position.z = G.nav.z(i)
-  ghost.scale.setScalar(r)
-  ghost.visible = true
+  overlay.range(u.pos, u.r, range, phaseKey(G) === 'charge' ? '#ffb070' : '#ffffff')
 }
 
 // What the pointer is over: a unit's line, or on a seat's own turn what its
@@ -1312,13 +652,13 @@ function ghostAt(i, r) {
 function hover() {
   const tip = $('#tooltip')
   tip.style.display = 'none'
-  pathLine.visible = false
-  ghost.visible = false
+  overlay.pathLine.visible = false
+  overlay.ghost.visible = false
   const h = S.hoverPick
   const pk = picking()
   if (!h) {
     // off the board mid-pick: show where "Shortest move" would put the unit
-    if (pk) ghostAt(pk.cell, pk.u.r)
+    if (pk) overlay.ghostAt(G.nav, pk.cell, pk.u.r)
     return
   }
   S.hover = h.unit
@@ -1326,9 +666,8 @@ function hover() {
   const sel = S.sel
   // a path, drawn with its end's ghost
   const path = (pts, i, r) => {
-    pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
-    pathLine.visible = true
-    ghostAt(i, r)
+    overlay.path(pts)
+    overlay.ghostAt(G.nav, i, r)
   }
   if (pk && h.ground) {
     const i = nearestSpot(G.nav, pk.ok, h.ground.x, h.ground.z)
@@ -1571,7 +910,7 @@ function refreshUI() {
   }
   // the deploying seat's zone is lit; in battle both dim
   const dep = deploySeat()
-  for (const s of [0, 1]) zoneMats[s].opacity = M.stage === 'battle' || M.stage === 'over' ? 0.05 : s === dep ? 0.2 : 0.07
+  table.zones([0, 1].map((s) => (M.stage === 'battle' || M.stage === 'over' ? 0.05 : s === dep ? 0.2 : 0.07)))
   // hint line (a picked-up unit's kept as it was while the table plays its
   // action: the match has moved on already)
   let hint = $('#hint').textContent
@@ -1593,8 +932,10 @@ function refreshUI() {
 // Each unit's ring: the one picked up, the deploying seat's, a charge's
 // target, and on a seat's own turn who can act and what the picked-up unit
 // can shoot or charge (asked of the match, so only once the table has
-// caught up); the one under the pointer.
-function refreshRings() {
+// caught up); the one under the pointer. ringLooks() is each ring's
+// [colour, opacity] by its view (the ?debug snap check paints a fresh
+// table's rings with it too).
+function ringLooks() {
   const mine = myTurn(), dep = deploySeat(), pk = picking(), sel = S.sel
   // (unit id → [colour, opacity]) for what the match says, on a seat's turn
   const lit = !mine ? new Map() : ask((G, q) => {
@@ -1607,28 +948,17 @@ function refreshRings() {
     }
     return out
   })
-  for (const v of views.values()) {
-    const u = v.u
-    // (the units the table shows standing)
-    if (!(shown(u).alive > 0)) continue
-    const m = v.ring.material
-    let op = 0, col = '#ffffff'
-    if (u === sel) {
-      op = 1
-      col = '#ffe680'
-    } else if (dep >= 0 && u.side === dep) {
-      op = 0.5
-    } else if (pk && u === pk.tg) {
-      op = 0.95
-      col = '#ffa040'
-    } else if (lit.has(u.id)) {
-      [col, op] = lit.get(u.id)
-    } else if (u === S.hover) {
-      op = 0.35
-    }
-    m.opacity = op
-    m.color.set(col)
+  return (v) => {
+    if (v.id === sel?.id) return ['#ffe680', 1]
+    if (dep >= 0 && v.u.side === dep) return ['#ffffff', 0.5]
+    if (pk && v.id === pk.tg.id) return ['#ffa040', 0.95]
+    if (lit.has(v.id)) return lit.get(v.id)
+    if (v.id === S.hover?.id) return ['#ffffff', 0.35]
+    return ['#ffffff', 0]
   }
+}
+function refreshRings() {
+  units.paintRings(ringLooks())
 }
 
 async function banner(a, b, side = -1) {
@@ -1689,8 +1019,8 @@ $('#speed').onclick = () => {
   $('#speed').textContent = `⏩ ${clock.speed}×`
 }
 $('#follow').onclick = () => {
-  S.follow = !S.follow
-  $('#follow').classList.toggle('off', !S.follow)
+  rig.follow = !rig.follow
+  $('#follow').classList.toggle('off', !rig.follow)
 }
 $('#mute').textContent = isMuted() ? '🔇' : '🔊'
 $('#mute').onclick = () => {
@@ -1724,34 +1054,16 @@ $('#again').onclick = () => {
   $('#over').classList.add('hidden')
   $('#title').classList.remove('hidden')
   document.body.classList.remove('playing')
-  S.titleSpin = true
-  S.titleAngle -= clock.time * 0.035
-  S.viewShift = 1
+  rig.toTitle()
   showTable(S.seed)
 }
 
-// keyboard panning
-const keys = new Set()
+// Escape puts down the unit picked up (but a charge's end must be picked);
+// the camera rig keeps the panning keys (view/camera.js)
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return
-  keys.add(e.key.toLowerCase())
   if (e.key === 'Escape' && !picking()) select(null)
 })
-addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()))
-function panKeys(dt) {
-  const v = new THREE.Vector3()
-  const fwd = new THREE.Vector3().subVectors(controls.target, camera.position).setY(0).normalize()
-  const right = new THREE.Vector3(-fwd.z, 0, fwd.x)
-  if (keys.has('w') || keys.has('arrowup')) v.add(fwd)
-  if (keys.has('s') || keys.has('arrowdown')) v.sub(fwd)
-  if (keys.has('d') || keys.has('arrowright')) v.add(right)
-  if (keys.has('a') || keys.has('arrowleft')) v.sub(right)
-  if (v.lengthSq()) {
-    v.normalize().multiplyScalar(dt * 18)
-    controls.target.add(v)
-    camera.position.add(v)
-  }
-}
 
 // ── Setup ───────────────────────────────────────────────────────────────────
 // The title screen's table for a board seed: its board and both armies where
@@ -1762,7 +1074,9 @@ function panKeys(dt) {
 // is the classic terrain set and the races at the table, RACE_PICK).
 function showTable(board, { terrain = 'classic', races = RACE_PICK } = {}) {
   // the new table first: if building it throws, the last one stays whole
-  const next = createMatch({ board, dice: 0, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: [] })
+  // (a quiet match: none of what it did is played, the table being drawn
+  // from it as it stands)
+  const next = createMatch({ board, dice: 0, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: null })
   session?.close()
   session = null
   G = null
@@ -1770,34 +1084,37 @@ function showTable(board, { terrain = 'classic', races = RACE_PICK } = {}) {
   backdropAsDrawn = true
   // (the figures take their seat's colours as they are made)
   seatPlayers(seatsOf(races))
-  clearUnits()
+  // a new table, drawn afresh: every figure and mesh of the last one off it
+  // and freed
+  units.dispose()
+  terrainView.dispose()
   S.sel = null
   S.reach = null
   pickShown = null
   phaseShown = false
   buttonsUp = false
-  clearOverlay()
+  overlay.clear()
   $('#logList').innerHTML = ''
   $('#tray').classList.remove('show')
-  // the table as shown: its units where they stand, nobody's flags, the
-  // title's stage; the board played from its terrain.clear (the rest of
-  // what the match reported, its deployment's lines, is no battle's)
-  player.reset({ ...project(next), stage: 'title' })
-  player.push(next.out.splice(0).filter((e) => /^terrain\./.test(e.t)))
-  scatterTufts()
-  for (const u of next.units) makeView(u, next)
-  for (const u of next.units) updateLabel(u)
-  // nothing from the last game carries over: banners, scorch marks, turn state
-  for (const o of objViews) paintObjective(o, -1)
-  fx.clearDecals()
-  // (and a template or thorns a replaced table left standing, though only
-  // the title and the end screen replace one, with nothing left to play)
-  blastMarker?.userData.remove()
-  blastMarker = null
-  for (const spikes of spikesOf.values()) for (const s of spikes) scene.remove(s)
-  spikesOf.clear()
+  // its board, then the tufts strewn anew, then (the snap) its figures: the
+  // order the table has always been drawn in, so the cosmetic Math.random
+  // draws fall as they did (three.js draws some for every object it makes)
+  terrainView.sync(next.terrain.chunks)
+  table.scatterTufts()
+  // the table as shown: the match as it stands (its board, its units where
+  // they stand, nobody's flags), at the title's stage; the snap draws it
+  // (and takes away the last game's scorch marks, and a template or thorns
+  // a replaced table left standing, though only the title and the end
+  // screen replace one, with nothing left to play)
+  player.snap(next, onTitle(next))
+  // nothing else from the last game carries over: banners, turn state
+  objectives.reset()
   refreshUI()
 }
+
+// A backdrop as the title shows it: the match as it stands, at the stage
+// 'title' (its own, a deployment no one plays, is never shown).
+const onTitle = (g) => ({ ...project(g), stage: 'title' })
 
 // who plays each seat, by the title screen's mode buttons
 const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
@@ -1833,8 +1150,10 @@ function start(mode) {
   // backdrop, on the same board and terrain with the same races and untouched
   // since it was drawn, is that match's table before anything has happened
   // (else it is drawn afresh from the battle's setup first: today the title's
-  // always is the battle's). So the mirror starts from it, and the match's own
-  // board events, which would rebuild the meshes chunk for chunk, are dropped
+  // always is the battle's). So the table is snapped to it as it stands (the
+  // figures and meshes on show kept, every one being the battle's), and the
+  // battle's events play on from there: its board's adds take back the
+  // meshes they find untouched (view/terrain.js), so nothing is rebuilt
   // (P-present holds the table to the match at every checkpoint).
   if (!backdropAsDrawn || !sameTable(backdrop.setup, setup)) showTable(setup.board, tableOf(setup))
   S.control = [...who]
@@ -1843,8 +1162,9 @@ function start(mode) {
   seatPlayers(seatsOf(setup.seats.map((s) => s.race)))
   // the page's trace starts afresh (?debug), before the match's first line
   traceListener?.begin()
-  player.reset(structuredClone(player.mirror))
-  boardShown = true
+  // (as the title showed it: the battle's own stage events, its deployment's
+  // first, take it on from there, P-present holding each)
+  player.snap(backdrop, onTitle(backdrop))
   const store = new LocalStore()
   session = new Session({ store, localSeats: who.flatMap((c, s) => (c === 'human' ? [s] : [])), sink, onTrace })
   store.append({ s: -1, t: 'start', setup })
@@ -1855,171 +1175,31 @@ function start(mode) {
     const why = session.error
     session.close()
     session = null
-    boardShown = false
     showTable(backdrop.setup.board, tableOf(backdrop.setup))
     throw new Error(`the battle could not start: ${why}`)
   }
   $('#title').classList.add('hidden')
   document.body.classList.add('playing')
-  S.titleSpin = false
-  const p0 = camera.position.clone(), t0 = controls.target.clone()
-  const view = defaultView()
   if (innerWidth < 700) $('#log').classList.add('collapsed')
-  tween(1.4, (k) => {
-    S.viewShift = 1 - k
-    camera.position.lerpVectors(p0, view.pos, k)
-    controls.target.lerpVectors(t0, view.target, k)
-  }, easeInOut)
+  // the camera swings onto the battle's view (present/camera-presets.js:
+  // today's, by the screen's shape)
+  rig.goTo(battleView({ localSeats: session.localSeats, edges: [0, 1].map((s) => edgeOf(session.G, s)), aspect: innerWidth / innerHeight }))
   refreshUI()
 }
 
-// ── Frame loop ──────────────────────────────────────────────────────────────
-const timer = new THREE.Clock()
-const tmpV = new THREE.Vector3()
-S.titleSpin = true
-S.titleAngle = -1.02
-S.viewShift = 1
-
-// Each figure walks toward its model's slot as shown (the mirror's place
-// for it), turns, lunges and idles; dying and fleeing figures play out their
-// own tweens.
-function animateUnits(dt, time) {
-  const M = player.mirror
-  for (const v of views.values()) {
-    // (a unit walking a unit.move is drawn where its walk has got to)
-    const u = v.u, mu = M.units[u.id], p = v.at ?? mu.pos
-    for (const [i, model] of mu.models.entries()) {
-      const m = v.models[i]
-      if (!model.alive && !m.dying) continue
-      const a = m.mesh.userData.anim
-      if (model.alive) {
-        const tx = p.x + model.ox, tz = p.z + model.oz
-        const k = 1 - Math.exp(-dt * (v.moving ? 16 : 7))
-        const px = m.x, pz = m.z
-        m.x += (tx - m.x) * k
-        m.z += (tz - m.z) * k
-        const sp = Math.hypot(m.x - px, m.z - pz) / Math.max(dt, 1e-4)
-        const want = sp > 0.6 ? Math.atan2(m.x - px, m.z - pz) : m.look ?? v.facing
-        m.yaw += wrapAngle(want - m.yaw) * (1 - Math.exp(-dt * 8))
-        m.moving = sp > 0.6
-        let lx = 0, lz = 0
-        if (m.lunge > 0) {
-          m.lunge = Math.max(0, m.lunge - dt * 2.5)
-          const s = Math.sin((1 - m.lunge) * Math.PI) * 0.35
-          lx = Math.sin(m.lungeDir) * s
-          lz = Math.cos(m.lungeDir) * s
-        }
-        m.mesh.position.set(m.x + lx, m.lift || 0, m.z + lz)
-        m.mesh.rotation.y = m.yaw
-      }
-      if (!a || !model.alive) continue
-      const t = time + m.mesh.userData.phase
-      const fig = m.mesh.userData.fig
-      if (a.kind === 'squirrel') {
-        const hop = m.moving ? Math.abs(Math.sin(t * 13)) * 0.16 : 0
-        fig.position.y = fig.userData.y0 + hop
-        fig.scale.y = 1 + (m.moving ? 0 : Math.sin(t * 2.4) * 0.018)
-        fig.rotation.x = m.moving ? 0.12 : 0
-      } else if (a.kind === 'naga') {
-        fig.rotation.z = Math.sin(t * (m.moving ? 9 : 1.4)) * (m.moving ? 0.12 : 0.035)
-        fig.scale.y = 1 + Math.sin(t * 1.4) * 0.015
-      } else if (a.kind === 'machine') {
-        if (m.moving) for (const w of a.wheels) w.rotation.x += dt * 6
-      }
-      if (a.gem) a.gem.rotation.y = t * 2
-      if (m.flash > 0) {
-        m.flash -= dt
-        fig.position.x = Math.sin(time * 60) * 0.04 * (m.flash > 0 ? 1 : 0)
-      }
-    }
-    // the floating label
-    if (mu.alive > 0 && !FAST) {
-      tmpV.set(p.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), p.z).project(camera)
-      const on = tmpV.z < 1
-      v.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`
-      v.label.style.visibility = on && M.stage !== 'title' ? 'visible' : 'hidden'
-      v.label.classList.toggle('sel', u === S.sel)
-    }
-  }
-}
-
-// Flag and ring in the colours of whoever holds the objective (-1: nobody).
-function paintObjective(o, c) {
-  o.owner = c
-  o.flagMat.color.set(c < 0 ? '#e8e0d0' : SIDES[c].color)
-  o.ring.material.color.set(c < 0 ? '#fff3c0' : SIDES[c].color)
-}
-
-// Each flag shows its holder as shown (the mirror's owners: nobody before the
-// battle).
-function animateObjectives(dt, time) {
-  const owners = player.mirror.owners
-  for (const o of objViews) {
-    const c = owners[o.i]
-    if (c !== o.owner) paintObjective(o, c)
-    o.gem.rotation.y = time * 1.2
-    o.gem.position.y = 0.45 + Math.sin(time * 2 + o.i) * 0.05
-    o.flag.rotation.y = Math.sin(time * 2.2 + o.i) * 0.25
-    o.ring.material.opacity = 0.3 + Math.sin(time * 2 + o.i) * 0.08
-  }
-}
-
-// ?fast: a test mode that skips drawing and lets game time run effectively
-// instantly, so a whole AI battle replays in about a minute. Logic is
-// unaffected: every animation still resolves, just within a frame.
-const FAST = params.has('fast')
-
-function frame() {
-  requestAnimationFrame(frame)
-  if (FAST) clock.speed = 1e4
-  const raw = Math.min(timer.getDelta(), 0.05)
-  const dt = raw * clock.speed
-  clock.time += dt
-  stepTweens(dt)
-  fx.update(dt)
-  animateUnits(dt, clock.time)
-  animateObjectives(dt, clock.time)
-  if (S.titleSpin) {
-    // a slow drift from behind seat 0's lines (the west edge), across toward seat 1's
-    const a = S.titleAngle + clock.time * 0.035
-    camera.position.set(-5 + Math.sin(a) * 25, 13, Math.cos(a) * 25)
-    controls.target.set(-5, 0, 0)
-  }
-  // on the title screen the table slides right, out from under the panel
-  const shift = innerWidth > 900 ? S.viewShift : 0
-  if (shift > 0.001) camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.21 * shift, 0, innerWidth, innerHeight)
-  else if (camera.view?.enabled) camera.clearViewOffset()
-  panKeys(raw)
-  controls.update()
-  const sh = fx.shake
-  const off = new THREE.Vector3((Math.random() - 0.5) * sh, (Math.random() - 0.5) * sh, (Math.random() - 0.5) * sh)
-  camera.position.add(off)
-  if (!FAST) renderer.render(scene, camera)
-  camera.position.sub(off)
-}
-
-// Landscape looks across the table; portrait looks down its length from
-// behind seat 0's lines, so the 28" width is what has to fit the screen.
-function defaultView() {
-  if (innerWidth >= innerHeight) return { pos: new THREE.Vector3(0, 30, 31), target: new THREE.Vector3(0, 0, 1.5) }
-  return { pos: new THREE.Vector3(-36, 46, 0), target: new THREE.Vector3(-1, 0, 0) }
-}
-function fitFov() {
-  camera.fov = innerWidth >= innerHeight ? 40 : 56
-  camera.aspect = innerWidth / innerHeight
-  camera.updateProjectionMatrix()
-}
-fitFov()
-
-addEventListener('resize', () => {
-  fitFov()
-  camera.aspect = innerWidth / innerHeight
-  camera.updateProjectionMatrix()
-  renderer.setSize(innerWidth, innerHeight)
-})
-
+// ── Boot ────────────────────────────────────────────────────────────────────
+// The title's table, then the frame loop (view/stage.js): each frame the
+// effects, the figures and the flags as shown, then the camera.
 showTable(S.seed)
-frame()
+stage.run({
+  parts: (dt, time) => {
+    fx.update(dt)
+    units.animate(dt, time, { fast: FAST, camera, sel: S.sel?.id })
+    objectives.animate(dt, time, player.mirror.owners)
+  },
+  rig,
+  shake: () => fx.shake,
+})
 if (params.has('watch')) start('watch')
 // ?debug exposes the table to the console (and to the test harness)
 if (params.has('debug')) {
@@ -2095,12 +1275,24 @@ if (params.has('debug')) {
   // quirk too: one past the last on the `over` line of a battle that ran its
   // course, as sim/run.mjs's shadowPartsG has it.)
   //
-  // Not promised, for sim/terrain-shots.mjs only: clock, camera, renderer,
-  // S.titleSpin, scenery.scene and scenery.blast (a blast played as
-  // core/actions/shoot.js's blastLands plays one: its reports played, the
-  // nav refreshed; on the title only, on the backdrop, which a start() then
-  // draws afresh: with a battle on it throws, the battle's board changing
-  // only through its commands). Nor G and session, for
+  // Promised since R7, for the pixel gate (sim/terrain-shots.mjs; R3 left
+  // them screenshot-only until R7 moved the clock and the camera into
+  // view/): clock.speed and clock.time (view/clock.js), camera, renderer,
+  // S.titleSpin (the camera rig's, view/camera.js: S keeps it, titleAngle,
+  // viewShift and follow as members over the rig), scenery.scene and
+  // scenery.blast (a blast played as core/actions/shoot.js's blastLands
+  // plays one: its reports played, the nav refreshed; on the title only, on
+  // the backdrop, which a start() then draws afresh: with a battle on it
+  // throws, the battle's board changing only through its commands); and
+  // every figure's root marked with userData.fig (view/models/cache.js),
+  // which the gate hides figures by.
+  //
+  // Not promised: view.snapDiff() and view.pauseAtChecks(fn), for
+  // sim/snap-check.mjs (the table built event by event against a fresh snap
+  // of the match as it stands, or as it stood at a checkpoint, where fn
+  // holds the player: below); view.counts() and renderer.info, for
+  // sim/rematch-memory.mjs (and view.counts().marks, fx's, and player.snap,
+  // for sim/snap-check.mjs's snap in place). Nor G and session, for
   // the console and for sim/rematch-check.mjs (G.out, which it requires
   // empty whenever the player is idle and before each new table: the
   // Session hands every event over as it folds an entry; it also presses
@@ -2110,8 +1302,10 @@ if (params.has('debug')) {
   // as it shows u now: it holds the card to the mirror while the player is
   // behind), G (at the game's end it holds its mirror to project(G)) and
   // player.idle (at the game's end): the observer's
-  // reset(M) hears each new table's mirror (the backdrop's, and a battle's
-  // as it starts, which it folds its own from) and event(e, M) every event
+  // reset(M) hears the mirror of each snap (R7: the player's snap(G), a new
+  // table's, the backdrop's at the title's stage, and a battle's as it
+  // starts, the backdrop's again, the battle's table before anything
+  // happened, which it folds its own from) and event(e, M) every event
   // as the player plays it, so it can hold its mirror to each act's `proj`
   // and to each `check {proj}`, which only ?debug carries: P-present's
   // checkpoints, put into each entry's events before the player gets them
@@ -2126,6 +1320,8 @@ if (params.has('debug')) {
   // reads it and never folds into it, or every event would be applied
   // twice.
   const TURN = new Set(['stage', 'round', 'active', 'first', 'phase', 'vp', 'wiped'])
+  // (the camera's, which S held until R7)
+  const RIG = new Set(['titleSpin', 'titleAngle', 'viewShift', 'follow'])
   const DERIVED = {
     busy: () => !player.idle,
     auto: () => !player.idle,
@@ -2143,18 +1339,20 @@ if (params.has('debug')) {
     return k === 'wiped' ? (T.wiped < 0 ? undefined : T.wiped) : k === 'phase' ? phaseKey(g) : T[k]
   }
   const legacyS = new Proxy(S, {
-    get: (s, k) => (TURN.has(k) ? turn(k) : Object.hasOwn(DERIVED, k) ? DERIVED[k]() : s[k]),
-    has: (s, k) => TURN.has(k) || Object.hasOwn(DERIVED, k) || k in s,
+    get: (s, k) => (TURN.has(k) ? turn(k) : Object.hasOwn(DERIVED, k) ? DERIVED[k]() : RIG.has(k) ? rig[k] : s[k]),
+    has: (s, k) => TURN.has(k) || Object.hasOwn(DERIVED, k) || RIG.has(k) || k in s,
     set: (s, k, v) => {
       if (TURN.has(k)) throw new Error(`__ts.S.${k} is the match's ${k === 'phase' ? 'G.turn.ph (phaseKey)' : `G.turn.${k}`}: it can't be set through S`)
       if (Object.hasOwn(DERIVED, k)) throw new Error(`__ts.S.${k} is derived from the Session and the player: it can't be set`)
-      s[k] = v
+      if (RIG.has(k)) rig[k] = v
+      else s[k] = v
       return true
     },
-    ownKeys: (s) => [...new Set([...Reflect.ownKeys(s), ...TURN, ...Object.keys(DERIVED)])],
+    ownKeys: (s) => [...new Set([...Reflect.ownKeys(s), ...TURN, ...Object.keys(DERIVED), ...RIG])],
     getOwnPropertyDescriptor: (s, k) =>
       TURN.has(k) ? { value: turn(k), enumerable: true, configurable: true, writable: false }
       : Object.hasOwn(DERIVED, k) ? { value: DERIVED[k](), enumerable: true, configurable: true, writable: false }
+      : RIG.has(k) ? { value: rig[k], enumerable: true, configurable: true, writable: true }
       : Reflect.getOwnPropertyDescriptor(s, k),
   })
   // the player is behind the match: events emitted and not yet played
@@ -2249,6 +1447,82 @@ if (params.has('debug')) {
   }
   // a question with the dice locked, of the match shown
   const asked = (fn) => preview(atTable(), fn)
+  // The snap check (sim/snap-check.mjs, DESIGN §2.4): the table as the
+  // player built it, event by event, against the table a snap of the match
+  // as it stands builds (the player's rebuild, into a scene of its own,
+  // from nothing), and against one kept from the last check and synced again
+  // (the snap's keeping path): every unit's ring (place, size, colour and
+  // strength), hit cylinder, standing figures and label, every chunk's mesh
+  // shown or not and where it stands, and what the shooting holds outside
+  // the mirror (a template's marker, an eruption's thorns: nothing, once
+  // the queue is drained, which a snap's table holds too). Asked once the
+  // player is idle and the figures have settled (a figure walks to its
+  // slot, a fallen one sinks out of sight, over a few frames).
+  const offTable = () => {
+    const sc = new THREE.Scene()
+    // (draws nothing: a rebuild throws no debris)
+    const quiet = new Proxy({}, { get: () => () => {} })
+    const at = { M: null }
+    const uv = new UnitViews({ scene: sc, labels: document.createElement('div'), fx: quiet, mirror: () => at.M, colorOf: (s) => SIDES[s].color, W })
+    // (no shot is ever fired off the table: it holds nothing to clear, and
+    // fx's marks are the page's, left alone)
+    const sh = { clear() {}, held: () => ({ marker: false, thorns: 0 }) }
+    return { at, units: uv, terrain: new TerrainView(sc, quiet), shots: sh, effects: quiet }
+  }
+  // (`proj`: the match as it stood at a checkpoint, its project(G); its
+  // chunks are G's that stood then, standing or not and at the height the
+  // projection says)
+  const snapped = (t, g, proj) => {
+    t.at.M = proj ?? project(g)
+    const chunks = !proj ? g.terrain.chunks : g.terrain.chunks.filter((c) => proj.chunks[c.id]).map((c) => ({ ...c, alive: proj.chunks[c.id].alive, shape: { ...c.shape, y: proj.chunks[c.id].y } }))
+    rebuild(g, t.at.M, { chunks, terrain: t.terrain, units: t.units, shots: t.shots, effects: t.effects })
+    t.units.paintRings(ringLooks())
+    return t
+  }
+  const tableState = (uv, tv, sh, g) => ({
+    units: g.units.map((u) => {
+      const v = uv.get(u.id)
+      if (!v) return { id: u.id, view: null }
+      const r = v.ring, h = v.hit
+      return {
+        id: u.id,
+        ring: r.visible ? { x: r.position.x, z: r.position.z, s: r.scale.x, op: r.material.opacity, col: r.material.color.getHexString() } : null,
+        hit: h.visible && h.parent ? { x: h.position.x, y: h.position.y, z: h.position.z, sx: h.scale.x, sy: h.scale.y } : null,
+        figures: v.models.map((f) => (f.mesh?.parent ? { x: f.mesh.position.x, y: f.mesh.position.y, z: f.mesh.position.z } : null)),
+        label: { html: v.label.innerHTML, display: v.label.style.display || '' },
+      }
+    }),
+    chunks: g.terrain.chunks.map((c) => ({ id: c.id, ...tv.state(c.id) })),
+    shots: sh.held(),
+  })
+  // where two states differ (numbers to within 1e-6)
+  const differ = (a, b, path, out) => {
+    if (typeof a === 'number' && typeof b === 'number') {
+      if (!(Math.abs(a - b) <= 1e-6)) out.push(`${path}: ${a} | ${b}`)
+    } else if (a && b && typeof a === 'object' && typeof b === 'object') {
+      const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])]
+      for (const k of keys) differ(a[k], b[k], `${path}.${k}`, out)
+    } else if (a !== b) out.push(`${path}: ${JSON.stringify(a)} | ${JSON.stringify(b)}`)
+    return out
+  }
+  let kept = null
+  // (`proj`: at a checkpoint, the match as it stood there, while the player
+  // waits on the check; else the match as it stands, the player idle)
+  const snapDiff = (proj = null) => {
+    const g = atTable()
+    if (!proj && !player.idle) throw new Error('?debug view.snapDiff: the player is still playing')
+    const live = tableState(units, terrainView, shots, g)
+    const fresh = snapped(offTable(), g, proj)
+    kept = snapped(kept ?? offTable(), g, proj)
+    const diffs = [...differ(live, tableState(fresh.units, fresh.terrain, fresh.shots, g), 'fresh', []), ...differ(live, tableState(kept.units, kept.terrain, kept.shots, g), 'kept', [])]
+    fresh.units.dispose()
+    fresh.terrain.dispose()
+    return {
+      diffs: diffs.slice(0, 12), n: diffs.length,
+      units: live.units.length, figures: live.units.reduce((n, u) => n + (u.figures?.filter(Boolean).length ?? 0), 0),
+      chunks: live.chunks.length, shown: live.chunks.filter((c) => c.shown).length,
+    }
+  }
   window.__ts = {
     S: legacyS, clock, camera, controls, renderer, trace,
     get G() {
@@ -2352,6 +1626,23 @@ if (params.has('debug')) {
     screen(x, y, z) {
       const v = new THREE.Vector3(x, y, z).project(camera)
       return [(v.x * 0.5 + 0.5) * innerWidth, (-v.y * 0.5 + 0.5) * innerHeight]
+    },
+    view: {
+      snapDiff,
+      // fn(e) at every checkpoint (a `check` event), the player waiting on
+      // what it returns (null: no pause)
+      pauseAtChecks(fn) {
+        checkHook = fn
+      },
+      // what the table holds (sim/rematch-memory.mjs): the scene's own
+      // objects, the battlefield's, the figures and the floating labels;
+      // and fx's scorch and acid marks (sim/snap-check.mjs: a snap takes
+      // them away)
+      counts: () => {
+        let figures = 0
+        scene.traverse((o) => o.userData.fig && figures++)
+        return { scene: scene.children.length, terrain: terrainView.group.children.length, figures, labels: stage.overlay.children.length, marks: fx.decals.length }
+      },
     },
   }
 }

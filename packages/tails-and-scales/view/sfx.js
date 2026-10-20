@@ -1,5 +1,7 @@
 // Tiny synthesized sound kit — no audio files. Starts muted until the first
-// user gesture (browsers insist), and remembers the mute toggle.
+// user gesture (browsers insist), and remembers the mute toggle. (The root
+// sfx.js until R7, which moved it here and keyed the races' voices by their
+// look: a slain model plays sfx.voice(race.look.voice), one of VOICES.)
 
 let ctx = null
 let master = null
@@ -73,7 +75,23 @@ function tone({ f0 = 440, f1 = f0, dur = 0.15, type = 'sine', peak = 0.2, delay 
   o.stop(t + dur + 0.05)
 }
 
+// A race's voice, by the name its look gives it (data/races/*.js
+// look.voice): what a model of that race cries as it falls. sim/data-check
+// holds every race's voice to one of these.
+const VOICES = {
+  squeak() {
+    tone({ f0: 1400, f1: 2400, dur: 0.12, type: 'sine', peak: 0.12 })
+  },
+  hiss() {
+    burst({ dur: 0.35, freq: 5000, type: 'highpass', peak: 0.18 })
+  },
+}
+
 const S = {
+  // a race's voice (silence for a name VOICES lacks)
+  voice(name) {
+    if (Object.hasOwn(VOICES, name)) VOICES[name]()
+  },
   dice(n = 3) {
     for (let i = 0; i < Math.min(6, n); i++) burst({ dur: 0.04, freq: 2500 + Math.random() * 2000, type: 'bandpass', q: 4, peak: 0.35, delay: i * 0.035 + Math.random() * 0.02 })
   },
@@ -86,12 +104,6 @@ const S = {
   },
   thwack() {
     burst({ dur: 0.07, freq: 1400, type: 'bandpass', q: 2, peak: 0.4 })
-  },
-  squeak() {
-    tone({ f0: 1400, f1: 2400, dur: 0.12, type: 'sine', peak: 0.12 })
-  },
-  hiss() {
-    burst({ dur: 0.35, freq: 5000, type: 'highpass', peak: 0.18 })
   },
   crumble() {
     burst({ dur: 0.8, freq: 500, peak: 0.45 })
@@ -112,11 +124,11 @@ const S = {
 }
 
 export const sfx = new Proxy(S, {
-  get(target, key) {
+  get(target, sound) {
     return (...args) => {
       if (!ctx || muted) return
       try {
-        target[key](...args)
+        target[sound](...args)
       } catch {}
     }
   },

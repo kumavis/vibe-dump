@@ -57,13 +57,49 @@ export const MUTATIONS = {
   'set-gap': ['/core/terrain/sets.js', 'gap: 2.1,', 'gap: 2.0,'],
   // one draw too many at the end of an obelisk: no chunk, mesh or later
   // draw shows it (the next feature reseeds), so only the draw count can
+  // catch it
   'draw-extra': ['/core/terrain/recipes.js', 'if (rng() < 0.7) boulder(T, F, rng, 1.0, 0.4, 0.4)\n}', 'if (rng() < 0.7) boulder(T, F, rng, 1.0, 0.4, 0.4)\n  rng()\n}'],
+  // (R7) a block dropped again mid-fall falls by the drop from where it was
+  // drawn, as R0's did, a level too high (the boards where a fall is cut
+  // and the block stands: 1 and 7)
+  'fall-by-drop': ['/view/terrain.js', 'const y0 = m.position.y, y1 = rest', 'const y0 = m.position.y, y1 = y0 - dy'],
+  // (R7) a fallen log synced from the chunks lies not quite all the way
+  'sync-lie': ['/view/terrain.js', 'topple(g, g.quaternion.clone(), c.look, t.look.trunk)(1)', 'topple(g, g.quaternion.clone(), c.look, t.look.trunk)(0.9)', '1-40'],
+  // (R7) a sync keeps a chunk's mesh whatever the chunk now is: a broken
+  // one's mesh stays up
+  'sync-keeps': ['/view/terrain.js', '(c.alive ? this.shows(item) : !this.shows(item))', 'true'],
+  // (R7) an add takes back a broken chunk's item a sync left, which holds
+  // no mesh: the chunk, standing on the new table, is never drawn
+  'spare-placeholder': ['/view/terrain.js', 'if (spare?.obj && !spare.touched', 'if (spare && !spare.touched'],
+  // (R7) a sync sets a dropped block at its height but leaves its item the
+  // def it was built from: an add of the block where it first stood takes
+  // it back at the height it dropped to (boards 1, 7 and 23)
+  'spare-height': ['/view/terrain.js', '          kept.obj.position.y = c.shape.y\n          kept.c = defOf(c)\n', '          kept.obj.position.y = c.shape.y\n'],
+  // (R7a's fixer, round 3) core's adds carry a field the view's copy of
+  // defOf lacks (as F7's deck and stair pieces might): no mesh reads it, so
+  // only the defs compared catch it
+  'def-drift': ['/core/terrain/terrain.js', 'const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })', 'const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look, hp: c.hp })', '1-3'],
 }
 
 // [the R0 text, the edit]: both lines must be found, or the hook throws
+// (R7_FALL's are applied after R5_DUST's, to its text)
 const R5_DUST = [
   ['const y0 = b.mesh.position.y, y1 = y0 - drop\n', 'const y0 = b.mesh.position.y, y1 = y0 - drop, rest__ = b.shape.y\n'],
   ['this.fx.debris(b.shape.x, b.shape.y - col.style.by / 2, b.shape.z,', 'globalThis.__dustAll = (globalThis.__dustAll ?? 0) + 1\n          if (rest__ !== b.shape.y) globalThis.__dustMoved = (globalThis.__dustMoved ?? 0) + 1\n          this.fx.debris(b.shape.x, rest__ - col.style.by / 2, b.shape.z,'],
+]
+
+// One more, R7's (view/terrain.js's collapse): a block dropped again before
+// its last fall ended falls on from where it is drawn to its new rest, the
+// earlier fall stopping there; R0 dropped it by the drop from where the
+// earlier fall had started, so it came to rest a level or more too high,
+// and the table as its events built it was no table a snap could build
+// (sim/terrain-check.mjs section 5, sim/snap-check.mjs). globalThis.__fallsCut
+// counts the falls begun while the block was still falling (of
+// globalThis.__fallsAll); the edit keeps its notes on the block's mesh, where
+// the check compares nothing but what is drawn.
+const R7_FALL = [
+  ['const y0 = b.mesh.position.y, y1 = y0 - drop, rest__ = b.shape.y\n', 'globalThis.__fallsAll = (globalThis.__fallsAll ?? 0) + 1\n        if (b.mesh.falling__) globalThis.__fallsCut = (globalThis.__fallsCut ?? 0) + 1\n        const y0 = b.mesh.position.y, y1 = b.shape.y, rest__ = b.shape.y, fall__ = (b.mesh.fall__ = {})\n        b.mesh.falling__ = (b.mesh.falling__ ?? 0) + 1\n'],
+  ['tween(0.18 + drop * 0.15, (k) => (b.mesh.position.y = y0 + (y1 - y0) * k), bounce).then(() => {\n', 'tween(0.18 + drop * 0.15, (k) => b.mesh.fall__ === fall__ && (b.mesh.position.y = y0 + (y1 - y0) * k), bounce).then(() => {\n          b.mesh.falling__--\n'],
 ]
 
 export async function load(url, ctx, next) {
@@ -78,6 +114,10 @@ export async function load(url, ctx, next) {
   if (url.endsWith('/scenery.js') && src.includes('collapse(col) {')) {
     for (const [from, to] of R5_DUST) {
       if (!src.includes(from)) throw new Error(`terrain-hooks: R5's dust edit found no "${from.trim()}" in ${url}`)
+      src = src.replace(from, to)
+    }
+    for (const [from, to] of R7_FALL) {
+      if (!src.includes(from)) throw new Error(`terrain-hooks: R7's fall edit found no "${from.trim()}" in ${url}`)
       src = src.replace(from, to)
     }
   }

@@ -1,12 +1,14 @@
-// Small shared helpers for the view: easings, and a promise-based tween clock
-// that the whole game awaits on, so an AI turn and a human click resolve
-// through the same animated code path. The seeded generator and the pure
-// helpers live in core/util.js. Of those, main.js still takes `lerp` from
-// here, and `pick` here wraps core's to default to Math.random, for purely
-// visual choices (core's always names its stream).
-import { pick as pickFrom } from './core/util.js'
+// The view's clock (DESIGN §1.1, §1.3: util.js's view half): easings, and a
+// promise-based tween clock the whole table awaits on, so every event the
+// player plays resolves through the same animated code path. Game time runs
+// `clock.speed` times faster than wall time (the speed button; ?fast runs it
+// at 1e4), and the frame loop (view/stage.js) steps it. The seeded
+// generator and the pure helpers live in core/util.js; `lerp` is re-exported
+// from there, and `pick` here wraps core's to default to Math.random, for
+// purely visual choices (core's always names its stream).
+import { pick as pickFrom } from '../core/util.js'
 
-export { lerp } from './core/util.js'
+export { lerp } from '../core/util.js'
 export const pick = (arr, rng = Math.random) => pickFrom(arr, rng)
 export const easeOut = (x) => 1 - Math.pow(1 - x, 3)
 export const easeIn = (x) => x * x * x

@@ -32,8 +32,11 @@
 // --self-test; R4 removed the working tree's re-export), everything under
 // core/ and data/, and (R6b) the Session's match/, the input tools' input/
 // and ui/, where the seats' look (ui/theme.js's isMirror) moved with
-// data/compat.js. main.js and ui/ are view code, so the presentation sites
-// they keep are listed below, each with why it is presentation. An allowed
+// data/compat.js, and (R7) the view's view/ (where main.js's figures,
+// shooting and models went, and their presentation sites with them),
+// present/ and app/. main.js, view/ and ui/ are view code, so the
+// presentation sites they keep are listed below, each with why it is
+// presentation. An allowed
 // text excuses only itself: it is cut out of the line and the rest of the
 // line is linted again, so a test added beside an allowed one is still
 // caught. An entry that no longer matches exactly its count of lines fails,
@@ -90,11 +93,12 @@ export const BANNED = [
 
 // [file, exact text on the line, how many lines hold it, why it is allowed]
 export const ALLOW = [
-  ['main.js', 'projectileStyle(e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
-  ['main.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
-  ['main.js', "if (e.fx !== 'thorns') {", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own'],
-  ['main.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire')", 1, "the explosion's look: presentation"],
-  ['main.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
+  ['view/effects/shots.js', 'this.fly(a, b, e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
+  ['view/effects/shots.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
+  ['view/effects/shots.js', "if (e.fx !== 'thorns') {", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own'],
+  ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire')", 1, "the explosion's look: presentation"],
+  ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
+  ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names): presentation"],
   ['main.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
   ['main.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
   ['core/actions/shoot.js', 'fx: w.fx', 3, "the weapon's look, carried to the view in the volley, blast.fire and blast.land events and never tested there: presentation"],
@@ -114,7 +118,7 @@ function files(dir) {
       else if (e.name.endsWith('.js')) out.push(join(d, e.name))
     }
   }
-  for (const d of ['core', 'data', 'match', 'input', 'ui']) walk(d)
+  for (const d of ['core', 'data', 'match', 'present', 'view', 'input', 'ui', 'app']) walk(d)
   return out
 }
 
@@ -251,7 +255,7 @@ if (main && args['self-test']) {
     ['main.js', 'keys.add(e.key.toLowerCase())'],
     ['data/schema.js', "if (typeof w.name !== 'string' || !w.name) throw bad('needs a name')"],
     ['data/schema.js', "if (typeof key !== 'string' || !/^[a-z][a-z0-9-]*$/.test(key)) throw new Error('bad key')"],
-    ['main.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2 })"],
+    ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2 })"],
     ['core/actions/shoot.js', "emit(G, 'blast.fire', { u: u.id, to: { x: land.x, z: land.z }, fx: w.fx })"],
     ['main.js', 'const race = raceOf(G, side), t = race.units[key]'],
     ['core/version.js', 'export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key) } = {}) {'],
@@ -275,7 +279,7 @@ if (main && args['self-test']) {
 if (main && !args['self-test']) {
   const { hits, stale, n } = lint(PKG)
   const roots = ['main.js', 'ai.js', 'rules.js'].filter((f) => existsSync(join(PKG, f)))
-  console.log(`flag-lint: ${n} files (${[...roots, 'core/', 'data/', 'match/', 'input/', 'ui/'].join(', ')}), ${ALLOW.length} allowed presentation sites`)
+  console.log(`flag-lint: ${n} files (${[...roots, 'core/', 'data/', 'match/', 'present/', 'view/', 'input/', 'ui/', 'app/'].join(', ')}), ${ALLOW.length} allowed presentation sites`)
   for (const h of hits) console.log(`  FAIL ${h.f}:${h.line} ${h.what}: ${h.text}`)
   for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
   for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)

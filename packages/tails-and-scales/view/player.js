@@ -1,39 +1,49 @@
 // The EventPlayer (DESIGN §2.4): plays the match's events, in order, at the
 // view's pace. The match runs ahead synchronously, to the next decision a
-// human makes, and the Session (match/session.js) hands main.js each
+// human makes, and the Session (match/session.js) hands the view each
 // entry's events, which it push()es here; so the view shows what happened
 // one event at a time, while the mirror (present/mirror.js) folds each
 // event as it is played: the state as shown, which the figures, labels,
 // flags and score read instead of G. When everything queued has played the
-// player is idle and tells onIdle, and the table catches up (main.js reads
-// G, the match itself, only then).
+// player is idle and tells onIdle, and the table catches up (the input and
+// the HUD read G, the match itself, only then).
 //
 // A handler is the old code's visuals for one kind of event, verbatim (a
 // dice row in the tray, a figure's fall, a line in the battle log), called
 // with the event and the mirror just after the event is folded in. It
 // returns a promise when the next event must wait for it (a dice row, a
 // pause), else nothing; events whose handlers take no time play at once,
-// inside push(), when the player is idle (a title's board: showTable). An
-// event with no handler goes to `fallback`.
+// inside push(), when the player is idle. An event with no handler goes to
+// `fallback`.
 //
-// R7's player adds snap(G) (it needs TerrainView.sync); backlog() and
-// catch-up are N2's. Here a new table only resets the mirror (reset).
-import { applyEvent } from '../present/mirror.js'
+// snap(G) (R7) jumps to a match as it stands, whatever was queued: the
+// queue is dropped, the mirror becomes project(G), the view is rebuilt from
+// G (its `rebuild(G, M)`: the battlefield from its chunks, the figures from
+// its units, what the view holds outside the mirror taken away), and the
+// player is idle. A new table is a snap (the title's backdrop), and so is a
+// battle's start (onto the backdrop, the battle's table as it stood before
+// anything happened: the same board, terrain and races; the start entry's
+// events then play on from there); a rejoin, a scrub and the catch-up are
+// N2's, with backlog().
+import { applyEvent, project } from '../present/mirror.js'
 
 export class EventPlayer {
-  constructor({ handlers, mirror = null, onIdle = null }) {
+  // `view.rebuild(G, M)`: the table made to show G as it stands (M its
+  // mirror)
+  constructor({ handlers, view = null, mirror = null, onIdle = null }) {
     this.handlers = handlers
+    this.view = view
     this.mirror = mirror
     this.onIdle = onIdle
-    // hears every reset and every event as it is played (?debug only:
+    // hears every snap and every event as it is played (?debug only:
     // sim/present-check.mjs folds its own mirror from them). It is handed
     // this player's mirror, which it reads and never folds into: applyEvent
     // folds in place, so the event would be applied twice.
     this.observer = null
     this.q = []
     this.running = false
-    // which table's events are playing: reset() starts a new one, and a
-    // handler's promise from the last table resumes nothing
+    // which table's events are playing: a snap starts a new one, and a
+    // handler's promise from before it resumes nothing
     this.table = 0
   }
 
@@ -47,19 +57,20 @@ export class EventPlayer {
     if (!this.running) this.run()
   }
 
-  // A new table: the mirror becomes `mirror` (project(G) of a match that
-  // hasn't run ahead, or the table on show a battle starts on), and nothing
-  // queued is played. Today a table is only replaced while the player is
-  // idle (from the title or the end screen), but should one be replaced
-  // mid-playback, nothing of the old one carries on: a handler still running
-  // (a dice row, a pause) resumes nothing when it settles, and the new
-  // table's events play at once.
-  reset(mirror) {
+  // Jump to G as it stands (`shown`: the mirror to show, project(G) unless
+  // the caller says otherwise: the title shows its backdrop at the stage
+  // 'title'). Nothing queued is played, and a handler still running (a dice
+  // row, a pause) resumes nothing when it settles; the table is rebuilt
+  // from G, the observer told, and the player idle (onIdle told so with
+  // `{ snap: true }`: the table was made, not played up to).
+  snap(G, shown = project(G)) {
     this.table++
     this.q.length = 0
     this.running = false
-    this.mirror = mirror
-    this.observer?.reset?.(mirror)
+    this.mirror = shown
+    this.view?.rebuild(G, shown)
+    this.observer?.reset?.(shown)
+    this.onIdle?.({ snap: true })
   }
 
   run() {

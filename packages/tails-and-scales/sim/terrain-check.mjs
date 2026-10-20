@@ -31,7 +31,29 @@
 //     the chunks (the rubble and logs they make included), what blast
 //     returns, `dirty`, every fx call and, at the end, the whole scenery
 //     group (rubble pieces, fallen logs, collapsed blocks), plus
-//     line-of-sight queries before and after.
+//     line-of-sight queries before and after;
+//  5. (R7) the snap's views: a table built from the chunks as they stand
+//     (TerrainView.sync, what a snap builds) is the table the events built,
+//     on the fresh table and after the destruction: every chunk shown or
+//     not alike, every shown one's mesh where it stands (to within 1e-9: a
+//     dropped block's tween ends a bounce's rounding off its height) and the
+//     same mesh (type, shape, children, geometry, material), but for what is
+//     cosmetic (a scuffed chunk's darker colour, a rubble pile's pieces,
+//     strewn at random). So is a table synced on the fresh table and synced
+//     again after the destruction (sync's keeping path: what still shows its
+//     chunk kept, the rest taken off and built), and the table the events
+//     built, synced, keeps every mesh it shows. A table cleared and its
+//     board added again takes every mesh back untouched (a battle started on
+//     the table the title showed builds nothing). And a table synced to the
+//     wrecked chunks (fresh, and the one synced before and again after),
+//     cleared and its board added again, shows the board as a fresh sync
+//     does: an add takes back no broken chunk's empty item, and no block
+//     a sync set lower at the height it dropped to. And (R7a's fixer,
+//     round 3) every terrain.add's def, as it is played, is exactly the
+//     view's defOf of its chunk (view/terrain.js keeps a copy of
+//     core/terrain/terrain.js's, which core doesn't export: a sync builds
+//     and keys the table by the copy, an add by the def the event carries,
+//     so a field one has and the other lacks would part the two tables).
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -82,7 +104,7 @@ if (args['self-test']) {
     const caught = r.status === 1 && /MISMATCH/.test(r.stdout)
     if (!caught) missed++
     const first = r.stdout.split('\n').find((l) => l.startsWith('  seed')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
-    console.log(`  ${caught ? 'caught' : 'MISSED'} ${name.padEnd(13)} ${first.trim().slice(0, 150)}`)
+    console.log(`  ${caught ? 'caught' : 'MISSED'} ${name.padEnd(17)} ${first.trim().slice(0, 150)}`)
   }
   console.log(missed ? `\nterrain-check self-test FAILED: ${missed} mutation(s) passed` : '\nterrain-check self-test passed: every mutation fails the check')
   process.exit(missed ? 1 : 0)
@@ -101,7 +123,7 @@ const { BOARD } = await imp(PKG, 'core/rules.js')
 const { hypot } = await imp(PKG, 'core/dmath.js')
 const { distToBox } = await imp(PKG, 'core/terrain/geom.js')
 const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
-const { TerrainView } = await imp(PKG, 'view/terrain.js')
+const { TerrainView, defOf: viewDefOf } = await imp(PKG, 'view/terrain.js')
 const { blankMirror, applyEvent } = await imp(PKG, 'present/mirror.js')
 const { smashAround } = await imp(PKG, 'core/actions/move.js')
 const { MISSIONS } = await imp(PKG, 'data/mission.js')
@@ -119,9 +141,14 @@ class Now {
     this.terrain = new Terrain(W, H)
     this.out = []
     this.mirror = blankMirror()
+    // each add played, with the view's defOf of its chunk then (defCheck)
+    this.adds = []
   }
   drain() {
-    for (const e of this.out.splice(0)) this.view.apply(e, applyEvent(this.mirror, e))
+    for (const e of this.out.splice(0)) {
+      if (e.t === 'terrain.add') this.adds.push([e.def, viewDefOf(this.terrain.chunks.find((c) => c.id === e.def.id))])
+      this.view.apply(e, applyEvent(this.mirror, e))
+    }
   }
   get chunks() {
     return this.terrain.chunks
@@ -168,7 +195,7 @@ legacy.smash = (S, x, z, dir, r) => {
     if (hypot(s.x - x, s.z - z) < r + Math.max(s.hx, s.hz) * 0.8) S.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) })
   }
 }
-const mine = { ...(await imp(PKG, 'util.js')), make: (scene, fx) => new Now(scene, fx) }
+const mine = { ...(await imp(PKG, 'view/clock.js')), make: (scene, fx) => new Now(scene, fx) }
 mine.smash = (S, x, z, dir, r) => {
   smashAround({ terrain: S.terrain }, { r }, { x, z, dir }, S.out)
   S.drain()
@@ -346,7 +373,111 @@ function losProbe(S, rand) {
   return out
 }
 
-const stats = { chunks: 0, meshes: 0, draws: 0, streams: 0, ops: 0, broke: 0, logs: 0, freshLogSmashed: 0, logSparedByBlast: 0, rubble: 0, mirrorChunks: 0 }
+const stats = { defs: 0, chunks: 0, meshes: 0, draws: 0, streams: 0, ops: 0, broke: 0, logs: 0, freshLogSmashed: 0, logSparedByBlast: 0, rubble: 0, mirrorChunks: 0, synced: 0, syncedShown: 0, syncedDead: 0, syncedFallen: 0, syncedDropped: 0, reused: 0, replayed: 0, replayBroken: 0, replayLower: 0, replayTaken: 0 }
+
+// 5. A table synced from the chunks as they stand against the one the events
+// built (`now`, the working tree's side).
+//
+// Every add played since the last call: its def is the view's defOf of its
+// chunk as the add was played, field for field (core's adds and the view's
+// sync draw the same chunk).
+function defCheck(where, now) {
+  for (const [def, mine] of now.adds.splice(0)) {
+    deep(`${where} chunk ${def.id}'s def (the add's | the view's defOf)`, def, mine)
+    stats.defs++
+  }
+}
+// The same for adds played straight from a generation's `out`.
+function addsCheck(where, chunks, out) {
+  for (const e of out) {
+    if (e.t !== 'terrain.add') continue
+    const c = chunks.find((x) => x.id === e.def.id)
+    deep(`${where} chunk ${e.def.id}'s def (the add's | the view's defOf)`, e.def, c ? viewDefOf(c) : null)
+    stats.defs++
+  }
+}
+const near = (where, a, b) => Math.abs(a - b) <= 1e-9 || differ(where, a, b)
+function sameMesh(where, a, b, colour) {
+  same(`${where} type`, a.type, b.type)
+  for (const k of ['visible', 'castShadow', 'receiveShadow']) same(`${where} ${k}`, a[k], b[k])
+  vec(`${where} scale`, a.scale, b.scale)
+  if (a.isMesh || b.isMesh) {
+    sameGeometry(`${where} geometry`, a.geometry, b.geometry)
+    for (const k of MAT) same(`${where} material.${k}`, a.material[k], b.material[k])
+    if (colour) vec(`${where} material.color`, a.material.color, b.material.color, ['r', 'g', 'b'])
+  }
+  same(`${where} children`, a.children.length, b.children.length)
+  a.children.forEach((c, i) => sameMesh(`${where}.children[${i}]`, c, b.children[i], colour))
+}
+// (tally: count what it compared in the sync stats; replayCheck's own don't)
+function syncCheck(where, now, view = null, tally = true) {
+  const fresh = view ?? new TerrainView(new THREE.Scene(), recorder().proxy)
+  fresh.sync(now.terrain.chunks)
+  const n = tally ? stats : {}
+  for (const c of now.terrain.chunks) {
+    const w = `${where} chunk ${c.id} (${c.look.piece})`
+    const a = now.view.state(c.id), b = fresh.state(c.id)
+    same(`${w} shown`, a.shown, b.shown)
+    n.synced++
+    if (!a.shown) {
+      n.syncedDead++
+      continue
+    }
+    n.syncedShown++
+    if (c.look.piece === 'fallen') n.syncedFallen++
+    if (c.shape.y !== now.view.items.get(c.id).c.shape.y) n.syncedDropped++
+    for (const k of ['x', 'y', 'z']) near(`${w} ${k}`, a[k], b[k])
+    a.q.forEach((x, i) => near(`${w} quaternion[${i}]`, x, b.q[i]))
+    if (c.kind === 'rubble') continue
+    const item = now.view.items.get(c.id)
+    sameMesh(`${w} mesh`, item.obj, fresh.items.get(c.id).obj, !item.ownMat)
+  }
+  if (!view) fresh.dispose()
+}
+// The table the events built, synced to the chunks it shows: every mesh kept.
+function keepCheck(where, now) {
+  const before = new Map([...now.view.items].map(([id, it]) => [id, it.obj]))
+  now.view.sync(now.terrain.chunks)
+  for (const c of now.terrain.chunks) if (now.view.state(c.id).shown) same(`${where} chunk ${c.id} (${c.look.piece}) mesh kept`, now.view.items.get(c.id).obj === before.get(c.id), true)
+}
+// A table cleared and its board's adds played again: every mesh taken back.
+function reuseCheck(where, now) {
+  const before = new Map([...now.view.items].map(([id, it]) => [id, it.obj]))
+  const out = []
+  now.terrain.generate(now.seed, OBJ_POS, MISSIONS.classic.deploy, 'classic', out)
+  addsCheck(where, now.terrain.chunks, out)
+  for (const e of out) now.view.apply(e, applyEvent(now.mirror, e))
+  for (const [id, obj] of before) same(`${where} chunk ${id} mesh kept`, now.view.items.get(id)?.obj === obj, true)
+  same(`${where} items`, now.view.items.size, before.size)
+  same(`${where} spares left`, now.view.spares.size, 0)
+  stats.reused += before.size
+}
+// A table synced to the chunks after the destruction, then cleared and the
+// board's adds played on it again (the next battle on this board starting on
+// the table a snap drew): it shows the board as a table synced to it fresh
+// does. Its spares are what the sync left: a broken chunk's item holds no
+// mesh (an add must build that chunk, not take back nothing), and a block
+// the sync set lower is no longer the def its add carries (an add must not
+// take it back at the height it dropped to).
+function replayCheck(where, view, seed) {
+  const T = new Terrain(W, H), out = [], mirror = blankMirror()
+  T.generate(seed, OBJ_POS, MISSIONS.classic.deploy, 'classic', out)
+  addsCheck(where, T.chunks, out)
+  // what the old table shows of the new one's chunks: broken, or lower
+  const ref = new TerrainView(new THREE.Scene(), recorder().proxy)
+  ref.sync(T.chunks)
+  for (const c of T.chunks) {
+    const a = view.state(c.id), b = ref.state(c.id)
+    if (!a.shown) stats.replayBroken++
+    else if (a.y !== b.y) stats.replayLower++
+  }
+  ref.dispose()
+  const before = new Set([...view.items.values()].map((it) => it.obj).filter(Boolean))
+  for (const e of out) view.apply(e, applyEvent(mirror, e))
+  syncCheck(where, { terrain: T, view }, null, false)
+  for (const c of T.chunks) if (before.has(view.items.get(c.id)?.obj)) stats.replayTaken++
+  stats.replayed += T.chunks.length
+}
 const pieces = {}
 const count = (o) => 1 + o.children.reduce((n, c) => n + count(c), 0)
 
@@ -369,6 +500,7 @@ async function board(seed) {
   stats.draws += drawsL.reduce((n, d) => n + d.n, 0)
 
   sameChunks(where, L.S.chunks, M.S.chunks)
+  defCheck(where, M.S)
   deep(`${where} features`, L.S.features, M.S.features)
   same(`${where} dirty`, L.S.dirty, M.S.dirty)
   const share = { geo: sharing(), mat: sharing() }
@@ -377,6 +509,15 @@ async function board(seed) {
   stats.chunks += L.S.chunks.length
   for (const c of M.S.chunks) pieces[c.look.piece] = (pieces[c.look.piece] ?? 0) + 1
   stats.meshes += count(L.S.group)
+
+  // the snap's views on the fresh table: synced from its chunks, and
+  // cleared and added again
+  M.S.seed = seed
+  syncCheck(`${where} synced`, M.S)
+  reuseCheck(`${where} cleared and added again`, M.S)
+  // (a table synced now, synced again after the destruction)
+  const stale = new TerrainView(new THREE.Scene(), recorder().proxy)
+  stale.sync(M.S.terrain.chunks)
 
   // line of sight on the fresh table
   const probe = mulberry(rseed ^ 0x105)
@@ -411,6 +552,7 @@ async function board(seed) {
     }
     const a = await run(L), b = await run(M)
     sameChunks(w, L.S.chunks, M.S.chunks)
+    defCheck(w, M.S)
     same(`${w} dirty`, a.dirty, b.dirty)
     if (a.broke) same(`${w} broken`, a.broke.map((c) => L.S.chunks.indexOf(c)).join(), b.broke.map((c) => M.S.chunks.indexOf(c)).join())
     deep(`${w} fx calls`, a.fx, b.fx)
@@ -436,7 +578,18 @@ async function board(seed) {
   if (ops.length) {
     sameObject(`${where} scenery group after destruction`, L.S.group, M.S.group, share)
     deep(`${where} los after destruction`, losProbe(L.S, mulberry(rseed ^ 0x106)), losProbe(M.S, mulberry(rseed ^ 0x106)))
+    syncCheck(`${where} synced after destruction`, M.S)
+    syncCheck(`${where} synced before and again after destruction`, M.S, stale)
+    keepCheck(`${where} the table the events built, synced`, M.S)
+    // a table synced fresh to the wrecked chunks, and the one synced before
+    // and again after, each cleared and its board added again
+    const wrecked = new TerrainView(new THREE.Scene(), recorder().proxy)
+    wrecked.sync(M.S.terrain.chunks)
+    replayCheck(`${where} synced after destruction, cleared and added again`, wrecked, seed)
+    wrecked.dispose()
+    replayCheck(`${where} synced before and again after destruction, cleared and added again`, stale, seed)
   }
+  stale.dispose()
 }
 
 const t0 = Date.now()
@@ -458,6 +611,10 @@ console.log(`P-terrain: boards ${lo}-${hi}, R0 code ${LEGACY_REF.slice(0, 9)} ag
 console.log(`  ${stats.chunks} chunks and ${stats.meshes} scene objects built; ${stats.streams} layout streams, ${stats.draws} draws`)
 console.log(`  pieces: ${Object.entries(pieces).map(([k, n]) => `${k} ${n}`).join(', ')}`)
 console.log(`  ${stats.ops} destruction ops: ${stats.broke} chunks broken by blasts, ${stats.rubble} rubble piles, ${stats.logs} fallen logs (${stats.freshLogSmashed} smashed in the same sweep that felled them, ${stats.logSparedByBlast} in range of the blast that felled them and spared)`)
+console.log(`  ${globalThis.__fallsCut ?? 0} of ${globalThis.__fallsAll ?? 0} falls began while the block was still falling from an earlier drop in the same op, and fell on from there to its new rest (R7's rule, made of the R0 code too; R0 dropped it by the drop from where the earlier fall began, a level or more too high)`)
+console.log(`  synced from the chunks as they stand, ${stats.synced} chunks matched the table the events built (${stats.syncedShown} shown, ${stats.syncedFallen} of them fallen logs and ${stats.syncedDropped} dropped blocks; ${stats.syncedDead} broken); a cleared table's ${stats.reused} meshes all taken back by its adds`)
+console.log(`  synced after destruction, cleared and the board added again: ${stats.replayed} chunks as a fresh table shows them (${stats.replayBroken} broken on the old table, ${stats.replayLower} standing lower on it; ${stats.replayTaken} meshes taken back)`)
+console.log(`  ${stats.defs} adds played, each one's def the view's defOf of its chunk (the copy sync builds and keys the table by)`)
 console.log(`  the mirror the events folded into matched ${stats.mirrorChunks} chunks (standing, height); ${globalThis.__dustMoved ?? 0} of ${globalThis.__dustAll ?? 0} collapse dust puffs rise where their own drop left the block, not lower where a later drop in the same op took it (R5's rule; R0 read the place when the fall ended)`)
 if (failedSeeds) {
   console.log(`MISMATCH on ${failedSeeds} board(s):`)

@@ -5,8 +5,9 @@
 // place (shape.x/z, and shape.y for a wall block or cap) and nothing else,
 // and draws nothing from the layout stream: core/terrain/recipes.js has
 // already made every draw and recorded the result in `look`. It plays the
-// terrain's events (core/terrain/terrain.js), in order, as main.js's
-// EventPlayer hands them over (apply(e, M), M the mirror with e folded in):
+// terrain's events (core/terrain/terrain.js), in order, as the EventPlayer
+// (view/player.js) hands them over (apply(e, M), M the mirror with e folded
+// in):
 // a scuffed chunk darkens and shudders, a broken one shatters, blocks above
 // a gap drop into it, a tree sheds its canopy and keels over, rubble piles
 // up. That randomness is purely cosmetic and stays on Math.random.
@@ -16,20 +17,38 @@
 // debris from the event's `at`, and where a dropped block comes to rest
 // from the mirror as its collapse is played (present/mirror.js).
 //
-// It is built only by playing those events from a table's terrain.clear on:
-// a fallen log is its tree's mesh keeled over, and a collapsed block is
-// drawn where its tween left it. Building it from the chunks as they stand
-// (a rejoin, a scrub, a snap) is a later step's (TerrainView.sync: DESIGN's
-// R3 notes and R7 row).
+// It is built either by playing those events from a table's terrain.clear
+// on (a fallen log is its tree's mesh keeled over, a collapsed block drawn
+// where its tween left it), or (R7) from the chunks as they stand, by
+// sync(): a new table, a snap (view/player.js, DESIGN §2.4), a rejoin or a
+// scrub later. sync() keeps what already shows a chunk as it stands and
+// builds the rest exactly as its events would have left it (a fallen log
+// keeled over all the way, a dropped block at its height, a rubble pile's
+// pieces strewn anew); a chunk's scuffs (a darker colour) and where the
+// rubble's pieces lie are cosmetic, and a fresh build shows none of the
+// first and its own of the second. A terrain.clear keeps what stood aside,
+// off the table, for the adds that follow: the same seed gives the same
+// defs (§2.9), so a battle started on the table the title showed takes the
+// same meshes back, untouched ones only, and builds nothing (a spare that
+// holds a mesh and is still its add's def: a sync's broken chunk holds none,
+// and a block it set lower is the def at that height).
+//
+// Its break sound is its own since R7 (main.js's onBreak hook before).
+// Meshes leave the table freed: their geometry (but the shared box and log
+// shapes) and a scuffed chunk's own material, at the next clear, sync or
+// dispose().
 //
 // sim/terrain-check.mjs builds these meshes in Node and holds them to the
 // ones the battlefield was built with before the split (the R0 code), mesh
 // for mesh, and plays destruction on both, folding the terrain's reports
-// into a mirror and applying them here one by one, as main.js's player does.
+// into a mirror and applying them here one by one, as the player does; and
+// (R7) holds a table synced from the chunks as they stand to the one the
+// events built.
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
-import { pick, tween, easeIn, bounce } from '../util.js'
+import { pick, tween, easeIn, bounce } from './clock.js'
 import { STYLES, WOOD } from '../core/terrain/recipes.js'
+import { sfx } from './sfx.js'
 
 const BOX = new THREE.BoxGeometry(1, 1, 1)
 const LOG = new THREE.CylinderGeometry(0.5, 0.5, 1, 8).rotateZ(Math.PI / 2)
@@ -222,11 +241,14 @@ function standing(c, m) {
 export class TerrainView {
   constructor(scene, fx) {
     this.scene = scene
-    this.fx = fx
+    this.effects = fx
     this.group = new THREE.Group()
     scene.add(this.group)
-    this.items = new Map() // chunk id → { c (its def), obj, canopy?, pieces?, ownMat? }
-    this.onBreak = null // (def) => {}, a broken chunk's: main.js's break sound (R7 moves it in here)
+    // chunk id → { c (its def), obj, canopy?, pieces?, ownMat?, touched?,
+    // shared? (a fallen tree's: its log's item holds the mesh) }
+    this.items = new Map()
+    // a cleared table's items, kept aside for the adds that follow (clear())
+    this.spares = new Map()
   }
 
   // the object a chunk is drawn with
@@ -247,23 +269,136 @@ export class TerrainView {
     throw new Error(`TerrainView: no handler for ${e.t}`)
   }
 
+  // A new table: what stood goes off it (a new group), kept aside for the
+  // adds that follow (what none of them takes back is freed at the next
+  // clear, sync or dispose).
   clear() {
+    this.freeSpares()
     this.scene.remove(this.group)
     this.group = new THREE.Group()
     this.scene.add(this.group)
-    this.items.clear()
+    this.spares = this.items
+    this.items = new Map()
   }
 
   add(c) {
+    // (the cleared table's mesh of this very chunk, untouched: taken back;
+    // a broken chunk's item from a sync holds no mesh, and is built)
+    const spare = this.spares.get(c.id)
+    if (spare?.obj && !spare.touched && !spare.shared && sameDef(spare.c, c, true)) {
+      this.spares.delete(c.id)
+      this.items.set(c.id, { ...spare, c })
+      this.group.add(spare.obj)
+      return
+    }
     if (c.look.piece === 'fallen') return this.fell(c)
     const item = { c, ...PIECES[c.look.piece](c) }
     this.items.set(c.id, item)
     this.group.add(item.obj)
   }
 
-  // scuffed: darken and shudder, the debris at `at`, where it stood when hit
+  // everything off the table and freed (a new table drawn from scratch, in a
+  // new group, as a terrain.clear's)
+  dispose() {
+    this.freeSpares()
+    for (const item of this.items.values()) this.free(item)
+    this.items.clear()
+    this.scene.remove(this.group)
+    this.group = new THREE.Group()
+    this.scene.add(this.group)
+  }
+
+  // ── From the chunks as they stand ─────────────────────────────────────────
+  // Show `chunks` (G.terrain.chunks) as they stand now. An item that shows
+  // its chunk as it stands is kept (a block that dropped since is set at its
+  // height); the rest are taken off and built as the chunk's events would
+  // have left them, in chunk order (so a fresh table is built mesh for mesh
+  // as its adds build it).
+  sync(chunks) {
+    this.freeSpares()
+    const byId = new Map(chunks.map((c) => [c.id, c]))
+    for (const [id, item] of [...this.items]) {
+      const c = byId.get(id)
+      if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item))) continue
+      this.free(item)
+      this.items.delete(id)
+    }
+    for (const c of chunks) {
+      const kept = this.items.get(c.id)
+      if (kept) {
+        // (at its height now: a fall still under way stops, and the item
+        // is the def at that height, so a later add of the block where it
+        // first stood doesn't take this mesh back down here)
+        if (c.alive && SET_Y.has(c.look.piece)) {
+          kept.fall = null
+          kept.obj.position.y = c.shape.y
+          kept.c = defOf(c)
+        }
+        continue
+      }
+      if (!c.alive) {
+        // (a broken chunk shows nothing: a fallen tree is its log's)
+        if (!this.items.has(c.id)) this.items.set(c.id, { c: defOf(c), obj: null })
+        continue
+      }
+      if (c.look.piece === 'fallen') {
+        this.fallen(defOf(c), byId.get(c.look.tree))
+        continue
+      }
+      const def = defOf(c)
+      const item = { c: def, ...PIECES[c.look.piece](def) }
+      this.items.set(c.id, item)
+      this.group.add(item.obj)
+      // a rubble pile: a heap of pieces for each block of its column broken
+      if (c.kind === 'rubble') for (const b of chunks) if (b.kind === 'block' && !b.alive && b.col?.rubble === c) this.rubble(def, null)
+    }
+  }
+
+  // whether an item shows its chunk standing (a tree with its canopy)
+  shows(item) {
+    if (!item.obj || item.obj.parent !== this.group) return false
+    return item.c.kind === 'tree' ? item.canopy?.parent === item.obj : true
+  }
+
+  // A chunk's mesh as the table shows it, for sim/ (the ?debug snap check):
+  // whether it shows the chunk standing, and where its object stands.
+  state(id) {
+    const item = this.items.get(id)
+    const shown = !!item && this.shows(item)
+    if (!shown) return { shown }
+    const o = item.obj
+    return { shown, x: o.position.x, y: o.position.y, z: o.position.z, q: o.quaternion.toArray() }
+  }
+
+  // ── Freeing ───────────────────────────────────────────────────────────────
+  // An item off the table, and what only it used freed: its geometry (but
+  // the shared box and log shapes) and a scuffed chunk's own material. (A
+  // fallen tree's item shares its mesh with its log's, which frees it.)
+  free(item) {
+    // (a felled tree's canopy, gone up in leaves, is no longer in its mesh)
+    if (item.canopy && item.canopy.parent !== item.obj) freeShapes(item.canopy)
+    item.canopy = null
+    if (!item.obj || item.shared) return
+    if (item.obj.parent) item.obj.parent.remove(item.obj)
+    freeShapes(item.obj)
+    if (item.ownMat) item.obj.material.dispose()
+    item.obj = null
+  }
+  freeSpares() {
+    for (const item of this.spares.values()) this.free(item)
+    this.spares.clear()
+  }
+
+  // ── Destruction ───────────────────────────────────────────────────────────
+  // scuffed: darken and shudder, the debris at `at`, where it stood when hit.
+  // The shudder is sideways only, and gives back only the place it shook
+  // (R7): a block hurt as it drops, by the same blast that broke the one
+  // under it, falls on to its rest. It used to hold the block at the height
+  // it was hit at, and leave it there when it ended, over a fall that had
+  // ended first (a short drop, or ?fast): a block floating a level up.
   hurt(c, from, at) {
     const v = this.items.get(c.id), m = v.obj
+    v.touched = true
     if (m.isMesh) {
       if (!v.ownMat) {
         m.material = m.material.clone()
@@ -274,15 +409,20 @@ export class TerrainView {
     const p0 = m.position.clone()
     tween(0.25, (k) => {
       const a = (1 - k) * 0.06
-      m.position.set(p0.x + (Math.random() - 0.5) * a, p0.y, p0.z + (Math.random() - 0.5) * a)
-    }).then(() => m.position.copy(p0))
-    this.fx.debris(at.x, at.y, at.z, [c.look.chip || '#888', '#666'], 3, { from, power: 3, size: 0.08 })
+      m.position.x = p0.x + (Math.random() - 0.5) * a
+      m.position.z = p0.z + (Math.random() - 0.5) * a
+    }).then(() => {
+      m.position.x = p0.x
+      m.position.z = p0.z
+    })
+    this.effects.debris(at.x, at.y, at.z, [c.look.chip || '#888', '#666'], 3, { from, power: 3, size: 0.08 })
   }
 
   destroy(c, from, at) {
     const v = this.items.get(c.id)
+    v.touched = true
     const s = at
-    const fx = this.fx
+    const fx = this.effects
     switch (c.kind) {
       case 'block': {
         this.group.remove(v.obj)
@@ -313,20 +453,29 @@ export class TerrainView {
         fx.debris(s.x, s.y, s.z, WOOD, 14, { from, power: 6, size: 0.12 })
         break
     }
-    this.onBreak?.(c)
+    // the break's sound: stone crumbles, the rest thwacks
+    if (c.kind === 'block') sfx.crumble()
+    else sfx.thwack()
   }
 
-  // blocks above a gap drop into it; each one's dust, when its fall ends, is
-  // where this drop leaves it (the mirror's height as the collapse is
-  // played: a later collapse in the same blast may lower it again, and that
-  // one raises its own dust)
+  // Blocks above a gap drop into it, each from where it is drawn to where
+  // this drop leaves it: the mirror's height as the collapse is played
+  // (R7: a block dropped again before its last fall ended falls on from
+  // where it was, to its new rest, and the fall it was in stops there; it
+  // used to fall by the drop from where the earlier fall had started, and
+  // so came to rest a level or more too high). Its dust, when its fall
+  // ends, is where this drop leaves it (a later collapse in the same blast
+  // may lower it again, and that one raises its own dust).
   collapse(drops, by, M) {
     for (const { id, dy } of drops) {
-      const { c: b, obj: m } = this.items.get(id)
+      const item = this.items.get(id)
+      const { c: b, obj: m } = item
+      item.touched = true
       const rest = M.chunks[id].y
-      const y0 = m.position.y, y1 = y0 - dy
-      tween(0.18 + dy * 0.15, (k) => (m.position.y = y0 + (y1 - y0) * k), bounce).then(() => {
-        this.fx.debris(b.shape.x, rest - by / 2, b.shape.z, ['#8a8478'], 3, { power: 2, size: 0.07 })
+      const y0 = m.position.y, y1 = rest
+      const fall = (item.fall = {})
+      tween(0.18 + dy * 0.15, (k) => item.fall === fall && (m.position.y = y0 + (y1 - y0) * k), bounce).then(() => {
+        this.effects.debris(b.shape.x, rest - by / 2, b.shape.z, ['#8a8478'], 3, { power: 2, size: 0.07 })
       })
     }
   }
@@ -334,6 +483,7 @@ export class TerrainView {
   // a few more broken pieces on the pile, spilled a little away from the blast
   rubble(c, from) {
     const v = this.items.get(c.id), g = v.obj
+    v.touched = true
     const st = STYLES[c.look.style]
     const n = 4 + Math.floor(Math.random() * 3)
     for (let i = 0; i < n; i++) {
@@ -357,18 +507,65 @@ export class TerrainView {
     const t = tree.c, s = t.shape, trunk = t.look.trunk
     const { dx, dz } = c.look
     const g = tree.obj
-    const axis = new THREE.Vector3(dz, 0, -dx).normalize()
     const q0 = g.quaternion.clone()
-    const qa = new THREE.Quaternion()
-    tween(0.9, (k) => {
-      qa.setFromAxisAngle(axis, (Math.PI / 2 - 0.12) * k)
-      g.quaternion.copy(q0).premultiply(qa)
-      g.position.y = Math.sin(k * Math.PI) * 0.05 + trunk.r * k
-    }, easeIn).then(() => {
-      this.fx.debris(s.x + dx * trunk.h, 0.2, s.z + dz * trunk.h, ['#6b4a2e', '#4f8a34'], 8, { power: 3, size: 0.1 })
-      this.fx.shake = Math.max(this.fx.shake, 0.05)
+    const keel = topple(g, q0, c.look, trunk)
+    tween(0.9, keel, easeIn).then(() => {
+      this.effects.debris(s.x + dx * trunk.h, 0.2, s.z + dz * trunk.h, ['#6b4a2e', '#4f8a34'], 8, { power: 3, size: 0.1 })
+      this.effects.shake = Math.max(this.effects.shake, 0.05)
     })
-    this.items.set(c.id, { c, obj: g })
+    tree.shared = true
+    this.items.set(c.id, { c, obj: g, touched: true })
     this.group.add(g)
+  }
+
+  // A fallen log built from the chunks as they stand: its tree's mesh, the
+  // canopy gone, keeled over all the way (the fall's last frame).
+  fallen(c, treeChunk) {
+    const t = defOf(treeChunk)
+    const { obj: g, canopy } = PIECES.tree(t)
+    g.remove(canopy)
+    topple(g, g.quaternion.clone(), c.look, t.look.trunk)(1)
+    this.items.set(t.id, { c: t, obj: g, canopy, shared: true })
+    this.items.set(c.id, { c, obj: g, touched: true })
+    this.group.add(g)
+  }
+}
+
+// every geometry of an object and its children freed, but the shared box
+// and log shapes
+function freeShapes(obj) {
+  obj.traverse((o) => {
+    if (o.geometry && o.geometry !== BOX && o.geometry !== LOG) o.geometry.dispose()
+  })
+}
+
+// the pieces whose mesh stands at the chunk's height (a wall's blocks and
+// caps, which drop when a block under them breaks)
+const SET_Y = new Set(['box', 'log', 'cap'])
+
+// a chunk as its terrain.add carries it: a copy of core/terrain/terrain.js's
+// defOf, which core doesn't export (R7 left core/ as it was), and which sync
+// builds and keys the table by. The two must stay in step (a field core's
+// adds carry and this lacks would leave a synced table short of it, and its
+// spares never taken back): sim/terrain-check.mjs holds every add's def to
+// this one.
+export const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })
+
+// whether two defs are the same chunk drawn the same (the height too, or
+// not: a dropped block is the same block, lower)
+function sameDef(a, b, withY) {
+  const key = (d) => JSON.stringify({ id: d.id, kind: d.kind, look: d.look, shape: withY ? d.shape : { ...d.shape, y: 0 } })
+  return key(a) === key(b)
+}
+
+// The fall of a tree's group along the log's (dx, dz), as a tween step:
+// k from 0 (standing) to 1 (lying as the log).
+function topple(g, q0, { dx, dz }, trunk) {
+  const axis = new THREE.Vector3(dz, 0, -dx).normalize()
+  const qa = new THREE.Quaternion()
+  return (k) => {
+    qa.setFromAxisAngle(axis, (Math.PI / 2 - 0.12) * k)
+    g.quaternion.copy(q0).premultiply(qa)
+    g.position.y = Math.sin(k * Math.PI) * 0.05 + trunk.r * k
   }
 }

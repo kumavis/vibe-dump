@@ -33,9 +33,10 @@
 // lists them there as screenshot-only. From R6b no match exists on the
 // title, and scenery.chunks and scenery.blast read the title's backdrop
 // (the match that is never played, which the title draws), which is all
-// this shoots; a blast there throws once a battle is on. R7 moves the clock
-// and camera into view/: a pixel diff as a gate at R7 is R7's to add, with
-// these members in the contract then.
+// this shoots; a blast there throws once a battle is on. R7 moved the clock
+// and the camera into view/ (view/clock.js, view/camera.js) and made these
+// members part of the ?debug contract (main.js's comment: the pixel gate),
+// S.titleSpin now the camera rig's, kept on S.
 //
 // Hidden by default: the grass tufts and flowers (every InstancedMesh: the
 // tufts, the flowers and fx's particle pools), and the figures, which
@@ -45,8 +46,15 @@
 // figure's idle phase and fur jitter) was shifted by one. R6b removed it, and
 // the draws at load line up with R0's again: with --full nothing is hidden,
 // and the working tree drew the same as R0 everything included (boards 4242
-// and 1, at R6b's review fixes). --full is also for comparing against a ref
-// with the same draws at load (the commit before this one).
+// and 1, at R6b's review fixes). From R7 the figures differ again with
+// --full, and only they: a figure is cloned from its unit's template
+// (view/models/cache.js) and so makes fewer three.js objects than one built
+// afresh, and three.js draws Math.random for every object's uuid, so each
+// figure's flock and idle phase come from another point of the stream
+// (the tufts, flowers, mat and wood are drawn before any figure, and line
+// up with R0's still; sim/title-shot.mjs holds the figures' places and
+// meshes to the code before R7). --full is also for comparing
+// against a ref with the same draws at load (the commit before this one).
 //
 // Two shots per board: `table` as generated, and `wrecked` after the same
 // blasts on both (some acid; Math.random reseeded alike just before them),

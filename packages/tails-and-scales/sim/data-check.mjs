@@ -17,9 +17,9 @@
 // 2. The races: names, shorts, icons, colours, the death voice and gore, and
 //    armies as the legacy SIDES, ARMIES and killModel had them (the classic
 //    matchup, data/mission.js's CLASSIC, seat by seat); every race's
-//    voice is a sound sfx.js can play; the AI roles are the ones the AI
-//    orders by (core/ai/policy.js's ORDER since R6a, ai.js's before), in the
-//    legacy ai.js's order.
+//    voice is a sound view/sfx.js can play (its VOICES); the AI roles are
+//    the ones the AI orders by (core/ai/policy.js's ORDER since R6a, ai.js's
+//    before), in the legacy ai.js's order.
 // 3. defineRace refuses malformed race data (one broken field at a time),
 //    and the registry refuses two races with one key.
 // 4. Seats: makeSeats seats any race in either seat, gives the edge by seat
@@ -199,11 +199,12 @@ for (const race of Object.keys(RACES)) {
   const want = [0, 1].map((seat) => ({ name: r.name, short: r.short, icon: r.icon, color: seat ? r.look.alt : r.look.team, dark: r.look.dark }))
   check(isMirror(twin.map((race, seat) => ({ seat, race }))) && isDeepStrictEqual(got.map((s) => ({ ...s })), want) && r.look.alt !== r.look.team, `a mirror match of ${race}: seat 1 in its alternate colour (${r.look.alt}), seat 0 in its own (${r.look.team})`, diffPath(got.map((s) => ({ ...s })), want) ?? (r.look.alt === r.look.team ? 'the alternate colour is the team colour' : 'isMirror says no'))
 }
-// killModel plays sfx[look.voice](), and sfx.js's proxy turns a name it
-// lacks into silence: so every race's voice must be one of the kit's sounds
-const kit = [...(/^const S = \{\n([\s\S]*?)^\}/m.exec(readFileSync(join(PKG, 'sfx.js'), 'utf8'))?.[1] ?? '').matchAll(/^ {2}(\w+)\(/gm)].map((m) => m[1])
+// a slain model plays sfx.voice(look.voice) (view/units.js), which is
+// silence for a name view/sfx.js's VOICES lacks (R7 keyed the voices so;
+// the root sfx.js's kit before): so every race's voice must be one of them
+const kit = [...(/^const VOICES = \{\n([\s\S]*?)^\}/m.exec(readFileSync(join(PKG, 'view', 'sfx.js'), 'utf8'))?.[1] ?? '').matchAll(/^ {2}(\w+)\(/gm)].map((m) => m[1])
 const mute = Object.values(RACES).filter((r) => !kit.includes(r.look.voice))
-check(kit.length && !mute.length, `every race's voice is a sound sfx.js plays (${Object.values(RACES).map((r) => `${r.key} ${r.look.voice}`).join(', ')})`, kit.length ? mute.map((r) => `${r.key}: no "${r.look.voice}" in ${kit.join(', ')}`).join('; ') : "no `const S = {` kit in sfx.js")
+check(kit.length && !mute.length, `every race's voice is one view/sfx.js plays (${Object.values(RACES).map((r) => `${r.key} ${r.look.voice}`).join(', ')})`, kit.length ? mute.map((r) => `${r.key}: no "${r.look.voice}" in ${kit.join(', ')}`).join('; ') : "no `const VOICES = {` in view/sfx.js")
 const { ORDER } = await imp(PKG, 'core/ai/policy.js')
 const order = [...ORDER]
 check(isDeepStrictEqual(order, literal(legacyAi, 'ORDER')), "the AI's role order (core/ai/policy.js ORDER) is the legacy ai.js's")

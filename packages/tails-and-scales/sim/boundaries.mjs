@@ -469,7 +469,7 @@ if (a['self-test']) {
     ['the view importing doAdvance from an action', append('input/tools/charge-end.js', "import { doAdvance } from '../../core/actions/move.js'"), true, /imports core\/actions\/move\.js, which draws/],
     ['the view importing the AI', append('ui/theme.js', "import { aiPhase } from '../core/ai/policy.js'"), true, /imports core\/ai\/policy\.js, which draws/],
     ['the view importing apply', append('main.js', "import { apply } from './core/index.js'"), true, /imports apply from core\/index\.js: a command reaches the match only through the Session/],
-    ['the view re-exporting the dice', append('util.js', "export { d6 } from './core/rules.js'"), true, /imports d6 from core\/rules\.js/],
+    ['the view re-exporting the dice', append('view/clock.js', "export { d6 } from '../core/rules.js'"), true, /imports d6 from core\/rules\.js/],
     ['match/ taking all of rules.js', append('match/session.js', "import * as R from '../core/rules.js'"), true, /match\/ may import from core\/ only index\.js/],
     ['match/ importing the engine', append('match/store.js', "import { advance } from '../core/engine.js'"), true, /imports core\/engine\.js, which draws: match\/ may import from core\/ only index\.js/],
     ['match/ calling HANDLERS', append('match/session.js', "import { HANDLERS } from '../core/commands.js'"), true, /imports core\/commands\.js, which draws/],

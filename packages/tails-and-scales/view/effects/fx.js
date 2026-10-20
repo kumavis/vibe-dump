@@ -1,10 +1,13 @@
 import * as THREE from 'three'
-import { tween, easeOut, clock } from './util.js'
+import { tween, easeOut, clock } from '../clock.js'
 
 // ---------------------------------------------------------------------------
 // Effects: pooled instanced particles (debris cubes, unlit glow motes, smoke
 // puffs), lobbed projectiles, blast flashes, scorch marks, template rings and
-// floating damage numbers. Nothing here knows any rules.
+// floating damage numbers. Nothing here knows any rules. (The root fx.js
+// until R7, which moved it here: view/effects/shots.js plays the shooting's
+// events with it, view/units.js and view/terrain.js the figures' and the
+// battlefield's.)
 // ---------------------------------------------------------------------------
 
 const MAX_CUBES = 900

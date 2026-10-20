@@ -39,8 +39,22 @@ the commit, and add whatever the work turned up.
   play of the core, the Session included since R6b), and from R6b
   `node sim/boundaries.mjs` (and `--self-test`: the layer rules, which
   code may import what, the core's surface that keeps the dice out of the
-  layers above it, and what the consensus code must never contain).
-  A step
+  layers above it, and what the consensus code must never contain), and
+  from R7a `node sim/camera-check.mjs` (the camera presets give the R0
+  code's views, and the CameraRig comes to rest where `fitPose` puts it;
+  F1/F2 change its "battleView chooses by the screen's shape" checks on
+  purpose, DESIGN §2.11). A step that touches `view/`, main.js's handlers
+  or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH` set),
+  each exiting 0: `node sim/snap-check.mjs` (and `--self-test`: the table
+  built event by event is a fresh snap's, and each battle's table snapped
+  in place at its end; by default seven battles, and the whole corpus,
+  `--only ai,human`, at milestones, as P-browser),
+  `node sim/rematch-memory.mjs` (and `--self-test`: renderer.info and the
+  heap flat over 5 rematches, and no shader program linked twice between
+  a title and a battle's end), `node sim/title-shot.mjs` (the title at 1200 ms against the
+  previous commit; exit 3 is a timeout, not a verdict: run it again) and
+  `node sim/terrain-shots.mjs` (the five boards against R0, run at every
+  step that touched the view since R3, listed here from R7a). A step
   that changes what one of them reads ports it in the same step (DESIGN's
   §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
@@ -460,7 +474,76 @@ step keeps the game playable.
     zones' opacity on the title after a battle) listed for approval; stale
     headers rewritten. Every check again (DESIGN's R6b notes).
 - [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,
-  input tools, `ui/*`, HUD model, template cache.
+  input tools, `ui/*`, HUD model, template cache. In two passes: R7a (the
+  view), R7b (the input, the UI, the HUD model and the app; main.js down to
+  its boot).
+  - [x] **R7a** built: every three.js object the page draws is made and
+    played by `view/`'s modules (stage, clock, camera rig, table,
+    objectives, units, terrain, overlay, effects, models, sfx; `util.js`,
+    `fx.js`, `sfx.js` and `models.js` moved or split), the camera's poses
+    come from `present/camera-presets.js` (today's views, the broadside and
+    behind presets built for F1/F2), and main.js keeps the input, the UI
+    and the flow (2,357 lines to 1,648). The player snaps: a new table and
+    a battle's start rebuild the table from the match as it stands
+    (`TerrainView.sync`, `UnitViews.sync`), in place of the start's dropped
+    board events, and the board's adds take back the meshes on show.
+    Figures are cloned from a template per unit type, and a new table frees
+    the last one's figures and meshes (before, every rematch leaked a
+    table's geometry). Changes a player can see, for approval: a block a
+    blast drops now falls to its place instead of floating a level up when
+    the blast drops it twice, or drops and then hurts it (R0's tweens). The
+    start's snap shows the title's stage, so P-present still sees the
+    deployment's `stage` event. New checks: the snap-equivalence check in
+    Chromium (`sim/snap-check.mjs`, with a self-test), renderer.info and
+    the heap over 5 rematches (`sim/rematch-memory.mjs`), the camera
+    presets against R0's camera (`sim/camera-check.mjs`), and the title at
+    1200 ms against HEAD (`sim/title-shot.mjs`). Checks: parity 40/40 on
+    the core and on the page, P-browser over the whole corpus 40/40,
+    P-present 40/40 (and its self-test), P-prop, the snap check over seven
+    battles (and its self-test), the memory check over 5 rematches (HEAD's
+    leak shown by the same check), the title against HEAD, every standing
+    check, and the shipped page played rendered in Chromium without
+    `?debug` or `?fast`: a watched battle to its end screen and back to a
+    new battlefield, vs. the AI from each seat with real clicks, and
+    hotseat (DESIGN's R7a notes, with what R7b must do). Fixer, round 1:
+    the camera rig's `fit` and `goTo(preset)` (a fitted preset, F1's or
+    F2's, no longer throws, and the dolly limit makes room for it), tested
+    on the rig itself in `sim/camera-check.mjs`; a board's adds on a table
+    synced to wrecked chunks no longer take back a broken chunk's empty item
+    (a standing chunk never drawn) or a block the sync set lower (left at
+    its dropped height) (terrain-check plays it, with two more self-test
+    edits); the snap check's fresh snap goes
+    through the player's own `rebuild` and compares the shooting's marker
+    and thorns; a snap puts a war machine's arm and globe back; every check
+    again. Fixer, round 2: R7a's checks joined the standing checks above
+    (`sim/camera-check.mjs` every step; the snap check and its self-test,
+    the memory check, the title shot and `sim/terrain-shots.mjs` in
+    Chromium for a step that touches the view, the snap check over the
+    whole corpus at milestones), and F1/F2's rows name camera-check's
+    checks they change; the snap check ran over the whole corpus, 40/40;
+    the presets' unread `fit` gone (`fitPose` fits the whole board, and a
+    narrow portrait phone stops at `max`: F1/F2's to tune); an open card is
+    left as it was after a snap, as before R7 (no card is open across one
+    in play); `sim/title-shot.mjs --timeout`, a timeout read as
+    inconclusive (exit 3), not as a failed frame; stale wording fixed (the
+    start snaps the backdrop, the battle's table; "another point of the
+    stream"; the projectiles made with the shooting's view); What R7b must
+    do names homes for the handlers' table, `rebuild`, `sameUnits`, `onTitle`
+    and the fallback, and the HUD after a snap mid-battle; every check
+    again (DESIGN's R7a notes). Fixer, round 3: a snap takes away fx's
+    scorch and acid marks (only a new table did, after its snap; N2's
+    scrub or rejoin would have kept a left timeline's), held by the snap
+    check snapping each battle's table in place at its end (a self-test
+    edit more); a glowing projectile's material is shared per colour
+    instead of made and freed per shot, which linked its shader program
+    again at every spit or acid volley, held by the memory check noting
+    every program linked (and its own `--self-test`); terrain-check holds
+    every add's def to the view's copy of `defOf` (a self-test edit more;
+    F7's row names the pair); the docs give `UnitViews.sync(units,
+    edgeOf)`, and What R7b must do names flag-lint's two main.js entries
+    and no new boundaries rows; every check again (DESIGN's R7a notes).
+  - [ ] **R7b** `input/`, `ui/*`, `present/hud-model.js`, `app/boot.js` and
+    `flow.js`; main.js down to its boot.
 - [ ] **R8 Netplay seams.** `stateHash`, envelopes, `Folder` (the replicated
   authority), merge-sim.
 
