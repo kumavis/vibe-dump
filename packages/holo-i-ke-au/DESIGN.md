@@ -284,6 +284,22 @@ for the schema. The pin is the entry point on the far view; selecting it flies
 the camera through the stops at whichever zooms the story needs, setting the
 year as it goes.
 
+**The whole app is one tour.** There is no play button: an automatic sweep of
+the timeline gives the viewer nothing to look at. Instead a Next button (and
+Back) advances to the next chapter and flies the camera to where it happened,
+then waits. Chapters are the eras in order; within a chapter, Next steps
+through the era's events by date, each at the zoom it asks for, and an event
+with stops walks them. The slider stays for free exploration and leaves the
+tour; Next resumes it from the nearest chapter. The sequence is built from the
+data, never hard-coded, so adding an event adds a step.
+
+**Pins cluster.** Many events share a place (ʻIolani Palace carries the
+overthrow, the 1895 rising and ʻOnipaʻa at one point). Pins within a few
+dozen screen pixels group into one marker with a count; hovering lists them,
+clicking opens a list card; zooming in splits clusters whose places differ,
+and identical places stay a list. The current tour step's pin is always drawn
+on its own.
+
 ### 5.7 Ocean
 
 The ahupuaʻa swell-and-surf shader is near-field. The far field needs its own
@@ -502,6 +518,8 @@ package with no `index.html` as scaffolding.
 - **Tone for battles and for depopulation** (§8). Decide before any figure work.
 - **Data budget and hosting**: committed packs under ~50 MB, or release assets.
 - **Timeline UI**: reigns with approximate years, or years with reign labels.
+  Decided so far: the era label leads with the approximate year beside it,
+  and the primary control is Next through chapters, not a play sweep (§5.6).
 - **How uncertainty looks**: hatching, soft radii, ranges on cards; one visual
   language for all three.
 - **Whether the coda ships in v1** or follows.
