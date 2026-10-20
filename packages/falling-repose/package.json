@@ -8,7 +8,7 @@
     "title": "Falling Repose",
     "description": "A figure falls through time in repose — a black cutout pouring volumetric light into a haze like sun in deep water, motes streaking past slow but fast, over a Shepard tone that never stops descending. Press and hold to hold time; drag to turn the camera, scroll or pinch to pull back.",
     "tags": ["art"],
-    "status": "wip",
+    "status": "done",
     "models": ["Opus 5.5"],
     "thinking": "ultracode",
     "thumbnail": { "waitFor": "body.ready", "settle": 2500 }
