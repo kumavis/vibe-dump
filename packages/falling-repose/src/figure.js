@@ -436,6 +436,67 @@ export class Figure {
     })
   }
 
+  // The same shapes in 3D, for the solid view (?solid): four texels each,
+  // world space, no projection.
+  //   cone     [a, ra] [b, rb] [k, 0|2, 0, -1] [0]         2 marks hair
+  //   ellipsoid [c, k] [x axis, rx] [y axis, ry] [z axis, rz]
+  // Group bounding spheres let the ray-march skip a hand it isn't near.
+  pack3D() {
+    const D = (this.data3 ??= new Float32Array(MAX_PRIMS * 16))
+    const J = this.byName
+    let n = 0
+    const groups = new Map(), order = []
+    const push = (g, rows, pts) => {
+      if (n >= MAX_PRIMS) return
+      rows.forEach((r, i) => D.set(r, n * 16 + i * 4))
+      if (!groups.has(g)) {
+        groups.set(g, { start: n, count: 0, lo: [1e9, 1e9, 1e9], hi: [-1e9, -1e9, -1e9], k: 0 })
+        order.push(g)
+      }
+      const G = groups.get(g)
+      G.count++
+      for (const [p, r] of pts)
+        for (let i = 0; i < 3; i++) {
+          G.lo[i] = Math.min(G.lo[i], p[i] - r)
+          G.hi[i] = Math.max(G.hi[i], p[i] + r)
+        }
+      G.k = Math.max(G.k, rows[2][3] < 0 ? rows[2][0] : rows[0][3])
+      n++
+    }
+    for (const sh of this.shapes) {
+      const j = J[sh.j]
+      const m = j.side
+      if (sh.type === 0) {
+        const a = add3(j.p, apply3(j.R, [sh.a[0] * m, sh.a[1], sh.a[2]]))
+        const b = add3(j.p, apply3(j.R, [sh.b[0] * m, sh.b[1], sh.b[2]]))
+        push(sh.g, [[...a, sh.ra], [...b, sh.rb], [sh.k, 0, 0, -1], [0, 0, 0, 0]], [[a, sh.ra], [b, sh.rb]])
+      } else {
+        const c = add3(j.p, apply3(j.R, [sh.c[0] * m, sh.c[1], sh.c[2]]))
+        let R = j.R
+        if (sh.e) R = mul3(R, euler(sh.e[0], sh.e[1] * m, sh.e[2] * m))
+        const col = (i) => [R[i], R[3 + i], R[6 + i]]
+        const rmax = Math.max(...sh.r)
+        push(sh.g, [[...c, sh.k], [...col(0), sh.r[0]], [...col(1), sh.r[1]], [...col(2), sh.r[2]]], [[c, rmax]])
+      }
+    }
+    for (const { pts, width } of this.hair) {
+      const m = pts.length - 1
+      const rad = (f) => width * Math.pow(1 - f, 1.4) + 0.0016
+      for (let i = 0; i < m; i++) {
+        const r0 = rad(i / m), r1 = rad((i + 1) / m)
+        push('hair', [[...pts[i], r0], [...pts[i + 1], r1], [Math.max(0.0025, r0 * 1.5), 2, 0, -1], [0, 0, 0, 0]], [[pts[i], r0], [pts[i + 1], r1]])
+      }
+    }
+    this.count3 = n
+    this.groups3 = order.map((g) => {
+      const G = groups.get(g)
+      const c = G.lo.map((v, i) => (v + G.hi[i]) / 2)
+      const r = Math.hypot(G.hi[0] - G.lo[0], G.hi[1] - G.lo[1], G.hi[2] - G.lo[2]) / 2
+      return { c, r, k: G.k, start: G.start, count: G.count }
+    })
+    return this
+  }
+
   // A point on the body to aim a camera at, from the current pose (a
   // development aid; see ?look in main.js).
   lookPoint(name) {

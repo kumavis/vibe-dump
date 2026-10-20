@@ -13,6 +13,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 //   ?t=95        start the clock at 95 s (skips the fade)
 //   ?still       freeze the clock
 //   ?fig         draw only the silhouette, black on paper
+//   ?solid       ray-march the body in 3D and light it like clay
 //   ?pose=curl   pin a pose key (open, curl, surrender, stand)
 //   ?roll= &twist= &yaw= &tilt=   pin the body's orientation
 //   ?reach=1     pin the gesture
@@ -24,6 +25,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 const params = new URLSearchParams(location.search)
 const pin = (name, value) => (params.has(name) ? +params.get(name) : value)
 const look = params.get('look')
+const solid = params.has('solid')
 
 let renderer
 try {
@@ -459,6 +461,7 @@ function step(dt) {
   const wind = 0.35 + 0.6 * Math.min(2, Math.max(0, clock.blur))
   figure.pose(s, { wind, reach: pin('reach', clock.reach), wall: T, orient, preset: params.get('pose') })
   figure.project(cam)
+  if (solid) figure.pack3D()
 
   // the light sits behind the torso, wandering a little so the shafts sweep
   const tp = figure.torsoPx
@@ -491,6 +494,7 @@ function step(dt) {
     bloom: 0.3,
     pr,
     debug: params.has('fig'),
+    solid,
   })
 
   if (!ready && fade >= 1 && frames > 8) {

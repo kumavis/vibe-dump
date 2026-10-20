@@ -531,3 +531,178 @@ void main() {
   col += (ign(gl_FragCoord.xy + fract(uTime) * 61.0) - 0.5) / 255.0 * step(0.0005, l);
   o = vec4(max(col, 0.0), 1.0);
 }`
+
+// ---------------------------------------------------------------------------
+// The solid view (?solid): the body the silhouette is cut from, ray-marched
+// in 3D from the same capsules and ellipsoids and shaded like clay under a
+// studio key, fill and rim light, so its form can be seen and judged. A
+// development aid; the piece itself never shows it.
+export const fsSolid = /* glsl */ `${HEAD}
+uniform highp sampler2D uPrims3;
+uniform vec4 uGroups3[12]; // centre, radius (blend margin included)
+uniform ivec2 uRanges3[12];
+uniform int uGroupCount3;
+uniform vec4 uBound;
+uniform vec3 uCamPos;
+uniform vec3 uRight;
+uniform vec3 uUp;
+uniform vec3 uFwd;
+uniform float uFocal;
+uniform float uAspect;
+in vec2 vUv;
+out vec4 o;
+
+float dot2(vec3 v) { return dot(v, v); }
+
+// a cone capped by two spheres of different radii (after Inigo Quilez)
+float sdRoundCone(vec3 p, vec3 a, vec3 b, float r1, float r2) {
+  vec3 ba = b - a;
+  float l2 = dot(ba, ba);
+  float rr = r1 - r2;
+  float a2 = l2 - rr * rr;
+  if (a2 <= 1e-9) return r1 > r2 ? length(p - a) - r1 : length(p - b) - r2;
+  float il2 = 1.0 / l2;
+  vec3 pa = p - a;
+  float y = dot(pa, ba);
+  float z = y - l2;
+  float x2 = dot2(pa * l2 - ba * y);
+  float y2 = y * y * l2;
+  float z2 = z * z * l2;
+  float k = sign(rr) * rr * rr * x2;
+  if (sign(z) * a2 * z2 > k) return sqrt(x2 + z2) * il2 - r2;
+  if (sign(y) * a2 * y2 < k) return sqrt(x2 + y2) * il2 - r1;
+  return (sqrt(x2 * a2 * il2) + y * rr) * il2 - r1;
+}
+
+float sdEllipsoid(vec3 p, vec3 c, vec3 ax, vec3 ay, vec3 az, vec3 r) {
+  vec3 d = p - c;
+  vec3 q = vec3(dot(ax, d), dot(ay, d), dot(az, d));
+  float k0 = length(q / r);
+  float k1 = length(q / (r * r));
+  return k1 > 1e-6 ? k0 * (k0 - 1.0) / k1 : -min(r.x, min(r.y, r.z));
+}
+
+float map(vec3 p, out float hair) {
+  float d = 1e5;
+  hair = 0.0;
+  for (int g = 0; g < 12; g++) {
+    if (g >= uGroupCount3) break;
+    vec4 G = uGroups3[g];
+    if (length(p - G.xyz) - G.w > d) continue;
+    ivec2 R = uRanges3[g];
+    for (int i = 0; i < 128; i++) {
+      if (i >= R.y) break;
+      int x = (R.x + i) * 4;
+      vec4 A = texelFetch(uPrims3, ivec2(x, 0), 0);
+      vec4 B = texelFetch(uPrims3, ivec2(x + 1, 0), 0);
+      vec4 C = texelFetch(uPrims3, ivec2(x + 2, 0), 0);
+      float di, k, isHair = 0.0;
+      // a cone is tagged -1 where an ellipsoid keeps a (positive) radius
+      if (C.w < 0.0) {
+        di = sdRoundCone(p, A.xyz, B.xyz, A.w, B.w);
+        k = C.x;
+        isHair = C.y == 2.0 ? 1.0 : 0.0;
+      } else {
+        vec4 D = texelFetch(uPrims3, ivec2(x + 3, 0), 0);
+        di = sdEllipsoid(p, A.xyz, B.xyz, C.xyz, D.xyz, vec3(B.w, C.w, D.w));
+        k = A.w;
+      }
+      k = max(k, 1e-4);
+      float h = clamp(0.5 + 0.5 * (d - di) / k, 0.0, 1.0);
+      d = mix(d, di, h) - k * h * (1.0 - h);
+      hair = mix(hair, isHair, h);
+    }
+  }
+  return d;
+}
+
+float map(vec3 p) {
+  float h;
+  return map(p, h);
+}
+
+vec3 normalAt(vec3 p) {
+  // a wide sample: overlapping blended shapes ripple the field finely
+  vec2 e = vec2(1.0, -1.0) * 0.0015;
+  return normalize(e.xyy * map(p + e.xyy) + e.yyx * map(p + e.yyx) + e.yxy * map(p + e.yxy) + e.xxx * map(p + e.xxx));
+}
+
+float occlusion(vec3 p, vec3 n) {
+  float occ = 0.0, w = 1.0;
+  for (int i = 1; i <= 5; i++) {
+    float h = 0.006 + 0.02 * float(i);
+    occ += (h - map(p + n * h)) * w;
+    w *= 0.7;
+  }
+  return clamp(1.0 - 2.5 * occ / 0.06, 0.0, 1.0);
+}
+
+float softShadow(vec3 ro, vec3 rd) {
+  // start clear of the surface: where blended shapes overlap the distance
+  // estimate is loose, and a shadow ray that starts too close finds itself
+  float res = 1.0, t = 0.015;
+  for (int i = 0; i < 48; i++) {
+    float h = map(ro + rd * t);
+    res = min(res, 7.0 * h / t);
+    t += clamp(h, 0.005, 0.06);
+    if (res < 0.005 || t > 1.2) break;
+  }
+  return clamp(res, 0.0, 1.0);
+}
+
+vec3 aces(vec3 x) {
+  return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
+}
+
+void main() {
+  vec2 ndc = vUv * 2.0 - 1.0;
+  vec3 rd = normalize(uFwd * uFocal + uRight * ndc.x * uAspect + uUp * ndc.y);
+  vec3 ro = uCamPos;
+  vec3 bg = mix(vec3(0.05, 0.055, 0.065), vec3(0.2, 0.21, 0.23), smoothstep(-0.2, 1.1, vUv.y));
+  bg *= 1.0 - 0.35 * dot(ndc * 0.6, ndc * 0.6);
+  vec3 col = bg;
+
+  vec3 oc = ro - uBound.xyz;
+  float b = dot(oc, rd);
+  float cc = dot(oc, oc) - uBound.w * uBound.w;
+  float disc = b * b - cc;
+  if (disc > 0.0) {
+    float t = max(-b - sqrt(disc), 0.0);
+    float t1 = -b + sqrt(disc);
+    float hairW = 0.0;
+    bool hit = false;
+    // the ellipsoid distance is an estimate that can overshoot at a graze,
+    // so step short; it costs steps, and this view has time
+    for (int i = 0; i < 400; i++) {
+      vec3 p = ro + rd * t;
+      float d = map(p, hairW);
+      if (d < 0.00012 * t + 0.00002) {
+        hit = true;
+        break;
+      }
+      t += d * 0.55;
+      if (t > t1) break;
+    }
+    if (hit) {
+      vec3 p = ro + rd * t;
+      vec3 n = normalAt(p);
+      vec3 key = normalize(-uRight * 0.55 + uUp * 0.7 - uFwd * 0.5);
+      vec3 fill = normalize(uRight * 0.85 + uUp * 0.05 - uFwd * 0.45);
+      vec3 albedo = mix(vec3(0.78, 0.73, 0.68), vec3(0.3, 0.24, 0.19), hairW);
+      float ao = occlusion(p, n);
+      float sh = softShadow(p + n * 0.006, key);
+      float dk = max(dot(n, key), 0.0);
+      float df = max(dot(n, fill), 0.0);
+      float sky = 0.5 + 0.5 * dot(n, uUp);
+      float fres = pow(1.0 - clamp(dot(n, -rd), 0.0, 1.0), 4.0);
+      vec3 lit = vec3(1.0, 0.95, 0.88) * dk * sh * 1.6 + vec3(0.55, 0.65, 0.8) * df * 0.45 + vec3(0.3, 0.33, 0.38) * sky * 0.5;
+      col = albedo * lit * (0.35 + 0.65 * ao);
+      // the piece's own light, from behind: a warm rim on every edge
+      col += vec3(1.0, 0.8, 0.55) * fres * 0.9 * (0.5 + 0.5 * ao);
+      vec3 hv = normalize(key - rd);
+      col += vec3(1.0) * pow(max(dot(n, hv), 0.0), 40.0) * 0.12 * sh * (1.0 - hairW);
+    }
+  }
+  col = aces(col * 1.1);
+  o = vec4(pow(col, vec3(1.0 / 2.2)), 1.0);
+}`

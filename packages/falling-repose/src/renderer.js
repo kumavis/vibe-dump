@@ -25,6 +25,7 @@ export class Renderer {
     this.pDown = program(gl, S.vsQuad, S.fsDown)
     this.pUp = program(gl, S.vsQuad, S.fsUp)
     this.pFinal = program(gl, S.vsQuad, S.fsFinal, defs)
+    this.pSolid = null // the solid debug view compiles on first use
 
     // primitive table for the silhouette shader
     this.primTex = gl.createTexture()
@@ -92,6 +93,49 @@ export class Renderer {
   // field: 1 at full quality, 2 when the frame-rate governor needs it back.
   // `pr` is canvas pixels per CSS pixel; the bloom is sized in CSS pixels so
   // its glow keeps the same reach whatever rung the governor is on.
+  // ?solid: ray-march the body in 3D and light it, instead of the piece
+  renderSolid(F) {
+    const gl = this.gl
+    const fig = F.figure
+    if (!this.pSolid) {
+      this.pSolid = program(gl, S.vsQuad, S.fsSolid)
+      this.primTex3 = gl.createTexture()
+      gl.bindTexture(gl.TEXTURE_2D, this.primTex3)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, fig.data3.length / 4, 1, 0, gl.RGBA, gl.FLOAT, null)
+    }
+    gl.bindTexture(gl.TEXTURE_2D, this.primTex3)
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, fig.count3 * 4, 1, gl.RGBA, gl.FLOAT, fig.data3, 0)
+    bindTarget(gl, null)
+    const u = this.pSolid.u
+    gl.useProgram(this.pSolid.p)
+    bindTex(gl, 0, this.primTex3, u.uPrims3)
+    const G = new Float32Array(48), Rg = new Int32Array(24)
+    const lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9]
+    fig.groups3.slice(0, 12).forEach((g, i) => {
+      G.set([...g.c, g.r + g.k], i * 4)
+      Rg.set([g.start, g.count], i * 2)
+      for (let k = 0; k < 3; k++) {
+        lo[k] = Math.min(lo[k], g.c[k] - g.r)
+        hi[k] = Math.max(hi[k], g.c[k] + g.r)
+      }
+    })
+    gl.uniform4fv(u.uGroups3, G)
+    gl.uniform2iv(u.uRanges3, Rg)
+    gl.uniform1i(u.uGroupCount3, Math.min(12, fig.groups3.length))
+    const c = lo.map((v, k) => (v + hi[k]) / 2)
+    gl.uniform4f(u.uBound, c[0], c[1], c[2], Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) / 2 + 0.05)
+    const R = F.cam.R
+    gl.uniform3fv(u.uCamPos, F.cam.pos)
+    gl.uniform3f(u.uRight, R[0], R[1], R[2])
+    gl.uniform3f(u.uUp, R[3], R[4], R[5])
+    gl.uniform3f(u.uFwd, -R[6], -R[7], -R[8])
+    gl.uniform1f(u.uFocal, F.cam.focal)
+    gl.uniform1f(u.uAspect, this.w / this.h)
+    this.quad()
+  }
+
   resize(w, h, sdfDiv = 2, pr = 1) {
     if (w === this.w && h === this.h && sdfDiv === this.sdfDiv && pr === this.pr) return
     const gl = this.gl
@@ -124,6 +168,7 @@ export class Renderer {
     const gl = this.gl
     const { w, h } = this
     const fig = F.figure
+    if (F.solid) return this.renderSolid(F)
 
     // 1 · silhouette
     gl.bindTexture(gl.TEXTURE_2D, this.primTex)
