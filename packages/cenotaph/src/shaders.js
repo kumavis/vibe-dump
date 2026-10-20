@@ -31,6 +31,23 @@ float sdfDecode(vec4 v) {
 }
 `
 
+// And without them the frame itself has to fit in 8 bits: light is stored as
+// sqrt(x / (1 + x)), which keeps fine steps in the dark and room for the
+// glare, and the hit distance as sqrt(t / 512).
+const HDR = /* glsl */ `
+#ifdef SDF8
+vec3 encHDR(vec3 c) { return sqrt(c / (1.0 + c)); }
+vec3 decHDR(vec3 e) { vec3 e2 = e * e; return e2 / max(1.0 - e2, 1e-3); }
+float encT(float t) { return sqrt(clamp(t / 512.0, 0.0, 1.0)); }
+float decT(float a) { return a * a * 512.0; }
+#else
+vec3 encHDR(vec3 c) { return c; }
+vec3 decHDR(vec3 e) { return e; }
+float encT(float t) { return t; }
+float decT(float a) { return a; }
+#endif
+`
+
 const NOISE = /* glsl */ `
 float hash12(vec2 p) {
   vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -267,7 +284,7 @@ float hg(float c, float g) {
 }
 // forward-scattering haze, with a little back-scatter so the shafts still
 // read when the sun is behind the eye
-float phase(float c) { return mix(hg(c, 0.68), hg(c, -0.25), 0.22); }
+float phase(float c) { return mix(hg(c, 0.55), hg(c, -0.25), 0.22); }
 
 // ---- the opening as light --------------------------------------------------
 // The emitters: sixteen patches of the opening. Each is a patch of sky in the
@@ -330,7 +347,7 @@ vec3 bounce(vec3 p, vec3 n, vec3 skyC, vec3 poolC, float area) {
   }
   vec3 pr = poolRadiance();
   // and the faint second bounce off everything else, without direction
-  return uSkyColor * sky + BOUNCE_GAIN * (pr * pool + beamIntensity(area) * beam + (uSkyColor * 0.002 + pr * 0.008) * (0.6 + 0.4 * n.y));
+  return uSkyColor * sky + BOUNCE_GAIN * (pr * pool + beamIntensity(area) * beam + (uSkyColor * 0.002 + pr * 0.008) * (0.75 - 0.25 * n.y));
 }
 
 // ---- the hall's surfaces ---------------------------------------------------
@@ -397,11 +414,10 @@ Hit traceHall(vec3 o, vec3 d) {
   return h;
 }
 
-// ---- concrete --------------------------------------------------------------
-// Board-formed in the walls and piers: panels 2.4 m by 1.2 m, each a slightly
-// different pour, with the seams between them and the six tie holes the
-// formwork left. The floor is ground and polished, with saw-cut joints every
-// six metres and the aggregate showing through.
+// ---- concrete ----------------------------------------------------------------
+// Smooth cast concrete in the walls, piers and ceiling (see concrete() below).
+// The floor is ground and polished, with saw-cut joints every six metres and
+// the aggregate showing through.
 
 // distance to the nearest grid line, in metres, over a cell of size s
 vec2 gridDist(vec2 p, vec2 s) {
@@ -431,11 +447,12 @@ Surf concrete(vec3 p, vec3 n, int mat, float fp) {
     float mott = fbm2(q * 0.07) * 0.6 + fbm2(q * 0.45 + 7.0) * 0.4;
     float speck = hash12(floor(q * 90.0));
     float agg = smoothstep(0.82, 0.95, speck) * (1.0 - smoothstep(0.004, 0.02, fp));
-    vec3 base = vec3(0.235, 0.228, 0.218) * mix(0.72, 1.18, mott);
+    // dark, so what it mirrors can show in it
+    vec3 base = vec3(0.14, 0.136, 0.13) * mix(0.72, 1.18, mott);
     base = mix(base, vec3(0.34, 0.33, 0.31), agg * 0.5);
     vec2 g = gridDist(q, vec2(6.0));
-    float joint = max(line(g.x, 0.006, fp), line(g.y, 0.006, fp));
-    s.albedo = base * (1.0 - 0.55 * joint);
+    float joint = max(line(g.x, 0.012, fp), line(g.y, 0.012, fp));
+    s.albedo = base * (1.0 - 0.8 * joint);
     // the polish: glassy, worn duller in broad swirls, never perfect
     float wear = fbm2(q * 0.11 + 3.0);
     s.rough = mix(0.035, 0.2, smoothstep(0.35, 0.85, wear)) + joint * 0.3;
@@ -585,23 +602,30 @@ float smithV(float nv, float nl, float a) {
   float k = a * 0.5;
   return 0.25 / ((nv * (1.0 - k) + k) * (nl * (1.0 - k) + k));
 }
-float schlick(float c) { return 0.04 + 0.96 * pow(1.0 - c, 5.0); }
+float schlick(float c) {
+  float f = 1.0 - clamp(c, 0.0, 1.0);
+  float f2 = f * f;
+  return 0.04 + 0.96 * f2 * f2 * f;
+}
 
 // a microfacet normal, importance-sampled from the GGX lobe
 vec3 ggxSample(vec3 n, float a, vec2 xi) {
   float phi = 2.0 * PI * xi.x;
   float ct = sqrt((1.0 - xi.y) / (1.0 + (a * a - 1.0) * xi.y));
-  float st = sqrt(1.0 - ct * ct);
+  float st = sqrt(max(1.0 - ct * ct, 0.0));
   vec3 t = abs(n.y) < 0.99 ? normalize(cross(n, vec3(0, 1, 0))) : vec3(1, 0, 0);
   vec3 b = cross(n, t);
   return normalize(t * st * cos(phi) + b * st * sin(phi) + n * ct);
 }
 
 // the diffuse and the sun's specular at a surface; v points back at the eye
-vec3 lightSurface(vec3 p, Surf s, vec3 v, int mat, vec3 skyC, vec3 poolC, float area) {
+// (the floor's own highlight goes out in spec, apart from the diffuse, so
+// the polish can take its share of the diffuse alone)
+vec3 lightSurface(vec3 p, Surf s, vec3 v, int mat, vec3 skyC, vec3 poolC, float area, out vec3 spec) {
   vec3 n = s.n;
   float sun = sunVis(p + n * 0.02) * max(dot(n, uSun), 0.0);
   vec3 col = vec3(0.0);
+  spec = vec3(0.0);
   if (sun > 0.0) {
     vec3 E = uSunColor * sun * sunPath(p);
     col += s.albedo / PI * E;
@@ -610,7 +634,7 @@ vec3 lightSurface(vec3 p, Surf s, vec3 v, int mat, vec3 skyC, vec3 poolC, float 
       float a = max(s.rough * s.rough, 0.002);
       vec3 hv = normalize(uSun + v);
       float nl = max(dot(n, uSun), 1e-3), nv = max(dot(n, v), 1e-3);
-      col += E * ggxD(max(dot(n, hv), 0.0), a) * smithV(nv, nl, a) * schlick(max(dot(v, hv), 0.0));
+      spec = E * ggxD(max(dot(n, hv), 0.0), a) * smithV(nv, nl, a) * schlick(max(dot(v, hv), 0.0));
     }
   }
   col += s.albedo / PI * bounce(p, n, skyC, poolC, area) * s.ao;
@@ -621,6 +645,7 @@ vec3 lightSurface(vec3 p, Surf s, vec3 v, int mat, vec3 skyC, vec3 poolC, float 
 // The whole frame's light in one pass, at the governor's resolution.
 export const fsHall = /* glsl */ `${HEAD}
 ${SDF}
+${HDR}
 ${NOISE}
 ${HALL}
 uniform vec2 uRes;
@@ -638,7 +663,7 @@ in vec2 vUv;
 out vec4 o;
 
 // everything a ray sees along its way and where it lands, bar reflections
-vec3 look(vec3 ro, vec3 rd, Hit h, int steps, float jit, float fp, bool primary, vec3 skyC, vec3 poolC, float area, out Surf s, out vec3 p) {
+vec3 look(vec3 ro, vec3 rd, Hit h, int steps, float jit, float fp, bool primary, vec3 skyC, vec3 poolC, float area, out Surf s, out vec3 p, out vec3 surf) {
   p = ro + rd * h.t;
   vec3 col;
   s.rough = 1.0;
@@ -649,15 +674,21 @@ vec3 look(vec3 ro, vec3 rd, Hit h, int steps, float jit, float fp, bool primary,
     float cov = clamp(0.5 - d / max(fp, 1e-3), 0.0, 1.0);
     vec3 up = cov > 0.0 ? opening(p, rd, primary) : vec3(0.0);
     s = concrete(p, h.n, 1, fp);
-    vec3 cl = cov < 1.0 ? lightSurface(p, s, -rd, 1, skyC, poolC, area) : vec3(0.0);
+    vec3 spec;
+    vec3 cl = cov < 1.0 ? lightSurface(p, s, -rd, 1, skyC, poolC, area, spec) : vec3(0.0);
     col = mix(cl, up, cov);
+    surf = col;
     s.rough = 1.0;
   } else {
     s = concrete(p, h.n, h.mat, fp);
-    col = lightSurface(p, s, -rd, h.mat, skyC, poolC, area);
+    vec3 spec;
+    col = lightSurface(p, s, -rd, h.mat, skyC, poolC, area, spec);
+    surf = col;
+    col += spec;
   }
   float T = exp(-opticalDepth(ro, rd, h.t));
   col *= T;
+  surf *= T;
   col += shafts(ro, rd, h.t, steps, jit);
   col += airGlow(ro, rd, h.t, fract(jit + 0.37), skyC, poolC, area);
   return col;
@@ -686,26 +717,38 @@ void main() {
   float pixAngle = 2.0 / (uRes.y * uFocal);
   float fp = h.t * pixAngle / max(abs(dot(rd, h.n)), 0.08);
   Surf s;
-  vec3 p;
-  vec3 col = look(ro, rd, h, uSteps, jit, fp * 0.7, true, skyC, poolC, area, s, p);
+  vec3 p, surf;
+  vec3 col = look(ro, rd, h, uSteps, jit, fp * 0.7, true, skyC, poolC, area, s, p, surf);
+  // what the resolve reprojects by: where the eye sees this pixel's light come from
+  float tOut = h.t;
 
   if (h.mat == 0) {
     // the polished floor: a second ray, scattered by how worn the polish is
     vec3 v = -rd;
-    vec2 xi = fract(hash22(gl_FragCoord.xy + float(uFrame % 256) * vec2(7.31, 3.17)) + vec2(jit * 0.5, 0.0));
+    // a low-discrepancy walk over the lobe, offset per pixel, so the frames
+    // the resolve blends cover it evenly; and none of the long tail, whose
+    // rare rays into the bright opening would only be glitter
+    vec2 xi = fract(float(uFrame % 64) * vec2(0.7548777, 0.5698403) + hash22(gl_FragCoord.xy));
+    xi.y *= 0.8;
     float a = max(s.rough * s.rough, 0.0015);
     vec3 m = ggxSample(s.n, a, xi);
     vec3 r = reflect(rd, m);
     if (r.y <= 0.002) r = reflect(rd, s.n);
     Hit h2 = traceHall(p + s.n * 0.01, r);
     Surf s2;
-    vec3 p2;
+    vec3 p2, surf2;
     float fp2 = (h.t + h2.t) * pixAngle / max(abs(dot(r, h2.n)), 0.08) + h2.t * a;
-    vec3 refl = look(p + s.n * 0.01, r, h2, uReflSteps, fract(jit + 0.5), fp2, false, skyC, poolC, area, s2, p2);
+    vec3 refl = look(p + s.n * 0.01, r, h2, uReflSteps, fract(jit + 0.5), fp2, false, skyC, poolC, area, s2, p2, surf2);
     float F = schlick(max(dot(v, m), 0.0));
-    col += refl * F * exp(-opticalDepth(ro, rd, h.t));
+    vec3 mirrored = refl * F * exp(-opticalDepth(ro, rd, h.t));
+    // the polish takes its share from the floor's own colour
+    col += mirrored - F * surf;
+    // a mirror image moves on screen as if it were as far away as the thing
+    // it mirrors; reproject by that, as much as the image is what shows
+    float lm = dot(mirrored, vec3(0.2126, 0.7152, 0.0722)), lc = dot(col, vec3(0.2126, 0.7152, 0.0722));
+    tOut = mix(h.t, h.t + h2.t, clamp(lm / max(lc, 1e-5), 0.0, 1.0));
   }
-  o = vec4(col, h.t);
+  o = vec4(encHDR(max(col, 0.0)), encT(tOut));
 }`
 
 // ---------------------------------------------------------------------------
@@ -714,6 +757,7 @@ void main() {
 // The hall's light is all noise at one sample a pixel; over a few frames it
 // is not.
 export const fsResolve = /* glsl */ `${HEAD}
+${HDR}
 uniform sampler2D uCur;
 uniform sampler2D uHist;
 uniform vec2 uRes;
@@ -734,15 +778,18 @@ vec3 fromYCoCg(vec3 c) { return vec3(c.x + c.y - c.z, c.x + c.z, c.x - c.y - c.z
 // compress the range so a single blazing texel doesn't run the neighbourhood
 vec3 squash(vec3 c) { return c / (1.0 + max(c.r, max(c.g, c.b))); }
 vec3 unsquash(vec3 c) { return c / max(1.0 - max(c.r, max(c.g, c.b)), 1e-4); }
+// a NaN or an infinity from one bad sample reads as black, not as poison
+vec3 safe(vec3 c) { return c.r + c.g + c.b < 1e30 ? max(c, 0.0) : vec3(0.0); }
 
 void main() {
   ivec2 ip = ivec2(gl_FragCoord.xy);
   vec4 cur = texelFetch(uCur, ip, 0);
+  cur = vec4(safe(decHDR(cur.rgb)), decT(cur.a));
   vec3 m1 = vec3(0.0), m2 = vec3(0.0);
   vec3 c0 = toYCoCg(squash(cur.rgb));
   for (int j = -1; j <= 1; j++)
     for (int i = -1; i <= 1; i++) {
-      vec3 c = toYCoCg(squash(texelFetch(uCur, clamp(ip + ivec2(i, j), ivec2(0), ivec2(uRes) - 1), 0).rgb));
+      vec3 c = toYCoCg(squash(safe(decHDR(texelFetch(uCur, clamp(ip + ivec2(i, j), ivec2(0), ivec2(uRes) - 1), 0).rgb))));
       m1 += c;
       m2 += c * c;
     }
@@ -759,14 +806,15 @@ void main() {
 
   vec3 res = c0;
   if (uValid > 0.5 && inside) {
-    vec3 hist = toYCoCg(squash(texture(uHist, puv).rgb));
+    vec3 hist = toYCoCg(squash(decHDR(textureLod(uHist, puv, 0.0).rgb)));
     hist = clamp(hist, lo, hi);
     // a texel that moved a long way on screen trusts its history less
     vec2 motion = (puv - vUv) * uRes;
     float w = clamp(uBlend + length(motion) * 0.02, uBlend, 0.6);
     res = mix(hist, c0, w);
   }
-  o = vec4(unsquash(fromYCoCg(res)), cur.a);
+  vec3 outc = safe(unsquash(fromYCoCg(res)));
+  o = vec4(encHDR(outc), encT(cur.a));
 }`
 
 // ---------------------------------------------------------------------------
@@ -776,6 +824,7 @@ void main() {
 // fall is the figure's own clock, slowed to the speed of dust.
 export const vsDust = /* glsl */ `${HEAD}
 ${SDF}
+${HDR}
 ${NOISE}
 ${HALL}
 layout(location = 0) in vec2 aCorner;
@@ -821,7 +870,7 @@ void main() {
   vec2 s1 = (c1.xy / c1.w * 0.5 + 0.5) * uRes;
   float depth = c0.w;
   // behind a pier, or past the wall the eye is looking at
-  float sceneT = texture(uScene, clamp(s0 / uRes, 0.0, 1.0)).a;
+  float sceneT = decT(texture(uScene, clamp(s0 / uRes, 0.0, 1.0)).a);
   if (distance(cur, uCamPos) > sceneT + 0.5) {
     gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
     return;
@@ -865,17 +914,23 @@ void main() {
 // ---------------------------------------------------------------------------
 // Bloom: the dual-filter (Kawase) chain — cheap, wide, and smooth.
 export const fsDown = /* glsl */ `${HEAD}
+${HDR}
 uniform sampler2D uSrc;
 uniform vec2 uTexel;
+uniform int uFirst; // reading the frame itself, which may be encoded
 in vec2 vUv;
 out vec4 o;
+vec3 at(vec2 uv) {
+  vec3 c = texture(uSrc, uv).rgb;
+  return uFirst == 1 ? decHDR(c) : c;
+}
 void main() {
   vec2 h = uTexel * 0.5;
-  vec3 c = texture(uSrc, vUv).rgb * 4.0;
-  c += texture(uSrc, vUv - h).rgb;
-  c += texture(uSrc, vUv + h).rgb;
-  c += texture(uSrc, vUv + vec2(h.x, -h.y)).rgb;
-  c += texture(uSrc, vUv - vec2(h.x, -h.y)).rgb;
+  vec3 c = at(vUv) * 4.0;
+  c += at(vUv - h);
+  c += at(vUv + h);
+  c += at(vUv + vec2(h.x, -h.y));
+  c += at(vUv - vec2(h.x, -h.y));
   o = vec4(c / 8.0, 1.0);
 }`
 
@@ -898,13 +953,46 @@ void main() {
 }`
 
 // ---------------------------------------------------------------------------
+// The eye's adaptation: the mean log luminance of the frame, from a 5×5 of the
+// smallest bloom level, weighted to the middle where the eye is looking, and
+// eased toward. The eye stops down fast in a glare and opens again slowly.
+export const fsAdapt = /* glsl */ `${HEAD}
+uniform sampler2D uSrc;
+uniform sampler2D uPrev;
+uniform float uDt; // seconds since the last frame; negative to start afresh
+out vec4 o;
+void main() {
+  float acc = 0.0, wsum = 0.0;
+  for (int j = 0; j < 5; j++)
+    for (int i = 0; i < 5; i++) {
+      vec2 uv = (vec2(i, j) + 0.5) / 5.0;
+      float w = 1.0 - 0.6 * length(uv - 0.5);
+      vec3 c = textureLod(uSrc, uv, 0.0).rgb;
+      acc += w * log(max(dot(c, vec3(0.2126, 0.7152, 0.0722)), 1e-4));
+      wsum += w;
+    }
+  float now = acc / wsum;
+  if (uDt < 0.0) {
+    o = vec4(now, 0.0, 0.0, 1.0);
+    return;
+  }
+  float prev = texelFetch(uPrev, ivec2(0), 0).r;
+  float tau = now > prev ? 0.6 : 2.5;
+  o = vec4(mix(prev, now, 1.0 - exp(-uDt / tau)), 0.0, 0.0, 1.0);
+}`
+
+// ---------------------------------------------------------------------------
 export const fsFinal = /* glsl */ `${HEAD}
 ${SDF}
+${HDR}
 ${NOISE}
 uniform sampler2D uScene;
 uniform sampler2D uBloom;
 uniform sampler2D uCookie;
 uniform sampler2D uDust;
+uniform sampler2D uAdapt;
+uniform int uAdaptOn;
+uniform float uKey; // the log luminance the eye is happy at; brighter stops it down
 uniform vec2 uRes;
 uniform float uTime;
 uniform float uFade;
@@ -937,14 +1025,17 @@ void main() {
   vec2 cc = uv - 0.5;
   cc.x *= uRes.x / uRes.y;
   float r2 = dot(cc, cc);
-  vec2 ca = (uv - 0.5) * r2 * 0.012;
+  vec2 ca = (uv - 0.5) * r2 * 0.003;
   vec3 col;
-  col.r = texture(uScene, uv - ca).r;
-  col.g = texture(uScene, uv).g;
-  col.b = texture(uScene, uv + ca).b;
+  col.r = decHDR(texture(uScene, uv - ca).rgb).r;
+  col.g = decHDR(texture(uScene, uv).rgb).g;
+  col.b = decHDR(texture(uScene, uv + ca).rgb).b;
   col += texture(uDust, uv).rgb;
   col += texture(uBloom, uv).rgb * uBloomAmt;
-  col *= uExposure;
+  // the eye only ever stops down, never opens up past the set exposure, so
+  // the dark stays dark and only a glare is tamed
+  float adapt = uAdaptOn == 1 ? clamp(exp(uKey - texelFetch(uAdapt, ivec2(0), 0).r), 0.12, 1.0) : 1.0;
+  col *= uExposure * adapt;
 
   float vig = 1.0 - smoothstep(0.2, 1.3, length(cc * vec2(0.9, 1.1)) * 1.2);
   col *= mix(0.35, 1.0, vig);

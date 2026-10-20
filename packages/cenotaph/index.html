@@ -8,12 +8,20 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <canvas id="view" aria-label="A vast dark concrete hall. Sunlight falls through a hole in the ceiling shaped like a turning figure. Press and hold to hold time; drag to look around."></canvas>
+    <canvas id="view" aria-label="A vast dark concrete hall. Sunlight falls through a hole in the ceiling shaped like a turning figure. Press and hold to hold time; drag to look around. Press anywhere to begin the sound."></canvas>
     <button id="reset" type="button" aria-label="Reset view">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M5.5 12a6.5 6.5 0 1 0 2-4.7" />
         <path d="M5 4.8v3.6h3.6" />
         <circle class="dot" cx="12" cy="12" r="1.6" />
+      </svg>
+    </button>
+    <button id="sound" type="button" aria-label="Sound">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path class="cone" d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" />
+        <path class="wave w1" d="M15 9.2a4 4 0 0 1 0 5.6" />
+        <path class="wave w2" d="M17.6 6.8a7.4 7.4 0 0 1 0 10.4" />
+        <path class="mute" d="M15.5 9.5l5 5m0-5l-5 5" />
       </svg>
     </button>
     <script type="module" src="./src/main.js"></script>

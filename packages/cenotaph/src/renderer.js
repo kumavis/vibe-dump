@@ -63,6 +63,13 @@ export class Renderer {
     this.gl = ctx.gl
     this.floatOk = ctx.floatOk && !force8
     const gl = this.gl
+    // an extension that is there is not always a target that renders: try one
+    // of each kind first, and fall back to 8 bits if either fails
+    if (this.floatOk) {
+      const probes = [target(gl, 4, 4, { float: true }), target(gl, 4, 4, { float: true, channels: 2 })]
+      this.floatOk = probes.every((t) => t.ok)
+      for (const t of probes) dispose(gl, t)
+    }
     this.canvas = canvas
     this.quad = fullscreen(gl)
 
@@ -71,11 +78,12 @@ export class Renderer {
     this.pSil = program(gl, S.vsQuad, S.fsSilhouette, sdf)
     this.pEmit = program(gl, S.vsQuad, S.fsEmitters, sdf)
     this.pHall = program(gl, S.vsQuad, S.fsHall, sdf + room)
-    this.pResolve = program(gl, S.vsQuad, S.fsResolve)
+    this.pResolve = program(gl, S.vsQuad, S.fsResolve, sdf)
     this.pDust = program(gl, injectVs(S.vsDust, sdf + room), S.fsDust)
-    this.pDown = program(gl, S.vsQuad, S.fsDown)
+    this.pDown = program(gl, S.vsQuad, S.fsDown, sdf)
     this.pUp = program(gl, S.vsQuad, S.fsUp)
     this.pFinal = program(gl, S.vsQuad, S.fsFinal, sdf)
+    this.pAdapt = program(gl, S.vsQuad, S.fsAdapt)
 
     // primitive table for the silhouette shader
     this.primTex = gl.createTexture()
@@ -86,6 +94,12 @@ export class Renderer {
 
     this.cookie = target(gl, COOKIE, COOKIE, { float: this.floatOk, channels: this.floatOk ? 2 : 4 })
     this.emitters = target(gl, 4, 4, { float: this.floatOk, linear: false })
+    // the eye's adaptation: one texel holding the log of how bright the frame
+    // has lately been, kept from frame to frame (float targets only: it is a
+    // logarithm, and can be negative)
+    this.adapt = this.floatOk ? [target(gl, 1, 1, { linear: false }), target(gl, 1, 1, { linear: false })] : null
+    this.adaptFlip = 0
+    this.adaptFresh = true
 
     const { data, n } = noiseVolume(64)
     this.noise = gl.createTexture()
@@ -295,12 +309,31 @@ export class Renderer {
       // its taps to match so nothing between them is skipped
       const spread = Math.max(1, src.w / t.w / 2)
       gl.uniform2f(this.pDown.u.uTexel, spread / src.w, spread / src.h)
+      gl.uniform1i(this.pDown.u.uFirst, src === scene ? 1 : 0)
       this.quad()
       src = t
     }
+    // how bright the frame is, from the smallest level, before the up chain
+    // adds into the levels above it; the eye eases toward that
+    let adapted = null
+    if (this.adapt) {
+      const a0 = this.adapt[this.adaptFlip], a1 = this.adapt[1 - this.adaptFlip]
+      this.adaptFlip = 1 - this.adaptFlip
+      bindTarget(gl, a1)
+      gl.useProgram(this.pAdapt.p)
+      bindTex(gl, 0, this.bloom[this.bloom.length - 1].tex, this.pAdapt.u.uSrc)
+      bindTex(gl, 1, a0.tex, this.pAdapt.u.uPrev)
+      gl.uniform1f(this.pAdapt.u.uDt, this.adaptFresh ? -1 : F.dt)
+      this.quad()
+      this.adaptFresh = false
+      adapted = a1
+    }
+    // each coarser level adds in at a little over half the weight of the one
+    // above it, so the glow stays near what glows instead of greying the hall
     gl.useProgram(this.pUp.p)
     gl.enable(gl.BLEND)
-    gl.blendFunc(gl.ONE, gl.ONE)
+    gl.blendFunc(gl.CONSTANT_COLOR, gl.ONE)
+    gl.blendColor(0.55, 0.55, 0.55, 1)
     for (let i = this.bloom.length - 1; i > 0; i--) {
       const from = this.bloom[i], to = this.bloom[i - 1]
       bindTarget(gl, to)
@@ -318,6 +351,9 @@ export class Renderer {
     bindTex(gl, 1, this.bloom[0].tex, u.uBloom)
     bindTex(gl, 2, this.cookie.tex, u.uCookie)
     bindTex(gl, 3, this.dust.tex, u.uDust)
+    bindTex(gl, 4, (adapted ?? this.emitters).tex, u.uAdapt)
+    gl.uniform1i(u.uAdaptOn, adapted ? 1 : 0)
+    gl.uniform1f(u.uKey, F.adaptKey)
     gl.uniform2f(u.uRes, w, h)
     gl.uniform1f(u.uTime, F.wall)
     gl.uniform1f(u.uFade, F.fade)
@@ -327,6 +363,13 @@ export class Renderer {
     gl.uniform1f(u.uPx, F.pr ?? 1)
     gl.uniform1i(u.uDebug, F.debug ? 1 : 0)
     this.quad()
+    if (F.logAdapt && adapted) {
+      bindTarget(gl, adapted)
+      const px = new Float32Array(4)
+      gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.FLOAT, px)
+      bindTarget(gl, null)
+      console.info(`cenotaph: adapted log luminance ${px[0].toFixed(3)}`)
+    }
   }
 }
 

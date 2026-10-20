@@ -3,9 +3,11 @@ import { Figure } from './figure.js'
 import { Camera, mul3, rotY, rotZ, rotX, norm3 } from './mat.js'
 import { Clock } from './clock.js'
 import { ROOM, FIGURE_SCALE, confine } from './room.js'
+import { Score, LAYERS } from './audio.js'
 
 const canvas = document.getElementById('view')
 const resetBtn = document.getElementById('reset')
+const soundBtn = document.getElementById('sound')
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 
 // Development aids, read from the query string and otherwise invisible.
@@ -23,10 +25,11 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 //   ?nodust      leave the motes out
 //   ?exp=2       scale the exposure
 //   ?fov=0.9     pin the vertical field of view (radians)
+//   ?layers=dust,breath   play only these parts of the score (see audio.js)
 // They also read from the hash, because some places (an artifact link) pass
 // only a plain #anchor through to the page: there, write ~ between settings
 // and _ for =, as in #t_200~y_12. Changing them reloads.
-const DEV_KEYS = ['t', 'still', 'cookie', 'pose', 'roll', 'twist', 'yaw', 'tilt', 'reach', 'sdf8', 'rung', 'govern', 'x', 'y', 'z', 'vyaw', 'vpitch', 'nodust', 'exp', 'fov']
+const DEV_KEYS = ['t', 'still', 'cookie', 'pose', 'roll', 'twist', 'yaw', 'tilt', 'reach', 'sdf8', 'rung', 'govern', 'x', 'y', 'z', 'vyaw', 'vpitch', 'nodust', 'exp', 'fov', 'layers', 'adaptlog', 'adaptkey']
 // the development settings a hash carries, as [key, value] pairs
 function hashSettings(hash) {
   const h = decodeURIComponent(hash.slice(1))
@@ -54,6 +57,7 @@ try {
 const figure = new Figure()
 const cam = new Camera()
 const clock = new Clock(Number(params.get('t')) || 0)
+const score = new Score({ layers: params.has('layers') ? params.get('layers').split(/[,.]/).filter((k) => LAYERS.includes(k)) : LAYERS })
 
 // The figure is cut into the ceiling by a camera of its own: a long lens far
 // off, so the projection is all but flat, framed so one metre of body is
@@ -134,9 +138,17 @@ function wake() {
 
 function press() {
   clock.holding = true
+  if (!score.started && !score.muted) startSound()
 }
 function release() {
   clock.holding = spaceHeld
+}
+
+function startSound() {
+  score
+    .start()
+    .then(() => document.body.classList.add('sounding'))
+    .catch((err) => console.warn('no sound:', err))
 }
 
 const clampPitch = (p) => Math.max(-PITCH_MAX, Math.min(PITCH_MAX, p))
@@ -151,14 +163,21 @@ function heading() {
 // slides down — so the eye turns the other way, and looks up
 function look(dx, dy) {
   eye.tyaw -= dx * 0.0035
-  eye.tpitch = clampPitch(eye.tpitch + dy * 0.0035)
+  // clamped as drawn, so the end of the range is never a dead zone
+  eye.tpitch = clampPitch(HOME.pitch + eye.tpitch + dy * 0.0035) - HOME.pitch
   markMoved()
 }
 
+// in half-metre steps, each kept out of the concrete, so a long stride slides
+// round a pier instead of passing through it
 function walk(forward, side = 0) {
   const f = heading()
   const r = [-f[2], 0, f[0]]
-  eye.tpos = confine([eye.tpos[0] + f[0] * forward + r[0] * side, eye.tpos[1], eye.tpos[2] + f[2] * forward + r[2] * side])
+  const dx = f[0] * forward + r[0] * side, dz = f[2] * forward + r[2] * side
+  const n = Math.max(1, Math.ceil(Math.hypot(dx, dz) / 0.5))
+  let p = eye.tpos
+  for (let i = 0; i < n; i++) p = confine([p[0] + dx / n, p[1], p[2] + dz / n])
+  eye.tpos = p
   markMoved()
 }
 
@@ -189,14 +208,22 @@ addEventListener('pointerdown', (e) => {
   if (touches.size === 1) {
     dragging = false
     press()
-  } else if (touches.size === 2) {
+  } else {
     // two fingers: pinch to walk, move together to look
-    const [a, b] = [...touches.values()]
-    pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1 }
+    reseedPinch()
     dragging = true
     release()
   }
 })
+
+// whenever the set of fingers changes, measure the pinch afresh, or lifting
+// one of three would read as a giant stride
+function reseedPinch() {
+  if (touches.size === 2) {
+    const [a, b] = [...touches.values()]
+    pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1 }
+  } else pinch = null
+}
 
 addEventListener('pointermove', (e) => {
   wake()
@@ -226,7 +253,7 @@ addEventListener('pointermove', (e) => {
 
 function lift(e) {
   touches.delete(e.pointerId)
-  if (touches.size < 2) pinch = null
+  reseedPinch()
   if (touches.size === 0) {
     dragging = false
     release()
@@ -257,11 +284,18 @@ addEventListener(
 const WALK_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD']
 addEventListener('keydown', (e) => {
   wake()
+  // a shortcut is not a step: and a letter let go while Cmd is down never
+  // reports its release, so drop any walking held
+  if (e.metaKey || e.ctrlKey || e.altKey) {
+    keys.clear()
+    return
+  }
   const k = e.key
-  if (k === 'ArrowLeft') look(-28, 0)
-  else if (k === 'ArrowRight') look(28, 0)
-  else if (k === 'ArrowUp') look(0, -28)
-  else if (k === 'ArrowDown') look(0, 28)
+  // the arrows turn the eye itself, the way WASD moves it
+  if (k === 'ArrowLeft') look(28, 0)
+  else if (k === 'ArrowRight') look(-28, 0)
+  else if (k === 'ArrowUp') look(0, 28)
+  else if (k === 'ArrowDown') look(0, -28)
   else if (k === '+' || k === '=') walk(3)
   else if (k === '-' || k === '_') walk(-3)
   else if (WALK_KEYS.includes(e.code)) keys.add(e.code)
@@ -269,13 +303,15 @@ addEventListener('keydown', (e) => {
   else if (e.code === 'Space') {
     spaceHeld = true
     press()
-  } else if (e.code === 'KeyF') toggleFullscreen()
+  } else if (e.code === 'KeyM') toggleSound()
+  else if (e.code === 'KeyF') toggleFullscreen()
   else if (e.code === 'KeyR' || k === '0') resetView()
   else return
   e.preventDefault()
 })
 addEventListener('keyup', (e) => {
   keys.delete(e.code)
+  if (e.key === 'Meta') keys.clear()
   if (e.code === 'Space') {
     spaceHeld = false
     if (touches.size === 0 || dragging) release()
@@ -291,6 +327,19 @@ function toggleFullscreen() {
   else document.documentElement.requestFullscreen?.().catch(() => {})
 }
 
+function toggleSound() {
+  if (!score.started) {
+    score.muted = false
+    startSound()
+    return
+  }
+  score.setMuted(!score.muted)
+  document.body.classList.toggle('sounding', !score.muted)
+}
+soundBtn.addEventListener('click', (e) => {
+  e.stopPropagation()
+  toggleSound()
+})
 resetBtn.addEventListener('click', (e) => {
   e.stopPropagation()
   resetView()
@@ -418,6 +467,14 @@ function halton(i, b) {
 const JITTER = Array.from({ length: 16 }, (_, i) => [halton(i + 1, 2) - 0.5, halton(i + 1, 3) - 0.5])
 
 let prevViewProj = null
+let lightInView = 1
+// Falling Repose opens on the body in profile, which cut flat into a ceiling
+// is a straight line; this one starts further into the same fall, where the
+// arms are up and the knees drawn in and the shape reads as a person.
+const STORY_OFFSET = 118
+// the brightest a frame may be on average (log luminance) before the eye
+// stops down: a little above the view from the start, so that one is untouched
+const ADAPT_KEY = pin('adaptkey', -3.8)
 let history = 0 // frames of history the resolve can trust
 
 function frame(now) {
@@ -432,6 +489,7 @@ function frame(now) {
 
 function step(dt) {
   clock.tick(params.has('still') ? 0 : dt, reducedMotion)
+  score.update(clock, lightInView)
   if (!renderer) return
 
   const [w, h, pr] = size()
@@ -452,12 +510,16 @@ function step(dt) {
   eye.yaw += (eye.tyaw - eye.yaw) * ease
   eye.pitch += (eye.tpitch - eye.pitch) * ease
   const walkEase = 1 - Math.exp(-dt / 0.45)
-  for (let k = 0; k < 3; k++) eye.pos[k] += (eye.tpos[k] - eye.pos[k]) * walkEase
+  // (kept out of the concrete as it goes, so it slides round a corner)
+  eye.pos = confine(eye.pos.map((v, k) => v + (eye.tpos[k] - v) * walkEase))
 
   // The eye breathes: a slow sway of where it looks and where it stands, too
   // slow to notice as motion — the hall just never quite holds still.
   const aspect = w / h
-  const fov = pin('fov', Math.max(0.95, 2 * Math.atan(Math.tan(0.475) * (1.6 / aspect))))
+  // the landscape lens keeps its width on narrower screens, up to a point:
+  // past 86° tall it narrows instead, so a phone still sees the opening
+  const vTan = Math.min((Math.tan(0.475) * 1.6) / aspect, Math.tan(0.75))
+  const fov = pin('fov', 2 * Math.atan(Math.max(Math.tan(0.475), vTan)))
   const yaw = HOME.yaw + eye.yaw + 0.035 * Math.sin(T / 47) + pointer.sx * 0.03
   const pitch = clampPitch(HOME.pitch + eye.pitch + 0.02 * Math.sin(T / 61 + 1) - pointer.sy * 0.02 + 0.03 * clock.hold)
   const sway = [0.5 * Math.sin(T / 97), 0.25 * Math.sin(T / 71 + 2), 0.4 * Math.sin(T / 89 + 4)]
@@ -470,10 +532,21 @@ function step(dt) {
   cam.target = [pos[0] + fwd[0], pos[1] + fwd[1], pos[2] + fwd[2]]
   cam.update()
 
+  // how much of the light is in view, for the score: the middle of the shaft,
+  // on screen or near it
+  {
+    const sunNow = sunAt(T)
+    const mid = [ROOM.HOLE_X - (sunNow[0] / sunNow[1]) * ROOM.H * 0.5, ROOM.H * 0.5, ROOM.HOLE_Z - (sunNow[2] / sunNow[1]) * ROOM.H * 0.5]
+    const [px, py, depth] = cam.project(mid)
+    const c = cam.toCam(mid)
+    const off = Math.max(Math.abs(px / w - 0.5), Math.abs(py / h - 0.5))
+    lightInView = c[2] < 0 ? Math.max(0, Math.min(1, (0.9 - off) / 0.4)) * Math.min(1, 40 / depth) : 0
+  }
+
   // The body turns slowly in the fall, as it did in Falling Repose: a lazy
   // roll, a slow spin about its own spine, a little yaw and tilt. Story time
   // drives it all, so when time stops the opening stops changing shape.
-  const s = clock.story
+  const s = clock.story + STORY_OFFSET
   const roll = pin('roll', 1.72 + 0.36 * Math.sin(s / 31) + 0.12 * Math.sin(s / 13 + 1))
   const twist = pin('twist', 1.0 + (s * Math.PI * 2) / 75 + 0.45 * Math.sin(s / 17))
   const fyaw = pin('yaw', 0.25 * Math.sin(s / 21 + 0.5))
@@ -527,7 +600,7 @@ function step(dt) {
     figure,
     cam,
     prevViewProj: prevViewProj ?? viewProj,
-    histValid: history > 0 && renderer.floatOk,
+    histValid: history > 0,
     blend,
     jitter: JITTER[frames % JITTER.length],
     frame: frames,
@@ -548,7 +621,10 @@ function step(dt) {
     exposure: pin('exp', 2.5) * (1.0 + 0.2 * clock.swell),
     palette: palette(T),
     fade: fade * fade,
-    bloom: 0.06,
+    bloom: 0.09,
+    dt,
+    adaptKey: ADAPT_KEY,
+    logAdapt: params.has('adaptlog') && frames % 4 === 0,
     pr,
     debug: params.has('cookie'),
   })
@@ -573,6 +649,7 @@ document.addEventListener('visibilitychange', () => {
   last = performance.now()
   settle(last, 1500)
   if (document.hidden) release()
+  score.setHidden(document.hidden)
 })
 
 wake()
