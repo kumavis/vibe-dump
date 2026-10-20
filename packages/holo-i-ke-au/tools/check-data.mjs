@@ -1,11 +1,14 @@
 #!/usr/bin/env node
-// Checks the hand-written gazetteer against the rules in DATA.md §4.
+// Checks the hand-written gazetteer against the rules in DATA.md §4 and
+// "Routes".
 //
 //   node packages/holo-i-ke-au/tools/check-data.mjs [data-dir]
 //
-// Reads public/data/{eras,places,events,sources,polities}.json and, when it
-// exists, public/data/boundaries/moku.geojson (only for its mokuKey values).
-// Pass another directory to check a copy (the default is public/data).
+// Reads public/data/{eras,places,events,sources,polities,routes}.json and, when
+// it exists, public/data/boundaries/moku.geojson (for its mokuKey values, and
+// for the coastline the routes must keep to the sea of).
+// Pass another directory to check a copy (the default is public/data); a copy
+// without routes.json is checked without routes.
 // No dependencies. Exits 1 with a list of problems, or prints counts when clean.
 // Warnings are printed but do not fail the check.
 
@@ -13,7 +16,8 @@ import { readFileSync, existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const DATA = process.argv[2] ? resolve(process.argv[2]) : join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'data')
+const DEFAULT_DATA = join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'data')
+const DATA = process.argv[2] ? resolve(process.argv[2]) : DEFAULT_DATA
 
 // ---------------------------------------------------------------------------
 // The moku keys. Normally read from boundaries/moku.geojson (property mokuKey,
@@ -75,6 +79,17 @@ const CONFIDENCE = new Set(['firm', 'soft', 'contested'])
 const ACCESS = new Set(['open', 'print', 'paywalled'])
 const ISLANDS = new Set(['hawaii', 'maui', 'kahoolawe', 'lanai', 'molokai', 'oahu', 'kauai', 'niihau'])
 const BOX = { south: 18.5, north: 22.5, west: -161, east: -154.5 } // the main islands, with sea around
+// routes (DATA.md "Routes")
+const ROUTE_KINDS = new Set(['voyage', 'fleet', 'ship', 'trade', 'schematic'])
+const POINT_PRECISION = new Set(['journal', 'narrative', 'schematic'])
+const DIRECTIONS = new Set(['oneway', 'return'])
+const ROUTE_CONFIDENCE_KEYS = new Set(['date', 'place', 'course'])
+// how far a route's end may lie from the place it names, km, by the place's precision
+// (the shore of a long ahupuaʻa like Wailua lies eight km from its centroid)
+const END_RADIUS = { exact: 3, ahupuaa: 10, moku: 30, island: 90, sea: 60 }
+const LANDING_KM = 20 // a route may end at a landing this far from the battle its event is about
+const ROUTE_END_KM = 1.5 // a route may touch land this close to either end (a landing, a harbour)
+const COAST_TOLERANCE_M = 200 // and elsewhere this far inside the simplified coastline
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const MONTHS = 'January|February|March|April|May|June|July|August|September|October|November|December'
 
@@ -95,19 +110,25 @@ const places = load('places.json')
 const events = load('events.json')
 const sources = load('sources.json')
 const polities = load('polities.json')
+// routes.json belongs to public/data; a copy elsewhere (the synthetic test set) may go without
+const routes = existsSync(join(DATA, 'routes.json')) || DATA === DEFAULT_DATA ? load('routes.json') : null
+if (!routes && DATA !== DEFAULT_DATA) warn('routes.json', 'not in this directory; routes not checked')
 if (problems.length) finish()
 for (const [name, v] of [['eras.json', eras], ['places.json', places], ['events.json', events], ['sources.json', sources]]) {
   if (!Array.isArray(v)) bad(name, 'must be an array')
 }
 if (!polities || typeof polities !== 'object' || Array.isArray(polities)) bad('polities.json', 'must be an object')
+if (routes && !Array.isArray(routes)) bad('routes.json', 'must be an array')
 if (problems.length) finish()
 
 let mokuKeys
 let mokuFrom
+let mokuGeo = null // the moku polygons, which together are the land
 const mokuPath = join(DATA, 'boundaries', 'moku.geojson')
 if (existsSync(mokuPath)) {
   try {
     const g = JSON.parse(readFileSync(mokuPath, 'utf8'))
+    mokuGeo = g
     mokuKeys = new Set(g.features.map((f) => f.properties?.mokuKey).filter(Boolean))
     mokuFrom = `boundaries/moku.geojson (${mokuKeys.size} mokuKey values)`
     const fallback = new Set(MOKU_LAYER.map((r) => r[3]))
@@ -383,6 +404,263 @@ for (const [era, ids] of Object.entries(polities.sources || {})) {
 for (const e of eras) if (!(polities.sources || {})[e.id]?.length) bad('polities.json', `era ${e.id} has no sources for its polity map`)
 
 // ---------------------------------------------------------------------------
+// routes.json (DATA.md "Routes")
+const R = routes ? checkIds(routes, 'routes.json') : new Map()
+if (routes) checkRoutes()
+
+function checkRoutes() {
+  const land = mokuGeo ? landTest(mokuGeo) : null
+  if (!land) warn('routes.json', 'no boundaries/moku.geojson, so whether routes keep to the sea is not checked')
+  for (const r of routes) {
+    const at = `routes.json ${r.id}`
+    if (!r.title) bad(at, 'has no title')
+    checkHawaiian(`${at} title`, r.title)
+    checkHawaiian(`${at} gloss`, r.gloss)
+    if (!ROUTE_KINDS.has(r.kind)) bad(at, `kind “${r.kind}” is not voyage | fleet | ship | trade | schematic`)
+    if (!POINT_PRECISION.has(r.pointPrecision)) bad(at, `pointPrecision “${r.pointPrecision}” is not journal | narrative | schematic`)
+    if (!DIRECTIONS.has(r.direction)) bad(at, `direction “${r.direction}” is not oneway | return`)
+    if (r.kind === 'schematic' && r.pointPrecision !== 'schematic') bad(at, 'a schematic kind must have schematic points')
+
+    // when, era, event
+    const span = checkWhen(at, r.when, r.era)
+    if (!E.has(r.era)) bad(at, `era “${r.era}” is not in eras.json`)
+    let ev = null
+    if (r.event !== null && r.event !== undefined) {
+      ev = V.get(r.event)
+      if (!ev) bad(at, `event “${r.event}” is not in events.json`)
+    } else if (!('event' in r)) bad(at, 'event must be an event id or null')
+    if (ev && span) {
+      const a = parseDate(ev.when?.from)
+      const b = parseDate(ev.when?.to ?? ev.when?.from)
+      if (a && b && (span[1] < a.start - 1 || span[0] > b.end + 1)) warn(at, `its dates do not touch those of event ${ev.id}`)
+    }
+
+    // points
+    const pts = r.points
+    let ok = Array.isArray(pts) && pts.length >= 3
+    if (!ok) bad(at, 'points must hold at least three [lon, lat]')
+    else {
+      for (const [i, c] of pts.entries()) {
+        if (!Array.isArray(c) || c.length !== 2 || !c.every(Number.isFinite)) { bad(at, `point ${i} is not [lon, lat]`); ok = false; break }
+        const [lon, lat] = c
+        if (Math.abs(lat) > 90 || Math.abs(lon) > 180) { bad(at, `point ${i} ${c} is out of range (is it [lon, lat]?)`); ok = false; break }
+        if (!(lat >= BOX.south && lat <= BOX.north && lon >= BOX.west && lon <= BOX.east)) bad(at, `point ${i} ${c} is outside the archipelago box`)
+        if (i && c[0] === pts[i - 1][0] && c[1] === pts[i - 1][1]) bad(at, `point ${i} repeats the one before it`)
+      }
+    }
+    if (ok && land) {
+      for (const h of seaHits(pts, land)) bad(at, `segment ${h.seg} runs over land at ${h.p} (${h.key}, ${h.depth} m in)`)
+    }
+
+    // the ends, and the places they name
+    for (const [end, idx] of [['from', 0], ['to', -1]]) {
+      const id = r[end]
+      if (!(end in r)) { bad(at, `${end} must be a place id or null`); continue }
+      if (id !== null && !P.has(id)) { bad(at, `${end} names place “${id}”, which is not in places.json`); continue }
+      if (id !== null) usedPlaces.add(id)
+      if (!ok) continue
+      const c = pts.at(idx)
+      if (id === null) {
+        if (land && land(c)) bad(at, `${end} is null (the open sea) but its end lies on land`)
+        continue
+      }
+      const p = P.get(id)
+      const pc = placePoint(p)
+      const radius = END_RADIUS[p.placePrecision] ?? 3
+      if (pc && kmBetween(c, pc) > radius) bad(at, `its ${end} end lies ${kmBetween(c, pc).toFixed(1)} km from ${id}, more than the ${radius} km a place at ${p.placePrecision} precision allows`)
+    }
+    if (ev && ok) {
+      // the route has to meet its event: name one of its places at an end, pass
+      // through one, or end at a landing near one (a battle fought inland)
+      const evPoints = (ev.where || []).map((w) => P.get(w.place)).filter(Boolean).map((p) => [p, placePoint(p)]).filter(([, c]) => c)
+      const named = [r.from, r.to].some((id) => id && (ev.where || []).some((w) => w.place === id))
+      const touches = evPoints.some(([p, c]) => pts.some((q) => kmBetween(q, c) <= (END_RADIUS[p.placePrecision] ?? 3)))
+      const landing = [r.from, r.to].map((id) => id && placePoint(P.get(id) || {})).filter(Boolean)
+        .some((c) => evPoints.some(([, e]) => kmBetween(c, e) <= LANDING_KM))
+      if (!named && !touches && !landing) bad(at, `meets none of the places of its event ${ev.id}`)
+      if (Array.isArray(ev.routes) && !ev.routes.includes(r.id)) warn(at, `event ${ev.id} lists routes but not this one`)
+    }
+
+    // segments that are only a bearing, inside a journal or narrative route
+    if ('schematicSegments' in r) {
+      const s = r.schematicSegments
+      if (!Array.isArray(s) || !s.every((i) => Number.isInteger(i) && i >= 0 && ok && i < pts.length - 1)) bad(at, 'schematicSegments must list segment indices (0 is points 0 → 1)')
+      else if (new Set(s).size !== s.length) bad(at, 'schematicSegments repeats an index')
+      if (r.pointPrecision === 'schematic') warn(at, 'schematicSegments on a route that is schematic throughout')
+    }
+
+    // waypoints: dated positions along the line
+    const wps = r.waypoints || []
+    if (!Array.isArray(wps)) bad(at, 'waypoints must be a list')
+    let last = -1
+    for (const w of Array.isArray(wps) && ok ? wps : []) {
+      if (!Number.isInteger(w.at) || w.at < 0 || w.at >= pts.length) { bad(at, `waypoint at ${w.at} is not a point index`); continue }
+      if (w.at <= last) bad(at, `waypoint at ${w.at} is out of order or repeated`)
+      last = w.at
+      if (w.date !== undefined) {
+        const d = parseDate(w.date)
+        if (!d) bad(at, `waypoint ${w.at} date “${w.date}” is not YYYY, YYYY-MM or YYYY-MM-DD`)
+        else if (span && (d.start < span[0] - 1e-6 || d.end > span[1] + 1e-6)) bad(at, `waypoint ${w.at} date ${w.date} lies outside the route’s when`)
+      }
+      if (w.note !== undefined) {
+        checkHawaiian(`${at} waypoint ${w.at}`, w.note)
+        checkNoNumbers(`${at} waypoint ${w.at}`, w.note)
+      }
+    }
+    if (r.pointPrecision === 'journal' && wps.filter((w) => w.date).length < 3) bad(at, 'a journal route needs at least three dated waypoints')
+
+    // text
+    if (!r.summary) bad(at, 'has no summary')
+    checkHawaiian(`${at} summary`, r.summary)
+    checkNoNumbers(`${at} summary`, r.summary)
+    if (r.pointPrecision === 'schematic' && !/schematic/i.test(r.summary || '')) bad(at, 'a schematic route must say so in its summary')
+    if (r.pointPrecision !== 'journal' && /\bjournal\b/i.test(r.gloss || '')) bad(at, 'only a journal route may call itself a journal track')
+
+    // sources, confidence, tellings
+    if (!Array.isArray(r.sources) || !r.sources.length) bad(at, 'cites no source')
+    for (const s of r.sources || []) {
+      if (typeof s !== 'object' || !s.id) { bad(at, 'a source entry needs an id'); continue }
+      useSource(at, s.id)
+      if (!s.where) warn(at, `source ${s.id} has no where`)
+    }
+    if (!r.sources?.some((s) => S.get(s.id)?.opened)) bad(at, 'none of its sources has been opened')
+    if (r.pointPrecision === 'journal' && !r.sources?.some((s) => S.get(s.id)?.opened && !S.get(s.id)?.tertiary)) bad(at, 'a journal track needs an opened primary source')
+    if (!r.confidence || typeof r.confidence !== 'object') bad(at, 'has no confidence')
+    for (const [k, v] of Object.entries(r.confidence || {})) {
+      if (!ROUTE_CONFIDENCE_KEYS.has(k)) bad(at, `confidence key “${k}” is not date | place | course`)
+      if (!CONFIDENCE.has(v)) bad(at, `confidence ${k} “${v}” is not firm | soft | contested`)
+    }
+    if (r.pointPrecision === 'schematic' && r.confidence?.course === 'firm') bad(at, 'a schematic course cannot be firm')
+    for (const t of r.tellings || []) {
+      if (!t.source || !t.says) bad(at, 'a telling needs a source and says')
+      else useSource(`${at} telling`, t.source)
+    }
+  }
+}
+
+// events may list the routes that belong to them; each must exist and point back
+for (const ev of events) {
+  if (!('routes' in ev)) continue
+  const at = `events.json ${ev.id}`
+  if (!Array.isArray(ev.routes) || !ev.routes.length) { bad(at, 'routes must be a non-empty list of route ids'); continue }
+  if (!routes) continue
+  for (const id of ev.routes) {
+    const r = R.get(id)
+    if (!r) bad(at, `lists route “${id}”, which is not in routes.json`)
+    else if (r.event !== ev.id) bad(at, `lists route ${id}, whose event is ${r.event}`)
+  }
+}
+
+/** A route's when, as events have it; returns its span in fractional years, or null. */
+function checkWhen(at, w, era) {
+  if (!w) { bad(at, 'has no when'); return null }
+  if (!DATE_PRECISION.has(w.precision)) bad(at, `date precision “${w.precision}” is not day | month | year | decade | generation | century`)
+  const a = parseDate(w.from)
+  const b = parseDate(w.to ?? w.from)
+  if (!a) bad(at, `when.from “${w.from}” is not YYYY, YYYY-MM or YYYY-MM-DD`)
+  if (!b) bad(at, `when.to “${w.to}” is not YYYY, YYYY-MM or YYYY-MM-DD`)
+  if (!a || !b) return null
+  if (a.start > b.start) bad(at, `when.from ${w.from} is after when.to ${w.to}`)
+  const need = w.precision === 'day' ? 3 : w.precision === 'month' ? 2 : 1
+  if (a.parts < need || b.parts < need) bad(at, `a ${w.precision}-precision date needs ${need === 3 ? 'YYYY-MM-DD' : 'YYYY-MM'}`)
+  if (need === 1 && (a.parts > 1 || b.parts > 1)) warn(at, `a ${w.precision}-precision date is written more finely than its precision`)
+  const e = E.get(era)
+  if (e) {
+    const [lo, hi] = eraSpan(e)
+    if (b.end < lo - 1 || a.start > hi + 1) warn(at, `dates ${w.from}–${w.to} fall outside era ${e.id} (${lo}–${hi})`)
+  }
+  return [a.start, b.end]
+}
+
+function placePoint(p) {
+  const g = p.geometry
+  if (!g) return null
+  if (g.type === 'Point') return g.coordinates
+  const pts = g.type === 'LineString' ? g.coordinates : g.coordinates.flat()
+  return [pts.reduce((s, c) => s + c[0], 0) / pts.length, pts.reduce((s, c) => s + c[1], 0) / pts.length]
+}
+
+function kmBetween(a, b) {
+  const kx = 111.32 * Math.cos((((a[1] + b[1]) / 2) * Math.PI) / 180)
+  return Math.hypot((a[0] - b[0]) * kx, (a[1] - b[1]) * 110.574)
+}
+
+/** A land test on the moku polygons: (lon, lat) → the moku key it lies in, or null at sea. */
+function landTest(fc) {
+  const polys = []
+  for (const f of fc.features || []) {
+    const g = f.geometry
+    if (!g) continue
+    for (const poly of g.type === 'Polygon' ? [g.coordinates] : g.type === 'MultiPolygon' ? g.coordinates : []) {
+      const xs = poly[0].map((c) => c[0])
+      const ys = poly[0].map((c) => c[1])
+      polys.push({ poly, key: f.properties?.mokuKey, box: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)] })
+    }
+  }
+  const inRing = (r, x, y) => {
+    let c = false
+    for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
+      if ((r[i][1] > y) !== (r[j][1] > y) && x < ((r[j][0] - r[i][0]) * (y - r[i][1])) / (r[j][1] - r[i][1]) + r[i][0]) c = !c
+    }
+    return c
+  }
+  const test = ([x, y]) => {
+    for (const p of polys) {
+      const [x0, y0, x1, y1] = p.box
+      if (x < x0 || x > x1 || y < y0 || y > y1) continue
+      if (inRing(p.poly[0], x, y) && !p.poly.slice(1).some((h) => inRing(h, x, y))) return p.key || 'land'
+    }
+    return null
+  }
+  // metres to the nearest polygon edge, for the coastline's own tolerance
+  test.depth = ([x, y]) => {
+    let best = Infinity
+    const kx = 111320 * Math.cos((y * Math.PI) / 180)
+    for (const p of polys) {
+      const [x0, y0, x1, y1] = p.box
+      if (x < x0 - 0.05 || x > x1 + 0.05 || y < y0 - 0.05 || y > y1 + 0.05) continue
+      for (const r of p.poly) {
+        for (let i = 0; i + 1 < r.length; i++) {
+          const ax = (r[i][0] - x) * kx
+          const ay = (r[i][1] - y) * 110574
+          const dx = (r[i + 1][0] - r[i][0]) * kx
+          const dy = (r[i + 1][1] - r[i][1]) * 110574
+          const t = Math.max(0, Math.min(1, -(ax * dx + ay * dy) / (dx * dx + dy * dy || 1)))
+          best = Math.min(best, Math.hypot(ax + t * dx, ay + t * dy))
+        }
+      }
+    }
+    return best
+  }
+  return test
+}
+
+/** Samples every ~250 m along a route that lie on land, away from its two ends. */
+function seaHits(pts, land) {
+  const lens = pts.slice(1).map((c, i) => kmBetween(pts[i], c))
+  const total = lens.reduce((s, l) => s + l, 0)
+  const hits = []
+  let along = 0
+  for (let i = 0; i + 1 < pts.length; i++) {
+    const n = Math.max(1, Math.ceil(lens[i] / 0.25))
+    let reported = false
+    for (let s = 0; s <= n && !reported; s++) {
+      const d = along + (lens[i] * s) / n
+      if (d < ROUTE_END_KM || d > total - ROUTE_END_KM) continue
+      const c = [pts[i][0] + ((pts[i + 1][0] - pts[i][0]) * s) / n, pts[i][1] + ((pts[i + 1][1] - pts[i][1]) * s) / n]
+      const key = land(c)
+      if (!key) continue
+      const depth = land.depth(c)
+      if (depth <= COAST_TOLERANCE_M) continue
+      hits.push({ seg: i, p: c.map((v) => +v.toFixed(4)).join(', '), key, depth: Math.round(depth) })
+      reported = true // one report per segment is enough to find it
+    }
+    along += lens[i]
+  }
+  return hits
+}
+
+// ---------------------------------------------------------------------------
 // Unused entries (warnings)
 for (const p of places) if (!usedPlaces.has(p.id)) warn(`places.json ${p.id}`, 'is not used by any event')
 for (const s of sources) if (!usedSources.has(s.id)) warn(`sources.json ${s.id}`, 'is not cited anywhere')
@@ -405,5 +683,9 @@ function finish() {
   console.log(`            with tellings ${events.filter((e) => e.tellings?.length).length}, with stops ${events.filter((e) => e.stops?.length).length}`)
   console.log(`  sources   ${sources.length} (opened ${sources.filter((s) => s.opened).length}, not opened ${sources.filter((s) => !s.opened).length}, tertiary ${sources.filter((s) => s.tertiary).length}; ${fmt(count(sources, (s) => s.access))})`)
   console.log(`  polities  ${POL.size} polities over ${Object.keys(byEra).length} eras; moku keys from ${mokuFrom}`)
+  if (routes) {
+    console.log(`  routes    ${routes.length} (${fmt(count(routes, (r) => r.pointPrecision))}; ${fmt(count(routes, (r) => r.kind))})`)
+    console.log(`            ${routes.reduce((s, r) => s + r.points.length, 0)} points, ${routes.filter((r) => r.event).length} tied to an event, ${routes.filter((r) => r.waypoints?.some((w) => w.date)).length} with dated waypoints${mokuGeo ? '; all at sea between their ends' : ''}`)
+  }
   if (warnings.length) console.log(`  warnings  ${warnings.length}`)
 }

@@ -67,6 +67,9 @@
         "source": "fornander-v2",
         "says": "Reading the genealogies at thirty years a generation, Fornander put the first arrival of the oldest chiefly line in the sixth century AD (pp. 2–3). Radiocarbon has set this aside."
       }
+    ],
+    "routes": [
+      "first-canoes-from-kahiki"
     ]
   },
   {
@@ -122,6 +125,9 @@
         "source": "fornander-v2",
         "says": "Fornander’s genealogical reckoning places Pāʻao among the migrations he dates to the eleventh and twelfth centuries; under the radiocarbon dates for settlement, any such voyage must be later. The range given here is a placeholder, not a date from a source."
       }
+    ],
+    "routes": [
+      "paao-voyage"
     ]
   },
   {
@@ -166,7 +172,11 @@
     "confidence": {
       "date": "contested",
       "place": "soft"
-    }
+    },
+    "routes": [
+      "moikeha-voyages",
+      "kila-laa-voyages"
+    ]
   },
   {
     "id": "mailikukahi",
@@ -512,6 +522,9 @@
         "source": "kamakau-ruling-chiefs",
         "says": "Kamakau gives no figure. He has Kahahana of Oʻahu and Molokaʻi come to Kahekili’s aid, and the Hawaiʻi army, expecting to fight at Kakanilua, meets a divided front in the sandhills of Kamaʻomaʻo (p. 86)."
       }
+    ],
+    "routes": [
+      "kakanilua-1776-fleet"
     ]
   },
   {
@@ -567,6 +580,9 @@
         "source": "sahlins-1995",
         "says": "Replies that Cook was received within the rites of Lono’s season, the Makahiki (not yet read)."
       }
+    ],
+    "routes": [
+      "cook-1778-kauai"
     ]
   },
   {
@@ -703,6 +719,10 @@
         "source": "sahlins-1995",
         "says": "The opposing case, that his arrival and departure followed the Makahiki circuit of Lono (not yet read)."
       }
+    ],
+    "routes": [
+      "cook-1778-79-hawaii",
+      "clerke-1779-leeward"
     ]
   },
   {
@@ -801,6 +821,9 @@
         "source": "kamakau-ruling-chiefs",
         "says": "January 1783, with Kahekili’s forces in two companies, one under Hueu behind Pūowaina (p. 136)."
       }
+    ],
+    "routes": [
+      "kahekili-oahu-1783"
     ]
   },
   {
@@ -858,6 +881,9 @@
         "source": "fornander-v2",
         "says": "Fornander dates the campaign to the summer of 1790 and says he spoke with survivors: the women, children and old people were sent up the valley sides, where they watched the fighting below (pp. 235–237)."
       }
+    ],
+    "routes": [
+      "kamehameha-maui-1790"
     ]
   },
   {
@@ -1041,6 +1067,9 @@
         "source": "fornander-v2",
         "says": "Fornander puts it off the Pali Hulaʻana on the Hāmākua coast (p. 247)."
       }
+    ],
+    "routes": [
+      "kepuwahaulaula-1791"
     ]
   },
   {
@@ -1308,6 +1337,9 @@
         "source": "james-2004-nuuanu",
         "says": "Cited for the name Kalelekaʻanae, “the leaping ʻanae (mullet)” (not yet read; the design notes spell it Kaleleakaʻanae)."
       }
+    ],
+    "routes": [
+      "nuuanu-1795-fleet"
     ]
   },
   {
@@ -1358,6 +1390,9 @@
         "source": "jarves-1847",
         "says": "Jarves tells of a violent wind driving the fleet back just before describing Broughton’s visit of January 1796, which would put the attempt earlier than the usual date of 1796."
       }
+    ],
+    "routes": [
+      "kaieiewaho-1796"
     ]
   },
   {
@@ -1398,6 +1433,9 @@
         "source": "kamakau-ruling-chiefs",
         "says": "Kamakau gives no count of the dead; he calls it “the severe pestilence of 1804 when so many chiefs and commoners” died (p. 236), and describes the court households on Oʻahu as running into the thousands (p. 189)."
       }
+    ],
+    "routes": [
+      "peleleu-1802"
     ]
   },
   {
@@ -1449,6 +1487,9 @@
         "source": "dibble-1843",
         "says": "Dibble says Kaumualiʻi “surrendered his island, without a contest” (p. 72)."
       }
+    ],
+    "routes": [
+      "kaumualii-1810"
     ]
   },
   {
@@ -1505,6 +1546,9 @@
         "source": "merlin-1990-sandalwood",
         "says": "Quoting Ellis: between 2,000 and 3,000 men carrying wood from Waimea down to the storehouse at Kawaihae in one morning."
       }
+    ],
+    "routes": [
+      "iliahi-lane"
     ]
   },
   {
@@ -1697,6 +1741,9 @@
         "source": "bingham-1847",
         "says": "Anchored off Kailua on the morning of 4 April 1820, 163 days from Boston; anchored off Honolulu on 14 April (pp. 85, 94)."
       }
+    ],
+    "routes": [
+      "thaddeus-1820"
     ]
   },
   {
@@ -1745,6 +1792,9 @@
         "source": "jarves-1847",
         "says": "Whaler arrivals at Honolulu and Lahaina together: 318 in 1843, 467 in 1844, 540 in 1845, 595 in 1846, counting ships that called more than once; seamen ashore 15,000 to 25,000 a year."
       }
+    ],
+    "routes": [
+      "whaling-lane"
     ]
   },
   {

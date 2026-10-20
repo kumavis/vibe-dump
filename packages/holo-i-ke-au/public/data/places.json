@@ -1324,5 +1324,196 @@
     "sources": [
       "state-gis-moku"
     ]
+  },
+  {
+    "id": "hawaii-island",
+    "name": "Hawaiʻi",
+    "alt": [
+      "Hawaiʻi Island",
+      "Hawaii"
+    ],
+    "kind": "island",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.5185,
+        19.5982
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "state-gis-moku"
+    ],
+    "note": "The island as a whole, for a fleet whose place of departure is not named. The point is the area centroid of the island’s moku in the State layer."
+  },
+  {
+    "id": "kohala-hawaii",
+    "name": "Kohala",
+    "alt": [],
+    "kind": "moku",
+    "island": "hawaii",
+    "moku": "Kohala",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.748,
+        20.0279
+      ]
+    },
+    "placePrecision": "moku",
+    "sources": [
+      "state-gis-moku",
+      "fornander-v2"
+    ],
+    "note": "Where Kamehameha gathered his forces for Maui in 1790 (Fornander). The point is the moku’s area centroid in the State layer."
+  },
+  {
+    "id": "upolu-point",
+    "name": "ʻUpolu",
+    "alt": [
+      "ʻUpolu Point",
+      "Lae ʻUpolu",
+      "Upolu"
+    ],
+    "kind": "other",
+    "island": "hawaii",
+    "moku": "Kohala",
+    "ahupuaa": "Kāhei, Hualua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.85079,
+        20.2684
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2"
+    ],
+    "note": "The north-west point of Hawaiʻi (GNIS “ʻUpolu Point”), the island’s nearest point to Maui. Fornander puts Pāʻao’s settlement at Puʻuepa near it; the heiau of Moʻokini there is not placed. The point lies a few metres outside the State layer’s coastline; the nearest ahupuaʻa is given."
+  },
+  {
+    "id": "kualoa",
+    "name": "Kualoa",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kualoa 1, Kualoa 2",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8402,
+        21.5211
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2"
+    ],
+    "note": "Where Laʻamaikahiki stayed on Oʻahu (Fornander). The State layer divides it into Kualoa 1 and Kualoa 2; the point is their joint centroid."
+  },
+  {
+    "id": "kalaeokailio",
+    "name": "Kalaeokaʻīlio",
+    "alt": [
+      "Kailio Point",
+      "Ka-lae-o-ka-ʻilio",
+      "Kalaeokailio"
+    ],
+    "kind": "other",
+    "island": "maui",
+    "moku": "Kaupō",
+    "ahupuaa": "Naholoku",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.14024,
+        20.61849
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The point in Kaupō under whose lee Kalaniʻōpuʻu’s fleet lay in about 1775, “The point of the dog” in the translators’ gloss of Kamakau. GNIS has it as “Kailio Point”, unmarked. The kahakō follows the word ʻīlio (dog); no source read prints it, so a speaker should confirm the spelling."
+  },
+  {
+    "id": "mokulau",
+    "name": "Mokulau",
+    "alt": [
+      "Mokolau"
+    ],
+    "kind": "other",
+    "island": "maui",
+    "moku": "Kaupō",
+    "ahupuaa": "Naholoku",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.10621,
+        20.64162
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The landing of Kaupō (GNIS populated place), where Kalaniʻōpuʻu came ashore in the campaign of 1778–79 and from which Kahekili sailed for Hawaiʻi in 1791."
+  },
+  {
+    "id": "kiheipukoa",
+    "name": "Kiheipukoʻa",
+    "alt": [
+      "Keālia",
+      "Kiheipukoa"
+    ],
+    "kind": "other",
+    "island": "maui",
+    "moku": "Pūʻali Komohana",
+    "ahupuaa": "Waikapū",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.47678,
+        20.79448
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "Kalaniʻōpuʻu’s landing and camp in 1776, “near the Kealia or salt marsh between Kalepolepo and Maalaea” (Fornander). Kiheipukoʻa itself is not in GNIS; the point is GNIS’s Keālia Pond, which the State layer puts in Waikapū, and it stands for the shore beside it. Spelled as Kamakau’s 1992 edition prints it; whether Kīhei keeps its kahakō in this name is not shown by any source read."
+  },
+  {
+    "id": "koolau-maui",
+    "name": "Koʻolau",
+    "alt": [],
+    "kind": "moku",
+    "island": "maui",
+    "moku": "Koʻolau",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.1457,
+        20.8077
+      ]
+    },
+    "placePrecision": "moku",
+    "sources": [
+      "state-gis-moku",
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The windward district of East Maui, where Kalaniʻōpuʻu held on in 1778–79. The point is the moku’s area centroid in the State layer, up on the mountain."
   }
 ]
