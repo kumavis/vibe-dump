@@ -10,7 +10,7 @@
     "tags": ["art"],
     "status": "wip",
     "models": ["Opus 5.5"],
-    "thinking": "unknown",
+    "thinking": "ultracode",
     "thumbnail": { "waitFor": "body.ready", "settle": 2500 }
   }
 }
