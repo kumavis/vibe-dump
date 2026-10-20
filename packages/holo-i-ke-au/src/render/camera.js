@@ -8,7 +8,9 @@
 // steep look to a landscape's oblique one as it closes in (keeping whatever
 // tilt the person has added by hand), the near and far planes follow the
 // distance, and picking marches the ray down from the highest summit rather
-// than out from the lens.
+// than out from the lens. fit() finds the view that puts a stretch of ground
+// in one part of the screen, so the tour can frame an island beside a card
+// rather than under it.
 
 import * as THREE from 'three'
 import { MIN_DISTANCE, MAX_DISTANCE } from '../config.js'
@@ -149,7 +151,8 @@ export class CameraRig {
     addEventListener('keydown', (e) => {
       if (!this.enabled || e.target.closest?.('input, textarea')) return
       const step = this.goal.distance * 0.08
-      const f = { ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1], ArrowLeft: [-1, 0], KeyA: [-1, 0], ArrowRight: [1, 0], KeyD: [1, 0] }[e.code]
+      // (left and right arrows belong to the tour's Back and Next, ui.js)
+      const f = { ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1], KeyA: [-1, 0], KeyD: [1, 0] }[e.code]
       if (f && !e.altKey) {
         const sy = Math.sin(this.goal.yaw)
         const cy = Math.cos(this.goal.yaw)
@@ -245,6 +248,71 @@ export class CameraRig {
     }
     if (tSea < 4e5) return o.clone().addScaledVector(d, tSea).setY(0)
     return null
+  }
+
+  /**
+   * The view that puts a world rectangle into a box on the screen (by
+   * default the whole screen), seen at `yaw` and the pitch its distance
+   * prefers plus `tilt`. A zero-size rectangle is a point; give it a
+   * `distance` and only the target slides, so the point lands in the box's
+   * middle. Found by trial: place a scratch camera, see where the corners
+   * land, scale the distance and slide the target to suit, and again; the
+   * projection is near enough linear over a view that it settles in a few
+   * rounds. Corners sit at sea level, which is where an island's outline is.
+   */
+  fit({ rect, distance, yaw = this.goal.yaw, tilt = 0, box, pad = 1.06 }) {
+    const cam = this._fitCam || (this._fitCam = new THREE.PerspectiveCamera())
+    cam.fov = this.camera.fov
+    cam.aspect = this.camera.aspect
+    cam.near = 0.1
+    cam.far = 1e6
+    cam.updateProjectionMatrix()
+    const W = innerWidth
+    const H = innerHeight
+    const b = box || { x0: 0, y0: 0, x1: W, y1: H }
+    const bw = Math.max(60, b.x1 - b.x0)
+    const bh = Math.max(60, b.y1 - b.y0)
+    const tanH = Math.tan((cam.fov * Math.PI) / 360)
+    const cy = Math.cos(yaw)
+    const sy = Math.sin(yaw)
+    let tx = (rect.x0 + rect.x1) / 2
+    let tz = (rect.z0 + rect.z1) / 2
+    const fixed = distance !== undefined
+    let d = fixed ? distance : (Math.max(rect.x1 - rect.x0, rect.z1 - rect.z0) / (2 * tanH)) * (H / bh)
+    let pitch = 0
+    const v = this._v
+    for (let i = 0; i < 8; i++) {
+      d = THREE.MathUtils.clamp(d, this.minDistance, this.maxDistance)
+      pitch = THREE.MathUtils.clamp(preferredPitch(d) + tilt, 0.06, 1.52)
+      const cp = Math.cos(pitch)
+      const ty = fixed ? this.world.heightAt(tx, tz) : 0
+      cam.position.set(tx + d * cp * sy, ty + d * Math.sin(pitch), tz + d * cp * cy)
+      cam.lookAt(tx, ty, tz)
+      cam.updateMatrixWorld()
+      let x0 = Infinity
+      let y0 = Infinity
+      let x1 = -Infinity
+      let y1 = -Infinity
+      for (let k = 0; k < 4; k++) {
+        v.set(k & 1 ? rect.x1 : rect.x0, ty, k & 2 ? rect.z1 : rect.z0).project(cam)
+        const px = ((v.x + 1) / 2) * W
+        const py = ((1 - v.y) / 2) * H
+        x0 = Math.min(x0, px)
+        x1 = Math.max(x1, px)
+        y0 = Math.min(y0, py)
+        y1 = Math.max(y1, py)
+      }
+      if (!fixed) d *= THREE.MathUtils.clamp(Math.max(((x1 - x0) * pad) / bw, ((y1 - y0) * pad) / bh), 0.3, 3)
+      // slide so the middle of what's framed lands in the middle of the box:
+      // along the screen's right on the ground, and along its down, which on
+      // the ground runs toward the camera and is stretched by the tilt (as panBy)
+      const k = (2 * d * tanH) / H
+      const ex = ((x0 + x1) / 2 - (b.x0 + b.x1) / 2) * k
+      const ey = (((y0 + y1) / 2 - (b.y0 + b.y1) / 2) * k) / Math.max(0.35, Math.sin(pitch))
+      tx += ex * cy + ey * sy
+      tz += -ex * sy + ey * cy
+    }
+    return { target: new THREE.Vector3(tx, this.world.heightAt(tx, tz), tz), distance: d, yaw, pitch }
   }
 
   /** Fly to a view. `to` may set any of target, distance, yaw, pitch. */

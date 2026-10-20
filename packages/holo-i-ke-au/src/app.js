@@ -9,6 +9,7 @@ import { Sky } from './render/sky.js'
 import { Pipeline } from './render/pipeline.js'
 import { CameraRig } from './render/camera.js'
 import { Boundaries } from './render/lines.js'
+import { Routes, loadRoutes } from './render/routes.js'
 import { PolityOverlay } from './overlay/polity.js'
 import { Timeline } from './time.js'
 
@@ -68,7 +69,7 @@ export class App {
     this.world.uniforms = this.shared.uniforms
     this.timeline = new Timeline(data.eras)
     this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
-    this.overlay = { polity: true, lines: true, pins: true }
+    this.overlay = { polity: true, lines: true, pins: true, routes: true }
     this.polityK = 0
 
     this.sky = new Sky()
@@ -90,6 +91,11 @@ export class App {
     this.scene.add(this.ocean.mesh)
     this.lines = new Boundaries(this.data, this.shared.uniforms)
     this.scene.add(this.lines.group)
+    // what moved over the sea in the chosen years: canoes, fleets, ships,
+    // lanes (render/routes.js); the file loads behind the first frame
+    this.routes = new Routes({ proj: this.data.proj, uniforms: this.shared.uniforms, camera: this.camera, renderer: this.renderer, eras: this.data.eras })
+    this.scene.add(this.routes.group)
+    loadRoutes(this.data, this.warn).then((r) => this.routes.setRoutes(r))
     this.rig = new CameraRig(this.camera, this.canvas, this.world)
     const cam = this.params.get('cam')
     if (cam) {
@@ -98,9 +104,12 @@ export class App {
     }
     const year = this.params.get('year')
     if (year) this.timeline.setYear(Number(year))
-    // Open at contact, or the keyframe nearest it: the chiefdoms at their
-    // fullest, just before the record changes character (DESIGN.md §3.2)
-    else this.timeline.set(Math.round(this.timeline.sAtYear(1778)))
+    // A view asked for with no year opens at contact, or the keyframe nearest
+    // it: the chiefdoms at their fullest, just before the record changes
+    // character (DESIGN.md §3.2). Otherwise the tour opens on its first
+    // chapter (ui/tour.js), and the year is that era's.
+    else if (cam) this.timeline.set(Math.round(this.timeline.sAtYear(1778)))
+    else this.timeline.set(0)
     this.timeline.onChange(() => this.syncEras())
     this.syncEras()
     this.sky.update(this.clock.doy, this.clock.hour, 0, this.light)
@@ -128,8 +137,9 @@ export class App {
     if (this.params.get('debug')) t.uniforms.uDebug.value = Number(this.params.get('debug'))
   }
 
-  /** Settle everything that eases (camera, pack detail, overlay) at once: for the tools. */
+  /** Settle everything that eases (camera, pack detail, overlay, the year) at once: for the tools. */
   settle() {
+    this.ui?.timeline.finish()
     this.rig.finishFlight()
     const g = this.rig.goal
     for (const s of [this.rig.goal, this.rig.state]) {
@@ -142,6 +152,7 @@ export class App {
     this.world.settle(this.camera)
     this.rig.jump({ x: g.target.x, z: g.target.z })
     this.polityK = this.overlay.polity ? smooth(260, 900, g.distance) : 0
+    this.routes?.settle(this.timeline.year, g.distance, { window: this.timeline.window })
   }
 
   stats() {
@@ -230,6 +241,8 @@ export class App {
     const L = this.light
     const lightLevel = Math.min(1, 0.25 + (L.sunColor.r + L.skyColor.r) * 0.35)
     this.lines.update(this.camera, this.renderer, d, lightLevel)
+    this.routes.visible = this.overlay.routes !== false
+    this.routes.update(this.timeline.year, d, { window: this.timeline.window, light: lightLevel })
     for (const u of this.updaters) u(dt, this.time)
     const pu = this.pipeline.uniforms
     pu.uSunDir.value.copy(L.sunDir)

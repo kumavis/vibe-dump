@@ -1,26 +1,33 @@
 // The year control: a slider over the era keyframes (time.js), each era a tick
 // with its year, and over it the nearest era's label with the year reached,
-// "in the time of ʻUmi · c. 1600". A play button sweeps forward through the
-// eras; the tour (card.js) moves it too, easing toward a stop's year.
+// "in the time of ʻUmi · c. 1600". Back and Next beside the label walk the
+// chapter tour (tour.js), which moves the year as it goes, easing it toward
+// each step's date; above the bar, small, is where the tour stands. The
+// slider and the ticks stay free for wandering, and taking them leaves the
+// tour until the next Next.
 
 import { h, $, esc } from './dom.js'
 import { icon } from './icons.js'
 import { formatYear } from '../time.js'
 
 export class TimelineBar {
-  constructor(root, app) {
+  constructor(root, app, ui) {
     this.app = app
+    this.ui = ui
     this.tl = app.timeline
-    this.playing = false
     this.tween = null
     const n = this.tl.n
     this.el = h('div', { class: 'timeline', role: 'group', 'aria-label': 'Time' })
     if (n < 2) this.el.classList.add('single')
     if (n < 1) this.el.hidden = true
     this.el.innerHTML = `
+      <div class="tl-tour" aria-live="polite"></div>
       <div class="tl-head">
-        <button class="tl-play" aria-label="Play through the eras" title="Play through the eras">${icon('play', 16)}</button>
-        <div class="tl-label" aria-live="polite"><b class="tl-era"></b><span class="tl-year"></span></div>
+        <div class="tl-nav">
+          <button class="tl-back" aria-label="Back" title="Back (←)">${icon('prev', 16)}</button>
+          <button class="tl-next" aria-label="Next" title="Next (→ or space)"><span>Next</span>${icon('next', 16)}</button>
+        </div>
+        <div class="tl-label"><b class="tl-era"></b><span class="tl-year"></span></div>
       </div>
       <div class="tl-track">
         <div class="tl-rail"><span></span></div>
@@ -29,7 +36,9 @@ export class TimelineBar {
       </div>`
     root.appendChild(this.el)
     this.input = $('.tl-input', this.el)
-    this.playBtn = $('.tl-play', this.el)
+    this.backBtn = $('.tl-back', this.el)
+    this.nextBtn = $('.tl-next', this.el)
+    this.tourEl = $('.tl-tour', this.el)
     const ticks = $('.tl-ticks', this.el)
     // label every tick if there's room, else every other one, and so on
     const every = Math.max(1, Math.ceil((n * 46) / Math.min(620, innerWidth - 60)))
@@ -40,40 +49,27 @@ export class TimelineBar {
       ticks.appendChild(t)
     })
     this.input.addEventListener('input', () => {
-      this.stop()
+      this.tween = null
       this.tl.set(Number(this.input.value))
+      this.ui.onScrub()
     })
     ticks.addEventListener('click', (e) => {
       const t = e.target.closest('.tl-tick')
-      if (t) this.easeTo(Number(t.dataset.i), 0.9)
+      if (!t) return
+      this.easeTo(Number(t.dataset.i), 0.9)
+      this.ui.onScrub(Number(t.dataset.i))
     })
-    this.playBtn.addEventListener('click', () => (this.playing ? this.stop() : this.play()))
-    addEventListener('keydown', (e) => {
-      if (e.target.closest?.('input, textarea')) return
-      if (e.key === ',' || e.key === '<') this.easeTo(Math.ceil(this.tl.s - 0.01) - 1, 0.7)
-      if (e.key === '.' || e.key === '>') this.easeTo(Math.floor(this.tl.s + 0.01) + 1, 0.7)
+    this.nextBtn.addEventListener('click', () => {
+      this.el.classList.remove('invite')
+      this.ui.tour.next()
     })
+    this.backBtn.addEventListener('click', () => this.ui.tour.back())
     this.tl.onChange(() => this.refresh())
     this.refresh()
   }
 
-  play() {
-    if (this.tl.s >= this.tl.max - 0.001) this.tl.set(0)
-    this.playing = true
-    this.tween = null
-    this.playBtn.innerHTML = icon('pause', 16)
-    this.playBtn.classList.add('on')
-  }
-
-  stop() {
-    this.playing = false
-    this.playBtn.innerHTML = icon('play', 16)
-    this.playBtn.classList.remove('on')
-  }
-
   /** Ease the slider to timeline position s over `dur` seconds. */
   easeTo(s, dur = 1) {
-    this.stop()
     const to = Math.max(0, Math.min(this.tl.max, s))
     this.tween = { from: this.tl.s, to, t: 0, dur }
   }
@@ -82,21 +78,20 @@ export class TimelineBar {
     this.easeTo(this.tl.sAtYear(y), dur)
   }
 
+  /** Skip to the end of the easing (the tools). */
+  finish() {
+    if (!this.tween) return
+    this.tl.set(this.tween.to)
+    this.tween = null
+  }
+
   update(dt) {
-    if (this.playing) {
-      // about four seconds an era, pausing a moment on each keyframe
-      const s = this.tl.s
-      const near = Math.abs(s - Math.round(s))
-      const speed = 0.25 * (0.3 + 0.7 * Math.min(1, near * 6 + 0.15))
-      this.tl.set(s + dt * speed)
-      if (this.tl.s >= this.tl.max) this.stop()
-    } else if (this.tween) {
-      const w = this.tween
-      w.t = Math.min(1, w.t + dt / w.dur)
-      const e = w.t < 0.5 ? 2 * w.t * w.t : 1 - Math.pow(-2 * w.t + 2, 2) / 2
-      this.tl.set(w.from + (w.to - w.from) * e)
-      if (w.t >= 1) this.tween = null
-    }
+    const w = this.tween
+    if (!w) return
+    w.t = Math.min(1, w.t + dt / w.dur)
+    const e = w.t < 0.5 ? 2 * w.t * w.t : 1 - Math.pow(-2 * w.t + 2, 2) / 2
+    this.tl.set(w.from + (w.to - w.from) * e)
+    if (w.t >= 1) this.tween = null
   }
 
   refresh() {
@@ -110,5 +105,25 @@ export class TimelineBar {
     $('.tl-rail span', this.el).style.width = `${f * 100}%`
     const near = Math.round(tl.s)
     for (const t of this.el.querySelectorAll('.tl-tick')) t.classList.toggle('on', Number(t.dataset.i) === near)
+  }
+
+  /** Where the tour stands, and what Back and Next can do from there. */
+  refreshTour(tour) {
+    // (called as the slider moves while off the tour: only redrawn when it reads differently)
+    const key = `${tour.active}:${tour.chapter}:${tour.step}:${tour.stop}:${tour.active ? '' : tour.nearestChapter()}:${tour.atEnd}`
+    if (key === this.tourKey) return
+    this.tourKey = key
+    const at = tour.describe()
+    this.backBtn.disabled = !at || tour.atStart
+    this.nextBtn.disabled = !at || tour.atEnd
+    this.el.classList.toggle('off-tour', !!at && !at.active)
+    if (!at) {
+      this.tourEl.innerHTML = ''
+      return
+    }
+    this.tourEl.innerHTML = at.active
+      ? `<span>${esc(at.chapter)}</span><i>·</i><em>${esc(at.name)}</em>${at.step ? `<i>·</i><span>${esc(at.step)}</span>` : ''}`
+      : `<span>Next resumes at ${esc(at.chapter.toLowerCase())}</span><i>·</i><em>${esc(at.name)}</em>`
+    this.nextBtn.title = at.active ? 'Next (→ or space)' : `Back to the tour: ${at.chapter.toLowerCase()}, ${at.name}`
   }
 }

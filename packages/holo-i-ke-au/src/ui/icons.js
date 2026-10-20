@@ -16,9 +16,9 @@ const P = {
   protest: '<path d="M6 21V3.5"/><path d="M6 4h11.5l-2.6 4 2.6 4H6"/>',
   restoration: '<path d="M12 21v-8"/><path d="M12 13c0-4 3-6.5 7.5-6.5 0 4-3 6.5-7.5 6.5z"/><path d="M12 15.5c0-3.2-2.2-5.5-6.5-5.5 0 3.3 2.2 5.5 6.5 5.5z"/>',
   other: '<path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/>',
+  // an era, opening its chapter of the tour: a canoe on the current
+  era: '<path d="M5 13.5h14l-2 2.6H7z"/><path d="M11.5 13.5V3.5l5.5 7.6h-5.5"/><path d="M2 19.5c2 0 2-1 4-1s2 1 4 1 2-1 4-1 2 1 4 1 2-1 4-1"/>',
   // controls
-  play: '<path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/>',
-  pause: '<path d="M8 5.5v13M16 5.5v13" stroke-width="2.6"/>',
   prev: '<path d="M15 5l-7 7 7 7"/>',
   next: '<path d="M9 5l7 7-7 7"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',

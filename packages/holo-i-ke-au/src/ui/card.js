@@ -1,23 +1,28 @@
-// An event's card: title and gloss, when and where, the summary, how sure
-// the record is (DATA.md's confidence), the tellings where the sources
-// disagree, and the sources themselves, a source nobody has yet opened marked
-// "verify". An event with stops gets the ahupuaʻa tour's footer: Next flies
-// the camera to each stop's place at the stop's zoom and moves the year to it.
+// The card on the right. Three kinds share it:
+//
+// - An event: title and gloss, when and where, the summary, how sure the
+//   record is (DATA.md's confidence), the tellings where the sources
+//   disagree, and the sources themselves, a source nobody has yet opened
+//   marked "verify". While the tour walks an event's stops, the stop it is
+//   at sits above the summary.
+// - An era, as its chapter of the tour opens: the label, the year, the note,
+//   what happens in it (each a way into its event), and its sources.
+// - A cluster of pins that share a spot on the screen: their events in date
+//   order, any of which opens its own card.
+//
+// The footer steps the tour (tour.js) back and on, as the buttons by the
+// timeline do: it sits where the reading ends.
 
-import * as THREE from 'three'
-import { $, h, esc } from './dom.js'
+import { h, esc } from './dom.js'
 import { icon, hasIcon } from './icons.js'
-import { geometryPoint } from '../geo.js'
-import { formatWhen } from '../time.js'
-import { preferredPitch } from '../render/camera.js'
-
-// camera distance for each of DATA.md's zooms
-export const ZOOM = { far: 2600, island: 520, near: 70 }
+import { formatWhen, formatYear, eventYear } from '../time.js'
 
 const KIND = {
   arrival: 'arrival', battle: 'battle', founding: 'founding', construction: 'construction', eruption: 'eruption',
   epidemic: 'epidemic', law: 'law', treaty: 'treaty', voyage: 'voyage', death: 'death', protest: 'protest', restoration: 'restoration', other: 'event',
 }
+
+const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
 
 export class EventCard {
   constructor(root, app, ui) {
@@ -27,61 +32,69 @@ export class EventCard {
     root.appendChild(this.el)
     this.places = new Map(app.data.places.map((p) => [p.id, p]))
     this.sources = new Map(app.data.sources.map((s) => [s.id, s]))
+    this.events = new Map(app.data.events.map((e) => [e.id, e]))
+    this.mode = null // 'event' | 'era' | 'cluster'
     this.ev = null
     this.stop = -1
+    this.chapter = null
+    this.list = null
+    // one listener for every button the card ever draws
+    this.el.addEventListener('click', (e) => this.click(e))
   }
 
   get isOpen() {
     return this.el.classList.contains('show')
   }
 
-  open(ev, { fly = true } = {}) {
-    this.ev = ev
-    this.stop = -1
-    this.ui.pins.setStopPlace(null)
+  open(ev) {
+    this.set('event', { ev })
+  }
+
+  /** The stop the tour is at (-1: the event's own card). */
+  setStop(i) {
+    this.stop = i
     this.render()
-    if (fly) {
-      const where = (ev.where || []).map((w) => this.places.get(w.place)).find((p) => p && geometryPoint(p.geometry))
-      if (where) {
-        const rig = this.app.rig
-        const want = ZOOM[ev.zoom?.[0]] ?? ZOOM.island
-        this.flyToPlace(where, Math.min(rig.goal.distance, Math.max(want, ZOOM.island)))
-      }
-    }
+  }
+
+  openEra(chapter) {
+    this.set('era', { chapter })
+  }
+
+  openList(events) {
+    this.set('cluster', { list: events })
+  }
+
+  set(mode, { ev = null, chapter = null, list = null }) {
+    this.mode = mode
+    this.ev = ev
+    this.chapter = chapter
+    this.list = list
+    this.stop = -1
+    this.render()
   }
 
   close() {
+    const was = this.ev
     this.el.classList.remove('show')
+    this.mode = null
     this.ev = null
-    this.ui.pins.setStopPlace(null)
-    this.ui.onCardClosed?.()
+    this.chapter = null
+    this.list = null
+    this.ui.onCardClosed?.(was)
   }
 
-  flyToPlace(place, distance) {
-    const [x, z] = this.app.data.proj.toWorld(geometryPoint(place.geometry))
-    const rig = this.app.rig
-    const target = new THREE.Vector3(x, this.app.world.heightAt(x, z), z)
-    const far = Math.hypot(rig.goal.target.x - x, rig.goal.target.z - z)
-    const dur = Math.min(6, 1.8 + Math.sqrt(far) * 0.05 + Math.abs(Math.log(distance / rig.goal.distance)) * 0.35)
-    const pitch = rig.goal.pitch + preferredPitch(distance) - preferredPitch(rig.goal.distance)
-    rig.flyTo({ target, distance, pitch }, dur)
-    return dur
-  }
-
-  /** Walk to stop i of the open event (-1: back to its summary). */
-  goStop(i) {
-    const ev = this.ev
-    const stops = ev?.stops || []
-    if (!ev || i < -1 || i >= stops.length) return
-    this.stop = i
-    this.render()
-    const s = stops[i]
-    const place = s ? this.places.get(s.place) : null
-    this.ui.pins.setStopPlace(place)
-    if (i < 0) return
-    let dur = 1.5
-    if (place && geometryPoint(place.geometry)) dur = this.flyToPlace(place, ZOOM[s.zoom] ?? ZOOM.island)
-    if (Number.isFinite(s.year)) this.ui.timeline.easeToYear(s.year, Math.max(0.8, dur * 0.8))
+  click(e) {
+    const b = e.target.closest('button')
+    if (!b || !this.el.contains(b)) return
+    const tour = this.ui.tour
+    if (b.classList.contains('card-close')) this.close()
+    else if (b.classList.contains('prev')) tour.back()
+    else if (b.classList.contains('next')) tour.next()
+    else if (b.dataset.ev) {
+      const ev = this.events.get(b.dataset.ev)
+      // from a chapter's list, the full step; from a cluster, come to it gently
+      if (ev) tour.open(ev, { gentle: this.mode === 'cluster' })
+    }
   }
 
   sourceLine(ref) {
@@ -96,10 +109,67 @@ export class EventCard {
     return `<li>${by}<span class="src-title">${title}</span>${yr}${where}${verify}</li>`
   }
 
+  sourcesSection(refs) {
+    return `<div class="card-sec"><h2>Sources</h2><ul class="sources">${(refs || []).map((s) => this.sourceLine(s)).join('') || '<li class="none">none listed</li>'}</ul></div>`
+  }
+
+  /** A list of events, a row each: what they are, when, and what they're called. */
+  eventRows(events, { gloss = true } = {}) {
+    return events
+      .map(
+        (ev) => `<li><button class="ev-row" data-ev="${esc(ev.id)}">
+          <span class="ev-ic">${icon(kindIcon(ev), 16)}</span>
+          <span class="ev-y">${esc(eventYear(ev))}</span>
+          <span class="ev-t"><b>${esc(ev.title)}</b>${gloss && ev.gloss ? `<em>${esc(ev.gloss)}</em>` : ''}</span>
+        </button></li>`,
+      )
+      .join('')
+  }
+
+  /** Back and Next, and where the tour stands, for a card the tour is showing. */
+  footer() {
+    const tour = this.ui.tour
+    if (!tour?.active) return ''
+    const ch = tour.current
+    let count
+    let nextLabel = 'Next'
+    if (this.mode === 'era' && this.chapter === ch && tour.step < 0) {
+      count = `chapter ${ch.index + 1} of ${tour.chapters.length}`
+    } else if (this.mode === 'event' && this.ev && this.ev === tour.event) {
+      const n = this.ev.stops?.length || 0
+      if (tour.stop >= 0) count = `stop ${tour.stop + 1} of ${n}`
+      else {
+        count = `${tour.step + 1} of ${ch.events.length} in this chapter`
+        if (n) nextLabel = `Walk ${n} stops`
+      }
+    } else return ''
+    return `<footer>
+      <button class="nav prev" aria-label="Back" title="Back (←)" ${tour.atStart ? 'disabled' : ''}>${icon('prev', 18)}</button>
+      <span class="count">${esc(count)}</span>
+      <button class="nav next" aria-label="Next" title="Next (→ or space)" ${tour.atEnd ? 'disabled' : ''}><span>${esc(nextLabel)}</span>${icon('next', 18)}</button>
+    </footer>`
+  }
+
   render() {
+    if (this.mode === 'era') this.el.innerHTML = this.eraHTML()
+    else if (this.mode === 'cluster') this.el.innerHTML = this.clusterHTML()
+    else if (this.mode === 'event' && this.ev) this.el.innerHTML = this.eventHTML()
+    else return
+    this.el.dataset.mode = this.mode
+    this.el.classList.add('show')
+    this.el.scrollTop = 0
+  }
+
+  header(ic, title, gloss) {
+    return `<header>
+        <div class="card-icon">${icon(ic, 26)}</div>
+        <div class="card-titles"><h1>${esc(title)}</h1>${gloss ? `<p class="gloss">${esc(gloss)}</p>` : ''}</div>
+        <button class="card-close" aria-label="Close">${icon('close', 18)}</button>
+      </header>`
+  }
+
+  eventHTML() {
     const ev = this.ev
-    if (!ev) return
-    const kind = hasIcon(ev.kind) ? ev.kind : 'other'
     const placeNames = (ev.where || [])
       .map((w) => {
         const p = this.places.get(w.place)
@@ -115,29 +185,41 @@ export class EventCard {
     const stops = ev.stops || []
     const st = this.stop >= 0 ? stops[this.stop] : null
     const stopPlace = st ? this.places.get(st.place) : null
-    this.el.innerHTML = `
-      <header>
-        <div class="card-icon">${icon(kind, 26)}</div>
-        <div class="card-titles"><h1>${esc(ev.title)}</h1>${ev.gloss ? `<p class="gloss">${esc(ev.gloss)}</p>` : ''}</div>
-        <button class="card-close" aria-label="Close">${icon('close', 18)}</button>
-      </header>
+    return `
+      ${this.header(kindIcon(ev), ev.title, ev.gloss)}
       <div class="card-meta"><span class="when">${esc(formatWhen(ev))}</span><span class="kind">${esc(KIND[ev.kind] || ev.kind || 'event')}</span></div>
       ${placeNames.length ? `<div class="card-where">${placeNames.join('<i>·</i>')}</div>` : ''}
       ${st ? `<div class="stop"><div class="stop-n">${this.stop + 1} / ${stops.length}${stopPlace ? ` · ${esc(stopPlace.name)}` : ''}</div><p>${esc(st.text)}</p></div>` : ''}
       <div class="card-body">${ev.summary ? `<p>${esc(ev.summary)}</p>` : ''}</div>
       ${conf ? `<div class="card-conf">${conf}</div>` : ''}
       ${tellings ? `<div class="card-sec"><h2>Tellings</h2><ul class="tellings">${tellings}</ul></div>` : ''}
-      <div class="card-sec"><h2>Sources</h2><ul class="sources">${(ev.sources || []).map((s) => this.sourceLine(s)).join('') || '<li class="none">none listed</li>'}</ul></div>
-      ${stops.length ? `<footer>
-        <button class="nav prev" aria-label="Previous" ${this.stop < 0 ? 'disabled' : ''}>${icon('prev', 18)}</button>
-        <span class="count">${this.stop < 0 ? `${stops.length} stops` : `${this.stop + 1} / ${stops.length}`}</span>
-        ${this.stop >= stops.length - 1 ? `<button class="nav finish" aria-label="Done">Done</button>` : `<button class="nav next" aria-label="${this.stop < 0 ? 'Begin' : 'Next'}">${this.stop < 0 ? '<span>Begin</span>' : ''}${icon('next', 18)}</button>`}
-      </footer>` : ''}`
-    this.el.classList.add('show')
-    this.el.scrollTop = 0
-    $('.prev', this.el)?.addEventListener('click', () => this.goStop(this.stop - 1))
-    $('.next', this.el)?.addEventListener('click', () => this.goStop(this.stop + 1))
-    $('.finish', this.el)?.addEventListener('click', () => this.goStop(-1))
-    $('.card-close', this.el)?.addEventListener('click', () => this.close())
+      ${this.sourcesSection(ev.sources)}
+      ${this.footer()}`
+  }
+
+  eraHTML() {
+    const ch = this.chapter
+    const e = ch.era
+    const tour = this.ui.tour
+    return `
+      ${this.header('era', e.label || e.id)}
+      <div class="card-meta"><span class="when">${esc(formatYear(e.year, Math.max(10, e.yearPrecision ?? 10)))}</span><span class="kind">chapter ${ch.index + 1} of ${tour.chapters.length}</span></div>
+      <div class="card-body">${e.note ? `<p>${esc(e.note)}</p>` : ''}</div>
+      ${ch.events.length ? `<div class="card-sec"><h2>In this chapter</h2><ul class="ev-list compact">${this.eventRows(ch.events, { gloss: false })}</ul></div>` : ''}
+      ${this.sourcesSection(e.sources)}
+      ${this.footer()}`
+  }
+
+  clusterHTML() {
+    const list = this.list || []
+    const names = []
+    for (const ev of list) {
+      const w = (ev.where || []).map((x) => this.places.get(x.place)).find(Boolean)
+      if (w && !names.includes(w.name)) names.push(w.name)
+    }
+    const at = names.length > 4 ? `${names.slice(0, 4).join(' · ')} · and ${names.length - 4} more` : names.join(' · ')
+    return `
+      ${this.header('pins', `${list.length} events`, at)}
+      <div class="card-sec"><ul class="ev-list">${this.eventRows(list)}</ul></div>`
   }
 }

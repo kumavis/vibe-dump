@@ -1,0 +1,2748 @@
+[
+  {
+    "id": "first-canoes-from-kahiki",
+    "title": "The first canoes",
+    "gloss": "from Kahiki: a bearing, not a course",
+    "kind": "schematic",
+    "when": {
+      "from": "0940",
+      "to": "1290",
+      "precision": "century"
+    },
+    "era": "voyaging",
+    "event": "first-canoes",
+    "from": "kahiki",
+    "to": "pae-aina",
+    "points": [
+      [
+        -154.95,
+        18.95
+      ],
+      [
+        -155.55,
+        18.7
+      ],
+      [
+        -156.25,
+        19.25
+      ],
+      [
+        -156.62,
+        20.08
+      ],
+      [
+        -156.82,
+        20.5
+      ],
+      [
+        -157.3,
+        20.7
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "summary": "A schematic line, not a course. The first people to reach these islands came by voyaging canoe from Kahiki, the islands to the south, sometime between the tenth century and the end of the thirteenth by the radiocarbon models. No one knows where they first made land, or how many voyages it took. The line gives only the bearing: in from the south, past the southern cape of Hawaiʻi, and up the channel named Kealaikahiki, the way to Kahiki, which keeps that road in its name.",
+    "sources": [
+      {
+        "id": "athens-2014",
+        "where": "abstract"
+      },
+      {
+        "id": "wilmshurst-2011",
+        "where": "abstract"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "pp. 1–2"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "p. 50"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "athens-2014",
+        "says": "First settlement between AD 940 and 1130 (95 per cent), most probably 1000–1100."
+      },
+      {
+        "source": "wilmshurst-2011",
+        "says": "Hawaiʻi settled in a single East Polynesian pulse about 1190–1290."
+      },
+      {
+        "source": "ks-kealaikahiki-2020",
+        "says": "Kahiki is taken to mean the Society, Tuamotu and Marquesas groups, and Kealaikahiki a sea road between Hawaiʻi and Kahiki with “multiple access points”, not a one-lane highway; Kahoʻolawe and the point and channel named Kealaikahiki are its markers (pp. 1–2)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "“The word Kahiki, from a Hawaiian point of view, comprises any and every group from Easter Island to the farthest west” (p. 50)."
+      }
+    ]
+  },
+  {
+    "id": "paao-voyage",
+    "title": "Pāʻao",
+    "gloss": "from Kahiki to Puna, then along the coast to Kohala",
+    "kind": "voyage",
+    "when": {
+      "from": "1100",
+      "to": "1400",
+      "precision": "century"
+    },
+    "era": "voyaging",
+    "event": "paao",
+    "from": "kahiki",
+    "to": "upolu-point",
+    "points": [
+      [
+        -154.95,
+        18.95
+      ],
+      [
+        -154.93,
+        19.3
+      ],
+      [
+        -154.72,
+        19.53
+      ],
+      [
+        -154.86,
+        19.78
+      ],
+      [
+        -155.08,
+        19.92
+      ],
+      [
+        -155.28,
+        20.07
+      ],
+      [
+        -155.58,
+        20.18
+      ],
+      [
+        -155.76,
+        20.29
+      ],
+      [
+        -155.8508,
+        20.2684
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 1,
+        "note": "off Puna, the district of the first landfall; the heiau Wahaʻula is not placed"
+      },
+      {
+        "at": 8,
+        "note": "ʻUpolu, near Puʻuepa, where Pāʻao settled; the heiau of Moʻokini is not placed"
+      }
+    ],
+    "summary": "A schematic line. In the traditions Pāʻao sails north from Kahiki after a quarrel with his brother Lonopele. He makes his first landfall in Puna and builds a heiau (temple) there, Wahaʻula, then coasts along the shores of Hilo and Hāmākua and settles in Kohala, at Puʻuepa near the north-west point, whose name ʻUpolu may recall his homeland. Only the districts come from the sources; the line between them is drawn over open water, and neither heiau is placed.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 33–36"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "p. 2"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "In the version Malo collected, Pāʻao comes from “Wawao”, finds Hawaiʻi without a chief, and sends back to his homeland for one (“another legend says he went back himself”); Pili answers and comes (pp. 33–34)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "In the version Kamakau collected, Pāʻao comes from “Upolo” with Pili Kaʻaiea, Pili’s wife Hinaauaku, his own sister and thirty-five others, “after a long and dangerous voyage”, and settles in Kohala (p. 34)."
+      }
+    ]
+  },
+  {
+    "id": "moikeha-voyages",
+    "title": "Moʻikeha",
+    "gloss": "with Olopana to Kahiki, and home to Kauaʻi",
+    "kind": "voyage",
+    "when": {
+      "from": "1100",
+      "to": "1400",
+      "precision": "century"
+    },
+    "era": "voyaging",
+    "event": "moikeha",
+    "from": "waipio-valley",
+    "to": "wailua-kauai",
+    "points": [
+      [
+        -155.5942,
+        20.1206
+      ],
+      [
+        -155.56,
+        20.17
+      ],
+      [
+        -155.17,
+        20.06
+      ],
+      [
+        -154.86,
+        19.82
+      ],
+      [
+        -154.72,
+        19.52
+      ],
+      [
+        -154.95,
+        18.95
+      ],
+      [
+        -155.62,
+        18.78
+      ],
+      [
+        -156.2,
+        19.25
+      ],
+      [
+        -156.48,
+        20.05
+      ],
+      [
+        -156.42,
+        20.5
+      ],
+      [
+        -156.62,
+        20.45
+      ],
+      [
+        -156.97,
+        20.62
+      ],
+      [
+        -157.45,
+        21.05
+      ],
+      [
+        -157.62,
+        21.27
+      ],
+      [
+        -157.88,
+        21.22
+      ],
+      [
+        -158.3,
+        21.36
+      ],
+      [
+        -158.8,
+        21.75
+      ],
+      [
+        -159.3,
+        22.04
+      ],
+      [
+        -159.333,
+        22.044
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 5,
+        "note": "Kahiki: Olopana rules there, and Moʻikeha builds his house Lanikeha"
+      },
+      {
+        "at": 9,
+        "note": "off Honuaʻula on Maui, named for a companion who stayed"
+      },
+      {
+        "at": 13,
+        "note": "off Makapuʻu, another companion’s name"
+      },
+      {
+        "at": 17,
+        "note": "anchored off Wailua"
+      },
+      {
+        "at": 18,
+        "note": "Wailua, at the river mouth"
+      }
+    ],
+    "summary": "A schematic line. Floods drive Olopana and his brother Moʻikeha out of Waipiʻo, and they sail with their families for Kahiki, where Olopana comes to rule a district. Slandered there, Moʻikeha sails home with his seer Kamahualele. As his canoes coast along the islands, companions go ashore and leave their names on places in Kaʻū and Puna, at Honuaʻula on Maui and at Makapuʻu on Oʻahu. One evening he anchors off Wailua on Kauaʻi, marries into its ruling family and stays. The places come from the tradition; their order and the line between them do not.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 49–54"
+      },
+      {
+        "id": "ks-kealaikahiki-2020",
+        "where": "p. 2"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "The places named for Moʻikeha’s companions: “the land of Moaula in Kau, Hawaii, the capes of Haehae and Kumukahi in Puna, the district of Honuaula on Maui, capes Makapuu and Makaaoa on Oahu”; Laʻamaomao settled near Hale-a-Lono on Kaluakoʻi, Molokaʻi (pp. 52–53)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Moʻikeha anchored “outside of Waialua and the surf of Makaiwa, or, as others say, off Waimahanalua in Kapaa” (p. 53). Fornander takes Kahiki in this tradition to be the Society group, probably Raʻiātea (pp. 50–51)."
+      }
+    ]
+  },
+  {
+    "id": "kila-laa-voyages",
+    "title": "Kila and Laʻamaikahiki",
+    "gloss": "the last remembered voyages to Kahiki and back",
+    "kind": "voyage",
+    "when": {
+      "from": "1100",
+      "to": "1400",
+      "precision": "century"
+    },
+    "era": "voyaging",
+    "event": "moikeha",
+    "from": "wailua-kauai",
+    "to": "kualoa",
+    "points": [
+      [
+        -159.333,
+        22.044
+      ],
+      [
+        -159.3,
+        22
+      ],
+      [
+        -158.85,
+        21.7
+      ],
+      [
+        -158.3,
+        21.33
+      ],
+      [
+        -157.85,
+        21.19
+      ],
+      [
+        -157.4,
+        20.95
+      ],
+      [
+        -156.97,
+        20.6
+      ],
+      [
+        -156.55,
+        20.42
+      ],
+      [
+        -156.15,
+        19.62
+      ],
+      [
+        -155.98,
+        19.02
+      ],
+      [
+        -155.68,
+        18.82
+      ],
+      [
+        -154.95,
+        18.95
+      ],
+      [
+        -154.68,
+        19.55
+      ],
+      [
+        -154.88,
+        20.08
+      ],
+      [
+        -155.7,
+        20.46
+      ],
+      [
+        -156.12,
+        20.98
+      ],
+      [
+        -156.82,
+        21.3
+      ],
+      [
+        -157.55,
+        21.56
+      ],
+      [
+        -157.79,
+        21.54
+      ],
+      [
+        -157.8402,
+        21.5211
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Wailua, at the river mouth"
+      },
+      {
+        "at": 10,
+        "note": "Kila takes his departure from the south point of Hawaiʻi"
+      },
+      {
+        "at": 19,
+        "note": "Kualoa, where Laʻamaikahiki stays"
+      }
+    ],
+    "summary": "A schematic line. After many years as ruler of Kauaʻi, Moʻikeha longs to see his foster-son Laʻa, left in Kahiki, and sends his son Kila to bring him. Kila’s canoes pass down the island chain and take their departure from the south point of Hawaiʻi. Laʻamaikahiki comes north and stays mostly at Kualoa on Oʻahu, where his wives bear him sons on the same day; after Moʻikeha’s death he goes back to Kahiki. No later voyager to or from Kahiki is remembered. Only Wailua, the south point and Kualoa come from the source; the rest of the line is drawn over open water.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 54–58"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "One legend has Laʻa come back with Kila, see Moʻikeha, visit the islands and return to Kahiki; the other has him stay in Kahiki until Olopana dies and then come with his own canoes, “accompanied by his priest, his astrologer, his master of ceremonies, his drummer, his prophet, and forty other attendants” (p. 55)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "“With Laa-mai-Kahiki closes this period of oceanic travel”: no later chief is remembered as sailing south, and no southerner as arriving (p. 58)."
+      }
+    ]
+  },
+  {
+    "id": "kalaehohoa-1775",
+    "title": "Kalaehohoa",
+    "gloss": "Kalaniʻōpuʻu’s raid on Kaupō, and the flight back to Hāna",
+    "kind": "fleet",
+    "when": {
+      "from": "1775",
+      "to": "1775",
+      "precision": "year"
+    },
+    "era": "kalaniopuu",
+    "event": null,
+    "from": "hana-bay",
+    "to": "kalaeokailio",
+    "points": [
+      [
+        -155.9841,
+        20.7596
+      ],
+      [
+        -155.955,
+        20.735
+      ],
+      [
+        -156,
+        20.645
+      ],
+      [
+        -156.08,
+        20.605
+      ],
+      [
+        -156.1355,
+        20.6155
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "return",
+    "waypoints": [
+      {
+        "at": 4,
+        "note": "under the lee of Kalaeokaʻīlio, where the fleet lay"
+      }
+    ],
+    "summary": "Hawaiʻi has held Hāna, with the fort on Kaʻuiki, since about 1759. From there Kalaniʻōpuʻu’s forces raid the Kaupō district, still loyal to Kahekili of Maui, and beat their captives about the head with clubs; the raid is remembered as Kalaehohoa, the forehead beaten with clubs. Kahekili sends troops who rout them among the sweet potato fields, and what is left of the Hawaiʻi army escapes to its canoes, lying under the lee of the point Kalaeokaʻīlio, and returns to Hāna. It is the first battle in which Kamehameha is noted as a warrior.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 150–151"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. VII, p. 84"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Dates the raid “about the year 1775”; the Hawaiʻi army “was utterly routed and pursued to their fleet, which was lying under lee of the said point of land, and barely a remnant escaped on board and returned to Hana” (pp. 150–151)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Gives no single year: “From the years 1775 to 1779 there was continual fighting between Ka-lani-ʻopuʻu of Hawaii and Ka-hekili”; the fleet rested under the lee of “The point of the dog” (Ka-lae-o-ka-ʻilio) (p. 84)."
+      }
+    ]
+  },
+  {
+    "id": "kakanilua-1776-fleet",
+    "title": "To Kakanilua",
+    "gloss": "Kalaniʻōpuʻu’s fleet to Honuaʻula and Keālia",
+    "kind": "fleet",
+    "when": {
+      "from": "1776",
+      "to": "1776",
+      "precision": "year"
+    },
+    "era": "kalaniopuu",
+    "event": "kakanilua-1776",
+    "from": "hawaii-island",
+    "to": "kiheipukoa",
+    "points": [
+      [
+        -155.862,
+        20.262
+      ],
+      [
+        -155.96,
+        20.36
+      ],
+      [
+        -156.22,
+        20.5
+      ],
+      [
+        -156.42,
+        20.57
+      ],
+      [
+        -156.465,
+        20.63
+      ],
+      [
+        -156.475,
+        20.7
+      ],
+      [
+        -156.478,
+        20.77
+      ],
+      [
+        -156.4768,
+        20.7945
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Hawaiʻi; the landing the fleet sailed from is not named, so the line leaves from the Kohala coast nearest Maui"
+      },
+      {
+        "at": 3,
+        "note": "Keoneʻōʻio, where the landing began"
+      },
+      {
+        "at": 4,
+        "note": "off Mākena, where it ended"
+      },
+      {
+        "at": 7,
+        "note": "Kiheipukoʻa, by the salt marsh of Keālia"
+      }
+    ],
+    "summary": "Kalaniʻōpuʻu brings his army over from Hawaiʻi and lands it unopposed along the Honuaʻula shore, its canoes stretching from Keoneʻōʻio to Mākena, and plunders the country. Part of the army he takes on by sea to Kiheipukoʻa, by the salt marsh of Keālia, and from there his best troops, the ʻAlapa, set out across the isthmus to drink the waters of Wailuku. They are destroyed in the sandhills, in the battle remembered as Kakanilua. The place on Hawaiʻi the fleet sailed from is not named, so its first stretch is drawn dashed from the Kohala coast.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 152–153"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. VII, pp. 85–86"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "“In 1776 Kalaniopuu embarked his forces and landed them without resistance in the Honuaula district, from Keonioio to Makena … Taking part of his forces around by water, Kalaniopuu landed again at Kiheipukoa, near the Kealia or salt marsh between Kalepolepo and Maalaea” (p. 152)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "The army landed at Keoneʻōʻio, “their double canoes extending to Makena”; landed before noon, it filled the land “from Kiheipukoʻa at Kealia to Kapaʻahu” (p. 85)."
+      }
+    ]
+  },
+  {
+    "id": "kalaniopuu-maui-1778",
+    "title": "Kalaniʻōpuʻu around Maui",
+    "gloss": "the campaign of 1778–79, when Cook came",
+    "kind": "fleet",
+    "when": {
+      "from": "1778",
+      "to": "1779",
+      "precision": "year"
+    },
+    "era": "kalaniopuu",
+    "event": null,
+    "from": "mokulau",
+    "to": "koolau-maui",
+    "points": [
+      [
+        -156.1062,
+        20.6416
+      ],
+      [
+        -156.14,
+        20.6
+      ],
+      [
+        -156.32,
+        20.55
+      ],
+      [
+        -156.5,
+        20.55
+      ],
+      [
+        -156.56,
+        20.64
+      ],
+      [
+        -156.64,
+        20.76
+      ],
+      [
+        -156.695,
+        20.865
+      ],
+      [
+        -156.79,
+        20.86
+      ],
+      [
+        -156.77,
+        20.97
+      ],
+      [
+        -156.64,
+        21.04
+      ],
+      [
+        -156.545,
+        21.025
+      ],
+      [
+        -156.43,
+        20.97
+      ],
+      [
+        -156.27,
+        20.955
+      ],
+      [
+        -156.14,
+        20.875
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Mokulau in Kaupō, the first landing"
+      },
+      {
+        "at": 3,
+        "note": "Kahoʻolawe, touched at in passing"
+      },
+      {
+        "at": 6,
+        "note": "Lahaina and the fort of Kahili above it"
+      },
+      {
+        "at": 7,
+        "note": "Lānaʻi, ravaged"
+      },
+      {
+        "at": 9,
+        "note": "Honokōhau, for food"
+      },
+      {
+        "at": 10,
+        "note": "rounding Kahakuloa"
+      },
+      {
+        "at": 12,
+        "note": "Hāmākualoa, where Kahekili drives him back to the canoes"
+      },
+      {
+        "at": 13,
+        "note": "Koʻolau, where he lands again and holds on"
+      }
+    ],
+    "summary": "A year or two after Kakanilua Kalaniʻōpuʻu is back on Maui with a large force. He lands at Mokulau in Kaupō, touches at Kahoʻolawe, and attacks the hill fort of Kahili above Lahaina without taking it. He ravages Lānaʻi, goes up the Pailolo channel to take food at Honokōhau, rounds Kahakuloa and lands at Hāmākualoa, where Kahekili drives him back to his canoes. He lands again in Koʻolau and, with men from Hāna, holds on there for months. Off this coast, late in 1778, he goes out to Cook’s ships.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 156–157"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. VII, pp. 89–91"
+      },
+      {
+        "id": "cook-1784-v2",
+        "where": "p. 532 (30 November 1778)"
+      },
+      {
+        "id": "king-1784-v3",
+        "where": "p. 3 (January 1779)"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Puts the start “hardly a year” after Kakanilua, gives the order Kaupō, Kahoʻolawe, Lahaina, Lānaʻi, the Pailolo channel, Honokōhau, Kahakuloa, Hāmākualoa, Koʻolau, and says Cook arrived “during the early part of this campaign of 1778” (pp. 156–157)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Calls it a campaign “carried on for half a year, from 1778 to 1779, with fighting at Kaupo, Lahaina, Lanai, Hamakualoa, and Koʻolau”, and has the army fed on the taro of Honokahua in Kāʻanapali, where Fornander has Honokōhau (pp. 89–91)."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "On 30 November 1778, off the north-east end of Maui, canoes came off, “most of these belonged to a Chief named Terreeoboo, who came in one of them” (p. 532)."
+      },
+      {
+        "source": "king-1784-v3",
+        "says": "At Kealakekua in January 1779 the ships were told the king “was at that time engaged on a military expedition at Mowee” (p. 3)."
+      }
+    ]
+  },
+  {
+    "id": "cook-1778-kauai",
+    "title": "Cook at Kauaʻi and Niʻihau",
+    "gloss": "the ships’ track from the journal, January 1778",
+    "kind": "ship",
+    "when": {
+      "from": "1778-01-18",
+      "to": "1778-02-02",
+      "precision": "day"
+    },
+    "era": "kalaniopuu",
+    "event": "cook-waimea-1778",
+    "from": null,
+    "to": null,
+    "points": [
+      [
+        -158.594,
+        18.95
+      ],
+      [
+        -159.3167,
+        21.2
+      ],
+      [
+        -159.33,
+        21.82
+      ],
+      [
+        -159.44,
+        21.845
+      ],
+      [
+        -159.6,
+        21.876
+      ],
+      [
+        -159.6819,
+        21.949
+      ],
+      [
+        -159.84,
+        21.95
+      ],
+      [
+        -159.8378,
+        22.0633
+      ],
+      [
+        -159.95,
+        21.985
+      ],
+      [
+        -159.68,
+        21.79
+      ],
+      [
+        -159.79,
+        21.94
+      ],
+      [
+        -160.06,
+        21.8
+      ],
+      [
+        -160.21,
+        21.762
+      ],
+      [
+        -160.2536,
+        21.8056
+      ],
+      [
+        -160.415,
+        21.805
+      ],
+      [
+        -160.41,
+        22.45
+      ]
+    ],
+    "pointPrecision": "journal",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      14
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "in from the south, on the bearing between two noon positions; drawn dashed"
+      },
+      {
+        "at": 1,
+        "date": "1778-01-18",
+        "note": "noon, as printed; Oʻahu and Kauaʻi in sight"
+      },
+      {
+        "at": 2,
+        "date": "1778-01-19",
+        "note": "noon, from the bearings of Kauaʻi"
+      },
+      {
+        "at": 3,
+        "note": "ranging along the south side, half a league off"
+      },
+      {
+        "at": 5,
+        "date": "1778-01-20",
+        "note": "anchored off Waimea"
+      },
+      {
+        "at": 6,
+        "date": "1778-01-23",
+        "note": "driven out of the road, three leagues to leeward at noon"
+      },
+      {
+        "at": 7,
+        "date": "1778-01-24",
+        "note": "daybreak, the west end of Kauaʻi a league to the east"
+      },
+      {
+        "at": 8,
+        "note": "standing for Niʻihau, then back"
+      },
+      {
+        "at": 9,
+        "date": "1778-01-25",
+        "note": "daybreak, Waimea road about north"
+      },
+      {
+        "at": 10,
+        "note": "beating to windward, two leagues to leeward of the road"
+      },
+      {
+        "at": 11,
+        "date": "1778-01-29",
+        "note": "carried west, within three leagues of Niʻihau"
+      },
+      {
+        "at": 13,
+        "note": "anchored off Niʻihau’s south-west shore, fixed by three bearings"
+      },
+      {
+        "at": 14,
+        "date": "1778-02-02",
+        "note": "driven three leagues to leeward; at noon the ships stand north"
+      },
+      {
+        "at": 15,
+        "note": "away to the north; drawn dashed"
+      }
+    ],
+    "summary": "Cook’s two ships come up from the south. On 18 January they sight Oʻahu and then Kauaʻi, and the next day they run along Kauaʻi’s south coast and anchor off Waimea. Blown out of the road on 23 January, they spend days trying to beat back, drift down to Niʻihau, and on 29 January anchor off its south-west shore. On 2 February they stand away to the north. The positions are read from Cook’s journal: his noon latitude and longitude where he prints them, otherwise his bearings of the land. The stretches in from the south and away to the north are bearings only and are drawn dashed.",
+    "sources": [
+      {
+        "id": "cook-1784-v2",
+        "where": "bk. III, chs. XI–XII, pp. 191–221"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "firm"
+    },
+    "tellings": [
+      {
+        "source": "cook-1784-v2",
+        "says": "Noon, 18 January: “latitude … 21° 12′ North; and longitude 200° 41′ East”, the first land bearing NE by E½E “about eight or nine leagues”, a hill near the east end of the other N½W (p. 191)."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "Anchorage of 20 January, in 25 fathoms: the east point of the road S51°E, the west point N65°W, the village NE by E one mile (p. 198)."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "Daybreak, 24 January: the west end of Atooi E one league, Orehoua W by S, Oneeheow from SW by W to WSW (p. 212)."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "Anchorage at Niʻihau, 29 January, in 26 fathoms, three-quarters of a mile from the shore: the south-east point S65°E three miles, the other extreme N by E two or three miles, Tahoora S61°W seven leagues (p. 213). Taken from GNIS Kawaihoa and Makahūʻena, the first two put the ships about a kilometre off Kahāʻino; Kaʻula then lies S61°W, six leagues off."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "Cook places the islands he saw “between the latitude of 21° 30′, and 22° 15′ North, and between the longitude of 199° 20′, and 201° 30′ East” (p. 221)."
+      }
+    ]
+  },
+  {
+    "id": "cook-1778-79-hawaii",
+    "title": "Cook to Kealakekua",
+    "gloss": "along Maui and round Hawaiʻi to the bay, and back from Kohala, from the journals",
+    "kind": "ship",
+    "when": {
+      "from": "1778-11-26",
+      "to": "1779-02-11",
+      "precision": "day"
+    },
+    "era": "kalaniopuu",
+    "event": "cook-kealakekua-1779",
+    "from": null,
+    "to": "kealakekua-bay",
+    "points": [
+      [
+        -154.8,
+        20.92
+      ],
+      [
+        -156.1667,
+        20.9833
+      ],
+      [
+        -156.02,
+        20.84
+      ],
+      [
+        -155.7861,
+        20.555
+      ],
+      [
+        -155.68,
+        20.24
+      ],
+      [
+        -155.44,
+        20.13
+      ],
+      [
+        -155.21,
+        20.02
+      ],
+      [
+        -154.6604,
+        19.7247
+      ],
+      [
+        -154.82,
+        19.575
+      ],
+      [
+        -154.8075,
+        19.6667
+      ],
+      [
+        -154.8988,
+        20.475
+      ],
+      [
+        -154.95,
+        19.9167
+      ],
+      [
+        -154.62,
+        19.4
+      ],
+      [
+        -154.86,
+        19.4
+      ],
+      [
+        -155.02,
+        19.28
+      ],
+      [
+        -155.48,
+        19.08
+      ],
+      [
+        -155.69,
+        18.86
+      ],
+      [
+        -155.89,
+        19.02
+      ],
+      [
+        -155.6448,
+        18.7134
+      ],
+      [
+        -155.62,
+        18.937
+      ],
+      [
+        -155.69,
+        18.87
+      ],
+      [
+        -155.93,
+        18.94
+      ],
+      [
+        -155.98,
+        19.25
+      ],
+      [
+        -156.088,
+        19.475
+      ],
+      [
+        -155.935,
+        19.4765
+      ],
+      [
+        -155.975,
+        19.48
+      ],
+      [
+        -156.1,
+        19.74
+      ],
+      [
+        -155.93,
+        20
+      ],
+      [
+        -156.0931,
+        20.0167
+      ],
+      [
+        -155.855,
+        19.965
+      ],
+      [
+        -156.07,
+        19.765
+      ],
+      [
+        -156,
+        19.52
+      ],
+      [
+        -155.96,
+        19.473
+      ],
+      [
+        -155.9286,
+        19.4751
+      ]
+    ],
+    "pointPrecision": "journal",
+    "direction": "oneway",
+    "schematicSegments": [
+      0
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "in from the east along the latitude of the day before; drawn dashed"
+      },
+      {
+        "at": 1,
+        "date": "1778-11-26",
+        "note": "noon off Maui, as printed"
+      },
+      {
+        "at": 2,
+        "date": "1778-11-30",
+        "note": "off the north-east end of Maui, where Kalaniʻōpuʻu comes out"
+      },
+      {
+        "at": 3,
+        "date": "1778-12-01",
+        "note": "morning, from the bearings of Maui and Hawaiʻi"
+      },
+      {
+        "at": 4,
+        "date": "1778-12-02",
+        "note": "close in with the north side of Hawaiʻi; snow on the summits"
+      },
+      {
+        "at": 5,
+        "date": "1778-12-06",
+        "note": "five leagues farther up the coast"
+      },
+      {
+        "at": 6,
+        "date": "1778-12-13",
+        "note": "six leagues farther to windward"
+      },
+      {
+        "at": 7,
+        "date": "1778-12-18",
+        "note": "evening, the south-east point five leagues off"
+      },
+      {
+        "at": 8,
+        "date": "1778-12-19",
+        "note": "set in by the swell, the surf half a league off"
+      },
+      {
+        "at": 9,
+        "date": "1778-12-20",
+        "note": "noon, the south-east point three leagues to the south"
+      },
+      {
+        "at": 10,
+        "date": "1778-12-22",
+        "note": "noon latitude, and the bearing of the snowy peak"
+      },
+      {
+        "at": 11,
+        "date": "1778-12-24",
+        "note": "noon, as printed"
+      },
+      {
+        "at": 12,
+        "date": "1778-12-28",
+        "note": "cruising off the south-east point, five to ten leagues out"
+      },
+      {
+        "at": 13,
+        "date": "1779-01-01",
+        "note": "in towards the land to trade"
+      },
+      {
+        "at": 15,
+        "note": "running down the south-east side"
+      },
+      {
+        "at": 16,
+        "date": "1779-01-05",
+        "note": "past the south point in the morning"
+      },
+      {
+        "at": 17,
+        "date": "1779-01-07",
+        "note": "off the south-west coast, from the bearings; the printed longitude is far to the west"
+      },
+      {
+        "at": 18,
+        "date": "1779-01-10",
+        "note": "evening, the south point four leagues to the north"
+      },
+      {
+        "at": 19,
+        "date": "1779-01-12",
+        "note": "a mile off shore, north-east of the south point"
+      },
+      {
+        "at": 21,
+        "date": "1779-01-13",
+        "note": "noon, from the latitude and the bearing of the south point"
+      },
+      {
+        "at": 22,
+        "note": "along the shore to the north"
+      },
+      {
+        "at": 23,
+        "date": "1779-01-16",
+        "note": "daybreak, three leagues off the bay"
+      },
+      {
+        "at": 24,
+        "date": "1779-01-17",
+        "note": "anchored in Kealakekua Bay"
+      },
+      {
+        "at": 25,
+        "date": "1779-02-04",
+        "note": "out of the bay, followed by canoes; calms"
+      },
+      {
+        "at": 26,
+        "date": "1779-02-06",
+        "note": "past the westernmost point in the morning"
+      },
+      {
+        "at": 27,
+        "note": "abreast of the bay of Kawaihae; a gale off the land"
+      },
+      {
+        "at": 28,
+        "date": "1779-02-07",
+        "note": "noon latitude, and the bearings of the west and north-west points"
+      },
+      {
+        "at": 29,
+        "date": "1779-02-09",
+        "note": "the foremast sprung again; within a mile of the shore at noon"
+      },
+      {
+        "at": 30,
+        "date": "1779-02-10",
+        "note": "close in with the breakers north of the west point, before dawn"
+      },
+      {
+        "at": 33,
+        "date": "1779-02-11",
+        "note": "anchored again in Kealakekua Bay"
+      }
+    ],
+    "summary": "Back from the Arctic, Cook comes in from the east and on 26 November 1778 sights Maui. Off its north-east end on 30 November Kalaniʻōpuʻu, at war on Maui, comes out to the ships. Cook crosses to Hawaiʻi and spends seven weeks working to windward along the north and east coasts, round the eastern cape and down past Kaʻū, trading with the canoes that come out and hardly setting foot ashore, until on 17 January 1779 he anchors in Kealakekua Bay. On 4 February he sails north to finish surveying the island, is caught by gales off Kohala, finds the foremast sprung again, and on 11 February is back in the bay. The positions are read from Cook’s journal and, for February, King’s; the stretch in from the east is a bearing only.",
+    "sources": [
+      {
+        "id": "cook-1784-v2",
+        "where": "bk. III, ch. XII, pp. 529–549"
+      },
+      {
+        "id": "king-1784-v3",
+        "where": "bk. V, ch. II, pp. 30–34"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "cook-1784-v2",
+        "says": "Daybreak, 25 November, “in the latitude of 20° 55′ … steered to the West”; noon, 26 November: “latitude was 20° 59′; and the longitude 203° 50′”, a low flat like an isthmus S42°W, the nearest shore three or four miles (pp. 529–531). The isthmus bearing would put the ship some 15 km west of the printed longitude; the printed position is kept."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "1 December, 8 a.m.: Owhyhee from S22°E to S12°W, Mowee from N41°W to N83°W (p. 532). Taken from GNIS ʻUpolu Point and Nānuʻalele Point, these place the ship in mid-channel, and Waipiʻo then lies S22°E as the journal says."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "Eclipse of the moon, evening of 4 December: longitude by lunar distances 204° 19′ 47″ East (pp. 533–534). 22 December, noon: latitude 20° 28′ 30″, the snowy peak SW½S. 24 December, noon: 19° 55′ N, 205° 3′ E; the south-east point lies in 19° 34′, 205° 6′ (pp. 540–541)."
+      },
+      {
+        "source": "cook-1784-v2",
+        "says": "The time-keeper longitudes printed for 7, 8 and 13 January (203° 26′, 203° 13′, 203° 40′ E) lie 50–70 km west of where the same days’ bearings put the ships, “two leagues” and “two miles” off the south-west coast; those days are placed by the bearings (pp. 545–547). The south point is given as 18° 54′; GNIS has Kalae at 18° 54.7′."
+      },
+      {
+        "source": "king-1784-v3",
+        "says": "7 February, noon: latitude 20° 1′ N, the west point S7°E, the north-west point N38°E, four or five leagues from shore; 8 February, the foremast sprung; 10 February, 2 a.m., close in with the breakers north of the west point; 11 February, anchored in the bay (pp. 32–34)."
+      }
+    ]
+  },
+  {
+    "id": "clerke-1779-leeward",
+    "title": "Clerke along the islands",
+    "gloss": "the ships leave Kealakekua without Cook, from King’s journal",
+    "kind": "ship",
+    "when": {
+      "from": "1779-02-22",
+      "to": "1779-03-15",
+      "precision": "day"
+    },
+    "era": "kalaniopuu",
+    "event": "cook-kealakekua-1779",
+    "from": "kealakekua-bay",
+    "to": null,
+    "points": [
+      [
+        -155.9286,
+        19.4751
+      ],
+      [
+        -155.96,
+        19.473
+      ],
+      [
+        -156.03,
+        19.6
+      ],
+      [
+        -156.35,
+        20.15
+      ],
+      [
+        -156.55,
+        20.47
+      ],
+      [
+        -156.76,
+        20.5
+      ],
+      [
+        -156.6333,
+        20.7
+      ],
+      [
+        -156.74,
+        20.8
+      ],
+      [
+        -156.92,
+        20.69
+      ],
+      [
+        -157.15,
+        20.9
+      ],
+      [
+        -157.36,
+        21.09
+      ],
+      [
+        -157.3,
+        21.38
+      ],
+      [
+        -157.815,
+        21.585
+      ],
+      [
+        -157.9839,
+        21.8333
+      ],
+      [
+        -158.035,
+        21.695
+      ],
+      [
+        -158.0755,
+        21.6487
+      ],
+      [
+        -158.2,
+        21.85
+      ],
+      [
+        -159.25,
+        22.02
+      ],
+      [
+        -159.31,
+        21.92
+      ],
+      [
+        -159.45,
+        21.845
+      ],
+      [
+        -159.6,
+        21.875
+      ],
+      [
+        -159.6904,
+        21.9297
+      ],
+      [
+        -160.21,
+        21.762
+      ],
+      [
+        -160.2536,
+        21.8056
+      ],
+      [
+        -160.54,
+        21.69
+      ],
+      [
+        -160.95,
+        21.335
+      ]
+    ],
+    "pointPrecision": "journal",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "date": "1779-02-22",
+        "note": "out of the bay at eight in the evening"
+      },
+      {
+        "at": 3,
+        "date": "1779-02-23",
+        "note": "driven to leeward by a north-east swell and gale"
+      },
+      {
+        "at": 4,
+        "date": "1779-02-24",
+        "note": "daybreak, standing towards Kahoʻolawe; along its south-east side"
+      },
+      {
+        "at": 5,
+        "note": "round its western extremity, keeping off the rocks"
+      },
+      {
+        "at": 6,
+        "note": "noon, as printed, between Maui and Lānaʻi"
+      },
+      {
+        "at": 7,
+        "note": "sunset, a shoal off the west point of Maui; tacked to the south"
+      },
+      {
+        "at": 8,
+        "date": "1779-02-25",
+        "note": "along the south side of Lānaʻi"
+      },
+      {
+        "at": 10,
+        "date": "1779-02-26",
+        "note": "round the west point of Molokaʻi in the morning"
+      },
+      {
+        "at": 11,
+        "note": "afternoon, Oʻahu in sight eight leagues off"
+      },
+      {
+        "at": 12,
+        "date": "1779-02-27",
+        "note": "a league off the middle of Oʻahu’s north-east side"
+      },
+      {
+        "at": 13,
+        "note": "noon, abreast of the north point, two leagues off"
+      },
+      {
+        "at": 15,
+        "note": "anchored at Waimea, Oʻahu"
+      },
+      {
+        "at": 16,
+        "date": "1779-02-28",
+        "note": "standing north, then away for Kauaʻi"
+      },
+      {
+        "at": 17,
+        "note": "sunset, off the eastern extremity of Kauaʻi"
+      },
+      {
+        "at": 21,
+        "date": "1779-03-01",
+        "note": "anchored in the old station off Waimea"
+      },
+      {
+        "at": 23,
+        "date": "1779-03-08",
+        "note": "anchored off Niʻihau, nearly on the spot of the year before"
+      },
+      {
+        "at": 24,
+        "date": "1779-03-15",
+        "note": "away in the morning, passing north of Kaʻula"
+      },
+      {
+        "at": 25,
+        "note": "towards the next noon position, which lies off the map"
+      }
+    ],
+    "summary": "A week after Cook’s death, on the evening of 22 February 1779, the ships leave Kealakekua under Charles Clerke, meaning to look for a harbour on the south-east side of Maui. Wind and swell drive them to leeward instead: past Kahoʻolawe, between Maui and Lānaʻi, along Lānaʻi’s south side and round the west point of Molokaʻi, up the windward side of Oʻahu to anchor at Waimea on its north shore, and across to Kauaʻi. They water at Waimea, move to their old anchorage at Niʻihau on 8 March, and on 15 March sail west past Kaʻula and out of the islands. The positions are read from King’s account.",
+    "sources": [
+      {
+        "id": "king-1784-v3",
+        "where": "bk. V, ch. V, pp. 82–95; bk. VI, ch. I"
+      },
+      {
+        "id": "cook-1784-v2",
+        "where": "p. 213 (the Niʻihau anchorage of 1778)"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "king-1784-v3",
+        "says": "Noon, 24 February: “the latitude was, by observation, 20° 42′ North, and the longitude 203° 22′ East … accurately deduced from observations made by the time-keeper before and after noon, compared with the longitude found by a great many distances of the moon from the sun and stars” (p. 84)."
+      },
+      {
+        "source": "king-1784-v3",
+        "says": "Noon, 27 February: “abreast of the North point of the island, about two leagues from the land … The latitude, by observation, 21° 50′ North, longitude 202° 15′ East” (p. 86). That longitude lies some 25 km east of Kahuku Point, so the point keeps the latitude and is set abreast of the cape."
+      },
+      {
+        "source": "king-1784-v3",
+        "says": "Anchorage at Waimea, Oʻahu, in 13 fathoms, the river mouth SE½E one mile (p. 87); at Kauaʻi, in 25 fathoms, the bluff west of the village NE by N¾E two miles (p. 88); at Niʻihau on 8 March in 20 fathoms, “nearly on the same spot as in the year 1778” (p. 95)."
+      },
+      {
+        "source": "king-1784-v3",
+        "says": "16 March, noon: latitude 21° 2′ N, longitude 198° 42′ E, west of the map (bk. VI, ch. I)."
+      }
+    ]
+  },
+  {
+    "id": "kahekili-oahu-1783",
+    "title": "Kahekili to Oʻahu",
+    "gloss": "the Maui fleet from Lahaina to Waikīkī",
+    "kind": "fleet",
+    "when": {
+      "from": "1782",
+      "to": "1783",
+      "precision": "year"
+    },
+    "era": "kahekili",
+    "event": "kaheiki-1783",
+    "from": "lahaina",
+    "to": "waikiki",
+    "points": [
+      [
+        -156.6766,
+        20.8743
+      ],
+      [
+        -156.7,
+        20.88
+      ],
+      [
+        -156.84,
+        20.955
+      ],
+      [
+        -157,
+        21.035
+      ],
+      [
+        -157.22,
+        21.06
+      ],
+      [
+        -157.48,
+        21.15
+      ],
+      [
+        -157.72,
+        21.235
+      ],
+      [
+        -157.82,
+        21.255
+      ],
+      [
+        -157.8287,
+        21.2766
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 2,
+        "note": "north of Lānaʻi, by the route Kamakau calls Ka-ʻopua-kiʻikiʻi"
+      },
+      {
+        "at": 4,
+        "note": "along the Molokaʻi shore towards Kaluakoʻi, for fish from the walled ponds"
+      },
+      {
+        "at": 5,
+        "note": "out to the deep ocean, until the breeze from Oʻahu is felt"
+      },
+      {
+        "at": 8,
+        "note": "Waikīkī; the fleet lies from Kaʻalāwai to Kawehewehe"
+      }
+    ],
+    "summary": "When Kahahana of Oʻahu has his chief counsellor Kaʻōpulupulu killed, Kahekili of Maui sees his chance. He gathers his chiefs and warriors at Lahaina, with double canoes sent from Hawaiʻi, and after the rites at the god house of Puehuehu the fleet sails to Molokaʻi to take fish from the walled ponds. It goes north of Lānaʻi by a route with its own name, out to the deep ocean until the breeze from Oʻahu is felt, and runs in to Waikīkī, lying along the shore from Kaʻalāwai to Kawehewehe. The battle that gives Kahekili the island is fought behind Pūowaina in January 1783.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XI, pp. 135–136"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "p. 222"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "The canoes off Molokaʻi “reached from Hoʻolehua(?) to Kaluakoʻi”: the first name is uncertain in the scan read (“Ho‘olehta”); the route north of Lānaʻi is “called Ka-ʻopua-kiʻikiʻi” (p. 135; the index lists it as a “sea route to Oahu”)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Kahekili “assembled his forces at Lahaina. Touching at Molokai on his way, he landed at Waikiki”; Kaʻōpulupulu died “in the latter part of 1782 or beginning of 1783” (p. 222)."
+      }
+    ]
+  },
+  {
+    "id": "kamehameha-maui-1790",
+    "title": "Kamehameha to Maui",
+    "gloss": "Kawaʻanui, the many canoes: to Hāna, Kahului and Molokaʻi",
+    "kind": "fleet",
+    "when": {
+      "from": "1790",
+      "to": "1790",
+      "precision": "year"
+    },
+    "era": "kahekili",
+    "event": "kepaniwai-1790",
+    "from": "kohala-hawaii",
+    "to": "kaunakakai",
+    "points": [
+      [
+        -155.862,
+        20.262
+      ],
+      [
+        -155.93,
+        20.38
+      ],
+      [
+        -155.955,
+        20.7
+      ],
+      [
+        -155.976,
+        20.752
+      ],
+      [
+        -155.965,
+        20.79
+      ],
+      [
+        -156.04,
+        20.845
+      ],
+      [
+        -156.15,
+        20.89
+      ],
+      [
+        -156.25,
+        20.95
+      ],
+      [
+        -156.31,
+        20.965
+      ],
+      [
+        -156.38,
+        20.95
+      ],
+      [
+        -156.47,
+        20.905
+      ],
+      [
+        -156.52,
+        20.98
+      ],
+      [
+        -156.6,
+        21.055
+      ],
+      [
+        -156.75,
+        21.05
+      ],
+      [
+        -156.9,
+        21.04
+      ],
+      [
+        -156.97,
+        21.055
+      ],
+      [
+        -157.015,
+        21.075
+      ],
+      [
+        -157.0174,
+        21.0896
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Kohala, where the forces gathered; the landing they left from is not named"
+      },
+      {
+        "at": 3,
+        "note": "Hāna: the canoes cover the beach from Hāmoa to Kawaipapa"
+      },
+      {
+        "at": 7,
+        "note": "Halehaku, where Kamehameha beaches and camps after the fight at Puʻukoaʻe"
+      },
+      {
+        "at": 10,
+        "note": "Kahului: the canoes hauled up as far as Hopukoa before the battle at Wailuku and ʻĪao"
+      },
+      {
+        "at": 13,
+        "note": "through the Pailolo channel"
+      },
+      {
+        "at": 17,
+        "note": "Kaunakakai, to find Kalola and her daughters"
+      }
+    ],
+    "summary": "With a cannon and muskets from a captured sloop, and John Young and Isaac Davis to work them, Kamehameha gathers his forces in Kohala, with canoes and men sent by Keawemaʻuhili of Hilo, and crosses the channel to Hāna. The canoes cover the beach from Hāmoa to Kawaipapa, and for the size of the fleet the war is remembered as Kawaʻanui, the many canoes. The fleet comes round the north coast while the army fights its way through Koʻolau and Hāmākualoa, beaching at Halehaku; then it moves to Kahului and is hauled up as far as Hopukoa for the battle at Wailuku and up ʻĪao. Afterwards Kamehameha sails from Kahului to Kaunakakai to bring Kalola and her daughters to Hawaiʻi.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 235–238"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XII, pp. 147–149"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "“Having collected his forces in Kohala, Kamehameha crossed the Hawaii channel, making his descent in Hana”; he “had brought his fleet round from Hana” to Hāmākualoa, then “moved his fleet to Kahului, and hauled up his canoes from there to Hopukoa”, and after the battle “leaving Kahului, sailed to Kaunakakai” (pp. 236–238). He dates the summons for canoes to the summer of 1790 (p. 235)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "The fleet “beached at Hana and extended from Hamoa to Kawaipapa”; “in the evening Kamehameha beached at Halehaku”; “the bay from Kahului to Hopukoa was filled with war canoes” (p. 148). Kamehameha “landed at Kaunakakai” and met Kalola at Kalamaʻula (p. 149)."
+      }
+    ]
+  },
+  {
+    "id": "kepuwahaulaula-1791",
+    "title": "Kepuwahaʻulaʻula",
+    "gloss": "the Maui and Kauaʻi fleet against Hawaiʻi",
+    "kind": "fleet",
+    "when": {
+      "from": "1791",
+      "to": "1791",
+      "precision": "year"
+    },
+    "era": "kahekili",
+    "event": "kepuwahaulaula-1791",
+    "from": "mokulau",
+    "to": "hana-bay",
+    "points": [
+      [
+        -156.1062,
+        20.6416
+      ],
+      [
+        -156.08,
+        20.6
+      ],
+      [
+        -155.9,
+        20.4
+      ],
+      [
+        -155.775,
+        20.255
+      ],
+      [
+        -155.7,
+        20.235
+      ],
+      [
+        -155.6,
+        20.17
+      ],
+      [
+        -155.585,
+        20.145
+      ],
+      [
+        -155.65,
+        20.2
+      ],
+      [
+        -155.83,
+        20.43
+      ],
+      [
+        -155.955,
+        20.715
+      ],
+      [
+        -155.9841,
+        20.7596
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Mokulau in Kaupō, where Kahekili sets out"
+      },
+      {
+        "at": 3,
+        "note": "off Hālawa in Kohala, where Kahekili lands"
+      },
+      {
+        "at": 6,
+        "note": "Waipiʻo, where the fleets join and Kaʻeokūlani lays the valley waste"
+      },
+      {
+        "at": 7,
+        "note": "off the Waimanu cliffs, where Kamehameha’s fleet meets them"
+      },
+      {
+        "at": 10,
+        "note": "back to Hāna"
+      }
+    ],
+    "summary": "Kahekili of Maui and his brother Kaʻeokūlani of Kauaʻi carry the war to Hawaiʻi. Kahekili sails from Mokulau in Kaupō and lands at Hālawa in Kohala; Kaʻeokūlani sails from Hāna, and they join at Waipiʻo, which Kaʻeokūlani lays waste. Kamehameha comes round from Kona with double canoes carrying guns, and a sloop with John Young and Isaac Davis aboard, to shut them in. The fleets meet off the Waimanu cliffs, in the fight named for Kamehameha’s cannon, and afterwards the Maui and Kauaʻi fleet goes back across the channel to Hāna. The line follows the invaders; Kaʻeokūlani’s crossing from Hāna and Kamehameha’s from Kona are not drawn.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XIII, pp. 160–162"
+      },
+      {
+        "id": "fornander-v2",
+        "where": "pp. 243–244, 247"
+      },
+      {
+        "id": "dibble-1843",
+        "where": "p. 64"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“Ka-hekili and his men set sail for Hawaii from Mokulau in Kaupo, and Ka-ʻeo-ku-lani from Hana. They landed at Waipiʻo” (p. 160); Kahekili had first gone to Hālawa in Kohala (p. 161); the fleets met “off the Waimanu cliffs”, and the fight “ended indecisively with the loss of warriors on both sides” (p. 162)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "The fleets met “not far from Waipio, near the Pali Hulaana of Waimanu”; Kahekili and Kaʻeokūlani “returned to Hana in Maui with their shattered fleet” (p. 244)."
+      },
+      {
+        "source": "dibble-1843",
+        "says": "Puts the engagement “in canoes off Kohala” and says “the greater part of their fleet of canoes was lost” (p. 64)."
+      }
+    ]
+  },
+  {
+    "id": "nuuanu-1795-fleet",
+    "title": "The fleet to Oʻahu",
+    "gloss": "Hawaiʻi to Waikīkī by Lahaina and Molokaʻi",
+    "kind": "fleet",
+    "when": {
+      "from": "1795-02",
+      "to": "1795-04",
+      "precision": "month"
+    },
+    "era": "kamehameha",
+    "event": "nuuanu-1795",
+    "from": "hawaii-island",
+    "to": "waikiki",
+    "points": [
+      [
+        -155.862,
+        20.262
+      ],
+      [
+        -155.96,
+        20.38
+      ],
+      [
+        -156.3,
+        20.53
+      ],
+      [
+        -156.53,
+        20.62
+      ],
+      [
+        -156.63,
+        20.76
+      ],
+      [
+        -156.695,
+        20.865
+      ],
+      [
+        -156.85,
+        20.985
+      ],
+      [
+        -156.93,
+        21.05
+      ],
+      [
+        -157.02,
+        21.065
+      ],
+      [
+        -157.25,
+        21.07
+      ],
+      [
+        -157.32,
+        21.08
+      ],
+      [
+        -157.48,
+        21.2
+      ],
+      [
+        -157.7,
+        21.24
+      ],
+      [
+        -157.79,
+        21.25
+      ],
+      [
+        -157.815,
+        21.247
+      ],
+      [
+        -157.835,
+        21.262
+      ],
+      [
+        -157.8287,
+        21.2766
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "date": "1795-02",
+        "note": "Hawaiʻi; the landing the fleet left from is not named, so the line leaves from the Kohala coast nearest Maui"
+      },
+      {
+        "at": 5,
+        "note": "Lahaina: the canoes cover the sand from Launiupoko to Māla"
+      },
+      {
+        "at": 7,
+        "note": "along the Molokaʻi shore from Kawela to Kalamaʻula; councils at Kaunakakai"
+      },
+      {
+        "at": 11,
+        "note": "the Kaʻiwi channel, where Kaʻiana turns away for the Koʻolau side"
+      },
+      {
+        "at": 13,
+        "note": "ashore along the beaches from Waiʻalae"
+      },
+      {
+        "at": 16,
+        "date": "1795-04",
+        "note": "to Waikīkī"
+      }
+    ],
+    "summary": "With the guns Kalanikūpule lost with the ships, Kamehameha leaves Hawaiʻi in February 1795 with the largest fleet the islands have seen. It covers the sand at Lahaina from Launiupoko to Māla and takes what it needs from the town, then lies along the Molokaʻi shore from Kawela to Kalamaʻula while the chiefs hold council at Kaunakakai. As it crosses the Kaʻiwi channel the chief Kaʻiana turns away with his people for the Koʻolau side of Oʻahu, to join Kalanikūpule. The rest comes ashore along the beaches from Waiʻalae to Waikīkī and marches on Nuʻuanu. The place on Hawaiʻi the fleet sailed from is not named, so its first stretch is drawn dashed from the Kohala coast.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 343–347"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XIV, pp. 171–172"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "“In the month of February 1795 Kamehameha left Hawaii with a fleet of canoes which, when it arrived at Lahaina, Maui, is said to have occupied the beach from Launiupoko to Mala”; it “came to at Kaunakakai, Molokai, being distributed along-shore from Kalamaula to Kawela” (pp. 343–344). During the crossing Kaʻiana’s people “separated from the main fleet and landed on the Koolau side of Oahu, whence, crossing the mountain, they joined Kalanikupule”; whether by night or day “has never been stated” (p. 347)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“In February, 1795, Kamehameha’s fleet of war canoes landed at Lahaina”; on Molokaʻi “the whole coast from Kawela to Kalamaʻula was covered by canoes” (p. 171). Kaʻiana leaves his wife’s canoe “when the fleet left Molokai and was approaching the Kaiwi channel” (p. 172)."
+      }
+    ]
+  },
+  {
+    "id": "kaieiewaho-1796",
+    "title": "Kaʻieʻiewaho",
+    "gloss": "the crossing to Kauaʻi, turned back",
+    "kind": "fleet",
+    "when": {
+      "from": "1796",
+      "to": "1796",
+      "precision": "year"
+    },
+    "era": "kamehameha",
+    "event": "kaieiewaho-1796",
+    "from": "waianae",
+    "to": "kaieiewaho-channel",
+    "points": [
+      [
+        -158.1859,
+        21.4434
+      ],
+      [
+        -158.215,
+        21.445
+      ],
+      [
+        -158.45,
+        21.56
+      ],
+      [
+        -158.8,
+        21.75
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "return",
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Waiʻanae, where the war god is carried ashore for the evening"
+      },
+      {
+        "at": 3,
+        "note": "mid-channel: the leading canoes overturn and the fleet turns back"
+      }
+    ],
+    "summary": "With Oʻahu won, Kamehameha dedicates the heiau of his war god at ʻEwa, moves the fleet to Waiʻanae, and puts to sea towards midnight, meaning to land at daylight in Puna on Kauaʻi. In the middle of the Kaʻieʻiewaho channel a strong wind, the Kulepe, overturns the leading canoes and swamps those that go to help. The fleet turns back to Oʻahu, near enough to Waiʻanae to find shelter, and stays on the island for over a year. The line ends where the canoes turned, at a mid-channel point that is not a recorded position.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XIV, p. 173"
+      },
+      {
+        "id": "jarves-1847",
+        "where": "ch. VII, the passage following Nuʻuanu"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“Towards midnight they put out to sea, intending to land at daylight in Puna harbor on Kauai”; the canoes “might have been wrecked on the coast of Kauai or carried out to sea by the current and lost had they not been near enough Waiʻanae to gain shelter” (p. 173)."
+      },
+      {
+        "source": "jarves-1847",
+        "says": "Kamehameha “prepared to attack, and embarked for that purpose; but a violent wind drove him back, and obliged him to suspend his designs”, told just before “In January, 1796, Capt. Broughton … anchored at Kealakeakua bay”, which would put the attempt before that month (ch. VII)."
+      }
+    ]
+  },
+  {
+    "id": "peleleu-1802",
+    "title": "Peleleu",
+    "gloss": "the war fleet’s slow passage to Oʻahu",
+    "kind": "fleet",
+    "when": {
+      "from": "1802",
+      "to": "1804",
+      "precision": "year"
+    },
+    "era": "kamehameha",
+    "event": "okuu-1804",
+    "from": "hilo",
+    "to": "oahu",
+    "points": [
+      [
+        -155.0868,
+        19.7225
+      ],
+      [
+        -155.03,
+        19.77
+      ],
+      [
+        -155.25,
+        20.15
+      ],
+      [
+        -155.72,
+        20.47
+      ],
+      [
+        -156.05,
+        20.635
+      ],
+      [
+        -156.115,
+        20.62
+      ],
+      [
+        -156.3,
+        20.55
+      ],
+      [
+        -156.45,
+        20.575
+      ],
+      [
+        -156.53,
+        20.635
+      ],
+      [
+        -156.63,
+        20.76
+      ],
+      [
+        -156.695,
+        20.865
+      ],
+      [
+        -156.85,
+        20.985
+      ],
+      [
+        -157.02,
+        21.065
+      ],
+      [
+        -157.25,
+        21.07
+      ],
+      [
+        -157.32,
+        21.08
+      ],
+      [
+        -157.5,
+        21.18
+      ],
+      [
+        -157.75,
+        21.245
+      ],
+      [
+        -157.815,
+        21.247
+      ],
+      [
+        -157.835,
+        21.262
+      ],
+      [
+        -157.8287,
+        21.2766
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Hilo, where the canoes were cut; the landing the fleet left from is not named"
+      },
+      {
+        "at": 4,
+        "note": "Kīpahulu, where a god house is raised"
+      },
+      {
+        "at": 5,
+        "note": "Kaupō, where its heiau are set up anew"
+      },
+      {
+        "at": 10,
+        "note": "Lahaina, for about a year"
+      },
+      {
+        "at": 19,
+        "note": "Oʻahu, for another year; the landing place is not named, so the line ends at Waikīkī"
+      }
+    ],
+    "summary": "For the conquest of Kauaʻi Kamehameha has a new fleet built of peleleu, big canoes lashed together with a covered platform aft and rigged with sails like a sloop. When it sails it touches first at Kīpahulu, where a god house is raised, then at Kaupō, then lies about a year at Lahaina, living off Maui, Molokaʻi, Lānaʻi and Kahoʻolawe. It moves on to Oʻahu for another year, and there in 1804 the pestilence called ʻōkuʻu strikes the court and the invasion is given up. Dibble has the canoes cut from the forests of Hilo; no source names where the fleet put out from, so the line leaves from Hilo and runs dashed to Kīpahulu.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XVI, pp. 187–189; p. 174 for Kaipalaoa"
+      },
+      {
+        "id": "dibble-1843",
+        "where": "p. 71"
+      },
+      {
+        "id": "jarves-1847",
+        "where": "pp. 96–97"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“Over eight hundred” peleleu were built, over five years; the fleet sailed when “six years had gone by since the battle with Na-makehaʻ at Kaipalaoa” (p. 188), whom Kamehameha had sacrificed in January 1797 (p. 174)."
+      },
+      {
+        "source": "dibble-1843",
+        "says": "After four years at peace on Hawaiʻi, Kamehameha built “a fleet of canoes from the forests of Hilo, short and deep, for an expedition to Oahu … in the sixth year of his reign”; “he landed first at Maui, and resided at Lahaina a year” (p. 71)."
+      },
+      {
+        "source": "jarves-1847",
+        "says": "“In 1801, Kamehameha returned to Oahu, to prepare for the conquest of Kauai. This occupied him two years”, with “seven thousand warriors and fifty whites” and “a fleet of twenty-one schooners” besides the war canoes (pp. 96–97)."
+      }
+    ]
+  },
+  {
+    "id": "kaumualii-1810",
+    "title": "Kaumualiʻi to Māmala",
+    "gloss": "Kauaʻi’s ruler sails to meet Kamehameha",
+    "kind": "ship",
+    "when": {
+      "from": "1810",
+      "to": "1810",
+      "precision": "year"
+    },
+    "era": "kamehameha",
+    "event": "kauai-1810",
+    "from": "waimea-kauai",
+    "to": "honolulu-harbor",
+    "points": [
+      [
+        -159.6689,
+        21.9571
+      ],
+      [
+        -159.66,
+        21.925
+      ],
+      [
+        -159.61,
+        21.875
+      ],
+      [
+        -159.38,
+        21.84
+      ],
+      [
+        -158.8,
+        21.6
+      ],
+      [
+        -158.3,
+        21.37
+      ],
+      [
+        -158.06,
+        21.27
+      ],
+      [
+        -157.88,
+        21.29
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "return",
+    "schematicSegments": [
+      0
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Waimea; where Kaumualiʻi embarked is not said"
+      },
+      {
+        "at": 7,
+        "note": "the sea of Māmala off Honolulu, where Kamehameha comes out to the ship"
+      }
+    ],
+    "summary": "After years of messages, and of gift canoes lost in the Kaʻieʻiewaho channel, Kaumualiʻi of Kauaʻi agrees to come to Oʻahu, on board the ship of the trader Winship. Kamehameha goes out to meet it at sea off Honolulu, in the waters of Māmala, with a fleet of canoes red with feather cloaks. Kaumualiʻi offers him Kauaʻi; Kamehameha tells him to go home and rule it, and after a few days ashore Kaumualiʻi sails back. Where he embarked is not said; the line leaves from Waimea, where ships calling at Kauaʻi met him, and its first stretch is drawn dashed.",
+    "sources": [
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XVI, pp. 195–196; p. 162"
+      },
+      {
+        "id": "dibble-1843",
+        "where": "p. 72"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "An earlier gift fleet of “eleven double canoe loads and nine single canoe loads” was “swamped in the Kaʻieʻiewaho channel except one which landed on Oahu and one on Niihau” (p. 195); the meeting came “in the seventh year of Kamehameha’s occupation of Oahu”, Kaumualiʻi “arriving on Captain Winship’s boat”, and Kamehameha “went out to meet the boat at the sea of Mamala” (p. 196). Vancouver had met Kaumualiʻi at Waimea (p. 162)."
+      },
+      {
+        "source": "dibble-1843",
+        "says": "Kaumualiʻi “surrendered his island, without a contest” (p. 72)."
+      }
+    ]
+  },
+  {
+    "id": "thaddeus-1820",
+    "title": "The Thaddeus",
+    "gloss": "the first company of missionaries, along Hawaiʻi to Kailua and Honolulu",
+    "kind": "ship",
+    "when": {
+      "from": "1820-03-30",
+      "to": "1820-04-14",
+      "precision": "day"
+    },
+    "era": "kaahumanu",
+    "event": "missionaries-1820",
+    "from": null,
+    "to": "honolulu-harbor",
+    "points": [
+      [
+        -154.85,
+        20.12
+      ],
+      [
+        -155.3,
+        20.12
+      ],
+      [
+        -155.58,
+        20.2
+      ],
+      [
+        -155.86,
+        20.31
+      ],
+      [
+        -155.94,
+        20.19
+      ],
+      [
+        -155.88,
+        20.04
+      ],
+      [
+        -155.98,
+        19.86
+      ],
+      [
+        -156.1,
+        19.73
+      ],
+      [
+        -156.06,
+        19.67
+      ],
+      [
+        -156.003,
+        19.633
+      ],
+      [
+        -156.06,
+        19.66
+      ],
+      [
+        -156.3,
+        20.05
+      ],
+      [
+        -156.76,
+        20.43
+      ],
+      [
+        -157.15,
+        20.72
+      ],
+      [
+        -157.5,
+        21.04
+      ],
+      [
+        -157.76,
+        21.235
+      ],
+      [
+        -157.815,
+        21.247
+      ],
+      [
+        -157.85,
+        21.27
+      ],
+      [
+        -157.875,
+        21.293
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "in from the east; drawn dashed"
+      },
+      {
+        "at": 1,
+        "date": "1820-03-30",
+        "note": "Mauna Kea raised at dawn; along the north-east coast of Hilo and Hāmākua"
+      },
+      {
+        "at": 3,
+        "note": "round the northern extremity of Hawaiʻi"
+      },
+      {
+        "at": 4,
+        "date": "1820-03-31",
+        "note": "canoes come off from the shores of Kohala"
+      },
+      {
+        "at": 5,
+        "date": "1820-04-01",
+        "note": "abreast of Kawaihae; Kalanimoku comes aboard"
+      },
+      {
+        "at": 9,
+        "date": "1820-04-04",
+        "note": "anchored off Kailua"
+      },
+      {
+        "at": 12,
+        "note": "outside Maui, Molokini and Kahoʻolawe"
+      },
+      {
+        "at": 13,
+        "note": "outside Lānaʻi"
+      },
+      {
+        "at": 14,
+        "note": "outside Molokaʻi"
+      },
+      {
+        "at": 18,
+        "date": "1820-04-14",
+        "note": "anchored in the roadstead off Honolulu"
+      }
+    ],
+    "summary": "The brig Thaddeus, out of Boston, raises Mauna Kea at dawn on 30 March 1820 and runs along the north-east coast of Hilo, Hāmākua and Kohala. Off Kohala people come out in their canoes to see the strangers; off Kawaihae the chief Kalanimoku and two of Kamehameha’s widows come aboard; and on 4 April the brig anchors off Kailua, where Liholiho lives. Given leave for some of the company to stay there, she sails north-west outside Maui, Kahoʻolawe, Lānaʻi and Molokaʻi and on 14 April anchors in the roadstead off Honolulu. The places and dates are Bingham’s; he gives no positions, and the stretch in from the east is drawn dashed.",
+    "sources": [
+      {
+        "id": "bingham-1847",
+        "where": "chs. III–IV, pp. 79–92"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "bingham-1847",
+        "says": "Mauna Kea was descried “at the distance of eighty miles” (p. 79); the brig anchored off Kailua “163 days from Boston” (p. 85); leaving, “we left them on our right, and reached Oahu in 36 hours”, anchoring off Honolulu “about 17 miles from the eastern extremity” of the island (p. 92)."
+      }
+    ]
+  },
+  {
+    "id": "iliahi-lane",
+    "title": "ʻIliahi",
+    "gloss": "the sandalwood lane, Kawaihae to Honolulu and on to Canton",
+    "kind": "trade",
+    "when": {
+      "from": "1810",
+      "to": "1840",
+      "precision": "decade"
+    },
+    "era": "kaahumanu",
+    "event": "sandalwood",
+    "from": "kawaihae",
+    "to": null,
+    "points": [
+      [
+        -155.8265,
+        20.0354
+      ],
+      [
+        -155.9,
+        20.06
+      ],
+      [
+        -156.2,
+        20.42
+      ],
+      [
+        -156.53,
+        20.635
+      ],
+      [
+        -156.74,
+        20.82
+      ],
+      [
+        -157,
+        21
+      ],
+      [
+        -157.3,
+        21.05
+      ],
+      [
+        -157.45,
+        21.17
+      ],
+      [
+        -157.75,
+        21.245
+      ],
+      [
+        -157.815,
+        21.247
+      ],
+      [
+        -157.85,
+        21.27
+      ],
+      [
+        -157.875,
+        21.293
+      ],
+      [
+        -158.12,
+        21.26
+      ],
+      [
+        -158.7,
+        21.4
+      ],
+      [
+        -159.6,
+        21.6
+      ],
+      [
+        -160.4,
+        21.48
+      ],
+      [
+        -160.95,
+        21.5
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "summary": "A schematic line. Sandalwood cut in the uplands is carried down on men’s backs to the landings. On Hawaiʻi the wood from Waimea goes to the chief’s storehouse on the beach at Kawaihae, to be shipped to Oʻahu, and Honolulu becomes the port where the ships for Canton load and pay for their anchorage. The line joins those places and points west towards China; it is not the course of any ship.",
+    "sources": [
+      {
+        "id": "merlin-1990-sandalwood",
+        "where": "pp. 50–52"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "merlin-1990-sandalwood",
+        "says": "Quoting Ellis: men carried wood from Waimea “to bring down to his storehouse on the beach, for the purpose of its being shipped to Oahu” (p. 52)."
+      },
+      {
+        "source": "merlin-1990-sandalwood",
+        "says": "Kamehameha’s brig Kaahumanu sailed for Canton with sandalwood in February 1817 and lost money on the port charges, after which he charged ships “forty Spanish dollars for anchorage in the outer, and eighty in the inner harbour of Hanaruro” (Kotzebue, quoted p. 51)."
+      }
+    ]
+  },
+  {
+    "id": "whaling-lane",
+    "title": "Whaling ports",
+    "gloss": "from the grounds off Japan to Honolulu and Lahaina, and back",
+    "kind": "trade",
+    "when": {
+      "from": "1820",
+      "to": "1846",
+      "precision": "decade"
+    },
+    "era": "kauikeaouli",
+    "event": "whaling",
+    "from": null,
+    "to": "lahaina",
+    "points": [
+      [
+        -160.95,
+        22.35
+      ],
+      [
+        -159.25,
+        22.33
+      ],
+      [
+        -158.55,
+        21.7
+      ],
+      [
+        -158.3,
+        21.36
+      ],
+      [
+        -158.11,
+        21.28
+      ],
+      [
+        -157.98,
+        21.27
+      ],
+      [
+        -157.875,
+        21.293
+      ],
+      [
+        -157.85,
+        21.27
+      ],
+      [
+        -157.815,
+        21.247
+      ],
+      [
+        -157.72,
+        21.235
+      ],
+      [
+        -157.45,
+        21.13
+      ],
+      [
+        -157.06,
+        20.99
+      ],
+      [
+        -156.8,
+        20.9
+      ],
+      [
+        -156.6766,
+        20.8743
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "return",
+    "summary": "A schematic line. Once the sperm whale grounds off Japan are found in 1820, whaling ships, most of them American, put in at the islands for water, food, repairs and men, chiefly at Honolulu and Lahaina, and go back out to the grounds; many call at both ports in a season. The line joins the two ports and points west towards the grounds; it is not the course of any ship.",
+    "sources": [
+      {
+        "id": "bingham-1847",
+        "where": "pp. 134, 358"
+      },
+      {
+        "id": "jarves-1847",
+        "where": "table “Arrivals at Honolulu and Lahaina”, 1843–1846"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "bingham-1847",
+        "says": "The whaling ships came after “the discovery in 1820, made and published by Captain Joseph Allen, of the ship Maro, of Nantucket, that the North Pacific off the coast of Japan and Niphon, abounded in sperm whales”, calling “especially at Honolulu and Lahaina” (p. 134); American whalers were “annually cruising off the coast of Japan, and generally procuring refreshments at the Sandwich Islands” (p. 358)."
+      },
+      {
+        "source": "jarves-1847",
+        "says": "Whaler arrivals at the two ports together: 318 in 1843 and 595 in 1846, counting “the arrival of the same vessels frequently at both ports, and sometimes twice or oftener during the year at the same port”."
+      }
+    ]
+  }
+]

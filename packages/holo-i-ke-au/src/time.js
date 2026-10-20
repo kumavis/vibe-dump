@@ -40,6 +40,21 @@ export function eventSpan(ev) {
   return [a, b]
 }
 
+/** When an event begins, in fractional years: its `when.from` as written, not widened by its precision. */
+export function eventStart(ev) {
+  const w = ev.when || {}
+  return parseDate(w.from) ?? parseDate(w.to)
+}
+
+const APPROX = ['generation', 'century', 'decade']
+
+/** The year an event goes by in a list: "1893", or "c. 1100" when the date is a generation's guess. */
+export function eventYear(ev) {
+  const y = eventStart(ev)
+  if (y === null) return ''
+  return formatYear(Math.floor(y), APPROX.includes(ev.when?.precision) ? 10 : 1)
+}
+
 /** How an event's date reads on its card. */
 export function formatWhen(ev) {
   const w = ev.when || {}
@@ -53,7 +68,7 @@ export function formatWhen(ev) {
     if (m[2]) return `${months[Number(m[2]) - 1]} ${ys}`
     return ys
   }
-  const approx = ['generation', 'century', 'decade'].includes(w.precision) ? 'c. ' : ''
+  const approx = APPROX.includes(w.precision) ? 'c. ' : ''
   if (!w.to || w.to === w.from) return `${approx}${fmt(w.from)}`
   return `${approx}${fmt(w.from)} – ${fmt(w.to)}`
 }
