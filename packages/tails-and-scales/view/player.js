@@ -14,7 +14,10 @@
 // returns a promise when the next event must wait for it (a dice row, a
 // pause), else nothing; events whose handlers take no time play at once,
 // inside push(), when the player is idle. An event with no handler goes to
-// `fallback`.
+// `fallback`: the player's own (an event's text over the unit or the place
+// it names, through the view's `text`, then a beat: §2.4), unless the
+// handlers bring one, so a player made without one still plays an unknown
+// event.
 //
 // snap(G) (R7) jumps to a match as it stands, whatever was queued: the
 // queue is dropped, the mirror becomes project(G), the view is rebuilt from
@@ -26,12 +29,15 @@
 // events then play on from there); a rejoin, a scrub and the catch-up are
 // N2's, with backlog().
 import { applyEvent, project } from '../present/mirror.js'
+import { PACE } from '../present/pace.js'
+import { wait } from './clock.js'
 
 export class EventPlayer {
   // `view.rebuild(G, M)`: the table made to show G as it stands (M its
-  // mirror)
+  // mirror); `view.text(pos, str, color)`: text floating on the table (the
+  // fallback's)
   constructor({ handlers, view = null, mirror = null, onIdle = null }) {
-    this.handlers = handlers
+    this.handlers = { fallback: (e, M) => this.fallback(e, M), ...handlers }
     this.view = view
     this.mirror = mirror
     this.onIdle = onIdle
@@ -62,7 +68,7 @@ export class EventPlayer {
   // 'title'). Nothing queued is played, and a handler still running (a dice
   // row, a pause) resumes nothing when it settles; the table is rebuilt
   // from G, the observer told, and the player idle (onIdle told so with
-  // `{ snap: true }`: the table was made, not played up to).
+  // `{ snap: true, G }`: the table was made from G, not played up to).
   snap(G, shown = project(G)) {
     this.table++
     this.q.length = 0
@@ -70,7 +76,7 @@ export class EventPlayer {
     this.mirror = shown
     this.view?.rebuild(G, shown)
     this.observer?.reset?.(shown)
-    this.onIdle?.({ snap: true })
+    this.onIdle?.({ snap: true, G })
   }
 
   run() {
@@ -92,6 +98,15 @@ export class EventPlayer {
     }
     this.running = false
     this.onIdle?.()
+  }
+
+  // An event this table has no visuals for yet: its text over the unit (or
+  // the place) it names, then a beat (PACE.beat, unless it says how long),
+  // so a new kind of event can ship its rules before its art.
+  fallback(e, M) {
+    const at = e.u !== undefined && M.units[e.u] ? M.units[e.u].pos : { x: e.x ?? 0, z: e.z ?? 0 }
+    if (e.text) this.view?.text?.({ x: at.x, y: 1.6, z: at.z }, e.text, '#ffffff')
+    return wait(e.beat ?? PACE.beat)
   }
 
   // A handler threw: nothing more is played, and the error goes on up (a

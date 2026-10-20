@@ -22,14 +22,15 @@
 // shown or not, and where it stands (a dropped block's height, a fallen
 // tree's lie); and what the shooting holds outside the mirror (a template's
 // marker, an eruption's thorns: none, as a snap holds none). The fresh snap
-// is made by main.js's own rebuild, the one the player's snap calls, into
-// views off the table. And since a watched battle drains only at its end,
-// the table is also held at every P-present checkpoint on the way (a
-// `check` event, ?debug's: after each action, each fight and morale phase,
-// each entry's stop; sim/present-check.mjs): the player waits there (the
-// ?debug block's view.pauseAtChecks) while the figures settle, and the
-// table as built so far must be the snap of the match as it stood there
-// (the checkpoint's projection, its chunks those that stood then). The
+// is made by the view's own rebuild (view/index.js; main.js's until R7b),
+// the one the player's snap calls, into views off the table. And since a
+// watched battle drains only at its end, the table is also held at every
+// P-present checkpoint on the way (a `check` event, ?debug's: after each
+// action, each fight and morale phase, each entry's stop;
+// sim/present-check.mjs): the player waits there (the ?debug block's
+// view.pauseAtChecks) while the figures settle, and the table as built so
+// far must be the snap of the match as it stood there (the checkpoint's
+// projection, its chunks those that stood then). The
 // battle must also replay the corpus exactly (trace, shadow, battle log),
 // so the check ran on the battle it names. And at its end the page's own
 // table is snapped where it stands (the player's snap(G), as N2's rejoin
@@ -94,11 +95,11 @@ const SETTLE = 8
 const MUTATIONS = {
   // the labels not redrawn as the match's status changes (a wound, a
   // mesmerism, a melee joined)
-  'stale-label': ['main.js', '  status: () => units.labelAll(),', '  status: () => {},'],
+  'stale-label': ['view/index.js', '      status: () => units.labelAll(),', '      status: () => {},'],
   // a slain model's figure left standing
   'dead-standing': ['view/units.js', '      .then(() => {\n        this.unfigure(f)\n        f.dying = false\n      })\n  }\n\n  // A model flees', '      .then(() => {\n        f.dying = false\n      })\n  }\n\n  // A model flees'],
   // a placed unit's ring and hit cylinder left where the unit stood
-  'place-unmoved': ['main.js', "  'unit.place': (e) => units.disc(e.u),", "  'unit.place': () => {},"],
+  'place-unmoved': ['view/index.js', "      'unit.place': (e) => units.disc(e.u),", "      'unit.place': () => {},"],
   // a broken chunk's mesh left up
   'broken-standing': ['view/terrain.js', "      case 'block': {\n        this.group.remove(v.obj)\n", "      case 'block': {\n"],
   // a block over a broken one left hanging where it stood
@@ -112,7 +113,7 @@ const MUTATIONS = {
   'marker-held': ['view/effects/shots.js', '    if (units.gone(e.u, v, gen)) return\n    this.blastMarker?.userData.remove()\n    this.blastMarker = null\n', '    if (units.gone(e.u, v, gen)) return\n'],
   // (R7a's fixer, round 3) a snap that leaves fx's scorch and acid marks on
   // the table, from a timeline it left (caught by the snap in place)
-  'marks-kept': ['main.js', '  sh.clear()\n  marks.clearDecals()\n', '  sh.clear()\n'],
+  'marks-kept': ['view/index.js', '    sh.clear()\n    marks.clearDecals()\n', '    sh.clear()\n'],
 }
 const SELF_TEST_ON = 'hotseat-aggressive-103'
 

@@ -95,6 +95,14 @@
 //    of three (a body with a stray field, the seat not waited on, a second
 //    start), must refuse exactly those, record why, and play the same
 //    battle.
+// 10. The end screen after a snap past the end (R7b: present/hud-model.js
+//    resultOf, which the table shows when the game.over it never played was
+//    dropped by the snap) says what the match's own game.over said. At the
+//    end of every corpus battle (the same log folded straight through the
+//    core, 9), every random game and both concessions out of band (7, the
+//    one in the deployment included), resultOf(G) must be exactly that
+//    event's win, why, score and rounds. (Code without present/hud-model.js
+//    skips it.)
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -343,7 +351,7 @@ function lockCheck(core, rng, G, where) {
 
 // A corpus battle, probed at each entry and folded strict, its events held
 // to the mirror, must still replay.
-function corpusTask(core, rng, mirror, it, match) {
+function corpusTask(core, rng, mirror, it, match, hud) {
   const rand = mulberry32(it.id.length * 7919 + 17)
   const counts = { probes: 0, aiStrict: 1 }
   const r = foldJob(core, it.job, {
@@ -378,14 +386,15 @@ function corpusTask(core, rng, mirror, it, match) {
   counts.quiet = 1
   counts.mirrored = r.mirrored
   // 9. through the Session (code from R6b on)
-  if (match) Object.assign(counts, sessionTask(core, match, it, r.trace))
+  if (match) Object.assign(counts, sessionTask(core, match, it, r.trace, hud))
   return counts
 }
 
 // 9. A corpus battle through the Session (match/'s modules, `M`), against
 // the trace foldJob wrote for it (`trace`, its lines) and the events the
-// same log leaves in G.out folded straight through the core.
-function sessionTask(core, M, it, trace) {
+// same log leaves in G.out folded straight through the core; and (10) the
+// HUD model's resultOf against that fold's game.over.
+function sessionTask(core, M, it, trace, hud) {
   const setup = jobSetup(it.job), entries = it.job.entries ?? []
   const humans = setup.seats.flatMap((x, i) => (x.ctrl === 'human' ? [i] : []))
   const where = `${it.id} through the Session`
@@ -397,6 +406,9 @@ function sessionTask(core, M, it, trace) {
     core.apply(direct, s, body)
     stream.push(direct.out.splice(0).map((e) => JSON.stringify(e)))
   }
+  const overs = stream.flat().map((e) => JSON.parse(e)).filter((e) => e.t === 'game.over')
+  if (overs.length !== 1) throw new Error(`${where}: the log folded straight through the core makes ${overs.length} game.over events`)
+  const results = sameResult(hud, direct, overs[0], where)
   const store = new M.LocalStore()
   const lines = [], seen = { batches: [], acts: 0 }
   const sink = {
@@ -472,13 +484,23 @@ function sessionTask(core, M, it, trace) {
   if (replay.status !== 'over' || replay.rejected.length !== spiked.length - log.length) {
     throw new Error(`${where}: the replay with ${spiked.length - log.length} junk entries ends ${replay.status}, refusing ${JSON.stringify(replay.rejected)}`)
   }
-  return { sessions: 1, junk: replay.rejected.length, handed: stream.reduce((n, b) => n + b.length, 0) }
+  return { sessions: 1, junk: replay.rejected.length, handed: stream.reduce((n, b) => n + b.length, 0), results }
+}
+
+// 10. What the end screen says after a snap past the end (`hud`: the HUD
+// model, present/hud-model.js; null for code without it) against the
+// match's own game.over event `over`. Returns 1 when checked, else 0.
+function sameResult(hud, G, over, where) {
+  if (!hud) return 0
+  const got = hud.resultOf(G), want = { win: over.win, why: over.why, vp: over.vp, rounds: over.rounds }
+  if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${where}: resultOf(G) says ${JSON.stringify(got)}, the match's game.over ${JSON.stringify(want)}`)
+  return 1
 }
 
 // A random game: a random setup, its human seats played at random among
 // the legal commands. Returns what it reached, and its command log.
 const MIXES = [['ai', 'ai'], ['human', 'ai'], ['ai', 'human'], ['human', 'human']]
-function randomTask(core, rng, mirror, races, seed) {
+function randomTask(core, rng, mirror, races, seed, hud) {
   const rand = mulberry32(seed * 2654435761)
   const pick = (arr) => arr[Math.floor(rand() * arr.length)]
   const ctrl = seed < 4 ? MIXES[seed] : pick(MIXES)
@@ -585,6 +607,7 @@ function randomTask(core, rng, mirror, races, seed) {
   if (over.win !== T.result.win || over.why !== T.result.why || over.vp.join() !== T.vp.join() || over.rounds !== rounds) {
     throw new Error(`${where0}: game.over ${JSON.stringify(over)} should say ${JSON.stringify({ ...T.result, vp: T.vp, rounds })} (${seen.scored} rounds scored)`)
   }
+  counts.results = sameResult(hud, G, over, where0)
   const trace = h10(G.journal.trace.join('\n'))
   if (log.length) {
     refold(core, setup, log, trace, where0)
@@ -608,7 +631,8 @@ function refold(core, setup, log, trace, where) {
 // `deployed`, while seat 1 still deploys) and once at the first phase
 // decision (the seat whose turn it isn't). Its game.over says 0 rounds
 // played in the deployment, 1 in the battle's first round.
-function offTurnTask(core) {
+function offTurnTask(core, hud) {
+  let results = 0
   const setup = { board: 4242, dice: 99, seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }
   const leads = { 'in the deployment': [[0, { t: 'deployed' }]], 'at the first phase decision': [[0, { t: 'deployed' }], [1, { t: 'deployed' }]] }
   for (const [k, [when, lead]] of Object.entries(leads).entries()) {
@@ -625,8 +649,10 @@ function offTurnTask(core) {
     // the rounds played: none in the deployment, the first under way
     const over = G.out.filter((e) => e.t === 'game.over')
     if (over.length !== 1 || over[0].win !== 1 - idle || over[0].why !== 'concede' || over[0].rounds !== k) throw new Error(`${where}: game.over ${JSON.stringify(over)}, not one saying seat ${1 - idle} wins by a concession after ${k} rounds`)
+    results += sameResult(hud, G, over[0], where)
     refold(core, setup, [...lead, [idle, { t: 'concede' }]], h10(G.journal.trace.join('\n')), where)
   }
+  return results
 }
 
 // 8. Setups the rules can't play, and G's shape.
@@ -708,21 +734,22 @@ if (a.child) {
   const match = existsSync(join(dir, 'match'))
     ? Object.assign({}, ...(await Promise.all(['session', 'store'].map((m) => import(pathToFileURL(join(dir, 'match', `${m}.js`)).href)))))
     : null
+  // the HUD model's resultOf (R7b on; null for older code)
+  const hud = existsSync(join(dir, 'present', 'hud-model.js')) ? await import(pathToFileURL(join(dir, 'present', 'hud-model.js')).href) : null
   let out
   try {
     if (task.kind === 'corpus') {
       const it = loadCorpus().items.find((x) => x.id === task.id)
-      out = { ok: true, counts: corpusTask(core, rng, mirror, it, match) }
+      out = { ok: true, counts: corpusTask(core, rng, mirror, it, match, hud) }
     } else if (task.kind === 'random') {
-      const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed)
+      const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed, hud)
       out = { ok: true, counts: r.counts, game: { setup: r.setup, log: r.log, trace: r.trace } }
     } else if (task.kind === 'interleave') {
       const [A, B] = task.games
       interleave(core, A, B)
       out = { ok: true, counts: { interleaved: 2 } }
     } else if (task.kind === 'offturn') {
-      offTurnTask(core)
-      out = { ok: true, counts: { offTurn: 2 } }
+      out = { ok: true, counts: { offTurn: 2, results: offTurnTask(core, hud) } }
     } else if (task.kind === 'setups') {
       out = { ok: true, counts: { refused: setupTask(core) } }
     }
@@ -774,11 +801,9 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
     if (!r.ok) bad.push(r)
   } else if (games >= 2) bad.push({ error: 'rule 13 unchecked: fewer than two random games with a human seat' })
   // 7. a concession out of band, whatever the seed
-  {
-    const r = await child({ kind: 'offturn' }, pkg)
-    say(`  a hotseat concession out of band: ${r.ok ? 'ok   in the deployment and in the battle, folded the same' : `FAIL ${r.error}`}`)
-    if (!r.ok) bad.push(r)
-  }
+  const offTurn = await child({ kind: 'offturn' }, pkg)
+  say(`  a hotseat concession out of band: ${offTurn.ok ? 'ok   in the deployment and in the battle, folded the same' : `FAIL ${offTurn.error}`}`)
+  if (!offTurn.ok) bad.push(offTurn)
   // 8. setups the rules can't play, and G's shape
   {
     const r = await child({ kind: 'setups' }, pkg)
@@ -801,11 +826,15 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   // (code with match/ plays every corpus battle through the Session too)
   const corpusOk = res.filter((r, i) => r.ok && tasks[i].kind === 'corpus').length
   if (existsSync(join(pkg, 'match')) && sessions[0] !== corpusOk) bad.push({ error: `the code has match/, but ${sessions[0]} of ${corpusOk} corpus battles went through the Session` })
+  // 10. (code with present/hud-model.js holds resultOf to every end played)
+  const results = [...res, offTurn].reduce((s, r) => s + (r.ok ? r.counts?.results ?? 0 : 0), 0)
+  const ends = res.filter((r) => r.ok).length + (offTurn.ok ? 2 : 0)
+  if (existsSync(join(pkg, 'present', 'hud-model.js')) && results !== ends) bad.push({ error: `the code has present/hud-model.js, but resultOf(G) was held to the game.over at ${results} of ${ends} ends` })
   if (coverage && games >= 8) {
     const never = Object.entries(reached).filter(([, n]) => !n).map(([k]) => k)
     if (never.length) bad.push({ error: `the random games never reached: ${never.join(', ')} (more --games?)` })
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well, the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay) (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well, the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay), resultOf(G) the match's game.over at ${results} ends (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -814,7 +843,8 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
 // Only a check of P-prop's own can catch most of them: parity sees none of
 // `preview-draws`, `concede-crash`, `concede-in-band` (no corpus battle
 // reaches them), `score-silent`, `legal-emits`, `over-rounds` (no such
-// event is recorded), `extra-field` (no log carries one), `pending-unset`
+// event is recorded), `result-rounds` (the view's, which nothing in the
+// core reads), `extra-field` (no log carries one), `pending-unset`
 // (nothing reads the missing key: (8) alone) or `rounds-unbounded` (every
 // battle recorded lasts 5 rounds); nor, being the Session's, `session-keeps-out`
 // (parity folds through foldJob), `session-folds-junk` (no log holds junk) or
@@ -860,6 +890,10 @@ const MUTATIONS = {
   // the Session filters what it hands the sink: the `pending` events, which
   // nothing the eye sees plays yet (N2's waiting line will)
   'session-drops-event': ['match/session.js', 'this.sink?.events?.(this.G.out.splice(0), this)', "this.sink?.events?.(this.G.out.splice(0).filter((e) => e.t !== 'pending'), this)"],
+  // the end screen after a snap past the end counts the deployment as round
+  // 1 played, where the match's own game.over says 0 (the view's, not the
+  // core's: no trace or event of the match changes)
+  'result-rounds': ['present/hud-model.js', "rounds: T.step === 'rolloff' ? 0 : T.round", 'rounds: T.round'],
 }
 
 if (a['self-test']) {

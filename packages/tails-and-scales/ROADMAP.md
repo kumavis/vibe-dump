@@ -36,25 +36,35 @@ the commit, and add whatever the work turned up.
   the default, with `node sim/parity.mjs --page` the page's run),
   `node sim/mutation.mjs --core` (one swapped die fails that gate too) and
   `node sim/property.mjs` (and `--self-test`: P-prop, what holds for any
-  play of the core, the Session included since R6b), and from R6b
+  play of the core, the Session included since R6b, and since R7b the end
+  screen's `resultOf` held to the match's game.over), and from R6b
   `node sim/boundaries.mjs` (and `--self-test`: the layer rules, which
   code may import what, the core's surface that keeps the dice out of the
   layers above it, and what the consensus code must never contain), and
   from R7a `node sim/camera-check.mjs` (the camera presets give the R0
   code's views, and the CameraRig comes to rest where `fitPose` puts it;
   F1/F2 change its "battleView chooses by the screen's shape" checks on
-  purpose, DESIGN §2.11). A step that touches `view/`, main.js's handlers
-  or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH` set),
+  purpose, DESIGN §2.11). A step that touches `view/`, `ui/`, `input/`,
+  `app/` (main.js's handlers until R7b) or the `?debug` block also runs
+  these in Chromium (`CHROMIUM_PATH` set),
   each exiting 0: `node sim/snap-check.mjs` (and `--self-test`: the table
   built event by event is a fresh snap's, and each battle's table snapped
   in place at its end; by default seven battles, and the whole corpus,
   `--only ai,human`, at milestones, as P-browser),
-  `node sim/rematch-memory.mjs` (and `--self-test`: renderer.info and the
-  heap flat over 5 rematches, and no shader program linked twice between
-  a title and a battle's end), `node sim/title-shot.mjs` (the title at 1200 ms against the
-  previous commit; exit 3 is a timeout, not a verdict: run it again) and
+  `node sim/rematch-memory.mjs` (and `--self-test`, an edit for each rule
+  it judges: renderer.info flat over 5 rematches, the page's own heap not
+  growing a rematch (R7b: from heap snapshots, V8's compiled code left
+  out), and no shader program linked twice between a title and a battle's
+  end), `node sim/title-shot.mjs` (the title at 1200 ms against the
+  previous commit; exit 3 is a timeout, not a verdict: run it again),
   `node sim/terrain-shots.mjs` (the five boards against R0, run at every
-  step that touched the view since R3, listed here from R7a). A step
+  step that touched the view since R3, listed here from R7a) and, from
+  R7b, `node sim/hud-check.mjs` (and `--self-test`: a snap mid-battle, in
+  the deployment, the roll-off, a seat's phase, at a charge's end and past
+  the end, leaves the HUD right: Begin battle, End and Auto up for a local
+  seat's phase, Shortest move and the charge's spots, the end screen worded
+  as the match's own game.over; and the HUD model's `end.ready` is the
+  match's wherever a local seat idles in its phase). A step
   that changes what one of them reads ports it in the same step (DESIGN's
   §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
@@ -473,7 +483,7 @@ step keeps the game playable.
     the two changes players can see (hotseat's deploy lines at once, the
     zones' opacity on the title after a battle) listed for approval; stale
     headers rewritten. Every check again (DESIGN's R6b notes).
-- [ ] **R7 View and UI decomposition.** Stage, camera rig and presets, views,
+- [x] **R7 View and UI decomposition.** Stage, camera rig and presets, views,
   input tools, `ui/*`, HUD model, template cache. In two passes: R7a (the
   view), R7b (the input, the UI, the HUD model and the app; main.js down to
   its boot).
@@ -542,8 +552,52 @@ step keeps the game playable.
     F7's row names the pair); the docs give `UnitViews.sync(units,
     edgeOf)`, and What R7b must do names flag-lint's two main.js entries
     and no new boundaries rows; every check again (DESIGN's R7a notes).
-  - [ ] **R7b** `input/`, `ui/*`, `present/hud-model.js`, `app/boot.js` and
-    `flow.js`; main.js down to its boot.
+  - [x] **R7b** built: `input/` (`human.js`, the local human with its derived
+    mode, the selection, the commands and the buttons' intents; `picking.js`;
+    the deploy, move, shoot and charge tools beside `charge-end.js`), `ui/*`
+    (the HUD, the action buttons, the tray, the log, the card, the tooltip,
+    the banner, `theme.js` with `paintSeats`, the title, result and help
+    screens), `present/hud-model.js` (R6b's `refreshUI` and `refreshRings`
+    rule as a model: the buttons still go disabled while the table plays;
+    `end.ready` computed for F3, not shown), `view/index.js` (the view made in
+    its order, its handlers and `rebuild`), `app/flow.js` (the title's table,
+    a battle, the Session's sink, the handlers merged, the HUD's refresh) and
+    `app/boot.js` (the URL, the page made in its old order, the `?debug`
+    block, its surface unchanged); main.js is its boot, 1,648 lines to 8. The
+    fallback handler is the player's own default. A snap mid-battle now leaves
+    the HUD right (End and Auto up for a local seat's phase, the end screen
+    past the end), held by the new `sim/hud-check.mjs` (and its self-test).
+    The unit card, while the table is behind, tells what each unit did this
+    turn and its cover as of the last action or stop for a decision played
+    (a change a player can see, the lead's R6b decision; P-present holds it
+    to a fold of its own; the fixer's round added the stops, so a
+    deployment's placements are in it as the battle begins).
+    The title retains nothing per rematch: heap snapshots show its growth is
+    V8's compiled code warming up, so `sim/rematch-memory.mjs` now judges the
+    page's own heap a rematch (from snapshots) instead of a flat 2 MB on all
+    of it. The tools that anchored on main.js moved with it (P-present's card
+    edits, the snap check's, flag-lint's two ALLOW entries, hooks-inert's
+    block). Fixer, round 2: a snap takes the local human's selection again
+    from the snapped match (by id); `sim/hud-check.mjs` also snaps in the
+    deployment and at a charge's end (twice: behind the roll, and again
+    once the spots are shaded), and words the end screen it expects from
+    the match's own game.over; P-prop holds the end screen's `resultOf` to
+    that game.over; hooks-inert's self-test checks the working tree's own
+    block; the spec's body says `onTrace` is the page's (§2.1, §2.2, §2.6).
+    Checks, on the final tree: parity 40/40 on the core and on the page,
+    P-browser over the whole corpus 40/40 (no battle run again), P-present
+    40/40 (and its self-test, 53 of 53), P-prop (and its self-test, 17 of
+    17), every standing check, in Chromium the snap check over the whole
+    corpus (8,277 checks) and its self-test, `sim/hud-check.mjs` (17 snaps)
+    and its self-test (4 of 4),
+    `sim/rematch-memory.mjs` with and without `?lowfi` and its self-test, the
+    title at 1200 ms R7a's pixel for pixel (`sim/title-shot.mjs`),
+    `sim/terrain-shots.mjs` identical to R0, and the shipped page played
+    rendered without `?debug` or `?fast`: watched battles to their end screen
+    and back, with and without `?lowfi`, vs. the AI from each seat with real
+    clicks (charges ended in the orange area and by Shortest move, Auto,
+    Advance, End), and hotseat; no page errors (DESIGN's R7b notes, with the
+    spec changes for approval and what R8 and F1-F3 inherit).
 - [ ] **R8 Netplay seams.** `stateHash`, envelopes, `Folder` (the replicated
   authority), merge-sim.
 

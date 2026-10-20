@@ -1,11 +1,12 @@
 // The ?debug input hooks must change nothing for players. Compare the code
 // before the hooks with the code that has them: the only difference allowed
-// is the body of main.js's `if (params.has('debug')) { … }`, which runs only
-// under ?debug. Each text is parsed (Rollup's parser, through Vite) and
+// is the body of the `if (params.has('debug')) { … }` block, which runs only
+// under ?debug: main.js's, or (R7b on) app/boot.js's, whichever file holds
+// it (BLOCK_FILES). Each text is parsed (Rollup's parser, through Vite) and
 // everything outside that body, before and after it, must be identical in:
-//   1. the sources: main.js; every other file of the package, at any depth,
-//      byte-identical (vite.config.js and public/ included; not dist/, sim/,
-//      test/ (the harness before sim/), node_modules/, *.md or
+//   1. the sources: the block's file; every other file of the package, at
+//      any depth, byte-identical (vite.config.js and public/ included; not
+//      dist/, sim/, test/ (the harness before sim/), node_modules/, *.md or
 //      thumbnail.jpg, which never ship); package.json apart from `scripts`
 //      and `gallery`; and from the repo root, vite.config.shared.js and the
 //      locked version of three. The builds below emulate the shared config
@@ -25,6 +26,11 @@
 // Defaults: the code under test is the hooks commit (the `hooks` line of
 // sim/oracle/PIN, which stays put when the PIN moves) and the base its
 // parent; while that is still WORKTREE, the working tree against HEAD.
+// So the standing runs judge main.js's block (R0's): app/boot.js's branch
+// serves a --ref or --dir whose base has the same files outside the block,
+// and the self-test checks it on the working tree's own app/boot.js without
+// a build (ownBlock: one block, every hook in it, and the edits the cases
+// put before and after the block landing inside boot()).
 // Exit 0 inert, 1 not inert, 2 nothing to check (identical).
 import { parseArgs } from 'node:util'
 import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync } from 'node:fs'
@@ -34,6 +40,10 @@ import { tmpdir } from 'node:os'
 import { parseAst } from 'vite'
 import { buildApp, copyCode } from './lib.mjs'
 import { codeDir, readHooks, PKG } from './oracle/pin.mjs'
+
+// the files the ?debug block may live in, in order: main.js (R0 to R7a),
+// app/boot.js (R7b on, the page's boot)
+const BLOCK_FILES = ['main.js', 'app/boot.js']
 
 // what the block has to hold (DESIGN §4 R0)
 const HOOKS = ['select', 'doMove', 'doAdvance', 'doShoot', 'doCharge', 'placeCharge', 'deployClick', 'endPhase', 'autoPhase', 'phaseResolve', 'chargePick']
@@ -59,6 +69,32 @@ function split(text, what) {
   if (found.length !== 1) throw new Error(`${what} has ${found.length} ?debug blocks, not exactly one`)
   const b = found[0]
   return { outside: text.slice(0, b.start) + '{}' + text.slice(b.end), body: text.slice(b.start, b.end) }
+}
+
+// The file of `dir` that holds the ?debug block (BLOCK_FILES' first with a
+// guard in it), and where the block's `if` statement ends; main.js when none
+// has one (the base, before the hooks, has none).
+function blockOf(dir) {
+  for (const f of BLOCK_FILES) {
+    const p = join(dir, f)
+    if (!existsSync(p)) continue
+    const text = readFileSync(p, 'utf8')
+    if (!text.includes("has('debug')") && !text.includes('has("debug")')) continue
+    let end = -1
+    const walk = (n) => {
+      if (n.type === 'IfStatement' && isGuard(n.test)) end = n.end
+      for (const k in n) {
+        const v = n[k]
+        if (Array.isArray(v)) for (const c of v) c && typeof c.type === 'string' && walk(c)
+        else if (v && typeof v.type === 'string') walk(v)
+      }
+    }
+    try {
+      walk(parseAst(text))
+    } catch {}
+    if (end >= 0) return { file: f, end }
+  }
+  return { file: 'main.js', end: -1 }
 }
 
 // Where two texts that agree outside their blocks first part, as a line number.
@@ -135,13 +171,16 @@ async function check(base, test) {
     lockedThree(base) !== lockedThree(test) && 'the locked version of three (package-lock.json)',
   ].filter(Boolean)
   if (!changed.length && !config.length) return { code: 2, problems, report: ['base and test sources are identical: nothing to check'] }
-  for (const f of changed) if (f !== 'main.js') problems.push(`source ${f} ${!read(base.dir, f) ? 'is only in the test' : !read(test.dir, f) ? 'is only in the base' : 'differs'}`)
+  // (the file that holds the test's block; the base's, before the hooks,
+  // holds none, so it is compared as the same file)
+  const bf = blockOf(test.dir).file
+  for (const f of changed) if (f !== bf) problems.push(`source ${f} ${!read(base.dir, f) ? 'is only in the test' : !read(test.dir, f) ? 'is only in the base' : 'differs'}`)
   for (const c of config) problems.push(`${c} differs`)
-  if (changed.includes('main.js')) {
-    const sb = tryIt(() => split(readFileSync(join(base.dir, 'main.js'), 'utf8'), 'base main.js'))
-    const st = tryIt(() => split(readFileSync(join(test.dir, 'main.js'), 'utf8'), 'main.js'))
+  if (changed.includes(bf)) {
+    const sb = tryIt(() => split(readFileSync(join(base.dir, bf), 'utf8'), `base ${bf}`))
+    const st = tryIt(() => split(readFileSync(join(test.dir, bf), 'utf8'), bf))
     if (sb && st) {
-      if (sb.outside !== st.outside) problems.push(`main.js differs outside its ?debug block (from line ${lineOf(sb.outside, st.outside)})`)
+      if (sb.outside !== st.outside) problems.push(`${bf} differs outside its ?debug block (from line ${lineOf(sb.outside, st.outside)})`)
       const missing = HOOKS.filter((h) => !new RegExp(`\\b${h}\\b`).test(st.body))
       if (missing.length) problems.push(`the ?debug block lacks hooks: ${missing.join(', ')}`)
       else if (HOOKS.every((h) => new RegExp(`\\b${h}\\b`).test(sb.body))) problems.push('the base already has the hooks: pass --base <the commit before them>')
@@ -185,6 +224,32 @@ async function check(base, test) {
   return { code: problems.length ? 1 : 0, problems, report }
 }
 
+// The working tree's own block, which no comparison above reaches (the
+// hooks commit's is main.js's): found by blockOf in app/boot.js, exactly one
+// (split), with every hook, and its guard and its end inside boot(), so the
+// self-test's edits before and after it run in the page's boot as they ran
+// in main.js's top level. Returns what is wrong ([] for nothing).
+function ownBlock(dir) {
+  const { file, end } = blockOf(dir)
+  if (file !== 'app/boot.js' || end < 0) return [`the working tree's ?debug block is ${end < 0 ? 'nowhere' : `in ${file}`}, not in app/boot.js`]
+  const text = readFileSync(join(dir, file), 'utf8'), bad = []
+  let body = null
+  try {
+    body = split(text, file).body
+  } catch (e) {
+    bad.push(e.message)
+  }
+  const missing = body ? HOOKS.filter((h) => !new RegExp(`\\b${h}\\b`).test(body)) : []
+  if (missing.length) bad.push(`its block lacks hooks: ${missing.join(', ')}`)
+  const fn = parseAst(text).body.map((n) => (n.type === 'ExportNamedDeclaration' ? n.declaration : n)).find((n) => n?.type === 'FunctionDeclaration' && n.id.name === 'boot')
+  if (!fn) return [...bad, `${file} declares no boot()`]
+  const inside = (at) => fn.body.start < at && at < fn.body.end
+  const guard = text.indexOf("if (params.has('debug')) {")
+  if (!inside(guard)) bad.push(`its guard (at ${guard}) is outside boot()`)
+  if (!inside(end)) bad.push(`its end (at ${end}) is outside boot()`)
+  return bad
+}
+
 const { values: a } = parseArgs({ options: { base: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const hooks = readHooks()
 const testRef = a.dir ? null : a.ref ?? hooks
@@ -211,18 +276,23 @@ if (!a['self-test']) {
   // the build config, a dependency) runs for every player and must fail; an
   // edit inside it, or to package.json's scripts, must pass.
   const GUARD = "if (params.has('debug')) {"
-  const main = readFileSync(join(test.dir, 'main.js'), 'utf8')
-  if (!main.trimEnd().endsWith('}') || main.split(GUARD).length !== 2) throw new Error('the self-test expects main.js to end with its one ?debug block')
+  // the file holding the block, and where its `if` ends: the edits after it
+  // go there (main.js's ended the file; app/boot.js's ends its boot())
+  const { file: BF, end: END } = blockOf(test.dir)
+  const main = readFileSync(join(test.dir, BF), 'utf8')
+  if (END < 0 || main.split(GUARD).length !== 2) throw new Error(`the self-test expects ${BF} to hold one ?debug block`)
   const edit = (file, fn) => (dir) => writeFileSync(join(dir, file), fn(readFileSync(join(dir, file), 'utf8')))
+  // text put straight after the block's closing brace
+  const after = (text) => edit(BF, (m) => `${m.slice(0, END)}${text}${m.slice(END)}`)
   const pkg = (fn) => edit('package.json', (s) => JSON.stringify(fn(JSON.parse(s)), null, 2) + '\n')
   const cases = [
     ['the code under test', null, 0],
     ['the base itself, unchanged', 'base', 2],
-    ['a statement inside the block', edit('main.js', (m) => m.replace(GUARD, `${GUARD}\n  S.debugging = true`)), 0],
-    ['a statement before the block', edit('main.js', (m) => m.replace(GUARD, `S.seed = 12345\n${GUARD}`)), 1],
-    ['a statement after the block', edit('main.js', (m) => `${m}S.seed = 12345\n`), 1],
-    ['an else branch', edit('main.js', (m) => `${m}else S.seed = 12345\n`), 1],
-    ['a second ?debug block', edit('main.js', (m) => `${m}${GUARD}\n  S.seed = 12345\n}\n`), 1],
+    ['a statement inside the block', edit(BF, (m) => m.replace(GUARD, `${GUARD}\n  S.debugging = true`)), 0],
+    ['a statement before the block', edit(BF, (m) => m.replace(GUARD, `S.seed = 12345\n${GUARD}`)), 1],
+    ['a statement after the block', after('\nS.seed = 12345\n'), 1],
+    ['an else branch', after(' else S.seed = 12345\n'), 1],
+    ['a second ?debug block', after(`\n${GUARD}\n  S.seed = 12345\n}\n`), 1],
     ['a change in rules.js', edit('rules.js', (s) => {
       if (!s.includes('rng() * 6')) throw new Error('rules.js has no d6 to change')
       return s.replace('rng() * 6', 'rng() * 5')
@@ -247,6 +317,11 @@ if (!a['self-test']) {
     if (!ok) bad++
     console.log(`  ${ok ? 'ok  ' : 'BAD '} ${what.padEnd(32)} exit ${r.code} (want ${want})${r.problems.length ? `: ${r.problems.join('; ')}` : ''}`)
   }
+  // the working tree's own app/boot.js, which none of the cases reach
+  // (they edit the hooks commit's main.js)
+  const own = ownBlock(PKG)
+  if (own.length) bad++
+  console.log(`  ${own.length ? 'BAD ' : 'ok  '} ${"the working tree's own block".padEnd(32)} ${own.length ? own.join('; ') : 'app/boot.js: one ?debug block, every hook, inside boot() (no build)'}`)
   console.log(bad ? `\nself-test FAILED: ${bad} wrong verdicts` : '\nself-test passed: every edit outside the block is caught, and only those')
   code = bad ? 1 : 0
 }

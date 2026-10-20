@@ -23,8 +23,9 @@
 // found by the mark buildModel puts on every figure's root (userData.fig),
 // which every build since R0 has.
 //
-// Lifetime: R0 code onward, as long as main.js's ?debug block keeps the
-// members it reads, which its contract comment does not promise (it lists
+// Lifetime: R0 code onward, as long as the ?debug block (app/boot.js's,
+// main.js's until R7b) keeps the members it reads, which its contract
+// comment did not promise until R7 (it lists
 // what the parity driver reads, and only that is kept working): clock.speed
 // and clock.time, S.titleSpin, camera, renderer, scenery.scene and
 // scenery.blast. R3's code had them on the Scenery facade; from R4 the
@@ -35,7 +36,7 @@
 // (the match that is never played, which the title draws), which is all
 // this shoots; a blast there throws once a battle is on. R7 moved the clock
 // and the camera into view/ (view/clock.js, view/camera.js) and made these
-// members part of the ?debug contract (main.js's comment: the pixel gate),
+// members part of the ?debug contract (its comment: the pixel gate),
 // S.titleSpin now the camera rig's, kept on S.
 //
 // Hidden by default: the grass tufts and flowers (every InstancedMesh: the

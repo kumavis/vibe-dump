@@ -6,7 +6,8 @@
 // checkout is never edited. The flags' and labels' events inside an action
 // (no-dmg-*, no-morale-*, no-move-owners, no-move-status, and the mirror's
 // side of no-gaze-status) and the stage events (no-stage-*) are caught only
-// at a `check`, the checkpoints main.js's ?debug block puts in the events
+// at a `check`, the checkpoints the ?debug block (app/boot.js's since R7b,
+// main.js's before) puts in the events
 // (where an `act` or `phase` line was written, and as the match stops after
 // each entry): the action's end re-emits the flags and labels before its
 // `act`, and a stage lost would be put right by the next stage event before
@@ -24,9 +25,14 @@
 // (present-check.mjs's eventOrder), each where the next event or line
 // breaks it: no-stomp through walk-speed, no-melee through land-fx, and
 // no-rolloff-row. The rest (no-formation through no-move-status, no-place
-// and on) are caught by the mirror. And one edit of main.js, not an event:
-// card-reads-match, the unit card telling of what the match did ahead of
-// the table, caught by the check's card test at a checkpoint.
+// and on) are caught by the mirror. And three edits of the page, not of an
+// event, caught by the check's card test at a checkpoint: card-reads-match,
+// the unit card telling of what the match did ahead of the table; and
+// (R7b) card-facts-stale, card-stop-stale and card-turn-kept, the card's
+// record of what each unit did this turn and its cover never updated at an
+// action's end, or at a stop (a deployment's placements kept out of it, the
+// battle beginning on the record of the title's table), or not cleared as a
+// seat's turn begins.
 //
 // Not here, because nothing the check can see depends on it: the `status`
 // at the fight phase's end, which repeats the last damage's (each fight
@@ -158,8 +164,20 @@ export const MUTATIONS = {
   'no-collapse': ['/core/terrain/terrain.js', "if (drops.length) emitTo(out, 'terrain.collapse',", "if (false) emitTo(out, 'terrain.collapse',"],
   // (R6b's fixer, round 2) the unit card reads the match while the table is
   // behind: it tells of moves, shots, charges and cover not yet played
-  // (main.js; caught by the card check at a checkpoint, not by an event)
-  'card-reads-match': ['/main.js', 'const mu = shown(u), live = player.idle', 'const mu = shown(u), live = true'],
+  // (ui/card.js since R7b, main.js before; caught by the card check at a
+  // checkpoint, not by an event)
+  'card-reads-match': ['/ui/card.js', 'f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]', 'f = this.ask((G) => factOf(G, u))'],
+  // (R7b) the card's record of what each unit did this turn kept from the
+  // battle's start: an action's end never updates it (app/flow.js)
+  'card-facts-stale': ['/app/flow.js', '      act: (e) => {\n        if (e.facts) this.facts = e.facts', '      act: (e) => {\n        if (false) this.facts = e.facts'],
+  // (R7b's fixer) the record never updated where the match stops for a
+  // decision: a human's placements never reach it, so through the roll-off
+  // and the first turn's walks it tells the cover the title's table had
+  // (app/flow.js)
+  'card-stop-stale': ['/app/flow.js', '      pending: (e) => {\n        if (e.facts) this.facts = e.facts', '      pending: (e) => {\n        if (false) this.facts = e.facts'],
+  // (R7b) a turn's start leaves its seat's deeds of the turn before on the
+  // card's record (app/flow.js)
+  'card-turn-kept': ['/app/flow.js', '    this.facts = turnBegun(this.facts, e)', '    // (dropped)'],
 }
 
 export async function load(url, ctx, next) {

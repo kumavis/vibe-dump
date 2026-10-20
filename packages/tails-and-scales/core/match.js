@@ -7,8 +7,9 @@
 // is built for every match (newState, which core/index.js's createMatch
 // calls with the whole setup), so nothing carries over from one match to
 // the next: unit ids and chunk ids both count from 1 again. The view keeps
-// its own state beside it (main.js: each unit's figures by unit id, the
-// terrain's meshes by chunk id), and the rules never read that.
+// its own state beside it (view/units.js: each unit's figures by unit id;
+// view/terrain.js: the terrain's meshes by chunk id), and the rules never
+// read that.
 //
 // A match has two seats; each plays a race and is played by a human or the
 // AI. The table edge a seat deploys on is fixed by the seat, never by the

@@ -8,7 +8,8 @@
 // `t` is the unit's type (data/schema.js), `alive` the count of models still
 // standing, `r` the disc's radius, and each model's (ox, oz) its slot in the
 // formation around `pos`. Where a figure is drawn this frame, which way it
-// faces and how it lunges or falls is the view's (main.js), never read here.
+// faces and how it lunges or falls is the view's (view/units.js), never read
+// here.
 import { hypot } from './dmath.js'
 import { raceOf } from './match.js'
 

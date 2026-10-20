@@ -1,7 +1,7 @@
 // Small pure helpers for consensus code. Everything here is exact integer,
 // IEEE or string work, so every engine computes the same result. The tween
-// clock and the easings stay with the view (the root util.js, which
-// re-exports `lerp` for main.js and wraps `pick` for the view).
+// clock and the easings stay with the view (view/clock.js, which re-exports
+// `lerp` for the view and wraps `pick` for it).
 
 // A seeded generator (the battlefield's layout stream: core/terrain draws
 // every board from it, so a board seed gives the same table everywhere).
@@ -19,7 +19,7 @@ export function mulberry32(seed) {
 
 export const lerp = (a, b, t) => a + (b - a) * t
 // one draw from `rng` picks an element; consensus code always names its
-// stream (the view's pick, in the root util.js, defaults to the engine's own
+// stream (the view's pick, in view/clock.js, defaults to the engine's own
 // unseeded random)
 export const pick = (arr, rng) => arr[Math.floor(rng() * arr.length)]
 export const rr = (rng, a, b) => a + rng() * (b - a)

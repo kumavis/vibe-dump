@@ -19,11 +19,12 @@
 // the run covers every mode switch.
 //
 // It also checks that the match's events are all played (DESIGN §4 R5):
-// whenever the page's EventPlayer is idle (main.js's ?debug `player`), after
+// whenever the page's EventPlayer is idle (the ?debug block's `player`:
+// app/boot.js's, main.js's until R7b), after
 // any frame of all three battles, the match's out (G.out) must be empty,
 // and so must it, with the player idle, before and after each new table. The
 // rules leave their events in G.out for the view to take. From R6b every
-// battle is a Session over a LocalStore (main.js's ?debug `session`), which
+// battle is a Session over a LocalStore (the ?debug block's `session`), which
 // hands each entry's events to the player as it folds the entry, a whole AI
 // turn after an `end`, a whole watched battle at its start: so with a
 // Session G.out must be empty after every frame, idle or not, and the

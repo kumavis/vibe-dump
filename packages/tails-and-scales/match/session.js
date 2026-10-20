@@ -33,7 +33,8 @@
 //   sink.events(events, session)   after each entry is folded: everything it
 //                         made happen, in order (G.out drained: the match keeps
 //                         none of them)
-//   onTrace(line, G)      createMatch's (sim/ and ?debug only)
+//   onTrace(line, G)      createMatch's (sim/; and the page's, app/flow.js:
+//                         the unit card's facts, and ?debug's trace)
 //
 // Pure and synchronous: no DOM, no three.js, nothing awaited. The view plays
 // the events at its own pace, while the match has already run on to the next

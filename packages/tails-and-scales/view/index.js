@@ -1,0 +1,164 @@
+// The view (DESIGN §1.1, §2.4): the table's three.js side, made in its
+// order, the handlers that play the match's events on it, and the table
+// made at once to show a match as it stands (rebuild, the player's snap).
+//
+// What the view makes as the page loads, and in which order, decides every
+// cosmetic Math.random draw the title shows (the mat's paint, the wood, the
+// tufts, the flowers: three.js draws some for every object it makes, its
+// uuid), so it is made in the order main.js always made it, in two parts:
+// the table (the renderer and scene, the camera and its controls, the
+// lights, the effects, the mat and the board, the objectives, the
+// battlefield's meshes), then, once app/boot.js has drawn the title's board
+// seed, the figures, the shooting's effects and the overlay (figures()).
+// sim/terrain-shots.mjs and sim/title-shot.mjs hold the title, drawn from a
+// seeded Math.random, to the code before, pixel for pixel (but for the
+// figures' flocks and idle phases, which the template cache draws from
+// another point of the stream: view/models/cache.js).
+import { edgeOf } from '../core/match.js'
+import { PACE } from '../present/pace.js'
+import { Stage } from './stage.js'
+import { CameraRig } from './camera.js'
+import { Table } from './table.js'
+import { ObjectivesView } from './objectives.js'
+import { TerrainView } from './terrain.js'
+import { UnitViews } from './units.js'
+import { Overlay } from './overlay.js'
+import { FX } from './effects/fx.js'
+import { Shots } from './effects/shots.js'
+import { wait } from './clock.js'
+
+export class View {
+  // The table: `W`, `H` the board's size, `deploy` the deployment's depth
+  // and `edges` the seats' edges (the zones), `objectives` their places and
+  // `range` their reach, `colorOf(seat)` a seat's colour (each flag in its
+  // holder's: the seats' look, ui/theme.js).
+  constructor({ lowfi = false, fast = false, W, H, deploy, edges, objectives, range, colorOf }) {
+    this.fast = fast
+    this.stage = new Stage({ lowfi, fast })
+    const { renderer, scene } = this.stage
+    this.renderer = renderer
+    this.scene = scene
+    this.rig = new CameraRig(renderer)
+    this.camera = this.rig.camera
+    this.controls = this.rig.controls
+    this.stage.light()
+    this.effects = new FX(scene, this.camera, this.stage.overlay)
+    this.table = new Table(scene, renderer, { W, H, deploy, edges })
+    this.objectives = new ObjectivesView(scene, objectives, range, colorOf)
+    // The battlefield's meshes. The battlefield itself is the match's
+    // (G.terrain): each terrain call reports what it built or broke into
+    // G.out, among the events of the entry the Session folds, and the player
+    // plays each report (the terrain.* handlers) when it reaches it in those
+    // events, in order (a wrecker's smashes as its walk passes them).
+    this.terrain = new TerrainView(scene, this.effects)
+  }
+
+  // The figures (view/units.js: each unit's view by unit id, following the
+  // unit as shown, `mirror()`, the player's), how the shooting looks
+  // (view/effects/shots.js) and what a seat's tools draw on the table
+  // (view/overlay.js: one texel per nav cell, `grid` every match's grid
+  // size).
+  figures({ mirror, colorOf, W, H, grid }) {
+    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, W })
+    this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units })
+    this.overlay = new Overlay(this.scene, { W, H, grid })
+  }
+
+  // The view's handlers for the player (view/player.js): each kind of event
+  // with the old code's visuals, called with the event and the mirror just
+  // after it is folded in (app/flow.js merges in the UI's and the flow's).
+  // `localSeats()`: the seats played here (the camera never follows during
+  // their turn).
+  handlers({ localSeats }) {
+    const { rig, units, shots, terrain } = this
+    return {
+      // the beats between
+      pause: (e) => wait(PACE.pause(e.s)),
+      // the camera, when it follows the action (the stage and the seat to act
+      // as shown: a focus event plays while the match has run ahead, a whole
+      // AI turn or more; never during the turn of the one seat played here)
+      focus: (e, M) => rig.focus(e.x, e.z, { stage: M.stage, active: M.active, localSeats: localSeats() }),
+      // the figures
+      'unit.place': (e) => units.disc(e.u),
+      'unit.formation': (e) => {
+        units.disc(e.u)
+        units.label(e.u)
+      },
+      'unit.wound': (e) => units.wounded(e),
+      'unit.slain': (e, M) => units.slain(e, M),
+      'unit.flee': (e) => units.fled(e),
+      'unit.destroyed': (e, M) => units.destroyed(e, M),
+      'unit.face': (e) => units.face(e),
+      // (what a wrecker smashed breaks as the walker passes it)
+      'unit.move': (e, M) => units.walk(e, M, (ev) => {
+        for (const x of ev) terrain.apply(x, M)
+      }),
+      melee: (e) => units.lunge(e),
+      'charge.result': (e) => units.shout(e),
+      // the shooting
+      volley: (e) => shots.volley(e),
+      'blast.aim': (e) => shots.aimed(e),
+      'blast.scatter': (e) => shots.scattered(e),
+      'blast.fire': (e) => shots.fired(e),
+      'blast.land': (e) => shots.landed(e),
+      'spell.cast': () => shots.cast(),
+      'spell.fizzle': (e) => shots.fizzled(e),
+      'spell.thorns': (e) => shots.thorns(e),
+      'spell.fade': (e) => shots.faded(e),
+      'spell.gaze': (e) => shots.gaze(e),
+      'spell.mesmerized': (e) => shots.mesmerized(e),
+      // what the labels and flags show: read off the mirror, which these
+      // have just updated (the flags repaint each frame, view/objectives.js)
+      status: () => units.labelAll(),
+      objectives: () => {},
+      // the battlefield
+      'terrain.clear': (e, M) => terrain.apply(e, M),
+      'terrain.add': (e, M) => terrain.apply(e, M),
+      'terrain.hurt': (e, M) => terrain.apply(e, M),
+      'terrain.destroy': (e, M) => terrain.apply(e, M),
+      'terrain.collapse': (e, M) => terrain.apply(e, M),
+      'terrain.rubble': (e, M) => terrain.apply(e, M),
+    }
+  }
+
+  // The table made to show a match as it stands (the player's snap): the
+  // battlefield from its chunks, the figures from its units, and what the
+  // view holds outside the mirror taken away: the shooting's (a template's
+  // marker, an eruption's thorns) and fx's scorch and acid marks (a snap
+  // back to an earlier point, or onto another match, would keep them from a
+  // timeline it left). `M` is the player's contract (view/player.js's
+  // view.rebuild(G, M)); the views read the mirror themselves (their
+  // mirror(), the player's, which it has set to M by now). Into the page's
+  // views, unless `to` names others: the ?debug snap check makes its fresh
+  // snap with this same function, into views off the table (and at a
+  // checkpoint, `chunks` G's as they stood).
+  rebuild(g, M, to = {}) {
+    const { chunks = g.terrain.chunks, terrain = this.terrain, units: uv = this.units, shots: sh = this.shots, effects: marks = this.effects } = to
+    terrain.sync(chunks)
+    uv.sync(g.units, (s) => edgeOf(g, s))
+    sh.clear()
+    marks.clearDecals()
+  }
+
+  // text floating at `pos` (the player's fallback: an event with no
+  // handler of its own says what it is)
+  text(pos, str, color) {
+    this.effects.text(pos, str, color)
+  }
+
+  // Run the table (view/stage.js): each frame the effects, the figures and
+  // the flags as shown (`mirror()`, the player's; `sel()`, the id of the
+  // unit picked up), then the camera.
+  run({ mirror, sel }) {
+    const { effects, units, objectives, camera } = this
+    this.stage.run({
+      parts: (dt, time) => {
+        effects.update(dt)
+        units.animate(dt, time, { fast: this.fast, camera, sel: sel() })
+        objectives.animate(dt, time, mirror().owners)
+      },
+      rig: this.rig,
+      shake: () => effects.shake,
+    })
+  }
+}
