@@ -436,6 +436,24 @@ export class Figure {
     })
   }
 
+  // A point on the body to aim a camera at, from the current pose (a
+  // development aid; see ?look in main.js).
+  lookPoint(name) {
+    const J = this.byName
+    const at = (j, local) => (J[j]?.p ? add3(J[j].p, apply3(J[j].R, local)) : null)
+    if (name === 'face') return at('head', [0, 0.065, 0.07])
+    if (name === 'hand' || name === 'handR') return at('wristR', [0, -0.085, 0])
+    if (name === 'handL') return at('wristL', [0, -0.085, 0])
+    if (name === 'foot' || name === 'footR') return at('ankleR', [0, -0.04, 0.03])
+    if (name === 'footL') return at('ankleL', [0, -0.04, 0.03])
+    if (name === 'hair') {
+      const pts = this.hair.flatMap((l) => l.pts)
+      if (!pts.length) return null
+      return scale3(pts.reduce((a, b) => add3(a, b), [0, 0, 0]), 1 / pts.length)
+    }
+    return at(name, [0, 0, 0])
+  }
+
   // Project every shape to pixels and pack them for the shader:
   // capsule  [ax, ay, bx, by] [ra, rb, 0|2, k]
   // ellipse  [cx, cy, cos, sin] [rx, ry, 1, k]

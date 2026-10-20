@@ -20,8 +20,10 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 //   ?rung=9      pin the quality ladder (0 roughest … 9 supersampled)
 //   ?govern      let the frame-rate governor run even under automation
 //   ?zoom=3 &vyaw=1 &vpitch=0.8   start the viewer's camera somewhere else
+//   ?look=face   aim at face, hair, handL, handR, footL, footR or any joint
 const params = new URLSearchParams(location.search)
 const pin = (name, value) => (params.has(name) ? +params.get(name) : value)
+const look = params.get('look')
 
 let renderer
 try {
@@ -432,8 +434,14 @@ function step(dt) {
   cam.w = w
   cam.h = h
   cam.fov = fov
-  cam.target = [0, 0, 0]
-  cam.pos = [Math.sin(yaw) * Math.cos(pitch) * dist, Math.sin(pitch) * dist, Math.cos(yaw) * Math.cos(pitch) * dist]
+  // ?look=face aims at a part of the body as it was posed last frame
+  const target = (look && figure.lookPoint(look)) || [0, 0, 0]
+  cam.target = target
+  cam.pos = [
+    target[0] + Math.sin(yaw) * Math.cos(pitch) * dist,
+    target[1] + Math.sin(pitch) * dist,
+    target[2] + Math.cos(yaw) * Math.cos(pitch) * dist,
+  ]
   cam.update()
 
   // The body turns slowly in the fall: a lazy roll in the picture plane, a
