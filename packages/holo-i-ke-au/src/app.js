@@ -11,6 +11,7 @@
 
 import * as THREE from 'three'
 import { World } from './render/world.js'
+import { Districts } from './render/district.js'
 import { Ocean } from './render/ocean.js'
 import { Sky } from './render/sky.js'
 import { Pipeline } from './render/pipeline.js'
@@ -109,6 +110,10 @@ export class App {
   start() {
     this.world.setArchipelago(this.world.archPack)
     this.scene.add(this.world.group)
+    // the district close-ups under their islands (render/district.js); their
+    // manifest is read behind the first frame (main.js)
+    this.districts = new Districts(this)
+    this.world.district = this.districts
     this.ocean = new Ocean(this.shared, this.shared.uniforms)
     this.scene.add(this.ocean.mesh)
     this.lines = new Boundaries(this.data, this.shared.uniforms)
@@ -215,6 +220,7 @@ export class App {
     }
     this.world.update(this.camera, g.distance, 0)
     this.world.settle(this.camera)
+    this.districts?.settle(this.camera, g.distance)
     this.rig.jump({ x: g.target.x, z: g.target.z })
     this.polityK = this.view === 'chiefdoms' ? polityZoom(g.distance) : 0
     this.landK = this.view === 'land' ? landZoom(g.distance) : 0

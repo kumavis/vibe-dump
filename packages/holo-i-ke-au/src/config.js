@@ -13,7 +13,7 @@ export const UNIT = 100 // metres per world unit, horizontally
 export const METRE = 1 / UNIT
 
 // camera distance (world units from its target) at the two ends of the zoom
-export const MIN_DISTANCE = 8 // 800 m: about as close as 70–150 m packs bear
+export const MIN_DISTANCE = 8 // 800 m: about as close as 70–150 m packs bear (and the district's 6 m is seen from)
 export const MAX_DISTANCE = 9000
 
 export const NEAR_EXAG = 1.3
@@ -40,6 +40,36 @@ export const NORMAL_EXAG = 2
 // Island packs that can be drawn at full detail at once. Each takes a slot;
 // a pack leaves its slot only after it has faded back to the archipelago.
 export const SLOTS = 5
+
+// The district close-up (DATA.md "District packs"), a third level under the
+// island: one district resident at a time, streamed as the camera comes down
+// near it and given up once it has gone. Distances are world units.
+export const DISTRICT = {
+  // its detail weight eases in as the camera closes from `far` to `near`
+  // (camera to the district's rect, as an island's is to its own); and only
+  // while the camera's own distance is under `rig`, where the far view's
+  // overlays have gone, so the hand-over shows nothing of them
+  far: 115,
+  near: 75,
+  rig: [95, 135],
+  // the outer band over which its heights and maps ease back into the
+  // island's, and inside that a strip where both are drawn, the district at
+  // nothing, so the two meshes overlap there rather than meet in a crack
+  margin: 7,
+  band: 0.5,
+  // start streaming once the camera is this near the rect, or a tour flight is headed into it
+  prefetch: 320,
+  // and drop it from memory this long after it has faded out and the camera
+  // is away, or after a tour has asked for it ahead of the camera, this
+  // much longer
+  linger: 25,
+  hold: 90,
+}
+
+// Things built and grown in the district are drawn larger than life, as the
+// ahupuaʻa app draws them 1.6×: a valley is seen from one to six kilometres
+// off, and a hale at life size would be a pixel.
+export const FEATURE_S = 0.024
 
 // Where the data lives: ./data/ by default, or ?data=<base url> (the dev tools
 // point it at ../test-data/, the synthetic set from tools/fake-data.mjs).

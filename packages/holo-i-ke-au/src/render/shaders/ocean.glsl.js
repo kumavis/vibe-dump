@@ -2,8 +2,9 @@
 // it, the sky in its surface, sun glint, chop that fades out with distance so
 // the far field reads as a smooth sea to the horizon, swash at the shore and
 // whitecaps in the trades. The set-wave breakers on the reef crest and the
-// fishpond and stream-plume maps are left out: they belong to a 17 m
-// heightmap, and this one is 70 to 300 m.
+// stream-plume maps are left out: they belong to a 17 m heightmap, and the
+// islands' are 70 to 300 m. A district's fishponds (common.glsl.js
+// distPond) lie still and green behind their walls.
 
 import { constants, noise, world, ground, lighting } from './common.glsl.js'
 
@@ -74,8 +75,10 @@ void main() {
   vec3 V = normalize(uCamPos - vWorld);
   float px = length(fwidth(xz));
 
+  // (in a fishpond, behind its wall, the water lies still and green)
+  float pond = distPond(xz);
   vec2 g = waveSlope(xz, uTime, px) * (0.55 + 0.6 * length(uWind));
-  g *= 1.0 + 0.6 * (1.0 - smoothstep(0.5, 6.0, depth));
+  g *= (1.0 + 0.6 * (1.0 - smoothstep(0.5, 6.0, depth))) * (1.0 - 0.85 * pond);
   vec3 N = normalize(vec3(-g.x, 1.0, -g.y));
 
   // --- what's under the surface ------------------------------------------
@@ -102,8 +105,9 @@ void main() {
   vec3 abyss = vec3(0.002, 0.018, 0.060) * amb;
   float scatter = 1.0 - exp(-depth * 0.3);
   vec3 body = mix(turq, deepC, smoothstep(5.0, 45.0, depth));
+  body = mix(body, vec3(0.075, 0.13, 0.07) * amb, pond);
   body = mix(body, abyss, smoothstep(200.0, 1500.0, depth));
-  vec3 water = under + body * scatter;
+  vec3 water = under * (1.0 - 0.7 * pond) + body * max(scatter, 0.8 * pond);
 
   // --- the surface ---------------------------------------------------------
   float cosT = max(dot(N, V), 0.0);
@@ -113,12 +117,12 @@ void main() {
   vec3 refl = skyMap(R);
   vec3 H = normalize(uSunDir + V);
   float spec = pow(max(dot(N, H), 0.0), 900.0) * 60.0 + pow(max(dot(N, H), 0.0), 90.0) * 0.6;
-  vec3 col = mix(water, refl, F) + uSunColor * spec * vis * step(0.0, uSunDir.y);
+  vec3 col = mix(water, refl, F * (1.0 - 0.5 * pond)) + uSunColor * spec * vis * step(0.0, uSunDir.y);
 
   // --- foam --------------------------------------------------------------------
   // swash at the shore, where the water is shallowest (depth stands in for the
   // distance to land), and whitecaps in the trades out in deeper water
-  float shore = 1.0 - smoothstep(0.1, 1.4, depth);
+  float shore = (1.0 - smoothstep(0.1, 1.4, depth)) * (1.0 - pond);
   float swash = 0.5 + 0.5 * sin(depth * 9.0 - uTime * 1.6 + fbm2F(xz * 3.0, px * 3.0) * 4.0);
   float foamTex = smoothstep(0.35, 0.75, fbm2F(xz * 9.0 + vec2(uTime * 0.3, 0.0), px * 9.0));
   float caps = smoothstep(0.78, 0.92, fbm2F(xz * 0.9 + uWind * uTime * 0.06, px * 0.9)) * smoothstep(0.55, 1.1, length(uWind)) * smoothstep(20.0, 60.0, depth);

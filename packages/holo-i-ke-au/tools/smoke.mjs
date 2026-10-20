@@ -688,6 +688,244 @@ if (evs) {
   } else console.log('  - no two events at one spot: cluster checks skipped')
 } else console.log('  - no events: pin checks skipped')
 
+// The district close-up (DATA.md "District packs"): Nuʻuanu streams in under
+// Oʻahu as the camera comes down, takes over with no seam at its edge, lays
+// the year on its ground (the patch, the loʻi, the ponds, the village), walks
+// its battles' forces stop by stop, lands each stop's camera where the stop
+// asks, and is let go once the camera has left.
+const districtCount = await ui('app.districts?.list.length ?? 0')
+if (districtCount) {
+  const offTour = (year) => run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish()`)
+  const districtReady = () => page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
+  const nearView = "app.tour.cameraView(app.tour.places.get('puiwa'), { bearing: 42, pitch: 0.38, distance: 16 })"
+  const settleTwice = () => run('app.settle(); app.settle()')
+  await check('the district streams in and takes over near Nuʻuanu', async () => {
+    await offTour(1795)
+    await view(nearView)
+    await districtReady()
+    await settleTwice()
+    await frames(2)
+    const st = await ui('app.districts.stats()')
+    if (!(st.on && st.k > 0.99)) throw new Error(`district ${JSON.stringify(st)}`)
+    await expect('app.world.exag.toFixed(2)', '1.30')
+    // where it is whole, the ground is its own
+    const [own, ground] = await ui("(() => { const t = app.rig.state.target; return [app.districts.metresAt(t.x, t.z), app.world.metresAt(t.x, t.z)] })()")
+    if (Math.abs(own - ground) > 0.01) throw new Error(`the ground at the target is ${ground}, the district's ${own}`)
+    console.log(`      decoded in ${st.workerMs} ms in its worker, ready ${st.readyMs} ms after it was asked for; ${st.gpuMB} MB on the GPU, ${st.cpuMB} MB here; ${st.nodes} nodes`)
+  })
+  await check('its edge is the island’s ground: no seam', async () => {
+    // along every side, at its very edge and a texel in, the ground with the district is the island's
+    const worst = await ui(`(() => {
+      const D = app.districts, r = D.cur.d.rect, W = app.world
+      let worst = 0
+      for (let k = 0; k <= 40; k++) {
+        const f = k / 40
+        for (const [x, z] of [[r.x0 + 0.05, r.z0 + f * (r.z1 - r.z0)], [r.x1 - 0.05, r.z0 + f * (r.z1 - r.z0)], [r.x0 + f * (r.x1 - r.x0), r.z0 + 0.05], [r.x0 + f * (r.x1 - r.x0), r.z1 - 0.05]]) {
+          const withD = W.metresAt(x, z)
+          D.on = false
+          const island = W.metresAt(x, z)
+          D.on = true
+          worst = Math.max(worst, Math.abs(withD - island))
+        }
+      }
+      return worst
+    })()`)
+    if (worst > 0.05) throw new Error(`the ground at the edge differs from the island's by ${worst.toFixed(2)} m`)
+    console.log(`      at the edge the ground is the island's to ${worst.toFixed(3)} m`)
+  })
+  await check('the patch sinks the harbour front in 1795, and not in 2020', async () => {
+    // a texel the fill made (the patch whole there) and land today
+    const pt = await ui(`(() => {
+      const rec = app.districts.cur, d = rec.d, r = d.rect
+      for (let c = 0; c < d.W * d.H; c += 97) if (rec.aux[c * 4] === 127 && rec.metres[c] > 1.5) { const i = c % d.W, j = (c - i) / d.W; return [r.x0 + (i + 0.5) * (r.x1 - r.x0) / d.W, r.z0 + (j + 0.5) * (r.z1 - r.z0) / d.H, rec.metres[c]] }
+      return null
+    })()`)
+    if (!pt) throw new Error('no patched texel')
+    const at = async (y) => {
+      await offTour(y)
+      await run(`app.rig.jump({ x: ${pt[0]}, z: ${pt[1]}, distance: 25, yaw: 0, pitch: 0.9 }); app.settle(); app.settle()`)
+      await frames(1)
+      return ui(`[app.world.metresAt(${pt[0]}, ${pt[1]}), app.districts.patchK]`)
+    }
+    const [m1795, k1795] = await at(1795)
+    const [m2020, k2020] = await at(2020)
+    if (!(m1795 < -0.5 && k1795 === 1)) throw new Error(`1795: ${m1795.toFixed(2)} m (patch ${k1795})`)
+    if (!(m2020 > 1 && k2020 === 0)) throw new Error(`2020: ${m2020.toFixed(2)} m (patch ${k2020})`)
+    console.log(`      at ${pt.map((v) => v.toFixed(2)).join(', ')} (today ${pt[2].toFixed(1)} m): ${m1795.toFixed(2)} m in 1795, ${m2020.toFixed(2)} m in 2020`)
+  })
+  await check('a channel dug since (the Ala Wai) is land in 1795, and water in 2020', async () => {
+    // the patch byte from 128 up: a texel of today's water filled back in
+    const pt = await ui(`(() => {
+      const rec = app.districts.cur, d = rec.d, r = d.rect
+      let n = 0
+      const deep = []
+      for (let c = 0; c < d.W * d.H; c++) if (rec.aux[c * 4] === 255) { n++; if (rec.metres[c] < -0.5) deep.push(c) }
+      if (!deep.length) return null
+      const c = deep[deep.length >> 1], i = c % d.W, j = (c - i) / d.W
+      return [r.x0 + (i + 0.5) * (r.x1 - r.x0) / d.W, r.z0 + (j + 0.5) * (r.z1 - r.z0) / d.H, rec.metres[c], n]
+    })()`)
+    if (!pt) throw new Error('no filled channel')
+    const at = async (y) => {
+      await offTour(y)
+      await run(`app.rig.jump({ x: ${pt[0]}, z: ${pt[1]}, distance: 25, yaw: 0, pitch: 0.9 }); app.settle(); app.settle()`)
+      await frames(1)
+      return ui(`app.world.metresAt(${pt[0]}, ${pt[1]})`)
+    }
+    const m1795 = await at(1795)
+    const m2020 = await at(2020)
+    if (!(m1795 > 0.2)) throw new Error(`1795: ${m1795.toFixed(2)} m`)
+    if (!(m2020 < 0)) throw new Error(`2020: ${m2020.toFixed(2)} m`)
+    console.log(`      ${pt[3]} texels filled; at ${pt[0].toFixed(2)}, ${pt[1].toFixed(2)} (today ${pt[2].toFixed(1)} m): ${m1795.toFixed(2)} m in 1795, ${m2020.toFixed(2)} m in 2020`)
+  })
+  await check('the loʻi, the fishponds and the village stand in 1795, and are gone in 2020', async () => {
+    const kinds = async (y) => {
+      await offTour(y)
+      await view(nearView)
+      await settleTwice()
+      return ui(`(() => {
+        const D = app.districts, out = { loi: [], pond: [], village: [] }
+        for (const [i, f] of D.cur.d.byIndex) {
+          const k = f.properties.kind
+          ;(k === 'loi' ? out.loi : k === 'fishpond' ? out.pond : out.village).push(+D.featK[i].toFixed(2))
+        }
+        // a terrace's ground, cut or filled: a loʻi texel whose level is not its height today
+        const rec = D.cur, d = rec.d, r = d.rect
+        let carved = 0
+        for (let c = 0; c < d.W * d.H; c += 13) if (rec.aux[c * 4 + 3] === 1 && rec.aux[c * 4 + 1] > 200) { const i = c % d.W, j = (c - i) / d.W; if (Math.abs(D.texel(i, j) - rec.metres[c]) > 0.05) carved++ }
+        out.carved = carved
+        out.features = D.cur.features.stats()
+        return out
+      })()`)
+    }
+    const a = await kinds(1795)
+    const b = await kinds(2020)
+    const all = (v, x) => v.length && v.every((k) => k === x)
+    // (the upland loʻi of Nuʻuanu begin in 1796: one loʻi is not yet there in 1795)
+    if (!(a.loi.filter((k) => k === 1).length >= a.loi.length - 1 && all(a.pond, 1) && all(a.village, 1))) throw new Error(`1795: ${JSON.stringify(a)}`)
+    if (!(a.carved > 100 && a.features.hale > 10 && a.features.waa > 0 && a.features.pondWalls === a.pond.length)) throw new Error(`1795: ${JSON.stringify(a)}`)
+    if (!(all(b.loi, 0) && all(b.pond, 0) && all(b.village, 0) && b.carved === 0)) throw new Error(`2020: ${JSON.stringify(b)}`)
+    console.log(`      1795: loʻi ${a.loi.join(' ')}, ponds ${a.pond.length}, village ${a.village}; ${a.features.hale} hale, ${a.features.waa} waʻa, ${a.features.pondWalls} pond walls, ${a.carved} sampled texels terraced, ${a.features.trees} trees placed; 2020: nothing`)
+  })
+  const ev95 = await ui("(() => { const ev = app.data.events.find((e) => e.id === 'nuuanu-1795'); return ev ? app.tour.locate(ev) : null })()")
+  const ev83 = await ui("(() => { const ev = app.data.events.find((e) => e.id === 'kaheiki-1783'); return ev ? app.tour.locate(ev) : null })()")
+  // what each stop shows, as the data numbers the steps (features.json): the
+  // fronts stand at their stops' places, and the steps follow in order
+  const expected = {
+    'nuuanu-1795': {
+      // (the crossing is told at the channel stop, a far view where the district is not down)
+      2: ['Kaʻiana’s people cross from Koʻolau'],
+      3: ['Kamehameha’s army ashore from Waiʻalae to Waikīkī', 'Kalanikūpule’s posts up the valley'],
+      4: ['The march past Kou and up the valley'],
+      5: ['The Oʻahu line at Puʻiwa', 'Kamehameha’s front at Puʻiwa'],
+      6: ['The Oʻahu line falls back to Lāʻimi', 'The Oʻahu line breaks at Lāʻimi', 'Kamehameha’s front at Lāʻimi'],
+      7: ['The retreat to the head of the valley', 'The pursuit up the valley', 'Over the ridge into Kalihi', 'Up the eastern side of the valley', 'Down the old path to Koʻolau'],
+    },
+    'kaheiki-1783': { 1: ['Kahekili’s column by Pūowaina', 'Kahekili’s column by Pauoa', 'Kahekili’s column by Kapena'], 2: ['Kahahana’s defence at Kaheiki'] },
+  }
+  for (const [id, at] of [['nuuanu-1795', ev95], ['kaheiki-1783', ev83]]) {
+    if (!at) continue
+    await check(`${id}: each stop’s camera lands where it asks, the district down, and the forces of its step`, async () => {
+      await run(`app.tour.goTo(${at[0]}, ${at[1]}); app.settle()`)
+      // (opening the event starts its district streaming)
+      await districtReady()
+      const n = await ui(`app.tour.event.stops.length`)
+      const rows = []
+      for (let i = 0; i < n; i++) {
+        await run(`app.tour.goStop(${i})`)
+        const stop = await ui(`app.tour.event.stops[${i}]`)
+        // (the district has been streaming since the event opened, and the flight waits for it)
+        const streaming = await ui('!!app.districts.cur')
+        await page.evaluate(() => window.__app.rig.finishFlight())
+        await yearSettles()
+        if (stop.camera) {
+          const [yaw, pitch, dist] = await ui('[app.rig.goal.yaw, app.rig.goal.pitch, app.rig.goal.distance]')
+          const wantYaw = (-stop.camera.bearing * Math.PI) / 180
+          const dy = Math.abs(((yaw - wantYaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI)
+          if (dy > 0.01 || Math.abs(pitch - (stop.camera.pitch * Math.PI) / 2) > 0.01 || Math.abs(dist - stop.camera.distance) > 0.01)
+            throw new Error(`stop ${i + 1}: yaw ${yaw.toFixed(3)} pitch ${pitch.toFixed(3)} distance ${dist.toFixed(1)}, asked ${JSON.stringify(stop.camera)}`)
+          if (!streaming) throw new Error(`stop ${i + 1}: the district was not streaming when the flight began`)
+          await districtReady()
+          await settleTwice()
+          await frames(2)
+          // the place in the middle of the free part of the screen
+          const where = await ui(`(() => {
+            const g = app.tour.places.get(app.tour.event.stops[${i}].place).geometry
+            if (g.type !== 'Point') return [0, 0]
+            const [x, z] = app.data.proj.toWorld(g.coordinates)
+            const v = new app.camera.position.constructor(x, app.world.heightAt(x, z), z).project(app.camera)
+            const b = app.ui.freeBox()
+            const sx = ((v.x + 1) / 2) * innerWidth, sy = ((1 - v.y) / 2) * innerHeight
+            return [Math.abs(sx - (b.x0 + b.x1) / 2) / (b.x1 - b.x0), Math.abs(sy - (b.y0 + b.y1) / 2) / (b.y1 - b.y0)]
+          })()`)
+          if (where[0] > 0.12 || where[1] > 0.12) throw new Error(`stop ${i + 1}: its place is off the middle of the view by ${where.map((v) => v.toFixed(2)).join(', ')}`)
+        }
+        const f = await ui('app.districts.cur?.features?.forces.stats() ?? null')
+        const shown = f ? [...f.forces, ...f.lines] : []
+        const want = expected[id]?.[i] ?? []
+        if (shown.length !== want.length || !want.every((w) => shown.includes(w))) throw new Error(`stop ${i + 1}: shows ${JSON.stringify(shown)}, wanted ${JSON.stringify(want)}`)
+        rows.push(`${i + 1} ${stop.place}${stop.camera ? ' (camera)' : ''}: ${shown.length ? `step ${f.steps.join(', ')}, ${shown.length} forces and fronts` : 'none'}`)
+      }
+      for (const r of rows) console.log(`      ${r}`)
+      if (id === 'nuuanu-1795') {
+        // nothing at the edge of the pali: within 300 m of the gap the retreat's marks have faded
+        await page.evaluate(() => new Promise((r) => setTimeout(r, 1500)))
+        await frames(2)
+        const atEdge = await ui(`(() => {
+          const F = app.districts.cur.features.forces
+          const [gx, gz] = app.data.proj.toWorld([-157.7933, 21.3668])
+          let n = 0
+          for (const r of F.forces) {
+            if (r.file) continue
+            for (let i = 0; i < r.n; i++) { const k = (r.o + i) * 4; if (F.marks[k + 2] > 0.05 && Math.hypot(F.marks[k] - gx, F.marks[k + 1] - gz) < 3) n++ }
+          }
+          return n
+        })()`)
+        if (atEdge) throw new Error(`${atEdge} marks within 300 m of the gap`)
+        console.log('      nothing at the edge of the pali')
+      }
+    })
+  }
+  await check('outside the tour, in the battle’s year, the forces show quietly', async () => {
+    await offTour(1795)
+    await view(nearView)
+    await settleTwice()
+    await frames(1)
+    const f = await ui('app.districts.cur.features.forces.stats()')
+    if (!(f.quiet && f.event === 'nuuanu-1795' && f.forces.length > 5)) throw new Error(JSON.stringify(f))
+    await offTour(1800)
+    await settleTwice()
+    await frames(1)
+    const g = await ui('app.districts.cur.features.forces.stats()')
+    if (g.forces.length || g.lines.length) throw new Error(`in 1800: ${JSON.stringify(g)}`)
+  })
+  await check('the polity colours and the land view are gone over the district', async () => {
+    await offTour(1795)
+    await view(nearView)
+    await settleTwice()
+    await expect('app.shared.uniforms.uPolityK.value', 0)
+    await expect('app.shared.uniforms.uLandK.value', 0)
+    // and hovering names the moku without lighting it
+    await page.mouse.move(640, 430)
+    await page.waitForTimeout(200)
+    await page.mouse.move(645, 432)
+    await page.waitForTimeout(300)
+    await expect('app.shared.uniforms.uHoverMoku.value', 0)
+    await page.mouse.move(5, 400)
+  })
+  await check('the district fades out and is let go once the camera leaves', async () => {
+    await view('app.tour.chainView()')
+    await settleTwice()
+    await frames(2)
+    const st = await ui('app.districts.stats()')
+    if (st.on || st.k > 0) throw new Error(`still down over the chain: ${JSON.stringify(st)}`)
+    // (it lingers a while in case the camera comes back; skip the wait)
+    await run('app.districts.lastSeen = -1e9; app.districts.prefetchAt = -1e9')
+    await frames(2)
+    await expect('app.districts.cur', null)
+    console.log('      off over the chain, and released')
+  })
+}
+
 // What the page costs, for comparing builds: the JS heap after a collection,
 // and the frame time held still over the whole chain and over one island, in
 // each view of the far map the build has. (Under the software renderer the
@@ -733,6 +971,15 @@ await check('perf', async () => {
     }
   }
   if (modes.length > 1) await run("app.setView('chiefdoms')")
+  // and down in a district, where there is one: the near zoom at Puʻiwa in 1795
+  if (await ui('app.districts?.list.length ?? 0')) {
+    await run("app.timeline.setYear(1795); app.ui.timeline.finish(); const v = app.tour.cameraView(app.tour.places.get('puiwa'), { bearing: 42, pitch: 0.38, distance: 16 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()")
+    await page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
+    await run('app.settle(); app.settle()')
+    await frames(4)
+    out['near.ms'] = await frameMs(6)
+    out.near = await ui('(() => { const s = app.stats(); return { calls: s.calls, triangles: s.triangles, district: s.district?.nodes, trees: s.district?.features?.treesDrawn } })()')
+  }
   out.heapAfterMB = await heapMB()
   out.textures = await ui('app.renderer.info.memory.textures')
   const land = await ui('app.land?.stats?.() ?? null')

@@ -253,9 +253,12 @@ export class UI {
     }
     const p = app.rig.pickGround(cx, cy)
     const m = p && app.world.metresAt(p.x, p.z) > 0 ? app.polity.mokuAt(p.x, p.z) : null
-    // (in the land view the moku isn't lit in its polity's colour, which would hide the layers under it)
+    // (in the land view the moku isn't lit in its polity's colour, which would
+    // hide the layers under it; and close in, where the polity colours have
+    // gone, it isn't lit either: the card names it)
     const landView = app.view === 'land' && app.landK > 0.25
-    u.uHoverMoku.value = m && !landView ? m.index : 0
+    const close = polityZoom(app.rig.state.distance) < 0.05
+    u.uHoverMoku.value = m && !landView && !close ? m.index : 0
     if (!m) {
       this.inspector.classList.remove('show')
       return

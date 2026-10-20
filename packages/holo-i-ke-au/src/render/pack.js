@@ -9,6 +9,9 @@
 //
 // Heights are metres throughout; node boxes are turned into world Y with the
 // exaggeration of the moment, so the selection follows it as the camera zooms.
+//
+// The district (render/district.js) is drawn by this same quadtree with its
+// own shaders, through `opts`.
 
 import * as THREE from 'three'
 import { terrainVertex, terrainFragment } from './shaders/terrain.glsl.js'
@@ -51,9 +54,12 @@ export class PackTerrain {
    * pack: a described pack (data/load.js) with its decoded `data`.
    * world: the World (render/world.js), whose shared uniforms this draws with.
    * base: for an island pack, the archipelago's PackTerrain (its heights are
-   * folded into the node bounds, since an island at low weight shows them).
+   * folded into the node bounds, since an island at low weight shows them);
+   * for a district, the list of what it can show under it.
+   * opts: { vertexShader, fragmentShader, uniforms, shadowFragment, shadowSize }
+   * to draw with other shaders than the island packs' (the district's).
    */
-  constructor(pack, world, base = null) {
+  constructor(pack, world, base = null, opts = {}) {
     this.pack = pack
     this.world = world
     const d = pack.data
@@ -75,14 +81,14 @@ export class PackTerrain {
     const side = Math.max(x1 - x0, z1 - z0)
     this.levels = Math.max(1, Math.ceil(Math.log2(side / (GRID * texel))) + 1)
     this.leafSize = side / 2 ** (this.levels - 1)
-    this.buildMinMax(base)
+    this.buildMinMax(Array.isArray(base) ? base : base ? [base] : [])
 
     this.full = this.makeGrid(GRID)
     this.half = this.makeGrid(GRID / 2)
     this.morph = []
     for (let l = 0; l < 12; l++) this.morph.push(new THREE.Vector2())
     const shared = world.uniforms
-    const arch = base || this
+    const arch = (Array.isArray(base) ? null : base) || world.arch || this
     this.uniforms = {
       ...shared,
       uOwnH: { value: this.heightTex },
@@ -102,12 +108,13 @@ export class PackTerrain {
       uCamPos: { value: new THREE.Vector3() },
       uKau: { value: 0.5 },
       uDebug: { value: 0 },
+      ...opts.uniforms,
     }
     this.group = new THREE.Group()
     for (const grid of [this.full, this.half]) {
       grid.material = new THREE.ShaderMaterial({
-        vertexShader: terrainVertex,
-        fragmentShader: terrainFragment,
+        vertexShader: opts.vertexShader || terrainVertex,
+        fragmentShader: opts.fragmentShader || terrainFragment,
         uniforms: { ...this.uniforms, uGrid: { value: grid.dim } },
       })
       grid.mesh = new THREE.Mesh(grid.geometry, grid.material)
@@ -115,7 +122,7 @@ export class PackTerrain {
       grid.mesh.matrixAutoUpdate = false
       this.group.add(grid.mesh)
     }
-    this.shadow = new PackShadow(this)
+    this.shadow = new PackShadow(this, opts.shadowSize, opts.shadowFragment)
     this.uniforms.uOwnS.value = this.shadow.texture
     this._frustum = new THREE.Frustum()
     this._m = new THREE.Matrix4()
@@ -157,7 +164,7 @@ export class PackTerrain {
   }
 
   /** Per-node min/max heights (metres), as a pyramid over leaf squares; leaves off the rect are empty. */
-  buildMinMax(base) {
+  buildMinMax(bases) {
     const { W, H, heights } = this
     const r = this.pack.rect
     const leaves = 2 ** (this.levels - 1)
@@ -185,13 +192,16 @@ export class PackTerrain {
             if (v > b) b = v
           }
         }
-        if (base) {
-          // what the archipelago has here too, since a fading island shows it
-          for (let j = j0; j <= j1; j += 2) {
-            for (let i = i0; i <= i1; i += 2) {
-              const v = base.metresAt(r.x0 + (i + 0.5) / sx, r.z0 + (j + 0.5) / sz)
-              if (v < a) a = v
-              if (v > b) b = v
+        if (bases.length) {
+          // what the archipelago (or the island) has here too, since a fading pack shows it
+          const st = Math.max(2, Math.round((j1 - j0) / 16))
+          for (const base of bases) {
+            for (let j = j0; j <= j1; j += st) {
+              for (let i = i0; i <= i1; i += st) {
+                const v = base.metresAt(r.x0 + (i + 0.5) / sx, r.z0 + (j + 0.5) / sz)
+                if (v < a) a = v
+                if (v > b) b = v
+              }
             }
           }
           a -= 40

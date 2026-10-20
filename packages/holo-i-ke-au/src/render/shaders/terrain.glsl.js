@@ -13,7 +13,9 @@
 // One material per pack. The archipelago's (uSelf = -1) draws wherever no
 // island slot owns the ground; an island's (uSelf = its slot) draws only where
 // it does, blending its own heights, normals and land over the archipelago's
-// by its slot weight, so the hand-over is a geomorph, not a swap.
+// by its slot weight, so the hand-over is a geomorph, not a swap. Where a
+// district is down, neither draws: the district's own mesh does
+// (district.glsl.js), from the same ground at its edge.
 
 import { constants, noise, world, lighting, polity, land } from './common.glsl.js'
 
@@ -29,71 +31,13 @@ float packMetres(vec2 xz) {
 }
 `
 
-export const terrainVertex = /* glsl */ `
-${constants}
-${world}
-${own}
-in vec4 aNode; // x0, z0, size, lod
-uniform vec2 uMorph[12];
-uniform float uGrid;
-uniform vec3 uCamPos;
-out vec3 vWorld;
-out float vMetres;
-
-void main() {
-  vec2 g = floor(position.xz * uGrid + 0.5); // this vertex's grid index in its node
-  float cell = aNode.z / uGrid;
-  vec2 xz = aNode.xy + g * cell;
-  float mt = packMetres(xz);
-  float dist = distance(uCamPos, vec3(xz.x, mt * uVert, xz.y));
-  vec2 m = uMorph[int(aNode.w)];
-  float k = clamp((dist - m.x) / (m.y - m.x), 0.0, 1.0);
-  // Geomorph (as in ahupuaʻa): toward the outer edge of its range a vertex
-  // between the next-coarser grid's vertices blends its height onto that
-  // coarser mesh, so by the hand-over the two levels are the same surface.
-  vec2 odd = g - 2.0 * floor(g * 0.5);
-  if (k > 0.0 && odd.x + odd.y > 0.5) {
-    vec2 base = aNode.xy + (g - odd) * cell;
-    float hc;
-    if (odd.x > 0.5 && odd.y > 0.5) {
-      vec2 pc = (g - odd) * 0.5;
-      if (mod(pc.x + pc.y, 2.0) > 0.5) hc = 0.5 * (packMetres(base + vec2(2.0, 0.0) * cell) + packMetres(base + vec2(0.0, 2.0) * cell));
-      else hc = 0.5 * (packMetres(base) + packMetres(base + vec2(2.0) * cell));
-    } else {
-      hc = 0.5 * (packMetres(base) + packMetres(base + odd * 2.0 * cell));
-    }
-    mt = mix(mt, hc, k);
-  }
-  vMetres = mt;
-  // The sea is drawn from the heights; the seabed under it only needs to show
-  // in the last few centimetres at the shoreline. Sink it below that so the
-  // two surfaces never fight over depth.
-  if (mt < 0.0) mt -= 25.0 * smoothstep(0.15, 3.0, -mt);
-  vWorld = vec3(xz.x, mt * uVert, xz.y);
-  gl_Position = projectionMatrix * viewMatrix * vec4(vWorld, 1.0);
-}
-`
-
-export const terrainFragment = /* glsl */ `
-${constants}
-${noise}
-${world}
-${own}
-${lighting}
-${polity}
-${land}
-uniform sampler2D uArchN;  // normals at NORMAL_E (rgb), ambient occlusion (a)
-uniform sampler2D uArchL;  // r rain (log), g sand, b riparian, a reserved
-uniform sampler2D uOwnN;
-uniform sampler2D uOwnL;
-uniform sampler2D uOwnS;   // this pack's cast shadows (shadow.js), over its rect
-uniform sampler2D uOwnLandA; // this island's era layers, the keyframe before and after (overlay/land.js)
-uniform sampler2D uOwnLandB;
-uniform float uOwnRain;    // 0: this pack has no rain image, so the archipelago's stands
+// The ground's own colour before it is lit: vegetation by rain (dry grass to
+// wet forest, the farmed and burned lowland of c. 1700, valley floors, uluhe,
+// the summit bogs, tree crowns close in), the mountains above the trees, the
+// pali in the rock's own terms, the coast. Shared by the island packs and the
+// district (district.glsl.js), so the two meet without a seam.
+export const albedo = /* glsl */ `
 uniform float uKau;        // the season, 0 hoʻoilo .. 1 kau
-uniform int uDebug;
-in vec3 vWorld;
-in float vMetres;
 
 vec3 srgb(vec3 c) { return pow(c, vec3(2.2)); }
 
@@ -113,39 +57,12 @@ vec2 crowns(vec2 p) {
   return vec2(sqrt(d1), hash12(best + 3.7));
 }
 
-void main() {
-  vec2 xz = vWorld.xz;
-  if (ownerAt(xz) != uSelf) discard;
-  if (edgeDist(uArchRect, xz) < 0.0) discard;
-  float kSelf = uSelf < 0 ? 0.0 : slotWeight(uSelf, xz);
-  // (all four sampled every time: mipmapped lookups need uniform control flow)
-  vec2 uvA = rectUv(uArchRect, xz);
-  vec2 uvO = rectUv(uOwnRect, xz);
-  vec4 nt = mix(texture(uArchN, uvA), texture(uOwnN, uvO), kSelf);
-  vec4 landA = texture(uArchL, uvA);
-  vec4 land = mix(landA, texture(uOwnL, uvO), kSelf);
-  if (uOwnRain < 0.5) land.r = landA.r;
-
-  // The normal map holds the ground's slope at NORMAL_E; turn it back into a
-  // gradient (metres per metre) and stand it up at the exaggeration of the
-  // moment for the light, and at the valley's 1.3 for what grows where, so the
-  // forest doesn't turn to cliff as the camera pulls back.
-  vec3 n0 = nt.xyz * 2.0 - 1.0;
-  vec2 grad = -n0.xz / (max(n0.y, 0.03) * NORMAL_E);
-  vec3 n = normalize(vec3(-grad.x * uExag, 1.0, -grad.y * uExag));
-  vec3 nC = normalize(vec3(-grad.x * NEAR_E, 1.0, -grad.y * NEAR_E));
+// nC: the normal at the valley's exaggeration; px: world units per pixel;
+// fwM: the metres' change over a pixel; wetHead (0..1): how far the farmed
+// band gives way to forest lower down where it is wettest, as at the head of
+// Nuʻuanu (the district passes its weight; the islands, 0)
+vec3 groundAlbedo(vec2 xz, float metres, float rain, float sand, float rip, vec3 nC, float px, float fwM, float wetHead) {
   float slope = 1.0 - nC.y;
-  float ao = mix(1.0, nt.a, 0.85);
-  float rain = land.r;
-  float sand = land.g;
-  float rip = land.b;
-  float metres = vMetres;
-
-  vec2 dX = dFdx(xz);
-  vec2 dY = dFdy(xz);
-  float px = length(abs(dX) + abs(dY)); // world units per pixel
-  float fwM = fwidth(metres);
-
   // (fbm's first three octaves, ~300 m across, faded as they get finer than a pixel)
   float nBig = fbm2F(xz * 0.35, px * 0.35);
   vec3 grassDry = srgb(vec3(0.70, 0.60, 0.38));
@@ -177,7 +94,8 @@ void main() {
     // c. 1700 the lowland below about 460 m was farmed and burned, and the
     // native forest stood untouched only above about 760 m: on the moist side
     // the interfluves lie open, the trees in the gulches and on steep slopes
-    float cult = 1.0 - smoothstep(420.0, 760.0, metres + (nBig - 0.5) * 120.0);
+    vec2 band = mix(vec2(420.0, 760.0), vec2(170.0, 330.0), wetHead * smoothstep(0.50, 0.60, r));
+    float cult = 1.0 - smoothstep(band.x, band.y, metres + (nBig - 0.5) * 120.0);
     float gul = smoothstep(0.08, 0.3, rip);
     float moistLow = cult * smoothstep(0.30, 0.40, r);
     forest *= mix(1.0, 0.35 + 0.65 * max(gul, smoothstep(0.17, 0.34, slope)), moistLow);
@@ -258,6 +176,113 @@ void main() {
   vec3 seabed = mix(sandC * 0.85, srgb(vec3(0.42, 0.40, 0.33)), smoothstep(0.35, 0.65, nMid));
   col = mix(col, seabed, under);
   col *= 1.0 - 0.25 * smoothstep(1.5, 0.0, metres) * (1.0 - under);
+
+  return col;
+}
+`
+
+export const terrainVertex = /* glsl */ `
+${constants}
+${world}
+${own}
+in vec4 aNode; // x0, z0, size, lod
+uniform vec2 uMorph[12];
+uniform float uGrid;
+uniform vec3 uCamPos;
+out vec3 vWorld;
+out float vMetres;
+
+void main() {
+  vec2 g = floor(position.xz * uGrid + 0.5); // this vertex's grid index in its node
+  float cell = aNode.z / uGrid;
+  vec2 xz = aNode.xy + g * cell;
+  float mt = packMetres(xz);
+  float dist = distance(uCamPos, vec3(xz.x, mt * uVert, xz.y));
+  vec2 m = uMorph[int(aNode.w)];
+  float k = clamp((dist - m.x) / (m.y - m.x), 0.0, 1.0);
+  // Geomorph (as in ahupuaʻa): toward the outer edge of its range a vertex
+  // between the next-coarser grid's vertices blends its height onto that
+  // coarser mesh, so by the hand-over the two levels are the same surface.
+  vec2 odd = g - 2.0 * floor(g * 0.5);
+  if (k > 0.0 && odd.x + odd.y > 0.5) {
+    vec2 base = aNode.xy + (g - odd) * cell;
+    float hc;
+    if (odd.x > 0.5 && odd.y > 0.5) {
+      vec2 pc = (g - odd) * 0.5;
+      if (mod(pc.x + pc.y, 2.0) > 0.5) hc = 0.5 * (packMetres(base + vec2(2.0, 0.0) * cell) + packMetres(base + vec2(0.0, 2.0) * cell));
+      else hc = 0.5 * (packMetres(base) + packMetres(base + vec2(2.0) * cell));
+    } else {
+      hc = 0.5 * (packMetres(base) + packMetres(base + odd * 2.0 * cell));
+    }
+    mt = mix(mt, hc, k);
+  }
+  vMetres = mt;
+  // The sea is drawn from the heights; the seabed under it only needs to show
+  // in the last few centimetres at the shoreline. Sink it below that so the
+  // two surfaces never fight over depth.
+  if (mt < 0.0) mt -= 25.0 * smoothstep(0.15, 3.0, -mt);
+  vWorld = vec3(xz.x, mt * uVert, xz.y);
+  gl_Position = projectionMatrix * viewMatrix * vec4(vWorld, 1.0);
+}
+`
+
+export const terrainFragment = /* glsl */ `
+${constants}
+${noise}
+${world}
+${own}
+${lighting}
+${polity}
+${land}
+${albedo}
+uniform sampler2D uArchN;  // normals at NORMAL_E (rgb), ambient occlusion (a)
+uniform sampler2D uArchL;  // r rain (log), g sand, b riparian, a reserved
+uniform sampler2D uOwnN;
+uniform sampler2D uOwnL;
+uniform sampler2D uOwnS;   // this pack's cast shadows (shadow.js), over its rect
+uniform sampler2D uOwnLandA; // this island's era layers, the keyframe before and after (overlay/land.js)
+uniform sampler2D uOwnLandB;
+uniform float uOwnRain;    // 0: this pack has no rain image, so the archipelago's stands
+uniform int uDebug;
+in vec3 vWorld;
+in float vMetres;
+
+void main() {
+  vec2 xz = vWorld.xz;
+  if (ownerAt(xz) != uSelf) discard;
+  if (edgeDist(uArchRect, xz) < 0.0) discard;
+  // (where the district is down, its own mesh draws the ground)
+  if (distDraws(xz)) discard;
+  float kSelf = uSelf < 0 ? 0.0 : slotWeight(uSelf, xz);
+  // (all four sampled every time: mipmapped lookups need uniform control flow)
+  vec2 uvA = rectUv(uArchRect, xz);
+  vec2 uvO = rectUv(uOwnRect, xz);
+  vec4 nt = mix(texture(uArchN, uvA), texture(uOwnN, uvO), kSelf);
+  vec4 landA = texture(uArchL, uvA);
+  vec4 land = mix(landA, texture(uOwnL, uvO), kSelf);
+  if (uOwnRain < 0.5) land.r = landA.r;
+
+  // The normal map holds the ground's slope at NORMAL_E; turn it back into a
+  // gradient (metres per metre) and stand it up at the exaggeration of the
+  // moment for the light, and at the valley's 1.3 for what grows where, so the
+  // forest doesn't turn to cliff as the camera pulls back.
+  vec3 n0 = nt.xyz * 2.0 - 1.0;
+  vec2 grad = -n0.xz / (max(n0.y, 0.03) * NORMAL_E);
+  vec3 n = normalize(vec3(-grad.x * uExag, 1.0, -grad.y * uExag));
+  vec3 nC = normalize(vec3(-grad.x * NEAR_E, 1.0, -grad.y * NEAR_E));
+  float slope = 1.0 - nC.y;
+  float ao = mix(1.0, nt.a, 0.85);
+  float rain = land.r;
+  float sand = land.g;
+  float rip = land.b;
+  float metres = vMetres;
+
+  vec2 dX = dFdx(xz);
+  vec2 dY = dFdy(xz);
+  float px = length(abs(dX) + abs(dY)); // world units per pixel
+  float fwM = fwidth(metres);
+
+  vec3 col = groundAlbedo(xz, metres, rain, sand, rip, nC, px, fwM, 0.0);
 
   // the land view: the archipelago's combined layers, and an island's own
   // over them by its weight, as the maps above (both conditions are

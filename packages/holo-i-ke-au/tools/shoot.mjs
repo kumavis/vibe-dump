@@ -3,9 +3,10 @@
 // `npm run build -w @vibe-dump/holo-i-ke-au` first.
 //
 //   node tools/shoot.mjs <outdir> '<json array of shots>' [extra query]
-//   shot = { name, cam: [x, z, distance, yaw, pitch], year, frames, wait, eval, until, keys, click, hover, settle, element }
+//   shot = { name, cam: [x, z, distance, yaw, pitch], year, frames, wait, eval, until, keys, click, hover, settle, element, report }
 //     eval: a function body run in the page with `app` (app.tour.goTo(6, 0), say)
 //     until: an expression waited on before the settle (app.land.ready, say)
+//     report: an expression logged after the shot (app.districts.stats(), say)
 //     element: a selector to shoot alone instead of the page (.legend, say)
 //     keys: keys to press, in order (["ArrowRight", "ArrowRight"])
 //     click / hover: a selector to click, or to rest the pointer on (after the settle)
@@ -103,6 +104,7 @@ for (const s of shots) {
     const tour = a.tour?.state
     return { d: Math.round(a.rig.state.distance), view: a.view, land: a.land?.stats?.(), fill: a.islandFill ? +a.islandFill().toFixed(2) : undefined, routes: a.routes?.visibleRoutes().map((r) => r.id), exag: a.world.exag.toFixed(2), slots: a.world.slots.map((t) => (t ? `${t.pack.id}:${t.k.toFixed(2)}` : '-')).join(' '), year: Math.round(a.timeline.year), tour, clusters: a.ui?.pins.groups().map((g) => g.ids.join('+')) }
   })
+  if (s.report) console.log('report', s.name, JSON.stringify(await page.evaluate(new Function(`const app = window.__app; return ${s.report}`))))
   console.log('shot', s.name, 'in', Date.now() - t, 'ms', JSON.stringify(info))
 }
 const perf = await page.evaluate(() => window.__app.stats?.())

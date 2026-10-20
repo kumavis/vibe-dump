@@ -14,11 +14,29 @@ import { NEAR_EXAG, NORMAL_EXAG, SLOTS } from '../../config.js'
 
 const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
 
+// The district's feature indices (aux map alpha): loʻi from 1, fishponds from
+// DIST_POND, the rest (the village) from DIST_OTHER, up to 63; and the levels
+// the year lays its ground at: a reef flat where the patch sinks the fill,
+// just above the tide where it fills a channel dug since (district-decode.js
+// PATCH_REEF, PATCH_FILL), still water in a pond.
+export const DIST_INDEX = { loi: 1, pond: 24, other: 48, max: 63 }
+export const DIST_REEF = -1
+export const DIST_FILL = 0.5
+export const DIST_POND_LEVEL = -0.6
+// a loʻi terrace's smallest step, metres (district-decode.js BASE; the others double it)
+export const DIST_BASE = 0.5625
+
 export const constants = /* glsl */ `
 #define PI 3.14159265
 #define NEAR_E ${f(NEAR_EXAG)}
 #define NORMAL_E ${f(NORMAL_EXAG)}
 #define SLOTS ${SLOTS}
+#define DIST_POND ${DIST_INDEX.pond}
+#define DIST_OTHER ${DIST_INDEX.other}
+#define DIST_REEF ${f(DIST_REEF)}
+#define DIST_FILL ${f(DIST_FILL)}
+#define DIST_POND_LEVEL ${f(DIST_POND_LEVEL)}
+#define DIST_BASE ${f(DIST_BASE)}
 `
 
 export const noise = /* glsl */ `
@@ -74,8 +92,9 @@ vec3 voronoi(vec2 p) {
 }
 `
 
-// The archipelago and the island slots' rects and weights. Enough for any
-// shader to work out who owns a point; the slots' textures are in ground.
+// The archipelago and the island slots' rects and weights, and the district's
+// under them (render/district.js). Enough for any shader to work out who owns
+// a point; the slots' and the district's textures are in ground.
 export const world = /* glsl */ `
 uniform float uVert;           // world Y per metre: the exaggeration of the moment / 100
 uniform float uExag;           // the exaggeration itself
@@ -123,10 +142,33 @@ float slotWeight(int s, vec2 xz) {
   vec4 info = uSlotInfo[s];
   return info.x * smoothstep(0.0, info.z, edgeDist(uSlotRect[s], xz));
 }
+
+// The district, a third level under its island: its rect, and x its detail
+// weight k, y on (0/1), z the margin over which it eases back into the
+// island, w a band at its very edge where it shows nothing of its own. Its
+// mesh draws the whole rect; the island's stop short of it by that band, so
+// the two overlap there, at the island's own heights, instead of meeting.
+uniform vec4 uDistRect;
+uniform vec4 uDistInfo;
+float distWeight(vec2 xz) {
+  if (uDistInfo.y < 0.5) return 0.0;
+  return uDistInfo.x * smoothstep(uDistInfo.w, uDistInfo.z, edgeDist(uDistRect, xz));
+}
+// whether the district's mesh draws xz, so an island's mesh need not
+bool distDraws(vec2 xz) {
+  return uDistInfo.y > 0.5 && edgeDist(uDistRect, xz) > uDistInfo.w;
+}
 `
 
 // The ground anywhere, for surfaces that aren't one pack's own mesh: the sea
-// (for its depth) and the boundary lines (draped on it).
+// (for its depth) and the lines (draped on it), and the district's own mesh.
+//
+// The district's ground is its lidar as it is today, with the year laid on
+// it: the patches (land the fill made, sunk back toward a reef flat) and the
+// features rastered into its aux map, each by its own weight in the year
+// (uFeatK, eased as the year crosses its dates): a loʻi's terraces cut and
+// filled into the slope, a fishpond's water. render/district.js keeps the CPU
+// copy (metresAt), line for line.
 const slotIndices = Array.from({ length: SLOTS }, (_, i) => i)
 export const ground = /* glsl */ `
 ${slotIndices.map((i) => `uniform sampler2D uSlotH${i};`).join('\n')}
@@ -135,7 +177,8 @@ float slotMetres(int s, vec2 xz) {
 ${slotIndices.map((i) => `  if (s == ${i}) return rectMetres(uSlotH${i}, uSlotRect[${i}], xz);`).join('\n')}
   return -4000.0;
 }
-float groundMetres(vec2 xz) {
+// the archipelago and the islands, without the district
+float islandMetres(vec2 xz) {
   float m = archMetres(xz);
   int o = ownerAt(xz);
   if (o >= 0) {
@@ -143,6 +186,59 @@ float groundMetres(vec2 xz) {
     if (w > 0.0) m = mix(m, slotMetres(o, xz), w);
   }
   return m;
+}
+
+uniform sampler2D uDistH;     // heights today, metres (R32F, nearest)
+uniform sampler2D uDistAux;   // r the patch's weight, g a feature's mask, b its paddy (hash, and the bank in the top bit), a its index
+uniform sampler2D uDistCarve; // a loʻi's r terraces down the valley (modulo 64), g paddies across it (RG16F); off the loʻi, a filled channel's level in r, the normals' offset in g
+uniform float uPatchK;        // the patch's weight in the year: 1 before its until, 0 after
+uniform vec4 uFeatK[16];      // each rastered feature's weight in the year, by index (loʻi DIST_LOI, ponds DIST_POND, the rest after)
+float featK(int i) { return uFeatK[i >> 2][i & 3]; }
+float distTexel(ivec2 p) {
+  float h = texelFetch(uDistH, p, 0).r;
+  vec4 a = texelFetch(uDistAux, p, 0);
+  // (the patch byte: under 128 toward the reef, from 128 toward the fill at
+  // the level the carve keeps there; district-decode.js patchLevel)
+  float r = a.r * 255.0;
+  if (r < 127.5) h = mix(h, DIST_REEF, r / 127.0 * uPatchK);
+  else h = mix(h, max(DIST_FILL, texelFetch(uDistCarve, p, 0).r), (r - 128.0) / 127.0 * uPatchK);
+  int f = int(a.a * 255.0 + 0.5);
+  if (f > 0) {
+    float k = featK(f);
+    if (f < DIST_POND) {
+      // a loʻi: cut or filled to its terrace's level (district-decode.js loiLevel)
+      float tau = texelFetch(uDistCarve, p, 0).r;
+      float stp = DIST_BASE * exp2(floor(a.b * 255.0 + 0.5));
+      float L = tau + 64.0 * floor((h / stp - tau) / 64.0 + 0.5);
+      h += ((floor(L) + 0.5) * stp - h) * a.g * k;
+    } else if (f < DIST_OTHER) h = mix(h, DIST_POND_LEVEL, a.g * k);
+  }
+  return h;
+}
+vec2 distGrid(vec2 xz) {
+  vec2 size = vec2(textureSize(uDistH, 0));
+  return clamp(rectUv(uDistRect, xz) * size - 0.5, vec2(0.0), size - 1.001);
+}
+float distMetres(vec2 xz) {
+  vec2 p = distGrid(xz);
+  vec2 fl = floor(p);
+  vec2 fr = p - fl;
+  ivec2 i = ivec2(fl);
+  return mix(mix(distTexel(i), distTexel(i + ivec2(1, 0)), fr.x), mix(distTexel(i + ivec2(0, 1)), distTexel(i + ivec2(1, 1)), fr.x), fr.y);
+}
+float groundMetres(vec2 xz) {
+  float w = distWeight(xz);
+  if (w >= 1.0) return distMetres(xz);
+  float m = islandMetres(xz);
+  return w > 0.0 ? mix(m, distMetres(xz), w) : m;
+}
+// a fishpond's water at xz (0..1), for the sea to lie calm in it
+float distPond(vec2 xz) {
+  if (distWeight(xz) <= 0.0) return 0.0;
+  ivec2 i = ivec2(distGrid(xz) + 0.5);
+  vec4 a = texelFetch(uDistAux, i, 0);
+  int f = int(a.a * 255.0 + 0.5);
+  return f >= DIST_POND && f < DIST_OTHER ? a.g * featK(f) : 0.0;
 }
 `
 

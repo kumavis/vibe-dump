@@ -259,8 +259,10 @@ export class CameraRig {
    * land, scale the distance and slide the target to suit, and again; the
    * projection is near enough linear over a view that it settles in a few
    * rounds. Corners sit at sea level, which is where an island's outline is.
+   * A `pitch` holds the tilt at that, whatever the distance prefers (a tour
+   * stop's own camera).
    */
-  fit({ rect, distance, yaw = this.goal.yaw, tilt = 0, box, pad = 1.06 }) {
+  fit({ rect, distance, yaw = this.goal.yaw, tilt = 0, pitch: fixedPitch, box, pad = 1.06 }) {
     const cam = this._fitCam || (this._fitCam = new THREE.PerspectiveCamera())
     cam.fov = this.camera.fov
     cam.aspect = this.camera.aspect
@@ -283,7 +285,7 @@ export class CameraRig {
     const v = this._v
     for (let i = 0; i < 8; i++) {
       d = THREE.MathUtils.clamp(d, this.minDistance, this.maxDistance)
-      pitch = THREE.MathUtils.clamp(preferredPitch(d) + tilt, 0.06, 1.52)
+      pitch = THREE.MathUtils.clamp(fixedPitch ?? preferredPitch(d) + tilt, 0.06, 1.52)
       const cp = Math.cos(pitch)
       const ty = fixed ? this.world.heightAt(tx, tz) : 0
       cam.position.set(tx + d * cp * sy, ty + d * Math.sin(pitch), tz + d * cp * cy)
@@ -315,7 +317,12 @@ export class CameraRig {
     return { target: new THREE.Vector3(tx, this.world.heightAt(tx, tz), tz), distance: d, yaw, pitch }
   }
 
-  /** Fly to a view. `to` may set any of target, distance, yaw, pitch. */
+  /**
+   * Fly to a view. `to` may set any of target, distance, yaw, pitch.
+   * opts.ready: what the landing waits for (a district streaming in under
+   * it): the last fifth of the flight slows to a crawl until it holds, for a
+   * few seconds at most, so the view arrives with its ground.
+   */
   flyTo(to, duration = 3, opts = {}) {
     const from = {
       target: this.goal.target.clone(),
@@ -334,7 +341,7 @@ export class CameraRig {
     dest.yaw = from.yaw + wrapAngle(dest.yaw - from.yaw)
     const travel = Math.hypot(from.target.x - dest.target.x, from.target.z - dest.target.z)
     const hop = opts.hop ?? Math.max(0, travel * 0.9 - Math.max(from.distance, dest.distance) * 0.6)
-    this.flight = { from, dest, t: 0, duration, hop, onDone: opts.onDone }
+    this.flight = { from, dest, t: 0, duration, hop, onDone: opts.onDone, ready: opts.ready, held: 0 }
   }
 
   finishFlight() {
@@ -372,7 +379,12 @@ export class CameraRig {
     const g = this.goal
     if (this.flight) {
       const f = this.flight
-      f.t = Math.min(1, f.t + dt / f.duration)
+      let step = dt / f.duration
+      if (f.ready && f.t > 0.8 && f.held < 6 && !f.ready()) {
+        f.held += dt
+        step *= 0.08
+      }
+      f.t = Math.min(1, f.t + step)
       const e = easeInOut(f.t)
       g.target.lerpVectors(f.from.target, f.dest.target, e)
       const logD = Math.log(f.from.distance) * (1 - e) + Math.log(f.dest.distance) * e

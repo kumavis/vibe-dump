@@ -53,7 +53,7 @@ void main() {
 `
 
 export class PackShadow {
-  constructor(terrain, maxSize = 1024) {
+  constructor(terrain, maxSize = 1024, fragmentShader = fragment) {
     const { W, H } = terrain
     const f = Math.min(1, maxSize / Math.max(W, H))
     const w = Math.max(16, Math.round(W * f))
@@ -75,7 +75,7 @@ export class PackShadow {
     }
     this.material = new THREE.ShaderMaterial({
       vertexShader: `out vec2 vUv; void main() { vUv = position.xy * 0.5 + 0.5; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
-      fragmentShader: fragment,
+      fragmentShader,
       uniforms: this.uniforms,
       depthTest: false,
       depthWrite: false,

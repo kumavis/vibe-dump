@@ -9,6 +9,10 @@
 // changes on screen; its detail then morphs in, and on the way out it morphs
 // back before it gives the slot up. No holes, no pops.
 //
+// Under an island, a district (render/district.js) can take over in the same
+// way, a level further down; its uniforms are made here with the rest, so
+// every material made from the shared bag has them from the start.
+//
 // The exaggeration of the moment (config.js) lives here too, as the shared
 // uVert uniform, and metresAt() is the CPU copy of the shaders' groundMetres,
 // for the camera, picking, the pins and the lines' bounds.
@@ -38,6 +42,9 @@ export class World {
     this.noIslands = false
     this.forceK = null
     const dummy = heightTexture(new Float32Array([-4000]), 1, 1)
+    const dummyAux = new THREE.DataTexture(new Uint8Array(4), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType)
+    dummyAux.needsUpdate = true
+    this.dummyAux = dummyAux
     this.uniforms = {
       uVert: { value: this.exag / 100 },
       uExag: { value: this.exag },
@@ -45,7 +52,16 @@ export class World {
       uArchRect: { value: new THREE.Vector4(0, 0, 1, 1) },
       uSlotRect: { value: Array.from({ length: SLOTS }, () => new THREE.Vector4(0, 0, 1, 1)) },
       uSlotInfo: { value: Array.from({ length: SLOTS }, () => new THREE.Vector4(0, 0, 1, 0)) },
+      // the district (render/district.js), off until one is down
+      uDistRect: { value: new THREE.Vector4(0, 0, 1, 1) },
+      uDistInfo: { value: new THREE.Vector4(0, 0, 1, 0) },
+      uDistH: { value: dummy },
+      uDistAux: { value: dummyAux },
+      uDistCarve: { value: dummy },
+      uPatchK: { value: 0 },
+      uFeatK: { value: Array.from({ length: 16 }, () => new THREE.Vector4(0, 0, 0, 0)) },
     }
+    this.district = null
     for (let s = 0; s < SLOTS; s++) this.uniforms[`uSlotH${s}`] = { value: dummy }
     this._frustum = new THREE.Frustum()
     this._m = new THREE.Matrix4()
@@ -140,6 +156,8 @@ export class World {
     }
     this.arch.update(camera, true)
     for (const t of isl) t.update(camera, t.slot >= 0)
+    // and under its island, the district
+    this.district?.update(camera, distance, dt)
     // cast shadows follow the sun, the exaggeration and each island's weight
     const r = this.app.renderer
     const sun = this.app.light.sunDir
@@ -147,6 +165,7 @@ export class World {
     const top = this.maxY + 0.1
     this.arch.shadow.update(r, sun, vert, 0, top)
     for (const t of isl) if (t.slot >= 0) t.shadow.update(r, sun, vert, t.k, top)
+    this.district?.updateShadow(r, sun, vert, top)
   }
 
   /** Skip the easing: every pack straight to the detail the view wants (tools, tests). */
@@ -171,7 +190,9 @@ export class World {
   stats() {
     const nodes = {}
     for (const [id, t] of this.terrains) if (t.group.visible) nodes[id] = t.full.count + t.half.count
-    return { exag: +this.exag.toFixed(2), nodes, slots: this.slots.map((t) => (t ? `${t.pack.id}:${t.k.toFixed(2)}` : null)) }
+    const d = this.district?.cur
+    if (d?.terrain?.group.visible) nodes[d.d.id] = d.terrain.full.count + d.terrain.half.count
+    return { exag: +this.exag.toFixed(2), nodes, slots: this.slots.map((t) => (t ? `${t.pack.id}:${t.k.toFixed(2)}` : null)), district: this.district?.stats() ?? null }
   }
 
   assign(t, s) {
@@ -217,7 +238,7 @@ export class World {
       const w = owner.k * smooth(0, owner.margin, best)
       if (w > 0) m += (owner.metresAt(x, z) - m) * w
     }
-    return m
+    return this.district?.on ? this.district.blend(x, z, m) : m
   }
 
   /** World Y of the ground (or the sea, at 0) at (x, z). */
@@ -249,9 +270,12 @@ export class World {
 
   setRange(k) {
     for (const t of this.terrains.values()) t.applyRange(k)
+    this.district?.cur?.terrain?.applyRange(k)
   }
 
   setDebug(v) {
     for (const t of this.terrains.values()) t.uniforms.uDebug.value = v
+    const d = this.district?.cur?.terrain
+    if (d) for (const g of [d.full, d.half]) g.material.uniforms.uDebug.value = v
   }
 }

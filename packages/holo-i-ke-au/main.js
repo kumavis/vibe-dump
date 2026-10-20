@@ -44,6 +44,9 @@ async function start() {
     boot.classList.add('gone')
     setTimeout(() => boot.remove(), 1200)
     loadIslands(app, ui, decoder)
+    // the district close-ups' manifest and features, behind it all (their
+    // packs stream when the camera comes down to them)
+    app.districts.load().catch((err) => warn(`districts: ${err.message}`))
   }
   requestAnimationFrame(reveal)
 }

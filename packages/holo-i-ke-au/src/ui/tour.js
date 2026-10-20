@@ -271,6 +271,7 @@ export class Tour {
   showEvent(ev, { jump, gentle }) {
     const ui = this.ui
     this.applyView(ev)
+    this.prefetch(ev)
     ui.pins.activeEvent = ev
     ui.pins.setStopPlace(null)
     ui.card.open(ev)
@@ -296,12 +297,33 @@ export class Tour {
     ui.card.setStop(i)
     const s = stops[i]
     const place = s ? this.places.get(s.place) : null
-    ui.pins.setStopPlace(place && geometryPoint(place.geometry) ? place : null)
+    const pt = place && geometryPoint(place.geometry)
+    ui.pins.setStopPlace(pt ? place : null)
+    this.prefetch(ev)
     if (s) {
-      const dur = this.fly(place && geometryPoint(place.geometry) ? this.pointView(place, ZOOM[s.zoom] ?? ZOOM.island) : null, jump)
+      // a stop's own camera, if it has one; else its place at its zoom
+      const view = pt ? (s.camera ? this.cameraView(place, s.camera) : this.pointView(place, ZOOM[s.zoom] ?? ZOOM.island)) : null
+      const dur = this.fly(view, jump)
       if (Number.isFinite(s.year)) this.setYear(s.year, dur, jump)
     }
     this.notify()
+  }
+
+  /**
+   * An event that walks into a district: start its pack streaming as soon as
+   * the event is opened (data/district.js decodes it in a worker), so it is
+   * down when the walk gets there.
+   */
+  prefetch(ev) {
+    const D = this.app.districts
+    if (!D) return
+    for (const s of ev?.stops || []) {
+      const p = this.places.get(s.place)
+      const pt = p && geometryPoint(p.geometry)
+      if (!pt || s.zoom === 'far') continue
+      const [x, z] = this.app.data.proj.toWorld(pt)
+      if (D.prefetch(x, z)) return
+    }
   }
 
   /**
@@ -378,6 +400,25 @@ export class Tour {
     return this.app.rig.fit({ rect: { x0: x, x1: x, z0: z, z1: z }, distance, tilt: this.tilt(), box: this.ui.freeBox() })
   }
 
+  /**
+   * A stop's own camera (DATA.md "District packs"): its place seen from
+   * `distance` world units, looking toward `bearing` (compass degrees), at
+   * `pitch` a fraction of a right angle (0 along the horizon, 1 straight
+   * down), slid so the place stands in the middle of the screen beside the
+   * card. The rig's yaw is the camera's bearing from its target turned about,
+   * so looking toward north is yaw 0 and toward east is −90°.
+   */
+  cameraView(place, cam) {
+    const [x, z] = this.app.data.proj.toWorld(geometryPoint(place.geometry))
+    return this.app.rig.fit({
+      rect: { x0: x, x1: x, z0: z, z1: z },
+      distance: cam.distance,
+      yaw: (-cam.bearing * Math.PI) / 180,
+      pitch: (cam.pitch * Math.PI) / 2,
+      box: this.ui.freeBox(),
+    })
+  }
+
   /** An event's step: its first place at the deepest zoom it asks for. */
   eventView(ev) {
     const place = this.placeOf(ev)
@@ -416,7 +457,10 @@ export class Tour {
     const travel = Math.hypot(g.target.x - view.target.x, g.target.z - view.target.z)
     const zoom = Math.abs(Math.log(view.distance / Math.max(1, g.distance)))
     const dur = clamp(1.1 + Math.sqrt(travel) * 0.032 + zoom * 0.28, 1.1, 3.4)
-    rig.flyTo(view, dur)
+    // (into a district: it starts streaming now, and the landing waits for it)
+    const D = this.app.districts
+    const into = D && view.distance < 130 ? D.prefetch(view.target.x, view.target.z) : null
+    rig.flyTo(view, dur, into ? { ready: () => D.readyAt(view.target.x, view.target.z) } : {})
     return dur
   }
 
