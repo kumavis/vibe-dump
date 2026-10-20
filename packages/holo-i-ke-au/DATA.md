@@ -166,3 +166,115 @@ Rules, enforced by `tools/check-data.mjs`:
 - numbers appear only inside `tellings`, each with its source, never as a single
   figure in `summary`
 - a source with `"opened": false` is marked `verify` in the card
+
+## How to bake
+
+How `manifest.json`, the packs and `boundaries/` (§1–3) are made. The gazetteer
+files (§4) are hand-written and the bake never touches them. Like
+`npm run thumbnails`, this is a by-hand step whose output is committed.
+
+```bash
+node packages/holo-i-ke-au/tools/bake.mjs --all        # download, bake, check, delete the downloads
+```
+
+or step by step:
+
+```bash
+node packages/holo-i-ke-au/tools/bake.mjs --download   # ~160 MB (~450 MB on disk unpacked), a few minutes
+node packages/holo-i-ke-au/tools/bake.mjs --bake       # writes public/data/, about 75 s and 1 GB of memory
+node packages/holo-i-ke-au/tools/bake.mjs --check      # = node packages/holo-i-ke-au/tools/bake-check.mjs
+node packages/holo-i-ke-au/tools/bake-preview.mjs /tmp/holo-preview   # shaded relief + lines, rain, per pack
+node packages/holo-i-ke-au/tools/bake.mjs --clean      # delete the downloads
+```
+
+`--downloads DIR` (or `$HOLO_BAKE_DOWNLOADS`) puts the raw downloads somewhere
+other than `<os tmpdir>/holo-i-ke-au-bake/downloads`; keep it outside the repo.
+`--bake --only oahu,maui` re-bakes some packs and keeps the others' manifest
+entries. The bake needs Node 22, `curl` (it honours the machine's proxy, which
+Node's own fetch does not) and `unzip`, plus the `geotiff` devDependency. A
+re-bake from the same downloads is byte-identical; only the `fetched` dates
+move when the sources are fetched again.
+
+GMRT builds each grid on request. Its GeoTIFF output sometimes answers with an
+empty body for many minutes while the same request as ESRI ASCII works, so the
+bake asks for ASCII. The download spaces and retries those requests, and if one
+still fails it stops rather than let a pack quietly lose its sea floor. Run
+`--download` again: finished files are kept and only the missing ones are
+fetched. `--flat-sea-ok` accepts a flat −1 m sea for those packs instead. GMRT
+cells deeper than 6,000 m are spikes (the archipelago grid has two near
+−10,000 m, and nothing here is deeper than about 5,800 m). They are treated as
+gaps.
+
+### Sources
+
+| data | source | licence |
+| --- | --- | --- |
+| land heights | USGS 3DEP 1 arc-second DEM, 1° tiles from `prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/`. 14 tiles hold the islands; n19w155, n19w157, n21w155 and n22w156 are published neither in `current/` nor `historical/` because they hold no land. | public domain |
+| sea depths | GMRT synthesis 4.5.0 (multibeam with GEBCO fill), one GridServer request per pack at about its texel size (61 m nodes for most islands), as ESRI ASCII | CC BY 4.0, cite Ryan et al. 2009 |
+| rain | Rainfall Atlas of Hawaiʻi, `StateASCIIGrids_mm.zip`, file `rfgrid_mm_state_ann.txt` (0.00225° cells, WGS84) | free with citation, Giambelluca et al. 2013 |
+| boundaries | State GIS `HistoricCultural/MapServer` layer 1 (Ahupuaa, 727 features) and layer 3 (Moku, 33 features), as GeoJSON in EPSG:4326, paged 100 at a time | State GIS open data; not legal boundaries |
+
+Each pack and each boundary file names its own sources inline, with the exact
+URL and the date fetched.
+
+### What the app can rely on beyond §1–3
+
+- **Texel registration.** `bounds` are the outer edges of the grid. Texel
+  `(i, j)` covers lon `west + i·dLon … west + (i+1)·dLon` and lat
+  `north − j·dLat … north − (j+1)·dLat`, with `dLon = (east − west)/W` and
+  `dLat = (north − south)/H`; its centre is at `i + 0.5`, `j + 0.5`.
+- **Island boxes** are the island's ahupuaʻa extent plus 2 km of sea, so a
+  neighbour that falls inside one is baked too (the Maui pack holds the north of
+  Kahoʻolawe, and Molokini).
+- **Land and sea.** A texel is land when at least half its area is land in the
+  DEM, and then holds the area-weighted mean of the land part (never below
+  0.25 m). Otherwise it is sea, from GMRT, never shallower than −1 m. (GMRT
+  shows stair-stepped edges where its multibeam swaths meet the coarser GEBCO
+  fill; they are in the source, not made by the bake.) Averaging
+  the two classes apart keeps the coastline where it is: a plain average would
+  push cliffs out to sea and drown low coasts. The DEM is a 2010s–2020s
+  snapshot, so modern fill (the Honolulu reef runway, for one) is land and lies
+  outside the historic boundaries.
+- **Rain.** The atlas has no grid over Niʻihau, so the `niihau` pack has no rain
+  image and the archipelago's rain is 0 there, which its `rain.note` says.
+- **Extra manifest fields.** `boundaries` (the two file paths), per pack
+  `stats` (`landFraction`, `minMetres`, `maxMetres`, `rainCoverage`), an
+  optional `rain.note`, and a `note` on each source.
+- **Boundary properties.** Besides `name`, `island`, `moku` and `gisId`, every
+  feature has `islandId` (a pack id) and `mokuKey`, which is `islandId:name` of
+  its moku and is exactly the key `polities.json` uses (`oahu:Koʻolaupoko`).
+  The layers' own fields stay verbatim beside them.
+- **Spellings.** A moku's `name` is the spelling its ahupuaʻa carry in layer 1,
+  which is the SHPD-corrected one. Layer 3 differs for three moku (`Halele'a`,
+  `Ko'olaupoko`, `Kipahulu`, still in its verbatim `moku` field) and writes
+  every `mokupuni` with an ASCII apostrophe; `island` uses layer 1's `Hawaiʻi`.
+- **Honuaʻula** (Maui) holds Kahoʻolawe and Molokini, as the layer has it, so no
+  moku has `islandId` `kahoolawe`, and the moku layer's `mokupuni` for it reads
+  `Molokini`. Select lines for a pack by its bounds, not by `islandId`. The
+  Kahoʻolawe and Molokini ahupuaʻa are named `N/A` in the layer and have
+  `name: null`.
+- **Lines coincide.** Both files are simplified together (shared arcs,
+  Douglas–Peucker at 50 m, finer where a ring would otherwise cross itself), so
+  neighbours share identical edges and every moku vertex is an ahupuaʻa vertex.
+  Rings are wound per RFC 7946.
+
+The moku keys: `niihau:Kona`; `kauai:Koʻolau`, `kauai:Haleleʻa`,
+`kauai:Nāpali`, `kauai:Kona`, `kauai:Puna`; `oahu:Koʻolauloa`, `oahu:Waialua`,
+`oahu:Waiʻanae`, `oahu:Koʻolaupoko`, `oahu:ʻEwa`, `oahu:Kona`;
+`molokai:Kona`, `molokai:Koʻolau`; `lanai:Lāhainā`; `maui:Honuaʻula`,
+`maui:Kāʻanapali`, `maui:Pūʻali Komohana`, `maui:Hāmākualoa`,
+`maui:Hāmākuapoko`, `maui:Lāhainā`, `maui:Koʻolau`, `maui:Kula`, `maui:Hāna`,
+`maui:Kīpahulu`, `maui:Kahikinui`, `maui:Kaupō`; `hawaii:Hilo`, `hawaii:Puna`,
+`hawaii:Hāmākua`, `hawaii:Kohala`, `hawaii:Kona`, `hawaii:Kaʻū`.
+
+### What the check covers
+
+`bake-check.mjs` reads everything back. It checks the manifest's shape and
+provenance and each image's format, size and `B = 0`. Sea must be ≤ −1 m and
+land > 0. It finds ten summits at their real coordinates and heights (Mauna Kea,
+Mauna Loa, Haleakalā, Puʻu Kukui, Kaʻala, Waiʻaleʻale, Kamakou, Lānaʻihale,
+Puʻu Moaulanui, Paniʻau), which also proves north is up and east is right. Each
+pack's land must match the ahupuaʻa polygons (IoU 0.98–0.999). Rain must be wet
+and dry in the right places, and every boundary feature must have its
+properties and valid, non-crossing rings. It lists every file under
+`public/data/` and fails over 40 MB.
