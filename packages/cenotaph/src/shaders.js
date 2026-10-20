@@ -209,6 +209,14 @@ uniform vec3 uBeamB; // two directions square to the sun, for the dust's frame
 uniform vec3 uBeamC;
 uniform float uTime;
 uniform float uDrift;
+// the tuning (see tune.js)
+uniform vec3 uFog; // haze everywhere, extra haze at the floor, its height (m)
+uniform vec4 uDust; // clear air between streaks, dust in them, threshold, edge
+uniform vec2 uDustScale; // across the light, along it (per metre)
+uniform float uPhaseG; // how strongly the haze scatters forward
+uniform float uSunSpread; // half-angle of the sun, for its penumbra
+uniform float uBounceGain;
+uniform vec4 uFloor; // reflection, polish roughness, worn roughness, tone
 
 const float PI = 3.14159265;
 const vec2 HOLE_C = vec2(ROOM_HOLE_X, ROOM_HOLE_Z);
@@ -218,12 +226,12 @@ const float TOP = ROOM_H + ROOM_SLAB;
 const float SPLAY = 0.12;
 
 // the haze: thin everywhere, thicker toward the floor, and dust on top
-const float FOG_BASE = 0.0062;
-const float FOG_LOW = 0.011;
-const float FOG_HF = 5.0;
+#define FOG_BASE uFog.x
+#define FOG_LOW uFog.y
+#define FOG_HF uFog.z
 // how wide the sun is, as a half-angle: a little more than the real one,
 // for the haze it shines through
-const float SUN_SPREAD = 0.0075;
+#define SUN_SPREAD uSunSpread
 
 vec2 rot(vec2 v, vec2 cs) { return vec2(cs.x * v.x - cs.y * v.y, cs.y * v.x + cs.x * v.y); }
 
@@ -273,9 +281,9 @@ float sunPath(vec3 p) {
 // frame turned to the sun and stretched along it, so it lies in the shafts the
 // way the shafts lie in the hall.
 float dust(vec3 p) {
-  vec3 q = vec3(dot(p, uBeamB) * 0.07 + uTime * 0.0013, dot(p, uBeamC) * 0.07, dot(p, uSun) * 0.011 + uDrift);
+  vec3 q = vec3(dot(p, uBeamB) * uDustScale.x + uTime * 0.0013, dot(p, uBeamC) * uDustScale.x, dot(p, uSun) * uDustScale.y + uDrift);
   float n = textureLod(uNoise, q, 0.0).r * 0.6 + textureLod(uNoise, q * 3.0 + vec3(0.37, uTime * 0.002, 0.11), 0.0).g * 0.4;
-  return 0.3 + 1.6 * smoothstep(0.25, 0.8, n);
+  return uDust.x + uDust.y * smoothstep(uDust.z, max(uDust.w, uDust.z + 0.01), n);
 }
 
 float hg(float c, float g) {
@@ -284,7 +292,7 @@ float hg(float c, float g) {
 }
 // forward-scattering haze, with a little back-scatter so the shafts still
 // read when the sun is behind the eye
-float phase(float c) { return mix(hg(c, 0.55), hg(c, -0.25), 0.22); }
+float phase(float c) { return mix(hg(c, uPhaseG), hg(c, -0.25), 0.22); }
 
 // ---- the opening as light --------------------------------------------------
 // The emitters: sixteen patches of the opening. Each is a patch of sky in the
@@ -328,7 +336,7 @@ vec3 beamIntensity(float area) { return uSunColor * (uSun.y * area * BEAM_SCATTE
 
 // The eye adapts in a dark hall, and the light that bounces round and round
 // it is more than one bounce can say: this lifts it so the concrete reads.
-const float BOUNCE_GAIN = 1.0;
+#define BOUNCE_GAIN uBounceGain
 
 // all the light that comes back off the floor and down from the sky
 vec3 bounce(vec3 p, vec3 n, vec3 skyC, vec3 poolC, float area) {
@@ -448,14 +456,14 @@ Surf concrete(vec3 p, vec3 n, int mat, float fp) {
     float speck = hash12(floor(q * 90.0));
     float agg = smoothstep(0.82, 0.95, speck) * (1.0 - smoothstep(0.004, 0.02, fp));
     // dark, so what it mirrors can show in it
-    vec3 base = vec3(0.14, 0.136, 0.13) * mix(0.72, 1.18, mott);
+    vec3 base = vec3(1.0, 0.971, 0.929) * uFloor.w * mix(0.72, 1.18, mott);
     base = mix(base, vec3(0.34, 0.33, 0.31), agg * 0.5);
     vec2 g = gridDist(q, vec2(6.0));
     float joint = max(line(g.x, 0.012, fp), line(g.y, 0.012, fp));
     s.albedo = base * (1.0 - 0.8 * joint);
     // the polish: glassy, worn duller in broad swirls, never perfect
     float wear = fbm2(q * 0.11 + 3.0);
-    s.rough = mix(0.035, 0.2, smoothstep(0.35, 0.85, wear)) + joint * 0.3;
+    s.rough = mix(uFloor.y, uFloor.z, smoothstep(0.35, 0.85, wear)) + joint * 0.3;
     // ambient occlusion where the floor meets the walls and the piers
     float dw = min(ROOM_HALF_W - abs(p.x), min(p.z - ROOM_Z0, ROOM_Z1 - p.z));
     float zc = ROOM_PIER_Z0 + clamp(floor((p.z - ROOM_PIER_Z0) / ROOM_PIER_DZ + 0.5), 0.0, float(ROOM_PIER_N - 1)) * ROOM_PIER_DZ;
@@ -746,7 +754,7 @@ void main() {
     vec3 p2, surf2;
     float fp2 = (h.t + h2.t) * pixAngle / max(abs(dot(r, h2.n)), 0.08) + h2.t * a;
     vec3 refl = look(p + s.n * 0.01, r, h2, uReflSteps, fract(jit + 0.5), fp2, false, skyC, poolC, area, s2, p2, surf2);
-    float F = schlick(max(dot(v, m), 0.0));
+    float F = schlick(max(dot(v, m), 0.0)) * uFloor.x;
     vec3 mirrored = refl * F * exp(-opticalDepth(ro, rd, h.t));
     // the polish takes its share from the floor's own colour
     col += mirrored - F * surf;
@@ -845,6 +853,7 @@ uniform vec3 uCamPos;
 uniform float uPxPerUnit;
 uniform float uFocus;
 uniform sampler2D uScene;
+uniform float uMoteGlow;
 out vec2 vLocal;
 out float vHalfLen;
 out float vRad;
@@ -901,7 +910,7 @@ void main() {
   float ph = phase(dot(dir, uSun)) * 4.0 + 0.05;
   float energy = max(core, 0.25) * max(core, 0.25) / (rad * rad);
   float wrap = smoothstep(0.0, 1.5, cur.y) * (1.0 - smoothstep(ROOM_H - 2.0, ROOM_H, cur.y));
-  vColor = uSunColor * sunPath(cur) * vis * wrap * ph * aB.z * energy * exp(-opticalDepth(uCamPos, dir, depth)) * 0.0065;
+  vColor = uSunColor * sunPath(cur) * vis * wrap * ph * aB.z * energy * exp(-opticalDepth(uCamPos, dir, depth)) * 0.0065 * uMoteGlow;
   gl_Position = vec4(pos / uRes * 2.0 - 1.0, 0.0, 1.0);
 }`
 
@@ -1006,6 +1015,7 @@ uniform float uFade;
 uniform float uExposure;
 uniform float uBloomAmt;
 uniform float uGrain;
+uniform float uFringe;
 uniform float uPx;
 uniform int uDebug;
 in vec2 vUv;
@@ -1032,7 +1042,7 @@ void main() {
   vec2 cc = uv - 0.5;
   cc.x *= uRes.x / uRes.y;
   float r2 = dot(cc, cc);
-  vec2 ca = (uv - 0.5) * r2 * 0.003;
+  vec2 ca = (uv - 0.5) * r2 * uFringe;
   vec3 col;
   col.r = decHDR(texture(uScene, uv - ca).rgb).r;
   col.g = decHDR(texture(uScene, uv).rgb).g;

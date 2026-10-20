@@ -14,7 +14,7 @@ export const ROOM = {
   PIER_HALF: 1.8,
   PIER_Z0: -119,
   PIER_DZ: 19,
-  PIER_N: 11,
+  PIER_N: 10, // the last stands 18 m short of the near wall
   // the opening: the centre of the square of ceiling the figure is cut into
   HOLE_X: 4,
   HOLE_Z: -16,
@@ -52,5 +52,8 @@ export function confine(p) {
       else z = pz + Math.sign(dz || 1) * h
     }
   }
+  // and never out through a wall on the way
+  x = Math.max(-R.HALF_W + m, Math.min(R.HALF_W - m, x))
+  z = Math.max(R.Z0 + m, Math.min(R.Z1 - m, z))
   return [x, y, z]
 }

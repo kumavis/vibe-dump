@@ -135,7 +135,8 @@ const CHORDS = [
   { bass: 33, notes: [40, 50, 52, 55], pcs: [7, 0, 2, 5] }, // A7sus4
 ]
 const CHORD_LEN = 14 // music-seconds: a little slower than the fall, for the room
-const LEVEL = 0.6
+// the score's levels, until a tuning says otherwise (see tune.js)
+const LEVELS = { level: 0.4, reverb: 0.85, lowCut: 40, shepard: 1, pad: 1, air: 1, hall: 1, dust: 1, breath: 1 }
 
 export const LAYERS = ['shepard', 'pad', 'air', 'hall', 'dust', 'breath']
 
@@ -160,7 +161,7 @@ function rng(seed) {
 // sparse, the way they do in a room this big, and the tail carries a faint
 // flutter from the parallel walls 92 m apart and the floor and ceiling 30 m
 // apart.
-function cathedral(ctx, seconds = 12) {
+function cathedral(ctx, seconds) {
   const sr = ctx.sampleRate
   const len = Math.floor(sr * seconds)
   const buf = ctx.createBuffer(2, len, sr)
@@ -215,7 +216,8 @@ function noiseBuffer(ctx, seconds = 6, seed = 1) {
 }
 
 export class Score {
-  constructor({ layers = LAYERS } = {}) {
+  constructor({ layers = LAYERS, tune = LEVELS } = {}) {
+    this.tune = tune
     this.started = false
     this.muted = false
     this.ctx = null
@@ -261,26 +263,40 @@ export class Score {
     }
     this.g = g
 
-    // master
+    // master: a low cut (phones can't play the bottom octaves, and distort
+    // trying), a gentle compressor, then a limiter so nothing ever clips
     this.master = g(0)
+    this.lowCut = ctx.createBiquadFilter()
+    this.lowCut.type = 'highpass'
+    this.lowCut.frequency.value = this.tune.lowCut
+    this.lowCut.Q.value = 0.6
     const comp = ctx.createDynamicsCompressor()
-    comp.threshold.value = -20
-    comp.knee.value = 18
-    comp.ratio.value = 2.6
-    comp.attack.value = 0.04
-    comp.release.value = 0.6
-    this.master.connect(comp).connect(ctx.destination)
+    comp.threshold.value = -22
+    comp.knee.value = 14
+    comp.ratio.value = 3
+    comp.attack.value = 0.03
+    comp.release.value = 0.5
+    const limit = ctx.createDynamicsCompressor()
+    limit.threshold.value = -6
+    limit.knee.value = 0
+    limit.ratio.value = 20
+    limit.attack.value = 0.002
+    limit.release.value = 0.2
+    this.master.connect(this.lowCut).connect(comp).connect(limit).connect(g(0.8)).connect(ctx.destination)
     this.master.gain.setValueAtTime(0, now)
     this.master.gain.linearRampToValueAtTime(0.0001, now + 0.05)
-    this.master.gain.setTargetAtTime(LEVEL, now + 0.05, 2.6)
+    this.master.gain.setTargetAtTime(this.tune.level, now + 0.05, 2.6)
 
     this.dry = g(1)
     this.dry.connect(this.master)
+    // A twelve-second tail is a lot of convolution for a phone's audio thread,
+    // and a starved thread crackles: small devices get a shorter hall.
+    const small = (navigator.hardwareConcurrency || 4) <= 4 || matchMedia('(pointer: coarse)').matches
     this.verb = ctx.createConvolver()
-    this.verb.buffer = cathedral(ctx)
+    this.verb.buffer = cathedral(ctx, small ? 7 : 12)
     this.verbIn = g(1)
-    const verbOut = g(1.0)
-    this.verbIn.connect(this.verb).connect(verbOut).connect(this.master)
+    this.verbOut = g(this.tune.reverb)
+    this.verbIn.connect(this.verb).connect(this.verbOut).connect(this.master)
 
     // tape: one slow wobble and one offset shared by every pitched voice, so
     // holding time sags the whole score like a slowing reel
@@ -414,7 +430,7 @@ export class Score {
       if (this.live) setTimeout(() => this.muted && this.ctx.suspend(), 1500)
     } else {
       this.ctx.resume()
-      this.master.gain.setTargetAtTime(LEVEL, now, 0.8)
+      this.master.gain.setTargetAtTime(this.tune.level, now, 0.8)
     }
   }
 
@@ -580,7 +596,20 @@ export class Score {
     const rate = clock.rate
     const at = now + 0.03
     const set = (param, v, tau = 0.25) => param.setTargetAtTime(v, now, tau)
-    const on = (k) => (this.on.has(k) ? 1 : 0)
+    // a layer's level: on or off, times its tuning
+    const tn = this.tune
+    const on = (k) => (this.on.has(k) ? tn[k] ?? 1 : 0)
+
+    // the levels the tuning panel moves
+    // (the master only when it moves, so the slow fade-in at the start stands)
+    if (!this.muted && tn.level !== this.lastLevel) {
+      if (this.lastLevel !== undefined) set(this.master.gain, tn.level, 0.3)
+      this.lastLevel = tn.level
+    }
+    set(this.verbOut.gain, tn.reverb, 0.3)
+    set(this.lowCut.frequency, tn.lowCut, 0.3)
+    set(this.padBus.gain, on('pad') * 0.055, 0.3)
+    set(this.breathBus.gain, on('breath'), 0.3)
 
     // music's own clock crawls when time does, but never runs backwards
     this.mtime += dt * Math.max(0.05, Math.min(1.8, Math.abs(rate)))
@@ -622,7 +651,7 @@ export class Score {
     // dust: grains come as fast as the dust falls; when time stops they hang
     const still = Math.max(clock.hold, clock.susp)
     set(this.dustBus.gain, on('dust') * (0.7 + 0.7 * light), 1)
-    if (on('dust')) {
+    if (on('dust') > 0) {
       const perSec = 2 + 9 * Math.min(1.5, Math.max(0, rate)) * (1 - still) + 1.2 * still
       // schedule a little ahead, never a burst to catch up after a stall
       if (this.nextGrain < now) this.nextGrain = now
@@ -633,7 +662,7 @@ export class Score {
     }
 
     // breath: as time comes to a stop — a suspension, or a held press
-    if (on('breath')) {
+    if (on('breath') > 0) {
       const stopping = (clock.susp > 0.35 && !this.inSusp) || (clock.holding && !this.held)
       if (stopping && T - this.lastBreath > 6) {
         this.breath(at + 0.05, clock.holding ? 0.8 : 1)

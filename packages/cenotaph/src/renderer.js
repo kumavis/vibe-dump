@@ -199,6 +199,14 @@ export class Renderer {
     gl.uniform3fv(u.uBeamC, cross3(L, b))
     gl.uniform1f(u.uTime, F.story)
     gl.uniform1f(u.uDrift, F.drift)
+    const t = F.tune
+    gl.uniform3f(u.uFog, t.fogBase, t.fogLow, t.fogHeight)
+    gl.uniform4f(u.uDust, t.dustFloor, t.dustAmount, t.dustLo, t.dustHi)
+    gl.uniform2f(u.uDustScale, t.dustAcross, t.dustAlong)
+    gl.uniform1f(u.uPhaseG, t.phaseG)
+    gl.uniform1f(u.uSunSpread, t.spread)
+    gl.uniform1f(u.uBounceGain, t.bounce)
+    gl.uniform4f(u.uFloor, t.polish, t.roughLo, t.roughHi, t.floorAlbedo)
   }
 
   camUniforms(u, cam) {
@@ -294,8 +302,9 @@ export class Renderer {
     gl.uniform3fv(u.uCamPos, F.cam.pos)
     gl.uniform1f(u.uPxPerUnit, F.cam.pxPerUnit)
     gl.uniform1f(u.uFocus, F.focus)
+    gl.uniform1f(u.uMoteGlow, F.tune.moteGlow)
     gl.bindVertexArray(this.vao)
-    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, F.dust ? this.dustCount : 0)
+    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, F.dust ? Math.round(this.dustCount * F.tune.motes) : 0)
     gl.bindVertexArray(null)
     gl.disable(gl.BLEND)
 
@@ -358,8 +367,9 @@ export class Renderer {
     gl.uniform1f(u.uTime, F.wall)
     gl.uniform1f(u.uFade, F.fade)
     gl.uniform1f(u.uExposure, F.exposure)
-    gl.uniform1f(u.uBloomAmt, F.bloom)
-    gl.uniform1f(u.uGrain, 0.03)
+    gl.uniform1f(u.uBloomAmt, F.tune.bloom)
+    gl.uniform1f(u.uGrain, F.tune.grain)
+    gl.uniform1f(u.uFringe, F.tune.fringe)
     gl.uniform1f(u.uPx, F.pr ?? 1)
     gl.uniform1i(u.uDebug, F.debug ? 1 : 0)
     this.quad()

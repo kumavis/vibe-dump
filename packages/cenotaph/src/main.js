@@ -4,6 +4,7 @@ import { Camera, mul3, rotY, rotZ, rotX, norm3 } from './mat.js'
 import { Clock } from './clock.js'
 import { ROOM, FIGURE_SCALE, confine } from './room.js'
 import { Score, LAYERS } from './audio.js'
+import { tune, mountPanel } from './tune.js'
 
 const canvas = document.getElementById('view')
 const resetBtn = document.getElementById('reset')
@@ -26,10 +27,12 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 //   ?exp=2       scale the exposure
 //   ?fov=0.9     pin the vertical field of view (radians)
 //   ?layers=dust,breath   play only these parts of the score (see audio.js)
+//   #debug       a panel of sliders for the light, the air, the dust, the
+//                floor, the lens and the sound (see tune.js)
 // They also read from the hash, because some places (an artifact link) pass
 // only a plain #anchor through to the page: there, write ~ between settings
 // and _ for =, as in #t_200~y_12. Changing them reloads.
-const DEV_KEYS = ['t', 'still', 'cookie', 'pose', 'roll', 'twist', 'yaw', 'tilt', 'reach', 'sdf8', 'rung', 'govern', 'x', 'y', 'z', 'vyaw', 'vpitch', 'nodust', 'exp', 'fov', 'layers', 'adaptlog', 'adaptkey']
+const DEV_KEYS = ['t', 'still', 'cookie', 'pose', 'roll', 'twist', 'yaw', 'tilt', 'reach', 'sdf8', 'rung', 'govern', 'x', 'y', 'z', 'vyaw', 'vpitch', 'nodust', 'exp', 'fov', 'layers', 'adaptlog', 'adaptkey', 'debug']
 // the development settings a hash carries, as [key, value] pairs
 function hashSettings(hash) {
   const h = decodeURIComponent(hash.slice(1))
@@ -57,7 +60,8 @@ try {
 const figure = new Figure()
 const cam = new Camera()
 const clock = new Clock(Number(params.get('t')) || 0)
-const score = new Score({ layers: params.has('layers') ? params.get('layers').split(/[,.]/).filter((k) => LAYERS.includes(k)) : LAYERS })
+if (params.has('debug')) mountPanel()
+const score = new Score({ tune, layers: params.has('layers') ? params.get('layers').split(/[,.]/).filter((k) => LAYERS.includes(k)) : LAYERS })
 
 // The figure is cut into the ceiling by a camera of its own: a long lens far
 // off, so the projection is all but flat, framed so one metre of body is
@@ -77,8 +81,7 @@ cookieCam.update()
 // noon, an afternoon gold, a rose evening and moonlight, and round again; the
 // hall takes the colour of whatever is pouring in. Linear RGB: the sun's
 // irradiance square on, the sky's radiance through the opening, and the air's
-// own faint glow.
-const SUN_I = 40
+// own faint glow. How strong each is comes from the tuning (tune.js).
 const PALETTES = [
   { sun: [0.69, 0.75, 0.92], sky: [0.27, 0.35, 0.54], fog: [0.015, 0.017, 0.024] },
   { sun: [1.0, 0.96, 0.9], sky: [0.46, 0.6, 0.86], fog: [0.02, 0.022, 0.026] },
@@ -86,18 +89,18 @@ const PALETTES = [
   { sun: [1.0, 0.6, 0.44], sky: [0.66, 0.5, 0.6], fog: [0.024, 0.019, 0.022] },
   { sun: [0.62, 0.74, 1.0], sky: [0.22, 0.3, 0.5], fog: [0.014, 0.017, 0.024] },
 ]
-const SKY_I = 0.13
 const PALETTE_SPAN = 95 // seconds per colour
 
 function palette(t) {
-  const x = (t / PALETTE_SPAN) % PALETTES.length
+  // a colour pinned from the tuning panel holds; otherwise they cycle
+  const x = tune.palette >= 0 ? Math.min(PALETTES.length - 1, tune.palette | 0) : (t / PALETTE_SPAN) % PALETTES.length
   const i = Math.floor(x)
   // each colour holds for most of its span, then turns into the next
   let f = Math.max(0, (x - i - 0.6) / 0.4)
   f = f * f * (3 - 2 * f)
   const a = PALETTES[i], b = PALETTES[(i + 1) % PALETTES.length]
   const mix = (k, s) => a[k].map((v, j) => (v + (b[k][j] - v) * f) * s)
-  return { sun: mix('sun', SUN_I), sky: mix('sky', SUN_I * SKY_I), fog: mix('fog', SUN_I * 0.01) }
+  return { sun: mix('sun', tune.sun), sky: mix('sky', tune.sun * tune.sky), fog: mix('fog', tune.sun * tune.glow) }
 }
 
 // The sun stands a little off the vertical, so the light slants across the
@@ -196,7 +199,8 @@ function markMoved() {
   document.body.classList.toggle('moved', moved)
 }
 
-const isControl = (e) => e.target.closest?.('button')
+// the buttons, and the tuning panel, are not the hall
+const isControl = (e) => e.target.closest?.('button, #tune')
 
 addEventListener('pointerdown', (e) => {
   if (isControl(e)) return
@@ -273,6 +277,7 @@ addEventListener('blur', () => {
 addEventListener(
   'wheel',
   (e) => {
+    if (isControl(e)) return
     e.preventDefault()
     wake()
     const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * innerHeight : e.deltaY
@@ -284,6 +289,8 @@ addEventListener(
 const WALK_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD']
 addEventListener('keydown', (e) => {
   wake()
+  // keys typed into the panel's sliders are the panel's
+  if (isControl(e) && e.target.tagName === 'INPUT') return
   // a shortcut is not a step: and a letter let go while Cmd is down never
   // reports its release, so drop any walking held
   if (e.metaKey || e.ctrlKey || e.altKey) {
@@ -618,10 +625,10 @@ function step(dt) {
     shutter: 0.04 * Math.max(0.12, clock.blur),
     focus: 45,
     dust: !params.has('nodust'),
-    exposure: pin('exp', 2.5) * (1.0 + 0.2 * clock.swell),
+    exposure: pin('exp', tune.exposure) * (1.0 + 0.2 * clock.swell),
+    tune,
     palette: palette(T),
     fade: fade * fade,
-    bloom: 0.09,
     dt,
     adaptKey: ADAPT_KEY,
     logAdapt: params.has('adaptlog') && frames % 4 === 0,
