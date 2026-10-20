@@ -553,4 +553,58 @@ Nuʻuanu to the pali, with Kalihi and Mānoa at the edges.
 - **Stops** for an event in this district carry, besides `place`, `zoom` and
   `year`, an optional `camera`: `{ "bearing": compass degrees the camera
   looks toward, "pitch": 0..1, "distance": world units }`, so the walk can
-  frame the valley the way the text reads it.
+  frame the valley the way the text reads it. `pitch` is a fraction of a
+  right angle: 0 looks along the horizon, 1 straight down; the app converts
+  to the rig's radians. `distance` is in world units (1 unit = 100 m).
+- **Accepted extensions from the first district.** A `force` role may also be
+  `maui` (Kahekili's columns in 1783). Features may carry `id`, `event`,
+  `when`, `step`, `side`, `place` and `site`, and a heiau carries
+  `placePrecision` and `ahupuaa`; a feature's `to` year is the last year a
+  source read shows it, not a sourced end. The district manifest may carry
+  `projection`, `parent`, `files`, `breaches`, `streams`, `stats`, and a
+  `source` and `note` on each patch. Two patches may share one mask when the
+  sources cannot separate their years. A `shoreline-<year>.geojson` traced
+  from a survey sheet is listed under `files`.
+
+### How to bake a district
+
+`tools/bake-district.mjs` writes `public/data/districts/manifest.json` and, per
+district, `height.png`, `rain.png`, the patches and their supporting files. It
+never writes `features.json`, which is hand-written.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-district.mjs --all                    # download (~1.5 GB), bake, check, delete the downloads (~6 min)
+node packages/holo-i-ke-au/tools/bake-district.mjs --preview /tmp/district  # relief, lines, streams, breaches, patches, the 1881 shore
+```
+
+or `--download`, `--bake`, `--check`, `--find-breaches` (the pits left on the
+stream trunks, as breach entries), `--clean`. `--downloads DIR` (or
+`$HOLO_DISTRICT_DOWNLOADS`) moves the downloads, as for the other bakes;
+`--breach "lon,lat lon,lat;…"` carves other breaches than the district's own.
+
+What `nuuanu` rests on (the manifest says it all again, per source):
+
+- **Heights**: the USGS 3DEP lidar `HI_NOAAMauiOahu_2020_B20` (Oʻahu flown
+  August 2022 to July 2023), bare earth at 0.5 m, 564 tiles, area-averaged to
+  6.05 m. Its zero lies 0.72 m below mean sea level (measured against the
+  CUDEM) and is moved to it. Water inside the coast is flattened in the survey
+  to the level of the day, so a cell counts as land above +0.2 m; otherwise the
+  island packs' rules hold. The windward face of the pali has no lidar tile:
+  there (5.8% of the pack) the heights are the CUDEM's land, corrected to meet
+  the lidar along the seam.
+- **Sea**: NOAA's 1/9 arc-second CUDEM, never shallower than −1 m; water inside
+  the coast the CUDEM holds as land (the Ala Wai, tidal stream reaches) is a
+  flat −1 m. The Ala Wai and the dredged basins are today's sea, so no patch
+  can raise them for 1795.
+- **Patches**: land that the State geologic map calls fill and the 1881
+  Government Survey map shows as sea or reef flat (the shore traced by hand,
+  `shoreline-1881.geojson`). The 1899 sheet shows the same waterfront, so
+  `contact` and `kingdom` are the same mask.
+- **Streams**: routed by the app. Twenty `breaches` cut the reservoir in upper
+  Nuʻuanu and the crossings the bare earth keeps; the check follows Nuʻuanu,
+  Kapālama, Kalihi and Mānoa from their mapped main stems to tidewater against
+  the State's stream lines.
+
+Beyond the contract the manifest carries `parent`, `files` (supporting files),
+`breaches`, `streams` (the check's findings), `stats`, and a `source` and
+`note` on each patch.
