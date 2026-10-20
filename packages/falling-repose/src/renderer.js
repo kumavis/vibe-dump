@@ -90,12 +90,15 @@ export class Renderer {
 
   // `sdfDiv` is how many pixels share one texel of the silhouette's distance
   // field: 1 at full quality, 2 when the frame-rate governor needs it back.
-  resize(w, h, sdfDiv = 2) {
-    if (w === this.w && h === this.h && sdfDiv === this.sdfDiv) return
+  // `pr` is canvas pixels per CSS pixel; the bloom is sized in CSS pixels so
+  // its glow keeps the same reach whatever rung the governor is on.
+  resize(w, h, sdfDiv = 2, pr = 1) {
+    if (w === this.w && h === this.h && sdfDiv === this.sdfDiv && pr === this.pr) return
     const gl = this.gl
     this.w = w
     this.h = h
     this.sdfDiv = sdfDiv
+    this.pr = pr
     for (const t of [this.sdf, this.emit, this.ra, this.rb, this.haze, this.scene, ...(this.bloom ?? [])]) dispose(gl, t)
     const hw = Math.max(1, Math.ceil(w / 2)), hh = Math.max(1, Math.ceil(h / 2))
     const f = { float: this.floatOk }
@@ -109,7 +112,7 @@ export class Renderer {
     this.haze = target(gl, Math.max(1, Math.ceil(w / 4)), Math.max(1, Math.ceil(h / 4)), f)
     this.scene = target(gl, w, h, f)
     this.bloom = []
-    let bw = w, bh = h
+    let bw = w / pr, bh = h / pr
     for (let i = 0; i < BLOOM_LEVELS; i++) {
       bw = Math.max(1, Math.ceil(bw / 2))
       bh = Math.max(1, Math.ceil(bh / 2))
@@ -239,7 +242,10 @@ export class Renderer {
     for (const t of this.bloom) {
       bindTarget(gl, t)
       bindTex(gl, 0, prev.tex, this.pDown.u.uSrc)
-      gl.uniform2f(this.pDown.u.uTexel, 1 / prev.w, 1 / prev.h)
+      // the first step can shrink by more than 2x (when supersampling); widen
+      // its taps to match so nothing between them is skipped
+      const spread = Math.max(1, prev.w / t.w / 2)
+      gl.uniform2f(this.pDown.u.uTexel, spread / prev.w, spread / prev.h)
       this.quad()
       prev = t
     }
@@ -267,6 +273,7 @@ export class Renderer {
     gl.uniform1f(u.uFade, F.fade)
     gl.uniform1f(u.uBloomAmt, F.bloom)
     gl.uniform1f(u.uGrain, 0.035)
+    gl.uniform1f(u.uPx, F.pr ?? 1)
     gl.uniform1i(u.uDebug, F.debug ? 1 : 0)
     this.quad()
   }

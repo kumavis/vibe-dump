@@ -423,7 +423,12 @@ export class Figure {
         const ph = s * 3.1 + wave - f * 3.4
         const amp = (0.25 + 0.95 * f) * (0.6 + 0.35 * (1 - Math.min(1, pull)))
         const swing = add3(scale3(a1, Math.sin(ph) * amp), scale3(a2, Math.sin(ph * 0.73 + s) * amp * 0.8))
-        const target = norm3(add3(add3(scale3(n, 0.7 * (1 - f) + 0.1), scale3(up, pull * (0.7 + 1.1 * f))), swing))
+        const raw = add3(add3(scale3(n, 0.7 * (1 - f) + 0.1), scale3(up, pull * (0.7 + 1.1 * f))), swing)
+        // A root pointing down with little pull could cancel the lift to
+        // nothing, and normalising near-zero flips the lock. The swing is
+        // horizontal, so a floor on the rise keeps the vector honest.
+        raw[1] = Math.max(raw[1], 0.15)
+        const target = norm3(raw)
         dir = norm3(add3(scale3(dir, 0.35), scale3(target, 0.65 + 0.3 * f)))
         pts.push(add3(pts[pts.length - 1], scale3(dir, seg)))
       }

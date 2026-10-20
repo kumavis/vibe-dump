@@ -289,9 +289,15 @@ resetBtn.addEventListener('click', (e) => {
 // Quality follows the frame rate. Each rung is [canvas pixels per CSS pixel,
 // pixels per texel of the silhouette's distance field]. Above 1 on an ordinary
 // screen it supersamples, and the browser's downscale smooths the edges — the
-// thin hair most of all. The governor drops a rung when frames run slow,
-// climbs one when there's headroom, and once a climb fails it leaves that
-// rung alone for a while instead of flickering between the two.
+// thin hair most of all.
+//
+// Every change of rung is itself a visible change of sharpness, so the
+// governor is built to make few of them. It climbs only while settling in
+// (after load, or after the window changes size) and never back past a rung
+// that failed. It steps down when frames are slow for two verdicts running,
+// or at once when they are very slow. And "slow" is measured against the
+// display's own refresh, so a 50 Hz panel or a 30 fps power cap reads as
+// steady rather than struggling.
 const LADDER = [
   [0.5, 2],
   [0.6, 2],
@@ -306,12 +312,13 @@ const LADDER = [
 ]
 // never more than about a 4K frame, however big the window
 const MAX_PIXELS = 8.3e6
+const SETTLE_IN_MS = 12000
 const gov = {
   rung: params.has('rung') ? Math.max(0, Math.min(LADDER.length - 1, +params.get('rung') | 0)) : (devicePixelRatio || 1) >= 2 ? 7 : 5,
   ceiling: LADDER.length - 1,
-  blockedUntil: 0,
-  backoff: 30000,
-  climbed: false,
+  climbUntil: performance.now() + SETTLE_IN_MS,
+  refresh: Infinity, // shortest steady frame interval seen: the display's own
+  slowStreak: 0,
   samples: [],
   // ignore frames until then: shader compiles, and the hitch of a resize
   quietUntil: performance.now() + 2500,
@@ -321,7 +328,7 @@ const gov = {
 // shot runs on a software renderer at a few frames a second), keeps its
 // starting quality rather than sinking to the floor.
 const governed = params.has('govern') || (!params.has('rung') && !navigator.webdriver)
-const born = performance.now()
+let born = performance.now()
 let frames = 0
 let last = performance.now()
 let ready = false
@@ -331,6 +338,9 @@ function rungRatio(i) {
   return Math.min(LADDER[i][0], cap)
 }
 
+// does rung i + 1 actually look any better than rung i on this window?
+const better = (i) => i + 1 < LADDER.length && (rungRatio(i + 1) > rungRatio(i) + 1e-6 || LADDER[i + 1][1] < LADDER[i][1])
+
 function size() {
   const pr = rungRatio(gov.rung)
   const w = Math.max(2, Math.round(innerWidth * pr))
@@ -339,14 +349,14 @@ function size() {
     canvas.width = w
     canvas.height = h
   }
-  return [w, h, LADDER[gov.rung][1]]
+  return [w, h, LADDER[gov.rung][1], pr]
 }
 
 function setRung(i, now) {
   i = Math.max(0, Math.min(LADDER.length - 1, i))
   if (i === gov.rung) return
-  gov.climbed = i > gov.rung
   gov.rung = i
+  gov.slowStreak = 0
   settle(now)
 }
 
@@ -364,26 +374,24 @@ function govern(ms, now) {
   const n = gov.samples.length
   if (n < 45 && !(n >= 6 && now - gov.windowStart > 1500)) return
   const sorted = gov.samples.slice().sort((a, b) => a - b)
+  gov.samples = []
   const median = sorted[n >> 1]
   const p90 = sorted[Math.floor(n * 0.9)]
-  gov.samples = []
-  if (now > gov.blockedUntil) gov.ceiling = LADDER.length - 1
-  if (median > 19.5 && gov.rung > 0) {
-    // slow: step down (two rungs if badly slow); a failed climb sets a ceiling
-    // Each failed climb waits twice as long before trying again, so a
-    // machine on the edge doesn't pop between two sharpnesses forever.
-    if (gov.climbed) {
-      gov.ceiling = gov.rung - 1
-      gov.blockedUntil = now + gov.backoff
-      gov.backoff = Math.min(gov.backoff * 2, 600000)
+  gov.refresh = Math.max(4, Math.min(gov.refresh, sorted[Math.floor(n * 0.1)]))
+  const slow = gov.rung > 0 && (median > Math.max(19.5, gov.refresh * 1.25) || median > 40)
+  if (slow) {
+    const severe = median > Math.max(34, gov.refresh * 2.2) || median > 66
+    gov.slowStreak++
+    if (severe || gov.slowStreak >= 2) {
+      // a rung that ran slow is out of reach until the window changes size
+      setRung(gov.rung - (severe ? 2 : 1), now)
+      gov.ceiling = Math.min(gov.ceiling, gov.rung)
     }
-    setRung(gov.rung - (median > 34 ? 2 : 1), now)
-    gov.climbed = false
-  } else if (median < 17.6 && p90 < 22 && gov.rung < gov.ceiling && rungRatio(gov.rung + 1) > rungRatio(gov.rung) + 1e-6) {
-    setRung(gov.rung + 1, now)
-  } else {
-    gov.climbed = false
+    return
   }
+  gov.slowStreak = 0
+  const steady = median < gov.refresh * 1.08 && p90 < gov.refresh * 1.4 && median < 22
+  if (steady && now < gov.climbUntil && gov.rung < gov.ceiling && better(gov.rung)) setRung(gov.rung + 1, now)
 }
 
 function frame(now) {
@@ -401,8 +409,8 @@ function step(dt) {
   score.update(clock)
   if (!renderer) return
 
-  const [w, h, sdfDiv] = size()
-  renderer.resize(w, h, sdfDiv)
+  const [w, h, sdfDiv, pr] = size()
+  renderer.resize(w, h, sdfDiv, pr)
   const T = clock.wall
 
   // pointer parallax, eased; the viewer's camera, eased
@@ -473,6 +481,7 @@ function step(dt) {
     palette: palette(T + 20),
     fade: fade * fade,
     bloom: 0.3,
+    pr,
     debug: params.has('fig'),
   })
 
@@ -482,7 +491,14 @@ function step(dt) {
   }
 }
 
-addEventListener('resize', () => settle(performance.now()))
+// a new window size is a new budget: settle in again, from scratch
+addEventListener('resize', () => {
+  const now = performance.now()
+  settle(now)
+  gov.ceiling = LADDER.length - 1
+  gov.climbUntil = now + SETTLE_IN_MS
+  gov.slowStreak = 0
+})
 document.addEventListener('visibilitychange', () => {
   last = performance.now()
   settle(last, 1500)
@@ -491,7 +507,27 @@ document.addEventListener('visibilitychange', () => {
 })
 
 wake()
-requestAnimationFrame((t) => {
+// Before drawing anything, time a few empty frames: that is the display's own
+// refresh, which the governor judges "slow" against. Measured once the page
+// is actually showing, and it costs a third of a second of the black we fade
+// in from anyway. The fade starts at the first frame actually drawn — a page
+// opened in a background tab shouldn't have faded in before anyone sees it.
+const calibration = []
+function calibrate(t) {
+  calibration.push(t)
+  if (calibration.length < 18) {
+    requestAnimationFrame(calibrate)
+    return
+  }
+  const gaps = calibration
+    .slice(1)
+    .map((x, i) => x - calibration[i])
+    .sort((a, b) => a - b)
+  gov.refresh = Math.max(4, gaps[gaps.length >> 1])
   last = t
+  born = t
+  gov.quietUntil = t + 2500
+  gov.climbUntil = t + SETTLE_IN_MS
   requestAnimationFrame(frame)
-})
+}
+requestAnimationFrame(calibrate)

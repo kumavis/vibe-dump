@@ -12,14 +12,17 @@ precision highp float;
 precision highp int;
 `
 
-// Without float render targets the distance field is packed into 8 bits:
-// ±128 px at one-pixel steps. Coarser edges, but it still draws.
+// Without float render targets the distance field is packed into 8 bits,
+// twice: red holds ±128 px at one-pixel steps for the edge, blue ±4096 px at
+// coarse steps for the glow far out. Coarser, but it still draws, and the far
+// light doesn't flatten out at a pixel radius that moves with the resolution.
 const SDF = /* glsl */ `
-float sdfDecode(float v) {
+float sdfDecode(vec4 v) {
 #ifdef SDF8
-  return (v - 0.5) * 256.0;
+  float fine = (v.r - 0.5) * 256.0;
+  return abs(fine) < 120.0 ? fine : (v.b - 0.5) * 8192.0;
 #else
-  return v;
+  return v.r;
 #endif
 }
 `
@@ -128,9 +131,10 @@ void main() {
     }
   }
 #ifdef SDF8
-  d = clamp(d / 256.0 + 0.5, 0.0, 1.0);
-#endif
+  o = vec4(clamp(d / 256.0 + 0.5, 0.0, 1.0), hair, clamp(d / 8192.0 + 0.5, 0.0, 1.0), 1.0);
+#else
   o = vec4(d, hair, 0.0, 1.0);
+#endif
 }`
 
 // ---------------------------------------------------------------------------
@@ -155,8 +159,8 @@ out vec4 o;
 
 void main() {
   vec2 p = vUv * uRes;
-  vec2 s = texture(uSdf, vUv).xy;
-  s.x = sdfDecode(s.x);
+  vec4 st = texture(uSdf, vUv);
+  vec2 s = vec2(sdfDecode(st), st.y);
   float dpx = s.x;
   float d = max(dpx, 0.0) / uPxPerM;
   float outside = smoothstep(-0.5, 1.5, dpx);
@@ -259,7 +263,7 @@ out vec4 o;
 
 void main() {
   vec2 p = vUv * uRes;
-  float d = sdfDecode(texture(uSdf, vUv).x);
+  float d = sdfDecode(texture(uSdf, vUv));
   float cov = clamp(0.5 - d / uAA, 0.0, 1.0);
 
   vec3 bg = mix(uBgBot, uBgTop, smoothstep(-0.2, 1.15, vUv.y));
@@ -426,7 +430,7 @@ void main() {
     a = exp(-dist * dist / max(vRad * vRad * 0.45, 0.25)) * tail * (vHalfLen > 0.5 ? 1.6 : 1.0);
   }
   if (vBehind > 0.0) {
-    float d = sdfDecode(texture(uSdf, gl_FragCoord.xy / uRes).x);
+    float d = sdfDecode(texture(uSdf, gl_FragCoord.xy / uRes));
     a *= mix(1.0, clamp(0.5 + d / uAA, 0.0, 1.0), vBehind);
   }
   o = vec4(vColor * a, 1.0);
@@ -479,6 +483,7 @@ uniform float uTime;
 uniform float uFade;
 uniform float uBloomAmt;
 uniform float uGrain;
+uniform float uPx;
 uniform int uDebug;
 in vec2 vUv;
 out vec4 o;
@@ -490,7 +495,7 @@ vec3 aces(vec3 x) {
 void main() {
   vec2 uv = vUv;
   if (uDebug == 1) {
-    float dd = sdfDecode(texture(uSdf, uv).x);
+    float dd = sdfDecode(texture(uSdf, uv));
     float m = clamp(0.5 - dd, 0.0, 1.0);
     float hr = texture(uSdf, uv).y;
     o = vec4(mix(vec3(0.85, 0.83, 0.8), vec3(0.05 + 0.4 * hr, 0.05, 0.05), m), 1.0);
@@ -506,7 +511,7 @@ void main() {
   col.b = texture(uScene, uv + ca).b;
 
   // bloom washes over the outline but not into the body: the cut-out stays black
-  float d = sdfDecode(texture(uSdf, uv).x);
+  float d = sdfDecode(texture(uSdf, uv));
   vec3 bl = texture(uBloom, uv).rgb;
   col += bl * uBloomAmt * smoothstep(-1.2, 1.2, d);
 
@@ -519,7 +524,8 @@ void main() {
   col = mix(col, col * vec3(0.92, 1.0, 1.06), 1.0 - smoothstep(0.0, 0.5, l));
   col = pow(col, vec3(1.0 / 2.2));
 
-  float g = hash12(uv * uRes + fract(uTime * 7.31) * 913.0) - 0.5;
+  // grain the size of a CSS pixel, so it looks the same at every resolution
+  float g = hash12(floor(gl_FragCoord.xy / max(uPx, 1e-3)) + fract(uTime * 7.31) * 913.0) - 0.5;
   col += g * uGrain * (0.35 + sqrt(l));
   col *= uFade;
   col += (ign(gl_FragCoord.xy + fract(uTime) * 61.0) - 0.5) / 255.0 * step(0.0005, l);
