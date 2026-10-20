@@ -1,0 +1,1328 @@
+[
+  {
+    "id": "kahiki",
+    "name": "Kahiki",
+    "alt": [
+      "the lands to the south"
+    ],
+    "kind": "sea",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -154.95,
+        18.95
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "ks-kealaikahiki-2020",
+      "fornander-v2"
+    ],
+    "note": "A direction marker only. Kahiki, the ancestral homeland, lies far to the south (the Society, Tuamotu and Marquesas groups and beyond); the point sits at the south-east corner of the archipelago view so arrivals can be shown coming in from the south."
+  },
+  {
+    "id": "pae-aina",
+    "name": "Ka Pae ʻĀina",
+    "alt": [
+      "the Hawaiian archipelago"
+    ],
+    "kind": "other",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.3,
+        20.7
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "state-gis-moku"
+    ],
+    "note": "The whole chain, for events that belong to every island. The point is a rough middle of the main islands, not a place."
+  },
+  {
+    "id": "kealaikahiki",
+    "name": "Kealaikahiki",
+    "alt": [
+      "Lae ʻO Kealaikahiki",
+      "Ke-ala-i-Kahiki"
+    ],
+    "kind": "other",
+    "island": "kahoolawe",
+    "moku": "Honuaʻula",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.69969,
+        20.52454
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "ks-kealaikahiki-2020"
+    ],
+    "note": "The western point of Kahoʻolawe (GNIS \"Lae ʻO Kealaikahiki\"). The name, the way to Kahiki, belongs also to the channel beyond it and to an ʻili."
+  },
+  {
+    "id": "puna-hawaii",
+    "name": "Puna",
+    "alt": [],
+    "kind": "moku",
+    "island": "hawaii",
+    "moku": "Puna",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.0626,
+        19.4706
+      ]
+    },
+    "placePrecision": "moku",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2"
+    ],
+    "note": "Pāʻao's landfall and his heiau Wahaʻula are placed only at moku precision."
+  },
+  {
+    "id": "wailua-kauai",
+    "name": "Wailua",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "kauai",
+    "moku": "Puna",
+    "ahupuaa": "Wailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.4113,
+        22.0581
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2"
+    ],
+    "note": "Moʻikeha's home in the traditions. The heiau of Wailua are not placed."
+  },
+  {
+    "id": "kukaniloko",
+    "name": "Kūkaniloko",
+    "alt": [
+      "Kūkaniloko Birth Site"
+    ],
+    "kind": "landmark",
+    "island": "oahu",
+    "moku": "Waialua",
+    "ahupuaa": "Kamananui",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -158.03639,
+        21.50472
+      ]
+    },
+    "placePrecision": "exact",
+    "landmark": true,
+    "sources": [
+      "wikipedia-kukaniloko",
+      "fornander-v2"
+    ],
+    "note": "The sacred birthplace of Oʻahu's chiefs, open to the public as a state monument; some areas within it are kept apart. Listing and coordinates are from a tertiary source: verify."
+  },
+  {
+    "id": "waikiki",
+    "name": "Waikīkī",
+    "alt": [
+      "Waikiki"
+    ],
+    "kind": "beach",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Waikīkī",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.82866,
+        21.27661
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ]
+  },
+  {
+    "id": "waialae",
+    "name": "Waiʻalae",
+    "alt": [
+      "Waialae"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Waikīkī",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.78995,
+        21.2749
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The shore east of Waikīkī. The State layer counts Waiʻalae within Waikīkī ahupuaʻa."
+  },
+  {
+    "id": "waipio-valley",
+    "name": "Waipiʻo",
+    "alt": [
+      "Waipio"
+    ],
+    "kind": "valley",
+    "island": "hawaii",
+    "moku": "Hāmākua",
+    "ahupuaa": "Waipiʻo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.59425,
+        20.12057
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "Seat of the ruling chiefs of Hawaiʻi in ʻUmi's time. Its heiau are not placed."
+  },
+  {
+    "id": "kailua-kona",
+    "name": "Kailua",
+    "alt": [
+      "Kailua-Kona"
+    ],
+    "kind": "town",
+    "island": "hawaii",
+    "moku": "Kona",
+    "ahupuaa": "Lanihau 1-2, Moeauo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.99025,
+        19.63928
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "bingham-1847"
+    ]
+  },
+  {
+    "id": "kamakahonu",
+    "name": "Kamakahonu",
+    "alt": [],
+    "kind": "landmark",
+    "island": "hawaii",
+    "moku": "Kona",
+    "ahupuaa": "Lanihau 1-2, Moeauo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.99766,
+        19.63929
+      ]
+    },
+    "placePrecision": "exact",
+    "landmark": true,
+    "sources": [
+      "usgs-gnis",
+      "wikipedia-kamakahonu",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "Kamehameha's residence at the north end of Kailua Bay, a National Historic Landmark (per a tertiary source: verify). The heiau Ahuʻena there is not placed separately."
+  },
+  {
+    "id": "kauiki",
+    "name": "Kaʻuiki",
+    "alt": [
+      "Kaʻuiki Head",
+      "Kauwiki"
+    ],
+    "kind": "peak",
+    "island": "maui",
+    "moku": "Hāna",
+    "ahupuaa": "Kawaipapa",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.98149,
+        20.75431
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The hill and fort above Hāna Bay (GNIS \"Kaʻuiki Head\")."
+  },
+  {
+    "id": "hana-bay",
+    "name": "Hāna",
+    "alt": [
+      "Hāna Bay",
+      "Hana"
+    ],
+    "kind": "bay",
+    "island": "maui",
+    "moku": "Hāna",
+    "ahupuaa": "Kawaipapa",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.98407,
+        20.75957
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "lahaina",
+    "name": "Lahaina",
+    "alt": [
+      "Lāhainā"
+    ],
+    "kind": "town",
+    "island": "maui",
+    "moku": "Lāhainā",
+    "ahupuaa": "Paunau",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.67664,
+        20.87429
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "jarves-1847"
+    ]
+  },
+  {
+    "id": "kahikinui",
+    "name": "Kahikinui",
+    "alt": [],
+    "kind": "moku",
+    "island": "maui",
+    "moku": "Kahikinui",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.2773,
+        20.6458
+      ]
+    },
+    "placePrecision": "moku",
+    "sources": [
+      "state-gis-ahupuaa",
+      "kirch-sharp-2005"
+    ],
+    "note": "The coral-dated heiau are not placed; the pin covers the district."
+  },
+  {
+    "id": "kawela-molokai",
+    "name": "Kawela",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "molokai",
+    "moku": "Kona",
+    "ahupuaa": "Kawela",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.9266,
+        21.0972
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kaunakakai",
+    "name": "Kaunakakai",
+    "alt": [],
+    "kind": "town",
+    "island": "molokai",
+    "moku": "Kona",
+    "ahupuaa": "Kaunakakai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.01741,
+        21.08964
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ]
+  },
+  {
+    "id": "wailuku",
+    "name": "Wailuku",
+    "alt": [],
+    "kind": "town",
+    "island": "maui",
+    "moku": "Pūʻali Komohana",
+    "ahupuaa": "Wailuku",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.50107,
+        20.88961
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ]
+  },
+  {
+    "id": "kamaomao",
+    "name": "Kamaʻomaʻo and the Wailuku sandhills",
+    "alt": [
+      "Kakanilua"
+    ],
+    "kind": "other",
+    "island": "maui",
+    "moku": "Pūʻali Komohana",
+    "ahupuaa": "Wailuku",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.4655,
+        20.8768
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The plain between Waikapū and Wailuku and the dunes beside it. The dunes hold many burials, so this place stays at ahupuaʻa precision and nothing in it is placed exactly."
+  },
+  {
+    "id": "iao-valley",
+    "name": "ʻĪao",
+    "alt": [
+      "ʻĪao Valley",
+      "Iao"
+    ],
+    "kind": "valley",
+    "island": "maui",
+    "moku": "Pūʻali Komohana",
+    "ahupuaa": "Wailuku",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.51375,
+        20.88514
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ]
+  },
+  {
+    "id": "waimea-kauai",
+    "name": "Waimea",
+    "alt": [
+      "Wymoa"
+    ],
+    "kind": "town",
+    "island": "kauai",
+    "moku": "Kona",
+    "ahupuaa": "Waimea",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.66894,
+        21.95707
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "cook-1784-v2",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kealakekua-bay",
+    "name": "Kealakekua",
+    "alt": [
+      "Kealakekua Bay",
+      "Karakakooa"
+    ],
+    "kind": "bay",
+    "island": "hawaii",
+    "moku": "Kona",
+    "ahupuaa": "Kealakekua, Kīloa 1",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.92858,
+        19.47509
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "king-1784-v3",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The heiau Hikiau at the head of the bay is not placed separately."
+  },
+  {
+    "id": "kaawaloa",
+    "name": "Kaʻawaloa",
+    "alt": [
+      "Kowrowa"
+    ],
+    "kind": "ahupuaa",
+    "island": "hawaii",
+    "moku": "Kona",
+    "ahupuaa": "Kaʻawaloa",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.8874,
+        19.5043
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "king-1784-v3",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The chiefs' village on the north point of Kealakekua Bay, where Cook died. Kept at ahupuaʻa precision."
+  },
+  {
+    "id": "keei",
+    "name": "Keʻei",
+    "alt": [
+      "Keei"
+    ],
+    "kind": "ahupuaa",
+    "island": "hawaii",
+    "moku": "Kona",
+    "ahupuaa": "Keʻei 1",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.8996,
+        19.4637
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2"
+    ],
+    "note": "Hauiki, where the armies met at Mokuʻōhai, is in Keʻei. The State layer divides Keʻei into Keʻei 1 and Keʻei 2."
+  },
+  {
+    "id": "pauoa",
+    "name": "Pauoa",
+    "alt": [
+      "Kaheiki"
+    ],
+    "kind": "ahupuaa",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.82724,
+        21.33861
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "A land within Honolulu in the State layer; the point is GNIS's land-division point for Pauoa. The heiau of Kaheiki is not placed."
+  },
+  {
+    "id": "kilauea",
+    "name": "Kīlauea",
+    "alt": [
+      "Kilauea"
+    ],
+    "kind": "peak",
+    "island": "hawaii",
+    "moku": "Kaʻū",
+    "ahupuaa": "Keauhou",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.28743,
+        19.42095
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "mcphie-1990",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kapapala",
+    "name": "Kapāpala",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "hawaii",
+    "moku": "Kaʻū",
+    "ahupuaa": "Kapāpala",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.414,
+        19.3766
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "On Keōua's road home past the volcano. Where his people died is not placed."
+  },
+  {
+    "id": "puukohola",
+    "name": "Puʻukoholā",
+    "alt": [
+      "Puʻukoholā Heiau"
+    ],
+    "kind": "heiau",
+    "island": "hawaii",
+    "moku": "Kohala",
+    "ahupuaa": "Kawaihae 2",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.82134,
+        20.02763
+      ]
+    },
+    "placePrecision": "exact",
+    "landmark": true,
+    "sources": [
+      "nps-puukohola",
+      "usgs-gnis",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "Puʻukoholā Heiau National Historic Site, open to the public (NPS). The point is GNIS's for the hill the heiau stands on."
+  },
+  {
+    "id": "kawaihae",
+    "name": "Kawaihae",
+    "alt": [],
+    "kind": "town",
+    "island": "hawaii",
+    "moku": "Kohala",
+    "ahupuaa": "Kawaihae 1",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.82648,
+        20.03539
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kalauao",
+    "name": "Kalauao",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "oahu",
+    "moku": "ʻEwa",
+    "ahupuaa": "Kalauao",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.9025,
+        21.402
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The battleground of Kukiʻiahu lay between Kalauao and ʻAiea. Where the dead were laid is not placed."
+  },
+  {
+    "id": "honolulu-harbor",
+    "name": "Honolulu Harbor",
+    "alt": [
+      "the harbor of Kou",
+      "Māmala"
+    ],
+    "kind": "bay",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.86891,
+        21.30737
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kaiwi-channel",
+    "name": "Kaʻiwi",
+    "alt": [
+      "Kaiwi",
+      "Molokaʻi Channel"
+    ],
+    "kind": "channel",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.48,
+        21.2
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "state-gis-moku",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "A mid-channel point between Molokaʻi and Oʻahu, computed from the coastlines; not a GNIS point."
+  },
+  {
+    "id": "kou",
+    "name": "Kou",
+    "alt": [
+      "Honolulu"
+    ],
+    "kind": "town",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.85835,
+        21.30695
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The village at the harbor, now downtown Honolulu. The point is GNIS's for Honolulu; the village's extent is not known."
+  },
+  {
+    "id": "honolulu",
+    "name": "Honolulu",
+    "alt": [],
+    "kind": "town",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.85835,
+        21.30695
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis"
+    ]
+  },
+  {
+    "id": "nuuanu",
+    "name": "Nuʻuanu",
+    "alt": [
+      "Nuuanu"
+    ],
+    "kind": "valley",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8402,
+        21.33287
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ]
+  },
+  {
+    "id": "puiwa",
+    "name": "Puʻiwa",
+    "alt": [
+      "Puiwa"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8319,
+        21.3316
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "A land in lower Nuʻuanu where the fighting began. Its bounds are not established from an opened source. A street named Puiwa Road survives in Nuʻuanu but is not used, because the street names do not keep the old order up the valley. Rendered at the Honolulu ahupuaʻa centroid."
+  },
+  {
+    "id": "laimi",
+    "name": "Lāʻimi",
+    "alt": [
+      "Laʻimi",
+      "Laimi"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8319,
+        21.3316
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "Where the Oʻahu line broke, above Puʻiwa in Kamakau's telling. Not located from an opened source; rendered at the Honolulu ahupuaʻa centroid."
+  },
+  {
+    "id": "nuuanu-pali",
+    "name": "Nuʻuanu Pali",
+    "alt": [
+      "the Pali"
+    ],
+    "kind": "pali",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.79334,
+        21.36685
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2"
+    ],
+    "note": "The gap at the head of the valley (GNIS \"Nuʻuanu Pali\", gap). The dead of 1795 are a burial matter: no remains or find-spots are placed."
+  },
+  {
+    "id": "waianae",
+    "name": "Waiʻanae",
+    "alt": [
+      "Waianae"
+    ],
+    "kind": "town",
+    "island": "oahu",
+    "moku": "Waiʻanae",
+    "ahupuaa": "Waiʻanae",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -158.18588,
+        21.4434
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kaieiewaho-channel",
+    "name": "Kaʻieʻiewaho",
+    "alt": [
+      "Kauaʻi Channel",
+      "Kaieiewaho"
+    ],
+    "kind": "channel",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -158.8,
+        21.75
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "state-gis-moku",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "A mid-channel point between Oʻahu and Kauaʻi, computed from the coastlines; not a GNIS point."
+  },
+  {
+    "id": "waimea-hawaii",
+    "name": "Waimea",
+    "alt": [],
+    "kind": "town",
+    "island": "hawaii",
+    "moku": "Kohala",
+    "ahupuaa": "Lālāmilo, Keanuʻiʻomanō",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.67168,
+        20.02306
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "merlin-1990-sandalwood"
+    ]
+  },
+  {
+    "id": "kuamoo",
+    "name": "Kuamoʻo",
+    "alt": [
+      "Kuamoo",
+      "Lekeleke"
+    ],
+    "kind": "ahupuaa",
+    "island": "hawaii",
+    "moku": "Kona",
+    "ahupuaa": "Kuamoʻo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.93863,
+        19.54473
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "bingham-1847"
+    ],
+    "note": "The State layer folds Kuamoʻo into the unit \"Honalo, Māʻihi 1-2\"; the point is GNIS's land-division point. The battlefield holds the graves of those who fell, which are not placed."
+  },
+  {
+    "id": "koloa",
+    "name": "Kōloa",
+    "alt": [
+      "Koloa"
+    ],
+    "kind": "town",
+    "island": "kauai",
+    "moku": "Kona",
+    "ahupuaa": "Kōloa",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.46418,
+        21.90236
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "nps-koloa-mill"
+    ]
+  },
+  {
+    "id": "thomas-square",
+    "name": "Thomas Square",
+    "alt": [],
+    "kind": "landmark",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.84889,
+        21.3025
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "wikipedia-thomas-square",
+      "jarves-1847"
+    ],
+    "note": "The plain east of the town where the flag was restored in 1843, now a park. Coordinates from a tertiary source."
+  },
+  {
+    "id": "hilo",
+    "name": "Hilo",
+    "alt": [],
+    "kind": "town",
+    "island": "hawaii",
+    "moku": "Hilo",
+    "ahupuaa": "Ponahawai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.08684,
+        19.72248
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kalawao",
+    "name": "Kalawao",
+    "alt": [
+      "Kalaupapa"
+    ],
+    "kind": "ahupuaa",
+    "island": "molokai",
+    "moku": "Koʻolau",
+    "ahupuaa": "Kalawao",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.9513,
+        21.1749
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "nps-kalaupapa"
+    ],
+    "note": "Within Kalaupapa National Historical Park. The peninsula holds the graves of those sent there; none are placed."
+  },
+  {
+    "id": "maui-isthmus",
+    "name": "central Maui",
+    "alt": [],
+    "kind": "other",
+    "island": "maui",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.42,
+        20.83
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "state-gis-moku",
+      "asce-hamakua-ditch"
+    ],
+    "note": "The isthmus between West Maui and Haleakalā, where the ditches brought the water. The ditches' routes are not mapped here."
+  },
+  {
+    "id": "iolani-palace",
+    "name": "ʻIolani Palace",
+    "alt": [],
+    "kind": "landmark",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Honolulu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.85889,
+        21.30667
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "wikipedia-iolani-palace",
+      "liliuokalani-1898",
+      "pl-103-150"
+    ],
+    "note": "Coordinates from a tertiary source."
+  },
+  {
+    "id": "leahi",
+    "name": "Lēʻahi",
+    "alt": [
+      "Diamond Head",
+      "Laeʻahi"
+    ],
+    "kind": "peak",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Waikīkī",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.81176,
+        21.26002
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "liliuokalani-1898",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kalama-valley",
+    "name": "Kalama Valley",
+    "alt": [],
+    "kind": "valley",
+    "island": "oahu",
+    "moku": "Kona",
+    "ahupuaa": "Maunalua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.6735,
+        21.29571
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "staradvertiser-2021-kalama"
+    ],
+    "note": "The State layer now counts Maunalua in Kona; it was counted in Koʻolaupoko until the 2024–2026 updates."
+  },
+  {
+    "id": "kahoolawe",
+    "name": "Kahoʻolawe",
+    "alt": [
+      "Kanaloa",
+      "Kahoolawe"
+    ],
+    "kind": "island",
+    "island": "kahoolawe",
+    "moku": "Honuaʻula",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.615,
+        20.55
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "state-gis-moku",
+      "kirc-history",
+      "ks-kealaikahiki-2020"
+    ],
+    "note": "In the State moku layer Kahoʻolawe lies inside the Honuaʻula feature, whose island field reads \"Molokini\". Cultural sites on the island are not placed."
+  },
+  {
+    "id": "honolua-bay",
+    "name": "Honolua",
+    "alt": [
+      "Honolua Bay"
+    ],
+    "kind": "bay",
+    "island": "maui",
+    "moku": "Kāʻanapali",
+    "ahupuaa": "Honolua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.63956,
+        21.01449
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "staradvertiser-2026-hokulea"
+    ]
+  },
+  {
+    "id": "waiahole",
+    "name": "Waiāhole",
+    "alt": [
+      "Waiāhole–Waikāne"
+    ],
+    "kind": "ahupuaa",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Waiāhole",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.8718,
+        21.478
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "hhfdc-waiahole-plan"
+    ]
+  },
+  {
+    "id": "heeia-fishpond",
+    "name": "Heʻeia Fishpond",
+    "alt": [
+      "Heʻeia Pond"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Heʻeia",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.80789,
+        21.43607
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "paepae-o-heeia",
+      "noaa-heeia-nerr"
+    ]
+  },
+  {
+    "id": "heeia-wetlands",
+    "name": "Heʻeia wetlands",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Heʻeia",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.822,
+        21.4225
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "hcda-heeia"
+    ],
+    "note": "The State layer has two features named Heʻeia; this is the centroid of the landward one."
+  },
+  {
+    "id": "pahonu",
+    "name": "Pāhonu",
+    "alt": [],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Waimānalo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.7191,
+        21.3405
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "khon-pahonu",
+      "civilbeat-2026-limu"
+    ],
+    "note": "On the Waimānalo shore by Kaiona Beach Park. Kept at ahupuaʻa precision until an opened source gives the pond's position."
+  },
+  {
+    "id": "oahu",
+    "name": "Oʻahu",
+    "alt": [
+      "Oahu"
+    ],
+    "kind": "island",
+    "island": "oahu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.9746,
+        21.4602
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "state-gis-moku"
+    ]
+  }
+]

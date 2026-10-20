@@ -19,6 +19,7 @@
     "tags": ["simulation", "tutorial", "art"],
     "status": "wip",
     "models": ["Opus 5.5"],
-    "thinking": "unknown"
+    "thinking": "unknown",
+    "thumbnail": { "waitFor": "!#boot", "settle": 6000 }
   }
 }

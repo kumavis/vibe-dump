@@ -1,0 +1,533 @@
+{
+  "projection": {
+    "lat0": 20.5,
+    "lon0": -157.5
+  },
+  "packs": [
+    {
+      "id": "archipelago",
+      "kind": "archipelago",
+      "name": "Ka Pae ʻĀina",
+      "bounds": [
+        -160.2662146,
+        18.8915976,
+        -154.7874391,
+        22.2518011
+      ],
+      "size": [
+        2048,
+        1332
+      ],
+      "metresPerTexel": [
+        278.9423,
+        278.9423
+      ],
+      "height": {
+        "file": "archipelago/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "archipelago/rain.png",
+        "note": "1.2% of land has no atlas value and is 0 (west of the atlas grid's edge at -159.816°, which leaves out Niʻihau)"
+      },
+      "stats": {
+        "landFraction": 0.0784,
+        "minMetres": -5931,
+        "maxMetres": 4168.5,
+        "rainCoverage": 0.9885
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n19w156, n20w155, n20w156, n20w157, n21w156, n21w157, n21w158, n22w157, n22w158, n22w159, n22w160, n22w161, n23w160, n23w161; n19w155, n19w157, n21w155, n22w156 not published by the USGS (no land); the other 17 one-degree cells in the box are open ocean outside every island pack and were not fetched; NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-160.27156&maxlongitude=-154.78209&minlatitude=18.88655&maxlatitude=22.25685&layer=topo&format=esriascii&mresolution=279",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 244.60 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "hawaii",
+      "kind": "island",
+      "name": "Hawaiʻi",
+      "bounds": [
+        -156.0808839,
+        18.892604,
+        -154.7874248,
+        20.286571
+      ],
+      "size": [
+        896,
+        1024
+      ],
+      "metresPerTexel": [
+        150.5239,
+        150.5239
+      ],
+      "height": {
+        "file": "hawaii/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "hawaii/rain.png"
+      },
+      "stats": {
+        "landFraction": 0.4986,
+        "minMetres": -5651,
+        "maxMetres": 4192.75,
+        "rainCoverage": 1
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n19w156, n20w155, n20w156, n20w157, n21w156, n21w157; n19w155, n19w157, n21w155 not published by the USGS (no land); NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-156.08377&maxlongitude=-154.78454&minlatitude=18.88988&maxlatitude=20.28929&layer=topo&format=esriascii&mresolution=151",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 122.30 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "maui",
+      "kind": "island",
+      "name": "Maui",
+      "bounds": [
+        -156.7164101,
+        20.5562628,
+        -155.9598279,
+        21.049547
+      ],
+      "size": [
+        1024,
+        708
+      ],
+      "metresPerTexel": [
+        77.0401,
+        77.0401
+      ],
+      "height": {
+        "file": "maui/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "maui/rain.png"
+      },
+      "stats": {
+        "landFraction": 0.4489,
+        "minMetres": -3317,
+        "maxMetres": 3048.5,
+        "rainCoverage": 1
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n21w156, n21w157, n22w157; n22w156 not published by the USGS (no land); NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-156.71789&maxlongitude=-155.95835&minlatitude=20.55487&maxlatitude=21.05094&layer=topo&format=esriascii&mresolution=77",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 61.15 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "kahoolawe",
+      "kind": "island",
+      "name": "Kahoʻolawe",
+      "bounds": [
+        -156.7198501,
+        20.4827242,
+        -156.5125214,
+        20.6221009
+      ],
+      "size": [
+        1024,
+        730
+      ],
+      "metresPerTexel": [
+        21.1116,
+        21.1116
+      ],
+      "height": {
+        "file": "kahoolawe/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "kahoolawe/rain.png"
+      },
+      "stats": {
+        "landFraction": 0.3511,
+        "minMetres": -800.5,
+        "maxMetres": 448.75,
+        "rainCoverage": 1
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n21w157; NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-156.72026&maxlongitude=-156.51212&minlatitude=20.48234&maxlatitude=20.62248&layer=topo&format=esriascii&mresolution=50",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 61.15 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "lanai",
+      "kind": "island",
+      "name": "Lānaʻi",
+      "bounds": [
+        -157.0814354,
+        20.713664,
+        -156.7861411,
+        20.9475269
+      ],
+      "size": [
+        1024,
+        860
+      ],
+      "metresPerTexel": [
+        30.0688,
+        30.0688
+      ],
+      "height": {
+        "file": "lanai/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "lanai/rain.png"
+      },
+      "stats": {
+        "landFraction": 0.4615,
+        "minMetres": -735,
+        "maxMetres": 1028.25,
+        "rainCoverage": 1
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n21w157, n21w158; NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-157.08201&maxlongitude=-156.78556&minlatitude=20.71312&maxlatitude=20.94807&layer=topo&format=esriascii&mresolution=50",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 61.15 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "molokai",
+      "kind": "island",
+      "name": "Molokaʻi",
+      "bounds": [
+        -157.330056,
+        21.0276437,
+        -156.6906621,
+        21.24256
+      ],
+      "size": [
+        1024,
+        365
+      ],
+      "metresPerTexel": [
+        65.1073,
+        65.1073
+      ],
+      "height": {
+        "file": "molokai/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "molokai/rain.png"
+      },
+      "stats": {
+        "landFraction": 0.431,
+        "minMetres": -949.25,
+        "maxMetres": 1507,
+        "rainCoverage": 0.9998
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n22w157, n22w158; NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-157.33130&maxlongitude=-156.68941&minlatitude=21.02647&maxlatitude=21.24374&layer=topo&format=esriascii&mresolution=65",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 61.15 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "oahu",
+      "kind": "island",
+      "name": "Oʻahu",
+      "bounds": [
+        -158.3000505,
+        21.2364436,
+        -157.6294454,
+        21.7311041
+      ],
+      "size": [
+        1024,
+        801
+      ],
+      "metresPerTexel": [
+        68.2854,
+        68.2854
+      ],
+      "height": {
+        "file": "oahu/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "oahu/rain.png"
+      },
+      "stats": {
+        "landFraction": 0.4094,
+        "minMetres": -2866.75,
+        "maxMetres": 1227.75,
+        "rainCoverage": 0.9996
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n22w158, n22w159; NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-158.30136&maxlongitude=-157.62814&minlatitude=21.23521&maxlatitude=21.73234&layer=topo&format=esriascii&mresolution=68",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 61.15 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "kauai",
+      "kind": "island",
+      "name": "Kauaʻi",
+      "bounds": [
+        -159.8072936,
+        21.850076,
+        -159.2732356,
+        22.2509001
+      ],
+      "size": [
+        1024,
+        815
+      ],
+      "metresPerTexel": [
+        54.3813,
+        54.3813
+      ],
+      "height": {
+        "file": "kauai/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "kauai/rain.png"
+      },
+      "stats": {
+        "landFraction": 0.5895,
+        "minMetres": -2580.75,
+        "maxMetres": 1587,
+        "rainCoverage": 1
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n22w160, n23w160; NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-159.80834&maxlongitude=-159.27219&minlatitude=21.84909&maxlatitude=22.25188&layer=topo&format=esriascii&mresolution=54",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 61.15 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-20",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells, WGS84; area-weighted onto the pack, 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        }
+      ]
+    },
+    {
+      "id": "niihau",
+      "kind": "island",
+      "name": "Niʻihau",
+      "bounds": [
+        -160.2663097,
+        21.7608545,
+        -160.0301183,
+        22.0470175
+      ],
+      "size": [
+        797,
+        1024
+      ],
+      "metresPerTexel": [
+        30.9006,
+        30.9006
+      ],
+      "height": {
+        "file": "niihau/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landFraction": 0.2451,
+        "minMetres": -1891,
+        "maxMetres": 389.25,
+        "rainCoverage": 0
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)",
+          "note": "tiles n22w161, n23w161; NAD83 geographic, metres; ocean (nodata or 0 in the source) and any cell without a tile are baked as sea; a texel is land where at least half its area is land, and then takes the area-weighted mean of the land cells"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-160.26690&maxlongitude=-160.02953&minlatitude=21.76030&maxlatitude=22.04758&layer=topo&format=esriascii&mresolution=50",
+          "fetched": "2026-10-20",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "sea texels only, area-weighted from a 61.15 m grid (ESRI ASCII), never shallower than -1 m; cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+        }
+      ]
+    }
+  ],
+  "boundaries": {
+    "moku": "boundaries/moku.geojson",
+    "ahupuaa": "boundaries/ahupuaa.geojson"
+  }
+}

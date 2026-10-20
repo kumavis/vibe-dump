@@ -1,0 +1,220 @@
+// GLSL shared by every surface in the scene: noise, the one lighting model,
+// and the ground itself, read from whichever packs are resident.
+//
+// The ground is the archipelago pack everywhere, with up to SLOTS island packs
+// laid over it. Each island slot has a rect and a detail weight k (0..1): where
+// a slot owns a point its own heights show through by k, eased to nothing over
+// a margin inside its edge, so at k = 0 an island pack is exactly the
+// archipelago and it can come and go without a seam or a pop. Where two island
+// rects overlap (Maui's padding reaches Kahoʻolawe) the point belongs to the
+// one whose edge is further away. render/world.js keeps a CPU copy of all of
+// this (metresAt), line for line, for the camera, picking and pins.
+
+import { NEAR_EXAG, NORMAL_EXAG, SLOTS } from '../../config.js'
+
+const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
+
+export const constants = /* glsl */ `
+#define PI 3.14159265
+#define NEAR_E ${f(NEAR_EXAG)}
+#define NORMAL_E ${f(NORMAL_EXAG)}
+#define SLOTS ${SLOTS}
+`
+
+export const noise = /* glsl */ `
+float hash12(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+vec2 hash22(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973));
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.xx + p3.yz) * p3.zy);
+}
+float vnoise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash12(i), hash12(i + vec2(1, 0)), u.x), mix(hash12(i + vec2(0, 1)), hash12(i + vec2(1, 1)), u.x), u.y);
+}
+// value noise faded to its mean once a cell is smaller than a couple of
+// pixels (q: cells per pixel), where it would only sparkle; a camera that
+// spans 600 km and 1 km needs this everywhere
+float vnoiseF(vec2 p, float q) {
+  float k = smoothstep(0.25, 0.6, q);
+  return k >= 1.0 ? 0.5 : mix(vnoise(p), 0.5, k);
+}
+float fbm2(vec2 p) {
+  float s = 0.0, a = 0.5;
+  for (int i = 0; i < 4; i++) { s += a * vnoise(p); p = p * 2.03 + 17.1; a *= 0.5; }
+  return s;
+}
+// fbm2 with each octave faded as vnoiseF (q: first-octave cells per pixel)
+float fbm2F(vec2 p, float q) {
+  float s = 0.0, a = 0.5;
+  for (int i = 0; i < 4; i++) { s += a * vnoiseF(p, q); p = p * 2.03 + 17.1; a *= 0.5; q *= 2.03; }
+  return s;
+}
+vec3 voronoi(vec2 p) {
+  vec2 n = floor(p);
+  vec2 f = fract(p);
+  float d1 = 8.0, d2 = 8.0;
+  float id = 0.0;
+  for (int j = -1; j <= 1; j++)
+  for (int i = -1; i <= 1; i++) {
+    vec2 g = vec2(float(i), float(j));
+    vec2 o = hash22(n + g);
+    vec2 r = g + o - f;
+    float d = dot(r, r);
+    if (d < d1) { d2 = d1; d1 = d; id = hash12(n + g + 3.7); }
+    else if (d < d2) { d2 = d; }
+  }
+  return vec3(sqrt(d1), id, sqrt(d2) - sqrt(d1));
+}
+`
+
+// The archipelago and the island slots' rects and weights. Enough for any
+// shader to work out who owns a point; the slots' textures are in ground.
+export const world = /* glsl */ `
+uniform float uVert;           // world Y per metre: the exaggeration of the moment / 100
+uniform float uExag;           // the exaggeration itself
+uniform sampler2D uArchH;      // archipelago heights, metres (R32F, nearest)
+uniform vec4 uArchRect;        // its world rect: x0, z0, x1, z1
+uniform vec4 uSlotRect[SLOTS];
+uniform vec4 uSlotInfo[SLOTS]; // x detail weight k, y on (0/1), z edge margin (world units)
+
+vec2 rectUv(vec4 r, vec2 xz) { return (xz - r.xy) / (r.zw - r.xy); }
+float edgeDist(vec4 r, vec2 xz) {
+  vec2 a = min(xz - r.xy, r.zw - xz);
+  return min(a.x, a.y);
+}
+// A manual bilinear fetch of a float height texture over a world rect,
+// clamped at its edges (float textures aren't filterable everywhere).
+float rectMetres(sampler2D t, vec4 r, vec2 xz) {
+  vec2 size = vec2(textureSize(t, 0));
+  vec2 p = clamp(rectUv(r, xz) * size - 0.5, vec2(0.0), size - 1.001);
+  vec2 fl = floor(p);
+  vec2 fr = p - fl;
+  ivec2 i = ivec2(fl);
+  float h00 = texelFetch(t, i, 0).r;
+  float h10 = texelFetch(t, i + ivec2(1, 0), 0).r;
+  float h01 = texelFetch(t, i + ivec2(0, 1), 0).r;
+  float h11 = texelFetch(t, i + ivec2(1, 1), 0).r;
+  return mix(mix(h00, h10, fr.x), mix(h01, h11, fr.x), fr.y);
+}
+// beyond the archipelago pack it is open ocean
+float archMetres(vec2 xz) {
+  return edgeDist(uArchRect, xz) < 0.0 ? -4000.0 : rectMetres(uArchH, uArchRect, xz);
+}
+// the island slot that draws xz, or -1 for the archipelago
+int ownerAt(vec2 xz) {
+  int o = -1;
+  float best = 0.0;
+  for (int s = 0; s < SLOTS; s++) {
+    if (uSlotInfo[s].y < 0.5) continue;
+    float e = edgeDist(uSlotRect[s], xz);
+    if (e > best) { best = e; o = s; }
+  }
+  return o;
+}
+// how much of slot s's own data shows at xz
+float slotWeight(int s, vec2 xz) {
+  vec4 info = uSlotInfo[s];
+  return info.x * smoothstep(0.0, info.z, edgeDist(uSlotRect[s], xz));
+}
+`
+
+// The ground anywhere, for surfaces that aren't one pack's own mesh: the sea
+// (for its depth) and the boundary lines (draped on it).
+const slotIndices = Array.from({ length: SLOTS }, (_, i) => i)
+export const ground = /* glsl */ `
+${slotIndices.map((i) => `uniform sampler2D uSlotH${i};`).join('\n')}
+float slotMetres(int s, vec2 xz) {
+  // (samplers can only be picked by a constant index)
+${slotIndices.map((i) => `  if (s == ${i}) return rectMetres(uSlotH${i}, uSlotRect[${i}], xz);`).join('\n')}
+  return -4000.0;
+}
+float groundMetres(vec2 xz) {
+  float m = archMetres(xz);
+  int o = ownerAt(xz);
+  if (o >= 0) {
+    float w = slotWeight(o, xz);
+    if (w > 0.0) m = mix(m, slotMetres(o, xz), w);
+  }
+  return m;
+}
+`
+
+// The lighting every lit surface shares, from ahupuaʻa's common.glsl.js. The
+// sun and sky colours already include the time of day. The island weather and
+// its cloud shadows are left out for now, so sunVisibility() is the open sky.
+export const lighting = /* glsl */ `
+uniform vec3 uSunDir;
+uniform vec3 uSunColor;
+uniform vec3 uSkyColor;
+uniform vec3 uGroundColor;
+uniform vec3 uMoonDir;
+uniform vec3 uMoonColor;
+uniform float uTime;
+uniform sampler2D uSkyMap;      // equirect sky radiance, elevation squashed to the horizon
+
+vec2 dirToSkyUv(vec3 d) {
+  float y = clamp(d.y, -1.0, 1.0);
+  return vec2(atan(d.z, d.x) / (2.0 * PI) + 0.5, sign(y) * sqrt(abs(y)) * 0.5 + 0.5);
+}
+vec3 skyMap(vec3 d) { return texture(uSkyMap, dirToSkyUv(d)).rgb; }
+
+float sunVisibility(vec3 p) { return 1.0; }
+
+vec3 ambientLight(vec3 n) {
+  return mix(uGroundColor, uSkyColor, n.y * 0.5 + 0.5);
+}
+
+vec3 shade(vec3 albedo, vec3 n, vec3 p, float ao, float vis) {
+  float ndl = max(dot(n, uSunDir), 0.0);
+  float ndm = max(dot(n, uMoonDir), 0.0);
+  vec3 direct = uSunColor * ndl * vis + uMoonColor * ndm;
+  return albedo * (direct + ambientLight(n) * ao);
+}
+`
+
+// The far-view polity overlay: each moku tinted by the polity holding it,
+// crossfaded between the two keyframe eras either side of the chosen year
+// (overlay/polity.js rasterises the moku and fills the palette).
+export const polity = /* glsl */ `
+uniform sampler2D uMokuId;   // moku index per texel over the archipelago (R8, nearest), 0 none
+uniform vec4 uMokuRect;
+uniform sampler2D uPalette;  // 256 × 2: polity colour per moku, row 0 the era before, row 1 after; a: held
+uniform float uEraMix;
+uniform float uPolityK;      // overall strength: full far out, gone close in
+uniform float uHoverMoku;
+
+float mokuAt(vec2 xz) {
+  vec2 uv = rectUv(uMokuRect, xz);
+  if (uv.x < 0.0 || uv.y < 0.0 || uv.x >= 1.0 || uv.y >= 1.0) return 0.0;
+  ivec2 size = textureSize(uMokuId, 0);
+  return floor(texelFetch(uMokuId, ivec2(uv * vec2(size)), 0).r * 255.0 + 0.5);
+}
+
+vec3 applyPolity(vec3 col, vec2 xz, vec3 light) {
+  if (uPolityK < 0.002 && uHoverMoku < 0.5) return col;
+  float id = mokuAt(xz);
+  if (id < 0.5) return col;
+  vec4 a = texelFetch(uPalette, ivec2(int(id), 0), 0);
+  vec4 b = texelFetch(uPalette, ivec2(int(id), 1), 0);
+  // (a moku held in one era and not the other fades its tint rather than its hue)
+  vec3 c = a.a > 0.5 && b.a > 0.5 ? mix(a.rgb, b.rgb, uEraMix) : (a.a > 0.5 ? a.rgb : b.rgb);
+  float held = mix(a.a, b.a, uEraMix);
+  if (a.a < 0.5 && b.a < 0.5) c = vec3(0.96, 0.93, 0.86); // (held by no one: hover shows it pale)
+  // the hue from the polity, the brightness from the lit ground under it, so
+  // the relief still reads through the colour and a cool hue over tan land
+  // doesn't settle to grey
+  vec3 lin = pow(c, vec3(2.2));
+  float lum = dot(col, vec3(0.2126, 0.7152, 0.0722));
+  vec3 tint = lin / max(dot(lin, vec3(0.2126, 0.7152, 0.0722)), 0.05) * lum * 1.05;
+  float k = uPolityK * 0.66 * held;
+  if (abs(id - uHoverMoku) < 0.5) k = max(k, 0.3) + 0.12;
+  return mix(col, tint, clamp(k, 0.0, 1.0));
+}
+`

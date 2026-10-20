@@ -1,0 +1,149 @@
+[
+  {
+    "id": "voyaging",
+    "label": "in the time of the long voyages",
+    "year": 1200,
+    "yearPrecision": 200,
+    "note": "Settlement and the centuries of two-way voyaging to Kahiki. Radiocarbon models put the first settlement between about 940 and 1290; the traditions of Pāʻao, Moʻikeha and Laʻamaikahiki follow, and after Laʻa the traditions record no more voyages south. Coastal hamlets and the first loʻi in the windward valleys; the land mostly forest.",
+    "sources": [
+      "athens-2014",
+      "wilmshurst-2011",
+      "fornander-v2",
+      "ks-kealaikahiki-2020"
+    ]
+  },
+  {
+    "id": "mailikukahi",
+    "label": "in the time of Māʻilikūkahi",
+    "year": 1480,
+    "yearPrecision": 70,
+    "note": "Reign-indexed. Fornander's genealogies, at thirty years a generation, put Māʻilikūkahi in the 1400s; shorter generations bring him nearer 1500. The range brackets both. Each island has its own chiefs; Hāna still stands apart from the rest of Maui.",
+    "sources": [
+      "fornander-v2"
+    ]
+  },
+  {
+    "id": "umi",
+    "label": "in the time of ʻUmi and Piʻilani",
+    "year": 1560,
+    "yearPrecision": 70,
+    "note": "Reign-indexed. Fornander's reckoning puts ʻUmi's death about 1521–1526; Kirch's coral dates put the consolidation of Maui under Piʻilani and Kiha, ʻUmi's in-laws and allies, between about 1550 and 1700. The range brackets both. Hawaiʻi and Maui each united; field systems spreading on the leeward slopes.",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "fornander-v2",
+      "kirch-sharp-2005",
+      "staradvertiser-2019-kahikinui"
+    ]
+  },
+  {
+    "id": "alapai",
+    "label": "in the time of Alapaʻinui",
+    "year": 1745,
+    "yearPrecision": 15,
+    "note": "Alapaʻinui rules Hawaiʻi until his death in 1754 and carries war to Molokaʻi, Maui and Oʻahu; Fornander's dates for these wars are estimates.",
+    "sources": [
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kalaniopuu",
+    "label": "in the time of Kalaniʻōpuʻu and Kahekili",
+    "year": 1772,
+    "yearPrecision": 10,
+    "note": "Hawaiʻi holds Hāna from about 1759 and wars on Maui; Oʻahu holds Molokaʻi. Cook arrives in 1778.",
+    "sources": [
+      "fornander-v2",
+      "kamakau-ruling-chiefs",
+      "cook-1784-v2"
+    ]
+  },
+  {
+    "id": "kahekili",
+    "label": "in the time of Kahekili and the rise of Kamehameha",
+    "year": 1788,
+    "yearPrecision": 6,
+    "note": "After Mokuʻōhai (1782) Hawaiʻi Island is split three ways; Kahekili of Maui takes Oʻahu and Molokaʻi in 1783. First guns, first cattle.",
+    "sources": [
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ]
+  },
+  {
+    "id": "kamehameha",
+    "label": "in the time of Kamehameha",
+    "year": 1807,
+    "yearPrecision": 12,
+    "note": "From Nuʻuanu (1795) Kamehameha rules every island but Kauaʻi, which comes to him by agreement in 1810. Sandalwood cutting begins; the ʻōkuʻu of 1804.",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ]
+  },
+  {
+    "id": "kaahumanu",
+    "label": "in the time of Kaʻahumanu",
+    "year": 1826,
+    "yearPrecision": 7,
+    "note": "The kapu system falls in 1819 and the missionaries arrive in 1820. Kaʻahumanu governs as kuhina nui; sandalwood, whaling ports.",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "bingham-1847"
+    ]
+  },
+  {
+    "id": "kauikeaouli",
+    "label": "in the time of Kauikeaouli, Kamehameha III",
+    "year": 1844,
+    "yearPrecision": 10,
+    "note": "A constitutional kingdom: whaling at its height, the first plantation, the 1843 cession and restoration, the Māhele and the Kuleana Act, measles and smallpox.",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "jarves-1847"
+    ]
+  },
+  {
+    "id": "kamehameha-iv-v",
+    "label": "in the time of Alexander Liholiho and Lota Kapuāiwa",
+    "year": 1864,
+    "yearPrecision": 9,
+    "note": "Kamehameha IV and V. Kalaupapa from 1866. The population keeps falling; sugar grows.",
+    "sources": [
+      "nps-kalaupapa",
+      "liliuokalani-1898"
+    ]
+  },
+  {
+    "id": "kalakaua",
+    "label": "in the time of Kalākaua",
+    "year": 1882,
+    "yearPrecision": 9,
+    "note": "Lunalilo's short reign, then Kalākaua. Ditches carry the windward streams to the cane; the 1887 constitution shifts power to the planters.",
+    "sources": [
+      "liliuokalani-1898",
+      "asce-hamakua-ditch"
+    ]
+  },
+  {
+    "id": "liliuokalani",
+    "label": "in the time of Liliʻuokalani, and after",
+    "year": 1895,
+    "yearPrecision": 4,
+    "note": "The Queen's reign from 1891, the overthrow of 1893, the Republic from 1894, annexation in 1898.",
+    "sources": [
+      "liliuokalani-1898",
+      "pl-103-150"
+    ]
+  },
+  {
+    "id": "coda",
+    "label": "now",
+    "year": 2000,
+    "yearPrecision": 30,
+    "note": "The coda, 1970 to the present: plantations closing, suburbs, and the return of loʻi, fishponds and voyaging. The only era whose people can be asked.",
+    "sources": [
+      "hi-constitution",
+      "uh-news-2026-kahoolawe"
+    ]
+  }
+]
