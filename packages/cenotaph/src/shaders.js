@@ -479,18 +479,25 @@ Surf concrete(vec3 p, vec3 n, int mat, float fp) {
   }
   // The walls and piers keep the marks of the formwork and nothing else:
   // panels of 1.8 m by 0.9 m, the tatami module, each a hair different from its
-  // neighbours, with hairline joints between them and the six tie holes each
-  // one leaves, so the holes run in one even grid down the whole wall.
+  // neighbours, with hairline joints between them and the tie holes they leave.
+  // A pier's face is measured from its own middle, so its two panels sit
+  // square on it, a joint down the centre line.
+  if (mat == 3) {
+    float zc = ROOM_PIER_Z0 + clamp(floor((p.z - ROOM_PIER_Z0) / ROOM_PIER_DZ + 0.5), 0.0, float(ROOM_PIER_N - 1)) * ROOM_PIER_DZ;
+    uv.x = abs(n.x) > 0.5 ? p.z - zc : p.x - sign(p.x) * ROOM_PIER_X;
+  }
   vec2 cell = vec2(1.8, 0.9);
   vec2 id = floor(uv / cell);
   vec2 f = uv - (id + 0.5) * cell;
   base *= 0.985 + 0.03 * hash12(id + float(mat) * 17.0);
   vec2 g = cell * 0.5 - abs(f);
   float joint = max(line(g.x, 0.0015, fp), line(g.y, 0.0015, fp));
-  // tie holes: three across, two up, each panel, at its sixths and quarters
-  vec2 tc = vec2(cell.x / 3.0, cell.y * 0.5);
-  vec2 tq = mod(uv - tc * 0.5, tc) - tc * 0.5;
-  float r = 0.014, W = max(r, fp);
+  // tie holes: on the walls three across and two up in each panel, at its
+  // sixths and quarters; on a pier one in the middle of each panel, so two
+  // across the face
+  vec2 tc = mat == 3 ? cell : vec2(cell.x / 3.0, cell.y * 0.5);
+  vec2 tq = mod(uv, tc) - tc * 0.5;
+  float r = 0.016, W = max(r, fp);
   float hole = (r / W) * (r / W) * (1.0 - smoothstep(W * 0.6, W * 1.4, length(tq)));
   s.albedo = base * (1.0 - 0.12 * joint) * (1.0 - 0.6 * hole);
   s.ao = 1.0 - 0.5 * hole;
