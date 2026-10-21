@@ -76,7 +76,7 @@ year.
 | settlement and population | far, mid | all eras |
 | forest extent | far, mid | all eras |
 | moku and ahupuaʻa lines | mid, near | all eras (lines barely move) |
-| voyaging and fleet routes, ship tracks | far | specific years |
+| voyaging and fleet routes, ship tracks | far | only the section the tour is on: the step's event, or a chapter's events faintly on its card; the routes toggle overrides to every route of the year |
 | battle lines and movements | near | one event |
 | the diorama itself: terrain, vegetation, structures, people, weather | near | the keyframe nearest the chosen year |
 
@@ -238,6 +238,12 @@ instead. This is a known pattern and the single largest technical item.
 - World units: the ahupuaʻa app uses 1 unit = 100 m. At 600 km that is 6,000
   units, which float precision handles; a floating origin keeps the valley-scale
   detail stable anyway.
+- **The chain view is a diagonal.** The whole-chain framing turns the camera so
+  the chain's long axis, Niʻihau to the southeast point of Hawaiʻi Island,
+  runs along the screen's own diagonal, Niʻihau top left and Hawaiʻi Island
+  bottom right, and fits the chain to that diagonal so the islands are as
+  large as the frame allows, at any aspect ratio. A far step that leans
+  toward an event's place keeps this orientation and only shifts and zooms.
 - **Vertical exaggeration varies with zoom.** 1.3 is right in a valley. Over
   600 km a 4,200 m mountain is a bump of under one percent, so the far view wants
   *more* exaggeration, and the transition has to be smooth during the zoom.
