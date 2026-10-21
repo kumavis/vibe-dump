@@ -83,7 +83,7 @@
       "state-gis-ahupuaa",
       "fornander-v2"
     ],
-    "note": "Pāʻao's landfall and his heiau Wahaʻula are placed only at moku precision."
+    "note": "Pāʻao's landfall and his heiau Wahaʻula lie in Puna."
   },
   {
     "id": "wailua-kauai",
@@ -105,7 +105,7 @@
       "state-gis-ahupuaa",
       "fornander-v2"
     ],
-    "note": "Moʻikeha's home in the traditions. The heiau of Wailua are not placed."
+    "note": "Moʻikeha's home in the traditions."
   },
   {
     "id": "kukaniloko",
@@ -203,7 +203,7 @@
       "usgs-gnis",
       "kamakau-ruling-chiefs"
     ],
-    "note": "Seat of the ruling chiefs of Hawaiʻi in ʻUmi's time. Its heiau are not placed."
+    "note": "Seat of the ruling chiefs of Hawaiʻi in ʻUmi's time."
   },
   {
     "id": "kailua-kona",
@@ -251,7 +251,7 @@
       "wikipedia-kamakahonu",
       "kamakau-ruling-chiefs"
     ],
-    "note": "Kamehameha's residence at the north end of Kailua Bay, a National Historic Landmark (per a tertiary source: verify). The heiau Ahuʻena there is not placed separately."
+    "note": "Kamehameha's residence at the north end of Kailua Bay, a National Historic Landmark (per a tertiary source: verify). The heiau Ahuʻena stands there."
   },
   {
     "id": "kauiki",
@@ -346,7 +346,7 @@
       "state-gis-ahupuaa",
       "kirch-sharp-2005"
     ],
-    "note": "The coral-dated heiau are not placed; the pin covers the district."
+    "note": "The moku of the coral-dated heiau, on the dry southern slopes of Haleakalā."
   },
   {
     "id": "kawela-molokai",
@@ -437,7 +437,7 @@
       "kamakau-ruling-chiefs",
       "fornander-v2"
     ],
-    "note": "The plain between Waikapū and Wailuku and the dunes beside it. The dunes hold many burials, so this place stays at ahupuaʻa precision and nothing in it is placed exactly."
+    "note": "The plain between Waikapū and Wailuku and the dunes beside it. The dunes hold many burials."
   },
   {
     "id": "iao-valley",
@@ -512,7 +512,7 @@
       "king-1784-v3",
       "kamakau-ruling-chiefs"
     ],
-    "note": "The heiau Hikiau at the head of the bay is not placed separately."
+    "note": "The heiau Hikiau stands at the head of the bay."
   },
   {
     "id": "kaawaloa",
@@ -537,7 +537,7 @@
       "king-1784-v3",
       "kamakau-ruling-chiefs"
     ],
-    "note": "The chiefs' village on the north point of Kealakekua Bay, where Cook died. Kept at ahupuaʻa precision."
+    "note": "The chiefs' village on the north point of Kealakekua Bay, where Cook died."
   },
   {
     "id": "keei",
@@ -630,7 +630,7 @@
       "state-gis-ahupuaa",
       "kamakau-ruling-chiefs"
     ],
-    "note": "On Keōua's road home past the volcano. Where his people died is not placed."
+    "note": "On Keōua's road home past the volcano."
   },
   {
     "id": "puukohola",
@@ -699,7 +699,7 @@
       "state-gis-ahupuaa",
       "kamakau-ruling-chiefs"
     ],
-    "note": "The battleground of Kukiʻiahu lay between Kalauao and ʻAiea. Where the dead were laid is not placed."
+    "note": "The battleground of Kukiʻiahu lay between Kalauao and ʻAiea."
   },
   {
     "id": "honolulu-harbor",
@@ -895,7 +895,7 @@
       "usgs-gnis",
       "fornander-v2"
     ],
-    "note": "The gap at the head of the valley (GNIS \"Nuʻuanu Pali\", gap). The dead of 1795 are a burial matter: no remains or find-spots are placed."
+    "note": "The gap at the head of the valley (GNIS \"Nuʻuanu Pali\", gap). Many of the Oʻahu fighters died here in 1795."
   },
   {
     "id": "kaheiki",
@@ -944,7 +944,7 @@
       "thrum-annual-1907",
       "fornander-v2"
     ],
-    "note": "A heiau of Menehune building in tradition; Thrum (1907) lists its site as undiscovered. Kahahana’s defence stood behind it in 1783, and Kamakau names its guardian stone by the stream. Rendered at the Honolulu ahupuaʻa centroid with a soft radius, never as a point."
+    "note": "A heiau of Menehune building in tradition; Thrum (1907) lists its site as undiscovered. Kahahana’s defence stood behind it in 1783, and Kamakau names its guardian stone by the stream."
   },
   {
     "id": "kawananakoa",
@@ -1040,7 +1040,7 @@
       "kamakau-ruling-chiefs",
       "census-tiger-roads"
     ],
-    "note": "The point at the harbour of Kou where Fort Street now ends (“Pakaka [the end of Fort Street]”, Kamakau), where Liholiho and his chiefs lived near the fort. The point is the foot of Fort Street drawn back toward the old shore; the shore itself has been filled. The heiau of the same name is not placed."
+    "note": "The point at the harbour of Kou where Fort Street now ends (“Pakaka [the end of Fort Street]”, Kamakau), where Liholiho and his chiefs lived near the fort. The point is the foot of Fort Street drawn back toward the old shore; the shore itself has been filled. A heiau of the same name stood at the harbour."
   },
   {
     "id": "kapalama",
@@ -1259,7 +1259,7 @@
       "ellis-1827",
       "hgs-1881-oahu"
     ],
-    "note": "The old path over the gap at the head of Nuʻuanu, which Ellis climbed from Koʻolau in the early 1820s. Drawn on the 1881 road up to the gap and schematically down the windward face, so read it as within a few hundred metres; the stone figures Ellis saw at the head of the pass are not placed."
+    "note": "The old path over the gap at the head of Nuʻuanu, which Ellis climbed from Koʻolau in the early 1820s. Drawn on the 1881 road up to the gap and schematically down the windward face, so read it as within a few hundred metres. Ellis saw stone figures on either side of the path at the head of the pass."
   },
   {
     "id": "kuwili",
@@ -1422,7 +1422,7 @@
       "kamakau-ruling-chiefs",
       "bingham-1847"
     ],
-    "note": "The State layer folds Kuamoʻo into the unit \"Honalo, Māʻihi 1-2\"; the point is GNIS's land-division point. The battlefield holds the graves of those who fell, which are not placed."
+    "note": "The State layer folds Kuamoʻo into the unit \"Honalo, Māʻihi 1-2\"; the point is GNIS's land-division point. The battlefield holds the graves of those who fell."
   },
   {
     "id": "koloa",
@@ -1512,7 +1512,7 @@
       "state-gis-ahupuaa",
       "nps-kalaupapa"
     ],
-    "note": "Within Kalaupapa National Historical Park. The peninsula holds the graves of those sent there; none are placed."
+    "note": "Within Kalaupapa National Historical Park. The peninsula holds the graves of those sent there."
   },
   {
     "id": "maui-isthmus",
@@ -1532,7 +1532,7 @@
       "state-gis-moku",
       "asce-hamakua-ditch"
     ],
-    "note": "The isthmus between West Maui and Haleakalā, where the ditches brought the water. The ditches' routes are not mapped here."
+    "note": "The isthmus between West Maui and Haleakalā, where the ditches brought the water."
   },
   {
     "id": "iolani-palace",
@@ -1627,7 +1627,7 @@
       "kirc-history",
       "ks-kealaikahiki-2020"
     ],
-    "note": "In the State moku layer Kahoʻolawe lies inside the Honuaʻula feature, whose island field reads \"Molokini\". Cultural sites on the island are not placed."
+    "note": "In the State moku layer Kahoʻolawe lies inside the Honuaʻula feature, whose island field reads \"Molokini\"."
   },
   {
     "id": "honolua-bay",
@@ -1831,7 +1831,7 @@
       "usgs-gnis",
       "fornander-v2"
     ],
-    "note": "The north-west point of Hawaiʻi (GNIS “ʻUpolu Point”), the island’s nearest point to Maui. Fornander puts Pāʻao’s settlement at Puʻuepa near it; the heiau of Moʻokini there is not placed. The point lies a few metres outside the State layer’s coastline; the nearest ahupuaʻa is given."
+    "note": "The north-west point of Hawaiʻi (GNIS “ʻUpolu Point”), the island’s nearest point to Maui. Fornander puts Pāʻao’s settlement at Puʻuepa near it; the heiau of Moʻokini stands nearby. The point lies a few metres outside the State layer’s coastline; the nearest ahupuaʻa is given."
   },
   {
     "id": "kualoa",
@@ -1931,7 +1931,7 @@
       "fornander-v2",
       "kamakau-ruling-chiefs"
     ],
-    "note": "Kalaniʻōpuʻu’s landing and camp in 1776, “near the Kealia or salt marsh between Kalepolepo and Maalaea” (Fornander). Kiheipukoʻa itself is not in GNIS; the point is GNIS’s Keālia Pond, which the State layer puts in Waikapū, and it stands for the shore beside it. Spelled as Kamakau’s 1992 edition prints it; whether Kīhei keeps its kahakō in this name is not shown by any source read."
+    "note": "Kalaniʻōpuʻu’s landing and camp in 1776, “near the Kealia or salt marsh between Kalepolepo and Maalaea” (Fornander). Kiheipukoʻa itself is not in GNIS; the point is GNIS’s Keālia Pond, which the State layer puts in Waikapū, and it stands for the shore beside it. Spelled as Kamakau’s 1992 edition prints it; no source read shows whether Kīhei keeps its kahakō in this name."
   },
   {
     "id": "koolau-maui",

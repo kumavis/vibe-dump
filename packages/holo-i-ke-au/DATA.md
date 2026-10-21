@@ -566,6 +566,15 @@ Nuʻuanu to the pali, with Kalihi and Mānoa at the edges.
   `source` and `note` on each patch. Two patches may share one mask when the
   sources cannot separate their years. A `shoreline-<year>.geojson` traced
   from a survey sheet is listed under `files`.
+- **After the first render.** Every `force` and `line` carries `stop`: the
+  0-based index of the stop of its `event` at which it shows (an array for a
+  front shown at several stops); the app prefers it to any inference. A
+  `stream` feature carries its `name` and `role: "reference"`: the app routes
+  water from the heights and uses these for names and checks. A loʻi outline
+  stays on the floor: `check-data.mjs` fails it above 10% of its texels over
+  15% slope on the district heights and warns above 5%. And the copy rule of
+  DESIGN.md §7.4 is enforced: no user-facing field says what the app does not
+  show, place or draw; the checker fails on the phrases it looks for.
 
 ### How to bake a district
 

@@ -8,15 +8,18 @@
 // it exists, public/data/boundaries/moku.geojson (for its mokuKey values, and
 // for the coastline the routes must keep to the sea of), and each district's
 // features.json named in districts/manifest.json (or, with no manifest,
-// districts/*/features.json), with boundaries/ahupuaa.geojson for the heiau rule.
+// districts/*/features.json), with boundaries/ahupuaa.geojson for the heiau rule
+// and the district's height image for the loʻi slope rule.
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
-// No dependencies. Exits 1 with a list of problems, or prints counts when clean.
+// No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
+// problems, or prints counts when clean.
 // Warnings are printed but do not fail the check.
 
 import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { readPNG } from './lib/png.mjs'
 
 const DEFAULT_DATA = join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'data')
 const DATA = process.argv[2] ? resolve(process.argv[2]) : DEFAULT_DATA
@@ -99,6 +102,13 @@ const FEATURE_PRECISION = new Set(['exact', 'mapped', 'inferred', 'schematic'])
 // the sides a force moves for: DATA.md names oahu and hawaii (1795); maui is Kahekili's army of 1783
 const FORCE_ROLES = new Set(['oahu', 'hawaii', 'maui'])
 const LINE_ROLES = new Set(['advance', 'stand', 'retreat'])
+// a mapped stream is kept for labels and checks; the app routes the water from the heights
+const STREAM_ROLES = new Set(['reference'])
+// loʻi lie on the valley floor: the share of a loʻi's texels steeper than LOI_STEEP (rise over run,
+// from central differences of the district heights) is aimed under LOI_STEEP_AIM and fails above LOI_STEEP_FAIL
+const LOI_STEEP = 0.15
+const LOI_STEEP_AIM = 0.05
+const LOI_STEEP_FAIL = 0.1
 const COARSE = new Set(['ahupuaa', 'moku', 'island']) // what a heiau may be held at
 const HEIAU_CENTROID_KM = 0.3 // a heiau at ahupuaʻa precision stands at its ahupuaʻa's centroid, within this
 // the box tools/lib/district-sources.mjs bakes, used only when districts/manifest.json is absent
@@ -108,12 +118,16 @@ const FALLBACK_DISTRICTS = { nuuanu: { island: 'oahu', bounds: [-157.897, 21.269
 const CAMERA_DISTANCE = [8, 9000]
 const NEAR_CAMERA_MAX = 150 // 15 km: a near stop standing farther back than this is suspect
 const MONTHS = 'January|February|March|April|May|June|July|August|September|October|November|December'
+// The sensitive-site rule is practised, not announced (DESIGN.md §7.4): no user-facing text says what the
+// app does not show, place or draw. Tellings quote their sources and are not checked.
+const ANNOUNCES = /this app|does not place|not drawn|nothing is drawn|is not shown/i
 
 const problems = []
 const warnings = []
 const bad = (where, msg) => problems.push(`${where}: ${msg}`)
 const warn = (where, msg) => warnings.push(`${where}: ${msg}`)
 const districtCounts = [] // filled by checkDistrict, printed by finish
+let copyFields = 0 // user-facing texts held to the copy rule
 let ahupuaaCentroids // undefined until read; null when boundaries/ahupuaa.geojson is absent
 
 // ---------------------------------------------------------------------------
@@ -202,6 +216,13 @@ function checkHawaiian(at, text) {
   if (u) bad(at, `“${u[0]}” without its ʻokina or kahakō`)
 }
 
+function checkCopy(at, text) {
+  if (typeof text !== 'string') return
+  copyFields++
+  const m = text.match(ANNOUNCES)
+  if (m) bad(at, `says what the app does not show (“${m[0]}”); the rule is practised, not announced (DESIGN.md §7.4)`)
+}
+
 // Numbers belong in tellings: in summaries and stops only years, decades and days of a month may appear.
 const BIG_WORDS = /\b(hundreds?|thousands?|millions?|dozens?|scores of|per ?cent)\b/i
 function checkNoNumbers(at, text) {
@@ -251,6 +272,8 @@ for (const e of eras) {
   const at = `eras.json ${e.id}`
   if (!e.label) bad(at, 'has no label')
   checkHawaiian(`${at} label`, e.label)
+  checkCopy(`${at} label`, e.label)
+  checkCopy(`${at} note`, e.note)
   if (!Number.isInteger(e.year)) bad(at, 'year must be an integer')
   if (!(Number.isInteger(e.yearPrecision) && e.yearPrecision >= 0)) bad(at, 'yearPrecision must be a whole number of years (the date has a precision)')
   if (e.year <= lastYear) bad(at, 'eras must be in order of year')
@@ -271,6 +294,7 @@ for (const p of places) {
   const at = `places.json ${p.id}`
   if (!p.name) bad(at, 'has no name')
   checkHawaiian(`${at} name`, p.name)
+  for (const k of ['name', 'note', 'gloss']) checkCopy(`${at} ${k}`, p[k])
   if (!PLACE_KINDS.has(p.kind)) bad(at, `kind “${p.kind}” is not in the vocabulary`)
   if (!PLACE_PRECISION.includes(p.placePrecision)) bad(at, `placePrecision “${p.placePrecision}” is not exact | ahupuaa | moku | island | sea`)
   if (p.island && !ISLANDS.has(p.island)) bad(at, `island “${p.island}” is not a pack id`)
@@ -312,6 +336,7 @@ for (const ev of events) {
   if (!ev.title) bad(at, 'has no title')
   checkHawaiian(`${at} title`, ev.title)
   checkHawaiian(`${at} gloss`, ev.gloss)
+  for (const k of ['title', 'gloss', 'summary']) checkCopy(`${at} ${k}`, ev[k])
   // when
   const w = ev.when
   if (!w) bad(at, 'has no when')
@@ -352,6 +377,7 @@ for (const ev of events) {
     const sat = `${at} stop ${i + 1}`
     if (!s.text) bad(sat, 'has no text')
     checkHawaiian(sat, s.text)
+    checkCopy(sat, s.text)
     checkNoNumbers(sat, s.text)
     if (!P.has(s.place)) bad(sat, `place “${s.place}” is not in places.json`)
     else usedPlaces.add(s.place)
@@ -393,6 +419,7 @@ else {
     seen.add(p.id)
     if (!p.name) bad(at, 'has no name')
     checkHawaiian(`${at} name`, p.name)
+    checkCopy(`${at} name`, p.name)
     if (!/^#[0-9a-fA-F]{6}$/.test(p.colour || '')) bad(at, 'colour must be #rrggbb')
     POL.set(p.id, p)
   }
@@ -414,6 +441,7 @@ for (const [era, notes] of Object.entries(polities.notes || {})) {
   for (const [key, text] of Object.entries(notes)) {
     if (key !== '_' && !mokuKeys.has(key)) bad(`polities.json notes ${era}`, `key “${key}” is not a moku key`)
     checkHawaiian(`polities.json notes ${era} ${key}`, text)
+    checkCopy(`polities.json notes ${era} ${key}`, text)
   }
 }
 for (const [era, ids] of Object.entries(polities.sources || {})) {
@@ -435,6 +463,7 @@ function checkRoutes() {
     if (!r.title) bad(at, 'has no title')
     checkHawaiian(`${at} title`, r.title)
     checkHawaiian(`${at} gloss`, r.gloss)
+    for (const k of ['title', 'gloss', 'summary']) checkCopy(`${at} ${k}`, r[k])
     if (!ROUTE_KINDS.has(r.kind)) bad(at, `kind “${r.kind}” is not voyage | fleet | ship | trade | schematic`)
     if (!POINT_PRECISION.has(r.pointPrecision)) bad(at, `pointPrecision “${r.pointPrecision}” is not journal | narrative | schematic`)
     if (!DIRECTIONS.has(r.direction)) bad(at, `direction “${r.direction}” is not oneway | return`)
@@ -523,6 +552,7 @@ function checkRoutes() {
       }
       if (w.note !== undefined) {
         checkHawaiian(`${at} waypoint ${w.at}`, w.note)
+        checkCopy(`${at} waypoint ${w.at}`, w.note)
         checkNoNumbers(`${at} waypoint ${w.at}`, w.note)
       }
     }
@@ -720,7 +750,7 @@ function loadDistricts() {
       const b = d.bounds
       if (!(Array.isArray(b) && b.length === 4 && b.every(Number.isFinite) && b[0] < b[2] && b[1] < b[3])) { bad(at, 'bounds must be [west, south, east, north]'); continue }
       if (!d.features) { warn(at, 'names no features file'); continue }
-      out.push({ id: d.id, island: d.island, bounds: b, file: `districts/${d.features}`, from: 'districts/manifest.json' })
+      out.push({ id: d.id, island: d.island, bounds: b, size: d.size, metresPerTexel: d.metresPerTexel, height: d.height, file: `districts/${d.features}`, from: 'districts/manifest.json' })
     }
   } else if (existsSync(dir)) {
     for (const id of readdirSync(dir)) {
@@ -790,6 +820,8 @@ function checkDistrict(d) {
   if (fc?.type !== 'FeatureCollection' || !Array.isArray(fc.features)) { bad(d.file, 'must be a GeoJSON FeatureCollection'); return }
   const seen = new Set()
   const kinds = {}
+  const steps = {} // event id → [{ at, step, stop }], for the order of steps against stops
+  const lois = [] // [at, polygon], for the slope rule
   for (const [i, f] of fc.features.entries()) {
     const at = `${d.file} ${f?.id ?? `#${i}`}`
     if (f?.type !== 'Feature' || !f.properties || typeof f.properties !== 'object') { bad(at, 'must be a Feature with properties'); continue }
@@ -807,6 +839,8 @@ function checkDistrict(d) {
     checkHawaiian(`${at} note`, p.note)
     checkNoNumbers(`${at} name`, p.name)
     checkNoNumbers(`${at} note`, p.note)
+    checkCopy(`${at} name`, p.name)
+    checkCopy(`${at} note`, p.note)
     for (const k of ['from', 'to']) if (!(p[k] === null || Number.isInteger(p[k]))) bad(at, `${k} must be a year or null`)
     if (Number.isInteger(p.from) && Number.isInteger(p.to) && p.from > p.to) bad(at, `from ${p.from} is after to ${p.to}`)
     if (!FEATURE_PRECISION.has(p.precision)) bad(at, `precision “${p.precision}” is not exact | mapped | inferred | schematic`)
@@ -840,6 +874,7 @@ function checkDistrict(d) {
     if (g.type === 'Polygon') {
       if (!g.coordinates.length) bad(at, 'a polygon needs a ring')
       g.coordinates.forEach((r, k) => checkRing(`${at} ring ${k}`, r, k === 0))
+      if (p.kind === 'loi') lois.push([at, g.coordinates])
     }
 
     // the battle as masses and lines: a side or a role, a date, an event
@@ -850,14 +885,30 @@ function checkDistrict(d) {
       const w = typeof p.when === 'string' ? parseDate(p.when) : null
       if (!w || w.parts < 2) bad(at, `a ${p.kind} needs a when, an ISO month or date (YYYY-MM or YYYY-MM-DD)`)
       if (p.step !== undefined && !(Number.isInteger(p.step) && p.step >= 0)) bad(at, 'step must be a whole number (the order within its event)')
+      // the stop of its event at which it shows: an index from 0 into the event's stops
+      const hasStop = Number.isInteger(p.stop) && p.stop >= 0
+      if (!hasStop) bad(at, `a ${p.kind} needs a stop: the index, from 0, of the stop of its event at which it shows`)
       if (p.event !== undefined) {
         const ev = V.get(p.event)
         if (!ev) bad(at, `event “${p.event}” is not in events.json`)
-        else if (w) {
-          const a = parseDate(ev.when?.from), b = parseDate(ev.when?.to ?? ev.when?.from)
-          if (a && b && (w.end < a.start - 1 / 12 || w.start > b.end + 1 / 12)) bad(at, `when ${p.when} falls outside event ${ev.id} (${ev.when.from}–${ev.when.to})`)
+        else {
+          if (w) {
+            const a = parseDate(ev.when?.from), b = parseDate(ev.when?.to ?? ev.when?.from)
+            if (a && b && (w.end < a.start - 1 / 12 || w.start > b.end + 1 / 12)) bad(at, `when ${p.when} falls outside event ${ev.id} (${ev.when.from}–${ev.when.to})`)
+          }
+          const stops = ev.stops || []
+          if (hasStop && p.stop >= stops.length) bad(at, `stop index ${p.stop} is not a stop of event ${ev.id}, whose stops are indexed 0 to ${stops.length - 1}`)
+          else if (hasStop) {
+            const y = stops[p.stop].year
+            if (Number.isInteger(y) && ((Number.isInteger(p.from) && y < p.from) || (Number.isInteger(p.to) && y > p.to))) bad(at, `shows at stop index ${p.stop} of ${ev.id} (${y}), outside its years ${p.from}–${p.to}`)
+            if (Number.isInteger(p.step)) (steps[ev.id] ||= []).push({ at, step: p.step, stop: p.stop })
+          }
         }
       } else warn(at, `a ${p.kind} names no event`)
+    } else if (p.kind === 'stream') {
+      // the app routes water from the heights; a mapped course is kept for its label and for checks
+      if (!STREAM_ROLES.has(p.role)) bad(at, `a stream's role “${p.role}” is not ${[...STREAM_ROLES].join(' | ')}`)
+      if (!p.name) bad(at, 'a stream needs its name, for its label')
     } else if (p.role !== undefined) bad(at, `a ${p.kind} has no role`)
 
     // heiau: ahupuaʻa precision unless an established public landmark (DATA.md §4, DESIGN.md §7.4)
@@ -877,7 +928,75 @@ function checkDistrict(d) {
       }
     }
   }
-  districtCounts.push({ id: d.id, n: fc.features.length, kinds, from: d.from })
+  // a later step never shows at an earlier stop
+  for (const list of Object.values(steps)) {
+    for (const a of list) for (const b of list) {
+      if (a.step < b.step && a.stop > b.stop) bad(b.at, `step ${b.step} shows at stop index ${b.stop}, before ${a.at.split(' ').at(-1)} (step ${a.step}) at stop index ${a.stop}`)
+    }
+  }
+  const steep = lois.length ? checkLoiSlopes(d, lois) : null
+  districtCounts.push({ id: d.id, n: fc.features.length, kinds, from: d.from, steep })
+}
+
+/**
+ * Loʻi lie on the valley floor: for each loʻi polygon, the share of the district texels whose centres
+ * fall inside it (even-odd over its rings) that are steeper than LOI_STEEP, the slope as rise over run
+ * from central differences of the neighbouring texels' heights (edges clamped). Returns the worst share.
+ */
+function checkLoiSlopes(d, lois) {
+  const where = `districts/${d.height?.file}`
+  if (!d.height?.file || !Array.isArray(d.size)) { warn(d.file, 'no height image named in districts/manifest.json, so the loʻi are not held to the valley floor'); return null }
+  const path = join(DATA, 'districts', d.height.file)
+  if (!existsSync(path)) { warn(where, 'is missing, so the loʻi are not held to the valley floor'); return null }
+  let img
+  try { img = readPNG(path) } catch (e) { bad(where, `does not decode: ${e.message}`); return null }
+  const [W, H] = d.size
+  if (img.width !== W || img.height !== H || img.channels !== 3) { bad(where, `is ${img.width}x${img.height} with ${img.channels} channels; the manifest says ${W}x${H}, split-byte RGB`); return null }
+  const scale = d.height.scale ?? 0.25
+  const offset = d.height.offset ?? -6000
+  const [west, south, east, north] = d.bounds
+  const dLon = (east - west) / W
+  const dLat = (north - south) / H
+  // metres per texel in the shared projection (DATA.md §1), as the manifest gives them
+  const [mx, mz] = Array.isArray(d.metresPerTexel) ? d.metresPerTexel : [dLon * Math.cos((20.5 * Math.PI) / 180) * 111320, dLat * 110574]
+  const h = (i, j) => {
+    const o = (Math.max(0, Math.min(H - 1, j)) * W + Math.max(0, Math.min(W - 1, i))) * 3
+    return (img.data[o] * 256 + img.data[o + 1]) * scale + offset
+  }
+  const slope = (i, j) => Math.hypot((h(i + 1, j) - h(i - 1, j)) / (2 * mx), (h(i, j + 1) - h(i, j - 1)) / (2 * mz))
+  let worst = { share: 0, at: null }
+  for (const [at, rings] of lois) {
+    let n = 0
+    let steep = 0
+    let y0 = Infinity
+    let y1 = -Infinity
+    for (const r of rings) for (const c of r) { y0 = Math.min(y0, c[1]); y1 = Math.max(y1, c[1]) }
+    for (let j = Math.max(0, Math.floor((north - y1) / dLat)); j <= Math.min(H - 1, Math.floor((north - y0) / dLat)); j++) {
+      const lat = north - (j + 0.5) * dLat
+      const xs = []
+      for (const r of rings) {
+        for (let a = 0, b = r.length - 1; a < r.length; b = a++) {
+          if ((r[a][1] > lat) !== (r[b][1] > lat)) xs.push(((r[b][0] - r[a][0]) * (lat - r[a][1])) / (r[b][1] - r[a][1]) + r[a][0])
+        }
+      }
+      xs.sort((p, q) => p - q)
+      for (let k = 0; k + 1 < xs.length; k += 2) {
+        const iA = Math.max(0, Math.ceil((xs[k] - west) / dLon - 0.5))
+        const iB = Math.min(W - 1, Math.ceil((xs[k + 1] - west) / dLon - 0.5) - 1)
+        for (let i = iA; i <= iB; i++) {
+          n++
+          if (slope(i, j) > LOI_STEEP) steep++
+        }
+      }
+    }
+    if (!n) { bad(at, 'covers no texel of the district'); continue }
+    const share = steep / n
+    const pc = (v) => `${(100 * v).toFixed(1)}%`
+    if (share > LOI_STEEP_FAIL) bad(at, `${pc(share)} of its texels are steeper than ${LOI_STEEP * 100}%: loʻi lie on the valley floor (aim under ${pc(LOI_STEEP_AIM)}, fail over ${pc(LOI_STEEP_FAIL)})`)
+    else if (share > LOI_STEEP_AIM) warn(at, `${pc(share)} of its texels are steeper than ${LOI_STEEP * 100}% (aim under ${pc(LOI_STEEP_AIM)})`)
+    if (share >= worst.share) worst = { share, at }
+  }
+  return worst
 }
 
 // ---------------------------------------------------------------------------
@@ -907,8 +1026,12 @@ function finish() {
     console.log(`  routes    ${routes.length} (${fmt(count(routes, (r) => r.pointPrecision))}; ${fmt(count(routes, (r) => r.kind))})`)
     console.log(`            ${routes.reduce((s, r) => s + r.points.length, 0)} points, ${routes.filter((r) => r.event).length} tied to an event, ${routes.filter((r) => r.waypoints?.some((w) => w.date)).length} with dated waypoints${mokuGeo ? '; all at sea between their ends' : ''}`)
   }
-  for (const d of districtCounts) console.log(`  district  ${d.id}: ${d.n} features (${fmt(d.kinds)}), box from ${d.from}`)
+  for (const d of districtCounts) {
+    console.log(`  district  ${d.id}: ${d.n} features (${fmt(d.kinds)}), box from ${d.from}`)
+    if (d.steep?.at) console.log(`            loʻi on the floor: at most ${(100 * d.steep.share).toFixed(1)}% of a loʻi's texels steeper than ${LOI_STEEP * 100}% (${d.steep.at.split(' ').at(-1)})`)
+  }
   const cams = events.reduce((n, e) => n + (e.stops || []).filter((s) => s.camera).length, 0)
   if (cams) console.log(`  cameras   ${cams} stops carry a camera`)
+  console.log(`  copy      ${copyFields} user-facing texts, none saying what the app does not show`)
   if (warnings.length) console.log(`  warnings  ${warnings.length}`)
 }

@@ -819,3 +819,252 @@ stop whose place lies in a district has no camera.
   site area, whose record also holds burials (only the pond outlines were taken); Pūowaina
   as a place, now a national cemetery; and how to credit the oral account's speakers, who
   are living people.
+
+## 11. Fixes after the first render
+
+The first close-up (Nuʻuanu, 1795, and Kaheiki, 1783) was rendered and looked at, and these
+are the data fixes that followed, from the render pass and from the project's owner. Made in
+October 2026. The district's heights, rain and patches are untouched; the slopes, shores and
+cameras below are measured on them. `tools/check-data.mjs` enforces the new rules and is clean.
+
+| file | change |
+| --- | --- |
+| `districts/nuuanu/features.json` | 62 features (was 61): `stop` on every force and line; a landing force for 1783; the 1795 landing redrawn on the beach; the seven loʻi trimmed to the valley floors; Kuwili and Kahoʻikekanaka rounded; `role: "reference"` on the six streams; fifteen notes rewritten |
+| `events.json` | the pali stop's camera; seven sentences rewritten (below) |
+| `places.json` | twenty notes rewritten (below) |
+| `sources.json` | 74 (was 73): the district's lidar, which the trims and the landings were measured on |
+| `routes.json` | three sentences rewritten (below); outside this pass's own files, changed only so the copy rule can hold everywhere |
+| `tools/check-data.mjs` | `stop` required and checked, the loʻi slope rule, the copy rule, `role` on streams |
+
+### Which stop shows each force and line
+
+Forces and lines now carry `stop`, the index from 0 into their event's `stops`, at which they
+show; the render no longer has to infer it from where each front stands. The render's
+inference had settled on a map given with stops counted from 1 (Nuʻuanu stops 3–7 for steps
+0–4 and stop 8 for steps 5 and 6; Kaheiki stops 2 and 3 for steps 1 and 2): Nuʻuanu has eight
+stops, so there is no index 8. Counted from 0 that is stops 2–7 and 1–2, and read against the
+stop texts and the lines it needed two changes:
+
+- **Kalanikūpule's posts** (step 1) show at the Kou stop, not with the landing: the Kou text is
+  the one that says the Oʻahu forces hold the valley "from Puʻiwa upward through a line of named
+  places", and the Waikīkī text speaks only of the landing.
+- **The escapes over the ridges** (step 5) show at the Lāʻimi stop, not at the pali: its text
+  ends "some escaping over the ridges on either side", Fornander puts the escapes "up the sides of
+  the mountains" straight after the rout (p. 348), and both lines start at Lāʻimi. The retreat,
+  the pursuit and the path down to Koʻolau stay at the pali.
+
+| event | stop (from 0) | text | features |
+| --- | --- | --- | --- |
+| nuuanu-1795 | 2 | the Kaʻiwi channel | `force-kaiana-crossing` |
+| nuuanu-1795 | 3 | Waikīkī | `force-hawaii-landing` |
+| nuuanu-1795 | 4 | Kou | `force-oahu-posts`, `force-hawaii-march` |
+| nuuanu-1795 | 5 | Puʻiwa | `line-puiwa-oahu`, `line-puiwa-hawaii` |
+| nuuanu-1795 | 6 | Lāʻimi | `force-oahu-fallback`, `line-laimi-oahu`, `line-laimi-hawaii`, `force-oahu-escape-west`, `force-oahu-escape-east` |
+| nuuanu-1795 | 7 | the pali | `force-oahu-retreat`, `force-hawaii-pursuit`, `force-oahu-down-the-trail` |
+| kaheiki-1783 | 0 | Waikīkī | `force-1783-landing` (new) |
+| kaheiki-1783 | 1 | Pūowaina | `force-1783-puowaina`, `force-1783-pauoa`, `force-1783-kapena` |
+| kaheiki-1783 | 2 | Kaheiki | `line-1783-kaheiki` |
+
+Steps keep their meaning (the order within the event); no later step shows at an earlier stop.
+
+### The landings, on the beach
+
+The 1795 landing ran 4.8 km behind Lēʻahi, rising to 80 m on the Kaimukī side of the crater
+(the render measured a climb of 59 m) and 14 % of it over today's water. The beaches the sources
+name run from Waiʻalae round the seaward side of Lēʻahi to Waikīkī, and the district's south
+edge (21.269 N) cuts them: Kaʻalāwai Beach (GNIS) is at 21.257 N, and from Kapiʻolani Park
+eastward the shore lies outside the box. Inside it there is only the Waikīkī beach, so both
+landings are drawn there and nowhere else.
+
+The line follows `shoreline-1881.geojson`, densified to 15 m and offset inland, at each sample,
+at least 40 m and on until the ground is land in 1795 (today's land, less the contact patch) for 30 m on; the offsets
+are held to the running maximum over the 75 m either side, averaged over the same window, and
+given 30 m more; Douglas–Peucker at 8 m. At Waikīkī today's sea reaches 100–150 m inside the
+1881 trace (cross-sections of the lidar across it), so the line keeps inland of both shores; at
+Kālia it stays off the fill the contact patch lowers.
+
+| line | vertices | length | heights | over today's water | from the 1881 trace |
+| --- | --- | --- | --- | --- | --- |
+| 1795, before | 6 | 4.8 km | −1.5 to 80 m | 14 % | 58 m to 3.5 km |
+| 1795, after (`force-hawaii-landing`) | 11 | 2.0 km | 0.8–5.3 m | 0 | 70–295 m |
+| 1783 (`force-1783-landing`, new) | 9 | 1.6 km | 1.0–3.7 m | 0 | 94–295 m |
+
+The 1795 line runs from the box edge below Lēʻahi to Kālia and ends 90 m from the start of the
+march. The 1783 line is the same track to Kawehewehe, the beach GNIS calls Grays Beach
+(−157.8317, 21.2773): Kamakau has Kahekili's canoes reach "from Kaʻalawai to Kawehewehe" (p. 135)
+and Fornander has the army "encamped and organising" at ʻĀpuakēhau in Waikīkī before the march
+inland (p. 224); the three columns already start there. It is `schematic`, role `maui`, step 0,
+cited like the other 1783 forces (Fornander, Kamakau) and the 1881 sheet for the shore.
+
+### Loʻi trimmed to the valley floors
+
+The first outlines came from the island pack's 68 m heights, and on the 6 m district heights they
+climb the walls. Slope here is rise over run from central differences of the neighbouring texels
+(the district grid, 6.05 m; edges clamped), counted over the texels whose centres fall inside a
+polygon; the render measured 15–19 % of texels over 20 % slope in Kalihi and Nuʻuanu with its own
+sampling, and this measure gives 17.5–22 % there.
+
+Each outline was trimmed, never grown: inside the old outline (less a texel at its edge and two
+texels clear of every other loʻi), keep the texels where the share of steep (over 15 %) texels in
+a small window is under a threshold; close and open with discs; drop pieces under 1.5 ha (the
+first rule); join the pieces that lie within 120 m of each other, inside the old outline, by the
+shortest path, five texels wide, across the stream gulch that otherwise splits them; fill holes
+under 1 ha; trace the texel edges and simplify at 7.5 m. Window (3–7 texels), threshold
+(0.12–0.6), closing (0–2 texels) and opening (1–3) were searched per polygon for the largest floor
+whose steep share is at most 4.9 %, with each extra piece counted against it. Every loʻi came out as one
+piece, Mānoa with one hole.
+
+| loʻi | before: area, over 15 %, over 20 % | after: area (kept), over 15 %, over 20 % | vertices |
+| --- | --- | --- | --- |
+| `loi-nuuanu-lower` | 187.2 ha, 24.3 %, 17.5 % | 118.5 ha (63 %), 4.0 %, 1.4 % | 111 → 617 |
+| `loi-nuuanu-upper` | 71.0 ha, 27.8 %, 20.7 % | 41.6 ha (59 %), 4.2 %, 1.4 % | 35 → 307 |
+| `loi-pauoa` | 77.7 ha, 11.4 %, 7.8 % | 63.0 ha (81 %), 4.3 %, 2.2 % | 42 → 154 |
+| `loi-kapalama` | 62.0 ha, 8.9 %, 4.6 % | 55.3 ha (89 %), 4.6 %, 1.6 % | 45 → 105 |
+| `loi-kapalama-2` | 9.8 ha, 14.4 %, 4.5 % | 5.4 ha (55 %), 4.6 %, 0.5 % | 22 → 45 |
+| `loi-kalihi` | 102.6 ha, 31.0 %, 22.0 % | 45.3 ha (44 %), 4.9 %, 1.5 % | 130 → 199 |
+| `loi-manoa` | 214.0 ha, 9.7 %, 6.3 % | 194.7 ha (91 %), 4.9 %, 2.3 % | 97 → 229, one hole |
+
+What went is the walls the stream bands ran up (in lower Nuʻuanu the stream runs along the foot
+of the east wall, so much of the band lay on it), the stream gulch itself where it is incised (it
+is now notches in the outline, bridged where the floor meets across it), and in two places much of
+the floor itself:
+
+- **Upper Kalihi.** Above about 21.354 N the floor is a strip between steep walls, and at 6 m it
+  is all terrace and bank: in each 400 m reach, even its ground gentler than 10 % at a 30 m scale
+  has 10–30 % of its texels over 15 %. No outline of it can be held under the line without lacing
+  round single terraces, so the Kalihi outline now ends in the lower valley and its note says so.
+  Whether those terraces are house lots or old loʻi the heights cannot say; the Land Commission
+  records could.
+- **The upland flats of Luakaha and Makuku**, which lost two fifths of their band along its whole
+  length, among them the reservoir's basin and dam, which stand in the bare earth there (the district
+  bake cuts a breach through the dam for its streams).
+
+The lidar is today's ground, so the floors are judged on the modern valley: house pads, roads and
+channelled streams add their own steep texels. The trims therefore keep the outlines off the walls,
+which was the fault seen in the render, and do not claim to find the old patches. The district's
+lidar is cited on each loʻi and added to `sources.json`.
+
+### The pali camera
+
+`nuuanu-1795` stop index 7 was `{ bearing 50, pitch 0.15, distance 18 }`: 1.75 km down the valley
+and about 320 m above the gap on the terrain's scale, low over the forest of the upper valley, so
+the canopy filled the frame.
+It is now `{ bearing 57, pitch 0.2, distance 32 }`, from the geometry:
+
+- **Bearing 57.** The trail climbs from Luakaha to the crest on 57° (from the trail's bend at the
+  reservoirs, 59°); looking along it puts the camera over the valley axis, so the walls frame the
+  valley evenly, the trail and the stream run up the middle of the frame, and the notch sits
+  between Lanihuli and Konahuanui.
+- **Distance 32, pitch 0.2 (18°).** The camera stands 3 km back, over the valley floor just below
+  Luakaha, at about 1,100 m on the terrain's scale: a little above the peaks either side of the gap
+  (Lanihuli about 845 m, Konahuanui about 955 m in the district heights), so the gap reads as a V
+  in the skyline with the windward plain seen through it and over the lower Lanihuli side. The
+  middle of the frame falls on the gap and its bottom edge on the floor 1.25 km in front of the
+  camera, by the reservoir, so the frame holds the upper valley from there to the gap.
+- Ray-cast over the district and island heights at the rig's 42° field and the near view's ×1.3:
+  sky 15 %, the windward side 14 %, the leeward floor 12 %, the walls 51 %. At pitch 0.25 the camera
+  rises 330 m over Konahuanui and the windward side fills a quarter of the frame, which flattens the
+  notch; at the old camera the floor just in front filled the lower part of the frame, at close
+  range, under trees.
+
+### Kuwili and Kahoʻikekanaka
+
+Both sheets were read again over the two places, exported by the State's image services in
+WGS 84 at about 2 m a pixel (the scans are about 10 m). The 1881 sheet writes Kuwili on the shore
+and rules the ground behind it, east of a curving line and north of the shore road, as wet land; it
+draws no pond walls, and the 1899 sheet draws none either. At Kakaʻako the 1881 sheet draws the
+salt works and the town but no pond, and Kamakau's "makai of Honuakaha" is all that places
+Kahoʻikekanaka. Neither outline can be read, so both are rounded pond shapes of the area the
+first shapes recorded, kept `schematic` and saying so in their notes:
+
+- Kuwili: 28.2 ha, its long axis along the shore (110°), centred about 200 m east of the old
+  hexagon, whose western quarter lay on the unruled plain; it now sits in the ruled ground north-east
+  of the label.
+- Kahoʻikekanaka: 4.7 ha, at the old centre, between the town's south corner and the salt works.
+
+### The mapped streams
+
+The six `stream` features keep their courses and names and gain `role: "reference"`: the app routes
+its water from the heights, and these are kept for labels and for checks against the routed water.
+The Mānoa note now says where the line ends without saying what is left out.
+
+### Copy: the rule is practised, not announced
+
+The project's owner: copy should not keep saying that the app will not show where graves are,
+and so on; the practice stands, the announcing goes (DESIGN.md §7.4). Every summary, stop text,
+note, gloss and era note in `events.json`, `places.json`, `eras.json`, `polities.json` and
+`features.json` was read; tellings quote their sources and were left alone. The era notes and the
+polity notes had none. Where a sentence carried history it was kept and the rest dropped; the pali
+stop now says that many of the Oʻahu fighters die there, and stops.
+
+| where | before | after |
+| --- | --- | --- |
+| event `nuuanu-1795` stop index 7 | … Many of the Oʻahu fighters die there. Their remains are a burial matter for their descendants, and this app does not place them. | … Many of the Oʻahu fighters die there. |
+| event `kahikinui-heiau` | The heiau themselves are not placed on the map. | (dropped) |
+| event `kakanilua-1776` | The Wailuku dunes hold many burials, and this app does not place the battle more closely than the ahupuaʻa. | The Wailuku dunes hold many burials. |
+| event `keanakakoi-1790` | Where the people died is not placed. | (dropped) |
+| event `kamehameha-death-1819` | His bones are prepared in the old way for a sacred chief; this app does not place them. | His bones are prepared in the old way for a sacred chief. |
+| event `kuamoo-1819` | The dead were buried where they fell; this app does not place the graves. | The dead were buried where they fell. |
+| event `kalaupapa-1866` | The peninsula holds the graves of those who died there; this app does not place them. | The peninsula holds the graves of those who died there. |
+| place `puna-hawaii` | Pāʻao's landfall and his heiau Wahaʻula are placed only at moku precision. | Pāʻao's landfall and his heiau Wahaʻula lie in Puna. |
+| place `wailua-kauai` | The heiau of Wailua are not placed. | (dropped) |
+| place `waipio-valley` | Its heiau are not placed. | (dropped) |
+| place `kamakahonu` | The heiau Ahuʻena there is not placed separately. | The heiau Ahuʻena stands there. |
+| place `kahikinui` | The coral-dated heiau are not placed; the pin covers the district. | The moku of the coral-dated heiau, on the dry southern slopes of Haleakalā. |
+| place `kamaomao` | The dunes hold many burials, so this place stays at ahupuaʻa precision and nothing in it is placed exactly. | The dunes hold many burials. |
+| place `kealakekua-bay` | The heiau Hikiau at the head of the bay is not placed separately. | The heiau Hikiau stands at the head of the bay. |
+| place `kaawaloa` | Kept at ahupuaʻa precision. | (dropped) |
+| place `kapapala` | Where his people died is not placed. | (dropped) |
+| place `kalauao` | Where the dead were laid is not placed. | (dropped) |
+| place `nuuanu-pali` | The dead of 1795 are a burial matter: no remains or find-spots are placed. | Many of the Oʻahu fighters died here in 1795. |
+| place `kaheiki-heiau` | Rendered at the Honolulu ahupuaʻa centroid with a soft radius, never as a point. | (dropped) |
+| place `pakaka` | The heiau of the same name is not placed. | A heiau of the same name stood at the harbour. |
+| place `nuuanu-pali-trail` | … so read it as within a few hundred metres; the stone figures Ellis saw at the head of the pass are not placed. | … so read it as within a few hundred metres. Ellis saw stone figures on either side of the path at the head of the pass. |
+| place `kuamoo` | The battlefield holds the graves of those who fell, which are not placed. | The battlefield holds the graves of those who fell. |
+| place `kalawao` | The peninsula holds the graves of those sent there; none are placed. | The peninsula holds the graves of those sent there. |
+| place `maui-isthmus` | The ditches' routes are not mapped here. | (dropped) |
+| place `kahoolawe` | Cultural sites on the island are not placed. | (dropped) |
+| place `upolu-point` | … Puʻuepa near it; the heiau of Moʻokini there is not placed. | … Puʻuepa near it; the heiau of Moʻokini stands nearby. |
+| place `kiheipukoa` | … whether Kīhei keeps its kahakō in this name is not shown by any source read. | … no source read shows whether Kīhei keeps its kahakō in this name. |
+| feature `heiau-kaheiki`, `heiau-kawaluna`, `heiau-makuku`, `heiau-kaahaimauli` | Shown only as within Honolulu ahupuaʻa. | (dropped) |
+| feature `heiau-pakaka` | Shown only as within Honolulu ahupuaʻa; the place Pākākā is in the gazetteer as the landing, not the heiau. | (dropped) |
+| feature `trail-pali-descent` | … stone figures stood on either side of the path at the head of the pass, and are not placed. | … stone figures stood on either side of the path at the head of the pass. |
+| feature `force-oahu-retreat` | What happened at the edge is told differently in every source, and is a burial matter; nothing is drawn there. | What happened at the edge is told differently in every source. |
+| feature `force-oahu-down-the-trail` | The line shows people going down the path, not over the edge. | (dropped) |
+| feature `line-1783-kaheiki` | The heiau itself is not placed. | (dropped) |
+| feature `stream-manoa` | … up the Waihī branch; below the valley it now runs into the Ala Wai canal, dug in the twentieth century, so the reach below the valley mouth is left out. | … up the Waihī branch, to the mouth of the valley; below it the stream now runs into the Ala Wai canal, dug in the twentieth century. |
+| feature `loi-kalihi` | The district box cuts the head of the valley. | (dropped; the note now says the outline ends in the lower valley) |
+| route `paao-voyage` waypoint 1 | off Puna, the district of the first landfall; the heiau Wahaʻula is not placed | off Puna, the district of the first landfall and of the heiau Wahaʻula |
+| route `paao-voyage` waypoint 8 | ʻUpolu, near Puʻuepa, where Pāʻao settled; the heiau of Moʻokini is not placed | ʻUpolu, near Puʻuepa, where Pāʻao settled, by the heiau of Moʻokini |
+| route `kepuwahaulaula-1791` | The line follows the invaders; Kaʻeokūlani's crossing from Hāna and Kamehameha's from Kona are not drawn. | The line follows the invaders. |
+
+Notes that say how a place that is not sensitive was fixed (Puʻiwa, Lāʻimi, Kawānanakoa,
+Kahapaʻakai, Kaheiki, Pahonu, the posts' line) say what the sources allow, not what the app
+withholds, and stay. The practice itself is unchanged: no burial is placed, heiau stay at ahupuaʻa
+precision, nothing is drawn at the edge of the pali, and no individual death is shown. The reasoning stays in
+DESIGN.md §7.4 and here; `sources.json` notes (provenance, not shown in the app) keep theirs.
+
+### What the check now enforces
+
+- every `force` and `line` has `stop`, a whole number indexing a stop of its event; the stop's year
+  lies within the feature's `from`–`to`; no later step shows at an earlier stop;
+- every `stream` has its name and `role: "reference"`;
+- every loʻi: the share of its texels steeper than 15 % (as above, on the district heights named in
+  `districts/manifest.json`) fails above 10 % and warns above 5 %;
+- no user-facing text (event title, gloss, summary and stop text; place name, note and gloss; era
+  label and note; polity names and notes; route title, gloss, summary and waypoint notes; feature
+  name and note) contains "this app", "does not place", "not drawn", "nothing is drawn" or "is not
+  shown". Tellings, `about` and source notes are not copy and are not checked.
+
+### Left for others
+
+- DATA.md should name `stop` (from 0; the render also takes a list, or a place id), `role:
+  "reference"` on streams, the loʻi slope rule and the copy rule, beside the accepted extensions.
+- The Lāʻimi stop now also shows the two escapes; its camera (bearing 42, 1.3 km back) looks up the
+  valley, and the western escape runs off to the left over ʻĀlewa. The Kou stop now shows the posts,
+  up to 8 km from Kou. Both framings want a look in the next render.
+- Ananoho and Auiki overlap by 11 texels (the site record's outline against the 1927 trace), as
+  before; not touched here.
+- The loʻi are still stream bands judged on today's ground. The Land Commission records for Nuʻuanu,
+  Pauoa, Kapālama and Kalihi would replace them with parcels, and would say what the terraces of
+  upper Kalihi were.
