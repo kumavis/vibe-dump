@@ -20,7 +20,10 @@
 // headless: each AI pair is createMatch from its seeds, each human log
 // createMatch then its entries applied for the seats they name, and the
 // three streams rebuilt from the match (the G adapter, sim/run.mjs), judged
-// exactly as the page's are (`--core` says so explicitly). --page plays the
+// exactly as the page's are (`--core` says so explicitly). (R8) Code with a
+// Folder (match/fold.js) is folded through it, every entry an envelope
+// written, encoded and decoded as a device's store does (sim/run.mjs), and
+// a battle that didn't go that way fails. --page plays the
 // page instead (sim/oracle/run-legacy.mjs, the driver the PIN and the
 // working tree share), as --browser does in Chromium; code with no pure core
 // (older than R6, the PIN today) runs only that way, so --dir or --ref to
@@ -78,7 +81,9 @@ if (!a.browser && runner === CORE_RUNNER && !existsSync(join(dir, 'core', 'index
   console.error(`parity: ${code} has no pure core (core/index.js): code older than R6 runs as its page, with --page`)
   process.exit(2)
 }
-const what = a.browser ? `Chromium on ${a.dist ? resolve(a.dist) : `a fresh build of ${code}`}` : runner === CORE_RUNNER ? `the pure core of ${code}, folded headless` : `the page of ${code}, under the fake DOM`
+// (R8) the Folder of the code under test, which the pure core's runs must go through
+const folder = !a.browser && runner === CORE_RUNNER && existsSync(join(dir, 'match', 'fold.js'))
+const what = a.browser ? `Chromium on ${a.dist ? resolve(a.dist) : `a fresh build of ${code}`}` : runner === CORE_RUNNER ? `the pure core of ${code}, folded headless${folder ? ' through its Folder, every entry an envelope' : ''}` : `the page of ${code}, under the fake DOM`
 console.log(`parity: ${items.length} battles (${items.filter((i) => i.kind === 'ai').length} AI, ${items.filter((i) => i.kind === 'human').length} human) on ${what}`)
 if (pin === 'WORKTREE') console.log('  (sim/oracle/PIN is still WORKTREE, so references come from the working tree, not frozen code)')
 const engines = pairs.engines ?? {}
@@ -163,7 +168,15 @@ const bad = []
 for (let i = 0; i < items.length; i++) {
   const v = verdict(items[i], results[i], opt)
   if (!v.ok) bad.push({ it: items[i], r: results[i], v })
+  // (R8) a run of code with a Folder that went straight through its core,
+  // or past its Folder (foldJob's `via`: what the run did)
+  else if (folder && results[i].via !== 'folder') {
+    bad.push({ it: items[i], r: results[i], v: { ...v, ok: false } })
+    const how = { core: 'straight through its core', bypassed: 'past its Folder (which did not accept the start and every entry, or whose match is not the one traced)' }
+    console.log(`  ${items[i].id}: folded ${how[results[i].via] ?? 'by a runner that names no way'}, not through the Folder`)
+  }
 }
+if (folder) console.log(`  ${results.filter((r) => r.via === 'folder').length} of ${items.length} folded through the Folder`)
 // the reference text comes from the PIN code (unless that is what ran),
 // fetched only now: without the PIN commit, only the hashes can be shown
 let pinDir = null

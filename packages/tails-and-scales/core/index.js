@@ -17,14 +17,28 @@
 //                         HUD's model, any question that must not roll
 //   q                     the read-only queries (core/queries.js), for
 //                         previews and the ?debug surface
-//   RULES_ID              which rules a match is played under
-// (stateHash, shadowState and CORE_VERSION join at R8.)
+//   RULES_ID, CORE_VERSION  which rules a match is played under: the hash of
+//                         the rule-bearing data, and the rules code's own
+//                         number (core/version.js; a match's `start` carries
+//                         both, match/fold.js)
+//   stateHash(G), shadowState(G)  the match's fingerprint between commands,
+//                         and the string it hashes (core/hash.js): the `h`
+//                         an entry carries, and a desync report's
+//   KINDS                 the command kinds legal() knows (an envelope's
+//                         decoder refuses any other: match/envelope.js)
+//   canonicalJSON         JSON with sorted keys (core/util.js): how a log
+//                         entry is written, so equal entries are equal text
+//   cyrb53                the string hash RULES_ID and stateHash use
+//                         (core/util.js): the Folder's head after a
+//                         simultaneous decision closes
 //
 // G.out is where the match's events go (DESIGN §2.3; null keeps none, for a
 // quiet fold), and G.onTrace(line, G) hears each trace line as it is
-// written (sim/ and ?debug only); `strict` checks every AI command with
-// legal() before it is applied, and throws on one that isn't (sim/'s P-prop).
-// Each is I/O, never match state: the rules don't read them.
+// written (sim/'s, and the page's in every battle: app/flow.js takes the
+// unit card's facts at each act line, and ?debug's trace listener reads
+// it); `strict` checks every AI command with legal() before it is applied,
+// and throws on one that isn't (sim/'s P-prop). Each is I/O, never match
+// state: the rules don't read them, and stateHash leaves them out.
 import { newState, missionOf, raceOf } from './match.js'
 import { lock, unlock } from './rng.js'
 import { emit, log } from './journal.js'
@@ -33,8 +47,10 @@ import { HANDLERS } from './commands.js'
 import * as q from './queries.js'
 
 export { q }
-export { legal } from './commands.js'
-export { RULES_ID } from './version.js'
+export { legal, KINDS } from './commands.js'
+export { RULES_ID, CORE_VERSION } from './version.js'
+export { stateHash, shadowState } from './hash.js'
+export { canonicalJSON, cyrb53 } from './util.js'
 
 // (a copy: whoever sorts or edits the answer leaves the match's decision be)
 export const pendingSeats = (G) => [...(G.pending?.seats ?? [])]

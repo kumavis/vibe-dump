@@ -35,7 +35,8 @@
 //      of its own that never rolls). The doors (every module on a surface,
 //      and data/, which the view imports whole) pass on nothing that draws:
 //      none of rules.js's dice, nothing of engine.js, commands.js, actions/
-//      or ai/ but the queries CROSS lists (queries.js's, index.js's legal),
+//      or ai/ but the queries CROSS lists (queries.js's, index.js's legal,
+//      and, R8, commands.js's list of kinds, KINDS, for the envelope),
 //      and all of a module (`export *`, a namespace) only if it is a door
 //      itself. No module of core/ or data/ passes on anything of core/rng.js
 //      but its rngState query. A binding is followed through `export {…}`
@@ -63,7 +64,14 @@
 //                         lookup table filled where it is declared is a
 //                         constant, and sim/data-check.mjs holds every
 //                         exported one frozen
-//        match/           the DOM, async, await, Promise
+//        match/           the DOM, async, await, Promise; (R8) and the
+//                         host's: Math.random, Date, performance, the
+//                         timers, crypto, process, globalThis, Math other
+//                         than as Math.<member> (the Folder's verdicts
+//                         depend on the entry list alone); and (R8's
+//                         fixer, round 2) core's module-level mutable
+//                         state (several Folders share a process: every
+//                         peer of sim/merge-sim.mjs, §4.1 rule 13)
 //        present/         the DOM
 //      (sin, cos, tan, atan, atan2, exp, pow and log join core's ban at N0,
 //      §0.2 #10: until then their count is only reported);
@@ -127,7 +135,9 @@ const CROSS = {
     'moveMode', 'forbidMask', 'movePlan', 'validEnd', 'nearestValid', 'canShoot', 'shotInfo', 'shootTargets',
     'canCharge', 'chargeTargets', 'chargePlan', 'chargeSpots', 'rngState',
   ],
-  'core/index.js': ['legal'],
+  // (R8) KINDS: the command kinds, a frozen list of names, which
+  // match/envelope.js decodes no other than
+  'core/index.js': ['legal', 'KINDS'],
 }
 const isDoor = (f) => f.startsWith('data/') || Object.values(SURFACE).some((s) => f in s)
 
@@ -143,7 +153,11 @@ const HOST = [
 ]
 const TOKENS = {
   core: [...DOM, ...ASYNC, ...HOST],
-  match: [...DOM, ...ASYNC],
+  // (R8) the Folder is the replicated authority: its verdicts depend on the
+  // entry list alone, never on the clock, a random draw, a timer or the
+  // host (§2.6), so match/ is held to the consensus code's host tokens too
+  // (an entry id's random part is handed to the Session by the app)
+  match: [...DOM, ...ASYNC, ...HOST],
   present: DOM,
 }
 TOKENS.data = TOKENS.core
@@ -368,7 +382,7 @@ export function check(files) {
         n0 += (l.match(N0) ?? []).length
       })
     }
-    if (layer === 'core' || layer === 'data') {
+    if (layer === 'core' || layer === 'data' || layer === 'match') {
       lines.forEach((l, i) => {
         if (LET.test(l)) say(f, i + 1, `a module-level let or var in consensus code: ${l.trim().slice(0, 100)}`)
         const d = DECL.exec(l)
@@ -437,6 +451,13 @@ if (a['self-test']) {
     ['data/ awaiting', append('data/schema.js', 'export async function later() { return 1 }'), true, /contains async/],
     ['match/ awaiting', append('match/session.js', 'export const later = () => new Promise((r) => r())'), true, /contains Promise/],
     ['match/ touching the window', append('match/store.js', 'export const w = () => window.name'), true, /contains window/],
+    // (R8) the Folder stays pure: no Automerge, no clock, no random draw
+    ['match/ naming Automerge', append('match/fold.js', "import * as A from '@automerge/automerge'"), true, /only net\/ may name Automerge/],
+    ['match/ importing a package', append('match/envelope.js', "import { nanoid } from 'nanoid'"), true, /match\/ imports no package/],
+    ['match/ reading the clock (Date)', append('match/fold.js', 'export const now = () => Date.now()'), true, /contains Date/],
+    ['match/ drawing Math.random', append('match/session.js', 'export const salt = () => Math.random().toString(36)'), true, /contains Math\.random/],
+    ['match/ setting a timer', append('match/session.js', 'export const later = (f) => setTimeout(f, 0)'), true, /contains a timer or a task queue/],
+    ['match/ importing the view', append('match/fold.js', "import { View } from '../view/index.js'"), true, /match\/ may import only/],
     ['present/ importing data/', append('present/mirror.js', "import { RACES } from '../data/schema.js'"), true, /present\/ may import only/],
     ['present/ touching the DOM', append('present/pace.js', 'export const p = () => requestAnimationFrame(() => {})'), true, /contains requestAnimationFrame/],
     ['the view importing core/rng.js', append('view/player.js', "import { draw } from '../core/rng.js'"), true, /imports core\/rng\.js/],
@@ -493,6 +514,8 @@ if (a['self-test']) {
     ['core/ with a module-level Object.create(null) filled later', append('core/queries.js', 'const memo = Object.create(null)'), true, /empty Object\.create\(null\)/],
     ['core/ with a cache as a later declarator', append('core/queries.js', 'const a = 1, cache = new Map()'), true, /module-level Map or WeakMap/],
     ['data/ with a list filled later', append('data/mission.js', 'export const seen = []'), true, /empty array or object/],
+    ['match/ with a module-level let', append('match/fold.js', 'let folds = 0'), true, /module-level let or var/],
+    ['match/ with a module-level cache', append('match/envelope.js', 'const decoded = new Map()'), true, /module-level Map or WeakMap/],
     ['a table filled where it is declared (Object.create(null) and a Set)', append('core/rules.js', "const KIND = Object.assign(Object.create(null), { a: 1 }), SOME = new Set(['a'])\nexport const kind = (k) => KIND[k] ?? SOME.size"), false],
     ['a default parameter (no module-level state)', append('core/rules.js', 'export const f = (a, seen = new Map()) => seen.get(a)'), false],
     ['core/ testing a unit key', append('core/actions/move.js', "export const brute = (u) => u.key === 'brute'"), true, /a key test \(flag-lint's ban\)/],

@@ -5,9 +5,9 @@
 // breath after losses) is an event in the match's out at the same place
 // (DESIGN §2.3, §4.1 rule 3): `pause` for a pure wait, and what the view
 // shows as its own event (a wound's number and flinch, a model's fall, a
-// unit's end, the survivors' new formation), which main.js's handlers play
-// with the old visuals. No logic moves across an emit, and building an event
-// draws nothing and changes nothing.
+// unit's end, the survivors' new formation), which the view's handlers play
+// with the old visuals (view/index.js, app/flow.js). No logic moves across
+// an emit, and building an event draws nothing and changes nothing.
 //
 //   unit.wound     { u, m, dmg }         model m took dmg and stands
 //   unit.slain     { u, m, by, dmg }     model m fell (by: the attacker's id)

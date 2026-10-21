@@ -11,15 +11,18 @@
 // The battle itself is the core's (core/index.js): a pure function of its
 // setup and the commands its seats send. Every mode plays one through a
 // Session (match/session.js) over a LocalStore (match/store.js): the title
-// screen's button makes the setup, the Session creates the match from it,
-// the AI plays inside the match (core/engine.js, core/ai/), and a human
-// seat's clicks become commands (input/human.js) that the Session folds into
-// it. The match runs ahead, to the next decision a human makes, and reports
-// what happened as events (DESIGN §2.3), which the player (view/player.js)
-// plays at the table's pace, folding each into the mirror
-// (present/mirror.js): the match as shown, which the figures, labels, flags
-// and score read. Input and the HUD read the match itself (G) only once the
-// player has played everything (§2.4).
+// screen's button makes the setup, the Session's start entry creates the
+// match from it, the AI plays inside the match (core/engine.js, core/ai/),
+// and a human seat's clicks become commands (input/human.js) that the
+// Session appends as envelopes and folds into it through the Folder
+// (match/fold.js), the same validator an online match has (the seat's
+// device, its head, the match's hash, legal()). The match runs ahead, to
+// the next decision a human makes, and reports what happened as events
+// (DESIGN §2.3), which the player (view/player.js) plays at the table's
+// pace, folding each into the mirror (present/mirror.js): the match as
+// shown, which the figures, labels, flags and score read. Input and the HUD
+// read the match itself (G) only once the player has played everything
+// (§2.4).
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { edgeOf } from '../core/match.js'
@@ -35,6 +38,12 @@ import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
 
 // who plays each seat, by the title screen's mode buttons
 export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
+
+// This device, as a battle's log names it: every human seat of a battle
+// played here is played from it (the Folder takes a seat's commands from
+// the device its setup names, match/fold.js). One name does for every game
+// played alone; online play gives each device its own (N2).
+export const DEVICE = 'local'
 
 // What of a setup the table shows before its battle: the board, the terrain
 // set and the races at it (a mission too, once a setup names one). Who plays
@@ -128,14 +137,15 @@ export class Flow {
       if (/^act /.test(line)) this.acted.push(preview(g, factsOf))
       this.traceListener?.line(line, g)
     }
-    // What the Session hands over after each entry it folds: the events that
-    // entry made happen, played in order. A battle's first entry, its start,
-    // begins with the match's board (its terrain.clear and an add per chunk);
-    // start() has snapped the table to the backdrop, the battle's table as it
-    // stood before anything happened (the same board, terrain and races), so
-    // the board's adds take back the meshes on show (view/terrain.js) and
-    // the battle's events play on from there. Under ?debug the checkpoints
-    // P-present holds the mirror to go in first (the ?debug block).
+    // What the Session hands over after each entry it accepts: the events
+    // that entry made happen, played in order. A battle's first entry, its
+    // start, begins with the match's board (its terrain.clear and an add per
+    // chunk); start() has snapped the table to the backdrop, the battle's
+    // table as it stood before anything happened (the same board, terrain
+    // and races), so the board's adds take back the meshes on show
+    // (view/terrain.js) and the battle's events play on from there. Under
+    // ?debug the checkpoints P-present holds the mirror to go in first (the
+    // ?debug block).
     this.sink = {
       // (`ses`, the Session handing them over: a Session over a store that
       // holds entries already folds them as it is made, before start() has
@@ -151,6 +161,17 @@ export class Flow {
         events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e))
         if (this.traceListener) events = this.traceListener.present(events, this.G)
         this.player.push(events)
+      },
+      // The match folded again, some of what was shown undone (a concurrent
+      // insert into an online log, §2.6's sync: never in a game played
+      // alone, whose log only grows at its end): the table snaps to it as it
+      // stands. (N2 adds the "history changed" toast, and keeps the battle
+      // log and the trace through it.)
+      reset: (G, ses) => {
+        this.G = ses.G
+        this.sameUnits(this.G)
+        this.acted.length = 0
+        this.player.snap(G, project(G))
       },
     }
     this.human = null
@@ -395,10 +416,10 @@ export class Flow {
   }
 
   // A battle: the whole setup (the board on the title screen, a fresh dice
-  // stream, who plays each seat), a LocalStore whose first entry starts it,
-  // and a Session over it for the seats played here. The match runs on at
-  // once: to each human seat's deployment, or (watch) to its end, and the
-  // table plays it from there.
+  // stream, who plays each seat, each human seat played from this device),
+  // a LocalStore whose first entry starts it, and a Session over it for the
+  // seats played here. The match runs on at once: to each human seat's
+  // deployment, or (watch) to its end, and the table plays it from there.
   start(mode) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
@@ -412,7 +433,7 @@ export class Flow {
     const dice = (Number(this.params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
     const setup = {
       board: this.S.seed, dice, terrain: 'classic', rounds: MISSIONS.classic.rounds, diceMode: 'shared',
-      seats: this.races.map((race, i) => ({ race, ctrl: who[i] })),
+      seats: this.races.map((race, i) => (who[i] === 'human' ? { race, ctrl: who[i], dev: DEVICE } : { race, ctrl: who[i] })),
     }
     // The battle starts on the table shown, which must be its own: the
     // backdrop, on the same board and terrain with the same races and
@@ -436,12 +457,13 @@ export class Flow {
     // deployment's first, take it on from there, P-present holding each)
     this.player.snap(this.backdrop, onTitle(this.backdrop))
     const store = new LocalStore()
-    this.session = new Session({ store, localSeats: who.flatMap((c, s) => (c === 'human' ? [s] : [])), sink: this.sink, onTrace: this.onTrace })
-    store.append({ s: -1, t: 'start', setup })
-    if (this.session.status === 'refused') {
-      // no battle: the title's table again, drawn afresh from the board it
-      // showed (built once already, so it builds again), and no refused
-      // Session left behind
+    this.session = new Session({ store, localSeats: who.flatMap((c, s) => (c === 'human' ? [s] : [])), dev: DEVICE, sink: this.sink, onTrace: this.onTrace })
+    this.session.start(setup)
+    if (this.session.status !== 'live' && this.session.status !== 'over') {
+      // no battle (a start the core refused leaves the log in its lobby):
+      // the title's table again, drawn afresh from the board it showed
+      // (built once already, so it builds again), and no refused Session
+      // left behind
       const why = this.session.error
       this.session.close()
       this.session = null

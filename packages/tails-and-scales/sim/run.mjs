@@ -1,15 +1,25 @@
-// The headless fold (DESIGN §1.1, §4 R6): one battle played by the pure core
-// (core/index.js) in plain Node, with no fake DOM, no three.js and no frames.
-// An AI pair is createMatch from its seeds, which plays the whole battle
-// inside the call; a human log is createMatch from its setup, then each
-// entry played for the seat it names (its `s`; the rest of the entry is
-// the command body), as the Folder will (R8): an in-band entry first held to
-// what the match is waiting on (pendingSeats), then to legal(); a `concede`,
-// which comes out of band (any human seat, the waiting one too: DESIGN §2.2's
-// table, §0.2 #5), to legal() alone. An entry that answers nothing pending,
-// or that legal() refuses, stops the run with an error naming it; so does a
-// log that ends while a decision is open, or a battle that ends with
+// The headless fold (DESIGN §1.1, §4 R6, R8): one battle played by the pure
+// core (core/index.js) in plain Node, with no fake DOM, no three.js and no
+// frames, through the Folder (match/fold.js) as every mode plays one. The
+// battle's log is written as a device writes it, every entry an envelope
+// (match/envelope.js), encoded to its text and decoded again as a store
+// hands it out, and pushed through the Folder: the start (the setup, each
+// human seat played from one device, `sim`, and the rules this core plays,
+// CORE_VERSION and RULES_ID), then each human log entry for the seat it
+// names (its `s`; the rest of the entry is the command body), after that
+// seat's head and, where one seat is waited on, with the match's hash, so
+// the Folder holds it to the turn, the device, prev, the hash and legal(),
+// in that order (a `concede` comes out of band: any human seat, the waiting
+// one too, DESIGN §2.2's table, §0.2 #5; legal() alone judges it). An AI
+// pair's log is its start alone: the whole battle runs inside it. An entry
+// the Folder refuses, or a desync, stops the run with an error naming it; so
+// does a log that ends while a decision is open, or a battle that ends with
 // entries left over.
+//
+// Code older than R8 (no match/fold.js) is folded straight through its core
+// as R6a did (createMatch, then each entry held to pendingSeats and legal()
+// and applied); the result's `via` says which way a run went ('folder' or
+// 'core'), and parity requires the Folder of code that has one.
 //
 // Beside the trace it rebuilds parity's two other streams, in the frozen
 // formats the legacy page recorded (sim/oracle/shadow.mjs, imported as a
@@ -39,17 +49,17 @@
 //        applied (createMatch's `strict`), as sim/property.mjs does
 //
 // --json (or --job) prints { trace, shadow, written, entries, over, secs,
-// error }, `error` saying why the run stopped short (else null). The parity
-// gate runs it as `node sim/parity.mjs --core`. Library: foldJob,
-// shadowPartsG, writtenOf, mirrorTap (sim/property.mjs holds the match's own
-// events to the mirror with it).
+// via, error }, `error` saying why the run stopped short (else null). The
+// parity gate runs it as `node sim/parity.mjs --core`. Library: foldJob,
+// loadMatch, seatDevices, shadowPartsG, writtenOf, mirrorTap
+// (sim/property.mjs holds the match's own events to the mirror with it).
 //
 // Run as a CLI it proves the fold is headless: before the core is loaded it
 // registers a module hook that refuses three.js and the oracle's fake DOM,
 // three shim and OrbitControls stub, so a core (or anything it imports)
 // that reached for one stops the run naming it, and plain Node has no
 // `document` or `window` for it to touch.
-import { readFileSync, writeSync } from 'node:fs'
+import { readFileSync, writeSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { pathToFileURL, fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
@@ -136,7 +146,25 @@ export function jobSetup(job) {
   return job.races ? { ...setup, seats: setup.seats.map((s, i) => ({ ...s, race: job.races[i] })) } : setup
 }
 
-// Fold one job with `core` (core/index.js's exports). `on(k, v)` hears each
+// The device a log written here plays every human seat from
+export const SIM_DEVICE = 'sim'
+
+// `setup` with each human seat played from device `dev` (a log's start
+// names the device each human seat's commands come from: match/fold.js)
+export const seatDevices = (setup, dev) => ({ ...setup, seats: setup.seats.map((x) => (x.ctrl === 'human' ? { ...x, dev } : x)) })
+
+// match/'s modules in `dir` that fold a log ({ envelope, fold }: R8's), or
+// null for code older than R8
+export async function loadMatch(dir) {
+  const at = (f) => pathToFileURL(join(dir, 'match', f)).href
+  if (!existsSync(join(dir, 'match', 'fold.js'))) return null
+  const [envelope, fold] = await Promise.all([import(at('envelope.js')), import(at('fold.js'))])
+  return { envelope, fold }
+}
+
+// Fold one job with `core` (core/index.js's exports) through `match`'s
+// Folder (loadMatch's: the same code's), or straight through the core
+// without one (code older than R8). `on(k, v)` hears each
 // trace line ('l'), shadow ('s') and battle-log write ('w') as it is taken;
 // `before(G, e, k)` is called before each log entry is held to the match
 // (sim/property.mjs probes the decision there); `quiet` folds with G.out
@@ -145,7 +173,7 @@ export function jobSetup(job) {
 // the match's events to the match as they are taken (mirrorTap), and the
 // result's `mirrored` says how often. Never throws: a run that stops short
 // says why in `error`, with what it got that far.
-export function foldJob(core, job, { on = null, strict = false, before = null, quiet = false, mirror = null } = {}) {
+export function foldJob(core, job, { on = null, strict = false, before = null, quiet = false, mirror = null, match = null } = {}) {
   const t0 = performance.now()
   const rec = { trace: [], shadow: [], written: [], entries: job.entries ? [] : null }
   const tap = mirror && !quiet ? mirrorTap(mirror) : null
@@ -172,25 +200,23 @@ export function foldJob(core, job, { on = null, strict = false, before = null, q
     }
   }
   let G = null, error = null
+  // the log, written and folded as a device does it (match/'s modules), or
+  // R6a's direct fold for code without them
+  const log = match ? folderLog(core, match, { out: quiet ? null : [], onTrace, strict }) : directLog(core, { out: quiet ? null : [], onTrace, strict })
   try {
     if (job.bot) throw new Error('the core fold replays command logs; a bot policy plays through the legacy hooks (run-legacy.mjs)')
-    G = core.createMatch(jobSetup(job), { out: quiet ? null : [], onTrace, strict })
+    G = log.start(jobSetup(job))
     writes(G, 'createMatch')
     const entries = job.entries ?? []
     for (const [k, e] of entries.entries()) {
       if (G.turn.stage === 'over') throw new Error(`the battle ended with ${entries.length - k} log entries unplayed`)
       before?.(G, e, k)
-      const bad = (why) => new Error(`entry ${k} ${JSON.stringify(e)}: ${why}`)
       // the entry: its seat, and the command body, which is all legal() and
-      // apply() take (legal() refuses a field the command doesn't; R8's
-      // Folder splits an envelope the same way, bodyOf: DESIGN §2.6)
+      // apply() take (legal() refuses a field the command doesn't; the
+      // Folder strips an envelope the same way, bodyOf: DESIGN §2.6)
       const { s, ...body } = e
-      // (a concession is out of band: the Folder switches on it before the
-      // turn check, §0.2 #5, and legal() judges who may send it)
-      if (body.t !== 'concede' && !core.pendingSeats(G).includes(s)) throw bad(`seat ${s} has no decision to make (waiting on ${JSON.stringify(G.pending)})`)
-      const why = core.legal(G, s, body)
-      if (why) throw bad(why)
-      core.apply(G, s, body)
+      const why = log.play(G, s, body)
+      if (why) throw new Error(`entry ${k} ${JSON.stringify(e)}: ${why}`)
       rec.entries.push(e)
       writes(G, `entry ${k}`)
     }
@@ -201,10 +227,58 @@ export function foldJob(core, job, { on = null, strict = false, before = null, q
   const T = G?.turn
   return {
     ...rec,
+    // (what the run did: 'folder' only when the Folder accepted the start
+    // and every entry played, and its match is the one traced)
+    via: !match ? 'core' : log.through(G, rec.entries?.length ?? 0) ? 'folder' : 'bypassed',
     mirrored: tap?.counts() ?? null,
     over: T ? { wiped: T.wiped, vp: T.vp.slice(), first: T.first, round: T.step === 'score' ? T.round + 1 : T.round, result: T.result } : null,
     secs: +((performance.now() - t0) / 1000).toFixed(2),
     error,
+  }
+}
+
+// A log written as a device writes one and folded through the Folder:
+// start(setup) → G; play(G, s, body) → null, or why the Folder took no
+// entry; through(G, n): the Folder's match is G, and it accepted the start
+// and n entries. Each entry is an envelope from device SIM_DEVICE, encoded
+// to its text and decoded back, as a store hands it out.
+function folderLog(core, { envelope: E, fold: F }, opts) {
+  const folder = new F.Folder(opts)
+  let n = 0
+  const push = (body, fields) => {
+    const k = folder.rejected.length
+    folder.push(E.decode(E.encode(E.envelope(body, { id: E.newEntryId(SIM_DEVICE, n++, '0'), d: SIM_DEVICE, ...fields }))))
+    if (folder.rejected.length > k) return folder.rejected[k].why
+    return folder.status === 'live' || folder.status === 'over' ? null : `the match is ${folder.status}: ${JSON.stringify(folder.report ?? folder.error)}`
+  }
+  return {
+    start(setup) {
+      const why = push({ t: 'start', core: core.CORE_VERSION, rules: core.RULES_ID, setup: seatDevices(setup, SIM_DEVICE) }, { s: -1 })
+      if (why) throw new Error(`the start: ${why}`)
+      return folder.G
+    },
+    play(G, s, body) {
+      // after the seat's head, with the match's hash where one seat is
+      // waited on; a concession out of band, with neither
+      const oob = body.t === 'concede'
+      const one = G.pending && !F.SIMULTANEOUS.includes(G.pending.k)
+      return push(body, { s, p: oob ? undefined : folder.head(s), h: !oob && one ? core.stateHash(G) : undefined })
+    },
+    through: (G, n) => !!G && folder.G === G && folder.accepted.length === n + 1,
+  }
+}
+
+// R6a's fold, for code without a Folder: createMatch, then each entry held
+// to what the match waits on (a concession out of band) and to legal().
+function directLog(core, opts) {
+  return {
+    start: (setup) => core.createMatch(setup, opts),
+    play(G, s, body) {
+      if (body.t !== 'concede' && !core.pendingSeats(G).includes(s)) return `seat ${s} has no decision to make (waiting on ${JSON.stringify(G.pending)})`
+      const why = core.legal(G, s, body)
+      if (!why) core.apply(G, s, body)
+      return why
+    },
   }
 }
 
@@ -248,7 +322,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       }
     }
   }
-  const out = foldJob(core, job, { on, strict: !!args.strict })
+  // (the Folder of the same code, R8's; none in older code)
+  const match = await loadMatch(dir).catch((e) => {
+    console.error(`the match layer in ${dir} failed to load headless: ${e.message.split('\n')[0]}`)
+    process.exit(2)
+  })
+  const out = foldJob(core, job, { on, strict: !!args.strict, match })
   if (args.json || args.job) process.stdout.write(JSON.stringify(out))
   else {
     process.stdout.write(out.trace.join('\n') + '\n')

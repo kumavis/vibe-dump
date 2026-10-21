@@ -9,9 +9,14 @@
 // by) and the missions (data/mission.js: the objectives, the default rounds
 // and the deployment depth). A stat retune changes it, so a match started
 // under other rules can be told apart instead of silently playing
-// differently; a renamed unit doesn't. (CORE_VERSION, the manual number for
-// changes to the rules code itself, recipes and AI included, joins it here
-// at R8.)
+// differently; a renamed unit doesn't.
+//
+// CORE_VERSION is the other half: a whole number bumped by hand whenever the
+// rules code itself changes what a battle does (an action, the engine, the
+// AI, a recipe, dmath), which no data hash can see. The parity corpus forces
+// the bump, since any such change breaks a baseline (DESIGN §2.7). A match's
+// `start` entry carries both, and a peer whose own differ opens it read-only
+// (match/fold.js: 'skew') rather than folding it into another battle.
 import { BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, AURA, PHASES } from './rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS } from '../data/mission.js'
@@ -42,3 +47,6 @@ export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASE
 export const rulesId = (opts) => cyrb53(canonicalJSON(rulesData(opts))).toString(36)
 
 export const RULES_ID = rulesId()
+
+// (1: the rules as R0 recorded them, unchanged through the refactor)
+export const CORE_VERSION = 1

@@ -121,6 +121,9 @@ const RULES = Object.freeze({
   concede: { k: null, fields: [], ok: (G, seat) => mayConcede(G, seat) },
 })
 
+// the kinds of command there are (match/envelope.js decodes no other)
+export const KINDS = Object.freeze(Object.keys(RULES))
+
 // null when `seat` may play `body` now, else why not; never draws a die
 // (the dice are locked while it asks) and never changes the match.
 export function legal(G, seat, body) {

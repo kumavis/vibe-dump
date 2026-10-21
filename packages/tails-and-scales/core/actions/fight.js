@@ -4,9 +4,10 @@
 // Synchronous, like damage.js: what the old code waited on is an event in
 // the match's out at the same place (DESIGN §2.3, §4.1 rule 3): the tray's
 // title and each row of dice (`tray.open`, `dice`), the beat after a fight
-// (`pause`), and what the view shows as its own event, which main.js's
-// handlers play with the old visuals. No logic moves across an emit, and
-// building an event draws nothing and changes nothing.
+// (`pause`), and what the view shows as its own event, which the view's
+// handlers play with the old visuals (view/index.js, app/flow.js). No logic
+// moves across an emit, and building an event draws nothing and changes
+// nothing.
 //
 //   unit.face { u, tg }           u turns to face tg
 //   focus     { x, z }            the camera may swing there (the view's

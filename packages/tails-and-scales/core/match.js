@@ -60,8 +60,10 @@ export const ctrl = (G, s) => G.seats[s].ctrl
 //   out    where the match's events go, the terrain's reports of what it
 //          builds and breaks among them (the view plays them; null for a
 //          quiet run)
-//   onTrace(line, G)  hears every trace line as it is written (sim/ and
-//          ?debug only: it never draws and nothing reads it back)
+//   onTrace(line, G)  hears every trace line as it is written (sim/'s, and
+//          the page's in every battle, app/flow.js: the unit card's facts
+//          and ?debug's trace; it never draws or changes G, and the rules
+//          never read it)
 // The board is scattered around the mission's objectives, the nav grid built
 // from it, and both armies made and deployed, seat 0's first. The turn
 // starts at the deployment, the engine's next step the roll-off

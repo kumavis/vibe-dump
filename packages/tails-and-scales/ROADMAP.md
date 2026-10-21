@@ -9,8 +9,9 @@ the commit, and add whatever the work turned up.
   `npm run parity -w @vibe-dump/tails-and-scales` replays the corpus in
   `sim/baselines` (seeded AI-vs-AI battles and human command logs) with the
   working tree's pure core, folded headless in Node (since R6b; `--page`
-  plays the page itself under a fake DOM instead), and checks every trace
-  line, every full-precision shadow snapshot and every battle-log write
+  plays the page itself under a fake DOM instead; since R8 through the
+  Folder, every entry an envelope, as every mode plays), and checks every
+  trace line, every full-precision shadow snapshot and every battle-log write
   against the recorded hashes; a failure names the first diverging line,
   with context from the frozen code in `sim/oracle/PIN` (by that code's own
   runner: its page today). `node sim/parity.mjs --browser`
@@ -44,9 +45,14 @@ the commit, and add whatever the work turned up.
   from R7a `node sim/camera-check.mjs` (the camera presets give the R0
   code's views, and the CameraRig comes to rest where `fitPose` puts it;
   F1/F2 change its "battleView chooses by the screen's shape" checks on
-  purpose, DESIGN §2.11). A step that touches `view/`, `ui/`, `input/`,
-  `app/` (main.js's handlers until R7b) or the `?debug` block also runs
-  these in Chromium (`CHROMIUM_PATH` set),
+  purpose, DESIGN §2.11), and from R8 `node sim/merge-sim.mjs` (and
+  `--self-test`: P-merge, peers folding one log in any causal order agree
+  on what was accepted, refused and hashed, junk and forks included, each
+  entry hashed where §0.2 #3 says; the cap, the Folder's edges, same-seat
+  forks in the deployment and the desync drills, early and late). A step
+  that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
+  R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
+  set),
   each exiting 0: `node sim/snap-check.mjs` (and `--self-test`: the table
   built event by event is a fresh snap's, and each battle's table snapped
   in place at its end; by default seven battles, and the whole corpus,
@@ -598,8 +604,46 @@ step keeps the game playable.
     clicks (charges ended in the orange area and by Shortest move, Auto,
     Advance, End), and hotseat; no page errors (DESIGN's R7b notes, with the
     spec changes for approval and what R8 and F1-F3 inherit).
-- [ ] **R8 Netplay seams.** `stateHash`, envelopes, `Folder` (the replicated
-  authority), merge-sim.
+- [x] **R8 Netplay seams** built: `core/hash.js` (`stateHash`,
+  `shadowState`), `CORE_VERSION = 1`, `match/envelope.js` (canonical JSON,
+  at most 1 kB, `bodyOf`), `match/fold.js` (the `Folder`: seat, device, prev,
+  the hash on a single seat's decision, out of band, the cap, the desync
+  freeze with a report, skew, tamper, a quiet refold and a reset), the
+  `LocalStore` keeping each entry as its text, and the Session folding
+  through the Folder: every mode, so a game played alone goes through the
+  validator that guards online play (`app/flow.js` names this device on each
+  human seat and writes the start with the rules' versions). Parity folds
+  the corpus through the Folder too, every entry an envelope. New:
+  `sim/merge-sim.mjs` (P-merge, no Automerge: peers over an RGA list ordered
+  as Automerge orders one, ops delivered in random causal order, every human
+  log played by its seats' peers with junk, duplicates, stray fields, stale
+  heads, out-of-turn, wrong-device and spoofed entries, same-seat forks and
+  concessions; all peers agree, on the single-process fold, which traces the
+  corpus, each sink handed the match its events lead to; the cap at 5,000
+  entries, the Folder's edges, same-seat forks in the deployment, and the
+  desync drills: a peer with `hypot` an ulp off freezes with the others at
+  the same entry, reported; R8's fixer's round 2 adds a drift late enough
+  that its desync finds the author's match over, and a match that goes on
+  past the others' end) and its self-test (41 broken match layers and a
+  store that caches by index, R8's fixers' among them: a refold swapped in
+  late, a decode that throws, the bare closing entry as the head, no turn
+  or hash check, a hash that rejects, `legal()` before the hash, a tamper
+  that thaws; an over match deaf to a desync or to a hashed entry on its
+  last head, tamper by ids alone, a charge's end with no hash, the cap
+  moved by one; round 3's: a Session or Folder that folds again from a
+  sink's submit, a throwing sink leaving the Session deaf, an entry with
+  no hash played, an over match frozen from any device, an older build's
+  start folded, tamper by content alone, a seat's device no entry can
+  carry, a start made inert silently, a stale error, a start without its
+  seed reveal); P-prop's quiet folds hash alike; data-check's section 9
+  (the versions, the Folder's spec constants, and what the hash reads);
+  boundaries holds match/ to no clock, random draw, timer or module-level
+  state.
+  Nothing in play changed: parity 40/40 through the Folder and on the page,
+  P-browser over the whole corpus, every standing check, and the shipped
+  page played rendered without `?debug` or `?fast` (DESIGN's R8 notes, with
+  the spec changes for approval, the refactor's three claims confirmed, and
+  what N0, N1-N3 and F4 inherit). The refactor is complete.
 
 **Multiplayer and features.**
 

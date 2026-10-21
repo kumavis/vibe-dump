@@ -137,11 +137,12 @@ export function endMesmerism(G, side) {
 
 // An action's end: its state line in the trace, then what the table shows of
 // it (who holds each objective; every label), the `act` itself, and whether
-// a side is gone. (Under ?debug the `act` the view plays carries the match
-// as it should be shown, project(G), which core can't compute: present/ is
-// above it. main.js's ?debug block adds it, taking project(G) in its
-// onTrace as the act line is written, and its Session sink puts it on the
-// event: sim/present-check.mjs's checkpoints.)
+// a side is gone. (The `act` the view plays carries what core can't compute,
+// present/ being above it: in every battle the unit card's facts as the
+// action ended, which the page's onTrace takes as the act line is written
+// and its Session sink puts on the event (app/flow.js); under ?debug also
+// the match as it should be shown, project(G), taken the same way
+// (app/boot.js's ?debug block: sim/present-check.mjs's checkpoints).)
 export function finishAction(G) {
   traceState(G, 'act')
   if (G.out) {

@@ -6,8 +6,9 @@
 // must write the identical trace (that is how refactors are checked:
 // sim/parity.mjs), so the format is frozen: positions to 3 decimals, each
 // model's wounds, the standing chunk count, the score and rngState. Each
-// line goes into G.journal.trace and, as it is written, to G.onTrace (sim/
-// and ?debug only), which may read G but never change it.
+// line goes into G.journal.trace and, as it is written, to G.onTrace (sim/'s,
+// and the page's in every battle: the unit card's facts and ?debug's trace,
+// app/flow.js), which may read G but never change it.
 //
 // The events (DESIGN §2.3): what happened, as plain data, pushed onto G.out
 // in the order it happened, for the view to play at its own pace (the

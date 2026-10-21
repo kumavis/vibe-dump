@@ -47,12 +47,26 @@
 //    or missing field. So a slip in a new set (F7's `fortified`) fails at
 //    load, not only on the boards whose draws reach it.
 // 8. Every core/, data/ and match/ module loads as the only entry of a
-//    fresh Node process. core/ has import cycles (match.js with units.js and deploy.js,
-//    for the seat helpers; queries.js with actions/, for canAct). They are
-//    harmless while no module uses an imported binding as it loads; one that
-//    does (a frozen table built from an imported function, `export const x
-//    = alive`) throws a TDZ error that only some entry points reach. A
-//    control cycle that does it must fail from the entry that reaches it.
+//    fresh Node process. core/ has import cycles (match.js with units.js
+//    and deploy.js, for the seat helpers; queries.js with actions/, for
+//    canAct). They are harmless while no module uses an imported binding as
+//    it loads; one that does (a frozen table built from an imported
+//    function, `export const x = alive`) throws a TDZ error that only some
+//    entry points reach. A control cycle that does it must fail from the
+//    entry that reaches it.
+// 9. (R8) The versions a match's start carries: CORE_VERSION a whole number
+//    (1 through the refactor), RULES_ID and CORE_VERSION the same through
+//    core/index.js as core/version.js computes them, the Folder's cap and
+//    simultaneous decisions the spec's (5,000 entries; deploy and
+//    roundLimit, §0.2 #3: R8's fixer, round 2), and the Session's
+//    start entry carrying exactly those (match/session.js), so a Folder
+//    with other ones opens the match read-only (merge-sim checks that
+//    side). And stateHash, the fingerprint every single-seat entry
+//    carries: it moves when anything §2.6 lists moves (a unit's x by one
+//    ulp, a model's wounds, a flag, a chunk's hp or height, each field of
+//    the turn, the decision's kind and seats, the dice; a slot at -0 apart
+//    from +0) and stays put when only what isn't match state does (G.out,
+//    G.onTrace, G.strict, the journal's trace, the nav).
 //
 //   node sim/data-check.mjs
 //
@@ -441,5 +455,87 @@ const loads = await pool(modules, CPUS, (f) => loadAlone(join(PKG, f)))
 const broken = modules.filter((f, i) => loads[i] !== null)
 check(modules.length > 10 && !broken.length, `${modules.length} modules each load alone`, broken.map((f) => `${f}: ${loads[modules.indexOf(f)]}`).join('; '))
 
-console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, and the terrain sets are well formed')
+// ── 9. The versions and the hash ───────────────────────────────────────────
+console.log(`\n9. the versions a start carries, and the match's hash`)
+{
+  const core = await imp(PKG, 'core/index.js')
+  const version = await imp(PKG, 'core/version.js')
+  check(Number.isInteger(version.CORE_VERSION) && version.CORE_VERSION >= 1, `CORE_VERSION is a whole number (${version.CORE_VERSION})`)
+  check(core.CORE_VERSION === version.CORE_VERSION && core.RULES_ID === version.RULES_ID, 'core/index.js exports the same CORE_VERSION and RULES_ID')
+  // (R8's fixer, round 2) the Folder's constants are the spec's: the log's
+  // cap (§2.6) and the decisions whose entries carry no hash (§0.2 #3)
+  const fold = await imp(PKG, 'match/fold.js')
+  check(fold.MAX_ENTRIES === 5000, `the Folder caps the log at 5,000 entries, as §2.6 says (${fold.MAX_ENTRIES})`)
+  check(JSON.stringify([...fold.SIMULTANEOUS].sort()) === '["deploy","roundLimit"]', `the Folder's simultaneous decisions are §0.2 #3's, the deployment and F4's vote (${fold.SIMULTANEOUS})`)
+  const { LocalStore } = await imp(PKG, 'match/store.js')
+  const { Session } = await imp(PKG, 'match/session.js')
+  const store = new LocalStore()
+  const setup = { board: 4242, dice: 99, seats: [{ race: 'squirrel', ctrl: 'human', dev: 'here' }, { race: 'serpent', ctrl: 'ai' }] }
+  const ses = new Session({ store, localSeats: [0], dev: 'here' })
+  ses.start(setup)
+  const st = store.entries()[0]
+  check(st.t === 'start' && st.core === core.CORE_VERSION && st.rules === core.RULES_ID && ses.status === 'live', 'the Session\'s start carries them, and its Folder begins the match', JSON.stringify({ ...st, setup: undefined }))
+  // the hash against each field §2.6 lists, each edit made on a fresh fold of
+  // the same log (G, a unit u and a breakable chunk c of it)
+  const h = core.stateHash(ses.G)
+  check(/^[0-9a-z]+$/.test(h) && core.stateHash(ses.G) === h, `is base 36 and reads alike twice (${h})`)
+  const fresh = () => {
+    const G = new Session({ store: new LocalStore(store.entries()), localSeats: [] }).G
+    return [G, G.units[3], G.terrain.chunks.find((x) => x.alive && Number.isFinite(x.hp))]
+  }
+  const ulp = (x) => x + Math.abs(x) * Number.EPSILON
+  const moves = [
+    ["a unit's x by one ulp", (G, u) => (u.pos.x = ulp(u.pos.x))],
+    ["a unit's z", (G, u) => (u.pos.z += 0.5)],
+    ["a unit's radius", (G, u) => (u.r += 0.01)],
+    ["a model's wounds", (G, u) => (u.models[0].w -= 1)],
+    ["a model's slot", (G, u) => (u.models[0].ox += 0.001)],
+    ['a model fallen', (G, u) => (u.models[0].alive = false)],
+    ["a unit's count", (G, u) => (u.alive -= 1)],
+    ["a unit's losses", (G, u) => (u.lost += 1)],
+    ['a unit mesmerized', (G, u) => (u.mesmerized = true)],
+    ['a flag', (G, u) => (u.flags.moved = true)],
+    ["a chunk's hp", (G, u, c) => (c.hp -= 1)],
+    ['a chunk fallen', (G, u, c) => (c.alive = false)],
+    ["a chunk's height", (G, u, c) => (c.shape.y -= 0.25)],
+    ["the turn's stage", (G) => (G.turn.stage = G.turn.stage === 'over' ? 'battle' : 'over')],
+    ["the turn's step", (G) => (G.turn.step = 'phase')],
+    ["the turn's round", (G) => (G.turn.round += 1)],
+    ["the turn's t", (G) => (G.turn.t += 1)],
+    ['who went first', (G) => (G.turn.first = G.turn.first === 1 ? 0 : 1)],
+    ['the active seat', (G) => (G.turn.active = G.turn.active === 1 ? 0 : 1)],
+    ["the turn's phase", (G) => (G.turn.ph += 1)],
+    ['a side wiped', (G) => (G.turn.wiped = G.turn.wiped === 1 ? 0 : 1)],
+    ['the score', (G) => (G.turn.vp[1] += 1)],
+    ['the overtime', (G) => (G.turn.overtime += 1)],
+    ["the decision's seats", (G) => (G.pending = { ...G.pending, seats: [1] })],
+    ["the decision's kind", (G) => (G.pending = { ...G.pending, k: G.pending.k === 'phase' ? 'deploy' : 'phase' })],
+    ["the dice' count", (G) => (G.rng.n += 1)],
+    ["the dice' word", (G) => (G.rng.a ^= 1)],
+  ]
+  const stays = [
+    ['an event in G.out', (G) => G.out.push({ t: 'focus' })],
+    ['onTrace', (G) => (G.onTrace = () => {})],
+    ['strict', (G) => (G.strict = !G.strict)],
+    ['a trace line', (G) => G.journal.trace.push('log 0 x')],
+    ['the nav grid', (G) => G.nav.rebuild(G.terrain.chunks)],
+  ]
+  for (const [what, edit] of moves) {
+    const [G, u, c] = fresh(), before = core.stateHash(G)
+    edit(G, u, c)
+    check(core.stateHash(G) !== before, `moves on ${what}`)
+  }
+  for (const [what, edit] of stays) {
+    const [G, u, c] = fresh(), before = core.stateHash(G)
+    edit(G, u, c)
+    check(core.stateHash(G) === before, `stays put on ${what}`)
+  }
+  // the sign of zero, which the rules can tell apart (atan2(0, -0) is pi)
+  const [P, pu] = fresh(), [N, nu] = fresh()
+  pu.models[0].ox = 0
+  nu.models[0].ox = -0
+  check(core.stateHash(P) !== core.stateHash(N), 'tells a model slot at -0 from one at +0')
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, and stateHash reads exactly the match')
 process.exit(failed ? 1 : 0)
