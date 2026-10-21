@@ -1,15 +1,13 @@
-// The battles in the district as masses (DESIGN.md §8, the tone rule):
-// features.json's `force` lines, each a drift of small soft marks flowing
-// along its line in the direction it was taken, Hawaiʻi's in one tone,
-// Oʻahu's in another, Maui's (1783) in a third, and its `line` fronts as a
-// faint band of their side's colour with a mass standing on it, stirring in
-// place. Never individuals and never the dead:
-// no figure is drawn, a mark stands for no one, and a mass thins out over the
-// last stretch of its line rather than arriving anywhere, so the retreat to
-// the head of Nuʻuanu fades before the gap and nothing is drawn at the edge
-// of the pali. The one line beyond it, down the old path to Koʻolau (the
-// oral account only), is drawn as a thin, faint file that begins below the
-// brink.
+// The battles in the district (DESIGN.md §8, the tone rule): features.json's
+// `force` lines and `line` fronts, shown as people. The owner's decision after
+// the first render: billboarded pixel-art soldiers, small and crisp, walking
+// their lines and meeting at the fronts, the two sides told apart by palette
+// and dress (sprites.js draws them, soldiers.js places and moves them). Two
+// restraints stay: no dead are drawn, and nothing is drawn at the pali edge.
+// A figure whose part is done walks on out of it; the retreat to the head of
+// Nuʻuanu thins out before the gap, and nobody stands within 300 m of the
+// edge (soldiers.js EDGES). Each front also lays a faint band of its side's
+// colour on the ground under it.
 //
 // Which forces show: at a stop of an event's walk, those of that stop. A
 // feature that names its stop (`stop`: an index into the event's stops, from
@@ -17,89 +15,20 @@
 // One that doesn't is placed by inference (stepsAt: the data numbers the
 // steps within the event, not by stop, so the stop a step belongs to is found
 // from the fronts, each of which stands at the place its stop names). Off the
-// tour, in the battle's own year, every one at once, quietly.
-//
-// The marks are instanced quads facing the camera, laid on the ground of the
-// year in the vertex shader (common.glsl.js groundMetres); where each is
-// along its line is worked out here each frame, a few thousand of them.
+// tour, in the battle's own year, every one at once, quietly: a fifth of the
+// people, walking and standing at half pace, nobody fighting.
 
 import * as THREE from 'three'
-import { constants, noise, world, ground, lighting } from '../render/shaders/common.glsl.js'
 import { geometryPoint } from '../geo.js'
-import { S } from './kit.js'
+import { Soldiers } from './soldiers.js'
 
 // (none of them blue, which on this ground reads as water)
 export const ROLE_COLOURS = { hawaii: '#f0ae3c', oahu: '#a88fe6', maui: '#d9703f' }
-const FLOW_S = 26 // seconds for a mark to run its line, end to end
-const MARK = 3.4 * S // a mark's radius (3.4 m, at the presentation scale): a few pixels at the near zoom
-
-const vertexShader = /* glsl */ `
-${constants}
-${world}
-${ground}
-in vec4 aMark;   // x, z, alpha, radius
-in vec3 aColour;
-uniform float uPxK;    // world units per pixel per unit of distance from the camera
-out vec2 vQ;
-out float vA;
-out vec3 vC;
-void main() {
-  vQ = position.xy;
-  vA = aMark.z;
-  vC = aColour;
-  if (aMark.z <= 0.002) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
-  vec3 c = vec3(aMark.x, max(groundMetres(aMark.xy), 0.0) * uVert, aMark.y);
-  // (never under a pixel and a half across, however far off)
-  float r = max(aMark.w, 1.6 * uPxK * distance(cameraPosition, c));
-  // (stood a little off the ground, and facing the camera)
-  c.y += r * 0.5;
-  vec3 right = vec3(viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
-  vec3 up = vec3(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
-  vec3 p = c + (right * position.x + up * position.y) * r;
-  // (a little toward the eye, so the coarser ground mesh away from the camera doesn't swallow it)
-  vec3 toCam = cameraPosition - p;
-  float dc = length(toCam);
-  p += toCam / max(dc, 1e-3) * min(dc * 0.01, 1.0);
-  gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0);
-}
-`
-
-const fragmentShader = /* glsl */ `
-${constants}
-${lighting}
-in vec2 vQ;
-in float vA;
-in vec3 vC;
-void main() {
-  float r = length(vQ);
-  float a = vA * (1.0 - smoothstep(0.35, 1.0, r));
-  if (a <= 0.004) discard;
-  vec3 light = uSunColor * max(uSunDir.y, 0.0) * 0.7 + uSkyColor * 1.3;
-  gl_FragColor = vec4(vC * light * (1.15 - 0.3 * r), a);
-}
-`
-
-/** A clumped spread of starting points along a line, so a mass has thicker and thinner stretches. */
-function clumps(n, rand) {
-  const out = new Float32Array(n)
-  const centres = Array.from({ length: 5 }, () => rand())
-  for (let i = 0; i < n; i++) {
-    const c = centres[i % centres.length]
-    out[i] = (c + (rand() - 0.5) * (rand() < 0.7 ? 0.16 : 1)) % 1
-    if (out[i] < 0) out[i] += 1
-  }
-  return out
-}
 
 export class Forces {
-  /** feats: features.json's features; proj: the app's projection; ribbons: features/ribbons.js. */
+  /** feats: features.json's features; shared: the app's uniforms; ribbons: features/ribbons.js. */
   constructor(app, feats, shared, ribbons) {
     this.app = app
-    let seed = 2026
-    const rand = () => {
-      seed = (seed * 16807) % 2147483647
-      return seed / 2147483647
-    }
     this.forces = []
     this.lines = []
     for (const f of feats) {
@@ -109,37 +38,20 @@ export class Forces {
       const cum = [0]
       for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]))
       const total = cum.at(-1)
-      const rec = { p, pts, cum, total, event: p.event, step: Number.isFinite(p.step) ? p.step : 0, w: 0, goal: 0, stop: p.stop ?? null }
-      if (p.kind === 'line') {
-        const side = p.side || (p.role === 'advance' ? 'hawaii' : 'oahu')
-        rec.batch = ribbons.add([{ pts, width: 0.75 }], { mode: 'band', colour: new THREE.Color(ROLE_COLOURS[side] || '#ffffff').toArray(), alpha: 0, minPx: 6, lift: 0.01, order: 6, endFade: 1.2 })
+      const rec = { p, pts, cum, total, event: p.event, step: Number.isFinite(p.step) ? p.step : 0, w: 0, goal: 0, stop: p.stop ?? null, line: p.kind === 'line' }
+      if (rec.line) {
+        rec.side = p.side || (p.role === 'advance' ? 'hawaii' : 'oahu')
+        rec.batch = ribbons.add([{ pts, width: 0.75 }], { mode: 'band', colour: new THREE.Color(ROLE_COLOURS[rec.side] || '#ffffff').toArray(), alpha: 0, minPx: 6, lift: 0.01, order: 6, endFade: 1.2 })
         rec.mid = geometryPoint(f.geometry)
-        this.lines.push(rec)
-        // and on it a mass standing: marks spread along the front, stirring in place
+        // (a front's people stand; the tools tell them from the forces by this)
         rec.stand = true
-        rec.n = Math.round(Math.max(60, Math.min(220, total * 45)))
-        rec.half = 0.2
-        rec.u0 = Float32Array.from({ length: rec.n }, () => rand())
-        rec.lat = Float32Array.from({ length: rec.n }, () => (rand() + rand() + rand()) / 1.5 - 1)
-        rec.size = Float32Array.from({ length: rec.n }, () => MARK * (0.7 + 0.6 * rand()))
-        rec.colour = new THREE.Color(ROLE_COLOURS[side] || '#ffffff')
-        this.forces.push(rec)
-      } else {
-        // the path down the pali is a file, not a mass
-        const file = /path/i.test(p.name || '') && total < 12
-        rec.file = file
-        rec.n = Math.round(Math.max(90, Math.min(1400, total * (file ? 12 : 40))))
-        rec.half = file ? 0.04 : p.role === 'hawaii' ? 0.36 : 0.28
-        rec.u0 = clumps(rec.n, rand)
-        rec.lat = Float32Array.from({ length: rec.n }, () => (rand() + rand() + rand()) / 1.5 - 1)
-        rec.size = Float32Array.from({ length: rec.n }, () => MARK * (0.7 + 0.6 * rand()))
-        rec.colour = new THREE.Color(ROLE_COLOURS[p.role] || '#ffffff')
-        this.forces.push(rec)
-      }
+        this.lines.push(rec)
+      } else rec.side = p.role || 'oahu'
+      this.forces.push(rec)
     }
     // the events they belong to, and the years each holds
     this.events = new Map()
-    for (const r of new Set([...this.forces, ...this.lines])) {
+    for (const r of this.forces) {
       if (!r.event) continue
       let e = this.events.get(r.event)
       if (!e) this.events.set(r.event, (e = { id: r.event, from: Infinity, to: -Infinity, recs: [] }))
@@ -147,31 +59,12 @@ export class Forces {
       if (Number.isFinite(r.p.from)) e.from = Math.min(e.from, r.p.from)
       if (Number.isFinite(r.p.to)) e.to = Math.max(e.to, r.p.to)
     }
-    // one mesh for every mark
-    const total = this.forces.reduce((s, r) => s + r.n, 0)
-    this.count = total
-    const g = new THREE.InstancedBufferGeometry()
-    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0]), 3))
-    g.setIndex([0, 1, 2, 0, 2, 3])
-    this.marks = new Float32Array(Math.max(1, total) * 4)
-    this.markAttr = new THREE.InstancedBufferAttribute(this.marks, 4)
-    this.markAttr.setUsage(THREE.DynamicDrawUsage)
-    g.setAttribute('aMark', this.markAttr)
-    const colours = new Float32Array(Math.max(1, total) * 3)
-    let o = 0
-    for (const r of this.forces) {
-      r.o = o
-      for (let i = 0; i < r.n; i++) r.colour.toArray(colours, (o + i) * 3)
-      o += r.n
-    }
-    g.setAttribute('aColour', new THREE.InstancedBufferAttribute(colours, 3))
-    g.instanceCount = total
-    this.material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms: { ...shared.uniforms, uPxK: { value: 0.001 } }, transparent: true, depthWrite: false })
-    this.mesh = new THREE.Mesh(g, this.material)
-    this.mesh.frustumCulled = false
-    this.mesh.renderOrder = 7
-    this.group = new THREE.Group()
-    this.group.add(this.mesh)
+    // their people, every one placed now (each rec is given o and n: its first and how many)
+    this.soldiers = new Soldiers(app, this.forces, shared)
+    this.count = this.soldiers.count
+    // (for the tools: each figure's x, z, how much of it shows, and its scale)
+    this.marks = this.soldiers.marks
+    this.group = this.soldiers.group
     this.time = 0
     this.showing = { event: null, steps: [], quiet: false }
   }
@@ -253,80 +146,38 @@ export class Forces {
     const tour = this.app.tour
     const ev = tour?.active ? tour.event : null
     if (ev && this.events.has(ev.id) && tour.stop >= 0) {
-      const recs = this.shownAt(ev, tour.stop)
-      return { event: ev.id, recs, steps: [...new Set([...recs].map((r) => r.step))].sort((a, b) => a - b), quiet: false }
+      // (worked out again only when the stop changes)
+      if (this._at?.ev !== ev || this._at.stop !== tour.stop) {
+        const recs = this.shownAt(ev, tour.stop)
+        this._at = { ev, stop: tour.stop, now: { event: ev.id, recs, steps: [...new Set([...recs].map((r) => r.step))].sort((a, b) => a - b), quiet: false } }
+      }
+      return this._at.now
     }
+    this._at = null
     const y = this.app.timeline.year
-    for (const e of this.events.values()) if (y >= e.from && y < e.to + 1) return { event: e.id, recs: null, steps: null, quiet: true }
-    return { event: null, recs: new Set(), steps: [], quiet: false }
+    for (const e of this.events.values()) if (y >= e.from && y < e.to + 1) return (this._quiet ||= new Map()).get(e.id) || this._quiet.set(e.id, { event: e.id, recs: null, steps: null, quiet: true }).get(e.id)
+    return (this._none ||= { event: null, recs: new Set(), steps: [], quiet: false })
   }
 
   update(dt, show, distance = 0) {
-    // (the masses belong to the near zoom: gone as the view widens past the valley)
+    // (the people belong to the near zoom: gone as the view widens past the valley)
     show *= 1 - smooth(75, 140, distance)
     this.time += dt
-    const cam = this.app.camera
-    this.material.uniforms.uPxK.value = (2 * Math.tan((cam.fov * Math.PI) / 360)) / Math.max(1, innerHeight)
     const now = this.choose()
     this.showing = now
     const ease = dt > 0 ? 1 - Math.exp(-dt * 2) : 1
-    for (const r of new Set([...this.forces, ...this.lines])) {
+    for (const r of this.forces) {
       const on = r.event === now.event && (now.recs === null || now.recs.has(r))
       r.goal = on ? (now.quiet ? 0.2 : 1) : 0
       r.w += (r.goal - r.w) * ease
       if (Math.abs(r.goal - r.w) < 0.003) r.w = r.goal
     }
-    for (const r of this.lines) r.batch && (r.batch.uniforms.uAlpha.value = 0.34 * r.w * show)
-    const speed = now.quiet ? 0.5 : 1
-    const M = this.marks
-    // (with nothing showing, and nothing last time, there is nothing to send)
-    const any = show > 0.002 && this.forces.some((r) => r.w > 0.002)
-    if (!any && !this.wasShowing) {
-      this.mesh.visible = false
-      this.marksShown = 0
-      return
-    }
-    this.wasShowing = any
-    for (const r of this.forces) {
-      const a0 = r.w * show * (r.file ? 0.5 : r.stand ? 0.7 : 0.85)
-      for (let i = 0; i < r.n; i++) {
-        const k = (r.o + i) * 4
-        if (a0 <= 0.002) {
-          M[k + 2] = 0
-          continue
-        }
-        // a mass taken along its line flows on and thins out over its last
-        // stretch, never arriving; one standing on a front stirs in place
-        const u = r.stand
-          ? Math.min(0.999, Math.max(0, r.u0[i] + Math.sin(this.time * 0.6 + i * 2.3) * 0.015))
-          : (r.u0[i] + (this.time * speed) / FLOW_S) % 1
-        const env = r.stand ? smooth(0, 0.12, u) * (1 - smooth(0.88, 1, u)) : r.file ? smooth(0.3, 0.45, u) * (1 - smooth(0.8, 0.97, u)) : smooth(0, 0.12, u) * (1 - smooth(0.72, 0.95, u))
-        const s = u * r.total
-        let j = 1
-        while (j < r.cum.length - 1 && r.cum[j] < s) j++
-        const a = r.pts[j - 1]
-        const b = r.pts[j]
-        const L = r.cum[j] - r.cum[j - 1] || 1
-        const t = (s - r.cum[j - 1]) / L
-        const dx = (b[0] - a[0]) / L
-        const dz = (b[1] - a[1]) / L
-        // the band narrows toward the ends, and stirs a little as it goes
-        const half = r.stand ? r.half : r.half * (0.45 + 0.55 * Math.sin(Math.PI * Math.min(1, u * 1.15)))
-        const wob = Math.sin(this.time * 0.7 + i * 1.7) * 0.15
-        const off = (r.lat[i] + wob) * half
-        M[k] = a[0] + (b[0] - a[0]) * t - dz * off
-        M[k + 1] = a[1] + (b[1] - a[1]) * t + dx * off
-        M[k + 2] = a0 * env
-        M[k + 3] = r.size[i]
-      }
-    }
-    this.markAttr.needsUpdate = true
-    this.mesh.visible = show > 0.002 && this.forces.some((r) => r.w > 0.002)
-    this.marksShown = 0
-    for (const r of this.forces) if (r.w > 0.002) this.marksShown += r.n
+    for (const r of this.lines) r.batch && (r.batch.uniforms.uAlpha.value = 0.26 * r.w * show)
+    this.soldiers.update(dt, show, now.quiet)
+    this.marksShown = this.soldiers.drawn
   }
 
-  /** For the tools: which forces show, by name (as the tour and the year stand now, not as last drawn). */
+  /** For the tools: which forces show, by name (as the tour and the year stand now, not as last drawn), and their people. */
   stats() {
     const now = this.choose()
     const on = (r) => r.event === now.event && (now.recs === null || now.recs.has(r))
@@ -340,12 +191,12 @@ export class Forces {
       lines: this.lines.filter(on).map((r) => r.p.name),
       marks: this.count,
       marksShown: this.marksShown ?? 0,
+      ...this.soldiers.stats(),
     }
   }
 
   dispose() {
-    this.mesh.geometry.dispose()
-    this.material.dispose()
+    this.soldiers.dispose()
   }
 }
 

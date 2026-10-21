@@ -1134,6 +1134,354 @@ if (districtCount) {
     if (jump > 0.15 || jumpM > step * 0.5) throw new Error(`the camera jumped ${jump.toFixed(3)} (${jumpM.toFixed(1)} m of ground) in a frame, while the ground under the target stepped ${step.toFixed(1)} m`)
     console.log(`      ${r.rows.length} frames over ${(hi - lo).toFixed(0)} m of relief (steps of up to ${step.toFixed(0)} m a frame): the camera's largest step ${jump.toFixed(3)} (${jumpM.toFixed(1)} m)`)
   })
+  // ==== the battles' people (features/soldiers.js, sprites.js) ===================== [soldiers]
+  // Pixel-art figures in place of the masses: at each stop the people of its
+  // forces, of their own sides; each a whole number of device pixels to the
+  // sprite pixel at every distance, crisp on the screen (every k by k block of
+  // a figure one colour, its outline where the sheet puts it); the two sides
+  // fighting in turn at the fronts, muskets firing, the guns served, nobody
+  // lost; nothing within 300 m of the edge of the pali however long they walk;
+  // nobody under the ground or in the water; off the tour, fewer and nobody
+  // fighting; and what they cost at Puʻiwa.
+  {
+    const SF = 'app.districts.cur.features.forces'
+    const SS = `${SF}.soldiers`
+    const gotoStop = async (at, i) => {
+      await run(`app.tour.goTo(${at[0]}, ${at[1]}); app.settle()`)
+      await districtReady()
+      await run(`app.tour.goStop(${i})`)
+      await page.evaluate(() => window.__app.rig.finishFlight())
+      await yearSettles()
+      await districtReady()
+      await settleTwice()
+      await frames(2)
+    }
+    /** The figures drawn now, each with its force's side and its own, where it stands, and its ground. */
+    const drawn = () =>
+      ui(`(() => {
+        const S = ${SS}, f = S.f, out = []
+        S.recs.forEach((r, ri) => { for (let i = r.o; i < r.o + r.n; i++) if (f.vis[i] > 0) out.push({ i, name: r.p.name, recSide: r.side, side: ['hawaii', 'oahu', 'maui'][f.side[i]], x: f.x[i], z: f.z[i], gm: f.gm[i], now: app.world.metresAt(f.x[i], f.z[i]), k: f.k[i], fr: f.fr[i], mode: f.mode[i] }) })
+        return out
+      })()`)
+    const edgeAt = await ui(`(() => { const p = app.data.places.find((p) => p.id === 'nuuanu-pali'); return p ? app.data.proj.toWorld(p.geometry.coordinates) : null })()`)
+    const stopsSeen = {}
+    for (const [id, at] of [['nuuanu-1795', ev95], ['kaheiki-1783', ev83]]) {
+      if (!at) continue
+      await check(`${id}: at each stop the people of its forces, of their own sides, on dry ground`, async () => {
+        const n = await ui(`app.data.events.find((e) => e.id === '${id}').stops.length`)
+        const rows = []
+        for (let i = 0; i < n; i++) {
+          await gotoStop(at, i)
+          const stop = await ui(`app.tour.event.stops[${i}]`)
+          if (!stop.camera) {
+            // (a far stop: the district is not down, and nobody is drawn)
+            const n = await ui(`app.districts.cur?.features?.forces?.soldiers.drawn ?? 0`)
+            if (n) throw new Error(`stop ${i + 1} (${stop.place}, far): ${n} figures drawn`)
+            rows.push(`${i + 1} ${stop.place}: far, nobody drawn`)
+            continue
+          }
+          const st = await ui(`${SF}.stats()`)
+          const figs = await drawn()
+          const names = [...st.forces, ...st.lines]
+          // (a force whose people would all stand over the edge of the pali as this camera sees it is kept from it)
+          const kept = await ui(`(() => { const S = ${SS}, f = S.f, out = {}; for (const r of S.recs) { let n = 0; for (let i = r.o; i < r.o + r.n; i++) n += f.hid[i]; if (n) out[r.p.name] = n } return out })()`)
+          for (const name of names) if (!figs.some((g) => g.name === name) && !kept[name]) throw new Error(`stop ${i + 1}: nobody of “${name}” drawn`)
+          const keptHere = names.filter((n) => kept[n] && !figs.some((g) => g.name === n))
+          const stray = figs.find((g) => !names.includes(g.name))
+          if (stray) throw new Error(`stop ${i + 1}: a figure of “${stray.name}”, not of this stop`)
+          const turned = figs.find((g) => g.side !== g.recSide)
+          if (turned) throw new Error(`stop ${i + 1}: a ${turned.side} figure in “${turned.name}” (${turned.recSide})`)
+          // feet on the ground of the year (as last looked up, a few metres back at most), never in the water
+          const off = figs.reduce((m, g) => Math.max(m, Math.abs(g.gm - g.now)), 0)
+          const wet = figs.filter((g) => g.now < 0.15)
+          if (off > 1.5) throw new Error(`stop ${i + 1}: a figure's feet ${off.toFixed(2)} m off the ground`)
+          if (wet.length) throw new Error(`stop ${i + 1}: ${wet.length} figures in the water (${wet[0].name})`)
+          if (edgeAt) {
+            const near = figs.filter((g) => Math.hypot(g.x - edgeAt[0], g.z - edgeAt[1]) < 3)
+            if (near.length) throw new Error(`stop ${i + 1}: ${near.length} figures within 300 m of the pali edge`)
+          }
+          const sides = {}
+          for (const g of figs) sides[g.side] = (sides[g.side] || 0) + 1
+          const ks = [...new Set(figs.map((g) => g.k))].sort()
+          stopsSeen[`${id}:${i}`] = figs.length
+          rows.push(`${i + 1} ${stop.place}: ${figs.length} figures (${Object.entries(sides).map(([s, c]) => `${s} ${c}`).join(', ')}), k ${ks.join('/')}, feet within ${off.toFixed(2)} m${keptHere.length ? `; kept from the edge as seen from here: ${keptHere.map((n) => `“${n}”`).join(', ')}` : ''}`)
+        }
+        for (const r of rows) console.log(`      ${r}`)
+      })
+    }
+    if (ev95) {
+      await check('each figure is a whole number of device pixels to the sprite pixel at every distance, and crisp on the screen', async () => {
+        const puiwa = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === 'puiwa')`)
+        await gotoStop(ev95, puiwa)
+        const t = await ui('[app.rig.state.target.x, app.rig.state.target.z, app.rig.state.yaw, app.rig.state.pitch]')
+        const rows = []
+        for (const d of [8, 10, 13, 16, 24, 40, 60]) {
+          await run(`app.rig.jump({ x: ${t[0]}, z: ${t[1]}, distance: ${d}, yaw: ${t[2]}, pitch: ${t[3]} }); app.settle(); app.settle()`)
+          await frames(1)
+          const r = await ui(`(() => {
+            const S = ${SS}, f = S.f, cam = app.camera, e = cam.matrixWorld.elements, vert = app.world.uniforms.uVert.value
+            const out = { n: 0, bad: [], ks: {}, dpr: S.dpr }
+            for (let i = 0; i < S.count; i++) {
+              if (f.vis[i] <= 0) continue
+              out.n++
+              const k = f.k[i]
+              const y = Math.max(f.gm[i], 0) * vert
+              const depth = -((f.x[i] - cam.position.x) * e[8] + (y - cam.position.y) * e[9] + (f.z[i] - cam.position.z) * e[10])
+              if (!Number.isInteger(k) || k < 2 || k > Math.round(4 * S.dpr) || k !== S.scaleAt(depth)) out.bad.push([i, k, +depth.toFixed(2)])
+              out.ks[k] = (out.ks[k] || 0) + 1
+            }
+            return out
+          })()`)
+          if (r.bad.length) throw new Error(`at ${d}: ${r.bad.length} figures at a scale off the rule, e.g. ${JSON.stringify(r.bad.slice(0, 3))}`)
+          if (!r.n) throw new Error(`at ${d}: nobody drawn`)
+          rows.push(`${d}: ${r.n} figures, ${Object.entries(r.ks).map(([k, c]) => `${c} at ${k} px (${(16 * k) / r.dpr} px tall)`).join(', ')}`)
+        }
+        for (const r of rows) console.log(`      ${r}`)
+        // on the screen: everyone held still, a screenshot, and each figure found where the shader puts
+        // it: every opaque sprite pixel that no other figure or shadow overlaps a k by k block of one
+        // colour, and its outline dark
+        for (const d of [16, 10]) {
+          await run(`app.rig.jump({ x: ${t[0]}, z: ${t[1]}, distance: ${d}, yaw: ${t[2]}, pitch: ${t[3]} }); app.settle(); app.settle(); ${SS}.hold = true`)
+          await frames(3)
+          const png = await page.screenshot({ timeout: 180000 })
+          const res = await page.evaluate(
+            async ({ b64, path }) => {
+              const app = window.__app
+              const S = path.split('.').reduce((o, k) => o[k], app)
+              const img = new Image()
+              img.src = `data:image/png;base64,${b64}`
+              await img.decode()
+              const cv = document.createElement('canvas')
+              cv.width = img.width
+              cv.height = img.height
+              const cx = cv.getContext('2d', { willReadFrequently: true })
+              cx.drawImage(img, 0, 0)
+              const W = cv.width
+              const H = cv.height
+              const px = cx.getImageData(0, 0, W, H).data
+              const sheet = S.sheet
+              const rects = []
+              for (let i = 0; i < S.count; i++) {
+                const r = S.screenRect(i)
+                if (r && r.vis >= 1) rects.push([i, r])
+              }
+              let figs = 0
+              let blocks = 0
+              let even = 0
+              let lines = 0
+              let dark = 0
+              for (const [i, r] of rects) {
+                if (r.x < 2 || r.y < 2 || r.x + r.w > W - 2 || r.y + r.h + 3 * r.k > H - 2) continue
+                // (clear of the page over the scene)
+                const pts = [[r.x + 1, r.y + 1], [r.x + r.w - 2, r.y + 1], [r.x + 1, r.y + r.h - 2], [r.x + r.w - 2, r.y + r.h - 2], [r.x + r.w / 2, r.y + r.h / 2]]
+                if (pts.some(([x, y]) => document.elementFromPoint(x, y)?.id !== 'scene')) continue
+                // the others that reach into its box, each with its shadow under it and a pixel round
+                const near = rects.filter(([j, q]) => j !== i && q.x - 2 < r.x + r.w + 2 && q.x + q.w + 2 > r.x - 2 && q.y - 2 < r.y + r.h + 3 * r.k && q.y + q.h + 3 * q.k > r.y - 2).map(([, q]) => q)
+                const covered = (X, Y, k) => near.some((q) => X < q.x + q.w + 2 && X + k > q.x - 2 && Y < q.y + q.h + 3 * q.k && Y + k > q.y - 2)
+                let best = null
+                // (where we put it, and a pixel either way, should the GPU round a hair differently)
+                for (const [ox, oy] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) {
+                  let b = 0
+                  let e = 0
+                  let l = 0
+                  let dk = 0
+                  for (let sy = 0; sy < r.h / r.k; sy++) {
+                    for (let sx = 0; sx < r.cell[2]; sx++) {
+                      const tx = r.facing < 0 ? r.cell[2] - 1 - sx : sx
+                      const s = ((r.cell[1] + sy) * sheet.width + r.cell[0] + tx) * 4
+                      if (sheet.data[s + 3] < 64) continue
+                      const X = r.x + ox + sx * r.k
+                      const Y = r.y + oy + sy * r.k
+                      if (covered(X, Y, r.k)) continue
+                      b++
+                      const o = (Y * W + X) * 4
+                      let same = true
+                      for (let v = 0; v < r.k && same; v++) {
+                        for (let u = 0; u < r.k; u++) {
+                          const q = ((Y + v) * W + X + u) * 4
+                          if (Math.abs(px[q] - px[o]) + Math.abs(px[q + 1] - px[o + 1]) + Math.abs(px[q + 2] - px[o + 2]) > 9) {
+                            same = false
+                            break
+                          }
+                        }
+                      }
+                      if (same) e++
+                      // (the outline's colour in the sheet: on the screen, dark)
+                      if (sheet.data[s] === 0x2a && sheet.data[s + 1] === 0x20 && sheet.data[s + 2] === 0x1b) {
+                        l++
+                        if (px[o] + px[o + 1] + px[o + 2] < 210) dk++
+                      }
+                    }
+                  }
+                  if (!best || e + dk > best.e + best.dk) best = { b, e, l, dk }
+                }
+                if (!best.b) continue
+                figs++
+                blocks += best.b
+                even += best.e
+                lines += best.l
+                dark += best.dk
+              }
+              return { drawn: rects.length, figs, blocks, even, lines, dark, W, H }
+            },
+            { b64: png.toString('base64'), path: 'districts.cur.features.forces.soldiers' },
+          )
+          await run(`${SS}.hold = false`)
+          const evenK = res.even / Math.max(1, res.blocks)
+          const darkK = res.dark / Math.max(1, res.lines)
+          console.log(`      at ${d}: ${res.figs} of ${res.drawn} figures in the open in part; of their sprite pixels that nothing overlaps, ${res.even} of ${res.blocks} (${(evenK * 100).toFixed(1)}%) one colour on the screen, ${res.dark} of ${res.lines} outline pixels dark (${(darkK * 100).toFixed(1)}%)`)
+          if (res.figs < 6 || res.blocks < 200) throw new Error(`at ${d}: only ${res.blocks} sprite pixels of ${res.figs} figures in the open to look at`)
+          if (evenK < 0.9 || darkK < 0.85) throw new Error(`at ${d}: not crisp on the screen (${(evenK * 100).toFixed(1)}% of blocks one colour, ${(darkK * 100).toFixed(1)}% of outlines dark)`)
+        }
+      })
+      await check('at the fronts the two sides strike in turn, muskets fire, the guns are served, and nobody is lost', async () => {
+        const rows = []
+        for (const place of ['puiwa', 'laimi']) {
+          const i = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === '${place}')`)
+          await gotoStop(ev95, i)
+          const r = await ui(`(() => {
+            const F = ${SF}, S = F.soldiers, f = S.f, M = S.constructor.MODE, KD = S.constructor.KIND
+            const out = { strikes: 0, together: 0, guards: 0, musketFlash: 0, gunFlash: 0, rammed: 0, touched: 0, min: Infinity, max: 0, frames: 0 }
+            const fronts = S.recs.filter((r) => r.line && r.w > 0)
+            for (let step = 0; step < 150; step++) {
+              F.update(0.1, app.districts.k, app.rig.state.distance)
+              const striking = new Map()
+              let atFront = 0
+              for (const r of fronts) for (let i = r.o; i < r.o + r.n; i++) {
+                if (f.vis[i] <= 0) continue
+                atFront++
+                const fr = f.fr[i]
+                if (f.mode[i] === M.duel) {
+                  // (striking: the draw and the blow; frame 12 is the guard, held while the other strikes)
+                  if (fr === 10 || fr === 11) {
+                    out.strikes++
+                    striking.set(f.grp[i], (striking.get(f.grp[i]) || 0) + 1)
+                  } else if (fr === 12) out.guards++
+                } else if (f.kind[i] === KD.musket && fr === 11) out.musketFlash++
+                else if (f.mode[i] === M.piece && fr === 10) out.gunFlash++
+                else if (f.kind[i] === KD.rammer && fr >= 10) out.rammed++
+                else if (f.kind[i] === KD.linstock && fr === 11) out.touched++
+              }
+              for (const c of striking.values()) if (c > 1) out.together++
+              out.min = Math.min(out.min, atFront)
+              out.max = Math.max(out.max, atFront)
+            }
+            return out
+          })()`)
+          rows.push(`${place}: over 15 s, ${r.strikes} blows struck (${r.together} by both of a pair at once), ${r.musketFlash} musket flashes, ${r.gunFlash} gun flashes, ${r.rammed} ramming, ${r.touched} matches put; ${r.min}–${r.max} people at the fronts`)
+          if (!(r.strikes > 0 && r.guards > 0)) throw new Error(`${place}: no bout fought: ${JSON.stringify(r)}`)
+          if (r.together) throw new Error(`${place}: both of a pair struck at once ${r.together} times`)
+          if (!(r.musketFlash > 0)) throw new Error(`${place}: no musket fired in 15 s`)
+          if (!(r.gunFlash > 0 && r.rammed > 0 && r.touched > 0)) throw new Error(`${place}: the guns not served: ${JSON.stringify(r)}`)
+          if (r.min !== r.max) throw new Error(`${place}: the people at the fronts went from ${r.max} to ${r.min}`)
+        }
+        for (const r of rows) console.log(`      ${r}`)
+      })
+      await check('however long they walk, nobody comes within 300 m of the edge of the pali', async () => {
+        if (!edgeAt) throw new Error('no nuuanu-pali in the gazetteer')
+        const rows = []
+        for (const place of ['laimi', 'nuuanu-pali']) {
+          const i = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === '${place}')`)
+          await gotoStop(ev95, i)
+          const r = await ui(`(() => {
+            const F = ${SF}, S = F.soldiers, f = S.f, [ex, ez] = [${edgeAt[0]}, ${edgeAt[1]}]
+            let nearest = Infinity, inside = 0, seen = 0, wet = 0, sunk = 0, worst = 0, worstOf = ''
+            for (let step = 0; step < 900; step++) {
+              F.update(0.1, app.districts.k, app.rig.state.distance)
+              for (let i = 0; i < S.count; i++) {
+                if (f.vis[i] <= 0) continue
+                seen++
+                const d = Math.hypot(f.x[i] - ex, f.z[i] - ez)
+                nearest = Math.min(nearest, d)
+                if (d < 3) inside++
+                if (S.marks[i * 4 + 2] > 0.05 && Math.hypot(S.marks[i * 4] - ex, S.marks[i * 4 + 1] - ez) < 3) inside++
+                if (step % 30 === 0) {
+                  const g = app.world.metresAt(f.x[i], f.z[i])
+                  if (g < 0.15) wet++
+                  if (Math.abs(g - f.gm[i]) > 1.5) sunk++
+                  if (Math.abs(g - f.gm[i]) > worst) {
+                    worst = Math.abs(g - f.gm[i])
+                    worstOf = S.recs[f.rec[i]].p.name
+                  }
+                }
+              }
+            }
+            return { nearest, inside, seen, wet, sunk, worst, worstOf }
+          })()`)
+          rows.push(`${place}: over 90 s, the nearest anyone came was ${(r.nearest * 100).toFixed(0)} m; none in the water, feet within ${r.worst.toFixed(2)} m of the ground`)
+          if (r.inside) throw new Error(`${place}: ${r.inside} times a figure within 300 m of the edge`)
+          if (r.wet || r.sunk) throw new Error(`${place}: ${r.wet} figure-frames in the water, ${r.sunk} more than 1.5 m off the ground (at worst ${r.worst.toFixed(2)} m, “${r.worstOf}”)`)
+        }
+        for (const r of rows) console.log(`      ${r}`)
+      })
+      await check('off the tour, in the battle’s year: fewer of them, walking and standing, nobody fighting', async () => {
+        await offTour(1795)
+        await view(nearView)
+        await settleTwice()
+        await frames(2)
+        const r = await ui(`(() => {
+          const F = ${SF}, S = F.soldiers, f = S.f, M = S.constructor.MODE
+          const out = { quiet: F.stats().quiet, engage: 0, walking: 0, standing: 0, shown: 0, perRec: 0 }
+          for (let step = 0; step < 60; step++) {
+            F.update(0.1, app.districts.k, app.rig.state.distance)
+            let shown = 0
+            for (const r of S.recs) {
+              let n = 0
+              for (let i = r.o; i < r.o + r.n; i++) {
+                if (f.vis[i] <= 0) continue
+                n++
+                if (f.fr[i] >= 10) out.engage++
+                else if (f.fr[i] >= 8) out.standing++
+                else out.walking++
+              }
+              shown += n
+              if (r.n >= 20) out.perRec = Math.max(out.perRec, n / r.n)
+            }
+            out.shown = Math.max(out.shown, shown)
+          }
+          return out
+        })()`)
+        if (!r.quiet) throw new Error(`not quiet: ${JSON.stringify(r)}`)
+        if (r.engage) throw new Error(`${r.engage} figure-frames fighting off the tour`)
+        if (!(r.walking > 0 && r.standing > 0)) throw new Error(`walking ${r.walking}, standing ${r.standing}`)
+        if (r.perRec > 0.35) throw new Error(`a force shows ${(r.perRec * 100).toFixed(0)}% of its people off the tour`)
+        const atStop = stopsSeen['nuuanu-1795:5']
+        console.log(`      up to ${r.shown} drawn, at most ${(r.perRec * 100).toFixed(0)}% of any force's people (the Puʻiwa stop drew ${atStop ?? '?'}), walking and standing only`)
+      })
+      await check('what the people cost at the Puʻiwa stop', async () => {
+        const puiwa = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === 'puiwa')`)
+        await gotoStop(ev95, puiwa)
+        await page.waitForTimeout(1500)
+        const frameMs = () =>
+          page.evaluate(
+            () =>
+              new Promise((resolve) => {
+                const app = window.__app
+                const f0 = app.frames + 1
+                let t0 = 0
+                const tick = () => {
+                  if (!t0 && app.frames >= f0) t0 = performance.now()
+                  if (t0 && app.frames >= f0 + 6) return resolve((performance.now() - t0) / 6)
+                  requestAnimationFrame(tick)
+                }
+                requestAnimationFrame(tick)
+              }),
+          )
+        const runs = [await frameMs(), await frameMs(), await frameMs()].sort((a, b) => a - b)
+        const r = await ui(`(() => {
+          const F = ${SF}, S = F.soldiers
+          const t0 = performance.now()
+          for (let k = 0; k < 200; k++) F.update(1 / 60, app.districts.k, app.rig.state.distance)
+          const ms = (performance.now() - t0) / 200
+          const s = app.stats()
+          return { updateMs: +ms.toFixed(3), drawn: S.drawn, planned: S.count, cap: S.cap, calls: s.calls, triangles: s.triangles }
+        })()`)
+        console.log(`      frame ${runs[1].toFixed(0)} ms (median of ${runs.map((v) => v.toFixed(0)).join(', ')}) under the software renderer; the people's update ${r.updateMs} ms on the CPU for ${r.drawn} drawn of ${r.planned} placed (at most ${r.cap}), two draws; ${r.calls} calls, ${r.triangles} triangles in all`)
+      })
+    }
+  }
+  // ==== [soldiers] end =========================================================================
+
   await check('the district fades out and is let go once the camera leaves', async () => {
     await view('app.tour.chainView()')
     await settleTwice()

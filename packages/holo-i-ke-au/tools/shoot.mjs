@@ -60,6 +60,60 @@ const port = Number(process.env.PORT || 5299)
 const useTest = process.env.DATA ? process.env.DATA === 'test' : !existsSync(join(root, 'public/data/manifest.json'))
 mkdirSync(outDir, { recursive: true })
 
+// ==== the battles' people (features/soldiers.js) ===================================== [soldiers]
+// '[{"preset":"soldiers"}]' walks the battles: the Puʻiwa and Lāʻimi stops at the stop camera and
+// close in (cam, over the fronts, where one figure is a few dozen pixels), the march past Kou, the
+// retreat to the pali, the landing at Waikīkī, Kaheiki in 1783 and its columns, and last the sprite
+// sheet itself. A shot with `sheet: n` lays the sheet (as the district's soldiers built it) over the
+// page at n× on a ground-coloured backing and shoots it alone.
+{
+  const tour = (ev, stop) => `const at = app.tour.locate(app.data.events.find((e) => e.id === '${ev}')); app.tour.goTo(at[0], at[1]); app.tour.goStop(${stop})`
+  const ready = "app.districts.cur?.state === 'ready'"
+  const people = 'app.districts.cur.features.forces.stats()'
+  // (over the fronts between the two lines, looking up the valley as the stops do: yaw -42°, pitch 0.38 of a right angle)
+  const SOLDIERS = [
+    { name: 'puiwa', eval: tour('nuuanu-1795', 5), until: ready, frames: 4, report: people },
+    { name: 'puiwa-close', cam: [-350.86, -923.85, 10, -0.733, 0.597], frames: 3, report: people },
+    { name: 'laimi', eval: 'app.tour.goStop(6)', until: ready, frames: 4, report: people },
+    { name: 'laimi-close', cam: [-348.26, -927.5, 10, -0.733, 0.597], frames: 3, report: people },
+    { name: 'kou', eval: 'app.tour.goStop(4)', until: ready, frames: 4, report: people },
+    { name: 'pali', eval: 'app.tour.goStop(7)', until: ready, frames: 4, report: people },
+    { name: 'waikiki', eval: 'app.tour.goStop(3)', until: ready, frames: 4, report: people },
+    { name: 'kaheiki', eval: tour('kaheiki-1783', 2), until: ready, frames: 4, report: people },
+    { name: 'kaheiki-columns', eval: 'app.tour.goStop(1)', until: ready, frames: 4, report: people },
+    { name: 'sheet', sheet: 2, settle: false, frames: 1 },
+  ]
+  const showSheet = (app, n) => {
+    const S = app.districts.cur?.features?.forces?.soldiers
+    if (!S) throw new Error('no district down: no sprite sheet to show')
+    const { width: w, height: h, data } = S.sheet
+    const cv = document.getElementById('sheet-shot') || document.body.appendChild(document.createElement('canvas'))
+    cv.id = 'sheet-shot'
+    cv.width = w * n + 16
+    cv.height = h * n + 16
+    Object.assign(cv.style, { position: 'fixed', left: '0', top: '0', zIndex: 1000, imageRendering: 'pixelated' })
+    const cx = cv.getContext('2d')
+    cx.fillStyle = '#76825a'
+    cx.fillRect(0, 0, cv.width, cv.height)
+    const img = cx.createImageData(w * n, h * n)
+    for (let y = 0; y < h * n; y++) {
+      for (let x = 0; x < w * n; x++) {
+        const s = (Math.floor(y / n) * w + Math.floor(x / n)) * 4
+        const o = (y * w * n + x) * 4
+        const a = data[s + 3] ? 1 : 0
+        img.data[o] = a ? data[s] : 0x76
+        img.data[o + 1] = a ? data[s + 1] : 0x82
+        img.data[o + 2] = a ? data[s + 2] : 0x5a
+        img.data[o + 3] = 255
+      }
+    }
+    cx.putImageData(img, 8, 8)
+  }
+  for (let i = shots.length - 1; i >= 0; i--) if (shots[i].preset === 'soldiers') shots.splice(i, 1, ...SOLDIERS)
+  for (const s of shots) if (s.sheet) Object.assign(s, { eval: `${s.eval || ''};(${showSheet})(app, ${s.sheet})`, element: '#sheet-shot' })
+}
+// ==== [soldiers] end ===============================================================================
+
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.geojson': 'application/geo+json', '.png': 'image/png', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' }
 export function serve(dir, p) {
   const server = createServer(async (req, res) => {

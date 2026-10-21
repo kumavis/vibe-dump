@@ -548,8 +548,9 @@ Nuʻuanu to the pali, with Kalihi and Mānoa at the edges.
   `sources` (ids in `sources.json`) and an optional `note`. Loʻi and fishponds
   are polygons; the village is a polygon or a point with a `households`
   estimate in a telling, never a figure in `note`; a `force` is a polyline
-  with a `when` (ISO date or month) so the battle can be shown as masses
-  moving, never as individuals; a `heiau` obeys §4's precision rule
+  with a `when` (ISO date or month) so the battle can be shown moving step
+  by step (DESIGN.md §8 says how: pixel-art figures, no dead drawn, nothing
+  at the pali edge); a `heiau` obeys §4's precision rule
   (ahupuaʻa precision unless an established public landmark).
 - **Stops** for an event in this district carry, besides `place`, `zoom` and
   `year`, an optional `camera`: `{ "bearing": compass degrees the camera

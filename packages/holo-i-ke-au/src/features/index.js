@@ -11,7 +11,7 @@
 //   up across the beach of the year below it, bows to the sea;
 // - the streams, routed over the pack's heights (data/district-decode.js),
 //   and the trail up the valley and over the pali, as ribbons on the ground;
-// - the trees (vegetation.js), the battles as masses (forces.js), and the
+// - the trees (vegetation.js), the battles as pixel-art soldiers (forces.js, soldiers.js), and the
 //   place names (labels.js);
 // - and the buildings of every other year and place (settlements.js), from
 //   the settlement layer's density for the year, their kind by the era, the
