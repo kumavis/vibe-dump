@@ -148,7 +148,7 @@ body.nogl {
   position: fixed;
   top: max(10px, env(safe-area-inset-top));
   left: max(10px, env(safe-area-inset-left));
-  width: min(300px, calc(100vw - 20px));
+  width: min(340px, calc(100vw - 20px));
   max-height: calc(100dvh - 20px);
   display: flex;
   flex-direction: column;
@@ -223,7 +223,7 @@ body.nogl {
 
 #tune .row {
   display: grid;
-  grid-template-columns: 1fr 96px 46px;
+  grid-template-columns: 1fr 92px 44px 38px;
   align-items: center;
   gap: 8px;
   padding: 2px 0;
@@ -281,10 +281,178 @@ body.nogl {
   outline: none;
 }
 
+#tune .row .ref {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: #c9a36a;
+  font-size: 11px;
+}
+
 #tune .note {
   min-width: 0;
+  min-height: 1.35em;
+  padding-top: 6px;
   overflow-wrap: anywhere;
   color: #9aa3ad;
   user-select: text;
   -webkit-user-select: text;
+}
+
+#tune .compare,
+#tune .presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(214, 219, 226, 0.1);
+}
+
+#tune .seg {
+  display: flex;
+  border: 1px solid rgba(214, 219, 226, 0.25);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#tune .seg button {
+  padding: 4px 9px;
+  border: 0;
+  border-right: 1px solid rgba(214, 219, 226, 0.18);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+#tune .seg button:last-child {
+  border-right: 0;
+}
+
+#tune .seg button[aria-pressed='true'] {
+  background: rgba(158, 195, 255, 0.22);
+  color: #fff;
+}
+
+#tune .pick {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+  color: #9aa3ad;
+}
+
+#tune select,
+#tune input[type='text'] {
+  min-width: 0;
+  flex: 1;
+  padding: 3px 6px;
+  border: 1px solid rgba(214, 219, 226, 0.25);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.35);
+  color: inherit;
+  font: inherit;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+#tune input[type='text'] {
+  cursor: text;
+}
+
+#tune .presets button,
+#tune .actions button {
+  flex: none;
+}
+
+#tune button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* the split: a hairline down the frame with a grip to drag, the reference
+   named on its left and yours on its right */
+#tune-split {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  margin-left: -12px;
+  cursor: ew-resize;
+  touch-action: none;
+  z-index: 9;
+}
+
+#tune-split::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+#tune-split .grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 36px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  background: rgba(10, 12, 15, 0.7);
+}
+
+#tune-split .label {
+  position: absolute;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(10, 12, 15, 0.7);
+  color: #d6dbe2;
+  font: 11px/1.4 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+#tune-split .left {
+  right: 18px;
+  color: #c9a36a;
+}
+
+#tune-split .right {
+  left: 18px;
+}
+
+#tune-badge {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(10, 12, 15, 0.75);
+  color: #c9a36a;
+  font: 11px/1.4 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 9;
+}
+
+#tune-split[hidden],
+#tune-badge[hidden] {
+  display: none;
+}
+
+#tune .actions + .actions {
+  border-top: 0;
+  padding-top: 6px;
+}
+
+#tune .actions button {
+  padding: 4px 8px;
 }

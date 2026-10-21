@@ -4,7 +4,7 @@ import { Camera, mul3, rotY, rotZ, rotX, norm3 } from './mat.js'
 import { Clock } from './clock.js'
 import { ROOM, FIGURE_SCALE, confine } from './room.js'
 import { Score, LAYERS } from './audio.js'
-import { tune, mountPanel } from './tune.js'
+import { tune, compare, reference, mountPanel } from './tune.js'
 
 const canvas = document.getElementById('view')
 const resetBtn = document.getElementById('reset')
@@ -91,7 +91,7 @@ const PALETTES = [
 ]
 const PALETTE_SPAN = 95 // seconds per colour
 
-function palette(t) {
+function palette(t, tune) {
   // a colour pinned from the tuning panel holds; otherwise they cycle
   const x = tune.palette >= 0 ? Math.min(PALETTES.length - 1, tune.palette | 0) : (t / PALETTE_SPAN) % PALETTES.length
   const i = Math.floor(x)
@@ -200,7 +200,7 @@ function markMoved() {
 }
 
 // the buttons, and the tuning panel, are not the hall
-const isControl = (e) => e.target.closest?.('button, #tune')
+const isControl = (e) => e.target.closest?.('button, .tune-ui')
 
 addEventListener('pointerdown', (e) => {
   if (isControl(e)) return
@@ -290,7 +290,7 @@ const WALK_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD']
 addEventListener('keydown', (e) => {
   wake()
   // keys typed into the panel's sliders are the panel's
-  if (isControl(e) && e.target.tagName === 'INPUT') return
+  if (isControl(e) && /^(INPUT|SELECT)$/.test(e.target.tagName)) return
   // a shortcut is not a step: and a letter let go while Cmd is down never
   // reports its release, so drop any walking held
   if (e.metaKey || e.ctrlKey || e.altKey) {
@@ -473,6 +473,16 @@ function halton(i, b) {
 }
 const JITTER = Array.from({ length: 16 }, (_, i) => [halton(i + 1, 2) - 0.5, halton(i + 1, 3) - 0.5])
 
+// What fills the frame: your values, the reference's, or the two side by
+// side, the reference on the left (see tune.js).
+function side(vals, x0, x1, T) {
+  return { tune: vals, palette: palette(T, vals), exposure: pin('exp', vals.exposure) * (1.0 + 0.2 * clock.swell), x0, x1 }
+}
+function sides(T) {
+  if (compare.view === 'split') return [side(reference(), 0, compare.split, T), side(tune, compare.split, 1, T)]
+  return [side(compare.view === 'ref' ? reference() : tune, 0, 1, T)]
+}
+
 let prevViewProj = null
 let lightInView = 1
 // Falling Repose opens on the body in profile, which cut flat into a ceiling
@@ -496,6 +506,8 @@ function frame(now) {
 
 function step(dt) {
   clock.tick(params.has('still') ? 0 : dt, reducedMotion)
+  // the sound follows whichever values fill the frame
+  score.tune = compare.view === 'ref' ? reference() : tune
   score.update(clock, lightInView)
   if (!renderer) return
 
@@ -627,7 +639,8 @@ function step(dt) {
     dust: !params.has('nodust'),
     exposure: pin('exp', tune.exposure) * (1.0 + 0.2 * clock.swell),
     tune,
-    palette: palette(T),
+    palette: palette(T, tune),
+    sides: sides(T),
     fade: fade * fade,
     dt,
     adaptKey: ADAPT_KEY,

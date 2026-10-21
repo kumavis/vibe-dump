@@ -268,6 +268,22 @@ export class Renderer {
     gl.uniform3f(u.uPoolRad, F.palette.sun[0] * k, F.palette.sun[1] * k, F.palette.sun[2] * k)
   }
 
+  // Run a pass once for the whole frame, or, comparing two tunings side by
+  // side, once for each side under a scissor. F.sides lists each side's span
+  // across the frame (0..1) and the tuning, palette and exposure it shows.
+  eachSide(F, width, height, draw) {
+    const gl = this.gl
+    const sides = F.sides?.length ? F.sides : [{}]
+    if (sides.length === 1) return draw({ ...F, ...sides[0] })
+    gl.enable(gl.SCISSOR_TEST)
+    for (const side of sides) {
+      const a = Math.round(side.x0 * width), b = Math.round(side.x1 * width)
+      gl.scissor(a, 0, b - a, height)
+      draw({ ...F, ...side })
+    }
+    gl.disable(gl.SCISSOR_TEST)
+  }
+
   render(F) {
     const gl = this.gl
     const { w, h } = this
@@ -320,18 +336,20 @@ export class Renderer {
     gl.useProgram(this.pHall.p)
     let u = this.pHall.u
     bindTex(gl, 0, this.cookie.tex, u.uCookie)
-    this.emitUniforms(u, F)
     gl.activeTexture(gl.TEXTURE2)
     gl.bindTexture(gl.TEXTURE_3D, this.noise)
     gl.uniform1i(u.uNoise, 2)
-    this.hallUniforms(u, F)
     this.camUniforms(u, F.cam)
     gl.uniform2f(u.uRes, w, h)
     gl.uniform2f(u.uJitter, F.jitter[0], F.jitter[1])
     gl.uniform1i(u.uFrame, F.frame)
     gl.uniform1i(u.uSteps, F.steps)
     gl.uniform1i(u.uReflSteps, F.reflSteps)
-    this.quad()
+    this.eachSide(F, w, h, (S) => {
+      this.emitUniforms(u, S)
+      this.hallUniforms(u, S)
+      this.quad()
+    })
     gl.activeTexture(gl.TEXTURE2)
     gl.bindTexture(gl.TEXTURE_3D, null)
 
@@ -361,7 +379,6 @@ export class Renderer {
     u = this.pDust.u
     bindTex(gl, 0, this.cookie.tex, u.uCookie)
     bindTex(gl, 3, this.cur.tex, u.uScene)
-    this.hallUniforms(u, F)
     gl.uniformMatrix4fv(u.uViewProj, false, F.cam.viewProj())
     gl.uniform2f(u.uRes, w, h)
     gl.uniform1f(u.uFall, F.dustFall)
@@ -369,9 +386,12 @@ export class Renderer {
     gl.uniform3fv(u.uCamPos, F.cam.pos)
     gl.uniform1f(u.uPxPerUnit, F.cam.pxPerUnit)
     gl.uniform1f(u.uFocus, F.focus)
-    gl.uniform1f(u.uMoteGlow, F.tune.moteGlow)
     gl.bindVertexArray(this.vao)
-    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, F.dust ? Math.round(this.dustCount * F.tune.motes) : 0)
+    this.eachSide(F, w, h, (S) => {
+      this.hallUniforms(u, S)
+      gl.uniform1f(u.uMoteGlow, S.tune.moteGlow)
+      gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, S.dust ? Math.round(this.dustCount * S.tune.motes) : 0)
+    })
     gl.bindVertexArray(null)
     gl.disable(gl.BLEND)
 
@@ -433,13 +453,15 @@ export class Renderer {
     gl.uniform2f(u.uRes, w, h)
     gl.uniform1f(u.uTime, F.wall)
     gl.uniform1f(u.uFade, F.fade)
-    gl.uniform1f(u.uExposure, F.exposure)
-    gl.uniform1f(u.uBloomAmt, F.tune.bloom)
-    gl.uniform1f(u.uGrain, F.tune.grain)
-    gl.uniform1f(u.uFringe, F.tune.fringe)
     gl.uniform1f(u.uPx, F.pr ?? 1)
     gl.uniform1i(u.uDebug, F.debug ? 1 : 0)
-    this.quad()
+    this.eachSide(F, gl.drawingBufferWidth, gl.drawingBufferHeight, (S) => {
+      gl.uniform1f(u.uExposure, S.exposure)
+      gl.uniform1f(u.uBloomAmt, S.tune.bloom)
+      gl.uniform1f(u.uGrain, S.tune.grain)
+      gl.uniform1f(u.uFringe, S.tune.fringe)
+      this.quad()
+    })
     if (F.logAdapt && adapted) {
       bindTarget(gl, adapted)
       const px = new Float32Array(4)
