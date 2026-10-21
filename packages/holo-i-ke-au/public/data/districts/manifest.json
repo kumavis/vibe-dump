@@ -35,6 +35,8 @@
         {
           "keyframe": "contact",
           "until": 1850,
+          "kind": "lower",
+          "depth": -1,
           "file": "nuuanu/patch-contact.png",
           "source": "the fill unit, cut with the 1881 shore",
           "note": "land today that the geologic map calls fill and the 1881 Government Survey map shows as sea or reef flat: Sand Island (but for Quarantine Island), the reef under the piers of the inner harbour and Kapālama, Kakaʻako makai and the Kewalo waterfront, Ala Moana and Magic Island, and the made ground at Kālia by the Ala Wai boat harbour. Fill the 1881 map shows as land (the Kewalo ponds and Kakaʻako salt pans, the Waikīkī wetland under the Ala Wai, the Kalihi and Moanalua ponds) stays land. The 1881 shore is the earliest surveyed; at the harbour front it already includes made ground of unknown date"
@@ -42,6 +44,8 @@
         {
           "keyframe": "kingdom",
           "until": 1900,
+          "kind": "lower",
+          "depth": -1,
           "file": "nuuanu/patch-kingdom.png",
           "source": "the fill unit, cut with the 1881 shore",
           "note": "land today that the geologic map calls fill and the 1881 Government Survey map shows as sea or reef flat: Sand Island (but for Quarantine Island), the reef under the piers of the inner harbour and Kapālama, Kakaʻako makai and the Kewalo waterfront, Ala Moana and Magic Island, and the made ground at Kālia by the Ala Wai boat harbour. Fill the 1881 map shows as land (the Kewalo ponds and Kakaʻako salt pans, the Waikīkī wetland under the Ala Wai, the Kalihi and Moanalua ponds) stays land. The same mask as the contact patch: the 1899 sheet shows the same waterfront within its registration, so the filling the patch covers came after it"

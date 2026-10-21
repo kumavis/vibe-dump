@@ -1,0 +1,1905 @@
+{
+  "about": "Patches that put the shore back where it was before each harbour work (DATA.md, “Patches, on any pack”): raise patches lay dredged ground back at the reef, bar or shore it was cut from, lower patches lay fill back at the reef it was made on. Each applies to years before its `until`. A raise mask’s weights carry the reef’s relief: under the app’s mix h + (depth − h)·w, each texel goes to the reef that rims the cut, which is never shallower than `depth`. Natural passages are in passages.geojson and no raise touches them",
+  "passages": {
+    "file": "patches/passages.geojson",
+    "note": "the passages kept open (Polygons) and, under `bars`, the bars held at their surveyed depth; lon/lat"
+  },
+  "patches": [
+    {
+      "id": "oahu-honolulu-bar-cut",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -5.5,
+      "until": 1892,
+      "file": "patches/oahu-honolulu-bar-cut.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the cut through the Honolulu bar",
+      "note": "the entrance channel where it crosses the bar and the reef edge: “In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had held ships to as little as 18 feet. Laid back at 5.5 m, the bar’s depth, where the reef beside it is shallower, and at the sea floor beside it past the reef edge; today’s cut is wider than the first",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 18,
+        "km2": 0.084,
+        "meanRaiseMetres": 5.23
+      }
+    },
+    {
+      "id": "oahu-honolulu-waterfront",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1900,
+      "file": "patches/oahu-honolulu-waterfront.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Honolulu waterfront fill",
+      "note": "the made ground the geologic map calls fill and the 1881 sheet shows as sea or reef flat, from the piers of the inner harbour and Kapālama to Kakaʻako makai, Kewalo and Kālia, where no later work below takes it: the district’s kingdom patch, on the island. The 1899 sheet shows the same waterfront, so the filling came after it",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
+        }
+      ],
+      "stats": {
+        "texels": 836,
+        "km2": 3.898,
+        "meanLowerMetres": 0.88
+      }
+    },
+    {
+      "id": "oahu-honolulu-harbour",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1.5,
+      "until": 1908,
+      "file": "patches/oahu-honolulu-harbour.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Honolulu Harbour outside the old harbour",
+      "note": "the harbour basin dredged out of the reef west of the 1881 harbour (towards Sand Island, as far as about 157.876° W), and the entrance channel where it runs outside the 1881 passage: 1901 to 1908 “The harbor was dredged and the channel enlarged to accommodate larger ships”, the spoil going to Sand Island. The 1881 harbour and passage stay open",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
+        },
+        {
+          "id": "usn-pearl-harbor-history",
+          "title": "U.S. Navy, Pearl Harbor: Its Origin and Administrative History Through World War II, chs. 2–3 (HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/fac/PH/USN-Hawaii-3.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "ch. 2 quotes Peter Corney (1818): “not more than 15 feet of water on the bar or reef at high water and inside from 6 to 18 fathoms”. ch. 3: the 1901 appropriation for “the improvement of the channel to the Lochs”; dredging of “the coral reef that blocked Pearl Harbor” let the gunboat Petrel reach the Main Loch in January 1905; the Act of 13 May 1908 for “the enlargement and dredging of the Pearl Harbor channel and lochs”; and at Honolulu, 1901 to 1908, “The harbor was dredged and the channel enlarged to accommodate larger ships”"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 67,
+        "km2": 0.312,
+        "meanRaiseMetres": 16.29
+      }
+    },
+    {
+      "id": "oahu-sand-island-early",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1908,
+      "file": "patches/oahu-sand-island-early.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Sand Island, as far as the 1938 map draws it",
+      "note": "Quarantine Island grown east by the spoil of the harbour’s dredging after annexation, 1901 to 1908; the 1938 map draws it so. Quarantine Island itself, on the 1881 sheet, stays",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1938",
+          "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
+          "note": "Sand Island as the 1938 map draws it, traced by hand"
+        },
+        {
+          "id": "usn-pearl-harbor-history",
+          "title": "U.S. Navy, Pearl Harbor: Its Origin and Administrative History Through World War II, chs. 2–3 (HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/fac/PH/USN-Hawaii-3.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "ch. 2 quotes Peter Corney (1818): “not more than 15 feet of water on the bar or reef at high water and inside from 6 to 18 fathoms”. ch. 3: the 1901 appropriation for “the improvement of the channel to the Lochs”; dredging of “the coral reef that blocked Pearl Harbor” let the gunboat Petrel reach the Main Loch in January 1905; the Act of 13 May 1908 for “the enlargement and dredging of the Pearl Harbor channel and lochs”; and at Honolulu, 1901 to 1908, “The harbor was dredged and the channel enlarged to accommodate larger ships”"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 271,
+        "km2": 1.264,
+        "meanLowerMetres": 1.57
+      }
+    },
+    {
+      "id": "oahu-pearl-channel",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -0.99,
+      "until": 1911,
+      "file": "patches/oahu-pearl-channel.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Pearl Harbor entrance channel and bar",
+      "note": "the entrance channel cut through the reef flat and the bar outside the natural channel: begun in 1902 under the 1901 appropriation, deep enough for the gunboat Petrel in January 1905, enlarged under the Act of 13 May 1908, and “completed ... December 14, 1911”, when the cruiser California entered. The 1881 channel inside the bar stays open; elsewhere the cut goes back to the reef flat or sea floor that rims it, and across the bar never shallower than 3.5 m, the bar’s depth by the surveys (the sea floor beside the bar is 6 to 8 m deep today, and the cut there goes back to that). Its later widenings are not separated",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "the soundings on the bar"
+        },
+        {
+          "id": "usn-pearl-harbor-history",
+          "title": "U.S. Navy, Pearl Harbor: Its Origin and Administrative History Through World War II, chs. 2–3 (HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/fac/PH/USN-Hawaii-3.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "ch. 2 quotes Peter Corney (1818): “not more than 15 feet of water on the bar or reef at high water and inside from 6 to 18 fathoms”. ch. 3: the 1901 appropriation for “the improvement of the channel to the Lochs”; dredging of “the coral reef that blocked Pearl Harbor” let the gunboat Petrel reach the Main Loch in January 1905; the Act of 13 May 1908 for “the enlargement and dredging of the Pearl Harbor channel and lochs”; and at Honolulu, 1901 to 1908, “The harbor was dredged and the channel enlarged to accommodate larger ships”"
+        },
+        {
+          "id": "iooh-pearl-harbor-1911",
+          "title": "Images of Old Hawaiʻi, “1st Big Ships into Pearl Harbor” (quoting Thrum’s Hawaiian Annual for 1912)",
+          "url": "https://imagesofoldhawaii.com/1st-big-ships-into-pearl-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "dredging of the entry channel began in 1902; “Upon the completion of the dredging operations of Pearl Harbor bar, December 14, 1911” the cruiser California entered"
+        }
+      ],
+      "stats": {
+        "texels": 158,
+        "km2": 0.737,
+        "meanRaiseMetres": 5.83
+      }
+    },
+    {
+      "id": "oahu-kewalo",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1926,
+      "file": "patches/oahu-kewalo.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Kewalo Basin",
+      "note": "the basin and its channel through the reef: “Dredging of the Kewalo Channel began in 1924”, the basin built in the 1920s and in use by the fishing sampans from 1926; given 1926",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 33,
+        "km2": 0.154,
+        "meanRaiseMetres": 3.17
+      }
+    },
+    {
+      "id": "oahu-ala-moana-channel",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1928,
+      "file": "patches/oahu-ala-moana-channel.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the channel along the Ala Moana reef",
+      "note": "“In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; what is left of it lies off Ala Moana Park (the rest was filled in the mid-1950s)",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 41,
+        "km2": 0.191,
+        "meanRaiseMetres": 1.84
+      }
+    },
+    {
+      "id": "oahu-waikiki-wetland-fill",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": 0.6,
+      "until": 1928,
+      "file": "patches/oahu-waikiki-wetland-fill.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Ala Wai’s fill on the Waikīkī wetland",
+      "note": "the made ground of Waikīkī inside its 1881 shore, where the canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields”: brought down to 0.6 m, the wetland’s own level a little above the tide, and kept land, as the district’s features (the ponds and loʻi) expect. Not a reef: the only lower patch that stays above the sea",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 1013,
+        "km2": 4.724,
+        "meanLowerMetres": 0.92
+      }
+    },
+    {
+      "id": "oahu-ala-moana-park",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1934,
+      "file": "patches/oahu-ala-moana-park.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Ala Moana Park",
+      "note": "the park made of dredged coral on the reef flat off the old shore, “completed in 1934”",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 98,
+        "km2": 0.457,
+        "meanLowerMetres": 0.55
+      }
+    },
+    {
+      "id": "oahu-ala-wai-harbour",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1.12,
+      "until": 1935,
+      "file": "patches/oahu-ala-wai-harbour.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Ala Wai boat harbour",
+      "note": "the boat harbour basin at the mouth of the Ala Wai, dredged out of the reef at Kālia; the posts read say it “grew incrementally” and give no year for the first basin, which the 1938 map draws; given 1935, the year the University of Hawaiʻi’s coastal surveys give for it",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        },
+        {
+          "id": "hawaii-gis-oahu-1938",
+          "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
+          "note": "the works it shows, which date the patch no later than 1938"
+        }
+      ],
+      "stats": {
+        "texels": 30,
+        "km2": 0.14,
+        "meanRaiseMetres": 2.42
+      }
+    },
+    {
+      "id": "oahu-kapalama",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1.5,
+      "until": 1935,
+      "file": "patches/oahu-kapalama.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Kapālama Basin and channel",
+      "note": "Kapālama Basin and the channel joining it to the harbour, on the reef flat of Kalihi kai: the Reserved Channel dredged after 1914, Pier 35 in the basin by 1931, and the connecting channel dredged in the 1934–35 federal project, its completion",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        },
+        {
+          "id": "living-new-deal-honolulu-harbor",
+          "title": "The Living New Deal, “Honolulu Harbor Improvements – Honolulu HI” (citing the Annual Report of the Chief of Engineers, 1935)",
+          "url": "https://livingnewdeal.org/sites/honolulu-harbor-improvements-honolulu-ak/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "in 1934–35 the Corps of Engineers with PWA funds deepened the harbour basin to 35 feet and dredged the channel connecting Honolulu Harbor and Kapālama Basin"
+        }
+      ],
+      "stats": {
+        "texels": 73,
+        "km2": 0.34,
+        "meanRaiseMetres": 15.8
+      }
+    },
+    {
+      "id": "oahu-ford-island",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1940,
+      "file": "patches/oahu-ford-island.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Ford Island’s edges",
+      "note": "the land round Mokuʻumeʻume outside its 1881 shore, made with fill dredged from the harbour during the 1930s (about 334 acres grown to about 441); seven more acres for the T-wharves in 1940–43 are not separated",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "wikipedia-ford-island",
+          "title": "Wikipedia, “Ford Island”",
+          "url": "https://en.wikipedia.org/wiki/Ford_Island",
+          "fetched": "2026-10-21",
+          "licence": "CC BY-SA 4.0, quoted for its dates",
+          "note": "about 334 acres when surveyed in 1825; the Navy enlarged it during the 1930s to about 441 acres with fill dredged from Pearl Harbor"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        }
+      ],
+      "stats": {
+        "texels": 350,
+        "km2": 1.632,
+        "meanLowerMetres": 1.97
+      }
+    },
+    {
+      "id": "oahu-kuahua",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1943,
+      "file": "patches/oahu-kuahua.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Kuahua peninsula",
+      "note": "Kuahua Island extended into the loch with the spoil of the wartime dredging, from 47 acres to a 116-acre peninsula; the contract ran to December 1943",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        }
+      ],
+      "stats": {
+        "texels": 123,
+        "km2": 0.574,
+        "meanLowerMetres": 1.24
+      }
+    },
+    {
+      "id": "oahu-kalihi-channel",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1944,
+      "file": "patches/oahu-kalihi-channel.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Kalihi Channel",
+      "note": "the channel from the Keʻehi seaplane harbour out through the reef, and the cut along Sand Island’s west side, where the 1881 sheet shows reef flat. Their own dates are not in the sources read (a Kalihi Channel was planned after 1914, with Kapālama Basin); they are given the seaplane runways’, which the channel served: dredged from February 1943, the station commissioned on 1 January 1944",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "hawaii-dot-hnl-history",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+          "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”"
+        }
+      ],
+      "stats": {
+        "texels": 266,
+        "km2": 1.24,
+        "meanRaiseMetres": 3.46
+      }
+    },
+    {
+      "id": "oahu-keehi-airport-fill",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1944,
+      "file": "patches/oahu-keehi-airport-fill.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the airport’s fill on Keʻehi lagoon",
+      "note": "the airport’s ground east of Keʻehi lagoon’s 1881 shore, made with the spoil of the seaplane runways (1943–44), which “raised the land to a 10-foot elevation”",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "hawaii-dot-hnl-history",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+          "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”"
+        }
+      ],
+      "stats": {
+        "texels": 622,
+        "km2": 2.9,
+        "meanLowerMetres": 2.09
+      }
+    },
+    {
+      "id": "oahu-keehi-seaplane",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1944,
+      "file": "patches/oahu-keehi-seaplane.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Keʻehi seaplane runways and Kalihi Channel",
+      "note": "the three seaplane runways dredged in the lagoon’s reef flat and mud for Naval Air Station Honolulu, with the barge channel and turning basin: a dredge brought in in February 1943, the station “commissioned on January 1, 1944”. The lagoon’s natural flats and its islets stay as they are",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "hawaii-dot-hnl-history",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+          "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”"
+        }
+      ],
+      "stats": {
+        "texels": 841,
+        "km2": 3.921,
+        "meanRaiseMetres": 2.58
+      }
+    },
+    {
+      "id": "oahu-sand-island-later",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1944,
+      "file": "patches/oahu-sand-island-later.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Sand Island’s later fill",
+      "note": "the western and southern two thirds of Sand Island, reef on the 1938 map, built up with the spoil of the Keʻehi seaplane runways (dredged from February 1943; the air station commissioned on 1 January 1944)",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1938",
+          "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
+          "note": "Sand Island as the 1938 map draws it, traced by hand"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "hawaii-dot-hnl-history",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+          "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”"
+        }
+      ],
+      "stats": {
+        "texels": 519,
+        "km2": 2.42,
+        "meanLowerMetres": 2.04
+      }
+    },
+    {
+      "id": "oahu-ala-wai-entrance",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1.16,
+      "until": 1951,
+      "file": "patches/oahu-ala-wai-entrance.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Ala Wai boat harbour entrance",
+      "note": "the boat harbour’s channel to the sea beside Magic Island: “in 1951, a channel was dredged directly out to sea”",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 25,
+        "km2": 0.117,
+        "meanRaiseMetres": 2.93
+      }
+    },
+    {
+      "id": "oahu-magic-island",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1964,
+      "file": "patches/oahu-magic-island.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Magic Island (ʻĀina Moana)",
+      "note": "the peninsula built on the reef flat from coral dredge spoil in 1964 (“a 30-acre peninsula”)",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 63,
+        "km2": 0.294,
+        "meanLowerMetres": 1.28
+      }
+    },
+    {
+      "id": "oahu-reef-runway",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1977,
+      "file": "patches/oahu-reef-runway.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Reef Runway",
+      "note": "the runway built on the reef flat off the airport, “constructed” in 1977; the 1881 sheet shows reef there",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef or water where the fill now stands"
+        },
+        {
+          "id": "hawaii-dot-reef-runway",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport history page",
+          "url": "https://hidot.hawaii.gov/airports/?p=91",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“In 1977, Runway 8R/26L or the Reef Runway was constructed as the fourth runway for Honolulu International Airport”"
+        }
+      ],
+      "stats": {
+        "texels": 812,
+        "km2": 3.786,
+        "meanLowerMetres": 2.51
+      }
+    },
+    {
+      "id": "oahu-reef-runway-cuts",
+      "pack": "oahu",
+      "kind": "raise",
+      "depth": -1.01,
+      "until": 1977,
+      "file": "patches/oahu-reef-runway-cuts.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the cuts on the reef beside the Reef Runway",
+      "note": "straight-edged basins and channels cut into the reef flat at either end of the Reef Runway and along its seaward side, which the 1881 sheet shows as reef. Dated with the runway, “constructed” in 1977, whose works they border; their own date is not in the sources read",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "hawaii-dot-reef-runway",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport history page",
+          "url": "https://hidot.hawaii.gov/airports/?p=91",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“In 1977, Runway 8R/26L or the Reef Runway was constructed as the fourth runway for Honolulu International Airport”"
+        }
+      ],
+      "stats": {
+        "texels": 438,
+        "km2": 2.042,
+        "meanRaiseMetres": 1.88
+      }
+    },
+    {
+      "id": "nuuanu-honolulu-bar-cut",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -5.5,
+      "until": 1892,
+      "file": "districts/nuuanu/patch-honolulu-bar-cut.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the cut through the Honolulu bar",
+      "note": "the entrance channel where it crosses the bar and the reef edge: “In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had held ships to as little as 18 feet. Laid back at 5.5 m, the bar’s depth, where the reef beside it is shallower, and at the sea floor beside it past the reef edge; today’s cut is wider than the first",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 1776,
+        "km2": 0.065,
+        "meanRaiseMetres": 2.63
+      }
+    },
+    {
+      "id": "nuuanu-honolulu-harbour",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -1.03,
+      "until": 1908,
+      "file": "districts/nuuanu/patch-honolulu-harbour.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Honolulu Harbour outside the old harbour",
+      "note": "the harbour basin dredged out of the reef west of the 1881 harbour (towards Sand Island, as far as about 157.876° W), and the entrance channel where it runs outside the 1881 passage: 1901 to 1908 “The harbor was dredged and the channel enlarged to accommodate larger ships”, the spoil going to Sand Island. The 1881 harbour and passage stay open",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
+        },
+        {
+          "id": "usn-pearl-harbor-history",
+          "title": "U.S. Navy, Pearl Harbor: Its Origin and Administrative History Through World War II, chs. 2–3 (HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/fac/PH/USN-Hawaii-3.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "ch. 2 quotes Peter Corney (1818): “not more than 15 feet of water on the bar or reef at high water and inside from 6 to 18 fathoms”. ch. 3: the 1901 appropriation for “the improvement of the channel to the Lochs”; dredging of “the coral reef that blocked Pearl Harbor” let the gunboat Petrel reach the Main Loch in January 1905; the Act of 13 May 1908 for “the enlargement and dredging of the Pearl Harbor channel and lochs”; and at Honolulu, 1901 to 1908, “The harbor was dredged and the channel enlarged to accommodate larger ships”"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 11084,
+        "km2": 0.405,
+        "meanRaiseMetres": 8.3
+      }
+    },
+    {
+      "id": "nuuanu-sand-island-early",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1908,
+      "file": "districts/nuuanu/patch-sand-island-early.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Sand Island, as far as the 1938 map draws it",
+      "note": "Quarantine Island grown east by the spoil of the harbour’s dredging after annexation, 1901 to 1908; the 1938 map draws it so. Quarantine Island itself, on the 1881 sheet, stays",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1938",
+          "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
+          "note": "Sand Island as the 1938 map draws it, traced by hand"
+        },
+        {
+          "id": "usn-pearl-harbor-history",
+          "title": "U.S. Navy, Pearl Harbor: Its Origin and Administrative History Through World War II, chs. 2–3 (HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/fac/PH/USN-Hawaii-3.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "ch. 2 quotes Peter Corney (1818): “not more than 15 feet of water on the bar or reef at high water and inside from 6 to 18 fathoms”. ch. 3: the 1901 appropriation for “the improvement of the channel to the Lochs”; dredging of “the coral reef that blocked Pearl Harbor” let the gunboat Petrel reach the Main Loch in January 1905; the Act of 13 May 1908 for “the enlargement and dredging of the Pearl Harbor channel and lochs”; and at Honolulu, 1901 to 1908, “The harbor was dredged and the channel enlarged to accommodate larger ships”"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 16603,
+        "km2": 0.607,
+        "meanLowerMetres": 2.62
+      }
+    },
+    {
+      "id": "nuuanu-kewalo",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -0.99,
+      "until": 1926,
+      "file": "districts/nuuanu/patch-kewalo.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Kewalo Basin",
+      "note": "the basin and its channel through the reef: “Dredging of the Kewalo Channel began in 1924”, the basin built in the 1920s and in use by the fishing sampans from 1926; given 1926",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 3739,
+        "km2": 0.137,
+        "meanRaiseMetres": 4.07
+      }
+    },
+    {
+      "id": "nuuanu-ala-moana-channel",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -0.99,
+      "until": 1928,
+      "file": "districts/nuuanu/patch-ala-moana-channel.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the channel along the Ala Moana reef",
+      "note": "“In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; what is left of it lies off Ala Moana Park (the rest was filled in the mid-1950s)",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 2806,
+        "km2": 0.103,
+        "meanRaiseMetres": 2.72
+      }
+    },
+    {
+      "id": "nuuanu-ala-wai-canal",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": 0.5,
+      "until": 1928,
+      "file": "districts/nuuanu/patch-ala-wai-canal.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the Ala Wai Canal",
+      "note": "the canal dug through the Waikīkī wetland, “begun in 1921 and completed in 1928”; before it the ground there was ponds and loʻi at about the level of the tide, so the canal is laid at 0.5 m, the low shore the district’s features stand on, rather than at a reef depth",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the Waikīkī wetland the canal was dug through"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 4853,
+        "km2": 0.177,
+        "meanRaiseMetres": 1.53
+      }
+    },
+    {
+      "id": "nuuanu-waikiki-wetland-fill",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": 0.6,
+      "until": 1928,
+      "file": "districts/nuuanu/patch-waikiki-wetland-fill.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the Ala Wai’s fill on the Waikīkī wetland",
+      "note": "the made ground of Waikīkī inside its 1881 shore, where the canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields”: brought down to 0.6 m, the wetland’s own level a little above the tide, and kept land, as the district’s features (the ponds and loʻi) expect. Not a reef: the only lower patch that stays above the sea",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 70900,
+        "km2": 2.593,
+        "meanLowerMetres": 0.81
+      }
+    },
+    {
+      "id": "nuuanu-ala-moana-park",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1934,
+      "file": "districts/nuuanu/patch-ala-moana-park.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Ala Moana Park",
+      "note": "the park made of dredged coral on the reef flat off the old shore, “completed in 1934”",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 3454,
+        "km2": 0.126,
+        "meanLowerMetres": 1.55
+      }
+    },
+    {
+      "id": "nuuanu-ala-wai-harbour",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1935,
+      "file": "districts/nuuanu/patch-ala-wai-harbour.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the Ala Wai boat harbour",
+      "note": "the boat harbour basin at the mouth of the Ala Wai, dredged out of the reef at Kālia; the posts read say it “grew incrementally” and give no year for the first basin, which the 1938 map draws; given 1935, the year the University of Hawaiʻi’s coastal surveys give for it",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        },
+        {
+          "id": "hawaii-gis-oahu-1938",
+          "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
+          "note": "the works it shows, which date the patch no later than 1938"
+        }
+      ],
+      "stats": {
+        "texels": 3021,
+        "km2": 0.11,
+        "meanRaiseMetres": 1.85
+      }
+    },
+    {
+      "id": "nuuanu-kapalama",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1935,
+      "file": "districts/nuuanu/patch-kapalama.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Kapālama Basin and channel",
+      "note": "Kapālama Basin and the channel joining it to the harbour, on the reef flat of Kalihi kai: the Reserved Channel dredged after 1914, Pier 35 in the basin by 1931, and the connecting channel dredged in the 1934–35 federal project, its completion",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        },
+        {
+          "id": "living-new-deal-honolulu-harbor",
+          "title": "The Living New Deal, “Honolulu Harbor Improvements – Honolulu HI” (citing the Annual Report of the Chief of Engineers, 1935)",
+          "url": "https://livingnewdeal.org/sites/honolulu-harbor-improvements-honolulu-ak/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "in 1934–35 the Corps of Engineers with PWA funds deepened the harbour basin to 35 feet and dredged the channel connecting Honolulu Harbor and Kapālama Basin"
+        }
+      ],
+      "stats": {
+        "texels": 12466,
+        "km2": 0.456,
+        "meanRaiseMetres": 9.57
+      }
+    },
+    {
+      "id": "nuuanu-kalihi-channel",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1944,
+      "file": "districts/nuuanu/patch-kalihi-channel.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Kalihi Channel",
+      "note": "the channel from the Keʻehi seaplane harbour out through the reef, and the cut along Sand Island’s west side, where the 1881 sheet shows reef flat. Their own dates are not in the sources read (a Kalihi Channel was planned after 1914, with Kapālama Basin); they are given the seaplane runways’, which the channel served: dredged from February 1943, the station commissioned on 1 January 1944",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "hawaii-dot-hnl-history",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+          "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”"
+        }
+      ],
+      "stats": {
+        "texels": 15846,
+        "km2": 0.579,
+        "meanRaiseMetres": 4.6
+      }
+    },
+    {
+      "id": "nuuanu-keehi-seaplane",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1944,
+      "file": "districts/nuuanu/patch-keehi-seaplane.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the Keʻehi seaplane runways and Kalihi Channel",
+      "note": "the three seaplane runways dredged in the lagoon’s reef flat and mud for Naval Air Station Honolulu, with the barge channel and turning basin: a dredge brought in in February 1943, the station “commissioned on January 1, 1944”. The lagoon’s natural flats and its islets stay as they are",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "hawaii-dot-hnl-history",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+          "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”"
+        }
+      ],
+      "stats": {
+        "texels": 38175,
+        "km2": 1.396,
+        "meanRaiseMetres": 4.31
+      }
+    },
+    {
+      "id": "nuuanu-sand-island-later",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1944,
+      "file": "districts/nuuanu/patch-sand-island-later.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Sand Island’s later fill",
+      "note": "the western and southern two thirds of Sand Island, reef on the 1938 map, built up with the spoil of the Keʻehi seaplane runways (dredged from February 1943; the air station commissioned on 1 January 1944)",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1938",
+          "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
+          "note": "Sand Island as the 1938 map draws it, traced by hand"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "hawaii-dot-hnl-history",
+          "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+          "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”"
+        }
+      ],
+      "stats": {
+        "texels": 45388,
+        "km2": 1.66,
+        "meanLowerMetres": 3.12
+      }
+    },
+    {
+      "id": "nuuanu-ala-wai-entrance",
+      "pack": "nuuanu",
+      "kind": "raise",
+      "depth": -1,
+      "until": 1951,
+      "file": "districts/nuuanu/patch-ala-wai-entrance.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the Ala Wai boat harbour entrance",
+      "note": "the boat harbour’s channel to the sea beside Magic Island: “in 1951, a channel was dredged directly out to sea”",
+      "sources": [
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
+        },
+        {
+          "id": "noaa-enc-direct-dredged-areas",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
+          "fetched": "2026-10-21",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "today’s charted dredged areas here, counted as cut wherever they lie"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "reef flat or lagoon where the cut now runs"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 2155,
+        "km2": 0.079,
+        "meanRaiseMetres": 4.52
+      }
+    },
+    {
+      "id": "nuuanu-magic-island",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1964,
+      "file": "districts/nuuanu/patch-magic-island.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Magic Island (ʻĀina Moana)",
+      "note": "the peninsula built on the reef flat from coral dredge spoil in 1964 (“a 30-acre peninsula”)",
+      "sources": [
+        {
+          "id": "hawaii-gis-geologic-units-fill-oahu",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-21",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-ala-wai-kewalo",
+          "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+          "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964"
+        }
+      ],
+      "stats": {
+        "texels": 4072,
+        "km2": 0.149,
+        "meanLowerMetres": 2.97
+      }
+    }
+  ],
+  "baked": {
+    "tool": "tools/bake-patches.mjs",
+    "works": "tools/lib/patch-works.mjs"
+  }
+}

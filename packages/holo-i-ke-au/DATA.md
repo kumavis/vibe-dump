@@ -649,8 +649,123 @@ app reads both.
   entrance as it was before 1900, the Kāneʻohe Bay channels) stay open: a
   patch must not invent a reef where the old surveys show a passage.
 - The mask carries the shape; the manifest carries the date and the
-  provenance. Dates come from the harbour's own history (the surveys and the
+  provenance. A mask value is the weight the app blends with: the patched
+  height is `mix(h, depth, w)`, toward `max(h, depth)` for a raise and
+  `min(h, depth)` for a lower, so a bake may write into the weights the
+  relief of the reef it rebuilds, not only a soft edge, and `depth` is then
+  the shallowest point of that surface. A depth above sea level makes land. Dates come from the harbour's own history (the surveys and the
   works records), never from the present chart.
 - Districts: the district's `patches` entries gain the same `kind` and
   `depth` fields (`kind` defaults to `lower`, `depth` to -1 for the entries
   already baked).
+
+### How to bake patches
+
+`tools/bake-patches.mjs` writes `public/data/patches/` (the manifest, the
+island masks and `passages.geojson`) and the district masks beside their
+pack (`districts/nuuanu/patch-<work>.png`). The works themselves, what was
+cut or filled, where, when and on whose word, are hand-written in
+`tools/lib/patch-works.mjs`; the bake never touches the packs, the district
+manifest or `features.json`.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-patches.mjs --all                  # download (~170 MB), bake, check, delete the downloads (~1 min)
+node packages/holo-i-ke-au/tools/bake-patches.mjs --preview /tmp/patches # today, 1795, 1930 and 1950 side by side, per harbour and pack
+node packages/holo-i-ke-au/tools/bake-patches.mjs --sheets /tmp/sheets   # the 1881 and 1938 maps with the traced shapes over them
+```
+
+or `--download`, `--bake` (about 20 s), `--check`, `--clean`. `--downloads
+DIR` (or `$HOLO_PATCHES_DOWNLOADS`) moves the downloads, as for the other
+bakes; `--sheets` needs them. Run the pack and district bakes first: the
+patches are made against their heights, so a re-baked pack needs its patches
+baked again.
+
+What the patches rest on:
+
+| data | source | use |
+| --- | --- | --- |
+| sea floor | NOAA CUDEM 1/9″, tile `ncei19_n21x50_w158x00` (the district bake's) | where the ground is cut: flat floors and straight walls below the reef flat |
+| charted channels | NOAA ENC Direct, harbour-scale `Dredged_Area` over Oʻahu | ground inside them counts as cut; the bake reports how much of them the patches cover |
+| made ground | State geologic map, fill unit (`Qf`) over Oʻahu | where the fill lies |
+| the old shore, passages, bars | the State's georeferenced 1881 Government Survey sheet; the 1899 sheet for the Pearl Harbor bar | traced by hand: the 1881 sea from Keʻehi to Waikīkī (the district's `shoreline-1881.geojson` carried west along Keʻehi lagoon), Ford Island and Kuahua, the Māmala and Pearl Harbor passages and their bars |
+| Sand Island in 1938 | the State's georeferenced 1938 topographic map | traced by hand: the island before its wartime fill |
+| dates | the harbours' own histories, each named in its patch's `sources` with what it says | `until`, and the note |
+
+How a mask is made:
+
+- **Raise.** Cut ground is the CUDEM inside a work's zone deeper than the
+  group's `cut`, outside the passages, and not natural deep water: what stays
+  of the water deeper than the cut once everything narrower than 500 m is
+  opened away, where it reaches 20 m depth (the fore-reef), unless the chart
+  keeps it dredged. On each pack the texels it touches, grown by about 20 m
+  (two texels on the island pack, where GMRT smooths a channel into its
+  sides), make the footprint; it is laid back at the reef that rims it, a
+  smooth surface held at the CUDEM's reef depth on the rim and free where it
+  meets land, a passage or deep natural water, so the old reef edge stays
+  sharp against a passage. Over a bar it is never shallower than the bar's
+  surveyed depth, and the fore-reef beside the bar holds it down too, so the
+  passage runs out over its bar onto the fore-reef rather than ending at a
+  wall. The manifest's `depth` is the shallowest of that surface,
+  and a texel's weight is what takes today's height to the surface under the
+  app's mix, `(t − h)/(depth − h)`: a raise mask's weights carry the reef's
+  relief as well as its soft edges, and they fade in over about 30 m (two
+  island texels) where a zone ends across open water.
+- **Lower.** Today's land inside the work's shapes (the 1881 sea, an old
+  island's outline, the fill unit, the work's region), with the low land
+  between it and today's water that the fill polygons stop short of, and a
+  feathered edge of a texel or two; only where today's ground stands above
+  `depth`.
+- Within one pack no texel's raise weights, nor its lower weights, add up to
+  more than one: groups and works claim their texels in turn, and
+  `honolulu-waterfront` takes only what the dated works leave.
+
+What the app can rely on beyond the contract:
+
+- The district's masks are listed in `patches/manifest.json` with `pack:
+  "nuuanu"` and a `file` relative to `public/data/`, not in the district
+  manifest: its check holds the patches listed there to the first district's
+  rules (a single kind, 0 or 255, over today's land, each inside the last).
+  The district's own `contact` and `kingdom` patches stay as they were (with
+  `kind: "lower"` and `depth: -1` now written out) and overlap the dated
+  lowers there; both lower to −1 m, so applying both is the same as applying
+  either.
+- Every mask is at its pack's full size, and `size` says so.
+- Two depths are above the sea: the Ala Wai Canal is raised to +0.5 m, the
+  wetland it was dug through, and the Ala Wai's fill on the Waikīkī wetland
+  is lowered to +0.6 m and stays land. A raise whose `depth` is above 0 makes
+  land of today's water.
+- Each entry also carries `name` and `stats` (`texels`, `km2`, and
+  `meanRaiseMetres` or `meanLowerMetres`); the manifest carries `about`,
+  `passages` (the file) and `baked`. `passages.geojson` holds the passages as
+  Polygons and, under `bars`, the bars with their depths.
+
+The patches, by pack (`until` in brackets): on both `oahu` and `nuuanu` where
+the work lies in the district, raise Honolulu's bar cut (1892), harbour
+(1908), Kapālama (1935), Kalihi Channel and the Keʻehi seaplane runways
+(1944), Kewalo (1926), the Ala Moana channel (1928), the Ala Wai boat harbour
+(1935) and its entrance (1951), the Ala Wai Canal (1928, district only: on the
+island it is land); lower Sand Island's first fill (1908) and its later fill
+(1944), Ala Moana Park (1934), Magic Island (1964) and the Waikīkī wetland
+fill (1928). On `oahu` only: raise the Pearl Harbor entrance channel and bar
+(1911) and the cuts beside the Reef Runway (1977); lower the Honolulu
+waterfront (1900, the district's kingdom patch), the airport's fill on Keʻehi
+lagoon (1944), the Reef Runway (1977), Ford Island's edges (1940) and Kuahua
+(1943).
+
+Not done: inside Pearl Harbor the lochs and their wartime mooring dredging
+are left as today's (natural deep water in 1881 within a few metres), as are
+the Navy Yard's piers and the airport's ground west of Keʻehi lagoon, which
+the 1881 sheet shows as land and ponds. Kāneʻohe Bay's seaplane runways
+(1939–42) were cleared through patch reefs in a naturally deep lagoon, and
+telling them from the lagoon floor needs a chart from before 1939; Haleʻiwa,
+Waiʻanae, Barbers Point (cut into the land in the 1980s), Ko Olina and
+Hawaiʻi Kai's Kuapā pond are not patched either. The ENC's dredged areas
+outside every zone are listed by the bake.
+
+The check (`--check`) reads every mask back on its pack: a greyscale image of
+the stated size; raise weights only over today's sea and only where today is
+deeper than `depth`, lower weights only over today's land and only where it
+stands above `depth`; no raise texel touching a passage; weights of one kind
+on one pack never over one; every patch with a note and sourced date, every
+source with its URL, date and licence; and `public/data/patches/` under 1 MB.
+It prints, per raise patch, the median depth of its ground today and in 1795.
