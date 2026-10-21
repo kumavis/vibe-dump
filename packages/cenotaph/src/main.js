@@ -114,7 +114,9 @@ function sunAt(T) {
 
 // ---- the eye -----------------------------------------------------------------
 // It stands a little above the floor near the open end of the hall, looking
-// down its length toward the light. Drag to look round, wheel or pinch to walk.
+// down its length toward the light. Click and move the mouse to look, WASD or
+// the arrows to walk (Shift to run); on a touch screen, drag to look and pinch
+// to walk.
 const HOME = { x: pin('x', -10), y: pin('y', 3.2), z: pin('z', 30), yaw: 0.22, pitch: 0.27 }
 const eye = {
   pos: confine([HOME.x, HOME.y, HOME.z]),
@@ -125,13 +127,14 @@ eye.tpos = eye.pos.slice()
 eye.tyaw = eye.yaw
 eye.tpitch = eye.pitch
 const PITCH_MAX = 1.35
-const pointer = { x: 0, y: 0, sx: 0, sy: 0 }
 const touches = new Map()
 const keys = new Set()
 let dragging = false
 let pinch = null
 let spaceHeld = false
+let mouseHeld = false
 let idleTimer = 0
+let lastInput = -Infinity // when the eye was last steered, for the idle sway
 
 function wake() {
   document.body.classList.remove('idle')
@@ -144,7 +147,7 @@ function press() {
   if (!score.started && !score.muted) startSound()
 }
 function release() {
-  clock.holding = spaceHeld
+  clock.holding = spaceHeld || mouseHeld
 }
 
 function startSound() {
@@ -162,12 +165,16 @@ function heading() {
   return [Math.sin(y), 0, -Math.cos(y)]
 }
 
-// grab-the-world: drag right and the hall slides right, drag down and it
-// slides down — so the eye turns the other way, and looks up
-function look(dx, dy) {
-  eye.tyaw -= dx * 0.0035
+// First-person: move the mouse (or a finger) right and the eye turns right,
+// up and it looks up. `rate` is radians per pixel moved.
+const MOUSE_RATE = 0.0022
+const TOUCH_RATE = 0.005
+function look(dx, dy, rate) {
+  eye.tyaw += dx * rate
   // clamped as drawn, so the end of the range is never a dead zone
-  eye.tpitch = clampPitch(HOME.pitch + eye.tpitch + dy * 0.0035) - HOME.pitch
+  eye.tpitch = clampPitch(HOME.pitch + eye.tpitch - dy * rate) - HOME.pitch
+  eye.slow = false
+  lastInput = performance.now()
   markMoved()
 }
 
@@ -181,6 +188,8 @@ function walk(forward, side = 0) {
   let p = eye.tpos
   for (let i = 0; i < n; i++) p = confine([p[0] + dx / n, p[1], p[2] + dz / n])
   eye.tpos = p
+  eye.slow = false
+  lastInput = performance.now()
   markMoved()
 }
 
@@ -188,8 +197,9 @@ function resetView() {
   eye.tyaw = 0
   eye.tpitch = 0
   eye.tpos = confine([HOME.x, HOME.y, HOME.z])
-  // turn the short way round
+  // turn the short way round, and unhurried
   eye.yaw = Math.atan2(Math.sin(eye.yaw), Math.cos(eye.yaw))
+  eye.slow = true
   markMoved()
 }
 
@@ -202,9 +212,42 @@ function markMoved() {
 // the buttons, and the tuning panel, are not the hall
 const isControl = (e) => e.target.closest?.('button, .tune-ui')
 
+// The mouse is the standard first-person one: a click captures it (pointer
+// lock), moving it looks, Esc lets it go. While it is captured, holding a
+// button holds time. Where a page can't capture it (some embeds refuse), a
+// drag looks instead, the same way round.
+let lockable = typeof canvas.requestPointerLock === 'function'
+const locked = () => document.pointerLockElement === canvas
+document.addEventListener('pointerlockerror', () => {
+  lockable = false
+})
+document.addEventListener('pointerlockchange', () => {
+  document.body.classList.toggle('locked', locked())
+  if (!locked() && mouseHeld) {
+    mouseHeld = false
+    release()
+  }
+})
+function capture() {
+  try {
+    const p = canvas.requestPointerLock()
+    p?.catch?.(() => {
+      lockable = false
+    })
+  } catch {
+    lockable = false
+  }
+}
+
 addEventListener('pointerdown', (e) => {
   if (isControl(e)) return
   wake()
+  if (e.pointerType === 'mouse' && lockable) {
+    if (!locked()) capture()
+    mouseHeld = true
+    press()
+    return
+  }
   try {
     canvas.setPointerCapture(e.pointerId)
   } catch {}
@@ -231,31 +274,39 @@ function reseedPinch() {
 
 addEventListener('pointermove', (e) => {
   wake()
-  if (e.pointerType === 'mouse' && touches.size === 0) {
-    pointer.x = (e.clientX / innerWidth) * 2 - 1
-    pointer.y = (e.clientY / innerHeight) * 2 - 1
+  if (locked()) {
+    // (a browser can report one wild jump as the lock takes hold)
+    const clip = (v) => Math.max(-200, Math.min(200, v || 0))
+    look(clip(e.movementX), clip(e.movementY), MOUSE_RATE)
+    return
   }
   const t = touches.get(e.pointerId)
   if (!t) return
   const dx = e.clientX - t.x, dy = e.clientY - t.y
   t.x = e.clientX
   t.y = e.clientY
+  const rate = e.pointerType === 'mouse' ? MOUSE_RATE * 1.4 : TOUCH_RATE
   if (touches.size === 1) {
+    // a press that starts to move becomes a look, and lets time go
     if (!dragging && Math.hypot(t.x - t.x0, t.y - t.y0) > 6) {
       dragging = true
       release()
     }
-    if (dragging) look(dx, dy)
+    if (dragging) look(dx, dy, rate)
   } else if (touches.size === 2 && pinch) {
     const [a, b] = [...touches.values()]
     const d = Math.hypot(a.x - b.x, a.y - b.y) || 1
     walk((d - pinch.d) * 0.12)
     pinch.d = d
-    look(dx / 2, dy / 2)
+    look(dx / 2, dy / 2, rate)
   }
 })
 
 function lift(e) {
+  if (e.pointerType === 'mouse' && mouseHeld) {
+    mouseHeld = false
+    release()
+  }
   touches.delete(e.pointerId)
   reseedPinch()
   if (touches.size === 0) {
@@ -271,6 +322,7 @@ addEventListener('blur', () => {
   pinch = null
   dragging = false
   spaceHeld = false
+  mouseHeld = false
   release()
 })
 
@@ -286,7 +338,17 @@ addEventListener(
   { passive: false },
 )
 
-const WALK_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD']
+// WASD or the arrows walk, Shift runs
+const MOVE_KEYS = {
+  KeyW: [1, 0],
+  ArrowUp: [1, 0],
+  KeyS: [-1, 0],
+  ArrowDown: [-1, 0],
+  KeyD: [0, 1],
+  ArrowRight: [0, 1],
+  KeyA: [0, -1],
+  ArrowLeft: [0, -1],
+}
 addEventListener('keydown', (e) => {
   wake()
   // keys typed into the panel's sliders are the panel's
@@ -298,14 +360,9 @@ addEventListener('keydown', (e) => {
     return
   }
   const k = e.key
-  // the arrows turn the eye itself, the way WASD moves it
-  if (k === 'ArrowLeft') look(28, 0)
-  else if (k === 'ArrowRight') look(-28, 0)
-  else if (k === 'ArrowUp') look(0, 28)
-  else if (k === 'ArrowDown') look(0, -28)
+  if (e.code in MOVE_KEYS || e.key === 'Shift') keys.add(e.key === 'Shift' ? 'Shift' : e.code)
   else if (k === '+' || k === '=') walk(3)
   else if (k === '-' || k === '_') walk(-3)
-  else if (WALK_KEYS.includes(e.code)) keys.add(e.code)
   else if (e.repeat) return
   else if (e.code === 'Space') {
     spaceHeld = true
@@ -318,6 +375,7 @@ addEventListener('keydown', (e) => {
 })
 addEventListener('keyup', (e) => {
   keys.delete(e.code)
+  if (e.key === 'Shift') keys.delete('Shift')
   if (e.key === 'Meta') keys.clear()
   if (e.code === 'Space') {
     spaceHeld = false
@@ -325,7 +383,7 @@ addEventListener('keyup', (e) => {
   }
 })
 addEventListener('dblclick', (e) => {
-  if (!isControl(e)) toggleFullscreen()
+  if (!isControl(e) && !locked()) toggleFullscreen()
 })
 addEventListener('contextmenu', (e) => e.preventDefault())
 
@@ -516,19 +574,20 @@ function step(dt) {
   const T = clock.wall
   const [, steps, reflSteps] = LADDER[gov.rung]
 
-  // walking keys, held
-  if (keys.size) {
-    const v = 9 * dt
-    walk((keys.has('KeyW') ? v : 0) - (keys.has('KeyS') ? v : 0), (keys.has('KeyD') ? v : 0) - (keys.has('KeyA') ? v : 0))
+  // walking keys, held: about a brisk walk, three times that running
+  let fw = 0, sd = 0
+  for (const code of keys) if (MOVE_KEYS[code]) (fw += MOVE_KEYS[code][0]), (sd += MOVE_KEYS[code][1])
+  if (fw || sd) {
+    const v = (keys.has('Shift') ? 18 : 6) * dt / Math.hypot(fw, sd)
+    walk(fw * v, sd * v)
   }
 
-  // pointer parallax, eased; the eye, eased
-  pointer.sx += (pointer.x - pointer.sx) * Math.min(1, dt * 1.5)
-  pointer.sy += (pointer.y - pointer.sy) * Math.min(1, dt * 1.5)
-  const ease = 1 - Math.exp(-dt / 0.14)
+  // the eye follows the mouse all but at once; only a reset swings it home
+  // slowly
+  const ease = 1 - Math.exp(-dt / (eye.slow ? 0.4 : 0.03))
   eye.yaw += (eye.tyaw - eye.yaw) * ease
   eye.pitch += (eye.tpitch - eye.pitch) * ease
-  const walkEase = 1 - Math.exp(-dt / 0.45)
+  const walkEase = 1 - Math.exp(-dt / (eye.slow ? 0.45 : 0.12))
   // (kept out of the concrete as it goes, so it slides round a corner)
   eye.pos = confine(eye.pos.map((v, k) => v + (eye.tpos[k] - v) * walkEase))
 
@@ -539,9 +598,12 @@ function step(dt) {
   // past 86° tall it narrows instead, so a phone still sees the opening
   const vTan = Math.min((Math.tan(0.475) * 1.6) / aspect, Math.tan(0.75))
   const fov = pin('fov', 2 * Math.atan(Math.max(Math.tan(0.475), vTan)))
-  const yaw = HOME.yaw + eye.yaw + 0.035 * Math.sin(T / 47) + pointer.sx * 0.03
-  const pitch = clampPitch(HOME.pitch + eye.pitch + 0.02 * Math.sin(T / 61 + 1) - pointer.sy * 0.02 + 0.03 * clock.hold)
-  const sway = [0.5 * Math.sin(T / 97), 0.25 * Math.sin(T / 71 + 2), 0.4 * Math.sin(T / 89 + 4)]
+  // (it settles while someone is steering, and returns once they stop)
+  const since = (performance.now() - lastInput) / 1000
+  const calm = since < 4 ? 0 : Math.min(1, (since - 4) / 8)
+  const yaw = HOME.yaw + eye.yaw + calm * 0.035 * Math.sin(T / 47)
+  const pitch = clampPitch(HOME.pitch + eye.pitch + calm * 0.02 * Math.sin(T / 61 + 1) + 0.03 * clock.hold)
+  const sway = [0.5 * calm * Math.sin(T / 97), 0.25 * calm * Math.sin(T / 71 + 2), 0.4 * calm * Math.sin(T / 89 + 4)]
   const pos = confine([eye.pos[0] + sway[0], eye.pos[1] + sway[1], eye.pos[2] + sway[2]])
   const fwd = [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch)]
   cam.w = w

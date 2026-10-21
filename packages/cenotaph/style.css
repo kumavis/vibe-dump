@@ -456,3 +456,7 @@ body.nogl {
 #tune .actions button {
   padding: 4px 8px;
 }
+
+body.locked {
+  cursor: none;
+}
