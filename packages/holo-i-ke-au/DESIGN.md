@@ -258,6 +258,16 @@ Trees and people exist only near the camera. Mid zoom gets aggregate marks
 zoom is the baked layers alone. The vegetation and life systems port nearly as
 they are, gated by camera distance and by era.
 
+**Settlements by era.** At the near zoom, buildings are placed from the
+settlement layer's density for the chosen year (§5.5), not only from the
+features file, and their kind follows the era: kauhale of thatched hale on
+paepae before contact; thatch beside frame houses, adobe and coral block,
+with churches, in the early kingdom; wood-frame houses, stores, masonry
+blocks downtown, plantation camps and mills by the 1890s; bungalows and
+plantation towns in the territory; towers and suburbs now. Density sets how
+close and how large; the era sets what. Where the record gives a town's
+extent (the 1881 and 1899 survey sheets for Honolulu) it bounds the placement.
+
 ### 5.5 Time: keyframed layers
 
 Each era is a set of masks per island: polity of each moku, cultivation extent,
@@ -451,9 +461,13 @@ Fornander's second volume is public domain. ʻĪʻī's *Fragments* is print only
 European eyewitness; the ship journals of the following year are secondhand.
 
 **Tone is the first decision.** The life system is built for work, not war.
-Proposal: show forces as masses and lines, never individual deaths, and nothing
-falling at the pali. Whatever is chosen here sets the art direction for every
-battle after it.
+The first render showed forces as drifting masses along their lines. The
+owner's decision after seeing it: forces are **billboarded pixel-art
+soldiers**, small crisp sprites of about 8 by 16 pixels scaled by whole
+numbers so they never blur, animated, walking their lines and engaging at
+the fronts, the two sides told apart by palette and dress. Two restraints
+stay: no dead are drawn, and nothing is drawn at the pali edge. This sets the
+art direction for every battle after it.
 
 **Why first.** The valley has an afterlife that carries the whole arc (§3.4). It
 sits on the island with the best data. And it forces all three zoom levels, the
