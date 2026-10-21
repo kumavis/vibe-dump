@@ -609,3 +609,39 @@ What `nuuanu` rests on (the manifest says it all again, per source):
 Beyond the contract the manifest carries `parent`, `files` (supporting files),
 `breaches`, `streams` (the check's findings), `stats`, and a `source` and
 `note` on each patch.
+
+## Patches, on any pack
+
+The first district showed that one kind of patch is not enough: modern fill
+has to be lowered, but modern dredging has to be raised, and each cut and
+each fill has its own date. So patches generalize. They live in
+`public/data/patches/manifest.json` (bake.mjs never touches it), and a
+district's own manifest may still list patches for its pack as before; the
+app reads both.
+
+```jsonc
+{ "patches": [ {
+    "id": "oahu-pearl-channel", "pack": "oahu",      // an island pack id or a district id
+    "kind": "raise",                                  // "lower": today's land becomes reef flat; "raise": today's sea becomes reef flat
+    "depth": -2,                                      // metres, the reef flat the patched texels become
+    "until": 1911,                                    // the patch applies to years before this
+    "file": "patches/oahu-pearl-channel.png",         // 8-bit mask on the pack's grid; 255 is full, soft edges are weights
+    "size": [512, 400],                               // optional: a mask may be at a lower resolution than its pack, same bounds
+    "note": "...", "sources": [ { "id": "...", "url": "...", "fetched": "...", "licence": "..." } ] } ] }
+```
+
+- One pack may carry many patches; the app applies every patch whose
+  `until` is after the chosen year, raises before lowers, and eases each
+  over about two seconds when the year crosses its `until`.
+- A `raise` patch marks water that was reef flat, lagoon or shore before it
+  was dredged: harbour channels and basins, seaplane runways, boat harbours,
+  the Ala Wai. A `lower` patch marks land that was water or reef before it
+  was filled. Natural channels through the reef (Māmala, the Pearl Harbor
+  entrance as it was before 1900, the Kāneʻohe Bay channels) stay open: a
+  patch must not invent a reef where the old surveys show a passage.
+- The mask carries the shape; the manifest carries the date and the
+  provenance. Dates come from the harbour's own history (the surveys and the
+  works records), never from the present chart.
+- Districts: the district's `patches` entries gain the same `kind` and
+  `depth` fields (`kind` defaults to `lower`, `depth` to -1 for the entries
+  already baked).
