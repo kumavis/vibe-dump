@@ -12,13 +12,17 @@
 // - the streams, routed over the pack's heights (data/district-decode.js),
 //   and the trail up the valley and over the pali, as ribbons on the ground;
 // - the trees (vegetation.js), the battles as masses (forces.js), and the
-//   place names (labels.js).
+//   place names (labels.js);
+// - and the buildings of every other year and place (settlements.js), from
+//   the settlement layer's density for the year, their kind by the era, the
+//   streets of the town under them; they yield to the village at Kou while
+//   it stands.
 //
 // Each thing belongs to a feature, and shows while the year is within that
 // feature's from and to (the shared uFeatK for the rastered ones, a weight of
 // its own here for the rest), so after a feature's last year nothing is
 // drawn in its place. The heiau of features.json stand at their ahupuaʻa's
-// centroid (their precision), so they are not drawn. Nothing modern is.
+// centroid (their precision), so they are not drawn.
 
 import * as THREE from 'three'
 import { Builder, MAT, S, Y, col, objectMaterial } from './kit.js'
@@ -27,6 +31,7 @@ import { Forest, TREE_R } from './vegetation.js'
 import { Ribbons } from './ribbons.js'
 import { Forces } from './forces.js'
 import { Labels } from './labels.js'
+import { Settlements } from './settlements.js'
 import { holds } from '../data/district.js'
 import { patchLevel, fromHalf } from '../data/district-decode.js'
 
@@ -84,6 +89,9 @@ export class DistrictFeatures {
       uShow: { value: 0 },
       uFeatSeen: { value: Array.from({ length: 16 }, () => new THREE.Vector4(0, 0, 0, 0)) },
       uDistS: { value: rec.terrain.shadow.texture },
+      // the year as the town eases to it, and what the town has built in it (settlements.js)
+      uYearNow: { value: app.timeline.year },
+      uTownClear: { value: null },
     }
     const rand = mulberry32(1795)
 
@@ -132,6 +140,10 @@ export class DistrictFeatures {
     }
     this.forces = new Forces(app, feats, shared, this.ribbons)
     this.group.add(this.ribbons.group, this.forces.group)
+
+    // --- the town of the year, and the houses of the countryside ------------------------
+    this.settlements = new Settlements(app, districts, rec, this.own, this.ribbons)
+    this.group.add(this.settlements.group)
 
     // --- names ----------------------------------------------------------------------
     this.labels = new Labels(app, feats)
@@ -290,6 +302,7 @@ export class DistrictFeatures {
     }
     this.forest.update(this.app.camera, show, this.rec.data.hi * this.app.world.uniforms.uVert.value + 1, distance)
     this.forces.update(dt, show, distance)
+    this.settlements.update(dt, show, distance)
     this.ribbons.update(this.app.renderer)
     this.labels.update(show)
   }
@@ -308,6 +321,7 @@ export class DistrictFeatures {
       trails: this.trails.filter((t) => t.w > 0.5).length,
       forces: this.forces.stats(),
       labels: this.labels.visible(),
+      settlements: this.settlements.stats(),
     }
   }
 
@@ -317,6 +331,7 @@ export class DistrictFeatures {
     this.forest.dispose()
     this.ribbons.dispose()
     this.forces.dispose()
+    this.settlements.dispose()
     this.labels.dispose()
   }
 }

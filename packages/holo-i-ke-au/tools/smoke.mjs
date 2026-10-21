@@ -1148,6 +1148,172 @@ if (districtCount) {
   })
 }
 
+// ==== settlements by era (features/settlements.js) ==========================
+// At the harbour: kauhale in 1795, a few hundred hale with Kou's own over the
+// plain the Kou stop frames (2.5 km round it: the layer has the village a
+// thin one, about a hundred people per km², and a kauhale is a household or
+// two); and within 1.5 km of Kou, a mixed town of thatch, frame and adobe by
+// 1853 with its church, stores and masonry by 1896, towers by the timeline's
+// last year (the 2020 keyframe). Every kind within its era's; none on a loʻi, a pond, the
+// village while it stands, or the water of its year; within the budget; and
+// what each year costs in heap and frame time, with the town and without it.
+if (await ui('app.districts?.list.length ?? 0')) {
+  const townReady = () => page.waitForFunction(() => window.__app.districts.cur?.state === 'ready' && window.__app.districts.cur.features?.settlements.ready, null, { timeout: 300000 })
+  const atHarbour = async (year) => {
+    await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish(); const v = app.tour.cameraView(app.tour.places.get('kou'), { bearing: 45, pitch: 0.6, distance: 40 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
+    await townReady()
+    await run('app.settle(); app.settle()')
+    await frames(2)
+  }
+  const kou = await ui("app.data.proj.toWorld(app.tour.places.get('kou').geometry.coordinates)")
+  const census = (year, r = 15) => ui(`app.districts.cur.features.settlements.census(${year}, ${r === Infinity ? 'null, null' : `${kou[0]}, ${kou[1]}`}, ${r === Infinity ? 'Infinity' : r})`)
+  const brief = (c) => Object.entries(c.by).map(([k, v]) => `${v} ${k}`).join(', ')
+  const ERA_KINDS = {
+    1795: ['kauhale'],
+    1853: ['hale', 'frame', 'adobe', 'church'],
+    1896: ['hale', 'frame', 'cottage', 'store', 'block', 'church', 'spire'],
+    1930: ['bungalow', 'store', 'block', 'midrise', 'church', 'spire', 'clock'],
+    2000: ['house', 'bungalow', 'walkup', 'tower', 'church', 'spire', 'clock'],
+  }
+  const lastYear = await ui('app.timeline.yearAt(app.timeline.max)')
+  await check('settlements: the harbour in 1795 is kauhale, a few hundred hale with Kou’s own', async () => {
+    await atHarbour(1795)
+    const c = await census(1795, 25)
+    const own = await ui('app.districts.cur.features.counts.hale')
+    const odd = Object.keys(c.by).filter((k) => k !== 'kauhale')
+    if (odd.length) throw new Error(`not kauhale in 1795: ${brief(c)}`)
+    if (!(c.hale + own >= 150 && c.hale + own <= 1500)) throw new Error(`${c.hale} hale in ${c.by.kauhale} kauhale and ${own} at Kou`)
+    const near = await census(1795)
+    console.log(`      within 2.5 km: ${c.by.kauhale} kauhale of ${c.hale} hale, and Kou’s ${own}; within 1.5 km ${near.by.kauhale} of ${near.hale}`)
+  })
+  await check('settlements: a mixed town by 1853, with the church of 1842', async () => {
+    await atHarbour(1853)
+    const c = await census(1853)
+    const all = await census(1853, Infinity)
+    const st = await ui('app.districts.cur.features.settlements.stats()')
+    if (!(c.total >= 150 && c.by.hale > 20 && (c.by.frame || 0) + (c.by.adobe || 0) > 20)) throw new Error(`within 1.5 km: ${brief(c)}`)
+    if (!all.by.church || !st.landmarks.some((l) => /1842/.test(l))) throw new Error(`no church of 1842: ${st.landmarks}`)
+    console.log(`      within 1.5 km: ${brief(c)}; landmarks ${st.landmarks.join(', ')}`)
+  })
+  await check('settlements: stores and masonry blocks by 1896, the town on a grid of streets', async () => {
+    await atHarbour(1896)
+    const c = await census(1896)
+    const st = await ui('app.districts.cur.features.settlements.stats()')
+    if (!((c.by.store || 0) + (c.by.block || 0) >= 30 && (c.by.cottage || 0) >= 50)) throw new Error(`within 1.5 km: ${brief(c)}`)
+    const streets = st.streets.find((s) => s.startsWith('1900:'))
+    if (!streets || +streets.split(':')[1].split('/')[0] < 100) throw new Error(`streets ${st.streets}`)
+    console.log(`      within 1.5 km: ${brief(c)}; streets ${st.streets.join(' ')}`)
+  })
+  await check(`settlements: towers by ${lastYear}, their height following the density`, async () => {
+    await atHarbour(lastYear)
+    const all = await census(lastYear, Infinity)
+    const c = await census(lastYear)
+    const h = await ui(`(() => { const t = app.districts.cur.features.settlements.alive(${lastYear}).filter((a) => a.kind === 'tower').map((a) => a.height); return t.length ? [Math.min(...t), Math.max(...t)] : null })()`)
+    if (!((all.by.tower || 0) >= 20 && h && h[1] > h[0] * 1.5)) throw new Error(`the district: ${brief(all)}; heights ${h}`)
+    console.log(`      the district: ${brief(all)}; within 1.5 km: ${brief(c)}; towers ${h.map((v) => (v * 100).toFixed(0)).join(' to ')} m drawn`)
+  })
+  await check('settlements: every kind within its era’s, none before its turn', async () => {
+    const wrong = []
+    for (const [y, kinds] of Object.entries(ERA_KINDS)) {
+      const year = Math.min(+y, lastYear)
+      const all = await census(year, Infinity)
+      for (const k of Object.keys(all.by)) if (!kinds.includes(k)) wrong.push(`${all.by[k]} ${k} in ${year}`)
+    }
+    // and no tower before 1960, no kauhale after 1850, at every decade
+    for (let y = 1780; y <= lastYear; y += 10) {
+      const all = await census(y, Infinity)
+      if (y < 1960 && all.by.tower) wrong.push(`${all.by.tower} towers in ${y}`)
+      if (y > 1850 && all.by.kauhale) wrong.push(`${all.by.kauhale} kauhale in ${y}`)
+    }
+    if (wrong.length) throw new Error(wrong.slice(0, 6).join('; '))
+    const seq = []
+    for (const y of [1795, 1830, 1853, 1870, 1896, 1930, 1960, lastYear]) seq.push(`${y}: ${Object.keys((await census(y, Infinity)).by).join('/')}`)
+    console.log(`      ${seq.join(' · ')}`)
+  })
+  await check('settlements: none on a loʻi, a pond, the standing village or the water of its year', async () => {
+    const out = []
+    for (const y of [1795, 1853, 1896, 1930, lastYear]) {
+      await atHarbour(y)
+      const r = await ui(`(() => {
+        const D = app.districts, rec = D.cur, d = rec.d, R = d.rect, S = rec.features.settlements
+        const bad = []
+        let n = 0
+        for (const a of S.alive(${y})) {
+          n++
+          const ux = [Math.cos(a.a), -Math.sin(a.a)], uz = [Math.sin(a.a), Math.cos(a.a)]
+          for (const [fu, fv] of [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [1, 0], [0, 1], [-1, 0]]) {
+            const x = a.x + (ux[0] * fu * a.ax + uz[0] * fv * a.az) * 0.9
+            const z = a.z + (ux[1] * fu * a.ax + uz[1] * fv * a.az) * 0.9
+            const i = Math.min(d.W - 1, Math.max(0, Math.floor(((x - R.x0) / (R.x1 - R.x0)) * d.W)))
+            const j = Math.min(d.H - 1, Math.max(0, Math.floor(((z - R.z0) / (R.z1 - R.z0)) * d.H)))
+            const c = j * d.W + i
+            const f = rec.aux[c * 4 + 3]
+            const what = D.metresAt(x, z) < 0.2 ? 'water' : f > 0 && rec.aux[c * 4 + 1] > 0 && D.featK[f] > 0.5 ? D.cur.d.byIndex.get(f).properties.kind : null
+            if (what) { bad.push(what + ' ' + a.kind + ' at ' + x.toFixed(2) + ',' + z.toFixed(2)); break }
+          }
+        }
+        return { n, bad }
+      })()`)
+      if (r.bad.length) throw new Error(`${y}: ${r.bad.length} of ${r.n}: ${r.bad.slice(0, 4).join('; ')}`)
+      out.push(`${y}: ${r.n}`)
+    }
+    console.log(`      buildings checked, footprint by footprint: ${out.join(', ')}`)
+  })
+  await check('settlements: within the budget, drawn and placed', async () => {
+    const rows = []
+    for (const y of [1795, 1896, lastYear]) {
+      await atHarbour(y)
+      const st = await ui('app.districts.cur.features.settlements.stats()')
+      if (st.drawn > 8000 || st.placed > 8100) throw new Error(`${y}: ${st.placed} placed, ${st.drawn} drawn`)
+      rows.push(`${y}: ${st.placed} placed, ${st.drawn} drawn, ${st.triangles} triangles`)
+    }
+    const st = await ui('app.districts.cur.features.settlements.stats()')
+    console.log(`      ${rows.join(' · ')}; ${st.instances} instances over ${st.lots} lots, built in ${st.buildMs} ms (${JSON.stringify(st.times)}), ${st.cpuMB} MB`)
+  })
+  await check('settlements: what the town costs at the harbour, by year', async () => {
+    const cdp = await page.context().newCDPSession(page)
+    const heapMB = async () => {
+      await cdp.send('HeapProfiler.collectGarbage')
+      const { usedSize, backingStorageSize } = await cdp.send('Runtime.getHeapUsage')
+      return { js: +(usedSize / 1048576).toFixed(1), buffers: backingStorageSize === undefined ? null : +(backingStorageSize / 1048576).toFixed(1) }
+    }
+    // (wall time over n of the app's frames, as the perf check below takes it)
+    const wall = (n) =>
+      page.evaluate(
+        (n) =>
+          new Promise((resolve) => {
+            const app = window.__app
+            const f0 = app.frames + 1
+            let t0 = 0
+            const tick = () => {
+              if (!t0 && app.frames >= f0) t0 = performance.now()
+              if (t0 && app.frames >= f0 + n) return resolve(+((performance.now() - t0) / n).toFixed(1))
+              requestAnimationFrame(tick)
+            }
+            requestAnimationFrame(tick)
+          }),
+        n,
+      )
+    const out = {}
+    for (const y of [1795, 1896, lastYear]) {
+      await atHarbour(y)
+      await frames(2)
+      const ms = await wall(6)
+      const heap = await heapMB()
+      const calls = await ui('app.renderer.info.render.calls')
+      await run('app.districts.cur.features.settlements.hidden = true')
+      await frames(2)
+      const without = await wall(6)
+      await run('app.districts.cur.features.settlements.hidden = false')
+      await frames(2)
+      const st = await ui('app.districts.cur.features.settlements.stats()')
+      out[y] = { ms, msWithout: without, calls, drawn: st.drawn, triangles: st.triangles, heapMB: heap }
+    }
+    console.log('      settlements perf', JSON.stringify(out))
+  })
+}
+// ==== end settlements =========================================================
+
 // Patches (DATA.md "Patches, on any pack"): each raises today's sea or sinks
 // today's land to its reef flat in the years before its until, and not after,
 // easing as the year crosses it; on the island packs and in a district, for

@@ -12,6 +12,14 @@
 // year (uFeatK, a feature's weight; uFeatSeen, whether its clearing has been
 // made by now); and the rain and the weather of the ahupuaʻa island are left
 // out.
+//
+// The town's buildings (settlements.js) add three things: each instance
+// carries the span of years it stands (aSpan, `grow`), and fades in and out
+// by an eased year (uYearNow), so dragging the year grows the town rather
+// than popping it; the trees stand back from what the town has built in the
+// year (uTownClear, a coverage map over the district); and a few touches for
+// the new materials: clapboard, masonry coursing, storeys of windows, the
+// ribs of an iron roof.
 
 import * as THREE from 'three'
 import { constants, noise, world, lighting } from '../render/shaders/common.glsl.js'
@@ -22,7 +30,7 @@ export const S = FEATURE_S
 /** World Y of the ground at this many metres, at the valley's exaggeration: what the geometry is built at. */
 export const Y = (metres) => (metres * NEAR_EXAG) / 100
 
-export const MAT = { plain: 0, thatch: 1, stone: 2, leaf: 3, water: 4, kapa: 5, wood: 6, skin: 7, sand: 8 }
+export const MAT = { plain: 0, thatch: 1, stone: 2, leaf: 3, water: 4, kapa: 5, wood: 6, skin: 7, sand: 8, clap: 9, windows: 10, roof: 11, masonry: 12 }
 
 export class Builder {
   constructor() {
@@ -275,9 +283,14 @@ ${constants}
 ${world}
 in float aMat;
 in float aFeat;
-#ifdef USE_INSTANCING
+#ifdef USE_GROW
+in vec4 aSpan;               // the years a building stands: in from x to y, out from z to w
+in float aStretch;           // its height over its model's (a tower's), for the storeys
+#elif defined(USE_INSTANCING)
 in float aClear;
+uniform sampler2D uTownClear; // what the town has built in the year (settlements.js)
 #endif
+uniform float uYearNow;      // the year, eased (settlements.js)
 uniform float uFadeNear;
 uniform float uFadeFar;
 uniform float uShow;         // the district's weight, and the near zoom's
@@ -312,6 +325,9 @@ void main() {
   vColor = c;
   vMat = aMat;
   vLocal = p;
+  #ifdef USE_GROW
+  vLocal.y *= aStretch;
+  #endif
   // (whole instances fade together, so a tree never dissolves from one side)
   #ifdef USE_INSTANCING
   float dist = distance(cameraPosition, origin);
@@ -322,8 +338,14 @@ void main() {
   int f = int(aFeat + 0.5);
   if (f > 0) fade *= featV(uFeatK, f);
   #ifdef USE_INSTANCING
+  #ifdef USE_GROW
+  fade *= smoothstep(aSpan.x, aSpan.y, uYearNow) * (1.0 - smoothstep(aSpan.z, aSpan.w, uYearNow));
+  #else
   int cl = int(aClear + 0.5);
   if (cl > 0) fade *= 1.0 - featV(uFeatSeen, cl);
+  // (and a tree stands back from what the town has built round it by the year)
+  fade *= 1.0 - smoothstep(0.3, 0.7, texture(uTownClear, rectUv(uDistRect, origin.xz)).r);
+  #endif
   // and thinner toward the district's edge, as its ground eases into the
   // island's (one tree in so many left out, not every one dissolved)
   float edgeK = smoothstep(uDistInfo.w, uDistInfo.z, edgeDist(uDistRect, origin.xz));
@@ -368,6 +390,25 @@ void main() {
     a *= (0.8 + 0.4 * vnoise(vWorld.xz * 600.0 + vLocal.y * 30.0)) * 0.8;
   } else if (m == 6) {
     a *= 0.85 + 0.25 * vnoise(vec2(vLocal.y * 40.0, vWorld.x * 300.0));
+  } else if (m >= 9 && abs(n.y) < 0.5) {
+    // the town's walls: boards, coursed stone, storeys of windows, each
+    // averaged out once it is finer than a pixel or two
+    float along = vLocal.x + vLocal.z;
+    if (m == 9) a *= 0.93 + 0.08 * vnoise(vec2(along * 0.5, vLocal.y * 2.0));
+    else if (m == 12) a *= 0.9 + 0.12 * vnoise(vec2(along * 0.7, vLocal.y * 1.6));
+    else if (m == 10) {
+      float fy = vLocal.y / 3.6;
+      float fl = fract(fy);
+      float bay = fract(along / 3.2);
+      float w = smoothstep(0.26, 0.34, fl) * (1.0 - smoothstep(0.76, 0.84, fl)) * smoothstep(0.1, 0.2, bay) * (1.0 - smoothstep(0.8, 0.9, bay));
+      float aa = 1.0 - smoothstep(0.25, 0.6, fwidth(fy));
+      a *= mix(0.84, mix(1.02, 0.52, w), aa);
+    }
+  } else if (m == 11) {
+    // an iron roof's ribs, down the slope
+    float r = fract((vLocal.x + vLocal.z) * 0.9);
+    float aa = 1.0 - smoothstep(0.3, 0.7, fwidth((vLocal.x + vLocal.z) * 0.9));
+    a *= mix(0.94, 0.88 + 0.12 * smoothstep(0.35, 0.5, r), aa);
   }
   vec2 uv = rectUv(uDistRect, vWorld.xz);
   float vis = texture(uDistS, uv).r;
@@ -382,8 +423,10 @@ void main() {
 /**
  * The district's object material. `opts.fade` = [near, far] camera distances
  * (world units) to dither out over; `opts.doubleSide` for single sheets
- * (palm fronds, hala straps). `shared` is the app's bag of uniforms, `own`
- * the district features' (uShow, uFeatSeen, uDistS).
+ * (palm fronds, hala straps); `opts.grow` for the town's buildings, whose
+ * instances carry their years (aSpan, aStretch). `shared` is the app's bag
+ * of uniforms, `own` the district features' (uShow, uFeatSeen, uDistS,
+ * uYearNow, uTownClear).
  */
 export function objectMaterial(shared, own, opts = {}) {
   const [near, far] = opts.fade || [60, 90]
@@ -392,8 +435,11 @@ export function objectMaterial(shared, own, opts = {}) {
     fragmentShader: objectFragment,
     vertexColors: true,
     side: opts.doubleSide ? THREE.DoubleSide : THREE.FrontSide,
+    defines: opts.grow ? { USE_GROW: '' } : {},
     uniforms: {
       ...shared.uniforms,
+      uYearNow: { value: 0 },
+      uTownClear: { value: null },
       ...own,
       uFadeNear: { value: near },
       uFadeFar: { value: far },

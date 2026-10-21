@@ -28,7 +28,33 @@ import { dirname, join, normalize, extname } from 'node:path'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 // (tools/shots/ is gitignored at the root)
 const outDir = process.argv[2] || join(root, 'tools/shots')
-const shots = JSON.parse(process.argv[3] || '[{"name":"default"}]')
+// ==== settlements: a named list of shots ======================================
+//   node tools/shoot.mjs <outdir> settlements
+// The town by era (features/settlements.js), each shot once the district and
+// its buildings are in: the harbour and Kou in 1795, Honolulu in 1853, 1896
+// and 1930, downtown and Waikīkī now (the timeline's last year, drawn from
+// the 2020 keyframe), and the valley in 1896.
+const nearShot = (name, place, year, [bearing, pitch, distance], first = false) => ({
+  name,
+  year,
+  eval: `${first ? 'app.ui.card.close(); app.ui.onScrub(); ' : ''}const v = app.tour.cameraView(app.tour.places.get('${place}'), { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`,
+  until: "app.districts.cur?.state === 'ready' && !!app.districts.cur.features?.settlements.ready",
+  report: 'app.districts.cur.features.settlements.stats()',
+})
+const PRESETS = {
+  settlements: [
+    nearShot('harbour-1795', 'kou', 1795, [45, 0.6, 40], true),
+    nearShot('kou-1795', 'kou', 1795, [30, 0.45, 16]),
+    nearShot('honolulu-1853', 'honolulu', 1853, [40, 0.5, 22]),
+    nearShot('honolulu-1896', 'honolulu', 1896, [40, 0.5, 22]),
+    nearShot('honolulu-1930', 'honolulu', 1930, [40, 0.5, 22]),
+    nearShot('downtown-now', 'kou', 2020, [50, 0.45, 24]),
+    nearShot('waikiki-now', 'waikiki', 2020, [20, 0.45, 26]),
+    nearShot('valley-1896', 'nuuanu', 1896, [42, 0.35, 60]),
+  ],
+}
+// ==== end settlements =========================================================
+const shots = PRESETS[process.argv[3]] || JSON.parse(process.argv[3] || '[{"name":"default"}]')
 const extra = process.argv[4] || ''
 const port = Number(process.env.PORT || 5299)
 const useTest = process.env.DATA ? process.env.DATA === 'test' : !existsSync(join(root, 'public/data/manifest.json'))
