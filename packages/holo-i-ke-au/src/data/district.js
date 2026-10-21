@@ -7,11 +7,19 @@
 // village) each get an index into the aux map's alpha (DIST_INDEX), and every
 // feature keeps its span of years, so the renderer can weigh each one in the
 // chosen year.
+//
+// A district's patches are those its own manifest lists and those
+// patches/manifest.json lists for its pack (data/patches.js), any number of
+// each kind, each with its own until; the decode lays them all on the grid.
 
-import { UNIT } from '../config.js'
+import { UNIT, DIST_PATCHES } from '../config.js'
 import { DIST_INDEX } from '../render/shaders/common.glsl.js'
 import { decodeImage } from './image.js'
 import { deriveDistrict } from './district-decode.js'
+import { describePatch, decodeMasks } from './patches.js'
+
+// (lower patches are told apart by a bit each, district-decode.js patchMap)
+const MAX_LOWER = 24
 
 async function getJSON(url) {
   const res = await fetch(url)
@@ -83,7 +91,8 @@ function describeDistrict(d, features, data, warn) {
     raster.push({ index, kind: kind === 'other' ? p.kind : kind, rings: g.coordinates.map((r) => r.map(toGrid)) })
     byIndex.set(index, f)
   }
-  const patches = (d.patches || []).filter((p) => p.file).map((p) => ({ ...p, url: abs(p.file) }))
+  // its own manifest's patches (DATA.md: kind defaults to lower, depth to -1)
+  const own = (d.patches || []).map((p) => describePatch(p, abs, (m) => warn(`district ${d.id}: ${m}`), d.id)).filter(Boolean)
   return {
     id: d.id,
     name: d.name || d.id,
@@ -100,14 +109,26 @@ function describeDistrict(d, features, data, warn) {
     rainUrl: d.rain?.file ? abs(d.rain.file) : null,
     scale: d.height.scale ?? 0.25,
     offset: d.height.offset ?? -6000,
-    patches,
-    // the patches are one mask here (decode.js); the latest until rules it
-    patchUntil: patches.length ? Math.max(...patches.map((p) => (Number.isFinite(p.until) ? p.until : -Infinity))) : -Infinity,
+    own,
+    patches: own,
     features,
     raster,
     byIndex,
     sources: d.sources || [],
   }
+}
+
+/**
+ * A district's patches: its own and those `extra` (patches/manifest.json)
+ * lists for it, as many of each kind as the decode can tell apart.
+ */
+export function districtPatches(d, extra = [], warn = console.warn) {
+  const all = [...d.own, ...extra.filter((p) => p.pack === d.id)]
+  const lower = all.filter((p) => p.kind === 'lower')
+  const raise = all.filter((p) => p.kind === 'raise')
+  if (lower.length > MAX_LOWER) warn(`district ${d.id}: ${lower.length} lower patches, ${MAX_LOWER} drawn`)
+  if (raise.length > DIST_PATCHES) warn(`district ${d.id}: ${raise.length} raise patches, ${DIST_PATCHES} drawn`)
+  return [...raise.slice(0, DIST_PATCHES), ...lower.slice(0, MAX_LOWER)]
 }
 
 /** Decodes a district in a worker of its own; on the main thread where workers can't decode images. */
@@ -130,10 +151,22 @@ export class DistrictDecoder {
   }
 
   job(d) {
+    // each mask once (two patches may share one), and each patch by its mask
+    const masks = []
+    const at = (p) => {
+      let i = masks.findIndex((m) => m.url === p.url)
+      if (i < 0) i = masks.push({ url: p.url, size: p.size }) - 1
+      return i
+    }
+    const lower = d.patches.filter((p) => p.kind === 'lower').map(at)
+    const raise = d.patches.filter((p) => p.kind === 'raise')
     return {
       heightUrl: d.heightUrl,
       rainUrl: d.rainUrl,
-      patchUrls: [...new Set(d.patches.map((p) => p.url))],
+      masks,
+      lower,
+      raise: raise.map(at),
+      raiseDepth: raise.map((p) => p.depth),
       W: d.W,
       H: d.H,
       scale: d.scale,
@@ -158,7 +191,7 @@ export class DistrictDecoder {
   message(m) {
     const j = this.jobs.get(m.id)
     if (!j) return
-    if (m.log) return
+    if (m.log) return this.warn(m.log)
     this.jobs.delete(m.id)
     if (m.ok) j.resolve(m.out)
     else if (/OffscreenCanvas|getContext|createImageBitmap/i.test(m.message)) {
@@ -174,12 +207,8 @@ export class DistrictDecoder {
       const hi = await decodeImage(job.heightUrl)
       if (hi.W !== job.W || hi.H !== job.H) throw new Error(`${job.heightUrl} is ${hi.W}×${hi.H}, the manifest says ${job.W}×${job.H}`)
       const rainPx = job.rainUrl ? await decodeImage(job.rainUrl).then((r) => (r.W === job.W && r.H === job.H ? r.px : null)).catch(() => null) : null
-      const patchPx = []
-      for (const u of job.patchUrls) {
-        const p = await decodeImage(u).catch(() => null)
-        if (p && p.W === job.W && p.H === job.H) patchPx.push(p.px)
-      }
-      const out = deriveDistrict({ ...job, heightPx: hi.px, rainPx, patchPx })
+      const masks = await decodeMasks(job, this.warn)
+      const out = deriveDistrict({ ...job, heightPx: hi.px, rainPx, masks })
       this.jobs.delete(id)
       j.resolve(out)
     } catch (err) {

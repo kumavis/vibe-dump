@@ -2,7 +2,8 @@
 // with its year, and over it the nearest era's label with the year reached,
 // "in the time of ʻUmi · c. 1600". Back and Next beside the label walk the
 // chapter tour (tour.js), which moves the year as it goes, easing it toward
-// each step's date; above the bar, small, is where the tour stands. The
+// each step's date; above the bar, small, is where the tour stands, the
+// chapter named as its card names it (card.js). The
 // slider and the ticks stay free for wandering, and taking them leaves the
 // tour until the next Next.
 
@@ -117,12 +118,13 @@ export class TimelineBar {
     this.backBtn.disabled = !at || tour.atStart
     this.nextBtn.disabled = !at || tour.atEnd
     this.el.classList.toggle('off-tour', !!at && !at.active)
+    this.tourEl.classList.toggle('opening', !!at?.opening)
     if (!at) {
       this.tourEl.innerHTML = ''
       return
     }
     this.tourEl.innerHTML = at.active
-      ? `<span>${esc(at.chapter)}</span><i>·</i><em>${esc(at.name)}</em>${at.step ? `<i>·</i><span>${esc(at.step)}</span>` : ''}`
+      ? `<span class="tl-ch">Chapter <b>${at.number}</b> of ${at.of}</span><i>·</i><em>${esc(at.name)}</em>${at.step ? `<i>·</i><span>${esc(at.step)}</span>` : ''}`
       : `<span>Next resumes at ${esc(at.chapter.toLowerCase())}</span><i>·</i><em>${esc(at.name)}</em>`
     this.nextBtn.title = at.active ? 'Next (→ or space)' : `Back to the tour: ${at.chapter.toLowerCase()}, ${at.name}`
   }

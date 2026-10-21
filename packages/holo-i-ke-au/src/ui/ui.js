@@ -4,6 +4,17 @@
 // naming the moku under the pointer (and in the land view, what the layers
 // hold there), and an about panel with the data's provenance. Built on the
 // ahupuaʻa app's cards and glass panels; words are kept for the cards.
+//
+// The legend and the hover card belong to the far views: both go as the
+// camera closes in and the far view's overlays fade (farStrength), and the
+// hover card goes too wherever a district is down. Once gone for the near
+// zoom, the hover card stays gone until the camera is back out where the
+// legend shows again, so it doesn't flicker at the edge of the rule.
+
+// the far view's strength under which the hover card goes, and over which
+// the legend (and the hover card with it) comes back
+const NEAR_GONE = 0.05
+const FAR_BACK = 0.25
 
 import { $, h, esc } from './dom.js'
 import { icon } from './icons.js'
@@ -243,14 +254,35 @@ export class UI {
     return box
   }
 
+  /**
+   * How strongly the far view's overlay shows at the camera's distance: the
+   * land's in the land view, else the chiefdoms' (with no overlay chosen, the
+   * chiefdoms' too: that is when its legend's switch would bring one back).
+   */
+  farStrength(d = this.app.rig.state.distance) {
+    return this.app.view === 'land' ? landZoom(d) : polityZoom(d)
+  }
+
+  /** Whether the hover card may show: far enough out, no district down, and (once gone) back out where the legend is. */
+  inspectorAllowed() {
+    const app = this.app
+    const k = this.farStrength()
+    const district = !!(app.districts?.on || app.districts?.k > 0)
+    if (district || k < NEAR_GONE) this.nearHeld = true
+    else if (k > FAR_BACK) this.nearHeld = false
+    return !this.nearHeld
+  }
+
+  hideInspector() {
+    this.app.shared.uniforms.uHoverMoku.value = 0
+    this.inspector.classList.remove('show')
+    this.inspectorKey = null
+  }
+
   hover(cx, cy) {
     const app = this.app
     const u = app.shared.uniforms
-    if (cx === null || cx === undefined) {
-      u.uHoverMoku.value = 0
-      this.inspector.classList.remove('show')
-      return
-    }
+    if (cx === null || cx === undefined || !this.inspectorAllowed()) return this.hideInspector()
     const p = app.rig.pickGround(cx, cy)
     const m = p && app.world.metresAt(p.x, p.z) > 0 ? app.polity.mokuAt(p.x, p.z) : null
     // (in the land view the moku isn't lit in its polity's colour, which would
@@ -318,13 +350,15 @@ export class UI {
     const now = performance.now()
     this.timeline.update(dt)
     this.pins.update(app.overlay.pins)
-    // the legend, and the switch on it, while the far view's overlays can show
-    const d = app.rig.state.distance
-    const far = (app.view === 'land' ? landZoom(d) : polityZoom(d)) > 0.25
+    // the legend, and the switch on it, while the far view's overlays can
+    // show; and the hover card, by the same rule (a card left up as the
+    // camera flies in under a resting pointer goes with it)
+    const far = this.farStrength() > FAR_BACK
     if (far !== this.legend.classList.contains('show')) {
       this.legend.classList.toggle('show', far)
       this.legend.inert = !far
     }
+    if (!this.inspectorAllowed() && (this.inspector.classList.contains('show') || app.shared.uniforms.uHoverMoku.value)) this.hideInspector()
     // (which keyframes the land is drawn from moves with the year, and the
     // words arrive with the manifest)
     if (app.view === 'land' && now - (this.landAt || 0) > 250) {

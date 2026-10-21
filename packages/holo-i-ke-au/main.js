@@ -44,8 +44,14 @@ async function start() {
     boot.classList.add('gone')
     setTimeout(() => boot.remove(), 1200)
     loadIslands(app, ui, decoder)
-    // the district close-ups' manifest and features, behind it all (their
-    // packs stream when the camera comes down to them)
+    // the patches (the reefs before the harbours were dredged and filled),
+    // and the district close-ups' manifest and features, behind it all
+    // (their packs stream when the camera comes down to them, with the
+    // patches of their own)
+    app.patches.load().catch((err) => {
+      warn(`patches: ${err.message}`)
+      app.patches.resolveReady([])
+    })
     app.districts.load().catch((err) => warn(`districts: ${err.message}`))
   }
   requestAnimationFrame(reveal)

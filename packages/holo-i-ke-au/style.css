@@ -120,10 +120,12 @@ button { font: inherit; color: inherit; }
 .lg-body:empty { display: none; }
 .lg-land em { margin-left: auto; padding-left: 12px; font-size: 11px; font-style: italic; color: var(--faint); white-space: nowrap; }
 .lg-note { margin-top: 6px; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--faint); }
-/* the land layers' tints, as they come out on lit ground */
+/* the land layers' tints, as they come out on lit ground (settlement's dark
+   marks on the pale ground the land view lays under them, or they would be
+   lost on the glass) */
 .lg i.sw-cultivation { background: #d6a03c; }
 .lg i.sw-forest { background: #2e5a2b; }
-.lg i.sw-settlement { background: radial-gradient(circle, #c9382a 0 1.5px, transparent 2px) 0 0 / 4px 4px, rgba(201, 56, 42, 0.32); }
+.lg i.sw-settlement { background: radial-gradient(circle, #2b1d12 0 1.5px, transparent 2px) 0 0 / 4px 4px, linear-gradient(90deg, #8a7457, #3a2a1d); }
 
 /* --- timeline ------------------------------------------------------------------- */
 .timeline {
@@ -154,6 +156,10 @@ button { font: inherit; color: inherit; }
 .tl-tour:empty { display: none; }
 .tl-tour em { font-family: var(--serif); font-style: italic; font-size: 13.5px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; }
 .tl-tour i { font-style: normal; color: var(--faint); }
+/* the chapter, named as its card names it: the numeral in the card's gold */
+.tl-tour .tl-ch b { font-family: var(--serif); font-weight: 600; font-size: 13.5px; letter-spacing: 0; color: var(--gold); }
+.tl-tour.opening { border-color: rgba(242, 200, 121, 0.42); }
+.timeline.off-tour .tl-tour .tl-ch b { color: var(--faint); }
 .timeline.off-tour .tl-tour, .timeline.off-tour .tl-tour em { color: var(--faint); }
 .tl-label { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
 .tl-era { font-family: var(--serif); font-weight: 600; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -294,7 +300,30 @@ button { font: inherit; color: inherit; }
 .card-sec a { color: inherit; text-decoration-color: rgba(242, 200, 121, 0.5); text-underline-offset: 2px; }
 .flag { display: inline-block; font-family: var(--sans); font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; background: rgba(240, 163, 94, 0.22); color: #f6c08e; vertical-align: 1px; }
 .flag.missing { background: rgba(192, 88, 74, 0.3); color: #f3a59a; }
-.card[data-mode="era"] h1 { font-size: 23px; }
+/* --- a chapter's first page: the era's card, set as a book opens a chapter -------- */
+.card.chapter { padding-top: 28px; }
+.card .ch-head { display: block; text-align: center; padding: 0 20px 26px; }
+.card .ch-head::after {
+  /* (the niho band, short and centred under the title, as an ornament) */
+  left: 30%; right: 30%; bottom: 6px;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 28%, #000 72%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 28%, #000 72%, transparent);
+}
+.ch-head .card-close { top: -14px; right: -10px; }
+.ch-mark { display: flex; flex-direction: column; align-items: center; }
+.ch-word { padding-left: 0.36em; font-size: 10.5px; font-weight: 600; letter-spacing: 0.36em; text-transform: uppercase; color: rgba(242, 200, 121, 0.78); }
+.ch-num { margin-top: 2px; font-family: var(--serif); font-weight: 600; font-size: 78px; line-height: 0.92; color: var(--gold); font-variant-numeric: lining-nums; }
+.card h1.ch-title { margin: 14px 0 0; font-size: 31px; line-height: 1.08; letter-spacing: 0.002em; text-wrap: balance; }
+.ch-lead { display: block; margin-bottom: 5px; font-weight: 400; font-style: italic; font-size: 17.5px; line-height: 1.2; color: var(--muted); }
+.ch-lead::first-letter { text-transform: uppercase; }
+.ch-year { display: flex; align-items: center; justify-content: center; gap: 11px; margin-top: 13px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.2em; color: var(--gold); font-variant-numeric: tabular-nums; }
+.ch-year::before, .ch-year::after { content: ''; width: 24px; height: 1px; background: rgba(242, 200, 121, 0.45); }
+.ch-note { margin-top: 2px; }
+.ch-note p { font-size: 15px; line-height: 1.66; }
+.ch-note .initial { float: left; margin: 5px 5px 0 -1px; font-family: var(--serif); font-weight: 600; font-size: 3.35em; line-height: 0.8; color: var(--gold); }
+.card.chapter .card-sec h2 { margin-top: 14px; }
+.ch-count { letter-spacing: 0.12em; }
+.ch-count b { font-family: var(--serif); font-weight: 600; font-size: 15px; letter-spacing: 0; color: var(--gold); }
 /* a list of events: a chapter's, or a cluster's */
 .card-sec .ev-list { list-style: none; margin: 2px -8px 0; padding: 0; }
 .card-sec .ev-list li { margin: 0; list-style: none; }
@@ -372,6 +401,20 @@ button { font: inherit; color: inherit; }
   .tl-tour em { font-size: 12.5px; }
   .card h1 { font-size: 22px; }
   .card-icon { width: 40px; height: 40px; }
+  /* a chapter's first page, compact: the numeral beside the title */
+  .card.chapter { padding-top: 14px; }
+  .card .ch-head { display: grid; grid-template-columns: auto 1fr; column-gap: 15px; align-items: center; text-align: left; padding: 0 30px 18px 0; }
+  .card .ch-head::after { left: 0; right: 0; -webkit-mask: linear-gradient(90deg, #000 60%, transparent); mask: linear-gradient(90deg, #000 60%, transparent); }
+  .ch-head .card-close { top: -6px; right: -8px; }
+  .ch-mark { grid-row: 1 / span 2; align-self: center; }
+  .ch-word { font-size: 9px; }
+  .ch-num { font-size: 54px; }
+  .card h1.ch-title { align-self: end; margin: 0; font-size: 21px; text-wrap: pretty; }
+  .ch-lead { margin-bottom: 2px; font-size: 14px; }
+  .ch-year { align-self: start; justify-content: flex-start; margin-top: 6px; font-size: 11px; }
+  .ch-year::before, .ch-year::after { display: none; }
+  .ch-note p { font-size: 13.5px; }
+  .ch-note .initial { margin-right: 3px; font-size: 2.9em; }
   .card-body p { font-size: 13.5px; }
   .timeline { bottom: 10px; padding: 8px 16px 4px 10px; }
   .tl-era { font-size: 16px; }

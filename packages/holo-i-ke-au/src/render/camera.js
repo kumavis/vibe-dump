@@ -11,11 +11,32 @@
 // than out from the lens. fit() finds the view that puts a stretch of ground
 // in one part of the screen, so the tour can frame an island beside a card
 // rather than under it.
+//
+// Close in, the ground under the target is rough: a pan across a valley wall
+// would lift and drop the whole view with every ridge and gulch it crossed.
+// So the target's height is kept in metres (the exaggeration of the moment
+// turns it into world Y, so a zoom moves it at once and exactly), and while
+// the target moves it eases toward the ground averaged over a disc that
+// grows with the distance (smoothGround), a few hundred milliseconds behind:
+// a slow pan glides over the gulches rather than riding each one. Where a
+// flight lands, or a jump puts it, it is the ground under the target exactly,
+// and stays so until the target moves. The eye is kept off the ground by a
+// lift eased the same way (quick to rise, slow to settle), and under that a
+// soft floor rather than a hard stop.
 
 import * as THREE from 'three'
 import { MIN_DISTANCE, MAX_DISTANCE } from '../config.js'
 
 const TAU = Math.PI * 2
+// the target's height eases toward the ground with this time constant (s);
+// the eye's lift rises in a third of it and settles in about twice it
+const GROUND_TAU = 0.4
+// the disc the target's ground is averaged over, as a fraction of the distance
+const GROUND_R = 0.18
+/** cur eased toward want over dt with time constant tau (dt 0 lands it). */
+const ease = (cur, want, dt, tau) => (dt > 0 ? cur + (want - cur) * (1 - Math.exp(-dt / tau)) : want)
+/** A smooth max, its knee s wide: max(a, b) far from it, and no corner. */
+const smax = (a, b, s) => (a + b + Math.sqrt((a - b) * (a - b) + s * s)) / 2
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 const wrapAngle = (a) => ((((a + Math.PI) % TAU) + TAU) % TAU) - Math.PI
 const smooth = (a, b, x) => {
@@ -39,6 +60,11 @@ export class CameraRig {
     this.goal = { target: h.target.clone(), distance: h.distance, yaw: h.yaw, pitch: h.pitch, lift: 0 }
     this.flight = null
     this.floor = 0
+    // the target's ground in metres, and whether it is pinned where a flight
+    // or a jump put it (until the target next moves)
+    this.groundM = 0
+    this.pinned = true
+    this._lastXZ = new THREE.Vector2(h.target.x, h.target.z)
     this.minDistance = MIN_DISTANCE
     this.maxDistance = MAX_DISTANCE
     this.autoOrbit = 0
@@ -317,6 +343,41 @@ export class CameraRig {
     return { target: new THREE.Vector3(tx, this.world.heightAt(tx, tz), tz), distance: d, yaw, pitch }
   }
 
+  /** The ground under (x, z) in metres (the sea at 0), as the shaders draw it. */
+  groundAt(x, z) {
+    return Math.max(0, this.world.metresAt(x, z))
+  }
+
+  /**
+   * The ground the target rides at a camera distance d: the ground under (x,
+   * z) averaged with two rings round it, the outer GROUND_R × d out, so that
+   * what is much smaller than the view does not move it.
+   */
+  smoothGround(x, z, d) {
+    const r = GROUND_R * d
+    let sum = 2 * this.groundAt(x, z)
+    let w = 2
+    for (let k = 0; k < 6; k++) {
+      const a = (k / 6) * TAU
+      const b = a + TAU / 12
+      sum += this.groundAt(x + Math.cos(a) * r * 0.5, z + Math.sin(a) * r * 0.5)
+      sum += this.groundAt(x + Math.cos(b) * r, z + Math.sin(b) * r)
+      w += 2
+    }
+    return sum / w
+  }
+
+  /** The target where its ground is now, exactly, held there until it moves (a landing, a jump). */
+  pin() {
+    const g = this.goal.target
+    this.groundM = this.groundAt(g.x, g.z)
+    this.pinned = true
+    this._lastXZ.set(g.x, g.z)
+    const y = this.groundM * this.world.uniforms.uVert.value
+    g.y = y
+    this.state.target.y = y
+  }
+
   /**
    * Fly to a view. `to` may set any of target, distance, yaw, pitch.
    * opts.ready: what the landing waits for (a district streaming in under
@@ -330,6 +391,7 @@ export class CameraRig {
       yaw: this.goal.yaw,
       pitch: this.goal.pitch,
       lift: this.goal.lift,
+      groundM: this.groundM,
     }
     const dest = {
       target: to.target ? to.target.clone() : from.target.clone(),
@@ -358,6 +420,7 @@ export class CameraRig {
     this.state.yaw = f.dest.yaw
     this.state.pitch = f.dest.pitch
     this.flight = null
+    this.pin()
     f.onDone?.()
     this.apply()
   }
@@ -372,6 +435,7 @@ export class CameraRig {
       if (pitch !== undefined) s.pitch = pitch
       s.lift = 0
     }
+    this.pin()
     this.apply()
   }
 
@@ -393,8 +457,13 @@ export class CameraRig {
       g.pitch = f.from.pitch + (f.dest.pitch - f.from.pitch) * e + 0.2 * Math.sin(Math.PI * e) * Math.min(1, f.hop / 300)
       g.pitch = Math.min(1.52, g.pitch)
       g.lift = f.from.lift + (f.dest.lift - f.from.lift) * e
+      // (the target's ground from where it was to the ground under the
+      // destination as it is now, which a district streaming in may change)
+      this.groundM = f.from.groundM + (this.groundAt(f.dest.target.x, f.dest.target.z) - f.from.groundM) * e
       if (f.t >= 1) {
         this.flight = null
+        // (landed: exactly the ground it aimed at, and held there)
+        this.pin()
         f.onDone?.()
       }
     } else if (this.autoOrbit && performance.now() - this.lastInput > 4000) {
@@ -405,10 +474,13 @@ export class CameraRig {
     g.target.x = THREE.MathUtils.clamp(g.target.x, b.x0 - m, b.x1 + m)
     g.target.z = THREE.MathUtils.clamp(g.target.z, b.z0 - m, b.z1 + m)
     if (!this.flight) {
-      // the target rides the ground; the exaggeration moves it as the camera zooms
-      const gy = this.world.heightAt(g.target.x, g.target.z)
-      g.target.y += (gy - g.target.y) * (1 - Math.exp(-dt * 6))
-    } else g.target.y = Math.max(g.target.y, this.world.heightAt(g.target.x, g.target.z))
+      // the target rides the ground, smoothed and eased, once it moves
+      if (Math.abs(g.target.x - this._lastXZ.x) + Math.abs(g.target.z - this._lastXZ.y) > 1e-7) this.pinned = false
+      this._lastXZ.set(g.target.x, g.target.z)
+      if (!this.pinned) this.groundM = ease(this.groundM, this.smoothGround(g.target.x, g.target.z, g.distance), dt, GROUND_TAU)
+    }
+    // (and the exaggeration of the moment turns it into world Y, so a zoom moves it at once)
+    g.target.y = this.groundM * this.world.uniforms.uVert.value
 
     const s = this.state
     const k = this.flight ? 1 : 1 - Math.exp(-dt * 7)
@@ -446,15 +518,18 @@ export class CameraRig {
       s.target.y + s.distance * Math.sin(s.pitch),
       s.target.z + s.distance * cp * Math.cos(s.yaw),
     )
-    // never under the ground: an eased lift that rises fast and settles slowly
+    // never under the ground: a lift eased as the target is, rising in a
+    // third of its time and settling in twice it, and under that a soft
+    // floor, so a ridge the lift is late for pushes the eye up smoothly
+    // rather than stopping it dead
     const clearance = 0.12 + s.distance * 0.03
     const ground = this.groundAhead(cam.position.x, cam.position.z, dt)
     const want = Math.max(0, ground + clearance - cam.position.y)
-    if (dt <= 0) this.floor = want
-    else this.floor += (want - this.floor) * (1 - Math.exp(-dt * (want > this.floor ? 9 : 2.5)))
+    this.floor = ease(this.floor, want, dt, want > this.floor ? GROUND_TAU / 3 : GROUND_TAU * 2)
     cam.position.y += this.floor
     const under = this.world.heightAt(cam.position.x, cam.position.z)
-    cam.position.y = Math.max(cam.position.y, under + Math.min(0.04, clearance * 0.3))
+    const gap = Math.min(0.04, clearance * 0.3)
+    cam.position.y = smax(cam.position.y, under + gap, gap)
     this._v.copy(s.target)
     this._v.y += s.lift * s.distance * 0.45
     cam.lookAt(this._v)

@@ -672,6 +672,16 @@
     "note": "Fetched 2026-10-20: perennial and non-perennial streams as of 2008 with 2013 name corrections, from USGS line graphs. Modern courses; the lower reaches in Honolulu are channelled."
   },
   {
+    "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+    "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM (Oʻahu flown 2022–23), as baked into the Nuʻuanu district pack",
+    "author": "U.S. Geological Survey; NOAA",
+    "year": 2023,
+    "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+    "access": "open",
+    "opened": true,
+    "note": "The district’s heights (districts/manifest.json says how they were baked, at about six metres a texel). Used to trim the loʻi outlines to the valley floors and to keep the landing lines on the land behind the beach; today’s ground, not that of 1795."
+  },
+  {
     "id": "census-tiger-roads",
     "title": "TIGERweb Transportation (local and secondary roads)",
     "author": "U.S. Census Bureau",

@@ -5,8 +5,12 @@
 //   disagree, and the sources themselves, a source nobody has yet opened
 //   marked "verify". While the tour walks an event's stops, the stop it is
 //   at sits above the summary.
-// - An era, as its chapter of the tour opens: the label, the year, the note,
-//   what happens in it (each a way into its event), and its sources.
+// - An era, as its chapter of the tour opens, set as a book sets a chapter's
+//   first page (the card's `chapter` class): the chapter's numeral large, the
+//   era's label as its title, its year beneath, then the note with a large
+//   initial, what happens in it (each a way into its event), and its
+//   sources. The footer and the pill over the timeline (timeline.js) name
+//   the chapter the same way.
 // - A cluster of pins that share a spot on the screen: their events in date
 //   order, any of which opens its own card.
 //
@@ -23,6 +27,16 @@ const KIND = {
 }
 
 const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
+
+/**
+ * An era's label as a chapter's title: the lead its labels share ("in the
+ * time of") apart from the name it leads to, and the space between kept, so
+ * the title's text is the label's.
+ */
+export function chapterTitle(label) {
+  const m = String(label).match(/^(in the time of)(\s+)(.+)$/i)
+  return m ? { lead: m[1], gap: m[2], name: m[3] } : { lead: '', gap: '', name: String(label) }
+}
 
 export class EventCard {
   constructor(root, app, ui) {
@@ -134,18 +148,19 @@ export class EventCard {
     let count
     let nextLabel = 'Next'
     if (this.mode === 'era' && this.chapter === ch && tour.step < 0) {
-      count = `chapter ${ch.index + 1} of ${tour.chapters.length}`
+      // (as the pill over the timeline names it, and the card's own numeral)
+      count = `<span class="ch-count">Chapter <b>${ch.index + 1}</b> of ${tour.chapters.length}</span>`
     } else if (this.mode === 'event' && this.ev && this.ev === tour.event) {
       const n = this.ev.stops?.length || 0
-      if (tour.stop >= 0) count = `stop ${tour.stop + 1} of ${n}`
+      if (tour.stop >= 0) count = esc(`stop ${tour.stop + 1} of ${n}`)
       else {
-        count = `${tour.step + 1} of ${ch.events.length} in this chapter`
+        count = esc(`${tour.step + 1} of ${ch.events.length} in chapter ${ch.index + 1}`)
         if (n) nextLabel = `Walk ${n} stops`
       }
     } else return ''
     return `<footer>
       <button class="nav prev" aria-label="Back" title="Back (←)" ${tour.atStart ? 'disabled' : ''}>${icon('prev', 18)}</button>
-      <span class="count">${esc(count)}</span>
+      <span class="count">${count}</span>
       <button class="nav next" aria-label="Next" title="Next (→ or space)" ${tour.atEnd ? 'disabled' : ''}><span>${esc(nextLabel)}</span>${icon('next', 18)}</button>
     </footer>`
   }
@@ -156,6 +171,7 @@ export class EventCard {
     else if (this.mode === 'event' && this.ev) this.el.innerHTML = this.eventHTML()
     else return
     this.el.dataset.mode = this.mode
+    this.el.classList.toggle('chapter', this.mode === 'era')
     this.el.classList.add('show')
     this.el.scrollTop = 0
   }
@@ -200,11 +216,19 @@ export class EventCard {
   eraHTML() {
     const ch = this.chapter
     const e = ch.era
-    const tour = this.ui.tour
+    const t = chapterTitle(e.label || e.id)
+    // (the note's first letter set large, with an ʻokina or an opening mark before it kept with it)
+    const note = String(e.note || '')
+    const m = note.match(/^([ʻʼ'‘“"(]*.)([\s\S]*)$/u)
+    const body = m ? `<p><span class="initial">${esc(m[1])}</span>${esc(m[2])}</p>` : ''
     return `
-      ${this.header('era', e.label || e.id)}
-      <div class="card-meta"><span class="when">${esc(formatYear(e.year, Math.max(10, e.yearPrecision ?? 10)))}</span><span class="kind">chapter ${ch.index + 1} of ${tour.chapters.length}</span></div>
-      <div class="card-body">${e.note ? `<p>${esc(e.note)}</p>` : ''}</div>
+      <header class="ch-head">
+        <div class="ch-mark"><span class="ch-word">Chapter</span><span class="ch-num">${ch.index + 1}</span></div>
+        <h1 class="ch-title">${t.lead ? `<span class="ch-lead">${esc(t.lead)}</span>${esc(t.gap)}` : ''}<span class="ch-name">${esc(t.name)}</span></h1>
+        <div class="ch-year">${esc(formatYear(e.year, Math.max(10, e.yearPrecision ?? 10)))}</div>
+        <button class="card-close" aria-label="Close">${icon('close', 18)}</button>
+      </header>
+      <div class="card-body ch-note">${body}</div>
       ${ch.events.length ? `<div class="card-sec"><h2>In this chapter</h2><ul class="ev-list compact">${this.eventRows(ch.events, { gloss: false })}</ul></div>` : ''}
       ${this.sourcesSection(e.sources)}
       ${this.footer()}`

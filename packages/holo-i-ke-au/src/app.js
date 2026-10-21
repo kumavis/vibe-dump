@@ -1,7 +1,7 @@
 // Wires the loaded data into a running scene: the ground (archipelago and
-// island packs), the sea, the sky, the boundary lines, the routes and the far
-// view's two overlays, under one camera that runs from the whole chain to a
-// single valley.
+// island packs, with the patches that give a year back its reefs), the sea,
+// the sky, the boundary lines, the routes and the far view's two overlays,
+// under one camera that runs from the whole chain to a single valley.
 //
 // The far view shows one of two things at a time (`view`): the chiefdoms,
 // each moku in the colour of the polity that held it (overlay/polity.js), or
@@ -12,6 +12,7 @@
 import * as THREE from 'three'
 import { World } from './render/world.js'
 import { Districts } from './render/district.js'
+import { Patches } from './render/patches.js'
 import { Ocean } from './render/ocean.js'
 import { Sky } from './render/sky.js'
 import { Pipeline } from './render/pipeline.js'
@@ -82,6 +83,8 @@ export class App {
     this.world = new World(this, data)
     Object.assign(this.shared.uniforms, this.world.uniforms)
     this.world.uniforms = this.shared.uniforms
+    // the patches (render/patches.js): read behind the first frame (main.js)
+    this.patches = new Patches(this)
     this.timeline = new Timeline(data.eras)
     this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
     this.land = new LandOverlay(this)

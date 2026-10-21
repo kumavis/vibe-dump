@@ -10,17 +10,16 @@
 // one whose edge is further away. render/world.js keeps a CPU copy of all of
 // this (metresAt), line for line, for the camera, picking and pins.
 
-import { NEAR_EXAG, NORMAL_EXAG, SLOTS } from '../../config.js'
+import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES } from '../../config.js'
 
 const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
 
 // The district's feature indices (aux map alpha): loʻi from 1, fishponds from
 // DIST_POND, the rest (the village) from DIST_OTHER, up to 63; and the levels
-// the year lays its ground at: a reef flat where the patch sinks the fill,
-// just above the tide where it fills a channel dug since (district-decode.js
-// PATCH_REEF, PATCH_FILL), still water in a pond.
+// the year lays its ground at: just above the tide where a lower patch fills
+// a channel dug since (district-decode.js PATCH_FILL; the reef flat a patch
+// sinks to or lifts to is its own `depth`), still water in a pond.
 export const DIST_INDEX = { loi: 1, pond: 24, other: 48, max: 63 }
-export const DIST_REEF = -1
 export const DIST_FILL = 0.5
 export const DIST_POND_LEVEL = -0.6
 // a loʻi terrace's smallest step, metres (district-decode.js BASE; the others double it)
@@ -31,9 +30,10 @@ export const constants = /* glsl */ `
 #define NEAR_E ${f(NEAR_EXAG)}
 #define NORMAL_E ${f(NORMAL_EXAG)}
 #define SLOTS ${SLOTS}
+#define PATCHES ${PATCHES}
+#define DIST_PATCHES ${DIST_PATCHES}
 #define DIST_POND ${DIST_INDEX.pond}
 #define DIST_OTHER ${DIST_INDEX.other}
-#define DIST_REEF ${f(DIST_REEF)}
 #define DIST_FILL ${f(DIST_FILL)}
 #define DIST_POND_LEVEL ${f(DIST_POND_LEVEL)}
 #define DIST_BASE ${f(DIST_BASE)}
@@ -160,22 +160,78 @@ bool distDraws(vec2 xz) {
 }
 `
 
+// The patches on the island packs (DATA.md "Patches, on any pack";
+// render/patches.js): the ground as it was before a harbour was dredged or a
+// reef filled. Each patch's mask is cropped to where it marks anything and
+// kept in one atlas with all the others; a patch has a box in the world, its
+// place in the atlas, and its weight in the year (1 before its until, easing
+// to 0 over a couple of seconds as the year crosses it). A raise lifts
+// today's sea to the reef flat at its depth, a lower sinks today's land to
+// it, the raises first; a soft edge is a weight. Each slot names the run of
+// patches its pack has, which render/patches.js writes raises first.
+// render/patches.js keeps the CPU copy (apply), for world.metresAt.
+export const patches = /* glsl */ `
+uniform sampler2D uPatchMap;       // the cropped masks (R8, linear), each with a texel of nothing round it
+uniform vec4 uPatchBox[PATCHES];   // each patch's crop in the world: x0, z0, x1, z1, outer edges
+uniform vec4 uPatchUv[PATCHES];    // the same in the atlas: u0, v0, u1, v1
+uniform vec4 uPatchInfo[PATCHES];  // x its weight in the year, y the reef flat's depth (metres), z 1 a raise, -1 a lower
+uniform vec2 uSlotPatch[SLOTS];    // each slot's patches: x the first, y how many
+uniform vec4 uSlotPatchBox[SLOTS]; // and the box round all of them (world), so the rest of the island skips the loop
+bool inPatchBox(int s, vec2 xz) {
+  vec4 b = uSlotPatchBox[s];
+  return xz.x >= b.x && xz.y >= b.y && xz.x <= b.z && xz.y <= b.w;
+}
+// (render/patches.js writes only the patches with any weight in the year,
+// so a year after them all costs nothing; and a patch's box is the first
+// thing read, since most of the ground is in none of them)
+float patchMask(int i, vec2 xz) {
+  vec4 b = uPatchBox[i];
+  if (xz.x < b.x || xz.y < b.y || xz.x > b.z || xz.y > b.w) return 0.0;
+  vec4 u = uPatchUv[i];
+  return textureLod(uPatchMap, mix(u.xy, u.zw, (xz - b.xy) / (b.zw - b.xy)), 0.0).r;
+}
+// how much of the ground the last patchedMetres was asked about is a patch's
+// reef flat in the year (0..1): the sea reads it after the depth, rather
+// than walk the patches again (patchReef)
+float gPatchReef = 0.0;
+// slot s's heights h at xz, as the year has them
+float patchedMetres(int s, vec2 xz, float h) {
+  gPatchReef = 0.0;
+  if (!inPatchBox(s, xz)) return h;
+  int a = int(uSlotPatch[s].x);
+  int n = int(uSlotPatch[s].y);
+  for (int i = 0; i < PATCHES; i++) {
+    if (i >= n) break;
+    float m = patchMask(a + i, xz);
+    if (m <= 0.0) continue;
+    vec4 info = uPatchInfo[a + i];
+    h = mix(h, info.z > 0.0 ? max(h, info.y) : min(h, info.y), m * info.x);
+    gPatchReef = max(gPatchReef, m * info.x);
+  }
+  return h;
+}
+`
+
 // The ground anywhere, for surfaces that aren't one pack's own mesh: the sea
 // (for its depth) and the lines (draped on it), and the district's own mesh.
 //
 // The district's ground is its lidar as it is today, with the year laid on
-// it: the patches (land the fill made, sunk back toward a reef flat) and the
+// it: its patches (today's sea lifted back to the reef flat a channel was
+// dredged through, the land the fill made sunk back toward one) and the
 // features rastered into its aux map, each by its own weight in the year
 // (uFeatK, eased as the year crosses its dates): a loʻi's terraces cut and
 // filled into the slope, a fishpond's water. render/district.js keeps the CPU
 // copy (metresAt), line for line.
 const slotIndices = Array.from({ length: SLOTS }, (_, i) => i)
 export const ground = /* glsl */ `
+${patches}
 ${slotIndices.map((i) => `uniform sampler2D uSlotH${i};`).join('\n')}
 float slotMetres(int s, vec2 xz) {
-  // (samplers can only be picked by a constant index)
-${slotIndices.map((i) => `  if (s == ${i}) return rectMetres(uSlotH${i}, uSlotRect[${i}], xz);`).join('\n')}
-  return -4000.0;
+  // (samplers can only be picked by a constant index; the patches are laid
+  // on whichever it was once, so the loop is compiled once, not per slot)
+  float h = -4000.0;
+${slotIndices.map((i) => `  ${i ? 'else ' : ''}if (s == ${i}) h = rectMetres(uSlotH${i}, uSlotRect[${i}], xz);`).join('\n')}
+  return patchedMetres(s, xz, h);
 }
 // the archipelago and the islands, without the district
 float islandMetres(vec2 xz) {
@@ -189,19 +245,51 @@ float islandMetres(vec2 xz) {
 }
 
 uniform sampler2D uDistH;     // heights today, metres (R32F, nearest)
-uniform sampler2D uDistAux;   // r the patch's weight, g a feature's mask, b its paddy (hash, and the bank in the top bit), a its index
+uniform sampler2D uDistAux;   // r the lower patches' weight, g a feature's mask, b its paddy (hash, and the bank in the top bit), a its index
 uniform sampler2D uDistCarve; // a loʻi's r terraces down the valley (modulo 64), g paddies across it (RG16F); off the loʻi, a filled channel's level in r, the normals' offset in g
-uniform float uPatchK;        // the patch's weight in the year: 1 before its until, 0 after
+// The district's patches (district-decode.js patchMap), over the box they
+// reach: r which lower patches a texel belongs to (a group, 0 none), g and a
+// the weights of the two raise patches over it, b their indices (low and
+// high four bits). By group, the lower patches' weight in the year (the most
+// of any patch in it) and their depth; by raise patch, its own.
+uniform sampler2D uDistPatch;
+uniform vec4 uDistPatchBox;               // x0, y0, x1, y1 in the district's texels, the far edges exclusive
+uniform vec4 uDistLower[DIST_PATCHES];    // by group: x weight in the year, y depth
+uniform vec4 uDistRaise[DIST_PATCHES];    // by raise patch: x weight in the year, y depth
+uniform float uDistRaiseTop;              // the highest depth a raise lifts to in the year: ground above it no raise can reach
 uniform vec4 uFeatK[16];      // each rastered feature's weight in the year, by index (loʻi DIST_LOI, ponds DIST_POND, the rest after)
 float featK(int i) { return uFeatK[i >> 2][i & 3]; }
+vec4 distPatchAt(ivec2 p) {
+  vec4 b = uDistPatchBox;
+  if (float(p.x) < b.x || float(p.y) < b.y || float(p.x) >= b.z || float(p.y) >= b.w) return vec4(0.0);
+  return texelFetch(uDistPatch, p - ivec2(b.xy), 0);
+}
+// today's height h at texel p with the patches of the year laid on it
+// (district-decode.js patchLevel): the raises first, then the lowers, whose
+// byte in the aux map is under 128 a weight toward the reef flat and from
+// 128 a weight toward the fill, at the level the carve keeps there
+float distPatched(ivec2 p, float h, float r) {
+  // (ground no raise can reach and no lower patch has is today's, without a look at the patch map)
+  if (r < 0.5 && h >= uDistRaiseTop) return h;
+  vec4 q = distPatchAt(p);
+  if (q.g + q.a > 0.0) {
+    int ix = int(q.b * 255.0 + 0.5);
+    vec4 ra = uDistRaise[ix & 15];
+    vec4 rb = uDistRaise[ix >> 4];
+    h = mix(h, max(h, ra.y), q.g * ra.x);
+    h = mix(h, max(h, rb.y), q.a * rb.x);
+  }
+  if (r > 0.5) {
+    vec4 L = uDistLower[int(q.r * 255.0 + 0.5)];
+    if (r < 127.5) h = mix(h, L.y, r / 127.0 * L.x);
+    else h = mix(h, max(DIST_FILL, texelFetch(uDistCarve, p, 0).r), (r - 128.0) / 127.0 * L.x);
+  }
+  return h;
+}
 float distTexel(ivec2 p) {
   float h = texelFetch(uDistH, p, 0).r;
   vec4 a = texelFetch(uDistAux, p, 0);
-  // (the patch byte: under 128 toward the reef, from 128 toward the fill at
-  // the level the carve keeps there; district-decode.js patchLevel)
-  float r = a.r * 255.0;
-  if (r < 127.5) h = mix(h, DIST_REEF, r / 127.0 * uPatchK);
-  else h = mix(h, max(DIST_FILL, texelFetch(uDistCarve, p, 0).r), (r - 128.0) / 127.0 * uPatchK);
+  h = distPatched(p, h, a.r * 255.0);
   int f = int(a.a * 255.0 + 0.5);
   if (f > 0) {
     float k = featK(f);
@@ -224,13 +312,20 @@ float distMetres(vec2 xz) {
   vec2 fl = floor(p);
   vec2 fr = p - fl;
   ivec2 i = ivec2(fl);
-  return mix(mix(distTexel(i), distTexel(i + ivec2(1, 0)), fr.x), mix(distTexel(i + ivec2(0, 1)), distTexel(i + ivec2(1, 1)), fr.x), fr.y);
+  // (the four texels in a loop: one copy of distTexel where it is inlined)
+  vec4 t;
+  for (int k = 0; k < 4; k++) t[k] = distTexel(i + ivec2(k & 1, k >> 1));
+  return mix(mix(t.x, t.y, fr.x), mix(t.z, t.w, fr.x), fr.y);
 }
 float groundMetres(vec2 xz) {
+  gPatchReef = 0.0;
   float w = distWeight(xz);
-  if (w >= 1.0) return distMetres(xz);
-  float m = islandMetres(xz);
-  return w > 0.0 ? mix(m, distMetres(xz), w) : m;
+  // (each read once, behind a branch: a software renderer inlines all of
+  // it, and runs what a choice of two values would have it compute)
+  float m = 0.0;
+  if (w < 1.0) m = islandMetres(xz);
+  if (w > 0.0) m = mix(m, distMetres(xz), w);
+  return m;
 }
 // a fishpond's water at xz (0..1), for the sea to lie calm in it
 float distPond(vec2 xz) {
@@ -239,6 +334,28 @@ float distPond(vec2 xz) {
   vec4 a = texelFetch(uDistAux, i, 0);
   int f = int(a.a * 255.0 + 0.5);
   return f >= DIST_POND && f < DIST_OTHER ? a.g * featK(f) : 0.0;
+}
+// how much of the water at xz is the reef flat a patch makes in the year
+// (0..1), for the sea to show reef there and not open water (ocean.glsl.js);
+// asked straight after groundMetres(xz), whose islands' part it reads
+float patchReef(vec2 xz) {
+  float r = 0.0;
+  int o = ownerAt(xz);
+  if (o >= 0) r = gPatchReef * slotWeight(o, xz);
+  float w = distWeight(xz);
+  if (w > 0.0) {
+    ivec2 i = ivec2(distGrid(xz) + 0.5);
+    vec4 q = distPatchAt(i);
+    float d = 0.0;
+    if (q.g + q.a > 0.0) {
+      int ix = int(q.b * 255.0 + 0.5);
+      d = max(q.g * uDistRaise[ix & 15].x, q.a * uDistRaise[ix >> 4].x);
+    }
+    float lr = texelFetch(uDistAux, i, 0).r * 255.0;
+    if (lr > 0.5 && lr < 127.5) d = max(d, lr / 127.0 * uDistLower[int(q.r * 255.0 + 0.5)].x);
+    r = mix(r, d, w);
+  }
+  return r;
 }
 `
 
@@ -321,8 +438,10 @@ vec3 applyPolity(vec3 col, vec2 xz, vec3 light) {
 // forest itself. The ground's own vegetation is a model of about 1700; under
 // the data it would read as a fourth layer, so it is quietened toward a dry,
 // pale ground first, the way a map's base is. Then, bottom to top: forest a
-// deep canopy green, cultivation gold, and settlement red, from a faint wash
-// where few people lived, through scattered specks, to solid town.
+// deep canopy green, cultivation gold, and settlement a warm dark umber that
+// deepens toward near-black as the people grow denser, from a faint wash
+// where few lived, through scattered specks, to the solid built ground of a
+// town. (Not red: specks of red over a map read as an outbreak.)
 export const land = /* glsl */ `
 uniform sampler2D uArchLandA; // over the archipelago, the keyframe before: r cultivation, g settlement (log), b forest
 uniform sampler2D uArchLandB; // and after
@@ -377,12 +496,12 @@ vec3 applyLand(vec3 col, vec3 m, float rain, vec2 xz, float px, float metres) {
   // about 10,000
   // (with the whole chain in view a shore's villages are a pixel or two
   // wide, so the specks are let to cover more of it there)
-  vec3 red = pow(vec3(0.80, 0.19, 0.13), vec3(2.2));
   float far = smoothstep(1.0, 5.0, px);
   float wash = mix(0.2, 0.28, far) * smoothstep(0.15, 0.40, sv);
   float cover = clamp((sv - 0.28) / 0.56, 0.0, 1.0);
   float speck = landSpecks(xz, px, pow(cover, 1.5 - 0.6 * far));
-  c = mix(c, red, max(wash, speck * 0.95));
+  vec3 umber = pow(mix(vec3(0.36, 0.25, 0.16), vec3(0.16, 0.135, 0.11), smoothstep(0.35, 0.9, sv)), vec3(2.2));
+  c = mix(c, umber, max(wash, speck * 0.95));
   return mix(col, c, k);
 }
 `

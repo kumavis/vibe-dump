@@ -4,7 +4,10 @@
 // whitecaps in the trades. The set-wave breakers on the reef crest and the
 // stream-plume maps are left out: they belong to a 17 m heightmap, and the
 // islands' are 70 to 300 m. A district's fishponds (common.glsl.js
-// distPond) lie still and green behind their walls.
+// distPond) lie still and green behind their walls. Where a patch gives a
+// year back its reef flat (common.glsl.js patchReef), the water over it is
+// shallow reef, coral and rubble mottled over sand at a size that reads at
+// any zoom, not one even sheet of blue.
 
 import { constants, noise, world, ground, lighting } from './common.glsl.js'
 
@@ -30,6 +33,19 @@ uniform int uDebug;
 in vec3 vWorld;
 
 float seaDepth(vec2 xz) { return -groundMetres(xz); }
+
+// a mottle fixed to the ground, about eight pixels to a patch at any zoom
+// (the two power-of-two cells nearest that, crossfaded), so a reef flat
+// seen across an island and one seen from a stop both read as reef
+float mottle(vec2 xz, float px) {
+  float lv = log2(max(px, 1e-4) * 8.0);
+  float l0 = floor(lv);
+  vec2 a = xz / exp2(l0);
+  vec2 b = xz / exp2(l0 + 1.0);
+  float m0 = 0.62 * vnoise(a + 3.1) + 0.38 * vnoise(a * 2.07 + 11.3);
+  float m1 = 0.62 * vnoise(b + 7.7) + 0.38 * vnoise(b * 2.07 + 5.9);
+  return mix(m0, m1, lv - l0);
+}
 
 vec2 noiseGrad(vec2 p) {
   const float e = 0.25;
@@ -87,6 +103,21 @@ void main() {
   vec3 reefC = mix(vec3(0.30, 0.27, 0.20), vec3(0.42, 0.30, 0.34), fbm2F(xz * 4.0 + 7.0, px * 4.0));
   float reef = smoothstep(0.45, 0.62, fb) * (1.0 - smoothstep(4.0, 14.0, depth));
   vec3 bed = mix(sandC, reefC, clamp(reef, 0.0, 1.0));
+  // the reef flat of a patch's years: heads of coral and rubble in the reef's
+  // own colours, mottled at a size that reads at any zoom and standing nearer
+  // the surface than the flat round them, so the patch is reef and not one
+  // even depth of blue, and meets the reef beyond its edge without a seam
+  // (a patch's reef flat is a few metres down at most: deeper water never asks)
+  float rf = 0.0;
+  if (depth < 12.0) rf = patchReef(xz);
+  float dU = depth;
+  if (rf > 0.002) {
+    float mt = mottle(xz, px);
+    float head = smoothstep(0.42, 0.66, mt) * rf;
+    vec3 coral = mix(vec3(0.30, 0.27, 0.20), vec3(0.42, 0.30, 0.34), smoothstep(0.3, 0.7, mottle(xz * 1.9 + 17.0, px)));
+    bed = mix(bed, coral, head * 0.85);
+    dU = depth * (1.0 - 0.5 * head);
+  }
   vec3 absorb = vec3(0.46, 0.105, 0.055);
   float vis = sunVisibility(vec3(vWorld.x, 0.0, vWorld.z));
   vec3 light = uSunColor * max(uSunDir.y, 0.0) * vis + uSkyColor * 0.8 + uMoonColor * 0.3;
@@ -97,13 +128,13 @@ void main() {
     float cb = voronoi(cp * 1.31 - vec2(uTime * 0.7, -uTime * 0.5)).x;
     caust = pow(1.0 - min(ca, cb), 6.0) * 1.6 * (1.0 - smoothstep(1.0, 8.0, depth)) * (1.0 - smoothstep(0.003, 0.012, px));
   }
-  vec3 under = bed * light * (1.0 + caust * vis) * exp(-absorb * depth * 2.0);
+  vec3 under = bed * light * (1.0 + caust * vis) * exp(-absorb * dU * 2.0);
   vec3 amb = uSkyColor * 1.6 + uSunColor * max(uSunDir.y, 0.0) * vis;
   vec3 deepC = vec3(0.004, 0.030, 0.075) * amb;
   vec3 turq = vec3(0.03, 0.20, 0.21) * amb;
   // (and in the channels, a kilometre and more down, the deepest blue)
   vec3 abyss = vec3(0.002, 0.018, 0.060) * amb;
-  float scatter = 1.0 - exp(-depth * 0.3);
+  float scatter = 1.0 - exp(-dU * 0.3);
   vec3 body = mix(turq, deepC, smoothstep(5.0, 45.0, depth));
   body = mix(body, vec3(0.075, 0.13, 0.07) * amb, pond);
   body = mix(body, abyss, smoothstep(200.0, 1500.0, depth));
@@ -122,7 +153,9 @@ void main() {
   // --- foam --------------------------------------------------------------------
   // swash at the shore, where the water is shallowest (depth stands in for the
   // distance to land), and whitecaps in the trades out in deeper water
-  float shore = (1.0 - smoothstep(0.1, 1.4, depth)) * (1.0 - pond);
+  // (over a patch's reef flat, which is a metre or two down throughout, the
+  // swash would cover all of it: there it stays at the real shore's edge)
+  float shore = (1.0 - smoothstep(0.1, 1.4, depth)) * (1.0 - pond) * (1.0 - 0.75 * rf);
   float swash = 0.5 + 0.5 * sin(depth * 9.0 - uTime * 1.6 + fbm2F(xz * 3.0, px * 3.0) * 4.0);
   float foamTex = smoothstep(0.35, 0.75, fbm2F(xz * 9.0 + vec2(uTime * 0.3, 0.0), px * 9.0));
   float caps = smoothstep(0.78, 0.92, fbm2F(xz * 0.9 + uWind * uTime * 0.06, px * 0.9)) * smoothstep(0.55, 1.1, length(uWind)) * smoothstep(20.0, 60.0, depth);

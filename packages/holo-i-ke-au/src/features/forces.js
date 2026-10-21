@@ -11,11 +11,13 @@
 // oral account only), is drawn as a thin, faint file that begins below the
 // brink.
 //
-// Which forces show: at a stop of an event's walk, the steps of that stop
-// (stepsAt: the data numbers the steps within the event, not by stop, so the
-// stop a step belongs to is found from the fronts, each of which stands at
-// the place its stop names); off the tour, in the battle's own year, every
-// step at once, quietly.
+// Which forces show: at a stop of an event's walk, those of that stop. A
+// feature that names its stop (`stop`: an index into the event's stops, from
+// 0, or a stop's place, or a list of either) shows at the stops it names.
+// One that doesn't is placed by inference (stepsAt: the data numbers the
+// steps within the event, not by stop, so the stop a step belongs to is found
+// from the fronts, each of which stands at the place its stop names). Off the
+// tour, in the battle's own year, every one at once, quietly.
 //
 // The marks are instanced quads facing the camera, laid on the ground of the
 // year in the vertex shader (common.glsl.js groundMetres); where each is
@@ -107,7 +109,7 @@ export class Forces {
       const cum = [0]
       for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]))
       const total = cum.at(-1)
-      const rec = { p, pts, cum, total, event: p.event, step: Number.isFinite(p.step) ? p.step : 0, w: 0, goal: 0 }
+      const rec = { p, pts, cum, total, event: p.event, step: Number.isFinite(p.step) ? p.step : 0, w: 0, goal: 0, stop: p.stop ?? null }
       if (p.kind === 'line') {
         const side = p.side || (p.role === 'advance' ? 'hawaii' : 'oahu')
         rec.batch = ribbons.add([{ pts, width: 0.75 }], { mode: 'band', colour: new THREE.Color(ROLE_COLOURS[side] || '#ffffff').toArray(), alpha: 0, minPx: 6, lift: 0.01, order: 6, endFade: 1.2 })
@@ -214,14 +216,49 @@ export class Forces {
     return [...steps].sort((a, b) => a - b)
   }
 
+  /** The stops of `ev` a feature names (`stop`), or null when it names none. */
+  namedStops(r, ev) {
+    if (r.stop === null || r.stop === undefined) return null
+    const out = []
+    for (const v of Array.isArray(r.stop) ? r.stop : [r.stop]) {
+      if (Number.isInteger(v)) out.push(v)
+      else if (typeof v === 'string') (ev.stops || []).forEach((s, k) => s.place === v && out.push(k))
+    }
+    return out
+  }
+
+  /**
+   * What shows of `ev` at its stop i: each feature that names its stops, at
+   * those; the rest by the steps stepsAt infers.
+   */
+  shownAt(ev, i) {
+    const e = this.events.get(ev.id)
+    const out = new Set()
+    if (!e) return out
+    let steps = null
+    for (const r of e.recs) {
+      const named = this.namedStops(r, ev)
+      if (named) {
+        if (named.includes(i)) out.add(r)
+        continue
+      }
+      steps ||= this.stepsAt(ev, i)
+      if (steps.includes(r.step)) out.add(r)
+    }
+    return out
+  }
+
   /** What shows now: the tour's stop, or the battle's year off the tour. */
   choose() {
     const tour = this.app.tour
     const ev = tour?.active ? tour.event : null
-    if (ev && this.events.has(ev.id) && tour.stop >= 0) return { event: ev.id, steps: this.stepsAt(ev, tour.stop), quiet: false }
+    if (ev && this.events.has(ev.id) && tour.stop >= 0) {
+      const recs = this.shownAt(ev, tour.stop)
+      return { event: ev.id, recs, steps: [...new Set([...recs].map((r) => r.step))].sort((a, b) => a - b), quiet: false }
+    }
     const y = this.app.timeline.year
-    for (const e of this.events.values()) if (y >= e.from && y < e.to + 1) return { event: e.id, steps: null, quiet: true }
-    return { event: null, steps: [], quiet: false }
+    for (const e of this.events.values()) if (y >= e.from && y < e.to + 1) return { event: e.id, recs: null, steps: null, quiet: true }
+    return { event: null, recs: new Set(), steps: [], quiet: false }
   }
 
   update(dt, show, distance = 0) {
@@ -234,7 +271,7 @@ export class Forces {
     this.showing = now
     const ease = dt > 0 ? 1 - Math.exp(-dt * 2) : 1
     for (const r of new Set([...this.forces, ...this.lines])) {
-      const on = r.event === now.event && (now.steps === null || now.steps.includes(r.step))
+      const on = r.event === now.event && (now.recs === null || now.recs.has(r))
       r.goal = on ? (now.quiet ? 0.2 : 1) : 0
       r.w += (r.goal - r.w) * ease
       if (Math.abs(r.goal - r.w) < 0.003) r.w = r.goal
@@ -292,11 +329,13 @@ export class Forces {
   /** For the tools: which forces show, by name (as the tour and the year stand now, not as last drawn). */
   stats() {
     const now = this.choose()
-    const on = (r) => r.event === now.event && (now.steps === null || now.steps.includes(r.step))
+    const on = (r) => r.event === now.event && (now.recs === null || now.recs.has(r))
     return {
       event: now.event,
       steps: now.steps,
       quiet: now.quiet,
+      // (how the stop's forces were found: named by the data, inferred, or both)
+      by: now.recs ? [...new Set([...now.recs].map((r) => (r.stop === null || r.stop === undefined ? 'inferred' : 'named')))].join('+') || 'none' : 'year',
       forces: this.forces.filter((r) => on(r) && !r.stand).map((r) => r.p.name),
       lines: this.lines.filter(on).map((r) => r.p.name),
       marks: this.count,

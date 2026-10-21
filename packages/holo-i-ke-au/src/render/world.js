@@ -15,11 +15,13 @@
 //
 // The exaggeration of the moment (config.js) lives here too, as the shared
 // uVert uniform, and metresAt() is the CPU copy of the shaders' groundMetres,
-// for the camera, picking, the pins and the lines' bounds.
+// for the camera, picking, the pins and the lines' bounds. An island's heights
+// carry the patches of the year (render/patches.js), in the shaders and here.
 
 import * as THREE from 'three'
-import { SLOTS, exaggeration } from '../config.js'
+import { SLOTS, DIST_PATCHES, exaggeration } from '../config.js'
 import { PackTerrain, heightTexture } from './pack.js'
+import { patchUniforms } from './patches.js'
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -45,6 +47,7 @@ export class World {
     const dummyAux = new THREE.DataTexture(new Uint8Array(4), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType)
     dummyAux.needsUpdate = true
     this.dummyAux = dummyAux
+    const vecs = (n) => Array.from({ length: n }, () => new THREE.Vector4(0, 0, 0, 0))
     this.uniforms = {
       uVert: { value: this.exag / 100 },
       uExag: { value: this.exag },
@@ -58,8 +61,15 @@ export class World {
       uDistH: { value: dummy },
       uDistAux: { value: dummyAux },
       uDistCarve: { value: dummy },
-      uPatchK: { value: 0 },
-      uFeatK: { value: Array.from({ length: 16 }, () => new THREE.Vector4(0, 0, 0, 0)) },
+      // its patches (render/district.js): the map over the box they reach, and their weights in the year
+      uDistPatch: { value: dummyAux },
+      uDistPatchBox: { value: new THREE.Vector4(0, 0, 0, 0) },
+      uDistLower: { value: vecs(DIST_PATCHES) },
+      uDistRaise: { value: vecs(DIST_PATCHES) },
+      uDistRaiseTop: { value: -1e9 },
+      uFeatK: { value: vecs(16) },
+      // and the islands' patches (render/patches.js)
+      ...patchUniforms(),
     }
     this.district = null
     for (let s = 0; s < SLOTS; s++) this.uniforms[`uSlotH${s}`] = { value: dummy }
@@ -154,6 +164,8 @@ export class World {
       const t = this.slots[s]
       u.uSlotInfo.value[s].set(t ? t.k : 0, t ? 1 : 0, t ? t.margin : 1, 0)
     }
+    // (the patches of the packs now in the slots, and their weights in the year)
+    this.app.patches?.update(dt)
     this.arch.update(camera, true)
     for (const t of isl) t.update(camera, t.slot >= 0)
     // and under its island, the district
@@ -184,6 +196,7 @@ export class World {
       }
       t.k = t.want
     }
+    this.app.patches?.settle()
   }
 
   /** What is being drawn, for the tools. */
@@ -236,9 +249,15 @@ export class World {
     }
     if (owner) {
       const w = owner.k * smooth(0, owner.margin, best)
-      if (w > 0) m += (owner.metresAt(x, z) - m) * w
+      if (w > 0) m += (this.ownMetres(owner, x, z) - m) * w
     }
     return this.district?.on ? this.district.blend(x, z, m) : m
+  }
+
+  /** An island pack's own heights at (x, z) with its patches of the year: slotMetres. */
+  ownMetres(t, x, z) {
+    const h = t.metresAt(x, z)
+    return this.app.patches ? this.app.patches.apply(t.pack.id, x, z, h) : h
   }
 
   /** World Y of the ground (or the sea, at 0) at (x, z). */

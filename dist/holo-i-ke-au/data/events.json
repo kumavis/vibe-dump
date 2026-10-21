@@ -348,7 +348,7 @@
       "island"
     ],
     "kind": "construction",
-    "summary": "On the dry southern slopes of Haleakalā, in Kahikinui, people live in scattered farming settlements. Here the chiefs of a consolidating Maui raise a network of heiau (temples) at the heart of the settlements, in a short burst of building. Pieces of branch coral set on the heiau as dedicatory offerings can be dated by uranium and thorium to within about a decade. They give calendar dates where the genealogies give only generations, and they tie the heiau to the rule of Piʻilani and Kiha. The heiau themselves are not placed on the map.",
+    "summary": "On the dry southern slopes of Haleakalā, in Kahikinui, people live in scattered farming settlements. Here the chiefs of a consolidating Maui raise a network of heiau (temples) at the heart of the settlements, in a short burst of building. Pieces of branch coral set on the heiau as dedicatory offerings can be dated by uranium and thorium to within about a decade. They give calendar dates where the genealogies give only generations, and they tie the heiau to the rule of Piʻilani and Kiha.",
     "sources": [
       {
         "id": "kirch-sharp-2005",
@@ -497,7 +497,7 @@
       "island"
     ],
     "kind": "battle",
-    "summary": "Kalaniʻōpuʻu lands his army in Honuaʻula and sends his finest troops, the ʻAlapa, across the isthmus toward Wailuku, where Kahekili rules Maui, vowing to drink the waters of Wailuku that day. Kahekili’s warriors wait in the sandhills between Waikapū and Wailuku and close on them from two sides. The ʻAlapa are destroyed. The Wailuku dunes hold many burials, and this app does not place the battle more closely than the ahupuaʻa.",
+    "summary": "Kalaniʻōpuʻu lands his army in Honuaʻula and sends his finest troops, the ʻAlapa, across the isthmus toward Wailuku, where Kahekili rules Maui, vowing to drink the waters of Wailuku that day. Kahekili’s warriors wait in the sandhills between Waikapū and Wailuku and close on them from two sides. The ʻAlapa are destroyed. The Wailuku dunes hold many burials.",
     "sources": [
       {
         "id": "fornander-v2",
@@ -979,7 +979,7 @@
       "island"
     ],
     "kind": "eruption",
-    "summary": "Keōua Kūʻahuʻula, holding Kaʻū against Kamehameha, marches his people home from Hilo by the inland road past the summit of Kīlauea. The volcano explodes: a column of ash and stones rises above the mountain and falls across the land to the south-west. One company on the march, women and children among them, dies where it walks. Survivors carry the story. The explosions leave a sheet of ash around the caldera, called the Keanakākoʻi ash. Where the people died is not placed.",
+    "summary": "Keōua Kūʻahuʻula, holding Kaʻū against Kamehameha, marches his people home from Hilo by the inland road past the summit of Kīlauea. The volcano explodes: a column of ash and stones rises above the mountain and falls across the land to the south-west. One company on the march, women and children among them, dies where it walks. Survivors carry the story. The explosions leave a sheet of ash around the caldera, called the Keanakākoʻi ash.",
     "sources": [
       {
         "id": "kamakau-ruling-chiefs",
@@ -1379,14 +1379,14 @@
         }
       },
       {
-        "text": "The retreat ends at the head of the valley, where the land drops away at the pali. Many of the Oʻahu fighters die there. Their remains are a burial matter for their descendants, and this app does not place them.",
+        "text": "The retreat ends at the head of the valley, where the land drops away at the pali. Many of the Oʻahu fighters die there.",
         "place": "nuuanu-pali",
         "zoom": "near",
         "year": 1795,
         "camera": {
-          "bearing": 50,
-          "pitch": 0.15,
-          "distance": 18
+          "bearing": 57,
+          "pitch": 0.2,
+          "distance": 32
         }
       }
     ],
@@ -1758,7 +1758,7 @@
       "island"
     ],
     "kind": "death",
-    "summary": "Kamehameha dies at night at Kamakahonu, his residence on the shore at Kailua in Kona. He had fought for years to unite the islands and ruled them for a generation after. His bones are prepared in the old way for a sacred chief; this app does not place them. His son Liholiho becomes ruler as Kamehameha II, with Kaʻahumanu, Kamehameha’s favourite wife, as kuhina nui, the co-ruler.",
+    "summary": "Kamehameha dies at night at Kamakahonu, his residence on the shore at Kailua in Kona. He had fought for years to unite the islands and ruled them for a generation after. His bones are prepared in the old way for a sacred chief. His son Liholiho becomes ruler as Kamehameha II, with Kaʻahumanu, Kamehameha’s favourite wife, as kuhina nui, the co-ruler.",
     "sources": [
       {
         "id": "kamakau-ruling-chiefs",
@@ -1852,7 +1852,7 @@
       "near"
     ],
     "kind": "battle",
-    "summary": "Kekuaokalani, Kamehameha’s nephew and keeper of the war god, refuses the free eating and gathers the chiefs and priests who want the kapu kept. Envoys sent to bring him to Kailua fail. Kalanimoku leads the government’s forces south from Kailua; the two sides meet on the lava at Kuamoʻo, by the stone wall of Lekeleke, with armed canoes firing from the sea. Kekuaokalani falls, and his wife Manono beside him. The old religion has lost its last army. The dead were buried where they fell; this app does not place the graves.",
+    "summary": "Kekuaokalani, Kamehameha’s nephew and keeper of the war god, refuses the free eating and gathers the chiefs and priests who want the kapu kept. Envoys sent to bring him to Kailua fail. Kalanimoku leads the government’s forces south from Kailua; the two sides meet on the lava at Kuamoʻo, by the stone wall of Lekeleke, with armed canoes firing from the sea. Kekuaokalani falls, and his wife Manono beside him. The old religion has lost its last army. The dead were buried where they fell.",
     "sources": [
       {
         "id": "kamakau-ruling-chiefs",
@@ -2262,7 +2262,7 @@
       "island"
     ],
     "kind": "law",
-    "summary": "Under a law of 1865, people found to have leprosy, now called Hansen’s disease, are taken from their families and sent to the Kalaupapa peninsula on Molokaʻi’s north shore, cut off by sea cliffs. The first are put ashore in January 1866 near the mouth of Waikolu Valley and left to make what life they can at Kalawao. The Hawaiians who had lived on the peninsula for centuries are bought out and moved away. Father Damien arrives in 1873. The isolation laws stand until 1969. The peninsula holds the graves of those who died there; this app does not place them.",
+    "summary": "Under a law of 1865, people found to have leprosy, now called Hansen’s disease, are taken from their families and sent to the Kalaupapa peninsula on Molokaʻi’s north shore, cut off by sea cliffs. The first are put ashore in January 1866 near the mouth of Waikolu Valley and left to make what life they can at Kalawao. The Hawaiians who had lived on the peninsula for centuries are bought out and moved away. Father Damien arrives in 1873. The isolation laws stand until 1969. The peninsula holds the graves of those who died there.",
     "sources": [
       {
         "id": "nps-kalaupapa",

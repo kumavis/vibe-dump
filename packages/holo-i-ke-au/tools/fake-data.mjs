@@ -9,10 +9,20 @@
 //                                               without bathymetry writes it)
 //
 // Then load the app with ?data=../test-data/ (built) or ?data=./test-data/ (dev).
+//
+// It also writes test patches (DATA.md "Patches, on any pack"), a raise and a
+// lower with soft edges, one of them at a smaller size than its pack: for the
+// made-up Oʻahu in test-data/patches/, and, when the real bake is in
+// public/data/, for the real Oʻahu pack and the Nuʻuanu district in
+// test-data/real/patches/ (load the app with ?patches=../test-data/real/;
+// tools/smoke.mjs loads them itself). They are shapes for trying the patch
+// path, placed where a harbour's dredging and a reef's filling would be, and
+// not a record of either.
 import { deflateSync } from 'node:zlib'
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { readPNG } from './lib/png.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const args = process.argv.slice(2)
@@ -512,4 +522,106 @@ writeFileSync(join(out, 'boundaries', 'moku.geojson'), JSON.stringify(b.moku))
 writeFileSync(join(out, 'boundaries', 'ahupuaa.geojson'), JSON.stringify(b.ahupuaa))
 const g = gazetteer()
 for (const k of ['eras', 'places', 'sources', 'events', 'polities']) writeFileSync(join(out, `${k}.json`), JSON.stringify(g[k], null, 2))
+testPatches()
 console.log(`wrote ${out} in ${((Date.now() - t0) / 1000).toFixed(1)} s${flatSea ? ' (flat sea)' : ''}`)
+
+// --- test patches --------------------------------------------------------------------------
+/**
+ * A soft mask over a pack's bounds at w × h: 255 inside an ellipse (centre,
+ * semi-axes in km, rotated `rot` degrees), easing to nothing over its outer
+ * third, where `keep(lon, lat)` says the ground qualifies.
+ */
+function ellipseMask(bounds, w, h, { lon, lat, a, b, rot = 0 }, keep) {
+  const [W, S, E, N] = bounds
+  const out = new Uint8Array(w * h)
+  const c = Math.cos(rot * DEG)
+  const s = Math.sin(rot * DEG)
+  const x0 = xkm(lon)
+  const z0 = zkm(lat)
+  let n = 0
+  for (let j = 0; j < h; j++) {
+    const la = N - ((j + 0.5) / h) * (N - S)
+    const dz = zkm(la) - z0
+    for (let i = 0; i < w; i++) {
+      const lo = W + ((i + 0.5) / w) * (E - W)
+      const dx = xkm(lo) - x0
+      const u = Math.hypot((dx * c - dz * s) / a, (dx * s + dz * c) / b)
+      if (u >= 1 || !keep(lo, la)) continue
+      const v = Math.round(255 * (1 - smooth(0.66, 1, u)))
+      out[j * w + i] = v
+      if (v) n++
+    }
+  }
+  return { grey: out, n }
+}
+
+/** The heights of a real pack (split bytes, DATA.md §2), and a nearest lookup by lon/lat. */
+function realHeights(dir, entry) {
+  const png = readPNG(join(dir, entry.height.file))
+  const [W, H] = entry.size
+  const ch = png.channels
+  const [w0, s0, e0, n0] = entry.bounds
+  return (lon, lat) => {
+    const i = Math.min(W - 1, Math.max(0, Math.floor(((lon - w0) / (e0 - w0)) * W)))
+    const j = Math.min(H - 1, Math.max(0, Math.floor(((n0 - lat) / (n0 - s0)) * H)))
+    const k = (j * W + i) * ch
+    return (png.data[k] * 256 + png.data[k + 1]) * (entry.height.scale ?? 0.25) + (entry.height.offset ?? -6000)
+  }
+}
+
+function writePatches(dir, list) {
+  mkdirSync(join(dir, 'patches'), { recursive: true })
+  const patches = []
+  for (const p of list) {
+    writePNG(join(dir, 'patches', `${p.id}.png`), p.size[0], p.size[1], p.grey, 1)
+    const { grey, n, ...entry } = p
+    patches.push({ ...entry, file: `patches/${p.id}.png`, note: `test mask (tools/fake-data.mjs), ${n} texels marked; not a record`, sources: [{ id: 'synthetic', title: 'Test mask (tools/fake-data.mjs)', url: 'about:blank', fetched: new Date().toISOString().slice(0, 10), licence: 'test data, not for release' }] })
+    console.log(`  patch ${p.id}: ${p.kind} to ${p.depth} m before ${p.until}, ${p.size.join('×')}, ${n} texels`)
+  }
+  writeFileSync(join(dir, 'patches', 'manifest.json'), JSON.stringify({ patches }, null, 2))
+}
+
+function testPatches() {
+  // the made-up Oʻahu: a channel off its south shore lifted to a reef flat
+  // before 1800, and a stretch of that shore sunk to one before 1830 (its
+  // timeline ends at 1850)
+  const isl = ISLANDS.find((i) => i.id === 'oahu')
+  const pack = packs.find((p) => p.id === 'oahu')
+  // (south from the highest summit to the shore)
+  const top = isl.domes.reduce((a, b) => (b.H > a.H ? b : a))
+  let z = top.z
+  while (heightAt(top.x, z) > 0 && z < top.z + 80) z += 0.1
+  const coast = { lon: lonOf(top.x), lat: latOf(z - 0.3) }
+  const [W, H] = pack.size
+  const half = [Math.ceil(W / 2), Math.ceil(H / 2)]
+  const sea = (lon, lat) => heightAt(xkm(lon), zkm(lat)) < -1
+  const land = (lon, lat) => heightAt(xkm(lon), zkm(lat)) > 0
+  console.log('test patches')
+  writePatches(out, [
+    { id: 'test-west-channel', pack: 'oahu', kind: 'raise', depth: -1.5, until: 1800, size: half, ...ellipseMask(pack.bounds, ...half, { lon: coast.lon, lat: latOf(z + 0.9), a: 2.6, b: 0.8 }, sea) },
+    { id: 'test-west-shore', pack: 'oahu', kind: 'lower', depth: -1, until: 1830, size: [W, H], ...ellipseMask(pack.bounds, W, H, { lon: coast.lon, lat: coast.lat, a: 1.8, b: 0.9 }, land) },
+  ])
+
+  // the real Oʻahu pack and the Nuʻuanu district, when the bake is here
+  const real = join(root, 'public/data')
+  if (!existsSync(join(real, 'manifest.json')) || !existsSync(join(real, 'districts/manifest.json'))) return
+  const man = JSON.parse(readFileSync(join(real, 'manifest.json'), 'utf8'))
+  const oahu = man.packs.find((p) => p.id === 'oahu')
+  const nuuanu = JSON.parse(readFileSync(join(real, 'districts/manifest.json'), 'utf8')).districts.find((d) => d.id === 'nuuanu')
+  if (!oahu || !nuuanu) return
+  const ho = realHeights(real, oahu)
+  const hn = realHeights(join(real, 'districts'), nuuanu)
+  const [OW, OH] = oahu.size
+  const [NW, NH] = nuuanu.size
+  console.log('test patches for the real packs')
+  writePatches(join(out, 'real'), [
+    // the Pearl Harbor entrance channel, its dredged water back to a reef flat before 1910
+    { id: 'test-oahu-channel', pack: 'oahu', kind: 'raise', depth: -1.5, until: 1910, size: [Math.ceil(OW / 2), Math.ceil(OH / 2)], ...ellipseMask(oahu.bounds, Math.ceil(OW / 2), Math.ceil(OH / 2), { lon: -157.961, lat: 21.322, a: 0.7, b: 2.8, rot: -8 }, (lo, la) => ho(lo, la) < -4) },
+    // the reef runway, its land back to a reef flat before 1977
+    { id: 'test-oahu-runway', pack: 'oahu', kind: 'lower', depth: -1, until: 1977, size: [OW, OH], ...ellipseMask(oahu.bounds, OW, OH, { lon: -157.925, lat: 21.3055, a: 2.2, b: 0.45, rot: 4 }, (lo, la) => ho(lo, la) > 0) },
+    // Kapālama's basin in Honolulu harbour, back to a reef flat before 1920, its mask at half the district's size
+    { id: 'test-nuuanu-basin', pack: 'nuuanu', kind: 'raise', depth: -1.2, until: 1920, size: [Math.ceil(NW / 2), Math.ceil(NH / 2)], ...ellipseMask(nuuanu.bounds, Math.ceil(NW / 2), Math.ceil(NH / 2), { lon: -157.874, lat: 21.3125, a: 1.1, b: 0.5, rot: 35 }, (lo, la) => hn(lo, la) < -3) },
+    // Magic Island and the Ala Moana shore, sunk before 1955 (later than the district's own fill patches)
+    { id: 'test-nuuanu-point', pack: 'nuuanu', kind: 'lower', depth: -1.3, until: 1955, size: [NW, NH], ...ellipseMask(nuuanu.bounds, NW, NH, { lon: -157.849, lat: 21.2865, a: 0.75, b: 0.4, rot: 20 }, (lo, la) => hn(lo, la) > 0) },
+  ])
+}

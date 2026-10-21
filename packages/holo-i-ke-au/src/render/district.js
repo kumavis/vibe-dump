@@ -20,19 +20,21 @@
 // of the camera and the levels double from there, so a valley in view is a
 // few hundred thousand vertices, not four million.
 //
-// The year is laid on its ground through two uniforms every shader that reads
-// the ground shares: uPatchK, the patch's weight (1 before its until, easing
-// to 0 across it), and uFeatK, each rastered feature's weight (1 while the
-// year is within its from and to). metresAt() is the CPU copy of
+// The year is laid on its ground through uniforms every shader that reads
+// the ground shares: each patch's weight (1 before its until, easing to 0
+// across it), a raise patch's by its index and the lower patches' by the
+// groups the patch map sorts their texels into (uDistRaise, uDistLower,
+// common.glsl.js distPatched), and uFeatK, each rastered feature's weight (1
+// while the year is within its from and to). metresAt() is the CPU copy of
 // common.glsl.js distMetres, for the camera, picking and what stands on the
 // ground.
 
 import * as THREE from 'three'
-import { DISTRICT } from '../config.js'
+import { DISTRICT, DIST_PATCHES, PATCH_EASE } from '../config.js'
 import { PackTerrain, heightTexture } from './pack.js'
 import { districtVertex, districtFragment, districtShadowFragment } from './shaders/district.glsl.js'
 import { DIST_INDEX, DIST_POND_LEVEL } from './shaders/common.glsl.js'
-import { loadDistricts, DistrictDecoder, holds, spanOf } from '../data/district.js'
+import { loadDistricts, DistrictDecoder, districtPatches, holds, spanOf } from '../data/district.js'
 import { fromHalf, loiLevel, patchLevel } from '../data/district-decode.js'
 import { DistrictFeatures } from '../features/index.js'
 
@@ -54,7 +56,11 @@ export class Districts {
     this.cur = null // the resident district: { d, state, data, terrain, features, … }
     this.k = 0
     this.want = 0
-    this.patchK = 1
+    // each patch's weight in the year, by its index in the district's list,
+    // and the groups' (the most of their patches') with their depth
+    this.patchW = new Float32Array(64).fill(1)
+    this.groupK = new Float32Array(DIST_PATCHES)
+    this.groupDepth = new Float32Array(DIST_PATCHES)
     this.featK = new Float32Array(64)
     this.featSeen = new Float32Array(64)
     this.u = this.world.uniforms
@@ -65,10 +71,33 @@ export class Districts {
     this.log = []
   }
 
-  /** The manifest and the features, behind the first frame. */
+  /** The patch weights of the resident district, by patch, for the tools. */
+  patchWeights() {
+    const rec = this.cur
+    if (!rec?.lower) return []
+    return [...rec.raise, ...rec.lower].map((p, i) => ({ id: p.id, kind: p.kind, depth: p.depth, until: p.until, k: +this.patchW[i].toFixed(3) }))
+  }
+
+  /** The manifest and the features, behind the first frame, with the patches patches/manifest.json has for them. */
   async load() {
-    this.list = await loadDistricts(this.app.data, this.app.warn)
+    const list = await loadDistricts(this.app.data, this.app.warn)
+    const extra = (await this.app.patches?.ready) || []
+    this.list = list
+    this.setPatches(extra)
     this.loaded = true
+  }
+
+  /**
+   * Each district's patches, its own and those `extra` lists for it; a
+   * district that is down now is let go, and streams again with them.
+   */
+  setPatches(extra) {
+    const warn = this.app.warn
+    for (const d of this.list) d.patches = districtPatches(d, extra, warn)
+    const islands = new Set(this.world.islandPacks.map((p) => p.id))
+    for (const p of extra) if (!islands.has(p.pack) && !this.list.some((d) => d.id === p.pack)) warn(`patch ${p.id}: no pack or district ${p.pack} here; not drawn`)
+    this.patchW.fill(1)
+    if (this.cur) this.drop()
   }
 
   /** The district whose rect, grown by `pad` world units, holds (x, z). */
@@ -170,8 +199,20 @@ export class Districts {
     carve.needsUpdate = true
     rec.auxTex = aux
     rec.carveTex = carve
+    // the patch map, over the box the patches reach (kept here too, for metresAt)
+    rec.pmap = out.patchMap
+    if (rec.pmap) {
+      const pm = rec.pmap
+      const t = new THREE.DataTexture(pm.data, pm.w, pm.h, THREE.RGBAFormat, THREE.UnsignedByteType)
+      t.minFilter = t.magFilter = THREE.NearestFilter
+      t.needsUpdate = true
+      rec.patchTex = t
+      rec.patchBox = new THREE.Vector4(pm.x0, pm.y0, pm.x0 + pm.w, pm.y0 + pm.h)
+    }
+    rec.lower = d.patches.filter((p) => p.kind === 'lower')
+    rec.raise = d.patches.filter((p) => p.kind === 'raise')
     // onto the GPU a texture a frame, before it is let draw
-    rec.uploads = [terrain.heightTex, aux, carve, terrain.normalTex, terrain.landTex]
+    rec.uploads = [terrain.heightTex, aux, carve, terrain.normalTex, terrain.landTex, ...(rec.patchTex ? [rec.patchTex] : [])]
     rec.state = 'uploading'
     rec.features = new DistrictFeatures(this.app, this, rec)
     this.app.scene.add(rec.features.group)
@@ -180,6 +221,9 @@ export class Districts {
     out.normals = out.land = null
     out.trees = { counts: out.trees.counts }
     out.streams = null
+    // (it arrives in the year as it stands: nothing eases in from another)
+    this.patchW.fill(1)
+    this.yearWeights(1)
   }
 
   /** Let the resident district go: off the GPU, out of memory. */
@@ -193,6 +237,7 @@ export class Districts {
     }
     rec.auxTex?.dispose()
     rec.carveTex?.dispose()
+    rec.patchTex?.dispose()
     if (rec.features) {
       this.app.scene.remove(rec.features.group)
       rec.features.dispose()
@@ -208,17 +253,57 @@ export class Districts {
     u.uDistH.value = this.world.dummy
     u.uDistAux.value = this.world.dummyAux
     u.uDistCarve.value = this.world.dummy
+    u.uDistPatch.value = this.world.dummyAux
+    u.uDistPatchBox.value.set(0, 0, 0, 0)
     if (this.cur?.terrain) this.cur.terrain.group.visible = false
     this.on = false
   }
 
-  /** The weights of the year: the patch, and each rastered feature (eased by `ease`; 1 settles them). */
+  /**
+   * The weights of the year: each patch's, and from them each group's and
+   * each raise's uniform, and each rastered feature's (eased by `ease`; 1
+   * settles them).
+   */
   yearWeights(ease) {
     const rec = this.cur
     const year = this.app.timeline.year
-    this.patchK += ((rec && year < rec.d.patchUntil ? 1 : 0) - this.patchK) * ease
-    if (Math.abs(this.patchK - Math.round(this.patchK)) < 0.002) this.patchK = Math.round(this.patchK)
-    this.u.uPatchK.value = this.patchK
+    const pw = this.patchW
+    if (rec?.lower) {
+      const list = [...rec.raise, ...rec.lower]
+      list.forEach((p, i) => {
+        const want = year < p.until ? 1 : 0
+        let v = pw[i] + (want - pw[i]) * ease
+        if (Math.abs(v - want) < 0.002) v = want
+        pw[i] = v
+      })
+      const nR = rec.raise.length
+      const R = this.u.uDistRaise.value
+      let top = -1e9
+      for (let i = 0; i < DIST_PATCHES; i++) {
+        R[i].set(i < nR ? pw[i] : 0, i < nR ? rec.raise[i].depth : 0, 0, 0)
+        if (i < nR && pw[i] > 0) top = Math.max(top, rec.raise[i].depth)
+      }
+      // (ground above every raise's depth is none of theirs: common.glsl.js distPatched)
+      this.u.uDistRaiseTop.value = top
+      const L = this.u.uDistLower.value
+      const groups = rec.pmap?.groups || [0]
+      for (let g = 0; g < DIST_PATCHES; g++) {
+        let k = 0
+        let depth = -1
+        const bits = groups[g] || 0
+        rec.lower.forEach((p, i) => {
+          if (bits & (1 << i) && pw[nR + i] > k) {
+            k = pw[nR + i]
+            depth = p.depth
+          }
+        })
+        // (a group whose patches have all gone keeps the depth it had, so it eases out in place)
+        if (k === 0 && bits) depth = rec.lower.find((_, i) => bits & (1 << i))?.depth ?? -1
+        this.groupK[g] = k
+        this.groupDepth[g] = depth
+        L[g].set(k, depth, 0, 0)
+      }
+    }
     const fk = this.u.uFeatK.value
     if (rec) {
       for (const [i, f] of rec.d.byIndex) {
@@ -274,7 +359,7 @@ export class Districts {
     if (near && best < DISTRICT.prefetch && this.cur?.d !== near) this.stream(near)
     const rec = this.cur
     const ease = 1 - Math.exp(-dt * 2.5)
-    this.yearWeights(dt > 0 ? 1 - Math.exp(-dt * 1.6) : 1)
+    this.yearWeights(dt > 0 ? 1 - Math.exp(-dt * PATCH_EASE) : 1)
     if (!rec) return
     if (rec.state === 'uploading') {
       const tex = rec.uploads.shift()
@@ -316,6 +401,9 @@ export class Districts {
     u.uDistH.value = rec.heightTex
     u.uDistAux.value = rec.auxTex
     u.uDistCarve.value = rec.carveTex
+    u.uDistPatch.value = rec.patchTex || this.world.dummyAux
+    if (rec.patchBox) u.uDistPatchBox.value.copy(rec.patchBox)
+    else u.uDistPatchBox.value.set(0, 0, 0, 0)
     const pu = rec.parUniforms
     pu.uParSlot.value = parent.slot
     pu.uParN.value = parent.normalTex
@@ -354,14 +442,34 @@ export class Districts {
     return this.k * smooth(DISTRICT.band, DISTRICT.margin, e)
   }
 
-  /** One texel as the year has it: distTexel. */
+  /** The patch map's four bytes at texel (i, j), or null outside its box: distPatchAt. */
+  patchAt(i, j) {
+    const pm = this.cur.pmap
+    if (!pm || i < pm.x0 || j < pm.y0 || i >= pm.x0 + pm.w || j >= pm.y0 + pm.h) return null
+    const k = ((j - pm.y0) * pm.w + (i - pm.x0)) * 4
+    return pm.data.subarray(k, k + 4)
+  }
+
+  /** One texel as the year has it: distTexel (distPatched, then the features). */
   texel(i, j) {
     const rec = this.cur
     const W = rec.d.W
     const c = j * W + i
     let h = rec.metres[c]
     const a = rec.aux
-    h = patchLevel(h, a[c * 4], this.patchK, HALF[rec.carve[c * 2]])
+    const q = this.patchAt(i, j)
+    if (q && q[1] + q[3] > 0) {
+      const R = this.u.uDistRaise.value
+      const ra = R[q[2] & 15]
+      const rb = R[q[2] >> 4]
+      h += (Math.max(h, ra.y) - h) * (q[1] / 255) * ra.x
+      h += (Math.max(h, rb.y) - h) * (q[3] / 255) * rb.x
+    }
+    const r = a[c * 4]
+    if (r) {
+      const g = q ? q[0] : 0
+      h = patchLevel(h, r, this.groupK[g], HALF[rec.carve[c * 2]], this.groupDepth[g])
+    }
     const f = a[c * 4 + 3]
     if (f > 0) {
       const k = this.featK[f]
@@ -408,8 +516,8 @@ export class Districts {
     const rec = this.cur
     if (!rec) return { district: null, loaded: this.loaded, count: this.list.length }
     const N = rec.d.W * rec.d.H
-    // GPU: heights R32F, aux RGBA8, carve RG16F, and normals and land RGBA8 with mipmaps; the shadow map
-    const gpu = N * 4 + N * 4 + N * 4 + 2 * ((N * 4 * 4) / 3) + 512 * 512
+    // GPU: heights R32F, aux RGBA8, carve RG16F, and normals and land RGBA8 with mipmaps; the shadow map; the patch map
+    const gpu = N * 4 + N * 4 + N * 4 + 2 * ((N * 4 * 4) / 3) + 512 * 512 + (rec.pmap ? rec.pmap.w * rec.pmap.h * 4 : 0)
     const cpu = rec.metres ? N * 4 + N * 4 + N * 4 : 0
     return {
       district: rec.d.id,
@@ -417,7 +525,8 @@ export class Districts {
       k: +this.k.toFixed(3),
       want: +this.want.toFixed(3),
       on: !!this.on,
-      patchK: +this.patchK.toFixed(3),
+      patches: this.patchWeights(),
+      patchMap: rec.pmap ? { box: [rec.pmap.x0, rec.pmap.y0, rec.pmap.w, rec.pmap.h], groups: rec.pmap.groups.length - 1 } : null,
       decodeMs: rec.decodeMs ?? null,
       readyMs: rec.readyMs ?? null,
       workerMs: rec.data?.ms ?? null,

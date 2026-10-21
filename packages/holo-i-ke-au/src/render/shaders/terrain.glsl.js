@@ -8,7 +8,10 @@
 // 1,700 m (subalpine shrub, then cinder and bare lava on the summits), noise
 // faded by pixel size so a 600 km view doesn't sparkle, normals rebuilt at the
 // exaggeration of the moment, and the far view's two overlays: the polity
-// of each moku, and the land in use (cultivation, settlement, forest).
+// of each moku, and the land in use (cultivation, settlement, forest). An
+// island's heights carry the patches of the chosen year (common.glsl.js
+// patchedMetres), so a harbour dredged since lies as reef flat and a reef
+// filled since goes back under the sea, which draws it as reef.
 //
 // One material per pack. The archipelago's (uSelf = -1) draws wherever no
 // island slot owns the ground; an island's (uSelf = its slot) draws only where
@@ -17,8 +20,10 @@
 // district is down, neither draws: the district's own mesh does
 // (district.glsl.js), from the same ground at its edge.
 
-import { constants, noise, world, lighting, polity, land } from './common.glsl.js'
+import { constants, noise, world, patches, lighting, polity, land } from './common.glsl.js'
 
+// (an island's own heights with its patches of the year laid on them,
+// common.glsl.js patchedMetres; the archipelago carries none)
 const own = /* glsl */ `
 uniform sampler2D uOwnH;
 uniform vec4 uOwnRect;
@@ -27,7 +32,8 @@ float packMetres(vec2 xz) {
   float a = archMetres(xz);
   if (uSelf < 0) return a;
   float w = slotWeight(uSelf, xz);
-  return w > 0.0 ? mix(a, rectMetres(uOwnH, uOwnRect, xz), w) : a;
+  if (w > 0.0) a = mix(a, patchedMetres(uSelf, xz, rectMetres(uOwnH, uOwnRect, xz)), w);
+  return a;
 }
 `
 
@@ -184,6 +190,7 @@ vec3 groundAlbedo(vec2 xz, float metres, float rain, float sand, float rip, vec3
 export const terrainVertex = /* glsl */ `
 ${constants}
 ${world}
+${patches}
 ${own}
 in vec4 aNode; // x0, z0, size, lod
 uniform vec2 uMorph[12];
@@ -205,16 +212,21 @@ void main() {
   // coarser mesh, so by the hand-over the two levels are the same surface.
   vec2 odd = g - 2.0 * floor(g * 0.5);
   if (k > 0.0 && odd.x + odd.y > 0.5) {
+    // (the two coarser vertices first, and the ground read at them in one
+    // place: packMetres is inlined wherever it is called, patches and all)
     vec2 base = aNode.xy + (g - odd) * cell;
-    float hc;
+    vec2 pa = base;
+    vec2 pb = base + odd * 2.0 * cell;
     if (odd.x > 0.5 && odd.y > 0.5) {
       vec2 pc = (g - odd) * 0.5;
-      if (mod(pc.x + pc.y, 2.0) > 0.5) hc = 0.5 * (packMetres(base + vec2(2.0, 0.0) * cell) + packMetres(base + vec2(0.0, 2.0) * cell));
-      else hc = 0.5 * (packMetres(base) + packMetres(base + vec2(2.0) * cell));
-    } else {
-      hc = 0.5 * (packMetres(base) + packMetres(base + odd * 2.0 * cell));
+      if (mod(pc.x + pc.y, 2.0) > 0.5) {
+        pa = base + vec2(2.0, 0.0) * cell;
+        pb = base + vec2(0.0, 2.0) * cell;
+      } else pb = base + vec2(2.0) * cell;
     }
-    mt = mix(mt, hc, k);
+    float hc = 0.0;
+    for (int q = 0; q < 2; q++) hc += packMetres(q == 0 ? pa : pb);
+    mt = mix(mt, hc * 0.5, k);
   }
   vMetres = mt;
   // The sea is drawn from the heights; the seabed under it only needs to show
@@ -230,6 +242,7 @@ export const terrainFragment = /* glsl */ `
 ${constants}
 ${noise}
 ${world}
+${patches}
 ${own}
 ${lighting}
 ${polity}

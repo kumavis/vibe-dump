@@ -9,15 +9,18 @@
 // detail weight 0 it is the island's ground everywhere, which is how it
 // appears and how it goes.
 //
-// The year, from the aux map and the carve (common.glsl.js distTexel): the
-// patch sinks land the fill made to a reef flat, which the sea then covers;
-// the loʻi are cut and filled into terraces, and drawn as paddies (from the
-// ahupuaʻa app's loʻi shader: sky in the open water over mud, taro by each
-// paddy's age, some lying fallow, banks between them), their inferred
-// outlines soft; a fishpond's water is the sea's, lying still; the village's
-// ground is trodden bare. The normal map is today's ground, so what the year
-// has changed is added to it from the texels themselves (the slope of the
-// terraces' risers, the patch's beach) while a texel is bigger than a pixel.
+// The year, from the aux map, the carve and the patch map (common.glsl.js
+// distTexel): each patch in its own years lifts a dredged harbour back to the
+// reef flat it was cut from, or sinks land the fill made to one, which the
+// sea then covers (and draws as reef, ocean.glsl.js), with the beach of those
+// years before the old shore; the loʻi are cut and filled into terraces, and
+// drawn as paddies (from the ahupuaʻa app's loʻi shader: sky in the open
+// water over mud, taro by each paddy's age, some lying fallow, banks between
+// them), their inferred outlines soft; a fishpond's water is the sea's,
+// lying still; the village's ground is trodden bare. The normal map is
+// today's ground, so what the year has changed is added to it from the
+// texels themselves (the slope of the terraces' risers, the patch's beach)
+// while a texel is bigger than a pixel.
 //
 // No polity colours and no land view here: the district only takes over once
 // the camera is close enough that both have gone (config.js DISTRICT.rig).
@@ -49,16 +52,21 @@ void main() {
   // (the geomorph of terrain.glsl.js)
   vec2 odd = g - 2.0 * floor(g * 0.5);
   if (k > 0.0 && odd.x + odd.y > 0.5) {
+    // (the two coarser vertices first, and the ground read at them in one
+    // place: packMetres is inlined wherever it is called, patches and all)
     vec2 base = aNode.xy + (g - odd) * cell;
-    float hc;
+    vec2 pa = base;
+    vec2 pb = base + odd * 2.0 * cell;
     if (odd.x > 0.5 && odd.y > 0.5) {
       vec2 pc = (g - odd) * 0.5;
-      if (mod(pc.x + pc.y, 2.0) > 0.5) hc = 0.5 * (packMetres(base + vec2(2.0, 0.0) * cell) + packMetres(base + vec2(0.0, 2.0) * cell));
-      else hc = 0.5 * (packMetres(base) + packMetres(base + vec2(2.0) * cell));
-    } else {
-      hc = 0.5 * (packMetres(base) + packMetres(base + odd * 2.0 * cell));
+      if (mod(pc.x + pc.y, 2.0) > 0.5) {
+        pa = base + vec2(2.0, 0.0) * cell;
+        pb = base + vec2(0.0, 2.0) * cell;
+      } else pb = base + vec2(2.0) * cell;
     }
-    mt = mix(mt, hc, k);
+    float hc = 0.0;
+    for (int q = 0; q < 2; q++) hc += packMetres(q == 0 ? pa : pb);
+    mt = mix(mt, hc * 0.5, k);
   }
   vMetres = mt;
   if (mt < 0.0) mt -= 25.0 * smoothstep(0.15, 3.0, -mt);
@@ -106,12 +114,15 @@ Year yearAt(vec2 xz) {
   vec2 fl = floor(p);
   vec2 fr = p - fl;
   ivec2 i0 = ivec2(fl);
-  // (most of the ground is neither patched nor a feature's: nothing to lay on it)
+  // (most of the ground is neither patched nor a feature's: nothing to lay on
+  // it; a raise patch is in the patch map alone, its strongest in g)
   vec4 a0 = texelFetch(uDistAux, i0, 0);
   vec4 a1 = texelFetch(uDistAux, i0 + ivec2(1, 0), 0);
   vec4 a2 = texelFetch(uDistAux, i0 + ivec2(0, 1), 0);
   vec4 a3 = texelFetch(uDistAux, i0 + ivec2(1, 1), 0);
-  if (max(max(a0.r + a0.a, a1.r + a1.a), max(a2.r + a2.a, a3.r + a3.a)) <= 0.0) return y;
+  float any = max(max(a0.r + a0.a, a1.r + a1.a), max(a2.r + a2.a, a3.r + a3.a));
+  if (any <= 0.0 && vMetres < uDistRaiseTop + 0.5) any = distPatchAt(i0).g + distPatchAt(i0 + ivec2(1, 0)).g + distPatchAt(i0 + ivec2(0, 1)).g + distPatchAt(i0 + ivec2(1, 1)).g;
+  if (any <= 0.0) return y;
   vec2 texel = (uDistRect.zw - uDistRect.xy) / vec2(textureSize(uDistH, 0)) * 100.0; // metres
   float d[4];
   vec4 loi;
@@ -169,7 +180,9 @@ void main() {
   if (uParRain < 0.5) lI.r = lA.r;
   vec4 ntD = texture(uDistN, uvD);
   vec4 lD = texture(uDistL, uvD);
-  lD.g = mix(lD.g, lD.a, uPatchK); // (the beach of the year)
+  // (the beach of the year: the lower patches' old shore while theirs, by the
+  // weight of the patches that texel's beach belongs to)
+  if (abs(lD.a - lD.g) > 0.002) lD.g = mix(lD.g, lD.a, uDistLower[int(distPatchAt(ivec2(distGrid(xz) + 0.5)).r * 255.0 + 0.5)].x);
   vec4 nt = mix(ntI, ntD, w);
   vec4 land = mix(lI, lD, w);
 

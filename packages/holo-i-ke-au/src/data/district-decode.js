@@ -13,10 +13,10 @@
 //   themselves, traced as lines down every channel past a set catchment;
 // - the land map: rain, the beach sand of today's shore and of the shore the
 //   patches give back (in alpha), riparian;
-// - an aux map: r the patch, a soft weight that rises from nothing at the old
-//   shore to whole a few tens of metres out, so the land the fill made sinks
-//   to a reef flat with a beach in front of it rather than a cliff (and from
-//   128 up, the channels dug since, filled back in: patchLevel); g, b, a the
+// - an aux map: r the lower patches, a soft weight that rises from nothing at
+//   the old shore to whole a few tens of metres out, so the land the fill made
+//   sinks to a reef flat with a beach in front of it rather than a cliff (and
+//   from 128 up, the channels dug since, filled back in: patchLevel); g, b, a the
 //   features rastered here (loʻi, fishponds, the village): their soft mask,
 //   for a loʻi its paddy (a hash in the low bits, the bank between two paddies
 //   in the top bit), and the feature's index;
@@ -25,6 +25,9 @@
 //   off the loʻi, where a dug channel is filled back in, the level it is
 //   filled to, and where the normals were made off today's ground, by how
 //   much);
+// - the patch map, over the box the patches reach: which lower patches each
+//   texel of that weight belongs to, so each can go at its own until, and the
+//   raise patches' own soft masks (patchMap);
 // - and the trees, placed once, species by rain, height and landform after the
 //   ahupuaʻa app's FOREST.md, each with the feature whose clearing it stands in.
 
@@ -618,21 +621,144 @@ function placeTrees({ W, H, mx, mz, m, m1795, rain, normals, rip, tpi, chanDist,
 
 // --- the patches ---------------------------------------------------------------
 
-// The levels the patch lays the ground at in its years (common.glsl.js
-// DIST_REEF, DIST_FILL): a reef flat where the fill made land of the sea, and
-// where a channel has been dug through the land since, its banks' level, and
-// never under this.
+// The levels the lower patches lay the ground at in their years: a reef flat
+// where the fill made land of the sea (each patch's own depth in the shader;
+// this one, DATA.md's default, for what is built here on the ground of the
+// year), and where a channel has been dug through the land since, its banks'
+// level, and never under this (common.glsl.js DIST_FILL).
 export const PATCH_REEF = -1
 export const PATCH_FILL = 0.5
+// how far (texels) a lower patch's texels reach the beach before its old
+// shore, so the beach of its years goes with its own until
+const BEACH = 16
 
 /**
- * A texel's height in a year, from today's and its patch byte (aux r): under
- * 128 a weight toward the reef, from 128 a weight toward the fill, at `level`
- * (the carve's first channel there); k the patch's own weight in the year (1
- * before its until). As distTexel.
+ * A texel's height in a year, from today's and its lower patches' byte (aux
+ * r): under 128 a weight toward the reef flat at `depth`, from 128 a weight
+ * toward the fill, at `level` (the carve's first channel there); k the
+ * patches' weight in the year (1 before their until). As distPatched.
  */
-export function patchLevel(h, r, k, level = PATCH_FILL) {
-  return r < 128 ? h + (PATCH_REEF - h) * (r / 127) * k : h + (Math.max(PATCH_FILL, level) - h) * ((r - 128) / 127) * k
+export function patchLevel(h, r, k, level = PATCH_FILL, depth = PATCH_REEF) {
+  return r < 128 ? h + (depth - h) * (r / 127) * k : h + (Math.max(PATCH_FILL, level) - h) * ((r - 128) / 127) * k
+}
+
+/**
+ * The patch map (common.glsl.js uDistPatch) over the box the patches reach,
+ * grown by BEACH: in r which lower patches a texel of their weight belongs
+ * to, as a group (each different set of them a group, from 1; groups[g] its
+ * bits); in g and a the two strongest raise masks over it, their indices in
+ * b (low and high four bits). A texel the lower masks don't mark takes the
+ * patches of the nearest that does (the first found, where two are as near),
+ * through the ground their derivation added and BEACH texels beyond it, the
+ * beach before their old shore; a filled channel goes with all of them, as
+ * the one patch it was derived from.
+ */
+function patchMap({ W, H, lowerMasks, lowerOf, raises, patchMask, fill, log }) {
+  const N = W * H
+  let x0 = W
+  let y0 = H
+  let x1 = -1
+  let y1 = -1
+  const mark = (c) => {
+    const i = c % W
+    const j = (c - i) / W
+    if (i < x0) x0 = i
+    if (i > x1) x1 = i
+    if (j < y0) y0 = j
+    if (j > y1) y1 = j
+  }
+  for (let c = 0; c < N; c++) {
+    if (patchMask[c] || fill[c]) mark(c)
+    else for (const m of raises) if (m[c]) mark(c)
+  }
+  if (x1 < 0) return null
+  x0 = Math.max(0, x0 - BEACH)
+  y0 = Math.max(0, y0 - BEACH)
+  x1 = Math.min(W - 1, x1 + BEACH)
+  y1 = Math.min(H - 1, y1 + BEACH)
+  const bw = x1 - x0 + 1
+  const bh = y1 - y0 + 1
+  const at = (k) => (y0 + Math.floor(k / bw)) * W + x0 + (k % bw)
+  // the lower patches' bits, from their masks outward a level at a time
+  // (through the ground their derivation added however far it reaches, and
+  // beyond it BEACH texels)
+  const FAR = 65535
+  const bits = new Uint32Array(bw * bh)
+  const dist = new Uint16Array(bw * bh).fill(FAR)
+  let queue = []
+  for (let k = 0; k < bw * bh; k++) {
+    const c = at(k)
+    let b = 0
+    lowerOf.forEach((mi, i) => {
+      if (lowerMasks[mi][c] >= 128) b |= 1 << i
+    })
+    if (b) {
+      bits[k] = b
+      dist[k] = 0
+      queue.push(k)
+    }
+  }
+  for (let level = 1; level < FAR && queue.length; level++) {
+    const next = []
+    for (const k of queue) {
+      const i = k % bw
+      for (const n of [i > 0 ? k - 1 : -1, i < bw - 1 ? k + 1 : -1, k - bw, k + bw]) {
+        if (n < 0 || n >= bw * bh) continue
+        if (dist[n] !== FAR || (level > BEACH && !patchMask[at(n)])) continue
+        dist[n] = level
+        bits[n] = bits[k]
+        next.push(n)
+      }
+    }
+    queue = next
+  }
+  const all = lowerOf.reduce((b, _, i) => b | (1 << i), 0)
+  for (let k = 0; k < bw * bh; k++) if (fill[at(k)]) bits[k] = all
+  // the groups: each set of lower patches that occurs, numbered from 1
+  const groups = [0]
+  const ids = new Map()
+  const data = new Uint8Array(bw * bh * 4)
+  for (let k = 0; k < bw * bh; k++) {
+    const b = bits[k]
+    if (b) {
+      let g = ids.get(b)
+      if (g === undefined) {
+        if (groups.length < 16) {
+          g = groups.push(b) - 1
+        } else {
+          // (more sets than the map can number: these go with all of them)
+          g = ids.get(all) ?? groups.length - 1
+          log?.(`patch map: more than 15 sets of lower patches; ${b.toString(2)} goes with group ${g}`)
+        }
+        ids.set(b, g)
+      }
+      data[k * 4] = g
+    }
+    // the two strongest raise masks
+    const c = at(k)
+    let a = -1
+    let wa = 0
+    let bI = -1
+    let wb = 0
+    raises.forEach((m, i) => {
+      const v = m[c]
+      if (v > wa) {
+        bI = a
+        wb = wa
+        a = i
+        wa = v
+      } else if (v > wb) {
+        bI = i
+        wb = v
+      }
+    })
+    if (a >= 0) {
+      data[k * 4 + 1] = wa
+      data[k * 4 + 2] = (a & 15) | (Math.max(0, bI) & 15) << 4
+      data[k * 4 + 3] = bI >= 0 ? wb : 0
+    }
+  }
+  return { data, x0, y0, w: bw, h: bh, groups }
 }
 
 /** The water (heights at or under nothing) that reaches the grid's edge, and so the open sea. */
@@ -667,7 +793,7 @@ function seaOf(m, W, H) {
  * pack's world rect. (Phases drop what they no longer need as they go: the
  * grids are four million texels each.)
  */
-export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset, mx, mz, rect, features, stride = 4, log = () => {} }) {
+export function deriveDistrict({ heightPx, rainPx, masks = [], lower = [], raise = [], raiseDepth = [], W, H, scale, offset, mx, mz, rect, features, stride = 4, log = () => {} }) {
   const t0 = Date.now()
   const times = {}
   let tl = t0
@@ -691,14 +817,19 @@ export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset,
   const toWorld = (gi, gj) => [rect.x0 + gi * sx, rect.z0 + gj * sz]
   lap('decode')
 
-  // the patches: one mask (DATA.md lets two share one; masks that differ are
-  // merged here), soft from the old shore out
+  // the lower patches: their masks as one (DATA.md lets two share one; masks
+  // that differ are merged here, and told apart again in the patch map), soft
+  // from the old shore out; the raise patches' masks are their own
+  const lowerMasks = [...new Set(lower)].map((i) => masks[i])
+  const raises = raise.map((i) => masks[i])
+  const raiseAny = new Uint8Array(N)
+  for (const m of raises) for (let c = 0; c < N; c++) if (m[c] > raiseAny[c]) raiseAny[c] = m[c]
   const patchMask = new Uint8Array(N)
-  for (const px of patchPx) for (let c = 0; c < N; c++) if (px[c * stride] >= 128) patchMask[c] = 1
+  for (const px of lowerMasks) for (let c = 0; c < N; c++) if (px[c] >= 128) patchMask[c] = 1
   // (the fill outlines stop a few metres short of today's piers and seawalls,
   // which would stand out of the reef as rims: low land that close to both
   // the patch and today's water goes with the patch)
-  if (patchPx.length) {
+  if (lowerMasks.length) {
     const R = 3
     const near = (c, test) => {
       const i = c % W
@@ -744,9 +875,10 @@ export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset,
   // patched years. Where one opens off the fill (the slips between the piers)
   // it was the reef's and goes with the patch; inland it was land (the
   // Waikīkī wetland the Ala Wai drained, the streams' own lower courses), and
-  // in the patch's years it is filled back to just above the tide
+  // in the patch's years it is filled back to just above the tide. (Water a
+  // raise patch marks is that patch's to lay, not this rule's.)
   const fill = new Uint8Array(N)
-  if (patchPx.length) {
+  if (lowerMasks.length) {
     const R = 45
     const sea = (c) => m[c] <= 0 || patchMask[c] === 1
     const toLand = distanceTransform(W, H, (c) => !sea(c), mx, mz)
@@ -754,14 +886,20 @@ export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset,
     const toPatch = distanceTransform(W, H, (c) => patchMask[c] === 1, mx, mz)
     const narrow = R + 1.5 * Math.max(mx, mz)
     for (let c = 0; c < N; c++) {
-      if (m[c] > 0 || patchMask[c] || toWide[c] <= narrow) continue
+      if (m[c] > 0 || patchMask[c] || toWide[c] <= narrow || raiseAny[c] >= 64) continue
       if (toPatch[c] < 60) patchMask[c] = 2
       else fill[c] = 1
     }
     for (let c = 0; c < N; c++) if (patchMask[c]) patchMask[c] = 1
   }
   const aux = new Uint8Array(N * 4)
+  // the ground of the patched years (for their beach and where the trees
+  // stand): the raises first, as the shader lays them, then the lowers
   const m1795 = Float32Array.from(m)
+  raises.forEach((px, i) => {
+    const d = raiseDepth[i] ?? PATCH_REEF
+    for (let c = 0; c < N; c++) if (px[c]) m1795[c] += (Math.max(m1795[c], d) - m1795[c]) * (px[c] / 255)
+  })
   let pbox = null
   let islets = null
   {
@@ -794,7 +932,7 @@ export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset,
         if (!patchMask[g]) continue
         const w = smooth(0, 45, toOldLand[c])
         aux[g * 4] = Math.round(127 * w)
-        m1795[g] = m[g] + (PATCH_REEF - m[g]) * w
+        m1795[g] += (PATCH_REEF - m1795[g]) * w
       }
     }
   }
@@ -849,7 +987,7 @@ export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset,
   // under it), so the line it was dug along doesn't show as a trough; kept
   // in the carve's first channel, which no loʻi uses there
   let fillAt = null
-  if (patchPx.length) {
+  if (lowerMasks.length) {
     for (let c = 0; c < N; c++) if (fill[c]) m1795[c] = PATCH_FILL
     // (with the water a filled canal leaves cut off from the sea: a basin dug
     // along it, or the reef the patch makes of its mouth)
@@ -875,6 +1013,7 @@ export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset,
       mS[c] = lv
     }
   }
+  const pmap = patchMap({ W, H, lowerMasks: masks, lowerOf: lower, raises, patchMask, fill, log })
   lap('patches')
 
   // normals and occlusion, on today's heights (the carve's own slope is added
@@ -1028,7 +1167,7 @@ export function deriveDistrict({ heightPx, rainPx, patchPx, W, H, scale, offset,
     if (m[c] > hi) hi = m[c]
   }
   log(`district decoded in ${Date.now() - t0} ms: ${JSON.stringify(times)}`)
-  return { metres: m, normals, land, aux, carve, streams, trees, counts, lo, hi, ms: Date.now() - t0, times }
+  return { metres: m, normals, land, aux, carve, streams, trees, counts, lo, hi, patchMap: pmap, ms: Date.now() - t0, times }
 }
 
 /** A grid reduced by k × k: each cell the min (min = true) or max of the texels it covers. */

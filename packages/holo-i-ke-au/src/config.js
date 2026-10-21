@@ -41,6 +41,15 @@ export const NORMAL_EXAG = 2
 // a pack leaves its slot only after it has faded back to the archipelago.
 export const SLOTS = 5
 
+// Patches (DATA.md "Patches, on any pack"; render/patches.js): how many the
+// island packs in the slots can carry between them, and how many a district
+// can (its raise patches, and the groups its lower patches fall into)
+export const PATCHES = 32
+export const DIST_PATCHES = 16
+// a patch's weight eases at this rate (1/s) as the year crosses its until:
+// most of the way in a couple of seconds
+export const PATCH_EASE = 1.6
+
 // The district close-up (DATA.md "District packs"), a third level under the
 // island: one district resident at a time, streamed as the camera comes down
 // near it and given up once it has gone. Distances are world units.

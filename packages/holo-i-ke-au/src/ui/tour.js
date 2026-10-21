@@ -464,12 +464,18 @@ export class Tour {
     return dur
   }
 
-  /** "Chapter 6 of 13 · Kahekili · 3 of 8", or what Next will do from off the tour. */
+  /**
+   * "Chapter 6 of 13 · Kahekili · 3 of 8", or what Next will do from off the
+   * tour; `opening` while the tour stands on a chapter's own card.
+   */
   describe() {
     const ch = this.chapters.length ? this.chapters[this.active ? this.chapter : this.nearestChapter()] : null
     if (!ch) return null
     return {
       active: this.active,
+      opening: this.active && this.step < 0,
+      number: ch.index + 1,
+      of: this.chapters.length,
       chapter: `Chapter ${ch.index + 1} of ${this.chapters.length}`,
       name: ch.name,
       step: this.active && this.step >= 0 ? `${this.step + 1} of ${ch.events.length}` : '',

@@ -4,9 +4,13 @@
 // view's switch between the chiefdoms and the land, the chapter tour's Next
 // and Back and the view it picks, an event's stops, the pins and the clusters
 // they gather into, and their cards) to catch anything that stops input
-// reaching what's on screen, and any console error on the way; then what the
-// page costs in heap and frame time. Run
-// `npm run build -w @vibe-dump/holo-i-ke-au` first.
+// reaching what's on screen, and any console error on the way; the chapter
+// card set as a chapter's first page, the hover card kept to the far views,
+// the patches raising and lowering the ground by year (the data's own, and
+// the test masks tools/fake-data.mjs writes), the battle's forces by the stop
+// they name, and the camera gliding over a valley's walls; then what the page
+// costs in heap and frame time. Run `npm run build -w @vibe-dump/holo-i-ke-au`
+// first (and `node tools/fake-data.mjs` for the test masks).
 //
 //   node tools/smoke.mjs                 (real data if public/data has events, else test-data/)
 //   DATA=test node tools/smoke.mjs       (test-data/, from tools/fake-data.mjs)
@@ -95,6 +99,62 @@ if (eras > 0) {
     const pill = await ui("document.querySelector('.tl-tour').textContent")
     if (!/Chapter 1 of \d+/.test(pill)) throw new Error(`the indicator reads “${pill}”`)
     console.log(`      ${pill.replace(/\s+/g, ' ')}`)
+  })
+  await check('a chapter card opens like a book’s chapter, apart from an event’s', async () => {
+    const card = () =>
+      ui(`(() => {
+        const c = document.querySelector('.card.show')
+        const q = (s) => c?.querySelector(s)?.textContent.replace(/\\s+/g, ' ').trim() ?? null
+        return { chapter: !!c?.classList.contains('chapter'), num: q('.ch-num'), word: q('.ch-word'), title: c?.querySelector('h1')?.textContent ?? null, lead: q('.ch-lead'), year: q('.ch-year'), initial: q('.ch-note .initial'), count: q('footer .count'), icon: !!c?.querySelector('.card-icon'), pill: document.querySelector('.tl-tour').textContent.replace(/\\s+/g, ' ').trim(),
+          num_px: c?.querySelector('.ch-num') ? parseFloat(getComputedStyle(c.querySelector('.ch-num')).fontSize) : 0, h1_px: c?.querySelector('h1') ? parseFloat(getComputedStyle(c.querySelector('h1')).fontSize) : 0, h1_font: c?.querySelector('h1') ? getComputedStyle(c.querySelector('h1')).fontFamily : '' }
+      })()`)
+    const n = await ui('app.tour.chapters.length')
+    // a chapter further in, whose title carries an ʻokina or a kahakō
+    const at = await ui(`app.tour.chapters.findIndex((ch, i) => i > 0 && /[ʻāēīōūĀĒĪŌŪ]/.test(ch.era.label))`)
+    const c = Math.max(1, at)
+    await run(`app.tour.goTo(${c}, -1); app.settle()`)
+    await page.evaluate(() => document.fonts.ready)
+    const a = await card()
+    const label = await ui(`app.tour.chapters[${c}].era.label`)
+    if (!a.chapter || a.icon) throw new Error(`the chapter card's class: ${JSON.stringify(a)}`)
+    if (a.num !== String(c + 1) || a.word !== 'Chapter') throw new Error(`its numeral reads “${a.word} ${a.num}”, wanted Chapter ${c + 1}`)
+    if (a.title !== label) throw new Error(`its title reads “${a.title}”, the era is “${label}”`)
+    if (!/^c\. \d{3,4}$/.test(a.year || '')) throw new Error(`its year reads “${a.year}”`)
+    if (!(a.num_px >= 2 * a.h1_px && a.h1_px >= 26)) throw new Error(`the numeral ${a.num_px}px and the title ${a.h1_px}px are not a chapter's scale`)
+    if (!/Fraunces/.test(a.h1_font)) throw new Error(`the title is set in ${a.h1_font}`)
+    const fonts = await page.evaluate((t) => [document.fonts.check('600 31px Fraunces', t), document.fonts.check('italic 400 17px Fraunces', t), document.fonts.check('400 15px Inter', t)], label)
+    if (!fonts.every(Boolean)) throw new Error(`the bundled faces for “${label}” (Fraunces, Fraunces italic, Inter): ${fonts.join(', ')}`)
+    const want = `Chapter ${c + 1} of ${n}`
+    if (a.count !== want) throw new Error(`the footer reads “${a.count}”, wanted “${want}”`)
+    if (!a.pill.startsWith(want)) throw new Error(`the pill reads “${a.pill}”, wanted “${want} …”`)
+    await expect("document.querySelector('.tl-tour').classList.contains('opening')", true)
+    // and an event card is not set so
+    const evs = await ui(`app.tour.chapters[${c}].events.length`)
+    if (evs) {
+      await run(`app.tour.goTo(${c}, 0); app.settle()`)
+      const b = await card()
+      if (b.chapter || !b.icon || b.num !== null) throw new Error(`an event card: ${JSON.stringify(b)}`)
+      if (!b.count?.endsWith(`in chapter ${c + 1}`) || !b.pill.startsWith(`Chapter ${c + 1} of ${n}`)) throw new Error(`an event's footer “${b.count}” and pill “${b.pill}”`)
+      await expect("document.querySelector('.tl-tour').classList.contains('opening')", false)
+    }
+    console.log(`      “${a.word} ${a.num}” over “${a.title}”, ${a.year}, initial “${a.initial}” · footer “${a.count}” · pill “${a.pill}”`)
+    await run('app.tour.goTo(0, -1); app.settle()')
+  })
+  await check('the chapter card on a phone: the numeral beside the title, the note in view', async () => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await frames(2)
+    const r = await ui(`(() => {
+      const c = document.querySelector('.card.show.chapter')
+      const box = (s) => c.querySelector(s).getBoundingClientRect()
+      const card = c.getBoundingClientRect(), num = box('.ch-num'), h1 = box('h1'), note = box('.ch-note')
+      return { left: card.left, right: card.right, top: card.top, numRight: num.right, h1Left: h1.left, h1Top: h1.top, numTop: num.top, noteTop: note.top, bottom: card.bottom, sw: document.documentElement.scrollWidth }
+    })()`)
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await frames(2)
+    if (r.sw > 390 || r.left < 0 || r.right > 390) throw new Error(`it spills off the screen: ${JSON.stringify(r)}`)
+    if (!(r.numRight <= r.h1Left + 1 && Math.abs(r.h1Top - r.numTop) < 40)) throw new Error(`the numeral is not beside the title: ${JSON.stringify(r)}`)
+    if (!(r.noteTop < r.bottom - 40)) throw new Error(`the note starts below the card's fold: ${JSON.stringify(r)}`)
+    console.log(`      390 × 844: the card ${Math.round(r.top)}–${Math.round(r.bottom)} px, the note from ${Math.round(r.noteTop)} px`)
   })
 }
 
@@ -745,12 +805,13 @@ if (districtCount) {
       await offTour(y)
       await run(`app.rig.jump({ x: ${pt[0]}, z: ${pt[1]}, distance: 25, yaw: 0, pitch: 0.9 }); app.settle(); app.settle()`)
       await frames(1)
-      return ui(`[app.world.metresAt(${pt[0]}, ${pt[1]}), app.districts.patchK]`)
+      // (the district's own fill patches, here the contact and kingdom ones, all whole in 1795 and all gone by 2020)
+      return ui(`[app.world.metresAt(${pt[0]}, ${pt[1]}), app.districts.patchWeights().filter((p) => p.kind === 'lower' && p.until > 1795).map((p) => p.k)]`)
     }
     const [m1795, k1795] = await at(1795)
     const [m2020, k2020] = await at(2020)
-    if (!(m1795 < -0.5 && k1795 === 1)) throw new Error(`1795: ${m1795.toFixed(2)} m (patch ${k1795})`)
-    if (!(m2020 > 1 && k2020 === 0)) throw new Error(`2020: ${m2020.toFixed(2)} m (patch ${k2020})`)
+    if (!(m1795 < -0.5 && k1795.length && k1795.every((k) => k === 1))) throw new Error(`1795: ${m1795.toFixed(2)} m (patches ${k1795})`)
+    if (!(m2020 > 1 && k2020.every((k) => k === 0))) throw new Error(`2020: ${m2020.toFixed(2)} m (patches ${k2020})`)
     console.log(`      at ${pt.map((v) => v.toFixed(2)).join(', ')} (today ${pt[2].toFixed(1)} m): ${m1795.toFixed(2)} m in 1795, ${m2020.toFixed(2)} m in 2020`)
   })
   await check('a channel dug since (the Ala Wai) is land in 1795, and water in 2020', async () => {
@@ -764,6 +825,11 @@ if (districtCount) {
       const c = deep[deep.length >> 1], i = c % d.W, j = (c - i) / d.W
       return [r.x0 + (i + 0.5) * (r.x1 - r.x0) / d.W, r.z0 + (j + 0.5) * (r.z1 - r.z0) / d.H, rec.metres[c], n]
     })()`)
+    if (!pt && (await ui("app.districts.patchWeights().some((p) => p.kind === 'raise')"))) {
+      // (the channels are raise patches' to lay now, which the patch checks below cover)
+      console.log('      no channel filled by the rule: raise patches lay them')
+      return
+    }
     if (!pt) throw new Error('no filled channel')
     const at = async (y) => {
       await offTour(y)
@@ -809,8 +875,9 @@ if (districtCount) {
   const ev95 = await ui("(() => { const ev = app.data.events.find((e) => e.id === 'nuuanu-1795'); return ev ? app.tour.locate(ev) : null })()")
   const ev83 = await ui("(() => { const ev = app.data.events.find((e) => e.id === 'kaheiki-1783'); return ev ? app.tour.locate(ev) : null })()")
   // what each stop shows, as the data numbers the steps (features.json): the
-  // fronts stand at their stops' places, and the steps follow in order
-  const expected = {
+  // fronts stand at their stops' places, and the steps follow in order; or,
+  // where the features name their stop, as they name it
+  const inferred = {
     'nuuanu-1795': {
       // (the crossing is told at the channel stop, a far view where the district is not down)
       2: ['Kaʻiana’s people cross from Koʻolau'],
@@ -822,12 +889,34 @@ if (districtCount) {
     },
     'kaheiki-1783': { 1: ['Kahekili’s column by Pūowaina', 'Kahekili’s column by Pauoa', 'Kahekili’s column by Kapena'], 2: ['Kahahana’s defence at Kaheiki'] },
   }
+  /** The table for an event: by the features' own `stop` where they name one, by inference for the rest. */
+  const expectedFor = (id) =>
+    ui(`(() => {
+      const F = app.districts.cur?.features?.forces
+      const e = F?.events.get('${id}')
+      const ev = app.data.events.find((x) => x.id === '${id}')
+      const table = ${JSON.stringify(inferred)}['${id}'] || {}
+      if (!e || !ev) return { table, named: 0 }
+      const named = e.recs.filter((r) => r.stop !== null && r.stop !== undefined)
+      if (!named.length) return { table, named: 0 }
+      const names = new Set(named.map((r) => r.p.name))
+      const out = {}
+      for (const [k, v] of Object.entries(table)) { const left = v.filter((n) => !names.has(n)); if (left.length) out[k] = left }
+      for (const r of named) for (const v of [r.stop].flat()) {
+        const ks = Number.isInteger(v) ? [v] : ev.stops.map((s, k) => (s.place === v ? k : -1)).filter((k) => k >= 0)
+        for (const k of ks) (out[k] ||= []).push(r.p.name)
+      }
+      return { table: out, named: named.length, of: e.recs.length }
+    })()`)
   for (const [id, at] of [['nuuanu-1795', ev95], ['kaheiki-1783', ev83]]) {
     if (!at) continue
-    await check(`${id}: each stop’s camera lands where it asks, the district down, and the forces of its step`, async () => {
+    await check(`${id}: each stop’s camera lands where it asks, the district down, and the forces of its stop`, async () => {
       await run(`app.tour.goTo(${at[0]}, ${at[1]}); app.settle()`)
       // (opening the event starts its district streaming)
       await districtReady()
+      const exp = await expectedFor(id)
+      const expected = { [id]: exp.table }
+      if (exp.named) console.log(`      ${exp.named} of ${exp.of} forces and fronts name their stop`)
       const n = await ui(`app.tour.event.stops.length`)
       const rows = []
       for (let i = 0; i < n; i++) {
@@ -847,6 +936,17 @@ if (districtCount) {
           await districtReady()
           await settleTwice()
           await frames(2)
+          // landed: the rig at the asked distance and pitch, its target on the ground under it, and the eye where they put it
+          const [sd, sp, gap, eyeD, eyeP] = await ui(`(() => {
+            const s = app.rig.state, t = s.target, c = app.camera.position
+            const d = c.distanceTo(t)
+            return [s.distance, s.pitch, t.y - app.world.heightAt(t.x, t.z), d, Math.asin((c.y - t.y) / d)]
+          })()`)
+          const askP = (stop.camera.pitch * Math.PI) / 2
+          if (Math.abs(sd - stop.camera.distance) > 0.01 || Math.abs(sp - askP) > 0.01 || Math.abs(gap) > 0.01)
+            throw new Error(`stop ${i + 1}: landed at distance ${sd.toFixed(2)} pitch ${sp.toFixed(3)}, the target ${gap.toFixed(3)} off the ground`)
+          if (Math.abs(eyeD - stop.camera.distance) / stop.camera.distance > 0.03 || Math.abs(eyeP - askP) > 0.03)
+            throw new Error(`stop ${i + 1}: the eye stands ${eyeD.toFixed(2)} off at ${eyeP.toFixed(3)}, asked ${stop.camera.distance} at ${askP.toFixed(3)}`)
           // the place in the middle of the free part of the screen
           const where = await ui(`(() => {
             const g = app.tour.places.get(app.tour.event.stops[${i}].place).geometry
@@ -863,7 +963,7 @@ if (districtCount) {
         const shown = f ? [...f.forces, ...f.lines] : []
         const want = expected[id]?.[i] ?? []
         if (shown.length !== want.length || !want.every((w) => shown.includes(w))) throw new Error(`stop ${i + 1}: shows ${JSON.stringify(shown)}, wanted ${JSON.stringify(want)}`)
-        rows.push(`${i + 1} ${stop.place}${stop.camera ? ' (camera)' : ''}: ${shown.length ? `step ${f.steps.join(', ')}, ${shown.length} forces and fronts` : 'none'}`)
+        rows.push(`${i + 1} ${stop.place}${stop.camera ? ' (camera)' : ''}: ${shown.length ? `step ${f.steps.join(', ')}, ${shown.length} forces and fronts (${f.by})` : 'none'}`)
       }
       for (const r of rows) console.log(`      ${r}`)
       if (id === 'nuuanu-1795') {
@@ -898,19 +998,141 @@ if (districtCount) {
     const g = await ui('app.districts.cur.features.forces.stats()')
     if (g.forces.length || g.lines.length) throw new Error(`in 1800: ${JSON.stringify(g)}`)
   })
-  await check('the polity colours and the land view are gone over the district', async () => {
+  await check('a force or a front that names its stop shows there, whatever its step', async () => {
+    if (!ev95) return
+    await run(`app.tour.goTo(${ev95[0]}, ${ev95[1]}); app.settle()`)
+    await districtReady()
+    const r = await ui(`(() => {
+      const F = app.districts.cur.features.forces
+      const ev = app.data.events.find((e) => e.id === 'nuuanu-1795')
+      const rec = F.forces.find((x) => !x.stand && !x.file)
+      const was = rec.stop
+      const names = (i) => [...F.shownAt(ev, i)].map((x) => x.p.name)
+      const out = {}
+      rec.stop = 7
+      out.index = [names(7).includes(rec.p.name), names(4).includes(rec.p.name)]
+      rec.stop = [4, 6]
+      out.list = [names(4).includes(rec.p.name), names(6).includes(rec.p.name), names(7).includes(rec.p.name)]
+      rec.stop = 'puiwa'
+      out.place = [names(5).includes(rec.p.name), names(4).includes(rec.p.name)]
+      rec.stop = was
+      out.name = rec.p.name
+      return out
+    })()`)
+    const ok = r.index[0] && !r.index[1] && r.list[0] && r.list[1] && !r.list[2] && r.place[0] && !r.place[1]
+    if (!ok) throw new Error(JSON.stringify(r))
+    console.log(`      “${r.name}” named at stop 7, at 4 and 6, at Puʻiwa: each shows there and only there`)
+  })
+  await check('the polity colours, the land view and the hover card are gone over the district', async () => {
     await offTour(1795)
     await view(nearView)
     await settleTwice()
     await expect('app.shared.uniforms.uPolityK.value', 0)
     await expect('app.shared.uniforms.uLandK.value', 0)
-    // and hovering names the moku without lighting it
+    // and the pointer over the land there names nothing and lights nothing
     await page.mouse.move(640, 430)
     await page.waitForTimeout(200)
     await page.mouse.move(645, 432)
     await page.waitForTimeout(300)
+    await frames(1)
     await expect('app.shared.uniforms.uHoverMoku.value', 0)
+    await expect("!!document.querySelector('.inspector.show')", false)
     await page.mouse.move(5, 400)
+  })
+  await check('the hover card belongs to the far views: gone at the Puʻiwa stop and in a valley, back at the chain', async () => {
+    const landAt = () =>
+      page.evaluate(() => {
+        const app = window.__app
+        for (let y = 140; y < innerHeight - 160; y += 21) {
+          for (let x = 60; x < innerWidth * 0.62; x += 21) {
+            if (document.elementFromPoint(x, y)?.id !== 'scene' || document.elementFromPoint(x - 6, y)?.id !== 'scene') continue
+            const p = app.rig.pickGround(x, y)
+            if (p && app.world.metresAt(p.x, p.z) > 20 && app.polity.mokuAt(p.x, p.z)) return [x, y]
+          }
+        }
+        return null
+      })
+    const hoverAt = async (pt) => {
+      await page.mouse.move(pt[0] - 6, pt[1])
+      await page.waitForTimeout(150)
+      await page.mouse.move(pt[0], pt[1])
+      await page.waitForTimeout(150)
+      await frames(2)
+      return ui("document.querySelector('.inspector.show')?.textContent.replace(/\\s+/g, ' ').trim() ?? null")
+    }
+    // at the chain, it names the moku
+    await offTour(1795)
+    await view('app.tour.chainView()')
+    await frames(2)
+    const far = await landAt()
+    if (!far) throw new Error('no moku on screen over the chain')
+    const a = await hoverAt(far)
+    if (!a) throw new Error('over the chain the hover card does not show')
+    // the tour's Puʻiwa stop, flown to under the resting pointer: it goes
+    if (ev95) {
+      const stop = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === 'puiwa')`)
+      await run(`app.tour.goTo(${ev95[0]}, ${ev95[1]}); app.tour.goStop(${stop})`)
+      await page.evaluate(() => window.__app.rig.finishFlight())
+      await districtReady()
+      await settleTwice()
+      await frames(2)
+      await expect("!!document.querySelector('.inspector.show')", false)
+      const near = await landAt()
+      if (near && (await hoverAt(near))) throw new Error('at the Puʻiwa stop the hover card shows over the land')
+    }
+    // a valley with no district: the near zoom over Maui's ʻĪao, or any island's middle
+    await run("app.ui.card.close(); app.ui.onScrub(); const p = app.tour.places.get('iao-valley') || app.tour.places.get('waipio-valley'); const t = app.world.islands.find((t) => t.pack.id === 'maui') || app.world.islands[0]; const r = t.pack.rect; const v = p ? app.tour.pointView(p, 60) : app.rig.fit({ rect: { x0: (r.x0 + r.x1) / 2, x1: (r.x0 + r.x1) / 2, z0: (r.z0 + r.z1) / 2, z1: (r.z0 + r.z1) / 2 }, distance: 60 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()")
+    await frames(3)
+    const valley = await landAt()
+    if (valley && (await hoverAt(valley))) throw new Error('in a valley the hover card shows')
+    // and back out over the chain, it names the moku again
+    await view('app.tour.chainView()')
+    await frames(3)
+    const back = await landAt()
+    const b = back && (await hoverAt(back))
+    if (!b) throw new Error('back over the chain the hover card does not return')
+    await page.mouse.move(5, 400)
+    console.log(`      chain: “${a}”; Puʻiwa and a valley: nothing; the chain again: “${b}”`)
+  })
+  await check('a pan across the valley’s walls glides: the camera never jumps a frame', async () => {
+    await offTour(1795)
+    await view(nearView)
+    await districtReady()
+    await settleTwice()
+    await frames(2)
+    // (a steady pan across the valley, screen right being across it from this stop's bearing; the
+    // frames are the app's own, whose step is held to a tenth of a second however slow they come)
+    const r = await page.evaluate(
+      () =>
+        new Promise((resolve) => {
+          const app = window.__app
+          const rows = []
+          let n = 0
+          const tick = () => {
+            const t = app.rig.goal.target
+            rows.push([app.camera.position.y, app.world.metresAt(t.x, t.z)])
+            if (n < 44) app.rig.panBy(-14, 0)
+            if (n++ < 52) requestAnimationFrame(tick)
+            else resolve({ rows, vert: app.world.uniforms.uVert.value })
+          }
+          requestAnimationFrame(tick)
+        }),
+    )
+    let jump = 0
+    let step = 0
+    let lo = Infinity
+    let hi = -Infinity
+    for (let i = 0; i < r.rows.length; i++) {
+      lo = Math.min(lo, r.rows[i][1])
+      hi = Math.max(hi, r.rows[i][1])
+      if (!i) continue
+      jump = Math.max(jump, Math.abs(r.rows[i][0] - r.rows[i - 1][0]))
+      step = Math.max(step, Math.abs(r.rows[i][1] - r.rows[i - 1][1]))
+    }
+    const jumpM = jump / r.vert
+    if (hi - lo < 30) throw new Error(`the pan crossed only ${(hi - lo).toFixed(0)} m of relief`)
+    if (jump > 0.15 || jumpM > step * 0.5) throw new Error(`the camera jumped ${jump.toFixed(3)} (${jumpM.toFixed(1)} m of ground) in a frame, while the ground under the target stepped ${step.toFixed(1)} m`)
+    console.log(`      ${r.rows.length} frames over ${(hi - lo).toFixed(0)} m of relief (steps of up to ${step.toFixed(0)} m a frame): the camera's largest step ${jump.toFixed(3)} (${jumpM.toFixed(1)} m)`)
   })
   await check('the district fades out and is let go once the camera leaves', async () => {
     await view('app.tour.chainView()')
@@ -925,6 +1147,147 @@ if (districtCount) {
     console.log('      off over the chain, and released')
   })
 }
+
+// Patches (DATA.md "Patches, on any pack"): each raises today's sea or sinks
+// today's land to its reef flat in the years before its until, and not after,
+// easing as the year crosses it; on the island packs and in a district, for
+// the data's own patches and for the test masks tools/fake-data.mjs writes.
+/** For each island patch, a point well inside its mask whose ground today it changes; and the same for the district's. */
+const patchPoints = () =>
+  ui(`(() => {
+    const out = []
+    for (const r of app.patches.recs) {
+      const t = app.world.terrains.get(r.pack)
+      const c = r.crop
+      const others = app.patches.byPack.get(r.pack).filter((o) => o !== r)
+      let best = null
+      for (let j = 1; j < c.h - 1; j++) for (let i = 1; i < c.w - 1; i++) {
+        if ([0, 1, -1, c.w, -c.w].some((o) => c.data[j * c.w + i + o] < 255)) continue
+        const x = r.box[0] + ((i + 0.5) / c.w) * (r.box[2] - r.box[0])
+        const z = r.box[1] + ((j + 0.5) / c.h) * (r.box[3] - r.box[1])
+        // (where no other patch reaches, so the year's ground there is this one's alone)
+        if (others.some((o) => app.patches.maskAt(o.crop, (x - o.box[0]) / (o.box[2] - o.box[0]), (z - o.box[1]) / (o.box[3] - o.box[1])) > 0)) continue
+        const h = t.metresAt(x, z)
+        const gap = r.kind === 'raise' ? r.depthM - h : h - r.depthM
+        if (gap > 1.5 && (!best || gap > best.gap)) best = { x, z, h, gap }
+      }
+      if (best) out.push({ where: 'island', id: r.id, pack: r.pack, kind: r.kind, depth: r.depthM, until: r.until, others: [], ...best })
+    }
+    return out
+  })()`)
+const districtPatchPoints = () =>
+  ui(`(() => {
+    const D = app.districts, rec = D.cur, out = []
+    if (!rec?.pmap) return out
+    const d = rec.d, r = d.rect, pm = rec.pmap
+    rec.raise.forEach((p, ri) => {
+      let best = null
+      for (let k = 0; k < pm.w * pm.h; k++) {
+        if (pm.data[k * 4 + 1] !== 255 || pm.data[k * 4 + 3] !== 0 || (pm.data[k * 4 + 2] & 15) !== ri) continue
+        const i = pm.x0 + (k % pm.w), j = pm.y0 + Math.floor(k / pm.w), c = j * d.W + i
+        if (rec.aux[c * 4] || rec.aux[c * 4 + 3]) continue
+        const h = rec.metres[c], gap = p.depth - h
+        if (gap > 1 && (!best || gap > best.gap)) best = { i, j, h, gap }
+      }
+      if (best) out.push({ where: 'district', id: p.id, kind: 'raise', depth: p.depth, until: p.until, others: [], ...best })
+    })
+    rec.lower.forEach((p, li) => {
+      let best = null
+      for (let k = 0; k < pm.w * pm.h; k++) {
+        const bits = pm.groups[pm.data[k * 4]] || 0
+        if (!(bits & (1 << li))) continue
+        // (where this patch is the last of its group to go, so after its until the ground is today's)
+        if (rec.lower.some((o, oi) => bits & (1 << oi) && o.until > p.until)) continue
+        const i = pm.x0 + (k % pm.w), j = pm.y0 + Math.floor(k / pm.w), c = j * d.W + i
+        if (rec.aux[c * 4] !== 127 || rec.aux[c * 4 + 3] || pm.data[k * 4 + 1]) continue
+        const h = rec.metres[c], gap = h - p.depth
+        if (gap > 1.5 && (!best || gap > best.gap)) best = { i, j, h, gap, others: rec.lower.filter((o, oi) => bits & (1 << oi)).map((o) => o.depth) }
+      }
+      if (best) out.push({ where: 'district', id: p.id, kind: 'lower', depth: p.depth, until: p.until, ...best })
+    })
+    for (const q of out) {
+      q.x = r.x0 + ((q.i + 0.5) * (r.x1 - r.x0)) / d.W
+      q.z = r.z0 + ((q.j + 0.5) * (r.z1 - r.z0)) / d.H
+    }
+    return out
+  })()`)
+/** Each point before its patch's until and after it, the ground at it, and the weight easing across. */
+const patchByYear = async (pts) => {
+  const rows = []
+  const [y0, y1] = await ui('[app.timeline.eras[0].year, app.timeline.eras.at(-1).year]')
+  for (const p of pts) {
+    if (p.until - 1 < y0 || p.until + 1 > y1) {
+      rows.push(`${p.where} ${p.id}: its until, ${p.until}, is off the timeline (${y0}–${y1}); not tried`)
+      continue
+    }
+    const at = async (y) => {
+      await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${y}); app.ui.timeline.finish(); app.rig.jump({ x: ${p.x}, z: ${p.z}, distance: 25, yaw: 0, pitch: 0.9 }); app.settle(); app.settle()`)
+      if (p.where === 'district') {
+        await page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
+        await run('app.settle(); app.settle()')
+        // (the district's own ground as the year lays it: near its edge the world's is eased into the island's)
+        return ui(`app.districts.metresAt(${p.x}, ${p.z})`)
+      }
+      // (an island's own ground as its slot draws it, whether or not a district is down over it)
+      return ui(`(() => { const t = app.world.terrains.get('${p.pack}'); return t.slot >= 0 ? app.world.ownMetres(t, ${p.x}, ${p.z}) : NaN })()`)
+    }
+    const before = await at(p.until - 1)
+    const after = await at(p.until + 1)
+    const depths = p.others?.length ? p.others : [p.depth]
+    const okBefore = depths.some((d) => Math.abs(before - d) < 0.05)
+    const okAfter = Math.abs(after - p.h) < 0.05
+    rows.push(`${p.where} ${p.id} (${p.kind} to ${p.depth} m before ${p.until}): today ${p.h.toFixed(1)} m; ${before.toFixed(2)} m in ${p.until - 1}, ${after.toFixed(2)} m in ${p.until + 1}`)
+    if (!okBefore || !okAfter) throw new Error(rows.at(-1))
+  }
+  return rows
+}
+const easesAcross = async (p) => {
+  // the year crosses the until: a frame or two later the weight is on its way, not there
+  await run(`app.timeline.setYear(${p.until - 1}); app.ui.timeline.finish(); app.settle()`)
+  await run(`app.timeline.setYear(${p.until + 1}); app.ui.timeline.finish()`)
+  await frames(2)
+  const k = await ui(`(app.patches.recs.find((r) => r.id === '${p.id}') || app.districts.patchWeights().find((r) => r.id === '${p.id}'))?.k`)
+  if (!(k > 0 && k < 1)) throw new Error(`${p.id}: two frames after the year crossed ${p.until}, its weight is ${k}`)
+  return k
+}
+const patchCheck = async (label) => {
+  const pts = await patchPoints()
+  let dpts = []
+  if (await ui('app.districts?.list.length ?? 0')) {
+    const anyD = await ui('app.districts.list.some((d) => d.patches.length)')
+    if (anyD) {
+      // (down at the district, so its patches are laid on its grid)
+      await run("app.ui.card.close(); app.ui.onScrub(); const d = app.districts.list.find((d) => d.patches.length); const r = d.rect; app.rig.jump({ x: (r.x0 + r.x1) / 2, z: r.z0 + (r.z1 - r.z0) * 0.62, distance: 30, yaw: 0, pitch: 0.9 }); app.settle()")
+      await page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
+      dpts = await districtPatchPoints()
+    }
+  }
+  const listed = await ui('app.patches.all.length + (app.districts?.list || []).reduce((s, d) => s + d.patches.length, 0)')
+  if (!pts.length && !dpts.length) throw new Error(`${label}: ${listed} patches listed, none with a point to try`)
+  console.log(`      ${listed} patches listed; ${pts.length} on the islands and ${dpts.length} in the district have a point no other patch reaches, where they change the ground`)
+  const rows = await patchByYear([...pts, ...dpts])
+  const [y0, y1] = await ui('[app.timeline.eras[0].year, app.timeline.eras.at(-1).year]')
+  const k = await easesAcross([...pts, ...dpts].find((p) => p.until - 1 >= y0 && p.until + 1 <= y1))
+  for (const r of rows) console.log(`      ${r}`)
+  console.log(`      two frames after the year crossed, the weight stood at ${k.toFixed(2)}`)
+  const runs = await ui('app.patches.stats()')
+  console.log(`      island masks in an atlas of ${runs.atlas ? runs.atlas.join('×') : 'none'} (${runs.kB} kB); patches in the slots ${runs.inSlots.join(' ')}`)
+}
+const ownPatches = await ui('app.patches.all.length + (app.districts?.list || []).reduce((s, d) => s + d.patches.length, 0)')
+if (ownPatches) await check(`the data’s own patches raise and lower the ground by year (${ownPatches})`, () => patchCheck('the data’s own'))
+else console.log('  - no patches in the data: its own patch check skipped')
+const testBase = useTest ? null : '../test-data/real/'
+if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) {
+  await check('the test masks raise and lower the ground by year, on Oʻahu and in Nuʻuanu', async () => {
+    await page.evaluate((b) => window.__app.patches.load(b), testBase)
+    try {
+      await patchCheck('the test masks')
+    } finally {
+      // (back to the data's own)
+      await page.evaluate(() => window.__app.patches.load())
+    }
+  })
+} else if (testBase) console.log('  - no test masks (node tools/fake-data.mjs writes them): that check skipped')
 
 // What the page costs, for comparing builds: the JS heap after a collection,
 // and the frame time held still over the whole chain and over one island, in
