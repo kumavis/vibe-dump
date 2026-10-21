@@ -403,6 +403,10 @@ them, which is why `na-au` was rejected as a slug (it reads as *naʻau*).
   established public landmark (Puʻukoholā, Puʻuhonua o Hōnaunau, ʻIolani Palace,
   Kūkaniloko).
 - The Nuʻuanu pali dead are a burial matter (§8), not a spectacle.
+- **The rule is practised, not announced.** No card, note, legend or panel
+  says what the app does not show, place or draw. A stop that reaches the
+  pali says, in the sources' plain words, that many died there, and stops.
+  The reasoning lives here and in RESEARCH.md, not in the copy.
 
 ### 7.5 Workflow
 
