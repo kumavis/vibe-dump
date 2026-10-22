@@ -544,6 +544,12 @@ them out; research/engine.md has the numbers):
   so the record's own losses to an untouched CAP happen.
 - `tools/replay.mjs` holds every box to replaying its record untouched
   (§13 Integrate, step 4).
+- *Heights.* A plan's keys are joined by Catmull-Rom with the height kept
+  monotone between keys (`path.js` keysAt, Fritsch–Carlson), and a vee's
+  step down never takes a slot under 30 m (`record.js` slotY), so no record
+  aircraft flies under the sea. `tools/record-heights.mjs` samples every
+  record aircraft of every box once a second and fails one under 15 m over
+  the sea outside a torpedo drop, a take-off, a landing or a fall.
 
 ## 6. Kits (`src/battle/kits/`)
 

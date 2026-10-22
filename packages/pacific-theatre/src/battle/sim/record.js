@@ -317,9 +317,9 @@ function buildGroup(g, ctx) {
     if (g.enter) {
       const t0 = g.enter.t
       const [x, z] = offsetBy(g.enter.x, g.enter.z, g.enter.heading, off)
-      keys.push({ t: t0, x, y: g.enter.alt + off.up, z })
+      keys.push({ t: t0, x, y: slotY(g.enter.alt, off.up), z })
       const [ux, uz] = courseVec(g.enter.heading)
-      keys.push({ t: t0 + 60, x: x + ux * vC * 60, y: g.enter.alt + off.up, z: z + uz * vC * 60 })
+      keys.push({ t: t0 + 60, x: x + ux * vC * 60, y: slotY(g.enter.alt, off.up), z: z + uz * vC * 60 })
       starts.push({ keys, spawnT: t0 })
       continue
     }
@@ -357,7 +357,7 @@ function buildGroup(g, ctx) {
       const pv = route[i - 1] || null
       const h = nb ? headingOf(nb.x - w.x, nb.z - w.z) : pv ? headingOf(w.x - pv.x, w.z - pv.z) : 0
       const [x, z] = offsetBy(w.x, w.z, h, off)
-      out.push({ t: w.t, x, y: w.alt + off.up, z })
+      out.push({ t: w.t, x, y: slotY(w.alt, off.up), z })
     }
     return out
   }
@@ -545,6 +545,16 @@ function buildGroup(g, ctx) {
     ac.actions = ac.actions.filter((x) => x.t < ac.lossT)
   }
   g.aircraft = aircraft
+}
+
+/**
+ * A formation slot's height at a route height: the vee's step down (slotOffset's negative `up`) never
+ * takes a slot below SLOT_FLOOR, so a group the record brings down low (Akagi's and Kaga's torpedo
+ * planes at 50 to 60 m over Pearl Harbor) keeps its rear sections over the water, not 15 to 25 m under it.
+ */
+const SLOT_FLOOR = 30
+function slotY(alt, up) {
+  return alt + (up < 0 ? Math.max(up, Math.min(0, SLOT_FLOOR - alt)) : up)
 }
 
 /** Whether attacker `order` of S carries one of the record's `n` hits (exactly n of the S, spread through the group). */

@@ -89,7 +89,14 @@ export function prepareTrack(fixes) {
 
 // --- aircraft legs ------------------------------------------------------------
 
-/** Catmull-Rom through time-stamped keys [{ t, x, y, z }] (at least two). */
+/**
+ * Catmull-Rom through time-stamped keys [{ t, x, y, z }] (at least two). The height is kept monotone
+ * between keys (Fritsch–Carlson): a key between a climb and a descent, or beside a level stretch, has
+ * no vertical tangent, and no tangent is steeper than three times the slope either side of it, so the
+ * path never dips below the lower of two keys. A plain Catmull-Rom tangent after a steep descent onto a
+ * long low run (a torpedo plane coming down to 60 m for its run, a fighter down to its field) carried the
+ * aircraft some 25 m under the sea before it rose to the next key.
+ */
 export function keysAt(keys, t, out) {
   const n = keys.length
   if (t <= keys[0].t) {
@@ -129,11 +136,23 @@ export function keysAt(keys, t, out) {
     const c = ci === 0 ? 'x' : ci === 1 ? 'y' : 'z'
     // tangents (per second) from the neighbours, scaled to the interval;
     // a key marked `corner` keeps the straight line into and out of it
-    const m0 = p && !a.corner ? (b[c] - p[c]) / (b.t - p.t) : (b[c] - a[c]) / T
-    const m1 = q && !b.corner ? (q[c] - a[c]) / (q.t - a.t) : (b[c] - a[c]) / T
+    let m0 = p && !a.corner ? (b[c] - p[c]) / (b.t - p.t) : (b[c] - a[c]) / T
+    let m1 = q && !b.corner ? (q[c] - a[c]) / (q.t - a.t) : (b[c] - a[c]) / T
+    if (ci === 1) {
+      const d = (b.y - a.y) / T
+      if (p && !a.corner) m0 = monotone(m0, (a.y - p.y) / (a.t - p.t), d)
+      if (q && !b.corner) m1 = monotone(m1, d, (q.y - b.y) / (q.t - b.t))
+    }
     out[c] = h00 * a[c] + h10 * m0 * T + h01 * b[c] + h11 * m1 * T
   }
   return out
+}
+
+/** A key's vertical tangent m, limited by the slopes before (d0) and after (d1) it (Fritsch–Carlson). */
+function monotone(m, d0, d1) {
+  if (d0 * d1 <= 0) return 0
+  const lim = 3 * Math.min(Math.abs(d0), Math.abs(d1))
+  return Math.sign(d1) * Math.min(Math.abs(m), lim)
 }
 
 /**
