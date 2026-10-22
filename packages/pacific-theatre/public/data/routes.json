@@ -1,0 +1,4011 @@
+[
+  {
+    "id": "kido-butai-hawaii-1941",
+    "title": "The Kidō Butai to Pearl Harbor and back",
+    "gloss": "by the empty northern route",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1941-11-26T06:00+09:00",
+      "to": "1941-12-24",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "prologue",
+    "event": "pearl-harbor-1941",
+    "from": "hitokappu-bay",
+    "to": "hashirajima",
+    "points": [
+      [
+        147.7,
+        44.92
+      ],
+      [
+        148.8,
+        43.4
+      ],
+      [
+        159.6,
+        41.7
+      ],
+      [
+        170.2,
+        41.7
+      ],
+      [
+        -177.8,
+        41.7
+      ],
+      [
+        -157.85,
+        30.8
+      ],
+      [
+        -157.85,
+        24.9
+      ],
+      [
+        -172,
+        37.1
+      ],
+      [
+        174,
+        37.1
+      ],
+      [
+        170,
+        36.1
+      ],
+      [
+        140.6,
+        28.05
+      ],
+      [
+        133.6,
+        31.6
+      ],
+      [
+        132.25,
+        32.75
+      ],
+      [
+        132.1,
+        33.05
+      ],
+      [
+        131.98,
+        33.3
+      ],
+      [
+        132.15,
+        33.6
+      ],
+      [
+        132.45,
+        33.9
+      ],
+      [
+        132.45,
+        33.95
+      ],
+      [
+        132.4,
+        34
+      ]
+    ],
+    "pointPrecision": "chart",
+    "direction": "oneway",
+    "schematicSegments": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1941-11-26T06:00+09:00",
+        "note": "Sails from Hitokappu Bay.",
+        "sourceClock": "0600",
+        "sourceZone": "+09:00",
+        "sourceDate": "1941-11-26",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 3,
+        "t": "1941-12-03",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "The refuelling point (the chart's \"REFUELING POINT 3 DEC\").",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 4,
+        "t": "1941-12-04",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "The turn south-east (\"4 DEC\").",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 5,
+        "t": "1941-12-07T17:00+09:00",
+        "note": "\"1700 7 DEC\" (Tokyo time) on the chart.",
+        "sourceClock": "1700",
+        "sourceZone": "+09:00",
+        "sourceDate": "1941-12-07",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 6,
+        "t": "1941-12-07T06:00-10:30",
+        "note": "The launch point, due north of Oʻahu on the chart (\"0300 (TOKYO TIME) 8 DEC.\"); the first wave takes off at 01:30 Tokyo time by the Japanese answers of 1945.",
+        "sourceClock": "0130",
+        "sourceZone": "+09:00",
+        "sourceDate": "1941-12-08",
+        "source": "pha-exhibit-8"
+      },
+      {
+        "at": 9,
+        "t": "1941-12-16",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Carrier Division 2 (Hiryū, Sōryū), Tone, Chikuma and destroyers detached for Wake.",
+        "source": "morton-1962"
+      },
+      {
+        "at": 18,
+        "t": "1941-12-23",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Home to the western Inland Sea (\"23 DEC (TOKYO TIME)\").",
+        "source": "morton-1962"
+      }
+    ],
+    "summary": "The Kidō Butai sails east from the Kurils along about 42° N, far from the shipping lanes, refuels on 3 December, turns south-east on the 4th and runs down to its launching point north of Oʻahu. After the attack it retires north-west, detaches carriers for Wake, and comes home past the Bonins to the western Inland Sea.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 2, Task Force Track Chart (p. 22)"
+      },
+      {
+        "id": "morton-1962",
+        "where": "Map I, inset"
+      },
+      {
+        "id": "jm-97"
+      },
+      {
+        "id": "pha-exhibit-8"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "jm-97",
+        "says": "The orders put the standby point at 42° N 170° W (Combined Fleet Op. Order No. 5; Nagumo's own order 42° N 165° W) and the approaching point at 32° N 157° W; the return to \"skirt 800 nautical miles north of Midway\" by the assembly point 30° N 165° E. The USSBS chart's track turns at about 178° W on 4 December.",
+        "scope": "planned and charted positions"
+      },
+      {
+        "source": "pha-exhibit-8",
+        "says": "The launch is measured from Point Z off Lānaʻi: 230 nautical miles north of it (about 24.6° N 157.1° W, computed by R10); the USSBS chart marks \"0°–200′\" from Oʻahu, at about 157.9° W.",
+        "scope": "the launch point"
+      }
+    ],
+    "notes": "The chart (USSBS App. 2) is drawn with north to the right and only two parallels; it was georeferenced on its 140°–160° W meridians and the 20° and 40° parallels as a Mercator chart, to about ±0.5°. The legs into the Inland Sea past the Bungo Strait are schematic, added so the line keeps to the sea."
+  },
+  {
+    "id": "cardiv2-wake-1941",
+    "title": "Carrier Division 2 to Wake",
+    "gloss": "detached from the returning force",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1941-12-16",
+      "to": "1941-12-23",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "wake-1941",
+    "from": null,
+    "to": "wake",
+    "points": [
+      [
+        170,
+        36.1
+      ],
+      [
+        168.5,
+        27.5
+      ],
+      [
+        167.2,
+        20.6
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1941-12-16",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Detached on 16 December (Morton's inset, \"16 DEC\")."
+      },
+      {
+        "at": 2,
+        "t": "1941-12-21",
+        "zone": "+12:00",
+        "precision": "day",
+        "note": "Aircraft from Sōryū and Hiryū bomb Wake on 21–22 December (chronology)."
+      }
+    ],
+    "summary": "Sōryū and Hiryū, with Tone, Chikuma and a destroyer screen, turn south from the returning Kidō Butai to support the second landing on Wake, whose defences they strike on 21–22 December.",
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "Map I, inset"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 2"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1941, 21–23 December"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "malaya-convoy-1941",
+    "title": "The Malaya convoys",
+    "gloss": "from Hainan and Cam Ranh to the beaches",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1941-12-04",
+      "to": "1941-12-08",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "prologue",
+    "event": "malaya-1941",
+    "from": "samah",
+    "to": "singora",
+    "points": [
+      [
+        109.5,
+        18.15
+      ],
+      [
+        109.9,
+        15
+      ],
+      [
+        109.6,
+        11.9
+      ],
+      [
+        107.5,
+        8.6
+      ],
+      [
+        104.9,
+        8
+      ],
+      [
+        102.8,
+        7.3
+      ],
+      [
+        100.75,
+        7.25
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      3,
+      4
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1941-12-04",
+        "zone": "+08:00",
+        "precision": "day",
+        "note": "Sails from Samah, Hainan (R3, *verify* the date)."
+      },
+      {
+        "at": 6,
+        "t": "1941-12-08",
+        "zone": "+07:30",
+        "precision": "day",
+        "note": "Landings at Singora, Patani and Kota Bharu in the first hours of 8 December."
+      }
+    ],
+    "summary": "The convoys of the 25th Army sail from Samah on Hainan, pass Cam Ranh Bay in Indochina, round Cape Cà Mau and cross the Gulf of Thailand to land at Singora and Patani in Thailand and Kota Bharu in Malaya.",
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "ch. VI and Map I"
+      },
+      {
+        "id": "jm-97"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 10"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "malaya-convoy-kota-bharu-1941",
+    "title": "The landing force for Kota Bharu",
+    "gloss": "the first landing of the war",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1941-12-07",
+      "to": "1941-12-08",
+      "precision": "day",
+      "clock": "malaya-1941"
+    },
+    "chapter": "prologue",
+    "event": "malaya-1941",
+    "from": null,
+    "to": "kota-bharu",
+    "points": [
+      [
+        102.8,
+        7.3
+      ],
+      [
+        102.4,
+        6.35
+      ],
+      [
+        102.24,
+        6.16
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "A detachment of the convoy turns south across the Gulf of Thailand for Kota Bharu, where the landing that opens the Pacific War comes under attack from British aircraft.",
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "ch. VI"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1941, 8 December"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "philippines-landings-north-1941",
+    "title": "The landings in northern Luzon",
+    "gloss": "from Formosa and the Pescadores",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1941-12-08",
+      "to": "1941-12-22",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "bataan-1942",
+    "from": "mako",
+    "to": "lingayen-gulf",
+    "points": [
+      [
+        119.57,
+        23.45
+      ],
+      [
+        119.9,
+        21
+      ],
+      [
+        120,
+        18.6
+      ],
+      [
+        120.15,
+        17.6
+      ],
+      [
+        119.95,
+        16.6
+      ],
+      [
+        120.25,
+        16.25
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      3
+    ],
+    "waypoints": [
+      {
+        "at": 3,
+        "t": "1941-12-10",
+        "zone": "+08:00",
+        "precision": "day",
+        "note": "Advance landings at Aparri and Vigan on 10 December."
+      },
+      {
+        "at": 5,
+        "t": "1941-12-22",
+        "zone": "+08:00",
+        "precision": "day",
+        "note": "The main landing on Lingayen Gulf."
+      }
+    ],
+    "summary": "From Mako in the Pescadores and Takao on Formosa the 14th Army's convoys come down the west coast of Luzon: advance landings at Aparri and Vigan on 10 December, and the main landing on Lingayen Gulf on the 22nd.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1941, 10 and 22 December"
+      },
+      {
+        "id": "jm-97"
+      },
+      {
+        "id": "morton-1953",
+        "where": "Maps 3–5"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "philippines-landings-south-1941",
+    "title": "The landings at Legaspi and Davao",
+    "gloss": "from Palau",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1941-12-11",
+      "to": "1941-12-20",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "bataan-1942",
+    "from": "koror",
+    "to": "leyte-gulf",
+    "points": [
+      [
+        134.3,
+        7.5
+      ],
+      [
+        130,
+        9.5
+      ],
+      [
+        126.5,
+        12.5
+      ],
+      [
+        124.3,
+        13
+      ],
+      [
+        124.15,
+        13.1
+      ],
+      [
+        123.85,
+        13.15
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      3,
+      4
+    ],
+    "waypoints": [
+      {
+        "at": 5,
+        "t": "1941-12-12",
+        "zone": "+08:00",
+        "precision": "day",
+        "note": "Legaspi, 12 December."
+      }
+    ],
+    "summary": "A force from Palau lands at Legaspi in southern Luzon on 12 December; another lands at Davao on Mindanao on the 20th.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1941, 12 and 20 December"
+      },
+      {
+        "id": "morton-1953",
+        "where": "Maps 3–5"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "The Davao branch is in the summary only."
+  },
+  {
+    "id": "philippines-landings-lamon-1941",
+    "title": "The landing at Lamon Bay",
+    "gloss": "from Amami Ōshima",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1941-12-17",
+      "to": "1941-12-24",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "bataan-1942",
+    "from": "amami-oshima",
+    "to": null,
+    "points": [
+      [
+        129.6,
+        28
+      ],
+      [
+        126,
+        21
+      ],
+      [
+        123,
+        15.5
+      ],
+      [
+        122.2,
+        14.4
+      ],
+      [
+        121.95,
+        14.25
+      ],
+      [
+        121.85,
+        14.15
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "waypoints": [
+      {
+        "at": 5,
+        "t": "1941-12-24",
+        "zone": "+08:00",
+        "precision": "day",
+        "note": "Lamon Bay, 24 December."
+      }
+    ],
+    "summary": "The 16th Division sails from Amami Ōshima and lands at Lamon Bay on Luzon's east coast on 24 December, closing on Manila from the south-east.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1941, 24 December"
+      },
+      {
+        "id": "morton-1953",
+        "where": "Maps 3–5"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "indian-ocean-raid-1942",
+    "title": "The Kidō Butai in the Indian Ocean",
+    "gloss": "Staring Bay to Ceylon and home",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-03-26",
+      "to": "1942-04-22",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "indian-ocean-raid-1942",
+    "from": "staring-bay",
+    "to": null,
+    "points": [
+      [
+        122.9,
+        -4.3
+      ],
+      [
+        123.25,
+        -4.45
+      ],
+      [
+        123.55,
+        -5.45
+      ],
+      [
+        124,
+        -6
+      ],
+      [
+        125.25,
+        -8.2
+      ],
+      [
+        125.05,
+        -8.45
+      ],
+      [
+        125,
+        -8.45
+      ],
+      [
+        123.6,
+        -9.3
+      ],
+      [
+        121,
+        -10.8
+      ],
+      [
+        118,
+        -12.5
+      ],
+      [
+        105,
+        -10
+      ],
+      [
+        92,
+        -4
+      ],
+      [
+        83,
+        1
+      ],
+      [
+        80.5,
+        1.8
+      ],
+      [
+        78.6,
+        2.5
+      ],
+      [
+        79.5,
+        4.5
+      ],
+      [
+        82.5,
+        6
+      ],
+      [
+        82.6,
+        7.4
+      ],
+      [
+        86,
+        8.5
+      ],
+      [
+        92.5,
+        9
+      ],
+      [
+        95.5,
+        7
+      ],
+      [
+        97.6,
+        5.6
+      ],
+      [
+        99.5,
+        3.7
+      ],
+      [
+        101.4,
+        2.3
+      ],
+      [
+        103.85,
+        1.18
+      ],
+      [
+        104.6,
+        1.4
+      ],
+      [
+        107,
+        5.5
+      ],
+      [
+        112,
+        12
+      ],
+      [
+        117.5,
+        19.5
+      ],
+      [
+        121.05,
+        22.05
+      ],
+      [
+        122.5,
+        24.5
+      ],
+      [
+        127,
+        28.5
+      ],
+      [
+        131.7,
+        31.6
+      ],
+      [
+        132.3,
+        32.7
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      14,
+      15,
+      18,
+      19,
+      20,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1942-03-26",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Sails from Staring Bay."
+      },
+      {
+        "at": 13,
+        "t": "1942-04-05",
+        "zone": "+06:00",
+        "precision": "day",
+        "note": "The strike on Colombo; Cornwall and Dorsetshire sunk to the south-west."
+      },
+      {
+        "at": 17,
+        "t": "1942-04-09",
+        "zone": "+06:00",
+        "precision": "day",
+        "note": "The strike on Trincomalee; Hermes sunk off Batticaloa."
+      },
+      {
+        "at": 24,
+        "t": "1942-04-13",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Passes Singapore; the 5th Carrier Division detaches for the South Pacific."
+      },
+      {
+        "at": 33,
+        "t": "1942-04-22",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Japanese home waters."
+      }
+    ],
+    "summary": "The carriers sail from Staring Bay through the Banda Sea into the Indian Ocean south of Java, strike Colombo from south of Ceylon on 5 April and Trincomalee from the east on the 9th, then pass south of the Andamans and down the Malacca Strait, past Singapore on the 13th and home through the South China Sea.",
+    "sources": [
+      {
+        "id": "wp-indian-ocean-raid"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 5 and 9 April"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 11"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "R3: the passage through the Ombai Strait and the strike positions are *verify*; most of this line is schematic between named places."
+  },
+  {
+    "id": "malaya-force-1942",
+    "title": "Ozawa's Malaya Force in the Bay of Bengal",
+    "gloss": "against the shipping off India's coast",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-04-01",
+      "to": "1942-04-11",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "indian-ocean-raid-1942",
+    "from": null,
+    "to": "singapore",
+    "points": [
+      [
+        98.2,
+        12.3
+      ],
+      [
+        97.9,
+        12.65
+      ],
+      [
+        96,
+        13.4
+      ],
+      [
+        93.8,
+        14.6
+      ],
+      [
+        89.5,
+        18
+      ],
+      [
+        86.9,
+        19.4
+      ],
+      [
+        90,
+        16
+      ],
+      [
+        93.15,
+        13.5
+      ],
+      [
+        93,
+        12.5
+      ],
+      [
+        94.5,
+        9.6
+      ],
+      [
+        97.6,
+        5.6
+      ],
+      [
+        99.5,
+        3.7
+      ],
+      [
+        101.4,
+        2.3
+      ],
+      [
+        103.6,
+        1.2
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1942-04-01",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Sails from off Mergui."
+      },
+      {
+        "at": 5,
+        "t": "1942-04-06",
+        "zone": "+06:30",
+        "precision": "day",
+        "note": "Off the coast of Orissa."
+      }
+    ],
+    "summary": "Vice Admiral Ozawa's cruisers and the light carrier Ryūjō sail from Mergui into the Bay of Bengal and attack the shipping off India's east coast on 6 April, then return to Singapore.",
+    "sources": [
+      {
+        "id": "wp-indian-ocean-raid"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "R3: schematic throughout (*verify*).",
+    "schematicSegments": [
+      0,
+      1,
+      6,
+      7
+    ]
+  },
+  {
+    "id": "doolittle-1942-fleet",
+    "title": "Hornet and Enterprise toward Japan",
+    "gloss": "TF 16 with Hornet's bombers on deck",
+    "kind": "fleet",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1942-04-13",
+      "to": "1942-04-18",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "doolittle-1942",
+    "from": null,
+    "to": "doolittle-takeoff",
+    "points": [
+      [
+        -175,
+        38
+      ],
+      [
+        170,
+        37.5
+      ],
+      [
+        160,
+        36.5
+      ],
+      [
+        153.417,
+        35.717
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 3,
+        "t": "1942-04-18",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "The take-off, earlier than planned after a picket boat sights the force.",
+        "source": "doolittle-report-1942"
+      }
+    ],
+    "summary": "Enterprise's task force meets Hornet in the North Pacific and together they steam west toward Japan, until a picket boat sights them and the bombers take off far out.",
+    "sources": [
+      {
+        "id": "doolittle-report-1942"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 18 April"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "The meeting of TF 16 and TF 18 is R3's *verify*; the line before the take-off point is schematic."
+  },
+  {
+    "id": "doolittle-1942-bombers",
+    "title": "The B-25s to Japan's coast",
+    "gloss": "from Hornet's deck to landfall",
+    "kind": "strike",
+    "side": "us",
+    "medium": "air",
+    "when": {
+      "from": "1942-04-18",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "doolittle-1942",
+    "from": "doolittle-takeoff",
+    "to": null,
+    "points": [
+      [
+        153.417,
+        35.717
+      ],
+      [
+        146,
+        35.75
+      ],
+      [
+        140.9,
+        35.75
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "The bombers fly west, low over the sea, to landfall on Honshu north-east of Tokyo; from there they scatter to their targets and on across the East China Sea to China.",
+    "sources": [
+      {
+        "id": "doolittle-report-1942"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "doolittle-1942-china",
+    "title": "The B-25s to China",
+    "gloss": "toward the fields near Chuchow",
+    "kind": "strike",
+    "side": "us",
+    "medium": "air",
+    "when": {
+      "from": "1942-04-18",
+      "to": "1942-04-19",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "doolittle-1942",
+    "from": null,
+    "to": "chuchow",
+    "points": [
+      [
+        131,
+        31.3
+      ],
+      [
+        126,
+        30.5
+      ],
+      [
+        121.9,
+        29.9
+      ],
+      [
+        118.87,
+        28.97
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "Leaving Japan's coast, the bombers cross the East China Sea at dusk toward the airfields near Chuchow; most crews bail out over China in the dark and the rain.",
+    "sources": [
+      {
+        "id": "doolittle-report-1942"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "coral-sea-1942-tf17",
+    "title": "TF 17 in the Coral Sea",
+    "gloss": "Yorktown, joined by Lexington",
+    "kind": "fleet",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1942-05-01",
+      "to": "1942-05-08",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "first-six-months",
+    "event": "coral-sea-1942",
+    "from": null,
+    "to": null,
+    "points": [
+      [
+        162,
+        -16
+      ],
+      [
+        158.6,
+        -11.4
+      ],
+      [
+        157,
+        -13.5
+      ],
+      [
+        155.25,
+        -14.58
+      ],
+      [
+        155.45,
+        -15.2
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 1,
+        "t": "1942-05-04",
+        "zone": "+11:00",
+        "precision": "day",
+        "note": "The strikes on Tulagi from south of Guadalcanal."
+      },
+      {
+        "at": 3,
+        "t": "1942-05-08",
+        "zone": "+10:00",
+        "precision": "day",
+        "note": "Lexington and Yorktown hit at 14°35′S 155°15′E (chronology).",
+        "source": "usn-chron"
+      },
+      {
+        "at": 4,
+        "t": "1942-05-08",
+        "zone": "+10:00",
+        "precision": "day",
+        "note": "Lexington scuttled at 15°12′S 155°27′E.",
+        "source": "usn-chron"
+      }
+    ],
+    "summary": "Yorktown's TF 17 strikes the landing at Tulagi from south of Guadalcanal on 4 May, joins Lexington, and turns west into the Coral Sea, where Japanese aircraft hit both carriers on the 8th and Lexington is scuttled.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 4–8 May"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. IV"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "coral-sea-1942-mo-carriers",
+    "title": "The MO Carrier Striking Force",
+    "gloss": "Shōkaku and Zuikaku round the Solomons",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-05-01",
+      "to": "1942-05-08",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "coral-sea-1942",
+    "from": "truk",
+    "to": null,
+    "points": [
+      [
+        151.85,
+        7
+      ],
+      [
+        156.5,
+        -2
+      ],
+      [
+        161,
+        -8
+      ],
+      [
+        163,
+        -11
+      ],
+      [
+        160,
+        -13.5
+      ],
+      [
+        156.5,
+        -13
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 5,
+        "t": "1942-05-08",
+        "zone": "+10:00",
+        "precision": "day",
+        "note": "The strike area on 8 May (*verify*)."
+      }
+    ],
+    "summary": "Shōkaku and Zuikaku sail from Truk, pass east of the Solomons and round San Cristobal into the Coral Sea from the east, to strike the American carriers on 8 May.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 7–8 May"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. IV"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "coral-sea-1942-moresby",
+    "title": "The Port Moresby Invasion Force",
+    "gloss": "toward the Jomard Passage, and back",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-05-04",
+      "to": "1942-05-08",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "coral-sea-1942",
+    "from": "rabaul",
+    "to": null,
+    "points": [
+      [
+        152.3,
+        -4.15
+      ],
+      [
+        152.5,
+        -4.45
+      ],
+      [
+        152,
+        -6.5
+      ],
+      [
+        151.8,
+        -9.4
+      ],
+      [
+        152.2,
+        -11
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "The transports for Port Moresby leave Rabaul and steam south past the Trobriands toward the Jomard Passage; after the carrier battle they turn back.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 4–8 May"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. IV"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "coral-sea-1942-tulagi",
+    "title": "The Tulagi Invasion Force",
+    "gloss": "Rabaul to Tulagi",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-04-29",
+      "to": "1942-05-03",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "first-six-months",
+    "event": "coral-sea-1942",
+    "from": "rabaul",
+    "to": "tulagi",
+    "points": [
+      [
+        152.3,
+        -4.15
+      ],
+      [
+        152.9,
+        -4.9
+      ],
+      [
+        154.2,
+        -5.5
+      ],
+      [
+        155.75,
+        -7.2
+      ],
+      [
+        157.5,
+        -7.6
+      ],
+      [
+        159.8,
+        -8.9
+      ],
+      [
+        160.15,
+        -9.05
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "A naval landing force from Rabaul occupies Tulagi in the Solomons at the start of May, to set up a seaplane base.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 29 April and 4 May"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "id": "kido-butai-midway-1942",
+    "title": "The Kidō Butai to Midway",
+    "gloss": "from the Bungo Strait, through fog",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-05-27T06:00+09:00",
+      "to": "1942-06-04T07:00-12:00",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "turn",
+    "event": "midway-1942",
+    "from": "bungo-strait",
+    "to": null,
+    "points": [
+      [
+        132.6,
+        32.7
+      ],
+      [
+        140,
+        28.3
+      ],
+      [
+        144.1,
+        29.1
+      ],
+      [
+        150,
+        30.9
+      ],
+      [
+        155.7,
+        32.8
+      ],
+      [
+        161.2,
+        34.2
+      ],
+      [
+        166.87,
+        35.94
+      ],
+      [
+        171.4,
+        37.08
+      ],
+      [
+        174.99,
+        34.68
+      ],
+      [
+        179.53,
+        31.48
+      ],
+      [
+        -179.33,
+        30.6
+      ]
+    ],
+    "pointPrecision": "chart",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1942-05-27T06:00+09:00",
+        "note": "\"At 0600 27 May the force departed\"; the chart's noon position N/27 at the Bungo Strait.",
+        "sourceClock": "0600",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-05-27",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 1,
+        "t": "1942-05-28T12:00+09:00",
+        "note": "N/28; rendezvous with the supply unit at 14:30.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-05-28",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 2,
+        "t": "1942-05-29T12:00+09:00",
+        "note": "N/29.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-05-29",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 3,
+        "t": "1942-05-30T12:00+09:00",
+        "note": "N/30; air action drill.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-05-30",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 4,
+        "t": "1942-05-31T12:00+09:00",
+        "note": "N/31; refuelling.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-05-31",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 5,
+        "t": "1942-06-01T12:00+09:00",
+        "note": "N/1; every ship refuels on 1–2 June.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-01",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 6,
+        "t": "1942-06-02T12:00+09:00",
+        "note": "N/2; thick fog.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-02",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 7,
+        "t": "1942-06-03T12:00+09:00",
+        "note": "N/3; \"intermittent fogs continue\"; the turn south-east.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-03",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 8,
+        "t": "1942-06-04T12:00+09:00",
+        "note": "N/4.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-04",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 9,
+        "t": "1942-06-04T04:30-12:00",
+        "note": "0130/5: the launch of the Midway strike; Midway time 04:30 on 4 June.",
+        "sourceClock": "0130",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "source": "nagumo-1947"
+      },
+      {
+        "at": 10,
+        "t": "1942-06-04T07:00-12:00",
+        "note": "0400/5; Midway time 07:00 on 4 June.",
+        "sourceClock": "0400",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "source": "nagumo-1947"
+      }
+    ],
+    "units": [
+      "akagi",
+      "kaga",
+      "soryu",
+      "hiryu"
+    ],
+    "summary": "The carriers leave the Bungo Strait on 27 May, meet their supply ships south of Japan and steam east, refuelling on 1–2 June and running through thick fog on the 2nd and 3rd before turning south-east toward Midway. At 01:30 Tokyo time on 5 June, 04:30 on 4 June by Midway's clock, they launch the strike on the atoll.",
+    "sources": [
+      {
+        "id": "nagumo-1947",
+        "where": "Chart 1, \"Track Chart, Battle of Midway\""
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 4 June"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "nagumo-1947",
+        "says": "The chart's noon positions read by eye to about ±0.5° (R3 with a calibration script; the last five re-read in this pass on the chart's 170° and 180° meridians and 30° and 40° parallels as Mercator, agreeing with R3 within 0.15°).",
+        "scope": "the reading"
+      }
+    ],
+    "notes": "The retirement on the same chart mixes the Main Body's track with the Kidō Butai's and is left out until re-read from the JACAR original (R3 §6.6). `units` are the battles workflow's expected unit ids for the four carriers; the integrator reconciles them."
+  },
+  {
+    "id": "tf16-tf17-midway-1942",
+    "title": "Task Forces 16 and 17 to the north-east of Midway",
+    "gloss": "waiting at the rendezvous",
+    "kind": "fleet",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1942-05-28",
+      "to": "1942-06-04T04:30-12:00",
+      "precision": "day",
+      "clock": "usn-zp10"
+    },
+    "chapter": "turn",
+    "event": "midway-1942",
+    "from": "pearl-harbor",
+    "to": null,
+    "points": [
+      [
+        -157.97,
+        21.32
+      ],
+      [
+        -158.2,
+        21.27
+      ],
+      [
+        -160.5,
+        23.6
+      ],
+      [
+        -166,
+        27.5
+      ],
+      [
+        -172.75,
+        32.07
+      ],
+      [
+        -174.6,
+        32
+      ],
+      [
+        -176.5,
+        31.5
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1942-05-28",
+        "zone": "-09:30",
+        "precision": "day",
+        "note": "TF 16 sails from Pearl Harbor on 28 May, TF 17 on 30 May (*verify*)."
+      },
+      {
+        "at": 4,
+        "t": "1942-06-02T17:30-10:00",
+        "note": "TF 16 sighted at 32°04′ N 172°45′ W at 17:30 on 2 June (\"Task Force SIXTEEN was sighted\").",
+        "sourceClock": "1730",
+        "sourceZone": "-10:00",
+        "sourceDate": "1942-06-02",
+        "source": "comcrupac-midway-1942"
+      },
+      {
+        "at": 6,
+        "t": "1942-06-04T04:30-12:00",
+        "note": "TF 17's planned 04:30 position, \"013° (T), distant 202 miles from Midway\" (NWC p. 120).",
+        "source": "nwc-midway-1948"
+      }
+    ],
+    "units": [
+      "enterprise",
+      "hornet",
+      "yorktown"
+    ],
+    "summary": "Enterprise and Hornet, then the hastily repaired Yorktown, sail from Pearl Harbor, refuel at sea and meet north-east of Midway on 2 June. Through the 3rd they move west and then north, and in the night close a point north of the atoll from which the Japanese carriers will be within reach at dawn.",
+    "sources": [
+      {
+        "id": "comcrupac-midway-1942"
+      },
+      {
+        "id": "oni-cn-midway-1943"
+      },
+      {
+        "id": "nwc-midway-1948",
+        "where": "p. 120"
+      },
+      {
+        "id": "cincpac-midway-1942"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "The legs from Pearl Harbor to the rendezvous are schematic. `units` are the expected unit ids for the three carriers; the integrator reconciles them."
+  },
+  {
+    "id": "midway-occupation-force-1942",
+    "title": "The Midway Occupation Force",
+    "gloss": "the transports from Saipan",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-05-28",
+      "to": "1942-06-04",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "turn",
+    "event": "midway-1942",
+    "from": "saipan",
+    "to": null,
+    "points": [
+      [
+        145.85,
+        15.3
+      ],
+      [
+        155,
+        20
+      ],
+      [
+        163,
+        24
+      ],
+      [
+        169.6,
+        26.4
+      ],
+      [
+        175,
+        28.1
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2
+    ],
+    "waypoints": [
+      {
+        "at": 3,
+        "t": "1942-06-03T09:00-12:00",
+        "note": "First sighted \"about 0900 … bearing 261° distant 700 miles from Midway\" (CINCPAC); R3 computes about 26°24′ N 169°36′ E.",
+        "source": "cincpac-midway-1942"
+      },
+      {
+        "at": 4,
+        "t": "1942-06-04",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "\"Occupation Force 08/?\" on the Nagumo chart.",
+        "source": "nagumo-1947"
+      }
+    ],
+    "summary": "The transports carrying the troops meant to occupy Midway sail from Saipan and Guam and approach from the west-south-west, where a PBY from Midway sights them on 3 June.",
+    "sources": [
+      {
+        "id": "cincpac-midway-1942"
+      },
+      {
+        "id": "nagumo-1947",
+        "where": "Chart 1"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "tokyo-express-1942",
+    "title": "The Tokyo Express",
+    "gloss": "down the Slot and back before dawn",
+    "kind": "lane",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-08",
+      "to": "1943-02",
+      "precision": "month",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "event": "tokyo-express-1942",
+    "from": "shortland-islands",
+    "to": "tassafaronga",
+    "points": [
+      [
+        155.85,
+        -7.05
+      ],
+      [
+        156.3,
+        -7.3
+      ],
+      [
+        157,
+        -7.6
+      ],
+      [
+        158,
+        -8.1
+      ],
+      [
+        159,
+        -8.75
+      ],
+      [
+        159.6,
+        -9.12
+      ],
+      [
+        159.88,
+        -9.33
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "return",
+    "waypoints": [],
+    "summary": "Destroyers loaded with troops and supply drums leave the Shortlands in the afternoon, run down New Georgia Sound between Choiseul and Santa Isabel and New Georgia, unload off Cape Esperance and Tassafaronga in the dark, and are back up the Slot before the aircraft of Henderson Field can find them.",
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944"
+      },
+      {
+        "id": "jm-98"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "guadalcanal-1942-callaghan",
+    "title": "Callaghan's and Scott's cruisers into Savo Sound",
+    "gloss": "escorting the reinforcement convoy",
+    "kind": "fleet",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1942-11-09",
+      "to": "1942-11-13",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "event": "guadalcanal-naval-1-1942",
+    "from": "espiritu-santo",
+    "to": "lunga-point",
+    "points": [
+      [
+        167.1,
+        -15.55
+      ],
+      [
+        166.75,
+        -15.75
+      ],
+      [
+        164,
+        -12.5
+      ],
+      [
+        162.5,
+        -10.4
+      ],
+      [
+        161.15,
+        -9.55
+      ],
+      [
+        160.85,
+        -9.2
+      ],
+      [
+        160.45,
+        -9.25
+      ],
+      [
+        160.15,
+        -9.35
+      ],
+      [
+        160.05,
+        -9.38
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "waypoints": [],
+    "summary": "The cruisers and destroyers escorting the reinforcement convoy come up from Espiritu Santo, pass north of San Cristobal, enter Savo Sound through Indispensable Strait and Lengo Channel, and stand off Lunga, where on the night of 12–13 November they meet Abe's battleships.",
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944",
+        "where": "Part I"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "guadalcanal-1942-abe",
+    "title": "Abe's Raiding Group toward Henderson Field",
+    "gloss": "Hiei and Kirishima from the north",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-11-09",
+      "to": "1942-11-13",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "turn",
+    "event": "guadalcanal-naval-1-1942",
+    "from": "truk",
+    "to": null,
+    "points": [
+      [
+        151.85,
+        7
+      ],
+      [
+        156,
+        -2
+      ],
+      [
+        158.9,
+        -7.2
+      ],
+      [
+        159.95,
+        -8.45
+      ],
+      [
+        159.9,
+        -8.6
+      ],
+      [
+        159.6,
+        -8.6
+      ],
+      [
+        159.95,
+        -9.2
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "The battleships Hiei and Kirishima, with a cruiser and destroyers, come south from Truk to shell Henderson Field, passing the Solomons from the north to reach Savo Sound in the first hours of 13 November.",
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944",
+        "where": "Part I"
+      },
+      {
+        "id": "jacar-batdiv11-1942"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "R3: whether they passed east or west of Santa Isabel is *verify* (USSBS App. 47 and JACAR).",
+    "schematicSegments": [
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "id": "guadalcanal-1942-tanaka",
+    "title": "Tanaka's transports down the Slot",
+    "gloss": "attacked all day on 14 November",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-11-13",
+      "to": "1942-11-15",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "event": "guadalcanal-naval-2-1942",
+    "from": "shortland-islands",
+    "to": "tassafaronga",
+    "points": [
+      [
+        155.85,
+        -7.05
+      ],
+      [
+        156.3,
+        -7.3
+      ],
+      [
+        157,
+        -7.6
+      ],
+      [
+        157.85,
+        -8.15
+      ],
+      [
+        158.6,
+        -8.6
+      ],
+      [
+        159.45,
+        -9.15
+      ],
+      [
+        159.85,
+        -9.28
+      ],
+      [
+        159.88,
+        -9.33
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 3,
+        "t": "1942-11-14",
+        "zone": "+11:00",
+        "precision": "day",
+        "note": "Attacked all day from Henderson Field and Enterprise; the attackers change course at 09°10′ S 157°50′ E (ONI).",
+        "source": "oni-cn-guadalcanal-1944"
+      },
+      {
+        "at": 7,
+        "t": "1942-11-15",
+        "zone": "+11:00",
+        "precision": "day",
+        "note": "The surviving transports beach at Tassafaronga."
+      }
+    ],
+    "summary": "Rear Admiral Tanaka's transports, carrying the reinforcements for which the battleships were to clear the way, come down the Slot and are attacked all day on 14 November; the survivors beach themselves at Tassafaronga at dawn on the 15th.",
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 14–15 November"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "guadalcanal-1942-kondo",
+    "title": "Kondō's bombardment force toward Savo",
+    "gloss": "Kirishima, Atago and Takao from the north",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-11-14",
+      "to": "1942-11-14T20:00+11:00",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "event": "guadalcanal-naval-2-1942",
+    "from": null,
+    "to": null,
+    "points": [
+      [
+        159.3,
+        -5.8
+      ],
+      [
+        159.55,
+        -7.4
+      ],
+      [
+        159.95,
+        -8.55
+      ],
+      [
+        159.4,
+        -8.7
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 3,
+        "t": "1942-11-14T20:00+11:00",
+        "note": "Where the box takes over; a schematic estimate two hours ahead of Sendai's sighting of TF 64 north of Savo at 22:10 (Morison)."
+      }
+    ],
+    "units": [
+      "kirishima",
+      "atago",
+      "takao"
+    ],
+    "summary": "Vice Admiral Kondō brings Kirishima and the heavy cruisers Atago and Takao south from the waters north of the Solomons to shell Henderson Field, screened ahead by Sendai and the destroyers, toward Savo Island on the evening of 14 November.",
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944",
+        "where": "Parts II–III"
+      },
+      {
+        "id": "morison-v"
+      },
+      {
+        "id": "jacar-atago-1942"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "R3: schematic, to be re-read from Atago's report. The end point is an estimate, not a fix; the integrator must align it with the box's units at 20:00 (DATA.md §5: within 20 km).",
+    "schematicSegments": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "guadalcanal-1942-tf64",
+    "title": "Lee's TF 64 round Guadalcanal to Savo",
+    "gloss": "Washington and South Dakota",
+    "kind": "fleet",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1942-11-14",
+      "to": "1942-11-14T20:00+11:00",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "event": "guadalcanal-naval-2-1942",
+    "from": null,
+    "to": null,
+    "points": [
+      [
+        159.6,
+        -10.15
+      ],
+      [
+        159.25,
+        -9.9
+      ],
+      [
+        159.25,
+        -9.55
+      ],
+      [
+        159.45,
+        -9.333
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1942-11-14",
+        "zone": "+11:00",
+        "precision": "day",
+        "note": "Before noon \"about 50 miles southwest of Guadalcanal\" (ONI Part III)."
+      },
+      {
+        "at": 3,
+        "t": "1942-11-14T20:00+11:00",
+        "note": "9°20′ S 159°27′ E, the flag navigator's fix (Washington's report via Morison V n. 54), course 020°, 23 knots.",
+        "sourceClock": "2100",
+        "sourceZone": "+12:00",
+        "sourceDate": "1942-11-14",
+        "source": "morison-v"
+      }
+    ],
+    "units": [
+      "washington",
+      "south-dakota",
+      "walke",
+      "benham",
+      "preston",
+      "gwin"
+    ],
+    "summary": "Rear Admiral Lee's battleships and their destroyer screen come up south of Guadalcanal, round its western end and pass between Savo and the Russell Islands on course 020°, to be north of Savo when the Japanese arrive.",
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944",
+        "where": "Part III"
+      },
+      {
+        "id": "morison-v"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "R5 §3.3: the fix was taken at 2100 on Washington's zone −12 clock, 20:00 on the box's (*verify*). `units` are the expected unit ids; the integrator reconciles them."
+  },
+  {
+    "id": "central-pacific-1943-44",
+    "title": "The Central Pacific drive",
+    "gloss": "from Pearl Harbor across the Mandate",
+    "kind": "campaign",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1943-11-20",
+      "to": "1944-11-27",
+      "precision": "month",
+      "zone": "+10:00"
+    },
+    "chapter": "central-pacific",
+    "event": "tarawa-1943",
+    "from": "pearl-harbor",
+    "to": "ulithi",
+    "points": [
+      [
+        -157.95,
+        21.36
+      ],
+      [
+        172.93,
+        1.36
+      ],
+      [
+        167.73,
+        8.72
+      ],
+      [
+        162.3,
+        11.45
+      ],
+      [
+        145.75,
+        15.18
+      ],
+      [
+        144.7,
+        13.45
+      ],
+      [
+        134.24,
+        7
+      ],
+      [
+        139.7,
+        10
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 1,
+        "t": "1943-11-20",
+        "zone": "+12:00",
+        "precision": "day",
+        "note": "Tarawa and Makin."
+      },
+      {
+        "at": 2,
+        "t": "1944-01-31",
+        "zone": "+11:00",
+        "precision": "day",
+        "note": "Majuro and Kwajalein."
+      },
+      {
+        "at": 3,
+        "t": "1944-02-17",
+        "zone": "+11:00",
+        "precision": "day",
+        "note": "Eniwetok."
+      },
+      {
+        "at": 4,
+        "t": "1944-06-15",
+        "zone": "+10:00",
+        "precision": "day",
+        "note": "Saipan."
+      },
+      {
+        "at": 5,
+        "t": "1944-07-21",
+        "zone": "+10:00",
+        "precision": "day",
+        "note": "Guam, and Tinian on the 24th."
+      },
+      {
+        "at": 6,
+        "t": "1944-09-15",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Peleliu, and Ulithi later in September."
+      }
+    ],
+    "summary": "The arrow of the Central Pacific drive: from Pearl Harbor to the Gilberts in November 1943, the Marshalls in February 1944, the Marianas in the summer and Peleliu and Ulithi in September, with Truk struck and passed by.",
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 December 1943 – 1 October 1944"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "chs. IX–XI"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "new-guinea-1943-44",
+    "title": "The advance along the New Guinea coast",
+    "gloss": "airfield by airfield toward the Philippines",
+    "kind": "campaign",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1943-01",
+      "to": "1944-09",
+      "precision": "month",
+      "zone": "+10:00"
+    },
+    "chapter": "central-pacific",
+    "event": "lae-1943",
+    "from": "buna",
+    "to": "morotai",
+    "points": [
+      [
+        148.35,
+        -8.65
+      ],
+      [
+        147,
+        -6.73
+      ],
+      [
+        147.85,
+        -6.6
+      ],
+      [
+        146.48,
+        -5.72
+      ],
+      [
+        140.72,
+        -2.53
+      ],
+      [
+        139,
+        -1.9
+      ],
+      [
+        136,
+        -1
+      ],
+      [
+        134.9,
+        -1
+      ],
+      [
+        131,
+        -0.35
+      ],
+      [
+        128.4,
+        2.3
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 1,
+        "t": "1943-09-16",
+        "zone": "+10:00",
+        "precision": "day",
+        "note": "Lae."
+      },
+      {
+        "at": 4,
+        "t": "1944-04-22",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Hollandia and Aitape."
+      },
+      {
+        "at": 9,
+        "t": "1944-09-15",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Morotai."
+      }
+    ],
+    "summary": "The Allied advance along New Guinea's north coast: Buna in January 1943, Lae and Finschhafen in September, Saidor in January 1944, the leap to Hollandia in April, then Wakde, Biak, Noemfoor and Sansapor, and Morotai in September 1944.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 65"
+      },
+      {
+        "id": "atlas-battle-fronts-1945"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "leyte-gulf-1944-kurita",
+    "title": "Kurita's force to San Bernardino and Samar",
+    "gloss": "the First Diversion Attack Force",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1944-10-18T01:00+09:00",
+      "to": "1944-10-25T06:15+09:00",
+      "precision": "day",
+      "clock": "usn-item"
+    },
+    "chapter": "return",
+    "event": "samar-1944",
+    "from": "lingga-roads",
+    "to": null,
+    "points": [
+      [
+        104.8,
+        0
+      ],
+      [
+        107.5,
+        2.8
+      ],
+      [
+        109.1,
+        3.75
+      ],
+      [
+        110,
+        4.6
+      ],
+      [
+        114.9,
+        5.25
+      ],
+      [
+        116.43,
+        8.5
+      ],
+      [
+        117.18,
+        9.4
+      ],
+      [
+        118.02,
+        10.83
+      ],
+      [
+        118.43,
+        12.19
+      ],
+      [
+        119.3,
+        12.79
+      ],
+      [
+        119.82,
+        13.06
+      ],
+      [
+        120.7,
+        12.25
+      ],
+      [
+        121.25,
+        11.95
+      ],
+      [
+        121.35,
+        12.15
+      ],
+      [
+        121.8,
+        12.35
+      ],
+      [
+        122.3,
+        13
+      ],
+      [
+        122.58,
+        12.83
+      ],
+      [
+        123,
+        12.7
+      ],
+      [
+        123.45,
+        12.64
+      ],
+      [
+        123.7,
+        12.75
+      ],
+      [
+        123.75,
+        12.55
+      ],
+      [
+        124.05,
+        12.52
+      ],
+      [
+        124.22,
+        12.55
+      ],
+      [
+        124.32,
+        12.7
+      ],
+      [
+        124.45,
+        12.72
+      ],
+      [
+        125.1,
+        12.9
+      ],
+      [
+        125.8,
+        12.55
+      ],
+      [
+        125.88,
+        12.05
+      ]
+    ],
+    "pointPrecision": "chart",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1944-10-18T01:00+09:00",
+        "note": "\"SORTIE 0100 18\" from Lingga.",
+        "sourceClock": "0100",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-18",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 4,
+        "t": "1944-10-22T08:00+09:00",
+        "note": "Arrived at Brunei at noon on the 20th; sorties at 08:00 on the 22nd.",
+        "sourceClock": "0800",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-22",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 5,
+        "t": "1944-10-23T00:00+09:00",
+        "note": "\"00/23\" on the chart.",
+        "sourceClock": "0000",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-23",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 6,
+        "t": "1944-10-23",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Submarines sink Atago and Maya in the Palawan Passage (Atago at 9°24′ N 117°11′ E, chronology).",
+        "source": "usn-chron"
+      },
+      {
+        "at": 9,
+        "t": "1944-10-24T00:00+09:00",
+        "note": "\"00/24\" on the chart.",
+        "sourceClock": "0000",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-24",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 16,
+        "t": "1944-10-24",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Musashi sunk by aircraft in the Sibuyan Sea (chronology).",
+        "source": "usn-chron"
+      },
+      {
+        "at": 22,
+        "t": "1944-10-25T00:00+09:00",
+        "note": "\"00/25\": through San Bernardino Strait at midnight.",
+        "sourceClock": "0000",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-25",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 27,
+        "t": "1944-10-25T06:15+09:00",
+        "note": "Where the Samar box takes over: computed back along course 170° at 20 knots from the main body's 06:50 position on the Battle Experience chart (R5 §4.3).",
+        "source": "sib22-leyte-1945"
+      }
+    ],
+    "units": [
+      "yamato",
+      "nagato",
+      "kongo",
+      "haruna",
+      "chokai",
+      "haguro",
+      "kumano",
+      "suzuya",
+      "chikuma",
+      "tone",
+      "yahagi",
+      "noshiro"
+    ],
+    "summary": "Kurita's battleships and cruisers sail from Lingga Roads, refuel at Brunei, and head north-east along Palawan, where submarines sink Atago and Maya. Through Mindoro Strait and the Sibuyan Sea, where aircraft sink Musashi, they come through San Bernardino Strait at midnight on 24–25 October and turn south down Samar's coast toward Leyte Gulf.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 93, \"Battle for Leyte Gulf: Approach of the Japanese Forces\" (p. 318)"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1944, 23–25 October"
+      },
+      {
+        "id": "sib22-leyte-1945"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "App. 93 read as a Mercator chart on its 110°–130° E meridians and the 0°–40° N parallels, about ±0.3°; the passage through the Sibuyan Sea to San Bernardino is drawn coarsely there and is schematic here, laid between the islands. The return north through San Bernardino on the night of 25–26 October is in the card. `units` are the expected unit ids; the integrator reconciles them."
+  },
+  {
+    "id": "leyte-gulf-1944-nishimura",
+    "title": "Nishimura's force to Surigao Strait",
+    "gloss": "\"C\" Force across the Sulu Sea",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1944-10-22T15:00+09:00",
+      "to": "1944-10-25",
+      "precision": "day",
+      "clock": "usn-item"
+    },
+    "chapter": "return",
+    "event": "leyte-gulf-1944",
+    "from": "brunei-bay",
+    "to": "surigao-strait",
+    "points": [
+      [
+        114.9,
+        5.25
+      ],
+      [
+        116.5,
+        6.8
+      ],
+      [
+        117.45,
+        7.65
+      ],
+      [
+        117.8,
+        7.82
+      ],
+      [
+        119.44,
+        8.8
+      ],
+      [
+        120.77,
+        8.8
+      ],
+      [
+        121.24,
+        8.15
+      ],
+      [
+        123.28,
+        8.72
+      ],
+      [
+        124.6,
+        9.45
+      ],
+      [
+        125.2,
+        9.85
+      ],
+      [
+        125.4,
+        10
+      ],
+      [
+        125.33,
+        10.42
+      ]
+    ],
+    "pointPrecision": "chart",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1944-10-22T15:00+09:00",
+        "note": "Sorties from Brunei (\"DEP 0800–1500 22\").",
+        "sourceClock": "1500",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-22",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 3,
+        "t": "1944-10-23T12:00+09:00",
+        "note": "\"1200/23\" on the chart, at the Balabac Strait.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-23",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 11,
+        "t": "1944-10-25",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Fusō and Yamashiro sunk in Surigao Strait (chronology).",
+        "source": "usn-chron"
+      }
+    ],
+    "summary": "Vice Admiral Nishimura's old battleships Fusō and Yamashiro sail from Brunei through the Balabac Strait and across the Sulu and Mindanao Seas, are attacked off Negros on the 24th, and enter Surigao Strait in the night, where they are destroyed.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 93"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1944, 24–25 October"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      1,
+      2,
+      9,
+      10
+    ]
+  },
+  {
+    "id": "leyte-gulf-1944-shima",
+    "title": "Shima's force behind Nishimura",
+    "gloss": "the Second Diversion Attack Force",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1944-10-15T07:00+09:00",
+      "to": "1944-10-25",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "return",
+    "event": "leyte-gulf-1944",
+    "from": "bungo-strait",
+    "to": "surigao-strait",
+    "points": [
+      [
+        132.25,
+        32.75
+      ],
+      [
+        131.2,
+        30.5
+      ],
+      [
+        129.75,
+        28.15
+      ],
+      [
+        129.25,
+        28
+      ],
+      [
+        127.9,
+        27.65
+      ],
+      [
+        124,
+        25.6
+      ],
+      [
+        121.35,
+        25.3
+      ],
+      [
+        120.35,
+        24.45
+      ],
+      [
+        119.75,
+        23.5
+      ],
+      [
+        119.6,
+        21
+      ],
+      [
+        119.6,
+        17.5
+      ],
+      [
+        119.8,
+        14.5
+      ],
+      [
+        120.15,
+        12.55
+      ],
+      [
+        120.6,
+        11.6
+      ],
+      [
+        121.1,
+        10.65
+      ],
+      [
+        121.8,
+        9.8
+      ],
+      [
+        123.1,
+        8.95
+      ],
+      [
+        123.3,
+        9.15
+      ],
+      [
+        123.3,
+        9.2
+      ],
+      [
+        123.8,
+        9.35
+      ],
+      [
+        124.6,
+        9.45
+      ],
+      [
+        125.2,
+        9.85
+      ],
+      [
+        125.4,
+        10
+      ],
+      [
+        125.33,
+        10.3
+      ]
+    ],
+    "pointPrecision": "chart",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      21,
+      22
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1944-10-15T07:00+09:00",
+        "note": "Sorties from the Bungo Channel, \"0700, 15 October\".",
+        "sourceClock": "0700",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-15",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 2,
+        "t": "1944-10-16T12:00+09:00",
+        "note": "Arrives at Amami Ōshima (\"ARR 1200 16\"); sails at 05:30 on the 18th.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-16",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 8,
+        "t": "1944-10-20T08:00+09:00",
+        "note": "At Mako (\"Bako, ARR 0800 20\"); sails at 16:00 on the 21st.",
+        "sourceClock": "0800",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-20",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 12,
+        "t": "1944-10-24T02:00+09:00",
+        "note": "Leaves the Calamian Islands (\"DEP 0200 24\").",
+        "sourceClock": "0200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-24",
+        "source": "ussbs-campaigns-1946"
+      }
+    ],
+    "summary": "Vice Admiral Shima's cruisers sail from Japan by way of Amami Ōshima and Mako, come south down Luzon's west coast, refuel in the Calamian Islands and follow Nishimura into Surigao Strait, where they find his force destroyed and turn back.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XII, App. 93"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "leyte-gulf-1944-ozawa",
+    "title": "Ozawa's carriers, the decoy",
+    "gloss": "the Main Body toward Cape Engaño",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1944-10-20T19:30+09:00",
+      "to": "1944-10-25",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "return",
+    "event": "leyte-gulf-1944",
+    "from": "bungo-strait",
+    "to": "cape-engano",
+    "points": [
+      [
+        132.25,
+        32.75
+      ],
+      [
+        133,
+        30
+      ],
+      [
+        133.27,
+        24.73
+      ],
+      [
+        131,
+        23.5
+      ],
+      [
+        127.5,
+        20.6
+      ],
+      [
+        126.3,
+        19.4
+      ],
+      [
+        125.85,
+        19.33
+      ]
+    ],
+    "pointPrecision": "chart",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1944-10-20T19:30+09:00",
+        "note": "\"DEP 1930 20\" from the Bungo Channel.",
+        "sourceClock": "1930",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-20",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 2,
+        "t": "1944-10-22T00:00+09:00",
+        "note": "\"00/22\" on the chart; it turns south-west on the evening of the 22nd.",
+        "sourceClock": "0000",
+        "sourceZone": "+09:00",
+        "sourceDate": "1944-10-22",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 6,
+        "t": "1944-10-25",
+        "zone": "+09:00",
+        "precision": "day",
+        "note": "Zuikaku sunk off Cape Engaño (chronology).",
+        "source": "usn-chron"
+      }
+    ],
+    "summary": "Vice Admiral Ozawa's carriers, nearly empty of aircraft, sail from the Bungo Channel on the evening of 20 October, steam south and then south-west toward northern Luzon, and draw Halsey's fast carriers north; off Cape Engaño on the 25th they are sunk.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XII, App. 93"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1944, 25 October"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "leyte-gulf-1944-halsey",
+    "title": "Halsey's run north",
+    "gloss": "the fast carriers drawn away",
+    "kind": "fleet",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1944-10-24",
+      "to": "1944-10-26",
+      "precision": "day",
+      "clock": "usn-item"
+    },
+    "chapter": "return",
+    "event": "leyte-gulf-1944",
+    "from": null,
+    "to": null,
+    "points": [
+      [
+        125.9,
+        13.2
+      ],
+      [
+        126.2,
+        15.5
+      ],
+      [
+        126.3,
+        18
+      ],
+      [
+        126.1,
+        19
+      ],
+      [
+        126,
+        16
+      ],
+      [
+        125.6,
+        13.2
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "On the night of 24–25 October Halsey takes the fast carriers north after Ozawa's decoy force, leaving San Bernardino Strait unwatched; late on the 25th part of his force turns back south, too late to meet Kurita.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XII"
+      },
+      {
+        "id": "nwc-leyte-3"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "notes": "R3: schematic; the time of TF 34's turn south and its arrival off San Bernardino are *verify*."
+  },
+  {
+    "id": "ten-go-1945",
+    "title": "Yamato's last sortie",
+    "gloss": "Tokuyama to the East China Sea",
+    "kind": "fleet",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1945-04-06T15:20+09:00",
+      "to": "1945-04-07T14:23+09:00",
+      "precision": "minute",
+      "clock": "jst"
+    },
+    "chapter": "approaches",
+    "event": "ten-go-1945",
+    "from": "tokuyama",
+    "to": "yamato-sinking",
+    "points": [
+      [
+        131.8,
+        33.97
+      ],
+      [
+        131.95,
+        33.7
+      ],
+      [
+        131.98,
+        33.3
+      ],
+      [
+        132.12,
+        32.92
+      ],
+      [
+        131.82,
+        32.5
+      ],
+      [
+        131.73,
+        31.52
+      ],
+      [
+        131.36,
+        31.13
+      ],
+      [
+        130.73,
+        30.96
+      ],
+      [
+        129.85,
+        31
+      ],
+      [
+        129.01,
+        31.04
+      ],
+      [
+        128.24,
+        31.16
+      ],
+      [
+        128.05,
+        30.9
+      ],
+      [
+        128.07,
+        30.37
+      ]
+    ],
+    "pointPrecision": "chart",
+    "direction": "oneway",
+    "schematicSegments": [
+      0,
+      1,
+      2
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "t": "1945-04-06T15:20+09:00",
+        "note": "Leaves the Tokuyama anchorage.",
+        "sourceClock": "1520",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-06",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 3,
+        "t": "1945-04-06T20:00+09:00",
+        "note": "\"Negotiate Bungo Channel\" (Yamato's battle chronology, App. 102); sighted by the submarines Threadfin and Hackleback that evening.",
+        "sourceClock": "2000",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-06",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 4,
+        "t": "1945-04-06T22:00+09:00",
+        "note": "\"2200/6\" on the chart.",
+        "sourceClock": "2200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-06",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 5,
+        "t": "1945-04-07T00:00+09:00",
+        "note": "\"0000/7\", 31°31′ N 131°44′ E.",
+        "sourceClock": "0000",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-07",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 8,
+        "t": "1945-04-07T06:00+09:00",
+        "note": "\"0600/7\", 31°00′ N 129°51′ E.",
+        "sourceClock": "0600",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-07",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 9,
+        "t": "1945-04-07T08:22+09:00",
+        "note": "Contacted by a search plane from Essex.",
+        "sourceClock": "0822",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-07",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 11,
+        "t": "1945-04-07T12:00+09:00",
+        "note": "\"1200/7\", 30°54′ N 128°03′ E; the attacks begin at about 12:40.",
+        "sourceClock": "1200",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-07",
+        "source": "ussbs-campaigns-1946"
+      },
+      {
+        "at": 12,
+        "t": "1945-04-07T14:23+09:00",
+        "note": "\"Yamato sunk 1423/7\", 30°22′ N 128°04′ E.",
+        "sourceClock": "1423",
+        "sourceZone": "+09:00",
+        "sourceDate": "1945-04-07",
+        "source": "ussbs-campaigns-1946"
+      }
+    ],
+    "summary": "Yamato, Yahagi and their destroyers leave Tokuyama in the afternoon of 6 April, pass the Bungo Channel in the evening, run south along Kyushu's east coast in the night, round Cape Sata through the Ōsumi Strait at dawn and steer west into the East China Sea, where carrier aircraft find them in the morning and sink Yamato in the early afternoon.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 100, \"Track Chart of the Yamato Group 6–7 April 45\" (p. 332), and App. 102"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1945, 7 April"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "usn-chron",
+        "says": "The chronology puts the sinking at 30°40′ N 128°03′ E; the USSBS chart and the Yamato TROM at 30°22′ N 128°04′ E.",
+        "scope": "where Yamato sank"
+      }
+    ],
+    "notes": "The chart is in \"TIME ZONE ITEM\" (UTC+9) on a 1° graticule; its labelled positions are used as printed and the others read to about ±0.05°. The leg out of the Inland Sea is schematic."
+  },
+  {
+    "id": "b29-marianas-1944-45",
+    "title": "The B-29 lanes from the Marianas",
+    "gloss": "north past Iwo Jima to Japan's coast",
+    "kind": "air",
+    "side": "us",
+    "medium": "air",
+    "when": {
+      "from": "1944-11-24",
+      "to": "1945-08-15",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "return",
+    "event": "saipan-1944",
+    "from": "saipan",
+    "to": null,
+    "points": [
+      [
+        145.73,
+        15.12
+      ],
+      [
+        143.5,
+        20
+      ],
+      [
+        141.32,
+        24.78
+      ],
+      [
+        139.8,
+        30
+      ],
+      [
+        138.8,
+        34.6
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "From the airfields of Saipan, Tinian and Guam the B-29s fly north over the sea past Iwo Jima, where from March 1945 crippled aircraft can land, to their landfall on Honshu.",
+    "sources": [
+      {
+        "id": "craven-cate",
+        "where": "vol. V"
+      },
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 April 1945"
+      },
+      {
+        "id": "ussbs-air-1947"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "matterhorn-1944",
+    "title": "The B-29s from India and China",
+    "gloss": "Kharagpur, Chengtu, and the Japanese coast",
+    "kind": "air",
+    "side": "us",
+    "medium": "air",
+    "when": {
+      "from": "1944-06-15",
+      "to": "1945-01",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "central-pacific",
+    "event": "ichigo-1944",
+    "from": "kharagpur",
+    "to": null,
+    "points": [
+      [
+        87.32,
+        22.33
+      ],
+      [
+        95,
+        26.5
+      ],
+      [
+        104,
+        30.6
+      ],
+      [
+        114,
+        31.5
+      ],
+      [
+        122,
+        32.5
+      ],
+      [
+        129.6,
+        33.6
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "The first B-29s fly from bases around Kharagpur in India, over the Hump to forward fields at Chengtu, and from there east across China and the East China Sea to the coast of Kyushu; the bases prove too costly to supply, and the bombers move to the Marianas.",
+    "sources": [
+      {
+        "id": "craven-cate",
+        "where": "vol. V"
+      },
+      {
+        "id": "romanus-1956"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": []
+  },
+  {
+    "id": "submarine-lanes-pearl",
+    "title": "US submarine patrols from Pearl Harbor",
+    "gloss": "by Midway to the Empire, the Luzon Strait and the East China Sea",
+    "kind": "lane",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1942-01",
+      "to": "1945-08",
+      "precision": "month",
+      "zone": "+10:00"
+    },
+    "chapter": "first-six-months",
+    "event": "submarine-war",
+    "from": "pearl-harbor",
+    "to": "luzon-strait",
+    "points": [
+      [
+        -157.97,
+        21.32
+      ],
+      [
+        -158.22,
+        21.22
+      ],
+      [
+        -168.22,
+        25.47
+      ],
+      [
+        -177.37,
+        28
+      ],
+      [
+        160,
+        30
+      ],
+      [
+        140,
+        30
+      ],
+      [
+        128,
+        25
+      ],
+      [
+        121.05,
+        20.55
+      ],
+      [
+        121,
+        20.5
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "Boats from Pearl Harbor refuel at Midway and patrol the \"Empire\" areas off Honshu, Kyushu and the Bungo Strait, the East China Sea, and the Luzon Strait, which the crews call Convoy College.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XVI, App. 109–112"
+      },
+      {
+        "id": "usn-chron"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      0,
+      1,
+      2,
+      6,
+      7
+    ]
+  },
+  {
+    "id": "submarine-lanes-fremantle",
+    "title": "Allied submarine patrols from Fremantle",
+    "gloss": "through the Lombok Strait",
+    "kind": "lane",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1942-03",
+      "to": "1945-08",
+      "precision": "month",
+      "zone": "+08:00"
+    },
+    "chapter": "first-six-months",
+    "event": "submarine-war",
+    "from": null,
+    "to": null,
+    "points": [
+      [
+        115.6,
+        -32.1
+      ],
+      [
+        112.8,
+        -25.45
+      ],
+      [
+        112.8,
+        -25
+      ],
+      [
+        115.6,
+        -10.5
+      ],
+      [
+        115.75,
+        -8.75
+      ],
+      [
+        116.2,
+        -6
+      ],
+      [
+        113,
+        -3.5
+      ],
+      [
+        111.5,
+        -3.65
+      ],
+      [
+        110.05,
+        -2.9
+      ],
+      [
+        108.75,
+        0.45
+      ],
+      [
+        109,
+        1.6
+      ],
+      [
+        109.45,
+        2.05
+      ],
+      [
+        109.75,
+        2.1
+      ],
+      [
+        110,
+        2
+      ],
+      [
+        112,
+        8
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "American, British and Dutch boats work from Fremantle north through the Lombok Strait into the Java Sea and the South China Sea, against the tankers coming from the oilfields of the Indies.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XVI"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      0,
+      1,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "japan-oil-route",
+    "title": "Japan's oil and convoy route",
+    "gloss": "the Indies to Moji",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-04",
+      "to": "1945-03",
+      "precision": "month",
+      "zone": "+09:00"
+    },
+    "chapter": "first-six-months",
+    "event": "submarine-war",
+    "from": "singapore",
+    "to": "shimonoseki-strait",
+    "points": [
+      [
+        104,
+        1.1
+      ],
+      [
+        105.5,
+        4
+      ],
+      [
+        108.8,
+        10.5
+      ],
+      [
+        109.6,
+        12.5
+      ],
+      [
+        113.45,
+        20.45
+      ],
+      [
+        113.5,
+        20.5
+      ],
+      [
+        117.5,
+        22.8
+      ],
+      [
+        120,
+        24.5
+      ],
+      [
+        122.5,
+        27.5
+      ],
+      [
+        126.5,
+        31.5
+      ],
+      [
+        129.5,
+        33.6
+      ],
+      [
+        129.7,
+        33.6
+      ],
+      [
+        130.85,
+        34
+      ],
+      [
+        130.9,
+        33.95
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "Tankers and cargo ships from Palembang, Miri and Balikpapan gather at Singapore and sail in convoy up the coast of Indochina, past Hong Kong and Formosa and through the Formosa Strait to Moji and Shimonoseki, the route the submarines hunt.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XVI, App. 112"
+      },
+      {
+        "id": "ussbs-transport-1947"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      3,
+      4,
+      9,
+      10,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "japan-supply-lines",
+    "title": "Japan's supply line to Truk and Rabaul",
+    "gloss": "Yokosuka, Saipan, Truk, Rabaul",
+    "kind": "convoy",
+    "side": "jp",
+    "medium": "sea",
+    "when": {
+      "from": "1942-01",
+      "to": "1944-02",
+      "precision": "month",
+      "zone": "+09:00"
+    },
+    "chapter": "first-six-months",
+    "event": "submarine-war",
+    "from": "yokosuka",
+    "to": "rabaul",
+    "points": [
+      [
+        139.75,
+        35.1
+      ],
+      [
+        139.7,
+        32.85
+      ],
+      [
+        141,
+        30
+      ],
+      [
+        145.5,
+        15.4
+      ],
+      [
+        146.2,
+        14.25
+      ],
+      [
+        151.85,
+        7.6
+      ],
+      [
+        150.7,
+        -2.85
+      ],
+      [
+        150.8,
+        -3.05
+      ],
+      [
+        152.3,
+        -4.1
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "The garrisons of the central and South Pacific live on ships from Yokosuka by way of Saipan to Truk, and on from Truk to Rabaul, until the submarines and the carriers cut the line.",
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XVI"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "course": "soft"
+    },
+    "tellings": [],
+    "schematicSegments": [
+      0,
+      1,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  {
+    "id": "tokyo-bay-1945",
+    "title": "The Allied fleet into Tokyo Bay",
+    "gloss": "Sagami Bay to the anchorage",
+    "kind": "fleet",
+    "side": "us",
+    "medium": "sea",
+    "when": {
+      "from": "1945-08-27",
+      "to": "1945-09-02",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "end",
+    "event": "surrender-1945",
+    "from": null,
+    "to": "missouri-anchorage",
+    "points": [
+      [
+        139.42,
+        35.13
+      ],
+      [
+        139.65,
+        35.07
+      ],
+      [
+        139.74,
+        35.12
+      ],
+      [
+        139.77,
+        35.2
+      ],
+      [
+        139.775,
+        35.27
+      ],
+      [
+        139.765,
+        35.33
+      ],
+      [
+        139.76,
+        35.355
+      ]
+    ],
+    "pointPrecision": "schematic",
+    "direction": "oneway",
+    "waypoints": [],
+    "summary": "From 27 August the Allied fleet anchors in Sagami Bay, then enters Tokyo Bay by the Uraga Channel to the anchorage off Yokosuka and Yokohama, where Missouri lies for the signing.",
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1945, 27 August – 2 September"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": []
+  }
+]
