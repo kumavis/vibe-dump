@@ -18,6 +18,7 @@ import { BattleLog } from '../ui/log.js'
 import { Card } from '../ui/card.js'
 import { Tooltip } from '../ui/tooltip.js'
 import { Banner } from '../ui/banner.js'
+import { Toast } from '../ui/toast.js'
 import { Hud } from '../ui/hud.js'
 import { Actions } from '../ui/actions.js'
 import { TitleScreen } from '../ui/screens/title.js'
@@ -44,7 +45,10 @@ import { Flow } from './flow.js'
 // battle's dice (else fresh ones per battle), ?races=<seat 0>,<seat 1> the
 // races at the table, ?watch a watched battle at once, ?lowfi no shadows
 // and a pixel ratio of 1, ?fast nothing drawn and game time effectively
-// instant (a test mode), ?debug the hooks.
+// instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
+// server a battle hosted here uses. The fragment `#m=<id>` (N2) opens an
+// online match (`&dev=<id>` plays it as that device, `&sync=` through that
+// server): app/online.js, loaded only then or for Play online.
 // ---------------------------------------------------------------------------
 
 const { W, H } = BOARD
@@ -97,6 +101,7 @@ export function boot(location) {
     card: new Card({ el: $('#card'), sides: () => flow.sides, shown: (u) => view.units.shown(u.id), live: () => flow.player.idle, ask: (fn) => preview(flow.atTable(), fn), facts: () => flow.facts }),
     tooltip: new Tooltip($('#tooltip')),
     banner: new Banner($('#banner')),
+    toast: new Toast($('#toast')),
     hud: new Hud(),
     actions: new Actions(),
     title,
@@ -115,7 +120,25 @@ export function boot(location) {
   ui.actions.wire(human)
   ui.hud.wire({ rig: view.rig })
   wireHelp()
-  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => flow.start(mode) })
+  // (N2) online play: app/online.js, the net layer and Automerge loaded the
+  // first time they are wanted (Play online, a #m= link), never for a game
+  // played here
+  let online = null
+  const goOnline = (how) => {
+    const go = async () => {
+      if (!online) {
+        const { Online, loadNet } = await import('./online.js')
+        await loadNet()
+        online ??= new Online({ flow, params })
+      }
+      return how === 'host' ? online.host() : online.route()
+    }
+    return go().catch((err) => {
+      console.error(err)
+      ui.toast.show(`Online play failed: ${err.message}`, 8000)
+    })
+  }
+  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => flow.start(mode), online: () => goOnline('host') })
   ui.result.wire(() => flow.back(), (more) => human.vote(more))
 
   // ── Boot ──────────────────────────────────────────────────────────────────
@@ -124,6 +147,10 @@ export function boot(location) {
   flow.showTable(flow.S.seed)
   view.run({ mirror: () => player.mirror, sel: () => human.sel?.id })
   if (params.has('watch')) flow.start('watch')
+  addEventListener('hashchange', () => {
+    if (online || /[#&]m=/.test(location.hash)) goOnline()
+  })
+  if (/[#&]m=/.test(location.hash)) goOnline()
   // ?debug exposes the table to the console (and to the test harness)
   if (params.has('debug')) {
     // The input hooks are the calls a click or a button makes, so sim/ can
@@ -332,6 +359,13 @@ export function boot(location) {
       flow.traceListener.settled()
     })
     flow.traceListener = {
+      // (N2) a match followed from as it stands (an online match, a refold):
+      // the trace is its trace so far, as written (none of it pushed again)
+      rejoin: (g) => {
+        trace.splice(0, trace.length, ...g.journal.trace)
+        held.length = 0
+        marks.length = 0
+      },
       begin: () => {
         trace.length = 0
         held.length = 0
@@ -474,6 +508,13 @@ export function boot(location) {
       get session() {
         return flow.session
       },
+      // (N2, not promised) the online page (app/online.js) once loaded, and
+      // the way in: goOnline('host') for Play online, goOnline() for the
+      // URL's #m= (sim/lobby-rig.mjs)
+      get net() {
+        return online
+      },
+      goOnline,
       // (not promised) the HUD model last put on the page
       get hud() {
         return flow.shownHud

@@ -3,7 +3,9 @@
 // where a charge's roll reaches), the range ring of a shot or a charge, a
 // move's path line and the ghost ring where it would end. The input decides
 // what to show (main.js until R7b's input/ tools); this only draws it, from
-// the nav grid it is handed.
+// the nav grid it is handed. (N2) And another player's pick online: a dashed
+// ring round the unit their player has picked up, in their colour, and a
+// line to the one they aim at (app/online.js, from their presence).
 //
 // R7 moved it out of main.js unchanged.
 import * as THREE from 'three'
@@ -11,6 +13,7 @@ import * as THREE from 'three'
 export class Overlay {
   // `grid`: the nav grid's size ({ nx, nz }: every match's grid has it)
   constructor(scene, { W, H, grid }) {
+    this.scene = scene
     this.data = new Uint8Array(grid.nx * grid.nz * 4)
     const tex = (this.tex = new THREE.DataTexture(this.data, grid.nx, grid.nz, THREE.RGBAFormat))
     tex.magFilter = THREE.LinearFilter
@@ -86,6 +89,42 @@ export class Overlay {
   path(pts) {
     this.pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
     this.pathLine.visible = true
+  }
+
+  // (N2) Another player's pick: `at` { x, z, r } the disc of the unit they
+  // hold, `to` { x, z } the unit they aim at (or null), in `color`; null
+  // takes it away. Made the first time it is shown (only an online match
+  // shows one, so a game played alone makes no more three.js objects, nor
+  // their ids' Math.random draws, than it did).
+  peer(at, to = null, color = '#ffffff') {
+    if (!at) {
+      if (this.peerRing) this.peerRing.visible = this.peerLine.visible = false
+      return
+    }
+    if (!this.peerRing) {
+      const pts = Array.from({ length: 49 }, (_, i) => new THREE.Vector3(Math.cos((i / 48) * Math.PI * 2), 0, Math.sin((i / 48) * Math.PI * 2)))
+      const dashed = () => new THREE.LineDashedMaterial({ color: '#ffffff', dashSize: 0.35, gapSize: 0.25, transparent: true, opacity: 0.9, toneMapped: false })
+      this.peerRing = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), dashed())
+      this.peerRing.material.dashSize = 0.12
+      this.peerRing.material.gapSize = 0.08
+      this.peerRing.computeLineDistances()
+      this.peerLine = new THREE.Line(new THREE.BufferGeometry(), dashed())
+      for (const o of [this.peerRing, this.peerLine]) {
+        o.renderOrder = 4
+        this.scene.add(o)
+      }
+    }
+    const ring = this.peerRing, line = this.peerLine
+    ring.position.set(at.x, 0.07, at.z)
+    ring.scale.setScalar(at.r * 1.25)
+    ring.material.color.set(color)
+    ring.visible = true
+    line.visible = !!to
+    if (to) {
+      line.geometry.setFromPoints([new THREE.Vector3(at.x, 0.09, at.z), new THREE.Vector3(to.x, 0.09, to.z)])
+      line.computeLineDistances()
+      line.material.color.set(color)
+    }
   }
 
   // the ghost of a disc of radius r on nav cell i

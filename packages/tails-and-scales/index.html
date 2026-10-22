@@ -57,6 +57,7 @@
           <button data-mode="serpent" class="m1">🐍 Lead the Serpents<small>vs. the AI</small></button>
           <button data-mode="hotseat">⚔️ Two players<small>one screen, take turns</small></button>
           <button data-mode="watch" id="watch">🎥 Watch the AI fight<small>sit back with snacks</small></button>
+          <button id="online" class="wide">🌐 Play online<small>against a friend, who joins by your link</small></button>
         </div>
         <div class="seedrow">
           <label>Battlefield <input id="seed" type="number" min="0" max="4294967295" step="1" /></label>
@@ -99,9 +100,47 @@
           <button id="keepPlaying" class="primary">Keep playing</button>
           <button id="endBattle">End the battle</button>
         </div>
+        <button id="rematch" class="hidden">Rematch</button>
         <button id="again" class="primary">Back to the war room</button>
       </div>
     </div>
+
+    <div id="lobby" class="modal hidden">
+      <div class="panel lobby">
+        <h2>Online battle</h2>
+        <p id="lobbyStatus" class="status"></p>
+        <div class="linkrow">
+          <input id="lobbyLink" readonly aria-label="The battle's link" />
+          <button id="copyLink">Copy link</button>
+          <button id="secondTab" title="Play the other seat in a new tab of this browser">Open second tab</button>
+        </div>
+        <div class="seedrow">
+          <label>Battlefield <input id="lobbyBoard" type="number" min="0" max="4294967295" step="1" /></label>
+          <button id="lobbyReroll">🎲 New battlefield</button>
+        </div>
+        <div class="seats">
+          <div class="seat" data-seat="0"></div>
+          <div class="seat" data-seat="1"></div>
+        </div>
+        <p class="small">Both players press Ready, and the host's page starts the battle. Anyone else who opens the link watches.</p>
+        <button id="lobbyBack">Back to the war room</button>
+      </div>
+    </div>
+
+    <div id="netdialog" class="modal hidden">
+      <div class="panel">
+        <h2 id="netTitle"></h2>
+        <p id="netWhy"></p>
+        <div class="row">
+          <button id="netReport" class="hidden">Download report</button>
+          <button id="netWatch" class="hidden">Keep watching</button>
+          <button id="netBack" class="primary">Back to the war room</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="netbadge" class="hidden"></div>
+    <div id="toast"></div>
 
     <script type="module" src="./main.js"></script>
   </body>

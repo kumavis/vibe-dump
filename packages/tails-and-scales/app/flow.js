@@ -23,18 +23,30 @@
 // shown, which the figures, labels, flags and score read. Input and the HUD
 // read the match itself (G) only once the player has played everything
 // (§2.4).
+//
+// (N2) An online match is the same Session over an Automerge store
+// (app/online.js makes it, from the lobby): follow() hands it to the flow
+// already folded to the log's head, quietly, and the table is drawn from
+// the match as it stands (a snap, the battle log made again from its
+// entries), its events played from there on. Online the table may fall
+// behind (a peer's whole turn arriving at once, a reconnect): the elastic
+// catch-up plays a backlog of over 8 s twice as fast, over 16 s four times,
+// and snaps past one of over 30 s. A refold that undoes moves shown (a
+// concurrent insert, §2.6) snaps the table, keeps the battle log (made again)
+// and says "History changed".
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { edgeOf } from '../core/match.js'
 import { createMatch, fullSetup, preview } from '../core/index.js'
 import { Session } from '../match/session.js'
 import { LocalStore } from '../match/store.js'
-import { MAX_ENTRIES } from '../match/fold.js'
+import { MAX_ENTRIES, Folder } from '../match/fold.js'
 import { project } from '../present/mirror.js'
 import { PACE } from '../present/pace.js'
 import { viewsFor } from '../present/camera-presets.js'
 import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, PHASE_NAME } from '../present/hud-model.js'
 import { EventPlayer } from '../view/player.js'
+import { clock } from '../view/clock.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
 
 // who plays each seat, by the title screen's mode buttons
@@ -167,19 +179,33 @@ export class Flow {
         events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e))
         if (this.traceListener) events = this.traceListener.present(events, this.G)
         this.player.push(events)
+        if (this.online) this.catchUp(ses)
       },
       // The match folded again, some of what was shown undone (a concurrent
       // insert into an online log, §2.6's sync: never in a game played
       // alone, whose log only grows at its end): the table snaps to it as it
-      // stands. (N2 adds the "history changed" toast, and keeps the battle
-      // log and the trace through it.)
-      reset: (G, ses) => {
+      // stands, the battle log (and ?debug's trace) made again from it, and
+      // (N2) a toast says how many moves shown are undone, if any (none when
+      // only two seats' simultaneous entries changed order).
+      reset: (G, ses, { undone = 0 } = {}) => {
+        // (a refold onto another start: two tabs of the host's device each
+        // wrote one at once, from another lobby; its table drawn afresh)
+        if (this.G && !sameTable(this.G.setup, G.setup)) this.redraw()
         this.G = ses.G
         this.sameUnits(this.G)
         this.acted.length = 0
+        this.traceListener?.rejoin?.(G)
         this.player.snap(G, project(G))
+        this.relog(ses.store.entries())
+        if (undone > 0) this.ui.toast?.show(`History changed: ${undone} move${undone === 1 ? '' : 's'} undone`)
       },
+      // (N2) the match's status changed (frozen, read-only): the online
+      // page's to show (app/online.js)
+      status: (status, ses) => this.online?.status?.(status, ses),
     }
+    // (N2) the online match followed: { status(status, session), leave() },
+    // app/online.js's; null for a game played here alone
+    this.online = null
     this.human = null
     this.player = null
   }
@@ -305,6 +331,7 @@ export class Flow {
   // mid-battle are ui/card.js's to decide: DESIGN's R7a notes.)
   idled({ snap = false, G = null } = {}) {
     const tl = this.traceListener, card = this.ui.card
+    clock.boost = 1
     tl?.idle()
     if (snap) this.snapped(G)
     const cu = !snap && card.unit && this.unitById(card.unit.id)
@@ -443,6 +470,8 @@ export class Flow {
     // playable
     if (!Object.hasOwn(MODES, mode)) throw new Error(`no mode "${mode}" (there are ${Object.keys(MODES).join(', ')})`)
     const who = MODES[mode]
+    // (an online match followed is left: a battle here is played alone)
+    if (this.online) this.leaveOnline()
     // (a battle starts on a fresh table: a second start without the end
     // screen's Back would find the last battle's on show)
     if (this.session) this.showTable(this.S.seed)
@@ -499,9 +528,87 @@ export class Flow {
     this.refreshUI()
   }
 
+  // ── Online (N2) ─────────────────────────────────────────────────────────
+  // A Session over an online store, folded to the log's head (as it was
+  // made, quietly: its events went nowhere), its match begun: the table
+  // drawn afresh for its setup and snapped to the match as it stands, the
+  // battle log made again from its entries, and its events played from here
+  // on (the flow's sink). `online`: { status(status, session), leave() }
+  // (app/online.js's).
+  follow(session, online) {
+    const { view, ui, human } = this
+    const G = session.G
+    if (this.online) this.leaveOnline()
+    this.showTable(G.setup.board, tableOf(G.setup))
+    this.session = session
+    this.G = G
+    this.S.control = G.setup.seats.map((s) => s.ctrl)
+    this.seatPlayers(seatsOf(G.setup.seats.map((s) => s.race)))
+    human.sel = null
+    human.reach = null
+    this.traceListener?.begin()
+    this.traceListener?.rejoin?.(G)
+    this.acted.length = 0
+    this.online = online
+    session.sink = this.sink
+    this.player.snap(G, project(G))
+    this.relog(session.store.entries())
+    ui.title.hide()
+    view.rig.setViews(viewsFor({ localSeats: session.localSeats, edges: [0, 1].map((s) => edgeOf(G, s)) }))
+    this.refreshUI()
+  }
+
+  // A fresh table for the Session's match (its setup's), the Session kept.
+  redraw() {
+    const ses = this.session
+    this.session = null
+    try {
+      this.showTable(ses.G.setup.board, tableOf(ses.G.setup))
+    } finally {
+      this.session = ses
+      this.G = ses.G
+    }
+  }
+
+  // The online match left: app/online.js lets go of its document.
+  leaveOnline() {
+    const online = this.online
+    this.online = null
+    clock.boost = 1
+    online?.leave()
+  }
+
+  // The battle log made again from a match's whole log: a quiet fold of
+  // its entries with their events kept, the `log` events written (the last
+  // 80, as many as the log keeps). After a snap onto a match this page
+  // didn't play up to (an online match followed, a refold), what the log
+  // shows is that match's history.
+  relog(entries) {
+    const f = new Folder({ out: [] }), lines = []
+    for (const e of entries) {
+      f.push(e)
+      for (const x of f.G?.out?.splice(0) ?? []) if (x.t === 'log') lines.push(x)
+    }
+    this.ui.log.clear()
+    for (const x of lines.slice(-80)) this.ui.log.write(x.side, x.html, x.cls, x.at)
+  }
+
+  // The elastic catch-up (above): the table's backlog after an entry's
+  // events (view/player.js's estimate, in game seconds), in the wall
+  // seconds it would take to play at the page's speed and frame rate.
+  catchUp(ses) {
+    const behind = this.player.backlog() / (clock.speed * Math.max(clock.rate, 0.05))
+    if (behind > 30) {
+      this.acted.length = 0
+      this.player.snap(ses.G, project(ses.G))
+      this.relog(ses.store.entries())
+    } else clock.boost = behind > 16 ? 4 : behind > 8 ? 2 : 1
+  }
+
   // Back to the war room (the end screen's button): the title, its orbit,
-  // and its table drawn afresh.
+  // and its table drawn afresh (an online match left).
   back() {
+    if (this.online) this.leaveOnline()
     this.ui.result.hide()
     this.ui.title.show()
     this.view.rig.toTitle()

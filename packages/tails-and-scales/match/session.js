@@ -18,11 +18,16 @@
 // it), the seat's head (`p`), the match's hash (`h`) on a single seat's
 // decision, then legal().
 //
-//   new Session({ store, localSeats, dev, rand, sink, onTrace, strict })
+//   new Session({ store, localSeats, dev, rand, sink, onTrace, strict, closing })
 //                         dev: this device (the setup names it on each seat
 //                         played here); rand(): an entry id's random part
 //                         (N2's, so two devices sharing an id don't collide;
-//                         '0' alone); strict: sim/'s, as createMatch's
+//                         '0' alone); strict: sim/'s, as createMatch's;
+//                         closing: (N2, online) say this device's closing
+//                         hash once its match is over (below)
+//   session.open(commit)  (N2) an online log's first entry, before anything
+//                         is written: the host's commitment to the seed
+//                         reveal its start carries (net/seed.js)
 //   session.start(setup, { a })  appends the log's start: the whole setup,
 //                         the rules this game plays (CORE_VERSION, RULES_ID),
 //                         and N2's seed reveal `a` when one is given
@@ -111,7 +116,12 @@
 // When this device finds the match apart from an entry's author (its hash),
 // it says so in the log, out of band from a seat played here, so the
 // author's device freezes at the same entry (§2.6), even when its match is
-// over by then (the Folder's end); a spectator only shows it.
+// over by then (the Folder's end); a spectator only shows it. (N2) And, with
+// `closing`, once its match is over it says so, from a seat played here:
+// its closing hash, a `final` carrying the head the match ended at and its
+// hash there, which every peer's Folder compares (match/fold.js's end),
+// once per device (a Session made over a log that holds this device's
+// final, a reload, says it again never).
 //
 // Pure and synchronous: no DOM, no three.js, nothing awaited. The view plays
 // the events at its own pace, while the match has already run on to the next
@@ -122,13 +132,14 @@ import { envelope, newEntryId, encode, decode } from './envelope.js'
 import { Folder, SIMULTANEOUS } from './fold.js'
 
 export class Session {
-  constructor({ store, localSeats = [], dev = 'local', rand = () => '0', sink = null, onTrace = null, strict = false }) {
+  constructor({ store, localSeats = [], dev = 'local', rand = () => '0', sink = null, onTrace = null, strict = false, closing = false }) {
     if (!Number.isInteger(store.length)) throw new Error('a MatchStore tells its length (match/store.js)')
     this.store = store
     this.localSeats = Object.freeze([...localSeats])
     this.dev = dev
     this.rand = rand
     this.sink = sink
+    this.closing = closing
     this.folder = new Folder({ out: [], onTrace, strict })
     // the entry this device last reported a desync at, and why the last
     // start this device made was never appended
@@ -227,6 +238,14 @@ export class Session {
     })
   }
 
+  // (N2) An online log's first entry: the host's commitment to the seed
+  // reveal (net/seed.js) its start will carry, before anything is written.
+  open(commit) {
+    if (this.store.length) throw new Error('an online log opens before anything else is written to it')
+    const why = this.append({ t: 'open', commit }, { s: -1 })
+    if (why) throw new Error(`the log can't open: ${why}`)
+  }
+
   // The log's start: the whole setup (each seat played here naming this
   // device), and the rules this game plays. A setup no entry can carry
   // (too big, a number JSON can't write) is never appended: the log stays
@@ -320,7 +339,7 @@ export class Session {
         } else if (this.status !== this.shown) {
           this.shown = this.status
           this.call(() => this.sink?.status?.(this.status, this))
-        } else if (!this.tell()) {
+        } else if (!this.tell() && !this.final()) {
           if (this.queue.length) this.drain()
           else if (this.dirty) {
             this.dirty = false
@@ -359,6 +378,16 @@ export class Session {
     this.told = r.at
     this.append({ t: 'desync', at: r.at, mine: r.mine }, { s: seat })
     return true
+  }
+
+  // (`closing`) This device's match is over: its closing hash said, from a
+  // seat played here, once per device (true when it was), on the head the
+  // match ended at.
+  final() {
+    if (!this.closing || this.status !== 'over' || this.folder.finals.has(this.dev)) return false
+    const seat = this.localSeats.find((s) => this.G.setup.seats[s]?.dev === this.dev)
+    if (seat === undefined) return false
+    return !this.append({ t: 'final' }, { s: seat, p: this.folder.last, h: stateHash(this.G) })
   }
 
   // stop following the store

@@ -131,7 +131,7 @@
 //          says so in the log (an out-of-band desync), and the other seat's
 //          peer freezes on it: all three at the same entry, each with a
 //          report (setup, entries, accepted, rejected, both hashes crossed,
-//          the last 50 trace lines and the state). Six drills:
+//          the last 50 trace lines and the state). Eight drills:
 //          hypot  dmath's hypot an ulp high, so the match drifts from the
 //                 start: two where the drifted peer writes that entry (the
 //                 spectator finds it apart by its own hash), one where an
@@ -150,7 +150,17 @@
 //                 round there: the seat that round waits on plays on, its
 //                 entry on the head the others' matches ended at, with the
 //                 hash of a match that went on, which they find apart
-//                 although theirs are over.
+//                 although theirs are over;
+//          closing (N2) the final entry's own application drifts on its
+//                 author's peer (a model slot an ulp off as it is
+//                 accepted, after which nothing more is written): only the
+//                 closing check finds it, each seated peer's Session saying
+//                 its `final` (the head its match ended at, its hash
+//                 there), every peer finding one of them apart and
+//                 freezing; twice, as for late. Here the seats may freeze at
+//                 different entries (each at the other's final, when both
+//                 are written at once), so the drill holds every peer
+//                 frozen by a final, none over.
 //
 //   node sim/merge-sim.mjs [--only <kinds, modes or ids>] [--seeds N] [--dir <packageDir> | --ref <ref>]
 //   node sim/merge-sim.mjs --self-test    each broken copy in MUTANTS must fail it,
@@ -230,7 +240,9 @@ class Net {
 // match has stopped, what it writes is held back until nothing else can
 // happen (the late drill's desync); `fallback`: past its script, a seat
 // sends End or Auto (the deaf drill's round more); `nudged`: its match
-// drifts outside any event (the late drill's), so its view isn't held to it;
+// drifts outside any event (the late and closing drills'), so its view
+// isn't held to it; `closing`: its Session says its closing hash (N2, the
+// closing drill);
 // `reactive` (the reenter scenario): its seats act only from inside its
 // sink's callbacks (events and settled, each half the time left to a later
 // one; reset; dropped), one queued command at a time, never from the run's
@@ -238,7 +250,7 @@ class Net {
 // its own, which settles), and every entry its Session writes is vetted as
 // it is appended (vet, below).
 class Peer {
-  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false, reactive = false, pace = null }) {
+  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false, reactive = false, pace = null, closing = false }) {
     Object.assign(this, { net, name, actor, dev, seats, M, script, fork, hold, fallback, nudged, reactive, pace })
     // (reactive: the command its Session holds queued, and how many it
     // wrote, dropped, and sent from each callback)
@@ -281,7 +293,7 @@ class Peer {
       },
     }
     this.session = new M.S.Session({
-      store: this.store, localSeats: seats, dev, rand,
+      store: this.store, localSeats: seats, dev, rand, closing,
       onTrace: (line, G) => (this.view ??= start(G)),
       sink: {
         // Handed an entry's events, the Session is the match they lead to
@@ -830,12 +842,13 @@ function capScenario(M, it) {
   return { where, steps: 0, peers: 2, entries: list.length, accepted: ref.accepted.length, rejected: ref.rejected.length, resets: 0, refolds: net.peers.reduce((n, p) => n + p.insertsBefore, 0), met: {}, full: N }
 }
 
-// The desync drills (`how`: hypot, late, deaf; the header). One seat's
-// peer runs the drifting copy (`patched`): `odd` for hypot; for late, the
-// seat that waits through the author's final turn; for deaf, the seat the
-// copy's round more waits on first.
+// The desync drills (`how`: hypot, late, deaf, closing; the header). One
+// seat's peer runs the drifting copy (`patched`): `odd` for hypot; for late,
+// the seat that waits through the author's final turn; for deaf, the seat
+// the copy's round more waits on first; for closing, the author of the
+// final entry.
 function drill(M, patched, it, odd, how = 'hypot') {
-  const rand = mulberry32(31337 + (how === 'hypot' ? odd : how === 'late' ? 1000 : 2000))
+  const rand = mulberry32(31337 + (how === 'hypot' ? odd : how === 'late' ? 1000 : how === 'closing' ? 3000 : 2000))
   const net = new Net()
   const setup = jobSetup(it.job), E = it.job.entries
   const devs = { ...setup, seats: setup.seats.map((x, s) => ({ ...x, dev: `d${s}` })) }
@@ -849,6 +862,11 @@ function drill(M, patched, it, odd, how = 'hypot') {
   if (how === 'late') {
     odd = 1 - author
     globalThis.MERGE_SIM_DRIFT_AT = first + 1
+  }
+  if (how === 'closing') {
+    // (every entry of a corpus log is accepted: with the start, its last)
+    odd = author
+    globalThis.MERGE_SIM_DRIFT_AT = E.length + 1
   }
   if (how === 'deaf') {
     // the log folded by the copy: the match must go on past it, and the seat
@@ -864,9 +882,9 @@ function drill(M, patched, it, odd, how = 'hypot') {
   const where = `${it.id} (drill: ${how}, seat ${odd} drifted)`
   const actor = (s) => (how === 'late' ? (s === odd ? 'a' : 'b') : `a${s}`)
   const seats = [0, 1].map((s) => new Peer(net, {
-    name: `seat ${s}${s === odd ? ` (${how === 'hypot' ? 'nudged hypot' : how === 'late' ? 'drifts late' : 'a round more'})` : ''}`,
+    name: `seat ${s}${s === odd ? ` (${how === 'hypot' ? 'nudged hypot' : how === 'late' ? 'drifts late' : how === 'closing' ? 'drifts in the last entry' : 'a round more'})` : ''}`,
     actor: actor(s), dev: `d${s}`, seats: [s], M: s === odd ? patched : M, script, rand: () => nameFrom(rand, 3),
-    hold: how === 'late' && s === odd, nudged: how === 'late' && s === odd, fallback: how === 'deaf' && s === odd,
+    hold: how === 'late' && s === odd, nudged: (how === 'late' || how === 'closing') && s === odd, fallback: how === 'deaf' && s === odd, closing: how === 'closing',
   }))
   const spectator = new Peer(net, { name: 'spectator', actor: 'aS', dev: 'dS', M, rand: () => '0' })
   seats[0].session.start(devs)
@@ -874,6 +892,25 @@ function drill(M, patched, it, odd, how = 'hypot') {
   const peers = [...seats, spectator]
   for (const p of peers) if (p.session.status !== 'desync') throw new Error(`${where}: ${p.name} ends ${p.session.status}, not desync (${p.session.accepted.length} accepted)`)
   const rs = peers.map((p) => p.session.report)
+  if (how === 'closing') {
+    // every peer folded the whole log, its match over before a final froze
+    // it (by its own hash, or on a seat's desync of one), each final from a
+    // seat's own device on the head the match ended at
+    const list = spectator.store.entries(), finals = list.filter((e) => e.t === 'final')
+    const last = list.findLast((e) => e.t !== 'final' && e.t !== 'desync')
+    const atFinal = (r) => finals.some((e) => e.id === r.at)
+    if (!finals.length || finals.some((e) => e.d !== `d${e.s}`)) throw new Error(`${where}: ${finals.length} finals, ${finals.map((e) => `${e.d} for seat ${e.s}`).join(', ')}: each seat's own device says one`)
+    for (const [i, r] of rs.entries()) {
+      if (!atFinal(r)) throw new Error(`${where}: ${peers[i].name} froze at ${r.at} (by ${r.by}), not at a final`)
+      if (!peers[i].session.accepted.includes(last.id)) throw new Error(`${where}: ${peers[i].name} never accepted the log's last entry ${last.id}`)
+    }
+    if (!rs.some((r) => r.by === 'hash')) throw new Error(`${where}: no peer found a final apart by its own hash`)
+    for (const [i, r] of rs.entries()) {
+      const missing = ['setup', 'entries', 'accepted', 'rejected', 'trace', 'state', 'core', 'rules'].filter((k) => r[k] === undefined || r[k] === null)
+      if (missing.length) throw new Error(`${where}: ${peers[i].name}'s report lacks ${missing.join(', ')}`)
+    }
+    return { where, steps, peers: 3, entries: list.length, accepted: spectator.session.accepted.length, rejected: spectator.session.rejected.length, resets: 0, refolds: 0, met: {}, at: rs.map((r) => r.at).join(' / '), found: peers.filter((p, i) => rs[i].by === 'hash').map((p) => p.name).join(', '), watched: rs[2].by === 'hash' ? 'its own hash' : 'a desync entry', how, odd, finals: finals.length }
+  }
   if (rs.some((r) => r.at !== rs[0].at)) throw new Error(`${where}: the peers froze at different entries: ${rs.map((r, i) => `${peers[i].name} ${r.at}`).join(', ')}`)
   // one seat found it by the hash, the other by that seat's desync entry,
   // their hashes crossed
@@ -1668,6 +1705,8 @@ const DRIFTS = {
   late: ['match/fold.js', '    const G = this.G, now = G?.pending, open = this.simul\n', '    const G = this.G, now = G?.pending, open = this.simul\n    if (G && this.accepted.length === globalThis.MERGE_SIM_DRIFT_AT) {\n      const m = G.units.flatMap((u) => u.models).find((x) => x.alive)\n      m.ox += Number.EPSILON * Math.max(1, Math.abs(m.ox))\n    }\n'],
   deaf: ['core/engine.js', 'if (T.round < G.setup.rounds) {', 'if (T.round < G.setup.rounds + 1) {'],
 }
+// (closing: late's nudge, at the last entry)
+DRIFTS.closing = DRIFTS.late
 function drifting(code, work, how) {
   const pkg = copyCode(code, join(work, `drift-${how}`))
   const [file, from, to] = DRIFTS[how]
@@ -1760,6 +1799,8 @@ function tasks({ only, seeds, extras = only === undefined }) {
     // entry that wipes the other army out, found apart itself. deaf: a log
     // that ends on the rounds, as hotseat-late-8 does)
     out.push({ kind: 'drill', how: 'late', id: 'hotseat-late-8' }, { kind: 'drill', how: 'late', id: 'hotseat-aggressive-125' }, { kind: 'drill', how: 'deaf', id: 'hotseat-late-8' })
+    // (N2) closing: the same two logs, the drift inside the final entry
+    out.push({ kind: 'drill', how: 'closing', id: 'hotseat-late-8' }, { kind: 'drill', how: 'closing', id: 'hotseat-aggressive-125' })
     out.push(...hot.map((x) => ({ kind: 'forks', id: x.id })))
   }
   return out
@@ -1775,7 +1816,8 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
     const r = await child(t, pkg, patched[t.how], store)
     const x = r.r
     say(`  ${`${t.id} ${t.kind === 'drill' ? `drill, ${t.how}${t.odd === undefined ? '' : `, seat ${t.odd}`}` : ['cap', 'edges', 'forks', 'votes'].includes(t.kind) ? t.kind : `#${t.seed} ${t.kind}`}`.padEnd(40)} ${r.ok
-      ? t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
+      ? t.kind === 'drill' && x.how === 'closing' ? `ok   all 3 peers froze on a final (${x.finals} said; at ${x.at}), found by ${x.found}, the spectator by ${x.watched}, reported (${x.steps} steps)`
+        : t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
           : t.kind === 'votes' ? `ok   ${x.checks.length} checks: both seats' say at once, in either order, every way (more, end), on to overtime or the end; a second say and another device's refused`
           : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant`
@@ -1883,9 +1925,15 @@ const MUTANTS = {
   // (R8's fixer, round 2) an over match is deaf to a seat's desync: the
   // author of an entry found apart that ended its match (or whose desync
   // lands after the end) never freezes
-  'over-ignores-desync': ['match/fold.js', "      if (e.t === 'desync') return this.outOfBand(e)\n", ''],
+  'over-ignores-desync': ['match/fold.js', "      if (e.t === 'desync' || e.t === 'final') return this.outOfBand(e)\n", "      if (e.t === 'final') return this.outOfBand(e)\n"],
   // an over match is deaf to a seat's hashed command on the head it ended
   // at: a peer whose match ended where another's went on never says so
+  // (N2) the closing check: a device whose match is over never says so; a
+  // final's hash never compared; an over match deaf to a final (the drift
+  // inside the last entry goes unseen)
+  'silent-final': ['match/session.js', "    return !this.append({ t: 'final' }, { s: seat, p: this.folder.last, h: stateHash(this.G) })\n", '    return false\n'],
+  'final-unchecked': ['match/fold.js', '    if (e.h !== stateHash(this.G)) return this.freeze(e)\n', ''],
+  'over-ignores-final': ['match/fold.js', "      if (e.t === 'desync' || e.t === 'final') return this.outOfBand(e)\n", "      if (e.t === 'desync') return this.outOfBand(e)\n"],
   'over-ignores-hash': ['match/fold.js', '      if (e.h !== undefined && e.p === this.last && e.t !== \'concede\' && seat?.ctrl === \'human\' && e.d === seat.dev && e.h !== stateHash(this.G)) return this.freeze(e)\n', ''],
   // tamper by ids alone: another body under an accepted id refolds silently
   'tamper-by-id': ['match/fold.js', 'const gone = this.accepted.filter((id) => !now.has(id) || !same(now.get(id).e, was.get(id).e))', 'const gone = this.accepted.filter((id) => !now.has(id))'],
@@ -2015,7 +2063,7 @@ if (a['self-test']) {
     { kind: 'plain', id: 'hotseat-aggressive-103', seed: 1 }, { kind: 'ai', id: '64-89', seed: 1 },
     { kind: 'cap', id: 'bushtail-random-6' }, { kind: 'edges', id: 'bushtail-random-6' }, { kind: 'drill', how: 'hypot', id: 'hotseat-late-8', odd: 1 },
     { kind: 'forks', id: 'hotseat-late-8' }, { kind: 'forks', id: 'hotseat-random-2' }, { kind: 'votes', id: 'hotseat-late-8' },
-    { kind: 'drill', how: 'late', id: 'hotseat-late-8' }, { kind: 'drill', how: 'deaf', id: 'hotseat-late-8' },
+    { kind: 'drill', how: 'late', id: 'hotseat-late-8' }, { kind: 'drill', how: 'deaf', id: 'hotseat-late-8' }, { kind: 'drill', how: 'closing', id: 'hotseat-aggressive-125' },
     { kind: 'reenter', id: 'hotseat-late-8', seed: 1 }, { kind: 'reenter', id: 'hotseat-random-4', seed: 1 }, { kind: 'reenter', id: 'bushtail-random-6', seed: 1 },
   ]
   const clean = await run(copyCode(dir, join(work, 'unbroken')), load, { quiet: true })
@@ -2066,7 +2114,7 @@ if (ran.has('cap')) said.push('a flooded log freezes alike everywhere')
 if (ran.has('edges')) said.push("the Folder's edges hold")
 if (ran.has('forks')) said.push("a same-seat fork's loser is stale everywhere")
 if (ran.has('votes')) said.push("both seats' say at the round limit folds alike in either order")
-if (ran.has('drill')) said.push('a peer whose maths drifted, early or late, freezes with the others at the same entry, reported')
+if (ran.has('drill')) said.push('a peer whose maths drifted, early or late, freezes with the others at the same entry, reported (and, drifting inside the last entry, every peer on a final: N2\'s closing check)')
 const skipped = ['cap', 'edges', 'forks', 'votes', 'drill'].filter((k) => !ran.has(k))
 console.log(bad.length ? `\nmerge-sim FAILED: ${bad.length} problem(s)` : `\nmerge-sim passed: ${said.join('; ')}${skipped.length ? ` (not run: ${skipped.join(', ')}${a.only ? ', as --only names battles' : ''})` : ''}`)
 process.exit(bad.length ? 1 : 0)

@@ -17,4 +17,14 @@ export const PACE = Object.freeze({
   pause: (s) => s,
   // an event the view has no handler for: its text, then this long
   beat: 0.3,
+  // (N2) about how long an event takes to play, for the table's backlog
+  // (the elastic catch-up, app/flow.js): an estimate, never waited on. A
+  // walk its path at its pace, a pause its length, a dice row its row, a
+  // banner its beat, a shot or a spell about half a second.
+  cost: (e) =>
+    e.t === 'unit.move' ? (e.L ?? 0) / (e.speed || 6) + 0.3
+      : e.t === 'pause' ? e.s ?? 0
+        : e.t === 'dice' ? PACE.dice(e.dice?.length ?? 1)
+          : e.t === 'phase.start' || e.t === 'round.scored' ? 0.9
+            : /^(volley|blast\.|spell\.)/.test(e.t) ? 0.5 : 0,
 })

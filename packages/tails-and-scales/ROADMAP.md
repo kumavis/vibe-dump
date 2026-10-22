@@ -63,7 +63,10 @@ the commit, and add whatever the work turned up.
   `node sim/peers.mjs` (and `--self-test`: P-peers, the corpus played over
   real Automerge by two and three automerge-repo peers, same-seat forks
   included, every peer's document, fold and view agreeing with a fresh fold
-  and the corpus battle; it runs on real time, about a minute). A step
+  and the corpus battle; it runs on real time, about a minute), and from N2
+  `node sim/net-check.mjs` (names, the seed, the start's check, the lobby
+  and a whole battle through a sync server) and `node sim/bundle-check.mjs`
+  (a game played alone loads no Automerge). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -88,9 +91,11 @@ the commit, and add whatever the work turned up.
   `node sim/play-check.mjs` (the shipped page played rendered, without
   `?debug` or `?fast`, through the DOM alone: a watched battle and back,
   vs. the AI from each seat and hotseat, each seat played here placing
-  units by clicks before Begin battle; `--full` without `?lowfi`). A step
-  that changes what one of them reads ports it in the same step (DESIGN's
-  §4 rows and notes say which).
+  units by clicks before Begin battle; `--full` without `?lowfi`), and from
+  N2 `node sim/lobby-rig.mjs` (and `--self-test`: online play in Chromium,
+  pages meeting only through a local sync server, from the lobby to the
+  rematch). A step that changes what one of them reads ports it in the same
+  step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
   distances and angles with `core/dmath.js` (`hypot`, `hypot3`, and since N0
@@ -726,11 +731,19 @@ follows N3.
   corpus battle, `sim/peers.mjs`; the fold linear over it, fold-cost
   `--store automerge`; a 465-entry log's document 11 KB. DESIGN's N1
   notes.)
-- [ ] **N2** Online play: lobby, join by link, joint dice seed, presence,
+- [x] **N2** Online play: lobby, join by link, joint dice seed, presence,
   desync report. `verifyStart` checks your whole seat (race, controller,
   device, name, nonce); names up to 24 characters and 48 bytes. (The
   claude.ai artifact blocks outside connections, so online play works from
-  GitHub Pages or a local server.)
+  GitHub Pages or a local server.) (Play online makes a match and its
+  link; the lobby seats both players, Ready starts the battle from the
+  host's page with dice from its secret and the guest's nonce; each page
+  plays its own seat, others watch; the net badge, the opponent's ghost, the
+  elastic catch-up, "History changed", the desync dialog with its report,
+  Rematch; and a closing check, each seated device's `final` hash, which a
+  drift inside the battle's last entry can't pass. Automerge loads only for
+  online play. `sim/net-check.mjs`, `sim/lobby-rig.mjs` (Chromium, with a
+  local sync server), `sim/bundle-check.mjs`. DESIGN's N2 notes.)
 - [ ] **N3** Spectating, rejoin, scrubbing, replay export, tamper alarm.
 - [ ] **F6** Race selection with a mini 3D diorama of each race's figures,
   on a battle-setup panel that a mode button opens (later steps add the

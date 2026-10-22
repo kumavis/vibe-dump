@@ -59,8 +59,12 @@ export class Stage {
     const frame = () => {
       requestAnimationFrame(frame)
       if (this.fast) clock.speed = 1e4
-      const raw = Math.min(timer.getDelta(), 0.05)
-      const dt = raw * clock.speed
+      const wall = timer.getDelta()
+      const raw = Math.min(wall, 0.05)
+      // (how much game time a wall second gives, at speed 1: under 1 when
+      // frames come slower than 20 a second)
+      if (wall > 0) clock.rate += (raw / wall - clock.rate) * 0.05
+      const dt = raw * clock.speed * clock.boost
       clock.time += dt
       stepTweens(dt)
       parts(dt, clock.time)

@@ -26,8 +26,8 @@
 // player is idle. A new table is a snap (the title's backdrop), and so is a
 // battle's start (onto the backdrop, the battle's table as it stood before
 // anything happened: the same board, terrain and races; the start entry's
-// events then play on from there); a rejoin, a scrub and the catch-up are
-// N2's, with backlog().
+// events then play on from there); (N2) an online match followed, a refold,
+// and the catch-up past a backlog() of 30 s (a scrub is N3's).
 import { applyEvent, project } from '../present/mirror.js'
 import { PACE } from '../present/pace.js'
 import { wait } from './clock.js'
@@ -55,6 +55,14 @@ export class EventPlayer {
 
   get idle() {
     return !this.running && !this.q.length
+  }
+
+  // (N2) about how long, in game seconds, what is queued takes to play
+  // (PACE.cost's estimate: the elastic catch-up's, app/flow.js)
+  backlog() {
+    let s = 0
+    for (const e of this.q) s += PACE.cost(e)
+    return s
   }
 
   // Queue events; they start playing now if nothing is playing.

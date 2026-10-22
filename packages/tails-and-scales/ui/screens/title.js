@@ -29,8 +29,14 @@ export class TitleScreen {
   }
 
   // `S`: the title's state ({ seed }, the board on show); `showTable(seed)`
-  // draws a board's table; `start(mode)` a battle (app/flow.js)
-  wire({ S, showTable, start }) {
+  // draws a board's table; `start(mode)` a battle (app/flow.js); (N2)
+  // `online()` a new online match (app/online.js)
+  wire({ S, showTable, start, online }) {
+    $('#online').onclick = () => {
+      unlock()
+      sfx.click()
+      online()
+    }
     $('#seed').value = S.seed
     $('#reroll').onclick = () => {
       S.seed = (Math.random() * 1e6) | 0

@@ -110,6 +110,12 @@ export const ALLOW = [
   ['data/schema.js', "if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string'))", 1, 'validates the card text is text'],
   ['data/schema.js', 'abilities: [...def.abilities]', 1, 'copies the card text into the normalised type'],
   ['data/schema.js', 'const { key } = def', 1, "reads the race definition's own key, to validate and register it"],
+  // (N2) the online lobby's race picker: each race by its key, name and
+  // icon, and a seat's race shown by its look
+  ['app/online.js', 'Object.keys(RACES).map((key) => ({ key, name: RACES[key].name, icon: RACES[key].icon }))', 1, "the lobby's race picker lists every race by its key, name and icon: presentation"],
+  ['app/online.js', 'races.find((r) => r.key === race)', 1, "a lobby seat's race shown by its name and icon: presentation"],
+  ['ui/screens/lobby.js', 'o.value = r.key', 1, "the race picker's options, one per race by its key: presentation"],
+  ['ui/screens/lobby.js', 'pick.value = s.race', 1, "the race picker shows the seat's race: presentation"],
 ]
 
 function files(dir) {

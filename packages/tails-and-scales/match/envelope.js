@@ -26,6 +26,9 @@
 //   desync {at, mine}             out of band: a seat's device found its
 //                                 match apart from the author's at entry
 //                                 `at` (its own hash, `mine`)
+//   final {} with p and h         out of band (N2's closing check): a seat's
+//                                 device whose match is over, the head it
+//                                 ended at (`p`) and its hash there (`h`)
 //
 // decode(text) refuses anything else: not canonical JSON, over 1 kB, no id,
 // seat or device, an unknown kind, a field of the wrong type, a Folder kind
@@ -55,7 +58,12 @@ const OWN = Object.freeze({
   open: Object.freeze({ commit: 'string' }),
   start: Object.freeze({ core: 'int', rules: 'string', setup: 'object', a: 'string?' }),
   desync: Object.freeze({ at: 'string', mine: 'string' }),
+  final: Object.freeze({}),
 })
+// the envelope fields one of them must carry, and the ones a seat sends
+// (the rest are the log's own, seat -1's)
+const NEEDS = Object.freeze({ final: Object.freeze(['p', 'h']) })
+const SEATED = Object.freeze(['desync', 'final'])
 
 const int = (v) => Number.isSafeInteger(v)
 // a name an envelope may carry (its id, device, prev or hash): the Folder
@@ -93,8 +101,9 @@ function whyNot(e) {
   for (const k of ['p', 'h']) if (Object.hasOwn(e, k) && !isName(e[k])) return `${k} is not a name`
   const own = typeof e.t === 'string' && Object.hasOwn(OWN, e.t) ? OWN[e.t] : null
   if (own) {
-    // (the log's own entries are seat -1's; a desync is a seat's)
-    if ((e.s === -1) !== (e.t !== 'desync')) return `${e.t} for seat ${e.s}`
+    // (the log's own entries are seat -1's; a desync or a final is a seat's)
+    if ((e.s === -1) === SEATED.includes(e.t)) return `${e.t} for seat ${e.s}`
+    for (const k of NEEDS[e.t] ?? []) if (!Object.hasOwn(e, k)) return `${e.t} takes a ${k}`
     for (const k of Object.keys(e)) if (k !== 't' && !ENVELOPE_KEYS.includes(k) && !Object.hasOwn(own, k)) return `${e.t} takes no field "${k}"`
     for (const [k, type] of Object.entries(own)) {
       const optional = type[type.length - 1] === '?', base = type.replace('?', '')

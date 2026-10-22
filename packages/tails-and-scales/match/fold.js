@@ -28,6 +28,8 @@
 //   folder.error          why the last start was refused, or why it is skew
 //   folder.report         a frozen match's report (freeze, below)
 //   folder.head(seat)     the `p` an entry for `seat` must carry
+//   folder.finals         the devices whose closing hash (`final`, N2) has
+//                         been folded, whatever came of it
 //   folder.push(e)        fold one decoded entry (match/envelope.js decode);
 //                         not reentrant (it throws when called while an
 //                         entry is folded or its events handed on: from the
@@ -54,14 +56,16 @@
 // → legal(), on the body alone (bodyOf: legal() refuses any envelope
 // field, §2.6's (R6a) note) → apply.
 //
-// Out of band (§0.2 #6): `concede` and `desync` (OUT_OF_BAND, and no
-// other kind ever: sim/data-check.mjs) come at any time after the start,
-// from a seated human seat's own device; they carry no prev and no hash
-// (an `h` or `p` one carries is never read). A concession is then judged
-// by legal() alone (any human seat, until the battle is decided) and
-// played; a `desync {at, mine}` freezes the match here too, so the author
-// of the entry `at`, whose own hash matched, freezes at the same entry as
-// the device that found it apart.
+// Out of band (§0.2 #6): `concede`, `desync` and (N2) `final`
+// (OUT_OF_BAND, and no other kind ever: sim/data-check.mjs) come at any
+// time after the start, from a seated human seat's own device; a concession
+// and a desync carry no prev and no hash (an `h` or `p` one carries is never
+// read). A concession is then judged by legal() alone (any human seat,
+// until the battle is decided) and played; a `desync {at, mine}` freezes the
+// match here too, so the author of the entry `at`, whose own hash matched,
+// freezes at the same entry as the device that found it apart. A `final`
+// (the closing check, below) is never accepted: the head stays where the
+// end left it.
 //
 // The end. Once the match is over, later entries are inert, but for two
 // that say a peer's match went apart from this one (§2.6): a seat's
@@ -73,7 +77,16 @@
 // nothing more, and a stale or forked entry never names that head; from
 // any other device it is inert, or one forged entry would freeze every
 // peer's result). Neither is caught when a peer whose match went on waits
-// on a seat whose match is over: N2's closing hash (§2.6).
+// on a seat whose match is over, nor a drift inside the entry that ended
+// the match: so (N2's closing check, §2.7) each seated device whose match is
+// over says so once, out of band, as a `final` carrying the head its match
+// ended at (`p`) and its hash after the end (`h`). A Folder on that same
+// head whose match hashes otherwise (over another way, or still live) is
+// apart from it: a desync by the hash, at the `final`, which its Session
+// says out of band as for any other, so the device that ended freezes too
+// (a desync still freezes a match that is over). On any other head it says
+// nothing this Folder can check (a peer that wrote on after that head is
+// held to the rule above by the device that ended): stale.
 //
 // Heads. While a simultaneous decision is open (the deployment, F4's vote),
 // each seat extends its own head: its last accepted entry in that decision,
@@ -93,7 +106,7 @@ import { bodyOf, isName, MAX_NAME } from './envelope.js'
 export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit'])
 // the kinds a seat sends out of band, whatever the match waits on: these
 // two only (§0.2 #6)
-export const OUT_OF_BAND = Object.freeze(['concede', 'desync'])
+export const OUT_OF_BAND = Object.freeze(['concede', 'desync', 'final'])
 // the longest a match's log may run: past it the match freezes ('full')
 export const MAX_ENTRIES = 5000
 // how many trace lines a report keeps
@@ -135,6 +148,7 @@ export class Folder {
     this.openBy = null
     this.last = null
     this.simul = null
+    this.finals = new Set()
     // a sync under way (sync), and an entry being folded or its events
     // handed on (push)
     this.syncing = false
@@ -184,8 +198,9 @@ export class Folder {
     }
     if (this.status === 'over') {
       // what still says a peer's match went apart from this one (the end,
-      // above): a seat's desync, a seat's hashed command on the last head
-      if (e.t === 'desync') return this.outOfBand(e)
+      // above): a seat's desync or final, a seat's hashed command on the
+      // last head
+      if (e.t === 'desync' || e.t === 'final') return this.outOfBand(e)
       const seat = this.G.setup.seats[e.s]
       if (e.h !== undefined && e.p === this.last && e.t !== 'concede' && seat?.ctrl === 'human' && e.d === seat.dev && e.h !== stateHash(this.G)) return this.freeze(e)
     }
@@ -246,11 +261,23 @@ export class Folder {
       this.accept(e)
       return this.halt('desync', { at: e.at, theirs: e.mine, mine: at?.h ?? null, by: e.id, seat: e.s })
     }
+    if (e.t === 'final') return this.closing(e)
     const body = bodyOf(e)
     const why = legal(G, e.s, body)
     if (why) return this.reject(e, `illegal: ${why}`)
     apply(G, e.s, body)
     return this.accept(e)
+  }
+
+  // (N2) A seat's device says its match is over, at the head `p`, hashing
+  // to `h` (the end, above): on this same head a hash that isn't this
+  // match's is a desync by the hash; else it agrees, or (another head) says
+  // nothing this Folder can check. Never accepted.
+  closing(e) {
+    this.finals.add(e.d)
+    if (e.p !== this.last) return this.reject(e, `stale: the match's head is ${this.last}, not ${e.p}`)
+    if (e.h !== stateHash(this.G)) return this.freeze(e)
+    return this.reject(e, `inert: the match is ${this.status}, its closing hash agreeing`)
   }
 
   // The author's hash isn't this match's: a desync, at this entry. Neither

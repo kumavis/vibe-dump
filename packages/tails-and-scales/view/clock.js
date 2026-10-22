@@ -23,8 +23,13 @@ export function bounce(x) {
   return n * (x -= 2.625 / d) * x + 0.984375
 }
 
-// Game time runs `speed` times faster than wall time, so the AI can be hurried.
-export const clock = { speed: 1, time: 0 }
+// Game time runs `speed` times faster than wall time, so the AI can be
+// hurried; (N2) `boost` times faster again while an online table catches up
+// (app/flow.js's elastic catch-up: 1, 2 or 4). `rate`: how much game time
+// a wall second has given lately at speed 1 (view/stage.js: a frame steps
+// at most 0.05 s, so a page drawing fewer than 20 frames a second runs
+// slow), which the catch-up turns a backlog into wall seconds by.
+export const clock = { speed: 1, time: 0, boost: 1, rate: 1 }
 
 const live = new Set()
 

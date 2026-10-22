@@ -83,11 +83,14 @@
 //      the cap 5,000 entries, junk counted (a start and 4,999 junk entries
 //      leave a match live, one more freezes it 'full'); the count exposed
 //      (folder.count, session.count, a report's count);
-//    - out of band: concede and desync only (match/fold.js's OUT_OF_BAND;
-//      the one kind of core's that answers no decision is concede; desync
-//      the one Folder kind a seat sends); in a hotseat battle, every kind
-//      from the seat not waited on, from its own device after its head, is
-//      refused as not its turn but those two;
+//    - out of band: concede, desync and (N2) final only (match/fold.js's
+//      OUT_OF_BAND; the one kind of core's that answers no decision is
+//      concede; desync and final the Folder kinds a seat sends, a final
+//      only with a head and a hash); in a hotseat battle, every kind from
+//      the seat not waited on, from its own device after its head, is
+//      refused as not its turn but concede and desync, and its final on the
+//      head is never accepted (inert when its hash agrees, a desync when
+//      not, stale on another head);
 //    - the hash's format: today's stateHash of a few corpus matches pinned
 //      under today's CORE_VERSION (a change to what shadowState prints must
 //      bump CORE_VERSION and pin anew); UNIT_EXTRAS, a unit field a feature
@@ -639,11 +642,12 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
     check(store.length === 2 && ses.count === 2 && ses.folder.count === 2, `the store's length and the Session's count are the entries folded (${store.length}, ${ses.count})`)
   }
   // out of band
-  check(isDeepStrictEqual([...F.OUT_OF_BAND], ['concede', 'desync']), `the kinds sent out of band are concede and desync, and no other (${F.OUT_OF_BAND.join(', ')})`)
+  check(isDeepStrictEqual([...F.OUT_OF_BAND], ['concede', 'desync', 'final']), `the kinds sent out of band are concede, desync and final, and no other (${F.OUT_OF_BAND.join(', ')})`)
   const loose = Object.entries(RULES).filter(([, r]) => !r.k).map(([k]) => k)
   check(isDeepStrictEqual(loose, ['concede']) && loose.every((k) => F.OUT_OF_BAND.includes(k)), `the one kind of core's that answers no decision is concede (${loose.join(', ')})`)
-  const own = ['open', 'start', 'desync'].filter((t) => !dec({ t, at: 'x', mine: 'y' }).bad || !E.decode(text({ id: 'x.0.0', s: 0, d: 'x', t, commit: 'c', core: 1, rules: 'r', setup: {} })).bad)
-  check(isDeepStrictEqual(own, ['desync']), `of the Folder's own kinds a seat sends desync alone (${own.join(', ')})`)
+  const own = ['open', 'start', 'desync', 'final'].filter((t) => !dec({ t, at: 'x', mine: 'y' }).bad || !dec({ t, p: 'x', h: 'y' }).bad || !E.decode(text({ id: 'x.0.0', s: 0, d: 'x', t, commit: 'c', core: 1, rules: 'r', setup: {} })).bad)
+  check(isDeepStrictEqual(own, ['desync', 'final']), `of the Folder's own kinds a seat sends desync and final alone (${own.join(', ')})`)
+  check([{ h: 'y' }, { p: 'x' }].every((half) => /^final takes a [ph]$/.test(E.decode(text({ id: 'x.0.0', s: 0, d: 'x', t: 'final', ...half })).bad ?? '')), 'a final carries a head and a hash, or decode refuses it')
   {
     // a hotseat battle, past its deployment: the seat not waited on sends
     // each kind, from its own device, after its head
@@ -673,6 +677,16 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
     }
     const taken = Object.keys(fates).filter((t) => fates[t] !== 'turn')
     check(isDeepStrictEqual(taken.sort(), ['concede', 'desync']) && fates.concede === 'taken' && fates.desync === 'taken', `in a hotseat battle (${it.id}), every kind from the seat not waited on is refused as not its turn but concede and desync, taken out of band`, JSON.stringify(fates))
+    // its final, never accepted: on the head with this match's hash it is
+    // inert, with another a desync, on another head stale
+    const finals = ['agrees', 'apart', 'elsewhere'].map((how) => {
+      const { f, env } = fresh()
+      const e = env({ t: 'final' }, idle, { p: how === 'elsewhere' ? 'x.0.0' : f.last, h: how === 'apart' ? 'x' : core.stateHash(f.G) })
+      f.push(e)
+      const r = f.rejected.find((x) => x.id === e.id)
+      return `${how}:${f.accepted.includes(e.id) ? 'accepted' : f.status === 'desync' && f.report?.at === e.id && f.report?.by === 'hash' ? 'desync' : r?.why.split(':')[0]}`
+    })
+    check(isDeepStrictEqual(finals, ['agrees:inert', 'apart:desync', 'elsewhere:stale']), `in a hotseat battle (${it.id}), the idle seat's final is inert on the head with this match's hash, a desync with another, stale elsewhere`, finals.join(', '))
   }
   // the hash's format, pinned under today's CORE_VERSION (a change to what
   // shadowState prints bumps it: pin the new hashes under the new version)
