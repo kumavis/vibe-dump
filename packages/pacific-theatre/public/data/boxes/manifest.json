@@ -5,13 +5,13 @@
       "name": "Midway",
       "event": "midway-1942",
       "bounds": [
-        179.299403,
+        179.2991751,
         27.8,
-        183.000597,
+        184.0008249,
         32.2
       ],
       "size": [
-        1502,
+        1908,
         2048
       ],
       "metresPerTexel": [
@@ -20,26 +20,26 @@
       ],
       "projection": {
         "kind": "tangent",
-        "lon0": 181.15,
+        "lon0": 181.65,
         "lat0": 30,
         "unit": 1
       },
       "placement": {
         "centre": [
-          3886.986337,
-          -2919.141756
+          3935.024765,
+          -2928.698493
         ],
         "jacobian": [
           [
-            0.000996996177601,
-            0.000289210745923
+            0.000996174142965,
+            0.000293275844761
           ],
           [
-            -0.000196818279228,
-            0.00105525149436
+            -0.000199705025016,
+            0.0010565261545
           ]
         ],
-        "convergenceDeg": -15.3266
+        "convergenceDeg": -15.5139
       },
       "height": {
         "file": "boxes/midway/height.png",
@@ -53,16 +53,16 @@
       "stats": {
         "landFraction": 0,
         "minMetres": -5878,
-        "maxMetres": 17.25,
+        "maxMetres": 18,
         "maxAt": [
-          182.615,
+          182.6147,
           28.2093
         ],
         "seaClamped": 189,
         "boundsWidenedTexels": [
-          0.242,
+          0.335,
           0,
-          0.242,
+          0.335,
           0
         ]
       },
@@ -76,15 +76,15 @@
           "liability": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30",
           "terms": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
           "fetched": "2026-10-22",
-          "note": "2 tiles (N28_00_W179_00, N28_00_W178_00) read as windows by HTTP range, at overview level 1 (cells of 60 m; the coarsest at most half a texel), shifted half a cell for PixelIsPoint; 28 one-degree cells have no tile (ocean). A texel is land where at least half its area is GLO-30 land (a cell above 0 m), and holds the land cells’ mean, at least 0.25 m. GLO-30 is a surface model: canopy and buildings read as terrain"
+          "note": "3 tiles (N27_00_W176_00, N28_00_W179_00, N28_00_W178_00) read as windows by HTTP range, at overview level 1 (cells of 60 m; the coarsest at most half a texel), shifted half a cell for PixelIsPoint; 33 one-degree cells have no tile (ocean). A texel is land where at least half its area is GLO-30 land (a cell above 0 m), and holds the land cells’ mean, at least 0.25 m. GLO-30 is a surface model: canopy and buildings read as terrain"
         },
         {
           "id": "gmrt",
           "title": "Global Multi-Resolution Topography synthesis (Ryan et al. 2009)",
           "url": "https://www.gmrt.org/",
           "requests": [
-            "https://www.gmrt.org/services/GridServer?minlongitude=179.29201&maxlongitude=180.00000&minlatitude=27.79355&maxlatitude=32.20645&layer=topo&format=esriascii&mresolution=238",
-            "https://www.gmrt.org/services/GridServer?minlongitude=-180.00000&maxlongitude=-176.99201&minlatitude=27.79355&maxlatitude=32.20645&layer=topo&format=esriascii&mresolution=238"
+            "https://www.gmrt.org/services/GridServer?minlongitude=179.29178&maxlongitude=180.00000&minlatitude=27.79355&maxlatitude=32.20645&layer=topo&format=esriascii&mresolution=238",
+            "https://www.gmrt.org/services/GridServer?minlongitude=-180.00000&maxlongitude=-175.99178&minlatitude=27.79355&maxlatitude=32.20645&layer=topo&format=esriascii&mresolution=238"
           ],
           "fetched": "2026-10-22",
           "licence": "cc-by-4.0",
