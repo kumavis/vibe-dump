@@ -264,8 +264,10 @@ export class Battle {
    * moment has changed the battle, a backward scrub asks (one HUD line)
    * whether to return to the record: answer 'yes' rebuilds the sim from
    * battle.json with the same seed and sets t, 'no' plays forward only.
+   * stop: the stop being walked to, carried with the question so its Y
+   * brings the stop's camera and card ('battle' event 'rebuilt').
    */
-  scrub(t, { answer = null } = {}) {
+  scrub(t, { answer = null, stop = null } = {}) {
     const sim = this.sim
     if (!sim) return
     const tt = sim.clock.clamp(sim.clock.parse(t))
@@ -281,7 +283,7 @@ export class Battle {
       if (tt > sim.t) sim.setTime(tt)
       return false
     }
-    this._question = { t: tt }
+    this._question = { t: tt, stop }
     this.scene?.hud.say('Return to the record at that time? Y: yes · N: play on', 20)
     return null
   }
@@ -481,6 +483,7 @@ export class Battle {
           this._question = null
           this.scrub(q.t, { answer: 'yes' })
           this.scene?.hud.say('', 0)
+          this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'rebuilt', stop: q.stop } }))
         } else if (e.code === 'KeyN' || e.code === 'Escape') {
           this._question = null
           this.scene?.hud.say('', 0)

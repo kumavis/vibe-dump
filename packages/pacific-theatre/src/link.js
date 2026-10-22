@@ -80,6 +80,13 @@ export function link(app, ui) {
     const d = e.detail
     // at the checkpoint the pointer comes back, so the bar's two buttons can be pressed
     if (d.kind === 'checkpoint' && document.pointerLockElement) document.exitPointerLock?.()
+    // a changed battle returned to the record on the way to a stop (the scrub's Y): the stop's camera and card, as the walk gives them
+    const stop = d.kind === 'rebuilt' && d.stop != null ? battle.sim?.record.stops[d.stop] : null
+    if (stop) {
+      L.stop = d.stop
+      battle.lookAtStop(stop)
+      ui.card.openStop(stopCard(d.stop))
+    }
   })
 
   // --- entering, leaving, the stops ----------------------------------------------------------
@@ -145,7 +152,9 @@ export function link(app, ui) {
     if (!sim || battle.input) return
     const stops = sim.record.stops
     if (!stops.length) return
-    const i = Math.max(0, Math.min(stops.length - 1, (L.stop < 0 ? (d > 0 ? -1 : 0) : L.stop) + d))
+    // (after a sortie the walk goes on from where the battle is)
+    const at = L.stop < 0 ? stopIndexAt(sim.t) : L.stop
+    const i = Math.max(0, Math.min(stops.length - 1, at + d))
     goStop(i)
   }
 
@@ -153,8 +162,9 @@ export function link(app, ui) {
     const sim = battle.sim
     const s = sim.record.stops[i]
     if (!s) return
+    // (a changed battle asks first, the HUD's question; its Y comes back as the 'rebuilt' event with the stop)
+    if (battle.scrub(s.t, { stop: i }) !== true) return
     L.stop = i
-    if (battle.scrub(s.t) === null) return // (a changed battle asks first: the HUD's question)
     battle.lookAtStop(s)
     ui.card.openStop(stopCard(i))
   }
