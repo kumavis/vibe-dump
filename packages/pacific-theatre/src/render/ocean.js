@@ -56,6 +56,8 @@ export class Ocean {
       uUnitM: { value: unit },
       uWind: { value: new THREE.Vector2(-0.8, 0.45) },
       uSwellDir: { value: new THREE.Vector2(-0.6, 0.8) },
+      uSeaK: { value: 1 },
+      uSwellK: { value: 1 },
       uDebug: { value: 0 },
     }
     this.material = new THREE.ShaderMaterial({
@@ -85,6 +87,10 @@ export class Ocean {
     this.uniforms.uWind.value.set(x * k, z * k)
     const [sx, sz] = bearing((Number.isFinite(weather.swellFromDeg) ? weather.swellFromDeg : from) + 180)
     this.uniforms.uSwellDir.value.set(sx, sz)
+    // the sea state (Douglas 0–9) scales the chop and the caps; the swell's height the long waves
+    const sea = Number.isFinite(weather.sea) ? weather.sea : 3
+    this.uniforms.uSeaK.value = 0.35 + 0.22 * sea
+    this.uniforms.uSwellK.value = 0.4 + 0.6 * Math.min(4, Number.isFinite(weather.swellM) ? weather.swellM : 1)
   }
 
   update(camera) {
