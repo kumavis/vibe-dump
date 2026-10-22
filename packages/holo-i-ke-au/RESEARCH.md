@@ -1068,3 +1068,284 @@ DESIGN.md §7.4 and here; `sources.json` notes (provenance, not shown in the app
 - The loʻi are still stream bands judged on today's ground. The Land Commission records for Nuʻuanu,
   Pauoa, Kapālama and Kalihi would replace them with parcels, and would say what the terraces of
   upper Kalihi were.
+
+## 12. The second pass
+
+A second round of feedback from the project's owner, October 2026: the arms each side carried, the
+battle choreographed as DESIGN.md §8 now tells it, the Kou camera, the chapters, the Māhele as a land
+division, and sources marked by how much of each was read. `tools/check-data.mjs` enforces what follows
+and is clean. Every source below was read in this pass unless it says otherwise; the scratch scripts that
+did the joins and parsing are described where they matter, and nothing they made is needed to use the data.
+
+| file | change |
+| --- | --- |
+| `mahele.json` | new: the class of each of the 727 State ahupuaʻa units after the Māhele |
+| `districts/nuuanu/features.json` | 65 features (was 62): `behaviour` and `arms` on every force of 1795 and 1783, and on the six fronts; the retreat and pursuit moved to the Lāʻimi stop, the retreat ending below the gap; three forces added at the pali |
+| `events.json` | 57 events (was 54): three added; the Kou camera; two stop sentences; arms tellings on `nuuanu-1795` and `kaheiki-1783`; acreage tellings on `mahele-1848`; Kalaupapa moved to the merged chapter |
+| `eras.json`, `polities.json` | 12 eras (was 13): `kamehameha-iv-v` dissolved into `kauikeaouli` |
+| `layers/manifest.json` | its `eras` map edited in place for the merge (below) |
+| `places.json` | 84 places (was 82): Mauna Loa and Kahuku in Kaʻū |
+| `sources.json` | 82 sources (was 74): eight added; `read` on every source |
+| `tools/check-data.mjs` | behaviour, arms, the edge rules, the camera `target`, `read`, `mahele.json`, the layers era map |
+
+### The Māhele file: `mahele.json`
+
+The schema, for DATA.md to carry:
+
+```jsonc
+{ "about": "…", "method": "…", "precision": { "whole": "…", "combined": "…", "part": "…", "none": "…" },
+  "fields": "…", "fetched": "2026-10-22", "sources": ["oha-kipuka-ahupuaa", "…"],
+  "counts": { "class": { "crown": 70, "…": 0 }, "precision": { … }, "disputed": 27, "withAwardee": 206, "byIsland": { … } },
+  "ahupuaa": [ {
+    "gisId": 38, "name": "Makaweli", "islandId": "kauai",        // as boundaries/ahupuaa.geojson has them (name may be null)
+    "class": "konohiki",                // crown | government | konohiki | mixed | unknown
+    "precision": "whole",               // whole | combined (a State unit joining several ahupuaʻa) | part | none (unknown)
+    "awardee": "Victoria Kamamalu",     // konohiki or mixed only: a name or a list, spelt as the record spells it
+    "parts": [ { "class": "konohiki", "share": 0.99, "awardee": "…", "ili": 2, "how": "…" } ],   // share 0..1 of the unit, or null: recorded, extent not
+    "how": "surrendered in lieu of commutation",                  // how the land came to its class
+    "later": [ { "class": "crown", "year": 1890, "how": "…" } ], // a status given after the Māhele
+    "disputed": [ { "class": "government", "source": "oha-kipuka-ahupuaa" } ],   // a class another source gives it
+    "note": "…", "sources": ["oha-kipuka-crown-lands", "…"], "refs": ["Buke Māhele pp. 1, 2, 5, 223, 225", "LCA 7713:1"] } ] }
+```
+
+Rules, enforced: every gisId is in the boundary file once, with its name and islandId; every unit of the
+boundary file has an entry (an unrecorded one is `unknown`); classes and precisions from the vocabularies;
+`unknown` has precision `none` (or `part` where the Act lists ʻili inside it); `mixed` lists two or more
+classes in `parts`; an awardee only on a konohiki or mixed land; part classes are crown, government or
+konohiki, shares null or 0..1; a later class is crown or government, after 1848; every source exists and a
+recorded class cites at least one opened source. Personal names stay as the records spell them (the
+records carry no diacritics); ʻokina and kahakō are added only to place names, from the State layer.
+
+### Chapters
+
+- **Dissolved: `kamehameha-iv-v`.** The last three Kamehameha kings read as one span, and Kalaupapa belongs
+  with them. `kauikeaouli` now runs 1834–1872 (year 1853, precision 19): "in the time of the last
+  Kamehameha kings", its note naming Kamehameha III, IV and V with the reigns Alexander's chapter heads give
+  (1855–1863, 1863–1872). 1853 is the middle of the span and the year of the Māhele keyframe. Kalākaua's
+  chapter still opens at 1873, now with Lunalilo's election. `kalaupapa-1866` moved; the dissolved era's
+  polity map (the kingdom everywhere, as `kauikeaouli`'s) and its source went with it.
+- **`layers/manifest.json`.** Its `eras` map is keyed by era id, so the dissolved key was removed and
+  `kauikeaouli` given what `eraMap()` in `tools/bake-layers.mjs` computes for 1853: cultivation and
+  settlement from `mahele` to `kingdom` at t 0 (the Māhele keyframe itself), forest from `contact` to
+  `kingdom` at t 0.636. The file is bake output; **`tools/bake-layers.mjs` must learn the new eras on its next
+  run**, which it does by reading `eras.json`, and that run will rewrite the map to the same values.
+- **Kept: `mailikukahi` and `alapai`.** A one-event chapter is not a problem in itself, and neither merge
+  reads better as history. Māʻilikūkahi's chapter is the Oʻahu land-division tradition (Fornander
+  pp. 88–90): the chiefs choose him and he has the island's divisions marked out for good, which is where an
+  atlas of the land from mountain to sea begins. ʻUmi's and Piʻilani's chapter is war and unification on
+  Hawaiʻi and Maui, another story. Alapaʻinui's is the Hawaiʻi Island ruler carrying war across the channels
+  in the 1730s, a generation before Kalaniʻōpuʻu, whose chapter is Hāna, Kakanilua and Cook. Both stay short.
+- **Events added**, each from a source read and none to fill a chapter:
+  `ke-au-okoa-1865` (the newspaper the app's name answers, and where part of Kamakau's history ran: the AAS
+  record, read again, and Kamakau p. 418); `kau-earthquake-1868` (Mauna Loa's eruption, the earthquake of
+  2 April, the Kapāpala mud flow, the sea wave and the Kahuku flow: Alexander pp. 292–293); `lunalilo-1873`
+  (the death of Kamehameha V without an heir and the election of Lunalilo: Alexander pp. 297–299), which
+  opens Kalākaua's chapter. Alexander's chapters also name the Queen's Hospital, the Anglican mission, the
+  constitution of 1864 and the first Japanese immigrants of 1868 (a footnote, p. 290); they were not made
+  events. The new royal mausoleum of 1865, which Alexander describes (p. 291), is a burial place and stays out.
+
+### Arms, from the record
+
+What was read for it:
+
+| source | what |
+| --- | --- |
+| `fornander-v2` | p. 224 (1783: the Oʻahu champions' "long spears and javelins"); pp. 243–244 (1791: "small cannon obtained from traders", Young and Davis "in command of his artillery", gunnery "on both sides"); p. 247 ("the inferiority of firearms on the losing side"); p. 268 and p. 343 (the captured ships' "stores of arms and ammunition", delivered to Kamehameha); p. 348 (Nuʻuanu) |
+| `kamakau-ruling-chiefs` | pp. 135–136 (1783: the companies "with the sling and the bow and arrow", spears and pololū, a dagger); pp. 145, 147–148 (muskets desired, the sloop's cannon Lopaka and muskets, Lopaka hauled into ʻĪao in 1790); p. 153 (Kaʻiana gives Kamehameha "a quantity of muskets and cannon"); p. 154 (the arms of the time, listed); pp. 163–164 (muskets taken at Waimea, Oʻahu, in 1792, to Kalanikūpule); pp. 169–171 (Kalauao; the ships' arms lost) |
+| `malo-1903` | ch. XXXV §60 (p. 257), §85 (p. 260) and Emerson's notes (pp. 266–267) |
+| `ellis-1827` | p. 138 (spears, javelins and slings kept in every house), p. 141 (the weapons described), pp. 16–17 (Nuʻuanu: the chase to the edge, the king's "last spear") |
+| `jarves-1847`, `thrum-annual-1911`, `johnstone-1908`, `pacific-worlds-nuuanu` | as in §10: Young's field-piece; Young "in charge of the cannon"; Kamehameha's guns in lower Nuʻuanu and "Oʻahu guns in the notches above the pali" (the oral account, through the earlier telling: the Wayback Machine reset every connection in this pass) |
+
+**The vocabulary** (`arms` keys): `spear` is the ihe and the pololū; `club` the laʻau pālau, with the
+shark-toothed weapons (Kamakau's "sharks'-teeth", p. 154; the leiomano); `dagger` the pāhoa and the kuʻia;
+`sling` the maʻa with its stones; `musket` the smoothbore musket (the sources say muskets and guns; none says
+rifle); `cannon` a count of small field pieces (Fornander's "small cannon", Jarves's "field-piece"). Bows
+appear in Kamakau's two lists and nowhere in the fighting described, so they have no share.
+
+**The shares are a depiction, not a count.** No source counts weapons. They turn the sources' "most",
+"some" and "few" into numbers for drawing: spears the most (the pololū ranks of Malo §85 and Ellis), clubs
+next, slings a company's worth (Kamakau p. 135), daggers few in hand. Muskets are sparse: one in ten on
+Kamehameha's side (more guns, "the better practice of his soldiers", and the ships' arms delivered to him),
+one in twenty on Oʻahu's (the Waimea muskets of 1792 and whatever Kalanikūpule kept after losing the ships'
+stores); Kaʻiana's people carry Kamehameha's share, since Kaʻiana had brought muskets home (Kamakau p. 153;
+his brother Namakeha shoots "with my gun" in the war with Keōua, p. 154). In 1783 neither side has a firearm: no source read names
+one in that fighting, and the first muskets Kamakau puts in Hawaiian hands come with the ships of 1789–90;
+the check warns on any firearm before 1786.
+
+**The cannon: two, on Kamehameha's side, as far as Lāʻimi.** No source gives a number for Nuʻuanu.
+Fornander's plural ("the number of his guns", and "small cannon" in 1791) needs more than one; Jarves names
+one field-piece in action; Kamakau names one cannon, Lopaka, in 1790, and Kaʻiana's gift of "cannon" after.
+Two is the least the plural allows, and nothing read supports more. They go with the landing, the march and
+the fronts at Puʻiwa and Lāʻimi; none goes with the pursuit or to the pali, since no source puts a gun above
+Lāʻimi (Jarves's field-piece fires on the stone wall, then "the forces of Kamehameha charged"). The Oʻahu side
+has none: Kalanikūpule lost "the large guns on the ships" with the ships (Kamakau pp. 170–171; Fornander
+p. 268). The oral account's Oʻahu "guns in the notches" names no cannon and is a modern reconstruction.
+
+| features | side | spear | club | sling | dagger | musket | cannon |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `force-hawaii-landing`, `force-hawaii-march`, `line-puiwa-hawaii`, `line-laimi-hawaii` | Kamehameha | 0.5 | 0.2 | 0.12 | 0.08 | 0.1 | 2 |
+| `force-hawaii-pursuit`, `force-hawaii-surround` | Kamehameha | 0.5 | 0.2 | 0.12 | 0.08 | 0.1 | 0 |
+| `force-kaiana-crossing` | Kaʻiana | 0.5 | 0.2 | 0.12 | 0.08 | 0.1 | 0 |
+| the other eleven 1795 forces and lines | Oʻahu | 0.52 | 0.22 | 0.13 | 0.08 | 0.05 | 0 |
+| the four 1783 forces | Maui | 0.55 | 0.2 | 0.17 | 0.08 | 0 | 0 |
+| `line-1783-kaheiki` | Oʻahu | 0.55 | 0.22 | 0.15 | 0.08 | 0 | 0 |
+
+### The battle, choreographed (DESIGN.md §8)
+
+| stop (from 0) | features | behaviour |
+| --- | --- | --- |
+| 2 the Kaʻiwi channel | `force-kaiana-crossing` | march |
+| 3 Waikīkī | `force-hawaii-landing` | stand |
+| 4 Kou | `force-oahu-posts` (stand), `force-hawaii-march` (march) | |
+| 5 Puʻiwa | `line-puiwa-oahu`, `line-puiwa-hawaii` | engage |
+| 6 Lāʻimi | `force-oahu-fallback` (run), `line-laimi-oahu` and `line-laimi-hawaii` (engage), `force-oahu-retreat` (run), `force-hawaii-pursuit` (run), `force-oahu-escape-west` and `-east` (run) | |
+| 7 the pali | `force-hawaii-surround` (surround), `force-oahu-last-stand` (stand), `force-oahu-over-the-edge` (leap), `force-oahu-down-the-trail` (run) | |
+| 1783: 0, 1, 2 | the landing (stand), the three columns (march), Kahahana's defence (stand) | |
+
+- **At Lāʻimi** the Oʻahu forces run up the floor of the valley past Luakaha (`force-oahu-retreat`, now at
+  stop 6, its line cut to end below the gap at −157.7955, 21.3650, 450 m short), with Kamehameha's behind
+  them (`force-hawaii-pursuit`, ending in the upper valley at −157.80423, 21.36076). Fornander has the
+  defeat become "an accelerated rout" and Kalanikūpule "hotly pursued"; Jarves the rest "pursued with great
+  slaughter" to the end of the valley; Ellis the army fleeing toward the precipice, "chased by the warriors
+  of Tamehameha". The escapes over the ridges stay as they were.
+- **At the pali.** The floor rises gently to the gap (322 m in the upper valley, 349 m at the gap on the
+  district heights) and the brink lies at about −157.7934, 21.3671, where the ground falls 100 m in the next
+  100 m to the north. `force-oahu-last-stand` follows the brink at the gap for about 115 m (Ellis's stand at
+  the edge, which he gives to Kaʻiana; Jarves and Dibble have the rest driven to the end of the valley);
+  `force-hawaii-surround` comes up the floor from 1.3 km below the gap and ends at the middle of the stand,
+  from the valley side (Fornander, Jarves, Dibble, Ellis); `force-oahu-over-the-edge` runs 70 m from the
+  stand to the brink and ends 30 m from GNIS's Nuʻuanu Pali (Fornander's "large number driven over",
+  Dibble's and Bingham's "precipitated", Jarves's "some", Ellis's "driven headlong"; Kamakau does not
+  mention the pali, and the oral account reads the name otherwise, which the note says). The file down the
+  old path stays. All four are step 6; the check holds a leap's end within 300 m of a place of kind `pali`
+  and a surround's end within 300 m of something of the other side shown at its stop.
+- **Copy.** Two stop sentences changed and nothing else: stop 6 "fall back up the valley" became "run up
+  the valley with Kamehameha's in pursuit"; stop 7 gained "where Kamehameha's forces close in". The pali
+  stop still says that many of the Oʻahu fighters die there, and stops; no note says what is or is not shown.
+
+### The Kou camera
+
+The old camera (`nuuanu-1795` stop 4: bearing 45, pitch 0.6, 4 km back) looked almost straight down on the
+harbour: ray-cast over the district heights at the rig's 42° field and the near view's ×1.3, Puʻiwa sat
+19 % of the frame height above its top edge. The new camera:
+
+- **Bearing 43**, from the geometry: Kou (−157.8625, 21.3098) to Lāʻimi (−157.8335, 21.3393) is 42.7°; Kou to
+  the gap is 48.7°, and the valley bends toward it above Lāʻimi.
+- **Pitch 0.3** (27°), as asked.
+- **`target`, and distance 48.** The rig centres the stop's place (`tour.js` `cameraView`), so with Kou at
+  the centre no distance puts Kou in the lower third: at pitch 0.3 and distance 48 Kou sits at 50 % and the
+  valley is pressed into the top half (Puʻiwa 18 %, the gap 2 %), the lower half harbour and reef. The camera
+  therefore gains an optional `target`, `[lon, lat]`, the point it centres while the stop's pin stays at its
+  place: −157.8534, 21.3189, 1.38 km from Kou along 43°, at the valley mouth below Pūowaina. With it the
+  ray-cast puts Kou 73 % of the way down the frame, Puʻiwa 26 %, Lāʻimi 24 %, Luakaha 11 %, Lanihuli 8 % and the
+  gap 5 %, the top rows reaching the windward side through the notch. **The app must read `target`** (one
+  line in `cameraView`: the target's world point for the rect when present); until it does it centres Kou
+  as above. The check holds `target` to [lon, lat] within 15 km of the stop's place.
+
+### Sources, by what was read
+
+Every source now carries `read`: `full` (31: a web page, an article, a data layer read whole), `part` (38:
+chapters, pages, an abstract; the four papers read only in abstract say so in their notes) or `title` (13:
+cited, not read; exactly the sources with `opened: false`). The check fails a source without it, a source not
+opened with anything but `title`, and an opened one with `title`. The app can then cite only what was read.
+No `access` value needed changing; `buke-mahele-1848` is `open` and `opened: false`, its manuscript being
+unreadable by machine.
+
+Added: `alexander-1891`, `malo-1903`, `chinen-1958` (on the Internet Archive with its author's waiver for the
+LLMC collection), `indices-of-awards-1929`, `buke-mahele-1848`, `crown-lands-report-1894`,
+`oha-kipuka-ahupuaa`, `oha-kipuka-crown-lands`. Checked and not cited: Alexander's *Brief History of Land
+Titles* (1882; no acreage), Linnekin's *Hui Lands of Keʻanae* (open, not needed), OHA's `LCA_State` konohiki
+awards (92, mostly Kauaʻi and Molokaʻi, already in the tenure layer) and `LCAIndex` (2,891 rows, a mix of
+whole-land and kuleana awards), and OHA's `Regulated_Lands` (today's public lands). Van Dyke's *Who Owns the
+Crown Lands of Hawaiʻi?* (2008) is on the Internet Archive for lending only. Found open and not yet read: OHA's
+index of the Government Survey's registered maps (3,526 entries, with PDFs on kipukadatabase.com), which
+holds a large tracing of Nuʻuanu Valley (RM 2028), the Nuʻuanu Pali (RM 4117) and Kāneʻohe Bay sheets
+(RM 4148, 4149); ACCESS.md lists these leads with the walls.
+
+### The Māhele, as a land division
+
+**What the sources are.** OHA's Kīpuka services (15, all open from here) hold two that carry the Māhele:
+`Ahupuaa_State`, a historic land type on 334 of its 695 units, and `Crown_Lands_State`, 219 tenure polygons
+with Buke Māhele pages and awardees, complete for Kauaʻi, Molokaʻi, Lānaʻi and Niʻihau and Crown-only
+elsewhere. The 1929 *Indices of Awards* reprint the Act of 7 June 1848, which names the Crown and Government
+lands one by one, and index every award by awardee and by land, marking an award of a whole ahupuaʻa "Ahp".
+The Buke Māhele itself is open on the Internet Archive as a manuscript scan that no machine can read. The
+State GIS has no historic Crown or Government layer: its "Government Lands" are today's public lands, and the
+Government Survey sheets of 1881, 1885 and 1899 colour crown, government and private land only as images.
+
+**How the file was made** (`about` and `method` in the file say it again):
+
+1. The 727 State units were joined to OHA's 695 by area (a grid of about 400 points in each): 716 names
+   agree and 713 units lie 90 % or more in one OHA unit. A unit takes OHA's land type only where the names
+   agree, so Maunalua and Kuliʻouʻou, which OHA still folds into Waimānalo, take nothing from it.
+2. On Kauaʻi, Molokaʻi, Lānaʻi and Niʻihau the tenure polygons decide, with shares by area. A land the Buke
+   Māhele divided between the king and a chief (ʻAhaʻino 1, Kahananui, Kōloa) is drawn twice there, the line
+   between the halves unmapped; it is `mixed` with both shares null.
+3. On Hawaiʻi, Maui and Oʻahu the land type gives crown and government, the polygons add the Crown lands
+   and the 1890 additions, and the "Ahp" awards give the konohiki and their awardees: 364 such rows in the
+   scan, 230 matched by name to 156 State units of the page's island (and district, where a name repeats), the
+   rest lands the State layer folds into larger units, ʻili, or names the scan garbles. On the four islands
+   Kīpuka maps whole the same rows agree with it in 54 of 55 cases (the one miss is a matching slip: “Waiakalua Kom. 2” read as Waiakalua), which
+   is the test of both the parse and the matching.
+4. An award of the whole land stands over a bare listing of it as government land, which is kept under
+   `disputed` (27 units, all against OHA's land type). Kīpuka's own note on Wahiawa shows how this happens: the
+   Buke Māhele records that land as relinquished by the king to the government (p. 223) by mistake. An award inside a
+   land the records list as Crown, or an award later surrendered in lieu of commutation, makes the land
+   `mixed` with the shares null and a note: both are recorded, the division is not.
+5. The Act's lists check the land types: 57 of 70 crown and 182 of 264 government listings were found in it;
+   the rest are lost in the two-column scan or absent from the Act; 22 of the 82 government ones are lands OHA
+   marks as surrendered in lieu of commutation. The
+   Act's "Ili in …" entries are counted into the lands they lie in as `parts` with an `ili` count; on their
+   own they make Honolulu and Waiau `mixed` (part), and leave eight more `unknown` with the ʻili listed
+   (Hakipuʻu, Waimano, Mānana, Waimalu, Kalihi, Kapālama, Keʻei 1 and 2).
+6. The two Acts of 1890 (unassigned lands declared Crown Land; the Bishop Estate compromise) give `later`
+   on 19 units.
+
+**Coverage.** 535 of 727 units carry a class: government 245, konohiki 178, crown 70, mixed 42; 192 are
+unknown. A konohiki or mixed land names its awardee on 206. By island: Kauaʻi 54 of 54, Niʻihau 2 of 2,
+Molokaʻi 72 of 73, Lānaʻi 11 of 13, Maui 100 of 142, Hawaiʻi 232 of 344, Oʻahu 64 of 98, Kahoʻolawe none.
+The unknown are lands whose award the index scan does not mark or name clearly, lands the State layer joins
+or splits differently from the records, and Oʻahu lands that no record read classes as a whole (Moanalua,
+Kalihi, Kapālama, Waimalu, much of Koʻolauloa). Precision: whole 456, combined 67, part 20, none 184.
+
+**The totals**, now tellings on `mahele-1848`: Chinen (p. 31) gives over 1,500,000 acres to the chiefs,
+about 1,000,000 Crown, 1,500,000 Government and under 30,000 awarded to the people as kuleana; Iaukea's
+report (p. 8) gives 971,463 acres of Crown Lands in 1894, island by island; the Indices' Foreword gives the
+three parts and the nearly 12,000 claims; OHA's layer is counted as it marks its units. Kameʻeleihiwa's
+study of the Māhele (print, not read) is the obvious check on all of it.
+
+**Where it is weak.** The Buke Māhele, the primary record, was not read: a reader of its hand (or AVA
+Konohiki's Buke Māhele pages, which Kīpuka cites and which timed out, or Papakilo, which refused) would settle the 27 disputes and most
+of the 193 unknowns. The konohiki of Hawaiʻi, Maui and Oʻahu rest on a machine reading of a two-column scan
+and on name matching; every match is listed in the scratch report of this pass but not in the file. The
+shares are fractions of today's GIS units, not of the lands as surveyed in the 1850s.
+
+### What the check now enforces
+
+- every force has a `behaviour` from march | run | stand | engage | surround | leap, and `arms`: shares of
+  spear, club, dagger, sling and musket summing to one within 0.02 and a whole number of cannon; a line may
+  carry either and is held to the same rules; a firearm before 1786 warns;
+- a `leap` ends within 300 m of a place of kind `pali`, a `surround` within 300 m of a force or line of
+  another side shown at the same stop; `stop`, steps and every earlier rule as before;
+- a stop camera may carry `target` ([lon, lat], within 15 km of its place);
+- every source has `read`, consistent with `opened`;
+- `mahele.json` as above, when present;
+- `layers/manifest.json`'s era map names only eras in `eras.json` and has one for each (an era that goes
+  leaves a dangling key, and the check fails it); a year that differs from `eras.json` warns.
+
+The synthetic set in `test-data/` has no `read` on its sources; it already failed the check on its own
+terms (108 problems before this pass) and nothing runs the check on it.
+
+### Left for others
+
+- **The app**: read the camera's `target`; draw `behaviour` and `arms` (the renderer's kinds are spear,
+  club, musket and the gun; slings and daggers have shares now); cite only sources whose `read` is not
+  `title`; and, when the Māhele layer is drawn, hatch `mixed` and leave `unknown` blank.
+- **DATA.md**: name `target` on a stop camera, `read` on a source, the `mahele.json` schema above, and
+  behaviour and arms on a line; and its keyframe table's `mahele` row, which still names `kamehameha-iv-v`:
+  `kauikeaouli` now sits on that keyframe exactly, and `kahekili` to `kaahumanu` and `kalakaua` to
+  `liliuokalani` interpolate through it.
+- **`tools/bake-layers.mjs`**: its next run rewrites the era map from `eras.json` (to the values above).
+- **A reader**: the Buke Māhele; Kameʻeleihiwa's appendix; Kamakau's own Hawaiian for the weapons' names;
+  and a cultural reviewer for the pali forces, which now draw a stand, a surround and the leap that DESIGN
+  §8 asks for.

@@ -132,7 +132,7 @@ Coordinates are `[lon, lat]` (GeoJSON order). Ids are kebab-case ASCII.
   "zoom": ["far", "island", "near"],
   "kind": "battle",                 // arrival | battle | founding | construction | eruption | epidemic | law | treaty | voyage | death | protest | restoration | other
   "summary": "one paragraph",
-  "stops": [ { "text": "...", "place": "puiwa", "zoom": "near", "year": 1795 } ],   // camera details are added by the app later
+  "stops": [ { "text": "...", "place": "puiwa", "zoom": "near", "year": 1795 } ],   // a near stop may add "camera" (District packs) with an optional "target": [lon, lat] the view centres on while the pin stays at the place
   "sources": [ { "id": "kamakau-ruling-chiefs", "where": "ch. 12" } ],
   "confidence": { "date": "firm", "place": "firm", "numbers": "soft" },
   "view": "land",                   // optional: the far view the tour shows for this event (land | chiefdoms); by default the tour picks by kind
@@ -144,6 +144,7 @@ Coordinates are `[lon, lat]` (GeoJSON order). Ids are kebab-case ASCII.
 ```jsonc
 { "id": "kamakau-ruling-chiefs", "title": "Ruling Chiefs of Hawaiʻi", "author": "Samuel Mānaiakalani Kamakau",
   "year": 1961, "url": "https://...", "access": "open | print | paywalled", "opened": true,
+  "read": "full | part | title",   // how much was read; title means not opened, and the app cites only full and part
   "note": "revised edition 1992; Hawaiian originals in Ka Nupepa Kuokoa 1866–71" }
 ```
 
@@ -423,7 +424,7 @@ layer: 8 islands, 88 masks, about 4.9 MB with the manifest.
 | id | year | layers | eras that use it directly |
 | --- | --- | --- | --- |
 | `contact` | 1778 | cultivation, settlement, forest | voyaging (with the growth note), mailikukahi, umi, alapai, kalaniopuu |
-| `mahele` | 1853 | cultivation, settlement | none exactly; kahekili to kauikeaouli and kamehameha-iv-v to liliuokalani interpolate through it |
+| `mahele` | 1853 | cultivation, settlement | none exactly; kahekili to kauikeaouli and kauikeaouli to liliuokalani interpolate through it (the era `kamehameha-iv-v` was dissolved into `kauikeaouli`, 1834–1872) |
 | `kingdom` | 1896 | cultivation, settlement, forest | none exactly; liliuokalani sits at t = 0.98 toward it |
 | `now` | 2020 | cultivation, settlement, forest | coda |
 
@@ -775,3 +776,34 @@ stands above `depth`; no raise texel touching a passage; weights of one kind
 on one pack never over one; every patch with a note and sourced date, every
 source with its URL, date and licence; and `public/data/patches/` under 1 MB.
 It prints, per raise patch, the median depth of its ground today and in 1795.
+
+## The Māhele, by ahupuaʻa
+
+`public/data/mahele.json`: the class of every State ahupuaʻa unit after the
+division of 1848, joined to `boundaries/ahupuaa.geojson` by `gisId`, for a
+land-division view at and after the Māhele. Classed where an opened source
+says so, `unknown` otherwise; never guessed from a name.
+
+```jsonc
+{ "about": "…", "method": "…", "fetched": "2026-10-22", "sources": ["oha-kipuka-ahupuaa", "…"],
+  "counts": { "class": { "crown": 70, "government": 245, "konohiki": 178, "mixed": 42, "unknown": 192 }, "disputed": 27, "withAwardee": 206 },
+  "ahupuaa": [ {
+    "gisId": 38, "name": "Makaweli", "islandId": "kauai",       // as the boundary file has them
+    "class": "konohiki",             // crown | government | konohiki | mixed | unknown
+    "precision": "whole",            // whole | combined (a State unit joining several ahupuaʻa) | part | none
+    "awardee": "Victoria Kamamalu",  // konohiki or mixed only, spelt as the record spells it
+    "parts": [ { "class": "konohiki", "share": 0.99, "awardee": "…", "how": "…" } ],
+    "how": "surrendered in lieu of commutation",
+    "later": [ { "class": "crown", "year": 1890, "how": "…" } ],      // a status given after 1848
+    "disputed": [ { "class": "government", "source": "oha-kipuka-ahupuaa" } ],
+    "note": "…", "sources": ["oha-kipuka-crown-lands"], "refs": ["Buke Māhele pp. 1, 2, 5"] } ] }
+```
+
+Rules `check-data.mjs` enforces: every gisId in the boundary file appears
+once and every boundary unit has an entry; vocabularies; `unknown` has
+precision `none`; `mixed` lists two or more classes in `parts`; an awardee
+only on konohiki or mixed land; a recorded class cites at least one opened
+source. Personal names keep the records' spelling; ʻokina and kahakō are
+added only to place names, from the State layer. RESEARCH.md §12 says what
+each source covered and where they disagree.
+

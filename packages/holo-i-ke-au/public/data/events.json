@@ -818,7 +818,7 @@
     "sources": [
       {
         "id": "kamakau-ruling-chiefs",
-        "where": "ch. XI, pp. 135–137; pp. 291–292 (Kaheiki on Boki’s road)"
+        "where": "ch. XI, pp. 135–137; pp. 145, 147, 153 (the first muskets); pp. 291–292 (Kaheiki on Boki’s road)"
       },
       {
         "id": "fornander-v2",
@@ -853,6 +853,14 @@
       {
         "source": "thrum-annual-1907",
         "says": "Lists Kaheiki, Honolulu, as a heiau “of traditional Menehune construction, site of same undiscovered” (p. 45)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kahekili’s army includes the warrior companies and “the experts with the sling and the bow and arrow” (p. 135). The Maui warriors throw “their spears or pololu” at the Oʻahu champions, and one tries to run his dagger into the back of Makaʻioulu’s neck (pp. 135–136). No gun is named in the fighting of 1783; the muskets Kamakau records in Hawaiian hands come later, with the trading ships of 1789 and 1790 (pp. 145, 147, 153)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "The eight Oʻahu champions fight the Maui host at Waikīkī “using their long spears and javelins with marvellous skill and dexterity” (p. 224)."
       }
     ],
     "routes": [
@@ -1351,9 +1359,13 @@
         "zoom": "island",
         "year": 1795,
         "camera": {
-          "bearing": 45,
-          "pitch": 0.6,
-          "distance": 40
+          "bearing": 43,
+          "pitch": 0.3,
+          "distance": 48,
+          "target": [
+            -157.8534,
+            21.3189
+          ]
         }
       },
       {
@@ -1368,7 +1380,7 @@
         }
       },
       {
-        "text": "At Lāʻimi the Oʻahu line gives way. Kaʻiana falls here, by Kamakau’s telling. The Oʻahu forces fall back up the valley, some escaping over the ridges on either side.",
+        "text": "At Lāʻimi the Oʻahu line gives way. Kaʻiana falls here, by Kamakau’s telling. The Oʻahu forces run up the valley with Kamehameha’s in pursuit, some escaping over the ridges on either side.",
         "place": "laimi",
         "zoom": "near",
         "year": 1795,
@@ -1379,7 +1391,7 @@
         }
       },
       {
-        "text": "The retreat ends at the head of the valley, where the land drops away at the pali. Many of the Oʻahu fighters die there.",
+        "text": "The retreat ends at the head of the valley, where Kamehameha’s forces close in and the land drops away at the pali. Many of the Oʻahu fighters die there.",
         "place": "nuuanu-pali",
         "zoom": "near",
         "year": 1795,
@@ -1393,11 +1405,11 @@
     "sources": [
       {
         "id": "kamakau-ruling-chiefs",
-        "where": "ch. XIV, pp. 171–173; p. 192 (cultivation); pp. 271–272 (Kou); pp. 291–292 (the old road)"
+        "where": "ch. XIV, pp. 171–173; p. 153 (muskets and cannon), p. 154 (the arms of the time), p. 164 (muskets on Oʻahu), pp. 169–171 (the ships’ arms); p. 192 (cultivation); pp. 271–272 (Kou); pp. 291–292 (the old road)"
       },
       {
         "id": "fornander-v2",
-        "where": "pp. 343–349"
+        "where": "pp. 243–244, 247, 268, 343–349"
       },
       {
         "id": "james-2004-nuuanu",
@@ -1433,7 +1445,7 @@
       },
       {
         "id": "ellis-1827",
-        "where": "pp. 12–17"
+        "where": "pp. 12–17, 141"
       },
       {
         "id": "johnstone-1908",
@@ -1450,6 +1462,10 @@
       {
         "id": "hgs-1899-oahu",
         "where": "Puiwa"
+      },
+      {
+        "id": "malo-1903",
+        "where": "ch. XXXV §§60, 85, pp. 257, 260, 266–267 (the weapons)"
       }
     ],
     "confidence": {
@@ -1521,6 +1537,22 @@
       {
         "source": "pacific-worlds-nuuanu",
         "says": "An oral account puts the first engagement at the foot of Pūowaina, Kaʻiana’s death near today’s Oʻahu Cemetery, Kamehameha’s guns in lower Nuʻuanu, flanking parties over Tantalus and Pauoa Flats to silence Oʻahu guns in the notches above the pali, and a rear guard near Luakaha so that the main body could escape over ʻĀlewa into Kalihi and down the pali trails. It gives the name as “Ka-lele-a-ke-anae”, the leaping of the ʻanae, and says the name tells something other than the men forced off the cliff. It repeats the find of about 800 skulls in 1897 without a source."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "The guns. In 1791 Kamehameha’s double canoes carry “small cannon obtained from traders”, with John Young and Isaac Davis in command of his artillery (pp. 243–244), and after that battle “the inferiority of firearms on the losing side” sets Kahekili’s chiefs seeking more (p. 247). Kalanikūpule takes the two ships “with all their stores of arms and ammunition” (p. 268), and the crews who retake them deliver “the guns, ammunition, and arms” to Kamehameha (p. 343). At Nuʻuanu Fornander credits Kamehameha’s artillery and “the number of his guns” (p. 348) and gives no number."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "The arms. Kaʻiana, back from abroad, gives Kamehameha “a quantity of muskets and cannon” (p. 153). Muskets taken from a ship’s crew at Waimea on Oʻahu in 1792 go to Kalanikūpule, who “rejoiced to have the muskets” (pp. 163–164). At Kalauao in 1794 Kāʻeo’s men meet “shots from guns and cannon” from Captain Brown’s boats (p. 169); Kalanikūpule then seizes the ships “well-stocked … with weapons and ammunition” and loses them, and their munitions, to Kamehameha (pp. 170–171). Of the wars with Keōua he lists the arms of the time: “pololu and ihe spears, … ku‘ia daggers and laumeki blades, … slings and bows, … sharks’-teeth and pahoa daggers, muskets, and bayonets” (p. 154)."
+      },
+      {
+        "source": "malo-1903",
+        "says": "The chiefs’ men are practised “with the short spear, ihe, the long spear, pololu, the club, laau palau, the kuia [dagger], in the use of the sling” (§60, p. 257), and ranks armed with the pololū stand before the king in battle (§85, p. 260). Emerson’s notes: the pololū was “generally wielded with both hands”, the laʻau pālau “a club of various length, a yard or a fathom”, the kuia “a short sharp pointed stick, a dagger”, and the sling “a very important weapon in warfare” (pp. 266–267)."
+      },
+      {
+        "source": "ellis-1827",
+        "says": "The weapons: the pololū, a spear “from sixteen to twenty feet long”; a javelin about six feet long; the laʻau pālau, “between a club and spear”; the pāhoa, a dagger of hard wood; and the sling, of plaited hair or coconut fibre, its stones “about the size of a hen’s egg” (p. 141). In his telling of Nuʻuanu the king of Oʻahu “hurled his last spear at the advancing foe” (p. 17)."
       }
     ],
     "routes": [
@@ -2099,6 +2131,22 @@
       {
         "id": "hi-leg-scr57-2021",
         "where": "preamble"
+      },
+      {
+        "id": "chinen-1958",
+        "where": "p. 31"
+      },
+      {
+        "id": "crown-lands-report-1894",
+        "where": "p. 8"
+      },
+      {
+        "id": "indices-of-awards-1929",
+        "where": "Foreword; the Act of 7 June 1848, pp. 24–47"
+      },
+      {
+        "id": "oha-kipuka-ahupuaa",
+        "where": "the historic land type of each ahupuaʻa"
       }
     ],
     "confidence": {
@@ -2110,6 +2158,22 @@
       {
         "source": "kamakau-ruling-chiefs",
         "says": "In a passage the editors added in brackets: the king came out with about half the land and the chiefs the other half, and the chiefs’ commutations added about a third of their lands to the government by 1850 (p. 403)."
+      },
+      {
+        "source": "chinen-1958",
+        "says": "“Over 1,500,000 acres of land were set aside for the chiefs in The Great Mahele of 1848, and approximately 1,000,000 acres were reserved by Kamehameha III as ‘Crown Lands,’ and 1,500,000 acres were given by the king to the ‘government and people,’” while “less than 30,000 acres” were awarded to the native tenants, chiefly taro lands, “considered the more valuable lands in the Islands” (p. 31)."
+      },
+      {
+        "source": "indices-of-awards-1929",
+        "says": "The king divided the lands into three parts, “one to the Chiefs, one for the support of the Government, and a third for the King’s personal use”, known as Konohiki, Government and Crown Lands; the chiefs surrendered some of their lands to the government “in lieu of a government commutation”. The Land Commission heard “nearly 12,000 individual claims” and was dissolved in March 1855 (Foreword). The Act of 7 June 1848 names the Crown and Government lands one by one."
+      },
+      {
+        "source": "crown-lands-report-1894",
+        "says": "By 1894 the Crown Lands come to “approximately 971,463 acres”: Hawaiʻi 642,852, Kauaʻi 154,636, Maui 69,121, Oʻahu 66,593, Molokaʻi 20,892 and Lānaʻi 17,369 (p. 8). Since the Act of 3 January 1865 they can be leased but not sold (p. 3)."
+      },
+      {
+        "source": "oha-kipuka-ahupuaa",
+        "says": "OHA’s ahupuaʻa layer marks 60 of its 695 units as Crown Land 1848 and 220 as Government Land 1848, a further 32 as government land surrendered in lieu of commutation, and 7 as Crown and Government both; 15 more are lands unassigned at the Māhele and settled in 1890. It leaves 361 unmarked."
       }
     ]
   },
@@ -2242,6 +2306,53 @@
     }
   },
   {
+    "id": "ke-au-okoa-1865",
+    "title": "Ke Au ʻOkoʻa",
+    "gloss": "a newspaper, “the different current”",
+    "when": {
+      "from": "1865",
+      "to": "1873",
+      "precision": "year"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "press"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "founding",
+    "summary": "A Hawaiian-language weekly begins in Honolulu with the government’s backing: Ke Au ʻOkoʻa, “the different current”. John Mākini Kapena edits it from 1870, and in 1873 it merges with Ka Nūpepa Kūʻokoʻa. Part of Samuel Kamakau’s history of the ruling chiefs first appears in its pages.",
+    "sources": [
+      {
+        "id": "aas-ke-au-okoa",
+        "where": "catalogue entry"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "p. 418 (footnote); the editors’ note on the newspapers"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "aas-ke-au-okoa",
+        "says": "A Hawaiian-language newspaper published from 1865 to 1873 in Honolulu, sponsored by the Hawaiian government; weekly; John Mākini Kapena (1843–1887) its editor from 1870 until it merged with Ka Nupepa Kuokoa in 1873. The catalogue gives the title in English as “The Different Current”."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "The smallpox chapter of Kamakau’s history is footnoted “Ke Au Okoa, Sept. 9, 1869” (p. 418); the book is translated from his series in Ka Nupepa Kuokoa and Ke Au Okoa, 1866–1871."
+      }
+    ]
+  },
+  {
     "id": "kalaupapa-1866",
     "title": "Kalaupapa",
     "gloss": "exile for Hansen’s disease",
@@ -2250,7 +2361,7 @@
       "to": "1866-01-06",
       "precision": "day"
     },
-    "era": "kamehameha-iv-v",
+    "era": "kauikeaouli",
     "where": [
       {
         "place": "kalawao",
@@ -2278,6 +2389,97 @@
       {
         "source": "nps-kalaupapa",
         "says": "The first group was nine men and three women; by October 1866, 101 men and 41 women had been left at Kalawao. The park puts the total sent at almost 8,000."
+      }
+    ]
+  },
+  {
+    "id": "kau-earthquake-1868",
+    "title": "The great earthquake in Kaʻū",
+    "gloss": "Mauna Loa erupts, the land slides, the sea comes in",
+    "when": {
+      "from": "1868-03-27",
+      "to": "1868-04-11",
+      "precision": "day"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "mauna-loa",
+        "role": "eruption"
+      },
+      {
+        "place": "kapapala",
+        "role": "landslide"
+      },
+      {
+        "place": "kahuku-kau",
+        "role": "lava flow"
+      },
+      {
+        "place": "kilauea",
+        "role": "crater"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "eruption",
+    "summary": "On 27 March 1868 Mauna Loa erupts at its summit, and the island shakes for days. On 2 April a great earthquake throws down nearly every stone wall and house in Kaʻū. At Kapāpala a mass of wet clay breaks from the bluff at the head of the valley and pours down it, burying people and animals, and a wave from the sea sweeps away the villages of the coast from Kaʻaluʻalu to Keauhou. The floor of Kīlauea’s crater falls in. On 7 April lava breaks out on the southwest slope of Mauna Loa, in the land of Kahuku, and runs to the sea within hours, covering good land. Kamehameha V sails with relief for the people of Puna and Kaʻū.",
+    "sources": [
+      {
+        "id": "alexander-1891",
+        "where": "ch. XXXV, pp. 292–293"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "alexander-1891",
+        "says": "The land-slip at Kapāpala, “commonly known as the ‘mud flow’”, ran three miles in a stream about half a mile wide and thirty feet deep and “overtook and buried thirty-one human beings and over five hundred horses, cattle, and goats”. The wave, “forty or fifty feet high”, swept away “all the villages from Kaalualu to Keauhou”, and “over eighty persons perished in a few minutes”. The lava broke out in Kahuku at 5,600 feet, ran ten miles to the sea in two hours and for five days, and “overflowed four thousand acres of good land” (pp. 292–293)."
+      }
+    ]
+  },
+  {
+    "id": "lunalilo-1873",
+    "title": "Lunalilo elected",
+    "gloss": "the legislature follows the people’s vote",
+    "when": {
+      "from": "1873-01-01",
+      "to": "1873-01-09",
+      "precision": "day"
+    },
+    "era": "kalakaua",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "legislature"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "other",
+    "summary": "Kamehameha V dies on 11 December 1872 without naming a successor, and the line of the Kamehamehas ends with him. The choice falls to the legislature. William Charles Lunalilo, held to be the highest chief by birth, asks the people to vote first, and on New Year’s Day 1873 they vote for him almost unanimously. On 8 January the legislature elects him king, and the next day he takes the oath in Kawaiahaʻo church.",
+    "sources": [
+      {
+        "id": "alexander-1891",
+        "where": "ch. XXXV–XXXVI, pp. 297–299"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "alexander-1891",
+        "says": "“With him ended the line of the Kamehamehas. Unfortunately, no successor had been appointed to the throne” (p. 297). On New Year’s Day “a larger vote than ever before was cast, almost unanimously, for Lunalilo”, and the legislature, meeting on 8 January, elected him “in compliance with the expressed will of the people” (p. 299)."
       }
     ]
   },

@@ -178,39 +178,21 @@
       }
     },
     "kauikeaouli": {
-      "year": 1844,
-      "cultivation": {
-        "from": "contact",
-        "to": "mahele",
-        "t": 0.88
-      },
-      "settlement": {
-        "from": "contact",
-        "to": "mahele",
-        "t": 0.88
-      },
-      "forest": {
-        "from": "contact",
-        "to": "kingdom",
-        "t": 0.559
-      }
-    },
-    "kamehameha-iv-v": {
-      "year": 1864,
+      "year": 1853,
       "cultivation": {
         "from": "mahele",
         "to": "kingdom",
-        "t": 0.256
+        "t": 0
       },
       "settlement": {
         "from": "mahele",
         "to": "kingdom",
-        "t": 0.256
+        "t": 0
       },
       "forest": {
         "from": "contact",
         "to": "kingdom",
-        "t": 0.729
+        "t": 0.636
       }
     },
     "kalakaua": {

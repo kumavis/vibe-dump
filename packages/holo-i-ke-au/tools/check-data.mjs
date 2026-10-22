@@ -9,7 +9,10 @@
 // for the coastline the routes must keep to the sea of), and each district's
 // features.json named in districts/manifest.json (or, with no manifest,
 // districts/*/features.json), with boundaries/ahupuaa.geojson for the heiau rule
-// and the district's height image for the loʻi slope rule.
+// and the district's height image for the loʻi slope rule; mahele.json (the
+// class of each ahupuaʻa after the Māhele, joined to boundaries/ahupuaa.geojson
+// by gisId) when it exists; and the era map of layers/manifest.json, which must
+// name only eras in eras.json.
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
@@ -82,6 +85,8 @@ const EVENT_KINDS = new Set(['arrival', 'battle', 'founding', 'construction', 'e
 const ZOOMS = new Set(['far', 'island', 'near'])
 const CONFIDENCE = new Set(['firm', 'soft', 'contested'])
 const ACCESS = new Set(['open', 'print', 'paywalled'])
+// how much of a source was read: full, part (some chapters, pages, an abstract) or title (cited, not read)
+const READ = new Set(['full', 'part', 'title'])
 const ISLANDS = new Set(['hawaii', 'maui', 'kahoolawe', 'lanai', 'molokai', 'oahu', 'kauai', 'niihau'])
 const BOX = { south: 18.5, north: 22.5, west: -161, east: -154.5 } // the main islands, with sea around
 // routes (DATA.md "Routes")
@@ -102,6 +107,25 @@ const FEATURE_PRECISION = new Set(['exact', 'mapped', 'inferred', 'schematic'])
 // the sides a force moves for: DATA.md names oahu and hawaii (1795); maui is Kahekili's army of 1783
 const FORCE_ROLES = new Set(['oahu', 'hawaii', 'maui'])
 const LINE_ROLES = new Set(['advance', 'stand', 'retreat'])
+// how a force's people move (DATA.md "District packs"): march walks the line; run is a retreat or a pursuit;
+// stand is a post; engage fights along a line; surround closes on the line's end from all sides; leap goes
+// over the edge at the line's end. A line (a front) may carry one too.
+const BEHAVIOURS = new Set(['march', 'run', 'stand', 'engage', 'surround', 'leap'])
+// what a side carried: shares of its people that sum to one, and a whole number of cannon
+const ARMS_SHARES = new Set(['spear', 'club', 'dagger', 'sling', 'musket'])
+const ARMS_SUM_TOLERANCE = 0.02
+// no source read records a firearm in Hawaiian hands before the trading ships of the later 1780s
+const FIRST_MUSKETS = 1786
+// a leap goes over an edge: its line ends this close to a place of kind pali; a surround closes on the other
+// side: its line ends this close to a force or line of the other side shown at the same stop
+const LEAP_EDGE_M = 300
+const SURROUND_M = 300
+// a stop camera may centre a point other than its place (target, [lon, lat]), within this of the place
+const CAMERA_TARGET_KM = 15
+// mahele.json: the classes after the Māhele, and how much of a unit a class is recorded for
+const MAHELE_CLASSES = new Set(['crown', 'government', 'konohiki', 'mixed', 'unknown'])
+const MAHELE_PART_CLASSES = new Set(['crown', 'government', 'konohiki'])
+const MAHELE_PRECISION = new Set(['whole', 'combined', 'part', 'none'])
 // a mapped stream is kept for labels and checks; the app routes the water from the heights
 const STREAM_ROLES = new Set(['reference'])
 // loʻi lie on the valley floor: the share of a loʻi's texels steeper than LOI_STEEP (rise over run,
@@ -254,6 +278,10 @@ for (const s of sources) {
   if (!s.author) bad(at, 'has no author')
   if (!ACCESS.has(s.access)) bad(at, `access “${s.access}” is not open | print | paywalled`)
   if (typeof s.opened !== 'boolean') bad(at, 'opened must be true or false')
+  // the app cites only what was read: every source says how much of it was
+  if (!READ.has(s.read)) bad(at, `read “${s.read}” is not full | part | title`)
+  else if (s.opened === false && s.read !== 'title') bad(at, `a source not opened can only have read “title” (it has “${s.read}”)`)
+  else if (s.opened === true && s.read === 'title') bad(at, 'a source opened and read must have read “full” or “part”')
   if (s.opened === false && !s.note) bad(at, 'a source not opened must say in note what it is believed to hold')
   if (s.access === 'open' && s.opened && !s.url) bad(at, 'an open source that was read needs its url')
   if ('tertiary' in s && typeof s.tertiary !== 'boolean') bad(at, 'tertiary must be true or false')
@@ -728,7 +756,18 @@ for (const ev of events) {
 function checkCamera(at, s) {
   const c = s.camera
   if (!c || typeof c !== 'object' || Array.isArray(c)) { bad(at, 'camera must be { bearing, pitch, distance }'); return }
-  for (const k of Object.keys(c)) if (!['bearing', 'pitch', 'distance'].includes(k)) bad(at, `camera has an unknown key “${k}”`)
+  for (const k of Object.keys(c)) if (!['bearing', 'pitch', 'distance', 'target'].includes(k)) bad(at, `camera has an unknown key “${k}”`)
+  if ('target' in c) {
+    // the point the camera centres when it is not the stop's place (the place stays the stop's pin)
+    const t = c.target
+    if (!(Array.isArray(t) && t.length === 2 && t.every(Number.isFinite))) bad(at, 'camera target must be [lon, lat]')
+    else if (!(t[1] >= BOX.south && t[1] <= BOX.north && t[0] >= BOX.west && t[0] <= BOX.east)) bad(at, `camera target ${t} is outside the archipelago box`)
+    else {
+      const p = P.get(s.place)
+      const c0 = p && placePoint(p)
+      if (c0 && kmBetween(t, c0) > CAMERA_TARGET_KM) bad(at, `camera target lies ${kmBetween(t, c0).toFixed(1)} km from the stop's place, more than ${CAMERA_TARGET_KM} km`)
+    }
+  }
   if (!(Number.isFinite(c.bearing) && c.bearing >= 0 && c.bearing < 360)) bad(at, `camera bearing ${c.bearing} is not compass degrees from 0 to under 360`)
   if (!(Number.isFinite(c.pitch) && c.pitch >= 0 && c.pitch <= 1)) bad(at, `camera pitch ${c.pitch} is not within 0..1`)
   if (!(Number.isFinite(c.distance) && c.distance >= CAMERA_DISTANCE[0] && c.distance <= CAMERA_DISTANCE[1])) bad(at, `camera distance ${c.distance} is outside the rig's ${CAMERA_DISTANCE.join('–')} world units`)
@@ -812,6 +851,21 @@ function checkRing(at, ring, outer) {
   return true
 }
 
+/** A force's or line's arms: shares of spear, club, dagger, sling and musket summing to one, and whole cannon. */
+function checkArms(at, a, year) {
+  if (!a || typeof a !== 'object' || Array.isArray(a)) { bad(at, 'arms must be { spear, club, dagger, sling, musket, cannon }'); return }
+  let sum = 0
+  for (const [k, v] of Object.entries(a)) {
+    if (k === 'cannon') { if (!(Number.isInteger(v) && v >= 0)) bad(at, `arms cannon ${v} is not a whole number`); continue }
+    if (!ARMS_SHARES.has(k)) { bad(at, `arms has an unknown key “${k}” (shares are ${[...ARMS_SHARES].join(', ')}; cannon is a count)`); continue }
+    if (!(Number.isFinite(v) && v >= 0 && v <= 1)) { bad(at, `arms ${k} ${v} is not a share from 0 to 1`); continue }
+    sum += v
+  }
+  if (Math.abs(sum - 1) > ARMS_SUM_TOLERANCE) bad(at, `arms shares sum to ${+sum.toFixed(3)}, not one`)
+  if (!('cannon' in a)) bad(at, 'arms needs a cannon count (0 for none)')
+  if (Number.isInteger(year) && year < FIRST_MUSKETS && ((a.musket || 0) > 0 || (a.cannon || 0) > 0)) warn(at, `carries firearms in ${year}; no source read records them in Hawaiian hands before ${FIRST_MUSKETS}`)
+}
+
 function checkDistrict(d) {
   const path = join(DATA, d.file)
   if (!existsSync(path)) { bad(d.file, `is named by ${d.from} but missing`); return }
@@ -821,6 +875,8 @@ function checkDistrict(d) {
   const seen = new Set()
   const kinds = {}
   const steps = {} // event id → [{ at, step, stop }], for the order of steps against stops
+  const edgeMoves = [] // forces that leap or surround: where their lines end
+  const shownLines = [] // every force and line, for what a surround closes on
   const lois = [] // [at, polygon], for the slope rule
   for (const [i, f] of fc.features.entries()) {
     const at = `${d.file} ${f?.id ?? `#${i}`}`
@@ -884,6 +940,13 @@ function checkDistrict(d) {
       if (p.kind === 'line' && p.side !== undefined && !FORCE_ROLES.has(p.side)) bad(at, `side “${p.side}” is not ${[...FORCE_ROLES].join(' | ')}`)
       const w = typeof p.when === 'string' ? parseDate(p.when) : null
       if (!w || w.parts < 2) bad(at, `a ${p.kind} needs a when, an ISO month or date (YYYY-MM or YYYY-MM-DD)`)
+      // how its people move, and what they carry (DATA.md "District packs"): required on a force, checked on a line
+      if (p.behaviour === undefined) { if (p.kind === 'force') bad(at, `a force needs a behaviour: ${[...BEHAVIOURS].join(' | ')}`) }
+      else if (!BEHAVIOURS.has(p.behaviour)) bad(at, `behaviour “${p.behaviour}” is not ${[...BEHAVIOURS].join(' | ')}`)
+      if (p.arms === undefined) { if (p.kind === 'force') bad(at, 'a force needs arms: the shares of what its people carried, and its cannon') }
+      else checkArms(at, p.arms, Number.isInteger(p.from) ? p.from : w ? Math.floor(w.start) : null)
+      if (g.type === 'LineString' && (p.behaviour === 'leap' || p.behaviour === 'surround')) edgeMoves.push({ at, p, end: g.coordinates.at(-1) })
+      if (g.type === 'LineString') shownLines.push({ at, p, coords: g.coordinates })
       if (p.step !== undefined && !(Number.isInteger(p.step) && p.step >= 0)) bad(at, 'step must be a whole number (the order within its event)')
       // the stop of its event at which it shows: an index from 0 into the event's stops
       const hasStop = Number.isInteger(p.stop) && p.stop >= 0
@@ -928,6 +991,22 @@ function checkDistrict(d) {
       }
     }
   }
+  // a leap goes over an edge: its line ends at a place of kind pali
+  const edges = places.filter((q) => q.kind === 'pali').map((q) => [q, placePoint(q)]).filter(([, c]) => c)
+  const stopsOf = (p) => (Array.isArray(p.stop) ? p.stop : [p.stop])
+  for (const m of edgeMoves) {
+    if (m.p.behaviour === 'leap') {
+      const near = edges.map(([q, c]) => [q, kmBetween(m.end, c) * 1000]).sort((a, b) => a[1] - b[1])[0]
+      if (!near) bad(m.at, 'a leap goes over an edge, but no place of kind pali is in the gazetteer')
+      else if (near[1] > LEAP_EDGE_M) bad(m.at, `a leap goes over the edge at its line's end, which lies ${Math.round(near[1])} m from ${near[0].id}, more than ${LEAP_EDGE_M} m`)
+    } else {
+      // a surround closes on the other side: a force or line of another side shown at the same stop, near its end
+      const mine = m.p.role
+      const others = shownLines.filter((o) => o.p.event === m.p.event && (o.p.kind === 'force' ? o.p.role : o.p.side) !== mine && stopsOf(o.p).some((k) => stopsOf(m.p).includes(k)))
+      const d = Math.min(Infinity, ...others.flatMap((o) => o.coords.map((c) => kmBetween(m.end, c) * 1000)))
+      if (!(d <= SURROUND_M)) bad(m.at, `a surround closes on the other side, but nothing of another side shown at its stop lies within ${SURROUND_M} m of its line's end${Number.isFinite(d) ? ` (the nearest is ${Math.round(d)} m)` : ''}`)
+    }
+  }
   // a later step never shows at an earlier stop
   for (const list of Object.values(steps)) {
     for (const a of list) for (const b of list) {
@@ -935,7 +1014,11 @@ function checkDistrict(d) {
     }
   }
   const steep = lois.length ? checkLoiSlopes(d, lois) : null
-  districtCounts.push({ id: d.id, n: fc.features.length, kinds, from: d.from, steep })
+  const moves = {}
+  for (const f of fc.features) if (f?.properties?.behaviour) moves[f.properties.behaviour] = (moves[f.properties.behaviour] || 0) + 1
+  const armed = fc.features.filter((f) => f?.properties?.arms).length
+  const cannon = fc.features.reduce((n, f) => n + (f?.properties?.arms?.cannon || 0), 0)
+  districtCounts.push({ id: d.id, n: fc.features.length, kinds, from: d.from, steep, moves, armed, cannon })
 }
 
 /**
@@ -1000,6 +1083,87 @@ function checkLoiSlopes(d, lois) {
 }
 
 // ---------------------------------------------------------------------------
+// mahele.json: the class of each ahupuaʻa after the Māhele (RESEARCH.md §12 gives the schema)
+let maheleCounts = null
+if (existsSync(join(DATA, 'mahele.json'))) checkMahele()
+
+function checkMahele() {
+  const m = load('mahele.json')
+  if (!m) return
+  const list = m.ahupuaa
+  if (!Array.isArray(list)) { bad('mahele.json', 'ahupuaa must be a list'); return }
+  for (const id of m.sources || []) useSource('mahele.json sources', id)
+  const bpath = join(DATA, 'boundaries', 'ahupuaa.geojson')
+  let units = null
+  if (existsSync(bpath)) {
+    try { units = new Map(JSON.parse(readFileSync(bpath, 'utf8')).features.map((f) => [f.properties?.gisId, f.properties])) } catch (e) { bad('boundaries/ahupuaa.geojson', `does not parse: ${e.message}`) }
+  } else warn('mahele.json', 'no boundaries/ahupuaa.geojson, so its gisIds are not checked')
+  const seen = new Set()
+  const counts = {}
+  for (const [i, e] of list.entries()) {
+    const at = `mahele.json ${e?.gisId ?? `#${i}`}`
+    if (!Number.isInteger(e?.gisId)) { bad(at, 'gisId must be a whole number'); continue }
+    if (seen.has(e.gisId)) bad(at, 'gisId appears twice')
+    seen.add(e.gisId)
+    if (units) {
+      const u = units.get(e.gisId)
+      if (!u) bad(at, 'gisId is not in boundaries/ahupuaa.geojson')
+      else {
+        if ((u.name ?? null) !== (e.name ?? null)) bad(at, `name “${e.name}” is not the boundary file's “${u.name}”`)
+        if (u.islandId !== e.islandId) bad(at, `islandId “${e.islandId}” is not the boundary file's “${u.islandId}”`)
+      }
+    }
+    if (!MAHELE_CLASSES.has(e.class)) { bad(at, `class “${e.class}” is not ${[...MAHELE_CLASSES].join(' | ')}`); continue }
+    counts[e.class] = (counts[e.class] || 0) + 1
+    if (!MAHELE_PRECISION.has(e.precision)) bad(at, `precision “${e.precision}” is not ${[...MAHELE_PRECISION].join(' | ')}`)
+    if (e.class === 'unknown' && !['none', 'part'].includes(e.precision)) bad(at, 'an unknown class has precision none (or part, where only some of its ʻili are recorded)')
+    if (e.class !== 'unknown' && e.precision === 'none') bad(at, 'a recorded class needs a precision other than none')
+    if (e.awardee !== undefined) {
+      if (!['konohiki', 'mixed'].includes(e.class)) bad(at, `an awardee belongs to a konohiki or mixed land, not ${e.class}`)
+      const names = Array.isArray(e.awardee) ? e.awardee : [e.awardee]
+      if (!names.length || !names.every((n) => typeof n === 'string' && n.trim())) bad(at, 'awardee must be a name or a list of names')
+    }
+    for (const x of e.parts || []) {
+      if (!MAHELE_PART_CLASSES.has(x.class)) bad(at, `a part's class “${x.class}” is not ${[...MAHELE_PART_CLASSES].join(' | ')}`)
+      if (!(x.share === null || (Number.isFinite(x.share) && x.share >= 0 && x.share <= 1))) bad(at, `a part's share ${x.share} is not null or 0..1`)
+      if ('ili' in x && !(Number.isInteger(x.ili) && x.ili > 0)) bad(at, `a part's ili ${x.ili} is not a whole number`)
+    }
+    if (e.class === 'mixed' && new Set((e.parts || []).map((x) => x.class)).size < 2) bad(at, 'a mixed land lists the classes recorded within it in parts (two or more)')
+    for (const l of e.later || []) {
+      if (!['crown', 'government'].includes(l.class)) bad(at, `a later class “${l.class}” is not crown | government`)
+      if (!(Number.isInteger(l.year) && l.year > 1848)) bad(at, `a later class needs a year after 1848 (has ${l.year})`)
+    }
+    for (const d of e.disputed || []) {
+      if (!MAHELE_PART_CLASSES.has(d.class)) bad(at, `a disputed class “${d.class}” is not ${[...MAHELE_PART_CLASSES].join(' | ')}`)
+      useSource(`${at} disputed`, d.source)
+    }
+    if (e.class !== 'unknown' && !(e.sources || []).length) bad(at, 'a recorded class cites no source')
+    for (const id of e.sources || []) useSource(at, id)
+    if ((e.sources || []).length && !e.sources.some((id) => S.get(id)?.opened)) bad(at, 'none of its sources has been opened')
+  }
+  if (units) {
+    const missing = [...units.keys()].filter((g) => !seen.has(g))
+    if (missing.length) bad('mahele.json', `has no entry for ${missing.length} ahupuaʻa of the boundary file (gisId ${missing.slice(0, 8).join(', ')}${missing.length > 8 ? ', …' : ''}); an unrecorded one is class unknown`)
+  }
+  maheleCounts = { n: list.length, counts }
+}
+
+// ---------------------------------------------------------------------------
+// layers/manifest.json: its era map is keyed by era id, so an era that goes leaves a dangling key
+let layerEras = null
+if (existsSync(join(DATA, 'layers', 'manifest.json'))) {
+  const lm = load('layers/manifest.json')
+  if (lm && lm.eras && typeof lm.eras === 'object') {
+    layerEras = Object.keys(lm.eras).length
+    for (const [id, x] of Object.entries(lm.eras)) {
+      if (!E.has(id)) bad(`layers/manifest.json eras ${id}`, 'is not an era in eras.json')
+      else if (x.year !== E.get(id).year) warn(`layers/manifest.json eras ${id}`, `year ${x.year} differs from eras.json (${E.get(id).year}); tools/bake-layers.mjs writes the map on its next run`)
+    }
+    for (const e of eras) if (!(e.id in lm.eras)) bad('layers/manifest.json', `has no era map for ${e.id}`)
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Unused entries (warnings)
 for (const p of places) if (!usedPlaces.has(p.id)) warn(`places.json ${p.id}`, 'is not used by any event')
 for (const s of sources) if (!usedSources.has(s.id)) warn(`sources.json ${s.id}`, 'is not cited anywhere')
@@ -1028,10 +1192,14 @@ function finish() {
   }
   for (const d of districtCounts) {
     console.log(`  district  ${d.id}: ${d.n} features (${fmt(d.kinds)}), box from ${d.from}`)
+    if (Object.keys(d.moves || {}).length) console.log(`            behaviour ${fmt(d.moves)}; arms on ${d.armed}, ${d.cannon} cannon in all`)
     if (d.steep?.at) console.log(`            loʻi on the floor: at most ${(100 * d.steep.share).toFixed(1)}% of a loʻi's texels steeper than ${LOI_STEEP * 100}% (${d.steep.at.split(' ').at(-1)})`)
   }
   const cams = events.reduce((n, e) => n + (e.stops || []).filter((s) => s.camera).length, 0)
   if (cams) console.log(`  cameras   ${cams} stops carry a camera`)
   console.log(`  copy      ${copyFields} user-facing texts, none saying what the app does not show`)
+  console.log(`  sources   read ${fmt(count(sources, (s) => s.read))}`)
+  if (maheleCounts) console.log(`  mahele    ${maheleCounts.n} ahupuaʻa (${fmt(maheleCounts.counts)})`)
+  if (layerEras !== null) console.log(`  layers    era map for ${layerEras} eras, all in eras.json`)
   if (warnings.length) console.log(`  warnings  ${warnings.length}`)
 }

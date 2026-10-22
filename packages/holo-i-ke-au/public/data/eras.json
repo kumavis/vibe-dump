@@ -93,24 +93,15 @@
   },
   {
     "id": "kauikeaouli",
-    "label": "in the time of Kauikeaouli, Kamehameha III",
-    "year": 1844,
-    "yearPrecision": 10,
-    "note": "A constitutional kingdom: whaling at its height, the first plantation, the 1843 cession and restoration, the Māhele and the Kuleana Act, measles and smallpox.",
+    "label": "in the time of the last Kamehameha kings",
+    "year": 1853,
+    "yearPrecision": 19,
+    "note": "Kamehameha III, IV and V: Kauikeaouli until 1854, Alexander Liholiho from 1855 to 1863, and Lota Kapuāiwa from 1863 to 1872, the last of the line. A constitutional kingdom: whaling at its height, the first plantation, the cession and restoration of 1843, the Māhele and the Kuleana Act, measles and smallpox; then the exile to Kalaupapa from 1866, a population still falling, and sugar growing.",
     "sources": [
       "kamakau-ruling-chiefs",
-      "jarves-1847"
-    ]
-  },
-  {
-    "id": "kamehameha-iv-v",
-    "label": "in the time of Alexander Liholiho and Lota Kapuāiwa",
-    "year": 1864,
-    "yearPrecision": 9,
-    "note": "Kamehameha IV and V. Kalaupapa from 1866. The population keeps falling; sugar grows.",
-    "sources": [
-      "nps-kalaupapa",
-      "liliuokalani-1898"
+      "jarves-1847",
+      "alexander-1891",
+      "nps-kalaupapa"
     ]
   },
   {
