@@ -52,6 +52,7 @@ export class EventCard {
     this.app = app
     this.ui = ui
     this.el = h('section', { class: 'card', 'aria-live': 'polite' })
+    this.el.inert = true
     root.appendChild(this.el)
     this.places = new Map(app.data.places.map((p) => [p.id, p]))
     this.sources = new Map(app.data.sources.map((s) => [s.id, s]))
@@ -111,6 +112,7 @@ export class EventCard {
   }
 
   set(mode, { ev = null, chapter = null, list = null, payload = null }) {
+    this.letGoFocus()
     this.mode = mode
     this.ev = ev
     this.chapter = chapter
@@ -130,7 +132,9 @@ export class EventCard {
     }
     const was = this.ev
     const mode = this.mode
+    this.letGoFocus()
     this.el.classList.remove('show')
+    this.el.inert = true
     this.mode = null
     this.ev = null
     this.chapter = null
@@ -138,6 +142,11 @@ export class EventCard {
     this.payload = null
     this.before = null
     this.ui.onCardClosed?.(was, mode)
+  }
+
+  /** A hidden card keeps no focus: Enter or Space would press a button no one can see. */
+  letGoFocus() {
+    if (this.el.contains(document.activeElement)) document.activeElement.blur()
   }
 
   click(e) {
@@ -243,6 +252,7 @@ export class EventCard {
     else return
     this.el.dataset.mode = this.mode
     this.el.classList.toggle('chapter', this.mode === 'chapter')
+    this.el.inert = false
     this.el.classList.add('show')
     this.el.scrollTop = 0
   }

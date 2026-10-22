@@ -93,6 +93,8 @@ export class Input {
   }
 
   key(e, down) {
+    // (in a moment Enter presses nothing on the page: a focused button would restart the sortie under the player)
+    if (this.app.mode === 'moment' && (e.code === 'Enter' || e.code === 'NumpadEnter')) e.preventDefault()
     if (!this.live) return
     const p = this.player
     const code = e.code
