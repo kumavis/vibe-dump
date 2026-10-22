@@ -40,6 +40,8 @@ import { creditsHTML } from './credits.js'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
+// A place's role on an event, in plain words; the rest (at, in, near, fleet, target) print nothing
+const ROLE = { from: 'from', to: 'to', via: 'by way of', along: 'along', over: 'over', landing: 'landing' }
 const monthYear = (ms) => {
   const d = new Date(ms)
   return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`
@@ -289,7 +291,7 @@ export class EventCard {
         if (!p) return null
         const today = p.today && p.today !== p.name ? ` <em>today ${esc(p.today)}</em>` : ''
         const ja = p.ja?.kanji ? ` <span lang="ja" class="pl-ja">${esc(p.ja.kanji)}</span>` : ''
-        return `${esc(p.name)}${ja}${today}${w.role ? ` <em>${esc(w.role)}</em>` : ''}`
+        return `${esc(p.name)}${ja}${today}${ROLE[w.role] ? ` <em>${ROLE[w.role]}</em>` : ''}`
       })
       .filter(Boolean)
     const conf = Object.entries(ev.confidence || {})
