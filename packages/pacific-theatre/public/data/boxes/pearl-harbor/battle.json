@@ -146,10 +146,10 @@
       "fate": {
         "kind": "sunk",
         "t": "08:06",
-        "sources": [{"id":"bushships-summary-1942"},{"id":"nps-people"}],
+        "sources": [{"id":"bushships-summary-1942"},{"id":"nps-pearl-people"}],
         "note": "her forward magazines exploded and she settled at her berth; a total loss",
         "tellings": [
-          {"source":"nps-people","says":"1,177 sailors and Marines lost their lives; 38 sets of brothers were aboard."},
+          {"source":"nps-pearl-people","says":"1,177 sailors and Marines lost their lives; 38 sets of brothers were aboard."},
           {"source":"bushships-summary-1942","says":"Eight bombs and one torpedo."},
           {"source":"combatships-1941","says":"Three bombs."},
           {"source":"cincpac-pearl-1942","says":"“About eight heavy bomb hits.”"}
@@ -313,10 +313,10 @@
       "fate": {
         "kind": "capsized",
         "t": "08:08",
-        "sources": [{"id":"oklahoma-ar-1941"},{"id":"cincpac-pearl-1942"},{"id":"nps-people"}],
+        "sources": [{"id":"oklahoma-ar-1941"},{"id":"cincpac-pearl-1942"},{"id":"nps-pearl-people"}],
         "note": "her masts on the bottom; later righted and raised",
         "tellings": [
-          {"source":"nps-people","says":"429 lost their lives; over 300 of her unknowns identified since 2015."},
+          {"source":"nps-pearl-people","says":"429 lost their lives; over 300 of her unknowns identified since 2015."},
           {"source":"combatships-1941","says":"32 men were cut out through her hull."}
         ]
       }
@@ -360,7 +360,7 @@
         },
         {"t":"08:03","kind":"opens-fire","by":"maryland","sources":[{"id":"combatships-1941"}]}
       ],
-      "fate": {"kind":"damaged","sources":[{"id":"bushships-summary-1942"},{"id":"nps-people"}]}
+      "fate": {"kind":"damaged","sources":[{"id":"bushships-summary-1942"},{"id":"nps-pearl-people"}]}
     },
     {
       "id": "tennessee",
@@ -479,9 +479,9 @@
       ],
       "fate": {
         "kind": "sunk",
-        "sources": [{"id":"bushships-summary-1942"},{"id":"nps-people"}],
+        "sources": [{"id":"bushships-summary-1942"},{"id":"nps-pearl-people"}],
         "note": "settled upright on the bottom; raised and back in service in the war’s last year",
-        "tellings": [{"source":"nps-people","says":"106 lost their lives."}]
+        "tellings": [{"source":"nps-pearl-people","says":"106 lost their lives."}]
       }
     },
     {
@@ -541,9 +541,9 @@
       ],
       "fate": {
         "kind": "sunk",
-        "sources": [{"id":"cincpac-pearl-1942"},{"id":"nps-people"}],
+        "sources": [{"id":"cincpac-pearl-1942"},{"id":"nps-pearl-people"}],
         "note": "she settled on the mud over three days; raised and back in service",
-        "tellings": [{"source":"nps-people","says":"105 lost their lives."}]
+        "tellings": [{"source":"nps-pearl-people","says":"105 lost their lives."}]
       }
     },
     {
@@ -1387,9 +1387,9 @@
       "fate": {
         "kind": "capsized",
         "t": "08:12",
-        "sources": [{"id":"utah-ar-1941"},{"id":"nps-people"}],
+        "sources": [{"id":"utah-ar-1941"},{"id":"nps-pearl-people"}],
         "note": "she rolled over at her berth and was left there",
-        "tellings": [{"source":"nps-people","says":"58 lost their lives."}]
+        "tellings": [{"source":"nps-pearl-people","says":"58 lost their lives."}]
       }
     },
     {
@@ -6055,7 +6055,7 @@
       },
       "losses": [[0,0]],
       "recover": {"t":"09:45","to":"akagi"},
-      "sources": [{"id":"ussbs-campaigns-1946","where":"App. 3"},{"id":"jacar-akagi-pearl"}],
+      "sources": [{"id":"ussbs-campaigns-1946","where":"App. 3"},{"id":"jacar-pearl-airgroups-1941"}],
       "note": "in five-plane sections releasing together on the leader",
       "tellings": [
         {
@@ -6303,7 +6303,7 @@
       },
       "losses": [[0,0]],
       "recover": {"t":"09:45","to":"akagi"},
-      "sources": [{"id":"ussbs-campaigns-1946","where":"App. 3"},{"id":"jacar-akagi-pearl"}],
+      "sources": [{"id":"ussbs-campaigns-1946","where":"App. 3"},{"id":"jacar-pearl-airgroups-1941"}],
       "note": "the main attack from the south-east; which carrier’s torpedoes struck which ship is not settled, and the box gives Oklahoma’s to Akagi’s unit"
     },
     {
@@ -8082,8 +8082,8 @@
       "t": "08:06",
       "text": "08:06. A bomb from the level bombers strikes Arizona forward; her forward magazines explode.",
       "camera": {"target":"arizona","bearingDeg":160,"pitch":0.25,"distanceM":2500},
-      "sources": [{"id":"trom-hiryu"},{"id":"bushships-summary-1942"},{"id":"nps-people"}],
-      "tellings": [{"source":"nps-people","says":"1,177 of her crew lost their lives."}]
+      "sources": [{"id":"trom-hiryu"},{"id":"bushships-summary-1942"},{"id":"nps-pearl-people"}],
+      "tellings": [{"source":"nps-pearl-people","says":"1,177 of her crew lost their lives."}]
     },
     {
       "t": "08:10",
@@ -8092,7 +8092,7 @@
       "sources": [
         {"id":"kimmel-narrative","where":"Mugford 0808"},
         {"id":"utah-ar-1941"},
-        {"id":"nps-people"}
+        {"id":"nps-pearl-people"}
       ]
     },
     {
@@ -8183,7 +8183,7 @@
           {"id":"bushships-summary-1942"},
           {"id":"combatships-1941"},
           {"id":"oklahoma-ar-1941"},
-          {"id":"nps-people"},
+          {"id":"nps-pearl-people"},
           {"id":"trom-kaga"}
         ],
         "tellings": [
@@ -8191,7 +8191,7 @@
             "source": "bushships-summary-1942",
             "says": "West Virginia: seven torpedoes and two dud bombs. Oklahoma: about five torpedoes and three near misses."
           },
-          {"source":"nps-people","says":"Oklahoma: 429 lost their lives. West Virginia: 106."},
+          {"source":"nps-pearl-people","says":"Oklahoma: 429 lost their lives. West Virginia: 106."},
           {"source":"trom-kaga","says":"Five of Kaga’s twelve torpedo bombers were lost."}
         ]
       }
@@ -8379,7 +8379,7 @@
     {"id":"aaf-7dec41"},
     {"id":"usmc-infamous-day"},
     {"id":"patwing1-1942"},
-    {"id":"nps-people"},
+    {"id":"nps-pearl-people"},
     {"id":"nps-battleship-row"},
     {"id":"jawp-pearl-harbor"},
     {"id":"wp-pearl-harbor"},
@@ -8390,7 +8390,7 @@
   ],
   "tellings": [
     {
-      "source": "nps-people",
+      "source": "nps-pearl-people",
       "says": "2,390 Americans lost their lives: 2,341 service members and 49 civilians, “some due to enemy actions and others from friendly fire”."
     },
     {"source":"wp-pearl-harbor","says":"2,403, with 68 civilians (Conn et al. 2000)."},

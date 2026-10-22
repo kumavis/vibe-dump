@@ -339,7 +339,7 @@
         {
           "t": "09:25",
           "kind": "other",
-          "sources": [{"id":"danfs-cve73"},{"id":"morison-xii","where":"XII §8"}],
+          "sources": [{"id":"danfs-gambier-bay"},{"id":"morison-xii","where":"XII §8"}],
           "text": "“They’re getting away!” The Japanese ships are turning north."
         }
       ],
@@ -1969,7 +1969,7 @@
         {
           "t": "09:15",
           "kind": "other",
-          "sources": [{"id":"danfs-cve63"},{"id":"morison-xii","where":"XII §6"}],
+          "sources": [{"id":"danfs-st-lo"},{"id":"morison-xii","where":"XII §6"}],
           "text": "Torpedoes from the destroyers astern run out of speed short of the carriers; an Avenger from St. Lo explodes one and her gun turns another."
         },
         {
@@ -1979,7 +1979,7 @@
           "count": [1,1],
           "where": "through the flight deck; it burst into flames below",
           "damage": 0.5,
-          "sources": [{"id":"morison-xii","where":"XIII §3"},{"id":"danfs-cve63"}],
+          "sources": [{"id":"morison-xii","where":"XIII §3"},{"id":"danfs-st-lo"}],
           "text": "St. Lo is struck by an aircraft of the Shikishima unit."
         },
         {
@@ -1997,13 +1997,13 @@
           "t": "11:25",
           "kind": "sinks",
           "sources": [{"id":"morison-xii","where":"XIII §3"}],
-          "tellings": [{"source":"danfs-cve63","says":"She sank “half an hour later”."}]
+          "tellings": [{"source":"danfs-st-lo","says":"She sank “half an hour later”."}]
         }
       ],
       "fate": {
         "kind": "sunk",
         "t": "11:25",
-        "sources": [{"id":"morison-xii","where":"XIII §3; XII n. 23"},{"id":"danfs-cve63"}],
+        "sources": [{"id":"morison-xii","where":"XIII §3; XII n. 23"},{"id":"danfs-st-lo"}],
         "note": "after the tokkō attack; outside the box’s clock",
         "tellings": [
           {
@@ -2341,16 +2341,16 @@
           "sources": [{"id":"morison-xii","where":"XII §7"}],
           "text": "Gambier Bay is abandoned; men in the water are hit by shell fragments."
         },
-        {"t":"09:07","kind":"sinks","sources":[{"id":"morison-xii","where":"XII §7"},{"id":"danfs-cve73"}]}
+        {"t":"09:07","kind":"sinks","sources":[{"id":"morison-xii","where":"XII §7"},{"id":"danfs-gambier-bay"}]}
       ],
       "fate": {
         "kind": "capsized",
         "t": "09:07",
-        "sources": [{"id":"morison-xii","where":"XII §7"},{"id":"danfs-cve73"}],
+        "sources": [{"id":"morison-xii","where":"XII §7"},{"id":"danfs-gambier-bay"}],
         "note": "capsized and sank, the one carrier lost to gunfire",
         "tellings": [
           {"source":"morison-xii","says":"“About 750 of the total complement of 854 went over the side.”"},
-          {"source":"danfs-cve73","says":"“The majority of her nearly 800 survivors” were rescued."}
+          {"source":"danfs-gambier-bay","says":"“The majority of her nearly 800 survivors” were rescued."}
         ]
       }
     },
@@ -3256,7 +3256,7 @@
         {
           "t": "07:50",
           "kind": "turns",
-          "sources": [{"id":"morison-xii","where":"XII §5"},{"id":"danfs-de413"}],
+          "sources": [{"id":"morison-xii","where":"XII §5"},{"id":"danfs-samuel-b-roberts"}],
           "text": "Samuel B. Roberts follows the destroyers in, unordered."
         },
         {
@@ -3274,7 +3274,7 @@
               "source": "morison-xii",
               "says": "From 4,000 yards; they “ran hot, straight and normal, but were evaded”. Her report claimed a hit on an “Aoba class” cruiser, probably Chōkai, “which was not hit just then” (n. 32)."
             },
-            {"source":"danfs-de413","says":"“A torpedo hit on one.”"}
+            {"source":"danfs-samuel-b-roberts","says":"“A torpedo hit on one.”"}
           ]
         },
         {
@@ -3355,7 +3355,7 @@
             "source": "morison-xii",
             "says": "Of 8 officers and about 170 men, “3 officers and 86 men were killed, missing or died of wounds”."
           },
-          {"source":"danfs-de413","says":"About 120 survivors were in the water for 50 hours."}
+          {"source":"danfs-samuel-b-roberts","says":"About 120 survivors were in the water for 50 hours."}
         ]
       }
     },
@@ -7531,7 +7531,7 @@
           "count": 4,
           "speedKn": 36,
           "target": "kalinin-bay",
-          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-cve63"}],
+          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-st-lo"}],
           "text": "The destroyers fire their torpedoes from far astern of the carriers; the torpedoes slow and stop short.",
           "note": "the number each fired and the speed setting are not in what was read; Morison has them launched from far astern of Kalinin Bay",
           "tellings": [
@@ -8011,7 +8011,7 @@
           "count": 4,
           "speedKn": 36,
           "target": "kalinin-bay",
-          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-cve63"}],
+          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-st-lo"}],
           "note": "the number each fired and the speed setting are not in what was read; Morison has them launched from far astern of Kalinin Bay",
           "tellings": [
             {
@@ -8481,7 +8481,7 @@
           "count": 4,
           "speedKn": 36,
           "target": "kalinin-bay",
-          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-cve63"}],
+          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-st-lo"}],
           "note": "the number each fired and the speed setting are not in what was read; Morison has them launched from far astern of Kalinin Bay",
           "tellings": [
             {
@@ -8951,7 +8951,7 @@
           "count": 4,
           "speedKn": 36,
           "target": "kalinin-bay",
-          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-cve63"}],
+          "sources": [{"id":"morison-xii","where":"XII §6"},{"id":"danfs-st-lo"}],
           "note": "the number each fired and the speed setting are not in what was read; Morison has them launched from far astern of Kalinin Bay",
           "tellings": [
             {
@@ -12363,7 +12363,7 @@
       "t": "09:07",
       "text": "09:07. Gambier Bay capsizes. Chikuma has been crippled by an air torpedo and Chōkai lies stopped; Hoel sank a few minutes earlier.",
       "camera": {"target":"gambier-bay","bearingDeg":120,"pitch":0.35,"distanceM":5000},
-      "sources": [{"id":"morison-xii","where":"XII §7"},{"id":"danfs-cve73"}]
+      "sources": [{"id":"morison-xii","where":"XII §7"},{"id":"danfs-gambier-bay"}]
     },
     {
       "t": "09:11",
@@ -12383,7 +12383,7 @@
       "camera": {"target":"st-lo","bearingDeg":230,"pitch":0.35,"distanceM":6000},
       "sources": [
         {"id":"morison-xii","where":"XIII §3"},
-        {"id":"danfs-cve63"},
+        {"id":"danfs-st-lo"},
         {"id":"sib22-leyte-1945","where":"CTU 77.4.3"}
       ]
     }
@@ -12514,7 +12514,7 @@
         "text": "Gambier Bay was on the open flank, where the smoke would not lie. For a long while she turned toward each salvo’s splashes, and the Japanese gunners, stepping their range up each time, kept missing. Then a hit aft started fires, an engine room flooded and she fell behind. Cruisers closed to point-blank range; she was abandoned and capsized, and the destroyers that tried to draw the fire away could not stop it.",
         "sources": [
           {"id":"morison-xii","where":"XII §7"},
-          {"id":"danfs-cve73"},
+          {"id":"danfs-gambier-bay"},
           {"id":"sib22-leyte-1945","where":"CTU 77.4.3"}
         ],
         "tellings": [
@@ -12559,7 +12559,7 @@
       },
       "after": {
         "text": "Roberts had not been ordered in; she followed the destroyers anyway, closed the cruiser column unseen in their smoke and fired her torpedoes. Whether any struck is disputed. She then fought the cruisers with her guns for most of an hour, until heavy shells tore open her side. Her crew abandoned her and she sank in mid-morning.",
-        "sources": [{"id":"morison-xii","where":"XII §5"},{"id":"danfs-de413"}],
+        "sources": [{"id":"morison-xii","where":"XII §5"},{"id":"danfs-samuel-b-roberts"}],
         "tellings": [
           {
             "source": "morison-xii",
@@ -12633,9 +12633,9 @@
     {"id":"trom-tone"},
     {"id":"trom-yahagi"},
     {"id":"trom-noshiro"},
-    {"id":"danfs-de413"},
-    {"id":"danfs-cve73"},
-    {"id":"danfs-cve63"},
+    {"id":"danfs-samuel-b-roberts"},
+    {"id":"danfs-gambier-bay"},
+    {"id":"danfs-st-lo"},
     {"id":"wp-samar"},
     {"id":"johnston-hoel-assn"},
     {"id":"jacar-crudiv7-1944"},

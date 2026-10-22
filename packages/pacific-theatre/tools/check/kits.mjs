@@ -7,7 +7,8 @@
 // gear, cowl and engine kind is in the frozen vocabulary (tools/check/ids.json)
 // and the generator knows it (src/battle/kits/blocks.js); every colour is in
 // the palette (src/battle/kits/palette.js); every source a kit or weapon
-// cites is in sources.json or sources-engine.json; every insignia is flown
+// cites is in sources.json (sources-engine.json merged into it at the
+// integration; a fragment that comes back is still checked); every insignia is flown
 // inside its dates; and the units are plausible (metres, knots, tonnes,
 // km/h).
 //
@@ -79,7 +80,7 @@ export default function check(ctx) {
     for (const s of list) {
       const id = typeof s === 'string' ? s : s?.id
       if (!id) ctx.bad(at, 'a source with no id')
-      else if (srcIds.size && !srcIds.has(id)) need(at, `source “${id}” is in neither sources.json nor sources-engine.json`)
+      else if (srcIds.size && !srcIds.has(id)) need(at, `source “${id}” is not in sources.json`)
     }
   }
 

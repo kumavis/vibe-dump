@@ -1,6 +1,8 @@
 // The battles' check (DATA.md §9 and §10, ENGINEERING.md §5 and §12): every
-// boxes/<id>/battle.json for the frozen boxes in tools/check/ids.json, and the
-// battles' fragment of the source ledger, public/data/sources-battles.json.
+// boxes/<id>/battle.json for the frozen boxes in tools/check/ids.json, its
+// cites resolved through public/data/sources.json (the battles' fragment of
+// the ledger, sources-battles.json, was merged into it at the integration;
+// a fragment, if one comes back, is still held to the ledger's schema).
 //
 // What it holds the record to:
 // - the clock: the frozen zone, name and span; the other clocks each box must
@@ -185,8 +187,8 @@ function loadLedger(ctx) {
       }
       ctx.count('battle sources', frag.length)
     }
-  } else if (!ctx.test) ctx.bad('sources-battles.json', 'is missing: the battles’ fragment of the ledger')
-  // content's ledger, when present, also resolves (the integrator merges the two)
+  }
+  // the ledger: since the integration the fragment is merged into sources.json (gazetteer.mjs holds its schema)
   const main = ctx.load('sources.json')
   if (Array.isArray(main)) for (const s of main) if (s?.id && !ids.has(s.id)) ids.set(s.id, s)
   return ids
@@ -818,7 +820,7 @@ function sourceRef(ctx, ledger) {
   return (at, x) => {
     const id = typeof x === 'string' ? x : x?.id
     if (!id) return ctx.bad(at, 'a source cite has no id')
-    if (!ledger.has(id)) ctx.bad(at, `source “${id}” is not in sources-battles.json or sources.json`)
+    if (!ledger.has(id)) ctx.bad(at, `source “${id}” is not in sources.json`)
   }
 }
 

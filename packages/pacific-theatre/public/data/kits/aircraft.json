@@ -311,12 +311,12 @@
    }
   ],
   "silhouette": {
-   "source": "taic-1",
+   "source": "taic-1-1945",
    "where": "proportions from the dimensions; shapes from R6 Table A5"
   },
   "sources": [
    {
-    "id": "taic-1",
+    "id": "taic-1-1945",
     "where": "leaf n26 (Zeke 52, March 1945): dimensions, weights, 1,120 hp, speeds, climb"
    },
    {
@@ -641,7 +641,7 @@
     "where": "infobox: dimensions, weights, Sakae 11, speeds, range"
    },
    {
-    "id": "taic-1",
+    "id": "taic-1-1945",
     "where": "leaf n144 (Kate, December 1944): height 4.11 m, 985 hp, ceiling 7,315 m (≠)"
    },
    {
@@ -924,12 +924,12 @@
    }
   ],
   "silhouette": {
-   "source": "taic-1",
+   "source": "taic-1-1945",
    "where": "proportions from the dimensions; shapes from R6 Table A5"
   },
   "sources": [
    {
-    "id": "taic-1",
+    "id": "taic-1-1945",
     "where": "leaf n148 (Jill, May 1945): dimensions, weights, Kasei 25, speeds, ceiling"
    },
    {
