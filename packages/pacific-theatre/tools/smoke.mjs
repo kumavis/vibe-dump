@@ -154,6 +154,17 @@ await check('the table is drawn: relief, sea and land in the frame', async () =>
   return JSON.stringify(l)
 })
 
+await check("the routes draw in the WarClock's window, across 180°", async () => {
+  await run(`app.clock.setDate(Date.UTC(1942, 5, 1)); app.settle()`)
+  await frames(2)
+  const r = await ui("app.table.routes.visibleRoutes().map((r) => r.id)")
+  const all = await ui('app.table.routes.lines.length')
+  if (useTest && !r.includes('test-fleet-route')) throw new Error(`showing ${JSON.stringify(r)} of ${all}`)
+  await look('smoke-routes.png')
+  await run(`app.clock.setS(0); app.settle()`)
+  return `${r.join(', ') || 'none'} of ${all} on 1 June 1942`
+})
+
 await check('every scene ShaderMaterial on the table carries vFragDepth', async () => {
   const a = await shaderAudit()
   if (!a.materials) throw new Error('no ShaderMaterials found')

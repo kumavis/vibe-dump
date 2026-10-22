@@ -1,9 +1,9 @@
 // The table scene (ENGINEERING.md §10), Stage 0's minimum: the relief pack on
 // its ground (TableGround), the coast's ink, the tray the relief sits in, the
-// Hawaiian camera rig over it in kilometres, and a box's outline through its
-// placement. Labels, the front, the routes and the pins are the table
-// workflow's to add here (render/routes.js and render/lines.js are ready for
-// them, unit-agnostic).
+// routes in the WarClock's window (render/routes.js, so its shaders are seen
+// to compile and draw), the Hawaiian camera rig over it in kilometres, and a
+// box's outline through its placement. Labels, the front and the pins are the
+// table workflow's to add here.
 //
 // The scene owns its THREE.Scene, camera, rig and ground; App draws whichever
 // scene is active (one per frame) and asks it for its sky (the table's is the
@@ -12,6 +12,7 @@
 import * as THREE from 'three'
 import { TABLE } from '../config.js'
 import { CameraRig } from '../render/camera.js'
+import { Routes } from '../render/routes.js'
 import { LineSet } from '../render/lines.js'
 import { WAR_ROOM } from '../render/sky.js'
 import { constants } from '../render/shaders/common.glsl.js'
@@ -128,6 +129,8 @@ export class TableScene {
 
     this.coast = data.coast ? new Coast(data.coast, data.proj, this.uniforms) : null
     if (this.coast) this.group.add(this.coast.group)
+    this.routes = new Routes({ routes: data.routes, proj: data.proj, uniforms: this.uniforms, camera: this.camera, renderer: app.renderer, maxSeg: 15, lift: [0.03, 0.0024], height: 300 })
+    this.group.add(this.routes.group)
 
     this.rig = new CameraRig(this.camera, app.canvas, this.ground, TABLE)
     this.outlines = new Map()
@@ -159,6 +162,8 @@ export class TableScene {
     r.getDrawingBufferSize(this._res)
     const dpr = r.getPixelRatio()
     this.coast?.update(this.camera, this._res, dpr, this.fade)
+    const clock = this.app.clock
+    this.routes.update(clock.date, d, { window: clock.windowAt(), fade: this.fade })
     for (const o of this.outlines.values()) {
       o.lines.uniforms.uWidth.value = 2.2 * dpr
       o.lines.update(this.camera, this._res, o.on ? 0.95 : 0)
@@ -179,6 +184,8 @@ export class TableScene {
     this.ground.update(this.camera, g.distance)
     rig.jump({ x: g.target.x, z: g.target.z })
     this.ground.update(this.camera, g.distance)
+    const clock = this.app.clock
+    this.routes.settle(clock.date, g.distance, { window: clock.windowAt(), fade: this.fade })
   }
 
   /** The rig's flight to a view ({ target, distance, yaw, pitch }); resolves on landing. */
@@ -234,6 +241,7 @@ export class TableScene {
     this.rig.dispose()
     this.ground.dispose()
     this.coast?.dispose()
+    this.routes.dispose()
     for (const o of this.outlines.values()) o.lines.dispose()
     this.tray.geometry.dispose()
     this.trayMaterial.dispose()
