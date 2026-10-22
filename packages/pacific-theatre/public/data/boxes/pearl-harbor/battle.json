@@ -1040,16 +1040,18 @@
       ],
       "events": [
         {
-          "t": "08:30",
+          "t": "09:00",
           "kind": "list",
           "sources": [{"id":"oglala-ar-1941"}],
-          "text": "Oglala, her plates opened by the torpedo’s blast, is warped astern of Helena and lists."
+          "sourceNote": "“At about 0900, the ship was secured to Ten Ten dock astern of the Helena”",
+          "text": "Oglala is secured astern of Helena and lists."
         },
-        {"t":"09:00","kind":"sinks","sources":[{"id":"kimmel-narrative","where":"0900"},{"id":"oglala-ar-1941"}]}
+        {"t":"09:30","kind":"abandoned","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“About 0930 with a list of approximately 20° the order was given to abandon ship”"},
+        {"t":"09:58","kind":"sinks","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“At about 1000 or slightly before, the Oglala turned over on her port side”"}
       ],
       "fate": {
         "kind": "capsized",
-        "t": "09:00",
+        "t": "09:58",
         "sources": [{"id":"oglala-ar-1941"},{"id":"kimmel-narrative"}],
         "note": "capsized at her berth at the Navy Yard; raised and recommissioned"
       }
