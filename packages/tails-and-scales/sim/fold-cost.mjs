@@ -283,9 +283,9 @@ const AUTOMERGE_MUTANTS = {
   // the list read off the document again at every change: O(n) elements
   // copied per entry
   'rebuild-every-change': ['net/automerge-store.js', "      if (p.path[0] !== 'log') continue\n      touched = true\n", "      if (p.path[0] !== 'log') continue\n      this.rebuild()\n      return true\n"],
-  // each text decoded again at every change, its cache by text gone: O(n)
-  // decodes per entry
-  'decode-uncached': ['net/automerge-store.js', '    let e = this.byText.get(text)\n', '    let e = undefined\n    this.rebuild = () => (this.list = this.texts().map((t) => decode(t)))\n'],
+  // the whole log decoded again at every change, an insert's patch
+  // ignored: O(n) decodes per entry
+  'decode-every-change': ['net/automerge-store.js', 'this.list.splice(p.path[1], 0, ...p.values.map((v) => this.decoded(String(v))))', '(this.list = this.texts().map((t) => decode(t)))'],
 }
 const MUTANTS = STORE === 'automerge' ? AUTOMERGE_MUTANTS : {
   // the store hands out a copy of its list every change (R8's entries()):
