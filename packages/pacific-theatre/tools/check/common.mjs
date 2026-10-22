@@ -552,7 +552,7 @@ export function core(ctx) {
     ctx.count('boxes')
   }
 
-  // kits: the frozen ids with their types and nations
+  // kits: the frozen ids with their types and sides
   for (const [file, kind] of [['kits/ships.json', 'ships'], ['kits/aircraft.json', 'aircraft']]) {
     const list = ctx.load(file)
     if (list === undefined || list === null) continue
@@ -564,7 +564,7 @@ export function core(ctx) {
     for (const k of list) {
       const f = fz.kits[kind][k.id]
       if (!f) ctx.warn(`${file} ${k.id}`, 'is not a frozen kit id (new kits go through the project manager)')
-      else if (k.type !== f.type || k.nation !== f.nation) ctx.bad(`${file} ${k.id}`, `type ${k.type}, nation ${k.nation}; frozen ${f.type}, ${f.nation}`)
+      else if (k.type !== f.type || k.side !== f.side) ctx.bad(`${file} ${k.id}`, `type ${k.type}, side ${k.side}; frozen ${f.type}, ${f.side}`)
     }
     ctx.count(`${kind} kits`, list.length)
   }

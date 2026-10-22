@@ -1,53 +1,147 @@
 {
-  "about": "The ids and vocabularies frozen at Stage 0 (ENGINEERING.md §13). The parallel workflows build against these; a change goes through the project manager. Longitudes: a box's bounds are a continuous range whose east may exceed 180; lon0 may be written either side of 180 (pearl-harbor keeps the Oʻahu pack's own negative longitudes). size is [W, H] in texels, row 0 north; the bake may refine bounds by less than a texel's worth and reports it. metresPerTexel is for reference, in the box's own tangent plane.",
+  "about": "The ids and vocabularies frozen at Stage 0 (ENGINEERING.md §13). The parallel workflows build against these; a change goes through the project manager. Longitudes: a box's bounds are a continuous range written east of 180 where it crosses (pearl-harbor at 201.45–202.45 is 158.55°W–157.55°W); lon0 the same. size is [W, H] in texels, row 0 north, from tools/lib/geo.mjs packGrid over the frozen bounds with the long side at the frozen length; the bake may refine bounds by less than a texel's worth and reports it. metresPerTexel is for reference, in the box's own tangent plane. clock.from/to are the box's clock span (DATA.md §7), with the ISO offset.",
   "boxes": {
     "midway": {
-      "lon0": 182.2,
-      "lat0": 30.0,
-      "bounds": [180.2, 27.9, 184.2, 32.0],
-      "size": [871, 1024],
-      "metresPerTexel": [442.74, 442.73],
-      "exaggeration": 1.0,
-      "clock": { "zone": "-12:00", "name": "Midway time (zone +12)" },
-      "event": "midway-1942"
+      "lon0": 181.15,
+      "lat0": 30,
+      "bounds": [
+        179.3,
+        27.8,
+        183,
+        32.2
+      ],
+      "size": [
+        1502,
+        2048
+      ],
+      "metresPerTexel": [
+        237.56,
+        237.56
+      ],
+      "exaggeration": 1,
+      "clock": {
+        "id": "usn-zp12",
+        "zone": "-12:00",
+        "name": "Midway time (zone +12)",
+        "from": "1942-06-04T04:00-12:00",
+        "to": "1942-06-04T18:00-12:00"
+      },
+      "event": "midway-1942",
+      "sea": "gmrt"
     },
     "pearl-harbor": {
-      "lon0": -157.96474795,
-      "lat0": 21.48377385,
-      "bounds": [-158.3000505, 21.2364436, -157.6294454, 21.7311041],
-      "size": [1024, 801],
-      "metresPerTexel": [67.84, 68.29],
-      "exaggeration": 1.0,
-      "clock": { "zone": "-10:30", "name": "Hawaiian time" },
-      "note": "the holo-i-ke-au Oʻahu pack's footprint and size (its manifest id \"oahu\", 68 m in the Hawaiian projection; its encoding there is scale 0.25, offset -6000, which the box manifest carries as it is)"
+      "lon0": 201.95,
+      "lat0": 21.6,
+      "bounds": [
+        201.45,
+        21.15,
+        202.45,
+        22.05
+      ],
+      "size": [
+        2048,
+        1970
+      ],
+      "metresPerTexel": [
+        50.54,
+        50.54
+      ],
+      "exaggeration": 1,
+      "clock": {
+        "id": "hst-1941",
+        "zone": "-10:30",
+        "name": "Hawaiian time",
+        "from": "1941-12-07T06:30-10:30",
+        "to": "1941-12-07T10:00-10:30"
+      },
+      "event": "pearl-harbor-1941",
+      "sea": "gmrt",
+      "note": "baked for 7 December 1941 (DATA.md §7): CUDEM over the harbour and the south shore, GLO-30 elsewhere, GMRT sea; encoding scale 0.25, offset -11000 like every box"
     },
     "ironbottom-sound": {
-      "lon0": 160.0,
-      "lat0": -9.3,
-      "bounds": [159.5, -9.75, 160.5, -8.85],
-      "size": [2048, 1855],
-      "metresPerTexel": [53.64, 53.65],
-      "exaggeration": 1.0,
-      "clock": { "zone": "+11:00", "name": "zone −11 (Guadalcanal)" }
+      "lon0": 159.9,
+      "lat0": -9.2,
+      "bounds": [
+        159.333,
+        -9.583,
+        160.45,
+        -8.833
+      ],
+      "size": [
+        2048,
+        1384
+      ],
+      "metresPerTexel": [
+        59.93,
+        59.93
+      ],
+      "exaggeration": 1,
+      "clock": {
+        "id": "usn-zm11",
+        "zone": "+11:00",
+        "name": "zone −11 (Guadalcanal)",
+        "from": "1942-11-14T20:00+11:00",
+        "to": "1942-11-15T03:30+11:00"
+      },
+      "event": "guadalcanal-naval-2-1942",
+      "sea": "gmrt"
     },
     "samar": {
-      "lon0": 126.1,
-      "lat0": 11.8,
-      "bounds": [125.0, 10.8, 127.2, 12.8],
-      "size": [1024, 945],
-      "metresPerTexel": [234.11, 234.02],
-      "exaggeration": 1.0,
-      "clock": { "zone": "+09:00", "name": "Item (zone −9)" }
+      "lon0": 126.08,
+      "lat0": 11.54,
+      "bounds": [
+        125.333,
+        11,
+        126.833,
+        12.083
+      ],
+      "size": [
+        1024,
+        750
+      ],
+      "metresPerTexel": [
+        159.77,
+        159.77
+      ],
+      "exaggeration": 1,
+      "clock": {
+        "id": "usn-item",
+        "zone": "+09:00",
+        "name": "Item (zone −9)",
+        "from": "1944-10-25T06:15+09:00",
+        "to": "1944-10-25T10:45+09:00"
+      },
+      "event": "samar-1944",
+      "sea": "gmrt",
+      "note": "the clock ends before the attack on St. Lo at about 10:50 (DATA.md §7)"
     }
   },
-  "chapters": ["prologue", "first-six-months", "turn", "ladder", "central-pacific", "return", "approaches", "end"],
-  "keyframes": ["1941-12-06", "1942-05-08", "1942-09-15", "1943-11-01", "1944-08-15", "1945-01-15", "1945-07-01", "1945-09-02"],
+  "chapters": [
+    "prologue",
+    "first-six-months",
+    "turn",
+    "ladder",
+    "central-pacific",
+    "return",
+    "approaches",
+    "end"
+  ],
+  "keyframes": [
+    "1941-12-06",
+    "1942-05-08",
+    "1942-09-15",
+    "1943-11-01",
+    "1944-08-15",
+    "1945-01-15",
+    "1945-07-01",
+    "1945-09-02"
+  ],
   "clocks": {
     "jst": "+09:00",
-    "usn-z+12": "-12:00",
-    "usn-z+10": "-10:00",
-    "usn-z-11": "+11:00",
-    "usn-z-12": "+12:00",
+    "usn-zp12": "-12:00",
+    "usn-zp10": "-10:00",
+    "usn-zm11": "+11:00",
+    "usn-zm12": "+12:00",
     "usn-item": "+09:00",
     "hst-1941": "-10:30",
     "hwt": "-09:30",
@@ -55,159 +149,952 @@
   },
   "kits": {
     "ships": {
-      "yamato": { "type": "bb", "nation": "japan" },
-      "nagato": { "type": "bb", "nation": "japan" },
-      "kongo": { "type": "bb", "nation": "japan", "ships": ["Kongō", "Haruna", "Kirishima"] },
-      "fuso": { "type": "bb", "nation": "japan" },
-      "akagi": { "type": "cv", "nation": "japan" },
-      "kaga": { "type": "cv", "nation": "japan" },
-      "soryu": { "type": "cv", "nation": "japan" },
-      "hiryu": { "type": "cv", "nation": "japan" },
-      "shokaku": { "type": "cv", "nation": "japan" },
-      "takao": { "type": "ca", "nation": "japan", "ships": ["Atago", "Takao", "Chōkai"] },
-      "myoko": { "type": "ca", "nation": "japan", "ships": ["Haguro"] },
-      "mogami": { "type": "ca", "nation": "japan", "ships": ["Kumano", "Suzuya"] },
-      "tone": { "type": "ca", "nation": "japan", "ships": ["Tone", "Chikuma"] },
-      "nagara": { "type": "cl", "nation": "japan" },
-      "sendai": { "type": "cl", "nation": "japan" },
-      "agano": { "type": "cl", "nation": "japan", "ships": ["Yahagi", "Noshiro"] },
-      "kagero": { "type": "dd", "nation": "japan" },
-      "yugumo": { "type": "dd", "nation": "japan" },
-      "fubuki": { "type": "dd", "nation": "japan" },
-      "akizuki": { "type": "dd", "nation": "japan" },
-      "shiratsuyu": { "type": "dd", "nation": "japan" },
-      "akatsuki": { "type": "dd", "nation": "japan" },
-      "asashio": { "type": "dd", "nation": "japan" },
-      "north-carolina": { "type": "bb", "nation": "usa", "ships": ["Washington"] },
-      "south-dakota": { "type": "bb", "nation": "usa" },
-      "pennsylvania": { "type": "bb", "nation": "usa", "ships": ["Arizona", "Pennsylvania"] },
-      "nevada": { "type": "bb", "nation": "usa", "ships": ["Nevada", "Oklahoma"] },
-      "tennessee": { "type": "bb", "nation": "usa", "ships": ["Tennessee", "California"] },
-      "colorado": { "type": "bb", "nation": "usa", "ships": ["Maryland", "West Virginia"] },
-      "utah": { "type": "bb", "nation": "usa", "note": "target ship" },
-      "yorktown": { "type": "cv", "nation": "usa", "ships": ["Yorktown", "Enterprise", "Hornet"] },
-      "casablanca": { "type": "cve", "nation": "usa" },
-      "northampton": { "type": "ca", "nation": "usa" },
-      "new-orleans": { "type": "ca", "nation": "usa" },
-      "pensacola": { "type": "ca", "nation": "usa" },
-      "portland": { "type": "ca", "nation": "usa" },
-      "atlanta": { "type": "cl", "nation": "usa" },
-      "brooklyn": { "type": "cl", "nation": "usa", "ships": ["Helena", "Honolulu"] },
-      "omaha": { "type": "cl", "nation": "usa", "ships": ["Raleigh", "Detroit"] },
-      "fletcher": { "type": "dd", "nation": "usa" },
-      "sims": { "type": "dd", "nation": "usa" },
-      "benham": { "type": "dd", "nation": "usa" },
-      "mahan": { "type": "dd", "nation": "usa" },
-      "gleaves": { "type": "dd", "nation": "usa" },
-      "farragut": { "type": "dd", "nation": "usa" },
-      "porter": { "type": "dd", "nation": "usa" },
-      "john-c-butler": { "type": "de", "nation": "usa" }
+      "yamato": {
+        "type": "bb",
+        "side": "jp"
+      },
+      "nagato": {
+        "type": "bb",
+        "side": "jp"
+      },
+      "kongo": {
+        "type": "bb",
+        "side": "jp",
+        "ships": [
+          "Kongō",
+          "Haruna",
+          "Kirishima"
+        ]
+      },
+      "fuso": {
+        "type": "bb",
+        "side": "jp"
+      },
+      "akagi": {
+        "type": "cv",
+        "side": "jp"
+      },
+      "kaga": {
+        "type": "cv",
+        "side": "jp"
+      },
+      "soryu": {
+        "type": "cv",
+        "side": "jp"
+      },
+      "hiryu": {
+        "type": "cv",
+        "side": "jp"
+      },
+      "shokaku": {
+        "type": "cv",
+        "side": "jp",
+        "ships": [
+          "Shōkaku",
+          "Zuikaku"
+        ]
+      },
+      "takao": {
+        "type": "ca",
+        "side": "jp",
+        "ships": [
+          "Atago",
+          "Takao",
+          "Chōkai"
+        ]
+      },
+      "myoko": {
+        "type": "ca",
+        "side": "jp",
+        "ships": [
+          "Haguro"
+        ]
+      },
+      "mogami": {
+        "type": "ca",
+        "side": "jp",
+        "ships": [
+          "Kumano",
+          "Suzuya"
+        ]
+      },
+      "tone": {
+        "type": "ca",
+        "side": "jp",
+        "ships": [
+          "Tone",
+          "Chikuma"
+        ]
+      },
+      "nagara": {
+        "type": "cl",
+        "side": "jp"
+      },
+      "sendai": {
+        "type": "cl",
+        "side": "jp"
+      },
+      "agano": {
+        "type": "cl",
+        "side": "jp",
+        "ships": [
+          "Yahagi",
+          "Noshiro"
+        ]
+      },
+      "kagero": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "yugumo": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "fubuki": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "akizuki": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "shiratsuyu": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "akatsuki": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "asashio": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "shimakaze": {
+        "type": "dd",
+        "side": "jp"
+      },
+      "type-a-midget": {
+        "type": "ss-midget",
+        "side": "jp",
+        "tokko": true,
+        "note": "the five midget submarines of 7 December 1941: tokkō (special attack); never a role"
+      },
+      "north-carolina": {
+        "type": "bb",
+        "side": "us",
+        "ships": [
+          "Washington"
+        ]
+      },
+      "south-dakota": {
+        "type": "bb",
+        "side": "us"
+      },
+      "pennsylvania": {
+        "type": "bb",
+        "side": "us",
+        "ships": [
+          "Arizona",
+          "Pennsylvania"
+        ]
+      },
+      "nevada": {
+        "type": "bb",
+        "side": "us",
+        "ships": [
+          "Nevada",
+          "Oklahoma"
+        ]
+      },
+      "tennessee": {
+        "type": "bb",
+        "side": "us",
+        "ships": [
+          "Tennessee",
+          "California"
+        ]
+      },
+      "colorado": {
+        "type": "bb",
+        "side": "us",
+        "ships": [
+          "Maryland",
+          "West Virginia"
+        ]
+      },
+      "utah": {
+        "type": "bb",
+        "side": "us",
+        "note": "target ship"
+      },
+      "yorktown": {
+        "type": "cv",
+        "side": "us",
+        "ships": [
+          "Yorktown",
+          "Enterprise",
+          "Hornet"
+        ]
+      },
+      "casablanca": {
+        "type": "cve",
+        "side": "us"
+      },
+      "northampton": {
+        "type": "ca",
+        "side": "us"
+      },
+      "new-orleans": {
+        "type": "ca",
+        "side": "us",
+        "ships": [
+          "New Orleans",
+          "San Francisco",
+          "Vincennes",
+          "Minneapolis",
+          "Astoria"
+        ]
+      },
+      "pensacola": {
+        "type": "ca",
+        "side": "us"
+      },
+      "portland": {
+        "type": "ca",
+        "side": "us",
+        "ships": [
+          "Portland"
+        ]
+      },
+      "atlanta": {
+        "type": "cl",
+        "side": "us"
+      },
+      "brooklyn": {
+        "type": "cl",
+        "side": "us",
+        "ships": [
+          "Helena",
+          "Honolulu",
+          "St. Louis",
+          "Phoenix"
+        ]
+      },
+      "omaha": {
+        "type": "cl",
+        "side": "us",
+        "ships": [
+          "Raleigh",
+          "Detroit"
+        ]
+      },
+      "fletcher": {
+        "type": "dd",
+        "side": "us"
+      },
+      "sims": {
+        "type": "dd",
+        "side": "us"
+      },
+      "benham": {
+        "type": "dd",
+        "side": "us"
+      },
+      "mahan": {
+        "type": "dd",
+        "side": "us"
+      },
+      "gleaves": {
+        "type": "dd",
+        "side": "us"
+      },
+      "farragut": {
+        "type": "dd",
+        "side": "us"
+      },
+      "porter": {
+        "type": "dd",
+        "side": "us"
+      },
+      "gridley": {
+        "type": "dd",
+        "side": "us",
+        "ships": [
+          "Maury"
+        ]
+      },
+      "wickes": {
+        "type": "dd",
+        "side": "us",
+        "ships": [
+          "Ward"
+        ]
+      },
+      "john-c-butler": {
+        "type": "de",
+        "side": "us"
+      },
+      "vestal": {
+        "type": "ar",
+        "side": "us"
+      },
+      "neosho": {
+        "type": "ao",
+        "side": "us"
+      },
+      "oglala": {
+        "type": "cm",
+        "side": "us"
+      },
+      "curtiss": {
+        "type": "av",
+        "side": "us",
+        "ships": [
+          "Curtiss",
+          "Tangier"
+        ]
+      },
+      "solace": {
+        "type": "ah",
+        "side": "us",
+        "hospital": true,
+        "note": "hospital ship: never a target, never a role"
+      }
     },
     "aircraft": {
-      "a6m2": { "type": "fighter", "nation": "japan" },
-      "a6m5": { "type": "fighter", "nation": "japan" },
-      "d3a1": { "type": "dive", "nation": "japan" },
-      "b5n2": { "type": "torpedo", "nation": "japan" },
-      "d4y1": { "type": "dive", "nation": "japan" },
-      "b6n2": { "type": "torpedo", "nation": "japan" },
-      "f4f-3": { "type": "fighter", "nation": "usa" },
-      "f4f-4": { "type": "fighter", "nation": "usa" },
-      "fm-2": { "type": "fighter", "nation": "usa" },
-      "f6f-3": { "type": "fighter", "nation": "usa" },
-      "sbd-3": { "type": "dive", "nation": "usa" },
-      "tbd-1": { "type": "torpedo", "nation": "usa" },
-      "tbf-1": { "type": "torpedo", "nation": "usa" },
-      "tbm-1c": { "type": "torpedo", "nation": "usa" },
-      "p-40b": { "type": "fighter", "nation": "usa" },
-      "p-36a": { "type": "fighter", "nation": "usa" },
-      "pby-5": { "type": "patrol", "nation": "usa" },
-      "b-17e": { "type": "bomber", "nation": "usa" }
+      "a6m2": {
+        "type": "fighter",
+        "side": "jp"
+      },
+      "a6m5": {
+        "type": "fighter",
+        "side": "jp"
+      },
+      "d3a1": {
+        "type": "dive",
+        "side": "jp"
+      },
+      "b5n2": {
+        "type": "torpedo",
+        "side": "jp"
+      },
+      "d4y1": {
+        "type": "dive",
+        "side": "jp"
+      },
+      "b6n2": {
+        "type": "torpedo",
+        "side": "jp"
+      },
+      "e13a1": {
+        "type": "patrol",
+        "side": "jp",
+        "note": "float reconnaissance"
+      },
+      "f1m2": {
+        "type": "patrol",
+        "side": "jp",
+        "note": "float observation"
+      },
+      "f4f-3": {
+        "type": "fighter",
+        "side": "us"
+      },
+      "f4f-4": {
+        "type": "fighter",
+        "side": "us"
+      },
+      "fm-2": {
+        "type": "fighter",
+        "side": "us"
+      },
+      "f6f-3": {
+        "type": "fighter",
+        "side": "us"
+      },
+      "f2a-3": {
+        "type": "fighter",
+        "side": "us"
+      },
+      "sbd-3": {
+        "type": "dive",
+        "side": "us"
+      },
+      "sb2u-3": {
+        "type": "dive",
+        "side": "us"
+      },
+      "tbd-1": {
+        "type": "torpedo",
+        "side": "us"
+      },
+      "tbf-1": {
+        "type": "torpedo",
+        "side": "us"
+      },
+      "tbm-1c": {
+        "type": "torpedo",
+        "side": "us"
+      },
+      "p-40b": {
+        "type": "fighter",
+        "side": "us"
+      },
+      "p-36a": {
+        "type": "fighter",
+        "side": "us"
+      },
+      "pby-5": {
+        "type": "patrol",
+        "side": "us"
+      },
+      "b-17e": {
+        "type": "bomber",
+        "side": "us"
+      },
+      "b-26": {
+        "type": "bomber",
+        "side": "us",
+        "note": "Midway: four carried torpedoes"
+      },
+      "b-18": {
+        "type": "bomber",
+        "side": "us"
+      },
+      "a-20": {
+        "type": "bomber",
+        "side": "us"
+      }
+    },
+    "weapons": {
+      "about": "R6's ids for guns, AA weapons, torpedoes and bombs (DATA.md §8); the engine fills kits/weapons.json and its check validates every kit's weapon ids against it, so the ids are not listed here"
     }
   },
   "vocab": {
-    "sides": ["jp", "us", "uk", "in", "au", "nz", "ca", "nl", "cn", "ph", "th", "fr", "su", "mn", "ina", "mk", "chamorro", "nauruan", "banaban", "okinawan", "unangax", "japanese-am"],
-    "eventKinds": ["battle", "campaign", "landing", "raid", "siege", "sinking", "occupation", "surrender", "political", "bombing", "atrocity", "captivity", "people", "other"],
-    "cardOnlyKinds": ["bombing", "atrocity", "captivity", "people"],
-    "eventFlags": ["box", "view", "cards"],
-    "eventTiers": [1, 2],
-    "zooms": ["table", "box"],
-    "datePrecision": ["minute", "hour", "day", "month"],
-    "confidence": ["firm", "soft", "contested"],
-    "placeKinds": ["island", "atoll", "group", "sea", "strait", "gulf", "harbour", "base", "airfield", "city", "point", "reef", "region", "sea-area", "other"],
-    "placePrecision": ["ex", "loc", "isl", "reg", "sea", "off"],
-    "sourceAccess": ["open", "lending", "print", "paywalled"],
-    "sourceRead": ["full", "part", "title"],
-    "sourceLanguage": ["en", "ja", "en (tr. from ja)", "fr", "nl"],
-    "sourceLicence": ["pd-us-gov", "pdm", "cc-by", "cc-by-nc", "cc-by-sa", "nids-permission", "copyright-cite-only", "unknown"],
-    "imageLicences": ["pd-us-gov", "pdm"],
-    "routeKinds": ["fleet", "strike", "air", "convoy", "lane", "campaign", "schematic"],
-    "routeSeaKinds": ["fleet", "strike", "convoy", "lane"],
-    "routeMedium": ["sea", "air"],
-    "pointPrecision": ["report", "chart", "orders", "narrative", "schematic"],
-    "routeDirections": ["oneway", "return"],
-    "frontStates": ["held", "garrisoned", "allied-with-japan", "contested", "allied", "neutral", "soviet", "zone-cks", "zone-soviet", "zone-seac", "zone-cincpac", "zone-swpa"],
-    "frontPrecision": ["mapped", "schematic"],
-    "labelKinds": ["sea", "group", "island", "strait", "base", "city", "region", "line"],
-    "labelRanks": [1, 2, 3, 4],
-    "coastKinds": ["land", "island", "reef"],
-    "boxSea": ["gmrt", "etopo15"],
-    "battleSides": ["japan", "usa"],
-    "kitNations": ["japan", "usa"],
-    "shipTypes": ["bb", "cv", "cvl", "cve", "ca", "cl", "dd", "de", "ss", "ap", "pt"],
-    "blockKinds": ["hull-extension", "flight-deck", "island", "bridge", "pagoda", "tower", "cage-mast", "tripod-mast", "pole-mast", "funnel", "turret", "casemate", "hangar", "deckhouse", "crane", "catapult", "boat-deck", "director"],
-    "funnelShapes": ["round", "trunked", "downturned", "raked"],
-    "turretShapes": ["twin", "triple", "single"],
-    "pagodaShapes": ["tall", "short"],
-    "hullBows": ["straight", "clipper", "raked"],
-    "hullSterns": ["cruiser", "transom", "round"],
-    "aircraftTypes": ["fighter", "dive", "torpedo", "level", "patrol", "bomber"],
-    "wingShapes": ["low", "mid", "high", "parasol"],
-    "tailShapes": ["single", "twin"],
-    "canopyShapes": ["long-frame", "short-frame", "bubble", "cockpit"],
-    "gearShapes": ["retract", "fixed"],
-    "cowlShapes": ["radial", "inline"],
-    "engineKinds": ["radial", "inline"],
-    "insignia": ["hinomaru", "hinomaru-white-surround", "star-red-centre", "star-no-red", "star-bar-red-outline", "star-bar-blue", "roundel-raaf", "roundel-rnzaf"],
-    "battleEventKinds": ["hit", "torpedo-hit", "near-miss", "fire", "flood", "list", "dead-in-water", "explodes", "sinks", "scuttled", "launches", "recovers", "turns", "opens-fire", "ceases-fire", "smoke", "searchlight", "starshell", "signal", "sighted", "withdraws", "aground", "other"],
-    "battleEventsWithCause": ["hit", "torpedo-hit", "near-miss", "opens-fire", "launches", "scuttled"],
-    "trackPrecision": ["report", "chart", "narrative", "schematic"],
-    "attackProfiles": ["dive", "torpedo", "level", "strafe", "cap", "escort", "search"],
-    "roleKinds": ["aircraft", "ship"],
-    "timeScales": { "aircraft": [1], "ship": [1, 2, 3] },
-    "scoreFields": ["hits", "torpedoes", "aircraft", "returned", "time"]
+    "sides": [
+      "jp",
+      "us",
+      "uk",
+      "in",
+      "au",
+      "nz",
+      "ca",
+      "nl",
+      "cn",
+      "ph",
+      "th",
+      "fr",
+      "su",
+      "mn",
+      "ina",
+      "mk",
+      "chamorro",
+      "nauruan",
+      "banaban",
+      "okinawan",
+      "unangax",
+      "japanese-am"
+    ],
+    "eventKinds": [
+      "battle",
+      "campaign",
+      "landing",
+      "raid",
+      "siege",
+      "sinking",
+      "occupation",
+      "surrender",
+      "political",
+      "bombing",
+      "atrocity",
+      "captivity",
+      "people",
+      "other"
+    ],
+    "cardOnlyKinds": [
+      "bombing",
+      "atrocity",
+      "captivity",
+      "people"
+    ],
+    "eventFlags": [
+      "box",
+      "view",
+      "cards"
+    ],
+    "eventTiers": [
+      1,
+      2
+    ],
+    "zooms": [
+      "table",
+      "box"
+    ],
+    "datePrecision": [
+      "minute",
+      "hour",
+      "day",
+      "month",
+      "year"
+    ],
+    "confidence": [
+      "firm",
+      "soft",
+      "contested"
+    ],
+    "placeKinds": [
+      "island",
+      "atoll",
+      "group",
+      "sea",
+      "strait",
+      "gulf",
+      "harbour",
+      "base",
+      "airfield",
+      "city",
+      "point",
+      "reef",
+      "region",
+      "sea-area",
+      "other"
+    ],
+    "placePrecision": [
+      "ex",
+      "loc",
+      "isl",
+      "reg",
+      "sea",
+      "off"
+    ],
+    "sourceAccess": [
+      "open",
+      "lending",
+      "print",
+      "paywalled"
+    ],
+    "sourceRead": [
+      "full",
+      "part",
+      "title"
+    ],
+    "sourceLanguage": [
+      "en",
+      "ja",
+      "en (tr. from ja)",
+      "fr",
+      "nl"
+    ],
+    "sourceLicence": [
+      "pd-us-gov",
+      "pdm",
+      "cc-by",
+      "cc-by-nc",
+      "cc-by-sa",
+      "nids-permission",
+      "copyright-cite-only",
+      "unknown"
+    ],
+    "imageLicences": [
+      "pd-us-gov",
+      "pdm"
+    ],
+    "routeKinds": [
+      "fleet",
+      "strike",
+      "air",
+      "convoy",
+      "lane",
+      "campaign",
+      "schematic"
+    ],
+    "routeSeaKinds": [
+      "fleet",
+      "strike",
+      "convoy",
+      "lane"
+    ],
+    "routeMedium": [
+      "sea",
+      "air"
+    ],
+    "pointPrecision": [
+      "report",
+      "chart",
+      "orders",
+      "narrative",
+      "schematic"
+    ],
+    "routeDirections": [
+      "oneway",
+      "return"
+    ],
+    "frontStates": [
+      "held",
+      "garrisoned",
+      "allied-with-japan",
+      "contested",
+      "allied",
+      "neutral",
+      "soviet",
+      "zone-cks",
+      "zone-soviet",
+      "zone-seac",
+      "zone-cincpac",
+      "zone-swpa"
+    ],
+    "frontPrecision": [
+      "mapped",
+      "schematic"
+    ],
+    "labelKinds": [
+      "sea",
+      "group",
+      "island",
+      "strait",
+      "base",
+      "city",
+      "region",
+      "line"
+    ],
+    "labelRanks": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "coastKinds": [
+      "land",
+      "island",
+      "reef"
+    ],
+    "boxSea": [
+      "gmrt",
+      "etopo15"
+    ],
+    "battleSides": [
+      "jp",
+      "us"
+    ],
+    "shipTypes": [
+      "bb",
+      "cv",
+      "cvl",
+      "cve",
+      "ca",
+      "cl",
+      "dd",
+      "de",
+      "ss",
+      "ss-midget",
+      "ap",
+      "pt",
+      "ar",
+      "ao",
+      "cm",
+      "av",
+      "ah",
+      "ag"
+    ],
+    "blockKinds": [
+      "hull-extension",
+      "flight-deck",
+      "island",
+      "bridge",
+      "pagoda",
+      "tower",
+      "cage-mast",
+      "tripod-mast",
+      "pole-mast",
+      "funnel",
+      "turret",
+      "casemate",
+      "hangar",
+      "deckhouse",
+      "crane",
+      "catapult",
+      "boat-deck",
+      "director"
+    ],
+    "funnelShapes": [
+      "round",
+      "trunked",
+      "downturned",
+      "raked"
+    ],
+    "turretShapes": [
+      "twin",
+      "triple",
+      "single"
+    ],
+    "pagodaShapes": [
+      "tall",
+      "short"
+    ],
+    "hullBows": [
+      "straight",
+      "clipper",
+      "raked"
+    ],
+    "hullSterns": [
+      "cruiser",
+      "transom",
+      "round"
+    ],
+    "aircraftTypes": [
+      "fighter",
+      "dive",
+      "torpedo",
+      "level",
+      "patrol",
+      "bomber"
+    ],
+    "wingShapes": [
+      "low",
+      "mid",
+      "high",
+      "parasol"
+    ],
+    "tailShapes": [
+      "single",
+      "twin"
+    ],
+    "canopyShapes": [
+      "long-frame",
+      "short-frame",
+      "bubble",
+      "cockpit"
+    ],
+    "gearShapes": [
+      "retract",
+      "fixed"
+    ],
+    "cowlShapes": [
+      "radial",
+      "inline"
+    ],
+    "engineKinds": [
+      "radial",
+      "inline"
+    ],
+    "insignia": [
+      "hinomaru",
+      "hinomaru-white-surround",
+      "star-red-centre",
+      "star-no-red",
+      "star-bar-red-outline",
+      "star-bar-blue",
+      "roundel-raaf",
+      "roundel-rnzaf"
+    ],
+    "battleEventKinds": [
+      "hit",
+      "torpedo-hit",
+      "near-miss",
+      "fire",
+      "flood",
+      "list",
+      "dead-in-water",
+      "explodes",
+      "sinks",
+      "scuttled",
+      "launches",
+      "recovers",
+      "turns",
+      "opens-fire",
+      "ceases-fire",
+      "smoke",
+      "searchlight",
+      "starshell",
+      "signal",
+      "sighted",
+      "withdraws",
+      "aground",
+      "torpedoes-fired",
+      "illuminated",
+      "smoke-screen",
+      "steering-jammed",
+      "power-failure",
+      "radar-lost",
+      "abandoned",
+      "collision",
+      "other"
+    ],
+    "battleEventsWithCause": [
+      "hit",
+      "torpedo-hit",
+      "near-miss",
+      "opens-fire",
+      "launches",
+      "scuttled"
+    ],
+    "trackPrecision": [
+      "report",
+      "chart",
+      "narrative",
+      "schematic"
+    ],
+    "attackProfiles": [
+      "dive",
+      "torpedo",
+      "level",
+      "strafe",
+      "cap",
+      "escort",
+      "search"
+    ],
+    "roleKinds": [
+      "aircraft",
+      "ship"
+    ],
+    "timeScales": {
+      "aircraft": [
+        1
+      ],
+      "ship": [
+        1,
+        2,
+        3
+      ]
+    },
+    "scoreFields": [
+      "hits",
+      "torpedoes",
+      "aircraft",
+      "returned",
+      "time"
+    ],
+    "kitSides": [
+      "jp",
+      "us"
+    ],
+    "unitFlags": [
+      "fixed",
+      "hospital",
+      "tokko",
+      "hangarHazard"
+    ],
+    "momentFields": [
+      "id",
+      "title",
+      "role",
+      "t",
+      "durationS",
+      "timeScale",
+      "maxTimeScale",
+      "start",
+      "objective",
+      "beats",
+      "checkpoints",
+      "record",
+      "after",
+      "sources",
+      "tellings"
+    ]
   },
   "fixtures": {
     "about": "The ids tools/fake-data.mjs writes into test-data/ (gitignored), frozen with the rest so the table, engine and battles workflows can build against the same fixtures. Plainly test data: nothing here is history.",
     "boxes": {
       "test-box": {
         "lon0": 179.5,
-        "lat0": 28.0,
-        "bounds": [178.6860797, 27.2765026, 180.3139203, 28.7234974],
-        "size": [256, 256],
-        "metresPerTexel": [625, 625],
-        "exaggeration": 1.0,
-        "clock": { "zone": "-12:00", "name": "test clock (zone +12)" },
-        "event": "test-box-battle"
+        "lat0": 28,
+        "bounds": [
+          178.6860797,
+          27.2765026,
+          180.3139203,
+          28.7234974
+        ],
+        "size": [
+          256,
+          256
+        ],
+        "metresPerTexel": [
+          625,
+          625
+        ],
+        "exaggeration": 1,
+        "clock": {
+          "id": "usn-zp12",
+          "zone": "-12:00",
+          "name": "test clock (zone +12)",
+          "from": "1942-06-04T04:00-12:00",
+          "to": "1942-06-04T18:00-12:00"
+        },
+        "event": "test-box-battle",
+        "sea": "gmrt"
       }
     },
-    "chapters": ["prologue", "test-opening", "test-middle", "test-end"],
-    "keyframes": ["1941-12-06", "1943-06-01"],
+    "chapters": [
+      "prologue",
+      "test-opening",
+      "test-middle",
+      "test-end"
+    ],
+    "keyframes": [
+      "1941-12-06",
+      "1943-06-01"
+    ],
     "kits": {
       "ships": {
-        "test-cv-jp": { "type": "cv", "nation": "japan" },
-        "test-bb-jp": { "type": "bb", "nation": "japan" },
-        "test-dd-jp": { "type": "dd", "nation": "japan" },
-        "test-cv-us": { "type": "cv", "nation": "usa" },
-        "test-bb-us": { "type": "bb", "nation": "usa" },
-        "test-dd-us": { "type": "dd", "nation": "usa" }
+        "test-cv-jp": {
+          "type": "cv",
+          "side": "jp"
+        },
+        "test-bb-jp": {
+          "type": "bb",
+          "side": "jp"
+        },
+        "test-dd-jp": {
+          "type": "dd",
+          "side": "jp"
+        },
+        "test-cv-us": {
+          "type": "cv",
+          "side": "us"
+        },
+        "test-bb-us": {
+          "type": "bb",
+          "side": "us"
+        },
+        "test-dd-us": {
+          "type": "dd",
+          "side": "us"
+        }
       },
       "aircraft": {
-        "test-fighter-jp": { "type": "fighter", "nation": "japan" },
-        "test-dive-us": { "type": "dive", "nation": "usa" },
-        "test-torpedo-us": { "type": "torpedo", "nation": "usa" },
-        "test-patrol-us": { "type": "patrol", "nation": "usa" },
-        "test-bomber-us": { "type": "bomber", "nation": "usa" }
+        "test-fighter-jp": {
+          "type": "fighter",
+          "side": "jp"
+        },
+        "test-dive-us": {
+          "type": "dive",
+          "side": "us"
+        },
+        "test-torpedo-us": {
+          "type": "torpedo",
+          "side": "us"
+        },
+        "test-patrol-us": {
+          "type": "patrol",
+          "side": "us"
+        },
+        "test-bomber-us": {
+          "type": "bomber",
+          "side": "us"
+        }
       }
     }
+  },
+  "clockNames": {
+    "jst": "Tokyo time",
+    "usn-zp12": "zone plus 12, Midway time",
+    "usn-zp10": "zone plus 10, the carriers at Midway",
+    "usn-zm11": "zone minus 11, Guadalcanal",
+    "usn-zm12": "zone minus 12",
+    "usn-item": "Item (zone minus 9), Samar",
+    "hst-1941": "Hawaiian time, 1941",
+    "hwt": "Hawaiian war time (from 9 February 1942)",
+    "malaya-1941": "Malaya time, 1941"
   }
 }
