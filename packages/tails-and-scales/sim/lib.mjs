@@ -203,7 +203,7 @@ export const tag = (v, r) =>
 // ── The corpus ──────────────────────────────────────────────────────────────
 // sim/baselines/pairs.json   AI-vs-AI pairs: { seed, dice, why, n, trace, shadow, written },
 //                            and `engines`: the Node and Chromium that recorded
-//                            the whole corpus's `shadow` and `webShadow`
+//                            the whole corpus
 // sim/baselines/human/*.json human logs: { setup, bot, why, n, trace, shadow, written, entries }
 // (until N0 the corpus also kept Chromium's shadow hashes, `webShadow`, where
 // they differed from Node's: since N0 every engine computes Node's). Each

@@ -8,17 +8,24 @@
 // and its pose at a game time) and the follow rule (focus: never during the
 // turn of the one seat played against the AI). For a range of screens, game
 // times and modes, the presets must give the same numbers (=== on every
-// coordinate), and battleView must still choose by the screen's shape alone
-// (F1's `behind` and F2's `broadside` are in the module, chosen by no
-// battle yet). Then what the module promises of its own: everything frozen,
-// fitPose fitting the whole board into the view for the presets it fits,
-// no farther than their `max`. Then the glue: view/camera.js's CameraRig,
+// coordinate): the landscape and portrait presets are still the R0 code's
+// battle views by the screen's shape. (F1, F2) But a battle no longer opens
+// on them: battleView opens behind the one seat played here, whichever
+// edge it holds, and broadside for no seat or two, on every screen; and
+// viewsFor lists the view button's views, the battle's own first, then
+// broadside, behind the other army and the overview. Then what the module
+// promises of its own: everything frozen, fitPose fitting the whole board
+// into the view for the presets it fits, no farther than their `max`, which
+// takes in the whole classic board on every screen down to a 412×915
+// portrait phone; and fitPose of another board (F8's rectangle) centred on
+// it and taking it in whole. Then the glue: view/camera.js's CameraRig,
 // made in Node over a stand-in canvas, swung by goTo onto every preset
-// (landscape, portrait, broadside, behind either edge) on screens of
-// several shapes, its tween run to the end and its controls updated, must
-// come to rest where fitPose puts it (a pose preset exactly where it says),
-// not pulled in by the controls' dolly limit; and back on the title, the
-// limit is today's again.
+// (landscape, portrait, broadside, behind either edge, overview) on screens
+// of several shapes, its tween run to the end and its controls updated,
+// must come to rest where fitPose puts it (a pose preset exactly where it
+// says), not pulled in by the controls' dolly limit; stepped through a
+// battle's views by nextView and toOverview; and back on the title, the
+// limit is today's again and there are no views to step through.
 //
 //   node sim/camera-check.mjs
 //
@@ -31,7 +38,7 @@ import { legacyDir, LEGACY_REF } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
 const imp = (f) => import(pathToFileURL(join(PKG, f)).href)
-const { PRESETS, battleView, fovFor, orbitPose, follows, fitPose } = await imp('present/camera-presets.js')
+const { PRESETS, battleView, viewsFor, fovFor, orbitPose, follows, fitPose, BOARD_RECT } = await imp('present/camera-presets.js')
 const { BOARD } = await imp('core/rules.js')
 const legacy = readFileSync(join(legacyDir(), 'main.js'), 'utf8')
 
@@ -90,10 +97,14 @@ check(PRESETS.title.orbit.angle === angle0, `the title's orbit starts at ${angle
 const SCREENS = [[1280, 800], [1920, 1080], [800, 800], [801, 800], [800, 801], [390, 844], [768, 1024], [2560, 1080], [360, 640], [1024, 768], [0, 0], [0, 800], [800, 0]]
 const SEATS = [[], [0], [1], [0, 1]]
 for (const [w, h] of SCREENS) {
-  const want = legacyView(w, h)
-  for (const localSeats of SEATS) {
-    const got = battleView({ localSeats, edges: [-1, 1], aspect: w / h })
-    check(same([...got.pos], xyz(want.pos)) && same([...got.target], xyz(want.target)), `battleView on ${w}×${h} for the seats ${JSON.stringify(localSeats)} is the view the R0 code opened a battle on`, `${JSON.stringify(got)} | ${xyz(want.pos)} → ${xyz(want.target)}`)
+  const want = legacyView(w, h), kept = w / h < 1 ? PRESETS.portrait : PRESETS.landscape
+  check(same([...kept.pos], xyz(want.pos)) && same([...kept.target], xyz(want.target)), `the ${w / h < 1 ? 'portrait' : 'landscape'} preset is the view the R0 code opened a battle on, on ${w}×${h}`, `${JSON.stringify(kept)} | ${xyz(want.pos)} → ${xyz(want.target)}`)
+  // (F1, F2) a battle opens behind the one seat played here, else broadside,
+  // whatever the screen's shape, and whichever edge each seat holds
+  for (const edges of [[-1, 1], [1, -1]]) for (const localSeats of SEATS) {
+    const got = battleView({ localSeats, edges, aspect: w / h })
+    const wantView = localSeats.length === 1 ? PRESETS.behind(edges[localSeats[0]]) : PRESETS.broadside
+    check(JSON.stringify(got) === JSON.stringify(wantView), `battleView on ${w}×${h} for the seats ${JSON.stringify(localSeats)} (edges ${edges}) is ${localSeats.length === 1 ? `behind seat ${localSeats[0]}'s edge` : 'broadside'}`, JSON.stringify(got))
   }
   check(fovFor(w / h) === legacyFov(w, h), `the field of view on ${w}×${h} is fitFov's (${legacyFov(w, h)})`, String(fovFor(w / h)))
 }
@@ -125,12 +136,22 @@ const frozen = (o, path) => {
 frozen(PRESETS, 'PRESETS')
 frozen(PRESETS.behind(-1), 'PRESETS.behind(-1)')
 check(PRESETS.behind(-1).azimuth === -Math.PI / 2 && PRESETS.behind(1).azimuth === Math.PI / 2, "behind(edge) looks from behind the seat's own edge")
+// (F1, F2) the view button's views: the battle's own first, then the rest,
+// the overview last, each seat's back and the broadside among them
+const key = (v) => JSON.stringify(v)
+for (const edges of [[-1, 1], [1, -1]]) for (const localSeats of SEATS) {
+  const views = viewsFor({ localSeats, edges }).map(key)
+  const want = (localSeats.length === 1 ? [PRESETS.behind(edges[localSeats[0]]), PRESETS.broadside, PRESETS.behind(-edges[localSeats[0]])] : [PRESETS.broadside, PRESETS.behind(-1), PRESETS.behind(1)]).concat(PRESETS.overview).map(key)
+  check(views.join('|') === want.join('|') && views[0] === key(battleView({ localSeats, edges })), `viewsFor the seats ${JSON.stringify(localSeats)} (edges ${edges}): the battle's own view first, then the others, the overview last`, views.join(' | '))
+}
 // fitPose: the board's four corners inside the view, at the preset's
-// elevation, no farther than its max; a pose preset comes back as it is
+// elevation, no farther than its max (which, down to a 412×915 portrait
+// phone, never stops it short); a pose preset comes back as it is
 check(fitPose(PRESETS.landscape, 1.6) === PRESETS.landscape, 'fitPose leaves a pose preset as it is')
 const { W, H } = BOARD
-for (const [name, preset] of [['broadside', PRESETS.broadside], ['behind(-1)', PRESETS.behind(-1)], ['behind(1)', PRESETS.behind(1)]]) {
-  for (const aspect of [16 / 9, 1.6, 4 / 3, 1, 0.75, 9 / 19.5]) {
+const PHONE = 412 / 915
+for (const [name, preset] of [['broadside', PRESETS.broadside], ['behind(-1)', PRESETS.behind(-1)], ['behind(1)', PRESETS.behind(1)], ['overview', PRESETS.overview]]) {
+  for (const aspect of [21 / 9, 16 / 9, 1.6, 4 / 3, 1, 0.75, 9 / 16, 9 / 19.5, PHONE, 0.4]) {
     const p = fitPose(preset, aspect)
     const cam = new THREE.PerspectiveCamera(p.fov, aspect, 0.1, 400)
     cam.position.set(...p.pos)
@@ -140,8 +161,19 @@ for (const [name, preset] of [['broadside', PRESETS.broadside], ['behind(-1)', P
     const corners = [[-W / 2, -H / 2], [W / 2, -H / 2], [-W / 2, H / 2], [W / 2, H / 2]].map(([x, z]) => new THREE.Vector3(x, 0, z).project(cam))
     const inside = corners.every((v) => Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1 && v.z < 1)
     const el = Math.atan2(p.pos[1], Math.hypot(p.pos[0], p.pos[2]))
-    check((inside || d >= preset.max - 1e-9) && d <= preset.max + 1e-9 && Math.abs(el - preset.elevation) < 1e-9, `fitPose(${name}) on aspect ${aspect.toFixed(2)} sees the whole board (or stops at its max ${preset.max}), at its elevation`, `distance ${d.toFixed(1)}, corners ${corners.map((v) => `${v.x.toFixed(2)},${v.y.toFixed(2)}`).join(' ')}`)
+    check((inside || (aspect < PHONE && d >= preset.max - 1e-9)) && d <= preset.max + 1e-9 && Math.abs(el - preset.elevation) < 1e-9, `fitPose(${name}) on aspect ${aspect.toFixed(2)} sees the whole board${aspect < PHONE ? ` (or stops at its max ${preset.max})` : ''}, at its elevation`, `distance ${d.toFixed(1)}, corners ${corners.map((v) => `${v.x.toFixed(2)},${v.y.toFixed(2)}`).join(' ')}`)
+    // classic's rectangle by default
+    check(key(fitPose(preset, aspect, BOARD_RECT)) === key(p), `fitPose(${name}) on aspect ${aspect.toFixed(2)}: classic's board is the default rectangle`)
   }
+  // (F8's) another board, off centre: looked at from its own centre, whole
+  const rect = { cx: 5, cz: -3, w: 60, h: 40 }
+  const p = fitPose({ ...preset, max: 500 }, 1.6, rect)
+  const cam = new THREE.PerspectiveCamera(p.fov, 1.6, 0.1, 800)
+  cam.position.set(...p.pos)
+  cam.lookAt(new THREE.Vector3(...p.target))
+  cam.updateMatrixWorld()
+  const inside = [[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sz]) => new THREE.Vector3(rect.cx + (sx * rect.w) / 2, 0, rect.cz + (sz * rect.h) / 2).project(cam)).every((v) => Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1 && v.z < 1)
+  check(inside && p.target[0] === 5 && p.target[1] === 0 && p.target[2] === -3, `fitPose(${name}) of a 60×40 board centred at (5, -3) looks at its centre and sees it whole`, `${p.pos} → ${p.target}`)
 }
 // ── The rig: goTo(preset) through fit ───────────────────────────────────────
 // a page's globals, enough for the CameraRig and its OrbitControls to be
@@ -152,7 +184,7 @@ const canvas = { ...listen, style: {}, ownerDocument: listen, getRootNode: () =>
 const { CameraRig } = await imp('view/camera.js')
 const { stepTweens } = await imp('view/clock.js')
 const close = (a, b) => a.every((x, i) => Math.abs(x - b[i]) <= 1e-9)
-const RIG_PRESETS = [['landscape', PRESETS.landscape], ['portrait', PRESETS.portrait], ['broadside', PRESETS.broadside], ['behind(-1)', PRESETS.behind(-1)], ['behind(1)', PRESETS.behind(1)]]
+const RIG_PRESETS = [['landscape', PRESETS.landscape], ['portrait', PRESETS.portrait], ['broadside', PRESETS.broadside], ['behind(-1)', PRESETS.behind(-1)], ['behind(1)', PRESETS.behind(1)], ['overview', PRESETS.overview]]
 let fartherThanToday = 0
 for (const [w, h] of [[1280, 720], [800, 800], [800, 1280], [390, 845]]) {
   globalThis.innerWidth = w
@@ -182,11 +214,44 @@ for (const [w, h] of [[1280, 720], [800, 800], [800, 1280], [390, 845]]) {
 }
 // (the dolly's limit is held only if some fitted preset goes past it)
 check(fartherThanToday > 0, 'some preset the rig was swung onto rests beyond the dolly limit of 75 (so the limit is tested)', String(fartherThanToday))
+// (F1, F2) a battle's views stepped through: setViews swings onto the
+// first, nextView onto each next and round again, toOverview onto the last;
+// on the title there are none, and neither moves the camera
+{
+  globalThis.innerWidth = 1280
+  globalThis.innerHeight = 800
+  const rig = new CameraRig({ domElement: canvas })
+  const settle = () => {
+    for (let i = 0; i < 30; i++) stepTweens(0.1)
+    for (let i = 0; i < 5; i++) rig.update(0)
+    return xyz(rig.camera.position)
+  }
+  const views = viewsFor({ localSeats: [1], edges: [-1, 1] })
+  const at = (v) => fitPose(v, 1280 / 800).pos
+  rig.setViews(views)
+  const seen = [settle()]
+  for (let i = 0; i < views.length; i++) {
+    rig.nextView()
+    seen.push(settle())
+  }
+  const want = [0, 1, 2, 3, 0].map((i) => at(views[i]))
+  check(seen.every((p, i) => close(p, want[i])), 'setViews swings onto the battle\'s own view, and nextView onto each next one and round again', seen.map((p) => p.map((x) => x.toFixed(1))).join(' | '))
+  rig.nextView()
+  settle()
+  rig.toOverview()
+  check(close(settle(), at(PRESETS.overview)), 'toOverview swings onto the overview')
+  rig.toTitle()
+  const still = xyz(rig.camera.position)
+  rig.nextView()
+  rig.toOverview()
+  for (let i = 0; i < 30; i++) stepTweens(0.1)
+  check(!rig.views.length && close(xyz(rig.camera.position), still), 'on the title there are no views: nextView and toOverview do nothing')
+}
 
 // pure: nothing but the board's size from core/
 const src = readFileSync(join(PKG, 'present', 'camera-presets.js'), 'utf8')
 const imports = [...src.matchAll(/^import .* from '([^']+)'/gm)].map((m) => m[1])
 check(imports.join() === '../core/rules.js', 'present/camera-presets.js imports only core/rules.js (pure: no three.js, no DOM)', imports.join(', '))
 
-console.log(bad ? `\ncamera-check FAILED: ${bad} of ${checks} checks` : `\ncamera-check passed: ${checks} checks, the presets give the R0 code's camera exactly, and keep their own promises`)
+console.log(bad ? `\ncamera-check FAILED: ${bad} of ${checks} checks` : `\ncamera-check passed: ${checks} checks, the camera at load, the field of view, the title's orbit and the follow rule are the R0 code's, a battle opens behind the seat played here or broadside, and the presets keep their own promises`)
 process.exit(bad ? 1 : 0)

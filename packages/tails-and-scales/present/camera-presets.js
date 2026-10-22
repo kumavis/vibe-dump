@@ -3,17 +3,23 @@
 // board's size; view/camera.js (the CameraRig) moves the camera to them,
 // and sim/camera-check.mjs tests them in Node.
 //
-// R7 keeps today's views exactly: the title's slow orbit from behind seat
-// 0's lines, and a battle seen across the table on a landscape screen or
-// down its length from behind seat 0 on a portrait one (main.js's
-// defaultView and fitFov before R7; sim/camera-check.mjs holds these to the
-// R0 code's). The views that change what a player sees, `behind` a seat
-// played here (F1) and `broadside` for everyone else (F2), are here and
-// fitted to the screen by fitPose, but no battle picks them yet:
-// battleView still chooses by the screen's shape alone.
+// R7 kept the R0 code's views exactly: the title's slow orbit from behind
+// seat 0's lines, and a battle seen across the table on a landscape screen
+// or down its length from behind seat 0 on a portrait one (main.js's
+// defaultView and fitFov before R7; sim/camera-check.mjs holds the camera
+// made at load, the field of view and the orbit to the R0 code's still).
+// (F1, F2) A battle now opens `behind` the one seat played here, its own
+// army in front whichever edge it holds (the serpents' too), and
+// `broadside` for everyone else (a watched battle, hotseat's two seats):
+// one army left, one right. Both are fitted to the screen and to the board
+// by fitPose, and the view button cycles through them and an overview.
 import { BOARD } from '../core/rules.js'
 
 const { W, H } = BOARD
+
+// The board as a rectangle on the table, its centre and size: classic's
+// here; (F8) a mission's own board is passed in its place.
+export const BOARD_RECT = Object.freeze({ cx: 0, cz: 0, w: W, h: H })
 
 export const PRESETS = Object.freeze({
   // the title screen: a slow drift around (centre) from behind seat 0's
@@ -25,10 +31,14 @@ export const PRESETS = Object.freeze({
   // a battle on a portrait screen: down the table's length from behind
   // seat 0's lines, so the 28" width is what has to fit
   portrait: Object.freeze({ pos: Object.freeze([-36, 46, 0]), target: Object.freeze([-1, 0, 0]), fov: 56 }),
-  // (F2) one army left, one right: seat 0 (west) on the left
-  broadside: Object.freeze({ azimuth: 0, elevation: 0.77, max: 86 }),
+  // (F2) one army left, one right: seat 0 (west) on the left. Its max lets
+  // a portrait phone take in the whole board (about 104" at 412×915)
+  broadside: Object.freeze({ azimuth: 0, elevation: 0.77, max: 105 }),
   // (F1) from behind the seat played here, its own army in front
-  behind: (edge) => Object.freeze({ azimuth: edge < 0 ? -Math.PI / 2 : Math.PI / 2, elevation: 0.9, max: 75 }),
+  behind: (edge) => Object.freeze({ azimuth: edge < 0 ? -Math.PI / 2 : Math.PI / 2, elevation: 0.9, max: 80 }),
+  // the whole board from nearly overhead (the view button's last, and the
+  // Home key)
+  overview: Object.freeze({ azimuth: 0, elevation: 1.45, max: 100 }),
 })
 
 // Whether a screen of this aspect is landscape: as wide as it is tall, or
@@ -36,11 +46,23 @@ export const PRESETS = Object.freeze({
 // aspect is NaN, passes too.)
 const wide = (aspect) => !(aspect < 1)
 
-// The view a battle opens on, for the seats played on this screen (their
-// edges by seat) and the screen's aspect (width / height). Today's: the
-// screen's shape alone decides (F1 and F2 make it `behind` one seat played
-// here, else `broadside`, §2.11).
-export const battleView = ({ localSeats = [], edges = [], aspect }) => (wide(aspect) ? PRESETS.landscape : PRESETS.portrait)
+// The view a battle opens on, for the seats played on this screen and each
+// seat's edge (-1 west, 1 east): (F1) behind the one seat played here,
+// (F2) else broadside. The screen's shape no longer decides it: fitPose
+// fits either to the screen.
+export const battleView = ({ localSeats = [], edges = [] }) => (localSeats.length === 1 ? PRESETS.behind(edges[localSeats[0]]) : PRESETS.broadside)
+
+// The views the view button (and V) steps through, the battle's own first:
+// behind the seat played here, broadside, behind the other army, overview;
+// for a watched or hotseat battle, broadside, behind the west army, behind
+// the east, overview.
+export function viewsFor({ localSeats = [], edges = [] }) {
+  if (localSeats.length === 1) {
+    const own = edges[localSeats[0]]
+    return [PRESETS.behind(own), PRESETS.broadside, PRESETS.behind(-own), PRESETS.overview]
+  }
+  return [PRESETS.broadside, PRESETS.behind(-1), PRESETS.behind(1), PRESETS.overview]
+}
 
 // The camera's vertical field of view for a screen's aspect: wider on a
 // portrait screen (the title's too).
@@ -60,17 +82,16 @@ export function orbitPose(orbit, time, angle = orbit.angle) {
 // follow every turn).
 export const follows = ({ follow, stage, active, localSeats }) => !!follow && stage === 'battle' && !(localSeats.length === 1 && localSeats.includes(active))
 
-// A pose for a preset given by azimuth and elevation, fitted to the screen:
-// the camera looking at the board's centre from the nearest distance at
-// which the whole board shows (all four corners, whichever way it lies
-// across the screen), with room for the HUD (12% each way), never farther
-// than the preset's `max`. A pose preset (pos and target) is returned as it
-// is. (The CameraRig's fit and goTo go through it; no battle picks a fitted
-// preset yet: F1/F2's. On a narrow portrait phone both stop at their
-// `max` with the board's ends past the screen's sides, the broadside below
-// an aspect of about 0.55 and behind below about 0.47: for F1/F2 to tune,
-// with a fit across one of the board's sides only if they want one.)
-export function fitPose(preset, aspect) {
+// A pose for a preset given by azimuth and elevation, fitted to the screen
+// and the board (`rect`, classic's by default): the camera looking at the
+// board's centre from the nearest distance at which the whole board shows
+// (all four corners, whichever way it lies across the screen), with room
+// for the HUD (12% each way), never farther than the preset's `max`. A pose
+// preset (pos and target) is returned as it is. (The CameraRig's fit and
+// goTo go through it. Each fitted preset's max takes in the whole classic
+// board on every screen down to a 412×915 portrait phone; sim/camera-check
+// says so.)
+export function fitPose(preset, aspect, rect = BOARD_RECT) {
   if (preset.pos) return preset
   const fov = fovFor(aspect)
   const tv = Math.tan((fov * Math.PI) / 360), th = tv * aspect
@@ -80,7 +101,9 @@ export function fitPose(preset, aspect) {
   const fwd = dir.map((x) => -x)
   const right = norm([-fwd[2], 0, fwd[0]])
   const up = cross(right, fwd)
-  const corners = [[-W / 2, -H / 2], [W / 2, -H / 2], [-W / 2, H / 2], [W / 2, H / 2]].map(([x, z]) => [x, 0, z])
+  const { cx, cz, w, h } = rect
+  // the corners, from the board's centre
+  const corners = [[-w / 2, -h / 2], [w / 2, -h / 2], [-w / 2, h / 2], [w / 2, h / 2]].map(([x, z]) => [x, 0, z])
   // whether the board fits from distance d
   const fits = (d) => corners.every((p) => {
     const v = [p[0] - dir[0] * d, p[1] - dir[1] * d, p[2] - dir[2] * d]
@@ -94,7 +117,7 @@ export function fitPose(preset, aspect) {
     if (fits(mid)) hi = mid
     else lo = mid
   }
-  return { pos: dir.map((x) => x * hi), target: [0, 0, 0], fov }
+  return { pos: [cx + dir[0] * hi, dir[1] * hi, cz + dir[2] * hi], target: [cx, 0, cz], fov }
 }
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]

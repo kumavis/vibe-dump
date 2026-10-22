@@ -31,7 +31,7 @@ import { Session } from '../match/session.js'
 import { LocalStore } from '../match/store.js'
 import { project } from '../present/mirror.js'
 import { PACE } from '../present/pace.js'
-import { battleView } from '../present/camera-presets.js'
+import { viewsFor } from '../present/camera-presets.js'
 import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, PHASE_NAME } from '../present/hud-model.js'
 import { EventPlayer } from '../view/player.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
@@ -472,8 +472,9 @@ export class Flow {
     }
     ui.title.hide()
     // the camera swings onto the battle's view (present/camera-presets.js:
-    // today's, by the screen's shape)
-    view.rig.goTo(battleView({ localSeats: this.session.localSeats, edges: [0, 1].map((s) => edgeOf(this.session.G, s)), aspect: innerWidth / innerHeight }))
+    // F1 behind the one seat played here, F2 else broadside), the view
+    // button stepping through the rest
+    view.rig.setViews(viewsFor({ localSeats: this.session.localSeats, edges: [0, 1].map((s) => edgeOf(this.session.G, s)) }))
     this.refreshUI()
   }
 

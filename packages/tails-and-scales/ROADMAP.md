@@ -46,8 +46,8 @@ the commit, and add whatever the work turned up.
   layers above it, and what the consensus code must never contain), and
   from R7a `node sim/camera-check.mjs` (the camera presets give the R0
   code's views, and the CameraRig comes to rest where `fitPose` puts it;
-  F1/F2 change its "battleView chooses by the screen's shape" checks on
-  purpose, DESIGN §2.11), and from R8 `node sim/merge-sim.mjs` (and
+  since F1/F2 a battle opens behind the seat played here or broadside, and
+  the view button's views step round, DESIGN §2.11), and from R8 `node sim/merge-sim.mjs` (and
   `--self-test`: P-merge, peers folding one log in any causal order agree
   on what was accepted, refused and hashed, junk and forks included, each
   entry hashed where §0.2 #3 says; the cap, the Folder's edges, same-seat
@@ -700,9 +700,13 @@ follows N3.
   slow glow, still under reduced motion) once none can, and as Begin battle
   in the deployment; `sim/hud-check.mjs` holds the page to it (DESIGN's F3
   notes).
-- [ ] **F1** Playing a side puts your side of the board in front of you
+- [x] **F1** Playing a side puts your side of the board in front of you
   (the serpents included); the presets take the board as an argument.
-- [ ] **F2** Spectating is viewed broadside: one army left, one right.
+- [x] **F2** Spectating is viewed broadside: one army left, one right.
+  (F1 and F2 landed together: a battle opens behind the one seat played
+  here, else broadside, fitted to the screen and the board; the 🧭 button
+  and V step through behind your army, broadside, behind the other army
+  and an overview, and Home goes to the overview. DESIGN's F1/F2 notes.)
 - [ ] **F4** After round 5, the win screen offers **Keep playing** (a vote);
   `legal()` takes optional and boolean fields; no Keep playing past 80% of
   the log cap.

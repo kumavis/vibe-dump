@@ -43,10 +43,17 @@ export class CameraRig {
     this.titleAngle = PRESETS.title.orbit.angle
     this.viewShift = 1
     this.focusTween = null
-    // the keys held for panning
+    // (F1, F2) the battle's views, which the view button and V step through
+    // (present/camera-presets.js viewsFor: the battle's own first), and the
+    // one the camera last went to; none on the title
+    this.views = []
+    this.viewAt = 0
+    // the keys held for panning; V the next view, Home the overview
     this.keys = new Set()
     addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT') return
+      if (!e.repeat && (e.key === 'v' || e.key === 'V')) this.nextView()
+      else if (e.key === 'Home') this.toOverview()
       this.keys.add(e.key.toLowerCase())
     })
     addEventListener('keyup', (e) => this.keys.delete(e.key.toLowerCase()))
@@ -74,10 +81,33 @@ export class CameraRig {
     return fitPose(preset, aspect)
   }
 
+  // (F1, F2) A battle's views (viewsFor's), the camera swinging onto the
+  // first: the battle's own.
+  setViews(views) {
+    this.views = views
+    this.viewAt = 0
+    this.goTo(views[0])
+  }
+
+  // The next of the battle's views, round again after the last (the view
+  // button, V); nothing on the title.
+  nextView() {
+    if (!this.views.length) return
+    this.viewAt = (this.viewAt + 1) % this.views.length
+    this.goTo(this.views[this.viewAt], 0.9)
+  }
+
+  // The whole board from overhead (Home): the views' last.
+  toOverview() {
+    if (!this.views.length) return
+    this.viewAt = this.views.length - 1
+    this.goTo(this.views[this.viewAt], 0.9)
+  }
+
   // Swing from wherever the camera is onto a preset (a battle's view as it
-  // starts: battleView's), fitted to the screen, sliding the table back
+  // starts: viewsFor's first), fitted to the screen, sliding the table back
   // from under the title's panel. A preset fitted farther than the dolly's
-  // limit (a portrait broadside's 86") raises it to its max, or the
+  // limit (a portrait broadside's, up to 105") raises it to its max, or the
   // controls would pull the camera back in on the first frame.
   goTo(preset, seconds = 1.4) {
     this.titleSpin = false
@@ -95,6 +125,7 @@ export class CameraRig {
 
   // Back to the title's orbit, picking it up where it would be now.
   toTitle() {
+    this.views = []
     this.titleSpin = true
     this.controls.maxDistance = MAX_DISTANCE
     this.titleAngle -= clock.time * PRESETS.title.orbit.speed
