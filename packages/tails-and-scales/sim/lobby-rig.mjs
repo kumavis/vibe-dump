@@ -29,11 +29,12 @@
 //                (seat 0's own say, "end", from another tab of its device,
 //                inserted before seat 1's "more"): the snap shows the end
 //                screen, not the vote (app/flow.js's snapped())
-//   history      a page whose own say ("more") is undone by another tab of
-//                its device saying "end" first (inserted before it): the
-//                toast says "History changed: 1 move undone", and the battle
-//                log is the new history's (made again: its newest line the
-//                match's last)
+//   history      a page whose own say ("more", deciding the vote: its
+//                lines in the log) is undone by another tab of its device
+//                saying "end" first (inserted before it): the toast says
+//                "History changed: 1 move undone", and the battle log is the
+//                new history's (made again: line for line the match's, none
+//                of the undone say's)
 //   catch-up     a watching page (drawn, not ?fast; its speed a quarter,
 //                so the backlog runs long on any machine) handed a whole
 //                battle at once: the elastic catch-up snaps past the backlog,
@@ -82,11 +83,6 @@ const PKG = fileURLToPath(new URL('..', import.meta.url))
 const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
-const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))
-if (bad.length) {
-  console.error(`lobby-rig: no case ${bad.join(', ')} (there are ${CASES.join(', ')})`)
-  process.exit(2)
-}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 class Fail extends Error {}
@@ -333,24 +329,35 @@ async function runCases(dist, cases) {
     },
 
     async history() {
-      const { repo, handle, store, page, d0 } = await atRoundLimit()
+      const { repo, handle, store, page, d0, d1 } = await atRoundLimit()
       try {
-        // the page says more itself; another tab of its device says end,
-        // inserted before it
+        // seat 1 says more (its own page, here); the page says more itself,
+        // the vote decided (its lines in the log, round 6 begun); another
+        // tab of its device says end, inserted before it: the match ends,
+        // and the lines the page showed for its say are no history's now
+        const s1 = new Session({ store, localSeats: [1], dev: d1, rand: () => 'r1' })
+        s1.submit(1, { t: 'vote', more: true })
+        s1.close()
+        await until(page, (n) => window.__ts.session.count >= n && window.__ts.player.idle, store.length, 30000, "seat 1's say on seat 0's page, played")
         const before = store.length
         await page.evaluate(() => window.__ts.vote(true))
         const t0 = Date.now()
         while (store.length <= before && Date.now() - t0 < 20000) await sleep(50)
         must(store.length === before + 1, "the page's say reached the server")
+        const said = store.entries()[before].id
         insertSay(handle, store, before, false, d0)
         await until(page, () => /History changed: 1 move undone/.test(document.querySelector('#toast').textContent) && document.querySelector('#toast').classList.contains('show'), null, 30000, 'the toast "History changed: 1 move undone"')
-        const log = await page.evaluate(() => {
+        const log = await page.evaluate((said) => {
           const lines = window.__ts.session.G.journal.trace.filter((l) => /^log /.test(l))
           const last = lines.at(-1).replace(/^log -?\d+ /, '').replace(/ rng:\S+$/, '')
-          return { shown: document.querySelector('#logList').firstElementChild?.textContent ?? '', last, n: document.querySelectorAll('#logList .entry').length, rejected: window.__ts.session.rejected.at(-1)?.why ?? '' }
-        })
+          return { shown: document.querySelector('#logList').firstElementChild?.textContent ?? '', last, n: document.querySelectorAll('#logList .entry').length, rejected: window.__ts.session.rejected.find((r) => r.id === said)?.why ?? '' }
+        }, said)
         must(log.n > 0 && log.shown === log.last, `the battle log is the new history's, its newest line the match's last: ${JSON.stringify(log)}`)
-        must(/^(stale|turn)/.test(log.rejected), `the undone say is refused now (its seat has had its say): ${log.rejected}`)
+        must(/^(stale|turn|inert)/.test(log.rejected), `the undone say is refused now (its seat has had its say, the match ended): ${log.rejected}`)
+        // the whole log the new history's: none of the undone say's lines
+        const shown = await page.evaluate(() => [...document.querySelectorAll('#logList .entry')].map((e) => e.textContent).reverse())
+        const want = logLines(store.entries()).slice(-shown.length)
+        must(JSON.stringify(shown) === JSON.stringify(want), `the battle log after the refold is the match's (${shown.length} lines; first apart at ${shown.findIndex((l, k) => l !== want[k])}: ${JSON.stringify(shown.find((l, k) => l !== want[k]))})`)
         store.close()
         return `"History changed: 1 move undone", the log made again (${log.n} lines)`
       } finally {
@@ -481,7 +488,9 @@ async function runCases(dist, cases) {
   } finally {
     await browser.close()
     await web.close()
-    process.on('uncaughtException', () => {})
+    // (a repo's socket closing late, the server gone; once, whatever the
+    // number of runs)
+    if (!process.listenerCount('uncaughtException')) process.on('uncaughtException', () => {})
     await sync.close()
   }
   return out
@@ -512,6 +521,12 @@ const MUTANTS = {
   'no-record-watches': ['continue', 'net/seed.js', '  if (!readied.length) return null\n', ''],
   // no snap past a backlog: the page plays every event (2 or 4 times as fast)
   'no-catch-up-snap': ['catch-up', 'app/flow.js', '    if (behind > 30) {', '    if (false) {'],
+}
+
+const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))
+if (bad.length) {
+  console.error(`lobby-rig: no case ${bad.join(', ')} (there are ${CASES.join(', ')})`)
+  process.exit(2)
 }
 
 const report = (out) => {
