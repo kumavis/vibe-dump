@@ -11,6 +11,8 @@ packages/*/public/vendor/
 .DS_Store
 *.log
 packages/*/tools/shots/
+# Pacific Theatre's fixtures (tools/fake-data.mjs): synthetic, rewritten on every run
+packages/pacific-theatre/test-data/
 # cold-boot's narrated-cut renders: gigabytes of frames, plus the narration and mp4
 packages/cold-boot/out/
 # scratch harnesses used while verifying a change in a real browser

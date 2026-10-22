@@ -1,0 +1,36 @@
+{
+  "name": "@vibe-dump/pacific-theatre",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "geotiff": "2.1.3",
+    "shapefile": "0.6.6",
+    "subset-font": "2.4.0"
+  },
+  "gallery": {
+    "title": "Pacific Theatre",
+    "description": "The Pacific War as a sand table, from Pearl Harbor to Tokyo Bay. Follow the front and the fleets day by day; drop into a battle to watch it as the record tells it, or take one aircraft or one ship, on either side.",
+    "tags": [
+      "game",
+      "simulation",
+      "tutorial"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5.5"
+    ],
+    "thinking": "high",
+    "thumbnail": {
+      "waitFor": "!#boot",
+      "settle": 4000
+    }
+  }
+}
