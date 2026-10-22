@@ -179,6 +179,11 @@ export class Flow {
         events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e))
         if (this.traceListener) events = this.traceListener.present(events, this.G)
         this.player.push(events)
+      },
+      // (N2) a change folded whole: the table's catch-up decided on the
+      // backlog it left (the fold is synchronous, so nothing played
+      // meanwhile; a snap here is to the match the whole change leads to)
+      settled: (ses) => {
         if (this.online) this.catchUp(ses)
       },
       // The match folded again, some of what was shown undone (a concurrent
@@ -579,9 +584,8 @@ export class Flow {
   }
 
   // The battle log made again from the entries the Session's Folder has
-  // pushed (the match as it stands: mid-change, the catch-up's snap, those
-  // up to the entry whose events are in hand, the rest of the change's to
-  // be played on from there): a quiet fold of them with their events kept,
+  // pushed (the match as it stands, which a snap shows): a quiet fold of
+  // them with their events kept,
   // the `log` events written (the last 80, as many as the log keeps). After
   // a snap onto a match this page didn't play up to (an online match
   // followed, a refold), what the log shows is that match's history.
@@ -595,8 +599,8 @@ export class Flow {
     for (const x of lines.slice(-80)) this.ui.log.write(x.side, x.html, x.cls, x.at)
   }
 
-  // The elastic catch-up (above): the table's backlog after an entry's
-  // events (view/player.js's estimate, in game seconds), in the wall
+  // The elastic catch-up (above), once a change is folded: the table's
+  // backlog (view/player.js's estimate, in game seconds), in the wall
   // seconds it would take to play at the page's speed and frame rate.
   catchUp(ses) {
     const behind = this.player.backlog() / (clock.speed * Math.max(clock.rate, 0.05))

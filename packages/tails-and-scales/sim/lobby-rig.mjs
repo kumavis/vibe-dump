@@ -54,7 +54,8 @@
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
-// --self-test: each broken copy in MUTANTS must fail its case. Exit 0 when
+// --self-test: each broken copy in MUTANTS must fail its case (with
+// --only, the mutants named, or those of the cases named). Exit 0 when
 // every case holds (the self-test: when every mutant is caught), 1
 // otherwise.
 import { parseArgs } from 'node:util'
@@ -81,7 +82,7 @@ const PKG = fileURLToPath(new URL('..', import.meta.url))
 const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
-const bad = only.filter((c) => !CASES.includes(c))
+const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))
 if (bad.length) {
   console.error(`lobby-rig: no case ${bad.join(', ')} (there are ${CASES.join(', ')})`)
   process.exit(2)
@@ -500,9 +501,6 @@ const MUTANTS = {
   'no-toast': ['history', 'app/flow.js', "        if (undone > 0) this.ui.toast?.show(", "        if (false) this.ui.toast?.show("],
   // a refold leaves the old history's battle log up
   'no-relog': ['history', 'app/flow.js', "        this.player.snap(G, project(G))\n        this.relog(ses.folder.pushed)\n", "        this.player.snap(G, project(G))\n"],
-  // (N2's review) the catch-up's snap makes the log from the whole list
-  // (the change's later entries then shown twice)
-  'relog-whole-list': ['catch-up', 'app/flow.js', "      this.player.snap(ses.G, project(ses.G))\n      this.relog(ses.folder.pushed)\n", "      this.player.snap(ses.G, project(ses.G))\n      this.relog(ses.store.entries())\n"],
   // a rematch page never looks back at the old match's `next`
   'rematch-strands': ['rematch-race', 'app/online.js', '    if (won && won !== this.id) return this.goTo(won)\n', ''],
   // a guest readies with whatever nonce its seat holds (a rematch's, the
@@ -525,7 +523,8 @@ const work = join(tmpdir(), `tails-and-scales-lobby-rig-${process.pid}`)
 try {
   if (a['self-test']) {
     let missed = 0
-    for (const [name, [c, file, from, to]] of Object.entries(MUTANTS)) {
+    const picked = Object.entries(MUTANTS).filter(([name, [c]]) => !a.only || only.includes(name) || only.includes(c))
+    for (const [name, [c, file, from, to]] of picked) {
       const code = copyCode(PKG, join(work, name))
       const f = join(code, file), src = readFileSync(f, 'utf8')
       if (src.split(from).length !== 2) throw new Error(`mutant ${name}: ${file} doesn't hold what it changes`)
@@ -535,7 +534,7 @@ try {
       if (!caught) missed++
       console.log(`  ${name.padEnd(18)} ${caught ? `caught by ${c}: ${out[c].said.split('\n')[0].slice(0, 160)}` : `MISSED (${c} passed)`}`)
     }
-    console.log(missed ? `\nlobby-rig self-test: ${missed} mutant(s) missed` : `\nlobby-rig self-test passed: ${Object.keys(MUTANTS).length} broken copies each caught`)
+    console.log(missed ? `\nlobby-rig self-test: ${missed} mutant(s) missed` : `\nlobby-rig self-test passed: ${picked.length} broken copies each caught`)
     process.exitCode = missed ? 1 : 0
   } else {
     const dist = a.dist ?? (await buildApp(PKG, join(work, 'dist')))
