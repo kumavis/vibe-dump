@@ -54,7 +54,7 @@
     ]
   },
   "sides": {
-    "japan": {"side":"jp","name":"Imperial Japanese Navy: Kondō’s Emergency Bombardment Force","ja":"大日本帝国海軍"},
+    "japan": {"side":"jp","name":"Imperial Japanese Navy: the Emergency Bombardment Force of Vice Admiral KONDŌ Nobutake 近藤信竹","ja":"大日本帝国海軍"},
     "usa": {"side":"us","name":"United States Navy: Task Force 64"}
   },
   "units": [
@@ -5715,7 +5715,7 @@
   "stops": [
     {
       "t": "20:10",
-      "text": "20:10, zone −11. Lee’s TF 64 comes up from the south-west to sweep round Savo: the destroyers ahead, Washington and South Dakota astern. Far to the west Tanaka’s transports, bombed all day, are burning.",
+      "text": "20:10, zone −11. Lee’s TF 64 comes up from the south-west to sweep round Savo: the destroyers ahead, Washington and South Dakota astern. Far to the west the transports of Rear Admiral TANAKA Raizō 田中頼三, bombed all day, are burning.",
       "camera": {"target":"washington","bearingDeg":200,"pitch":0.35,"distanceM":12000},
       "sources": [{"id":"oni-cn-guadalcanal-1944","where":"Part III"},{"id":"morison-v"}]
     },
