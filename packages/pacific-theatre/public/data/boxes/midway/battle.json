@@ -4703,7 +4703,7 @@
         ],
         "tellings": [
           {"source":"nagumo-1947","says":"Bombs 4, 7, 8 and 9 hit; Kaga’s dead printed “1 800” (garbled)."},
-          {"source":"trom-kaga","says":"A minimum of one 1,000-pound and three 500-pound bombs; 814 dead."},
+          {"source":"trom-kaga","says":"A minimum of one 1,000-pound and three 500-pound bombs; 814 of her crew lost their lives."},
           {"source":"wp-midway","says":"Three to five direct hits."},
           {
             "source": "nwc-midway-1948",
@@ -4744,10 +4744,10 @@
           {"id":"wp-midway"}
         ],
         "tellings": [
-          {"source":"nagumo-1947","says":"Two hits and a near miss; 221 dead."},
+          {"source":"nagumo-1947","says":"Two hits and a near miss; 221 of her crew lost their lives."},
           {
             "source": "trom-akagi",
-            "says": "One hit, one under the port quarter, one near miss forward (after Parshall and Tully); 263 dead."
+            "says": "One hit, one under the port quarter, one near miss forward (after Parshall and Tully); 263 of her crew lost their lives."
           }
         ]
       }
@@ -4778,8 +4778,8 @@
           {"id":"trom-soryu"}
         ],
         "tellings": [
-          {"source":"nagumo-1947","says":"718 dead."},
-          {"source":"trom-soryu","says":"713 dead; hits at 10:25–10:26 and 10:29."},
+          {"source":"nagumo-1947","says":"718 of her crew lost their lives."},
+          {"source":"trom-soryu","says":"713 of her crew lost their lives; hits at 10:25–10:26 and 10:29."},
           {"source":"cv5-midway-1942","says":"Five direct hits and three very near misses claimed."}
         ]
       }
@@ -5012,7 +5012,7 @@
           {"id":"cv6-midway-1942","where":"1905 zone +10"}
         ],
         "tellings": [
-          {"source":"nagumo-1947","says":"416 dead."},
+          {"source":"nagumo-1947","says":"416 of her crew lost their lives."},
           {"source":"jawp-midway","says":"417, counting 34 engine-room men later rescued by US forces."},
           {"source":"cv6-midway-1942","says":"Three did not return."}
         ]
@@ -5043,7 +5043,7 @@
       "source": "nwc-midway-1948",
       "says": "Japanese dead about 2,500; 234 carrier aircraft lost (48 shot down, 186 lost aboard or ditched). US dead about 307; 132 aircraft lost."
     },
-    {"source":"wp-midway","says":"After Parshall and Tully: 3,057 Japanese dead and 248 aircraft (verify)."},
+    {"source":"wp-midway","says":"After Parshall and Tully: 3,057 Japanese lost their lives, and 248 aircraft were lost (verify)."},
     {
       "source": "cincpac-midway-1942",
       "says": "About 92 officers and 215 men lost; about 150 planes lost in action or damaged beyond repair."
