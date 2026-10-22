@@ -1,69 +1,55 @@
-// The chapter tour: history as a walk the viewer takes one Next at a time.
+// The chapter tour: the war as a walk the viewer takes one Next at a time
+// (DESIGN.md §5.5, §5.6).
 //
-// The chapters are the eras of eras.json, in order, and in each chapter that
-// era's events in date order (`when.from`). A chapter opens on its era's
-// card, with the year set to the era's and the camera on the whole chain, or
-// on the one island where the era's events gather when they do. Each Next
-// after that sets the year to the next event's date, flies to its first place
-// at the deepest zoom it asks for, opens its card and lights its pin; an
-// event with stops walks them before moving on (DESIGN.md §5.6, an event is a
-// tour). Back is the same walk in reverse. Nothing is written per chapter or
-// per event: the sequence is the data's.
+// The chapters are chapters.json's, in order (the WarClock's), and in each
+// chapter its events in order of their UTC instant (`when.from`, so a raid
+// on Hawaiian time and a landing on Tokyo time sort as they happened). A
+// chapter opens on its card, with the date set to the chapter's keyframe (the
+// date its front shows) and the camera framing the chapter's events beside
+// the card. Each Next after that sets the date to the next event's, flies to
+// its first place at the distance its precision asks for, opens its card,
+// lights its pin and keeps its routes on (TableScene.setFocus); an event with
+// table stops walks them before moving on (an event is a tour). Back is the
+// same walk in reverse. Nothing is written per chapter or per event: the
+// sequence is the data's.
 //
-// The camera is the viewer's between steps: they can zoom and look around,
-// and the next step flies from wherever they are. The timeline stays free;
+// The camera is the viewer's between steps; the timeline stays free;
 // dragging it leaves the tour, and the next Next picks the tour up at the
-// chapter nearest the year it was left on.
+// chapter holding the date it was left on.
 //
-// Each step also picks what the far view shows, by the event's kind: the
-// land for laws, epidemics and restorations (what happened to the land and
-// the people on it), the chiefdoms for everything else, an era's own card
-// included. An event may name its view outright (`view: "land"`). Once the
-// viewer has used the switch themselves, the tour leaves it alone.
+// A box event's card offers *Enter the battle*, which raises
+// ui.onEnter(ev) (the integrator wires it to app.battle); a box's own stops
+// live in its battle.json and are walked inside the box, so the table walks
+// only an event's `table` stops. Opening a box event raises ui.onPrefetch(ev)
+// too, so the box's pack can start decoding before the click.
+//
+// Adapted from holo-i-ke-au's ui/tour.js (b480c27): Next, Back, the stops,
+// leaving and resuming, the views fitted beside the card and the flight's
+// timing are kept; the islands, districts and far-view modes are gone; years
+// became dates in ms (R9 §2.7).
 
 import { geometryPoint } from '../geo.js'
-import { eventSpan, eventStart } from '../time.js'
+import { parseInstant } from '../time.js'
 import { preferredPitch } from '../render/camera.js'
+import { TABLE } from '../config.js'
+import { eventSpan, placeOf } from './pins.js'
+import { chapterShort } from './timeline.js'
 
-// camera distance for DATA.md's zooms; `island` frames the whole island
-// instead, where the place has one
-export const ZOOM = { far: 2600, island: 520, near: 70 }
-const DEPTH = { far: 0, island: 1, near: 2 }
+// camera distance (km) for a place of each precision; a polygon place is fitted instead
+export const ZOOM = { ex: 650, loc: 800, isl: 900, reg: 2600, sea: 2400, off: 9000 }
+// the closest a chapter's view comes, km of ground across
+const CHAPTER_MIN_SPAN = 2600
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 
-// the kinds (DATA.md §4) whose story is the land; every other kind, and an
-// era's card, shows the chiefdoms
-export const LAND_KINDS = new Set(['law', 'epidemic', 'restoration'])
-
-/** The far view a step asks for: an event's own `view`, else by its kind; null is an era's card. */
-export function viewFor(ev) {
-  if (ev?.view === 'land' || ev?.view === 'chiefdoms') return ev.view
-  return ev && LAND_KINDS.has(ev.kind) ? 'land' : 'chiefdoms'
-}
-
-/** The name a chapter goes by: "in the time of Kahekili and the rise of Kamehameha" → "Kahekili". */
-export function chapterName(era) {
-  if (era.short) return era.short
-  return String(era.label || era.id)
-    .replace(/^in the time of\s+/i, '')
-    .split(/,| and the /)[0]
-    .trim()
-}
-
-/** The deepest of an event's zooms (DATA.md §4 lists them shallow to deep). */
-export function deepestZoom(zooms) {
-  let best = null
-  for (const z of zooms || []) if (z in DEPTH && (best === null || DEPTH[z] > DEPTH[best])) best = z
-  return best || 'island'
-}
+/** An event's table stops (a `box` stop is the box's, walked inside it). */
+export const tableStops = (ev) => (ev?.stops || []).filter((s) => !s.zoom || s.zoom === 'table')
 
 export class Tour {
   constructor(app, ui) {
     this.app = app
     this.ui = ui
     this.places = new Map(app.data.places.map((p) => [p.id, p]))
-    this.islands = new Map(app.data.packs.filter((p) => p !== app.world.archPack).map((p) => [p.id, p]))
     this.chapters = this.build()
     this.active = false
     this.chapter = 0
@@ -72,62 +58,44 @@ export class Tour {
     this.listeners = []
   }
 
-  /** The chapters, from the eras and the events' own `era`. */
+  get rig() {
+    return this.app.table.rig
+  }
+
+  /** The chapters, from the WarClock's, and the events by their `chapter` or, failing that, their date. */
   build() {
     const app = this.app
-    const tl = app.timeline
-    const index = new Map(tl.eras.map((e, i) => [e.id, i]))
-    const chapters = tl.eras.map((era, i) => ({ era, index: i, name: chapterName(era), events: [], island: null }))
+    const clock = app.clock
+    const C = clock.chapters
+    const index = new Map(C.map((c, i) => [c.id, i]))
+    const numbered = C.filter((c) => c !== clock.prologue)
+    const chapters = C.map((c, i) => ({
+      chapter: c,
+      index: i,
+      number: c === clock.prologue ? 0 : numbered.indexOf(c) + 1,
+      prologue: c === clock.prologue,
+      name: chapterShort(c),
+      events: [],
+    }))
     if (!chapters.length) return chapters
     const strays = []
     const rows = chapters.map(() => [])
     app.data.events.forEach((ev, order) => {
-      const start = eventStart(ev)
-      if (start === null) return // (no date: no pin and no step; pins.js names it)
-      let i = index.get(ev.era)
+      const span = eventSpan(ev)
+      if (!span) return // (no date: no pin and no step; pins.js names it)
+      let i = index.get(ev.chapter)
       if (i === undefined) {
-        // an era that isn't in eras.json: the chapter its date falls in
-        i = Math.round(tl.sAtYear(start))
+        i = C.indexOf(clock.chapterAt(span[0]))
         strays.push(ev.id)
       }
-      rows[i].push({ ev, start, order })
+      rows[i].push({ ev, start: span[0], order })
     })
-    if (strays.length) app.warn(`events whose era is not in eras.json, placed in a chapter by date: ${strays.join(', ')}`)
+    if (strays.length) app.warn(`events whose chapter is not in chapters.json, placed by date: ${strays.join(', ')}`)
     chapters.forEach((ch, i) => {
       ch.events = rows[i].sort((a, b) => a.start - b.start || a.order - b.order).map((r) => r.ev)
-      ch.island = this.gathering(ch.events)
     })
+    this.numbered = numbered.length
     return chapters
-  }
-
-  /**
-   * The island a chapter's events gather on, if they do: most of them (seven
-   * in ten, and at least two) have their first place there. Otherwise null,
-   * and the chapter opens on the whole chain, which is also where the polity
-   * colours read best.
-   */
-  gathering(events) {
-    const count = new Map()
-    let placed = 0
-    for (const ev of events) {
-      const p = this.placeOf(ev)
-      if (!p) continue
-      placed++
-      if (p.island && this.islands.has(p.island)) count.set(p.island, (count.get(p.island) || 0) + 1)
-    }
-    let best = null
-    let n = 0
-    for (const [id, c] of count) if (c > n) [best, n] = [id, c]
-    return best && n >= 2 && n >= placed * 0.7 ? best : null
-  }
-
-  /** An event's first place that can be put on the map. */
-  placeOf(ev) {
-    for (const w of ev.where || []) {
-      const p = this.places.get(w.place)
-      if (p && geometryPoint(p.geometry)) return p
-    }
-    return null
   }
 
   onChange(f) {
@@ -142,12 +110,12 @@ export class Tour {
     return this.chapters[this.chapter] || null
   }
 
-  /** The event the tour stands at, or null on an era's card. */
+  /** The event the tour stands at, or null on a chapter's card. */
   get event() {
     return this.step >= 0 ? this.current?.events[this.step] || null : null
   }
 
-  /** Where it stands, for the tools: chapter and step (-1: the era's card) and stop (-1: the event's own view). */
+  /** Where it stands, for the tools: chapter and step (-1: the chapter's card) and stop (-1: the event's own view). */
   get state() {
     return { active: this.active, chapter: this.chapter, step: this.step, stop: this.stop, event: this.event?.id ?? null }
   }
@@ -162,12 +130,13 @@ export class Tour {
     if (!this.active) return false
     const ch = this.current
     const ev = this.event
-    const lastStop = ev ? (ev.stops?.length || 0) - 1 : -1
+    const lastStop = ev ? tableStops(ev).length - 1 : -1
     return this.chapter === n - 1 && this.step === ch.events.length - 1 && this.stop >= lastStop
   }
 
   nearestChapter() {
-    return clamp(Math.round(this.app.timeline.s), 0, this.chapters.length - 1)
+    const clock = this.app.clock
+    return clamp(clock.chapters.indexOf(clock.chapterAt(clock.date)), 0, this.chapters.length - 1)
   }
 
   /** The first chapter's card, the camera already there: how the app opens. */
@@ -179,7 +148,7 @@ export class Tour {
     if (!this.chapters.length) return
     if (!this.active) return this.goTo(this.nearestChapter(), -1)
     const ev = this.event
-    if (ev && this.stop < (ev.stops?.length || 0) - 1) return this.goStop(this.stop + 1)
+    if (ev && this.stop < tableStops(ev).length - 1) return this.goStop(this.stop + 1)
     if (this.step < this.current.events.length - 1) return this.goTo(this.chapter, this.step + 1)
     if (this.chapter < this.chapters.length - 1) return this.goTo(this.chapter + 1, -1)
   }
@@ -210,6 +179,8 @@ export class Tour {
   leave() {
     if (!this.active) return
     this.active = false
+    this.ui.timeline.zone = null
+    this.app.table.setFocus(null)
     this.notify()
   }
 
@@ -225,13 +196,16 @@ export class Tour {
   /**
    * An event opened from its pin or a list: the tour moves to it, so Next
    * carries on from there. From a pin it's `gentle`: the camera comes to the
-   * place without diving in, and the year stays if the event is already in it.
+   * place without diving in, and the date stays if the event is already in
+   * the window.
    */
   open(ev, { gentle = false } = {}) {
     const at = this.locate(ev)
     if (at) return this.goTo(at[0], at[1], { gentle })
     this.ui.pins.activeEvent = ev
     this.ui.pins.setStopPlace(null)
+    this.ui.timeline.zone = ev.when?.zone ?? null
+    this.app.table.setFocus(ev)
     this.ui.card.open(ev)
     this.fly(this.gentleView(ev))
   }
@@ -243,212 +217,200 @@ export class Tour {
     this.chapter = c
     this.step = clamp(s, -1, ch.events.length - 1)
     this.stop = -1
-    if (this.step < 0) this.showEra(ch, jump)
+    if (this.step < 0) this.showChapter(ch, jump)
     else {
       const ev = ch.events[this.step]
-      const n = ev.stops?.length || 0
+      const n = tableStops(ev).length
       if (stop === 'last' && n) return this.goStop(n - 1, { jump })
       this.showEvent(ev, { jump, gentle })
     }
     this.notify()
   }
 
-  /** The step's view, unless the viewer has chosen their own. */
-  applyView(ev) {
-    if (!this.app.viewChosen) this.app.setView(viewFor(ev))
-  }
-
-  showEra(ch, jump) {
+  showChapter(ch, jump) {
     const ui = this.ui
-    this.applyView(null)
+    ui.timeline.zone = null
     ui.pins.activeEvent = null
     ui.pins.setStopPlace(null)
-    ui.card.openEra(ch)
-    const view = ch.island ? this.islandView(ch.island, this.homeYaw()) : this.chainView()
-    this.setS(ch.index, this.fly(view, jump), jump)
+    this.app.table.setFocus(null)
+    ui.card.openChapter(ch)
+    const dur = this.fly(this.chapterView(ch), jump)
+    this.setDate(this.chapterDate(ch), dur, jump)
   }
 
   showEvent(ev, { jump, gentle }) {
     const ui = this.ui
-    this.applyView(ev)
-    this.prefetch(ev)
+    ui.timeline.zone = ev.when?.zone ?? null
+    if (ev.box) ui.onPrefetch?.(ev)
     ui.pins.activeEvent = ev
     ui.pins.setStopPlace(null)
+    this.app.table.setFocus(ev)
     ui.card.open(ev)
     const dur = this.fly(gentle ? this.gentleView(ev) : this.eventView(ev), jump)
-    const tl = this.app.timeline
-    const [a, b] = tl.window
+    const [a, b] = this.app.clock.windowAt()
     const span = eventSpan(ev)
     if (gentle && span && span[1] >= a && span[0] <= b) return
-    this.setYear(this.stepYear(ev, this.current), dur, jump)
+    this.setDate(this.stepDate(ev, this.current), dur, jump)
   }
 
   /** Walk to stop i of the tour's event (-1: back to the event's own card). */
   goStop(i, { jump = false } = {}) {
     const ev = this.event
-    const stops = ev?.stops || []
+    const stops = tableStops(ev)
     if (!ev || i < -1 || i >= stops.length) return
     const ui = this.ui
     this.active = true
     this.stop = i
-    this.applyView(ev)
     ui.pins.activeEvent = ev
+    this.app.table.setFocus(ev)
     if (ui.card.ev !== ev) ui.card.open(ev)
     ui.card.setStop(i)
     const s = stops[i]
     const place = s ? this.places.get(s.place) : null
     const pt = place && geometryPoint(place.geometry)
     ui.pins.setStopPlace(pt ? place : null)
-    this.prefetch(ev)
     if (s) {
-      // a stop's own camera, if it has one; else its place at its zoom
-      const view = pt ? (s.camera ? this.cameraView(place, s.camera) : this.pointView(place, ZOOM[s.zoom] ?? ZOOM.island)) : null
+      const view = pt ? this.placeView(place) : null
       const dur = this.fly(view, jump)
-      if (Number.isFinite(s.year)) this.setYear(s.year, dur, jump)
+      if (s.when || s.date) {
+        try {
+          this.setDate(parseInstant(s.when?.from ?? s.date, { zone: ev.when?.zone }), dur, jump)
+        } catch {
+          /* (a stop without a usable date keeps the event's) */
+        }
+      }
     }
     this.notify()
   }
 
-  /**
-   * An event that walks into a district: start its pack streaming as soon as
-   * the event is opened (data/district.js decodes it in a worker), so it is
-   * down when the walk gets there.
-   */
-  prefetch(ev) {
-    const D = this.app.districts
-    if (!D) return
-    for (const s of ev?.stops || []) {
-      const p = this.places.get(s.place)
-      const pt = p && geometryPoint(p.geometry)
-      if (!pt || s.zoom === 'far') continue
-      const [x, z] = this.app.data.proj.toWorld(pt)
-      if (D.prefetch(x, z)) return
+  /** The date a chapter's card shows: its keyframe (the date its front shows) when inside it, else its first day. */
+  chapterDate(ch) {
+    const c = ch.chapter
+    try {
+      const k = c.keyframe ? parseInstant(c.keyframe) : null
+      if (k !== null && k >= c.fromMs && k < c.toMs) return k
+    } catch {
+      /* (an unreadable keyframe: the first day) */
     }
+    return c.fromMs
   }
 
   /**
-   * The year a step shows. An event's own date when it falls in its chapter's
-   * stretch of the timeline; a long event that only overlaps it (the
-   * sandalwood trade, the depopulation) shows the point of its span nearest
-   * the era's year, so the chapter's map stays on screen; an event dated
-   * outside its era altogether keeps its own date, and the timeline says so.
+   * The date a step shows: the event's start when it falls in its chapter; a
+   * long event that only overlaps the chapter shows the chapter's nearest
+   * day; an event dated outside its chapter keeps its own date.
    */
-  stepYear(ev, ch) {
-    const tl = this.app.timeline
-    const start = eventStart(ev)
-    const span = eventSpan(ev) || [start, start]
-    const wa = tl.yearAt(ch.index - 0.5)
-    const wb = tl.yearAt(ch.index + 0.5)
-    if (start >= wa && start <= wb) return start
-    if (span[1] >= wa && span[0] <= wb) return clamp(ch.era.year, Math.max(span[0], wa), Math.min(span[1], wb))
-    return start
+  stepDate(ev, ch) {
+    const span = eventSpan(ev)
+    if (!span) return this.app.clock.date
+    const { fromMs, toMs } = ch.chapter
+    if (span[0] >= fromMs && span[0] < toMs) return span[0]
+    if (span[1] >= fromMs && span[0] < toMs) return clamp(span[0], fromMs, toMs - 1)
+    return span[0]
   }
 
-  setYear(y, dur, jump) {
-    this.setS(this.app.timeline.sAtYear(y), dur, jump)
-  }
-
-  setS(s, dur, jump) {
+  setDate(ms, dur, jump) {
     const bar = this.ui.timeline
     if (jump) {
       bar.tween = null
-      this.app.timeline.set(s)
-    } else bar.easeTo(s, clamp(dur * 0.8, 0.6, 2.4))
+      this.app.clock.setDate(ms)
+    } else bar.easeToDate(ms, clamp(dur * 0.8, 0.6, 2.4))
   }
 
   // --- views ------------------------------------------------------------------
 
-  /** North up, or turned down the screen's long side when the free part of it is portrait (as rig.homeView). */
-  homeYaw(box = this.ui.freeBox()) {
-    return (box.x1 - box.x0) / Math.max(1, box.y1 - box.y0) < 0.85 ? 1.1 : 0
-  }
-
   /** The tilt the viewer has added to the zoom's own, kept from step to step (within reason). */
   tilt() {
-    const g = this.app.rig.goal
-    return clamp(g.pitch - preferredPitch(g.distance), -0.3, 0.3)
+    const g = this.rig.goal
+    return clamp(g.pitch - preferredPitch(g.distance, TABLE.pitchRange), -0.3, 0.3)
   }
 
-  /** The whole chain, from Niʻihau to Hawaiʻi, beside the card. */
-  chainView() {
+  /** The whole table, beside the card. */
+  theatreView() {
+    const b = this.app.table.ground.bounds
+    return this.rig.fit({ rect: b, yaw: 0, box: this.ui.freeBox(), pad: 1.0 })
+  }
+
+  /** A chapter's events framed beside its card (the whole table when they are few or spread across it). */
+  chapterView(ch) {
+    const pts = []
+    for (const ev of ch.events) {
+      const p = placeOf(ev, this.places)
+      if (!p || p.placePrecision === 'off') continue
+      pts.push(this.app.data.proj.toWorld(geometryPoint(p.geometry)))
+    }
+    const b = this.app.table.ground.bounds
+    if (pts.length < 2) return this.theatreView()
+    let r = { x0: Infinity, z0: Infinity, x1: -Infinity, z1: -Infinity }
+    for (const [x, z] of pts) r = { x0: Math.min(r.x0, x), z0: Math.min(r.z0, z), x1: Math.max(r.x1, x), z1: Math.max(r.z1, z) }
+    // never closer than a sea's worth of ground, and never past the table's edge
+    const cx = (r.x0 + r.x1) / 2
+    const cz = (r.z0 + r.z1) / 2
+    const half = Math.max(r.x1 - r.x0, r.z1 - r.z0, CHAPTER_MIN_SPAN) / 2
+    r = { x0: Math.max(b.x0, cx - half), x1: Math.min(b.x1, cx + half), z0: Math.max(b.z0, cz - half), z1: Math.min(b.z1, cz + half) }
+    return this.rig.fit({ rect: r, yaw: 0, box: this.ui.freeBox(), pad: 1.25 })
+  }
+
+  /** A place at the distance its precision asks for, or its polygon framed. */
+  placeView(place, { distance } = {}) {
+    const proj = this.app.data.proj
+    const g = place.geometry
     const box = this.ui.freeBox()
-    let r = null
-    for (const p of this.islands.values()) {
-      const q = p.rect
-      r = r ? { x0: Math.min(r.x0, q.x0), z0: Math.min(r.z0, q.z0), x1: Math.max(r.x1, q.x1), z1: Math.max(r.z1, q.z1) } : { ...q }
+    if (place.placePrecision === 'off') return this.theatreView()
+    if (!distance && (g?.type === 'Polygon' || g?.type === 'MultiPolygon')) {
+      const rings = g.type === 'Polygon' ? [g.coordinates[0]] : g.coordinates.map((p) => p[0])
+      let r = { x0: Infinity, z0: Infinity, x1: -Infinity, z1: -Infinity }
+      for (const ring of rings) for (const c of ring) {
+        const [x, z] = proj.toWorld(c)
+        r = { x0: Math.min(r.x0, x), z0: Math.min(r.z0, z), x1: Math.max(r.x1, x), z1: Math.max(r.z1, z) }
+      }
+      return this.rig.fit({ rect: r, yaw: this.rig.goal.yaw, tilt: this.tilt(), box, pad: 1.6 })
     }
-    return this.app.rig.fit({ rect: r || this.app.world.bounds, yaw: this.homeYaw(box), box })
+    const [x, z] = proj.toWorld(geometryPoint(g))
+    const d = distance ?? ZOOM[place.placePrecision] ?? ZOOM.loc
+    return this.rig.fit({ rect: { x0: x, x1: x, z0: z, z1: z }, distance: d, tilt: this.tilt(), box })
   }
 
-  islandView(id, yaw = this.app.rig.goal.yaw, tilt = 0) {
-    const pack = this.islands.get(id)
-    return this.app.rig.fit({ rect: pack.rect, yaw, tilt, box: this.ui.freeBox() })
-  }
-
-  pointView(place, distance, { towardChain = 0 } = {}) {
-    let [x, z] = this.app.data.proj.toWorld(geometryPoint(place.geometry))
-    if (towardChain) {
-      // lean toward the middle of the chain, so a far view shows the place
-      // among its neighbours, not at the middle of an empty sea
-      const b = this.app.world.bounds
-      const dx = (b.x0 + b.x1) / 2 - x
-      const dz = (b.z0 + b.z1) / 2 - z
-      const k = Math.min(towardChain, 900 / Math.max(1, Math.hypot(dx, dz)))
-      x += dx * k
-      z += dz * k
-    }
-    return this.app.rig.fit({ rect: { x0: x, x1: x, z0: z, z1: z }, distance, tilt: this.tilt(), box: this.ui.freeBox() })
-  }
-
-  /**
-   * A stop's own camera (DATA.md "District packs"): its place seen from
-   * `distance` world units, looking toward `bearing` (compass degrees), at
-   * `pitch` a fraction of a right angle (0 along the horizon, 1 straight
-   * down), slid so the place stands in the middle of the screen beside the
-   * card. The rig's yaw is the camera's bearing from its target turned about,
-   * so looking toward north is yaw 0 and toward east is −90°.
-   */
-  cameraView(place, cam) {
-    const [x, z] = this.app.data.proj.toWorld(geometryPoint(place.geometry))
-    return this.app.rig.fit({
-      rect: { x0: x, x1: x, z0: z, z1: z },
-      distance: cam.distance,
-      yaw: (-cam.bearing * Math.PI) / 180,
-      pitch: (cam.pitch * Math.PI) / 2,
-      box: this.ui.freeBox(),
-    })
-  }
-
-  /** An event's step: its first place at the deepest zoom it asks for. */
+  /** An event's step: a box event framed round its box, else its first place. */
   eventView(ev) {
-    const place = this.placeOf(ev)
-    if (!place) return null
-    const zoom = deepestZoom(ev.zoom)
-    if (zoom === 'near') return this.pointView(place, ZOOM.near)
-    if (zoom === 'island' && this.islands.has(place.island)) return this.islandView(place.island, this.app.rig.goal.yaw, this.tilt())
-    if (zoom === 'island') return this.pointView(place, ZOOM.island)
-    // far: the chain around the place, or the whole of it for a place that is the whole of it
-    if (!place.island && place.placePrecision === 'island') return this.chainView()
-    return this.pointView(place, ZOOM.far, { towardChain: 0.35 })
+    const table = this.app.table
+    if (ev.box && this.app.data.boxById.has(ev.box)) {
+      const box = this.app.data.boxById.get(ev.box)
+      const r = box.pack.rect
+      const pts = [
+        [r.x0, r.z0],
+        [r.x1, r.z0],
+        [r.x1, r.z1],
+        [r.x0, r.z1],
+      ].map((p) => box.placement.toTable(p))
+      const rect = { x0: Math.min(...pts.map((p) => p[0])), x1: Math.max(...pts.map((p) => p[0])), z0: Math.min(...pts.map((p) => p[1])), z1: Math.max(...pts.map((p) => p[1])) }
+      // the box and its approaches: a few times its own size
+      const cx = (rect.x0 + rect.x1) / 2
+      const cz = (rect.z0 + rect.z1) / 2
+      const half = Math.max(rect.x1 - rect.x0, rect.z1 - rect.z0) * 2.2
+      return this.rig.fit({ rect: { x0: cx - half, x1: cx + half, z0: cz - half, z1: cz + half }, yaw: table.rig.goal.yaw, tilt: this.tilt(), box: this.ui.freeBox() })
+    }
+    const place = placeOf(ev, this.places)
+    return place ? this.placeView(place) : null
   }
 
-  /** From a pin: to the place, closer only as far as the island and never farther out than now. */
+  /** From a pin: to the place, closer only as far as its precision asks and never farther out than now. */
   gentleView(ev) {
-    const place = this.placeOf(ev)
-    if (!place) return null
-    const want = ZOOM[deepestZoom(ev.zoom)]
-    return this.pointView(place, Math.min(this.app.rig.goal.distance, Math.max(want, ZOOM.island)))
+    const place = placeOf(ev, this.places)
+    if (!place || place.placePrecision === 'off') return null
+    const want = ZOOM[place.placePrecision] ?? ZOOM.loc
+    return this.placeView(place, { distance: Math.min(this.rig.goal.distance, Math.max(want, 600)) })
   }
 
   /**
    * Fly the rig's own flight there and say how long it takes: short hops are
-   * quick, a crossing of the chain or a dive from the whole chain to a valley
-   * takes longer, and nothing takes much over three seconds. Between distant
-   * places the rig rises mid-flight (its `hop`), so the chain reads on the way.
+   * quick, a crossing of the theatre or a dive from the whole of it to an
+   * island group takes longer, and nothing takes much over three and a half
+   * seconds. Between distant places the rig rises mid-flight (its `hop`).
    */
   fly(view, jump = false) {
     if (!view) return 1
-    const rig = this.app.rig
+    const rig = this.rig
     if (jump) {
       rig.jump({ x: view.target.x, z: view.target.z, distance: view.distance, yaw: view.yaw, pitch: view.pitch })
       return 0
@@ -456,17 +418,15 @@ export class Tour {
     const g = rig.goal
     const travel = Math.hypot(g.target.x - view.target.x, g.target.z - view.target.z)
     const zoom = Math.abs(Math.log(view.distance / Math.max(1, g.distance)))
-    const dur = clamp(1.1 + Math.sqrt(travel) * 0.032 + zoom * 0.28, 1.1, 3.4)
-    // (into a district: it starts streaming now, and the landing waits for it)
-    const D = this.app.districts
-    const into = D && view.distance < 130 ? D.prefetch(view.target.x, view.target.z) : null
-    rig.flyTo(view, dur, into ? { ready: () => D.readyAt(view.target.x, view.target.z) } : {})
+    const dur = clamp(1.1 + Math.sqrt(travel) * 0.02 + zoom * 0.28, 1.1, 3.5)
+    rig.flyTo(view, dur)
     return dur
   }
 
   /**
-   * "Chapter 6 of 13 · Kahekili · 3 of 8", or what Next will do from off the
-   * tour; `opening` while the tour stands on a chapter's own card.
+   * "Chapter 3 of 7 · The turn · 2 of 9" (or "Prologue · …"), or what Next
+   * will do from off the tour; `opening` while the tour stands on a chapter's
+   * own card.
    */
   describe() {
     const ch = this.chapters.length ? this.chapters[this.active ? this.chapter : this.nearestChapter()] : null
@@ -474,9 +434,10 @@ export class Tour {
     return {
       active: this.active,
       opening: this.active && this.step < 0,
-      number: ch.index + 1,
-      of: this.chapters.length,
-      chapter: `Chapter ${ch.index + 1} of ${this.chapters.length}`,
+      numbered: !ch.prologue,
+      number: ch.number,
+      of: this.numbered,
+      chapter: ch.prologue ? 'Prologue' : `Chapter ${ch.number} of ${this.numbered}`,
       name: ch.name,
       step: this.active && this.step >= 0 ? `${this.step + 1} of ${ch.events.length}` : '',
     }

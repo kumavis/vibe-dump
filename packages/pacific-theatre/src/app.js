@@ -250,8 +250,9 @@ export class App {
 
   // --- tools ---------------------------------------------------------------
 
-  /** Settle everything that eases (camera, ground, the cut) at once: for the tools. */
+  /** Settle everything that eases (the clock's easing, camera, ground, the cut) at once: for the tools. */
   settle() {
+    this.ui?.timeline.finish()
     if (this._cut) {
       const c = this._cut
       if (c.phase === 'out') c.fn()
