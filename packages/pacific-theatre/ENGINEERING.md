@@ -33,7 +33,7 @@ packages/pacific-theatre/
   battle.html                      dev-only entry: boots straight into a box on the Vite dev server (not in the build)
   DESIGN.md  DATA.md  ENGINEERING.md  RESEARCH.md  ACCESS.md  FONTS.md
   research/                        the research reports and each workflow's notes (content.md, engine.md, battles.md)
-  public/data/                     DATA.md
+  public/data/                     DATA.md (kits/{ships,aircraft,weapons}.json among them)
   test-data/                       fixtures from tools/fake-data.mjs (gitignored at the root)
   src/
     config.js                      per-scene units and limits, exaggeration curves, budgets, URL params
@@ -47,7 +47,7 @@ packages/pacific-theatre/
     battle/
       sim/                         pure JS, no three.js import anywhere in this directory
         clock.js  rng.js  world.js  units.js  tracks.js  aircraft.js  ship.js  guns.js  torpedoes.js
-        aa.js  cap.js  damage.js  events.js  moments.js  score.js  outcome.js  index.js (createSim)
+        aa.js  cap.js  sight.js  damage.js  events.js  moments.js  score.js  outcome.js  index.js (createSim)
       kits/                        builder.js (the Hawaiian features/kit.js Builder, scale 1, a lofted hull), ships.js, aircraft.js,
                                    palette.js, insignia.js (one atlas), blocks.js
       scene/                       box.js (BoxScene), terrain.js (BoxGround), sea.js, weather.js, units.js (instanced renderers),
@@ -126,7 +126,7 @@ export class TableProjection {                   // the table: kind 'aeqd' (v1),
   toWorld, toLonLat                               // as above
   jacobianAt([lon, lat]) → [[dx/dE, dx/dS], [dz/dE, dz/dS]]   // world units per metre east and per metre south
   scaleAt([lon, lat]) → sqrt(|det J|) · unit      // the areal scale factor, 1 at the centre
-  convergenceAt([lon, lat]) → degrees             // atan2(J[1][0], J[0][0]): grid north to true north; −13° at Midway
+  convergenceAt([lon, lat]) → degrees             // atan2(J[1][0], J[0][0]): grid north to true north; −15.0° at Midway, −17.1° at Pearl Harbor, +1.2° at Guadalcanal, +2.7° at Samar
 }
 export function projectionFor(desc) → TangentProjection | TableProjection
 export function placement(box, table) → {         // box: a boxes/manifest.json entry; table: the TableProjection
@@ -158,7 +158,7 @@ export const DAY = 86400000
 export function zoneMinutes(zone) → minutes east of UTC; throws on anything but ±HH:MM or Z
 export function parseInstant(s, { zone }) → ms     // YYYY[-MM[-DD]] = the start of that period in `zone` (UTC if none);
                                                   // YYYY-MM-DDTHH:MM[:SS](Z|±HH:MM) exact; a time with no offset throws
-export function spanOf(when) → [from, to)          // widened by precision: minute, hour, day, month
+export function spanOf(when) → [from, to)          // widened by precision: minute, hour, day, month, year
 export function formatWhen(when, { zone }) → "4 June 1942, 10:22 (UTC−12)"
 export class WarClock {                           // the table's time; owned by App
   constructor(chapters, { prologueShare = 0.1 })
@@ -208,10 +208,13 @@ sim.pick(rayOrigin, rayDir) → unitIndex | -1   // for the scene's picking; sim
 
 **State layout** (fixed at `createSim`; nothing is reallocated):
 
-- `sim.capacity` = the record's units + every group's aircraft + `spares`
-  (default 64: the player's own aircraft, a saved carrier's relaunched
-  strikes). `sim.units[i]` exists for every slot; a free slot has
-  `alive[i] = 0`.
+- `sim.capacity` = the record's units + every group's aircraft + the parked
+  aircraft at the box's sites + `spares` (default 64: the player's own
+  aircraft, a saved carrier's relaunched strikes). Pearl Harbor needs about
+  900 slots (ninety-odd ships, 350 aircraft in the air, 390 on the ground);
+  Midway about 400. `sim.units[i]` exists for every slot; a free slot has
+  `alive[i] = 0`. Parked aircraft are units with a `parked` station: they are
+  the strafing targets, drawn instanced like any other.
 - `sim.state.pos`: Float64Array(3N), x y z interleaved, box metres, y up,
   sea level 0. `quat`: Float32Array(4N), x y z w (THREE.Quaternion order).
   `vel`: Float32Array(3N), m/s. `speed`, `heading` (deg), `damage` (0..1),
@@ -287,24 +290,67 @@ outside the battle moves. So:
   bombs are still scripted against their own count, scaled by how many of
   them are still flying.
 - A scripted event whose cause has been removed does not fire: a strike from
-  a carrier that is burning or sunk at its `launch` does not launch; a `hit`
-  by a group that has lost more than half its aircraft fires with its count
-  scaled by the survivors and drops to nothing below a quarter; a `sinks` or
-  `dead-in-water` fires only if the unit's accumulated damage has reached
-  its kit's `fatal` threshold, from scripted hits or real ones.
-- Damage is one model for everyone (`damage.js`): scripted hits apply
-  damage (`event.damage`, a share of `fatal`) like real hits, calibrated so
-  the record's hits produce the record's result on schedule (Kaga's four or
-  five bombs take her past `fatal` by 10:30). A unit the player damages past
-  `fatal` sinks whatever the record says; a unit the player saved from its
-  scripted hits fights on and the sim's AI runs it (a saved carrier
-  recovers and relaunches her groups on the record's cycle times).
-- The AI reacts to the player and only to the player, within bounds the kit
-  and the record set: a ship fired on by the player evades within **±30°**
-  of its course and returns fire with its real battery; CAP within range
-  engages the player; AA engages the player's aircraft; a scripted strike
-  whose target is the player's ship attacks it with the real attack model.
-  Nothing else deviates, so the battle stays recognisable.
+  a carrier that is burning or sunk at its `launch` does not launch. **The
+  group rule** (R7 §4.7): every scripted count belongs to a cause group, and
+  at the beat `count = recordCount × min(1, S / Srec) + baseRate × max(0,
+  S − Srec)`, where `S` is the cause group's survivors now, `Srec` the
+  record's survivors at that beat (`attack.reached` in DATA.md §9: Hiryū's
+  strike had 7 of 18 left when it scored its three hits; VT-3 had 5 of 12 at
+  the drop, so scaling against launch strength would cancel the record's own
+  hits), `recordCount` drawn from the record's range by the seed, and
+  `baseRate` a per-attacker rate for attackers the record never had (dive
+  0.3 against a carrier, 0.15 against a destroyer; torpedo 0.15; level 0.02).
+  Below `0.25 × Srec` the beat does not fire. When the player is one of the
+  group, the squadron's other hits use `S` without the player and
+  `recordCount` less one, so the player's own bomb is theirs alone.
+- **Damage is one model for everyone** (`damage.js`, R7 §4.8), with two
+  tracks and a doomed state instead of one threshold, because Johnston
+  survived three battleship shells and Kaga did not survive four bombs: per
+  ship `fight` (0 → 1 and beyond; at the kit's `crippledAt`, default 0.5,
+  speed is capped at half and half the turrets or the flight deck are out;
+  at 1 the ship is out of action), `float` (0 → 1; at 1 she founders over 3
+  to 10 minutes, or capsizes if `list` passes 35°), `list` (degrees, from
+  asymmetric flooding, counter-flooded at 1°/min USN or 0.5°/min IJN 1942),
+  `fires` in four zones (each burning zone adds `fight`, spreads at a rate
+  multiplied by the hangar hazard, is fought at the navy's and year's rate),
+  the **hangar hazard `H`** on carriers (fuelled and armed aircraft below:
+  0.8 on the Kidō Butai at 10:20, 0.15 on Yorktown at 12:05 with her lines
+  drained; from the record at the clock, `hangarHazard` in the battle file),
+  per-kit systems (rudder, engines, turrets, directors, radar, flight deck,
+  AA groups, bow), and `doomed`, set when three fire zones burn on a carrier
+  with `H ≥ 0.4` or flooding outruns damage control; a doomed ship sinks at
+  the record's time where the record has one, else after the sim's own
+  hours. Scripted hits apply the per-hit table (R7 §4.8, tuned by the
+  calibration tests) like real hits; untouched units take the record's
+  outcome by construction. A unit the player damages past `float` sinks
+  whatever the record says; a unit the player saved from its scripted hits
+  fights on and the sim's AI runs it.
+- **The AI reacts to the player and only to the player**, within bounds the
+  kit and the record set (R7 §4.7): a ship fired on by the player evades
+  within **±30° of its course and ±5 knots**, turning toward or away from the
+  last fall of shot, and returns to its track within three minutes of the
+  last salvo; it returns fire with the battery that bears, with a solution
+  error that starts at 2.5 % of range and 3 mils, improves 30 % per
+  corrected salvo to a floor of 1 % and 1.5 mils, and loses half its
+  improvement when the target turns more than 20° or changes speed more than
+  5 knots (so the player's evasion means something); CAP within range
+  engages the player with the same flight model and a skill (reaction 0.6 to
+  1.0 s, lead error σ 2 to 4 mils, up to 5 or 6 g, 1 to 2 s bursts inside
+  300 m); AA engages the player's aircraft as a calibrated hazard (below); a
+  scripted strike whose target is the player's ship flies its route and
+  profile with the real attack model and the AI's aiming errors. Scripted
+  kills the player is not involved in are choreographed, not rolled: a
+  nearby fighter or the AA is assigned, flies a short pursuit, fires tracer,
+  and the victim falls on the record's minute. Nothing else deviates, so the
+  battle stays recognisable.
+- **A saved carrier** (R7 §4.7, D12): if the player's battle leaves a carrier
+  not doomed that the record lost, the sim runs her within bounds: she
+  recovers what is aloft on the record's cycle times and launches only what
+  the record says was ready, at the last contact the record gives her side;
+  the strike is resolved like any other. Everything that follows is labelled
+  on the after-card "the sim's guess; the record has no such event". A
+  moment taken in a box the player has already changed always restarts the
+  box from the record at that moment's `t` (R7 D10).
 - `sim.outcome` compares the sim's state to the record's at the clock's end
   or when the player leaves: what sank, what burned, what was lost, side by
   side, with the divergences named. The after-card shows the sortie's score
@@ -317,50 +363,137 @@ outside the battle moves. So:
   bombs and rounds on them score nothing. HUD strings name the ship and what
   happened ("Kaga: fire on the hangar deck"), never "Kill", "Destroyed" or
   "Mission accomplished"; a sinking of either navy sounds and reads the same.
-- Moments remain the way in. A moment's `durationS` is a **checkpoint**, not
-  an end: at it the HUD offers the card or to keep going; the sortie then
-  runs until the player's unit is lost, the aircraft's `enduranceS` or ammo
-  runs out, the player leaves, or the battle clock ends. Watching is always
-  the alternative: a box with no moment taken replays the record.
+- Moments remain the way in. A moment's `durationS` (real seconds; the
+  battle span is `durationS × timeScale`) is a **checkpoint**, not an end: at
+  it the HUD offers the card or to keep going; the sortie then runs until
+  the player's unit is lost, the aircraft's `enduranceS` or ammo runs out,
+  the player leaves, or the battle clock ends. The moment's start and its
+  checkpoint are both restart points, offered on the pause card and the end
+  card. After the checkpoint an aircraft may "fly home" at up to 32×, ending
+  in a landing, a ditching or the clock's end as a summary line (R7 D11).
+  Watching is always the alternative: a box with no moment taken replays
+  the record.
+- **Time scales** (R7 §4.1): distances and sizes are true, never
+  compressed; time is. Aircraft moments run at 1× in combat; ship gunnery
+  moments at 2×; torpedo runs and helm moments at 3×; the player may
+  compress up to the moment's `maxTimeScale` (ships 4× or 8×, aircraft 4× in
+  transit, 32× flying home), and the scale drops back to the default when a
+  threat appears (an enemy aircraft within 8 km, AA engaging, a dive or
+  torpedo run begun; a salvo landing within 1 km, a torpedo track within
+  3 km, own salvo in its last 5 s of flight, an enemy ship within 5 km).
+  Watch mode runs at any scale from 1× to 60×.
 
 Models, as parameters the kits carry (DATA.md §8) and `config.js` scales
 (R7 gives the numbers; RESEARCH.md §7):
 
-- **Aircraft** (`aircraft.js`): an arcade model with lift ∝ speed², drag,
-  thrust from throttle, a stall below `stall` speed that drops the nose, a
-  dive limit that shakes and then breaks control surfaces, roll rate and
-  turn rate from the kit's `handling`, altitude limited by `ceilingM`; bombs
-  fall ballistically with the aircraft's velocity (a release cue when the
-  computed impact point is within the target's hull); torpedoes drop within
-  the kit's `torpedo` envelope or break; guns fire tracer with convergence
-  at 250 m and a lead reticle on the current target. Gravity 9.81.
-- **Ships** (`ship.js`): acceleration from `speedKn` with a time constant
-  (BB 90 s, CV 60 s, CA 45 s, DD 25 s to 90 %), rudder with `rudderS` lag and
-  a turning circle from `tacticalDiameterM`, speed loss in a turn, wake
-  from speed; turrets traverse at `traverseDegS` toward `aimAz` within their
-  arcs, elevate for range, fire a salvo when `salvoCount` and ready, with
-  `rofRpm`; shells follow a ballistic arc at `mvMs` with drag so time of
-  flight ≈ the historical (Washington's 16-inch at 8,400 yd ≈ 12 s), and
-  land with a dispersion ellipse (`guns.js`); splashes where they fall; hits
-  by oriented-box test against the target.
+- **Aircraft** (`aircraft.js`, R7 §4.2): an arcade point-mass model with a
+  lift polar and induced drag, thrust from throttle against a power curve
+  with altitude, a stall below `stall` speed that drops the nose, a dive
+  limit that shakes and then breaks control surfaces, roll and turn rates
+  from the kit's `handling` (NACA 868's roll chart: a P-40 about 95°/s at
+  its best, an F4F 75°/s falling to 63, a Zero 55°/s falling to about 40 at
+  high speed; sustained circles: Zero about 14 s, F4F-4 and P-40B about
+  21 s), altitude limited by `ceilingM`; mouse-aim (the nose follows the
+  pointer through a coordinated-turn instructor) is the default on keyboard
+  and mouse, a bank-to-turn self-levelling stick on touch, direct control an
+  option; bombs fall ballistically with the aircraft's velocity (a release
+  cue when the computed impact point is within the target's hull); torpedoes
+  drop within the kit's `torpedo` envelope or break; guns fire tracer with
+  convergence at 250 m and a lead reticle on the current target. Gravity
+  9.81. The engine's tests hold each kit's sustained turn and roll rate
+  within ±10 % of R7's tables and an SBD's 70° dive from 4,500 m to 600 m
+  within 30 to 45 s.
+- **Ships** (`ship.js`, R7 §4.4): speed from `m·dV/dt = Tmax·(u −
+  (V/Vmax)²)` with the telegraph ordering a speed, so from rest a battleship
+  reaches 90 % of top speed in 220 to 320 s, a carrier in 140 to 270, a heavy
+  cruiser in 107 to 125, a destroyer in about 55, Nevada and the escort
+  carriers slower still (the physical constants from displacement and shaft
+  horsepower, which the kits carry; ships start each moment at the record's
+  speed, so the helm matters more than the telegraph); a persistent helm
+  (an order stays until countered), the rudder moving at `rudderS` (30 s
+  hard over to hard over for battleships and carriers, 20 s cruisers, 15 s
+  destroyers) and the yaw rate following Nomoto's first-order model with the
+  steady radius `0.45 × tacticalDiameterM` and `T ≈ 3L/V`; speed loss in a
+  hard turn (25 to 40 %); wake from speed; turrets traverse at `traverseDegS`
+  (Yamato's 2°/s is the slowest) toward `aimAz` within their arcs, elevate
+  from a **firing table precomputed at load** (range → elevation, time of
+  flight, angle of fall), fire a salvo when `salvoCount` and ready, with
+  `rofRpm`.
+- **Shells** (`guns.js`, R7 §4.4): flown as point masses at 60 Hz with one
+  Mach-dependent drag curve, the standard atmosphere and a form factor per
+  shell fitted to its published maximum range, which reproduces the
+  published times of flight within 2 % (Washington's 16-inch takes 11.9 s at
+  8,400 yd; Yamato's 46 cm 47.8 s at 30,000 yd; Johnston's 5-inch 21 s at
+  10,000 yd); dispersion per shell is Gaussian about the salvo's mean point
+  of impact with the **historical** patterns (about 1 % of range in range
+  and 2 mils across for the 16-inch), never inflated; the difficulty lives
+  in the fire-control solution; splashes where they fall, in the ship's own
+  dye colour by day and white at night; hits by oriented-box test against
+  the target. R7's `research/r7-scripts/` hold the reference drag model,
+  polar, gunnery Monte Carlo and AA hazard; the engine ports them.
 - **Torpedoes** (`torpedoes.js`): straight runs at the type's speed and
-  range, arming after `armRunM`, a spread angle for a salvo; hit by box
-  test; the Mark 15's failure rate as a kit number, the Type 93's as its own.
-- **AA** (`aa.js`): each ship's AA engages aircraft within range with a
-  hit chance per second from the fit and range, drawn as tracer and bursts;
-  the player's `aa` directs it at a point for a burst of attention.
+  range settings (Johnston's ten Mark 15s, fired at about 07:20 from about
+  10,000 yd at low speed on a closing target, ran about 7.4 minutes to the
+  07:27 hit on Kumano, R5 §4.6), arming after `armRunM`, a narrow or wide
+  spread for a salvo; a scripted `torpedoes-fired` event runs its spread in
+  the water with the same model, so the player can be its target; hit by box
+  test; failure rates from `weapons.json` for the battle's date (a rate no
+  source gives is a *verify* default in `config.js`), with no switch.
+- **Sight** (`sight.js`): who can see whom, because two v1 boxes turn on it
+  (Kondō's column does not see Washington beyond about 5,000 yards unless
+  she shows a light; Kirishima has no radar; Taffy 3 hid in smoke and
+  squalls). Each unit has sensors from its kit and the battle (optics with a
+  range by light level; SG and fire-control radar where fitted, with their
+  ranges; lookouts), sight lines are blocked by smoke screens (volumes that
+  drift with the wind) and squalls (moving polygons) and lit by star shells,
+  searchlights and gun flashes (which also reveal the firer); the AI aims
+  only at what it can see; `player.state.contacts` carries the plot (a radar
+  plot on a US ship with SG, a lookout plot on a Japanese one) with range,
+  bearing and quality, and the HUD draws it. R7 §4.9's ranges are the
+  starting values, marked *verify* in `config.js`.
+- **AA** (`aa.js`, R7 §4.6): a Poisson hazard on each aircraft the AI is
+  shooting at, `λ = Σ λbarrel × barrels × f(range) × era × alert × aspect ÷
+  share` from COMINCH's rounds-per-bird figures per barrel, a range
+  fall-off, an era factor fitted to the record (0.85 USN 1942, 0.6 IJN 1942,
+  0.5 Pearl Harbor's peacetime crews), an alertness ramp from the first
+  sighting, and the fire shared among the attackers; drawn as hit events
+  (smoke, a dead engine, a holed wing) before the end; **AA rounds are
+  effects only, never projectiles** (a hundred ships' guns at Pearl Harbor
+  would swamp the buffer and tie the kill rate to the frame rate). The
+  player's `aa` points every bearing mount at the pointer's aircraft for
+  5 s. Calibrated against the record: about 27 % of D3As diving on TF 17 at
+  12:05 lost to AA, under 3 % of SBDs over Kaga at 10:22, about 31 % of B5Ns
+  on Yorktown at 14:43, about 10 % of first-wave torpedo planes at Pearl
+  Harbor. A Japanese ship that sights a raid fires two bursts toward it and
+  the CAP turns to them, as the record describes.
 - **CAP and AI** (`cap.js`): script by default (tracks, stations, routes,
   attack profiles); `cap` units pursue the nearest enemy aircraft within
-  their patrol radius with a lead pursuit and fire within 300 m; evasion as
-  above; nothing else deviates from the record.
-- **Damage** (`damage.js`): per unit, `damage` 0..1 from hits weighted by
-  calibre against armour, `fire` and `list` as states; a player's ship loses
-  speed, turrets and steering with damage; the record's `events` set these
-  on schedule for non-player units subject to the authority rules.
+  their patrol radius with a lead pursuit and fire within 300 m; evasion and
+  gunnery as above; a wingman AI that turns into a Zero on the player's
+  tail when the player flies an F4F; nothing else deviates from the record.
+- **Damage** (`damage.js`): the two-track model above, with the per-hit
+  table of R7 §4.8 as the starting values and its calibration cases as the
+  tests (Kaga doomed in at least 95 % of runs from her four bombs; Akagi
+  from one hit in 55 to 90 %; Yorktown's three bombs dooming her in under
+  5 % and stopping her for 40 to 100 minutes; Kirishima's nine heavy hits
+  capsizing her within one to five hours in at least 80 %; South Dakota's
+  26 hits leaving her afloat in at least 95 %; Johnston's 07:30 hits leaving
+  her afloat and making at least 15 knots in at least 90 %). A magazine
+  detonation is scripted where the record has one and otherwise a 1 % chance
+  per heavy AP shell into a magazine zone inside 10 km.
+- **Aiming aids and difficulty** (R7 §4.5): three levels built from named
+  switches, Guided, Standard (the default, calibrated to the record) and
+  Record (no markers, no lead reticle); Guided halves only what is aimed at
+  the player. Readability at true scale comes from zoom sights (4×, 8×, 16×)
+  in gunnery views, a minimum on-screen length below which a ship is drawn
+  as its silhouette, contact markers for aircraft beyond 2 km, a corner plot
+  at the box's scale, and ranges in the unit's own system (yards and knots
+  for the US Navy, metres and km/h for the Imperial Navy, with a toggle).
 - **Moments** (`moments.js`): starts the clock at `t`, spawns the player per
-  `start`, runs the beats, reaches its checkpoint at `t + durationS`, ends
-  when the player is lost, out of endurance, leaves, or the clock ends, and
-  computes the score; `outcome.js` the comparison.
+  `start`, runs the beats, reaches its checkpoint at `t + durationS ×
+  timeScale` on the battle clock (`durationS` real seconds), ends when the
+  player is lost, out of endurance, leaves, or the clock ends, and computes
+  the score; `outcome.js` the comparison.
 - **Events** (`events.js`): the record's beats per unit, fired as the clock
   crosses them subject to the authority rules, to the effects ring, the
   beats list and the damage state; each carries its `by` so the sim can tell
@@ -465,20 +598,32 @@ and aircraft below y = 0 are discarded (a sinking ship goes under the
 surface without depth games). Terrain shading keeps the Hawaiian
 `groundAlbedo` with a per-box constant rain. Budget: about 60 to 80 draw
 calls for Midway's morning (30 hulls, five or six turret calibres, six
-aircraft kits, ten effect families, terrain, ocean, sky); under 500 always.
+aircraft kits, ten effect families, terrain, ocean, sky); Pearl Harbor's
+ninety-odd ships instance hulls per kit; under 500 on a desktop and under
+150 on a phone, where the sea's and the smoke's overdraw are the costs to
+measure first. The sim's determinism is per browser engine: the smoke test
+asserts outcomes in bands ("Kaga doomed by 10:30"), not exact positions.
 
 ## 8. Controls (`src/battle/controls/`)
 
 `Input` collects keyboard, mouse and touch into `player.input` each frame
-(levels held, counters incremented). Bindings for an aircraft: W/S or ↑/↓
-pitch, A/D or ←/→ roll, Q/E yaw, Shift/Ctrl throttle, mouse-aim optional
-(the nose follows the pointer when held), Space guns, B bomb, T torpedo, C
-camera, Esc release the controls. For a ship: A/D helm, W/S telegraph, mouse
-aims the main battery (the reticle shows range and time of flight), click
-salvo, T torpedoes, Space direct the AA at the pointer, C camera. Touch: a
-virtual stick (left), throttle slider, fire/bomb/torpedo buttons (right), a
-camera button; for a ship, helm and telegraph as two sliders, the aim by
-drag, salvo by tap. The HUD shows the bindings on the briefing card and on
+(levels held, counters incremented). Bindings for an aircraft: **mouse-aim
+by default** (the nose follows the pointer through the instructor; a held
+button or a toggle switches to direct control), W/S or ↑/↓ pitch and A/D or
+←/→ roll in direct control, Q/E yaw, **R/F or PageUp/PageDown throttle**
+(never Ctrl: Ctrl+W closes the tab and a page cannot prevent it), Space guns
+(with `preventDefault`, or the page scrolls), B bomb, T torpedo, C camera, Z
+time scale, **Backspace releases the controls** (with a confirm; Esc is the
+browser's own key for leaving pointer lock and full screen, so losing
+pointer lock pauses and offers release instead). For a ship: A/D helm
+(persistent), W/S telegraph, mouse aims the main battery (the reticle shows
+range and time of flight from the firing table), click salvo, T torpedoes
+(with a narrow or wide spread), Space direct the AA at the pointer's
+aircraft, C camera, Z time scale. Touch, in v1 for both: a self-levelling
+bank-to-turn stick (left), a throttle slider, fire/bomb/torpedo buttons
+(right), camera and time buttons; for a ship, helm and telegraph as two
+sliders, the aim by drag, salvo by tap; Guided aids and the Low quality tier
+by default on touch. The HUD shows the bindings on the briefing card and on
 the first three seconds of a moment.
 
 **Input arbitration**: `app.mode` is one of `table`, `flying`, `watch`,
@@ -632,8 +777,15 @@ chapter ticks and the prologue compressed to a tenth.
   that the sim stayed finite, and prints frame time and heap.
   `smoke-battle.mjs` does the box alone against the Vite dev server
   (`npx vite --port 5297` in the package) before integration and against
-  `dist/index.html#battle=…` after. `fake-data.mjs` writes `test-data/`
-  (§13); `fake-battle.mjs` (engine-owned) may extend the box fixture.
+  `dist/index.html#battle=…` after, and runs the **calibration tests** of
+  R7 §8 as seeded headless batches asserted in bands: the AA cases, the
+  gunnery cases (an AI Washington at 8,400 yd makes 9 to 20 hits from 75
+  rounds in 80 % of runs against a non-evading Kirishima and fewer against
+  one that turns 30° a minute), the times of flight within 3 % of the
+  published tables, the damage cases, the group rule (with the player
+  absent every scripted count equals the record's), and the flight model
+  (turn and roll within ±10 %). `fake-data.mjs` writes `test-data/` (§13);
+  `fake-battle.mjs` (engine-owned) may extend the box fixture.
 - `shoot.mjs`: the Hawaiian one, with `battle`, `t` and `moment` shot
   parameters.
 - `subset-font.mjs`: scans `public/data/**/*.json` for CJK characters and
@@ -671,11 +823,44 @@ agent adapts the shared core and freezes the contracts before anyone forks:
 | `tools/fake-data.mjs`, `tools/smoke.mjs`, `tools/shoot.mjs` | the fixtures below; the harnesses with a boot-and-no-errors check |
 | `DATA.md`, `ENGINEERING.md` | patched and frozen: from here on a change to either goes through the project manager |
 
-**Frozen in `tools/check/ids.json`** (and in DATA.md): the box ids, each
-box's `lon0`, `lat0`, bounds and size (the bake may refine bounds by less
-than a texel's worth and reports it); the kit ids and types for every ship
-class and aircraft type the four v1 battles use; the chapter and front
-keyframe ids; the side and kind vocabularies; the clock ids.
+**Frozen in `tools/check/ids.json`** (and in DATA.md): the four boxes of
+DATA.md §7 (id, `lon0`, `lat0`, bounds, size, clock id and span; the bake may
+square a grid by less than a texel's worth and reports it); the chapter and
+front keyframe ids; the side, kind, flag and precision vocabularies; the
+clock ids (`jst`, `usn-zp12`, `usn-zp10`, `usn-zm11`, `usn-zm12`,
+`usn-item`, `hst-1941`, `hwt`, `malaya-1941`); and the kit ids with their
+types for every class and type the four boxes use:
+
+- ships, Japan: `yamato` (bb), `nagato` (bb), `kongo` (bb: Kongō, Haruna,
+  Kirishima), `fuso` (bb), `akagi`, `kaga`, `soryu`, `hiryu`, `shokaku` (cv:
+  Shōkaku, Zuikaku), `takao` (ca: Atago, Takao, Chōkai), `myoko` (ca:
+  Haguro), `mogami` (ca: Kumano, Suzuya), `tone` (ca: Tone, Chikuma),
+  `nagara`, `sendai` (cl), `agano` (cl: Yahagi, Noshiro), `kagero`, `yugumo`,
+  `fubuki`, `akizuki`, `shiratsuyu`, `akatsuki`, `asashio`, `shimakaze` (dd),
+  `type-a-midget` (ss-midget, `tokko`);
+- ships, United States: `north-carolina` (bb: Washington), `south-dakota`,
+  `pennsylvania` (bb: Arizona, Pennsylvania), `nevada` (bb: Nevada,
+  Oklahoma), `tennessee` (bb: Tennessee, California), `colorado` (bb:
+  Maryland, West Virginia), `utah` (bb, target ship), `yorktown` (cv:
+  Yorktown, Enterprise, Hornet), `casablanca` (cve), `northampton`,
+  `new-orleans` (ca: New Orleans, San Francisco, Vincennes, Minneapolis,
+  Astoria), `pensacola`, `portland` (ca: Portland), `atlanta` (cl),
+  `brooklyn` (cl: Helena, Honolulu, St. Louis, Phoenix), `omaha` (cl:
+  Raleigh, Detroit), `fletcher`, `sims`, `benham`, `mahan`, `gleaves`,
+  `farragut`, `porter`, `gridley` (dd: Maury), `wickes` (dd: Ward),
+  `john-c-butler` (de), `vestal` (ar), `neosho` (ao), `oglala` (cm),
+  `curtiss` (av: Curtiss, Tangier), `solace` (ah, `hospital`);
+- aircraft: `a6m2`, `a6m5`, `d3a1`, `b5n2`, `d4y1`, `b6n2`, `e13a1`, `f1m2`,
+  `f4f-3`, `f4f-4`, `fm-2`, `f6f-3`, `f2a-3`, `sbd-3`, `sb2u-3`, `tbd-1`,
+  `tbf-1`, `tbm-1c`, `p-40b`, `p-36a`, `pby-5`, `b-17e`, `b-26`, `b-18`,
+  `a-20`;
+- weapons: R6's ids for guns, AA, torpedoes and bombs (DATA.md §8), which
+  the engine fills in `kits/weapons.json`.
+
+Source ids are not frozen: content owns `sources.json`; the engine and the
+battles each write a fragment (`public/data/sources-engine.json`,
+`public/data/sources-battles.json`) with the same schema, and the integrator
+merges them, reconciling duplicates by URL.
 
 **Gate**: `npm run build` succeeds; `node tools/smoke.mjs` boots
 `dist/index.html?data=../test-data/` under SwiftShader, shows the fake
@@ -709,11 +894,11 @@ wing, tail and canopy shape at least once.
 
 | workflow | owns (only these) | interfaces it consumes, frozen | runs alone on |
 | --- | --- | --- | --- |
-| **bake** | `tools/bake-table.mjs`, `tools/bake-box.mjs`, `tools/lib/{etopo,cog,ne,simplify}.mjs`, `tools/check/packs.mjs`; outputs `public/data/manifest.json`, `public/data/table/height.png`, `public/data/table/coast.json`, `public/data/boxes/manifest.json`, `public/data/boxes/*/height.png` for the four v1 boxes | DATA.md §§1–3, 7, 11; `ids.json` boxes | real downloads (outside the repo, with the ledger); its own `--check` and `--preview` |
+| **bake** | `tools/bake-table.mjs`, `tools/bake-box.mjs`, `tools/lib/{etopo,cog,ne,cudem,gmrt,simplify}.mjs` and the Hawaiian 1941 works for Oʻahu copied under `tools/lib/`, `tools/check/packs.mjs`, `research/bake.md`; outputs `public/data/manifest.json`, `public/data/table/height.png`, `public/data/table/coast.json`, `public/data/boxes/manifest.json`, `public/data/boxes/*/height.png` for the four v1 boxes | DATA.md §§1–3, 7, 11; `ids.json` boxes | real downloads (outside the repo, with the ledger); its own `--check` and `--preview` |
 | **content** | `public/data/{chapters,clocks,places,events,sources,routes}.json`, `public/data/fronts/**`, `public/data/table/labels.json` (by hand from the gazetteer; the bake does not seed it), `tools/check/{gazetteer,routes,fronts}.mjs`, `research/content.md` | DATA.md §§3–6, 10; `ids.json` boxes, chapters, clocks | its own files and checks |
 | **table** | `src/table/**`, `src/ui/**`, `src/render/{pack,camera,sky,stars,pipeline,lines,routes}.js` and `src/render/shaders/{common,ground,logdepth}.glsl.js` (extend, never break the Stage 0 API), `src/app.js` (table side), `main.js`, `index.html`, `style.css`, `tools/smoke.mjs`, `tools/shoot.mjs`, `tools/subset-font.mjs`, `FONTS.md` | ENGINEERING §§2–4, 9–11 | `test-data/` (table and gazetteer) |
-| **engine** | `src/battle/**` (replacing the stub), `src/render/{ocean,shadow}.js`, `src/render/shaders/ocean.glsl.js`, `battle.html`, `public/data/kits/**`, `tools/smoke-battle.mjs`, `tools/fake-battle.mjs`, `tools/check/kits.mjs`, `research/engine.md` | ENGINEERING §§2, 5–9; DATA.md §§8–9; `ids.json` kits | `test-data/boxes/test-box/**` and `test-data/kits/**` in `battle.html` on the Vite dev server |
-| **battles** | `public/data/boxes/*/battle.json`, `tools/check/battle.mjs`, `research/battles.md` | DATA.md §9; `ids.json` boxes and kits; `time.js`'s `BattleClock` for its checks | its check validates against `ids.json` until real kits and packs merge |
+| **engine** | `src/battle/**` (replacing the stub), `src/render/{ocean,shadow}.js`, `src/render/shaders/ocean.glsl.js`, `battle.html`, `public/data/kits/**` (ships, aircraft, weapons), `public/data/sources-engine.json`, `tools/smoke-battle.mjs`, `tools/fake-battle.mjs`, `tools/check/kits.mjs`, `research/engine.md` | ENGINEERING §§2, 5–9; DATA.md §§8–9; `ids.json` kits | `test-data/boxes/test-box/**` and `test-data/kits/**` in `battle.html` on the Vite dev server |
+| **battles** | `public/data/boxes/*/battle.json`, `public/data/sources-battles.json`, `tools/check/battle.mjs`, `research/battles.md` | DATA.md §9; `ids.json` boxes and kits; `time.js`'s `BattleClock` for its checks | its check validates against `ids.json` until real kits and packs merge |
 
 Each workflow works in its own git worktree on a branch named for it,
 commits there, and reports the branch. **Merge order**: Stage 0, then bake,

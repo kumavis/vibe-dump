@@ -201,10 +201,10 @@ battleship, a destroyer and an escort carrier, on both sides.
 
 | # | battle | date | box | moments |
 | --- | --- | --- | --- | --- |
-| 1 | **Midway** ミッドウェー海戦 | 4 June 1942 | the Kidō Butai and TF 16/17 north of Midway, ~400 km | the dive on Kaga and Akagi (SBD, VB-6/VS-6, 10:22); the dive on Sōryū (VB-3, 10:25); the Zero CAP against VT-3 (10:15); Thach's escort (F4F); Hiryū's D3As on Yorktown (12:05); the F4F CAP over Yorktown (12:00); the B5N run on Yorktown (14:40) |
-| 2 | **Pearl Harbor** 真珠湾攻撃 | 7 December 1941 | Oʻahu (the Hawaiian app's pack) and the sea north of it | the first-wave B5N torpedo run on Battleship Row (07:55); a D3A over Ford Island and Hickam; Welch and Taylor's P-40s from Haleʻiwa over ʻEwa (08:30); a ship's AA; Nevada's sortie down the channel (08:40–09:10) |
-| 3 | **Second Naval Battle of Guadalcanal** 第三次ソロモン海戦 (second night) | 14–15 November 1942 | Ironbottom Sound: Savo, Guadalcanal's north coast, Nggela and Tulagi, ~100 km | Washington's bridge, 23:58–00:10; Kirishima's bridge, the same minutes; a destroyer of either van |
-| 4 | **Samar** サマール沖海戦 | 25 October 1944 | off Samar's east coast, ~200 km | Johnston's torpedo run on Kumano (07:10–07:25); Yamato's main battery on Taffy 3 (06:58–07:10); an escort carrier's helm under fire; Samuel B. Roberts's run; a heavy cruiser of CruDiv 7 |
+| 1 | **Midway** ミッドウェー海戦 | 4 June 1942 | the atoll, the Kidō Butai and TF 16/17 across the date line, ~370 × 490 km, 04:00–18:00 Midway time | the dive on Kaga (SBD, VS-6/VB-6, 10:22); Best's section on Akagi (10:26); the dive on Sōryū (VB-3, 10:25); Hiryū's Zero CAP against VT-3 (10:09); Thach's escort (F4F, 10:05); Hiryū's D3As on Yorktown (12:05); the F4F CAP over Yorktown (11:59); the B5N run on Yorktown (14:40); Torpedo Eight is a stop with a card |
+| 2 | **Pearl Harbor** 真珠湾攻撃 | 7 December 1941 | Oʻahu and its waters, ~100 km, the carriers off the box, 06:30–10:00 Hawaiian time | a Kaga B5N's torpedo run over Southeast Loch (07:56); Nevada's helm and AA down the channel (08:40–09:10) and its mirror, a Kaga D3A of the second wave on Nevada; Welch and Taylor's P-40s over ʻEwa (08:33); Helm, the one destroyer under way (07:58–08:22); later, Shōkaku's D3As on Ford Island's hangars, Sanders's P-36s, Helena's AA; no level-bomber moment (§3.5); Ward's attack on the midget submarine is a watched stop |
+| 3 | **Second Naval Battle of Guadalcanal** 第三次ソロモン海戦 (second night) | 14–15 November 1942 | Ironbottom Sound: Savo, Guadalcanal's north coast, Nggela and Tulagi, ~100 km | Washington's bridge, 23:58–00:10 (75 rounds of 16-inch at Kirishima from 8,400 yards under radar); Kirishima's bridge from 23:51; Gwin in the van at 23:24; Ayanami at 23:24 |
+| 4 | **Samar** サマール沖海戦 | 25 October 1944 | off Samar's east coast, ~200 km | Johnston's torpedo run on Kumano (07:10–07:31); Yamato's main battery on Taffy 3 (06:58–07:10); Gambier Bay's helm under fire (07:45); Samuel B. Roberts's run (07:50); Tone of CruDiv 7 closing the carriers (07:58); the box's clock closes with the surface action, before the attack on St. Lo |
 | 5 | Ten-Gō 坊ノ岬沖海戦 | 7 April 1945 | the East China Sea south of Kyūshū | Yamato's helm and AA under the first wave (12:32); a TBM of the first wave |
 | 6 | Philippine Sea マリアナ沖海戦 | 19 June 1944 | west of the Marianas | an F6F against Raid II; a D4Y or B6N of Raid II |
 | 7 | Santa Cruz 南太平洋海戦 | 26 October 1942 | north of the Santa Cruz Islands | Widhelm's SBDs on Shōkaku (10:30); Shōkaku's D3As on Hornet (10:10) |
@@ -308,10 +308,14 @@ container (RESEARCH.md §1):
   notice in every box's sources), read by HTTP range through the `geotiff`
   package; every island the v1 and later battles need is present, Midway and
   Wake included. Sea depth from GMRT (CC BY) with ETOPO 2022 15″ as the
-  fallback; sea clamped to −1 m or deeper; land only from GLO-30. Oʻahu's
-  box reuses the Hawaiian app's pack. Each box is one pack in the Hawaiian
-  format, rendered in its own frame, with its placement on the table (centre
-  and the projection's local Jacobian) in its manifest.
+  fallback; sea clamped to −1 m or deeper; land only from GLO-30, except
+  that the Pearl Harbor box takes the harbour and the south shore from
+  NOAA's 3 m topobathymetry, because the lochs are the sortie's ground, and
+  is baked for 1941 (the later fill, drydocks and piers taken out on the
+  dated record the Hawaiian app already holds for Oʻahu). Each box is one
+  pack in the Hawaiian format, baked for its battle's date, rendered in its
+  own frame, with its placement on the table (centre and the projection's
+  local Jacobian) in its manifest.
 - **The front and the routes** are hand-written GeoJSON and JSON from the
   record, traced only from public-domain US government charts (the USSBS
   plates, CINCPAC's composite tracks, the Naval War College diagrams, the
@@ -550,37 +554,38 @@ sources, precisions and tellings as the Hawaiian gazetteer does, and
 
 ```jsonc
 // a chapter (chapters.json)
-{ "id": "turn", "label": "the turn: the Coral Sea and Midway", "from": "1942-05-01", "to": "1942-06-30",
-  "front": "1942-06", "note": "...", "sources": ["..."] }
+{ "id": "turn", "label": "the turn", "from": "1942-06-01", "to": "1943-02-09",
+  "keyframe": "1942-09-15", "note": "...", "sources": ["..."] }
 
 // a place (places.json)
 { "id": "midway", "name": "Midway Atoll", "ja": { "kanji": "ミッドウェー島", "romaji": "Middowē-tō" }, "kind": "atoll",
-  "geometry": { "type": "Point", "coordinates": [-177.37, 28.2] }, "placePrecision": "exact", "sources": ["..."] }
+  "geometry": { "type": "Point", "coordinates": [-177.37, 28.2] }, "placePrecision": "ex", "held": [ ... ], "sources": ["..."] }
 
 // an event (events.json)
 { "id": "midway-1942", "title": "The Battle of Midway", "ja": { "kanji": "ミッドウェー海戦", "romaji": "Middowē kaisen" },
-  "when": { "from": "1942-06-04T04:30-12:00", "to": "1942-06-07T05:01-12:00", "precision": "minute", "zone": "+12 (Midway)" },
-  "chapter": "turn", "where": [ { "place": "midway", "role": "near" } ], "kind": "battle", "sides": ["japan", "usa"],
+  "when": { "from": "1942-06-04T04:30-12:00", "to": "1942-06-07T05:01-12:00", "precision": "minute", "clock": "usn-zp12" },
+  "chapter": "turn", "where": [ { "place": "midway", "role": "near" } ], "kind": "battle", "flag": "box", "sides": ["jp", "us"],
   "zoom": ["table", "box"], "box": "midway", "summary": "...", "stops": [ ... ],
   "sources": [ { "id": "nwc-midway-1948", "where": "pp. 120–143" } ], "confidence": { "date": "firm", "place": "firm", "numbers": "soft" },
   "tellings": [ ... ], "routes": ["kido-butai-midway", "tf16-tf17-midway"] }
 
 // a battle box (boxes/midway/battle.json)
-{ "id": "midway", "event": "midway-1942", "clock": { "zone": "+12", "name": "Midway time", "from": "1942-06-04T04:00-12:00", "to": "1942-06-04T18:00-12:00" },
+{ "id": "midway", "event": "midway-1942", "clock": { "id": "usn-zp12", "zone": "-12:00", "name": "Midway time (zone +12)", "from": "1942-06-04T04:00-12:00", "to": "1942-06-04T18:00-12:00" },
   "weather": { "wind": { "fromDeg": 135, "kn": 5 }, "sea": 2, "cloud": { "baseM": 460, "topsM": 760, "cover": 0.3 }, "visibilityM": 60000 },
-  "units": [ { "id": "kaga", "kit": "kaga", "side": "japan", "name": "Kaga", "ja": "加賀",
-               "track": [ { "t": "10:00", "lonlat": [-179.0, 30.0], "courseDeg": 30, "speedKn": 24, "precision": "report", "source": "nagumo-1947" } ],
+  "units": [ { "id": "kaga", "kit": "kaga", "side": "jp", "name": "Kaga", "ja": "加賀",
+               "track": [ { "t": "10:00", "lonlat": [181.0, 30.0], "courseDeg": 30, "speedKn": 24, "precision": "report", "source": "nagumo-1947", "sourceClock": "0700", "sourceZone": "+09:00", "sourceDate": "1942-06-05" } ],
                "events": [ { "t": "10:22", "kind": "hit", "by": "vb-6", "count": [4, 5], "sources": [ ... ], "tellings": [ ... ] },
-                           { "t": "19:25", "kind": "sinks", "sources": [ ... ] } ] } ],
-  "groups": [ { "id": "vb-6", "kit": "sbd-3", "side": "usa", "count": 15, "from": "enterprise", "launch": "07:45",
-                "attack": { "t": "10:22", "target": "kaga", "profile": "dive", "pushOverM": 5800, "releaseM": 760 } } ],
-  "moments": [ { "id": "vb6-kaga", "role": { "kind": "aircraft", "kit": "sbd-3", "side": "usa", "group": "vb-6" }, "t": "10:21:30", "durationS": 180,
-                 "start": { "from": "kaga", "bearingDeg": 200, "rangeM": 3000, "altM": 5800, "speedMs": 70 }, "after": { "text": "...", "sources": [ ... ] } } ] }
+                           { "t": "19:25", "kind": "sinks", "sources": [ ... ] } ], "hangarHazard": [ { "t": "10:20", "h": 0.8 } ] } ],
+  "groups": [ { "id": "vb-6", "kit": "sbd-3", "side": "us", "count": 15, "from": "enterprise", "launch": "07:45",
+                "attack": { "t": "10:22", "target": "kaga", "profile": "dive", "pushOverM": 5800, "releaseM": 760, "reached": [13, 15] } } ],
+  "moments": [ { "id": "vb6-kaga", "role": { "kind": "aircraft", "kit": "sbd-3", "side": "us", "group": "vb-6", "name": "a Dauntless of Bombing Six" }, "t": "10:21:30", "durationS": 180, "timeScale": 1, "maxTimeScale": 4,
+                 "start": { "from": "kaga", "bearingDeg": 200, "rangeM": 3000, "altM": 5800, "speedMs": 78 }, "after": { "text": "...", "sources": [ ... ] } } ] }
 
-// a kit (kits/ships.json, kits/aircraft.json)
-{ "id": "kaga", "class": "Kaga", "type": "cv", "nation": "japan", "loa": 247.6, "beam": 32.5, "speedKn": 28,
+// a kit (kits/ships.json, kits/aircraft.json, kits/weapons.json)
+{ "id": "kaga", "class": "Kaga", "type": "cv", "side": "jp", "loa": 247.6, "beam": 32.5, "speedKn": 28, "shp": 127400,
   "blocks": [ { "kind": "flight-deck", "at": [0.02, 1.0], "w": 30.5 }, { "kind": "island", "at": 0.45, "side": "starboard" }, { "kind": "funnel", "shape": "downturned", "at": 0.5, "side": "starboard" } ],
-  "guns": [ ... ], "aa": [ ... ], "fatal": 0.8, "colour": { "hull": "ijn-kure-grey", "deck": "wood", "deckMarking": "hinomaru-forward" }, "sources": [ ... ] }
+  "blocksPrecision": "measured", "guns": [ ... ], "aa": [ { "weapon": "jp-25-t96", "mounts": 11, "barrels": 2 } ], "crippledAt": 0.5, "fatal": 1.0,
+  "colour": { "hull": "ijn-kure-grey", "deck": "wood", "deckMarking": "hinomaru-forward" }, "sources": [ ... ] }
 ```
 
 Rules the schema enforces, beyond the Hawaiian ones (every date a precision,
@@ -722,7 +727,7 @@ the record for it (RESEARCH.md §4).
   the atoll. The card: the battle, the four carriers, the tellings on the
   numbers (the Japanese dead 2,500 by the Naval War College or 3,057 by
   Parshall and Tully; the aircraft 234 or 248).
-- **Box.** 04:30 to 18:00 on the Midway clock, about a hundred and ten timed
+- **Box.** 04:00 to 18:00 on the Midway clock, about a hundred and ten timed
   beats from the primaries on both sides: Tomonaga's strike on the atoll, the
   shore-based attacks, the torpedo squadrons' runs and losses, the two
   dive-bomber groups arriving from the south-west and the south-east at
@@ -843,20 +848,34 @@ Made by the owner on the first draft (22 October 2026):
 - **v1.** Midway, the Second Naval Battle of Guadalcanal, Samar and Pearl
   Harbor.
 
-Still open, decided by the designer from the research unless the owner says
-otherwise:
+Decided by the designer from the research (the owner may overrule any):
 
-- **Ship moments' time scale** (two or three times real time) and whether
-  aircraft moments ever compress (R7).
+- **Time scales**: ships at two times real time for gunnery and three for
+  torpedo runs and helm, aircraft at one in combat, with a bounded speed-up
+  that drops back when a threat appears (R7 D2).
+- **Touch controls in v1** for aircraft and ships, with the Guided aids and
+  the Low quality tier by default (R7 D8).
+- **The cards that touch the dead** say what the record says, in the words
+  of §7.3: the US fliers captured at Midway were killed, and the card says
+  so plainly with its sources (R4 §3.12); Preston's loss carries Lundgren's
+  friendly-fire reading as a telling, with no shooter drawn (R5 D3); men in
+  the water are never drawn, and the card says who was picked up and who was
+  not, counts in tellings (R5 §12); the Bengal famine of 1943 is on the
+  table as a card (R3 §11).
+- **No level-bomber moment at Pearl Harbor**, whichever group: the rule of
+  §3.5 and the check that enforces it win over R10's narrower carve-out.
+
+Still open:
+
 - **Ten-Gō's Japanese role.** Yamato's sortie was itself a surface tokkō
-  (水上特攻); R3 argues that playing her helm and AA is close to playing the
-  tokkō side and recommends the TBM pilot instead (R3 D11). Not v1; R8 and the
-  owner decide before the box is built.
-- **Touch controls** in v1 for the sortie, or table-only on phones.
+  (水上特攻); R3 and R8 advise only defensive moments or the TBM pilot. Not v1;
+  the owner decides before the box is built.
 - **How uncertainty looks** in a box: a `schematic` track drawn finer; a
   disputed hit count on the card; one visual language with the table's.
 - **The Kidō Butai's box** stays schematic until someone reads *Shattered
   Sword* and Lundstrom; the owner can pull them (ACCESS.md).
+- **The repository's licence**: without one the app is all rights reserved
+  (R8 D15); the owner's call.
 
 ---
 

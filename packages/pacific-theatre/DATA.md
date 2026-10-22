@@ -31,6 +31,7 @@ public/data/
   fronts/lines.geojson       the declared lines: the 1941 perimeter, the Absolute National Defence Zone, General Order No. 1
   kits/ships.json            the ship classes, §8
   kits/aircraft.json         the aircraft types, §8
+  kits/weapons.json          the guns, AA weapons, torpedoes and bombs the kits reference by id, §8
   boxes/manifest.json        every battle box's pack, §7
   boxes/<id>/height.png
   boxes/<id>/battle.json     the record of one battle: units, tracks, events, groups, stops, moments, §9
@@ -73,8 +74,8 @@ the camera looks north. Longitudes are normalised with one wrap,
 antimeridian in the middle of the table and the seam far off its west and
 east edges; the bake splits nothing at 180° and merges Natural Earth's own
 splits there (§3). Grid convergence is real in this projection (true north
-leans 13° at Midway, 1° at Guadalcanal); labels and box placements take it
-from `proj.convergenceAt([lon, lat])`.
+leans 15° at Midway and 17° at Pearl Harbor, 1° at Guadalcanal); labels and
+box placements take it from `proj.convergenceAt([lon, lat])`.
 
 **A box on the table.** Each box is rendered in its own frame (metres, origin
 at its centre) and placed on the table by the manifest's `placement`: the
@@ -214,9 +215,9 @@ clock by id and the app can format by arithmetic (never by IANA zone names,
 whose 1940s Pacific history is approximate):
 
 ```jsonc
-{ "id": "usn-z+12", "offset": "-12:00", "name": "zone plus 12, Midway time", "side": "us", "used": "CINCPAC and the shore forces at Midway; the Naval War College analysis" }
-// also: jst (+09:00), usn-z+10 (−10:00, the carriers at Midway), usn-z-11 (+11:00, Guadalcanal), usn-z-12 (+12:00, ONI's battleship action),
-// usn-item (+09:00, Samar), hst-1941 (−10:30), hwt (−09:30), malaya-1941 (+07:30), ...
+{ "id": "usn-zp12", "offset": "-12:00", "name": "zone plus 12, Midway time", "side": "us", "used": "CINCPAC and the shore forces at Midway; the Naval War College analysis" }
+// also: jst (+09:00), usn-zp10 (−10:00, the carriers at Midway), usn-zm11 (+11:00, Guadalcanal: Morison, ONI Part I, the box), usn-zm12 (+12:00, ONI Part III and the US primaries of 14–15 November),
+// usn-item (+09:00, Samar), hst-1941 (−10:30), hwt (−09:30, Hawaiian war time from 9 February 1942), malaya-1941 (+07:30), ...
 ```
 
 `places.json`:
@@ -236,7 +237,7 @@ whose 1940s Pacific history is approximate):
 ```jsonc
 { "id": "midway-1942", "title": "The Battle of Midway", "gloss": "four carriers in one day",
   "ja": { "kanji": "ミッドウェー海戦", "romaji": "Middowē kaisen" },
-  "when": { "from": "1942-06-04T04:30-12:00", "to": "1942-06-07T05:01-12:00", "precision": "minute", "clock": "usn-z+12",
+  "when": { "from": "1942-06-04T04:30-12:00", "to": "1942-06-07T05:01-12:00", "precision": "minute", "clock": "usn-zp12",
             "zoneNote": "the US Navy's zone plus 12 is UTC−12 (ISO offset −12:00); Japanese reports keep Tokyo time, 21 hours ahead, so their date is 5 June" },
   "chapter": "turn",
   "where": [ { "place": "midway", "role": "near" }, { "place": "midway-sea-kido-butai", "role": "fleet" } ],
@@ -247,8 +248,7 @@ whose 1940s Pacific history is approximate):
   "zoom": ["table", "box"],           // table: a pin; box: it has a battle box
   "box": "midway",                    // the box id, or null
   "summary": "one paragraph, present tense, no counts",
-  "stops": [ { "text": "...", "place": "midway", "zoom": "table" },
-             { "text": "...", "zoom": "box", "t": "10:22", "camera": { "target": "kaga", "bearing": 200, "pitch": 0.45, "distance": 4000 } } ],
+  "stops": [ { "text": "...", "place": "midway", "zoom": "table" } ],   // table stops only; a box's stops live in its battle.json (§9) and the tour walks them there
   "sources": [ { "id": "ussbs-campaigns", "where": "pp. 60–71" } ],
   "confidence": { "date": "firm", "place": "firm", "numbers": "soft" },
   "tellings": [ { "source": "...", "says": "..." } ],
@@ -256,25 +256,32 @@ whose 1940s Pacific history is approximate):
 ```
 
 - **`when`** is ISO 8601 with an offset on every instant that has one.
-  `precision` is `minute | hour | day | month`. `zone` is the clock the card
-  shows, which is the record's clock for that event (R2 D1, R3's rule,
-  RESEARCH.md §§2–3): local civil time of the place for things ashore; the
-  battle's named clock for things at sea (Midway: zone +12; Guadalcanal: zone
-  −11; Samar: Item, which is also Tokyo time; Pearl Harbor: Hawaiian time,
-  UTC−10:30), with `zoneNote` where the two sides' clocks differ. **Any timed
+  `precision` is `minute | hour | day | month | year` (`year` for the things
+  that ran for years: the "comfort women" system, Unit 731). `clock` is the
+  id, in `clocks.json`, of the clock the card shows, which is the record's
+  clock for that event (R2 D1, R3's rule, RESEARCH.md §§2–3): local civil
+  time of the place for things ashore; the battle's named clock for things at
+  sea (Midway: `usn-zp12`; Guadalcanal: `usn-zm11`; Samar: `usn-item`, which
+  is also Tokyo time; Pearl Harbor: `hst-1941`), with `zoneNote` where the two
+  sides' clocks differ. The offset in the instant and the clock's offset must
+  agree, and the check says so when they do not. Clock ids are kebab-case
+  like every id (`usn-zp12` for the navy's "zone +12", `usn-zm11` for "zone
+  −11"). **Any timed
   thing taken from a source keeps the source's own reading beside the
   absolute instant**: `{ "t": "...", "sourceClock": "0722", "sourceZone":
   "+09:00", "sourceDate": "1942-06-05", "source": "nagumo-1947" }`, so a
   conversion can be checked. The app stores UTC internally and shows the
   card's zone. `check-data` refuses an instant without an offset.
-- A `box` event's stops with `zoom: "box"` carry `t`, a battle-clock time in
-  the box's zone, and a `camera` in the box's terms (a `target` unit id or
-  `[lon, lat]`, a compass `bearing`, a `pitch` 0..1 as the Hawaiian stops, a
-  `distance` in metres).
+- An event's `stops` are table stops only (`place`, `zoom: "table"`,
+  `text`); the stops that walk a battle on its clock are the box's own, in
+  `battle.json` (§9), so that content and battles never write the same
+  thing twice.
 - `kind: bombing | atrocity | captivity | people` events are always `flag:
   cards`: never a box, never a stop below `table` (§10 enforces). An event
-  with no single honest place (the comfort system) has no pin and opens from
-  its chapter's list (R3 D13).
+  with no single honest place (the "comfort women" system) has no pin and
+  opens from its chapter's list (R3 D13). The Bengal famine of 1943 is in,
+  as a `cards` event of kind `other`, with its tellings (the designer's
+  call on R3 §11).
 - `when.from` and `when.to` are written in the civil date of the place, as
   the record kept there writes it; `when.alt` may give the other side's date
   where it differs (`[{ "clock": "jst", "from": "1942-06-05" }]`).
@@ -291,7 +298,7 @@ whose 1940s Pacific history is approximate):
   "access": "open",                   // open | lending | print | paywalled
   "opened": true, "read": "part",     // read: full | part | title
   "language": "en",                   // en | ja | en (tr. from ja) | fr | nl
-  "licence": "pd-us-gov",             // pd-us-gov | pdm | cc-by | cc-by-nc | cc-by-sa | nids-permission | copyright-cite-only | unknown
+  "licence": "pd-us-gov",             // pd-us-gov | pdm | cc-by | cc-by-nc | cc-by-sa | odbl | nids-permission | copyright-cite-only | unknown
   "ref": "OPNAV-P-03-100",            // the archive's own reference: a JACAR RefCode, a NAVPERS/OPNAV number, a CINCPAC serial, a DOI
   "tertiary": false,
   "note": "..." }
@@ -329,9 +336,10 @@ The Hawaiian "Routes" section holds, with these vocabularies:
   against `table/coast.json` except within 10 km of its ends and except a
   `strike` or `lane` in the air (`medium: "air"`), which may cross land. A
   `drive` is schematic and may cross anything.
-- Every `fleet` route of a battle that has a box must also appear, at finer
-  resolution, as a unit track in that box's `battle.json`; the check compares
-  the two at the battle's start.
+- A route carries `units: [...]`, the ids of the box units whose tracks it
+  stands for, where the battle has a box; every `fleet` route of such a
+  battle must then agree with those units' tracks at the battle's start,
+  and the check compares the two (within 20 km).
 
 ## 6. The front
 
@@ -388,7 +396,7 @@ The sea is never filled.
     "id": "midway", "name": "Midway", "event": "midway-1942",
     "bounds": [west, south, east, north], "size": [W, H], "metresPerTexel": [mx, mz],   // east may exceed 180
     "projection": { "kind": "tangent", "lon0": 181.0, "lat0": 30.0, "unit": 1 },
-    "placement": { "centre": [x, z], "jacobian": [[a, b], [c, d]], "convergenceDeg": -13 },   // on the table, §1
+    "placement": { "centre": [x, z], "jacobian": [[a, b], [c, d]], "convergenceDeg": -15.0 },   // on the table, §1 (−15.0° at Midway, −17.1° at Pearl Harbor, +1.2° at Guadalcanal, +2.7° at Samar for the 141.5°E 7°N centre)
     "height": { "file": "boxes/midway/height.png", "scale": 0.25, "offset": -11000 },
     "exaggeration": 1.0,                           // one constant for the renderer and the sim alike; never varies with the camera
     "sea": "gmrt",                                 // gmrt | etopo15: which supplied the sea floor
@@ -399,6 +407,12 @@ The sea is never filled.
                  { "id": "gmrt", "title": "Global Multi-Resolution Topography synthesis (Ryan et al. 2009)", "url": "https://www.gmrt.org/", "licence": "cc-by-4.0", "credit": "GMRT, CC BY 4.0, resampled and clamped" } ],
     "credit": "Terrain produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Sea floor: GMRT (Ryan et al. 2009), CC BY 4.0, resampled." } ] }
 ```
+
+The Pearl Harbor box's `sources` add NOAA's CUDEM (public domain, with its
+citation) for the harbour and south shore, and its berths F-6 to F-8 and the
+wrecks, placed from OpenStreetMap, carry `licence: "odbl"` with the
+"© OpenStreetMap contributors" credit on the briefing footer and in
+NOTICE.md; its `credit` line names CUDEM, GLO-30 and GMRT.
 
 The same strings live in the package's `NOTICE.md` and in the app's
 Sources and credits panel (ENGINEERING.md §11), so the notice travels with
@@ -421,45 +435,86 @@ a fork or a download of the data.
   15″ where GMRT fails or the box is open ocean; never shallower than −1 m at
   a sea texel, and never land (GMRT's land is wrong by hundreds of metres;
   R1 §3.1).
-- Oʻahu's box (`pearl-harbor`) is the Hawaiian app's Oʻahu pack's footprint
-  at its native 68 m (copied, with its sources), with GMRT for the sea a few
-  tens of kilometres out; the carriers 200 nautical miles north stay off the
-  box and the strikes enter at its edge (R9 E7).
+- **A box pack is baked for its battle's date.** Fill, dredging, piers and
+  runways built after the date are taken out at bake time where the record
+  gives them (the Hawaiian app's dated patch works for Oʻahu: Ford Island's
+  fill is present in 1941, Kuahua's 1943 extension and the later drydocks
+  and piers are not), so a box needs no patches at runtime.
+- The `pearl-harbor` box (R10 D1–D3) is an island box of about 103 × 100 km,
+  bounds `[201.45, 21.15, 202.45, 22.05]` (158.55°W to 157.55°W), at 2048
+  (about 50 m), with the carriers 374 km north off the box: the two waves
+  enter at its north edge at about 07:28 and 08:30 and the table draws the
+  launch and the carriers' track. Its land comes from the finest source on
+  each part: NOAA's CUDEM 1/9″ topobathymetry over the harbour and the
+  south shore (the two tiles the Hawaiian district bake used, downloaded
+  and deleted by the bake; the one exception to GLO-30-only, because the
+  lochs and Battleship Row are the sortie's ground and GLO-30 is a surface
+  model too coarse for them), GLO-30 elsewhere, GMRT for the sea. Its clock
+  runs 06:30 to 10:00 Hawaiian time (`-10:30`), which holds Ward's attack and
+  the whole air attack; Nevada's move to Waipiʻo at 10:35 is a card.
 - Every v1 box is sized so that every coast seen from the action lies
   inside it (Ironbottom Sound holds Guadalcanal's north coast and Savo's
   surroundings; Samar's box holds the island's east coast), because beyond
   a box's pack the ground is a flat deep sea.
-- Boxes are listed in `tools/check/ids.json` with their `lon0`, `lat0`,
-  bounds and size before the bake runs; the bake may refine bounds by less
-  than a texel's worth and reports it.
+- **The four v1 boxes**, frozen in `tools/check/ids.json` (the bake may
+  square a grid by less than a texel's worth and reports it; each holds
+  every unit's track with 10 km to spare and every coast seen from the
+  action; longitudes continuous, east of 180 written above 180):
+
+  | id | lon0, lat0 | bounds [w, s, e, n] | size | clock (id, offset) | from, to | why these edges |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | `midway` | 181.15, 30.0 | [179.3, 27.8, 183.0, 32.2] | 2048 (~240 m) | `usn-zp12`, −12:00, "Midway time (zone +12)" | 04:00, 18:00 | the atoll (28.2°N 177.37°W) for Tomonaga's strike and the shore groups; the Kidō Butai at 04:00 near 31.5°N 179.6°E; TF 17 at noon near 30.9°N 176.8°W |
+  | `pearl-harbor` | 201.95, 21.6 | [201.45, 21.15, 202.45, 22.05] | 2048 (~50 m) | `hst-1941`, −10:30, "Hawaiian time" | 06:30, 10:00 | R10 D1: the island and its waters; the carriers 374 km north stay off the box and the waves enter at its north edge |
+  | `ironbottom-sound` | 159.9, −9.2 | [159.333, −9.583, 160.45, −8.833] | 2048 (~60 m) | `usn-zm11`, +11:00, "zone −11 (Guadalcanal)" | 1942-11-14 20:00, 1942-11-15 03:30 | the union of R5 D13 and R1's box: Washington's turns at 159°29′–31′E, Savo, Guadalcanal's north coast, Nggela and Tulagi (160.15°E) |
+  | `samar` | 126.08, 11.54 | [125.333, 11.0, 126.833, 12.083] | 1024 (~160 m) | `usn-item`, +09:00, "Item (zone −9)" | 06:15, 10:45 | R5 D13's edges with the west edge moved to 125°20′E so Samar's coast is inside; the clock ends before the attack on St. Lo at about 10:50 |
+
+  A clock that crosses midnight (Ironbottom Sound) writes `from` as a full
+  instant and times after midnight as `24:07` or full instants (§9).
 - The box's size is set by the record: it must hold every unit's track from
   the battle clock's `from` to `to` with 10 km to spare; the check enforces
   it.
 ## 8. Kits
 
-`kits/ships.json` and `kits/aircraft.json`: arrays, hand-written from R6's
-tables (RESEARCH.md §6), every number with a source id in `sources`. The app
-builds the models from these alone (`src/battle/kits/`). Units name a kit by
-its `id`; a unit may override `name`, `ja`, `hull`, `colour` and `aa`.
+`kits/ships.json`, `kits/aircraft.json` and `kits/weapons.json`: arrays,
+hand-written from R6's tables (RESEARCH.md §6) and R7's numbers (§7), every
+number with a source id in `sources`. The app builds the models from these
+alone (`src/battle/kits/`). Units name a kit by its `id`; a unit may override
+`name`, `ja`, `hull`, `colour` and `aa`. Kit ids are frozen in
+`tools/check/ids.json` for every class and type the four v1 boxes use, the
+auxiliaries and the shore-based and float aircraft included.
+
+`kits/weapons.json`, keyed by R6's ids, so a number lives in one place:
+
+```jsonc
+{ "id": "us-16in-45-mk6", "kind": "gun", "calibreMm": 406, "shellKg": 1225, "mvMs": 701, "maxRangeM": 33741, "rofRpm": 2, "formFactor": 1.30, "sources": [ ... ] }
+{ "id": "jp-25-t96", "kind": "aa", "calibreMm": 25, "lambdaBarrel": 1.5e-4, "rangeM": 2000, "roundsPerS": 2.3, "sources": [ ... ] }   // ENGINEERING.md §5's AA hazard
+{ "id": "mk15-mod0", "kind": "torpedo", "calibreMm": 533, "warheadKg": 224, "settings": [ { "speedKn": 45, "rangeM": 5500 }, { "speedKn": 33.5, "rangeM": 9150 }, { "speedKn": 26.5, "rangeM": 13700 } ],
+  "armRunM": 400, "failRate": [ { "from": "1941-12", "to": "1943-06", "rate": null, "note": "verify: no source reached" } ], "sources": [ ... ] }
+{ "id": "type-91-m2", "kind": "torpedo", "air": true, "dropSpeedKn": 160, "dropAltM": 20, "warheadKg": 205, "speedKn": 42, "rangeM": 2000, "note": "the shallow-water fit of Pearl Harbor", "sources": [ ... ] }
+{ "id": "us-1000lb-an-m65", "kind": "bomb", "massKg": 454, "sources": [ ... ] }
+```
 
 A ship kit:
 
 ```jsonc
-{ "id": "kaga", "class": "Kaga", "type": "cv",                 // bb | cv | cvl | cve | ca | cl | dd | de | ss | ap | pt
-  "nation": "japan", "ships": ["Kaga 加賀"],
+{ "id": "kaga", "class": "Kaga", "type": "cv",                 // bb | cv | cvl | cve | ca | cl | dd | de | ss | ss-midget | ap | ar | ao | cm | av | ah | ag | pt
+  "side": "jp", "ships": ["Kaga 加賀"],                         // side codes as events (§4): jp | us | uk | au | nz | nl | ...
   "loa": 247.6, "beam": 32.5, "draught": 9.5, "displacement": { "standard": 38200, "full": 42500 },
-  "speedKn": 28, "turn": { "tacticalDiameterM": 900, "rudderS": 12 },     // tacticalDiameterM: at speed; rudderS: seconds hard-over to hard-over
+  "speedKn": 28, "turn": { "tacticalDiameterM": 900, "rudderS": 30, "turnPrecision": "rule" },     // tacticalDiameterM: at speed; rudderS: seconds hard-over to hard-over (30 battleships and carriers, 20 cruisers, 15 destroyers where unsourced)
   "hull": { "bow": "straight", "sheer": 0.5, "freeboard": [14, 11], "stern": "cruiser" },
   "blocks": [                                                 // the silhouette, bow to stern; `at` is the fraction of loa from the bow, `side` for off-centre blocks
     { "kind": "flight-deck", "at": [0.02, 1.0], "w": 30.5, "h": 1.2 },
     { "kind": "island", "at": 0.45, "side": "starboard", "w": 6, "l": 18, "h": 10 },
     { "kind": "funnel", "shape": "downturned", "at": 0.5, "side": "starboard", "h": 8 } ],
-  "guns": [ { "role": "main", "calibreMm": 200, "turrets": 0, "mounts": 10, "barrels": 1, "at": [0.55, 0.6, 0.65, 0.7, 0.75], "side": "both",
-              "rangeM": 26700, "rofRpm": 3, "shellKg": 110, "mvMs": 835, "traverseDegS": 4, "elevationDeg": [-5, 25] } ],
-  "aa": [ { "kind": "127mm", "mounts": 8, "barrels": 2 }, { "kind": "25mm", "mounts": 11, "barrels": 2 } ],   // as of the battle's date; a unit may override
-  "torpedoes": null,                                          // or { "tubes": 2, "barrels": 4, "type": "type-93" }
+  "guns": [ { "role": "main", "weapon": "jp-20cm-50-3rd", "turrets": 0, "mounts": 10, "barrels": 1, "at": [0.55, 0.6, 0.65, 0.7, 0.75], "side": "both",
+              "traverseDegS": 4, "elevationDeg": [-5, 25], "arcDeg": [30, 150] } ],   // ballistics come from the weapon; the mount's own numbers stay here
+  "aa": [ { "weapon": "jp-127-t89", "mounts": 8, "barrels": 2 }, { "weapon": "jp-25-t96", "mounts": 11, "barrels": 2 } ],   // as of the battle's date; a unit may override
+  "torpedoes": null,                                          // or { "tubes": 2, "barrels": 4, "weapon": "type-93-m1", "reloads": 1 }
+  "shp": 127400, "shpPrecision": "sourced",                   // sourced | estimated: the speed model's time constant needs it
   "armour": { "beltMm": 152, "deckMm": 38 },
-  "fatal": 0.8,                                               // the damage (0..1) at which the ship is lost; calibrated so the record's hits sink what the record sank
+  "displacementFullT": 42500,                                 // metric tonnes, for the speed model's time constant (R7 §4.4)
+  "crippledAt": 0.5, "fatal": 1.0,                            // the fight track's crippling point and the float track's sinking point (ENGINEERING.md §5)
+  "systems": ["rudder", "engines", "flight-deck", "aa-fwd", "aa-aft"],   // what a hit can knock out
   "aircraft": 72,
   "colour": { "hull": "ijn-kure-grey", "deck": "wood", "measure": null, "deckMarking": "hinomaru-forward" },
   "silhouette": { "source": "oni-41-42", "where": "p. ..." },  // the recognition manual the blocks were drawn from
@@ -475,23 +530,50 @@ A ship kit:
 - Turret positions are explicit in `guns[].at` so Yamato's two forward and
   one aft, Fusō's six along the length and Nelson-style layouts all come from
   data.
-- Speeds are knots, dimensions metres, masses tonnes and kilograms as named;
-  the app converts.
+- Speeds are knots, dimensions metres, masses metric tonnes (long tons ×
+  1.016, the original kept in `notes`) and kilograms as named; the app
+  converts.
+- **Numbers and silhouettes come from different places** (R6 D1–D2): every
+  physical number is a post-war figure with its source; the block positions
+  were measured off the public-domain recognition plates (ONI 41-42, ONI
+  222-J, FM 30-50, TAIC No. 1) to about ±0.02 of the length where a plate
+  exists. A kit carries `blocksPrecision: "measured" | "estimated"`; the
+  estimated rows (Yamato, Agano, Fubuki, Sims, Benham, Nevada, Tennessee,
+  South Dakota, Iowa, Essex, Casablanca, John C. Butler, Omaha) are flagged
+  on the briefing's sources line until a person reads a print plan
+  (ACCESS.md). The manuals' own captions and images are never reproduced.
+- Where no turning figure was found, `turn.tacticalDiameterM` follows the
+  rule 3.0–3.3 × loa for battleships, 3.5 × for cruisers and carriers, 4 × for
+  destroyers, and `rudderS` 30 s, marked `"turnPrecision": "rule"` (R6 D10).
+- A torpedo in `weapons.json` carries its dated failure rate (`failRate:
+  [{ "from": "1941-12", "to": "1943-06", "rate": 0.65 }, ...]` for the Mark 13;
+  the Type 93's early prematures; R6 D6), applied for the battle's date and
+  named on the after-card where it mattered; a rate no source gives is
+  `null` with a `note`, and the engine's config carries a *verify* default.
+- An aircraft kit's `aero` block holds what the flight model and its tests
+  need (R7 §4.2): wing area, the parabolic polar (`cd0`, `clMax`, `k`), the
+  g limit, the speeds at which the airframe shakes and breaks, the dive
+  flaps' or brakes' drag, and a roll-rate table against true airspeed, so
+  the Zero rolls fast slow and slow fast.
+- At Midway every US aircraft flies `star-no-red` (the order of 15 May
+  1942); the check holds insignia to their dates.
 
 An aircraft kit:
 
 ```jsonc
-{ "id": "sbd-3", "name": "Douglas SBD-3 Dauntless", "ja": null, "type": "dive",   // fighter | dive | torpedo | level | patrol | bomber
-  "nation": "usa", "crew": 2,
-  "span": 12.66, "length": 10.09, "height": 4.14, "weightKg": { "empty": 2905, "loaded": 4245 },
-  "engine": { "kind": "radial", "hp": 1000 },
+{ "id": "sbd-3", "name": "Douglas SBD-3 Dauntless", "ja": null, "type": "dive",   // fighter | dive | torpedo | level | patrol | bomber | float
+  "side": "us", "crew": 2,
+  "span": 12.66, "length": 10.09, "height": 4.14, "weightKg": { "empty": 2905, "loaded": 4245 }, "wingM2": 30.2,
+  "engine": { "kind": "radial", "hp": 1000, "ratedAltM": 4900 },
   "speedKmh": { "max": 402, "atAltM": 4900, "seaLevel": 365, "cruise": 298, "stall": 125, "diveLimit": 560 },
   "climbMs": 6.5, "ceilingM": 7780, "rangeKm": 1790, "enduranceS": 1800,   // enduranceS: how long a sortie may run before fuel ends it (sortie time, not the real endurance)
   "fatal": 1.0,
-  "handling": { "rollDegS": 60, "turnS": 24, "note": "perforated dive flaps hold a 70° dive near 450 km/h" },
-  "guns": [ { "calibreMm": 12.7, "count": 2, "position": "nose", "rounds": 360 }, { "calibreMm": 7.62, "count": 2, "position": "rear", "rounds": 2000 } ],
-  "payload": [ { "kind": "bomb", "massKg": 454, "count": 1 }, { "kind": "bomb", "massKg": 45, "count": 2 } ],
-  "torpedo": null,                                            // or { "type": "type-91", "dropSpeedKn": 160, "dropAltM": 50, "armRunM": 200 }
+  "aero": { "cd0": 0.030, "clMax": 1.4, "k": 0.06, "gLimit": 6, "vShakeMs": 150, "vBreakMs": 175, "diveDrag": 0.12,   // the polar and limits of ENGINEERING.md §5's flight model (R7 §4.2), estimates marked in notes
+            "rollTable": [[60, 55], [90, 60], [120, 50], [150, 35]] },                                            // [true airspeed m/s, deg/s]
+  "handling": { "turnS": 24, "note": "perforated dive flaps hold a 70° dive near 450 km/h" },
+  "guns": [ { "weapon": "us-50cal-m2", "count": 2, "position": "nose", "rounds": 360 }, { "weapon": "us-30cal-an-m2", "count": 2, "position": "rear", "rounds": 2000 } ],
+  "payload": [ { "weapon": "us-1000lb-an-m65", "count": 1 }, { "weapon": "us-100lb-an-m30", "count": 2 } ],
+  "torpedo": null,                                            // or { "weapon": "type-91-m2" }: the drop envelope lives on the weapon
   "shape": { "wing": "low", "tail": "single", "canopy": "long-frame", "gear": "retract", "cowl": "radial", "dihedral": 8 },
   "colours": [ { "from": "1942-01", "to": "1943-02", "upper": "blue-grey", "lower": "light-grey", "insignia": "star-no-red" } ],
   "sources": [ { "id": "sac-sbd-3", "where": "..." } ] }
@@ -527,32 +609,41 @@ The record's beats are data; the sim fills in between them.
                     "tellings": [ { "source": "parshall-tully-2005", "says": "..." } ] },
                   { "t": "10:25", "kind": "fire" },
                   { "t": "19:25", "kind": "sinks", "sources": [ ... ] } ],
+      "hangarHazard": [ { "t": "04:00", "h": 0.3 }, { "t": "10:20", "h": 0.8 } ],   // carriers: fuelled and armed aircraft below, by the clock, from the record (ENGINEERING.md §5)
       "fate": { "kind": "sunk", "t": "19:25" } },
     { "id": "dd-nowaki", "kit": "kagero", "side": "japan", "name": "Nowaki", "ja": "野分",
       "station": { "guide": "akagi", "bearingDeg": 45, "rangeM": 2500 } } ],
 
   "groups": [
-    { "id": "vb-6", "kit": "sbd-3", "side": "usa", "name": "Bombing Six", "count": 15, "from": "enterprise",
+    { "id": "kaga-torpedo-1", "kit": "b5n2", "side": "jp", "name": "Kaga's torpedo unit", "count": 12, "from": "kaga", "offBox": true,   // a carrier 374 km north: the group enters at the box's edge
+      "enter": { "t": "07:28", "lonlat": [202.0, 22.04], "headingDeg": 190, "altM": 3000 }, "attack": { ... } },
+    { "id": "vb-6", "kit": "sbd-3", "side": "us", "name": "Bombing Six", "count": 15, "from": "enterprise",
       "launch": "07:06", "altM": 5800,
       "route": [ { "t": "07:45", "lonlat": [...], "altM": 5800 }, { "t": "09:55", "lonlat": [...], "altM": 5800 } ],
-      "attack": { "t": "10:22", "target": "kaga", "profile": "dive", "fromDeg": 200, "pushOverM": 4500, "releaseM": 600 },
+      "attack": { "t": "10:22", "target": "kaga", "profile": "dive", "fromDeg": 200, "pushOverM": 5800, "releaseM": 760,
+                  "reached": [13, 15] },                      // how many of the group reached the release in the record: the group rule scales scripted counts against this (ENGINEERING.md §5)
       "losses": [ [7, 9] ], "recover": { "t": "11:50", "to": "enterprise" }, "sources": [ ... ] },
     { "id": "cap-akagi-1020", "kit": "a6m2", "side": "japan", "count": 12, "from": "akagi", "launch": "09:50",
       "attack": { "t": "10:15", "profile": "cap", "altM": 300, "target": "vt-3" } } ],
+
+  "sites": [                                                   // things on the ground that are not units: airfields, hangars, drydocks, AA positions, quays (R10 D11)
+    { "id": "ford-island-hangars", "kind": "hangar", "lonlat": [...], "side": "us", "target": true, "damage": 0 },
+    { "id": "hickam-barracks", "kind": "building", "lonlat": [...], "side": "us", "target": false } ],   // buildings with people are terrain: never a target, never scored
 
   "stops": [ { "t": "10:20", "text": "...", "camera": { "target": "kaga", "bearingDeg": 200, "pitch": 0.5, "distanceM": 6000 } } ],
 
   "moments": [
     { "id": "vb6-kaga", "title": "Bombing Six pushes over on Kaga", "ja": null,
       "role": { "kind": "aircraft", "kit": "sbd-3", "side": "usa", "group": "vb-6", "name": "a Dauntless of Bombing Six" },
-      "t": "10:21:30", "durationS": 180, "timeScale": 1,
-      "start": { "from": "kaga", "bearingDeg": 200, "rangeM": 3000, "altM": 4500, "speedMs": 70, "headingDeg": 20 },
+      "t": "10:21:30", "durationS": 180, "timeScale": 1, "maxTimeScale": 4,     // durationS is real seconds to the checkpoint; the battle span is durationS × timeScale
+      "start": { "from": "kaga", "bearingDeg": 200, "rangeM": 3000, "altM": 5800, "speedMs": 78, "headingDeg": 20 },   // the record's climbing approach, about 115 knots true at altitude
       "objective": { "kind": "dive", "target": "kaga", "text": "Put a thousand-pound bomb on Kaga's flight deck." },
       "beats": [ { "t": "10:22:00", "text": "The first section pushes over." }, { "t": "10:24:00", "text": "Kaga is burning from the island aft." } ],
       "record": { "hits": [ { "unit": "kaga", "count": [4, 5], "window": ["10:22", "10:26"] } ] },
       "after": { "text": "...", "sources": [ ... ], "tellings": [ ... ] } },
-    { "id": "washington-kirishima", "role": { "kind": "ship", "unit": "washington", "side": "usa" },
-      "t": "23:58", "durationS": 720, "timeScale": 2, "objective": { "kind": "gunnery", "target": "kirishima", "text": "..." }, "...": "..." } ],
+    { "id": "washington-kirishima", "role": { "kind": "ship", "unit": "washington", "side": "us" },
+      "t": "23:58", "durationS": 360, "timeScale": 2, "maxTimeScale": 4,       // 12 battle minutes to the checkpoint at 00:10
+      "objective": { "kind": "gunnery", "target": "kirishima", "text": "..." }, "...": "..." } ],
 
   "sources": [ { "id": "nagumo-report", "where": "..." } ] }
 ```
@@ -576,22 +667,43 @@ Rules:
   no player role may be the cause of its events: Arizona, Oklahoma and Utah
   at Pearl Harbor), `hospital: true` with `target: false` (Solace), or
   `tokko: true` (a tokkō aircraft or unit, never a player role; its attack
-  is drawn as the record's track and hit). A unit past its kit's `fatal`
-  is never a target (ENGINEERING.md §5).
+  is drawn as the record's track and hit; the midget submarines of Pearl
+  Harbor count as such on the Japanese side, R10 D9). A unit past its kit's
+  `fatal` is never a target (ENGINEERING.md §5).
+- `sites` are the ground's own things (airfields, hangars, drydocks, quays,
+  AA positions): a `start.from` or an attack `target` may name one; a site
+  with `target: false` (barracks, tents, hospitals, towns) registers and
+  scores nothing. Aircraft on the ground are units with a `parked` station
+  at a site.
 - Event `kind` vocabulary: `hit | torpedo-hit | near-miss | fire | flood |
-  list | dead-in-water | explodes | sinks | scuttled | launches | recovers |
-  turns | opens-fire | ceases-fire | smoke | searchlight | starshell | signal |
-  sighted | withdraws | aground | other`. A `hit`, `torpedo-hit`,
-  `near-miss`, `opens-fire`, `launches` or `scuttled` carries `by` (a group
-  or unit id): the cause the sim checks before it fires the event
-  (ENGINEERING.md §5, the authority rule). A `hit` carries `count` as a
+  list | dead-in-water | explodes | sinks | scuttled | abandoned | launches |
+  recovers | turns | opens-fire | ceases-fire | torpedoes-fired | smoke-screen
+  | searchlight | illuminated | starshell | steering-jammed | power-failure |
+  radar-lost | collision | signal | sighted | withdraws | aground | other`. A
+  `hit`, `torpedo-hit`, `near-miss`, `opens-fire`, `torpedoes-fired`,
+  `illuminated`, `launches` or `scuttled` carries `by` (a group or unit id):
+  the cause the sim checks before it fires the event (ENGINEERING.md §5, the
+  authority rule). A `torpedoes-fired` carries `count`, `speedKn` and
+  `target`, so a scripted spread runs in the water and the player can be its
+  target (Ayanami's at 23:30, Atago's at 00:03, Johnston's at about 07:20). A
+  `smoke-screen` carries a start point, a length and a duration, and drifts
+  with the weather's wind; a squall in `weather.squalls` may carry a
+  `velocity` so it moves. A `hit` carries `count` as a
   range, `where`, `damage` (the share of the target's `fatal` it does, so the
   record's hits sink what the record sank), sources and tellings where the
   tellings differ. A `sinks`, `explodes` or `dead-in-water` carries nothing
   but its time and sources: whether it happens is the damage model's call.
 - A group's `attack.profile`: `dive | torpedo | level | strafe | cap |
   escort | search`. `losses` are ranges. A group with no `route` flies a
-  straight line from its `from` unit's position at `launch` to its attack.
+  straight line from its `from` unit's position at `launch` to its attack. A
+  group whose carrier or field is off the box carries `offBox: true` and an
+  `enter` point (time, position on the box's edge, heading, altitude); such
+  groups and their `from` are exempt from the box-holds-tracks check, and
+  the table draws their launch as a route.
+- A moment's role may carry a descriptive `name` ("a Dauntless of Bombing
+  Six", "a Type 97 carrier attack aircraft of Kaga's torpedo unit") that
+  contains no personal name; the check holds it against `places`' and the
+  record's named people.
 - A moment's `role` names a `kit` that exists and either a `unit` (a ship)
   or a `group` (an aircraft within it), never a person (no `pilot` or
   `name`: "an SBD of Bombing Six"), never a `tokko` unit, never the first
@@ -606,8 +718,17 @@ Rules:
   `after` has text and at least one opened source, and its text speaks of
   the record only; the outcome of the player's battle is computed, never
   written.
-- `timeScale` is 1 for aircraft moments; ship moments may use 2 or 3
-  (DESIGN.md §5.5); nothing else.
+- `timeScale` is 1 for aircraft moments, 2 for ship gunnery, 3 for torpedo
+  runs and helm (4 for a helm-only moment longer than twenty battle minutes,
+  or split it); `maxTimeScale` bounds the player's own compression (ships 4
+  or 8, aircraft 4; 32 is reserved for flying home after the checkpoint) and
+  the sim drops back to `timeScale` when a threat appears (ENGINEERING.md
+  §5). Johnston's torpedo moment runs to 07:31 so the 07:27 hit on Kumano
+  and the 07:30 shells fall inside it.
+- A group's `attack.reached` is the range of how many of it reached the
+  release or the drop in the record; every scripted count the group causes
+  is scaled against it (ENGINEERING.md §5, the group rule). A carrier unit
+  carries `hangarHazard` by the clock.
 - The copy rules of §4 hold for every text field.
 
 ## 10. What the check covers
@@ -649,14 +770,16 @@ exits 1 with a list of problems:
 - credits: every box manifest that uses GLO-30 carries the licence's
   "produced using" notice and its liability sentence verbatim, and every
   one that uses GMRT its citation and "resampled" (DESIGN.md §13, R8 §6.6);
-- `kind: massacre | internment | bombing` events have no `box` and no stop
-  below `table`; no moment's `role` is on a `kamikaze` or `tokko` group
+- `kind: bombing | atrocity | captivity | people` events have no `box` and
+  no stop below `table`; no moment's `role` is on a `tokko` unit or group
   (`attack.profile` has no such value, and a group named so fails);
 - routes keep to the sea as §5; fronts are valid polygons inside the table
   (§6); each box holds its tracks (§7); every kit cited; every insignia
   dated (§8);
-- the table pack decodes and its land fraction is plausible (between 10 and
-  20 per cent of the texels over the theatre); each box pack decodes and its
+- the table pack decodes and its land fraction is plausible (R1 measured
+  22 to 28 per cent over the theatre's boxes with ETOPO alone; the projected
+  rectangle adds India and Central Asia, so the band is 18 to 35 per cent,
+  tightened to the first bake's figure ±3); each box pack decodes and its
   coastline agrees with `coast.json` within two texels at the box's edge.
 
 Warnings (printed, not failing): an event with no `ja` whose `sides` include

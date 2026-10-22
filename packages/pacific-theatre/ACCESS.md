@@ -37,6 +37,9 @@ host answers to a person with a browser.
 | ndlsearch.ndl.go.jp OpenSearch | 429 (concurrent-access limit) | NDL catalogue search (the NDL Lab API works) |
 | api.github.com | 403 (proxy policy) | repository metadata for the Natural Earth GeoJSON mirrors (the naciscdn zips serve instead) |
 | HyperWar IJO Nav 83 and Nav 106 | 404 | two USSBS interrogations covering Savo, Midway, Leyte and Santa Cruz |
+| [wwiiaircraftperformance.org](http://www.wwiiaircraftperformance.org/) | 403 | the flight-test reports behind the aircraft kits' speeds, climbs and roll rates |
+| [shipcamouflage.com](http://www.shipcamouflage.com/) | a JavaScript challenge | the SHIPS-2 camouflage instructions: the US ships' measures at each battle's date, now *verify* |
+| BuShips War Damage Report 51, plate V (Johnston); the *Escort Carriers* report's Section III (Gambier Bay); the US Naval Technical Mission to Japan's ship reports | not reached on any open host | the hit plots behind Johnston's and Gambier Bay's damage; Japanese ship data at first hand |
 | navweaps.com, Japanese torpedo page | bot check to curl (read via WebFetch) | the Type 91's drop speed and height are not given there anyway |
 
 ## Archive requests
@@ -65,7 +68,8 @@ host answers to a person with a browser.
 | Prange, *At Dawn We Slept* (1981); Goldstein and Dillon, *The Pearl Harbor Papers* (1993); Zimm, *Attack on Pearl Harbor* (2011) | the torpedo drop height and speed at Pearl Harbor; the attack geometry from the Japanese planning documents; Zimm's analysis of the bomb that sank Arizona |
 | Cressman et al., *A Glorious Page in Our History* (1990) | the Japanese CAP and Hiryū's position as the Japanese sources tell it |
 | Spurr, *A Glorious Way to Die* (1981); Yoshida, *Requiem for Battleship Yamato* | Ten-Gō from the Japanese side; the VT-9 and VT-17 aircraft action reports it cites |
-| Evans and Peattie, *Kaigun* (1997); Lacroix and Wells, *Japanese Cruisers of the Pacific War* (1997); Skulski's *Anatomy of the Ship* volumes (Yamato, Fusō, Takao); Garzke and Dulin; Friedman's *US Battleships*, *US Cruisers*, *US Destroyers*, *US Aircraft Carriers* | the kits' dimensions, turret positions and AA fits by date, now taken from the recognition manuals and Wikipedia as *verify* |
+| Evans and Peattie, *Kaigun* (1997); Lacroix and Wells, *Japanese Cruisers of the Pacific War* (1997); Skulski's *Anatomy of the Ship* volumes (Yamato, Fusō, Takao); Garzke and Dulin; Friedman's *US Battleships*, *US Cruisers*, *US Destroyers*, *US Aircraft Carriers* | the kits' dimensions, turret positions, tactical diameters and AA fits by date, now taken from the recognition manuals and Wikipedia as *verify*; above all **a plan of Yamato**, of which no public-domain plate was reached, and of the Agano, Iowa, Essex, South Dakota, Casablanca and John C. Butler classes, whose block rows are estimates (R6 D2, D8) |
+| Lundgren, *The Last Stand of the Tin Can Sailors* companion analyses and his Kirishima paper (navweaps.com, read); the Petrel survey of Kirishima (2019) | a person to read the survey's own report, which decides between 9 and about 20 hits |
 | Toll, Prange, Willmott, Ienaga, Dower, Hastings | the table's cards for the war as a whole |
 | USF-74, *Current Tactical Orders and Doctrine, U.S. Fleet Aircraft* (1941, 1944) | not digitised (NARA RG 38): the dive and torpedo doctrine the attack profiles now take from the targets' reports |
 
@@ -85,8 +89,12 @@ host answers to a person with a browser.
 | FABDEM (bare-earth Copernicus DEM) | reachable, but CC BY-NC-SA 4.0 | a canopy-free Guadalcanal and Samar; share-alike would bind the committed packs, so it is not used |
 | the U.S. Army Map Service 1940s sheets | reachable at UT Austin's PCL (`maps.lib.utexas.edu/maps/ams/`), public domain, not yet read | period shorelines and the 1940s names of the Solomons, the Philippines and the Marianas; Pearl Harbor's 1941 shore |
 | the AAF history's maps 6 and 7 (*7 December 1941: The Air Force Story*) | reachable on HyperWar, not opened | the plotted routes of the two waves over Oʻahu |
+| CINCPAC's Enclosure A harbour chart and ComBatShips' berthing plan for 7 December 1941 | reachable in the hearings, not georeferenced | the exact berths F-3 to F-5 and the 1010 Dock, now `schematic` (the F-5 quays were rebuilt in 1943–44 and 1992); a person to georeference one chart (R10 D14) |
+| NOAA CUDEM 1/9″ topobathymetry, tiles `ncei19_n21x50_w158x00` and `…w158x25` | reachable (159 and 144 MB), as the Hawaiian district bake used them | the Pearl Harbor box's harbour at ship scale; the bake downloads and deletes them |
+| the TAIC No. 1 and ONI 41-42 page images where the OCR lost a number (the B5N2's length, the Jill's torpedo weight, several ranges) | reachable on archive.org | a person to read the page images (R6) |
 | the Naval War College's Diagrams D-1 and D-2 for Midway and its Japanese-disposition plates | reachable on archive.org, not opened | positions from 04:30 to 09:00, now from the text only |
 | Snyder, *Map Projections: A Working Manual* (USGS PP 1395) | reachable (22.5 MB), not downloaded | page numbers for the projection formulas, which were checked numerically instead |
+| a nautical almanac (USNO or the Nautical Almanac) for the four battle dates | not consulted | the sun's and the moon's times at each box, Ironbottom Sound on 14–15 November 1942 above all, against the app's low-precision ephemeris (R9) |
 
 ## Permission, not access
 

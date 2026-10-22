@@ -30,15 +30,22 @@ this app.
 
 ## The table's relief, and the boxes' sea floor where GMRT was not used: ETOPO 2022
 
-NOAA National Centers for Environmental Information (2022), *ETOPO 2022 15
-Arc-Second Global Relief Model*, doi:10.25921/fd45-gt74. Public domain (US
+NOAA National Centers for Environmental Information (2022), *ETOPO 2022
+Global Relief Model* (the 60 arc-second grid for the table, the 15
+arc-second tiles in the boxes), doi:10.25921/fd45-gt74. Public domain (US
 government work).
 
-## Oʻahu (the Pearl Harbor box)
+## Pearl Harbor's harbour and south shore: NOAA CUDEM
 
-The land of the Pearl Harbor box is the Hawaiian diorama's Oʻahu pack,
-produced from the USGS 3D Elevation Program (public domain) with GMRT for
-the sea; its own `sources` are carried in `boxes/manifest.json`.
+NOAA National Centers for Environmental Information, *Continuously Updated
+Digital Elevation Model (CUDEM), 1/9 arc-second resolution bathymetric-
+topographic tiles* (Hawaiʻi), public domain (US government work); resampled
+and set back to the shore of 1941 on the dated record of the harbour's
+works. The rest of the Pearl Harbor box is Copernicus WorldDEM-30 as above.
+
+The berths F-6 to F-8 and the wrecks of Arizona and Utah were positioned
+from OpenStreetMap: © OpenStreetMap contributors, Open Database License
+(ODbL).
 
 ## Coastlines and positions on the table: Natural Earth
 

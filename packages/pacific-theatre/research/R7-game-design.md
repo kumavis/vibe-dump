@@ -54,28 +54,28 @@ survey table's "basis" column.
 4. **"Fatal" needs two tracks, not one number.** Kaga was finished by 10:25
    and sank at 19:25; Yorktown survived three bombs at 12:05 and was steaming
    at 19–20 knots by 14:00; South Dakota took 26 hits on 15 November and came
-   home; Kirishima took 9 or 20 heavy hits and capsized about two and a half
-   hours later. One 0..1 "damage" with a single `fatal` threshold cannot
+   home; Kirishima took 9 or 20 heavy hits and capsized hours later (03:25 by
+   Wikipedia's clock). One 0..1 "damage" with a single `fatal` threshold cannot
    produce all four. Recommended: a **fight** track (what the ship can still
    do) and a **float** track (whether it sinks), with a **doomed** state and
    a sinking time, and on carriers a **hangar hazard** (fuelled and armed
    aircraft below) that decides whether bomb fires run away. Per-hit values
    and calibration tests are in §4.8.
 5. **AA can be a calibrated hazard, not ballistics.** COMINCH's own 1945
-   summary gives "rounds per bird" by weapon (5-inch common 960, 5-inch VT
-   470–624, 40 mm 2,272–3,361, 20 mm 8,972–15,139, 1.1-inch 2,231–7,152;
+   summary gives "rounds per bird" by weapon (5-inch common 960–1,162, 5-inch VT
+   310–624, 40 mm 2,272–3,361, 20 mm 8,972–15,139, 1.1-inch 2,231–7,152;
    *opened*) and a planning table of 60 % of attackers lost to CAP and a third
    of the rest to AA. Turned into a kill rate per barrel per second and scaled
    by era, alertness and how the fire is shared, it gives **27 %** for a D3A
    diving on Yorktown (the record: about 2 of the 7 that dived), **2–3 %** for
-   an SBD over Kaga at 10:22 (the record: AA "slow to start", few losses over
-   the target), **31 %** for a B5N's run on Yorktown at 14:43, and **10 %**
+   an SBD over Kaga at 10:22 (the record: "little anti-aircraft fire", NWC via
+   R4; few losses over the target), **31 %** for a B5N's run on Yorktown at 14:43, and **10 %**
    for a first-wave torpedo plane at Pearl Harbor (*computed*, §4.6). AA
    rounds become tracer for the eye only.
-6. **The drafts' ship acceleration is two to four times too quick.** From
+6. **The drafts' ship acceleration is two to four and a half times too quick.** From
    displacement, shaft horsepower and top speed, the time constant of a
    battleship's speed is 150–220 s (90 % of full speed from rest in 220–320
-   s), a fleet carrier's 140–165 s, a heavy cruiser's about 70 s and a
+   s), a fleet carrier's 95–185 s, a heavy cruiser's about 70 s and a
    destroyer's 36–40 s (*computed*). ENGINEERING has "BB 90 s, CV 60 s, CA
    45 s, DD 25 s to 90 %". Keep physics: ships start at the record's speed,
    the helm matters more than the telegraph, and at 2–3× the felt times halve
@@ -118,7 +118,7 @@ survey table's "basis" column.
     were published in Japan by Spike (Famitsu 27/40 and 30/40 for Midway, 29/40
     for Pacific). Medal of Honor: Rising Sun's Japanese edition removed the
     hinomaru from the box logo and the rising-sun flag from the titles and
-    re-recorded the Japanese soldiers' shouts. Call of Duty: World at War had
+    "substantially changed" the Japanese soldiers' shouted lines. Call of Duty: World at War had
     no Japanese release until a 2024 storefront listing. World of Warships
     removed the rising-sun naval ensign from every server in 2015 and flies
     the national flag on Japanese ships instead (ja.wikipedia, *opened*).
@@ -150,16 +150,19 @@ survey table's "basis" column.
   the US Naval Technical Mission to Japan reports as NavWeaps quotes them),
   the battle damage from Robert Lundgren's analyses on NavWeaps, roll rates
   from NACA Report 868, and AA effectiveness from COMINCH P-009 on HyperWar.
-- Computed what the sources did not tabulate, with three scripts in
-  `research/r7-scripts/`: `ballistics.py` (times of flight), `aero.py`
-  (stall, turn and climb from weight, wing and power), `gunnery_mc.py` (hit
-  probability per shell) and `aa_calib.py` (AA kill probability). Each
-  prints its inputs; rerun them to change an assumption.
-- Downloads are under `research/downloads/R7/` and small, except one
-  duplicate NACA scan (110 MB) that came down by mistake and was deleted at
-  once; the 8.9 MB copy used is kept.
+- Computed what the sources did not tabulate, with six small scripts in
+  `research/r7-scripts/`: `ballistics.py` and `tof_table.py` (times of
+  flight), `aero.py` (stall, turn and climb from weight, wing and power),
+  `ship_dyn.py` (ship time constants), `gunnery_mc.py` (hit probability per
+  shell) and `aa_calib.py` (AA kill probability). Each prints its inputs;
+  rerun them (with `python3 -I`) to change an assumption.
+- Downloads are under `research/downloads/R7/` as text extracts (about 4 MB
+  in all): the HTML pages and PDFs were converted to text and deleted, and
+  page 40 of NACA 868 is kept as an image (`naca_p-45.png`). One duplicate
+  NACA scan (110 MB) came down by mistake and was deleted unread.
 
 ---
+
 ## 2. The precedents
 
 ### 2.1 At a glance
@@ -170,8 +173,8 @@ marked *verify* is a claim I could not check.
 | game (year) | what it is | scale and time | control and aiming | damage | camera, structure | basis |
 | --- | --- | --- | --- | --- | --- | --- |
 | **Battlestations: Midway** (Eidos Hungary, 2007) | action plus real-time tactics: command a fleet on a map, or take any unit | map compressed; ranges short (a Battlestations: Pacific achievement asks for a battleship kill "at over 2800 meters", search snippet only, *verify*); weapons restock over time (Pacific, O) | ships: speed steps, rudder, a reticle with zoom; "fire torpedoes ahead and behind ships to bracket them"; aircraft: "learn to lead ships with bombs" (IGN, O); dual-stick on pad | ship repair screen for "leakages, fires, mechanical issues or weapons failure" (Eurogamer, O) | chase; tactical map; 11 missions, 1-hour tutorial, no checkpoints; 40-minute missions | O+M |
-| **Battlestations: Pacific** (2009) | the sequel; a US campaign and a Japanese "what if" campaign | as above | as above; Ohka and Kaiten playable (O) | ships "split in two" (O) | checkpoints added but no restart from them in-game (Eurogamer, O) | O |
-| **World of Warships** (Lesta/Wargaming, 2015–) | PvP naval arcade | ships about **2×** too big for the map, maps 24–48 km square (O); speeds and shell times "creative licence" (bit-tech preview via search, *verify*; the often-quoted 5.22 and 2.61 factors not found) | throttle in six steps (W/S), rudder held (A/D) or set in steps (Q/E) that stays until countered; shell time shown under the crosshair; horizontal dispersion = R(km)×10+60 m for US battleships, ×7.2+84 for Japanese (O); torpedo "white cone" lead aid, narrow/wide spread (O) | hit points; fires 0.3 %/s for 60 s (battleships) or 30 s, four fire zones; floods 0.25–0.5 %/s for 40 s and −30 % speed (O) | third person; matches about 20 min | O |
+| **Battlestations: Pacific** (2009) | the sequel; a US campaign and a Japanese "what if" campaign | as above | as above; Ohka and Kaiten playable (O) | ships "split in two" (O) | checkpoints added, but a restart from the last one only from the main menu, not the pause screen (Eurogamer, O) | O |
+| **World of Warships** (Lesta/Wargaming, 2015–) | PvP naval arcade | ships about **2×** too big for the map, maps 24–48 km square (O); speeds and shell times "creative licence" (bit-tech preview via search, *verify*; the often-quoted 5.22 and 2.61 factors not found) | throttle in six steps (W/S), rudder held (A/D) or set in steps (Q/E) that stays until countered; shell time shown under the crosshair; horizontal dispersion = R(km)×10+60 m for US battleships, ×7.2+84 for Japanese (O); torpedo "white cone" lead aid, narrow/wide spread (O) | hit points; fires 0.3 %/s for 60 s (battleships) or 30 s, four fire zones; floods 0.25–0.5 %/s for 40 s and −30 % speed (O) | third person; matches about 20 min (memory) | O+M |
 | **War Thunder**, naval and air arcade (Gaijin) | PvP combined arms | ships near true scale; arcade ships get "a large boost to engine power and traverse speed"; torpedo speed **×3 up to 4 km**, falling to ×1 at 8 km (O) | naval arcade: "will always aim where your cursor is pointed", gunners auto-correct range after a close hit, horizontal targeting ×2 (O); air arcade: lead marker, no spin or structural failure, ammunition replenished in the air (O); mouse aim through an "instructor" that blocks stalls and spins (forum reports, O; mechanism *verify*) | ship crew and compartments, fire and flooding as player actions (dev blog via search, *verify*) | air spawns in the air near the fight (M) | O+M |
 | **Task Force 1942** (MicroProse, 1992) | surface actions around Guadalcanal, either side | campaign on a map, battles in time compression (M) | bridge stations; star shell, searchlights and radar at night (M, *verify*) | — | Dragon gave it "X" because it would not install (O) | O+M |
 | **Great Naval Battles** (SSI, 1992–95; Vol. II is Guadalcanal) | fleet command plus individual ship stations | — | "individual ship views and fleet command views ... individual stations" (O); Vol. III's air combat "problematic" (O) | — | — | O |
@@ -219,8 +222,8 @@ AI flies or steers the rest. What reviewers said, verbatim (*opened*):
 - On what worked: "Bombing runs never get old"; "you learn to lead ships
   with bombs and to lead enemy fighter planes with your guns ... to fire
   torpedoes ahead and behind ships to bracket them"; "the slow-lumbering
-  turning radius of carriers"; "no slowdown even with 40 planes in the air"
-  (IGN, Midway, Xbox 360). "Seeing a good couple of dozen planes flying in
+  turning radius of carriers"; "there isn't any slowdown even with 40 planes in
+  the air" (IGN, Midway, PC). "Seeing a good couple of dozen planes flying in
   formation ... literally filling the sky - and then scattering as you swoop
   in" (GamesRadar, the part that loaded).
 - The scale itself: map scale, weapon ranges and time compression were not
@@ -337,7 +340,7 @@ situation in the briefing rather than the controls in a tutorial.
 | Reception of that | Eurogamer: "Opening, rather boldly, with the bombing of Pearl Harbor, to which you contribute, it's a welcome addition"; Game Informer: a "peculiar direction" few Americans would want, reliving "the bombing of Pearl Harbor from the eyes of the aggressors" | O |
 | Kamikaze | Battlestations: Pacific made the Ohka and Kaiten playable units; Game Informer: the Japanese campaign's appeal is mostly "giving a kamikaze plane a test run". Pacific Theatre never offers the role (owner's rule), and the check rejects a tokkō group as a role (DATA §10) | O |
 | Japan: Battlestations | Midway ported and published by Spike, 7 February 2008, Famitsu one six and three sevens (27/40), Famitsu X360 30/40; Pacific by Spike, 28 May 2009, Famitsu 29/40 | O |
-| Japan: Medal of Honor: Rising Sun | Japanese edition: the hinomaru removed from the package logo; the sixteen-ray rising-sun flag removed from the demo and opening titles; Japanese soldiers' shouted lines "substantially changed"; ja.wikipedia lists the game's misunderstandings (sword charges, a Zen garden in a Thai temple, a carrier named "Toshikaze" against the IJN's naming rules) | O |
+| Japan: Medal of Honor: Rising Sun | Japanese edition: the hinomaru removed from the package logo; the sixteen-ray rising-sun flag removed from the demo and opening titles; Japanese soldiers' shouted lines "substantially changed" (translated); ja.wikipedia lists the game's misunderstandings (sword charges, a Zen garden in a Thai temple, a carrier named "Toshikaze" against the IJN's naming rules) | O |
 | Japan: Call of Duty: World at War | "日本語版は未発売" (no Japanese release); on the Microsoft Store with Japan-region support from 24 December 2024 | O |
 | Japan: World of Warships | after a 2015 dispute the rising-sun ensign was removed from all servers under a guideline on historical symbols; Japanese ships fly the national flag; Wargaming's CEO: an entertainment, not a place for political argument, "even if it becomes historically inaccurate"; anime collaborations (Arpeggio of Blue Steel, High School Fleet, Azur Lane) | O |
 | Japan: other | Secret Weapons Over Normandy 30/40 (EA, PS2); Blazing Angels 27/40; Kantai Collection's huge success drew a South Korean charge of glorifying the IJN and Japanese replies (Japan Times; an Asahi piece arguing its permanent sinkings teach war's brutality) | O |
@@ -353,6 +356,7 @@ should hold kit names to the IJN's naming rules), and decide the ensign
 question once (D13).
 
 ---
+
 ## 3. Where the drafts are wrong, inconsistent or short of numbers
 
 Numbered for reference; each points to the recommendation that fixes it.
@@ -374,8 +378,9 @@ Numbered for reference; each points to the recommendation that fixes it.
    doomed state and a hangar hazard (§4.8). Keep `fatal` as the float
    threshold and add `crippledAt`.
 3. **Ship acceleration constants (ENGINEERING §5 ships).** "BB 90 s, CV 60 s,
-   CA 45 s, DD 25 s to 90 %" are 2.5–3.5 times faster than displacement and
-   power allow (§4.4 table). Use the physical values; the time scale already
+   CA 45 s, DD 25 s to 90 %" are 2.2–4.5 times faster than displacement and
+   power allow (§4.4 table: battleships 221–323 s, carriers 142–272 s,
+   cruisers 107–125 s, destroyers 54–59 s to 90 % from rest). Use the physical values; the time scale already
    compresses them.
 4. **Evasion bound.** An earlier draft had ±30° in the authority rule and
    ±20° in `cap.js`; the current ENGINEERING (re-read 22 October, after it
@@ -436,8 +441,15 @@ Numbered for reference; each points to the recommendation that fixes it.
     gun range of 18,500 yards" in her battle with Kirishima, which may be the
     23:17 opening on the Sendai group (*opened*, all three). One hour apart is
     a zone; the range difference is a telling.
+14. **`durationS` and the Washington example (DATA §9).** DATA's rule is
+    that `t + durationS × timeScale` falls inside the clock, so `durationS`
+    is real seconds; the Washington example (`durationS: 720`, `timeScale: 2`)
+    then spans 24 battle minutes, 23:58 to 00:22, not DESIGN §3.4's 23:58 to
+    00:10. Either set it to 360 or say which. §5's table gives battle span
+    and real time separately to avoid the ambiguity.
 
 ---
+
 ## 4. Recommendations for v1
 
 ### 4.1 World scale inside a box
@@ -533,8 +545,10 @@ converted (160 mph = 72 m/s, 240 = 107, 300 = 134, 380 = 170).
 
 **Characters this produces, and should keep:** the Zero turns a full circle
 seven seconds faster than a Wildcat or a P-40 but rolls at about half the
-P-40's rate above 300 km/h; the Wildcat out-dives and out-rolls it fast;
-the P-40 rolls best of all and turns worst; the SBD with its bomb is slow
+P-40's rate above about 400 km/h indicated; the Wildcat out-rolls it fast and
+dives with less fear (a higher dive limit, *verify*: one forum claim found in
+search says US tests showed the F4F-4 could not out-dive a Zero); the P-40
+rolls best of all and turns about as badly as the Wildcat; the SBD with its bomb is slow
 and wide, and light and lively after release. A playability multiplier of
 1.2 on roll rates is acceptable; flattening the curves is not.
 
@@ -555,9 +569,9 @@ Direct WASD flying stays available.
   (the doctrinal figure, *verify*; Akagi's lookouts saw 50°). From 4,500 m to
   a 600 m release at 110–125 m/s the dive lasts **about 35–40 s**: the
   "forty seconds of dive" of DESIGN §1 is right.
-- **The bomb.** From 600 m at 125 m/s and 70° the bomb falls for **4.4 s**
-  and travels 190 m forward of the release point (computed, drag ignored);
-  Kaga at 28 knots moves 63 m in that time, a quarter of her length. So the
+- **The bomb.** From 600 m at 125 m/s and 70° the bomb falls for **4.3 s**
+  and travels 185 m forward of the release point (computed, drag ignored);
+  Kaga at 28 knots moves 62 m in that time, a quarter of her length. So the
   aim point must lead the bow on a crossing target and sit short on one
   steaming toward the diver.
 - **The cue.** Every frame, integrate the bomb from the current state to the
@@ -608,7 +622,8 @@ says happened.
 
 ### 4.4 The ship model
 
-**Speed.** `m·dV/dt = Tmax·(u − (V/Vmax)²)` with `u` the telegraph (−0.6 to 1),
+**Speed.** `m·dV/dt = Tmax·(u − (V/Vmax)²)` with `u` from the telegraph
+(`u = (Vordered/Vmax)²`, so each step orders a speed; back full is −0.6),
 `Tmax = Peff/Vmax`, `Peff = 0.6 × shp`, `m` the full-load displacement plus 5 %
 added mass. Then `V(t) = Vmax·tanh(t/τ)` from rest with `τ = m·Vmax²/Peff`,
 and coasting with engines stopped halves the speed in `τ`. Values from
@@ -845,10 +860,11 @@ every mount that bears at the pointer's aircraft for 5 s; for that aircraft
 "burst of attention" ENGINEERING asks for, and it makes a ship's AA a
 playable role at Pearl Harbor (§5).
 
-**Japanese CAP direction without radar.** Ships "fired AA bursts and laid
-smoke to point fighters at raids" (Yorktown's VF report via R4). Draw it:
-an AI Japanese ship that sights a raid fires two bursts in its direction,
-and the CAP turns toward them. The player as a Zero sees the same bursts.
+**Japanese CAP direction without radar.** Yorktown's fighter report saw a
+Japanese ship fire two AA bursts just before 18–20 Zeros attacked VT-3 and
+its escort; R4 reads it, with smoke, as the way the Kidō Butai pointed its
+fighters at raids. Draw it: an AI Japanese ship that sights a raid fires
+two bursts in its direction, and the CAP turns toward them. The player as a Zero sees the same bursts.
 
 ### 4.7 CAP and AI behaviours the authority rule needs
 
@@ -950,8 +966,8 @@ no such strike".
 
 The kit's `fatal` stays as the `float` threshold (1.0); add `crippledAt`.
 Untouched units take the record's outcome by construction (the replay test in
-ENGINEERING §13's integration step passes because their doomed flags and sinkings come from
-`fate`); the stochastic model runs only where the player is the cause or the
+ENGINEERING §13's integration step passes because their doomed flags
+and sinkings come from `fate`); the stochastic model runs only where the player is the cause or the
 target, and its *expected* result is what the calibration below checks.
 
 **Per hit** (fight / float), penetrating hits, starting values to tune in the
@@ -988,9 +1004,9 @@ magazine zone inside 10 km (estimate): a flash, the ship breaks, `float` = 1.
 | **Yorktown**, 14:43 | two Type 91 torpedoes on the port side; list 17°, then 23°, then about 26°; abandoned from 15:14; afloat until I-168's torpedoes on 6 June | float 0.36, list about 20° growing with the holes; power lost (system); abandoned at list ≥ 20°; not sunk |
 | **Kirishima**, 15 November | nine 16" and forty 5" hits (Horishi, consistent with Lee's eight) or 20 heavy and 17 secondary (Ikeda's sketch, which Lundgren prefers); rudder jammed; turned 500° to port; capsized about 03:25 (Wikipedia) | nine heavy (three below the waterline) and forty 5": fight 0.75, float 0.30 and three holes: crippled at once, capsizes about three hours later; twenty heavy: out of action at once, float 0.68 and seven holes: capsizes within one to three hours depending on patching. Both tellings capsize her that night |
 | **South Dakota**, same night | 26 hits: one 14", eighteen 8", six 6", one 5", mostly superstructure (BuShips via Lundgren) | fight about 0.35 plus radar, fire control and radio systems out: blind but afloat and steaming |
-| **Johnston**, 07:30 | three heavy AP (three 14-inch from Kongō in the older telling; three 18.1-inch from Yamato in the current Wikipedia text, which calls the Kongō version a "myth") and three 6-inch or 6.1-inch; speed to 17 knots, power to the 5-inch lost and restored to two mounts within ten minutes; fought on; dead in the water near 09:40; sank 10:10 | over-penetrating heavy AP 3 × 0.06 plus 3 × 0.07 = fight 0.39, float 0.09; systems: engine room (speed cap 17 knots), 5-inch power (repair 10 minutes), gyro. Afloat and fighting; the later 5"–8" hits (twenty-odd) bring `fight` past 1 and the waterline holes sink her within half an hour |
+| **Johnston**, 07:30 | three heavy AP (three 14-inch from Kongō in the older telling; three 18.1-inch from Yamato in the current Wikipedia text, which calls the Kongō version a "myth") and three 6-inch or 6.1-inch; speed to 17 knots, power to the 5-inch lost and restored to two mounts within ten minutes; fought on; dead in the water near 09:40 (*verify*); sank 10:10 | over-penetrating heavy AP 3 × 0.06 plus 3 × 0.07 = fight 0.39, float 0.09; systems: engine room (speed cap 17 knots), 5-inch power (repair 10 minutes), gyro. Afloat and fighting; the later 5"–8" hits (twenty-odd) bring `fight` past 1 and the waterline holes sink her within half an hour |
 | **Kumano**, 07:27 | one Mark 15 forward: "blew off her entire bow"; 12 knots | Mark 15 forward: bow lost (speed cap 12 knots), fight 0.10: out of the fight, afloat |
-| **Gambier Bay** | hit repeatedly by 8-inch from about 08:10; sank about 09:07–09:11 | over-penetrating 8" AP 0.04 each and a few HE: 20–25 hits to the end, which is the order the record describes (*verify* the count) |
+| **Gambier Bay** | hit repeatedly by 8-inch from about 08:10 (memory, *verify*); sank at 09:11 (Wikipedia's Johnston article) | over-penetrating 8" AP 0.04 each and a few HE: 20–25 hits to the end, which is the order the record describes (*verify* the count) |
 
 That Johnston survived three battleship shells and Kaga did not survive four
 bombs is the point of the model: armour-piercing shells pass through thin
@@ -1171,3 +1187,330 @@ sim keeps every unit. Under SwiftShader (the smoke test) expect a few frames
 a second; it must not throw (ENGINEERING §0).
 
 ---
+
+## 5. The v1 moments, with numbers
+
+Times on each battle's clock (R4 for Midway and Pearl Harbor; DESIGN §3.4
+for the others; R5 owns the record of Guadalcanal and Samar). "Span" is
+battle time to the checkpoint; "real" is what the player spends at the
+default scale.
+
+| battle | moment (role, kit) | start | scale | span → real | the numbers that make it | the threat (calibrated) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Midway | VB-6 or VS-6 on Kaga (SBD-3) | 10:21:30; 4,500–5,800 m, 3 km from Kaga bearing 200°, 75–80 m/s true | 1× | 180 s → 3 min | dive 35–40 s; release 600–760 m; bomb falls 4.3 s; pull-out loses about 225 m at 5 g | AA 2–3 % per dive; no fighters at altitude (R4); the danger is fuel on the way home |
+| Midway | VB-3 on Sōryū (SBD-3) | 10:24:30; 14,500 ft out of the sun, south-east | 1× | 180 s → 3 min | release about 2,500 ft (the record's average) | as above; "the first plane to dive received no anti-aircraft fire" |
+| Midway | Hiryū's CAP against VT-3 (A6M2) | 10:09 (or 10:17, so the dive begins overhead) | 1× | 300 s → 5 min | the Zero's 14 s turn against the F4F's 21 s; 60 rounds per 20 mm gun (about 7 s of fire) | six F4F above VT-3; VT-3's rear guns |
+| Midway | Thach's escort (F4F-4) | 10:05 | 1× | 300 s → 5 min | 240 rounds per gun, about 18 s of fire; the Zero cannot roll with you above 300 km/h | 15–20 Zeros (VF-3's count) |
+| Midway | Hiryū's D3A on Yorktown (D3A1) | 11:59; about 20 miles west-south-west, climbing through 8,000–10,000 ft | 1× | 360 s → 6 min | the curved approach, the 60° position angle at 6,000–8,000 ft, release about 500 ft (R4) | the CAP intercepts 15–20 miles out; AA 27 % in the dive |
+| Midway | the F4F CAP over Yorktown (F4F-4) | 11:59; 10,000 ft over TF 17, vectored 250° | 1× | 300 s → 5 min | each D3A you down subtracts from the seven that dived (§4.7) | four Zeros as top cover; running out of ammunition (the record) |
+| Midway | Tomonaga's torpedo run on Yorktown (B5N2) | 14:38; 10–14 miles out, about 5,000 ft, descending | 1× | 300 s → 5 min | drop at about 730 m; 34 s to the target; the anvil | AA 31 % on the run plus the CAP |
+| Pearl Harbor | first-wave torpedo run on Battleship Row (B5N2) | about 07:56; 3 km south-east over the tank farm, 30–50 m, 75 m/s | 1× | 180 s → 3 min | drop at 300–500 m inside the envelope; pull out at about 300 ft (CINCPAC via R4) | AA 10 % (alert 0.45) |
+| Pearl Harbor | a D3A over Ford Island or Hickam (D3A1) | 07:55 (first wave) or 08:50 (second) | 1× | 240 s → 4 min | release 450 m or lower | AA 2–5 % in the first wave, 18–22 % in the second (calibrate to the losses by type, *verify*) |
+| Pearl Harbor | Welch and Taylor's P-40s from Haleʻiwa (P-40B) | about 08:30, toward ʻEwa (AAF via R4) | 1× | 300 s → 5 min | the P-40 rolls at 95°/s fast and turns worst; dive away, never turn | A6Ms strafing and covering; friendly AA |
+| Pearl Harbor | a ship's AA (a destroyer or a battleship's .50s and 5"/25s) | 07:55–08:10 | 1× | 300 s → 5 min | direct the battery (Space) at one attacker for 5 s: share 1 | the attack itself; alertness ramps as the crew closes up |
+| Pearl Harbor | Nevada's sortie down the channel (helm) | 08:40 | 3× (or 4×) | 1,800 s → 10 min (7.5 at 4×); or split at 08:50 | τ about 300 s: she is slow to gather way; the channel's width | second-wave D3As on her in the channel |
+| Guadalcanal | Washington's bridge and main battery | 23:58 (the design's clock; Lundgren's 01:00) | 2× | 720 s → 6 min | first salvo at 8,400 yd, 12 s of flight; 39 rounds in 2 min 39 s, a check of 1 min 30 s, 36 more in 2 min 45 s | Kirishima's 36 cm and the Japanese cruisers' torpedoes |
+| Guadalcanal | Kirishima's bridge and main battery | the same | 2× | 720 s → 6 min | South Dakota lit by Atago's searchlights at close range (about 5,000 m, *verify* with R5); Kirishima's 36 cm takes about 7 s at that range, 11 s at 8,400 yd | AI Washington: 20–26 % hits at 8,400 yd unless you turn or change speed (the solution resets) |
+| Guadalcanal | a destroyer of either van | about 23:22 | 2× | 600 s → 5 min | 5"/38 at 15 s to 8,000 yd; Type 93 at 49 knots | Nagara's group: Preston hit "some nine times", her magazines ignited; Walke and Benham lost their bows to torpedoes; Gwin hit in the engine room (Wikipedia) |
+| Samar | Yamato's main battery on Taffy 3 | 06:58 | 2× | 720 s → 6 min | about 32 km (*verify*): 60 s of flight, 30 s felt; yellow dye; a 35 s loading cycle; turrets train at 2°/s | rain squalls and smoke; the solution's error of 2–2.7 % of range |
+| Samar | Johnston's torpedo run on Kumano | 07:10 | 3× (4× offered) | **extend to 07:31**: 1,260 s → 7 min (5¼ at 4×) | the Mark 15 at 26.5 knots needs 11.5 minutes for 9,400 m; the record's hit is at 07:27 and Yamato's salvo on Johnston at 07:30, both after DESIGN's 07:25 checkpoint | CruDiv 7's 20 cm; then the 07:30 heavy shells |
+| Samar | an escort carrier's helm under fire | about 07:00 | 3× | 900 s → 5 min | τ about 270 s and 19 knots: chase the salvos, use the squalls | coloured splashes walking in; Kongō red, Yamato yellow |
+| Samar | Samuel B. Roberts's run | R5 to set | 3× | about 5 min | the 5"/38 and the Mark 15 | as Johnston |
+| Samar | a heavy cruiser of CruDiv 7 (Kumano or Chikuma) | about 07:15 | 2× | 600 s → 5 min | 20 cm at 14 s to 10,000 yd; comb Johnston's ten torpedoes (11.5 minutes in the water, visible tracks) | Johnston's 5-inch and torpedoes; aircraft from the escort carriers |
+
+Not offered as sorties, as R4 recommends: VT-8's run and the last run on a
+Yamato already on her beam ends (no sortie-terms success the record allows).
+
+---
+
+## 6. What "enter in position, a checkpoint, keep going" still cannot solve
+
+1. **The cascade.** Saving a carrier, a battleship or a strike changes what
+   the record's other units would have done, and the record cannot say what.
+   Bound it (a saved carrier launches only what the record says was ready,
+   at the contact the record gives her side; her strike meets the record's
+   CAP), and label it on the after-card. Beyond a few hours of battle time the
+   sim is writing fiction; the after-card should say so plainly and the
+   designer should consider stopping "keep going" at the next record beat
+   that no longer makes sense (for Midway, Hiryū's afternoon if Kaga still
+   flies).
+2. **Chained moments.** A moment's start state is the record's. If the player
+   has already diverged the box and takes another moment, the two can
+   contradict (a saved Kaga's aircraft in Hiryū's strike at 11:59). ENGINEERING
+   already asks, on scrubbing, whether to return to the record; make taking
+   any moment do the same: a moment always starts from the record at its `t`.
+3. **Long empty stretches after the checkpoint.** A returning SBD has 150 km
+   to fly; a saved carrier's strike takes an hour or two to arrive. Time
+   compression and a summary line ("you reach Point Option at 11:48 with
+   20 minutes of fuel") are the answer; nothing makes them exciting.
+4. **One unit cannot do what decided the battles.** Nagumo's arming orders,
+   Spruance's launch, Kurita's turn north are command decisions; the design
+   excludes them. A player who expects to "win Midway for Japan" as one Zero
+   will find the CAP's failure at 10:22 is not one Zero's to fix (by design;
+   say so in the briefing, in sortie terms).
+5. **Plausibility at the edges.** The models let an expert destroyer captain
+   at Samar put several torpedoes into Yamato, or an F4F stop every D3A.
+   The record's bounds on the AI (±30°) and the calibrated lethality keep it
+   rare, not impossible; this is the owner's rule working, but it will
+   produce after-cards that read as alternative history.
+6. **Fairness under 2–3×.** A player's reaction time is real-time; the
+   world runs at double or triple speed. Torpedo combing and evasion at 3×
+   are harder than they were. The auto-drop to the default when a torpedo is
+   within 3 km mitigates it; the player's time controls can always go down to
+   1×.
+7. **Night readability for a casual player.** A radar plot read at 2× in the
+   dark is hard; the Guided aids help but the fight will remain the hardest
+   of the four to enjoy cold.
+8. **Cross-browser replays.** A seeded sim replays exactly in one browser,
+   not necessarily across engines (§3, item 12).
+9. **Calibration debt.** The era factors (AA), the per-hit damage values and
+   the AI's solution errors are fitted to a handful of record events. Each new
+   battle adds events the fit has not seen; a later box may need new
+   factors, which means re-checking the old ones.
+
+---
+
+## 7. Decisions for the designer
+
+| # | decision | recommendation | why |
+| --- | --- | --- | --- |
+| D1 | Compress sea distance inside a box? | **No.** True sizes, true distances; readability by zoom sights, minimum on-screen sizes, markers and the plot | entering in position removes the reason; the record's ranges and times of flight stay true; WoWs compresses only to bring PvP players together |
+| D2 | Time scales | Ships 2× (gunnery) and 3× (torpedo, helm), aircraft 1× in combat; a bounded player compression (ships to 4× or 8×, aircraft to 4× in transit and 32× after the checkpoint) that drops back when a threat appears; add `maxTimeScale` to DATA §9 | the waits are shells and torpedoes in the water and empty sea; Secret Weapons let players change time at will; the auto-drop protects the moments that matter |
+| D3 | Ship acceleration | Physical time constants (§4.4), not ENGINEERING's 90/60/45/25 s | ships start at the record's speed; the helm is the control that matters; the escort carriers' and Nevada's sluggishness is the story |
+| D4 | Default flight control | Mouse-aim on keyboard and mouse; a bank-to-turn self-levelling stick on touch; direct control as an option | War Thunder and Ace Combat solved these two cases; flying with WASD is a skill most visitors do not have |
+| D5 | Aiming aids | Three levels, Guided, Standard (default), Record, as named switches; the difficulty is in the fire-control solution and the drop envelope, not in inflated dispersion | historical patterns stay true; the player still has to spot, lead and correct |
+| D6 | AI lethality | Calibrated to the record at Standard (the five AA cases of §4.6, Washington's 20–26 %); Guided halves AA and CAP against the player only | the record is the yardstick; the easy level changes only what happens to the player |
+| D7 | The group rule | Scale scripted counts by survivors ÷ the record's survivors at that beat, with a base rate for extra attackers; add `attack.reached` | the drafts' rule would cancel the record's own hits (Hiryū 7 of 18, VT-3 5 of 12) |
+| D8 | Touch controls in v1 | **Yes**, for aircraft and ships, with Guided aids and the Low quality tier by default | the intents layer makes it cheap; the alternative (table only on phones) loses the app's best part for most visitors |
+| D9 | Scoring | Sortie terms only; no points total, medals, ranks or grades; personal bests kept locally | a memorial; DESIGN §7.4's "no score in people" extends naturally to no glory |
+| D10 | Taking a moment in a diverged box | Always start the moment from the record at its `t` (ask, as scrubbing already does) | chained divergences contradict the moment's start state |
+| D11 | After the checkpoint, for aircraft | Offer "fly home" at up to 32× ending in a landing, ditching or the clock's end, or end the sortie | ditching for fuel was the commonest end in the record (R4); it is part of the story |
+| D12 | A saved carrier's strike | Allow it, bounded to what the record says was ready and the contact the record gives her side; label it "the sim's guess"; consider ending "keep going" when the record's next beats no longer apply | the owner's rule wants consequences; honesty wants the label |
+| D13 | IJN ensigns and the rising-sun flag | Do not render ensigns on the kits (at true scale a few metres of flag are invisible at most ranges) and never use the rising-sun flag as decoration; cards may show it in a sourced photograph. R8 and the owner decide | World of Warships removed it from all servers in 2015; Medal of Honor: Rising Sun's Japanese edition removed it and the hinomaru from its titles; drawing it badly would be worse than not at all |
+| D14 | Splash colours | Use the record's dye colours by day (Kirishima blue, Kongō red, Yamato yellow; the US list is 1945's, *verify* for 1942); white at night | a true detail that is also the best reading aid at Samar |
+| D15 | Night | A radar plot for US ships, a lookout plot for Japanese ships, light as information, no invented tracer colours | the battle's subject is radar against eyes |
+| D16 | Long moments | Johnston to 07:31 at 3× (or 4×) so the 07:27 hit and the 07:30 shells fall inside it; split Nevada at 08:50 or allow 4× for helm-only moments | DESIGN's 07:25 checkpoint ends with the torpedoes still running |
+| D17 | Kit names | The check should hold Japanese kit and unit names to the IJN's naming rules (from memory: battleships old provinces, heavy cruisers mountains, light cruisers rivers, destroyers weather and the sea, carriers flying creatures, converted ships keeping their old names, as Akagi and Kaga did) | Medal of Honor: Rising Sun's carrier "Toshikaze" is the example ja.wikipedia mocks |
+
+---
+
+## 8. Calibration tests to write (for `smoke-battle.mjs`)
+
+Each is a seeded batch run headless, asserted as a band, so the models stay
+tied to the record as they change:
+
+1. **AA:** 1,000 D3A dives on TF 17 at 12:05: 20–35 % lost to AA. 1,000
+   SBD dives on Kaga at 10:22: under 6 %. 1,000 B5N runs on Yorktown at
+   14:43: 22–40 % lost to AA. Pearl Harbor first-wave torpedo runs: 6–15 %.
+2. **Gunnery:** an AI Washington against a non-evading Kirishima from 8,400
+   yd, 75 rounds: 9–20 hits in 80 % of runs; against a Kirishima that turns
+   30° every 60 s: fewer than 9 in 80 % of runs. An AI Yamato against an
+   escort carrier at 30 km: 2–7 % hits.
+3. **Times of flight:** the firing tables reproduce the published ones within
+   3 % (16-inch at 5,000–35,000 yd; Yamato at 16,830–40,700 m; 5"/38 at
+   2,000–16,000 yd).
+4. **Damage:** with the record's hits applied by the stochastic model
+   (not the scripted path): Kaga doomed in at least 95 % of runs; Akagi with
+   one hit doomed in 55–90 %; Yorktown with three bombs at H 0.15 doomed in
+   under 5 % and dead in the water for 40–100 minutes; Kirishima with nine
+   heavy hits capsizes within 1–5 hours in at least 80 %; South Dakota with
+   her 26 hits afloat in at least 95 %; Johnston with her 07:30 hits afloat
+   and making at least 15 knots in at least 90 %.
+5. **Group rule:** with the player absent, every scripted count equals the
+   record's (the replay test); with three D3As removed before the dive, the
+   expected hits on Yorktown fall to about 1.7.
+6. **Flight model:** sustained 360° at 1,500 m within ±10 % of §4.2's table
+   for each kit; roll rate at the table's speeds within ±10 %; an SBD dive
+   from 4,500 m at 70° reaches 600 m in 30–45 s.
+
+---
+
+## 9. Risks
+
+1. **Unwinnable or trivial moments.** Calibrating to the record makes some
+   roles lethal (a D3A against TF 17: CAP plus 27 % AA in the dive) and
+   others nearly free (an SBD over Kaga). Playtest both ends; adjust the
+   moment's start (a D3A that starts after the CAP's interception, as one of
+   the seven that broke through) rather than the lethality.
+2. **The after-card reads as alternative history.** A saved Kaga's strike or
+   a sunk Yamato will be on screen as "your battle". The labels, the record
+   column beside it, and stopping "keep going" when the record no longer
+   applies are the mitigations (D12).
+3. **Playing the attacker at Pearl Harbor and the Japanese side generally.**
+   Precedent is mixed (Eurogamer welcomed it, Game Informer found it a
+   "peculiar direction"); the risk is tone, which is R8's. GamesRadar's review
+   of Battlestations: Midway opens: "Calling it 'the Pacific theater' always
+   seems somewhat disrespectful": a small data point about the app's chosen
+   name.
+4. **The AA era factors and damage values are fitted, not sourced.** COMINCH's
+   rounds per bird are 1944–45 US data; the 1941–42 and Japanese factors (0.5,
+   0.6, 0.85) and the estimated rates for the 25 mm, the 12.7 cm/40 and the
+   5"/25 are mine, fitted to five events. Keep them in `config.js`, cite this
+   report, and let the calibration tests carry them.
+5. **Aircraft numbers.** Most published performance figures here are *verify*
+   (R6's kits own them); the computed turn and climb come from a crude polar
+   and overstate bombers (B5N, D3A) and climbs; the roll curves are the
+   firmest numbers.
+6. **Phones.** 183 aircraft, 96 ships and burning carriers' smoke are a phone's
+   worst case; overdraw from smoke and the sea under log depth (§3, item 9).
+7. **Browser key and focus traps.** Ctrl+W, Esc and pointer lock (§3, item
+   7).
+8. **Cross-engine determinism** (§3, item 12).
+9. **Calibration drift** as boxes are added (§6, item 9).
+10. **A clock or range disagreement in the Guadalcanal record** (§3, item 13)
+    would move Washington's moment by an hour or change its opening range
+    from 8,400 to 18,500 yd, which changes the time of flight from 12 s to
+    30 s.
+
+---
+
+## 10. Notes for the other researchers and builders
+
+- **R5 (naval record):** reconcile Washington's opening time (Lundgren 01:00,
+  the design 23:58) and range (8,400 yd on Kirishima; NavWeaps' 18,500 yd);
+  Yamato's opening range at Samar; the Johnston telling (Kongō's 14-inch or
+  Yamato's 18.1-inch at 07:30); Gambier Bay's hit count; star-shell burn
+  times; tracer colours if any source gives them; the moon on 14–15 November.
+- **R6 (kits):** tactical diameters, rudder times and full-load
+  displacements for every v1 ship; aircraft climbs, dive limits and gun
+  loads; the SBD's dive speed with flaps and the D3A's with brakes; the
+  Type 91's drop envelope; turret arcs.
+- **R8 (tone):** the attacker's seat at Pearl Harbor, the ensign (D13), the
+  after-card's wording for "the sim's guess", and whether "Record" difficulty
+  is the right name.
+- **R9 (engineering):** draw calls at Pearl Harbor (hulls per kit),
+  log-depth cost on phones, cross-engine determinism, key conflicts.
+- **Engine workflow:** the scripts in `research/r7-scripts/` are the
+  reference implementations of the drag model, the polar, the gunnery Monte
+  Carlo and the AA hazard; port them to `guns.js`, `aircraft.js` and `aa.js`
+  and keep §8's tests.
+
+---
+
+## 11. Sources opened
+
+Fetched on 22 October 2026 with curl (through the proxy) or WebFetch; copies
+under `research/downloads/R7/` unless noted.
+
+**Project documents**: `BRIEF.md`; `design/DESIGN.md`, `design/ENGINEERING.md`
+(re-read after it changed on disk), `design/DATA.md` §§7–9;
+`research/R4-air-battles.md` (§0, §3.5–3.11, §4).
+
+**Games: Wikipedia article source** (`https://en.wikipedia.org/w/index.php?title=<title>&action=raw`):
+- Battlestations: Midway — https://en.wikipedia.org/wiki/Battlestations:_Midway
+- Battlestations: Pacific — https://en.wikipedia.org/wiki/Battlestations:_Pacific
+- Heroes of the Pacific — https://en.wikipedia.org/wiki/Heroes_of_the_Pacific
+- Secret Weapons Over Normandy — https://en.wikipedia.org/wiki/Secret_Weapons_Over_Normandy
+- Blazing Angels: Squadrons of WWII — https://en.wikipedia.org/wiki/Blazing_Angels:_Squadrons_of_WWII
+- Task Force 1942 — https://en.wikipedia.org/wiki/Task_Force_1942
+- Great Naval Battles — https://en.wikipedia.org/wiki/Great_Naval_Battles
+- Fighting Steel — https://en.wikipedia.org/wiki/Fighting_Steel
+- Pacific Fighters — https://en.wikipedia.org/wiki/Pacific_Fighters
+- Pacific Storm — https://en.wikipedia.org/wiki/Pacific_Storm
+- Carrier Command — https://en.wikipedia.org/wiki/Carrier_Command
+- Ace Combat 7: Skies Unknown — https://en.wikipedia.org/wiki/Ace_Combat_7:_Skies_Unknown
+- Order of Battle: Pacific — https://en.wikipedia.org/wiki/Order_of_Battle:_Pacific
+- Medal of Honor: Rising Sun — https://en.wikipedia.org/wiki/Medal_of_Honor:_Rising_Sun
+- Medal of Honor: Pacific Assault — https://en.wikipedia.org/wiki/Medal_of_Honor:_Pacific_Assault
+- Call of Duty: World at War — https://en.wikipedia.org/wiki/Call_of_Duty:_World_at_War
+- 1943: The Battle of Midway — https://en.wikipedia.org/wiki/1943:_The_Battle_of_Midway
+- Midway Campaign — https://en.wikipedia.org/wiki/Midway_Campaign
+- P.T.O. (Teitoku no Ketsudan) — https://en.wikipedia.org/wiki/P.T.O._(video_game)
+- Kantai Collection — https://en.wikipedia.org/wiki/Kantai_Collection
+
+**Japanese Wikipedia** (`https://ja.wikipedia.org/w/index.php?title=<title>&action=raw`):
+- メダル・オブ・オナー ライジングサン — https://ja.wikipedia.org/wiki/メダル・オブ・オナー_ライジングサン (the Japanese edition's changes; the depiction notes)
+- Call of Duty: World at War — https://ja.wikipedia.org/wiki/Call_of_Duty:_World_at_War ("日本語版は未発売", citing 4Gamer.net)
+- World of Warships — https://ja.wikipedia.org/wiki/World_of_Warships (旭日旗の扱い; collaborations)
+
+**Reviews**:
+- Eurogamer, Battlestations: Midway (Kristan Reed), pp. 1–2 — https://www.eurogamer.net/battlestations-midway-review and `?page=2`
+- Eurogamer, Battlestations: Pacific (Dan Whitehead), pp. 1–2 — https://www.eurogamer.net/battlestations-pacific-review and `?page=2`
+- IGN, Battlestations: Midway — https://www.ign.com/articles/2007/02/02/battlestations-midway-review
+- Game Informer, Battlestations: Pacific (through WebFetch) — https://www.gameinformer.com/games/battlestations_pacific/b/xbox360/archive/2009/09/22/review.aspx
+- GamesRadar, Battlestations: Midway (only the opening loaded) — https://www.gamesradar.com/battlestations-midway-2/
+- Subsim, Fighting Steel — http://www.subsim.com/ssr/fightst2.html
+- Steam store pages: Victory at Sea Pacific — https://store.steampowered.com/app/806950/Victory_At_Sea_Pacific/ ; Sky Rogue — https://store.steampowered.com/app/381020/Sky_Rogue/
+
+**Game mechanics wikis**:
+- World of Warships wiki (raw): Ship:Maps — https://wiki.worldofwarships.com/Ship:Maps ; Ship:Gunnery_and_Aiming — https://wiki.worldofwarships.com/Ship:Gunnery_and_Aiming ; Ship:Fire — https://wiki.worldofwarships.com/Ship:Fire ; Ship:Flooding — https://wiki.worldofwarships.com/Ship:Flooding ; Ship:Maneuvering — https://wiki.worldofwarships.com/Ship:Maneuvering ; Ship:Torpedoes — https://wiki.worldofwarships.com/Ship:Torpedoes ; Ship:Controls (downloaded, skimmed)
+- War Thunder wiki, Arcade Battles (WebFetch) — https://wiki.warthunder.com/Arcade_Battles
+- Search results only (not opened; treated as *verify*): War Thunder forum and Steam threads on mouse aim and the instructor; the bit-tech World of Warships preview; the TrueAchievements "Long-range gunnery" page.
+
+**Guns, torpedoes, damage (NavWeaps, `http://www.navweaps.com/`)**:
+- 16"/45 Mark 6 — http://www.navweaps.com/Weapons/WNUS_16-45_mk6.php (range table with times of flight; Washington and Massachusetts in action; turret rates; dye colours)
+- 46 cm/45 Type 94 — http://www.navweaps.com/Weapons/WNJAP_18-45_t94.php (range table with times of flight; dispersion; firing cycle; train 2°/s; dye)
+- 36 cm/45 41st Year Type — http://www.navweaps.com/Weapons/WNJAP_14-45_t41.php
+- 20 cm/50 3rd Year Type No. 2 — http://www.navweaps.com/Weapons/WNJAP_8-50_3ns.php (dispersion; illumination round)
+- 8"/55 Marks 12 and 15 — http://www.navweaps.com/Weapons/WNUS_8-55_mk12-15.php
+- 5"/38 Mark 12 — http://www.navweaps.com/Weapons/WNUS_5-38_mk12.php
+- 12.7 cm/50 3rd Year Type — http://www.navweaps.com/Weapons/WNJAP_5-50_3ns.php
+- 15.5 cm/60 3rd Year Type — http://www.navweaps.com/Weapons/WNJAP_61-60_3ns.php
+- 15.2 cm/50 41st Year Type — http://www.navweaps.com/Weapons/WNJAP_6-50_t41.php
+- Japanese torpedoes — http://www.navweaps.com/Weapons/WTJAP_WWII.php ; US torpedoes — http://www.navweaps.com/Weapons/WTUS_WWII.php
+- Robert Lundgren, *Kirishima Damage Analysis* (2010) — http://www.navweaps.com/index_lundgren/Kirishima_Damage_Analysis.pdf
+- Robert Lundgren, *South Dakota Damage Analysis* — http://www.navweaps.com/index_lundgren/South_Dakota_Damage_Analysis.php
+- Index of Lundgren's papers — http://www.navweaps.com/index_lundgren/index_lundgren.php
+
+**Aircraft**:
+- NACA Report 868, *Summary of Lateral-Control Research* (Toll, 1947), fig. 47 on p. 40 and table VI — https://ntrs.nasa.gov/api/citations/19930090943/downloads/19930090943.pdf (found with the NTRS search API: https://ntrs.nasa.gov/api/citations/search)
+- R. Dunn, "Zero-sen Model 21 performance: unraveling conflicting data" — https://j-aircraft.com/research/rdunn/zeroperformance/zero_performance.htm
+
+**AA effectiveness**:
+- COMINCH P-009, *Antiaircraft Action Summary: Suicide Attacks* (30 April 1945), on HyperWar — https://www.ibiblio.org/hyperwar/USN/rep/Kamikaze/AAA-Summary/index.html , chapters https://www.ibiblio.org/hyperwar/USN/rep/Kamikaze/AAA-Summary/AAA-Summary-1.html (Tables I and II) and https://www.ibiblio.org/hyperwar/USN/rep/Kamikaze/AAA-Summary/AAA-Summary-2.html (Tables V and VI, rounds per bird; weapon shares)
+
+**The record (for calibration)**:
+- USS Johnston (DD-557) — https://en.wikipedia.org/wiki/USS_Johnston_(DD-557)
+- Naval Battle of Guadalcanal — https://en.wikipedia.org/wiki/Naval_Battle_of_Guadalcanal
+- R4's report for Midway and Pearl Harbor (its own sources: Nagumo's report, NWC 1948, CINCPAC, the Yorktown and Enterprise reports, USSBS, the AAF history).
+
+**Computed** (scripts in `research/r7-scripts/`): `ballistics.py` and
+`tof_table.py` (times of flight), `aero.py` (aircraft polar), `ship_dyn.py`
+(ship time constants), `gunnery_mc.py` (hit probability), `aa_calib.py` (AA
+hazard).
+
+---
+
+## 12. What could not be reached
+
+| host or work | status | what it would have given |
+| --- | --- | --- |
+| gamespot.com reviews (Battlestations: Midway, Pacific; Pacific Storm) | 403 (WebFetch and curl) | the most-cited reviews; GameSpot's verdicts known only through Wikipedia |
+| giantbomb.com (Battlestations: Pacific review) | 403 | a third review of the Japanese campaign |
+| strategywiki.org (Battlestations: Midway weapons, ships, aircraft, controls) | 403, Cloudflare challenge | Battlestations' weapon ranges and map scale; the precedent number for distance compression |
+| mobygames.com (the arcade *Midway*) | 403, Cloudflare | which game "Midway (the 1980 Atari arcade)" is |
+| trueachievements.com (Battlestations: Pacific "Long-range gunnery") | 403 | the 2,800 m figure beyond a search snippet |
+| wwiiaircraftperformance.org (F4F, P-40, Zero trials) | 202 with a JavaScript challenge, 403 | published flight-test figures for the aircraft table |
+| archive.org Wayback availability API | 429 | archived copies of the blocked reviews |
+| old-wiki.warthunder.com | 401 | War Thunder's instructor and mouse-aim pages |
+| ja.wikipedia.org 提督の決断; en.wikipedia.org Japanese battleship Kirishima; Great Naval Battles Vol. II | 429 (rate limit) | P.T.O.'s Japanese article; Kirishima's own article; GNB II's details |
+| NTRS duplicate of NACA 868 (19930081932) | reached, 110 MB; deleted unread as oversize | — |
+| Not attempted: Famitsu's site, Japanese gaming press on Battlestations: Pacific's Pearl Harbor and kamikaze units; the USN Ship Data Books; Skulski's *Anatomy of the Ship* volumes; *Shattered Sword* | — | Japanese reception beyond scores; tactical diameters and rudder data |
+
+---
+
+## 13. Still needs a person
+
+1. **Someone who has played Battlestations: Midway or Pacific** (or can open
+   StrategyWiki in a browser) to give its weapon ranges, map sizes, ship
+   speeds and its torpedo-drop and dive-bombing cues: the precedent numbers
+   for distance compression that this report could not get.
+2. **A naval architecture reader** with the USN Ship Data Books, Skulski's
+   *Yamato*, Lacroix and Wells, or the Japanese construction records, for
+   tactical diameters, rudder times and full-load displacements (§4.4), so
+   the helm feels right ship by ship.
+3. **A flight-simulation or warbird reviewer** to sanity-check the aircraft
+   characters (§4.2): the Zero's slow-speed turn against its high-speed roll,
+   the SBD's dive with flaps, the D3A's brakes, the B5N's drop envelope.
+4. **A reader of the Japanese press** (Famitsu, 4Gamer, Game Watch) for how
+   Battlestations: Pacific's Pearl Harbor and kamikaze units and other
+   Japanese-side games were received in Japan; and **R8 with a historian on
+   each side** for the attacker's seat at Pearl Harbor and the ensign (D13).
+5. **Playtesters on phones and on integrated GPUs** for the budget (§4.14),
+   the touch controls (§4.12) and whether the calibrated lethality is fun
+   (§9, risk 1).
+6. **Whoever reconciles the Guadalcanal clock and ranges** (§3, item 13) and
+   the Johnston telling, because the moment's numbers depend on them.
+7. **Whoever verifies Pearl Harbor's losses by aircraft type and wave**, the
+   ships and aircraft present, so the AA calibration and the scene budget
+   rest on counts rather than estimates.
