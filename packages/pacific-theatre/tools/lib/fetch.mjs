@@ -11,7 +11,8 @@
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs'
-import { dirname, join, relative } from 'node:path'
+import { dirname, join, relative, resolve, sep } from 'node:path'
+import { tmpdir } from 'node:os'
 
 export function today() {
   return new Date().toISOString().slice(0, 10)
@@ -86,4 +87,31 @@ export function fetchText(url, { maxTime = 120, globoff = false } = {}) {
   })
   if (r.status !== 0) throw new Error(`curl failed (${r.status}) for ${url}: ${(r.stderr || '').trim()}`)
   return r.stdout
+}
+
+// ---------------------------------------------------------------------------
+// Added by the bake workflow (tools/bake-table.mjs, tools/bake-box.mjs): where
+// the downloads go, which is never inside the repository (DATA.md §11).
+
+/** The default downloads directory: the session scratchpad when it exists, else the system temporary directory. */
+export const DEFAULT_DOWNLOADS = '/tmp/claude-0/-home-user-vibe-dump/2e5146ca-4f91-535f-8583-82396d698b48/scratchpad/bake-downloads'
+
+/**
+ * The downloads directory: `--downloads DIR`, else $PACIFIC_THEATRE_DOWNLOADS,
+ * else DEFAULT_DOWNLOADS (or <tmpdir>/pacific-theatre-downloads where the
+ * scratchpad does not exist). Refuses a directory inside the repository,
+ * whose root is found by walking up from `repoProbe` to a `.git`.
+ */
+export function downloadsDir(argv, repoProbe) {
+  const at = argv.indexOf('--downloads')
+  let dir = at >= 0 ? argv[at + 1] : process.env.PACIFIC_THEATRE_DOWNLOADS
+  if (!dir) dir = existsSync(dirname(DEFAULT_DOWNLOADS)) ? DEFAULT_DOWNLOADS : join(tmpdir(), 'pacific-theatre-downloads')
+  dir = resolve(dir)
+  let root = resolve(repoProbe)
+  while (root !== dirname(root) && !existsSync(join(root, '.git'))) root = dirname(root)
+  if (existsSync(join(root, '.git')) && (dir === root || dir.startsWith(root + sep))) {
+    throw new Error(`the downloads directory ${dir} is inside the repository (${root}); downloads stay outside it`)
+  }
+  mkdirSync(dir, { recursive: true })
+  return dir
 }

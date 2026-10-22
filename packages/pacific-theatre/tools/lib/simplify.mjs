@@ -1,29 +1,20 @@
-// Topology-preserving polygon simplification, written for the boundary bake.
+// Line and polygon simplification for the table's coast (DATA.md §3), in
+// lon/lat with a local metric, so it works anywhere on the table and across
+// 180° (longitudes continuous, past 180 where they fall).
 //
-// Neighbouring ahupuaʻa share their boundary vertices exactly, and the moku
-// layer was dissolved from the ahupuaʻa layer, so its vertices are theirs too.
-// Simplifying every ring on its own would give two neighbours two different
-// versions of their shared edge (slivers and double lines). Instead, as
-// TopoJSON does, every ring of every input layer is cut into arcs at its
-// junctions (vertices where three or more distinct edges meet), each distinct
-// arc is simplified once with Douglas–Peucker, and every ring that uses an arc
-// gets the identical result. Moku and ahupuaʻa lines therefore coincide.
-//
-// Coordinates are first snapped to a 1e-6 degree grid (about 0.1 m), which is
-// what makes the two layers' copies of a vertex compare equal.
-import { KX, KZ } from './geo.mjs'
+// From holo-i-ke-au's tools/lib/simplify.mjs (b480c27), which simplified the
+// ahupuaʻa boundaries: its Douglas–Peucker, its ring geometry checks
+// (ringSignedArea, ringIntersections) and its repair rule (a ring that
+// collapses or crosses itself or a sibling is re-simplified at half the
+// tolerance until it is valid, down to the source's own vertices) are kept.
+// What changed, as R9 §2.13 asked: the Hawaiian metric (metres per degree
+// fixed at 20.5° N) is now taken from each line's own mean latitude; the
+// integer keys (which lost precision past 2^53 for longitudes beyond 180) are
+// gone, since the coast's polygons share no edges after the merge at 180° and
+// need no shared-arc topology; and open lines (the coastline strokes) are
+// simplified too.
 
-const Q = 1e6
-const XOFF = 200 * Q
-const YMUL = 1e9
-
-const keyOf = (X, Y) => (X + XOFF) * YMUL + (Y + 90 * Q)
-const xOf = (k) => Math.floor(k / YMUL) - XOFF
-const yOf = (k) => (k % YMUL) - 90 * Q
-
-/** metres in the shared projection (offsets do not matter for distances) */
-const mx = (k) => (xOf(k) / Q) * KX
-const mz = (k) => (yOf(k) / Q) * KZ
+const DEG = Math.PI / 180
 
 function segDist2(px, pz, ax, az, bx, bz) {
   const dx = bx - ax
@@ -36,15 +27,24 @@ function segDist2(px, pz, ax, az, bx, bz) {
   return ex * ex + ez * ez
 }
 
-/** Douglas–Peucker on an open polyline of keys; endpoints kept. tol in metres. */
-export function douglasPeucker(keys, tol) {
-  const n = keys.length
-  if (n <= 2 || tol <= 0) return keys.slice()
+/** Metres per degree of longitude and latitude at a line's mean latitude. */
+function metricOf(pts) {
+  let s = 0
+  for (const p of pts) s += p[1]
+  const lat = s / Math.max(1, pts.length)
+  return [Math.cos(lat * DEG) * 111320, 110574]
+}
+
+/** Douglas–Peucker on an open polyline of [lon, lat]; endpoints kept; tol in metres. */
+export function douglasPeucker(pts, tol, metric = metricOf(pts)) {
+  const n = pts.length
+  if (n <= 2 || tol <= 0) return pts.slice()
+  const [kx, kz] = metric
   const xs = new Float64Array(n)
   const zs = new Float64Array(n)
   for (let i = 0; i < n; i++) {
-    xs[i] = mx(keys[i])
-    zs[i] = mz(keys[i])
+    xs[i] = pts[i][0] * kx
+    zs[i] = pts[i][1] * kz
   }
   const keep = new Uint8Array(n)
   keep[0] = keep[n - 1] = 1
@@ -67,29 +67,31 @@ export function douglasPeucker(keys, tol) {
     }
   }
   const out = []
-  for (let i = 0; i < n; i++) if (keep[i]) out.push(keys[i])
+  for (let i = 0; i < n; i++) if (keep[i]) out.push(pts[i])
   return out
 }
 
-/** Douglas–Peucker on a closed loop (first key not repeated at the end). */
-function simplifyLoop(loop, tol) {
+/** Douglas–Peucker on a closed ring ([lon, lat] with the first point repeated at the end); returns a closed ring. */
+export function simplifyRing(ring, tol) {
+  const loop = ring.slice(0, -1)
   const n = loop.length
-  if (tol <= 0 || n <= 4) return loop.slice()
+  if (tol <= 0 || n <= 4) return ring.slice()
+  const metric = metricOf(loop)
   // split at the vertex farthest from the first, so both halves are open arcs
   let far = 1
   let farD = -1
-  const x0 = mx(loop[0])
-  const z0 = mz(loop[0])
   for (let i = 1; i < n; i++) {
-    const d = (mx(loop[i]) - x0) ** 2 + (mz(loop[i]) - z0) ** 2
+    const d = ((loop[i][0] - loop[0][0]) * metric[0]) ** 2 + ((loop[i][1] - loop[0][1]) * metric[1]) ** 2
     if (d > farD) {
       farD = d
       far = i
     }
   }
-  const a = douglasPeucker(loop.slice(0, far + 1), tol)
-  const b = douglasPeucker([...loop.slice(far), loop[0]], tol)
-  return [...a, ...b.slice(1, -1)]
+  const a = douglasPeucker(loop.slice(0, far + 1), tol, metric)
+  const b = douglasPeucker([...loop.slice(far), loop[0]], tol, metric)
+  const out = [...a, ...b.slice(1, -1)]
+  out.push(out[0])
+  return out
 }
 
 // ---------------------------------------------------------------------------
@@ -123,14 +125,17 @@ function segmentsIntersect(a, b, c, d) {
 }
 
 /**
- * Pairs of segments that cross or overlap, among all the closed rings given
- * (integer or float coordinates). Segments that only share an endpoint
- * vertex are allowed (consecutive edges, or rings touching at a vertex).
- * Returns a list of [ringIndex, ringIndex] that intersect, empty if none.
+ * Pairs of segments that cross or overlap, among all the closed rings given.
+ * Segments that only share an endpoint vertex are allowed (consecutive
+ * edges, or rings touching at a vertex). Returns a list of [ringIndex,
+ * ringIndex] that intersect, empty if none.
  */
 export function ringIntersections(rings) {
   const segs = []
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
   rings.forEach((r, ri) => {
     for (let i = 0; i < r.length - 1; i++) {
       segs.push([r[i], r[i + 1], ri])
@@ -152,12 +157,13 @@ export function ringIntersections(rings) {
     const x1 = Math.floor((Math.max(s[0][0], s[1][0]) - minX) / cw)
     const y0 = Math.floor((Math.min(s[0][1], s[1][1]) - minY) / ch)
     const y1 = Math.floor((Math.max(s[0][1], s[1][1]) - minY) / ch)
-    for (let x = x0; x <= x1; x++) for (let y = y0; y <= y1; y++) {
-      const k = x * 100003 + y
-      let l = grid.get(k)
-      if (!l) grid.set(k, (l = []))
-      l.push(si)
-    }
+    for (let x = x0; x <= x1; x++)
+      for (let y = y0; y <= y1; y++) {
+        const k = x * 100003 + y
+        let l = grid.get(k)
+        if (!l) grid.set(k, (l = []))
+        l.push(si)
+      }
   })
   const same = (p, q) => p[0] === q[0] && p[1] === q[1]
   const bad = new Map()
@@ -184,192 +190,58 @@ export function ringIntersections(rings) {
   return [...bad.values()]
 }
 
+/** A ring is usable: at least three distinct points and some area. */
+export function ringOk(ring) {
+  if (ring.length < 4) return false
+  const keys = new Set(ring.map((p) => `${p[0]},${p[1]}`))
+  return keys.size >= 3 && ringSignedArea(ring) !== 0
+}
+
 // ---------------------------------------------------------------------------
 
 /**
- * Simplify the polygons of several FeatureCollections together.
- * layers: array of arrays of features (Polygon or MultiPolygon, lon/lat).
- * Returns { layers: new feature arrays with simplified geometry, stats }.
+ * Simplify one polygon ([outer, ...holes], closed rings) with DP at tol
+ * metres, then round to `digits` decimals; a polygon whose rings collapse or
+ * cross is done again at half the tolerance, down to the rounded source.
+ * Holes that collapse are dropped; an outer that collapses drops the polygon
+ * (returns null). Returns { rings, tol } (the tolerance that held).
  */
-export function simplifyLayers(layers, tolMetres) {
-  // 1. snap and collect rings as key arrays (open: no repeated closing key)
-  const ringRefs = [] // { li, fi, pi, ri, keys }
-  layers.forEach((feats, li) =>
-    feats.forEach((f, fi) => {
-      const polys = f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.coordinates
-      polys.forEach((poly, pi) =>
-        poly.forEach((ring, ri) => {
-          const keys = []
-          for (const [lon, lat] of ring) {
-            const k = keyOf(Math.round(lon * Q), Math.round(lat * Q))
-            if (keys[keys.length - 1] !== k) keys.push(k)
-          }
-          while (keys.length > 1 && keys[0] === keys[keys.length - 1]) keys.pop()
-          ringRefs.push({ li, fi, pi, ri, keys })
-        }),
-      )
-    }),
-  )
-
-  // 2. junctions: vertices with three or more distinct neighbours
-  const nbrs = new Map()
-  const addN = (k, n) => {
-    let s = nbrs.get(k)
-    if (!s) nbrs.set(k, (s = []))
-    if (s.length < 3 && !s.includes(n)) s.push(n)
-  }
-  for (const { keys } of ringRefs) {
-    const n = keys.length
-    for (let i = 0; i < n; i++) {
-      addN(keys[i], keys[(i + n - 1) % n])
-      addN(keys[i], keys[(i + 1) % n])
-    }
-  }
-  const isJ = (k) => nbrs.get(k).length >= 3
-
-  // 3. cut rings into arcs; identify each arc canonically
-  const arcs = new Map() // id -> { keys (canonical direction), loop, tol, out }
-  const lt = (a, b) => a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])
-  for (const r of ringRefs) {
-    const k = r.keys
-    const n = k.length
-    r.parts = [] // [{ id, reversed }]
-    if (n < 3) continue
-    const js = []
-    for (let i = 0; i < n; i++) if (isJ(k[i])) js.push(i)
-    if (!js.length) {
-      // a closed loop: canonical start at its least key, direction toward the lesser neighbour
-      let m = 0
-      for (let i = 1; i < n; i++) if (k[i] < k[m]) m = i
-      let loop = [...k.slice(m), ...k.slice(0, m)]
-      if (loop[loop.length - 1] < loop[1]) loop = [loop[0], ...loop.slice(1).reverse()]
-      const id = `L${loop[0]}:${loop[1]}`
-      const reversed = !(k[(m + 1) % n] === loop[1])
-      if (!arcs.has(id)) arcs.set(id, { keys: loop, loop: true, tol: tolMetres })
-      r.parts.push({ id, reversed, start: m })
-      continue
-    }
-    for (let q = 0; q < js.length; q++) {
-      const a = js[q]
-      const b = js[(q + 1) % js.length]
-      const seg = []
-      for (let i = a; ; i = (i + 1) % n) {
-        seg.push(k[i])
-        if (i === b && seg.length > 1) break
-      }
-      const fwd = [seg[0], seg[1]]
-      const rev = [seg[seg.length - 1], seg[seg.length - 2]]
-      const reversed = lt(rev, fwd)
-      const canon = reversed ? seg.slice().reverse() : seg
-      const id = `A${canon[0]}:${canon[1]}`
-      if (!arcs.has(id)) arcs.set(id, { keys: canon, loop: false, tol: tolMetres })
-      r.parts.push({ id, reversed })
-    }
-  }
-
-  const simplifyArc = (arc) => {
-    arc.out = arc.loop ? simplifyLoop(arc.keys, arc.tol) : douglasPeucker(arc.keys, arc.tol)
-  }
-  for (const arc of arcs.values()) simplifyArc(arc)
-
-  const assemble = (r) => {
+export function simplifyPolygon(rings, tol, { digits = 5 } = {}) {
+  const q = 10 ** digits
+  const round = (ring) => {
     const out = []
-    for (const p of r.parts) {
-      const arc = arcs.get(p.id)
-      let pts = arc.out
-      if (arc.loop) {
-        pts = p.reversed ? [pts[0], ...pts.slice(1).reverse()] : pts
-        out.push(...pts)
-      } else {
-        pts = p.reversed ? pts.slice().reverse() : pts
-        out.push(...(out.length ? pts.slice(1) : pts))
-      }
+    for (const [x, y] of ring) {
+      const p = [Math.round(x * q) / q, Math.round(y * q) / q]
+      const last = out[out.length - 1]
+      if (!last || last[0] !== p[0] || last[1] !== p[1]) out.push(p)
     }
-    if (out.length > 1 && out[0] === out[out.length - 1]) out.pop()
+    if (out.length > 1 && (out[0][0] !== out[out.length - 1][0] || out[0][1] !== out[out.length - 1][1])) out.push(out[0])
     return out
   }
-  const toLonLat = (keys) => {
-    const ring = keys.map((k) => [xOf(k), yOf(k)])
-    ring.push(ring[0])
-    return ring
+  for (let t = tol; ; t = t < 1 ? 0 : t / 2) {
+    const outer = round(simplifyRing(rings[0], t))
+    if (!ringOk(outer)) {
+      if (t === 0) return null
+      continue
+    }
+    const holes = rings
+      .slice(1)
+      .map((h) => round(simplifyRing(h, t)))
+      .filter(ringOk)
+    const all = [outer, ...holes]
+    if (!ringIntersections(all).length) return { rings: all, tol: t }
+    if (t === 0) return { rings: all, tol: 0, invalid: true }
   }
+}
 
-  // 4. repair: a ring that collapses or self-intersects gets its arcs
-  // re-simplified at half the tolerance (and its neighbours with it, since
-  // they share the arcs), until every ring is valid or the arcs are raw.
-  let rounds = 0
-  const repaired = new Set()
-  const unfixable = new Set()
-  for (;;) {
-    const failing = []
-    // rings grouped per feature, so a hole crossing its shell, or two parts
-    // of a MultiPolygon crossing each other, are caught too
-    const byFeature = new Map()
-    for (const r of ringRefs) {
-      if (!r.parts.length) continue
-      r.out = assemble(r)
-      const key = `${r.li}/${r.fi}`
-      let l = byFeature.get(key)
-      if (!l) byFeature.set(key, (l = []))
-      l.push(r)
-    }
-    for (const rs of byFeature.values()) {
-      const rings = rs.map((r) => toLonLat(r.out))
-      const bad = new Set()
-      rs.forEach((r, i) => {
-        if (new Set(r.out).size < 3 || ringSignedArea(rings[i]) === 0) bad.add(i)
-      })
-      for (const [a, b] of ringIntersections(rings)) {
-        bad.add(a)
-        bad.add(b)
-      }
-      for (const i of bad) if (!unfixable.has(rs[i])) failing.push(rs[i])
-    }
-    if (!failing.length) break
-    rounds++
-    for (const r of failing) {
-      let changed = 0
-      for (const p of r.parts) {
-        const arc = arcs.get(p.id)
-        if (arc.tol <= 0) continue
-        arc.tol = arc.tol < 1 ? 0 : arc.tol / 2
-        simplifyArc(arc)
-        repaired.add(p.id)
-        changed++
-      }
-      // already at the source's own vertices: the source ring itself is the problem
-      if (!changed) unfixable.add(r)
-    }
+/** Simplify an open line with DP at tol metres and round it; null when it collapses to a point. */
+export function simplifyLine(pts, tol, { digits = 5 } = {}) {
+  const q = 10 ** digits
+  const out = []
+  for (const [x, y] of douglasPeucker(pts, tol)) {
+    const p = [Math.round(x * q) / q, Math.round(y * q) / q]
+    const last = out[out.length - 1]
+    if (!last || last[0] !== p[0] || last[1] !== p[1]) out.push(p)
   }
-
-  // 5. rebuild the features; RFC 7946 winding (exterior CCW, holes CW)
-  const out = layers.map((feats) => feats.map((f) => ({ ...f, geometry: null, _polys: [] })))
-  for (const r of ringRefs) {
-    if (!r.parts.length || new Set(r.out).size < 3) continue
-    const g = out[r.li][r.fi]
-    const ring = toLonLat(r.out).map(([x, y]) => [x / Q, y / Q])
-    const ccw = ringSignedArea(ring) > 0
-    if ((r.ri === 0) !== ccw) ring.reverse()
-    ;(g._polys[r.pi] ||= [])[r.ri] = ring
-  }
-  let vin = 0
-  let vout = 0
-  for (const r of ringRefs) {
-    vin += r.keys.length
-    vout += r.parts.length ? r.out.length : 0
-  }
-  for (const feats of out) {
-    for (const g of feats) {
-      const polys = g._polys.filter((p) => p && p[0]).map((p) => p.filter(Boolean))
-      delete g._polys
-      g.geometry = polys.length === 1 ? { type: 'Polygon', coordinates: polys[0] } : { type: 'MultiPolygon', coordinates: polys }
-    }
-  }
-  const tolHist = {}
-  for (const a of arcs.values()) tolHist[a.tol] = (tolHist[a.tol] || 0) + 1
-  const invalidInSource = [...unfixable].map((r) => ({ layer: r.li, feature: r.fi, polygon: r.pi, ring: r.ri }))
-  return {
-    layers: out,
-    stats: { rings: ringRefs.length, arcs: arcs.size, verticesIn: vin, verticesOut: vout, repairRounds: rounds, arcsRepaired: repaired.size, arcsByTolerance: tolHist, invalidInSource },
-  }
+  return out.length >= 2 ? out : null
 }

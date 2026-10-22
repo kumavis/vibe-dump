@@ -147,3 +147,127 @@ export function fillThroughMask(values, mask, W, H, maxSteps) {
   }
   return filled
 }
+
+// ---------------------------------------------------------------------------
+// Added by the bake workflow: the previews of `--preview DIR` (DATA.md §11),
+// pictures for a person to look at, never shipped. After R1's
+// r1-scripts/preview.mjs (a hillshade over a hypsometric and bathymetric tint).
+
+/** Decode a pack's RGB PNG data (value = R·256 + G) to metres. */
+export function decodeHeights(img, scale, offset) {
+  const { width: W, height: H, data, channels } = img
+  const m = new Float32Array(W * H)
+  for (let i = 0; i < W * H; i++) m[i] = (data[i * channels] * 256 + data[i * channels + 1]) * scale + offset
+  return m
+}
+
+const lerp3 = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]
+function ramp(stops, v) {
+  if (v <= stops[0][0]) return stops[0][1]
+  for (let i = 1; i < stops.length; i++) if (v <= stops[i][0]) return lerp3(stops[i - 1][1], stops[i][1], (v - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0]))
+  return stops[stops.length - 1][1]
+}
+const LAND = [[0, [96, 128, 72]], [50, [120, 150, 84]], [300, [170, 170, 110]], [1000, [176, 140, 100]], [2500, [150, 120, 110]], [5000, [235, 235, 235]]]
+const SEA = [[-11000, [8, 16, 48]], [-6000, [16, 36, 90]], [-3000, [30, 70, 130]], [-200, [60, 120, 170]], [-20, [110, 170, 200]], [-1, [150, 205, 220]]]
+
+/**
+ * A hillshaded RGB picture of a height grid (metres, row 0 north): land
+ * tinted by height, sea by depth, lit from the north-west. cell: metres per
+ * texel [x, z]; exag: the vertical exaggeration of the shading.
+ */
+export function hillshadeRGB(m, W, H, { cell = [1, 1], exag = 1 } = {}) {
+  const rgb = new Uint8Array(W * H * 3)
+  const L = [-0.5, 0.6, -0.62] // toward the light: west, up, north (z grows south)
+  const ll = Math.hypot(...L)
+  for (let j = 0; j < H; j++) {
+    for (let i = 0; i < W; i++) {
+      const k = j * W + i
+      const v = m[k]
+      const dx = ((m[j * W + Math.min(W - 1, i + 1)] - m[j * W + Math.max(0, i - 1)]) * exag) / (2 * cell[0])
+      const dz = ((m[Math.min(H - 1, j + 1) * W + i] - m[Math.max(0, j - 1) * W + i]) * exag) / (2 * cell[1])
+      // normal of y = h(x, z): (−dh/dx, 1, −dh/dz)
+      const nl = Math.hypot(dx, 1, dz)
+      const sh = Math.max(0, (-dx * L[0] + L[1] - dz * L[2]) / (nl * ll))
+      const base = v > 0 ? ramp(LAND, v) : ramp(SEA, v)
+      const f = v > 0 ? 0.35 + 0.9 * sh : 0.6 + 0.5 * sh
+      rgb[k * 3] = Math.max(0, Math.min(255, base[0] * f))
+      rgb[k * 3 + 1] = Math.max(0, Math.min(255, base[1] * f))
+      rgb[k * 3 + 2] = Math.max(0, Math.min(255, base[2] * f))
+    }
+  }
+  return rgb
+}
+
+/** Draw a line of colour c (RGB) into rgb (W × H), in pixel coordinates, by Bresenham. */
+export function drawLine(rgb, W, H, x0, y0, x1, y1, c) {
+  let x = Math.round(x0)
+  let y = Math.round(y0)
+  const xe = Math.round(x1)
+  const ye = Math.round(y1)
+  const dx = Math.abs(xe - x)
+  const dy = -Math.abs(ye - y)
+  const sx = x < xe ? 1 : -1
+  const sy = y < ye ? 1 : -1
+  let err = dx + dy
+  for (let guard = 0; guard < 1e6; guard++) {
+    if (x >= 0 && y >= 0 && x < W && y < H) {
+      const k = (y * W + x) * 3
+      rgb[k] = c[0]
+      rgb[k + 1] = c[1]
+      rgb[k + 2] = c[2]
+    }
+    if (x === xe && y === ye) break
+    const e2 = 2 * err
+    if (e2 >= dy) {
+      err += dy
+      x += sx
+    }
+    if (e2 <= dx) {
+      err += dx
+      y += sy
+    }
+  }
+}
+
+/** Draw a small cross (a marker) of colour c at pixel (x, y). */
+export function drawMark(rgb, W, H, x, y, c, r = 4) {
+  drawLine(rgb, W, H, x - r, y, x + r, y, c)
+  drawLine(rgb, W, H, x, y - r, x, y + r, c)
+}
+
+/** A crop of an RGB picture, enlarged by an integer factor (nearest), for looking closely. */
+export function cropRGB(rgb, W, H, x0, y0, w, h, factor = 1) {
+  x0 = Math.max(0, Math.min(W - 1, Math.round(x0)))
+  y0 = Math.max(0, Math.min(H - 1, Math.round(y0)))
+  w = Math.min(w, W - x0)
+  h = Math.min(h, H - y0)
+  const ow = w * factor
+  const oh = h * factor
+  const out = new Uint8Array(ow * oh * 3)
+  for (let j = 0; j < oh; j++) {
+    const sy = y0 + Math.floor(j / factor)
+    for (let i = 0; i < ow; i++) {
+      const s = (sy * W + x0 + Math.floor(i / factor)) * 3
+      const d = (j * ow + i) * 3
+      out[d] = rgb[s]
+      out[d + 1] = rgb[s + 1]
+      out[d + 2] = rgb[s + 2]
+    }
+  }
+  return { rgb: out, W: ow, H: oh }
+}
+
+/** A box-filtered reduction of an RGB picture by an integer factor (for an overview of a large preview). */
+export function shrinkRGB(rgb, W, H, factor) {
+  const ow = Math.floor(W / factor)
+  const oh = Math.floor(H / factor)
+  const out = new Uint8Array(ow * oh * 3)
+  for (let j = 0; j < oh; j++)
+    for (let i = 0; i < ow; i++)
+      for (let c = 0; c < 3; c++) {
+        let s = 0
+        for (let b = 0; b < factor; b++) for (let a = 0; a < factor; a++) s += rgb[((j * factor + b) * W + i * factor + a) * 3 + c]
+        out[(j * ow + i) * 3 + c] = s / (factor * factor)
+      }
+  return { rgb: out, W: ow, H: oh }
+}
