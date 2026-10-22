@@ -240,6 +240,14 @@ export class App {
     if (h !== location.hash) history.pushState(history.state, '', `${location.pathname}${location.search}${h}`)
   }
 
+  /** The same in the entry the browser is on (a Back that left a box has already landed on the table's entry). */
+  replaceUrl() {
+    const h = this.hashNow()
+    this.url.written = h
+    this.url.timer = 0.25
+    if (h !== location.hash) history.replaceState(history.state, '', `${location.pathname}${location.search}${h}`)
+  }
+
   /** Start decoding a box's pack before the click that enters it (a box event's card is open). */
   prefetch(boxId) {
     if (!boxId || this.battle?.scene || !this.data.boxById?.has(boxId) || this._prefetch?.id === boxId) return
@@ -260,7 +268,8 @@ export class App {
   hashNow() {
     const p = new URLSearchParams()
     const sim = this.battle?.sim
-    if (sim && this.active === this.battle.scene) {
+    const inBox = !!(sim && this.active === this.battle.scene)
+    if (inBox) {
       // in a box: its clock's time, to the second when it is not on the minute
       this.url.t = urlTime(sim.clock, sim.t)
     }
@@ -268,14 +277,16 @@ export class App {
     p.set('date', `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`)
     const s = this.active.rig.goal
     p.set('cam', [s.target.x, s.target.z, s.distance, s.yaw, s.pitch].map((v) => (+v.toFixed(4)).toString()).join(','))
-    for (const k of ['battle', 't', 'moment']) if (this.url[k]) p.set(k, this.url[k])
+    // (#t only while a box is the scene: a table hash carries none)
+    for (const k of ['battle', 't', 'moment']) if (this.url[k] && (k !== 't' || inBox)) p.set(k, this.url[k])
     for (const [k, v] of Object.entries(this.url.kept)) p.set(k, v)
     return `#${p.toString().replace(/%2C/g, ',').replace(/%3A/g, ':')}`
   }
 
   /** Write the hash with replaceState, debounced 250 ms, only when it changed; remember it so it does not re-enter fromUrl. */
   syncUrl(dt) {
-    if (!this.ready) return
+    // (nothing while flying: during a fly-up after Back the box is still the scene, and its #t would land in the entry Back went to)
+    if (!this.ready || this.mode === 'flying') return
     this.url.timer -= dt
     if (this.url.timer > 0) return
     this.url.timer = 0.25

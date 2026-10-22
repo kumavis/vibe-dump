@@ -106,7 +106,8 @@ export function link(app, ui) {
     }
   }
 
-  async function leave() {
+  /** fromUrl: the browser's Back took the hash off the box; the entry it landed on is rewritten, not added to. */
+  async function leave({ fromUrl = false } = {}) {
     if (L.busy || !battle.scene) return
     L.busy = true
     try {
@@ -120,7 +121,8 @@ export function link(app, ui) {
       // back on the table: the battle's own card again, the camera out to its view
       const ev = evId ? app.data.events.find((e) => e.id === evId) : null
       if (ev) ui.tour.open(ev)
-      app.pushUrl()
+      if (fromUrl) app.replaceUrl()
+      else app.pushUrl()
     } finally {
       L.busy = false
     }
@@ -338,7 +340,7 @@ export function link(app, ui) {
       app.warn(`#battle=${id}: no such box`)
       return
     }
-    if (!id && open) return leave()
+    if (!id && open) return leave({ fromUrl: true })
     if (id && id !== open) {
       await enter(id, { from: 'url', t, momentId })
       const cam = h.get('cam')?.split(',').map(Number)
