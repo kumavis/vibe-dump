@@ -69,6 +69,27 @@ has no gap; the keyframe is the front's date for the chapter.
 
 ## 3. How the front was traced
 
+**Rebuilding it.** The front is rebuilt with the content workflow's own
+scripts, kept in `tools/fronts/`: `build.py` writes the eight keyframes,
+`lines.py` then writes `lines.geojson` and `manifest.json`, and `preview.py`
+draws a contact sheet to look at (`--bbox=w,s,e,n --k=<px per degree>` for one
+place up close). They read their downloads from the directory the
+`FRONTS_DOWNLOADS` environment variable names, outside the repository:
+`atlas/jp2/` (the Atlas's leaves, archive.org's jp2 zip unpacked) and `ne/`
+(Natural Earth's 1:50m land and admin-0 countries as GeoJSON). They need
+numpy, shapely 2 and Pillow; under `python3 -I`, which ignores `PYTHONPATH`,
+`FRONTS_PYLIB` puts a directory holding them on the path, and `FRONTS_OUT`
+writes somewhere other than `public/data/fronts` (`tools/fronts/paths.py`).
+`classify.py` and `perimeters.py` are `build.py`'s; `atlas_register.py` made
+each leaf's registration in `tools/fronts/fits/`. Run from the same downloads,
+`build.py` and `lines.py` reproduce the committed files byte for byte:
+
+```bash
+FRONTS_DOWNLOADS=/path/to/downloads python3 -I tools/fronts/build.py
+python3 -I tools/fronts/lines.py
+python3 -I tools/fronts/preview.py 1944-08-15 --bbox=141.5,-5,146,-2.6 --k=90
+```
+
 `fronts/manifest.json` carries the method in its `method` field; in short:
 
 - **Land only, large land only.** Natural Earth 1:50m land of 2,500 km² and

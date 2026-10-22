@@ -23,3 +23,6 @@ __probe*.mjs
 
 # the harness's agent worktrees
 /.claude/worktrees/
+
+# Python bytecode (packages/pacific-theatre/tools/fronts)
+__pycache__/
