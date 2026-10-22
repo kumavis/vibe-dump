@@ -7,7 +7,7 @@
 // the record and the seed: untouched, a box replays the battle the same way
 // every time.
 
-import { prepareTrack, trackAt, courseVec, headingOf, wrap180, slotOffset, offsetBy, fallPath, legAt, DEG } from './path.js'
+import { prepareTrack, trackAt, courseVec, headingOf, wrap180, slotOffset, offsetBy, fallPath, legAt, keysAt, keysSpeed, makeLift, liftAt, DEG } from './path.js'
 import { KN } from './units.js'
 import { P } from './params.js'
 
@@ -17,7 +17,8 @@ const SINK_KINDS = new Set(['sunk', 'scuttled', 'capsized', 'exploded', 'lost', 
 
 /**
  * ctx: { proj (TangentProjection), clock (BattleClock), rng, warn,
- * shipModel(kitId), aircraftModel(kitId), heightAt(x, z) }.
+ * shipModel(kitId), aircraftModel(kitId), heightAt(x, z), ground (world.js:
+ * metresAt, maxIn, exaggeration; the record's plans clear it over land) }.
  */
 export function readRecord(battle, ctx) {
   const { proj, clock, rng, warn } = ctx
@@ -339,7 +340,8 @@ function buildGroup(g, ctx) {
       const h = g.route[0] ? headingOf(g.route[0].x - s.x, g.route[0].z - s.z) : 0
       const [ux, uz] = courseVec(h)
       const lat = (k % 3) * 40 - 40
-      keys.push({ t: ts, x: s.x - uz * lat, y: ground, z: s.z + ux * lat })
+      // (each on the ground under its own place in the line abreast, not under the field's point)
+      keys.push({ t: ts, x: s.x - uz * lat, y: Math.max(ground, heightAt(s.x - uz * lat, s.z + ux * lat) + 2), z: s.z + ux * lat })
       keys.push({ t: ts + 25, x: s.x + ux * 900 - uz * lat, y: ground + 30, z: s.z + uz * 900 + ux * lat })
       keys.push({ t: ts + 70, x: s.x + ux * 4000, y: ground + 400, z: s.z + uz * 4000 })
     }
@@ -522,6 +524,8 @@ function buildGroup(g, ctx) {
     if (!ac.plan.legs.length) ac.plan.legs.push({ type: 'keys', t0: keys[0].t, t1: keys[keys.length - 1].t, keys })
     // --- home: recover aboard, land at the field, or leave the box -------------
     homePlan(ac, g, k, ctx, { vC, tEnd, fromShip, fromModel, shipPose })
+    // --- clear of the ground over land: the profiles' heights are over the sea's level -------------
+    clearGround(ac, g, ctx)
     aircraft.push(ac)
   }
 
@@ -555,6 +559,172 @@ function buildGroup(g, ctx) {
 const SLOT_FLOOR = 30
 function slotY(alt, up) {
   return alt + (up < 0 ? Math.max(up, Math.min(0, SLOT_FLOOR - alt)) : up)
+}
+
+// --- clear of the ground ----------------------------------------------------------
+
+const CLEAR = 60 // m of ground clearance a record aircraft keeps over land
+const CLIMB = 10 // m/s: how fast a lift comes on ahead of the ground it clears (a climb an A6M or a B5N makes easily)
+const SINK = 25 // m/s: how fast it goes off after (a fighter diving from a ridge onto its strafe)
+const FIELD_S = [5, 30] // s from a field's runway: a take-off's or a landing's clearance ramps from nothing to CLEAR
+const DROP_S = [1, 5] // s from a release or a drop over the water: the clearance of the shore beside it ramps the same way
+const LEAF_S = 2 // s: the finest interval the search splits a plan into
+const BIN_S = 4 // s: the lift's key spacing
+const PIN_S = 1 // s: the ground this close to a pinned key (a runway, a release over the water) is let go
+
+/**
+ * Lift a record aircraft's plan clear of the ground over land. The profiles put their heights over the
+ * sea's level (a strafe at 45 m, a run-in at 300 m, a landing approach at 200 m), so over Oʻahu the A6Ms'
+ * strafe passed some 650 m inside the Waiʻanae range and the second wave's level bombers through the
+ * Koʻolau. The plan as built is searched for where its aircraft is less than CLEAR above the ground over
+ * land: each leg is split in time until an interval's whole reach (its ends and the most the leg can fly
+ * between them: keysSpeed for keys, a bound for an orbit or a slot on a leader) is over the sea or clear
+ * of the highest ground under it (world.js maxIn), down to LEAF_S. The shortfalls are then covered by a lift
+ * added to the plan's height (liftThrough). It is zero at the pinned keys (a field's runway at take-off and
+ * landing, a release or a drop over the water), so no release over the water moves; the plan's horizontal
+ * path is unchanged everywhere, and over the sea away from the coast so is its height.
+ */
+function clearGround(ac, g, ctx) {
+  const ground = ctx.ground
+  const legs = ac.plan.legs
+  if (!ground?.maxIn || !legs.length) return
+  const exag = ground.exaggeration ?? 1
+  const resolve = makeResolve(ctx)
+  const t0 = ac.spawnT
+  const t1 = Math.min(Number.isFinite(ac.endT) ? ac.endT : Infinity, legs[legs.length - 1].t1, t0 + 6 * 3600)
+  const takeT = g.from < 0 && !g.enter && g.fromSite ? t0 : null
+  const landT = ac.endHow === 'land' && !(ac.landOn >= 0) ? ac.endT : null
+  const drops = []
+  const p = { x: 0, y: 0, z: 0 }
+  for (const a of ac.actions) {
+    if (a.kind !== 'release' && a.kind !== 'drop') continue
+    planPos(ac, a.t, p, ctx)
+    if (ground.metresAt(p.x, p.z) <= 0) drops.push(a.t)
+  }
+  const pins = [...drops]
+  if (takeT != null) pins.push(takeT)
+  if (landT != null) pins.push(landT)
+  // the most clearance asked anywhere in [ta, tb]: CLEAR, less on a take-off's or a landing's ramp from its runway and
+  // on the ramp down to a release or a drop over the water and up from it
+  const ramp = (s, [s0, s1]) => CLEAR * clampN((s - s0) / (s1 - s0), 0, 1)
+  const clearAt = (ta, tb) => {
+    let c = CLEAR
+    if (takeT != null) c = Math.min(c, ramp(tb - takeT, FIELD_S))
+    if (landT != null) c = Math.min(c, ramp(landT - ta, FIELD_S))
+    for (const td of drops) c = Math.min(c, ramp(Math.max(Math.abs(ta - td), Math.abs(tb - td)), DROP_S))
+    return c
+  }
+  const found = [] // ta, tb, metres short: flat triples
+  // an interval [ta, tb] whose ends are A and B: V the most the leg flies in a second, ylo its lowest height
+  const walk = (ta, tb, A, B, V, ylo, at) => {
+    const dt = tb - ta
+    const c = Math.hypot(B.x - A.x, B.z - A.z) / 2
+    const r = (V * dt) / 2
+    const e = r > c ? Math.sqrt(r * r - c * c) : 0
+    const gm = ground.maxIn(Math.min(A.x, B.x) - e, Math.min(A.z, B.z) - e, Math.max(A.x, B.x) + e, Math.max(A.z, B.z) + e)
+    if (gm <= 0) return
+    const need = gm * exag + clearAt(ta, tb) - ylo(A, B, dt)
+    if (need <= 0) return
+    if (dt <= LEAF_S) {
+      // beside a pin the leaves are split finer, so the ground just outside its PIN_S is still cleared
+      const pinned = pins.some((tp) => tb > tp - PIN_S && ta < tp + PIN_S)
+      if (!pinned) {
+        found.push(ta, tb, need)
+        return
+      }
+      if (dt <= LEAF_S / 8) return
+    }
+    const tm = (ta + tb) / 2
+    const M = at(tm, { x: 0, y: 0, z: 0 })
+    walk(ta, tm, A, M, V, ylo, at)
+    walk(tm, tb, M, B, V, ylo, at)
+  }
+  const lowerEnd = (A, B) => Math.min(A.y, B.y) // keys: the height is monotone between keys
+  for (let li = 0; li < legs.length; li++) {
+    const leg = legs[li]
+    const a0 = Math.max(leg.t0, t0)
+    const b0 = Math.min(leg.t1, t1, legs[li + 1]?.t0 ?? Infinity)
+    if (!(b0 > a0)) continue
+    if (leg.type === 'keys') {
+      const K = leg.keys
+      const at = (t, o) => keysAt(K, t, o)
+      for (let i = 0; i + 1 < K.length; i++) {
+        const sa = Math.max(K[i].t, a0)
+        const sb = Math.min(K[i + 1].t, b0)
+        if (sb > sa) walk(sa, sb, at(sa, { x: 0, y: 0, z: 0 }), at(sb, { x: 0, y: 0, z: 0 }), keysSpeed(K, i), lowerEnd, at)
+      }
+    } else {
+      const at = (t, o) => legAt(leg, t, o, resolve)
+      // an orbit flies r·w about a centre that moves at a ship's speed, 40 m either side of its height; a slot on a
+      // leader moves with it, weaving, and its height changes no faster than a dive's
+      const V = leg.type === 'orbit' ? Math.abs(leg.r * leg.w) + 25 : 400
+      const ylo = leg.type === 'orbit' ? () => leg.alt - 40 : (A, B, dt) => Math.max(60, Math.min(A.y, B.y) - 100 * dt)
+      walk(a0, b0, at(a0, { x: 0, y: 0, z: 0 }), at(b0, { x: 0, y: 0, z: 0 }), V, ylo, at)
+    }
+  }
+  // a pin clears the lift's keys off its ramp, so the lift comes down to it no faster than the ramp asks
+  const spans = [...drops.map((t) => [t, DROP_S[1]]), ...[takeT, landT].filter((t) => t != null).map((t) => [t, FIELD_S[1]])]
+  if (found.length) ac.plan.lift = liftThrough(found, spans)
+}
+
+/**
+ * The lift over the shortfalls (flat triples ta, tb, metres): keys every BIN_S seconds, each the most any
+ * shortfall within a bin of it needs, so between two keys the lift (monotone, path.js makeLift) is never
+ * less than what the shortfalls there need; it comes on at CLIMB before them and goes off at SINK after,
+ * and a dip between two shortfalls is filled where those ramps meet; zero at each pin, with the keys on
+ * its ramp cleared and any shortfall the joined curve then misses beside it made a key of its own.
+ */
+function liftThrough(found, spans) {
+  const raw = new Map()
+  let k0 = Infinity
+  let k1 = -Infinity
+  for (let j = 0; j < found.length; j += 3) {
+    const a = Math.floor(found[j] / BIN_S)
+    const b = Math.floor(found[j + 1] / BIN_S)
+    for (let k = a; k <= b; k++) raw.set(k, Math.max(raw.get(k) ?? 0, found[j + 2]))
+    k0 = Math.min(k0, a)
+    k1 = Math.max(k1, b)
+  }
+  let vmax = 0
+  for (const v of raw.values()) vmax = Math.max(vmax, v)
+  const R = Math.ceil(vmax / (CLIMB * BIN_S)) + 2
+  const base = k0 - R
+  const n = k1 + R - base + 1
+  const v = new Float64Array(n)
+  for (const [k, x] of raw) for (let d = -1; d <= 1; d++) v[k + d - base] = Math.max(v[k + d - base], x)
+  for (let i = 1; i < n; i++) v[i] = Math.max(v[i], v[i - 1] - SINK * BIN_S)
+  for (let i = n - 2; i >= 0; i--) v[i] = Math.max(v[i], v[i + 1] - CLIMB * BIN_S)
+  let keys = []
+  const at = (i) => (base + i + 0.5) * BIN_S
+  for (let i = 0; i < n; i++) {
+    if (v[i] <= 0) continue
+    if (!(v[i - 1] > 0)) keys.push({ t: at(i) - v[i] / CLIMB, v: 0 })
+    // a key inside a level run adds nothing
+    if (!(v[i - 1] === v[i] && v[i + 1] === v[i])) keys.push({ t: at(i), v: v[i] })
+    if (!(v[i + 1] > 0)) keys.push({ t: at(i) + v[i] / SINK, v: 0 })
+  }
+  const span0 = keys[0].t
+  const span1 = keys[keys.length - 1].t
+  const near = spans.filter(([tp]) => tp > span0 && tp < span1)
+  if (!near.length) return makeLift(keys)
+  keys = keys.filter((q) => !near.some(([tp, w]) => Math.abs(q.t - tp) < w))
+  for (const [tp] of near) keys.push({ t: tp, v: 0 })
+  keys.sort((a, b) => a.t - b.t)
+  // the shortfalls within two minutes of a pin, held to the curve
+  const check = []
+  for (let j = 0; j < found.length; j += 3) if (near.some(([tp]) => found[j + 1] > tp - 120 && found[j] < tp + 120)) check.push({ t: found[j], v: found[j + 2] }, { t: found[j + 1], v: found[j + 2] })
+  for (let it = 0; it < 16; it++) {
+    makeLift(keys)
+    const miss = check.filter((q) => liftAt(keys, q.t) < q.v - 0.01)
+    if (!miss.length) break
+    for (const q of miss) {
+      const same = keys.find((x) => Math.abs(x.t - q.t) < 1e-6)
+      if (same) same.v = Math.max(same.v, q.v)
+      else keys.push({ t: q.t, v: q.v })
+    }
+    keys.sort((a, b) => a.t - b.t)
+  }
+  return makeLift(keys)
 }
 
 /** Whether attacker `order` of S carries one of the record's `n` hits (exactly n of the S, spread through the group). */
@@ -809,7 +979,9 @@ export function planPos(ac, t, out, ctx) {
     else break
   }
   ctx._resolve ||= makeResolve(ctx)
-  return legAt(leg, Math.min(tc, leg.t1), out, ctx._resolve)
+  legAt(leg, Math.min(tc, leg.t1), out, ctx._resolve)
+  if (ac.plan.lift) out.y += liftAt(ac.plan.lift, tc)
+  return out
 }
 
 export { wrap180 }

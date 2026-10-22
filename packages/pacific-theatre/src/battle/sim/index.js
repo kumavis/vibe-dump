@@ -85,7 +85,7 @@ export function createSim(battle, kits, opts = {}) {
   // --- the world and the record ----------------------------------------------------
   const g0 = opts.ground
   const world = createWorld(g0 && (g0.metres ? g0 : g0.data ? { metres: g0.data.metres, W: g0.W, H: g0.H, rect: g0.rect, exaggeration: opts.exaggeration ?? 1 } : null))
-  const record = readRecord(battle, { proj, clock, rng, warn, shipModel: shipModelOf, aircraftModel: airModelOf, heightAt: world.heightAt })
+  const record = readRecord(battle, { proj, clock, rng, warn, shipModel: shipModelOf, aircraftModel: airModelOf, heightAt: world.heightAt, ground: world })
   const lat0 = proj.lat0 ?? 0
   const lon0 = proj.lon0 ?? 0
   const sight = new Sight({ lat: lat0, lon: lon0, clock, weather: battle.weather, squalls: record.squalls, world: g0 ? world : null })

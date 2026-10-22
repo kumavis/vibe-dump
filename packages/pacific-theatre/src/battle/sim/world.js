@@ -5,6 +5,7 @@
 // the segment over the heights for the AA and the lookouts.
 
 const OUTSIDE = -4000
+const PYRAMIDS = new WeakMap() // a pack's max pyramid, kept while its heights are (a rebuilt sim reuses it)
 
 /**
  * ground: { metres: Float32Array (row 0 north), W, H, rect: { x0, z0, x1, z1 },
@@ -17,6 +18,7 @@ export function createWorld(ground) {
       heightAt: () => 0,
       exaggeration: 1,
       lineOfSight: () => true,
+      maxIn: () => OUTSIDE,
       rect: null,
     }
   }
@@ -56,5 +58,63 @@ export function createWorld(ground) {
     }
     return true
   }
-  return { metresAt, heightAt, exaggeration: exag, lineOfSight, rect }
+  // The highest ground under a rectangle, for the record's clearance over land (record.js clearGround): a
+  // max pyramid of the pack from 4 × 4 blocks up, built on the first query. A query reads every pixel
+  // whose bilinear support reaches into the rectangle, so no point inside it stands higher than the answer.
+  let pyramid = PYRAMIDS.get(metres) || null
+  function buildPyramid() {
+    const levels = []
+    let w = Math.ceil(W / 4)
+    let h = Math.ceil(H / 4)
+    let cur = new Float32Array(w * h).fill(OUTSIDE)
+    for (let j = 0; j < H; j++) {
+      const row = (j >> 2) * w
+      for (let i = 0; i < W; i++) {
+        const v = metres[j * W + i]
+        const c = row + (i >> 2)
+        if (v > cur[c]) cur[c] = v
+      }
+    }
+    levels[2] = { a: cur, w, h }
+    for (let L = 3; w > 1 || h > 1; L++) {
+      const pw = w
+      const ph = h
+      const prev = cur
+      w = Math.ceil(w / 2)
+      h = Math.ceil(h / 2)
+      cur = new Float32Array(w * h).fill(OUTSIDE)
+      for (let j = 0; j < ph; j++) {
+        for (let i = 0; i < pw; i++) {
+          const v = prev[j * pw + i]
+          const c = (j >> 1) * w + (i >> 1)
+          if (v > cur[c]) cur[c] = v
+        }
+      }
+      levels[L] = { a: cur, w, h }
+    }
+    return levels
+  }
+  /** The highest metres the ground reaches anywhere in the rectangle [x0, x1] × [z0, z1] (OUTSIDE wholly beyond the pack). */
+  function maxIn(x0, z0, x1, z1) {
+    if (x1 < rect.x0 || z1 < rect.z0 || x0 > rect.x1 || z0 > rect.z1) return OUTSIDE
+    const px = (x) => Math.min(W - 1.001, Math.max(0, (x - rect.x0) * sx - 0.5)) | 0
+    const pz = (z) => Math.min(H - 1.001, Math.max(0, (z - rect.z0) * sz - 0.5)) | 0
+    const i0 = px(x0)
+    const i1 = Math.min(W - 1, px(x1) + 1)
+    const j0 = pz(z0)
+    const j1 = Math.min(H - 1, pz(z1) + 1)
+    const span = Math.max(i1 - i0, j1 - j0) + 1
+    let m = OUTSIDE
+    if (span <= 8) {
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) if (metres[j * W + i] > m) m = metres[j * W + i]
+      return m
+    }
+    if (!pyramid) PYRAMIDS.set(metres, (pyramid = buildPyramid()))
+    let L = Math.max(2, Math.ceil(Math.log2(span)) - 1)
+    while (!pyramid[L]) L--
+    const { a, w } = pyramid[L]
+    for (let j = j0 >> L; j <= j1 >> L; j++) for (let i = i0 >> L; i <= i1 >> L; i++) if (a[j * w + i] > m) m = a[j * w + i]
+    return m
+  }
+  return { metresAt, heightAt, exaggeration: exag, lineOfSight, maxIn, rect }
 }

@@ -156,6 +156,70 @@ function monotone(m, d0, d1) {
 }
 
 /**
+ * The most horizontal speed (m/s) keysAt reaches between keys i and i + 1: the Hermite there is a Bézier
+ * whose control legs are the tangents' thirds and the chord between them, and its speed never exceeds
+ * three times the longest leg over the interval.
+ */
+export function keysSpeed(keys, i) {
+  const a = keys[i]
+  const b = keys[i + 1]
+  const p = keys[i - 1] || null
+  const q = keys[i + 2] || null
+  const T = b.t - a.t
+  if (!(T > 0)) return 0
+  const tan = (c) => [p && !a.corner ? (b[c] - p[c]) / (b.t - p.t) : (b[c] - a[c]) / T, q && !b.corner ? (q[c] - a[c]) / (q.t - a.t) : (b[c] - a[c]) / T]
+  const [x0, x1] = tan('x')
+  const [z0, z1] = tan('z')
+  const l1 = Math.hypot(x0, z0) / 3
+  const l3 = Math.hypot(x1, z1) / 3
+  const l2 = Math.hypot((b.x - a.x) / T - (x0 + x1) / 3, (b.z - a.z) / T - (z0 + z1) / 3)
+  return 3 * Math.max(l1, l2, l3)
+}
+
+/**
+ * A lift (record.js clearGround): keys [{ t, v }] of metres added to a plan's height, joined as keysAt
+ * joins heights (Catmull-Rom tangents limited by Fritsch–Carlson, so the lift is monotone between keys
+ * and never dips below the lower of two), level at its first and last key and nothing outside them.
+ * Returns the keys with their tangents.
+ */
+export function makeLift(keys) {
+  const n = keys.length
+  for (let k = 0; k < n; k++) {
+    const p = keys[k - 1]
+    const q = keys[k + 1]
+    if (!p || !q) {
+      keys[k].m = 0
+      continue
+    }
+    const d0 = (keys[k].v - p.v) / (keys[k].t - p.t)
+    const d1 = (q.v - keys[k].v) / (q.t - keys[k].t)
+    keys[k].m = monotone((q.v - p.v) / (q.t - p.t), d0, d1)
+  }
+  return keys
+}
+
+/** A lift's metres at t (0 outside its keys). */
+export function liftAt(keys, t) {
+  const n = keys.length
+  if (!n || t <= keys[0].t) return n ? keys[0].v : 0
+  if (t >= keys[n - 1].t) return keys[n - 1].v
+  let lo = 0
+  let hi = n - 1
+  while (hi - lo > 1) {
+    const m = (lo + hi) >> 1
+    if (keys[m].t <= t) lo = m
+    else hi = m
+  }
+  const a = keys[lo]
+  const b = keys[hi]
+  const T = b.t - a.t
+  const s = (t - a.t) / T
+  const s2 = s * s
+  const s3 = s2 * s
+  return (2 * s3 - 3 * s2 + 1) * a.v + (s3 - 2 * s2 + s) * a.m * T + (-2 * s3 + 3 * s2) * b.v + (s3 - s2) * b.m * T
+}
+
+/**
  * Evaluate a flight plan (legs sorted by t0) at t. resolve(ref, t, out) gives
  * the pose { x, y, z, heading } of an orbit's centre (a unit) or a
  * formation leader. Returns out { x, y, z } or null outside the plan.
@@ -168,7 +232,9 @@ export function planAt(plan, t, out, resolve) {
     if (t >= legs[i].t0) leg = legs[i]
     else break
   }
-  return legAt(leg, Math.min(t, leg.t1), out, resolve)
+  legAt(leg, Math.min(t, leg.t1), out, resolve)
+  if (plan.lift) out.y += liftAt(plan.lift, t)
+  return out
 }
 
 const TMP = { x: 0, y: 0, z: 0, vx: 0, vz: 0, heading: 0 }

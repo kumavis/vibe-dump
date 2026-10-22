@@ -547,9 +547,20 @@ them out; research/engine.md has the numbers):
 - *Heights.* A plan's keys are joined by Catmull-Rom with the height kept
   monotone between keys (`path.js` keysAt, Fritsch–Carlson), and a vee's
   step down never takes a slot under 30 m (`record.js` slotY), so no record
-  aircraft flies under the sea. `tools/record-heights.mjs` samples every
-  record aircraft of every box once a second and fails one under 15 m over
-  the sea outside a torpedo drop, a take-off, a landing or a fall.
+  aircraft flies under the sea. Over land a plan is lifted clear of the
+  ground (`record.js` clearGround): the plan as built is searched, leg by
+  leg, for where it is less than 60 m above the highest ground under it
+  (`world.js` maxIn, a max pyramid of the pack), and a lift is added to its
+  height there, monotone between keys every 4 s (`path.js` makeLift), coming
+  on at 10 m/s ahead of the ground and going off at 25 m/s after it. The
+  horizontal path is unchanged, the lift is zero at a field's runway and at
+  a release or a drop over the water (the clearance ramps down to them over
+  30 s and 5 s), and over the sea away from the coast nothing changes. It
+  adds some 30 to 50 ms to entering Pearl Harbor. `tools/record-heights.mjs`
+  samples every record aircraft of every box twice a second and fails one
+  under 15 m over the sea outside a torpedo drop, a take-off, a landing or a
+  fall, or under 60 m above the ground over land outside a take-off, a
+  landing or the shore beside a drop.
 
 ## 6. Kits (`src/battle/kits/`)
 
