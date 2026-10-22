@@ -25,6 +25,13 @@
 // having pushed every entry, at the same match as the log alone (the corpus
 // battle's own stateHash).
 //
+// (N1) With --store automerge, both folds run over the AutomergeStore
+// (net/automerge-store.js) on a document of a repo with no network
+// (automerge-repo's, in this process): `play` appends each text in a change
+// of its own, `reload` makes the store over a document whose log holds them
+// all (one change). What Automerge itself does per change (its diff, the
+// patches) is counted and timed with the fold, since a peer pays it.
+//
 // The verdict compares the marginal cost per filler entry (the cost of a
 // log of n entries less the battle's alone, over the entries added) at n/4
 // and at n entries: in time (the fastest of five folds, each in a fresh
@@ -35,9 +42,11 @@
 // stay level (at most 1.5 times; time at most twice, for noise), and
 // JSON.parse at one a filler entry, or the fold is not linear.
 //
-//   node sim/fold-cost.mjs [--entries N] [--dir <packageDir> | --ref <ref>]
-//   node sim/fold-cost.mjs --self-test   each broken copy in MUTANTS must
-//                                        fail it, after the unbroken passes
+//   node sim/fold-cost.mjs [--entries N] [--store local | automerge] [--dir <packageDir> | --ref <ref>]
+//   node sim/fold-cost.mjs --self-test [--store automerge]   each broken copy in
+//                                        MUTANTS (the store's own, for the
+//                                        AutomergeStore) must fail it, after
+//                                        the unbroken passes
 //
 // --entries (default 5000, the cap) is n. Exit 0 when the fold is linear
 // (the self-test: when every mutant is caught), 1 otherwise, 2 on bad
@@ -46,7 +55,7 @@ import { parseArgs } from 'node:util'
 import { spawn } from 'node:child_process'
 import { join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
-import { readFileSync, writeFileSync, rmSync } from 'node:fs'
+import { readFileSync, writeFileSync, rmSync, symlinkSync, existsSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadCorpus, copyCode } from './lib.mjs'
 import { jobSetup } from './run.mjs'
@@ -54,9 +63,14 @@ import { codeDir, PKG } from './oracle/pin.mjs'
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { entries: { type: 'string' }, dir: { type: 'string' }, ref: { type: 'string' }, child: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: a } = parseArgs({ options: { entries: { type: 'string' }, store: { type: 'string' }, dir: { type: 'string' }, ref: { type: 'string' }, child: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
 } catch (e) {
-  console.error(`fold-cost: ${e.message}\nusage: node sim/fold-cost.mjs [--entries N] [--dir <packageDir> | --ref <ref>] | --self-test`)
+  console.error(`fold-cost: ${e.message}\nusage: node sim/fold-cost.mjs [--entries N] [--store local | automerge] [--dir <packageDir> | --ref <ref>] | --self-test [--store automerge]`)
+  process.exit(2)
+}
+const STORE = a.store ?? 'local'
+if (!['local', 'automerge'].includes(STORE)) {
+  console.error(`fold-cost: --store takes local or automerge, not ${a.store}`)
   process.exit(2)
 }
 const N = a.entries === undefined ? 5000 : Number(a.entries)
@@ -78,6 +92,10 @@ const LEVEL = 1.5, LEVEL_TIME = 2, RUNS = 5
 async function measure({ path, n, counted }) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
   const [core, E, F, { LocalStore }, { Session }] = await Promise.all(['core/index.js', 'match/envelope.js', 'match/fold.js', 'match/store.js', 'match/session.js'].map(at))
+  // (--store automerge: a store over a document of a repo with no network;
+  // the repo's full entry first, which initialises the wasm the store's
+  // slim import shares)
+  const am = STORE === 'automerge' ? await automerge(at) : null
   const it = loadCorpus().items.find((x) => x.id === LOG)
   const texts = build({ core, E, F }, it, n)
   // the battle alone, folded straight: the match every fold must end at
@@ -88,16 +106,26 @@ async function measure({ path, n, counted }) {
   const t0 = performance.now()
   let ses
   if (path === 'play') {
-    const store = new LocalStore()
+    const store = am ? am.store() : new LocalStore()
     ses = new Session({ store, localSeats: [], dev: 'watch', sink: { events() {} } })
     for (const t of texts) store.append(t)
-  } else ses = new Session({ store: new LocalStore(texts), localSeats: [], dev: 'watch', sink: { events() {} } })
+  } else ses = new Session({ store: am ? am.store(texts) : new LocalStore(texts), localSeats: [], dev: 'watch', sink: { events() {} } })
   const ms = performance.now() - t0
   const got = counts?.stop()
   if (ses.status !== 'over' || ses.folder.pushed.length !== texts.length || core.stateHash(ses.G) !== want) {
     throw new Error(`the ${path} fold of ${texts.length} entries ends ${ses.status} with ${ses.folder.pushed.length} pushed${ses.G ? `, at ${core.stateHash(ses.G) === want ? 'the battle\'s match' : 'another match than the battle\'s'}` : ''}`)
   }
   return { entries: texts.length, ms, ...got }
+}
+
+// The AutomergeStore of the code under test, and a store over a new
+// document (holding `texts`, written in one change).
+async function automerge(at) {
+  const { Repo } = await import('@automerge/automerge-repo')
+  const { ImmutableString } = await import('@automerge/automerge/slim')
+  const { AutomergeStore, matchDoc } = await at('net/automerge-store.js')
+  const repo = new Repo({ network: [] })
+  return { store: (texts = []) => new AutomergeStore(repo.create({ ...matchDoc(), log: texts.map((t) => new ImmutableString(t)) })) }
 }
 
 // The log of n entries: the start, then the corpus log's entries with the
@@ -142,9 +170,12 @@ function build({ core, E, F }, it, n) {
 
 // What a fold does, counted from now until stop(): JSON.parse and
 // JSON.stringify calls, and the elements of every array copied by slice,
-// map, filter, concat, flatMap or Array.from.
+// map, filter, concat, flatMap or Array.from. (N1) Copies Automerge makes
+// itself, its wasm's glue code copying the document's materialized log at
+// every change (Array.from), are counted apart, as `automerge`: Automerge
+// 3.5.0's own cost, which no store can avoid (told, not judged).
 function count() {
-  const c = { parse: 0, stringify: 0, copied: 0 }
+  const c = { parse: 0, stringify: 0, copied: 0, automerge: 0 }
   const was = { parse: JSON.parse, stringify: JSON.stringify, from: Array.from }
   const protos = ['slice', 'map', 'filter', 'concat', 'flatMap'].map((m) => [m, Array.prototype[m]])
   JSON.parse = function (...x) {
@@ -156,7 +187,10 @@ function count() {
     return was.stringify.apply(this, x)
   }
   Array.from = function (x, ...y) {
-    if (x && typeof x.length === 'number') c.copied += x.length
+    if (x && typeof x.length === 'number') {
+      if (x.length > 64 && /automerge_wasm/.test(new Error().stack)) c.automerge += x.length
+      else c.copied += x.length
+    }
     return was.from.call(this, x, ...y)
   }
   for (const [m, fn] of protos) {
@@ -190,7 +224,7 @@ if (a.child) {
 const ME = fileURLToPath(import.meta.url)
 function child(task, pkg) {
   return new Promise((done) => {
-    const p = spawn(process.execPath, [ME, '--dir', pkg, '--child', JSON.stringify(task)], { stdio: ['ignore', 'pipe', 'pipe'] })
+    const p = spawn(process.execPath, [ME, '--dir', pkg, '--store', STORE, '--child', JSON.stringify(task)], { stdio: ['ignore', 'pipe', 'pipe'] })
     let out = '', err = ''
     p.stdout.setEncoding('utf8')
     p.stderr.setEncoding('utf8')
@@ -231,6 +265,7 @@ async function run(pkg, { quiet = false } = {}) {
       const lo = per(N / 4, k), hi = per(N, k), ratio = hi / lo
       return { k, lo, hi, ratio, ok: k === 'ms' ? ratio <= LEVEL_TIME : ratio <= LEVEL && (k !== 'parse' || (lo <= 1.05 && hi <= 1.05)) }
     })
+    if (at[N].automerge) say(`  ${path.padEnd(7)} (Automerge's own copies of its log, per entry added: ${per(N / 4, 'automerge').toFixed(1)} elements at ${N / 4}, ${per(N, 'automerge').toFixed(1)} at ${N}; not judged)`)
     say(`  ${path.padEnd(7)} the battle alone ${base.entries} entries in ${Math.round(base.ms)} ms; ${at[N / 4].entries} in ${Math.round(at[N / 4].ms)} ms; ${at[N].entries} in ${Math.round(at[N].ms)} ms (fastest of ${at[N].msAll.join(', ')})`)
     for (const r of rows) {
       const fmt = (x) => (r.k === 'ms' ? `${(x * 1000).toFixed(1)} µs` : x.toFixed(2))
@@ -243,8 +278,16 @@ async function run(pkg, { quiet = false } = {}) {
 
 // ── The self-test ───────────────────────────────────────────────────────────
 // Each a broken copy whose fold does O(n) work per entry; the check must
-// fail on each.
-const MUTANTS = {
+// fail on each. (--store automerge: the AutomergeStore's own.)
+const AUTOMERGE_MUTANTS = {
+  // the list read off the document again at every change: O(n) elements
+  // copied per entry
+  'rebuild-every-change': ['net/automerge-store.js', "      if (p.path[0] !== 'log') continue\n      touched = true\n", "      if (p.path[0] !== 'log') continue\n      this.rebuild()\n      return true\n"],
+  // each text decoded again at every change, its cache by text gone: O(n)
+  // decodes per entry
+  'decode-uncached': ['net/automerge-store.js', '    let e = this.byText.get(text)\n', '    let e = undefined\n    this.rebuild = () => (this.list = this.texts().map((t) => decode(t)))\n'],
+}
+const MUTANTS = STORE === 'automerge' ? AUTOMERGE_MUTANTS : {
   // the store hands out a copy of its list every change (R8's entries()):
   // O(n) elements copied per entry
   'entries-copies': ['match/store.js', '    return this.decoded\n', '    return this.decoded.slice()\n'],
@@ -256,7 +299,13 @@ const MUTANTS = {
 
 if (a['self-test']) {
   const work = join(tmpdir(), `tails-and-scales-cost-${process.pid}`)
-  const clean = await run(copyCode(dir, join(work, 'unbroken')), { quiet: true })
+  // (a copy outside the repo finds its node_modules through a link)
+  const copy = (to) => {
+    copyCode(dir, to)
+    if (STORE === 'automerge' && !existsSync(join(to, 'node_modules'))) symlinkSync(join(PKG, '..', '..', 'node_modules'), join(to, 'node_modules'))
+    return to
+  }
+  const clean = await run(copy(join(work, 'unbroken')), { quiet: true })
   if (clean.length) {
     console.log(`fold-cost self-test: the unbroken copy fails, so no mutant can be judged: ${clean[0].error}`)
     rmSync(work, { recursive: true, force: true })
@@ -265,7 +314,7 @@ if (a['self-test']) {
   console.log('  unbroken               linear')
   let missed = 0
   for (const [name, [file, from, to]] of Object.entries(MUTANTS)) {
-    const pkg = copyCode(dir, join(work, name))
+    const pkg = copy(join(work, name))
     const f = join(pkg, file)
     const src = readFileSync(f, 'utf8')
     if (src.split(from).length !== 2) {
@@ -283,7 +332,7 @@ if (a['self-test']) {
   process.exit(missed ? 1 : 0)
 }
 
-console.log(`fold-cost: the fold of ${dir === PKG ? 'the working tree' : dir}, ${LOG} padded to ${N / 4} and ${N} entries`)
+console.log(`fold-cost: the fold of ${dir === PKG ? 'the working tree' : dir} over the ${STORE === 'automerge' ? 'AutomergeStore (a repo with no network)' : 'LocalStore'}, ${LOG} padded to ${N / 4} and ${N} entries`)
 const bad = await run(dir)
 for (const b of bad) console.log(`  FAIL ${b.error}`)
 console.log(bad.length ? `\nfold-cost FAILED: ${bad.length} problem(s)` : `\nfold-cost passed: folding a log of ${N} entries costs per entry what one of ${N / 4} does, played one entry at a time and reloaded whole (no O(n) decode, copy or stringify per entry)`)

@@ -58,7 +58,12 @@ the commit, and add whatever the work turned up.
   a short one, with no O(n) decode, copy or stringify per entry (played an
   entry at a time, each change still makes one identity scan of the
   entries pushed: nanoseconds a compare, so quadratic only in theory); it times folds, so
-  run it on a quiet machine). A step
+  run it on a quiet machine; from N1 also `--store automerge`, and its
+  `--self-test`, over the Automerge store), and from N1
+  `node sim/peers.mjs` (and `--self-test`: P-peers, the corpus played over
+  real Automerge by two and three automerge-repo peers, same-seat forks
+  included, every peer's document, fold and view agreeing with a fresh fold
+  and the corpus battle; it runs on real time, about a minute). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -714,7 +719,13 @@ follows N3.
   2. Two logs that vote joined the corpus, 42 battles, recorded on F4's
   code, to which the PIN moved; `legacyMode` retired, every page runner
   holding the page's battle to the log's setup instead. DESIGN's F4 notes.)
-- [ ] **N1** Real Automerge in Node: two- and three-peer tests.
+- [x] **N1** Real Automerge in Node: two- and three-peer tests. (The
+  match store over an Automerge document, `net/automerge-store.js`; the
+  corpus played by two and three automerge-repo peers over lagging links,
+  same-seat forks included, every peer agreeing with a fresh fold and the
+  corpus battle, `sim/peers.mjs`; the fold linear over it, fold-cost
+  `--store automerge`; a 465-entry log's document 11 KB. DESIGN's N1
+  notes.)
 - [ ] **N2** Online play: lobby, join by link, joint dice seed, presence,
   desync report. `verifyStart` checks your whole seat (race, controller,
   device, name, nonce); names up to 24 characters and 48 bytes. (The
