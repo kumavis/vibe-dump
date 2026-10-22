@@ -203,7 +203,17 @@ export class TableScene {
     return { fade, near }
   }
 
+  /**
+   * Once a frame. Under a software renderer (about a second a frame) the
+   * camera's flights run on the wall clock, not on the frame loop's dt, which
+   * is clamped to a tenth of a second: a tour's flight lands in its own few
+   * seconds there too, so the thumbnail and the smoke test see it land.
+   */
   update(dt) {
+    const now = performance.now()
+    const wall = this._wall === undefined ? dt : Math.min(1, (now - this._wall) / 1000)
+    this._wall = now
+    if (this.app.software) dt = Math.max(dt, wall)
     this.rig.update(dt)
     const d = this.rig.state.distance
     const h = this.handover(d)

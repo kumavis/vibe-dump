@@ -34,8 +34,8 @@ function clipped(lines, proj, b) {
 }
 
 /** Points along a meridian or a parallel, every `d` degrees. */
-const meridian = (lon, lat0, lat1, d = 0.5) => Array.from({ length: Math.round((lat1 - lat0) / d) + 1 }, (_, i) => [lon, lat0 + i * d])
-const parallel = (lat, lon0, lon1, d = 0.5) => Array.from({ length: Math.round((lon1 - lon0) / d) + 1 }, (_, i) => [lon0 + i * d, lat])
+const meridian = (lon, lat0, lat1, d = 1) => Array.from({ length: Math.round((lat1 - lat0) / d) + 1 }, (_, i) => [lon, lat0 + i * d])
+const parallel = (lat, lon0, lon1, d = 1) => Array.from({ length: Math.round((lon1 - lon0) / d) + 1 }, (_, i) => [lon0 + i * d, lat])
 
 export class Graticule {
   /** proj: the TableProjection (lon0 about the middle of the table); bounds: the pack's world rect; uniforms: the table's bag. */
@@ -45,7 +45,8 @@ export class Graticule {
     const grid = []
     for (let lon = l0; lon <= l1; lon += STEP) if (Math.abs(lon - 180) > 1e-6) grid.push(meridian(lon, -80, 80))
     for (let lat = -70; lat <= 70; lat += STEP) if (lat !== 0) grid.push(parallel(lat, l0 - 20, l1 + 20))
-    const opts = { world: true, maxSeg: 40, lift: [0.02, 0.0022], height: 300 }
+    // (long segments: the grid is faint, mostly at sea, and every vertex reads the ground)
+    const opts = { world: true, maxSeg: 120, lift: [0.02, 0.0022], height: 300 }
     this.grid = new LineSet(clipped(grid, proj, bounds), null, uniforms, { ...opts, color: [0.62, 0.72, 0.82], width: 1, order: 2 })
     this.equator = new LineSet(clipped([parallel(0, l0 - 20, l1 + 20)], proj, bounds), null, uniforms, { ...opts, color: [0.82, 0.88, 0.94], width: 1.2, order: 2 })
     this.dateLine = new LineSet(clipped([meridian(180, -80, 80)], proj, bounds), null, uniforms, { ...opts, color: [1.25, 1.08, 0.82], width: 1.3, order: 2, dash: [60, 0.55] })

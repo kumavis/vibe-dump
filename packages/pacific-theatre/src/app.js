@@ -110,6 +110,8 @@ export class App {
     this.gpu = gpu
     this.software = /swiftshader|llvmpipe|software/i.test(gpu)
     this.quality = { level: 2, cap: 3, avg: 16, since: 0, raisedAt: -1e9, fixed: this.software || this.params.has('fixedq') }
+    // (under a software renderer a frame takes about a second: no multisampling there, ?msaa keeps it)
+    if (this.software && !this.params.has('msaa')) this.pipeline.setSamples(0)
     if (this.params.get('q')) this.quality.level = Number(this.params.get('q'))
     this.applyQuality()
     if (this.params.get('debug')) this.table.ground.terrain.setDebug(Number(this.params.get('debug')))
@@ -252,7 +254,7 @@ export class App {
 
   /** Settle everything that eases (the clock's easing, camera, ground, the cut) at once: for the tools. */
   settle() {
-    this.ui?.timeline.finish()
+    this.ui?.settle()
     if (this._cut) {
       const c = this._cut
       if (c.phase === 'out') c.fn()

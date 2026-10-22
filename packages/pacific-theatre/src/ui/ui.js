@@ -100,8 +100,13 @@ export class UI {
     this.tour = new Tour(app, this)
     app.tour = this.tour
     this.tour.onChange((t) => this.timeline.refreshTour(t))
-    // off the tour, what Next will do follows the slider
-    app.clock.onChange(() => this.timeline.refreshTour(this.tour))
+    // off the tour, what Next will do follows the slider; a date set from
+    // outside the tour and the slider (the URL's #date, the tools) leaves the
+    // tour as taking the slider does
+    app.clock.onChange(() => {
+      if (this.tour.active && !this.tour.setting && !this.timeline.tween && !this.timeline.dragging) this.onScrub()
+      this.timeline.refreshTour(this.tour)
+    })
     this.timeline.refreshTour(this.tour)
 
     this.help = h('div', { class: 'help hidden' })
@@ -275,7 +280,8 @@ export class UI {
     const table = app.table
     if (cx === null || cx === undefined || app.active !== table || app.mode !== 'table') return this.hideInspector()
     const p = table.rig.pickGround(cx, cy)
-    if (!p) return this.hideInspector()
+    const b = table.ground.bounds
+    if (!p || p.x < b.x0 || p.x > b.x1 || p.z < b.z0 || p.z > b.z1) return this.hideInspector()
     const m = table.ground.metresAt(p.x, p.z)
     // the nearest named place within a fingertip
     let best = null
@@ -315,6 +321,18 @@ export class UI {
     this.inspector.style.transform = `translate(${x}px, ${y}px)`
   }
 
+  /**
+   * Everything that eases in the interface, straight to where it is going
+   * (app.settle(), for the tools): the clock's easing, and the names' and the
+   * pins' fades, which skip their transitions for the next two frames so a
+   * screenshot never catches a name fading out where the camera was.
+   */
+  settle() {
+    this.timeline.finish()
+    this.snap = 2
+    document.body.classList.add('snap')
+  }
+
   /** The front's legend: the states on the table now, the keyframe's date, the marks. */
   refreshLegend() {
     const lg = this.overlay.front ? this.app.table.front.legend() : null
@@ -340,7 +358,12 @@ export class UI {
 
   update(dt) {
     const app = this.app
+    // (the clock's easing on the wall clock under a software renderer, as the table's flights are)
+    const now = performance.now()
+    if (app.software && this._wall !== undefined) dt = Math.max(dt, Math.min(1, (now - this._wall) / 1000))
+    this._wall = now
     const onTable = app.active === app.table
+    if (this.snap && --this.snap === 0) document.body.classList.remove('snap')
     // the table's clock, legend and pins are the table's: hidden in a box
     if (this.timeline.el.hidden === onTable) this.timeline.el.hidden = !onTable
     this.timeline.update(dt)

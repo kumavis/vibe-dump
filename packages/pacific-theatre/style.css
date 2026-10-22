@@ -564,6 +564,9 @@ button { font: inherit; color: inherit; }
   .inspector { display: none; }
   .tl-era { font-size: 16px; }
 }
+/* (app.settle(): the tools' screenshots skip the fades for a frame or two) */
+body.snap .label, body.snap .pin, body.snap .cluster, body.snap .halo, body.snap .legend { transition: none !important; }
+
 @media (prefers-reduced-motion: reduce) {
   .card, .pin, .help, .halo, .cluster, .cl-tip, .label, .legend, .inspector { transition: none; }
   .timeline.invite .tl-next { animation: none; }

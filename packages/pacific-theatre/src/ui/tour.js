@@ -313,7 +313,9 @@ export class Tour {
     const bar = this.ui.timeline
     if (jump) {
       bar.tween = null
+      this.setting = true
       this.app.clock.setDate(ms)
+      this.setting = false
     } else bar.easeToDate(ms, clamp(dur * 0.8, 0.6, 2.4))
   }
 
