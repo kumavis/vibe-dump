@@ -294,18 +294,25 @@ export function link(app, ui) {
     const end = sim.clock.duration
     const lines = []
     const sources = []
-    const zone = B.clock?.name ? ` (${B.clock.name})` : ''
+    const zone = B.clock?.name ? `, ${B.clock.name}` : ''
     const at = (t) => (sim.clock.dateLabel(t) === sim.clock.dateLabel(0) ? `at ${sim.clock.label(t)}` : `on ${sim.clock.dateLabel(t)}, at ${sim.clock.label(t)}`)
     const items = []
+    // a group the record sends in after the clock (Samar's Shikishima unit): the record's next blow, said once
+    for (const g of sim.record.groups) {
+      const t = g.attack?.t ?? g.enter?.t ?? g.launch
+      if (t == null || t <= end || !g.raw?.tokko) continue
+      const names = (g.attack?.targets || []).map((x) => (x.unit >= 0 ? sim.record.ships[x.unit]?.name : null)).filter(Boolean)
+      items.push({ t, text: `${at(t).replace(/^at /, 'At ').replace(/^on /, 'On ')}${zone}, aircraft of ${g.name.replace(/^The /, 'the ')}, a tokkō (special attack) unit, dived on ${names.length ? names.join(' and ') : 'the ships'}.`, sources: g.attack?.sources || g.sources })
+    }
+    // the ships' fates after the clock, in the record's order
     for (const r of sim.record.ships) {
-      // the record's beats after the clock: a ship's own words (St. Lo and the Shikishima unit), then her fate
-      for (const e of r.events) if (e.t > end && e.text) items.push({ t: e.t, text: e.text, sources: e.sources })
       const f = r.fate
       if (f?.t != null && f.t > end && FATE_VERB[f.kind]) items.push({ t: f.t, text: `${r.name} ${FATE_VERB[f.kind]} ${at(f.t)}${zone}.`, sources: r.raw.fate?.sources })
     }
     items.sort((a, b) => a.t - b.t)
-    for (const it of items.slice(0, 5)) {
-      lines.push(it.text)
+    // (the clock named once, on the first line)
+    for (const [k, it] of items.slice(0, 5).entries()) {
+      lines.push(k && zone ? it.text.replace(zone, '') : it.text)
       for (const s of it.sources || []) if (!sources.some((x) => (x.id ?? x) === (s.id ?? s))) sources.push(s)
     }
     // and the war's next step on the table
