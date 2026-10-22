@@ -51,6 +51,7 @@
   --chart: #7fb4cc;
   --chart-deep: #1d3a52;
   --signal: #d26a50;
+  --signal-rgb: 226, 128, 104;
   --bg: #07111a;
   --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -181,14 +182,46 @@ button { font: inherit; color: inherit; }
 .tl-input:focus-visible { outline: none; }
 .tl-input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(var(--sand-rgb), 0.4); }
 
-/* --- names on the table (DOM labels, ENGINEERING §10): the table workflow's to finish --- */
-.labels { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+/* --- names on the table (DOM labels, ENGINEERING §10; src/table/labels.js) ------------------ */
+/* (a layer of its own over the canvas and under the interface; the fly-down fades it whole) */
+.labels { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 5; }
 .label {
-  position: absolute; left: 0; top: 0; translate: -50% -50%; visibility: hidden; opacity: 0;
-  font-family: var(--serif); font-style: italic; font-size: 13.5px; letter-spacing: 0.01em; white-space: nowrap;
-  color: rgba(var(--ink-rgb), 0.94); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), 0 0 9px rgba(0, 0, 0, 0.4);
-  transition: opacity 0.4s; will-change: transform;
+  position: absolute; left: 0; top: 0; transform-origin: 0 0; visibility: hidden; opacity: 0;
+  font-family: var(--serif); font-size: 13.5px; letter-spacing: 0.01em; white-space: nowrap; line-height: 1.15;
+  color: rgba(var(--ink-rgb), 0.93);
+  text-shadow: 0 0 3px rgba(4, 10, 18, 0.92), 0 1px 7px rgba(4, 10, 18, 0.55);
+  transition: opacity 0.35s, visibility 0s linear 0.35s; will-change: transform;
 }
+.label.show { visibility: visible; opacity: var(--k, 1); transition: opacity 0.35s, visibility 0s; }
+.label .lb-ja { margin-left: 0.42em; font-size: 0.84em; letter-spacing: 0.04em; opacity: 0.82; }
+/* seas: a spaced italic in the water's own pale blue */
+.label.k-sea { font-style: italic; font-size: 14.5px; letter-spacing: 0.16em; color: rgba(206, 226, 240, 0.8); }
+.label.k-sea.r-1 { font-size: 17.5px; letter-spacing: 0.24em; }
+.label.k-sea .lb-ja, .label.k-strait .lb-ja { font-style: normal; }
+/* island groups and regions: small capitals */
+.label.k-group, .label.k-region { font-family: var(--sans); font-size: 10.5px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
+.label.k-group.r-1, .label.k-region.r-1 { font-size: 12px; letter-spacing: 0.24em; }
+.label.k-region { color: rgba(var(--ink-rgb), 0.66); font-weight: 400; }
+.label.k-group .lb-ja, .label.k-region .lb-ja { text-transform: none; letter-spacing: 0.06em; }
+/* islands: upright */
+.label.k-island { font-weight: 600; }
+.label.k-island.r-1, .label.k-island.r-2 { font-size: 15px; }
+.label.k-island.r-4 { font-size: 12.5px; }
+.label.k-strait { font-style: italic; font-size: 12px; color: rgba(206, 226, 240, 0.78); }
+/* bases and cities: the name beside a mark at the place (a square for a base, a dot for a city) */
+.label.k-base, .label.k-city { font-family: var(--sans); font-size: 11.5px; padding-left: 11px; }
+.label.k-base::before, .label.k-city::before {
+  content: ''; position: absolute; left: 1px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px;
+  background: var(--ink); box-shadow: 0 0 0 1.5px rgba(4, 10, 18, 0.75);
+}
+.label.k-city::before { border-radius: 50%; }
+.label.k-base::before { border-radius: 1px; }
+/* the date line and the equator: small spaced capitals turned along the line */
+.label.k-line { font-family: var(--sans); font-size: 9.5px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(var(--sand-rgb), 0.85); }
+.label.k-line .lb-ja { text-transform: none; }
+/* the front's declared lines and perimeters (front.js) */
+.label.k-front { font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--signal-rgb), 0.95); }
+.label.k-front .lb-ja { text-transform: none; letter-spacing: 0.04em; }
 
 /* --- pins ------------------------------------------------------------------------- */
 /* (its own stacking context: a lit pin rises over the other pins, never over the card) */

@@ -20,6 +20,8 @@ import { world, ground as groundChunk } from '../render/shaders/ground.glsl.js'
 import { logDepthParsVertex, logDepthVertex, logDepthParsFragment, logDepthFragment } from '../render/shaders/logdepth.glsl.js'
 import { TableGround } from './ground.js'
 import { Coast } from './coast.js'
+import { Graticule } from './graticule.js'
+import { Labels } from './labels.js'
 
 // The tray: a frame round the relief at sea level, and walls from it down to
 // the sea floor at the pack's edge (wherever the exaggeration has it now), so
@@ -129,6 +131,10 @@ export class TableScene {
 
     this.coast = data.coast ? new Coast(data.coast, data.proj, this.uniforms, this.ground) : null
     if (this.coast) this.group.add(this.coast.group)
+    this.graticule = new Graticule(data.proj, b, this.uniforms)
+    this.group.add(this.graticule.group)
+    // the names: DOM, over the canvas (ui.js drives them with the pins once it is up)
+    this.labels = new Labels(this, data.labels)
     this.routes = new Routes({ routes: data.routes, proj: data.proj, uniforms: this.uniforms, camera: this.camera, renderer: app.renderer, maxSeg: 15, lift: [0.03, 0.0024], height: 300 })
     this.group.add(this.routes.group)
 
@@ -162,6 +168,8 @@ export class TableScene {
     r.getDrawingBufferSize(this._res)
     const dpr = r.getPixelRatio()
     this.coast?.update(this.camera, this._res, dpr, this.fade, d)
+    this.graticule.update(this.camera, this._res, dpr, this.fade, d)
+    if (!this.labels.driven) this.labels.update([], this.fade)
     const clock = this.app.clock
     this.routes.update(clock.date, d, { window: clock.windowAt(), fade: this.fade })
     for (const o of this.outlines.values()) {
@@ -241,6 +249,8 @@ export class TableScene {
     this.rig.dispose()
     this.ground.dispose()
     this.coast?.dispose()
+    this.graticule.dispose()
+    this.labels.dispose()
     this.routes.dispose()
     for (const o of this.outlines.values()) o.lines.dispose()
     this.tray.geometry.dispose()
