@@ -144,14 +144,15 @@ export class EventCard {
     const ui = this.ui
     const tour = ui.tour
     if (b.classList.contains('card-close')) this.close()
+    // (a box's stop buttons first: the next one carries the table's .next look, never its tour)
+    else if (b.classList.contains('bstop-prev')) ui.onStep(-1)
+    else if (b.classList.contains('bstop-next')) ui.onStep(1)
     else if (b.classList.contains('prev')) tour.back()
     else if (b.classList.contains('next')) tour.next()
     else if (b.classList.contains('enter')) {
       const ev = this.events.get(b.dataset.enter)
       if (ev) ui.onEnter(ev)
     } else if (b.dataset.take) ui.onTake(b.dataset.take)
-    else if (b.classList.contains('bstop-prev')) ui.onStep(-1)
-    else if (b.classList.contains('bstop-next')) ui.onStep(1)
     else if (b.classList.contains('watch')) {
       this.close()
       ui.onWatch()
