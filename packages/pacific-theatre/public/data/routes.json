@@ -38,8 +38,8 @@
         41.7
       ],
       [
-        -157.85,
-        30.8
+        -157.06,
+        28.5
       ],
       [
         -157.06,
@@ -135,7 +135,7 @@
       {
         "at": 5,
         "t": "1941-12-07T17:00+09:00",
-        "note": "\"1700 7 DEC\" (Tokyo time) on the chart.",
+        "note": "\"1700 7 DEC\" (Tokyo time) on the chart, whose point lies too far north to reach the launch point by 01:30; laid where the operation order in the Japanese monograph puts the force at that hour, 700 nautical miles north of Lānaʻi's western tip at 06:00 and then south at 24 knots.",
         "sourceClock": "1700",
         "sourceZone": "+09:00",
         "sourceDate": "1941-12-07",

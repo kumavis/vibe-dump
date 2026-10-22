@@ -48,6 +48,8 @@ const END_SLACK_KM = 10
 const STEP_KM = 1
 /** How far a box battle's fleet route may stand from its units' tracks at the battle's start, km. */
 const UNIT_SLACK_KM = 20
+/** No fleet or convoy made more than this between two dated waypoints (a day's date read at its widest), knots. */
+const MAX_FLEET_KN = 35
 /** Where the battle workflow's check is present, it holds routes and tracks together (once, not twice). */
 const BATTLE_CHECK = existsSync(join(dirname(fileURLToPath(import.meta.url)), 'battle.mjs'))
 
@@ -195,7 +197,7 @@ export default function check(ctx) {
           }
           if (end < prevMs) ctx.bad(wat, `t ${w.t} is before the waypoint ahead of it`)
           if (span && (ms < span[0] - 864e5 || ms > span[1] + 864e5)) ctx.bad(wat, `t ${w.t} falls outside the route's when`)
-          if (Number.isInteger(w.at)) timed.push({ at: w.at, ms })
+          if (Number.isInteger(w.at)) timed.push({ at: w.at, ms, end })
           prevMs = Math.max(prevMs, ms)
         }
       }
@@ -210,6 +212,19 @@ export default function check(ctx) {
       if (Number.isInteger(w?.at)) prevAt = Math.max(prevAt, w.at)
     }
     if (r.pointPrecision === 'report' && timed.length < 2) ctx.bad(at, 'a report route needs dated waypoints')
+    // a fleet or a convoy moves at a ship's speed: the legs between its dated waypoints, along the drawn line
+    if ((r.kind === 'fleet' || r.kind === 'convoy') && pts.length) {
+      for (let i = 0; i + 1 < timed.length; i++) {
+        const a = timed[i]
+        const b = timed[i + 1]
+        if (b.at <= a.at || b.at > pts.length - 1) continue
+        let km = 0
+        for (let k = a.at; k < b.at; k++) km += kmBetween(pts[k], pts[k + 1])
+        const h = (b.end - a.ms) / 3.6e6
+        const kn = h > 0 ? km / 1.852 / h : Infinity
+        if (kn > MAX_FLEET_KN) ctx.bad(`${at} waypoints at ${a.at}–${b.at}`, `${Math.round(km / 1.852)} nautical miles in ${h.toFixed(1)} h is ${Math.round(kn)} knots; no fleet or convoy made more than ${MAX_FLEET_KN}`)
+      }
+    }
 
     // a chart route is read off a named public-domain chart
     if (r.pointPrecision === 'chart') {
