@@ -15,7 +15,8 @@
 # (held, garrisoned, allied with Japan; occupied China's points and lines) and what a cell off the page's
 # map holds. The keyframes before the Atlas (1941-12-06, 1942-05-08, 1942-09-15) are schematic: the
 # territories' holders by date, occupied China from the Atlas's first page (1 July 1943), and a few hand
-# regions for the fronts of 1942 (Papua, Guadalcanal, Mindanao, Timor).
+# regions for the fronts of 1942 (Papua, Guadalcanal, Mindanao, Timor). Where the trace misreads the page
+# and the record says otherwise, the record's state is laid over it (RECORD below).
 import sys, json, math
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -205,6 +206,75 @@ HAND = {
     ],
 }
 
+# --- where the record overrides the trace -----------------------------------------------------------
+# A narrow island or a thin coast on the page fills few pixels of a cell's window, so the window's majority
+# goes to the sea round it: the page's grey sea reads as neutral, and a neutral in Papua or the Solomons
+# keeps the territory's default, Allied; or the pink of the Allied sea runs over it. The project's record
+# (research/R3-timeline.md §5, K3 to K5, and the audit's finding D1) puts these places on the other side,
+# and the page itself agrees where it is looked at closely (research/content.md §3). Each override takes
+# the cells of one Natural Earth island (grown like the coast) or of a hand region, in the territories
+# named, before General Order No. 1; its feature is schematic and carries its own sources.
+TOROKINA = P([(154.92, -6.12), (155.12, -6.10), (155.22, -6.25), (155.12, -6.36), (154.98, -6.30)])  # the beachhead at Cape Torokina, schematic
+WEWAK_COAST = P([(143.3, -3.35), (143.75, -3.45), (144.2, -3.6), (144.65, -3.8), (144.65, -4.05), (143.3, -3.85)])  # Wewak east to the Sepik's mouth
+XIANG_VALLEY = LineString([(112.95, 28.05), (113.1, 27.8), (112.9, 27.25), (112.57, 26.89), (112.5, 26.75)]).buffer(0.22, cap_style='flat')  # the railway south of Changsha to Hengyang
+NEW_IRELAND = (151.5, -3.0)  # a point on each island, to pick its Natural Earth polygon
+MALAITA = (161.0, -9.0)
+BOUGAINVILLE = (155.4, -6.3)  # Buka, under ISLE_KM2, is left to the islands
+
+
+def _atlas(kf, what):
+    return {'id': 'atlas-battle-fronts-1945', 'where': f'{ATLAS_WHERE[kf]}: {what}'}
+
+
+RECORD = {
+    '1943-11-01': [
+        dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
+             sources=lambda kf: [_atlas(kf, 'New Ireland inside the enemy-held white')]),
+        dict(state='allied', name='Malaita', island=MALAITA, terr=('solomons',),
+             sources=lambda kf: [{'id': 'zimmerman-1949', 'where': 'p. 2: the Resident Commissioner removed to Malaita in May 1942'},
+                                 _atlas(kf, 'the edge of the Allied sea across Malaita')]),
+    ],
+    '1944-08-15': [
+        dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
+             sources=lambda kf: [_atlas(kf, 'New Ireland and the Gazelle Peninsula inside the enemy-held white')]),
+        dict(state='held', name='the Wewak coast', region=WEWAK_COAST, terr=('papua',),
+             sources=lambda kf: [_atlas(kf, 'the coast at Wewak in the enemy-held white')]),
+        dict(state='held', name='occupied China: Hengyang and the Xiang valley', region=XIANG_VALLEY, terr=('china',), pointsAndLines=True,
+             sources=lambda kf: [_atlas(kf, 'the white corridor south from Changsha and the black of the period\'s gains at Hengyang')]),
+    ],
+    '1945-01-15': [
+        dict(state='held', name='Bougainville', island=BOUGAINVILLE, less=TOROKINA, terr=('papua',),
+             sources=lambda kf: [_atlas(kf, 'Bougainville in the enemy-held white'), {'id': 'smith-1963', 'where': 'Map 1: Bougainville cut off'}]),
+        dict(state='allied', name='the Torokina perimeter', region=TOROKINA, terr=('papua',),
+             sources=lambda kf: [{'id': 'atlas-battle-fronts-1945', 'where': 'p. 22, the period ending 15 November 1943: "our troops consolidated and enlarged their holdings on strategic Bougainville"'}]),
+    ],
+    '1945-07-01': [
+        dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
+             sources=lambda kf: [_atlas(kf, 'New Ireland and the Gazelle Peninsula inside the enemy-held white')]),
+    ],
+    # held to the surrender, so General Order No. 1 gives it to the Australian forces
+    '1945-09-02': [
+        dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
+             sources=lambda kf: [_atlas(kf, 'New Ireland and the Gazelle Peninsula inside the enemy-held white')]),
+    ],
+}
+
+
+def island_of(land, at):
+    p = shapely.Point(*at)
+    hit = [g for g in (land.geoms if hasattr(land, 'geoms') else [land]) if g.contains(p)]
+    if len(hit) != 1:
+        sys.exit(f'RECORD: no single island of {ISLE_KM2} km² or more at {at}')
+    return hit[0]
+
+
+def record_cells(r, land, LON, LAT, inside, tid):
+    region = island_of(land, r['island']).buffer(GROW) if 'island' in r else r['region']
+    if 'less' in r:
+        region = region.difference(r['less'])
+    return inside & np.isin(tid, list(r['terr'])) & shapely.contains_xy(region, LON, LAT)
+
+
 # General Order No. 1's zones (keyframe 1945-09-02): what Japanese forces surrendered to whom, by territory
 # and the two parallels
 GO1 = {
@@ -373,6 +443,19 @@ def build():
             m = inside & shapely.contains_xy(poly, LON, LAT)
             state[m] = st
             name[m] = nm
+        # where the record overrides the trace
+        rec_src = {}
+        over = np.full(LON.shape, '', dtype=object)
+        for r in RECORD.get(kf, []):
+            m = record_cells(r, land, LON, LAT, inside, tid)
+            if not m.any():
+                sys.exit(f'RECORD {kf} {r["name"]}: no cells')
+            state[m] = r['state']
+            name[m] = r['name']
+            pal[m] = bool(r.get('pointsAndLines'))
+            mapped[m] = False
+            over[m] = r['name']
+            rec_src[r['name']] = r['sources'](kf)
         # General Order No. 1
         if kf == '1945-09-02':
             ys, xs = np.nonzero(inside & np.isin(state, ['held', 'garrisoned', 'allied-with-japan', 'contested']))
@@ -381,6 +464,9 @@ def build():
                 if z:
                     state[y, x] = z[0]
                     name[y, x] = f'{terrs[tid[y, x]][0]}: {z[1]}' if tid[y, x] not in ('china',) else f'China: {z[1]}'
+                    if over[y, x]:
+                        name[y, x] = f'{over[y, x]}: {z[1]}'
+                        rec_src[name[y, x]] = rec_src[over[y, x]]
             # Manchuria, north Korea, Karafuto and the Kurils: occupied by the Soviet forces by 2 September, all in the Soviet zone
             for k in ('manchukuo',):
                 m = inside & (tid == k)
@@ -409,8 +495,13 @@ def build():
             if pl:
                 props['pointsAndLines'] = True
             props['sources'] = feature_sources(kf, st, nm, precise)
+            if nm in rec_src:  # the record's own sources, before the coast's
+                props['sources'] = [s for s in props['sources'] if s['id'] == 'go1-1945'] + rec_src[nm] + [{'id': 'natural-earth', 'where': '1:50m land and admin-0 countries'}]
             feats.append({'type': 'Feature', 'properties': props, 'geometry': mapping(g)})
         feats += perimeters(kf, land, ATLAS, ATLAS_WHERE, (majority, fill_unknown, cells_to_geom))
+        for nm in rec_src:
+            if not any(f['properties'].get('name') == nm for f in feats) and not any(f['properties'].get('name', '').startswith(nm + ': ') for f in feats):
+                sys.exit(f'RECORD {kf} {nm}: no feature survived (under 300 km² once clipped to the land?)')
         fc = {'type': 'FeatureCollection', 'features': feats}
         with open(OUT + f'{kf}.geojson', 'w') as f:
             json.dump(fc, f, separators=(',', ':'), ensure_ascii=False)

@@ -123,6 +123,33 @@ python3 -I tools/fronts/preview.py 1944-08-15 --bbox=141.5,-5,146,-2.6 --k=90
   10 August 1945; Tibet, Nepal and Bhutan neutral; India, Ceylon and
   Australia Allied; the page's pink along the coasts of Thailand and
   Indochina is the sea's, not ground held. These are `schematic`.
+- **Where the trace misreads the page** (`RECORD` in `tools/fronts/build.py`,
+  after the audit's finding D1): a narrow island or a thin coast fills few
+  pixels of a cell's window, so the window's majority goes to the sea round
+  it. The page's grey sea reads as neutral, which leaves a cell in Papua or
+  the Solomons at its default, Allied; or the pink of the Allied sea runs over
+  it. Looked at closely, the page agrees with the record (R3 §5, K3 to K5),
+  and the record's state is laid over the trace, `schematic`, with its
+  sources on the feature and in the keyframe's note:
+  - New Ireland `held` on 1943-11-01, 1944-08-15 and 1945-07-01 (inside the
+    page's white on pp. 20, 58 and 98; R3 K3 runs the perimeter through it),
+    and on 1945-09-02, held to the surrender inside page 100's white, in
+    General Order No. 1's `zone-swpa` (R3 K5: Rabaul's garrison cut off);
+  - Malaita `allied` on 1943-11-01, where the British Resident Commissioner
+    moved in May 1942 (Zimmerman, *The Guadalcanal Campaign*, p. 2); page 20's
+    edge of the Allied sea crosses its north, and the audit found no
+    occupation in the record;
+  - Bougainville `held` on 1945-01-15, inside page 78's white (the fit lays
+    the island's coast west of the page's drawing of it) and cut off on Smith's
+    Map 1 as R3 K5 reads it, less a schematic Torokina perimeter round Cape
+    Torokina; Buka is under the front's island size and left out;
+  - the Wewak coast, from west of Wewak to the Sepik's mouth, `held` on
+    1944-08-15 (page 58's white along it; R3 K4, "the Wewak pocket is held
+    and cut off");
+  - the railway south of Changsha to Hengyang, occupied China `held` with
+    `pointsAndLines`, on 1944-08-15: page 58 draws a white corridor too
+    narrow for the trace, with the black of the period's gains at Hengyang,
+    which fell on 8 August (R3 K4; the event `ichigo-1944`).
 - **Before the Atlas** (1941-12-06, 1942-05-08, 1942-09-15) the keyframes
   are `schematic`: the territories' holders by date; occupied China taken
   from the Atlas's first page (to 1 July 1943), the nearest public-domain
@@ -158,7 +185,10 @@ python3 -I tools/fronts/preview.py 1944-08-15 --bbox=141.5,-5,146,-2.6 --k=90
 annexations in Laos, Cambodia, Malaya and the Shan States are not drawn);
 1941–42's China from a 1943 map; the Atlas's own simplification (it paints
 the interior of New Guinea as enemy-held until the Allies hold the coast);
-page 100 is the situation to 1 August 1945, not 15 August.
+page 100 is the situation to 1 August 1945, not 15 August. The trace's misreading of narrow land is
+fixed only where it was looked at: the western Vogelkop at Sorong reads
+Allied on 1945-01-15 and 1945-07-01 under the page's pink sea lane past
+Sansapor, and Choiseul reads Allied on 1943-11-01, inside R3 K3's perimeter.
 
 ## 4. How the routes were traced
 

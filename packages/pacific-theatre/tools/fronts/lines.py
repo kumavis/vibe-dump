@@ -45,16 +45,24 @@ WHERE = {
                    'The end of the first offensive, the day the Coral Sea battle ends: Malaya, Burma, the Indies and Luzon held; Mindanao and the Visayas contested until the surrenders of May; Dutch New Guinea and Portuguese Timor contested; Thailand allied with Japan. Schematic.'),
     '1942-09-15': ([{'id': 'morton-1962', 'where': 'Maps I and 9'}, {'id': 'milner-1957', 'where': 'Map II, the Japanese advance on Port Moresby'}, {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4: occupied China'}],
                    'The high-water mark: the Kokoda Track at Ioribaiwa, Guadalcanal contested, the Aleutians and the islands of the central Pacific held. Schematic.'),
-    '1943-11-01': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 20, the period ending 1 November 1943'}],
-                   'Traced from the Atlas page for the second half of October 1943 by its colours (enemy-held white, Allied pink, neutral grey), registered to Natural Earth\'s coast.'),
+    '1943-11-01': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 20, the period ending 1 November 1943'},
+                    {'id': 'zimmerman-1949', 'where': 'p. 2: the Resident Commissioner removed to Malaita in May 1942'}],
+                   'Traced from the Atlas page for the second half of October 1943 by its colours (enemy-held white, Allied pink, neutral grey), registered to Natural Earth\'s coast. '
+                   'Where the trace misreads the page, the record stands: New Ireland, inside the page\'s white, is held; Malaita, where the British Resident Commissioner moved in May 1942 '
+                   '(Zimmerman, The Guadalcanal Campaign), is Allied, though the edge of the page\'s Allied sea crosses it.'),
     '1944-08-15': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 58, the period ending 15 August 1944'}],
-                   'Traced from the Atlas page for the first half of August 1944: the Marianas lost, New Guinea west to Sansapor, the Ichi-gō offensive in China.'),
-    '1945-01-15': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 78, the period ending 15 January 1945'}],
-                   'Traced from the Atlas page for the first half of January 1945: Leyte and Mindoro, the landing at Lingayen Gulf, the corridor through China.'),
+                   'Traced from the Atlas page for the first half of August 1944: the Marianas lost, New Guinea west to Sansapor, the Ichi-gō offensive in China. '
+                   'Where the trace misreads the page, the record stands: New Ireland, the coast from Wewak to the Sepik and the railway south of Changsha to Hengyang, which fell on 8 August, '
+                   'are held, as the page\'s own white, and its black of the period\'s gains at Hengyang, show.'),
+    '1945-01-15': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 78, the period ending 15 January 1945'}, {'id': 'smith-1963', 'where': 'Map 1'}],
+                   'Traced from the Atlas page for the first half of January 1945: Leyte and Mindoro, the landing at Lingayen Gulf, the corridor through China. '
+                   'Where the trace misreads the page, the record stands: Bougainville, inside the page\'s white, is held and cut off, as Smith\'s Triumph in the Philippines draws it, '
+                   'less the Torokina perimeter, which is drawn schematically.'),
     '1945-07-01': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 98, the period to 1 July 1945'}],
-                   'Traced from the Atlas page to 1 July 1945: Okinawa ended, Borneo landings, Burma retaken, Indochina held outright since the coup of 9 March 1945.'),
+                   'Traced from the Atlas page to 1 July 1945: Okinawa ended, Borneo landings, Burma retaken, Indochina held outright since the coup of 9 March 1945. '
+                   'Where the trace misreads the page, the record stands: New Ireland, inside the page\'s white, is held.'),
     '1945-09-02': ([{'id': 'go1-1945', 'where': 'paragraph 1 (a)–(e)'}, {'id': 'atlas-battle-fronts-1945', 'where': 'p. 100, the period to 1 August 1945'}],
-                   'The surrender: General Order No. 1\'s zones laid over the land Japan still held on the Atlas\'s page to 1 August 1945, Manchuria, Karafuto and the Kurils as the Soviet forces had taken them, the 16th and 38th parallels dividing Indochina and Korea. The zones are drawn by territory and parallel, so schematic; where the order leaves the split between South East Asia Command and the Australian forces to be arranged, Sumatra and Java go to the first and Borneo and the islands east to the second, as the surrenders were taken.'),
+                   'The surrender: General Order No. 1\'s zones laid over the land Japan still held on the Atlas\'s page to 1 August 1945, Manchuria, Karafuto and the Kurils as the Soviet forces had taken them, the 16th and 38th parallels dividing Indochina and Korea. The zones are drawn by territory and parallel, so schematic; where the order leaves the split between South East Asia Command and the Australian forces to be arranged, Sumatra and Java go to the first and Borneo and the islands east to the second, as the surrenders were taken. New Ireland, held to the surrender inside the page\'s white, goes to the Australian forces.'),
 }
 
 if __name__ == '__main__':
@@ -67,7 +75,8 @@ if __name__ == '__main__':
                       'the Atlas page\'s colours say who held each cell (enemy-held white, Allied pink and deep red, neutral grey, enemy '
                       'gains black), the page registered to Natural Earth\'s coast by a cubic fit to local coastline matches (about 2 px, '
                       '8 km, residual). The smaller islands are left to places.json\'s held intervals. Perimeters on the Atlas keyframes '
-                      'are the page\'s white sea where it meets the pink, away from land and the page\'s frame.')}
+                      'are the page\'s white sea where it meets the pink, away from land and the page\'s frame. Where the trace misreads the page (a narrow island or a '
+                      'thin coast whose cells take the colour of the sea round it), the record\'s state is laid over it, schematic, with its sources (each keyframe\'s note).')}
     for k in kfs:
         src, note = WHERE[k]
         man['keyframes'].append({'id': k, 'date': k, 'file': f'fronts/{k}.geojson', 'sources': src + [{'id': 'natural-earth', 'where': '1:50m land and admin-0 countries, for the coast and the borders'}], 'note': note})
