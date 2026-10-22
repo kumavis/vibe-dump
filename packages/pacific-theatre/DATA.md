@@ -720,7 +720,11 @@ Rules:
   carry): whether it happens is the damage model's call. Any event may
   carry `hud: false`: it plays and is drawn, and the HUD prints no line
   for it (Arizona's magazine at 08:06, R8 §5.2 a); a `fixed` unit's going
-  down prints only its own events' lines.
+  down prints only its own events' lines. A unit's `sinks`, `scuttled`,
+  `explodes` and `abandoned` carry their `text` (or `hud: false`), the line
+  the HUD prints in the rule's words ("Oglala turns over on her port
+  side."), never its fallback ("Oglala: sinks"); a sinking whose `sinks` or
+  `scuttled` carries its line prints no "sinking" before it.
 - A group's `attack.profile`: `dive | torpedo | level | strafe | cap |
   escort | search`. `losses` are ranges. A group with no `route` flies a
   straight line from its `from` unit's position at `launch` to its attack. A

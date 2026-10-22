@@ -645,7 +645,7 @@ write('boxes/test-box/battle.json', {
       events: [
         { t: '10:24', kind: 'hit', by: 'test-vb', count: [2, 3], where: 'amidships', damage: 0.6, sources: [cite()], tellings: [{ source: 'test-source-b', says: 'Test telling: three hits.' }] },
         { t: '10:25', kind: 'fire', sources: [cite()] },
-        { t: '16:30', kind: 'sinks', sources: [cite()] },
+        { t: '16:30', kind: 'sinks', text: 'Test Carrier A sinks.', sources: [cite()] },
       ],
       fate: { kind: 'sunk', t: '16:30' },
     },

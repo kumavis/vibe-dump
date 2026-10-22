@@ -1315,6 +1315,7 @@
         {
           "t": "23:42",
           "kind": "sinks",
+          "text": "Walke sinks.",
           "sources": [{"id":"morison-v","where":"2342"},{"id":"oni-cn-guadalcanal-1944","where":"Part III"}],
           "tellings": [
             {
@@ -1921,6 +1922,7 @@
         {
           "t": "23:42",
           "kind": "sinks",
+          "text": "Preston sinks.",
           "sources": [
             {"id":"oni-cn-guadalcanal-1944","where":"Part III"},
             {"id":"lundgren-bbaction","where":"0032"}
@@ -2605,6 +2607,7 @@
         {
           "t": "27:20",
           "kind": "sinks",
+          "text": "Kirishima capsizes to port and sinks.",
           "sources": [{"id":"morison-v","where":"0320"},{"id":"trom-kirishima"}],
           "tellings": [
             {"source":"trom-kirishima","says":"Capsized at 0325 at 09°05′S 159°42′E."},

@@ -1985,6 +1985,7 @@
         {
           "t": "10:53",
           "kind": "explodes",
+          "text": "Torpedoes and bombs explode on St. Lo’s hangar deck.",
           "sources": [{"id":"morison-xii","where":"XIII §3"}],
           "tellings": [
             {
@@ -1996,6 +1997,7 @@
         {
           "t": "11:25",
           "kind": "sinks",
+          "text": "St. Lo sinks.",
           "sources": [{"id":"morison-xii","where":"XIII §3"}],
           "tellings": [{"source":"danfs-st-lo","says":"She sank “half an hour later”."}]
         }
@@ -2341,7 +2343,7 @@
           "sources": [{"id":"morison-xii","where":"XII §7"}],
           "text": "Gambier Bay is abandoned; men in the water are hit by shell fragments."
         },
-        {"t":"09:07","kind":"sinks","sources":[{"id":"morison-xii","where":"XII §7"},{"id":"danfs-gambier-bay"}]}
+        {"t":"09:07","kind":"sinks","text":"Gambier Bay capsizes and sinks.","sources":[{"id":"morison-xii","where":"XII §7"},{"id":"danfs-gambier-bay"}]}
       ],
       "fate": {
         "kind": "capsized",
@@ -2638,6 +2640,7 @@
         {
           "t": "10:10",
           "kind": "sinks",
+          "text": "Johnston sinks.",
           "sources": [{"id":"johnston-ar-1944"},{"id":"morison-xii","where":"XII §6"}],
           "tellings": [
             {
@@ -2867,7 +2870,7 @@
           "sources": [{"id":"hoel-ar-1944"}],
           "text": "Hoel is abandoned, listing to port."
         },
-        {"t":"08:55","kind":"sinks","sources":[{"id":"hoel-ar-1944"},{"id":"morison-xii","where":"XII §4"}]}
+        {"t":"08:55","kind":"sinks","text":"Hoel sinks.","sources":[{"id":"hoel-ar-1944"},{"id":"morison-xii","where":"XII §4"}]}
       ],
       "fate": {
         "kind": "sunk",
@@ -3337,6 +3340,7 @@
         {
           "t": "10:05",
           "kind": "sinks",
+          "text": "Samuel B. Roberts sinks by the stern.",
           "sources": [{"id":"morison-xii","where":"XII §5"}],
           "tellings": [
             {
@@ -5807,7 +5811,7 @@
           "text": "Suzuya’s torpedoes explode under air attack.",
           "note": "outside the box’s clock"
         },
-        {"t":"13:22","kind":"sinks","sources":[{"id":"trom-suzuya"},{"id":"morison-xii","where":"XIII §5"}]}
+        {"t":"13:22","kind":"sinks","text":"Suzuya sinks.","sources":[{"id":"trom-suzuya"},{"id":"morison-xii","where":"XIII §5"}]}
       ],
       "fate": {
         "kind": "sunk",
@@ -6073,7 +6077,7 @@
           "text": "Chikuma turns sharply away to the east, a fire on her fantail."
         },
         {"t":"09:02:30","kind":"fire","sources":[{"id":"morison-xii","where":"XII §6"}]},
-        {"t":"14:30","kind":"sinks","sources":[{"id":"trom-chikuma"}]}
+        {"t":"14:30","kind":"sinks","text":"Chikuma sinks.","sources":[{"id":"trom-chikuma"}]}
       ],
       "fate": {
         "kind": "sunk",

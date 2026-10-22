@@ -624,8 +624,9 @@ export function createSim(battle, kits, opts = {}) {
         if (x.dmg.regime === 'sim' && !x.rec.fixed) return
         setAlive(i, 2)
         fx(FX.sink, state.pos[3 * i], 0, state.pos[3 * i + 2], { unit: i, size: x.model.L })
-        // (a fixed fate's own record events carry its line)
-        if (!x.rec?.fixed) beat(i, 'sinks', `${u.name}: sinking`)
+        // (a fixed fate's own record events carry its line, and so does a sinking the record words itself:
+        // "Oglala turns over on her port side." needs no "Oglala: sinking" before it)
+        if (!x.rec?.fixed && !(x.rec?.events || []).some((e) => (e.kind === 'sinks' || e.kind === 'scuttled') && e.text)) beat(i, 'sinks', `${u.name}: sinking`)
         return
       case 'sunk':
         if (x.dmg.regime === 'sim' && !x.rec.fixed) return

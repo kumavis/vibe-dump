@@ -72,6 +72,8 @@ export const OBJECTIVE_KINDS = ['dive', 'torpedo', 'level', 'gunnery', 'helm', '
 const CAUSE_KINDS = ['hit', 'torpedo-hit', 'near-miss', 'opens-fire', 'torpedoes-fired', 'illuminated', 'launches', 'scuttled']
 /** Kinds that carry nothing but a time and sources (DATA.md §9). */
 const BARE_KINDS = ['sinks', 'explodes', 'dead-in-water']
+/** A unit's fate events, which the HUD prints: each carries the record's own line (or hud: false). */
+const FATE_LINE_KINDS = ['sinks', 'scuttled', 'explodes', 'abandoned']
 const SINKING = { sunk: ['sinks', 'explodes'], scuttled: ['scuttled', 'sinks'], capsized: ['sinks'] }
 
 /** Sources that keep a clock other than the record's own, by id (R2 §3, R4 §2.1, R5 §2, R10 §2). */
@@ -622,6 +624,8 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
     foreignClock(at, e, (e.sources || []).slice(0, 1))
     tellings(at, e.tellings)
     text(ctx, `${at} text`, e.text, { numbers: true, people, card: e.text })
+    // a fate's line is the record's own, never the HUD's fallback ("Oglala: sinks", eventLine's WORDS)
+    if (!isSite && FATE_LINE_KINDS.includes(e.kind) && !e.text && e.hud !== false) ctx.bad(at, `a ${e.kind} event has no text, so the HUD would print “${owner.name || owner.id}: ${e.kind}”; give it its line (or hud: false)`)
     text(ctx, `${at} note`, e.note, { numbers: true, people })
     text(ctx, `${at} byNote`, e.byNote, { numbers: false, people })
   }

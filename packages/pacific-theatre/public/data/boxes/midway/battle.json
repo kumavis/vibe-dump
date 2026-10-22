@@ -611,6 +611,7 @@
         {
           "t": "19:25",
           "kind": "sinks",
+          "text": "Kaga sinks.",
           "sources": [{"id":"nagumo-1947","where":"narrative"},{"id":"trom-kaga","where":"4 June 1942"}],
           "sourceClock": "1625",
           "sourceZone": "+09:00",
@@ -830,6 +831,7 @@
         {
           "t": "19:13",
           "kind": "sinks",
+          "text": "Sōryū sinks.",
           "sources": [{"id":"nagumo-1947","where":"narrative; Table 3"}],
           "sourceClock": "1613",
           "sourceZone": "+09:00",
@@ -2039,6 +2041,7 @@
         {
           "t": "1942-06-07T05:01-12:00",
           "kind": "sinks",
+          "text": "Yorktown capsizes to port and sinks.",
           "sources": [
             {"id":"nwc-midway-1948","where":"p. 185"},
             {"id":"cv5-midway-1942","where":"0701 zone +10"}
@@ -2148,6 +2151,7 @@
         {
           "t": "1942-06-06T13:36-12:00",
           "kind": "sinks",
+          "text": "Hammann sinks.",
           "sources": [{"id":"cv5-midway-1942","where":"1536 zone +10, 6 June"}],
           "sourceClock": "1536",
           "sourceZone": "-10:00",
