@@ -29,19 +29,24 @@
 //     and once the table has caught up and shaded the spots, again where it
 //     stands (a rejoin while a seat picks: the snap clears the spots the
 //     input already shaded, and it must shade them again);
+//   - (F4) at the round limit (a human log that votes): a seat played here
+//     still to vote, the table still playing the round's score;
 //   - past game.over (every battle; a watched battle at once, its whole
 //     battle computed as it starts): the match over, its game.over event
-//     still queued, unplayed.
+//     still queued, unplayed (a battle the round limit's last say ends
+//     plays its end in the table's next frame: that point is taken as the
+//     driver plays the say).
 // After each snap, while the figures settle (the driver held), the page must
 // show: in the deployment, End up and enabled as "Begin battle ▸", Auto
 // down, the deployment's hint and the deploying seat's zone lit; for a
 // phase, End up and enabled as "End <phase> ▸", Auto up and enabled, a
 // hint; at a charge's end, Shortest move up, End and Auto down, the
-// charge's hint ("Charge! Rolled …") and its spots shaded orange; past the
-// end, the end screen up, worded as the match's own game.over event (taken
+// charge's hint ("Charge! Rolled …") and its spots shaded orange; at the
+// round limit, the vote's panel up ("Round r is over"), End and Auto down;
+// past the end, the end screen up (not the vote's panel), worded as the match's own game.over event (taken
 // from the player's queue before the snap drops it: who won, how, the score
 // and the rounds), End and Auto down; and nowhere else Shortest move, nor
-// the end screen. The battle must then play on to its end with every log
+// the end screen or the vote's panel. The battle must then play on to its end with every log
 // entry played and no page error.
 //
 // And the HUD model's end.ready, read off the ?debug block's `hud` (the
@@ -118,13 +123,18 @@ const MUTATIONS = {
   // (F3) Begin battle lit, but End never lit when nothing is left to do
   'ready-unlit': ['present/hud-model.js', '  end.lit = deploying || end.ready', '  end.lit = deploying'],
   // no end screen after a snap past the battle's end
-  'over-unshown': ['app/flow.js', "    if (M.stage === 'over' && !this.ui.result.up) this.over(resultOf(G))", '    // (dropped)'],
+  'over-unshown': ['app/flow.js', "    if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))", '    // (dropped)'],
+  // (F4) the round limit's vote panel never shown
+  'vote-unshown': ['app/flow.js', "    if (this.player.idle && P?.k === 'roundLimit' && this.session.decisionFor() >= 0) {", '    if (false) {'],
+  // (F4) the vote panel up keeps the end screen from a snap past the end
+  // (the panel shares it: then taken down, and no end screen)
+  'vote-blocks-end': ['app/flow.js', "    if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))", "    if (M.stage === 'over' && !this.ui.result.up) this.over(resultOf(G))"],
   // a charge's spots left marked as shaded after a snap clears them: the
   // input never shades them again (the pick is the same decision's: the
   // snap again at a charge's end)
   'pick-unshaded': ['app/flow.js', '    human.pickShown = null\n', ''],
 }
-const SELF_TEST_ON = '64-89,hotseat-aggressive-103'
+const SELF_TEST_ON = '64-89,hotseat-aggressive-103,hotseat-late-vote-9'
 
 // In the page, before the app: catch window.__ts, drive a human log's seats
 // (the corpus driver), and snap at each point due, reading the page once
@@ -171,8 +181,8 @@ function pageHarness(job, mode, settle, names) {
   // the points still to snap at, whichever comes first (a seat's charge
   // may come before the table shows the other seat's turn, or after); one
   // the battle passes by is dropped, and judge() says which it needed
-  const CHARGE_END = "at a charge's end", AGAIN = "again at a charge's end"
-  const todo = mode === 'watch' ? ['past the end'] : ['in the deployment', 'in the roll-off', 'in a phase', CHARGE_END, AGAIN, 'past the end']
+  const CHARGE_END = "at a charge's end", AGAIN = "again at a charge's end", ROUND_LIMIT = 'at the round limit'
+  const todo = mode === 'watch' ? ['past the end'] : ['in the deployment', 'in the roll-off', 'in a phase', CHARGE_END, AGAIN, ROUND_LIMIT, 'past the end']
   let waiting = null
   // the page as a player sees it
   const lit = () => document.querySelector('#endPhase').classList.contains('ready')
@@ -206,6 +216,8 @@ function pageHarness(job, mode, settle, names) {
     end: shown('#endPhase'), auto: shown('#autoPhase'), shortest: shown('#closestSpot'), ready: ts.hud?.end.ready ?? null, zones: ts.hud?.zones ?? null, shading: shading(),
     hint: getComputedStyle(document.querySelector('#hint')).display === 'none' ? '' : document.querySelector('#hint').textContent,
     over: document.querySelector('#over').classList.contains('hidden') ? null : { title: document.querySelector('#overTitle').textContent, why: document.querySelector('#overWhy').textContent },
+    // (F4) the panel showing the round limit's vote, not the end
+    vote: !document.querySelector('#over').classList.contains('hidden') && !document.querySelector('#overVote').classList.contains('hidden'),
   })
   // what the page must show once settled after the snap, by the match (and
   // past the end by its game.over event, which the snap drops)
@@ -213,6 +225,7 @@ function pageHarness(job, mode, settle, names) {
     const P = g.pending
     if (what === 'in the deployment') return { seat: ts.session.decisionFor() }
     if (what === CHARGE_END || what === AGAIN) return { rolled: P.rolled }
+    if (what === ROUND_LIMIT) return { round: g.turn.round }
     if (what !== 'past the end') return { phase: names[P.phase], ready: done(g) }
     const { win, why, vp, rounds } = queuedOver(), when = rounds ? `in round ${rounds}` : 'in the deployment'
     return {
@@ -232,12 +245,24 @@ function pageHarness(job, mode, settle, names) {
     if (what === 'in the roll-off') return local && P?.k === 'phase' && stage === 'battle' && !begun
     if (what === 'in a phase') return local && P?.k === 'phase' && M.stage === 'battle' && begun && M.active !== P.seats[0]
     if (what === CHARGE_END) return local && P?.k === 'chargeEnd'
+    if (what === ROUND_LIMIT) return local && P?.k === 'roundLimit'
     return g.turn.stage === 'over' && !!queuedOver()
   }
   // the points the battle has passed by: the deployment once the match has
   // left it, every other once it is over (and the end itself once its
   // game.over has played)
   const passed = (what, g) => (what === 'in the deployment' && g.turn.stage !== 'deploy') || (g.turn.stage === 'over' && (what !== 'past the end' || !queuedOver()))
+  // the first point due now, snapped at: the table settles `settle` frames
+  // before it is read
+  const take = (g) => {
+    const what = todo.find((w) => due(w, g))
+    if (!what) return false
+    todo.splice(todo.indexOf(what), 1)
+    const want = expect(what, g)
+    ts.player.snap(g)
+    waiting = { what, want, n: settle }
+    return true
+  }
   function loop() {
     try {
       if (waiting) {
@@ -247,17 +272,7 @@ function pageHarness(job, mode, settle, names) {
         // (the driver held one frame more: a point due where the table now
         // rests, the snap again at a charge's end, comes first)
         return void requestAnimationFrame(loop)
-      } else if (ts.G && todo.length) {
-        const g = ts.G
-        const what = todo.find((w) => due(w, g))
-        if (what) {
-          todo.splice(todo.indexOf(what), 1)
-          const want = expect(what, g)
-          ts.player.snap(g)
-          waiting = { what, want, n: settle }
-          return void requestAnimationFrame(loop)
-        }
-      }
+      } else if (ts.G && todo.length && take(ts.G)) return void requestAnimationFrame(loop)
       if (ts.G) for (const w of todo.filter((w) => passed(w, ts.G))) todo.splice(todo.indexOf(w), 1)
       if (ts.S.stage === 'over' && ts.player.idle && !todo.length) {
         sim.done = true
@@ -275,7 +290,10 @@ function pageHarness(job, mode, settle, names) {
       }
       // (F3) Begin battle lit wherever it shows in the deployment
       if (g && ts.player.idle && g.pending?.k === 'deploy' && shown('#endPhase') && !lit()) sim.ready.wrong ??= `Begin battle not lit in the deployment (trace line ${ts.trace.length})`
-      sim.driver?.tick()
+      // (F4) an entry that ends the battle at once (the round limit's last
+      // say) leaves its end queued only until the table's next frame plays
+      // it: a point due then is taken before that frame
+      if (sim.driver?.tick() && ts.G && todo.length) take(ts.G)
     } catch (e) {
       sim.error ??= String(e.stack ?? e)
       return
@@ -332,10 +350,17 @@ function wrong({ what, want, got }) {
   const zones = (z) => JSON.stringify(got.zones) !== JSON.stringify(z) && bad.push(`the zones ${JSON.stringify(got.zones)}, not ${JSON.stringify(z)}`)
   if (what === 'past the end') {
     if (!got.over) bad.push('no end screen')
+    else if (got.vote) bad.push('the vote panel up, not the end screen')
     else {
       if (want.win < 0 ? got.over.title !== 'A bloody draw' : !got.over.title.endsWith(' win!')) bad.push(`the end screen's title "${got.over.title}"`)
       if (!got.over.why.endsWith(want.line)) bad.push(`the end screen says "${got.over.why}", not "… ${want.line}"`)
     }
+    down('end', 'End')
+    down('auto', 'Auto')
+    zones([0.05, 0.05])
+  } else if (what === 'at the round limit') {
+    if (!got.vote) bad.push('no vote panel')
+    else if (got.over.title !== `Round ${want.round} is over`) bad.push(`the vote panel's title "${got.over.title}", not "Round ${want.round} is over"`)
     down('end', 'End')
     down('auto', 'Auto')
     zones([0.05, 0.05])
@@ -359,14 +384,14 @@ function wrong({ what, want, got }) {
     zones([0.05, 0.05])
   }
   if (!what.endsWith("at a charge's end")) down('shortest', 'Shortest move')
-  if (what !== 'past the end' && got.over) bad.push('the end screen up')
+  if (what !== 'past the end' && what !== 'at the round limit' && got.over) bad.push('the end screen up')
   return bad.join('; ')
 }
 
 // the points a battle must be snapped at: every human log's deployment,
-// roll-off and phase, and its charge's end (twice) if it has one; every
-// battle's end
-const needs = (item, mode) => (mode === 'watch' ? [] : ['in the deployment', 'in the roll-off', 'in a phase', ...((item.job.entries ?? []).some((e) => e.t === 'chargeEnd') ? ["at a charge's end", "again at a charge's end"] : [])]).concat('past the end')
+// roll-off and phase, its charge's end (twice) if it has one and its round
+// limit if it votes; every battle's end
+const needs = (item, mode) => (mode === 'watch' ? [] : ['in the deployment', 'in the roll-off', 'in a phase', ...((item.job.entries ?? []).some((e) => e.t === 'chargeEnd') ? ["at a charge's end", "again at a charge's end"] : []), ...((item.job.entries ?? []).some((e) => e.t === 'vote') ? ['at the round limit'] : [])]).concat('past the end')
 
 // what one battle's run says is wrong ('' when nothing is)
 function judge(item, r) {
@@ -379,7 +404,7 @@ function judge(item, r) {
 }
 
 // a snap as the page showed it, in brief
-const brief = (s) => `${s.what} (trace line ${s.at}: ${s.what === 'past the end' ? `"${s.got.over.title}", "${s.got.over.why}"` : s.what.endsWith("at a charge's end") ? `Shortest move, "${s.got.hint.slice(0, 22)}…", spots shaded` : `"${s.got.end.text}"${s.got.auto.show ? ', Auto' : ''}`})`
+const brief = (s) => `${s.what} (trace line ${s.at}: ${s.what === 'past the end' ? `"${s.got.over.title}", "${s.got.over.why}"` : s.what === 'at the round limit' ? `"${s.got.over.title}"` : s.what.endsWith("at a charge's end") ? `Shortest move, "${s.got.hint.slice(0, 22)}…", spots shaded` : `"${s.got.end.text}"${s.got.auto.show ? ', Auto' : ''}`})`
 const say = (it, r, why) => `${why ? `FAIL: ${why.slice(0, 400)}` : `right after ${r.snaps.length} snap${r.snaps.length === 1 ? '' : 's'}: ${r.snaps.map(brief).join(', ')}${r.ready?.checked ? `; End's readiness right at ${r.ready.checked} frames idle on a local seat's phase (${r.ready.ready} ready)` : ''}`}`
 
 const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-hud-'))
