@@ -49,10 +49,12 @@ with the ledger) into the downloads directory (`--downloads`, or
 `$PACIFIC_THEATRE_DOWNLOADS`, or the system's temporary directory), never into
 the repository, and writes the woff2 with `subset-font` 2.4.0.
 
-**The subset committed now was cut from Stage 0's fixtures (`node
-tools/subset-font.mjs test-data`): 78 characters, 14.4 KB (about 190 bytes a
-character).** It covers the app's own strings and the fixtures' names, not
-the real record's. At integration, once the content and the battles have
-landed, run `node tools/subset-font.mjs` on `public/data/`, commit the new
-woff2 and put its count here; R9 measured about 225 bytes a character, so
-about 120 KB for the 526 characters it estimated.
+**The subset committed now was cut at the integration from the final
+`public/data/` (`node tools/subset-font.mjs`): 555 characters, 85.5 KB
+(about 158 bytes a character)**, every CJK character in the gazetteer, the
+labels, the fronts, the four battles and the kits, and the app's own strings
+(the boot lines, the after-card's headings, the help, the HUD). The built
+app loads no font from the network: every `@font-face` in `style.css` points
+at a file under `src/fonts/`, which Vite copies into `dist/assets/`.
+`tools/check/table.mjs` says so when a name in the data is not in the
+subset; run the tool again whenever the data gains one.
