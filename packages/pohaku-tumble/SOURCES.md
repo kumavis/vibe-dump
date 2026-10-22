@@ -33,11 +33,29 @@ in `research/review/`. Each word was read against these sources:
 
 The authority for Hawaiian spelling and sense is Mary Kawena Pukui and
 Samuel H. Elbert, ***Hawaiian Dictionary***, revised and enlarged edition
-(University of Hawaiʻi Press, 1986). Its online home refuses automated
-access, and that was respected, so it was not read for this list. A word
-marked with an open circle on its card (`ev: 'pending'` in the data) has not
-yet been confirmed against it; the legend calls this *awaiting dictionary
-check*. The list has also not yet been read by a fluent speaker.
+(University of Hawaiʻi Press, 1986). Dictionary evidence is recorded entry by
+entry in [`research/review/pe-check.json`](./research/review/pe-check.json).
+Each entry identifies its dictionary and headword; directly checked entries
+also include links to [wehewehe.org](https://www.wehewehe.org/).
+
+The curation uses Pukui & Elbert alongside Andrews, Parker, Māmaka Kaiao,
+Kent and the Combined Hawaiian Dictionary (2020). A sense supported by an
+older dictionary is attributed to that dictionary. Definitions and literal
+root analyses are separate evidence: a definition of a compound does not
+by itself establish the meanings or ancestry of its component stones.
+
+The correction records and stone changes were checked directly against
+wehewehe.org on 22 October 2026. The standing confirmation-only records
+also carry their source lines; this date does not certify a new reading of
+every entry. The build itself does not query dictionary websites.
+
+An open circle (`ev: 'pending'`) marks a dictionary sense or root decision
+that remains open: one word with an unsettled sense and eight spelling/root
+rulings. An empty stone gloss likewise marks an unresolved root sense.
+The legend calls the circle *awaiting dictionary check*.
+
+This is documentary evidence, not a kumu's reading: **the list has still
+not been read by a fluent speaker**, and that invitation stands.
 
 ## The map and the star compass
 
