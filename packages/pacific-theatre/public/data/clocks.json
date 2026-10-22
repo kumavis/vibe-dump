@@ -79,5 +79,23 @@
     "used": "British Malaya and Singapore until the fall of Singapore, after which the occupation put them on Tokyo time.",
     "sources": ["tzdb"],
     "note": "On this clock the first landing at Kota Bharu falls shortly after midnight on 8 December, about an hour and a half before the first bombs on Pearl Harbor; the minute is unsettled."
+  },
+  {
+    "id": "ijn-zm8",
+    "offset": "+08:00",
+    "name": "one hour behind Item",
+    "side": "jp",
+    "used": "The early entries in the tabular records of movement of Yamato, Kongō, Haruna, Chōkai, Haguro, Yahagi and Noshiro for 25 October 1944, which switch to Item later the same day; Samar's battle file converts them by adding an hour.",
+    "sources": [],
+    "note": "An hour behind Item (+09:00), which is also Tokyo time; the records' own clock for those entries is not stated (research/battles.md)."
+  },
+  {
+    "id": "gct",
+    "offset": "+00:00",
+    "name": "Greenwich civil time",
+    "side": "us",
+    "used": "The Bishop's Point radio log and Monaghan's despatch on 7 December 1941; Pearl Harbor's battle file converts them by subtracting 10 h 30 min (1821 GCT is 0751 Hawaiian time).",
+    "sources": [],
+    "note": "The navy's Greenwich civil time of 1941 is what is now called UTC."
   }
 ]
