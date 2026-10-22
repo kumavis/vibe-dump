@@ -1,37 +1,35 @@
-// Wires the loaded data into a running scene: the ground (archipelago and
-// island packs, with the patches that give a year back its reefs), the sea,
-// the sky, the boundary lines, the routes and the far view's two overlays,
-// under one camera that runs from the whole chain to a single valley.
+// The app (ENGINEERING.md §§2, 7–9): one renderer with a logarithmic depth
+// buffer, the pipeline, the light bag every material of both scenes shares,
+// one Sky, the table and (through Battle) a box as two scenes of which one is
+// drawn per frame, app.mode for the input, the frame loop with its quality
+// governor, and the URL.
 //
-// The far view shows one of two things at a time (`view`): the chiefdoms,
-// each moku in the colour of the polity that held it (overlay/polity.js), or
-// the land, how it was used in the chosen year (overlay/land.js). The viewer
-// picks with the switch on the legend; the tour may pick for a step until
-// they have (ui/tour.js).
+// Adapted from holo-i-ke-au's app.js (b480c27): the renderer setup, the
+// light and its shared uniforms, govern/applyQuality, resize, the frame loop
+// and settle() are kept; the World, islands, districts, patches, polity and
+// land views, the ocean and the boundary lines are gone (the table's ground
+// is src/table/, a box's src/battle/). The Hawaiian bag mixed the light with
+// the ground; here the light bag (light.uniforms) is shared by reference by
+// every material of both scenes and written each frame by the active scene's
+// sky, and each scene's ground uniforms are its own.
+//
+// The URL (ENGINEERING §9): the hash carries the view (#date, #cam, #battle,
+// #t, #moment), the query string the tools' switches (?data=, ?q=, ?fixedq,
+// ?debug=). Until integration, #battle, #t and #moment are parsed, kept and
+// logged, not acted on.
 
 import * as THREE from 'three'
-import { World } from './render/world.js'
-import { Districts } from './render/district.js'
-import { Patches } from './render/patches.js'
-import { Ocean } from './render/ocean.js'
-import { Sky } from './render/sky.js'
+import { CLOCK, QUALITY } from './config.js'
+import { WarClock, parseInstant } from './time.js'
 import { Pipeline } from './render/pipeline.js'
-import { CameraRig } from './render/camera.js'
-import { Boundaries } from './render/lines.js'
-import { Routes, loadRoutes } from './render/routes.js'
-import { PolityOverlay } from './overlay/polity.js'
-import { LandOverlay } from './overlay/land.js'
-import { Timeline } from './time.js'
+import { Sky, WAR_ROOM } from './render/sky.js'
+import { MAX_POINT_LIGHTS } from './render/shaders/common.glsl.js'
+import { PackDecoder } from './data/load.js'
+import { TableScene } from './table/index.js'
+import { Battle } from './battle/index.js'
 
-const smooth = (a, b, x) => {
-  const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
-  return t * t * (3 - 2 * t)
-}
-
-/** The polity overlay's strength at a camera distance. */
-export const polityZoom = (d) => smooth(260, 900, d)
-/** The land overlay's: full at the island zooms, gone over a valley. */
-export const landZoom = (d) => smooth(90, 300, d)
+export const MODES = ['table', 'flying', 'watch', 'moment']
+const pad = (n) => String(n).padStart(2, '0')
 
 export class App {
   constructor(canvas, data, { warn = console.warn } = {}) {
@@ -39,15 +37,17 @@ export class App {
     this.data = data
     this.warn = warn
     this.params = new URLSearchParams(location.search)
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' })
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', logarithmicDepthBuffer: true })
     renderer.setClearColor(0x000000, 1)
     renderer.info.autoReset = false // (counted over the whole frame, every pass)
     this.renderer = renderer
     this.pipeline = new Pipeline(renderer)
-    this.scene = new THREE.Scene()
-    this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 9000)
+    this.events = new EventTarget()
 
-    this.light = {
+    // The light: what the active scene's sky writes each frame, and one bag
+    // of uniforms holding it that every material of both scenes shares by
+    // reference (ENGINEERING §7). uPointPos[i].w is a point light's radius.
+    const light = {
       sunDir: new THREE.Vector3(0, 1, 0),
       sunColor: new THREE.Color(),
       skyColor: new THREE.Color(),
@@ -59,198 +59,231 @@ export class App {
       sunHorizon: new THREE.Color(),
       night: 0,
     }
-    // One bag of uniforms that every surface shares by reference: the light,
-    // the ground (World adds its own), and the two overlays (the land's add
-    // their own too).
-    this.shared = {
-      uniforms: {
-        uSunDir: { value: this.light.sunDir },
-        uSunColor: { value: this.light.sunColor },
-        uSkyColor: { value: this.light.skyColor },
-        uGroundColor: { value: this.light.groundColor },
-        uMoonDir: { value: this.light.moonDir },
-        uMoonColor: { value: this.light.moonColor },
-        uTime: { value: 0 },
-        uSkyMap: { value: null },
-        uMokuId: { value: null },
-        uMokuRect: { value: new THREE.Vector4(0, 0, 1, 1) },
-        uPalette: { value: null },
-        uEraMix: { value: 0 },
-        uPolityK: { value: 0 },
-        uHoverMoku: { value: 0 },
-      },
+    light.uniforms = {
+      uSunDir: { value: light.sunDir },
+      uSunColor: { value: light.sunColor },
+      uSkyColor: { value: light.skyColor },
+      uGroundColor: { value: light.groundColor },
+      uMoonDir: { value: light.moonDir },
+      uMoonColor: { value: light.moonColor },
+      uTime: { value: 0 },
+      uSkyMap: { value: null },
+      uPointPos: { value: Array.from({ length: MAX_POINT_LIGHTS }, () => new THREE.Vector4(0, -1e9, 0, 1)) },
+      uPointCol: { value: Array.from({ length: MAX_POINT_LIGHTS }, () => new THREE.Vector3()) },
+      uPointCount: { value: 0 },
     }
-    this.world = new World(this, data)
-    Object.assign(this.shared.uniforms, this.world.uniforms)
-    this.world.uniforms = this.shared.uniforms
-    // the patches (render/patches.js): read behind the first frame (main.js)
-    this.patches = new Patches(this)
-    this.timeline = new Timeline(data.eras)
-    this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
-    this.land = new LandOverlay(this)
-    this.overlay = { lines: true, pins: true, routes: true }
-    // 'chiefdoms', 'land', or null for neither; ?view= asks for one, and
-    // counts as the viewer's choice
-    const v = this.params.get('view')
-    this.view = v === 'land' ? 'land' : v === 'none' ? null : 'chiefdoms'
-    this.viewChosen = v === 'land' || v === 'chiefdoms' || v === 'none'
-    this.viewListeners = []
-    this.polityK = 0
-    this.landK = 0
+    this.light = light
 
-    this.sky = new Sky()
-    this.scene.add(this.sky.group)
-    this.shared.uniforms.uSkyMap.value = this.sky.mapRT.texture
+    this.sky = new Sky(WAR_ROOM)
+    light.uniforms.uSkyMap.value = this.sky.mapRT.texture
     this.pipeline.uniforms.uSkyMap.value = this.sky.mapRT.texture
 
-    this.clock = { doy: Number(this.params.get('doy') ?? 277), hour: Number(this.params.get('hour') ?? 15.6) }
+    // the table's time (ENGINEERING §4); the fronts' keyframes when there are any
+    const chapters = data.chapters.length ? data.chapters : [{ id: 'war', from: '1941-12-07', to: '1945-09-03' }]
+    if (!data.chapters.length) warn('chapters.json: none; the clock runs over the war alone')
+    const kf = data.fronts?.manifest?.keyframes
+    this.clock = new WarClock(chapters, { prologueShare: CLOCK.prologueShare, windowMinDays: CLOCK.windowMinDays, windowMaxDays: CLOCK.windowMaxDays, keyframes: kf?.length ? kf.map((k) => ({ id: k.id, date: k.date })) : null })
+
+    this.decoder = new PackDecoder(2, warn)
+    this.mode = 'table'
+    this.ready = false
+    this.table = null
+    this.battle = new Battle(this)
+    this.tour = null
+    this.ui = null
+    this.active = null
     this.time = 0
     this.frames = 0
     this.updaters = []
+    this.url = { kept: {}, written: null, timer: 0, battle: null, t: null, moment: null }
   }
 
-  /** The archipelago is decoded: build the scene on it and start the frame loop. */
+  /** The table pack is decoded: build the table, make it the active scene, start the frame loop. */
   start() {
-    this.world.setArchipelago(this.world.archPack)
-    this.scene.add(this.world.group)
-    // the district close-ups under their islands (render/district.js); their
-    // manifest is read behind the first frame (main.js)
-    this.districts = new Districts(this)
-    this.world.district = this.districts
-    this.ocean = new Ocean(this.shared, this.shared.uniforms)
-    this.scene.add(this.ocean.mesh)
-    this.lines = new Boundaries(this.data, this.shared.uniforms)
-    this.scene.add(this.lines.group)
-    // what moved over the sea in the chosen years: canoes, fleets, ships,
-    // lanes (render/routes.js); the file loads behind the first frame
-    this.routes = new Routes({ proj: this.data.proj, uniforms: this.shared.uniforms, camera: this.camera, renderer: this.renderer, eras: this.data.eras })
-    this.scene.add(this.routes.group)
-    loadRoutes(this.data, this.warn).then((r) => this.routes.setRoutes(r))
-    this.rig = new CameraRig(this.camera, this.canvas, this.world)
-    const cam = this.params.get('cam')
-    if (cam) {
-      const [x, z, distance, yaw, pitch] = cam.split(',').map(Number)
-      this.rig.jump({ x, z, distance, yaw, pitch })
-    }
-    const year = this.params.get('year')
-    if (year) this.timeline.setYear(Number(year))
-    // A view asked for with no year opens at contact, or the keyframe nearest
-    // it: the chiefdoms at their fullest, just before the record changes
-    // character (DESIGN.md §3.2). Otherwise the tour opens on its first
-    // chapter (ui/tour.js), and the year is that era's.
-    else if (cam) this.timeline.set(Math.round(this.timeline.sAtYear(1778)))
-    else this.timeline.set(0)
-    this.timeline.onChange(() => this.syncEras())
-    this.syncEras()
-    this.sky.update(this.clock.doy, this.clock.hour, 0, this.light)
+    this.table = new TableScene(this, this.data)
+    this.setActive(this.table)
+    this.setMode('table')
 
     const gl = this.renderer.getContext()
     const dbg = gl.getExtension('WEBGL_debug_renderer_info')
     const gpu = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : ''
+    this.gpu = gpu
     this.software = /swiftshader|llvmpipe|software/i.test(gpu)
     this.quality = { level: 2, cap: 3, avg: 16, since: 0, raisedAt: -1e9, fixed: this.software || this.params.has('fixedq') }
     if (this.params.get('q')) this.quality.level = Number(this.params.get('q'))
     this.applyQuality()
-    if (this.params.get('debug')) this.world.setDebug(Number(this.params.get('debug')))
+    if (this.params.get('debug')) this.table.ground.terrain.setDebug(Number(this.params.get('debug')))
 
     this.resize()
     addEventListener('resize', () => this.resize())
+    addEventListener('hashchange', () => {
+      if (location.hash === this.url.written) return
+      this.fromUrl()
+    })
     this.last = performance.now()
     this.frame = this.frame.bind(this)
     requestAnimationFrame(this.frame)
   }
 
+  /** Make a scene the one drawn: the sky moves into it and is seen from its place. */
+  setActive(s) {
+    if (this.active === s) return
+    this.active?.scene.remove(this.sky.group)
+    this.active = s
+    s.scene.add(this.sky.group)
+    const p = s.skyPlace
+    this.sky.setPlace(p.lat, p.lon)
+    s.setRange?.(this.qset?.range ?? QUALITY[2].range)
+    if (this.sized) this.resize()
+  }
+
   /**
-   * What the far view shows: 'chiefdoms', 'land' or null. `user` marks the
-   * viewer's own choice, which the tour leaves alone from then on.
+   * Who owns the input (ENGINEERING §8): 'table' the table rig and the UI,
+   * 'flying' nothing but Esc, 'watch' the box's orbit rig, 'moment' only the
+   * battle's controls. The rigs are switched here; the UI and the controls
+   * read app.mode before they act.
    */
-  setView(v, { user = false } = {}) {
-    if (user) this.viewChosen = true
-    const next = v === 'chiefdoms' || v === 'land' ? v : null
-    if (next === this.view) return
-    this.view = next
-    for (const f of this.viewListeners) f(next)
+  setMode(m) {
+    if (!MODES.includes(m)) throw new Error(`app.mode “${m}”: one of ${MODES.join(', ')}`)
+    this.mode = m
+    if (this.table) this.table.rig.enabled = m === 'table'
+    const box = this.battle?.scene
+    if (box?.rig) box.rig.enabled = m === 'watch'
   }
 
-  onView(f) {
-    this.viewListeners.push(f)
+  /**
+   * The hand-over's cut (ENGINEERING §9): the frame fades to the haze over
+   * `out` seconds, fn() switches the scene and places its camera, and it
+   * fades back in over `back`. One scene is drawn on every frame of it.
+   */
+  cut(fn, { out = 0.25, back = 0.25 } = {}) {
+    return new Promise((resolve, reject) => {
+      this._cut = { phase: 'out', t: 0, out, back, fn, resolve, reject }
+    })
   }
 
-  /** How much of the screen the island under the camera's target fills: 0 over open sea, about 1 edge to edge. */
-  islandFill() {
-    const s = this.rig.state
-    const t = s.target
-    let best = null
-    let e0 = 0
-    for (const p of this.world.islandPacks) {
-      const q = p.rect
-      const e = Math.min(t.x - q.x0, q.x1 - t.x, t.z - q.z0, q.z1 - t.z)
-      if (e > e0) {
-        e0 = e
-        best = p
+  stepCut(dt) {
+    const c = this._cut
+    if (!c) return
+    c.t += dt
+    const u = this.pipeline.uniforms.uFade
+    if (c.phase === 'out') {
+      u.value = Math.min(1, c.t / c.out)
+      if (c.t >= c.out) {
+        try {
+          c.fn()
+        } catch (err) {
+          this._cut = null
+          u.value = 0
+          return c.reject(err)
+        }
+        c.phase = 'back'
+        c.t = 0
+      }
+    } else {
+      u.value = Math.max(0, 1 - c.t / c.back)
+      if (c.t >= c.back) {
+        u.value = 0
+        this._cut = null
+        c.resolve()
       }
     }
-    if (!best) return 0
-    const h = 2 * s.distance * Math.tan((this.camera.fov * Math.PI) / 360)
-    const q = best.rect
-    return Math.max((q.x1 - q.x0) / (h * this.camera.aspect), (q.z1 - q.z0) / h)
   }
 
-  /** What the routes need to know of the tour and the view, besides the year. */
-  routeOptions(extra) {
-    const tour = this.tour
-    return { window: this.timeline.window, fill: this.islandFill(), focus: tour?.active ? (tour.event?.id ?? null) : null, ...extra }
-  }
+  // --- the URL -------------------------------------------------------------
 
-  /** An island pack, decoded in the background. */
-  addIsland(pack) {
-    const t = this.world.addIsland(pack)
-    this.land.attach(t)
-    t.applyRange(this.qset.range)
-    if (this.params.get('debug')) t.uniforms.uDebug.value = Number(this.params.get('debug'))
-  }
-
-  /** Settle everything that eases (camera, pack detail, overlay, the year) at once: for the tools. */
-  settle() {
-    this.ui?.timeline.finish()
-    this.rig.finishFlight()
-    const g = this.rig.goal
-    for (const s of [this.rig.goal, this.rig.state]) {
-      s.target.copy(g.target)
-      s.distance = g.distance
-      s.yaw = g.yaw
-      s.pitch = g.pitch
+  /** Read the hash (at boot, after the table is ready, and on hashchange): #date and #cam act; #battle, #t, #moment are kept. */
+  fromUrl() {
+    const h = new URLSearchParams(location.hash.replace(/^#/, ''))
+    const kept = {}
+    for (const [k, v] of h) if (!['date', 'cam', 'battle', 't', 'moment'].includes(k)) kept[k] = v
+    this.url.kept = kept
+    const date = h.get('date')
+    if (date) {
+      try {
+        this.clock.setDate(parseInstant(date))
+      } catch (err) {
+        this.warn(`#date=${date}: ${err.message}`)
+      }
     }
-    this.world.update(this.camera, g.distance, 0)
-    this.world.settle(this.camera)
-    this.districts?.settle(this.camera, g.distance)
-    this.rig.jump({ x: g.target.x, z: g.target.z })
-    this.polityK = this.view === 'chiefdoms' ? polityZoom(g.distance) : 0
-    this.landK = this.view === 'land' ? landZoom(g.distance) : 0
-    this.shared.uniforms.uPolityK.value = this.polityK
-    this.land.settle(this.landK)
-    this.routes?.settle(this.timeline.year, g.distance, this.routeOptions())
+    const cam = h.get('cam')
+    if (cam) {
+      const v = cam.split(',').map(Number)
+      if (v.length === 5 && v.every(Number.isFinite)) {
+        const [x, z, distance, yaw, pitch] = v
+        this.active.rig.jump({ x, z, distance, yaw, pitch })
+      } else this.warn(`#cam=${cam}: want x,z,distance,yaw,pitch`)
+    }
+    for (const k of ['battle', 't', 'moment']) this.url[k] = h.get(k)
+    if (this.url.battle || this.url.t || this.url.moment) {
+      // (integration wires these to app.battle; until then they are kept and said)
+      console.info('[url] kept until integration:', JSON.stringify({ battle: this.url.battle, t: this.url.t, moment: this.url.moment }))
+    }
+  }
+
+  /** The hash the view now stands for: the date (a day), the active rig's pose, the kept keys. */
+  hashNow() {
+    const p = new URLSearchParams()
+    const d = new Date(this.clock.date)
+    p.set('date', `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`)
+    const s = this.active.rig.goal
+    p.set('cam', [s.target.x, s.target.z, s.distance, s.yaw, s.pitch].map((v) => (+v.toFixed(4)).toString()).join(','))
+    for (const k of ['battle', 't', 'moment']) if (this.url[k]) p.set(k, this.url[k])
+    for (const [k, v] of Object.entries(this.url.kept)) p.set(k, v)
+    return `#${p.toString().replace(/%2C/g, ',').replace(/%3A/g, ':')}`
+  }
+
+  /** Write the hash with replaceState, debounced 250 ms, only when it changed; remember it so it does not re-enter fromUrl. */
+  syncUrl(dt) {
+    if (!this.ready) return
+    this.url.timer -= dt
+    if (this.url.timer > 0) return
+    this.url.timer = 0.25
+    const h = this.hashNow()
+    if (h === this.url.written || h === location.hash) {
+      this.url.written = h
+      return
+    }
+    this.url.written = h
+    history.replaceState(history.state, '', `${location.pathname}${location.search}${h}`)
+  }
+
+  // --- tools ---------------------------------------------------------------
+
+  /** Settle everything that eases (camera, ground, the cut) at once: for the tools. */
+  settle() {
+    if (this._cut) {
+      const c = this._cut
+      if (c.phase === 'out') c.fn()
+      this._cut = null
+      this.pipeline.uniforms.uFade.value = 0
+      c.resolve()
+    }
+    this.active.settle()
   }
 
   stats() {
     const info = this.renderer.info
-    return { ...this.world.stats(), view: this.view, frameMs: +(this.frameAvg ?? 0).toFixed(1), calls: info.render.calls, triangles: info.render.triangles, textures: info.memory.textures, quality: this.quality.level }
+    return {
+      mode: this.mode,
+      ...this.active.stats(),
+      frameMs: +(this.frameAvg ?? 0).toFixed(1),
+      calls: info.render.calls,
+      triangles: info.render.triangles,
+      textures: info.memory.textures,
+      geometries: info.memory.geometries,
+      programs: info.programs?.length ?? 0,
+      quality: this.quality.level,
+      gpu: this.gpu,
+    }
   }
 
-  syncEras() {
-    const { a, b, t } = this.timeline.pair
-    this.polity.setEras(a, b, t)
-  }
+  // --- quality and size ------------------------------------------------------
 
   applyQuality() {
-    const L = [
-      { range: 3, dpr: 1 },
-      { range: 3.8, dpr: 1.25 },
-      { range: 4.6, dpr: 1.5 },
-      { range: 5.5, dpr: 2 },
-    ][Math.max(0, Math.min(3, this.quality.level))]
+    const L = QUALITY[Math.max(0, Math.min(QUALITY.length - 1, this.quality.level))]
     this.qset = L
-    this.world.setRange(L.range)
+    this.active?.setRange?.(L.range)
     if (this.sized) this.resize()
   }
 
@@ -281,10 +314,15 @@ export class App {
     this.renderer.setPixelRatio(dpr)
     this.renderer.setSize(w, h, false)
     this.pipeline.setSize(w, h, dpr)
-    this.camera.aspect = w / h
-    this.camera.updateProjectionMatrix()
+    for (const s of [this.table, this.battle?.scene]) {
+      if (!s) continue
+      s.camera.aspect = w / h
+      s.camera.updateProjectionMatrix()
+    }
     this.sky.starUniforms.uPixel.value = dpr
   }
+
+  // --- the frame -------------------------------------------------------------
 
   frame(now) {
     const dt = Math.max(0, Math.min(0.1, (now - this.last) / 1000))
@@ -294,51 +332,30 @@ export class App {
     this.renderer.info.reset()
     this.camDt = this.camDt === undefined ? dt : this.camDt + (dt - this.camDt) * 0.3
     this.govern(dt)
+    this.stepCut(dt)
     this.update(dt)
     this.sky.renderMap(this.renderer)
-    this.pipeline.render(this.scene, this.camera)
+    this.pipeline.render(this.active.scene, this.active.camera)
     this.frames++
     requestAnimationFrame(this.frame)
   }
 
   update(dt) {
-    const c = this.clock
-    this.sky.update(c.doy, c.hour, this.time, this.light)
-    this.shared.uniforms.uTime.value = this.time
-    this.rig.update(this.camDt ?? dt)
-    const d = this.rig.state.distance
-    this.world.update(this.camera, d, dt)
-    this.ocean.update(this.camera)
-    // the two overlays of the far view, crossfading as the view changes: the
-    // polity full over the chain and gone well before the valleys; the land
-    // full at the chain and the island zooms, gone as the camera closes on a
-    // valley (where the near view will carry the land itself)
-    const ease = 1 - Math.exp(-dt * 5)
-    const pk = this.view === 'chiefdoms' ? polityZoom(d) : 0
-    this.polityK += (pk - this.polityK) * ease
-    this.shared.uniforms.uPolityK.value = this.polityK
-    const lk = this.view === 'land' ? landZoom(d) : 0
-    this.landK += (lk - this.landK) * ease
-    this.land.update(dt, this.landK)
-    this.lines.visible = this.overlay.lines
+    const s = this.active
     const L = this.light
-    const lightLevel = Math.min(1, 0.25 + (L.sunColor.r + L.skyColor.r) * 0.35)
-    this.lines.update(this.camera, this.renderer, d, lightLevel)
-    this.routes.visible = this.overlay.routes !== false
-    this.routes.update(this.timeline.year, d, this.routeOptions({ light: lightLevel }))
+    this.sky.update(s.skyInstant(), this.time, L)
+    L.uniforms.uTime.value = this.time
+    s.update(this.camDt ?? dt)
     for (const u of this.updaters) u(dt, this.time)
     const pu = this.pipeline.uniforms
     pu.uSunDir.value.copy(L.sunDir)
     pu.uSunColor.value.copy(L.sunHorizon)
     pu.uFogColor.value.copy(L.horizon)
-    // Aerial perspective scaled to the view: the haze is set by how far the
-    // camera stands off, so a valley and the whole chain both read with depth
-    // and neither goes milky. (ahupuaʻa's fixed 0.0016 and 0.045 suit a
-    // camera a few hundred units out.)
-    pu.uFogDensity.value = 0.09 / Math.max(30, d)
-    pu.uFogFalloff.value = 2.0 / Math.max(30, d)
+    const f = s.fog()
+    this.pipeline.setFog(f.density, f.falloff)
     pu.uExposure.value = 0.55 * (1 + 2.2 * Math.pow(L.night, 1.5))
     pu.uNight.value = L.night
-    this.sky.group.position.copy(this.camera.position)
+    this.sky.group.position.copy(s.camera.position)
+    this.syncUrl(dt)
   }
 }

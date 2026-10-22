@@ -3,21 +3,28 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Holo i ke Au</title>
-    <meta name="description" content="The Hawaiian Islands from real terrain, across the eras from the first canoes to 1898: the chiefdoms by moku, the boundaries of moku and ahupuaʻa, and sourced events on a timeline." />
+    <title>Pacific Theatre</title>
+    <meta name="description" content="The Pacific War as a sand table, from Pearl Harbor to Tokyo Bay. Follow the front and the fleets day by day; drop into a battle to watch it as the record tells it, or take one aircraft or one ship, on either side." />
     <link rel="icon" href="data:," />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <canvas id="scene" tabindex="0" aria-label="A three-dimensional map of the Hawaiian Islands"></canvas>
+    <canvas id="scene" tabindex="0" aria-label="A three-dimensional relief map of the Pacific theatre of the Second World War"></canvas>
     <div id="boot">
       <div class="boot-inner">
         <svg class="boot-art" viewBox="0 0 180 96" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path class="isle" d="M10 74c6-3 9-9 15-9s8 6 14 9M52 74c5-5 9-14 17-14s11 9 16 14M96 74c6-9 13-24 25-24 11 0 18 15 24 24" />
-          <path class="current" d="M4 84c14 0 18-5 32-5s18 5 32 5 18-5 32-5 18 5 32 5 18-5 32-5" />
-          <path class="waa" d="M70 30h26l-3 4H73zM83 30V14l9 13h-9" />
+          <path class="grid" d="M14 88c20-46 132-46 152 0M40 88c10-30 90-30 100 0M90 22v66M30 60h120" />
+          <path class="land" d="M18 70c8-4 12-11 20-11s9 7 15 9M128 64c5-6 10-13 18-13 6 0 10 6 14 12" />
+          <path class="route" d="M24 80c26-10 48-30 70-30s42 12 66 6" />
+          <path class="ship" d="M78 42h24l-3 4H81zM86 42v-6h8v6M90 36v-7" />
         </svg>
-        <div class="boot-title">Holo i ke Au</div>
+        <div class="boot-title">Pacific Theatre</div>
+        <div class="boot-lines">
+          <p>The Pacific War, 7 December 1941 – 2 September 1945</p>
+          <p class="boot-sub">A sand table of the record</p>
+          <p lang="ja">太平洋戦争　1941年12月8日 – 1945年9月2日</p>
+          <p class="boot-sub" lang="ja">記録でたどる砂盤（ジオラマ）</p>
+        </div>
         <div class="boot-bar"><span></span></div>
         <div class="boot-stage"></div>
       </div>
