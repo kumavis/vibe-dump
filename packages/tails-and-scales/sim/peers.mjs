@@ -23,6 +23,13 @@
 //   fork   (hotseat logs) seat 0 played from two tabs (two peers of one
 //          device, each playing the log's commands) and seat 1's peer:
 //          three peers, same-seat forks, the loser stale
+//   auto   as pair, but each seat answers only from inside its Session's
+//          sink, in `settled`, as an autopilot does: the log's next command
+//          and, when it is legal already, the one after it, two queued in
+//          one call (the Session writes the second on the head the first
+//          leaves, so the store must take a write made from inside a fold)
+// and, for one hotseat log, tamper: a peer puts the log anew (a string)
+// part way through, and every peer's match must freeze, 'tamper'.
 // and the AI pairs (--ai N of them, default 3): a spectator writes the
 // start and a second one joins.
 //
@@ -37,7 +44,8 @@
 // is project(G); each accepted seat command carries `h` exactly where §0.2
 // #3 says (one for a phase and a charge's end, none for the deployment and
 // the round limit's vote); no seat has two accepted commands after the same
-// head. In pair and trio nothing is refused; in fork every refused entry
+// head. In pair, trio and auto nothing is refused (and over the run some
+// auto seat queued two commands in one call); in fork every refused entry
 // is a seat's command that lost to a tab's (stale, no longer its turn, or
 // inert past the end: a tab's loser, or one the other seat wrote having
 // seen only the loser), sent again on the winner's head. Over the run, entries must have landed before entries
@@ -129,8 +137,13 @@ const actorOf = (rank) => rank.toString(16).padStart(2, '0').repeat(16)
 
 // ── A peer ──────────────────────────────────────────────────────────────────
 class Peer {
-  constructor(M, { name, seats = [], dev, script }) {
-    Object.assign(this, { M, name, seats, dev, script })
+  constructor(M, { name, seats = [], dev, script, reactive = false }) {
+    Object.assign(this, { M, name, seats, dev, script, reactive })
+    // (reactive: commands sent from settled, two queued in one call, and
+    // queued ones the Session dropped)
+    this.sent = 0
+    this.pairs = 0
+    this.drops = 0
     this.view = null
     this.resets = 0
     this.undone = 0
@@ -172,6 +185,11 @@ class Peer {
           this.undone += undone
           this.view = M.mirror.project(G)
         },
+        settled: (ses) => this.reactive && this.react(ses),
+        dropped: (seat, body, why) => {
+          if (!this.reactive) throw new Error(`${this.name}'s Session dropped ${JSON.stringify(body)}, which it never queued: ${why}`)
+          this.drops++
+        },
       },
     })
   }
@@ -180,22 +198,44 @@ class Peer {
     return this.session.G
   }
 
-  // the seat's command the log plays next: its accepted commands so far,
-  // by any device, count it off
-  next(seat) {
+  // (auto) the seats' next commands from inside the sink's settled, as an
+  // autopilot answers: the next, and the one after it if it is legal
+  // already, both queued in one call
+  react(ses) {
+    if (ses.status !== 'live') return
+    for (const s of this.seats) {
+      if (!ses.G.pending?.seats.includes(s)) continue
+      const first = this.next(s)
+      if (!first || ses.legal(s, first) !== null) continue
+      ses.submit(s, first)
+      this.sent++
+      const second = this.next(s, 1)
+      if (second && ses.legal(s, second) === null) {
+        ses.submit(s, second)
+        this.sent++
+        this.pairs++
+      }
+    }
+  }
+
+  // the seat's command the log plays next (or `ahead` after it): its
+  // accepted commands so far, by any device, count it off
+  next(seat, ahead = 0) {
     const byId = new Map()
     for (const e of this.store.entries()) if (!e.bad && !byId.has(e.id)) byId.set(e.id, e)
+    // (an accepted id gone from the list counts nothing: the log put anew,
+    // which the Session hears a microtask later)
     const done = this.session.accepted.filter((id) => {
       const e = byId.get(id)
-      return e.s === seat && e.t !== 'concede' && e.t !== 'desync'
+      return e?.s === seat && e.t !== 'concede' && e.t !== 'desync'
     }).length
-    return this.script?.[seat]?.[done] ?? null
+    return this.script?.[seat]?.[done + ahead] ?? null
   }
 
   // a decision of a seat played here, with the log's next command for it
   // legal now in this peer's view
   canAct() {
-    if (this.session?.status !== 'live') return null
+    if (this.reactive || this.session?.status !== 'live') return null
     for (const s of this.seats) {
       if (!this.G.pending?.seats.includes(s)) continue
       const body = this.next(s)
@@ -219,7 +259,7 @@ async function scenario(M, task) {
   const specs = []
   if (task.kind === 'ai') specs.push({ name: 'host', dev: 'h' }, { name: 'watcher', dev: 'w' })
   else {
-    for (const s of humans) specs.push({ name: `seat ${s}`, seats: [s], dev: `d${s}`, script })
+    for (const s of humans) specs.push({ name: `seat ${s}`, seats: [s], dev: `d${s}`, script, reactive: task.kind === 'auto' })
     if (task.kind === 'fork') specs.splice(1, 0, { name: 'seat 0, tab 2', seats: [0], dev: 'd0', script })
     if (humans.length === 1 || task.kind === 'trio') specs.push({ name: humans.length === 1 && task.kind === 'trio' ? 'watcher 2' : 'watcher', dev: 'w' })
     if (humans.length === 1 && task.kind === 'trio') specs.splice(1, 0, { name: 'watcher', dev: 'w1' })
@@ -249,7 +289,15 @@ async function scenario(M, task) {
     let last = Date.now(), steps = 0
     for (const h of handles) h.on('change', () => (last = Date.now()))
     const heads = (p) => M.A.getHeads(p.handle.doc()).slice().sort().join()
+    let tampered = false
     for (;;) {
+      // (tamper) part way through, the last peer puts the log anew
+      if (task.kind === 'tamper' && !tampered && peers.at(-1).store.length >= 40) {
+        peers.at(-1).handle.change((d) => {
+          d.log = 'junk'
+        })
+        tampered = true
+      }
       for (const p of peers) {
         if (Date.now() < p.readyAt) continue
         const act = p.canAct()
@@ -266,6 +314,11 @@ async function scenario(M, task) {
         throw new Error(`${where}: stalled, nothing changed for ${STALL / 1000} s (${at})`)
       }
       await sleep(2)
+    }
+    if (task.kind === 'tamper') {
+      const not = peers.filter((p) => p.session.status !== 'tamper')
+      if (!tampered || not.length) throw new Error(`${where}: ${tampered ? `the log put anew, ${not.map((p) => `${p.name}'s match is ${p.session.status}`).join(', ')}, not tamper` : 'the run never reached the tamper'}`)
+      return { where, peers: peers.length, entries: peers[0].store.length, steps, refused: {}, inserts: 0, resets: 0, undone: 0, pairs: 0, bytes: M.A.save(peers[0].handle.doc()).byteLength, tamper: true }
     }
     return judge(M, peers, it, task, where, steps)
   } finally {
@@ -340,6 +393,7 @@ function judge(M, peers, it, task, where, steps) {
   return {
     where, peers: peers.length, entries: list.length, steps, refused,
     inserts: peers.reduce((s, p) => s + p.insertsBefore, 0), resets: peers.reduce((s, p) => s + p.resets, 0), undone: peers.reduce((s, p) => s + p.undone, 0),
+    pairs: peers.reduce((s, p) => s + p.pairs, 0), drops: peers.reduce((s, p) => s + p.drops, 0),
     bytes: M.A.save(p0.handle.doc()).byteLength,
   }
 }
@@ -429,8 +483,10 @@ function tasks(only) {
   const out = []
   let seed = 1
   for (const it of chosen.filter((x) => x.kind === 'human')) {
-    for (const kind of ['pair', 'trio', ...(it.mode === 'hotseat' ? ['fork'] : [])]) out.push({ kind, id: it.id, seed: seed++ })
+    for (const kind of ['pair', 'trio', 'auto', ...(it.mode === 'hotseat' ? ['fork'] : [])]) out.push({ kind, id: it.id, seed: seed++ })
   }
+  const hot = chosen.find((x) => x.kind === 'human' && x.mode === 'hotseat')
+  if (hot) out.push({ kind: 'tamper', id: hot.id, seed: seed++ })
   for (const it of chosen.filter((x) => x.kind === 'ai').slice(0, only === undefined ? AI : Infinity)) out.push({ kind: 'ai', id: it.id, seed: seed++ })
   return out
 }
@@ -448,13 +504,15 @@ async function run(pkg, list, { quiet = false } = {}) {
     }
     done.push(r.r)
     const x = r.r
-    say(`  ${`${task.id} ${task.kind}`.padEnd(32)} ok   ${x.peers} peers, ${x.entries} entries, ${x.inserts} landing before folded ones, ${x.resets} resets${x.undone ? ` (${x.undone} shown undone)` : ''}${Object.keys(x.refused).length ? `, refused ${Object.entries(x.refused).map(([k, v]) => `${k} ${v}`).join(', ')}` : ''}; ${(x.bytes / 1024).toFixed(1)} KB saved (${x.steps} commands sent)`)
+    if (x.tamper) return say(`  ${`${task.id} ${task.kind}`.padEnd(32)} ok   ${x.peers} peers: the log put anew after ${x.steps} commands, every peer's match frozen, tamper`)
+    say(`  ${`${task.id} ${task.kind}`.padEnd(32)} ok   ${x.peers} peers, ${x.entries} entries,${x.pairs ? ` ${x.pairs} pairs queued from settled${x.drops ? ` (${x.drops} dropped)` : ''},` : ''} ${x.inserts} landing before folded ones, ${x.resets} resets${x.undone ? ` (${x.undone} shown undone)` : ''}${Object.keys(x.refused).length ? `, refused ${Object.entries(x.refused).map(([k, v]) => `${k} ${v}`).join(', ')}` : ''}; ${(x.bytes / 1024).toFixed(1)} KB saved (${x.steps} commands sent)`)
   })
   // over the run: concurrent inserts landed before folded entries, and a
   // fork reset some peer's view
   if (!bad.length && list.some((t) => t.kind !== 'ai')) {
     if (!done.some((x) => x.inserts > 0)) bad.push({ error: 'no entry ever landed before entries a peer had folded: the run never met Automerge\'s concurrent inserts' })
     if (list.some((t) => t.kind === 'fork') && !done.some((x) => x.where.endsWith('(fork)') && x.resets > 0)) bad.push({ error: 'no fork ever reset a peer\'s view' })
+    if (list.some((t) => t.kind === 'auto') && !done.some((x) => x.pairs > 0)) bad.push({ error: 'no auto seat ever queued two commands in one call: the Session\'s queue never wrote from inside a fold' })
   }
   return { bad, done }
 }
@@ -469,7 +527,11 @@ const MUTANTS = {
   // refuses
   'append-encodes': ['net/automerge-store.js', "    const text = typeof entry === 'string' ? entry : encode(entry)\n", '    const text = encode(entry)\n'],
   // a change never told: the Session folds nothing after its start
-  'silent': ['net/automerge-store.js', '      if (this.patch(patches)) for (const fn of [...this.subs]) fn()\n', '      this.patch(patches)\n'],
+  'silent': ['net/automerge-store.js', '    for (const fn of [...this.subs]) fn()\n', ''],
+  // a peer's change told inside the handle's own change event, where a
+  // write the Session makes is only queued: an autopilot's second command
+  // written on a stale head
+  'told-in-emit': ['net/automerge-store.js', '      if (!this.writing) queueMicrotask(() => this.tell())\n', '      if (!this.writing) this.tell()\n'],
   // decoded once per place (the cache the contract forbids): an insert
   // before folded entries hands out the old entries at their old places,
   // the inserted one at the end

@@ -26,12 +26,22 @@
 //   - append(entry | text): the text pushed as it is (the Session hands
 //     over the canonical text it has checked decode takes: encoding it
 //     again would make a JSON-quoted string every peer refuses), in one
-//     change. Its subscribers hear it before append returns: the handle
-//     emits its change event synchronously on a local change (verified on
-//     automerge-repo 2.5.6), as LocalStore tells its own at once.
+//     change. Its subscribers hear it before append returns, as LocalStore
+//     tells its own at once.
 //   - subscribe(fn): told on every change that touches the log, a peer's
-//     arriving through the network included (asynchronously, between the
-//     tasks of the event loop, never in the middle of a fold).
+//     arriving through the network included, never inside the handle's own
+//     change event. automerge-repo 2.5.6 emits that event from inside its
+//     state machine (xstate), where a change made meanwhile is only queued,
+//     applied after the event's listeners return: so a Session that folded
+//     there and wrote an entry from its own loop (a queued submit, a
+//     desync it found) would go on before the entry was in the list, its
+//     next entry written on a stale head. The store notes the change in the
+//     event and tells its subscribers outside it: a change its own append
+//     made as append returns (the handle has applied it by then), any other
+//     a microtask later (a peer's, arriving between the event loop's tasks:
+//     told before any other task runs). A subscriber's error so reaches
+//     append's caller (or, for a peer's change, the microtask's), never the
+//     handle's machinery.
 //
 // ImmutableString comes from @automerge/automerge/slim, the module instance
 // the repo uses (its slim entry, or the one its full entry initialises: an
@@ -56,8 +66,14 @@ export class AutomergeStore {
     this.list = []
     this.subs = new Set()
     this.rebuild()
+    // a change heard but not yet told, and whether this store's append is
+    // making one now
+    this.unheard = false
+    this.writing = false
     this.heard = ({ patches }) => {
-      if (this.patch(patches)) for (const fn of [...this.subs]) fn()
+      if (!this.patch(patches)) return
+      this.unheard = true
+      if (!this.writing) queueMicrotask(() => this.tell())
     }
     handle.on('change', this.heard)
   }
@@ -76,9 +92,22 @@ export class AutomergeStore {
   // an envelope (or a text, kept as it is), in a change of its own
   append(entry) {
     const text = typeof entry === 'string' ? entry : encode(entry)
-    this.handle.change((d) => {
-      d.log.push(new ImmutableString(text))
-    })
+    this.writing = true
+    try {
+      this.handle.change((d) => {
+        d.log.push(new ImmutableString(text))
+      })
+    } finally {
+      this.writing = false
+    }
+    this.tell()
+  }
+
+  // the subscribers told of the change heard, once
+  tell() {
+    if (!this.unheard) return
+    this.unheard = false
+    for (const fn of [...this.subs]) fn()
   }
 
   subscribe(fn) {
@@ -98,8 +127,11 @@ export class AutomergeStore {
     return JSON.stringify(this.texts())
   }
 
+  // the log's texts (a log put anew as anything but a list reads as empty:
+  // every accepted entry gone, the Folder's tamper)
   texts() {
-    return (this.handle.doc()?.log ?? []).map((x) => String(x))
+    const log = this.handle.doc()?.log
+    return Array.isArray(log) ? log.map((x) => String(x)) : []
   }
 
   decoded(text) {
@@ -128,7 +160,8 @@ export class AutomergeStore {
         return true
       }
     }
-    if (touched && this.list.length !== (this.handle.doc()?.log?.length ?? 0)) this.rebuild()
+    const log = this.handle.doc()?.log
+    if (touched && this.list.length !== (Array.isArray(log) ? log.length : 0)) this.rebuild()
     return touched
   }
 }
