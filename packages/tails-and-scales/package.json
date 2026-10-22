@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": { "dev": "vite", "build": "vite build", "parity": "node sim/parity.mjs", "peers": "node sim/peers.mjs" },
-  "dependencies": { "@automerge/automerge": "3.5.0", "@automerge/automerge-repo": "2.5.6", "three": "^0.160.0" },
+  "dependencies": {
+    "@automerge/automerge": "3.5.0", "@automerge/automerge-repo": "2.5.6", "@automerge/automerge-repo-network-broadcastchannel": "2.5.6",
+    "@automerge/automerge-repo-network-websocket": "2.5.6", "@automerge/automerge-repo-storage-indexeddb": "2.5.6", "three": "^0.160.0"
+  },
   "devDependencies": { "@automerge/automerge-repo-network-messagechannel": "2.5.6" },
   "gallery": {
     "title": "Tails & Scales",
