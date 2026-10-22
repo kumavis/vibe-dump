@@ -23,13 +23,25 @@
 //                         match went apart (the end, below)
 //   folder.accepted       ids, in fold order (the start included)
 //   folder.rejected       [{ id, why }]: a refused entry, or an inert one
+//   folder.count          how many entries were pushed, junk counted: what
+//                         the cap (MAX_ENTRIES) counts
 //   folder.error          why the last start was refused, or why it is skew
 //   folder.report         a frozen match's report (freeze, below)
 //   folder.head(seat)     the `p` an entry for `seat` must carry
-//   folder.push(e)        fold one decoded entry (match/envelope.js decode)
+//   folder.push(e)        fold one decoded entry (match/envelope.js decode);
+//                         not reentrant (it throws when called while an
+//                         entry is folded or its events handed on: from the
+//                         match's onTrace, or from sync's `each`)
 //   folder.sync(entries, each)  fold the store's list as it now stands:
 //                         → { events, reset } (below); not reentrant (it
 //                         throws when `each` asks for another fold)
+//
+// Per entry the Folder does the checks below, stateHash where one seat is
+// waited on, legal() and apply(), and O(1) besides; per sync, one pass of
+// identity compares over the entries pushed (the prefix check). Nothing
+// per entry decodes, copies or stringifies the list (sim/fold-cost.mjs).
+// (A refold folds the list again, from the one seam that starts it:
+// refoldFrom.)
 //
 // The checks, in this order (§0.2 #2): the envelope (decode's verdict, and
 // an id seen before) → the turn (the seat is one the decision pending waits
@@ -42,10 +54,11 @@
 // → legal(), on the body alone (bodyOf: legal() refuses any envelope
 // field, §2.6's (R6a) note) → apply.
 //
-// Out of band (§0.2 #6): `concede` and `desync` come at any time after the
-// start, from a seated human seat's own device; they carry no prev and no
-// hash (an `h` or `p` one carries is never read). A concession is then
-// judged by legal() alone (any human seat, until the battle is decided) and
+// Out of band (§0.2 #6): `concede` and `desync` (OUT_OF_BAND, and no
+// other kind ever: sim/data-check.mjs) come at any time after the start,
+// from a seated human seat's own device; they carry no prev and no hash
+// (an `h` or `p` one carries is never read). A concession is then judged
+// by legal() alone (any human seat, until the battle is decided) and
 // played; a `desync {at, mine}` freezes the match here too, so the author
 // of the entry `at`, whose own hash matched, freezes at the same entry as
 // the device that found it apart.
@@ -78,6 +91,9 @@ import { bodyOf, isName, MAX_NAME } from './envelope.js'
 
 // the decisions every seat in them answers at once
 export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit'])
+// the kinds a seat sends out of band, whatever the match waits on: these
+// two only (§0.2 #6)
+export const OUT_OF_BAND = Object.freeze(['concede', 'desync'])
 // the longest a match's log may run: past it the match freezes ('full')
 export const MAX_ENTRIES = 5000
 // how many trace lines a report keeps
@@ -119,15 +135,35 @@ export class Folder {
     this.openBy = null
     this.last = null
     this.simul = null
-    // a sync under way (sync)
+    // a sync under way (sync), and an entry being folded or its events
+    // handed on (push)
     this.syncing = false
+    this.busy = false
   }
 
   head(seat) {
     return this.simul ? this.simul.heads[seat] ?? this.simul.id : this.last
   }
 
+  get count() {
+    return this.pushed.length
+  }
+
+  // Fold one entry. Not reentrant: an entry pushed while one is folded (from
+  // the match's onTrace) or while one's events are handed on (sync's `each`)
+  // would land in the middle of the list every other peer folds whole.
   push(e) {
+    if (this.busy) throw new Error('Folder.push is not reentrant: it was called while an entry was being folded or its events handed on')
+    this.busy = true
+    try {
+      this.judge(e)
+    } finally {
+      this.busy = false
+    }
+  }
+
+  // (push's checks, in §0.2 #2's order)
+  judge(e) {
     this.pushed.push(e)
     if (this.pushed.length > MAX_ENTRIES) {
       if (this.status === 'lobby' || this.status === 'live') this.halt('full', { at: e.id ?? null, why: `the log ran past ${MAX_ENTRIES} entries` })
@@ -155,7 +191,7 @@ export class Folder {
     }
     if (this.status !== 'live') return this.inert(e)
     if (e.t === 'open' || e.t === 'start') return this.reject(e, `turn: the match has begun, so no ${e.t}`)
-    if (e.t === 'concede' || e.t === 'desync') return this.outOfBand(e)
+    if (OUT_OF_BAND.includes(e.t)) return this.outOfBand(e)
     const G = this.G, P = G.pending
     if (!P.seats.includes(e.s)) return this.reject(e, `turn: seat ${e.s} has no decision to make`)
     if (e.d !== G.setup.seats[e.s].dev) return this.reject(e, `device: seat ${e.s} is not played from ${e.d}`)
@@ -231,7 +267,7 @@ export class Folder {
     this.status = status
     const G = this.G
     this.report = {
-      status, ...info, core: CORE_VERSION, rules: RULES_ID,
+      status, ...info, core: CORE_VERSION, rules: RULES_ID, count: this.pushed.length,
       setup: G?.setup ?? null, entries: this.pushed.slice(), accepted: this.accepted.slice(), rejected: this.rejected.map((r) => ({ ...r })),
       trace: G ? G.journal.trace.slice(-REPORT_LINES) : [], state: G ? shadowState(G) : null,
     }
@@ -276,7 +312,14 @@ export class Folder {
     if (this.accepted.length === n || !this.G?.out) return
     const batch = this.G.out.splice(0)
     events.push(...batch)
-    each?.(batch, e)
+    if (!each) return
+    // (nothing is pushed meanwhile: push throws)
+    this.busy = true
+    try {
+      each(batch, e)
+    } finally {
+      this.busy = false
+    }
   }
 
   // Fold the store's list as it now stands (`entries`, decoded, in list
@@ -322,25 +365,36 @@ export class Folder {
     }
   }
 
+  // Where a refold of the list starts: a quiet Folder, and the first entry
+  // of the list it has still to push. Today a fresh Folder, from the start:
+  // the one seam a checkpoint (S6) would start it from instead (a copy of
+  // a Folder that had pushed the list's first k entries, and k, where the
+  // list still begins with those).
+  refoldFrom() {
+    return { next: new Folder({ ...this.opts, out: null, onTrace: null }), from: 0 }
+  }
+
   // (sync's fold, under its flag)
   fold(entries, each) {
     const events = []
     if (this.status === 'tamper') return { events, reset: false, undone: 0 }
-    const n = this.pushed.length
-    let prefix = entries.length >= n
+    // (the list as it stands as the sync begins: a store may hand out its
+    // own array, and what joins it meanwhile is the next sync's)
+    const N = entries.length, n = this.pushed.length
+    let prefix = N >= n
     for (let i = 0; prefix && i < n; i++) prefix = same(entries[i], this.pushed[i])
     if (prefix) {
-      for (let i = n; i < entries.length; i++) this.step(entries[i], events, each)
+      for (let i = n; i < N; i++) this.step(entries[i], events, each)
       return { events, reset: false, undone: 0 }
     }
     // (an id's entry: the first good one carrying it, the one a fold takes,
     // and its place in the list)
-    const firsts = (list) => {
+    const firsts = (list, len) => {
       const m = new Map()
-      for (const [i, e] of list.entries()) if (!e.bad && !m.has(e.id)) m.set(e.id, { e, i })
+      for (let i = 0; i < len; i++) if (!list[i].bad && !m.has(list[i].id)) m.set(list[i].id, { e: list[i], i })
       return m
     }
-    const now = firsts(entries), was = firsts(this.pushed)
+    const now = firsts(entries, N), was = firsts(this.pushed, n)
     const gone = this.accepted.filter((id) => !now.has(id) || !same(now.get(id).e, was.get(id).e))
     const moved = this.accepted.filter((id, k) => k > 0 && now.get(id)?.i < now.get(this.accepted[k - 1])?.i)
     if (gone.length || moved.length) {
@@ -348,7 +402,7 @@ export class Folder {
       return { events, reset: false, undone: 0 }
     }
     const old = this.accepted
-    const next = new Folder({ ...this.opts, out: null, onTrace: null })
+    const { next, from } = this.refoldFrom()
     let showing = false, apart = false
     // From here on the match is shown again (its events and trace lines),
     // and the refold is this Folder: whoever is handed an entry's events
@@ -361,7 +415,8 @@ export class Folder {
       Object.assign(this, { ...next, opts: this.opts, syncing: true })
     }
     if (!old.length) show()
-    for (const e of entries) {
+    for (let i = from; i < N; i++) {
+      const e = entries[i]
       if (showing) {
         this.step(e, events, each)
         continue

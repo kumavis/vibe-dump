@@ -38,7 +38,19 @@
 // valid extension of the head winning and the other stale, a peer that had
 // shown the loser snapping back: sync's reset); concede (a seated peer
 // concedes at a random moment, out of band, often while the other seat
-// plays). The AI pairs run as a start and spectators slipping in junk.
+// plays). And (R8b) one more per log, reenter: each seat's peer sends the
+// log's commands only from inside its Session's sink, as an autopilot
+// would (from the events it is handed, half the time leaving it to a later
+// callback; from a reset; from settled, half the time; after a drop), one
+// command queued at a time, and its deliveries come slowly, so the seats'
+// deployments interleave and a reset finds a seat still deploying; the run
+// only pokes it (junk slipped into its list, a change of its own, which
+// settles). Every entry its Session writes must be appended once the
+// change in hand is folded (never while its Folder syncs), on the seat's
+// head and the match's hash as they then stand, and be the command it
+// queued; settled must come with its whole list pushed and nothing of its
+// own queued; and nothing may be left queued at the end. The AI pairs run
+// as a start and spectators slipping in junk.
 //
 // At the end, with every op on every peer, all peers must agree on
 // {accepted, rejected, stateHash} (and the status and the list itself);
@@ -54,7 +66,8 @@
 // seat share a `p`; every accepted entry carries `h` exactly where §0.2 #3
 // says, by the kind of decision it answered (phase and chargeEnd: one; a
 // deployment's and F4's vote: none; out of band: neither `h` nor `p`), the
-// spec's kinds, never the code's own SIMULTANEOUS;
+// spec's kinds, never the code's own SIMULTANEOUS; every peer's Folder
+// pushed each entry of the list once;
 // every slipped-in entry must be refused for a reason its kind allows
 // (junk and dup as 'envelope'; stray mostly 'illegal'; …), every honest
 // entry accepted (a fork's loser stale), and over the run each kind must
@@ -89,15 +102,20 @@
 //          appended, the Session in its lobby saying why until another
 //          device's start begins the match, one in a log another device
 //          opened inert, saying why, and one carrying N2's seed reveal;
-//          and (R8's fixer, round 3) the Session and the Folder not
-//          reentrant: a sink that submits while a change of several
-//          entries is folded (as the Session is made over a store holding
-//          them, and while a refold shows what follows) and an autopilot
-//          answering every batch it is handed (it plays the log on to its
-//          end, the corpus battle), each judged against a fresh Folder,
-//          every entry pushed once; a sink that throws, the Session folding
-//          the next change all the same; Folder.sync entered again from the
-//          events it hands on throws
+//          and (R8b) the single flight: a sink's submits while a change of
+//          several entries is folded (as the Session is made over a store
+//          holding them, and while a refold shows what follows) queued and,
+//          once the change is folded, one the match moved past dropped and
+//          reported, the others written in turn on the head and hash as
+//          they then stand (two from one callback included), never stale;
+//          a submit from a reset (two seats' placements folded in another
+//          order) written on the reset match; an autopilot answering in
+//          settled plays the log on to its end (the corpus battle), settled
+//          once a change; each Session judged against a fresh Folder, every
+//          entry pushed once; a sink that throws, the Session folding the
+//          next change all the same; Folder.sync and Folder.push entered
+//          again from the events it hands on throw, and push from the
+//          match's own onTrace
 //   forks  each hotseat log, one process: a same-seat fork in the
 //          deployment, the losing tab placing a unit elsewhere, the other
 //          seat closing the deployment having seen neither branch; the
@@ -137,9 +155,11 @@
 //   node sim/merge-sim.mjs [--only <kinds, modes or ids>] [--seeds N] [--dir <packageDir> | --ref <ref>]
 //   node sim/merge-sim.mjs --self-test    each broken copy in MUTANTS must fail it,
 //                                         and so must a store caching by index
+//                                         (and, R8b, a Session with no single
+//                                         flight: `no-queue`)
 //
 // --seeds (default 3) scenarios per human log, the kinds in turn (plain,
-// fork, concede); --only picks the corpus battles (cap, edges, forks and
+// fork, concede), and one reenter; --only picks the corpus battles (cap, edges, forks and
 // the drills run unless --only names battles). One child process per
 // scenario, up to one per CPU. Exit 0 when every check holds (the
 // self-test: when every mutant is caught), 1 otherwise, 2 on bad arguments.
@@ -210,10 +230,21 @@ class Net {
 // match has stopped, what it writes is held back until nothing else can
 // happen (the late drill's desync); `fallback`: past its script, a seat
 // sends End or Auto (the deaf drill's round more); `nudged`: its match
-// drifts outside any event (the late drill's), so its view isn't held to it.
+// drifts outside any event (the late drill's), so its view isn't held to it;
+// `reactive` (the reenter scenario): its seats act only from inside its
+// sink's callbacks (events and settled, each half the time left to a later
+// one; reset; dropped), one queued command at a time, never from the run's
+// own steps (which only poke it, slipping junk into its list: a change of
+// its own, which settles), and every entry its Session writes is vetted as
+// it is appended (vet, below).
 class Peer {
-  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false }) {
-    Object.assign(this, { net, name, actor, dev, seats, M, script, fork, hold, fallback, nudged })
+  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false, reactive = false, pace = null }) {
+    Object.assign(this, { net, name, actor, dev, seats, M, script, fork, hold, fallback, nudged, reactive, pace })
+    // (reactive: the command its Session holds queued, and how many it
+    // wrote, dropped, and sent from each callback)
+    this.queued = null
+    this.reacted = { events: 0, reset: 0, settled: 0, dropped: 0, written: 0, drops: 0, settles: 0 }
+    this.pokes = 0
     this.ops = new Map()
     this.order = []
     this.seen = {}
@@ -232,10 +263,18 @@ class Peer {
     // (--store index, the self-test's broken store: each entry decoded
     // once per index, as a store that never inserts may, LocalStore)
     const byIndex = []
+    const peer = this
     this.store = {
       kind: 'sim',
+      get length() {
+        return peer.order.length
+      },
       entries: a.store === 'index' ? () => this.order.map((k, i) => (byIndex[i] ??= this.decoded(this.ops.get(k)))) : () => this.order.map((k) => this.decoded(this.ops.get(k))),
-      append: (e) => this.write(typeof e === 'string' ? e : M.E.encode(e)),
+      // (the Session's appends; what the run slips in goes through put)
+      append: (e) => {
+        const text = typeof e === 'string' ? e : M.E.encode(e)
+        return this.write(text, this.reactive && this.vet(text) ? 'honest' : null)
+      },
       subscribe: (fn) => {
         this.subs.add(fn)
         return () => this.subs.delete(fn)
@@ -256,15 +295,77 @@ class Peer {
           if (stop && (P?.k !== stop.k || `${P.seats}` !== `${stop.seats}`)) throw new Error(`${this.name}'s sink was handed a stop at ${stop.k} for seats ${stop.seats}, but the Session's match waits on ${JSON.stringify(P)}`)
           const d = !this.nudged && differ(this.view, M.mirror.project(ses.G))
           if (d) throw new Error(`${this.name}'s sink was handed events of another match than the Session's (${ses.accepted.length} accepted): ${d}`)
+          if (this.reactive) this.react(ses, 'events')
         },
         reset: (G, ses, { undone }) => {
           this.resets++
           this.undone += undone
           this.view = M.mirror.project(G)
+          if (this.reactive) this.react(ses, 'reset')
+        },
+        // (once the change is folded and nothing is queued: the store's
+        // whole list pushed, no command of this peer's still waiting)
+        settled: (ses) => {
+          if (!this.reactive) return
+          this.reacted.settles++
+          if (this.queued) throw new Error(`${this.name}'s sink was told the Session settled while its ${JSON.stringify(this.queued.body)} (sent from ${this.queued.from}) was still queued`)
+          if (ses.count !== this.order.length) throw new Error(`${this.name}'s sink was told the Session settled with ${ses.count} of ${this.order.length} entries pushed`)
+          this.react(ses, 'settled')
+        },
+        dropped: (seat, body, why, ses) => {
+          if (!this.reactive) throw new Error(`${this.name}'s Session dropped ${JSON.stringify(body)} for seat ${seat}, but it never sent one from a callback: ${why}`)
+          if (!this.queued || this.queued.s !== seat || JSON.stringify(this.queued.body) !== JSON.stringify(body)) throw new Error(`${this.name}'s Session dropped ${JSON.stringify(body)}, which isn't the command it held queued (${JSON.stringify(this.queued)})`)
+          this.queued = null
+          this.reacted.drops++
+          this.react(ses, 'dropped')
         },
       },
     })
     net.peers.push(this)
+  }
+
+  // (reactive) Answer a decision of a seat played here from inside one of
+  // the sink's callbacks: the seat's next command, if it is legal now and
+  // nothing of this peer's is queued; from `events` or `settled`, half the
+  // time left to a later callback (a later batch, a reset, a later change's
+  // settling), so a seat's turn spreads over changes and meets the others'.
+  // The Session queues it (the callback runs while a change is folded) and
+  // writes it once that change is folded.
+  react(ses, from) {
+    if (this.queued || ses.status !== 'live') return
+    if ((from === 'events' || from === 'settled') && this.pace() < 0.5) return
+    const act = this.canAct(true)
+    if (!act) return
+    ses.submit(act.s, act.body)
+    this.queued = { ...act, from }
+    this.reacted[from]++
+  }
+
+  // (reactive) An entry this peer's Session appends, as it is appended: never
+  // while its Folder is folding a change (a callback's submit is queued, and
+  // written only once the change is folded), and, for a seat's command,
+  // written on the match as it then stands: the seat's head as `p`, the
+  // match's hash as `h` exactly where §0.2 #3 puts one. True when it is
+  // the command this peer held queued.
+  vet(text) {
+    const ses = this.session, e = this.M.E.decode(text)
+    if (!ses || e.bad) return false
+    if (ses.folder.syncing) throw new Error(`${this.name}'s Session appended ${e.t} for seat ${e.s} while its Folder was folding a change: a sink's submit written there and then, not queued until the change was folded`)
+    if (e.s < 0 || e.t === 'concede' || e.t === 'desync') return false
+    const head = ses.folder.head(e.s), one = HASHED.includes(ses.G.pending?.k)
+    if (e.p !== head) throw new Error(`${this.name}'s Session wrote ${e.t} for seat ${e.s} after ${e.p}, not the seat's head as the match stands (${head})`)
+    if (e.h !== (one ? this.M.core.stateHash(ses.G) : undefined)) throw new Error(`${this.name}'s Session wrote ${e.t} for seat ${e.s} with ${e.h === undefined ? 'no hash' : `the hash ${e.h}`}, not the match's as it stands (${one ? 'one seat waited on' : 'a simultaneous decision'})`)
+    const q = this.queued
+    if (!q || q.s !== e.s || this.M.core.canonicalJSON(this.M.E.bodyOf(e)) !== this.M.core.canonicalJSON(q.body)) throw new Error(`${this.name}'s Session wrote ${JSON.stringify(e)}, which isn't the command it held queued (${JSON.stringify(q)})`)
+    this.queued = null
+    this.reacted.written++
+    return true
+  }
+
+  // what the run slips in (junk, a duplicate, a flood): appended as it is,
+  // never vetted, noted as `kind`
+  put(x, kind = null) {
+    return this.write(typeof x === 'string' ? x : this.M.E.encode(x), kind)
   }
 
   decoded(op) {
@@ -291,13 +392,16 @@ class Peer {
   }
 
   // an append: the op, in this peer's list at once, its Session told
-  write(text) {
+  // (`kind`: what it is, noted before the Session hears of it, so whatever
+  // the Session writes in answer is noted as its own)
+  write(text, kind = null) {
     const seq = (this.seen[this.actor] ?? 0) + 1
     const op = { key: `${this.lamport + 1}@${this.actor}`, lamport: this.lamport + 1, actor: this.actor, seq, after: this.order.at(-1) ?? null, text, vc: { ...this.seen, [this.actor]: seq } }
     if (this.hold && this.session && this.session.status !== 'live') op.held = true
     this.integrate(op)
     this.net.ops.push(op)
     this.last = op
+    if (kind) this.net.why.set(op.key, { kind, peer: this.name })
     this.notify()
     return op
   }
@@ -335,8 +439,10 @@ class Peer {
   }
 
   // a decision of a seat played here, with the log's next command for it
-  // legal now in this peer's view
-  canAct() {
+  // legal now in this peer's view (a reactive peer's only from its sink:
+  // `own`)
+  canAct(own = false) {
+    if (this.reactive && !own) return null
     if (this.session.status !== 'live') return null
     for (const s of this.seats) {
       if (!this.G.pending?.seats.includes(s)) continue
@@ -403,22 +509,21 @@ function slip(p, rand, n) {
   const id = () => E.newEntryId(p.dev, ses.store.entries().length, `x${n}`)
   const one = G.pending && !p.M.F.SIMULTANEOUS.includes(G.pending.k)
   const cmd = (s, extra = {}) => E.envelope(p.next(s), { id: id(), s, d: p.dev, p: ses.folder.head(s), h: one ? core.stateHash(G) : undefined, ...extra })
-  if (kind === 'junk') p.store.append(JUNK[Math.floor(rand() * JUNK.length)](E, p, n))
+  if (kind === 'junk') p.put(JUNK[Math.floor(rand() * JUNK.length)](E, p, n), kind)
   else if (kind === 'dup') {
     const had = ses.store.entries().filter((e) => !e.bad)
-    p.store.append(E.encode(had[Math.floor(rand() * had.length)]))
-  } else if (kind === 'stray') p.store.append(cmd(mine, { zz: 1 }))
-  else if (kind === 'device') p.store.append(cmd(mine, { d: `${p.dev}x` }))
+    p.put(E.encode(had[Math.floor(rand() * had.length)]), kind)
+  } else if (kind === 'stray') p.put(cmd(mine, { zz: 1 }), kind)
+  else if (kind === 'device') p.put(cmd(mine, { d: `${p.dev}x` }), kind)
   else if (kind === 'stale') {
     const head = ses.folder.head(mine), old = ses.accepted.filter((x) => x !== head)
-    p.store.append(cmd(mine, { p: old[Math.floor(rand() * old.length)] }))
-  } else if (kind === 'offturn') p.store.append(cmd(idle))
+    p.put(cmd(mine, { p: old[Math.floor(rand() * old.length)] }), kind)
+  } else if (kind === 'offturn') p.put(cmd(idle), kind)
   else {
     // a concession or a desync for a seat the spectator doesn't play
     const s = Math.floor(rand() * G.seats.length)
-    p.store.append(rand() < 0.5 ? E.envelope({ t: 'concede' }, { id: id(), s, d: p.dev }) : E.envelope({ t: 'desync', at: ses.accepted.at(-1), mine: 'x' }, { id: id(), s, d: p.dev }))
+    p.put(rand() < 0.5 ? E.envelope({ t: 'concede' }, { id: id(), s, d: p.dev }) : E.envelope({ t: 'desync', at: ses.accepted.at(-1), mine: 'x' }, { id: id(), s, d: p.dev }), kind)
   }
-  p.mark(kind)
   return kind
 }
 
@@ -428,13 +533,23 @@ function slip(p, rand, n) {
 // on its view (its seat's next command), a peer slipping something in
 // (while it has budget), a conceding peer conceding. A held op travels only
 // once nothing else can happen.
-function play(net, rand, { cap = 400000 } = {}) {
+// the most a reactive peer is poked in a run
+const POKES = 300
+// (`deliver`: how often a delivery is picked against a peer acting; the
+// reenter scenario's seats deploy at once more often with it lower, so
+// their deployments interleave and a reset finds a seat still deploying)
+function play(net, rand, { cap = 400000, deliver = 3 } = {}) {
   for (let step = 0; step < cap; step++) {
     const moves = []
     for (const p of net.peers) {
-      if (net.ops.some((op) => !op.held && !p.ops.has(op.key) && p.deliverable(op))) moves.push([3, 'deliver', p])
+      if (net.ops.some((op) => !op.held && !p.ops.has(op.key) && p.deliverable(op))) moves.push([deliver, 'deliver', p])
       const act = p.canAct()
       if (act) moves.push([1, 'act', p, act])
+      // (a reactive peer with a decision to answer and nothing queued: its
+      // list changes, so its sink is told the change settled; a few hundred
+      // times at most, so a Session that never settles stalls the match
+      // instead of the run)
+      if (p.reactive && !p.queued && p.pokes < POKES && p.canAct(true)) moves.push([1, 'poke', p])
       const live = p.session.status === 'live'
       if (live && p.budget > 0) moves.push([0.12, 'slip', p])
       if (live && p.concedes && p.G.turn.stage === 'battle') moves.push([0.04, 'concede', p])
@@ -464,6 +579,9 @@ function play(net, rand, { cap = 400000 } = {}) {
     } else if (m[1] === 'slip') {
       p.budget--
       slip(p, rand, net.ops.length)
+    } else if (m[1] === 'poke') {
+      p.pokes++
+      p.put(JUNK[Math.floor(rand() * JUNK.length)](p.M.E, p, net.ops.length), 'junk')
     } else {
       p.concedes = false
       const s = p.seats[0]
@@ -527,6 +645,9 @@ function judge(net, M, { want = 'over', corpusTrace = null, where }) {
   for (const p of net.peers) {
     if (p.order.length !== list.length || p.order.some((k, i) => k !== list[i])) throw new Error(`${where}: ${p.name}'s list isn't ${p0.name}'s (the simulator's own RGA)`)
   }
+  // every entry pushed once by every peer's Folder (a fold re-entered from
+  // a sink pushes the rest of a list twice)
+  for (const p of net.peers) if (p.session.folder.pushed.length !== list.length) throw new Error(`${where}: ${p.name}'s Folder pushed ${p.session.folder.pushed.length} entries for a list of ${list.length}`)
   const { ref, fate, answered } = refold(M, list, p0)
   const hk = hashes(p0, list, fate, answered, where)
   const sig = (f) => JSON.stringify({ status: f.status, accepted: f.accepted, rejected: f.rejected, hash: f.G ? M.core.stateHash(f.G) : null })
@@ -588,9 +709,10 @@ function fates(net, fate, where) {
 const nameFrom = (rand, n = 6) => Array.from({ length: n }, () => Math.floor(rand() * 36).toString(36)).join('')
 
 // A human log played by its seats' peers, a spectator and (fork) a second
-// device on seat 0's.
+// device on seat 0's; (reenter) each seat's peer answering only from inside
+// its sink's callbacks.
 function humanScenario(M, it, kind, seed) {
-  const rand = mulberry32(seed * 7919 + it.id.length * 104729 + KINDS.indexOf(kind))
+  const rand = mulberry32(seed * 7919 + it.id.length * 104729 + (kind === 'reenter' ? 7 : KINDS.indexOf(kind)))
   const where = `${it.id} #${seed} (${kind})`
   const net = new Net()
   const setup = jobSetup(it.job)
@@ -604,17 +726,18 @@ function humanScenario(M, it, kind, seed) {
   // (in a fork scenario any seat's honest entry may lose: the fork's loser,
   // and an entry the other seat wrote after seeing only the loser, are both
   // refused as stale once the winner is folded before them)
-  const forked = kind === 'fork'
-  const seated = humans.map((s) => peer({ name: `seat ${s}`, dev: `d${s}`, seats: [s], fork: forked }))
+  const forked = kind === 'fork', reactive = kind === 'reenter'
+  const seated = humans.map((s) => peer({ name: `seat ${s}`, dev: `d${s}`, seats: [s], fork: forked, ...(reactive ? { reactive, pace: mulberry32(Math.floor(rand() * 2 ** 32)) } : {}) }))
   const spectator = peer({ name: 'spectator', dev: 'dS' })
   if (forked) peer({ name: `seat ${humans[0]}'`, dev: `d${humans[0]}`, seats: [humans[0]], fork: true })
   for (const p of net.peers) p.budget = 3 + Math.floor(rand() * 4)
   if (kind === 'concede') seated[Math.floor(rand() * seated.length)].concedes = true
-  // the start, by the lowest human seat's device
+  // the start, by the lowest human seat's device (the list's first op:
+  // what a reactive seat answers it with comes after)
   const host = seated[0]
   host.session.start({ ...setup, seats: setup.seats.map((x, s) => (x.ctrl === 'human' ? { ...x, dev: `d${s}` } : x)) })
-  host.mark('start')
-  const steps = play(net, rand)
+  net.why.set(net.ops[0].key, { kind: 'start', peer: host.name })
+  const steps = play(net, rand, reactive ? { deliver: 0.5 } : {})
   const conceded = [...net.why.values()].some((w) => w.kind === 'concede')
   const corpus = conceded ? null : foldJob(M.core, it.job, { match: M.folding })
   if (corpus?.error) throw new Error(`${where}: the corpus log folds short in one process: ${corpus.error.split('\n')[0]}`)
@@ -624,10 +747,22 @@ function humanScenario(M, it, kind, seed) {
   // with one device a seat, nothing a peer has shown is ever undone (a reset
   // there only reorders two seats' deployments, which commute)
   const undone = net.peers.reduce((n, p) => n + p.undone, 0)
-  if (kind === 'plain' && undone) throw new Error(`${where}: with one device a seat, a reset undid ${undone} entries shown`)
+  if ((kind === 'plain' || kind === 'reenter') && undone) throw new Error(`${where}: with one device a seat, a reset undid ${undone} entries shown`)
+  // (reenter) nothing left queued, and every command a seat's peer sent
+  // from a callback written (a drop only where the match had moved on)
+  let reacted = null
+  if (reactive) {
+    reacted = {}
+    for (const p of seated) {
+      if (p.queued) throw new Error(`${where}: ${p.name}'s ${JSON.stringify(p.queued.body)} (sent from ${p.queued.from}) is still queued at the end`)
+      for (const [k, n] of Object.entries(p.reacted)) reacted[k] = (reacted[k] ?? 0) + n
+    }
+    const sent = reacted.events + reacted.reset + reacted.settled + reacted.dropped
+    if (sent !== reacted.written + reacted.drops) throw new Error(`${where}: the seats' peers sent ${sent} commands from their sinks, ${reacted.written} written and ${reacted.drops} dropped`)
+  }
   return {
     where, steps, peers: net.peers.length, entries: ref.accepted.length + ref.rejected.length, accepted: ref.accepted.length, rejected: ref.rejected.length,
-    resets: net.peers.reduce((n, p) => n + p.resets, 0), undone, refolds: net.peers.reduce((n, p) => n + p.insertsBefore, 0), conceded, met, hk, spectator: spectator.name,
+    resets: net.peers.reduce((n, p) => n + p.resets, 0), undone, refolds: net.peers.reduce((n, p) => n + p.insertsBefore, 0), conceded, met, hk, spectator: spectator.name, reacted,
   }
 }
 
@@ -643,10 +778,7 @@ function aiScenario(M, it, seed) {
   peers[0].mark('start')
   // (an all-AI match is over at its start: what follows is inert, and the
   // spectators only slip junk in while it is live, so slip some in now)
-  for (const p of peers) for (let k = 0; k < 3; k++) {
-    p.store.append(JUNK[Math.floor(rand() * JUNK.length)](M.E, p, k))
-    p.mark('junk')
-  }
+  for (const p of peers) for (let k = 0; k < 3; k++) p.put(JUNK[Math.floor(rand() * JUNK.length)](M.E, p, k), 'junk')
   const steps = play(net, rand)
   const corpus = foldJob(M.core, it.job, { match: M.folding })
   if (!verdict(it, corpus).ok) throw new Error(`${where}: the AI pair, folded in one process, no longer replays its baseline`)
@@ -681,7 +813,7 @@ function capScenario(M, it) {
   const N = CAP
   for (let k = 0; flood.session.status !== 'full'; k++) {
     if (k > N + 10) throw new Error(`${where}: the flooder's own Folder never went full (${k} entries written)`)
-    flood.store.append(M.E.encode({ id: `dF.flood${k}`, s: s0, d: 'dF', t: 'nope' }))
+    flood.put(M.E.encode({ id: `dF.flood${k}`, s: s0, d: 'dF', t: 'nope' }))
   }
   // the seat plays on, concurrently, then the flood reaches it at once
   for (let k = 0; k < 5; k++) {
@@ -943,6 +1075,9 @@ function edges(M, it) {
     const subs = new Set()
     const store = {
       kind: 'sim',
+      get length() {
+        return list.length
+      },
       entries: () => list.slice(),
       append: (x) => {
         list.push(E.decode(typeof x === 'string' ? x : E.encode(x)))
@@ -1013,13 +1148,18 @@ function edges(M, it) {
     s3.close()
   }
   {
-    // The Session and the Folder are not reentrant: a sink that submits
-    // from the events it is handed (an autopilot) while a change of several
-    // entries is being folded (a sync message, a reload, a refold) has its
-    // entry folded once that change is done, every entry pushed once. Each
-    // Session here is judged against a fresh Folder over the list its store
-    // ends with: the same accepted and refused entries and status, and as
-    // many entries pushed as the list holds.
+    // (R8b) The single flight: the Session folds a change whole before it
+    // writes anything, and the Folder never folds within itself. A submit
+    // made from a sink's callback while a change of several entries is
+    // folded (a sync message, a reload, a refold) is queued as its body and
+    // written once the change is folded, on the match as it then stands:
+    // held to legal() again, it is dropped (sink.dropped saying why) when
+    // the match has moved past it, else written with the seat's head and
+    // the match's hash as they then are, never stale; two from one callback
+    // are written in turn. Each Session here is judged against a fresh
+    // Folder over the list its store ends with: the same accepted and
+    // refused entries and status, and as many entries pushed as the list
+    // holds.
     const listStore = (initial) => {
       const L = { list: initial }
       const subs = new Set()
@@ -1028,6 +1168,9 @@ function edges(M, it) {
       }
       L.store = {
         kind: 'sim',
+        get length() {
+          return L.list.length
+        },
         entries: () => L.list.slice(),
         append: (x) => {
           L.list.push(E.decode(typeof x === 'string' ? x : E.encode(x)))
@@ -1061,33 +1204,69 @@ function edges(M, it) {
     // (the seat's next command: in a log against the AI every accepted
     // entry but the start is the seat's)
     const nextOf = (ses) => script[ses.accepted.length - 1]
+    // the first place past the deployment where the log plays four of the
+    // seat's actions in one phase (entries j to j + 3) and the last two are
+    // already legal before the second is played (as the match stands after
+    // entry j): a sink handed entry j's events may send them both
+    const ACTS = ['move', 'advance', 'shoot', 'charge']
+    const after = (k) => {
+      const f = new F.Folder({ out: null })
+      for (const e of preload(k)) f.push(e)
+      return f
+    }
+    let j = -1
+    for (let k = deployed; k + 3 < script.length && j < 0; k++) {
+      if (!script.slice(k, k + 4).every((x) => ACTS.includes(x.t))) continue
+      const f = after(k + 1)
+      if (f.status === 'live' && [2, 3].every((d) => core.legal(f.G, s0, script[k + d]) === null)) j = k
+    }
+    if (j < 0) throw new Error(`${where}: the log has no four actions in a phase whose last two are legal after the first`)
+    // (a body as a peer would see it: canonical, for comparing)
+    const canon = (b) => core.canonicalJSON(b)
     {
-      // the prefix path: a store that holds several entries as the Session
-      // is made, its sink submitting when handed the start's events
-      const L = listStore(preload(6))
-      let sent = 0
+      // the prefix path: a store holding the log up to the run's second
+      // move as the Session is made; its sink submits the seat's first
+      // deployment command when handed the start's events (legal then;
+      // past the deployment by the time the change is folded: dropped),
+      // and, handed the run's first move's events, the run's third and
+      // fourth moves in one call (each legal in turn on the match the whole
+      // change leads to: written after the second, on the head it left)
+      const L = listStore(preload(j + 2))
+      const drops = [], wrote = []
       const sink = {
         events: (events, ses) => {
-          if (ses.accepted.length !== 1 || sent++) return
-          ses.submit(s0, nextOf(ses))
+          const n = ses.accepted.length
+          if (n === 1) ses.submit(s0, script[0])
+          if (n === j + 2) {
+            ses.submit(s0, script[j + 2])
+            ses.submit(s0, script[j + 3])
+          }
         },
+        dropped: (seat, body, why, ses) => drops.push({ seat, body, why, n: ses.accepted.length }),
       }
+      const before = L.list.length
       const ses = new S.Session({ store: L.store, localSeats: [s0], dev: `d${s0}`, sink })
-      judged("a sink that submits while a change of several entries is folded (handed the start's events) has its entry folded after that change, stale; every entry pushed once", ses, L, sent === 1 && L.list.length === 8 && /^stale/.test(ses.rejected.at(-1)?.why ?? ''))
+      for (const e of L.list.slice(before)) wrote.push(e)
+      const heads = wrote.map((e) => e.p), at = L.list.slice(before - 1).map((e) => e.id)
+      judged("a sink's submits while a change of several entries is folded are queued: one the match has moved past is dropped and reported, never written; two from one callback are written in turn once the change is folded, on the head each finds (never stale); every entry pushed once", ses, L,
+        drops.length === 1 && drops[0].seat === s0 && canon(drops[0].body) === canon(script[0]) && /doesn't answer|no decision/.test(drops[0].why) && drops[0].n === j + 3
+        && wrote.length === 2 && wrote.every((e, k) => canon(E.bodyOf(e)) === canon(script[j + 2 + k]) && ses.accepted.includes(e.id)) && heads[0] === at[0] && heads[1] === at[1] && !ses.rejected.length,
+        `, ${drops.length} dropped (${JSON.stringify(drops.map((d) => d.why))}), ${wrote.length} written after ${JSON.stringify(heads)} (heads ${JSON.stringify(at)})`)
       ses.close()
     }
     {
       // the refold path: junk inserted before folded entries, the sink
-      // submitting while the refold shows the entries after them
-      const pre = preload(7)
-      const L = listStore(pre.slice(0, 5))
+      // submitting while the refold shows what follows: written once the
+      // change is folded, after the entries that follow, never stale
+      const pre = preload(j + 2)
+      const L = listStore(pre.slice(0, j + 1))
       let armed = false, sent = 0
       const sink = {
         events: (events, ses) => {
-          if (!armed || ses.accepted.length !== 6) return
+          if (!armed || ses.accepted.length !== j + 2) return
           armed = false
           sent++
-          ses.submit(s0, nextOf(ses))
+          ses.submit(s0, script[j + 2])
         },
         reset: () => {
           throw new Error('a refold that undid nothing reset the view')
@@ -1096,25 +1275,60 @@ function edges(M, it) {
       const ses = new S.Session({ store: L.store, localSeats: [s0], dev: `d${s0}`, sink })
       armed = true
       L.set([pre[0], env({ t: 'nope' }, s0, 'dX'), ...pre.slice(1)])
-      judged('… and one that submits while a refold shows what follows: stale after the entries that follow, every entry pushed once', ses, L, sent === 1 && L.list.length === 10 && /^stale/.test(ses.rejected.at(-1)?.why ?? '') && ses.accepted.length === 8)
+      const last = L.list.at(-1)
+      judged("… and one that submits while a refold shows what follows: written once the change is folded, after the entries that follow (accepted, never stale)", ses, L, sent === 1 && L.list.length === j + 5 && canon(E.bodyOf(last)) === canon(script[j + 2]) && last.p === pre.at(-1).id && ses.accepted.at(-1) === last.id && ses.rejected.length === 1, `, j ${j}, sent ${sent}, ${L.list.length} entries, the last ${JSON.stringify(last)} after ${pre.at(-1).id}`)
       ses.close()
     }
     {
-      // an autopilot: the sink answers every batch it is handed, through a
-      // change of several entries and on, each answer of a change stale but
-      // the last, which plays the log to its end
-      const L = listStore(preload(6))
-      let calls = 0
+      // and from a reset: a hotseat-style deployment folded in another
+      // order (a concurrent insert of the other seat's placements before
+      // this seat's): the sink submits from the reset, which is queued and
+      // written on the reset match
+      const hs = { ...devs, seats: devs.seats.map((x, s) => ({ ...x, ctrl: 'human', dev: `d${s}` })) }
+      const o = 1 - s0
+      const st = start({}, 'd0', hs)
+      const f = new F.Folder({ out: null })
+      f.push(st)
+      const mine = [], theirs = []
+      for (const [s, into] of [[s0, mine], [o, theirs]]) {
+        const u = f.G.units.find((x) => x.side === s)
+        into.push(env({ t: 'place', u: u.id, c: f.G.nav.index(u.pos.x, u.pos.z) }, s, `d${s}`, { p: st.id }))
+      }
+      const L = listStore([st, ...mine])
+      const resets = []
       const sink = {
-        events: (events, ses) => {
-          calls++
+        reset: (G, ses, { undone }) => {
+          resets.push(undone)
+          const u = ses.G.units.find((x) => x.side === s0)
+          ses.submit(s0, { t: 'place', u: u.id, c: ses.G.nav.index(u.pos.x, u.pos.z) })
+        },
+      }
+      const ses = new S.Session({ store: L.store, localSeats: [s0], dev: `d${s0}`, sink })
+      L.set([st, ...theirs, ...mine])
+      const last = L.list.at(-1)
+      judged('a submit from a reset (two seats\' placements folded in another order) is queued and written on the reset match, after the seat\'s own head', ses, L, resets.length === 1 && resets[0] === 0 && L.list.length === 4 && last.d === `d${s0}` && last.p === mine[0].id && ses.accepted.at(-1) === last.id, `, resets ${JSON.stringify(resets)}`)
+      ses.close()
+    }
+    {
+      // an autopilot that answers in settled (the one place to answer a
+      // decision: the match the whole list leads to, nothing queued): from a
+      // store of several entries, it plays the log on to its end, one
+      // change at a time, each settled once; the corpus battle traced
+      const L = listStore(preload(j + 2))
+      let settles = 0, changes = 0
+      const sink = {
+        settled: (ses) => {
+          settles++
+          if (ses.count !== L.list.length) throw new Error(`settled with ${ses.count} of ${L.list.length} entries pushed`)
           const b = nextOf(ses)
           if (b && ses.legal(s0, b) === null) ses.submit(s0, b)
         },
       }
+      const sub = L.store.subscribe
+      L.store.subscribe = (fn) => sub(() => (changes++, fn()))
       const ses = new S.Session({ store: L.store, localSeats: [s0], dev: `d${s0}`, sink })
       const corpus = foldJob(core, it.job, { match: M.folding })
-      judged('an autopilot answering every batch it is handed plays the log on to its end: every entry pushed once, the corpus battle traced, never full', ses, L, ses.status === 'over' && calls === ses.accepted.length && !corpus.error && ses.G.journal.trace.join('\n') === corpus.trace.join('\n'), `, ${calls} batches, ${ses.accepted.length} accepted`)
+      judged('an autopilot answering in settled plays the log on to its end: settled once a change (the Session made over the store, then each entry it wrote), every entry pushed once, the corpus battle traced, never full', ses, L, ses.status === 'over' && settles === changes + 1 && L.list.length === script.length + 1 && !corpus.error && ses.G.journal.trace.join('\n') === corpus.trace.join('\n'), `, ${settles} settles for ${changes} changes after the first, ${ses.accepted.length} accepted`)
       ses.close()
     }
     {
@@ -1139,18 +1353,84 @@ function edges(M, it) {
       ses.close()
     }
     {
+      // a sink that queues a body and then throws: the body is still written
+      // (or dropped, the sink told) and the change still settles before the
+      // error surfaces, so nothing waits on a queue no change will drain
+      const L = listStore(preload(0))
+      let armed = false, settles = 0, dropped = 0
+      const ses = new S.Session({ store: L.store, localSeats: [s0], dev: `d${s0}`, sink: {
+        events: (ev, ses) => {
+          if (!armed) return
+          armed = false
+          ses.submit(s0, script[1])
+          throw new Error('boom after queueing')
+        },
+        settled: () => settles++,
+        dropped: () => dropped++,
+      } })
+      armed = true
+      let threw = null
+      const before = settles
+      try {
+        ses.submit(s0, script[0])
+      } catch (err) {
+        threw = err.message
+      }
+      judged('a sink that queues a body and then throws: the body is written before the error surfaces, and the change settles', ses, L, threw === 'boom after queueing' && !ses.queue.length && ses.accepted.length + dropped === 3 && settles > before, `, threw ${threw}, ${ses.queue.length} still queued, ${ses.accepted.length} accepted, ${dropped} dropped, ${settles - before} settles`)
+      ses.close()
+    }
+    {
+      // a store that throws while a queued body is written (no sink's
+      // error, so call() never sees it): the error reaches the caller and
+      // the Session folds the next change all the same, never left folding
+      const L = listStore(preload(0))
+      let armed = false, broke = false
+      const append = L.store.append
+      L.store.append = (x) => {
+        if (broke) {
+          broke = false
+          throw new Error('store full')
+        }
+        append(x)
+      }
+      const ses = new S.Session({ store: L.store, localSeats: [s0], dev: `d${s0}`, sink: { events: (ev, ses) => {
+        if (!armed) return
+        armed = false
+        broke = true
+        ses.submit(s0, script[1])
+      } } })
+      armed = true
+      let threw = null
+      try {
+        ses.submit(s0, script[0])
+      } catch (err) {
+        threw = err.message
+      }
+      const stuck = ses.folding
+      ses.submit(s0, script[1])
+      judged('a store that throws while a queued body is written leaves the Session folding the next change', ses, L, threw === 'store full' && !stuck && ses.accepted.length === 3, `, threw ${threw}, folding after ${stuck}, ${ses.accepted.length} accepted`)
+      ses.close()
+    }
+    {
       // the Folder itself: sync entered again from the events it hands on
       // throws (the rest of the list is never pushed twice), and a sink
-      // that throws leaves it free to fold on
+      // that throws leaves it free to fold on; push from the events it
+      // hands on, or from the match's own onTrace, throws too (an entry
+      // pushed into the middle of a fold)
       const pre = preload(2)
       const f = new F.Folder({ out: [] })
-      let threw = null, after = null
+      let threw = null, pushed = null, after = null
       f.sync(pre.slice(0, 2), (events, e) => {
         if (e.id !== pre[0].id) return
         try {
           f.sync(pre)
         } catch (err) {
           threw = err.message
+        }
+        try {
+          f.push(pre[2])
+        } catch (err) {
+          pushed = err.message
         }
       })
       try {
@@ -1161,7 +1441,59 @@ function edges(M, it) {
         after = err.message
       }
       f.sync(pre)
-      expect('Folder.sync entered again from the events it hands on throws, never pushing the list twice, and folds on after a sink that throws', /not reentrant/.test(threw ?? '') && after === 'a sink that throws' && f.pushed.length === 3 && f.accepted.length === 3 && !f.rejected.length, `threw ${threw}, then ${after}; ${f.pushed.length} pushed, ${f.accepted.length} accepted, ${JSON.stringify(f.rejected)}`)
+      expect('Folder.sync and Folder.push entered again from the events it hands on throw, never pushing the list twice, and it folds on after a sink that throws', /^Folder\.sync is not reentrant/.test(threw ?? '') && /^Folder\.push is not reentrant/.test(pushed ?? '') && after === 'a sink that throws' && f.pushed.length === 3 && f.accepted.length === 3 && !f.rejected.length, `sync threw ${threw}, push ${pushed}, then ${after}; ${f.pushed.length} pushed, ${f.accepted.length} accepted, ${JSON.stringify(f.rejected)}`)
+      let traced = null
+      const g = new F.Folder({ out: [], onTrace: () => {
+        if (traced !== null) return
+        try {
+          g.push(pre[1])
+          traced = 'pushed'
+        } catch (err) {
+          traced = err.message
+        }
+      } })
+      g.push(pre[0])
+      expect("Folder.push entered again from the match's own onTrace throws", /^Folder\.push is not reentrant/.test(traced ?? ''), traced)
+    }
+    {
+      // a change that reaches the store while one is being folded (here a
+      // sink appending the log's next entry itself, as a sync message
+      // landing mid-change would): folded in the Session's next pass, never
+      // inside the fold under way, every entry pushed once
+      const pre = preload(j + 3)
+      const L = listStore(pre.slice(0, j + 1))
+      let armed = false, landed = 0
+      const sink = {
+        events: (events, ses) => {
+          if (!armed) return
+          armed = false
+          landed++
+          L.store.append(pre[j + 2])
+        },
+      }
+      const ses = new S.Session({ store: L.store, localSeats: [], dev: 'dS', sink })
+      armed = true
+      L.store.append(pre[j + 1])
+      judged("a change that reaches the store while one is folded (an entry appended from the sink) is folded in the Session's next pass, never within the fold under way", ses, L, landed === 1 && L.list.length === j + 3 && ses.accepted.length === j + 3, `, ${landed} landed, ${ses.accepted.length} accepted`)
+      ses.close()
+    }
+    {
+      // a start made from a callback (an online lobby's: settled, once the
+      // open has arrived) is queued like a submit, and written once the
+      // change is folded, after the open
+      const L = listStore([])
+      let sent = 0
+      const sink = {
+        settled: (ses) => {
+          if (ses.status !== 'lobby' || sent) return
+          sent++
+          ses.start(devs)
+        },
+      }
+      const ses = new S.Session({ store: L.store, localSeats: [s0], dev: 'd0', sink })
+      L.store.append(env({ t: 'open', commit: 'c0' }, -1, 'd0'))
+      judged('a start made from a sink\'s callback (settled, once the open arrived) is queued, then written after the open and begins the match', ses, L, sent === 1 && L.list.length === 2 && L.list[1].t === 'start' && L.list[1].p === L.list[0].id && ses.status === 'live', `, ${L.list.length} entries`)
+      ses.close()
     }
   }
   return { where, steps: 0, peers: 1, entries: n, accepted: 0, rejected: 0, resets: 0, refolds: 0, met: {}, checks }
@@ -1350,7 +1682,11 @@ function tasks({ only, seeds, extras = only === undefined }) {
   const out = []
   for (const it of picked) {
     if (it.kind === 'ai') out.push({ kind: 'ai', id: it.id, seed: 1 })
-    else for (let k = 0; k < seeds; k++) out.push({ kind: KINDS[k % KINDS.length], id: it.id, seed: k + 1 })
+    else {
+      for (let k = 0; k < seeds; k++) out.push({ kind: KINDS[k % KINDS.length], id: it.id, seed: k + 1 })
+      // (R8b) the seats answering from their sinks' callbacks
+      out.push({ kind: 'reenter', id: it.id, seed: 1 })
+    }
   }
   if (extras) {
     const vsAi = items.find((x) => x.kind === 'human' && x.job.setup.seats.some((s) => s.ctrl === 'ai'))
@@ -1382,9 +1718,9 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
     say(`  ${`${t.id} ${t.kind === 'drill' ? `drill, ${t.how}${t.odd === undefined ? '' : `, seat ${t.odd}`}` : ['cap', 'edges', 'forks'].includes(t.kind) ? t.kind : `#${t.seed} ${t.kind}`}`.padEnd(40)} ${r.ok
       ? t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
-          : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, a sink that submits mid-change`
+          : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant`
           : t.kind === 'forks' ? `ok   ${x.checks.length} checks: each seat forked in the deployment, the loser's world answering first, stale everywhere, live`
-          : `ok   ${x.peers} peers agree: ${x.accepted} accepted, ${x.rejected} refused${x.conceded ? ', conceded' : ''}; ${x.refolds} inserts before folded entries, ${x.resets} resets${x.undone ? ` (${x.undone} undone)` : ''}`
+          : `ok   ${x.peers} peers agree: ${x.accepted} accepted, ${x.rejected} refused${x.conceded ? ', conceded' : ''}; ${x.refolds} inserts before folded entries, ${x.resets} resets${x.undone ? ` (${x.undone} undone)` : ''}${x.reacted ? `; sent from events ${x.reacted.events}, reset ${x.reacted.reset}, settled ${x.reacted.settled}, dropped ${x.reacted.dropped} (${x.reacted.written} written, ${x.reacted.drops} dropped)` : ''}`
       : `FAIL ${r.error}`}`)
     return r
   })
@@ -1398,6 +1734,13 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
   const sums = { refolds: ok.reduce((n, x) => n + x.refolds, 0), resets: ok.reduce((n, x) => n + x.resets, 0), undone: ok.reduce((n, x) => n + (x.undone ?? 0), 0), entries: ok.reduce((n, x) => n + x.entries, 0) }
   const hk = {}
   for (const x of ok) for (const [k, n] of Object.entries(x.hk ?? {})) hk[k] = (hk[k] ?? 0) + n
+  // (R8b) what the reenter scenarios' seats sent from each callback
+  const reacted = {}
+  for (const x of ok) for (const [k, n] of Object.entries(x.reacted ?? {})) reacted[k] = (reacted[k] ?? 0) + n
+  const reenters = list.filter((t) => t.kind === 'reenter').length
+  if (reenters >= 4 && !bad.length) {
+    for (const k of ['events', 'reset', 'settled']) if (!reacted[k]) bad.push({ error: `no reenter scenario's seat ever submitted from its sink's ${k} callback` })
+  }
   const human = list.filter((t) => KINDS.includes(t.kind)).length
   if (human >= KINDS.length && !bad.length) {
     for (const k of [...HASHED, 'deploy']) if (!hk[k]) bad.push({ error: `no accepted entry answering a ${k} decision was ever held to §0.2 #3's hash rule` })
@@ -1415,7 +1758,7 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
   if (list.filter((t) => t.kind === 'drill' && t.how === 'hypot').length >= 3 && !bad.length) {
     for (const how of ['its own hash', 'the desync entry']) if (!drills.some((x) => x.watched === how)) bad.push({ error: `no hypot drill's spectator froze by ${how}` })
   }
-  say(`\n${list.length} scenarios, ${sums.entries} entries folded by every peer, ${sums.refolds} inserts before folded entries, ${sums.resets} resets (${sums.undone} entries shown undone); refused or accepted: ${Object.entries(met).sort().map(([k, n]) => `${k} ${n}`).join(', ')}; held to §0.2 #3's hash rule: ${Object.entries(hk).sort().map(([k, n]) => `${k} ${n}`).join(', ')} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${list.length} scenarios, ${sums.entries} entries folded by every peer, ${sums.refolds} inserts before folded entries, ${sums.resets} resets (${sums.undone} entries shown undone); refused or accepted: ${Object.entries(met).sort().map(([k, n]) => `${k} ${n}`).join(', ')}; held to §0.2 #3's hash rule: ${Object.entries(hk).sort().map(([k, n]) => `${k} ${n}`).join(', ')}${reenters ? `; submitted from a sink's callback (reenter): ${['events', 'reset', 'settled', 'dropped'].map((k) => `${k} ${reacted[k] ?? 0}`).join(', ')}, ${reacted.written ?? 0} written once their change was folded, ${reacted.drops ?? 0} dropped, ${reacted.settles ?? 0} settles` : ''} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -1445,7 +1788,7 @@ const MUTANTS = {
   // one head for every seat in a simultaneous decision
   'global-head': ['match/fold.js', 'return this.simul ? this.simul.heads[seat] ?? this.simul.id : this.last', 'return this.last'],
   // a concession held to the turn (it carries no prev: refused)
-  'concede-in-band': ['match/fold.js', "if (e.t === 'concede' || e.t === 'desync') return this.outOfBand(e)", "if (e.t === 'desync') return this.outOfBand(e)"],
+  'concede-in-band': ['match/fold.js', 'if (OUT_OF_BAND.includes(e.t)) return this.outOfBand(e)', "if (e.t === 'desync') return this.outOfBand(e)"],
   // anyone may speak out of band for a seat
   'spoofed-out-of-band': ['match/fold.js', '    if (e.d !== seat.dev) return this.reject(e, `device: seat ${e.s} is not played from ${e.d}`)\n', ''],
   // no cap on the log
@@ -1491,13 +1834,15 @@ const MUTANTS = {
   'chargeEnd-simultaneous': ['match/fold.js', "export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit'])", "export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit', 'chargeEnd'])"],
   // the cap moved by one (§2.6: 5,000 entries)
   'cap-moved': ['match/fold.js', 'export const MAX_ENTRIES = 5000', 'export const MAX_ENTRIES = 5001'],
-  // (R8's fixer, round 3) the Session folds a change made from its sink
-  // nested inside the one being folded: the rest of the list pushed twice
+  // (R8's fixer, round 3) the Session folds a change that reaches the store
+  // while one is being folded nested inside it (R8b: a sink's own submits
+  // are queued, so an entry appended from elsewhere, a sync message landing
+  // mid-change): the rest of the list pushed twice, or Folder.sync throws
   'session-reentrant': ['match/session.js', '    if (this.folding) {\n      this.again = true\n      return\n    }\n', ''],
   // the Folder lets sync be entered again from the events it hands on
   'sync-reentrant': ['match/fold.js', 'if (this.syncing) throw', 'if (false) throw'],
-  // a sink that throws leaves the Session folding for ever: every later
-  // change dropped
+  // a store that throws mid-fold leaves the Session folding for ever:
+  // every later change queued and never written
   'session-no-finally': ['match/session.js', '    } finally {\n      this.folding = false\n    }\n', '    } finally {}\n    this.folding = false\n'],
   // a single seat's decision answered with no hash is played unchecked
   'missing-h-accepted': ['match/fold.js', 'if (!SIMULTANEOUS.includes(P.k) && e.h !== stateHash(G)) return this.freeze(e)', 'if (!SIMULTANEOUS.includes(P.k) && e.h !== undefined && e.h !== stateHash(G)) return this.freeze(e)'],
@@ -1520,13 +1865,44 @@ const MUTANTS = {
   'error-lingers': ['match/session.js', "    if (this.status !== 'lobby') this.unsent = null\n", ''],
   // the start drops N2's seed reveal
   'start-drops-a': ['match/session.js', "rules: RULES_ID, setup, a }", "rules: RULES_ID, setup }"],
+  // (R8b) no single flight: a submit from a sink's callback is written
+  // there and then, on the match as it stands mid-change (R8's Session):
+  // stale once a later entry of the change moves the seat's head, and a
+  // body the change made illegal written all the same
+  // a sink's error ends the loop at once, as before R8b's review: a body it
+  // queued is stranded and the change never settles
+  'call-rethrows': ['match/session.js', '      this.failed ??= err\n      return false\n', '      throw err\n'],
+  'no-queue': ['match/session.js', '    if (this.folding) {\n      this.queue.push({ seat, body: { ...body } })\n      return\n    }\n', ''],
+  // a queued body written without being held to legal() again: one the
+  // change in hand made illegal is written, and refused by every peer
+  'drain-unchecked': ['match/session.js', 'const why = this.legal(seat, body) ?? this.send(seat, body)', 'const why = this.send(seat, body)'],
+  // a queued body dropped without a word to the sink
+  'drop-silent': ['match/session.js', '    if (why) this.call(() => this.sink?.dropped?.(seat, body, why, this))\n', ''],
+  // the sink told the Session settled before its queue drained: an
+  // autopilot answering there answers again what it has queued
+  'settled-early': ['match/session.js', `          if (this.queue.length) this.drain()
+          else if (this.dirty) {
+            this.dirty = false
+            this.call(() => this.sink?.settled?.(this))
+          } else break`, `          if (this.dirty) {
+            this.dirty = false
+            this.call(() => this.sink?.settled?.(this))
+          } else if (this.queue.length) this.drain()
+          else break`],
+  // the sink never told a change settled: whoever answers there waits for
+  // ever
+  'no-settled': ['match/session.js', '            this.call(() => this.sink?.settled?.(this))\n', ''],
+  // the Folder lets push be entered again (from the events it hands on, or
+  // from the match's onTrace): an entry lands in the middle of a fold
+  'push-reentrant': ['match/fold.js', "    if (this.busy) throw new Error('Folder.push is not reentrant", "    if (false) throw new Error('Folder.push is not reentrant"],
   // the refold is swapped in only after it is shown: a sink handed its
   // events reads the old match (or none)
   'late-swap': ['match/fold.js', `      if (next.G) Object.assign(next.G, { out: this.opts.out ? [] : null, onTrace: this.opts.onTrace })
       Object.assign(this, { ...next, opts: this.opts, syncing: true })
     }
     if (!old.length) show()
-    for (const e of entries) {
+    for (let i = from; i < N; i++) {
+      const e = entries[i]
       if (showing) {
         this.step(e, events, each)
         continue
@@ -1545,7 +1921,8 @@ const MUTANTS = {
       else Object.assign(next.opts, { out, onTrace: this.opts.onTrace })
     }
     if (!old.length) show()
-    for (const e of entries) {
+    for (let i = from; i < N; i++) {
+      const e = entries[i]
       if (showing) {
         next.step(e, events, each)
         continue
@@ -1571,6 +1948,7 @@ if (a['self-test']) {
     { kind: 'cap', id: 'bushtail-random-6' }, { kind: 'edges', id: 'bushtail-random-6' }, { kind: 'drill', how: 'hypot', id: 'hotseat-late-8', odd: 1 },
     { kind: 'forks', id: 'hotseat-late-8' }, { kind: 'forks', id: 'hotseat-random-2' },
     { kind: 'drill', how: 'late', id: 'hotseat-late-8' }, { kind: 'drill', how: 'deaf', id: 'hotseat-late-8' },
+    { kind: 'reenter', id: 'hotseat-late-8', seed: 1 }, { kind: 'reenter', id: 'hotseat-random-4', seed: 1 }, { kind: 'reenter', id: 'bushtail-random-6', seed: 1 },
   ]
   const clean = await run(copyCode(dir, join(work, 'unbroken')), load, { quiet: true })
   if (clean.length) {

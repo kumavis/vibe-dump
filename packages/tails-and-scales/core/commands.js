@@ -32,6 +32,7 @@
 // a legal one; `via` is 'seat' for a seat's own command, 'ai' for the AI's
 // (an AI seat's, or a human's Auto).
 import { lock, unlock } from './rng.js'
+import { deepFreeze } from './util.js'
 import { emit } from './journal.js'
 import { ctrl } from './match.js'
 import { setUnitPos } from './units.js'
@@ -107,8 +108,10 @@ export const HANDLERS = Object.freeze({
 // ── Whether a command is legal now ──────────────────────────────────────────
 // Each kind: the decision it answers (`k`; `phase`: the phase it belongs to;
 // none for concede, which comes out of band), its integer fields, and its
-// own rule.
-const RULES = Object.freeze({
+// own rule. (Exported, frozen, for sim/data-check.mjs's lints: no field may
+// bear a name an envelope keeps for itself, and concede alone answers no
+// decision. KINDS below is its keys; nothing above the core reads it.)
+export const RULES = deepFreeze({
   place: { k: 'deploy', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? (placeOk(G, unitOf(G, u), c) ? null : `cell ${c} is no free spot in seat ${seat}'s zone for unit ${u}`) },
   deployed: { k: 'deploy', fields: [] },
   advance: { k: 'phase', phase: 'move', fields: ['u'], ok: (G, seat, { u }) => mine(G, seat, u) ?? mayAdvance(G, unitOf(G, u)) },

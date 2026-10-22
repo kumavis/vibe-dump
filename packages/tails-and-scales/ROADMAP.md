@@ -49,7 +49,14 @@ the commit, and add whatever the work turned up.
   `--self-test`: P-merge, peers folding one log in any causal order agree
   on what was accepted, refused and hashed, junk and forks included, each
   entry hashed where §0.2 #3 says; the cap, the Folder's edges, same-seat
-  forks in the deployment and the desync drills, early and late). A step
+  forks in the deployment and the desync drills, early and late; since
+  R8b each human log's seats also answering only from their sinks, the
+  single flight), and from R8b `node sim/fold-cost.mjs` (and
+  `--self-test`: a 5,000-entry log folds with the same work per entry as
+  a short one, with no O(n) decode, copy or stringify per entry (played an
+  entry at a time, each change still makes one identity scan of the
+  entries pushed: nanoseconds a compare, so quadratic only in theory); it times folds, so
+  run it on a quiet machine). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -70,7 +77,11 @@ the commit, and add whatever the work turned up.
   the end, leaves the HUD right: Begin battle, End and Auto up for a local
   seat's phase, Shortest move and the charge's spots, the end screen worded
   as the match's own game.over; and the HUD model's `end.ready` is the
-  match's wherever a local seat idles in its phase). A step
+  match's wherever a local seat idles in its phase), and from R8b
+  `node sim/play-check.mjs` (the shipped page played rendered, without
+  `?debug` or `?fast`, through the DOM alone: a watched battle and back,
+  vs. the AI from each seat and hotseat, each seat played here placing
+  units by clicks before Begin battle; `--full` without `?lowfi`). A step
   that changes what one of them reads ports it in the same step (DESIGN's
   §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
@@ -644,6 +655,28 @@ step keeps the game playable.
   page played rendered without `?debug` or `?fast` (DESIGN's R8 notes, with
   the spec changes for approval, the refactor's three claims confirmed, and
   what N0, N1-N3 and F4 inherit). The refactor is complete.
+- [x] **R8b Consolidation** (after R8; no rules change, the corpus
+  byte-identical, `CORE_VERSION` 1). What the large battles need of the
+  netplay seams, from their design's "R8 must allow" list: the Session's
+  single flight (a submit from any sink callback queued as its body and
+  written once the change in hand is folded, on the match as it then
+  stands, or dropped with `sink.dropped` when no longer legal;
+  `Folder.sync` and `Folder.push` not reentrant), `sink.settled` (once a
+  change is folded: where an autopilot or an auto-End answers), kinds and
+  fields (decode takes any safe whole number or boolean, nothing in
+  match/ reads a kind's fields), a lint that no command field bears an
+  envelope key's name or `t`, the sizes (one `MAX_BYTES`, the cap
+  counting junk, the entry count exposed), a fold whose work per entry
+  doesn't grow with the log (bar the per-change identity scan) (the store's `length`, ids from a counter, no copy of the list
+  per entry, the refold behind one seam; `sim/fold-cost.mjs`), `stateHash`
+  extensible (a feature's unit fields printed only off their defaults)
+  and its format pinned under `CORE_VERSION`, and concede and desync the
+  only kinds out of band; the setup's key whitelist waits for F8a/F11.
+  R8's critic lows: P-prop's quiet folds and refolds held to the Folder,
+  P-prop's Session cases for R8's three gate-gap mutants, and a rendered
+  lane that places units by clicks (`sim/play-check.mjs`, the scratch
+  lanes committed). Then every standing check on the final tree, the
+  refactor's closing record (DESIGN's R8b notes, its results table).
 
 **Multiplayer and features.**
 

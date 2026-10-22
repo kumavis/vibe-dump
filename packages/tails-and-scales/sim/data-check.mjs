@@ -67,6 +67,34 @@
 //    the turn, the decision's kind and seats, the dice; a slot at -0 apart
 //    from +0) and stays put when only what isn't match state does (G.out,
 //    G.onTrace, G.strict, the journal's trace, the nav).
+// 10. (R8b) What the large battles need the netplay seams to allow, held:
+//    - kinds and fields: KINDS is core/commands.js's RULES' keys, and decode
+//      takes any safe whole number or boolean in any field of a known kind,
+//      none of them required (a kind's fields missing, a stray one, a
+//      boolean: legal() is the one judge of a body), and refuses an array,
+//      an object, a string, a fraction or a whole number past 2^53; no
+//      module of match/ reads RULES or a kind's field lists;
+//    - reserved names: no field of any kind (its `fields`, and F4's `opt`
+//      and `bools` when they come) is named as an envelope key (id, s, d,
+//      p, h) or `t`, which bodyOf would strip or the kind would shadow
+//      (the lint shown to find one planted in a copy);
+//    - sizes: MAX_BYTES one constant of at least 1,024, the same for every
+//      kind (each kind's entry padded to it decodes, a byte more doesn't);
+//      the cap 5,000 entries, junk counted (a start and 4,999 junk entries
+//      leave a match live, one more freezes it 'full'); the count exposed
+//      (folder.count, session.count, a report's count);
+//    - out of band: concede and desync only (match/fold.js's OUT_OF_BAND;
+//      the one kind of core's that answers no decision is concede; desync
+//      the one Folder kind a seat sends); in a hotseat battle, every kind
+//      from the seat not waited on, from its own device after its head, is
+//      refused as not its turn but those two;
+//    - the hash's format: today's stateHash of a few corpus matches pinned
+//      under today's CORE_VERSION (a change to what shadowState prints must
+//      bump CORE_VERSION and pin anew); UNIT_EXTRAS, a unit field a feature
+//      adds, printed only where it isn't its default, in sorted key=value
+//      (a doctored table shows a unit at its default hashing as before).
+// (The setup's key whitelist, the spec's item 8, comes with F8a/F11, when
+// the mission's and the army's keys land.)
 //
 //   node sim/data-check.mjs
 //
@@ -537,5 +565,158 @@ console.log(`\n9. the versions a start carries, and the match's hash`)
   check(core.stateHash(P) !== core.stateHash(N), 'tells a model slot at -0 from one at +0')
 }
 
-console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, and stateHash reads exactly the match')
+// ── 10. What R8 must allow (R8b) ────────────────────────────────────────────
+console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes, the kinds out of band, and the hash\'s format (R8b)')
+{
+  const core = await imp(PKG, 'core/index.js')
+  const { RULES } = await imp(PKG, 'core/commands.js')
+  const { UNIT_EXTRAS, unitExtras, shadowState } = await imp(PKG, 'core/hash.js')
+  const E = await imp(PKG, 'match/envelope.js')
+  const F = await imp(PKG, 'match/fold.js')
+  const { LocalStore } = await imp(PKG, 'match/store.js')
+  const { Session } = await imp(PKG, 'match/session.js')
+  const { loadCorpus } = await imp(PKG, 'sim/lib.mjs')
+  const { jobSetup } = await imp(PKG, 'sim/run.mjs')
+  // kinds and fields
+  check(isDeepStrictEqual([...core.KINDS], Object.keys(RULES)), `KINDS is RULES' kinds, in its order (${core.KINDS.join(', ')})`)
+  // (an envelope around `body` for seat 0, as its text, decoded; the text
+  // written with sorted keys, as encode would, but by hand so a value encode
+  // can't write is still handed over)
+  const text = (e) => `{${Object.keys(e).sort().map((k) => `${JSON.stringify(k)}:${JSON.stringify(e[k])}`).join(',')}}`
+  const dec = (body) => E.decode(text({ id: 'x.0.0', s: 0, d: 'x', p: 'x.0.0', h: 'abc', ...body }))
+  const takes = [['none of its fields', {}], ['a stray whole number', { zz: 7 }], ['a boolean', { more: true }], ['2^53 - 1', { zz: 2 ** 53 - 1 }], ['-0', { zz: -0 }]]
+  const refuses = [['an array', { zz: [1] }], ['an object', { zz: { a: 1 } }], ['a string', { zz: '1' }], ['a fraction', { zz: 1.5 }], ['2^53', { zz: 2 ** 53 }], ['null', { zz: null }]]
+  const wrong = []
+  for (const t of core.KINDS) {
+    for (const [what, body] of takes) if (dec({ t, ...body }).bad) wrong.push(`${t} with ${what} refused (${dec({ t, ...body }).bad})`)
+    for (const [what, body] of refuses) if (!dec({ t, ...body }).bad) wrong.push(`${t} with ${what} decoded`)
+  }
+  check(!wrong.length, `decode takes any safe whole number or boolean in any field of each of the ${core.KINDS.length} kinds, none required, and refuses an array, an object, a string, a fraction, 2^53 and null`, wrong.slice(0, 4).join('; '))
+  const reads = readdirSync(join(PKG, 'match')).filter((f) => f.endsWith('.js') && /\bRULES\b|[\w\])]\.(fields|opt|bools)\b/.test(readFileSync(join(PKG, 'match', f), 'utf8')))
+  check(!reads.length, 'no module of match/ reads RULES or a kind\'s field lists (legal() alone judges a body)', reads.join(', '))
+  // reserved names
+  const RESERVED = [...E.ENVELOPE_KEYS, 't']
+  const clashes = (rules) => Object.entries(rules).flatMap(([k, r]) => ['fields', 'opt', 'bools'].flatMap((list) => (r[list] ?? []).filter((f) => RESERVED.includes(f)).map((f) => `${k}.${list} names ${f}`)))
+  check(isDeepStrictEqual([...E.ENVELOPE_KEYS], ['id', 's', 'd', 'p', 'h']), `the envelope keeps id, s, d, p and h (${E.ENVELOPE_KEYS.join(', ')})`)
+  check(!clashes(RULES).length, 'no field of any kind is named id, s, d, p, h or t (bodyOf would strip it, or the kind shadow it)', clashes(RULES).join('; '))
+  const planted = clashes({ ...RULES, vote: { k: 'roundLimit', fields: [], opt: ['h'], bools: ['more', 't'] } })
+  check(planted.length === 2, 'control: the lint finds a field named h (opt) and one named t (bools) planted in a copy of RULES', planted.join('; '))
+  // sizes
+  check(Number.isInteger(E.MAX_BYTES) && E.MAX_BYTES >= 1024, `MAX_BYTES is one whole number of at least 1,024 (${E.MAX_BYTES})`)
+  const consts = Object.entries(E).filter(([k, v]) => typeof v === 'number').map(([k]) => k).sort()
+  check(isDeepStrictEqual(consts, ['MAX_BYTES', 'MAX_NAME']), `match/envelope.js has no size but MAX_BYTES (and MAX_NAME, a name's): no cap by kind (${consts.join(', ')})`)
+  // an entry of kind t whose text is exactly `size` bytes: stray whole
+  // numbers make up the length (the last two sized to it)
+  const padded = (t, size) => {
+    const e = { id: 'x.0.0', s: 0, d: 'x', p: 'x.0.0', h: 'abc', t }
+    let k = 0
+    while (size - text(e).length > 45) e[`z${k++}`] = 1e15
+    for (let a = 1; a <= 15; a++) {
+      for (let b = 1; b <= 15; b++) {
+        const x = text({ ...e, [`z${k}`]: Number('9'.repeat(a)), [`z${k + 1}`]: Number('9'.repeat(b)) })
+        if (x.length === size) return x
+      }
+    }
+    return ''
+  }
+  const sized = core.KINDS.filter((t) => {
+    const at = padded(t, E.MAX_BYTES), over = padded(t, E.MAX_BYTES + 1)
+    return at.length !== E.MAX_BYTES || over.length !== E.MAX_BYTES + 1 || E.decode(at).bad || !/^over/.test(E.decode(over).bad ?? '')
+  })
+  check(!sized.length, `every kind's entry decodes at ${E.MAX_BYTES} bytes and is refused a byte over: one size for every kind`, sized.join(', '))
+  {
+    const setup = { board: 4242, dice: 99, seats: [{ race: 'squirrel', ctrl: 'human', dev: 'here' }, { race: 'serpent', ctrl: 'ai' }] }
+    const f = new F.Folder({ out: null })
+    f.push(E.decode(E.encode({ id: 'here.0.0', s: -1, d: 'here', t: 'start', core: core.CORE_VERSION, rules: core.RULES_ID, setup })))
+    for (let k = 1; k < 5000; k++) f.push(E.decode(`junk ${k}`))
+    const live = f.status, count = f.count
+    f.push(E.decode('one more'))
+    check(live === 'live' && count === 5000 && f.status === 'full' && f.count === 5001 && f.report?.count === 5001, 'the cap counts junk: a start and 4,999 junk entries leave the match live (count 5,000), the next freezes it full (count 5,001, in the report too)', `${live} at ${count}, then ${f.status} at ${f.count}`)
+    const store = new LocalStore()
+    const ses = new Session({ store, localSeats: [0], dev: 'here' })
+    ses.start(setup)
+    store.append('junk')
+    check(store.length === 2 && ses.count === 2 && ses.folder.count === 2, `the store's length and the Session's count are the entries folded (${store.length}, ${ses.count})`)
+  }
+  // out of band
+  check(isDeepStrictEqual([...F.OUT_OF_BAND], ['concede', 'desync']), `the kinds sent out of band are concede and desync, and no other (${F.OUT_OF_BAND.join(', ')})`)
+  const loose = Object.entries(RULES).filter(([, r]) => !r.k).map(([k]) => k)
+  check(isDeepStrictEqual(loose, ['concede']) && loose.every((k) => F.OUT_OF_BAND.includes(k)), `the one kind of core's that answers no decision is concede (${loose.join(', ')})`)
+  const own = ['open', 'start', 'desync'].filter((t) => !dec({ t, at: 'x', mine: 'y' }).bad || !E.decode(text({ id: 'x.0.0', s: 0, d: 'x', t, commit: 'c', core: 1, rules: 'r', setup: {} })).bad)
+  check(isDeepStrictEqual(own, ['desync']), `of the Folder's own kinds a seat sends desync alone (${own.join(', ')})`)
+  {
+    // a hotseat battle, past its deployment: the seat not waited on sends
+    // each kind, from its own device, after its head
+    const it = loadCorpus().items.find((x) => x.mode === 'hotseat')
+    const setup = jobSetup(it.job), devs = { ...setup, seats: setup.seats.map((x, s) => ({ ...x, dev: `d${s}` })) }
+    const fresh = () => {
+      const f = new F.Folder({ out: null })
+      let n = 0
+      const env = (body, s, extra = {}) => E.decode(E.encode(E.envelope(body, { id: `d${Math.max(s, 0)}.${n++}.0`, s, d: `d${Math.max(s, 0)}`, ...extra })))
+      f.push(env({ t: 'start', core: core.CORE_VERSION, rules: core.RULES_ID, setup: devs }, -1))
+      for (const { s, ...b } of it.job.entries) {
+        if (f.G.turn.stage === 'battle' && f.G.pending?.k === 'phase') break
+        f.push(env(b, s, { p: f.head(s), h: F.SIMULTANEOUS.includes(f.G.pending.k) ? undefined : core.stateHash(f.G) }))
+      }
+      return { f, env }
+    }
+    const { f: probe } = fresh()
+    const idle = 1 - probe.G.pending.seats[0]
+    const fates = {}
+    for (const t of [...core.KINDS, 'desync']) {
+      const { f, env } = fresh()
+      const body = t === 'desync' ? { t, at: f.accepted.at(-1), mine: 'x' } : { t }
+      const oob = F.OUT_OF_BAND.includes(t)
+      f.push(env(body, idle, oob ? {} : { p: f.head(idle), h: core.stateHash(f.G) }))
+      const r = f.rejected.at(-1)
+      fates[t] = f.accepted.at(-1) === `d${idle}.${f.pushed.length - 1}.0` || f.status !== 'live' ? 'taken' : r?.why.split(':')[0]
+    }
+    const taken = Object.keys(fates).filter((t) => fates[t] !== 'turn')
+    check(isDeepStrictEqual(taken.sort(), ['concede', 'desync']) && fates.concede === 'taken' && fates.desync === 'taken', `in a hotseat battle (${it.id}), every kind from the seat not waited on is refused as not its turn but concede and desync, taken out of band`, JSON.stringify(fates))
+  }
+  // the hash's format, pinned under today's CORE_VERSION (a change to what
+  // shadowState prints bumps it: pin the new hashes under the new version)
+  const PINNED = {
+    1: {
+      '64-89': { end: 'chz79qx8m5' },
+      'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
+      'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
+    },
+  }
+  const pins = PINNED[core.CORE_VERSION]
+  if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
+    // (nothing to compare)
+  } else {
+    const { items } = loadCorpus()
+    const apart = []
+    for (const [id, want] of Object.entries(pins)) {
+      const job = items.find((x) => x.id === id).job, entries = job.entries ?? []
+      const G = core.createMatch(jobSetup(job), { out: null })
+      for (let k = 0; k <= entries.length; k++) {
+        if (want[k] !== undefined && core.stateHash(G) !== want[k]) apart.push(`${id} before entry ${k}: ${core.stateHash(G)}, pinned ${want[k]}`)
+        if (k < entries.length) {
+          const { s, ...b } = entries[k]
+          core.apply(G, s, b)
+        }
+      }
+      if (core.stateHash(G) !== want.end) apart.push(`${id} at its end: ${core.stateHash(G)}, pinned ${want.end}`)
+    }
+    check(!apart.length, `stateHash of ${Object.values(pins).reduce((n, w) => n + Object.keys(w).length, 0)} corpus matches is the one pinned under CORE_VERSION ${core.CORE_VERSION}`, `${apart.join('; ')}: shadowState's output changed, which bumps CORE_VERSION (§2.6), then pin the new hashes under it`)
+  }
+  // the extras
+  check(Object.isFrozen(UNIT_EXTRAS) && !Object.keys(UNIT_EXTRAS).length, `UNIT_EXTRAS is frozen and names no field yet (${Object.keys(UNIT_EXTRAS).join(', ') || 'none'})`)
+  const extras = Object.freeze({ zeta: false, aboard: 0 })
+  check(unitExtras({}, extras) === '' && unitExtras({ aboard: 0, zeta: false }, extras) === '' && unitExtras({ aboard: 3 }, extras) === 'aboard=3' && unitExtras({ zeta: true, aboard: -0 }, extras) === 'aboard=-0,zeta=true', 'a unit\'s extras print only where they aren\'t their default, in sorted key=value (-0 apart from 0)')
+  {
+    const G = new Session({ store: new LocalStore([E.encode({ id: 'here.0.0', s: -1, d: 'here', t: 'start', core: core.CORE_VERSION, rules: core.RULES_ID, setup: { board: 4242, dice: 99, seats: [{ race: 'squirrel', ctrl: 'human', dev: 'here' }, { race: 'serpent', ctrl: 'ai' }] } })]), localSeats: [] }).G
+    const before = shadowState(G), plain = shadowState(G, extras)
+    G.units[2].aboard = 0
+    const held = shadowState(G, extras)
+    G.units[2].aboard = 4
+    const moved = shadowState(G, extras)
+    check(plain === before && held === before && moved !== before && moved.includes(`[aboard=4]`) && shadowState(G) === before, 'a doctored table of extras leaves a match that never uses them, or holds their defaults, hashing as before; a unit off its default moves the hash; a field the table doesn\'t name prints nothing')
+  }
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, and the seams allow what the large battles need')
 process.exit(failed ? 1 : 0)

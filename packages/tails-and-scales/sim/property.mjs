@@ -62,7 +62,10 @@
 //    every entry: the `h` a peer catching up quietly checks is the one an
 //    author took from a presented fold. (From R8 every corpus fold here,
 //    the refolds of (3) and (7) too, goes through the Folder, every entry
-//    an envelope, as parity's does: sim/run.mjs foldJob.)
+//    an envelope, as parity's does: sim/run.mjs foldJob; (R8b) and each of
+//    them must say so, `via: 'folder'`, for code that has a Folder: the
+//    presented fold, the quiet one and every refold, the Folder's match
+//    the one traced, its start and every entry accepted.)
 // 6. The match's own events show the match (§2.4's mirror, for the engine's
 //    stream: P-present held only main.js's loop before R6b, and plays the
 //    Session since). Every corpus battle and random game folds its events,
@@ -111,8 +114,14 @@
 //    the junk is envelopes with ids of their own (a copied id would only
 //    be a duplicate, which the Folder refuses as such), and one text right
 //    after the start: a start whose setup holds 1e999 (Infinity once
-//    parsed), which decode refuses instead of throwing. (Code older than
-//    R8, whose Session has no Folder, skips this rule.)
+//    parsed), which decode refuses instead of throwing. (R8b) And three
+//    rules of the Folder's at the Session, over replays of the log: an
+//    entry answering one seat's decision with no hash freezes the match
+//    there (a desync by the hash), never played; after the end, a hashed
+//    End on the final head is inert from a spectator's device and freezes
+//    the match from the seat's own; a start under an older or a newer
+//    CORE_VERSION opens read-only. (Code older than R8, whose Session has
+//    no Folder, skips this rule.)
 // 10. The end screen after a snap past the end (R7b: present/hud-model.js
 //    resultOf, which the table shows when the game.over it never played was
 //    dropped by the snap) says what the match's own game.over said. At the
@@ -416,7 +425,11 @@ function corpusTask(core, rng, mirror, it, match, hud) {
   if (line >= 0 || snap >= 0) throw new Error(`${it.id}: folded quietly (G.out null) it plays another battle: trace line ${line + 1}, shadow ${snap + 1} (${(quiet.trace[line] ?? r.trace[line] ?? '').slice(0, 80)})`)
   const hash = first(hashes[1], hashes[0])
   if (hash >= 0) throw new Error(`${it.id}: folded quietly (G.out null) its stateHash before entry ${hash} is ${hashes[1][hash]}, not ${hashes[0][hash]} as presented`)
-  if (r.via === 'core' && match?.folding) throw new Error(`${it.id}: foldJob went straight through the core, not through the Folder`)
+  // (R8b) both folds through the Folder of code that has one: its match the
+  // one traced, the start and every entry accepted ('bypassed' otherwise)
+  for (const [x, how] of [[r, 'presented'], [quiet, 'quiet']]) {
+    if (match?.folding && x.via !== 'folder') throw new Error(`${it.id}: its ${how} fold went ${x.via === 'core' ? 'straight through the core' : 'past the Folder (it took fewer entries than were played, or another match)'}, not through the Folder`)
+  }
   counts.quiet = 1
   counts.hashed = hashes[0].length
   counts.mirrored = r.mirrored
@@ -547,7 +560,42 @@ function sessionTask(core, M, it, trace, hud) {
   const exported = new M.Session({ store: new M.LocalStore(JSON.parse(store.export())), localSeats: [] })
   same(exported.G?.journal.trace ?? [], 'the exported log, replayed')
   if (exported.status !== 'over' || exported.rejected.length) throw new Error(`${where}: the exported log replays ${exported.status}, refusing ${JSON.stringify(exported.rejected)}`)
-  return { sessions: 1, junk: replay.rejected.length, handed: stream.reduce((n, b) => n + b.length, 0), results }
+  return { sessions: 1, junk: replay.rejected.length, handed: stream.reduce((n, b) => n + b.length, 0), results, gaps: gaps(core, M, log, dev, where) }
+}
+
+// (R8b) Three rules of the Folder's, held at the Session over a replay of
+// the corpus log `log` (its envelopes, each human seat played from `dev`):
+// an entry answering a single seat's decision with no hash freezes the
+// match there (a desync by the hash, theirs null), never played unchecked;
+// after the end, a hashed command on the final head with another hash is
+// inert from a device the seat isn't played from (a spectator's) and
+// freezes the match from the seat's own; and a start made under an older
+// or a newer CORE_VERSION opens read-only ('skew', no match). R8's gate
+// mutants missing-h-accepted, over-any-device and core-newer-only passed
+// every gate but merge-sim's edges. Returns how many it held (an AI pair's
+// log, its start alone, holds only the last).
+function gaps(core, M, log, dev, where) {
+  const replay = (entries) => new M.Session({ store: new M.LocalStore(entries), localSeats: [] })
+  // a start under another CORE_VERSION, older and newer
+  for (const v of [core.CORE_VERSION - 1, core.CORE_VERSION + 1]) {
+    const c = replay([{ ...log[0], core: v }, ...log.slice(1)])
+    if (c.status !== 'skew' || c.G !== null || !/another version/.test(c.error ?? '')) throw new Error(`${where}: a log started under CORE_VERSION ${v} (this is ${core.CORE_VERSION}) replays ${c.status}${c.G ? ', with a match' : ''}, not read-only (skew)`)
+  }
+  const k = log.findIndex((e) => e.h !== undefined)
+  if (k < 0) return 1
+  const bare = { ...log[k] }
+  delete bare.h
+  const a = replay([...log.slice(0, k), bare, ...log.slice(k + 1)])
+  if (a.status !== 'desync' || a.report?.at !== bare.id || a.report?.by !== 'hash' || a.report?.theirs !== null || a.accepted.includes(bare.id)) throw new Error(`${where}: a replay whose entry ${bare.id} (${bare.t}, answering one seat) carries no hash ends ${a.status} (${JSON.stringify(a.report && { at: a.report.at, by: a.report.by, theirs: a.report.theirs })}), not frozen there by the hash`)
+  // the log played to its end, then an End on the head it ended at
+  const b = replay(log)
+  const seat = log.findLast((e) => e.s >= 0 && e.h !== undefined).s, last = b.folder.head(seat)
+  const end = (id, d) => M.encode(M.envelope({ t: 'end' }, { id, s: seat, d, p: last, h: 'apart' }))
+  b.store.append(end('gap.spectator', 'there'))
+  const spectator = b.status, why = b.rejected.at(-1)
+  b.store.append(end('gap.seat', dev))
+  if (spectator !== 'over' || why?.id !== 'gap.spectator' || !/^inert/.test(why.why) || b.status !== 'desync' || b.report?.at !== 'gap.seat' || b.report?.by !== 'hash') throw new Error(`${where}: after the end, a hashed End on the final head leaves the match ${spectator} from a spectator's device (${JSON.stringify(why)}) and ${b.status} from the seat's own (${JSON.stringify(b.report && { at: b.report.at, by: b.report.by })}), not over then frozen`)
+  return 3
 }
 
 // The log folded straight through the core: the match, the batches the
@@ -701,6 +749,8 @@ function randomTask(core, rng, mirror, races, seed, hud) {
 function refold(core, setup, log, trace, where) {
   const f = foldJob(core, { setup, entries: log.map(([s, b]) => ({ s, ...b })) }, { strict: true, match: FOLDING })
   if (f.error) throw new Error(`${where}: its log, folded by sim/run.mjs foldJob, stops: ${f.error.split('\n')[0]}`)
+  // (R8b) through the Folder of code that has one, every entry accepted
+  if (FOLDING && f.via !== 'folder') throw new Error(`${where}: its log, folded by sim/run.mjs foldJob, went ${f.via}, not through the Folder (it took fewer entries than were played, or another match)`)
   const t = h10(f.trace.join('\n'))
   if (t !== trace) throw new Error(`${where}: its log, folded by sim/run.mjs foldJob, traces ${t}, not ${trace} as played`)
 }
@@ -909,7 +959,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   const probes = res.reduce((s, r) => s + (r.counts?.probes ?? 0), 0)
   const quietly = res.reduce((s, r) => s + (r.counts?.quiet ?? 0), 0)
   const refolded = res.reduce((s, r) => s + (r.counts?.refolded ?? 0), 0)
-  const sessions = res.reduce((s, r) => [s[0] + (r.counts?.sessions ?? 0), s[1] + (r.counts?.junk ?? 0), s[2] + (r.counts?.handed ?? 0)], [0, 0, 0])
+  const sessions = res.reduce((s, r) => [s[0] + (r.counts?.sessions ?? 0), s[1] + (r.counts?.junk ?? 0), s[2] + (r.counts?.handed ?? 0), s[3] + (r.counts?.gaps ?? 0)], [0, 0, 0, 0])
   const mirrored = res.reduce((s, r) => [s[0] + (r.counts?.mirrored?.acts ?? 0), s[1] + (r.counts?.mirrored?.stops ?? 0)], [0, 0])
   // (code with match/ plays every corpus battle through the Session too)
   const corpusOk = res.filter((r, i) => r.ok && tasks[i].kind === 'corpus').length
@@ -922,7 +972,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
     const never = Object.entries(reached).filter(([, n]) => !n).map(([k]) => k)
     if (never.length) bad.push({ error: `the random games never reached: ${never.join(', ')} (more --games?)` })
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay), resultOf(G) the match's game.over at ${results} ends (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -939,7 +989,11 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
 // `session-drops-event` (nor does P-present: the view plays `pending` as nothing);
 // nor (R8) `session-no-hash` and `session-global-head` (foldJob writes its
 // own envelopes), nor `hash-reads-out` (foldJob takes each `h` from the same
-// fold that checks it: only a quiet fold's hash, (5), sees it).
+// fold that checks it: only a quiet fold's hash, (5), sees it); nor (R8b)
+// `quiet-accepted-short` and `concede-accepted-short` (the battle traced the
+// same: only (5)'s `via` sees the first, only the refolds' the second), nor
+// `missing-h-accepted`, `over-any-device` and `core-newer-only` (no honest
+// log writes those entries: only (9)'s replays do).
 const MUTATIONS = {
   // a preview the fold never runs draws a die (a tool's nearest valid end)
   'preview-draws': ['core/actions/move.js', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n  roll(G, 1)\n'],
@@ -980,7 +1034,7 @@ const MUTATIONS = {
   'session-folds-junk': ['match/fold.js', "    if (why) return this.reject(e, `illegal: ${why}`)\n    const clock = clockOf(G)", '    const clock = clockOf(G)'],
   // the Session filters what it hands the sink: the `pending` events, which
   // nothing the eye sees plays yet (N2's waiting line will)
-  'session-drops-event': ['match/fold.js', 'each?.(batch, e)', "each?.(batch.filter((x) => x.t !== 'pending'), e)"],
+  'session-drops-event': ['match/fold.js', '      each(batch, e)\n', "      each(batch.filter((x) => x.t !== 'pending'), e)\n"],
   // (R8) the Session writes an entry for one seat without the match's hash
   // (so the Folder freezes the match at it: a desync of its own making)
   'session-no-hash': ['match/session.js', 'h: oob || SIMULTANEOUS.includes(P.k) ? undefined : stateHash(this.G),', 'h: undefined,'],
@@ -999,6 +1053,22 @@ const MUTATIONS = {
   // 1 played, where the match's own game.over says 0 (the view's, not the
   // core's: no trace or event of the match changes)
   'result-rounds': ['present/hud-model.js', "rounds: T.step === 'rolloff' ? 0 : T.round", 'rounds: T.round'],
+  // (R8b) a quiet Folder leaves its Ends out of `accepted`: the battle
+  // traced the same, but not every entry taken through the Folder (only the
+  // quiet fold's own check, `via`, sees it)
+  'quiet-accepted-short': ['match/fold.js', '    this.accepted.push(e.id)\n', "    if (this.opts.out || e.t !== 'end') this.accepted.push(e.id)\n"],
+  // the Folder leaves a concession out of `accepted` (only the random
+  // games' and the out-of-band concessions' refolds, `via`, see it: no
+  // corpus log concedes)
+  'concede-accepted-short': ['match/fold.js', '    this.accepted.push(e.id)\n', "    if (e.t !== 'concede') this.accepted.push(e.id)\n"],
+  // R8's gate mutants, now held at the Session too (gaps): an entry
+  // answering one seat's decision with no hash played unchecked
+  'missing-h-accepted': ['match/fold.js', 'if (!SIMULTANEOUS.includes(P.k) && e.h !== stateHash(G)) return this.freeze(e)', 'if (!SIMULTANEOUS.includes(P.k) && e.h !== undefined && e.h !== stateHash(G)) return this.freeze(e)'],
+  // after the end, any device's hashed command on the final head freezes
+  // the match
+  'over-any-device': ['match/fold.js', "seat?.ctrl === 'human' && e.d === seat.dev && e.h !== stateHash(this.G)) return this.freeze(e)", "seat?.ctrl === 'human' && e.h !== stateHash(this.G)) return this.freeze(e)"],
+  // only a newer build's start is skew: an older one's is folded
+  'core-newer-only': ['match/fold.js', 'if (e.core !== CORE_VERSION || e.rules !== RULES_ID) {', 'if (e.core > CORE_VERSION || e.rules !== RULES_ID) {'],
 }
 
 if (a['self-test']) {

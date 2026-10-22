@@ -4,9 +4,9 @@
 // into the core. It holds commands, never game state: the match is a pure
 // function of its entries.
 //
-//   MatchStore = { kind: 'local' | 'automerge', entries(): Entry[] (decoded,
-//                  list order), append(entry | text): void, subscribe(fn):
-//                  () => void }
+//   MatchStore = { kind: 'local' | 'automerge', length, entries(): Entry[]
+//                  (decoded, list order), append(entry | text): void,
+//                  subscribe(fn): () => void }
 //
 // entries() is the decoded list as it stands, the same object for the same
 // entry across calls: a fast path for the Folder's prefix check (it tells
@@ -15,6 +15,13 @@
 // list element or per text, never per index alone: a store that inserts
 // (Automerge, N1) shifts every later index, and an index's old entry handed
 // out at its new place reads as a prefix, the inserted entry never folded.
+// The array it returns is read-only, and may be the store's own (it then
+// grows as entries are appended: LocalStore's); a caller that keeps one
+// copies it. Nothing per entry decodes, copies or stringifies the list:
+// entries() decodes each text once, `length` is the entry count without a
+// list (the Session numbers its ids by its own counter: match/session.js),
+// and the Folder compares by identity first (sim/fold-cost.mjs holds a
+// fold of a 5,000-entry log to linear time).
 // append takes an envelope, or the text it is written as (the Session
 // hands over the text it has checked decode takes: kept as it is, never
 // encoded again).
@@ -47,9 +54,16 @@ export class LocalStore {
     this.subs = new Set()
   }
 
+  // how many entries the log holds
+  get length() {
+    return this.log.length
+  }
+
+  // the decoded log: this store's own array (read-only; it grows at its
+  // end as entries are appended, the only change a LocalStore makes)
   entries() {
     for (let i = this.decoded.length; i < this.log.length; i++) this.decoded.push(decode(this.log[i]))
-    return this.decoded.slice()
+    return this.decoded
   }
 
   // an envelope (or a text, kept as it is)
