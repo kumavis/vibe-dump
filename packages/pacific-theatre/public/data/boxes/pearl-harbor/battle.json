@@ -8162,11 +8162,11 @@
       "durationS": 180,
       "timeScale": 1,
       "maxTimeScale": 4,
-      "start": {"from":"west-virginia","bearingDeg":130,"rangeM":3000,"altM":60,"speedMs":80,"headingDeg":310},
+      "start": {"from":"nevada","bearingDeg":130,"rangeM":3000,"altM":60,"speedMs":80,"headingDeg":310},
       "objective": {
         "kind": "torpedo",
-        "target": ["west-virginia","california","nevada"],
-        "text": "Put your torpedo into an outboard battleship."
+        "target": ["nevada","california"],
+        "text": "Put your torpedo into Nevada, moored alone at the end of the row, or into California at its other end."
       },
       "beats": [
         {"t":"07:57:00","text":"The first torpedoes are in the water."},
@@ -8180,7 +8180,7 @@
           {"unit":"nevada","count":[1,1],"window":["08:00","08:03"],"weapon":"torpedo"}
         ],
         "losses": {"count":[5,5]},
-        "note": "which carrier’s torpedoes struck which ship is not settled; the box keeps Oklahoma’s with Akagi’s unit"
+        "note": "which carrier’s torpedoes struck which ship is not settled; the box keeps Oklahoma’s with Akagi’s unit. The start aims at Nevada, whose torpedo at about 08:02 (R10 §8.2, her report) the box gives Kaga’s unit: West Virginia, the unit’s first target, is past her fatal from 07:57, so a hit on her registers nothing"
       },
       "after": {
         "text": "Kaga’s torpedo unit came in low over the Southeast Loch and released at the outboard battleships. West Virginia was torn open along her side and settled upright on the bottom; Oklahoma, ahead of her, rolled over within minutes with men trapped inside her. Kaga’s torpedo unit lost more aircraft than any other torpedo unit that morning; their crews did not return.",
