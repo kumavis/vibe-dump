@@ -112,12 +112,15 @@ export const HANDLERS = Object.freeze({
     const P = G.pending
     const votes = { ...P.votes, [seat]: more }
     const left = P.seats.filter((s) => s !== seat)
-    log(G, seat, `<b>${raceOf(G, seat).name}</b> ${more ? 'want to keep playing' : 'want to end the battle'}.`)
     emit(G, 'vote', { seat, more })
     if (left.length) {
       G.pending = { ...P, seats: left, votes }
       return
     }
+    // the says are logged as the vote closes, in seat order: the seats vote
+    // at once, so the battle's log is the same whichever say folds first
+    // (the panel shows each as it comes, from G.pending.votes)
+    for (const s of Object.keys(votes).map(Number).sort((a, b) => a - b)) log(G, s, `<b>${raceOf(G, s).name}</b> ${votes[s] ? 'want to keep playing' : 'want to end the battle'}.`)
     G.pending = null
     const T = G.turn
     if (!Object.values(votes).every(Boolean)) return gameOver(G)

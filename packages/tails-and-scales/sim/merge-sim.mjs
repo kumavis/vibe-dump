@@ -942,7 +942,8 @@ function votes(M, it) {
     for (const e of list) f.push(e)
     return f
   }
-  const sig = (f) => JSON.stringify({ status: f.status, accepted: f.accepted.length, rejected: f.rejected.map((r) => r.why), hash: f.G ? core.stateHash(f.G) : null, pending: f.G?.pending?.k ?? null, round: f.G?.turn.round, result: f.G?.turn.result ?? null })
+  // (the battle's log too: the says commute in it as in the match)
+  const sig = (f) => JSON.stringify({ status: f.status, accepted: f.accepted.length, rejected: f.rejected.map((r) => r.why), hash: f.G ? core.stateHash(f.G) : null, pending: f.G?.pending?.k ?? null, round: f.G?.turn.round, result: f.G?.turn.result ?? null, trace: f.G ? core.cyrb53(f.G.journal.trace.join('\n')) : null })
   // the log to its round limit, as its seats wrote it
   const lead = new F.Folder({ out: [] })
   const list = [env({ t: 'start', core: core.CORE_VERSION, rules: core.RULES_ID, setup: devs }, -1)]
@@ -1905,6 +1906,9 @@ const MUTANTS = {
   // (F4) the round limit's vote taken for a single seat's decision: each
   // seat's say written hashed on the one head, so two said at once fork
   'roundLimit-hashed': ['match/fold.js', "export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit'])", "export const SIMULTANEOUS = Object.freeze(['deploy'])"],
+  // each say logged as it folds: the battle's log then depends on which of
+  // two says made at once came first
+  'vote-logged-as-said': ['core/commands.js', "    emit(G, 'vote', { seat, more })\n", "    log(G, seat, `${seat} ${more}`)\n    emit(G, 'vote', { seat, more })\n"],
   // a seat's say doesn't close its part of the vote: the vote never ends
   'vote-never-closes': ['core/commands.js', '    const left = P.seats.filter((s) => s !== seat)\n', '    const left = P.seats\n'],
   'session-no-finally': ['match/session.js', '    } finally {\n      this.folding = false\n    }\n', '    } finally {}\n    this.folding = false\n'],
