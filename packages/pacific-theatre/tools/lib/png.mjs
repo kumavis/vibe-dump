@@ -1,10 +1,13 @@
-// A minimal PNG writer and reader for the bake.
+// A minimal PNG writer and reader for the bakes, the fixtures and the checks.
 //
-// Copied from packages/ahupuaa/tools/png.mjs (8-bit RGB, no interlace) and
-// extended here: greyscale output, per-row adaptive filtering for smaller
-// files, and a decoder so the checker can read back exactly what was written.
-// Every image this writes is 8-bit, non-interlaced, colour type 2 (RGB) or 0
-// (grey), which browsers decode losslessly.
+// Copied from holo-i-ke-au's tools/lib/png.mjs (b480c27), itself from
+// packages/ahupuaa/tools/png.mjs (8-bit RGB, no interlace) with greyscale
+// output, per-row adaptive filtering for smaller files, and a decoder so the
+// checker can read back exactly what was written. Every image this writes is
+// 8-bit, non-interlaced, colour type 2 (RGB) or 0 (grey), which browsers
+// decode losslessly; it writes exactly the pack format of DATA.md §2. The
+// reader also takes 8-bit RGBA (colour type 6), so the smoke test can look at
+// a browser's screenshot.
 import { deflateSync, inflateSync } from 'node:zlib'
 import { readFileSync, writeFileSync } from 'node:fs'
 
@@ -106,14 +109,15 @@ export function writeGreyPNG(path, w, h, grey) {
 }
 
 /**
- * Decode an 8-bit, non-interlaced grey or RGB PNG (what this module writes).
+ * Decode an 8-bit, non-interlaced grey, RGB or RGBA PNG (a path or a Buffer).
  * Returns { width, height, channels, colourType, interlace, bitDepth, data }.
  * Throws on anything else, so the checker fails loudly on a wrong format.
  */
 export function readPNG(path) {
-  const buf = readFileSync(path)
+  const buf = Buffer.isBuffer(path) ? path : readFileSync(path)
+  const name = Buffer.isBuffer(path) ? '(a PNG in memory)' : path
   const sig = [137, 80, 78, 71, 13, 10, 26, 10]
-  for (let i = 0; i < 8; i++) if (buf[i] !== sig[i]) throw new Error(`${path}: not a PNG`)
+  for (let i = 0; i < 8; i++) if (buf[i] !== sig[i]) throw new Error(`${name}: not a PNG`)
   let off = 8
   let width = 0, height = 0, bitDepth = 0, colourType = -1, interlace = -1
   const idat = []
@@ -122,7 +126,7 @@ export function readPNG(path) {
     const type = buf.toString('latin1', off + 4, off + 8)
     const body = buf.subarray(off + 8, off + 8 + len)
     const crc = buf.readUInt32BE(off + 8 + len)
-    if (crc32(buf.subarray(off + 4, off + 8 + len)) !== crc) throw new Error(`${path}: bad CRC in ${type}`)
+    if (crc32(buf.subarray(off + 4, off + 8 + len)) !== crc) throw new Error(`${name}: bad CRC in ${type}`)
     if (type === 'IHDR') {
       width = body.readUInt32BE(0)
       height = body.readUInt32BE(4)
@@ -133,13 +137,13 @@ export function readPNG(path) {
     else if (type === 'IEND') break
     off += 12 + len
   }
-  if (bitDepth !== 8) throw new Error(`${path}: bit depth ${bitDepth}, expected 8`)
-  if (interlace !== 0) throw new Error(`${path}: interlaced`)
-  const channels = colourType === 2 ? 3 : colourType === 0 ? 1 : 0
-  if (!channels) throw new Error(`${path}: colour type ${colourType}, expected 0 or 2`)
+  if (bitDepth !== 8) throw new Error(`${name}: bit depth ${bitDepth}, expected 8`)
+  if (interlace !== 0) throw new Error(`${name}: interlaced`)
+  const channels = colourType === 2 ? 3 : colourType === 0 ? 1 : colourType === 6 ? 4 : 0
+  if (!channels) throw new Error(`${name}: colour type ${colourType}, expected 0, 2 or 6`)
   const raw = inflateSync(Buffer.concat(idat))
   const stride = width * channels
-  if (raw.length !== (stride + 1) * height) throw new Error(`${path}: bad data length`)
+  if (raw.length !== (stride + 1) * height) throw new Error(`${name}: bad data length`)
   const data = new Uint8Array(stride * height)
   for (let y = 0; y < height; y++) {
     const f = raw[y * (stride + 1)]
@@ -155,7 +159,7 @@ export function readPNG(path) {
       else if (f === 2) p = b
       else if (f === 3) p = (a + b) >> 1
       else if (f === 4) p = paeth(a, b, c)
-      else if (f !== 0) throw new Error(`${path}: bad filter ${f}`)
+      else if (f !== 0) throw new Error(`${name}: bad filter ${f}`)
       row[i] = (src[i] + p) & 255
     }
   }
