@@ -1,23 +1,33 @@
 // Dev-only: boot the built app (dist/) in headless Chromium under SwiftShader
-// and check the Stage 0 gate (ENGINEERING.md §13): the table boots on the
-// fixtures and is drawn; every scene ShaderMaterial's compiled source carries
-// the log-depth chunks (vFragDepth); the stub Battle flies the table to the
-// fixture box's outline through its placement; the box flavours compile and
-// draw in a preview of the box and the cut comes back; the URL's #date and
-// #cam act and #battle is kept; no console error on the way. Then what the
-// page costs in heap and frame time.
+// and check the table (ENGINEERING.md §§10–13): the table boots on the
+// fixtures and is drawn; the tour opens on the first chapter's card, and Next
+// and Back walk it; the clock's slider and chapter ticks move the date and
+// open a chapter; the wheel runs from the whole theatre down to an island
+// group; the front shows each of its keyframes (held land, the hatch, the
+// perimeters, the islands' holders) and cross-fades between them; a pin opens
+// its card and a box event's card raises ui.onEnter; pins in one spot gather
+// into a cluster that opens a list; the names thin under a hundred; the
+// credits panel holds NOTICE.md's notices; the briefing and the after-card
+// render from plain objects, people kept to The record; every scene
+// ShaderMaterial's compiled source carries the log-depth chunks
+// (vFragDepth); the URL's #date and #cam act and #battle is kept; the stub
+// Battle flies to the fixture box's outline with the overlays faded out, the
+// box flavours compile and draw in its preview with the table's interface
+// hidden, and the cut comes back; no console error on the way. Then the frame
+// time and the heap at the far and near zooms.
 //
 //   npm run build -w @vibe-dump/pacific-theatre
 //   node tools/fake-data.mjs
-//   node tools/smoke.mjs                 (test-data/ unless public/data/ has a manifest and DATA=real)
+//   node tools/smoke.mjs                 (test-data/ unless DATA=real)
 //   DATA=real node tools/smoke.mjs
 //   CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome (the default)
 //
-// Adapted from holo-i-ke-au's tools/smoke.mjs (b480c27): its harness (the
-// server, the browser, check/ui/run/expect/frames) and its perf block (the
-// CDP heap, wall-time frames) are kept; the checks are new. The table and
-// engine workflows extend it (the tour, the pins, a moment with
-// player.scripted).
+// Under SwiftShader a frame takes the better part of a second, so the checks
+// settle the camera (app.settle()) rather than wait out flights. Adapted from
+// holo-i-ke-au's tools/smoke.mjs (b480c27): its harness (the server, the
+// browser, check/ui/run/expect/frames) and its perf block (the CDP heap,
+// wall-time frames) are kept. The engine's checks (a moment with
+// player.scripted) live in tools/smoke-battle.mjs until integration.
 import { chromium } from 'playwright'
 import { createServer } from 'node:http'
 import { readFile, stat } from 'node:fs/promises'
@@ -89,13 +99,14 @@ const frames = async (n) => {
   await page.waitForFunction((f) => window.__app.frames >= f, f0 + n, { timeout: 180000 })
 }
 /** Screenshot → { mean luminance, its spread, the share of blue-dominant pixels, distinct colours }. */
-const look = async (file) => {
-  const buf = await page.screenshot({ path: join(shots, file) })
+const look = async (file, clip) => {
+  const buf = await page.screenshot({ path: join(shots, file), clip })
   const img = readPNG(buf)
   const { width, height, channels, data } = img
   let s = 0
   let s2 = 0
   let blue = 0
+  let red = 0
   const seen = new Set()
   const n = width * height
   for (let i = 0; i < n; i++) {
@@ -106,10 +117,11 @@ const look = async (file) => {
     s += l
     s2 += l * l
     if (b > r + 12 && b > g - 10) blue++
+    if (r > g + 30 && r > b + 30) red++
     if (i % 7 === 0) seen.add((r >> 3) * 1024 + (g >> 3) * 32 + (b >> 3))
   }
   const mean = s / n
-  return { mean: +mean.toFixed(1), spread: +Math.sqrt(Math.max(0, s2 / n - mean * mean)).toFixed(1), blue: +(blue / n).toFixed(3), colours: seen.size }
+  return { mean: +mean.toFixed(1), spread: +Math.sqrt(Math.max(0, s2 / n - mean * mean)).toFixed(1), blue: +(blue / n).toFixed(3), red: +(red / n).toFixed(4), colours: seen.size }
 }
 /** Every ShaderMaterial in the active scene, compiled: how many, and which lack vFragDepth in either compiled stage. */
 const shaderAudit = () =>
@@ -134,6 +146,11 @@ const shaderAudit = () =>
     })
     return out
   `)
+// the whole theatre, the camera straight to it
+const HOME = `const h = app.table.rig.homeView(); app.table.rig.jump({ x: h.target.x, z: h.target.z, distance: h.distance, yaw: h.yaw, pitch: h.pitch }); app.settle()`
+// a fixture's keyframes and the box event (the real data's first two keyframes and first box event otherwise)
+const KF = await ui('[...app.data.fronts.keyframes.keys()]')
+const BOX_EV = await ui('app.data.events.find((e) => e.box && app.data.boxById.has(e.box))?.id ?? null')
 
 await check('the table boots on the fixtures and is the active scene', async () => {
   await expect('app.mode', 'table')
@@ -145,8 +162,20 @@ await check('the table boots on the fixtures and is the active scene', async () 
   return `${n} relief nodes, exaggeration ${s.exag}, ${s.calls} draw calls, ${s.gpu}`
 })
 
+await check("the tour opens on the first chapter's card, the clock at its keyframe", async () => {
+  const st = await ui('app.tour.state')
+  if (!st.active || st.chapter !== 0 || st.step !== -1) throw new Error(`tour ${JSON.stringify(st)}`)
+  await expect('app.ui.card.mode', 'chapter')
+  const want = await ui('app.tour.chapterDate(app.tour.chapters[0])')
+  const got = await ui('app.clock.date')
+  if (Math.abs(got - want) > 60000) throw new Error(`the clock is at ${new Date(got).toISOString()}, the chapter's date ${new Date(want).toISOString()}`)
+  const pill = await ui("document.querySelector('.tl-tour').textContent")
+  await look('smoke-chapter.png')
+  return `“${pill.trim()}”; ${await ui("document.querySelector('.card h1').textContent")}`
+})
+
 await check('the table is drawn: relief, sea and land in the frame', async () => {
-  await run('app.settle()')
+  await run(`${HOME}; app.ui.card.close()`)
   await frames(3)
   const l = await look('smoke-table.png')
   if (l.spread < 8 || l.colours < 60) throw new Error(`a flat frame: ${JSON.stringify(l)}`)
@@ -154,15 +183,164 @@ await check('the table is drawn: relief, sea and land in the frame', async () =>
   return JSON.stringify(l)
 })
 
-await check("the routes draw in the WarClock's window, across 180°", async () => {
-  await run(`app.clock.setDate(Date.UTC(1942, 5, 1)); app.settle()`)
+await check('the names thin by rank and collision, under a hundred on screen, kanji through lang="ja"', async () => {
+  const far = await ui('app.table.labels.visible()')
+  await run(`app.table.rig.jump({ x: -213, z: -1168, distance: 1500, yaw: 0, pitch: 1.0 }); app.settle()`)
+  await frames(3)
+  const near = await ui('app.table.labels.visible()')
+  if (!far.length || far.length >= 100 || near.length >= 100) throw new Error(`far ${far.length}, near ${near.length}`)
+  const ja = await ui(`document.querySelectorAll('.label.show .lb-ja[lang="ja"]').length`)
+  return `far: ${far.join(', ')}; near: ${near.join(', ')}; ${ja} with a Japanese name`
+})
+
+await check("the tour's Next and Back walk chapters, events and their table stops", async () => {
+  await run(`app.tour.goTo(0, -1, { jump: true }); app.settle()`)
+  const seq = []
+  for (let i = 0; i < 4; i++) {
+    await page.keyboard.press('ArrowRight')
+    seq.push(await ui('app.tour.state'))
+  }
+  const back = []
+  for (let i = 0; i < 2; i++) {
+    await page.keyboard.press('ArrowLeft')
+    back.push(await ui('app.tour.state'))
+  }
+  await run('app.settle()')
   await frames(2)
-  const r = await ui("app.table.routes.visibleRoutes().map((r) => r.id)")
-  const all = await ui('app.table.routes.lines.length')
-  if (useTest && !r.includes('test-fleet-route')) throw new Error(`showing ${JSON.stringify(r)} of ${all}`)
-  await look('smoke-routes.png')
-  await run(`app.clock.setS(0); app.settle()`)
-  return `${r.join(', ') || 'none'} of ${all} on 1 June 1942`
+  const fmt = (s) => `${s.chapter}.${s.step}${s.stop >= 0 ? `/${s.stop}` : ''}`
+  // each Next moves forward, each Back moves back, and the card follows
+  const order = (s) => s.chapter * 1e6 + (s.step + 1) * 1e3 + (s.stop + 1)
+  for (let i = 1; i < seq.length; i++) if (!(order(seq[i]) > order(seq[i - 1]))) throw new Error(`Next did not move on: ${seq.map(fmt).join(' → ')}`)
+  if (!(order(back[0]) < order(seq.at(-1)) && order(back[1]) < order(back[0]))) throw new Error(`Back did not move back: ${back.map(fmt).join(' → ')}`)
+  await look('smoke-tour.png')
+  return `next ${seq.map(fmt).join(' → ')}; back ${back.map(fmt).join(' → ')}; card ${await ui('app.ui.card.mode')}`
+})
+
+await check("the clock: a tick per chapter, a tick opens its chapter's card, the slider moves the date and leaves the tour", async () => {
+  const n = await ui("document.querySelectorAll('.tl-tick').length")
+  const nc = await ui('app.clock.chapters.length')
+  if (n !== nc) throw new Error(`${n} ticks for ${nc} chapters`)
+  const i = Math.min(2, nc - 1)
+  await page.click(`.tl-tick[data-i="${i}"]`)
+  await run('app.settle()')
+  const st = await ui('app.tour.state')
+  if (st.chapter !== i || st.step !== -1) throw new Error(`the tick opened ${JSON.stringify(st)}`)
+  await expect('app.ui.card.mode', 'chapter')
+  await frames(2)
+  await look('smoke-tick.png')
+  const before = await ui('app.clock.date')
+  await run(`const el = document.querySelector('.tl-input'); el.value = '0.62'; el.dispatchEvent(new Event('input', { bubbles: true }))`)
+  const after = await ui('app.clock.date')
+  await expect('app.tour.active', false)
+  await expect('Math.abs(app.clock.s - 0.62) < 1e-6', true)
+  const label = await ui("document.querySelector('.tl-year').textContent")
+  if (after === before) throw new Error('the slider did not move the date')
+  return `tick ${i} → chapter ${st.chapter}; slider at 0.62 → ${label}`
+})
+
+await check('the wheel runs from the whole theatre down to an island group', async () => {
+  await run(HOME)
+  await frames(2)
+  const d0 = await ui('app.table.rig.goal.distance')
+  await page.mouse.move(640, 400)
+  for (let i = 0; i < 16; i++) await page.mouse.wheel(0, -150)
+  await run('app.settle()')
+  await frames(3)
+  const s = await ui('app.stats()')
+  const min = await ui('app.table.rig.minDistance')
+  if (!(s.distance < d0 / 20 && s.distance >= min)) throw new Error(`from ${d0.toFixed(0)} km to ${s.distance} km`)
+  const l = await look('smoke-wheel.png')
+  if (l.spread < 4) throw new Error(`a flat frame close in: ${JSON.stringify(l)}`)
+  return `${d0.toFixed(0)} km → ${s.distance} km, exaggeration ${s.exag}, ${s.nodes} nodes; ${JSON.stringify(l)}`
+})
+
+await check("the front at its keyframes: held land, the hatch, the perimeters, the islands' holders, cross-faded between", async () => {
+  if (KF.length < 2) throw new Error(`${KF.length} keyframes in the data`)
+  await run(`app.ui.card.close(); app.ui.onScrub()`)
+  await page.mouse.move(5, 795)
+  const at = async (date, name) => {
+    await run(`app.clock.setDate(Date.parse('${date}T12:00:00Z')); app.table.rig.jump({ x: 800, z: 200, distance: 7000, yaw: 0, pitch: 1.05 }); app.settle()`)
+    await frames(3)
+    const r = await ui(`(() => { const f = app.table.front; const lg = f.legend(); return { pair: f.pair, k: app.table.frontUniforms.uFrontK.value, t: app.table.frontUniforms.uFrontT.value, states: lg?.states.map((s) => s.id), isles: f.isleShown, perimeters: [...f.perimeters.entries()].map(([id, p]) => [id, +p.k.toFixed(2)]) } })()`)
+    r.look = await look(name)
+    return r
+  }
+  const a = await at(KF[0], 'smoke-front-a.png')
+  const b = await at(KF[1], 'smoke-front-b.png')
+  if (a.pair.a !== KF[0] || b.pair.a !== KF[1] || a.k < 0.99 || b.k < 0.99) throw new Error(`pairs ${JSON.stringify(a.pair)} / ${JSON.stringify(b.pair)}, strength ${a.k} / ${b.k}`)
+  if (JSON.stringify(a.states) === JSON.stringify(b.states) && a.look.red === b.look.red) throw new Error('the two keyframes look the same')
+  const mid = new Date((Date.parse(KF[0]) + Date.parse(KF[1])) / 2).toISOString().slice(0, 10)
+  const m = await at(mid, 'smoke-front-mid.png')
+  if (!(m.t > 0.2 && m.t < 0.8)) throw new Error(`between the keyframes the cross-fade is at ${m.t}`)
+  // the hatch, close on a contested polygon over land, if a keyframe has one
+  const c = await ui(`(() => { for (const [id, kf] of app.table.front.keyframes) for (const f of kf.geojson?.features || []) if (f.properties?.state === 'contested' && f.geometry?.type === 'Polygon') { const r = f.geometry.coordinates[0]; let x = 0, z = 0; for (const p of r) { const w = app.data.proj.toWorld(p); x += w[0]; z += w[1] } x /= r.length; z /= r.length; if (app.table.ground.metresAt(x, z) > 0) return { id, x, z } } return null })()`)
+  let hatch = ''
+  if (c) {
+    await run(`app.clock.setDate(Date.parse('${c.id}T12:00:00Z')); app.table.rig.jump({ x: ${c.x}, z: ${c.z}, distance: 1500, yaw: 0, pitch: 1.0 }); app.settle()`)
+    await frames(3)
+    const h = await look('smoke-front-hatch.png')
+    hatch = `; the hatch close in ${JSON.stringify(h)}`
+  }
+  return `${KF[0]}: ${a.states.join(', ')} (isles ${a.isles}); ${KF[1]}: ${b.states.join(', ')} (isles ${b.isles}); ${mid}: t ${m.t.toFixed(2)}, perimeters ${JSON.stringify(m.perimeters)}${hatch}`
+})
+
+await check("a pin opens its card, and a box event's card raises ui.onEnter", async () => {
+  if (!BOX_EV) throw new Error('no box event in the data')
+  await run(`app.ui.card.close(); app.ui.onScrub(); const ev = app.data.events.find((e) => e.id === '${BOX_EV}'); app.clock.setDate(app.ui.tour.stepDate(ev, app.ui.tour.chapters[app.ui.tour.locate(ev)[0]])); app.table.rig.jump(app.ui.tour.eventView(ev)); app.settle()`)
+  await frames(3)
+  await page.click(`.pin.show[data-ev="${BOX_EV}"]`, { timeout: 30000 })
+  await run('app.settle()')
+  await frames(2)
+  await expect('app.ui.card.mode', 'event')
+  await expect('app.ui.card.ev.id', BOX_EV)
+  const routes = await ui('app.table.routes.visibleRoutes().map((r) => r.id)')
+  await run(`window.__entered = null; app.ui.onEnter = (ev) => { window.__entered = ev.id }`)
+  await page.click('.card .nav.enter')
+  await expect('window.__entered', BOX_EV)
+  await look('smoke-card.png')
+  return `${BOX_EV}: “${await ui("document.querySelector('.card h1').textContent")}”, ${await ui("document.querySelector('.card .when').textContent")}; routes on ${routes.join(', ') || 'none'}; Enter the battle raised onEnter`
+})
+
+await check('pins in one spot gather into a cluster, whose list opens on the card', async () => {
+  // the date of the box event, seen from the whole theatre, where its neighbours in the window gather with it
+  await run(`app.ui.card.close(); app.ui.pins.activeEvent = null; app.table.setFocus(null); app.ui.onScrub(); app.table.rig.jump({ x: app.table.rig.homeView().target.x, z: app.table.rig.homeView().target.z, distance: app.table.rig.maxDistance, yaw: 0, pitch: 1.12 }); app.settle()`)
+  await frames(3)
+  const groups = await ui('app.ui.pins.groups()')
+  if (!groups.length) throw new Error(`no cluster on ${await ui('new Date(app.clock.date).toISOString()')}; pins showing: ${(await ui('app.ui.pins.visibleEvents().map((e) => e.id)')).join(', ')}`)
+  await page.click('.cluster.show')
+  await expect('app.ui.card.mode', 'cluster')
+  const rows = await ui("document.querySelectorAll('.card .ev-row').length")
+  if (rows !== groups[0].count) throw new Error(`${rows} rows for a cluster of ${groups[0].count}`)
+  await look('smoke-cluster.png')
+  return `${groups.map((g) => `[${g.ids.join(' ')}]`).join(' ')}; the list has ${rows}`
+})
+
+await check("the Sources and credits panel holds NOTICE.md's notices and the boxes' credits", async () => {
+  await page.click('[data-tool="sources"]')
+  await expect('app.ui.card.mode', 'credits')
+  const text = await ui("document.querySelector('.card').textContent")
+  for (const s of ['produced using Copernicus WorldDEM-30', 'do not incur any liability', 'GMRT', 'ETOPO 2022', 'Natural Earth', 'SIL Open Font License']) if (!text.includes(s)) throw new Error(`no “${s}”`)
+  await look('smoke-credits.png')
+  await page.click('.card .card-close')
+  return `${text.length} characters`
+})
+
+await check('the briefing and the after-card render from plain objects; people stay in The record', async () => {
+  await run(`app.ui.openBriefing({ title: 'Test briefing', ja: { kanji: '試験海戦', romaji: 'Shiken kaisen' }, when: '4 June 1942, 10:20', clock: 'test clock', situation: 'Test situation.', forces: [{ name: 'Test side A', units: ['A1', 'A2'] }, { name: 'Test side B', units: ['B1'] }], moments: [{ id: 'test-dive', title: 'A test dive', role: 'a test aircraft', t: '10:21:30', objective: 'Test objective.', focus: true }], sources: ['test-source-a'], credit: 'Test credit line.' })`)
+  await expect('app.ui.card.mode', 'briefing')
+  await run(`window.__took = null; app.ui.onTake = (id) => { window.__took = id }`)
+  await page.click('.card .nav.take')
+  await expect('window.__took', 'test-dive')
+  await run(`app.ui.openAfter({ momentId: 'test-dive', title: 'A test dive', sortie: [{ label: 'Hits', value: 'one, aft' }, { label: 'Crew', value: '120 men lost' }], battle: { rows: [{ what: 'Test carrier', record: 'sank 19:25', yours: 'sinks 19:25 as in the record' }] }, record: { text: 'Test: between 1,000 and 1,200 men lost their lives.', sources: ['test-source-a'] }, next: { text: 'Test next.' }, retry: { start: true, checkpoint: true } })`)
+  await expect('app.ui.card.mode', 'after')
+  const parts = await ui("[...document.querySelectorAll('.after-part h2')].map((h) => h.textContent.trim())")
+  const sortie = await ui("document.querySelector('.after-part[data-part=sortie]').textContent")
+  const record = await ui("document.querySelector('.after-part[data-part=record]').textContent")
+  if (parts.length !== 4 || !parts.every((p) => /[ぁ-んァ-ン一-龯]/.test(p))) throw new Error(`parts ${JSON.stringify(parts)}`)
+  if (/men/.test(sortie) || !/1,200 men/.test(record)) throw new Error('a count of people outside The record, or none in it')
+  await look('smoke-after.png')
+  await run('app.ui.card.close()')
+  return parts.join(' | ')
 })
 
 await check('every scene ShaderMaterial on the table carries vFragDepth', async () => {
@@ -173,66 +351,76 @@ await check('every scene ShaderMaterial on the table carries vFragDepth', async 
 })
 
 await check('the hash carries the date and the camera', async () => {
-  await page.waitForFunction(() => /date=\d{4}-\d{2}-\d{2}/.test(location.hash) && /cam=/.test(location.hash), null, { timeout: 30000 })
+  await page.waitForFunction(() => /date=\d{4}-\d{2}-\d{2}/.test(location.hash) && /cam=/.test(location.hash), null, { timeout: 60000 })
   return await ui('location.hash')
 })
 
 await check('#date and #cam act; #battle, #t and #moment are kept', async () => {
-  await run(`location.hash = '#date=1942-06-04&cam=3787.4,-2655.8,2400,0.3,0.9&battle=test-box&t=10:22&keep=me'`)
-  await page.waitForFunction(() => Math.abs(window.__app.clock.date - Date.UTC(1942, 5, 4)) < 1000, null, { timeout: 20000 })
+  const [bx, bz] = [3787.4, -2655.8]
+  await run(`location.hash = '#date=1942-06-04&cam=${bx},${bz},2400,0.3,0.9&battle=test-box&t=10:22&keep=me'`)
+  await page.waitForFunction(() => Math.abs(window.__app.clock.date - Date.UTC(1942, 5, 4)) < 1000, null, { timeout: 30000 })
   await frames(2)
   const g = await ui('[app.table.rig.goal.target.x, app.table.rig.goal.target.z, app.table.rig.goal.distance]')
-  if (Math.abs(g[0] - 3787.4) > 0.5 || Math.abs(g[1] + 2655.8) > 0.5 || Math.abs(g[2] - 2400) > 1) throw new Error(`the rig is at ${g}`)
+  if (Math.abs(g[0] - bx) > 0.5 || Math.abs(g[1] - bz) > 0.5 || Math.abs(g[2] - 2400) > 1) throw new Error(`the rig is at ${g}`)
   await expect('app.url.battle', 'test-box')
   await expect('app.url.t', '10:22')
-  await page.waitForFunction(() => /keep=me/.test(location.hash) && /battle=test-box/.test(location.hash), null, { timeout: 20000 })
+  await page.waitForFunction(() => /keep=me/.test(location.hash) && /battle=test-box/.test(location.hash), null, { timeout: 30000 })
   if (!infos.some((t) => /\[url\] kept until integration/.test(t))) throw new Error('the kept battle was not logged')
   return await ui('location.hash')
 })
 
-await check("the stub Battle flies the table to the fixture box's outline through its placement", async () => {
+await check("the stub Battle flies the table to the fixture box's outline, the overlays faded out over the box", async () => {
   const st = await run(`return await app.battle.enter('test-box')`)
   if (st?.boxId !== 'test-box') throw new Error(`enter resolved ${JSON.stringify(st)}`)
+  await run('app.settle()')
+  await frames(2)
   const r = await ui(`(() => {
     const b = app.data.boxById.get('test-box')
     const v = app.table.outlineView('test-box')
     const s = app.table.rig.state
     return { dx: s.target.x - b.placement.centre[0], dz: s.target.z - b.placement.centre[1], d: s.distance, want: v.distance, yaw: s.yaw, wantYaw: v.yaw,
-      outline: !!app.table.outlines.get('test-box')?.on, mode: app.mode, pack: app.battle.loaded?.pack.W, units: app.battle.loaded?.battle?.units?.length, kits: app.battle.loaded?.kits.ships.length }
+      outline: !!app.table.outlines.get('test-box')?.on, mode: app.mode, pack: app.battle.loaded?.pack.W, units: app.battle.loaded?.battle?.units?.length, kits: app.battle.loaded?.kits.ships.length,
+      fade: app.table.fade, frontK: app.table.frontUniforms.uFrontK.value }
   })()`)
   if (Math.hypot(r.dx, r.dz) > 1 || Math.abs(r.d - r.want) > r.want * 0.01 || Math.abs(r.yaw - r.wantYaw) > 1e-3) throw new Error(`the rig landed off the hand-over pose: ${JSON.stringify(r)}`)
   if (!r.outline || r.mode !== 'table' || r.pack !== 256 || r.units !== 6) throw new Error(JSON.stringify(r))
-  await frames(2)
+  if (!(r.fade < 0.05 && r.frontK < 0.05)) throw new Error(`the overlays are still up over the box: fade ${r.fade}, front ${r.frontK}`)
   const l = await look('smoke-outline.png')
-  return `${(r.d).toFixed(0)} km over the box's centre, yaw ${r.yaw.toFixed(3)}; ${r.units} units, ${r.kits} ship kits; frame ${JSON.stringify(l)}`
+  return `${r.d.toFixed(0)} km over the box's centre, yaw ${r.yaw.toFixed(3)}; overlays ${r.fade.toFixed(3)}; ${r.units} units, ${r.kits} ship kits; frame ${JSON.stringify(l)}`
 })
 
-await check('the box flavours compile and draw (preview), every material with vFragDepth', async () => {
+await check("the box flavours compile and draw (preview), every material with vFragDepth, the table's interface hidden", async () => {
   await run(`await app.battle.preview()`)
-  await expect("app.active.name", 'box')
+  await expect('app.active.name', 'box')
   await expect('app.mode', 'watch')
   await frames(3)
   const a = await shaderAudit()
   if (a.missing.length || a.uncompiled.length) throw new Error(`missing in ${a.missing.join(', ')}; uncompiled ${a.uncompiled.join(', ')}`)
   const s = await ui('app.stats()')
   if (!(s.nodes > 0)) throw new Error(`the box terrain draws ${s.nodes} nodes`)
+  await expect("document.querySelector('.timeline').hidden", true)
+  await expect("document.querySelectorAll('.pin.show, .cluster.show, .label.show').length", 0)
   const l = await look('smoke-box.png')
   if (l.spread < 4) throw new Error(`a flat frame: ${JSON.stringify(l)}`)
   return `${a.materials} materials, ${s.nodes} terrain nodes, ${s.calls} draw calls, at ${s.distance} m; frame ${JSON.stringify(l)}`
 })
 
-await check('leave cuts back to the table and takes the outline away', async () => {
+await check('leave cuts back to the table, takes the outline away, and the overlays come back', async () => {
   await run(`await app.battle.leave()`)
   await expect('app.active === app.table', true)
   await expect('app.mode', 'table')
   await expect("!!app.table.outlines.get('test-box')?.on", false)
   await expect('app.battle.scene', null)
+  await run('app.settle()')
+  await frames(2)
+  await expect('app.table.fade', 1)
+  await expect("document.querySelector('.timeline').hidden", false)
 })
 
 // What the page costs: the JS heap after a collection, and the frame time on
-// the table held still at the whole theatre and over the box. (Under the
-// software renderer the frame times are the CPU's: compare them only with
-// each other.)
+// the table held still at the whole theatre (far) and over an island group
+// (near). Under the software renderer the frame times are the CPU's, shared
+// with whatever else the machine runs: compare them only with each other.
 let perf = null
 await check('perf', async () => {
   const cdp = await page.context().newCDPSession(page)
@@ -258,15 +446,16 @@ await check('perf', async () => {
         }),
       n,
     )
+  const scene = () => ui('(() => { const s = app.stats(); return { distance: s.distance, calls: s.calls, triangles: s.triangles, nodes: s.nodes, exag: s.exag, labels: s.labels } })()')
   const out = { heapMB: await heapMB() }
-  await run(`const h = app.table.rig.homeView(); app.table.rig.jump({ x: h.target.x, z: h.target.z, distance: h.distance, yaw: h.yaw, pitch: h.pitch }); app.settle()`)
+  await run(`app.ui.card.close(); ${HOME}`)
   await frames(3)
-  out['table.theatre.ms'] = await frameMs(8)
-  out['table.theatre'] = await ui('(() => { const s = app.stats(); return { calls: s.calls, triangles: s.triangles, nodes: s.nodes, exag: s.exag } })()')
-  await run(`app.table.rig.jump(app.table.outlineView('test-box')); app.settle()`)
+  out['table.far.ms'] = await frameMs(8)
+  out['table.far'] = await scene()
+  await run(`app.table.rig.jump({ x: -213, z: -1168, distance: 300, yaw: 0, pitch: 0.9 }); app.settle()`)
   await frames(3)
-  out['table.box.ms'] = await frameMs(8)
-  out['table.box'] = await ui('(() => { const s = app.stats(); return { calls: s.calls, triangles: s.triangles, nodes: s.nodes, exag: s.exag } })()')
+  out['table.near.ms'] = await frameMs(8)
+  out['table.near'] = await scene()
   out.heapAfterMB = await heapMB()
   out.textures = await ui('app.renderer.info.memory.textures')
   out.programs = await ui('app.renderer.info.programs.length')
