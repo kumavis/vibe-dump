@@ -8,8 +8,7 @@
 //     momentId: 'vb6-kaga', title: 'Bombing Six pushes over on Kaga', ja: null,
 //     sortie: [ { label: 'Hits', value: 'one 1,000-lb bomb, aft of the island' },
 //               { label: 'Release', value: '740 m (the record: about 760 m)' }, { label: 'Came back', value: 'landed on Enterprise' } ],
-//     battle: { rows: [ { what: 'Kaga', record: 'burning from 10:25, sank 19:25', yours: 'burning from 10:24; sinks 19:25 as in the record' } ],
-//               rest: 'Everything else followed the record.',
+//     battle: { rows: [ { what: 'Kaga', yours: 'afloat at 18:00' }, { what: 'Bombing Six', yours: '5 aircraft lost' } ],
 //               guesses: [ 'Hiryū's second strike: the sim's guess; the record has no such event' ] },
 //     record: { text: 'what the record says, with its ranges', tellings: [ { source, says } ], sources: [ ... ] },
 //     next: { text: 'what came next, in the record', sources: [ ... ] },
@@ -18,8 +17,10 @@
 //
 // The parts: *Your sortie* (あなたの出撃), what the player's own unit did, in
 // hits, heights, torpedoes, aircraft and time; *Your battle* (あなたの戦い),
-// the record and the player's battle in two columns, divergences only, then
-// "everything else followed the record"; *The record* (記録), the record's own
+// what went otherwise in the player's battle, from the sim's side only, a
+// short past-tense line each ("Kaga: afloat at 18:00."), never beside the
+// record (DESIGN §5.7: the parts never share a row; R8 §5.2 d: no line
+// joins the two); *The record* (記録), the record's own
 // text with its tellings and sources, the only part where people are
 // counted, in the record's ranges; *What came next* (その後). The buttons:
 // *Watch on* (ui.onWatchOn()), *Back to the table* (ui.onLeave()), and the
@@ -65,9 +66,8 @@ const head = (k) => `<h2>${AFTER_PARTS[k].en} <span lang="ja">${AFTER_PARTS[k].j
 export function afterHTML(a, { sourceLine, sourceTitle = (id) => id, warn = console.warn }) {
   const ok = (t, part) => afterLineOk(t, part, warn)
   const sortie = (a.sortie || []).filter((r) => ok(`${r.label ?? ''} ${r.value ?? r}`, 'sortie'))
-  const rows = (a.battle?.rows || []).filter((r) => ok(`${r.what} ${r.record} ${r.yours}`, 'battle'))
+  const lines = (a.battle?.rows || []).map((r) => `${r.what}: ${r.yours}.`).filter((l) => ok(l, 'battle'))
   const guesses = (a.battle?.guesses || []).filter((g) => ok(g, 'battle'))
-  const rest = a.battle?.rest && ok(a.battle.rest, 'battle') ? a.battle.rest : 'Everything else followed the record.'
   const recText = a.record?.text && ok(a.record.text, 'record') ? a.record.text : ''
   const tellings = (a.record?.tellings || []).filter((t) => ok(t.says, 'record'))
   const nextText = a.next?.text && ok(a.next.text, 'next') ? a.next.text : ''
@@ -82,9 +82,9 @@ export function afterHTML(a, { sourceLine, sourceTitle = (id) => id, warn = cons
       ${sortie.length ? `<dl class="af-sortie">${sortie.map((r) => (typeof r === 'string' ? `<dd>${esc(r)}</dd>` : `<dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd>`)).join('')}</dl>` : '<p class="none">—</p>'}
     </section>
     <section class="card-sec after-part" data-part="battle">${head('battle')}
-      ${rows.length ? `<table class="af-cmp"><thead><tr><th></th><th>The record</th><th>Your battle</th></tr></thead><tbody>${rows.map((r) => `<tr><th>${esc(r.what)}</th><td>${esc(r.record)}</td><td>${esc(r.yours)}</td></tr>`).join('')}</tbody></table>` : ''}
-      <p class="af-rest">${esc(rest)}</p>
+      ${lines.length ? `<ul class="af-battle">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
       ${guesses.length ? `<ul class="af-guess">${guesses.map((g) => `<li>${esc(g)}</li>`).join('')}</ul>` : ''}
+      ${lines.length || guesses.length ? '' : '<p class="none">—</p>'}
     </section>
     <section class="card-sec after-part" data-part="record">${head('record')}
       ${recText ? `<div class="card-body"><p>${esc(recText)}</p></div>` : ''}

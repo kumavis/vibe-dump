@@ -52,7 +52,14 @@ function simStatus(sim, i, T) {
   return { kind: 'afloat' }
 }
 
-const label = (sim, s) => (s.kind === 'sunk' || s.kind === 'doomed' ? `${s.kind}${s.t != null ? ` ${sim.clock.label(s.t)}` : ''}` : s.kind)
+/** A status in the past tense with its clock ("sank at 10:31", "afloat at 18:00"); the record's doomed ship sank at its record time. */
+function label(sim, s, T, { record = false } = {}) {
+  const at = (t) => sim.clock.label(t)
+  if (s.kind === 'sunk') return `sank at ${at(s.t ?? T)}`
+  if (s.kind === 'doomed') return record && s.t != null ? `sank at ${at(s.t)}` : `sinking at ${at(T)}`
+  if (s.kind === 'damaged') return `damaged, afloat at ${at(T)}`
+  return `afloat at ${at(T)}`
+}
 
 /** The record's and the sim's battle side by side, at the clock's end or now. */
 export function computeOutcome(sim, { at = null } = {}) {
@@ -72,7 +79,7 @@ export function computeOutcome(sim, { at = null } = {}) {
     if (b.kind !== 'afloat') ro[b.kind].push(r.id)
     const sameKind = a.kind === b.kind
     const sameTime = !(a.kind === 'sunk' && b.kind === 'sunk') || Math.abs((a.t ?? 0) - (b.t ?? 0)) <= 600
-    if (!sameKind || !sameTime) diverged.push({ unit: r.id, name: r.name, sim: label(sim, a), record: b.kind === 'afloat' ? 'survived' : label(sim, b) })
+    if (!sameKind || !sameTime) diverged.push({ unit: r.id, name: r.name, sim: label(sim, a, T), record: b.kind === 'afloat' ? 'survived' : label(sim, b, T, { record: true }) })
   }
   // aircraft: the record's losses by T against the sim's
   for (const g of sim.record.groups) {

@@ -279,8 +279,8 @@ export function link(app, ui) {
       : { landed: 'landed', ditched: 'ditched', lost: 'did not return', clock: 'still flying when the battle clock ran out', released: 'still flying, the controls given back', left: 'still flying', card: 'still flying' }[sc.how ?? r.reason]
     if (how) sortie.push({ label: ship ? 'The ship' : 'Came back', value: sc.survived === false ? (ship ? 'lost' : 'did not return') : how })
     if (sc.timeS) sortie.push({ label: 'Time', value: `${Math.floor(sc.timeS / 60)} min ${String(Math.round(sc.timeS % 60)).padStart(2, '0')} s` })
-    // Your battle: ships and aircraft only, the divergences
-    const rows = (o.diverged || []).map((d) => ({ what: d.name || d.unit || d.group, record: d.group ? aircraftLine(d.record) : d.record, yours: d.group ? aircraftLine(d.sim) : d.sim }))
+    // Your battle: ships and aircraft only, the divergences, from the sim's side only (the record's is The record's)
+    const rows = (o.diverged || []).map((d) => ({ what: d.name || d.unit || d.group, yours: d.group ? aircraftLine(d.sim) : d.sim }))
     const guesses = (o.guess || []).map((g) => (typeof g === 'string' ? g : `${L2(g.t)}: ${g.text}`))
     // The record: the moment's own text, its tellings and the battle's (the people, by source, in ranges)
     const record = { text: m.after?.text || '', tellings: [...(m.after?.tellings || []), ...(B.tellings || [])], sources: m.after?.sources || [] }
