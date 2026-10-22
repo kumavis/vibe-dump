@@ -1,8 +1,11 @@
 // The bright stars, by right ascension (hours), declination (degrees) and
-// magnitude — enough to make the real sky over Hawaiʻi recognisable at night:
-// Makaliʻi (the Pleiades) rising at dusk to open the Makahiki season, Hōkūleʻa
-// (Arcturus) overhead, Hōkūpaʻa (Polaris) sitting low in the north at 21°, and
-// Newe (the Southern Cross) just clearing the southern horizon.
+// magnitude, J2000: enough to make the real night sky recognisable from any
+// box in the theatre, the Southern Cross low over Samar and high over
+// Ironbottom Sound, Polaris low in the north at Pearl Harbor and Midway.
+// Precession from J2000 back to 1942 is under a degree, which no one sees.
+//
+// Copied from holo-i-ke-au's render/stars.js (b480c27); only this note is new
+// (the comments in the list keep the Hawaiian names it was drawn up with).
 
 export const BRIGHT_STARS = [
   // Makaliʻi — the Pleiades

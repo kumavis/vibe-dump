@@ -1,47 +1,40 @@
-// The land surface, from ahupuaʻa's terrain.glsl.js. What it keeps: the CDLOD
-// geomorph, vegetation by rainfall (dry grass to wet forest, the farmed and
-// burned lowland of c. 1700, valley floors, uluhe, the summit bogs, tree
-// crowns close in), the pali drawn in the rock's own terms, the coast. What it
-// drops: the hero falls and their amphitheatres, the field-system walls (no
-// cultivation layer yet), and the flow-by-flow lava detail, all of which want
-// a 17 m heightmap. What it adds: the mountains above the ahupuaʻa island's
-// 1,700 m (subalpine shrub, then cinder and bare lava on the summits), noise
-// faded by pixel size so a 600 km view doesn't sparkle, normals rebuilt at the
-// exaggeration of the moment, and the far view's two overlays: the polity
-// of each moku, and the land in use (cultivation, settlement, forest). An
-// island's heights carry the patches of the chosen year (common.glsl.js
-// patchedMetres), so a harbour dredged since lies as reef flat and a reef
-// filled since goes back under the sea, which draws it as reef.
+// The terrain of a battle box, in metres (ENGINEERING §7): the Hawaiian
+// island terrain of holo-i-ke-au's shaders/terrain.glsl.js (b480c27) over the
+// single-pack ground (render/shaders/ground.glsl.js), handed to the engine
+// workflow at the fork.
 //
-// One material per pack. The archipelago's (uSelf = -1) draws wherever no
-// island slot owns the ground; an island's (uSelf = its slot) draws only where
-// it does, blending its own heights, normals and land over the archipelago's
-// by its slot weight, so the hand-over is a geomorph, not a swap. Where a
-// district is down, neither draws: the district's own mesh does
-// (district.glsl.js), from the same ground at its edge.
+// What changed from the Hawaiian shader (R9 §2.3): the slot, district,
+// polity and land branches are gone (one pack, nothing to hand over to);
+// groundAlbedo is fed a per-box constant rain (uRain, the land map's ln(mm /
+// 300) / ln 40 encoding) instead of a rain image; every xz and pixel width the
+// albedo's noise reads is turned into the Hawaiian 100 m units first (xz ·
+// uUnitM / 100), or the noise would be a hundred times too fine in metres;
+// the normals come back from the exaggeration they were baked at (uNormalE)
+// and are stood up at the box's one exaggeration (uExag) for the light and
+// at the valley's 1.3 for what grows where; and the four log-depth chunks.
+// The sea bed under the water is still sunk 25 m below the shoreline's last
+// few decimetres, so the box's sea (render/ocean.js) and its floor never
+// fight over depth, polygonOffset being of no use under log depth.
 
-import { constants, noise, world, patches, lighting, polity, land } from './common.glsl.js'
+import { constants, noise, lighting } from '../../render/shaders/common.glsl.js'
+import { world } from '../../render/shaders/ground.glsl.js'
+import { logDepthParsVertex, logDepthVertex, logDepthParsFragment, logDepthFragment } from '../../render/shaders/logdepth.glsl.js'
+import { cdlodMorph } from '../../render/pack.js'
+import { BOX } from '../../config.js'
 
-// (an island's own heights with its patches of the year laid on them,
-// common.glsl.js patchedMetres; the archipelago carries none)
-const own = /* glsl */ `
-uniform sampler2D uOwnH;
-uniform vec4 uOwnRect;
-uniform int uSelf;
-float packMetres(vec2 xz) {
-  float a = archMetres(xz);
-  if (uSelf < 0) return a;
-  float w = slotWeight(uSelf, xz);
-  if (w > 0.0) a = mix(a, patchedMetres(uSelf, xz, rectMetres(uOwnH, uOwnRect, xz)), w);
-  return a;
-}
+const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
+
+export const boxConstants = /* glsl */ `
+#define NEAR_E ${f(BOX.slopeExag)}
 `
 
-// The ground's own colour before it is lit: vegetation by rain (dry grass to
-// wet forest, the farmed and burned lowland of c. 1700, valley floors, uluhe,
-// the summit bogs, tree crowns close in), the mountains above the trees, the
-// pali in the rock's own terms, the coast. Shared by the island packs and the
-// district (district.glsl.js), so the two meet without a seam.
+// The ground's own colour before it is lit, the Hawaiian groundAlbedo as it
+// was (R9 E8): vegetation by rain (dry grass to wet forest, an open farmed
+// lowland, valley floors, fern on the wet slopes, tree crowns close in), the
+// mountains above the trees, the cliffs in the rock's own terms, the coast.
+// It reads plausibly for Guadalcanal, Samar and Oʻahu; Midway is sand and
+// scrub at 0–12 m and mostly its beach and seabed branches. xz and px come
+// in the Hawaiian 100 m units its noise was tuned in.
 export const albedo = /* glsl */ `
 uniform float uKau;        // the season, 0 hoʻoilo .. 1 kau
 
@@ -190,133 +183,73 @@ vec3 groundAlbedo(vec2 xz, float metres, float rain, float sand, float rip, vec3
 export const terrainVertex = /* glsl */ `
 ${constants}
 ${world}
-${patches}
-${own}
+${logDepthParsVertex}
 in vec4 aNode; // x0, z0, size, lod
 uniform vec2 uMorph[12];
 uniform float uGrid;
 uniform vec3 uCamPos;
 out vec3 vWorld;
 out float vMetres;
+float packMetres(vec2 xz) { return archMetres(xz); }
 
 void main() {
-  vec2 g = floor(position.xz * uGrid + 0.5); // this vertex's grid index in its node
-  float cell = aNode.z / uGrid;
-  vec2 xz = aNode.xy + g * cell;
-  float mt = packMetres(xz);
-  float dist = distance(uCamPos, vec3(xz.x, mt * uVert, xz.y));
-  vec2 m = uMorph[int(aNode.w)];
-  float k = clamp((dist - m.x) / (m.y - m.x), 0.0, 1.0);
-  // Geomorph (as in ahupuaʻa): toward the outer edge of its range a vertex
-  // between the next-coarser grid's vertices blends its height onto that
-  // coarser mesh, so by the hand-over the two levels are the same surface.
-  vec2 odd = g - 2.0 * floor(g * 0.5);
-  if (k > 0.0 && odd.x + odd.y > 0.5) {
-    // (the two coarser vertices first, and the ground read at them in one
-    // place: packMetres is inlined wherever it is called, patches and all)
-    vec2 base = aNode.xy + (g - odd) * cell;
-    vec2 pa = base;
-    vec2 pb = base + odd * 2.0 * cell;
-    if (odd.x > 0.5 && odd.y > 0.5) {
-      vec2 pc = (g - odd) * 0.5;
-      if (mod(pc.x + pc.y, 2.0) > 0.5) {
-        pa = base + vec2(2.0, 0.0) * cell;
-        pb = base + vec2(0.0, 2.0) * cell;
-      } else pb = base + vec2(2.0) * cell;
-    }
-    float hc = 0.0;
-    for (int q = 0; q < 2; q++) hc += packMetres(q == 0 ? pa : pb);
-    mt = mix(mt, hc * 0.5, k);
-  }
+${cdlodMorph}
   vMetres = mt;
-  // The sea is drawn from the heights; the seabed under it only needs to show
-  // in the last few centimetres at the shoreline. Sink it below that so the
-  // two surfaces never fight over depth.
+  // The sea is drawn from the heights; the sea bed under it only needs to
+  // show in the last few decimetres at the shoreline. Sink it below that so
+  // the two surfaces never fight over depth.
   if (mt < 0.0) mt -= 25.0 * smoothstep(0.15, 3.0, -mt);
   vWorld = vec3(xz.x, mt * uVert, xz.y);
   gl_Position = projectionMatrix * viewMatrix * vec4(vWorld, 1.0);
+  ${logDepthVertex}
 }
 `
 
 export const terrainFragment = /* glsl */ `
 ${constants}
+${boxConstants}
 ${noise}
 ${world}
-${patches}
-${own}
 ${lighting}
-${polity}
-${land}
 ${albedo}
-uniform sampler2D uArchN;  // normals at NORMAL_E (rgb), ambient occlusion (a)
-uniform sampler2D uArchL;  // r rain (log), g sand, b riparian, a reserved
-uniform sampler2D uOwnN;
-uniform sampler2D uOwnL;
-uniform sampler2D uOwnS;   // this pack's cast shadows (shadow.js), over its rect
-uniform sampler2D uOwnLandA; // this island's era layers, the keyframe before and after (overlay/land.js)
-uniform sampler2D uOwnLandB;
-uniform float uOwnRain;    // 0: this pack has no rain image, so the archipelago's stands
+${logDepthParsFragment}
+uniform sampler2D uOwnN;   // normals at uNormalE (rgb), ambient occlusion (a)
+uniform sampler2D uOwnL;   // r rain (unused: uRain), g sand, b riparian, a reserved
+uniform sampler2D uOwnS;   // cast shadows (render/shadow.js), over the pack's rect
+uniform vec4 uOwnRect;
+uniform float uRain;       // the box's rain, ln(mm / 300) / ln 40
+uniform float uUnitM;      // metres per world unit
 uniform int uDebug;
 in vec3 vWorld;
 in float vMetres;
 
 void main() {
+  ${logDepthFragment}
   vec2 xz = vWorld.xz;
-  if (ownerAt(xz) != uSelf) discard;
-  if (edgeDist(uArchRect, xz) < 0.0) discard;
-  // (where the district is down, its own mesh draws the ground)
-  if (distDraws(xz)) discard;
-  float kSelf = uSelf < 0 ? 0.0 : slotWeight(uSelf, xz);
-  // (all four sampled every time: mipmapped lookups need uniform control flow)
-  vec2 uvA = rectUv(uArchRect, xz);
-  vec2 uvO = rectUv(uOwnRect, xz);
-  vec4 nt = mix(texture(uArchN, uvA), texture(uOwnN, uvO), kSelf);
-  vec4 landA = texture(uArchL, uvA);
-  vec4 land = mix(landA, texture(uOwnL, uvO), kSelf);
-  if (uOwnRain < 0.5) land.r = landA.r;
-
-  // The normal map holds the ground's slope at NORMAL_E; turn it back into a
-  // gradient (metres per metre) and stand it up at the exaggeration of the
-  // moment for the light, and at the valley's 1.3 for what grows where, so the
-  // forest doesn't turn to cliff as the camera pulls back.
-  vec3 n0 = nt.xyz * 2.0 - 1.0;
-  vec2 grad = -n0.xz / (max(n0.y, 0.03) * NORMAL_E);
+  vec2 uv = rectUv(uOwnRect, xz);
+  vec4 nt = texture(uOwnN, uv);
+  vec4 land = texture(uOwnL, uv);
+  // The normal map holds the ground's slope at uNormalE; turn it back into a
+  // gradient (metres per metre) and stand it up at the box's exaggeration for
+  // the light, and at the valley's for what grows where.
+  vec2 grad = normalGrad(nt.xyz);
   vec3 n = normalize(vec3(-grad.x * uExag, 1.0, -grad.y * uExag));
   vec3 nC = normalize(vec3(-grad.x * NEAR_E, 1.0, -grad.y * NEAR_E));
-  float slope = 1.0 - nC.y;
   float ao = mix(1.0, nt.a, 0.85);
-  float rain = land.r;
-  float sand = land.g;
-  float rip = land.b;
   float metres = vMetres;
-
-  vec2 dX = dFdx(xz);
-  vec2 dY = dFdy(xz);
-  float px = length(abs(dX) + abs(dY)); // world units per pixel
+  // (the albedo's noise in the Hawaiian 100 m units it was tuned in)
+  vec2 hx = xz * uUnitM / 100.0;
+  vec2 dX = dFdx(hx);
+  vec2 dY = dFdy(hx);
+  float px = length(abs(dX) + abs(dY)); // Hawaiian units per pixel
   float fwM = fwidth(metres);
-
-  vec3 col = groundAlbedo(xz, metres, rain, sand, rip, nC, px, fwM, 0.0);
-
-  // the land view: the archipelago's combined layers, and an island's own
-  // over them by its weight, as the maps above (both conditions are
-  // uniform, so the mipmapped lookups stay in uniform control flow)
-  if (uLandK > 0.002) {
-    vec3 lm = mix(texture(uArchLandA, uvA).rgb, texture(uArchLandB, uvA).rgb, uLandT);
-    if (uSelf >= 0) lm = mix(lm, mix(texture(uOwnLandA, uvO).rgb, texture(uOwnLandB, uvO).rgb, uLandT), kSelf);
-    col = applyLand(col, lm, rain, xz, px, metres);
-  }
-
-  // (an island's shadow map already holds its blend with the archipelago)
-  float vis = texture(uOwnS, uvO).r;
+  vec3 col = groundAlbedo(hx, metres, uRain, land.g, land.b, nC, px, fwM, 0.0);
+  float vis = texture(uOwnS, uv).r;
   vec3 lit = shade(col, n, vWorld, ao, vis);
-  vec3 lightLevel = uSunColor * max(dot(n, uSunDir), 0.0) * vis + uSkyColor;
-  if (metres > 0.0) lit = applyPolity(lit, xz, lightLevel * 0.5);
   if (uDebug == 1) lit = col * 2.0;
   if (uDebug == 2) lit = n * 0.5 + 0.5;
   if (uDebug == 3) lit = vec3(ao);
-  if (uDebug == 4) lit = vec3(rain, sand, rip);
-  if (uDebug == 5) lit = uSelf < 0 ? vec3(0.2, 0.2, 0.8) : mix(vec3(0.2, 0.2, 0.8), vec3(0.9, 0.3, 0.1), kSelf);
-  if (uDebug == 6) lit = mix(texture(uArchLandA, uvA).rgb, texture(uArchLandB, uvA).rgb, uLandT);
+  if (uDebug == 4) lit = vec3(uRain, land.g, land.b);
   gl_FragColor = vec4(lit, 1.0);
 }
 `

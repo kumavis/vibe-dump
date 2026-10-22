@@ -1,85 +1,82 @@
-// Routes over the sea: the voyaging canoes, the war fleets, Cook's ships and
-// the trade lanes of public/data/routes.json (DATA.md "Routes"), drawn on the
-// far view while the chosen year falls within their dates.
+// Routes over the sea: the fleets' tracks, the strikes, the air and sea lanes,
+// the convoys and the schematic arrows of the drives (DATA.md §5), drawn on
+// the table while the WarClock's window holds their dates.
 //
-// How the app uses it (src/app.js; this module reads nothing else of the app):
+// How the table uses it (this module reads nothing else of the app):
 //
-//   import { Routes, loadRoutes } from './render/routes.js'
-//
-//   // in start(), after the boundary lines are added to the scene:
-//   this.routes = new Routes({ proj: this.data.proj, uniforms: this.shared.uniforms,
-//     camera: this.camera, renderer: this.renderer, eras: this.data.eras })
-//   this.scene.add(this.routes.group)
-//   loadRoutes(this.data, this.warn).then((r) => this.routes.setRoutes(r))
-//
-//   // in update(dt), after this.lines.update(...):
-//   this.routes.visible = this.overlay.routes !== false
-//   this.routes.update(this.timeline.year, d, { window: this.timeline.window, light: lightLevel, fill, focus })
-//
+//   import { Routes } from '../render/routes.js'
+//   this.routes = new Routes({ routes: data.routes, proj: data.proj, uniforms, camera, renderer,
+//     maxSeg: 15, lift: [0.02, 0.0024], height: 300 })
+//   scene.add(this.routes.group)
+//   // once a frame:
+//   this.routes.update(clock.date, rig.state.distance, { window: clock.windowAt(), light, fade, focus })
 //   // in settle(), so a screenshot doesn't catch a route halfway faded in:
-//   this.routes?.settle(this.timeline.year, g.distance, { window: this.timeline.window, fill, focus })
+//   this.routes.settle(clock.date, distance, { window, fade, focus })
 //
-//   // and on teardown: this.routes.dispose()
+// `window` is [from, to] in ms UTC (time.js WarClock.windowAt); `fade` is the
+// overlays' strength (1 on the table, easing to 0 over the last third of a
+// fly-down into a box); `focus` is the id of the event the tour stands on,
+// whose own routes are its story and stay.
 //
-// `window` is the stretch of years whose events show (time.js); without it the
-// module works out the same half-an-era-either-side window from the eras.
-// `fill` is how much of the screen the island under the camera's target fills
-// (0 over open sea, about 1 edge to edge; app.islandFill()), and `focus` the id
-// of the event the tour stands on, whose own routes are its story and stay.
+// The lines are drawn as lines.js draws the coast: instanced quads widened in
+// screen space and draped on the ground, so a landing at the end of a route
+// climbs the beach with the terrain. Styled by how the points are known
+// (`pointPrecision`): a report's or a chart's track sits solid; orders and a
+// narrative are solid but finer; a schematic one, or a schematic stretch of
+// another, is a quiet dashed line. A soft arrowhead marks where each route
+// ends (both ends, for one there and back), and a brightening runs along it
+// in the direction of travel; dashes march the same way.
 //
-// The lines are drawn as lines.js draws the boundaries: instanced quads
-// widened in screen space and draped on whatever ground is showing, so a
-// landing at the end of a route climbs the beach with the terrain. A route
-// whose course is a journal's sits solid; one drawn from a narrative is solid
-// but finer; a schematic one, or a schematic stretch of another, is a quiet
-// dashed line. A soft arrowhead marks where each route ends (both ends, for
-// one sailed there and back), and a brightening runs along it in the
-// direction of travel, out and back again for a return; dashes march the same
-// way, except on a return. The whole layer belongs to the far view:
-// it fades in as the chain comes into frame and is gone by the time one
-// island fills the screen (by that island's size, not a fixed distance, since
-// Hawaiʻi fills the screen from four times as far out as Lānaʻi), all but
-// the routes of the event the tour stands on.
+// Copied from holo-i-ke-au's render/routes.js (b480c27) and adapted: dates in
+// ms through time.js's spanOf and the WarClock's window (the year parser
+// `routeSpan` carried is gone), the vocabularies of DATA.md §5, the split
+// length, lift and bounds in the caller's units, long legs densified in
+// lon/lat before projecting, the log-depth chunks, no polygonOffset (it does
+// nothing under log depth), and no fade by zoom: on the table routes show at
+// every distance and fade only with the fly-down. In a box the same RouteLine
+// can draw a unit's recorded track in metres.
 
 import * as THREE from 'three'
-import { constants, world, ground } from './shaders/common.glsl.js'
+import { constants } from './shaders/common.glsl.js'
+import { world, ground } from './shaders/ground.glsl.js'
+import { logDepthParsVertex, logDepthVertex, logDepthParsFragment, logDepthFragment } from './shaders/logdepth.glsl.js'
+import { spanOf } from '../time.js'
+import { densifyLonLat } from '../geo.js'
 
-const MAX_SEG = 4 // world units (400 m): long sea crossings need few vertices; the ends still follow the land
-const ZOOM_IN = [300, 1000] // camera distance over which routes fade in as the view widens
-const FILL_OUT = [0.4, 0.7] // share of the screen one island fills over which the routes fade out
 const PULSE_PERIOD = 9 // seconds for the brightening to run a route end to end
 
-// in the family of the boundary lines (lines.js), in the scene's linear light:
-// canoes warm sand, war fleets ochre, foreign ships a cool white, lanes muted
+// in the family of the coast's ink, in the scene's linear light: fleets a
+// warm signal red, strikes amber, the lanes muted, the drives a pale chart
+// blue, the schematic quietest
 const COLOURS = {
-  voyage: [1.38, 1.18, 0.86],
-  fleet: [1.6, 0.9, 0.52],
-  ship: [1.0, 1.1, 1.26],
-  trade: [1.15, 1.1, 0.96],
-  schematic: [1.25, 1.18, 1.02],
+  fleet: [1.45, 0.62, 0.42],
+  strike: [1.55, 1.05, 0.45],
+  air: [1.1, 1.05, 1.15],
+  convoy: [1.0, 1.15, 1.25],
+  lane: [0.95, 1.05, 1.1],
+  campaign: [0.75, 1.05, 1.45],
+  schematic: [1.05, 1.08, 1.12],
 }
 // by how a route's points are known: line width (px at DPR 1), opacity, pulse strength
 const STYLE = {
-  journal: { width: 2.0, opacity: 0.92, pulse: 1.0 },
+  report: { width: 2.0, opacity: 0.92, pulse: 1.0 },
+  chart: { width: 2.0, opacity: 0.9, pulse: 1.0 },
+  orders: { width: 1.6, opacity: 0.8, pulse: 0.8 },
   narrative: { width: 1.7, opacity: 0.82, pulse: 0.9 },
   schematic: { width: 1.4, opacity: 0.62, pulse: 0.45 },
-}
-const SPREAD = { day: 0, month: 0, year: 0, decade: 5, generation: 12, century: 50 } // as time.js widens events
-
-const smooth = (a, b, x) => {
-  const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
-  return t * t * (3 - 2 * t)
 }
 
 const vertexShader = /* glsl */ `
 ${constants}
 ${world}
 ${ground}
+${logDepthParsVertex}
 in vec4 aSeg;    // the segment's ends: ax, az, bx, bz
 in vec4 aInfo;   // distance along the route at A and at B (world units), dashed (0/1), arrowhead at B (0/1)
 uniform vec2 uResolution;  // drawing buffer, px
 uniform float uWidth;      // px
 uniform float uHead;       // arrowhead length, px
+uniform vec2 uLift;        // world units off the ground: x + y × the distance to the camera
 uniform vec3 uCamPos;
 out float vS;
 out float vDash;
@@ -87,7 +84,7 @@ out float vHead;
 
 vec3 draped(vec2 xz) {
   vec3 p = vec3(xz.x, max(groundMetres(xz), 0.0) * uVert, xz.y);
-  p.y += 0.02 + distance(uCamPos, p) * 0.0024;
+  p.y += uLift.x + distance(uCamPos, p) * uLift.y;
   return p;
 }
 
@@ -97,8 +94,9 @@ void main() {
   mat4 pv = projectionMatrix * viewMatrix;
   vec4 ca = pv * vec4(A, 1.0);
   vec4 cb = pv * vec4(B, 1.0);
+  vDash = aInfo.z;
   const float W0 = 1e-3;
-  if (ca.w < W0 && cb.w < W0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
+  if (ca.w < W0 && cb.w < W0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vS = 0.0; vHead = -1.0; ${logDepthVertex} return; }
   if (ca.w < W0) ca = mix(ca, cb, (W0 - ca.w) / (cb.w - ca.w));
   if (cb.w < W0) cb = mix(cb, ca, (W0 - cb.w) / (ca.w - cb.w));
   vec2 sa = ca.xy / ca.w;
@@ -108,7 +106,6 @@ void main() {
   vec2 dir = len > 1e-5 ? d / len : vec2(1.0, 0.0);
   vec2 nrm = vec2(-dir.y, dir.x);
   bool atB = position.x > 0.5;
-  vDash = aInfo.z;
   if (aInfo.w > 0.5) {
     // a soft arrowhead at B, pointing along A -> B: the tip a little past B,
     // the base corners behind it (the quad's two B corners meet at the tip)
@@ -118,19 +115,21 @@ void main() {
     gl_Position = c;
     vS = aInfo.y;
     vHead = atB ? 1.0 : 0.0;
-    return;
+  } else {
+    vec4 c = atB ? cb : ca;
+    // half the width either side, and as far again past each end so the joins close
+    vec2 off = (nrm * position.y + dir * (atB ? 0.5 : -0.5)) * uWidth / uResolution;
+    c.xy += off * c.w;
+    gl_Position = c;
+    vS = atB ? aInfo.y : aInfo.x;
+    vHead = -1.0;
   }
-  vec4 c = atB ? cb : ca;
-  // half the width either side, and as far again past each end so the joins close
-  vec2 off = (nrm * position.y + dir * (atB ? 0.5 : -0.5)) * uWidth / uResolution;
-  c.xy += off * c.w;
-  gl_Position = c;
-  vS = atB ? aInfo.y : aInfo.x;
-  vHead = -1.0;
+  ${logDepthVertex}
 }
 `
 
 const fragmentShader = /* glsl */ `
+${logDepthParsFragment}
 uniform vec3 uColor;
 uniform float uOpacity;
 uniform float uDashLen;   // world units per dash and gap
@@ -142,6 +141,7 @@ in float vS;
 in float vDash;
 in float vHead;
 void main() {
+  ${logDepthFragment}
   float a = uOpacity;
   if (vHead >= 0.0) {
     a *= mix(0.2, 1.0, vHead);
@@ -156,54 +156,40 @@ void main() {
 }
 `
 
-/** A route's span in fractional years, widened by its precision when it gives only one date (as time.js does for events). */
+/** A route's [from, to) in ms UTC (time.js spanOf), or null if it has no usable when. */
 export function routeSpan(route) {
-  const w = route.when || {}
-  const parse = (v, end) => {
-    const m = String(v ?? '').match(/(-?\d{1,4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?/)
-    if (!m) return null
-    const y = Number(m[1])
-    if (m[2]) return y + (Number(m[2]) - 1 + (end ? 1 : 0)) / 12
-    return y + (end ? 1 : 0)
-  }
-  let a = parse(w.from, false)
-  let b = parse(w.to ?? w.from, true)
-  if (a === null && b === null) return null
-  if (a === null) a = b - 1
-  if (b === null) b = a + 1
-  const s = SPREAD[w.precision] ?? 0
-  if (s && b - a <= 1.01) {
-    a -= s
-    b += s
-  }
-  return [a, b]
-}
-
-/** Fetches routes.json from the app's data base (data/load.js's `abs`, or `base`); an empty list if it can't. */
-export async function loadRoutes(data, warn = console.warn) {
-  const url = data?.abs ? data.abs('routes.json') : new URL('routes.json', new URL(data?.base || './data/', location.href)).href
   try {
-    const res = await fetch(url)
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const v = await res.json()
-    return Array.isArray(v) ? v : Array.isArray(v?.routes) ? v.routes : []
-  } catch (err) {
-    warn(`${url}: ${err.message} (no routes)`)
-    return []
+    return route.when?.from ? spanOf(route.when) : null
+  } catch {
+    return null
   }
 }
 
 /** One route: its instanced segments and arrowheads, its own uniforms, its fade. */
-class RouteLine {
-  constructor(route, proj, shared) {
+export class RouteLine {
+  /**
+   * route: a routes.json entry (normalised longitudes), or { points: [[x, z]...] } with `world` set.
+   * opts: { maxSeg, lift, height, densifyKm, world }, in the scene's units.
+   */
+  constructor(route, proj, shared, { maxSeg = 4, lift = [0.02, 0.0024], height = 60, densifyKm = 50, world: inWorld = false } = {}) {
     this.route = route
     this.span = routeSpan(route)
     const prec = STYLE[route.pointPrecision] ? route.pointPrecision : 'schematic'
     this.style = STYLE[prec]
     this.ret = route.direction === 'return'
-    const dashedAll = prec === 'schematic'
+    const dashedAll = prec === 'schematic' || route.kind === 'schematic'
     const dashedSeg = new Set(route.schematicSegments || [])
-    const pts = (route.points || []).map((c) => proj.toWorld(c))
+    // (each original leg densified in lon/lat, keeping track of which leg a point came from, for the dashes)
+    const pts = []
+    const legOf = []
+    const src = route.points || []
+    for (let i = 0; i + 1 < src.length; i++) {
+      const leg = inWorld ? [src[i], src[i + 1]] : densifyLonLat([src[i], src[i + 1]], densifyKm)
+      for (let k = i === 0 ? 0 : 1; k < leg.length; k++) {
+        pts.push(inWorld ? leg[k] : proj.toWorld(leg[k]))
+        legOf.push(i)
+      }
+    }
     const seg = []
     const info = []
     let s = 0
@@ -211,8 +197,8 @@ class RouteLine {
       const [ax, az] = pts[i]
       const [bx, bz] = pts[i + 1]
       const L = Math.hypot(bx - ax, bz - az)
-      const n = Math.max(1, Math.ceil(L / MAX_SEG))
-      const dash = dashedAll || dashedSeg.has(i) ? 1 : 0
+      const n = Math.max(1, Math.ceil(L / maxSeg))
+      const dash = dashedAll || dashedSeg.has(legOf[i + 1]) ? 1 : 0
       for (let k = 0; k < n; k++) {
         const t0 = k / n
         const t1 = (k + 1) / n
@@ -222,7 +208,7 @@ class RouteLine {
       s += L
     }
     this.total = s
-    // arrowheads: at the end, and at the start too for a route sailed there and back
+    // arrowheads: at the end, and at the start too for a route there and back
     const head = (from, to, at) => {
       seg.push(from[0], from[1], to[0], to[1])
       info.push(at, at, 0, 1)
@@ -249,7 +235,7 @@ class RouteLine {
       z0 = Math.min(z0, z)
       z1 = Math.max(z1, z)
     }
-    g.boundingSphere = new THREE.Sphere(new THREE.Vector3((x0 + x1) / 2, 60, (z0 + z1) / 2), Math.hypot(x1 - x0, z1 - z0, 300) / 2 + 20)
+    g.boundingSphere = new THREE.Sphere(new THREE.Vector3((x0 + x1) / 2, height / 2, (z0 + z1) / 2), Math.hypot(x1 - x0, z1 - z0, height) / 2 + maxSeg)
     this.geometry = g
     const colour = COLOURS[route.kind] || COLOURS.schematic
     this.colour = colour
@@ -258,6 +244,7 @@ class RouteLine {
       uResolution: { value: new THREE.Vector2(1, 1) },
       uWidth: { value: this.style.width },
       uHead: { value: 9 },
+      uLift: { value: new THREE.Vector2(lift[0], lift[1]) },
       uCamPos: { value: new THREE.Vector3() },
       uColor: { value: new THREE.Color(...colour) },
       uOpacity: { value: 0 },
@@ -273,9 +260,6 @@ class RouteLine {
       uniforms: this.uniforms,
       transparent: true,
       depthWrite: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -1,
-      polygonOffsetUnits: -4,
     })
     this.mesh = new THREE.Mesh(g, this.material)
     this.mesh.renderOrder = 4
@@ -300,19 +284,21 @@ function hash(s) {
 export class Routes {
   /**
    * @param {object} o
-   * @param {object[]} [o.routes] routes.json, if already loaded (else setRoutes later)
-   * @param {import('../geo.js').Projection} o.proj the app's projection (data.proj)
-   * @param {object} o.uniforms the shared uniforms that carry the ground (app.shared.uniforms)
+   * @param {object[]} [o.routes] routes.json (normalised by data/load.js)
+   * @param {object} o.proj the scene's projection (data.proj on the table)
+   * @param {object} o.uniforms the scene's bag, light and ground
    * @param {THREE.Camera} o.camera
    * @param {THREE.WebGLRenderer} o.renderer
-   * @param {object[]} [o.eras] eras.json, for the time window when update() is given none
+   * @param {number} [o.maxSeg] split length, world units (10–25 km on the table)
+   * @param {number[]} [o.lift] [base, k]: world units, and per unit of camera distance
+   * @param {number} [o.height] the tallest the ground gets, world units (for the bounds)
    */
-  constructor({ routes = [], proj, uniforms, camera, renderer, eras = [] }) {
+  constructor({ routes = [], proj, uniforms, camera, renderer, maxSeg = 15, lift = [0.02, 0.0024], height = 300 }) {
     this.proj = proj
     this.shared = uniforms
     this.camera = camera
     this.renderer = renderer
-    this.eras = [...eras].filter((e) => Number.isFinite(e.year)).sort((a, b) => a.year - b.year)
+    this.lineOpts = { maxSeg, lift, height }
     this.group = new THREE.Group()
     this.group.name = 'routes'
     this.lines = []
@@ -331,35 +317,14 @@ export class Routes {
     this.lines = []
     for (const r of routes || []) {
       if (!Array.isArray(r.points) || r.points.length < 2) continue
-      const l = new RouteLine(r, this.proj, this.shared)
-      if (!l.span) continue
+      const l = new RouteLine(r, this.proj, this.shared, this.lineOpts)
+      if (!l.span) {
+        l.dispose()
+        continue
+      }
       this.lines.push(l)
       this.group.add(l.mesh)
     }
-  }
-
-  /** The stretch of years around `year` whose routes show: half an era either side, as time.js. */
-  windowAt(year) {
-    const E = this.eras
-    if (E.length < 2) return [year - 10, year + 10]
-    const yearAt = (s) => {
-      if (s <= 0) return E[0].year + s * (E[1].year - E[0].year)
-      const n = E.length - 1
-      if (s >= n) return E[n].year + (s - n) * (E[n].year - E[n - 1].year)
-      const i = Math.floor(s)
-      return E[i].year + (s - i) * (E[i + 1].year - E[i].year)
-    }
-    let s = 0
-    if (year >= E.at(-1).year) s = E.length - 1
-    else if (year > E[0].year) {
-      for (let i = 0; i + 1 < E.length; i++) {
-        if (year <= E[i + 1].year) {
-          s = i + (year - E[i].year) / Math.max(1e-6, E[i + 1].year - E[i].year)
-          break
-        }
-      }
-    }
-    return [yearAt(s - 0.5), yearAt(s + 0.5)]
   }
 
   /** The routes showing now (faded in more than halfway), for a legend or a card. */
@@ -368,45 +333,44 @@ export class Routes {
   }
 
   /**
-   * Once a frame. `year` is the timeline's year, `cameraDistance` the rig's
-   * distance from its target; `window` (time.js), `light` (0..1, the level
-   * the boundary lines are lit by), `fill` and `focus` (see the top) are optional.
+   * Once a frame. `date` is the WarClock's (ms UTC), `cameraDistance` the
+   * rig's distance from its target; `window` ([from, to] ms), `light` (0..1),
+   * `fade` (0..1, the overlays' strength) and `focus` (see the top).
    */
-  update(year, cameraDistance, { window, light = 1, fill = 0, focus = null } = {}) {
+  update(date, cameraDistance, { window, light = 1, fade = 1, focus = null } = {}) {
     const now = performance.now() / 1000
     const dt = this._last === null ? 1 : Math.max(0, Math.min(0.1, now - this._last))
     this._last = now
-    this.apply(year, cameraDistance, { win: window, light, fill, focus }, now, 1 - Math.exp(-dt * 4))
+    this.apply(date, cameraDistance, { win: window, light, fade, focus }, now, 1 - Math.exp(-dt * 4))
   }
 
-  /** Every route straight to the fade the view and the year ask for (tools, screenshots). */
-  settle(year, cameraDistance, { window, light = 1, fill = 0, focus = null } = {}) {
-    this.apply(year, cameraDistance, { win: window, light, fill, focus }, performance.now() / 1000, 1)
+  /** Every route straight to the fade the view and the date ask for (tools, screenshots). */
+  settle(date, cameraDistance, { window, light = 1, fade = 1, focus = null } = {}) {
+    this.apply(date, cameraDistance, { win: window, light, fade, focus }, performance.now() / 1000, 1)
   }
 
-  apply(year, d, { win, light, fill, focus }, now, ease) {
-    const [wa, wb] = win || this.windowAt(year)
+  apply(date, d, { win, light, fade, focus }, now, ease) {
+    const [wa, wb] = win || [date - 14 * 86400000, date + 14 * 86400000]
     this.renderer.getDrawingBufferSize(this._res)
     const dpr = this.renderer.getPixelRatio()
-    const zoom = this.visible ? smooth(ZOOM_IN[0], ZOOM_IN[1], d) : 0
-    const away = 1 - smooth(FILL_OUT[0], FILL_OUT[1], fill)
-    const wide = 1 - smooth(800, 4000, d) // a little wider over an island group than over the whole chain
+    const on0 = this.visible ? fade : 0
     for (const l of this.lines) {
       const [a, b] = l.span
-      const on = b >= wa && a <= wb ? 1 : 0
+      // (the routes of the event the tour stands on are its story: always on)
+      const mine = focus !== null && l.route.event === focus
+      const on = mine || (b >= wa && a <= wb) ? 1 : 0
       l.k += (on - l.k) * ease
       if (Math.abs(on - l.k) < 0.003) l.k = on
-      // a route whose own dates hold the year stands out from its neighbours in the window
-      const inYear = year >= a && year <= b ? 1 : 0.55
-      const mine = focus !== null && l.route.event === focus
-      const alpha = l.style.opacity * l.k * zoom * (mine ? 1 : away) * inYear
+      // a route whose own dates hold the date stands out from its neighbours in the window
+      const inDate = mine || (date >= a && date <= b) ? 1 : 0.55
+      const alpha = l.style.opacity * l.k * on0 * inDate
       l.mesh.visible = alpha > 0.01
       if (!l.mesh.visible) continue
       const u = l.uniforms
       u.uResolution.value.copy(this._res)
       u.uCamPos.value.copy(this.camera.position)
-      u.uWidth.value = (l.style.width + 0.6 * wide) * dpr
-      u.uHead.value = (8 + 3 * wide) * dpr
+      u.uWidth.value = l.style.width * dpr
+      u.uHead.value = 9 * dpr
       u.uOpacity.value = alpha
       u.uColor.value.setRGB(l.colour[0] * light, l.colour[1] * light, l.colour[2] * light)
       // dashes and the brightening keep a constant size on screen

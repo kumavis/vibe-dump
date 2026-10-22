@@ -8,20 +8,23 @@
 // rect are never drawn. The finest level puts a vertex on every texel.
 //
 // Heights are metres throughout; node boxes are turned into world Y with the
-// exaggeration of the moment, so the selection follows it as the camera zooms.
+// exaggeration of the moment (the uVert of the ground it draws for), so the
+// selection follows it as the camera zooms.
 //
-// The district (render/district.js) is drawn by this same quadtree with its
-// own shaders, through `opts`.
+// Copied from holo-i-ke-au's render/pack.js (b480c27) and made unit-agnostic:
+// it draws for one ground (render/shaders/ground.glsl.js) instead of the
+// Hawaiian World's slots, with the shaders passed in (the table's relief, a
+// box's terrain), the node boxes' margins in the scene's own units, and the
+// sea-floor skip switchable: the Hawaiian packs skipped every node wholly
+// below -0.5 m because their opaque sea hid it, but on the table the sea
+// floor is the picture (`seaCull: -Infinity`). A box's cast shadows
+// (shadow.js) are attached by its ground with setShadow(); the table has none
+// (its relief is hillshaded, and its exaggeration moves with every zoom).
 
 import * as THREE from 'three'
-import { terrainVertex, terrainFragment } from './shaders/terrain.glsl.js'
-import { PackShadow } from './shadow.js'
 
 const GRID = 32 // quads per node edge
 const MAX_NODES = 1600
-// the deep sea floor never shows through the water, which is opaque past a
-// few decimetres (ocean.glsl.js), so nodes lying wholly below this are skipped
-const SEA_CULL = -0.5
 
 export function heightTexture(metres, W, H) {
   const t = new THREE.DataTexture(metres, W, H, THREE.RedFormat, THREE.FloatType)
@@ -41,7 +44,7 @@ function mapTexture(data, W, H, anisotropy = 1) {
   t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping
   t.needsUpdate = true
   // once on the GPU the bytes aren't needed again (only the heights are read
-  // on the CPU), and nine packs of them are worth a hundred megabytes
+  // on the CPU)
   t.onUpdate = () => {
     t.image.data = null
     t.onUpdate = null
@@ -49,19 +52,30 @@ function mapTexture(data, W, H, anisotropy = 1) {
   return t
 }
 
+/** A 1 × 1 RGBA8 texture of one value, standing in for a map a pack does not have. */
+export function constantTexture(r = 255, g = 255, b = 255, a = 255) {
+  const t = new THREE.DataTexture(new Uint8Array([r, g, b, a]), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType)
+  t.needsUpdate = true
+  return t
+}
+
 export class PackTerrain {
   /**
    * pack: a described pack (data/load.js) with its decoded `data`.
-   * world: the World (render/world.js), whose shared uniforms this draws with.
-   * base: for an island pack, the archipelago's PackTerrain (its heights are
-   * folded into the node bounds, since an island at low weight shows them);
-   * for a district, the list of what it can show under it.
-   * opts: { vertexShader, fragmentShader, uniforms, shadowFragment, shadowSize }
-   * to draw with other shaders than the island packs' (the district's).
+   * renderer: the app's WebGLRenderer (for the anisotropy it allows).
+   * uniforms: the bag this ground's materials draw with, shared by reference
+   * ({ ...app.light.uniforms, ...ground.uniforms }); its uVert is read each
+   * frame for the node boxes.
+   * opts: { vertexShader, fragmentShader (both required); uniforms (the
+   * material's own, besides these); seaCull (metres: nodes wholly below it
+   * are skipped; default -0.5, -Infinity for the table); unit (metres per
+   * world unit); margin ([below, above] in world units round each node's
+   * heights, for the geomorph and a sunk sea bed; default 30 m and 10 m) }
    */
-  constructor(pack, world, base = null, opts = {}) {
+  constructor(pack, renderer, uniforms, opts = {}) {
+    if (!opts.vertexShader || !opts.fragmentShader) throw new Error('PackTerrain needs its shaders')
     this.pack = pack
-    this.world = world
+    this.shared = uniforms
     const d = pack.data
     const { W, H } = pack
     const { x0, z0, x1, z1 } = pack.rect
@@ -69,10 +83,14 @@ export class PackTerrain {
     this.heights = d.metres
     this.W = W
     this.H = H
-    const aniso = world.app.renderer.capabilities.getMaxAnisotropy()
+    this.seaCull = opts.seaCull ?? -0.5
+    const unit = opts.unit ?? 1
+    this.margin = opts.margin ?? [30 / unit, 10 / unit]
+    const aniso = renderer.capabilities.getMaxAnisotropy()
     this.heightTex = heightTexture(d.metres, W, H)
     this.normalTex = mapTexture(d.normals, W, H, Math.min(8, aniso))
-    this.landTex = mapTexture(d.land, W, H, Math.min(4, aniso))
+    this.landTex = d.land ? mapTexture(d.land, W, H, Math.min(4, aniso)) : constantTexture(0, 0, 0, 0)
+    this.shadowTex = constantTexture()
     d.normals = null
     d.land = null
 
@@ -81,40 +99,29 @@ export class PackTerrain {
     const side = Math.max(x1 - x0, z1 - z0)
     this.levels = Math.max(1, Math.ceil(Math.log2(side / (GRID * texel))) + 1)
     this.leafSize = side / 2 ** (this.levels - 1)
-    this.buildMinMax(Array.isArray(base) ? base : base ? [base] : [])
+    this.buildMinMax()
 
     this.full = this.makeGrid(GRID)
     this.half = this.makeGrid(GRID / 2)
     this.morph = []
     for (let l = 0; l < 12; l++) this.morph.push(new THREE.Vector2())
-    const shared = world.uniforms
-    const arch = (Array.isArray(base) ? null : base) || world.arch || this
     this.uniforms = {
-      ...shared,
+      ...uniforms,
       uOwnH: { value: this.heightTex },
       uOwnRect: { value: this.rect },
       uOwnN: { value: this.normalTex },
       uOwnL: { value: this.landTex },
-      uArchN: { value: arch.normalTex },
-      uArchL: { value: arch.landTex },
-      uOwnS: { value: null },
-      // this island's era layers (overlay/land.js attaches them)
-      uOwnLandA: { value: null },
-      uOwnLandB: { value: null },
-      uSelf: { value: -1 },
-      // (an island without its own rain image takes the archipelago's)
-      uOwnRain: { value: base && !pack.rainUrl ? 0 : 1 },
+      uOwnS: { value: this.shadowTex },
       uMorph: { value: this.morph },
       uCamPos: { value: new THREE.Vector3() },
-      uKau: { value: 0.5 },
       uDebug: { value: 0 },
       ...opts.uniforms,
     }
     this.group = new THREE.Group()
     for (const grid of [this.full, this.half]) {
       grid.material = new THREE.ShaderMaterial({
-        vertexShader: opts.vertexShader || terrainVertex,
-        fragmentShader: opts.fragmentShader || terrainFragment,
+        vertexShader: opts.vertexShader,
+        fragmentShader: opts.fragmentShader,
         uniforms: { ...this.uniforms, uGrid: { value: grid.dim } },
       })
       grid.mesh = new THREE.Mesh(grid.geometry, grid.material)
@@ -122,13 +129,18 @@ export class PackTerrain {
       grid.mesh.matrixAutoUpdate = false
       this.group.add(grid.mesh)
     }
-    this.shadow = new PackShadow(this, opts.shadowSize, opts.shadowFragment)
-    this.uniforms.uOwnS.value = this.shadow.texture
     this._frustum = new THREE.Frustum()
     this._m = new THREE.Matrix4()
     this._box = new THREE.Box3()
     this.rangeK = 3.5
     this.applyRange(this.rangeK)
+  }
+
+  /** Draw with a cast-shadow map over this pack's rect (a box's PackShadow texture), or none. */
+  setShadow(texture) {
+    const t = texture || this.shadowTex
+    this.uniforms.uOwnS.value = t
+    for (const g of [this.full, this.half]) g.material.uniforms.uOwnS.value = t
   }
 
   makeGrid(dim) {
@@ -164,7 +176,7 @@ export class PackTerrain {
   }
 
   /** Per-node min/max heights (metres), as a pyramid over leaf squares; leaves off the rect are empty. */
-  buildMinMax(bases) {
+  buildMinMax() {
     const { W, H, heights } = this
     const r = this.pack.rect
     const leaves = 2 ** (this.levels - 1)
@@ -192,21 +204,6 @@ export class PackTerrain {
             if (v > b) b = v
           }
         }
-        if (bases.length) {
-          // what the archipelago (or the island) has here too, since a fading pack shows it
-          const st = Math.max(2, Math.round((j1 - j0) / 16))
-          for (const base of bases) {
-            for (let j = j0; j <= j1; j += st) {
-              for (let i = i0; i <= i1; i += st) {
-                const v = base.metresAt(r.x0 + (i + 0.5) / sx, r.z0 + (j + 0.5) / sz)
-                if (v < a) a = v
-                if (v > b) b = v
-              }
-            }
-          }
-          a -= 40
-          b += 40
-        }
         lo[bj * leaves + bi] = a
         hi[bj * leaves + bi] = b
       }
@@ -231,7 +228,7 @@ export class PackTerrain {
     }
   }
 
-  /** Bilinear metres from this pack alone, matching the shader's rectMetres. */
+  /** Bilinear metres from this pack alone, matching the shader's rectMetres (the CPU copy of groundMetres inside the rect). */
   metresAt(x, z) {
     const r = this.pack.rect
     const { W, H, heights } = this
@@ -257,7 +254,7 @@ export class PackTerrain {
     const r0 = k * this.leafSize
     this.ranges = []
     for (let l = 0; l < this.levels; l++) this.ranges.push(r0 * 2 ** l)
-    this.ranges[this.levels - 1] = 1e9
+    this.ranges[this.levels - 1] = 1e12
     for (let l = 0; l < this.levels; l++) {
       const r = this.ranges[l]
       const prev = l > 0 ? this.ranges[l - 1] : 0
@@ -265,12 +262,12 @@ export class PackTerrain {
     }
   }
 
-  setSelf(slot) {
-    this.uniforms.uSelf.value = slot
-    for (const g of [this.full, this.half]) g.material.uniforms.uSelf.value = slot
+  setDebug(v) {
+    this.uniforms.uDebug.value = v
+    for (const g of [this.full, this.half]) g.material.uniforms.uDebug.value = v
   }
 
-  update(camera, visible) {
+  update(camera, visible = true) {
     this.group.visible = visible
     this.full.count = 0
     this.half.count = 0
@@ -278,7 +275,7 @@ export class PackTerrain {
       this._m.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
       this._frustum.setFromProjectionMatrix(this._m)
       this.cam = camera.position
-      this.vert = this.world.uniforms.uVert.value
+      this.vert = this.shared.uVert.value
       this.uniforms.uCamPos.value.copy(camera.position)
       this.select(0, 0, this.levels - 1)
     }
@@ -294,8 +291,8 @@ export class PackTerrain {
     const x0 = this.pack.rect.x0 + i * size
     const z0 = this.pack.rect.z0 + j * size
     const v = this.vert
-    const lo = Math.min(0, level.lo[j * level.n + i]) * v - 0.3
-    const hi = Math.max(0, level.hi[j * level.n + i]) * v + 0.1
+    const lo = Math.min(0, level.lo[j * level.n + i]) * v - this.margin[0]
+    const hi = Math.max(0, level.hi[j * level.n + i]) * v + this.margin[1]
     this._box.min.set(x0, lo, z0)
     this._box.max.set(x0 + size, hi, z0 + size)
     return this._box
@@ -306,7 +303,7 @@ export class PackTerrain {
   select(i, j, lod) {
     const level = this.mm[lod]
     const hiM = level.hi[j * level.n + i]
-    if (!(hiM >= SEA_CULL)) return true // (empty, or all deep sea)
+    if (!(hiM >= this.seaCull)) return true // (empty, or all deep sea where that is skipped)
     const box = this.nodeBox(i, j, lod)
     if (box.distanceToPoint(this.cam) > this.ranges[lod]) return false
     if (!this._frustum.intersectsBox(box)) return true
@@ -325,7 +322,7 @@ export class PackTerrain {
       if (!this.select(ci, cj, lod - 1)) {
         // the child is beyond the finer range: draw that quarter at this level
         const cl = this.mm[lod - 1]
-        if (!(cl.hi[cj * cl.n + ci] >= SEA_CULL)) continue
+        if (!(cl.hi[cj * cl.n + ci] >= this.seaCull)) continue
         const cb = this.nodeBox(ci, cj, lod - 1)
         if (!this._frustum.intersectsBox(cb)) continue
         this.emit(this.half, ci, cj, size / 2, lod)
@@ -344,14 +341,54 @@ export class PackTerrain {
     grid.count++
   }
 
+  /** What is drawn, for the tools. */
+  stats() {
+    return { nodes: this.full.count + this.half.count, levels: this.levels }
+  }
+
   dispose() {
     for (const g of [this.full, this.half]) {
       g.geometry.dispose()
       g.material.dispose()
     }
-    this.shadow.dispose()
     this.heightTex.dispose()
     this.normalTex.dispose()
     this.landTex.dispose()
+    this.shadowTex.dispose()
   }
 }
+
+/**
+ * The CDLOD vertex shader's body, shared by the table's relief and a box's
+ * terrain: the vertex's grid position, the geomorph toward the coarser
+ * level's surface at the edge of its range (as in ahupuaʻa: by the hand-over
+ * the two levels are the same surface), and `mt` the metres there. Expects
+ * aNode, uMorph, uGrid, uCamPos, uVert and a packMetres(xz) function.
+ */
+export const cdlodMorph = /* glsl */ `
+  vec2 g = floor(position.xz * uGrid + 0.5); // this vertex's grid index in its node
+  float cell = aNode.z / uGrid;
+  vec2 xz = aNode.xy + g * cell;
+  float mt = packMetres(xz);
+  float dist = distance(uCamPos, vec3(xz.x, mt * uVert, xz.y));
+  vec2 m = uMorph[int(aNode.w)];
+  float k = clamp((dist - m.x) / (m.y - m.x), 0.0, 1.0);
+  vec2 odd = g - 2.0 * floor(g * 0.5);
+  if (k > 0.0 && odd.x + odd.y > 0.5) {
+    // (the two coarser vertices first, and the ground read at them in one
+    // place: packMetres is inlined wherever it is called)
+    vec2 base = aNode.xy + (g - odd) * cell;
+    vec2 pa = base;
+    vec2 pb = base + odd * 2.0 * cell;
+    if (odd.x > 0.5 && odd.y > 0.5) {
+      vec2 pc = (g - odd) * 0.5;
+      if (mod(pc.x + pc.y, 2.0) > 0.5) {
+        pa = base + vec2(2.0, 0.0) * cell;
+        pb = base + vec2(0.0, 2.0) * cell;
+      } else pb = base + vec2(2.0) * cell;
+    }
+    float hc = 0.0;
+    for (int q = 0; q < 2; q++) hc += packMetres(q == 0 ? pa : pb);
+    mt = mix(mt, hc * 0.5, k);
+  }
+`

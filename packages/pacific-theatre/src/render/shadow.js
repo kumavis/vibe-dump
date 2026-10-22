@@ -3,33 +3,32 @@
 // disc clears the ridges (the classic heightfield soft shadow, its penumbra
 // widening with distance).
 //
-// Here there is one map per pack, over the pack's own rect, because one map
-// over 600 km would be useless in a valley. And the land's height is not
-// fixed: the exaggeration follows the camera and an island's detail weight
-// eases in and out, so a map is redrawn whenever either has moved enough to
-// show, as well as when the sun moves, a strip per frame so the cost is
-// spread out rather than landing on one frame.
+// One map per pack, over the pack's own rect, redrawn when the sun has moved
+// (or the exaggeration, which a box holds fixed), a strip per frame so the
+// cost is spread out rather than landing on one frame.
+//
+// Copied from holo-i-ke-au's render/shadow.js (b480c27) and adapted for a
+// box over the single-pack ground (shaders/ground.glsl.js): the Hawaiian
+// packMetres blended a slot over the archipelago; here it is the box's own
+// pack, archMetres. It is a fullscreen pass into its own target, so it needs
+// no log-depth chunks. The table has no cast shadows (its relief is
+// hillshaded); a box's ground attaches the map with PackTerrain.setShadow.
+// Handed to the engine workflow at the fork.
 
 import * as THREE from 'three'
-import { constants, world } from './shaders/common.glsl.js'
+import { constants } from './shaders/common.glsl.js'
+import { world } from './shaders/ground.glsl.js'
 import { fullscreenTriangle } from './pipeline.js'
 
 const fragment = /* glsl */ `
 ${constants}
 ${world}
-uniform sampler2D uOwnH;
 uniform vec4 uOwnRect;
-uniform int uSelf;
 uniform vec3 uSunDir;
 uniform float uStep;   // world units: about one texel of the map
 uniform float uTop;    // world Y of the highest ground; a ray above it is clear
 in vec2 vUv;
-float packMetres(vec2 xz) {
-  float a = archMetres(xz);
-  if (uSelf < 0) return a;
-  float w = slotWeight(uSelf, xz);
-  return w > 0.0 ? mix(a, rectMetres(uOwnH, uOwnRect, xz), w) : a;
-}
+float packMetres(vec2 xz) { return archMetres(xz); }
 void main() {
   vec2 xz = uOwnRect.xy + vUv * (uOwnRect.zw - uOwnRect.xy);
   float h0 = max(packMetres(xz), 0.0) * uVert + uStep * 0.02;
@@ -53,6 +52,7 @@ void main() {
 `
 
 export class PackShadow {
+  /** terrain: the box's PackTerrain (its uniforms carry the ground); maxSize: the map's longer side, texels. */
   constructor(terrain, maxSize = 1024, fragmentShader = fragment) {
     const { W, H } = terrain
     const f = Math.min(1, maxSize / Math.max(W, H))
@@ -95,8 +95,8 @@ export class PackShadow {
     return this.rt.texture
   }
 
-  /** Redraw a strip if the sun, the exaggeration or the detail weight has moved since the last full map. */
-  update(renderer, sunDir, vert, k, top) {
+  /** Redraw a strip if the sun or the exaggeration has moved since the last full map (k: a detail weight, 1 in a box). */
+  update(renderer, sunDir, vert, k = 1, top) {
     const u = this.uniforms
     const was = this.drawn
     if (this.strip < 0) {

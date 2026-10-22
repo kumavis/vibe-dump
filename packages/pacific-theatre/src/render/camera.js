@@ -2,6 +2,21 @@
 // cinematic flights between points. Everything is (target, distance, yaw,
 // pitch); input moves a goal and the visible camera eases toward it.
 //
+// Copied from holo-i-ke-au's render/camera.js (b480c27) and made
+// unit-agnostic, because one page now holds two rigs in two units (the table
+// in kilometres, a box in metres; ENGINEERING §2): every distance it used to
+// take from config.js (limits, the pitch curve, clearances, near and far
+// clamps, the target's margin, the ray march, the flight's hop) comes in as a
+// constructor option, config.js's TABLE or BOX object as it is. It reads its
+// ground only through the ground interface of ENGINEERING §7 (bounds, maxY,
+// vert, metresAt, heightAt), never a World. It gains dispose() (one
+// AbortController for every listener, so a box's rig does not leak its
+// listeners on the shared canvas), `enabled` (App turns a scene's rig off
+// when app.mode says another listener owns the input), a `keys` option, and
+// pose() for the hand-over's poseToBox/poseToTable. The flight's `ready`
+// hold, which slows the last fifth of a flight until the box has streamed
+// in, is kept as it was.
+//
 // What changes here is the range. One wheel gesture runs from the whole chain
 // (several hundred km) down to a few km over a valley, so the zoom is
 // multiplicative and pulls toward the cursor, the camera tilts from a map's
@@ -25,7 +40,6 @@
 // soft floor rather than a hard stop.
 
 import * as THREE from 'three'
-import { MIN_DISTANCE, MAX_DISTANCE } from '../config.js'
 
 const TAU = Math.PI * 2
 // the target's height eases toward the ground with this time constant (s);
@@ -44,16 +58,44 @@ const smooth = (a, b, x) => {
   return t * t * (3 - 2 * t)
 }
 
-/** The tilt a zoom eases toward: oblique over a valley, steep over the whole chain. */
-export function preferredPitch(d) {
-  return 0.6 + 0.52 * smooth(Math.log(40), Math.log(4500), Math.log(Math.max(1, d)))
+/** The tilt a zoom eases toward: oblique close in, steep far out; range is the rig's pitchRange (world units). */
+export function preferredPitch(d, range = [40, 4500]) {
+  return 0.6 + 0.52 * smooth(Math.log(range[0]), Math.log(range[1]), Math.log(Math.max(1e-6, d)))
+}
+
+// the rig's defaults: the Hawaiian numbers, in its 100 m units (config.js's TABLE and BOX replace them)
+const DEFAULTS = {
+  minDistance: 8,
+  maxDistance: 9000,
+  pitchRange: [40, 4500],
+  near: 0.02,
+  nearMax: 300,
+  far: 3e5,
+  targetMargin: 150,
+  clearance: [0.12, 0.03],
+  floorGap: 0.04,
+  aheadMax: 20,
+  marchLimit: 4e5,
+  marchStep: 0.02,
+  hopScale: 300,
 }
 
 export class CameraRig {
-  constructor(camera, dom, world) {
+  /**
+   * camera: a PerspectiveCamera; dom: the canvas; ground: the scene's ground
+   * (ENGINEERING §7); opts: config.js's TABLE or BOX (any subset of DEFAULTS'
+   * keys), plus keys (bind W/A/S/D, the arrows, Q/E and +/-; default true).
+   */
+  constructor(camera, dom, ground, opts = {}) {
     this.camera = camera
     this.dom = dom
-    this.world = world
+    this.ground = ground
+    const o = { ...DEFAULTS }
+    for (const k of Object.keys(DEFAULTS)) if (opts[k] !== undefined) o[k] = opts[k]
+    this.opts = o
+    this.keys = opts.keys !== false
+    this.minDistance = o.minDistance
+    this.maxDistance = o.maxDistance
     this.home = this.homeView()
     const h = this.home
     this.state = { target: h.target.clone(), distance: h.distance, yaw: h.yaw, pitch: h.pitch, lift: 0 }
@@ -65,15 +107,31 @@ export class CameraRig {
     this.groundM = 0
     this.pinned = true
     this._lastXZ = new THREE.Vector2(h.target.x, h.target.z)
-    this.minDistance = MIN_DISTANCE
-    this.maxDistance = MAX_DISTANCE
     this.autoOrbit = 0
     this.lastInput = -1e9
     this.onUserInput = null
     this.enabled = true
     this._ray = new THREE.Raycaster()
     this._v = new THREE.Vector3()
+    this._abort = new AbortController()
     this.bind()
+  }
+
+  /** The tilt this rig's zoom eases toward at distance d. */
+  pitchFor(d) {
+    return preferredPitch(d, this.opts.pitchRange)
+  }
+
+  /** Remove every listener this rig added (a box's rig goes with its box). */
+  dispose() {
+    this._abort.abort()
+    this.flight = null
+  }
+
+  /** The visible pose, { target: {x, y, z}, distance, yaw, pitch }, for the hand-over (geo.js poseToBox). */
+  pose() {
+    const s = this.state
+    return { target: { x: s.target.x, y: s.target.y, z: s.target.z }, distance: s.distance, yaw: s.yaw, pitch: s.pitch }
   }
 
   /**
@@ -84,24 +142,25 @@ export class CameraRig {
    * shrinking to a strip across the middle.
    */
   homeView(aspect = innerWidth / Math.max(1, innerHeight)) {
-    const b = this.world.bounds
+    const b = this.ground.bounds
     const w = b.x1 - b.x0
     const t = Math.tan((this.camera.fov * Math.PI) / 360)
     const portrait = aspect < 0.85
     // (1.2: the tilt and the perspective want a little more room than the rect)
     const d = portrait ? (1.2 * Math.hypot(w, b.z1 - b.z0) * 0.92) / (2 * t) : (1.2 * w) / (2 * t * Math.max(1, aspect))
-    const distance = Math.min(MAX_DISTANCE, d)
+    const distance = Math.min(this.maxDistance, d)
     const target = new THREE.Vector3((b.x0 + b.x1) / 2, 0, (b.z0 + b.z1) / 2 + (portrait ? 0 : (b.z1 - b.z0) * 0.04))
-    return { target, distance, yaw: portrait ? 1.1 : 0, pitch: preferredPitch(distance) }
+    return { target, distance, yaw: portrait ? 1.1 : 0, pitch: this.pitchFor(distance) }
   }
 
   bind() {
     const el = this.dom
+    const on = { signal: this._abort.signal }
     const pointers = new Map()
     let mode = null
     let last = null
     let pinch = null
-    el.addEventListener('contextmenu', (e) => e.preventDefault())
+    el.addEventListener('contextmenu', (e) => e.preventDefault(), on)
     el.addEventListener('pointerdown', (e) => {
       if (!this.enabled) return
       el.setPointerCapture(e.pointerId)
@@ -114,9 +173,14 @@ export class CameraRig {
         mode = 'pinch'
         pinch = this.pinchState(pointers)
       }
-    })
+    }, on)
     el.addEventListener('pointermove', (e) => {
       if (!pointers.has(e.pointerId)) return
+      if (!this.enabled) {
+        pointers.clear()
+        mode = null
+        return
+      }
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
       if (mode === 'orbit' && last) {
         const dx = e.clientX - last.x
@@ -142,7 +206,7 @@ export class CameraRig {
         pinch = now
         this.touch()
       }
-    })
+    }, on)
     const up = (e) => {
       pointers.delete(e.pointerId)
       if (pointers.size === 0) mode = null
@@ -152,8 +216,8 @@ export class CameraRig {
         last = { ...p }
       }
     }
-    el.addEventListener('pointerup', up)
-    el.addEventListener('pointercancel', up)
+    el.addEventListener('pointerup', up, on)
+    el.addEventListener('pointercancel', up, on)
     el.addEventListener(
       'wheel',
       (e) => {
@@ -165,17 +229,18 @@ export class CameraRig {
         this.zoomAt(e.clientX, e.clientY, k)
         this.touch()
       },
-      { passive: false },
+      { passive: false, signal: this._abort.signal },
     )
     el.addEventListener('dblclick', (e) => {
+      if (!this.enabled) return
       const p = this.pickGround(e.clientX, e.clientY)
       if (p) {
         const d = Math.max(this.minDistance, this.goal.distance * 0.35)
-        this.flyTo({ target: p, distance: d, pitch: this.goal.pitch + preferredPitch(d) - preferredPitch(this.goal.distance) }, 1.8)
+        this.flyTo({ target: p, distance: d, pitch: this.goal.pitch + this.pitchFor(d) - this.pitchFor(this.goal.distance) }, 1.8)
       }
-    })
+    }, on)
     addEventListener('keydown', (e) => {
-      if (!this.enabled || e.target.closest?.('input, textarea')) return
+      if (!this.enabled || !this.keys || e.target.closest?.('input, textarea')) return
       const step = this.goal.distance * 0.08
       // (left and right arrows belong to the tour's Back and Next, ui.js)
       const f = { ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1], KeyA: [-1, 0], KeyD: [1, 0] }[e.code]
@@ -192,7 +257,7 @@ export class CameraRig {
       const cy = innerHeight / 2
       if (e.code === 'Equal' || e.code === 'NumpadAdd') this.zoomAt(cx, cy, 0.8)
       if (e.code === 'Minus' || e.code === 'NumpadSubtract') this.zoomAt(cx, cy, 1.25)
-    })
+    }, on)
   }
 
   pinchState(pointers) {
@@ -234,7 +299,7 @@ export class CameraRig {
       this.goal.target.x += (p.x - this.goal.target.x) * t
       this.goal.target.z += (p.z - this.goal.target.z) * t
     }
-    this.goal.pitch = THREE.MathUtils.clamp(this.goal.pitch + preferredPitch(d1) - preferredPitch(d0), 0.06, 1.52)
+    this.goal.pitch = THREE.MathUtils.clamp(this.goal.pitch + this.pitchFor(d1) - this.pitchFor(d0), 0.06, 1.52)
     this.goal.distance = d1
   }
 
@@ -247,12 +312,13 @@ export class CameraRig {
 
   /** Where a ray meets the ground (or the sea at y = 0), marching down from the highest summit. */
   marchRay(o, d) {
-    const W = this.world
-    const top = W.maxY + 0.05
+    const W = this.ground
+    const lim = this.opts.marchLimit
+    const top = W.maxY + this.opts.marchStep * 2.5
     if (d.y >= 0 && o.y > top) return null
-    const tSea = d.y < 0 ? o.y / -d.y : 4e5
+    const tSea = d.y < 0 ? o.y / -d.y : lim
     let t = o.y > top && d.y < 0 ? (o.y - top) / -d.y : 0
-    const tEnd = Math.min(tSea, 4e5)
+    const tEnd = Math.min(tSea, lim)
     const p = this._v
     let prevT = t
     for (let i = 0; i < 700 && t <= tEnd + 1e-3; i++) {
@@ -270,9 +336,9 @@ export class CameraRig {
         return p.clone()
       }
       prevT = t
-      t += Math.max(0.02, gap * 0.45, t * 0.0015)
+      t += Math.max(this.opts.marchStep, gap * 0.45, t * 0.0015)
     }
-    if (tSea < 4e5) return o.clone().addScaledVector(d, tSea).setY(0)
+    if (tSea < lim) return o.clone().addScaledVector(d, tSea).setY(0)
     return null
   }
 
@@ -292,8 +358,8 @@ export class CameraRig {
     const cam = this._fitCam || (this._fitCam = new THREE.PerspectiveCamera())
     cam.fov = this.camera.fov
     cam.aspect = this.camera.aspect
-    cam.near = 0.1
-    cam.far = 1e6
+    cam.near = this.opts.near
+    cam.far = this.opts.far * 4
     cam.updateProjectionMatrix()
     const W = innerWidth
     const H = innerHeight
@@ -311,9 +377,9 @@ export class CameraRig {
     const v = this._v
     for (let i = 0; i < 8; i++) {
       d = THREE.MathUtils.clamp(d, this.minDistance, this.maxDistance)
-      pitch = THREE.MathUtils.clamp(fixedPitch ?? preferredPitch(d) + tilt, 0.06, 1.52)
+      pitch = THREE.MathUtils.clamp(fixedPitch ?? this.pitchFor(d) + tilt, 0.06, 1.52)
       const cp = Math.cos(pitch)
-      const ty = fixed ? this.world.heightAt(tx, tz) : 0
+      const ty = fixed ? this.ground.heightAt(tx, tz) : 0
       cam.position.set(tx + d * cp * sy, ty + d * Math.sin(pitch), tz + d * cp * cy)
       cam.lookAt(tx, ty, tz)
       cam.updateMatrixWorld()
@@ -340,12 +406,12 @@ export class CameraRig {
       tx += ex * cy + ey * sy
       tz += -ex * sy + ey * cy
     }
-    return { target: new THREE.Vector3(tx, this.world.heightAt(tx, tz), tz), distance: d, yaw, pitch }
+    return { target: new THREE.Vector3(tx, this.ground.heightAt(tx, tz), tz), distance: d, yaw, pitch }
   }
 
   /** The ground under (x, z) in metres (the sea at 0), as the shaders draw it. */
   groundAt(x, z) {
-    return Math.max(0, this.world.metresAt(x, z))
+    return Math.max(0, this.ground.metresAt(x, z))
   }
 
   /**
@@ -373,7 +439,7 @@ export class CameraRig {
     this.groundM = this.groundAt(g.x, g.z)
     this.pinned = true
     this._lastXZ.set(g.x, g.z)
-    const y = this.groundM * this.world.uniforms.uVert.value
+    const y = this.groundM * this.ground.vert
     g.y = y
     this.state.target.y = y
   }
@@ -394,7 +460,7 @@ export class CameraRig {
       groundM: this.groundM,
     }
     const dest = {
-      target: to.target ? to.target.clone() : from.target.clone(),
+      target: to.target ? new THREE.Vector3(to.target.x, to.target.y ?? 0, to.target.z) : from.target.clone(),
       distance: THREE.MathUtils.clamp(to.distance ?? from.distance, this.minDistance, this.maxDistance),
       yaw: to.yaw ?? from.yaw,
       pitch: THREE.MathUtils.clamp(to.pitch ?? from.pitch, 0.06, 1.52),
@@ -425,12 +491,19 @@ export class CameraRig {
     this.apply()
   }
 
-  /** Jump (no easing) to a view: the tools and the ?cam= parameter use this. */
-  jump({ x, z, distance, yaw, pitch }) {
+  /**
+   * Jump (no easing) to a view: the tools, the #cam= parameter and the
+   * hand-over use this. Takes { x, z, distance, yaw, pitch } or a pose
+   * ({ target: {x, z}, ... }); anything left out stays.
+   */
+  jump(v) {
+    const { distance, yaw, pitch } = v
+    const x = v.target ? v.target.x : v.x
+    const z = v.target ? v.target.z : v.z
     this.flight = null
     for (const s of [this.goal, this.state]) {
-      if (x !== undefined) s.target.set(x, this.world.heightAt(x, z), z)
-      if (distance !== undefined) s.distance = distance
+      if (x !== undefined) s.target.set(x, this.ground.heightAt(x, z), z)
+      if (distance !== undefined) s.distance = THREE.MathUtils.clamp(distance, this.minDistance, this.maxDistance)
       if (yaw !== undefined) s.yaw = yaw
       if (pitch !== undefined) s.pitch = pitch
       s.lift = 0
@@ -454,7 +527,7 @@ export class CameraRig {
       const logD = Math.log(f.from.distance) * (1 - e) + Math.log(f.dest.distance) * e
       g.distance = Math.exp(logD) + f.hop * Math.sin(Math.PI * e)
       g.yaw = f.from.yaw + (f.dest.yaw - f.from.yaw) * e
-      g.pitch = f.from.pitch + (f.dest.pitch - f.from.pitch) * e + 0.2 * Math.sin(Math.PI * e) * Math.min(1, f.hop / 300)
+      g.pitch = f.from.pitch + (f.dest.pitch - f.from.pitch) * e + 0.2 * Math.sin(Math.PI * e) * Math.min(1, f.hop / this.opts.hopScale)
       g.pitch = Math.min(1.52, g.pitch)
       g.lift = f.from.lift + (f.dest.lift - f.from.lift) * e
       // (the target's ground from where it was to the ground under the
@@ -469,8 +542,8 @@ export class CameraRig {
     } else if (this.autoOrbit && performance.now() - this.lastInput > 4000) {
       g.yaw += this.autoOrbit * dt
     }
-    const b = this.world.bounds
-    const m = 150
+    const b = this.ground.bounds
+    const m = this.opts.targetMargin
     g.target.x = THREE.MathUtils.clamp(g.target.x, b.x0 - m, b.x1 + m)
     g.target.z = THREE.MathUtils.clamp(g.target.z, b.z0 - m, b.z1 + m)
     if (!this.flight) {
@@ -480,7 +553,7 @@ export class CameraRig {
       if (!this.pinned) this.groundM = ease(this.groundM, this.smoothGround(g.target.x, g.target.z, g.distance), dt, GROUND_TAU)
     }
     // (and the exaggeration of the moment turns it into world Y, so a zoom moves it at once)
-    g.target.y = this.groundM * this.world.uniforms.uVert.value
+    g.target.y = this.groundM * this.ground.vert
 
     const s = this.state
     const k = this.flight ? 1 : 1 - Math.exp(-dt * 7)
@@ -495,15 +568,15 @@ export class CameraRig {
 
   /** Ground under the camera and a little ahead of where it's heading, so it rises before a ridge. */
   groundAhead(x, z, dt) {
-    const W = this.world
+    const W = this.ground
     let g = W.heightAt(x, z)
     const prev = this._prevXZ
     if (prev && dt > 0) {
       const vx = (x - prev.x) / dt
       const vz = (z - prev.y) / dt
       const speed = Math.hypot(vx, vz)
-      const ahead = Math.min(20, speed * 0.3)
-      if (ahead > 0.005) g = Math.max(g, W.heightAt(x + (vx / speed) * ahead, z + (vz / speed) * ahead))
+      const ahead = Math.min(this.opts.aheadMax, speed * 0.3)
+      if (ahead > this.opts.aheadMax * 2.5e-4) g = Math.max(g, W.heightAt(x + (vx / speed) * ahead, z + (vz / speed) * ahead))
     }
     this._prevXZ = (this._prevXZ || new THREE.Vector2()).set(x, z)
     return g
@@ -522,20 +595,23 @@ export class CameraRig {
     // third of its time and settling in twice it, and under that a soft
     // floor, so a ridge the lift is late for pushes the eye up smoothly
     // rather than stopping it dead
-    const clearance = 0.12 + s.distance * 0.03
+    const clearance = this.opts.clearance[0] + s.distance * this.opts.clearance[1]
     const ground = this.groundAhead(cam.position.x, cam.position.z, dt)
     const want = Math.max(0, ground + clearance - cam.position.y)
     this.floor = ease(this.floor, want, dt, want > this.floor ? GROUND_TAU / 3 : GROUND_TAU * 2)
     cam.position.y += this.floor
-    const under = this.world.heightAt(cam.position.x, cam.position.z)
-    const gap = Math.min(0.04, clearance * 0.3)
+    const under = this.ground.heightAt(cam.position.x, cam.position.z)
+    const gap = Math.min(this.opts.floorGap, clearance * 0.3)
     cam.position.y = smax(cam.position.y, under + gap, gap)
     this._v.copy(s.target)
     this._v.y += s.lift * s.distance * 0.45
     cam.lookAt(this._v)
     const alt = cam.position.y - under
-    cam.near = THREE.MathUtils.clamp(Math.min(alt, s.distance) * 0.12, 0.02, 300)
-    cam.far = THREE.MathUtils.clamp(s.distance * 30 + alt * 60, 8000, 3e5)
+    // (under the logarithmic depth buffer the far plane costs no precision
+    // that matters, so it stays at the scene's limit: 50,000 km on the table,
+    // 450 km in a box; the near plane follows the height above the ground)
+    cam.near = THREE.MathUtils.clamp(Math.min(alt, s.distance) * 0.12, this.opts.near, this.opts.nearMax)
+    cam.far = this.opts.far
     cam.updateProjectionMatrix()
     cam.updateMatrixWorld()
   }

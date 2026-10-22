@@ -1,22 +1,34 @@
-// The sea, from ahupuaʻa's ocean.glsl.js: depth colour from the ground under
-// it, the sky in its surface, sun glint, chop that fades out with distance so
-// the far field reads as a smooth sea to the horizon, swash at the shore and
-// whitecaps in the trades. The set-wave breakers on the reef crest and the
-// stream-plume maps are left out: they belong to a 17 m heightmap, and the
-// islands' are 70 to 300 m. A district's fishponds (common.glsl.js
-// distPond) lie still and green behind their walls. Where a patch gives a
-// year back its reef flat (common.glsl.js patchReef), the water over it is
-// shallow reef, coral and rubble mottled over sand at a size that reads at
-// any zoom, not one even sheet of blue.
+// The sea of a battle box, from ahupuaʻa's ocean.glsl.js by way of
+// holo-i-ke-au's (b480c27): depth colour from the ground under it, the sky in
+// its surface, sun glint, chop that fades out with distance so the far field
+// reads as a smooth sea to the horizon, swash at the shore and whitecaps in
+// the wind.
+//
+// Adapted for a box in metres (ENGINEERING §7; R9 §2.10). Every frequency,
+// wavelength and pixel threshold inside is still written in the Hawaiian 100 m
+// units, which were tuned by eye; main() turns the world position into them
+// once (xz = vWorld.xz · uUnitM / 100), the pixel width with it, so nothing in the
+// tuning moved. The ground is read in world units through groundMetres()
+// (shaders/ground.glsl.js), and depths stay metres. The wind and swell come
+// from battle.json's weather (ocean.js setWeather); the point lights (star
+// shells, searchlights, gun flashes) glint in it as the sun does. It includes
+// the four log-depth chunks; polygonOffset, which the Hawaiian sea leaned
+// on, does nothing under the logarithmic depth buffer, and the terrain's sea
+// bed is sunk well below the water instead. The fishponds and the patches'
+// reef flats of the Hawaiian sea answer zero from the single-pack ground.
 
-import { constants, noise, world, ground, lighting } from './common.glsl.js'
+import { constants, noise, lighting } from './common.glsl.js'
+import { world, ground } from './ground.glsl.js'
+import { logDepthParsVertex, logDepthVertex, logDepthParsFragment, logDepthFragment } from './logdepth.glsl.js'
 
 export const oceanVertex = /* glsl */ `
+${logDepthParsVertex}
 out vec3 vWorld;
 void main() {
   vec4 w = modelMatrix * vec4(position, 1.0);
   vWorld = w.xyz;
   gl_Position = projectionMatrix * viewMatrix * w;
+  ${logDepthVertex}
 }
 `
 
@@ -26,7 +38,9 @@ ${noise}
 ${world}
 ${ground}
 ${lighting}
+${logDepthParsFragment}
 uniform vec3 uCamPos;
+uniform float uUnitM;      // metres per world unit (1 in a box): the Hawaiian tuning is in 100 m units
 uniform vec2 uWind;        // direction the wind blows toward, scaled by strength (0..1+)
 uniform vec2 uSwellDir;    // direction the swell travels
 uniform int uDebug;
@@ -85,14 +99,16 @@ vec2 waveSlope(vec2 p, float t, float detail) {
 }
 
 void main() {
-  vec2 xz = vWorld.xz;
-  float depth = seaDepth(xz);
+  ${logDepthFragment}
+  float depth = seaDepth(vWorld.xz);
   if (depth < -0.05) discard; // land pokes through
+  // (the rest in the Hawaiian 100 m units the tuning was done in)
+  vec2 xz = vWorld.xz * uUnitM / 100.0;
   vec3 V = normalize(uCamPos - vWorld);
   float px = length(fwidth(xz));
 
   // (in a fishpond, behind its wall, the water lies still and green)
-  float pond = distPond(xz);
+  float pond = distPond(vWorld.xz);
   vec2 g = waveSlope(xz, uTime, px) * (0.55 + 0.6 * length(uWind));
   g *= (1.0 + 0.6 * (1.0 - smoothstep(0.5, 6.0, depth))) * (1.0 - 0.85 * pond);
   vec3 N = normalize(vec3(-g.x, 1.0, -g.y));
@@ -109,7 +125,7 @@ void main() {
   // even depth of blue, and meets the reef beyond its edge without a seam
   // (a patch's reef flat is a few metres down at most: deeper water never asks)
   float rf = 0.0;
-  if (depth < 12.0) rf = patchReef(xz);
+  if (depth < 12.0) rf = patchReef(vWorld.xz);
   float dU = depth;
   if (rf > 0.002) {
     float mt = mottle(xz, px);
@@ -149,6 +165,8 @@ void main() {
   vec3 H = normalize(uSunDir + V);
   float spec = pow(max(dot(N, H), 0.0), 900.0) * 60.0 + pow(max(dot(N, H), 0.0), 90.0) * 0.6;
   vec3 col = mix(water, refl, F * (1.0 - 0.5 * pond)) + uSunColor * spec * vis * step(0.0, uSunDir.y);
+  // the point lights' glints: a star shell's path across the water
+  col += pointGlints(N, V, vWorld, 300.0) * 1.5 + pointGlints(N, V, vWorld, 40.0) * 0.08;
 
   // --- foam --------------------------------------------------------------------
   // swash at the shore, where the water is shallowest (depth stands in for the

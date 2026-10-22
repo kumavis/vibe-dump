@@ -1,14 +1,34 @@
-// Sky, sun, moon and stars at 21° N.
+// Sky, sun, moon and stars, at any place and any instant.
 //
 // The daylight dome is the Preetham model as implemented in three.js's Sky
 // example (Wallner, Upitis, zz85), extended with a night sky: the real bright
 // stars on the real celestial sphere, a Milky Way, and a moon with its phase.
-// The same scattering is evaluated in JS, so the light falling on the island is
-// the light of the sky you can see — gold at dusk, blue in the shadows.
+// The same scattering is evaluated in JS, so the light falling on the ground
+// is the light of the sky you can see: gold at dusk, blue in the shadows.
+//
+// Copied from holo-i-ke-au's render/sky.js (b480c27) with its astronomy
+// replaced. That one took a day of the year and a local solar hour at a fixed
+// 21° N, with the moon anchored on a new moon of 12 August 2026, so it was
+// right by coincidence at Midway and Guadalcanal and eight to eleven days
+// wrong at Pearl Harbor and Samar (R9 §2.11). Here astronomy(utcMs, lat, lon)
+// is a dated low-precision ephemeris: the sun from the NOAA solar calculator's
+// formulas (Meeus' low-precision sun, about 0.01°), the moon from Meeus,
+// Astronomical Algorithms ch. 47, cut to its main terms (a few hundredths of
+// a degree in longitude and latitude, plenty for a moonset), with the
+// moon's parallax taken off its altitude. Each Sky has its own latitude and
+// longitude (setPlace): the box's, from the battle clock's UTC instant. The
+// table keeps a fixed war-room light (WAR_ROOM, the Hawaiian far view's
+// afternoon), because a map that goes dark with the date is hard to read and
+// says nothing; the battle's real sky lives only in a box.
+//
+// The dome and the stars are drawn at gl_Position.xyww and include the
+// log-depth chunks in their far-plane form (shaders/logdepth.glsl.js), so they
+// stay behind everything under the logarithmic depth buffer.
 
 import * as THREE from 'three'
 import { BRIGHT_STARS, GALACTIC_POLE } from './stars.js'
 import { fullscreenTriangle } from './pipeline.js'
+import { logDepthParsVertex, logDepthVertexFar, logDepthParsFragment, logDepthFragment } from './shaders/logdepth.glsl.js'
 
 // (the ahupuaʻa generator's seeded random, for the faint star field)
 function mulberry32(seed) {
@@ -22,45 +42,167 @@ function mulberry32(seed) {
 }
 
 const DEG = Math.PI / 180
-export const LATITUDE = 21 * DEG
-export const SYNODIC = 29.530588
-const NEW_MOON_DOY = 224.1 // 12 Aug 2026 — the day of the total eclipse
+export const SYNODIC = 29.530588853
 
-// Hawaiian names of the nights of the lunar month, from Hilo (first sliver) to
-// Muku (gone). Names and order vary by island; this is the commonly given list.
-export const MOON_NIGHTS = [
-  'Hilo', 'Hoaka', 'Kūkahi', 'Kūlua', 'Kūkolu', 'Kūpau', 'ʻOlekūkahi', 'ʻOlekūlua', 'ʻOlekūkolu', 'ʻOlepau',
-  'Huna', 'Mōhalu', 'Hua', 'Akua', 'Hoku', 'Māhealani', 'Kulu', 'Lāʻaukūkahi', 'Lāʻaukūlua', 'Lāʻaupau',
-  'ʻOlekūkahi', 'ʻOlekūlua', 'ʻOlepau', 'Kāloakūkahi', 'Kāloakūlua', 'Kāloapau', 'Kāne', 'Lono', 'Mauli', 'Muku',
-]
+/**
+ * The table's fixed light: the Hawaiian far view's day 277 at a local solar
+ * hour of 15.6, at 21° N on the prime meridian (4 October, 15:25 UTC, the
+ * equation of time taken off): the sun in the west-south-west, a little
+ * over 30° up.
+ */
+export const WAR_ROOM = { utc: Date.UTC(1942, 9, 4, 15, 25), lat: 21, lon: 0 }
 
-function toWorld(dec, H, out) {
+const norm360 = (x) => ((x % 360) + 360) % 360
+
+/** A direction in world axes (x east, y up, z south) from declination and hour angle (radians) at latitude lat (radians). */
+function toWorld(dec, H, lat, out) {
   const cd = Math.cos(dec)
   const east = -cd * Math.sin(H)
-  const north = Math.sin(dec) * Math.cos(LATITUDE) - cd * Math.cos(H) * Math.sin(LATITUDE)
-  const up = Math.sin(dec) * Math.sin(LATITUDE) + cd * Math.cos(H) * Math.cos(LATITUDE)
+  const north = Math.sin(dec) * Math.cos(lat) - cd * Math.cos(H) * Math.sin(lat)
+  const up = Math.sin(dec) * Math.sin(lat) + cd * Math.cos(H) * Math.cos(lat)
   return out.set(east, up, -north)
 }
 
-/** Sun & moon for a fractional day of year and local solar hour. */
-export function astronomy(doy, hour, out = {}) {
-  const decl = 23.44 * DEG * Math.sin((2 * Math.PI * (284 + doy)) / 365)
-  const lambdaSun = (((doy - 80) / 365.25) * 360) * DEG
-  const raSun = ((((doy - 80) / 365.25) * 24) % 24 + 24) % 24
-  const lst = raSun + hour - 12 // hours
-  out.sun = toWorld(decl, ((hour - 12) * 15) * DEG, out.sun || new THREE.Vector3())
-  const t = doy + hour / 24
-  const age = (((t - NEW_MOON_DOY) % SYNODIC) + SYNODIC) % SYNODIC
-  const phase = age / SYNODIC
-  const lambdaMoon = lambdaSun + phase * 2 * Math.PI
-  const decMoon = Math.asin(Math.sin(23.44 * DEG) * Math.sin(lambdaMoon) + Math.sin(5.1 * DEG) * Math.sin(t * 0.23))
-  const raMoon = (lambdaMoon / (2 * Math.PI)) * 24
-  out.moon = toWorld(decMoon, ((lst - raMoon) * 15) * DEG, out.moon || new THREE.Vector3())
-  out.phase = phase
-  out.night = Math.min(29, Math.floor(age)) // index into MOON_NIGHTS (approximate)
-  out.illum = 0.5 - 0.5 * Math.cos(phase * 2 * Math.PI)
-  out.lst = lst
-  out.decl = decl
+// Meeus table 47.A (longitude and distance) and 47.B (latitude), cut to the
+// terms over about 0.004°: multiples of D, M, M′, F, then Σl (1e-6°) and Σr (m)
+const MOON_LR = [
+  [0, 0, 1, 0, 6288774, -20905355],
+  [2, 0, -1, 0, 1274027, -3699111],
+  [2, 0, 0, 0, 658314, -2955968],
+  [0, 0, 2, 0, 213618, -569925],
+  [0, 1, 0, 0, -185116, 48888],
+  [0, 0, 0, 2, -114332, -3149],
+  [2, 0, -2, 0, 58793, 246158],
+  [2, -1, -1, 0, 57066, -152138],
+  [2, 0, 1, 0, 53322, -170733],
+  [2, -1, 0, 0, 45758, -204586],
+  [0, 1, -1, 0, -40923, -129620],
+  [1, 0, 0, 0, -34720, 108743],
+  [0, 1, 1, 0, -30383, 104755],
+  [2, 0, 0, -2, 15327, 10321],
+  [0, 0, 1, 2, -12528, 0],
+  [0, 0, 1, -2, 10980, 79661],
+  [4, 0, -1, 0, 10675, -34782],
+  [0, 0, 3, 0, 10034, -23210],
+  [4, 0, -2, 0, 8548, -21636],
+  [2, 1, -1, 0, -7888, 24208],
+  [2, 1, 0, 0, -6766, 30824],
+  [1, 0, -1, 0, -5163, -8379],
+  [1, 1, 0, 0, 4987, -16675],
+  [2, -1, 1, 0, 4036, -12831],
+  [2, 0, 2, 0, 3994, -10445],
+  [4, 0, 0, 0, 3861, -11650],
+  [2, 0, -3, 0, 3665, 14403],
+  [0, 1, -2, 0, -2689, -7003],
+]
+const MOON_B = [
+  [0, 0, 0, 1, 5128122],
+  [0, 0, 1, 1, 280602],
+  [0, 0, 1, -1, 277693],
+  [2, 0, 0, -1, 173237],
+  [2, 0, -1, 1, 55413],
+  [2, 0, -1, -1, 46271],
+  [2, 0, 0, 1, 32573],
+  [0, 0, 2, 1, 17198],
+  [2, 0, 1, -1, 9266],
+  [0, 0, 2, -1, 8822],
+  [2, -1, 0, -1, 8216],
+  [2, 0, -2, -1, 4324],
+  [2, 0, 1, 1, 4200],
+  [2, 1, 0, -1, -3359],
+  [2, -1, -1, 1, 2463],
+  [2, -1, 0, 1, 2211],
+  [2, -1, -1, -1, 2065],
+]
+
+/** The sun's apparent ecliptic longitude, right ascension and declination (degrees), and the true obliquity, at Julian centuries T. */
+export function sunPosition(T) {
+  const L0 = norm360(280.46646 + T * (36000.76983 + 0.0003032 * T))
+  const M = 357.52911 + T * (35999.05029 - 0.0001537 * T)
+  const C = Math.sin(M * DEG) * (1.914602 - T * (0.004817 + 0.000014 * T)) + Math.sin(2 * M * DEG) * (0.019993 - 0.000101 * T) + Math.sin(3 * M * DEG) * 0.000289
+  const omega = 125.04 - 1934.136 * T
+  const lambda = L0 + C - 0.00569 - 0.00478 * Math.sin(omega * DEG)
+  const eps0 = 23 + (26 + (21.448 - T * (46.815 + T * (0.00059 - T * 0.001813))) / 60) / 60
+  const eps = eps0 + 0.00256 * Math.cos(omega * DEG)
+  const ra = Math.atan2(Math.cos(eps * DEG) * Math.sin(lambda * DEG), Math.cos(lambda * DEG)) / DEG
+  const dec = Math.asin(Math.sin(eps * DEG) * Math.sin(lambda * DEG)) / DEG
+  return { lambda: norm360(lambda), ra: norm360(ra), dec, eps }
+}
+
+/** The moon's geocentric ecliptic longitude and latitude (degrees), distance (km), right ascension and declination, at Julian centuries T. */
+export function moonPosition(T, eps) {
+  const Lp = 218.3164477 + 481267.88123421 * T - 0.0015786 * T * T
+  const D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T * T
+  const M = 357.5291092 + 35999.0502909 * T - 0.0001536 * T * T
+  const Mp = 134.9633964 + 477198.8675055 * T + 0.0087414 * T * T
+  const F = 93.272095 + 483202.0175233 * T - 0.0036539 * T * T
+  const E = 1 - 0.002516 * T - 0.0000074 * T * T
+  const A1 = 119.75 + 131.849 * T
+  const A2 = 53.09 + 479264.29 * T
+  const A3 = 313.45 + 481266.484 * T
+  let sl = 0
+  let sr = 0
+  let sb = 0
+  for (const [d, m, mp, f, l, r] of MOON_LR) {
+    const e = Math.abs(m) === 1 ? E : Math.abs(m) === 2 ? E * E : 1
+    const arg = (d * D + m * M + mp * Mp + f * F) * DEG
+    sl += l * e * Math.sin(arg)
+    sr += r * e * Math.cos(arg)
+  }
+  for (const [d, m, mp, f, b] of MOON_B) {
+    const e = Math.abs(m) === 1 ? E : Math.abs(m) === 2 ? E * E : 1
+    sb += b * e * Math.sin((d * D + m * M + mp * Mp + f * F) * DEG)
+  }
+  sl += 3958 * Math.sin(A1 * DEG) + 1962 * Math.sin((Lp - F) * DEG) + 318 * Math.sin(A2 * DEG)
+  sb += -2235 * Math.sin(Lp * DEG) + 382 * Math.sin(A3 * DEG) + 175 * Math.sin((A1 - F) * DEG) + 175 * Math.sin((A1 + F) * DEG) + 127 * Math.sin((Lp - Mp) * DEG) - 115 * Math.sin((Lp + Mp) * DEG)
+  const lambda = norm360(Lp + sl / 1e6)
+  const beta = sb / 1e6
+  const dist = 385000.56 + sr / 1000
+  const l = lambda * DEG
+  const b = beta * DEG
+  const e = eps * DEG
+  const ra = Math.atan2(Math.sin(l) * Math.cos(e) - Math.tan(b) * Math.sin(e), Math.cos(l)) / DEG
+  const dec = Math.asin(Math.sin(b) * Math.cos(e) + Math.cos(b) * Math.sin(e) * Math.sin(l)) / DEG
+  return { lambda, beta, dist, ra: norm360(ra), dec }
+}
+
+/** Greenwich mean sidereal time, degrees, at Julian day jd. */
+export function gmst(jd) {
+  const T = (jd - 2451545) / 36525
+  return norm360(280.46061837 + 360.98564736629 * (jd - 2451545) + 0.000387933 * T * T - (T * T * T) / 38710000)
+}
+
+/**
+ * The sun and the moon at an instant (ms UTC), seen from latitude and
+ * longitude (degrees, east positive): their directions in world axes (x east,
+ * y up, z south), the moon's phase (0 new, 0.5 full) and illuminated
+ * fraction, its age in days, and the local sidereal time (hours) the stars
+ * turn by.
+ */
+export function astronomy(utcMs, lat, lon, out = {}) {
+  const jd = utcMs / 86400000 + 2440587.5
+  const T = (jd - 2451545) / 36525
+  const sun = sunPosition(T)
+  const moon = moonPosition(T, sun.eps)
+  const lst = norm360(gmst(jd) + lon) // degrees
+  const phi = lat * DEG
+  out.sun = toWorld(sun.dec * DEG, (lst - sun.ra) * DEG, phi, out.sun || new THREE.Vector3())
+  out.moon = toWorld(moon.dec * DEG, (lst - moon.ra) * DEG, phi, out.moon || new THREE.Vector3())
+  // the moon's parallax (about a degree) off its altitude: what an observer on the ground sees
+  const par = Math.asin(6378.14 / moon.dist)
+  const alt = Math.asin(Math.max(-1, Math.min(1, out.moon.y)))
+  const alt2 = alt - par * Math.cos(alt)
+  const hz = Math.hypot(out.moon.x, out.moon.z) || 1e-9
+  const k = Math.cos(alt2) / hz
+  out.moon.set(out.moon.x * k, Math.sin(alt2), out.moon.z * k)
+  const elong = Math.acos(Math.cos(moon.beta * DEG) * Math.cos((moon.lambda - sun.lambda) * DEG))
+  out.phase = norm360(moon.lambda - sun.lambda) / 360
+  out.illum = (1 - Math.cos(elong)) / 2
+  out.age = out.phase * SYNODIC
+  out.lst = lst / 15
+  out.decl = sun.dec * DEG
+  out.sunRaDec = [sun.ra, sun.dec]
+  out.moonRaDec = [moon.ra, moon.dec]
   return out
 }
 
@@ -116,11 +258,13 @@ export function sunTransmittance(sun, p, out = [0, 0, 0]) {
 
 // --- the dome ------------------------------------------------------------------
 const skyVertex = /* glsl */ `
+${logDepthParsVertex}
 out vec3 vDir;
 void main() {
   vDir = position;
   vec4 p = projectionMatrix * mat4(mat3(viewMatrix)) * vec4(position, 1.0);
   gl_Position = p.xyww;
+  ${logDepthVertexFar}
 }
 `
 
@@ -209,8 +353,10 @@ vec3 skyRadiance(vec3 dir, float disc) {
 
 const skyFragment = /* glsl */ `
 ${skyCommon}
+${logDepthParsFragment}
 in vec3 vDir;
 void main() {
+  ${logDepthFragment}
   vec3 dir = normalize(vDir);
   vec3 col = skyRadiance(dir, 1.0);
   // --- moon ----------------------------------------------------------------
@@ -256,6 +402,7 @@ void main() {
 `
 
 const starVertex = /* glsl */ `
+${logDepthParsVertex}
 in vec3 aStar; // ra (rad), dec (rad), magnitude
 uniform float uLst;
 uniform float uLat;
@@ -274,14 +421,17 @@ void main() {
   vec4 p = projectionMatrix * mat4(mat3(viewMatrix)) * vec4(dir * 100.0, 1.0);
   gl_Position = p.xyww;
   gl_PointSize = clamp(uPixel * (1.6 + 2.2 * sqrt(vBright)), 1.0, 9.0);
+  ${logDepthVertexFar}
 }
 `
 const starFragment = /* glsl */ `
+${logDepthParsFragment}
 uniform float uNight;
 uniform float uTime;
 in float vBright;
 in float vTw;
 void main() {
+  ${logDepthFragment}
   vec2 q = gl_PointCoord * 2.0 - 1.0;
   float d = dot(q, q);
   if (d > 1.0) discard;
@@ -292,7 +442,10 @@ void main() {
 `
 
 export class Sky {
-  constructor() {
+  /** lat, lon: where the sky is seen from, degrees (the table's war room by default). */
+  constructor({ lat = WAR_ROOM.lat, lon = WAR_ROOM.lon } = {}) {
+    this.lat = lat
+    this.lon = lon
     this.params = { turbidity: 3.2, rayleigh: 1.3, mieCoefficient: 0.005, mieDirectionalG: 0.82 }
     const gp = GALACTIC_POLE
     const eq = (raH, decD) => {
@@ -311,7 +464,7 @@ export class Sky {
       uMieG: { value: this.params.mieDirectionalG },
       uNight: { value: 0 },
       uLst: { value: 0 },
-      uLat: { value: LATITUDE },
+      uLat: { value: lat * DEG },
       uGalPole: { value: eq(gp.ra, gp.dec) },
       uGalCentre: { value: eq(17.761, -28.94) },
       uExposureHint: { value: 1 },
@@ -393,12 +546,21 @@ export class Sky {
     renderer.setRenderTarget(prev)
   }
 
+  /** Where the sky is seen from (a box's centre), degrees. */
+  setPlace(lat, lon) {
+    this.lat = lat
+    this.lon = lon
+    this.uniforms.uLat.value = lat * DEG
+  }
+
   /**
-   * Advance to a moment, update the dome, and fill `light` with the colours
-   * every lit surface uses.
+   * Advance to an instant (ms UTC) at this sky's place, update the dome, and
+   * fill `light` with the colours every lit surface uses. `time` is the
+   * app's running seconds (the stars' twinkle). The table passes WAR_ROOM.utc
+   * with the war room's place set.
    */
-  update(doy, hour, time, light) {
-    const a = astronomy(doy, hour, this.astro)
+  update(utcMs, time, light) {
+    const a = astronomy(utcMs, this.lat, this.lon, this.astro)
     const sun = a.sun
     const u = this.uniforms
     u.uSun.value.copy(sun)

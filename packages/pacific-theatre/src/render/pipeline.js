@@ -2,6 +2,17 @@
 // keeps its depth; the atmosphere pass (clouds, rain, rainbows) reads that depth
 // at reduced resolution; the composite lays both together, adds aerial
 // perspective, tone-maps, and writes sRGB to the screen.
+//
+// Copied from holo-i-ke-au's render/pipeline.js (b480c27) with two changes.
+// The depth target holds logarithmic depth (one WebGLRenderer with
+// logarithmicDepthBuffer for both scenes, ENGINEERING §2), so the composite
+// rebuilds each pixel's distance as exp2(depth · log2(far + 1)) − 1 along the
+// pixel's ray instead of through the inverse projection, which would give
+// nonsense and put the height fog everywhere. And uFade blends the frame to
+// the scene's haze colour for the hand-over's cut between the table and a box
+// (a quarter of a second out, the scene switched, a quarter back in: one scene
+// drawn per frame, never two). The fog's density and falloff are set by the
+// active scene (setFog).
 
 import * as THREE from 'three'
 
@@ -37,6 +48,8 @@ uniform float uExposure;
 uniform float uSaturation;
 uniform float uNight;
 uniform sampler2D uSkyMap;
+uniform float uLogFar;   // log2(camera.far + 1), set each frame by render()
+uniform float uFade;     // 0 the frame, 1 the haze colour (the hand-over's cut)
 in vec2 vUv;
 
 vec3 skyMap(vec3 d) {
@@ -56,10 +69,13 @@ vec3 toSRGB(vec3 c) {
 void main() {
   vec3 col = texture(uScene, vUv).rgb;
   float depth = texture(uDepth, vUv).r;
-  vec4 ndc = vec4(vUv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
-  vec4 view = uInvProj * ndc;
-  view /= view.w;
-  vec3 world = (uCamWorld * vec4(view.xyz, 1.0)).xyz;
+  // distance from a logarithmic depth buffer: a view-space point on this
+  // pixel's ray, scaled to the depth along -z the buffer holds
+  vec4 farPt = uInvProj * vec4(vUv * 2.0 - 1.0, 1.0, 1.0);
+  vec3 dirV = farPt.xyz / farPt.w;
+  float w = exp2(depth * uLogFar) - 1.0;
+  vec3 view = dirV * (w / max(-dirV.z, 1e-6));
+  vec3 world = (uCamWorld * vec4(view, 1.0)).xyz;
   vec3 ray = world - uCamPos;
   float dist = length(ray);
   vec3 rd = ray / max(dist, 1e-4);
@@ -91,6 +107,8 @@ void main() {
   col = aces(col);
   float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
   col = mix(vec3(l), col, uSaturation);
+  // the hand-over's cut: to the scene's haze, as the eye would see it
+  col = mix(col, aces(uFogColor * uExposure), uFade);
   gl_FragColor = vec4(toSRGB(col), 1.0);
 }
 `
@@ -132,6 +150,8 @@ export class Pipeline {
           uSaturation: { value: 1.0 },
           uNight: { value: 0 },
           uSkyMap: { value: null },
+          uLogFar: { value: Math.log2(1e5) },
+          uFade: { value: 0 },
         },
       }),
     )
@@ -144,6 +164,12 @@ export class Pipeline {
 
   get uniforms() {
     return this.quad.material.uniforms
+  }
+
+  /** The aerial perspective of the active scene: density and falloff in its own world units. */
+  setFog(density, falloff) {
+    this.uniforms.uFogDensity.value = density
+    this.uniforms.uFogFalloff.value = falloff
   }
 
   setSize(w, h, dpr) {
@@ -160,6 +186,7 @@ export class Pipeline {
     u.uInvProj.value.copy(camera.projectionMatrixInverse)
     u.uCamWorld.value.copy(camera.matrixWorld)
     u.uCamPos.value.copy(camera.position)
+    u.uLogFar.value = Math.log2(camera.far + 1)
     if (this.atmosphere) {
       this.atmosphere.render(r, camera, this.sceneRT.depthTexture)
       u.uClouds.value = this.atmosphere.texture
