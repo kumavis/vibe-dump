@@ -140,10 +140,16 @@ export function readRecord(battle, ctx) {
   for (const g of groups) {
     const a = g.attack
     if (!a) continue
-    a.targetUnit = a.target != null ? shipById.get(a.target)?.index ?? -1 : -1
-    a.targetGroup = a.target != null ? groupById.get(a.target)?.index ?? -1 : -1
-    a.targetSite = a.target != null ? siteById.get(a.target) || null : null
-    if (a.target && a.targetUnit < 0 && a.targetGroup < 0 && !a.targetSite) warn?.(`battle: group ${g.id}'s attack target ${a.target} is not a unit, group or site`)
+    // a target, or a list of them (Pearl Harbor's waves split over the battleships, the ramps and the hangars):
+    // the group's aircraft are shared out over the list in order, a section to each (buildGroup)
+    const ids = Array.isArray(a.target) ? a.target : a.target != null ? [a.target] : []
+    a.targets = ids.map((id) => ({ id, unit: shipById.get(id)?.index ?? -1, group: groupById.get(id)?.index ?? -1, site: siteById.get(id) || null }))
+    for (const x of a.targets) if (x.unit < 0 && x.group < 0 && !x.site) warn?.(`battle: group ${g.id}'s attack target ${x.id} is not a unit, group or site`)
+    a.targets = a.targets.filter((x) => x.unit >= 0 || x.group >= 0 || x.site)
+    const first = a.targets[0] || null
+    a.targetUnit = first?.unit ?? -1
+    a.targetGroup = first?.group ?? -1
+    a.targetSite = first?.site ?? null
   }
 
   const ctx2 = { ...ctx, ships, groups, motion, sites, shipById, groupById }
@@ -288,12 +294,17 @@ function buildGroup(g, ctx) {
   if (a?.reached != null) Srec = clampN(R.fork('reached').range(a.reached), 0, g.count)
   else if (profile === 'torpedo' || capOn) Srec = g.count - Math.min(g.count, lossTotal)
   else Srec = g.count
-  const preLoss = g.count - Srec
-  let postLoss = Math.max(0, lossTotal - preLoss)
-  if (lossTotal < preLoss && a?.reached != null) warn?.(`battle: group ${g.id}: reached ${Srec} of ${g.count} but losses only ${lossTotal}`)
+  // those that did not reach the release: lost on the way in, as far as the record's losses go; the rest
+  // turned back or reached it with nothing to drop (VB-3's four bombs jettisoned by the arming switch, the
+  // morning strike's aborts): they fly the plan without a release and are not counted lost
+  const notReached = g.count - Srec
+  const preLoss = Math.min(notReached, lossTotal)
+  const turnedBack = notReached - preLoss
+  const postLoss = Math.max(0, lossTotal - preLoss)
   g.Srec = Srec
   g.preLoss = preLoss
-  g.lossTotal = Math.max(lossTotal, preLoss)
+  g.turnedBack = turnedBack
+  g.lossTotal = lossTotal
 
   // --- the start: a carrier's deck, an airfield, or the box's edge -------------
   const fromShip = g.from >= 0 ? g.from : -1
@@ -352,14 +363,18 @@ function buildGroup(g, ctx) {
   }
 
   // --- the attack -------------------------------------------------------------
+  // (the target of the aircraft being planned: a list's targets take the group's sections in order)
+  const targetList = a?.targets?.length ? a.targets : [{ unit: a?.targetUnit ?? -1, site: a?.targetSite ?? null }]
+  let cur = targetList[0]
+  const targetOf = (k) => targetList[Math.min(targetList.length - 1, Math.floor((k * targetList.length) / g.count))]
+  const lengthOf = (c) => (c.unit >= 0 ? ctx.shipModel(ships[c.unit].kitId)?.L : null) ?? 60
   const targetPose = (t) => {
-    if (a?.targetUnit >= 0) return shipPose(a.targetUnit, t)
-    if (a?.targetSite) return { x: a.targetSite.x, z: a.targetSite.z, heading: 0, speed: 0, vx: 0, vz: 0 }
+    if (cur.unit >= 0) return shipPose(cur.unit, t)
+    if (cur.site) return { x: cur.site.x, z: cur.site.z, heading: 0, speed: 0, vx: 0, vz: 0 }
     return null
   }
   const ta = a?.t ?? null
-  const targetModel = a?.targetUnit >= 0 ? ctx.shipModel(ships[a.targetUnit].kitId) : null
-  const tgtL = targetModel?.L ?? 60
+  let tgtL = lengthOf(cur)
   // the approach bearing: the record's fromDeg, or from the last route point
   const lastRoute = route[route.length - 1] || null
   const approachFrom = (t) => {
@@ -385,6 +400,9 @@ function buildGroup(g, ctx) {
     pushKeys(routeKeys(k))
     const ac = { k, plan: { legs: [] }, spawnT: starts[k].spawnT, endT: Infinity, endHow: 'exit', lossT: null, lossHow: null, lossCause: null, releaseT: null, actions: [], hit: false }
     const order = k // attack order: the survivors first (losses are drawn from the rear)
+    cur = targetOf(k)
+    tgtL = lengthOf(cur)
+    ac.target = cur.unit
     const tgt0 = ta != null ? targetPose(ta) : null
     let tEnd = keys[keys.length - 1].t
 
@@ -426,7 +444,7 @@ function buildGroup(g, ctx) {
           { t: tr + 200, x: rel.x - ux * 15000, y: 900, z: rel.z - uz * 15000 },
         ])
         ac.releaseT = tr
-        ac.actions.push({ t: tr, kind: 'release', g: g.index, k, hit, aim, target: a.targetUnit, weapon: model.payload[0]?.weapon?.id ?? null })
+        ac.actions.push({ t: tr, kind: 'release', g: g.index, k, hit, aim, target: cur.unit, weapon: model.payload[0]?.weapon?.id ?? null })
         tEnd = tr + 200
       } else if (profile === 'torpedo' && tgt0) {
         const tor = model.torpedo
@@ -463,7 +481,7 @@ function buildGroup(g, ctx) {
         ])
         ac.releaseT = td
         const heading = (phi + 180) % 360
-        ac.actions.push({ t: td, kind: 'drop', g: g.index, k, hit, aim, heading, target: a.targetUnit, weapon: tor?.id ?? null })
+        ac.actions.push({ t: td, kind: 'drop', g: g.index, k, hit, aim, heading, target: cur.unit, weapon: tor?.id ?? null })
         tEnd = td + 200
       } else if ((profile === 'level' || profile === 'strafe' || profile === 'search') && tgt0) {
         const low = profile === 'strafe'
@@ -490,9 +508,9 @@ function buildGroup(g, ctx) {
           const hit = hitIndex(order, Srec, hitsToDraw)
           ac.hit = hit
           const aim = { x: cx + (hit ? 0 : R.gauss() * 120), z: cz + (hit ? 0 : R.gauss() * 120) }
-          ac.actions.push({ t: tr, kind: 'release', g: g.index, k, hit, aim, target: a.targetUnit, weapon: model.payload[0]?.weapon?.id ?? null, level: true })
+          ac.actions.push({ t: tr, kind: 'release', g: g.index, k, hit, aim, target: cur.unit, weapon: model.payload[0]?.weapon?.id ?? null, level: true })
         } else if (profile === 'strafe') {
-          ac.actions.push({ t: tr - 3, kind: 'strafe', g: g.index, k, dur: 3, target: a.targetUnit, site: a.targetSite?.id ?? null })
+          ac.actions.push({ t: tr - 3, kind: 'strafe', g: g.index, k, dur: 3, target: cur.unit, site: cur.site?.id ?? null })
         }
         tEnd = tr + 12000 / v
       } else if (profile === 'cap') {
@@ -508,7 +526,7 @@ function buildGroup(g, ctx) {
   }
 
   // --- losses: the record's ranges, drawn by the seed, placed in time ----------
-  scheduleLosses(g, aircraft, ctx, { R, preLoss, postLoss, capOn, profile, ta })
+  scheduleLosses(g, aircraft, ctx, { R, preLoss, postLoss, turnedBack, capOn, profile, ta })
   // the plans' falls
   for (const ac of aircraft) {
     if (ac.lossT == null) continue
@@ -666,7 +684,7 @@ function homePlan(ac, g, k, ctx, { vC, tEnd, fromShip, fromModel, shipPose }) {
 }
 
 /** The record's losses, drawn and placed: before the attack (those that never reached it, from the rear), after it (the rest). */
-function scheduleLosses(g, aircraft, ctx, { R, preLoss, postLoss, capOn, profile, ta }) {
+function scheduleLosses(g, aircraft, ctx, { R, preLoss, postLoss, turnedBack = 0, capOn, profile, ta }) {
   const n = aircraft.length
   const at = (ac) => ac.releaseT ?? ta ?? ac.spawnT + 1800
   // before the attack: the rear aircraft, shot down by the CAP sent at the group or by the AA on the run in
@@ -691,8 +709,16 @@ function scheduleLosses(g, aircraft, ctx, { R, preLoss, postLoss, capOn, profile
       ac.lossCause = capOn ? capOn.index : 'aa'
     }
   }
+  // the ones that reached no release and were not lost: no release, no hit
+  for (let j = 0; j < turnedBack; j++) {
+    const ac = aircraft[n - 1 - preLoss - j]
+    if (!ac) break
+    ac.noReach = true
+    ac.hit = false
+    ac.actions = ac.actions.filter((x) => x.kind !== 'release' && x.kind !== 'drop')
+  }
   // after: among those that reached the attack; half to the AA on the way out, half to the sea on the way home
-  const reached = aircraft.slice(0, n - preLoss)
+  const reached = aircraft.slice(0, Math.max(0, n - preLoss - turnedBack))
   const pool = reached.filter((ac) => ac.endT > at(ac) + 60)
   const pick = []
   for (let j = 0; j < postLoss && pool.length; j++) pick.push(pool.splice(Math.floor(R.next() * pool.length), 1)[0])

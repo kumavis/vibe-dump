@@ -457,6 +457,9 @@ export function createSim(battle, kits, opts = {}) {
     const x = X[i]
     if (x.touched || !x.rec) return
     x.touched = true
+    // (when and why, for the replay test's report: tools/replay.mjs)
+    x.touchedAt = sim.t
+    x.touchedWhy = why
     if (units[i].kind !== 'ship') return
     const st = x.dmg
     st.regime = 'sim'
@@ -541,6 +544,7 @@ export function createSim(battle, kits, opts = {}) {
       const i = ac.slot
       if (i == null) continue
       if (sim.player && sim.player.unitIndex === i) continue
+      if (ac.noReach) continue
       const x = X[i]
       const rel = ac.releaseT ?? Infinity
       if (x.lostAt != null) {
@@ -551,6 +555,26 @@ export function createSim(battle, kits, opts = {}) {
     return n
   }
   sim._survivors = survivors
+
+  /** A group's aircraft still flying at t: in the record (its losses as drawn), or in the sim (the sim's own losses too). */
+  function flyingAt(g, t, inRecord) {
+    if (!inRecord && sim._cancelled.has(g.index)) return 0
+    let n = 0
+    for (const ac of g.aircraft) {
+      if (t < ac.spawnT) continue
+      const recLost = ac.lossT != null && ac.lossT <= t
+      if (inRecord) {
+        if (!recLost) n++
+        continue
+      }
+      const i = ac.slot
+      const x = i == null ? null : X[i]
+      if (x && x.lostAt != null && x.lostAt <= t) continue
+      if (recLost && (!x || (units[i].authority === 'record' && !x.spared))) continue
+      n++
+    }
+    return n
+  }
 
   function groupRuleCount(g, ev, playerInGroup) {
     const S = survivors(g)
@@ -581,6 +605,7 @@ export function createSim(battle, kits, opts = {}) {
           const fd = X[fi].dmg
           if (state.alive[fi] !== 1 || (fd.regime === 'sim' && (fd.out || fd.sinking || fd.doomed || fd.fires.reduce((s, v) => s + v, 0) >= 2))) {
             sim._cancelled.add(g.index)
+            g.cancelledAt = sim.t
             beat(fi, 'launches', `${units[fi].name}: ${g.name} not launched`)
             return
           }
@@ -618,12 +643,15 @@ export function createSim(battle, kits, opts = {}) {
         // a loss caused by a CAP the player has thinned happens in proportion to that CAP's survivors
         const cause = x.ac.lossCause
         if (typeof cause === 'number') {
+          // the CAP's aircraft flying now against the record's now (untouched they are the same, so the record's loss stands)
           const cg = record.groups[cause]
-          const S = survivors(cg)
-          const p = cg.Srec > 0 ? Math.min(1, S / cg.Srec) : 1
+          const recNow = flyingAt(cg, sim.t, true)
+          const S = flyingAt(cg, sim.t, false)
+          const p = recNow > 0 ? Math.min(1, S / recNow) : 1
           if (p < 1 && !R.rule.chance(p)) {
             // spared: it flies its plan on, home or out of the box
             x.spared = true
+            x.sparedAt = sim.t
             x.ac = { ...x.ac, lossT: null, goneT: null }
             if (Number.isFinite(x.ac.endT)) insertAction({ t: x.ac.endT, kind: 'exit', slot: i, n: queue.length })
             return
@@ -700,8 +728,10 @@ export function createSim(battle, kits, opts = {}) {
       if (!u.target || x.model?.fatal == null) return
       let count = ev.rc
       let changed = false
+      let why = 'group rule'
       if (!fixed && byGroup) {
         const r = groupRuleCount(byGroup, ev, playerInGroup)
+        why = `group rule: ${byGroup.id} ${r.S ?? '?'} flying of ${r.Srec ?? '?'} reached, ${r.count} of ${ev.rc} hits`
         count = r.count
         changed = r.changed && count !== ev.rc
         if (r.changed && playerInGroup) changed = true
@@ -727,7 +757,7 @@ export function createSim(battle, kits, opts = {}) {
         return
       }
       // the sim's path: the per-hit table applied to the count the group rule gives
-      touch(i, 'group rule')
+      touch(i, why)
       if (count <= 0) return
       const cls = causeClass(ev)
       const rr = R.dmg

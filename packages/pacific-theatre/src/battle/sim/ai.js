@@ -239,8 +239,9 @@ function recruit(sim) {
   } else {
     // strikes sent at the player's ship: real from 150 s before their attack
     for (const g of sim.record.groups) {
-      if (g.attack?.targetUnit < 0 || sim.record.ships[g.attack.targetUnit]?.slot !== pi) continue
+      if (!g.attack?.targets?.some((x) => x.unit >= 0 && sim.record.ships[x.unit]?.slot === pi)) continue
       for (const ac of g.aircraft) {
+        if (sim.record.ships[ac.target ?? g.attack.targetUnit]?.slot !== pi) continue
         const i = ac.slot
         if (i == null || sim.units[i].authority !== 'record' || s.alive[i] !== 1) continue
         if (ac.releaseT == null || sim.t < ac.releaseT - 150 || sim.t > ac.releaseT + 30) continue
