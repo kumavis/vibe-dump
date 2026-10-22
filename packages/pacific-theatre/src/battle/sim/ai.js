@@ -236,8 +236,8 @@ function recruit(sim) {
         }
       }
     }
-  } else {
-    // strikes sent at the player's ship: real from 150 s before their attack
+  } else if (targetable(sim, pi)) {
+    // strikes sent at the player's ship: real from 150 s before their attack (none at a ship past her fatal)
     for (const g of sim.record.groups) {
       if (!g.attack?.targets?.some((x) => x.unit >= 0 && sim.record.ships[x.unit]?.slot === pi)) continue
       for (const ac of g.aircraft) {
@@ -280,7 +280,7 @@ function savedCarriers(sim) {
       let best = Infinity
       for (const q of sim.record.ships) {
         const j = q.slot
-        if (q.side === r.side || s.alive[j] !== 1 || !sim._X[j].model?.carrier) continue
+        if (q.side === r.side || !targetable(sim, j) || !sim._X[j].model?.carrier) continue
         const dd = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
         if (dd < best) {
           best = dd
@@ -377,7 +377,7 @@ function shipThink(sim, i, x, dt) {
   const pl = sim.player
   if (!pl || pl.kind !== 'ship' || !ai.engaged || x.dmg?.out || x.dmg?.sinking) return
   const ti = pl.unitIndex
-  if (s.alive[ti] !== 1 || sim.units[ti].side === sim.units[i].side) return
+  if (!targetable(sim, ti) || sim.units[ti].side === sim.units[i].side) return
   const tx = s.pos[3 * ti]
   const tz = s.pos[3 * ti + 2]
   const obs = { x: s.pos[3 * i], y: x.model.top * 0.8, z: s.pos[3 * i + 2], sensors: x.model.sensors }
@@ -1072,6 +1072,39 @@ export function bulletStrike(sim, p, i) {
   if (byPlayer && x.ai && x.ai.mode !== 'fight') x.ai.mode = 'rejoin'
 }
 
+/**
+ * Whether a unit may be a target now (ENGINEERING §5 "Fixed fates and
+ * targets"; R8 §5.1, 3–5): a target at all (never a hospital ship), afloat,
+ * and, a ship, not past its kit's fatal. In the record's regime that is its
+ * record damage; in the sim's, not foundering, out of action, sinking or
+ * doomed. A ship the record dooms when it is first touched keeps its record
+ * fate, so it leaves the target list when the record's hits take it past.
+ */
+export function targetable(sim, j) {
+  if (j == null || j < 0) return false
+  const u = sim.units[j]
+  if (!u?.target || sim.state.alive[j] !== 1) return false
+  if (u.kind !== 'ship') return true
+  const x = sim._X[j]
+  const fatal = x.model?.fatal ?? 1
+  const d = x.dmg
+  if (d?.regime === 'sim') {
+    if (d.sinking || d.float >= 1 || d.fight >= 1) return false
+    return !d.doomed || (d.doomedWhy === 'record' && recordDamageAt(x.rec, sim.t) < fatal)
+  }
+  return (x.rd?.damage ?? 0) < fatal
+}
+
+/** The record's damage on a ship by t: the shares of its fatal its hits do (as the record's own path sums them). */
+function recordDamageAt(r, t) {
+  let sum = 0
+  for (const ev of r?.events || []) {
+    if (ev.t > t) break
+    if (ev.kind === 'hit' || ev.kind === 'torpedo-hit') sum += ev.damage ?? 0.08 * Math.max(1, ev.rc)
+  }
+  return sum
+}
+
 export function loseAircraft(sim, i, how, by = null) {
   const x = sim._X[i]
   const s = sim.state
@@ -1098,7 +1131,7 @@ export function bombStrike(sim, p, i, local, w) {
   const u = sim.units[i]
   const pr = sim.projectiles
   const byPlayer = !!(pr.flags[p] & FLAG.player)
-  if (!u.target || sim.state.alive[i] !== 1) return
+  if (!targetable(sim, i)) return
   if (byPlayer && x.rec?.fixed) return
   sim._touch(i, byPlayer ? 'player' : 'ai')
   const m = x.model
@@ -1118,7 +1151,7 @@ export function bombFell(sim, p, x0, z0, w) {
   for (const i of sim._shipsNear(x0, z0, 40)) {
     const m = sim._X[i].model
     const d = boxDistance(x0, z0, s.pos[3 * i], s.pos[3 * i + 2], s.heading[i], m.B / 2, m.L / 2)
-    if (d.d < 15 && sim.units[i].target) {
+    if (d.d < 15 && targetable(sim, i)) {
       const x = sim._X[i]
       sim._touch(i, 'near miss')
       if (m.type === 'dd' || m.type === 'de') applyHit(x.dmg, m, { cls: 'small', part: 'waterline', zone: 1, t: sim.t }, sim.rngs.dmg)
@@ -1136,7 +1169,7 @@ export function torpedoStrike(sim, p, i, local) {
   const u = sim.units[i]
   const pr = sim.projectiles
   const byPlayer = !!(pr.flags[p] & FLAG.player)
-  if (!u.target || sim.state.alive[i] !== 1) return
+  if (!targetable(sim, i)) return
   if (byPlayer && x.rec?.fixed) return
   sim._touch(i, byPlayer ? 'player' : 'ai')
   const w = sim.weaponList[pr.weapon[p]]
@@ -1639,7 +1672,7 @@ function ccip(sim, i, x) {
   let onTarget = false
   let target = -1
   for (const j of sim._shipsNear(px, pz, 300)) {
-    if (sim.units[j].side === sim.units[i].side) continue
+    if (sim.units[j].side === sim.units[i].side || !targetable(sim, j)) continue
     const m = sim._X[j].model
     // the target moves on through the fall
     const d = boxDistance(px, pz, s.pos[3 * j] + s.vel[3 * j] * t, s.pos[3 * j + 2] + s.vel[3 * j + 2] * t, s.heading[j], m.B / 2, m.L / 2)
@@ -1657,7 +1690,7 @@ function shipTarget(sim, i, x, aimAz) {
   let best = null
   for (const r of sim.record.ships) {
     const j = r.slot
-    if (s.alive[j] !== 1 || sim.units[j].side === sim.units[i].side || sim.units[j].kind !== 'ship') continue
+    if (!targetable(sim, j) || sim.units[j].side === sim.units[i].side || sim.units[j].kind !== 'ship') continue
     const dx = s.pos[3 * j] - s.pos[3 * i]
     const dz = s.pos[3 * j + 2] - s.pos[3 * i + 2]
     const brg = headingOf(dx, dz)

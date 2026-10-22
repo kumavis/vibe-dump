@@ -1264,7 +1264,7 @@ export function createSim(battle, kits, opts = {}) {
     const wi = pr.weapon[p]
     const w = sim.weaponList[wi]
     fx(FX.hit, hx, Math.max(2, hy), hz, { unit: i, size: pr.calibreMm[p] / 100 })
-    if (!u.target || state.alive[i] !== 1) return
+    if (!AI.targetable(sim, i)) return
     const owner = pr.owner[p]
     const byPlayer = !!(pr.flags[p] & FLAG.player)
     if (byPlayer && x.rec?.fixed) return
