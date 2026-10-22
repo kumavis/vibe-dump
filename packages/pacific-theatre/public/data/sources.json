@@ -2386,7 +2386,7 @@
   },
   {
     "id": "natural-earth",
-    "title": "Natural Earth 1:10m and 1:50m physical vectors (land, minor islands)",
+    "title": "Natural Earth 1:10m and 1:50m vectors (land, minor islands; admin-0 countries)",
     "author": "Natural Earth (N. V. Kelso, T. Patterson et al.)",
     "year": 2024,
     "url": "https://www.naturalearthdata.com/",
@@ -2397,6 +2397,6 @@
     "licence": "pdm",
     "ref": "v5.1.1",
     "tertiary": false,
-    "note": "Public domain. Used for coastlines only: the front's land polygons are clipped to it, and some sea labels are positioned from its marine polygons; none of its name strings is used."
+    "note": "Public domain. The front's areas are clipped to its 1:50m land, and its admin-0 countries place them in their territories, today's borders standing in for 1941's (a schematic step, named in the fronts' notes); the routes were laid round its 1:10m land and minor islands. None of its name strings is used."
   }
 ]
