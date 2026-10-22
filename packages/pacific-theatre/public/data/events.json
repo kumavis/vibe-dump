@@ -747,7 +747,7 @@
       "to": "1941-12-25",
       "precision": "day",
       "zone": "+08:30",
-      "zoneNote": "Hong Kong's 1941 offset as the tz database gives it (*verify*)."
+      "zoneNote": "Hong Kong's 1941 offset as the tz database gives it."
     },
     "chapter": "first-six-months",
     "where": [
@@ -865,7 +865,7 @@
       "to": "1941-12-23",
       "precision": "day",
       "zone": "+12:00",
-      "zoneNote": "Wake lies west of the date line and keeps the western Pacific's date; the garrison's own clock is not in the record read (*verify*)."
+      "zoneNote": "Wake lies west of the date line and keeps the western Pacific's date; the garrison's own clock is not in the record read."
     },
     "chapter": "first-six-months",
     "where": [
@@ -1422,7 +1422,7 @@
       "to": "1942-04-09",
       "precision": "day",
       "zone": "+06:00",
-      "zoneNote": "Ceylon's wartime offset as the tz database gives it for April 1942 (*verify*)."
+      "zoneNote": "Ceylon's wartime offset as the tz database gives it for April 1942."
     },
     "chapter": "first-six-months",
     "where": [
@@ -1581,7 +1581,7 @@
       },
       {
         "source": "morton-1953-march",
-        "says": "Morton describes the march and defers to Falk (1962) on the numbers (*verify*).",
+        "says": "Morton describes the march and defers to Falk (1962) on the numbers.",
         "scope": "the US Army history"
       }
     ],
@@ -2086,7 +2086,7 @@
       },
       {
         "source": "parshall-tully-2005",
-        "says": "3,057 Japanese dead (pp. 114, 365, 377–380, 476; known here through Wikipedia, *verify*).",
+        "says": "3,057 Japanese dead (pp. 114, 365, 377–380, 476; known here at second hand, through Wikipedia).",
         "scope": "Japanese dead"
       },
       {
@@ -3059,7 +3059,7 @@
       },
       {
         "source": "morison-v",
-        "says": "South Dakota: \"38 men killed or missing and 60 wounded\"; ONI: thirty killed and 60 wounded; Frank (via Wikipedia, *verify*): 39 killed, 59 wounded.",
+        "says": "South Dakota: \"38 men killed or missing and 60 wounded\"; ONI: thirty killed and 60 wounded; Frank (at second hand, through Wikipedia): 39 killed, 59 wounded.",
         "scope": "South Dakota's crew"
       },
       {
@@ -4585,7 +4585,7 @@
     "tellings": [
       {
         "source": "wp-hell-ships",
-        "says": "\"More than 20,000 Allied POWs died at sea when the transport ships carrying them were attacked by Allied submarines and aircraft\" (*verify*); others died of suffocation, thirst and disease in the holds.",
+        "says": "\"More than 20,000 Allied POWs died at sea when the transport ships carrying them were attacked by Allied submarines and aircraft\"; others died of suffocation, thirst and disease in the holds.",
         "scope": "the whole war"
       }
     ],
@@ -4997,12 +4997,12 @@
       },
       {
         "source": "wp-samar",
-        "says": "1,161 Americans killed and missing and 913 wounded (NHHC H-Gram 036, at second hand; *verify*).",
+        "says": "1,161 Americans killed and missing and 913 wounded (NHHC H-Gram 036, at second hand).",
         "scope": "US losses at Samar"
       },
       {
         "source": "wp-samar",
-        "says": "\"2,700+ killed and wounded\" (the CTG 77.4 report, a US estimate, at second hand; *verify*).",
+        "says": "\"2,700+ killed and wounded\" (the CTG 77.4 report, a US estimate, at second hand).",
         "scope": "Japanese losses at Samar"
       },
       {
@@ -5184,7 +5184,7 @@
     "tellings": [
       {
         "source": "wp-manila-massacre",
-        "says": "\"at least 100,000 civilians were killed in total during the battle from all causes, including the massacre by Japanese troops\" (*verify* Connaughton et al.).",
+        "says": "\"at least 100,000 civilians were killed in total during the battle from all causes, including the massacre by Japanese troops\" (at second hand, citing Connaughton et al.).",
         "scope": "Manila's civilians, February–March 1945"
       }
     ],
@@ -5308,7 +5308,7 @@
     "tellings": [
       {
         "source": "wp-tokyo-raid-1945",
-        "says": "\"more than 90,000 and possibly over 100,000\" killed, mostly civilians, and a million left homeless (citing Frank 1999; *verify* the Japanese official figures).",
+        "says": "\"more than 90,000 and possibly over 100,000\" killed, mostly civilians, and a million left homeless (citing Frank 1999).",
         "scope": "the night of 9–10 March 1945"
       }
     ],
@@ -6473,7 +6473,7 @@
     "tellings": [
       {
         "source": "wp-comfort-women",
-        "says": "20,000 to 200,000 women, by \"most historians\"; Chinese scholars give up to 360,000–410,000 (*verify*).",
+        "says": "20,000 to 200,000 women, by \"most historians\"; Chinese scholars give up to 360,000–410,000.",
         "scope": "the women held, 1932–1945"
       },
       {

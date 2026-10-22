@@ -335,7 +335,7 @@
         "t": "1941-12-04",
         "zone": "+08:00",
         "precision": "day",
-        "note": "Sails from Samah, Hainan (R3, *verify* the date)."
+        "note": "Sails from Samah, Hainan."
       },
       {
         "at": 6,
@@ -364,7 +364,8 @@
       "place": "soft",
       "course": "soft"
     },
-    "tellings": []
+    "tellings": [],
+    "notes": "R3: the sailing date from Samah is *verify*."
   },
   {
     "id": "malaya-convoy-kota-bharu-1941",
@@ -778,6 +779,10 @@
         2.3
       ],
       [
+        103.3,
+        1.2
+      ],
+      [
         103.85,
         1.18
       ],
@@ -838,14 +843,14 @@
       18,
       19,
       20,
-      25,
       26,
       27,
       28,
       29,
       30,
       31,
-      32
+      32,
+      33
     ],
     "waypoints": [
       {
@@ -870,14 +875,14 @@
         "note": "The strike on Trincomalee; Hermes sunk off Batticaloa."
       },
       {
-        "at": 24,
+        "at": 25,
         "t": "1942-04-13",
         "zone": "+09:00",
         "precision": "day",
         "note": "Passes Singapore; the 5th Carrier Division detaches for the South Pacific."
       },
       {
-        "at": 33,
+        "at": 34,
         "t": "1942-04-22",
         "zone": "+09:00",
         "precision": "day",
@@ -1300,8 +1305,8 @@
         -11
       ],
       [
-        160,
-        -13.5
+        159.8,
+        -13
       ],
       [
         156.5,
@@ -1316,7 +1321,7 @@
         "t": "1942-05-08",
         "zone": "+10:00",
         "precision": "day",
-        "note": "The strike area on 8 May (*verify*)."
+        "note": "The strike area on 8 May."
       }
     ],
     "summary": "Shōkaku and Zuikaku sail from Truk, pass east of the Solomons and round San Cristobal into the Coral Sea from the east, to strike the American carriers on 8 May.",
@@ -1335,7 +1340,8 @@
       "place": "soft",
       "course": "soft"
     },
-    "tellings": []
+    "tellings": [],
+    "notes": "Schematic; the strike area of 8 May is *verify*, and the turn south of San Cristobal is set clear of the Indispensable Reefs."
   },
   {
     "id": "coral-sea-1942-moresby",
@@ -1730,7 +1736,7 @@
         "t": "1942-05-28",
         "zone": "-09:30",
         "precision": "day",
-        "note": "TF 16 sails from Pearl Harbor on 28 May, TF 17 on 30 May (*verify*)."
+        "note": "TF 16 sails from Pearl Harbor on 28 May, TF 17 on 30 May."
       },
       {
         "at": 4,
@@ -1775,7 +1781,7 @@
       "course": "soft"
     },
     "tellings": [],
-    "notes": "The legs from Pearl Harbor to the rendezvous are schematic. `units` are the expected unit ids for the three carriers; the integrator reconciles them."
+    "notes": "The legs from Pearl Harbor to the rendezvous are schematic; the sailing dates of 28 and 30 May are *verify*. `units` are the expected unit ids for the three carriers; the integrator reconciles them."
   },
   {
     "id": "midway-occupation-force-1942",
@@ -3779,8 +3785,12 @@
     "to": "shimonoseki-strait",
     "points": [
       [
-        104,
-        1.1
+        103.9,
+        1.22
+      ],
+      [
+        104.45,
+        1.25
       ],
       [
         105.5,
@@ -3855,12 +3865,12 @@
     },
     "tellings": [],
     "schematicSegments": [
-      3,
       4,
-      9,
+      5,
       10,
       11,
-      12
+      12,
+      13
     ]
   },
   {
