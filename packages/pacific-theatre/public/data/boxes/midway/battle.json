@@ -458,8 +458,8 @@
         "t": "1942-06-05T05:00-12:00",
         "sources": [{"id":"nagumo-1947","where":"Table 3"}],
         "tellings": [
-          {"source":"nagumo-1947","says":"221 dead (8 officers and warrant officers, 213 men)."},
-          {"source":"trom-akagi","says":"263 dead."}
+          {"source":"nagumo-1947","says":"221 lost their lives (8 officers and warrant officers, 213 men)."},
+          {"source":"trom-akagi","says":"263 lost their lives."}
         ]
       }
     },
@@ -638,9 +638,9 @@
             "source": "nagumo-1947",
             "says": "Sank at 30-20.3N 179-17.2W (narrative); 30-23.3N 179-17.2W in Table 3, as in the TROM and NWC."
           },
-          {"source":"nagumo-1947","says":"Dead printed as “1 800” (garbled in the translation)."},
-          {"source":"trom-kaga","says":"814 dead."},
-          {"source":"jawp-midway","says":"Just under 800 dead (800名弱)."}
+          {"source":"nagumo-1947","says":"Those who lost their lives printed as “1 800” (garbled in the translation)."},
+          {"source":"trom-kaga","says":"814 lost their lives."},
+          {"source":"jawp-midway","says":"Just under 800 lost their lives (800名弱)."}
         ]
       },
       "track": [
@@ -850,8 +850,8 @@
         "tellings": [
           {"source":"nagumo-1947","says":"Sank at 30-42.5N 178-37.5W."},
           {"source":"trom-soryu","says":"Sank at 30°38′N 179°13′W."},
-          {"source":"nagumo-1947","says":"718 dead (35 officers and warrant officers, 683 men)."},
-          {"source":"trom-soryu","says":"713 dead."}
+          {"source":"nagumo-1947","says":"718 lost their lives (35 officers and warrant officers, 683 men)."},
+          {"source":"trom-soryu","says":"713 lost their lives."}
         ]
       },
       "track": [
@@ -1161,7 +1161,7 @@
         "sources": [{"id":"nagumo-1947","where":"Table 3"},{"id":"trom-hiryu"}],
         "note": "Rear Admiral Yamaguchi and Captain Kaku stayed aboard.",
         "tellings": [
-          {"source":"nagumo-1947","says":"416 dead (29 officers and warrant officers, 387 men)."},
+          {"source":"nagumo-1947","says":"416 lost their lives (29 officers and warrant officers, 387 men)."},
           {"source":"jawp-midway","says":"417, counting 34 engine-room men later rescued by US forces."}
         ]
       }
@@ -4706,7 +4706,7 @@
           {"id":"trom-kaga"}
         ],
         "tellings": [
-          {"source":"nagumo-1947","says":"Bombs 4, 7, 8 and 9 hit; Kaga’s dead printed “1 800” (garbled)."},
+          {"source":"nagumo-1947","says":"Bombs 4, 7, 8 and 9 hit; the number of Kaga’s crew who lost their lives is printed “1 800” (garbled)."},
           {"source":"trom-kaga","says":"A minimum of one 1,000-pound and three 500-pound bombs; 814 of her crew lost their lives."},
           {"source":"wp-midway","says":"Three to five direct hits."},
           {
@@ -5045,7 +5045,7 @@
   "tellings": [
     {
       "source": "nwc-midway-1948",
-      "says": "Japanese dead about 2,500; 234 carrier aircraft lost (48 shot down, 186 lost aboard or ditched). US dead about 307; 132 aircraft lost."
+      "says": "About 2,500 Japanese lost their lives; 234 carrier aircraft lost (48 shot down, 186 lost aboard or ditched). About 307 Americans lost their lives; 132 aircraft lost."
     },
     {"source":"wp-midway","says":"After Parshall and Tully: 3,057 Japanese lost their lives, and 248 aircraft were lost (verify)."},
     {

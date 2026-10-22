@@ -84,7 +84,7 @@ export function afterHTML(a, { sourceLine, sourceTitle = (id) => id, warn = cons
     <section class="card-sec after-part" data-part="battle">${head('battle')}
       ${lines.length ? `<ul class="af-battle">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
       ${guesses.length ? `<ul class="af-guess">${guesses.map((g) => `<li>${esc(g)}</li>`).join('')}</ul>` : ''}
-      ${lines.length || guesses.length ? '' : '<p class="none">—</p>'}
+      ${lines.length || guesses.length ? '' : '<p class="none">Nothing left the record. <span lang="ja">記録から外れたものはなかった。</span></p>'}
     </section>
     <section class="card-sec after-part" data-part="record">${head('record')}
       ${recText ? `<div class="card-body"><p>${esc(recText)}</p></div>` : ''}

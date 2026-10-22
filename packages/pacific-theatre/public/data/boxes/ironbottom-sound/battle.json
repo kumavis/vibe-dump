@@ -262,7 +262,7 @@
           "sourceClock": "0013",
           "sourceZone": "+12:00",
           "sourceDate": "1942-11-15",
-          "text": "Lee: “You may open fire when you are ready.”"
+          "text": "Rear Admiral Willis A. Lee: “You may open fire when you are ready.”"
         },
         {
           "t": "23:16",
@@ -2627,7 +2627,7 @@
         "t": "27:20",
         "sources": [{"id":"morison-v","where":"0320"},{"id":"trom-kirishima"}],
         "tellings": [
-          {"source":"trom-kirishima","says":"212 lost; Iwabuchi, Ono and 1,098 rescued."},
+          {"source":"trom-kirishima","says":"212 lost their lives; Captain IWABUCHI Sanji 岩淵三次, Ono and 1,098 were rescued."},
           {
             "source": "lundgren-bbaction",
             "says": "About 209 killed; 61 officers and petty officers and 1,031 sailors rescued."
@@ -5718,7 +5718,7 @@
   "stops": [
     {
       "t": "20:10",
-      "text": "20:10, zone −11. Lee’s TF 64 comes up from the south-west to sweep round Savo: the destroyers ahead, Washington and South Dakota astern. Far to the west the transports of Rear Admiral TANAKA Raizō 田中頼三, bombed all day, are burning.",
+      "text": "20:10, zone −11. Rear Admiral Willis A. Lee’s TF 64 comes up from the south-west to sweep round Savo: the destroyers ahead, Washington and South Dakota astern. Far to the west the transports of Rear Admiral TANAKA Raizō 田中頼三, bombed all day, are burning.",
       "camera": {"target":"washington","bearingDeg":200,"pitch":0.35,"distanceM":12000},
       "sources": [{"id":"oni-cn-guadalcanal-1944","where":"Part III"},{"id":"morison-v"}]
     },
@@ -5794,7 +5794,7 @@
     },
     {
       "t": "24:33",
-      "text": "00:33. Lee turns his flagship back to the south to keep out of a torpedo trap. Torpedoes chase Washington and burst in her wake; none hits.",
+      "text": "00:33. Rear Admiral Willis A. Lee turns his flagship back to the south to keep out of a torpedo trap. Torpedoes chase Washington and burst in her wake; none hits.",
       "camera": {"target":"washington","bearingDeg":20,"pitch":0.35,"distanceM":9000},
       "sources": [
         {"id":"oni-cn-guadalcanal-1944","where":"Part III"},
@@ -5856,7 +5856,7 @@
           {"id":"trom-kirishima"}
         ],
         "tellings": [
-          {"source":"trom-kirishima","says":"Lee’s report: eight 16-inch hits; 212 of Kirishima’s crew lost."},
+          {"source":"trom-kirishima","says":"Rear Admiral Willis A. Lee’s report: eight 16-inch hits; 212 of Kirishima’s crew lost their lives."},
           {"source":"ussbs-nav33","says":"About nine 16-inch and forty 5-inch."},
           {
             "source": "lundgren-wreck",
@@ -5907,13 +5907,13 @@
         "tellings": [
           {
             "source": "ussbs-nav33",
-            "says": "“We couldn’t see it because of the glare from the destroyers’ searchlights” (Tokuno, of Washington)."
+            "says": "“We couldn’t see it because of the glare from the destroyers’ searchlights”: TOKUNO Horishi, Kirishima’s assistant gunnery officer, of Washington."
           },
           {
             "source": "lundgren-kdamage",
             "says": "117 rounds of 14-inch fired (68 Type 3, 22 Type 0, 27 Type 1), after Ikeda."
           },
-          {"source":"trom-kirishima","says":"212 lost; Iwabuchi and 1,098 rescued."}
+          {"source":"trom-kirishima","says":"212 lost their lives; Captain IWABUCHI Sanji 岩淵三次 and 1,098 were rescued."}
         ]
       }
     },

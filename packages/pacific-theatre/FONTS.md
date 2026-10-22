@@ -49,9 +49,9 @@ with the ledger) into the downloads directory (`--downloads`, or
 `$PACIFIC_THEATRE_DOWNLOADS`, or the system's temporary directory), never into
 the repository, and writes the woff2 with `subset-font` 2.4.0.
 
-**The subset committed now was cut after the audit from the final
-`public/data/` (`node tools/subset-font.mjs`): 568 characters, 87.1 KB
-(about 157 bytes a character)**, every CJK character in the gazetteer, the
+**The subset committed now was cut after the audit's follow-up from the
+final `public/data/` (`node tools/subset-font.mjs`): 576 characters, 88.8 KB
+(about 158 bytes a character)**, every CJK character in the gazetteer, the
 labels, the fronts, the four battles and the kits, and the app's own strings
 (the boot lines, the after-card's headings, the help, the HUD). The built
 app loads no font from the network: every `@font-face` in `style.css` points

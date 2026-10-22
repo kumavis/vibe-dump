@@ -277,7 +277,7 @@
           "t": "07:01",
           "kind": "signal",
           "sources": [{"id":"morison-xii","where":"XII §3"},{"id":"sib22-leyte-1945","where":"CTU 77.4.3"}],
-          "text": "Sprague broadcasts his contact report in plain language and orders the screen to make smoke astern of the carriers.",
+          "text": "Rear Admiral Clifton A. F. Sprague broadcasts his contact report in plain language and orders the screen to make smoke astern of the carriers.",
           "tellings": [{"source":"sib22-leyte-1945","says":"CTU 77.4.3: the contact report “At 0705”."}]
         },
         {
@@ -4415,7 +4415,7 @@
           "t": "07:03",
           "kind": "signal",
           "sources": [{"id":"trom-chikuma","where":"0703"},{"id":"morison-xii","where":"XII §3"}],
-          "text": "Kurita orders a general attack; the cruiser divisions go after the carriers."
+          "text": "KURITA Takeo 栗田健男 orders a general attack; the cruiser divisions go after the carriers."
         },
         {
           "t": "07:08",
@@ -12325,7 +12325,7 @@
     },
     {
       "t": "07:06",
-      "text": "07:06. The carriers run into a rain squall. Sprague orders his escorts to attack with torpedoes; Johnston is already heading for the cruisers.",
+      "text": "07:06. The carriers run into a rain squall. Rear Admiral Clifton A. F. Sprague orders his escorts to attack with torpedoes; Johnston is already heading for the cruisers.",
       "camera": {"target":"johnston","bearingDeg":160,"pitch":0.3,"distanceM":6000},
       "moment": "johnston-kumano",
       "sources": [{"id":"morison-xii","where":"XII §3"}]
@@ -12456,7 +12456,7 @@
       "beats": [
         {"t":"06:59","text":"Dyed splashes rise astern of the carriers."},
         {"t":"07:00","text":"Kongō opens fire."},
-        {"t":"07:03","text":"Kurita orders a general attack; the formation breaks up."},
+        {"t":"07:03","text":"KURITA Takeo 栗田健男 orders a general attack; the formation breaks up."},
         {"t":"07:06","text":"The carriers vanish into a rain squall."},
         {"t":"07:08","text":"The destroyer squadrons are ordered to the rear."},
         {"t":"07:10","text":"An American destroyer opens fire on the cruisers."}
@@ -12612,7 +12612,7 @@
           },
           {
             "source": "ussbs-nav35",
-            "says": "Koyanagi had not known the leading cruisers were “within 10 kilometers of the American ships”."
+            "says": "Rear Admiral KOYANAGI Tomiji had not known the leading cruisers were “within 10 kilometers of the American ships”."
           }
         ]
       }
