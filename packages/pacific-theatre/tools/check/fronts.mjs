@@ -4,7 +4,8 @@
 // vocabulary, valid (closed rings, no ring crossing itself or another of its polygon's rings) and inside
 // the table's envelope; General Order No. 1's zones only on the last keyframe (and there); perimeters as
 // lines; the declared lines with a name, a Japanese name and their dates; every keyframe's, polygon's and
-// line's sources public domain (§4); the copy and voice rules on the notes and names the table shows.
+// line's sources public domain (§4); the copy and voice rules on the notes and names the table shows;
+// R3's named cut-off garrisons Japanese on every keyframe from their isolation to their surrender.
 import { resolver, checkVocab, instant, checkCopy, checkVoice, checkNoNumbers, TableProjection, V1_PROJECTION, VOCAB } from './common.mjs'
 import { ALLOW } from './gazetteer.mjs'
 
@@ -96,6 +97,42 @@ function firstCrossing(rings) {
   }
   return null
 }
+
+/** Whether [lon, lat] is inside a polygon's rings (even-odd, the outer ring less its holes). */
+function inPolygon(rings, [lon, lat]) {
+  let inside = false
+  for (const raw of rings) {
+    const r = unwrap(raw)
+    let x = lon
+    while (x - r[0][0] > 180) x -= 360
+    while (x - r[0][0] < -180) x += 360
+    for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
+      const [xi, yi] = r[i]
+      const [xj, yj] = r[j]
+      if (yi > lat !== yj > lat && x < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside
+    }
+  }
+  return inside
+}
+
+/**
+ * R3's named cut-off garrisons (research/R3-timeline.md §5: K4's "held and cut off", K5's "Cut off:" list;
+ * research/content.md §3), each from the first keyframe on which R3 names it cut off. On the land the
+ * front draws (`at`, a point inside the garrison), the keyframe's state there is `held`, or on the last
+ * keyframe a zone of General Order No. 1, through `to` or the place's Japanese interval's end. An island
+ * the front leaves to the marks (`place` alone) has a Japanese held interval in places.json that covers
+ * the date, with its `cutOff` on or before it.
+ */
+export const CUT_OFF = [
+  { name: 'Rabaul and the Gazelle Peninsula', at: [152.17, -4.2], place: 'rabaul', from: '1944-08-15' },
+  { name: 'New Ireland, isolated with Rabaul', at: [150.8, -2.58], from: '1944-08-15', to: LAST },
+  { name: 'the Wewak pocket', at: [143.63, -3.55], place: 'wewak', from: '1944-08-15' },
+  { name: 'Bougainville, less Torokina', at: [155.63, -6.22], place: 'bougainville', from: '1945-01-15' },
+  // the Vogelkop at Manokwari; Sorong, under the page's pink sea lane past Sansapor, is a known gap (content.md §3)
+  { name: 'the Vogelkop', at: [134.08, -0.87], from: '1945-01-15', to: LAST },
+  ...['wotje', 'maloelap', 'mili', 'jaluit', 'rota', 'pagan'].map((place) => ({ place, from: '1944-08-15' })),
+  ...['truk', 'ponape', 'kusaie', 'nauru', 'banaba', 'wake', 'marcus', 'yap', 'babelthuap'].map((place) => ({ place, from: '1945-01-15' })),
+]
 
 const ringArea = (r) => {
   let s = 0
@@ -251,6 +288,46 @@ export default function check(ctx) {
     }
     if (lastId && k.id === lastId && !zones) ctx.bad(at0, `the last keyframe holds General Order No. 1's zones as states (zone-cks, zone-soviet, zone-seac, zone-cincpac, zone-swpa)`)
     ctx.count(`front polygons on ${k.id}`, polys)
+  }
+
+  // --- R3's named cut-off garrisons ------------------------------------------------------------------------
+  if (!ctx.test) {
+    const places = new Map(list(ctx.load('places.json')).filter((p) => p?.id).map((p) => [p.id, p]))
+    for (const g of CUT_OFF) {
+      const at = `fronts cut-off garrison ${g.name || g.place}`
+      const place = g.place ? places.get(g.place) : null
+      if (g.place && !place) {
+        ctx.bad(at, `no place ${g.place} in places.json`)
+        continue
+      }
+      const jp = list(place?.held).find((h) => h?.by === 'jp' && String(h.from) <= g.from && String(h.to) >= g.from)
+      if (!g.at) {
+        if (!jp) ctx.bad(at, `places.json ${g.place} has no Japanese held interval over ${g.from}, when R3 names it cut off`)
+        else if (!jp.cutOff || String(jp.cutOff) > g.from) ctx.bad(at, `places.json ${g.place}: its Japanese interval's cutOff is ${jp.cutOff}, not on or before ${g.from}`)
+        else ctx.count('cut-off garrisons held to their surrender')
+        continue
+      }
+      const to = g.to || jp?.to
+      if (!to) {
+        ctx.bad(at, `no end: places.json ${g.place} has no Japanese held interval over ${g.from}`)
+        continue
+      }
+      for (const k of man.keyframes) {
+        if (!k?.id || k.id < g.from || k.id > String(to)) continue
+        const fc = ctx.load(k.file)
+        // every feature over the point: two smoothed polygons can overlap at their edge, and the table draws both
+        const states = []
+        for (const f of fc?.features || []) {
+          const p = f?.properties || {}
+          if (!p.state || !f.geometry) continue
+          const ps = f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates : []
+          if (ps.some((rings) => inPolygon(rings, g.at))) states.push(p.state)
+        }
+        const ok = states.length && states.every((st) => st === 'held' || (k.id === LAST && String(st).startsWith('zone-')))
+        if (!ok) ctx.bad(`${k.file} at ${g.at.join(', ')}`, `${g.name} is ${states.join(' and ') || 'not on the front’s land'}; R3 has it cut off and Japanese from ${g.from} to ${to} (held, or a General Order No. 1 zone on ${LAST})`)
+        else ctx.count('cut-off garrison keyframes held')
+      }
+    }
   }
 
   // --- the declared lines --------------------------------------------------------------------------------

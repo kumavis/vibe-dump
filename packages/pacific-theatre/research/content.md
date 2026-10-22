@@ -150,6 +150,12 @@ python3 -I tools/fronts/preview.py 1944-08-15 --bbox=141.5,-5,146,-2.6 --k=90
     `pointsAndLines`, on 1944-08-15: page 58 draws a white corridor too
     narrow for the trace, with the black of the period's gains at Hengyang,
     which fell on 8 August (R3 K4; the event `ichigo-1944`).
+
+  `tools/check/fronts.mjs` holds R3's named cut-off garrisons to `held` on
+  every keyframe from their isolation to their surrender (a zone of General
+  Order No. 1 on the last), on the land the front draws, and to a Japanese
+  held interval with its `cutOff` in `places.json` for the islands it
+  leaves to the marks.
 - **Before the Atlas** (1941-12-06, 1942-05-08, 1942-09-15) the keyframes
   are `schematic`: the territories' holders by date; occupied China taken
   from the Atlas's first page (to 1 July 1943), the nearest public-domain
