@@ -392,7 +392,7 @@ function checkBox(ctx, b, coastTest) {
     const edgeShare = edgeN ? edgeOff / edgeN : 0
     ctx.count(`${b.id} land against the coast ${(share * 100).toFixed(2)} % off (edge ${(edgeShare * 100).toFixed(2)} %)`)
     if (share > 0.05 || edgeShare > 0.05) ctx.bad(at, `${(share * 100).toFixed(1)} % of the box (${(edgeShare * 100).toFixed(1)} % of its edge) disagrees with coast.json by more than two texels: the pack may be misplaced (DATA.md §10)`)
-    else if (share > 0.005 || edgeShare > 0.005) ctx.warn(at, `${(share * 100).toFixed(2)} % of the box (${(edgeShare * 100).toFixed(2)} % of its edge) disagrees with coast.json by more than two texels (Natural Earth's 10 m coast is coarse beside GLO-30 and CUDEM: Oʻahu is one polygon with its lochs filled)`)
+    else if (share > 0.005 || edgeShare > 0.005) ctx.warn(at, `${(share * 100).toFixed(2)} % of the box (${(edgeShare * 100).toFixed(2)} % of its edge) disagrees with coast.json by more than two texels (Natural Earth's 10 m coast is coarse beside GLO-30 and CUDEM${b.id === 'pearl-harbor' ? ': Oʻahu is one polygon with its lochs filled' : ''})`)
   }
 }
 

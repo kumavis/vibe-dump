@@ -111,23 +111,11 @@ export default function check(ctx) {
   const opened = (id) => sources.get(id)?.opened === true
   const pdChart = (id) => VOCAB.imageLicences.includes(sources.get(id)?.licence)
 
-  // the sea rule's land: coast.json's polygons, less any that wrapping has turned into a band round the world
+  // the sea rule's land: coast.json's polygons (landIndex unwraps a polygon across the seam vertex to vertex)
   const coast = ctx.load('table/coast.json')
   let land = null
   if (coast === undefined) ctx.warn('routes.json', 'no table/coast.json here (the bake writes it): the sea rule is skipped')
-  else {
-    const features = []
-    for (const f of coast?.features || []) {
-      const polys = f.geometry?.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry?.type === 'MultiPolygon' ? f.geometry.coordinates : []
-      const keep = polys.filter((poly) => {
-        const xs = (poly[0] || []).map((c) => wrapLon(c[0], 141.5))
-        return xs.length && Math.max(...xs) - Math.min(...xs) < 180
-      })
-      if (keep.length < polys.length) ctx.count('coast polygons set aside for wrapping round the world')
-      if (keep.length) features.push({ properties: f.properties || {}, geometry: { type: 'MultiPolygon', coordinates: keep } })
-    }
-    land = landIndex({ type: 'FeatureCollection', features })
-  }
+  else land = landIndex(coast)
 
   const routes = checkIds(ctx, routesL, 'routes.json')
   for (const r of routesL) {

@@ -297,7 +297,7 @@ export class EventCard {
     const stops = tableStops(ev)
     const st = this.stop >= 0 ? stops[this.stop] : null
     const stopPlace = st ? this.places.get(st.place) : null
-    const sides = (ev.sides || []).map((s) => esc(sideName(s))).join('<i>·</i>')
+    const sides = [...(ev.sides || []), ...(ev.alsoSides || [])].map((s) => esc(sideName(s))).join('<i>·</i>')
     return `
       ${this.header(kindIcon(ev), ev.title, ev.gloss, ev.ja)}
       <div class="card-meta">${this.whenHTML(ev)}<span class="kind">${esc(kindName(ev.kind))}</span></div>

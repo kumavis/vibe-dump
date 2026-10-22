@@ -118,7 +118,7 @@ battle.units.push(
       { t: '04:26', kind: 'searchlight', by: 'test-night-bb-jp', target: 'test-night-bb-us', sources: src },
       { t: '04:33', kind: 'hit', by: 'test-night-bb-us', count: [2, 3], where: 'amidships', damage: 0.3, sources: src },
       { t: '04:34', kind: 'fire', sources: src },
-      { t: '04:36', kind: 'torpedoes-fired', by: 'test-night-bb-jp', count: [4, 4], speedKn: 36, target: 'test-night-bb-us', sources: src },
+      { t: '04:36', kind: 'torpedoes-fired', by: 'test-night-bb-jp', count: 4, speedKn: 36, target: 'test-night-bb-us', sources: src },
     ],
   },
 )

@@ -257,7 +257,15 @@ export function landIndex(fc, { lon0 = V1_PROJECTION.lon0, cell = 1 } = {}) {
   const key = (i, j) => `${i},${j}`
   for (const f of fc?.features || []) {
     for (const poly of polysOf(f.geometry)) {
-      const rings = poly.map((r) => r.map(([x, y]) => [wrapLon(x, lon0), y]))
+      // (each ring unwrapped vertex to vertex, so a polygon across the seam stays one polygon, not a band round the world)
+      const rings = poly.map((r) => {
+        let prev = null
+        return r.map(([x, y]) => {
+          const u = prev === null ? wrapLon(x, lon0) : wrapLon(x, prev)
+          prev = u
+          return [u, y]
+        })
+      })
       const xs = rings[0].map((c) => c[0])
       const ys = rings[0].map((c) => c[1])
       const box = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]
@@ -280,20 +288,23 @@ export function landIndex(fc, { lon0 = V1_PROJECTION.lon0, cell = 1 } = {}) {
   }
   const near = (x, y) => grid.get(key(Math.floor(x / cell), Math.floor(y / cell))) || []
   const test = ([lon, lat]) => {
-    const x = wrapLon(lon, lon0)
-    for (const k of near(x, lat)) {
-      const p = polys[k]
-      const [x0, y0, x1, y1] = p.box
-      if (x < x0 || x > x1 || lat < y0 || lat > y1) continue
-      if (inRing(p.rings[0], x, lat) && !p.rings.slice(1).some((h) => inRing(h, x, lat))) return p.kind
+    const w = wrapLon(lon, lon0)
+    // (a polygon unwrapped across the seam reaches past lon0 ± 180: look there too)
+    for (const x of [w, w + 360, w - 360]) {
+      for (const k of near(x, lat)) {
+        const p = polys[k]
+        const [x0, y0, x1, y1] = p.box
+        if (x < x0 || x > x1 || lat < y0 || lat > y1) continue
+        if (inRing(p.rings[0], x, lat) && !p.rings.slice(1).some((h) => inRing(h, x, lat))) return p.kind
+      }
     }
     return null
   }
   test.depth = ([lon, lat]) => {
-    const x = wrapLon(lon, lon0)
+    const w = wrapLon(lon, lon0)
     const kx = 111320 * Math.cos((lat * Math.PI) / 180)
     let best = Infinity
-    for (let di = -1; di <= 1; di++) {
+    for (const x of [w, w + 360, w - 360]) for (let di = -1; di <= 1; di++) {
       for (let dj = -1; dj <= 1; dj++) {
         for (const k of grid.get(key(Math.floor(x / cell) + di, Math.floor(lat / cell) + dj)) || []) {
           for (const r of polys[k].rings) {
@@ -353,7 +364,7 @@ const ALLOW = [
   /\b(?:Type|Mark|Mk\.?|Model)\s?\d{1,3}\b/g, // Type 93, Mark 15
   /\b[A-Z]{1,3}\d[A-Z]?\d?(?:-\d{1,2}[A-Z]?)?\b/g, // A6M2, B5N2, SBD-3, F4F-4, P-40B
   /\b\d{1,3}(?:st|nd|rd|th)\b/g, // ordinals: the 2nd Marine Division
-  /\b\d{1,3}°\s?[NSEW]?\b/g, // latitudes in a line's name, 16° N
+  /\b\d{1,3}°(?:\s?[NSEW]\b)?/g, // latitudes in a line's name, 16° N; a course, 020°,
 ]
 
 /**
