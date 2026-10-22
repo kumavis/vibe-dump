@@ -1,5 +1,4 @@
-# Scratch: classify an Atlas leaf's colours onto a lon/lat grid.
-#
+"""Classify an Atlas of the World Battle Fronts leaf's colours onto a lon/lat grid, for build.py and perimeters.py."""
 # Per pixel: 'jp' (the white of enemy-held territory, light and neutral in hue), 'allied' (the pink tint
 # and the deep red of the period's gains: red over green), 'neutral' (the grey, neutral in hue and darker
 # than the white), 'black' (the period's enemy gains, solid near-black) and nothing for line work,

@@ -1,4 +1,4 @@
-# Scratch: the keyframes' perimeters (DATA.md §6): the dashed line round the island area Japan controlled.
+"""The keyframes' perimeters (DATA.md §6), the dashed line round the island area Japan controlled, for build.py."""
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

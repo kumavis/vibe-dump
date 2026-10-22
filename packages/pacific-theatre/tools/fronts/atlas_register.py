@@ -1,5 +1,4 @@
-# Scratch: register an Atlas of the World Battle Fronts leaf to lon/lat.
-#
+"""Register an Atlas of the World Battle Fronts leaf to lon/lat, writing the fits/T<leaf>.json classify.py reads."""
 # The page is a Mercator map, scanned with a little rotation and warp. Start from a quadratic fit to
 # hand-read control points (fits/cp24.json, read off leaf 24), carried to another leaf by one global
 # shift found by correlating its line work with leaf 24's; then refine with the coastline itself: draw
