@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Battle Box (dev)</title>
+    <meta name="description" content="Dev-only: boots straight into a battle box from ?box=&t=&moment= against test-data/, or shows the kits as a contact sheet with ?view=kits. Not in the build." />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+      #kit-labels { position: fixed; inset: 0; pointer-events: none; font: 11px/1.2 Inter, system-ui, sans-serif; color: #e9e4d6; }
+      #kit-labels div { position: absolute; transform: translate(-50%, 0); white-space: nowrap; text-shadow: 0 1px 2px #000; }
+      #dev-status { position: fixed; left: 12px; bottom: 10px; font: 12px/1.3 Inter, system-ui, sans-serif; color: #d8d2c2; text-shadow: 0 1px 2px #000; pointer-events: none; max-width: 70vw; }
+    </style>
+  </head>
+  <body>
+    <canvas id="scene" tabindex="0" aria-label="A battle box"></canvas>
+    <div id="kit-labels"></div>
+    <div id="dev-status"></div>
+    <script type="module" src="./src/battle/dev.js"></script>
+  </body>
+</html>

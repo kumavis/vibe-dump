@@ -111,9 +111,9 @@ export function flightDeckAt(kit, f) {
 /** The size defaults by kind for a ship of this type (metres). */
 function typeScale(kit) {
   const t = kit.type
-  if (t === 'bb') return { bridge: 18, tower: 22, tripod: 30, cage: 34, pole: 24, funnel: 14, crane: 9, house: 3 }
+  if (t === 'bb') return { bridge: 18, tower: 22, tripod: 30, cage: 34, pole: 24, funnel: 16, crane: 9, house: 3 }
   if (t === 'cv' || t === 'cvl' || t === 'cve') return { bridge: 10, tower: 10, tripod: 14, cage: 14, pole: 12, funnel: 7, crane: 7, house: 3 }
-  if (t === 'ca' || t === 'cl') return { bridge: 14, tower: 14, tripod: 24, cage: 24, pole: 22, funnel: 11, crane: 8, house: 2.6 }
+  if (t === 'ca' || t === 'cl') return { bridge: 14, tower: 14, tripod: 24, cage: 24, pole: 22, funnel: 12, crane: 8, house: 2.6 }
   if (t === 'dd' || t === 'de') return { bridge: 7, tower: 6, tripod: 14, cage: 14, pole: 14, funnel: 6, crane: 5, house: 2.4 }
   if (t === 'ss-midget' || t === 'ss') return { bridge: 1.2, tower: 1.2, tripod: 3, cage: 3, pole: 3, funnel: 1, crane: 1, house: 0.8 }
   return { bridge: 9, tower: 9, tripod: 18, cage: 18, pole: 18, funnel: 10, crane: 7, house: 3 }
@@ -168,8 +168,9 @@ export function defaultDims(kit, b, turretGun = null) {
       set(0.6, 0.6, s.pole)
       break
     case 'funnel':
+      if (flightDeckTop(kit) != null && b.side && b.side !== 'centre' && b.shape !== 'downturned' && !(kit.blocks || []).some((o) => o.kind === 'island' && o.side === b.side && Math.abs(mid(o) - mid(b)) < 0.08)) set(B * 0.12, B * 0.12, Math.max(4, flightDeckTop(kit) - deckTop(kit, mid(b)) + 1.5))
       if (b.shape === 'downturned') set(B * 0.14, len || L * 0.03, s.funnel)
-      else set(B * (b.shape === 'trunked' ? 0.26 : 0.19), len || B * (b.shape === 'trunked' ? 0.32 : 0.22), s.funnel)
+      else set(B * (b.shape === 'trunked' ? 0.27 : 0.22), len || B * (b.shape === 'trunked' ? 0.34 : 0.26), s.funnel)
       break
     case 'island':
       set(Math.max(4, B * 0.2), len || L * 0.06, 10)
@@ -232,9 +233,13 @@ export function blockBase(kit, b, dims = null) {
     case 'cage-mast':
     case 'crane':
       return fdt ?? deck
-    case 'funnel':
+    case 'funnel': {
       if (b.shape === 'downturned') return deck + 0.5
-      return fdt ?? deck
+      if (fdt == null) return deck
+      // a carrier's funnel: on the flight deck where it is part of the island (Yorktown's), else up the hull's side to the deck's edge (the escort carriers')
+      const island = (kit.blocks || []).find((o) => o.kind === 'island' && (o.side === b.side || !b.side) && Math.abs(mid(o) - f) < 0.08)
+      return island ? fdt : deck
+    }
     case 'casemate':
       return deck - (dims?.h ?? b.h ?? 2.6) - 0.6
     case 'turret':
