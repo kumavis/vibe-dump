@@ -182,3 +182,26 @@ From the workflows and the integration (each workflow's notes say more):
 - **The project's owner**: `odbl` and the peoples' side codes are not in the
   frozen vocabularies (`tools/check/ids.json`), so OpenStreetMap is
   `licence: unknown` with a note and 30 events carry `alsoSides`.
+
+## 4. Measured at the integration
+
+Under SwiftShader in the container's Chromium (1280 × 800, MSAA off, DPR 1):
+no GPU was measured, so these are the CPU's numbers, for comparing with each
+other only.
+
+| where | frame | draw calls | triangles | JS heap |
+| --- | --- | --- | --- | --- |
+| the table, the whole theatre | about 1.0–1.3 s | 21 | 100,000–118,000 | 19–21 MB (68 MB of buffers once a box has been in) |
+| the table, the Solomons at 300 km | about 0.9 s | 16 | 97,000–117,000 | |
+| Midway, watching (675 slots) | 0.64–0.73 s | 144 | 87,000 | 20–21 MB |
+| Pearl Harbor, watching (769 slots) | 0.72–0.81 s | 213 | 228,000 | 20–22 MB |
+| Ironbottom Sound, watching (86 slots) | 0.54–0.65 s | 121 | 51,000 | 18–19 MB |
+| Samar, watching (156 slots) | 0.59–0.60 s | 105 | 62,000 | 19–20 MB |
+
+A box boots from its URL in 13–22 s there (the table first). Every box draws
+faster than the table, so none is unusable and **the depth fallback of
+ENGINEERING §2 is not taken**: one logarithmic depth buffer for both scenes
+stays, until a person measures an integrated GPU. The replay test runs the
+four boxes untouched at the sim's 1/60 s step in 155 s (Midway), 141 s (Pearl
+Harbor), 33 s (Ironbottom Sound) and 71 s (Samar) of node time; the data is
+17.8 MiB (`public/data/`), the build 20 MB.
