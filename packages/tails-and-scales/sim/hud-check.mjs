@@ -126,9 +126,6 @@ const MUTATIONS = {
   'over-unshown': ['app/flow.js', "    if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))", '    // (dropped)'],
   // (F4) the round limit's vote panel never shown
   'vote-unshown': ['app/flow.js', "    if (this.player.idle && P?.k === 'roundLimit' && this.session.decisionFor() >= 0) {", '    if (false) {'],
-  // (F4) the vote panel up keeps the end screen from a snap past the end
-  // (the panel shares it: then taken down, and no end screen)
-  'vote-blocks-end': ['app/flow.js', "    if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))", "    if (M.stage === 'over' && !this.ui.result.up) this.over(resultOf(G))"],
   // a charge's spots left marked as shaded after a snap clears them: the
   // input never shades them again (the pick is the same decision's: the
   // snap again at a charge's end)
