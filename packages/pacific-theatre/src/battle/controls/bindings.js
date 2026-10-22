@@ -51,7 +51,7 @@ Mouse lays the main battery; wheel ±100 m (Shift ±400 m); click: salvo, hold: 
 T torpedoes · G narrow/wide spread · Space: the AA at the pointer's aircraft · L star shell
 X battery · C camera · Z zoom · +/− time · U units · Backspace: release the controls`
 
-export const TOUCH_HELP = 'Left: the stick (or the helm and telegraph) · right: fire and ordnance · the buttons: camera and time'
+export const TOUCH_HELP = 'Left: the stick (or the helm and telegraph) · right: fire and ordnance · the buttons: camera and time · release, twice: the controls back'
 
 export const HELM_STEPS = [-1, -0.5, 0, 0.5, 1]
 // the telegraph's steps as levels (−1 full astern … 1 flank): back full, stop, one third, two thirds, standard, full, flank

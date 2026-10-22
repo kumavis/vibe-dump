@@ -118,17 +118,7 @@ export class Input {
     }
     const inp = p.input
     const hud = this.battle.scene?.hud
-    if (matches(map, 'release', code)) {
-      const now = performance.now()
-      if (now - this.confirmRelease < 3000) {
-        this.confirmRelease = 0
-        this.battle.release()
-      } else {
-        this.confirmRelease = now
-        hud?.say('Backspace again to release the controls', 3)
-      }
-      return
-    }
+    if (matches(map, 'release', code)) return this.askRelease('Backspace')
     if (matches(map, 'units', code)) return hud?.toggleUnits()
     if (matches(map, 'camera', code)) return this.battle.cycleCamera?.()
     if (p.kind === 'aircraft') {
@@ -168,6 +158,18 @@ export class Input {
         hud?.say(`${z}×`, 1)
       } else if (matches(map, 'faster', code)) this.battle.cycleTime?.(1)
       else if (matches(map, 'slower', code)) this.battle.cycleTime?.(-1)
+    }
+  }
+
+  /** Backspace, or the touch controls' release: twice within three seconds gives the controls back. */
+  askRelease(how) {
+    const now = performance.now()
+    if (now - this.confirmRelease < 3000) {
+      this.confirmRelease = 0
+      this.battle.release()
+    } else {
+      this.confirmRelease = now
+      this.battle.scene?.hud?.say(`${how} again to release the controls`, 3)
     }
   }
 

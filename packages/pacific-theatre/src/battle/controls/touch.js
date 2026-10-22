@@ -5,7 +5,9 @@
 // the right. A ship: the helm as a slider with five detents and the
 // telegraph with seven, a salvo button (never tap-anywhere: a stray tap
 // would waste a salvo), an AA button that directs at the nearest attacker,
-// and the aim by dragging on the sea. Camera and time buttons for both.
+// and the aim by dragging on the sea. Camera and time buttons for both, and
+// a release under the clock that gives the controls back on a second tap,
+// as Backspace does (ENGINEERING §8).
 
 import { HELM_STEPS, TELEGRAPH_LEVELS } from './bindings.js'
 
@@ -149,6 +151,12 @@ export class TouchControls {
     this.btn('torp', { right: '24px', bottom: '24px' }, () => inp() && inp().torpedoCount++)
     this.btn('cam', { right: '24px', top: '210px' }, () => this.input.battle.cycleCamera?.())
     this.btn('time', { right: '96px', top: '210px' }, () => this.input.battle.cycleTime?.())
+    this.releaseButton()
+  }
+
+  /** Top left, under the clock: the touch visitor's Backspace. */
+  releaseButton() {
+    this.btn('release', { left: '14px', top: '64px', padding: '0 12px' }, () => this.input.askRelease('Tap release'))
   }
 
   buildShip() {
@@ -167,6 +175,7 @@ export class TouchControls {
     })
     this.btn('cam', { right: '24px', top: '210px' }, () => this.input.battle.cycleCamera?.())
     this.btn('time', { right: '96px', top: '210px' }, () => this.input.battle.cycleTime?.())
+    this.releaseButton()
     this.active = true
   }
 
