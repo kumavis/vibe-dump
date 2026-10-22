@@ -549,8 +549,13 @@ Nuʻuanu to the pali, with Kalihi and Mānoa at the edges.
   are polygons; the village is a polygon or a point with a `households`
   estimate in a telling, never a figure in `note`; a `force` is a polyline
   with a `when` (ISO date or month) so the battle can be shown moving step
-  by step (DESIGN.md §8 says how: pixel-art figures, no dead drawn, nothing
-  at the pali edge); a `heiau` obeys §4's precision rule
+  by step (DESIGN.md §8 says how), a `behaviour` from `march | run | stand |
+  engage | surround | leap` (march walks the line; run is a retreat or a
+  pursuit; stand is a post; engage fights along a `line`; surround closes on
+  the line's end from all sides; leap goes over the edge at the line's end),
+  and `arms`, shares that sum to one plus a `cannon` count, e.g.
+  `{ "spear": 0.55, "club": 0.2, "sling": 0.1, "dagger": 0.05, "musket": 0.1, "cannon": 2 }`,
+  so the renderer draws what the sources say each side carried; a `heiau` obeys §4's precision rule
   (ahupuaʻa precision unless an established public landmark).
 - **Stops** for an event in this district carry, besides `place`, `zoom` and
   `year`, an optional `camera`: `{ "bearing": compass degrees the camera

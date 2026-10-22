@@ -471,9 +471,16 @@ The first render showed forces as drifting masses along their lines. The
 owner's decision after seeing it: forces are **billboarded pixel-art
 soldiers**, small crisp sprites of about 8 by 16 pixels scaled by whole
 numbers so they never blur, animated, walking their lines and engaging at
-the fronts, the two sides told apart by palette and dress. Two restraints
-stay: no dead are drawn, and nothing is drawn at the pali edge. This sets the
-art direction for every battle after it.
+the fronts, the two sides told apart by palette and dress. A later decision
+by the owner, after seeing the first figures: the battle is choreographed as
+the sources tell it, step by step. At Lāʻimi the Oʻahu forces run up the
+valley with Kamehameha's in pursuit; at the valley's head Kamehameha's
+forces close around the remaining Oʻahu fighters at the edge, and some go
+over, drawn as leaps and falls, without gore and without bodies left on the
+ground. Arms follow the record: cannon on Kamehameha's line, muskets sparse
+on both sides, spears, clubs, daggers and slings for most. Figures face the
+way they move, so a cannon fires at the enemy and a retreat is seen from
+behind. This sets the art direction for every battle after it.
 
 **Why first.** The valley has an afterlife that carries the whole arc (§3.4). It
 sits on the island with the best data. And it forces all three zoom levels, the
