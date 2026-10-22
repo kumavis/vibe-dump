@@ -526,7 +526,9 @@ takes over from its island pack as the camera comes down, with the patches
 and features that let one valley be drawn in a chosen year. Under
 `public/data/districts/`, with its own `manifest.json` (bake.mjs never
 touches it). The first district is `nuuanu`: Honolulu's harbour and plain,
-Nuʻuanu to the pali, with Kalihi and Mānoa at the edges.
+Nuʻuanu to the pali, with Kalihi and Mānoa at the edges. The second is
+`koolaupoko`: the whole windward moku from Kualoa to Makapuʻu, with Kāneʻohe
+Bay and Mōkapu, Kailua and Waimānalo.
 
 ```jsonc
 // public/data/districts/manifest.json
@@ -592,6 +594,16 @@ Nuʻuanu to the pali, with Kalihi and Mānoa at the edges.
   15% slope on the district heights and warns above 5%. And the copy rule of
   DESIGN.md §7.4 is enforced: no user-facing field says what the app does not
   show, place or draw; the checker fails on the phrases it looks for.
+- **From the second district.** A district's own `patches` may be dated works
+  as `patches/manifest.json` has them: an `id` and a `name` in place of
+  `keyframe`, with `kind`, `depth`, `until`, `file`, `source`, `note`, `dates`
+  (the ids among the district's `sources` that date it) and `stats`; no
+  texel's weights of one kind over the dated works pass one. Two district
+  boxes may overlap (Koʻolaupoko's holds about 70% of Nuʻuanu's, for the moku
+  runs north-west to south-east): the manifest lists the finer district first,
+  and the district for a point is the first whose box holds it. A district's
+  texel may run to 13.5 m where the district is large (Koʻolaupoko's is 12.98
+  m), and each district's directory stays under 4 MB.
 
 ### How to bake a district
 
@@ -600,8 +612,9 @@ district, `height.png`, `rain.png`, the patches and their supporting files. It
 never writes `features.json`, which is hand-written.
 
 ```bash
-node packages/holo-i-ke-au/tools/bake-district.mjs --all                    # download (~1.5 GB), bake, check, delete the downloads (~6 min)
-node packages/holo-i-ke-au/tools/bake-district.mjs --preview /tmp/district  # relief, lines, streams, breaches, patches, the 1881 shore
+node packages/holo-i-ke-au/tools/bake-district.mjs --all                        # nuuanu: download (~1.5 GB), bake, check, delete the downloads (~6 min)
+node packages/holo-i-ke-au/tools/bake-district.mjs --all --district koolaupoko  # koolaupoko: ~3.6 GB, about 25 min (1,419 lidar tiles)
+node packages/holo-i-ke-au/tools/bake-district.mjs --preview /tmp/district      # every district: relief, lines, streams, breaches, patches, the old shores
 ```
 
 or `--download`, `--bake`, `--check`, `--find-breaches` (the pits left on the
@@ -631,6 +644,81 @@ What `nuuanu` rests on (the manifest says it all again, per source):
   Nuʻuanu and the crossings the bare earth keeps; the check follows Nuʻuanu,
   Kapālama, Kalihi and Mānoa from their mapped main stems to tidewater against
   the State's stream lines.
+
+What `koolaupoko` rests on:
+
+- **Box**: the whole moku, from the crest behind Waikāne to 650 m of sea past
+  Makapuʻu Point and from 700 m south of the point to 300 m past Kualoa
+  (157.898–157.643 W, 21.302–21.538 N): 2048 × 2010 at 12.98 m, inside the 13
+  m that lets Kahaluʻu, Waiāhole and Kualoa in with the rest (a box padded 700
+  m all round would be 13.5 m). The moku lies north-west to south-east, so the
+  box also holds the leeward side behind the crest and Honolulu's harbour at
+  its south-west corner: about 70% of the `nuuanu` box, which the manifest
+  lists first.
+- **Heights**: the same lidar, 1,419 tiles, area-averaged to 12.98 m, with the
+  same datum shift (measured again here: residual −0.07 m) and the same rules,
+  and two more that this district asks for (`walls` and `islets` in
+  `district-sources.mjs`). A line of texels a tenth to a half land, one or two
+  texels across with water on both sides, stays land (670 texels): the
+  fishpond walls of Heʻeia, Moliʻi and Kahouna, a few metres wide, which the
+  half-land rule would sink, and the causeways and spits. The islets the
+  survey left out (Mokumanu, Kekepa, Mokolea, Kapapa, the Mokulua islands,
+  Mānana and Kāohikaipu), pieces of the CUDEM's land standing at least 2 m
+  that no lidar cell reaches, are the CUDEM's land (2,634 texels in ten
+  pieces, two of them the breakwater of the pier at Makapuʻu, which the bare
+  earth leaves out as a structure). The windward face of the Koʻolau above
+  Kahaluʻu and Waiāhole and under the Nuʻuanu pali has no lidar tile: there
+  (11.6% of the pack) the heights are the CUDEM's land, corrected to meet the
+  lidar along the seam.
+- **Sea**: the CUDEM's three tiles (the fourth, north-east of Mōkapu, is open
+  sea and not published) and GMRT past them (275,954 texels of the deep sea);
+  water inside the coast that the CUDEM holds as land (stream mouths, canals,
+  the open water of the ponds and marshes) is a flat −1 m. Kāneʻohe Bay's reef
+  flats and patch reefs are the CUDEM's topobathymetric lidar, never shallower
+  than −1 m: shallow sea, not land (the check holds the barrier reef flat, a
+  patch reef and the flat west of Mōkapu between −1 and −4 m); ʻAhu o Laka's
+  sand bar is sea.
+- **Rain**: as for `nuuanu`.
+- **Patches**: five dated works in the district's own list, each dated from
+  its own history (the air station's of 1965 and the Navy's of 1947, DLNR's
+  for Heʻeia Kea, a tertiary one for Moku o Loʻe). The bay and its shores
+  before the works: G. E. G. Jackson's
+  survey of August 1882 (Registered Map 1140, 1:12,000, soundings in fathoms
+  at low water), read in F. W. Thrum's reduction of 1892 (RM 1848) as Kīpuka
+  serves it, registered here on eight fixed points to 42 m rms over the south
+  bay and Mōkapu; its reefs found on the sheet, its shores traced
+  (`shoreline-1882.geojson`). The USGS sheets of 1927 and 1938 draw Mōkapu,
+  Moku o Loʻe and Lae o Kealohi where Jackson does, within about 30 m. Where
+  the works lie: the fill unit, and NOAA's chart of today (the seaplane
+  landing area, the fairways to the air station, the dredged areas). Raise
+  `kaneohe-bay-dredging` (until 1943): Jackson's reefs inside the seaplane
+  area, the fairways and the Crashboat Channel where today's floor is deeper
+  than 3 m, back at −1 m (0.92 km²). Lower `mokapu-air-station-fill`
+  (1943): the fill unit seaward of Jackson's shore, the airfield's ground west
+  of Pali Kilo and the strip along Mōkapu's south shore (1.11 km²; 280
+  acres, 1.13 km², by the station's history). Lower `moku-o-loe-fill` (1936),
+  outside the island Jackson draws. Raise `heeia-kea-harbour` and lower
+  `heeia-kea-fill` (1950). The sources do not separate the stages of each work
+  (the runways from their channels, Holmes's fill from the Navy's and the
+  laboratory's, the harbour of 1950 from its enlargement of 1963–68), and each
+  note says so. Kailua's and Waimānalo's shores lie on today's within about 30
+  m on the 1902 and 1938 sheets and take no patch. Fill over the ponds stays
+  land, as in `nuuanu`, for the features draw the ponds: the causeways across
+  Nuʻupia, Halekou and Kaluapuhi, the fill over Kāneʻohe's shore ponds,
+  Moliʻi's wall, and the houses round Kaʻelepulu, which the fill unit does not
+  map. The small fill of 1969 fronting ʻŌpaʻapaʻa (RM 4148) is not in the fill
+  unit and was not read here. The fairway from the north passage is left as
+  today's: north of Kapapa the chart's registration is too loose to read its
+  reefs (ACCESS.md). Honolulu's waterfront in the south-west corner is the patch
+  bake's: its works reach this pack when `bake-patches.mjs` is run again (it
+  bakes onto every Oʻahu district in the manifest), which has not been done.
+- **Streams**: routed by the app. Twenty-six `breaches` cut the crossings the
+  bare earth keeps over the windward trunks, and the lower Waiāhole, narrower
+  than a texel behind the coastal road. The check follows Kāneʻohe, Heʻeia,
+  Kahaluʻu, Waiāhole, Waikāne, Maunawili, Kaʻelepulu and Waimānalo streams to
+  tidewater, holding a trunk to six texels (78 m) of the State's lines where
+  the texel passes 10 m, and Maunawili, which ends in the open water of
+  Kawainui at the Hāmākua canal, to 100 m.
 
 Beyond the contract the manifest carries `parent`, `files` (supporting files),
 `breaches`, `streams` (the check's findings), `stats`, and a `source` and
@@ -740,8 +828,10 @@ What the app can rely on beyond the contract:
 
 - The district's masks are listed in `patches/manifest.json` with `pack:
   "nuuanu"` and a `file` relative to `public/data/`, not in the district
-  manifest: its check holds the patches listed there to the first district's
-  rules (a single kind, 0 or 255, over today's land, each inside the last).
+  manifest: its check holds the keyframe patches listed there to the first
+  district's rules (a single kind, 0 or 255, over today's land, each inside
+  the last), and a district's own dated works (`koolaupoko`'s) to these:
+  each on its own side of the coast, weights of one kind never over one.
   The district's own `contact` and `kingdom` patches stay as they were (with
   `kind: "lower"` and `depth: -1` now written out) and overlap the dated
   lowers there; both lower to −1 m, so applying both is the same as applying
@@ -773,8 +863,9 @@ Not done: inside Pearl Harbor the lochs and their wartime mooring dredging
 are left as today's (natural deep water in 1881 within a few metres), as are
 the Navy Yard's piers and the airport's ground west of Keʻehi lagoon, which
 the 1881 sheet shows as land and ponds. Kāneʻohe Bay's seaplane runways
-(1939–42) were cleared through patch reefs in a naturally deep lagoon, and
-telling them from the lagoon floor needs a chart from before 1939; Haleʻiwa,
+(1939–43) were cleared through patch reefs in a naturally deep lagoon: the
+`koolaupoko` district carries them, read off Jackson's chart of 1882 ("What
+`koolaupoko` rests on"), but the island pack does not; Haleʻiwa,
 Waiʻanae, Barbers Point (cut into the land in the 1980s), Ko Olina and
 Hawaiʻi Kai's Kuapā pond are not patched either. The ENC's dredged areas
 outside every zone are listed by the bake.

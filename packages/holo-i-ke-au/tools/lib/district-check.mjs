@@ -5,9 +5,11 @@
 // stated scale and offset; known summits and the harbour at their heights,
 // which also proves the registration (north up, east right, no shift); the
 // district against its island pack, texel for texel at the island's
-// resolution; rain wet and dry where it should be; every patch only over
-// today's land, each keyframe's inside the one before it; the supporting
-// files; the streams; and the size of the whole directory.
+// resolution; rain wet and dry where it should be; every patch on its own
+// side of today's coast (a lower over land standing above its depth, a raise
+// over sea deeper than its depth), a keyframe's inside the one before it and
+// a dated work's weights of one kind never over one; the supporting files;
+// the streams; and the size of each district's directory.
 //
 // The preview draws, per district, the shaded relief with the moku and
 // ahupuaʻa lines, the routed streams (blue), the breaches (magenta), the
@@ -21,7 +23,10 @@ import { readPNG, writePNG } from './png.mjs'
 import { readPack, routeWater } from './layers-raster.mjs'
 import { trunkBreaches } from './district-water.mjs'
 
-const MAX_BYTES = 6 * 1024 * 1024
+// each district's directory (its images, masks, features and supporting files)
+const MAX_BYTES = 4 * 1024 * 1024
+// a district's texel, metres: lidar where it can be, but the long side is 2048
+const TEXEL = [4, 13.5]
 
 // Known heights: [name, lon, lat, search radius m, expected m, tolerance m, 'max' | 'at'].
 // Positions are the summits as the lidar has them; the heights are the
@@ -34,14 +39,42 @@ const KNOWN = {
     ['Puowaina (Punchbowl), rim', -157.8491, 21.3122, 100, 152, 12, 'max'],
     ['Nuʻuanu Pali lookout', -157.7933, 21.3667, 25, 362, 20, 'at'],
   ],
+  // Kōnāhuanui as above; Olomana 1,643 ft (its sharp summit stands lower in a
+  // 13 m texel); Mānana 361 ft and Puʻu Hawaiʻiloa 337 ft on the 1938 map
+  // (Mānana's from the CUDEM, an islet the lidar left out)
+  koolaupoko: [
+    ['Kōnāhuanui', -157.7882, 21.3581, 150, 960, 25, 'max'],
+    ['Olomana', -157.7508, 21.3612, 150, 501, 25, 'max'],
+    ['Mānana (Rabbit Island)', -157.6565, 21.3285, 150, 110, 8, 'max'],
+    ['Puʻu Hawaiʻiloa', -157.7569, 21.448, 100, 103, 8, 'max'],
+  ],
 }
-// Points that must be sea, and how deep at least: [name, lon, lat, metres]
+// Points that must be sea, and how deep at least: [name, lon, lat, metres,
+// and optionally how shallow at most: a reef flat must read as shallow sea]
 const SEA_POINTS = {
   nuuanu: [
     ['Honolulu Harbour, main channel', -157.869, 21.308, -5],
     ['Honolulu Harbour, entrance', -157.8655, 21.303, -5],
     ['Kewalo Basin', -157.8575, 21.2925, -1],
     ['off Waikīkī', -157.835, 21.272, -1],
+  ],
+  koolaupoko: [
+    ['Kāneʻohe Bay, the south basin', -157.778, 21.432, -5],
+    ['Kāneʻohe Bay, the lagoon off Kahaluʻu', -157.822, 21.462, -5],
+    ['Kailua Bay', -157.705, 21.405, -5],
+    ['Waimānalo Bay', -157.68, 21.345, -3],
+    ['the barrier reef flat', -157.805, 21.47, -1, -4],
+    ['the reef flat west of Mōkapu', -157.785, 21.453, -1, -4],
+    ['a patch reef off Heʻeia', -157.8008, 21.4529, -1, -4],
+    ['inside Heʻeia’s fishpond', -157.8075, 21.4365, -1, -3],
+  ],
+}
+// Points that must be land: [name, lon, lat, search radius m] (the highest texel within it)
+const LAND_POINTS = {
+  koolaupoko: [
+    ['Heʻeia’s pond wall, east side', -157.805, 21.4345, 15],
+    ['Mokumanu', -157.7218, 21.47, 40],
+    ['Mokolea', -157.7195, 21.4319, 25],
   ],
 }
 // Rain: [name, lon, lat, radius m, 'max' | 'min', lo mm, hi mm]
@@ -52,11 +85,18 @@ const RAIN_SPOTS = {
     ['downtown by the harbour (dry)', -157.862, 21.308, 600, 'min', 0, 900],
     ['Waikīkī (dry)', -157.83, 21.28, 600, 'min', 0, 900],
   ],
+  koolaupoko: [
+    ['the crest above Kāneʻohe (wet)', -157.815, 21.385, 800, 'max', 2500, 6000],
+    ['the head of Waiāhole (wet)', -157.875, 21.47, 800, 'max', 2500, 6000],
+    ['Mōkapu (dry)', -157.745, 21.452, 600, 'min', 0, 900],
+    ['Makapuʻu (dry)', -157.66, 21.315, 400, 'min', 0, 900],
+  ],
 }
 
 // The stretch of shore the patches lie on: [west, south, east, north]
 const WATERFRONT = {
   nuuanu: [-157.897, 21.27, -157.8, 21.335],
+  koolaupoko: [-157.83, 21.41, -157.735, 21.48],
 }
 
 const mmOf = (b) => (b === 0 ? 0 : 300 * Math.pow(40, b / 255))
@@ -99,7 +139,7 @@ export function checkDistricts({ data, log }) {
     const [mx, mz] = d.metresPerTexel
     ok(Math.abs(mx - grid.dLon * KX) < 1e-3 && Math.abs(mz - grid.dLat * KZ) < 1e-3, `${d.id}: metresPerTexel does not match bounds and size`)
     ok(Math.abs(mx / mz - 1) < 0.005, `${d.id}: texels are not square (${mx} x ${mz} m)`)
-    ok(mx >= 4 && mx <= 8, `${d.id}: ${mx} m per texel`)
+    ok(mx >= TEXEL[0] && mx <= TEXEL[1], `${d.id}: ${mx} m per texel, outside ${TEXEL.join('–')}`)
     for (const s of d.sources) ok(s.id && s.title && s.url && s.licence && s.fetched, `${d.id}: source ${s.id || '?'} lacks id, title, url, licence or fetched`)
 
     // heights
@@ -143,11 +183,19 @@ export function checkDistricts({ data, log }) {
       ok(Math.abs(got - want) <= tol, `${name}: ${got} m, expected ${want} ± ${tol}`)
       log(`  ${name.padEnd(28)} ${got.toFixed(1).padStart(7)} m (mapped ${want})${how === 'max' ? `, highest texel ${off.toFixed(0)} m from the summit` : ''}`)
     }
-    for (const [name, lon, lat, deeper] of SEA_POINTS[d.id] || []) {
+    for (const [name, lon, lat, deeper, shallower = -Infinity] of SEA_POINTS[d.id] || []) {
       const [i, j] = texelOf(grid, lon, lat)
       const v = metres[j * W + i]
-      ok(v <= deeper, `${name}: ${v} m, expected sea at or below ${deeper} m`)
+      ok(v <= deeper && v >= shallower, `${name}: ${v} m, expected sea at or below ${deeper} m${shallower > -Infinity ? ` and above ${shallower} m` : ''}`)
       log(`  ${name.padEnd(28)} ${v.toFixed(1).padStart(7)} m`)
+    }
+    for (const [name, lon, lat, r] of LAND_POINTS[d.id] || []) {
+      const [i0, j0] = texelOf(grid, lon, lat)
+      const rr = Math.max(0, Math.round(r / mx))
+      let best = -Infinity
+      for (let j = j0 - rr; j <= j0 + rr; j++) for (let i = i0 - rr; i <= i0 + rr; i++) if (metres[j * W + i] > best) best = metres[j * W + i]
+      ok(best > 0, `${name}: ${best} m, expected land`)
+      log(`  ${name.padEnd(28)} ${best.toFixed(1).padStart(7)} m`)
     }
 
     // against the island pack
@@ -223,34 +271,65 @@ export function checkDistricts({ data, log }) {
       }
     }
 
-    // patches: 255 only over today's land, and each later keyframe inside
-    // the one before it (land made then stayed land)
-    const sorted = [...d.patches].sort((a, b) => a.until - b.until)
-    for (const p of sorted) {
-      for (const k of ['keyframe', 'until', 'file']) ok(p[k] !== undefined, `${d.id}: patch lacks ${k}`)
+    // patches. Each on its own side of today's coast: a lower (the default)
+    // only over land standing above its depth, a raise only over sea deeper
+    // than its depth. A keyframe patch (as nuuanu's) is 0 or 255, and each
+    // later keyframe's inside the one before it (land made then stayed land);
+    // a dated work (an id, as patches/manifest.json's) may carry soft weights,
+    // and no texel's weights of one kind over the dated works pass one.
+    const sums = { raise: new Float32Array(W * H), lower: new Float32Array(W * H) }
+    const keyframes = []
+    for (const p of d.patches) {
+      const kind = p.kind ?? 'lower'
+      const depth = p.depth ?? -1
+      const label = p.keyframe || p.id
+      ok(label && Number.isInteger(p.until) && p.file, `${d.id}: a patch lacks keyframe or id, until or file`)
+      ok(['raise', 'lower'].includes(kind) && Number.isFinite(depth), `${label}: kind ${kind}, depth ${depth}`)
+      ok(typeof p.note === 'string' && p.note.length > 40 && p.source, `${label}: no source or note`)
       const m = readPNG(join(dir, p.file))
       if (!ok(m.channels === 1 && m.width === W && m.height === H, `${p.file}: not a ${W}x${H} greyscale image`)) continue
       let on = 0
-      let offLand = 0
+      let wrongSide = 0
+      let wrongWay = 0
       let odd = 0
+      let km2 = 0
       for (let o = 0; o < W * H; o++) {
         const v = m.data[o]
         if (v !== 0 && v !== 255) odd++
         if (!v) continue
         on++
-        if (!land[o]) offLand++
+        km2 += v / 255
+        if (!p.keyframe) sums[kind][o] += v / 255
+        if (kind === 'lower') {
+          if (!land[o]) wrongSide++
+          if (!(metres[o] > depth)) wrongWay++
+        } else {
+          if (land[o]) wrongSide++
+          if (!(metres[o] < depth)) wrongWay++
+        }
       }
-      ok(!odd, `${p.file}: ${odd} texels neither 0 nor 255`)
-      ok(!offLand, `${p.file}: ${offLand} texels over today's sea`)
+      km2 *= (mx * mz) / 1e6
+      if (p.keyframe) {
+        ok(!odd, `${p.file}: ${odd} texels neither 0 nor 255`)
+        keyframes.push(p)
+      }
+      ok(!wrongSide, `${p.file}: ${wrongSide} texels over today's ${kind === 'lower' ? 'sea' : 'land'}`)
+      ok(!wrongWay, `${p.file}: ${wrongWay} texels it would ${kind === 'lower' ? 'raise' : 'deepen'} (today already ${kind === 'lower' ? 'at or below' : 'at or above'} ${depth} m)`)
       ok(on > 0, `${p.file}: empty`)
-      log(`  patch ${p.keyframe} (until ${p.until}): ${on} texels, ${((on / nLand) * 100).toFixed(2)}% of today's land, ${((on * mx * mz) / 1e6).toFixed(2)} km²`)
+      log(`  patch ${label} (${kind} to ${depth} m, until ${p.until}): ${on} texels, ${km2.toFixed(3)} km²`)
     }
-    for (let k = 1; k < sorted.length; k++) {
-      const a = readPNG(join(dir, sorted[k - 1].file)).data
-      const b = readPNG(join(dir, sorted[k].file)).data
+    for (const k of ['raise', 'lower']) {
+      let over = 0
+      for (const v of sums[k]) if (v > 1 + 1 / 255) over++
+      ok(!over, `${d.id}: ${over} texels where the dated ${k} weights add up to more than one`)
+    }
+    keyframes.sort((a, b) => a.until - b.until)
+    for (let k = 1; k < keyframes.length; k++) {
+      const a = readPNG(join(dir, keyframes[k - 1].file)).data
+      const b = readPNG(join(dir, keyframes[k].file)).data
       let out = 0
       for (let o = 0; o < W * H; o++) if (b[o] && !a[o]) out++
-      ok(!out, `${sorted[k].file}: ${out} texels outside ${sorted[k - 1].file}`)
+      ok(!out, `${keyframes[k].file}: ${out} texels outside ${keyframes[k - 1].file}`)
     }
 
     // supporting files
@@ -275,20 +354,27 @@ export function checkDistricts({ data, log }) {
     for (const s of d.streams || []) {
       ok(s.ok, `${s.name}: ${(s.withinMappedShare * 100).toFixed(0)}% on the mapped stream, outlet ${s.outletOffStreamMetres} m off it, deepest pit ${s.deepestPitMetres} m`)
       log(
-        `  ${s.name.padEnd(16)} ${s.lengthKm.toFixed(2)} km to tidewater, ${(s.withinMappedShare * 100).toFixed(0)}% within 60 m of the mapped stream, ` +
+        `  ${s.name.padEnd(16)} ${s.lengthKm.toFixed(2)} km to tidewater, ${(s.withinMappedShare * 100).toFixed(0)}% on the mapped lines (within the district's tolerance), ` +
           `outlet ${s.outletOffStreamMetres} m off it and ${s.outletFromMouthMetres} m from its mouth, ${s.catchmentKm2} km², deepest pit ${s.deepestPitMetres} m`,
       )
     }
   }
 
-  // size of the whole directory
+  // size of each district's directory, and of the whole
   let bytes = 0
+  const per = new Map()
   for (const f of walk(dir)) {
     const b = statSync(f).size
     bytes += b
-    log(`  ${f.slice(dir.length + 1).padEnd(36)} ${(b / 1024).toFixed(0).padStart(6)} KB`)
+    const rel = f.slice(dir.length + 1)
+    const id = rel.includes('/') ? rel.split('/')[0] : null
+    if (id) per.set(id, (per.get(id) || 0) + b)
+    log(`  ${rel.padEnd(44)} ${(b / 1024).toFixed(0).padStart(6)} KB`)
   }
-  ok(bytes <= MAX_BYTES, `districts/ is ${(bytes / 1048576).toFixed(2)} MB, over ${MAX_BYTES / 1048576} MB`)
+  for (const [id, b] of per) {
+    ok(b <= MAX_BYTES, `districts/${id}/ is ${(b / 1048576).toFixed(2)} MB, over ${MAX_BYTES / 1048576} MB`)
+    log(`districts/${id}/: ${(b / 1048576).toFixed(2)} MB`)
+  }
   log(`districts/: ${(bytes / 1048576).toFixed(2)} MB`)
   log(failures ? `${failures} failure(s)` : 'all district checks passed')
   return failures === 0
@@ -371,7 +457,8 @@ function crop(rgb, W, x0, y0, cw, ch, k) {
   return out
 }
 
-const PATCH_COLOURS = { contact: [225, 60, 40], kingdom: [250, 190, 40] }
+// keyframe patches by keyframe; dated works by kind (raise cyan, lower red)
+const PATCH_COLOURS = { contact: [225, 60, 40], kingdom: [250, 190, 40], raise: [0, 230, 230], lower: [235, 40, 40] }
 
 export function previewDistricts({ data, out, log }) {
   mkdirSync(out, { recursive: true })
@@ -408,8 +495,8 @@ export function previewDistricts({ data, out, log }) {
     const patches = [...d.patches].sort((a, b) => b.until - a.until)
     for (const p of patches) {
       const m = readPNG(join(dir, p.file)).data
-      const c = PATCH_COLOURS[p.keyframe] || [200, 0, 200]
-      for (let o = 0; o < W * H; o++) if (m[o]) blend(rgb, o, c, 0.55)
+      const c = PATCH_COLOURS[p.keyframe] || PATCH_COLOURS[p.kind ?? 'lower'] || [200, 0, 200]
+      for (let o = 0; o < W * H; o++) if (m[o]) blend(rgb, o, c, 0.55 * (m[o] / 255))
     }
     // streams: routed over the pack, drawn where they drain more than 0.25 km²
     const rain = readPNG(join(dir, d.rain.file)).data
@@ -424,7 +511,10 @@ export function previewDistricts({ data, out, log }) {
     for (const f of d.files || []) {
       if (!f.file.endsWith('.geojson')) continue
       const fc = JSON.parse(readFileSync(join(dir, f.file), 'utf8'))
-      drawFeatures(rgb, W, H, grid, fc, f.year && f.year < 1890 ? [120, 0, 0] : [140, 80, 0], 0.95, 2)
+      const colour = f.year && f.year < 1890 ? [120, 0, 0] : [140, 80, 0]
+      // (the reefs and other shapes of a chart thinner and lighter than its shores)
+      drawFeatures(rgb, W, H, grid, { features: fc.features.filter((x) => !['reef', 'enclosed'].includes(x.properties?.kind)) }, colour, 0.95, 2)
+      drawFeatures(rgb, W, H, grid, { features: fc.features.filter((x) => ['reef', 'enclosed'].includes(x.properties?.kind)) }, [255, 255, 255], 0.7, 1)
     }
     for (const b of d.breaches || []) {
       drawLine(rgb, W, H, grid, b.points.length > 1 ? b.points : [b.points[0], b.points[0]], [255, 0, 255], 1, 3)

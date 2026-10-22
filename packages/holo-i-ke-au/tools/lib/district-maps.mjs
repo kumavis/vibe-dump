@@ -1,5 +1,7 @@
-// The shoreline patches of a district (DATA.md, "District packs"): where a
-// texel that is land today was sea or reef flat in a keyframe's year.
+// The shoreline patches of the nuuanu district (DATA.md, "District packs"):
+// where a texel that is land today was sea or reef flat in a keyframe's
+// year. (A district with patches of its own kind names its module in
+// district-sources.mjs, `patchModule`; Koʻolaupoko's are district-koolaupoko.mjs.)
 //
 // Two sources, as the State serves them. The geologic map's fill unit says
 // where the ground is made, not when, nor what lay under it: on the
@@ -157,8 +159,8 @@ export async function buildPatches({ dir, d, grid, land, outDir, ledger, log }) 
     'at Kālia by the Ala Wai boat harbour. Fill the 1881 map shows as land (the Kewalo ponds and Kakaʻako salt pans, the Waikīkī wetland under the Ala Wai, ' +
     'the Kalihi and Moanalua ponds) stays land'
   const entries = [
-    { keyframe: 'contact', until: 1850, file: `${d.id}/patch-contact.png`, source: 'the fill unit, cut with the 1881 shore', note: `${why}. The 1881 shore is the earliest surveyed; at the harbour front it already includes made ground of unknown date` },
-    { keyframe: 'kingdom', until: 1900, file: `${d.id}/patch-kingdom.png`, source: 'the fill unit, cut with the 1881 shore', note: `${why}. The same mask as the contact patch: the 1899 sheet shows the same waterfront within its registration, so the filling the patch covers came after it` },
+    { keyframe: 'contact', until: 1850, kind: 'lower', depth: -1, file: `${d.id}/patch-contact.png`, source: 'the fill unit, cut with the 1881 shore', note: `${why}. The 1881 shore is the earliest surveyed; at the harbour front it already includes made ground of unknown date` },
+    { keyframe: 'kingdom', until: 1900, kind: 'lower', depth: -1, file: `${d.id}/patch-kingdom.png`, source: 'the fill unit, cut with the 1881 shore', note: `${why}. The same mask as the contact patch: the 1899 sheet shows the same waterfront within its registration, so the filling the patch covers came after it` },
   ]
   return { entries, files, sources, stats: { texels: on, km2: km2(on), fillOnLandKm2: km2(fillLand) } }
 }

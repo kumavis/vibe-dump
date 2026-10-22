@@ -33,17 +33,10 @@ export const ENC = {
   note: 'today’s maintained channels and basins with their charted depths: ground inside them counts as cut, and the raise patches are checked against them',
 }
 
-const HISTORIC_MAPS = 'https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps'
 export const MAPS = {
   1881: SURVEY_MAPS[1881],
   1899: SURVEY_MAPS[1899],
-  1938: {
-    id: 'hawaii-gis-oahu-1938',
-    year: 1938,
-    title: 'Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)',
-    service: `${HISTORIC_MAPS}/Oahu_1938/ImageServer`,
-    licence: 'State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey',
-  },
+  1938: SURVEY_MAPS[1938],
 }
 
 /** The island the patches cover, for the vector queries (the oahu pack's box). */

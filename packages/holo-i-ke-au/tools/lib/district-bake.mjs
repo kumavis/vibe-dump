@@ -33,9 +33,9 @@ import { join } from 'node:path'
 import { OFFSET, SCALE } from './bake-run.mjs'
 import { carveBreaches, streamReport } from './district-water.mjs'
 import { accumulateLidar, readGeoWindow, squaresOver } from './district-raster.mjs'
-import { buildPatches } from './district-maps.mjs'
 import {
   CUDEM,
+  DISTRICTS,
   LIDAR,
   STREAMS,
   cudemTilesFor,
@@ -49,6 +49,7 @@ import {
 import { Ledger } from './fetch.mjs'
 import { writeGreyPNG, writePNG } from './png.mjs'
 import { distanceTo } from './layers-raster.mjs'
+import { components } from './patch-raster.mjs'
 import { fillThroughMask, readAsciiGrid, resampleGrid } from './raster.mjs'
 import { BATHY, RAIN, findRainGrid, paths as islandPaths } from './sources.mjs'
 
@@ -68,6 +69,11 @@ const FLAT_SEA = -1
 // least GAP_FROM_SEA metres from the CUDEM's own sea.
 const GAP_MIN_METRES = 2
 const GAP_FROM_SEA = 150
+// Walls: a texel at least WALL_MIN land, on a line with water (under WALL_WATER land) at
+// most two texels off on both sides, and WALL_SUM land across the line, is a wall
+const WALL_MIN = 0.1
+const WALL_WATER = 0.08
+const WALL_SUM = 0.3
 
 const rainByte = (mm) => Math.round(Math.min(1, Math.max(0, Math.log(mm / 300) / Math.log(40))) * 255)
 const RAIN_FILL_METRES = 2000
@@ -183,8 +189,77 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
     if ((x > 0 && gap[o - 1]) || (x < W - 1 && gap[o + 1]) || (o >= W && gap[o - W]) || (o < N - W && gap[o + W])) seamDiff[o] = lidar.landMean[o] - cudemAll[o]
   }
   const corr = gapTexels ? seamCorrection(gap, seamDiff, W, H) : new Float32Array(N)
+  // islets the survey left out (a district that asks for them): pieces of the
+  // CUDEM's land that no lidar cell reaches are land at the CUDEM's height
+  const islet = new Uint8Array(N)
+  let isletTexels = 0
+  let isletPieces = 0
+  if (d.islets) {
+    const cl = new Uint8Array(N)
+    for (let o = 0; o < N; o++) cl[o] = cudemAll[o] > LAND_ABOVE && !gap[o] ? 1 : 0
+    const { label, n } = components(cl, W, H)
+    // (rock, not a reef flat or a sand bar the CUDEM holds as just dry: the piece stands GAP_MIN_METRES somewhere)
+    const touched = new Uint8Array(n + 1)
+    const peak = new Float32Array(n + 1)
+    for (let o = 0; o < N; o++) {
+      if (!label[o]) continue
+      if (lidar.dataFrac[o] > 0) touched[label[o]] = 1
+      if (cudemAll[o] > peak[label[o]]) peak[label[o]] = cudemAll[o]
+    }
+    for (let l = 1; l <= n; l++) if (peak[l] < GAP_MIN_METRES) touched[l] = 1
+    const counted = new Uint8Array(n + 1)
+    for (let o = 0; o < N; o++) {
+      if (!label[o] || touched[label[o]]) continue
+      islet[o] = 1
+      isletTexels++
+      if (!counted[label[o]]) (counted[label[o]] = 1), isletPieces++
+    }
+    const where = new Map()
+    for (let o = 0; o < N; o++) {
+      if (!islet[o]) continue
+      const e = where.get(label[o]) || { n: 0, i: 0, j: 0 }
+      e.n++
+      e.i += o % W
+      e.j += Math.floor(o / W)
+      where.set(label[o], e)
+    }
+    const list = [...where].map(([l, e]) => `${e.n} at ${grid.latAt(e.j / e.n).toFixed(4)} N ${(-grid.lonAt(e.i / e.n)).toFixed(4)} W (${peak[l].toFixed(0)} m)`)
+    log(`  islets: ${isletPieces} pieces of the CUDEM's land with no lidar cell, ${isletTexels} texels: ${list.join('; ')}`)
+  }
   const seamVals = [...seamDiff].filter((v) => v === v)
   log(`  gap: ${gapTexels} texels (${((gapTexels / N) * 100).toFixed(1)}%) from the CUDEM, seam difference median ${median(seamVals).toFixed(2)} m over ${seamVals.length} texels`)
+
+  // --- walls (a district that asks for them): a line of texels a tenth to a
+  // half land, one or two texels across, with water on both sides, is a
+  // fishpond wall, a causeway or a spit, and stays land; by the half-land rule
+  // alone a wall narrower than a texel would sink. A coast has land on one side.
+  const wall = new Uint8Array(N)
+  let wallTexels = 0
+  if (d.walls) {
+    const f = lidar.landFrac
+    const water = (o) => f[o] < WALL_WATER
+    const steps = [1, W, W + 1, W - 1]
+    for (let o = W + 1; o < N - W - 1; o++) {
+      const x = o % W
+      if (x < 2 || x > W - 3 || o < 2 * W || o >= N - 2 * W || f[o] < WALL_MIN || f[o] >= 0.5 || lidar.landMean[o] < LAND_ABOVE + 0.1) continue
+      for (const st of steps) {
+        let sum = f[o]
+        let ok = true
+        for (const dir of [st, -st]) {
+          if (water(o + dir)) continue
+          if (f[o + dir] >= WALL_MIN && f[o + dir] < 0.5 && water(o + 2 * dir)) sum += f[o + dir]
+          else ok = false
+        }
+        // (a wall two texels across counts its other half; three across is land by the half rule)
+        if (ok && sum >= WALL_SUM) {
+          wall[o] = 1
+          wallTexels++
+          break
+        }
+      }
+    }
+    log(`  walls: ${wallTexels} texels of fishpond walls, causeways and spits kept as land`)
+  }
 
   // --- land and sea
   let gmrt = null
@@ -199,14 +274,17 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
   for (let o = 0; o < N; o++) {
     let frac = lidar.landFrac[o]
     let mean = lidar.landMean[o]
-    if (gap[o]) {
+    if (islet[o]) {
+      frac = 1
+      mean = cudemAll[o]
+    } else if (gap[o]) {
       // the part without lidar is land at the CUDEM's height, corrected
       const missing = 1 - lidar.dataFrac[o]
       const fill = cudemAll[o] + corr[o]
       mean = (frac * mean + missing * fill) / (frac + missing)
       frac += missing
     }
-    if (frac >= 0.5) {
+    if (frac >= 0.5 || wall[o]) {
       land[o] = 1
       nLand++
       metres[o] = Math.max(LAND_MIN * SCALE + OFFSET, mean)
@@ -272,10 +350,12 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
   const rainMm = new Float32Array(N)
   for (let o = 0; o < N; o++) rainMm[o] = land[o] ? 300 * Math.pow(40, rainGrey[o] / 255) : 0
   const mappedStreams = JSON.parse(readFileSync(p.streams, 'utf8'))
-  const streams = streamReport(metres, land, grid, rainMm, d.streams || [], mappedStreams)
+  // a trunk keeps within 60 m of the State's lines, or six texels where the texel is coarser than 10 m
+  const streams = streamReport(metres, land, grid, rainMm, d.streams || [], mappedStreams, { near: Math.max(60, 6 * texel) })
   for (const s of streams) log(`  stream ${s.name}: ${s.summary}`)
 
-  // --- patches
+  // --- patches (the district's own module, or nuuanu's in district-maps.mjs)
+  const { buildPatches } = await import(`./${d.patchModule || 'district-maps.mjs'}`)
   const patches = await buildPatches({ dir, d, grid, land, metres, outDir, ledger, log })
 
   // --- provenance
@@ -298,7 +378,8 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
         `(measured against the CUDEM on flat ground; residual ${residual.toFixed(2)} m) and is moved to it. A cell is land above ` +
         `+${LAND_ABOVE} m, because water inside the coast is flattened to the level of the day it was flown (−0.35 to +0.1 m); ` +
         `a texel is land when at least half its cells are, and holds their mean (never below ${LAND_MIN * SCALE + OFFSET} m). ` +
-        `${lidar.missing} of the ${squares.length} squares over the box have no tile: open sea, and the windward face of the pali (see the CUDEM)`,
+        `${lidar.missing} of the ${squares.length} squares over the box have no tile: open sea, and the windward face of the pali (see the CUDEM)` +
+        (d.walls ? `. ${wallTexels} texels a tenth to a half land, on a line one or two texels across with water on both sides (fishpond walls, causeways, spits), are land too` : ''),
     },
     {
       id: CUDEM.id,
@@ -308,11 +389,12 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
       licence: CUDEM.licence,
       note:
         `tile ${cudemTiles.join(', ')}, about 3 m cells. Sea texels: the area-weighted mean of the cells below mean sea level, never shallower than ${FLAT_SEA} m ` +
-        `(${seaFromCudem} texels; the reef flats from topobathymetric lidar, the harbour and channels from NOAA surveys); ${seaInland} texels of water inside ` +
-        `the coast that the CUDEM holds as land (the Ala Wai, the tidal reaches of the streams, lagoons) are a flat ${FLAT_SEA} m. Land: ${gapTexels} texels ` +
+        `(${seaFromCudem} texels; the reef flats from topobathymetric lidar, ${d.chartedSea} from NOAA surveys); ${seaInland} texels of water inside ` +
+        `the coast that the CUDEM holds as land (${d.inlandWater}) are a flat ${FLAT_SEA} m. Land: ${gapTexels} texels ` +
         `(${((gapTexels / N) * 100).toFixed(1)}% of the pack) on the windward face of the pali, where the lidar has no tile, are the CUDEM's land there ` +
         `(the 2013 NOAA Oʻahu lidar on the lower slopes, the USGS 1/3 arc-second DEM on the cliffs, per its spatial metadata) plus a smooth correction ` +
-        `that meets the lidar along the seam (seam difference median ${median(seamVals).toFixed(1)} m)`,
+        `that meets the lidar along the seam (seam difference median ${median(seamVals).toFixed(1)} m)` +
+        (d.islets ? `. ${isletTexels} texels on ${isletPieces} islets the survey left out (${d.islets}) are the CUDEM's land` : ''),
     },
   ]
   if (gmrt && seaFromGmrt) {
@@ -364,7 +446,7 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
       minMetres: min,
       maxMetres: max,
       rainCoverage: round(rainCoverage, 4),
-      lidarShare: round((nLand - countGapLand(gap, land)) / Math.max(1, nLand), 4),
+      lidarShare: round((nLand - countGapLand(gap, land) - isletTexels) / Math.max(1, nLand), 4),
       datumShiftMetres: LIDAR_SHIFT,
     },
     sources,
@@ -374,7 +456,14 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
   const existing = readJson(manifestPath)
   const districts = (existing?.districts || []).filter((x) => x.id !== d.id)
   districts.push(entry)
-  districts.sort((a, b) => (a.id < b.id ? -1 : 1))
+  // in the order the districts are declared (district-sources.mjs), the
+  // finer first: where two boxes overlap (Koʻolaupoko's holds most of
+  // Nuʻuanu's), the first district whose box holds a point is the one for it
+  const rank = (x) => {
+    const k = Object.keys(DISTRICTS).indexOf(x.id)
+    return k < 0 ? Infinity : k
+  }
+  districts.sort((a, b) => rank(a) - rank(b) || (a.id < b.id ? -1 : 1))
   writeFileSync(manifestPath, JSON.stringify({ projection: { lat0: 20.5, lon0: -157.5 }, districts }, null, 2) + '\n')
   log(`wrote ${manifestPath} (${((Date.now() - t0) / 1000).toFixed(0)} s)`)
 }

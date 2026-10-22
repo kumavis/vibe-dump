@@ -239,7 +239,7 @@ function trunkStart(route, metres, land, grid, main, margin = 30) {
  * its length and catchment, and the deepest pit it passes through (water
  * standing over the bare earth: a dam or a crossing until breached).
  */
-export function streamReport(metres, land, grid, rainMm, streams, mapped, { near = 60, share = 0.8, maxPit = 1.5 } = {}) {
+export function streamReport(metres, land, grid, rainMm, streams, mapped, { near: nearAll = 60, share = 0.8, maxPit = 1.5 } = {}) {
   if (!streams.length) return []
   const { W, H } = grid
   const texel = grid.metresPerTexel[0]
@@ -248,6 +248,8 @@ export function streamReport(metres, land, grid, rainMm, streams, mapped, { near
   const metresBetween = ([a, b], [c, d]) => Math.hypot(((a - c) * grid.metresPerTexel[0]) / grid.dLon, ((b - d) * grid.metresPerTexel[1]) / grid.dLat)
   const out = []
   for (const s of streams) {
+    // (a stream may carry its own tolerance, with the reason beside it in the district's list)
+    const near = s.near ?? nearAll
     const m = mappedStream(mapped, s)
     const dist = distanceTo(rasterLines(m.all, grid), W, H, texel)
     // the mouth: the stream's lowest mapped end
@@ -300,7 +302,7 @@ export function streamReport(metres, land, grid, rainMm, streams, mapped, { near
       name: s.name,
       summary:
         `from ${f5(lonLatOf(grid, start))} (${route.area[start].toFixed(2)} km² above), ${(length / 1000).toFixed(2)} km to water at sea level at ${f5(outlet)}, ` +
-        `${Math.round(dist[o])} m from the mapped stream and ${Math.round(fromMouth)} m from its mouth; ${(kept * 100).toFixed(0)}% of the trunk within ${near} m of the mapped lines; ` +
+        `${Math.round(dist[o])} m from the mapped stream and ${Math.round(fromMouth)} m from its mouth; ${(kept * 100).toFixed(0)}% of the trunk within ${Math.round(near)} m of the mapped lines; ` +
         `${route.area[o].toFixed(2)} km² at the outlet; deepest pit ${deepest.toFixed(1)} m at ${f5(lonLatOf(grid, deepestAt))}${atEdge ? '; LEAVES THE BOX' : ''}${ok ? '' : ' (CHECK)'}`,
       result: {
         mapped: `${s.stream} / ${s.trib}`,

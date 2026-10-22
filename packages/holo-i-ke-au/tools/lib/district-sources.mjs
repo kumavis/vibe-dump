@@ -3,16 +3,21 @@
 // data: nothing here executes them, the bake only parses them.
 //
 // A district is a box on one island, baked finer than its island pack from
-// the best open elevation there is. For Nuʻuanu that is the 2022–23 Oʻahu
-// lidar, published by the USGS at its original 0.5 m as 500 m GeoTIFF tiles
-// in UTM zone 4; the box needs about 560 of them (about 1.4 GB). The sea
+// the best open elevation there is. For Nuʻuanu and Koʻolaupoko that is the
+// 2022–23 Oʻahu lidar, published by the USGS at its original 0.5 m as 500 m
+// GeoTIFF tiles in UTM zone 4; the Nuʻuanu box needs about 560 of them
+// (about 1.4 GB), the Koʻolaupoko box about 1,420 (about 3.2 GB). The sea
 // floor comes from NOAA's 1/9 arc-second topobathymetric DEM, which holds the
 // reef flats and the dredged harbour; GMRT, as the island packs use, stands
 // by for any gap in it. The rest is what the island bake and the layers bake
 // already read: the Rainfall Atlas, the State geologic map (here only its
-// fill unit), and the Government Survey maps of 1881 and 1899 as the State
-// serves them, georeferenced, from its Historic_Maps image services; plus
-// the State's stream lines, to check the routed streams against.
+// fill unit), and the Government Survey maps of Oʻahu (1881, 1899, 1902) and
+// the U.S. Geological Survey's of 1927 and 1938 as the State serves them,
+// georeferenced, from its Historic_Maps and SoH_Maps image services; plus the
+// State's stream lines, to check the routed streams against. A district may also read the Government Survey's
+// registered maps as OHA's Kīpuka database serves them (scans, not
+// georeferenced): Koʻolaupoko's bay and shores are read off G. E. G.
+// Jackson's surveys of 1882 and 1884 (district-koolaupoko.mjs).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fetchTo } from './fetch.mjs'
@@ -77,6 +82,86 @@ export const DISTRICTS = {
       { name: 'Kalihi Stream', stream: 'Kalihi', trib: 'Kalihi' },
       { name: 'Mānoa Stream', stream: 'Ala Wai', trib: 'Manoa' },
     ],
+    // the Government Survey sheets exported over the box, and at what pixel
+    maps: [1881, 1899],
+    mapPixel: 5,
+    // what the sources' notes name as water inside the coast and as charted sea
+    inlandWater: 'the Ala Wai, the tidal reaches of the streams, lagoons',
+    chartedSea: 'the harbour and channels',
+  },
+  koolaupoko: {
+    id: 'koolaupoko',
+    name: 'Koʻolaupoko',
+    island: 'oahu',
+    // The whole moku, from Kualoa to Makapuʻu: its ahupuaʻa reach from
+    // 157.8978 W (the crest behind Waikāne) to 157.6494 W (Makapuʻu Point)
+    // and from 21.3085 N (Makapuʻu) to 21.5354 N (Kualoa), and the
+    // district's features from 157.896 W to 157.681 W and 21.326 N to
+    // 21.521 N. West: the crest behind Waikāne and Waiāhole. East: 650 m of
+    // sea past Makapuʻu Point. South: 700 m past the point. North: 300 m
+    // past Kualoa's boundary with Kaʻaʻawa. About 26.6 by 26.1 km, so 12.98
+    // m a texel on 2048: inside the 13 m that lets the north (Kahaluʻu,
+    // Waiāhole, Kualoa) in with the rest (a box padded to 700 m all round
+    // would be 13.5 m). The moku runs north-west to south-east, so the box
+    // also takes in the leeward side behind the crest, Honolulu's harbour at
+    // its south-west corner, and most of the nuuanu box.
+    bbox: [-157.898, 21.302, -157.643, 21.538],
+    longSide: DISTRICT_LONG_SIDE,
+    // Found by --find-breaches on a bake without them and carved in this
+    // order, as for nuuanu: the crossings the bare earth keeps over the
+    // windward trunks.
+    breaches: [
+      { name: 'Kāneʻohe Stream at 21.3923 N 157.8046 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.5 m deep behind it', points: [[-157.80461, 21.392286], [-157.804113, 21.392755], [-157.80374, 21.393224], [-157.803616, 21.393692], [-157.803492, 21.394161], [-157.803864, 21.39463]] },
+      { name: 'Kāneʻohe Stream at 21.4005 N 157.8030 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 8.5 m deep behind it', points: [[-157.802995, 21.400489], [-157.802995, 21.400958], [-157.802995, 21.401426], [-157.802995, 21.401895], [-157.802995, 21.402364], [-157.802746, 21.402833], [-157.802249, 21.403301], [-157.801876, 21.40377]] },
+      { name: 'Kāneʻohe Stream at 21.4119 N 157.7953 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it', points: [[-157.79529, 21.411856], [-157.794793, 21.411856], [-157.794669, 21.411387], [-157.794544, 21.41127]] },
+      { name: 'Heʻeia Stream at 21.4172 N 157.8167 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 6.0 m deep behind it', points: [[-157.816664, 21.417246], [-157.816167, 21.417715], [-157.81567, 21.418184], [-157.815297, 21.418652], [-157.8148, 21.419121], [-157.814551, 21.419121]] },
+      { name: 'Heʻeia Stream at 21.4189 N 157.8150 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.8 m deep behind it', points: [[-157.815048, 21.418887], [-157.814676, 21.419121]] },
+      { name: 'Waikāne Stream at 21.5004 N 157.8730 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.5 m deep behind it', points: [[-157.872957, 21.500446], [-157.87246, 21.500329], [-157.872212, 21.500446]] },
+      { name: 'Maunawili Stream at 21.3589 N 157.7661 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it', points: [[-157.766087, 21.358889], [-157.765839, 21.35924]] },
+      { name: 'Kaʻelepulu Stream at 21.3572 N 157.7378 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.5 m deep behind it', points: [[-157.737754, 21.357248], [-157.737381, 21.357483]] },
+      { name: 'Kaʻelepulu Stream at 21.3578 N 157.7373 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it', points: [[-157.737257, 21.357834], [-157.737133, 21.358186]] },
+      { name: 'Kaʻelepulu Stream at 21.3591 N 157.7369 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it', points: [[-157.736884, 21.359123], [-157.736511, 21.35924]] },
+      { name: 'Kaʻelepulu Stream at 21.3609 N 157.7358 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 5.0 m deep behind it', points: [[-157.735766, 21.360881], [-157.73589, 21.36135], [-157.736014, 21.361818], [-157.735641, 21.362053]] },
+      { name: 'Kaʻelepulu Stream at 21.3615 N 157.7360 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.0 m deep behind it', points: [[-157.736014, 21.361467], [-157.73589, 21.361936], [-157.735766, 21.361936]] },
+      { name: 'Kaʻelepulu Stream at 21.3630 N 157.7354 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 6.3 m deep behind it', points: [[-157.735393, 21.36299], [-157.735269, 21.363459], [-157.735393, 21.363928]] },
+      { name: 'Kaʻelepulu Stream at 21.3670 N 157.7363 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it', points: [[-157.736263, 21.366975], [-157.736139, 21.367443], [-157.736014, 21.367678]] },
+      { name: 'Kaʻelepulu Stream at 21.3698 N 157.7361 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.8 m deep behind it', points: [[-157.736139, 21.369787], [-157.736139, 21.370256], [-157.736139, 21.370373]] },
+      { name: 'Heʻeia Stream at 21.4191 N 157.8147 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it', points: [[-157.814676, 21.419121], [-157.814179, 21.419238]] },
+      { name: 'Kaʻelepulu Stream at 21.3582 N 157.7371 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.5 m deep behind it', points: [[-157.737133, 21.358186], [-157.737257, 21.358537]] },
+      { name: 'Kaʻelepulu Stream at 21.3639 N 157.7354 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.5 m deep behind it', points: [[-157.735393, 21.363928], [-157.735641, 21.364162]] },
+      { name: 'Waiāhole Stream at 21.4815 N 157.8484 W', why: 'the lower channel to the mouth, narrower than a texel behind the coastal road, carved along the State’s line: without it the routed trunk turns north into the cove 350 m short of the mouth', points: [[-157.848434, 21.481492], [-157.84784, 21.481525], [-157.846952, 21.481476], [-157.84634, 21.48168], [-157.845622, 21.481592], [-157.844998, 21.481492], [-157.844345, 21.481564], [-157.843645, 21.481938], [-157.843386, 21.482583], [-157.84328, 21.483403], [-157.842916, 21.483827], [-157.842786, 21.48418], [-157.842862, 21.484571]] },
+      { name: 'Kāneʻohe Stream at 21.3905 N 157.8080 W', why: 'a road fill over the channel (a crossing the bare earth keeps); the trunk ponded 2.0 m deep behind it. Cut along the channel to the reach below, as the short breaches found here stopped on the fill', points: [[-157.80804, 21.3905], [-157.80766, 21.3909], [-157.80741, 21.3913], [-157.80729, 21.3916], [-157.80679, 21.392], [-157.80604, 21.3922], [-157.8050, 21.3925]] },
+      { name: 'Kāneʻohe Stream at 21.3893 N 157.8084 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it', points: [[-157.808414, 21.389296], [-157.808289, 21.389766], [-157.80804, 21.390236], [-157.807916, 21.390705], [-157.807418, 21.391175], [-157.807418, 21.39141]] },
+      { name: 'Kāneʻohe Stream at 21.3988 N 157.8024 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it', points: [[-157.802437, 21.398807], [-157.802562, 21.399277]] },
+      { name: 'Kāneʻohe Stream at 21.3993 N 157.8026 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.5 m deep behind it', points: [[-157.802562, 21.399277], [-157.802686, 21.399629]] },
+      { name: 'Kāneʻohe Stream at 21.4113 N 157.7946 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it', points: [[-157.794593, 21.411253], [-157.794095, 21.411018], [-157.793597, 21.411018], [-157.793348, 21.411135]] },
+      { name: 'Heʻeia Stream at 21.4195 N 157.8135 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it', points: [[-157.813519, 21.419472], [-157.813394, 21.419706]] },
+      { name: 'Kaʻelepulu Stream at 21.3621 N 157.7357 W', why: 'a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 4.5 m deep behind it', points: [[-157.735699, 21.362056], [-157.73545, 21.362291]] },
+    ],
+    streams: [
+      { name: 'Kāneʻohe Stream', stream: 'Kaneohe', trib: 'Kaneohe' },
+      { name: 'Heʻeia Stream', stream: 'Heeia', trib: 'Heeia' },
+      { name: 'Kahaluʻu Stream', stream: 'Kahaluu', trib: 'Kahaluu' },
+      { name: 'Waiāhole Stream', stream: 'Waiahole', trib: 'Waiahole' },
+      { name: 'Waikāne Stream', stream: 'Waikane', trib: 'Waikane' },
+      // Maunawili ends in the open water of Kawainui marsh, at the Hāmākua canal, which the State draws as straight strokes
+      { name: 'Maunawili Stream', stream: 'Kawainui', trib: 'Maunawili', near: 100 },
+      { name: 'Kaʻelepulu Stream', stream: 'Kaelepulu', trib: 'Kaelepulu' },
+      { name: 'Waimānalo Stream', stream: 'Waimanalo', trib: 'Waimanalo' },
+    ],
+    // (the sheets are served at 1.2 m (1927), 5.3 m (1938) and 7.6 to 10.2 m;
+    // a 5 m export of this box would pass the services' 4,100 px limit)
+    maps: [1881, 1902, 1927, 1938],
+    mapPixel: 7,
+    registered: [1140, 1848, 1345, 1019],
+    patchModule: 'district-koolaupoko.mjs',
+    // the fishpond walls of the bay (Heʻeia, Moliʻi, Kahouna) stand a few metres wide in the
+    // water: keep them as land (district-bake.mjs, walls)
+    walls: true,
+    // the survey has no tile over these, and they lie too near the sea for the gap rule
+    islets: 'Mokumanu, Kekepa, Mokolea and Kapapa, the Mokulua islands, Mānana and Kāohikaipu, and the breakwater of the pier at Makapuʻu, which the bare earth leaves out as a structure',
+    inlandWater: 'the stream mouths, the canals and the open water of the ponds and marshes',
+    chartedSea: 'the bay’s channels and dredged areas',
   },
 }
 
@@ -146,12 +231,78 @@ export const SURVEY_MAPS = {
     service: `${HISTORIC_MAPS}/Oahu_1899/ImageServer`,
     licence: 'State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899',
   },
+  1902: {
+    id: 'hawaii-gis-oahu-1902',
+    year: 1902,
+    title: 'Hawaiian Government Survey, map of Oʻahu by J. M. Donn, 1902, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/islands_1900s ImageServer, item oa_1902_drg_Donn)',
+    service: `${HISTORIC_MAPS}/islands_1900s/ImageServer`,
+    // the service is a mosaic of one sheet per island; this is Oʻahu's
+    mosaicRule: { mosaicMethod: 'esriMosaicLockRaster', lockRasterIds: [8] },
+    licence: 'State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1902',
+  },
+  1927: {
+    id: 'hawaii-gis-oahu-topo-1927',
+    year: 1927,
+    title: 'Topographic quadrangles of Oʻahu, 1927 edition (U.S. Geological Survey), as the State of Hawaiʻi GIS mosaic (SoH_Maps/oahu_topo_1927 ImageServer)',
+    service: 'https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/oahu_topo_1927/ImageServer',
+    licence: 'State of Hawaiʻi Statewide GIS Program open data; the maps themselves are public-domain federal surveys',
+  },
+  1938: {
+    id: 'hawaii-gis-oahu-1938',
+    year: 1938,
+    title: 'Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)',
+    service: `${HISTORIC_MAPS}/Oahu_1938/ImageServer`,
+    licence: 'State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey',
+  },
 }
-// The scans are served in NAD83 / UTM zone 4N (EPSG:26904) at about 10.2 m a
-// pixel; they are exported at 5 m over the box and a margin, unresampled
-// beyond what the server's nearest-neighbour lookup does.
+// The scans are served in NAD83 / UTM zone 4N (EPSG:26904) at about 5 to
+// 10 m a pixel; they are exported at the district's mapPixel (5 m unless it
+// says otherwise) over the box and a margin, unresampled beyond what the
+// server's nearest-neighbour lookup does.
 export const MAP_PIXEL = 5
 const MAP_MARGIN = 600
+
+// The Government Survey's registered maps as OHA's Kīpuka database serves
+// them: 1-bit scans in PDF, at 300 or 400 dpi, with no georeferencing. The
+// registry's own index is Kīpuka's RegisteredMaps layer.
+const KIPUKA_PDF = 'https://kipukadatabase.com/Docs/RegMaps'
+export const REGISTERED_INDEX = 'https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/RegisteredMaps/FeatureServer/0'
+const REGISTERED_LICENCE =
+  'the map is a public-domain survey of the Hawaiian Government; the scan is served by the Office of Hawaiian Affairs’ Kīpuka database, which states no licence for it'
+export const REGISTERED_MAPS = {
+  1140: {
+    id: 'kipuka-rm-1140',
+    rm: 1140,
+    year: 1882,
+    file: '1140WIDEblueprint.pdf',
+    title: 'Hawaiian Government Survey, Registered Map 1140: “Koolau Bay and Anchorages, Oahu”, surveyed and drawn by Geo. E. Gresley Jackson, Nav. Lieut. R.N., August 1882, 1:12,000, soundings in fathoms at low water (a blueprint), as scanned for OHA’s Kīpuka database',
+  },
+  1848: {
+    id: 'kipuka-rm-1848',
+    rm: 1848,
+    year: 1882,
+    file: '1848.pdf',
+    title: 'Hawaiian Government Survey, Registered Map 1848: “Reduction of Jackson’s Koolau Bay”, 1:24,000, F. W. Thrum, March 1892 (Jackson’s survey of August 1882), as scanned for OHA’s Kīpuka database',
+  },
+  1345: {
+    id: 'kipuka-rm-1345',
+    rm: 1345,
+    year: 1884,
+    file: '1345.pdf',
+    title: 'Hawaiian Government Survey, Registered Map 1345: “Kailua Bay, Oahu”, surveyed and drawn by George Ed. Gresley Jackson, Nav. Lieut. R.N., October 1884, 1:12,000, soundings in fathoms at low water, as scanned for OHA’s Kīpuka database',
+  },
+  1019: {
+    id: 'kipuka-rm-1019',
+    rm: 1019,
+    year: 1884,
+    file: '1019WIDEtracing.pdf',
+    title: 'Hawaiian Government Survey, Registered Map 1019: “East Coast of Oahu including Waimanalo, Hanauma and Maunalua Bays”, surveyed and drawn by Geo. E. Gresley Jackson, Nav. Lieut. R.N., 1884, 1:12,000 (traced from the original by A. Taga, July 1929), as scanned for OHA’s Kīpuka database',
+  },
+}
+for (const m of Object.values(REGISTERED_MAPS)) {
+  m.url = `${KIPUKA_PDF}/${m.file}`
+  m.licence = REGISTERED_LICENCE
+}
 
 // ---------------------------------------------------------------------------
 // Layout of the downloads directory
@@ -171,6 +322,9 @@ export const districtPaths = (dir, id) => ({
   fillLayer: join(dir, id, 'vectors', 'fill-layer.json'),
   map: (year) => join(dir, id, 'maps', `oahu-${year}.png`),
   mapInfo: (year) => join(dir, id, 'maps', `oahu-${year}.json`),
+  registered: (rm) => join(dir, id, 'registered', `rm-${rm}.pdf`),
+  enc: join(dir, id, 'vectors', 'enc-dredged.geojson'),
+  encLayer: (layer) => join(dir, id, 'vectors', `enc-${layer}.geojson`),
 })
 
 // ---------------------------------------------------------------------------
@@ -356,30 +510,67 @@ export function downloadStreams(ledger, dir, d, grid, log) {
   log(`  streams: ${fc.features.length} lines`)
 }
 
-/** Export a Government Survey map over the box (in its own UTM, at MAP_PIXEL m) as a lossless PNG. */
-export function mapExport(grid) {
+/** Export a Government Survey map over the box (in its own UTM, at the district's map pixel, MAP_PIXEL m unless given) as a lossless PNG. */
+export function mapExport(grid, pixel = MAP_PIXEL) {
   const [e0, n0, e1, n1] = utmExtent(grid.bounds)
   const x0 = Math.floor((e0 - MAP_MARGIN) / 100) * 100
   const y0 = Math.floor((n0 - MAP_MARGIN) / 100) * 100
-  const x1 = Math.ceil((e1 + MAP_MARGIN) / 100) * 100
-  const y1 = Math.ceil((n1 + MAP_MARGIN) / 100) * 100
-  return { extent: [x0, y0, x1, y1], size: [(x1 - x0) / MAP_PIXEL, (y1 - y0) / MAP_PIXEL], pixel: MAP_PIXEL, epsg: 26904 }
+  // (the far edges on whole pixels from the near ones)
+  const W = Math.ceil((Math.ceil((e1 + MAP_MARGIN) / 100) * 100 - x0) / pixel)
+  const H = Math.ceil((Math.ceil((n1 + MAP_MARGIN) / 100) * 100 - y0) / pixel)
+  return { extent: [x0, y0, x0 + W * pixel, y0 + H * pixel], size: [W, H], pixel, epsg: 26904 }
 }
 
 export function downloadMaps(ledger, dir, d, grid, log) {
   const p = districtPaths(dir, d.id)
-  const ex = mapExport(grid)
-  for (const m of Object.values(SURVEY_MAPS)) {
+  const ex = mapExport(grid, d.mapPixel)
+  for (const year of d.maps || [1881, 1899]) {
+    const m = SURVEY_MAPS[year]
     const info = fetchTo(ledger, `${m.service}?f=json`, p.mapInfo(m.year), { force: true })
     if (!info.ok) throw new Error(`${m.year} map: HTTP ${info.status}`)
     const url =
       `${m.service}/exportImage?bbox=${ex.extent.join(',')}&bboxSR=${ex.epsg}&imageSR=${ex.epsg}` +
-      `&size=${ex.size.join(',')}&format=png&interpolation=RSP_NearestNeighbor&f=image`
+      `&size=${ex.size.join(',')}&format=png&interpolation=RSP_NearestNeighbor` +
+      `${m.mosaicRule ? `&mosaicRule=${encodeURIComponent(JSON.stringify(m.mosaicRule))}` : ''}&f=image`
     const r = fetchTo(ledger, url, p.map(m.year), { force: true, maxTime: 600 })
     if (!r.ok) throw new Error(`${m.year} map export: HTTP ${r.status}`)
     log(`  map ${m.year}: ${ex.size.join('x')} px at ${ex.pixel} m`)
   }
   return ex
+}
+
+/** The district's registered maps from Kīpuka, as the PDFs it serves (read by hand; the bake only dates them). */
+export function downloadRegistered(ledger, dir, d, log) {
+  const p = districtPaths(dir, d.id)
+  for (const rm of d.registered || []) {
+    const m = REGISTERED_MAPS[rm]
+    const r = fetchTo(ledger, m.url, p.registered(rm), { maxTime: 600 })
+    if (!r.ok) throw new Error(`registered map ${rm}: HTTP ${r.status}`)
+    log(`  RM ${rm}: ${r.cached ? 'cached' : 'fetched'}`)
+  }
+}
+
+// NOAA's harbour-scale charts (ENC Direct) over the box: the dredged areas, as the patch bake reads them
+// (patch-sources.mjs ENC), and the seaplane landing areas and fairways, which say where a bay was cleared
+export const ENC = {
+  id: 'noaa-enc-direct-koolaupoko',
+  title: 'NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE), Sea_Plane_Landing_Area (SPLARE) and Fairway (FAIRWY) polygons over the district',
+  service: 'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer',
+  layers: { dredged: 228, seaplane: 198, fairway: 208 },
+  licence: 'public domain (NOAA); not for navigation',
+}
+export function downloadEnc(ledger, dir, d, grid, log) {
+  const p = districtPaths(dir, d.id)
+  const [w, s, e, n] = grid.bounds
+  for (const [kind, layer] of Object.entries(ENC.layers)) {
+    const url =
+      `${ENC.service}/${layer}/query?where=1%3D1&geometry=${[w, s, e, n].map((v) => v.toFixed(5)).join(',')}` +
+      '&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=4326&geometryPrecision=7&f=geojson'
+    const file = kind === 'dredged' ? p.enc : p.encLayer(layer)
+    const r = fetchTo(ledger, url, file, { force: true })
+    if (!r.ok) throw new Error(`ENC ${kind}: HTTP ${r.status}`)
+    log(`  enc ${kind}: ${JSON.parse(readFileSync(file, 'utf8')).features?.length ?? 0} polygons`)
+  }
 }
 
 export async function downloadDistrict(ledger, dir, d, log) {
@@ -391,6 +582,11 @@ export async function downloadDistrict(ledger, dir, d, log) {
   downloadStreams(ledger, dir, d, grid, log)
   log('Government Survey maps (State GIS):')
   downloadMaps(ledger, dir, d, grid, log)
+  if (d.registered?.length) {
+    log('registered maps (OHA Kīpuka), dredged areas (NOAA ENC):')
+    downloadRegistered(ledger, dir, d, log)
+    downloadEnc(ledger, dir, d, grid, log)
+  }
   log('rain (Rainfall Atlas of Hawaiʻi):')
   downloadRain(ledger, dir, log)
   log('sea floor (NOAA CUDEM, GMRT):')

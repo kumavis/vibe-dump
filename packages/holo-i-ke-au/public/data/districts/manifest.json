@@ -1022,6 +1022,1082 @@
           "note": "246 lines; the Division of Aquatic Resources stream lines (stream_nam, trib_nam); used only to check the routed trunks, never baked"
         }
       ]
+    },
+    {
+      "id": "koolaupoko",
+      "name": "Koʻolaupoko",
+      "island": "oahu",
+      "parent": "oahu",
+      "bounds": [
+        -157.898,
+        21.3019994,
+        -157.643,
+        21.5380006
+      ],
+      "size": [
+        2048,
+        2010
+      ],
+      "metresPerTexel": [
+        12.9829,
+        12.9829
+      ],
+      "height": {
+        "file": "koolaupoko/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "koolaupoko/rain.png"
+      },
+      "patches": [
+        {
+          "id": "kaneohe-bay-dredging",
+          "name": "the seaplane runways, turning basin and channels of the Kāneʻohe naval air station",
+          "until": 1943,
+          "kind": "raise",
+          "depth": -1,
+          "file": "koolaupoko/patch-kaneohe-bay-dredging.png",
+          "source": "Jackson’s chart of 1882, registered; NOAA’s seaplane landing area and fairways; the CUDEM",
+          "dates": [
+            "mokapu-1965",
+            "usn-building-bases-1947"
+          ],
+          "note": "the reefs and reef flats Jackson’s survey of August 1882 draws inside today’s seaplane landing area, the fairways to the air station and the Crashboat Channel, where today’s sea floor lies deeper than 3 m: cleared for the seaplane runways, the turning basin and the channels, laid back at 1 m deep, where the reefs of 1882 that still stand round the south bay are (the median of their tops; the pack holds no sea shallower). Dredging began with the dredge B. F. Dillingham on 27 September 1939 and went on for three years (11,000,000 cubic yards) “until 1943”; given 1943. The natural lagoon between the reefs, which Jackson sounds at 6 to 8 fathoms, stays as it is; the chart’s registration (about 40 m) leaves the cut a texel or two short of or past the old reef edges",
+          "stats": {
+            "texels": 5441,
+            "km2": 0.917
+          }
+        },
+        {
+          "id": "mokapu-air-station-fill",
+          "name": "the air station’s fill on Mōkapu",
+          "until": 1943,
+          "kind": "lower",
+          "depth": -1,
+          "file": "koolaupoko/patch-mokapu-air-station-fill.png",
+          "source": "the fill unit, cut with the 1882 shore of Mōkapu",
+          "dates": [
+            "mokapu-1965",
+            "usn-building-bases-1947"
+          ],
+          "note": "land today that the geologic map calls fill and Jackson’s survey of 1882 shows as sea or reef flat: the airfield’s ground west of Pali Kilo and the strip along Mōkapu’s south shore from the seaplane ramps east to the bay side of Nuʻupia, made with the spoil of the dredging (162 acres west of the runway and about 118 along the south shore, 280 in all, “until 1943”). The 1927 and 1938 maps draw the same shore within about 30 m, so the fill is the Navy’s. Fill over the ponds of 1882 (the causeways of Nuʻupia, Halekou and Kaluapuhi) stays land, as the features draw the ponds",
+          "stats": {
+            "texels": 6585,
+            "km2": 1.11
+          }
+        },
+        {
+          "id": "moku-o-loe-fill",
+          "name": "Holmes’s fill round Moku o Loʻe",
+          "until": 1936,
+          "kind": "lower",
+          "depth": -1,
+          "file": "koolaupoko/patch-moku-o-loe-fill.png",
+          "source": "Moku o Loʻe’s outline on Jackson’s chart of 1882",
+          "dates": [
+            "wikipedia-coconut-island"
+          ],
+          "note": "today’s land of Moku o Loʻe outside the island Jackson draws in 1882, which the 1927 map draws the same: the coral, sand and earth Chris Holmes laid on its reef in 1934–36, doubling its 12 acres, and the later walls and fill of the Navy’s rest station and the marine laboratory, which the sources read do not separate from his; given 1936. The fill unit does not map it",
+          "stats": {
+            "texels": 245,
+            "km2": 0.041
+          }
+        },
+        {
+          "id": "heeia-kea-harbour",
+          "name": "the small-boat harbour at Heʻeia Kea",
+          "until": 1950,
+          "kind": "raise",
+          "depth": -1,
+          "file": "koolaupoko/patch-heeia-kea-harbour.png",
+          "source": "the shore flat on Jackson’s chart of 1882; the CUDEM",
+          "dates": [
+            "dlnr-boating-history-2016"
+          ],
+          "note": "the basin and channel of the harbour at Lae o Kealohi, dug into the shore flat Jackson draws dry at low water in 1882, where today’s floor lies deeper than 1.6 m: laid back at 1 m deep, the median of the flat round it. “Completed ... in 1950”; its enlargement of 1963–68 is not separated",
+          "stats": {
+            "texels": 261,
+            "km2": 0.044
+          }
+        },
+        {
+          "id": "heeia-kea-fill",
+          "name": "the moles and yard of the harbour at Heʻeia Kea",
+          "until": 1950,
+          "kind": "lower",
+          "depth": -1,
+          "file": "koolaupoko/patch-heeia-kea-fill.png",
+          "source": "the 1882 shore at Lae o Kealohi",
+          "dates": [
+            "dlnr-boating-history-2016"
+          ],
+          "note": "today’s land at Lae o Kealohi seaward of the shore Jackson draws in 1882 (the 1927 map draws the same point): the harbour’s moles and yard, “completed ... in 1950”, with the enlargement of 1963–68 not separated. The fill unit does not map it",
+          "stats": {
+            "texels": 74,
+            "km2": 0.012
+          }
+        }
+      ],
+      "features": "koolaupoko/features.json",
+      "files": [
+        {
+          "file": "koolaupoko/shoreline-1882.geojson",
+          "kind": "shoreline",
+          "year": 1882,
+          "note": "Jackson’s survey of August 1882 as registered here (affine on eight points, 42 m rms): the shores of Mōkapu and Lae o Kealohi (LineStrings), Moku o Loʻe (a Polygon), and the 21 shapes the chart encloses (Polygons, kind “enclosed”: its reefs and flats, and the shore where they join it, cut to the box round the dredged zone) that meet that zone, in lon/lat; what the patches are cut with"
+        }
+      ],
+      "breaches": [
+        {
+          "name": "Kāneʻohe Stream at 21.3923 N 157.8046 W",
+          "points": [
+            [
+              -157.80461,
+              21.392286
+            ],
+            [
+              -157.804113,
+              21.392755
+            ],
+            [
+              -157.80374,
+              21.393224
+            ],
+            [
+              -157.803616,
+              21.393692
+            ],
+            [
+              -157.803492,
+              21.394161
+            ],
+            [
+              -157.803864,
+              21.39463
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.5 m deep behind it",
+          "texels": 30,
+          "cutMetres": 5.1
+        },
+        {
+          "name": "Kāneʻohe Stream at 21.4005 N 157.8030 W",
+          "points": [
+            [
+              -157.802995,
+              21.400489
+            ],
+            [
+              -157.802995,
+              21.400958
+            ],
+            [
+              -157.802995,
+              21.401426
+            ],
+            [
+              -157.802995,
+              21.401895
+            ],
+            [
+              -157.802995,
+              21.402364
+            ],
+            [
+              -157.802746,
+              21.402833
+            ],
+            [
+              -157.802249,
+              21.403301
+            ],
+            [
+              -157.801876,
+              21.40377
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 8.5 m deep behind it",
+          "texels": 35,
+          "cutMetres": 12.4
+        },
+        {
+          "name": "Kāneʻohe Stream at 21.4119 N 157.7953 W",
+          "points": [
+            [
+              -157.79529,
+              21.411856
+            ],
+            [
+              -157.794793,
+              21.411856
+            ],
+            [
+              -157.794669,
+              21.411387
+            ],
+            [
+              -157.794544,
+              21.41127
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 11,
+          "cutMetres": 2.9
+        },
+        {
+          "name": "Heʻeia Stream at 21.4172 N 157.8167 W",
+          "points": [
+            [
+              -157.816664,
+              21.417246
+            ],
+            [
+              -157.816167,
+              21.417715
+            ],
+            [
+              -157.81567,
+              21.418184
+            ],
+            [
+              -157.815297,
+              21.418652
+            ],
+            [
+              -157.8148,
+              21.419121
+            ],
+            [
+              -157.814551,
+              21.419121
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 6.0 m deep behind it",
+          "texels": 34,
+          "cutMetres": 12.9
+        },
+        {
+          "name": "Heʻeia Stream at 21.4189 N 157.8150 W",
+          "points": [
+            [
+              -157.815048,
+              21.418887
+            ],
+            [
+              -157.814676,
+              21.419121
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.8 m deep behind it",
+          "texels": 5,
+          "cutMetres": 13.3
+        },
+        {
+          "name": "Waikāne Stream at 21.5004 N 157.8730 W",
+          "points": [
+            [
+              -157.872957,
+              21.500446
+            ],
+            [
+              -157.87246,
+              21.500329
+            ],
+            [
+              -157.872212,
+              21.500446
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.5 m deep behind it",
+          "texels": 9,
+          "cutMetres": 2.5
+        },
+        {
+          "name": "Maunawili Stream at 21.3589 N 157.7661 W",
+          "points": [
+            [
+              -157.766087,
+              21.358889
+            ],
+            [
+              -157.765839,
+              21.35924
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 5,
+          "cutMetres": 4.8
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3572 N 157.7378 W",
+          "points": [
+            [
+              -157.737754,
+              21.357248
+            ],
+            [
+              -157.737381,
+              21.357483
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.5 m deep behind it",
+          "texels": 5,
+          "cutMetres": 7.1
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3578 N 157.7373 W",
+          "points": [
+            [
+              -157.737257,
+              21.357834
+            ],
+            [
+              -157.737133,
+              21.358186
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 5,
+          "cutMetres": 5.7
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3591 N 157.7369 W",
+          "points": [
+            [
+              -157.736884,
+              21.359123
+            ],
+            [
+              -157.736511,
+              21.35924
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 4,
+          "cutMetres": 3.8
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3609 N 157.7358 W",
+          "points": [
+            [
+              -157.735766,
+              21.360881
+            ],
+            [
+              -157.73589,
+              21.36135
+            ],
+            [
+              -157.736014,
+              21.361818
+            ],
+            [
+              -157.735641,
+              21.362053
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 5.0 m deep behind it",
+          "texels": 16,
+          "cutMetres": 12.4
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3615 N 157.7360 W",
+          "points": [
+            [
+              -157.736014,
+              21.361467
+            ],
+            [
+              -157.73589,
+              21.361936
+            ],
+            [
+              -157.735766,
+              21.361936
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.0 m deep behind it",
+          "texels": 7,
+          "cutMetres": 6.3
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3630 N 157.7354 W",
+          "points": [
+            [
+              -157.735393,
+              21.36299
+            ],
+            [
+              -157.735269,
+              21.363459
+            ],
+            [
+              -157.735393,
+              21.363928
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 6.3 m deep behind it",
+          "texels": 11,
+          "cutMetres": 11
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3670 N 157.7363 W",
+          "points": [
+            [
+              -157.736263,
+              21.366975
+            ],
+            [
+              -157.736139,
+              21.367443
+            ],
+            [
+              -157.736014,
+              21.367678
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 9,
+          "cutMetres": 2.9
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3698 N 157.7361 W",
+          "points": [
+            [
+              -157.736139,
+              21.369787
+            ],
+            [
+              -157.736139,
+              21.370256
+            ],
+            [
+              -157.736139,
+              21.370373
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.8 m deep behind it",
+          "texels": 6,
+          "cutMetres": 5
+        },
+        {
+          "name": "Heʻeia Stream at 21.4191 N 157.8147 W",
+          "points": [
+            [
+              -157.814676,
+              21.419121
+            ],
+            [
+              -157.814179,
+              21.419238
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 6,
+          "cutMetres": 6.4
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3582 N 157.7371 W",
+          "points": [
+            [
+              -157.737133,
+              21.358186
+            ],
+            [
+              -157.737257,
+              21.358537
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.5 m deep behind it",
+          "texels": 5,
+          "cutMetres": 5.2
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3639 N 157.7354 W",
+          "points": [
+            [
+              -157.735393,
+              21.363928
+            ],
+            [
+              -157.735641,
+              21.364162
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 3.5 m deep behind it",
+          "texels": 4,
+          "cutMetres": 5.7
+        },
+        {
+          "name": "Waiāhole Stream at 21.4815 N 157.8484 W",
+          "points": [
+            [
+              -157.848434,
+              21.481492
+            ],
+            [
+              -157.84784,
+              21.481525
+            ],
+            [
+              -157.846952,
+              21.481476
+            ],
+            [
+              -157.84634,
+              21.48168
+            ],
+            [
+              -157.845622,
+              21.481592
+            ],
+            [
+              -157.844998,
+              21.481492
+            ],
+            [
+              -157.844345,
+              21.481564
+            ],
+            [
+              -157.843645,
+              21.481938
+            ],
+            [
+              -157.843386,
+              21.482583
+            ],
+            [
+              -157.84328,
+              21.483403
+            ],
+            [
+              -157.842916,
+              21.483827
+            ],
+            [
+              -157.842786,
+              21.48418
+            ],
+            [
+              -157.842862,
+              21.484571
+            ]
+          ],
+          "why": "the lower channel to the mouth, narrower than a texel behind the coastal road, carved along the State’s line: without it the routed trunk turns north into the cove 350 m short of the mouth",
+          "texels": 69,
+          "cutMetres": 2.7
+        },
+        {
+          "name": "Kāneʻohe Stream at 21.3905 N 157.8080 W",
+          "points": [
+            [
+              -157.80804,
+              21.3905
+            ],
+            [
+              -157.80766,
+              21.3909
+            ],
+            [
+              -157.80741,
+              21.3913
+            ],
+            [
+              -157.80729,
+              21.3916
+            ],
+            [
+              -157.80679,
+              21.392
+            ],
+            [
+              -157.80604,
+              21.3922
+            ],
+            [
+              -157.805,
+              21.3925
+            ]
+          ],
+          "why": "a road fill over the channel (a crossing the bare earth keeps); the trunk ponded 2.0 m deep behind it. Cut along the channel to the reach below, as the short breaches found here stopped on the fill",
+          "texels": 40,
+          "cutMetres": 7.4
+        },
+        {
+          "name": "Kāneʻohe Stream at 21.3893 N 157.8084 W",
+          "points": [
+            [
+              -157.808414,
+              21.389296
+            ],
+            [
+              -157.808289,
+              21.389766
+            ],
+            [
+              -157.80804,
+              21.390236
+            ],
+            [
+              -157.807916,
+              21.390705
+            ],
+            [
+              -157.807418,
+              21.391175
+            ],
+            [
+              -157.807418,
+              21.39141
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 23,
+          "cutMetres": 6.1
+        },
+        {
+          "name": "Kāneʻohe Stream at 21.3988 N 157.8024 W",
+          "points": [
+            [
+              -157.802437,
+              21.398807
+            ],
+            [
+              -157.802562,
+              21.399277
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 5,
+          "cutMetres": 1.1
+        },
+        {
+          "name": "Kāneʻohe Stream at 21.3993 N 157.8026 W",
+          "points": [
+            [
+              -157.802562,
+              21.399277
+            ],
+            [
+              -157.802686,
+              21.399629
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.5 m deep behind it",
+          "texels": 4,
+          "cutMetres": 2.6
+        },
+        {
+          "name": "Kāneʻohe Stream at 21.4113 N 157.7946 W",
+          "points": [
+            [
+              -157.794593,
+              21.411253
+            ],
+            [
+              -157.794095,
+              21.411018
+            ],
+            [
+              -157.793597,
+              21.411018
+            ],
+            [
+              -157.793348,
+              21.411135
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 1.8 m deep behind it",
+          "texels": 14,
+          "cutMetres": 2.6
+        },
+        {
+          "name": "Heʻeia Stream at 21.4195 N 157.8135 W",
+          "points": [
+            [
+              -157.813519,
+              21.419472
+            ],
+            [
+              -157.813394,
+              21.419706
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 2.0 m deep behind it",
+          "texels": 4,
+          "cutMetres": 3.7
+        },
+        {
+          "name": "Kaʻelepulu Stream at 21.3621 N 157.7357 W",
+          "points": [
+            [
+              -157.735699,
+              21.362056
+            ],
+            [
+              -157.73545,
+              21.362291
+            ]
+          ],
+          "why": "a crossing the bare earth keeps over the channel (culvert or bridge fill), or a channel narrower than a texel; the trunk ponded 4.5 m deep behind it",
+          "texels": 3,
+          "cutMetres": 5.7
+        }
+      ],
+      "streams": [
+        {
+          "name": "Kāneʻohe Stream",
+          "mapped": "Kaneohe / Kaneohe",
+          "from": [
+            -157.822235,
+            21.385187
+          ],
+          "outlet": [
+            -157.790609,
+            21.411722
+          ],
+          "mouth": [
+            -157.788512,
+            21.410843
+          ],
+          "outletOffStreamMetres": 0,
+          "outletFromMouthMetres": 239,
+          "withinMappedShare": 0.923,
+          "lengthKm": 5.921,
+          "catchmentKm2": 14.3,
+          "deepestPitMetres": 1.3,
+          "ok": true
+        },
+        {
+          "name": "Heʻeia Stream",
+          "mapped": "Heeia / Heeia",
+          "from": [
+            -157.825596,
+            21.39775
+          ],
+          "outlet": [
+            -157.811153,
+            21.437084
+          ],
+          "mouth": [
+            -157.811048,
+            21.437507
+          ],
+          "outletOffStreamMetres": 39,
+          "outletFromMouthMetres": 48,
+          "withinMappedShare": 0.888,
+          "lengthKm": 6.832,
+          "catchmentKm2": 8.09,
+          "deepestPitMetres": 1.3,
+          "ok": true
+        },
+        {
+          "name": "Kahaluʻu Stream",
+          "mapped": "Kahaluu / Kahaluu",
+          "from": [
+            -157.849254,
+            21.427573
+          ],
+          "outlet": [
+            -157.835931,
+            21.453874
+          ],
+          "mouth": [
+            -157.838744,
+            21.459828
+          ],
+          "outletOffStreamMetres": 0,
+          "outletFromMouthMetres": 721,
+          "withinMappedShare": 1,
+          "lengthKm": 3.907,
+          "catchmentKm2": 9.57,
+          "deepestPitMetres": 1.3,
+          "ok": true
+        },
+        {
+          "name": "Waiāhole Stream",
+          "mapped": "Waiahole / Waiahole",
+          "from": [
+            -157.882872,
+            21.472073
+          ],
+          "outlet": [
+            -157.842655,
+            21.484284
+          ],
+          "mouth": [
+            -157.842862,
+            21.484571
+          ],
+          "outletOffStreamMetres": 13,
+          "outletFromMouthMetres": 38,
+          "withinMappedShare": 0.984,
+          "lengthKm": 5.553,
+          "catchmentKm2": 10.04,
+          "deepestPitMetres": 0.5,
+          "ok": true
+        },
+        {
+          "name": "Waikāne Stream",
+          "mapped": "Waikane / Waikane",
+          "from": [
+            -157.893829,
+            21.500722
+          ],
+          "outlet": [
+            -157.849627,
+            21.488393
+          ],
+          "mouth": [
+            -157.849293,
+            21.488359
+          ],
+          "outletOffStreamMetres": 13,
+          "outletFromMouthMetres": 35,
+          "withinMappedShare": 0.987,
+          "lengthKm": 6.737,
+          "catchmentKm2": 8.77,
+          "deepestPitMetres": 1,
+          "ok": true
+        },
+        {
+          "name": "Maunawili Stream",
+          "mapped": "Kawainui / Maunawili",
+          "from": [
+            -157.785753,
+            21.347849
+          ],
+          "outlet": [
+            -157.741302,
+            21.389414
+          ],
+          "mouth": [
+            -157.741818,
+            21.425308
+          ],
+          "outletOffStreamMetres": 55,
+          "outletFromMouthMetres": 3969,
+          "withinMappedShare": 0.816,
+          "lengthKm": 10.119,
+          "catchmentKm2": 25.77,
+          "deepestPitMetres": 1.5,
+          "ok": true
+        },
+        {
+          "name": "Kaʻelepulu Stream",
+          "mapped": "Kaelepulu / Kaelepulu",
+          "from": [
+            -157.745286,
+            21.355364
+          ],
+          "outlet": [
+            -157.738812,
+            21.375676
+          ],
+          "mouth": [
+            -157.732036,
+            21.379396
+          ],
+          "outletOffStreamMetres": 13,
+          "outletFromMouthMetres": 817,
+          "withinMappedShare": 0.97,
+          "lengthKm": 3.454,
+          "catchmentKm2": 2.97,
+          "deepestPitMetres": 1,
+          "ok": true
+        },
+        {
+          "name": "Waimānalo Stream",
+          "mapped": "Waimanalo / Waimanalo",
+          "from": [
+            -157.738438,
+            21.326245
+          ],
+          "outlet": [
+            -157.710921,
+            21.363935
+          ],
+          "mouth": [
+            -157.709382,
+            21.364646
+          ],
+          "outletOffStreamMetres": 0,
+          "outletFromMouthMetres": 179,
+          "withinMappedShare": 0.982,
+          "lengthKm": 6.079,
+          "catchmentKm2": 12.96,
+          "deepestPitMetres": 1.3,
+          "ok": true
+        }
+      ],
+      "stats": {
+        "landFraction": 0.5223,
+        "minMetres": -1051.25,
+        "maxMetres": 953.75,
+        "rainCoverage": 0.9985,
+        "lidarShare": 0.7776,
+        "datumShiftMetres": 0.72
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA",
+          "collected": "2023-01-11 to 2023-07-07",
+          "note": "1419 tiles (USGS_OPR_HI_NOAAMauiOahu_2020_B20_4QFJ140560 … USGS_OPR_HI_NOAAMauiOahu_2020_B20_4QFJ395555, part HI_NOAAMauiOahu_2_B20); every 0.5 m cell counts toward the texel its centre falls in. The survey's zero is 0.72 m below mean sea level (measured against the CUDEM on flat ground; residual -0.07 m) and is moved to it. A cell is land above +0.2 m, because water inside the coast is flattened to the level of the day it was flown (−0.35 to +0.1 m); a texel is land when at least half its cells are, and holds their mean (never below 0.25 m). 1497 of the 2916 squares over the box have no tile: open sea, and the windward face of the pali (see the CUDEM). 670 texels a tenth to a half land, on a line one or two texels across with water on both sides (fishpond walls, causeways, spits), are land too"
+        },
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-10-22",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "tile ncei19_n21x50_w157x75_2021v1, ncei19_n21x50_w158x00_2021v1, ncei19_n21x75_w158x00_2021v1, about 3 m cells. Sea texels: the area-weighted mean of the cells below mean sea level, never shallower than -1 m (1683031 texels; the reef flats from topobathymetric lidar, the bay’s channels and dredged areas from NOAA surveys); 7432 texels of water inside the coast that the CUDEM holds as land (the stream mouths, the canals and the open water of the ponds and marshes) are a flat -1 m. Land: 475605 texels (11.6% of the pack) on the windward face of the pali, where the lidar has no tile, are the CUDEM's land there (the 2013 NOAA Oʻahu lidar on the lower slopes, the USGS 1/3 arc-second DEM on the cliffs, per its spatial metadata) plus a smooth correction that meets the lidar along the seam (seam difference median -0.0 m). 2634 texels on 10 islets the survey left out (Mokumanu, Kekepa, Mokolea and Kapapa, the Mokulua islands, Mānana and Kāohikaipu, and the breakwater of the pier at Makapuʻu, which the bare earth leaves out as a structure) are the CUDEM's land"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-157.89900&maxlongitude=-157.64200&minlatitude=21.30106&maxlatitude=21.53894&layer=topo&format=esriascii&mresolution=30",
+          "fetched": "2026-10-22",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "the fallback for sea texels the CUDEM leaves empty: 275954 texels"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-10-22",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells; interpolated onto the pack (the cells are 40 times the texel), 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        },
+        {
+          "id": "hawaii-gis-geologic-units-fill",
+          "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) in the district box",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+          "query": "name = 'Fill'",
+          "fetched": "2026-10-22",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+          "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+          "note": "20 polygons in and around the box; a texel counts as fill when at least half of it is. Mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps; in the district it holds the air station’s ground on Mōkapu, the causeways across the Nuʻupia ponds, fill over the ponds of Kāneʻohe’s shore, two small pieces at Kualoa and one inland at Kāneʻohe; only the first lies on the sea of 1882. In the south-west corner of the box it holds Honolulu’s waterfront, whose works are the patch bake’s (bake-patches.mjs), not this district’s"
+        },
+        {
+          "id": "kipuka-rm-1140",
+          "title": "Hawaiian Government Survey, Registered Map 1140: “Koolau Bay and Anchorages, Oahu”, surveyed and drawn by Geo. E. Gresley Jackson, Nav. Lieut. R.N., August 1882, 1:12,000, soundings in fathoms at low water (a blueprint), as scanned for OHA’s Kīpuka database",
+          "url": "https://kipukadatabase.com/Docs/RegMaps/1140WIDEblueprint.pdf",
+          "fetched": "2026-10-22",
+          "licence": "the map is a public-domain survey of the Hawaiian Government; the scan is served by the Office of Hawaiian Affairs’ Kīpuka database, which states no licence for it",
+          "note": "read at full resolution (17007x12600 px, 300 dpi, a blueprint): its title, scale and soundings note, and its reefs against the reduction’s"
+        },
+        {
+          "id": "kipuka-rm-1848",
+          "title": "Hawaiian Government Survey, Registered Map 1848: “Reduction of Jackson’s Koolau Bay”, 1:24,000, F. W. Thrum, March 1892 (Jackson’s survey of August 1882), as scanned for OHA’s Kīpuka database",
+          "url": "https://kipukadatabase.com/Docs/RegMaps/1848.pdf",
+          "fetched": "2026-10-22",
+          "licence": "the map is a public-domain survey of the Hawaiian Government; the scan is served by the Office of Hawaiian Affairs’ Kīpuka database, which states no licence for it",
+          "note": "the sheet the reefs and shores were read from: 14384x11782 px at 400 dpi, 1.542 m a pixel on the ground; registered by an affine fit on 8 points (Kapapa Island (centre) 37 m, Mokolea (centre) 37 m, Pyramid Rock (its tip) 42 m, Puʻu Hawaiʻiloa (summit) 72 m, Heʻeia fishpond (centroid) 20 m, Moku o Loʻe (summit) 34 m, Pointed Hill (summit) 42 m, the triangulation station the chart writes “Kaaualu” (summit) 30 m)"
+        },
+        {
+          "id": "kipuka-rm-1345",
+          "title": "Hawaiian Government Survey, Registered Map 1345: “Kailua Bay, Oahu”, surveyed and drawn by George Ed. Gresley Jackson, Nav. Lieut. R.N., October 1884, 1:12,000, soundings in fathoms at low water, as scanned for OHA’s Kīpuka database",
+          "url": "https://kipukadatabase.com/Docs/RegMaps/1345.pdf",
+          "fetched": "2026-10-22",
+          "licence": "the map is a public-domain survey of the Hawaiian Government; the scan is served by the Office of Hawaiian Affairs’ Kīpuka database, which states no licence for it",
+          "note": "read at overview: Kailua Bay in 1884, the beach, Kaʻelepulu drawn as a fishpond, Popoia and the Mokulua islands; not registered here. The shore of Kailua was compared on the State’s 1902 and 1938 sheets instead"
+        },
+        {
+          "id": "kipuka-rm-1019",
+          "title": "Hawaiian Government Survey, Registered Map 1019: “East Coast of Oahu including Waimanalo, Hanauma and Maunalua Bays”, surveyed and drawn by Geo. E. Gresley Jackson, Nav. Lieut. R.N., 1884, 1:12,000 (traced from the original by A. Taga, July 1929), as scanned for OHA’s Kīpuka database",
+          "url": "https://kipukadatabase.com/Docs/RegMaps/1019WIDEtracing.pdf",
+          "fetched": "2026-10-22",
+          "licence": "the map is a public-domain survey of the Hawaiian Government; the scan is served by the Office of Hawaiian Affairs’ Kīpuka database, which states no licence for it",
+          "note": "read at overview: the coast from Kailua to Maunalua in 1884; not registered here. The shore of Waimānalo was compared on the State’s 1902 and 1938 sheets instead"
+        },
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-10-22",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "exported over the box at 7 m in EPSG:26904 (3986x3958 px); read over the bay: it draws the shore of Mōkapu and Kāneʻohe at 1:60,000 and no reefs, so Jackson’s survey of the next year stands for it"
+        },
+        {
+          "id": "hawaii-gis-oahu-1902",
+          "title": "Hawaiian Government Survey, map of Oʻahu by J. M. Donn, 1902, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/islands_1900s ImageServer, item oa_1902_drg_Donn)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/islands_1900s/ImageServer",
+          "fetched": "2026-10-22",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1902",
+          "note": "exported over the box at 7 m in EPSG:26904 (3986x3958 px); read over the bay, Kailua and Waimānalo: it copies Jackson’s reefs and draws the same Mōkapu shore within its registration (100–200 m); the shores of Kailua, Lanikai and Waimānalo lie on today’s within about 30 m, so they take no patch"
+        },
+        {
+          "id": "hawaii-gis-oahu-topo-1927",
+          "title": "Topographic quadrangles of Oʻahu, 1927 edition (U.S. Geological Survey), as the State of Hawaiʻi GIS mosaic (SoH_Maps/oahu_topo_1927 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/oahu_topo_1927/ImageServer",
+          "fetched": "2026-10-22",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the maps themselves are public-domain federal surveys",
+          "note": "exported over the box at 7 m in EPSG:26904 (3986x3958 px); the shore before the war, best registered of the sheets (within about 20 m at Pyramid Rock, Pōhākea and Heʻeia’s pond): Mōkapu, Moku o Loʻe and Lae o Kealohi lie where Jackson draws them, within about 30 m"
+        },
+        {
+          "id": "hawaii-gis-oahu-1938",
+          "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+          "fetched": "2026-10-22",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
+          "note": "exported over the box at 7 m in EPSG:26904 (3986x3958 px); read over the bay, Kailua and Waimānalo: the same shores as 1927 at Mōkapu, Moku o Loʻe already grown; Kailua, Lanikai and Waimānalo on today’s shore within about 30 m (the pier at Makapuʻu is later, and too small to patch)"
+        },
+        {
+          "id": "noaa-enc-direct-koolaupoko",
+          "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE), Sea_Plane_Landing_Area (SPLARE) and Fairway (FAIRWY) polygons over the district",
+          "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer",
+          "fetched": "2026-10-22",
+          "licence": "public domain (NOAA); not for navigation",
+          "note": "the zone the bay’s dredging is looked for in: the Sea_Plane_Landing_Area over the south bay, the fairways within the south bay and along Mōkapu (one “Dredged to 15 feet”), and the Crashboat Channel (dredged to 2.4 m); the Heʻeia Kea harbour’s dredged areas (1.9 and 2.1 m) confirm its basin"
+        },
+        {
+          "id": "mokapu-1965",
+          "title": "A. Steele and C. A. P. McNease, Myths, Martyrs and Marines of Mokapu: a history of the Marine Corps Air Station, Kaneohe Bay, Hawaii (1965)",
+          "url": "https://archive.org/details/mythsmartyrsmari00stee",
+          "fetched": "2026-10-22",
+          "licence": "quoted for its dates; a publication of the air station",
+          "note": "pp. 24–25 (in the Internet Archive’s full text): “On Sept. 5, 1939, workers began building a dike preparatory to filling with material dredged from the Kaneohe Bay”; the dredge B. F. Dillingham began on 27 September; “Dredging and filling continued on the new Naval Base until 1943. By then workers had added 280 acres”, about 118 of them along the south shore from the hangars east, and “West of the runway a dike was built and 162 acres were added to the ancient Heeia section”"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        },
+        {
+          "id": "wikipedia-coconut-island",
+          "title": "Wikipedia, “Coconut Island (Hawaii)”",
+          "url": "https://en.wikipedia.org/wiki/Coconut_Island_(Hawaii)",
+          "fetched": "2026-10-22",
+          "licence": "CC BY-SA 4.0, quoted for its dates",
+          "note": "“In 1934–1936, Chris Holmes II ... doubled the original 12-acre (49,000 m2) island with coral rubble, sand, and earthen landfill”; today 28 acres"
+        },
+        {
+          "id": "dlnr-boating-history-2016",
+          "title": "Hawaiʻi Department of Land and Natural Resources, “History of Recreational Boating In Hawaiʻi is Topic of 2017 State Historic Preservation Calendar” (14 December 2016)",
+          "url": "https://dlnr.hawaii.gov/dobor/nr16-255b/",
+          "fetched": "2026-10-22",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“James W. Glover completed the windward Oʻahu project at Heʻeia Kea in 1950”; “between 1963-68 Heʻeia Kea also increased in size to accommodate more than just fishing vessels”"
+        },
+        {
+          "id": "hawaii-gis-streams-dar",
+          "title": "State of Hawaiʻi GIS, Streams (DAR), FreshWater MapServer layer 1, in the district box",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/FreshWater/MapServer/1",
+          "fetched": "2026-10-22",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "note": "674 lines; the Division of Aquatic Resources stream lines (stream_nam, trib_nam); used only to check the routed trunks, never baked"
+        }
+      ]
     }
   ]
 }
