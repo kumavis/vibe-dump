@@ -678,26 +678,78 @@ step keeps the game playable.
   lanes committed). Then every standing check on the final tree, the
   refactor's closing record (DESIGN's R8b notes, its results table).
 
-**Multiplayer and features.**
+**Multiplayer and features.** Online play first; the large-battle work
+follows N3.
 
 - [ ] **N0** Cross-engine maths (`sin`/`cos`/`atan`/`atan2` in `dmath`).
 - [ ] **F3** The End-phase button lights up when nothing is left to do.
 - [ ] **F1** Playing a side puts your side of the board in front of you
-  (the serpents included).
+  (the serpents included); the presets take the board as an argument.
 - [ ] **F2** Spectating is viewed broadside: one army left, one right.
-- [ ] **F4** After round 5, the win screen offers **Keep playing** (a vote).
+- [ ] **F4** After round 5, the win screen offers **Keep playing** (a vote);
+  `legal()` takes optional and boolean fields; no Keep playing past 80% of
+  the log cap.
 - [ ] **N1** Real Automerge in Node: two- and three-peer tests.
 - [ ] **N2** Online play: lobby, join by link, joint dice seed, presence,
-  desync report. (The claude.ai artifact blocks outside connections, so
-  online play works from GitHub Pages or a local server.)
+  desync report. `verifyStart` checks your whole seat (race, controller,
+  device, name, nonce); names up to 24 characters and 48 bytes. (The
+  claude.ai artifact blocks outside connections, so online play works from
+  GitHub Pages or a local server.)
 - [ ] **N3** Spectating, rejoin, scrubbing, replay export, tamper alarm.
-- [ ] **F6** Race selection with a mini 3D diorama of each race's figures.
-  It makes mirror matches reachable from the title, so it also takes R2's
-  leftovers: seat names that read the same in a mirror (roll-off rows, log
-  lines, AI hint) and a stronger mirror cue on the table.
-- [ ] **F5** New races: insectoids (burrow, swarm) and bird-people (fly,
-  swoop).
-- [ ] **F7** More terrain: climbable fortifications (2.5D elevation).
+- [ ] **F6** Race selection with a mini 3D diorama of each race's figures,
+  on a battle-setup panel that a mode button opens (later steps add the
+  terrain, the battle size and the army to it). It makes mirror matches
+  reachable from the title, so it also takes R2's leftovers: seat names
+  that read the same in a mirror (roll-off rows, log lines, AI hint) and a
+  stronger mirror cue on the table.
+- [ ] **S0-S3** Scale hygiene: bounded scans, an LOS broadphase, hoisted
+  invariants, one forbid mask, a plan memo inside one apply. Byte-identical,
+  no bump; `sim/scale-bench.mjs` and a Grand test fixture.
+- [ ] **F10a** Drag-select a group (Shift-drag; ▭ Select on touch), the group
+  bar, and group move, approach, fire, charge and place as ordinary commands.
+  A group move pins a ghost formation; a second click sends it. No rules
+  change.
+- [ ] **V1** Batched playback: units walk together, a batch's advance dice in
+  one row.
+- [ ] **F10b** Autopilot in the rules: `pilot {m}`, the AI playing the
+  units you choose.
+- [ ] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried
+  out at End or Go; badges, counters, optional auto-End.
+- [ ] **F8a** Missions choose the board: `setup.mission`, the setup
+  whitelist, `G.board`, the table rebuilt per match. Only the classic
+  mission yet.
+- [ ] **F11a** Army lists in the setup: each seat names a preset or a list of
+  unit counts, checked against the mission's points limit and slot table;
+  prices (`cost`) tuned by `sim/army-sim.mjs`; AI seats play presets (or a
+  seeded random list); the classic battles unchanged.
+- [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
+  swoop), each priced for the army builder against the other races.
+- [ ] **F11b** The Muster screen: build an army with +/− and a points bar,
+  presets, Random, lists saved on the device; hotseat builds in turn;
+  online lists ride in the lobby, unseen until the battle starts; changing
+  race resets the army.
+- [ ] **F7a** Climbable fortifications: decks, stairs and ladders sized for
+  whole squads; ramparts, bastions, watchtowers, timber platforms and a keep
+  on the centre objective; each side's own rampart at its zone's front (the
+  `fortified` set, on every mission).
+- [ ] **F7b** Parapets with cover at deck level; reading heights: drop
+  lines, the climbing cost, line of sight with its reasons, see-through
+  walls.
+- [ ] **F7c** Timber platforms that collapse under their defenders.
+- [ ] **F8b** Field (60×40, 1,000 points) and Grand (80×56, 1,500 points)
+  battles: their presets and list limits, prices retuned on the real
+  boards, the `open` set, a minimap (March from it), semantic zoom, terrain
+  tiles and LOD.
+- [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
+  squads; embark, disembark, wrecks and bail-outs; riders loaded at
+  deployment; up to two a side in Field and Grand.
+- [ ] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
+  turn where there's room; a facing, set with a rotate handle or [ / ].
+- [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
+- [ ] **F5b** The new races' vehicles: the insectoids' Brood Beetle and the
+  bird-people's Sky-Basket (which may land on ramparts).
+- [ ] **F9d** Siege towers that unload onto ramparts (round for every race
+  in v1).
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
 
@@ -712,6 +764,48 @@ step keeps the game playable.
    `dist/`** and loaded only when you play online.
 4. A rules change makes in-progress online matches **read-only**.
 5. Insect burrowing is **always visible**.
+6. *(answered)* **Online play comes first**; the large-battle work follows
+   N3. Race selection stays right after N3.
+7. *(answered)* Battle sizes are **Skirmish 40×28, Field 60×40 and Grand
+   80×56** with a **points-based army builder** (500, 1,000, 1,500 points;
+   5, 6, 7 rounds); the fixed lists ×1, ×2, ×3 are presets.
+8. Standing orders live **on your device** (free to improve; they act only
+   while you play). Orders kept in the match are the documented fallback.
+9. Standing orders act **when you press End (or Go)**; "autopilot first" is
+   a local setting, off.
+10. A march that arrives **holds**; an attack whose target dies goes on
+    **autopilot**; a march blocked two turns **waits for you**.
+11. Auto-End (a 1.5 s countdown when only ordered units can act) is a
+    setting, **off** by default.
+12. Stairs for all but ground vehicles, **ladders for infantry**; squads
+    stand on wide walks as a group, no lining walls; no to-hit bonus for
+    height.
+13. Each side starts with **its own rampart** on a fortified board.
+14. *(answered)* **Each race's vehicle has its own shape**: a round War-Cart,
+    a long Shell-Back Howdah, and (with the new races) a Brood Beetle and a
+    flying Sky-Basket; at most two a side in Field and Grand, none in
+    Skirmish. (This covers the transports; siege towers are question 26.)
+15. Walks are **batched**, with a "one at a time" setting.
+16. Grand is offered on phones, **with a note**.
+17. *(answered)* Left-drag **orbits**; Shift-drag (▭ on touch) selects; a
+    long hull turns by its handle or [ / ].
+18. **No undo** of group orders in v1; a group move pins and needs a second
+    click.
+19. A siege mission comes **later**, after F9d.
+20. *(answered)* Army lists are hidden **by courtesy** until the battle
+    starts; sealed lists come with N4 if strangers play.
+21. Units are bought **whole**, at their fixed size.
+22. Heroes are **not unique**: a Field army may field two Elders.
+23. A long hull's pivot costs **0.25" per 45° for the Howdah**, nothing for
+    the Beetle.
+24. The Sky-Basket **lands on rampart and keep tops** and unloads there.
+25. The insectoids' vehicle is the **Brood Beetle**; a burrowing Sapper Grub
+    may come later.
+26. *(answered)* Siege towers are **round for every race** in v1 (each in
+    its race's look); towers on each race's own chassis may follow.
+27. *(answered)* The new races arrive **after the army builder's first
+    step** (F5a after F11a), their vehicles after the firing decks (F5b
+    after F9c).
 
 ## Done
 

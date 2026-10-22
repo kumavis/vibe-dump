@@ -857,6 +857,8 @@ export default { key: 'squirrel', name: 'Bushtail Clans', short: 'Bushtails', ic
 
 `sim/data-check.mjs` deep-equals the normalised types against legacy `TYPES` (minus `side`, plus the derived fields). It also checks that `RULES_ID` changes when a stat changes and does not change when a name changes.
 
+(Large battles, §4.2.8 and §4.2.5) F11a gives every unit `cost` and every race `roster` and `armies`. F9 adds the `Vehicle` role, the `transport` record, the `vehicle` and `climb` flags, and (F9b) `footprint`.
+
 ### 2.9 Terrain: recipes, sets, meshes
 
 ```js
@@ -902,6 +904,8 @@ inCover                              // a cover raster applies only at its chunk
 
 `burrow` mode (F5) gets its own clearance field. It passes under soft and difficult scenery, and must end on a cell that is standable on foot. Commands stay a single cell index `c`, because a 2.5D heightfield has exactly one floor per cell. Bridges are a non-goal.
 
+(Large battles) The F7 sketch in §2.9 and this section is superseded by §4.2.4: `STEP` 0.4", stairs rising 0.5" per inch and 4.5" wide, floors quantised to 1/64", ladders as nav links rather than ramps, parapets with `navKind` null, and `kind` gains `ladder`, `parapet` and `post`.
+
 ### 2.11 Camera presets and HUD model
 
 ```js
@@ -939,7 +943,31 @@ export const battleView = ({ localSeats, edges }) => localSeats.length === 1 ? P
 | **F4: Win screen with "keep playing"** | `engine.js` `score` step plus a `roundLimit` decision; the `vote` handler; `setup.overtime`; `ui/screens/result.js` (a provisional result with live votes, Keep playing / End battle; no continue after a wipe); `hudModel.round` shows "overtime"; `merge-sim` scenarios for concurrent votes | bump `CORE_VERSION`; baselines unaffected (`overtime` absent means `'never'`); add 2 human logs that vote | ~120 |
 | **F5: Insectoids and bird-people** | `data/races/insect.js`, `bird.js` (~6 units each, ~100 lines each, each added to `data/schema.js`'s `RACES` registry); flags: `burrow` (nav mode + clearance field ~40), `swarm {min}` (fight.js: re-roll wound 1s while ≥ min models alive; new draws only inside `if (t.swarm)`, ~15), `swoop {chargeS}` (fight.js: +S on the charge turn, ~10); `view/models/insect.js`, `bird.js` (~250 each, plus animators ~40 each); 4 projectile styles; 2 voices; AI needs only `ai:` roles. **Burrowing stays visible**, because a public doc can't hold hidden positions (open question 5). | bump; squirrel and serpent baselines unchanged (they carry no new flags); new matrix baselines for each new pairing, recorded once by `sim/run.mjs` | ~900, mostly data and art |
 | **F6: Race select with a mini 3D scene** | `view/diorama.js`: the same renderer with a scissor viewport in the panel's rect, figures laid out from `race.units` via the template cache, idle animators, hover → card. `ui/screens/races.js`, reused in lobby seat cards. Re-shoot and inspect `thumbnail.jpg` if the title changes; the title must still be on screen 1200 ms after load. | none | ~360 |
-| **F7: Climbable fortifications** | `core/terrain/recipes.js` (deck, stair, parapet pieces; rampart, bastion, keep ~250); `SETS.fortified`; `terrain.js` surfaces and supports (~50); `nav.js` floor, cliff, step, ramps, per-level clearance (~150); `queries.js` `groundY`, height in LOS, level-aware cover, engagement `|Δy|` (~40); an engine `settle` step after any action that destroys a `surface` chunk: each unit whose floor changed takes D3 mortal wounds (the only new draws, and only then) and moves to the nearest standable cell (~60); `view/terrain.js` (~120; (R7a's fixer, round 3) its `defOf`, a copy of `core/terrain/terrain.js`'s that `sync` builds and keys the table by, gains every field core's adds carry, `surface` and `supports` among them: `sim/terrain-check.mjs` holds every add's def to it, or a step that may touch `core/` exports one `defOf` through `core/terrain/recipes.js`, on the view's surface); unit y and labels at `groundY`; overlay projected onto deck tops (~60); picking against walkable surfaces (~30); AI height score term (~20); terrain choice in title and lobby (~15) | only under `setup.terrain = 'fortified'`; bump; its own baselines | ~800 |
+| **F7: Climbable fortifications** (large battles: replaces the first sketch) | §4.2.4. **F7a**, decks, stairs, ladders and platforms. `core/terrain/recipes.js`: deck, stair, ladder, parapet and post pieces; rampart, bastion, watchtower, platform and keep; the works; the fort phase and `gatesOf` (~380). `SETS.fortified`. `terrain.js`: surfaces, `base`, links (~60). `nav.js`: floor, links, ledge, cliff, levels and gates, plus the height branches of `standable`, `reach`, `path` and `walkable`, and burrow's (F5a's insectoids: a deck is hard) (~220). `queries.js`: `floorAt`, `groundY`, `sightInfo`, and height in sight, engagement, forbid, charge, control, blast and smash (~90). AI: the height term and `levelDist` (~60). View: decks, stairs, ladders and posts from `look`; units at `y`; drop lines; the deck overlay; picking deck tops; climbing animation (~350). App: the terrain line on F6's panel, and `?terrain=` at boot for `sim/`'s browser runs of `fort/` (~30). **F7b:** parapets and level-aware cover; the LOS ray with its reasons, the climbing cost in the move tooltip, cliff rims, see-through occluders (~250). **F7c:** destructible posts, the collapse cascade, `settle` and `unit.fall` (~150). | a bump at each of F7a, F7b and F7c; `fort/` baselines. Classic and `open` never build a floor. | ~1,550 |
+| **S0-S3: Scale hygiene** | §4.2.2. Bounded scans (S0); an LOS broadphase (S0b); hoisted per-scan invariants (S1); one forbid mask per plan and a plan memo scoped to one `apply` (S3). Touches `core/ai/score.js`, `core/ai/policy.js`, `core/deploy.js`, `core/queries.js`, `core/terrain/terrain.js`, `core/actions/move.js` and `core/nav.js`. New: `sim/scale-bench.mjs`, P-scan, P-los, P-memo. | none: byte-identical, no bump | ~250 + checks |
+| **F8: Larger maps** | §4.2.3, §4.2.7. **F8a:** `MISSIONS` gain `board`, `army` (the preset's name) and `sets`; `setup.mission`; the `fullSetup` whitelist (`SETUP_KEYS`, `SEAT_KEYS`); `checkMission`; `G.board` at every `BOARD` site; the snap rebuilds Table, Overlay, ObjectivesView and UnitViews for the match's board; fog, far plane, dolly and shadows by board; N2's lobby gains `mission`. Only `classic` is offered. **F8b:** `field` and `grand`, with their `list` rules and every race's presets (the classic ×2 and ×3, `'224222'` and `'336333'` for the first two races; §4.2.8); `SETS.open`; the fight guard; battle size on F6's panel and in the lobby; `?mission=` at boot; terrain tiles; figure LOD; semantic zoom and chips; minimap (with March from it) and roster; the shadow fit; Grand opens behind your army; army-sim's Field and Grand gates on the real boards; the Grand fixture (§4.2.9) retired. | a bump at F8a and at F8b; classic byte-identical; `scale/` baselines | F8a ~350, F8b ~1,300 |
+| **F11: Army builder** | §4.2.8. **F11a, army lists in the setup:** `cost` on every unit, `roster` on every race, presets as count strings; `MISSIONS.classic.list`; `core/army.js` (`armyOf`, `checkList`, `listCost`, `listText`, `autoList`; ~170); `fullSetup` fills in and checks `army`, and `SEAT_KEYS` gains it; `newState` builds units from `armyOf`; `core/index.js` exports `army`; `checkMission` checks `list`; data-check, flag-lint, boundaries, P-mission's refusals, P-army, `sim/army-sim.mjs` (~250), the `army/` corpus (its own commit). **F11b, the Muster screen:** `ui/screens/muster.js` (~350); the army line on F6's panel, reset by a race change (~80); the lobby's `army` field, un-ready on change, cleared on a race change, courtesy sealing (~90); saved lists (~60); `?armies=` (~20); CSS (~120); ui-check (~120). | F11a: a bump; `RULES_ID` moves; classic byte-identical (its setups name no army). F11b: none. | F11a ~650 with checks, F11b ~840 |
+| **F9: Vehicles, one shape per race** | §4.2.5. **F9a, round transports:** the `Vehicle` role, the `transport` AI role, the `vehicle` and `climb` flags and the `transport` record (`data/schema.js`); the **Acorn War-Cart** (Bushtails only; appended to their roster, its `cost` fitted); `u.aboard`; `moveUnitTo`; riders out of every spatial rule; `embark` and `disembark`; the deployment's autoload; the wreck and bail-out; the builder's `Vehicle` slot (0 / 2 / 2). **F9b, long hulls:** `core/footprint.js` (tables, `discsOf`, `clearOf`, `fpGap`; ~170); `nav.js` `hullReach`, its per-epoch memo, `cellBest`, `hullPath` (~220); the footprint branch at every rule site (~260); `f` on `move`, `place` and `chargeEnd` (~40); `facing` in state, hash and events (~30); the AI's room term and charge prefilter (~40); the **Shell-Back Howdah** (appended to the Coil roster); view: the three-segment Howdah, footprint outlines, yaw along paths, the ghost hull with its rotate handle and **[** / **]**, octilinear paths with pivot ticks, the hatched overlay, the turning tooltip, "no room to turn here", the minimap capsule (~450). **F9c, firing decks** on every shape (was F9b). **F9d, siege towers**, round for every race in v1 (was F9c; open question 26). **F5b** brings the Brood Beetle and the Sky-Basket on this engine (§4.2.5). **View throughout:** hull meshes; riders at 0.8 scale on deck slots (`present/deck.js`), pips and chips for an enclosed hull; capacity pips; rider chips; the embark and disembark tools. | a bump at each of F9a, F9b, F9c and F9d; `vehicle/` and (F9b) `hull/` baselines | F9a ~900, F9b ~1,200 + checks, F9c ~250, F9d ~150 (est.) |
+| **F10: Group selection, orders, autopilot** | §4.2.6. **F10a:** `input/selection.js`, `ui/groupbar.js`, `present/orders.js` (the planner) and `input/orders.js` (the executor). One-shot group Move, Approach, Fire, Charge and Place as ordinary commands; pin-then-commit ghost formations; the picker's screen-space fallback; a Controls help section; the selection in presence under a new key, `sels` (`sel` stays the lead's id). **F10b:** `pilot {m}` (`core/commands.js`, plus an `only` filter through `runAI` and `aiPhase`). **F10c:** the order book; March, Attack, Hold and Autopilot carried out at End and Go; badges (in presence too, as `ords`), counters, optional auto-End. | F10a and F10c: none (ordinary commands). F10b: a bump and `pilot/` baselines. | F10a ~900, F10b ~60 + checks, F10c ~700 |
+| **V1: Batched playback** | §4.2.7. `view/player.js` looks ahead: consecutive walks start 0.15 s apart, and a batch's advance rolls share one tray row. The batch rule is a pure function in `present/pace.js`, so its timings are checked in Node. A "one at a time" setting turns it off. It composes with N2's elastic catch-up, already built. | none (view) | ~120 |
+
+**Additions from the large-battle design (§4.2), row by row.**
+
+- **The Automerge multiplayer row** (headed "R0: Automerge multiplayer": N1-N3): N2's lobby seat record is `{ctrl, dev, name, race, ready, nonce}`, and from F11b `army`.
+  - **Names and nonces** (the start's byte budget, §4.2.1). A display name is normalised (NFC, with control characters and lone surrogates removed, then trimmed). It is capped at 24 characters **and** at 48 bytes of canonical JSON, `utf8Length(canonicalJSON(name)) − 2 ≤ 48`. A nonce is exactly 16 hex characters.
+  - **The whole seat.** `net/seed.verifyStart` checks this client's **whole seat** in the start, not only its nonce. Every field of the client's own lobby seat record except `ready` must equal the start's seat as written: `race`, `ctrl`, `dev`, `name`, `nonce`, and from F11b `army`. A field absent on one side must be absent on the other. A host that changed any of them, for instance flipping a guest's `ctrl` to `ai` or swapping its `dev` for the host's own, gets a read-only match with "The start changed your seat (ctrl)".
+  - **Presence** keeps `sel` as the lead unit's id. F10a adds the selection under a new key, `sels` (up to 120 ids), and F10c adds the order badges as `ords`. A tab still on an older build ignores keys it doesn't know.
+  - N1 runs `sim/fold-cost.mjs` against the AutomergeStore (R8b's per-entry rule).
+- **F1, F2:** `fitPose(preset, aspect, rect)` and `battleView({…, board})` take the board as a rectangle `{cx, cz, w, h}`, never `BOARD` (`present/` may not import `data/`). Classic passes today's numbers, so camera-check's other rows hold. The view-cycle gains **Overview** (the whole board, also the Home key), which is a no-op on classic.
+- **F3:** From F10c, `end.ready` counts **manual** units only. Units whose standing order covers the phase count as handled, and so do riders in the movement phase, since disembarking is optional.
+- **F4:** `legal()`'s field schema gains `opt` (optional integers) and `bools` (booleans), §4.2.6; `vote {more}` is the first `bools` field and F9b's heading `f` the first `opt` field. The result screen stops offering Keep playing at ≥ 80% of `MAX_ENTRIES`, read from the Folder's entry count (R8b's `count`). This is a UI rule: a vote past it is still legal, and the cap still freezes the match.
+- **F5:** Split in two (the designer's choice, open question 27).
+  - **F5a, the races**, after F11a: the insectoids (burrow, swarm) and the bird-people (fly, swoop). Each race brings its builder data (§4.2.8): a `roster`, a `cost` per unit fitted by `army-sim --fit` at Skirmish against both existing races, and its classic `army`. It must pass army-sim's gates for every race pair. Its Field and Grand presets come with F8b, which writes them for every race.
+  - F7a lands after F5a. It makes `burrow` treat a deck's footprint as hard (no tunnelling under fortifications), and its data-check lists any unit with r above `CLIMB_R` (1.22, §4.2.4) as a non-climber.
+  - **F5b, their vehicles**, after F9c (§4.2.5). The insectoids' Brood Beetle runs on F9b's footprint engine and is data only. The bird-people's Sky-Basket is a flying hull that may land on deck tops (~40 lines of rules, open question 24). Each has its `cost` fitted, and both must pass army-sim's gates.
+- **F6:** It stays right after N3, where this table has it. F6 introduces the **battle-setup panel** that a mode button opens: each seat's race in the picker, with defaults read from `?races=`. The panel gains a terrain line at F7a, a battle size at F8b and an army line at F11b. N2's lobby seat cards, built before F6, offer a plain race list until F6 gives them the picker.
+  - **Harnesses.** The panel puts one click between a mode button and the battle. F6 therefore ports, in the same step, every Chromium harness that starts a battle from the title to press the panel's Start: `sim/chromium.mjs` (parity `--browser`, P-browser, and self-test's mutant-title row), play-check, snap-check, hud-check and rematch-memory. P-browser then re-runs over the whole corpus. There is no `?quick` path around the panel: the checks press what a player presses.
+  - The diorama uses today's template cache (about 12 figures), not F8b's LOD bake. The title's first frame doesn't change.
 
 ---
 
@@ -1517,16 +1545,48 @@ Everything runs by hand with `npm run parity -w @vibe-dump/tails-and-scales` (an
 
 ### Multiplayer and feature work, in order
 
+Online play comes first (the user's answer 6). R8b has built the R8 fix and the "R8 must allow" list but its item 8 (§4.2.10), so the table starts at N0. F6 stays right after N3, as this table had it; F5 is split into F5a and F5b (§4.2.0).
+
 | Step | Change | Checkpoint |
 |---|---|---|
-| **N0 Consensus hardening** | dmath `sin`/`cos`/`atan`/`atan2` (and `hypot3` if it was deferred): pure-JS ports; lint bans the approximated `Math.*` in `core/` and `data/`. "Bit-exact to the shipped V8" can't mean both engines, since Node's and Chromium's sin/cos already disagree (§0.1): match Node's (the baselines' `shadow`) and retire `webShadow`, or take the re-record below. | `perturb.mjs` goes **from 11/12 diverging to 0/12**. If the V8 match fails: `CORE_VERSION 2` and one re-record commit containing only baselines, never mixed with code changes. |
-| **F3 → F1 → F2** | §3 | P-ai/P-human unchanged; manual check in landscape and portrait; (R7a's fixer, round 2) `node sim/camera-check.mjs`, its "battleView chooses by the screen's shape alone" checks (its header and lines 95-96) changed by F1/F2 on purpose, and everything else it checks (today's landscape and portrait poses, the title's orbit, `fitPose`, `CameraRig.goTo`) still holding |
-| **F4 Keep playing** | §3 | P-ai/P-human unchanged; 2 new vote logs; merge-sim with concurrent votes |
-| **N1 Real Automerge in Node** | pinned deps (lockfile commit separate); `net/automerge-store.js`; `sim/peers.mjs`: (a) raw `@automerge/automerge` docs from shared genesis bytes, a manual `generateSyncMessage`/`receiveSyncMessage` pump with random delays and partitions, each scenario run with actor ids **swapped** so both concurrent orders occur; (b) three Repos (host, guest, spectator) over `MessageChannelNetworkAdapter` | **P-peers:** each human log split by seat across 2 peers; a spectator joining in round 3; same-seat fork with rollback; out-of-turn junk; concurrent deploy; desync drill; tamper (delete an accepted entry → `tamper`). All peers agree on `{accepted, rejected, stateHash, trace}`, equal to the single-process fold and the baseline. |
-| **N2 Online play** | `net/repo.js` (lazy), lobby with joint seed and `verifyStart`, `#m=` routing, device-to-seat mapping, presence, net badge, elastic catch-up, desync dialog and report, version-skew read-only screen | Entry chunk grep: no Automerge. Playwright (by hand): two tabs over BroadcastChannel, and two isolated contexts over a local `automerge-repo-sync-server` (`?sync=ws://127.0.0.1:3030`), play a scripted mini-battle with equal `h` chains. Plus a manual check on `wss://sync.automerge.org` from a real browser (the sandbox's Chromium can't reach it). |
-| **N3 Spectating and recovery** | spectator view (broadside, speed, scrub bar, watch from start, replay export), rejoin from IndexedDB, tamper alarm, rematch link, "continue on another device" link | rejoin mid-battle reproduces `stateHash`; scrub to k equals fold of the prefix; tamper drill in the browser |
-| **F6 → F5 → F7** | §3 | P-ai/P-human unchanged for squirrel vs serpent and the classic set; new matrix and fortified baselines recorded with the `CORE_VERSION` bump |
-| **N4 (optional)** | Ed25519-signed entries (L1: a key per seat claim; 0.15 ms to sign, 0.22 ms to verify; verified on arrival, cached by id, so the fold stays synchronous); `diceMode: 'fair'` | baselines per dice mode; reveal-stall UX |
+| **N0 Consensus hardening** | unchanged | unchanged |
+| **F3 → F1 → F2** | §3; F1 and F2 take the board as an argument | as before; camera-check |
+| **F4 Keep playing** | §3, plus `opt`/`bools` in `legal()` and the 80% offer cap (R8b's `count`) | as before |
+| **N1 Real Automerge in Node** | as before. Additions: `sim/fold-cost.mjs` runs against the AutomergeStore; a synthetic 465-entry log's document bytes are measured (est. 50-100 KB) | as before |
+| **N2 Online play** | as before. Additions: the lobby seat record (race, ctrl, dev, name, nonce; `army` from F11b); display names normalised and capped at 24 characters and 48 encoded bytes; nonces of 16 hex characters; `verifyStart` checks this client's whole seat record (every field but `ready`) | as before; N2's lobby rig's seat cases (§4.2.9): a host-flipped `ctrl`, a host-swapped `dev`, an over-long name |
+| **N3 Spectating and recovery** | as before | as before |
+| **F6 Race selection** (where it was) | §3, plus the battle-setup panel (each seat's race; its terrain, size and army lines come with F7a, F8b and F11b); the diorama on today's template cache; R2's leftovers | as before; the title at 1200 ms unchanged; the Chromium harnesses that start from the title ported to press the panel's Start (§3's additions); P-browser over the whole corpus |
+| **S0-S3 Scale hygiene** | §4.2.2; `sim/fixtures/grand.mjs` (§4.2.9) | P-ai, P-human and P-browser byte-identical; P-scan, P-los and P-memo on classic and the Grand fixture; perturb; P-prop; the first scale-bench report (presets and cap lists) |
+| **F10a Group selection** | §4.2.6: selection, the group bar, pin-then-commit Move, Approach and Place, one-click Fire and Charge, ghost formations, the picker fallback, the Controls help; the selection in presence as `sels` | P-ai and P-human unchanged; P-macro; input-check; hud-check; a manual phone check; a group move played online in N2's two-tab rig |
+| **V1 Batched playback** | §4.2.7; the batch rule in `present/pace.js` | playback-check (Node on classic and the Grand fixture; Chromium with the catch-up run); P-present; snap-check; a watched battle |
+| **F10b `pilot`** | §4.2.6 | classic parity; P-auto; P-pilot; `pilot/` (its own commit); merge-sim; P-peers over `pilot/` |
+| **F10c Standing orders and autopilot** | §4.2.6; March by clicking the board (the minimap's March comes with F8b); badges in presence as `ords` | P-macro; hud-check; input-check; play-report. By hand: a march over 3 turns, an attack to the kill, autopilot with auto-End, and orders at End online. |
+| **F8a Missions select the board** | §4.2.3; only classic is offered; `SETUP_KEYS` and `SEAT_KEYS`; N2's lobby gains `mission`; the Grand fixture ported to patch `MISSIONS.classic` | classic byte-identical; P-mission; data-check; camera-check; snap-check; rematch-memory; terrain-check through the mission |
+| **F11a Army lists in the setup** | §4.2.8.2-§4.2.8.7: `cost`, `roster`, presets as count strings, `MISSIONS.classic.list`, `core/army.js`, `fullSetup` fills and checks `army`, `newState` from `armyOf`; only Skirmish | classic byte-identical (its setups name no army); data-check; flag-lint; boundaries; P-mission's refusals and `checkMission` cases; P-army; army-sim's Skirmish score gate and per-unit gate; merge-sim with lists in starts; `army/` (its own commit) |
+| **F5a New races** (split from F5) | as before: the insectoids (burrow, swarm) and the bird-people (fly, swoop). Additions: each race's `roster`, `cost` (fitted at Skirmish against both existing races) and classic `army` (§4.2.8) | as before; army-sim's Skirmish gates for every race pair; the new races' AI pairs, recorded with the bump |
+| **F11b The Muster screen** | §4.2.8.8-§4.2.8.9: the Muster screen, the army line on F6's panel (reset by a race change), the lobby's `army` field with un-ready on change, cleared on a race change, and courtesy sealing; saved lists; `?armies=` | ui-check; N2's lobby rig; by hand: a hotseat build in turn, an online build with Random for an AI seat |
+| **F7a Decks, stairs, ladders, platforms; the works** | §4.2.4; burrow treats decks as hard; the terrain line on F6's panel and `?terrain=` | classic parity; P-height; P-climb; P-level; terrain-check fortified; play-report; `fort/` (its own commit); scale-bench's fortified rows; army-sim's Skirmish gates on `fortified`. By hand: a squad up a rampart's ladder, a trebuchet up a bastion's stair, Hold on a rampart. |
+| **F7b Parapets, level cover, readability** | §4.2.4 | `fort/` re-recorded (its own commit); terrain-shots plus fortified boards; hud-check's tooltips; play-report; army-sim's Skirmish gates on `fortified` |
+| **F7c Collapsing platforms** | §4.2.4 | `fort/` extended and re-recorded; P-prop's boundary rows; army-sim's Skirmish gates on `fortified` |
+| **F8b Field and Grand** | §4.2.3, §4.2.7, the minimap's March; `field` and `grand` with their `list` and every race's presets; `?mission=`; army-sim's Field and Grand gates on the real boards (the Brute, the Trebuchet and the Venom Engine retuned first); `army/` gains its Field and Grand pairs; the Grand fixture retired | classic, fort and army parity; connectivity; `scale/` (its own commit); P-auto at Grand; P-peers over a Grand log; render-bench; rematch-memory at Grand; scale-bench on the `grand` mission; army-sim's score gates and per-unit gate at all three sizes, every race pair and set; a Grand battle played on a phone |
+| **F9a Round transports** | §4.2.5: the War-Cart, `transport`, `aboard`, embark and disembark, the autoload, the wreck and bail-out, the `Vehicle` slot (0 / 2 / 2), the War-Cart's `cost` fitted | classic, scale, fort and army parity; P-riders; P-present; data-check (`checkMission` with the Vehicle slots); connectivity; P-army's War-Cart deployment at the caps; scale-bench's cap lists with two War-Carts; army-sim; play-report; `vehicle/` (its own commit) |
+| **F9b Long hulls** | §4.2.5: the footprint engine and the Howdah, its `cost` fitted | classic, scale, fort, army and `vehicle/` parity; P-lattice; P-hull; P-memo's facing; P-army's hull deployment (two Howdahs on the Coil side); connectivity's long-hull rows; input-check; scale-bench's hull rows on the cap lists (the AI count budget's trigger, §4.2.2); army-sim; play-report; merge-sim; `hull/` (its own commit) |
+| **F9c Firing decks** (was F9b) | §4.2.5, every shape | `vehicle/` and `hull/` re-recorded; play-report |
+| **F5b The new races' vehicles** (split from F5) | the Brood Beetle (data on F9b's engine) and the Sky-Basket (the flying-hull rules), each `cost` fitted (§4.2.5) | army-sim's gates; P-climb's flying-hull row; connectivity's Beetle row; P-army with every race's hulls; `hull/` extended |
+| **F9d Siege towers** (was F9c) | §4.2.5, round for every race in v1 (open question 26) | `vehicle/` extended. By hand: a siege tower unloading onto a rampart's walk. |
+| **N4 (optional)** | unchanged; sealed army lists (§4.2.8.9) come with it if open question 1 becomes "strangers" | unchanged |
+
+- Every shipping step ends with `npm run build && npm run verify` and a commit of `dist/`.
+- Lockfile changes and baseline re-records each go in a commit of their own.
+- Bumps come at F4, F10b, F8a, F11a, F5a, F7a, F7b, F7c, F8b, F9a, F9b, F9c, F5b and F9d (and at N0 only if its V8 match fails). None of N1-N3, F6, S0-S3, V1, F10a, F10c or F11b bumps. A price retune is data only: `RULES_ID` moves, with no bump.
+- **What moved, and why.**
+  - **From the user's answer 6:** everything from S0-S3 on follows N3.
+  - **Kept from the earlier plan:** F6 right after N3.
+  - **The designer's choices:**
+    - F11a needs F8a's `setup.mission`, whitelist and `checkMission`. F11b needs F6's panel and N2's lobby.
+    - **F5 splits.** F5a follows F11a, so the builder is priced for two races and each new race brings prices fitted against the others. F5b follows F9c, because the Beetle runs on F9b's engine and both hulls want firing decks. The cost: the new races arrive seven steps later than the earlier "F6 → F5" (open question 27).
+    - Fortifications follow the builder. Field and Grand switch on with orders, lists and fortifications in hand. Vehicles follow the boards they need (none in Skirmish), and firing decks wait for both ground shapes.
+- **If selection and autopilot are wanted sooner**, F10a-F10c (with V1) can move ahead of N1. Their online checkpoints then move to N2: F10a's group move in the two-tab rig, F10c's orders at End online, and the presence keys `sels` and `ords`. Nothing else in them depends on N1-N3 or on S0-S3.
 
 ### 4.1 RNG-order rules
 
@@ -1563,6 +1623,1591 @@ Each rule gets a comment at its new site. The parity gates (P-ai, P-human and P-
 12. **Commands carry integers and booleans only.** Fair-dice reseeding (N4) may happen only at a command boundary.
 13. **No module-level mutable state in consensus code.** Two matches in one process must not interact; the peer tests rely on it.
 
+14. **`pilot` is the AI for a subset.** It calls `runAI(G, seat, phase, only)`: the same generators, the same role sort and the same draws, filtered by `only`. `only = null` is today's path, so P-ai stays byte-identical. `pilot` over every unit followed by `end` plays exactly `auto`'s phase (P-auto).
+15. **Masks.** Bit `j` is the seat's `j`-th unit in G.units order; G.units is never spliced, so the order is stable. A mask is decoded by exact division (`m % 2`, `(m − r) / 2`), never with 32-bit operators.
+16. **Bail-out** (F9a), at a transport's destruction inside `unitDestroyed`, in this order:
+    1. The wreck chunk is added, then `refreshNav`.
+    2. For each rider in G.units order: its spot (no draw; the nearest landing cell of any of the hull's discs, ties to the lowest index), then `roll(G, alive)`, then `damage` for the 1s (mortal: no saves).
+17. **Settle** (F7c). After the `refreshNav` that follows terrain destruction (the end of a blast, a move or a charge), for each dropped deck in chunk order, and each unit on it in G.units order: its spot (no draw; ties to the lowest cell index), then one D6 for the D3, then `damage`.
+18. **Height.** Every height-dependent computation sits behind `G.nav.hasHeight`, which is false on `classic` and `open` boards. It is a separate code path, never "+0". Floors are quantised to 1/64" as they are rastered, so every comparison with `STEP` (0.4") is between exact Float32 values.
+19. **Riders.** An aboard unit is off the table for every spatial rule, friendly ones included (§4.2.5). `moveUnitTo` carries riders in G.units order and draws nothing. The deployment's autoload (F9a) boards riders in G.units order and draws nothing.
+20. **New `refreshNav` sites:** the wreck's (16), settle's (17), and the embark walk, which ends through `doMove`'s own tail (§4.2.5). Each is reached only in its own branch. Nav is still never dirty at a command boundary, and `terrain.dropped` is empty there (P-prop checks both).
+21. **Derived caches never decide.** Each returns exactly what the full computation returns: the LOS bins (S0b, checked by P-los), the plan memo (S3b, P-memo) and the hull memo (F9b, P-lattice). The height layer (`floor`, links, `cliff`, `level`, gates) is derived from the chunks like today's clearance fields. None of it is hashed. The plan memo lives inside one `apply`, opened and closed in `try/finally`, and is gone between commands. The bins, the height layer and the hull memo are rebuilt (or cleared) with the terrain they index; the hull memo may be filled during `legal()` or a preview, which is harmless because it returns exactly what the full test returns.
+22. **Client macros are not rules.** Group commands, standing orders and autopilot runs reach the log only as ordinary entries: `place`, `advance`, `move`, `shoot`, `charge`, `chargeEnd`, `embark`, `disembark`, `pilot` and `end`. Peers replay the entries, never the client's choices, so a client may change how it chooses with no bump.
+23. **A list is data, never a draw** (F11a). `seats[i].army` is fixed in the start. `newState` expands each seat's list in roster order, seat 0 first (rule 6), and the classic preset expands to exactly `race.army`. `autoList` draws from its own `mulberry32(seed)`, runs only in a client before the start, and never runs in the fold. Validation is integer arithmetic in a fixed order, so every peer refuses the same setups with the same text.
+24. **Footprints** (F9b). A footprint's per-heading disc offsets and pivot sweep samples are tables built at load from exact constants:
+    - axis headings use 0 and ±1, and diagonals `Math.SQRT1_2`;
+    - the 15° and 30° sub-steps use sqrt-only `cos` and `sin` (`(√6 ± √2)/4`, `√3/2`, `½`);
+    - they are rounded to the 0.5" grid by `sign(v)·Math.round(|v|/cell)`, and data whose `|v|/cell` falls within 1e-9 of a half is refused.
+
+    No trig runs at play time. The tables are point-symmetric exactly (heading h+4 is the negation of h).
+25. **The lattice** (F9b). `hullReach` relaxes forward, reverse, pivot right, pivot left, in that order, from each popped state. Ties in the heap pop as `nav.reach`'s. With `f` absent, a command takes the valid heading with the least distance, ties to the lowest index. Facing changes draw nothing. The AI's `bestSpot` draws once per lattice **cell** that has a valid heading, as rule 6 says for cells.
+26. **Footprint branches** (F9b). Every footprint site is `if (t.fp)` (either unit's). Two round units keep today's expression literally, never "the disc formula with k = 1" (`hypot(…) < o.r + u.r + 0.08` and `hypot(…) − o.r − u.r < 0.08` round differently), so classic, `fort/`, `scale/`, `army/` and War-Cart battles are byte-identical through F9b.
+
+Rule 10 ("AI code is rules code") covers F7's AI terms (`levelDist` and the height term bump with F7a) and F9b's (the room term and the charge prefilter bump with F9b). It does not cover `autoList`, whose output is recorded (rule 23).
+
+### 4.2 Large battles (S0-S3, F7-F11, V1)
+
+The user asked for larger maps with fortifications and platforms to climb, large vehicles with firing platforms, and, for large battles, drag-selecting a group to order it to move or attack or to put it on autopilot. They then asked for online play first, three battle sizes with a points-based army builder, and a vehicle shape per race. This section is that design (written after R8, against R8b; revision 3, then the user's decisions of 2026-10-22).
+
+It grafts three competing designs onto one base:
+- **Base: the scale-and-performance design.** It contributes S0-S3, the size envelope, the measured budgets, V1, the rendering plan, `pilot {m}` and the client macros.
+- **From the controls design:** the whole player layer. That is the selection model, the group bar, ghost formations, "leftovers stay selected", the End/Go timing, semantic zoom, the minimap, height and vehicle readability, and group deployment as a macro. It also gives `legal()`'s `opt`/`bools` schema.
+- **From the rules-engine design:** the rules for missions, fortifications and vehicles, the setup whitelist, `checkMission`, the fight guard, `RULES` `k` as a list, and its core standing orders as the documented fallback.
+
+**Evidence.** The figures quoted below were measured with throwaway prototypes written during the design (`sp/`, `f7proto/`, `army/`, `hulls/`, `rev3/`); they are not in the repo. All are desktop Node 22 CPU time, the minimum of 3 interleaved runs unless stated. Phone figures are about 4-5× desktop and were **not measured**. Battle scores are AI against AI over seeded boards and dice with seats swapped every other battle; "score" is wins plus half of draws, and "±" one standard error.
+
+#### 4.2.0 Decisions
+
+**The user's answers.**
+
+| # | Answer | What it changes |
+|---|---|---|
+| 6 | **Online play first.** N1-N3 come before the large-battle work, which slots in after N3. | The queue (§4's order table, ROADMAP's queue). Every large-battle step, F10 and S0-S3 included, moves after N3: none depends on N1-N3. They then land on a working online stack: F10's executor, F11's lobby lists and F8's lobby fields are tested online from the day they land. Nothing else in the earlier queue moves because of this answer: F6 stays right after N3. (F5's split is a separate choice, §4.2.0.) |
+| 7 | **Three sizes (Skirmish, Field, Grand) plus a points-based army builder.** Players pick their own units up to a points limit per size. | New feature **F11** (§4.2.8). The fixed lists become **presets**: classic ×1, ×2 and ×3. |
+| 14 | **The vehicle's shape depends on the race.** | F9 is rewritten (§4.2.5): a round War-Cart, a long Shell-Back Howdah, a broad Brood Beetle and a flying Sky-Basket. Long hulls get a facing and a planner of their own. **Scope:** question 14 asked about the transports, so the answer is applied to each race's transport. Siege towers (F9d, the last step) stay one round chassis per race in v1. Whether they too follow their race's shape is open question 26. |
+| 17 | **The spec's default.** Left-drag orbits, Shift-drag box-selects, and touch has a Select mode. | Nothing changes. A long hull's facing is set with a rotate handle or the **[** / **]** keys, never by left-drag. |
+| 8-13, 15, 16, 18, 19 | **Not answered.** | Their recommended defaults are built (§6 lists them). |
+
+| Topic | Decision | Why |
+|---|---|---|
+| Order of work | R8b → N0 → F3 → F1 → F2 → F4 → **N1 → N2 → N3** → F6 → S0-S3 → F10a → V1 → F10b → F10c → F8a → **F11a** → **F5a** → **F11b** → F7a → F7b → F7c → F8b → F9a → F9b → F9c → **F5b** → F9d | **From the user's answer 6:** the large-battle work follows N3. **Kept from the earlier plan:** F6 stays right after N3, and its battle-setup panel gains a line as F7a, F8b and F11b land. **The designer's choices** (not consequences of the answers): F11a needs F8a's mission plumbing, and F11b needs F6's panel and N2's lobby. Fortifications come right after the builder, big boards land with orders already in hand, and hulls follow the big boards they need. **F5 splits in two.** F5a (the insectoids and bird-people) follows F11a, so the builder is priced for two races first and each new race arrives with prices fitted against the others. F5b (their Brood Beetle and Sky-Basket) follows F9c, whose engine and firing decks they use. The cost: the new races arrive seven steps later than the earlier "F6 → F5" (open question 27). |
+| Larger maps (F8) | A **mission** owns its board, deployment depth, objectives, rounds, terrain sets, its **preset's name** and its **list rules** (points, slots). `setup.mission` names it; absent means `classic`, and an unknown name is refused. Three sizes: **Skirmish** 40×28 (500 points, 5 rounds), **Field** 60×40 (1,000, 6), **Grand** 80×56 (1,500, 7). `G.board` replaces every core read of `BOARD`. | Classic computes the same doubles, so the 40 battles replay. RULES_ID already hashes missions. |
+| Army builder (F11) | Each seat names a **preset** or a **list of unit counts** (one digit per roster entry) in `seats[i].army`, checked by `core/army.js` against the mission's points limit and slot table. Prices are a new field, **`cost`**, tuned by simulation; `pts` stays the AI's own appraisal. A seat that names no army plays the mission's preset. AI seats play the preset, or a seeded Random list recorded in the start. A **Muster** screen per human seat, after F6's race picker; online, lists ride in N2's lobby, hidden by courtesy until the start. | Retuning `pts` would move every AI choice and all 40 classic battles. Raw `pts × models` prices score the Bushtails 76.8% ± 1.7 at equal points; the v6 table scores 51.2% ± 1.4 at Skirmish (N = 1,200). Digit lists keep an online Grand start at 513 B. With N2's name cap (48 encoded bytes) the worst case is 613 B, inside a 640 B budget and well under R8's 1,024 B. Classic parity held 12/12 across three spellings of the classic army. |
+| Scale hygiene (S0-S3) | Bounded scans, an LOS broadphase, hoisted invariants, one forbid mask per plan, and a plan memo scoped to one `apply`. No bump. Lands after N3 (and so after N0). | Prototyped byte-identical: 8/8 classic and 6/6 Grand (trace, `stateHash`, draws). A Grand AI battle drops from 366 to 264 ms, setup from 34-45 to 20-25 ms. |
+| Fortifications (F7) | A 2.5D heightfield of **decks, stairs and parapets**, with **ladders as nav links** between a foot cell and a top cell. Every piece is **sized from the unit discs**: decks at least 4.5" across and stairs 4.5" wide, so any disc up to r 1.22 stands, climbs and turns at any yaw. Five recipes: rampart, bastion, watchtower, timber platform, and a keep on the centre objective. Each side also gets **its own works**, a rampart on its zone's front edge. Every height rule sits behind `nav.hasHeight`. Collapsing platforms and `settle` come in F7c. | A unit is one disc of r 0.89-1.18, so the pieces had to grow (the critique measured that the first sizes fit no squad). Prototyped on 200 boards per size: every deck reachable, every top hosts r 1.22, the height layer point-symmetric. |
+| Vehicles (F9) | **One transport per race, each its own shape.** Bushtails: the **Acorn War-Cart**, round (one disc, r 1.5). Coil: the **Shell-Back Howdah**, long (head, body and tail discs, 5.9 × 2.5"). Insectoids (F5b): the **Brood Beetle**, broad (three discs, 5.7 × 3.0", enclosed). Bird-people (F5b): the **Sky-Basket**, round and flying (r 1.2). Each has a `transport` record (capacity 12, the Basket 6). Riders carry `aboard = hullId` and are **off the table for every spatial rule**. Up to `fire` rider units shoot from the deck (F9c). Riders land by walking from **any** of the hull's discs. A destroyed hull leaves a wreck and its riders bail out: one D6 per model, a 1 is a mortal wound, the only new draws. Siege towers (F9d) and landed flying hulls (F5b) alone unload onto decks. Siege towers are round for every race in v1 (open question 26). | Four ways to move: wheels, slither, legs, wings. Two need no new navigation (round is today's disc, flying today's `fly` mode). No moving terrain and no second floor: each rider change is a guard on a site that exists today. |
+| Long hulls (F9b) | A `footprint` of 2-3 discs relative to the hull's facing, one of them the **body disc** at `[0, 0]` (the unit's `pos`). **8 headings**, the nav grid's own. Offsets **snapped to the 0.5" grid** from exact constants, so no trig runs in play. Planned by a Dijkstra over **(cell, heading)** states: forward, back (cost ×2) and a 45° pivot where the swept arc is clear (the Howdah pays 0.25" a pivot, the Beetle nothing: open question 23). Every spatial rule measures **to the nearest disc**, in a branch only footprint units reach. `move`, `place` and `chargeEnd` gain an optional heading `f`; without it the cheapest valid heading is taken (no dice). | The lattice crosses zone to zone on **300/300** Field and Grand boards, open and fortified. A bounding disc crosses only 59-94%; "plan with the body disc, check the footprint at the end" offers 5-8% of end spots the hull can't reach (16-41% with turn costs). A max-12 plan costs 0.8-1.1 ms at Grand (a round unit's 0.23-0.32). Two round units keep today's expressions literally, so every earlier corpus replays byte for byte. |
+| Group orders and autopilot (F10) | **One new consensus kind, `pilot {m}`**: "the AI plays these units' remaining actions in this phase, now". Everything else is **client macros of ordinary commands**: the one-shot group Move, Approach, Fire, Charge and Place, and the standing orders **March, Attack, Hold and Autopilot**. The standing orders sit in a per-device **order book** and are carried out **when you press End (or Go)**, never when the phase opens. A ground click with a group selected **pins a preview**; a second click commits it. | Smallest consensus surface: tuning March or Attack needs no bump and no re-recorded baselines. Acting at End keeps the human first in every phase, and pin-then-commit means a stray click never moves a whole group. |
+| Fallback (documented, not built) | The rules-engine's core standing orders, `order {m, k, a}` with `u.order` hashed and executed at `end`. | For when orders must follow the player across devices or act while they are away (open question 8). |
+| Playback and drawing (V1, F8b) | **Playback:** walks batched 0.15 s apart, with one tray row for a batch's advance rolls. **Drawing:** terrain merged into 8" tiles, shadows fitted to the view, figure LOD, and semantic zoom with DOM chips. **Navigation:** a minimap. | A Grand movement phase plays in 4.2 s instead of 21.2 s, a Grand battle in 165 s instead of 357 s (a classic battle today takes 166 s). A whole-board Grand frame takes 1,770 main-pass draw calls; the target is ≤ 600. |
+| R8 defect, fixed by R8b | **The defect:** `Folder.sync` re-entered when a sink submitted from inside `sink.events` during a multi-entry sync. **The fix:** R8b's single flight (§4.2.10 item 1): a submit from any sink callback is queued as its body and written once the change is folded. | Reproduced (`sp/reenter2.mjs`): a live peer recorded "envelope: an id seen before" that a fresh fold of the same log didn't. R8b also builds the rest of §4.2.10's list but item 8, the setup whitelist, which lands with F8a. |
+
+**Numbering, settled.**
+- **F8**: missions and larger maps. **F9**: vehicles (F9a round transports, F9b long hulls, F9c firing decks, F9d siege towers). **F10**: selection, group orders and autopilot. **F11**: the army builder (F11a lists in the setup, F11b the Muster screen).
+- **S0-S3**: scale hygiene. S2 and S4-S6 are held in reserve.
+- **V1**: batched playback.
+- **F5a / F5b**: the earlier F5, split in two, the races and then their vehicles (§4.2.0).
+- **Open questions** keep their numbers: 6, 7, 14 and 17 are answered; 8-13, 15, 16, 18 and 19 keep their defaults; 20-27 are new (§6).
+
+#### 4.2.1 Size envelope and budgets
+
+**Size envelope.** data-check's **capacity check** holds every mission, preset, list rule and set inside this table; a set's chunk count is checked on its worst board over seeds 1-200. A mission that wants more must move the table and re-run the budgets.
+
+| Limit | Value | Set by |
+|---|---|---|
+| Board | ≤ 80×56 | Readability and the camera, not the core. The core copes with 120×84: a rebuild takes 2.4 ms and an 18" reach 0.9 ms. |
+| Nav cell | 0.5" on every board | The smallest base (0.3), STEP and ledges. A coarser grid would move every classic battle. |
+| Cell index `c` | ≤ 17,919 | Stable within a match: every peer builds the grid from the setup. |
+| Points a side | 500 / 1,000 / 1,500 by mission (F11) | The builder's limits; prices are tuned against them (§4.2.8). |
+| Units a side | ≤ 24 (a Grand list's cap; the Grand presets hold 21; the Bushtails reach 23 under the model cap, the Coil 24) | AI cost. Measured: a Grand AI battle with lists at the caps costs 1.07× one with the presets (below). `pilot`'s mask would allow 53. |
+| Models a side | ≤ 90 (a Grand list's cap; the Grand presets hold 72-84) | Draw calls and LOS rays. |
+| Vehicles a side | ≤ 2 in Field and Grand (the builder's `Vehicle` slot), 0 in Skirmish; capacity ≤ 12 | Lanes, draw calls and AI cost. Long hulls cross zone to zone on only 75-100% of Skirmish boards (§4.2.5). |
+| Footprint (F9b) | 2-3 discs; r 0.5-1.6; a body disc at the pivot; snap error ≤ 0.15"; connected at every heading; each disc's pivot gap ≤ 0.06"; bounding R ≤ 3.5 | Lanes, the sweep's sampling and the lattice's cost (§4.2.5). |
+| Headings (F9b) | 8 | The nav grid's neighbour steps. |
+| Climber disc | r ≤ `CLIMB_R` = 1.22 for any unit that uses stairs or ladders (squads today: 0.89-1.18) | The fortification sizes (§4.2.4). |
+| Chunks | ≤ 450 (fortified, measured: Skirmish 26-72, Field 63-146, Grand 142-223) | `sight` costs 2.6 µs at 148 chunks and 9.4 µs at 440 without S0b. |
+| Rounds | 5 / 6 / 7 by mission | The log budget below. |
+| Entry | ≤ 1,024 B; the largest new one is `pilot`, 125 B with a 53-bit mask (`embark` 119 B; `move` with a heading ≈ 108 B) | R8's `MAX_BYTES`. |
+| `start` | ≤ 640 B. Measured (`army/tools/size.mjs`, `rev3/size-names.mjs`): an online-style start today 461 B, a local one 304 B; online at Grand with a mission and two digit lists 513 B; 24-character ASCII names and 12-entry rosters 565 B; names at N2's cap of 48 encoded bytes each (48 ASCII, 16 CJK or 12 astral characters) **613 B**, the worst case (a few bytes more with the longest mission or overtime name). Uncapped, a name of 24 control characters or lone surrogates encodes to 144 B (`\u00XX` escapes) and the start to 805 B. | R8's `MAX_BYTES` (1,024 B). Lists are digit strings (§4.2.8). N2 normalises a display name and caps it at 24 characters and 48 encoded bytes, and fixes the nonce at 16 hex characters (§3's additions). |
+
+**Performance budget.** `sim/scale-bench.mjs` reports the core rows on classic and on Grand, and fails above 1.5× budget. Its Grand runs use the fixture of §4.2.9 until F8b, then the `grand` mission. They cover `open` and, from F7a, `fortified`, each with two sets of lists: the ×3 presets, and **lists at the caps**. A cap list fields 24 units, or as many as 90 models allow, with every slot but Troops full, and from F9a/F9b two hulls a side. Measured: Bushtails 23 units and 89 models, the Coil 24 units and 84 models. The Grand budgets below hold on the cap lists. `sim/render-bench.mjs` (Chromium) reports the drawing rows, and fails above 1.25× budget.
+
+| Measure | Classic today | Grand, measured | Budget at Grand |
+|---|---|---|---|
+| `createMatch` to the deployment | 3-4 ms | 34-45 ms; 20-25 ms after S0-S3 | ≤ 40 ms |
+| AI movement phase, p50 / p90 / max | 3.3 / 6.2 / 15 ms | 25 / 36 / 55 ms; 17 / 25 / 33 ms after S0-S3 (`open`) | p90 ≤ 35 ms on `open` and `fortified` (phone ≈ 0.15 s inside `end`) |
+| Whole AI battle (a rejoin's quiet fold) | 46-110 ms | Presets: 316-435 ms; 214-286 ms after S0-S3 (`open`). Fortified adds ≈ 1.1 ms per rebuild (20-40 rebuilds) and the height branch of `reach` (est. +10%): est. 250-330 ms. **Cap lists** cost 1.07× the presets over a 16-board run (per board 0.77-1.33×, mean 1.10; `rev3/grand-caps.out`): est. 235-315 ms `open` and 275-365 ms fortified after S0-S3. Two long hulls a side: est. +40-80 ms (not measured in play), so 315-445 ms fortified. | ≤ 350 ms on both, on the cap lists (phone ≈ 1.5 s, behind N2's veil). The estimate passes it with hulls on fortified boards: the AI count budget's trigger (§4.2.2). |
+| One human `move` through the Session | 0.76 ms | 1.41 ms (the plan is made in `Session.legal`, `Folder.push`'s `legal` and `apply`; the apply-scoped memo saves nothing here) | ≤ 2 ms |
+| Long-hull plan, max 12 (warm memo) | – | 0.8-1.1 / 1.2-1.6 ms (p50 / p90); max 6: 0.15-0.21 ms; a round unit's max-12 plan: 0.23-0.32 ms | p90 ≤ 2.5 ms |
+| Long-hull plan, first after a nav rebuild, max 14 | – | 1.6-2.1 / 2.3-3.9 ms | p90 ≤ 5 ms |
+| Hull memo | – | `N·8` bytes per hull kind (143 KB at Grand) | – |
+| `pilot` for 20 units | – | about one AI movement phase | ≤ 35 ms |
+| A 20-unit macro, planned and submitted | – | ≈ 20 ms of planning plus 20 submits | ≤ 50 ms (phone ≤ 0.25 s) |
+| Client goal field (one whole-board Dijkstra) | 0.72 ms | 3.83 ms (a long hull marches by its body disc's field, 1.8-2.1 ms; its own lattice field would take 13-21 ms) | ≤ 8 ms |
+| Group preview per pointer move (plans cached) / at rest | – | – | ≤ 2 ms / ≤ 15 ms (throttled to 60 ms on phones) |
+| `stateHash` | 0.06 ms | 0.18 ms | ≤ 0.5 ms |
+| `nav.rebuild`, plus the height layer on fortified | 0.31 ms | 1.2 ms (`open`); fortified prototype: 1.1 + 1.1 ms (avg; max 2.9 + 1.8) | ≤ 3 ms on average, else S4 |
+| Playback, one movement phase (avg / max) | 5.5 / 11.9 s | 21.2 / 34.5 s; 4.2 / 5.2 s with V1 | ≤ 8 s |
+| Playback, whole AI battle | 166 s | 357 s; 165 s with V1 | ≤ 200 s |
+| Log, 7-round Grand hotseat played by hand | 104-150 entries (classic, 5 rounds) | ≈ 465 (estimated from AI command counts) | ≤ 1,000 |
+| Main-pass draw calls, whole board | 492 | 1,770 | ≤ 600 |
+| Shadow casters drawn | ≤ 441 | ≤ 1,481 (most culled by the fixed shadow camera) | ≤ 600, with shadows across the visible board |
+| Triangles, whole board | 251 K | 656 K | ≤ 400 K |
+| JS time of `renderer.render` | 1× | 1.8-2.7× classic | ≤ 1.3× classic |
+| Label and chip style writes per frame, camera still | 14 | 42 | ≤ 20 |
+| Minimap | – | – | ≤ 1 ms per redraw, ≤ 10 Hz |
+
+#### 4.2.2 S0-S3: scale hygiene (no behaviour change, no bump)
+
+Each step returns **the same cells in the same order with the same doubles**, so every draw lands where it did. It lands **after N3**, and so after N0, which rewrites `sin`/`cos` in `nav.raster` and `geom.js`: any N0 re-record stays off the optimised code. The core has no Grand board yet, so its Grand checks (P-scan, P-memo's Grand states, scale-bench) run on the Grand fixture of §4.2.9.
+
+| Step | Change | Why it is the same behaviour | Grand battle (ms, same run) |
+|---|---|---|---|
+| **S0** Bounded scans | `bestSpot`'s lattice and `aiMove`'s fall-back scan visit only the box `start ± (max + cell)`, keeping the lattice's alignment and its odd-row offset. `freeSpot` visits only the zone's columns. `forbidMask` uses `nav.W/H`. | Every finite reach cell lies within `max` of the start. `fits` refuses every column outside the zone first. | 343 → 307; setup 34 → 20 |
+| **S1** Hoisted invariants | Built once per `bestSpot`, per enemy: `isEngaged`, `inCover`, `meleeValue(u, e)` and `meleeValue(e, u)`. `p2D6` becomes a table built by the same loop. `sight` and `shotValue` take the precomputed values as optional arguments. | They are pure functions of state the scan doesn't touch, and the same expressions give the same doubles. | 359 → 316 (with S0) |
+| **S0b** LOS broadphase | Chunk ids are binned on a 4" grid as chunks are added; a chunk never moves sideways, and `collapse` changes only `y`. `los` visits only the bins the segment crosses, then tests the candidates **in chunk order**. It falls back to the full scan when an endpoint is off the board. | Bins are filled from each chunk's circle AABB plus 0.01". Chunk order keeps the early `block` return, and `obscure` is a count, which order can't change. | 344 → 294 (with S0, S1) |
+| **S3a** One mask | `movePlan` builds one forbid mask when the unit is not falling back; today it builds two identical ones (move.js:57-58). | The same call with the same arguments. | part of the next row |
+| **S3b** A plan memo per `apply` | `apply` opens `G.nav.memo` (a `Map` of typed arrays and plain objects) in a `try` and drops it in its `finally`, so a throwing `apply` (`runAI` strict, engine.js:212) leaves nothing behind. The AI's `movePlan` and the handler's own then share one plan within a single entry. The lookup happens **after** `movePlan`'s `refreshNav`, so the key never reads a stale epoch. The key covers everything the plan reads: unit id, position, r, `extra`, the nav epoch (which `rebuild` bumps), every live unit's position, r and `aboard` (F9a: `enemiesOf` reads it), and (F9b) the `facing` of the mover and of every footprint unit (others' discs depend on it). Only code running inside one `apply` reads or writes the memo. Previews, the HUD and a `legal()` call outside `apply` never see it, so **a UI preview can never feed the fold**. | A hit returns a plan equal to a fresh one (P-memo). The memo is derived state, not hashed, and null between commands. | 360 → 267 (S3a + S3b) |
+
+**Held in reserve**, each with the trigger that brings it in:
+
+| Step | What | Trigger |
+|---|---|---|
+| **S2** Windowed plans | `reach` allocates only the move's box, `(2·max/cell + 3)²` cells. The closure prototype was *slower*: classic went from 56 to 68 ms. | GC above 20% of a Grand battle's profile after S3. If taken, build it as a class with inlined index arithmetic. |
+| **S4** Incremental nav rebuild | Clamp the clearance and cliff fields at `C = max r + 0.5`, which is exact for every `r − 0.06 ≤ C` comparison. Then re-raster and re-run the chamfer only on the dirty rectangle grown by 2C. | `nav.rebuild` plus the height layer above 3 ms on average on the largest board. |
+| **S5** Streamed fold | `advance` and `runAI` become resumable at each AI yield, driven in 8 ms slices by the Session. The generator lives only *during* a command (§0.2 #12 holds), and the Folder accepts no entry mid-push. | A phone's `end` at Grand measured above 250 ms. |
+| **S6** In-memory checkpoints | `cloneState(G)` at each round's end, for the open match only. A refold or N3 scrub starts from the nearest one, through R8b's `Folder.refoldFrom()` seam. | N3's scrub at Grand above 0.5 s on a phone. |
+| **AI count budget** | A mission may carry `ai: {lattice, targets}`: the scan step in cells, and score only the K nearest enemies (ties in G.units order). It is rules data, never a clock. Measured on Grand: the movement phase p50 drops from 19.6 to 12.8 ms. A long hull may likewise weigh only its nearest chargeable target. | Measured on scale-bench's **cap-list** fixture, `open` or `fortified`, from F9b with two hulls a side: a whole AI battle above 350 ms, or a movement phase p90 above 35 ms. §4.2.1's estimate (315-445 ms fortified with hulls) puts Grand near or over that line, so F9b should plan on taking it for `grand`. It is a rules change: bump, and that mission's own baselines. |
+
+#### 4.2.3 F8: larger maps
+
+**What the player sees.** F6's battle-setup panel (and N2's lobby) gains a **battle size** and, from F7a, a **terrain** choice within the size's sets. Each side then builds an army to the size's points limit, or takes its preset (F11, §4.2.8):
+
+| Size | Board | Points (preset) | Objectives | Rounds | Sets |
+|---|---|---|---|---|---|
+| Skirmish | 40×28 | 500 (the classic list, 7 units) | 5 | 5 | classic, fortified |
+| Field | 60×40 | 1,000 (classic ×2, 14 units) | 7 | 6 | open, fortified |
+| Grand | 80×56 | 1,500 (classic ×3, 21 units) | 9 | 7 | open, fortified |
+
+On Field and Grand the camera opens behind your army at 45-60", where figures stay 18-22 px tall. The whole board is one button away (Overview, or Home). A minimap and a roster keep off-screen units in reach (§4.2.7).
+
+**Data.**
+
+```js
+// data/mission.js: consensus data (RULES_ID hashes MISSIONS whole). Starting values, tuned by sim in F8b.
+classic: { board: { W: 40, H: 28 }, deploy: BOARD.deploy, rounds: ROUNDS, army: 'classic', sets: ['classic'],
+           objectives: [ {0,0}, {-9,8}, {9,-8}, {-9,-8}, {9,8} ] },                                   // values unchanged
+field:   { board: { W: 60, H: 40 }, deploy: 12, rounds: 6, army: 'field', sets: ['open'],
+           objectives: [ {0,0}, {-11,10}, {11,-10}, {-11,-10}, {11,10}, {0,-14}, {0,14} ] },
+grand:   { board: { W: 80, H: 56 }, deploy: 14, rounds: 7, army: 'grand', sets: ['open'],
+           objectives: [ {0,0}, {-14,14}, {14,-14}, {-14,-14}, {14,14}, {-24,0}, {24,0}, {0,-20}, {0,20} ] },
+// F8a ships classic's new fields only; F11a adds classic's `list`; F8b adds field and grand with theirs (§4.2.8);
+// F7a appends 'fortified' to every mission's sets. (objectives as {x, z}; the shorthand {a,b} above is x = a, z = b)
+
+// data/races/<race>.js: plain data. `army` (the classic list) is unchanged; F11a adds `roster` and `cost`, F8b the presets
+// for every race (F5a's included):
+armies: { field: '224222', grand: '336333' }   // count strings, one digit per roster entry (§4.2.8);
+                                               // defineRace adds the `classic` key, derived from army, to the frozen copy
+```
+
+**`checkMission`**, run at load (the same pattern as `checkSet`):
+- `W` and `H` are even whole numbers, so `W / 0.5` is a whole cell count, and `deploy < W/2 − 6`.
+- Every objective lies inside the board by 1", lies outside both deployment zones (`|x| < W/2 − deploy`), and has its point mirror in the list. Both seats rely on that fairness, as on the scatter's mirror.
+- `sets` names sets that exist, and `army` is a name.
+- (F11a) `list` is sane: §4.2.8.3.
+
+**`defineRace`** validates (F11a; F8b and F9 extend it):
+- `roster` lists each of the race's units exactly once, and `army` is in roster order;
+- every unit has `cost`, a whole multiple of 5;
+- each preset is a valid count string; data-check holds it legal for the mission whose `army` names it (§4.2.8.5).
+
+The registry stays prototype-free, so a preset named `toString` finds nothing.
+
+**The `open` set** (`core/terrain/sets.js`):
+
+```js
+open: { ...SETS.classic's centre and kinds..., pairs: [6, 3], attempts: 1200, gap: 3.2, objectiveGap: 2.6, scale: 'area', /* rest as classic */ }
+// scatter, only when S.scale === 'area' (a branch of its own; classic's line is untouched):
+//   s = (T.W · T.H) / (40 · 28); want = round(pairs[0]·s) + floor(rng() · round(pairs[1]·s)); attempts = round(S.attempts · s)
+// checkSet allows `scale` as an optional field.
+```
+
+- Expect 250-300 chunks at Grand. Classic density gives 148, and pairs [24, 12] give 440.
+- **Lanes are checked, not assumed.** Footprint circles over-state some pieces and under-state none, so `gap` alone neither proves nor rules out a hull's lane. terrain-check's **connectivity** rows (§4.2.9) do: on seeds 1-500, a round hull disc (r 1.5, ground only) and (from F9b) each long hull on its lattice cross from zone to zone, and every objective is controllable by an r 1.18 squad. `gap: 3.2` is the starting value; F8b tunes it until those rows pass. (The hull prototype's `open` stand-in, with gap 3.2, already passed 300/300 for both long hulls.)
+
+**Setup.** `fullSetup(setup)` runs these checks in order. Each refusal is a thrown `Error`, as today.
+
+```js
+// core/match.js exports the whitelists as one constant each: SETUP_KEYS, SEAT_KEYS (F11a adds 'army' to SEAT_KEYS)
+// unknown top-level key → `a setup takes no field "x"`  (SETUP_KEYS: board, dice, terrain, rounds, overtime, diceMode, seats, mission)
+// unknown seat key      → `seat 1 takes no field "x"`   (SEAT_KEYS: race, ctrl, dev, name, nonce; from F11a army)
+// mission ?? 'classic'; not in MISSIONS → `no mission "x" (there are classic, field, grand)`
+// terrain ?? mission.sets[0]; not in mission.sets → `the grand mission is fought on open or fortified, not "classic"`
+// rounds ?? mission.rounds; then today's checks
+// (F11a) army ?? mission.army, per seat; then armyOf's refusals in §4.2.8.4's order
+```
+
+`missionOf(setup)` reads `MISSIONS[setup.mission ?? 'classic']` (today it ignores the setup). The whitelist is constraint C7: today a stray key is copied through, so a `setup.mission` sent to a core that predates missions would quietly play classic. R8b deferred it to here.
+
+**Core plumbing.** `newState` sets `G.board = {W, H, deploy}` from the mission. Every core read of `BOARD` goes through it:
+
+| Site | Today | After |
+|---|---|---|
+| `newState`: `new Terrain`, `new NavGrid(…, 0.5)` | `BOARD` (match.js:72) | `G.board` |
+| `forbidMask` cell bounds | `BOARD.W/H` (move.js:33) | `nav.W/H` (S0) |
+| `blastVolley` scatter clamp | `±BOARD.W/2 − 0.3` (shoot.js:122) | `±G.board.W/2 − 0.3` |
+| `deploy.js` `zone`, `deployArmies` (rows over `H − 6`) | `BOARD` (deploy.js:11, 57) | `G.board`; the expressions are unchanged |
+| Fight alternation guard | `30` (fight.js:66) | `max(30, 2·G.units.length + 2)`. This is 30 for every classic battle (14 units). It is a rules change, so it ships with F8b's bump. |
+| The scatter's `inDeploy`; the nav field's edge clamp | `T.W`; the grid's own W/H | unchanged |
+
+`BOARD` stays in `CONSTANTS` (RULES_ID) as classic's numbers. data-check asserts `MISSIONS.classic.board` and `.deploy` equal `BOARD`. On classic every expression computes the same doubles. F8a still bumps `CORE_VERSION`: the setup is read differently, and the whitelist refuses setups that were accepted before.
+
+**View, presenter, app** (F8a; F8b's drawing work is in §4.2.7):
+- **Rebuilt per match, not at boot.** `Table` (mat, frame, zones), `Overlay` (its DataTexture is nx×nz; 160×112 RGBA is 72 KB), `ObjectivesView` and `UnitViews(W)`. A snap rebuilds them when `G.board` differs from the table's. A battle's start is a snap, so the board is in place before its events play.
+  - `project(G)` gains `board: {W, H}`, and the presenter reads it from there.
+  - `app/boot.js` (lines 50, 84 and 108) and `app/flow.js` (272 and 435) read the match's mission instead of `BOARD` and `MISSIONS.classic`. `Flow.scored` and `Flow.start` read it too.
+- **Camera presets.** `present/camera-presets.js` stops reading `BOARD` at module load (F1/F2 already pass the board).
+  - The rig's `maxDistance` is `max(75, overview fit × 1.1)`.
+  - Fog runs from `70·k` to `140·k`, where `k = hypot(W, H) / hypot(40, 28)`.
+  - The far plane is `max(400, 3 × overview fit)`.
+  - Classic is unchanged (k = 1).
+- **Shadows.** Classic keeps ±27/±22. On a larger board, the sun's shadow camera is fitted to the ground footprint of the view frustum, clamped to the board, and recomputed when the camera settles, never per frame. The map stays 2048.
+- **The mat.** The canvas stays 2048 px wide, with a tiled detail texture (one tile per 4": one more sampler, no more draw calls). Blot, stroke, tuft and flower counts scale with area, capped at 30,000 strokes, 2,800 tufts and 560 flowers. Tufts and flowers are already `InstancedMesh` (view/table.js:118): only their counts grow.
+- **The title stays on the classic table**, so the thumbnail's 1,200 ms frame doesn't change.
+- **sim tools take the mission:** the human-bot's deploy depth (today a fixed 8), terrain-check and camera-check.
+- **Boot parameters for the browser runs.** `?mission=` (F8b) and `?terrain=` (F7a) join `?races=` and `?armies=` (F11b), so `sim/`'s Chromium runs of `scale/` and `fort/` start the battles they recorded. F6's panel takes its defaults from them, so a harness presses Start with the panel as the URL set it. A bad value gets a line on the title card, as `?races=` does.
+
+**Netplay.** The setup names the mission, about 20 B more on `start`. Every peer derives the same board, grid and objectives. A new mission moves RULES_ID, so an older peer sees `skew`: read-only, never a silent desync. There are no new draws, apart from the fight guard letting long fights play out. **F8a lands after N3** (online first): N2's lobby gains `mission` then, beside `board`, `terrain` and `rounds`. A start written before F8a names no mission and reads as classic; F8a's bump makes such a match in progress read-only anyway (open question 4).
+
+#### 4.2.4 F7: fortifications and platforms to climb
+
+**What the player sees.**
+- **The pieces.**
+  - **Ramparts:** a long earth walk with parapets along the front, a stair at one end and a scaling ladder on the front face.
+  - **Bastions:** a square stone platform walled on three sides, stairs at the back.
+  - **Watchtowers:** tall, walled all round, reached by ladders.
+  - **Timber platforms** on posts, reached by a ladder.
+  - **The keep:** it stands round the centre objective with the objective on its top. Its two stairs face the two armies.
+- **Your works.** On a fortified board each side starts with **its own rampart** along the front of its deployment zone, parapets toward the enemy. You can deploy onto it. Its ladder faces no-man's land, so the enemy can scale it too. Every other fortification is no-man's land, scattered in mirrored pairs.
+- **Climbing.** Everyone but ground vehicles walks up **stairs**. Infantry (not big units, fliers or vehicles) can also climb **ladders**, which cost twice the height in inches (4" for a 2" wall).
+- **On a deck.** A unit on a deck sees over hedges and ruins, and parapets give it cover.
+- **At the foot of a wall.** A unit at the foot of a 2" wall can't fight the defenders on top (the height gap is over 1.2"). It must take the wall by its stairs or ladders, from a siege tower (F9d), or (open question 24) from a landed Sky-Basket (F5b). Indirect artillery still lobs over.
+- **Collapse (F7c).** Timber platforms can be shot out from under their defenders, who fall and take D3 mortal wounds.
+
+A squad stands on a deck as its disc, as it does everywhere. A rampart is therefore a 4.5"-deep walk that holds two squads end to end, not a wall the squad lines one model thick. Lining a wall model by model is later work (open question 12).
+
+**Sizing: the disc envelope.** Every unit is one disc: squads r 0.89-1.18, heroes 0.42-0.45, the trebuchet 1.05, the Brute 0.95, a round hull 1.5. (Long hulls, F9b, stand on every disc's cell and never climb.) A disc stands where `cliff ≥ r − 0.06`, and the chamfer `cliff` field rasters a rim of ledge cells on both sides of every edge. Raster alignment varies with yaw. So:
+
+| Constant | Value | Why (measured in `f7proto/bottleneck.mjs`, worst of 24 yaws × 3 sub-cell origins) |
+|---|---|---|
+| `STEP` | 0.4" | A neighbour step anyone walks. A diagonal step on a 0.5"/" stair rises 0.354", plus at most 1/64" of quantisation: always under 0.4. |
+| `STAIR_SLOPE` | 0.5"/" | A stair is twice as long as its rise (4" for a 2" deck). |
+| Floors | quantised to 1/64" as rastered | Exact in Float32: no comparison flips by an ULP. |
+| `CLIMB_R` | 1.22 | The largest disc every piece below admits, on every route, at the worst yaw. |
+| Deck, narrow side | ≥ 4.5" | A 4" deck admits only r 0.96-1.02 at bad yaws (squads are 1.06-1.18). |
+| Stair width | 4.5" | A 4" stair admits r 1.02 at the worst yaw. |
+| Ladder | a nav **link** from a foot cell 2.25" out from the face to a top cell on the deck's centreline; cost `2·h` | A ramp ladder's cells are all ledges (the critique measured cliff 0 on them). A link needs no corridor: the disc stands at both ends. |
+
+**Terrain data.**
+
+```js
+ChunkDef += {
+  kind: … | 'deck' | 'stair' | 'ladder' | 'parapet' | 'post' | 'wreck' (F9a),
+  surface?: { y, ramp?: { axis: 'x' | 'z', y0, y1 } },   // the walkable top, in the chunk's own frame (deck: y; stair: y0 → y1 along axis)
+  link?: { foot: {x, z}, top: {x, z}, h },                // a ladder: the two cells it joins, and the height it climbs
+  base?: number,           // the floor the chunk stands on (a parapet on a 2" deck: 2); 0 when absent
+  supports?: [id], fallsAt?: n,   // F7c: a timber deck's posts; it falls once n of them are down
+  on?: id,                 // F7c: a ladder's deck (it falls with it)
+}
+```
+
+| Piece | navKind | los | cover | Shape | Notes |
+|---|---|---|---|---|---|
+| `deck` (earth, stone, timber) | null | `block` (the solid body: `shape.y = h/2`, `hy = h/2`) | – | footprint × h | `surface: { y: h }`; `hp: Infinity` |
+| `stair` | null | null | – | the ramp's footprint, 4.5" wide | `surface.ramp`, rising 0.5"/"; `hp: Infinity` |
+| `ladder` | null | null | – | a 1"-wide strip against the face (drawn only) | `link`; `hp: Infinity` (F7c: falls with its deck) |
+| `parapet` | **null**: it stands on the deck's rim, inside the ledge band that already stops movement | `obscure` | its cover band (1.5" deep behind it) is rastered **at its base level** | a thin wall on a deck edge, 0.7" tall | `base` = the deck's y; `hp: 3`. A broken parapet leaves no rubble: it had no nav effect, and the view spills debris. |
+| `post` (F7a: `hp: Infinity`; F7c: `hp: 3`) | null (under its deck) | `block` | – | 0.4" square, the deck's height | listed in its deck's `supports` |
+
+**Recipes** (`core/terrain/recipes.js`; each is centred on its bounding box, with its front at local −z):
+
+| Recipe | Pieces | Real extent | Footprint r (data) | Climbed by |
+|---|---|---|---|---|
+| `rampart` | earth deck 8×4.5", h 2; a 4.5"-wide, 4"-long stair continuing the deck at one end (the end is drawn); a ladder on the front face; 4 parapets along the front (F7b) | 12 × 6.75" | 7.1 | stairs: every non-vehicle; ladder: climbers |
+| `bastion` | stone deck 5×5", h 2; a 4.5×4" stair at the back; a ladder on the front; 6 parapets, front and sides (F7b) | 5 × 11.25" | 6.3 | stairs: every non-vehicle; ladder: climbers |
+| `watchtower` | stone deck 4.5×4.5", h 3; ladders front and back; 8 parapets (F7b) | 4.5 × 9" | 4.8 | climbers only |
+| `platform` | timber deck 4.5×4.5", h 2, on 4 posts; one ladder | 4.5 × 6.75" | 4.3 | climbers only |
+| `keep` (centre piece) | stone deck 6×6", h 2.5, round the centre objective; two 4.5×5" stairs on opposite sides; 10 parapets on the other sides (F7b). Its yaw is `(rng() − 0.5)·0.4`, so its stairs face the two zones. | 16 × 6" | 8.6 | stairs: every non-vehicle |
+
+- **Footprint r** is the largest distance from the frame's origin to any chunk corner or link foot, plus 0.25", rounded up. checkSet asserts each recipe's `r` is at least that on 500 seeds.
+- **Every recipe makes every `rng()` call in a fixed order** and records the results in `look` (§2.9's trap). `view/terrain.js` builds the meshes from `look`, and its `defOf` carries `surface`, `link`, `base`, `supports` and `on` (terrain-check holds it to core's).
+- **`gatesOf(name, frame, seed)`** dry-builds a recipe into a scratch `T` and returns its **gates**: each stair's low end (0.5" past its foot) and each ladder's foot. A recipe draws only from its own stream, so the dry build costs no board draws.
+
+**The `fortified` set** (`core/terrain/sets.js`; `classic` stays frozen):
+
+```js
+fortified: {
+  centre: [['keep', 0.5], ['tower', 0.8]],
+  works: 1,                         // a rampart per seat on its zone's front edge (below)
+  forts: [1, 1], fortAttempts: 600, fortGap: 3.2, fortObjectiveGap: 1.5,
+  fortKinds: [['rampart', 7.1, 3], ['bastion', 6.3, 2], ['watchtower', 4.8, 1.5], ['platform', 4.3, 1.5]],
+  facing: ['rampart', 'bastion'],   // these face the enemy (below)
+  kinds: [['ruin', 3.2, 3], ['wall', 3.6, 1], ['forest', 3.2, 2], ['hedgerow', 3.4, 2], ['rocks', 2.0, 1.5], ['barricade', 2.0, 2]],
+  pairs: [4, 3], attempts: 1200, mirror: 'point', margin: 0.5, selfGap: 1.4, deployMargin: 1, bigNotInDeploy: 2.1,
+  notInDeploy: ['forest'], objectiveGap: 2.6, gap: 3.2, scale: 'area' }
+// checkSet allows works, forts, fortAttempts, fortGap, fortObjectiveGap, fortKinds, facing and scale as optional fields
+```
+
+The scatter gains three branches, each reached only for a set that has the field. Classic's draws are untouched.
+
+1. **The centre**, as today; `keep` records `{x: 0, z: 0, r: 8.6}`.
+2. **Works** (`works`).
+   - Per rampart, up to 8 tries: `z = rr(rng, −zr, zr)` with `zr = H/2 − 7.1 − margin`, then the seed.
+   - Seat 0's frame is `(−W/2 + deploy − 1.125, z, −π/2)`: the deck's front face lies on the zone's edge, the deck inside the zone, and the ladder's foot 2.25" into no-man's land. Seat 1 gets the point mirror.
+   - A try succeeds when both copies' **aprons** fit. An apron is a 2.2" circle round each gate; it must lie on the table and clear of every placed footprint. The success pushes both footprints and their aprons.
+3. **The fort phase** (`forts`), before the ordinary pass, so the big pieces get the space:
+   - `want = round(forts[0]·s) + floor(rng()·round(forts[1]·s))` and `attempts = round(fortAttempts·s)`, with `s` the area scale.
+   - Each attempt draws a weighted kind, then `x` and `z`. The tests:
+     - inside the table by `r + margin`;
+     - `|x| + r` clear of both zones by `deployMargin`;
+     - clear of its own mirror (`selfGap`);
+     - clear of every objective by `r + fortObjectiveGap`;
+     - clear of every placed footprint (and its mirror) by both radii plus `fortGap`.
+   - Then the yaw: for `facing` kinds `(x < 0 ? −π/2 : π/2) + (rng() − 0.5)·0.6`, so the front faces the other side's zone; otherwise `rng()·2π`. Then the seed, and both copies' aprons must fit.
+   - The ordinary pass then runs over `kinds`, keeping clear of footprints and aprons alike.
+   - The point mirror turns each copy by π, so each seat's facing pieces face the other seat.
+
+**Measured** on seeds 1-200 (prototype, `f7proto/why2.mjs` and `pclimb.mjs`):
+
+| | Skirmish | Field | Grand |
+|---|---|---|---|
+| Works placed | 193 / 200 boards | 200 / 200 | 200 / 200 |
+| Fort pairs besides the works (min / avg / max) | 0 / 0.3 / 1 | 0 / 0.9 / 2 | 2 / 4.0 / 5 |
+| The keep | on half the boards | on half | on half |
+| Chunks (min / avg / max) | 26 / 39 / 72 | 63 / 91 / 146 | 142 / 177 / 223 |
+| Round hull r 1.5 crosses zone to zone; climber r 1.22 likewise | 100% | 100% | 100% |
+| Long hulls cross zone to zone (`hulls/cross-final.mjs`, seeds 1-300; Skirmish 1-100) | Howdah 89%, Beetle 75% | 100% | 100% |
+| Every deck reached by a climber (r 1.22); every stair deck by a big walker (r 1.05); every top hosts r 1.22 | 100% | 100% | 100% |
+| Floor and links point-symmetric (exact); cliff within 1e-4 | 100% | (not run) | 100% |
+
+**Navigation.**
+
+```js
+// core/nav.js: built only when an alive chunk has a surface or a link (hasHeight); classic and open never build them
+STEP = 0.4; STAIR_SLOPE = 0.5; LADDER_MUL = 2; CLIMB_R = 1.22
+nav.hasHeight                    // false → every height branch is skipped
+nav.floor  Float32Array(N)       // walkable height: the maximum over alive surfaces whose shape covers the cell centre
+                                 //   (deck: y; ramp: lerp along its axis), quantised to 1/64"
+nav.link   Int32Array(N)         // −1, or the cell a ladder joins this one to; nav.linkCost[i] = 2·h
+nav.cliff  Float32Array(N)       // chamfer distance (NavGrid.field) to the nearest ledge cell: a cell with an 8-neighbour j
+                                 //   whose abs(floor[i] − floor[j]) > STEP
+nav.level  Int32Array(N)         // 0 on the ground (floor ≤ STEP); else the id of the raised region (8-connected by steps
+                                 //   ≤ STEP), numbered by its first cell index
+nav.gates  [{ lo, hi, level, cost, ladder }]   // per alive stair (low and high ends' centres; cost: its length) and ladder
+                                 //   (foot, top; cost 2h), in chunk order
+t.climb = !big && !fly && !vehicle   // derived (overridable); read only by nav's mode setup
+```
+
+`rebuild(chunks)` with height runs in this order:
+1. The floor raster, in chunk order, the maximum winning.
+2. Links.
+3. Ledges, then `field(ledge, null, cliff)`.
+4. Levels and gates.
+5. Today's hard, soft and diff rasters. Each raster of a chunk applies only to cells whose floor is within STEP of the chunk's `base`.
+6. Cover, under the same level rule, so a parapet covers the deck, not the ditch.
+7. (F9b) The hull memo is cleared (§4.2.5).
+
+`inCover` keeps its code: the raster is already level-aware.
+
+| Function | Height branch |
+|---|---|
+| `standable(i, r, mode)` | Also `cliff[i] ≥ r − 0.06`: a base never straddles a ledge. On the ground this also keeps a disc off a deck's solid body. A ground vehicle also needs `floor[i] ≤ STEP`; a long hull needs both for every disc's cell (§4.2.5). |
+| `reach`, walk and wreck modes | A neighbour step from i to j needs `abs(floor[j] − floor[i]) ≤ STEP`, and j must be standable for r (cliff included). A **climber** at a cell with `link[i] ≥ 0` may also step to `link[i]` at cost `linkCost[i]`, if that cell is standable. Stairs cost only their length. |
+| `reach`, fly mode | The circle, as today. The end must be standable on whatever floor it lands on. |
+| `path` | Never string-pulls across a link: the polyline keeps the foot and the top as vertices, and the segment between them is the climb. |
+| `walkable` | Also refuses a sample whose cliff is under `r − 0.06`, or whose floor differs from the previous sample's by more than STEP. A wrecker's smash samples follow the pulled path, so this keeps them honest. |
+| burrow (F5a's insectoids; the branch lands with F7a) | A deck's footprint is hard. |
+
+**Height in the rules** (each inside `if (G.nav.hasHeight)`):
+
+| Rule | Change |
+|---|---|
+| `q.floorAt(G, x, z)` | `nav.floor` at the cell; 0 without height. |
+| `q.groundY(G, u)` | `floorAt(u.pos)`; a rider's is its hull's plus the deck's height (F9). |
+| `sight(G, a, b, from = a.pos)` | eye.y = `floorAt(from) + eyeY(a)`: the floor **where the shooter would stand**, so the AI scoring a deck cell from the ground (score.js:113 → :32) and the planner's `approachFor` see from that cell. Each target model sits at `floorAt(model) + chestY(b)`. `segmentHitsBox` is already 3D: a deck's solid body blocks rays that dip into it ("dead ground" at the foot of a wall), and parapets obscure. |
+| `q.sightInfo(G, u, tg, from?)` (new door, under the lock) | The same code as `sight` returning `{ok, block: chunkId \| null, obscure: [ids], cover, high}`. `sight` wraps it, so verdicts are unchanged. The LOS ray's reasons come from here. |
+| `engagedWith` | also `abs(groundY(u) − groundY(e)) ≤ 1.2` |
+| `forbidMask` | an enemy's bubble forbids only cells whose floor is within 1.2 of the enemy's |
+| `chargePlan` spots | also `abs(floor(spot) − groundY(target)) ≤ 1.2` |
+| `controlOf` | a model counts if in range horizontally and `abs(floor(model) − floor(objective)) ≤ 1.2`; the keep's objective is held from its top |
+| `blastLands` | the template lands at `land.y = floor(land)`; victims need `hypot3(dx, floor(model) − land.y, dz) ≤ blast + base·0.6`; `Terrain.blast(…, y = land.y + 0.5)` (classic passes 0.5, as today) |
+| `smashAround` (wreckers) | skips chunks whose `base` is not within 1.2 of the sample's floor: a Brute on the ground doesn't smash parapets on a deck beside it |
+| `closeRanks` pile-in | skipped where the new place isn't standable (no pile-in off a wall) |
+| `validEnd`, `placeOk` spacing | horizontal, unchanged: the cliff band keeps ground discs off decks |
+
+There is **no to-hit or save bonus for height** in v1 (open question 12). Height acts through sight, parapet cover, engagement and climbing cost.
+
+**AI** (consensus, rule 10, behind `hasHeight`; no field is built):
+- **`levelDist(G, a, b, climb)`** replaces straight-line distance in `score`'s approach and objective terms.
+  - It is exact over the gate graph (ground ↔ a raised region through its gates). With `la` and `lb` the two points' levels, and only stair gates unless `climb`:
+    - `la === lb`: `hypot(a − b)`;
+    - one end on the ground: the minimum over the other level's gates g of `|a − g.lo| + g.cost + |g.hi − b|`;
+    - both raised: the minimum over gate pairs, through the ground.
+  - The minimum is taken over gates in chunk order. A non-finite result (a ground vehicle and a raised target) falls back to today's straight line.
+  - It costs O(gates of two levels) a call, against the critique's 2 × 3.8 ms Dijkstra per run. So brawlers no longer hug the foot of a rampart: the stair's foot is nearer to the defenders than the wall is.
+- **The height term.** Shooters and artillery get `+0.25 · min(4, floor(spot))`. Climbing costs reach the score through `plan.res.dist`, which is already paid for.
+- **Stairs and ladders** are used only through `reach`; no other AI code is needed.
+- **P-level** holds `levelDist` to a reference Dijkstra over the gate graph.
+
+**Destruction and `settle` (F7c).** Decks, stairs and ladders are indestructible except through the cascade. Parapets are destructible blocks with no rubble. Posts get `hp: 3`.
+- **The cascade.** `Terrain.destroy(post)` gains a branch. Every alive deck that lists the post in `supports` and now has `fallsAt` of them down, in chunk order, is destroyed too, with every ladder that lists it in `on`. It adds a timber rubble pile at ground level (`diff`, obscure, cover) and appends the deck to `terrain.dropped`. That list is empty between commands, like `pendingLog`.
+- **`settle(G)`** runs right after the `refreshNav` at the end of `blastLands`, `doMove` and `finishCharge`. For each deck in `dropped` (chunk order), every on-table unit whose centre lies inside its footprint (G.units order):
+  1. stays if its cell is standable and clear of every other unit by `o.r + u.r + 0.08`. Otherwise it moves to the nearest such cell within `u.r + 6"` outside enemies' bubbles at its level (ties: the lowest index; no draw). With no such cell, every model is slain (`killModel`, by nobody).
+  2. takes D3 mortal wounds: `ceil(d6/2)`, then `damage(G, u, n, 1, u)` with no save;
+  3. emits `unit.fall {u, to: {x, y, z}, dy}`, then the dice row.
+
+  `dropped` is then cleared. These are the only new draws (rule 17). A landed Sky-Basket (F5b) on a falling platform settles like any unit, and its riders stay aboard.
+
+**Events and mirror.**
+- `terrain.add {def}`'s def carries `surface`, `link`, `base`, `supports`, `fallsAt` and `on`.
+- With height, `unit.move` carries `path: [{x, y, z, climb?}]` (a link segment is marked `climb`) and `to: {x, y, z}`, and `unit.place` carries `y`. Classic events don't grow.
+- `unit.fall` is new (F7c).
+- Mirror units gain `y`, and P-present holds it to `project(G)`.
+
+**View, input, UI.** F7a covers the core and plain geometry; F7b adds the readability layer.
+- **Geometry.** `TerrainView` builds decks (rim, plank or stone top), stairs (step geometry and an up-arrow decal), ladders, posts and parapets from `look`.
+- **Units on decks.** Figures, rings and labels sit at `y`. A link segment plays as a climb (figures rise up the ladder in file). A thin **drop line** runs from a raised unit's ring to the ground. Its label reads "▲2"" and its card "high ground".
+- **The reach overlay on decks.** Each deck or ramp top gets a thin mesh sampling the same DataTexture by world x,z: one more draw call per visible deck while the overlay shows (10-30). A reachable ladder top glows at its foot with "⤒ 4"". **Cliff rims** under the unit's radius draw as a hard red edge: "a ledge: no way down here".
+- **The move tooltip** breaks the cost down: `7.0" of 7" (4.0" climbing)`. It walks the plan's `prev` chain, adding `linkCost` for each link step; no new nav array is needed.
+- **Line of sight with reasons.** Hovering an enemy in the shooting phase draws the real ray, eye to chest: green when clear, amber when obscured or in cover, red when blocked. The tooltip lists the reasons from `sightInfo`: "Visible · target behind a parapet (cover)", "Blocked by the keep", "High ground: sees over the hedge".
+- **See-through walls.**
+  - Chunks whose screen box covers the selected or hovered unit, or a group member, fade to 35% (dithered alpha, so no transparency sort).
+  - The seat's own rings and chips draw with `depthTest` off at 40% when occluded.
+  - Holding Alt fades every tall chunk.
+- **Picking.** The picker raycasts unit hit cylinders, then deck and ramp tops (30-60 meshes, no BVH), then the board plane. The screen-space fallback (§4.2.6) still applies.
+- **Choosing the terrain.** F6's battle-setup panel and N2's lobby offer the mission's sets.
+
+**Cost** (prototype at Grand, fortified): `nav.rebuild` 1.1 ms plus the height layer 1.1 ms on average (max 2.9 + 1.8); S4 comes in if the sum passes 3 ms on average. `reach` costs an estimated +10% per plan behind `hasHeight` (unmeasured; scale-bench's fortified row reports it). `levelDist` costs no field. A fortified Grand board holds 142-223 chunks, so S0b helps but is no prerequisite.
+
+**Netplay and determinism.**
+- The height layer is derived from the chunks and not hashed; chunks already hash `id`, `alive`, `hp` and `shape.y`.
+- Ramp, raster and link yaws need N0, so **F7 lands after N0**; otherwise two engines' floors would sit an ULP apart.
+- Floors are quantised (rule 18).
+- `settle` draws only in its branch.
+- `fortified` is a new set: classic and `open` boards never build a floor.
+
+#### 4.2.5 F9: vehicles, one shape per race
+
+**What the player sees.** Each race fields its own vehicle, with its own shape, a weapon of its own, and room for **12 models: two squads** (Nutkin and Grenadiers make 11, Scaleguard and Spitters 11; the Sky-Basket carries one squad).
+
+| Race | Vehicle | Shape | Moves | Deck | Step |
+|---|---|---|---|---|---|
+| Bushtail Clans | **Acorn War-Cart**: a giant acorn cup on spiked wheels, pushed by a crew | **round**: one disc, r 1.5 (3") | M8, wheels: turns freely, no facing | open deck r 1.4; capacity 12, **fire 2** | F9a |
+| Coil of Ssithra | **Shell-Back Howdah**: a great serpent carrying a long tortoise-shell howdah on its back | **long**: head r 0.95 at +2", body r 1.25 at 0, tail r 0.95 at −2"; 5.9 × 2.5" (6.14" on diagonals); bounding R 3.07 | M6; pivots where its 6" body has room, at **0.25" per 45°** (open question 23); backs up at half speed | the long shell over all three segments; capacity 12, **fire 3** | F9b |
+| Insectoids | **Brood Beetle**: an armoured beetle carrying its brood inside the carapace | **broad**: front r 1.35 at +1.5", body r 1.5 at 0, rear r 1.35 at −1.5"; 5.7 × 3.0"; bounding R 2.85 | M5; legs: pivots freely where it has room (**turn 0**) | **enclosed**: capacity 12, **fire 1** through its spiracle ports | F5b |
+| Bird-people | **Sky-Basket**: a wicker basket under a seed-pod balloon, towed by a flight of birds | **round, flying**: one disc, r 1.2 (≤ `CLIMB_R`) | M12, `fly`: passes over terrain and lands where it can stand, on any floor | the basket rim; capacity **6** (one squad), **fire 1** | F5b |
+
+- **Embarking.** In your movement phase, a unit that can walk to within 1" of any of the hull's discs can embark; that is its move.
+- **Disembarking.** A unit aboard can disembark to anywhere it can walk to within 3" of any of the hull's discs, also as its move. A long hull's riders step off at its head or tail, about 2" further than off a War-Cart: the Howdah's delivery bonus, paid for by M6 and its turning cost. A unit that disembarks from a hull that already moved this turn can't charge.
+- **Riding.** Riders move with the hull, can't be targeted and don't hold objectives. The hull's own Objective Control counts: OC0 for every vehicle so far, and OC0 by data rule for a long hull.
+- **Firing deck (F9c).** Up to `fire` rider units shoot from the deck each turn, from deck height, with range measured from the hull's nearest edge. There are no firing arcs: a long hull's riders shoot all round. They count as having moved (or advanced) if the hull did.
+- **Long hulls (F9b).** A long hull has a facing. It drives forward, backs up at half speed, and pivots on the spot only where its body has room to swing. Its ghost shows the hull's outline at the end heading, the path drives straight and turns at pivot ticks, and the tooltip breaks the cost down: "6.0" of 6" (0.5" turning, 1.0" backing)". Where it could pivot neither way, the UI warns "no room to turn here". A ground click with a long hull selected, even alone, **pins** its ghost rather than moving it (§4.2.6's one exception to the single unit's one-click move). The facing is set with the pinned ghost's **rotate handle** or the **[** / **]** keys; Enter, ✓ or the ghost's flag commits; a double-click on the ground pins there and commits at the default heading. Left-drag still orbits (open question 17).
+- **Destruction.** A destroyed hull leaves a burning wreck. Each rider model bails out: a 1 is a mortal wound, and riders with nowhere to stand are lost.
+- **Fortifications.** Ground hulls stay on the ground (no stairs). Riders step off onto the ground, and reach a deck only through its stairs or ladders within their inches. Only **siege towers (F9d)**, and a **Sky-Basket landed on a deck (F5b, open question 24)**, unload onto a walk.
+- **In the builder (F11).** A vehicle is a list entry with a `cost`: none in Skirmish, at most two a side in Field and Grand (the `Vehicle` slot, §4.2.8.3). At the deployment each vehicle fills with its seat's Troops (the autoload, §4.2.8.7); a human seat re-arranges them with `place` and `embark`.
+
+A later option for the insectoids is a **Sapper Grub**, a burrowing long hull on the same lattice over F5a's burrow field, kept visible (open question 5's default). It isn't in v1 (open question 25).
+
+**Data.**
+
+```js
+// data/races/squirrel.js (F9a): round, so no footprint; appended at the end of the Bushtail roster
+warcart: { name: 'Acorn War-Cart', short: 'War-Cart', role: 'Vehicle', ai: 'transport', models: 1, base: 1.5, pts: 120,
+           cost: /* fitted by army-sim at F9a, before the War-Cart is offered */,
+           stats: 'M8 WS5 BS4 S5 T7 W10 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
+           transport: { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } },
+           ranged: { name: 'Bolt thrower', range: 24, shots: 2, S: 6, AP: 2, D: 2, heavy: true, fx: 'bolt' },
+           melee: { name: 'Spiked wheels', S: 5, AP: 1, D: 1 }, abilities: [/* card text */] },
+// data/races/serpent.js (F9b): long. base = the body disc's r; appended at the end of the Coil roster
+howdah:  { name: 'Shell-Back Howdah', short: 'Howdah', role: 'Vehicle', ai: 'transport', models: 1, base: 1.25, pts: 140,
+           cost: /* fitted by army-sim at F9b */,
+           stats: 'M6 WS4 BS4 S6 T8 W14 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
+           footprint: { discs: [[0, 2, 0.95], [0, 0, 1.25], [0, -2, 0.95]], turn: 0.25, rev: 2 },
+           transport: { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckAt: [0, 0], wreck: { hx: 1.2, hy: 0.7, hz: 2.9 } },
+           ranged: { name: 'Venom lobber', range: 18, shots: 1, blast: 1.6, S: 5, AP: 1, D: 1, fx: 'spit' },
+           melee: { name: 'Coil crush', S: 6, AP: 1, D: 2 }, abilities: [/* card text */] },
+// data/races/insect.js (F5b): broad, enclosed
+beetle:  { …, role: 'Vehicle', models: 1, base: 1.5, stats: 'M5 … T9 W14 … Sv2 OC0', big: true, wrecker: true, vehicle: true,
+           footprint: { discs: [[0, 1.5, 1.35], [0, 0, 1.5], [0, -1.5, 1.35]], turn: 0, rev: 2 },
+           transport: { capacity: 12, maxBase: 0.45, fire: 1, deck: 1.8, deckAt: [0, 0.5], enclosed: true, wreck: { … } } },
+// data/races/bird.js (F5b): round, flying
+basket:  { …, role: 'Vehicle', models: 1, base: 1.2, stats: 'M12 … T6 W8 … Sv4 OC0', big: true, fly: true, vehicle: true,
+           transport: { capacity: 6, maxBase: 0.45, fire: 1, deck: 1.0, wreck: { … } } },
+// F9d: a siege tower per race (round in v1, each in its race's look; open question 26. M5, deck 2.4, capacity 12, fire 1,
+// siege: true), a Vehicle entry like any hull.
+// Stats, pts and cost are starting values, tuned by sim. `pts` is the AI's appraisal; `cost` is what the builder charges.
+// `enclosed` is view-only: riders show as pips and chips, not deck figures.
+```
+
+**`data/schema.js` and data-check.**
+- `ROLES += 'Vehicle'`. `AI_ROLES += 'transport'`, and `ORDER` gains `'transport'` **first**. That shifts every existing role's index alike, so the stable sorts keep classic's relative order in both directions.
+- `FLAGS += 'vehicle', 'climb'`; `transport` is a new field, and (F9b) `footprint`.
+- `transport` is checked at load:
+  - `capacity` a whole number from 1 to 12, `maxBase > 0`, `fire` a whole number ≥ 0, `deck ≥ 0`;
+  - `deckAt` (F9b) inside the footprint;
+  - `wreck` false or a box;
+  - `siege` and `enclosed` optional booleans.
+- `vehicle` implies `models: 1`, `big` and `!climb`; a `footprint` also implies `OC0` (below).
+- **Deck slots.** `deckSlots(t, capacity, 0.8) ≥ capacity` for every transport (`present/deck.js`, pure, run in Node; §View below).
+- **Loads.** Riders are no longer named in lists: the deployment's autoload boards them (§4.2.8.7), so data-check's old per-list load rule goes. A list may run a hull half-empty or empty.
+- **Lanes.** terrain-check's connectivity rows (§4.2.9) cover every set offered by a mission whose `Vehicle` slot is above 0. They run from F8b, when fortified first meets Field and Grand, and again at F9a, F9b and F5b, with a row per hull shape.
+
+**Footprint rules** (F9b; `data/schema.js` at load, repeated by data-check). `footprint` is read only by `core/footprint.js` (flag-lint). A unit with `footprint` must also have `vehicle`, `models: 1` and `OC0` (so `controlOf` needs no footprint branch: a hull adds 0 wherever its discs are), and no `fly` (a flying long hull would need footprint landings, out of scope).
+
+| Rule | Value | Why |
+|---|---|---|
+| discs | 2 or 3 of `[dx, dz, r]`, each `0.5 ≤ r ≤ 1.6`, listed front to back | Smashing walks them in this order. A one-disc footprint is refused: that is just `base`. |
+| body disc | exactly one disc at `[0, 0]`, with `r === base` | `pos` is its centre. It is the lower bound below. |
+| snapping | each disc's snapped offset within **0.15"** of its exact rotation, at every heading | Measured: offsets 0, 1.5, 2.0 and 3.5" err ≤ 0.121"; 1.0, 1.75 and 2.5" err 0.29-0.34" (`hulls/snaperr.mjs`). |
+| connected | consecutive discs overlap or touch (gap ≤ 0) at every heading | No unit stands inside a hull. The Howdah: −0.20 on the axes, −0.08 on the diagonals. |
+| pivot gap | for every disc, with `d = hypot(dx, dz)`: `gap = sqrt((d + r)² + d² − 2·d·(d + r)·cos 7.5°) − r ≤ 0.06"`, computed by data-check from the exact constants | Pivot samples are taken at fixed 15° steps. The worst uncovered point lies on the disc's outer edge, 7.5° from the nearest sample. The shipped discs: the Howdah's head and tail 0.052", the Beetle's front and rear 0.027", and body discs 0 (`rev3/sweep-gap.out`). The limit allows d ≤ 2.19" at r 0.95, d ≤ 2.44" at r 1.25 and d ≤ 2.67" at r 1.6. Revision 2's `d ≤ 2.3·r` allowed gaps up to 0.067" within R ≤ 3.5, and the Howdah already exceeded the 0.05" it claimed. |
+| size | bounding `R ≤ 3.5` | Lanes and the lattice's cost. |
+| costs | `turn ≥ 0` (inches per 45°), `rev ≥ 1` | – |
+
+**Derived** (`defineRace`, frozen, as `t.fp`): the disc count and radii and their **radius classes** (distinct `r`s, ≤ 3); `H[h][q] = {ix, iz, r}` for h = 0-7; `S[h][…] = {ix, iz, need, q}`, the pivot sweep from h to h+1 as fixed cell offsets with their sub-cell error folded into `need`; the bounding `R`, `turn`, `rev` and `span` (the largest offset in cells). The derivation is a pure function of the data in `core/footprint.js`, which `data/schema.js` imports (data may import core). RULES_ID hashes `footprint`; the tables are a function of it. The constants are exact (rule 24): `Math.sqrt` is correctly rounded in every engine, while `Math.cos(π/12)` already differs from the sqrt form in its last bit in Node (`hulls/shapes.out`).
+
+**What a footprint unit's `r` means.** `relayout` sets `u.r = R`, the bounding radius, and nothing rules-side reads it there. It is read only by the AI's heuristics (anti-bunching, threat, hero company) and as a broadphase: a unit farther than `R + o.r + 2` can't touch the hull. `shadowState` prints it as for any unit (it is constant).
+
+| Flag or field | Read only by (flag-lint) |
+|---|---|
+| `transport` | `core/actions/transport.js` (the autoload included, which `deployArmies` calls) |
+| `footprint` | `core/footprint.js` (which `data/schema.js` calls to derive `t.fp`) |
+| `vehicle` | the derived `climb` (schema), nav's mode setup (ground only), `transport.js`'s legality |
+| `climb` | nav's mode setup |
+| `enclosed` | the view (`present/deck.js`) |
+
+**State and invariants.**
+
+```js
+Unit += { aboard: 0 }     // the carrying vehicle's id; 0 = on the table (ids start at 1). Not in flags (resetTurn wipes those).
+Unit += { facing }        // (F9b) footprint units only: 0-7, h = 0 faces +z, h = 2 faces +x; makeUnit sets the seat's default
+                          //   (h = 2 for edge −1, h = 6 for edge +1, the point mirror)
+flags += { rode }         // disembarked from a hull that had moved this turn: no charge (canCharge)
+```
+
+`shadowState` prints `aboard=<id>` among a unit's extras **only when non-zero**, and `f=<h>` **only for footprint units** (R8b's `UNIT_EXTRAS`), so a match with no riders and no long hull hashes as before (§4.2.10 item 7).
+
+**P-riders** checks these after every entry of every vehicle game:
+1. If `u.aboard` is set, the vehicle is alive, the seat's own and has a `transport`, and `u.pos` equals its `pos` exactly.
+2. The riders' alive models sum to at most `capacity`, and every rider's `t.base ≤ maxBase`.
+3. An aboard unit is never in:
+   - `engagedWith`, `controlOf` or `blastLands`' victims;
+   - `forbidMask` or any spacing test;
+   - `chargeTargets` or `shootTargets` as a target;
+   - `friendsOf` (leadership auras), `score`'s friend loops (hero company, anti-bunching), or `aiShoot`'s friendly-fire loop.
+
+`moveUnitTo(G, u, x, z)` sets `u.pos`, then the `pos` of every unit with `aboard === u.id`, in G.units order. It replaces `setUnitPos` at `resolveWalk`'s end, in `closeRanks`' pile-in and in the `place` handler. With no riders it is the same code.
+
+**Commands** (`k` may now be a list; `legalFor` accepts a decision whose kind is in it, and `phase` still applies when the decision is a phase). `f` is an optional field (F4's `opt`).
+
+| `t` | Body | Answers | Legal when | Draws |
+|---|---|---|---|---|
+| `embark` | `{u, v}` | `phase` (move), `deploy` | **u:** the seat's own, standing, on the table, not a vehicle, `t.base ≤ maxBase`, not `moved`, not engaged. **v:** the seat's own standing vehicle with a `transport`, on the table, not engaged, with room for `u.alive` models. **In a phase only:** `movePlan(G, u, advanced ? advRoll : 0)` reaches a valid end cell within 1" of any of `v`'s discs (`clearOf(v, x, z, u.r) ≤ 1`; for a round hull, within `v.r + u.r + 1"` of `v`). | – |
+| `disembark` | `{u, c}` | `phase` (move) | **u:** the seat's own, aboard `v`, not `moved`. **c:** a cell of `landing(G, u, v)`: `nav.reach` from `v.pos` with `r = u.r`, `max = R + u.r + 3` (`v.r + u.r + 3` for a round hull), walk mode, `u`'s climbing, and `endForbid`'s bubbles, where `c` is standable, within 3" of any of `v`'s discs, and clear of every on-table unit by `o.r + u.r + 0.08`. Riders thus walk off at the hull's own level, and reach a deck only through its stairs or ladders within those inches. **Siege towers (F9d):** also any deck cell within `v.r + u.r + 1"` of `v.pos` whose floor is within 1.2 of `groundY(v) + deck`, if the straight segment from `v.pos` to `c` crosses no `block` chunk but that deck. | – |
+| `place` | `{u, c, f?}` | `deploy` | As today, against `placeOk(G, u, c, f)`. Placing an aboard unit takes it off its vehicle (`aboard = 0`). Placing a vehicle carries its riders. `f` (F9b), when present, is a whole number 0-7 and refused for a unit without a footprint ("a round unit has no facing"). | – |
+| `move` | `{u, c, f?}` | `phase` (move) | As today, and `validEnd(plan, c, f)`; with `f` absent any heading passes. Refused for an aboard unit: "aboard a vehicle: disembark first". `f` as for `place`. | – |
+| `chargeEnd` | `{c, f?}` | `chargeEnd` | `c = −1`: the shortest spot state. Otherwise `plan.spotOk(c, f, rolled)`, any heading when `f` is absent. | – |
+| `advance`, `charge` | unchanged | – | also refused for an aboard unit: "aboard a vehicle: disembark first" | – |
+
+**The default heading** when `f` is absent, with no draw: for `move`, the valid end heading at `c` with the least plan distance, ties to the lowest index; for `place`, the unit's current facing if it fits at `c`, else the lowest fitting heading; for `chargeEnd`, the reached spot heading at `c` with the least distance, ties to the lowest index. The AI and the macros send `{u, c}` as today, so the default rule is theirs too. `"f":7,` adds 6 B to an entry.
+
+**Handlers.**
+- **`embark`, in a phase:**
+  1. Pick the ring cell with the least plan distance (ties: the lowest index; no draw).
+  2. Walk there through `doMove`'s tail: `resolveWalk`, `refreshNav`, and (F7c) `settle`.
+  3. `u.aboard = v.id`, `moveUnitTo(G, u, v.pos)` and `flags.moved = true`.
+  4. Emit `unit.embark {u, v}`, write a log line, then `finishAction`.
+- **`embark`, in the deployment:** set `aboard` and `pos` only.
+- **`disembark`:**
+  1. `aboard = 0`; `moveUnitTo` to `c`; `flags.moved = true`; `flags.rode = true` if `v.flags.moved`.
+  2. Emit `unit.disembark {u, v, to, forced: false}`, then `objectives` and `status`.
+  3. Write a log line, then `finishAction`.
+- **`deployArmies`:** places the rows as today, then runs the **autoload** (`core/actions/transport.js`, §4.2.8.7): each vehicle, in G.units order, boards its seat's eligible Troops in G.units order while their models fit. No list without a vehicle changes, so classic's rows are identical.
+- **`canAct` (move) for a rider** is `!flags.moved`, since it may disembark. F3's `end.ready` leaves riders out.
+
+**Riders in every rule** (each change is reached only when a unit is aboard):
+
+| Rule | Change |
+|---|---|
+| `enemiesOf`, `friendsOf` | filter `!e.aboard`. That keeps riders out of `forbidMask`, `engagedWith`, `chargeTargets`, `shootTargets`, the AI's threat sums, fight targets and leadership auras. |
+| `score` (AI) | its friend loops (score.js:56, 153, 159) skip aboard units, so a hull isn't pushed off by its own riders (about 2.4 a rider unit otherwise) |
+| `aiShoot`'s friendly-fire loop | skips aboard units (policy.js:119) |
+| `engagedWith(G, u)` | `[]` for an aboard `u` |
+| `validEnd`, `fits`/`placeOk`, `chargePlan`'s friend spacing, `freeSpot` | skip aboard units |
+| `controlOf` | skips aboard units: riders hold nothing; the hull's own OC counts |
+| `blastLands` | skips aboard units; templates hit the hull (`big`: D3+1 hits) |
+| `closeRanks` | an aboard unit only re-forms (no pile-in) |
+| legality `foe(tg)` | refuses an aboard target: "inside a vehicle" |
+| `canCharge` | false when `aboard` or `flags.rode` |
+| morale, `checkWipe`, `traceState` | unchanged (a rider prints its vehicle's position) |
+| `shadowState` | `aboard=<id>` among a unit's extras **only when non-zero** (above) |
+
+##### Long hulls: movement and turning (F9b)
+
+**The lattice.** A state is `(c, h)`: the body disc on cell `c`, facing heading `h` (`DIRS` are the nav's eight neighbour steps). `nav.hullReach(sx, sz, h0, fp, { max, mode, forbid })` is a Dijkstra over states, with `dist` (Float64) and `prev` (Int32) of `N·8`. From each popped state it relaxes, in this order (rule 25):
+1. **forward:** to `(c + DIRS[h], h)`, at cost `step·mul`, where `step` is 0.5 or 0.5√2 as today's reach;
+2. **reverse:** to `(c − DIRS[h], h)`, at cost `step·rev·mul`;
+3. **pivot right:** to `(c, h+1)`, at cost `turn`, if the sweep `S[h]` is clear;
+4. **pivot left:** to `(c, h−1)`, at cost `turn`, if the sweep `S[h−1]` is clear.
+
+A target state must **stand**: every disc's cell is on the board, has `clearance ≥ r_q − 0.06`, and isn't in disc q's forbid mask. Under `hasHeight` (F7), each disc's cell also needs `cliff ≥ r_q − 0.06` and `floor ≤ STEP`: ground hulls only. `mul` is 2 when any disc stands on difficult ground, or, for a wrecker, ploughs (`clearAll < r_q − 0.06`). Fliers never use the lattice: a flying hull is round, so it gets today's circle. Wreck mode tests `clearHard`, so a wrecker hull may pivot through soft scenery and smashes it. The start state is accepted as it stands; nothing makes a ground hull's own cells unstandable between commands except F7c's collapse, whose `settle` moves it.
+
+**Forbid masks per radius class.** `forbidMask(G, u, pad, onlyBodies, r = u.r)` gains the `r` argument (its default keeps every classic call identical) and is built once per radius class, at most 3 per plan. An enemy with a footprint contributes one bubble per disc, and its exact discs join `f.discs` for `walkable`.
+
+**Turning: "room to swing".** A pivot from h to h+1 about cell c tests each disc's centre at the two intermediate angles, h·45° + 15° and + 30°, in the conservative off-centre form `clearance(cell(p)) ≥ r − 0.06 + |p − centre(cell(p))|`. The offsets and errors are precomputed per heading, since the pivot is always a cell centre, so a sample costs one array lookup. With the two end states, which stand exactly, that bounds the uncovered crescent by the disc's pivot gap: ≤ 0.06" by data rule, 0.052" for the Howdah. **Stated plainly:** mid-pivot, a disc may overlap an obstacle by up to the standing tolerance plus its gap (0.06 + 0.06 = 0.12" at most; 0.11" for the Howdah), against 0.06" at rest. Sampling every 7.5° would quarter the gap (the Howdah's to 0.013") for 2.5× the sweep tests. It is held in reserve, because the crossings and timings below were measured with 15° samples. The forbid masks are tested on the same sample cells, so a hull can't swing its tail through an enemy's 1" bubble.
+
+**The per-epoch memo** (a derived cache, rule 21). Terrain-only tests are memoised per nav epoch in `nav.hullMemo`, a `Map` from `'<race>.<unit>:<mode>'` to a `Uint8Array(N·8)`: bit 1 stand known, 2 stand ok, 4 sweep known, 8 sweep ok, 16 this state's cost doubles. `rebuild` clears it; forbid tests stay per plan. The plan arrays reset by a touched list, not a fill. `cellBest(res)` (the least `dist` over headings per cell, and that heading) is computed over the touched states only, for `bestSpot`, the overlay and `nearestValid`. Rejected: an **eager** cache built at every rebuild (6-14 ms on `open` and 13-33 ms on `fortified` at Grand, per hull kind, at 20-40 rebuilds a battle), and **no memo** (3-5 ms a plan).
+
+**Paths.** `nav.hullPath(res, c, h)` follows `prev` and emits the body's centre as `{x, z, f}` points. Consecutive steps along one heading merge into one segment; a pivot is a repeated point with a new `f`. There is no string-pulling, so paths are octilinear: a long hull drives straight, pivots, and drives straight. The plan's cost is the move's length in inches, turning and backing included, and that is the figure the log line prints. (A round unit's line prints its string-pulled length, as today.)
+
+**The walk and smashing** (`resolveWalk`, `smashAround`). The body follows the path; the end is the path's last point, a cell centre, with `u.facing = f`; `moveUnitTo` carries the riders. A wrecker hull's samples are taken every 0.25" along each straight segment, plus the end, as today, and at each pivot's two 15° sub-steps. At each sample, for each disc **front to back**, `smashAround(G, u, {x, z, dir}, out, r_q)` runs with that disc's radius in place of `u.r`, walking the live chunk list (rule 6). `dir` is the travel direction on a straight segment (reversed when backing) and the disc's tangent on a pivot. A smash's `s` counts the path's inches plus 0.5" per 45° pivot, for the view's timing only.
+
+**The body disc as an exact lower bound.** Every lattice path is a valid path for the body disc alone: the body is one of the discs, the forbid set is a superset, and turn costs ≥ 0, `rev ≥ 1` and `mul ≥` the disc's. So `nav.reach` with the body's `r` (0.3 ms at max 12) bounds the hull's distance from below. That gives two uses, neither of which changes any decision:
+- **Charge prefilter.** Skip a target when no cell within `target.r + R + ENGAGE` of it has a body-disc distance ≤ 12.
+- **March guidance.** The planner's goal field for a long hull is the body disc's whole-board field (1.8-2.1 ms at Grand), not the lattice's (13-21 ms).
+
+Measured: with a body disc at the pivot, no cell the lattice reached was missed by the body disc, on 7,224 start-plans. A two-disc Beetle tried first, with its pivot between its discs, broke this (5-752 cells a run), which is why the body disc is a data rule and the Beetle has three discs.
+
+**Every rule site** (F9b). Each branch is reached only when one side has `t.fp` (or, for riders, `aboard`). Two round units keep the current expression literally (rule 26). Helpers in `core/footprint.js`, on `queries.js`'s door: `discsOf(u)` returns `[{x, z, r}]` for a footprint unit; `clearOf(o, x, z, r)` is the least edge gap from a disc `(x, z, r)` to `o`'s discs (or `o`'s own disc); `fpGap(a, b)` is the least edge gap between two units' discs, with a bounding-circle early-out.
+
+| Site | Today | Footprint branch |
+|---|---|---|
+| `gap(a, b)` (queries.js:26): range, charge range, engagement, `chargeTargets`, the AI's `nearest` | `dist − a.r − b.r` | `fpGap(a, b)` when either has `fp` (the nearest disc to the nearest edge) |
+| `engagedWith`, `isEngaged` | via `gap` | automatic |
+| `leadership` aura (queries.js:64) | `dist(u, f) ≤ AURA + u.r` | `clearOf(u, f.pos, 0) ≤ AURA` (no hull has Ld tests in v1: morale skips one-model units; kept for correctness) |
+| `controlOf` (queries.js:73) | per model | none: footprint units are OC0 by data rule |
+| `sight(G, a, b, from)`: the target's points | rays to each alive model | for an `fp` target: rays to each disc centre at `chestY`; `visible` if any, `cover` if any is blocked or obscured, or `inCover`. As a shooter, a hull's eye is at `deckAt` (snapped like a disc), height `eyeY`. |
+| `inCover(G, u)` (queries.js:52) | models' cells, half or more | discs' cells, half or more |
+| `forbidMask` (move.js:33) | a disc bubble per enemy | per enemy disc for `fp` enemies (and `f.discs` gains them); built per radius class for an `fp` mover |
+| `movePlan` (move.js:52) | `nav.reach` | `nav.hullReach` from `(pos, facing)`, with masks per radius class; `plan.fp`; `plan.cells` = `cellBest` |
+| `validEnd(G, plan, i, at = null, f = null)` (move.js:64; `at` is F10a's) | standable plus spacing | `f` given: that state reached ≤ max, standing, outside `endForbid`, every disc clear of every other unit's discs by 0.08. `f` null: any heading, cheapest first. For a round mover beside an `fp` unit: `clearOf(o, x, z, u.r) < 0.08`. |
+| `nearestValid` | cells | cells, then the default heading |
+| `doMove` / `resolveWalk` / `smashAround` | §2.3 | above |
+| `chargePlan` (charge.js:50): `fp` **target** | ring `want = target.r + u.r + ENGAGE − 0.08` around `pos` | the window grows to `target.R`. A spot needs `0.02 ≤ clearOf(target, x, z, u.r) ≤ ENGAGE − 0.08`. Other enemies and friends are tested with `clearOf`. |
+| `chargePlan`: `fp` **charger** | cells | the lattice (max 12.5, the target's own bubble allowed, its discs not). Spots are **states** whose least disc gap to the target is in `[0.02, ENGAGE − 0.08]`, standing, clear of other enemies' bubbles and friends. `need` comes from the least spot `dist`. The prefilter runs first. |
+| `chargeSpots(plan, rolled)` | a cell mask | a cell mask (any spot heading reached), plus `plan.spotOk(c, f, rolled)` for `chargeEnd`'s legality |
+| `closeRanks` pile-in (damage.js:70) | steps toward `f.pos` | toward the nearest disc of `f`, by `fpGap`. A footprint unit never piles in: it has one model. |
+| `blastLands` victims (shoot.js:170) | per model `≤ blast + base·0.6` | under if any disc is `≤ blast + r_q·0.6` from the landing. Big targets take D3+1 hits, as today. |
+| `blastVolley` aim | offset `draw()·target.r·0.5` | for an `fp` target, `draw()·target.t.base·0.5`: aimed inside the body disc, not over the bounding circle. The same two draws in the same order; round targets keep the expression literally. |
+| `placeOk` / `fits` / `freeSpot` (deploy.js:21) | the disc in the zone, standable, clear by 0.4 | every disc inside the zone's x-bounds; the state standing; discs clear by 0.4. `freeSpot` for an `fp` unit tries the default heading (seat 0: h = 2, facing +x; seat 1: h = 6) and **prefers states with a clear pivot sweep** (deterministic: nearest, then lowest index), so no default deployment wedges a hull. |
+| `deployArmies` fallback | puts the unit at a non-cell point | `fp`: the other headings in order, then the first fitting cell row-wise. P-army holds random lists with hulls to fitting (§4.2.9). |
+| AI `score` / `policy` friend and threat terms | `hypot(...) − u.r − e.r` | unchanged expressions, reading `u.r = R` for a hull: conservative heuristics |
+| `aiMove` fallback scan (policy.js:58) | `validEnd(plan, i)` | the `fp` `validEnd` (any heading) |
+| `embark` ring, `landing`, `bailSpot` | within `v.r + u.r + 1` / `+ 3` of `v.pos` | `clearOf(v, x, z, u.r) ≤ 1` / `≤ 3`: any disc. The landing's reach runs from `v.pos` with `max = R + u.r + 3`, then filters by `clearOf`. |
+| wreck chunk | a box at `pos`, yaw 0 | `fp`: one box along the facing: `x, z = pos`, `hx` and `hz` from `transport.wreck`, `yaw = facing·π/4` (a yaw raster needs N0's `sin`/`cos`, which F9 follows anyway) |
+| firing deck (F9c) | eye at the hull, range from its edge | eye at `deckAt` (snapped); range = `fpGap(hull, tg)` |
+
+##### Firing decks (F9c, every shape)
+
+```js
+const hullOf = (G, u) => (u.aboard ? unitOf(G, u.aboard) : u)
+canShoot(G, u):  … as today, and when u.aboard: !isEngaged(G, hull) && ridersShot(G, hull) < hull.t.transport.fire
+                 (u.flags.advanced || hull.flags.advanced → assault weapons only)
+shotInfo(G, u, tg): range = gap(hull, tg)            // from the hull's nearest edge: fpGap for a footprint hull
+                    sight(G, u, tg, deckPoint(hull)), eye = groundY(hull) + deck + u.t.eye   // deckPoint: deckAt, snapped; pos if none
+                    heavy: moved = u.flags.moved || hull.flags.moved
+shotValue (AI):     the same hull, point and r, in the same branch
+eyeY(u) → eyeOf(G, u, from)   // today's value for any unit on the ground of a flat board (F7 needs it anyway)
+```
+
+Fire slots per hull: War-Cart 2, Howdah 3, Beetle 1, Basket 1. An enclosed hull's riders fire through its ports, from the same eye. No arcs: facing changes the footprint only.
+
+##### A hull destroyed (F9a)
+
+A new branch at the end of `unitDestroyed(G, v, by)`, reached only when `v.t.transport`:
+
+```
+1. if transport.wreck: G.terrain.add({ kind: 'wreck', hp: 6, navKind: 'diff', los: 'obscure', cover: true,
+       shape: { x: v.pos.x, y: groundY(v) + hy, z: v.pos.z, hx, hy, hz, yaw: v.t.fp ? v.facing·π/4 : 0 }, base: groundY(v),
+       look: { piece: 'wreck', race } }); refreshNav(G)
+2. for p of G.units.filter(p => p.aboard === v.id && alive(p)):          // G.units order
+     p.aboard = 0
+     c = bailSpot(G, p, v)     // the nearest cell (ties: lowest index) of landing(G, p, v) outside enemies' 1";
+                               // failing that, the same without the enemy rule; else −1. No draw.
+     if c < 0: every model of p is slain (killModel, by v); continue
+     moveUnitTo(G, p, x(c), z(c)); p.flags.moved = true
+     emit unit.disembark { u: p.id, v: v.id, to, forced: true }
+     dice = roll(G, p.alive); emit dice { label: `${p.t.short}: bail out, 1s wound`, dice, need: 2 }
+     damage(G, p, ones(dice), 1, v)                                        // mortal: no save roll
+```
+
+This runs inside `damage()`, mid-attack:
+- A blast's victims were collected before any damage, so riders who bail out are not in that template's list.
+- `terrain.blast` walks a chunk copy taken after the wreck was added, so it may chip the new wreck, deterministically.
+- A Sky-Basket wrecked on a deck (F5b) leaves its wreck at the deck's floor (`base`), and its riders bail out at that level.
+
+**`smashAround` binned** with S0b's grid. A wrecker hull samples every 0.25" over hundreds of chunks. The bins keep the exact order: binned candidates in chunk order, then chunks appended during the sweep by index, as the live-array walk does.
+
+##### AI (consensus; reached only with transports or footprints)
+
+- **A transport `v`, before it moves:** each `!moved` brawler rider with an enemy within `CHARGE_RANGE − 2` of the hull's edge disembarks to the landing cell nearest that enemy (a long hull's head or tail cells included). This is draw-free (ties: the lowest index).
+- **Moving.** `bestSpot` scores the hull as `'raider'` while brawler riders remain aboard, else as `'line'`. Its existing tie-break draws stay inside the transport branch.
+- **A long hull** (F9b) scans its lattice cells as today: the test `isFinite(res.dist[i])` reads `plan.cells.dist` (`cellBest`), and `validEnd(G, plan, i)` asks for any heading. A cell that passes takes its **one tie-break draw** and is scored at the body's centre. The AI yields `{t: 'move', u, c}` with no `f`, so the handler's default heading is the AI's too.
+  - **The room term:** a long hull ending where it can pivot neither way scores −1.5 (memo bits, free). It keeps the hull out of pockets it can't leave next turn; play-report gates it.
+  - **Charges:** the prefilter, then `chargePlan` as for any unit. The charge goes straight on to the shortest move: the least-`dist` spot state (ties: the lowest state index `c·8 + h`).
+  - **Heuristic terms** (anti-bunching, threats, hero company) read `u.r = R`: conservative, and unchanged in form.
+- **After moving:**
+  - non-brawler riders disembark toward an objective their seat doesn't hold within `OBJECTIVE_RANGE + 2`;
+  - riders beyond the deck's `fire` slots disembark if an enemy is within their weapon's range + 3.
+- **Under `pilot`**, a rider moves only with its hull, and disembarks only if it is in `only`. A long hull under `pilot` runs the AI above.
+- **Riders** are skipped by `aiMove`'s ordinary loop and by `aiCharge`. `aiShoot` reaches them through `canShoot`.
+- The AI never embarks after the deployment in v1.
+
+##### Events and mirror
+
+- `unit.embark {u, v}`; `unit.disembark {u, v, to, forced}`; the mirror sets `aboard` and `pos`.
+- The mirror carries riders with their hull on `unit.move`, `unit.place` and `unit.formation`. This is pure and needs no new event. `project(G)` gains `aboard`, and P-present holds it.
+- (F9b) For footprint units only, `unit.move` carries `path: [{x, z, f}]` and `to: {x, z, f}`, and `unit.place` carries `f`. Mirror units gain `f`; P-present holds it to `project(G)`. Round units' events don't grow.
+- `terrain.add` with the `wreck` kind.
+
+##### View, input, UI
+
+- **Look.** A hull is one big figure with its deck. The Howdah is three segments whose head and tail slither on the walk; the Beetle a carapace; the Basket a balloon and basket. A footprint unit's ring is its **outline** (the discs' hull), not a circle; the view tweens its yaw along the path, turning at pivots at about 180°/s.
+- **Riders on deck.** Their figures are parented to the hull's mesh at **deck slots**: `present/deck.js` `deckSlots(t, n, scale)` hex-packs `n` rider positions over the deck discs in the hull's frame, at **0.8 scale** with `maxBase` margins. Riders face the way the hull moves or the target they shoot, so they need no tween of their own, and they have no ring and no hit cylinder. An **enclosed** hull draws no rider figures: capacity pips and chips only. Slots for 0.32" bases:
+
+  | Scale | War-Cart | Howdah | Beetle | Basket |
+  |---|---|---|---|---|
+  | 1.0 | 7 | 11 | 7 | 1 |
+  | **0.8** | **13** | **13** | **13** | **7** |
+  | 0.7 | 19 | 23 | 19 | 7 |
+
+  At full scale a 1.4" deck holds only 7 of 12 riders (revision 1's "a ring at 0.6 of the deck's radius" was a latent error), so 0.8 is the scale that fits every capacity, and data-check runs `deckSlots` against each `transport.capacity`.
+- **The hull's ring:** capacity pips (an arc per 2 models aboard).
+- **The label and chip:** the hull's wounds and the riders as small chips, e.g. "▣ War-Cart 11/12 ⟨Nutkin 6 · Grenadiers 5⟩".
+- **Card.** The hull's stats, then "Fire deck: 2 of 2 squads · 11/12 models" with rider chips; tapping one selects that rider. The copy reads: "Riders shoot from the deck's height (sees over walls) and measure range from the hull's edge."
+- **Embark** (movement phase):
+  1. Select an infantry unit. Every friendly vehicle it can reach with room gets a ⤒ badge.
+  2. Hovering a badged vehicle shows the walk and "Board War-Cart · 4.2" of 7"".
+  3. Clicking it sends `embark {u, v}`. A full or unreachable vehicle is simply selected, as today.
+- **Disembark:**
+  1. Select a rider: its chip, its figure on the deck, the **R** key (the hull's riders), or Tab.
+  2. The overlay shades its landing cells (a long hull's at its head and tail).
+  3. Click one to send `disembark {u, c}`.
+- **Deck fire.** Riders that can shoot glow white on the deck (or light their chips, enclosed). Select the hull and press R, then click a target: the riders fire as a group (§4.2.6).
+- **Long hulls** (F9b):
+  - the **ghost** is the hull's outline at its end heading, with a 44 px **rotate handle** on the pinned ghost (hit-tested before OrbitControls takes the pointer, as F10's pin handles are) and the **[** / **]** keys (a tap on the handle on touch); both visit only valid headings; Enter or the flag commits; a double-click commits the default heading;
+  - the path is octilinear with **pivot ticks**;
+  - the **reach overlay** shades cells reachable at some heading, hatched where only some headings fit;
+  - the tooltip: "6.0" of 6" (0.5" turning, 1.0" backing)";
+  - "**no room to turn here**" when a long hull is placed or moved into a state with no clear sweep either way;
+  - the minimap draws a long hull as a **capsule** along its facing.
+- **Groups.** A box catches the hull, not its riders; R adds the riders. A group Move moves the hull, and the preview says "riders ride along". A rider's standing order reads "with the hull" (§4.2.6).
+- **Wreck and bail-out.** The wreck is a TerrainView piece. The bail-out plays as a hop off, then the dice row.
+
+##### Flying hulls (F5b: the Sky-Basket)
+
+- **Moving.** The Basket moves as any flier: a circle, ending standable on whatever floor it lands on. At r 1.2 ≤ `CLIMB_R` it fits on every deck top (P-climb asserts every top hosts r 1.22).
+- **Riders** disembark at the Basket's level: a walk from `v.pos` in their own mode and climbing, which on a deck keeps them on the deck and its stairs.
+- **Two rules are refined:** P-height's "no vehicle stands on a floor above STEP" reads "no **ground** vehicle"; "only siege towers unload onto decks" reads "siege towers, and flying hulls landed on one".
+- **Cost** (inside F5b): about 40 lines and a P-climb row ("a flying hull lands on every deck top"). It is open question 24.
+
+##### Siege towers (F9d)
+
+A `siege` transport adds the drawbridge rule of `disembark`: its riders may step onto a rampart's walk within 1" when the walk's floor is within 1.2" of the tower's deck. Each race gets one, in its own look, with M5, deck 2.4, capacity 12 and fire 1. It is a `Vehicle` entry like any hull, so it counts against the `Vehicle` slot (Field and Grand). A `siege` mission (one seat holds a keep) is later work: open question 19.
+
+**Why the towers are round for every race in v1 (open question 26).** This is a designer's choice, not part of the answer to question 14. That question asked about the transports, and the answer is applied to them.
+- **What a shaped tower would need.** A tower on its race's chassis (the Coil's on the Howdah's footprint, the insectoids' on the Beetle's) needs a facing for its bridge: the deck point is the head disc's `deckAt`, and the bridge reaches 1" ahead of the head disc. That rule is about 30 lines on F9b's engine.
+- **The cost is the AI, not the rule.** The AI picks cells everywhere and takes the default heading. A shaped tower's AI would have to choose a heading that faces the wall, which is a new consensus term (rule 10) on top of a new rule.
+- **Not a dead end.** If round towers play well, shaped ones can follow as their own bumped step.
+
+##### Measurements (`hulls/`)
+
+**Lanes: can a hull cross from its zone to the enemy's?** Each start is an open spot in zone 0 where the footprint could pivot freely (clearance ≥ R), facing the enemy; it counts if any reached state's body lies in zone 1. Fortified boards fold decks, ledges (`cliff`) and `floor ≤ STEP` into the ground clearance; hulls never climb. Final footprints (`cross-final.mjs`, `cross-final.out`):
+
+| Board family | seeds | Howdah (lattice, turn 0.25) | Brood Beetle, three discs (lattice, turn 0) | Beetle as its body disc r 1.5 | Beetle as its bounding disc r 2.85 |
+|---|---|---|---|---|---|
+| Field / open | 1-300 | **300** | **300** | 300 | 210 |
+| Grand / open | 1-300 | **300** | **300** | 300 | 250 |
+| Field / fortified | 1-300 | **300** | **300** | 300 | 258 |
+| Grand / fortified | 1-300 | **300** | **300** | 300 | 281 |
+| Skirmish / classic | 1-100 | 100 | 94 | 100 | 33 |
+| Skirmish / fortified | 1-100 | 89 | 75 (one board had no open start) | 100 | 40 |
+
+The model comparison (`cross.mjs`, `cross-fg.mjs`; the Beetle there is a first two-disc draft): the War-Cart (r 1.5) and the lattice cross 300/300 on every Field and Grand family; the Howdah as its bounding disc (r 3.07) crosses only 177-250 of 300, the Beetle draft as its bounding disc 193-265. So the bounding-disc model loses 6-41% of Field and Grand boards, and the Skirmish rows support no vehicles in Skirmish.
+
+**How wrong is the cheap model?** It plans the path with the body disc and checks the footprint at the end only (`cheap2.mjs`, Grand, 6 boards per family, 276-334 open starts). "Offered but unreachable" counts the ends it (and its overlay) would offer that the hull can't reach within the inches.
+
+| Turn cost | Max | Offered but unreachable (open / fortified) | Reached cells where it can face all 8 ways | Lattice longer than the disc (cells; average extra) |
+|---|---|---|---|---|
+| 0 | 6 | Howdah 5.3% / 7.9% · Beetle 6.6% / 7.2% | 78-82% | 11-14%; +0.65-0.80" |
+| 0 | 12 | Howdah 5.2% / 6.8% · Beetle 6.1% / 6.0% | 70-76% | 12-15%; +0.70-1.01" |
+| 0.25 | 6 | Howdah 23.9% / 24.9% · Beetle 24.7% / 24.0% | 56-60% | 96%; +0.70" |
+| 0.25 | 12 | Howdah 16.4% / 16.3% · Beetle 17.2% / 15.5% | 62-67% | 98%; +0.81" |
+| 0.5 | 6 | Howdah 40.3% / 40.4% · Beetle 40.8% / 39.5% | 38-40% | 95%; +1.2" |
+| 0.5 | 12 | Howdah 26.1% / 24.8% · Beetle 26.8% / 23.9% | 53-58% | 98%; +1.45" |
+
+The geometry alone (turn 0) makes the cheap model wrong on about 1 end in 15, enough that a click would often be refused, so the lattice is the model.
+
+**Cost** (`timing4`, `timing5`; Grand; p50 / p90):
+
+| Plan | Measured |
+|---|---|
+| Today's disc reach, r 1.5, max 12 | 0.23-0.32 / 0.32-0.50 ms |
+| Long hull, max 6 (a move), warm memo | 0.15-0.21 / 0.20-0.37 ms |
+| Long hull, max 9 | 0.42-0.59 / 0.58-1.07 ms |
+| Long hull, max 12 (an advance) | 0.77-1.08 / 1.18-1.64 ms |
+| Long hull, max 12.5 (a charge) | 0.83-1.03 / 1.15-1.64 ms |
+| Long hull, max 14, first plan after a nav rebuild (cold memo) | 1.6-2.1 / 2.3-3.9 ms |
+| Long hull, whole board (warm / cold) | 13-16 / 16-21 ms (p50), so March steers by the body disc's field |
+
+All four implementations (plain, eager, lazy, touched-list reset) agree exactly on `dist` and `prev` for every state of every plan pair: 0 of 1,896 pairs differ.
+
+**Not measured in play** (estimates):
+- **AI cost.** A long hull's own turn costs about 1-2 move plans (0.2-1.0 ms) plus 0-3 charge plans (≈ 1 ms each, fewer after the prefilter). A Grand AI battle with two long hulls a side has 28 hull-turns: est. +40-80 ms, with S3's apply-scoped memo (the AI and the handler share each plan) and the prefilter. On top of §4.2.1's cap-list estimates that makes 275-395 ms on `open` and 315-445 ms fortified, against ≤ 350 ms. So scale-bench's hull rows on the cap-list fixture are likely to bring in the AI count budget at Grand (§4.2.2): a long hull weighs only its nearest chargeable target, and every unit scores only the K nearest enemies.
+- **Deployment at the caps with hulls.** The builder's deployment check (§4.2.8.7) placed no hull. P-army re-runs it with random cap lists: at F9a with two War-Carts a side, at F9b with two Howdahs on the Coil side, and at F5b with every race's hulls (§4.2.9).
+
+**Found along the way.** A Howdah started in a rampart's stair pocket on fortified Skirmish could not move at all (`diag.mjs`). A human could place a hull there legally, which is why `freeSpot` prefers pivot-room states and the UI warns "no room to turn here".
+
+##### Staging
+
+| Step | What lands | Consensus | Size |
+|---|---|---|---|
+| **F9a Round transports** | `transport`, `aboard`, `embark` and `disembark`, the autoload, the wreck and bail-out, P-riders, the **War-Cart** (appended to the Bushtail roster, its `cost` fitted) and the builder's `Vehicle` slot (0 / 2 / 2). The Coil has no vehicle until F9b, nor F5a's races until F5b; with the builder such a list simply lacks one. `vehicle/` AI pairs: War-Cart armies against serpents, and Bushtail mirrors. | bump; `vehicle/` | ~900 |
+| **F9b Long hulls** | The footprint engine and the **Howdah** (appended to the Coil roster, its `cost` fitted); §"Long hulls" and §"Every rule site" above; the view's long-hull layer. | bump; `hull/` | ~1,200 + checks |
+| **F9c Firing decks** (was F9b) | §"Firing decks", on every shape | bump; `vehicle/` and `hull/` re-recorded | ~250 |
+| **F5b** (the new races' hulls; F5a, the races, came after F11a) | The **Brood Beetle** (data only, on the F9b engine) and the **Sky-Basket** (the flying-hull rules, ~40); meshes; each `cost` fitted | bump; `hull/` extended | ~+350 |
+| **F9d Siege towers** (was F9c) | round for every race in v1, each in its race's look (open question 26) | bump | ~150 (est.) |
+
+Firing decks land once both ground shapes exist, so `deckAt` is designed once. Rejected: shipping the Howdah **round** at F9a and reshaping it at F9b, which means a second mesh, a second tuning pass and a `vehicle/` corpus re-recorded for a shape change.
+
+**Cost.**
+- Riders leave every spatial loop, so each loop gets slightly cheaper. `moveUnitTo` adds O(riders) per hull move. `landing` is one reach of about 5" (about 8" from a long hull).
+- Playback is unchanged: riders don't walk. Every hull is a wrecker, so its walk plays alone under V1.
+- Draw calls: a hull is one larger figure; riders at deck slots add their figures.
+- `stateHash` gains `aboard` (only while a unit is aboard), `f` (footprint units only) and a few wreck chunks.
+- A hull's wreck box and deck slots rotate by yaw, so **F9 lands after N0**.
+
+#### 4.2.6 F10: group selection, group orders and autopilot
+
+F10 lands after N3 (online first), on today's classic board; nothing in it needs a big board. It lands with N2 already built, so its executor's online path is tested from the start.
+
+**What the player sees.**
+- **Select.** Shift-drag a box on the table (plain left-drag still orbits), or press ▭ **Select** on touch and drag with one finger. Your standing units inside the box join the group.
+- **Act together.** With a group selected:
+  - deployment and movement: **click the ground to pin a ghost formation**, then click its flag (or press Enter, or ✓) to send it. A double-click on the ground pins and sends at once;
+  - movement: click an enemy to approach it (pinned the same way);
+  - shooting: everyone who can fires at the clicked enemy;
+  - charge: everyone who can charges it.
+- **Give a standing order.** **March** (G) to a place; **Attack** (T) an enemy until it falls; **Hold** (H) and shoot; **Autopilot** (P), where the AI plays them; **Clear** (X).
+  - Standing orders act when you press **End**, after whatever you played by hand, or now with **▶ Go**.
+  - End reads **End Movement ▸ · ⟳ 9**: nine ordered units will act.
+- **Hand override.** Units you move by hand simply have nothing left for their order to do this phase. An order is what untouched units do.
+
+##### Selection (`input/selection.js`, about 220 lines; local, never logged)
+
+State: `group: Set<id>` (the seat's own standing units); `lead` (today's `sel`, the unit on the card); `saved[1..9]`; `pin` (a pinned group preview, or null). Dead units drop out when the table catches up.
+
+| Action | Mouse and keyboard | Touch |
+|---|---|---|
+| Select one | click (today) | tap (today) |
+| Add or remove one | Shift-click (Cmd/Ctrl-click too) | long-press, 450 ms, with a 10 ms vibrate tick |
+| Box select | Shift-drag (add: with Ctrl/Cmd also held) | ▭ Select mode, then one-finger drag; two fingers still pan, pinch and rotate |
+| All of a type on screen (again: the whole board) | double-click a unit | double-tap |
+| All ready units | **Q**, or click the "Ready N" counter | tap "Ready N" |
+| Next / previous ready unit (the camera glides to it) | **Tab** / Shift-Tab | ⇥ in the group bar |
+| Save / recall a group | Ctrl-1…9 / 1…9 (twice: the camera jumps to it) | "＋ Save", then numbered tabs |
+| Pin a group move / commit it | click the ground / click the flag, Enter, or double-click the ground | tap / ✓ or tap the flag |
+| Move one long hull (F9b) | as a group: click the ground pins its ghost at the default heading; the flag or Enter commits; a double-click on the ground pins and commits at the default heading | tap pins / ✓ or the flag |
+| Turn a long hull's ghost (F9b) | drag the pinned ghost's rotate handle, or **[** / **]** | drag or tap the handle |
+| Cancel a pin | Esc, right-click or ✕ | ✕ |
+| Clear the selection | Esc (with no pin), or the bar's ✕. With **one** unit selected, a click on empty board clears, as today | the bar's ✕; with one unit, tap empty board |
+| Camera to the selection / whole board | Space / Home | double-tap a saved tab / 🗺 |
+
+- **Why pin-then-commit.** A group Move plans legs toward any point, and there is no online undo. If one click both cleared the selection and moved the group, a stray click would move the whole group for good. So with two or more selected, a ground click only ever pins or moves the pin, and committing takes a deliberate second action. A single selected unit keeps today's one-click move, which only fires inside its reach. **The one exception is a long hull (F9b):** its ground click pins its ghost even when it is alone, so the facing can be set before it moves.
+- **The box test.** `UnitViews.animate` already projects every unit's label anchor each frame, and now also keeps `screen[id] = {x, y, on}`. On release, the box selects the seat's own units whose projected centre lies inside it: O(U), no raycast.
+  - The box is a DOM rectangle in the seat's colour.
+  - OrbitControls is disabled from pointerdown to pointerup while Shift is held or Select mode is on.
+  - **Why left-drag stays orbit:** LEFT is ROTATE and RIGHT is PAN (`view/camera.js:36`), and orbiting is today's most-used gesture. The user kept it (open question 17, answered).
+- **Enemies.** A box never selects enemies. Dragging over enemies shows "4 enemy units · 23 models", and clicking an enemy still opens its card.
+- **Picking far units.** `Picker.pick` gains a screen-space fallback: when the ray hits no hit cylinder, it picks the unit whose projected centre is nearest the pointer, within 14 px (mouse) or 24 px (touch). A 1" figure is about 11 px tall at the whole-board Grand fit.
+- **Outside your decision.** Selection works at any time, but the verbs are disabled ("Orders can be given on your turn"). Standing orders can still be edited at any time, since the book is local.
+- **Hotseat.** Each seat has its own selection, saved groups and order book.
+- **Online.** N2's presence (already built) gains new keys, for display only: the selection as `sels` (≤ 120 ids) at F10a, and the order badges as `ords` at F10c. `sel` keeps meaning the lead unit's id. A tab that hasn't reloaded since a deploy ignores keys it doesn't know, so it never reads a list as an id.
+
+##### The group bar (`ui/groupbar.js`, about 150 lines; HUD slice `group`)
+
+It shows above `#actions` when two or more units are selected. On a portrait phone it is one horizontally scrolling row with 44 px buttons.
+
+```
+[ 6 selected · 31 models ]  [Nutkin ×4] [Grenadiers ×2]  ⇥  │ Move ▸  Approach ⚔  Fire ➶  Charge ⇶ │ March ➜  Attack 🎯  Hold ⚓  Autopilot ⟳  Auto these 🤖  Clear ✕ │ ＋Save
+```
+
+- **Composition chips.** Tap a chip to narrow the group to that type; long-press or right-click to drop that type. A chip greys out with its reason when its units can't act in this phase ("2 can't act: in combat").
+- **One-shot verbs.** These are what a click does in this phase; on touch they arm the click.
+- **Standing verbs.** March and Attack arm a click: a place on the board (or, from F8b, the minimap) for March, an enemy for Attack. Hold, Autopilot and Clear apply at once. W, A, S and D stay the pan keys.
+- **Auto these** sends one `pilot {m}` for the group (F10b). Today's 🤖 Auto, "the AI plays the rest of this phase", keeps its place and meaning.
+- **The card in group mode** shows a summary (count, models, orders by kind, and from F11a the points standing, `cost × alive / models` summed, display only), then the lead unit's line.
+
+##### One-shot group actions (F10a: client macros of ordinary commands; no consensus change)
+
+| Phase | Click the ground (or the minimap) | Click an enemy |
+|---|---|---|
+| Deployment | **Place**, pinned then committed: N `place` entries keeping the group's shape | – |
+| Movement | **Move here**, in formation, pinned then committed. With the **+D6** toggle each member sends `advance` first. | **Approach**, pinned then committed: shooters move to a cell from which the target is in range and in sight; brawlers take the reachable cell nearest it |
+| Shooting | – (the hint says "pick a target") | **Fire**: each member that may shoot it sends `shoot`, in the AI's shooting order, stopping when it falls |
+| Charge | – | **Charge**: each member that may charge it sends `charge`, then `chargeEnd {c: −1}` (the shortest move) if the charge opens one |
+
+- **Leftovers stay yours.** Members that did nothing stay selected and ready (out of range, no sight, already acted, or the target fell). The bar says "Target down · 3 still ready", so the next click picks another target. This is what keeps group fire from overkilling, with no AI involved.
+- **Group place** hands `freeSpot` an `others` list in which already-planned members stand at their new cells. Placements need no `h` and commute with the other seat's. It costs 1-2 ms of `freeSpot` per member at Grand.
+
+##### The planner (`present/orders.js`, pure, no `data/` import; client code, tuned freely)
+
+```js
+slotsOf(G, members, anchor, line?)   // id → {x, z}. Default: each member's offset from the group's centroid, kept around the anchor,
+                                     // squeezed so the formation's radius is ≤ 12", clamped 0.25" inside the board.
+                                     // With a line (Alt-drag, or the touch handle): spread along it in ranks, spacing 2·max r + 0.5.
+                                     // (F9b) A long hull is spaced by its bounding R.
+goalField(G, anchor, mode, rClass)   // one whole-board nav.reach from the anchor (max ∞); cached in a WeakMap keyed by G, then by
+                                     // (anchor, nav epoch, mode, r-class), so a refold's new G never meets an old field.
+                                     // (F9b) A long hull uses its body disc's field (1.8-2.1 ms at Grand; the lattice's would be 13-21).
+legFor(G, u, slot, field, at)        // the cell u ends on this phase: the valid end nearest its slot (within 1.5") if reachable,
+                                     // else the reachable valid end with the least field value (ties: the lowest index). −1: none.
+                                     // (F9b) A long hull plans on its lattice: any heading, the default rule's choice.
+approachFor(G, u, tg, at)            // shooters: stay if shotInfo is ok where they stand, else the nearest reachable cell from which
+                                     // q.sight(G, u, tg, from) and range hold (≤ 16 candidates, nearest the target first);
+                                     // brawlers: the reachable valid end nearest tg (by levelDist on fortified boards)
+previewGroup(G, seat, verb, members, target) → { members: [{ u, cell, f?, slot, how: 'arrive'|'short'|'none'|'fire'|'charge', why }], summary }
+```
+
+- **Members are planned in order:** distance to the anchor, then id. The front of a moving group goes first and clears the way.
+- **`at` is the virtual occupancy, exactly what the executor will meet.** Earlier members stand at their planned ends; later members stand where they are now, which is simply `G`.
+  - For this, `validEnd(G, plan, i, at = null)` gains an optional position override for friends' spacing; with `null` it is today's code. (F9b appends the heading: `validEnd(G, plan, i, at = null, f = null)`.)
+  - Reach is unaffected, since friends don't block transit.
+  - A member whose slot is taken by a later member's current spot gets the next valid end. The preview and the burst then agree, because both see that member still standing there.
+- **Everything runs under `session.preview`**, with the dice locked. Plans are cached per selection, so a pointer move recomputes only slots and legs (≤ 2 ms). "Falls short" legs are computed after a 150 ms rest. Ghosts are planned a few units per frame (≈ 0.5 ms each at Grand).
+- **Preview = execution.** The executor re-plans each member from the session's match after the previous submit. It lands where the preview drew it (heading included, since the default rule is shared), unless an advance roll or a wrecker's smash intervened. The preview marks those cases "+D6 each" and "may shift". P-macro holds this property in Node, with `at` built as above.
+
+##### Previews and confirmation
+
+- **Ghost formation (hover, with Move or March armed).** One ghost ring per member (a long hull's outline at its end heading): **white** if it arrives, **amber** if it falls short. Faint paths are drawn, at most 24. A flag pin marks the anchor. The tooltip reads "Move 6 · 4 arrive · 2 fall short (G: march)".
+- **The pin.** A ground click pins the preview. A pinned preview has handles to move, rotate and stretch it into a line, and (F9b) each long hull's own rotate handle. Another ground click moves the pin. The flag, Enter or ✓ commits; Esc, right-click or ✕ cancels.
+- **Fire preview.** "4 of 6 fire (≈ 5.2 wounds) · 2 can't: out of range", from `shotInfo` and `rules.expected`, under the lock. Fire and Charge commit on the enemy click: their targets are explicit and they never move anyone to an unintended place.
+
+##### Standing orders (F10c: the order book, client-side)
+
+```js
+// input/orders.js: per device, localStorage key `ts.orders.<start entry id>.<seat>` (every access in try/catch); never in G, never logged
+book = { v: 1,
+         units: { [id]: { k: 'march', anchor: c, slot: c } | { k: 'attack', tg: id } | { k: 'hold' } | { k: 'auto' } },
+         groups: { 1: [ids], …, 9: [ids] } }
+```
+
+What each order does, per phase. Every action is an ordinary command; `pilot` is F10b's kind.
+
+| Order | Movement | Shooting | Charge | Done when | Then |
+|---|---|---|---|---|---|
+| **March** ➜ | `legFor` toward its slot via the goal field. It sends `advance` first when the slot's field value exceeds M and the unit has no target in range. | `pilot` (the AI's best target) | – | within 1" of its slot / no progress (field value improved < 0.5") 2 turns running | Hold, "Arrived" / manual, "Blocked" |
+| **Attack** 🎯 | brawlers: the valid end nearest the target, advancing when the gap exceeds M + 12, or exceeds M + 6 and the unit may charge after advancing; shooters: `approachFor` | `shoot {u, tg}` if `shotInfo` is ok, else `pilot` | `charge {u, tg}` when `chargePlan` exists and `p2D6(need) ≥ 0.25` (melee) or `0.42` (others), then `chargeEnd {c: −1}` | the target is destroyed | Autopilot, "Target down" |
+| **Hold** ⚓ | – | `pilot` | – | never | – |
+| **Autopilot** ⟳ | `pilot` | `pilot` | `pilot` | never | – |
+
+- **Combat.** A unit in combat never falls back under March or Attack. Only the AI under Autopilot may fall back.
+- **Riders.** A rider can't hold a movement order of its own: the executor folds it into its hull's ("with the hull"). In the shooting phase a rider's Hold or Autopilot sends it in `pilot` like any unit.
+- **Death.** A dead unit leaves the book.
+- **Tuning.** All thresholds above are client code, tuned freely with no bump.
+
+**When orders act.**
+- **End.** Pressing End runs the executor, then sends `end`. The order is fixed:
+  1. March and Attack macros, in the AI's role order (stable). Each command is planned from `session.G` as it stands, then submitted.
+  2. One `pilot {m}` for every unit whose order calls for it and that `mayPilot` accepts.
+  3. `end`.
+- **Go.** ▶ **Go (9)** runs the same without the `end`: the phase stays open, so you can see the orders' shots before choosing your own.
+- **🤖 Auto** with orders runs the executor, then sends `auto`.
+- **Autopilot first.** A local setting, off by default: autopilot units run `pilot` as soon as your phase opens, before you act.
+  - It answers from R8b's `sink.settled(session)`, deduplicated on `(round, turn, phase, seat)`.
+  - It re-checks `session.decisionFor(seat)` when it runs, so a catch-up fold that sees many phase openings runs at most one task, for the phase actually open.
+- **Auto-End.** A local setting, off by default. When End is ready and every able unit is under orders, a 1.5 s countdown is drawn on the End button and a tap cancels it. It sends the ordinary End, from `settled`, under the same deduplication and re-check.
+
+**The executor's discipline.**
+- It runs from a UI handler or from `sink.settled`, **never from `sink.events`** (R8b queues a submit made there anyway, but a decision answered from `events` may be one a later entry of the same change made needless).
+- On a LocalStore each submit is synchronous. On an online store (N2) it waits for the entry to be accepted before planning the next, and stops after 10 s with "Orders paused: waiting for the connection".
+- A command the Session refuses (`submit` throws, or `sink.dropped` reports it) skips that unit for the phase with a "Blocked" cue; it is never retried.
+- It never waits for animation.
+- After the run, the book updates its completions from `session.G`.
+
+**`pilot {m}` (F10b, the one consensus kind):**
+
+```js
+// core/commands.js
+RULES.pilot = { k: 'phase', fields: ['m'], ok: (G, seat, { m }) => mayPilot(G, seat, m) }
+HANDLERS.pilot = (G, seat, { m }) => runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))   // the phase stays open; no log line of its own
+// mayPilot, in order:
+//   !Number.isSafeInteger(m) || m < 1                  → 'm is a set of the seat's units (a whole number ≥ 1)'
+//   maskUnits(G, seat, m) === null                     → `m names a unit seat ${seat} doesn't have`
+//   a named unit is not alive                          → `unit ${id} is destroyed`
+//   (F9a) in the movement phase, a named rider whose hull isn't named → `unit ${id} moves with its hull: name the hull too`
+//   no named unit canAct                               → `none of these units can act in the ${phase} phase`
+// core/queries.js (the door): bit j = the seat's j-th unit in G.units order; exact division
+export function maskUnits(G, seat, m) {
+  const mine = G.units.filter((u) => u.side === seat), out = []
+  for (let j = 0; m > 0; j++) { const r = m % 2; if (r) { if (j >= mine.length) return null; out.push(mine[j]) } m = (m - r) / 2 }
+  return out
+}
+export const maskOf = (G, seat, ids) => G.units.filter((u) => u.side === seat).reduce((m, u, j) => (ids.includes(u.id) ? m + 2 ** j : m), 0)
+// core/engine.js:   runAI(G, seat, phase, only = null)   → aiPhase(G, seat, phase, only)
+// core/ai/policy.js: aiPhase(G, side, phase, only = null); aiMove, aiShoot and aiCharge filter `mine` by (!only || only.includes(u))
+```
+
+- **Charges** go straight on to the shortest move (`via 'ai'`), as `auto`'s do, so no `chargeEnd` decision opens.
+- **Size:** 116-125 B, carrying `h` (a single-seat decision).
+- **Draws:** exactly the AI's own, in the AI's order, for the named units.
+- **Bump**, with new `pilot/` logs. The classic corpus has no `pilot`.
+- **Riders (F9a).** The rider rule above refuses a mask that would do nothing: the AI moves riders only from inside its hull's transport branch.
+- **A Grand army's mask** needs at most 24 bits (the list cap), well inside the 53 a safe integer holds.
+
+**`legal()`'s schema** (lands with F4; F10 needs none of it, F9b's `f` is its first optional field):
+
+```js
+// a RULES entry: { k: 'phase' | ['deploy', 'phase'], phase?, fields: [required ints], opt?: [optional ints], bools?: [required booleans], ok }
+// why(): a key passes only if it is t or in fields/opt/bools; each fields key present and Number.isInteger; each opt key, when present,
+// Number.isInteger; each bools key typeof 'boolean'. Today's kinds keep `fields` only, so their verdicts are unchanged (P-prop).
+```
+
+**The order language.** Every state has a shape or glyph as well as a colour, and looks the same on the ring, the label, the chip and the minimap.
+
+| State | Ring (3D) | Label or chip badge | Minimap |
+|---|---|---|---|
+| Selected (lead) | yellow `#ffe680`, full (today) | `.sel` (today) | yellow outline |
+| In the group | yellow, 60% | ◆ | yellow dot outline |
+| Ready to act (manual) | white 0.75 (today) | – | white pip |
+| Under an order covering this phase | cyan `#5fd3ff`, dashed; rotating slowly for Autopilot | ⟳ / ⚓ / ➜ / 🎯 | cyan dot |
+| Attack target | orange, plus a crosshair decal | 🎯 over the target | orange ring |
+| March slot (hovered or selected marcher, or all with **O**) | a dashed path to a dashed ghost ring | – | dashed cyan line |
+| Attack link | a red-orange dashed line, unit to target | – | red-orange line |
+
+**Cues.**
+- **Order given:** a race voice and a ring pulse on each member.
+- **Order done:** floating text ("Arrived", "Blocked", "Target down") and a minimap ping. The bar reads "4 units await orders" or "4 now on autopilot"; tapping it selects them.
+- **Orders running at End:** a banner, "Your orders: 9 units".
+
+**HUD model** (`present/hud-model.js` stays pure; the book and the selection come in through `input`):
+- `group: {ids, n, models, chips: [{key, n, can, why}], verbs: {[verb]: {enabled, why}}, preview, pin}`;
+- `counters: {ready, orders}`, shown beside the phase as **Ready N · Orders M** (tap Ready: select all ready; tap Orders: toggle order lines);
+- `end.badge`: the units the executor will act for;
+- `go: {show, n}`;
+- `rings[id]` gain `inGroup` and `badge`;
+- `zoomTier` (§4.2.7);
+- `end.ready` counts manual units only (F3's rule, refined).
+
+**Hotseat, vs-AI, online, spectators.**
+- AI seats have no book.
+- The opponent and spectators see your orders' **effects** as ordinary entries, and your badges through N2's presence.
+- Watch mode has no orders.
+- A book doesn't follow you to another device (open question 8).
+
+**Netplay.**
+- Macros are ordinary entries chained by `p` and `h`. A burst of up to about 25 entries comes from one seat inside its own decision; no order is ever sent outside it.
+- A seat's book is local, so a client may pre-plan while waiting; nothing is pre-queued on the wire.
+- **Log growth.** A macro adds exactly the entries manual play would (≈ 60 a round at Grand, 102-125 B each). An army fully on autopilot sends about 6 entries a seat-turn: `pilot` and `end` per phase.
+- **Catch-up.** A spectator or rejoining peer folds a hand-played 7-round Grand log (≈ 465 entries) in an estimated 0.2-0.35 s on desktop. Autopilot phases cost what the AI costs.
+
+**Fallback (documented, not built).** If orders must persist across devices, act while the player is offline, or show natively to spectators, take the rules-engine's core orders:
+- **The command:** `order {m, k, a}` (k: 0 manual, 1 autopilot, 2 attack `a` = enemy id, 3 march `a` = goal cell, 4 hold) answers `phase` and `deploy`, with the same mask decode. No-op orders are refused.
+- **The state:** `u.order = {k, a}`, outside `flags`, hashed per unit.
+- **The executor:** `end` runs `runAI(G, seat, phase, (u) => !!u.order)`, with draw-free directives for march, attack and hold. A new order acts at once for its units. Releases happen in `unitDestroyed` and on arrival.
+- **The cost:** March, Attack and Hold become consensus AI code, so every behaviour tweak is a bump and re-recorded baselines.
+
+#### 4.2.7 V1 and drawing at scale
+
+**V1, batched playback** (`view/player.js`, `present/pace.js`; view only):
+- **The batch.** The EventPlayer looks ahead over its queue, across entries. A batch is a run of `unit.move` events from one seat, separated only by instant events: `focus`, `pause` ≤ 0.2 s, `objectives`, `status`, `act`, `log`, `tray.open` and advance `dice`.
+- **Playing it.** Walks start 0.15 s apart and the player awaits them all at the batch's end. The batch's advance dice show in **one** tray row ("Advance: 3 5 1 6 …").
+- **What breaks a batch:** a charge's dice, shooting, a wound, a smash, or a climb (F7). A wrecker's walk plays alone, and every hull is a wrecker.
+- **Where the rule lives.** `present/pace.js` exports the batch rule as a pure function, `batchesOf(events)` (which events batch, their start offsets, a batch's length), and `view/player.js` follows it. playback-check's timing rows therefore run in Node over event streams, on Grand too, before the core has a Grand board (§4.2.9's fixture).
+- **The mirror** still folds every event in order, so P-present's checkpoints are unchanged; only *when* animations start changes.
+- **The setting.** "One at a time" restores today's pacing (open question 15).
+- **Online.** N2's elastic catch-up (2× above an 8 s backlog, 4×, a snap above 30 s), built before V1, composes with it: the backlog estimate counts a batch's walks once, at their longest.
+
+**Drawing at scale** (F8b, in order of payoff):
+1. **Terrain tiles.** One mesh per (8" tile, material), built from `defOf` and the mirror's chunk record: about 70 tiles at Grand, typically about 150 draw calls against about 1,000 today.
+   - A chunk that is hurt, falls, topples or breaks is **promoted** out of its tile while it animates, and its tile is re-merged without it (a few ms, once per terrain event).
+   - terrain-check's view half and snap-check hold every tiled chunk's drawn shape equal to its unmerged mesh.
+2. **Shadows fitted to the view** (§4.2.3). This restores shadows across a Grand board and culls the shadow pass to the screen.
+3. **Figure LOD** past 60" of camera distance: one low-poly bake per template, so one mesh per figure, and no idle animation. A whole-board Grand frame drops from about 650 figure calls to about 160.
+4. **Semantic zoom.** The tier is chosen from pixels per inch at the camera's target, `pxPerInch = screenH / (2·d·tan(fov/2))`:
+
+   | Tier | px per inch | Labels | Rings |
+   |---|---|---|---|
+   | Close | ≥ 12 (classic landscape 22.7, portrait 13.6: **classic is unchanged**) | today's | today's |
+   | Tactical | 6-12 | short: glyph, model count, order badge | today's |
+   | Strategic | < 6 | **chips** only | hidden; the chip's border carries the state |
+
+   - **Chips** are 22 px DOM discs in the side's colour. Each carries a role glyph (⚔ ➶ ★ ✈ ⛭ ▣), the model count, the order badge, and dots for a hull's riders. Chips are clickable: a tap selects, which beats raycasting 11 px figures. (F11b's Muster screen already uses the same glyphs.)
+   - **Clusters.** Chips within 18 px stack into a "×3" cluster; a tap zooms the camera onto it.
+   - **Label writes** are skipped when the projected position moved < 0.5 px.
+5. **`InstancedMesh` figures** only if `render-bench` still misses its budget after 1-4 (§5's non-goal stands until then).
+
+**Camera and navigation** (F8b):
+- **Opening view.** Field and Grand open **behind your army** at 45-60". That is F1's preset with a board-aware distance, fitting your half (your zone to the centre line); broadside fits the whole board. **Overview** fits the whole board (also Home).
+- **Pan speed** scales with distance: `dt · 18 · max(1, d/50)`. Today it is a fixed 18"/s, about 5 s to cross 80".
+- **Batch framing.** With 🎥 on, when a batch opens with a member off-screen, the camera fits the bounding circle of the members' starts and ends. This includes your own orders at End, which play after your decision, so it doesn't break "never follow during the player's own decision".
+- **The bookmark.** At your next `phase.start`, the camera glides back to the pose it had when End was pressed.
+- **Minimap** (`view/minimap.js`, about 250 lines): a 160×112 px canvas, bottom-left in landscape; top-right at 120 px in portrait, collapsing to 🗺.
+  - **Layers:**
+    - terrain footprints, cached offscreen and redrawn on terrain events (decks light with rims, stairs as arrows, ladders as ticks);
+    - objectives in their owner's colour;
+    - unit dots in the seat's colour, sized by `r`, with the selection outlined; (F9b) long hulls as capsules along their facing;
+    - order lines;
+    - the camera's ground trapezoid;
+    - pings for off-screen events.
+  - **Input:** click or drag pans the camera there. With a group selected, a **right-click or long-press pins a march (or move) there**, as does a click with March armed; the pin commits as on the board. A right-drag on the table pans, so March is never bound to a right-click on the table.
+  - **Cost:** it is redrawn on mirror and camera changes only, ≤ 1 ms, ≤ 10 Hz. It is hidden on classic unless toggled.
+- **Roster.** Your units with their status (acted, ordered, engaged, aboard) and both armies' point totals. Tapping one selects it and frames it.
+- **Discoverability.**
+  - The title's small print gains "Shift-drag to select several".
+  - The help modal gains a **Controls** section: the selection table and the order glyphs.
+  - One-time tips (localStorage, try/catch):
+    - the first time a seat has more than 10 units on its turn: "Shift-drag (▭ on touch) to select a group";
+    - the first group pin: "Click the flag (or Enter) to send them";
+    - the first standing order: "Orders act when you press End, or now with Go".
+- **Phones** (open question 16): Grand is offered with a "best on a larger screen" note.
+
+#### 4.2.8 F11: the points-based army builder
+
+F11 answers open question 7: three battle sizes, and players pick their own units up to a points limit per size. The fixed lists become **presets**. **F11a** puts lists in the setup (consensus; lands right after F8a, with only Skirmish offered). **F11b** is the Muster screen and the lobby's lists (client only; lands after F6, whose race picker it follows). F5a, F8b, F9a, F9b and F5b carry their own builder data inside their own bumps.
+
+##### 4.2.8.1 What the player sees
+
+- **Pick a size, a race, then an army.** F6's battle-setup panel shows each seat's race, then an army line: **Army: Classic ▾ · Build…** for a human seat (the preset is the default), **Army: Preset ▾ / Random** for an AI seat. A player who changes nothing presses Start as before.
+- **The Muster screen** (Build…): one row per unit with − and +, a points bar, role chips, presets, Random, Clear and lists saved on the device. **Ready** names what is missing ("Take at least 2 Troops").
+- **Hotseat** builds in turn, seat 0 then a "Pass to player 2" screen. **Online**, each seat builds on its own device in N2's lobby; neither sees the other's list before the battle starts.
+- **In battle** the card shows each unit's cost; the deployment shows a banner, "Bushtails 970 pts · 14 units vs Coil 990 pts · 14 units"; the roster (F8b) and the result screen show both armies' totals.
+
+##### 4.2.8.2 Prices: `cost`, not `pts`
+
+**Why a new field.** `pts` is rules data with two readers, both AI and both under rule 10 (any change is a bump): `worth(u) = pts × alive / models` (`core/ai/score.js`) reads it per unit, and `expected().value = kills × pts` (`core/rules.js`) per model. The two readings disagree, a legacy quirk that stays. Any change to `pts` changes AI scores, and so all 40 classic battles. The builder therefore prices from a new field:
+
+```js
+// data/races/<race>.js, per unit: what the unit costs to field, at full strength
+cost: 75,   // a whole number, a multiple of 5; in core/, read only by core/army.js (flag-lint)
+```
+
+- `defineRace` requires `cost` on every unit. There is no default: the obvious one, `pts × models`, is the 76.8% table below.
+- `RULES_ID` hashes it (the race strip keeps every field but `name`, `short`, `icon`, `look`, `abilities` and `fx`).
+- The card, the Muster screen, the roster and F10's group card show it.
+- `pts` stays the AI's own appraisal. When an AI change re-records the corpus anyway (a future bump), the AI may switch to `cost` and `pts` can go. That is not part of F11.
+
+**What was measured.** Random legal lists come from `autoList` (§4.2.8.6) with uniform picks over every unit that still fits, so a list ends within the cheapest unit of the limit. Each table was measured on the same seeds, with the composition rules of the "Rules" column. Skirmish was played on the classic board; **Field and Grand on stand-in boards** (60×40 deploy 12 and 80×56 deploy 14 with the spec's objectives, the classic set at area-scaled density, pairs [13, 6] and [24, 12]: not F8b's `open` set).
+
+| Table | Rules | Skirmish (classic board) | Field (stand-in, 6 rounds) | Grand (stand-in, 7 rounds) |
+|---|---|---|---|---|
+| classic armies (raw 484 vs 586) | – | **53.8% ± 3.5** (N = 200; seat 0 50.2%) | | |
+| raw `pts × models` | per-kind caps | 76.8% ± 1.7 (600) | | |
+| v1 (first fit, scaled) | per-kind caps | 57.7% ± 2.0 (600) | | |
+| v2 (second fit) | per-kind caps | 51.5% ± 1.8 (800) | 50.3% ± 2.9 (300) | |
+| v2 | slot table | 44.0% ± 1.8 (800) | 50.5% ± 2.9 (300) | |
+| v3 (fit near the limit) | slot table | 51.6% ± 1.8 (800) | 58.8% ± 2.8 (300) | 41.7% ± 4.5 (120) |
+| v4 | slot table | 46.4% ± 1.8 (800) | 51.5% ± 2.5 (400) | 43.0% ± 3.5 (200) |
+| v5 | slot table | 47.1% ± 1.8 (800) | 52.3% ± 2.5 (400) | 42.5% ± 3.5 (200) |
+| v6 | slot table | 51.2% ± 1.4 (1,200) | 53.9% ± 2.5 (400) | 42.5% ± 3.5 (200) |
+| **v6 (proposed), final rules** | slot table, heroes 1 / 1-2 / 1-3 | **51.2% ± 1.4** (1,200; exactly one hero there anyway) | **54.8% ± 2.5** (400) | **47.0% ± 3.5** (200) |
+
+The Bushtails' score is shown. **The Field and Grand rows above the last were measured with exactly one hero per army**, because the prototype capped each hero type at one until the last run; only the last row uses the proposed Hero slots of 1-2 and 1-3.
+
+What shaped the procedure:
+- **The classic matchup is fair, and raw points say it isn't.** The classic armies are the yardstick: a table must price the two classic lists within about 10 points of each other.
+- **Balance depends on army size.** With v2 prices and spends within 40 points of each other, the Bushtails score 70.3% ± 5.9 at 300-399 points and 44.1% ± 3.4 at 500-599 (small armies are hero-heavy, and the Elder's blast spell carries them). So prices are fitted only on budgets within ±20% of the limit; the first fit, on 250-750, was misled.
+- **Prices depend on the composition rules.** Moving from per-kind caps to the slot table moved Skirmish from 51.5% to 44.0% under the same prices. Prices are tuned under the final rules and re-checked whenever the rules move.
+- **Grand leaned Coil (42-43%) while each army had exactly one hero.** The proposed 1-3 heroes bring it to 47.0% ± 3.5: cheap extra Elders help the Bushtails at scale. It was not the model cap: with a 96-model cap and one hero, the Bushtails spend as much as the Coil (1,478 against 1,488) and still score 42.3% ± 3.5.
+- **Unit values change with size: one price table can't be exact at every size.** A Field fit (N = 900, budgets 800-1,200, v6 prices) agrees with the Skirmish fits on most units within one standard error, but not on three: the **Brute** is worth 145 ± 20 (priced 100; Skirmish fits 107-114), the **Trebuchet** 79 ± 14 (priced 50; Skirmish 44-51) and the **Venom Engine** 14 ± 16 (priced 65; Skirmish 61-72). The two Coil errors offset, which is why Field still balances by race (54.8%). These three are F8b's first candidates. F11a tunes for Skirmish, the only size it offers. F8b re-measures Field and Grand on the real boards and retunes the one table until all three sizes pass the gates below, the per-unit gate included.
+- **The fallback** if no single table passes all three sizes: a mission's `list` may carry `prices: { <race>: { <unit>: cost } }`, overriding `cost` for that mission only. It is data only: read only by `core/army.js`, hashed with the mission, and shown by the card and the Muster screen as that battle's price. It is not built unless F8b's retune needs it.
+
+**The fitting procedure** (`sim/army-sim.mjs`, F11a; prototype `army/tools/fit.mjs`):
+1. **`--fit <mission>`** plays N (2,400 at Skirmish) AI battles between random legal lists, each side's budget drawn from 80-120% of the limit. It fits a quasi-binomial logistic model of the Bushtail score on both sides' unit counts and the seat (an IRLS fit in plain JS).
+2. Each unit's fair price is its coefficient divided by an exchange rate: the classic lists' fitted value divided by their current cost.
+3. **The heroes are not identified separately at Skirmish**, where every list has exactly one: their difference is the fit's intercept, so the two hero prices are set from it (equal in v6) and act as a race-level handicap. At Field, lists hold one or two heroes and the fit does identify them (Elder 54 ± 25, Hierophant 53 ± 29), so 60 is consistent; random lists take the most heroes about 90% of the time (the hero is the cheapest unit), so that identification is weak. Human play will tell.
+4. Round to 5. Keep both classic lists ≤ the Skirmish limit.
+5. **`--check`** is the gate. Each score gate holds for every pair of races (from F5a, six pairs) on every set the mission offers (from F7a, Skirmish on `classic` and `fortified`; from F8b, Field and Grand on `open` and `fortified`), with seats swapped every other battle. N is sized so each threshold is at least 3 standard errors (SE = 50/√N points): a balanced table fails a score gate about 0.3% of the time. At F8b there are 36 score gates (6 race pairs, 2 sets, 3 sizes), so a balanced table fails one of them on about 9% of runs. A failing gate is therefore re-run once on fresh seeds before it counts, and only a failure that repeats sends the table back for tuning.
+
+| Gate | N per pair and set | Holds when | From |
+|---|---|---|---|
+| Skirmish | 1,500 (SE 1.3) | \|score − 50%\| ≤ 4 | F11a |
+| Field | 900 (SE 1.7) | ≤ 5 | F8b, on its real boards |
+| Grand | 625 (SE 2.0) | ≤ 6 | F8b, on its real boards |
+| **Each unit's price** (from `--fit`, budgets 80-120% of the limit) | Skirmish 2,400; Field 900; Grand 600 | Each unit's fitted value lies within max(2 SE, 20%) of its `cost`, at every size that offers it. The heroes are exempt at Skirmish, where every list has exactly one, so the fit can't separate them from the intercept. | F11a (Skirmish); F8b (all three) |
+| Each race's classic list | – | costs ≤ 500 | F11a |
+| Each mission's own preset | – | is legal for every race | F11a |
+
+- **Where v6 stands.** On the stand-in boards it scored 1.2, 4.8 and 3.0 points from even. Field's 4.8 sits at the line, so a re-measure at N = 900 could go either way.
+- **The per-unit gate** is there because a race-average gate can't see one underpriced unit that humans will take every time. At Field it fails v6 on the Brute (145 ± 20 against 100), the Trebuchet (79 ± 14 against 50) and the Venom Engine (14 ± 16 against 65). The Skirmish fits put those three inside it (107-114, 44-51 and 61-72). v6 is therefore F11a's table and F8b's starting point, not a table F8b can expect to pass unchanged.
+- **Standard errors** are 5-9 points per unit in the last Skirmish fit and 11-29 in the Field fit.
+- **When it runs:** F11a, F5a (each new race against both others), F7a, F7b and F7c (fortifications can move balance: ladders favour climbers, and the Brute can't climb), F8b, F9a (the War-Cart), F9b (the Howdah), F5b (the Beetle and the Sky-Basket) and every price change.
+- **Runtime** (estimated from the prototype's per-battle times, before S0-S3): at F8b, with four races, three sizes and two sets each, the score gates take about 2 CPU-hours. `--jobs N` spreads the seeded battles over processes, and the result doesn't depend on how, so four cores take about 30 minutes. Skirmish alone, one pair and one set, takes about 2 minutes.
+
+**The proposed table (v6).**
+
+| Bushtail Clans | cost | (raw `pts × models`) | Coil of Ssithra | cost | (raw) |
+|---|---|---|---|---|---|
+| Elder Chitterwick (Hero) | 60 | (80) | Hierophant Ssithra (Hero) | 60 | (85) |
+| Oak Guard (Elite, 5) | 105 | (110) | Constrictor Brute (Monster) | 100 | (125) |
+| Nutkin Skirmishers (Troops, 6) | 75 | (42) | Scaleguard (Troops, 6) | 70 | (60) |
+| Acorn Grenadiers (Troops, 5) | 65 | (55) | Venom Spitters (Troops, 5) | 65 | (60) |
+| Glider Wing (Fast, 4) | 55 | (60) | Sidewinder Stalkers (Fast, 4) | 65 | (96) |
+| Pinecone Trebuchet (Artillery) | 50 | (95) | Basilisk Venom Engine (Artillery) | 65 | (100) |
+| War-Cart (Vehicle, F9a) | fitted at F9a | (120) | Shell-Back Howdah (Vehicle, F9b) | fitted at F9b | (140) |
+| **classic list** | **485** | (484) | **classic list** | **495** | (586) |
+
+No vehicle price is proposed yet: each is fitted at Field before it is offered, and data-check refuses a unit without `cost`, so neither can ship unpriced.
+
+**A retune is data only.** `RULES_ID` moves (an online match in progress becomes read-only, open question 4), with no bump and no re-recorded battle. Lists saved on a device are re-checked at load (§4.2.8.8). The help page says prices are tuned on AI-against-AI play, which human play may value differently.
+
+##### 4.2.8.3 Limits and composition: the mission's `list`
+
+```js
+// data/mission.js: consensus data (RULES_ID hashes MISSIONS whole). F11a adds `list` to classic; F8b to field and grand.
+classic: { …, army: 'classic',
+  list: { points: 500,  units: 10, models: 36, perKind: 3,
+          roles: { Hero: [1, 1], Troops: [1, 6],  Elite: [0, 2], Fast: [0, 2], Monster: [0, 1], Artillery: [0, 1] } } },
+field:   { …, army: 'field',
+  list: { points: 1000, units: 18, models: 70, perKind: 5,
+          roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2] } } },
+grand:   { …, army: 'grand',
+  list: { points: 1500, units: 24, models: 90, perKind: 7,
+          roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3] } } },
+// F9a adds Vehicle: [0, 0] / [0, 2] / [0, 2] to every mission's roles.
+```
+
+| | Skirmish (`classic`) | Field | Grand |
+|---|---|---|---|
+| Points | 500 | 1,000 | 1,500 |
+| Preset (classic ×) | ×1: 485 / 495 | ×2: 970 / 990 | ×3: 1,455 / 1,485 |
+| Units, models (at most) | 10, 36 | 18, 70 | 24, 90 (the envelope) |
+| Heroes | exactly 1 | 1-2 | 1-3 |
+| Troops (at least) | 1 | 2 | 3 |
+| Of any one unit (at most) | 3 | 5 | 7 |
+| Monster, Artillery (each, at most) | 1 | 2 | 3 |
+| Vehicles (F9a) | 0 | 2 | 2 |
+
+- **Points must be what binds.** Under per-kind caps alone, every Coil Field list came out at the same 14 units and 56 models. Under the slot table, auto-built lists spend 450-500, 935-1,000 and 1,405-1,500 points (v6 prices).
+- **A unit is bought whole**, at its data's model count. There are no per-model options and no wargear (open question 21).
+- **Heroes are not unique.** Each race has one hero type today, so a Field army may field two Elders. A `unique` flag can come with the first race that has a second hero type (open question 22).
+- **`checkMission` gains checks of `list`:**
+  - `points` is a whole number above 0;
+  - `units ≤ 24` and `models ≤ 90` (§4.2.1's envelope);
+  - `perKind` is a whole number from 1 to 9. A list carries one digit per roster entry, and an entry's count is bounded by `perKind`, so every count is one digit. A role slot sums several entries, so it is not bounded by 9;
+  - every role in `ROLES` has a slot `[min, max]` of whole numbers with `0 ≤ min ≤ max ≤ units`, and the minimums sum to at most `units`. So Field's Troops `[2, 10]`, Grand's `[3, 14]` and F9a's Skirmish Vehicle `[0, 0]` are all legal.
+- **data-check adds:**
+  - every race can field a legal list for every mission (`autoList` succeeds on 100 seeds);
+  - each mission's `army` preset is legal for every race;
+  - every mission as shipped passes `checkMission`. This is a row of its own, so the slot tables F8b and F9a add fail data-check by name, not only at load.
+
+##### 4.2.8.4 The army in the setup
+
+**Representation.**
+
+```js
+setup.seats[i].army    // absent (or null): the mission's preset, mission.army
+                       // a preset name: /^[a-z][a-z0-9-]*$/, one of race.armies' keys (defineRace adds 'classic',
+                       //   derived from army, to the frozen armies, so it is always there)
+                       // a list: /^[0-9]*[1-9]$/, one digit per roster entry (in roster order), no trailing zeros
+// data/races/squirrel.js
+roster: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet'],   // the builder's order; append-only (F9a appends 'warcart')
+army:   ['elder', 'oakguard', 'nutkin', 'nutkin', 'grenadier', 'glider', 'trebuchet'],   // the classic list, unchanged
+armies: { field: '224222', grand: '336333' },                                   // F8b; defineRace adds classic: '112111'
+// data/races/serpent.js: roster ['hierophant', 'brute', 'scaleguard', 'spitter', 'sidewinder', 'engine'] (F9b appends 'howdah'),
+// the same presets
+```
+
+- **Preset names and lists never collide.** A preset name starts with a letter and a list is all digits, so one field carries both.
+- **One spelling per list.** Trailing zeros are refused, so every army has exactly one text. A list may be shorter than the roster: missing entries are 0.
+- **The roster is append-only.** `RULES_ID` hashes it as an array, so its order is in the hash. data-check pins each race's roster as it stood when its first list was recorded, and today's roster must start with the pin. Appending is safe: when F9a adds `'warcart'` at the end, every recorded or saved list still means what it meant and needs no trailing zero. Reordering or inserting fails data-check: it would silently change what the `army/` corpus's lists mean, and the parity runner stamps the current `RULES_ID`, so nothing else would notice.
+- **`army` must be in roster order** (defineRace). Then the classic preset expands to exactly `race.army`, and a player who builds the classic composition plays exactly the classic army. Both races satisfy this today (prototype: `expand('112111') === race.army`).
+
+**The cost** (the start entry as `match/envelope.js` encodes it; `army/tools/size.mjs`, `rev3/size-names.mjs`):
+
+| Start entry | Bytes |
+|---|---|
+| Local hotseat, today | 304 |
+| Local hotseat, with a mission and two lists | 358 |
+| Online-style, today (`a`, `p`, an 8-character device id, name and a 16-hex nonce per seat) | 461 |
+| Online-style, with a mission and presets by name | 509 |
+| **Online-style, Grand, two digit lists** | **513** |
+| Online-style: 24-character ASCII names and 12-entry rosters | 565 |
+| **Online-style, worst case: names at N2's cap (48 encoded bytes each) and 12-entry rosters** | **613** |
+| *(uncapped)* 24 CJK characters a name / 24 astral characters / 24 control characters or lone surrogates | 661 / 709 / 805 |
+| *(rejected format)* `key:n` lists, Skirmish / Grand / worst case with ASCII names | 626 / 647 / 827 |
+
+Canonical JSON writes non-ASCII as raw UTF-8 (3-4 bytes a character) and escapes control characters and lone surrogates as `\u00XX` (6 bytes), which is why N2 caps a name by its encoded length as well as its characters (§3's additions). The budget is 640 B, against R8's 1,024 B cap.
+
+**Why digits and not unit keys.** Keys read better in a desync report, but they cost about 60 B a seat and break the budget (827 B with ASCII names, about 875 B at the name cap). The digits lose nothing: the roster is in `RULES_ID`, so a peer with another roster sees `skew`, never a silent misreading; saved lists are stored by key (§4.2.8.8); the UI and the desync report expand a list with `army.keysOf(race, list)`.
+
+**Core plumbing.**
+
+```js
+// core/army.js: consensus (fullSetup and newState read it); pure; imports data/ and util.js only; draws nothing
+export const LIST = /^[0-9]*[1-9]$/
+export function armyOf(setup, seat)          // → { preset: name | null, counts: [per roster entry], keys: [unit key…] }; throws why
+export function checkList(race, rules, counts)   // → null | why: the first broken rule, in the order below
+export const listCost = (race, counts) => …  // Σ counts[i] × units[roster[i]].cost
+export const listText = (counts) => …        // canonical digits (trailing zeros dropped)
+export const keysOf = (race, list) => …      // unit keys in roster order, for the UI and the desync report
+export function autoList(race, rules, seed, { troops = 1.5 } = {})   // a client's tool; never called by the fold (§4.2.8.6)
+// core/index.js: export * as army from './army.js'    (a door on the present/view/input/ui/app surfaces)
+```
+
+- **`newState`.** `for (const side of [0, 1]) for (const key of armyOf(setup, side).keys) G.units.push(makeUnit(G, key, side))`, replacing the read of `raceOf(G, side).army`. `G.units` order stays seat 0's list, then seat 1's, each in roster order (rule 6); unit ids still count from 1. Nothing else in the core reads the list: no new state, nothing new in `stateHash`, nothing new in the trace.
+- **`fullSetup`.** After the setup whitelist (`SEAT_KEYS` gains `army`) and each seat's race and controller, it fills in `army ??= mission.army`, as it fills in `terrain` and `rounds`, then runs `armyOf(s, i)` for each seat, which returns or throws the refusal. The start entry keeps the setup as written; `G.setup` holds the filled one, which the setup's hash never includes.
+- **No battle-log line.** `createMatch`'s "deploy your army" lines are unchanged. The armies' totals are a **UI banner** at the deployment, built from the setup, never a core `log()` line, because the trace is pinned.
+- **`boundaries.mjs`.** `core/army.js` joins the surfaces of `present/`, `view/`, `input/`, `ui/` and `app/`. It imports `data/schema.js`, `data/mission.js` and `core/util.js` (`mulberry32`, `cyrb53`), and nothing that draws from `G.rng`.
+
+**Refusals, in order** (each a thrown `Error`; the setup is refused). The order is **seat-major**: every check for seat 0, then every check for seat 1. The first failure is the refusal, so a setup in which both seats break rules reports seat 0's first broken rule.
+
+| # | Check | Message (examples) |
+|---|---|---|
+| 1 | `army` is a string after defaults | `seat 1's army is a preset's name or a list of counts, not 7` |
+| 2 | A preset name names a preset of the seat's race | `the Coil of Ssithra have no army "grnad" (there are classic, field, grand)` |
+| 3 | Otherwise `LIST` matches | `seat 0's army "11a" is neither a preset nor a list of counts` |
+| 4 | Its length is at most the roster's | `seat 0's list "1121113" counts 7 kinds of unit; the Bushtail Clans muster 6 (elder oakguard nutkin grenadier glider trebuchet)` |
+| 5 | `checkList`: points | `seat 0's army: 515 points, over the Skirmish limit of 500` |
+| 6 | `checkList`: units, then models | `seat 1's army: 38 models; a Skirmish army has at most 36` |
+| 7 | `checkList`: each role in `ROLES` order (from F9a `Vehicle` among them), minimum then maximum | `seat 0's army: no Troops unit; a Field army needs at least 2` · `seat 1's army: 2 Monster units; at most 1 in a Skirmish` · `seat 0's army: 1 Vehicle; none in a Skirmish` |
+| 8 | `checkList`: each roster entry against `perKind` | `seat 0's army: 6 Nutkin; at most 5 of one unit in a Field army` |
+
+- **No vehicle-load refusal.** The builder amendment proposed a ninth, "each vehicle has `fire` eligible Troops units". The merge drops it: the Howdah's `fire` 3 can't be met by whole Coil Troops in 12 places (Scaleguard 6 + Spitters 5 = 11; any three ≥ 15), so the rule would forbid the Howdah outright, and a player may run a hull half-empty. The Muster screen shows a tip instead (§4.2.8.8).
+- **A preset is checked like any list.** data-check guarantees that each mission's own preset passes. A seat that names `'classic'` in a Field battle is legal: it is under the limit and holds 3 Troops.
+- **No floats anywhere** (rule 23).
+- **Where a refusal surfaces.** The Folder's `begin` refuses such a start and leaves the log in its lobby, with `error` saying why (R8). Locally, the UI never offers Start for an illegal list, because it calls the same `checkList`.
+- **Measured** (`army/tools/digits.mjs`): 200,000 fuzzed strings never crashed the parser, and every accepted list was in its single valid spelling.
+
+##### 4.2.8.5 Presets and the parity corpus
+
+- **Three presets per race.** `classic` is derived from `army`. `field` (×2, `'224222'`) and `grand` (×3, `'336333'`) are F8b's data: revision 1's ×2 and ×3 lists, unchanged in content. With v6 prices they cost 970 / 990 and 1,455 / 1,485, all legal (Grand ×3: 21 units; 84 and 72 models). Presets carry no vehicles.
+- **Revision 1's F8 data changes.** It gave `armies` as unit-key lists and allowed `{unit, rides}` entries. Presets are now count strings, and riders are loaded by the deployment's autoload (§4.2.8.7).
+- **The corpus.** Every corpus setup (the 40 classic battles: 24 AI pairs and 16 human logs) names no army, so it plays its mission's preset, `classic`, whose units `armyOf(…).keys` builds equal to `race.army`. **Prototype:** 12/12 battles identical in `stateHash`, trace length, result and VP across all three spellings, no army, `'classic'` and `'112111'` (`army/tools/parity.mjs`). The parity runner stamps the current `RULES_ID` into the start (sim/run.mjs:256), so the moved hash costs nothing.
+
+##### 4.2.8.6 AI seats
+
+- **The default is the mission's preset.** The setup names no army, and an AI seat plays the curated list.
+- **Random.** A toggle on the battle-setup panel, and the host's choice in an online lobby. It picks `autoList(race, mission.list, seed)` with ``seed = cyrb53(`${board}:${mission}:${seat}`) % 2^32``, and writes the resulting list into the setup **before the start**. The fold reads it as data, and every peer sees the same list without recomputing it; the panel's preview stays stable while the player builds; "New battlefield" rerolls it with the board.
+- **`autoList`.**
+  1. One hero (the race's first Hero in roster order).
+  2. Troops to the slot minimum, each drawn at random among the race's Troops.
+  3. Units drawn at random among those whose +1 still passes every cap, with Troops weighted 1.5, until none fits.
+  - It draws from its own `mulberry32(seed)`, like the terrain's layout stream, and never from `G.rng`.
+  - It is client code in all but location. It lives in `core/` so that `boundaries.mjs` keeps `Math.random` and `Date` out of it, and so that P-army can hold it to `checkList`. **Changing it needs no bump**, because its output is recorded.
+  - Measured with v6 prices (40 seeds per race): Skirmish 450-500, Field 935-1,000, Grand 1,405-1,500 points. Its lists take the most heroes about 90% of the time, since the hero is the cheapest unit: fine for a Random opponent, and a weight to tune if it reads as odd.
+- **Why the fold never builds a list.** `army: 'auto'` in the setup would make `autoList` rules code: every tweak a bump, every recorded `auto` battle re-recorded.
+- **Hotseat and online humans** get the same Random button. Its seed may come from `Math.random`: it is the UI's choice, and only the resulting list is recorded.
+
+##### 4.2.8.7 Deployment and the autoload
+
+**`deployArmies` is unchanged.** Its rows run over `H − 6` (front, then mid, then back), and `freeSpot` resolves any crowding to the nearest legal cell in the zone. Zone depth is the mission's (8 / 12 / 14); with the unit caps, zone area per unit stays roughly constant across sizes. Measured with lists at the caps and unlimited points (`army/tools/deploycheck.mjs`, no vehicles):
+
+| Size | Board, zone depth | Boards | Units | Placed where `place` refuses | Widest front row | Zone area per unit at the cap |
+|---|---|---|---|---|---|---|
+| Skirmish | 40×28, 8" | 100 | 1,500 | **0** | 6 | 22 sq in |
+| Field | 60×40, 12" | 60 | 1,677 | **0** | 12 | 27 sq in |
+| Grand | 80×56, 14" | 30 | 1,297 | **0** | 19 | 33 sq in |
+
+At Grand a 19-unit front row spaces units 2.6" apart, under the 2.76" the widest squads (r 1.18) need, so `freeSpot` shifts a few by a cell or two; they stay legal. Ranks would look tidier, but they would touch consensus code for looks only, and human seats re-arrange in their deployment anyway (F10a's group Place helps).
+
+**The autoload (F9a), replacing revision 1's `{unit, rides}` entries.**
+- **The rule.** After the rows are placed, each vehicle of a seat, in G.units order, loads that seat's Troops units in G.units order. A unit is eligible if it is still on the table, `t.base ≤ maxBase`, and neither `big` nor a wrecker. Whole units load while their models fit the room left, until none fits. It lives in `core/actions/transport.js` (the one reader of `transport`), and `deployArmies` calls it.
+- **No draw** (rule 19). Lists without a vehicle, every preset among them, deploy exactly as before.
+- **Long hulls** (F9b): placement tests every disc (§4.2.5's `fits`), and `freeSpot` prefers states with room to pivot. The deployment measurement above holds no hull. P-army re-runs it at Field and Grand with random cap lists: at F9a with two War-Carts a side, at F9b with two Howdahs on the Coil side, and at F5b with every race's hulls (§4.2.9).
+- **Human seats re-arrange in their deployment.** `place` takes a rider off; `embark` (which answers `deploy`) boards one.
+
+##### 4.2.8.8 The builder (F11b)
+
+**Where it sits in the flow.**
+1. **The war room (title).** Unchanged, so the thumbnail's 1,200 ms frame doesn't move.
+2. **A mode button opens the battle-setup panel** that F6 introduces: each seat's race in F6's picker, terrain from F7a (the size's sets), and the size from F8b (Skirmish, Field, Grand).
+3. **F11b adds an army line to each seat:** human seat **Army: Classic ▾ · Build…**; AI seat **Army: Preset ▾ / Random**.
+4. **Changing a seat's race resets its army line.** An army list is a digit per roster entry, so its meaning depends on the race: `'112111'` is legal for both first races and means different units in each. A race change therefore sets the seat's `army` back to absent (the preset), or to that race's last list for this mission (`ts.lists.last.<race>.<mission>`), checked as a saved list is. A list string is never carried across races. A Random AI seat rerolls for its new race.
+5. **Start** is enabled once every seat's army is legal. A player who changes nothing presses Start: one extra click over today since F6, with the panel's defaults.
+
+**The Muster screen** (`ui/screens/muster.js`):
+
+```
+┌ Bushtail Clans · Field battle ─────────────────────────────── ✕ ┐
+│ [██████████████████████████████████████░░░] 970 / 1,000 pts       │
+│ 14 units · 56 models      Hero 2 (1-2) · Troops 6 (≥2) · Elite 2 · Fast 2 · Artillery 2 │
+│ [Classic ×2] [Random] [Clear] [Saved ▾]                            │
+│ ─────────────────────────────────────────────────────────────────  │
+│ ★ Elder Chitterwick   Hero       1 model     60   [−] 2 [+]  ← "Hero: 2 of 2" │
+│ ⚔ Oak Guard           Elite      5 models   105   [−] 2 [+]        │
+│ ➶ Nutkin Skirmishers  Troops     6 models    75   [−] 4 [+]        │
+│ ➶ Acorn Grenadiers    Troops     5 models    65   [−] 2 [+]        │
+│ ✈ Glider Wing         Fast       4 models    55   [−] 2 [+]        │
+│ ⛭ Pinecone Trebuchet  Artillery  1 model     50   [−] 2 [+]  ← "Artillery: 2 of 2" │
+│ ─────────────────────────────────────────────────────────────────  │
+│ [Save list…]                                        [Ready ✓]      │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+- **The mock-up** shows the Field preset, classic ×2 (`'224222'`): 970 points, 14 units, 56 models.
+- **The rows.** One per roster entry, in roster order. Each has a small figure thumbnail (F6's template cache), name, role glyph (the chip glyphs of §4.2.7), models, cost, and −/+. Tapping the name opens the unit card (`ui/card.js`: stats, weapons, abilities).
+- **A disabled + always says why**, in its tooltip (a long-press on touch): "Artillery: 2 of 2", "15 over the limit", "70 models at most", "at most 5 of one unit", "no vehicles in a Skirmish". − is disabled at 0.
+- **Vehicle rows** (from F9a) show which Troops the autoload would put aboard, and a tip when a hull would carry fewer rider units than its fire slots ("the Howdah's deck fires 3; 2 units fit aboard"). It is a tip, never a refusal.
+- **The points bar** fills in segments coloured by role, reads `970 / 1,000 pts`, and turns red above the limit. That can only happen after a mission change, a price retune, or loading a list saved under other prices; +/− never take a list over.
+- **Role chips** turn red below a minimum.
+- **Ready ✓** is disabled with the first refusal of §4.2.8.4 as its label ("Take at least 2 Troops").
+- **Presets.** The mission's own preset, plus any smaller preset that is legal here (Classic in a Field battle). **Random** runs `autoList` with a fresh seed. **Clear** keeps only the minimums: the hero and the cheapest Troops.
+- **Phones (360 px portrait).** One column, with the points bar sticky at the top and Ready sticky at the bottom; 44 px buttons and no horizontal scroll (ui-check asserts it); the role chips scroll in one row.
+
+**Per mode.**
+
+| Mode | Who builds | What the other side sees before the battle |
+|---|---|---|
+| vs AI | The human seat | The AI's army line (Preset or Random), its point total and unit count; its units are one tap away (no secrecy against the AI). |
+| Hotseat | Seat 0, then a "Pass to player 2" screen, then seat 1 | Nothing of the other's list (courtesy), only its total and "Ready". Both armies appear on the table at the deployment. |
+| Watch | – | Presets, or Random for both. |
+| Online (N2's lobby) | Each seat on its own device | §4.2.8.9. |
+
+**Saved lists** (per device):
+
+```js
+// localStorage['ts.lists'], every access in try/catch; the page works without it
+{ v: 1, lists: [{ id, name, race, mission, units: { nutkin: 4, … }, at }] }   // at most 50; by unit key, never by digits
+// localStorage['ts.lists.last.<race>.<mission>']: the list the Muster screen opens with
+```
+
+- A saved list is stored by key, so a roster change in an update never misreads it. On load, an unknown key is dropped with a note ("Pinecone Ballista is no longer in the Bushtail roster"); the list is then checked under today's prices, and a list that is now over shows red: "Prices changed: 15 over".
+- **`?armies=<a>,<b>`** (boot) sets both seats' armies, for `sim/`'s browser runs of the `army/` corpus. A bad value gets a line on the title card, as `?races=` does.
+
+##### 4.2.8.9 Online play
+
+N2's lobby exists when F11b lands (online first), so lists ride in it from day one.
+
+```js
+lobby: { …, mission: 'field', terrain: 'open',
+         seats: { s0: { ctrl, dev, name, race, army: '224222', ready, nonce }, s1: { … } } }   // army: a preset name or a list
+```
+
+- **A seat's card** shows its race (F6), then its army state: "Building…", "Ready · 970 pts · 14 units", or "Preset: Field".
+- **Changes un-ready.** Changing your race or your list un-readies you. A race change also clears your lobby record's `army` (the preset), or sets it to your last list for that race and mission, as on the panel (§4.2.8.8): a list's digits mean other units in another race's roster. The host changing the mission un-readies both seats and re-checks both lists; a list over the new limit shows "over by N" on its owner's screen.
+- **An AI seat in an online lobby.** The host picks Preset or Random. Random is computed by the host's client (§4.2.8.6) and written into that seat's lobby record.
+- **The start.** When both seats are Ready, the host's client builds the start's setup from the lobby, each seat's `army` included (N2's step 5).
+- **Rematch** keeps the seats, races and lists. Players may edit before readying again.
+- **Spectators** see both lists from the start entry onward.
+
+**Hidden until both are ready: courtesy sealing (the default, open question 20).**
+- **What the client shows.** Before a start exists, it shows the opponent's race, "Ready" and the point total, **never the list's contents**. The DOM doesn't hold them (an N2 browser check asserts it). The lists appear together when the start is appended, which happens the moment both are Ready.
+- **What the client checks.** `net/seed.verifyStart` checks this client's **whole seat** (N2 builds it so: §3's additions). Every field of its own lobby seat record but `ready` must equal the start's seat as written: `race`, `ctrl`, `dev`, `name`, `nonce` and, from F11b, `army`. A field absent on one side must be absent on the other. A host that swapped a guest's list gets a read-only match, "The start changed your seat (army)". The same holds if the host flipped the guest's `ctrl` to `ai` (the AI would play it on every peer) or swapped its `dev` for the host's own (the host's device would play it).
+- **Why not real secrecy in v1.** The lobby is a public Automerge map, and the host must read both lists to write the start: anyone with devtools can read the doc. That is the same trust level as v1's "friendly" dice (question 1's default: friends). Real sealing needs immutable commitments, which a last-writer-wins lobby field is not, and both players online for the reveal.
+
+**Sealed lists for strangers** (documented, not built; with N4):
+1. **Seal.** On Ready, a seat appends a pre-start entry `seal {c}` with `c = hex(sha256(army ‖ ':' ‖ salt ‖ ':' ‖ documentId))`. The `salt` is 16 random bytes kept locally, like `a`. The Folder records the first `seal` per seat while in `lobby`, the way it records `open`: a new Folder kind, its `decode` entry, and a merge-sim scenario.
+2. **Reveal.** Once both seals are in the log, each client writes `army` and `salt` into its lobby seat.
+3. **Verify.** The start carries each seat's `army` and `salt`. `verifyStart` checks every seat's seal and makes the match read-only on a mismatch ("sealed list check failed").
+4. **The cost.** About 100 lines in `net/` and `match/`, plus both players online between seal and reveal, so an asynchronous lobby stalls. Take it with N4's signed entries if open question 1 becomes "strangers".
+
+**Netplay and consensus.**
+- **No new command kind, and no change to `match/`.** The setup is an object in `start` (`envelope.js`: `setup: 'object'`), and lists are strings inside it.
+- **The seat whitelist.** F8a builds `SEAT_KEYS`; F11a adds `army` with its bump.
+- **`RULES_ID` hashes `cost`, `roster`, `armies` and each mission's `list`.** A peer whose prices or rosters differ opens the match as `skew` (read-only), never as a desync.
+- **No new draws, and nothing new in `stateHash`.** The lists decide only which units `newState` makes (rule 23).
+
+**Cost.** AI battles on the prototype took 54 ms at Skirmish (classic 56 ms) and 195 ms at Field. Grand was re-measured under the final list rules in one process (`rev3/grand-caps.mjs`). It ran 16 stand-in boards before S0-S3, with presets and cap lists interleaved on the same boards:
+- **Presets:** the ×3 presets (21 units a side) took 447 ms a battle (mean CPU; p50 454 ms).
+- **Cap lists:** Bushtails 23 units and 89 models, the Coil 24 and 84. They took 478 ms (p50 486 ms).
+- **The ratio** is 1.07 over the run (per board 0.77-1.33, mean 1.10). That is far below the (24/21)² ≈ 1.31 a units × enemies model predicts.
+- **Caveat:** the machine was busy with other work (load ≈ 13 on 4 cores), so the absolute figures run high against §4.2.1's quiet-machine 316-435 ms. The ratio is the finding, and scale-bench re-measures on a quiet machine from S0 on (§4.2.1).
+
+Revision 2 cited 431-446 ms here; that was an early run with one hero per army.
+
+#### 4.2.9 Checks, gates and corpora
+
+R8b built the re-entry check (merge-sim's `reenter` scenario and its no-guard mutant), the reserved-names lint, `sim/fold-cost.mjs` and the `stateHash` pin; the rows below are what the large battles add.
+
+| Check | Asserts | Lands |
+|---|---|---|
+| P-scan | Bounded `bestSpot`, the fall-back scan and `freeSpot` equal a reference full scan kept in `sim/`, on 1,000 random states (classic, and Grand: the fixture below until F8b, then the `grand` mission). | S0 |
+| P-los | Broadphase `los` equals the full scan as `{blocked, obscure}` over terrain-check's segments, off-board endpoints included, on board seeds 1-500 after random blasts. | S0b |
+| P-memo | Inside random applies, a memoised `movePlan` deep-equals a fresh one (`dist`, `prev`, both masks, `fallback`). Folds with previews interleaved between entries trace and hash as folds without them. An `apply` made to throw leaves `G.nav.memo` null. (F9b) The key includes facing; a hit equals a fresh hull plan. | S3, F9b |
+| scale-bench | §4.2.1's core rows on classic and on Grand (the fixture below until F8b, then the `grand` mission): `open` and (from F7a) `fortified`, each with the ×3 presets and with **cap lists** (from F9a/F9b two hulls a side); (from F9b) the long-hull rows. A report; it fails above 1.5× budget, and its cap-list rows decide the AI count budget (§4.2.2). | S0, then every step |
+| P-mission | `fullSetup` refuses an unknown mission, unknown top-level and seat keys, a set the mission doesn't list. Every mission's objectives are point-symmetric, inside the board and outside both zones. (F11a) Every refusal of §4.2.8.4, each with its message, in seat-major order; `checkMission` accepts a slot maximum of 10 and a `[0, 0]` slot, and refuses a `perKind` of 10, a slot with `min > max` or `max > units`, and minimums summing past `units`. | F8a, F11a |
+| data-check | Classic's board and depth equal `BOARD`. The capacity check (§4.2.1). R8b's reserved-names lint covers F4's `opt` and `bools` and F9b's `f`. Every climber's r ≤ `CLIMB_R` (others listed, F5a's units included). (F9) `deckSlots(…, 0.8) ≥ capacity` for every transport; (F9b) the footprint rules of §4.2.5, each disc's pivot gap ≤ 0.06" among them, and the tables' exact point symmetry. (F11a) Every unit has `cost`, a whole multiple of 5; every race has a `roster` listing each unit once and starting with its pinned prefix; `army` is in roster order; every preset is a valid count string and legal for the mission whose `army` names it; every mission as shipped passes `checkMission` (its `list` included); every race can field a legal list at every mission; `RULES_ID` moves when a `cost`, the roster's order, a preset or a mission's `list` changes, and not on a rename; every list in the `army/` corpus is legal under today's prices and costs ≤ 90% of its limit. | F8a, F7a, F9a, F9b, F11a; F5a, F8b and F5b extend it |
+| flag-lint | (F11a) In `core/`, `cost`, `roster`, `armies`, a mission's `list` and `race.army` are read only by `core/army.js`, and `pts` only by `core/ai/score.js` and `core/rules.js` (`expected`). (F9) The flag table of §4.2.5. | F9a, F9b, F11a |
+| boundaries | (F11a) `core/army.js` is on the present/view/input/ui/app surfaces, and imports nothing that draws. (F9b) `core/footprint.js`'s helpers on `queries.js`'s door. | F11a, F9b |
+| camera-check | Classic poses unchanged; `fitPose` with a mission rectangle fits all four corners; each preset's `max` reaches the overview. | F1/F2, F8a |
+| snap-check, rematch-memory | A snap classic → Grand → classic rebuilds the table. renderer.info stays flat over 5 rematches across missions, and no shader program is linked twice. | F8a, F8b |
+| render-bench (Chromium) | §4.2.1's drawing rows on classic and Grand; it fails above 1.25×. | F8b |
+| playback-check | **In Node**, over event streams through `present/pace.js`'s batch rule: (a) today's and (c) batched playback seconds per phase, on the corpus and on Grand (the fixture below until F8b, then `scale/`). It fails if a Grand movement phase exceeds 8 s. **In Chromium**, on the corpus: the player applies the mirror in event order, so the batcher reorders nothing; a catch-up run in N2's rig plays a backlog batched and still snaps above 30 s. | V1, F8b |
+| P-height | Classic and `open` boards build no height array, and `groundY` is 0. On fortified boards no unit ends straddling a ledge (`cliff ≥ r − 0.06`), no non-climber ever takes a link, and no **ground** vehicle stands on a floor above STEP. `sight` from a deck cell equals `sight` with the unit standing there. | F7a; F5b refines the vehicle rule |
+| **P-climb** (terrain-check, fortified, every mission, seeds 1-500) | The expected matrix below. Also: every deck top hosts an r `CLIMB_R` disc; every recipe chunk and gate lies inside its footprint r; floor and links are exactly point-symmetric (cell i ↔ N−1−i) and cliff within 1e-4; the works stand on ≥ 95% of boards. (F5b) A flying hull lands on every deck top. | F7a, F5b |
+| **connectivity** (terrain-check, every set a mission offers, seeds 1-500) | A round hull disc (r 1.5, ground only) crosses zone to zone; an r 1.18 squad crosses too, and controls every objective (a reachable standable cell within `OBJECTIVE_RANGE + r` at its level). (F9b, F5b) A row per footprint: the hull on its lattice crosses zone to zone on every set a mission with a `Vehicle` slot offers (prototype: 300/300 on Field and Grand, open and fortified). | F8b, F9a, F9b, F5b |
+| P-level | `levelDist` equals a reference Dijkstra over the gate graph, for climbers and non-climbers, on 1,000 random point pairs per fortified board. | F7a |
+| P-auto | `pilot` over every unit, then `end`, equals `auto`: the same trace, `rngState` and `stateHash` at every phase's end, for every corpus seed (from F8b, 4 Grand ones too). | F10b, F8b |
+| P-pilot | `pilot` never moves, shoots or charges with a unit outside its mask. Masks with stray bits or dead units, with nobody able to act, or (F9a) with a rider but not its hull in the movement phase, are refused. | F10b, F9a |
+| P-macro (Node, over a Session) | Random one-shot and standing group orders on random states send only legal commands, never throw, and finish within budget. Previewed cells, with `at` holding later members where they stand, equal the cells moved to (no advance, no wrecker); (F9b) and their headings. A ground click with a group selected sends nothing until the commit. Autopilot-first and auto-End answer only from `settled`. | F10a, F10c, F9b |
+| input-check (Chromium) | A box selects exactly the seat's units whose projected centres lie inside it. Shift-click toggles. Tab visits each ready unit once. In touch Select mode one finger boxes and two fingers orbit. The fallback picks a far unit within 24 px. A ground click with a group pins and sends nothing; the flag commits; Esc cancels; a single round unit's ground click still moves it at once. (F9b) A single long hull's ground click pins and sends nothing; the ghost's rotate handle and **[** / **]** visit only valid headings; Enter or the flag commits; a double-click on the ground commits the default heading; left-drag still orbits. | F10a, F9b |
+| hud-check | The group bar shows with ≥ 2 selected, its verbs enabled per phase. End's ⟳ badge equals the units the executor will act for. `end.ready` ignores ordered units and riders. Go shows only with something to do. | F10a, F10c |
+| P-riders | §4.2.5's invariants after every entry. Riders are never targeted, engaged, holding objectives, lending auras or counted in the AI's friend terms. Every hull death bails its riders out in G.units order, onto landing cells clear of units and outside enemies' 1"; (F9b) within 3" of any of a long hull's discs. The autoload boards only eligible Troops, in G.units order, within capacity. | F9a, F9b |
+| **P-lattice** | Inside random applies, `hullReach` (memoised, touched reset) equals a reference plain lattice kept in `sim/`: `dist` and `prev` on every state, with random forbid masks and after random blasts (memo cleared). The body disc's `nav.reach` is ≤ the lattice's best heading on every cell (the lower bound). Prototype: 0 of 1,896 plan pairs differ; the lower bound held on 7,224 start-plans. | F9b |
+| **P-hull** | After every entry of every hull game: `facing` ∈ 0-7; the body on a cell centre; every disc standing (clearance and height); no disc of any unit within spacing of another unit's discs; riders at the hull's `pos`. `legal()` refuses `f` on a round unit, `f` outside 0-7, and an `f` whose state isn't a valid end. | F9b |
+| P-present | `y`, `aboard` and (F9b) `f` in the mirror equal `project(G)`. Its self-test drops `unit.embark`, a rider's carry and a pivot's `f`, and catches each. | F7a, F9a, F9b |
+| P-prop (additions) | At every command boundary: nav clean, `terrain.dropped` empty, `G.nav.memo` null. A classic match's `shadowState` strings are unchanged across F9a, F9b and F11a. | F7c, F9a, F9b, F11a |
+| **P-army** (`sim/property.mjs`) | 100,000 fuzzed `army` values (numbers, arrays, objects, letters, unicode, leading and trailing zeros, over-long, `__proto__`) are refused with an `Error` and never crash anything else; every accepted list round-trips (`listText(armyOf(…).counts)`); `autoList` over seeds 1-1,000 × races × missions is always legal; the number of units equals the digit sum, in roster order; 50 random legal lists per mission play to the end under `strict`, with P-prop's invariants at every boundary. **Hull deployment** at Field and Grand, with random cap lists: every unit, riders included, placed where `place` would accept it. (F9a) Two War-Carts a side (Bushtail mirrors, and Bushtails against the Coil). (F9b) Two Howdahs on the Coil side as well. (F5b) Every race's hulls. | F11a, F9a, F9b, F5b |
+| **army-sim** (`sim/army-sim.mjs`) | `--check`: the score gates and the per-unit gate of §4.2.8.2, for every race pair on every set the mission offers. `--fit`: the fitted price table (a report). `--jobs N`. | F11a, F5a, F7a, F7b, F7c, F8b, F9a, F9b, F5b, every price change |
+| merge-sim | Bursts of 25 macro entries from one seat with concurrent junk; `pilot` in every phase; `embark` in the deployment from both seats at once (they commute); (F11a) starts carrying two lists; (F9b) `move`, `place` and `chargeEnd` with and without `f`, junk `f` (8, −1, 2.5, on a round unit) refused alike on every peer; the new corpora's human logs. (Concurrent lobby edits are N2's lobby rig's and `sim/peers.mjs`'s: merge-sim folds entry lists, and the lobby is an Automerge map.) | F10b, F9a, F11a, F9b |
+| P-peers | Re-run over the `pilot/` logs (F10b), and over a Grand log with macro bursts and `pilot` (F8b); N1 measured a synthetic 465-entry log's document bytes (est. 50-100 KB), F8b measures a real one. | F10b, F8b |
+| ui-check (Chromium) | On the Muster screen: + is disabled at each cap with its reason; Ready is disabled with the first refusal; Random is always legal; a saved list round-trips; a list over the limit after a mission change shows red. On the battle-setup panel, a race change resets that seat's army line (to the preset, or the race's last list). A 360 px viewport has no horizontal scroll. The hotseat pass screen hides seat 0's list. | F11b |
+| N2's lobby rig (Playwright, two contexts) | (N2) A host-altered guest seat fails `verifyStart` with a read-only match: its `ctrl` flipped to `ai`, its `dev` swapped for the host's, its race or name changed. A name over the cap (48 encoded bytes) or with control characters can't be entered. Concurrent edits of both seats before the start settle to one lobby on both tabs (also in `sim/peers.mjs`). (F11b) The opponent's list is not in the DOM before the start. A host-altered guest list fails `verifyStart`. A list change un-readies. A race change clears the lobby record's `army`. | N2, F11b |
+| **play-report** (`sim/play-report.mjs`) | Whether the new mechanics actually get played, over the step's AI corpus. A step whose report misses a threshold is not done: tune its AI terms or data, then re-record. Thresholds below. | F7a, F7b, F9a, F9b, F9c, F10b, F10c |
+| **The Chromium harnesses' start** | From F6, every harness that starts a battle from the title presses the mode button, then the battle-setup panel's Start, with the panel's defaults set from the URL (`?races=`; from F7a `?terrain=`, F8b `?mission=`, F11b `?armies=`). Self-test's mutant-title row covers both clicks. | F6 |
+
+**P-climb's expected matrix** (prototype: 100% on seeds 1-200 per mission, `f7proto/pclimb.mjs`):
+
+| Piece | Squads (climbers, r ≤ 1.18) and heroes | Big walkers (Trebuchet 1.05, Brute 0.95) | Fliers (the Sky-Basket included, F5b) | Ground hulls |
+|---|---|---|---|---|
+| rampart, bastion, keep | stairs and ladder | stairs | land on the top | never |
+| watchtower, platform | ladders | never | land on the top | never |
+
+**play-report thresholds.**
+
+| Step | Over | Threshold |
+|---|---|---|
+| F7a | `fort/` AI pairs | In ≥ 50% of battles some unit stands on a deck by the end of round 3. Where the keep stands, its objective is held from the top in ≥ 1 battle of 6. |
+| F7b | `fort/` | A shooter fires from a deck in ≥ 50% of battles. |
+| F9a | `vehicle/` AI pairs | Riders disembark in ≥ 50% of battles. |
+| F9b | `hull/` | Howdahs move in ≥ 90% of their movement phases; ≥ 90% of long-hull moves end where the hull can pivot at least one way; riders disembark from a long hull in ≥ 50% of battles. |
+| F9c | `vehicle/` and `hull/`, each shape | A firing deck fires in ≥ 50% of battles. |
+| F10b | 4 Grand battles with one army on `pilot` every phase (at F8b) | That army reaches melee by round 3 in ≥ 3 of 4. |
+| F10c | P-macro's March scenarios (one with a long hull, from F9b) | A march to a reachable slot within 3 turns' reach arrives in ≥ 80%. |
+
+**The Grand fixture** (`sim/fixtures/grand.mjs`; S0 to F8b). S0-S3, V1 and the scale-bench rows land before the core has a Grand board (F8a gives it `G.board`, F8b the `grand` mission and the `open` set). Their Grand checks run on a fixture built the way the prototypes built theirs (`sp/patch.mjs`, `army/grand/`), made a tool:
+- **What it builds.** `node sim/fixtures/grand.mjs [--caps] [--fortified]` copies the working tree's `core/`, `data/` and `match/` into `sim/.fixtures/grand/` (gitignored), fresh on every run, and applies text patches:
+  - **the board:** 80×56 with deploy 14, 7 rounds, and the `grand` mission's nine objectives. Before F8a it patches `BOARD`; from F8a it patches `MISSIONS.classic`'s `board`, `deploy`, `rounds` and `objectives`, a port F8a makes as a step ports the checks that read what it changes;
+  - **the terrain:** the classic set at area-scaled density (pairs [24, 12], attempts ×4); with `--fortified` (from F7a), the `fortified` set;
+  - **the armies:** before F11a, each race's `army` becomes its ×3 list, or with `--caps` its cap list (the Bushtails' 23 units and 89 models, the Coil's 24 units and 84 models). From F11a that patch goes and the fixture's setups name the lists in `army`.
+- **Fails loudly.** Each patch is an exact substitution that must match exactly once. Otherwise the fixture refuses to build and names the anchor, so a refactor of a patched line fails the check instead of silently measuring classic.
+- **Kept out of the lint.** `boundaries.mjs`, flag-lint, hooks-inert and data-check skip `sim/.fixtures/`.
+- **Retired at F8b.** scale-bench, P-scan and playback-check switch to the `grand` mission (`open` and `fortified`, presets and cap lists in the setup), and the fixture is deleted.
+
+**New corpora.** Each is recorded once, in its own commit after the code commit, then frozen. They are admitted where Node and Chromium agree, which is automatic after N0.
+
+| Corpus | Content | Step |
+|---|---|---|
+| `pilot/` | 4 human-bot logs on classic mixing manual commands and random `pilot` masks; 2 Grand ones added at F8b. | F10b |
+| `army/` | 4 Skirmish AI pairs with built lists (both seat orders) and 2 human-bot hotseat logs. Every list, the bot's included, is built by `autoList(race, { ...rules, points: Math.floor(0.9 * rules.points) }, seed)` on a fixed seed, so it costs at most 90% of its limit (450 at Skirmish) and a price retune of up to 10% keeps it legal; data-check asserts it. F8b adds 2 Field and 2 Grand pairs, built the same way. | F11a |
+| `fort/` | 6 AI pairs on the Skirmish fortified board (works, the keep on half), plus 2 human logs (climbing a ladder, a deck fight). Re-recorded at F7b and F7c (a platform shot out). | F7a |
+| `scale/` | 4 Field and 4 Grand AI pairs (half `open`, half `fortified`), plus 2 human-bot logs (the bot's deploy depth reads the mission). | F8b |
+| `vehicle/` | 6 AI pairs with War-Carts (against serpents, and Bushtail mirrors), plus 4 human logs (embark, disembark, a forced bail-out with deaths, the autoload re-arranged in the deployment). Re-recorded at F9c (deck fire); extended at F9d. | F9a |
+| `hull/` | 4 AI pairs (Field and Grand, half fortified) with Howdahs, plus 2 human logs: a pivot in a tight lane with an explicit `f`, a reverse, a Howdah charge ending with `f`, and a bail-out from a long hull. Re-recorded at F9c; extended at F5b with the Beetle and the Sky-Basket. | F9b |
+
+**The 40 classic battles stay byte-identical through every step**: their setups name no army, and no unit in them has a footprint or rides. A bump re-records only the corpora whose battles change.
+
+#### 4.2.10 What R8 had to allow, and what N2 must
+
+R8b (its row in §4 and the §2.6 notes) builds every item but 8, which it defers to F8a/F11a. What each item asks, and where it stands:
+
+1. **Single-flight Session** (a defect, reproduced with `sp/reenter2.mjs`). *Built (R8b).*
+   - **The defect:** `Folder.sync` looped over its own snapshot of the entries. A sink that submitted from inside `sink.events` during a multi-entry sync re-entered it, and the outer loop re-pushed entries the inner sync had already pushed: the live peer recorded "envelope: an id seen before" that a fresh fold didn't, and its `pushed` ran one longer than the store.
+   - **As built:** the Session folds a change whole before it writes anything. A `submit` from any sink callback (`events`, `reset`, `status`, `settled`, `dropped`) or the match's `onTrace` is queued as its body; once the change is folded, the queue drains one body at a time, each held to `legal()` again on the match as it then stands and either written (its envelope, `p` and `h` built then) or dropped with `sink.dropped(seat, body, why, session)`. `Folder.sync` and `Folder.push` throw if re-entered. merge-sim's `reenter` scenario and the no-guard mutant check it.
+2. **Kinds and fields.** *Built (R8b).* `KINDS` stays derived from `RULES`, and `decode` accepts any safe-integer or boolean field on a known kind, none required, no arrays; `legal()` is the only judge of a body. The new kinds `pilot`, `embark` and `disembark`, and F9b's optional `f`, arrive with their bumps and no change to `match/`.
+3. **Reserved names.** *Built (R8b).* A data-check lint: no `RULES[k]` field in `fields`, `opt` or `bools` is in `ENVELOPE_KEYS` (`id`, `s`, `d`, `p`, `h`) or is `t`.
+4. **`h` by decision kind.** *Kept (R8b).* The `h` rule and the per-seat heads stay keyed on the pending decision's kind (`P.k`), never on the command's. A kind that answers two decisions (`embark`: `phase` and `deploy`) carries `h` only in the phase. A simultaneous decision's heads accept any kind `legal()` takes for that decision. A command answering `deploy` touches only its own seat's units, so it commutes.
+5. **Sizes.** *Built (R8b).* `MAX_BYTES` is one constant ≥ 1,024 (the largest new entry is 125 B). `MAX_ENTRIES` stays 5,000 with junk counted. No per-kind caps. The entry count is exposed (`folder.count`, `session.count`, a report's `count`) for F4's offer cap and the HUD. A manual 7-round Grand hotseat is about 465 entries; macro bursts are up to about 25 entries from one seat.
+6. **Per-entry cost.** *Built (R8b).* Folder work per entry is `stateHash` + `legal` + `apply` and O(1) besides, with one pass of identity compares per change. The store exposes its `length`; the Session numbers ids from a counter; the refold sits behind `Folder.refoldFrom()` (S6's seam); `sim/fold-cost.mjs` holds the work per entry flat over a 5,000-entry log (apart from the one identity scan per change). N1's AutomergeStore must return the identical decoded object for an unchanged element, as LocalStore does (N1 runs fold-cost against it).
+7. **`stateHash` extensible and versioned.** *Built (R8b).* A unit field a feature adds is named in `UNIT_EXTRAS` with its default and printed only off it (`aboard` only when non-zero; F9b's `f` only for footprint units). Any change to `shadowState`'s output for some state bumps `CORE_VERSION`; data-check pins today's hashes of a few corpus states under `CORE_VERSION` 1. Derived caches (the nav and height arrays, the LOS bins, the plan memo, the hull memo) and `G.board` stay out.
+8. **The setup, whole and whitelisted.** *Deferred by R8b to F8a; F11a extends it.*
+   - The Folder passes the setup whole to `createMatch` (R8 does), which receives `setup.mission` and each seat's `army`.
+   - `fullSetup` refuses unknown top-level keys and unknown seat keys against **one exported constant each**, `SETUP_KEYS` (`board`, `dice`, `terrain`, `rounds`, `overtime`, `diceMode`, `seats`, `mission`) and `SEAT_KEYS` (`race`, `ctrl`, `dev`, `name`, `nonce`; F11a adds `army` with its bump).
+   - `start` stays ≤ 640 B, as measured (§4.2.1): an online-style start is 461 B today (not revision 1's "229 B"), 513 B at Grand with two digit lists, and 613 B in the worst case, with names at N2's cap of 48 encoded bytes.
+   - Online first means N2 writes its first starts before the whitelist exists. That is safe: N2's lobby writes only today's keys, and F8a's bump makes any older match read-only (open question 4).
+9. **No new out-of-band kinds.** *Built (R8b):* `concede` and `desync` only, asserted. Orders never travel outside the seat's own decision.
+10. **The sink.** *Built (R8b).* Events per entry stay uncapped: an `end` after a `pilot` can carry hundreds. Playback batching is presentation, not an envelope field. A sink may read `session.G` and `preview`. `sink.settled(session)` is where F10's autopilot-first and auto-End answer a decision.
+
+**N2 must allow** (the builder's corrections, now N2's since N2 lands first):
+- a display name normalised (NFC; control characters and lone surrogates removed) and capped at **24 characters and 48 bytes of canonical JSON**, and a nonce of exactly **16 hex characters** (the start's byte budget);
+- `net/seed.verifyStart` comparing this client's **whole seat record**, not only its nonce. That means every field of its lobby seat record but `ready` (`race`, `ctrl`, `dev`, `name`, `nonce`, and from F11b `army`), as written, absent equal to absent;
+- a lobby seat record that can take `army` (F11b) and a lobby that can take `mission` (F8a) without a schema change (both are plain fields of a last-writer-wins map);
+- presence messages that later steps extend with new keys (`sels`, `ords`) rather than by changing what an existing key means.
+
+F9b adds nothing to the list: `f` is an optional integer field (item 2), and entries stay ≤ 1 kB.
+
 ---
 
 ## 5. Explicit non-goals (v1)
@@ -1576,7 +3221,29 @@ Each rule gets a comment at its new site. The parity gates (P-ai, P-human and P-
 - No overtime in watch mode. No "share this local game online" upgrade (`fromLocal`). No seat handoff mid-match.
 - No keyword-hook or registry framework, and no ability DSL. No structured log messages: the trace hashes the HTML text.
 - No multi-level navigation (bridges, walking under decks). No vertical engagement beyond `|Δy| ≤ 1.2"`.
-- No TypeScript, ECS or framework (JSDoc typedefs only). No `InstancedMesh` figures until `renderer.info` shows insect swarms need them.
+- **Large battles** (§4.2):
+  - **No standing orders in match state in v1.** Orders live in the client's book; the core's only order is `pilot`. The core-orders design is documented as the fallback (§4.2.6).
+  - **Vehicles** (replaces revision 1's "no vehicle decks as terrain … no hull facing"):
+    - no vehicle decks as terrain, no riders on the table as discs, and no moving terrain;
+    - facing exists only for footprints: no firing arcs; no front, side or rear armour or saves; no 16 or continuous headings; no string-pulled long-hull paths;
+    - ground vehicles never stand on stairs or decks (flying hulls may land on decks: F5b, open question 24);
+    - no flying long hulls and no burrowing hulls in v1 (open question 25);
+    - no race-shaped siege towers in v1: every race's tower is round (open question 26).
+  - **Height:**
+    - no to-hit or save bonus;
+    - no climbing a wall without stairs, ladders, a siege tower or (open question 24) a flying hull;
+    - no multi-level navigation (kept): one floor per cell.
+    - Units stand on decks as discs: no lining a wall model by model in v1.
+  - **Boards:** none above 80×56, and no coarse or hierarchical nav grid.
+  - **Armies and missions** (replaces "no points-based army builder"):
+    - no per-model options or wargear: a unit is bought whole (open question 21);
+    - no allies: one race per army;
+    - no secret lists beyond courtesy sealing until N4 (open question 20);
+    - no in-fold list building: a list reaches the fold only through the start;
+    - no asymmetric (siege) mission.
+  - **AI budgets:** no AI time budget (kept). A deterministic count budget (`mission.ai`) is held in reserve, as a rules change.
+  - **Undo:** no undo of group orders in v1 (open question 18); groups pin before they move.
+- No TypeScript, ECS or framework (JSDoc typedefs only). (Large battles) No `InstancedMesh` figures until `render-bench` misses its budget after terrain tiles and LOD.
 - No CI change. `npm run verify` stays the only CI step, and the `sim/` suites run by hand.
 - No rules or AI rebalancing before R8 is green.
 
@@ -1596,3 +3263,37 @@ Each of these changes the design. The default in brackets is what gets built if 
 3. **May `dist/` grow by the 3.64 MB Automerge wasm (about 1.1 MB compressed in git) each time Automerge is upgraded?** [yes] The alternative is loading the wasm from a CDN, which breaks the repo's no-external-requests preference.
 4. **Is it acceptable that a deploy which changes the rules makes in-progress online matches read-only?** [yes] The alternative is versioned deploy paths, for example `dist/tails-and-scales/v3/`, so old matches keep their old code. That is a build and gallery change.
 5. **Insect burrowing: always visible?** [visible] True hidden movement would need per-player secrets and commitments, which a shared public document can't hold.
+
+### Large battles (§4.2): questions 6-27
+
+**Answered with a choice.**
+
+6. **Online play first.** N1-N3 come before the large-battle work, which slots in after N3: S0-S3, F10, V1, F8, F11, F7 and F9 (§4). Race selection (F6) stays where it was, right after N3.
+7. **Skirmish 40×28, Field 60×40 and Grand 80×56, with a points-based army builder**: 500, 1,000 and 1,500 points, 5, 6 and 7 rounds. The fixed lists ×1, ×2 and ×3 are presets (§4.2.8).
+14. **Each race's vehicle has its own shape.** The Bushtail War-Cart is round; the Coil's Shell-Back Howdah is long (three segments, slow to turn); the planned insectoids get an armoured Brood Beetle and the bird-people a flying Sky-Basket. At most two a side in Field and Grand, none in Skirmish (§4.2.5). The question was about these transports, and the answer is applied to them; siege towers are question 26.
+17. **Left-drag orbits**, Shift-drag box-selects, and touch has a Select mode. A long hull's facing is set with a rotate handle or **[** / **]**, never by left-drag.
+
+**The defaults, and three later answers** (the default in brackets is what gets built).
+
+Questions 20, 26 and 27 were answered by the user on 2026-10-22 (marked below); for every other question here the user took the default, which is what gets built.
+
+8. **Where do standing orders live?** On your device, or in the match itself? [On your device; the in-match design is documented as the fallback.]
+   - **On your device:** client macros you can improve freely. They act only while you play, and the opponent sees them as badges.
+   - **In the match:** they follow you across devices and act while you're away, but every behaviour tweak resets the saved test battles.
+9. **When do standing orders act?** When you press End (or Go), after what you played by hand, or as soon as your phase opens? [At End and Go; "autopilot first" is a local setting, off by default.]
+10. **What happens when an order is done?** A march that arrives holds; an attack whose target dies switches to autopilot; a march blocked for two turns stops and waits for you. [Yes.]
+11. **Hands-free turns.** When only ordered units can act, may the game press End for you, with a 1.5 s countdown you can tap to cancel? [Yes, as a setting, off by default.]
+12. **Climbing and high ground.** Stairs for everyone but ground vehicles; ladders for infantry only; walls are taken by those or by siege towers (and, if question 24 stands, by a flying hull landing on them). High ground helps through sight, parapet cover and the climb, with no to-hit bonus. A squad stands on a deck as a group, so fortifications are wide walks (4.5" and more), not one-model-thick walls. [Yes; no bonus and no lining walls in v1.] Lining a wall model by model would change how every unit stands and moves, so it would be its own later step.
+13. **Your own works.** On a fortified board, each side starts with its own rampart along the front of its deployment zone, and every other fortification is shared no-man's land. Do you want that, more works each, or none? [One rampart each.]
+15. **Batched animation.** Units ordered together, and the AI's units, walk at the same time, with their advance dice in one row. Keep one-at-a-time as an option? [Batched on every board, with "one at a time" in the settings.]
+16. **Grand battles on phones?** [All sizes offered; Grand with a "best on a larger screen" note. The Muster screen and the hull's rotate handle are built for a 360 px phone.]
+18. **Undo for group orders.** A group move pins a ghost formation and needs a second click, so a stray click can't send it. Do you also want "undo the last group move" in local games (hotseat and against the AI, when no dice were rolled)? [Not in v1.] It needs no change to the match layer: the game would refold the log without the last burst. Online, an undo would need the opponent's consent.
+19. **Siege mission.** One side holds a fortress, with asymmetric deployment zones. [Later, after F9d's siege towers.]
+20. **Hidden lists.** Your list is hidden from your opponent until the battle starts, by courtesy: the game never shows it, but a determined player with devtools could read it. Do you want true sealed lists (a cryptographic commit and reveal, both players online at the reveal)? [Courtesy only; sealed lists come with signed commands (N4) if you play strangers.] Answered (the user, 2026-10-22): **courtesy hiding**; sealed lists come with signed commands (N4).
+21. **Unit sizes.** Units are bought whole at their fixed size (a Nutkin squad is always 6). Do you want variable squad sizes (buy 4-10 models, priced per model)? [Fixed in v1.] Variable sizes would change formations, the AI's appraisal and every price.
+22. **Heroes.** Each race has one hero type, so a Field army may field two Elder Chitterwicks and a Grand army three. Keep that, or make named heroes unique (one per army) and add a second, generic hero type per race later? [Allowed; a `unique` flag comes with the first race that has two hero types.]
+23. **How long hulls turn.** A long hull pivots only where it has room to swing. Should a pivot also cost inches? [**0.25" per 45° for the Howdah** (1" for an about-face; its reach over a 6" move shrinks about 20% against free pivots), **free for the Beetle**.] Free pivots for all are simpler to explain; a larger cost (0.5") shrinks the Howdah's 6" reach by about 40%.
+24. **Sky-Basket landings.** Should the bird-people's Sky-Basket land on rampart and keep tops and unload its riders there? [**Yes**: their identity is "they come from above". Otherwise it lands only on the ground.] It adds "or a flying hull" to question 12's "walls are taken by stairs, ladders or siege towers".
+25. **The insectoid vehicle.** An armoured Brood Beetle (ground, enclosed, pivots freely), or a burrowing Sapper Grub? [**The Beetle** in F5b; the Grub later, after F5a's burrowing, if wanted.]
+26. **Siege towers' shape.** Each race gets a siege tower in F9d, the last step. Should they all be round (each in its race's look), or should each race's tower sit on its own chassis? A shaped tower would put the Coil's on the Howdah's long footprint, with a drawbridge reaching 1" ahead of its head disc. [**Round for every race in v1.** A shaped tower's bridge needs a facing, so the AI would have to pick a heading that faces the wall. Everywhere else it picks only cells, so this would be a new consensus AI rule on top of the new bridge rule. Shaped towers can follow if round ones play well.] Answered (the user, 2026-10-22): **round for every race in v1**, each in its race's look; race-shaped towers may follow.
+27. **When do the new races arrive?** This plan brings the insectoids and bird-people after the army builder's first step (F5a after F11a), and their vehicles after the firing decks (F5b after F9c). That way the builder is priced for two races first, and each new race arrives with prices fitted against the others. [**After F11a**, seven steps later than "right after race selection".] The alternative brings the races right after race selection (F6), which gets you them sooner. But F11a would then have to price four races at once, which nothing has prototyped. Answered (the user, 2026-10-22): **after F11a**, as planned (F5a after F11a, F5b after F9c).
