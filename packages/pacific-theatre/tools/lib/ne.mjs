@@ -438,9 +438,16 @@ export function mergeAtMeridian(items, X = 180) {
   return { items: [...out, ...grouped], merged: touching.length - grouped.length }
 }
 
-/** Join lines whose ends meet on the meridian x = X (Natural Earth's coastline splits). items: [{ pts, id }]; ids joined with '+'. */
-export function joinAtMeridian(items, X = 180) {
-  const onX = (p) => Math.abs(p[0] - X) < SEAM_EPS
+/**
+ * Join lines whose ends meet on the meridian x = X (Natural Earth's coastline
+ * splits). Its halves do not meet exactly (an end at 179.99998939° against
+ * one at 180°, latitudes up to 0.0014° apart at Taveuni), so an end within
+ * xTol of the meridian joins the nearest other end there within yTol, the
+ * small gap closed by a straight leg. items: [{ pts, id }]; ids joined with '+'.
+ */
+export function joinAtMeridian(items, X = 180, { xTol = 1e-4, yTol = 0.005 } = {}) {
+  const onX = (p) => Math.abs(p[0] - X) < xTol
+  const SEAM_EPS = yTol
   const pool = items.map((it) => ({ pts: it.pts.map((p) => (onX(p) ? [X, p[1]] : p)), id: it.id }))
   let joined = 0
   for (let changed = true; changed; ) {

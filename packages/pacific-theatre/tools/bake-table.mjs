@@ -126,8 +126,29 @@ async function nePolygons(dir, envelope) {
     }
     const m = ne.mergeAtMeridian(items)
     items = m.items
+    // most minor islands are in the land layer too: keep one copy, the minor
+    // island's (kind island), and take it out of the land layer
+    let dup = 0
+    if (kind === 'island' && out.land) {
+      const sig = (it) => {
+        const r = it.rings[0]
+        let x0 = Infinity
+        let y0 = Infinity
+        for (const [x, y] of r) {
+          x0 = Math.min(x0, x)
+          y0 = Math.min(y0, y)
+        }
+        return `${r.length - 1}:${x0.toFixed(6)}:${y0.toFixed(6)}:${ne.ringArea(r).toExponential(6)}`
+      }
+      const islands = new Set(items.map(sig))
+      const before = out.land.length
+      out.land = out.land.filter((it) => !islands.has(sig(it)))
+      dup = before - out.land.length
+      stats.land.polygons = out.land.length
+      stats.land.vertices = out.land.reduce((a, it) => a + it.rings.reduce((b, r) => b + r.length, 0), 0)
+    }
     out[kind] = items
-    stats[kind] = { polygons: items.length, mergedAt180: m.merged, vertices: items.reduce((a, it) => a + it.rings.reduce((b, r) => b + r.length, 0), 0) }
+    stats[kind] = { polygons: items.length, mergedAt180: m.merged, duplicatesOfLand: dup, vertices: items.reduce((a, it) => a + it.rings.reduce((b, r) => b + r.length, 0), 0) }
   }
   return { polys: out, stats }
 }
@@ -146,7 +167,20 @@ async function neLines(dir, envelope) {
       })
     }
   }
-  const j = ne.joinAtMeridian(strokes)
+  // the minor islands' coastlines are in ne_10m_coastline too: one stroke each
+  const seen = new Set()
+  const sig = (pts) => {
+    const k = pts.map(([x, y]) => `${x.toFixed(5)},${y.toFixed(5)}`)
+    const a = k.slice(0, -1).sort()
+    return `${k.length}:${a[0]}:${a[a.length - 1]}`
+  }
+  const unique = strokes.filter((st) => {
+    const k = sig(st.pts)
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
+  const j = ne.joinAtMeridian(unique)
   const reefs = []
   for (const r of await ne.readLayer(dir, 'ne_10m_reefs')) {
     for (const l of ne.linesOf(r.geometry)) {
@@ -155,7 +189,7 @@ async function neLines(dir, envelope) {
       for (const piece of ne.clipLineToRect(s, envelope)) reefs.push({ pts: piece, id: `ne_10m_reefs:${r.index}` })
     }
   }
-  return { strokes: j.items, joinedAt180: j.joined, reefs }
+  return { strokes: j.items, joinedAt180: j.joined, duplicates: strokes.length - unique.length, reefs }
 }
 
 // ---------------------------------------------------------------------------
@@ -229,7 +263,7 @@ async function bake(dir) {
 
   // Natural Earth
   const { polys, stats: neStats } = await nePolygons(dir, envelope)
-  lap(`natural earth: ${Object.entries(neStats).map(([k, v]) => `${k} ${v.polygons} polygons (${v.vertices} vertices, ${v.mergedAt180} merged at 180°)`).join('; ')}`)
+  lap(`natural earth: ${Object.entries(neStats).map(([k, v]) => `${k} ${v.polygons} polygons (${v.vertices} vertices, ${v.mergedAt180} merged at 180°${v.duplicatesOfLand ? `, ${v.duplicatesOfLand} of them also in the land layer, kept here only` : ''})`).join('; ')}`)
   const SW = W * SUPER
   const mask = new Uint8Array(SW * H * SUPER)
   const landMask = new Uint8Array(SW * H * SUPER)
@@ -442,7 +476,8 @@ async function writeCoast(dir, envelope, polys) {
   if (dropped) log(`  warning: ${dropped} polygons collapsed at every precision and were dropped`)
   // the larger first, so a reader that stops early has the land
   features.sort((a, b) => b.properties.area - a.properties.area)
-  const { strokes, reefs } = await neLines(dir, envelope)
+  const { strokes, reefs, duplicates, joinedAt180 } = await neLines(dir, envelope)
+  log(`  strokes: ${duplicates} minor-island coastlines also in ne_10m_coastline kept once; ${joinedAt180} joined at 180°`)
   const strokeFeatures = []
   let strokeVertices = 0
   for (const { pts, id } of strokes) {

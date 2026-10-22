@@ -218,16 +218,20 @@ export function simplifyPolygon(rings, tol, { digits = 5 } = {}) {
     if (out.length > 1 && (out[0][0] !== out[out.length - 1][0] || out[0][1] !== out[out.length - 1][1])) out.push(out[0])
     return out
   }
+  // a ring keeps its winding: a thin ring simplified to a triangle can turn over
+  const sign = (r) => Math.sign(ringSignedArea(r))
+  const want = rings.map(sign)
   for (let t = tol; ; t = t < 1 ? 0 : t / 2) {
     const outer = round(simplifyRing(rings[0], t))
-    if (!ringOk(outer)) {
+    if (!ringOk(outer) || sign(outer) !== want[0]) {
       if (t === 0) return null
       continue
     }
     const holes = rings
       .slice(1)
-      .map((h) => round(simplifyRing(h, t)))
-      .filter(ringOk)
+      .map((h, i) => [round(simplifyRing(h, t)), want[i + 1]])
+      .filter(([h, w]) => ringOk(h) && sign(h) === w)
+      .map(([h]) => h)
     const all = [outer, ...holes]
     if (!ringIntersections(all).length) return { rings: all, tol: t }
     if (t === 0) return { rings: all, tol: 0, invalid: true }
