@@ -8,7 +8,8 @@
 // seas in a spaced italic, island groups and regions in small capitals,
 // islands upright, straits small italic, bases and cities beside a dot, and
 // the `line` labels (the date line, the equator) turned along their line on
-// the screen. A label with a `ja` name carries it after the English one.
+// the screen. An island's name stands just above its point, so the front's
+// mark of who holds it (front.js) shows beneath. A label with a `ja` name carries it after the English one.
 // Today's name is the card's (DATA.md §3), never the table's.
 //
 // Thinning, once a frame and in the same loop as the pins (ui.js calls
@@ -84,8 +85,10 @@ export class Labels {
       ta: NaN,
       along: l.along ? l.along.map((p) => this.proj.toWorld(p)) : null,
     }
-    // (a dot beside the name: the text starts to its right)
+    // (a dot beside the name: the text starts to its right; an island's
+    // name stands just above its point, where the front marks who holds it)
     it.dot = it.kind === 'base' || it.kind === 'city'
+    it.above = it.kind === 'island'
     this.items.push(it)
     // rank order, stable: what comes first is placed first
     this.items.sort((a, b) => a.rank - b.rank)
@@ -159,7 +162,8 @@ export class Labels {
         const w = it.w * c + it.h * s
         const h = it.w * s + it.h * c
         const cx = it.dot ? sx + it.w / 2 - 4 : sx
-        rect = [cx - w / 2 - PAD, sy - h / 2 - PAD, cx + w / 2 + PAD, sy + h / 2 + PAD]
+        const cy = it.above ? sy - h / 2 - 6 : sy
+        rect = [cx - w / 2 - PAD, cy - h / 2 - PAD, cx + w / 2 + PAD, cy + h / 2 + PAD]
         for (const o of placed) {
           if (rect[0] < o[2] && rect[2] > o[0] && rect[1] < o[3] && rect[3] > o[1]) {
             show = false
@@ -181,7 +185,11 @@ export class Labels {
         it.tx = tx
         it.ty = ty
         it.ta = ta
-        it.el.style.transform = it.dot ? `translate(${tx - 4}px, ${ty}px) translateY(-50%)` : `translate(${tx}px, ${ty}px)${ta ? ` rotate(${ta}deg)` : ''} translate(-50%, -50%)`
+        it.el.style.transform = it.dot
+          ? `translate(${tx - 4}px, ${ty}px) translateY(-50%)`
+          : it.above
+            ? `translate(${tx}px, ${ty - 6}px) translate(-50%, -100%)`
+            : `translate(${tx}px, ${ty}px)${ta ? ` rotate(${ta}deg)` : ''} translate(-50%, -50%)`
       }
       const o = it.k.toFixed(2)
       if (o !== it.o) {

@@ -31,6 +31,7 @@ import { constants, noise, lighting } from '../render/shaders/common.glsl.js'
 import { world } from '../render/shaders/ground.glsl.js'
 import { logDepthParsVertex, logDepthVertex, logDepthParsFragment, logDepthFragment } from '../render/shaders/logdepth.glsl.js'
 import { cdlodMorph } from '../render/pack.js'
+import { frontChunk } from './front.js'
 
 export const reliefVertex = /* glsl */ `
 ${constants}
@@ -117,8 +118,8 @@ in float vMetres;
 
 ${chart}
 
-// (front.js: the front's held land, hatched where contested)
-vec3 applyFront(vec3 col, vec2 xz, float metres, float landK) { return col; }
+// the front's held land, hatched where contested, and its line (front.js)
+${frontChunk}
 
 void main() {
   ${logDepthFragment}

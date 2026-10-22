@@ -1,9 +1,17 @@
-// The table scene (ENGINEERING.md §10), Stage 0's minimum: the relief pack on
-// its ground (TableGround), the coast's ink, the tray the relief sits in, the
-// routes in the WarClock's window (render/routes.js, so its shaders are seen
-// to compile and draw), the Hawaiian camera rig over it in kilometres, and a
-// box's outline through its placement. Labels, the front and the pins are the
-// table workflow's to add here.
+// The table scene (ENGINEERING.md §10): the relief pack on its ground
+// (TableGround, relief.js), the coast's ink and the small islands' fills
+// (coast.js), the chart's grid with the equator and the date line
+// (graticule.js), the names (labels.js, DOM), the front for the WarClock's
+// date (front.js: the held land in the relief, the perimeters and declared
+// lines, the islands' holders), the routes in the WarClock's window
+// (render/routes.js, the tour's step's own always), the tray the relief sits
+// in, the Hawaiian camera rig over it in kilometres, and a box's outline
+// through its placement. The pins are the UI's (ui/pins.js), over the same
+// camera.
+//
+// The overlays (front, routes, labels, pins; the grid) share one strength,
+// `fade`: 1 on the table, easing to 0 as the camera drops toward a box whose
+// outline is up, which is the fly-down of ENGINEERING §9.
 //
 // The scene owns its THREE.Scene, camera, rig and ground; App draws whichever
 // scene is active (one per frame) and asks it for its sky (the table's is the
@@ -22,6 +30,7 @@ import { TableGround } from './ground.js'
 import { Coast } from './coast.js'
 import { Graticule } from './graticule.js'
 import { Labels } from './labels.js'
+import { Front, frontUniforms } from './front.js'
 
 // The tray: a frame round the relief at sea level, and walls from it down to
 // the sea floor at the pack's edge (wherever the exaggeration has it now), so
@@ -114,7 +123,9 @@ export class TableScene {
     this.group = new THREE.Group()
     this.scene.add(this.group)
     this.camera = new THREE.PerspectiveCamera(42, 1, TABLE.near, TABLE.far)
-    this.ground = new TableGround(app, data.table, data.proj)
+    // (the front's masks are the relief's own uniforms: made first, taken by reference)
+    this.frontUniforms = frontUniforms(data.table.rect)
+    this.ground = new TableGround(app, data.table, data.proj, this.frontUniforms)
     this.group.add(this.ground.group)
     this.uniforms = { ...app.light.uniforms, ...this.ground.uniforms }
 
@@ -135,13 +146,20 @@ export class TableScene {
     this.group.add(this.graticule.group)
     // the names: DOM, over the canvas (ui.js drives them with the pins once it is up)
     this.labels = new Labels(this, data.labels)
+    this.front = new Front(this, data, this.frontUniforms, this.labels)
+    this.group.add(this.front.group)
     this.routes = new Routes({ routes: data.routes, proj: data.proj, uniforms: this.uniforms, camera: this.camera, renderer: app.renderer, maxSeg: 15, lift: [0.03, 0.0024], height: 300 })
     this.group.add(this.routes.group)
 
     this.rig = new CameraRig(this.camera, app.canvas, this.ground, TABLE)
     this.outlines = new Map()
-    // the overlays' strength: 1 on the table, easing to 0 over the last third of a fly-down
+    // the overlays' strength: 1 on the table, easing to 0 as the camera
+    // drops toward a box whose outline is up (the fly-down); `fadeOverride`,
+    // when a number, takes its place (the integrator's hand-over may drive it)
     this.fade = 1
+    this.fadeOverride = null
+    // the tour's step, whose routes always show: { id, routes: [ids] } or null
+    this.focus = null
     this._res = new THREE.Vector2()
   }
 
@@ -160,18 +178,46 @@ export class TableScene {
     return { density: 0.09 / Math.max(3, d), falloff: 2.0 / Math.max(3, d) }
   }
 
+  /**
+   * The overlays' strength at camera distance d (ENGINEERING §9 step 2):
+   * with a box's outline up, they fade from three times its hand-over
+   * distance down to just above it, so they are gone over the last stretch
+   * of the fly-down and come back as the camera climbs away; the
+   * exaggeration's near value is the box's, so the ridges do not jump at the
+   * cut.
+   */
+  handover(d) {
+    let fade = 1
+    let near = TABLE.exag.near
+    for (const [id, o] of this.outlines) {
+      if (!o.on) continue
+      if (o.handover === undefined) {
+        o.handover = this.outlineView(id).distance
+        o.exaggeration = this.data.boxById.get(id)?.exaggeration ?? TABLE.exag.near
+      }
+      const D = o.handover
+      const t = Math.max(0, Math.min(1, Math.log(d / (D * 1.12)) / Math.log(3.2 / 1.12)))
+      fade = Math.min(fade, t * t * (3 - 2 * t))
+      near = o.exaggeration
+    }
+    return { fade, near }
+  }
+
   update(dt) {
     this.rig.update(dt)
     const d = this.rig.state.distance
-    this.ground.update(this.camera, d)
+    const h = this.handover(d)
+    this.fade = typeof this.fadeOverride === 'number' ? this.fadeOverride : h.fade
+    this.ground.update(this.camera, d, { exag: TABLE.exaggeration(d, h.near) })
     const r = this.app.renderer
     r.getDrawingBufferSize(this._res)
     const dpr = r.getPixelRatio()
-    this.coast?.update(this.camera, this._res, dpr, this.fade, d)
+    this.coast?.update(this.camera, this._res, dpr, Math.max(this.fade, 0.6), d)
     this.graticule.update(this.camera, this._res, dpr, this.fade, d)
-    if (!this.labels.driven) this.labels.update([], this.fade)
     const clock = this.app.clock
-    this.routes.update(clock.date, d, { window: clock.windowAt(), fade: this.fade })
+    this.front.update(clock.date, d, { camera: this.camera, resolution: this._res, dpr, fade: this.fade })
+    if (!this.labels.driven) this.labels.update([], this.fade)
+    this.routes.update(clock.date, d, { window: clock.windowAt(), fade: this.fade, focus: this.focus })
     for (const o of this.outlines.values()) {
       o.lines.uniforms.uWidth.value = 2.2 * dpr
       o.lines.update(this.camera, this._res, o.on ? 0.95 : 0)
@@ -189,11 +235,17 @@ export class TableScene {
       s.yaw = g.yaw
       s.pitch = g.pitch
     }
-    this.ground.update(this.camera, g.distance)
+    const h = this.handover(g.distance)
+    this.fade = typeof this.fadeOverride === 'number' ? this.fadeOverride : h.fade
+    const exag = TABLE.exaggeration(g.distance, h.near)
+    this.ground.update(this.camera, g.distance, { exag })
     rig.jump({ x: g.target.x, z: g.target.z })
-    this.ground.update(this.camera, g.distance)
+    this.ground.update(this.camera, g.distance, { exag })
     const clock = this.app.clock
-    this.routes.settle(clock.date, g.distance, { window: clock.windowAt(), fade: this.fade })
+    const r = this.app.renderer
+    r.getDrawingBufferSize(this._res)
+    this.front.update(clock.date, g.distance, { camera: this.camera, resolution: this._res, dpr: r.getPixelRatio(), fade: this.fade, ease: 1 })
+    this.routes.settle(clock.date, g.distance, { window: clock.windowAt(), fade: this.fade, focus: this.focus })
   }
 
   /** The rig's flight to a view ({ target, distance, yaw, pitch }); resolves on landing. */
@@ -237,12 +289,17 @@ export class TableScene {
     return o
   }
 
+  /** The tour's step (an event, or null): its routes are its story and always show. */
+  setFocus(ev) {
+    this.focus = ev ? { id: ev.id, routes: ev.routes || [] } : null
+  }
+
   setRange(k) {
     this.ground.setRange(k)
   }
 
   stats() {
-    return { scene: 'table', ...this.ground.stats(), distance: +this.rig.state.distance.toFixed(1), fade: this.fade }
+    return { scene: 'table', ...this.ground.stats(), distance: +this.rig.state.distance.toFixed(1), fade: +this.fade.toFixed(3), labels: this.labels.shown, front: this.front.stats() }
   }
 
   dispose() {
@@ -250,6 +307,7 @@ export class TableScene {
     this.ground.dispose()
     this.coast?.dispose()
     this.graticule.dispose()
+    this.front.dispose()
     this.labels.dispose()
     this.routes.dispose()
     for (const o of this.outlines.values()) o.lines.dispose()
