@@ -21,20 +21,20 @@ spaced, unspaced, and as `root_a + root_b` — against thirteen dictionaries:
 - Andrews (1836), Hitchcock (1887), Judd/Pukui/Stokes (1943), Kent (1986), Wehiwehi Baibala (1872)
 - Place Names of Hawaiʻi (1974), Hawaiʻi Place Names (2002), Hawaiian Legal Land-Terms (1995)
 
-Coverage of the 370: **347 found in Pukui–Elbert**, 2 more in Māmaka Kaiao, 19 in older
-dictionaries only, **2 not found anywhere**.
+The machine-readable curation contains 387 records, including the pending
+set and spot checks. Dictionary correction and stone records have direct
+wehewehe.org checks dated 22 October 2026; each checked entry carries its
+own source attribution. The curation has no words marked unattested.
+The full build ships 598 words, with 9 circles for open sense/root decisions.
 
 ## Verdict key
 
-| | meaning | count |
-|---|---|---|
-| ✅ | correct as glossed | **313** |
-| ✏️ | needs a fix — corrected gloss and/or spelling given | **52** |
-| ❓ | could not confirm | **2** |
-| ❌ | not an attested word, or the wrong word for the gloss | **3** |
-
-Separately, **129 of the 370 carry a spelling correction** — mostly word-spacing, which is its own
-section below and is *not* counted as an error of understanding.
+| | meaning |
+|---|---|
+| ✅ | chosen sense supported by the cited dictionary |
+| ✏️ | chosen spelling or gloss supplied |
+| ❓ | dictionary sense remains open |
+| ruling | spelling or root decision remains open despite word-level evidence |
 
 ---
 
@@ -44,7 +44,7 @@ section below and is *not* counted as an error of understanding.
 
 | word | his gloss | verdict | corrected spelling | corrected gloss | source | note |
 |---|---|:--:|---|---|---|---|
-| **hakakau** | rack; to perch on slender footing | ✏️ |  | to stand with slender/precarious footing; to straddle | PE s.v. hakakau; haka kau; And.–Parker s.v. hakakau | Two different lexemes got fused. PE: hakakau = 'to straddle; fig. a tall thin person'; the 'rack / perch / shelf' sense is haka kau (two words). Keep the stone as hakakau with the straddle/slender-footing gloss, or respell as 'haka kau' for the shelf sense — but not both in one gloss. |
+| **hakakau** | rack; to perch on slender footing | ✏️ |  | to straddle; on slender footing | PE s.v. haka.kau; Andrews (1865) s.v. HA-KA-KAU | PE records straddling and figuratively a tall thin person. Andrews records standing with slender footing, as on the edge of a canoe, and analyzes haka, ladder, + kau, set up. |
 | **hale kaʻa** | carriage house; garage | ✅ |  |  | PE s.v. hale kaʻa | PE: 'Garage, house for a vehicle; carriage, chariot.' Gloss is right. |
 | **hale lāʻau** | wooden house, not thatched | ✅ |  |  | PE s.v. hale lāʻau | PE: 'Wooden or frame building.' And.–Parker adds 'in distinction from a grass-covered house' — his gloss captures exactly that. |
 | **hale moe** | sleeping house | ✅ |  |  | PE s.v. hale moe | PE: 'Sleeping house, dormitory.' |
@@ -54,7 +54,7 @@ section below and is *not* counted as an error of understanding.
 | **halelana** | the ark; a floating house | ✏️ | hale lana | floating house, houseboat; (in the Bible) the Ark | PE s.v. hale lana | Lead with the Hawaiian sense, not the missionary one. PE: 'Floating house, ark, houseboat' with the example Ka hale lana i ke kai. 'The ark' is the Bible-translation use; it should follow, not lead. Two words in PE. |
 | **halelewa** | portable house; tent | ✅ |  |  | PE s.v. hale.lewa | PE writes this one solid — halelewa is correct as he has it. 'Tent, portable house, tabernacle.' |
 | **halelole** | tent | ✅ | hale lole |  | PE s.v. hale lole | PE: 'Cloth house, tent.' Two words. |
-| **halemalu** | shaded house; shed | ✅ | hale malu |  | And. 1865 / Parker 1922 s.v. halemalu; Kent s.v. hale malu | Not in Pukui–Elbert. Attested in Andrews–Parker and Kent as 'shaded house; shed'. Safe, but it is an older-dictionary word. |
+| **halemalu** | shaded house; shed | ✅ | hale malu |  | PE s.v. hale malu, hale malumalu | PE records shaded house, shed, with spaced spellings hale malu and hale malumalu. |
 | **hamoʻula** | red-stained tapa; red dye | ✅ |  |  | PE s.v. hamo.ʻula | PE: 'Ribbed tapa; to stain or dye with red, as tapa.' His gloss is right; PE's extra sense 'ribbed tapa' could be added. |
 | **haowaha** | bridle bit | ✅ | hao waha |  | PE s.v. hao waha | PE: 'Bit of a bridle. Lit., mouth iron.' Exactly his gloss. Two words in PE. |
 | **haʻihaʻi** | brittle; to break in pieces | ✅ |  |  | PE s.v. haʻihaʻi; And. 1865 | 'Brittle; to break in pieces' is right. PE's entry is huge (also: quavering voice, chiropractic massage, hula limbering) — a richer gloss is available if he wants one. |
@@ -127,7 +127,7 @@ section below and is *not* counted as an error of understanding.
 | **pālāʻau** | stick fence; wooden fence | ✏️ | pā lāʻau | wooden fence, hedge | PE s.v. pā lāʻau vs. pālāʻau | IMPORTANT, same trap as oneʻā. PE: pā lāʻau (two words) = wooden fence, hedge; pālāʻau (solid) = 'to heal, as with herbs' — the lāʻau lapaʻau word, quoted in a Hiʻiaka prayer. As spelled, this stone currently says 'to heal with herbs'. |
 | **pāpale aliʻi** | crown; headdress of a king | ✅ |  |  | PE s.v. pāpale aliʻi | PE: 'Crown.' |
 | **uhikino** | body covering; shield; outer garment | ✅ |  |  | PE s.v. uhikino | PE: 'Body covering, garment, shield.' |
-| **uhiuhi** | cover over, as a makeshift | ✏️ |  | to cover over, as makeshift thatch; also uhiuhi, a rare endemic hardwood tree | PE s.v. uhiuhi; And. 1865 | His gloss comes from Andrews ('to thatch a house poorly with banana leaves') and is defensible, but for most speakers today uhiuhi is first of all the endemic legume tree (Mezoneuron kauaiense) whose hard wood was used for hōlua sleds, spears and ʻōʻō. Worth naming. |
+| **uhiuhi** | cover over, as a makeshift | ✏️ |  | to cover over, as makeshift thatch | PE s.v. uhi.uhi; Andrews (1865) s.v. U-HI-U-HI | Andrews records poor thatching with banana leaves. PE lists reduplication of uhi and a tree sense. The thatching sense has its own older-dictionary citation. |
 | **waiwai** | goods, wealth; to be rich | ✅ |  |  | PE s.v. waiwai | PE: 'Goods, property, value, wealth...' — and note his root gloss wai = 'retain, deposit' is exactly PE's own etymological note ('probably related to wai #4, to retain, rather than wai #1, water'). That is a careful piece of work. |
 | **waiʻele** | dye for kapa | ✅ |  |  | PE s.v. wai.ʻele | PE: 'Black tapa dye; tapa so dyed.' Could be sharpened to 'black kapa dye' — the colour is part of the word. |
 | **waʻapā** | rowboat; skiff of boards | ✅ |  |  | PE s.v. waʻapā | PE: 'Skiff, rowboat; ferry boat. Lit., board canoe.' |
@@ -165,7 +165,7 @@ section below and is *not* counted as an error of understanding.
 | **kuapapa** | peace; quiet, untroubled | ✅ |  |  | PE s.v. kuapapa (sense 2) | PE: 'Peace, quiet, tranquility; union under a single ruler; peace following a treaty.' Correct — and heavy with history: kuapapa nui is the phrase for the long peace under one ruler. Note the root split is shaky: kua papa as two words is 'to hew boards'. |
 | **kuhihewa** | to mistake, misjudge | ✅ | kuhi hewa |  | PE s.v. kuhi hewa | PE: 'To suppose wrongly, err in judgment; erroneous supposition, illusion.' Two words. |
 | **kākāʻōlelo** | orator; counselor to a chief | ✅ |  |  | PE s.v. kākāʻōlelo | PE: 'Orator, person skilled in use of language; counselor, adviser. Lit., to fence [with] words.' Correct — and his root gloss for kākā is EMPTY in the data; PE supplies it: kākā = to fence, to strike, as with sticks. |
-| **kālāʻau** | stick dance; striking sticks together | ✅ | kālaʻau |  | PE s.v. kālaʻau; MK s.v. kālāʻau | Gloss right: 'stick dancing; to stick dance.' PE's headword is kālaʻau with one kahakō; Māmaka Kaiao lists kālāʻau as a spelling variant, so his form is defensible — but PE is the safer spelling. Note PE adds that kākā lāʻau is the commoner term for the fighting art. |
+| **kālāʻau** | stick dance; striking sticks together | ✅ |  |  | PE s.v. kāla.ʻau; Kent (1986) s.v. kālāʻau | PE records stick dancing as kālaʻau. Kent records kālāʻau with both long vowels for striking sticks to the rhythm of a dance. |
 | **kēʻai** | to fast | ✅ | kē ʻai |  | PE s.v. kē ʻai; And.–Parker s.v. keai | 'To thrust away food; to fast.' Two words in PE. The commoner living form is hoʻokē ʻai. |
 | **kūkia** | to stand firm, steady in purpose | ✅ |  |  | PE s.v. kū.kia | PE: 'Firm, steady, steadfast.' |
 | **kūmaka** | known by sight; in plain view | ✅ |  |  | PE s.v. kūmaka | PE: 'Seen by the eye, visible; eyewitness; to see for oneself.' |
@@ -186,7 +186,7 @@ section below and is *not* counted as an error of understanding.
 | **milimili** | examine admiringly; a cherished favorite | ✅ |  |  | PE s.v. milimili | PE: 'toy, plaything; favorite, darling, pet, beloved; to examine with interest, curiosity and admiration.' Both halves of his gloss are right. |
 | **moeʻino** | an unpleasant dream; uneasy sleep | ✅ | moe ʻino |  | PE s.v. moe ʻino | PE: 'Nightmare; bad dream; to toss, turn while sleeping.' Two words. |
 | **moʻoʻōlelo** | history; tradition; connected narrative | ✅ |  |  | PE s.v. moʻoʻōlelo | PE: 'Same as moʻolelo.' Gloss correct. moʻolelo is the living form; moʻoʻōlelo is the older, fuller spelling — which is exactly the kind of thing his root-stones are good at showing. |
-| **mūmū** | to be silent; to hum | ✏️ |  | silent, mum; to hold water in the mouth | PE s.v. mūmū vs. mumu | The kahakō splits these. PE mūmū = 'to rinse out the mouth, swish water in the mouth; silent, mum; dull, blunt.' The humming/indistinct-sound word is mumu, short vowels (PE: 'thud-like sound, as of footsteps'; And.: 'to hum'). So 'to hum' does not belong on this stone. PE's example under mūmū is wonderful: ʻai mūmū, to eat silently without smacking the lips — said of stingy people eating so quietly that no one would know and they would not have to share. |
+| **mūmū** | to be silent; to hum | ✏️ |  | silent, mum | PE s.v. mū.mū | The card uses the silent/mum sense, matching its mū stones. PE also records rinsing or swishing water in the mouth as a separate sense. |
 | **nahenahe** | soft, gentle; sweet-sounding | ✅ |  |  | PE s.v. nahenahe | PE: 'Soft, sweet, melodious, as music or a gentle voice; softly blowing, as a gentle breeze; gentle-mannered, soft-spoken.' |
 | **naʻaulua** | undecided; of two minds | ✅ | naʻau lua |  | PE s.v. naʻau lua | PE: 'Doubtful, two-minded, undecided.' Two words. |
 | **naʻaupono** | upright, just | ✅ | naʻau pono |  | PE s.v. naʻau pono | PE: 'Upright, just; right-minded; upright heart.' Two words. |
@@ -222,7 +222,7 @@ section below and is *not* counted as an error of understanding.
 | **haku ʻāina** | land steward under a chief | ✏️ | hakuʻāina | landowner, landlord; one who manages land under a chief | PE s.v. hakuʻāina; Kent s.v. haku ʻāina | PE writes it solid and glosses it 'landowner; landlord' — ownership, not only stewardship. Kent carries his 'manage land for and under a chief' sense. Give both; PE first. |
 | **hakuhale** | master or owner of a house | ✅ | haku hale |  | PE s.v. haku hale | PE: 'Landlord, house owner, host, hostess.' Two words. |
 | **hanupaʻa** | a head cold; catarrh | ✅ | hanu paʻa |  | PE s.v. hanu paʻa | PE: 'A head cold; stifled breathing.' Two words. |
-| **hiʻipoi** | to tend and cherish | ✅ |  |  | PE s.v. hiʻi.poi | PE: 'To tend, feed, cherish, as a child.' Correct. Note his root gloss for 'poi' here is EMPTY; the poi in this word is 'to cover, to protect, to cherish', not the food. |
+| **hiʻipoi** | to tend and cherish | ✅ |  |  | PE s.v. hiʻi.poi | PE records tending, feeding, and cherishing a child. The compound meaning does not establish a free poi root with that sense; its stone sense remains unresolved. |
 | **hoa kaua** | fellow soldier; adversary in war | ✅ |  |  | PE s.v. hoa kaua | PE: 'Fellow soldier, enemy.' Both at once — his gloss catches that, and it is one of the finest words on the board. |
 | **hoahanauna** | fellow kin; relatives | ✏️ | hoa hanauna | a relative of one's own generation | PE s.v. hoa hanauna | PE is more exact than 'fellow kin': hoa hanauna is specifically kin of your OWN generation — cousins, not elders. Two words. |
 | **hoakoa** | fellow soldier | ✅ |  |  | And. 1865 / Parker 1922 s.v. hoakoa | Not in PE. 'A fellow soldier; one under the same leader.' Faithful. |
@@ -241,7 +241,7 @@ section below and is *not* counted as an error of understanding.
 | **kulihiamoe** | to doze, too drowsy to hear | ✅ | kuli hiamoe |  | PE s.v. kuli hiamoe | PE: 'To doze; too drowsy to hear (a deeper sleep than kulu hiamoe). Lit., sleep deafly.' Marked RARE. Two words. |
 | **kupuna wahine** | grandmother | ✅ |  |  | PE s.v. kupuna wahine | PE: 'Grandmother, grandaunt, female ancestor.' In Hawaiian kinship the grandaunt IS a grandmother — worth saying. |
 | **kāne make** | widowed (of a wife) | ✅ |  |  | PE s.v. kāne make | PE: 'Widowed; dead husband. Wahine kāne make, widow.' |
-| **kōkō** | to fulfill; to be pregnant | ✏️ |  | carrying net of sennit, as for hanging calabashes; to lace or tie up strings | PE s.v. kōkō; Kent s.v. kōkō | IMPORTANT — wrong word. PE kōkō is the carrying NET: 'a carrying net, usually made of sennit, as used for hanging calabashes; a string hammock, as formerly used for carrying the very old.' The 'fulfil / be great with young' sense he has is kō (Parker lists it under koko with a note 'Syn: ua kō'). Also kokō, short first vowel, is a rooster's crow. Three words, three vowel lengths. The kōkō is also a beautiful object to have on the board — kōkō puʻu, the fine knotted carrier; ua kaʻi kōkō, carried in a hammock because of great age. |
+| **kōkō** | to fulfill; to be pregnant | ✅ |  | to fulfill; to be pregnant | PE s.v. kō.kō, senses 4–5 | PE records pregnancy in sense 4 and reduplication of kō, fulfill, in sense 5. These senses match the fulfill/conceive stones. The carrying-net sense in the same entry has a separate ancestral reference and is not the sense represented by these stones. |
 | **kūloko** | internal, domestic; of home affairs | ✅ |  |  | PE s.v. kūloko | PE: 'Local, domestic. Lit., state of being inside.' Kaua kūloko, civil war. |
 | **kūola** | to come through danger unharmed | ✅ |  |  | PE s.v. kū.ola | PE: 'Alive and safe, as after escaping from danger.' |
 | **kūʻauhau** | genealogy; genealogist | ✅ |  |  | PE s.v. kūʻauhau | PE: 'Genealogy, pedigree, lineage, old traditions; genealogist, historian; to recite genealogy.' Correct. His root gloss for kū here is EMPTY. See cultural notes — genealogy is not a neutral category in Hawaiʻi. |
@@ -254,7 +254,7 @@ section below and is *not* counted as an error of understanding.
 | **luna koa** | military officer | ✅ |  |  | PE s.v. luna koa | PE: 'Military officer.' |
 | **lunakaua** | war captain | ✅ | luna kaua |  | PE s.v. luna kaua | PE: 'War officer, captain, commander.' Two words. |
 | **lunaʻohana** | head of a family | ✅ | luna ʻohana |  | PE s.v. luna ʻohana | PE: 'Head of a family; headman of a tribe.' Two words. |
-| **lāhui kaua** | warriors; company of soldiers | ❓ |  |  | Andrews 1836 s.v. La-hu-i-kau-a only | Attested ONLY in Andrews 1836 ('a company of people for war, warriors'). Not in PE, not in Andrews 1865, not in Parker. Transparent and probably fine, but it is the thinnest evidence on the board — flagging it honestly. |
+| **lāhui kaua** | warriors; company of soldiers | ✅ |  |  | Andrews (1865) s.v. LA-HU-I-KAU-A; Parker (1922) s.v. Lahuikaua | Both dictionaries record people assembled for war, warriors, or a company of soldiers, with lāhui + kaua. Traditional headwords run the compound together. |
 | **makahiamoe** | sleepy; to doze off | ✅ | maka hiamoe |  | PE s.v. maka hia.moe | PE: 'Sleepy eyes; sleepy, drowsy.' Two words. |
 | **makamomi** | white speck in the eye | ✅ | maka momi |  | PE s.v. maka momi (see momi 5); And.–Parker | 'A white speck in the eye.' Two words. |
 | **makapaʻa** | blind; with closed eyes | ✏️ |  | blind in one eye; one-eyed (lit., closed eye) | PE s.v. makapaʻa | PE is specific: blind in ONE eye. (The word for blind outright is makapō.) PE also records that it was considered bad luck to meet such a person — true to the record, but I would not put that on a stone people tumble for fun. |
@@ -292,7 +292,7 @@ section below and is *not* counted as an error of understanding.
 | **aumoe** | midnight, late night | ✅ |  |  | PE s.v. au.moe | PE: 'Late at night, as about midnight. Lit., time to sleep.' |
 | **helekū** | to walk upright | ✅ |  |  | PE s.v. hele.kū | PE: 'To walk upright, wade.' The 'wade' half is worth adding — it is the same image, standing up through something. |
 | **hoa hele** | fellow traveler | ✅ |  |  | PE s.v. hoa hele | PE: 'Traveling companion, fellow traveler.' |
-| **hoakipa** | visitor | ❌ |  |  | Not found in PE, Māmaka Kaiao, Andrews 1836/1865, Parker 1922, Kent, Judd-Pukui-Stokes, Place Names, Land Terms | I could not find hoa kipa / hoakipa as a compound in ANY of the thirteen dictionaries. Both roots are real (hoa, companion; kipa, to visit, to turn aside) and the formation is not ungrammatical, but it is not an attested word. For 'visitor' the living word is malihini. Recommend removing it, or swapping in an attested hoa- compound — hoa hele, hoa kaua, hoa ʻōlelo, hoa hanauna are all solid. |
+| **hoakipa** | visitor | ✅ |  |  | Combined Hawaiian Dictionary (2020) s.v. hoakipa | Visitor, guest; the entry gives hoa + kipa and an example about official guests. This sense uses the companion and visit stones. |
 | **hoʻi hope** | to turn back, retreat | ✅ |  |  | PE s.v. hoʻi hope | PE: 'To go back, return, retreat, revert, backslide, deteriorate morally.' |
 | **hulilua** | turning two ways; shifting | ✅ | huli lua |  | PE s.v. huli lua | PE: 'To turn in two directions; to shift, as the wind; unstable.' Two words. PE's example deserves to be on the piece: Mehe makani huli lua lā, huli ka manaʻo — like a shifting wind, the mind changes. |
 | **kahapili** | tangent to a circle | ✅ |  |  | PE s.v. kaha.pili | PE: 'Tangent of a circle. Lit., line that touches.' |
@@ -340,7 +340,7 @@ section below and is *not* counted as an error of understanding.
 | **huaʻai** | fruit, edible fruit | ✅ | hua ʻai |  | PE s.v. hua ʻai | PE: 'Edible fruit or seed.' Two words. |
 | **hāhā** | native lobelias; Gunnera plants | ✅ |  |  | PE s.v. hāhā (sense 4) | The lobelia sense is real (PE sense 4). But PE's FIRST sense is one of the great words of the language: hāhā, to grope, to feel with the hands — and kahuna hāhā, the healer who diagnoses by feeling the body. If the stone can carry a note, carry that. |
 | **hāipu** | gourd leaf stalk, used medicinally | ✏️ | hāʻipu |  | PE s.v. hāʻipu | Gloss right ('stem of a gourd leaf, as used in medicine'); PE spells it with an ʻokina: hāʻipu. |
-| **hākō** | sugar-cane leaf | ❌ |  | to carve out a pathway, as a passage through coral or a watercourse | PE s.v. hā.kō and hako | IMPORTANT. hākō does not mean 'sugar-cane leaf' in any dictionary I can find. PE has two entries: hako (no kahakō) = 'dignified, noble, honorable', rare; and hā.kō = 'to carve out a pathway, as a passage through coral or as a water course', rare. The sugar-cane leaf is lau kō — which he already has as its own stone. Either regloss hākō, or retire it; the carving-a-channel-through-coral sense would be a beautiful stone on a wayfinding map. |
+| **hākō** | sugar-cane leaf | ✅ |  | sugar-cane leaf | Andrews (1865) s.v. HA-KO; Parker (1922) s.v. Hako; PE s.v. hā.kō | Andrews and Parker attest sugar-cane leaf. Parker explicitly gives hā, leaf, + kō, sugar cane. This is the sense represented by the two stones. PE also records a separate pathway-carving sense; that sense does not establish the leaf-stalk and sugar-cane root analysis. |
 | **hāniu** | butt end of a coconut frond | ✅ | hā niu |  | PE s.v. hā niu | PE: 'Heavy end of a coconut frond.' Two words. Andrews adds what it was for — beating the banks of loʻi kalo. |
 | **kumulau** | sprouting stump; prolific source | ✅ |  |  | PE s.v. kumu.lau | Correct for PE's 'root with many sprouts; major source'. Worth knowing PE's first sense is animal: a female that has borne young — lio kumulau, a brood mare. And the dark idiom: he kumulau hōʻilihune, a great source of poverty. |
 | **kuʻi ʻai** | pounding poi; poi pounder | ✅ |  |  | PE s.v. kuʻi ʻai | PE: 'To pound food, especially poi; one who pounds food.' |
@@ -368,7 +368,7 @@ section below and is *not* counted as an error of understanding.
 | **ʻieʻie** | a woody climbing vine (Freycinetia) | ✅ |  |  | PE s.v. ʻieʻie | PE: the endemic woody climber Freycinetia arborea. Correct — and PE notes it was one of the five plants placed on the hula kuahu, the hula altar. That is not a casual plant. |
 | **ʻiwaʻiwa** | maidenhair fern | ✅ |  |  | MK s.v. ʻiwaʻiwa; Parker 1922 s.v. iwaiwa | 'Maidenhair fern.' |
 | **ʻoheʻohe** | a tall native tree | ✅ |  |  | PE s.v. ʻoheʻohe | PE: 'Tall native trees (Tetraplasandra kavaiensis and varieties).' Correct. Note oheohe without the ʻokina means 'tall and straight, as a tree; precipitous, steep' — the adjective the tree is named for. |
-| **ʻohākulaʻi** | break young taro from parent corm | ✏️ |  | (And.) to bend the young taro off the parent corm to give it room; (PE) a hard lump on the joints | PE s.v. ʻohākulaʻi (= puʻuhau); And. 1865 s.v. ohakulai | Split evidence, worth being honest about. His gloss is Andrews' first sense and is good. But PE records ONLY the other sense — ʻohākulaʻi = puʻuhau, a hard calcium lump on the joints. Both are real; PE did not keep the taro one. |
+| **ʻohākulaʻi** | break young taro from parent corm | ✏️ |  | to bend young taro off the corm | Andrews (1865) s.v. O-HA-KU-LAI; PE s.v. ʻohā.kulaʻi | Andrews records bending young taro off the parent to give it room to grow, with ʻohā, shoot, + kulaʻi, push over. PE instead cross-references puʻuhau. The taro sense is supported by Andrews. |
 | **ʻukiʻuki** | a native flax lily (Dianella) | ✅ |  |  | PE s.v. ʻukiʻuki | PE: Dianella sandwicensis, the native lily whose blue berries dyed kapa. Correct — and the ʻokina is load-bearing: ukiuki without it means anger, resentment, to be vexed. |
 | **ʻulu kahiki** | foreign breadfruit tree | ✅ |  |  | And. 1865 s.v. ulukahiki; Kent s.v. ʻulukahiki | Attested, though not in PE. Andrews reads it as the FIG tree — 'foreign breadfruit, from the resemblance of its leaves' — while Kent reads it as Artocarpus altilis. His gloss stays neutral, which is the right call. |
 
@@ -394,7 +394,7 @@ section below and is *not* counted as an error of understanding.
 | **moeone** | an earth-dwelling worm | ✅ |  |  | PE s.v. moeone | PE: 'Small worm that hides in the sand. Lit., sand lying.' Correct. Sense 2 is the flounder — same logic, bigger animal. |
 | **nukuwai** | mouth of a stream | ✅ | nuku wai |  | PE s.v. nuku wai | PE: 'Stream mouth.' Two words. |
 | **papapōhaku** | stone slab; slate | ✅ | papa pōhaku |  | PE s.v. papa pōhaku | PE: 'Row or tier of stones; slate, stone tablet; stone table or flat, as for pounding.' Two words. And he should know what he has made: papa pōhaku is, literally, a board of stone. His whole piece is one. |
-| **pīpīwai** | place where water oozes up | ✏️ | pīpī wai |  | PE s.v. pī.pī wai vs. pī.pī.wai | For his sense PE has the verb pīpī wai, 'to percolate, ooze, of water; to sprinkle water'; pīpīwai written solid is a genus of sedges (Eleocharis), also called kohekohe. Note too that Pīpīwai is the famous stream and trail in Kīpahulu, Maui — this one reads as a place name to anyone from there. |
+| **pīpīwai** | place where water oozes up | ✏️ | pīpī wai | to ooze or percolate; sprinkle water | PE s.v. pī.pī wai | PE records percolating or oozing water and sprinkling water. The spaced headword is a verb; the short gloss describes those actions. |
 | **waipaʻa** | ice; frozen water | ✅ |  |  | PE s.v. wai.paʻa | PE: 'Ice. Lit., hard, solid water.' Solid in PE — correct as he has it. |
 | **waipiʻi** | flood; overflowing water | ✅ | wai piʻi |  | PE s.v. wai piʻi | PE: 'Rising water, overflow of water, flood; to flow, overflow.' Two words. |
 | **ʻauwai** | irrigation ditch; watercourse | ✅ |  |  | PE s.v. ʻauwai | PE: 'Ditch, canal.' Correct. The ʻauwai is not just infrastructure — it is the backbone of traditional water law and of the loʻi system, and ʻauwai rights survive in Hawaiʻi courts to this day. His root gloss for ʻau here is EMPTY. |
@@ -434,8 +434,8 @@ section below and is *not* counted as an error of understanding.
 
 | word | his gloss | verdict | corrected spelling | corrected gloss | source | note |
 |---|---|:--:|---|---|---|---|
-| **heiheinalu** | to race on surfboards | ❌ |  |  | Not found in PE, Māmaka Kaiao, Andrews 1836/1865, Parker 1922, Kent, JPS 1943, Place Names, Land Terms | Not attested as a compound anywhere I can reach. Both roots are solid — heihei, 'race, to race'; nalu, 'wave, surf' — but heihei nalu is not a recorded word, and it reads as 'wave race' rather than 'board race'. The attested word for surfing is heʻe nalu; a surf race would be heihei heʻe nalu. Recommend replacing with heʻe nalu, which is unimpeachable and belongs on a board like this anyway. |
-| **hoalawaiʻa** | fellow fisherman | ❓ |  |  | Andrews 1836 s.v. Ho-a-la-wa-ia only | Attested only in Andrews 1836 ('a fishing companion'). Not in PE or any later dictionary. The formation is regular — compare hoa hele, hoa ʻai, hoa kaua, all solid — so it is probably fine, but the evidence is one line from 1836. |
+| **heiheinalu** | to race on surfboards | ✅ |  |  | Parker (1922) s.v. Heiheinalu | Parker records surfing and racing on surfboards, with the analysis heihei, to run, + nalu, surf. The racing sense uses the race and wave stones. |
+| **hoalawaiʻa** | fellow fisherman | ✅ |  |  | Andrews (1836, 1865) s.v. Ho-a-la-wa-ia | Andrews (1865) records a fellow fisherman or fishing companion, with hoa, companion, + lawaia, fisherman. |
 | **hūkai** | brackish; tasteless | ✅ |  |  | PE s.v. hū.kai (= hūkākai); Parker 1922 | PE sends it to hūkākai, brackish. Parker: 'Brackish; insipid; tasteless.' Both halves of his gloss are right. |
 | **iheihe** | halfbeak, a fish | ✅ |  |  | PE s.v. iheihe | PE: 'One of several halfbeaks (Hemirampus depauperatus).' Correct. (PE sense 2: also a variety of kalo.) |
 | **kahaone** | sandy beach | ✅ |  |  | PE s.v. kahaone | PE: 'Sandy beach.' A locative noun — kahaone takes i ke/ma ke, not ka. |
@@ -730,31 +730,34 @@ tell a true and painful story and I would leave them exactly as they are.
 
 ## E. Data bugs in the lexicon (not language errors)
 
-### E1 · Nineteen roots ship with an EMPTY gloss
+### E1 · Stone gloss evidence
 
-The compound stones render as `holo =  + waʻa = canoe`. Here are fills, all from PE:
+An empty gloss marks an unresolved component sense. Dictionary word evidence
+and stone etymology are separate claims.
 
-| root key | root | suggested gloss |
+| root key | chosen gloss or state | evidence |
 |---|---|---|
-| `holo?holowaʻa` | holo | run, sail, go |
-| `poi?hiʻipoi` | poi | to cover, protect, cherish *(not the food)* |
-| `kau?kaupale` | kau | to place, set, put |
-| `pale?kaupale` | pale | to ward off, fend off, protect |
-| `kua?kuahao` | kua | anvil, beating-block; back |
-| `kaha?kahawai` | kaha | to cut, mark; a place |
-| `kaha?kūkaha` | kaha | to turn aside, turn away |
-| `kaka?kakaʻōlelo` | kākā | to strike, to fence *(PE: kākāʻōlelo, lit. "to fence with words")* |
-| `kū?kūʻau` | kū | to stand |
-| `kū?kūʻauhau` | kū | to stand |
-| `luna?kaʻaluna` | luna | above, upper; one in command |
-| `ala?makaala` | ʻala | awake, alert |
-| `olo?olokaʻa` | olo | to rub, saw back and forth |
-| `pahu?pahukapu` | pahu | post, stake *(in this compound — not 'drum, box')* |
-| `pū?paʻapū` | pū | together, entirely, completely |
-| `paʻi?paʻiaʻa` | paʻi | to slap, print, bunch |
-| `ʻau?ʻaumakua` | ʻau | group, company *(PE: ʻau, a group)* |
-| `ʻau?ʻauwai` | ʻau | current, flow *(PPN kau + wai)* |
-| `ʻula?alaʻula` | ula | flame, red glow *(PE: alaula, lit. "flaming road")* |
+| `holo?holowaʻa` | run, sail, go | PE s.v. holo |
+| `poi?hiʻipoi` | unresolved | PE s.v. poi |
+| `kau?kaupale` | to place, set, put | PE s.v. kau |
+| `pale?kaupale` | to ward off, fend off | PE s.v. pale |
+| `kua?kuahao` | anvil, beating block | PE s.v. kua |
+| `kaha?kahawai` | place | PE s.v. kaha |
+| `kaha?kūkaha` | to turn aside, turn away | Andrews s.v. kaha; PE s.v. kū.kaha |
+| `kaka?kakaʻōlelo` | to strike, to fence | PE s.v. kākāʻōlelo |
+| `kū?kūʻau` | to stand | PE s.v. kū |
+| `kū?kūʻauhau` | to stand | PE s.v. kū |
+| `luna?kaʻaluna` | above, upper; one in command | PE s.v. luna |
+| `olo?olokaʻa` | unresolved | PE s.v. olo; ʻolokaʻa |
+| `pahu?pahukapu` | post, stake | PE s.v. pahu |
+| `pū?paʻapū` | together, entirely | PE s.v. pū |
+| `paʻi?paʻiaʻa` | unresolved | PE s.v. paʻi |
+| `ʻau?ʻaumakua` | group, company | PE s.v. ʻau |
+| `ʻau?ʻauwai` | unresolved | PE s.v. ʻau; PPN kau + wai |
+| `ʻula?alaʻula` | flame, red glow | PE s.v. alaula |
+| `hāliʻi` | spelling: haliʻi | PE s.v. haliʻi kuli; hāliʻi |
+
+The unresolved ʻala stone in makaʻala also retains its empty gloss.
 
 ### E2 · Root spellings
 

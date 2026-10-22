@@ -1,5 +1,5 @@
 {
- "_about": "The Pukui & Elbert check the ◦ on a card asks for, run word by word. Read against the thirteen dictionaries served by Wehe²wiki² (UH Hilo / Ulukau), which carries Pukui & Elbert 1986 with per-entry attribution; wehewehe.org itself is behind the same bot challenge SOURCES.md describes and was not opened. Applied by build_words.py after the curation: `pe` sets the card's evidence mark, `spelling` and `gloss` replace what ships, and an entry carrying `ruling` applies nothing but its gloss and keeps its ◦ — those are the calls that need the owner, because they would respell a stone other words share or split a root. `was` records the gloss that was there, so the diff reads. This is a dictionary check by a Hawaiian-language reviewer agent, not a kumu's reading: SOURCES.md's standing request for a fluent speaker still stands.",
+ "_about": "Dictionary evidence for the word list, with per-entry attribution. build_words.py applies spelling and gloss choices, excludes entries marked unattested, and keeps the circle for unconfirmed senses or open root rulings. Whole-word dictionary evidence and stone etymology are separate claims. Source URLs identify directly checked entries. The list has not been read by a fluent speaker.",
  "reviewer": "LEILANI 🌺 — ʻŌlelo Hawaiʻi reviewer, Taurus Translation Fleet",
  "reviewed": "2026-10-06",
  "authority": "Mary Kawena Pukui and Samuel H. Elbert, Hawaiian Dictionary, revised and enlarged edition (University of Hawaiʻi Press, 1986)",
@@ -13,16 +13,15 @@
  "lookup_service": "https://wehe.hilo.hawaii.edu/ (Wehe²wiki², UH Hilo / Ulukau)",
  "scope": "the 370 words marked ev=pending, plus a spot check of the 228 already marked keep",
  "verdict_key": {
-  "confirmed": "correct as glossed, confirmed in Pukui & Elbert",
+  "confirmed": "the shipped sense is supported by the cited dictionary entry",
   "fix": "confirmed, with a corrected spelling or gloss",
-  "unconfirmed": "in no dictionary reachable except one 1836 line; keeps its ◦",
+  "unconfirmed": "the shipped sense needs further dictionary evidence; keeps its ◦",
   "unattested": "not an attested word; does not ship"
  },
  "counts": {
-  "fix": 67,
-  "confirmed": 315,
-  "unattested": 2,
-  "unconfirmed": 3
+  "confirmed": 321,
+  "fix": 65,
+  "unconfirmed": 1
  },
  "words": {
   "aheahe": {
@@ -64,7 +63,10 @@
    "pe": "confirmed",
    "spelling": "aliʻi wahine",
    "source": "PE s.v. aliʻi wahine",
-   "note": "PE: 'Chiefess, queen.' Two words. PE adds a courtesy note worth knowing: it is also a polite word for someone's wife — but never said of or to one's own."
+   "note": "PE: 'Chiefess, queen.' Two words. PE adds a courtesy note worth knowing: it is also a polite word for someone's wife — but never said of or to one's own.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D998&l=en"
+   ]
   },
   "ana ʻāina": {
    "pe": "confirmed",
@@ -91,14 +93,20 @@
    "was": "blood vessel, vein",
    "ruling": "PE writes ʻaʻa koko with an opening ʻokina. The aʻa stone is shared with aʻalele, aʻalolo and paʻiaʻa, and she read aʻalolo as correct at aʻa — so this is a root question, not a typo.",
    "source": "PE s.v. ʻaʻa koko",
-   "note": "Gloss right ('vein, blood vessel'); the word is missing its opening ʻokina. PE: ʻaʻa koko. ʻAʻa (root, vein) always carries it."
+   "note": "Gloss right ('vein, blood vessel'); the word is missing its opening ʻokina. PE: ʻaʻa koko. ʻAʻa (root, vein) always carries it.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D51&l=en"
+   ]
   },
   "aʻalele": {
    "pe": "fix",
    "was": "artery",
    "gloss": "pulse (lit., leaping vein)",
    "source": "PE s.v. aʻalele; And.–Parker s.v. aalele",
-   "note": "PE reads it as the PULSE, not the artery: 'Pulse. Lit., leaping vein.' Andrews and Parker say artery, which is where his gloss came from — worth giving both, with PE first."
+   "note": "PE reads it as the PULSE, not the artery: 'Pulse. Lit., leaping vein.' Andrews and Parker say artery, which is where his gloss came from — worth giving both, with PE first.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D63&l=en"
+   ]
   },
   "aʻalolo": {
    "pe": "confirmed",
@@ -114,8 +122,12 @@
    "pe": "fix",
    "was": "rack; to perch on slender footing",
    "gloss": "to straddle; on slender footing",
-   "source": "PE s.v. hakakau; haka kau; And.–Parker s.v. hakakau",
-   "note": "Two different lexemes got fused. PE: hakakau = 'to straddle; fig. a tall thin person'; the 'rack / perch / shelf' sense is haka kau (two words). Keep the stone as hakakau with the straddle/slender-footing gloss, or respell as 'haka kau' for the shelf sense — but not both in one gloss."
+   "source": "PE s.v. haka.kau; Andrews (1865) s.v. HA-KA-KAU",
+   "note": "PE records straddling and figuratively a tall thin person. Andrews records standing with slender footing, as on the edge of a canoe, and analyzes haka, ladder, + kau, set up.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2410&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D50301&l=en"
+   ]
   },
   "hakamoa": {
    "pe": "fix",
@@ -123,7 +135,11 @@
    "gloss": "cockfight; a lua style using no hands",
    "spelling": "hākā moa",
    "source": "PE s.v. hākā moa, hakakāamoa; Kent s.v. haka moa",
-   "note": "Two gifts here. (1) The spelling: PE gives hākā moa (= hakakā a moa), 'quarrelling fowl'. (2) For his star compass — Hakamoa with a capital and no kahakō is a CONSTELLATION in PE, literally 'chicken roost'. So the stone as currently spelled is a star name, and the game is hākā moa. His 'one-leg wrestling' instinct was right: PE's sense 2 is a lua style fought with feet, legs, shoulders and head, hands not used."
+   "note": "Two gifts here. (1) The spelling: PE gives hākā moa (= hakakā a moa), 'quarrelling fowl'. (2) For his star compass — Hakamoa with a capital and no kahakō is a CONSTELLATION in PE, literally 'chicken roost'. So the stone as currently spelled is a star name, and the game is hākā moa. His 'one-leg wrestling' instinct was right: PE's sense 2 is a lua style fought with feet, legs, shoulders and head, hands not used.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2429&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2405&l=en"
+   ]
   },
   "haku wahine": {
    "pe": "confirmed",
@@ -136,7 +152,10 @@
    "gloss": "landowner; one who manages land",
    "spelling": "hakuʻāina",
    "source": "PE s.v. hakuʻāina; Kent s.v. haku ʻāina",
-   "note": "PE writes it solid and glosses it 'landowner; landlord' — ownership, not only stewardship. Kent carries his 'manage land for and under a chief' sense. Give both; PE first."
+   "note": "PE writes it solid and glosses it 'landowner; landlord' — ownership, not only stewardship. Kent carries his 'manage land for and under a chief' sense. Give both; PE first.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2489&l=en"
+   ]
   },
   "haku ʻōlelo": {
    "pe": "confirmed",
@@ -147,7 +166,10 @@
    "pe": "confirmed",
    "spelling": "haku hale",
    "source": "PE s.v. haku hale",
-   "note": "PE: 'Landlord, house owner, host, hostess.' Two words."
+   "note": "PE: 'Landlord, house owner, host, hostess.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2496&l=en"
+   ]
   },
   "hale kaʻa": {
    "pe": "confirmed",
@@ -173,13 +195,19 @@
    "pe": "confirmed",
    "spelling": "hale kaua",
    "source": "PE s.v. hale kaua",
-   "note": "Gloss correct ('fort, fortification; tower'). PE writes it as two words."
+   "note": "Gloss correct ('fort, fortification; tower'). PE writes it as two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2654&l=en"
+   ]
   },
   "halekia": {
    "pe": "confirmed",
    "spelling": "hale kia",
    "source": "PE s.v. hale kia",
-   "note": "PE: 'Portico; veranda with pillars.' Two words in PE."
+   "note": "PE: 'Portico; veranda with pillars.' Two words in PE.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2657&l=en"
+   ]
   },
   "halelana": {
    "pe": "fix",
@@ -187,7 +215,10 @@
    "gloss": "floating house, houseboat; the Ark",
    "spelling": "hale lana",
    "source": "PE s.v. hale lana",
-   "note": "Lead with the Hawaiian sense, not the missionary one. PE: 'Floating house, ark, houseboat' with the example Ka hale lana i ke kai. 'The ark' is the Bible-translation use; it should follow, not lead. Two words in PE."
+   "note": "Lead with the Hawaiian sense, not the missionary one. PE: 'Floating house, ark, houseboat' with the example Ka hale lana i ke kai. 'The ark' is the Bible-translation use; it should follow, not lead. Two words in PE.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2682&l=en"
+   ]
   },
   "halelewa": {
    "pe": "confirmed",
@@ -198,13 +229,19 @@
    "pe": "confirmed",
    "spelling": "hale lole",
    "source": "PE s.v. hale lole",
-   "note": "PE: 'Cloth house, tent.' Two words."
+   "note": "PE: 'Cloth house, tent.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2696&l=en"
+   ]
   },
   "halemalu": {
    "pe": "confirmed",
    "spelling": "hale malu",
-   "source": "And. 1865 / Parker 1922 s.v. halemalu; Kent s.v. hale malu",
-   "note": "Not in Pukui–Elbert. Attested in Andrews–Parker and Kent as 'shaded house; shed'. Safe, but it is an older-dictionary word."
+   "source": "PE s.v. hale malu, hale malumalu",
+   "note": "PE records shaded house, shed, with spaced spellings hale malu and hale malumalu.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2706&l=en"
+   ]
   },
   "hamoʻula": {
    "pe": "confirmed",
@@ -225,13 +262,19 @@
    "pe": "confirmed",
    "spelling": "hanu paʻa",
    "source": "PE s.v. hanu paʻa",
-   "note": "PE: 'A head cold; stifled breathing.' Two words."
+   "note": "PE: 'A head cold; stifled breathing.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2976&l=en"
+   ]
   },
   "haowaha": {
    "pe": "confirmed",
    "spelling": "hao waha",
    "source": "PE s.v. hao waha",
-   "note": "PE: 'Bit of a bridle. Lit., mouth iron.' Exactly his gloss. Two words in PE."
+   "note": "PE: 'Bit of a bridle. Lit., mouth iron.' Exactly his gloss. Two words in PE.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3019&l=en"
+   ]
   },
   "hauhau": {
    "pe": "confirmed",
@@ -259,9 +302,12 @@
    "note": "'Brittle; to break in pieces' is right. PE's entry is huge (also: quavering voice, chiropractic massage, hula limbering) — a richer gloss is available if he wants one."
   },
   "heiheinalu": {
-   "pe": "unattested",
-   "source": "Not found in PE, Māmaka Kaiao, Andrews 1836/1865, Parker 1922, Kent, JPS 1943, Place Names, Land Terms",
-   "note": "Not attested as a compound anywhere I can reach. Both roots are solid — heihei, 'race, to race'; nalu, 'wave, surf' — but heihei nalu is not a recorded word, and it reads as 'wave race' rather than 'board race'. The attested word for surfing is heʻe nalu; a surf race would be heihei heʻe nalu. Recommend replacing with heʻe nalu, which is unimpeachable and belongs on a board like this anyway."
+   "pe": "confirmed",
+   "source": "Parker (1922) s.v. Heiheinalu",
+   "note": "Parker records surfing and racing on surfboards, with the analysis heihei, to run, + nalu, surf. The racing sense uses the race and wave stones.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D68824&l=en"
+   ]
   },
   "helekū": {
    "pe": "confirmed",
@@ -301,7 +347,7 @@
   "hiʻipoi": {
    "pe": "confirmed",
    "source": "PE s.v. hiʻi.poi",
-   "note": "PE: 'To tend, feed, cherish, as a child.' Correct. Note his root gloss for 'poi' here is EMPTY; the poi in this word is 'to cover, to protect, to cherish', not the food."
+   "note": "PE records tending, feeding, and cherishing a child. The compound meaning does not establish a free poi root with that sense; its stone sense remains unresolved."
   },
   "hiʻuhiʻu": {
    "pe": "confirmed",
@@ -322,7 +368,11 @@
    "pe": "fix",
    "source": "PE s.v. hoaloha; hoa aloha",
    "note": "PE's headword is hoaloha, with hoa aloha listed as a variant spelling.",
-   "ruling": "PE's headword is hoaloha; hoa aloha is listed as a variant spelling. Closing it would drop a letter the two stones carry, so the stones could no longer spell the word."
+   "ruling": "PE's headword is hoaloha; hoa aloha is listed as a variant spelling. Closing it would drop a letter the two stones carry, so the stones could no longer spell the word.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3709&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3782&l=en"
+   ]
   },
   "hoahanauna": {
    "pe": "fix",
@@ -330,12 +380,18 @@
    "gloss": "a relative of the same generation",
    "spelling": "hoa hanauna",
    "source": "PE s.v. hoa hanauna",
-   "note": "PE is more exact than 'fellow kin': hoa hanauna is specifically kin of your OWN generation — cousins, not elders. Two words."
+   "note": "PE is more exact than 'fellow kin': hoa hanauna is specifically kin of your OWN generation — cousins, not elders. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3721&l=en"
+   ]
   },
   "hoakipa": {
-   "pe": "unattested",
-   "source": "Not found in PE, Māmaka Kaiao, Andrews 1836/1865, Parker 1922, Kent, Judd-Pukui-Stokes, Place Names, Land Terms",
-   "note": "I could not find hoa kipa / hoakipa as a compound in ANY of the thirteen dictionaries. Both roots are real (hoa, companion; kipa, to visit, to turn aside) and the formation is not ungrammatical, but it is not an attested word. For 'visitor' the living word is malihini. Recommend removing it, or swapping in an attested hoa- compound — hoa hele, hoa kaua, hoa ʻōlelo, hoa hanauna are all solid."
+   "pe": "confirmed",
+   "source": "Combined Hawaiian Dictionary (2020) s.v. hoakipa",
+   "note": "Visitor, guest; the entry gives hoa + kipa and an example about official guests. This sense uses the companion and visit stones.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D102683&l=en"
+   ]
   },
   "hoakoa": {
    "pe": "confirmed",
@@ -343,21 +399,31 @@
    "note": "Not in PE. 'A fellow soldier; one under the same leader.' Faithful."
   },
   "hoalawaiʻa": {
-   "pe": "unconfirmed",
-   "source": "Andrews 1836 s.v. Ho-a-la-wa-ia only",
-   "note": "Attested only in Andrews 1836 ('a fishing companion'). Not in PE or any later dictionary. The formation is regular — compare hoa hele, hoa ʻai, hoa kaua, all solid — so it is probably fine, but the evidence is one line from 1836."
+   "pe": "confirmed",
+   "source": "Andrews (1836, 1865) s.v. Ho-a-la-wa-ia",
+   "note": "Andrews (1865) records a fellow fisherman or fishing companion, with hoa, companion, + lawaia, fisherman.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D51252&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D102713&l=en"
+   ]
   },
   "hoaʻai": {
    "pe": "confirmed",
    "spelling": "hoa ʻai",
    "source": "PE s.v. hoa ʻai",
-   "note": "PE: 'Eating or dinner companion.' Two words."
+   "note": "PE: 'Eating or dinner companion.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3705&l=en"
+   ]
   },
   "hoaʻōlelo": {
    "pe": "confirmed",
    "spelling": "hoa ʻōlelo",
    "source": "PE s.v. hoa ʻōlelo",
-   "note": "PE: 'Companion with whom one converses or consults.' Two words."
+   "note": "PE: 'Companion with whom one converses or consults.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3804&l=en"
+   ]
   },
   "hoe waʻa": {
    "pe": "confirmed",
@@ -398,13 +464,19 @@
    "pe": "confirmed",
    "spelling": "hua liʻi",
    "source": "PE s.v. hua liʻi",
-   "note": "PE: 'Small or inferior fruit; runt; small, puny.' Two words. PE's second sense is a delight: hua liʻi is also a lower-case letter."
+   "note": "PE: 'Small or inferior fruit; runt; small, puny.' Two words. PE's second sense is a delight: hua liʻi is also a lower-case letter.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4552&l=en"
+   ]
   },
   "huaʻai": {
    "pe": "confirmed",
    "spelling": "hua ʻai",
    "source": "PE s.v. hua ʻai",
-   "note": "PE: 'Edible fruit or seed.' Two words."
+   "note": "PE: 'Edible fruit or seed.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4478&l=en"
+   ]
   },
   "huaʻōlelo": {
    "pe": "confirmed",
@@ -420,19 +492,28 @@
    "pe": "fix",
    "spelling": "hue wai",
    "source": "PE s.v. hue wai",
-   "note": "PE spaces it. Māmaka Kaiao allows the solid form. Gloss right."
+   "note": "PE spaces it. Māmaka Kaiao allows the solid form. Gloss right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4623&l=en"
+   ]
   },
   "hukiwai": {
    "pe": "confirmed",
    "spelling": "huki wai",
    "source": "PE s.v. huki wai",
-   "note": "PE: 'To draw water; one who draws water.' Two words."
+   "note": "PE: 'To draw water; one who draws water.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4766&l=en"
+   ]
   },
   "hulilua": {
    "pe": "confirmed",
    "spelling": "huli lua",
    "source": "PE s.v. huli lua",
-   "note": "PE: 'To turn in two directions; to shift, as the wind; unstable.' Two words. PE's example deserves to be on the piece: Mehe makani huli lua lā, huli ka manaʻo — like a shifting wind, the mind changes."
+   "note": "PE: 'To turn in two directions; to shift, as the wind; unstable.' Two words. PE's example deserves to be on the piece: Mehe makani huli lua lā, huli ka manaʻo — like a shifting wind, the mind changes.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4840&l=en"
+   ]
   },
   "huluʻiʻiwi": {
    "pe": "confirmed",
@@ -454,7 +535,10 @@
    "was": "sea foam; the sanderling",
    "gloss": "the sanderling; beach morning glory",
    "source": "PE s.v. hunakai; huna kai",
-   "note": "His gloss mixes two spellings. hunakai closed is the beach morning-glory and the sanderling, the little shorebird that runs the wave line. huna kai open is sea spray, sea foam. Both are real; one stone pair can only be one of them."
+   "note": "His gloss mixes two spellings. hunakai closed is the beach morning-glory and the sanderling, the little shorebird that runs the wave line. huna kai open is sea spray, sea foam. Both are real; one stone pair can only be one of them.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4937&l=en"
+   ]
   },
   "hunakaua": {
    "pe": "fix",
@@ -462,7 +546,10 @@
    "gloss": "a unit of a war host; one fighter",
    "spelling": "huna kaua",
    "source": "PE s.v. huna kaua",
-   "note": "PE: 'A battle unit, either a single individual or a group of men; host of an army.' The 'or a group' half is missing from his gloss, and it is the interesting half — huna is a grain, a particle, so the word scales. Two words."
+   "note": "PE: 'A battle unit, either a single individual or a group of men; host of an army.' The 'or a group' half is missing from his gloss, and it is the interesting half — huna is a grain, a particle, so the word scales. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4941&l=en"
+   ]
   },
   "huʻihuʻi": {
    "pe": "confirmed",
@@ -479,13 +566,21 @@
    "was": "gourd leaf stalk, used medicinally",
    "ruling": "PE spells it hāʻipu. The ipu stone ships only here, but ipu the gourd carries no ʻokina of its own: the ʻokina belongs to the compound, not the root, so no stone can hold it.",
    "source": "PE s.v. hāʻipu",
-   "note": "Gloss right ('stem of a gourd leaf, as used in medicine'); PE spells it with an ʻokina: hāʻipu."
+   "note": "Gloss right ('stem of a gourd leaf, as used in medicine'); PE spells it with an ʻokina: hāʻipu.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2383&l=en"
+   ]
   },
   "hākō": {
-   "pe": "fix",
-   "gloss": "to carve a path, as through coral",
-   "source": "PE s.v. hā.kō and hako",
-   "note": "IMPORTANT. hākō does not mean 'sugar-cane leaf' in any dictionary I can find. PE has two entries: hako (no kahakō) = 'dignified, noble, honorable', rare; and hā.kō = 'to carve out a pathway, as a passage through coral or as a water course', rare. The sugar-cane leaf is lau kō — which he already has as its own stone. Either regloss hākō, or retire it; the carving-a-channel-through-coral sense would be a beautiful stone on a wayfinding map."
+   "pe": "confirmed",
+   "gloss": "sugar-cane leaf",
+   "source": "Andrews (1865) s.v. HA-KO; Parker (1922) s.v. Hako; PE s.v. hā.kō",
+   "note": "Andrews and Parker attest sugar-cane leaf. Parker explicitly gives hā, leaf, + kō, sugar cane. This is the sense represented by the two stones. PE also records a separate pathway-carving sense; that sense does not establish the leaf-stalk and sugar-cane root analysis.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2476&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D50333&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D68199&l=en"
+   ]
   },
   "hāliʻikuli": {
    "pe": "fix",
@@ -493,7 +588,11 @@
    "gloss": "to spread the knees; (hence) stingy",
    "spelling": "haliʻi kuli",
    "source": "PE s.v. haliʻi kuli",
-   "note": "PE writes the compound with a SHORT a — haliʻi kuli — even though the free root is hāliʻi. And PE gives only 'to spread the knees' and 'stingy'; 'one who guards the food' is an interpretation, not a dictionary sense. The image is someone sitting with knees spread over the food so no one else can reach — worth keeping as a note, not as the gloss."
+   "note": "PE writes the compound with a SHORT a — haliʻi kuli — even though the free root is hāliʻi. And PE gives only 'to spread the knees' and 'stingy'; 'one who guards the food' is an interpretation, not a dictionary sense. The image is someone sitting with knees spread over the food so no one else can reach — worth keeping as a note, not as the gloss.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2768&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2767&l=en"
+   ]
   },
   "hānau mua": {
    "pe": "confirmed",
@@ -504,31 +603,47 @@
    "pe": "confirmed",
    "spelling": "hānau kahi",
    "source": "PE s.v. hā.nau kahi",
-   "note": "PE: 'Only child.' Two words."
+   "note": "PE: 'Only child.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2921&l=en"
+   ]
   },
   "hāniu": {
    "pe": "confirmed",
    "spelling": "hā niu",
    "source": "PE s.v. hā niu",
-   "note": "PE: 'Heavy end of a coconut frond.' Two words. Andrews adds what it was for — beating the banks of loʻi kalo."
+   "note": "PE: 'Heavy end of a coconut frond.' Two words. Andrews adds what it was for — beating the banks of loʻi kalo.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2950&l=en"
+   ]
   },
   "hōkūao": {
    "pe": "fix",
    "was": "Venus as the morning star",
    "source": "PE s.v. Hōkūao",
-   "note": "Gloss right: Venus as the morning star. PE capitalises it — it is a proper name, not a common noun. (PE also gives Hōkūaliʻi as another name for it.)"
+   "note": "Gloss right: Venus as the morning star. PE capitalises it — it is a proper name, not a common noun. (PE also gives Hōkūaliʻi as another name for it.)",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3953&l=en"
+   ]
   },
   "hōkūlele": {
    "pe": "confirmed",
    "spelling": "hōkū lele",
    "source": "PE s.v. hō.kū lele",
-   "note": "PE: 'Shooting star, meteor, any moving star.' Two words."
+   "note": "PE: 'Shooting star, meteor, any moving star.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3967&l=en"
+   ]
   },
   "hōkūloa": {
    "pe": "fix",
    "was": "Venus; the morning star",
    "source": "PE s.v. Hōkūloa",
-   "note": "Gloss right. Capitalise — a proper name, the same star as Hōkūao."
+   "note": "Gloss right. Capitalise — a proper name, the same star as Hōkūao.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3970&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D34613&l=en"
+   ]
   },
   "hūkai": {
    "pe": "confirmed",
@@ -571,7 +686,10 @@
    "gloss": "bone socket, as the eye socket",
    "spelling": "iwi pona",
    "source": "PE s.v. iwi pona",
-   "note": "PE: 'Hollow bone, as the eye socket; socket at the joint into which a round end of a bone fits.' It is the SOCKET, not the joint in general. Two words."
+   "note": "PE: 'Hollow bone, as the eye socket; socket at the joint into which a round end of a bone fits.' It is the SOCKET, not the joint in general. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D5634&l=en"
+   ]
   },
   "kahaone": {
    "pe": "confirmed",
@@ -627,7 +745,10 @@
    "pe": "fix",
    "spelling": "kaiʻau",
    "source": "PE s.v. kaiʻau; kai au",
-   "note": "Correct meaning — sea too deep to stand in — but PE closes this one: kaiʻau. He also ships kai au, open, correctly glossed sea where a current is visible. He found the pair; only the spacing is inverted."
+   "note": "Correct meaning — sea too deep to stand in — but PE closes this one: kaiʻau. He also ships kai au, open, correctly glossed sea where a current is visible. He found the pair; only the spacing is inverted.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D6116&l=en"
+   ]
   },
   "kala hale": {
    "pe": "confirmed",
@@ -673,13 +794,19 @@
    "pe": "fix",
    "spelling": "kaula hao",
    "source": "PE s.v. kaula hao",
-   "note": "PE spaces it. Gloss right."
+   "note": "PE spaces it. Gloss right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7292&l=en"
+   ]
   },
   "kaulawaha": {
    "pe": "confirmed",
    "spelling": "kaula waha",
    "source": "PE s.v. kaula waha",
-   "note": "PE: 'Bridle, reins; to bridle. Lit., mouth chain.' Two words."
+   "note": "PE: 'Bridle, reins; to bridle. Lit., mouth chain.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7349&l=en"
+   ]
   },
   "kaulua": {
    "pe": "confirmed",
@@ -697,13 +824,19 @@
    "gloss": "trailer; house on wheels",
    "spelling": "kaʻa hale",
    "source": "PE s.v. kaʻa hale",
-   "note": "PE is specific: 'Trailer, house on wheels.' Not 'covered carriage' — that is hale kaʻa, which he already has as a separate stone."
+   "note": "PE is specific: 'Trailer, house on wheels.' Not 'covered carriage' — that is hale kaʻa, which he already has as a separate stone.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D5652&l=en"
+   ]
   },
   "kaʻakaua": {
    "pe": "confirmed",
    "spelling": "kaʻa kaua",
    "source": "PE s.v. kaʻa kaua",
-   "note": "PE sense 1: 'Skilled in warfare; strategist, war maneuvers, strategy' — his gloss. Two words. Sense 2 is a bonus for the board: war chariot, and in modern use, a tank."
+   "note": "PE sense 1: 'Skilled in warfare; strategist, war maneuvers, strategy' — his gloss. Two words. Sense 2 is a bonus for the board: war chariot, and in modern use, a tank.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D5683&l=en"
+   ]
   },
   "kaʻalalo": {
    "pe": "confirmed",
@@ -719,7 +852,10 @@
    "pe": "confirmed",
    "spelling": "keiki papa",
    "source": "PE s.v. keiki papa",
-   "note": "PE: 'Native whose ancestors for several generations back were natives of the same place.' His gloss is a good compression. Two words."
+   "note": "PE: 'Native whose ancestors for several generations back were natives of the same place.' His gloss is a good compression. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7647&l=en"
+   ]
   },
   "keʻokeʻo": {
    "pe": "confirmed",
@@ -745,13 +881,19 @@
    "pe": "confirmed",
    "spelling": "kia kolu",
    "source": "PE s.v. kia kolu",
-   "note": "PE: 'Three-masted vessel.' Two words."
+   "note": "PE: 'Three-masted vessel.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7853&l=en"
+   ]
   },
   "kialua": {
    "pe": "confirmed",
    "spelling": "kia lua",
    "source": "PE s.v. kia lua",
-   "note": "PE: 'Brig, two-masted vessel, two-masted schooner.' Two words."
+   "note": "PE: 'Brig, two-masted vessel, two-masted schooner.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7861&l=en"
+   ]
   },
   "kiaʻipoʻo": {
    "pe": "confirmed",
@@ -762,13 +904,19 @@
    "pe": "confirmed",
    "spelling": "kiaʻi puka",
    "source": "PE s.v. kiaʻi puka",
-   "note": "PE: 'Guard at a gate or door, porter, gatekeeper.' Two words."
+   "note": "PE: 'Guard at a gate or door, porter, gatekeeper.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7846&l=en"
+   ]
   },
   "kiaʻipō": {
    "pe": "confirmed",
    "spelling": "kiaʻi pō",
    "source": "PE s.v. kiaʻi pō",
-   "note": "PE: 'Night watchman, night watch.' Two words."
+   "note": "PE: 'Night watchman, night watch.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7844&l=en"
+   ]
   },
   "kihikihi": {
    "pe": "confirmed",
@@ -790,13 +938,19 @@
    "was": "to keep a daily tally",
    "gloss": "timekeeper (lit., day marker)",
    "source": "PE s.v. kiko.lā; MK s.v. kiko lā",
-   "note": "PE makes it a person or instrument, not an act: 'Timekeeper. Lit., day marker.' And a gift for the lani field: Māmaka Kaiao gives kiko lā, two words, for SUNSPOT."
+   "note": "PE makes it a person or instrument, not an act: 'Timekeeper. Lit., day marker.' And a gift for the lani field: Māmaka Kaiao gives kiko lā, two words, for SUNSPOT.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8078&l=en"
+   ]
   },
   "kiloheʻe": {
    "pe": "confirmed",
    "spelling": "kilo heʻe",
    "source": "PE s.v. kilo heʻe",
-   "note": "Two words in PE — and this is one of the best entries in the whole dictionary, worth quoting on the piece: 'formerly the kilo heʻe spit chewed kukui nut on the sea to calm the water, then examined (kilo) the sea bottom for octopus.' Same kilo as kilo hōkū, the star watcher. His map is full of kilo."
+   "note": "Two words in PE — and this is one of the best entries in the whole dictionary, worth quoting on the piece: 'formerly the kilo heʻe spit chewed kukui nut on the sea to calm the water, then examined (kilo) the sea bottom for octopus.' Same kilo as kilo hōkū, the star watcher. His map is full of kilo.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8158&l=en"
+   ]
   },
   "kino wailua": {
    "pe": "confirmed",
@@ -814,19 +968,28 @@
    "gloss": "printed picture, as in a newspaper",
    "spelling": "kiʻi palapala",
    "source": "PE s.v. kiʻi palapala",
-   "note": "PE narrows it: a *printed* picture. 'Portrait' is kiʻi helehelena / kiʻi onohi. Two words."
+   "note": "PE narrows it: a *printed* picture. 'Portrait' is kiʻi helehelena / kiʻi onohi. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7973&l=en"
+   ]
   },
   "komohale": {
    "pe": "confirmed",
    "spelling": "komo hale",
    "source": "PE s.v. komo hale",
-   "note": "PE: 'Housewarming; moving into a new house.' Two words."
+   "note": "PE: 'Housewarming; moving into a new house.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8841&l=en"
+   ]
   },
   "komoʻāina": {
    "pe": "confirmed",
    "spelling": "komo ʻāina",
    "source": "PE s.v. komo ʻāina",
-   "note": "PE: 'To take possession of a land; to acquire land, as by inheritance.' Two words."
+   "note": "PE: 'To take possession of a land; to acquire land, as by inheritance.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8839&l=en"
+   ]
   },
   "konakona": {
    "pe": "confirmed",
@@ -837,19 +1000,28 @@
    "pe": "confirmed",
    "spelling": "koʻi kahi",
    "source": "PE s.v. koʻi kahi",
-   "note": "PE: 'Carpenter's plane; scraper, as for olonā fiber. Lit., shaving adze.' Two words."
+   "note": "PE: 'Carpenter's plane; scraper, as for olonā fiber. Lit., shaving adze.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8580&l=en"
+   ]
   },
   "koʻilipi": {
    "pe": "confirmed",
    "spelling": "koʻi lipi",
    "source": "PE s.v. koʻi lipi",
-   "note": "PE: 'Adze, axe, hatchet. Lit., sharp adze.' Two words."
+   "note": "PE: 'Adze, axe, hatchet. Lit., sharp adze.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8591&l=en"
+   ]
   },
   "kuahao": {
    "pe": "confirmed",
    "spelling": "kua hao",
    "source": "PE s.v. kua hao",
-   "note": "PE: 'Anvil, as used by blacksmiths.' Two words. Note his root gloss for 'kua' here is EMPTY; the relevant kua is the anvil/beating-block sense."
+   "note": "PE: 'Anvil, as used by blacksmiths.' Two words. Note his root gloss for 'kua' here is EMPTY; the relevant kua is the anvil/beating-block sense.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9050&l=en"
+   ]
   },
   "kuamauna": {
    "pe": "confirmed",
@@ -866,7 +1038,10 @@
    "was": "hard-backed crab or mollusk",
    "gloss": "the chiton, a hard-backed mollusk",
    "source": "PE s.v. kuapaʻa",
-   "note": "His gloss is PE sense 2 and is correct. I am flagging it because sense 1 is the one a Hawaiian reader meets first: kuapaʻa, 'slave, bond servant; hard labour; oppressed, enslaved, downtrodden' — literally a hardened back. Leaving only the mollusc on the stone hides a heavy word. Also lovely and worth keeping: the chiton is used in the māwaewae ceremony for a newborn's first-born rites."
+   "note": "His gloss is PE sense 2 and is correct. I am flagging it because sense 1 is the one a Hawaiian reader meets first: kuapaʻa, 'slave, bond servant; hard labour; oppressed, enslaved, downtrodden' — literally a hardened back. Leaving only the mollusc on the stone hides a heavy word. Also lovely and worth keeping: the chiton is used in the māwaewae ceremony for a newborn's first-born rites.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9191&l=en"
+   ]
   },
   "kuenehale": {
    "pe": "confirmed",
@@ -877,19 +1052,28 @@
    "pe": "confirmed",
    "spelling": "kuhi hewa",
    "source": "PE s.v. kuhi hewa",
-   "note": "PE: 'To suppose wrongly, err in judgment; erroneous supposition, illusion.' Two words."
+   "note": "PE: 'To suppose wrongly, err in judgment; erroneous supposition, illusion.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9316&l=en"
+   ]
   },
   "kuilua": {
    "pe": "confirmed",
    "spelling": "kuʻi lua",
    "source": "PE s.v. kuʻi lua",
-   "note": "Gloss right, but the ʻokina is missing: PE kuʻi lua, two words. Note kuʻi is also 'to punch', so PE's gloss runs 'to add on, increase, punch doubly hard' — the same word doubles a blessing or a blow. E kuʻi lua mai ka pōmaikaʻi iā lākou, may their blessings be doubled."
+   "note": "Gloss right, but the ʻokina is missing: PE kuʻi lua, two words. Note kuʻi is also 'to punch', so PE's gloss runs 'to add on, increase, punch doubly hard' — the same word doubles a blessing or a blow. E kuʻi lua mai ka pōmaikaʻi iā lākou, may their blessings be doubled.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9416&l=en"
+   ]
   },
   "kulihiamoe": {
    "pe": "confirmed",
    "spelling": "kuli hiamoe",
    "source": "PE s.v. kuli hiamoe",
-   "note": "PE: 'To doze; too drowsy to hear (a deeper sleep than kulu hiamoe). Lit., sleep deafly.' Marked RARE. Two words."
+   "note": "PE: 'To doze; too drowsy to hear (a deeper sleep than kulu hiamoe). Lit., sleep deafly.' Marked RARE. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9679&l=en"
+   ]
   },
   "kumulau": {
    "pe": "confirmed",
@@ -900,7 +1084,10 @@
    "pe": "confirmed",
    "spelling": "kumu wai",
    "source": "PE s.v. kumu wai",
-   "note": "PE: 'Source of a stream, spring.' Two words. ʻĀina kumu wai is Māmaka Kaiao's word for a watershed."
+   "note": "PE: 'Source of a stream, spring.' Two words. ʻĀina kumu wai is Māmaka Kaiao's word for a watershed.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9853&l=en"
+   ]
   },
   "kupuna wahine": {
    "pe": "confirmed",
@@ -916,7 +1103,10 @@
    "pe": "fix",
    "spelling": "kuʻi hao",
    "source": "PE s.v. kuʻi hao",
-   "note": "PE writes it as two words: to pound and shape iron; to forge; blacksmith. Gloss right."
+   "note": "PE writes it as two words: to pound and shape iron; to forge; blacksmith. Gloss right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9369&l=en"
+   ]
   },
   "kuʻukuʻu": {
    "pe": "confirmed",
@@ -935,15 +1125,22 @@
   },
   "kālāʻau": {
    "pe": "confirmed",
-   "ruling": "PE writes kālaʻau, one kahakō fewer — though Māmaka Kaiao allows his form as a variant, so this may be no error at all. The lāʻau stone is shared by six words.",
-   "source": "PE s.v. kālaʻau; MK s.v. kālāʻau",
-   "note": "Gloss right: 'stick dancing; to stick dance.' PE's headword is kālaʻau with one kahakō; Māmaka Kaiao lists kālāʻau as a spelling variant, so his form is defensible — but PE is the safer spelling. Note PE adds that kākā lāʻau is the commoner term for the fighting art."
+   "ruling": "PE uses kālaʻau; Kent attests kālāʻau. The lāʻau stone is shared, so its spelling remains a root decision.",
+   "source": "PE s.v. kāla.ʻau; Kent (1986) s.v. kālāʻau",
+   "note": "PE records stick dancing as kālaʻau. Kent records kālāʻau with both long vowels for striking sticks to the rhythm of a dance.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D6436&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D144972&l=en"
+   ]
   },
   "kāmaʻaloa": {
    "pe": "confirmed",
    "spelling": "kāmaʻa loa",
    "source": "PE s.v. kāmaʻa loa",
-   "note": "PE: 'Runners of a hōlua sled. Lit., long shoes.' Exact. Two words."
+   "note": "PE: 'Runners of a hōlua sled. Lit., long shoes.' Exact. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D6668&l=en"
+   ]
   },
   "kāne make": {
    "pe": "confirmed",
@@ -956,13 +1153,20 @@
    "gloss": "to snare birds; bird snarer",
    "spelling": "kāwili manu",
    "source": "PE s.v. kā.wili manu",
-   "note": "PE: 'Bird catcher or snarer; to snare birds.' Bird lime specifically is kēpau (and the limed stick is lāʻau kia, which he has separately) — so 'with bird lime' over-specifies. Two words."
+   "note": "PE: 'Bird catcher or snarer; to snare birds.' Bird lime specifically is kēpau (and the limed stick is lāʻau kia, which he has separately) — so 'with bird lime' over-specifies. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7535&l=en"
+   ]
   },
   "kēʻai": {
    "pe": "confirmed",
    "spelling": "kē ʻai",
    "source": "PE s.v. kē ʻai; And.–Parker s.v. keai",
-   "note": "'To thrust away food; to fast.' Two words in PE. The commoner living form is hoʻokē ʻai."
+   "note": "'To thrust away food; to fast.' Two words in PE. The commoner living form is hoʻokē ʻai.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7555&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7544&l=en"
+   ]
   },
   "kōhiʻai": {
    "pe": "fix",
@@ -970,20 +1174,29 @@
    "gloss": "to pick taro from the stalk",
    "spelling": "kōhi ʻai",
    "source": "PE s.v. kōhi ʻai",
-   "note": "PE is specific to kalo: 'To separate taro corm from stalk; to pick taro.' 'To dig food from the ground, as potatoes' is Parker's wording. Two words in PE."
+   "note": "PE is specific to kalo: 'To separate taro corm from stalk; to pick taro.' 'To dig food from the ground, as potatoes' is Parker's wording. Two words in PE.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8530&l=en"
+   ]
   },
   "kōkea": {
    "pe": "confirmed",
    "spelling": "kō kea",
    "source": "PE s.v. kō kea (see kea 3); And.–Parker",
-   "note": "'The white cane.' Two words."
+   "note": "'The white cane.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8620&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7546&l=en"
+   ]
   },
   "kōkō": {
-   "pe": "fix",
-   "was": "to fulfill; to be pregnant",
-   "gloss": "carrying net, as for a calabash",
-   "source": "PE s.v. kōkō; Kent s.v. kōkō",
-   "note": "IMPORTANT — wrong word. PE kōkō is the carrying NET: 'a carrying net, usually made of sennit, as used for hanging calabashes; a string hammock, as formerly used for carrying the very old.' The 'fulfil / be great with young' sense he has is kō (Parker lists it under koko with a note 'Syn: ua kō'). Also kokō, short first vowel, is a rooster's crow. Three words, three vowel lengths. The kōkō is also a beautiful object to have on the board — kōkō puʻu, the fine knotted carrier; ua kaʻi kōkō, carried in a hammock because of great age."
+   "pe": "confirmed",
+   "gloss": "to fulfill; to be pregnant",
+   "source": "PE s.v. kō.kō, senses 4–5",
+   "note": "PE records pregnancy in sense 4 and reduplication of kō, fulfill, in sense 5. These senses match the fulfill/conceive stones. The carrying-net sense in the same entry has a separate ancestral reference and is not the sense represented by these stones.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D8642&l=en"
+   ]
   },
   "kōʻula": {
    "pe": "confirmed",
@@ -995,7 +1208,11 @@
    "was": "to retreat, as from something feared",
    "ruling": "PE's word is kuemi, no kahakō; kūemi with the kahakō is Māmaka Kaiao's modern recessive, as in genetics. The kū stone is shared by seventeen words, so this asks for a sense split rather than a respelling.",
    "source": "PE s.v. kuemi; MK s.v. kūemi",
-   "note": "For his sense, PE spells it kuemi, no kahakō: 'to step back; to walk backward, AS FROM THE PRESENCE OF A CHIEF; to retreat, shrink back, recoil, flinch.' That court detail is the whole word. (kūemi with the kahakō does exist, but it is Māmaka Kaiao's modern coinage for 'recessive', as of a gene.)"
+   "note": "For his sense, PE spells it kuemi, no kahakō: 'to step back; to walk backward, AS FROM THE PRESENCE OF A CHIEF; to retreat, shrink back, recoil, flinch.' That court detail is the whole word. (kūemi with the kahakō does exist, but it is Māmaka Kaiao's modern coinage for 'recessive', as of a gene.)",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D91541&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9265&l=en"
+   ]
   },
   "kūhewa": {
    "pe": "confirmed",
@@ -1021,7 +1238,10 @@
    "pe": "confirmed",
    "spelling": "kūkulu papa",
    "source": "PE s.v. kūkulu papa",
-   "note": "PE: 'To pile in regular order; to arrange, classify, as plants, words.' Two words."
+   "note": "PE: 'To pile in regular order; to arrange, classify, as plants, words.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9592&l=en"
+   ]
   },
   "kūlehu": {
    "pe": "confirmed",
@@ -1037,7 +1257,10 @@
    "pe": "confirmed",
    "spelling": "kūlou poʻo",
    "source": "PE s.v. kūlou poʻo",
-   "note": "PE: 'To bow the head; to dive headfirst.' Two words."
+   "note": "PE: 'To bow the head; to dive headfirst.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9725&l=en"
+   ]
   },
   "kūlālā": {
    "pe": "confirmed",
@@ -1059,7 +1282,10 @@
    "was": "to stand and watch",
    "gloss": "puzzled, stumped, undecided",
    "source": "PE s.v. kūnānā",
-   "note": "IMPORTANT. 'To stand and watch' is the literal reading, not the meaning. PE: 'Puzzled, stumped, at wit's end, hesitating, undecided, bewildered. Lit., stand look.' Kūnānā au i kaʻu mea e hana ai — I don't know what to do. A lovely word for the naʻau field, and currently glossed as its own etymology."
+   "note": "IMPORTANT. 'To stand and watch' is the literal reading, not the meaning. PE: 'Puzzled, stumped, at wit's end, hesitating, undecided, bewildered. Lit., stand look.' Kūnānā au i kaʻu mea e hana ai — I don't know what to do. A lovely word for the naʻau field, and currently glossed as its own etymology.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9868&l=en"
+   ]
   },
   "kūola": {
    "pe": "confirmed",
@@ -1090,7 +1316,10 @@
    "pe": "confirmed",
    "spelling": "lae lua",
    "source": "PE s.v. lae lua",
-   "note": "PE: 'Prominent, as a ridge. Lit., double brow.' Two words."
+   "note": "PE: 'Prominent, as a ridge. Lit., double brow.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10205&l=en"
+   ]
   },
   "lahalaha": {
    "pe": "confirmed",
@@ -1127,7 +1356,10 @@
    "was": "leaf of the koa tree",
    "spelling": "lau koa",
    "source": "PE s.v. lau koa vs. lau.koa",
-   "note": "And here is the same pair pointing the other way: PE lau koa, two words, = leaf of a koa tree (his gloss); laukoa written solid = 'to feather out, as young birds'. This stone needs the space that lau kō and lau ʻulu already have."
+   "note": "And here is the same pair pointing the other way: PE lau koa, two words, = leaf of a koa tree (his gloss); laukoa written solid = 'to feather out, as young birds'. This stone needs the space that lau kō and lau ʻulu already have.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10533&l=en"
+   ]
   },
   "laulama": {
    "pe": "confirmed",
@@ -1158,7 +1390,10 @@
    "pe": "confirmed",
    "spelling": "lawaiʻamanu",
    "source": "PE s.v. lawaiʻa.manu",
-   "note": "PE: 'Birdcatcher, birdcatching with a net. Lit., to fish birds.' PE writes this one solid — the opposite direction from most of his spacing issues."
+   "note": "PE: 'Birdcatcher, birdcatching with a net. Lit., to fish birds.' PE writes this one solid — the opposite direction from most of his spacing issues.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10618&l=en"
+   ]
   },
   "lawakua": {
    "pe": "confirmed",
@@ -1174,19 +1409,28 @@
    "pe": "confirmed",
    "spelling": "lawe ola",
    "source": "PE s.v. lawe ola",
-   "note": "PE: 'Manslaughter, homicide; to take a life; to take alive.' Two words. Note the word faces both ways — to take a life, and to take alive."
+   "note": "PE: 'Manslaughter, homicide; to take a life; to take alive.' Two words. Note the word faces both ways — to take a life, and to take alive.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10653&l=en"
+   ]
   },
   "laʻamake": {
    "pe": "confirmed",
    "spelling": "laʻa make",
    "source": "PE s.v. laʻa make",
-   "note": "PE: 'Season when plants die or grow slowly, like autumn in cooler climates. Lit., dead season.' Two words."
+   "note": "PE: 'Season when plants die or grow slowly, like autumn in cooler climates. Lit., dead season.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10110&l=en"
+   ]
   },
   "laʻaulu": {
    "pe": "confirmed",
    "spelling": "laʻa ulu",
    "source": "PE s.v. laʻa ulu",
-   "note": "PE: 'Spring, time of growth.' Two words. The exact partner of laʻa make — a good tumble pair."
+   "note": "PE: 'Spring, time of growth.' Two words. The exact partner of laʻa make — a good tumble pair.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10173&l=en"
+   ]
   },
   "lehulehu": {
    "pe": "confirmed",
@@ -1202,7 +1446,10 @@
    "pe": "confirmed",
    "spelling": "lele pono",
    "source": "PE s.v. lele pono",
-   "note": "PE: 'To jump carefully. Fig., to live a happy life; to transact business justly; to rise rapidly to success.' Two words."
+   "note": "PE: 'To jump carefully. Fig., to live a happy life; to transact business justly; to rise rapidly to success.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10889&l=en"
+   ]
   },
   "leo wahine": {
    "pe": "confirmed",
@@ -1215,13 +1462,19 @@
    "gloss": "a person who cannot speak",
    "spelling": "leo paʻa",
    "source": "PE s.v. leo paʻa",
-   "note": "Two things. (1) 'One whose voice is stopped' is the literal; PE's sense is a mute person. (2) PE's English is 'deaf-mute, dumb person' — 1986 English. Please do not carry that wording into a 2026 artwork; 'a person who cannot speak' says the same thing without the injury. Two words in PE."
+   "note": "Two things. (1) 'One whose voice is stopped' is the literal; PE's sense is a mute person. (2) PE's English is 'deaf-mute, dumb person' — 1986 English. Please do not carry that wording into a 2026 artwork; 'a person who cannot speak' says the same thing without the injury. Two words in PE.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10949&l=en"
+   ]
   },
   "leowaena": {
    "pe": "confirmed",
    "spelling": "leo waena",
    "source": "PE s.v. leo waena",
-   "note": "PE: 'Second treble, middle or alto voice.' Two words."
+   "note": "PE: 'Second treble, middle or alto voice.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D10954&l=en"
+   ]
   },
   "lihilihi": {
    "pe": "confirmed",
@@ -1243,13 +1496,19 @@
    "was": "to hear often, repeatedly",
    "gloss": "to listen carefully; to eavesdrop",
    "source": "PE s.v. lohelohe",
-   "note": "'To hear often, repeatedly' is reduplication logic, not the attested sense. PE: 'to listen carefully, eavesdrop'; hoʻolohelohe ʻōlelo, to eavesdrop. (PE sense 2 is also charming: the dragonfly larva, used in hula ceremony precisely because lohe means to hear and obey.)"
+   "note": "'To hear often, repeatedly' is reduplication logic, not the attested sense. PE: 'to listen carefully, eavesdrop'; hoʻolohelohe ʻōlelo, to eavesdrop. (PE sense 2 is also charming: the dragonfly larva, used in hula ceremony precisely because lohe means to hear and obey.)",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11277&l=en"
+   ]
   },
   "lokoʻino": {
    "pe": "fix",
    "spelling": "loko ʻino",
    "source": "PE s.v. loko ʻino",
-   "note": "PE spaces it. Gloss right."
+   "note": "PE spaces it. Gloss right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11326&l=en"
+   ]
   },
   "lole hana": {
    "pe": "confirmed",
@@ -1270,7 +1529,10 @@
    "pe": "fix",
    "spelling": "lolo uila",
    "source": "MK s.v. lolo uila",
-   "note": "Māmaka Kaiao spaces it, and also allows the solid form for the modern coinage. Gloss right."
+   "note": "Māmaka Kaiao spaces it, and also allows the solid form for the modern coinage. Gloss right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11423&l=en"
+   ]
   },
   "luapō": {
    "pe": "confirmed",
@@ -1291,13 +1553,19 @@
    "pe": "confirmed",
    "spelling": "luna kaua",
    "source": "PE s.v. luna kaua",
-   "note": "PE: 'War officer, captain, commander.' Two words."
+   "note": "PE: 'War officer, captain, commander.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11674&l=en"
+   ]
   },
   "lunaʻohana": {
    "pe": "confirmed",
    "spelling": "luna ʻohana",
    "source": "PE s.v. luna ʻohana",
-   "note": "PE: 'Head of a family; headman of a tribe.' Two words."
+   "note": "PE: 'Head of a family; headman of a tribe.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11696&l=en"
+   ]
   },
   "lā hana": {
    "pe": "confirmed",
@@ -1305,9 +1573,13 @@
    "note": "PE: 'Workday.' Parker 1922 even notes 'properly two words' — he has it right."
   },
   "lāhui kaua": {
-   "pe": "unconfirmed",
-   "source": "Andrews 1836 s.v. La-hu-i-kau-a only",
-   "note": "Attested ONLY in Andrews 1836 ('a company of people for war, warriors'). Not in PE, not in Andrews 1865, not in Parker. Transparent and probably fine, but it is the thinnest evidence on the board — flagging it honestly."
+   "pe": "confirmed",
+   "source": "Andrews (1865) s.v. LA-HU-I-KAU-A; Parker (1922) s.v. Lahuikaua",
+   "note": "Both dictionaries record people assembled for war, warriors, or a company of soldiers, with lāhui + kaua. Traditional headwords run the compound together.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D56205&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D74799&l=en"
+   ]
   },
   "lāʻau kia": {
    "pe": "confirmed",
@@ -1318,13 +1590,19 @@
    "pe": "fix",
    "spelling": "mahi ʻai",
    "source": "PE s.v. mahi ʻai; Mahiʻai",
-   "note": "PE writes mahi ʻai, two words. Note that Mahiʻai capitalised and closed is a star name; §4.4 keeps the stone pair lower case, so the farmer is the only reading here."
+   "note": "PE writes mahi ʻai, two words. Note that Mahiʻai capitalised and closed is a star name; §4.4 keeps the stone pair lower case, so the farmer is the only reading here.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11863&l=en"
+   ]
   },
   "makahiamoe": {
    "pe": "confirmed",
    "spelling": "maka hiamoe",
    "source": "PE s.v. maka hia.moe",
-   "note": "PE: 'Sleepy eyes; sleepy, drowsy.' Two words."
+   "note": "PE: 'Sleepy eyes; sleepy, drowsy.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D12176&l=en"
+   ]
   },
   "makaluku": {
    "pe": "confirmed",
@@ -1336,13 +1614,20 @@
    "was": "buds, as on a taro corm",
    "gloss": "intimate friend, host",
    "source": "PE s.v. makamaka",
-   "note": "THE MOST IMPORTANT GLOSS CHANGE ON THE BOARD. 'Buds on a taro corm' is PE sense 3 and is not wrong — but makamaka is one of the great social words of Hawaiian: 'intimate friend with whom one is on terms of receiving and giving freely; host.' It is the word for the relationship that hoʻokipa is built on. Leaving it glossed as taro buds reads, to a Hawaiian eye, like glossing 'aloha' as a kind of greeting card. Please lead with the friend."
+   "note": "THE MOST IMPORTANT GLOSS CHANGE ON THE BOARD. 'Buds on a taro corm' is PE sense 3 and is not wrong — but makamaka is one of the great social words of Hawaiian: 'intimate friend with whom one is on terms of receiving and giving freely; host.' It is the word for the relationship that hoʻokipa is built on. Leaving it glossed as taro buds reads, to a Hawaiian eye, like glossing 'aloha' as a kind of greeting card. Please lead with the friend.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D12283&l=en"
+   ]
   },
   "makamomi": {
    "pe": "confirmed",
    "spelling": "maka momi",
    "source": "PE s.v. maka momi (see momi 5); And.–Parker",
-   "note": "'A white speck in the eye.' Two words."
+   "note": "'A white speck in the eye.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D12290&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13701&l=en"
+   ]
   },
   "makanahele": {
    "pe": "confirmed",
@@ -1354,14 +1639,20 @@
    "was": "blind; with closed eyes",
    "gloss": "blind in one eye",
    "source": "PE s.v. makapaʻa",
-   "note": "PE is specific: blind in ONE eye. (The word for blind outright is makapō.) PE also records that it was considered bad luck to meet such a person — true to the record, but I would not put that on a stone people tumble for fun."
+   "note": "PE is specific: blind in ONE eye. (The word for blind outright is makapō.) PE also records that it was considered bad luck to meet such a person — true to the record, but I would not put that on a stone people tumble for fun.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D12327&l=en"
+   ]
   },
   "makawai": {
    "pe": "fix",
    "was": "watery-eyed",
    "spelling": "maka wai",
    "source": "PE s.v. maka wai vs. makawai",
-   "note": "Spacing changes the word. maka wai (two words) = watery-eyed, eyes welling with tears — his gloss. makawai written solid = the small outlets for water through the banks of loʻi kalo, the little waterways. Two beautiful words, and the stone is currently wearing the wrong spelling."
+   "note": "Spacing changes the word. maka wai (two words) = watery-eyed, eyes welling with tears — his gloss. makawai written solid = the small outlets for water through the banks of loʻi kalo, the little waterways. Two beautiful words, and the stone is currently wearing the wrong spelling.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D12375&l=en"
+   ]
   },
   "makehewa": {
    "pe": "confirmed",
@@ -1377,13 +1668,19 @@
    "pe": "confirmed",
    "spelling": "manawa ʻino",
    "source": "PE s.v. manawa ʻino",
-   "note": "PE: 'Evil disposition, hard feelings, hard-hearted; time of storm.' Two words. That last sense — a time of storm — is the same word, and it is the whole poem of the compound."
+   "note": "PE: 'Evil disposition, hard feelings, hard-hearted; time of storm.' Two words. That last sense — a time of storm — is the same word, and it is the whole poem of the compound.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D12824&l=en"
+   ]
   },
   "manaʻo paʻa": {
    "pe": "confirmed",
    "spelling": "manaʻopaʻa",
    "source": "PE s.v. manaʻopaʻa",
-   "note": "PE: 'Conviction, determination, firm intention; resolute.' PE writes it solid."
+   "note": "PE: 'Conviction, determination, firm intention; resolute.' PE writes it solid.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D12795&l=en"
+   ]
   },
   "manu ihu": {
    "pe": "confirmed",
@@ -1399,7 +1696,10 @@
    "pe": "confirmed",
    "spelling": "maʻawe ʻula",
    "source": "PE s.v. maʻawe ʻula",
-   "note": "PE: 'A red track, as in well-trod red earth.' Two words. And here is the line he will want, given the wayfinding map under his stones: Ke alanui maʻawe ʻula a Kanaloa — the red track pathway of Kanaloa, meaning the western sky."
+   "note": "PE: 'A red track, as in well-trod red earth.' Two words. And here is the line he will want, given the wayfinding map under his stones: Ke alanui maʻawe ʻula a Kanaloa — the red track pathway of Kanaloa, meaning the western sky.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11782&l=en"
+   ]
   },
   "mehameha": {
    "pe": "confirmed",
@@ -1420,13 +1720,19 @@
    "pe": "confirmed",
    "spelling": "moana kai",
    "source": "PE s.v. moana kai",
-   "note": "PE: 'Salt sea, salt lake; deep sea.' Two words."
+   "note": "PE: 'Salt sea, salt lake; deep sea.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13437&l=en"
+   ]
   },
   "moanawai": {
    "pe": "confirmed",
    "spelling": "moana wai",
    "source": "PE s.v. moana wai",
-   "note": "PE: 'Fresh-water lake.' Two words."
+   "note": "PE: 'Fresh-water lake.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13439&l=en"
+   ]
   },
   "moeone": {
    "pe": "confirmed",
@@ -1437,7 +1743,10 @@
    "pe": "confirmed",
    "spelling": "moe ʻino",
    "source": "PE s.v. moe ʻino",
-   "note": "PE: 'Nightmare; bad dream; to toss, turn while sleeping.' Two words."
+   "note": "PE: 'Nightmare; bad dream; to toss, turn while sleeping.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13462&l=en"
+   ]
   },
   "mokuluʻu": {
    "pe": "confirmed",
@@ -1458,20 +1767,29 @@
    "pe": "confirmed",
    "spelling": "moʻa maka",
    "source": "PE s.v. moʻa maka",
-   "note": "PE: 'Barely cooked. Lit., cooked raw.' Two words. The literal is a small perfect contradiction."
+   "note": "PE: 'Barely cooked. Lit., cooked raw.' Two words. The literal is a small perfect contradiction.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13430&l=en"
+   ]
   },
   "moʻo lele": {
    "pe": "fix",
    "was": "flying serpent, dragon",
    "gloss": "flying serpent, dragon; a Bible word",
    "source": "PE s.v. moʻo lele",
-   "note": "Attested (PE gives it for Kanl. 32.33, and for viper, adder, great owl and even frog elsewhere) — but every citation is from Bible translation. In Hawaiian tradition moʻo are not dragons: they are the lizard guardians of fresh water, of fishponds and pools, ancestral kiaʻi. Glossing moʻo lele as 'dragon' with no note invites exactly the wrong picture. Keep the word, add one line."
+   "note": "Attested (PE gives it for Kanl. 32.33, and for viper, adder, great owl and even frog elsewhere) — but every citation is from Bible translation. In Hawaiian tradition moʻo are not dragons: they are the lizard guardians of fresh water, of fishponds and pools, ancestral kiaʻi. Glossing moʻo lele as 'dragon' with no note invites exactly the wrong picture. Keep the word, add one line.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13759&l=en"
+   ]
   },
   "moʻoaliʻi": {
    "pe": "confirmed",
    "spelling": "moʻo aliʻi",
    "source": "PE s.v. moʻo aliʻi",
-   "note": "PE: 'Genealogy of chiefs, history of chiefs, chiefly line of succession.' Two words. PE's literal reading is 'royal lizard' — moʻo is both the line of succession and the lizard/water spirit, and that is not a coincidence. See cultural notes."
+   "note": "PE: 'Genealogy of chiefs, history of chiefs, chiefly line of succession.' Two words. PE's literal reading is 'royal lizard' — moʻo is both the line of succession and the lizard/water spirit, and that is not a coincidence. See cultural notes.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13740&l=en"
+   ]
   },
   "moʻokanaka": {
    "pe": "fix",
@@ -1479,19 +1797,28 @@
    "gloss": "list of commoners, as for taxation",
    "spelling": "moʻo kanaka",
    "source": "PE s.v. moʻo kanaka",
-   "note": "Not a genealogy in the moʻokūʻauhau sense — PE: 'List or succession of commoners, as for taxation.' It is a tax roll. Two words."
+   "note": "Not a genealogy in the moʻokūʻauhau sense — PE: 'List or succession of commoners, as for taxation.' It is a tax roll. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13750&l=en"
+   ]
   },
   "moʻokupuna": {
    "pe": "confirmed",
    "spelling": "moʻo kupuna",
    "source": "PE s.v. moʻo kupuna",
-   "note": "PE: 'Ancestral genealogy.' Two words."
+   "note": "PE: 'Ancestral genealogy.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13756&l=en"
+   ]
   },
   "moʻokūʻauhau": {
    "pe": "fix",
    "spelling": "moʻo kūʻauhau",
    "source": "PE s.v. moʻo kūʻauhau",
-   "note": "PE spaces it. Gloss right."
+   "note": "PE spaces it. Gloss right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13755&l=en"
+   ]
   },
   "moʻoʻōlelo": {
    "pe": "confirmed",
@@ -1502,14 +1829,20 @@
    "pe": "confirmed",
    "spelling": "muli hope",
    "source": "PE s.v. muli hope",
-   "note": "PE: 'Youngest child; very last.' Two words. (Its opposite, hiapo, is the firstborn.)"
+   "note": "PE: 'Youngest child; very last.' Two words. (Its opposite, hiapo, is the firstborn.)",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13874&l=en"
+   ]
   },
   "mūmū": {
    "pe": "fix",
    "was": "to be silent; to hum",
-   "gloss": "silent, mum; to hold water in the mouth",
-   "source": "PE s.v. mūmū vs. mumu",
-   "note": "The kahakō splits these. PE mūmū = 'to rinse out the mouth, swish water in the mouth; silent, mum; dull, blunt.' The humming/indistinct-sound word is mumu, short vowels (PE: 'thud-like sound, as of footsteps'; And.: 'to hum'). So 'to hum' does not belong on this stone. PE's example under mūmū is wonderful: ʻai mūmū, to eat silently without smacking the lips — said of stingy people eating so quietly that no one would know and they would not have to share."
+   "gloss": "silent, mum",
+   "source": "PE s.v. mū.mū",
+   "note": "The card uses the silent/mum sense, matching its mū stones. PE also records rinsing or swishing water in the mouth as a separate sense.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13878&l=en"
+   ]
   },
   "nahenahe": {
    "pe": "confirmed",
@@ -1521,19 +1854,28 @@
    "was": "to chew, munch",
    "gloss": "to mumble, speak indistinctly",
    "source": "PE s.v. naunau",
-   "note": "PE's reduplication of nau is about SPEECH, not food: 'to munch one's words and speak indistinctly, mumble.' Plain chewing is nau. PE also records naunau lepo, 'dirt muncher' — an insult once thrown at lōpā, tenant farmers; worth knowing before it goes on a tile."
+   "note": "PE's reduplication of nau is about SPEECH, not food: 'to munch one's words and speak indistinctly, mumble.' Plain chewing is nau. PE also records naunau lepo, 'dirt muncher' — an insult once thrown at lōpā, tenant farmers; worth knowing before it goes on a tile.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D14262&l=en"
+   ]
   },
   "naʻaulua": {
    "pe": "confirmed",
    "spelling": "naʻau lua",
    "source": "PE s.v. naʻau lua",
-   "note": "PE: 'Doubtful, two-minded, undecided.' Two words."
+   "note": "PE: 'Doubtful, two-minded, undecided.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13939&l=en"
+   ]
   },
   "naʻaupono": {
    "pe": "confirmed",
    "spelling": "naʻau pono",
    "source": "PE s.v. naʻau pono",
-   "note": "PE: 'Upright, just; right-minded; upright heart.' Two words."
+   "note": "PE: 'Upright, just; right-minded; upright heart.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D13945&l=en"
+   ]
   },
   "noʻonoʻo": {
    "pe": "confirmed",
@@ -1544,7 +1886,10 @@
    "pe": "confirmed",
    "spelling": "nuku wai",
    "source": "PE s.v. nuku wai",
-   "note": "PE: 'Stream mouth.' Two words."
+   "note": "PE: 'Stream mouth.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D14780&l=en"
+   ]
   },
   "nānā uli": {
    "pe": "confirmed",
@@ -1555,7 +1900,10 @@
    "pe": "confirmed",
    "spelling": "nānā ao",
    "source": "PE s.v. nānā ao",
-   "note": "PE: 'Cloud interpreter, one who observes the clouds; seer, forecaster.' Two words."
+   "note": "PE: 'Cloud interpreter, one who observes the clouds; seer, forecaster.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D14119&l=en"
+   ]
   },
   "nūnū": {
    "pe": "confirmed",
@@ -1567,19 +1915,28 @@
    "was": "to roll over and over",
    "spelling": "ʻolokaʻa",
    "source": "PE s.v. ʻolokaʻa",
-   "note": "Gloss right ('to roll along, as a wheel'); missing its opening ʻokina. PE: ʻolokaʻa. His root gloss for 'olo' is EMPTY."
+   "note": "Gloss right ('to roll along, as a wheel'); missing its opening ʻokina. PE: ʻolokaʻa. His root gloss for 'olo' is EMPTY.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D15422&l=en"
+   ]
   },
   "omokoko": {
    "pe": "confirmed",
    "spelling": "omo koko",
    "source": "PE s.v. omo koko",
-   "note": "PE: 'Bloodsucker, leech; to suck blood.' Two words."
+   "note": "PE: 'Bloodsucker, leech; to suck blood.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D15544&l=en"
+   ]
   },
   "omoliu": {
    "pe": "confirmed",
    "spelling": "omo liu",
    "source": "PE s.v. omo liu",
-   "note": "PE: 'Ship's pump; to suck up bilge.' Two words."
+   "note": "PE: 'Ship's pump; to suck up bilge.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D15550&l=en"
+   ]
   },
   "oneʻā": {
    "pe": "fix",
@@ -1587,7 +1944,10 @@
    "gloss": "black cinder sand; hence gunpowder",
    "spelling": "one ʻā",
    "source": "PE s.v. one ʻā vs. one.ʻā",
-   "note": "IMPORTANT. PE keeps two different words apart by spacing: one ʻā (two words) = black sand/volcanic cinder, and so gunpowder; oneʻā (solid) = 'afflicted, affliction'. As he has it spelled, the stone currently reads 'affliction'. Also the chant PE quotes is beautiful: Lauahi Pele i kai o Puna, one ʻā kai o Malama."
+   "note": "IMPORTANT. PE keeps two different words apart by spacing: one ʻā (two words) = black sand/volcanic cinder, and so gunpowder; oneʻā (solid) = 'afflicted, affliction'. As he has it spelled, the stone currently reads 'affliction'. Also the chant PE quotes is beautiful: Lauahi Pele i kai o Puna, one ʻā kai o Malama.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D15591&l=en"
+   ]
   },
   "pahu kani": {
    "pe": "confirmed",
@@ -1598,20 +1958,29 @@
    "pe": "confirmed",
    "spelling": "pahu kapu",
    "source": "PE s.v. pahu kapu",
-   "note": "PE: 'A stake beyond which it was taboo to pass; sanctuary. Lit., taboo stake.' His gloss is right. Two words in PE. See cultural notes."
+   "note": "PE: 'A stake beyond which it was taboo to pass; sanctuary. Lit., taboo stake.' His gloss is right. Two words in PE. See cultural notes.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16221&l=en"
+   ]
   },
   "pahupalapala": {
    "pe": "confirmed",
    "spelling": "pahu palapala",
    "source": "PE s.v. pahu pala.pala",
-   "note": "PE: 'Writing desk; formerly a container for the coloring liquid used in printing tapa.' Both his senses, right order. Two words."
+   "note": "PE: 'Writing desk; formerly a container for the coloring liquid used in printing tapa.' Both his senses, right order. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16242&l=en"
+   ]
   },
   "pakakahi": {
    "pe": "fix",
    "was": "scattered drops of light rain",
    "ruling": "PE has a kahakō: pākakahi. The paka stone is shared with pakapaka, which she did not flag.",
    "source": "PE s.v. pā.kakahi",
-   "note": "Gloss right ('scattered, here and there, as light rain'); PE has a kahakō: pākakahi. PE's primary sense is to distribute one at a time to several — e pākakahi aku i ka iʻa i kamaliʻi, giving the children a fish each. Rain falling one drop to a person."
+   "note": "Gloss right ('scattered, here and there, as light rain'); PE has a kahakō: pākakahi. PE's primary sense is to distribute one at a time to several — e pākakahi aku i ka iʻa i kamaliʻi, giving the children a fish each. Rain falling one drop to a person.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16392&l=en"
+   ]
   },
   "pakapaka": {
    "pe": "confirmed",
@@ -1624,7 +1993,11 @@
    "gloss": "abashed, shamefaced; to turn away",
    "spelling": "palai maka",
    "source": "PE s.v. palai maka (see palai 2); And. 1865",
-   "note": "Not simple aversion of the eyes — it is shame. PE sends you to palai 'bashful, shy'; Andrews: 'to be cast down in countenance; to be confounded. SYN. with hilahila.' Two words in PE."
+   "note": "Not simple aversion of the eyes — it is shame. PE sends you to palai 'bashful, shy'; Andrews: 'to be cast down in countenance; to be confounded. SYN. with hilahila.' Two words in PE.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16593&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16579&l=en"
+   ]
   },
   "pale keiki": {
    "pe": "confirmed",
@@ -1635,19 +2008,28 @@
    "pe": "confirmed",
    "spelling": "pale kaua",
    "source": "PE s.v. pale kaua",
-   "note": "PE: 'War defense, shield, defensive armor.' Two words."
+   "note": "PE: 'War defense, shield, defensive armor.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16834&l=en"
+   ]
   },
   "palemaka": {
    "pe": "confirmed",
    "spelling": "pale maka",
    "source": "PE s.v. pale maka",
-   "note": "PE: 'Veil that conceals the face.' Two words."
+   "note": "PE: 'Veil that conceals the face.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16860&l=en"
+   ]
   },
   "paleuhi": {
    "pe": "confirmed",
    "spelling": "pale uhi",
    "source": "PE s.v. pale uhi",
-   "note": "PE: 'Veil, covering.' Two words."
+   "note": "PE: 'Veil, covering.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16883&l=en"
+   ]
   },
   "panapoʻo": {
    "pe": "fix",
@@ -1655,26 +2037,38 @@
    "gloss": "to tap or snap the head",
    "spelling": "pana poʻo",
    "source": "PE s.v. pana poʻo; Kent s.v. pana poʻo",
-   "note": "IMPORTANT and lovely. His gloss is Kent's and is not wrong, but PE carries the thing a dictionary usually leaves out: 'To tap or snap the head (it was rude or provocative to tap another's head, as the head was sacred).' The poʻo is the most kapu part of a person. That belongs on the stone. Two words in PE."
+   "note": "IMPORTANT and lovely. His gloss is Kent's and is not wrong, but PE carries the thing a dictionary usually leaves out: 'To tap or snap the head (it was rude or provocative to tap another's head, as the head was sacred).' The poʻo is the most kapu part of a person. That belongs on the stone. Two words in PE.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17000&l=en"
+   ]
   },
   "panapua": {
    "pe": "confirmed",
    "spelling": "pana pua",
    "source": "PE s.v. pana pua",
-   "note": "PE: 'To shoot with bow and arrow; archer, archery.' Two words."
+   "note": "PE: 'To shoot with bow and arrow; archer, archery.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17001&l=en"
+   ]
   },
   "panepoʻo": {
    "pe": "fix",
    "was": "back of the head",
    "gloss": "pinnacle, summit; most important",
    "source": "PE s.v. panepoʻo",
-   "note": "PE moved this one a long way from the anatomy: 'Pinnacle, summit; topmost, most important (preceded by ke). Lit., hind part [of] head.' The occiput reading is Andrews'. In Hawaiian the top of the head is where rank lives, so the metaphor is not decoration — it is the point."
+   "note": "PE moved this one a long way from the anatomy: 'Pinnacle, summit; topmost, most important (preceded by ke). Lit., hind part [of] head.' The occiput reading is Andrews'. In Hawaiian the top of the head is where rank lives, so the metaphor is not decoration — it is the point.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17020&l=en"
+   ]
   },
   "panipuka": {
    "pe": "confirmed",
    "spelling": "pani puka",
    "source": "PE s.v. pani puka",
-   "note": "PE: 'Door, gate; cover of an opening.' Two words."
+   "note": "PE: 'Door, gate; cover of an opening.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17060&l=en"
+   ]
   },
   "panipū": {
    "pe": "confirmed",
@@ -1696,43 +2090,64 @@
    "was": "beach washed only at high tide",
    "spelling": "papa kea",
    "source": "PE s.v. papa kea vs. papākea",
-   "note": "Two words and no kahakō for his sense: papa kea = 'white stratum, sand beach' (Andrews: the strip washed by high tide but not low, where the sand is white). papākea WITH the kahakō is white spray, white caps. Both are sea words; only one is a beach."
+   "note": "Two words and no kahakō for his sense: papa kea = 'white stratum, sand beach' (Andrews: the strip washed by high tide but not low, where the sand is white). papākea WITH the kahakō is white spray, white caps. Both are sea words; only one is a beach.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17210&l=en"
+   ]
   },
   "papalalo": {
    "pe": "confirmed",
    "spelling": "papa lalo",
    "source": "PE s.v. papa lalo",
-   "note": "PE: 'Lower floor of a house, valley bottom, lower stratum.' Two words."
+   "note": "PE: 'Lower floor of a house, valley bottom, lower stratum.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17244&l=en"
+   ]
   },
   "papapalapala": {
    "pe": "confirmed",
    "spelling": "papa palapala",
    "source": "PE s.v. papa pala.pala",
-   "note": "PE: 'Writing desk, board, or flat surface where writing is done.' Two words."
+   "note": "PE: 'Writing desk, board, or flat surface where writing is done.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17316&l=en"
+   ]
   },
   "papapāʻina": {
    "pe": "confirmed",
    "spelling": "papa pāʻina",
    "source": "PE s.v. papa pā.ʻina",
-   "note": "PE: 'Table for eating.' Two words."
+   "note": "PE: 'Table for eating.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17314&l=en"
+   ]
   },
   "papapōhaku": {
    "pe": "confirmed",
    "spelling": "papa pōhaku",
    "source": "PE s.v. papa pōhaku",
-   "note": "PE: 'Row or tier of stones; slate, stone tablet; stone table or flat, as for pounding.' Two words. And he should know what he has made: papa pōhaku is, literally, a board of stone. His whole piece is one."
+   "note": "PE: 'Row or tier of stones; slate, stone tablet; stone table or flat, as for pounding.' Two words. And he should know what he has made: papa pōhaku is, literally, a board of stone. His whole piece is one.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17320&l=en"
+   ]
   },
   "papawaena": {
    "pe": "confirmed",
    "spelling": "papa waena",
    "source": "PE s.v. papa waena",
-   "note": "PE: 'Middle floor or story; middle class or layer.' Two words."
+   "note": "PE: 'Middle floor or story; middle class or layer.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17335&l=en"
+   ]
   },
   "paʻaluhi": {
    "pe": "confirmed",
    "spelling": "paʻa luhi",
    "source": "PE s.v. paʻa luhi",
-   "note": "PE: 'Overcome with weariness.' Two words."
+   "note": "PE: 'Overcome with weariness.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16008&l=en"
+   ]
   },
   "paʻapū": {
    "pe": "confirmed",
@@ -1744,7 +2159,10 @@
    "was": "a bridle",
    "gloss": "gag; to gag the mouth",
    "source": "PE s.v. paʻa.waha",
-   "note": "PE corrects the old dictionaries here: paʻawaha is a GAG ('to gag the mouth. Lit., make the mouth solid'), not a bridle. Andrews and Parker both say 'bridle' — that is where his gloss came from. The bridle is kaula waha, which he already has as its own stone."
+   "note": "PE corrects the old dictionaries here: paʻawaha is a GAG ('to gag the mouth. Lit., make the mouth solid'), not a bridle. Andrews and Parker both say 'bridle' — that is where his gloss came from. The bridle is kaula waha, which he already has as its own stone.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16045&l=en"
+   ]
   },
   "paʻaʻili": {
    "pe": "confirmed",
@@ -1760,25 +2178,38 @@
    "pe": "confirmed",
    "spelling": "paʻi aʻa",
    "source": "PE s.v. paʻi aʻa",
-   "note": "PE: 'Root system, rootlets, small branches.' Two words. His root gloss for 'paʻi' here is EMPTY."
+   "note": "PE: 'Root system, rootlets, small branches.' Two words. His root gloss for 'paʻi' here is EMPTY.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16259&l=en"
+   ]
   },
   "pekapeka": {
    "pe": "fix",
    "was": "to tattle; tattler",
    "gloss": "to slander; a slanderer",
    "source": "And. 1865 / Parker 1922 s.v. pekapeka; JPS 1943",
-   "note": "Not in PE. 'Tattle' is too small and too childish for this word. Andrews–Parker: 'to calumniate another for self-advancement; to detract; slander, reviling.' It is adult malice, usually for personal gain."
+   "note": "Not in PE. 'Tattle' is too small and too childish for this word. Andrews–Parker: 'to calumniate another for self-advancement; to detract; slander, reviling.' It is adult malice, usually for personal gain.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D60259&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D79994&l=en"
+   ]
   },
   "pekupeku": {
    "pe": "unconfirmed",
    "source": "PE s.v. pekupeku; MK s.v. pekupeku",
-   "note": "Glossed to kick again and again, which is what the reduplication of peku should mean — but PE's entry is to flick out, as bark while scraping olonā, and Māmaka Kaiao extends it to dribbling a ball. Plain repeated kicking is not PE's gloss. Flagged rather than reglossed: the stones are right, the card may be reading the reduplication instead of the dictionary."
+   "note": "Glossed to kick again and again, which is what the reduplication of peku should mean — but PE's entry is to flick out, as bark while scraping olonā, and Māmaka Kaiao extends it to dribbling a ball. Plain repeated kicking is not PE's gloss. Flagged rather than reglossed: the stones are right, the card may be reading the reduplication instead of the dictionary.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17572&l=en"
+   ]
   },
   "pihalima": {
    "pe": "confirmed",
    "spelling": "piha lima",
    "source": "PE s.v. piha lima",
-   "note": "PE: 'Handful.' Two words."
+   "note": "PE: 'Handful.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17755&l=en"
+   ]
   },
   "pilipili": {
    "pe": "confirmed",
@@ -1794,19 +2225,28 @@
    "pe": "confirmed",
    "spelling": "poʻo hina",
    "source": "PE s.v. poʻo hina",
-   "note": "PE: 'Gray- or white-haired; ash-colored.' Two words."
+   "note": "PE: 'Gray- or white-haired; ash-colored.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18562&l=en"
+   ]
   },
   "poʻokepa": {
    "pe": "confirmed",
    "spelling": "poʻo kepa",
    "source": "PE s.v. poʻo kepa",
-   "note": "PE: 'Hair cut in an extraordinary manner, as of one in mourning in the old days, with only part of the hair cut. Lit., sideways head.' His gloss is right. Two words. See cultural notes — this is a mourning practice."
+   "note": "PE: 'Hair cut in an extraordinary manner, as of one in mourning in the old days, with only part of the hair cut. Lit., sideways head.' His gloss is right. Two words. See cultural notes — this is a mourning practice.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18578&l=en"
+   ]
   },
   "poʻowai": {
    "pe": "fix",
    "spelling": "poʻo wai",
    "source": "PE s.v. poʻo wai",
-   "note": "PE spaces it. Gloss right — the head of a stream, and the dam that feeds an ʻauwai."
+   "note": "PE spaces it. Gloss right — the head of a stream, and the dam that feeds an ʻauwai.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18628&l=en"
+   ]
   },
   "poʻoʻōlelo": {
    "pe": "confirmed",
@@ -1818,7 +2258,10 @@
    "was": "Hawaiian prickly poppy",
    "spelling": "pua kala",
    "source": "PE s.v. pua kala vs. pua.kala",
-   "note": "Spacing. pua kala, two words = the native prickly poppy (Argemone glauca), whose yellow juice was used for pain — his gloss. puakala written solid is, in PE, an octopus taking on the look of kala seaweed, and a kind of crab. Lovely word, wrong spelling."
+   "note": "Spacing. pua kala, two words = the native prickly poppy (Argemone glauca), whose yellow juice was used for pain — his gloss. puakala written solid is, in PE, an octopus taking on the look of kala seaweed, and a kind of crab. Lovely word, wrong spelling.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18809&l=en"
+   ]
   },
   "puapoʻo": {
    "pe": "confirmed",
@@ -1834,14 +2277,20 @@
    "pe": "confirmed",
    "spelling": "puka hale",
    "source": "PE s.v. puka hale",
-   "note": "PE: 'Door of a house; window.' Two words."
+   "note": "PE: 'Door of a house; window.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D19064&l=en"
+   ]
   },
   "pukaihu": {
    "pe": "fix",
    "was": "nostril",
    "spelling": "puka ihu",
    "source": "PE s.v. puka ihu vs. pukaihu",
-   "note": "Spacing again. puka ihu (two words) = nostril — his gloss. pukaihu written solid is, in PE, the hole in the shank of a pearl-shell lure. The stone needs the space."
+   "note": "Spacing again. puka ihu (two words) = nostril — his gloss. pukaihu written solid is, in PE, the hole in the shank of a pearl-shell lure. The stone needs the space.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D19072&l=en"
+   ]
   },
   "puʻukaua": {
    "pe": "confirmed",
@@ -1854,13 +2303,19 @@
    "gloss": "clot of blood; the heart",
    "spelling": "puʻu koko",
    "source": "PE s.v. puʻu koko",
-   "note": "His gloss is right as far as it goes, but PE's third sense is the one a Hawaiian reader is waiting for: the puʻu koko is the shape some heroes are born in, a clot of blood, before they take form. Two words."
+   "note": "His gloss is right as far as it goes, but PE's third sense is the one a Hawaiian reader is waiting for: the puʻu koko is the shape some heroes are born in, a clot of blood, before they take form. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D19526&l=en"
+   ]
   },
   "puʻuone": {
    "pe": "fix",
    "spelling": "puʻu one",
    "source": "PE s.v. puʻu one; puʻuone",
-   "note": "The most consequential thing outside the pending set. PE's puʻuone written solid is divination, and a shoreline pond connected to the sea (loko puʻuone, a type of fishpond). The sand dune is puʻu one, two words. The gloss is right; only the spacing carries the wrong word."
+   "note": "The most consequential thing outside the pending set. PE's puʻuone written solid is divination, and a shoreline pond connected to the sea (loko puʻuone, a type of fishpond). The sand dune is puʻu one, two words. The gloss is right; only the spacing carries the wrong word.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D19569&l=en"
+   ]
   },
   "pāleo": {
    "pe": "confirmed",
@@ -1873,7 +2328,10 @@
    "gloss": "wooden fence, hedge",
    "spelling": "pā lāʻau",
    "source": "PE s.v. pā lāʻau vs. pālāʻau",
-   "note": "IMPORTANT, same trap as oneʻā. PE: pā lāʻau (two words) = wooden fence, hedge; pālāʻau (solid) = 'to heal, as with herbs' — the lāʻau lapaʻau word, quoted in a Hiʻiaka prayer. As spelled, this stone currently says 'to heal with herbs'."
+   "note": "IMPORTANT, same trap as oneʻā. PE: pā lāʻau (two words) = wooden fence, hedge; pālāʻau (solid) = 'to heal, as with herbs' — the lāʻau lapaʻau word, quoted in a Hiʻiaka prayer. As spelled, this stone currently says 'to heal with herbs'.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16545&l=en"
+   ]
   },
   "pānini": {
    "pe": "confirmed",
@@ -1889,20 +2347,31 @@
    "pe": "confirmed",
    "spelling": "pī kai",
    "source": "PE s.v. pī kai",
-   "note": "PE: 'To sprinkle with sea water or salted fresh water to purify or remove taboo.' His gloss is accurate and respectfully worded. Two words in PE. See cultural notes."
+   "note": "PE: 'To sprinkle with sea water or salted fresh water to purify or remove taboo.' His gloss is accurate and respectfully worded. Two words in PE. See cultural notes.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D17808&l=en"
+   ]
   },
   "pīpīwai": {
    "pe": "fix",
    "was": "place where water oozes up",
    "spelling": "pīpī wai",
-   "source": "PE s.v. pī.pī wai vs. pī.pī.wai",
-   "note": "For his sense PE has the verb pīpī wai, 'to percolate, ooze, of water; to sprinkle water'; pīpīwai written solid is a genus of sedges (Eleocharis), also called kohekohe. Note too that Pīpīwai is the famous stream and trail in Kīpahulu, Maui — this one reads as a place name to anyone from there."
+   "source": "PE s.v. pī.pī wai",
+   "note": "PE records percolating or oozing water and sprinkling water. The spaced headword is a verb; the short gloss describes those actions.",
+   "gloss": "to ooze or percolate; sprinkle water",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18076&l=en"
+   ]
   },
   "pōhakuhele": {
    "pe": "confirmed",
    "spelling": "pōhaku hele",
    "source": "PE s.v. pōhaku hele (var. of pōhaku hali); Kent",
-   "note": "Two words. Kent: a crab of the family Leucosiidae; literally 'stone fetcher'. A walking stone on a board of stones — he could not have planted a better one if he had tried."
+   "note": "Two words. Kent: a crab of the family Leucosiidae; literally 'stone fetcher'. A walking stone on a board of stones — he could not have planted a better one if he had tried.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18198&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18195&l=en"
+   ]
   },
   "pōʻai lōʻihi": {
    "pe": "confirmed",
@@ -1928,14 +2397,21 @@
    "pe": "fix",
    "was": "cover over, as a makeshift",
    "gloss": "to cover over, as makeshift thatch",
-   "source": "PE s.v. uhiuhi; And. 1865",
-   "note": "His gloss comes from Andrews ('to thatch a house poorly with banana leaves') and is defensible, but for most speakers today uhiuhi is first of all the endemic legume tree (Mezoneuron kauaiense) whose hard wood was used for hōlua sleds, spears and ʻōʻō. Worth naming."
+   "source": "PE s.v. uhi.uhi; Andrews (1865) s.v. U-HI-U-HI",
+   "note": "Andrews records poor thatching with banana leaves. PE lists reduplication of uhi and a tree sense. The thatching sense has its own older-dictionary citation.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D19830&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D49562&l=en"
+   ]
   },
   "ululāʻau": {
    "pe": "fix",
    "spelling": "ulu lāʻau",
    "source": "PE s.v. ulu lāʻau",
-   "note": "PE spaces it. Gloss right."
+   "note": "PE spaces it. Gloss right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D20119&l=en"
+   ]
   },
   "wahahewa": {
    "pe": "confirmed",
@@ -1953,13 +2429,19 @@
    "gloss": "small house at a heiau entrance",
    "spelling": "wai ea",
    "source": "PE s.v. wai ea; Malo 162",
-   "note": "PE gives three senses and his is closest to the third. The second is the one most worth having: wai ea is a STRUCTURE, the little house at a heiau entrance where the ʻaha cord was stretched — not the water itself. Two words in PE. Literal reading: water of life. See cultural notes."
+   "note": "PE gives three senses and his is closest to the third. The second is the one most worth having: wai ea is a STRUCTURE, the little house at a heiau entrance where the ʻaha cord was stretched — not the water itself. Two words in PE. Literal reading: water of life. See cultural notes.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D20603&l=en"
+   ]
   },
   "waikai": {
    "pe": "confirmed",
    "spelling": "wai kai",
    "source": "PE s.v. wai kai",
-   "note": "PE: 'Brackish or salty water.' Two words."
+   "note": "PE: 'Brackish or salty water.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D20664&l=en"
+   ]
   },
   "wailana": {
    "pe": "confirmed",
@@ -1975,7 +2457,10 @@
    "pe": "confirmed",
    "spelling": "wai piʻi",
    "source": "PE s.v. wai piʻi",
-   "note": "PE: 'Rising water, overflow of water, flood; to flow, overflow.' Two words."
+   "note": "PE: 'Rising water, overflow of water, flood; to flow, overflow.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D20754&l=en"
+   ]
   },
   "waiwai": {
    "pe": "confirmed",
@@ -2016,7 +2501,10 @@
    "pe": "confirmed",
    "spelling": "ʻaha inu",
    "source": "PE s.v. ʻaha inu",
-   "note": "PE: 'Drinking party.' Two words."
+   "note": "PE: 'Drinking party.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D215&l=en"
+   ]
   },
   "ʻahakanaka": {
    "pe": "confirmed",
@@ -2029,7 +2517,10 @@
    "gloss": "mat of soft young pandanus leaves",
    "ruling": "PE reads this ahu (mat) + ʻao (young unfurled leaf), not ʻahu (garment) + ao — so the fix is ahu ʻao, and it is a root split: the ʻahu stone is shared with ʻahu ʻula, which wants the garment. Gloss applied, spelling held.",
    "source": "PE s.v. ahu ʻao",
-   "note": "The ʻokina is on the wrong root. PE: ahu ʻao — ahu here is 'mat', ʻao is 'young leaf'. His root split (ʻahu = garment/covering) is also the wrong root; it should be ahu (mat) + ʻao (young unfurled leaf, as of hala). Gloss itself is right."
+   "note": "The ʻokina is on the wrong root. PE: ahu ʻao — ahu here is 'mat', ʻao is 'young leaf'. His root split (ʻahu = garment/covering) is also the wrong root; it should be ahu (mat) + ʻao (young unfurled leaf, as of hala). Gloss itself is right.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D331&l=en"
+   ]
   },
   "ʻahālike": {
    "pe": "confirmed",
@@ -2051,13 +2542,19 @@
    "was": "to swim abreast, evenly",
    "spelling": "ʻau like",
    "source": "PE s.v. ʻau like vs. aulike",
-   "note": "Two words, and the ʻokina belongs to ʻau. PE: ʻau like = 'to swim evenly or abreast' — his gloss. aulike written solid and WITHOUT the ʻokina is a different word: 'even, smooth, as timber; to treat kindly'."
+   "note": "Two words, and the ʻokina belongs to ʻau. PE: ʻau like = 'to swim evenly or abreast' — his gloss. aulike written solid and WITHOUT the ʻokina is a different word: 'even, smooth, as timber; to treat kindly'.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1607&l=en"
+   ]
   },
   "ʻaulima": {
    "pe": "fix",
    "spelling": "ʻau lima",
    "source": "PE s.v. ʻau lima",
-   "note": "PE spaces it. Gloss right — the hand stick of the fire plough."
+   "note": "PE spaces it. Gloss right — the hand stick of the fire plough.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1608&l=en"
+   ]
   },
   "ʻaumoana": {
    "pe": "confirmed",
@@ -2073,7 +2570,10 @@
    "pe": "confirmed",
    "spelling": "ʻau waʻa",
    "source": "PE s.v. ʻau waʻa",
-   "note": "PE: 'Canoe fleet.' Two words."
+   "note": "PE: 'Canoe fleet.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1638&l=en"
+   ]
   },
   "ʻauʻau": {
    "pe": "confirmed",
@@ -2084,13 +2584,19 @@
    "pe": "confirmed",
    "spelling": "ʻaʻa niu",
    "source": "PE s.v. ʻaʻa niu",
-   "note": "PE: 'Clothlike sheath at base of coconut frond.' Two words."
+   "note": "PE: 'Clothlike sheath at base of coconut frond.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D84&l=en"
+   ]
   },
   "ʻaʻapua": {
    "pe": "confirmed",
    "spelling": "ʻaʻa pua",
    "source": "PE s.v. ʻaʻa pua",
-   "note": "PE: 'Arrow case, quiver.' Two words."
+   "note": "PE: 'Arrow case, quiver.' Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D95&l=en"
+   ]
   },
   "ʻekeʻeke": {
    "pe": "confirmed",
@@ -2111,7 +2617,10 @@
    "pe": "confirmed",
    "spelling": "ʻili lua",
    "source": "PE s.v. ʻili lua",
-   "note": "PE: 'New skin, as over a sore; new bark.' Andrews adds the aged-skin reading his gloss carries — both are good. Two words."
+   "note": "PE: 'New skin, as over a sore; new bark.' Andrews adds the aged-skin reading his gloss carries — both are good. Two words.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D5253&l=en"
+   ]
   },
   "ʻimoʻimo": {
    "pe": "confirmed",
@@ -2132,8 +2641,12 @@
    "pe": "fix",
    "was": "break young taro from parent corm",
    "gloss": "to bend young taro off the corm",
-   "source": "PE s.v. ʻohākulaʻi (= puʻuhau); And. 1865 s.v. ohakulai",
-   "note": "Split evidence, worth being honest about. His gloss is Andrews' first sense and is good. But PE records ONLY the other sense — ʻohākulaʻi = puʻuhau, a hard calcium lump on the joints. Both are real; PE did not keep the taro one."
+   "source": "Andrews (1865) s.v. O-HA-KU-LAI; PE s.v. ʻohā.kulaʻi",
+   "note": "Andrews records bending young taro off the parent to give it room to grow, with ʻohā, shoot, + kulaʻi, push over. PE instead cross-references puʻuhau. The taro sense is supported by Andrews.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D14902&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D48749&l=en"
+   ]
   },
   "ʻoluʻolu": {
    "pe": "confirmed",
@@ -2191,104 +2704,172 @@
    "gloss": "round, low calabash",
    "ruling": "PE writes ōpūhue with no opening ʻokina, and its literal is ōpū (clump, cluster) + hue, not ʻōpū (belly) — PE's reading is calabash clump. The ʻōpū stone is shared with ʻōpūao, which wants the belly. Gloss applied, spelling held.",
    "source": "PE s.v. ō.pū.hue",
-   "note": "No ʻokina at the front: PE has ōpūhue. And the root is not ʻōpū 'belly' — PE's literal reading is 'calabash clump', i.e. ōpū in the sense 'clump, cluster'. Both the spelling and the root split need a touch."
+   "note": "No ʻokina at the front: PE has ōpūhue. And the root is not ʻōpū 'belly' — PE's literal reading is 'calabash clump', i.e. ōpū in the sense 'clump, cluster'. Both the spelling and the root split need a touch.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D15834&l=en"
+   ]
   }
  },
  "stones": {
   "holo?holowaʻa": {
    "gloss": "run, sail, go",
    "source": "PE s.v. holo",
-   "note": "shipped with an empty gloss, so the card read holo =  + waʻa = canoe"
+   "note": "shipped with an empty gloss, so the card read holo =  + waʻa = canoe",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D4008&l=en"
+   ]
   },
   "poi?hiʻipoi": {
-   "gloss": "to cover, protect, cherish",
    "source": "PE s.v. poi",
-   "note": "the poi in hiʻipoi is to cover and cherish, not the food"
+   "note": "The stone sense is unresolved. PE poi records the food; covering is poʻi, with an ʻokina. PE hiʻipoi establishes the compound meaning, not a free poi sense of cherish.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18316&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18317&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D3498&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D60619&l=en"
+   ]
   },
   "kau?kaupale": {
    "gloss": "to place, set, put",
    "source": "PE s.v. kau",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D7181&l=en"
+   ]
   },
   "pale?kaupale": {
    "gloss": "to ward off, fend off",
    "source": "PE s.v. pale",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16809&l=en"
+   ]
   },
   "kua?kuahao": {
    "gloss": "anvil, beating block",
    "source": "PE s.v. kua",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9029&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9050&l=en"
+   ]
   },
   "kaha?kahawai": {
-   "gloss": "to cut, mark; a place",
+   "gloss": "place",
    "source": "PE s.v. kaha",
-   "note": "shipped with an empty gloss"
+   "note": "PE kaha sense 2 explicitly lists kahawai among place compounds.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D5827&l=en"
+   ]
   },
   "kaha?kūkaha": {
    "gloss": "to turn aside, turn away",
    "source": "Andrews s.v. kaha; PE s.v. kū.kaha",
-   "note": "shipped with an empty gloss; Andrews supplies the sense PE's kūkaha needs"
+   "note": "shipped with an empty gloss; Andrews supplies the sense PE's kūkaha needs",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D53628&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9481&l=en"
+   ]
   },
   "kaka?kakaʻōlelo": {
    "gloss": "to strike, to fence",
    "source": "PE s.v. kākāʻōlelo",
-   "note": "shipped with an empty gloss. PE writes the root kākā, and the word kākāʻōlelo, literally to fence with words — the kahakō is a separate call, since the stone would then spell the word differently"
+   "note": "shipped with an empty gloss. PE writes the root kākā, and the word kākāʻōlelo, literally to fence with words — the kahakō is a separate call, since the stone would then spell the word differently",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D6355&l=en"
+   ]
   },
   "kū?kūʻau": {
    "gloss": "to stand",
    "source": "PE s.v. kū",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9027&l=en"
+   ]
   },
   "kū?kūʻauhau": {
    "gloss": "to stand",
    "source": "PE s.v. kū",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D9027&l=en"
+   ]
   },
   "luna?kaʻaluna": {
    "gloss": "above, upper; one in command",
    "source": "PE s.v. luna",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D11634&l=en"
+   ]
   },
   "olo?olokaʻa": {
-   "gloss": "to rub, saw back and forth",
    "source": "PE s.v. olo; ʻolokaʻa",
-   "note": "shipped with an empty gloss. The word is respelled ʻolokaʻa, so this stone now reads ʻolo; PE's root entry olo, to rub or saw back and forth, carries no ʻokina of its own — PE writes the compound ʻolo.kaʻa, so the ʻokina here belongs to the word. The stone links to nothing else, so it teaches no false line either way"
+   "note": "The stone sense is unresolved. PE establishes olo, rub/saw, and ʻolokaʻa, roll along, but its compound entry does not establish a connection between those senses.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D15395&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D15422&l=en"
+   ]
   },
   "pahu?pahukapu": {
    "gloss": "post, stake",
    "source": "PE s.v. pahu",
-   "note": "shipped with an empty gloss; the pahu here is the post, not the drum or box"
+   "note": "shipped with an empty gloss; the pahu here is the post, not the drum or box",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16195&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16221&l=en"
+   ]
   },
   "pū?paʻapū": {
    "gloss": "together, entirely",
    "source": "PE s.v. pū",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D18711&l=en"
+   ]
   },
   "paʻi?paʻiaʻa": {
-   "gloss": "to slap, print, bunch",
    "source": "PE s.v. paʻi",
-   "note": "shipped with an empty gloss"
+   "note": "The stone sense is unresolved. PE lists paʻi aʻa under the bundle/bunch sense of paʻi; slap/print is a separate sense. The compound-specific etymology remains a root decision.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16254&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D16259&l=en"
+   ]
   },
   "ʻau?ʻaumakua": {
    "gloss": "group, company",
    "source": "PE s.v. ʻau",
-   "note": "shipped with an empty gloss"
+   "note": "shipped with an empty gloss",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1489&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1614&l=en"
+   ]
   },
   "ʻau?ʻauwai": {
-   "gloss": "current, flow",
    "source": "PE s.v. ʻau; PPN kau + wai",
-   "note": "shipped with an empty gloss"
+   "note": "The stone sense is unresolved. PE ʻau does not record current/flow; that sense belongs to au without the opening ʻokina. The ʻauwai entry gives PPN kau + wai without establishing that free-root meaning.",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1489&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1485&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D1651&l=en"
+   ]
   },
   "ʻula?alaʻula": {
    "gloss": "flame, red glow",
    "source": "PE s.v. alaula",
-   "note": "shipped with an empty gloss. PE's literal for alaula is flaming road"
+   "note": "shipped with an empty gloss. PE's literal for alaula is flaming road",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D899&l=en"
+   ]
   },
   "hāliʻi": {
    "spelling": "haliʻi",
    "source": "PE s.v. haliʻi kuli; hāliʻi",
-   "note": "the root headword keeps its kahakō (hāliʻi, to spread), but PE writes the compound haliʻi kuli without it. The stone ships only in this one word, so it follows the compound; if you would rather the stone carry the root as PE heads it, revert this and the word stays hāliʻikuli"
+   "note": "the root headword keeps its kahakō (hāliʻi, to spread), but PE writes the compound haliʻi kuli without it. The stone ships only in this one word, so it follows the compound; if you would rather the stone carry the root as PE heads it, revert this and the word stays hāliʻikuli",
+   "source_urls": [
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2767&l=en",
+    "https://www.wehewehe.org/gsdl2.85/cgi-bin/hdict?a=d&d=D2768&l=en"
+   ]
   }
  },
  "notes": {
@@ -2300,6 +2881,13 @@
   "capitals": "PE capitalises Hōkūao and Hōkūloa (Venus as the morning star), Hakamoa (a constellation, literally chicken roost — so a star is sitting in the kanaka field), Mahiʻai and Pōʻaono. DESIGN §4.4 already rules that common nouns are written lower case on a stone pair, so none of these were changed; they are recorded because the capital is the only thing separating the star from the word.",
   "cultural_flags": "Nothing on this board is desecration, and that is said first. The full detail is in pe-check/REVIEW.md section D. The one request: some of the words now tumbling — ʻaumakua, ʻai kapu, kahu akua, pahu kapu, wai ea, papahola, pī kai, kino wailua, hana mana, kumupaʻa — belong to religious practice, some of it living, and all are correctly glossed. No removals are asked for. One line in the colophon acknowledging that would mean a visitor does not meet them only as a turning stone. Also: moʻo in Hawaiian tradition are lizard guardians of fresh water, not European dragons, and every PE citation under moʻo lele is Bible translation; kuapaʻa's PE sense 1 is slave, bond servant, oppressed, literally a hardened back; moʻo kanaka is a tax roll, not a genealogy; PE's 1986 English for leo paʻa should not travel to 2026. huluʻiʻiwi and ʻahu ʻula together tell a true and painful story — a threatened bird, and about 160 surviving cloaks worldwide. Leave them exactly as they are.",
   "the_compass": "The star compass was read out of the bundle rather than guessed from the render: all four kūkulu, all seven houses in the right order and mirrored into the right quadrants, Koʻolau and Malanai and Kona and Hoʻolua in their right corners, every ʻokina and kahakō in place. It is correct.",
-  "a_gift_for_the_compass": "PE's entry for alaula — already on the board, glossed dawn light; sunset glow — carries the line Ke alaula a Kāne, the flaming path of Kāne, meaning the eastern sky. Its exact partner is on the board too, in the ʻāina field: maʻawe ʻula, and PE gives Ke alanui maʻawe ʻula a Kanaloa, the red track pathway of Kanaloa, meaning the western sky. East and west, both named as roads. On a wayfinding map made of stones, those two belong facing each other."
+  "a_gift_for_the_compass": "PE's entry for alaula — already on the board, glossed dawn light; sunset glow — carries the line Ke alaula a Kāne, the flaming path of Kāne, meaning the eastern sky. Its exact partner is on the board too, in the ʻāina field: maʻawe ʻula, and PE gives Ke alanui maʻawe ʻula a Kanaloa, the red track pathway of Kanaloa, meaning the western sky. East and west, both named as roads. On a wayfinding map made of stones, those two belong facing each other.",
+  "unresolved_stones": "An empty stone gloss marks an unresolved root analysis. A whole compound definition, or a homograph with different spelling, does not by itself establish a free-root sense."
+ },
+ "checked_against_wehewehe": "2026-10-22",
+ "checked_scope": {
+  "word_records": 166,
+  "stone_records": 19,
+  "confirmation_only_records_not_rechecked": 221
  }
 }

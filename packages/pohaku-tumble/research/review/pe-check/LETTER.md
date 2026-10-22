@@ -40,23 +40,17 @@ He aloha nō,
 
 ---
 
-## The numbers
+## The dictionary record
 
-| verdict | count | |
-|---|---:|---|
-| ✅ correct as glossed | **313** | 85% |
-| ✏️ needs a fix | **52** | 14% |
-| ❓ could not confirm | **2** | |
-| ❌ not an attested word / wrong word | **3** | |
+The curation contains 387 word records: 321 confirmed,
+65 with spelling or gloss choices, and 1 with an unsettled sense.
+Eight root or spelling rulings also keep their circles. The full build ships
+598 words, with 589 clear and 9 circled.
 
-Separately, **129 of the 370 carry a spelling correction.** Most of those (106) are plain word-spacing,
-and they are not really errors of understanding — see below.
-
-**Coverage.** `wehewehe.org` is behind a Cloudflare challenge, so I worked through
-**<https://wehe.hilo.hawaii.edu/>** (Wehe²wiki², UH Hilo / Ulukau), which serves the same corpus with
-per-entry source attribution. Every word was queried in up to six forms against thirteen dictionaries.
-Of the 370: **347 are in Pukui–Elbert**, 2 more in Māmaka Kaiao, 19 in older dictionaries only, and
-**2 appear nowhere at all**.
+The correction and stone records have direct wehewehe.org checks dated
+22 October 2026. Per-entry source links identify the dictionaries supporting
+the chosen senses. A definition of a compound and an analysis of its roots
+are separate claims.
 
 ---
 
@@ -69,18 +63,15 @@ freely; host."** It is the relationship that hoʻokipa is built on. Leaving only
 Hawaiian eye, roughly like glossing *aloha* as "a kind of greeting." Lead with the friend; keep the buds
 as the second sense.
 
-### 2. `kōkō` — "to fulfill; to be pregnant" → **the carrying net**
-Wrong word. PE's `kōkō` is *"a carrying net, usually made of sennit, as used for hanging calabashes; a
-string hammock, as formerly used for carrying the very old."* The fulfil/pregnant word is **`kō`**
-(Parker records it under *koko* with the note "Syn: ua kō"). And `kokō` with a short first vowel is a
-rooster crowing. Three words, three vowel lengths. The kōkō is also a better object for your board —
-*kōkō puʻu*, the fine knotted carrier; *ua kaʻi kōkō*, carried in a hammock because of great age.
+### 2. `kōkō` — fulfillment and pregnancy
+PE's entry supports fulfillment as reduplication of kō (sense 5), and pregnancy
+(sense 4). These senses match the fulfill/conceive stones. The carrying-net
+sense also exists, but its ancestor and component analysis require separate evidence.
 
-### 3. `hākō` — "sugar-cane leaf" → **to carve a path through coral** ❌
-`hākō` does not mean sugar-cane leaf in any dictionary I can reach. PE has `hako` (no kahakō) = dignified,
-noble; and `hā.kō` = *"to carve out a pathway, as a passage through coral or as a water course."* The
-sugar-cane leaf is `lau kō` — which you already have as its own stone. Regloss it or retire it; the
-carving-a-channel-through-coral sense would be a beautiful stone on a wayfinding map.
+### 3. `hākō` — sugar-cane leaf
+Andrews (1865) and Parker (1922) attest sugar-cane leaf. Parker explicitly gives
+hā, leaf, + kō, sugar cane. The stones use that sense. PE's pathway-carving
+sense is a separate lexical choice and does not establish a leaf + cane analysis.
 
 ### 4. `oneʻā` and `pālāʻau` — where a missing space changes the word
 - `oneʻā` glossed "gunpowder" currently reads **"affliction."** The cinder/gunpowder word is **`one ʻā`**,
@@ -124,15 +115,15 @@ leaves out: *"to tap or snap the head — it was rude or provocative to tap anot
 sacred."* The poʻo is the most kapu part of a person. If one stone on the board carries a cultural note,
 make it this one.
 
-### 10. Two words that are not words ❌, and one that is barely one ❓
-- **`hoakipa`** ("visitor") — not found in any of the thirteen dictionaries. Both roots are real; the
-  compound is not attested. For "visitor" the living word is *malihini*. Swap it for an attested
-  `hoa-` compound: `hoa hele`, `hoa kaua`, `hoa ʻōlelo`, `hoa hanauna` are all solid.
-- **`heiheinalu`** ("to race on surfboards") — also unattested. The word for surfing is **`heʻe nalu`**,
-  which belongs on a board like this anyway.
-- **`hoalawaiʻa`** ("fellow fisherman") ❓ — attested *only* in Andrews 1836, one line. The formation is
-  regular, so it is probably fine, but that is the thinnest evidence on the board.
-- Also ❓: **`lāhui kaua`**, likewise Andrews 1836 only.
+### 10. Dictionary attestations
+- **Hoakipa** means visitor/guest in the Combined Hawaiian Dictionary (2020),
+  with hoa + kipa and a usage example.
+- **Heiheinalu** appears in Parker (1922) for surfing and racing on surfboards,
+  with heihei + nalu.
+- **Hoalawaiʻa** appears in Andrews (1865) as a fishing companion.
+- **Lāhuikaua** appears in Andrews (1865) and Parker (1922) as warriors or a
+  company of soldiers.
+
 
 ---
 
@@ -213,8 +204,9 @@ worksheet; the headlines:
 
 ## Data bugs (not language errors)
 
-1. **Nineteen roots ship with an empty gloss** — the stones render as `holo =  + waʻa = canoe`.
-   Suggested fills for all nineteen are in section E1 of the worksheet.
+1. **Root glosses need their own evidence.** Section E1 of the worksheet records
+   chosen senses and unresolved analyses. Empty glosses remain where a compound
+   definition does not establish a component sense.
 2. **Root orthography is 366/368 clean.** Only `pōuli` → `pouli`, and `kahiki` → `Kahiki` when standing
    alone. That is an extraordinary rate for a set this size.
 3. **Four root-parse errors:** `ʻahuao` (ahu + ʻao, not ʻahu + ao), `ʻōpūhue` (ōpū = clump, not belly),

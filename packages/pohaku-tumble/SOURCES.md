@@ -33,29 +33,29 @@ in `research/review/`. Each word was read against these sources:
 
 The authority for Hawaiian spelling and sense is Mary Kawena Pukui and
 Samuel H. Elbert, ***Hawaiian Dictionary***, revised and enlarged edition
-(University of Hawaiʻi Press, 1986). wehewehe.org, its online home, refuses
-automated access, and that was respected: nothing in the build reads it.
+(University of Hawaiʻi Press, 1986). Dictionary evidence is recorded entry by
+entry in [`research/review/pe-check.json`](./research/review/pe-check.json).
+Each entry identifies its dictionary and headword; directly checked entries
+also include links to [wehewehe.org](https://www.wehewehe.org/).
 
-That check has since been done by hand, word by word, through
-**[Wehe²wiki²](https://wehe.hilo.hawaii.edu/)** (University of Hawaiʻi at
-Hilo / Ulukau), which serves the same dictionaries with per-entry attribution
-and was not challenged — by **LEILANI**, the ʻŌlelo Hawaiʻi reviewer of Shaka
-Leikaumaka's ʻohana of agents, in October 2026. All 370 circled words were
-looked up, plus a spot check of the 228 already clear; her letter, the full
-worksheet, the source line for every word and what the build does and does
-not apply are in
-[`research/review/pe-check/`](./research/review/pe-check). Of the 370, 313
-were already right. Short definitions are quoted and attributed entry by
-entry, as lexicographic citation; the dictionary itself is neither
-reproduced nor redistributed.
+The curation uses Pukui & Elbert alongside Andrews, Parker, Māmaka Kaiao,
+Kent and the Combined Hawaiian Dictionary (2020). A sense supported by an
+older dictionary is attributed to that dictionary. Definitions and literal
+root analyses are separate evidence: a definition of a compound does not
+by itself establish the meanings or ancestry of its component stones.
 
-A word still marked with an open circle on its card (`ev: 'pending'` in the
-data) is one that check could not settle: three the dictionaries do not
-support, and eight whose spelling waits on a decision that would respell a
-stone other words share. The legend calls this *awaiting dictionary check*.
+The correction records and stone changes were checked directly against
+wehewehe.org on 22 October 2026. The standing confirmation-only records
+also carry their source lines; this date does not certify a new reading of
+every entry. The build itself does not query dictionary websites.
 
-That is a dictionary check, not a kumu's reading: **the list has still not
-been read by a fluent speaker**, and that invitation stands.
+An open circle (`ev: 'pending'`) marks a dictionary sense or root decision
+that remains open: one word with an unsettled sense and eight spelling/root
+rulings. An empty stone gloss likewise marks an unresolved root sense.
+The legend calls the circle *awaiting dictionary check*.
+
+This is documentary evidence, not a kumu's reading: **the list has still
+not been read by a fluent speaker**, and that invitation stands.
 
 ## The map and the star compass
 

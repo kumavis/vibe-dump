@@ -23,21 +23,21 @@ aumiki	aumiki	au	miki#0	outgoing current; rip current	kai	W+A	keep
 aumoe	aumoe	au?aumoe	moe	midnight, late night	hele	A	keep-pending	confirmed
 auwaʻa	ʻau waʻa	ʻau#group	waʻa	fleet of canoes	hana	A*	keep-pending	confirmed
 aʻakoko	aʻa koko	aʻa#0	koko	blood vessel, vein	kanaka	A*	keep-pending	fix (ruling open)
-aʻalele	aʻalele	aʻa#0	lele	artery	kanaka	A*	keep-pending	fix
+aʻalele	aʻalele	aʻa#0	lele	pulse (lit., leaping vein)	kanaka	A*	keep-pending	fix
 aʻalolo	aʻalolo	aʻa#0	lolo	nerve	kanaka	A*	keep-pending	confirmed
 haipule	haipule	hai#0	pule#0	devout, religious; to worship	naʻau	A*	keep-pending	confirmed
-hakakau	hakakau	haka#0	kau#1	rack; to perch on slender footing	hana	A*	keep-pending	fix
-hakamoa	hākā moa	haka?hakamoa	moa	one-leg wrestling game; cockfighting	kanaka	A*	keep-pending	fix
+hakakau	hakakau	haka#0	kau#1	to straddle; on slender footing	hana	A*	keep-pending	fix
+hakamoa	hākā moa	haka?hakamoa	moa	cockfight; a lua style using no hands	kanaka	A*	keep-pending	fix
 hakuhale	haku hale	haku#0	hale	master or owner of a house	kanaka	A*	keep-pending	confirmed
 hakumele	haku mele	haku#2	mele#0	to compose songs; a composer	naʻau	A*	keep	
 hakuwahine	haku wahine	haku#0	wahine	female head; wife of a chief	kanaka	A*	keep-pending	confirmed
-hakuʻāina	hakuʻāina	haku#0	ʻāina	land steward under a chief	kanaka	A*	keep-pending	fix
+hakuʻāina	hakuʻāina	haku#0	ʻāina	landowner; one who manages land	kanaka	A*	keep-pending	fix
 hakuʻōlelo	haku ʻōlelo	haku#2	ʻōlelo	one who composes words; a writer	naʻau	A*	keep-pending	confirmed
-halealiʻi	hale aliʻi	hale	aliʻi	chief's house; palace	hana	A*	keep	
+halealiʻi	hale aliʻi	hale	aliʻi	house of a chief; palace	hana	A*	keep	
 halekaua	hale kaua	hale	kaua	fort; fortification	hana	A*	keep-pending	confirmed
 halekaʻa	hale kaʻa	hale	kaʻa#0	carriage house; garage	hana	A*	keep-pending	confirmed
 halekia	hale kia	hale	kia#0	pillared porch; veranda	hana	A*	keep-pending	confirmed
-halelana	hale lana	hale	lana#0	the ark; a floating house	hana	A*	keep-pending	fix
+halelana	hale lana	hale	lana#0	floating house, houseboat; the Ark	hana	A*	keep-pending	fix
 halelewa	halelewa	hale	lewa	portable house; tent	hana	A*	keep-pending	confirmed
 halelole	hale lole	hale	lole	tent	hana	A*	keep-pending	confirmed
 halelāʻau	hale lāʻau	hale	lāʻau	wooden house, not thatched	hana	A*	keep-pending	confirmed
@@ -53,6 +53,7 @@ haowaha	hao waha	hao#0	waha#0	bridle bit	hana	A*	keep-pending	confirmed
 haupia	haupia	hau#0	pia#0	pudding of coconut cream and starch	ulu	W	keep-pending	confirmed
 hauʻeli	hauʻeli	hau#0	ʻeli	a salt dug from cave rocks	ʻāina	A*	keep-pending	confirmed
 hauʻoli	hauʻoli	hau#mood	ʻoli	happy, glad; joy	naʻau	W	keep-pending	confirmed
+heiheinalu	heiheinalu	heihei	nalu#0	to race on surfboards	kai	A*	keep-pending	confirmed
 helekū	helekū	hele	kū#0	to walk upright	hele	W	keep-pending	confirmed
 heʻenalu	heʻe nalu	heʻe#1	nalu#0	surfing; to ride a surfboard	kai	W+A	keep	
 hikilele	hikilele	hiki?hikilele	lele	startled; to jump with fright	naʻau	A*	keep-pending	confirmed
@@ -61,16 +62,17 @@ hiʻilani	hiʻilani	hiʻi	lani	to exalt, praise, admire	naʻau	A*	keep-pending	c
 hiʻipoi	hiʻipoi	hiʻi	poi?hiʻipoi	to tend and cherish	kanaka	A*	keep-pending	confirmed
 hoaaloha	hoaaloha	hoa#0	aloha	friend	kanaka	A*	keep	fix (ruling open)
 hoahana	hoa hana	hoa#0	hana#0	fellow worker; helper	hana	A*	keep	
-hoahanauna	hoa hanauna	hoa#0	hanauna	relatives of one's own people	kanaka	A*	keep-pending	fix
+hoahanauna	hoa hanauna	hoa#0	hanauna	a relative of the same generation	kanaka	A*	keep-pending	fix
 hoahele	hoa hele	hoa#0	hele	fellow traveler	hele	A*	keep-pending	confirmed
-hoahānau	hoahānau	hoa#0	hānau	cousin; kinsman of one's generation	kanaka	A*	keep	
+hoahānau	hoahānau	hoa#0	hānau	cousin; kin of the same generation	kanaka	A*	keep	
 hoakaua	hoa kaua	hoa#0	kaua	fellow soldier; adversary in war	kanaka	A*	keep-pending	confirmed
+hoakipa	hoakipa	hoa#0	kipa#0	visitor	hele	W	keep-pending	confirmed
 hoakoa	hoakoa	hoa#0	koa#1	fellow soldier	kanaka	A*	keep-pending	confirmed
-hoalawaiʻa	hoalawaiʻa	hoa#0	lawaiʻa	fellow fisherman	kai	A*	keep-pending	unconfirmed
+hoalawaiʻa	hoalawaiʻa	hoa#0	lawaiʻa	fellow fisherman	kai	A*	keep-pending	confirmed
 hoapaio	hoa paio	hoa#0	paio	opponent, adversary	kanaka	A*	keep	
 hoaʻai	hoa ʻai	hoa#0	ʻai	table companion; guest at a meal	ulu	A*	keep-pending	confirmed
 hoaʻāina	hoaʻāina	hoa#0	ʻāina	native tenant; tiller of the land	ʻāina	A*	keep	
-hoaʻōlelo	hoa ʻōlelo	hoa#0	ʻōlelo	conversation partner; counsellor	naʻau	A*	keep-pending	confirmed
+hoaʻōlelo	hoa ʻōlelo	hoa#0	ʻōlelo	conversation partner; counselor	naʻau	A*	keep-pending	confirmed
 hoeuli	hoe uli	hoe	uli#1	steering paddle	hana	A*	keep	
 hoewaʻa	hoe waʻa	hoe	waʻa	to paddle a canoe; paddler	hana	A*	keep-pending	confirmed
 holokai	holokai	holo#0	kai	seafarer; seafaring	kai	A*	keep	
@@ -82,7 +84,7 @@ hopepoʻo	hope poʻo	hope	poʻo	deputy or associate head	kanaka	A*	keep-pending	
 hoʻihope	hoʻi hope	hoʻi	hope	to turn back, retreat	hele	A*	keep-pending	confirmed
 hualiʻi	hua liʻi	hua	liʻi#0	small fruit left after harvest	ulu	A*	keep-pending	confirmed
 huamele	hua mele	hua#word	mele#0	musical note	naʻau	A*	keep-pending	confirmed
-huamoa	hua moa	hua	moa	hen's egg	ulu	A*	keep	
+huamoa	hua moa	hua	moa	hen egg	ulu	A*	keep	
 huaʻai	hua ʻai	hua	ʻai	fruit, edible fruit	ulu	A*	keep-pending	confirmed
 huaʻōlelo	huaʻōlelo	hua#word	ʻōlelo	word	naʻau	W	keep-pending	confirmed
 huewai	hue wai	hue	wai#0	water gourd	hana	A*	keep	fix
@@ -91,12 +93,12 @@ huikala	huikala	hui	kala#2	forgiveness; to purify	naʻau	A*	keep
 hukiwai	huki wai	huki	wai#0	to draw water	hana	A*	keep-pending	confirmed
 hulilua	huli lua	huli#0	lua#0	turning two ways; shifting	hele	A*	keep-pending	confirmed
 huluʻiʻiwi	huluʻiʻiwi	hulu#0	ʻiʻiwi	ʻiʻiwi feathers, for cloaks	hana	A*	keep-pending	confirmed
-hunakai	hunakai	huna#0	kai	sea foam; the sanderling	kai	A*	keep	fix
-hunakaua	huna kaua	huna#0	kaua	a single fighter in an army	kanaka	A*	keep-pending	fix
+hunakai	hunakai	huna#0	kai	the sanderling; beach morning glory	kai	A*	keep	fix
+hunakaua	huna kaua	huna#0	kaua	a unit of a war host; one fighter	kanaka	A*	keep-pending	fix
 hunawai	huna wai	huna#0	wai#0	drop of water; spray, mist	ʻāina	A*	keep-pending	confirmed
 hāipu	hāipu	hā#2	ipu	gourd leaf stalk, used medicinally	ulu	A*	keep-pending	fix (ruling open)
-hākō	hākō	hā#2	kō#0	sugar-cane leaf	ulu	A*	keep-pending	fix
-hāliʻikuli	haliʻi kuli	hāliʻi	kuli#1	stingy; one who guards the food	naʻau	A*	keep-pending	fix
+hākō	hākō	hā#2	kō#0	sugar-cane leaf	ulu	A*	keep-pending	confirmed
+hāliʻikuli	haliʻi kuli	hāliʻi	kuli#1	to spread the knees; (hence) stingy	naʻau	A*	keep-pending	fix
 hānaukahi	hānau kahi	hānau	kahi#0	an only child	kanaka	A*	keep-pending	confirmed
 hānaumua	hānau mua	hānau	mua	first-born child	kanaka	A*	keep-pending	confirmed
 hāniu	hā niu	hā#2	niu#0	butt end of a coconut frond	ulu	A*	keep-pending	confirmed
@@ -110,7 +112,7 @@ hūkai	hūkai	hū#0	kai	brackish; tasteless	kai	A*	keep-pending	confirmed
 hūlani	hūlani	hū#0	lani	to praise highly, exalt	naʻau	A*	keep-pending	confirmed
 hūpuna	hūpuna	hū#0	puna#0	pool of overflowing spring water	ʻāina	A*	keep-pending	confirmed
 iwikū	iwikū	iwi	kū#0	a bone of the lower leg	kanaka	A*	keep-pending	confirmed
-iwipona	iwi pona	iwi	pona	a joint of the bones	kanaka	A*	keep-pending	fix
+iwipona	iwi pona	iwi	pona	bone socket, as the eye socket	kanaka	A*	keep-pending	fix
 kahakai	kahakai	kaha#1	kai	seashore, beach	kai	A	keep	
 kahaone	kahaone	kaha#1	one	sandy beach	kai	W	keep-pending	confirmed
 kahapili	kahapili	kaha#0	pili	tangent to a circle	hele	A*	keep-pending	confirmed
@@ -145,7 +147,7 @@ kaulawaha	kaula waha	kaula	waha#0	bridle; to rein in	hana	A*	keep-pending	confir
 kaulike	kaulike	kau#1	like	fair, just; evenly balanced	naʻau	A*	keep	
 kaulua	kaulua	kau?kaulua	lua#0	double canoe; a pair	hana	A*	keep-pending	confirmed
 kaupale	kaupale	kau?kaupale	pale?kaupale	partition; dividing barrier	hana	A*	keep-pending	confirmed
-kaʻahale	kaʻa hale	kaʻa#0	hale	covered carriage; house-like cart	hana	A*	keep-pending	fix
+kaʻahale	kaʻa hale	kaʻa#0	hale	trailer; house on wheels	hana	A*	keep-pending	fix
 kaʻahele	kaʻahele	kaʻa#0	hele	to travel about, tour	hele	A*	keep	
 kaʻakaua	kaʻa kaua	kaʻa#0	kaua	to maneuver forces in war	hele	A*	keep-pending	confirmed
 kaʻalalo	kaʻalalo	kaʻa#0	lalo	to sail off the wind, leeward	hele	A*	keep-pending	confirmed
@@ -158,12 +160,12 @@ kiaao	kia ao	kia#0	ao#2	pillar of cloud	lani	A*	keep-pending	confirmed
 kiakahi	kiakahi	kia#0	kahi#0	steadfast, of one purpose	naʻau	A*	keep-pending	confirmed
 kiakolu	kia kolu	kia#0	kolu	three-masted ship	hana	A*	keep-pending	confirmed
 kialua	kia lua	kia#0	lua#0	two-masted vessel; brig, schooner	hana	A*	keep-pending	confirmed
-kiaʻipoʻo	kiaʻipoʻo	kiaʻi	poʻo	guard of the king's person	kanaka	A*	keep-pending	confirmed
+kiaʻipoʻo	kiaʻipoʻo	kiaʻi	poʻo	bodyguard of a king	kanaka	A*	keep-pending	confirmed
 kiaʻipuka	kiaʻi puka	kiaʻi	puka	gatekeeper, porter	kanaka	A*	keep-pending	confirmed
 kiaʻipō	kiaʻi pō	kiaʻi	pō	night watch	hele	A*	keep-pending	confirmed
 kiaʻāina	kiaʻāina	kia#0	ʻāina	governor; ruler of an island	kanaka	A*	keep	
 kikokahi	kiko kahi	kiko	kahi#0	period (punctuation mark)	naʻau	A*	keep-pending	confirmed
-kikolā	kikolā	kiko	lā#1	to keep a daily tally	hele	A*	keep-pending	fix
+kikolā	kikolā	kiko	lā#1	timekeeper (lit., day marker)	hele	A*	keep-pending	fix
 kikomoe	kiko moe	kiko	moe	hyphen	naʻau	A*	keep-pending	confirmed
 kikonīnau	kiko nīnau	kiko	nīnau	question mark	naʻau	A*	keep	
 kikowaena	kikowaena	kiko	waena	center; center of a circle	hele	A*	keep	
@@ -173,17 +175,17 @@ kinopaʻa	kinopaʻa	kino	paʻa	solid (state of matter)	ʻāina	W	keep
 kinowai	kinowai	kino	wai#0	liquid (state of matter)	ʻāina	W	keep	
 kinowailua	kino wailua	kino	wailua	spirit or ghost of the dead	naʻau	A*	keep-pending	confirmed
 kipikua	kipikua	kipi#0	kua#1	pickaxe	hana	A*	keep-pending	confirmed
-kiʻipalapala	kiʻi palapala	kiʻi#0	palapala	picture; portrait	hana	A*	keep-pending	fix
+kiʻipalapala	kiʻi palapala	kiʻi#0	palapala	printed picture, as in a newspaper	hana	A*	keep-pending	fix
 kiʻipōhaku	kiʻi pōhaku	kiʻi#0	pōhaku	petroglyph; stone image	hana	A*	keep	
-koikahi	koʻi kahi	koʻi	kahi#1	carpenter's plane	hana	A*	keep-pending	confirmed
+koikahi	koʻi kahi	koʻi	kahi#1	wood plane	hana	A*	keep-pending	confirmed
 koilipi	koʻi lipi	koʻi	lipi	axe	hana	A*	keep-pending	confirmed
 komohale	komo hale	komo	hale	house-warming; dedicating a new house	hana	A*	keep-pending	confirmed
 komoʻāina	komo ʻāina	komo	ʻāina	to enter upon inherited land	ʻāina	A*	keep-pending	confirmed
-kuahao	kua hao	kua?kuahao	hao#0	blacksmith's anvil	hana	W	keep-pending	confirmed
+kuahao	kua hao	kua?kuahao	hao#0	anvil	hana	W	keep-pending	confirmed
 kuamauna	kuamauna	kua#0	mauna	mountaintop zone	ʻāina	A*	keep-pending	confirmed
 kuamoʻo	kuamoʻo	kua#0	moʻo	backbone; path; way, custom	kanaka	W+A	keep	
 kuapapa	kuapapa	kua#1	papa#0	peace; quiet, untroubled	naʻau	A*	keep-pending	confirmed
-kuapaʻa	kuapaʻa	kua#0	paʻa	hard-backed crab or mollusk	kai	A*	keep-pending	fix
+kuapaʻa	kuapaʻa	kua#0	paʻa	the chiton, a hard-backed mollusk	kai	A*	keep-pending	fix
 kuapuʻu	kuapuʻu	kua#0	puʻu	hump, as of a camel	kanaka	W+A	keep	
 kuaʻāina	kuaʻāina	kua#0	ʻāina	countryside, back country	ʻāina	W+A	keep	
 kuenehale	kuenehale	kuene	hale	house framer; house-building craft	hana	A*	keep-pending	confirmed
@@ -204,9 +206,9 @@ kālaiʻāina	kālaiʻāina	kālai	ʻāina	politics; affairs of the land	kanaka	
 kālāʻau	kālāʻau	kā#0	lāʻau	stick dance; striking sticks together	naʻau	A*	keep-pending	confirmed (ruling open)
 kāmaʻaloa	kāmaʻa loa	kāmaʻa	loa	runners of a hōlua sled	hana	A*	keep-pending	confirmed
 kānemake	kāne make	kāne	make	widowed (of a wife)	kanaka	A*	keep-pending	confirmed
-kāwilimanu	kāwili manu	kāwili	manu	catching birds with bird lime	hana	A*	keep-pending	fix
+kāwilimanu	kāwili manu	kāwili	manu	to snare birds; bird snarer	hana	A*	keep-pending	fix
 kēʻai	kē ʻai	kē	ʻai	to fast	naʻau	A*	keep-pending	confirmed
-kōhiʻai	kōhi ʻai	kōhi#0	ʻai	to dig food from the ground	ulu	A*	keep-pending	fix
+kōhiʻai	kōhi ʻai	kōhi#0	ʻai	to pick taro from the stalk	ulu	A*	keep-pending	fix
 kōkea	kō kea	kō#0	kea	a white sugar cane	ulu	A*	keep-pending	confirmed
 kōpaʻa	kōpaʻa	kō#0	paʻa	sugar	ulu	W	keep	
 kōʻula	kōʻula	kō#0	ʻula#0	a reddish sugar cane	ulu	A*	keep-pending	confirmed
@@ -223,7 +225,7 @@ kūloupoʻo	kūlou poʻo	kūlou	poʻo	to dive in head first	hele	A*	keep-pending
 kūlālā	kūlālā	kū#0	lālā	plant grown from a cutting	ulu	A*	keep-pending	confirmed
 kūmaka	kūmaka	kū?kūmaka	maka#0	known by sight; in plain view	naʻau	A*	keep-pending	confirmed
 kūnihi	kūnihi	kū#0	nihi	set on edge; standing sideways	hele	A*	keep-pending	confirmed
-kūnānā	kūnānā	kū#0	nānā#1	to stand and watch	naʻau	A*	keep-pending	fix
+kūnānā	kūnānā	kū#0	nānā#1	puzzled, stumped, undecided	naʻau	A*	keep-pending	fix
 kūola	kūola	kū#0	ola	to come through danger unharmed	kanaka	A*	keep-pending	confirmed
 kūpaʻa	kūpaʻa	kū#0	paʻa	steadfast, unshaken in purpose	naʻau	A*	keep	
 kūpono	kūpono	kū#0	pono	upright, honest; proper, suitable	naʻau	A*	keep	
@@ -258,7 +260,7 @@ leialiʻi	lei aliʻi	lei	aliʻi	crown; diadem; lei of a chief	hana	A*	keep-pendi
 leihala	lei hala	lei	hala#1	lei of hala (pandanus) fruit	hana	A*	keep	
 lelehuna	lelehuna	lele	huna#0	fine windblown spray or mist	lani	A*	keep	
 lelepono	lele pono	lele	pono	to prosper; to fare well	naʻau	A*	keep-pending	confirmed
-leopaʻa	leo paʻa	leo	paʻa	one whose voice is stopped	naʻau	A*	keep-pending	fix
+leopaʻa	leo paʻa	leo	paʻa	a person who cannot speak	naʻau	A*	keep-pending	fix
 leowaena	leo waena	leo	waena	middle voice in part-singing	naʻau	A*	keep-pending	confirmed
 leowahine	leo wahine	leo	wahine	highest voice part; female voice	naʻau	A*	keep-pending	confirmed
 lewalani	lewa lani	lewa	lani	highest stratum of the heavens	lani	A*	keep	
@@ -285,9 +287,9 @@ lunamanaʻo	lunamanaʻo	luna#1	manaʻo	conscience	naʻau	A*	keep
 lunaʻauhau	luna ʻauhau	luna#1	ʻauhau	tax collector	kanaka	A*	keep	
 lunaʻohana	luna ʻohana	luna#1	ʻohana#0	head of a family	kanaka	A*	keep-pending	confirmed
 lunaʻōlelo	lunaʻōlelo	luna#1	ʻōlelo	apostle; messenger, proclaimer	kanaka	A*	keep	
-lāhana	lā hana	lā#1	hana#0	workday; a day's work	hana	A*	keep-pending	confirmed
-lāhuikaua	lāhui kaua	lāhui	kaua	warriors; company of soldiers	kanaka	A*	keep-pending	unconfirmed
-lāʻaukia	lāʻau kia	lāʻau	kia#0	bird-catcher's limed stick	hana	A*	keep-pending	confirmed
+lāhana	lā hana	lā#1	hana#0	workday; day of work	hana	A*	keep-pending	confirmed
+lāhuikaua	lāhui kaua	lāhui	kaua	warriors; company of soldiers	kanaka	A*	keep-pending	confirmed
+lāʻaukia	lāʻau kia	lāʻau	kia#0	limed stick for catching birds	hana	A*	keep-pending	confirmed
 mahiʻai	mahi ʻai	mahi	ʻai	farmer; to farm	ulu	W+A	keep	fix
 makaala	makaʻala	maka#0	ala?makaala	alert, vigilant, watchful	naʻau	A*	keep	
 makahiamoe	maka hiamoe	maka#0	hiamoe	sleepy; to doze off	kanaka	A*	keep-pending	confirmed
@@ -296,7 +298,7 @@ makaluku	makaluku	maka#0	luku	turned against one, for harm	naʻau	A*	keep-pendin
 makamomi	maka momi	maka#0	momi	white speck in the eye	kanaka	A*	keep-pending	confirmed
 makamua	maka mua	maka#0	mua	first; beginning	hele	A*	keep	
 makanahele	makanahele	maka#0	nahele	wild, untamed	ʻāina	W+A	keep-pending	confirmed
-makapaʻa	makapaʻa	maka#0	paʻa	blind; with closed eyes	kanaka	A*	keep-pending	fix
+makapaʻa	makapaʻa	maka#0	paʻa	blind in one eye	kanaka	A*	keep-pending	fix
 makapouli	makapōuli	maka#0	pouli	dizzy, faint	kanaka	A*	keep	
 makapō	makapō	maka#0	pō	blind; a blind person	kanaka	A*	keep	
 makawai	maka wai	maka#0	wai#0	watery-eyed	kanaka	A*	keep-pending	fix
@@ -328,10 +330,10 @@ mokuʻāina	mokuʻāina	moku	ʻāina	state; district; island	ʻāina	W	keep
 monakō	monakō	mona	kō#0	glucose	ulu	W	keep-pending	confirmed
 moʻamaka	moʻa maka	moʻa	maka#1	partly cooked	ulu	A*	keep-pending	confirmed
 moʻoaliʻi	moʻo aliʻi	moʻo#line	aliʻi	genealogy of chiefs	kanaka	A*	keep-pending	confirmed
-moʻokanaka	moʻo kanaka	moʻo#line	kanaka	genealogy; list of the people	kanaka	A*	keep-pending	fix
+moʻokanaka	moʻo kanaka	moʻo#line	kanaka	list of commoners, as for taxation	kanaka	A*	keep-pending	fix
 moʻokupuna	moʻo kupuna	moʻo#line	kupuna	line of ancestors; genealogy	kanaka	A*	keep-pending	confirmed
 moʻokūʻauhau	moʻo kūʻauhau	moʻo#line	kūʻauhau	genealogy, line of descent	kanaka	A*	keep	fix
-moʻolele	moʻo lele	moʻo	lele	flying serpent, dragon	lani	A*	keep-pending	fix
+moʻolele	moʻo lele	moʻo	lele	flying serpent, dragon; a Bible word	lani	A*	keep-pending	fix
 moʻoʻōlelo	moʻoʻōlelo	moʻo#line	ʻōlelo	history; tradition; connected narrative	naʻau	A*	keep-pending	confirmed
 mulihope	muli hope	muli	hope	the last; youngest born	kanaka	A*	keep-pending	confirmed
 naʻauao	naʻauao	naʻau	ao#0	wise, learned; wisdom	naʻau	W+A	keep	
@@ -346,20 +348,20 @@ olokaʻa	ʻolokaʻa	olo?olokaʻa	kaʻa#0	to roll over and over	hele	A*	keep-pend
 omokoko	omo koko	omo	koko	a leech, a bloodsucker	kanaka	A*	keep-pending	confirmed
 omoliu	omo liu	omo	liu	bilge pump; to pump bilge	hana	A*	keep-pending	confirmed
 onehānau	one hānau	one	hānau	birthplace; native land	ʻāina	A*	keep	
-oneʻā	one ʻā	one	ʻā#0	gunpowder	hana	A*	keep-pending	fix
+oneʻā	one ʻā	one	ʻā#0	black cinder sand; hence gunpowder	hana	A*	keep-pending	fix
 pahukani	pahu kani	pahu#0	kani	drum; percussion instrument	naʻau	A*	keep-pending	confirmed
 pahukapu	pahu kapu	pahu?pahukapu	kapu#0	kapu marker; consecrated place	naʻau	A*	keep-pending	confirmed
 pahupalapala	pahu palapala	pahu#0	palapala	kapa-dye box; writing desk	hana	A*	keep-pending	confirmed
 pakakahi	pakakahi	paka#4	kahi#0	scattered drops of light rain	lani	A*	keep-pending	fix (ruling open)
-palaimaka	palai maka	palai#avert	maka#0	averted; to turn the face away	naʻau	A*	keep-pending	fix
-palekai	pale kai	pale#1	kai	breakwater; a ship's railing	kai	A*	keep	
+palaimaka	palai maka	palai#avert	maka#0	abashed, shamefaced; to turn away	naʻau	A*	keep-pending	fix
+palekai	pale kai	pale#1	kai	breakwater; ship railing	kai	A*	keep	
 palekaua	pale kaua	pale#1	kaua	shield; defensive armor	hana	A*	keep-pending	confirmed
 palekeiki	pale keiki	pale#1	keiki	midwife; to deliver a child	kanaka	A*	keep-pending	confirmed
 palemaka	pale maka	pale#0	maka#0	veil; covering for the face	hana	A*	keep-pending	confirmed
 paleuhi	pale uhi	pale#0	uhi#1	a covering; a veil	hana	A*	keep-pending	confirmed
-panapoʻo	pana poʻo	pana	poʻo	scratch the head to remember	naʻau	A*	keep-pending	fix
+panapoʻo	pana poʻo	pana	poʻo	to tap or snap the head	naʻau	A*	keep-pending	fix
 panapua	pana pua	pana	pua	archer; to shoot arrows	hana	A*	keep-pending	confirmed
-panepoʻo	panepoʻo	pane#head	poʻo	back of the head	kanaka	A*	keep-pending	fix
+panepoʻo	panepoʻo	pane#head	poʻo	pinnacle, summit; most important	kanaka	A*	keep-pending	fix
 panipuka	pani puka	pani	puka	door; gate	hana	A*	keep-pending	confirmed
 panipū	panipū	pani	pū#1	wad of a gun	hana	A*	keep-pending	confirmed
 papahola	papahola	papa#0	hola#0	level court before a heiau	hana	A*	keep-pending	confirmed
@@ -375,17 +377,17 @@ pauaho	pauaho	pau	aho#1	out of breath; disheartened	naʻau	W+A	keep
 paʻahana	paʻahana	paʻa	hana#0	industrious, hard-working	hana	A*	keep	
 paʻahao	paʻahao	paʻa	hao#0	prisoner; imprisoned	kanaka	W+A	keep	
 paʻakai	paʻakai	paʻa	kai	salt	kai	W+A	keep	
-paʻakāhili	paʻa kāhili	paʻa	kāhili	kāhili bearer, a chief's attendant	kanaka	A*	keep	
+paʻakāhili	paʻa kāhili	paʻa	kāhili	kāhili bearer, attendant of a chief	kanaka	A*	keep	
 paʻaluhi	paʻa luhi	paʻa	luhi#0	overcome with weariness	kanaka	A*	keep-pending	confirmed
 paʻanaʻau	paʻanaʻau	paʻa	naʻau	memorized, known by heart	naʻau	W	keep	
 paʻapū	paʻapū	paʻa	pū?paʻapū	dense, crowded; covered over	hele	W	keep-pending	confirmed
-paʻawaha	paʻawaha	paʻa	waha#0	a bridle	hana	A*	keep-pending	fix
+paʻawaha	paʻawaha	paʻa	waha#0	gag; to gag the mouth	hana	A*	keep-pending	fix
 paʻaʻili	paʻaʻili	paʻa	ʻili	many-sided solid (geometry)	hele	A*	keep-pending	confirmed
 paʻiaʻa	paʻi aʻa	paʻi?paʻiaʻa	aʻa#0	root system, rootlets	ulu	A*	keep-pending	confirmed
 paʻikiʻi	paʻi kiʻi	paʻi	kiʻi#0	photograph; to take a picture	hana	W	keep	
 paʻiʻai	paʻi ʻai	paʻi?paʻiʻai	ʻai	hand-pounded, undiluted taro	ulu	A*	keep-pending	confirmed
 pihalima	piha lima	piha	lima	a handful	hele	A*	keep-pending	confirmed
-pipiwai	pīpī wai	pipi#seep	wai#0	place where water oozes up	ʻāina	A*	keep-pending	fix
+pipiwai	pīpī wai	pipi#seep	wai#0	to ooze or percolate; sprinkle water	ʻāina	A*	keep-pending	fix
 poʻohina	poʻo hina	poʻo	hina#0	gray-haired; gray with age	kanaka	A*	keep-pending	confirmed
 poʻokepa	poʻo kepa	poʻo	kepa	hair cut lopsided in mourning	kanaka	A*	keep-pending	confirmed
 poʻopaʻa	poʻopaʻa	poʻo	paʻa	stocky hawkfish, a reef fish	kai	A*	keep	
@@ -398,12 +400,12 @@ pukaihu	puka ihu	puka	ihu	nostril	kanaka	A*	keep-pending	fix
 pukamakani	puka makani	puka	makani	window; opening for ventilation	hana	A*	keep-pending	confirmed
 puʻukani	puʻukani	puʻu	kani	sweet-voiced; a singer	naʻau	W	keep	
 puʻukaua	puʻukaua	puʻu	kaua	fortification; stronghold	hana	A*	keep-pending	confirmed
-puʻukoko	puʻu koko	puʻu	koko	a clot of blood	kanaka	A*	keep-pending	fix
+puʻukoko	puʻu koko	puʻu	koko	clot of blood; the heart	kanaka	A*	keep-pending	fix
 puʻuone	puʻu one	puʻu	one	mound of sand; sand berm	kai	A*	keep	fix
 puʻuwai	puʻuwai	puʻu	wai#0	heart	kanaka	A	keep	
 pākū	pākū	pā#0	kū#0	partition, screen, curtain	hana	A	keep	
 pāleo	pāleo	pā#4	leo	to converse; to debate	naʻau	W+A	keep-pending	confirmed
-pālāʻau	pā lāʻau	pā#0	lāʻau	stick fence; wooden fence	hana	A*	keep-pending	fix
+pālāʻau	pā lāʻau	pā#0	lāʻau	wooden fence, hedge	hana	A*	keep-pending	fix
 pānini	pānini	pā#0	nini#1	cactus	ulu	W	keep-pending	confirmed
 pāpalealiʻi	pāpale aliʻi	pāpale	aliʻi	crown; headdress of a king	hana	A*	keep-pending	confirmed
 pīkai	pī kai	pī#sprinkle	kai	purify by sprinkling seawater	naʻau	A*	keep-pending	confirmed
@@ -419,7 +421,7 @@ ululāʻau	ulu lāʻau	ulu#0	lāʻau	forest; thicket of trees	ulu	A*	keep	fix
 uluwehi	uluwehi	ulu#0	wehi	lush growth	ulu	W	keep	
 wahahewa	wahahewa	waha#0	hewa	wicked, false speech	naʻau	A*	keep-pending	confirmed
 wahaheʻe	wahaheʻe	waha#0	heʻe#1	to lie; deceitful	naʻau	W+A	keep	
-waiea	wai ea	wai#0	ea	ceremonial water at a heiau	naʻau	A*	keep-pending	fix
+waiea	wai ea	wai#0	ea	small house at a heiau entrance	naʻau	A*	keep-pending	fix
 waihoʻoluʻu	waihoʻoluʻu	wai#0	hoʻoluʻu	dye; color	hana	W+A	keep	
 waikai	wai kai	wai#0	kai	brackish water	kai	A*	keep-pending	confirmed
 wailana	wailana	wai#0	lana#0	still, calm water	kai	A*	keep-pending	confirmed
@@ -436,7 +438,7 @@ wiliʻau	wiliau	wili	au	eddy; swirling motion	hele	A*	keep-pending	confirmed
 ʻahakanaka	ʻahakanaka	ʻaha#0	kanaka	a great company, multitude	kanaka	A*	keep-pending	confirmed
 ʻahamele	ʻaha mele	ʻaha#0	mele#0	concert	naʻau	W	keep	
 ʻahaʻōlelo	ʻahaʻōlelo	ʻaha#0	ʻōlelo	council; legislature	kanaka	W+A	keep	
-ʻahuao	ʻahuao	ʻahu	ao?ʻahuao	mat of young lauhala leaves	hana	A*	keep-pending	fix (ruling open)
+ʻahuao	ʻahuao	ʻahu	ao?ʻahuao	mat of soft young pandanus leaves	hana	A*	keep-pending	fix (ruling open)
 ʻahuʻula	ʻahu ʻula	ʻahu	ʻula#0	feather cloak of high chiefs	hana	A*	keep	
 ʻahāinu	ʻaha inu	ʻaha#0	inu	a gathering for drinking	ulu	A*	keep-pending	confirmed
 ʻahālike	ʻahālike	ʻahā	like	square, four equal sides	hele	A*	keep-pending	confirmed
@@ -455,7 +457,7 @@ wiliʻau	wiliau	wili	au	eddy; swirling motion	hele	A*	keep-pending	confirmed
 ʻikepili	ʻikepili	ʻike	pili	data	naʻau	W	keep	
 ʻilikai	ʻilikai	ʻili	kai	surface of the sea; sea level	kai	W	keep	
 ʻililua	ʻili lua	ʻili	lua#0	new skin after healing; aged skin	kanaka	A*	keep-pending	confirmed
-ʻohākulaʻi	ʻohākulaʻi	ʻohā	kulaʻi	break young taro from parent corm	ulu	A*	keep-pending	fix
+ʻohākulaʻi	ʻohākulaʻi	ʻohā	kulaʻi	to bend young taro off the corm	ulu	A*	keep-pending	fix
 ʻoihana	ʻoihana	ʻoi	hana#0	occupation, trade; department, office	hana	W+A	keep	
 ʻualakahiki	ʻuala kahiki	ʻuala	kahiki#0	potato (the Irish potato)	ulu	A*	keep	
 ʻukukapa	ʻuku kapa	ʻuku#0	kapa	body louse	kanaka	A*	keep-pending	confirmed
@@ -465,7 +467,7 @@ wiliʻau	wiliau	wili	au	eddy; swirling motion	hele	A*	keep-pending	confirmed
 ʻōleloaʻo	ʻōlelo aʻo	ʻōlelo	aʻo	counsel, advice; teachings	naʻau	A*	keep-pending	confirmed
 ʻōlelopaʻa	ʻōlelo paʻa	ʻōlelo	paʻa	a precept; a command	naʻau	A*	keep-pending	confirmed
 ʻōpūao	ʻōpūao	ʻōpū	ao#0	wise-hearted, knowing, intelligent	naʻau	A*	keep-pending	confirmed
-ʻōpūhue	ʻōpūhue	ʻōpū	hue	a round, flat calabash	hana	A*	keep-pending	fix (ruling open)
+ʻōpūhue	ʻōpūhue	ʻōpū	hue	round, low calabash	hana	A*	keep-pending	fix (ruling open)
 aheahe	aheahe	ahe	ahe	gentle breeze	lani		keep-pending	confirmed
 akaaka	akaaka	aka#bright	aka#bright	clear, bright, luminous	lani		keep-pending	confirmed
 aniani	aniani	ani	ani	cool; blowing softly	lani		keep-pending	confirmed
@@ -516,7 +518,7 @@ konākonā	konākonā	konā	konā	dislike, contempt	naʻau		keep
 koʻokoʻo	koʻokoʻo	koʻo	koʻo	cane, staff; support, prop	hana		keep	
 kupukupu	kupukupu	kupu	kupu	to surge forth; sword fern	ulu		keep	
 kuʻukuʻu	kuʻukuʻu	kuʻu	kuʻu	to lower bit by bit	hele		keep-pending	confirmed
-kōkō	kōkō	kō#1	kō#1	to fulfill; to be pregnant	kanaka		keep-pending	fix
+kōkō	kōkō	kō#1	kō#1	to fulfill; to be pregnant	kanaka		keep-pending	confirmed
 kūkākūkā	kūkākūkā	kūkā	kūkā	to discuss, consult together	naʻau		keep	
 lahalaha	lahalaha	laha	laha	spread over, as brooding wings	ulu		keep-pending	confirmed
 lahilahi	lahilahi	lahi	lahi	thin, delicate; thinness	hana		keep	
@@ -530,18 +532,18 @@ likiliki	likiliki	liki	liki	tight; tied on tightly	hana		keep-pending	confirmed
 limalima	limalima	lima	lima	to handle, work with the hands	hana		keep	
 linolino	linolino	lino	lino	calm, unruffled; bright	naʻau		keep-pending	confirmed
 liʻiliʻi	liʻiliʻi	liʻi#0	liʻi#0	small, little; few	hele		keep	
-lohelohe	lohelohe	lohe	lohe	to hear often, repeatedly	naʻau		keep-pending	fix
-makamaka	makamaka	maka#0	maka#0	buds, as on a taro corm	ulu		keep-pending	fix
+lohelohe	lohelohe	lohe	lohe	to listen carefully; to eavesdrop	naʻau		keep-pending	fix
+makamaka	makamaka	maka#0	maka#0	intimate friend, host	ulu		keep-pending	fix
 manamana	manamana	mana#1	mana#1	fingers, toes; branches	kanaka		keep	
 maʻamaʻa	maʻamaʻa	maʻa	maʻa	accustomed, experienced	naʻau		keep	
 maʻomaʻo	maʻomaʻo	maʻo#0	maʻo#0	green, greenness	ulu		keep	
 mehameha	mehameha	meha	meha	loneliness, solitude	naʻau		keep-pending	confirmed
 melemele	melemele	mele#1	mele#1	yellow, light yellow	lani		keep	
-mikomiko	mikomiko	miko	miko	lightly salted; savoury	ulu		keep	
-milimili	milimili	mili	mili	examine admiringly; a cherished favourite	naʻau		keep-pending	confirmed
-mūmū	mūmū	mū#4	mū#4	to be silent; to hum	naʻau		keep-pending	fix
+mikomiko	mikomiko	miko	miko	lightly salted; savory	ulu		keep	
+milimili	milimili	mili	mili	examine admiringly; a cherished favorite	naʻau		keep-pending	confirmed
+mūmū	mūmū	mū#4	mū#4	silent, mum	naʻau		keep-pending	fix
 nahenahe	nahenahe	nahe	nahe	soft, gentle; sweet-sounding	naʻau		keep-pending	confirmed
-naunau	naunau	nau	nau	to chew, munch	kanaka		keep-pending	fix
+naunau	naunau	nau	nau	to mumble, speak indistinctly	kanaka		keep-pending	fix
 nihoniho	nihoniho	niho	niho	toothed, notched, serrated	hana		keep	
 noʻonoʻo	noʻonoʻo	noʻo	noʻo	to think, reflect; thought	naʻau		keep-pending	confirmed
 nūnū	nūnū	nū	nū	pigeon, dove	lani		keep-pending	confirmed
@@ -549,7 +551,7 @@ okaoka	okaoka	oka	oka	bits, particles; dust	ʻāina		keep
 paepae	paepae	pae#1	pae#1	platform, pavement; prop, support	hana		keep	
 pakapaka	pakapaka	paka#4	paka#4	patter of heavy raindrops	lani		keep-pending	confirmed
 panepane	panepane	pane	pane	to talk back	naʻau		keep	
-pekapeka	pekapeka	peka	peka	to tattle; tattler	naʻau		keep-pending	fix
+pekapeka	pekapeka	peka	peka	to slander; a slanderer	naʻau		keep-pending	fix
 pekupeku	pekupeku	peku	peku	to kick again and again	hele		keep	unconfirmed
 pilipili	pilipili	pili	pili	clinging, sticking close; connected	kanaka		keep-pending	confirmed
 piopio	piopio	pio#2	pio#2	chick; call for chickens	lani		keep-pending	confirmed
@@ -559,8 +561,8 @@ pulepule	pulepule	pule#1	pule#1	spotted, speckled	lani		keep
 punipuni	punipuni	puni#1	puni#1	to lie, tell falsehoods	naʻau		keep	
 puʻupuʻu	puʻupuʻu	puʻu	puʻu	lumpy; heaped up	ʻāina		keep	
 pūpū	pūpū	pū#1	pū#1	shells; shell beads	kai		keep	
-uhiuhi	uhiuhi	uhi#1	uhi#1	cover over, as a makeshift	hana		keep-pending	fix
-uliuli	uliuli	uli#0	uli#0	dark colour: blue, green, black	lani		keep	
+uhiuhi	uhiuhi	uhi#1	uhi#1	to cover over, as makeshift thatch	hana		keep-pending	fix
+uliuli	uliuli	uli#0	uli#0	dark color: blue, green, black	lani		keep	
 waiwai	waiwai	wai#1	wai#1	goods, wealth; to be rich	hana		keep-pending	confirmed
 wanawana	wanawana	wana	wana	spiny, thorny	kai		keep	
 wehewehe	wehewehe	wehe	wehe	explain; open up, pull apart	naʻau		keep	
