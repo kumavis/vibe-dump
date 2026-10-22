@@ -29,6 +29,12 @@ decisions recorded in the design documents and below.
 | [R9 reuse](./research/R9-reuse.md) | the audit of the staged Hawaiian code module by module; units, precision and depth; the architecture reviewed as lead engineer; the order of work | 125 KB | Stage 0 before the fork; Float64 in the sim; the log-depth chunk rule; one ground interface; the clock rewrite; the hand-over as a cut; the five workflows' files (ENGINEERING.md throughout) |
 | [R10 Pearl Harbor](./research/R10-pearl-harbor.md) | the attack in full on both sides: the waves, the geometry, the berths, the minute-by-minute record, the defence, the box, the moments | 131 KB | the 1941 offset (UTC−10:30) proved from the record; the launch point measured from Lānaʻi, not Oʻahu; the six carriers' air group records in JACAR; the berths from ComBatShips; the BuShips damage summary as the authority; the NPS's current 2,390 dead; a 100 km island box baked for 1941 from CUDEM; ten moments on both sides, the level bomber held to Akagi's group so Arizona's explosion is never the player's (DESIGN.md §3.4–3.5; DATA.md §7, §9) |
 | the critic | gaps and contradictions across the reports and the documents | the report in `tasks/` | eighteen gaps and twenty-nine contradictions, every one taken into the documents before the fork: the four boxes' ids, bounds and clocks; a weapons file and the kit ids the boxes need; the aircraft kits' flight-model fields; a sight model; entry points for off-box groups; the surface record's event kinds; kebab-case clock ids and one side vocabulary; `year` precision; the Pearl Harbor box's terrain and credits; the convergence at Midway; the tone questions left open |
+| [bake](./research/bake.md) | the table and the four boxes as baked: what was fetched, the coast, the boxes' sources, Pearl Harbor set back to 7 December 1941, the measured statistics | 25 KB | ETOPO 2022 60″ for the table, GLO-30, GMRT and CUDEM for the boxes; the 1941 shore undone work by work on the dated record; summits within a texel of R1's; 15.7 MB of packs (DATA.md §§2–3, 7, 11) |
+| [content](./research/content.md) | the clocks, chapters, places, events, routes, sources, fronts and labels: what was read and how the front and the routes were traced | 14 KB | 160 sources (115 opened), 230 places, 90 events, 40 routes, eight front keyframes, 255 labels; the box battles' fleet routes laid onto the boxes' tracks (DATA.md §§4–6) |
+| [table](./research/table.md) | the far view: the relief as a chart, the ink, the DOM labels, the front's two masks, the pins, the tour, the cards, SwiftShader | 13 KB | the decisions D1–D11 of the table workflow (ENGINEERING.md §§10–11) |
+| [engine](./research/engine.md) | the kits, what was ported from R7's scripts, the sim, the parameters and the calibration | 18 KB | 56 ship and 25 aircraft kits with sources; R7 §8's calibration cases passing in bands; the engine's departures, now in ENGINEERING.md §5 "As built" |
+| [battles](./research/battles.md) | what the four battle files follow: conventions, each battle's positions, schedule and moments, the check | 21 KB | 423 units, 86 groups, 518 events, 53 stops and 23 moments on both sides from the primaries (DATA.md §9) |
+| the integration | the five merged: the ledger, the wiring, the cross-references, the replay test, the font, the thumbnail | this file, §2 and §3 | `tools/replay.mjs` (every box replays its record untouched), `tools/check/cross.mjs`, `src/link.js`; the tuning and the fixes listed in §2 |
 
 ## 2. The decisions, and where each came from
 
@@ -82,6 +88,22 @@ The designer's, from the reports:
 | DOM labels; a fixed war-room light on the table; the prologue a tenth of the slider; a dated ephemeris in a box; point lights for the night | R9 E9–E13 | ENGINEERING §§7, 10 |
 | one Japanese font weight, subset at integration; `geotiff` 2.1.3 pinned | R9 E16–E17 | ENGINEERING §0, §12 |
 
+The workflows', after the fork (each workflow's notes under `research/`
+say why), and the integration's:
+
+| decision | from | recorded in |
+| --- | --- | --- |
+| Midway's box widened east to hold TF 16 and TF 17 (179.3°E–184.0°, 1908 × 2048) | battles, the project manager | `tools/check/ids.json`; DATA §7 |
+| the 1941 shore at Pearl Harbor undone work by work at the 50 m texel; drydocks No. 2–4 filled; CUDEM for the harbour floor | bake §5 | `boxes/manifest.json` `shore`; NOTICE.md |
+| the coast clipped to the table's projected rectangle, not only its lon/lat envelope | the project manager; the integration | `tools/bake-table.mjs` `clipCoastToTable` |
+| peoples outside the frozen side codes in `alsoSides`, shown on the card beside the sides | content; the integration | `events.json`; `src/ui/card.js` |
+| one source ledger: the engine's and the battles' fragments merged into `sources.json` by id and URL, twelve duplicate ids folded | the integration | `sources.json` (369 sources) |
+| the record's hit `damage` is the share of fatal the whole event does; sixteen shares raised so every ship the record sinks is past fatal within ten minutes of her last hit (Kaga past it at 10:23:30) | the integration's replay test | `boxes/*/battle.json`; ENGINEERING §5 "As built" |
+| an attack may name a list of targets, its aircraft shared a section each; aircraft that did not reach the release beyond the record's losses turned back, not lost; a CAP's thinning against the record's own now | the integration's replay test | `src/battle/sim/record.js`, `index.js`; ENGINEERING §5 |
+| the AI gunnery's blind factor and manoeuvre penalty; the steady Washington band at 60 % of runs, not 80 % | engine §6 | ENGINEERING §5 "As built" |
+| Battle keeps both sides of the hand-over; `src/link.js` wires the UI; Esc while flying down aborts; Back leaves a box | the integration | ENGINEERING §9 "As built" |
+| the Kidō Butai's Pearl Harbor route laid on the box's carriers at 06:30, about 95 km east of the chart's launch point, the chart's reading kept in its note | the integration (the route–box check) | `routes.json` |
+
 Where a report's recommendation was not taken:
 
 - R4 D5 (the record's hits always happen; a player's hit where the record
@@ -121,3 +143,42 @@ each would unlock.
   shape (R8 D15).
 - **A check of the inboard and outboard ships on Battleship Row** against
   CINCPAC's harbour chart (R4), and of Solace's berth (R8).
+
+From the workflows and the integration (each workflow's notes say more):
+
+- **A reader of Japanese for the data's readings**: 151 of 156 places' and
+  76 of 84 events' `ja` carry `verify`; six people's and card-only events
+  have no Japanese name; no battle stop, moment or after-text has a Japanese
+  version yet (every moment's `ja` is null but one); the planned perimeter's
+  第一段作戦の攻略範囲 is a description, not a quotation (content §6, battles).
+- **A reader of the JACAR records in Japanese** for the carriers' action
+  reports at Midway, CruDiv 7's detailed report and charts at Samar
+  (C08030037100), and the Pearl Harbor air group records; **Senshi Sōsho 43
+  and 83** for the Kidō Butai's relative positions at 10:20 and Kondō's
+  dispositions on 14–15 November (battles).
+- **A person to fly the 23 moments** with a mouse and a touch screen: the
+  instructor's gains, the chase camera's lag and the bindings have been
+  exercised by scripts only; the smoke test's autopilot loses most dive
+  bombers in the pull-out (engine §7; the integration).
+- **AI gunnery cases for Samar's long-range fire and the Japanese night
+  gunnery** at Guadalcanal; the era factors, sight ranges and the torpedo
+  failure rates still at their *verify* defaults (engine §7).
+- **Frame time on a real GPU**: every measurement here is SwiftShader's
+  (about 0.6–1.3 s a frame on the table and in a box); the Low quality tier
+  for phones is not tuned (table §2, engine §7, the integration).
+- **The table on the real data, by eye**: `relief.js`'s ramp,
+  `labels.js`'s RANK_RANGE, `coast.js`'s size classes and `states.js`'s
+  colours were tuned on the fixtures (table §2); the front's colours and
+  legend words want a historian's and the designer's eye (table §3).
+- **Pearl Harbor's shore**: the Keʻehi airport fill against the 1938 sheet;
+  Drydock No. 2 on the day; a georeferenced 1941 harbour chart and
+  ComBatShips' berthing plan for the berths (bake §9, battles).
+- **The GLO-30 licence** for committed derived packs on a public site, read
+  by someone who reads licences (bake §9).
+- **The dates marked *verify*** in the content notes, and the front's 1942
+  hand regions against period maps (content §6).
+- **The schematic positions at Pearl Harbor and Samar** watched against the
+  baked terrain in the app (battles); nothing checks a ship against land.
+- **The project's owner**: `odbl` and the peoples' side codes are not in the
+  frozen vocabularies (`tools/check/ids.json`), so OpenStreetMap is
+  `licence: unknown` with a note and 30 events carry `alsoSides`.

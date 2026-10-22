@@ -122,3 +122,20 @@ Not walls, but leads: each is open from here and simply unread.
 | the Japanese Monographs for the Solomons, Midway, Leyte and Okinawa | HyperWar (several large PDFs; read by page range) | the Japanese side's post-war reconstructions |
 | the Pearl Harbor Attack hearings and their exhibits | ibiblio.org/pha | the Japanese attack plan and Fuchida's report as translated; the harbour charts |
 | the GEBCO 2026 grid's undocumented subset API | download.gebco.net | spot checks of box bathymetry against GMRT and ETOPO |
+
+## From the five workflows and the integration
+
+What the bake, content, table, engine and battles workflows could not reach
+or settle, and what the integration found, beyond the walls above (each
+workflow's notes under `research/` say more). Tested from the container on
+22 October 2026.
+
+| what | why | what it would unlock |
+| --- | --- | --- |
+| 45 of the 369 sources in the merged `sources.json` (`opened: false`, among them Senshi Sōsho 10, 12, 17, 43, 56, 83 and 102, the Japanese Monographs 84, 93, 98 and 116, *Shattered Sword*, *The First Team*, Frank, Hornfischer, Prange and Zimm, Washington's report, Sprague's report and the JACAR carrier and DesRon 4 records) | print, a reader of Japanese, or an archive request (the sections above) | each card or battle beat that cites one marked *verify* until it is read |
+| Morison XII's page numbers | the Internet Archive's OCR of the volume does not hold its page breaks reliably, so Samar's file cites it by chapter and section | a page-true copy (print or a better scan) to turn the section cites into pages |
+| Wikimedia Commons (the 1942–45 atlas the fronts were traced from) | every request refused (429) | content took archive.org's scan instead; nothing traced from Commons in any case |
+| a nautical chart or the national mapping agencies' heights for Savo, Kōnāhuanui and Samar's summits | not consulted | the packs' summits checked against a charted figure, not R1's GLO-30 readings (bake §9) |
+| the kits' authoring scripts (R6's table parser, the infobox reader, the aero and form-factor fits) | they stayed in the engine workflow's scratchpad, not the repository | regenerating the kits from their sources; until then `kits/*.json` is the source of truth and `tools/check/kits.mjs` guards it |
+| a real GPU | the container has SwiftShader only (a frame of the table or a box takes 0.6 to 1.3 s there) | the frame time the quality governor and the depth fallback of ENGINEERING §2 are to be decided on |
+| a person with a mouse and a touch screen | the moments have been flown only by scripts | the instructor's gains, the chase camera's lag, the bindings and the Guided aids by hand |
