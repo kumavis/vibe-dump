@@ -277,7 +277,7 @@
           "t": "07:01",
           "kind": "signal",
           "sources": [{"id":"morison-xii","where":"XII §3"},{"id":"sib22-leyte-1945","where":"CTU 77.4.3"}],
-          "text": "Sprague broadcasts his contact report in plain language and orders the screen to make smoke astern of the carriers.",
+          "text": "Rear Admiral Clifton A. F. Sprague broadcasts his contact report in plain language and orders the screen to make smoke astern of the carriers.",
           "tellings": [{"source":"sib22-leyte-1945","says":"CTU 77.4.3: the contact report “At 0705”."}]
         },
         {
@@ -1985,6 +1985,7 @@
         {
           "t": "10:53",
           "kind": "explodes",
+          "text": "Torpedoes and bombs explode on St. Lo’s hangar deck.",
           "sources": [{"id":"morison-xii","where":"XIII §3"}],
           "tellings": [
             {
@@ -1996,6 +1997,7 @@
         {
           "t": "11:25",
           "kind": "sinks",
+          "text": "St. Lo sinks.",
           "sources": [{"id":"morison-xii","where":"XIII §3"}],
           "tellings": [{"source":"danfs-st-lo","says":"She sank “half an hour later”."}]
         }
@@ -2341,7 +2343,7 @@
           "sources": [{"id":"morison-xii","where":"XII §7"}],
           "text": "Gambier Bay is abandoned; men in the water are hit by shell fragments."
         },
-        {"t":"09:07","kind":"sinks","sources":[{"id":"morison-xii","where":"XII §7"},{"id":"danfs-gambier-bay"}]}
+        {"t":"09:07","kind":"sinks","text":"Gambier Bay capsizes and sinks.","sources":[{"id":"morison-xii","where":"XII §7"},{"id":"danfs-gambier-bay"}]}
       ],
       "fate": {
         "kind": "capsized",
@@ -2638,6 +2640,7 @@
         {
           "t": "10:10",
           "kind": "sinks",
+          "text": "Johnston sinks.",
           "sources": [{"id":"johnston-ar-1944"},{"id":"morison-xii","where":"XII §6"}],
           "tellings": [
             {
@@ -2867,7 +2870,7 @@
           "sources": [{"id":"hoel-ar-1944"}],
           "text": "Hoel is abandoned, listing to port."
         },
-        {"t":"08:55","kind":"sinks","sources":[{"id":"hoel-ar-1944"},{"id":"morison-xii","where":"XII §4"}]}
+        {"t":"08:55","kind":"sinks","text":"Hoel sinks.","sources":[{"id":"hoel-ar-1944"},{"id":"morison-xii","where":"XII §4"}]}
       ],
       "fate": {
         "kind": "sunk",
@@ -3337,6 +3340,7 @@
         {
           "t": "10:05",
           "kind": "sinks",
+          "text": "Samuel B. Roberts sinks by the stern.",
           "sources": [{"id":"morison-xii","where":"XII §5"}],
           "tellings": [
             {
@@ -4411,7 +4415,7 @@
           "t": "07:03",
           "kind": "signal",
           "sources": [{"id":"trom-chikuma","where":"0703"},{"id":"morison-xii","where":"XII §3"}],
-          "text": "Kurita orders a general attack; the cruiser divisions go after the carriers."
+          "text": "KURITA Takeo 栗田健男 orders a general attack; the cruiser divisions go after the carriers."
         },
         {
           "t": "07:08",
@@ -5807,7 +5811,7 @@
           "text": "Suzuya’s torpedoes explode under air attack.",
           "note": "outside the box’s clock"
         },
-        {"t":"13:22","kind":"sinks","sources":[{"id":"trom-suzuya"},{"id":"morison-xii","where":"XIII §5"}]}
+        {"t":"13:22","kind":"sinks","text":"Suzuya sinks.","sources":[{"id":"trom-suzuya"},{"id":"morison-xii","where":"XIII §5"}]}
       ],
       "fate": {
         "kind": "sunk",
@@ -6073,7 +6077,7 @@
           "text": "Chikuma turns sharply away to the east, a fire on her fantail."
         },
         {"t":"09:02:30","kind":"fire","sources":[{"id":"morison-xii","where":"XII §6"}]},
-        {"t":"14:30","kind":"sinks","sources":[{"id":"trom-chikuma"}]}
+        {"t":"14:30","kind":"sinks","text":"Chikuma sinks.","sources":[{"id":"trom-chikuma"}]}
       ],
       "fate": {
         "kind": "sunk",
@@ -12321,7 +12325,7 @@
     },
     {
       "t": "07:06",
-      "text": "07:06. The carriers run into a rain squall. Sprague orders his escorts to attack with torpedoes; Johnston is already heading for the cruisers.",
+      "text": "07:06. The carriers run into a rain squall. Rear Admiral Clifton A. F. Sprague orders his escorts to attack with torpedoes; Johnston is already heading for the cruisers.",
       "camera": {"target":"johnston","bearingDeg":160,"pitch":0.3,"distanceM":6000},
       "moment": "johnston-kumano",
       "sources": [{"id":"morison-xii","where":"XII §3"}]
@@ -12452,7 +12456,7 @@
       "beats": [
         {"t":"06:59","text":"Dyed splashes rise astern of the carriers."},
         {"t":"07:00","text":"Kongō opens fire."},
-        {"t":"07:03","text":"Kurita orders a general attack; the formation breaks up."},
+        {"t":"07:03","text":"KURITA Takeo 栗田健男 orders a general attack; the formation breaks up."},
         {"t":"07:06","text":"The carriers vanish into a rain squall."},
         {"t":"07:08","text":"The destroyer squadrons are ordered to the rear."},
         {"t":"07:10","text":"An American destroyer opens fire on the cruisers."}
@@ -12608,7 +12612,7 @@
           },
           {
             "source": "ussbs-nav35",
-            "says": "Koyanagi had not known the leading cruisers were “within 10 kilometers of the American ships”."
+            "says": "Rear Admiral KOYANAGI Tomiji had not known the leading cruisers were “within 10 kilometers of the American ships”."
           }
         ]
       }

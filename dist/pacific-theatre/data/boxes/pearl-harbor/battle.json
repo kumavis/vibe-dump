@@ -893,6 +893,7 @@
         {
           "t": "09:15",
           "kind": "explodes",
+          "text": "Downes explodes in the dry dock beside Cassin.",
           "sources": [{"id":"kimmel-narrative","where":"0915"},{"id":"cassin-ar-1941"}],
           "tellings": [
             {"source":"cassin-ar-1941","says":"“About 0915 there was a terrific explosion on the Downes.”"}
@@ -952,6 +953,7 @@
         {
           "t": "09:30",
           "kind": "explodes",
+          "text": "Shaw explodes in the floating dry dock, her bow severed.",
           "sources": [{"id":"bushships-summary-1942","where":"WDR No. 7"}],
           "tellings": [
             {"source":"kimmel-narrative","says":"Mugford: “SHAW in floating dry-dock exploded” at 10:05."},
@@ -1046,8 +1048,8 @@
           "sourceNote": "“At about 0900, the ship was secured to Ten Ten dock astern of the Helena”",
           "text": "Oglala is secured astern of Helena and lists."
         },
-        {"t":"09:30","kind":"abandoned","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“About 0930 with a list of approximately 20° the order was given to abandon ship”"},
-        {"t":"09:58","kind":"sinks","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“At about 1000 or slightly before, the Oglala turned over on her port side”"}
+        {"t":"09:30","kind":"abandoned","text":"Oglala’s list grows; the order is given to abandon ship.","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“About 0930 with a list of approximately 20° the order was given to abandon ship”"},
+        {"t":"09:58","kind":"sinks","text":"Oglala turns over on her port side.","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“At about 1000 or slightly before, the Oglala turned over on her port side”"}
       ],
       "fate": {
         "kind": "capsized",
@@ -3047,7 +3049,7 @@
           "sources": [{"id":"ward-ar-1941"},{"id":"patwing1-1942"}],
           "tellings": [{"source":"patwing1-1942","says":"Patrol plane 14-P-1 added a depth bomb."}]
         },
-        {"t":"06:47","kind":"sinks","sources":[{"id":"ward-ar-1941"}]}
+        {"t":"06:47","kind":"sinks","text":"The midget submarine Ward attacked sinks off the entrance.","sources":[{"id":"ward-ar-1941"}]}
       ],
       "fate": {
         "kind": "sunk",
@@ -3147,7 +3149,7 @@
           "damage": 0.6,
           "sources": [{"id":"monaghan-ar-1941"}]
         },
-        {"t":"08:45","kind":"sinks","sources":[{"id":"monaghan-ar-1941"}]}
+        {"t":"08:45","kind":"sinks","text":"The midget submarine inside the harbour sinks after Monaghan rams it.","sources":[{"id":"monaghan-ar-1941"}]}
       ],
       "fate": {"kind":"sunk","t":"08:45","sources":[{"id":"monaghan-ar-1941"},{"id":"cincpac-pearl-1942"}]}
     },
@@ -7436,7 +7438,7 @@
       "tellings": [
         {
           "source": "aaf-7dec41",
-          "says": "“Each getting two confirmed kills during this first engagement. Taylor fired on a third plane but did not see the crash.”"
+          "says": "The Army’s history gives each of the two pilots two aircraft claimed in this first engagement; Taylor fired on a third but did not see it crash."
         }
       ]
     },
@@ -8162,11 +8164,11 @@
       "durationS": 180,
       "timeScale": 1,
       "maxTimeScale": 4,
-      "start": {"from":"west-virginia","bearingDeg":130,"rangeM":3000,"altM":60,"speedMs":80,"headingDeg":310},
+      "start": {"from":"nevada","bearingDeg":130,"rangeM":3000,"altM":60,"speedMs":80,"headingDeg":310},
       "objective": {
         "kind": "torpedo",
-        "target": ["west-virginia","california","nevada"],
-        "text": "Put your torpedo into an outboard battleship."
+        "target": ["nevada","california"],
+        "text": "Put your torpedo into Nevada, moored alone at the end of the row, or into California at its other end."
       },
       "beats": [
         {"t":"07:57:00","text":"The first torpedoes are in the water."},
@@ -8180,7 +8182,7 @@
           {"unit":"nevada","count":[1,1],"window":["08:00","08:03"],"weapon":"torpedo"}
         ],
         "losses": {"count":[5,5]},
-        "note": "which carrier’s torpedoes struck which ship is not settled; the box keeps Oklahoma’s with Akagi’s unit"
+        "note": "which carrier’s torpedoes struck which ship is not settled; the box keeps Oklahoma’s with Akagi’s unit. The start aims at Nevada, whose torpedo at about 08:02 (R10 §8.2, her report) the box gives Kaga’s unit: West Virginia, the unit’s first target, is past her fatal from 07:57, so a hit on her registers nothing"
       },
       "after": {
         "text": "Kaga’s torpedo unit came in low over the Southeast Loch and released at the outboard battleships. West Virginia was torn open along her side and settled upright on the bottom; Oklahoma, ahead of her, rolled over within minutes with men trapped inside her. Kaga’s torpedo unit lost more aircraft than any other torpedo unit that morning; their crews did not return.",

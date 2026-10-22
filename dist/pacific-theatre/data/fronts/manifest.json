@@ -74,11 +74,15 @@
      "where": "p. 20, the period ending 1 November 1943"
     },
     {
+     "id": "zimmerman-1949",
+     "where": "p. 2: the Resident Commissioner removed to Malaita in May 1942"
+    },
+    {
      "id": "natural-earth",
      "where": "1:50m land and admin-0 countries, for the coast and the borders"
     }
    ],
-   "note": "Traced from the Atlas page for the second half of October 1943 by its colours (enemy-held white, Allied pink, neutral grey), registered to Natural Earth's coast."
+   "note": "Traced from the Atlas page for the second half of October 1943 by its colours (enemy-held white, Allied pink, neutral grey), registered to Natural Earth's coast. Where the trace misreads the page, the record stands: New Ireland, inside the page's white, is held; Malaita, where the British Resident Commissioner moved in May 1942 (Zimmerman, The Guadalcanal Campaign), is Allied, though the edge of the page's Allied sea crosses it."
   },
   {
    "id": "1944-08-15",
@@ -94,7 +98,7 @@
      "where": "1:50m land and admin-0 countries, for the coast and the borders"
     }
    ],
-   "note": "Traced from the Atlas page for the first half of August 1944: the Marianas lost, New Guinea west to Sansapor, the Ichi-gō offensive in China."
+   "note": "Traced from the Atlas page for the first half of August 1944: the Marianas lost, New Guinea west to Sansapor, the Ichi-gō offensive in China. Where the trace misreads the page, the record stands: New Ireland, the coast from Wewak to the Sepik and the railway south of Changsha to Hengyang, which fell on 8 August, are held, as the page's own white, and its black of the period's gains at Hengyang, show."
   },
   {
    "id": "1945-01-15",
@@ -106,11 +110,15 @@
      "where": "p. 78, the period ending 15 January 1945"
     },
     {
+     "id": "smith-1963",
+     "where": "Map 1"
+    },
+    {
      "id": "natural-earth",
      "where": "1:50m land and admin-0 countries, for the coast and the borders"
     }
    ],
-   "note": "Traced from the Atlas page for the first half of January 1945: Leyte and Mindoro, the landing at Lingayen Gulf, the corridor through China."
+   "note": "Traced from the Atlas page for the first half of January 1945: Leyte and Mindoro, the landing at Lingayen Gulf, the corridor through China. Where the trace misreads the page, the record stands: Bougainville, inside the page's white, is held and cut off, as Smith's Triumph in the Philippines draws it, less the Torokina perimeter, which is drawn schematically."
   },
   {
    "id": "1945-07-01",
@@ -126,7 +134,7 @@
      "where": "1:50m land and admin-0 countries, for the coast and the borders"
     }
    ],
-   "note": "Traced from the Atlas page to 1 July 1945: Okinawa ended, Borneo landings, Burma retaken, Indochina held outright since the coup of 9 March 1945."
+   "note": "Traced from the Atlas page to 1 July 1945: Okinawa ended, Borneo landings, Burma retaken, Indochina held outright since the coup of 9 March 1945. Where the trace misreads the page, the record stands: New Ireland, inside the page's white, is held."
   },
   {
    "id": "1945-09-02",
@@ -146,9 +154,9 @@
      "where": "1:50m land and admin-0 countries, for the coast and the borders"
     }
    ],
-   "note": "The surrender: General Order No. 1's zones laid over the land Japan still held on the Atlas's page to 1 August 1945, Manchuria, Karafuto and the Kurils as the Soviet forces had taken them, the 16th and 38th parallels dividing Indochina and Korea. The zones are drawn by territory and parallel, so schematic; where the order leaves the split between South East Asia Command and the Australian forces to be arranged, Sumatra and Java go to the first and Borneo and the islands east to the second, as the surrenders were taken."
+   "note": "The surrender: General Order No. 1's zones laid over the land Japan still held on the Atlas's page to 1 August 1945, Manchuria, Karafuto and the Kurils as the Soviet forces had taken them, the 16th and 38th parallels dividing Indochina and Korea. The zones are drawn by territory and parallel, so schematic; where the order leaves the split between South East Asia Command and the Australian forces to be arranged, Sumatra and Java go to the first and Borneo and the islands east to the second, as the surrenders were taken. New Ireland, held to the surrender inside the page's white, goes to the Australian forces."
   }
  ],
  "lines": "fronts/lines.geojson",
- "method": "Land of 2,500 km² and more (Natural Earth 1:50m), on a 0.1-degree grid. Japan's states are assigned by territory, today's admin-0 borders standing in for those of the 1940s, with Manchukuo and Tibet drawn by hand. From 1943-11-01 the Atlas page's colours say who held each cell (enemy-held white, Allied pink and deep red, neutral grey, enemy gains black), the page registered to Natural Earth's coast by a cubic fit to local coastline matches (about 2 px, 8 km, residual). The smaller islands are left to places.json's held intervals. Perimeters on the Atlas keyframes are the page's white sea where it meets the pink, away from land and the page's frame."
+ "method": "Land of 2,500 km² and more (Natural Earth 1:50m), on a 0.1-degree grid. Japan's states are assigned by territory, today's admin-0 borders standing in for those of the 1940s, with Manchukuo and Tibet drawn by hand. From 1943-11-01 the Atlas page's colours say who held each cell (enemy-held white, Allied pink and deep red, neutral grey, enemy gains black), the page registered to Natural Earth's coast by a cubic fit to local coastline matches (about 2 px, 8 km, residual). The smaller islands are left to places.json's held intervals. Perimeters on the Atlas keyframes are the page's white sea where it meets the pink, away from land and the page's frame. Where the trace misreads the page (a narrow island or a thin coast whose cells take the colour of the sea round it), the record's state is laid over it, schematic, with its sources (each keyframe's note)."
 }

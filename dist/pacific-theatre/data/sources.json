@@ -990,6 +990,21 @@
     "note": "The land front."
   },
   {
+    "id": "zimmerman-1949",
+    "title": "The Guadalcanal Campaign (Marines in World War II Historical Monograph)",
+    "author": "J. L. Zimmerman",
+    "year": 1949,
+    "url": "https://www.ibiblio.org/hyperwar/USMC/USMC-M-Guadalcanal/index.html",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "language": "en",
+    "licence": "pd-us-gov",
+    "ref": null,
+    "tertiary": false,
+    "note": "Ch. I read for Malaita: the British Resident Commissioner and the Anglican bishop removed there in May 1942 (p. 2), and a coastwatching station was set up on it."
+  },
+  {
     "id": "oni-41-42",
     "title": "ONI 41-42: Japanese Naval Vessels",
     "author": "Office of Naval Intelligence",
