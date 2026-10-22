@@ -42,8 +42,8 @@
         30.8
       ],
       [
-        -157.85,
-        24.9
+        -157.06,
+        24.43
       ],
       [
         -172,
@@ -144,7 +144,7 @@
       {
         "at": 6,
         "t": "1941-12-07T06:00-10:30",
-        "note": "The launch point, due north of Oʻahu on the chart (\"0300 (TOKYO TIME) 8 DEC.\"); the first wave takes off at 01:30 Tokyo time by the Japanese answers of 1945.",
+        "note": "The launch point, laid on the Pearl Harbor box’s carriers at 06:30 (the box’s first fix, from the Japanese monograph and the hearings’ exhibit) so that route and box agree; the chart puts it some way west, due north of Oʻahu (\"0300 (TOKYO TIME) 8 DEC.\"). The first wave takes off at 01:30 Tokyo time by the Japanese answers of 1945.",
         "sourceClock": "0130",
         "sourceZone": "+09:00",
         "sourceDate": "1941-12-08",
@@ -166,6 +166,14 @@
         "note": "Home to the western Inland Sea (\"23 DEC (TOKYO TIME)\").",
         "source": "morton-1962"
       }
+    ],
+    "units": [
+      "akagi",
+      "kaga",
+      "soryu",
+      "hiryu",
+      "shokaku",
+      "zuikaku"
     ],
     "summary": "The Kidō Butai sails east from the Kurils along about 42° N, far from the shipping lanes, refuels on 3 December, turns south-east on the 4th and runs down to its launching point north of Oʻahu. After the attack it retires north-west, detaches carriers for Wake, and comes home past the Bonins to the western Inland Sea.",
     "sources": [

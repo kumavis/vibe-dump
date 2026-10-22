@@ -173,7 +173,8 @@ export function link(app, ui) {
     const sim = battle.sim
     const B = battle.loaded.battle
     const role = m.role || {}
-    const sideKey = role.side ?? null
+    // (a role names its side by the battle's key, japan or usa, or by the code, jp or us)
+    const sideKey = Object.keys(B.sides || {}).find((k) => k === role.side || B.sides[k]?.side === role.side) ?? role.side ?? null
     const side = B.sides?.[sideKey]?.side ?? sideKey
     const unit = role.unit ? sim.record.shipById.get(role.unit) : null
     return {
