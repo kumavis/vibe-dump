@@ -21,8 +21,11 @@
 // the after-card's headings あなたの出撃 and the rest, the help's 太平洋戦争),
 // for the characters in U+3000–30FF (punctuation, kana), U+3400–4DBF and
 // U+4E00–9FFF (kanji), U+F900–FAFF and U+FF00–FFEF (full-width forms). It
-// prints the count and the file's size; FONTS.md carries the count. The
-// integrator runs it again on the final data (ENGINEERING §13, integrate 5).
+// prints the count and the file's size, and writes the characters beside the
+// font (noto-sans-jp-subset.chars.txt), which tools/check/table.mjs holds the
+// data against, so a name the subset lacks is said before it ships; FONTS.md
+// carries the count. The integrator runs it again on the final data
+// (ENGINEERING §13, integrate 5).
 import { readdirSync, readFileSync, statSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join, dirname, resolve, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -108,4 +111,5 @@ const { default: subsetFont } = await import('subset-font')
 const woff2 = await subsetFont(readFileSync(ttf), text, { targetFormat: 'woff2' })
 mkdirSync(dirname(out), { recursive: true })
 writeFileSync(out, woff2)
+writeFileSync(out.replace(/\.woff2$/, '.chars.txt'), text + '\n')
 console.log(`  wrote ${relative(root, out)}: ${chars.size} characters, ${(woff2.length / 1024).toFixed(1)} KB (${Math.round(woff2.length / chars.size)} bytes a character)`)
