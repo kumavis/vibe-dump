@@ -282,7 +282,7 @@
     "opened": true,
     "read": "part",
     "language": "en",
-    "licence": "unknown",
+    "licence": "odbl",
     "tertiary": false,
     "note": "ODbL (© OpenStreetMap contributors): the ledger’s licence vocabulary has no odbl value. Surviving quays, wrecks and points at Pearl Harbor (R10 §7) and Midway’s islands and seaplane ramps, used as positions of record features."
   },

@@ -222,7 +222,8 @@ whose 1940s Pacific history is approximate):
 ```jsonc
 { "id": "usn-zp12", "offset": "-12:00", "name": "zone plus 12, Midway time", "side": "us", "used": "CINCPAC and the shore forces at Midway; the Naval War College analysis" }
 // also: jst (+09:00), usn-zp10 (−10:00, the carriers at Midway), usn-zm11 (+11:00, Guadalcanal: Morison, ONI Part I, the box), usn-zm12 (+12:00, ONI Part III and the US primaries of 14–15 November),
-// usn-item (+09:00, Samar), hst-1941 (−10:30), hwt (−09:30, Hawaiian war time from 9 February 1942), malaya-1941 (+07:30), ...
+// usn-item (+09:00, Samar), hst-1941 (−10:30), hwt (−09:30, Hawaiian war time from 9 February 1942), malaya-1941 (+07:30),
+// ijn-zm8 (+08:00, the hour-early entries of some Japanese tabular records at Leyte), gct (+00:00, the radio logs of 7 December 1941), ...
 ```
 
 `places.json`:
@@ -468,7 +469,7 @@ a fork or a download of the data.
 
   | id | lon0, lat0 | bounds [w, s, e, n] | size | clock (id, offset) | from, to | why these edges |
   | --- | --- | --- | --- | --- | --- | --- |
-  | `midway` | 181.15, 30.0 | [179.3, 27.8, 183.0, 32.2] | 2048 (~240 m) | `usn-zp12`, −12:00, "Midway time (zone +12)" | 04:00, 18:00 | the atoll (28.2°N 177.37°W) for Tomonaga's strike and the shore groups; the Kidō Butai at 04:00 near 31.5°N 179.6°E; TF 17 at noon near 30.9°N 176.8°W |
+  | `midway` | 181.65, 30.0 | [179.3, 27.8, 184.0, 32.2] | 2048 (~240 m) | `usn-zp12`, −12:00, "Midway time (zone +12)" | 04:00, 18:00 | the atoll (28.2°N 177.37°W) for Tomonaga's strike and the shore groups; the Kidō Butai at 04:00 near 31.5°N 179.6°E; TF 16 and TF 17 through the afternoon strikes, east to 176.0°W with 10 km to spare (the first edge at 183.0 left them up to 74 km out) |
   | `pearl-harbor` | 201.95, 21.6 | [201.45, 21.15, 202.45, 22.05] | 2048 (~50 m) | `hst-1941`, −10:30, "Hawaiian time" | 06:30, 10:00 | R10 D1: the island and its waters; the carriers 374 km north stay off the box and the waves enter at its north edge |
   | `ironbottom-sound` | 159.9, −9.2 | [159.333, −9.583, 160.45, −8.833] | 2048 (~60 m) | `usn-zm11`, +11:00, "zone −11 (Guadalcanal)" | 1942-11-14 20:00, 1942-11-15 03:30 | the union of R5 D13 and R1's box: Washington's turns at 159°29′–31′E, Savo, Guadalcanal's north coast, Nggela and Tulagi (160.15°E) |
   | `samar` | 126.08, 11.54 | [125.333, 11.0, 126.833, 12.083] | 1024 (~160 m) | `usn-item`, +09:00, "Item (zone −9)" | 06:15, 10:45 | R5 D13's edges with the west edge moved to 125°20′E so Samar's coast is inside; the clock ends before the attack on St. Lo at about 10:50 |
@@ -658,6 +659,18 @@ The record's beats are data; the sim fills in between them.
 
   "sources": [ { "id": "nagumo-report", "where": "..." } ] }
 ```
+
+The four v1 files carry some fields beyond this example, each checked by
+`tools/check/battle.mjs` and listed in `research/battles.md` ("Conventions
+in all four files"): events on `sites`; `unit.offBox` and
+`station.bearingRef: "true"`; a `lonlat` on each parked aircraft;
+`group.wave`, `lossesBy` and `launchSource`; `moment.checkpoints`, and the
+`record` fields `weapon`, `damageTaken`, `claims`, `rounds`, `torpedoes` and
+`track`; `byNote` and `kitNote` where a near class stands in for a kit the
+ids do not have; sources on `hangarHazard`; and the vocabularies of site
+kinds, fates and objective kinds. The `sides` entries carry the side code
+(`"side": "jp"`) beside the name. A unit whose source clock has no frozen
+id names its zone only.
 
 Rules:
 

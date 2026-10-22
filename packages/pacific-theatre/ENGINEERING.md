@@ -248,6 +248,15 @@ assigned or freed (re-read `kitIndex` and `version`); `sink` and `fall` mean
 `sim.advance(realDt · timeScale)` while running. Nothing else advances the
 sim.
 
+**After the last fix**: a unit whose track ends before the clock's `to`
+holds its last course and speed (a `withdraws` event means it carries on
+out of the box and is despawned at the pack's edge; `sinks`, `scuttled`,
+`aground` and `abandoned` mean it stays where its fate left it; a `fixed`
+unit never moves). A group whose `enter` or `launch` is after the clock's
+`to` (Samar's Shikishima unit) is never instantiated: it exists for the
+after-card's *What came next* only, and the sim's capacity does not count
+it.
+
 **Scrubbing**: scripted motion is closed-form in t, so `sim.setTime(t)` is
 cheap while `sim.diverged` is false. Once a moment has been taken,
 `sim.diverged` is true and `Battle.scrub(t)` asks (one HUD line) whether to

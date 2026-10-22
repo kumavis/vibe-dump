@@ -2,16 +2,16 @@
   "about": "The ids and vocabularies frozen at Stage 0 (ENGINEERING.md §13). The parallel workflows build against these; a change goes through the project manager. Longitudes: a box's bounds are a continuous range written east of 180 where it crosses (pearl-harbor at 201.45–202.45 is 158.55°W–157.55°W); lon0 the same. size is [W, H] in texels, row 0 north, from tools/lib/geo.mjs packGrid over the frozen bounds with the long side at the frozen length; the bake may refine bounds by less than a texel's worth and reports it. metresPerTexel is for reference, in the box's own tangent plane. clock.from/to are the box's clock span (DATA.md §7), with the ISO offset.",
   "boxes": {
     "midway": {
-      "lon0": 181.15,
+      "lon0": 181.65,
       "lat0": 30,
       "bounds": [
         179.3,
         27.8,
-        183,
+        184,
         32.2
       ],
       "size": [
-        1502,
+        1908,
         2048
       ],
       "metresPerTexel": [
@@ -27,7 +27,8 @@
         "to": "1942-06-04T18:00-12:00"
       },
       "event": "midway-1942",
-      "sea": "gmrt"
+      "sea": "gmrt",
+      "note": "east edge at 184.0 (176.0°W) so that TF 16 and TF 17 at noon and during the afternoon strikes are inside with 10 km to spare; the frozen 183.0 edge left them up to 74 km out (research/battles.md)"
     },
     "pearl-harbor": {
       "lon0": 201.95,
@@ -145,7 +146,9 @@
     "usn-item": "+09:00",
     "hst-1941": "-10:30",
     "hwt": "-09:30",
-    "malaya-1941": "+07:30"
+    "malaya-1941": "+07:30",
+    "ijn-zm8": "+08:00",
+    "gct": "+00:00"
   },
   "kits": {
     "ships": {
@@ -694,6 +697,7 @@
       "cc-by-sa",
       "nids-permission",
       "copyright-cite-only",
+      "odbl",
       "unknown"
     ],
     "imageLicences": [
@@ -1095,6 +1099,8 @@
     "usn-item": "Item (zone minus 9), Samar",
     "hst-1941": "Hawaiian time, 1941",
     "hwt": "Hawaiian war time (from 9 February 1942)",
-    "malaya-1941": "Malaya time, 1941"
+    "malaya-1941": "Malaya time, 1941",
+    "ijn-zm8": "one hour behind Item: the early entries in some Japanese tabular records at Leyte",
+    "gct": "Greenwich civil time, as the US primaries of 7 December 1941 sometimes give it"
   }
 }

@@ -79,6 +79,7 @@ host answers to a person with a browser.
 | --- | --- | --- |
 | the Japanese action reports 戦闘詳報 of the v1 battles | JACAR: Kaga C08030040500 (with the bombers' track and the hit charts); the First Air Fleet's report C08030023600–24100; Atago C08030745200 and Inazuma C08030752400 (the night of 14–15 November); Cruiser Division 7 C08030037100 and Tone C08030568700 (Samar); Yamato and Destroyer Squadron 2 C08030103100 (Ten-Gō); the Pearl Harbor reports R10 lists | a reader of wartime Japanese: times (JST), courses, positions, hits and losses as the Japanese side recorded them, to check against the US records and the 1947 translation of Nagumo's report at the points the app uses (the 0415 order, the 0428 delivery, the 0730 readiness) |
 | the Senshi Sōsho 戦史叢書 | the NIDS viewer, open: 10 ハワイ作戦, 43 ミッドウェー海戦 (chs. 5–6, the CAP), 83 南東方面海軍作戦 (ch. 7, the night of 14–15 November), 56 海軍捷号作戦 (part 1 ch. 5, Samar), 17 沖縄方面海軍作戦 (ch. 10, Yamato's hits; the fold-out track 付図第三), 12 マリアナ沖海戦 | the Japanese official counts and chronology for every v1 battle |
+| the moments' `after` texts and the stops' words on the dead | `public/data/boxes/*/battle.json` | a historian's read of R8 §5's rules as applied, before release (research/battles.md); and a Japanese speaker for the `ja` of every stop and after-card, which are empty but one |
 | the readings and romaji of every Japanese name the data carries | `places.json`, `events.json`, `kits/*.json`, the battle files | a Japanese speaker, before any of it reaches a card (RESEARCH.md §2 D10) |
 
 ## Data

@@ -369,6 +369,8 @@ const CLOCK_NAMES = {
   'hst-1941': ['Hawaiian time, 1941', 'us', 'test: Oʻahu before February 1942'],
   hwt: ['Hawaiian war time', 'us', 'test: Oʻahu from February 1942'],
   'malaya-1941': ['Malaya time, 1941', 'uk', 'test: Malaya'],
+  'ijn-zm8': ['one hour behind Item', 'jp', 'test: the early entries of some Japanese tabular records at Leyte'],
+  gct: ['Greenwich civil time', 'us', 'test: a radio log kept in GCT'],
 }
 write('clocks.json', Object.entries(ids.clocks).map(([id, offset]) => ({ id, offset, name: CLOCK_NAMES[id][0], side: CLOCK_NAMES[id][1], used: CLOCK_NAMES[id][2], note: 'test fixture' })))
 
