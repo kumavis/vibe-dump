@@ -1724,7 +1724,10 @@
   {
     "id": "pahonu",
     "name": "Pāhonu",
-    "alt": [],
+    "alt": [
+      "Pahonu",
+      "Kaiona"
+    ],
     "kind": "fishpond",
     "island": "oahu",
     "moku": "Koʻolaupoko",
@@ -1732,17 +1735,20 @@
     "geometry": {
       "type": "Point",
       "coordinates": [
-        -157.7191,
-        21.3405
+        -157.68134,
+        21.32573
       ]
     },
-    "placePrecision": "ahupuaa",
+    "placePrecision": "exact",
     "sources": [
       "state-gis-ahupuaa",
       "khon-pahonu",
-      "civilbeat-2026-limu"
+      "civilbeat-2026-limu",
+      "oha-kipuka-sites",
+      "usgs-gnis",
+      "nps-1992-ka-iwi"
     ],
-    "note": "On the Waimānalo shore by Kaiona Beach Park. Kept at ahupuaʻa precision until an opened source gives the pond's position."
+    "note": "The walled pond on the Waimānalo shore by Kaiona Beach Park; the point is the State historic site record’s (Pahonu Turtle Pond). GNIS’s Pahonu, an area, lies a little to the west."
   },
   {
     "id": "oahu",
@@ -1851,9 +1857,10 @@
     "placePrecision": "ahupuaa",
     "sources": [
       "state-gis-ahupuaa",
-      "fornander-v2"
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
     ],
-    "note": "Where Laʻamaikahiki stayed on Oʻahu (Fornander). The State layer divides it into Kualoa 1 and Kualoa 2; the point is their joint centroid."
+    "note": "Where Laʻamaikahiki stayed on Oʻahu (Fornander); a sacred land of the Oʻahu chiefs, with its drums and its sacred hill (Kamakau). The State layer divides it into Kualoa 1 and Kualoa 2; the point is their joint centroid."
   },
   {
     "id": "kalaeokailio",
@@ -1998,5 +2005,426 @@
       "alexander-1891"
     ],
     "note": "The land on the southwest slope of Mauna Loa, in Kaʻū; not Kahuku on Oʻahu."
+  },
+  {
+    "id": "kailua-oahu",
+    "name": "Kailua",
+    "alt": [
+      "Kailua, Oʻahu"
+    ],
+    "kind": "town",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.73946,
+        21.40223
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2",
+      "kamakau-ruling-chiefs",
+      "dlnr-ulupo"
+    ],
+    "note": "Kailua in Koʻolaupoko, on the windward side of Oʻahu, where the island’s rulers liked best to live; not Kailua in Kona on Hawaiʻi Island. The point is the GNIS point for the town."
+  },
+  {
+    "id": "kalapawai",
+    "name": "Kalapawai",
+    "alt": [],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.72806,
+        21.39746
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "A land at the south end of Kailua Bay (GNIS). Kūaliʻi was born here (Fornander), and here in 1794 Kalanikūpule and Kaʻeokūlani met and ended the fighting (Kamakau)."
+  },
+  {
+    "id": "oneawa",
+    "name": "Oneawa",
+    "alt": [],
+    "kind": "beach",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.74416,
+        21.41712
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "The beach at the north end of Kailua Bay toward Mōkapu (GNIS: Oneawa Beach), where Alapaʻinui landed his army in 1737, “between Kaneʻohe and Kailua” (Kamakau)."
+  },
+  {
+    "id": "naonealaa",
+    "name": "Naonealaʻa",
+    "alt": [
+      "Naonealaa"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kāneʻohe",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.781901,
+        21.408361
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "A place on the Kāneʻohe shore of the bay where Alapaʻinui and Peleioholani met to end the war of 1737 (Kamakau; Fornander writes Naonealaa). No map read locates it; the point is the Kāneʻohe centroid of the State layer."
+  },
+  {
+    "id": "kawainui",
+    "name": "Kawainui",
+    "alt": [
+      "Kawainui Marsh",
+      "Ka-wai-nui"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.75835,
+        21.39723
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "nps-1992-ka-iwi",
+      "dlnr-ulupo"
+    ],
+    "note": "The great inland fishpond of Kailua, behind the beach, now a marsh (GNIS: Kawainui Marsh). Kamehameha worked at its ponds in his years on Oʻahu (Kamakau)."
+  },
+  {
+    "id": "kaelepulu",
+    "name": "Kaʻelepulu",
+    "alt": [
+      "Kaelepulu",
+      "Enchanted Lake"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.73623,
+        21.38348
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "hgs-1881-oahu",
+      "kamakau-ruling-chiefs",
+      "nps-1992-ka-iwi"
+    ],
+    "note": "The second inland pond of Kailua, between Kawainui and the sea (GNIS: Kaʻelepulu Pond), today ringed by the houses of Enchanted Lake."
+  },
+  {
+    "id": "ulupo",
+    "name": "Ulupō",
+    "alt": [
+      "Ulu Po",
+      "Upo"
+    ],
+    "kind": "heiau",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.75288,
+        21.38591
+      ]
+    },
+    "placePrecision": "exact",
+    "landmark": true,
+    "sources": [
+      "dlnr-ulupo",
+      "oha-kipuka-sites",
+      "nps-1992-ka-iwi"
+    ],
+    "note": "Ulupō Heiau State Historic Site, at the edge of Kawainui, listed on the National and Hawaiʻi Registers of Historic Places; the point is the State historic site record’s."
+  },
+  {
+    "id": "kaneohe",
+    "name": "Kāneʻohe",
+    "alt": [
+      "Kaneohe"
+    ],
+    "kind": "town",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kāneʻohe",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.80093,
+        21.40929
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "bingham-1847",
+      "kipuka-rm-585"
+    ],
+    "note": "The town on the south shore of Kāneʻohe Bay (GNIS). The mission station of the 1830s stood near the shore just below it."
+  },
+  {
+    "id": "molii",
+    "name": "Moliʻi",
+    "alt": [
+      "Mōliʻi",
+      "Molii"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kualoa 1",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.84578,
+        21.51005
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "usgs-topo-1927-oahu",
+      "oha-kipuka-sites"
+    ],
+    "note": "The walled pond below Kualoa (GNIS: Mōliʻi Pond; the State site record writes Moliʻi). A speaker should settle the spelling."
+  },
+  {
+    "id": "kahaluu-fishpond",
+    "name": "Kahouna",
+    "alt": [
+      "Kahaluʻu Pond"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kahaluʻu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.83603,
+        21.45935
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "oha-kipuka-sites"
+    ],
+    "note": "The walled pond on the Kahaluʻu shore (GNIS: Kahaluʻu Pond; the State site record: Kahouna Fishpond)."
+  },
+  {
+    "id": "waikalua",
+    "name": "Waikalua Loko",
+    "alt": [
+      "Waikalua"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kāneʻohe",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.7829,
+        21.41076
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kipuka-rm-585",
+      "kipuka-rm-1936"
+    ],
+    "note": "The pond at the mouth of Kāneʻohe Stream (GNIS: Waikalua-Loko Fish Pond). Behind it lay the Waikalua swamp, in rice by the 1890s."
+  },
+  {
+    "id": "nuupia",
+    "name": "Nuʻupia",
+    "alt": [
+      "Nuupia"
+    ],
+    "kind": "fishpond",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kāneʻohe",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.7478,
+        21.43239
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kipuka-rm-1140",
+      "mokapu-1965"
+    ],
+    "note": "The ponds across the neck of Mōkapu, with Halekou and Kaluapuhi beside them (GNIS: Nuʻupia Pond)."
+  },
+  {
+    "id": "mokapu",
+    "name": "Mōkapu",
+    "alt": [
+      "Mokapu"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kāneʻohe",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.74721,
+        21.44365
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "kamakau-ruling-chiefs",
+      "mokapu-1965"
+    ],
+    "note": "The peninsula between Kāneʻohe Bay and Kailua Bay (GNIS: Mōkapu Peninsula), divided among Heʻeia, Kāneʻohe and Kailua; a military air station since 1939."
+  },
+  {
+    "id": "waimanalo",
+    "name": "Waimānalo",
+    "alt": [
+      "Waimanalo"
+    ],
+    "kind": "town",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Waimānalo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.72294,
+        21.34691
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "nps-1992-ka-iwi"
+    ],
+    "note": "The plain of Waimānalo below the cliffs of the Koʻolau (GNIS: the populated place). Crown land at the Māhele."
+  },
+  {
+    "id": "bellows",
+    "name": "Bellows",
+    "alt": [
+      "Bellows Field",
+      "Waimanalo Military Reservation"
+    ],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Waimānalo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.71751,
+        21.36584
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "nps-1992-ka-iwi"
+    ],
+    "note": "The military reservation on the north side of Waimānalo from 1917, Bellows Field from 1933; the point is GNIS’s for the Waimanalo Military Reservation (historical)."
+  },
+  {
+    "id": "maunawili",
+    "name": "Maunawili",
+    "alt": [],
+    "kind": "valley",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Kailua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.76474,
+        21.36237
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "nps-1992-ka-iwi"
+    ],
+    "note": "The valley that drains into Kawainui from below the pali (GNIS: Maunawili Valley)."
+  },
+  {
+    "id": "kukui",
+    "name": "Kukui",
+    "alt": [],
+    "kind": "other",
+    "island": "oahu",
+    "moku": "Koʻolaupoko",
+    "ahupuaa": "Waimānalo",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.6865,
+        21.3255
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "nps-1992-ka-iwi",
+      "kamakau-ruling-chiefs",
+      "fornander-v2"
+    ],
+    "note": "A fishing village on the Waimānalo shore near Pāhonu (National Park Service). In 1794 the Oʻahu chiefs threw up earthworks at Kukui (Kamakau), “Kukui in Kalapueo, Waimanalo” (Fornander). The point is a marker near Pāhonu."
   }
 ]

@@ -380,6 +380,235 @@
     ]
   },
   {
+    "id": "kailua-chiefs",
+    "title": "Kailua of the chiefs",
+    "gloss": "the windward seat of Oʻahu’s rulers",
+    "when": {
+      "from": "1690",
+      "to": "1737",
+      "precision": "generation"
+    },
+    "era": "alapai",
+    "where": [
+      {
+        "place": "kailua-oahu",
+        "role": "seat"
+      },
+      {
+        "place": "kalapawai",
+        "role": "birthplace"
+      },
+      {
+        "place": "kawainui",
+        "role": "fishpond"
+      },
+      {
+        "place": "kaelepulu",
+        "role": "fishpond"
+      },
+      {
+        "place": "ulupo",
+        "role": "heiau"
+      },
+      {
+        "place": "heeia-fishpond",
+        "role": "fishpond"
+      },
+      {
+        "place": "nuupia",
+        "role": "fishpond"
+      },
+      {
+        "place": "kahaluu-fishpond",
+        "role": "fishpond"
+      },
+      {
+        "place": "molii",
+        "role": "fishpond"
+      },
+      {
+        "place": "kualoa",
+        "role": "sacred land"
+      },
+      {
+        "place": "oneawa",
+        "role": "landing"
+      },
+      {
+        "place": "naonealaa",
+        "role": "meeting"
+      },
+      {
+        "place": "mokapu",
+        "role": "canoes"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "other",
+    "summary": "For generations the rulers of Oʻahu make Kailua, on the windward side, their favourite home. Kākuhihewa builds a great house there, his descendants live chiefly on their lands in Koʻolaupoko, and Kūaliʻi, born at Kalapawai, dies at Kailua in great old age some time before 1730. Behind the beach lie the inland ponds of Kawainui and Kaʻelepulu, ringed with loʻi and dry fields, with the heiau Ulupō above them; along Kāneʻohe Bay walled ponds line the shore, and at its head lies Kualoa, sacred to the chiefs. In 1737 Alapaʻinui of Hawaiʻi lands his army on this coast, and after fighting in Kāneʻohe he and Peleioholani, who has come from Kauaʻi to the aid of the Oʻahu chiefs, make peace on the shore of the bay.",
+    "stops": [
+      {
+        "text": "Kailua is where Oʻahu’s rulers like best to live. Kākuhihewa built his great house Pamoa at Alele here, and Kūaliʻi was born at Kalapawai by the shore and grew up between Kailua and Kualoa.",
+        "place": "kailua-oahu",
+        "zoom": "near",
+        "year": 1700,
+        "camera": {
+          "bearing": 225,
+          "pitch": 0.35,
+          "distance": 45,
+          "target": [
+            -157.748,
+            21.395
+          ]
+        }
+      },
+      {
+        "text": "Behind the beach lies Kawainui, a great inland fishpond divided from Kaʻelepulu by a low stone wall, its edges planted in loʻi watered from Maunawili and in dry fields above. The heiau Ulupō stands at its eastern edge.",
+        "place": "kawainui",
+        "zoom": "near",
+        "year": 1700,
+        "camera": {
+          "bearing": 200,
+          "pitch": 0.4,
+          "distance": 30
+        }
+      },
+      {
+        "text": "Along the shore of Kāneʻohe Bay, from Mōkapu to Kualoa, walled fishponds take in the reef flat. At Heʻeia the wall curves out over the shallows from one point of the shore to another.",
+        "place": "heeia-fishpond",
+        "zoom": "near",
+        "year": 1700,
+        "camera": {
+          "bearing": 235,
+          "pitch": 0.45,
+          "distance": 18
+        }
+      },
+      {
+        "text": "At the head of the bay is Kualoa, sacred land of the Oʻahu chiefs, with its sacred drums and its sacred hill. When a chief lives there, passing canoes lower their masts from Makawai until they reach the waters of Kaʻaʻawa.",
+        "place": "kualoa",
+        "zoom": "near",
+        "year": 1700,
+        "camera": {
+          "bearing": 315,
+          "pitch": 0.3,
+          "distance": 30,
+          "target": [
+            -157.843,
+            21.512
+          ]
+        }
+      },
+      {
+        "text": "In 1737 Alapaʻinui of Hawaiʻi, turned back from Oʻahu’s southern shore, lands his army on the coast of Oneawa. After fighting in Kāneʻohe, he and Peleioholani meet at Naonealaʻa and end the war, the canoes lined up along the shore from Mōkapu.",
+        "place": "oneawa",
+        "zoom": "near",
+        "year": 1737,
+        "camera": {
+          "bearing": 250,
+          "pitch": 0.35,
+          "distance": 50,
+          "target": [
+            -157.772,
+            21.418
+          ]
+        }
+      }
+    ],
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 138–139 (Alapaʻi at Oneawa and Naonealaa), 273–274 (Kākuhihewa), 278, 280n and 283 (Kūaliʻi; the kapu of Kualoa)"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "pp. 71–72 (Alapaʻi), 129 (Kualoa), 192 (Kawainui)"
+      },
+      {
+        "id": "thrum-annual-1907",
+        "where": "p. 49 (the heiau of Koʻolaupoko)"
+      },
+      {
+        "id": "dlnr-ulupo",
+        "where": "history"
+      },
+      {
+        "id": "nps-1992-ka-iwi",
+        "where": "pp. 34–35"
+      },
+      {
+        "id": "oha-kipuka-sites",
+        "where": "the pond outlines and the site of Ulupō"
+      },
+      {
+        "id": "usgs-topo-1927-oahu",
+        "where": "the Koʻolaupoko sheets"
+      },
+      {
+        "id": "wikipedia-kawainui-marsh",
+        "where": "finding aid"
+      },
+      {
+        "id": "kamakau-poe-kahiko",
+        "where": "pp. 82–84, not read"
+      },
+      {
+        "id": "mcallister-1933",
+        "where": "not read"
+      },
+      {
+        "id": "sterling-summers-1978",
+        "where": "not read"
+      },
+      {
+        "id": "noaa-cudem-hawaii",
+        "where": "the walls of Heʻeia, Moliʻi and Kahouna on today’s heights"
+      },
+      {
+        "id": "state-gis-oahu-1943",
+        "where": "the ponds of the Kāneʻohe shore"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Kākuhihewa’s principal royal residences were at ʻEwa, Waikīkī and Kailua; at Alele in Kailua he built a house named Pamoa (some legends say Kamooa), “said to have been 240 feet long and 90 feet broad” (pp. 273–274)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Kūaliʻi was born at Kalapawai, the navel-string rite performed at the heiau of Alala; he grew up at Kailua and Kualoa (p. 278), made Kailua his favourite residence and died there “at a very advanced age” (p. 283), “some time previous to 1730” (p. 280n)."
+      },
+      {
+        "source": "thrum-annual-1907",
+        "says": "Thrum puts the rites at Alala for the birth of Kūaliʻi “about 1640”, and lists Upo at Kailua as “a stone paved heiau with walls ten feet high” (p. 49)."
+      },
+      {
+        "source": "dlnr-ulupo",
+        "says": "State Parks has Kākuhihewa at Kailua “in the 1400s” and Kūaliʻi “in the late 1600s”; about 1750 Kawainui was a fishpond of about 400 acres, with Kaʻelepulu and Nuʻupia nearby."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "The two rulers met at Naonealaʻa in Kāneʻohe “on Ka‘elo 13, 1737, corresponding to our January”, the canoes lined up from Kiʻi at Mōkapu to Naonealaʻa (p. 72)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Alapaʻinui’s war on Oʻahu was “a mere series of skirmishes”, lasting “nearly a month” (p. 139)."
+      },
+      {
+        "source": "nps-1992-ka-iwi",
+        "says": "Kawainui may have been in use as a fishpond as early as the late seventeenth century (p. 35)."
+      }
+    ]
+  },
+  {
     "id": "alapai-wars",
     "title": "The wars of Alapaʻinui",
     "gloss": "Hawaiʻi against Maui and Oʻahu",
@@ -397,6 +626,10 @@
       {
         "place": "wailuku",
         "role": "battle"
+      },
+      {
+        "place": "oneawa",
+        "role": "landing"
       }
     ],
     "zoom": [
@@ -2270,6 +2503,242 @@
     ]
   },
   {
+    "id": "koolaupoko-1850",
+    "title": "Koʻolaupoko after the Māhele",
+    "gloss": "kuleana, a mission, a ranch, and rice",
+    "when": {
+      "from": "1848",
+      "to": "1882",
+      "precision": "decade"
+    },
+    "era": "kauikeaouli",
+    "where": [
+      {
+        "place": "kaneohe",
+        "role": "mission"
+      },
+      {
+        "place": "heeia-wetlands",
+        "role": "kuleana"
+      },
+      {
+        "place": "kawainui",
+        "role": "marsh"
+      },
+      {
+        "place": "kailua-oahu",
+        "role": "kuleana"
+      },
+      {
+        "place": "maunawili",
+        "role": "kuleana"
+      },
+      {
+        "place": "kualoa",
+        "role": "ranch"
+      },
+      {
+        "place": "waimanalo",
+        "role": "crown land"
+      },
+      {
+        "place": "kukui",
+        "role": "village"
+      },
+      {
+        "place": "waikalua",
+        "role": "rice"
+      }
+    ],
+    "zoom": [
+      "island",
+      "near"
+    ],
+    "kind": "other",
+    "summary": "At the Māhele the lands of Koʻolaupoko are divided among the chiefs and the king: Kāneʻohe and Kailua go to Queen Kalama, Kauikeaouli’s wife, Heʻeia to the chief Abner Paki, and Waimānalo and Kualoa to the king. In the early 1850s the families of the district claim their kuleana, the loʻi and house lots they work along the streams, and the Land Commission awards them. A mission station stands at Kāneʻohe; the great pond of Kawainui has grown over; the people are fewer than a generation before. In 1850 the king sells Kualoa to Gerrit P. Judd, who ranches it. From about 1860 rice is planted in the old loʻi and the marshes, and sugar cane spreads over the lowlands.",
+    "stops": [
+      {
+        "text": "At Kāneʻohe, on the shore of the bay, is the mission station founded in 1834, when the people of Koʻolau built it a thatched church. Under the Māhele, Kāneʻohe and Kailua have gone to Queen Kalama and Heʻeia to the chief Paki.",
+        "place": "kaneohe",
+        "zoom": "near",
+        "year": 1850,
+        "camera": {
+          "bearing": 215,
+          "pitch": 0.4,
+          "distance": 28
+        }
+      },
+      {
+        "text": "Up the streams from Heʻeia to Waikāne the families claim their kuleana, the loʻi they work and their house lots, and the Land Commission awards them through the early 1850s.",
+        "place": "heeia-wetlands",
+        "zoom": "near",
+        "year": 1850,
+        "camera": {
+          "bearing": 240,
+          "pitch": 0.4,
+          "distance": 22,
+          "target": [
+            -157.815,
+            21.428
+          ]
+        }
+      },
+      {
+        "text": "At Kailua the great pond of Kawainui has grown over with bulrushes, and fewer people work the land than a generation before.",
+        "place": "kawainui",
+        "zoom": "near",
+        "year": 1850,
+        "camera": {
+          "bearing": 210,
+          "pitch": 0.4,
+          "distance": 35
+        }
+      },
+      {
+        "text": "In 1850 the king sells Kualoa to the missionary physician Gerrit P. Judd, who puts it to cattle. His family later plants cane there and builds a sugar mill, which closes within a decade.",
+        "place": "kualoa",
+        "zoom": "near",
+        "year": 1850,
+        "camera": {
+          "bearing": 315,
+          "pitch": 0.3,
+          "distance": 28,
+          "target": [
+            -157.843,
+            21.514
+          ]
+        }
+      },
+      {
+        "text": "Waimānalo is Crown land. Its kuleana lie in a band of terraced loʻi at the foot of the mountains, and from the 1850s cattle graze the plain below.",
+        "place": "waimanalo",
+        "zoom": "near",
+        "year": 1850,
+        "camera": {
+          "bearing": 230,
+          "pitch": 0.35,
+          "distance": 40
+        }
+      },
+      {
+        "text": "By the 1880s much of the Kāneʻohe and Heʻeia lowland is in sugar cane, and old loʻi and swamp land are in rice, as around the pond of Waikalua.",
+        "place": "waikalua",
+        "zoom": "near",
+        "year": 1882,
+        "camera": {
+          "bearing": 205,
+          "pitch": 0.45,
+          "distance": 18
+        }
+      }
+    ],
+    "sources": [
+      {
+        "id": "bingham-1847",
+        "where": "pp. 130–131, 467"
+      },
+      {
+        "id": "indices-of-awards-1929",
+        "where": "the awards of whole lands, as mahele.json reads them (leaves 404, 414, 419)"
+      },
+      {
+        "id": "oha-kipuka-lca",
+        "where": "the award parcels of Koʻolaupoko"
+      },
+      {
+        "id": "mokapu-1965",
+        "where": "pp. 18–19"
+      },
+      {
+        "id": "nps-1992-ka-iwi",
+        "where": "pp. 27–28, 35"
+      },
+      {
+        "id": "hgs-1881-oahu",
+        "where": "Old Mission Res. & Church; Crown 8000 A. at Waimānalo"
+      },
+      {
+        "id": "kipuka-rm-585",
+        "where": "the Kāneʻohe shore"
+      },
+      {
+        "id": "kipuka-rm-1140",
+        "where": "Sugar Cane, Rice land"
+      },
+      {
+        "id": "kipuka-rm-1936",
+        "where": "the legend"
+      },
+      {
+        "id": "thrum-annual-1887",
+        "where": "sugar plantations and mills"
+      },
+      {
+        "id": "wikipedia-kualoa-ranch",
+        "where": "Judd’s purchase and the mill (tertiary)"
+      },
+      {
+        "id": "devaney-1976-kaneohe",
+        "where": "not read"
+      },
+      {
+        "id": "char-1988-chinese-sites",
+        "where": "not read"
+      },
+      {
+        "id": "handy-1940-hawaiian-planter",
+        "where": "not read"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "oha-kipuka-lca",
+        "says": "The Kīpuka award layer maps 1,334 award parcels in Koʻolaupoko, most of them awarded between 1849 and 1860: under about 136 claims in Kāneʻohe, 117 in Kailua, 93 in Heʻeia, 87 in Waimānalo, 60 in Waiāhole, and 51 each in Kahaluʻu and Hakipuʻu."
+      },
+      {
+        "source": "nps-1992-ka-iwi",
+        "says": "Kailua ahupuaʻa had about 610 people in 1850, down from 762 in the missionary census of 1835–36 (p. 35)."
+      },
+      {
+        "source": "bingham-1847",
+        "says": "Parker was placed at Kāneʻohe, “twelve miles north of Honolulu”, where the people of Palikoolau, led by Amasa Kaiakoili, built a small thatched church, dedicated on 30 November (p. 467)."
+      },
+      {
+        "source": "kipuka-rm-585",
+        "says": "Lyons’s survey of 1874 marks L.C.A. 387 to the American Protestant Mission and grants to B. W. Parker on the Kāneʻohe shore, the Kāneʻohe church’s Grant 167, a court house, a mill chimney at Keaʻahala, and cane fields of 226 and 50 acres."
+      },
+      {
+        "source": "kipuka-rm-1140",
+        "says": "Jackson’s chart of August 1882 writes “Sugar Cane” across the lowland behind Heʻeia and “Rice land” beside it."
+      },
+      {
+        "source": "kipuka-rm-1936",
+        "says": "Monsarrat’s map of March 1896 draws the edge of the rice over the kuleana of the Waikalua swamp: 85.25 acres of rice, 60 of them south of the main stream as far as Kawa Stream."
+      },
+      {
+        "source": "nps-1992-ka-iwi",
+        "says": "By 1860 rice was a major crop in the Kawainui marsh, grown by Chinese farmers in the old taro fields; its profits peaked in 1875, Japanese growers followed, and the fields were given up by the mid-1940s (p. 35). Chinese farmers first planted cane at Waimānalo in 1876; the Waimānalo Sugar Plantation, organized in 1878, lasted until 1947 (p. 28)."
+      },
+      {
+        "source": "wikipedia-kualoa-ranch",
+        "says": "Judd bought 622 acres at Kualoa and the island of Mokoliʻi from Kamehameha III in 1850 for $1,300; a sugar mill built in 1863 closed in 1870."
+      },
+      {
+        "source": "mokapu-1965",
+        "says": "At the Māhele Kailua and Kāneʻohe went to Queen Kalama and Heʻeia to the high chief Abner Paki; when Paki died in 1856 the Mōkapu land of Heʻeia was sold at auction (pp. 18–19)."
+      },
+      {
+        "source": "thrum-annual-1887",
+        "says": "Thrum’s list of 1887 names the Waimanalo Sugar Co., Kaneohe Plantation and the Heeia Agricultural Co. among the sugar plantations, and Kualoa Ranch on the road around the island."
+      }
+    ]
+  },
+  {
     "id": "smallpox-1853",
     "title": "Smallpox",
     "gloss": "the epidemic of 1853",
@@ -2883,6 +3352,27 @@
       {
         "source": "hhfdc-waiahole-plan",
         "says": "The developer planned to upzone the valleys for about 4,000 homes; the Hawaiʻi Housing Authority bought 795 acres for $6 million in 1977."
+      },
+      {
+        "source": "hhfdc-waiahole-plan",
+        "says": "In the plan’s account, Link McCandless had a tunnel bored through the Koʻolau at the back of the valley to carry water to Central Oʻahu and ʻEwa, and came to own 40 kuleana in Waiāhole and Waikāne; his heirs moved their tenants to month-to-month leases from 1959."
+      }
+    ],
+    "stops": [
+      {
+        "text": "In Waiāhole the tenants hold the valley in farms; in 1977 the State buys it and leases it back to the families who were there.",
+        "place": "waiahole",
+        "zoom": "near",
+        "year": 1977,
+        "camera": {
+          "bearing": 255,
+          "pitch": 0.35,
+          "distance": 35,
+          "target": [
+            -157.862,
+            21.482
+          ]
+        }
       }
     ]
   },
@@ -3096,6 +3586,30 @@
       {
         "id": "noaa-heeia-nerr",
         "where": "reserve page"
+      },
+      {
+        "id": "kakoo-oiwi-history",
+        "where": "whole page"
+      },
+      {
+        "id": "mokapu-1965",
+        "where": "pp. 24–25, 30, 68"
+      },
+      {
+        "id": "kipuka-rm-4148",
+        "where": "the fill of 1969"
+      },
+      {
+        "id": "nps-1992-ka-iwi",
+        "where": "p. 36"
+      },
+      {
+        "id": "usgs-topo-2000-oahu",
+        "where": "the ponds still standing"
+      },
+      {
+        "id": "state-gis-parcels-oahu",
+        "where": "the wetland parcels"
       }
     ],
     "confidence": {
@@ -3111,6 +3625,65 @@
       {
         "source": "noaa-heeia-nerr",
         "says": "The reserve covers 1,385 acres, most of it water."
+      },
+      {
+        "source": "kakoo-oiwi-history",
+        "says": "An aerial photograph of 1928 shows more than 300 acres of wetland kalo at Heʻeia and at least three poi mills; kalo was worked there through the mid-1930s. Since 2010 about six acres of loʻi kalo have been restored and twenty more acres cleared for dryland crops."
+      },
+      {
+        "source": "mokapu-1965",
+        "says": "The Navy bought Mōkapu from September 1939 and filled its shore with mud and coral dredged from the bay until 1943, adding about 280 acres; the naval air station was commissioned on 15 February 1941, the Marine Corps air station on 15 January 1952 (pp. 24–25, 30, 68)."
+      },
+      {
+        "source": "kipuka-rm-4148",
+        "says": "A survey of 1969 records about 12,100 square feet of Kāneʻohe Bay filled in front of house lots on Kāneʻohe Bay Drive at ʻŌpaʻapaʻa."
+      },
+      {
+        "source": "nps-1992-ka-iwi",
+        "says": "Across Mōkapu, Kailua grew from 7,740 people in 1950 to 25,622 in 1960 and 33,783 in 1970, and from the mid-1960s houses were built at Enchanted Lake, on the Kaʻelepulu fishpond (p. 36)."
+      }
+    ],
+    "stops": [
+      {
+        "text": "In 2001 a group of young Hawaiians forms Paepae o Heʻeia to care for the old pond, with its landowner, Kamehameha Schools.",
+        "place": "heeia-fishpond",
+        "zoom": "near",
+        "year": 2001,
+        "camera": {
+          "bearing": 250,
+          "pitch": 0.5,
+          "distance": 14
+        }
+      },
+      {
+        "text": "Inland, Kākoʻo ʻŌiwi takes its lease of the wetland in 2010 and begins to clear it; loʻi kalo return beside the highway.",
+        "place": "heeia-wetlands",
+        "zoom": "near",
+        "year": 2010,
+        "camera": {
+          "bearing": 235,
+          "pitch": 0.45,
+          "distance": 14,
+          "target": [
+            -157.8135,
+            21.4345
+          ]
+        }
+      },
+      {
+        "text": "In 2017 the southern bay, the pond and the wetland become a National Estuarine Research Reserve.",
+        "place": "heeia-fishpond",
+        "zoom": "near",
+        "year": 2017,
+        "camera": {
+          "bearing": 225,
+          "pitch": 0.35,
+          "distance": 45,
+          "target": [
+            -157.8,
+            21.43
+          ]
+        }
       }
     ]
   },
@@ -3128,6 +3701,14 @@
       {
         "place": "pahonu",
         "role": "pond"
+      },
+      {
+        "place": "waimanalo",
+        "role": "plain"
+      },
+      {
+        "place": "bellows",
+        "role": "airfield"
       }
     ],
     "zoom": [
@@ -3148,11 +3729,61 @@
       {
         "id": "civilbeat-2026-limu",
         "where": "whole article"
+      },
+      {
+        "id": "nps-1992-ka-iwi",
+        "where": "pp. 26–28"
+      },
+      {
+        "id": "hhca-1921",
+        "where": "§203"
+      },
+      {
+        "id": "oha-kipuka-sites",
+        "where": "Pahonu Turtle Pond"
       }
     ],
     "confidence": {
       "date": "firm",
       "place": "soft"
-    }
+    },
+    "stops": [
+      {
+        "text": "At Kaiona Beach Park on the Waimānalo shore, the Waimānalo Limu Hui meets each month at Pāhonu to rebuild the pond’s wall and plant limu along it.",
+        "place": "pahonu",
+        "zoom": "near",
+        "year": 2017,
+        "camera": {
+          "bearing": 200,
+          "pitch": 0.5,
+          "distance": 10
+        }
+      },
+      {
+        "text": "Behind the shore, the plain of Waimānalo, Crown land at the Māhele and sugar cane until 1947, is farms and homesteads now, with the old airfield at Bellows to the north.",
+        "place": "waimanalo",
+        "zoom": "near",
+        "year": 2017,
+        "camera": {
+          "bearing": 235,
+          "pitch": 0.3,
+          "distance": 50
+        }
+      }
+    ],
+    "tellings": [
+      {
+        "source": "nps-1992-ka-iwi",
+        "says": "Pāhonu is “a prehistoric walled enclosure where it is said that turtles were kept for the use of Hawaiian chieftains” (p. 27)."
+      },
+      {
+        "source": "nps-1992-ka-iwi",
+        "says": "In 1917 a parcel of about 1,530 acres at Waimānalo became the Waimanalo Military Reservation, renamed Bellows Field in 1933 and Bellows Air Force Station in 1958 (p. 28)."
+      },
+      {
+        "source": "hhca-1921",
+        "says": "The Act, as amended, names Waimānalo, about 4,000 acres in Koʻolaupoko, among the lands available for homesteading, excepting the military reservation and the beach lands (§203)."
+      }
+    ]
   }
 ]

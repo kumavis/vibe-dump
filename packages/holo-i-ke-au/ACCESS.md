@@ -2,9 +2,9 @@
 
 A standing list of what the research could not reach from the build container, why, and what each
 would unlock if the project's owner can open it: a host to allow, a lending scan to borrow, a book to
-buy or borrow, a dataset to obtain. Consolidated from RESEARCH.md §§2–12. Each entry names the events,
+buy or borrow, a dataset to obtain. Consolidated from RESEARCH.md §§2–13. Each entry names the events,
 places, layers or questions it would settle: what to look for in it, not only that it is wanted. For the
-thirteen sources the app already cites unread (`opened: false` in `sources.json`), the same want is on
+nineteen sources the app already cites unread (`opened: false` in `sources.json`), the same want is on
 the entry itself, in `wanted`, and `check-data` requires it; this file carries the rest: the sources no
 entry cites yet, and the hosts and datasets that are not sources. When one is opened, read it, turn its
 `sources.json` entry from `opened: false` to `true` with its `read`, drop or narrow its `wanted`, and
@@ -24,13 +24,19 @@ strike it here.
 | [usgs.gov](https://www.usgs.gov/) | 403, timeouts | the Volcano Watch column of 2008 on the Kaʻū footprints and the dead of 1790 (`keanakakoi-1790`); the observatory's pages on the 1868 earthquake and Mauna Loa flow, a second source for `kau-earthquake-1868` |
 | [Wayback Machine](https://web.archive.org/) | reset every connection in the second pass | a re-read of the Pacific Worlds Nuʻuanu page (the oral account), for its exact words on the guns of both sides |
 | [oha.org](https://www.oha.org/) | 403 (Kīpuka's own site and services answer) | Kīpuka's documentation and terms of use, for the licence question below |
+| [Waikalua Loko Iʻa](https://www.waikalualoko.org/) | 502 through the proxy | the pond's own history and its restoration: when the wall was rebuilt and who keeps it, for `fishpond-waikalua` and a stop in the coda (RESEARCH §13) |
+| [Justia](https://law.justia.com/) | Cloudflare challenge, 403 | the Hawaiʻi Supreme Court's Waiāhole Ditch decision of 2000 (*In re Water Use Permit Applications*): the ditch, the windward streams and the return of water, for `waiahole-1977` |
 | Wikimedia Commons API, Google Books API | rate limit, quota | the 1825 chart of Honolulu harbour from the Blonde's survey: the shore ponds thirty years after the battle (§10) |
 
 ## Scans behind lending
 
 | scan | where | what it would unlock |
 | --- | --- | --- |
-| McAllister, *Archaeology of Oahu* (Bishop Museum Bulletin 104, 1933; Kraus reprint 1971) | [Internet Archive](https://archive.org/details/archaeologyofoah0000mcal), lending only; its search-inside refused; tDAR restricted; not in the Bishop Museum's list of bulletin PDFs | the site descriptions behind the Honolulu ponds and heiau (Kālia, Kuwili, Kahoʻikekanaka, Kaheiki) and whether the Kīpuka site numbers repeat McAllister's (§10) |
+| McAllister, *Archaeology of Oahu* (Bishop Museum Bulletin 104, 1933; Kraus reprint 1971) | [Internet Archive](https://archive.org/details/archaeologyofoah0000mcal), lending only; its search-inside refused; tDAR restricted; not in the Bishop Museum's list of bulletin PDFs | the site descriptions behind the Honolulu ponds and heiau (Kālia, Kuwili, Kahoʻikekanaka, Kaheiki) and whether the Kīpuka site numbers repeat McAllister's (§10); for Koʻolaupoko, the heiau of Kailua, Kāneʻohe and Waimānalo and the bay's ponds as he found them (`mcallister-1933`, §13). The archive's full-text search shows his Kawainui as site 370, the State number the Kīpuka layer gives it, so the numbers probably do repeat his |
+| Handy, *The Hawaiian Planter*, vol. I (Bishop Museum Bulletin 161, 1940; the 1971 reprint) | [Internet Archive](https://archive.org/details/hawaiianplanter0000hand), lending only | the loʻi of Koʻolaupoko valley by valley, to check the loʻi drawn from the kuleana (`handy-1940-hawaiian-planter`; RESEARCH §13) |
+| Char and Char, *Chinese Historic Sites and Pioneer Families of Rural Oahu* (1988) | [Internet Archive](https://archive.org/details/chinesehistorics0000char), lending only | rice in Koʻolaupoko valley by valley, the mills and the Chinese tenants of the ponds (`char-1988-chinese-sites`) |
+| Kamakau, *Ka Poʻe Kahiko* (1964) | [Internet Archive](https://archive.org/details/bwb_Y0-BOQ-669), lending only | pp. 82–84, the Kawainui fishpond (`kamakau-poe-kahiko`) |
+| *Atlas of Kaneohe Bay* (1973); *Kaneohe Bay Water Resources Data Evaluation* (1976) | [Internet Archive](https://archive.org/details/atlasofkaneoheba0000vari), lending only | the reefs, sediments and shore of the bay before and after the dredging and fill of 1939–43, for the Kāneʻohe Bay patches |
 | Van Dyke, *Who Owns the Crown Lands of Hawaiʻi?* (2008) | [Internet Archive](https://archive.org/details/whoownscrownland0000vand), lending only | the Crown lands from 1848 to 1893: sales before 1865, the 1890 additions, a check on `mahele.json`'s crown and `later` classes |
 
 ## Print (a library card, or a purchase)
@@ -38,7 +44,8 @@ strike it here.
 | book | what it would unlock |
 | --- | --- |
 | ʻĪʻī, *Fragments of Hawaiian History* (1959) | the Honolulu–Nuʻuanu trail of about 1810 and the ʻili of the valley; who served the guns at Nuʻuanu; Kamehameha's court (every card of that era) |
-| Sterling and Summers, *Sites of Oahu* (1978) | the Honolulu and Nuʻuanu sites, ponds and heiau, and the place-name lore of the valley |
+| Sterling and Summers, *Sites of Oahu* (1978) | the Honolulu and Nuʻuanu sites, ponds and heiau, and the place-name lore of the valley; the Koʻolaupoko chapters, and where Alele, Pamoa, Naonealaʻa and Kukui were (`sterling-summers-1978`) |
+| Devaney, Kelly, Lee and Motteler, *Kaneohe: A History of Change* (1976) | Kāneʻohe from contact to 1950: population by decade, the mission, the kuleana, rice, sugar, ranching, and when each pond of the shore was filled (`devaney-1976-kaneohe`) |
 | Kuykendall, *The Hawaiian Kingdom*, vols. I–III (from 1938) | vol. I: the guns and the foreigners of 1795 (Young, Davis, how many cannon), pp. 88–89 on the sandalwood famine at first hand, and the land laws of 1846–50 and the Māhele, for `mahele.json`'s classes and the Māhele chapter; vol. II: the 1864 constitution and the reigns of the merged chapter, event by event; vol. III: the 1887 constitution and the overthrow |
 | Kameʻeleihiwa, *Native Land and Foreign Desires* (1992) | the Māhele chief by chief: the check on every konohiki class and awardee in `mahele.json`, and the acreage totals |
 | Handy, *Native Planters in Old Hawaii* (a paid ebook) | the loʻi valley by valley; Nuʻuanu's taro; the 1778 cultivation weights (§9) |
@@ -61,7 +68,8 @@ strike it here.
 | The 1850 census by island | not found open; Thrum's table starts at 1853 | an 1850 base for the Māhele keyframe's settlement layer (§9) |
 | UH coastal-geology pages (SOEST) | known only at second hand: the patches cite "the University of Hawaiʻi's coastal surveys" for the Ala Wai boat harbour | the dates and extents of fill and dredging on the Waikīkī and Kālia shore, from the surveys themselves (DATA.md "Patches") |
 | U.S. Army Corps of Engineers report of 1961 | named in the owner's list; no pass has located it | the post-war harbour works from the works' own record; the harbour patches now rest on secondary posts and on the Chief of Engineers' report of 1935 as one site quotes it |
-| Charts of Kāneʻohe Bay before 1939 | none found by the patch work; Kīpuka's registered maps (below) include Kāneʻohe Bay sheets, undated | the Kāneʻohe seaplane runways (1939–42), which cannot be told from the natural lagoon without them (DATA.md "Patches"); the Koʻolaupoko district |
+| Charts of Kāneʻohe Bay before 1939 | **found**: Jackson's *Koolau Bay and Anchorages* (August 1882, 1:12,000, soundings at low water) is Kīpuka's Registered Map 1140 (`kipuka-rm-1140`), read in part and not georeferenced. RM 4148 and 4149, the "Kāneʻohe Bay" sheets, are lot surveys of small shore fills in 1969 | georeferenced, the reef flats, patch reefs and passages before the seaplane runways (1939–42), which the Kāneʻohe Bay patches need (DATA.md "Patches") |
+| The first homestead leases at Waimānalo | DHHL's pages read give the Act and its §203 list, not the leases | when homesteading began at Waimānalo, for the coda's tellings (`hhca-1921`) |
 | The leeward Kohala and Kona field systems as GIS | not found open (the Hawaiʻi Biocomplexity Project publishes papers, not footprints) | the 1778 dryland cultivation, now stood in for by the Kurashima–Kirch zones (§9) |
 | Hawaiʻi Conservation Alliance fishpond layer | needs a login | real fishponds statewide, now a shore rule (§9) |
 
@@ -72,6 +80,9 @@ strike it here.
 | OHA's Kīpuka layers (award, site, ahupuaʻa and Crown lands layers) | no licence is stated on the items; `mahele.json` and the 1853 layers use them. Ask OHA before release |
 | Kamehameha Schools' Traditional Agriculture model (Kurashima et al.) | no licence on the item; the cultivation layers use it at hundreds of metres. Ask before release |
 | The oral account's speakers (Pacific Worlds, Nuʻuanu) | living people: ask how they want to be credited (§10) |
+| Paepae o Heʻeia; Kākoʻo ʻŌiwi | the organisations caring for Heʻeia's pond and wetland: ask how they want their work shown and credited in the coda, and whether the restored loʻi may be drawn where `loi-heeia-restored` puts them (§13). Kākoʻo ʻŌiwi's history page is quoted in tellings |
+| The Waimānalo Limu Hui | ask how the hui wants Pāhonu and its work shown, and whether the pond may be drawn at the State site record's point (§13) |
+| The Waiāhole-Waikāne Community Association | ask how the association wants the struggle of 1974–77 and the valley today told and credited (§13) |
 
 ## Found open in the second pass, not yet read
 
@@ -79,7 +90,8 @@ Not walls, but leads: each is open from here and simply unread.
 
 | source | where | what it would give |
 | --- | --- | --- |
-| The Government Survey's registered maps | OHA Kīpuka's [RegisteredMaps](https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/RegisteredMaps/FeatureServer/0) index, 3,526 entries, with PDFs at kipukadatabase.com (many marked missing) | Nuʻuanu Valley (RM 2028, a large tracing) and Nuʻuanu Pali (RM 4117), for the bounds of Puʻiwa and Lāʻimi, now points (§§6, 10); Kāneʻohe (RM 585, C. J. Lyons, 1874) and Kāneʻohe Bay (RM 4148, 4149), for the Kāneʻohe patches and district |
+| The Government Survey's registered maps | OHA Kīpuka's [RegisteredMaps](https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/RegisteredMaps/FeatureServer/0) index, 3,526 entries, with PDFs at kipukadatabase.com (many marked missing) | Nuʻuanu Valley (RM 2028, a large tracing) and Nuʻuanu Pali (RM 4117), for the bounds of Puʻiwa and Lāʻimi, now points (§§6, 10). For Koʻolaupoko (§13), RM 585, 1140, 1936 and 4148 are now read in part; still unread and open: Heʻeia (RM 633, Webster, 1851; RM 1142, 1859), Waimānalo (RM 72, Metcalf, 1850; RM 865, Waimānalo kuleana, Monsarrat, 1880; RM 2681, the plantation, 1921), Kailua (RM 747, Lyons, 1875; RM 1434, 1888), Kawainui (RM 2030, 2895), Kāneʻohe rice lands under government lease (RM 2038), Mōkapu and Kāneʻohe Bay (RM 1073, Lyons), Kāneʻohe Bay (RM 1848, W. F. Thrum, 1892), the U.S. Exploring Expedition's chart with Kāneʻohe (RM 423, 1840) and the Kāneʻohe homesteads of 1913 (RM 2562–2564): georeferenced, they would replace the loʻi drawn from the kuleana with surveyed fields and date the ponds and the shore. RM 2834, "Old Palace Lot, Kailua", is Kailua in Kona |
+| *Archaeological Investigations in Upland Kaneohe* (1976) | Internet Archive, `DTIC_ADA128210` | the upper Kamoʻoaliʻi valley's terraces and their history, for the Kāneʻohe loʻi above the floors |
 | Vancouver, *A Voyage of Discovery to the North Pacific Ocean* (1798) | [Internet Archive](https://archive.org/details/cihm_41864) | his visits of 1792–94: a route and events not yet made (§8) |
 | Alexander, *A Brief History of Land Titles in the Hawaiian Kingdom* (1882) | [Internet Archive](https://archive.org/details/appendixtorepor00hawagoog) | the land laws from 1846 to 1882, beside Chinen |
 | Linnekin, *The Hui Lands of Keanae* | [Internet Archive](https://archive.org/details/hui-lands-keanae-hawaiian-land-tenure-great-mahele) | the Māhele at Keʻanae, one of the lands `mahele.json` leaves mixed |

@@ -536,7 +536,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Queried 2026-10-20; coordinates for named natural features and populated places."
+    "note": "Queried 2026-10-20; coordinates for named natural features and populated places. Queried again over Koʻolaupoko on 2026-10-22."
   },
   {
     "id": "wikipedia-battle-of-nuuanu",
@@ -706,7 +706,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1881), exported over the district on 2026-10-20 and checked against GNIS points (Punchbowl, Queen Emma’s summer house, the Pali). Writes land names (Laimi, Luakaha, Kuwili, Apili, Pahounui, Mokauea, Waolani, Puunui) and Land Commission Award numbers; its notes define stations, acres, grants, awards and patents but not the ruled hatching it puts on valley floors and shore flats, which is read here as wet land."
+    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1881), exported over the district on 2026-10-20 and checked against GNIS points (Punchbowl, Queen Emma’s summer house, the Pali). Writes land names (Laimi, Luakaha, Kuwili, Apili, Pahounui, Mokauea, Waolani, Puunui) and Land Commission Award numbers; its notes define stations, acres, grants, awards and patents but not the ruled hatching it puts on valley floors and shore flats, which is read here as wet land. Read again over Koʻolaupoko on 2026-10-22: Loko at Heʻeia, Kaeleoulu Loko at Kailua, the Old Mission Res. & Church and a mill at Kāneʻohe, the roads below the pali, and Crown 8000 A. and J. Cummings at Waimānalo."
   },
   {
     "id": "hgs-1899-oahu",
@@ -717,18 +717,18 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1899), exported over the district on 2026-10-20. Writes PUIWA on the Nuʻuanu valley floor, Kuwili by the railway depot, and ponds and rice at Kālia and Mōʻiliʻili. Its georeferencing is a few hundred metres looser than the 1881 sheet’s."
+    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1899), exported over the district on 2026-10-20. Writes PUIWA on the Nuʻuanu valley floor, Kuwili by the railway depot, and ponds and rice at Kālia and Mōʻiliʻili. Its georeferencing is a few hundred metres looser than the 1881 sheet’s. Read again over Kāneʻohe: it writes Heeia Agricultural Co. across Heʻeia, with a mill, churches, and salt works on Mōkapu."
   },
   {
     "id": "usgs-topo-1927-oahu",
-    "title": "Topographic quadrangles of Oʻahu, 1927 edition (Honolulu sheet), as the State GIS mosaic oahu_topo_1927",
+    "title": "Topographic quadrangles of Oʻahu, 1927 edition, as the State GIS mosaic oahu_topo_1927",
     "author": "U.S. Geological Survey",
     "year": 1927,
     "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/oahu_topo_1927/ImageServer",
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported over Kalihi Kai and Kālia on 2026-10-20. Names and outlines Apili, Pahou, Pahouiki, Auiki and Ananoho ponds on the Kalihi shore; shows Kālia and Iwilei already filled."
+    "note": "Exported over Kalihi Kai and Kālia on 2026-10-20. Names and outlines Apili, Pahou, Pahouiki, Auiki and Ananoho ponds on the Kalihi shore; shows Kālia and Iwilei already filled. Exported again on 2026-10-22 over Koʻolaupoko, where it names and outlines the ponds of Kāneʻohe Bay and Mōkapu, writes Kawainui Swamp and Kaelepulu Pond, and marks ruins at Kualoa and Waimanalo Landing."
   },
   {
     "id": "oha-kipuka-sites",
@@ -739,7 +739,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Queried over the district on 2026-10-20: State Inventory of Historic Places site numbers and names, each marked Public, Private or PlaceName. Only Public sites that are not burials were used, and only fishpond outlines were copied; burials, caves and heiau in the layer were neither copied nor used to place anything. No licence is stated on the item."
+    "note": "Queried over the district on 2026-10-20: State Inventory of Historic Places site numbers and names, each marked Public, Private or PlaceName. Only Public sites that are not burials were used, and only fishpond outlines were copied; burials, caves and heiau in the layer were neither copied nor used to place anything. No licence is stated on the item. Queried again over Koʻolaupoko on 2026-10-22: the outlines of public pond sites were used, and the public points of Ulupō and Pāhonu; heiau outlines were not copied and burial sites were not used."
   },
   {
     "id": "state-gis-streams-dar",
@@ -750,7 +750,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Fetched 2026-10-20: perennial and non-perennial streams as of 2008 with 2013 name corrections, from USGS line graphs. Modern courses; the lower reaches in Honolulu are channelled."
+    "note": "Fetched 2026-10-20: perennial and non-perennial streams as of 2008 with 2013 name corrections, from USGS line graphs. Modern courses; the lower reaches in Honolulu are channelled. Fetched again over Koʻolaupoko on 2026-10-22; its streams are named by system, with tributaries named in their own field."
   },
   {
     "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
@@ -895,5 +895,271 @@
     "opened": true,
     "read": "full",
     "note": "Queried in full on 2026-10-22: 219 tenure polygons, Crown (1848, 1890), Government (1848, 1850, 1853) and Konohiki, each with its Buke Māhele pages and, for a konohiki land, the chief the king relinquished it to and the award. It maps every land of Kauaʻi, Molokaʻi, Lānaʻi and Niʻihau and the Crown lands of the other islands, where its descriptions come from the 1894 Crown Lands report. A land the Buke Māhele divided between the king and a chief is drawn twice, the line between the halves unmapped. No licence is stated on the item."
+  },
+  {
+    "id": "nps-1992-ka-iwi",
+    "title": "Reconnaissance Survey: Ka Iwi Shoreline Study, Hawaii",
+    "author": "National Park Service",
+    "year": 1992,
+    "url": "https://archive.org/details/reconnaissancesu00kaiwi",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "A study of the shore from Makapuʻu to Kailua for a possible park. Read in its full text on the Internet Archive: the cultural resources of the Waimānalo Bay unit (pp. 26–28) and of the Maunawili Valley unit, on Kawainui and Maunawili (pp. 34–36). It summarizes earlier studies, which were not read.",
+    "wanted": "its own sources for Kailua: the missionary census of 1835–36 and the count of 1850 for the ahupuaʻa, and the Kawainui reports in its bibliography, for the extent of the pond and of the loʻi before 1850"
+  },
+  {
+    "id": "mokapu-1965",
+    "title": "Myths, Martyrs and Marines of Mokapu: a history of the Marine Corps Air Station, Kaneohe Bay, Hawaii",
+    "author": "Al Steele and C. A. P. McNease",
+    "year": 1965,
+    "url": "https://archive.org/details/mythsmartyrsmari00stee",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "A history published by the air station. Read in its full text on the Internet Archive: the land divisions of Mōkapu (p. 5), the ponds (pp. 16–17), the Māhele (pp. 18–19), the Army's reservation of 1918 (p. 21), the Navy's purchase, dredging and fill from 1939 (pp. 24–25), the naval air station (p. 30) and the Marine Corps station (p. 68). Its traditions of the peninsula are told without sources and are not used."
+  },
+  {
+    "id": "dlnr-ulupo",
+    "title": "Ulupō Heiau State Historic Site",
+    "author": "Hawaiʻi Department of Land and Natural Resources, Division of State Parks",
+    "year": 2026,
+    "url": "https://dlnr.hawaii.gov/dsp/parks/oahu/ulupo-heiau-state-historic-site/",
+    "access": "open",
+    "opened": true,
+    "read": "full",
+    "note": "The park's page, read 2026-10-22: Kailua and Kawainui about 1750, the heiau and its history, and its listing on the National and Hawaiʻi Registers of Historic Places."
+  },
+  {
+    "id": "thrum-annual-1887",
+    "title": "Hawaiian Almanac and Annual for 1887",
+    "author": "Thomas G. Thrum",
+    "year": 1887,
+    "url": "https://archive.org/details/acp0143.1887.001.umich.edu",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read in its full text on the Internet Archive: the list of sugar plantations and mills with their agents, and the table of distances around Oʻahu from the Honolulu post office."
+  },
+  {
+    "id": "oha-kipuka-lca",
+    "title": "Land Awards (LCA_State), Kīpuka database",
+    "author": "Office of Hawaiian Affairs",
+    "year": 2026,
+    "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Queried over Koʻolaupoko on 2026-10-22: the award parcels (apana) with their claim numbers, claimants, award years and ahupuaʻa, placed from older maps georeferenced to the USGS sheets. The land-use field is empty for every parcel here. No licence is stated on the item.",
+    "wanted": "the use of each Koʻolaupoko apana (loʻi, kula or house lot), which the Native Register and Native Testimony record and the layer leaves empty, to turn the loʻi outlines into patches"
+  },
+  {
+    "id": "kipuka-rm-585",
+    "title": "Kaneohe, Oahu, with West Kailua (Registered Map 585)",
+    "author": "C. J. Lyons, for the Hawaiian Government Survey under W. D. Alexander",
+    "year": 1876,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/0585WIDEtracing.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Surveyed in 1874 and drawn in 1876; read in the 1938 tracing by A. Taga that Kīpuka publishes, at low and medium resolution: the Kāneʻohe shore from Heʻeia to Keaʻalau, its ponds and their acreages, the mission and church lands, the mill and the cane fields. Its own note says kuleana over five acres are drawn and most smaller ones left off. Not georeferenced here.",
+    "wanted": "the whole sheet at full resolution, georeferenced: the land names and award numbers inland, the bounds of the cane fields, and the road and trail from the pali, for the Kāneʻohe loʻi and trails"
+  },
+  {
+    "id": "kipuka-rm-1140",
+    "title": "Koolau Bay and Anchorages, Oahu (Registered Map 1140)",
+    "author": "George E. Gresley Jackson, Nav. Lieut. R.N., for the Hawaiian Government Survey under W. D. Alexander",
+    "year": 1882,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/1140WIDEblueprint.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Surveyed and drawn in August 1882 at 1,000 feet to the inch, soundings in feet at low water; read in Kīpuka's blueprint copy at low and medium resolution for the ponds, cane and rice lands of the south shore and Mōkapu. A chart of the whole bay, its reefs and passages, before any dredging. Not georeferenced here.",
+    "wanted": "the whole chart at full resolution, georeferenced: the reef flats, patch reefs, passages and soundings before the seaplane runways and the dredging of 1939–43, for the Kāneʻohe Bay patches; and the ponds and fields of the north shore from Kahaluʻu to Kualoa"
+  },
+  {
+    "id": "kipuka-rm-1936",
+    "title": "Map of Waikalua Swamp &c., Kaneohe Koolau, Oahu (Registered Map 1936)",
+    "author": "M. D. Monsarrat",
+    "year": 1896,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/1936.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "March 1896, 200 feet to the inch: the kuleana of the Waikalua swamp between Kāneʻohe and Kawa streams with their award numbers and holders, the ʻauwai, the fences and the edge of the rice. Read at low resolution for its legend and labels.",
+    "wanted": "the parcels at full resolution: which kuleana were in rice and which in taro, and their holders, for the Kāneʻohe loʻi"
+  },
+  {
+    "id": "kipuka-rm-4148",
+    "title": "Filled Area of Kaneohe Bay Fronting Lots 2 to 6 (inclusive) and Lot A of Opaapaa Subdivision (Registered Map 4148)",
+    "author": "P. Nuha, State Survey Division",
+    "year": 1969,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/4148.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "full",
+    "note": "A survey of 1 August 1969 of a small fill on the shore at ʻŌpaʻapaʻa, on Kāneʻohe Bay Drive. Not a chart of the bay, which ACCESS.md had hoped; Registered Map 4149, beside it in the index, is of the same kind and was not opened."
+  },
+  {
+    "id": "state-gis-oahu-1943",
+    "title": "Oʻahu, 1943 map (State GIS image service SoH_Maps/Oahu_1943)",
+    "author": "State of Hawaiʻi Statewide GIS Program (the service names no maker of the original)",
+    "year": 1943,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/Oahu_1943/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported over the Kāneʻohe shore and Kailua on 2026-10-22. It fills ponds and marsh in blue, which is how the ponds of the Kāneʻohe shore were traced and dated; it carries a military grid and route shields."
+  },
+  {
+    "id": "usgs-topo-2000-oahu",
+    "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+    "author": "U.S. Geological Survey",
+    "year": 2000,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported over Kāneʻohe Bay and Kailua on 2026-10-22, to see which ponds still stand: Heʻeia, Halekou and Nuʻupia, Kaʻelepulu and the fishpond at Waikalua; it marks Ulupō Heiau State Monument."
+  },
+  {
+    "id": "noaa-cudem-hawaii",
+    "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi",
+    "author": "NOAA National Centers for Environmental Information",
+    "year": 2021,
+    "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Three tiles over Koʻolaupoko (ncei19_n21x50_w157x75, ncei19_n21x50_w158x00, ncei19_n21x75_w158x00), fetched 2026-10-22: the walls of the standing ponds traced at their native resolution, and the loʻi outlines held to gentle ground on a grid of about 12.6 m. Today's ground. The district bake reads the same product."
+  },
+  {
+    "id": "kakoo-oiwi-history",
+    "title": "History of Heʻeia",
+    "author": "Kākoʻo ʻŌiwi",
+    "year": 2026,
+    "url": "https://kakoooiwi.org/history-of-he%ca%bbeia/",
+    "access": "open",
+    "opened": true,
+    "read": "full",
+    "note": "The organisation's page on the wetland, read 2026-10-22: kalo there through the mid-1930s, an aerial photograph of 1928, the State's acquisition of 1991, the lease of 2010 and the loʻi restored since. It cites Handy, Handy and Pukui (1972)."
+  },
+  {
+    "id": "wikipedia-kualoa-ranch",
+    "title": "Kualoa Ranch",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Kualoa_Ranch",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read for Judd's purchase of 1850 and the sugar mill of 1863–70; its citations (the ranch's pages, the National Register) were not read. Tertiary: verify.",
+    "wanted": "Judd's purchase and the mill from a primary or published source: the deed of 1850, the plantation's years"
+  },
+  {
+    "id": "wikipedia-kawainui-marsh",
+    "title": "Kawainui Marsh",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Kawainui_Marsh",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read as a finding aid: the Ramsar designation of 2005, and a summary of the pond about 1750 that follows State Parks. Tertiary."
+  },
+  {
+    "id": "hhca-1921",
+    "title": "Hawaiian Homes Commission Act, 1920, as amended",
+    "author": "United States Congress (the edition published by the Department of Hawaiian Home Lands)",
+    "year": 1921,
+    "url": "https://dhhl.hawaii.gov/wp-content/uploads/2020/02/Hawaiian-Homes-Commission-Act-1921-As-Ammended-Searchable.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Signed 9 July 1921 (DHHL). Read in DHHL's searchable copy of the Act as amended: section 203, the lands available, which names Waimānalo in Koʻolaupoko. Because the copy is the Act as amended, its list may differ from the text of 1921.",
+    "wanted": "the Act as passed in 1921, and the first homestead leases at Waimānalo: when homesteading began there"
+  },
+  {
+    "id": "state-gis-parcels-oahu",
+    "title": "Oahu Parcels, ParcelsZoning MapServer layer 11",
+    "author": "State of Hawaiʻi Statewide GIS Program; City and County of Honolulu",
+    "year": 2026,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/11",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Queried 2026-10-22 for the Heʻeia wetland parcels that the HCDA names (TMK 4-6-16:001 and :002), to place the restored loʻi."
+  },
+  {
+    "id": "handy-1940-hawaiian-planter",
+    "title": "The Hawaiian Planter, vol. I (Bishop Museum Bulletin 161)",
+    "author": "E. S. Craighill Handy",
+    "year": 1940,
+    "url": "https://archive.org/details/hawaiianplanter0000hand",
+    "access": "print",
+    "opened": false,
+    "read": "title",
+    "note": "On the Internet Archive for lending only (the 1971 reprint); not read.",
+    "wanted": "the loʻi of Koʻolaupoko valley by valley (Waimānalo, Kailua and Maunawili, Kāneʻohe, Heʻeia, Kahaluʻu, Waiheʻe, Kaʻalaea, Waiāhole, Waikāne): how far up each floor the terraces ran, to check the loʻi drawn from the kuleana"
+  },
+  {
+    "id": "char-1988-chinese-sites",
+    "title": "Chinese Historic Sites and Pioneer Families of Rural Oahu",
+    "author": "Tin-Yuke Char and Wai Jane Char",
+    "year": 1988,
+    "url": "https://archive.org/details/chinesehistorics0000char",
+    "access": "print",
+    "opened": false,
+    "read": "title",
+    "note": "On the Internet Archive for lending only; not read.",
+    "wanted": "the Chinese rice farmers, mills and fishpond tenants of Koʻolaupoko (Kāneʻohe, Heʻeia, Kahaluʻu, Waiāhole, Waikāne, Kailua): when each valley went to rice and when it was given up, for the loʻi end years and the rice stop"
+  },
+  {
+    "id": "mcallister-1933",
+    "title": "Archaeology of Oahu (Bishop Museum Bulletin 104)",
+    "author": "J. Gilbert McAllister",
+    "year": 1933,
+    "url": "https://archive.org/details/archaeologyofoah0000mcal",
+    "access": "print",
+    "opened": false,
+    "read": "title",
+    "note": "On the Internet Archive for lending only (the Kraus reprint of 1971); not read (ACCESS.md).",
+    "wanted": "the Koʻolaupoko sites: the heiau of Kailua, Kāneʻohe and Waimānalo (Ulupō, Pahukini, Holomakani, Alala, Kawaewae, Olohana, Pueo) and the fishponds of Kāneʻohe Bay, Kailua and Waimānalo as he found them, and whether the State site numbers the Kīpuka layer gives them repeat his"
+  },
+  {
+    "id": "sterling-summers-1978",
+    "title": "Sites of Oahu",
+    "author": "Elspeth P. Sterling and Catherine C. Summers",
+    "year": 1978,
+    "access": "print",
+    "opened": false,
+    "read": "title",
+    "note": "Print (Bishop Museum); not found on the Internet Archive.",
+    "wanted": "the Koʻolaupoko chapters: the heiau, ponds, springs and place-name lore of Waimānalo, Kailua, Kāneʻohe, Heʻeia and Kualoa, and where Alele, Pamoa, Naonealaʻa and Kukui were"
+  },
+  {
+    "id": "devaney-1976-kaneohe",
+    "title": "Kaneohe: A History of Change",
+    "author": "Dennis M. Devaney, Marion Kelly, Polly Jae Lee and Lee S. Motteler",
+    "year": 1976,
+    "access": "print",
+    "opened": false,
+    "read": "title",
+    "note": "Print (Bishop Museum); not found on the Internet Archive.",
+    "wanted": "Kāneʻohe from contact to 1950: the population by decade, the mission, the Māhele and the kuleana, rice, sugar and ranching, and when each pond of the shore was filled; the figures the 1850 tellings lack"
+  },
+  {
+    "id": "kamakau-poe-kahiko",
+    "title": "Ka Poʻe Kahiko: The People of Old (Bishop Museum Special Publication 51)",
+    "author": "Samuel Mānaiakalani Kamakau",
+    "year": 1964,
+    "url": "https://archive.org/details/bwb_Y0-BOQ-669",
+    "access": "print",
+    "opened": false,
+    "read": "title",
+    "note": "On the Internet Archive for lending only; its search index shows the Kawainui fishpond at pp. 82–84. Not read.",
+    "wanted": "pp. 82–84 on the Kawainui fishpond: its keepers, its fish and its guardian, for the Kawainui stop of c. 1700"
   }
 ]

@@ -1349,3 +1349,273 @@ terms (108 problems before this pass) and nothing runs the check on it.
 - **A reader**: the Buke Māhele; Kameʻeleihiwa's appendix; Kamakau's own Hawaiian for the weapons' names;
   and a cultural reviewer for the pali forces, which now draw a stand, a surround and the leap that DESIGN
   §8 asks for.
+
+## 13. Koʻolaupoko
+
+The record behind the second close-up (DESIGN.md §3.4): Koʻolaupoko, from Waimānalo to Kualoa, at c. 1700, 1850 and
+now, with the coda in the same place. Made in October 2026, in parallel with the district's bake (heights, rain, the
+patches for the dredged bay and the fill) and the app's side; neither is described here. What follows is the gazetteer,
+the events and their cameras, and `public/data/districts/koolaupoko/features.json`.
+
+| file | change |
+| --- | --- |
+| `places.json` | 101 places (was 84): 17 added; `pahonu` now exact, at the State site record's point; `kualoa`'s note and sources |
+| `events.json` | 59 events (was 57): `kailua-chiefs` (c. 1700) and `koolaupoko-1850` added, with five and six stops; stops and cameras on `heeia-restoration` (three), `pahonu-limu` (two) and `waiahole-1977` (one), with tellings for the years between 1898 and 1970; Oneawa added to `alapai-wars` |
+| `sources.json` | 105 sources (was 82): 23 added, 17 opened and 6 not; `usgs-topo-1927-oahu` retitled (it is the whole mosaic, not the Honolulu sheet); five notes extended |
+| `districts/koolaupoko/features.json` | new, 90 features: fishpond 15, loʻi 40 (one of them restored, from 2010), village 3, heiau 7, trail 2, stream 14, label 9 |
+
+`districts/manifest.json` is the bake's and was not touched, so until it lists `koolaupoko` the check reads only Nuʻuanu's
+features (`loadDistricts()` falls back to `districts/*/features.json` only when there is no manifest at all). Checked
+against a scratch copy of `public/data` whose manifest adds the district over −157.90 to −157.64 W, 21.30 to 21.54 N,
+with a test height image made from the CUDEM tiles below on a 12.9 m grid: clean, every heiau at its centroid, every
+text held to the copy and numbers rules, and at most 2.1 % of any loʻi's texels steeper than 15 % (`loi-waimanalo-1`).
+
+### What was read
+
+| source | what, and where |
+| --- | --- |
+| `fornander-v2` | Pp. 138–139 (Alapaʻinui lands at Oneawa in Kailua; headquarters at Waihaukalua; the meeting at Naonealaa in Kāneʻohe; “a mere series of skirmishes”), 262–263 (Kaʻeokūlani at Kukui in Kalapueo, Waimānalo, and the meeting at Kalapawai, 1794), 271–274 (Kākuhihewa: his residences at ʻEwa, Waikīkī and Kailua, the house Pamoa at Alele), 277–278, 280n, 282–284 (Kūaliʻi: born at Kalapawai, the rite at Alala, raised at Kailua and Kualoa, the kapu of Kualoa, died at Kailua before 1730). |
+| `kamakau-ruling-chiefs` | Pp. 54 (Lono lands at Lapawai, Kailua), 71–72 (Alapaʻi at Oneawa, Kaulekola, Waihaukalua; Naonealaʻa, Kaʻelo 13, 1737), 85 (Kalaniʻōpuʻu's heiau at Kahaluʻu and Kailua: the other Kailua, in Kona), 129 (Kualoa: its water courses, drums, spring and sacred hill), 138 (Kahekili at Kailua, his chiefs at Kāneʻohe and Heʻeia), 140, 168 (Kukui, Kalapueo, Waimānalo; the meeting at Kalapawai), 192 (Kamehameha at the ponds of Kawainui, Kaʻelepulu, Ukoʻa and Maunalua), 275 (the stream of Makawai between Kāneʻohe and Kualoa), 325 (travellers from Kahiki at Mōkapu), 344n (Pukui on the mud of Kawainui). |
+| `bingham-1847` | Pp. 130–131 (the view from the pali over “Palikoolau”, with the note of a station since founded at Kāneʻohe), 467 (Parker at Kāneʻohe, 1834; the thatched church), 499. |
+| `thrum-annual-1907` | P. 49: the heiau of Koʻolaupoko (Kawaewae, Leleahina, Alala, Upo, Makini, Olohana, Pueo, the heiau on Mōkapu). |
+| `thrum-annual-1887` | The list of sugar plantations and mills; the distances round Oʻahu from the Honolulu post office. |
+| `nps-1992-ka-iwi` | Pp. 26–28 (Waimānalo: the terraces at the foot of the mountains, Kaupō and Kukui, Pāhonu, ranching, sugar 1876–1947, the military reservation and Bellows), 34–36 (Kawainui and Maunawili: the pond and the loʻi, the census figures for Kailua, rice from 1860, ranching, the flood works, Kailua's growth, Ulupō and Pahukini). |
+| `mokapu-1965` | Pp. 5, 16–21, 24–30, 68: the ʻili of Mōkapu, the ponds, the Māhele, the reservation of 1918, the Navy's purchase, dredging and fill, the commissionings. |
+| `dlnr-ulupo` | The whole page: Kailua and Kawainui about 1750, Ulupō, its registers. |
+| `kakoo-oiwi-history` | The whole page; with `hcda-heeia` and `paepae-o-heeia`, read again. |
+| `hhfdc-waiahole-plan` | Its history section, again: the McCandless tunnel and kuleana, the leases from 1959. |
+| `hhca-1921` | Section 203, in DHHL's copy of the Act as amended. |
+| `kipuka-rm-585` | Lyons's Kāneʻohe of 1874, in Kīpuka's 1938 tracing, at low and medium resolution: the shore from Heʻeia to Keaʻalau. |
+| `kipuka-rm-1140` | Jackson's chart of the bay, August 1882, at low and medium resolution: the south shore and Mōkapu. |
+| `kipuka-rm-1936` | Monsarrat's Waikalua swamp, March 1896, at low resolution: its legend and labels. |
+| `kipuka-rm-4148` | A 1969 survey of a small fill at ʻŌpaʻapaʻa, Kāneʻohe. |
+| `hgs-1881-oahu`, `hgs-1899-oahu` | The State's image services over Kāneʻohe, Kailua, the pali foot and Waimānalo, read window by window with a lon/lat grid drawn on, as §10. |
+| `usgs-topo-1927-oahu`, `state-gis-oahu-1943`, `usgs-topo-2000-oahu` | The State's mosaics over the bay, Kailua and Waimānalo: the ponds and their names in each edition. |
+| `oha-kipuka-sites` | 119 polygons and 865 points in the district box: the pond outlines and the points of Ulupō and Pāhonu. |
+| `oha-kipuka-lca` | 1,416 award parcels in the box, 1,334 inside the moku. |
+| `noaa-cudem-hawaii` | Three 1/9″ tiles: the pond walls at native resolution; a 12.6 m grid for the loʻi. |
+| `state-gis-streams-dar`, `state-gis-parcels-oahu`, `usgs-gnis` | The streams of the moku; the Heʻeia wetland parcels; 388 names in the box. |
+| `wikipedia-kualoa-ranch`, `wikipedia-kawainui-marsh` | Tertiary: Judd's purchase and the mill; the Ramsar designation. |
+
+Also opened and not cited: Kīpuka's index of registered maps over the district (about 70 sheets for Kāneʻohe, Kailua,
+Heʻeia and Waimānalo; the leads are in ACCESS.md), and RM 2834, “Old Palace Lot, Kailua”, which is Huliheʻe's lot in
+Kailua, Kona (a resurvey of 1930), a false match. The census of 1896 (`census-1896`) was opened for district figures, but
+its tables do not survive the OCR by district. The full-text search of the Internet Archive was used to find books, and its
+snippets of lending-only books (McAllister, *Ka Poʻe Kahiko*, Char, Handy, Dorrance) were not read as sources.
+
+### What could not be reached
+
+- **The lending-only books**: Handy's *Hawaiian Planter* (1940), the Chars' *Chinese Historic Sites and Pioneer Families
+  of Rural Oahu* (1988), Kamakau's *Ka Poʻe Kahiko* (1964), McAllister (1933), the *Atlas of Kaneohe Bay* (1973), the Kāneʻohe
+  Bay water-resources study (1976) and Dorrance's *Oʻahu's Hidden History* (1998) are on the Internet Archive for lending
+  only. The first four are in `sources.json` as unread, with what to look for in each.
+- **Print**: Devaney, Kelly, Lee and Motteler, *Kaneohe: A History of Change* (1976), and Sterling and Summers, *Sites of
+  Oahu* (1978), the two syntheses for this district; neither is on the Internet Archive.
+- **Hosts**: the Waikalua Loko Iʻa site (`waikalualoko.org`) refused through the proxy (502); Justia's copy of the Waiāhole
+  water decision of 2000 answered with a Cloudflare challenge; Wikipedia's API rate-limited (its pages answered). The blocked
+  hosts of ACCESS.md were not tried.
+- **Who first held homesteads at Waimānalo, and when**: DHHL's pages read give the Act and its §203 list, not the first leases.
+
+### How each place was fixed
+
+| place | precision | how |
+| --- | --- | --- |
+| `kailua-oahu` Kailua | exact | GNIS's populated place. Its own id, beside `kailua-kona`. |
+| `kalapawai`, `oneawa` | exact | GNIS (Kalapawai, an area; Oneawa Beach). Fornander's “a place called Oneawa, in Kailua” and Kamakau's “coast of Oneawa … between Kaneʻohe and Kailua” both fit the beach at the north end of Kailua Bay. |
+| `naonealaa` Naonealaʻa | ahupuaʻa | No map read writes it; Kāneʻohe's centroid. Kamakau writes Naoneala‘a, Fornander Naonealaa. |
+| `kawainui`, `kaelepulu`, `waikalua`, `nuupia`, `molii`, `kahaluu-fishpond` | exact | GNIS's points for the ponds (Kawainui Marsh; Kaʻelepulu Pond; Waikalua-Loko Fish Pond; Nuʻupia Pond; Mōliʻi Pond; Kahaluʻu Pond). Kahaluʻu's pond is named Kahouna after the State site record, with GNIS's name as alt. |
+| `ulupo` Ulupō | exact, landmark | The State site record's point; a State historic site on the National and Hawaiʻi Registers (State Parks), so it may be exact. |
+| `kaneohe`, `waimanalo`, `mokapu`, `maunawili` | exact | GNIS (populated places; Mōkapu Peninsula; Maunawili Valley). |
+| `bellows` | exact | GNIS's Waimanalo Military Reservation (historical). |
+| `kukui` | ahupuaʻa | “Near Pahonu Pond” (National Park Service); a marker inland of Pāhonu. |
+| `pahonu` | exact (was ahupuaʻa) | The State site record's public point, Pahonu Turtle Pond, on the shore by Kaiona; GNIS's Pahonu (an area) lies 500 m west, inland. Kaiona is an alt name rather than a place of its own. |
+
+### What the award parcels showed
+
+Unlike Nuʻuanu (§10), Koʻolaupoko's kuleana are in Kīpuka's award layer: 1,334 parcels inside the moku, mostly awarded
+1849–1860 (84 %; the rest later or undated). By State unit, parcels and claims (the award number before the colon):
+
+| ahupuaʻa | parcels | claims | | ahupuaʻa | parcels | claims |
+| --- | --- | --- | --- | --- | --- | --- |
+| Kāneʻohe | 250 | 136 | | Waiāhole | 115 | 60 |
+| Kailua | 223 | 117 | | Kahaluʻu | 94 | 51 |
+| Heʻeia | 182 | 93 | | Hakipuʻu | 97 | 51 |
+| Waimānalo | 128 | 87 | | Kaʻalaea | 72 | 26 |
+| Waiheʻe | 53 | 29 | | Waikāne | 46 | 20 |
+| Kualoa 1 and 2 | 74 | 38 | | | | |
+
+The layer's land-use field is empty for every one, so which parcel was loʻi, kula or house lot is not recorded here;
+Lyons's survey (1874) adds that his sheet draws kuleana over five acres and leaves most smaller ones off, and Monsarrat's
+Waikalua map (1896) draws the small ones of that swamp with the edge of the rice over them. The parcels include whole-land
+awards and later grants, some of hundreds of hectares; only those under 2.5 ha were used for the loʻi.
+
+### How the features were made
+
+All coordinates lie within −157.896 to −157.681 W, 21.326 to 21.521 N. A feature's `to` is the last year a source read
+shows it, as in §10.
+
+- **Fishponds** (15). Three ways, chosen per pond by what the sources hold:
+  - *Traced on today's heights* where the wall stands (`mapped`, `noaa-cudem-hawaii`): the water at or below +0.3 m reached
+    from a seed inside the pond, with every texel within a few texels of land a barrier (closing the openings for the
+    sluice gates), grown back to the outside of the wall, simplified at 2.5 m. Heʻeia (gap 8 texels, 32.0 ha; stable from
+    6 to 12), Moliʻi (6, 45.4 ha), Kahouna (6, 12.6 ha). Each checked against the 1927 sheet's walls, which it follows within
+    the sheet's registration. The State site record's outlines for these three are boxes around the sites and were not used.
+  - *The State site record's outline* where it is a pond's shape and matches the 1927 and 1943 maps (`mapped`, with `site`):
+    Oʻohope, Kalokohanahou, Punaluʻu, Keana, Mikiola–Kapuʻu–Mahinui, Keaʻalau, the Nuʻupia–Halekou–Kaluapuhi complex,
+    Kawainui (the marsh's outline) and Kaʻelepulu (the pond with its marsh).
+  - *Traced from the 1943 map's blue fill* (`state-gis-oahu-1943`, exported at 1.7 m, opened and closed to drop the blue
+    shore lines and lettering): Kanohuluiwi and Waikapoki, two ponds side by side drawn as one (3.3 ha), and Waikalua Loko
+    (4.3 ha, its tail along the stream cut off at −157.7857), whose walled basin on today's heights is only 3 ha.
+  - *Pāhonu* (`schematic`): its wall shows neither on the CUDEM's near-shore heights nor on the 1881, 1927 or 1943 sheets;
+    a half-ring of 40 m on the reef flat at the State site point. Its size is a guess, and its note says so.
+
+  | pond | area | outline | to | why |
+  | --- | --- | --- | --- | --- |
+  | Moliʻi, Kahouna, Heʻeia | 45.4, 12.6, 32.0 ha | heights | — | walls stand today |
+  | Oʻohope, Kalokohanahou, Kanohuluiwi and Waikapoki, Punaluʻu | 1.5, 5.8, 3.3, 5.2 ha | site, site, 1943, site | 1943 | the 1943 map fills them; GNIS calls them historical |
+  | Keana, Mikiola–Kapuʻu–Mahinui, Keaʻalau | 2.1, 6.5, 3.0 ha | site | 1943 | the 1943 map fills them; no later map read shows them |
+  | Waikalua Loko | 4.3 ha | 1943 | — | the 2000 sheet still draws a fishpond; GNIS lists it as standing |
+  | Nuʻupia, Halekou, Kaluapuhi | 136.6 ha | site | — | the 2000 sheet draws Halekou and Nuʻupia inside the air station |
+  | Kawainui | 277.4 ha | site | 1827 | Kamakau's Kamehameha at work there; bulrushes over most of it by the late 1820s (NPS) |
+  | Kaʻelepulu | 123.3 ha | site | 1943 | the 1943 map fills it; Enchanted Lake from the mid-1960s |
+  | Pāhonu | 0.3 ha | schematic | — | rebuilt today |
+
+  No pond's building date is in any source read, so every `from` is null. Lyons (1874) gives three acreages and Jackson
+  (1882) the Mōkapu names; they are tellings on the ponds. The burial and heiau outlines in the same layer were not copied.
+
+- **Loʻi** (40). For each State ahupuaʻa, the award parcels under 2.5 ha rasterized on the 12.6 m CUDEM grid; closed with
+  a 5 × 5 square so neighbours join; kept where the ground is land, at most 12 % slope and below 150 m; opened (2 × 2);
+  trimmed of texels whose 5 × 5 neighbourhood is more than half steep (over 15 %); pieces under 1.5 ha, and any piece still
+  more than 4.9 % steep, dropped; holes filled, traced along texel edges, simplified at 7.5 m;
+  then pieces under 2.5 ha left out of the file. `inferred`, because the parcels are mapped but their use is not. Each later
+  ahupuaʻa takes only ground no earlier one claimed.
+
+  | loʻi | pieces | area | to | the end year |
+  | --- | --- | --- | --- | --- |
+  | Waimānalo | 4 | 71.0 ha | 1856 | the last awards; cattle from the 1850s, cane from 1878 |
+  | Kailua | 6 | 41.0 ha | 1945 | rice in the marsh's wet fields from about 1860, given up by the mid-1940s (NPS) |
+  | Kāneʻohe | 9 | 78.1 ha | 1896 | Monsarrat's rice over the Waikalua kuleana |
+  | Heʻeia | 5 | 41.9 ha | 1935 | kalo through the mid-1930s (Kākoʻo ʻŌiwi) |
+  | Kahaluʻu, Waiheʻe, Kaʻalaea | 4, 2, 2 | 31.0, 19.4, 12.5 ha | 1856 | the last awards |
+  | Waiāhole, Waikāne | 2, 3 | 36.6, 16.5 ha | 1856 | the last awards |
+  | Hakipuʻu, Kualoa | 1, 1 | 21.3, 2.7 ha | 1856 | the last awards |
+  | Heʻeia, restored | 1 | 2.4 ha | — | from 2010; Kākoʻo ʻŌiwi |
+
+  The restored loʻi are `schematic`: a disc of 88 m inside the State's wetland parcel (TMK 4-6-16:001) by the highway, where
+  the farm's driveway lies just south of the Heʻeia Stream bridge, clipped to the parcel, about the six acres its history gives.
+  On the CUDEM test heights the check's measure (texel centres inside the outline) is at most 2.1 %; counting every texel an
+  outline touches, the worst Kāneʻohe and Kailua pieces reach 12–13 %, so the outlines run close to steeper edges in places.
+  The bake's lidar will see house pads and road cuts the CUDEM smooths; the rule is checked at merge.
+
+- **Villages** (3), points with tellings: Kailua at GNIS's point, to 1850 (the NPS's count of that year); Kāneʻohe where the
+  1881 sheet writes “Old Mission Res. & Church”, to 1874 (Lyons's survey, with its church, court house and kuleana); Kukui near
+  Pāhonu, to 1850, `schematic`. No source read counts households; the tellings give the people counted for Kailua and say so.
+- **Heiau** (7): Ulupō exact, as a landmark; Pahukini, Holomakani and Alala at Kailua's centroid, Kawaewae at Kāneʻohe's,
+  Olohana and Pueo at Waimānalo's, all `schematic` with `placePrecision: ahupuaa`. Leleahina (Heʻeia), which Thrum says was
+  then used as a cemetery, and the heiau on Mōkapu were left out of the file. The site record's points and outlines for heiau
+  were not used to place anything.
+- **Trails** (2), `inferred`, to 1881: from the windward end of the Nuʻuanu district's pali trail (−157.787, 21.3745) along the
+  1881 sheet's roads, north across Kāneʻohe to the shore at Mahinui, and east to Maunawili.
+- **Streams** (14), `mapped`, `role: "reference"`: the State layer names streams by system with the tributary in its own
+  field, and its segments meet at interior vertices, so each main stem is the path, over a graph of every vertex, from the
+  lowest end of the system's largest component to the farthest node from it; simplified at 12 m. Maunawili ends in the marsh.
+- **Labels** (9) at the new places, as Nuʻuanu's.
+
+### What each keyframe rests on
+
+- **c. 1700 (`kailua-chiefs`, era `alapai`)**. Kailua as the rulers' windward home: Fornander for Kākuhihewa's house and for
+  Kūaliʻi's birth, youth and death there; State Parks for the place about 1750. The landscape: the ponds as the site record,
+  the old maps and the heights give them (none dated), the loʻi of the kuleana as a stand-in for the older fields, and
+  Kawainui as a pond (NPS: in use perhaps from the late 1600s). The one dated moment is Alapaʻinui's landing at Oneawa and the
+  peace at Naonealaʻa, 1737 (Kamakau, Fornander). **The era**: c. 1700 falls between `umi` (to 1630) and `alapai` (from 1730),
+  and no era covers it. The event runs 1690–1737 at generation precision and sits in `alapai`, the chapter its last stop and
+  the death of Kūaliʻi (before 1730) fall in or beside; with `umi` the check would warn. A chapter for the Oʻahu rulers of the
+  1600s (Kākuhihewa to Kūaliʻi) would fit better and is the design's to decide.
+- **1850 (`koolaupoko-1850`, era `kauikeaouli`)**. The Māhele as `mahele.json` reads it (Kāneʻohe and Kailua to Kalama,
+  Heʻeia to Paki, Waimānalo and Kualoa crown; the Mōkapu history agrees for the first three); the kuleana from Kīpuka's layer;
+  the mission from Bingham, the 1881 sheet and Lyons; depopulation from the NPS's Kailua figures; Kualoa's sale from Wikipedia
+  (tertiary, with a `wanted`); rice and cane from Lyons (1874), Jackson (1882), Monsarrat (1896), Thrum (1887) and the NPS.
+  The rice stop's year is 1882, Jackson's chart.
+- **Now (the coda)**. Heʻeia (Paepae o Heʻeia, Kākoʻo ʻŌiwi, the reserve), Pāhonu (the Limu Hui) and Waiāhole, each now with
+  stops. The years between 1898 and 1970 are tellings, not events, as the brief asks: on `heeia-restoration`, Heʻeia's
+  wetland kalo into the 1930s, the Navy's dredging and fill at Mōkapu (1939–43) and the air stations, a shore fill of 1969,
+  and Kailua's growth and Enchanted Lake; on `pahonu-limu`, the military reservation of 1917 and Bellows, the homestead lands
+  of §203 and the turtle pond; on `waiahole-1977`, the tunnel and the kuleana bought up. The ponds' end years (1943, the
+  houses after) and the restored loʻi (from 2010) carry the rest in the features.
+
+### The stop cameras
+
+`bearing` is the compass direction the camera looks; distance in world units (100 m). Each was set from the geometry
+(a camera over the bay or the plain looking inland at the place), not ray-cast; all want a look in the first render.
+
+| event | stop | place | bearing | pitch | distance | target | frames |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| kailua-chiefs | 0 | `kailua-oahu` | 225 | 0.35 | 45 | −157.748, 21.395 | from over Kailua Bay: the beach, the plain, Kawainui, Olomana and the pali behind |
+| kailua-chiefs | 1 | `kawainui` | 200 | 0.4 | 30 | | the pond from the north, Ulupō on its far edge, Maunawili beyond |
+| kailua-chiefs | 2 | `heeia-fishpond` | 235 | 0.45 | 18 | | the pond's wall from the bay, Heʻeia behind |
+| kailua-chiefs | 3 | `kualoa` | 315 | 0.3 | 30 | −157.843, 21.512 | Kualoa's cliffs and Moliʻi from the bay |
+| kailua-chiefs | 4 | `oneawa` | 250 | 0.35 | 50 | −157.772, 21.418 | the south shore of the bay from over Mōkapu's neck |
+| koolaupoko-1850 | 0 | `kaneohe` | 215 | 0.4 | 28 | | the Kāneʻohe shore and the mission |
+| koolaupoko-1850 | 1 | `heeia-wetlands` | 240 | 0.4 | 22 | −157.815, 21.428 | up the Heʻeia floor |
+| koolaupoko-1850 | 2 | `kawainui` | 210 | 0.4 | 35 | | the marsh |
+| koolaupoko-1850 | 3 | `kualoa` | 315 | 0.3 | 28 | −157.843, 21.514 | Kualoa |
+| koolaupoko-1850 | 4 | `waimanalo` | 230 | 0.35 | 40 | | the plain and the foot of the cliffs from the bay |
+| koolaupoko-1850 | 5 | `waikalua` | 205 | 0.45 | 18 | | the Waikalua swamp |
+| heeia-restoration | 0, 1, 2 | `heeia-fishpond`, `heeia-wetlands`, `heeia-fishpond` | 250, 235, 225 | 0.5, 0.45, 0.35 | 14, 14, 45 | —, −157.8135, 21.4345, −157.80, 21.43 | the pond; the restored loʻi; the reserve |
+| pahonu-limu | 0, 1 | `pahonu`, `waimanalo` | 200, 235 | 0.5, 0.3 | 10, 50 | | the pond on the reef flat; the plain |
+| waiahole-1977 | 0 | `waiahole` | 255 | 0.35 | 35 | −157.862, 21.482 | up the valley from the bay |
+
+### Where the tellings diverge
+
+1. **When Kākuhihewa and Kūaliʻi lived.** Fornander has Kūaliʻi dead “some time previous to 1730”, at past ninety; Thrum dates
+   the rites for his birth “about 1640”; State Parks puts Kākuhihewa “in the 1400s” and Kūaliʻi “in the late 1600s”. The event
+   runs 1690–1737 and its date confidence is soft.
+2. **Alapaʻi's war.** Kamakau gives a day, Kaʻelo 13, 1737; Fornander, a war of “nearly a month” of skirmishes and no year
+   here (his “say 1738” is in `alapai-wars`). Kamakau's Waihaukalua is Fornander's Waihaukalua too; Lyons's Waikalua is
+   probably the same land, which a speaker should confirm.
+3. **Kawainui's end as a pond.** Kamakau has Kamehameha at work on its ponds; the NPS has it in use from the late 1600s and
+   overgrown by the late 1820s; State Parks describes it as a 400-acre pond about 1750 and has Kamehameha eat its mud in a
+   famine. Pukui's note in Kamakau (p. 344) tells the mud as a trick played on Kamehameha's men. The feature ends in 1827.
+4. **Ulupō.** State Parks: probably an agricultural heiau, perhaps later a luakini, abandoned by 1795; Thrum's “Upo” at Kailua
+   is probably it. Names and spellings differ (Ulupō, Ulu Po, Upo).
+5. **Who held Kualoa.** `mahele.json` classes Kualoa as crown in 1848, and the king sold it to Judd in 1850; the source for the
+   sale read here is tertiary.
+6. **Names to check**: Moliʻi or Mōliʻi; Kahouna or Kahaluʻu Pond; Alala (Fornander, Thrum); Pamoa or Kamooa; Naonealaʻa;
+   Kūaliʻi, which Nuʻuanu's heiau note writes Kualiʻi; Oʻohope; Keaʻalau.
+
+### Where the schema grew
+
+- A fishpond, like a pond from the State site record in Nuʻuanu, carries `site`; here also the ponds traced otherwise, which
+  share a site record with a box outline.
+- A loʻi restored in the coda is a second feature with `from` 2010, as the brief allows.
+- The c. 1700 keyframe has no era of its own (above).
+- The district needs an entry in `districts/manifest.json` before the check reads its features; the check finds a second
+  district only through the manifest once one exists.
+
+### Still needs a reader, a library card, or a cultural reviewer
+
+- **A library**: Devaney et al. for Kāneʻohe's population, ponds and fields decade by decade; Sterling and Summers for the
+  sites and the lore (where Alele, Pamoa, Naonealaʻa and Kukui were); Handy for the loʻi valley by valley; the Chars for rice;
+  McAllister for the heiau and ponds as he found them; *Ka Poʻe Kahiko* for Kawainui.
+- **The registered maps at full resolution, georeferenced**: Jackson's chart (1882) for the bay before dredging, Lyons's
+  Kāneʻohe (1874), Monsarrat's Waikalua (1896), and the Heʻeia (1851, 1859), Kailua (1875, 1888) and Waimānalo (1850, 1880)
+  sheets in ACCESS.md, which would replace the kuleana-floor loʻi with surveyed fields.
+- **A reader of Hawaiian**: Kamakau's own chapters on Kūaliʻi and Alapaʻi; the names above.
+- **A cultural reviewer**: Ulupō placed exactly (a public State site); the heiau at the Kailua, Kāneʻohe and Waimānalo
+  centroids; Leleahina left out; Kūaliʻi's bones, which Fornander's story disposes of and the cards leave alone; the
+  Mōkapu sand dunes and the Bellows dunes, which hold burials, under the base and the beach park, which no feature touches;
+  and how the living organisations of the coda (Paepae o Heʻeia, Kākoʻo ʻŌiwi, the Waimānalo Limu Hui, the Waiāhole-Waikāne
+  Community Association) want to be named. No individual is named in the coda's new text.
+
+### Left for others
+
+- **The bake**: an entry for `koolaupoko` in `districts/manifest.json` with bounds covering the features (−157.896 to
+  −157.681 W, 21.326 to 21.521 N) and preferably the whole moku (−157.898 to −157.649 W, 21.309 to 21.535 N), say
+  −157.905, 21.300, −157.640, 21.545. For the patches: Jackson's chart of 1882 (RM 1140) is the chart of the bay before 1939
+  that DATA.md “Patches” lacked; the Navy dredged and filled at Mōkapu from September 1939 to 1943, adding about 280 acres
+  (`mokapu-1965` pp. 24–25); Kaʻelepulu was dredged and built over from the mid-1960s; a fill of 1969 at ʻŌpaʻapaʻa
+  (RM 4148). The pond walls of Heʻeia, Moliʻi and Kahouna stand low over the water on the CUDEM, with gaps at the sluices
+  (the traces close gaps of up to six to eight texels, 20–25 m), so a bake that flattens water inside the coast should keep them.
+- **The app**: the new event ids and cameras (`target` on eight stops); `kailua-oahu` is distinct from `kailua-kona`; ponds
+  ending in 1943 and Kawainui in 1827; the restored loʻi from 2010; villages as points with tellings.
+- **DATA.md**: nothing new beyond §11–12's list, unless the design gives the 1600s a chapter.
