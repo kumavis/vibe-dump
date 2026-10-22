@@ -252,16 +252,20 @@ export function link(app, ui) {
     const sortie = []
     const hits = (sc.hits || []).filter((x) => x.kind !== 'near-miss')
     const near = (sc.hits || []).filter((x) => x.kind === 'near-miss').reduce((s, x) => s + x.count, 0)
-    sortie.push({ label: 'Hits', value: hits.length ? hits.map((x) => `${x.name}: ${x.count} ${x.kind.replace('-', ' ')}${x.count > 1 ? 's' : ''}${x.where ? `, ${x.where}` : ''}`).join('; ') : 'none' })
+    const kindWord = (k) => String(k).replace(/-hit$/, '').replace('-', ' ')
+    const whereOf = (x) => [...new Set([].concat(x.where ?? []).map((w) => String(w).trim()).filter(Boolean))].join(', ')
+    sortie.push({ label: 'Hits', value: hits.length ? hits.map((x) => `${x.name}: ${x.count} ${kindWord(x.kind)} hit${x.count > 1 ? 's' : ''}${whereOf(x) ? `, ${whereOf(x)}` : ''}`).join('; ') : 'none' })
     if (near) sortie.push({ label: 'Near misses', value: String(near) })
     if (sc.bombs) sortie.push({ label: 'Bombs dropped', value: String(sc.bombs) })
     if (sc.releaseM != null) sortie.push({ label: 'Release height', value: `${Math.round(sc.releaseM)} m` })
     if (sc.torpedoes) sortie.push({ label: 'Torpedoes', value: `${sc.torpedoes} fired, ${sc.torpedoesHit || 0} hit` })
     if (sc.salvos) sortie.push({ label: 'Salvos', value: `${sc.salvos} (${sc.shells || 0} shells, ${sc.straddles || 0} straddling)` })
     if (sc.downed) sortie.push({ label: 'Aircraft downed', value: String(sc.downed) })
-    const how = { landed: 'landed', ditched: 'ditched', lost: 'lost', clock: 'the battle clock ran out', released: 'controls given back', left: 'left the box', card: 'still flying' }[sc.how ?? r.reason]
-    const pl = sim.player
-    if (how) sortie.push({ label: pl?.kind === 'ship' ? 'The ship' : 'Came back', value: sc.survived === false ? 'lost' : how })
+    const ship = (sim.units[sim.player?.unitIndex]?.kind ?? (m.role?.kind === 'ship' ? 'ship' : 'aircraft')) === 'ship' || m.role?.kind === 'ship'
+    const how = ship
+      ? { lost: 'lost', clock: 'afloat when the battle clock ran out', released: 'afloat, the controls given back', left: 'afloat', card: 'afloat' }[sc.how ?? r.reason]
+      : { landed: 'landed', ditched: 'ditched', lost: 'lost', clock: 'still flying when the battle clock ran out', released: 'still flying, the controls given back', left: 'still flying', card: 'still flying' }[sc.how ?? r.reason]
+    if (how) sortie.push({ label: ship ? 'The ship' : 'Came back', value: sc.survived === false ? 'lost' : how })
     if (sc.timeS) sortie.push({ label: 'Time', value: `${Math.floor(sc.timeS / 60)} min ${String(Math.round(sc.timeS % 60)).padStart(2, '0')} s` })
     // Your battle: ships and aircraft only, the divergences
     const rows = (o.diverged || []).map((d) => ({ what: d.name || d.unit || d.group, record: d.group ? aircraftLine(d.record) : d.record, yours: d.group ? aircraftLine(d.sim) : d.sim }))

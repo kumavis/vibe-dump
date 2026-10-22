@@ -21,7 +21,15 @@
 // (tools/shots/battle-*.png); prints frame time and heap.
 //
 //   node tools/fake-data.mjs && node tools/fake-battle.mjs
-//   node tools/smoke-battle.mjs [--calibration-only] [--browser-only] [--quick]
+//   node tools/smoke-battle.mjs [--calibration-only] [--browser-only] [--real-only] [--no-real] [--quick]
+//
+// Part 3, after the integration, in Chromium under SwiftShader against the
+// built app (npm run build first): each real box booted from
+// dist/index.html#battle=<id> (its frame time, draw calls and heap in watch
+// mode), then every one of its moments taken through the app's way in with
+// player.scripted and an autopilot, run to its checkpoint: the checkpoint's
+// prompt and the bar's offer appear, the card opens with its four parts, no
+// console error (tools/shots/real-*.png).
 //   CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome (the default)
 
 import fs from 'node:fs'
@@ -77,8 +85,11 @@ const band = (v, lo, hi, what) => {
 // ===========================================================================================
 // Part 1: the calibration batches (R7 §8)
 // ===========================================================================================
-const doCal = !args.has('--browser-only')
-const doBrowser = !args.has('--calibration-only')
+const REAL_ONLY = args.has('--real-only')
+const doCal = !args.has('--browser-only') && !REAL_ONLY
+const doBrowser = !args.has('--calibration-only') && !REAL_ONLY
+// Part 3 (the integration): every v1 moment on the real boxes in the built app
+const doReal = (REAL_ONLY || (!args.has('--calibration-only') && !args.has('--browser-only') && !args.has('--no-real'))) && fs.existsSync(path.join(root, 'dist/index.html')) && fs.existsSync(path.join(root, 'public/data/boxes/manifest.json'))
 
 if (doCal) {
   console.log('calibration (R7 §8), real kits:')
@@ -683,6 +694,135 @@ if (doBrowser) {
   if (vite) vite.kill()
 }
 
-fs.writeFileSync(path.join(shots, 'smoke-battle.json'), JSON.stringify({ when: new Date().toISOString(), failed, results, perf }, null, 1))
+// ===========================================================================================
+// Part 3: every v1 moment on the real boxes, in the built app (dist/index.html#battle=…)
+// ===========================================================================================
+// Each box booted from its URL (the table first, then the box with no fly-down), its frame time,
+// draw calls and heap read in watch mode; then each of its moments taken through the app's own
+// way in (app.take, as the briefing's Take the controls), with player.scripted and an autopilot,
+// run to just short of its checkpoint, the frames carried over it: the checkpoint's prompt and
+// the bar's offer must appear, its "The card" press must open the after-card with its four
+// parts (or, a sortie lost before its checkpoint, the after-card must come by itself), and no
+// console error may be raised on the way.
+const perBox = {}
+if (doReal) {
+  console.log('the v1 moments on the real boxes (dist/index.html#battle=…, SwiftShader):')
+  const { createServer } = await import('node:http')
+  const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.geojson': 'application/geo+json', '.png': 'image/png', '.woff2': 'font/woff2' }
+  const server = createServer(async (req, res) => {
+    let f = path.normalize(path.join(root, decodeURIComponent(req.url.split('?')[0])))
+    if (!f.startsWith(root)) return res.writeHead(403).end()
+    if (fs.existsSync(f) && fs.statSync(f).isDirectory()) f = path.join(f, 'index.html')
+    if (!fs.existsSync(f)) return res.writeHead(404).end('not found')
+    res.writeHead(200, { 'Content-Type': MIME[path.extname(f)] || 'application/octet-stream' }).end(fs.readFileSync(f))
+  })
+  const RPORT = Number(process.env.REAL_PORT || 5299)
+  await new Promise((r) => server.listen(RPORT, '127.0.0.1', r))
+  const { chromium } = await import('playwright')
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const AUTOPILOT = `window.__ap = (pl, s, sim) => {
+    const st = pl.state, inp = pl.input
+    const ob = sim._moment?.objective || {}
+    const tid = Array.isArray(ob.target) ? ob.target[0] : ob.target
+    const tg = tid ? sim.record.shipById.get(tid) : null
+    const ti = tg ? tg.slot : -1
+    if (pl.kind === 'aircraft') {
+      if (ti >= 0 && s.alive[ti] && (st.bombs > 0 || st.torpedoes > 0)) {
+        const dx = s.pos[3 * ti] - st.x, dz = s.pos[3 * ti + 2] - st.z, d = Math.hypot(dx, dz)
+        if (st.torpedoes > 0) { inp.aimDir = [dx / d, (60 - st.y) / 1500, dz / d]; inp.throttle = 0.8; if (d < 1200) inp.torpedoCount++ }
+        else { inp.aimDir = d > 1700 && st.pitch > -30 ? [dx / d, 0.02, dz / d] : [dx + s.vel[3 * ti] * 4, -st.y, dz + s.vel[3 * ti + 2] * 4]; inp.throttle = d > 1700 ? 0.9 : 0.25; if (st.release || st.alt < 800) inp.bombCount++ }
+      } else {
+        const h = st.heading * Math.PI / 180
+        // (after the release: pull out and climb hard, as a pilot would, so the sortie reaches its checkpoint)
+        inp.aimDir = [Math.sin(h), st.y < 900 ? 0.6 : (Math.max(900, st.y) - st.y) / 1500, -Math.cos(h)]
+        inp.throttle = 0.8
+      }
+      inp.fireHeld = !!st.target && st.target.range < 500
+    } else {
+      inp.telegraph = 1
+      inp.helm = Math.sin(sim.t / 90) * 0.25
+      if (ti >= 0) {
+        const dx = s.pos[3 * ti] - st.x, dz = s.pos[3 * ti + 2] - st.z
+        inp.aimAz = ((Math.atan2(dx, -dz) * 180 / Math.PI) + 360) % 360
+        inp.aimRange = Math.hypot(dx, dz)
+        window.__n = (window.__n || 0) + 1
+        if (window.__n % 300 === 10) inp.salvoCount++
+        if (ob.kind === 'torpedo' && window.__n % 600 === 300) inp.torpedoCount++
+      }
+    }
+  }`
+  const man = J('public/data/boxes/manifest.json')
+  for (const box of list(man, 'boxes')) {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+    const errors = []
+    page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
+    page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
+    const run = (body) => page.evaluate(new Function(`const app = window.__app; const battle = app?.battle; const sim = battle?.sim; return (async () => { ${body} })()`))
+    const frames = async (n) => {
+      const f0 = await run('return app.frames')
+      await page.waitForFunction((f) => window.__app.frames >= f, f0 + n, { timeout: 300000 })
+    }
+    const t0 = Date.now()
+    await check(`${box.id}: boots from #battle=${box.id} into watch mode; frame time, draw calls and heap`, async () => {
+      await page.goto(`http://127.0.0.1:${RPORT}/dist/index.html#battle=${box.id}`)
+      await page.waitForFunction(() => window.__app?.mode === 'watch' && window.__app.active === window.__app.battle?.scene, null, { timeout: 900000 })
+      const boot = (Date.now() - t0) / 1000
+      await frames(3)
+      const tf = Date.now()
+      await frames(6)
+      const frameMs = Math.round((Date.now() - tf) / 6)
+      const cdp = await page.context().newCDPSession(page)
+      await cdp.send('HeapProfiler.collectGarbage')
+      const { usedSize } = await cdp.send('Runtime.getHeapUsage')
+      const st = await run('return app.stats()')
+      perBox[box.id] = { bootS: +boot.toFixed(1), watchFrameMs: frameMs, heapMB: +(usedSize / 1048576).toFixed(1), calls: st.calls, triangles: st.triangles, programs: st.programs, slots: await run('return sim.capacity') }
+      await page.screenshot({ path: path.join(shots, `real-${box.id}.png`) })
+      return JSON.stringify(perBox[box.id])
+    })
+    const moments = await run(`return sim ? [...sim.record.moments.values()].map((m) => ({ id: m.id, kind: m.role.kind, t1: m.t + (m.durationS ?? 180) * (m.timeScale ?? 1) })) : []`)
+    for (const m of moments) {
+      await check(`${box.id} / ${m.id} (${m.kind}): the checkpoint's offer, then the after-card's four parts`, async () => {
+        await run(`app.ui.card.close(); window.__n = 0; app.take('${m.id}'); sim.player && (sim.player.scripted = true); app.battle.pause(); ${AUTOPILOT}`)
+        const sim0 = await run('return { mode: app.mode, t: app.battle.sim.t }')
+        if (sim0.mode !== 'moment') throw new Error(`mode ${sim0.mode} after take`)
+        // the record to just short of the checkpoint, the autopilot at every step, in chunks the page can bear
+        for (let k = 0; k < 400; k++) {
+          const r = await run(`const sim = app.battle.sim, pl = sim.player, s = sim.state, ms = sim.momentState; const end = Math.min(sim.t + 30, ms.t1 - 0.6); while (sim.t < end && !ms.done) { window.__ap(pl, s, sim); sim.advance(1 / 60) } return { t: sim.t, done: ms.done, t1: ms.t1 }`)
+          if (r.done || r.t >= r.t1 - 0.6 - 1e-6) break
+        }
+        const pre = await run('const ms = app.battle.sim.momentState; return { done: ms.done, reason: ms.reason }')
+        await run(`app.battle.play(app.battle.sim.momentState.timeScale)`)
+        let how
+        if (!pre.done) {
+          await page.waitForSelector('.boxbar[data-mode=checkpoint]:not([hidden])', { timeout: 300000 })
+          // (the HUD's text follows on its own tenth-of-a-second beat, a frame or two after the bar)
+          await page.waitForFunction(() => /Checkpoint/.test(document.querySelector('.pt-hud .msg')?.textContent || ''), null, { timeout: 60000 }).catch(() => null)
+          const msg = await run(`return document.querySelector('.pt-hud .msg')?.textContent || ''`)
+          if (!/Checkpoint/.test(msg)) throw new Error(`the HUD at the checkpoint says “${msg}”`)
+          await page.click('.boxbar .bb-card')
+          how = 'checkpoint'
+        } else how = `ended before it: ${pre.reason}`
+        await page.waitForSelector('.card.show[data-mode=after]', { timeout: 120000 })
+        const parts = await run(`return [...document.querySelectorAll('.after-part h2')].map((h) => h.textContent.trim())`)
+        if (parts.length !== 4) throw new Error(`the after-card has ${parts.length} parts`)
+        const sortie = await run(`return [...document.querySelectorAll('.af-sortie dd')].map((d) => d.textContent).slice(0, 3).join('; ')`)
+        if (m === moments[0]) await page.screenshot({ path: path.join(shots, `real-${box.id}-after.png`) })
+        await page.click('.card .watch-on')
+        await frames(1)
+        if (errors.length) throw new Error(errors.slice(0, 3).join(' | '))
+        return `${how}; ${sortie}`
+      })
+    }
+    await check(`${box.id}: no console errors`, async () => {
+      if (errors.length) throw new Error(errors.slice(0, 5).join(' | '))
+    })
+    await page.close()
+  }
+  await browser.close()
+  server.close()
+  console.log('  per box', JSON.stringify(perBox))
+}
+
+fs.writeFileSync(path.join(shots, 'smoke-battle.json'), JSON.stringify({ when: new Date().toISOString(), failed, results, perf, perBox }, null, 1))
 console.log(failed ? `${failed} failed` : 'all passed')
 process.exitCode = failed ? 1 : 0

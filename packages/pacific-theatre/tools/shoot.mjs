@@ -56,7 +56,8 @@ const AFTER = "app.ui.openAfter({ momentId: 'test-dive', title: 'A test dive', s
 const PRESETS = {
   gate: [
     { name: 'gate-table', eval: HOME, frames: 3 },
-    { name: 'gate-island', eval: "app.ui?.card.close(); app.table.rig.jump({ x: -213, z: -1168, distance: 900, yaw: 0, pitch: 0.95 })", frames: 3 },
+    // an island group: the Solomons on the real data (Guadalcanal's place), the fixture's islands otherwise
+    { name: 'gate-island', eval: "app.ui?.card.close(); const p = app.data.places.find((x) => x.id === 'guadalcanal'); const [x, z] = p && p.geometry?.type === 'Point' ? app.data.proj.toWorld(p.geometry.coordinates) : [-213, -1168]; app.table.rig.jump({ x, z, distance: 900, yaw: 0, pitch: 0.95 })", frames: 3 },
     { name: 'gate-front-a', eval: KF(0), frames: 3, report: 'app.table.front.legend()' },
     { name: 'gate-front-b', eval: KF(1), frames: 3, report: 'app.table.front.legend()' },
     { name: 'gate-hatch', eval: HATCH, frames: 3 },
