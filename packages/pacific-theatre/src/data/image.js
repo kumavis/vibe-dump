@@ -2,7 +2,8 @@
 // conversion and no premultiplication, drawn 1:1 into a 2D canvas and read
 // back, gives the bytes in the file: no gamma, no ICC, no blending. (DATA.md
 // §2 asks for exactly this; a 16-bit PNG would be cut to 8 bits on the way,
-// which is why the heights come split across two channels.)
+// which is why the heights come split across two channels.) Copied as it is
+// from holo-i-ke-au's data/image.js (b480c27).
 
 export async function decodeImage(url) {
   const res = await fetch(url)

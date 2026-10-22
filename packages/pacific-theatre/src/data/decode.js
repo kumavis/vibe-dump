@@ -2,18 +2,24 @@
 // typed arrays, so they run in the loader's worker (worker.js) or, failing
 // that, on the main thread.
 //
+// Copied from holo-i-ke-au's data/decode.js (b480c27) and adapted: the
+// exaggerations the normals and the ambient occlusion are worked out at come
+// in as parameters instead of module constants (the table bakes its normals
+// near the display exaggeration, 18, so 8-bit normals do not terrace the
+// abyssal plain; a box keeps the Hawaiian 2), and the land map (drainage,
+// beach sand, rain) is skipped where the shader does not read it (`land:
+// false`, the table: about a second and 15 MB saved on a 2048 pack).
+//
 // The height image carries a 16-bit value split across two 8-bit channels
 // (DATA.md §2): value = R·256 + G, metres = value·scale + offset. It is decoded
 // here, on the CPU, into a Float32Array, and only that goes to the GPU: the
 // split bytes must never be filtered as a texture, since blending a high byte
 // with its neighbour's gives nonsense.
 //
-// From the metres come the companion grids the ahupuaʻa shaders expect: a
-// normal map (with ambient occlusion in its alpha), and a land map of rain,
-// beach sand and how much water gathers in each gully. The rain image, when the
+// From the metres come the companion grids the shaders expect: a normal map
+// (with ambient occlusion in its alpha), and for a box the land map of rain,
+// beach sand and how much water gathers in each gully. The rain image, when a
 // pack has one, is already in the encoding the land map's red channel uses.
-
-import { NEAR_EXAG, NORMAL_EXAG } from '../config.js'
 
 /** Split-byte RGB(A) pixels → metres. */
 export function decodeHeights(px, W, H, scale, offset, stride = 4) {
@@ -137,10 +143,10 @@ export function distanceTransform(W, H, seed, mx = 1, mz = 1) {
 /**
  * Horizon-based ambient occlusion on a coarse grid (about 512 across), as in
  * ahupuaʻa's finalize.js: in eight directions, how much of the sky do the
- * surrounding ridges hide? Worked out at the valley exaggeration, where it
- * shows; further out it is too soft to matter.
+ * surrounding ridges hide? Worked out at `exag` (a box's valley 1.3; the
+ * table's display exaggeration), where it shows.
  */
-export function ambientOcclusion(m, W, H, mx, mz) {
+export function ambientOcclusion(m, W, H, mx, mz, exag = 1.3) {
   const f = Math.max(1, Math.round(Math.max(W, H) / 512))
   const w = Math.ceil(W / f)
   const h = Math.ceil(H / f)
@@ -155,7 +161,7 @@ export function ambientOcclusion(m, W, H, mx, mz) {
           n++
         }
       }
-      lo[j * w + i] = (s / n) * NEAR_EXAG
+      lo[j * w + i] = (s / n) * exag
     }
   }
   const out = new Float32Array(w * h)
@@ -189,13 +195,13 @@ export function ambientOcclusion(m, W, H, mx, mz) {
 }
 
 /**
- * Normals packed as RGBA8: xyz of the normal at NORMAL_EXAG in RGB, ambient
- * occlusion in A. The shader turns the normal back into the ground's gradient
- * and rebuilds it at whatever exaggeration the camera has (terrain.glsl.js).
+ * Normals packed as RGBA8: xyz of the normal at exaggeration E in RGB,
+ * ambient occlusion in A. The shader turns the normal back into the ground's
+ * gradient (dividing by uNormalE, ground.glsl.js) and rebuilds it at whatever
+ * exaggeration the camera has.
  */
-export function packNormals(m, W, H, mx, mz, ao) {
+export function packNormals(m, W, H, mx, mz, ao, E = 2) {
   const out = new Uint8Array(W * H * 4)
-  const E = NORMAL_EXAG
   for (let j = 0; j < H; j++) {
     const jm = Math.max(0, j - 1)
     const jp = Math.min(H - 1, j + 1)
@@ -331,20 +337,25 @@ export function landTexture(m, rain, W, H, mx, mz) {
   return out
 }
 
-/** Everything a pack needs, from decoded pixels. */
-export function derivePack({ heightPx, rainPx, W, H, scale, offset, mx, mz, stride = 4 }) {
+/**
+ * Everything a pack needs, from decoded pixels. normalExag: the exaggeration
+ * the normals are baked at (the shader's uNormalE); aoExag: the occlusion's;
+ * land: whether to derive the land map (null when false).
+ */
+export function derivePack({ heightPx, rainPx, W, H, scale, offset, mx, mz, normalExag = 2, aoExag = 1.3, land: withLand = true, stride = 4 }) {
+  if (!Number.isFinite(scale) || !Number.isFinite(offset)) throw new Error('a pack needs its height scale and offset (DATA.md §2 makes both mandatory)')
   const metres = decodeHeights(heightPx, W, H, scale, offset, stride)
   const flatSea = isFlatSea(metres)
   if (flatSea) synthShelf(metres, W, H, mx, mz)
   const rain = rainPx ? decodeGrey(rainPx, W, H, stride) : null
-  const ao = ambientOcclusion(metres, W, H, mx, mz)
-  const normals = packNormals(metres, W, H, mx, mz, ao)
-  const land = landTexture(metres, rain, W, H, mx, mz)
+  const ao = ambientOcclusion(metres, W, H, mx, mz, aoExag)
+  const normals = packNormals(metres, W, H, mx, mz, ao, normalExag)
+  const land = withLand ? landTexture(metres, rain, W, H, mx, mz) : null
   let lo = Infinity
   let hi = -Infinity
   for (let c = 0; c < metres.length; c++) {
     if (metres[c] < lo) lo = metres[c]
     if (metres[c] > hi) hi = metres[c]
   }
-  return { metres, normals, land, flatSea, lo, hi }
+  return { metres, normals, land, flatSea, lo, hi, normalExag }
 }
