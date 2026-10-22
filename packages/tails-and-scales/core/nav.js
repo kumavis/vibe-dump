@@ -1,4 +1,4 @@
-import { hypot } from './dmath.js'
+import { hypot, sin, cos } from './dmath.js'
 
 // ---------------------------------------------------------------------------
 // Movement on the tabletop. The board is rasterised into half-inch cells; each
@@ -69,7 +69,7 @@ export class NavGrid {
 
   raster(s, pad, arr) {
     const reach = hypot(s.hx, s.hz) + pad
-    const c = Math.cos(s.yaw), sn = Math.sin(s.yaw)
+    const c = cos(s.yaw), sn = sin(s.yaw)
     const ix0 = Math.max(0, Math.floor((s.x - reach + this.W / 2) / this.cell))
     const ix1 = Math.min(this.nx - 1, Math.floor((s.x + reach + this.W / 2) / this.cell))
     const iz0 = Math.max(0, Math.floor((s.z - reach + this.H / 2) / this.cell))

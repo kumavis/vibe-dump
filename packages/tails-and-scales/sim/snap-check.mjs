@@ -240,7 +240,7 @@ async function run(browser, url, item) {
 
 // what one battle's run says is wrong ('' when nothing is)
 function judge(it, r) {
-  const v = r.error ? null : verdict(it, r, { browser: true })
+  const v = r.error ? null : verdict(it, r)
   const bad = r.checks.filter((c) => c.n)
   const played = r.checks.filter((c) => c.stage !== 'in place')
   const held = played.filter((c) => c.stage === 'checkpoint').length, drained = played.length - held

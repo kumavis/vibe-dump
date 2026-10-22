@@ -26,9 +26,11 @@
 // To read the reference text: node sim/parity.mjs --pin --dump <dir>.
 //
 // Node and Chromium disagree in the last bit of Math.sin/cos for a few
-// inputs, so some terrain differs by an ULP between the engines; where it
-// does, the corpus keeps Chromium's hashes too (`webShadow`). N0's dmath trig
-// changes chunk x/z/yaw, so the shadow is frozen only through R8.
+// inputs, so code that takes the engine's trig (the PIN, everything older
+// than N0) puts some terrain an ULP apart in the two engines. (N0) The rules'
+// trig is core/dmath.js's, fdlibm's as Node's V8 runs it, so every engine
+// now computes Node's shadow, which is the corpus's (until N0 it kept
+// Chromium's hashes too, as `webShadow`).
 //
 // Beside the shadow, instrument() records the battle log as written: every
 // entry put into #logList, as `@<trace length> <class>: <html>`. Most echo a

@@ -35,7 +35,7 @@
 // are kept exactly.
 import { BOARD, hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
-import { hypot } from '../dmath.js'
+import { hypot, sin, cos } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf } from '../queries.js'
@@ -126,7 +126,7 @@ export function blastVolley(G, u, target, w, info) {
     if (!alive(u)) break
     if (!alive(target) && k > 0) break
     const ang = draw(G.rng) * Math.PI * 2, off = draw(G.rng) * target.r * 0.5
-    const aim = { x: target.pos.x + Math.cos(ang) * off, z: target.pos.z + Math.sin(ang) * off }
+    const aim = { x: target.pos.x + cos(ang) * off, z: target.pos.z + sin(ang) * off }
     emit(G, 'blast.aim', { x: aim.x, z: aim.z, r: w.blast })
     const r = roll(G, 1)
     const hit = r[0] >= info.need
@@ -136,8 +136,8 @@ export function blastVolley(G, u, target, w, info) {
       const sc = roll(G, 1)[0] + 1
       const a = draw(G.rng) * Math.PI * 2
       land = {
-        x: Math.max(-W / 2 + 0.3, Math.min(W / 2 - 0.3, aim.x + Math.cos(a) * sc)),
-        z: Math.max(-H / 2 + 0.3, Math.min(H / 2 - 0.3, aim.z + Math.sin(a) * sc)),
+        x: Math.max(-W / 2 + 0.3, Math.min(W / 2 - 0.3, aim.x + cos(a) * sc)),
+        z: Math.max(-H / 2 + 0.3, Math.min(H / 2 - 0.3, aim.z + sin(a) * sc)),
       }
       emit(G, 'dice', { label: 'Scatter D6+1', dice: [sc - 1], need: 0, sum: true, note: `${sc}"` })
       emit(G, 'blast.scatter', { from: { x: aim.x, z: aim.z }, to: { x: land.x, z: land.z }, d: sc })

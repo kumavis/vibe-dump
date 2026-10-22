@@ -19,9 +19,12 @@
 // 3. Admission: a pair or log enters the corpus only when the Node oracle and
 //    Chromium produce identical traces and battle logs; Chromium runs a build
 //    of the same PIN code, made into a temp dir. Each human log must also
-//    replay identically (trace, shadow and log) twice more in Node. Where
-//    Chromium's shadow differs from Node's (an ULP of terrain, from the
-//    engines' Math.sin/cos), its hashes are kept too, as `webShadow`. The 12
+//    replay identically (trace, shadow and log) twice more in Node. The
+//    shadow recorded is Node's: (N0) code since N0 computes it in every
+//    engine (core/dmath.js's trig), while code older than that, the PIN
+//    among it, puts some terrain an ULP apart in Chromium (the engines'
+//    Math.sin/cos), so Chromium's shadow takes no part in admission (until
+//    N0 the corpus kept it too, as `webShadow`). The 12
 //    originals are not optional: if any fails in Node or traces differently
 //    in Chromium, nothing is written.
 //
@@ -55,10 +58,6 @@ const dir = codeDir(PIN)
 const json = (v) => JSON.stringify(v ?? null)
 const sameTrace = (x, y) => json(x.trace) === json(y.trace) && json(x.written) === json(y.written)
 const same = (x, y) => sameTrace(x, y) && json(x.shadow) === json(y.shadow)
-// Chromium's shadow, hashed, where it differs from Node's: the two engines'
-// Math.sin/cos disagree in the last bit for ~3% of inputs, which moves some
-// terrain by an ULP without changing the 3-decimal trace
-const webShadow = (c) => (c.web && !same(c.web, c.res) ? { webShadow: hashLines(c.web.shadow) } : {})
 const run = (jobs) => pool(jobs, CPUS, (j) => runOracle(j, dir).catch((e) => ({ trace: [], shadow: [], written: [], error: e.message })))
 const describe = (f) => Object.entries(f).filter(([, v]) => v).map(([k, v]) => `${k} ${v}`).join(', ')
 
@@ -302,8 +301,8 @@ else if (!a.dry) {
     note: 'AI-vs-AI battles (each started from the title screen\'s watch button, ?debug&fast&seed&dice): per trace line, per shadow snapshot and per battle-log write, a 10-hex sha256 prefix. The hashes come from the code of sim/oracle/PIN, which a re-record moves with them; node sim/parity.mjs --pin checks that it still reproduces them. Built by sim/corpus.mjs.',
     engines: { node: process.version, chromium },
     pairs: [
-      ...ORIGINAL.map(([seed, dice], i) => ({ seed, dice, why: 'original baseline', ...hashes(origRes[i]), ...webShadow({ res: origRes[i], web: origWeb[i] }), written: hashLines(origRes[i].written) })),
-      ...aiChosen.map((c) => ({ seed: c.job.seed, dice: c.job.dice, why: describe(c.f), ...hashes(c.res), ...webShadow(c), written: hashLines(c.res.written) })),
+      ...ORIGINAL.map(([seed, dice], i) => ({ seed, dice, why: 'original baseline', ...hashes(origRes[i]), written: hashLines(origRes[i].written) })),
+      ...aiChosen.map((c) => ({ seed: c.job.seed, dice: c.job.dice, why: describe(c.f), ...hashes(c.res), written: hashLines(c.res.written) })),
     ],
   }
   savePairs(pairs)
@@ -311,7 +310,7 @@ else if (!a.dry) {
   for (const l of hChosen) {
     saveHuman(l.label, {
       setup: l.job.setup, bot: { policy: l.policy, seed: l.seed }, why: describe(l.c),
-      ...hashes(l.res), ...webShadow(l), written: hashLines(l.res.written), entries: l.res.entries,
+      ...hashes(l.res), written: hashLines(l.res.written), entries: l.res.entries,
     })
   }
   console.log(`wrote ${pairs.pairs.length} pairs and ${hChosen.length} human logs to ${BASE}`)

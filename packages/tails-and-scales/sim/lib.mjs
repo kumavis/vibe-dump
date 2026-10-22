@@ -142,12 +142,13 @@ export const CPUS = Math.max(1, cpus().length)
 
 // ── Judging a run ───────────────────────────────────────────────────────────
 // A run matches its battle when the trace, the shadow snapshots and the
-// battle-log writes all hash the same. In Chromium the shadow is checked
-// against `webShadow` where the corpus has one: the engines' Math.sin/cos
-// disagree in the last bit for some inputs.
-export function verdict(item, r, { browser = false } = {}) {
+// battle-log writes all hash the same, in every engine: (N0) the rules'
+// trig is core/dmath.js's, so Chromium computes Node's shadow too (code
+// older than N0 took the engine's Math.sin/cos, which Chromium's build of
+// V8 rounds differently for a few inputs: its terrain an ULP apart there).
+export function verdict(item, r) {
   const line = firstDiff(r.trace, item.trace)
-  const shadow = firstDiff(r.shadow ?? [], (browser && item.webShadow) || item.shadow)
+  const shadow = firstDiff(r.shadow ?? [], item.shadow)
   const written = firstDiff(r.written ?? [], item.written)
   return { ok: line < 0 && shadow < 0 && written < 0 && !r.error, line, shadow, written }
 }
@@ -200,11 +201,12 @@ export const tag = (v, r) =>
   v.ok ? 'same' : r.error && (v.line < 0 || v.line >= r.trace.length) ? 'STOPPED' : v.line >= 0 ? 'DIVERGES' : v.written >= 0 ? 'LOG DIFFERS' : 'SHADOW DIFFERS'
 
 // ── The corpus ──────────────────────────────────────────────────────────────
-// sim/baselines/pairs.json   AI-vs-AI pairs: { seed, dice, why, n, trace, shadow[, webShadow], written },
+// sim/baselines/pairs.json   AI-vs-AI pairs: { seed, dice, why, n, trace, shadow, written },
 //                            and `engines`: the Node and Chromium that recorded
 //                            the whole corpus's `shadow` and `webShadow`
-// sim/baselines/human/*.json human logs: { setup, bot, why, n, trace, shadow[, webShadow], written, entries }
-// (webShadow: Chromium's shadow hashes, where they differ from Node's). Each
+// sim/baselines/human/*.json human logs: { setup, bot, why, n, trace, shadow, written, entries }
+// (until N0 the corpus also kept Chromium's shadow hashes, `webShadow`, where
+// they differed from Node's: since N0 every engine computes Node's). Each
 // item comes back as { id, kind, mode, job, ...stored fields }. A log whose
 // setup the legacy code can't play is refused here, for the whole corpus: a
 // step that adds logs the legacy URL can't carry (F4 votes, F5 races, F7
@@ -263,7 +265,7 @@ export function saveHuman(id, log) {
 }
 
 // A human log's stored fields, in file order.
-export const humanRecord = (it) => ({ setup: it.setup, bot: it.bot, why: it.why, n: it.n, trace: it.trace, shadow: it.shadow, webShadow: it.webShadow, written: it.written, entries: it.entries })
+export const humanRecord = (it) => ({ setup: it.setup, bot: it.bot, why: it.why, n: it.n, trace: it.trace, shadow: it.shadow, written: it.written, entries: it.entries })
 
 // Text features of a battle, for choosing what the corpus should cover.
 export function features(trace) {

@@ -121,7 +121,7 @@ if (a.browser) {
   const res = await runBrowser(picks.map((it) => it.job), { dist })
   console.log('\nChromium on the mutant build:')
   picks.forEach((it, k) => {
-    const i = items.indexOf(it), v = verdict(it, res[k], { browser: true })
+    const i = items.indexOf(it), v = verdict(it, res[k])
     const ok = !v.ok && v.line === first(ref[i].trace, res[k].trace)
     if (!ok) web = false
     console.log(`  ${it.id.padEnd(24)} parity ${v.ok ? 'passes' : `flags line ${v.line + 1}`}${ok ? '' : '   <-- WRONG'}`)

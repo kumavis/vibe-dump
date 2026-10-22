@@ -49,7 +49,12 @@
 //        core/, data/     the DOM (document, window, location, localStorage,
 //                         requestAnimationFrame), async, await, Promise,
 //                         Math.random, Date, performance, Math.hypot (core's
-//                         dmath since R1), Math other than as Math.<member>
+//                         dmath since R1), (N0) the other approximated Math
+//                         functions (sin, cos, tan, their inverses and
+//                         hyperbolics, atan2, exp, expm1, log, log1p, log2,
+//                         log10, pow, cbrt: dmath has sin, cos, atan and
+//                         atan2) and the ** operator (pow by another name),
+//                         Math other than as Math.<member>
 //                         (Math['random'], `const { random } = Math`, an
 //                         alias, Math passed on), the timers and task queues
 //                         (setTimeout, setInterval, setImmediate,
@@ -66,15 +71,14 @@
 //                         exported one frozen
 //        match/           the DOM, async, await, Promise; (R8) and the
 //                         host's: Math.random, Date, performance, the
-//                         timers, crypto, process, globalThis, Math other
+//                         approximated Math functions and **, the timers,
+//                         crypto, process, globalThis, Math other
 //                         than as Math.<member> (the Folder's verdicts
 //                         depend on the entry list alone); and (R8's
 //                         fixer, round 2) core's module-level mutable
 //                         state (several Folders share a process: every
 //                         peer of sim/merge-sim.mjs, §4.1 rule 13)
 //        present/         the DOM
-//      (sin, cos, tan, atan, atan2, exp, pow and log join core's ban at N0,
-//      §0.2 #10: until then their count is only reported);
 //   4. sim/flag-lint.mjs's key/text/fx ban over core/ and data/, with its
 //      allow-list (data/schema.js names .fx and .abilities to validate them;
 //      core/actions/shoot.js carries a weapon's look to the view), each
@@ -150,6 +154,10 @@ const ASYNC = [/\basync\b/, /\bawait\b/, /\bPromise\b/]
 const HOST = [
   /\bMath\s*\.\s*random\b/, /\bMath\s*\.\s*hypot\b/, /\bMath\b(?!\s*\.)/, /\bDate\b/, /\bperformance\b/,
   /\b(setTimeout|setInterval|setImmediate|queueMicrotask|requestIdleCallback)\b/, /\bcrypto\b/, /\bprocess\b/, /\bglobalThis\b/,
+  // (N0) the functions the engines approximate, each its own way (Chromium's
+  // build of V8 and Node's disagree on sin and cos), and ** (pow): rules code
+  // takes sin, cos, atan and atan2 from core/dmath.js
+  /\bMath\s*\.\s*(a?sinh?|a?cosh?|a?tanh?|atan2|exp|expm1|log|log1p|log2|log10|pow|cbrt)\b/, /\*\*/,
 ]
 const TOKENS = {
   core: [...DOM, ...ASYNC, ...HOST],
@@ -165,10 +173,9 @@ TOKENS.data = TOKENS.core
 const TOKEN_NAME = new Map([
   [HOST[0], 'Math.random'], [HOST[1], 'Math.hypot'], [HOST[2], 'Math other than as Math.<member> (computed, aliased, destructured or passed on)'],
   [HOST[5], 'a timer or a task queue'],
+  [HOST[9], 'an approximated Math function (core/dmath.js has sin, cos, atan and atan2)'], [HOST[10], 'the ** operator (pow, which the engines approximate)'],
 ])
 const tokenName = (re) => TOKEN_NAME.get(re) ?? re.source.replace(/\\b|\\/g, '')
-// N0's: reported, not yet banned
-const N0 = /\bMath\.(sin|cos|tan|atan|atan2|exp|pow|log)\b/g
 // module-level mutable state: a let or var; and, as any declarator of a
 // module-level const, a cache or a container filled later
 const LET = /^(export\s+)?(let|var)\s/
@@ -314,13 +321,13 @@ function statements(lines) {
 }
 
 // Check the package's sources, `files` a Map of path (posix, from the
-// package root) → text. Returns { problems: [text], n0: count, edges }.
+// package root) → text. Returns { problems: [text], edges }.
 export function check(files) {
   const problems = []
   const say = (f, line, what) => problems.push(`${f}${line ? `:${line}` : ''} ${what}`)
   const who = (layer) => (layer === 'root' ? 'the view' : VIEW.has(layer) ? `the view (${layer}/)` : `${layer}/`)
   const short = (m) => m.replace(/^core\//, '')
-  let n0 = 0, edges = 0
+  let edges = 0
   for (const [f, text] of files) {
     const layer = layerOf(f)
     const lines = strip(text)
@@ -379,7 +386,6 @@ export function check(files) {
     if (TOKENS[layer]) {
       lines.forEach((l, i) => {
         for (const re of TOKENS[layer]) if (re.test(l)) say(f, i + 1, `${layer}/ contains ${tokenName(re)}: ${l.trim().slice(0, 100)}`)
-        n0 += (l.match(N0) ?? []).length
       })
     }
     if (layer === 'core' || layer === 'data' || layer === 'match') {
@@ -400,7 +406,7 @@ export function check(files) {
     for (const h of lintSource(f, text, used)) say(h.f, h.line, `${h.what} (flag-lint's ban): ${h.text}`)
   }
   for (const a of ALLOW) if (/^(core|data)\//.test(a[0]) && used.get(a) !== a[2]) say(a[0], 0, `flag-lint's allow entry "${a[1]}" matches ${used.get(a)} line(s), not ${a[2]}`)
-  return { problems, n0, edges }
+  return { problems, edges }
 }
 
 // The package's sources: every .js file but sim/, dist/ and node_modules/.
@@ -436,6 +442,14 @@ if (a['self-test']) {
     ['core/ reading the clock (Date)', append('core/rules.js', 'export const now = () => Date.now()'), true, /contains Date/],
     ['core/ rolling Math.random', append('core/rules.js', 'export const r = () => Math.random()'), true, /contains Math\.random/],
     ['core/ measuring with Math.hypot', append('core/queries.js', 'export const d = (a, b) => Math.hypot(a, b)'), true, /contains Math\.hypot/],
+    // (N0) the engines' own trig, and pow under either spelling
+    ['core/ turning with Math.sin', append('core/units.js', 'export const s = (a) => Math.sin(a)'), true, /contains an approximated Math function/],
+    ['data/ aiming with Math.atan2', append('data/mission.js', 'export const yaw = (x, z) => Math.atan2(z, x)'), true, /contains an approximated Math function/],
+    ['core/ with Math.tanh', append('core/rules.js', 'export const t = (a) => Math.tanh(a)'), true, /contains an approximated Math function/],
+    ['core/ raising with Math.pow', append('core/rules.js', 'export const p = (a) => Math.pow(a, 3)'), true, /contains an approximated Math function/],
+    ['core/ raising with **', append('core/rules.js', 'export const p = (a) => a ** 3'), true, /contains the \*\* operator/],
+    ['match/ with Math.cos', append('match/fold.js', 'export const c = (a) => Math.cos(a)'), true, /contains an approximated Math function/],
+    ['core/ with dmath\'s sin, and Math.sign, Math.sqrt and Math.exponent-like names', append('core/rules.js', "import { sin } from './dmath.js'\nexport const f = (a) => sin(a) + Math.sign(a) + Math.sqrt(a) + ({ cosine: 1, logged: 2 }).cosine"), false],
     ["core/ rolling Math['random']", append('core/rules.js', "export const r = () => Math['random']()"), true, /contains Math other than as Math\.<member>/],
     ['core/ rolling Math . random (spaced)', append('core/rules.js', 'export const r = () => Math . random()'), true, /contains Math\.random/],
     ['core/ destructuring Math', append('core/rules.js', 'const { random } = Math\nexport const r = () => random()'), true, /contains Math other than as Math\.<member>/],
@@ -542,10 +556,9 @@ if (!existsSync(join(dir, 'core'))) {
   process.exit(2)
 }
 const files = sources(dir)
-const { problems, n0, edges } = check(files)
+const { problems, edges } = check(files)
 const count = (l) => [...files.keys()].filter((f) => layerOf(f) === l).length
 console.log(`boundaries: ${files.size} files (${[...LAYERS, 'root'].map((l) => [l, count(l)]).filter(([, n]) => n).map(([l, n]) => `${l === 'root' ? 'the root' : `${l}/`} ${n}`).join(', ')}), ${edges} imports, ${BANNED.length} flag-lint patterns over core/ and data/`)
 for (const p of problems) console.log(`  FAIL ${p}`)
-console.log(`  (N0's: ${n0} call(s) to Math.sin/cos/tan/atan/atan2/exp/pow/log left in core/ and data/, banned from N0)`)
 console.log(problems.length ? `\nboundaries FAILED: ${problems.length} problem(s)` : '\nboundaries passed: every layer imports only what it may, and the consensus code holds none of what it must not')
 process.exit(problems.length ? 1 : 0)

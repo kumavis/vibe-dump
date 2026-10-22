@@ -18,15 +18,17 @@ the commit, and add whatever the work turned up.
   builds the app and does the same in Chromium, starting each battle from its
   title-screen button; set `CHROMIUM_PATH` to the pre-installed Chromium if
   Playwright's own isn't installed. `node sim/self-test.mjs` checks the
-  harness still catches what it must. Re-record (`--record`, then
-  `--record --browser`) only for a change that is *meant* to alter play, and
-  say so in the commit; the re-record moves `sim/oracle/PIN` (its first line)
+  harness still catches what it must. Re-record (`--record`, in Node; since
+  N0 Chromium computes the same shadow, so `--browser` then only checks it)
+  only for a change that is *meant* to alter play, and say so in the commit; the re-record moves `sim/oracle/PIN` (its first line)
   to the commit whose code produced the new hashes, in the same push, and
   `node sim/parity.mjs --pin` must pass after it.
 - **Standing checks.** Beside parity, every step runs the checks the steps
   before it added, each exiting 0: `node sim/self-test.mjs`,
   `node sim/mutation.mjs`, `node sim/perturb.mjs --fn hypot` (0 battles
-  moved), `node sim/data-check.mjs`, `node sim/flag-lint.mjs` (and
+  moved; from N0 also `--fn sin,cos,atan,atan2`), from N0
+  `node sim/dmath-check.mjs` (core/dmath.js computes Node's own bits;
+  `--browser` in Chromium too: the same bits), `node sim/data-check.mjs`, `node sim/flag-lint.mjs` (and
   `--self-test`), `node sim/mirror-check.mjs`, `node sim/terrain-check.mjs`
   (and `--self-test`), from R4 `node sim/rematch-check.mjs` (two battles
   in one page don't touch each other, and every event is played), and from
@@ -86,7 +88,9 @@ the commit, and add whatever the work turned up.
   §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
-  distances with `core/dmath.js`, never the engine's `Math.hypot`; and reads
+  distances and angles with `core/dmath.js` (`hypot`, `hypot3`, and since N0
+  `sin`, `cos`, `atan`, `atan2`), never the engine's approximated `Math`
+  functions or `**`, which `sim/boundaries.mjs` bans from the rules; and reads
   logical positions, never animated ones. Visual randomness stays on
   `Math.random`.
 - **Copy.** Call it a tabletop wargame. Don't name other games or companies in
@@ -129,7 +133,8 @@ step keeps the game playable.
     and `hypot` agree). So 31 of the 40 battles have terrain an ULP apart in
     the two engines while their traces match; the corpus keeps Chromium's
     shadow hashes for those (`webShadow`). N0 picks which engine's trig to
-    match, and `atan` joins its list.
+    match, and `atan` joins its list. (N0: Node's, which is fdlibm's;
+    `webShadow` retired.)
   - DESIGN.md's R0 notes record the spec changes R0 made and the lead's
     decisions on them, plus two hooks later steps need (`log.at`,
     `createMatch`'s `onTrace`).
@@ -681,7 +686,15 @@ step keeps the game playable.
 **Multiplayer and features.** Online play first; the large-battle work
 follows N3.
 
-- [ ] **N0** Cross-engine maths (`sin`/`cos`/`atan`/`atan2` in `dmath`).
+- [x] **N0** Cross-engine maths (`sin`/`cos`/`atan`/`atan2` in `dmath`).
+  fdlibm's algorithms, as Node's V8 runs them, in plain JS: Node's own bits
+  (so no battle changed and nothing was re-recorded), and the same bits in
+  Chromium, whose build of V8 rounds `sin` and `cos` its own way. The rules'
+  approximated `Math` calls and `**` are banned by `sim/boundaries.mjs`;
+  `sim/dmath-check.mjs` holds dmath to Node's bits (and to Chromium's with
+  `--browser`); perturb on `sin,cos,atan,atan2` moves 24/24 PIN battles and
+  0/24 now; the corpus's `webShadow` is retired, P-browser checking
+  Chromium against Node's shadow (DESIGN's N0 notes).
 - [ ] **F3** The End-phase button lights up when nothing is left to do.
 - [ ] **F1** Playing a side puts your side of the board in front of you
   (the serpents included); the presets take the board as an argument.

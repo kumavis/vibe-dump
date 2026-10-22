@@ -31,7 +31,7 @@
 // over the table, and `checkSet`, which sets.js runs on every set at load.
 // ---------------------------------------------------------------------------
 import { mulberry32, pick, rr, deepFreeze } from '../util.js'
-import { hypot } from '../dmath.js'
+import { hypot, sin, cos, atan, atan2 } from '../dmath.js'
 
 // Wall styles: palette, block width / height / thickness, hit points, and
 // whether a block is a box or a log. The palettes are drawn from the layout
@@ -64,7 +64,7 @@ const FLOOR_SEGMENTS = 22
 // comes out identical, just turned around.
 export function build(T, name, frame, seed) {
   const rng = mulberry32(seed)
-  const c = Math.cos(frame.yaw), s = Math.sin(frame.yaw)
+  const c = cos(frame.yaw), s = sin(frame.yaw)
   const F = {
     p: (lx, lz) => ({ x: frame.x + c * lx + s * lz, z: frame.z - s * lx + c * lz }),
     yaw: (ly = 0) => frame.yaw + ly,
@@ -290,8 +290,8 @@ function tower(T, F, rng) {
     const k = i % (n / 2)
     if (doors.has(k)) continue
     const a = (i / n) * Math.PI * 2
-    const yaw = Math.atan2(-Math.cos(a), -Math.sin(a))
-    column(T, F, rng, Math.cos(a) * R, Math.sin(a) * R, yaw, heights[k], style, {
+    const yaw = atan2(-cos(a), -sin(a))
+    column(T, F, rng, cos(a) * R, sin(a) * R, yaw, heights[k], style, {
       holes: glazed[k] ? [1] : [], bw: 1.12,
     })
   }
@@ -304,7 +304,7 @@ function forest(T, F, rng) {
   const n = 3 + Math.floor(rng() * 3)
   for (let tries = 0; tries < 60 && pts.length < n; tries++) {
     const a = rng() * Math.PI * 2, d = Math.sqrt(rng()) * 2.2
-    const x = Math.cos(a) * d, z = Math.sin(a) * d
+    const x = cos(a) * d, z = sin(a) * d
     if (pts.some((p) => hypot(p.x - x, p.z - z) < 1.55)) continue
     pts.push({ x, z })
   }
@@ -319,7 +319,7 @@ function hedgerow(T, F, rng) {
     if (i === gap && rng() < 0.7) continue
     const x = (i - (n - 1) / 2) * 1.12
     const z = bend * x * x
-    hedge(T, F, rng, x, z, -Math.atan(2 * bend * x))
+    hedge(T, F, rng, x, z, -atan(2 * bend * x))
   }
 }
 
@@ -328,7 +328,7 @@ function rocks(T, F, rng) {
   boulder(T, F, rng, 0, 0, rr(rng, 0.8, 1.15))
   for (let i = 1; i < n; i++) {
     const a = rng() * 6
-    boulder(T, F, rng, Math.cos(a) * rr(rng, 0.9, 1.4), Math.sin(a) * rr(rng, 0.9, 1.4), rr(rng, 0.35, 0.7))
+    boulder(T, F, rng, cos(a) * rr(rng, 0.9, 1.4), sin(a) * rr(rng, 0.9, 1.4), rr(rng, 0.35, 0.7))
   }
 }
 
@@ -342,7 +342,7 @@ function mushrooms(T, F, rng) {
   const pts = []
   for (let tries = 0; tries < 40 && pts.length < n; tries++) {
     const a = rng() * 6, d = Math.sqrt(rng()) * 1.5
-    const x = Math.cos(a) * d, z = Math.sin(a) * d
+    const x = cos(a) * d, z = sin(a) * d
     if (pts.some((p) => hypot(p.x - x, p.z - z) < 0.9)) continue
     pts.push({ x, z })
     mushroom(T, F, rng, x, z)
@@ -371,7 +371,7 @@ export const CENTRES = deepFreeze(Object.assign(Object.create(null), {
     const a = rng() * Math.PI
     for (const k of [0, 1]) {
       const ang = a + k * (Math.PI / 2)
-      const x = Math.cos(ang) * 4.2, z = Math.sin(ang) * 4.2
+      const x = cos(ang) * 4.2, z = sin(ang) * 4.2
       const s = (rng() * 1e9) | 0
       build(T, 'rocks', { x, z, yaw: ang }, s)
       build(T, 'rocks', { x: -x, z: -z, yaw: ang + Math.PI }, s)

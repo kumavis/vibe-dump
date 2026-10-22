@@ -15,7 +15,7 @@
 // finishAction after the action (DESIGN §2.2's (R6a) note). The advance
 // roll writes no `act` line at all (§4.1 rule 8).
 import { BOARD, ENGAGE, roll } from '../rules.js'
-import { hypot } from '../dmath.js'
+import { hypot, sin, cos, atan2 } from '../dmath.js'
 import { lerp } from '../util.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
@@ -165,10 +165,10 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
   const smashes = []
   if (u.t.wrecker) {
     const samples = []
-    for (const q of seg) for (let t = 0; t < q.l; t += 0.25) samples.push({ s: q.s + t, x: q.a.x + ((q.b.x - q.a.x) * t) / q.l, z: q.a.z + ((q.b.z - q.a.z) * t) / q.l, dir: Math.atan2(q.b.x - q.a.x, q.b.z - q.a.z) })
+    for (const q of seg) for (let t = 0; t < q.l; t += 0.25) samples.push({ s: q.s + t, x: q.a.x + ((q.b.x - q.a.x) * t) / q.l, z: q.a.z + ((q.b.z - q.a.z) * t) / q.l, dir: atan2(q.b.x - q.a.x, q.b.z - q.a.z) })
     // (a path of 0.05" or more has a last segment)
     const last = seg[seg.length - 1]
-    samples.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: Math.atan2(last.b.x - last.a.x, last.b.z - last.a.z) })
+    samples.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: atan2(last.b.x - last.a.x, last.b.z - last.a.z) })
     // (a quiet run, G.out null, keeps no events: the smashing is the same)
     for (const p of samples) {
       const ev = G.out ? [] : null
@@ -199,7 +199,7 @@ export function smashAround(G, u, { x, z, dir }, out) {
     if (!c.alive || !c.destructible) continue
     const s = c.nav || c.shape
     if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
-      G.terrain.hurt(c, 99, { x: x - Math.sin(dir), z: z - Math.cos(dir) }, out)
+      G.terrain.hurt(c, 99, { x: x - sin(dir), z: z - cos(dir) }, out)
       n++
     }
   }

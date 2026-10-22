@@ -43,7 +43,7 @@
 // which sim/terrain-check.mjs drives without any match, and reporting
 // through journal.js's emitTo is the same rule emit applies to G.out.
 // ---------------------------------------------------------------------------
-import { hypot } from '../dmath.js'
+import { hypot, atan2 } from '../dmath.js'
 import { emitTo } from '../journal.js'
 import { SETS } from './sets.js'
 import { scatter } from './recipes.js'
@@ -217,7 +217,7 @@ export class Terrain {
     const len = c.trunkH
     const log = this.add({
       kind: 'log', hp: 2,
-      shape: { x: s.x + dx * len * 0.5, y: c.trunkR, z: s.z + dz * len * 0.5, hx: len * 0.5, hy: c.trunkR, hz: c.trunkR + 0.05, yaw: Math.atan2(-dz, dx) },
+      shape: { x: s.x + dx * len * 0.5, y: c.trunkR, z: s.z + dz * len * 0.5, hx: len * 0.5, hy: c.trunkR, hz: c.trunkR + 0.05, yaw: atan2(-dz, dx) },
       navKind: 'diff', los: 'obscure', cover: true,
       // the tree's own trunk becomes it, falling along (dx, dz)
       look: { piece: 'fallen', tree: c.id, dx, dz },

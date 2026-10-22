@@ -10,7 +10,7 @@
 // formation around `pos`. Where a figure is drawn this frame, which way it
 // faces and how it lunges or falls is the view's (view/units.js), never read
 // here.
-import { hypot } from './dmath.js'
+import { hypot, sin, cos, atan2 } from './dmath.js'
 import { raceOf } from './match.js'
 
 // Formation: one model in the middle and the rest in a ring, or a plain ring
@@ -19,12 +19,12 @@ export function formation(n, base) {
   const sp = base * 2 + 0.16
   if (n === 1) return [[0, 0]]
   if (n <= 4) {
-    const R = n === 2 ? sp / 2 : sp / (2 * Math.sin(Math.PI / n))
-    return Array.from({ length: n }, (_, i) => [Math.cos((i / n) * Math.PI * 2 + 0.4) * R, Math.sin((i / n) * Math.PI * 2 + 0.4) * R])
+    const R = n === 2 ? sp / 2 : sp / (2 * sin(Math.PI / n))
+    return Array.from({ length: n }, (_, i) => [cos((i / n) * Math.PI * 2 + 0.4) * R, sin((i / n) * Math.PI * 2 + 0.4) * R])
   }
   const k = n - 1
-  const R = Math.max(sp, sp / (2 * Math.sin(Math.PI / k)))
-  return [[0, 0], ...Array.from({ length: k }, (_, i) => [Math.cos((i / k) * Math.PI * 2 + 0.3) * R, Math.sin((i / k) * Math.PI * 2 + 0.3) * R])]
+  const R = Math.max(sp, sp / (2 * sin(Math.PI / k)))
+  return [[0, 0], ...Array.from({ length: k }, (_, i) => [cos((i / k) * Math.PI * 2 + 0.3) * R, sin((i / k) * Math.PI * 2 + 0.3) * R])]
 }
 
 // A unit of `key` for seat `side`, with the match's next id (ids count from
@@ -45,7 +45,7 @@ export function relayout(u) {
   const live = u.models.filter((m) => m.alive)
   const offs = formation(live.length, u.t.base)
   // keep each survivor roughly where it was: assign slots greedily by angle
-  live.sort((a, b) => Math.atan2(a.oz, a.ox) - Math.atan2(b.oz, b.ox))
+  live.sort((a, b) => atan2(a.oz, a.ox) - atan2(b.oz, b.ox))
   offs.forEach(([ox, oz], i) => {
     live[i].ox = ox
     live[i].oz = oz
