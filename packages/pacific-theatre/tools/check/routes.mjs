@@ -11,6 +11,9 @@ import {
 } from './common.mjs'
 import { ALLOW as GAZ_ALLOW, JAPANESE_NAMES, checkReading, tableTest } from './gazetteer.mjs'
 import { parseInstant, spanOf } from '../../src/time.js'
+import { existsSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 /** Numbers that are names or directions, not counts: units, positions, courses and bearings. */
 const ALLOW = [
@@ -45,6 +48,8 @@ const END_SLACK_KM = 10
 const STEP_KM = 1
 /** How far a box battle's fleet route may stand from its units' tracks at the battle's start, km. */
 const UNIT_SLACK_KM = 20
+/** Where the battle workflow's check is present, it holds routes and tracks together (once, not twice). */
+const BATTLE_CHECK = existsSync(join(dirname(fileURLToPath(import.meta.url)), 'battle.mjs'))
 
 const cites = (list) => (list || []).map((s) => (typeof s === 'string' ? s : s?.id))
 const isLonLat = (c) => Array.isArray(c) && c.length >= 2 && Number.isFinite(c[0]) && Number.isFinite(c[1]) && Math.abs(c[1]) <= 90
@@ -54,40 +59,6 @@ function continuous(points) {
   const out = []
   for (const p of points) out.push(out.length ? [wrapLon(p[0], out[out.length - 1][0]), p[1]] : [wrapLon(p[0], 141.5), p[1]])
   return out
-}
-
-/** The point a fraction f of the way along points[i..j] by length (lon/lat chords, as drawn). */
-function alongPath(pts, i, j, f) {
-  if (i === j) return pts[i]
-  const legs = []
-  let total = 0
-  for (let k = i; k < j; k++) {
-    const d = kmBetween(pts[k], pts[k + 1])
-    legs.push(d)
-    total += d
-  }
-  let want = f * total
-  for (let k = i; k < j; k++) {
-    const d = legs[k - i]
-    if (want <= d || k === j - 1) {
-      const g = d > 0 ? Math.min(1, want / d) : 0
-      return [pts[k][0] + (pts[k + 1][0] - pts[k][0]) * g, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * g]
-    }
-    want -= d
-  }
-  return pts[j]
-}
-
-/** A route's position at instant ms from its timed waypoints, or null where they do not bracket it. */
-function routeAt(pts, timed, ms) {
-  if (!timed.length) return null
-  if (ms <= timed[0].ms) return timed[0].ms === ms ? pts[timed[0].at] : null
-  for (let k = 0; k + 1 < timed.length; k++) {
-    const a = timed[k]
-    const b = timed[k + 1]
-    if (ms >= a.ms && ms <= b.ms) return alongPath(pts, a.at, b.at, b.ms > a.ms ? (ms - a.ms) / (b.ms - a.ms) : 0)
-  }
-  return null
 }
 
 /** A unit's position from its track at battle-clock seconds s (clamped to the track's ends), or null. */
@@ -317,22 +288,34 @@ export default function check(ctx) {
         if (battle === undefined) ctx.count('route units not compared (no battle.json here yet)')
         else {
           const units = new Map(list(battle.units).filter((u) => u?.id).map((u) => [u.id, u]))
-          for (const u of r.units) if (!units.has(u)) ctx.bad(at, `unit ${u} is not in boxes/${ev.box}/battle.json`)
-          const clock = battle.clock ? battleClock(ctx, `boxes/${ev.box}/battle.json`, battle.clock) : null
-          if (clock && r.kind === 'fleet') {
-            // compare where the route ends if it ends inside the battle's clock, else at the clock's start
-            const last = timed[timed.length - 1]
-            const ms = last && last.ms >= clock.fromMs && last.ms <= clock.toMs ? last.ms : clock.fromMs
-            const here = routeAt(pts, timed, ms) ?? (last && last.at === pts.length - 1 && last.ms <= ms ? pts[pts.length - 1] : null)
-            if (!here) ctx.warn(at, 'its waypoints do not reach the battle, so its units are not compared')
-            else {
-              for (const u of r.units) {
-                const there = units.has(u) ? unitAt(clock, units.get(u), units, (ms - clock.fromMs) / 1000) : null
-                if (!there) continue
-                const d = kmBetween(here, there)
-                if (d > UNIT_SLACK_KM) ctx.bad(at, `stands ${Math.round(d)} km from unit ${u}'s track at ${new Date(ms).toISOString()} (more than ${UNIT_SLACK_KM} km)`)
+          if (BATTLE_CHECK) {
+            // the battle workflow's tools/check/battle.mjs resolves these ids and compares the tracks itself
+            ctx.count('route units left to the battle check')
+          } else {
+            for (const u of r.units) if (!units.has(u)) ctx.bad(at, `unit ${u} is not in boxes/${ev.box}/battle.json`)
+            const clock = battle.clock ? battleClock(ctx, `boxes/${ev.box}/battle.json`, battle.clock) : null
+            if (clock && r.kind === 'fleet') {
+              // at the battle's start (DATA.md §5): the route's waypoint nearest the clock's start (its last
+              // point if it has none), against each unit's position at t = 0 (its first fix if it begins later)
+              let here = null
+              let best = Infinity
+              for (const w of timed) {
+                const d = Math.abs(w.ms - clock.fromMs)
+                if (d < best) {
+                  best = d
+                  here = pts[w.at]
+                }
               }
-              ctx.count('fleet routes compared with their units')
+              here ??= pts[pts.length - 1]
+              if (here) {
+                for (const u of r.units) {
+                  const there = units.has(u) ? unitAt(clock, units.get(u), units, 0) : null
+                  if (!there) continue
+                  const d = kmBetween(here, there)
+                  if (d > UNIT_SLACK_KM) ctx.bad(at, `stands ${Math.round(d)} km from unit ${u}'s track at the battle's start (more than ${UNIT_SLACK_KM} km)`)
+                }
+                ctx.count('fleet routes compared with their units')
+              }
             }
           }
         }

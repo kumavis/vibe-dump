@@ -1532,12 +1532,12 @@
         34.68
       ],
       [
-        179.53,
-        31.48
+        179.57,
+        30.89
       ],
       [
-        -179.33,
-        30.6
+        -179.69,
+        30.19
       ]
     ],
     "pointPrecision": "chart",
@@ -1627,7 +1627,7 @@
       {
         "at": 9,
         "t": "1942-06-04T04:30-12:00",
-        "note": "0130/5: the launch of the Midway strike; Midway time 04:30 on 4 June.",
+        "note": "0130/5: the launch of the Midway strike; Midway time 04:30 on 4 June, on the box's track.",
         "sourceClock": "0130",
         "sourceZone": "+09:00",
         "sourceDate": "1942-06-05",
@@ -1636,7 +1636,7 @@
       {
         "at": 10,
         "t": "1942-06-04T07:00-12:00",
-        "note": "0400/5; Midway time 07:00 on 4 June.",
+        "note": "0400/5; Midway time 07:00 on 4 June: 315°, 170 miles from Midway (NWC p. 88).",
         "sourceClock": "0400",
         "sourceZone": "+09:00",
         "sourceDate": "1942-06-05",
@@ -1672,7 +1672,7 @@
         "scope": "the reading"
       }
     ],
-    "notes": "The retirement on the same chart mixes the Main Body's track with the Kidō Butai's and is left out until re-read from the JACAR original (R3 §6.6). `units` are the battles workflow's expected unit ids for the four carriers; the integrator reconciles them."
+    "notes": "The chart reads the launch at about 31°29′ N 179°32′ E; the line takes the Midway box's position for 04:30 (dead reckoning back from the 07:00 fix, NWC p. 88), some 65 km south, so route and box agree (DATA.md §5). The retirement on the same chart mixes the Main Body's track with the Kidō Butai's and is left out until re-read from the JACAR original (R3 §6.6). `units` are the battles workflow's expected unit ids for the four carriers; the integrator reconciles them."
   },
   {
     "id": "tf16-tf17-midway-1942",
@@ -2180,7 +2180,7 @@
     "medium": "sea",
     "when": {
       "from": "1942-11-14",
-      "to": "1942-11-14T20:00+11:00",
+      "to": "1942-11-14T22:45+11:00",
       "precision": "day",
       "clock": "usn-zm11"
     },
@@ -2198,21 +2198,29 @@
         -7.4
       ],
       [
-        159.95,
-        -8.55
+        160.1,
+        -8
       ],
       [
-        159.4,
+        160,
         -8.7
+      ],
+      [
+        159.7,
+        -8.94
       ]
     ],
     "pointPrecision": "schematic",
     "direction": "oneway",
     "waypoints": [
       {
-        "at": 3,
-        "t": "1942-11-14T20:00+11:00",
-        "note": "Where the box takes over; a schematic estimate two hours ahead of Sendai's sighting of TF 64 north of Savo at 22:10 (Morison)."
+        "at": 4,
+        "t": "1942-11-14T22:45+11:00",
+        "note": "Coming down from the north, west of Savo: the Ironbottom Sound box's first position for the bombardment unit, an hour before the first fix.",
+        "sourceClock": "2345",
+        "sourceZone": "+12:00",
+        "sourceDate": "1942-11-14",
+        "source": "lundgren-bbaction"
       }
     ],
     "units": [
@@ -2239,11 +2247,7 @@
       "course": "soft"
     },
     "tellings": [],
-    "notes": "R3: schematic, to be re-read from Atago's report. The end point is an estimate, not a fix; the integrator must align it with the box's units at 20:00 (DATA.md §5: within 20 km).",
-    "schematicSegments": [
-      1,
-      2
-    ]
+    "notes": "R3: schematic, to be re-read from Atago's report. The end is the box's first position for Kirishima, Atago and Takao (22:45, schematic, after Lundgren), so route and box agree (DATA.md §5); the passage east of Santa Isabel is a guess (*verify*)."
   },
   {
     "id": "guadalcanal-1942-tf64",
@@ -2276,8 +2280,8 @@
         -9.55
       ],
       [
-        159.45,
-        -9.333
+        159.5,
+        -9.09
       ]
     ],
     "pointPrecision": "narrative",
@@ -2297,7 +2301,7 @@
       {
         "at": 3,
         "t": "1942-11-14T20:00+11:00",
-        "note": "9°20′ S 159°27′ E, the flag navigator's fix (Washington's report via Morison V n. 54), course 020°, 23 knots.",
+        "note": "Course 020°, 23 knots, back along the course from ONI's 20:10 position; Morison's note has the flag navigator's fix at 9°20′ S 159°27′ E, about eighteen miles south.",
         "sourceClock": "2100",
         "sourceZone": "+12:00",
         "sourceDate": "1942-11-14",
@@ -2328,7 +2332,7 @@
       "course": "soft"
     },
     "tellings": [],
-    "notes": "R5 §3.3: the fix was taken at 2100 on Washington's zone −12 clock, 20:00 on the box's (*verify*). `units` are the expected unit ids; the integrator reconciles them."
+    "notes": "R5 §3.3: the fix was taken at 2100 on Washington's zone −12 clock, 20:00 on the box's (*verify*). The line ends where the Ironbottom Sound box puts TF 64 at 20:00 (ONI's 20:10 position less ten minutes on 020°), not at the fix, which the box's own note finds inconsistent with ONI; route and box agree (DATA.md §5). `units` are the expected unit ids; the integrator reconciles them."
   },
   {
     "id": "central-pacific-1943-44",
