@@ -38,7 +38,19 @@
 //                so the backlog runs long on any machine) handed a whole
 //                battle at once: the elastic catch-up snaps past the backlog,
 //                so the page shows the end within seconds rather than
-//                replaying minutes of it
+//                replaying minutes of it, its battle log the match's (no
+//                line twice)
+//   (N2's review)
+//   rematch-race both seated pages press Rematch at the same moment (each
+//                makes a match of its own): both end in one lobby, the one
+//                the old match's `next` names
+//   bad-lobby    a peer writes a battle into the lobby the rules refuse
+//                (overtime 'x'): with both seats ready the host's page says
+//                why it can't start and writes no start (never one after
+//                another)
+//   continue     another browser opens a seat's link (`&dev=`) after the
+//                start, with no record of readying it: it plays the seat, and
+//                says so, rather than watching a battle that then waits on it
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -63,9 +75,10 @@ import { lobbyOf, startSeat } from '../net/lobby.js'
 import { Session } from '../match/session.js'
 import { Folder } from '../match/fold.js'
 import { envelope, encode, decode } from '../match/envelope.js'
+import { commitOf } from '../net/seed.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 const bad = only.filter((c) => !CASES.includes(c))
@@ -135,18 +148,34 @@ async function runCases(dist, cases) {
   // A battle at the round limit, made in Node through the same server (each
   // seat's say still to come), and seat 0's page on it: { repo, handle,
   // store, page, id }
+  // (a seat's page: its readied record kept, under the match's commitment)
+  const seatPage = async (handle, a, i, dev) => {
+    const id = handle.documentId
+    const readied = JSON.stringify([{ seat: i, record: startSeat(lobbyOf(handle.doc()).seats[i]), commit: await commitOf(a) }])
+    const page = await open(`#m=${id}&dev=${dev}`, { [`ts.ready.${id}.${dev}`]: readied })
+    await live(page)
+    return page
+  }
   const atRoundLimit = async () => {
     const repo = new Repo({ network: [new WebSocketClientAdapter(sync.url, 200)] })
     const d0 = 'seatzero', d1 = 'seatoneo'
-    const { handle, setup } = await makeMatch(repo, { host: 'hosthost', seats: [{ dev: d0, name: 'Ann', race: 'squirrel' }, { dev: d1, name: 'Ben', race: 'serpent' }], AutomergeStore })
+    const { handle, setup, a } = await makeMatch(repo, { host: 'hosthost', seats: [{ dev: d0, name: 'Ann', race: 'squirrel' }, { dev: d1, name: 'Ben', race: 'serpent' }], AutomergeStore })
     const store = new AutomergeStore(handle)
     for (const x of autoplay(store, setup, { stop: (G) => G.pending?.k === 'roundLimit' })) x?.close()
     const id = handle.documentId
-    const ready0 = JSON.stringify([{ seat: 0, record: startSeat(lobbyOf(handle.doc()).seats[0]) }])
-    const page = await open(`#m=${id}&dev=${d0}`, { [`ts.ready.${id}.${d0}`]: ready0 })
-    await live(page)
+    const page = await seatPage(handle, a, 0, d0)
     await until(page, () => window.__ts.session.G.pending?.k === 'roundLimit' && !document.querySelector('#over').classList.contains('hidden') && !document.querySelector('#overVote').classList.contains('hidden'), null, 60000, 'the vote panel up on seat 0\'s page')
     return { repo, handle, store, page, id, d0, d1 }
+  }
+  // the battle log's lines a fold of `entries` shows, as text (the page's
+  // entries' textContent)
+  const logLines = (entries) => {
+    const f = new Folder({ out: [] }), lines = []
+    for (const e of entries) {
+      f.push(e)
+      for (const x of f.G?.out?.splice(0) ?? []) if (x.t === 'log') lines.push(x.html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'"))
+    }
+    return lines
   }
   // seat 0's say from another tab of its device, inserted at place k (as a
   // concurrent change from a higher actor lands), on the head that opened
@@ -352,8 +381,82 @@ async function runCases(dist, cases) {
         const secs = (Date.now() - t0) / 1000
         const at = await page.evaluate(() => ({ status: window.__ts.session.status, boost: window.__ts.clock.boost, over: !document.querySelector('#over').classList.contains('hidden') }))
         must(secs < 15 && at.boost === 1 && at.status === 'over' && at.over, `a whole battle handed over at once caught up in ${secs.toFixed(1)} s (under 15 s), the end shown and the clock back to its pace (${JSON.stringify(at)})`)
+        // the battle log is the match's, its last lines once each
+        const shown = await page.evaluate(() => [...document.querySelectorAll('#logList .entry')].map((e) => e.textContent).reverse())
+        const want = logLines(store.entries()).slice(-shown.length)
+        must(shown.length > 0 && JSON.stringify(shown) === JSON.stringify(want), `the battle log after the catch-up is the match's (${shown.length} lines; first apart at ${shown.findIndex((l, k) => l !== want[k])}: ${JSON.stringify(shown.find((l, k) => l !== want[k]))})`)
         store.close()
-        return `${n} entries caught up in ${secs.toFixed(1)} s, the end shown`
+        return `${n} entries caught up in ${secs.toFixed(1)} s, the end shown, the log the match's`
+      } finally {
+        await repo.shutdown?.().catch(() => {})
+      }
+    },
+
+    async 'rematch-race'() {
+      const repo = new Repo({ network: [new WebSocketClientAdapter(sync.url, 200)] })
+      try {
+        const d0 = 'seatzero', d1 = 'seatoneo'
+        const { handle, setup, a } = await makeMatch(repo, { host: 'hosthost', seats: [{ dev: d0, name: 'Ann', race: 'squirrel' }, { dev: d1, name: 'Ben', race: 'serpent' }], overtime: 'never', AutomergeStore })
+        const store = new AutomergeStore(handle)
+        for (const x of autoplay(store, setup)) x?.close()
+        const pages = [await seatPage(handle, a, 0, d0), await seatPage(handle, a, 1, d1)]
+        for (const p of pages) await until(p, () => !document.querySelector('#rematch').classList.contains('hidden'), null, 30000, 'the Rematch button on both seated pages')
+        // both at once: each makes a match of its own
+        await Promise.all(pages.map((p) => p.evaluate(() => document.querySelector('#rematch').click())))
+        const ids = async () => Promise.all(pages.map((p) => p.evaluate(() => window.__ts.net?.id ?? null)))
+        const t0 = Date.now()
+        let now = await ids()
+        while (Date.now() - t0 < 30000 && !(now[0] && now[0] === now[1] && now[0] !== handle.documentId)) {
+          await sleep(250)
+          now = await ids()
+        }
+        const next = lobbyOf(handle.doc()).next
+        must(now[0] && now[0] === now[1] && now[0] === next, `both pages in the one rematch the old match names (${now.join(' / ')}; next ${next})`)
+        for (const p of pages) await until(p, () => document.querySelector('.seat.mine'), null, 30000, 'each page in its seat of the rematch')
+        // the guest readies with a nonce of its own, drawn after the
+        // rematch's open; the host's seat contributes none
+        const hostDev = JSON.parse(await lobbyNow(pages[0])).host
+        const g = hostDev === d0 ? pages[1] : pages[0], gs = hostDev === d0 ? 's1' : 's0', hs = gs === 's1' ? 's0' : 's1'
+        await press(g, 'Ready')
+        await until(g, (k) => window.__ts.net.handle.doc().lobby.seats[k]?.ready, gs, 20000, "the guest's Ready")
+        const L = JSON.parse(await lobbyNow(g))
+        const old = setup.seats.map((x) => x.nonce)
+        must(/^[0-9a-f]{16}$/.test(L.seats[gs].nonce) && !old.includes(L.seats[gs].nonce) && L.seats[hs].nonce === '', `the guest readies the rematch with a nonce it drew (not one the old match's start showed the host), the host's seat none: ${JSON.stringify([L.seats.s0.nonce, L.seats.s1.nonce])}`)
+        store.close()
+        return `both pages in one rematch (${next.slice(0, 8)}…), the guest's nonce its own`
+      } finally {
+        await repo.shutdown?.().catch(() => {})
+      }
+    },
+
+    async 'bad-lobby'() {
+      const { host, guest } = await lobbyPair()
+      // a peer writes a battle the rules refuse
+      await guest.evaluate(() => window.__ts.net.handle.change((d) => {
+        d.lobby.overtime = 'x'
+      }))
+      await until(host, () => window.__ts.net.handle.doc().lobby.overtime === 'x', null, 20000, 'the change on the host page')
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await until(host, () => /can't start a battle: overtime "x"/.test(document.querySelector('#lobbyStatus').textContent), null, 20000, "the host page saying why the lobby can't start")
+      await sleep(3000)
+      const n = await host.evaluate(() => window.__ts.net.store.length)
+      must(n === 1, `no start written (the log holds ${n} entries, its open alone)`)
+      return "\"This lobby can't start a battle: overtime \"x\"…\", no start written"
+    },
+
+    async continue() {
+      const { repo, handle, store, page, id, d0 } = await atRoundLimit()
+      try {
+        // seat 0's link in another browser: no record of readying the seat
+        const other = await open(`#m=${id}&dev=${d0}`)
+        await live(other)
+        const seats = await other.evaluate(() => window.__ts.session.localSeats.join())
+        await until(other, () => /Playing seat 1 as the battle's start set it/.test(document.querySelector('#toast').textContent), null, 20000, 'the notice that this browser kept no record')
+        const dialog = await other.evaluate(() => !document.querySelector('#netdialog').classList.contains('hidden'))
+        must(seats === '0' && !dialog, `another browser on seat 1's link plays it (seats ${seats}, a dialog ${dialog})`)
+        store.close()
+        return 'another browser on the seat\'s link plays it, and says so'
       } finally {
         await repo.shutdown?.().catch(() => {})
       }
@@ -396,7 +499,19 @@ const MUTANTS = {
   // a refold that undoes moves says nothing
   'no-toast': ['history', 'app/flow.js', "        if (undone > 0) this.ui.toast?.show(", "        if (false) this.ui.toast?.show("],
   // a refold leaves the old history's battle log up
-  'no-relog': ['history', 'app/flow.js', "        this.player.snap(G, project(G))\n        this.relog(ses.store.entries())\n", "        this.player.snap(G, project(G))\n"],
+  'no-relog': ['history', 'app/flow.js', "        this.player.snap(G, project(G))\n        this.relog(ses.folder.pushed)\n", "        this.player.snap(G, project(G))\n"],
+  // (N2's review) the catch-up's snap makes the log from the whole list
+  // (the change's later entries then shown twice)
+  'relog-whole-list': ['catch-up', 'app/flow.js', "      this.player.snap(ses.G, project(ses.G))\n      this.relog(ses.folder.pushed)\n", "      this.player.snap(ses.G, project(ses.G))\n      this.relog(ses.store.entries())\n"],
+  // a rematch page never looks back at the old match's `next`
+  'rematch-strands': ['rematch-race', 'app/online.js', '    if (won && won !== this.id) return this.goTo(won)\n', ''],
+  // a guest readies with whatever nonce its seat holds (a rematch's, the
+  // host's copy)
+  'nonce-not-drawn': ['rematch-race', 'app/online.js', "    if (fields.ready) fields = { ...fields, nonce: L.host === this.dev ? '' : this.nonce() }\n", ''],
+  // the lobby's battle unchecked: a start the Folder refuses is written
+  'start-unchecked': ['bad-lobby', 'app/online.js', '        createMatch(N.setupOf(L, 0), { out: null })\n', ''],
+  // a page with no record of readying its seat watches instead
+  'no-record-watches': ['continue', 'net/seed.js', '  if (!readied.length) return null\n', ''],
   // no snap past a backlog: the page plays every event (2 or 4 times as fast)
   'no-catch-up-snap': ['catch-up', 'app/flow.js', '    if (behind > 30) {', '    if (false) {'],
 }

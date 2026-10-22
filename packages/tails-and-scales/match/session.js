@@ -120,8 +120,9 @@
 // `closing`, once its match is over it says so, from a seat played here:
 // its closing hash, a `final` carrying the head the match ended at and its
 // hash there, which every peer's Folder compares (match/fold.js's end),
-// once per device (a Session made over a log that holds this device's
-// final, a reload, says it again never).
+// once per device and head (a Session made over a log that holds this
+// device's final on that head, a reload, says it again never; a refold that
+// ends the match on another head says it there).
 //
 // Pure and synchronous: no DOM, no three.js, nothing awaited. The view plays
 // the events at its own pace, while the match has already run on to the next
@@ -145,6 +146,8 @@ export class Session {
     // start this device made was never appended
     this.told = null
     this.unsent = null
+    // (closing) the head this Session said its final on
+    this.saidAt = null
     // The next entry's number in its id (newEntryId): counted on from the
     // log's length as the Session is made, never read off the list (which
     // a store may build afresh), and still past every number this device
@@ -381,13 +384,16 @@ export class Session {
   }
 
   // (`closing`) This device's match is over: its closing hash said, from a
-  // seat played here, once per device (true when it was), on the head the
-  // match ended at.
+  // seat played here, on the head the match ended at, once per head (true
+  // when it was). Once by this Session whatever the Folder makes of it: a
+  // log past its cap folds the final inert, never recording it.
   final() {
-    if (!this.closing || this.status !== 'over' || this.folder.finals.has(this.dev)) return false
+    const at = this.folder.last
+    if (!this.closing || this.status !== 'over' || this.saidAt === at || this.folder.finals.has(`${this.dev} ${at}`)) return false
     const seat = this.localSeats.find((s) => this.G.setup.seats[s]?.dev === this.dev)
     if (seat === undefined) return false
-    return !this.append({ t: 'final' }, { s: seat, p: this.folder.last, h: stateHash(this.G) })
+    this.saidAt = at
+    return !this.append({ t: 'final' }, { s: seat, p: at, h: stateHash(this.G) })
   }
 
   // stop following the store

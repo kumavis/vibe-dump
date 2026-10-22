@@ -364,6 +364,11 @@ class Peer {
     if (!ses || e.bad) return false
     if (ses.folder.syncing) throw new Error(`${this.name}'s Session appended ${e.t} for seat ${e.s} while its Folder was folding a change: a sink's submit written there and then, not queued until the change was folded`)
     if (e.s < 0 || e.t === 'concede' || e.t === 'desync') return false
+    if (e.t === 'final') {
+      // (N2) a closing hash: on the head the match ended at, its hash there
+      if (ses.status !== 'over' || e.p !== ses.folder.last || e.h !== this.M.core.stateHash(ses.G)) throw new Error(`${this.name}'s Session said its final on ${e.p} with ${e.h}, not on the head its match ended at (${ses.status}, ${ses.folder.last}) with its hash`)
+      return false
+    }
     const head = ses.folder.head(e.s), one = HASHED.includes(ses.G.pending?.k)
     if (e.p !== head) throw new Error(`${this.name}'s Session wrote ${e.t} for seat ${e.s} after ${e.p}, not the seat's head as the match stands (${head})`)
     if (e.h !== (one ? this.M.core.stateHash(ses.G) : undefined)) throw new Error(`${this.name}'s Session wrote ${e.t} for seat ${e.s} with ${e.h === undefined ? 'no hash' : `the hash ${e.h}`}, not the match's as it stands (${one ? 'one seat waited on' : 'a simultaneous decision'})`)
@@ -598,8 +603,12 @@ function play(net, rand, { cap = 400000, deliver = 3 } = {}) {
       p.concedes = false
       const s = p.seats[0]
       if (p.session.legal(s, { t: 'concede' }) === null) {
+        // (the concession's own op: its Session says its final right after,
+        // N2's closing check)
+        const n = net.ops.length
         p.session.submit(s, { t: 'concede' })
-        p.mark('concede')
+        const op = net.ops.slice(n).find((o) => o.actor === p.actor && p.M.E.decode(o.text).t === 'concede')
+        net.why.set(op.key, { kind: 'concede', peer: p.name })
       }
     }
   }
@@ -733,7 +742,10 @@ function humanScenario(M, it, kind, seed) {
   for (const { s, ...body } of it.job.entries) (script[s] ??= []).push(body)
   const peer = (o) => {
     const r = mulberry32(Math.floor(rand() * 2 ** 32))
-    return new Peer(net, { actor: nameFrom(rand), M, script, rand: () => nameFrom(r, 3), ...o })
+    // (N2) every seat's Session says its closing hash, as an online page's
+    // does: its final, written as the match ends, races the other seat's
+    // last entries and a concession (N2's review)
+    return new Peer(net, { actor: nameFrom(rand), M, script, rand: () => nameFrom(r, 3), closing: true, ...o })
   }
   // (in a fork scenario any seat's honest entry may lose: the fork's loser,
   // and an entry the other seat wrote after seeing only the loser, are both
@@ -1238,6 +1250,47 @@ function edges(M, it) {
     s3.start(devs, { a: 'r3v3al' })
     expect("a start with N2's seed reveal (`a`) carries it and begins the match", list.length === 1 && list[0].a === 'r3v3al' && s3.status === 'live', `${list.length} appended, ${JSON.stringify(list[0]?.bad ?? list[0]?.a)}, ${s3.status}`)
     s3.close()
+    // (N2's review) A closing Session over a finished match whose log is at
+    // its cap (junk after the end): its final is the cap's inert entry, never
+    // recorded, and it says it once all the same, never in a loop.
+    {
+      const st = start(), C = env({ t: 'concede' }, s0, `d${s0}`)
+      list = [st, C, ...Array.from({ length: F.MAX_ENTRIES - 2 }, (_, k) => env({ t: 'nope' }, s0, `dJ${k}`))]
+      const s4 = new S.Session({ store, localSeats: [s0], dev: `d${s0}`, closing: true })
+      const said = list.length - F.MAX_ENTRIES
+      expect("a closing Session over a finished match whose log is at its cap says its final once, never in a loop", s4.status === 'over' && said === 1 && list.at(-1).t === 'final', `${s4.status}, ${said} appended`)
+      s4.close()
+    }
+  }
+  {
+    // (N2's review) A concession races its seat's own move from another tab,
+    // both on the same head, the move folded first everywhere. The head after
+    // a concession names the history it ended (a digest of the head before,
+    // the accept's and its id: it carries no prev), so the conceder's final,
+    // written where the move wasn't, is stale, never a desync of an honest
+    // match; with the concession first, the final agrees and the move is
+    // inert.
+    const f = new F.Folder({ out: null })
+    const pre = [start()]
+    f.push(pre[0])
+    for (const b of script.slice(0, deployed)) {
+      const e = write(f, b)
+      f.push(e)
+      pre.push(e)
+    }
+    const Z = write(f, script[deployed]), C = env({ t: 'concede' }, s0, `d${s0}`)
+    const a = new F.Folder({ out: null })
+    for (const e of [...pre, C]) a.push(e)
+    const fin = env({ t: 'final' }, s0, `d${s0}`, { p: a.last, h: core.stateHash(a.G) })
+    const fold = (l) => {
+      const g = new F.Folder({ out: null })
+      for (const e of l) g.push(e)
+      return g
+    }
+    const why = (g, e) => g.rejected.find((r) => r.id === e.id)?.why ?? ''
+    const zFirst = fold([...pre, Z, C, fin]), cFirst = fold([...pre, C, fin, Z])
+    expect("a concession racing its seat's own move (another tab), the move folded first: the conceder's final is stale, the match over, never a desync", a.status === 'over' && zFirst.status === 'over' && zFirst.accepted.includes(Z.id) && zFirst.accepted.includes(C.id) && /^stale/.test(why(zFirst, fin)), `${zFirst.status}, ${why(zFirst, fin)}`)
+    expect('… and the concession folded first, its final agrees, the move inert', cFirst.status === 'over' && /agreeing/.test(why(cFirst, fin)) && /^inert/.test(why(cFirst, Z)), `${cFirst.status}, ${why(cFirst, fin)}, ${why(cFirst, Z)}`)
   }
   {
     // (R8b) The single flight: the Session folds a change whole before it
@@ -1820,7 +1873,7 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
         : t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
           : t.kind === 'votes' ? `ok   ${x.checks.length} checks: both seats' say at once, in either order, every way (more, end), on to overtime or the end; a second say and another device's refused`
-          : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant`
+          : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant, (N2) a final past the cap said once, a concession racing a move`
           : t.kind === 'forks' ? `ok   ${x.checks.length} checks: each seat forked in the deployment, the loser's world answering first, stale everywhere, live`
           : `ok   ${x.peers} peers agree: ${x.accepted} accepted, ${x.rejected} refused${x.conceded ? ', conceded' : ''}; ${x.refolds} inserts before folded entries, ${x.resets} resets${x.undone ? ` (${x.undone} undone)` : ''}${x.reacted ? `; sent from events ${x.reacted.events}, reset ${x.reacted.reset}, settled ${x.reacted.settled}, dropped ${x.reacted.dropped} (${x.reacted.written} written, ${x.reacted.drops} dropped)` : ''}`
       : `FAIL ${r.error}`}`)
@@ -1934,6 +1987,11 @@ const MUTANTS = {
   'silent-final': ['match/session.js', "    return !this.append({ t: 'final' }, { s: seat, p: this.folder.last, h: stateHash(this.G) })\n", '    return false\n'],
   'final-unchecked': ['match/fold.js', '    if (e.h !== stateHash(this.G)) return this.freeze(e)\n', ''],
   'over-ignores-final': ['match/fold.js', "      if (e.t === 'desync' || e.t === 'final') return this.outOfBand(e)\n", "      if (e.t === 'desync') return this.outOfBand(e)\n"],
+  // (N2's review) the head after a concession its id alone: a final written
+  // where a raced move wasn't compares, freezing an honest match; and a
+  // Session that says its final again and again past the cap
+  'concede-head-bare': ['match/fold.js', '    this.last = cyrb53(JSON.stringify([before, this.last, e.id])).toString(36)\n', ''],
+  'final-said-forever': ['match/session.js', '    this.saidAt = at\n', ''],
   'over-ignores-hash': ['match/fold.js', '      if (e.h !== undefined && e.p === this.last && e.t !== \'concede\' && seat?.ctrl === \'human\' && e.d === seat.dev && e.h !== stateHash(this.G)) return this.freeze(e)\n', ''],
   // tamper by ids alone: another body under an accepted id refolds silently
   'tamper-by-id': ['match/fold.js', 'const gone = this.accepted.filter((id) => !now.has(id) || !same(now.get(id).e, was.get(id).e))', 'const gone = this.accepted.filter((id) => !now.has(id))'],

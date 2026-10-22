@@ -48,7 +48,11 @@
 // auto seat queued two commands in one call); in fork every refused entry
 // is a seat's command that lost to a tab's (stale, no longer its turn, or
 // inert past the end: a tab's loser, or one the other seat wrote having
-// seen only the loser), sent again on the winner's head. Over the run, entries must have landed before entries
+// seen only the loser), sent again on the winner's head. (N2) Every page's
+// Session says its closing hash, as an online page's does: each seated
+// device's final is on the log, on the head the match ended at, and every
+// final is refused as agreeing (inert) or, said on a head a raced entry
+// moved, stale; none freezes the match. Over the run, entries must have landed before entries
 // a peer had folded, and a fork must have reset some peer's view.
 //
 // It also weighs the document: each scenario's saved bytes, and those of a
@@ -170,7 +174,7 @@ class Peer {
     })
     const start = (G) => ({ ...M.mirror.project(G), stage: 'title', owners: G.objectives.map(() => -1), chunks: {} })
     this.session = new M.S.Session({
-      store: this.store, localSeats: this.seats, dev: this.dev, rand: () => Math.floor(rand() * 1e9).toString(36),
+      store: this.store, localSeats: this.seats, dev: this.dev, rand: () => Math.floor(rand() * 1e9).toString(36), closing: true,
       onTrace: (line, G) => (this.view ??= start(G)),
       sink: {
         // handed an entry's events, the Session is the match they lead to
@@ -372,6 +376,14 @@ function judge(M, peers, it, task, where, steps) {
   // refused
   const heads = new Set(), refused = {}
   list.forEach((e, i) => {
+    if (e.t === 'final') {
+      // (N2) a closing hash: agreeing, or stale where a raced entry moved
+      // the head after it was said; never accepted, never a freeze
+      refused[`final ${fate[i]}`] = (refused[`final ${fate[i]}`] ?? 0) + 1
+      const why = ref.rejected.find((r) => r.id === e.id)?.why ?? fate[i]
+      if (!/^inert: .*agreeing|^stale/.test(why)) throw new Error(`${where}: the final from ${e.d} was ${why}, not agreeing (or stale on a raced head)`)
+      return
+    }
     if (fate[i] !== 'accepted') {
       refused[fate[i]] = (refused[fate[i]] ?? 0) + 1
       // (in a fork any seat's command may lose: a tab's loser, and one the
@@ -390,6 +402,12 @@ function judge(M, peers, it, task, where, steps) {
     if (heads.has(key)) throw new Error(`${where}: two accepted commands of seat ${e.s} after the same head ${e.p}`)
     heads.add(key)
   })
+  // (N2) each seated device said its closing hash on the head the match
+  // ended at
+  for (const [s, x] of ref.G.setup.seats.entries()) {
+    if (x.ctrl !== 'human' || !peers.some((p) => p.seats.includes(s))) continue
+    if (!list.some((e) => e.t === 'final' && e.d === x.dev && e.p === ref.last)) throw new Error(`${where}: seat ${s}'s device ${x.dev} said no closing hash on the head the match ended at (${ref.last})`)
+  }
   return {
     where, peers: peers.length, entries: list.length, steps, refused,
     inserts: peers.reduce((s, p) => s + p.insertsBefore, 0), resets: peers.reduce((s, p) => s + p.resets, 0), undone: peers.reduce((s, p) => s + p.undone, 0),

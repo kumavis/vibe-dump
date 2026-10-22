@@ -7,9 +7,12 @@
 //   dice = u32be(sha256(a ‖ ':' ‖ documentId ‖ ':' ‖ nonce0 ‖ ':' ‖ nonce1))
 //
 // (each seat's nonce as the start writes it: '' for the host's seat and an
-// AI's). So no one picks the dice: the host committed before seeing a
-// nonce, and a guest's nonce is its own. ("Friendly" dice, §2.7: the seed is
-// public once the start is written.)
+// AI's). So no one picks the dice: the host commits before any guest draws
+// its nonce (a guest's page draws it as it presses Ready, once the open is
+// in the log, and keeps the commitment it saw with the record it readied),
+// and doesn't know the nonce when it commits; a guest knows the commitment,
+// not the secret. ("Friendly" dice, §2.7: the seed is public once the start
+// is written.)
 //
 // verifyStart runs once, asynchronously, outside the fold, when a client
 // first sees the start. It checks the reveal against the commitment, that
@@ -17,8 +20,12 @@
 // lobby record it readied (all but `ready`: race, ctrl, dev, name, nonce,
 // and from F11b army) must be the start's seat as written, a field absent
 // on one side absent on the other, and no seat of the start may name this
-// device unless it readied that seat so. A failure makes the match
-// read-only here, with why ("The start changed your seat (ctrl)").
+// device unless it readied that seat so. Only records readied under this
+// match's commitment count. A failure makes the match read-only here, with
+// why ("The start changed your seat (ctrl)"). A page that kept no record
+// (another browser opened with the seat's `&dev=` link, storage cleared) has
+// nothing to hold the seat to: it checks the seed alone, and its caller
+// says so.
 //
 // sha256 is the browser's (crypto.subtle; Node's global crypto too).
 
@@ -44,11 +51,12 @@ export function seatDiff(record, seat) {
 // Why the start can't be trusted here, or null.
 //   open, start: the log's accepted `open` and `start` entries (decoded)
 //   documentId: the match document's id
-//   mine: { dev, readied: [{ seat, record }, …] }, this device and every
-//     lobby record it pressed Ready on in this match (any of them will do:
-//     a start built from the lobby as it stood at an earlier Ready, the
-//     record unchanged since, is one this device agreed to); null for a
-//     page that keeps none (a spectator's)
+//   mine: { dev, readied: [{ seat, record, commit }, …] }, this device and
+//     every lobby record it pressed Ready on in this match, with the
+//     commitment the log had opened with then (any of them will do: a start
+//     built from the lobby as it stood at an earlier Ready, the record
+//     unchanged since, is one this device agreed to); null for a page that
+//     keeps none (a spectator's)
 export async function verifyStart({ open, start, documentId, mine = null }) {
   if (open?.t !== 'open' || typeof start?.a !== 'string') return 'seed check failed: the match has no seed commitment'
   if ((await commitOf(start.a)) !== open.commit) return 'seed check failed: the start reveals another secret than the one the match opened with'
@@ -56,7 +64,8 @@ export async function verifyStart({ open, start, documentId, mine = null }) {
   const dice = await diceOf({ a: start.a, documentId, nonces: seats.map((s) => (typeof s?.nonce === 'string' ? s.nonce : '')) })
   if (start.setup.dice !== dice) return "seed check failed: the dice aren't the ones the seats' nonces make"
   if (!mine) return null
-  const readied = mine.readied ?? []
+  const readied = (mine.readied ?? []).filter((r) => r.commit === open.commit)
+  if (!readied.length) return null
   const match = (i) => readied.some((r) => r.seat === i && !seatDiff(r.record, seats[i]).length)
   // the seat this device readied last, as the start writes it
   const last = readied.at(-1)

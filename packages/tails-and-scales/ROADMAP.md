@@ -743,7 +743,11 @@ follows N3.
   Rematch; and a closing check, each seated device's `final` hash, which a
   drift inside the battle's last entry can't pass. Automerge loads only for
   online play. `sim/net-check.mjs`, `sim/lobby-rig.mjs` (Chromium, with a
-  local sync server), `sim/bundle-check.mjs`. DESIGN's N2 notes.)
+  local sync server), `sim/bundle-check.mjs`; merge-sim and P-peers play
+  every seat with the closing check on. The review's nine findings fixed:
+  a concession racing a move no longer freezes an honest match, a bad
+  lobby is never started from, guests draw their own nonces after the
+  host's commitment. DESIGN's N2 notes.)
 - [ ] **N3** Spectating, rejoin, scrubbing, replay export, tamper alarm.
 - [ ] **F6** Race selection with a mini 3D diorama of each race's figures,
   on a battle-setup panel that a mode button opens (later steps add the

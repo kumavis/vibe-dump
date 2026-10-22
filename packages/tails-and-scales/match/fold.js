@@ -28,8 +28,8 @@
 //   folder.error          why the last start was refused, or why it is skew
 //   folder.report         a frozen match's report (freeze, below)
 //   folder.head(seat)     the `p` an entry for `seat` must carry
-//   folder.finals         the devices whose closing hash (`final`, N2) has
-//                         been folded, whatever came of it
+//   folder.finals         each closing hash (`final`, N2) folded, whatever
+//                         came of it, as `${device} ${head}`
 //   folder.push(e)        fold one decoded entry (match/envelope.js decode);
 //                         not reentrant (it throws when called while an
 //                         entry is folded or its events handed on: from the
@@ -63,9 +63,13 @@
 // read). A concession is then judged by legal() alone (any human seat,
 // until the battle is decided) and played; a `desync {at, mine}` freezes the
 // match here too, so the author of the entry `at`, whose own hash matched,
-// freezes at the same entry as the device that found it apart. A `final`
-// (the closing check, below) is never accepted: the head stays where the
-// end left it.
+// freezes at the same entry as the device that found it apart. A
+// concession, which carries no prev, moves the head to a digest of the head
+// before it, the head its accept makes and its own id (the head before
+// alone names the history, which an entry that raced it may have changed:
+// N2's review), so a final on it names the history that ended there. A
+// `final` (the closing check, below) is never accepted: the head stays
+// where the end left it.
 //
 // The end. Once the match is over, later entries are inert, but for two
 // that say a peer's match went apart from this one (§2.6): a seat's
@@ -265,8 +269,10 @@ export class Folder {
     const body = bodyOf(e)
     const why = legal(G, e.s, body)
     if (why) return this.reject(e, `illegal: ${why}`)
+    const before = this.last
     apply(G, e.s, body)
-    return this.accept(e)
+    this.accept(e)
+    this.last = cyrb53(JSON.stringify([before, this.last, e.id])).toString(36)
   }
 
   // (N2) A seat's device says its match is over, at the head `p`, hashing
@@ -274,7 +280,7 @@ export class Folder {
   // match's is a desync by the hash; else it agrees, or (another head) says
   // nothing this Folder can check. Never accepted.
   closing(e) {
-    this.finals.add(e.d)
+    this.finals.add(`${e.d} ${e.p}`)
     if (e.p !== this.last) return this.reject(e, `stale: the match's head is ${this.last}, not ${e.p}`)
     if (e.h !== stateHash(this.G)) return this.freeze(e)
     return this.reject(e, `inert: the match is ${this.status}, its closing hash agreeing`)

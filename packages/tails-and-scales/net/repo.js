@@ -12,12 +12,16 @@
 // sim/sync-server.mjs).
 export const DEFAULT_SYNC = 'wss://sync.automerge.org'
 
-let made = null
+// the repo for each sync server, once made (or being made)
+const made = new Map()
 
-// The repo, made once per page: { repo, ws } (ws: the websocket adapter,
-// whose state the net badge shows).
+// The repo for a sync server, made once per page and server: { repo, ws,
+// sync } (ws: the websocket adapter, whose state the net badge shows). One
+// that failed to start (the wasm or IndexedDB refused) is made afresh next
+// time.
 export function openRepo(sync = DEFAULT_SYNC) {
-  made ??= (async () => {
+  if (made.has(sync)) return made.get(sync)
+  const making = (async () => {
     const [{ Repo, initializeWasm }, { default: wasmUrl }, { WebSocketClientAdapter }, { BroadcastChannelNetworkAdapter }, { IndexedDBStorageAdapter }] = await Promise.all([
       import('@automerge/automerge-repo/slim'),
       import('@automerge/automerge/automerge.wasm?url'),
@@ -30,5 +34,7 @@ export function openRepo(sync = DEFAULT_SYNC) {
     const repo = new Repo({ storage: new IndexedDBStorageAdapter('tails-and-scales'), network: [new BroadcastChannelNetworkAdapter(), ws] })
     return { repo, ws, sync }
   })()
-  return made
+  made.set(sync, making)
+  making.catch(() => made.delete(sync))
+  return making
 }

@@ -43,7 +43,7 @@
 // "continue on another device" link), kept for the tab in sessionStorage.
 import { Session } from '../match/session.js'
 import { SIMULTANEOUS } from '../match/fold.js'
-import { stateHash, CORE_VERSION, RULES_ID } from '../core/index.js'
+import { stateHash, createMatch, CORE_VERSION, RULES_ID } from '../core/index.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
 import { LobbyScreen } from '../ui/screens/lobby.js'
@@ -110,7 +110,12 @@ export class Online {
     this.badge = new NetBadge($('#netbadge'))
     this.screen.wire({
       claim: (i) => this.claim(i),
-      leave: (i) => this.handle && N.leave(this.handle, i, this.dev),
+      leave: (i) => {
+        if (!this.handle) return
+        N.leave(this.handle, i, this.dev)
+        // (a seat left is no seat this device agreed to any more)
+        kept.set(this.readyKey(), JSON.stringify(this.readied().filter((x) => x.seat !== i)))
+      },
       name: (text) => this.editMine({ name: text }, true),
       race: (key) => this.editMine({ race: key }),
       ready: (on) => this.editMine({ ready: on }),
@@ -138,7 +143,14 @@ export class Online {
       return
     }
     if (id === this.id) return
+    const from = this.pendingFrom ?? null
+    this.pendingFrom = null
     this.release()
+    if (from) {
+      this.from = from
+      this.onFrom = () => this.soon()
+      from.on('change', this.onFrom)
+    }
     const gen = this.gen
     this.sync = q.get('sync') || this.params.get('sync') || N.DEFAULT_SYNC
     this.dev = tabDevice(q.get('dev'))
@@ -245,6 +257,11 @@ export class Online {
   }
 
   lobby() {
+    // (a rematch this page asked for or joined: two asked at once, each
+    // made its own, and the old match's `next` names one of them on every
+    // page, which both go to)
+    const won = this.from && N.lobbyOf(this.from.doc()).next
+    if (won && won !== this.id) return this.goTo(won)
     const L = N.lobbyOf(this.handle.doc()), me = N.seatOf(L, this.dev)
     // a seat this device claimed that another device holds now (two claims
     // at once: one stands everywhere)
@@ -255,8 +272,10 @@ export class Online {
     }
     const other = me < 0 ? null : L.seats[1 - me]
     const hostHere = L.host === this.dev || this.presence.live().some((p) => p.dev === L.host)
+    const problem = N.ready(L) ? this.startProblem(L) : null
     const status = this.lost && me < 0 ? `Seat ${this.lost.seat + 1} was taken by ${this.lost.by} at the same moment.`
       : !this.store.length ? 'Waiting for the host…'
+        : problem ? `This lobby can't start a battle: ${problem}`
         : me < 0 ? (L.seats.some((r) => !r) ? 'Take a free seat to play, or just watch.' : 'Both seats are taken: you will watch the battle.')
           : !other ? 'Copy the link and send it to your opponent.'
             : !other.ready ? `Waiting for ${other.name || 'your opponent'} to get ready…`
@@ -273,7 +292,28 @@ export class Online {
     if (shown !== this.shown || !this.screen.up) this.screen.render(m)
     this.shown = shown
     this.presence.send()
-    if (this.autoStart && this.isHost() && N.ready(L)) this.startMatch()
+    if (this.autoStart && this.isHost() && N.ready(L) && !problem) this.startMatch()
+  }
+
+  // Why the battle a ready lobby makes can't start, or null: what the
+  // Folder would refuse its start for (a race, a battlefield or rounds no
+  // game here knows: a peer may write anything into the lobby), or a start
+  // from this very lobby already refused (it is never written again, or a
+  // page would write one after another until the log is full). Asked of
+  // the rules once per lobby as it stands.
+  startProblem(L) {
+    const at = JSON.stringify(L)
+    if (this.problemOf?.at !== at) {
+      let why = null
+      try {
+        createMatch(N.setupOf(L, 0), { out: null })
+      } catch (err) {
+        why = err.message
+      }
+      this.problemOf = { at, why }
+    }
+    if (this.problemOf.why) return this.problemOf.why
+    return this.refused?.at === at ? this.refused.why : null
   }
 
   // the race a free seat is offered with: the table's for it, unless the
@@ -290,19 +330,39 @@ export class Online {
     if (N.claim(this.handle, i, { dev: this.dev, name: this.myName(), race: this.freeRace(L, i), host: L.host })) this.claimed = i
   }
 
-  // This device's own seat changed (`fields`: race, name, ready); a Ready
-  // pressed keeps the record readied (what verifyStart holds the start to).
+  // This device's own seat changed (`fields`: race, name, ready). A Ready
+  // is pressed only once the log's open (the host's commitment) is in: a
+  // guest seat readies with a nonce this device drew then (net/seed.js:
+  // so the host committed before it knew the nonce, a rematch's copied
+  // seat included), and the record readied is kept, with that commitment
+  // (what verifyStart holds the start to).
   editMine(fields, rename = false) {
     const L = N.lobbyOf(this.handle.doc()), me = N.seatOf(L, this.dev)
     if (me < 0) return
     if (rename) kept.set('ts.name', N.fitName(fields.name))
+    const open = this.opened()
+    if (fields.ready && !open) return
+    if (fields.ready) fields = { ...fields, nonce: L.host === this.dev ? '' : this.nonce() }
     N.editSeat(this.handle, me, this.dev, fields)
     if (fields.ready) {
-      const r = N.lobbyOf(this.handle.doc()).seats[me]
-      const list = this.readied().filter((x) => !(x.seat === me && JSON.stringify(x.record) === JSON.stringify(N.startSeat(r))))
-      list.push({ seat: me, record: N.startSeat(r) })
+      const r = N.startSeat(N.lobbyOf(this.handle.doc()).seats[me])
+      const list = this.readied().filter((x) => !(x.seat === me && x.commit === open.commit && JSON.stringify(x.record) === JSON.stringify(r)))
+      list.push({ seat: me, record: r, commit: open.commit })
       kept.set(this.readyKey(), JSON.stringify(list.slice(-8)))
     }
+  }
+  // the log's open, once it holds one
+  opened() {
+    return this.store?.entries().find((e) => !e.bad && e.t === 'open') ?? null
+  }
+  // this device's nonce for this match (drawn the first time it readies,
+  // kept for the match)
+  nonce() {
+    const key = `ts.nonce.${this.id}.${this.dev}`, had = kept.get(key)
+    if (N.isNonce(had)) return had
+    const n = N.newNonce()
+    kept.set(key, n)
+    return n
   }
   readyKey() {
     return `ts.ready.${this.id}.${this.dev}`
@@ -329,7 +389,11 @@ export class Online {
       // (written only on the lobby it was built from: one that changed
       // meanwhile is started from as it stands next time)
       if (gen !== this.gen || !this.lobbySes || this.lobbySes.status !== 'lobby' || JSON.stringify(N.lobbyOf(this.handle.doc())) !== JSON.stringify(L)) return
+      // (one start per lobby as it stands: one the log refused is never
+      // written again, startProblem saying why)
+      if (this.startProblem(L)) return
       this.lobbySes.start(change(N.setupOf(L, dice)), { a })
+      if (this.lobbySes.status === 'lobby') this.refused = { at: JSON.stringify(L), why: this.lobbySes.error ?? 'the start was refused' }
     } finally {
       this.starting = false
     }
@@ -351,8 +415,11 @@ export class Online {
     const entries = this.store.entries()
     const byId = (id) => entries.find((e) => e.id === id && !e.bad)
     const [open, start] = ses.accepted.slice(0, 2).map(byId)
-    const why = await N.verifyStart({ open, start, documentId: this.id, mine: { dev: this.dev, readied: this.readied() } })
+    const readied = this.readied().filter((r) => r.commit === open?.commit)
+    const why = await N.verifyStart({ open, start, documentId: this.id, mine: { dev: this.dev, readied } })
     if (gen !== this.gen) return
+    this.from?.off('change', this.onFrom)
+    this.from = null
     const seats = ses.G.setup.seats
     const localSeats = why ? [] : seats.flatMap((s, i) => (s.ctrl === 'human' && s.dev === this.dev ? [i] : []))
     ses.close()
@@ -362,6 +429,9 @@ export class Online {
     this.screen.hide()
     this.flow.follow(this.play, { status: (st) => this.frozen(st), leave: () => this.close() })
     if (why) this.dialog.show({ title: 'Watching only', why: `${why}. This page won't play a seat in this battle, though you can watch it.`, watch: () => {}, back: () => this.flow.back() })
+    // (a page that kept no record of readying, another browser opened with
+    // the seat's link: it plays the seat as the start set it, and says so)
+    else if (!readied.length && localSeats.length) this.flow.ui.toast?.show(`Playing seat ${localSeats[0] + 1} as the battle's start set it (this browser kept no record of readying it)`, 8000)
     this.frozen(this.play.status)
     this.followed()
   }
@@ -453,8 +523,10 @@ export class Online {
     if (gen !== this.gen) return
     const me = G.setup.seats.find((s) => s.dev === this.dev) ?? G.setup.seats[0]
     const doc = N.lobbyDoc({ host: this.dev, board: G.setup.board, rounds: G.setup.rounds, overtime: G.setup.overtime, me: { ctrl: 'human', dev: this.dev, name: me.name, race: me.race } })
+    // (each guest draws its nonce as it readies, after this match's open:
+    // none is copied, which the host would know)
     G.setup.seats.forEach((s, i) => {
-      doc.lobby.seats[N.SEAT_KEYS[i]] = { ctrl: 'human', dev: s.dev, name: s.name, race: s.race, ready: false, nonce: s.dev === this.dev ? '' : s.nonce || N.newNonce() }
+      doc.lobby.seats[N.SEAT_KEYS[i]] = { ctrl: 'human', dev: s.dev, name: s.name, race: s.race, ready: false, nonce: '' }
     })
     const handle = repo.create(doc)
     kept.set(`ts.a.${handle.documentId}`, N.randomHex(16))
@@ -462,8 +534,11 @@ export class Online {
     this.goTo(handle.documentId)
   }
 
+  // To another match: the rematch's, its old match watched meanwhile (two
+  // pages that asked at once go to the one its `next` names).
   goTo(id) {
-    this.flow.back()
+    this.pendingFrom = this.from ?? (this.play ? this.handle : null)
+    if (this.play) this.flow.back()
     location.hash = this.linkFor(id).split('#')[1]
   }
 
@@ -492,11 +567,13 @@ export class Online {
   close() {
     this.gen++
     clearInterval(this.tick)
+    this.from?.off('change', this.onFrom)
+    this.from = null
     this.presence?.stop()
     this.handle?.off('change', this.onDoc)
     this.lobbySes?.close()
     this.store?.close()
-    Object.assign(this, { presence: null, lobbySes: null, play: null, store: null, handle: null, id: null, beginning: false, starting: false, saidFrozen: null, readOnly: null, claimed: null, lost: null, hashed: null, shown: null })
+    Object.assign(this, { presence: null, lobbySes: null, play: null, store: null, handle: null, id: null, beginning: false, starting: false, saidFrozen: null, readOnly: null, claimed: null, lost: null, hashed: null, shown: null, problemOf: null, refused: null })
     this.badge.hide()
     this.screen.hide()
     this.dialog.hide()

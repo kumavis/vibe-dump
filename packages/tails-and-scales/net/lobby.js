@@ -22,7 +22,7 @@
 // what every peer folds, each client holding its own seat in it to what it
 // readied (net/seed.js's verifyStart).
 import { matchDoc } from './automerge-store.js'
-import { fitName, nameOk, isNonce, newNonce } from './ids.js'
+import { fitName, nameOk, isNonce, isDevice, newNonce } from './ids.js'
 
 export const SEAT_KEYS = Object.freeze(['s0', 's1'])
 
@@ -52,8 +52,11 @@ export function lobbyOf(doc) {
 // the seat this device sits in, or -1
 export const seatOf = (lobby, dev) => lobby.seats.findIndex((r) => r?.dev === dev)
 
-// Both seats claimed by two devices, each with a name, and both ready.
-export const ready = (lobby) => lobby.seats.every((r) => r?.ready && r.ctrl === 'human' && nameOk(r.name)) && lobby.seats[0].dev !== lobby.seats[1].dev
+// Both seats claimed by two devices, each with a name and a nonce of the
+// form a start carries ('' for the host's), and both ready. (What the rules
+// make of the rest, a race or a battle no game knows, is the start's check:
+// app/online.js's.)
+export const ready = (lobby) => lobby.seats.every((r) => r?.ready && r.ctrl === 'human' && nameOk(r.name) && isDevice(r.dev) && (r.nonce === '' || isNonce(r.nonce))) && lobby.seats[0].dev !== lobby.seats[1].dev
 
 // a seat's record as the start writes it (and verifyStart compares): all
 // but `ready`
@@ -92,7 +95,8 @@ export function leave(handle, i, dev) {
 }
 
 // Change this device's own seat: its race or name (un-readying it), or its
-// Ready. False when the seat isn't this device's.
+// Ready (with the nonce it readies with, `nonce`: drawn by this device once
+// the log's open is in). False when the seat isn't this device's.
 export function editSeat(handle, i, dev, fields) {
   const k = SEAT_KEYS[i]
   if (lobbyOf(handle.doc()).seats[i]?.dev !== dev) return false
@@ -100,6 +104,7 @@ export function editSeat(handle, i, dev, fields) {
     const r = d.lobby.seats[k]
     if (fields.race !== undefined) r.race = fields.race
     if (fields.name !== undefined) r.name = fitName(fields.name)
+    if (fields.nonce !== undefined) r.nonce = fields.nonce
     r.ready = fields.ready === true
   })
   return true

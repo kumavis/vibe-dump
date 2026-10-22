@@ -196,7 +196,7 @@ export class Flow {
         this.acted.length = 0
         this.traceListener?.rejoin?.(G)
         this.player.snap(G, project(G))
-        this.relog(ses.store.entries())
+        this.relog(ses.folder.pushed)
         if (undone > 0) this.ui.toast?.show(`History changed: ${undone} move${undone === 1 ? '' : 's'} undone`)
       },
       // (N2) the match's status changed (frozen, read-only): the online
@@ -552,7 +552,7 @@ export class Flow {
     this.online = online
     session.sink = this.sink
     this.player.snap(G, project(G))
-    this.relog(session.store.entries())
+    this.relog(session.folder.pushed)
     ui.title.hide()
     view.rig.setViews(viewsFor({ localSeats: session.localSeats, edges: [0, 1].map((s) => edgeOf(G, s)) }))
     this.refreshUI()
@@ -578,11 +578,13 @@ export class Flow {
     online?.leave()
   }
 
-  // The battle log made again from a match's whole log: a quiet fold of
-  // its entries with their events kept, the `log` events written (the last
-  // 80, as many as the log keeps). After a snap onto a match this page
-  // didn't play up to (an online match followed, a refold), what the log
-  // shows is that match's history.
+  // The battle log made again from the entries the Session's Folder has
+  // pushed (the match as it stands: mid-change, the catch-up's snap, those
+  // up to the entry whose events are in hand, the rest of the change's to
+  // be played on from there): a quiet fold of them with their events kept,
+  // the `log` events written (the last 80, as many as the log keeps). After
+  // a snap onto a match this page didn't play up to (an online match
+  // followed, a refold), what the log shows is that match's history.
   relog(entries) {
     const f = new Folder({ out: [] }), lines = []
     for (const e of entries) {
@@ -601,7 +603,7 @@ export class Flow {
     if (behind > 30) {
       this.acted.length = 0
       this.player.snap(ses.G, project(ses.G))
-      this.relog(ses.store.entries())
+      this.relog(ses.folder.pushed)
     } else clock.boost = behind > 16 ? 4 : behind > 8 ? 2 : 1
   }
 

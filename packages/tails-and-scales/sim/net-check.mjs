@@ -11,7 +11,10 @@
 //             (another secret, other dice) or that changed this device's
 //             seat: its ctrl flipped to ai, its dev swapped for the host's,
 //             its race, name or nonce changed, a field only one side has,
-//             or a seat it never readied; a spectator's page checks the seed
+//             or a seat it never readied; a spectator's page checks the seed;
+//             only records readied under this match's commitment count, and
+//             a page that kept none (another browser on the seat's link)
+//             checks the seed alone
 //   lobby     through a real sync server (sim/sync-server.mjs) and three
 //             Node repos on websockets: the host makes the match (its
 //             open), two guests claim the same seat at once and one claim
@@ -37,6 +40,7 @@ import { fitName, nameOk, nameBytes, isNonce, isDevice, newNonce, deviceId, MAX_
 import { commitOf, diceOf, verifyStart, seatDiff } from '../net/seed.js'
 import { lobbyOf, claim, editSeat, ready, setupOf, startSeat, seatOf } from '../net/lobby.js'
 import { Session } from '../match/session.js'
+import { decode } from '../match/envelope.js'
 import { stateHash } from '../core/index.js'
 import { startSyncServer } from './sync-server.mjs'
 import { makeMatch, autoplay } from './online-fixture.mjs'
@@ -90,10 +94,11 @@ console.log('verify')
   const seats = [{ race: 'squirrel', ctrl: 'human', dev: host, name: 'Ann', nonce: '' }, { race: 'serpent', ctrl: 'human', dev: guest, name: 'Ben', nonce: '0123456789abcdef' }]
   const open = { t: 'open', commit: await commitOf(a) }
   const startOf = async (ss, { aa = a, dice } = {}) => ({ t: 'start', a: aa, setup: { board: 1, dice: dice ?? (await diceOf({ a: aa, documentId, nonces: ss.map((s) => s.nonce) })), seats: ss } })
-  const mine = { dev: guest, readied: [{ seat: 1, record: { ...seats[1] } }] }
+  const c = open.commit
+  const mine = { dev: guest, readied: [{ seat: 1, record: { ...seats[1] }, commit: c }] }
   const v = async (start, m = mine) => verifyStart({ open, start, documentId, mine: m })
   check((await v(await startOf(seats))) === null, 'a start built from the lobby as readied passes, on the guest and the host')
-  check((await v(await startOf(seats), { dev: host, readied: [{ seat: 0, record: seats[0] }] })) === null && (await v(await startOf(seats), null)) === null, '… and on the host, and on a spectator (no seat: the seed checked)')
+  check((await v(await startOf(seats), { dev: host, readied: [{ seat: 0, record: seats[0], commit: c }] })) === null && (await v(await startOf(seats), null)) === null, '… and on the host, and on a spectator (no seat: the seed checked)')
   check(/^seed check failed/.test((await v(await startOf(seats, { aa: 'e'.repeat(32) }))) ?? ''), 'another secret than the one the log opened with fails (seed check failed)')
   check(/^seed check failed/.test((await v(await startOf(seats, { dice: 7 }))) ?? ''), "dice the seats' nonces don't make fail (seed check failed)")
   const altered = [
@@ -106,8 +111,14 @@ console.log('verify')
   }
   const twice = await v(await startOf([{ ...seats[0], dev: guest }, seats[1]]))
   check(twice === 'The start gave you a seat you never readied (seat 1)', "a start that also seats the guest's device in a seat it never readied fails", twice)
-  const earlier = { dev: guest, readied: [{ seat: 1, record: { ...seats[1], race: 'squirrel' } }, { seat: 1, record: seats[1] }, { seat: 1, record: { ...seats[1], name: 'Benny' } }] }
+  const earlier = { dev: guest, readied: [{ seat: 1, record: { ...seats[1], race: 'squirrel' }, commit: c }, { seat: 1, record: seats[1], commit: c }, { seat: 1, record: { ...seats[1], name: 'Benny' }, commit: c }] }
   check((await v(await startOf(seats), earlier)) === null, 'a start from any record the guest readied passes (a start built as it changed its seat again)')
+  // (N2's review) a record readied under another commitment (another
+  // match's, or one the host's page drew its secret after) counts for
+  // nothing; a page with none checks the seed alone
+  const flipped = await startOf([seats[0], { ...seats[1], ctrl: 'ai' }])
+  const elsewhere = { dev: guest, readied: [{ seat: 1, record: { ...seats[1] }, commit: 'f'.repeat(64) }] }
+  check((await v(flipped, elsewhere)) === null && (await v(flipped, { dev: guest, readied: [] })) === null && (await v(flipped, mine)) === 'The start changed your seat (ctrl)', 'only records readied under this match\'s commitment count: one under another, or none (another browser on the seat\'s link), checks the seed alone')
   check(isDeepStrictEqual(seatDiff({ a: 1, ready: true }, { a: 1 }), []) && isDeepStrictEqual(seatDiff({ a: 1 }, { a: 1, b: undefined }), ['b']), 'a seat is compared whole but for ready, a field absent on one side and present on the other a difference')
 }
 
@@ -151,7 +162,8 @@ try {
   await until(() => ready(lobbyOf(H.doc())) && ready(lobbyOf(wh.doc())))
   const L = lobbyOf(H.doc())
   check(ready(L), 'both seats ready on the host page')
-  const readied = (dev, i) => ({ dev, readied: [{ seat: i, record: startSeat(lobbyOf(H.doc()).seats[i]) }] })
+  const opened = (h) => h.doc().log.map((t) => decode(String(t))).find((e) => e.t === 'open')
+  const readied = (dev, i) => ({ dev, readied: [{ seat: i, record: startSeat(lobbyOf(H.doc()).seats[i]), commit: opened(H).commit }] })
   const hs = new Session({ store: new AutomergeStore(H), dev: host })
   hs.start(setupOf(L, await diceOf({ a, documentId: id, nonces: L.seats.map((r) => r.nonce) })), { a })
   const gs = new Session({ store: new AutomergeStore(wh), dev: winner })
@@ -167,7 +179,7 @@ try {
   {
     const { handle: H2, a: a2 } = await makeMatch(hostRepo, { host, seats: [{ dev: host, name: 'Ann', race: 'squirrel' }, { dev: winner, name: 'Ben', race: 'serpent' }], start: false, AutomergeStore })
     const L2 = lobbyOf(H2.doc())
-    const theirs = { dev: winner, readied: [{ seat: 1, record: startSeat(L2.seats[1]) }] }
+    const theirs = { dev: winner, readied: [{ seat: 1, record: startSeat(L2.seats[1]), commit: opened(H2).commit }] }
     const setup = setupOf(L2, await diceOf({ a: a2, documentId: H2.documentId, nonces: L2.seats.map((r) => r.nonce) }))
     setup.seats[1] = { ...setup.seats[1], ctrl: 'ai' }
     const s2 = new Session({ store: new AutomergeStore(H2), dev: host })
