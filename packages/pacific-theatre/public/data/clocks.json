@@ -1,0 +1,83 @@
+[
+  {
+    "id": "jst",
+    "offset": "+09:00",
+    "name": "Tokyo time",
+    "side": "jp",
+    "used": "Every Japanese record read: the First Air Fleet's Midway report (\"all dates in this report and all times are in Tokyo time, Plus 9\"), the action reports of Atago and Inazuma for the night of 14–15 November 1942 (十一月十四日二〇〇〇 to 十五日〇一〇〇), Japanese Monograph 97's orders for Pearl Harbor (take-off at \"0100 hours X Day (0530 Honolulu time)\"), the Kidō Butai's track on Morton's inset (\"26 NOV (TOKYO TIME)\"). Japan put the territories it occupied on Tokyo time, so a local time in Manila, Singapore or the Indies under occupation is this clock.",
+    "sources": ["nagumo-1947", "jacar-inazuma-1942", "jm-97", "morton-1962", "tzdb"],
+    "note": "Tokyo dates run a day ahead of the American dates east of the date line: the dive on Kaga is 07:22 on 5 June by this clock and 10:22 on 4 June by Midway's."
+  },
+  {
+    "id": "usn-zp12",
+    "offset": "-12:00",
+    "name": "zone plus 12, Midway time",
+    "side": "us",
+    "used": "CINCPAC's Midway report (\"All times in this rept are Zone plus 12\"), the ONI Combat Narrative of Midway (\"All times given in this narrative are zone plus 12\"), the Naval War College analysis of 1948, the shore forces on Midway, and the Midway box.",
+    "sources": ["cincpac-midway-1942", "oni-cn-midway-1943", "nwc-midway-1948"],
+    "note": "The navy's zone description is what is added to local time to reach Greenwich: zone plus 12 is UTC−12. The tz database has no such zone for Midway; its Pacific/Midway follows Pago Pago."
+  },
+  {
+    "id": "usn-zp10",
+    "offset": "-10:00",
+    "name": "zone plus 10, the carriers at Midway",
+    "side": "us",
+    "used": "Task Forces 16 and 17 at Midway: Spruance's report (\"All times given are zone plus ten\"), ComCruPac (\"All times are local, plus ten zone\"), Enterprise's report; and the US Navy's Aleutian dates, which USSBS gives as \"150th meridian west longitude, zone plus 10, time and date\".",
+    "sources": ["ctf16-midway-1942", "comcrupac-midway-1942", "cv6-midway-1942", "ussbs-campaigns-1946"],
+    "note": "Two hours ahead of Midway time on the same date."
+  },
+  {
+    "id": "usn-zm11",
+    "offset": "+11:00",
+    "name": "zone minus 11, Guadalcanal",
+    "side": "us",
+    "used": "Part One of the ONI Combat Narrative of the Naval Battle of Guadalcanal (\"All times in Part I are Zone minus 11\"), Morison's volume V, the combinedfleet.com tables of movement for the Solomons, and the Ironbottom Sound box.",
+    "sources": ["oni-cn-guadalcanal-1944", "morison-v", "trom-kirishima"],
+    "note": "Morison: Tokyo time runs two hours behind it. The Solomons' own nautical zone."
+  },
+  {
+    "id": "usn-zm12",
+    "offset": "+12:00",
+    "name": "zone minus 12",
+    "side": "us",
+    "used": "Parts Two and Three of the ONI Combat Narrative of the Naval Battle of Guadalcanal (\"All times in this section are Zone minus 12\"), South Dakota's action report (\"All times reported herein are zone minus twelve\"), the BuShips war damage report built on it, and Lundgren's essays, which follow Washington's report.",
+    "sources": ["oni-cn-guadalcanal-1944", "ar-south-dakota-1942", "wdr-south-dakota-1942", "lundgren-bbaction"],
+    "note": "An hour ahead of zone minus 11: Washington's opening on Kirishima is midnight by one telling and 01:00 by the other. A computed moonset matches ONI's \"moon had set at 0058\" only on this reading."
+  },
+  {
+    "id": "usn-item",
+    "offset": "+09:00",
+    "name": "Item (zone minus 9), Samar",
+    "side": "us",
+    "used": "The action reports of Hoel (\"All times mentioned herein are Item (Zone -9), and from memory\") and Johnston (\"zone minus 9 time\"), Morison's volume XII, which corrects the submarines' \"How\" times to it, and the Samar box.",
+    "sources": ["hoel-ar-1944", "johnston-ar-1944", "morison-xii"],
+    "note": "The same offset as Tokyo time, so at Samar the two sides' clocks agree; several Japanese tables of movement nonetheless run an hour behind it in their early entries."
+  },
+  {
+    "id": "hst-1941",
+    "offset": "-10:30",
+    "name": "Hawaiian time, 1941",
+    "side": "us",
+    "used": "Every American record of 7 December 1941 on Oʻahu: Monaghan's report receipts a despatch \"at 1821 GCT (0751 LCT)\"; the Bishop's Point radio log notes \"subtract 10½ hours\"; Kimmel's narrative of events; CINCPAC's report; the Pearl Harbor box.",
+    "sources": ["kimmel-narrative", "pha-exhibit-119", "cincpac-pearl-1942", "tzdb"],
+    "note": "Hawaiian time is Tokyo time less nineteen and a half hours:07:55 on 7 December here is 03:25 on 8 December in Tokyo."
+  },
+  {
+    "id": "hwt",
+    "offset": "-09:30",
+    "name": "Hawaiian war time (from 9 February 1942)",
+    "side": "us",
+    "used": "Oʻahu and the Hawaiian commands from 9 February 1942 to the end of the war.",
+    "sources": ["tzdb"],
+    "note": "The tz database dates the change to 9 February 1942, citing Schmitt and Cox, \"Hawaiian Time\", Hawaiian Journal of History 26 (1992)."
+  },
+  {
+    "id": "malaya-1941",
+    "offset": "+07:30",
+    "name": "Malaya time, 1941",
+    "side": "uk",
+    "used": "British Malaya and Singapore until the fall of Singapore, after which the occupation put them on Tokyo time.",
+    "sources": ["tzdb"],
+    "note": "On this clock the first landing at Kota Bharu falls shortly after midnight on 8 December, about an hour and a half before the first bombs on Pearl Harbor; the minute is unsettled."
+  }
+]
