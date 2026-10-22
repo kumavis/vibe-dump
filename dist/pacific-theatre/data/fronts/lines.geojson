@@ -1,0 +1,282 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Japan's planned perimeter",
+    "ja": {
+     "kanji": "第一段作戦の攻略範囲",
+     "romaji": "Daiichidan sakusen no kōryaku han'i",
+     "verify": true
+    },
+    "from": "1941-12-07",
+    "to": "1942-06-04",
+    "sources": [
+     {
+      "id": "morton-1962",
+      "where": "Map 1, \"Approximate limit of objective area\", December 1941"
+     }
+    ],
+    "note": "The objective area of the first operations as the Green Books draw it: the Kurils, Wake, the Marshalls and the Gilberts, the Bismarcks, New Guinea, the Indies, Malaya, Burma and Hong Kong. Schematic; the Japanese name is a description, not a quotation, and wants a reader of the plans."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      156.5,
+      50.8
+     ],
+     [
+      167.8,
+      19.6
+     ],
+     [
+      172.6,
+      8.4
+     ],
+     [
+      174.8,
+      -0.8
+     ],
+     [
+      160.0,
+      -6.4
+     ],
+     [
+      152.0,
+      -8.2
+     ],
+     [
+      141.0,
+      -10.6
+     ],
+     [
+      127.0,
+      -11.2
+     ],
+     [
+      116.0,
+      -10.6
+     ],
+     [
+      105.0,
+      -8.6
+     ],
+     [
+      97.0,
+      -3.0
+     ],
+     [
+      94.2,
+      5.0
+     ],
+     [
+      92.2,
+      10.0
+     ],
+     [
+      92.3,
+      14.0
+     ],
+     [
+      94.6,
+      16.6
+     ],
+     [
+      97.6,
+      20.2
+     ],
+     [
+      103.0,
+      21.2
+     ],
+     [
+      110.0,
+      21.6
+     ],
+     [
+      114.2,
+      22.3
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "the Absolute National Defence Zone",
+    "ja": {
+     "kanji": "絶対国防圏",
+     "romaji": "Zettai kokubōken"
+    },
+    "from": "1943-09-30",
+    "to": "1944-07-18",
+    "sources": [
+     {
+      "id": "morton-1962",
+      "where": "Maps 9 and 14, Japan's national defence zone"
+     }
+    ],
+    "note": "Decided at the Imperial Conference of 30 September 1943: the Kurils, the Bonins, the Marianas and the Carolines, western New Guinea, the Banda Sea, the Indies and Burma. It is shown until Tōjō Hideki's cabinet falls after the loss of Saipan."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      156.5,
+      50.8
+     ],
+     [
+      150.0,
+      40.0
+     ],
+     [
+      143.4,
+      27.0
+     ],
+     [
+      146.6,
+      16.2
+     ],
+     [
+      151.0,
+      10.5
+     ],
+     [
+      153.4,
+      7.4
+     ],
+     [
+      150.0,
+      3.0
+     ],
+     [
+      144.0,
+      -0.8
+     ],
+     [
+      141.0,
+      -2.4
+     ],
+     [
+      140.6,
+      -5.0
+     ],
+     [
+      139.4,
+      -8.2
+     ],
+     [
+      133.0,
+      -9.4
+     ],
+     [
+      127.0,
+      -10.4
+     ],
+     [
+      122.0,
+      -10.8
+     ],
+     [
+      116.0,
+      -10.4
+     ],
+     [
+      106.0,
+      -8.6
+     ],
+     [
+      98.0,
+      -3.4
+     ],
+     [
+      94.6,
+      2.6
+     ],
+     [
+      92.5,
+      7.0
+     ],
+     [
+      92.0,
+      12.0
+     ],
+     [
+      93.0,
+      17.0
+     ],
+     [
+      93.2,
+      20.5
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "the 16th parallel",
+    "ja": {
+     "kanji": "北緯16度線",
+     "romaji": "Hokui jūroku-do sen"
+    },
+    "from": "1945-09-02",
+    "to": "1945-09-03",
+    "sources": [
+     {
+      "id": "go1-1945",
+      "where": "paragraph 1 (a) and (c)"
+     }
+    ],
+    "note": "General Order No. 1: Japanese forces in French Indochina north of the line surrender to Chiang Kai-shek, south of it to South East Asia Command."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      104.9,
+      16.0
+     ],
+     [
+      108.5,
+      16.0
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "the 38th parallel",
+    "ja": {
+     "kanji": "北緯38度線",
+     "romaji": "Hokui sanjūhachi-do sen"
+    },
+    "from": "1945-09-02",
+    "to": "1945-09-03",
+    "sources": [
+     {
+      "id": "go1-1945",
+      "where": "paragraph 1 (b) and (e)"
+     }
+    ],
+    "note": "General Order No. 1: Japanese forces in Korea north of the line surrender to the Soviet Far East command, south of it to the US Army Forces, Pacific."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      124.6,
+      38.0
+     ],
+     [
+      128.8,
+      38.0
+     ]
+    ]
+   }
+  }
+ ]
+}

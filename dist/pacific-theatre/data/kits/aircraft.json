@@ -1,0 +1,4037 @@
+[
+ {
+  "id": "a6m2",
+  "name": "Mitsubishi A6M2 Type 0 Model 21",
+  "ja": "零式艦上戦闘機二一型",
+  "type": "fighter",
+  "side": "jp",
+  "crew": 1,
+  "span": 12,
+  "length": 9.06,
+  "height": 3.05,
+  "weightKg": {
+   "empty": 1680,
+   "loaded": 2410
+  },
+  "wingM2": 22.44,
+  "engine": {
+   "kind": "radial",
+   "hp": 940,
+   "count": 1,
+   "ratedAltM": 4550
+  },
+  "speedKmh": {
+   "max": 533,
+   "atAltM": 4550,
+   "seaLevel": 450,
+   "cruise": 333,
+   "stall": 110,
+   "diveLimit": 630
+  },
+  "climbMs": 15.7,
+  "ceilingM": 10000,
+  "rangeKm": 1870,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 2410,
+   "cd0": 0.0189,
+   "clMax": 1.5,
+   "k": 0.0661,
+   "e": 0.75,
+   "gLimit": 7,
+   "vShakeMs": 165,
+   "vBreakMs": 175,
+   "diveDrag": 0,
+   "turnLimitDegS": 25.71,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     64,
+     35
+    ],
+    [
+     90.8,
+     43
+    ],
+    [
+     128,
+     55
+    ],
+    [
+     161.8,
+     40
+    ],
+    [
+     197.8,
+     32
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 14,
+   "rollIasAt3048": [
+    [
+     55,
+     35
+    ],
+    [
+     78,
+     43
+    ],
+    [
+     110,
+     55
+    ],
+    [
+     139,
+     40
+    ],
+    [
+     170,
+     32
+    ]
+   ],
+   "note": "controls very light at 320 km/h and stiffening above 348 km/h; \"the ailerons froze up at speeds above 200 knots\" (US test pilot on the Akutan Zero)"
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t97",
+    "count": 2,
+    "position": "nose",
+    "rounds": 500
+   },
+   {
+    "weapon": "jp-20-t99-1",
+    "count": 2,
+    "position": "wing",
+    "rounds": 60
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-60kg-t97",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-01",
+    "to": "1942-09",
+    "upper": "ijn-ameiro",
+    "lower": "ijn-ameiro",
+    "insignia": "hinomaru"
+   },
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-mitsubishi-a6m-zero",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-mitsubishi-a6m-zero",
+    "where": "infobox; out-turned any Allied fighter of the time"
+   },
+   {
+    "id": "wp-akutan-zero",
+    "where": "the aileron and carburettor statements"
+   },
+   {
+    "id": "naca-868",
+    "where": "fig. 47: the Zero's roll, 55°/s at 245 mph falling to about 40°/s by 310 mph"
+   }
+  ],
+  "notes": "Loaded mass 2,410 kg (verify; the infobox gives 2,796 kg for gross and maximum). Sea-level speed and the 630 km/h dive limit are estimates (R6). Turn 14 s from R7 §4.2. vShake and vBreak indicated, R7's memory figures (verify). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (13.7 s for the sustained 360° at 1,500 m) with the turn rate capped at 25.7°/s so the 360° takes 14 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "a6m5",
+  "name": "Mitsubishi A6M5 Type 0 Model 52",
+  "ja": "零式艦上戦闘機五二型",
+  "type": "fighter",
+  "side": "jp",
+  "crew": 1,
+  "span": 11,
+  "length": 9.08,
+  "height": 2.8,
+  "weightKg": {
+   "empty": 1921,
+   "loaded": 2733
+  },
+  "wingM2": 21.3,
+  "engine": {
+   "kind": "radial",
+   "hp": 1120,
+   "count": 1,
+   "ratedAltM": 6000
+  },
+  "speedKmh": {
+   "max": 565,
+   "atAltM": 6000,
+   "seaLevel": 475,
+   "cruise": 319,
+   "stall": 120,
+   "diveLimit": 670
+  },
+  "climbMs": 16,
+  "ceilingM": 10700,
+  "rangeKm": 1931,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 2733,
+   "cd0": 0.0229,
+   "clMax": 1.45,
+   "k": 0.0721,
+   "e": 0.777,
+   "gLimit": 7,
+   "vShakeMs": 175,
+   "vBreakMs": 186,
+   "diveDrag": 0,
+   "turnLimitDegS": null,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     64,
+     37
+    ],
+    [
+     90.8,
+     45
+    ],
+    [
+     128,
+     55
+    ],
+    [
+     161.8,
+     48
+    ],
+    [
+     197.8,
+     40
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 16,
+   "rollIasAt3048": [
+    [
+     55,
+     37
+    ],
+    [
+     78,
+     45
+    ],
+    [
+     110,
+     55
+    ],
+    [
+     139,
+     48
+    ],
+    [
+     170,
+     40
+    ]
+   ],
+   "note": "shorter wings and new ailerons rolled better and dived faster (670 km/h) at a cost in turning"
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t97",
+    "count": 2,
+    "position": "nose",
+    "rounds": 500
+   },
+   {
+    "weapon": "jp-20-t99-2",
+    "count": 2,
+    "position": "wing",
+    "rounds": 100
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-60kg-t97",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "taic-1-1945",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "taic-1-1945",
+    "where": "leaf n26 (Zeke 52, March 1945): dimensions, weights, 1,120 hp, speeds, climb"
+   },
+   {
+    "id": "wp-mitsubishi-a6m-zero",
+    "where": "the Model 52's roll and dive"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Wing area the engine's estimate for the shortened span (verify). TAIC managed only 340 mph in tests (≠ its charted 358 mph); max speed taken as 565 km/h at about 6,000 m. Roll curve R6 A4 E. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, the span efficiency e (0.78) raised from 0.75 (16.2 s) so the sustained 360° at 1,500 m is 16 s. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "d3a1",
+  "name": "Aichi D3A1 Type 99 Model 11",
+  "ja": "九九式艦上爆撃機一一型",
+  "type": "dive",
+  "side": "jp",
+  "crew": 2,
+  "span": 14.37,
+  "length": 10.2,
+  "height": 3.85,
+  "weightKg": {
+   "empty": 2408,
+   "loaded": 3650
+  },
+  "wingM2": 34.9,
+  "engine": {
+   "kind": "radial",
+   "hp": 1070,
+   "count": 1,
+   "ratedAltM": 3000
+  },
+  "speedKmh": {
+   "max": 385,
+   "atAltM": 3000,
+   "seaLevel": 340,
+   "cruise": 296,
+   "stall": 120,
+   "diveLimit": 520
+  },
+  "climbMs": 8,
+  "ceilingM": 9300,
+  "rangeKm": 1352,
+  "enduranceS": 1500,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 3650,
+   "cd0": 0.0301,
+   "clMax": 1.45,
+   "k": 0.0717,
+   "e": 0.75,
+   "gLimit": 6.5,
+   "vShakeMs": 150,
+   "vBreakMs": 165,
+   "diveDrag": 0.1514,
+   "turnLimitDegS": 18,
+   "diveMs": 108,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     50
+    ],
+    [
+     116.4,
+     50
+    ],
+    [
+     162.9,
+     45
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 20,
+   "rollIasAt3048": [
+    [
+     60,
+     50
+    ],
+    [
+     100,
+     50
+    ],
+    [
+     140,
+     45
+    ]
+   ],
+   "note": "dive brakes hold 60–80° near 105–110 m/s; at Yorktown a shallow glide to a 60° position angle at 6,000–8,000 ft, then a steep dive, release about 500 ft (R4)"
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t97",
+    "count": 2,
+    "position": "nose",
+    "rounds": 600
+   },
+   {
+    "weapon": "jp-77-t92",
+    "count": 1,
+    "position": "rear",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-250kg-t99",
+    "count": 1
+   },
+   {
+    "weapon": "jp-60kg-t97",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "payloadAlternatives": [
+   {
+    "weapon": "jp-250kg-t98",
+    "count": 1,
+    "note": "the land bomb, against the airfields at Pearl Harbor"
+   }
+  ],
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "fixed",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-01",
+    "to": "1942-09",
+    "upper": "ijn-ameiro",
+    "lower": "ijn-ameiro",
+    "insignia": "hinomaru"
+   },
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-aichi-d3a",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-aichi-d3a",
+    "where": "infobox (mixes D3A1 and D3A2 data): span, wing area, Kinsei 43/44, cruise, range, ceiling; bombs"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Performance verify (the infobox is the D3A2's 430 km/h at 6,200 m): 385 km/h at 3,000 m from R7 §4.2. Empty and loaded masses are the engine's estimates on R7's 3,650 kg with the bomb. Turn 20 s and dive speed from R7 §4.2. Fixed, spatted gear. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (16.3 s for the sustained 360° at 1,500 m) with the turn rate capped at 18°/s so the 360° takes 20 s, as R7 recommends where the polar alone turns too well; dive drag so a 70° dive settles near 108 m/s at 3,000 m. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "b5n2",
+  "name": "Nakajima B5N2 Type 97 Model 12",
+  "ja": "九七式艦上攻撃機一二型",
+  "type": "torpedo",
+  "side": "jp",
+  "crew": 3,
+  "span": 15.51,
+  "length": 10.3,
+  "height": 3.7,
+  "weightKg": {
+   "empty": 2279,
+   "loaded": 4000
+  },
+  "wingM2": 37.7,
+  "engine": {
+   "kind": "radial",
+   "hp": 1000,
+   "count": 1,
+   "ratedAltM": 3600
+  },
+  "speedKmh": {
+   "max": 378,
+   "atAltM": 3600,
+   "seaLevel": 320,
+   "cruise": 259,
+   "stall": 115,
+   "diveLimit": 450
+  },
+  "climbMs": 6.5,
+  "ceilingM": 8260,
+  "rangeKm": 978,
+  "enduranceS": 1500,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 4000,
+   "cd0": 0.0288,
+   "clMax": 1.5,
+   "k": 0.0665,
+   "e": 0.75,
+   "gLimit": 4.5,
+   "vShakeMs": 115,
+   "vBreakMs": 125,
+   "diveDrag": 0,
+   "turnLimitDegS": 16.36,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     40
+    ],
+    [
+     116.4,
+     40
+    ],
+    [
+     151.3,
+     36
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 22,
+   "rollIasAt3048": [
+    [
+     60,
+     40
+    ],
+    [
+     100,
+     40
+    ],
+    [
+     130,
+     36
+    ]
+   ],
+   "note": "the Type 91 released at 180 kn from 20 m by design, up to 204 kn in a power glide; at Yorktown a loose V varying from 50 to 2,000 ft, release at about 800 yd (R4)"
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t92",
+    "count": 1,
+    "position": "rear",
+    "rounds": 582
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-800kg-t99-80",
+    "count": 1
+   }
+  ],
+  "torpedo": {
+   "weapon": "type-91-m3"
+  },
+  "torpedoes": [
+   {
+    "weapon": "type-91-m2",
+    "from": "1941-08",
+    "to": "1942-04"
+   },
+   {
+    "weapon": "type-91-m3",
+    "from": "1942-04",
+    "to": "1945-09"
+   }
+  ],
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-01",
+    "to": "1942-09",
+    "upper": "ijn-ameiro",
+    "lower": "ijn-ameiro",
+    "insignia": "hinomaru"
+   },
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-nakajima-b5n",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-nakajima-b5n",
+    "where": "infobox: dimensions, weights, Sakae 11, speeds, range"
+   },
+   {
+    "id": "taic-1-1945",
+    "where": "leaf n144 (Kate, December 1944): height 4.11 m, 985 hp, ceiling 7,315 m (≠)"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Mass 4,000 kg with the torpedo (R7). Turn: the polar alone gives 17 s; 22 s used, as R7 recommends (no control-force limit in the model). The torpedo hung offset to the right. The level-bombing 800 kg load was the first wave's at Pearl Harbor, never a player's role. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (16.9 s for the sustained 360° at 1,500 m) with the turn rate capped at 16.4°/s so the 360° takes 22 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "d4y1",
+  "name": "Yokosuka D4Y1 Suisei",
+  "ja": "彗星",
+  "type": "dive",
+  "side": "jp",
+  "crew": 2,
+  "span": 11.5,
+  "length": 10.22,
+  "height": 3.74,
+  "weightKg": {
+   "empty": 2440,
+   "loaded": 3650
+  },
+  "wingM2": 23.6,
+  "engine": {
+   "kind": "inline",
+   "hp": 1200,
+   "count": 1,
+   "ratedAltM": 4750
+  },
+  "speedKmh": {
+   "max": 546,
+   "atAltM": 4750,
+   "seaLevel": 460,
+   "cruise": 426,
+   "stall": 140,
+   "diveLimit": 650
+  },
+  "climbMs": 9.4,
+  "ceilingM": 9900,
+  "rangeKm": 1465,
+  "enduranceS": 1500,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 3650,
+   "cd0": 0.0207,
+   "clMax": 1.5,
+   "k": 0.0757,
+   "e": 0.75,
+   "gLimit": 6.5,
+   "vShakeMs": 165,
+   "vBreakMs": 180,
+   "diveDrag": 0.139,
+   "turnLimitDegS": 16.36,
+   "diveMs": 140,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     50
+    ],
+    [
+     116.4,
+     60
+    ],
+    [
+     162.9,
+     55
+    ],
+    [
+     197.8,
+     45
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 22,
+   "rollIasAt3048": [
+    [
+     60,
+     50
+    ],
+    [
+     100,
+     60
+    ],
+    [
+     140,
+     55
+    ],
+    [
+     170,
+     45
+    ]
+   ],
+   "note": "the only Japanese naval combat type with an inline engine besides the Army's Tony (TAIC); dive brakes"
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t97",
+    "count": 2,
+    "position": "nose",
+    "rounds": 400
+   },
+   {
+    "weapon": "jp-77-t92",
+    "count": 1,
+    "position": "rear",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-250kg-t99",
+    "count": 1
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "inline",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-yokosuka-d4y-suisei",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-yokosuka-d4y-suisei",
+    "where": "infobox (the D4Y2's Atsuta 32): span, length, height, masses, ceiling, range"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "D4Y1 figures (Atsuta 21, 1,200 hp; 546 km/h) are the engine's reading from memory (verify against TAIC n106–n116, whose OCR R6 did not read). Wing area estimated. Turn, roll and dive speed are estimates. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (20.2 s for the sustained 360° at 1,500 m) with the turn rate capped at 16.4°/s so the 360° takes 22 s, as R7 recommends where the polar alone turns too well; dive drag so a 70° dive settles near 140 m/s at 3,000 m. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "b6n2",
+  "name": "Nakajima B6N2 Tenzan Model 12",
+  "ja": "天山一二型",
+  "type": "torpedo",
+  "side": "jp",
+  "crew": 3,
+  "span": 14.94,
+  "length": 11,
+  "height": 4.45,
+  "weightKg": {
+   "empty": 3084,
+   "loaded": 5203
+  },
+  "wingM2": 37.2,
+  "engine": {
+   "kind": "radial",
+   "hp": 1850,
+   "count": 1,
+   "ratedAltM": 4602
+  },
+  "speedKmh": {
+   "max": 526,
+   "atAltM": 4602,
+   "seaLevel": 478,
+   "cruise": 423,
+   "stall": 140,
+   "diveLimit": 560
+  },
+  "climbMs": 10,
+  "ceilingM": 10790,
+  "rangeKm": 1750,
+  "enduranceS": 1500,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 5203,
+   "cd0": 0.0228,
+   "clMax": 1.5,
+   "k": 0.0707,
+   "e": 0.75,
+   "gLimit": 4.5,
+   "vShakeMs": 140,
+   "vBreakMs": 155,
+   "diveDrag": 0,
+   "turnLimitDegS": 15,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     40
+    ],
+    [
+     128,
+     42
+    ],
+    [
+     174.6,
+     36
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 24,
+   "rollIasAt3048": [
+    [
+     60,
+     40
+    ],
+    [
+     110,
+     42
+    ],
+    [
+     150,
+     36
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t92",
+    "count": 2,
+    "position": "rear",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-800kg-t99-80",
+    "count": 1
+   }
+  ],
+  "torpedo": {
+   "weapon": "type-91-m3"
+  },
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "taic-1-1945",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "taic-1-1945",
+    "where": "leaf n148 (Jill, May 1945): dimensions, weights, Kasei 25, speeds, ceiling"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Climb 18 m/s in TAIC is at reconnaissance load: 10 m/s at torpedo load is the engine's estimate. Wing area and range estimated (OCR, verify). The torpedo TAIC prints (1,475 kg) cannot be a Type 91: the Mod 3 used. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (17.7 s for the sustained 360° at 1,500 m) with the turn rate capped at 15°/s so the 360° takes 24 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "e13a1",
+  "name": "Aichi E13A1 Type 0 reconnaissance seaplane",
+  "ja": "零式水上偵察機",
+  "type": "patrol",
+  "side": "jp",
+  "crew": 3,
+  "span": 14.5,
+  "length": 11.3,
+  "height": 4.7,
+  "weightKg": {
+   "empty": 2642,
+   "loaded": 3640
+  },
+  "wingM2": 36,
+  "engine": {
+   "kind": "radial",
+   "hp": 1060,
+   "count": 1,
+   "ratedAltM": 2180
+  },
+  "speedKmh": {
+   "max": 376,
+   "atAltM": 2180,
+   "seaLevel": 340,
+   "cruise": 222,
+   "stall": 110,
+   "diveLimit": 420
+  },
+  "climbMs": 8.2,
+  "ceilingM": 8730,
+  "rangeKm": 2089,
+  "enduranceS": 3600,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 3640,
+   "cd0": 0.0287,
+   "clMax": 1.45,
+   "k": 0.0727,
+   "e": 0.75,
+   "gLimit": 4.5,
+   "vShakeMs": 110,
+   "vBreakMs": 120,
+   "diveDrag": 0,
+   "turnLimitDegS": 12.86,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     58.2,
+     30
+    ],
+    [
+     93.1,
+     35
+    ],
+    [
+     128,
+     32
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 28,
+   "rollIasAt3048": [
+    [
+     50,
+     30
+    ],
+    [
+     80,
+     35
+    ],
+    [
+     110,
+     32
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t92",
+    "count": 1,
+    "position": "rear",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-60kg-t97",
+    "count": 4
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "fixed",
+   "cowl": "radial",
+   "dihedral": 5,
+   "floats": "twin"
+  },
+  "colours": [
+   {
+    "from": "1941-01",
+    "to": "1942-09",
+    "upper": "ijn-ameiro",
+    "lower": "ijn-ameiro",
+    "insignia": "hinomaru"
+   },
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-aichi-e13a",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-aichi-e13a",
+    "where": "infobox: dimensions, wing area, masses, Kinsei 43, 376 km/h at 2,180 m, range, ceiling, 3,000 m in 6 min 5 s, armament"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Twin floats (shape.floats, an addition to the vocabulary). The 250 kg bomb load drawn as four 60 kg. Turn and roll are estimates. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (16 s for the sustained 360° at 1,500 m) with the turn rate capped at 12.9°/s so the 360° takes 28 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "f1m2",
+  "name": "Mitsubishi F1M2 Type 0 observation seaplane",
+  "ja": "零式観測機",
+  "type": "patrol",
+  "side": "jp",
+  "crew": 2,
+  "span": 11,
+  "length": 9.5,
+  "height": 4,
+  "weightKg": {
+   "empty": 1928,
+   "loaded": 2550
+  },
+  "wingM2": 29.5,
+  "engine": {
+   "kind": "radial",
+   "hp": 875,
+   "count": 1,
+   "ratedAltM": 3440
+  },
+  "speedKmh": {
+   "max": 370,
+   "atAltM": 3440,
+   "seaLevel": 320,
+   "cruise": 280,
+   "stall": 95,
+   "diveLimit": 450
+  },
+  "climbMs": 8.7,
+  "ceilingM": 9440,
+  "rangeKm": 740,
+  "enduranceS": 2400,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 2550,
+   "cd0": 0.034,
+   "clMax": 1.6,
+   "k": 0.1035,
+   "e": 0.75,
+   "gLimit": 5.5,
+   "vShakeMs": 130,
+   "vBreakMs": 145,
+   "diveDrag": 0,
+   "turnLimitDegS": 22.5,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     58.2,
+     55
+    ],
+    [
+     93.1,
+     70
+    ],
+    [
+     128,
+     60
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 16,
+   "rollIasAt3048": [
+    [
+     50,
+     55
+    ],
+    [
+     80,
+     70
+    ],
+    [
+     110,
+     60
+    ]
+   ],
+   "note": "a biplane observation seaplane, agile for its type"
+  },
+  "guns": [
+   {
+    "weapon": "jp-77-t97",
+    "count": 2,
+    "position": "nose",
+    "rounds": 500
+   },
+   {
+    "weapon": "jp-77-t92",
+    "count": 1,
+    "position": "rear",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "jp-60kg-t97",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "high",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "fixed",
+   "cowl": "radial",
+   "dihedral": 4,
+   "floats": "single"
+  },
+  "colours": [
+   {
+    "from": "1941-01",
+    "to": "1942-09",
+    "upper": "ijn-ameiro",
+    "lower": "ijn-ameiro",
+    "insignia": "hinomaru"
+   },
+   {
+    "from": "1942-09",
+    "to": "1944-01",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru-white-surround"
+   },
+   {
+    "from": "1944-01",
+    "to": "1945-09",
+    "upper": "ijn-green",
+    "lower": "ijn-grey",
+    "insignia": "hinomaru"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-mitsubishi-f1m",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-mitsubishi-f1m",
+    "where": "infobox: dimensions, wing area, masses, Zuisei 13, 370 km/h at 3,440 m, 5,000 m in 9 min 36 s, armament"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "A biplane: drawn with a high wing over a lower stub (the vocabulary has no biplane; wing \"high\" is the nearest). Central float with wingtip floats (shape.floats \"single\"). Turn and roll are estimates. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (14.8 s for the sustained 360° at 1,500 m) with the turn rate capped at 22.5°/s so the 360° takes 16 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "f4f-3",
+  "name": "Grumman F4F-3 Wildcat",
+  "ja": null,
+  "type": "fighter",
+  "side": "us",
+  "crew": 1,
+  "span": 11.58,
+  "length": 8.76,
+  "height": 3.61,
+  "weightKg": {
+   "empty": 2226,
+   "loaded": 3367
+  },
+  "wingM2": 24.15,
+  "engine": {
+   "kind": "radial",
+   "hp": 1200,
+   "count": 1,
+   "ratedAltM": 6400
+  },
+  "speedKmh": {
+   "max": 533,
+   "atAltM": 6400,
+   "seaLevel": 450,
+   "cruise": 418,
+   "stall": 120,
+   "diveLimit": 780
+  },
+  "climbMs": 11.7,
+  "ceilingM": 12040,
+  "rangeKm": 1360,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 3367,
+   "cd0": 0.026,
+   "clMax": 1.4,
+   "k": 0.0764,
+   "e": 0.75,
+   "gLimit": 7,
+   "vShakeMs": 190,
+   "vBreakMs": 215,
+   "diveDrag": 0,
+   "turnLimitDegS": 18,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     48
+    ],
+    [
+     83.8,
+     55
+    ],
+    [
+     124.5,
+     75
+    ],
+    [
+     155.9,
+     63
+    ],
+    [
+     176.9,
+     57
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 20,
+   "rollIasAt3048": [
+    [
+     60,
+     48
+    ],
+    [
+     72,
+     55
+    ],
+    [
+     107,
+     75
+    ],
+    [
+     134,
+     63
+    ],
+    [
+     152,
+     57
+    ]
+   ],
+   "note": "best roll 58°/s at 190 mph IAS with a 30-lb stick force; \"too heavy for satisfactory maneuverability at high speeds\" (NACA)"
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 4,
+    "position": "wing",
+    "rounds": 450
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-100lb-an-m30",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "short-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 5
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-grumman-f4f-wildcat",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-grumman-f4f-wildcat",
+    "where": "infobox (F4F-3): dimensions, weights, R-1830-76, 533 km/h, climb, ceiling, range"
+   },
+   {
+    "id": "naca-f4f3",
+    "where": "roll rate and stick forces"
+   },
+   {
+    "id": "naca-868",
+    "where": "fig. 47: the F4F-3, 75°/s at 240 mph falling to about 63°/s at 300 mph"
+   }
+  ],
+  "notes": "Loaded 3,367 kg is high for a -3 (verify). Altitude of the top speed not in the infobox: 6,400 m estimated. vShake and vBreak R7's (verify). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (18.9 s for the sustained 360° at 1,500 m) with the turn rate capped at 18°/s so the 360° takes 20 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "f4f-4",
+  "name": "Grumman F4F-4 Wildcat",
+  "ja": null,
+  "type": "fighter",
+  "side": "us",
+  "crew": 1,
+  "span": 11.58,
+  "length": 8.76,
+  "height": 3.6,
+  "weightKg": {
+   "empty": 2610,
+   "loaded": 3610
+  },
+  "wingM2": 24.15,
+  "engine": {
+   "kind": "radial",
+   "hp": 1200,
+   "count": 1,
+   "ratedAltM": 5900
+  },
+  "speedKmh": {
+   "max": 512,
+   "atAltM": 5900,
+   "seaLevel": 440,
+   "cruise": 249,
+   "stall": 125,
+   "diveLimit": 780
+  },
+  "climbMs": 11,
+  "ceilingM": 10400,
+  "rangeKm": 1240,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 3610,
+   "cd0": 0.0273,
+   "clMax": 1.4,
+   "k": 0.0764,
+   "e": 0.75,
+   "gLimit": 7,
+   "vShakeMs": 190,
+   "vBreakMs": 215,
+   "diveDrag": 0,
+   "turnLimitDegS": 17.14,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     44
+    ],
+    [
+     83.8,
+     50
+    ],
+    [
+     124.5,
+     68
+    ],
+    [
+     155.9,
+     57
+    ],
+    [
+     176.9,
+     51
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 21,
+   "rollIasAt3048": [
+    [
+     60,
+     44
+    ],
+    [
+     72,
+     50
+    ],
+    [
+     107,
+     68
+    ],
+    [
+     134,
+     57
+    ],
+    [
+     152,
+     51
+    ]
+   ],
+   "note": "heavier than the -3 with folding wings and six guns and no more power; the Thach weave first flown in combat at Midway"
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 6,
+    "position": "wing",
+    "rounds": 240
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-100lb-an-m30",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "short-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 5
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-grumman-f4f-wildcat",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-grumman-f4f-wildcat",
+    "where": "text: the F4F-4's weight, six guns, fewer rounds"
+   },
+   {
+    "id": "wp-thach-weave",
+    "where": "the beam defence"
+   },
+   {
+    "id": "naca-868",
+    "where": "fig. 47 (the F4F-3's curve, scaled 0.9 for the heavier -4)"
+   }
+  ],
+  "notes": "Most F4F-4 numbers are R6 and R7 estimates (E): 3,610 kg, 512 km/h at 5,900 m, 240 rounds a gun (the Yorktown report via R4). Roll the F4F-3's × 0.9. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (20.6 s for the sustained 360° at 1,500 m) with the turn rate capped at 17.1°/s so the 360° takes 21 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "fm-2",
+  "name": "General Motors FM-2 Wildcat",
+  "ja": null,
+  "type": "fighter",
+  "side": "us",
+  "crew": 1,
+  "span": 11.58,
+  "length": 8.8,
+  "height": 3.5,
+  "weightKg": {
+   "empty": 2470,
+   "loaded": 3400
+  },
+  "wingM2": 24.15,
+  "engine": {
+   "kind": "radial",
+   "hp": 1350,
+   "count": 1,
+   "ratedAltM": 8800
+  },
+  "speedKmh": {
+   "max": 534,
+   "atAltM": 8800,
+   "seaLevel": 470,
+   "cruise": 264,
+   "stall": 120,
+   "diveLimit": 780
+  },
+  "climbMs": 15,
+  "ceilingM": 10600,
+  "rangeKm": 1250,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 3400,
+   "cd0": 0.038,
+   "clMax": 1.4,
+   "k": 0.0689,
+   "e": 0.832,
+   "gLimit": 7,
+   "vShakeMs": 190,
+   "vBreakMs": 215,
+   "diveDrag": 0,
+   "turnLimitDegS": null,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     48
+    ],
+    [
+     83.8,
+     55
+    ],
+    [
+     124.5,
+     72
+    ],
+    [
+     155.9,
+     62
+    ],
+    [
+     176.9,
+     56
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 18,
+   "rollIasAt3048": [
+    [
+     60,
+     48
+    ],
+    [
+     72,
+     55
+    ],
+    [
+     107,
+     72
+    ],
+    [
+     134,
+     62
+    ],
+    [
+     152,
+     56
+    ]
+   ],
+   "note": "lighter and more powerful than the F4F-4, with a taller fin (verify)"
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 4,
+    "position": "wing",
+    "rounds": 430
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-100lb-an-m30",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "short-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 5
+  },
+  "colours": [
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-grumman-f4f-wildcat",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-grumman-f4f-wildcat",
+    "where": "the FM-2 variant (text)"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Every FM-2 number is an estimate (R6 E: no Standard Aircraft Characteristics sheet reached). Taffy 3's VC squadrons at Samar. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, the span efficiency e (0.83) raised from 0.75 (18.6 s) so the sustained 360° at 1,500 m is 18 s. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "f6f-3",
+  "name": "Grumman F6F-3 Hellcat",
+  "ja": null,
+  "type": "fighter",
+  "side": "us",
+  "crew": 1,
+  "span": 13.06,
+  "length": 10.24,
+  "height": 3.99,
+  "weightKg": {
+   "empty": 4100,
+   "loaded": 5600
+  },
+  "wingM2": 31,
+  "engine": {
+   "kind": "radial",
+   "hp": 2000,
+   "count": 1,
+   "ratedAltM": 7000
+  },
+  "speedKmh": {
+   "max": 605,
+   "atAltM": 7000,
+   "seaLevel": 520,
+   "cruise": 270,
+   "stall": 135,
+   "diveLimit": 760
+  },
+  "climbMs": 15,
+  "ceilingM": 11300,
+  "rangeKm": 1750,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 5600,
+   "cd0": 0.0248,
+   "clMax": 1.5,
+   "k": 0.0593,
+   "e": 0.975,
+   "gLimit": 7,
+   "vShakeMs": 200,
+   "vBreakMs": 220,
+   "diveDrag": 0,
+   "turnLimitDegS": null,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     45
+    ],
+    [
+     103.6,
+     60
+    ],
+    [
+     151.3,
+     50
+    ],
+    [
+     208.3,
+     30
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 20,
+   "rollIasAt3048": [
+    [
+     60,
+     45
+    ],
+    [
+     89,
+     60
+    ],
+    [
+     130,
+     50
+    ],
+    [
+     179,
+     30
+    ]
+   ],
+   "note": "NACA: pb/2V below the Navy's 0.08 across the level-flight range"
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 6,
+    "position": "wing",
+    "rounds": 400
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "short-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 7
+  },
+  "colours": [
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-grumman-f6f-hellcat",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-grumman-f6f-hellcat",
+    "where": "infobox (F6F-5; the -3 similar): dimensions, R-2800-10 2,000 hp"
+   },
+   {
+    "id": "naca-f6f3",
+    "where": "aileron effectiveness"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "F6F-3 masses and speeds are the engine's estimates below the infobox's F6F-5 (verify). Wing area 31.0 m² (334 sq ft, verify). Roll R6 A4 E. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, the span efficiency e (0.97) raised from 0.75 (22.2 s) so the sustained 360° at 1,500 m is 20 s. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "f2a-3",
+  "name": "Brewster F2A-3 Buffalo",
+  "ja": null,
+  "type": "fighter",
+  "side": "us",
+  "crew": 1,
+  "span": 10.67,
+  "length": 8.03,
+  "height": 3.66,
+  "weightKg": {
+   "empty": 2146,
+   "loaded": 3247
+  },
+  "wingM2": 19.4,
+  "engine": {
+   "kind": "radial",
+   "hp": 1200,
+   "count": 1,
+   "ratedAltM": 5000
+  },
+  "speedKmh": {
+   "max": 517,
+   "atAltM": 5000,
+   "seaLevel": 440,
+   "cruise": 259,
+   "stall": 130,
+   "diveLimit": 700
+  },
+  "climbMs": 12.4,
+  "ceilingM": 10100,
+  "rangeKm": 1553,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 3247,
+   "cd0": 0.0309,
+   "clMax": 1.4,
+   "k": 0.0631,
+   "e": 0.859,
+   "gLimit": 7,
+   "vShakeMs": 180,
+   "vBreakMs": 200,
+   "diveDrag": 0,
+   "turnLimitDegS": null,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     45
+    ],
+    [
+     116.4,
+     65
+    ],
+    [
+     162.9,
+     55
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 20,
+   "rollIasAt3048": [
+    [
+     60,
+     45
+    ],
+    [
+     100,
+     65
+    ],
+    [
+     140,
+     55
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 4,
+    "position": "nose",
+    "rounds": 400
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-100lb-an-m30",
+    "count": 2
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "short-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 5
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-brewster-f2a-buffalo",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-brewster-f2a-buffalo",
+    "where": "infobox: 35 ft, 26 ft 4 in, 12 ft, 209 sq ft, 4,732 lb empty, 7,159 lb max, R-1820-40 1,200 hp, 321 mph, ceiling, climb, armament"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Converted from the infobox (feet, pounds). Loaded mass the engine's estimate below the maximum. VMF-221 at Midway. Turn and roll are estimates. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, the span efficiency e (0.86) raised from 0.75 (21 s) so the sustained 360° at 1,500 m is 20 s. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "sbd-3",
+  "name": "Douglas SBD-3 Dauntless",
+  "ja": null,
+  "type": "dive",
+  "side": "us",
+  "crew": 2,
+  "span": 12.66,
+  "length": 10.09,
+  "height": 3.96,
+  "weightKg": {
+   "empty": 2905,
+   "loaded": 4350
+  },
+  "wingM2": 30.19,
+  "engine": {
+   "kind": "radial",
+   "hp": 1000,
+   "count": 1,
+   "ratedAltM": 4900
+  },
+  "speedKmh": {
+   "max": 410,
+   "atAltM": 4900,
+   "seaLevel": 365,
+   "cruise": 298,
+   "stall": 125,
+   "diveLimit": 560
+  },
+  "climbMs": 8.5,
+  "ceilingM": 7782,
+  "rangeKm": 1794,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 4350,
+   "cd0": 0.0291,
+   "clMax": 1.5,
+   "k": 0.0799,
+   "e": 0.75,
+   "gLimit": 6.5,
+   "vShakeMs": 145,
+   "vBreakMs": 156,
+   "diveDrag": 0.1667,
+   "turnLimitDegS": 14.4,
+   "diveMs": 122,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     45
+    ],
+    [
+     81.5,
+     50
+    ],
+    [
+     116.4,
+     60
+    ],
+    [
+     162.9,
+     60
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 25,
+   "rollIasAt3048": [
+    [
+     60,
+     45
+    ],
+    [
+     70,
+     50
+    ],
+    [
+     100,
+     60
+    ],
+    [
+     140,
+     60
+    ]
+   ],
+   "note": "perforated split dive flaps, kept for \"eliminating tail buffeting with dive flaps open\"; VB-3 released at an average of 2,500 ft (R4)"
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 2,
+    "position": "nose",
+    "rounds": 360
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 2,
+    "position": "rear",
+    "rounds": 2000
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-1000lb-an-m65",
+    "count": 1
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-douglas-sbd-dauntless",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-douglas-sbd-dauntless",
+    "where": "infobox (SBD-5): dimensions, weights, ceiling, range; armament; payload"
+   },
+   {
+    "id": "naca-sbd1",
+    "where": "the dive flaps"
+   },
+   {
+    "id": "naca-sbd-dive",
+    "where": "test dives at 45°, 60° and 75°"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Mass 4,350 kg with the 1,000-lb bomb (R7 §4.2); the infobox weights are the SBD-5's. Top speed 410 km/h at 4,267 m (SBD-5) ≠ 402 at 4,900 (DATA.md's example, unsourced). Sea-level speed, stall and dive limit DATA.md's unsourced figures (verify). Turn 25 s with the bomb (R7). Roll an estimate (not in NACA 868). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (24.5 s for the sustained 360° at 1,500 m) with the turn rate capped at 14.4°/s so the 360° takes 25 s, as R7 recommends where the polar alone turns too well; dive drag so a 70° dive settles near 122 m/s at 3,000 m. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "sb2u-3",
+  "name": "Vought SB2U-3 Vindicator",
+  "ja": null,
+  "type": "dive",
+  "side": "us",
+  "crew": 2,
+  "span": 12.77,
+  "length": 10.36,
+  "height": 4.27,
+  "weightKg": {
+   "empty": 2556,
+   "loaded": 3390
+  },
+  "wingM2": 28.4,
+  "engine": {
+   "kind": "radial",
+   "hp": 825,
+   "count": 1,
+   "ratedAltM": 2900
+  },
+  "speedKmh": {
+   "max": 391,
+   "atAltM": 2900,
+   "seaLevel": 340,
+   "cruise": 245,
+   "stall": 110,
+   "diveLimit": 480
+  },
+  "climbMs": 5.4,
+  "ceilingM": 7190,
+  "rangeKm": 1802,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 3390,
+   "cd0": 0.026,
+   "clMax": 1.45,
+   "k": 0.0739,
+   "e": 0.75,
+   "gLimit": 6,
+   "vShakeMs": 140,
+   "vBreakMs": 150,
+   "diveDrag": 0.1215,
+   "turnLimitDegS": 15,
+   "diveMs": 128,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     35
+    ],
+    [
+     104.7,
+     42
+    ],
+    [
+     139.6,
+     38
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 24,
+   "rollIasAt3048": [
+    [
+     60,
+     35
+    ],
+    [
+     90,
+     42
+    ],
+    [
+     120,
+     38
+    ]
+   ],
+   "note": "no dive brakes: the propeller in fine pitch and the gear held the dive (verify)"
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 1,
+    "position": "wing",
+    "rounds": 400
+   },
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 1,
+    "position": "rear",
+    "rounds": 400
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 1
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-vought-sb2u-vindicator",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-vought-sb2u-vindicator",
+    "where": "infobox: dimensions, 305.3 sq ft, weights, R-1535-02 825 hp, 243 mph at 9,500 ft, ceiling, climb, armament, bombs"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Converted from the infobox. VMSB-241 at Midway. Dive speed the engine's estimate (verify). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (19.7 s for the sustained 360° at 1,500 m) with the turn rate capped at 15°/s so the 360° takes 24 s, as R7 recommends where the polar alone turns too well; dive drag so a 70° dive settles near 128 m/s at 3,000 m. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "tbd-1",
+  "name": "Douglas TBD-1 Devastator",
+  "ja": null,
+  "type": "torpedo",
+  "side": "us",
+  "crew": 3,
+  "span": 15.24,
+  "length": 10.67,
+  "height": 4.57,
+  "weightKg": {
+   "empty": 2540,
+   "loaded": 4213
+  },
+  "wingM2": 39.2,
+  "engine": {
+   "kind": "radial",
+   "hp": 900,
+   "count": 1,
+   "ratedAltM": 2438
+  },
+  "speedKmh": {
+   "max": 331,
+   "atAltM": 2438,
+   "seaLevel": 300,
+   "cruise": 206,
+   "stall": 105,
+   "diveLimit": 420
+  },
+  "climbMs": 3.7,
+  "ceilingM": 5944,
+  "rangeKm": 700,
+  "enduranceS": 1500,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 4213,
+   "cd0": 0.0318,
+   "clMax": 1.5,
+   "k": 0.0716,
+   "e": 0.75,
+   "gLimit": 4.5,
+   "vShakeMs": 120,
+   "vBreakMs": 130,
+   "diveDrag": 0,
+   "turnLimitDegS": 12,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     58.2,
+     25
+    ],
+    [
+     93.1,
+     30
+    ],
+    [
+     128,
+     28
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 30,
+   "rollIasAt3048": [
+    [
+     50,
+     25
+    ],
+    [
+     80,
+     30
+    ],
+    [
+     110,
+     28
+    ]
+   ],
+   "note": "\"the aerial torpedo could not even be released at speeds above 115 mph\"; the approach at 100 kn, VT-3 down to 150 ft under attack (R4)"
+  },
+  "guns": [
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "nose",
+    "rounds": 600
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "rear",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-1000lb-an-m65",
+    "count": 1
+   }
+  ],
+  "torpedo": {
+   "weapon": "mk13-1942"
+  },
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "long-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-douglas-tbd-devastator",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-douglas-tbd-devastator",
+    "where": "infobox: dimensions, weights, R-1830-64 900 hp, 331 km/h at 2,438 m, range with a torpedo, the release limit"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Semi-retracting gear (the wheels protruded): drawn retracted. Turn and roll are estimates. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (19.3 s for the sustained 360° at 1,500 m) with the turn rate capped at 12°/s so the 360° takes 30 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "tbf-1",
+  "name": "Grumman TBF-1 Avenger",
+  "ja": null,
+  "type": "torpedo",
+  "side": "us",
+  "crew": 3,
+  "span": 16.51,
+  "length": 12.19,
+  "height": 5,
+  "weightKg": {
+   "empty": 4783,
+   "loaded": 7047
+  },
+  "wingM2": 45.5,
+  "engine": {
+   "kind": "radial",
+   "hp": 1700,
+   "count": 1,
+   "ratedAltM": 3700
+  },
+  "speedKmh": {
+   "max": 447,
+   "atAltM": 3700,
+   "seaLevel": 400,
+   "cruise": 346,
+   "stall": 125,
+   "diveLimit": 510
+  },
+  "climbMs": 5.5,
+  "ceilingM": 6888,
+  "rangeKm": 1456,
+  "enduranceS": 1500,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 7047,
+   "cd0": 0.0237,
+   "clMax": 1.5,
+   "k": 0.0708,
+   "e": 0.75,
+   "gLimit": 4.5,
+   "vShakeMs": 140,
+   "vBreakMs": 155,
+   "diveDrag": 0,
+   "turnLimitDegS": 13.85,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     35
+    ],
+    [
+     116.4,
+     40
+    ],
+    [
+     162.9,
+     36
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 26,
+   "rollIasAt3048": [
+    [
+     60,
+     35
+    ],
+    [
+     100,
+     40
+    ],
+    [
+     140,
+     36
+    ]
+   ],
+   "note": "by late 1944, with the drag and shroud rings, Mark 13 drops at up to 800 ft and 260 kn"
+  },
+  "guns": [
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "nose",
+    "rounds": 600
+   },
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 1,
+    "position": "turret",
+    "rounds": 400
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "ventral",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 4
+   }
+  ],
+  "torpedo": {
+   "weapon": "mk13-1942"
+  },
+  "torpedoes": [
+   {
+    "weapon": "mk13-1942",
+    "from": "1942-01",
+    "to": "1944-09"
+   },
+   {
+    "weapon": "mk13-1944",
+    "from": "1944-09",
+    "to": "1945-09"
+   }
+  ],
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "bubble",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-grumman-tbf-avenger",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-grumman-tbf-avenger",
+    "where": "infobox: dimensions, wing area, 7,047 kg (variant verify), R-2600-8 1,700 hp, 447 km/h, ceiling, range, armament"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Empty mass the engine's estimate. Six TBF-1s flew from Midway on 4 June 1942. The canopy drawn as \"bubble\" for the dorsal ball turret (the vocabulary's nearest). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (23.3 s for the sustained 360° at 1,500 m) with the turn rate capped at 13.8°/s so the 360° takes 26 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "tbm-1c",
+  "name": "General Motors TBM-1C Avenger",
+  "ja": null,
+  "type": "torpedo",
+  "side": "us",
+  "crew": 3,
+  "span": 16.51,
+  "length": 12.19,
+  "height": 5,
+  "weightKg": {
+   "empty": 4900,
+   "loaded": 7300
+  },
+  "wingM2": 45.5,
+  "engine": {
+   "kind": "radial",
+   "hp": 1700,
+   "count": 1,
+   "ratedAltM": 3700
+  },
+  "speedKmh": {
+   "max": 436,
+   "atAltM": 3700,
+   "seaLevel": 395,
+   "cruise": 340,
+   "stall": 125,
+   "diveLimit": 510
+  },
+  "climbMs": 5.2,
+  "ceilingM": 6800,
+  "rangeKm": 1600,
+  "enduranceS": 1500,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 7300,
+   "cd0": 0.0251,
+   "clMax": 1.5,
+   "k": 0.0708,
+   "e": 0.75,
+   "gLimit": 4.5,
+   "vShakeMs": 140,
+   "vBreakMs": 155,
+   "diveDrag": 0,
+   "turnLimitDegS": 13.85,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     35
+    ],
+    [
+     116.4,
+     40
+    ],
+    [
+     162.9,
+     36
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 26,
+   "rollIasAt3048": [
+    [
+     60,
+     35
+    ],
+    [
+     100,
+     40
+    ],
+    [
+     140,
+     36
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 2,
+    "position": "wing",
+    "rounds": 300
+   },
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 1,
+    "position": "turret",
+    "rounds": 400
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "ventral",
+    "rounds": 600
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 4
+   }
+  ],
+  "torpedo": {
+   "weapon": "mk13-1944"
+  },
+  "torpedoes": [
+   {
+    "weapon": "mk13-1942",
+    "from": "1943-06",
+    "to": "1944-09"
+   },
+   {
+    "weapon": "mk13-1944",
+    "from": "1944-09",
+    "to": "1945-09"
+   }
+  ],
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "bubble",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-grumman-tbf-avenger",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-grumman-tbf-avenger",
+    "where": "the TBM-1C (wing guns); infobox figures"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Masses and speeds the engine's estimates on the TBF-1's (verify). Taffy 3's VC squadrons at Samar. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (24.5 s for the sustained 360° at 1,500 m) with the turn rate capped at 13.8°/s so the 360° takes 26 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "p-40b",
+  "name": "Curtiss P-40B Warhawk (Tomahawk)",
+  "ja": null,
+  "type": "fighter",
+  "side": "us",
+  "crew": 1,
+  "span": 11.38,
+  "length": 9.68,
+  "height": 3.23,
+  "weightKg": {
+   "empty": 2460,
+   "loaded": 3450
+  },
+  "wingM2": 21.92,
+  "engine": {
+   "kind": "inline",
+   "hp": 1040,
+   "count": 1,
+   "ratedAltM": 4572
+  },
+  "speedKmh": {
+   "max": 566,
+   "atAltM": 4572,
+   "seaLevel": 480,
+   "cruise": 435,
+   "stall": 145,
+   "diveLimit": 780
+  },
+  "climbMs": 13,
+  "ceilingM": 8870,
+  "rangeKm": 1152,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 3450,
+   "cd0": 0.017,
+   "clMax": 1.35,
+   "k": 0.0718,
+   "e": 0.751,
+   "gLimit": 7,
+   "vShakeMs": 200,
+   "vBreakMs": 215,
+   "diveDrag": 0,
+   "turnLimitDegS": null,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     50
+    ],
+    [
+     83.8,
+     57
+    ],
+    [
+     114,
+     85
+    ],
+    [
+     135,
+     95
+    ],
+    [
+     155.9,
+     95
+    ],
+    [
+     176.9,
+     90
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 21.5,
+   "rollIasAt3048": [
+    [
+     60,
+     50
+    ],
+    [
+     72,
+     57
+    ],
+    [
+     98,
+     85
+    ],
+    [
+     116,
+     95
+    ],
+    [
+     134,
+     95
+    ],
+    [
+     152,
+     90
+    ]
+   ],
+   "note": "NACA's benchmark of light, effective ailerons; faster in a dive than any Japanese fighter of the early war years"
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 2,
+    "position": "nose",
+    "rounds": 380
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 4,
+    "position": "wing",
+    "rounds": 490
+   }
+  ],
+  "payload": [],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "short-frame",
+   "gear": "retract",
+   "cowl": "inline",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-06",
+    "to": "1942-05-15",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-06-28",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1945-09",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-curtiss-p-40-warhawk",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-curtiss-p-40-warhawk",
+    "where": "infobox (P-40E) and text"
+   },
+   {
+    "id": "naca-868",
+    "where": "fig. 47: the P-40F, about 95°/s at 260–300 mph"
+   }
+  ],
+  "notes": "P-40B numbers are R6 E (the infobox is the P-40E). The chin scoop of the inline engine. Welch and Taylor flew from Haleʻiwa (R4). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, the span efficiency e (0.75) raised from 0.75 (21.5 s) so the sustained 360° at 1,500 m is 21.5 s. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "p-36a",
+  "name": "Curtiss P-36A Hawk",
+  "ja": null,
+  "type": "fighter",
+  "side": "us",
+  "crew": 1,
+  "span": 11.38,
+  "length": 8.69,
+  "height": 2.57,
+  "weightKg": {
+   "empty": 2072,
+   "loaded": 2563
+  },
+  "wingM2": 21.92,
+  "engine": {
+   "kind": "radial",
+   "hp": 1050,
+   "count": 1,
+   "ratedAltM": 3000
+  },
+  "speedKmh": {
+   "max": 504,
+   "atAltM": 3000,
+   "seaLevel": 440,
+   "cruise": 434,
+   "stall": 120,
+   "diveLimit": 720
+  },
+  "climbMs": 17.3,
+  "ceilingM": 9967,
+  "rangeKm": 1006,
+  "enduranceS": 1800,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 2563,
+   "cd0": 0.0217,
+   "clMax": 1.4,
+   "k": 0.0718,
+   "e": 0.75,
+   "gLimit": 7,
+   "vShakeMs": 190,
+   "vBreakMs": 205,
+   "diveDrag": 0,
+   "turnLimitDegS": 20,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     45
+    ],
+    [
+     93.1,
+     60
+    ],
+    [
+     128,
+     70
+    ],
+    [
+     162.9,
+     65
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 18,
+   "rollIasAt3048": [
+    [
+     60,
+     45
+    ],
+    [
+     80,
+     60
+    ],
+    [
+     110,
+     70
+    ],
+    [
+     140,
+     65
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "nose",
+    "rounds": 500
+   },
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 1,
+    "position": "nose",
+    "rounds": 200
+   }
+  ],
+  "payload": [],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "short-frame",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 6
+  },
+  "colours": [
+   {
+    "from": "1941-06",
+    "to": "1942-05-15",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-06-28",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1945-09",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-curtiss-p-36-hawk",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-curtiss-p-36-hawk",
+    "where": "infobox: dimensions, weights, R-1830-17 1,050 hp, 504 km/h, climb, ceiling, range, armament"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Altitude of the top speed estimated. No self-sealing tanks in 1941 (verify). Turn and roll R6 E. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (15.1 s for the sustained 360° at 1,500 m) with the turn rate capped at 20°/s so the 360° takes 18 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "pby-5",
+  "name": "Consolidated PBY-5 Catalina",
+  "ja": null,
+  "type": "patrol",
+  "side": "us",
+  "crew": 8,
+  "span": 31.7,
+  "length": 19.46,
+  "height": 6.43,
+  "weightKg": {
+   "empty": 9485,
+   "loaded": 14000
+  },
+  "wingM2": 130,
+  "engine": {
+   "kind": "radial",
+   "hp": 1200,
+   "count": 2,
+   "ratedAltM": 2000
+  },
+  "speedKmh": {
+   "max": 315,
+   "atAltM": 2000,
+   "seaLevel": 290,
+   "cruise": 201,
+   "stall": 110,
+   "diveLimit": 380
+  },
+  "climbMs": 5.1,
+  "ceilingM": 4816,
+  "rangeKm": 4055,
+  "enduranceS": 3600,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 14000,
+   "cd0": 0.0285,
+   "clMax": 1.4,
+   "k": 0.0549,
+   "e": 0.75,
+   "gLimit": 2.5,
+   "vShakeMs": 85,
+   "vBreakMs": 95,
+   "diveDrag": 0,
+   "turnLimitDegS": 6,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     58.2,
+     12
+    ],
+    [
+     81.5,
+     16
+    ],
+    [
+     104.7,
+     15
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 60,
+   "rollIasAt3048": [
+    [
+     50,
+     12
+    ],
+    [
+     70,
+     16
+    ],
+    [
+     90,
+     15
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 2,
+    "position": "nose",
+    "rounds": 500
+   },
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 2,
+    "position": "waist",
+    "rounds": 400
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "ventral",
+    "rounds": 500
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 4
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "parasol",
+   "tail": "single",
+   "canopy": "cockpit",
+   "gear": "fixed",
+   "cowl": "radial",
+   "dihedral": 0,
+   "floats": "boat"
+  },
+  "colours": [
+   {
+    "from": "1941-10",
+    "to": "1942-05-15",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-01",
+    "upper": "blue-grey",
+    "lower": "light-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-01",
+    "to": "1943-06-28",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1944-10",
+    "upper": "sea-blue",
+    "lower": "insignia-white",
+    "insignia": "star-bar-blue"
+   },
+   {
+    "from": "1944-10",
+    "to": "1945-09",
+    "upper": "glossy-sea-blue",
+    "lower": "glossy-sea-blue",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-consolidated-pby-catalina",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-consolidated-pby-catalina",
+    "where": "infobox: dimensions, weights, 2 × R-1830-92 1,200 hp, 315 km/h, ceiling, range, armament"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "A flying boat (shape.floats \"boat\", an addition) with retracting wingtip floats. Loaded mass the engine's estimate below the 16,067 kg maximum. Wing area 130 m² (1,400 sq ft, verify). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (19.7 s for the sustained 360° at 1,500 m) with the turn rate capped at 6°/s so the 360° takes 60 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "b-17e",
+  "name": "Boeing B-17E Flying Fortress",
+  "ja": null,
+  "type": "bomber",
+  "side": "us",
+  "crew": 10,
+  "span": 31.62,
+  "length": 22.5,
+  "height": 5.82,
+  "weightKg": {
+   "empty": 14800,
+   "loaded": 24000
+  },
+  "wingM2": 132,
+  "engine": {
+   "kind": "radial",
+   "hp": 1200,
+   "count": 4,
+   "ratedAltM": 7600
+  },
+  "speedKmh": {
+   "max": 512,
+   "atAltM": 7600,
+   "seaLevel": 420,
+   "cruise": 340,
+   "stall": 145,
+   "diveLimit": 500
+  },
+  "climbMs": 4.6,
+  "ceilingM": 11150,
+  "rangeKm": 3200,
+  "enduranceS": 3600,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 24000,
+   "cd0": 0.0217,
+   "clMax": 1.4,
+   "k": 0.056,
+   "e": 0.75,
+   "gLimit": 2.5,
+   "vShakeMs": 120,
+   "vBreakMs": 130,
+   "diveDrag": 0,
+   "turnLimitDegS": 5.14,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     69.8,
+     12
+    ],
+    [
+     104.7,
+     15
+    ],
+    [
+     139.6,
+     13
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 70,
+   "rollIasAt3048": [
+    [
+     60,
+     12
+    ],
+    [
+     90,
+     15
+    ],
+    [
+     120,
+     13
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 8,
+    "position": "turret",
+    "rounds": 400
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 1,
+    "position": "nose",
+    "rounds": 500
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 8
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "cockpit",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 4
+  },
+  "colours": [
+   {
+    "from": "1941-06",
+    "to": "1942-05-15",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-06-28",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1945-09",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-boeing-b-17-flying-fortress",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-boeing-b-17-flying-fortress",
+    "where": "infobox (the G model) and text"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "B-17E numbers are R6 E (the infobox is the G). Midway, from the island. Wing area 132 m² (1,420 sq ft). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (26.7 s for the sustained 360° at 1,500 m) with the turn rate capped at 5.1°/s so the 360° takes 70 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "b-26",
+  "name": "Martin B-26 Marauder",
+  "ja": null,
+  "type": "bomber",
+  "side": "us",
+  "crew": 7,
+  "span": 19.81,
+  "length": 17.07,
+  "height": 6.04,
+  "weightKg": {
+   "empty": 9700,
+   "loaded": 14000
+  },
+  "wingM2": 55.7,
+  "engine": {
+   "kind": "radial",
+   "hp": 1850,
+   "count": 2,
+   "ratedAltM": 4600
+  },
+  "speedKmh": {
+   "max": 507,
+   "atAltM": 4600,
+   "seaLevel": 440,
+   "cruise": 410,
+   "stall": 165,
+   "diveLimit": 560
+  },
+  "climbMs": 6.1,
+  "ceilingM": 7620,
+  "rangeKm": 1600,
+  "enduranceS": 3600,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 14000,
+   "cd0": 0.0306,
+   "clMax": 1.4,
+   "k": 0.0602,
+   "e": 0.75,
+   "gLimit": 3,
+   "vShakeMs": 140,
+   "vBreakMs": 155,
+   "diveDrag": 0,
+   "turnLimitDegS": 6.55,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     81.5,
+     18
+    ],
+    [
+     116.4,
+     22
+    ],
+    [
+     151.3,
+     20
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 55,
+   "rollIasAt3048": [
+    [
+     70,
+     18
+    ],
+    [
+     100,
+     22
+    ],
+    [
+     130,
+     20
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-50cal-an-m2",
+    "count": 2,
+    "position": "turret",
+    "rounds": 400
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 2,
+    "position": "nose",
+    "rounds": 500
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 4
+   }
+  ],
+  "torpedo": {
+   "weapon": "mk13-1942"
+  },
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "cockpit",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 4
+  },
+  "colours": [
+   {
+    "from": "1941-06",
+    "to": "1942-05-15",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-06-28",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1945-09",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-martin-b-26-marauder",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-martin-b-26-marauder",
+    "where": "infobox (late model: 71 ft span, 658 sq ft) and text; Midway's four carried torpedoes"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "The early B-26 of Midway (65 ft span, R-2800-5, about 507 km/h) differs from the infobox's B-26G: span 19.81 m (65 ft) and wing 55.7 m² (602 sq ft) are the early aircraft's from memory (verify). Four carried Mark 13s at Midway (ids.json note). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (31.5 s for the sustained 360° at 1,500 m) with the turn rate capped at 6.5°/s so the 360° takes 55 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "b-18",
+  "name": "Douglas B-18 Bolo",
+  "ja": null,
+  "type": "bomber",
+  "side": "us",
+  "crew": 6,
+  "span": 27.28,
+  "length": 17.63,
+  "height": 4.62,
+  "weightKg": {
+   "empty": 7400,
+   "loaded": 10900
+  },
+  "wingM2": 89.1,
+  "engine": {
+   "kind": "radial",
+   "hp": 1000,
+   "count": 2,
+   "ratedAltM": 3050
+  },
+  "speedKmh": {
+   "max": 348,
+   "atAltM": 3050,
+   "seaLevel": 320,
+   "cruise": 269,
+   "stall": 110,
+   "diveLimit": 400
+  },
+  "climbMs": 5.1,
+  "ceilingM": 7280,
+  "rangeKm": 1450,
+  "enduranceS": 3600,
+  "fatal": 1,
+  "protection": "none",
+  "aero": {
+   "massKg": 10900,
+   "cd0": 0.0287,
+   "clMax": 1.4,
+   "k": 0.0508,
+   "e": 0.75,
+   "gLimit": 2.5,
+   "vShakeMs": 100,
+   "vBreakMs": 110,
+   "diveDrag": 0,
+   "turnLimitDegS": 6,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     58.2,
+     12
+    ],
+    [
+     93.1,
+     15
+    ],
+    [
+     116.4,
+     14
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 60,
+   "rollIasAt3048": [
+    [
+     50,
+     12
+    ],
+    [
+     80,
+     15
+    ],
+    [
+     100,
+     14
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 3,
+    "position": "turret",
+    "rounds": 500
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 4
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "low",
+   "tail": "single",
+   "canopy": "cockpit",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 5
+  },
+  "colours": [
+   {
+    "from": "1941-06",
+    "to": "1942-05-15",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-06-28",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1945-09",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-douglas-b-18-bolo",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-douglas-b-18-bolo",
+    "where": "infobox: 89 ft 6 in, 57 ft 10 in, 15 ft, 959 sq ft, 16,320 lb empty, 24,000 lb gross, 2 × R-1820-53 1,000 hp, 216 mph at 10,000 ft, ceiling, range, armament"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "Converted from the infobox. Pearl Harbor (Hickam). Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (20.3 s for the sustained 360° at 1,500 m) with the turn rate capped at 6°/s so the 360° takes 60 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ },
+ {
+  "id": "a-20",
+  "name": "Douglas A-20 Havoc",
+  "ja": null,
+  "type": "bomber",
+  "side": "us",
+  "crew": 3,
+  "span": 18.69,
+  "length": 14.63,
+  "height": 5.49,
+  "weightKg": {
+   "empty": 7270,
+   "loaded": 10940
+  },
+  "wingM2": 43.1,
+  "engine": {
+   "kind": "radial",
+   "hp": 1600,
+   "count": 2,
+   "ratedAltM": 4420
+  },
+  "speedKmh": {
+   "max": 523,
+   "atAltM": 4420,
+   "seaLevel": 460,
+   "cruise": 450,
+   "stall": 158,
+   "diveLimit": 560
+  },
+  "climbMs": 10.2,
+  "ceilingM": 7220,
+  "rangeKm": 1521,
+  "enduranceS": 3600,
+  "fatal": 1,
+  "protection": "self-sealing",
+  "aero": {
+   "massKg": 10940,
+   "cd0": 0.0321,
+   "clMax": 1.4,
+   "k": 0.0524,
+   "e": 0.75,
+   "gLimit": 4,
+   "vShakeMs": 150,
+   "vBreakMs": 165,
+   "diveDrag": 0,
+   "turnLimitDegS": 9,
+   "diveMs": null,
+   "eta": 0.8,
+   "rollTable": [
+    [
+     81.5,
+     30
+    ],
+    [
+     128,
+     35
+    ],
+    [
+     162.9,
+     32
+    ]
+   ]
+  },
+  "handling": {
+   "turnS": 40,
+   "rollIasAt3048": [
+    [
+     70,
+     30
+    ],
+    [
+     110,
+     35
+    ],
+    [
+     140,
+     32
+    ]
+   ],
+   "note": ""
+  },
+  "guns": [
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 4,
+    "position": "nose",
+    "rounds": 500
+   },
+   {
+    "weapon": "us-30cal-an-m2",
+    "count": 2,
+    "position": "rear",
+    "rounds": 500
+   }
+  ],
+  "payload": [
+   {
+    "weapon": "us-500lb-an-m64",
+    "count": 4
+   }
+  ],
+  "torpedo": null,
+  "shape": {
+   "wing": "mid",
+   "tail": "single",
+   "canopy": "cockpit",
+   "gear": "retract",
+   "cowl": "radial",
+   "dihedral": 5
+  },
+  "colours": [
+   {
+    "from": "1941-06",
+    "to": "1942-05-15",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-red-centre"
+   },
+   {
+    "from": "1942-05-15",
+    "to": "1943-06-28",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-no-red"
+   },
+   {
+    "from": "1943-06-28",
+    "to": "1943-08-14",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-red-outline"
+   },
+   {
+    "from": "1943-08-14",
+    "to": "1945-09",
+    "upper": "olive-drab",
+    "lower": "neutral-grey",
+    "insignia": "star-bar-blue"
+   }
+  ],
+  "silhouette": {
+   "source": "wp-douglas-a-20-havoc",
+   "where": "proportions from the dimensions; shapes from R6 Table A5"
+  },
+  "sources": [
+   {
+    "id": "wp-douglas-a-20-havoc",
+    "where": "infobox: 61 ft 3.5 in, 47 ft 11.9 in, 18 ft, 464 sq ft, 16,031 lb empty, 24,127 lb gross, 2 × R-2600-23 1,600 hp, 325 mph at 14,500 ft, ceiling, climb, range"
+   },
+   {
+    "id": "naca-868",
+    "where": "the flight model's structure (R7 §4.2)"
+   }
+  ],
+  "notes": "The infobox is a late A-20 (R-2600-23, 1,600 hp); the 1941 A-20A at Hickam had R-2600-3s and different guns (verify). Converted from the infobox. Polar fitted by the engine (R7 §4.2's method, aero.py): cd0 to the top speed at its altitude with a propeller efficiency of 0.8, e = 0.75 (28.5 s for the sustained 360° at 1,500 m) with the turn rate capped at 9°/s so the 360° takes 40 s, as R7 recommends where the polar alone turns too well. Roll table: indicated speeds at 10,000 ft converted to true airspeed (× 1.164)."
+ }
+]

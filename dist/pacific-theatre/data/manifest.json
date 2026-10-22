@@ -1,0 +1,79 @@
+{
+  "projection": {
+    "kind": "aeqd",
+    "lon0": 141.5,
+    "lat0": 7,
+    "unit": 1000
+  },
+  "table": {
+    "id": "table",
+    "name": "The Pacific theatre",
+    "bounds": [
+      78,
+      -42,
+      205,
+      56
+    ],
+    "envelope": [
+      49.472,
+      -48.026,
+      233.528,
+      65.844
+    ],
+    "size": [
+      2048,
+      1830
+    ],
+    "extent": [
+      -7084.9896,
+      -6543.1097,
+      7084.9896,
+      6118.5417
+    ],
+    "metresPerTexel": [
+      6918.9,
+      6918.9
+    ],
+    "height": {
+      "file": "table/height.png",
+      "scale": 0.5,
+      "offset": -11000
+    },
+    "coast": "table/coast.json",
+    "labels": "table/labels.json",
+    "stats": {
+      "landFraction": 0.2476,
+      "minMetres": -10615.5,
+      "maxMetres": 7086.5
+    },
+    "sources": [
+      {
+        "id": "etopo-2022-60s",
+        "title": "ETOPO 2022 60 arc-second surface elevation (Global Relief Model)",
+        "doi": "10.25921/fd45-gt74",
+        "url": "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc",
+        "page": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+        "fetched": "2026-10-22",
+        "licence": "public domain (US government work, NOAA NCEI)",
+        "citation": "NOAA National Centers for Environmental Information (2022), ETOPO 2022 60 Arc-Second Global Relief Model, doi:10.25921/fd45-gt74",
+        "note": "OPeNDAP subsets at stride 2 (every second 60″ cell, about 3.7 km), 5 bands either side of 180° stitched into one grid (75.8 MB); each cell binned into the texel its centre projects to, weighted by cos φ, land and sea cells apart; heights only: land is decided by Natural Earth; sea never shallower than −1 m"
+      },
+      {
+        "id": "natural-earth-10m",
+        "title": "Natural Earth 10 m physical vectors: land, minor islands, reefs, coastline, minor islands coastline",
+        "url": "https://www.naturalearthdata.com/",
+        "files": [
+          "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip",
+          "https://naciscdn.org/naturalearth/10m/physical/ne_10m_minor_islands.zip",
+          "https://naciscdn.org/naturalearth/10m/physical/ne_10m_reefs.zip",
+          "https://naciscdn.org/naturalearth/10m/physical/ne_10m_coastline.zip",
+          "https://naciscdn.org/naturalearth/10m/physical/ne_10m_minor_islands_coastline.zip"
+        ],
+        "terms": "https://www.naturalearthdata.com/about/terms-of-use/",
+        "fetched": "2026-10-22",
+        "licence": "public domain (Natural Earth)",
+        "note": "decides the table’s land: a texel is land where the land and minor-island polygons cover at least half of it (4 × 4 samples a texel); coast.json carries the polygons (clipped to the envelope, merged at 180°, simplified) and the coastline strokes; no Natural Earth name is used"
+      }
+    ]
+  }
+}

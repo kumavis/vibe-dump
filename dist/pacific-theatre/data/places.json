@@ -1,0 +1,5922 @@
+[
+  {
+    "id": "tokyo",
+    "name": "Tokyo",
+    "ja": {
+      "kanji": "東京",
+      "romaji": "Tōkyō",
+      "verify": false
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        139.753,
+        35.685
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The pin stands at the Imperial Palace."
+  },
+  {
+    "id": "yokohama",
+    "name": "Yokohama",
+    "ja": {
+      "kanji": "横浜",
+      "romaji": "Yokohama",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        139.64,
+        35.44
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "yokosuka",
+    "name": "Yokosuka",
+    "ja": {
+      "kanji": "横須賀",
+      "romaji": "Yokosuka",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        139.67,
+        35.28
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "nagoya",
+    "name": "Nagoya",
+    "ja": {
+      "kanji": "名古屋",
+      "romaji": "Nagoya",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        136.91,
+        35.18
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "kobe",
+    "name": "Kobe",
+    "ja": {
+      "kanji": "神戸",
+      "romaji": "Kōbe",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        135.2,
+        34.69
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "tokyo-bay",
+    "name": "Tokyo Bay",
+    "ja": {
+      "kanji": "東京湾",
+      "romaji": "Tōkyō-wan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "gulf",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        139.78,
+        35.4
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "missouri-anchorage",
+    "name": "Missouri's anchorage, Tokyo Bay",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        139.76,
+        35.355
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata",
+      "usn-chron"
+    ],
+    "note": "Where Missouri lay at anchor for the signing (Wikidata)."
+  },
+  {
+    "id": "shitamachi",
+    "name": "Shitamachi, Tokyo east of the Sumida",
+    "ja": {
+      "kanji": "下町",
+      "romaji": "Shitamachi",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "region",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        139.8,
+        35.7
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "hiroshima",
+    "name": "Hiroshima",
+    "ja": {
+      "kanji": "広島",
+      "romaji": "Hiroshima",
+      "verify": false
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        132.4546,
+        34.3955
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The pin stands at the hypocentre (Wikidata)."
+  },
+  {
+    "id": "nagasaki",
+    "name": "Nagasaki (Urakami)",
+    "ja": {
+      "kanji": "長崎",
+      "romaji": "Nagasaki",
+      "verify": false
+    },
+    "alt": [
+      "Urakami"
+    ],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        129.8633,
+        32.7737
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The pin stands at the hypocentre over the Urakami valley (R3 gives 32.774 N 129.863 E, *verify*; Wikidata's point is the city centre)."
+  },
+  {
+    "id": "yawata",
+    "name": "Yawata",
+    "ja": {
+      "kanji": "八幡",
+      "romaji": "Yahata",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Kitakyūshū",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        130.8,
+        33.87
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "kure",
+    "name": "Kure",
+    "ja": {
+      "kanji": "呉",
+      "romaji": "Kure",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        132.56,
+        34.24
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "hashirajima",
+    "name": "Hashirajima",
+    "ja": {
+      "kanji": "柱島",
+      "romaji": "Hashirajima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        132.4,
+        34
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1962",
+      "jm-97"
+    ],
+    "note": "The Combined Fleet's anchorage in the western Inland Sea."
+  },
+  {
+    "id": "tokuyama",
+    "name": "Tokuyama",
+    "ja": {
+      "kanji": "徳山",
+      "romaji": "Tokuyama",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        131.8,
+        34.03
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "bungo-strait",
+    "name": "Bungo Strait",
+    "ja": {
+      "kanji": "豊後水道",
+      "romaji": "Bungo-suidō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        132.1,
+        32.9
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "nagumo-1947",
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "sasebo",
+    "name": "Sasebo",
+    "ja": {
+      "kanji": "佐世保",
+      "romaji": "Sasebo",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        129.72,
+        33.16
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "shimonoseki-strait",
+    "name": "Shimonoseki Strait",
+    "ja": {
+      "kanji": "関門海峡",
+      "romaji": "Kanmon-kaikyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        130.95,
+        33.96
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "otaru",
+    "name": "Otaru",
+    "ja": {
+      "kanji": "小樽",
+      "romaji": "Otaru",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        141,
+        43.19
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "hitokappu-bay",
+    "name": "Hitokappu Bay, Etorofu",
+    "ja": {
+      "kanji": "単冠湾",
+      "romaji": "Hitokappu-wan",
+      "verify": true
+    },
+    "alt": [
+      "Tankan Bay"
+    ],
+    "kind": "harbour",
+    "today": "Kasatka Bay, Iturup",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        147.6,
+        44.9
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "ussbs-campaigns-1946",
+      "jm-97",
+      "morton-1962"
+    ],
+    "note": "R3 places it at 44.9 N 147.6 E (*verify*); Morton writes \"Tankan Bay\"."
+  },
+  {
+    "id": "kurils",
+    "name": "Kuril Islands",
+    "ja": {
+      "kanji": "千島列島",
+      "romaji": "Chishima rettō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "group",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        150.5,
+        46.5
+      ]
+    },
+    "placePrecision": "reg",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1875",
+        "to": "1945-08-18",
+        "cutOff": null,
+        "note": "Japanese since the 1875 treaty with Russia; the Soviet landings run from 18 August into early September 1945 (*verify*)"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945",
+      "go1-1945"
+    ]
+  },
+  {
+    "id": "paramushiro",
+    "name": "Paramushiro",
+    "ja": {
+      "kanji": "幌筵島",
+      "romaji": "Paramushiru-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Paramushir",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        155.9,
+        50.3
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1875",
+        "to": "1945-08-23",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "karafuto",
+    "name": "Karafuto (southern Sakhalin)",
+    "ja": {
+      "kanji": "樺太",
+      "romaji": "Karafuto",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "region",
+    "today": "Sakhalin",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        142.8,
+        47.5
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "korea",
+    "name": "Korea",
+    "ja": {
+      "kanji": "朝鮮",
+      "romaji": "Chōsen",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "region",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.5,
+        37.5
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "A Japanese colony from 1910."
+  },
+  {
+    "id": "formosa",
+    "name": "Formosa",
+    "ja": {
+      "kanji": "台湾",
+      "romaji": "Taiwan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Taiwan",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        121,
+        23.7
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1895",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "takao",
+    "name": "Takao",
+    "ja": {
+      "kanji": "高雄",
+      "romaji": "Takao",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": "Kaohsiung",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.3,
+        22.6
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "mako",
+    "name": "Mako, Pescadores",
+    "ja": {
+      "kanji": "馬公",
+      "romaji": "Makō",
+      "verify": true
+    },
+    "alt": [
+      "Bako"
+    ],
+    "kind": "base",
+    "today": "Magong, Penghu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        119.57,
+        23.57
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "jm-97",
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "amami-oshima",
+    "name": "Amami Ōshima",
+    "ja": {
+      "kanji": "奄美大島",
+      "romaji": "Amami Ōshima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        129.5,
+        28.3
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1609",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "akusekijima",
+    "name": "Akusekijima",
+    "ja": {
+      "kanji": "悪石島",
+      "romaji": "Akusekijima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        129.6,
+        29.47
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1609",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "okinawa",
+    "name": "Okinawa",
+    "ja": {
+      "kanji": "沖縄島",
+      "romaji": "Okinawa-jima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.8,
+        26.5
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1879",
+        "to": "1945-06-22",
+        "cutOff": null,
+        "note": "the Tenth Army lands on 1 April 1945; the Japanese commander takes his life on 22 June or the 23rd; the US declares the campaign over on 2 July"
+      }
+    ],
+    "sources": [
+      "appleman-1948",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "naha",
+    "name": "Naha",
+    "ja": {
+      "kanji": "那覇",
+      "romaji": "Naha",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.68,
+        26.21
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "hagushi",
+    "name": "Hagushi beaches",
+    "ja": {
+      "kanji": "渡具知",
+      "romaji": "Toguchi",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.73,
+        26.37
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "appleman-1948"
+    ]
+  },
+  {
+    "id": "shuri",
+    "name": "Shuri",
+    "ja": {
+      "kanji": "首里",
+      "romaji": "Shuri",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.72,
+        26.22
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "appleman-1948"
+    ]
+  },
+  {
+    "id": "ihara",
+    "name": "Ihara, Itoman",
+    "ja": {
+      "kanji": "伊原",
+      "romaji": "Ihara",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.68,
+        26.1
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "Where the Himeyuri students' cave stands (R3, *verify*)."
+  },
+  {
+    "id": "kerama-islands",
+    "name": "Kerama Islands",
+    "ja": {
+      "kanji": "慶良間諸島",
+      "romaji": "Kerama shotō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "group",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.32,
+        26.2
+      ]
+    },
+    "placePrecision": "reg",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1879",
+        "to": "1945-03-29",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "appleman-1948"
+    ]
+  },
+  {
+    "id": "zamami",
+    "name": "Zamami",
+    "ja": {
+      "kanji": "座間味島",
+      "romaji": "Zamami-jima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.3,
+        26.23
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1879",
+        "to": "1945-03-26",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "tokashiki",
+    "name": "Tokashiki",
+    "ja": {
+      "kanji": "渡嘉敷島",
+      "romaji": "Tokashiki-jima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        127.36,
+        26.2
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1879",
+        "to": "1945-03-29",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "iwo-jima",
+    "name": "Iwo Jima",
+    "ja": {
+      "kanji": "硫黄島",
+      "romaji": "Iōtō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Iōtō (Iwo To)",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        141.32,
+        24.78
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1891",
+        "to": "1945-03-26",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "ussbs-campaigns-1946"
+    ],
+    "note": "Japanese readings of 硫黄島 differ (Iōtō, Iwō-jima); R3 asks a reader to settle it."
+  },
+  {
+    "id": "chichi-jima",
+    "name": "Chichi-jima",
+    "ja": {
+      "kanji": "父島",
+      "romaji": "Chichijima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        142.19,
+        27.07
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1876",
+        "to": "1945-09-02",
+        "cutOff": null,
+        "note": "held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "marcus",
+    "name": "Marcus Island",
+    "ja": {
+      "kanji": "南鳥島",
+      "romaji": "Minami-Tori-shima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Minami-Torishima",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        153.97,
+        24.29
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1898",
+        "to": "1945-08-31",
+        "cutOff": "1944-08-10",
+        "note": "surrendered on 31 August 1945 aboard Bagley"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "mukden",
+    "name": "Mukden",
+    "ja": {
+      "kanji": "奉天",
+      "romaji": "Hōten",
+      "verify": true
+    },
+    "alt": [
+      "Liutiao Lake (柳条湖)"
+    ],
+    "kind": "city",
+    "today": "Shenyang",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        123.466,
+        41.835
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata",
+      "morton-1962"
+    ],
+    "note": "The pin stands at Liutiao Lake, where the railway was blown (Wikidata)."
+  },
+  {
+    "id": "hsinking",
+    "name": "Hsinking",
+    "ja": {
+      "kanji": "新京",
+      "romaji": "Shinkyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Changchun",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125.317,
+        43.883
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "harbin",
+    "name": "Harbin (Pingfang)",
+    "ja": {
+      "kanji": "哈爾浜",
+      "romaji": "Harubin",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        126.63,
+        45.61
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The pin stands at Pingfang, south of the city (R3, *verify*)."
+  },
+  {
+    "id": "manchuria",
+    "name": "Manchuria",
+    "ja": {
+      "kanji": "満洲",
+      "romaji": "Manshū",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "region",
+    "today": "Northeast China",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125,
+        46
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "nomonhan",
+    "name": "Nomonhan (Khalkhin Gol)",
+    "ja": {
+      "kanji": "ノモンハン",
+      "romaji": "Nomonhan",
+      "verify": true
+    },
+    "alt": [
+      "Khalkhin Gol"
+    ],
+    "kind": "region",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        118.59,
+        47.73
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "marco-polo-bridge",
+    "name": "Marco Polo Bridge",
+    "ja": {
+      "kanji": "盧溝橋",
+      "romaji": "Rokōkyō",
+      "verify": true
+    },
+    "alt": [
+      "Lukouchiao"
+    ],
+    "kind": "point",
+    "today": "Lugou Bridge, Beijing",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        116.213,
+        39.849
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "peiping",
+    "name": "Peiping",
+    "ja": {
+      "kanji": "北平",
+      "romaji": "Hokuhei",
+      "verify": true
+    },
+    "alt": [
+      "Peking"
+    ],
+    "kind": "city",
+    "today": "Beijing",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        116.39,
+        39.91
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1962"
+    ]
+  },
+  {
+    "id": "shanghai",
+    "name": "Shanghai",
+    "ja": {
+      "kanji": "上海",
+      "romaji": "Shanhai",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        121.469,
+        31.232
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "nanking",
+    "name": "Nanking",
+    "ja": {
+      "kanji": "南京",
+      "romaji": "Nankin",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Nanjing",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        118.738,
+        32.038
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "chungking",
+    "name": "Chungking",
+    "ja": {
+      "kanji": "重慶",
+      "romaji": "Jūkei",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Chongqing",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        106.55,
+        29.56
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1962"
+    ]
+  },
+  {
+    "id": "chuchow",
+    "name": "Chuchow",
+    "ja": {
+      "kanji": "衢州",
+      "romaji": "Kushū",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Quzhou",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        118.87,
+        28.97
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "doolittle-report-1942"
+    ]
+  },
+  {
+    "id": "hengyang",
+    "name": "Hengyang",
+    "ja": {
+      "kanji": "衡陽",
+      "romaji": "Kōyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        112.57,
+        26.89
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "kweilin",
+    "name": "Kweilin",
+    "ja": {
+      "kanji": "桂林",
+      "romaji": "Keirin",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Guilin",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        110.29,
+        25.27
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "canton",
+    "name": "Canton",
+    "ja": {
+      "kanji": "広州",
+      "romaji": "Kōshū",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Guangzhou",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        113.26,
+        23.13
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "hong-kong",
+    "name": "Hong Kong",
+    "ja": {
+      "kanji": "香港",
+      "romaji": "Honkon",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        114.16,
+        22.28
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1941-12-25",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1941-12-25",
+        "to": "1945-08-30",
+        "cutOff": null,
+        "note": "the British fleet arrives on 30 August 1945 (*verify*)"
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "hainan",
+    "name": "Hainan",
+    "ja": {
+      "kanji": "海南島",
+      "romaji": "Kainan-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        109.7,
+        19.2
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1939-02",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "samah",
+    "name": "Samah, Hainan",
+    "ja": {
+      "kanji": "三亜",
+      "romaji": "Sanā",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": "Sanya",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        109.5,
+        18.25
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "vladivostok",
+    "name": "Vladivostok",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        131.9,
+        43.12
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "doolittle-report-1942"
+    ]
+  },
+  {
+    "id": "haiphong",
+    "name": "Haiphong",
+    "ja": {
+      "kanji": "ハイフォン",
+      "romaji": "Haifon",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        106.68,
+        20.86
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1962"
+    ]
+  },
+  {
+    "id": "saigon",
+    "name": "Saigon",
+    "ja": {
+      "kanji": "サイゴン",
+      "romaji": "Saigon",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Ho Chi Minh City",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        106.7,
+        10.78
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1962"
+    ]
+  },
+  {
+    "id": "cam-ranh-bay",
+    "name": "Cam Ranh Bay",
+    "ja": {
+      "kanji": "カムラン湾",
+      "romaji": "Kamuran-wan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        109.2,
+        11.9
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "jm-97"
+    ]
+  },
+  {
+    "id": "singora",
+    "name": "Singora",
+    "ja": {
+      "kanji": "シンゴラ",
+      "romaji": "Shingora",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Songkhla",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        100.6,
+        7.2
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1962",
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "patani",
+    "name": "Patani",
+    "ja": {
+      "kanji": "パタニ",
+      "romaji": "Patani",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Pattani",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        101.25,
+        6.87
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1962"
+    ]
+  },
+  {
+    "id": "bangkok",
+    "name": "Bangkok",
+    "ja": {
+      "kanji": "バンコク",
+      "romaji": "Bankoku",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        100.5,
+        13.75
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "kanchanaburi",
+    "name": "Kanchanaburi",
+    "ja": {
+      "kanji": "カンチャナブリ",
+      "romaji": "Kanchanaburi",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        99.5,
+        14.04
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The pin stands at the railway bridge over the Mae Klong (Wikidata)."
+  },
+  {
+    "id": "thanbyuzayat",
+    "name": "Thanbyuzayat",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        97.73,
+        15.97
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "rangoon",
+    "name": "Rangoon",
+    "ja": {
+      "kanji": "ラングーン",
+      "romaji": "Rangūn",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Yangon",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        96.16,
+        16.8
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "mandalay",
+    "name": "Mandalay",
+    "ja": {
+      "kanji": "マンダレー",
+      "romaji": "Mandarē",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        96.09,
+        21.96
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "meiktila",
+    "name": "Meiktila",
+    "ja": {
+      "kanji": "メイクテーラ",
+      "romaji": "Meikutēra",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        95.86,
+        20.88
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "myitkyina",
+    "name": "Myitkyina",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        97.4,
+        25.38
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "imphal",
+    "name": "Imphal",
+    "ja": {
+      "kanji": "インパール",
+      "romaji": "Inpāru",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        93.94,
+        24.82
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "kohima",
+    "name": "Kohima",
+    "ja": {
+      "kanji": "コヒマ",
+      "romaji": "Kohima",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        94.11,
+        25.67
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "calcutta",
+    "name": "Calcutta",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": "Kolkata",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        88.36,
+        22.57
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "chabua",
+    "name": "Chabua",
+    "ja": null,
+    "alt": [],
+    "kind": "airfield",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        95.12,
+        27.48
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "romanus-1953"
+    ]
+  },
+  {
+    "id": "kunming",
+    "name": "Kunming",
+    "ja": {
+      "kanji": "昆明",
+      "romaji": "Konmei",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        102.71,
+        25.04
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "romanus-1953"
+    ]
+  },
+  {
+    "id": "kharagpur",
+    "name": "Kharagpur",
+    "ja": null,
+    "alt": [],
+    "kind": "airfield",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        87.32,
+        22.33
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "craven-cate"
+    ]
+  },
+  {
+    "id": "chengtu",
+    "name": "Chengtu",
+    "ja": {
+      "kanji": "成都",
+      "romaji": "Seito",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "airfield",
+    "today": "Chengdu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        104,
+        30.6
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "craven-cate"
+    ]
+  },
+  {
+    "id": "port-blair",
+    "name": "Port Blair, Andaman Islands",
+    "ja": {
+      "kanji": "ポートブレア",
+      "romaji": "Pōto Burea",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        92.73,
+        11.62
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wp-indian-ocean-raid"
+    ]
+  },
+  {
+    "id": "colombo",
+    "name": "Colombo",
+    "ja": {
+      "kanji": "コロンボ",
+      "romaji": "Koronbo",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Colombo, Sri Lanka",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        79.85,
+        6.93
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron",
+      "wp-indian-ocean-raid"
+    ]
+  },
+  {
+    "id": "trincomalee",
+    "name": "Trincomalee",
+    "ja": {
+      "kanji": "トリンコマリー",
+      "romaji": "Torinkomarī",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": "Trincomalee, Sri Lanka",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        81.23,
+        8.57
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron",
+      "wp-indian-ocean-raid"
+    ]
+  },
+  {
+    "id": "kota-bharu",
+    "name": "Kota Bharu",
+    "ja": {
+      "kanji": "コタバル",
+      "romaji": "Kotabaru",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        102.24,
+        6.13
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron",
+      "morton-1962"
+    ]
+  },
+  {
+    "id": "off-kuantan",
+    "name": "off Kuantan",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        104.48,
+        3.56
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata",
+      "ussbs-campaigns-1946"
+    ],
+    "note": "Where Prince of Wales and Repulse sank (Wikidata)."
+  },
+  {
+    "id": "singapore",
+    "name": "Singapore",
+    "ja": {
+      "kanji": "昭南島",
+      "romaji": "Shōnan-tō",
+      "verify": true
+    },
+    "alt": [
+      "Shōnan"
+    ],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        103.82,
+        1.35
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1942-02-15",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-02-15",
+        "to": "1945-09-05",
+        "cutOff": null,
+        "note": "Japan renames it Shōnan; British forces return on 5 September 1945 (*verify*)"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "wikidata"
+    ]
+  },
+  {
+    "id": "sumatra",
+    "name": "Sumatra",
+    "ja": null,
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        101.5,
+        -0.5
+      ]
+    },
+    "placePrecision": "reg",
+    "held": [
+      {
+        "by": "nl",
+        "from": "1941-12-07",
+        "to": "1942-03-28",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-03-28",
+        "to": "1945-09-02",
+        "cutOff": null,
+        "note": "Japanese landings from 14 February 1942; the Dutch on Sumatra surrender late in March (*verify* the date); held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945",
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "java",
+    "name": "Java",
+    "ja": {
+      "kanji": "ジャワ島",
+      "romaji": "Jawa-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        110,
+        -7.3
+      ]
+    },
+    "placePrecision": "reg",
+    "held": [
+      {
+        "by": "nl",
+        "from": "1941-12-07",
+        "to": "1942-03-09",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-03-09",
+        "to": "1945-09-02",
+        "cutOff": null,
+        "note": "held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945",
+      "wikidata"
+    ]
+  },
+  {
+    "id": "java-sea",
+    "name": "Java Sea",
+    "ja": {
+      "kanji": "ジャワ海",
+      "romaji": "Jawa-kai",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "sea",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        112.5,
+        -6
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "surabaya",
+    "name": "Soerabaja",
+    "ja": {
+      "kanji": "スラバヤ",
+      "romaji": "Surabaya",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": "Surabaya",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        112.75,
+        -7.25
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "batavia",
+    "name": "Batavia",
+    "ja": {
+      "kanji": "バタビア",
+      "romaji": "Batabia",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": "Jakarta",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        106.83,
+        -6.17
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "sunda-strait",
+    "name": "Sunda Strait",
+    "ja": {
+      "kanji": "スンダ海峡",
+      "romaji": "Sunda kaikyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        105.9,
+        -5.95
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "kalijati",
+    "name": "Kalidjati",
+    "ja": {
+      "kanji": "カリジャティ",
+      "romaji": "Karijati",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "airfield",
+    "today": "Kalijati",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        107.66,
+        -6.53
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "R3 places it at 6.53 S 107.66 E (*verify*)."
+  },
+  {
+    "id": "staring-bay",
+    "name": "Staring Bay, Celebes",
+    "ja": {
+      "kanji": "スターリング湾",
+      "romaji": "Sutāringu-wan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": "Staring Bay, Sulawesi",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        122.9,
+        -4.3
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wp-indian-ocean-raid"
+    ],
+    "note": "R3 gives about 4.0 S 122.6 E (*verify*), which falls on land in Natural Earth; the pin stands in the water off Kendari, south-east Celebes."
+  },
+  {
+    "id": "sandakan",
+    "name": "Sandakan",
+    "ja": {
+      "kanji": "サンダカン",
+      "romaji": "Sandakan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        118.12,
+        5.84
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "ranau",
+    "name": "Ranau",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        116.68,
+        5.95
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "R3 places it at 5.95 N 116.68 E (*verify*)."
+  },
+  {
+    "id": "tarakan",
+    "name": "Tarakan",
+    "ja": null,
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        117.57,
+        3.35
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "nl",
+        "from": "1941-12-07",
+        "to": "1942-01-12",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-01-12",
+        "to": "1945-05-01",
+        "cutOff": null,
+        "note": "Japan lands on 11–12 January 1942 (*verify*); Australians land on 1 May 1945"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945",
+      "wikidata"
+    ]
+  },
+  {
+    "id": "balikpapan",
+    "name": "Balikpapan",
+    "ja": null,
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        116.85,
+        -1.27
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "brunei-bay",
+    "name": "Brunei Bay",
+    "ja": null,
+    "alt": [],
+    "kind": "gulf",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        115.1,
+        5.1
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "lingga-roads",
+    "name": "Lingga Roads",
+    "ja": null,
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        104.6,
+        -0.2
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "palembang",
+    "name": "Palembang",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        104.75,
+        -2.99
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "morotai",
+    "name": "Morotai",
+    "ja": null,
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        128.4,
+        2.3
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1942-04",
+        "to": "1944-09-15",
+        "cutOff": null,
+        "note": "the date of the Japanese occupation is not settled here"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "timor",
+    "name": "Timor",
+    "ja": null,
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125.5,
+        -9.2
+      ]
+    },
+    "placePrecision": "reg",
+    "held": [
+      {
+        "by": "nl",
+        "from": "1941-12-07",
+        "to": "1942-02-20",
+        "cutOff": null,
+        "note": "Dutch West Timor and neutral Portuguese East Timor"
+      },
+      {
+        "by": "jp",
+        "from": "1942-02-20",
+        "to": "1945-09-02",
+        "cutOff": null,
+        "note": "Japanese landings at Koepang and Dili on 20 February 1942 (*verify*); held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945",
+      "morton-1962"
+    ]
+  },
+  {
+    "id": "manila",
+    "name": "Manila",
+    "ja": {
+      "kanji": "マニラ",
+      "romaji": "Manira",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.98,
+        14.6
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "intramuros",
+    "name": "Intramuros",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.975,
+        14.59
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The old walled city."
+  },
+  {
+    "id": "bataan",
+    "name": "Bataan",
+    "ja": {
+      "kanji": "バターン半島",
+      "romaji": "Batān hantō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "region",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.42,
+        14.67
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "usn-chron",
+      "morton-1953"
+    ]
+  },
+  {
+    "id": "mariveles",
+    "name": "Mariveles",
+    "ja": null,
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.49,
+        14.43
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron",
+      "morton-1953-march"
+    ]
+  },
+  {
+    "id": "san-fernando",
+    "name": "San Fernando, Pampanga",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.69,
+        15.03
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1953-march"
+    ]
+  },
+  {
+    "id": "camp-odonnell",
+    "name": "Camp O'Donnell",
+    "ja": null,
+    "alt": [],
+    "kind": "base",
+    "today": "Capas, Tarlac",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.53,
+        15.36
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morton-1953-march"
+    ]
+  },
+  {
+    "id": "corregidor",
+    "name": "Corregidor",
+    "ja": {
+      "kanji": "コレヒドール島",
+      "romaji": "Korehidōru-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.574,
+        14.385
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "us",
+        "from": "1941-12-07",
+        "to": "1942-05-06",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-05-06",
+        "to": "1945-02-26",
+        "cutOff": null,
+        "note": "US paratroops and infantry land on 16 February 1945; organised resistance ends late in February (*verify*)"
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "lingayen-gulf",
+    "name": "Lingayen Gulf",
+    "ja": {
+      "kanji": "リンガエン湾",
+      "romaji": "Ringaen-wan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "gulf",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.3,
+        16.1
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "clark-field",
+    "name": "Clark Field",
+    "ja": null,
+    "alt": [],
+    "kind": "airfield",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.56,
+        15.19
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "mabalacat",
+    "name": "Mabalacat",
+    "ja": {
+      "kanji": "マバラカット",
+      "romaji": "Mabarakatto",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "airfield",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        120.57,
+        15.22
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morison-xii"
+    ]
+  },
+  {
+    "id": "leyte",
+    "name": "Leyte",
+    "ja": {
+      "kanji": "レイテ島",
+      "romaji": "Reite-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        124.85,
+        10.85
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1942-05",
+        "to": "1944-12-26",
+        "cutOff": null,
+        "note": "the Sixth Army lands on 20 October 1944; organised resistance ends late in December"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "palo",
+    "name": "Red Beach, Palo",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125.01,
+        11.17
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata",
+      "cannon-1954"
+    ]
+  },
+  {
+    "id": "leyte-gulf",
+    "name": "Leyte Gulf",
+    "ja": {
+      "kanji": "レイテ湾",
+      "romaji": "Reite-wan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "gulf",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125.3,
+        10.75
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "samar",
+    "name": "Samar",
+    "ja": {
+      "kanji": "サマール島",
+      "romaji": "Samāru-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125,
+        11.85
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1942-05",
+        "to": "1945-01",
+        "cutOff": null,
+        "note": "retaken from the end of October 1944; the date the island was clear is not settled here"
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "off-samar",
+    "name": "off Samar",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        126.165,
+        11.785
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "sib22-leyte-1945"
+    ],
+    "note": "Taffy 3 at 06:45, read off Battle Experience's track chart (R5 §4.3: 11°47.1′N 126°09.9′E)."
+  },
+  {
+    "id": "st-lo-sinking",
+    "name": "where St. Lo sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        126.08,
+        11.17
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "morison-xii"
+    ],
+    "note": "11°10′N 126°05′E (Morison, via R5 §4.10)."
+  },
+  {
+    "id": "palawan-passage",
+    "name": "Palawan Passage",
+    "ja": null,
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        117.18,
+        9.4
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "Where Atago sank (chronology)."
+  },
+  {
+    "id": "sibuyan-sea",
+    "name": "Sibuyan Sea",
+    "ja": {
+      "kanji": "シブヤン海",
+      "romaji": "Shibuyan-kai",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "sea",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        122.58,
+        12.83
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "Where Musashi sank (chronology)."
+  },
+  {
+    "id": "san-bernardino-strait",
+    "name": "San Bernardino Strait",
+    "ja": {
+      "kanji": "サンベルナルジノ海峡",
+      "romaji": "San Berunarujino kaikyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        124.25,
+        12.55
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "surigao-strait",
+    "name": "Surigao Strait",
+    "ja": {
+      "kanji": "スリガオ海峡",
+      "romaji": "Surigao kaikyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125.33,
+        10.42
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "Where Fusō and Yamashiro sank (chronology)."
+  },
+  {
+    "id": "cape-engano",
+    "name": "off Cape Engaño",
+    "ja": {
+      "kanji": "エンガノ岬",
+      "romaji": "Engano-misaki",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        125.85,
+        19.33
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "Where Zuikaku sank (chronology)."
+  },
+  {
+    "id": "luzon-strait",
+    "name": "Luzon Strait (\"Convoy College\")",
+    "ja": {
+      "kanji": "ルソン海峡",
+      "romaji": "Ruson kaikyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        121,
+        20.5
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "bashi-channel",
+    "name": "Bashi Channel",
+    "ja": {
+      "kanji": "バシー海峡",
+      "romaji": "Bashī kaikyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        121,
+        21.5
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "saipan",
+    "name": "Saipan",
+    "ja": {
+      "kanji": "サイパン島",
+      "romaji": "Saipan-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        145.75,
+        15.18
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-07-09",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "charan-kanoa",
+    "name": "Charan Kanoa beaches",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        145.7,
+        15.17
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "crowl-1960"
+    ]
+  },
+  {
+    "id": "marpi-point",
+    "name": "Marpi Point",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        145.81,
+        15.28
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "tinian",
+    "name": "Tinian",
+    "ja": {
+      "kanji": "テニアン島",
+      "romaji": "Tenian-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        145.63,
+        15
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-08-01",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "rota",
+    "name": "Rota",
+    "ja": {
+      "kanji": "ロタ島",
+      "romaji": "Rota-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        145.2,
+        14.15
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-08-10",
+        "note": "surrendered on 2 September 1945 aboard Heyliger"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "pagan",
+    "name": "Pagan",
+    "ja": {
+      "kanji": "パガン島",
+      "romaji": "Pagan-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        145.77,
+        18.12
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-08-10",
+        "note": "surrendered on 2 September 1945 aboard Rhind"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "guam",
+    "name": "Guam",
+    "ja": {
+      "kanji": "大宮島",
+      "romaji": "Ōmiya-jima",
+      "verify": true
+    },
+    "alt": [
+      "Guam (グアム島)"
+    ],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        144.78,
+        13.44
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "us",
+        "from": "1941-12-07",
+        "to": "1941-12-10",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1941-12-10",
+        "to": "1944-08-10",
+        "cutOff": null,
+        "note": "Japan renames it Ōmiya-jima"
+      },
+      {
+        "by": "us",
+        "from": "1944-08-10",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "wp-guam-occupation"
+    ]
+  },
+  {
+    "id": "agana",
+    "name": "Agana",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": "Hagåtña",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        144.75,
+        13.476
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "asan",
+    "name": "Asan beach",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        144.71,
+        13.47
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "crowl-1960"
+    ]
+  },
+  {
+    "id": "manenggon",
+    "name": "Manenggon",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        144.75,
+        13.4
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The camp in the Ylig river valley (Wikidata)."
+  },
+  {
+    "id": "malesso",
+    "name": "Malesso'",
+    "ja": null,
+    "alt": [
+      "Merizo"
+    ],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        144.67,
+        13.27
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "Tinta and Faha lie near the village (R3, *verify*)."
+  },
+  {
+    "id": "yap",
+    "name": "Yap",
+    "ja": {
+      "kanji": "ヤップ島",
+      "romaji": "Yappu-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        138.13,
+        9.53
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-05",
+        "cutOff": "1944-09-15",
+        "note": "surrendered on 5 September 1945 aboard Tillman"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "ulithi",
+    "name": "Ulithi",
+    "ja": {
+      "kanji": "ウルシー環礁",
+      "romaji": "Urushī kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        139.7,
+        10
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-09-23",
+        "cutOff": null,
+        "note": "occupied by US forces without opposition (R3, *verify* the date)"
+      },
+      {
+        "by": "us",
+        "from": "1944-09-23",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "palau",
+    "name": "Palau Islands",
+    "ja": {
+      "kanji": "パラオ諸島",
+      "romaji": "Parao shotō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "group",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        134.5,
+        7.5
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "babelthuap",
+    "name": "Babelthuap",
+    "ja": {
+      "kanji": "バベルダオブ島",
+      "romaji": "Baberudaobu-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Babeldaob",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        134.6,
+        7.5
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-09-15",
+        "note": "the Palau garrison surrendered on 2 September 1945 aboard Amick"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "koror",
+    "name": "Koror",
+    "ja": {
+      "kanji": "コロール",
+      "romaji": "Korōru",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        134.47,
+        7.35
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The Mandate's capital."
+  },
+  {
+    "id": "peleliu",
+    "name": "Peleliu",
+    "ja": {
+      "kanji": "ペリリュー島",
+      "romaji": "Peririū-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        134.24,
+        7
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-11-27",
+        "cutOff": null,
+        "note": "the 1st Marine Division lands on 15 September 1944"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "angaur",
+    "name": "Angaur",
+    "ja": {
+      "kanji": "アンガウル島",
+      "romaji": "Angauru-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        134.15,
+        6.91
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-10-22",
+        "cutOff": null,
+        "note": "organised resistance ends in October (*verify*)"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "truk",
+    "name": "Truk",
+    "ja": {
+      "kanji": "トラック諸島",
+      "romaji": "Torakku shotō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": "Chuuk",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        151.85,
+        7.42
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-02-18",
+        "note": "surrendered on 2 September 1945 aboard Portland"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ],
+    "note": "The Combined Fleet's anchorage; R3 places the lagoon at 7.34 N 151.88 E."
+  },
+  {
+    "id": "tol",
+    "name": "Tol, Truk",
+    "ja": null,
+    "alt": [],
+    "kind": "island",
+    "today": "Tol, Chuuk",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        151.62,
+        7.35
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-02-18"
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ],
+    "note": "Where Nauruans were put to work (R3, *verify*)."
+  },
+  {
+    "id": "ponape",
+    "name": "Ponape",
+    "ja": {
+      "kanji": "ポナペ島",
+      "romaji": "Ponape-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Pohnpei",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        158.22,
+        6.88
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-02-18",
+        "note": "held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "kusaie",
+    "name": "Kusaie",
+    "ja": {
+      "kanji": "クサイ島",
+      "romaji": "Kusai-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Kosrae",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        162.98,
+        5.32
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-02-18",
+        "note": "held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "kwajalein",
+    "name": "Kwajalein",
+    "ja": {
+      "kanji": "クェゼリン環礁",
+      "romaji": "Kwezerin kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        167.73,
+        8.72
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-02-04",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ],
+    "note": "The romanisation クェゼリン is R3's *verify*."
+  },
+  {
+    "id": "roi-namur",
+    "name": "Roi-Namur",
+    "ja": {
+      "kanji": "ルオット・ナムル",
+      "romaji": "Ruotto Namuru",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        167.47,
+        9.4
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-02-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "majuro",
+    "name": "Majuro",
+    "ja": {
+      "kanji": "マジュロ環礁",
+      "romaji": "Majuro kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        171.2,
+        7.1
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-01-31",
+        "cutOff": null,
+        "note": "taken without opposition"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "eniwetok",
+    "name": "Eniwetok",
+    "ja": {
+      "kanji": "エニウェトク環礁",
+      "romaji": "Eniwetoku kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": "Enewetak",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        162.3,
+        11.45
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1944-02-23",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "wotje",
+    "name": "Wotje",
+    "ja": {
+      "kanji": "ウォッジェ環礁",
+      "romaji": "Wojje kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        170,
+        9.45
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-02-04",
+        "note": "held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "maloelap",
+    "name": "Maloelap",
+    "ja": {
+      "kanji": "マロエラップ環礁",
+      "romaji": "Maroerappu kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        171.05,
+        8.75
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-06",
+        "cutOff": "1944-02-04",
+        "note": "surrendered on 6 September 1945 aboard Wingfield"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "mili",
+    "name": "Mili",
+    "ja": {
+      "kanji": "ミレ環礁",
+      "romaji": "Mire kanshō",
+      "verify": true
+    },
+    "alt": [
+      "Mille"
+    ],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        171.9,
+        6.1
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-08-22",
+        "cutOff": "1944-02-04",
+        "note": "the first Japanese garrison in the Pacific to capitulate, on 22 August 1945"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "jaluit",
+    "name": "Jaluit",
+    "ja": {
+      "kanji": "ヤルート環礁",
+      "romaji": "Yarūto kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        169.6,
+        6
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "jp",
+        "from": "1914-10",
+        "to": "1945-09-02",
+        "cutOff": "1944-02-04",
+        "note": "held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "wake",
+    "name": "Wake Island",
+    "ja": {
+      "kanji": "大鳥島",
+      "romaji": "Ōtori-shima",
+      "verify": true
+    },
+    "alt": [
+      "ウェーク島"
+    ],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        166.6,
+        19.29
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "us",
+        "from": "1941-12-07",
+        "to": "1941-12-23",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1941-12-23",
+        "to": "1945-09-03",
+        "cutOff": "1944-02-04",
+        "note": "Japan renames it Ōtori-shima; surrendered on 3 September 1945 aboard Levy"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "midway",
+    "name": "Midway Atoll",
+    "ja": {
+      "kanji": "ミッドウェー島",
+      "romaji": "Middowē-tō",
+      "verify": false
+    },
+    "alt": [
+      "Midway Islands"
+    ],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -177.37,
+        28.21
+      ]
+    },
+    "placePrecision": "ex",
+    "held": [
+      {
+        "by": "us",
+        "from": "1941-12-07",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "cincpac-midway-1942"
+    ]
+  },
+  {
+    "id": "midway-sea-kido-butai",
+    "name": "where the Kidō Butai was struck",
+    "ja": null,
+    "alt": [],
+    "kind": "sea-area",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -179.2,
+        30.45
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron",
+      "nagumo-1947"
+    ],
+    "note": "The chronology's sinking positions for Kaga (30°20′N 179°17′W), Sōryū and Akagi (R3), within a few miles of where the carriers were hit at about 10:22."
+  },
+  {
+    "id": "point-luck",
+    "name": "the rendezvous north-east of Midway (\"Point Luck\")",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -172.75,
+        32.07
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "comcrupac-midway-1942"
+    ],
+    "note": "\"Task Force SIXTEEN was sighted in Latitude 32 - 04 N., Longitude 172 - 45 W. at 1730, June 2, 1942\" (ComCruPac); the name \"Point Luck\" is the secondary works' (*verify*)."
+  },
+  {
+    "id": "yorktown-sinking",
+    "name": "where Yorktown sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -176.57,
+        30.6
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "30°36′N 176°34′W (chronology, 7 June 1942)."
+  },
+  {
+    "id": "oahu",
+    "name": "Oʻahu",
+    "ja": {
+      "kanji": "オアフ島",
+      "romaji": "Oafu-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.98,
+        21.47
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "us",
+        "from": "1941-12-07",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "cincpac-pearl-1942"
+    ]
+  },
+  {
+    "id": "pearl-harbor",
+    "name": "Pearl Harbor",
+    "ja": {
+      "kanji": "真珠湾",
+      "romaji": "Shinjuwan",
+      "verify": false
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.95,
+        21.365
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "cincpac-pearl-1942",
+      "wikidata"
+    ]
+  },
+  {
+    "id": "honouliuli",
+    "name": "Honouliuli, Oʻahu",
+    "ja": null,
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -158.05,
+        21.37
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "R3 places it at 21.37 N 158.05 W (*verify*)."
+  },
+  {
+    "id": "kido-butai-launch-1941",
+    "name": "the launch north of Oʻahu",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.06,
+        24.63
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "pha-exhibit-8",
+      "jm-97"
+    ],
+    "note": "Computed by R10 from the Japanese plan's \"230 nautical miles bearing 000°\" from Point Z, the western tip of Lānaʻi; about 202 nautical miles from Ford Island. No source opened logs it."
+  },
+  {
+    "id": "dutch-harbor",
+    "name": "Dutch Harbor",
+    "ja": {
+      "kanji": "ダッチハーバー",
+      "romaji": "Datchi Hābā",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -166.54,
+        53.89
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "attu",
+    "name": "Attu",
+    "ja": {
+      "kanji": "熱田島",
+      "romaji": "Atsuta-jima",
+      "verify": true
+    },
+    "alt": [
+      "アッツ島 (Attsu-tō)"
+    ],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        173.18,
+        52.88
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "us",
+        "from": "1941-12-07",
+        "to": "1942-06-05",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-06-05",
+        "to": "1943-05-30",
+        "cutOff": null,
+        "note": "occupied on 5 June (chronology) or 7 June 1942 (USSBS, zone +10 dates): two tellings; Japan renames it Atsuta-jima"
+      },
+      {
+        "by": "us",
+        "from": "1943-05-30",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "chichagof-harbor",
+    "name": "Chichagof Harbor, Attu",
+    "ja": null,
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        173.24,
+        52.93
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The Unangax̂ village of Attu."
+  },
+  {
+    "id": "kiska",
+    "name": "Kiska",
+    "ja": {
+      "kanji": "鳴神島",
+      "romaji": "Narukami-jima",
+      "verify": true
+    },
+    "alt": [
+      "キスカ島 (Kisuka-tō)"
+    ],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        177.5,
+        51.97
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "us",
+        "from": "1941-12-07",
+        "to": "1942-06-06",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-06-06",
+        "to": "1943-07-28",
+        "cutOff": null,
+        "note": "occupied on 6 June (USSBS) or 7 June 1942 (chronology); evacuated undetected on 28 July 1943; US and Canadian troops land on 15 August"
+      },
+      {
+        "by": "us",
+        "from": "1943-08-15",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "ussbs-campaigns-1946"
+    ]
+  },
+  {
+    "id": "pribilof-islands",
+    "name": "Pribilof Islands",
+    "ja": null,
+    "alt": [],
+    "kind": "group",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -170.28,
+        57.12
+      ]
+    },
+    "placePrecision": "isl",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "Just north of the theatre box, inside the projected table's north-east corner."
+  },
+  {
+    "id": "funter-bay",
+    "name": "Funter Bay, Southeast Alaska",
+    "ja": null,
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -134.9,
+        58.25
+      ]
+    },
+    "placePrecision": "off",
+    "bearing": "east, beyond the table's north-east corner",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "tarawa",
+    "name": "Tarawa",
+    "ja": {
+      "kanji": "タラワ環礁",
+      "romaji": "Tarawa kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        172.98,
+        1.42
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1941-12-09",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1941-12-09",
+        "to": "1943-11-23",
+        "cutOff": null,
+        "note": "seized on 9 December 1941; garrisoned in strength from September 1942 (*verify*)"
+      },
+      {
+        "by": "us",
+        "from": "1943-11-23",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "betio",
+    "name": "Betio, Tarawa",
+    "ja": {
+      "kanji": "ベティオ島",
+      "romaji": "Betio-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        172.93,
+        1.355
+      ]
+    },
+    "placePrecision": "ex",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1941-12-09",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1941-12-09",
+        "to": "1943-11-23",
+        "cutOff": null
+      },
+      {
+        "by": "us",
+        "from": "1943-11-23",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "makin",
+    "name": "Makin (Butaritari)",
+    "ja": {
+      "kanji": "マキン環礁",
+      "romaji": "Makin kanshō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        172.79,
+        3.07
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1941-12-09",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1941-12-09",
+        "to": "1943-11-23",
+        "cutOff": null
+      },
+      {
+        "by": "us",
+        "from": "1943-11-23",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "abemama",
+    "name": "Abemama",
+    "ja": null,
+    "alt": [
+      "Apamama"
+    ],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        173.85,
+        0.4
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1942-09",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-09",
+        "to": "1943-11-26",
+        "cutOff": null,
+        "note": "garrisoned in September 1942 (R3, *verify*)"
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "nauru",
+    "name": "Nauru",
+    "ja": {
+      "kanji": "ナウル島",
+      "romaji": "Nauru-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        166.93,
+        -0.53
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "au",
+        "from": "1941-12-07",
+        "to": "1942-08-25",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-08-25",
+        "to": "1945-09-02",
+        "cutOff": "1943-11-23",
+        "note": "occupied on 25 August (chronology), or on 26 August or 29 August 1942 (other tellings); held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "wp-nauru"
+    ]
+  },
+  {
+    "id": "banaba",
+    "name": "Ocean Island",
+    "ja": {
+      "kanji": "オーシャン島",
+      "romaji": "Ōshan-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": "Banaba",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        169.54,
+        -0.86
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1942-08-26",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-08-26",
+        "to": "1945-09-02",
+        "cutOff": "1943-11-23",
+        "note": "held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "wp-ocean-island"
+    ]
+  },
+  {
+    "id": "nikunau",
+    "name": "Nikunau",
+    "ja": null,
+    "alt": [],
+    "kind": "atoll",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        176.45,
+        -1.36
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ],
+    "note": "Kabunare Koura's home island."
+  },
+  {
+    "id": "rabaul",
+    "name": "Rabaul",
+    "ja": {
+      "kanji": "ラバウル",
+      "romaji": "Rabauru",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        152.17,
+        -4.2
+      ]
+    },
+    "placePrecision": "ex",
+    "held": [
+      {
+        "by": "au",
+        "from": "1941-12-07",
+        "to": "1942-01-23",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-01-23",
+        "to": "1945-09-02",
+        "cutOff": "1944-03-20",
+        "note": "encircled when the Admiralties and Emirau are taken in February–March 1944; held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "kavieng",
+    "name": "Kavieng",
+    "ja": null,
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        150.8,
+        -2.58
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "lae",
+    "name": "Lae",
+    "ja": {
+      "kanji": "ラエ",
+      "romaji": "Rae",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        147,
+        -6.73
+      ]
+    },
+    "placePrecision": "loc",
+    "held": [
+      {
+        "by": "au",
+        "from": "1941-12-07",
+        "to": "1942-03-08",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-03-08",
+        "to": "1943-09-16",
+        "cutOff": null
+      },
+      {
+        "by": "au",
+        "from": "1943-09-16",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "salamaua",
+    "name": "Salamaua",
+    "ja": null,
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        147.05,
+        -7.05
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "nadzab",
+    "name": "Nadzab",
+    "ja": null,
+    "alt": [],
+    "kind": "airfield",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        146.73,
+        -6.57
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "wewak",
+    "name": "Wewak",
+    "ja": {
+      "kanji": "ウエワク",
+      "romaji": "Uewaku",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        143.63,
+        -3.55
+      ]
+    },
+    "placePrecision": "loc",
+    "held": [
+      {
+        "by": "au",
+        "from": "1941-12-07",
+        "to": "1942-12",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-12",
+        "to": "1945-05-10",
+        "cutOff": "1944-04-22",
+        "note": "cut off by the landings at Hollandia and Aitape; Australian troops take Wewak in May 1945 (*verify*)"
+      }
+    ],
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "hollandia",
+    "name": "Hollandia",
+    "ja": {
+      "kanji": "ホーランジア",
+      "romaji": "Hōranjia",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": "Jayapura",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        140.72,
+        -2.53
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "aitape",
+    "name": "Aitape",
+    "ja": null,
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        142.35,
+        -3.14
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "port-moresby",
+    "name": "Port Moresby",
+    "ja": {
+      "kanji": "ポートモレスビー",
+      "romaji": "Pōto Moresubī",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        147.15,
+        -9.48
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "kokoda",
+    "name": "Kokoda",
+    "ja": {
+      "kanji": "ココダ",
+      "romaji": "Kokoda",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        147.74,
+        -8.88
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata",
+      "milner-1957"
+    ]
+  },
+  {
+    "id": "ioribaiwa",
+    "name": "Ioribaiwa",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        147.43,
+        -9.28
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "milner-1957"
+    ],
+    "note": "R3 places the ridge at 9.28 S 147.43 E (*verify*)."
+  },
+  {
+    "id": "kokoda-track",
+    "name": "the Kokoda Track",
+    "ja": null,
+    "alt": [],
+    "kind": "region",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        147.6,
+        -9
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "milner-1957"
+    ]
+  },
+  {
+    "id": "buna",
+    "name": "Buna",
+    "ja": {
+      "kanji": "ブナ",
+      "romaji": "Buna",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        148.35,
+        -8.65
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron",
+      "milner-1957"
+    ]
+  },
+  {
+    "id": "gona",
+    "name": "Gona",
+    "ja": {
+      "kanji": "ゴナ",
+      "romaji": "Gona",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        148.26,
+        -8.62
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "milner-1957"
+    ]
+  },
+  {
+    "id": "milne-bay",
+    "name": "Milne Bay",
+    "ja": {
+      "kanji": "ミルン湾",
+      "romaji": "Miruun-wan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "gulf",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        150.34,
+        -10.37
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "R3 places Gili Gili at 10.37 S 150.34 E (*verify*)."
+  },
+  {
+    "id": "jomard-passage",
+    "name": "Jomard Passage",
+    "ja": null,
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        152.1,
+        -11.25
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "coral-sea",
+    "name": "Coral Sea",
+    "ja": {
+      "kanji": "珊瑚海",
+      "romaji": "Sangokai",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "sea",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        155,
+        -14
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "shoho-sinking",
+    "name": "where Shōhō sank, off Misima",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        152.92,
+        -10.48
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "10°29′S 152°55′E (chronology, 7 May 1942)."
+  },
+  {
+    "id": "lexington-sinking",
+    "name": "where Lexington was scuttled",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        155.45,
+        -15.2
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "15°12′S 155°27′E (chronology, 8 May 1942)."
+  },
+  {
+    "id": "bismarck-sea",
+    "name": "Bismarck Sea",
+    "ja": {
+      "kanji": "ビスマルク海",
+      "romaji": "Bisumaruku-kai",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "sea",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        148.25,
+        -7.25
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "The pin stands where the convoy was struck, by the Huon Gulf (Wikidata)."
+  },
+  {
+    "id": "tulagi",
+    "name": "Tulagi",
+    "ja": {
+      "kanji": "ツラギ",
+      "romaji": "Tsuragi",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        160.15,
+        -9.1
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1942-05-03",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-05-03",
+        "to": "1942-08-08",
+        "cutOff": null,
+        "note": "the chronology enters the occupation under 29 April with \"see 3–4 May\""
+      },
+      {
+        "by": "us",
+        "from": "1942-08-08",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "guadalcanal",
+    "name": "Guadalcanal",
+    "ja": {
+      "kanji": "ガダルカナル島",
+      "romaji": "Gadarukanaru-tō",
+      "verify": true
+    },
+    "alt": [
+      "ガ島 (Ga-tō)"
+    ],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        160,
+        -9.6
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1942-07",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-07",
+        "to": "1942-08-07",
+        "cutOff": null,
+        "note": "Japanese construction troops land to build the airfield at Lunga"
+      },
+      {
+        "by": "us",
+        "from": "1942-08-07",
+        "to": "1945-09-02",
+        "cutOff": null,
+        "note": "contested until the Japanese evacuation of February 1943"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "miller-1949"
+    ]
+  },
+  {
+    "id": "lunga-point",
+    "name": "Lunga Point",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        160.05,
+        -9.42
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "henderson-field",
+    "name": "Henderson Field",
+    "ja": null,
+    "alt": [],
+    "kind": "airfield",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        160.055,
+        -9.428
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "ilu-river",
+    "name": "the Ilu River",
+    "ja": null,
+    "alt": [
+      "Tenaru"
+    ],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        160.07,
+        -9.42
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "cape-esperance",
+    "name": "Cape Esperance",
+    "ja": {
+      "kanji": "エスペランス岬",
+      "romaji": "Esuperansu-misaki",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        159.7,
+        -9.25
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "tassafaronga",
+    "name": "Tassafaronga",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        159.88,
+        -9.37
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "oni-cn-guadalcanal-1944"
+    ]
+  },
+  {
+    "id": "savo",
+    "name": "Savo Island",
+    "ja": {
+      "kanji": "サボ島",
+      "romaji": "Sabo-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        159.81,
+        -9.13
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1945-09-02",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "oni-cn-guadalcanal-1944"
+    ]
+  },
+  {
+    "id": "ironbottom-sound",
+    "name": "Ironbottom Sound (Savo Sound)",
+    "ja": {
+      "kanji": "鉄底海峡",
+      "romaji": "Teppan kaikyō",
+      "verify": true
+    },
+    "alt": [
+      "Savo Sound",
+      "Sealark Channel"
+    ],
+    "kind": "sea-area",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        159.95,
+        -9.2
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "oni-cn-guadalcanal-1944",
+      "morison-v"
+    ],
+    "note": "The sailors' name for the water between Guadalcanal, Savo and Nggela; the Japanese 鉄底海峡 and its reading are *verify*."
+  },
+  {
+    "id": "kirishima-sinking",
+    "name": "where Kirishima capsized",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        159.7,
+        -9.08
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "trom-kirishima"
+    ],
+    "note": "09°05′S 159°42′E (TROM); 7.5 miles north-west of Savo."
+  },
+  {
+    "id": "the-slot",
+    "name": "New Georgia Sound (\"the Slot\")",
+    "ja": {
+      "kanji": "ニュージョージア海峡",
+      "romaji": "Nyū Jōjia kaikyō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "sea-area",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        158.5,
+        -8
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "oni-cn-guadalcanal-1944"
+    ]
+  },
+  {
+    "id": "shortland-islands",
+    "name": "Shortland Islands",
+    "ja": {
+      "kanji": "ショートランド",
+      "romaji": "Shōtorando",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "group",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        155.87,
+        -6.97
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "oni-cn-guadalcanal-1944"
+    ]
+  },
+  {
+    "id": "santa-cruz-islands",
+    "name": "Santa Cruz Islands",
+    "ja": {
+      "kanji": "サンタクルーズ諸島",
+      "romaji": "Santa Kurūzu shotō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "group",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        166,
+        -10.7
+      ]
+    },
+    "placePrecision": "reg",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "hornet-sinking",
+    "name": "where Hornet sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        166.72,
+        -8.63
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "8°38′S 166°43′E (chronology, 27 October 1942)."
+  },
+  {
+    "id": "munda",
+    "name": "Munda",
+    "ja": {
+      "kanji": "ムンダ",
+      "romaji": "Munda",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "airfield",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        157.26,
+        -8.33
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "rendova",
+    "name": "Rendova",
+    "ja": null,
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        157.3,
+        -8.55
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "uk",
+        "from": "1941-12-07",
+        "to": "1942-10",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-10",
+        "to": "1943-06-30",
+        "cutOff": null
+      }
+    ],
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "kula-gulf",
+    "name": "Kula Gulf",
+    "ja": null,
+    "alt": [],
+    "kind": "gulf",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        157.2,
+        -8
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "bougainville",
+    "name": "Bougainville",
+    "ja": {
+      "kanji": "ブーゲンビル島",
+      "romaji": "Būgenbiru-tō",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "island",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        155.3,
+        -6.2
+      ]
+    },
+    "placePrecision": "isl",
+    "held": [
+      {
+        "by": "au",
+        "from": "1941-12-07",
+        "to": "1942-01-23",
+        "cutOff": null
+      },
+      {
+        "by": "jp",
+        "from": "1942-01-23",
+        "to": "1945-09-02",
+        "cutOff": null,
+        "note": "Japan lands at Kieta on 23 January and Buka on 1 April 1942; the US beachhead at Torokina from 1 November 1943; held at the surrender; the garrison's own surrender date is not settled here"
+      }
+    ],
+    "sources": [
+      "usn-chron",
+      "atlas-battle-fronts-1945"
+    ]
+  },
+  {
+    "id": "buin",
+    "name": "Buin",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        155.46,
+        -6.77
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ],
+    "note": "Yamamoto's aircraft came down in the jungle near Buin (R3, *verify* the crash site)."
+  },
+  {
+    "id": "cape-torokina",
+    "name": "Cape Torokina, Empress Augusta Bay",
+    "ja": {
+      "kanji": "タロキナ岬",
+      "romaji": "Tarokina-misaki",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        155.04,
+        -6.23
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "atlas-battle-fronts-1945"
+    ],
+    "note": "R3, *verify*."
+  },
+  {
+    "id": "blackett-strait",
+    "name": "Blackett Strait",
+    "ja": null,
+    "alt": [],
+    "kind": "strait",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        156.97,
+        -8.08
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "espiritu-santo",
+    "name": "Espiritu Santo",
+    "ja": null,
+    "alt": [],
+    "kind": "base",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        167.2,
+        -15.5
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "oni-cn-guadalcanal-1944"
+    ]
+  },
+  {
+    "id": "darwin",
+    "name": "Darwin",
+    "ja": {
+      "kanji": "ダーウィン",
+      "romaji": "Dāwin",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        130.85,
+        -12.47
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "sydney-harbour",
+    "name": "Sydney Harbour",
+    "ja": {
+      "kanji": "シドニー湾",
+      "romaji": "Shidonī-wan",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "harbour",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        151.233,
+        -33.858
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "cowra",
+    "name": "Cowra",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        148.7,
+        -33.81
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "philippine-sea",
+    "name": "Philippine Sea",
+    "ja": {
+      "kanji": "フィリピン海",
+      "romaji": "Firipin-kai",
+      "verify": true
+    },
+    "alt": [],
+    "kind": "sea-area",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        138,
+        14
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "ussbs-campaigns-1946"
+    ],
+    "note": "The battle lay between the Marianas and the Philippines, about 13–15 N 135–143 E (R3, *verify* from USSBS App. 79–84)."
+  },
+  {
+    "id": "tsushima-maru-sinking",
+    "name": "where Tsushima Maru sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        129.5,
+        29.5
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ],
+    "note": "29°30′N 129°30′E (chronology, 22 August 1944), near Akusekijima."
+  },
+  {
+    "id": "rakuyo-maru-sinking",
+    "name": "where Rakuyō Maru sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        114.5,
+        18.7
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "junyo-maru-sinking",
+    "name": "where Jun'yō Maru sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        101.18,
+        -2.88
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "arisan-maru-sinking",
+    "name": "where Arisan Maru sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        118.32,
+        20.9
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "montevideo-maru-sinking",
+    "name": "where Montevideo Maru sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        119.48,
+        18.62
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "usn-chron"
+    ]
+  },
+  {
+    "id": "yamato-sinking",
+    "name": "where Yamato sank",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        128.07,
+        30.37
+      ]
+    },
+    "placePrecision": "loc",
+    "sources": [
+      "trom-yamato",
+      "usn-chron"
+    ],
+    "note": "30°22′N 128°04′E (Yamato TROM; Wikidata) or 30°40′N 128°03′E (chronology): two tellings."
+  },
+  {
+    "id": "doolittle-takeoff",
+    "name": "where the B-25s took off from Hornet",
+    "ja": null,
+    "alt": [],
+    "kind": "point",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        153.417,
+        35.717
+      ]
+    },
+    "placePrecision": "ex",
+    "sources": [
+      "doolittle-report-1942"
+    ],
+    "note": "\"Latitude 35° 43′N Longitude 153° 25′E approximately 824 statute miles East of the center of Tokyo\" (Doolittle)."
+  },
+  {
+    "id": "washington",
+    "name": "Washington",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -77.04,
+        38.9
+      ]
+    },
+    "placePrecision": "off",
+    "bearing": "east, across the Pacific and North America",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "potsdam",
+    "name": "Potsdam",
+    "ja": null,
+    "alt": [],
+    "kind": "city",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        13.06,
+        52.39
+      ]
+    },
+    "placePrecision": "off",
+    "bearing": "west, across Asia to Europe",
+    "sources": [
+      "wikidata"
+    ]
+  },
+  {
+    "id": "us-west-coast",
+    "name": "the US West Coast",
+    "ja": null,
+    "alt": [],
+    "kind": "region",
+    "today": null,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -122.4,
+        37.8
+      ]
+    },
+    "placePrecision": "off",
+    "bearing": "east, beyond Hawaiʻi",
+    "sources": [
+      "wikidata"
+    ]
+  }
+]

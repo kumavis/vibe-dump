@@ -1,0 +1,604 @@
+{
+  "boxes": [
+    {
+      "id": "midway",
+      "name": "Midway",
+      "event": "midway-1942",
+      "bounds": [
+        179.2991751,
+        27.8,
+        184.0008249,
+        32.2
+      ],
+      "size": [
+        1908,
+        2048
+      ],
+      "metresPerTexel": [
+        237.56,
+        237.56
+      ],
+      "projection": {
+        "kind": "tangent",
+        "lon0": 181.65,
+        "lat0": 30,
+        "unit": 1
+      },
+      "placement": {
+        "centre": [
+          3935.024765,
+          -2928.698493
+        ],
+        "jacobian": [
+          [
+            0.000996174142965,
+            0.000293275844761
+          ],
+          [
+            -0.000199705025016,
+            0.0010565261545
+          ]
+        ],
+        "convergenceDeg": -15.5139
+      },
+      "height": {
+        "file": "boxes/midway/height.png",
+        "scale": 0.25,
+        "offset": -11000
+      },
+      "exaggeration": 1,
+      "sea": "gmrt",
+      "battle": "boxes/midway/battle.json",
+      "clock": "usn-zp12",
+      "stats": {
+        "landFraction": 0,
+        "minMetres": -5878,
+        "maxMetres": 18,
+        "maxAt": [
+          182.6147,
+          28.2093
+        ],
+        "seaClamped": 189,
+        "boundsWidenedTexels": [
+          0.335,
+          0,
+          0.335,
+          0
+        ]
+      },
+      "sources": [
+        {
+          "id": "glo-30",
+          "title": "Copernicus DEM GLO-30",
+          "url": "https://copernicus-dem-30m.s3.amazonaws.com/",
+          "licence": "attribution",
+          "notice": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+          "liability": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30",
+          "terms": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+          "fetched": "2026-10-22",
+          "note": "3 tiles (N27_00_W176_00, N28_00_W179_00, N28_00_W178_00) read as windows by HTTP range, at overview level 1 (cells of 60 m; the coarsest at most half a texel), shifted half a cell for PixelIsPoint; 33 one-degree cells have no tile (ocean). A texel is land where at least half its area is GLO-30 land (a cell above 0 m), and holds the land cells’ mean, at least 0.25 m. GLO-30 is a surface model: canopy and buildings read as terrain"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography synthesis (Ryan et al. 2009)",
+          "url": "https://www.gmrt.org/",
+          "requests": [
+            "https://www.gmrt.org/services/GridServer?minlongitude=179.29178&maxlongitude=180.00000&minlatitude=27.79355&maxlatitude=32.20645&layer=topo&format=esriascii&mresolution=238",
+            "https://www.gmrt.org/services/GridServer?minlongitude=-180.00000&maxlongitude=-175.99178&minlatitude=27.79355&maxlatitude=32.20645&layer=topo&format=esriascii&mresolution=238"
+          ],
+          "fetched": "2026-10-22",
+          "licence": "cc-by-4.0",
+          "credit": "GMRT, CC BY 4.0, resampled and clamped",
+          "citation": "Ryan, W. B. F., S. M. Carbotte, J. O. Coplan, S. O’Hara, A. Melkonian, R. Arko, R. A. Weissel, V. Ferrini, A. Goodwillie, F. Nitsche, J. Bonczkowski and R. Zemsky (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "the sea floor: the GridServer’s topo layer as ESRI ASCII, GMRT 4.5.0, about 122 m a node, in 2 requests either side of 180°; area-weighted into the sea texels only, never shallower than -1 m (resampled and clamped); land is never taken from it"
+        }
+      ],
+      "credit": "Terrain produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Sea floor: GMRT (Ryan et al. 2009), CC BY 4.0, resampled."
+    },
+    {
+      "id": "pearl-harbor",
+      "name": "Pearl Harbor",
+      "event": "pearl-harbor-1941",
+      "bounds": [
+        201.45,
+        21.1498005,
+        202.45,
+        22.0501995
+      ],
+      "size": [
+        2048,
+        1970
+      ],
+      "metresPerTexel": [
+        50.54,
+        50.54
+      ],
+      "projection": {
+        "kind": "tangent",
+        "lon0": 201.95,
+        "lat0": 21.6,
+        "unit": 1
+      },
+      "placement": {
+        "centre": [
+          6231.144602,
+          -2384.318096
+        ],
+        "jacobian": [
+          [
+            0.000963465027635,
+            0.000360728416981
+          ],
+          [
+            -0.000268780355891,
+            0.00116005548083
+          ]
+        ],
+        "convergenceDeg": -17.2735
+      },
+      "height": {
+        "file": "boxes/pearl-harbor/height.png",
+        "scale": 0.25,
+        "offset": -11000
+      },
+      "exaggeration": 1,
+      "sea": "gmrt",
+      "battle": "boxes/pearl-harbor/battle.json",
+      "clock": "hst-1941",
+      "stats": {
+        "landFraction": 0.1479,
+        "minMetres": -4748,
+        "maxMetres": 1220.5,
+        "maxAt": [
+          201.8575,
+          21.5079
+        ],
+        "seaClamped": 18999,
+        "cudemTexels": 562725,
+        "boundsWidenedTexels": [
+          0,
+          0.436,
+          0,
+          0.436
+        ]
+      },
+      "shore": {
+        "year": 1941,
+        "note": "every dated work of Oʻahu’s harbours later than the year undone at the texel (4 × 4 samples, the half rule): lower works (land made later) back to their level, raise works (sea cut later) back to the reef that rims them, the drydocks of 1942–43 filled to the yard’s ground; the works, dates and shapes are Holo i ke Au’s (tools/lib/oahu-1941.mjs) and R10’s; the geologic map’s fill unit, which the Hawaiian patches also asked for, is not read here (research/bake.md)",
+        "works": [
+          {
+            "kind": "lower",
+            "id": "sand-island-later",
+            "name": "Sand Island’s later fill",
+            "until": 1944,
+            "level": -1,
+            "texels": 624,
+            "sources": [
+              "usn-building-bases-1947",
+              "hawaii-dot-hnl-history",
+              "hawaii-gis-oahu-1938"
+            ],
+            "fillUnitSkipped": false
+          },
+          {
+            "kind": "lower",
+            "id": "magic-island",
+            "name": "Magic Island (ʻĀina Moana)",
+            "until": 1964,
+            "level": -1,
+            "texels": 59,
+            "sources": [
+              "iooh-ala-wai-kewalo"
+            ],
+            "fillUnitSkipped": true
+          },
+          {
+            "kind": "lower",
+            "id": "keehi-airport-fill",
+            "name": "the airport’s fill on Keʻehi lagoon",
+            "until": 1944,
+            "level": -1,
+            "texels": 689,
+            "sources": [
+              "usn-building-bases-1947",
+              "hawaii-dot-hnl-history"
+            ],
+            "fillUnitSkipped": true
+          },
+          {
+            "kind": "lower",
+            "id": "reef-runway",
+            "name": "the Reef Runway",
+            "until": 1977,
+            "level": -1,
+            "texels": 1212,
+            "sources": [
+              "hawaii-dot-reef-runway"
+            ],
+            "fillUnitSkipped": false
+          },
+          {
+            "kind": "lower",
+            "id": "kuahua",
+            "name": "Kuahua peninsula",
+            "until": 1943,
+            "level": -1,
+            "texels": 71,
+            "sources": [
+              "usn-building-bases-1947"
+            ],
+            "fillUnitSkipped": false
+          },
+          {
+            "kind": "raise",
+            "id": "keehi-seaplane",
+            "name": "the Keʻehi seaplane runways and Kalihi Channel",
+            "until": 1944,
+            "cut": -1.8,
+            "reef": -1,
+            "texels": 1314,
+            "sources": [
+              "usn-building-bases-1947",
+              "hawaii-dot-hnl-history"
+            ]
+          },
+          {
+            "kind": "raise",
+            "id": "reef-runway-cuts",
+            "name": "the cuts on the reef beside the Reef Runway",
+            "until": 1977,
+            "cut": -1.8,
+            "reef": -1.03,
+            "texels": 783,
+            "sources": [
+              "hawaii-dot-reef-runway"
+            ]
+          },
+          {
+            "kind": "raise",
+            "id": "kalihi-channel",
+            "name": "Kalihi Channel",
+            "until": 1944,
+            "cut": -4,
+            "reef": -1.01,
+            "texels": 527,
+            "sources": [
+              "usn-building-bases-1947",
+              "hawaii-dot-hnl-history"
+            ]
+          },
+          {
+            "kind": "raise",
+            "id": "ala-wai-entrance",
+            "name": "the Ala Wai boat harbour entrance",
+            "until": 1951,
+            "cut": -2.2,
+            "reef": -1,
+            "texels": 47,
+            "sources": [
+              "iooh-ala-wai-kewalo"
+            ]
+          },
+          {
+            "kind": "fill",
+            "id": "pearl-drydock-2",
+            "name": "Drydock No. 2 at the Navy Yard",
+            "until": 1942,
+            "level": 2.46,
+            "texels": 5,
+            "sources": [
+              "r10-pearl-harbor",
+              "osm"
+            ]
+          },
+          {
+            "kind": "fill",
+            "id": "pearl-drydock-3",
+            "name": "Drydock No. 3 at the Navy Yard",
+            "until": 1942,
+            "level": 2.17,
+            "texels": 1,
+            "sources": [
+              "r10-pearl-harbor",
+              "osm"
+            ]
+          },
+          {
+            "kind": "fill",
+            "id": "pearl-drydock-4",
+            "name": "Drydock No. 4 at the Navy Yard",
+            "until": 1943,
+            "level": 3.42,
+            "texels": 4,
+            "sources": [
+              "r10-pearl-harbor",
+              "osm"
+            ]
+          }
+        ],
+        "references": {
+          "hawaii-dot-hnl-history": {
+            "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport: the first 80 years, part 2 (1944–1959)",
+            "url": "https://aviation.hawaii.gov/wp-content/uploads/2015/03/HNL-first80yrs-2.pdf",
+            "licence": "State of Hawaiʻi publication, quoted for its dates",
+            "note": "Naval Air Station Honolulu “was operational in late 1943 but was commissioned on January 1, 1944”; full operation for land and sea planes from 1 April 1944; in 1946 “three seaplane runways, each 1,000 feet wide with an average length of approximately 2.7 miles”",
+            "fetched": "2026-10-21"
+          },
+          "hawaii-dot-reef-runway": {
+            "title": "Hawaiʻi Department of Transportation, Airports Division, Honolulu International Airport history page",
+            "url": "https://hidot.hawaii.gov/airports/?p=91",
+            "licence": "State of Hawaiʻi publication, quoted for its dates",
+            "note": "“In 1977, Runway 8R/26L or the Reef Runway was constructed as the fourth runway for Honolulu International Airport”",
+            "fetched": "2026-10-21"
+          },
+          "hawaii-gis-oahu-1938": {
+            "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
+            "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
+            "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey"
+          },
+          "iooh-ala-wai-kewalo": {
+            "title": "Images of Old Hawaiʻi, posts tagged “Ala Wai Boat Harbor” (Ala Wai, Kewalo, Ala Moana, Magic Island)",
+            "url": "https://imagesofoldhawaii.com/tag/ala-wai-boat-harbor/",
+            "licence": "quoted for its dates; text © its author",
+            "note": "the Ala Wai Drainage Canal “begun in 1921 and completed in 1928” led to “the draining and filling in of the ponds and irrigated fields of Waikīkī”; “Dredging of the Kewalo Channel began in 1924”, Kewalo Basin built in the 1920s; “In 1928, a channel was dredged through the coral reef to connect the Ala Wai Boat Harbor and the Kewalo Basin”; Ala Moana Park on dredged coral “completed in 1934”; “in 1951, a channel was dredged directly out to sea” from the boat harbour; Magic Island, “a 30-acre peninsula”, built in 1964",
+            "fetched": "2026-10-21"
+          },
+          "osm": {
+            "title": "OpenStreetMap",
+            "url": "https://www.openstreetmap.org/copyright",
+            "licence": "odbl",
+            "credit": "© OpenStreetMap contributors"
+          },
+          "r10-pearl-harbor": {
+            "title": "Pacific Theatre research report R10, Pearl Harbor (research/R10-pearl-harbor.md), §7.2 and §11.4",
+            "url": "research/R10-pearl-harbor.md",
+            "licence": "this repository"
+          },
+          "usn-building-bases-1947": {
+            "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+            "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+            "licence": "public domain (U.S. Navy)",
+            "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)",
+            "fetched": "2026-10-21"
+          }
+        }
+      },
+      "sources": [
+        {
+          "id": "glo-30",
+          "title": "Copernicus DEM GLO-30",
+          "url": "https://copernicus-dem-30m.s3.amazonaws.com/",
+          "licence": "attribution",
+          "notice": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+          "liability": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30",
+          "terms": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+          "fetched": "2026-10-22",
+          "note": "2 tiles (N21_00_W159_00, N21_00_W158_00) read as windows by HTTP range, at overview level 0 (cells of 30 m, the full resolution; the coarsest at most half a texel), shifted half a cell for PixelIsPoint; 2 one-degree cells have no tile (ocean). A texel is land where at least half its area is GLO-30 land (a cell above 0 m), and holds the land cells’ mean, at least 0.25 m. GLO-30 is a surface model: canopy and buildings read as terrain. At Pearl Harbor GLO-30 is used outside the CUDEM tiles only"
+        },
+        {
+          "id": "noaa-cudem-hawaii-ninth",
+          "title": "NOAA NCEI Continuously Updated Digital Elevation Model (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (2021v1)",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "files": [
+            "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/tiles/ncei19_n21x50_w158x00_2021v1.tif",
+            "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/tiles/ncei19_n21x50_w158x25_2021v1.tif"
+          ],
+          "fetched": "2026-10-22",
+          "licence": "public domain (US government work, NOAA NCEI)",
+          "citation": "Amante, C. J., M. Love, K. Carignan, M. G. Sutherland, M. MacFerrin and E. Lim (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "the harbour and the south shore: the two tiles ncei19_n21x50_w158x00_2021v1 and ncei19_n21x50_w158x25_2021v1 (1/9″, about 3.4 m), every cell binned into the texel its centre falls in (about 234 a texel), land and harbour floor alike by the half-land rule, sea never shallower than -1 m; 562725 texels (13.9 %) take CUDEM; then set back to the shore of 7 December 1941 from the dated works of Oʻahu (Holo i ke Au's patch works; research/bake.md)"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography synthesis (Ryan et al. 2009)",
+          "url": "https://www.gmrt.org/",
+          "requests": [
+            "https://www.gmrt.org/services/GridServer?minlongitude=-158.55146&maxlongitude=-157.54854&minlatitude=21.14843&maxlatitude=22.05157&layer=topo&format=esriascii&mresolution=51"
+          ],
+          "fetched": "2026-10-22",
+          "licence": "cc-by-4.0",
+          "credit": "GMRT, CC BY 4.0, resampled and clamped",
+          "citation": "Ryan, W. B. F., S. M. Carbotte, J. O. Coplan, S. O’Hara, A. Melkonian, R. Arko, R. A. Weissel, V. Ferrini, A. Goodwillie, F. Nitsche, J. Bonczkowski and R. Zemsky (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "the sea floor: the GridServer’s topo layer as ESRI ASCII, GMRT 4.5.0, about 61 m a node; area-weighted into the sea texels only, never shallower than -1 m (resampled and clamped); land is never taken from it"
+        },
+        {
+          "id": "osm",
+          "title": "OpenStreetMap",
+          "url": "https://www.openstreetmap.org/copyright",
+          "licence": "odbl",
+          "credit": "© OpenStreetMap contributors",
+          "note": "positions of the Navy Yard’s drydocks No. 2 to 4 and their start dates (R10 §7.2), used to take them out of the 1941 shore; the battle’s berths F-6 to F-8 and the wrecks are placed from the same data"
+        }
+      ],
+      "credit": "Harbour and south shore: NOAA NCEI CUDEM, public domain, set back to the shore of 1941. Terrain elsewhere produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Sea floor: GMRT (Ryan et al. 2009), CC BY 4.0, resampled. Positions © OpenStreetMap contributors (ODbL)."
+    },
+    {
+      "id": "ironbottom-sound",
+      "name": "Ironbottom Sound",
+      "event": "guadalcanal-naval-2-1942",
+      "bounds": [
+        159.333,
+        -9.5830823,
+        160.45,
+        -8.8329177
+      ],
+      "size": [
+        2048,
+        1384
+      ],
+      "metresPerTexel": [
+        59.93,
+        59.93
+      ],
+      "projection": {
+        "kind": "tangent",
+        "lon0": 159.9,
+        "lat0": -9.2,
+        "unit": 1
+      },
+      "placement": {
+        "centre": [
+          2046.772946,
+          1792.245158
+        ],
+        "jacobian": [
+          [
+            0.00101222173703,
+            -0.0000218770491892
+          ],
+          [
+            -0.00000898729092114,
+            0.00102336743794
+          ]
+        ],
+        "convergenceDeg": 1.2247
+      },
+      "height": {
+        "file": "boxes/ironbottom-sound/height.png",
+        "scale": 0.25,
+        "offset": -11000
+      },
+      "exaggeration": 1,
+      "sea": "gmrt",
+      "battle": "boxes/ironbottom-sound/battle.json",
+      "clock": "usn-zm11",
+      "stats": {
+        "landFraction": 0.2436,
+        "minMetres": -2188,
+        "maxMetres": 1053,
+        "maxAt": [
+          159.7331,
+          -9.3573
+        ],
+        "seaClamped": 71831,
+        "boundsWidenedTexels": [
+          0,
+          0.152,
+          0,
+          0.152
+        ]
+      },
+      "sources": [
+        {
+          "id": "glo-30",
+          "title": "Copernicus DEM GLO-30",
+          "url": "https://copernicus-dem-30m.s3.amazonaws.com/",
+          "licence": "attribution",
+          "notice": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+          "liability": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30",
+          "terms": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+          "fetched": "2026-10-22",
+          "note": "4 tiles (S10_00_E159_00, S10_00_E160_00, S09_00_E159_00, S09_00_E160_00) read as windows by HTTP range, at overview level 0 (cells of 30 m, the full resolution; the coarsest at most half a texel), shifted half a cell for PixelIsPoint; 0 one-degree cells have no tile (ocean). A texel is land where at least half its area is GLO-30 land (a cell above 0 m), and holds the land cells’ mean, at least 0.25 m. GLO-30 is a surface model: canopy and buildings read as terrain"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography synthesis (Ryan et al. 2009)",
+          "url": "https://www.gmrt.org/",
+          "requests": [
+            "https://www.gmrt.org/services/GridServer?minlongitude=159.33136&maxlongitude=160.45164&minlatitude=-9.58471&maxlatitude=-8.83129&layer=topo&format=esriascii&mresolution=60"
+          ],
+          "fetched": "2026-10-22",
+          "licence": "cc-by-4.0",
+          "credit": "GMRT, CC BY 4.0, resampled and clamped",
+          "citation": "Ryan, W. B. F., S. M. Carbotte, J. O. Coplan, S. O’Hara, A. Melkonian, R. Arko, R. A. Weissel, V. Ferrini, A. Goodwillie, F. Nitsche, J. Bonczkowski and R. Zemsky (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "the sea floor: the GridServer’s topo layer as ESRI ASCII, GMRT 4.5.0, about 61 m a node; area-weighted into the sea texels only, never shallower than -1 m (resampled and clamped); land is never taken from it"
+        }
+      ],
+      "credit": "Terrain produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Sea floor: GMRT (Ryan et al. 2009), CC BY 4.0, resampled."
+    },
+    {
+      "id": "samar",
+      "name": "Samar",
+      "event": "samar-1944",
+      "bounds": [
+        125.333,
+        10.9996568,
+        126.833,
+        12.0833432
+      ],
+      "size": [
+        1024,
+        750
+      ],
+      "metresPerTexel": [
+        159.77,
+        159.77
+      ],
+      "projection": {
+        "kind": "tangent",
+        "lon0": 126.08,
+        "lat0": 11.54,
+        "unit": 1
+      },
+      "placement": {
+        "centre": [
+          -1681.191396,
+          -538.547119
+        ],
+        "jacobian": [
+          [
+            0.000998962331496,
+            -0.0000476969177134
+          ],
+          [
+            0.0000403482948991,
+            0.00101658879738
+          ]
+        ],
+        "convergenceDeg": 2.6863
+      },
+      "height": {
+        "file": "boxes/samar/height.png",
+        "scale": 0.25,
+        "offset": -11000
+      },
+      "exaggeration": 1,
+      "sea": "gmrt",
+      "battle": "boxes/samar/battle.json",
+      "clock": "usn-item",
+      "stats": {
+        "landFraction": 0.1106,
+        "minMetres": -9344,
+        "maxMetres": 719,
+        "maxAt": [
+          125.3425,
+          11.3761
+        ],
+        "seaClamped": 5571,
+        "boundsWidenedTexels": [
+          0,
+          0.238,
+          0,
+          0.238
+        ]
+      },
+      "sources": [
+        {
+          "id": "glo-30",
+          "title": "Copernicus DEM GLO-30",
+          "url": "https://copernicus-dem-30m.s3.amazonaws.com/",
+          "licence": "attribution",
+          "notice": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+          "liability": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30",
+          "terms": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+          "fetched": "2026-10-22",
+          "note": "4 tiles (N10_00_E125_00, N10_00_E126_00, N11_00_E125_00, N12_00_E125_00) read as windows by HTTP range, at overview level 1 (cells of 60 m; the coarsest at most half a texel), shifted half a cell for PixelIsPoint; 2 one-degree cells have no tile (ocean). A texel is land where at least half its area is GLO-30 land (a cell above 0 m), and holds the land cells’ mean, at least 0.25 m. GLO-30 is a surface model: canopy and buildings read as terrain"
+        },
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography synthesis (Ryan et al. 2009)",
+          "url": "https://www.gmrt.org/",
+          "requests": [
+            "https://www.gmrt.org/services/GridServer?minlongitude=125.32861&maxlongitude=126.83739&minlatitude=10.99532&maxlatitude=12.08768&layer=topo&format=esriascii&mresolution=160"
+          ],
+          "fetched": "2026-10-22",
+          "licence": "cc-by-4.0",
+          "credit": "GMRT, CC BY 4.0, resampled and clamped",
+          "citation": "Ryan, W. B. F., S. M. Carbotte, J. O. Coplan, S. O’Hara, A. Melkonian, R. Arko, R. A. Weissel, V. Ferrini, A. Goodwillie, F. Nitsche, J. Bonczkowski and R. Zemsky (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+          "note": "the sea floor: the GridServer’s topo layer as ESRI ASCII, GMRT 4.5.0, about 122 m a node; area-weighted into the sea texels only, never shallower than -1 m (resampled and clamped); land is never taken from it"
+        }
+      ],
+      "credit": "Terrain produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Sea floor: GMRT (Ryan et al. 2009), CC BY 4.0, resampled."
+    }
+  ]
+}
