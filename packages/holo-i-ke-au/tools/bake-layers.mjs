@@ -529,6 +529,13 @@ async function bake(dir) {
         'evidence of land in use; much of what they miss is kula (dryland) and house lots outside both models.',
     },
   }
+  // tools/bake-zoning.mjs keeps its own entry in this file under `zoning`;
+  // carry it over, since this bake rewrites everything else from scratch
+  const prior = join(OUT, 'manifest.json')
+  if (existsSync(prior)) {
+    const z = JSON.parse(readFileSync(prior, 'utf8')).zoning
+    if (z) layersManifest.zoning = z
+  }
   writeFileSync(join(OUT, 'manifest.json'), JSON.stringify(layersManifest, null, 2) + '\n')
   log(`wrote ${join(OUT, 'manifest.json')} (${(bytes / 1048576).toFixed(2)} MB of masks, ${((Date.now() - t0) / 1000).toFixed(0)} s)`)
   printTable(layersManifest)

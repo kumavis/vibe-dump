@@ -833,3 +833,87 @@ the fetch date.
 - The settlements use zoning only for the keyframes it applies to. Earlier
   eras keep density and value, and the 1900 cane and pineapple lands already
   baked into cultivation stand in for land use then.
+
+### How to bake zoning
+
+Run the pack bake first; this reads `manifest.json` and each island's
+`height.png` (for the grid and the land), and writes only
+`layers/<island>/now-zoning.png`, `layers/<island>/lud.png` and the top-level
+`zoning` key of `layers/manifest.json`, leaving every other key of that file
+as it stands.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-zoning.mjs --all                  # download, bake, check, delete the downloads (about a minute)
+node packages/holo-i-ke-au/tools/bake-zoning.mjs --preview /tmp/zoning  # each island tinted by class over shaded relief, with a legend
+```
+
+or `--download` (about 22 MB of GeoJSON), `--bake` (about 12 s), `--check`,
+`--clean`. `--downloads DIR` (or `$HOLO_ZONING_DOWNLOADS`) moves the downloads
+from `<os tmpdir>/holo-i-ke-au-bake/zoning-downloads`; keep them outside the
+repo. Same needs as the other bakes: Node 22 and `curl`. A re-bake from the
+same downloads is byte-identical; the counties edit their layers often, so a
+fresh download moves a texel here and there as well as the `fetched` dates.
+
+`tools/bake-layers.mjs` writes `layers/manifest.json` afresh, so after it runs,
+run this bake again (or carry the `zoning` key across) to put the entry back.
+
+**Sources.** Each county's own layer, which its planning department keeps
+current, rather than the State GIS mirrors of them (ParcelsZoning layers 2, 3,
+29 and 33, snapshots of 2023 to 2025); the districts from the State GIS.
+
+| layer | service | class field |
+| --- | --- | --- |
+| City and County of Honolulu zoning | `services.arcgis.com/tNJpAOha4mODLkXz/…/Zoning_Reg/FeatureServer/0` (HOLIS) | `zone_class`, named by `zoning_description` |
+| Honolulu zoning map height limit | the same service, layer 2 | `height_label` (feet) |
+| County of Maui zoning | `services3.arcgis.com/fsrDo0QMPlK9CkZD/…/Maui_County_Zoning_Districts/FeatureServer/0` | `ZONE_CLASS`, a code named by the layer's domain |
+| County of Hawaiʻi zoning | `services1.arcgis.com/C2LPusZs5OXNGFDn/…/Zoning_COH/FeatureServer/9` | `ZONE` |
+| County of Kauaʻi zoning | `services1.arcgis.com/0DaVqrPt2eyXUS9g/…/Zoning/FeatureServer/0` (Kauaʻi GIS) | `ZONING`, named by `DESCRIPTION` |
+| State Land Use Districts | `geodata.hawaii.gov/…/ParcelsZoning/MapServer/20` | `ludcode` (U, R, A, C) |
+
+Kahoʻolawe and Niʻihau have no county zoning in these layers, so their packs
+have `lud.png` only, and `zoning: null` with a `zoningNote` saying why. The
+Maui pack's slivers of Kahoʻolawe and Molokini are 0 for the same reason.
+
+**The manifest entry.** `zoning.encoding` names the classes of both rasters;
+`zoning.rule` writes out how a texel is classed; `zoning.sources.<layer>` gives
+each layer's URL, its name and the fields read, its ArcGIS Online item, the
+date its data was last edited, the date fetched, the publisher's terms and the
+credit; `zoning.mapping.<county>.classes` lists, under each class number, every
+class of that county's layer that fed it, as
+`"code (name), when a rule chose: km² of pack land"`, with 0 listing what
+counts as no class, and `zoning.mapping.<county>.rules` the reasons where the
+choice is not plain. Per pack, `zoning.islands.<island>` has `zoning` and `lud`,
+each with `file`, `size`, `source`, `fetched` and `stats` (`classed` and `none`
+as shares of the pack's land, and `share`, by class number); the zoning also
+names its `mapping` and any layer it `alsoReads`.
+
+**The generalization** (`tools/lib/zoning-classes.mjs` holds every rule, and
+the bake stops on a county code no rule matches). Classes follow building
+form: Waikīkī's Resort Mixed Use precinct and every hotel district are resort,
+its Apartment precincts high-rise; Honolulu's A-2 and AMX-2 are high-rise where
+the zoning map's height limit is 100 ft or more, low-rise below; BMX-4,
+Kakaʻako, Aloha Tower, Hilo's CDH, Wailuku's redevelopment core, Kapaʻa's
+special planning area and Lahaina's historic districts are mixed-use downtown;
+airports are industrial (Honolulu zones its own I-2); P-1, forest reserves and
+national parks are conservation; F-1 is military; P-2, Open and park districts
+are parks and open space. Maui County's Interim district takes its class from
+the State district beneath it (urban or rural as houses, agricultural,
+conservation), and its project districts are resort in West Maui, on Lānaʻi and
+at Mākena, houses elsewhere. Kauaʻi's overlays (`/ST-P`, `/P-D`) defer to the
+district before the slash. Roads, streams, drainage and land marked not zoned
+(Kalaupapa; the Kukuiʻula area Kauaʻi's layer leaves to its planning
+department) are no class.
+
+**What the check covers.** `--check` reads every raster back: greyscale, the
+pack's exact grid (the contract allows half, but this bake writes full size,
+and the rasters still come to under 200 KB), values inside the vocabulary,
+nothing over sea, `stats` equal to what the image holds, every class on a
+raster fed by something in its mapping, and every source with its URL, layer,
+fields, terms and date. It prints coverage per island and a sanity table, the
+commonest class within a few hundred metres of places whose zoning is known:
+Waikīkī resort and high-rise, downtown Honolulu mixed-use, Kalihi Kai and Sand
+Island industrial, Mililani and Kāneʻohe houses, the Koʻolau crest
+conservation, Kāʻanapali resort, Lahaina's historic core, Kahului business and
+industrial, Haleakalā conservation, Kailua-Kona business, downtown Hilo
+mixed-use, Līhuʻe business, and the State district at several of them. It
+fails if the zoning rasters pass 1 MB or `layers/` its 8 MB.
