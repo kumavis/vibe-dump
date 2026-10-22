@@ -49,7 +49,9 @@ export function hale(B, rand, L = 7, W = 4.6, H = 5.2, door = true, foot = 0.6) 
   B.box(0, ridge - 0.12, 0, L + 0.9, 0.35, 0.55, thD, MAT.thatch)
   if (door) {
     const dk = [0.05, 0.035, 0.025]
-    B.quad([gx + 0.02, y0, -0.45], [gx + 0.02, y0 + 1.4, -0.45], [gx + 0.02, y0 + 1.4, 0.45], [gx + 0.02, y0, 0.45], dk, 0)
+    // (a shallow dark block out from the wall: as a sheet against it, it
+    // fights the wall for the depth buffer from a kilometre off)
+    B.box(gx + 0.15, y0, 0, 0.3, 1.4, 0.9, dk, 0)
   }
 }
 

@@ -286,6 +286,11 @@ in float aFeat;
 #ifdef USE_GROW
 in vec4 aSpan;               // the years a building stands: in from x to y, out from z to w
 in float aStretch;           // its height over its model's (a tower's), for the storeys
+out float vFadeOut;          // how far it has gone: the pixels under this are the next one's
+#ifdef USE_YIELD
+uniform vec4 uYieldRect;     // a district's inner box, where the island's buildings yield to its own (towns.js)
+uniform float uYield;        // how far they yield there: the district's weight, once its own are built
+#endif
 #elif defined(USE_INSTANCING)
 in float aClear;
 uniform sampler2D uTownClear; // what the town has built in the year (settlements.js)
@@ -339,18 +344,31 @@ void main() {
   if (f > 0) fade *= featV(uFeatK, f);
   #ifdef USE_INSTANCING
   #ifdef USE_GROW
-  fade *= smoothstep(aSpan.x, aSpan.y, uYearNow) * (1.0 - smoothstep(aSpan.z, aSpan.w, uYearNow));
+  // In by the year, and out by it. A building fading out keeps the pixels
+  // above its curve and the one fading in on its lot takes those below the
+  // same curve (settlements.js gives the two one window), so they never draw
+  // over each other; and an island's building inside a district that is down
+  // gives the district's own the pixels it takes, the same way.
+  fade *= smoothstep(aSpan.x, aSpan.y, uYearNow);
+  float gone = smoothstep(aSpan.z, aSpan.w, uYearNow);
+  #ifdef USE_YIELD
+  if (edgeDist(uYieldRect, origin.xz) > 0.0) gone = max(gone, uYield);
+  #endif
+  vFadeOut = gone;
+  if (gone >= 0.999) fade = 0.0;
   #else
   int cl = int(aClear + 0.5);
   if (cl > 0) fade *= 1.0 - featV(uFeatSeen, cl);
   // (and a tree stands back from what the town has built round it by the year)
   fade *= 1.0 - smoothstep(0.3, 0.7, texture(uTownClear, rectUv(uDistRect, origin.xz)).r);
-  #endif
   // and thinner toward the district's edge, as its ground eases into the
-  // island's (one tree in so many left out, not every one dissolved)
+  // island's (one tree in so many left out, not every one dissolved; the
+  // buildings instead keep their lots inside it, and the island's stand
+  // beyond: settlements.js PART)
   float edgeK = smoothstep(uDistInfo.w, uDistInfo.z, edgeDist(uDistRect, origin.xz));
   float pick = fract(sin(dot(origin.xz, vec2(12.9898, 78.233))) * 43758.5453);
   fade *= step(pick, edgeK);
+  #endif
   #endif
   vFade = fade;
   gl_Position = fade <= 0.001 ? vec4(2.0, 2.0, 2.0, 1.0) : projectionMatrix * viewMatrix * wp;
@@ -362,17 +380,25 @@ ${constants}
 ${noise}
 ${world}
 ${lighting}
-uniform sampler2D uDistS;   // the district's cast shadows
+uniform sampler2D uShadeS;  // the cast shadows of the ground under it (the district's, or an island's)
+uniform vec4 uShadeRect;    // and the rect they cover
 in vec3 vWorld;
 in vec3 vNormal;
 in vec3 vColor;
 in float vMat;
 in vec3 vLocal;
 in float vFade;
+#ifdef USE_GROW
+in float vFadeOut;
+#endif
 void main() {
   if (vFade <= 0.0) discard;
   // dither in and out instead of popping
-  if (hash12(gl_FragCoord.xy) >= vFade) discard;
+  float hd = hash12(gl_FragCoord.xy);
+  if (hd >= vFade) discard;
+  #ifdef USE_GROW
+  if (hd < vFadeOut) discard;
+  #endif
   vec3 n = normalize(vNormal);
   if (!gl_FrontFacing) n = -n;
   vec3 a = vColor;
@@ -410,8 +436,8 @@ void main() {
     float aa = 1.0 - smoothstep(0.3, 0.7, fwidth((vLocal.x + vLocal.z) * 0.9));
     a *= mix(0.94, 0.88 + 0.12 * smoothstep(0.35, 0.5, r), aa);
   }
-  vec2 uv = rectUv(uDistRect, vWorld.xz);
-  float vis = texture(uDistS, uv).r;
+  vec2 uv = rectUv(uShadeRect, vWorld.xz);
+  float vis = texture(uShadeS, uv).r;
   vec3 lit = shade(a, n, vWorld, 1.0, vis);
   // a little wrap and translucency for leaves
   if (m == 3) lit += a * uSunColor * max(dot(-n, uSunDir), 0.0) * 0.25 * vis;
@@ -424,9 +450,11 @@ void main() {
  * The district's object material. `opts.fade` = [near, far] camera distances
  * (world units) to dither out over; `opts.doubleSide` for single sheets
  * (palm fronds, hala straps); `opts.grow` for the town's buildings, whose
- * instances carry their years (aSpan, aStretch). `shared` is the app's bag
- * of uniforms, `own` the district features' (uShow, uFeatSeen, uDistS,
- * uYearNow, uTownClear).
+ * instances carry their years (aSpan, aStretch); `opts.yield` for an island's
+ * (towns.js), which give way to a district's inside it (uYieldRect, uYield).
+ * `shared` is the app's bag of uniforms, `own` the district features' (uShow,
+ * uFeatSeen, uDistS, uYearNow, uTownClear), or an island's with its shadows
+ * (uShadeS, uShadeRect).
  */
 export function objectMaterial(shared, own, opts = {}) {
   const [near, far] = opts.fade || [60, 90]
@@ -435,12 +463,15 @@ export function objectMaterial(shared, own, opts = {}) {
     fragmentShader: objectFragment,
     vertexColors: true,
     side: opts.doubleSide ? THREE.DoubleSide : THREE.FrontSide,
-    defines: opts.grow ? { USE_GROW: '' } : {},
+    defines: { ...(opts.grow ? { USE_GROW: '' } : {}), ...(opts.yield ? { USE_YIELD: '' } : {}) },
     uniforms: {
       ...shared.uniforms,
       uYearNow: { value: 0 },
       uTownClear: { value: null },
       ...own,
+      // (the shadows of the ground under it: the district's unless `own` names an island's)
+      uShadeS: own.uShadeS ?? own.uDistS ?? { value: null },
+      uShadeRect: own.uShadeRect ?? shared.uniforms.uDistRect,
       uFadeNear: { value: near },
       uFadeFar: { value: far },
     },

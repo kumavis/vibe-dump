@@ -6,21 +6,29 @@
 //
 // Each figure is a foot on the ground of the year (its metres, turned into
 // world Y by the exaggeration of the moment, so it never floats while the
-// valley is stretched), a frame of the sheet, a scale, a facing and how much
-// of it is shown. The foot is projected and rounded to a pixel corner, and
-// the quad is built round it in pixels: 8 by 16 times the scale (16 wide for
-// the field piece), standing on it. Two figures that belong together, a pair
-// at the front or the piece and its crew, share a foot and are set apart
-// across the screen by whole sprite pixels (dx), so they stand toe to toe at
-// every zoom.
+// valley is stretched; a figure going over the pali gives the metres of its
+// fall instead), a frame of the sheet, a scale, a mirroring and how much of
+// it is shown. The foot is projected and rounded to a pixel corner, and the
+// quad is built round it in pixels: the cell (8 by 16, 16 wide for the field
+// piece and the slinger) times the scale, standing on it. Figures that belong
+// together, a pair at the front, the piece and its crew, a knot, share a foot
+// and are set apart on the screen by whole sprite pixels (dx across, dy up),
+// so they stand toe to toe at every zoom.
+//
+// Every figure is drawn at one scale (soldiers.js picks it from the camera's
+// distance). Across a change of scale a figure is drawn twice, at the old
+// scale and the new, each keeping only the sprite pixels whose place in an
+// ordered dither falls in its own part of [0, 1) (aMix: lo, hi), so the two
+// share every pixel of the figure between them and never draw it both: the
+// figure dissolves from one size to the next by whole sprite pixels. A figure
+// dissolves in and out the same way, within its part.
 //
 // The quad keeps the depth of its foot drawn toward the eye by half the
 // figure's own height there (and a figure's own nudge), so the ground right
 // at its feet doesn't cut them off but a ridge in front of it still hides
 // it. The sheet is read texel by texel (texelFetch), the edges are cut by its
-// alpha, never blended, and a figure dissolves in and out by whole sprite
-// pixels (an ordered dither) rather than fading. Each has a small dark
-// ellipse on the ground under it, drawn before it, darkening what is there.
+// alpha, never blended. Each has a small dark ellipse on the ground under it,
+// drawn before it, darkening what is there.
 
 import { constants, world, lighting } from './common.glsl.js'
 
@@ -28,16 +36,17 @@ import { constants, world, lighting } from './common.glsl.js'
 const place = /* glsl */ `
 in vec4 aFoot;   // x, the ground there (metres), z, a nudge toward the eye (world units)
 in vec4 aCell;   // the frame in the sheet: x, y, w, h (sheet pixels, y down from the top)
-in vec4 aDraw;   // k (screen pixels to a sprite pixel), facing times tint (+ right, - left), shown (0..1), dx (sprite pixels across the screen)
+in vec4 aDraw;   // k (screen pixels to a sprite pixel), mirroring times tint (- mirrored), shown (0..1), dx (sprite pixels across the screen)
+in vec4 aMix;    // the part of the dither this copy keeps: lo, hi; dy (sprite pixels up the screen); the shadow's width (sprite pixels)
 uniform vec2 uViewport;   // the target drawn into, in pixels
 uniform float uPxW;       // world units a screen pixel spans, per unit of distance from the eye
 // the foot projected and rounded to a pixel corner (x, y), and its depth drawn toward the eye by
 // pull (as a fraction of the figure's height) and the figure's own nudge (z); w < 0 when not drawn
 vec4 footPixel(vec3 foot, float pull) {
   vec4 clip = projectionMatrix * viewMatrix * vec4(foot, 1.0);
-  if (aDraw.z <= 0.0 || clip.w <= 0.0) return vec4(0.0, 0.0, 0.0, -1.0);
+  if (aDraw.z <= 0.0 || clip.w <= 0.0 || aMix.y <= aMix.x) return vec4(0.0, 0.0, 0.0, -1.0);
   vec2 px = floor((clip.xy / clip.w * 0.5 + 0.5) * uViewport + 0.5);
-  px.x += aDraw.w * aDraw.x;
+  px += vec2(aDraw.w, aMix.z) * aDraw.x;
   vec3 toEye = cameraPosition - foot;
   float de = length(toEye);
   float h = aCell.w * aDraw.x * uPxW * de;
@@ -50,12 +59,18 @@ vec3 footWorld() {
 }
 `
 
-// an ordered dither by sprite pixel, for dissolving in and out
+// an ordered dither by sprite pixel, for dissolving in and out and from one size to the next
 const bayer = /* glsl */ `
 float bayer4(ivec2 p) {
   int i = (p.x & 3) + 4 * (p.y & 3);
   int m[16] = int[16](0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5);
   return (float(m[i]) + 0.5) / 16.0;
+}
+// kept: the pixel's place in the dither falls in this copy's part, and within it, under how much is shown
+bool kept(ivec2 p, vec2 part, float shown) {
+  float b = bayer4(p);
+  if (b < part.x || b >= part.y) return false;
+  return shown >= 0.999 || (b - part.x) / (part.y - part.x) < shown;
 }
 `
 
@@ -68,7 +83,8 @@ uniform sampler2D uFigS;  // the district's cast shadows (its shadow map), when 
 uniform float uHasS;
 out vec2 vSp;
 flat out vec4 vCell;
-flat out vec3 vDraw;   // facing, tint, shown
+flat out vec3 vDraw;   // mirroring, tint, shown
+flat out vec2 vPart;
 flat out vec3 vLight;
 void main() {
   vec3 foot = footWorld();
@@ -81,6 +97,7 @@ void main() {
   vSp = vec2(position.x * aCell.z, (1.0 - position.y) * aCell.w);
   vCell = aCell;
   vDraw = vec3(sign(aDraw.y), abs(aDraw.y), aDraw.z);
+  vPart = aMix.xy;
   // lit as an upright card turned to the eye and tipped a little skyward, in the valley's shadows
   vec3 e = cameraPosition - foot;
   e.y = 0.0;
@@ -102,6 +119,7 @@ uniform sampler2D uSheet;
 in vec2 vSp;
 flat in vec4 vCell;
 flat in vec3 vDraw;
+flat in vec2 vPart;
 flat in vec3 vLight;
 void main() {
   ivec2 wh = ivec2(vCell.zw);
@@ -109,7 +127,7 @@ void main() {
   if (vDraw.x < 0.0) t.x = wh.x - 1 - t.x;
   vec4 c = texelFetch(uSheet, ivec2(vCell.xy) + t, 0);
   if (c.a < 0.25) discard;
-  if (vDraw.z < 0.999 && bayer4(t) >= vDraw.z) discard;
+  if (!kept(t, vPart, vDraw.z)) discard;
   vec3 a = pow(c.rgb, vec3(2.2));
   // (a flash and a match's glow are their own light: the sheet marks them with a lower alpha)
   vec3 col = c.a < 0.9 ? a * 2.4 : a * vDraw.y * vLight;
@@ -123,17 +141,21 @@ ${world}
 ${place}
 out vec2 vSp;
 flat out vec3 vInfo;   // w, h, shown
+flat out vec2 vPart;
 void main() {
   vec3 foot = footWorld();
   // (a little further than the figure, so its feet are drawn over it)
   vec4 fp = footPixel(foot, 0.42);
-  if (fp.w < 0.0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
+  // (nothing under a figure in the air)
+  if (fp.w < 0.0 || aMix.w <= 0.0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
   float k = aDraw.x;
+  float w = aMix.w;
   // four sprite pixels tall, centred on the line of the feet: the half under it shows below them
-  vec2 corner = fp.xy + vec2((position.x - 0.5) * aCell.z * k, (position.y * 4.0 - 2.0) * k);
+  vec2 corner = fp.xy + vec2((position.x - 0.5) * w * k, (position.y * 4.0 - 2.0) * k);
   gl_Position = vec4(corner / uViewport * 2.0 - 1.0, fp.z, 1.0);
-  vSp = vec2(position.x * aCell.z, aCell.w + 2.0 - position.y * 4.0);
-  vInfo = vec3(aCell.zw, aDraw.z);
+  vSp = vec2(position.x * w, aCell.w + 2.0 - position.y * 4.0);
+  vInfo = vec3(w, aCell.w, aDraw.z);
+  vPart = aMix.xy;
 }
 `
 
@@ -142,12 +164,13 @@ ${constants}
 ${bayer}
 in vec2 vSp;
 flat in vec3 vInfo;
+flat in vec2 vPart;
 void main() {
   // a pixel ellipse, the width of the figure less a pixel each side, on the line of its feet
   vec2 c = floor(vSp) + 0.5;
   vec2 q = (c - vec2(vInfo.x * 0.5, vInfo.y)) / vec2(vInfo.x * 0.5 - 0.5, 1.6);
   if (dot(q, q) > 1.0) discard;
-  if (vInfo.z < 0.999 && bayer4(ivec2(floor(vSp))) >= vInfo.z) discard;
+  if (!kept(ivec2(floor(vSp)), vPart, vInfo.z)) discard;
   gl_FragColor = vec4(vec3(0.55), 1.0);
 }
 `

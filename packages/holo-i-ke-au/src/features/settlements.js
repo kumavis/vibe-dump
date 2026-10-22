@@ -1,10 +1,18 @@
-// Settlements by era (DESIGN.md §5.4): at the near zoom the district's
-// buildings come from the settlement layer's density for the chosen year
-// (DATA.md "Era layers", people per km² on a log scale at four keyframes),
-// not only from features.json, and their kind follows the era. Density sets
-// how close and how large; the era sets what. The village at Kou keeps its
+// Settlements by era (DESIGN.md §5.4): at the near zoom buildings come from
+// the settlement layer's density for the chosen year (DATA.md "Era layers",
+// people per km² on a log scale at four keyframes), not only from
+// features.json, and their kind follows the era. Density sets how close and
+// how large; the era sets what; a house's value, with the density, sets which
+// of the era's kinds, the humbler or the finer. The village at Kou keeps its
 // own hale, placed from its outline (index.js), and the scatter yields to it
 // while it stands.
+//
+// Two scatters share the rules here (Scatter): the district's (Settlements,
+// below), worked out once over its 6 m ground when the district arrives, and
+// every island's (towns.js), worked out tile by tile over the island pack's
+// coarser ground around the camera, so a painted mask is all a settled place
+// needs. Inside a district's bounds the district places its own; the island's
+// yield to it (PART).
 //
 // This is modelled placement from a modelled density: nothing here is a
 // surveyed building. The landmarks are the exceptions, and only where the
@@ -13,36 +21,54 @@
 // clock tower at the harbour from 1926 (only if the gazetteer has
 // `aloha-tower`); no other building is named.
 //
-// How it is worked out, once, when the district arrives:
+// How it is worked out:
 //
-// - The density. The parent island's settlement masks are read (four PNGs,
-//   about 68 m a texel on Oʻahu), cut to the district, and sampled at any
-//   point bilinearly with a stable noise over them, so a coarse texel breaks
-//   into hamlets and gaps rather than a square of even scatter. The year is
-//   placed on the keyframes as the land overlay places it (overlay/land.js:
-//   by the manifest's eras, linearly in the bytes, which is geometric in
-//   people), and thinned before 1450 as the overlay thins it. The Māhele
-//   keyframe has no town in it, so Honolulu's of 1853 is put back (townTerm).
-// - The lots. The district is laid with lots on a street grid aligned to the
-//   shore: a tile of 500 m takes the direction away from the sea of the
-//   patched years, so the grid runs mauka–makai and along the shore as
-//   Honolulu's does, blocks of four lots by two between streets. Each lot has
-//   a rank in an ordered dither (Bayer), so the lots that fill at any density
-//   are evenly spread, and the same lots fill again whenever the density
-//   comes back to the same value: the same year always gives the same town.
+// - The density. The island's settlement masks are read (four PNGs, about
+//   68 m a texel on Oʻahu, 150 m on Hawaiʻi), and sampled at any point
+//   bilinearly with a stable noise over them, so a coarse texel breaks into
+//   hamlets and gaps rather than a square of even scatter. The year is placed
+//   on the keyframes as the land overlay places it (overlay/land.js: by the
+//   manifest's eras, linearly in the bytes, which is geometric in people),
+//   and thinned before 1450 as the overlay thins it. The Māhele keyframe has
+//   no town in it, so the towns of 1853 are put back (townTerm).
+// - The lots. The land is laid with lots on a street grid aligned to the
+//   shore: a tile of 500 m takes the direction away from the sea, so the grid
+//   runs mauka–makai and along the shore as Honolulu's does, blocks of four
+//   lots by two between streets. Each lot has a rank in an ordered dither
+//   (Bayer), so the lots that fill at any density are evenly spread, and the
+//   same lots fill again whenever the density comes back to the same value:
+//   the same place and year always give the same town. A kauhale takes four
+//   lots, a yard of its own, ranked on a dither of its own.
 // - The weight of the ground. Flat ground near the coast and the streams
 //   draws more than slopes away from both; a lot is refused where the ground
 //   of the year is water (the patches lower the made land and raise the
 //   dredged channels before their dates), on a loʻi or a fishpond or the
 //   village while it stands, on a stream, or where its footprint falls more
-//   than a few metres (the pali).
+//   than a few metres.
+// - The value (valueAt). Modelled, unless the layers ever carry a value mask
+//   (`layers/<island>/<keyframe>-value.png`, 0..255): rising with the
+//   density, the nearness of the coast, of a harbour and of a town's core,
+//   and with the years, it decides within an era between the humbler kinds
+//   and the finer: thatch against frame and coral block in the 1850s,
+//   cottages against stores and masonry in the 1890s, bungalows against
+//   offices in the territory, walk-ups and houses against towers now.
+// - Zoning, for the years after 1960 (DATA.md "Zoning, for the
+//   settlements"): where the island has `now-zoning.png` its class decides
+//   what the modern era builds, towers only in the high-rise, downtown and
+//   resort classes, offices and shops in the commercial, sheds in the
+//   industrial, nothing residential on agricultural, conservation, military,
+//   institutional or park land; and from 1964 the State Land Use District
+//   keeps conservation land empty and the rural and agricultural sparse.
+//   Density and value still set how many and how fine; where the raster is
+//   absent, they set it all.
 // - The years. Each lot is asked, year by sampled year (every four years from
 //   contact, and at every date a patch or a feature changes), whether a
 //   building stands on it and of which kind; the answers become instances,
 //   each with the span of years it stands, which the shader fades by an
 //   eased year (kit.js aSpan): density changes ease, kinds crossfade at their
-//   boundaries, and a change forced by the ground (a loʻi laid, a reef
-//   filled) is never crossed fading.
+//   boundaries (the one going and the one coming dithered over complementary
+//   pixels, never both on one), and a change forced by the ground (a loʻi
+//   laid, a reef filled) is never crossed fading.
 //
 // The kinds by era (buildings.js), each lot moving on at its own time, the
 // densest first: kauhale before about 1820, each hale on its own ground;
@@ -52,6 +78,11 @@
 // about 1900, church spires; bungalows and downtown's mid-rise to about 1960;
 // then the suburbs, walk-ups and towers, a tower's height following the
 // density, and the old downtown's lots gone up to office towers.
+//
+// Nothing flickers: every model fits its lot with a gap to the next (fit),
+// stands a hand's breadth over the highest ground sampled under it (LIFT)
+// on a plinth reaching down past the lowest, and no two instances ever share
+// a footprint at once.
 //
 // What it costs: the instances are drawn by kind and variant, one draw call
 // each, at most MAX_DRAWN at once, all of them near the camera and fewer of
@@ -71,9 +102,10 @@ import { patchLevel, fromHalf, ihash } from '../data/district-decode.js'
 import { distanceTransform, blur } from '../data/decode.js'
 import { EARLY } from '../overlay/land.js'
 import { geometryPoint } from '../geo.js'
+import { DISTRICT } from '../config.js'
 
-const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
-const smooth = (a, b, x) => {
+export const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
+export const smooth = (a, b, x) => {
   const t = clamp((x - a) / (b - a), 0, 1)
   return t * t * (3 - 2 * t)
 }
@@ -83,22 +115,41 @@ const smooth = (a, b, x) => {
 // world units (100 m): a lot along the shore and mauka, the streets between
 // blocks of four lots by two, and the tile over which the grid keeps one
 // direction
-const LU = 0.36
-const LV = 0.4
+export const LU = 0.36
+export const LV = 0.4
 const GU = 0.14
 const GV = 0.14
 const BU = 4 * LU + GU
 const BV = 2 * LV + GV
-const GRID_TILE = 5
+export const GRID_TILE = 5
 const LOTS_PER_KM2 = (8 / (BU * BV)) * 100
+// people per km² at which every lot of the grid would hold a house, filled in
+// proportion below it (fill): about a household or two a lot, at the scale
+// the buildings are drawn
+const PROP = 5000
+// what a building keeps clear of its lot's edges (so neighbours never touch),
+// and how far over the highest ground sampled under it its footing stands
+// (metres of ground, at the near exaggeration: a hand's breadth)
+const GAP = 0.012
+export const LIFT = Y(0.15)
+// a lot's front may reach this far into its street, short of its middle
+const FRONT = LV / 2 + GV / 2 - GAP
+
+// Where a district meets its island (towns.js): the district places its own
+// lots no nearer its edge than PART + PART_GAP; the island's lots further in
+// than PART yield to it, dithered out over the pixels the district's take
+// in, while it is down. Between them a strip no lot of either stands on.
+export const PART = 3.5
+export const PART_GAP = 0.8
 
 // the kinds: scale on the ground (sh) and up (sv), world units per metre;
-// the fall a footprint may take (metres); the era's grid or a loose scatter
+// the fall a footprint may take (metres); the era's grid or a loose scatter;
+// how far the early town's lots turn off the grid (radians, either way of it)
 const HALE_S = S * 1.4 // (as index.js draws Kou's)
 const TOWN_S = S * 1.25
-const KINDS = {
+export const KINDS = {
   kauhale: { sh: HALE_S, sv: HALE_S, relief: 2.5, loose: true },
-  hale: { sh: HALE_S, sv: HALE_S, relief: 3, jitter: 0.35 },
+  hale: { sh: TOWN_S, sv: TOWN_S, relief: 3, jitter: 0.2 },
   frame: { sh: TOWN_S, sv: TOWN_S, relief: 3, jitter: 0.3 },
   adobe: { sh: TOWN_S, sv: TOWN_S, relief: 3, jitter: 0.3 },
   cottage: { sh: TOWN_S, sv: TOWN_S, relief: 3.5 },
@@ -109,20 +160,30 @@ const KINDS = {
   house: { sh: TOWN_S * 0.9, sv: TOWN_S * 0.9, relief: 6 },
   walkup: { sh: S * 0.75, sv: S * 0.75, relief: 5 },
   tower: { sh: S * 0.48, sv: S * 0.58, relief: 6 },
+  shed: { sh: TOWN_S * 0.9, sv: TOWN_S * 0.9, relief: 4 },
   church: { sh: S * 0.85, sv: S * 0.85, relief: 3 },
   spire: { sh: TOWN_S * 0.9, sv: TOWN_S * 0.9, relief: 3 },
   clock: { sh: S * 0.7, sv: S * 0.7, relief: 3 },
 }
-const KIND_NAMES = Object.keys(KINDS)
-// the lot paved under the city's kinds (model metres: the lot over the kind's scale)
-const PADS = Object.fromEntries(['walkup', 'tower'].map((k) => [k, [(LU * 0.96) / KINDS[k].sh, (LV * 0.96) / KINDS[k].sh]]))
-const KIND = Object.fromEntries(KIND_NAMES.map((k, i) => [k, i]))
+export const KIND_NAMES = Object.keys(KINDS)
+// the lot paved under the city's kinds (model metres: the lot, less its gap, over the kind's scale)
+export const PADS = Object.fromEntries(['walkup', 'tower'].map((k) => [k, [(LU - 2 * GAP) / KINDS[k].sh, (LV - 2 * GAP) / KINDS[k].sh]]))
+export const KIND = Object.fromEntries(KIND_NAMES.map((k, i) => [k, i]))
+const LANDMARK = new Set(['church', 'spire', 'clock'])
 
-// the scatter's budget, and what is drawn at once
-const MAX_PLACED = 8000
-const MAX_DRAWN = 8000
-const TILE = 3 // world units: the culling tiles
-const reachFor = (distance) => clamp(distance * 2.6, 40, 110)
+// The zoning classes of DATA.md "Zoning, for the settlements", and the State
+// Land Use Districts.
+export const ZONE = { none: 0, houses: 1, lowrise: 2, highrise: 3, commercial: 4, downtown: 5, industrial: 6, resort: 7, agricultural: 8, conservation: 9, military: 10, institutional: 11, parks: 12 }
+export const LUD = { urban: 1, rural: 2, agricultural: 3, conservation: 4 }
+// the zoning applies to the modern era's kinds (after 1960), the Land Use
+// Districts from 1964 (DATA.md)
+const ZONING_FROM = 1960
+const LUD_FROM = 1964
+// The people who work where few live, as a density the fill reads (people
+// per km²): the census of now counts residents, and a business district, a
+// resort strip or an industrial estate would otherwise come out emptier than
+// the 1930s left it. Modelled, as the old downtown's towers are (CORE_BYTE).
+export const ZONE_FLOOR = { [ZONE.downtown]: 9000, [ZONE.resort]: 8000, [ZONE.commercial]: 4000, [ZONE.industrial]: 3500, [ZONE.institutional]: 1500, [ZONE.military]: 800, [ZONE.agricultural]: 120 }
 
 // the years: sampled every STEP from contact, sparsely before it (only the
 // thinning before 1450 changes anything there)
@@ -137,21 +198,16 @@ const HARD = 2.5
 // far ends of a span that never closes
 const NEVER = 1e5
 
-// the old downtown's office towers (see scatter): at least the density, as a
-// byte, whose towers stand about 80 m, and up to about 130 m
+// the old downtown's office towers (see scatterLot): at least the density, as
+// a byte, whose towers stand about 80 m, and up to about 130 m
 const CORE_BYTE = 232
 const CORE_UNTIL = 1936
 
-// the Māhele keyframe's town (see townTerm): from this year on a keyframe
+// the Māhele keyframe's towns (see townTerm): from this year on a keyframe
 // with no towns of its own borrows the next keyframe's
 const TOWN_FROM = 1800
 
-// the streets, one ribbon batch per epoch, crossfading by the year
-const STREET_EPOCHS = [1850, 1875, 1900, 1930, 1960, 2000]
-const STREET_W = 0.1
-const PAD_W = 1.0
-
-const BAYER = (() => {
+export const BAYER = (() => {
   let M = [[0]]
   for (let k = 0; k < 3; k++) {
     const n = M.length
@@ -170,8 +226,16 @@ const BAYER = (() => {
   return M
 })()
 
+// the yards' own ordered dither (a kauhale takes a yard of four lots)
+const YARD_BAYER = [
+  [0, 8, 2, 10],
+  [12, 4, 14, 6],
+  [3, 11, 1, 9],
+  [15, 7, 13, 5],
+]
+
 /** A smooth value noise from the integer hash, for the density's upsampling. */
-function vnoise(x, z, seed) {
+export function vnoise(x, z, seed) {
   const i = Math.floor(x)
   const j = Math.floor(z)
   const fx = x - i
@@ -185,7 +249,7 @@ function vnoise(x, z, seed) {
   return a + (b - a) * ux + (c - a + (a - b + d - c) * ux) * uz
 }
 
-function mulberry32(seed) {
+export function mulberry32(seed) {
   let a = seed >>> 0
   return () => {
     a = (a + 0x6d2b79f5) | 0
@@ -195,14 +259,863 @@ function mulberry32(seed) {
   }
 }
 
-export class Settlements {
+/** Point in polygon (a ring of [x, z]). */
+export function inside(poly, x, z) {
+  let c = false
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const a = poly[i]
+    const b = poly[j]
+    if (a[1] > z !== b[1] > z && x < ((b[0] - a[0]) * (z - a[1])) / (b[1] - a[1]) + a[0]) c = !c
+  }
+  return c
+}
+
+// --- zoning ---------------------------------------------------------------------
+
+/**
+ * Where the layers' manifest lists an island's zoning (DATA.md "Zoning, for
+ * the settlements"): { zoning, lud }, each a file under layers/ or null. The
+ * manifest may give them under a top-level `zoning` key by island (with or
+ * without an `islands` level), or in the island's own entry; any of them may
+ * be missing, and then so is the raster.
+ */
+export function zoningFiles(m, island) {
+  const top = m?.zoning
+  const e = top?.islands?.[island] ?? top?.[island] ?? m?.islands?.[island]?.zoning ?? m?.islands?.[island]?.layers?.now?.zoning ?? null
+  if (!e) return { zoning: null, lud: null }
+  const file = (v) => (typeof v === 'string' ? v : v?.file || null)
+  return { zoning: file(e.zoning ?? e.now ?? (e.file ? e : null)), lud: file(e.lud) }
+}
+
+/**
+ * An island's zoning and Land Use District rasters, decoded, or nulls: read
+ * from the data's own layers/manifest.json, or from the manifest under
+ * ?zoning=<base> (the tools' test rasters, tools/fake-data.mjs). A raster
+ * may be smaller than the pack (half its resolution, DATA.md): it is read by
+ * where a point falls across the pack's bounds, nearest texel.
+ */
+export async function loadZoning(app, m, island) {
+  let base = null
+  let man = m
+  const q = app.params?.get('zoning')
+  if (q) {
+    try {
+      base = new URL(q.endsWith('/') ? q : `${q}/`, location.href)
+      const res = await fetch(new URL('layers/manifest.json', base))
+      man = res.ok ? await res.json() : null
+    } catch {
+      man = null
+    }
+  }
+  const files = zoningFiles(man, island)
+  const read = async (f) => {
+    if (!f) return null
+    try {
+      const url = base ? new URL(`layers/${f}`, base).href : app.data.abs(`layers/${f}`)
+      return await decodeGrey(decodeImage, url)
+    } catch (err) {
+      app.warn(`zoning ${island}: ${f}: ${err.message} (the settlements go by density and value there)`)
+      return null
+    }
+  }
+  const [zoning, lud] = await Promise.all([read(files.zoning), read(files.lud)])
+  return { zoning, lud, files }
+}
+
+/** A class raster's value at world (x, z) over a rect, nearest texel; 0 off it or without one. */
+export function classAt(img, r, x, z) {
+  if (!img) return 0
+  const i = Math.floor(((x - r.x0) / (r.x1 - r.x0)) * img.W)
+  const j = Math.floor(((z - r.z0) / (r.z1 - r.z0)) * img.H)
+  if (i < 0 || j < 0 || i >= img.W || j >= img.H) return 0
+  return img.px[j * img.W + i]
+}
+
+// --- the rules every scatter shares -------------------------------------------------
+
+/**
+ * The machinery both scatters share: the keyframes and the year's place on
+ * them, the density at a point, the fill and the kind of a lot in a year,
+ * where its building stands and the span of years it stands. A scatter sets
+ * `crop` (the grid its bytes are on: x0, z0, sx, sz, w, h) and `bytes` (one
+ * array per keyframe, and `values` too where a value mask exists), `kits`,
+ * and `years()`'s breaks.
+ */
+export class Scatter {
+  constructor(app) {
+    this.app = app
+    this.sites = 0
+  }
+
+  /** The keyframes, the codec, and each era's year on them, from layers/manifest.json. */
+  setLayers(m) {
+    const K = [...(m.keyframes || [])].filter((k) => Number.isFinite(k.year)).sort((a, b) => a.year - b.year)
+    const enc = m.encoding?.settlement || {}
+    const dMax = enc.dMax ?? 50000
+    this.d0 = enc.d0 ?? 2
+    this.L = Math.log(1 + dMax / this.d0)
+    this.codec = settlementCodec(this.d0, dMax)
+    this.keyframes = K
+    const at = (id) => K.find((k) => k.id === id)?.year
+    // (the year an era's settlement stands at, as the manifest maps it: LandOverlay.eraYear)
+    this.eraYears = this.app.timeline.eras.map((era) => {
+      const spec = m.eras?.[era.id]?.settlement
+      if (spec?.keyframe && at(spec.keyframe) !== undefined) return at(spec.keyframe)
+      if (spec?.from && at(spec.from) !== undefined && at(spec.to) !== undefined) return at(spec.from) + (at(spec.to) - at(spec.from)) * (spec.t ?? 0)
+      return era.year
+    })
+    this.lut = new Float32Array(256 * 8 + 1)
+    for (let k = 0; k <= 256 * 8; k++) this.lut[k] = this.d0 * (Math.exp((k / 8 / 255) * this.L) - 1)
+  }
+
+  /** Each keyframe's settlement file and value file (or null) for an island's entry. */
+  layerFiles(entry) {
+    return this.keyframes.map((k) => ({ settlement: entry.layers?.[k.id]?.settlement?.file || null, value: entry.layers?.[k.id]?.value?.file || null }))
+  }
+
+  /** The keyframe position (0 the first keyframe, 1 the second, …) of a timeline year, as LandOverlay.position. */
+  kpAt(year) {
+    const tl = this.app.timeline
+    const Yr = this.eraYears
+    const K = this.keyframes
+    let ly = year
+    if (Yr.length > 1) {
+      const v = clamp(tl.sAtYear(year), 0, Yr.length - 1)
+      const i = Math.min(Yr.length - 2, Math.floor(v))
+      ly = Yr[i] + (Yr[i + 1] - Yr[i]) * (v - i)
+    }
+    if (ly <= K[0].year) return 0
+    for (let i = 0; i + 1 < K.length; i++) if (ly <= K[i + 1].year) return i + (ly - K[i].year) / (K[i + 1].year - K[i].year)
+    return K.length - 1
+  }
+
+  /** Bilinear over the crop at world (x, z), each of `arrays` into `out`, with `noise` added where it is above half a byte. */
+  sample(arrays, x, z, out, noise) {
+    const c = this.crop
+    const fx = clamp((x - c.x0) / c.sx - 0.5, 0, c.w - 1.001)
+    const fz = clamp((z - c.z0) / c.sz - 0.5, 0, c.h - 1.001)
+    const i = fx | 0
+    const j = fz | 0
+    const tx = fx - i
+    const tz = fz - j
+    const q = j * c.w + i
+    for (let k = 0; k < arrays.length; k++) {
+      const b = arrays[k]
+      const top = b[q] + (b[q + 1] - b[q]) * tx
+      const bot = b[q + c.w] + (b[q + c.w + 1] - b[q + c.w]) * tx
+      const v = top + (bot - top) * tz
+      out[k] = v > 0.5 ? v + noise : 0
+    }
+    return out
+  }
+
+  /** The density bytes at world (x, z) for each keyframe, into `out`: bilinear, with a stable noise over the coarse texels (hamlets and gaps, not an even scatter). */
+  bytesAt(x, z, out) {
+    const n = (vnoise(x / 1.7, z / 1.7, 71) - 0.5) * 26 + (vnoise(x / 0.55, z / 0.55, 72) - 0.5) * 12
+    return this.sample(this.bytes, x, z, out, n)
+  }
+
+  /** People per km² from a (fractional) byte. */
+  people(v) {
+    if (v <= 0) return 0
+    if (v < 256) return this.lut[Math.round(v * 8)]
+    return this.d0 * (Math.exp((v / 255) * this.L) - 1)
+  }
+
+  /**
+   * The Māhele keyframe spreads each island's people of 1853 by the kuleana
+   * parcels and the contact weights alone (methods.mahele.settlement.rule),
+   * with no town: Honolulu, which by then held most of Oʻahu's people (Ellis
+   * already gives the town of the 1820s six or seven thousand), comes out as
+   * thin as the countryside, and Lahaina, Hilo and Kailua with it. A keyframe
+   * after TOWN_FROM with no towns of its own therefore borrows the towns of
+   * the next keyframe that has them (the end of the kingdom: their centre,
+   * spread and share, the bake's own assumption) and puts their people into
+   * the same soft discs, taking them from the layer's spread. `rule` says how
+   * many: 'island' gives each town its share of the island's figure (as the
+   * district has always done: Oʻahu's 1853 census puts 11,455 of its 19,126
+   * in Honolulu); 'district' its share of its census district's, the
+   * district's part of the island taken as the later keyframe's (the bake's
+   * shares are of districts, and a whole island's would put two thirds of
+   * Maui in its three towns). These are this file's assumptions, as the
+   * bake's are for 1896; a historian with Schmitt (RESEARCH.md §9) could set
+   * them. Only the texels within four spreads of a town are touched.
+   */
+  townTerm(m, island, rule = 'island') {
+    const K = this.keyframes
+    const proj = this.app.data.proj
+    const c = this.crop
+    const islandRect = this.islandRect
+    this.townTerms = []
+    K.forEach((kf, k) => {
+      const own = m.methods?.[kf.id]?.settlement
+      if (kf.year < TOWN_FROM || !own || own.towns?.length) return
+      const later = K.slice(k + 1).find((q) => m.methods?.[q.id]?.settlement?.towns?.length)
+      const people = own.populations?.[island]
+      if (!later || !Number.isFinite(people)) return
+      const lm = m.methods[later.id].settlement
+      const towns = lm.towns
+        .map((t) => ({ ...t, xz: proj.toWorld([t.lon, t.lat]) }))
+        .filter((t) => t.xz[0] > islandRect.x0 && t.xz[0] < islandRect.x1 && t.xz[1] > islandRect.z0 && t.xz[1] < islandRect.z1 && (t.share || 0) > 0)
+      if (!towns.length) return
+      // each town's people, and what the spread gives up for them
+      const laterPeople = m.islands?.[island]?.layers?.[later.id]?.settlement?.stats?.people
+      for (const t of towns) {
+        let frac = 1
+        if (rule === 'district') {
+          const dist = (lm.districts || []).find((d) => d.name === t.district)
+          frac = dist && laterPeople ? clamp(dist.pop / laterPeople, 0.05, 1) : 0.25
+        }
+        t.people = people * (t.share || 0) * frac
+      }
+      const share = Math.min(0.9, towns.reduce((s, t) => s + t.people, 0) / people)
+      const b = Float32Array.from(this.bytes[k])
+      // (the spread, less the towns' share, everywhere; then each disc added where it reaches)
+      const lift = new Float32Array(c.w * c.h)
+      for (const t of towns) {
+        const s = (t.sigma || 1500) / 1000 // km
+        const R = (4 * s * 1000) / 100 // world units
+        const i0 = clamp(Math.floor((t.xz[0] - R - c.x0) / c.sx), 0, c.w - 1)
+        const i1 = clamp(Math.ceil((t.xz[0] + R - c.x0) / c.sx), 0, c.w - 1)
+        const j0 = clamp(Math.floor((t.xz[1] - R - c.z0) / c.sz), 0, c.h - 1)
+        const j1 = clamp(Math.ceil((t.xz[1] + R - c.z0) / c.sz), 0, c.h - 1)
+        const peak = t.people / (2 * Math.PI * s * s)
+        for (let j = j0; j <= j1; j++) {
+          for (let i = i0; i <= i1; i++) {
+            const x = c.x0 + (i + 0.5) * c.sx
+            const z = c.z0 + (j + 0.5) * c.sz
+            const r2 = ((x - t.xz[0]) ** 2 + (z - t.xz[1]) ** 2) / 100 // km²
+            lift[j * c.w + i] += peak * Math.exp(-r2 / (2 * s * s))
+          }
+        }
+      }
+      for (let q = 0; q < b.length; q++) {
+        if (b[q] <= 0 && lift[q] <= 0) continue
+        // (the layer is 0 over the sea: a disc never reaches out over it)
+        if (b[q] <= 0) continue
+        const d = this.codec.decode(b[q]) * (1 - share) + lift[q]
+        b[q] = (255 * Math.log(1 + Math.max(0, d) / this.d0)) / this.L
+      }
+      this.bytes[k] = b
+      this.townTerms.push({ keyframe: kf.id, from: later.id, towns: towns.map((t) => t.name), people: Math.round(people * share) })
+    })
+  }
+
+  /**
+   * The sampled years, from the timeline's first to its last, with `breaks`
+   * (the dates where the ground or a feature changes) among them, and per
+   * sample the keyframes either side, the thinning before 1450 and the eras'
+   * weights. Sets Ys, isBreak, samples, edges (the breaks in order) and
+   * epochAt (each sample's stretch between breaks).
+   */
+  years(breaks) {
+    const tl = this.app.timeline
+    const y0 = tl.yearAt(0)
+    const y1 = tl.yearAt(tl.max)
+    const br = new Set([...breaks].filter((y) => y > y0 && y <= y1))
+    const contact = this.keyframes[0].year
+    const ys = new Set([y0, ...PRE.filter((y) => y > y0 && y < contact), ...br])
+    for (let y = contact; y <= y1; y += STEP) ys.add(y)
+    ys.add(y1)
+    this.Ys = [...ys].filter((y) => y >= y0 && y <= y1).sort((a, b) => a - b)
+    this.isBreak = this.Ys.map((y) => br.has(y))
+    this.edges = [...br].sort((a, b) => a - b)
+    this.epochAt = this.Ys.map((y) => this.epochOfYear(y))
+    this.samples = this.Ys.map((y) => {
+      const kp = this.kpAt(y)
+      const a = Math.min(this.keyframes.length - 2, Math.floor(kp))
+      // (each era's weight, eased over twenty years about its turn)
+      const turns = [1820, 1860, 1900, 1960].map((t) => smooth(t - 10, t + 10, y))
+      const w = [1 - turns[0], turns[0] - turns[1], turns[1] - turns[2], turns[2] - turns[3], turns[3]]
+      return { y, a, t: kp - a, early: 25.5 * (1 - smooth(EARLY[0], EARLY[1], y)), w }
+    })
+  }
+
+  /** The stretch between breaks a year falls in. */
+  epochOfYear(y) {
+    const E = this.edges
+    let e = 0
+    while (e < E.length && y >= E[e]) e++
+    return e
+  }
+
+  /**
+   * The share of lots built at a density in a sample's year (before the
+   * ground's weight), and the kauhale's own. Before the town a kauhale stands
+   * for a few households (about eight people), on a yard of four lots. After
+   * it, a house for every household or two at the scale the buildings are
+   * drawn (PROP people per km² would build every lot), so a hamlet of a few
+   * dozen people and a country town of a thousand read as what they are; and
+   * where the town is dense the share rises faster than the density, so a
+   * town reads as a town and its outskirts as scattered houses (the layer's
+   * towns are soft discs kilometres across, and a fill in proportion alone
+   * would spread one even suburb over the plain).
+   */
+  fill(s, d) {
+    const fk = Math.min(1 / 12, d / (8 * LOTS_PER_KM2))
+    const w = s.w
+    const p = d / PROP
+    let f = 0
+    if (w[1]) f += w[1] * Math.min(0.8, Math.max(p, 0.8 * (d / 700) ** 2))
+    if (w[2]) f += w[2] * Math.min(0.9, Math.max(p, 0.9 * (d / 1300) ** 2.5))
+    if (w[3]) f += w[3] * Math.min(0.9, Math.max(p, 0.9 * (d / 2500) ** 1.5))
+    if (w[4]) f += w[4] * (d < 6000 ? Math.min(0.85, Math.max(p, 0.85 * (d / 6000) ** 1.2)) : 0.85 - 0.45 * smooth(6000, 15000, d))
+    return [f, fk]
+  }
+
+  /** The most a lot could fill at a density, in any era (for the lots that never could). */
+  fillMax(d) {
+    return Math.max(4 * Math.min(1 / 12, d / (8 * LOTS_PER_KM2)), Math.min(0.9, d / PROP), Math.min(0.8, 0.8 * (d / 700) ** 2), Math.min(0.9, 0.9 * (d / 1300) ** 2.5), Math.min(0.9, 0.9 * (d / 2500) ** 1.5), Math.min(0.85, 0.85 * (d / 6000) ** 1.2))
+  }
+
+  /**
+   * A lot's value in a year (0..1): what a house there is worth, which sets
+   * the finer kinds against the humbler. From the value mask where the layers
+   * carry one (`l.vb`, its bytes per keyframe, eased between them as the
+   * density is); otherwise modelled: the density (from a few dozen people
+   * per km² to ten thousand), nearness to the coast (within about 600 m), to
+   * a harbour (within about 1.5 km) and to a town's core (within its spread),
+   * the years (money came with the trade, the plantations and the visitors),
+   * and a lot's own fortune.
+   */
+  valueAt(l, s, d) {
+    if (l.vb) return clamp((l.vb[s.a] + (l.vb[s.a + 1] - l.vb[s.a]) * s.t) / 255, 0, 1)
+    const dn = smooth(1.5, 4.0, Math.log10(Math.max(1, d)))
+    const era = smooth(1800, 2000, s.y)
+    return clamp(0.34 * dn + 0.14 * l.coast + 0.16 * l.harbour + 0.22 * l.centre + 0.1 * era + 0.24 * (l.r8 - 0.5), 0, 1)
+  }
+
+  /**
+   * What stands on a lot in year y at density d and value v: a kind, by the
+   * era (each lot moving on at its own time, after the era's turn and never
+   * before it, the densest first), by the density, by the value within the
+   * era, and after 1960 by the zoning where there is any. `K`: the lot holds
+   * its yard's kauhale. Returns -1 where the zoning or the Land Use District
+   * of the year allows nothing.
+   */
+  kindAt(y, d, v, l, K) {
+    const dn = clamp(Math.log10(Math.max(1, d) / 300), -1, 1)
+    const t = y - l.lag * (1 - 0.6 * Math.max(0, dn))
+    if (y < 1818 || t < 1820) return K ? KIND.kauhale : KIND.hale
+    // (the finer share of an era's kinds, from the value)
+    const fine = smooth(0.35, 0.8, v)
+    if (t < 1860) {
+      // thatch against frame against coral block and adobe
+      const thatch = (1 - smooth(1820, 1880, t + 12 * dn)) * (1.15 - 0.6 * fine)
+      if (l.r2 < thatch) return KIND.hale
+      return l.r3 < 0.15 + 0.5 * fine ? KIND.adobe : KIND.frame
+    }
+    if (t < 1900) {
+      // (masonry where the town of the end of the kingdom is densest, the
+      // layer's town a soft disc about 1,300 people per km² at its heart, or
+      // where its lots are worth most; stores along the streets of value)
+      if ((d > 1150 && l.r3 < 0.3) || (d > 450 && l.r3 < 0.42 * smooth(0.6, 0.9, v))) return KIND.block
+      if ((d > 700 && l.r3 < 0.55) || (d > 250 && l.r3 < 0.6 * smooth(0.5, 0.8, v))) return KIND.store
+      const thatch = (1 - smooth(1820, 1880, t + 12 * dn)) * (1.2 - 0.8 * fine)
+      if (l.r2 < thatch) return KIND.hale
+      return l.r4 < 0.2 ? KIND.frame : KIND.cottage
+    }
+    if (t < 1960) {
+      if ((d > 4000 && l.r3 < 0.5) || (d > 2000 && l.r3 < 0.45 * smooth(0.65, 0.95, v))) return KIND.midrise
+      if ((d > 1800 && l.r3 < 0.6) || (d > 700 && l.r3 < 0.5 * smooth(0.55, 0.85, v))) return KIND.block
+      if (((d > 900 && l.r3 < 0.4) || (d > 400 && l.r3 < 0.4 * smooth(0.5, 0.8, v))) && t < 1935) return KIND.store
+      return KIND.bungalow
+    }
+    // now: the zoning of the lot where there is any (and the Land Use District from 1964)
+    const z = l.zone
+    if (y >= LUD_FROM && l.lud === LUD.conservation) return -1
+    if (z) return this.zoneKind(z, t, d, v, l)
+    if (y >= LUD_FROM && l.lud === LUD.agricultural) return l.r3 < 0.4 ? KIND.shed : KIND.house
+    if (y >= LUD_FROM && l.lud === LUD.rural) return KIND.house
+    // (towers where the census is densest, Waikīkī's and downtown's, and on
+    // the old downtown's lots (see scatterLot), and where the lots are worth
+    // most; walk-ups and houses between. On an island with zoning, a lot it
+    // gives no class to (a road, a stream's banks) raises no tower.)
+    const tower = l.zoned ? KIND.walkup : KIND.tower
+    if (l.core) return tower
+    if (d > 20000) return l.r3 < 0.85 ? tower : KIND.walkup
+    if (d > 10000) return l.r3 < 0.2 + 0.5 * smooth(10000, 20000, d) + 0.2 * fine ? tower : KIND.walkup
+    if (d > 4000) return l.r3 < 0.45 + 0.2 * fine ? (l.r5 < 0.25 * smooth(0.7, 0.95, v) ? tower : KIND.walkup) : KIND.house
+    if (d > 2500 && l.r3 < 0.2 + 0.15 * fine) return KIND.walkup
+    if (l.r4 < 0.35 && t < 1990) return KIND.bungalow
+    return KIND.house
+  }
+
+  /**
+   * The modern era's kind on a lot in zoning class z (DATA.md: towers only in
+   * classes 3, 5 and 7). The density here is the people who live there (the
+   * census), so a country town's downtown stays low (Lahaina's Front Street,
+   * Hilo's) and a city's goes up; the value picks the finer within each.
+   */
+  zoneKind(z, t, d, v, l) {
+    const fine = smooth(0.35, 0.8, v)
+    switch (z) {
+      case ZONE.houses:
+        return l.r4 < 0.35 && t < 1990 ? KIND.bungalow : KIND.house
+      case ZONE.lowrise:
+        return l.r3 < 0.55 + 0.35 * fine ? KIND.walkup : KIND.house
+      case ZONE.highrise:
+        return l.r3 < 0.3 + 0.45 * smooth(4000, 20000, d) + 0.2 * fine ? KIND.tower : KIND.walkup
+      case ZONE.commercial:
+        if (d > 4000 && l.r3 < 0.25 + 0.45 * fine) return KIND.midrise
+        return d < 2000 && l.r4 < 0.35 - 0.25 * fine ? KIND.store : KIND.block
+      case ZONE.downtown:
+        if (l.core || (d > 6000 && l.r3 < 0.25 + 0.5 * smooth(6000, 15000, d) + 0.2 * fine)) return KIND.tower
+        if (d > 5000 && l.r4 < 0.3 + 0.4 * fine) return KIND.midrise
+        // (a country town's main street: masonry, and the old false fronts among it)
+        return d < 5000 && l.r4 < 0.55 - 0.3 * fine ? KIND.store : KIND.block
+      case ZONE.industrial:
+      case ZONE.military:
+        return KIND.shed
+      case ZONE.resort:
+        // (the hotels along the strip: towers where the lots are worth most
+        // or the people are many, the low-rise behind)
+        return l.r3 < 0.15 + 0.45 * smooth(0.5, 0.9, v) + 0.35 * smooth(4000, 15000, d) ? KIND.tower : KIND.walkup
+      case ZONE.agricultural:
+        return KIND.shed
+      case ZONE.institutional:
+        return d > 3000 && l.r3 < 0.3 * fine ? KIND.midrise : KIND.block
+      case ZONE.conservation:
+      case ZONE.parks:
+        return -1
+      default:
+        return KIND.house
+    }
+  }
+
+  /** Which variant of a kind a lot draws (the resort strip's towers are its hotel slabs). */
+  variantOf(l, kind, nv) {
+    if (kind === KIND.tower && l.zone === ZONE.resort && l.r6 < 0.75) return 0
+    return Math.min(nv - 1, Math.floor(ihash(l.tile, kind, Math.floor(l.rank * 1e6)) * nv))
+  }
+
+  /** A tower's height (metres) at a density: 35 m, to 150 m where it is densest. */
+  towerHeight(d) {
+    return 35 + 115 * smooth(4.0, 4.7, Math.log10(Math.max(1, d)))
+  }
+
+  /** A lot's density in a sample, as a byte: the people who live there. */
+  byteAt(l, s) {
+    return l.b[s.a] + (l.b[s.a + 1] - l.b[s.a]) * s.t - s.early
+  }
+
+  /** The byte the fill reads: byte v, or after 1960 the zoning's floor of the people who work there, if more. */
+  fillByte(l, s, v) {
+    const floor = l.zone && s.w[4] > 0 && s.y >= ZONING_FROM ? ZONE_FLOOR[l.zone] : 0
+    if (!floor) return v
+    const fb = (255 * Math.log(1 + floor / this.d0)) / this.L + 10 * (l.r6 - 0.5)
+    return fb > v ? v + (fb - v) * s.w[4] : v
+  }
+
+  /**
+   * One lot through the years: for each sample, whether a building stands on
+   * it and of which kind, and runs of one kind into instances (`emit`).
+   * `allows(pose, relief, epoch)` says whether a footprint may stand and on
+   * how high a ground (null if not); `cap(n)` thins a sample to its budget.
+   * A yard's kauhale keeps its other three lots empty while it stands
+   * (`l.yard`, written by the yard's own lot, which comes first).
+   */
+  scatterLot(l, allows, cap, emit) {
+    const NS = this.Ys.length
+    const S_ = this.samples
+    const cache = new Map()
+    let run = null
+    const out = (end) => {
+      const r = this.instance(l, run, end)
+      if (Array.isArray(r)) for (const q of r) emit(q)
+      else emit(r)
+      run = null
+    }
+    // A lot that carried downtown's mid-rise before the war goes up to an
+    // office tower after 1960, whatever the census there: the layer of now
+    // counts where people live, and the business district, where few do,
+    // would otherwise come out emptier than the 1930s left it (where the
+    // zoning says otherwise, the zoning has it).
+    l.core = false
+    if (l.anchor) l.yard = new Uint8Array(NS)
+    for (let n = 0; n < NS; n++) {
+      const s = S_[n]
+      let state = null
+      let v = this.byteAt(l, s)
+      const core = l.core && s.y >= 1960 && (l.zoned ? l.zone === ZONE.downtown || l.zone === ZONE.highrise : true)
+      if (core) v = Math.max(v, CORE_BYTE + 14 * l.r6)
+      const vf = this.fillByte(l, s, v)
+      const held = l.host?.yard?.[n]
+      if (vf > 0 && !held) {
+        const d = this.people(v)
+        const [F, fk] = this.fill(s, this.people(vf))
+        const c = cap(n)
+        // (a yard's kauhale, on its own dither: four lots, so four times the share)
+        const K = !!l.anchor && l.rankY < 4 * fk * l.w * c
+        const val = this.valueAt(l, s, d)
+        let kind = -1
+        if (core || l.rank < F * l.w * c || K) kind = this.kindAt(s.y, d, val, l, K)
+        // (a kauhale only on its yard's lot; a lot that filled by its yard's dither alone stands empty once the kauhale has gone)
+        if (kind === KIND.kauhale && !K) kind = KIND.hale
+        if (kind >= 0 && kind !== KIND.kauhale && !(core || l.rank < F * l.w * c)) kind = -1
+        if (kind >= 0) {
+          const nv = kind === KIND.kauhale ? KAUHALE.length : this.kits[KIND_NAMES[kind]].length
+          const variant = this.variantOf(l, kind, nv)
+          const e = this.epochAt[n]
+          const key = kind * 16 + variant
+          // (an answer that no epoch changes is kept for all of them)
+          let top = cache.get(key * 256 + 255)
+          if (top === undefined) top = cache.get(key * 256 + e)
+          if (top === undefined) {
+            const p = this.pose(l, kind, variant)
+            const relief = KINDS[KIND_NAMES[kind]].relief
+            let dep = false
+            if (p.parts) {
+              // (each hale of a kauhale on its own ground)
+              top = []
+              for (const q of p.parts) {
+                const t = allows(q, relief, e)
+                dep ||= this.dep
+                if (t === null) {
+                  top = null
+                  break
+                }
+                top.push(t)
+              }
+            } else {
+              top = allows(p, relief, e)
+              dep = this.dep
+            }
+            cache.set(key * 256 + (dep ? e : 255), top)
+          }
+          if (top !== null) {
+            state = { key, kind, variant, top, d }
+            if (kind === KIND.kauhale) l.yard[n] = 1
+          }
+          if (state && kind === KIND.midrise && s.y <= CORE_UNTIL) l.core = true
+        }
+      }
+      if (run && state && state.key === run.key) {
+        run.d = Math.max(run.d, state.d)
+        continue
+      }
+      if (run) out(n)
+      if (state) run = { ...state, n0: n }
+    }
+    if (run) out(NS)
+  }
+
+  /**
+   * How much a kind's model must shrink to keep within its lot with a gap
+   * all round (or, for a kauhale, its yard of four), turned by the most its
+   * kind turns off the grid and moved by the most it moves: 1 for nearly
+   * every model (buildings.js sizes them to their lots).
+   */
+  fitOf(kind, variant) {
+    const key = kind * 16 + variant
+    this.fits ??= new Map()
+    let f = this.fits.get(key)
+    if (f !== undefined) return f
+    const name = KIND_NAMES[kind]
+    const kd = KINDS[name]
+    if (LANDMARK.has(name)) f = 1
+    else if (kd.loose) {
+      // the yard's hale, turned with the yard by up to 0.2 either way
+      let ux = 0
+      let uz = 0
+      for (const [ox, oz, rot, size] of KAUHALE[variant]) {
+        const kit = this.kits[name][size]
+        for (const a of [-0.2, 0.2]) {
+          const c = Math.cos(rot + a)
+          const s = Math.sin(rot + a)
+          const ca = Math.cos(a)
+          const sa = Math.sin(a)
+          const cx = ox * ca + oz * sa
+          const cz = -ox * sa + oz * ca
+          ux = Math.max(ux, Math.abs(cx) + Math.abs(kit.hx * c) + Math.abs(kit.hz * s))
+          uz = Math.max(uz, Math.abs(cz) + Math.abs(kit.hx * s) + Math.abs(kit.hz * c))
+        }
+      }
+      f = Math.min(1, (LU - GAP) / (ux * kd.sh), (LV - GAP) / (uz * kd.sh))
+    } else {
+      const kit = this.kits[name][variant]
+      const [x0, x1, z0, z1] = kit.box
+      const j = (kd.jitter || 0) / 2
+      const c = Math.cos(j)
+      const s = Math.sin(j)
+      const hx = Math.max(-x0, x1) * c + Math.max(-z0, z1) * s
+      const back = -z0 * c + Math.max(-x0, x1) * s
+      const front = z1 * c + Math.max(-x0, x1) * s
+      const m = kd.jitter ? 0.03 : 0
+      f = Math.min(1, (LU / 2 - GAP - m) / (hx * kd.sh), (LV / 2 - GAP - m) / (back * kd.sh), (FRONT - m) / (front * kd.sh))
+    }
+    this.fits.set(key, f)
+    return f
+  }
+
+  /**
+   * Where a kind stands on a lot: its centre, turn, half extents (world
+   * units) and scale; for a kauhale, each of its hale (`parts`, each with its
+   * size), round the middle of its yard.
+   */
+  pose(l, kind, variant) {
+    const name = KIND_NAMES[kind]
+    const kd = KINDS[name]
+    const f = this.fitOf(kind, variant)
+    let x = l.x
+    let z = l.z
+    let a = l.face
+    if (kd.loose) {
+      // a kauhale keeps to its yard (the four lots from its own: half a lot
+      // along the street, half a lot mauka), its own way round
+      const sh = kd.sh * f
+      x = l.x + (LU / 2) * l.e[0] + (LV / 2) * l.m[0]
+      z = l.z + (LU / 2) * l.e[1] + (LV / 2) * l.m[1]
+      a = Math.atan2(l.e[0], l.e[1]) - Math.PI / 2 + (l.r7 - 0.5) * 0.4 + (l.r5 < 0.5 ? 0 : Math.PI)
+      const c = Math.cos(a)
+      const s = Math.sin(a)
+      const parts = KAUHALE[variant].map(([ox, oz, rot, size]) => {
+        const kit = this.kits[name][size]
+        // (as THREE turns about y: local x to (cos, −sin), local z to (sin, cos))
+        return { x: x + (ox * c + oz * s) * sh, z: z + (-ox * s + oz * c) * sh, a: a + rot, size, ax: kit.hx * sh, az: kit.hz * sh, f }
+      })
+      return { x, z, a, parts, f }
+    }
+    const kit = this.kits[name][variant]
+    if (kd.jitter) {
+      // the early town: lots taken up before the grid was ruled
+      a += (l.r5 - 0.5) * kd.jitter
+      x += (l.r6 - 0.5) * 0.06
+      z += (l.r7 - 0.5) * 0.06
+    }
+    // (a kind paved to its lot's edges asks the ground under all its paving,
+    // so no slope pokes up through the paving's edge)
+    const pad = PADS[name]
+    const ax = pad ? Math.max(kit.hx * kd.sh * f, LU / 2 - GAP) : kit.hx * kd.sh * f
+    const az = pad ? Math.max(kit.hz * kd.sh * f, LV / 2 - GAP) : kit.hz * kd.sh * f
+    return { x, z, a, ax, az, f }
+  }
+
+  /**
+   * One instance: a run of samples with one kind on one lot, and the span of
+   * years it fades over (a kauhale: one for each of its hale, sharing it).
+   */
+  instance(l, run, end) {
+    const Ys = this.Ys
+    const NS = Ys.length
+    const name = KIND_NAMES[run.kind]
+    const kd = KINDS[name]
+    const p = l.landmark ? { x: l.x, z: l.z, a: l.face, f: 1 } : this.pose(l, run.kind, run.variant)
+    const span = new Float32Array(4)
+    // A soft change between samples n − 1 and n falls at the lot's own
+    // moment between them, the same for what goes and what comes, over the
+    // same window (inside the two samples where they allow it): so the fade
+    // in and the fade out it replaces are one curve, and the shader dithers
+    // them over complementary pixels (kit.js), never both on one.
+    const soft = (n) => {
+      const a = Ys[n - 1]
+      const b = Ys[n]
+      const h = Math.min(SOFT, (b - a) / 2)
+      const t = a + h + ihash(l.tile ?? 0, n, Math.floor((l.rank ?? 0) * 1e6)) * (b - a - 2 * h)
+      return [t - h, t + h]
+    }
+    if (run.n0 === 0) {
+      span[0] = -NEVER
+      span[1] = -NEVER + 1
+    } else if (this.isBreak[run.n0] || l.landmark) {
+      span[0] = Ys[run.n0]
+      span[1] = Ys[run.n0] + HARD
+    } else [span[0], span[1]] = soft(run.n0)
+    if (end >= NS) {
+      span[2] = NEVER
+      span[3] = NEVER + 1
+    } else if (this.isBreak[end]) {
+      span[2] = Ys[end] - HARD
+      span[3] = Ys[end] - 0.01
+    } else [span[2], span[3]] = soft(end)
+    const stretch = name === 'tower' ? this.towerHeight(run.d) / TOWER_H : 1
+    const jit = 0.94 + 0.12 * (l.r5 ?? 0.5)
+    const one = (q, variant, top) => {
+      const kit = this.kits[name][variant]
+      const f = q.f ?? p.f ?? 1
+      return {
+        kind: run.kind,
+        variant,
+        site: this.sites,
+        x: q.x,
+        z: q.z,
+        a: q.a,
+        y: Y(top) + LIFT,
+        sh: kd.sh * f,
+        sv: kd.sv * f * stretch,
+        stretch,
+        span,
+        colour: [jit * (0.98 + 0.04 * (l.r6 ?? 0.5)), jit, jit * (0.98 + 0.04 * (l.r7 ?? 0.5))],
+        // (the ground it clears of trees: its footprint, a little in)
+        rx: kit.hx * kd.sh * f * 0.95,
+        rz: kit.hz * kd.sh * f * 0.95,
+        landmark: !!l.landmark,
+      }
+    }
+    this.sites++
+    if (p.parts) return p.parts.map((q, k) => one(q, q.size, run.top[k]))
+    return one(p, run.variant, run.top)
+  }
+
+  /**
+   * The lots of one grid tile (x0, z0 its corner, GRID_TILE square), on the
+   * grid of direction th (radians: the way mauka), in yard order (each
+   * yard's own lot first). `pads` says which sides keep a margin from the
+   * next tile (its grid turned another way): [west, east, north, south].
+   * `keep(x, z)` refuses a lot before anything is asked of it; `seed` is the
+   * tile's. Each lot comes with its hashes and its place on the grid.
+   */
+  tileLots(x0, z0, th, seed, pads, keep) {
+    const m = [Math.cos(th), Math.sin(th)]
+    const e = [-m[1], m[0]]
+    let umin = Infinity
+    let umax = -Infinity
+    let vmin = Infinity
+    let vmax = -Infinity
+    for (const [cx, cz] of [[x0, z0], [x0 + GRID_TILE, z0], [x0, z0 + GRID_TILE], [x0 + GRID_TILE, z0 + GRID_TILE]]) {
+      const u = cx * e[0] + cz * e[1]
+      const v = cx * m[0] + cz * m[1]
+      umin = Math.min(umin, u)
+      umax = Math.max(umax, u)
+      vmin = Math.min(vmin, v)
+      vmax = Math.max(vmax, v)
+    }
+    // (a lot near an edge where the next tile's grid turns another way keeps
+    // back far enough that no building of either reaches the other's)
+    const P = 0.42
+    const ok = (x, z) => x >= x0 && x < x0 + GRID_TILE && z >= z0 && z < z0 + GRID_TILE && !((pads[0] && x < x0 + P) || (pads[1] && x >= x0 + GRID_TILE - P) || (pads[2] && z < z0 + P) || (pads[3] && z >= z0 + GRID_TILE - P))
+    const out = []
+    for (let bv = Math.floor(vmin / BV) - 1; bv <= Math.ceil(vmax / BV); bv++) {
+      for (let bu = Math.floor(umin / BU) - 1; bu <= Math.ceil(umax / BU); bu++) {
+        for (let yu = 0; yu < 2; yu++) {
+          // a yard: lots (2yu, 0), its own, then (2yu + 1, 0), (2yu, 1), (2yu + 1, 1);
+          // its kauhale may stand only if all four are this tile's to give
+          const yard = [[0, 0], [1, 0], [0, 1], [1, 1]].map(([du, iv]) => {
+            const iu = 2 * yu + du
+            const u = bu * BU + GU / 2 + (iu + 0.5) * LU
+            const v = bv * BV + GV / 2 + (iv + 0.5) * LV
+            const x = u * e[0] + v * m[0]
+            const z = u * e[1] + v * m[1]
+            return { iu, iv, u, v, x, z, ok: ok(x, z) && keep(x, z) }
+          })
+          const whole = yard.every((q) => q.ok)
+          let host = null
+          for (const q of yard) {
+            if (!q.ok) continue
+            const { iu, iv, u, v, x, z } = q
+            const gu = bu * 4 + iu
+            const gv = bv * 2 + iv
+            const rank = (BAYER[gv & 7][gu & 7] + ihash(gu, gv, seed * 7 + 1)) / 64
+            const h = (k) => ihash(gu, gv, seed * 7 + k)
+            // the front to the lot's street: makai for the first row, mauka for the second
+            const f = iv === 0 ? [-m[0], -m[1]] : m
+            const l = { x, z, rank, face: Math.atan2(f[0], f[1]), tile: seed, bu, bv, u, v, e, m, lag: 25 * h(2), r2: h(3), r3: h(4), r4: h(5), r5: h(6), r6: h(7), r7: h(8), r8: h(9) }
+            if (q === yard[0] && whole) {
+              // (its own dither, over the yards)
+              const ya = bu * 2 + yu
+              l.anchor = true
+              l.rankY = (YARD_BAYER[bv & 3][ya & 3] + ihash(ya, bv, seed * 7 + 11)) / 16
+              host = l
+            } else if (host) l.host = host
+            out.push(l)
+          }
+        }
+      }
+    }
+    return out
+  }
+}
+
+// --- the ground the scatters stand on ------------------------------------------------
+
+/**
+ * An island pack's ground at world (x, z) in a year: its own heights, with
+ * the patches of that year laid on them whole (render/patches.js apply, but
+ * by the year asked rather than the one eased to on screen).
+ */
+export function islandMetres(app, t, x, z, year) {
+  let h = t.metresAt(x, z)
+  const list = app.patches?.byPack?.get(t.pack.id)
+  if (!list) return h
+  for (const r of list) {
+    if (!(year < r.until)) continue
+    const b = r.box
+    const tx = (x - b[0]) / (b[2] - b[0])
+    const tz = (z - b[1]) / (b[3] - b[1])
+    if (tx < 0 || tz < 0 || tx > 1 || tz > 1) continue
+    const w = app.patches.maskAt(r.crop, tx, tz)
+    if (w > 0) h += ((r.kind === 'raise' ? Math.max(h, r.depthM) : Math.min(h, r.depthM)) - h) * w
+  }
+  return h
+}
+
+/**
+ * The places that raise a lot's value (valueAt): the harbours (the
+ * gazetteer's bays and the towns on the shore, as roadsteads) and the town
+ * cores (the bake's towns of 1896 with their spread, and the gazetteer's
+ * towns, a kilometre round), in world units.
+ */
+export function valuePlaces(app, m) {
+  const proj = app.data.proj
+  const places = app.data.places || []
+  const cores = []
+  const harbours = []
+  const towns = Object.values(m.methods || {}).flatMap((q) => q?.settlement?.towns || [])
+  for (const t of towns) {
+    if (!Number.isFinite(t.lon) || !Number.isFinite(t.lat)) continue
+    const [x, z] = proj.toWorld([t.lon, t.lat])
+    cores.push({ x, z, s: (t.sigma || 1000) / 100 })
+  }
+  for (const p of places) {
+    if (p.kind !== 'town' && p.kind !== 'bay') continue
+    const pt = geometryPoint(p.geometry)
+    if (!pt) continue
+    const [x, z] = proj.toWorld(pt)
+    if (p.kind === 'town') cores.push({ x, z, s: 8 })
+    harbours.push({ x, z, town: p.kind === 'town' })
+  }
+  return { cores, harbours }
+}
+
+/** A lot's nearness to a town's core (0..1, its spread) and to a harbour (0..1, about 1.5 km). */
+export function placeTerms(P, x, z, nearSea) {
+  let centre = 0
+  for (const c of P.cores) {
+    const r2 = (x - c.x) ** 2 + (z - c.z) ** 2
+    if (r2 > 16 * c.s * c.s) continue
+    centre = Math.max(centre, Math.exp(-r2 / (2 * c.s * c.s)))
+  }
+  let harbour = 0
+  for (const h of P.harbours) {
+    const d = Math.hypot(x - h.x, z - h.z)
+    if (d > 60) continue
+    // (a town counts as a roadstead only where it is on the shore)
+    harbour = Math.max(harbour, Math.exp(-d / 15) * (h.town ? nearSea : 1))
+  }
+  return { centre, harbour }
+}
+
+// --- the district's scatter ---------------------------------------------------------
+
+// the district scatter's budget, and what is drawn at once
+const MAX_PLACED = 8000
+const MAX_DRAWN = 8000
+const TILE = 3 // world units: the culling tiles
+export const reachFor = (distance) => clamp(distance * 2.6, 40, 110)
+
+// the streets, one ribbon batch per epoch, crossfading by the year
+const STREET_EPOCHS = [1850, 1875, 1900, 1930, 1960, 2000]
+const STREET_W = 0.1
+const PAD_W = 1.0
+
+export class Settlements extends Scatter {
   /**
    * rec: the resident district (render/district.js), read while its decode is
    * still whole; own: the district features' uniforms (index.js), which the
    * buildings share with the trees; ribbons: theirs too, for the streets.
    */
   constructor(app, districts, rec, own, ribbons) {
-    this.app = app
+    super(app)
     this.districts = districts
     this.rec = rec
     this.own = own
@@ -227,7 +1140,7 @@ export class Settlements {
 
   // --- the density ------------------------------------------------------------------
 
-  /** The layers' manifest and the parent island's settlement masks, cut to the district; then everything else. */
+  /** The layers' manifest and the parent island's settlement masks (and value and zoning, where there are any), cut to the district; then everything else. */
   async load() {
     const t0 = performance.now()
     const data = this.app.data
@@ -238,17 +1151,16 @@ export class Settlements {
     const entry = m.islands?.[d.parent]
     const pack = this.app.world.islandPacks.find((p) => p.id === d.parent)
     if (!entry || !pack) throw new Error(`no settlement layer for ${d.parent}`)
-    const K = [...(m.keyframes || [])].filter((k) => Number.isFinite(k.year)).sort((a, b) => a.year - b.year)
-    const files = K.map((k) => entry.layers?.[k.id]?.settlement?.file)
-    if (K.length < 2 || files.some((f) => !f)) throw new Error('the settlement layer lacks a keyframe')
-    const enc = m.encoding?.settlement || {}
-    this.codec = settlementCodec(enc.d0 ?? 2, enc.dMax ?? 50000)
-    this.L = Math.log(1 + (enc.dMax ?? 50000) / (enc.d0 ?? 2))
-    this.d0 = enc.d0 ?? 2
-    this.keyframes = K
-    this.manifest = m
-    const imgs = await Promise.all(files.map((f) => decodeGrey(decodeImage, data.abs(`layers/${f}`))))
-    for (const [k, img] of imgs.entries()) if (img.W !== pack.W || img.H !== pack.H) throw new Error(`${files[k]} is ${img.W}×${img.H}, the pack ${pack.W}×${pack.H}`)
+    this.setLayers(m)
+    const files = this.layerFiles(entry)
+    if (this.keyframes.length < 2 || files.some((f) => !f.settlement)) throw new Error('the settlement layer lacks a keyframe')
+    const grey = (f) => decodeGrey(decodeImage, data.abs(`layers/${f}`))
+    const [imgs, vals, zoning] = await Promise.all([
+      Promise.all(files.map((f) => grey(f.settlement))),
+      files.every((f) => f.value) ? Promise.all(files.map((f) => grey(f.value))).catch(() => null) : null,
+      loadZoning(this.app, m, d.parent),
+    ])
+    for (const [k, img] of [...imgs, ...(vals || [])].entries()) if (img.W !== pack.W || img.H !== pack.H) throw new Error(`a layer of ${d.parent} is ${img.W}×${img.H} (${k}), the pack ${pack.W}×${pack.H}`)
     // the district's box on the island's grid, a texel or two beyond it
     const r = pack.rect
     const dr = d.rect
@@ -261,14 +1173,17 @@ export class Settlements {
     const cw = i1 - i0 + 1
     const ch = j1 - j0 + 1
     this.crop = { x0: r.x0 + i0 * sx, z0: r.z0 + j0 * sz, sx, sz, w: cw, h: ch }
-    this.bytes = imgs.map((img) => {
+    this.islandRect = r
+    const cut = (img) => {
       const out = new Float32Array(cw * ch)
       for (let j = 0; j < ch; j++) for (let i = 0; i < cw; i++) out[j * cw + i] = img.px[(j0 + j) * pack.W + i0 + i]
       return out
-    })
-    this.townTerm()
-    this.eraYears = this.app.timeline.eras.map((era) => this.eraYear(era))
-    this.manifest = null
+    }
+    this.bytes = imgs.map(cut)
+    this.values = vals ? vals.map(cut) : null
+    this.zoning = { ...zoning, rect: r }
+    this.places = valuePlaces(this.app, m)
+    this.townTerm(m, d.parent, 'island')
     this.loadMs = Math.round(performance.now() - t0)
     // the rest, a second or two of work in all, in slices a frame apart
     const t1 = performance.now()
@@ -284,113 +1199,6 @@ export class Settlements {
       this.slice = performance.now()
     }
     return !this.disposed
-  }
-
-  /**
-   * The Māhele keyframe spreads each island's people of 1853 by the kuleana
-   * parcels and the contact weights alone (methods.mahele.settlement.rule),
-   * with no town: Honolulu, which by then held most of Oʻahu's people (Ellis
-   * already gives the town of the 1820s six or seven thousand), comes out as
-   * thin as the countryside, about 13 people per km² at Kou. A keyframe
-   * after TOWN_FROM with no towns of its own therefore borrows the towns of
-   * the next keyframe that has them (the end of the kingdom: their centre,
-   * spread and share, the bake's own assumption) and puts that share of its
-   * own island figure into the same soft disc, taking it from the layer's
-   * spread. The share for 1853 is this file's assumption, as the bake's is
-   * for 1896; a historian with Schmitt (RESEARCH.md §9) could set it.
-   */
-  townTerm() {
-    const m = this.manifest
-    const K = this.keyframes
-    const island = this.rec.d.parent
-    const pack = this.app.world.islandPacks.find((p) => p.id === island)
-    const proj = this.app.data.proj
-    this.towns = []
-    K.forEach((kf, k) => {
-      const own = m.methods?.[kf.id]?.settlement
-      if (kf.year < TOWN_FROM || !own || own.towns?.length) return
-      const later = K.slice(k + 1).find((q) => m.methods?.[q.id]?.settlement?.towns?.length)
-      const people = own.populations?.[island]
-      if (!later || !Number.isFinite(people)) return
-      const towns = m.methods[later.id].settlement.towns.filter((t) => {
-        const [x, z] = proj.toWorld([t.lon, t.lat])
-        return x > pack.rect.x0 && x < pack.rect.x1 && z > pack.rect.z0 && z < pack.rect.z1
-      })
-      if (!towns.length) return
-      const share = Math.min(0.9, towns.reduce((s, t) => s + (t.share || 0), 0))
-      const { codec } = this
-      const c = this.crop
-      const b = this.bytes[k]
-      for (let j = 0; j < c.h; j++) {
-        for (let i = 0; i < c.w; i++) {
-          const x = c.x0 + (i + 0.5) * c.sx
-          const z = c.z0 + (j + 0.5) * c.sz
-          let d = codec.decode(b[j * c.w + i]) * (1 - share)
-          for (const t of towns) {
-            const [tx, tz] = proj.toWorld([t.lon, t.lat])
-            const s = (t.sigma || 1500) / 1000 // km
-            const r2 = ((x - tx) ** 2 + (z - tz) ** 2) / 100 // km²
-            d += ((people * (t.share || 0)) / (2 * Math.PI * s * s)) * Math.exp(-r2 / (2 * s * s))
-          }
-          b[j * c.w + i] = (255 * Math.log(1 + Math.max(0, d) / this.d0)) / this.L
-        }
-      }
-      this.towns.push({ keyframe: kf.id, from: later.id, towns: towns.map((t) => t.name), people: Math.round(people * share) })
-    })
-  }
-
-  /** The year an era's settlement stands at, as the manifest maps it (as LandOverlay.eraYear). */
-  eraYear(era) {
-    const spec = this.manifest.eras?.[era.id]?.settlement
-    const at = (id) => this.keyframes.find((k) => k.id === id)?.year
-    if (spec?.keyframe && at(spec.keyframe) !== undefined) return at(spec.keyframe)
-    if (spec?.from && at(spec.from) !== undefined && at(spec.to) !== undefined) return at(spec.from) + (at(spec.to) - at(spec.from)) * (spec.t ?? 0)
-    return era.year
-  }
-
-  /** The keyframe position (0 the first keyframe, 1 the second, …) of a timeline year, as LandOverlay.position. */
-  kpAt(year) {
-    const tl = this.app.timeline
-    const Yr = this.eraYears
-    const K = this.keyframes
-    let ly = year
-    if (Yr.length > 1) {
-      const v = clamp(tl.sAtYear(year), 0, Yr.length - 1)
-      const i = Math.min(Yr.length - 2, Math.floor(v))
-      ly = Yr[i] + (Yr[i + 1] - Yr[i]) * (v - i)
-    }
-    if (ly <= K[0].year) return 0
-    for (let i = 0; i + 1 < K.length; i++) if (ly <= K[i + 1].year) return i + (ly - K[i].year) / (K[i + 1].year - K[i].year)
-    return K.length - 1
-  }
-
-  /** The bytes at world (x, z), bilinear over the crop, for each keyframe, into `out`. */
-  bytesAt(x, z, out) {
-    const c = this.crop
-    const fx = clamp((x - c.x0) / c.sx - 0.5, 0, c.w - 1.001)
-    const fz = clamp((z - c.z0) / c.sz - 0.5, 0, c.h - 1.001)
-    const i = fx | 0
-    const j = fz | 0
-    const tx = fx - i
-    const tz = fz - j
-    const q = j * c.w + i
-    // a stable noise over the coarse texels: hamlets and gaps, not an even scatter
-    const n = (vnoise(x / 1.7, z / 1.7, 71) - 0.5) * 26 + (vnoise(x / 0.55, z / 0.55, 72) - 0.5) * 12
-    for (let k = 0; k < this.bytes.length; k++) {
-      const b = this.bytes[k]
-      const top = b[q] + (b[q + 1] - b[q]) * tx
-      const bot = b[q + c.w] + (b[q + c.w + 1] - b[q + c.w]) * tx
-      const v = top + (bot - top) * tz
-      out[k] = v > 0.5 ? v + n : 0
-    }
-    return out
-  }
-
-  /** People per km² from a (fractional) byte (by table once the years are laid out). */
-  people(v) {
-    if (v <= 0) return 0
-    if (this.lut && v < 256) return this.lut[Math.round(v * 8)]
-    return this.d0 * (Math.exp((v / 255) * this.L) - 1)
   }
 
   // --- the ground of a year ----------------------------------------------------------
@@ -445,11 +1253,20 @@ export class Settlements {
     return [clamp(Math.floor(((x - r.x0) / (r.x1 - r.x0)) * d.W), 0, d.W - 1), clamp(Math.floor(((z - r.z0) / (r.z1 - r.z0)) * d.H), 0, d.H - 1)]
   }
 
+  /** How far (x, z) is inside the district's edge (world units). */
+  edgeAt(x, z) {
+    const r = this.rec.d.rect
+    return Math.min(x - r.x0, r.x1 - x, z - r.z0, r.z1 - z)
+  }
+
   /**
    * Whether a footprint (centre x, z; half extents ax, az along its own axes;
    * turned by a) may stand in epoch `e` (the ground and the features as that
    * stretch of years has them), and the highest ground under it. `this.dep`
-   * says afterwards whether the answer could differ in another epoch.
+   * says afterwards whether the answer could differ in another epoch. Toward
+   * the district's edge its ground eases into the island's (DISTRICT.margin),
+   * and the footing stands on the higher of the two as they are drawn there,
+   * so nothing there is sunk into the island's slope.
    */
   allows(x, z, ax, az, a, relief, e) {
     const ep = this.epochs[e]
@@ -465,6 +1282,8 @@ export class Settlements {
     let hi = -Infinity
     let top = -Infinity
     this.dep = false
+    const parent = rec.parent
+    const margin = DISTRICT.margin
     for (let p = 0; p < 13; p++) {
       // the centre, the corners and the sides' middles, and the corners again a margin out
       const fu = p === 0 ? 0 : p < 5 ? [-1, 1, 1, -1][p - 1] : p < 9 ? [0, 1, 0, -1][p - 5] : [-1, 1, 1, -1][p - 9]
@@ -483,17 +1302,23 @@ export class Settlements {
       if (p >= 9) continue
       if (this.streamNear(px, pz)) return null
       if (aux[c * 4] || this.districts.patchAt(i, j)) this.dep = true
-      const g = this.groundAt(i, j, ep.state)
+      let g = this.groundAt(i, j, ep.state)
       if (g < 0.6) return null
       const raw = rec.metres[c]
       lo = Math.min(lo, raw)
       hi = Math.max(hi, raw)
+      const edge = this.edgeAt(px, pz)
+      if (parent && edge < margin) {
+        const w = smooth(DISTRICT.band, margin, edge)
+        g = Math.max(g, islandMetres(this.app, parent, px, pz, ep.year) * (1 - w) + g * w)
+        this.dep = true
+      }
       top = Math.max(top, g)
     }
     if (hi - lo > relief) return null
     // (and clear of the landmarks standing then)
     for (const L of this.landmarks) {
-      if (Math.hypot(x - L.x, z - L.z) >= L.r + Math.max(ax, az)) continue
+      if (Math.hypot(x - L.x, z - L.z) >= L.r + Math.max(ax, az) + GAP) continue
       this.dep = true
       if (ep.year >= L.from) return null
     }
@@ -590,120 +1415,27 @@ export class Settlements {
   // --- the years ------------------------------------------------------------------
 
   /** The sampled years, the dates where the ground or a feature changes, and the epochs between them. */
-  years() {
+  epochYears() {
     const rec = this.rec
-    const tl = this.app.timeline
-    const y0 = tl.yearAt(0)
-    const y1 = tl.yearAt(tl.max)
     const breaks = new Set()
-    for (const p of [...rec.raise, ...rec.lower]) if (p.until > y0 && p.until <= y1) breaks.add(p.until)
+    for (const p of [...rec.raise, ...rec.lower]) breaks.add(p.until)
     for (const [, f] of rec.d.byIndex) {
       const [a, b] = spanOf(f.properties)
-      if (Number.isFinite(a) && a > y0 && a <= y1) breaks.add(a)
-      if (Number.isFinite(b) && b + 1 > y0 && b + 1 <= y1) breaks.add(b + 1)
+      if (Number.isFinite(a)) breaks.add(a)
+      if (Number.isFinite(b)) breaks.add(b + 1)
     }
-    for (const L of this.landmarks) if (L.from > y0 && L.from <= y1) breaks.add(L.from)
-    const contact = this.keyframes[0].year
-    const ys = new Set([y0, ...PRE.filter((y) => y > y0 && y < contact), ...breaks])
-    for (let y = contact; y <= y1; y += STEP) ys.add(y)
-    ys.add(y1)
-    this.Ys = [...ys].filter((y) => y >= y0 && y <= y1).sort((a, b) => a - b)
-    this.isBreak = this.Ys.map((y) => breaks.has(y))
+    for (const L of this.landmarks) breaks.add(L.from)
+    this.years(breaks)
     // the epochs: the stretches between breaks, each with its patches and features
-    const edges = [...breaks].sort((a, b) => a - b)
+    const tl = this.app.timeline
+    const y0 = tl.yearAt(0)
     this.epochs = []
-    const epochOf = (y) => {
-      let e = 0
-      while (e < edges.length && y >= edges[e]) e++
-      return e
-    }
-    for (let e = 0; e <= edges.length; e++) {
-      const y = e === 0 ? y0 : edges[e - 1]
+    for (let e = 0; e <= this.edges.length; e++) {
+      const y = e === 0 ? y0 : this.edges[e - 1]
       const features = new Set()
       for (const [i, f] of rec.d.byIndex) if (holds(f.properties, y)) features.add(i)
       this.epochs.push({ year: y, state: this.patchState(y), features })
     }
-    this.epochAt = this.Ys.map(epochOf)
-    this.epochOfYear = epochOf
-    // per sample: the keyframes either side and how far, the thinning before 1450, the eras' weights
-    this.samples = this.Ys.map((y) => {
-      const kp = this.kpAt(y)
-      const a = Math.min(this.keyframes.length - 2, Math.floor(kp))
-      // (each era's weight, eased over twenty years about its turn)
-      const turns = [1820, 1860, 1900, 1960].map((t) => smooth(t - 10, t + 10, y))
-      const w = [1 - turns[0], turns[0] - turns[1], turns[1] - turns[2], turns[2] - turns[3], turns[3]]
-      return { y, a, t: kp - a, early: 25.5 * (1 - smooth(EARLY[0], EARLY[1], y)), w }
-    })
-    this.lut = new Float32Array(256 * 8 + 1)
-    for (let k = 0; k <= 256 * 8; k++) this.lut[k] = this.d0 * (Math.exp((k / 8 / 255) * this.L) - 1)
-  }
-
-  /**
-   * The share of lots built at a density in a sample's year (before the
-   * ground's weight), and the kauhale's own. Before the town a kauhale stands
-   * for a few households (about eight people); after it the share rises
-   * faster than the density, so a town reads as a town and its outskirts as
-   * scattered houses: the layer's towns are soft discs kilometres across,
-   * and a fill in proportion would spread one even suburb over the plain.
-   */
-  fill(s, d) {
-    const fk = Math.min(1 / 12, d / (8 * LOTS_PER_KM2))
-    const w = s.w
-    let f = w[0] * fk
-    if (w[1]) f += w[1] * Math.min(0.8, 0.8 * (d / 700) ** 2)
-    if (w[2]) f += w[2] * Math.min(0.9, 0.9 * (d / 1300) ** 2.5)
-    if (w[3]) f += w[3] * Math.min(0.9, 0.9 * (d / 2500) ** 1.5)
-    if (w[4]) f += w[4] * (d < 6000 ? Math.min(0.85, 0.85 * (d / 6000) ** 1.2) : 0.85 - 0.45 * smooth(6000, 15000, d))
-    return [f, fk]
-  }
-
-  /** The most a lot could fill at a density, in any era (for the lots that never could). */
-  fillMax(d) {
-    return Math.max(Math.min(1 / 12, d / (8 * LOTS_PER_KM2)), Math.min(0.8, 0.8 * (d / 700) ** 2), Math.min(0.9, 0.9 * (d / 1300) ** 2.5), Math.min(0.9, 0.9 * (d / 2500) ** 1.5), Math.min(0.85, 0.85 * (d / 6000) ** 1.2))
-  }
-
-  /**
-   * What stands on a lot in year y at density d: a kind, by the era (each lot
-   * moving on at its own time, after the era's turn and never before it, the
-   * densest first) and by the density.
-   */
-  kindAt(y, d, lot, kauhale) {
-    const dn = clamp(Math.log10(Math.max(1, d) / 300), -1, 1)
-    const t = y - lot.lag * (1 - 0.6 * Math.max(0, dn))
-    if (y < 1818 || t < 1820) return kauhale ? KIND.kauhale : KIND.hale
-    const thatch = 1 - smooth(1820, 1880, t + 12 * dn)
-    if (t < 1860) {
-      if (lot.r2 < thatch) return KIND.hale
-      return lot.r3 < 0.3 + 0.25 * Math.max(0, dn) ? KIND.adobe : KIND.frame
-    }
-    if (t < 1900) {
-      // (masonry where the town of the end of the kingdom is densest: the
-      // layer's town is a soft disc, about 1,300 people per km² at its heart)
-      if (d > 1150 && lot.r3 < 0.3) return KIND.block
-      if (d > 700 && lot.r3 < 0.55) return KIND.store
-      if (lot.r2 < thatch) return KIND.hale
-      return lot.r4 < 0.2 ? KIND.frame : KIND.cottage
-    }
-    if (t < 1960) {
-      if (d > 4000 && lot.r3 < 0.5) return KIND.midrise
-      if (d > 1800 && lot.r3 < 0.6) return KIND.block
-      if (d > 900 && lot.r3 < 0.4 && t < 1935) return KIND.store
-      return KIND.bungalow
-    }
-    // (towers where the census is densest, Waikīkī's and downtown's, and on
-    // the old downtown's lots (see scatter); walk-ups and houses between)
-    if (lot.core) return KIND.tower
-    if (d > 20000) return lot.r3 < 0.85 ? KIND.tower : KIND.walkup
-    if (d > 10000) return lot.r3 < 0.2 + 0.5 * smooth(10000, 20000, d) ? KIND.tower : KIND.walkup
-    if (d > 4000) return lot.r3 < 0.45 ? KIND.walkup : KIND.house
-    if (d > 2500 && lot.r3 < 0.2) return KIND.walkup
-    if (lot.r4 < 0.35 && t < 1990) return KIND.bungalow
-    return KIND.house
-  }
-
-  /** A tower's height (metres) at a density: 35 m, to 150 m where it is densest. */
-  towerHeight(d) {
-    return 35 + 115 * smooth(4.0, 4.7, Math.log10(Math.max(1, d)))
   }
 
   // --- the build --------------------------------------------------------------------
@@ -737,93 +1469,62 @@ export class Settlements {
     this.grounds()
     lap('grounds')
     if (!(await breathe())) return false
-    // the lots, tile by tile of the grid
+    // the lots, tile by tile of the grid, kept PART + PART_GAP inside the
+    // district's edge (the island's own stand nearer it: towns.js)
     const lots = []
     const nx = Math.ceil((r.x1 - r.x0) / GRID_TILE)
     const nz = Math.ceil((r.z1 - r.z0) / GRID_TILE)
+    const ths = new Float32Array(nx * nz)
+    for (let tj = 0; tj < nz; tj++) for (let ti = 0; ti < nx; ti++) ths[tj * nx + ti] = this.mauka(r.x0 + (ti + 0.5) * GRID_TILE, r.z0 + (tj + 0.5) * GRID_TILE)
+    const thAt = (ti, tj) => (ti < 0 || tj < 0 || ti >= nx || tj >= nz ? NaN : ths[tj * nx + ti])
     const kb = new Float32Array(this.keyframes.length)
+    const vb = new Float32Array(this.keyframes.length)
+    const inner = PART + PART_GAP
+    const Z = this.zoning
     for (let tj = 0; tj < nz; tj++) {
       if (!(await breathe())) return false
       for (let ti = 0; ti < nx; ti++) {
         const tx0 = r.x0 + ti * GRID_TILE
         const tz0 = r.z0 + tj * GRID_TILE
-        const th = this.mauka(tx0 + GRID_TILE / 2, tz0 + GRID_TILE / 2)
-        const m = [Math.cos(th), Math.sin(th)]
-        const e = [-m[1], m[0]]
-        let umin = Infinity
-        let umax = -Infinity
-        let vmin = Infinity
-        let vmax = -Infinity
-        for (const [cx, cz] of [[tx0, tz0], [tx0 + GRID_TILE, tz0], [tx0, tz0 + GRID_TILE], [tx0 + GRID_TILE, tz0 + GRID_TILE]]) {
-          const u = cx * e[0] + cz * e[1]
-          const v = cx * m[0] + cz * m[1]
-          umin = Math.min(umin, u)
-          umax = Math.max(umax, u)
-          vmin = Math.min(vmin, v)
-          vmax = Math.max(vmax, v)
-        }
-        const pad = 0.2
-        for (let bv = Math.floor(vmin / BV) - 1; bv <= Math.ceil(vmax / BV); bv++) {
-          for (let bu = Math.floor(umin / BU) - 1; bu <= Math.ceil(umax / BU); bu++) {
-            for (let iv = 0; iv < 2; iv++) {
-              for (let iu = 0; iu < 4; iu++) {
-                const u = bu * BU + GU / 2 + (iu + 0.5) * LU
-                const v = bv * BV + GV / 2 + (iv + 0.5) * LV
-                const x = u * e[0] + v * m[0]
-                const z = u * e[1] + v * m[1]
-                if (x < tx0 + pad || x >= tx0 + GRID_TILE - pad || z < tz0 + pad || z >= tz0 + GRID_TILE - pad) continue
-                if (x < r.x0 + 0.4 || x > r.x1 - 0.4 || z < r.z0 + 0.4 || z > r.z1 - 0.4) continue
-                const gu = bu * 4 + iu
-                const gv = bv * 2 + iv
-                const seed = tj * nx + ti
-                const rank = (BAYER[gv & 7][gu & 7] + ihash(gu, gv, seed * 7 + 1)) / 64
-                // (no lot that could never fill: its most generous fill at its densest keyframe)
-                this.bytesAt(x, z, kb)
-                let vmaxB = 0
-                for (const v of kb) vmaxB = Math.max(vmaxB, v)
-                const fmax = this.fillMax(this.people(vmaxB))
-                if (rank >= fmax * 1.5) continue
-                const w = this.weight(x, z) * (0.85 + 0.3 * vnoise(x / 2.3, z / 2.3, 73))
-                if (rank >= fmax * w) continue
-                const h = (k) => ihash(gu, gv, seed * 7 + k)
-                // the front to the lot's street: makai for the first row, mauka for the second
-                const f = iv === 0 ? [-m[0], -m[1]] : m
-                lots.push({
-                  x,
-                  z,
-                  rank,
-                  w,
-                  b: Float32Array.from(kb),
-                  face: Math.atan2(f[0], f[1]),
-                  tile: seed,
-                  bu,
-                  bv,
-                  u,
-                  v,
-                  e,
-                  m,
-                  lag: 25 * h(2),
-                  r2: h(3),
-                  r3: h(4),
-                  r4: h(5),
-                  r5: h(6),
-                  r6: h(7),
-                  r7: h(8),
-                })
-              }
-            }
-          }
+        const th = ths[tj * nx + ti]
+        const pads = [thAt(ti - 1, tj) !== th, thAt(ti + 1, tj) !== th, thAt(ti, tj - 1) !== th, thAt(ti, tj + 1) !== th]
+        const seed = tj * nx + ti
+        const keep = (x, z) => this.edgeAt(x, z) >= inner
+        for (const l of this.tileLots(tx0, tz0, th, seed, pads, keep)) {
+          // (no lot that could never fill: its most generous fill at its densest keyframe)
+          this.bytesAt(l.x, l.z, kb)
+          let vmaxB = 0
+          for (const v of kb) vmaxB = Math.max(vmaxB, v)
+          // (where the zoning of now floors the density, by that floor)
+          l.zone = classAt(Z.zoning, Z.rect, l.x, l.z)
+          l.lud = classAt(Z.lud, Z.rect, l.x, l.z)
+          l.zoned = !!Z.zoning
+          const floor = ZONE_FLOOR[l.zone]
+          if (floor) vmaxB = Math.max(vmaxB, (255 * Math.log(1 + floor / this.d0)) / this.L + 5)
+          const fmax = this.fillMax(this.people(vmaxB))
+          if (l.rank >= fmax * 1.5 && !(l.anchor && l.rankY < fmax * 1.5)) continue
+          l.w = this.weight(l.x, l.z) * (0.85 + 0.3 * vnoise(l.x / 2.3, l.z / 2.3, 73))
+          if (l.rank >= fmax * l.w && !(l.anchor && l.rankY < fmax * l.w)) continue
+          l.b = Float32Array.from(kb)
+          if (this.values) l.vb = Float32Array.from(this.sample(this.values, l.x, l.z, vb, 0))
+          const nearSea = Math.exp(-this.coarse(this.sea, l.x, l.z) / 600)
+          const pt = placeTerms(this.places, l.x, l.z, nearSea)
+          l.coast = nearSea
+          l.harbour = pt.harbour
+          l.centre = pt.centre
+          lots.push(l)
         }
       }
     }
     this.lotCount = lots.length
     this.gridTiles = { nx, nz }
+    this.ths = ths
     lap('lots')
     // the landmarks first (the scatter keeps clear of them), then the years
     this.landmarks = []
-    this.years()
+    this.epochYears()
     this.placeLandmarks(lots)
-    if (this.landmarks.length) this.years()
+    if (this.landmarks.length) this.epochYears()
     lap('landmarks')
     if (!(await this.scatter(lots, breathe))) return false
     lap('scatter')
@@ -851,6 +1552,7 @@ export class Settlements {
       const kit = this.kits[kind][0]
       const kd = KINDS[kind]
       const e = this.epochOfYear(from)
+      if (this.edgeAt(x, z) < PART + PART_GAP) return false
       const top = this.allows(x, z, kit.hx * kd.sh, kit.hz * kd.sh, face, kd.relief + 2, e)
       if (top === null) return false
       this.landmarks.push({ kind, name, x, z, face, from, r: Math.hypot(kit.hx, kit.hz) * kd.sh, top })
@@ -936,81 +1638,20 @@ export class Settlements {
       const l = lots[li]
       for (let n = 0; n < NS; n++) {
         const s = S_[n]
-        const v = l.b[s.a] + (l.b[s.a + 1] - l.b[s.a]) * s.t - s.early
+        const v = this.fillByte(l, s, this.byteAt(l, s))
         if (v <= 0) continue
-        const [F] = this.fill(s, this.people(v))
-        if (l.rank < F * l.w) count[n]++
+        const [F, fk] = this.fill(s, this.people(v))
+        if (l.rank < F * l.w || (l.anchor && l.rankY < 4 * fk * l.w)) count[n]++
       }
     }
     this.cap = Array.from(count, (c) => Math.min(1, MAX_PLACED / Math.max(1, c)))
     const inst = []
+    const allows = (q, relief, e) => this.allows(q.x, q.z, q.ax, q.az, q.a, relief, e)
+    const cap = (n) => this.cap[n]
+    const emit = (it) => inst.push(it)
     for (let li = 0; li < lots.length; li++) {
       if (li % 256 === 0 && !(await breathe())) return false
-      const l = lots[li]
-      const cache = new Map()
-      let run = null
-      const emit = (end) => {
-        const out = this.instance(l, run, end)
-        if (Array.isArray(out)) inst.push(...out)
-        else inst.push(out)
-        run = null
-      }
-      // A lot that carried downtown's mid-rise before the war goes up to an
-      // office tower after 1960, whatever the census there: the layer of now
-      // counts where people live, and the business district, where few do,
-      // would otherwise come out emptier than the 1930s left it.
-      l.core = false
-      for (let n = 0; n < NS; n++) {
-        const s = S_[n]
-        let state = null
-        let v = l.b[s.a] + (l.b[s.a + 1] - l.b[s.a]) * s.t - s.early
-        const core = l.core && s.y >= 1960
-        if (core) v = Math.max(v, CORE_BYTE + 14 * l.r6)
-        if (v > 0) {
-          const d = this.people(v)
-          const [F, fk] = this.fill(s, d)
-          const c = this.cap[n]
-          if (core || l.rank < F * l.w * c) {
-            const kind = this.kindAt(s.y, d, l, l.rank < fk * l.w * c)
-            const nv = kind === KIND.kauhale ? KAUHALE.length : this.kits[KIND_NAMES[kind]].length
-            const variant = Math.min(nv - 1, Math.floor(ihash(l.tile, kind, Math.floor(l.rank * 1e6)) * nv))
-            const e = this.epochAt[n]
-            const key = kind * 16 + variant
-            // (an answer that no epoch changes is kept for all of them)
-            let top = cache.get(key * 256 + 255)
-            if (top === undefined) top = cache.get(key * 256 + e)
-            if (top === undefined) {
-              const p = this.pose(l, kind, variant)
-              const relief = KINDS[KIND_NAMES[kind]].relief
-              if (p.parts) {
-                // (each hale of a kauhale on its own ground)
-                top = []
-                let dep = false
-                for (const q of p.parts) {
-                  const t = this.allows(q.x, q.z, q.ax, q.az, q.a, relief, e)
-                  dep ||= this.dep
-                  if (t === null) {
-                    top = null
-                    break
-                  }
-                  top.push(t)
-                }
-                this.dep = dep
-              } else top = this.allows(p.x, p.z, p.ax, p.az, p.a, relief, e)
-              cache.set(key * 256 + (this.dep ? e : 255), top)
-            }
-            if (top !== null) state = { key, kind, variant, top, d }
-            if (state && kind === KIND.midrise && s.y <= CORE_UNTIL) l.core = true
-          }
-        }
-        if (run && state && state.key === run.key) {
-          run.d = Math.max(run.d, state.d)
-          continue
-        }
-        if (run) emit(n)
-        if (state) run = { ...state, n0: n }
-      }
-      if (run) emit(NS)
+      this.scatterLot(lots[li], allows, cap, emit)
     }
     // the landmarks, standing from their year to the end
     for (const L of this.landmarks) {
@@ -1019,104 +1660,6 @@ export class Settlements {
     }
     this.instances = inst
     return true
-  }
-
-  /**
-   * Where a kind stands on a lot: its centre, turn and half extents (world
-   * units); for a kauhale, each of its hale (`parts`, each with its size).
-   */
-  pose(l, kind, variant) {
-    const name = KIND_NAMES[kind]
-    const kd = KINDS[name]
-    let x = l.x
-    let z = l.z
-    let a = l.face
-    if (kd.loose) {
-      // a kauhale keeps to no grid: anywhere on its lot and the street beside, turned as it will
-      x += (l.r5 - 0.5) * LU * 0.9 * l.e[0] + (l.r6 - 0.5) * LV * 0.8 * l.m[0]
-      z += (l.r5 - 0.5) * LU * 0.9 * l.e[1] + (l.r6 - 0.5) * LV * 0.8 * l.m[1]
-      a = l.r7 * Math.PI * 2
-      const c = Math.cos(a)
-      const s = Math.sin(a)
-      const parts = KAUHALE[variant].map(([ox, oz, rot, size]) => {
-        const kit = this.kits[name][size]
-        // (as THREE turns about y: local x to (cos, −sin), local z to (sin, cos))
-        return { x: x + (ox * c + oz * s) * kd.sh, z: z + (-ox * s + oz * c) * kd.sh, a: a + rot, size, ax: kit.hx * kd.sh, az: kit.hz * kd.sh }
-      })
-      return { x, z, a, parts }
-    }
-    const kit = this.kits[name][variant]
-    if (kd.jitter) {
-      // the early town: lots taken up before the grid was ruled
-      a += (l.r5 - 0.5) * kd.jitter
-      x += (l.r6 - 0.5) * 0.06
-      z += (l.r7 - 0.5) * 0.06
-    }
-    return { x, z, a, ax: kit.hx * kd.sh, az: kit.hz * kd.sh }
-  }
-
-  /**
-   * One instance: a run of samples with one kind on one lot, and the span of
-   * years it fades over (a kauhale: one for each of its hale, sharing it).
-   */
-  instance(l, run, end) {
-    const Ys = this.Ys
-    const NS = Ys.length
-    const name = KIND_NAMES[run.kind]
-    const kd = KINDS[name]
-    const p = l.landmark ? { x: l.x, z: l.z, a: l.face } : this.pose(l, run.kind, run.variant)
-    const span = new Float32Array(4)
-    // (a soft change between samples n − 1 and n falls at the lot's own moment
-    // between them, the same for what goes and what comes)
-    const when = (n) => Ys[n - 1] + ihash(l.tile ?? 0, n, Math.floor((l.rank ?? 0) * 1e6)) * (Ys[n] - Ys[n - 1])
-    if (run.n0 === 0) {
-      span[0] = -NEVER
-      span[1] = -NEVER + 1
-    } else if (this.isBreak[run.n0] || l.landmark) {
-      span[0] = Ys[run.n0]
-      span[1] = Ys[run.n0] + HARD
-    } else {
-      const t = when(run.n0)
-      span[0] = Math.max(t - SOFT, Ys[run.n0 - 1])
-      span[1] = t + SOFT
-    }
-    if (end >= NS) {
-      span[2] = NEVER
-      span[3] = NEVER + 1
-    } else if (this.isBreak[end]) {
-      span[2] = Ys[end] - HARD
-      span[3] = Ys[end] - 0.01
-    } else {
-      const t = when(end)
-      span[2] = t - SOFT
-      span[3] = Math.min(t + SOFT, Ys[end])
-    }
-    const stretch = name === 'tower' ? this.towerHeight(run.d) / TOWER_H : 1
-    const jit = 0.94 + 0.12 * (l.r5 ?? 0.5)
-    const one = (q, variant, top) => {
-      const kit = this.kits[name][variant]
-      return {
-        kind: run.kind,
-        variant,
-        site: this.sites,
-        x: q.x,
-        z: q.z,
-        a: q.a,
-        y: Y(top),
-        sh: kd.sh,
-        sv: kd.sv * stretch,
-        stretch,
-        span,
-        colour: [jit * (0.98 + 0.04 * (l.r6 ?? 0.5)), jit, jit * (0.98 + 0.04 * (l.r7 ?? 0.5))],
-        // (the ground it clears of trees: its footprint, a little in)
-        rx: kit.hx * kd.sh * 0.95,
-        rz: kit.hz * kd.sh * 0.95,
-        landmark: !!l.landmark,
-      }
-    }
-    this.sites = (this.sites || 0) + 1
-    if (p.parts) return p.parts.map((q, k) => one(q, q.size, run.top[k]))
-    return one(p, run.variant, run.top)
   }
 
   /** How far instance i has faded in at a year (the shader's own sum). */
@@ -1155,6 +1698,7 @@ export class Settlements {
     this.irx = new Float32Array(N)
     this.irz = new Float32Array(N)
     this.isv = new Float32Array(N)
+    this.ish = new Float32Array(N)
     this.ikind = new Uint8Array(N)
     this.ivar = new Uint8Array(N)
     this.isite = new Int32Array(N)
@@ -1183,6 +1727,7 @@ export class Settlements {
       this.irx[i] = it.rx
       this.irz[i] = it.rz
       this.isv[i] = it.sv
+      this.ish[i] = it.sh
       this.ikind[i] = it.kind
       this.ivar[i] = it.variant
       this.isite[i] = it.site
@@ -1234,7 +1779,8 @@ export class Settlements {
         this.tOrder[b] = tmp
       }
     }
-    // (the landmarks are drawn whatever the thinning)
+    // (the landmarks are drawn whatever the thinning; a kauhale's hale go
+    // together, the first of them deciding for the rest)
     this.always = []
     for (let i = 0; i < N; i++) if (this.iland[i]) this.always.push(i)
     this.frustum = new THREE.Frustum()
@@ -1334,11 +1880,14 @@ export class Settlements {
    * ground off the loʻi and the ponds of the year; and from the 1870s the
    * blocks themselves where they are mostly built, packed earth and then
    * paving under them, so a block reads as a block. A ribbon batch of each
-   * per epoch (ribbons.js drapes them on the ground of the moment).
+   * per epoch (ribbons.js drapes them on the ground of the moment, drawn a
+   * little toward the eye and offset in depth, so they never fight it).
    */
   async streets(breathe) {
     const tl = this.app.timeline
     const top = tl.yearAt(tl.max)
+    const R = this.rec.d.rect
+    const { nx, nz } = this.gridTiles
     this.streetBatches = []
     for (const ey of STREET_EPOCHS) {
       if (!(await breathe())) return false
@@ -1351,16 +1900,16 @@ export class Settlements {
         const kd = KINDS[KIND_NAMES[this.ikind[i]]]
         if (kd.loose || this.iland[i] || this.weightAt(i, y) < 0.5) continue
         const it = { x: this.ix[i], z: this.iz[i] }
-        const tx = clamp(Math.floor((it.x - this.rec.d.rect.x0) / GRID_TILE), 0, this.gridTiles.nx - 1)
-        const tz = clamp(Math.floor((it.z - this.rec.d.rect.z0) / GRID_TILE), 0, this.gridTiles.nz - 1)
-        const th = this.mauka(this.rec.d.rect.x0 + (tx + 0.5) * GRID_TILE, this.rec.d.rect.z0 + (tz + 0.5) * GRID_TILE)
+        const tx = clamp(Math.floor((it.x - R.x0) / GRID_TILE), 0, nx - 1)
+        const tz = clamp(Math.floor((it.z - R.z0) / GRID_TILE), 0, nz - 1)
+        const th = this.ths[tz * nx + tx]
         const m = [Math.cos(th), Math.sin(th)]
         const ev = [-m[1], m[0]]
         const u = it.x * ev[0] + it.z * ev[1]
         const v = it.x * m[0] + it.z * m[1]
         const bu = Math.floor(u / BU)
         const bv = Math.floor(v / BV)
-        const key = `${tz * this.gridTiles.nx + tx}:${bu}:${bv}`
+        const key = `${tz * nx + tx}:${bu}:${bv}`
         const b = blocks.get(key) || { th, bu, bv, n: 0 }
         b.n++
         blocks.set(key, b)
@@ -1446,34 +1995,39 @@ export class Settlements {
     this.clearTex = t
     this.own.uTownClear.value = t
     this.yearCleared = NaN
+    this.townsCleared = -1
   }
 
-  /** What stands in the year, stamped over the district, for the trees to keep out of. */
-  stampClearing(y) {
+  /** Stamp a footprint (centre, turn, half extents) into the clearing at weight v (0..255). */
+  stamp(x, z, a, rx, rz, v) {
     const N = this.clearN
-    const a = this.clearData
-    a.fill(0)
+    const D = this.clearData
     const r = this.rec.d.rect
     const sx = N / (r.x1 - r.x0)
     const sz = N / (r.z1 - r.z0)
+    const ca = Math.abs(Math.cos(a))
+    const sa = Math.abs(Math.sin(a))
+    const hx = rx * ca + rz * sa
+    const hz = rx * sa + rz * ca
+    const i0 = clamp(Math.floor((x - hx - r.x0) * sx), 0, N - 1)
+    const i1 = clamp(Math.floor((x + hx - r.x0) * sx), 0, N - 1)
+    const j0 = clamp(Math.floor((z - hz - r.z0) * sz), 0, N - 1)
+    const j1 = clamp(Math.floor((z + hz - r.z0) * sz), 0, N - 1)
+    for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) if (D[j * N + i] < v) D[j * N + i] = v
+  }
+
+  /** What stands in the year, the island's buildings near the edge with it (towns.js), stamped over the district for the trees to keep out of. */
+  stampClearing(y) {
+    this.clearData.fill(0)
     for (let k = 0; k < this.N; k++) {
       const w = this.weightAt(k, y)
       if (w < 0.02) continue
-      const v = Math.round(255 * w)
-      const x = this.ix[k]
-      const z = this.iz[k]
-      const ca = Math.abs(Math.cos(this.ia[k]))
-      const sa = Math.abs(Math.sin(this.ia[k]))
-      const hx = this.irx[k] * ca + this.irz[k] * sa
-      const hz = this.irx[k] * sa + this.irz[k] * ca
-      const i0 = clamp(Math.floor((x - hx - r.x0) * sx), 0, N - 1)
-      const i1 = clamp(Math.floor((x + hx - r.x0) * sx), 0, N - 1)
-      const j0 = clamp(Math.floor((z - hz - r.z0) * sz), 0, N - 1)
-      const j1 = clamp(Math.floor((z + hz - r.z0) * sz), 0, N - 1)
-      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) if (a[j * N + i] < v) a[j * N + i] = v
+      this.stamp(this.ix[k], this.iz[k], this.ia[k], this.irx[k], this.irz[k], Math.round(255 * w))
     }
+    this.app.towns?.stampInto(this.rec.d.rect, y, (x, z, a, rx, rz, v) => this.stamp(x, z, a, rx, rz, v))
     this.clearTex.needsUpdate = true
     this.yearCleared = y
+    this.townsCleared = this.app.towns?.version ?? 0
   }
 
   // --- every frame -----------------------------------------------------------------
@@ -1501,7 +2055,7 @@ export class Settlements {
     this.material.uniforms.uFadeFar.value = R
     const maxY = (this.rec.data?.hi ?? 1000) * this.app.world.uniforms.uVert.value + 3
     this.refresh(this.app.camera, R, maxY)
-    if (!(Math.abs(this.yearNow - this.yearCleared) < 0.5)) this.stampClearing(this.yearNow)
+    if (!(Math.abs(this.yearNow - this.yearCleared) < 0.5) || (this.app.towns?.version ?? 0) !== this.townsCleared) this.stampClearing(this.yearNow)
   }
 
   // --- for the tools ------------------------------------------------------------------
@@ -1514,8 +2068,7 @@ export class Settlements {
       if (this.weightAt(i, year) < 0.999) continue
       const name = KIND_NAMES[this.ikind[i]]
       const kit = this.kits[name][this.ivar[i]]
-      const kd = KINDS[name]
-      out.push({ i, site: this.isite[i], kind: name, x: this.ix[i], z: this.iz[i], a: this.ia[i], ax: kit.hx * kd.sh, az: kit.hz * kd.sh, y: this.iy[i], height: kit.top * this.isv[i], landmark: !!this.iland[i] })
+      out.push({ i, site: this.isite[i], kind: name, variant: this.ivar[i], x: this.ix[i], z: this.iz[i], a: this.ia[i], ax: kit.hx * this.ish[i], az: kit.hz * this.ish[i], box: kit.box.map((v) => v * this.ish[i]), y: this.iy[i], height: kit.top * this.isv[i], landmark: !!this.iland[i] })
     }
     return out
   }
@@ -1526,25 +2079,14 @@ export class Settlements {
    * the thatched hale among them.
    */
   census(year = this.yearNow, x = null, z = null, radius = Infinity) {
-    const by = {}
-    const sites = new Set()
-    let hale = 0
-    for (const a of this.alive(year)) {
-      if (x !== null && Math.hypot(a.x - x, a.z - z) > radius) continue
-      if (a.kind === 'kauhale') hale++
-      if (a.kind === 'hale') hale += 2
-      if (sites.has(a.site)) continue
-      sites.add(a.site)
-      by[a.kind] = (by[a.kind] || 0) + 1
-    }
-    return { by, total: Object.values(by).reduce((s, v) => s + v, 0), hale }
+    return censusOf(this.alive(year), x, z, radius)
   }
 
   stats() {
     if (!this.ready) return { ready: false, failed: this.failed }
     const n = this.Ys.findIndex((y) => y >= this.yearNow)
     let bytes = this.clearData.byteLength + this.bytes.reduce((s, b) => s + b.byteLength, 0) + this.sea.a.byteLength + this.stream.a.byteLength + this.broad.a.byteLength
-    for (const a of [this.mats, this.spans, this.cols, this.stretches, this.vOf, this.ix, this.iz, this.ia, this.iy, this.irx, this.irz, this.isv, this.ikind, this.ivar, this.isite, this.iland, this.tOrder, this.tStart]) bytes += a.byteLength
+    for (const a of [this.mats, this.spans, this.cols, this.stretches, this.vOf, this.ix, this.iz, this.ia, this.iy, this.irx, this.irz, this.isv, this.ish, this.ikind, this.ivar, this.isite, this.iland, this.tOrder, this.tStart]) bytes += a.byteLength
     const c = this.census(this.yearNow)
     return {
       ready: true,
@@ -1556,7 +2098,9 @@ export class Settlements {
       by: c.by,
       hale: c.hale,
       landmarks: this.landmarks.map((L) => `${L.name || L.kind} ${L.from}`),
-      towns: this.towns,
+      towns: this.townTerms,
+      zoning: { zoning: this.zoning.zoning ? `${this.zoning.zoning.W}×${this.zoning.zoning.H}` : null, lud: this.zoning.lud ? `${this.zoning.lud.W}×${this.zoning.lud.H}` : null },
+      value: this.values ? 'mask' : 'modelled',
       cap: +(this.cap[Math.max(0, n)] ?? 1).toFixed(2),
       streets: this.streetBatches.map((s) => `${s.year}:${s.n}/${s.pads}:${(s.batch?.uniforms.uAlpha.value ?? 0).toFixed(2)}`),
       triangles: this.variants.reduce((s, v) => s + v.mesh.count * v.kit.tris, 0),
@@ -1579,3 +2123,18 @@ export class Settlements {
   }
 }
 
+/** Counts by kind among standing instances (a kauhale once, however many its hale), within `radius` of (x, z). */
+export function censusOf(list, x = null, z = null, radius = Infinity) {
+  const by = {}
+  const sites = new Set()
+  let hale = 0
+  for (const a of list) {
+    if (x !== null && Math.hypot(a.x - x, a.z - z) > radius) continue
+    if (a.kind === 'kauhale') hale++
+    if (a.kind === 'hale') hale += 2
+    if (sites.has(a.site)) continue
+    sites.add(a.site)
+    by[a.kind] = (by[a.kind] || 0) + 1
+  }
+  return { by, total: Object.values(by).reduce((s, v) => s + v, 0), hale }
+}

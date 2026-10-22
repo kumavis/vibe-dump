@@ -14,9 +14,10 @@
 // - the trees (vegetation.js), the battles as pixel-art soldiers (forces.js, soldiers.js), and the
 //   place names (labels.js);
 // - and the buildings of every other year and place (settlements.js), from
-//   the settlement layer's density for the year, their kind by the era, the
-//   streets of the town under them; they yield to the village at Kou while
-//   it stands.
+//   the settlement layer's density for the year, their kind by the era and
+//   their value, the streets of the town under them; they yield to the
+//   village at Kou while it stands, and toward the district's edge to the
+//   island's own (towns.js), which the trees keep clear of too.
 //
 // Each thing belongs to a feature, and shows while the year is within that
 // feature's from and to (the shared uFeatK for the rastered ones, a weight of
@@ -61,6 +62,40 @@ function inside(poly, x, z) {
     if (a[1] > z !== b[1] > z && x < ((b[0] - a[0]) * (z - a[1])) / (b[1] - a[1]) + a[0]) c = !c
   }
   return c
+}
+
+/** The corners of a paepae: centre, turn (as Builder.at turns), length along x and width along z. */
+function corners(x, z, a, L, W) {
+  const c = Math.cos(a)
+  const s = Math.sin(a)
+  return [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [x + (u * L * c - v * W * s) / 2, z + (u * L * s + v * W * c) / 2])
+}
+
+/** Whether two convex quads overlap (separating axes). */
+function overlaps(A, B) {
+  for (const P of [A, B]) {
+    for (let i = 0; i < 4; i++) {
+      const p = P[i]
+      const q = P[(i + 1) % 4]
+      const n = [q[1] - p[1], p[0] - q[0]]
+      let a0 = Infinity
+      let a1 = -Infinity
+      let b0 = Infinity
+      let b1 = -Infinity
+      for (const c of A) {
+        const d = c[0] * n[0] + c[1] * n[1]
+        a0 = Math.min(a0, d)
+        a1 = Math.max(a1, d)
+      }
+      for (const c of B) {
+        const d = c[0] * n[0] + c[1] * n[1]
+        b0 = Math.min(b0, d)
+        b1 = Math.max(b1, d)
+      }
+      if (a1 < b0 || b1 < a0) return false
+    }
+  }
+  return true
 }
 
 /** A polyline resampled to about `step` world units, so a ribbon follows the ground between its points. */
@@ -181,6 +216,9 @@ export class DistrictFeatures {
     }
     const step = 0.85 // world units between kauhale, about
     const homes = []
+    // (every paepae laid so far, a little grown: no two meet, since two
+    // platforms of one height overlapping fight over every pixel they share)
+    const laid = []
     for (let z = z0 + step / 2; z < z1; z += step) {
       for (let x = x0 + step / 2; x < x1; x += step) {
         const cx = x + (rand() - 0.5) * step * 0.7
@@ -212,8 +250,12 @@ export class DistrictFeatures {
           hi = Math.max(hi, g)
         }
         if (lo < 0.6 || hi - lo > 2.5) continue
+        const turn = rot + (h % 2) * Math.PI * 0.5
+        const pad = corners(x, z, turn, (L + 2.4) * HALE_S, (Wd + 2.4) * HALE_S)
+        if (laid.some((q) => overlaps(q, pad))) continue
+        laid.push(pad)
         const y = Y(hi)
-        B.at(x, y, z, rot + (h % 2) * Math.PI * 0.5, HALE_S)
+        B.at(x, y, z, turn, HALE_S)
         hale(B, rand, L, Wd, 4.6 + rand() * 1.2, true, 0.9 + Y(hi - lo) / HALE_S)
         B.done()
         this.counts.hale++

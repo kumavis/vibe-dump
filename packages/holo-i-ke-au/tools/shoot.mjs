@@ -28,18 +28,22 @@ import { dirname, join, normalize, extname } from 'node:path'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 // (tools/shots/ is gitignored at the root)
 const outDir = process.argv[2] || join(root, 'tools/shots')
-// ==== settlements: a named list of shots ======================================
+// ==== settlements: a named list of shots ================================== [settlements]
 //   node tools/shoot.mjs <outdir> settlements
 // The town by era (features/settlements.js), each shot once the district and
 // its buildings are in: the harbour and Kou in 1795, Honolulu in 1853, 1896
 // and 1930, downtown and Waikīkī now (the timeline's last year, drawn from
-// the 2020 keyframe), and the valley in 1896.
+// the 2020 keyframe), and the valley in 1896; the harbour in 1896 from a
+// raking angle (where the buildings once flickered); and every island's
+// (features/towns.js), once its towns in reach are built: Lahaina in 1850
+// and now, Kailua-Kona in 1820 and 1896, Hilo now, a Kohala hamlet in 1778.
+// `place` is a gazetteer id or [lon, lat].
 const nearShot = (name, place, year, [bearing, pitch, distance], first = false) => ({
   name,
   year,
-  eval: `${first ? 'app.ui.card.close(); app.ui.onScrub(); ' : ''}const v = app.tour.cameraView(app.tour.places.get('${place}'), { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`,
-  until: "app.districts.cur?.state === 'ready' && !!app.districts.cur.features?.settlements.ready",
-  report: 'app.districts.cur.features.settlements.stats()',
+  eval: `${first ? 'app.ui.card.close(); app.ui.onScrub(); ' : ''}const v = app.tour.cameraView(${typeof place === 'string' ? `app.tour.places.get('${place}')` : `{ geometry: { type: 'Point', coordinates: ${JSON.stringify(place)} } }`}, { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`,
+  until: "(() => { app.settle(); const t = app.rig.state.target, D = app.districts, d = D.districtAt(t.x, t.z); return app.towns.idle && (!d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready)) })()",
+  report: "{ district: app.districts.cur?.features?.settlements.stats() ?? null, towns: app.towns.stats() }",
 })
 // ==== chain: the whole chain and the routes that follow the story ==============
 //   node tools/shoot.mjs <outdir> chain          (and VIEWPORT=390x844 for a phone)
@@ -69,13 +73,20 @@ const PRESETS = {
     nearShot('kou-1795', 'kou', 1795, [30, 0.45, 16]),
     nearShot('honolulu-1853', 'honolulu', 1853, [40, 0.5, 22]),
     nearShot('honolulu-1896', 'honolulu', 1896, [40, 0.5, 22]),
+    nearShot('harbour-1896-raking', 'kou', 1896, [45, 0.1, 22]),
     nearShot('honolulu-1930', 'honolulu', 1930, [40, 0.5, 22]),
     nearShot('downtown-now', 'kou', 2020, [50, 0.45, 24]),
     nearShot('waikiki-now', 'waikiki', 2020, [20, 0.45, 26]),
     nearShot('valley-1896', 'nuuanu', 1896, [42, 0.35, 60]),
+    nearShot('lahaina-1850', 'lahaina', 1850, [60, 0.3, 18]),
+    nearShot('lahaina-now', 'lahaina', 2020, [60, 0.3, 18]),
+    nearShot('kona-1820', 'kailua-kona', 1820, [80, 0.3, 16]),
+    nearShot('kona-1896', 'kailua-kona', 1896, [80, 0.3, 16]),
+    nearShot('hilo-now', 'hilo', 2020, [300, 0.3, 22]),
+    nearShot('kohala-1778', [-155.815, 20.245], 1778, [30, 0.3, 12]),
   ],
 }
-// ==== end settlements =========================================================
+// ==== [settlements] end ===============================================================
 const shots = PRESETS[process.argv[3]] || JSON.parse(process.argv[3] || '[{"name":"default"}]')
 const extra = process.argv[4] || ''
 const port = Number(process.env.PORT || 5299)
@@ -83,56 +94,102 @@ const useTest = process.env.DATA ? process.env.DATA === 'test' : !existsSync(joi
 mkdirSync(outDir, { recursive: true })
 
 // ==== the battles' people (features/soldiers.js) ===================================== [soldiers]
-// '[{"preset":"soldiers"}]' walks the battles: the Puʻiwa and Lāʻimi stops at the stop camera and
-// close in (cam, over the fronts, where one figure is a few dozen pixels), the march past Kou, the
-// retreat to the pali, the landing at Waikīkī, Kaheiki in 1783 and its columns, and last the sprite
-// sheet itself. A shot with `sheet: n` lays the sheet (as the district's soldiers built it) over the
-// page at n× on a ground-coloured backing and shoots it alone.
+// '[{"preset":"soldiers"}]' walks the battles: the Puʻiwa, Lāʻimi and pali stops at the stop camera
+// and close in (where a figure is three device pixels to the sprite pixel), the pali close at a
+// moment of the leap; a zoom at Puʻiwa across the change from two pixels to three, held at five
+// moments of the crossfade; the march past Kou, the landing at Waikīkī, Kaheiki in 1783 and its
+// columns; and last the sprite sheet itself: whole at 1x, each facing at 3x, the slinger at 3x and
+// the run and the leap at 3x. A shot with `sheet: { n, rows, facing, frames }` lays the sheet (as
+// the district's soldiers built it) over the page at n× on a ground-coloured backing, only the rows
+// whose kind/side/dress contain one of `rows`, one facing (0 side, 1 front, 2 back; all when left
+// out) and frames [a, b] of it, and shoots it alone.
 {
   const tour = (ev, stop) => `const at = app.tour.locate(app.data.events.find((e) => e.id === '${ev}')); app.tour.goTo(at[0], at[1]); app.tour.goStop(${stop})`
   const ready = "app.districts.cur?.state === 'ready'"
   const people = 'app.districts.cur.features.forces.stats()'
-  // (over the fronts between the two lines, looking up the valley as the stops do: yaw -42°, pitch 0.38 of a right angle)
+  const S = 'app.districts.cur.features.forces.soldiers'
+  const F = 'app.districts.cur.features.forces'
+  // (let the figures go again after a held shot)
+  const free = `if (app.districts.cur?.features) ${S}.hold = false;`
+  // the camera over a place as a stop camera frames it, closer
+  const near = (place, bearing, pitch, distance) => `${free} const v = app.tour.cameraView(app.tour.places.get('${place}'), { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`
+  // on until a leaper is in the air past the brink, tumbling, then everyone held
+  const leapMoment = `const Sx = ${S}, f = Sx.f; for (let k = 0; k < 400; k++) { ${F}.update(0.04, app.districts.k, app.rig.state.distance); let air = 0; for (let i = 0; i < Sx.count; i++) if (f.vis[i] > 0.9 && f.air[i] && f.fr[i] >= 15) air++; if (air) break } Sx.hold = true`
+  // a zoom at Puʻiwa from 14 in to d, a third of a per cent a frame, then held where it got to
+  const zoomTo = (d) =>
+    `${free} const v = app.tour.cameraView(app.tour.places.get('puiwa'), { bearing: 42, pitch: 0.38, distance: 14 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: 14, yaw: v.yaw, pitch: v.pitch }); app.settle(); for (let d = 14; d > ${d}; d *= 0.9967) { app.rig.jump({ distance: Math.max(d, ${d}) }); ${F}.update(1 / 60, app.districts.k, Math.max(d, ${d})) } app.rig.jump({ distance: ${d} }); ${F}.update(1 / 60, app.districts.k, ${d}); ${S}.hold = true`
+  const scale = `${S}.stats().scale`
+  const facingRows = ['spear/oahu/kihei', 'club/oahu/bare', 'musket/hawaii/kihei', 'sling/maui/kihei', 'dagger/oahu/kihei', 'spear/hawaii/chief', 'club/oahu/chief', 'rammer', 'linstock', 'gun']
   const SOLDIERS = [
-    { name: 'puiwa', eval: tour('nuuanu-1795', 5), until: ready, frames: 4, report: people },
-    { name: 'puiwa-close', cam: [-350.86, -923.85, 10, -0.733, 0.597], frames: 3, report: people },
-    { name: 'laimi', eval: 'app.tour.goStop(6)', until: ready, frames: 4, report: people },
-    { name: 'laimi-close', cam: [-348.26, -927.5, 10, -0.733, 0.597], frames: 3, report: people },
-    { name: 'kou', eval: 'app.tour.goStop(4)', until: ready, frames: 4, report: people },
-    { name: 'pali', eval: 'app.tour.goStop(7)', until: ready, frames: 4, report: people },
-    { name: 'waikiki', eval: 'app.tour.goStop(3)', until: ready, frames: 4, report: people },
-    { name: 'kaheiki', eval: tour('kaheiki-1783', 2), until: ready, frames: 4, report: people },
-    { name: 'kaheiki-columns', eval: 'app.tour.goStop(1)', until: ready, frames: 4, report: people },
-    { name: 'sheet', sheet: 2, settle: false, frames: 1 },
+    { name: 'puiwa', eval: `${free} ${tour('nuuanu-1795', 5)}`, until: ready, frames: 4, report: people },
+    { name: 'puiwa-close', eval: near('puiwa', 42, 0.38, 9), frames: 3, report: people },
+    { name: 'laimi', eval: `${free} app.tour.goStop(6)`, until: ready, frames: 4, report: people },
+    { name: 'laimi-close', eval: near('laimi', 42, 0.38, 9), frames: 3, report: people },
+    { name: 'pali', eval: `${free} app.tour.goStop(7)`, until: ready, frames: 4, report: people },
+    { name: 'pali-close', eval: `${near('nuuanu-pali', 57, 0.2, 10)}; ${leapMoment}`, frames: 3, report: people },
+    { name: 'pali-leap-3x', eval: `${near('nuuanu-pali', 57, 0.25, 8)}; ${leapMoment}`, frames: 3, report: people },
+    { name: 'zoom-start', eval: `${free} app.tour.goStop(5)`, until: ready, frames: 2 },
+    ...[12.4, 12.0, 11.6, 11.2, 10.8].map((d, q) => ({ name: `zoom-${q + 1}-at-${d}`, eval: zoomTo(d), settle: false, frames: 3, report: scale })),
+    { name: 'kou', eval: `${free} app.tour.goStop(4)`, until: ready, frames: 4, report: people },
+    { name: 'waikiki', eval: `${free} app.tour.goStop(3)`, until: ready, frames: 4, report: people },
+    { name: 'kaheiki', eval: `${free} ${tour('kaheiki-1783', 2)}`, until: ready, frames: 4, report: people },
+    { name: 'kaheiki-columns', eval: `${free} app.tour.goStop(1)`, until: ready, frames: 4, report: people },
+    { name: 'sheet', sheet: { n: 1 }, settle: false, frames: 1 },
+    { name: 'facings-side-3x', sheet: { n: 3, rows: facingRows, facing: 0 }, settle: false, frames: 1 },
+    { name: 'facings-front-3x', sheet: { n: 3, rows: facingRows, facing: 1 }, settle: false, frames: 1 },
+    { name: 'facings-back-3x', sheet: { n: 3, rows: facingRows, facing: 2 }, settle: false, frames: 1 },
+    { name: 'slinger-3x', sheet: { n: 3, rows: ['sling/hawaii/bare', 'sling/oahu/kihei', 'sling/maui/bare'], frames: [8, 13] }, settle: false, frames: 1 },
+    { name: 'leap-3x', sheet: { n: 3, rows: ['spear/oahu/kihei', 'club/oahu/bare', 'dagger/oahu/bare', 'spear/oahu/chief'], frames: [4, 16] }, settle: false, frames: 1 },
   ]
-  const showSheet = (app, n) => {
-    const S = app.districts.cur?.features?.forces?.soldiers
-    if (!S) throw new Error('no district down: no sprite sheet to show')
-    const { width: w, height: h, data } = S.sheet
+  const showSheet = (app, o) => {
+    const Sd = app.districts.cur?.features?.forces?.soldiers
+    if (!Sd) throw new Error('no district down: no sprite sheet to show')
+    const { width: w, data, rows, facingW } = Sd.sheet
+    const n = o.n || 1
+    const H = 16
+    const picked = rows.map((r, i) => ({ ...r, i })).filter((r) => !o.rows || o.rows.some((k) => `${r.kind}/${r.side}/${r.dress}`.includes(k)))
+    const f0 = o.facing ?? 0
+    const nf = o.facing === undefined ? 3 : 1
+    const [a, b] = o.frames || [0, facingW - 1]
+    const cells = (b - a + 1) * nf
+    const cw = Math.max(...picked.map((r) => r.w))
     const cv = document.getElementById('sheet-shot') || document.body.appendChild(document.createElement('canvas'))
     cv.id = 'sheet-shot'
-    cv.width = w * n + 16
-    cv.height = h * n + 16
+    cv.width = cells * cw * n + 16
+    cv.height = picked.length * H * n + 16
     Object.assign(cv.style, { position: 'fixed', left: '0', top: '0', zIndex: 1000, imageRendering: 'pixelated' })
     const cx = cv.getContext('2d')
     cx.fillStyle = '#76825a'
     cx.fillRect(0, 0, cv.width, cv.height)
-    const img = cx.createImageData(w * n, h * n)
-    for (let y = 0; y < h * n; y++) {
-      for (let x = 0; x < w * n; x++) {
-        const s = (Math.floor(y / n) * w + Math.floor(x / n)) * 4
-        const o = (y * w * n + x) * 4
-        const a = data[s + 3] ? 1 : 0
-        img.data[o] = a ? data[s] : 0x76
-        img.data[o + 1] = a ? data[s + 1] : 0x82
-        img.data[o + 2] = a ? data[s + 2] : 0x5a
-        img.data[o + 3] = 255
+    const img = cx.createImageData(cells * cw * n, picked.length * H * n)
+    picked.forEach((r, ri) => {
+      for (let fc = 0; fc < nf; fc++) {
+        for (let fr = a; fr <= b; fr++) {
+          const sx0 = ((f0 + fc) * facingW + fr) * r.w
+          const dx0 = (fc * (b - a + 1) + (fr - a)) * cw + (cw - r.w) / 2
+          for (let y = 0; y < H * n; y++) {
+            for (let x = 0; x < r.w * n; x++) {
+              const s = ((r.i * H + Math.floor(y / n)) * w + sx0 + Math.floor(x / n)) * 4
+              const o2 = ((ri * H * n + y) * cells * cw * n + dx0 * n + x) * 4
+              const on = data[s + 3] ? 1 : 0
+              img.data[o2] = on ? data[s] : 0x76
+              img.data[o2 + 1] = on ? data[s + 1] : 0x82
+              img.data[o2 + 2] = on ? data[s + 2] : 0x5a
+              img.data[o2 + 3] = 255
+            }
+          }
+        }
       }
-    }
+      // (the rest of a narrow row's wide cells: ground)
+      for (let y = 0; y < H * n; y++) for (let x = 0; x < cells * cw * n; x++) {
+        const o2 = ((ri * H * n + y) * cells * cw * n + x) * 4
+        if (!img.data[o2 + 3]) img.data.set([0x76, 0x82, 0x5a, 255], o2)
+      }
+    })
     cx.putImageData(img, 8, 8)
   }
   for (let i = shots.length - 1; i >= 0; i--) if (shots[i].preset === 'soldiers') shots.splice(i, 1, ...SOLDIERS)
-  for (const s of shots) if (s.sheet) Object.assign(s, { eval: `${s.eval || ''};(${showSheet})(app, ${s.sheet})`, element: '#sheet-shot' })
+  for (const s of shots) if (s.sheet) Object.assign(s, { eval: `${s.eval || ''};(${showSheet})(app, ${JSON.stringify(typeof s.sheet === 'number' ? { n: s.sheet } : s.sheet)})`, element: '#sheet-shot' })
 }
 // ==== [soldiers] end ===============================================================================
 

@@ -523,6 +523,7 @@ writeFileSync(join(out, 'boundaries', 'ahupuaa.geojson'), JSON.stringify(b.ahupu
 const g = gazetteer()
 for (const k of ['eras', 'places', 'sources', 'events', 'polities']) writeFileSync(join(out, `${k}.json`), JSON.stringify(g[k], null, 2))
 testPatches()
+testZoning()
 console.log(`wrote ${out} in ${((Date.now() - t0) / 1000).toFixed(1)} s${flatSea ? ' (flat sea)' : ''}`)
 
 // --- test patches --------------------------------------------------------------------------
@@ -625,3 +626,66 @@ function testPatches() {
     { id: 'test-nuuanu-point', pack: 'nuuanu', kind: 'lower', depth: -1.3, until: 1955, size: [NW, NH], ...ellipseMask(nuuanu.bounds, NW, NH, { lon: -157.849, lat: 21.2865, a: 0.75, b: 0.4, rot: 20 }, (lo, la) => hn(lo, la) > 0) },
   ])
 }
+
+// ==== [settlements] a stand-in zoning raster ========================================
+/**
+ * A stand-in for DATA.md "Zoning, for the settlements", for the real Maui
+ * pack when the real bake is in public/data/: test-data/real/layers/ with a
+ * manifest holding only the `zoning` key, a class raster at half the pack's
+ * resolution (as the contract allows) and a Land Use District raster at full.
+ * Shapes for trying the path (load the app with ?zoning=../test-data/real/),
+ * placed roughly where Lahaina's core and the Kāʻanapali strip are, and not
+ * a record of either.
+ */
+function testZoning() {
+  const real = join(root, 'public/data')
+  if (!existsSync(join(real, 'manifest.json'))) return
+  const man = JSON.parse(readFileSync(join(real, 'manifest.json'), 'utf8'))
+  const maui = man.packs.find((p) => p.id === 'maui')
+  if (!maui) return
+  const metres = realHeights(real, maui)
+  const [W, H] = maui.size
+  const [w0, s0, e0, n0] = maui.bounds
+  const grid = (gw, gh, f) => {
+    const out = new Uint8Array(gw * gh)
+    for (let j = 0; j < gh; j++) {
+      const lat = n0 - ((j + 0.5) / gh) * (n0 - s0)
+      for (let i = 0; i < gw; i++) {
+        const lon = w0 + ((i + 0.5) / gw) * (e0 - w0)
+        const m = metres(lon, lat)
+        out[j * gw + i] = m > 0 ? f(lon, lat, m) : 0
+      }
+    }
+    return out
+  }
+  // km from a point, and across and along an ellipse turned `rot` degrees
+  const km = (lon, lat, lo, la) => Math.hypot(xkm(lon) - xkm(lo), zkm(lat) - zkm(la))
+  const ell = (lon, lat, { lon: lo, lat: la, a, b, rot }) => {
+    const dx = xkm(lon) - xkm(lo)
+    const dz = zkm(lat) - zkm(la)
+    const c = Math.cos(rot * DEG)
+    const sn = Math.sin(rot * DEG)
+    return Math.hypot((dx * c - dz * sn) / a, (dx * sn + dz * c) / b)
+  }
+  const cls = (lon, lat, m) => {
+    if (km(lon, lat, -156.6766, 20.8743) < 0.45 && m < 30) return 5 // the core
+    if (ell(lon, lat, { lon: -156.692, lat: 20.925, a: 0.35, b: 2.2, rot: 15 }) < 1 && m < 40) return 7 // the strip
+    if (km(lon, lat, -156.67, 20.86) < 0.4 && m < 30) return 6 // a works
+    if (km(lon, lat, -156.67, 20.88) < 3 && m < 80) return 1
+    if (m < 400) return 8
+    return 9
+  }
+  const zoning = grid(Math.ceil(W / 2), Math.ceil(H / 2), cls)
+  const lud = grid(W, H, (lon, lat, m) => ({ 1: 1, 5: 1, 6: 1, 7: 1, 8: 3, 9: 4 })[cls(lon, lat, m)] ?? 0)
+  const dir = join(out, 'real', 'layers')
+  mkdirSync(join(dir, 'maui'), { recursive: true })
+  writePNG(join(dir, 'maui', 'now-zoning.png'), Math.ceil(W / 2), Math.ceil(H / 2), zoning, 1)
+  writePNG(join(dir, 'maui', 'lud.png'), W, H, lud, 1)
+  const note = 'test raster (tools/fake-data.mjs); not a record'
+  writeFileSync(
+    join(dir, 'manifest.json'),
+    JSON.stringify({ zoning: { about: note, islands: { maui: { pack: 'maui', zoning: { file: 'maui/now-zoning.png', size: [Math.ceil(W / 2), Math.ceil(H / 2)], note }, lud: { file: 'maui/lud.png', size: [W, H], note } } } } }, null, 2),
+  )
+  console.log('test zoning for the real Maui pack', `${Math.ceil(W / 2)}×${Math.ceil(H / 2)}`)
+}
+// ==== [settlements] end =============================================================

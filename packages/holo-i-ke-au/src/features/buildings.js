@@ -28,13 +28,24 @@
 // - walkup: three- and four-storey apartments;
 // - tower: towers, the height set per instance by the density (settlements.js);
 // - church and spire: a church with a square tower, and one with a spire;
-// - clock: a harbour clock tower, drawn only where the gazetteer has its place.
+// - clock: a harbour clock tower, drawn only where the gazetteer has its place;
+// - shed: warehouses, sawtooth works and hangars, where the zoning of now
+//   says industrial (DATA.md "Zoning, for the settlements"), a farm's shed
+//   on agricultural land.
+//
+// No two faces of a model lie in one plane where they overlap, since two
+// such faces fight over the depth buffer and flicker as the camera moves: a
+// lanai's floor starts where the plinth ends rather than on top of it, a
+// false front stands on its wall rather than over it, a door stands a hand's
+// breadth proud of its wall, and every model fits its lot (settlements.js
+// scales what would not, so neighbours never meet).
 
 import { Builder, MAT, col, indexed } from './kit.js'
 import { hale } from './structures.js'
 
-// metres of plinth under every model, for the fall of a lot
-const FOOT = 3
+// metres of plinth under every model, for the fall of a lot (at the
+// smallest scale a kind is drawn at, more than the fall its lot may take)
+const FOOT = 4
 
 export const TOWN_PALETTE = {
   limewash: '#d6d0c0',
@@ -130,12 +141,14 @@ function pyramid(B, a, y, h, c, x = 0, z = 0, mat = MAT.roof) {
 /**
  * A lanai or porch along the front (+z) of a box W deep: its floor at
  * `floor`, `depth` out, `width` across, under a lean-to from `hi` at the wall
- * to `lo` at its edge, on two posts or more.
+ * to `lo` at its edge, on two posts or more. The floor starts at `from` (the
+ * plinth's front edge, where there is one: a floor laid over the plinth's
+ * top at the same height would fight it for every pixel they share).
  */
-function lanai(B, width, W, depth, floor, hi, lo, roofC, postC, { posts = 2, x = 0 } = {}) {
+function lanai(B, width, W, depth, floor, hi, lo, roofC, postC, { posts = 2, x = 0, from = W / 2 } = {}) {
   const z0 = W / 2
   const z1 = z0 + depth
-  B.box(x, floor - 0.35, (z0 + z1) / 2, width, 0.35, depth, postC, MAT.wood)
+  if (z1 - from > 0.05) B.box(x, floor - 0.35, (from + z1) / 2, width, 0.35, z1 - from, postC, MAT.wood)
   const a = [x - width / 2 - 0.2, hi, z0]
   const b = [x + width / 2 + 0.2, hi, z0]
   const c = [x + width / 2 + 0.2, lo, z1 + 0.3]
@@ -147,10 +160,15 @@ function lanai(B, width, W, depth, floor, hi, lo, roofC, postC, { posts = 2, x =
   }
 }
 
-/** A dark doorway on the front face (z = W/2) of a box, `w` wide, `h` high. */
+/**
+ * A dark doorway on the front face (z = W/2) of a box, `w` wide, `h` high:
+ * a shallow dark block standing 30 cm proud of the wall, its sides dark as
+ * its face. (As a sheet 3 cm off the wall it fought the wall from a
+ * kilometre off, and at 12 cm still did from the low views: the depth
+ * buffer's step there is several centimetres of the drawn scale.)
+ */
 function door(B, W, w, h, y0 = 0, x = 0) {
-  const z = W / 2 + 0.03
-  B.quad([x - w / 2, y0, z], [x + w / 2, y0, z], [x + w / 2, y0 + h, z], [x - w / 2, y0 + h, z], col(P.dark, 0), MAT.plain)
+  B.box(x, y0, W / 2 + 0.15, w, h, 0.3, col(P.dark, 0), MAT.plain)
 }
 
 // --- the kinds -------------------------------------------------------------------
@@ -175,22 +193,31 @@ function kauhaleHale(rand, [L, W, H]) {
   return B
 }
 
-/** Kauhale: which hale stand round the yard, and where (metres from its middle; a turn; a size). */
+/**
+ * Kauhale: which hale stand round the yard, and where (metres from its
+ * middle, x along the street and z across it; a turn; a size). Each yard
+ * keeps within the four lots it is given (settlements.js), about 21 by 23
+ * metres at the scale they are drawn, and no two paepae meet: two platforms
+ * of one height overlapping would fight over every pixel they share.
+ */
 export const KAUHALE = [
-  [[0, 0, 0.3, 0], [9.5, 3.5, 1.9, 2], [-3.5, 9.0, 2.6, 3]],
-  [[0, 0, 1.2, 0], [-9.5, -2.5, 1.0, 3]],
-  [[0, 0, 0.0, 1], [9.0, -4.5, 1.6, 2], [-8.5, 4.5, 0.4, 2], [3.0, 10.0, 1.4, 3]],
-  [[0, 0, 2.2, 1], [0.5, 9.5, 2.0, 2], [9.0, 5.0, 0.6, 3]],
+  [[-3.0, -4.0, 0.06, 0], [5.6, -2.8, 1.64, 2], [-3.4, 4.6, 0.12, 3]],
+  [[-1.6, -2.6, 0.15, 0], [4.2, 4.4, 1.45, 3]],
+  [[-4.2, -4.2, -0.05, 1], [4.6, -3.6, 1.6, 2], [-4.8, 4.0, 1.5, 2], [3.6, 4.4, 0.08, 3]],
+  [[0.2, -3.5, 0.04, 1], [-4.0, 4.0, -0.06, 2], [4.6, 3.6, 1.62, 3]],
 ]
 
-/** A single thatched house of the town, on a low paepae, a cookhouse behind. */
+/**
+ * A single thatched house of the town, on a low paepae toward the back of
+ * its lot, and its small cookhouse at the front corner, turned to the lane.
+ */
 function thatchHouse(rand, v) {
   const B = new Builder()
-  B.at(0, 0, 0, Math.PI / 2, 1)
-  hale(B, rand, 7.2 + v, 4.8, 5.2, true, FOOT)
+  B.at(0, 0, -2.2, 0, 1)
+  hale(B, rand, 6.8 + v * 0.6, 4.6, 5.2, true, FOOT)
   B.done()
-  B.at(v ? -4.5 : 4.5, 0, -6.5, 0, 1)
-  hale(B, rand, 4.4, 3.4, 3.6, false, FOOT)
+  B.at(v ? -2.6 : 2.6, 0, 4.6, Math.PI / 2, 1)
+  hale(B, rand, 3.6, 2.8, 3.4, false, FOOT)
   B.done()
   return B
 }
@@ -207,7 +234,7 @@ function frameHouse(rand, v) {
     plinth(B, L + 0.4, W + 0.4, 0.6, col(P.plinth, 0.1, rand))
     B.box(0, 0.6, 0, L, 3.0, W, wall, MAT.clap)
     gable(B, L, W, 3.6, 2.6, 0.5, roof, wall, { wallMat: MAT.clap })
-    lanai(B, L, W, 2.2, 0.6, 3.3, 2.7, roof, post)
+    lanai(B, L, W, 2.2, 0.6, 3.3, 2.7, roof, post, { from: W / 2 + 0.2 })
     door(B, W, 1.1, 2.1, 0.6)
   } else if (v === 1) {
     const L = 8
@@ -215,15 +242,16 @@ function frameHouse(rand, v) {
     plinth(B, L + 0.4, W + 0.4, 0.5, col(P.plinth, 0.1, rand))
     B.box(0, 0.5, 0, L, 5.8, W, wall, MAT.clap)
     gable(B, L, W, 6.3, 2.4, 0.5, roof, wall, { wallMat: MAT.clap })
-    lanai(B, L, W, 2.0, 3.4, 6.0, 5.6, roof, post)
-    lanai(B, L, W, 2.0, 0.5, 3.4, 3.1, roof, post)
+    // (the upper lanai's roof well under the gable's eaves, never along them)
+    lanai(B, L, W, 2.0, 3.4, 5.8, 5.4, roof, post)
+    lanai(B, L, W, 2.0, 0.5, 3.4, 3.1, roof, post, { from: W / 2 + 0.2 })
   } else {
-    const L = 10
+    const L = 9.6
     const W = 7
     plinth(B, L + 0.4, W + 0.4, 0.6, col(P.plinth, 0.1, rand))
     B.box(0, 0.6, 0, L, 2.9, W, wall, MAT.clap)
-    hip(B, L, W, 3.5, 2.2, 0.6, roof)
-    lanai(B, L - 1.5, W, 2.3, 0.6, 3.2, 2.6, roof, post, { posts: 3 })
+    hip(B, L, W, 3.5, 2.2, 0.5, roof)
+    lanai(B, L - 1.5, W, 2.3, 0.6, 3.2, 2.6, roof, post, { posts: 3, from: W / 2 + 0.2 })
   }
   return B
 }
@@ -240,14 +268,14 @@ function adobeHouse(rand, v) {
     hip(B, L, W, 3.1, 2.8, 0.7, col('#a58a5c', 0.12, rand), { roofMat: MAT.thatch })
     door(B, W, 1.1, 2.0, 0.3)
   } else {
-    const L = 11
+    const L = 10.4
     const W = 8
     const wall = col(P.coral, 0.06, rand)
     plinth(B, L + 0.4, W + 0.4, 0.4, col(P.plinth, 0.1, rand))
     B.box(0, 0.4, 0, L, 6.4, W, wall, MAT.masonry)
-    hip(B, L, W, 6.8, 2.0, 0.5, col(P.shingle, 0.1, rand))
+    hip(B, L, W, 6.8, 2.0, 0.4, col(P.shingle, 0.1, rand))
     lanai(B, L, W, 2.2, 3.6, 6.4, 6.0, col(P.shingle, 0.1, rand), col(P.post, 0.1, rand), { posts: 3 })
-    lanai(B, L, W, 2.2, 0.4, 3.6, 3.2, col(P.shingle, 0.1, rand), col(P.post, 0.1, rand), { posts: 3 })
+    lanai(B, L, W, 2.2, 0.4, 3.6, 3.2, col(P.shingle, 0.1, rand), col(P.post, 0.1, rand), { posts: 3, from: W / 2 + 0.2 })
   }
   return B
 }
@@ -260,29 +288,35 @@ function cottage(rand, v) {
   const post = col(P.limewash, 0.05, rand)
   plinth(B, 9.4, 8.4, 0.9, col(P.plinth, 0.1, rand))
   if (v === 1) {
-    // (an L: a wing forward on one side, its own gable to the street)
+    // (an L: a wing forward on one side, its own gable to the street; the
+    // wing's walls, foot and top stand a little off the main block's, never
+    // in its planes)
     B.box(-1.5, 0.9, -1, 7, 3.1, 6, wall, MAT.clap)
     gable(B, 7, 6, 4.0, 2.5, 0.5, roof, wall, { wallMat: MAT.clap, x: -1.5, z: -1 })
-    B.box(2.6, 0.9, 1.0, 4, 3.1, 7, wall, MAT.clap)
-    gable(B, 4, 7, 4.0, 2.0, 0.45, roof, wall, { wallMat: MAT.clap, alongZ: true, x: 2.6, z: 1.0 })
-    lanai(B, 4.5, 4, 2.0, 0.9, 3.7, 3.2, roof, post, { x: -2.3 })
+    B.box(2.6, 0.85, 1.05, 4, 3.1, 6.9, wall, MAT.clap)
+    gable(B, 4, 6.9, 3.95, 2.0, 0.45, roof, wall, { wallMat: MAT.clap, alongZ: true, x: 2.6, z: 1.05 })
+    // (its porch stands on the plinth: no floor of its own over the plinth's top)
+    lanai(B, 4.5, 4, 2.0, 0.9, 3.7, 3.2, roof, post, { x: -2.3, from: 4.2 })
   } else {
     const L = 9
     const W = 7.5
     B.box(0, 0.9, 0, L, 3.1, W, wall, MAT.clap)
     if (v === 0) gable(B, L, W, 4.0, 2.7, 0.5, roof, wall, { wallMat: MAT.clap })
     else hip(B, L, W, 4.0, 2.4, 0.55, roof)
-    lanai(B, L, W, 2.4, 0.9, 3.8, 3.2, roof, post, { posts: 3 })
+    lanai(B, L, W, 2.4, 0.9, 3.8, 3.2, roof, post, { posts: 3, from: 4.2 })
     door(B, W, 1.0, 2.2, 0.9)
   }
   return B
 }
 
-/** Stores in a row, each with its false front to the street and an awning over the walk. */
-function storeRow(rand, n) {
+/**
+ * Stores in a row, each with its false front to the street and an awning
+ * over the walk: two in a row, or one wider. The false front stands on its
+ * wall's top, not over the wall's face.
+ */
+function storeRow(rand, n, w = 5.8) {
   const B = new Builder()
-  const w = 6
-  const D = 13
+  const D = 12
   const fronts = [P.cream, P.limewash, P.ochre, P.paleBlue, P.sage, P.duskRed]
   const awning = col(P.iron, 0.1, rand)
   const post = col(P.post, 0.1, rand)
@@ -293,16 +327,16 @@ function storeRow(rand, n) {
     const h = 4.2 + rand() * 1.4
     B.box(x, 0.3, 0, w - 0.15, h, D, fc, MAT.clap)
     // the roof behind the front, falling to the back
-    const a = [x - w / 2, 0.3 + h - 0.2, D / 2 - 0.6]
-    const b = [x + w / 2, 0.3 + h - 0.2, D / 2 - 0.6]
-    const c = [x + w / 2, 0.3 + h - 1.3, -D / 2 - 0.4]
-    const d = [x - w / 2, 0.3 + h - 1.3, -D / 2 - 0.4]
+    const a = [x - w / 2 + 0.075, 0.3 + h - 0.2, D / 2 - 0.6]
+    const b = [x + w / 2 - 0.075, 0.3 + h - 0.2, D / 2 - 0.6]
+    const c = [x + w / 2 - 0.075, 0.3 + h - 1.3, -D / 2 - 0.4]
+    const d = [x - w / 2 + 0.075, 0.3 + h - 1.3, -D / 2 - 0.4]
     B.quad(a, b, c, d, col(P.iron, 0.1, rand), MAT.roof)
-    // the false front, standing above the roof
-    B.box(x, 0.3 + h - 0.2, D / 2 - 0.2, w - 0.15, 1.6 + rand() * 1.0, 0.35, fc, MAT.clap)
+    // the false front, standing above the roof on the wall's top
+    B.box(x, 0.3 + h, D / 2 - 0.175, w - 0.15, 1.4 + rand() * 1.0, 0.35, fc, MAT.clap)
     door(B, D, 1.6, 2.4, 0.3, x)
   }
-  lanai(B, n * w, D, 2.6, 0.3, 3.4, 3.1, awning, post, { posts: n + 1 })
+  lanai(B, n * w, D, 2.6, 0.3, 3.4, 3.1, awning, post, { posts: n + 1, from: D / 2 + 0.2 })
   return B
 }
 
@@ -310,17 +344,16 @@ function storeRow(rand, n) {
 function masonryBlock(rand, v) {
   const B = new Builder()
   const storeys = [2, 3, 3][v]
-  const L = [14, 13, 15][v]
-  const W = [13, 14, 12][v]
+  const L = [11, 10.5, 11.2][v]
+  const W = [12, 13, 11][v]
   const h = 0.4 + storeys * 3.7
   const wall = col([P.brick, P.stoneGrey, P.concreteWarm][v], 0.07, rand)
   plinth(B, L + 0.3, W + 0.3, 0.4, col(P.plinth, 0.1, rand))
   B.box(0, 0.4, 0, L, h - 0.4, W, wall, MAT.windows)
-  // cornice and parapet
+  // cornice and parapet (the parapet's top is the roof seen from above)
   B.box(0, h, 0, L + 0.5, 0.45, W + 0.5, wall.map((c) => c * 0.86), MAT.masonry)
   B.box(0, h + 0.45, 0, L, 0.6, W, wall.map((c) => c * 0.95), MAT.masonry)
-  B.box(0, h + 0.2, 0, L - 1.2, 0.3, W - 1.2, col(P.asphalt, 0.1, rand), MAT.plain)
-  if (v === 2) lanai(B, L, W, 2.5, 0.4, 4.0, 3.8, col(P.iron, 0.1, rand), col(P.dark, 0.1, rand), { posts: 4 })
+  if (v === 2) lanai(B, L, W, 2.5, 0.4, 4.0, 3.8, col(P.iron, 0.1, rand), col(P.dark, 0.1, rand), { posts: 4, from: W / 2 + 0.15 })
   return B
 }
 
@@ -329,16 +362,16 @@ function bungalow(rand, v) {
   const B = new Builder()
   const wall = col([P.cream, P.sage, P.paleGrey][v], 0.07, rand)
   const roof = col([P.ironGreen, P.iron, P.ironRed][v], 0.1, rand)
-  const L = [11, 10, 12][v]
-  const W = [9, 9.5, 8][v]
+  const L = [9.8, 10, 10.2][v]
+  const W = [8.6, 9.5, 8][v]
   plinth(B, L, W, 0.8, col(P.plinth, 0.1, rand))
   B.box(0, 0.8, 0, L, 2.8, W, wall, MAT.clap)
   if (v === 1) {
-    gable(B, L, W, 3.6, 2.0, 0.9, roof, wall, { wallMat: MAT.clap })
+    gable(B, L, W, 3.6, 2.0, 0.8, roof, wall, { wallMat: MAT.clap })
     lanai(B, 6, W, 2.6, 0.8, 3.4, 2.9, roof, col(P.limewash, 0.05, rand), { x: -1.5 })
   } else {
-    hip(B, L + 1.6, W + 2.6, 3.6, 1.8, 0.9, roof, { z: 1.3 })
-    B.box(0, 0.8, W / 2 + 1.3, L - 0.4, 0.2, 2.4, col(P.post, 0.1, rand), MAT.wood)
+    hip(B, L + 1.2, W + 2.4, 3.6, 1.8, 0.7, roof, { z: 1.2 })
+    B.box(0, 0.8, W / 2 + 1.25, L - 0.4, 0.2, 2.3, col(P.post, 0.1, rand), MAT.wood)
   }
   return B
 }
@@ -347,7 +380,7 @@ function bungalow(rand, v) {
 function midrise(rand, v) {
   const B = new Builder()
   const storeys = [6, 8][v]
-  const L = [15, 14][v]
+  const L = [13.6, 13][v]
   const W = [14, 15][v]
   const h = storeys * 3.6
   const wall = col([P.concreteWarm, P.stoneGrey][v], 0.06, rand)
@@ -372,15 +405,16 @@ function suburbHouse(rand, v) {
     gable(B, L, W, 5.7, 1.4, 0.6, roof, wall)
     return B
   }
-  const L = 14
+  const L = 11.5
   const W = 9
   plinth(B, L, W, 0.3, col(P.plinth, 0.1, rand))
   B.box(-1.5, 0.3, 0, L - 3, 2.7, W, wall, MAT.plain)
-  hip(B, L - 3, W, 3.0, 1.3, 0.8, roof, { x: -1.5 })
+  hip(B, L - 3, W, 3.0, 1.3, 0.7, roof, { x: -1.5 })
   // the carport, a flat roof on two posts
-  B.box(L / 2 - 1.5, 2.6, 0.5, 3.2, 0.25, W - 1, roof.map((c) => c * 0.9), MAT.plain)
+  B.box(L / 2 - 1.5, 2.6, 0.4, 3.2, 0.25, W - 1.2, roof.map((c) => c * 0.9), MAT.plain)
   B.box(L / 2 - 0.1, 0.3, W / 2 - 1, 0.25, 2.3, 0.25, wall, MAT.plain)
-  if (v === 1) B.box(-3.5, 0.3, -W / 2 - 1.4, 5, 2.4, 2.8, wall.map((c) => c * 0.95), MAT.plain)
+  // (and an annex behind, on its own footing to the ground)
+  if (v === 1) B.box(-3.2, -FOOT, -W / 2 - 1.4, 4.4, FOOT + 2.7, 2.8, wall.map((c) => c * 0.95), MAT.plain)
   return B
 }
 
@@ -388,14 +422,15 @@ function suburbHouse(rand, v) {
 function walkup(rand, v) {
   const B = new Builder()
   const storeys = [3, 4][v]
-  const L = 20
+  const L = 18.4
   const W = 10
   const h = storeys * 3.1
   const wall = col([P.concrete, P.cream][v], 0.06, rand)
-  plinth(B, L, W + 2, 0.3, col(P.plinth, 0.1, rand))
-  B.box(0, 0.3, -0.8, L, h, W - 1.6, wall, MAT.windows)
-  for (let k = 1; k <= storeys; k++) B.box(0, 0.3 + k * 3.1 - 0.3, W / 2 - 0.4, L, 0.3, 1.6, wall.map((c) => c * 0.9), MAT.plain)
-  hip(B, L, W - 1.6, h + 0.3, 1.2, 0.4, col(P.iron, 0.1, rand), { z: -0.8 })
+  // (its plinth well over its paving: the two tops never within the depth buffer's step)
+  plinth(B, L, W + 2, 0.6, col(P.plinth, 0.1, rand))
+  B.box(0, 0.6, -0.8, L, h, W - 1.6, wall, MAT.windows)
+  for (let k = 1; k <= storeys; k++) B.box(0, 0.6 + k * 3.1 - 0.3, W / 2 - 0.4, L - 0.3, 0.3, 1.6, wall.map((c) => c * 0.9), MAT.plain)
+  hip(B, L, W - 1.6, h + 0.6, 1.2, 0.4, col(P.iron, 0.1, rand), { z: -0.8 })
   return B
 }
 
@@ -409,9 +444,9 @@ function tower(rand, v) {
   const wall = col([P.concrete, P.concreteWarm, P.limewash][v], 0.06, rand)
   const glassy = wall.map((c, i) => c * 0.75 + col(P.glass, 0, rand)[i] * 0.25)
   if (v === 0) {
-    B.box(0, -FOOT * 3, 0, 32, FOOT * 3 + 6, 18, wall.map((c) => c * 0.9), MAT.masonry)
-    B.box(0, 6, 0, 30, TOWER_H - 6, 13, glassy, MAT.windows)
-    B.box(0, TOWER_H, 0, 30.6, 1.2, 13.6, wall.map((c) => c * 0.85), MAT.plain)
+    B.box(0, -FOOT * 3, 0, 29, FOOT * 3 + 6, 18, wall.map((c) => c * 0.9), MAT.masonry)
+    B.box(0, 6, 0, 27, TOWER_H - 6, 13, glassy, MAT.windows)
+    B.box(0, TOWER_H, 0, 27.6, 1.2, 13.6, wall.map((c) => c * 0.85), MAT.plain)
   } else if (v === 1) {
     B.box(0, -FOOT * 3, 0, 22, FOOT * 3 + 1, 22, wall.map((c) => c * 0.9), MAT.masonry)
     B.box(0, 1, 0, 20, TOWER_H - 1, 20, glassy, MAT.windows)
@@ -420,6 +455,48 @@ function tower(rand, v) {
     B.box(0, -FOOT * 3, 0, 28, FOOT * 3 + 9, 26, wall.map((c) => c * 0.88), MAT.windows)
     B.box(-2, 9, -2, 17, TOWER_H - 9, 16, glassy, MAT.windows)
     B.box(-2, TOWER_H, -2, 17.6, 1.0, 16.6, wall.map((c) => c * 0.85), MAT.plain)
+  }
+  return B
+}
+
+/**
+ * Sheds, where the zoning of now says industrial or military, or a farm's
+ * on agricultural land: a warehouse under a low gable of iron, a works under
+ * a sawtooth roof, a hangar's broad low vault (as a shallow gable). Iron,
+ * concrete and paint gone chalky in the sun.
+ */
+function shed(rand, v) {
+  const B = new Builder()
+  const wall = col([P.concrete, P.paleGrey, P.stoneGrey][v], 0.08, rand)
+  const roof = col([P.iron, P.ironGreen, P.iron][v], 0.1, rand)
+  const L = [12, 12.2, 11.6][v]
+  const W = [12.5, 12, 13][v]
+  plinth(B, L + 0.3, W + 0.3, 0.25, col(P.plinth, 0.1, rand))
+  if (v === 1) {
+    // the sawtooth: three bays, each a steep glazed face and a long slope behind
+    const h = 4.6
+    B.box(0, 0.25, 0, L, h, W, wall, MAT.plain)
+    const n = 3
+    const bw = W / n
+    for (let k = 0; k < n; k++) {
+      const z0 = -W / 2 + k * bw
+      const z1 = z0 + bw
+      const y0 = 0.25 + h
+      const y1 = y0 + 2.2
+      const xa = -L / 2
+      const xb = L / 2
+      // the slope, from the low back to the high front of the bay; the glazed face; the bay's two ends
+      B.quad([xa, y0, z0], [xa, y1, z1], [xb, y1, z1], [xb, y0, z0], roof, MAT.roof)
+      B.quad([xa, y1, z1], [xa, y0, z1], [xb, y0, z1], [xb, y1, z1], col(P.glass, 0.05, rand), MAT.plain)
+      B.tri([xa, y0, z0], [xa, y0, z1], [xa, y1, z1], wall, MAT.plain)
+      B.tri([xb, y0, z1], [xb, y0, z0], [xb, y1, z1], wall, MAT.plain)
+    }
+    door(B, W, 3.6, 3.4, 0.25)
+  } else {
+    const h = v === 0 ? 5.2 : 3.8
+    B.box(0, 0.25, 0, L, h, W, wall, MAT.clap)
+    gable(B, L, W, 0.25 + h, v === 0 ? 1.6 : 2.6, 0.4, roof, wall, { alongZ: true, wallMat: MAT.clap, roofMat: MAT.roof })
+    door(B, W, v === 0 ? 4.2 : 6.5, v === 0 ? 4.0 : 3.4, 0.25)
   }
   return B
 }
@@ -434,11 +511,13 @@ function towerChurch(rand) {
   plinth(B, L + 1, W + 1, 0.8, col(P.plinth, 0.08, rand))
   B.box(0, 0.8, -2, L, 9.2, W - 4, wall, MAT.masonry)
   gable(B, L, W - 4, 10, 6.5, 0.6, roof, wall, { alongZ: true, wallMat: MAT.masonry, z: -2 })
-  // the tower at the front, its top stepped in, a low cap
-  B.box(0, 0.8, W / 2 - 4, 9, 22, 8, wall, MAT.masonry)
-  B.box(0, 22.8, W / 2 - 4, 9.6, 0.8, 8.6, wall.map((c) => c * 0.88), MAT.masonry)
-  for (const [sx, sz] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) B.box(sx * 4, 23.6, W / 2 - 4 + sz * 3.5, 1.2, 1.4, 1.2, wall, MAT.masonry)
-  door(B, W, 2.2, 4, 0.8)
+  // the tower at the front, its top stepped in, a low cap; its foot stands
+  // proud of the nave's front, so their faces never share a plane
+  B.box(0, 0.75, W / 2 - 3.6, 9, 22.05, 8.4, wall, MAT.masonry)
+  B.box(0, 22.8, W / 2 - 3.6, 9.6, 0.8, 9, wall.map((c) => c * 0.88), MAT.masonry)
+  for (const [sx, sz] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) B.box(sx * 4, 23.6, W / 2 - 3.6 + sz * 3.5, 1.2, 1.4, 1.2, wall, MAT.masonry)
+  // (on the tower's front)
+  door(B, 2 * (W / 2 - 3.6 + 4.2), 2.2, 4, 0.8)
   return B
 }
 
@@ -452,8 +531,8 @@ function spireChurch(rand) {
   plinth(B, L + 0.6, W + 0.6, 0.8, col(P.plinth, 0.08, rand))
   B.box(0, 0.8, -1, L, 6.4, W - 2, wall, MAT.clap)
   gable(B, L, W - 2, 7.2, 4.6, 0.5, roof, wall, { alongZ: true, wallMat: MAT.clap, z: -1 })
-  B.box(0, 0.8, W / 2 - 1.5, 4.5, 14, 4.5, wall, MAT.clap)
-  pyramid(B, 4.8, 14.8, 12, roof, 0, W / 2 - 1.5)
+  B.box(0, 0.75, W / 2 - 1.3, 4.5, 14.05, 4.9, wall, MAT.clap)
+  pyramid(B, 4.8, 14.8, 12, roof, 0, W / 2 - 1.3)
   return B
 }
 
@@ -473,10 +552,13 @@ function clockTower(rand) {
 
 /**
  * Each kind with its variants' geometry (indexed) and footprint: `hx`, `hz`
- * the half extents in model metres, so settlements.js can fit them to a lot
- * and clear the ground under them. `pads` gives, for the kinds that have one,
- * the lot's size in their own metres: the city's lots are paved to their
- * edges.
+ * the half extents in model metres, and `box` the extents on each side
+ * ([x0, x1, z0, z1]: a model reaches further toward its street than behind),
+ * so settlements.js can fit them to a lot and clear the ground under them.
+ * `pads` gives, for the kinds that have one, the lot's size in their own
+ * metres: the city's lots are paved to their edges, the paving's top 20 cm
+ * over the highest ground under the lot (and the footing's lift), never in
+ * the ground's plane.
  */
 export function buildKits(rand, pads = {}) {
   const out = {}
@@ -487,9 +569,11 @@ export function buildKits(rand, pads = {}) {
       own.computeBoundingBox()
       const ob = own.boundingBox
       own.dispose()
-      if (pads[kind]) B.box(0, -FOOT, 0, pads[kind][0], FOOT + 0.12, pads[kind][1], col(P.concrete, 0.05, rand).map((c) => c * 0.88), MAT.plain)
+      // (its top under the plinth's, its foot under the building's: no face of it in theirs)
+      const deep = FOOT * (kind === 'tower' ? 3 : 1) + 0.25
+      if (pads[kind]) B.box(0, -deep, 0, pads[kind][0], deep + 0.2, pads[kind][1], col(P.concrete, 0.05, rand).map((c) => c * 0.88), MAT.plain)
       const g = indexed(B.geometry())
-      return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), top: ob.max.y, tris: g.index.count / 3 }
+      return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), box: [ob.min.x, ob.max.x, ob.min.z, ob.max.z], top: ob.max.y, tris: g.index.count / 3 }
     })
   }
   add('kauhale', HALE_SIZES.map((h) => kauhaleHale(rand, h)))
@@ -497,13 +581,14 @@ export function buildKits(rand, pads = {}) {
   add('frame', [0, 1, 2].map((v) => frameHouse(rand, v)))
   add('adobe', [0, 1].map((v) => adobeHouse(rand, v)))
   add('cottage', [0, 1, 2].map((v) => cottage(rand, v)))
-  add('store', [3, 2].map((n) => storeRow(rand, n)))
+  add('store', [[2, 5.8], [1, 9.4]].map(([n, w]) => storeRow(rand, n, w)))
   add('block', [0, 1, 2].map((v) => masonryBlock(rand, v)))
   add('bungalow', [0, 1, 2].map((v) => bungalow(rand, v)))
   add('midrise', [0, 1].map((v) => midrise(rand, v)))
   add('house', [0, 1, 2].map((v) => suburbHouse(rand, v)))
   add('walkup', [0, 1].map((v) => walkup(rand, v)))
   add('tower', [0, 1, 2].map((v) => tower(rand, v)))
+  add('shed', [0, 1, 2].map((v) => shed(rand, v)))
   add('church', [towerChurch(rand)])
   add('spire', [spireChurch(rand)])
   add('clock', [clockTower(rand)])

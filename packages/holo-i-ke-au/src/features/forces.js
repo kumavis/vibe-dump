@@ -2,12 +2,13 @@
 // `force` lines and `line` fronts, shown as people. The owner's decision after
 // the first render: billboarded pixel-art soldiers, small and crisp, walking
 // their lines and meeting at the fronts, the two sides told apart by palette
-// and dress (sprites.js draws them, soldiers.js places and moves them). Two
-// restraints stay: no dead are drawn, and nothing is drawn at the pali edge.
-// A figure whose part is done walks on out of it; the retreat to the head of
-// Nuʻuanu thins out before the gap, and nobody stands within 300 m of the
-// edge (soldiers.js EDGES). Each front also lays a faint band of its side's
-// colour on the ground under it.
+// and dress (sprites.js draws them, soldiers.js places and moves them). And
+// after the first figures: the battle as the sources tell it, each feature
+// doing what its `behaviour` says and carrying what its `arms` say, the last
+// stand, the surround and the leap at the pali's edge where the data puts
+// them. No dead are drawn: a figure whose part is done walks on out of it, and
+// one who goes over the edge falls out of sight. Each front also lays a faint
+// band of its side's colour on the ground under it.
 //
 // Which forces show: at a stop of an event's walk, those of that stop. A
 // feature that names its stop (`stop`: an index into the event's stops, from

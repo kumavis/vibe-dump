@@ -135,7 +135,7 @@ Coordinates are `[lon, lat]` (GeoJSON order). Ids are kebab-case ASCII.
   "stops": [ { "text": "...", "place": "puiwa", "zoom": "near", "year": 1795 } ],   // a near stop may add "camera" (District packs) with an optional "target": [lon, lat] the view centres on while the pin stays at the place
   "sources": [ { "id": "kamakau-ruling-chiefs", "where": "ch. 12" } ],
   "confidence": { "date": "firm", "place": "firm", "numbers": "soft" },
-  "view": "land",                   // optional: the far view the tour shows for this event (land | chiefdoms); by default the tour picks by kind
+  "view": "land",                   // optional: the far view the tour shows for this event (land | chiefdoms | mahele); by default the tour picks by kind
   "tellings": [ { "source": "fornander-v2", "says": "..." } ] }
 ```
 

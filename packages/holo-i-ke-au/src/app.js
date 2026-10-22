@@ -26,6 +26,7 @@ import { PolityOverlay } from './overlay/polity.js'
 import { LandOverlay } from './overlay/land.js'
 import { MaheleOverlay } from './overlay/mahele.js'
 import { Timeline } from './time.js'
+import { Towns } from './features/towns.js'
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -130,6 +131,8 @@ export class App {
     // manifest is read behind the first frame (main.js)
     this.districts = new Districts(this)
     this.world.district = this.districts
+    // and the settlements of every island, where the camera comes down (features/towns.js)
+    this.towns = new Towns(this)
     this.ocean = new Ocean(this.shared, this.shared.uniforms)
     this.scene.add(this.ocean.mesh)
     this.lines = new Boundaries(this.data, this.shared.uniforms)
@@ -294,6 +297,7 @@ export class App {
     this.world.update(this.camera, g.distance, 0)
     this.world.settle(this.camera)
     this.districts?.settle(this.camera, g.distance)
+    this.towns?.settle()
     this.rig.jump({ x: g.target.x, z: g.target.z })
     const fv = this.farView
     if (fv === 'chiefdoms' || fv === 'mahele') {

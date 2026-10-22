@@ -1070,7 +1070,7 @@ if (districtCount) {
       4: ['The march past Kou and up the valley'],
       5: ['The Oʻahu line at Puʻiwa', 'Kamehameha’s front at Puʻiwa'],
       6: ['The Oʻahu line falls back to Lāʻimi', 'The Oʻahu line breaks at Lāʻimi', 'Kamehameha’s front at Lāʻimi'],
-      7: ['The retreat to the head of the valley', 'The pursuit up the valley', 'Over the ridge into Kalihi', 'Up the eastern side of the valley', 'Down the old path to Koʻolau'],
+      7: ['The run up the valley', 'The pursuit up the valley', 'Over the ridge into Kalihi', 'Up the eastern side of the valley', 'Down the old path to Koʻolau'],
     },
     'kaheiki-1783': { 1: ['Kahekili’s column by Pūowaina', 'Kahekili’s column by Pauoa', 'Kahekili’s column by Kapena'], 2: ['Kahahana’s defence at Kaheiki'] },
   }
@@ -1154,21 +1154,22 @@ if (districtCount) {
       }
       for (const r of rows) console.log(`      ${r}`)
       if (id === 'nuuanu-1795') {
-        // nothing at the edge of the pali: within 300 m of the gap the retreat's marks have faded
+        // at the edge of the pali, within 300 m of the gap, only the forces the data puts there: the stand, the surround and the leap
         await page.evaluate(() => new Promise((r) => setTimeout(r, 1500)))
         await frames(2)
-        const atEdge = await ui(`(() => {
+        const [atEdge, theirs] = await ui(`(() => {
           const F = app.districts.cur.features.forces
           const [gx, gz] = app.data.proj.toWorld([-157.7933, 21.3668])
-          let n = 0
+          const n = [0, 0]
           for (const r of F.forces) {
             if (r.file) continue
-            for (let i = 0; i < r.n; i++) { const k = (r.o + i) * 4; if (F.marks[k + 2] > 0.05 && Math.hypot(F.marks[k] - gx, F.marks[k + 1] - gz) < 3) n++ }
+            const own = /^(stand|surround|leap)$/.test(r.behaviour) ? 1 : 0
+            for (let i = 0; i < r.n; i++) { const k = (r.o + i) * 4; if (F.marks[k + 2] > 0.05 && Math.hypot(F.marks[k] - gx, F.marks[k + 1] - gz) < 3) n[own]++ }
           }
           return n
         })()`)
-        if (atEdge) throw new Error(`${atEdge} marks within 300 m of the gap`)
-        console.log('      nothing at the edge of the pali')
+        if (atEdge || !theirs) throw new Error(`within 300 m of the gap: ${atEdge} marks of other forces, ${theirs} of the stand, the surround and the leap`)
+        console.log(`      at the edge of the pali: ${theirs} of the stand, the surround and the leap, nobody else`)
       }
     })
   }
@@ -1323,13 +1324,17 @@ if (districtCount) {
   })
   // ==== the battles' people (features/soldiers.js, sprites.js) ===================== [soldiers]
   // Pixel-art figures in place of the masses: at each stop the people of its
-  // forces, of their own sides; each a whole number of device pixels to the
-  // sprite pixel at every distance, crisp on the screen (every k by k block of
-  // a figure one colour, its outline where the sheet puts it); the two sides
-  // fighting in turn at the fronts, muskets firing, the guns served, nobody
-  // lost; nothing within 300 m of the edge of the pali however long they walk;
-  // nobody under the ground or in the water; off the tour, fewer and nobody
-  // fighting; and what they cost at Puʻiwa.
+  // forces, of their own sides; all of them at one scale from the camera's
+  // distance, a whole number of device pixels to the sprite pixel, crisp on the
+  // screen (every k by k block of a figure one colour, its outline where the
+  // sheet puts it), and across a change of scale dissolving from one size to
+  // the next, never popping; each facing the way it moves or aims as the
+  // camera sees it; carrying what the data's `arms` say; doing what each
+  // `behaviour` says: the two sides fighting in turn at the fronts, muskets and
+  // slings, the guns served; the run up the valley with the pursuit behind;
+  // the arc round the last stand and the leap from the pali; nobody under the
+  // ground or in the water; off the tour, fewer, and nobody fighting or going
+  // over; and what they cost at Puʻiwa.
   {
     const SF = 'app.districts.cur.features.forces'
     const SS = `${SF}.soldiers`
@@ -1343,18 +1348,20 @@ if (districtCount) {
       await settleTwice()
       await frames(2)
     }
+    const stopOf = (place) => ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === '${place}')`)
     /** The figures drawn now, each with its force's side and its own, where it stands, and its ground. */
     const drawn = () =>
       ui(`(() => {
         const S = ${SS}, f = S.f, out = []
-        S.recs.forEach((r, ri) => { for (let i = r.o; i < r.o + r.n; i++) if (f.vis[i] > 0) out.push({ i, name: r.p.name, recSide: r.side, side: ['hawaii', 'oahu', 'maui'][f.side[i]], x: f.x[i], z: f.z[i], gm: f.gm[i], now: app.world.metresAt(f.x[i], f.z[i]), k: f.k[i], fr: f.fr[i], mode: f.mode[i] }) })
+        S.recs.forEach((r, ri) => { for (let i = r.o; i < r.o + r.n; i++) if (f.vis[i] > 0) out.push({ i, name: r.p.name, recSide: r.side, side: ['hawaii', 'oahu', 'maui'][f.side[i]], x: f.x[i], z: f.z[i], gm: f.gm[i], now: app.world.metresAt(f.x[i], f.z[i]), air: f.air[i], k: f.k[i], fr: f.fr[i], mode: f.mode[i] }) })
         return out
       })()`)
-    const edgeAt = await ui(`(() => { const p = app.data.places.find((p) => p.id === 'nuuanu-pali'); return p ? app.data.proj.toWorld(p.geometry.coordinates) : null })()`)
-    const stopsSeen = {}
+    // (the facing rule, as the page applies it: across the screen, and away from the eye; held within HOLD)
+    const facingRule = `const V = S.view, HOLD = 1.25
+      const want = (hx, hz) => { const a = hx * V.rx + hz * V.rz, b = hx * V.ax + hz * V.az; if (Math.abs(b) > HOLD * Math.abs(a)) return b > 0 ? 3 : 2; if (Math.abs(a) > HOLD * Math.abs(b)) return a > 0 ? 0 : 1; return -1 }`
     for (const [id, at] of [['nuuanu-1795', ev95], ['kaheiki-1783', ev83]]) {
       if (!at) continue
-      await check(`${id}: at each stop the people of its forces, of their own sides, on dry ground`, async () => {
+      await check(`${id}: at each stop the people of its forces, of their own sides, doing what the data says, on dry ground`, async () => {
         const n = await ui(`app.data.events.find((e) => e.id === '${id}').stops.length`)
         const rows = []
         for (let i = 0; i < n; i++) {
@@ -1368,60 +1375,72 @@ if (districtCount) {
             continue
           }
           const st = await ui(`${SF}.stats()`)
+          // (a leap is one figure after another: a few seconds on for the next if nobody is on the way now)
+          await ui(`(() => { const F = ${SF}, S = F.soldiers, f = S.f; const r = S.recs.find((r) => r.behaviour === 'leap' && r.w > 0.5); if (!r) return; for (let k = 0; k < 60; k++) { for (let i = r.o; i < r.o + r.n; i++) if (f.vis[i] > 0) return; F.update(0.1, app.districts.k, app.rig.state.distance) } })()`)
           const figs = await drawn()
           const names = [...st.forces, ...st.lines]
-          // (a force whose people would all stand over the edge of the pali as this camera sees it is kept from it)
-          const kept = await ui(`(() => { const S = ${SS}, f = S.f, out = {}; for (const r of S.recs) { let n = 0; for (let i = r.o; i < r.o + r.n; i++) n += f.hid[i]; if (n) out[r.p.name] = n } return out })()`)
-          for (const name of names) if (!figs.some((g) => g.name === name) && !kept[name]) throw new Error(`stop ${i + 1}: nobody of “${name}” drawn`)
-          const keptHere = names.filter((n) => kept[n] && !figs.some((g) => g.name === n))
+          for (const name of names) if (!figs.some((g) => g.name === name)) throw new Error(`stop ${i + 1}: nobody of “${name}” drawn`)
           const stray = figs.find((g) => !names.includes(g.name))
           if (stray) throw new Error(`stop ${i + 1}: a figure of “${stray.name}”, not of this stop`)
           const turned = figs.find((g) => g.side !== g.recSide)
           if (turned) throw new Error(`stop ${i + 1}: a ${turned.side} figure in “${turned.name}” (${turned.recSide})`)
           // feet on the ground of the year (as last looked up, a few metres back at most), never in the water
-          const off = figs.reduce((m, g) => Math.max(m, Math.abs(g.gm - g.now)), 0)
-          const wet = figs.filter((g) => g.now < 0.15)
+          const ground = figs.filter((g) => !g.air)
+          const off = ground.reduce((m, g) => Math.max(m, Math.abs(g.gm - g.now)), 0)
+          const wet = ground.filter((g) => g.now < 0.15)
           if (off > 1.5) throw new Error(`stop ${i + 1}: a figure's feet ${off.toFixed(2)} m off the ground`)
           if (wet.length) throw new Error(`stop ${i + 1}: ${wet.length} figures in the water (${wet[0].name})`)
-          if (edgeAt) {
-            const near = figs.filter((g) => Math.hypot(g.x - edgeAt[0], g.z - edgeAt[1]) < 3)
-            if (near.length) throw new Error(`stop ${i + 1}: ${near.length} figures within 300 m of the pali edge`)
+          // what each force does: its behaviour and what its people are drawn doing
+          const doing = await ui(`(() => {
+            const S = ${SS}, f = S.f, M = S.constructor.MODE, out = {}
+            for (const r of S.recs) {
+              if (!(r.w > 0.5)) continue
+              const modes = new Set()
+              for (let i = r.o; i < r.o + r.n; i++) if (f.vis[i] > 0) modes.add(Object.keys(M).find((k) => M[k] === f.mode[i]))
+              out[r.p.name] = { behaviour: r.behaviour, data: r.p.behaviour ?? null, line: !!r.line, modes: [...modes].sort() }
+            }
+            return out
+          })()`)
+          const want = { march: ['file'], run: ['file'], stand: ['knot'], engage: ['rank'], surround: ['ring', 'file'], leap: [] }
+          for (const [name, d] of Object.entries(doing)) {
+            if (d.data && d.data !== d.behaviour) throw new Error(`stop ${i + 1}: “${name}” is drawn as ${d.behaviour}, the data says ${d.data}`)
+            // (a front, whatever it does, stands in ranks; a force as its behaviour)
+            const need = d.line ? ['rank'] : want[d.behaviour] || []
+            const missing = need.filter((m) => !d.modes.includes(m))
+            if (missing.length) throw new Error(`stop ${i + 1}: “${name}” (${d.behaviour}) has nobody ${missing.join(', ')}: ${d.modes.join(', ')}`)
           }
           const sides = {}
           for (const g of figs) sides[g.side] = (sides[g.side] || 0) + 1
           const ks = [...new Set(figs.map((g) => g.k))].sort()
-          stopsSeen[`${id}:${i}`] = figs.length
-          rows.push(`${i + 1} ${stop.place}: ${figs.length} figures (${Object.entries(sides).map(([s, c]) => `${s} ${c}`).join(', ')}), k ${ks.join('/')}, feet within ${off.toFixed(2)} m${keptHere.length ? `; kept from the edge as seen from here: ${keptHere.map((n) => `“${n}”`).join(', ')}` : ''}`)
+          rows.push(`${i + 1} ${stop.place}: ${figs.length} figures (${Object.entries(sides).map(([s, c]) => `${s} ${c}`).join(', ')}), k ${ks.join('/')}, feet within ${off.toFixed(2)} m; ${Object.values(doing).map((d) => d.behaviour).join(', ')}`)
         }
         for (const r of rows) console.log(`      ${r}`)
       })
     }
     if (ev95) {
-      await check('each figure is a whole number of device pixels to the sprite pixel at every distance, and crisp on the screen', async () => {
-        const puiwa = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === 'puiwa')`)
-        await gotoStop(ev95, puiwa)
+      await check('one scale for every figure from the camera’s distance: whole device pixels, crisp on the screen', async () => {
+        await gotoStop(ev95, await stopOf('puiwa'))
         const t = await ui('[app.rig.state.target.x, app.rig.state.target.z, app.rig.state.yaw, app.rig.state.pitch]')
         const rows = []
         for (const d of [8, 10, 13, 16, 24, 40, 60]) {
           await run(`app.rig.jump({ x: ${t[0]}, z: ${t[1]}, distance: ${d}, yaw: ${t[2]}, pitch: ${t[3]} }); app.settle(); app.settle()`)
           await frames(1)
           const r = await ui(`(() => {
-            const S = ${SS}, f = S.f, cam = app.camera, e = cam.matrixWorld.elements, vert = app.world.uniforms.uVert.value
-            const out = { n: 0, bad: [], ks: {}, dpr: S.dpr }
+            const S = ${SS}, f = S.f
+            const out = { n: 0, ks: {}, dpr: S.dpr, k: S.scaleAt(), t: S.scale.t, want: S.scale.s }
             for (let i = 0; i < S.count; i++) {
               if (f.vis[i] <= 0) continue
               out.n++
-              const k = f.k[i]
-              const y = Math.max(f.gm[i], 0) * vert
-              const depth = -((f.x[i] - cam.position.x) * e[8] + (y - cam.position.y) * e[9] + (f.z[i] - cam.position.z) * e[10])
-              if (!Number.isInteger(k) || k < 2 || k > Math.round(4 * S.dpr) || k !== S.scaleAt(depth)) out.bad.push([i, k, +depth.toFixed(2)])
-              out.ks[k] = (out.ks[k] || 0) + 1
+              out.ks[f.k[i]] = (out.ks[f.k[i]] || 0) + 1
             }
             return out
           })()`)
-          if (r.bad.length) throw new Error(`at ${d}: ${r.bad.length} figures at a scale off the rule, e.g. ${JSON.stringify(r.bad.slice(0, 3))}`)
+          const ks = Object.keys(r.ks).map(Number)
+          if (ks.length !== 1 || ks[0] !== r.k) throw new Error(`at ${d}: figures at ${JSON.stringify(r.ks)}, the scale ${r.k}`)
+          if (!Number.isInteger(r.k) || r.k < 2 || r.k > Math.round(4 * r.dpr) || Math.abs(r.k - r.want) >= 1) throw new Error(`at ${d}: k ${r.k} for a wanted ${r.want.toFixed(2)}`)
+          if (r.t !== 0 && r.t !== 1) throw new Error(`at ${d}: settled half way through a crossfade (${r.t})`)
           if (!r.n) throw new Error(`at ${d}: nobody drawn`)
-          rows.push(`${d}: ${r.n} figures, ${Object.entries(r.ks).map(([k, c]) => `${c} at ${k} px (${(16 * k) / r.dpr} px tall)`).join(', ')}`)
+          rows.push(`${d}: ${r.n} figures at ${r.k} px (${(16 * r.k) / r.dpr} px tall; ${r.want.toFixed(2)} wanted)`)
         }
         for (const r of rows) console.log(`      ${r}`)
         // on the screen: everyone held still, a screenshot, and each figure found where the shader puts
@@ -1450,7 +1469,7 @@ if (districtCount) {
               const rects = []
               for (let i = 0; i < S.count; i++) {
                 const r = S.screenRect(i)
-                if (r && r.vis >= 1) rects.push([i, r])
+                if (r && r.vis >= 1 && r.solid) rects.push([i, r])
               }
               let figs = 0
               let blocks = 0
@@ -1521,14 +1540,152 @@ if (districtCount) {
           if (evenK < 0.9 || darkK < 0.85) throw new Error(`at ${d}: not crisp on the screen (${(evenK * 100).toFixed(1)}% of blocks one colour, ${(darkK * 100).toFixed(1)}% of outlines dark)`)
         }
       })
-      await check('at the fronts the two sides strike in turn, muskets fire, the guns are served, and nobody is lost', async () => {
+      await check('a zoom across every change of scale: the figures dissolve from one size to the next, never popping, never both solid', async () => {
+        await gotoStop(ev95, await stopOf('puiwa'))
+        const t = await ui('[app.rig.state.target.x, app.rig.state.target.z, app.rig.state.yaw, app.rig.state.pitch]')
+        // in and out between 18 and 7 (world units), a third of a per cent a frame, at 60 frames a second
+        const r = await ui(`(() => {
+          const F = ${SF}, S = F.soldiers, f = S.f
+          const dists = []
+          for (let d = 18; d > 7; d *= 0.9967) dists.push(d)
+          for (let d = 7; d < 18; d /= 0.9967) dists.push(d)
+          let last = null, worst = 0, worstAt = 0, pops = 0, crossings = 0, both = 0, bothBad = 0, mixed = 0, lastK = null, maxStep = 0
+          const seen = []
+          for (const d of dists) {
+            app.rig.jump({ x: ${t[0]}, z: ${t[1]}, distance: d, yaw: ${t[2]}, pitch: ${t[3]} })
+            F.update(1 / 60, app.districts.k, d)
+            const k = S.scale.k, tt = S.scale.t
+            // (the height a figure shows: its sprite pixels shared between the two sizes by the dither)
+            const h = 16 * (k + tt)
+            // every figure drawn at the one scale; while a crossfade runs, two copies whose parts of the dither
+            // are [t, 1) at k and [0, t) at k + 1, so between them every sprite pixel is drawn once
+            const mix = S.aMix.array, draw = S.aDraw.array
+            let solidK = 0
+            for (let j = 0; j < S.instances; j++) {
+              const lo = mix[j * 4], hi = mix[j * 4 + 1], kk = draw[j * 4]
+              if (lo === 0 && hi === 1) solidK++
+              if (!((kk === k && hi === 1 && Math.abs(lo - tt) < 1e-6) || (kk === k + 1 && lo === 0 && Math.abs(hi - tt) < 1e-6) || (lo === 0 && hi === 1 && (kk === k || kk === k + 1)))) bothBad++
+            }
+            if (tt > 0 && tt < 1) {
+              mixed++
+              if (S.instances < 2 * S.drawn * 0.99 && tt > 1 / 32 && tt < 31 / 32) both++
+              if (solidK) bothBad++
+            }
+            const ks = new Set()
+            for (let i = 0; i < S.count; i++) if (f.vis[i] > 0) ks.add(f.k[i])
+            if (ks.size > 1) pops++
+            if (last !== null) {
+              const step = Math.abs(h - last)
+              maxStep = Math.max(maxStep, step)
+              if (step > worst) { worst = step; worstAt = d }
+            }
+            if (lastK !== null && S.scaleAt() !== lastK) crossings++
+            seen.push([+d.toFixed(2), k, +tt.toFixed(3)])
+            last = h
+            lastK = S.scaleAt()
+          }
+          return { frames: dists.length, worst, worstAt, pops, crossings, mixed, both, bothBad, maxStep }
+        })()`)
+        console.log(`      ${r.frames} frames in and out between 18 and 7: the drawn height moved at most ${r.worst.toFixed(2)} px a frame (a dither step is 1 px), across ${r.crossings} changes of size, ${r.mixed} frames crossfading`)
+        for (const dpr of [1, 2]) {
+          const bands = await ui(`${SS}.scaleBands(${dpr})`)
+          console.log(`      at ${dpr}x: ${bands.map((b) => `${b.k}→${b.k + 1} coming in over ${b.in[0]}–${b.in[1]}, back over ${b.out[0]}–${b.out[1]}`).join('; ')} (world units of camera distance)`)
+        }
+        if (r.worst > 1.0001) throw new Error(`a figure's height jumped ${r.worst.toFixed(2)} px in a frame at ${r.worstAt.toFixed(2)}`)
+        if (r.pops) throw new Error(`${r.pops} frames with figures at two scales outside a crossfade`)
+        if (r.crossings < 2 || r.mixed < 10) throw new Error(`the zoom crossed ${r.crossings} changes of scale, ${r.mixed} frames crossfading`)
+        if (r.bothBad) throw new Error(`${r.bothBad} instances whose dither parts are not the two halves of the crossfade`)
+        if (r.both) throw new Error(`${r.both} crossfading frames without both copies`)
+        // and settled: at rest, a crossfade left half done finishes toward the nearer size
+        const rest = await ui(`(() => {
+          const F = ${SF}, S = F.soldiers
+          const want = S.scale
+          // (a distance in the middle of a band, approached from far, then left alone for a second)
+          let d = 18
+          for (; d > 7; d *= 0.997) { app.rig.jump({ x: ${t[0]}, z: ${t[1]}, distance: d, yaw: ${t[2]}, pitch: ${t[3]} }); F.update(1 / 60, app.districts.k, d); if (want.t > 0.3 && want.t < 0.7) break }
+          const mid = want.t
+          for (let k = 0; k < 60; k++) F.update(1 / 60, app.districts.k, d)
+          return { d, mid, after: want.t }
+        })()`)
+        if (!(rest.after === 0 || rest.after === 1)) throw new Error(`left at ${rest.d.toFixed(2)} half through a crossfade (${rest.mid.toFixed(2)}), a second later still ${rest.after}`)
+        console.log(`      left at ${rest.d.toFixed(2)} ${(rest.mid * 100).toFixed(0)}% through a crossfade, a second later whole at the ${rest.after ? 'larger' : 'smaller'} size`)
+      })
+      await check('facings: as the camera sees each figure’s way; at Puʻiwa the guns fire up the valley, Kamehameha’s line from behind, the Oʻahu line facing the eye', async () => {
+        await gotoStop(ev95, await stopOf('puiwa'))
+        const r = await ui(`(() => {
+          const S = ${SS}, f = S.f, M = S.constructor.MODE
+          ${facingRule}
+          const out = { pieces: [], hawaii: [0, 0], oahu: [0, 0], wrong: 0, checked: 0, faces: {} }
+          for (let i = 0; i < S.count; i++) {
+            if (f.vis[i] <= 0) continue
+            const m = f.mode[i]
+            if (m === M.piece) out.pieces.push(f.face[i])
+            if (m === M.crew) continue
+            const w = want(f.hx[i], f.hz[i])
+            if (w >= 0) {
+              out.checked++
+              if (w !== f.face[i]) out.wrong++
+            }
+            out.faces[f.face[i]] = (out.faces[f.face[i]] || 0) + 1
+            if (m === M.rank || m === M.duel) {
+              const side = f.side[i] === 0 ? 'hawaii' : 'oahu'
+              out[side][0]++
+              if (f.face[i] === (side === 'hawaii' ? 3 : 2)) out[side][1]++
+            }
+          }
+          return out
+        })()`)
+        if (r.pieces.length !== 2 || r.pieces.some((v) => v !== 3)) throw new Error(`the guns at Puʻiwa face ${JSON.stringify(r.pieces)} (3 is away from the eye)`)
+        if (r.wrong) throw new Error(`${r.wrong} of ${r.checked} figures facing other than the way they move or aim`)
+        // 0.85, not more: a figure keeps its facing until the other wins by a clear margin, so a few stay side-on
+        if (r.hawaii[1] < r.hawaii[0] * 0.85 || r.oahu[1] < r.oahu[0] * 0.85) throw new Error(`Kamehameha's line from behind ${r.hawaii[1]} of ${r.hawaii[0]}, the Oʻahu line facing the eye ${r.oahu[1]} of ${r.oahu[0]}`)
+        console.log(`      the two guns from behind, firing up the valley; Kamehameha's line from behind ${r.hawaii[1]} of ${r.hawaii[0]}, the Oʻahu line facing the eye ${r.oahu[1]} of ${r.oahu[0]}; all ${r.checked} with a clear way facing it (right ${r.faces[0] || 0}, left ${r.faces[1] || 0}, front ${r.faces[2] || 0}, back ${r.faces[3] || 0})`)
+        // and from the other side of the front: the camera turned round, the sides change places
+        const t = await ui('[app.rig.state.target.x, app.rig.state.target.z, app.rig.state.distance, app.rig.state.yaw, app.rig.state.pitch]')
+        await run(`app.rig.jump({ x: ${t[0]}, z: ${t[1]}, distance: ${t[2]}, yaw: ${t[3] + Math.PI}, pitch: ${t[4]} }); app.settle(); app.settle()`)
+        await frames(1)
+        const back = await ui(`(() => { const S = ${SS}, f = S.f, M = S.constructor.MODE; const p = []; for (let i = 0; i < S.count; i++) if (f.vis[i] > 0 && f.mode[i] === M.piece) p.push(f.face[i]); return p })()`)
+        if (back.some((v) => v !== 2)) throw new Error(`seen from up the valley the guns face ${JSON.stringify(back)} (2 is toward the eye)`)
+        console.log('      seen from up the valley, the guns face the eye, muzzle and flash')
+      })
+      await check('arms by the data: each force’s shares within one, and exactly its cannon', async () => {
+        await gotoStop(ev95, await stopOf('puiwa'))
+        const r = await ui(`(() => {
+          const S = ${SS}, f = S.f, M = S.constructor.MODE, KD = S.constructor.KIND
+          const out = []
+          for (const r of S.recs) {
+            const a = r.p.arms
+            if (!a) continue
+            const counts = { spear: 0, club: 0, sling: 0, dagger: 0, musket: 0 }
+            let people = 0, pieces = 0, chiefs = 0
+            for (let i = r.o; i < r.o + r.n; i++) {
+              if (f.mode[i] === M.piece) { pieces++; continue }
+              if (f.mode[i] === M.crew) continue
+              people++
+              const k = Object.keys(KD).find((k) => KD[k] === f.kind[i])
+              counts[k]++
+              if (f.dress[i] === 2) chiefs++
+            }
+            const sum = ['spear', 'club', 'sling', 'dagger', 'musket'].reduce((s, k) => s + (a[k] || 0), 0)
+            const off = ['spear', 'club', 'sling', 'dagger', 'musket'].map((k) => [k, counts[k], ((a[k] || 0) / sum) * people]).filter(([, c, w]) => Math.abs(c - w) >= 1)
+            out.push({ name: r.p.name, event: r.p.event, people, counts, cannon: a.cannon || 0, pieces, chiefs, off })
+          }
+          return out
+        })()`)
+        for (const x of r) {
+          if (x.off.length) throw new Error(`“${x.name}”: ${x.off.map(([k, c, w]) => `${k} ${c} for ${w.toFixed(1)}`).join(', ')}`)
+          if (x.pieces !== x.cannon) throw new Error(`“${x.name}”: ${x.pieces} pieces for ${x.cannon} cannon`)
+          if (x.event === 'kaheiki-1783' && x.counts.musket) throw new Error(`“${x.name}”: muskets in 1783`)
+        }
+        for (const x of r) console.log(`      ${x.name}: ${x.people} people, spear ${x.counts.spear} club ${x.counts.club} sling ${x.counts.sling} dagger ${x.counts.dagger} musket ${x.counts.musket}, ${x.pieces} cannon, ${x.chiefs} chiefs`)
+      })
+      await check('at the fronts the two sides strike in turn, muskets fire, slings whirl and let go, the guns are served, and nobody is lost', async () => {
         const rows = []
         for (const place of ['puiwa', 'laimi']) {
-          const i = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === '${place}')`)
-          await gotoStop(ev95, i)
+          await gotoStop(ev95, await stopOf(place))
           const r = await ui(`(() => {
             const F = ${SF}, S = F.soldiers, f = S.f, M = S.constructor.MODE, KD = S.constructor.KIND
-            const out = { strikes: 0, together: 0, guards: 0, musketFlash: 0, gunFlash: 0, rammed: 0, touched: 0, min: Infinity, max: 0, frames: 0 }
+            const out = { strikes: 0, together: 0, guards: 0, musketFlash: 0, whirl: 0, thrown: 0, gunFlash: 0, rammed: 0, touched: 0, min: Infinity, max: 0 }
             const fronts = S.recs.filter((r) => r.line && r.w > 0)
             for (let step = 0; step < 150; step++) {
               F.update(0.1, app.districts.k, app.rig.state.distance)
@@ -1545,6 +1702,8 @@ if (districtCount) {
                     striking.set(f.grp[i], (striking.get(f.grp[i]) || 0) + 1)
                   } else if (fr === 12) out.guards++
                 } else if (f.kind[i] === KD.musket && fr === 11) out.musketFlash++
+                else if (f.kind[i] === KD.sling && (fr === 10 || fr === 11)) out.whirl++
+                else if (f.kind[i] === KD.sling && fr >= 12 && fr <= 13) out.thrown++
                 else if (f.mode[i] === M.piece && fr === 10) out.gunFlash++
                 else if (f.kind[i] === KD.rammer && fr >= 10) out.rammed++
                 else if (f.kind[i] === KD.linstock && fr === 11) out.touched++
@@ -1555,60 +1714,140 @@ if (districtCount) {
             }
             return out
           })()`)
-          rows.push(`${place}: over 15 s, ${r.strikes} blows struck (${r.together} by both of a pair at once), ${r.musketFlash} musket flashes, ${r.gunFlash} gun flashes, ${r.rammed} ramming, ${r.touched} matches put; ${r.min}–${r.max} people at the fronts`)
+          rows.push(`${place}: over 15 s, ${r.strikes} blows struck (${r.together} by both of a pair at once), ${r.musketFlash} musket flashes, ${r.whirl} slings whirling and ${r.thrown} let go, ${r.gunFlash} gun flashes, ${r.rammed} ramming, ${r.touched} matches put; ${r.min}–${r.max} people at the fronts`)
           if (!(r.strikes > 0 && r.guards > 0)) throw new Error(`${place}: no bout fought: ${JSON.stringify(r)}`)
           if (r.together) throw new Error(`${place}: both of a pair struck at once ${r.together} times`)
           if (!(r.musketFlash > 0)) throw new Error(`${place}: no musket fired in 15 s`)
+          if (!(r.whirl > 0 && r.thrown > 0)) throw new Error(`${place}: no sling whirled and let go in 15 s`)
           if (!(r.gunFlash > 0 && r.rammed > 0 && r.touched > 0)) throw new Error(`${place}: the guns not served: ${JSON.stringify(r)}`)
           if (r.min !== r.max) throw new Error(`${place}: the people at the fronts went from ${r.max} to ${r.min}`)
         }
         for (const r of rows) console.log(`      ${r}`)
       })
-      await check('however long they walk, nobody comes within 300 m of the edge of the pali', async () => {
-        if (!edgeAt) throw new Error('no nuuanu-pali in the gazetteer')
-        const rows = []
-        for (const place of ['laimi', 'nuuanu-pali']) {
-          const i = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === '${place}')`)
-          await gotoStop(ev95, i)
-          const r = await ui(`(() => {
-            const F = ${SF}, S = F.soldiers, f = S.f, [ex, ez] = [${edgeAt[0]}, ${edgeAt[1]}]
-            let nearest = Infinity, inside = 0, seen = 0, wet = 0, sunk = 0, worst = 0, worstOf = ''
-            for (let step = 0; step < 900; step++) {
-              F.update(0.1, app.districts.k, app.rig.state.distance)
-              for (let i = 0; i < S.count; i++) {
-                if (f.vis[i] <= 0) continue
-                seen++
-                const d = Math.hypot(f.x[i] - ex, f.z[i] - ez)
-                nearest = Math.min(nearest, d)
-                if (d < 3) inside++
-                if (S.marks[i * 4 + 2] > 0.05 && Math.hypot(S.marks[i * 4] - ex, S.marks[i * 4 + 1] - ez) < 3) inside++
-                if (step % 30 === 0) {
-                  const g = app.world.metresAt(f.x[i], f.z[i])
-                  if (g < 0.15) wet++
-                  if (Math.abs(g - f.gm[i]) > 1.5) sunk++
-                  if (Math.abs(g - f.gm[i]) > worst) {
-                    worst = Math.abs(g - f.gm[i])
-                    worstOf = S.recs[f.rec[i]].p.name
-                  }
-                }
+      await check('at Lāʻimi the Oʻahu forces run up the valley, seen from behind, with the pursuit behind them', async () => {
+        await gotoStop(ev95, await stopOf('laimi'))
+        const r = await ui(`(() => {
+          const F = ${SF}, S = F.soldiers, f = S.f
+          ${facingRule}
+          const proj = app.data.proj
+          const [lx, lz] = proj.toWorld(app.tour.places.get('laimi').geometry.coordinates)
+          const [gx, gz] = proj.toWorld(app.tour.places.get('nuuanu-pali').geometry.coordinates)
+          const al = Math.hypot(gx - lx, gz - lz)
+          const ax = (gx - lx) / al, az = (gz - lz) / al
+          const chase = S.recs.find((r) => r.chase && r.w > 0.5)
+          const fled = chase?.chase
+          if (!chase) return { none: true }
+          const out = { up: 0, down: 0, back: 0, away: 0, oahu: [], hawaii: [], gaps: [], name: fled.p.name, by: chase.p.name }
+          for (let step = 0; step < 40; step++) {
+            const x0 = new Float32Array(S.count), z0 = new Float32Array(S.count)
+            for (let i = 0; i < S.count; i++) { x0[i] = f.x[i]; z0[i] = f.z[i] }
+            F.update(0.1, app.districts.k, app.rig.state.distance)
+            for (const [r, list] of [[fled, out.oahu], [chase, out.hawaii]]) {
+              let sum = 0, n = 0
+              for (let i = r.o; i < r.o + r.n; i++) {
+                if (f.vis[i] <= 0 || x0[i] === 0) continue
+                const vx = f.x[i] - x0[i], vz = f.z[i] - z0[i]
+                const v = Math.hypot(vx, vz)
+                if (v > 0.5) continue
+                if (r === fled) (vx * ax + vz * az > 0 ? out.up++ : out.down++)
+                // (going away from the eye: seen from behind)
+                if (want(f.hx[i], f.hz[i]) === 3) { out.away++; if (f.face[i] === 3) out.back++ }
+                sum += (f.x[i] - lx) * ax + (f.z[i] - lz) * az
+                n++
+              }
+              if (n) list.push(sum / n)
+            }
+            // knot for knot, each of the pursuit's behind the one it follows (at the same share of their ways)
+            if (step === 39) {
+              const at = (r, s) => { let j = 1; while (j < r.cum.length - 1 && r.cum[j] < s) j++; const t = (s - r.cum[j - 1]) / (r.cum[j] - r.cum[j - 1] || 1); return [r.pts[j - 1][0] + (r.pts[j][0] - r.pts[j - 1][0]) * t, r.pts[j - 1][1] + (r.pts[j][1] - r.pts[j - 1][1]) * t] }
+              for (let q = 0; q < fled.knots.length; q++) {
+                const pa = at(fled, fled.knots[q].u * fled.total)
+                const pb = at(chase, chase.knots[q].u * chase.total)
+                out.gaps.push(((pa[0] - pb[0]) * ax + (pa[1] - pb[1]) * az) * 100)
               }
             }
-            return { nearest, inside, seen, wet, sunk, worst, worstOf }
-          })()`)
-          rows.push(`${place}: over 90 s, the nearest anyone came was ${(r.nearest * 100).toFixed(0)} m; none in the water, feet within ${r.worst.toFixed(2)} m of the ground`)
-          if (r.inside) throw new Error(`${place}: ${r.inside} times a figure within 300 m of the edge`)
-          if (r.wet || r.sunk) throw new Error(`${place}: ${r.wet} figure-frames in the water, ${r.sunk} more than 1.5 m off the ground (at worst ${r.worst.toFixed(2)} m, “${r.worstOf}”)`)
-        }
-        for (const r of rows) console.log(`      ${r}`)
+          }
+          const mean = (l) => l.reduce((s, v) => s + v, 0) / Math.max(1, l.length)
+          out.oahuAt = mean(out.oahu) * 100
+          out.hawaiiAt = mean(out.hawaii) * 100
+          delete out.oahu
+          delete out.hawaii
+          return out
+        })()`)
+        if (r.none) throw new Error('no pursuit following a retreat at the Lāʻimi stop')
+        if (!(r.up > 0 && r.down <= r.up * 0.02)) throw new Error(`“${r.name}”: ${r.up} steps up the valley, ${r.down} down it`)
+        if (r.back < r.away) throw new Error(`of ${r.away} going away from the eye, ${r.back} seen from behind`)
+        if (!(r.hawaiiAt < r.oahuAt)) throw new Error(`the pursuit stands ${r.hawaiiAt.toFixed(0)} m up the valley from Lāʻimi on average, the retreat ${r.oahuAt.toFixed(0)} m`)
+        if (r.gaps.some((g) => g <= 0)) throw new Error(`a knot of the pursuit ahead of the one it follows: ${r.gaps.map((g) => g.toFixed(0)).join(', ')} m`)
+        console.log(`      “${r.name}”: ${r.up} figure-steps up the valley toward the gap, ${r.down} down; ${r.back} of ${r.away} going away seen from behind; “${r.by}” behind it, on average ${r.oahuAt.toFixed(0)} m and ${r.hawaiiAt.toFixed(0)} m up from Lāʻimi, each knot ${Math.min(...r.gaps).toFixed(0)}–${Math.max(...r.gaps).toFixed(0)} m behind the one it follows`)
       })
-      await check('off the tour, in the battle’s year: fewer of them, walking and standing, nobody fighting', async () => {
+      await check('at the pali Kamehameha’s forces close round the stand in an arc, and Oʻahu figures go over the edge and out of sight', async () => {
+        await gotoStop(ev95, await stopOf('nuuanu-pali'))
+        const r = await ui(`(() => {
+          const F = ${SF}, S = F.soldiers, f = S.f, M = S.constructor.MODE
+          const ringRec = S.recs.find((r) => r.ring && r.w > 0.5)
+          const leap = S.recs.find((r) => r.behaviour === 'leap' && r.w > 0.5)
+          const stand = S.recs.find((r) => r.behaviour === 'stand' && r.w > 0.5 && r.side !== ringRec?.side)
+          if (!ringRec || !leap || !stand) return { missing: [!ringRec && 'surround', !leap && 'leap', !stand && 'stand'].filter(Boolean) }
+          const R = ringRec.ring
+          // the arc: where its people stand round the stand's middle, along the stand and out toward the valley
+          const angles = []
+          let inward = 0, valley = 0, ring = 0, near = 0
+          for (let i = ringRec.o; i < ringRec.o + ringRec.n; i++) {
+            if (f.vis[i] <= 0 || f.mode[i] !== M.ring) continue
+            ring++
+            const dx = f.x[i] - R.cx, dz = f.z[i] - R.cz
+            const u = dx * R.ux + dz * R.uz, v = dx * R.nx + dz * R.nz
+            angles.push(Math.atan2(u, v))
+            if (v > -0.02) valley++
+            if (f.hx[i] * -dx + f.hz[i] * -dz > 0) inward++
+            if (Math.hypot(u, v) > Math.min(1.2, R.half)) near++
+          }
+          angles.sort((a, b) => a - b)
+          const spread = angles.length ? ((angles.at(-1) - angles[0]) * 180) / Math.PI : 0
+          // the leap: over 20 s, each leap crossing the brink and gone below it, and nobody left anywhere
+          const end = leap.pts.at(-1), a = leap.pts[0]
+          const dir = [(end[0] - a[0]) / leap.total, (end[1] - a[1]) / leap.total]
+          const brink = app.world.metresAt(end[0], end[1])
+          let leaps = 0, over = 0, below = 0, left = 0, sunk = 0, last = new Float32Array(S.count)
+          const frames = new Set()
+          for (let step = 0; step < 200; step++) {
+            F.update(0.1, app.districts.k, app.rig.state.distance)
+            for (let i = leap.o; i < leap.o + leap.n; i++) {
+              const past = (f.x[i] - end[0]) * dir[0] + (f.z[i] - end[1]) * dir[1]
+              if (f.vis[i] > 0) {
+                frames.add(f.fr[i])
+                if (f.air[i] && past > 0) over++
+                // (a figure seen with all of it below the ground would be a body left in it)
+                if (f.air[i] && f.lift[i] + (16 * S.unit) / app.world.uniforms.uVert.value < app.world.metresAt(f.x[i], f.z[i]) - 0.5) sunk++
+              }
+              if (last[i] > 0 && f.vis[i] <= 0) {
+                leaps++
+                if (f.air[i] && past > 0 && f.lift[i] < brink) below++
+              }
+              last[i] = f.vis[i]
+            }
+            // nobody drawn lying still: a fall frame only in the air
+            for (let i = 0; i < S.count; i++) if (f.vis[i] > 0 && f.fr[i] >= 14 && !f.air[i]) left++
+          }
+          return { ring, valley, inward, near, spread, leaps, over, below, left, sunk, frames: [...frames].sort((a, b) => a - b), stand: stand.p.name }
+        })()`)
+        if (r.missing) throw new Error(`at the pali: no ${r.missing.join(', ')}`)
+        if (r.ring < 12 || r.valley < r.ring || r.inward < r.ring) throw new Error(`the arc: ${r.ring} people, ${r.valley} on the valley side, ${r.inward} facing in`)
+        if (r.spread < 100 || r.near < r.ring) throw new Error(`the arc spans ${r.spread.toFixed(0)}° round the stand, ${r.near} of ${r.ring} outside it`)
+        if (r.leaps < 8 || r.below < r.leaps) throw new Error(`${r.leaps} leaps in 20 s, ${r.below} of them gone over the brink and below it`)
+        if (!r.over || r.sunk || r.left) throw new Error(`in the air past the brink ${r.over} times; ${r.sunk} seen below the ground; ${r.left} drawn falling on the ground`)
+        if (![4, 14, 15, 16].every((v) => r.frames.includes(v))) throw new Error(`the leap's frames: ${r.frames.join(', ')}`)
+        console.log(`      ${r.ring} of Kamehameha's people in an arc ${r.spread.toFixed(0)}° round “${r.stand}”, all on the valley side and facing in; ${r.leaps} leaps in 20 s, each over the brink and gone below it, frames ${r.frames.join(', ')}; nobody left on the ground or seen under it`)
+      })
+      await check('off the tour, in the battle’s year: fewer of them, walking and standing, nobody fighting or going over', async () => {
         await offTour(1795)
         await view(nearView)
         await settleTwice()
         await frames(2)
         const r = await ui(`(() => {
           const F = ${SF}, S = F.soldiers, f = S.f, M = S.constructor.MODE
-          const out = { quiet: F.stats().quiet, engage: 0, walking: 0, standing: 0, shown: 0, perRec: 0 }
+          const out = { quiet: F.stats().quiet, engage: 0, walking: 0, standing: 0, shown: 0, perRec: 0, over: 0 }
           for (let step = 0; step < 60; step++) {
             F.update(0.1, app.districts.k, app.rig.state.distance)
             let shown = 0
@@ -1617,6 +1856,7 @@ if (districtCount) {
               for (let i = r.o; i < r.o + r.n; i++) {
                 if (f.vis[i] <= 0) continue
                 n++
+                if (f.mode[i] === M.leap || f.air[i]) out.over++
                 if (f.fr[i] >= 10) out.engage++
                 else if (f.fr[i] >= 8) out.standing++
                 else out.walking++
@@ -1629,15 +1869,13 @@ if (districtCount) {
           return out
         })()`)
         if (!r.quiet) throw new Error(`not quiet: ${JSON.stringify(r)}`)
-        if (r.engage) throw new Error(`${r.engage} figure-frames fighting off the tour`)
+        if (r.engage || r.over) throw new Error(`${r.engage} figure-frames fighting or falling, ${r.over} going over, off the tour`)
         if (!(r.walking > 0 && r.standing > 0)) throw new Error(`walking ${r.walking}, standing ${r.standing}`)
         if (r.perRec > 0.35) throw new Error(`a force shows ${(r.perRec * 100).toFixed(0)}% of its people off the tour`)
-        const atStop = stopsSeen['nuuanu-1795:5']
-        console.log(`      up to ${r.shown} drawn, at most ${(r.perRec * 100).toFixed(0)}% of any force's people (the Puʻiwa stop drew ${atStop ?? '?'}), walking and standing only`)
+        console.log(`      up to ${r.shown} drawn, at most ${(r.perRec * 100).toFixed(0)}% of any force's people, walking and standing only`)
       })
       await check('what the people cost at the Puʻiwa stop', async () => {
-        const puiwa = await ui(`app.data.events.find((e) => e.id === 'nuuanu-1795').stops.findIndex((s) => s.place === 'puiwa')`)
-        await gotoStop(ev95, puiwa)
+        await gotoStop(ev95, await stopOf('puiwa'))
         await page.waitForTimeout(1500)
         const frameMs = () =>
           page.evaluate(
@@ -1683,7 +1921,7 @@ if (districtCount) {
   })
 }
 
-// ==== settlements by era (features/settlements.js) ==========================
+// ==== settlements by era (features/settlements.js, features/towns.js) ======= [settlements]
 // At the harbour: kauhale in 1795, a few hundred hale with Kou's own over the
 // plain the Kou stop frames (2.5 km round it: the layer has the village a
 // thin one, about a hundred people per km², and a kauhale is a household or
@@ -1692,6 +1930,13 @@ if (districtCount) {
 // last year (the 2020 keyframe). Every kind within its era's; none on a loʻi, a pond, the
 // village while it stands, or the water of its year; within the budget; and
 // what each year costs in heap and frame time, with the town and without it.
+// Then every island's: buildings low over Lahaina, Kailua-Kona and Hilo in
+// 1778, 1896 and the last year, none on the water of the year or a stream;
+// the kit mix shifting with value; the zoning of now where the layers have it
+// (Waikīkī's towers, Sand Island's sheds, Mililani's houses, Kāʻanapali's
+// strip, towers nowhere else); the district placing its own and Kou winning;
+// no two buildings on one footprint; nothing flickering between two frames a
+// hair apart; and what the island's towns cost.
 if (await ui('app.districts?.list.length ?? 0')) {
   const townReady = () => page.waitForFunction(() => window.__app.districts.cur?.state === 'ready' && window.__app.districts.cur.features?.settlements.ready, null, { timeout: 300000 })
   const atHarbour = async (year) => {
@@ -1708,7 +1953,8 @@ if (await ui('app.districts?.list.length ?? 0')) {
     1853: ['hale', 'frame', 'adobe', 'church'],
     1896: ['hale', 'frame', 'cottage', 'store', 'block', 'church', 'spire'],
     1930: ['bungalow', 'store', 'block', 'midrise', 'church', 'spire', 'clock'],
-    2000: ['house', 'bungalow', 'walkup', 'tower', 'church', 'spire', 'clock'],
+    // (now the zoning has its say: shops and offices, sheds, the old false fronts on a main street)
+    2000: ['house', 'bungalow', 'walkup', 'tower', 'block', 'midrise', 'store', 'shed', 'church', 'spire', 'clock'],
   }
   const lastYear = await ui('app.timeline.yearAt(app.timeline.max)')
   await check('settlements: the harbour in 1795 is kauhale, a few hundred hale with Kou’s own', async () => {
@@ -1805,6 +2051,23 @@ if (await ui('app.districts?.list.length ?? 0')) {
     const st = await ui('app.districts.cur.features.settlements.stats()')
     console.log(`      ${rows.join(' · ')}; ${st.instances} instances over ${st.lots} lots, built in ${st.buildMs} ms (${JSON.stringify(st.times)}), ${st.cpuMB} MB`)
   })
+  // (wall time over n of the app's frames, as the perf check below takes it)
+  const wall = (n) =>
+    page.evaluate(
+      (n) =>
+        new Promise((resolve) => {
+          const app = window.__app
+          const f0 = app.frames + 1
+          let t0 = 0
+          const tick = () => {
+            if (!t0 && app.frames >= f0) t0 = performance.now()
+            if (t0 && app.frames >= f0 + n) return resolve(+((performance.now() - t0) / n).toFixed(1))
+            requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        }),
+      n,
+    )
   await check('settlements: what the town costs at the harbour, by year', async () => {
     const cdp = await page.context().newCDPSession(page)
     const heapMB = async () => {
@@ -1812,23 +2075,6 @@ if (await ui('app.districts?.list.length ?? 0')) {
       const { usedSize, backingStorageSize } = await cdp.send('Runtime.getHeapUsage')
       return { js: +(usedSize / 1048576).toFixed(1), buffers: backingStorageSize === undefined ? null : +(backingStorageSize / 1048576).toFixed(1) }
     }
-    // (wall time over n of the app's frames, as the perf check below takes it)
-    const wall = (n) =>
-      page.evaluate(
-        (n) =>
-          new Promise((resolve) => {
-            const app = window.__app
-            const f0 = app.frames + 1
-            let t0 = 0
-            const tick = () => {
-              if (!t0 && app.frames >= f0) t0 = performance.now()
-              if (t0 && app.frames >= f0 + n) return resolve(+((performance.now() - t0) / n).toFixed(1))
-              requestAnimationFrame(tick)
-            }
-            requestAnimationFrame(tick)
-          }),
-        n,
-      )
     const out = {}
     for (const y of [1795, 1896, lastYear]) {
       await atHarbour(y)
@@ -1836,18 +2082,323 @@ if (await ui('app.districts?.list.length ?? 0')) {
       const ms = await wall(6)
       const heap = await heapMB()
       const calls = await ui('app.renderer.info.render.calls')
-      await run('app.districts.cur.features.settlements.hidden = true')
+      await run('app.districts.cur.features.settlements.hidden = true; app.towns.hidden = true')
       await frames(2)
       const without = await wall(6)
-      await run('app.districts.cur.features.settlements.hidden = false')
+      await run('app.districts.cur.features.settlements.hidden = false; app.towns.hidden = false')
       await frames(2)
       const st = await ui('app.districts.cur.features.settlements.stats()')
-      out[y] = { ms, msWithout: without, calls, drawn: st.drawn, triangles: st.triangles, heapMB: heap }
+      const tw = await ui('app.towns.stats()')
+      out[y] = { ms, msWithout: without, calls, drawn: st.drawn, islandDrawn: tw.drawn, triangles: st.triangles, heapMB: heap }
     }
     console.log('      settlements perf', JSON.stringify(out))
   })
+
+  // --- every island's towns (features/towns.js) ---------------------------------------
+  /** Low over a gazetteer place (or a lon/lat), in a year, the towns in reach built. */
+  const lowOver = async (place, year, [bearing, pitch, distance] = [60, 0.3, 24]) => {
+    const at = typeof place === 'string' ? `app.tour.places.get('${place}')` : `{ geometry: { type: 'Point', coordinates: ${JSON.stringify(place)} } }`
+    await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish(); const v = app.tour.cameraView(${at}, { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
+    for (let k = 0; k < 600; k++) {
+      const ok = await ui(`(() => { app.settle(); const t = app.rig.state.target, D = app.districts, d = D.districtAt(t.x, t.z); return app.towns.idle && (!d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready)) })()`)
+      if (ok) break
+      await frames(1)
+    }
+    await run('app.settle()')
+    await frames(2)
+    return ui('[app.rig.state.target.x, app.rig.state.target.z]')
+  }
+  const islandCensus = (year, xz, r) => ui(`app.towns.census(${year}, ${xz[0]}, ${xz[1]}, ${r})`)
+  // (the island's buildings a district that is down hides, inside its inner box, are not drawn: left out where they are counted with the district's)
+  const shown = "((q) => { const u = app.towns.yieldU, r = u.uYieldRect.value; return !(u.uYield.value >= 0.999 && q.x > r.x && q.z > r.y && q.x < r.z && q.z < r.w) })"
+  const townRows = {}
+  await check('towns: buildings low over Lahaina, Kailua-Kona and Hilo in 1778, 1896 and now, more now than then', async () => {
+    const bad = []
+    for (const place of ['lahaina', 'kailua-kona', 'hilo']) {
+      const row = {}
+      for (const y of [1778, 1896, lastYear]) {
+        const xz = await lowOver(place, y)
+        const c = await islandCensus(y, xz, 15)
+        row[y] = c
+        if (!c.total) bad.push(`${place} ${y}: none`)
+      }
+      if (!(row[lastYear].total > row[1896].total && row[lastYear].total > row[1778].total)) bad.push(`${place}: ${row[1778].total}, ${row[1896].total}, ${row[lastYear].total}`)
+      townRows[place] = row
+      console.log(`      ${place} within 1.5 km: ${[1778, 1896, lastYear].map((y) => `${y} ${row[y].total} (${brief(row[y])})`).join(' · ')}`)
+    }
+    if (bad.length) throw new Error(bad.join('; '))
+  })
+  await check('towns: none on the water of its year or a stream, and the island’s grids registered with its pack', async () => {
+    const out = []
+    for (const [place, y] of [['lahaina', 1850], ['hilo', lastYear], ['kailua-kona', 1820], [[-157.95, 21.37], 1900]]) {
+      const xz = await lowOver(place, y)
+      const r = await ui(`(() => {
+        const bad = []
+        let n = 0
+        for (const isl of app.towns.islands.values()) {
+          if (!isl.ready) continue
+          for (const a of isl.alive(${y}, ${xz[0]}, ${xz[1]}, 20)) {
+            n++
+            const ux = [Math.cos(a.a), -Math.sin(a.a)], uz = [Math.sin(a.a), Math.cos(a.a)]
+            // (the points the scatter asked of the ground: the centre, the corners and the sides' middles)
+            for (const [fu, fv] of [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [1, 0], [0, 1], [-1, 0]]) {
+              const x = a.x + ux[0] * fu * a.ax + uz[0] * fv * a.az
+              const z = a.z + ux[1] * fu * a.ax + uz[1] * fv * a.az
+              const g = isl.t.metresAt(x, z)
+              const list = app.patches?.byPack?.get(isl.id) || []
+              let w = g
+              for (const p of list) { if (!(${y} < p.until)) continue; const b = p.box; const tx = (x - b[0]) / (b[2] - b[0]), tz = (z - b[1]) / (b[3] - b[1]); if (tx < 0 || tz < 0 || tx > 1 || tz > 1) continue; const m = app.patches.maskAt(p.crop, tx, tz); if (m > 0) w += ((p.kind === 'raise' ? Math.max(w, p.depthM) : Math.min(w, p.depthM)) - w) * m }
+              const what = w < 0.3 ? 'water ' + w.toFixed(2) : isl.grid(isl.streamOn, x, z) ? 'stream' : null
+              if (what) { bad.push(isl.id + ' ' + what + ' ' + a.kind + ' at ' + x.toFixed(2) + ',' + z.toFixed(2)); break }
+            }
+          }
+        }
+        return { n, bad }
+      })()`)
+      if (r.bad.length) throw new Error(`${place} ${y}: ${r.bad.length} of ${r.n}: ${r.bad.slice(0, 4).join('; ')}`)
+      out.push(`${typeof place === 'string' ? place : 'ʻEwa'} ${y}: ${r.n}`)
+    }
+    console.log(`      buildings checked, footprint by footprint: ${out.join(', ')}`)
+  })
+  await check('towns: the kit mix shifts with value within each era', async () => {
+    const r = await ui(`(() => {
+      const isl = [...app.towns.islands.values()].find((i) => i.ready)
+      const lots = Array.from({ length: 4000 }, (_, k) => { const h = (n) => ((Math.sin((k + 1) * 12.9898 + n * 78.233) * 43758.5453) % 1 + 1) % 1; return { lag: 0, r2: h(1), r3: h(2), r4: h(3), r5: h(4), r6: h(5), r7: h(6), r8: h(7), zone: 0, zoned: false, lud: 0 } })
+      const share = (y, d, v, kinds) => lots.filter((l) => kinds.includes(isl.kindAt(y, d, v, l, false))).length / lots.length
+      const K = { hale: 1, frame: 2, adobe: 3, cottage: 4, store: 5, block: 6, bungalow: 7, midrise: 8, house: 9, walkup: 10, tower: 11 }
+      const fine = (y, d, kinds) => [share(y, d, 0.15, kinds.map((k) => K[k])), share(y, d, 0.9, kinds.map((k) => K[k]))]
+      return { thatch1850: fine(1850, 400, ['hale']), coral1850: fine(1850, 400, ['adobe']), masonry1896: fine(1896, 600, ['store', 'block']), offices1930: fine(1930, 2500, ['midrise']), towers2000: fine(2000, 6000, ['tower']) }
+    })()`)
+    const wrong = []
+    if (!(r.thatch1850[0] > r.thatch1850[1] && r.coral1850[1] > r.coral1850[0])) wrong.push(`1850 thatch ${r.thatch1850}, coral ${r.coral1850}`)
+    if (!(r.masonry1896[1] > r.masonry1896[0] + 0.1)) wrong.push(`1896 masonry ${r.masonry1896}`)
+    if (!(r.offices1930[1] > r.offices1930[0])) wrong.push(`1930 offices ${r.offices1930}`)
+    if (!(r.towers2000[1] > r.towers2000[0])) wrong.push(`2000 towers ${r.towers2000}`)
+    if (wrong.length) throw new Error(wrong.join('; '))
+    const f = (p) => p.map((v) => `${Math.round(v * 100)}%`).join(' → ')
+    console.log(`      humble → fine lots: thatch in 1850 ${f(r.thatch1850)}, coral and adobe ${f(r.coral1850)}; stores and masonry in 1896 ${f(r.masonry1896)}; offices in 1930 ${f(r.offices1930)}; towers now ${f(r.towers2000)}`)
+  })
+  await check('towns: the zoning of now: Waikīkī’s towers, Sand Island’s sheds, Mililani’s houses, Kāʻanapali’s strip, towers nowhere else', async () => {
+    const has = await ui("!!(app.districts.cur?.features?.settlements?.zoning?.zoning) || [...app.towns.islands.values()].some((i) => !!i.zoning?.zoning)")
+    const rows = []
+    const bad = []
+    const both = (y, xz, r) => ui(`(() => { const S = app.districts.cur?.features?.settlements; const a = S?.ready ? S.alive(${y}).filter((q) => Math.hypot(q.x - ${xz[0]}, q.z - ${xz[1]}) < ${r}) : []; return { district: a.map((q) => ({ kind: q.kind, x: q.x, z: q.z })), island: app.towns.alive(${y}, ${xz[0]}, ${xz[1]}, ${r}).filter(${shown}).map((q) => ({ kind: q.kind, x: q.x, z: q.z, island: q.island })) } })()`)
+    const tally = (list) => list.reduce((o, q) => ((o[q.kind] = (o[q.kind] || 0) + 1), o), {})
+    for (const [name, place, want] of [
+      ['Waikīkī', 'waikiki', (t) => (t.tower || 0) >= 10],
+      ['Sand Island', [-157.882, 21.31], (t) => (t.shed || 0) >= 10 && (t.shed || 0) > (t.house || 0)],
+      ['Mililani', [-158.015, 21.452], (t) => (t.house || 0) >= 50 && !t.tower],
+      ['Kāʻanapali', [-156.692, 20.925], (t) => (t.tower || 0) + (t.walkup || 0) >= 10],
+    ]) {
+      const xz = await lowOver(place, lastYear)
+      const got = await both(lastYear, xz, 8)
+      const t = tally([...got.district, ...got.island])
+      rows.push(`${name}: ${Object.entries(t).map(([k, v]) => `${v} ${k}`).join(', ')}`)
+      if (has && !want(t)) bad.push(`${name}: ${JSON.stringify(t)}`)
+    }
+    // towers only where the class allows them (3 high-rise, 5 downtown, 7 resort)
+    const stray = await ui(`(() => {
+      const out = []
+      const S = app.districts.cur?.features?.settlements
+      const look = (list, Z) => { for (const q of list) if (q.kind === 'tower' && Z?.zoning) { const c = Z.zoning.px[Math.floor(((q.z - Z.rect.z0) / (Z.rect.z1 - Z.rect.z0)) * Z.zoning.H) * Z.zoning.W + Math.floor(((q.x - Z.rect.x0) / (Z.rect.x1 - Z.rect.x0)) * Z.zoning.W)]; if (![3, 5, 7].includes(c)) out.push(q.kind + ' in class ' + c) } }
+      if (S?.ready) look(S.alive(${lastYear}), S.zoning)
+      for (const isl of app.towns.islands.values()) if (isl.ready) look(isl.alive(${lastYear}), isl.zoning)
+      return out
+    })()`)
+    if (has && stray.length) bad.push(`${stray.length} towers outside classes 3, 5 and 7: ${stray.slice(0, 3).join('; ')}`)
+    console.log(`      ${has ? 'zoned' : 'no zoning in the layers: density and value alone'} · ${rows.join(' · ')}`)
+    if (bad.length) throw new Error(bad.join('; '))
+  })
+  await check('towns: the district places its own, the island’s yield inside it, and Kou wins', async () => {
+    await atHarbour(1795)
+    const r = await ui(`(() => {
+      const D = app.districts, rec = D.cur, S = rec.features.settlements, R = rec.d.rect
+      const edge = (x, z) => Math.min(x - R.x0, R.x1 - x, z - R.z0, R.z1 - z)
+      const near = S.alive(1795).filter((a) => edge(a.x, a.z) < 3.8).length
+      // the island's drawn instances inside the district's inner box, while it is down
+      const y = app.towns.yieldU.uYield.value
+      let inner = 0
+      for (const isl of app.towns.islands.values()) for (const vr of isl.variants || []) {
+        if (!vr.mesh?.visible) continue
+        const m = vr.mesh.instanceMatrix.array
+        for (let c = 0; c < vr.mesh.count; c++) { const x = m[c * 16 + 12], z = m[c * 16 + 14]; if (edge(x, z) > 3.5) inner++ }
+      }
+      // Kou's outline, against the island's own lots in 1795 (they would be there were the district not down)
+      const village = [...rec.d.byIndex.values()].find((f) => f.properties.kind === 'village')
+      const ring = village.geometry.coordinates[0].map((c) => app.data.proj.toWorld(c))
+      const ins = (x, z) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const a = ring[i], b = ring[j]; if (a[1] > z !== b[1] > z && x < ((b[0] - a[0]) * (z - a[1])) / (b[1] - a[1]) + a[0]) c = !c } return c }
+      // (the island's tiles under the district wait while it is down: work out those under Kou now)
+      const isl = app.towns.islands.get(rec.d.parent)
+      if (isl?.ready) {
+        const xs = ring.map((p) => p[0]), zs = ring.map((p) => p[1]), T = 5, r0 = isl.rect
+        for (let i = Math.floor((Math.min(...xs) - r0.x0) / T); i <= Math.floor((Math.max(...xs) - r0.x0) / T); i++)
+          for (let j = Math.floor((Math.min(...zs) - r0.z0) / T); j <= Math.floor((Math.max(...zs) - r0.z0) / T); j++) if (!isl.tiles.has(i + ',' + j)) isl.buildTile(i, j)
+      }
+      const onKou = app.towns.alive(1795).filter((a) => ins(a.x, a.z)).length
+      const nearKou = app.towns.alive(1795).filter((a) => Math.hypot(a.x - ring[0][0], a.z - ring[0][1]) < 8).length
+      const own = S.alive(1795).filter((a) => ins(a.x, a.z)).length
+      return { k: +D.k.toFixed(2), yield: +y.toFixed(2), near, inner, onKou, nearKou, own }
+    })()`)
+    if (r.near || r.onKou || r.own || (r.yield >= 0.999 && r.inner)) throw new Error(JSON.stringify(r))
+    console.log(`      district at ${r.k}, the island yielding ${r.yield}: ${r.inner} of its drawn inside the district’s inner box, ${r.near} of the district’s within 380 m of its edge, ${r.onKou} of the island’s (of ${r.nearKou} within 800 m) and ${r.own} of the district’s on Kou`)
+  })
+  await check('towns: no two buildings on one footprint, a gap between lots', async () => {
+    const out = []
+    for (const [place, y] of [['kou', 1896], ['kou', lastYear], ['lahaina', 1850], ['lahaina', lastYear], [[-157.893, 21.33], lastYear]]) {
+      const xz = await lowOver(place, y, [45, 0.4, 24])
+      const r = await ui(`(() => {
+        const S = app.districts.cur?.features?.settlements
+        const list = [...(S?.ready ? S.alive(${y}).filter((a) => Math.hypot(a.x - ${xz[0]}, a.z - ${xz[1]}) < 14) : []), ...app.towns.alive(${y}, ${xz[0]}, ${xz[1]}, 14).filter(${shown})]
+        // each footprint as a quad (its own box, turned as THREE turns), then every pair near enough to meet
+        const quad = (a) => { const c = Math.cos(a.a), s = Math.sin(a.a), [x0, x1, z0, z1] = a.box; return [[x0, z0], [x1, z0], [x1, z1], [x0, z1]].map(([u, v]) => [a.x + u * c + v * s, a.z - u * s + v * c]) }
+        const sep = (A, B) => { for (const P of [A, B]) for (let i = 0; i < 4; i++) { const p = P[i], q = P[(i + 1) % 4], n = [q[1] - p[1], p[0] - q[0]]; const pa = A.map((c) => c[0] * n[0] + c[1] * n[1]), pb = B.map((c) => c[0] * n[0] + c[1] * n[1]); if (Math.max(...pa) <= Math.min(...pb) || Math.max(...pb) <= Math.min(...pa)) return true } return false }
+        const Q = list.map(quad)
+        const bad = []
+        for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+          if (Math.hypot(list[i].x - list[j].x, list[i].z - list[j].z) > 1.2) continue
+          if (!sep(Q[i], Q[j])) bad.push(list[i].kind + '/' + list[j].kind + ' at ' + list[i].x.toFixed(2) + ',' + list[i].z.toFixed(2))
+        }
+        return { n: list.length, bad }
+      })()`)
+      if (r.bad.length) throw new Error(`${place} ${y}: ${r.bad.length} pairs of ${r.n}: ${r.bad.slice(0, 4).join('; ')}`)
+      out.push(`${typeof place === 'string' ? place : 'Kalihi'} ${y}: ${r.n}`)
+    }
+    console.log(`      footprints checked pair by pair: ${out.join(', ')}`)
+  })
+  await check('settlements: no two faces of a kit in one plane where they overlap', async () => {
+    // every pair of triangles in a kit that face the same way in one plane
+    // (within 2 cm) and overlap by area: the faces that would fight over the
+    // depth buffer whatever the camera did
+    const r = await ui(`(() => {
+      const S = app.districts.cur?.features?.settlements
+      const kits = S?.kits || [...app.towns.islands.values()].find((i) => i.ready)?.kits
+      if (!kits) return null
+      const area2 = (q) => { let a = 0; for (let i = 0; i < q.length; i++) { const p = q[i], n = q[(i + 1) % q.length]; a += p[0] * n[1] - n[0] * p[1] } return a / 2 }
+      const clip = (sub, cl) => { let out = sub; const sg = Math.sign(area2(cl)) || 1
+        for (let i = 0; i < cl.length && out.length; i++) { const a = cl[i], b = cl[(i + 1) % cl.length], ins = (p) => sg * ((b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])) >= -1e-9, inp = out; out = []
+          for (let k = 0; k < inp.length; k++) { const P = inp[k], Q = inp[(k + 1) % inp.length], pi = ins(P), qi = ins(Q); if (pi) out.push(P)
+            if (pi !== qi) { const dx = Q[0] - P[0], dy = Q[1] - P[1], ex = b[0] - a[0], ey = b[1] - a[1], den = dx * ey - dy * ex; if (Math.abs(den) > 1e-12) { const t = ((a[0] - P[0]) * ey - (a[1] - P[1]) * ex) / den; out.push([P[0] + dx * t, P[1] + dy * t]) } } } }
+        return out }
+      const bad = []
+      let tris = 0
+      for (const [kind, list] of Object.entries(kits)) list.forEach((kit, v) => {
+        const g = kit.geometry, P = g.attributes.position.array, I = g.index.array, T = []
+        for (let t = 0; t < I.length / 3; t++) { const p = [0, 1, 2].map((k) => [P[I[t * 3 + k] * 3], P[I[t * 3 + k] * 3 + 1], P[I[t * 3 + k] * 3 + 2]]); const u = p[1].map((c, i) => c - p[0][i]), w = p[2].map((c, i) => c - p[0][i]); const n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]], l = Math.hypot(...n); if (l < 1e-9) continue; const N = n.map((c) => c / l); T.push({ p, N, d: N[0] * p[0][0] + N[1] * p[0][1] + N[2] * p[0][2] }) }
+        tris += T.length
+        for (let i = 0; i < T.length; i++) for (let j = i + 1; j < T.length; j++) {
+          const a = T[i], b = T[j]
+          if (a.N[0] * b.N[0] + a.N[1] * b.N[1] + a.N[2] * b.N[2] < 0.9999 || Math.abs(a.d - b.d) > 0.02) continue
+          const N = a.N, r = Math.abs(N[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0]
+          let e1 = [N[1] * r[2] - N[2] * r[1], N[2] * r[0] - N[0] * r[2], N[0] * r[1] - N[1] * r[0]]; const l = Math.hypot(...e1); e1 = e1.map((c) => c / l)
+          const e2 = [N[1] * e1[2] - N[2] * e1[1], N[2] * e1[0] - N[0] * e1[2], N[0] * e1[1] - N[1] * e1[0]]
+          const to2 = (p) => [p[0] * e1[0] + p[1] * e1[1] + p[2] * e1[2], p[0] * e2[0] + p[1] * e2[1] + p[2] * e2[2]]
+          const o = clip(a.p.map(to2), b.p.map(to2))
+          if (o.length >= 3 && Math.abs(area2(o)) > 1e-3) bad.push(kind + ' ' + v)
+        }
+      })
+      return { bad, tris, kits: Object.values(kits).reduce((s, l) => s + l.length, 0) }
+    })()`)
+    if (!r) throw new Error('no kits built')
+    if (r.bad.length) throw new Error(`${r.bad.length} pairs: ${[...new Set(r.bad)].slice(0, 8).join(', ')}`)
+    console.log(`      ${r.kits} kits, ${r.tris} triangles: no overlapping faces in one plane`)
+  })
+  await check('towns: nothing flickers between two frames a hair apart (z-fighting)', async () => {
+    const out = []
+    for (const [name, place, y, cam] of [
+      ['harbour 1896', 'kou', 1896, [45, 0.1, 22]],
+      ['harbour now', 'kou', lastYear, [45, 0.1, 22]],
+      ['valley 1853', 'nuuanu', 1853, [42, 0.18, 40]],
+      ['Honolulu 1896, low', 'honolulu', 1896, [200, 0.06, 12]],
+      ['Lahaina now, low', 'lahaina', lastYear, [60, 0.06, 12]],
+    ]) {
+      await lowOver(place, y, cam)
+      const r = await page.evaluate(async () => {
+        const app = window.__app
+        // the loop and the clock stopped: these frames are drawn by hand
+        const keep = app.frame
+        app.frame = () => {}
+        await new Promise((res) => requestAnimationFrame(() => requestAnimationFrame(res)))
+        const R = app.renderer
+        const gl = R.getContext()
+        const w = gl.drawingBufferWidth
+        const h = gl.drawingBufferHeight
+        const draw = () => {
+          app.sky.renderMap(R)
+          app.pipeline.render(app.scene, app.camera)
+          const px = new Uint8Array(w * h * 4)
+          gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px)
+          return px
+        }
+        const groups = [app.districts.cur?.features?.settlements?.group, app.towns.group].filter(Boolean)
+        const cam = app.camera
+        const p0 = cam.position.clone()
+        const n0 = cam.near
+        const base = draw()
+        const vis = groups.map((g) => g.visible)
+        for (const g of groups) g.visible = false
+        const bare = draw()
+        groups.forEach((g, i) => (g.visible = vis[i]))
+        // the buildings' pixels: where the frame differs without them
+        const mask = new Uint8Array(w * h)
+        let building = 0
+        for (let i = 0; i < w * h; i++) if (Math.abs(base[i * 4] - bare[i * 4]) + Math.abs(base[i * 4 + 1] - bare[i * 4 + 1]) + Math.abs(base[i * 4 + 2] - bare[i * 4 + 2]) > 12) (mask[i] = 1), building++
+        const count = (moves) => {
+          const flipped = new Uint8Array(w * h)
+          for (const move of moves) {
+            move()
+            cam.updateProjectionMatrix()
+            cam.updateMatrixWorld()
+            const a = draw()
+            for (let i = 0; i < w * h; i++) if (mask[i] && Math.max(Math.abs(a[i * 4] - base[i * 4]), Math.abs(a[i * 4 + 1] - base[i * 4 + 1]), Math.abs(a[i * 4 + 2] - base[i * 4 + 2])) > 40) flipped[i] = 1
+            cam.position.copy(p0)
+            cam.near = n0
+          }
+          cam.updateProjectionMatrix()
+          cam.updateMatrixWorld()
+          let n = 0
+          for (let i = 0; i < w * h; i++) n += flipped[i]
+          return n
+        }
+        // the camera moved 2 mm four ways; and the near plane moved a few
+        // tenths of a per cent, which leaves every pixel where it was and
+        // changes only the depths, so what flips there is two faces tied in depth
+        const J = 2e-5
+        const jitter = count([[J, 0, 0], [0, J, 0], [0, 0, J], [-J, J / 2, -J / 2]].map((j) => () => cam.position.set(p0.x + j[0], p0.y + j[1], p0.z + j[2])))
+        const depth = count([1.002, 1.004, 0.998, 0.996].map((k) => () => (cam.near = n0 * k)))
+        app.frame = keep
+        requestAnimationFrame(app.frame)
+        return { building, jitter, depth, near: +n0.toFixed(3), far: Math.round(cam.far) }
+      })
+      out.push(`${name}: ${r.jitter} and ${r.depth} of ${r.building} (near ${r.near}, far ${r.far})`)
+      const most = Math.max(80, r.building * 0.001)
+      // the near-plane probe is the harsher of the two: what it still flips at a low camera are silhouette edges, so it gets half again
+      const mostDepth = Math.max(80, r.building * 0.0015)
+      if (r.jitter > most || r.depth > mostDepth) throw new Error(`${name}: ${r.jitter} pixels flip under the jitter, ${r.depth} under the depth, of ${r.building}`)
+    }
+    console.log(`      building pixels that change under a 2 mm jitter and under the near plane moved 0.2–0.4%: ${out.join(' · ')}`)
+  })
+  await check('towns: what the island’s towns cost over Lahaina and Kailua-Kona, in 1896 and now', async () => {
+    const out = {}
+    for (const place of ['lahaina', 'kailua-kona']) {
+      for (const y of [1896, lastYear]) {
+        await lowOver(place, y, [60, 0.3, 30])
+        await frames(2)
+        const ms = await wall(6)
+        await run('app.towns.hidden = true')
+        await frames(2)
+        const without = await wall(6)
+        await run('app.towns.hidden = false')
+        await frames(2)
+        const tw = await ui('app.towns.stats()')
+        const isl = tw.islands.find((i) => i.drawn) || tw.islands[0] || {}
+        out[`${place} ${y}`] = { ms, msWithout: without, calls: await ui('app.renderer.info.render.calls'), drawn: tw.drawn, triangles: isl.triangles, tiles: isl.worked, msPerTile: isl.msPerTile, buildMs: isl.buildMs, cpuMB: isl.cpuMB }
+        if (tw.drawn > 6000) throw new Error(`${place} ${y}: ${tw.drawn} drawn`)
+      }
+    }
+    console.log('      towns perf', JSON.stringify(out))
+  })
 }
-// ==== end settlements =========================================================
+// ==== [settlements] end =======================================================
 
 // Patches (DATA.md "Patches, on any pack"): each raises today's sea or sinks
 // today's land to its reef flat in the years before its until, and not after,
