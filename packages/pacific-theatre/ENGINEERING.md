@@ -511,6 +511,40 @@ Models, as parameters the kits carry (DATA.md §8) and `config.js` scales
 - **World** (`world.js`): samples `ground` bilinearly (as the Hawaiian
   `PackTerrain.metresAt`) for collisions, groundings and AA lines of sight.
 
+**As built** (the engine's departures that change this section's words,
+kept by the integration because the replay test and the real boxes bear
+them out; research/engine.md has the numbers):
+
+- *Parameters* live in `src/battle/sim/params.js`, not `config.js`, and
+  `createSim(battle, kits, { seed, warn, ground, proj, exaggeration })`
+  takes the box's `TangentProjection` (`proj`), because battle.json does not
+  carry its box's origin.
+- *AI gunnery*: the solution error above gives about 45 % hits at 8,400 yd,
+  so a 2.2× "blind" factor holds until a fall of shot has been seen, a
+  target's manoeuvre multiplies the error by `1 + 4·e^(−Δt/60 s)`, and a
+  salvo's shells share one error (each turret draws 0.87 of it). The steady
+  Washington case holds 9–20 hits in about 70 % of runs, not 80 %.
+- *After the last fix* a ship runs on her last course and speed for an hour,
+  then holds (rather than holding at once), so a track that ends inside the
+  box does not stop a ship dead.
+- *A saved carrier's strike* launches only what an optional unit field
+  `ready: [{ t, kit, count }]` says was ready; without it nothing launches.
+- *Hulls* are instanced per kit in every box (§7 says one mesh each).
+- *Watching at 60×* takes one closed-form stride a call while nothing is
+  under the sim's control; eight 1/60 s steps cannot keep up with it.
+- *A hit's `damage`* is the share of the target's fatal the whole event does
+  (the default is 0.08 a hit times the count); the record's shares take every
+  ship it sinks past fatal within ten minutes of her last hit.
+- *A group's `attack.target`* may be a list: its aircraft are shared over the
+  targets a section each, each keeping its own target.
+- *Aircraft that did not reach the release* beyond the record's losses (a
+  `reached` below the count with fewer losses) turned back or had nothing to
+  drop: they fly the plan without a release and are not counted lost.
+- *A CAP's thinning* compares its aircraft flying now with the record's now,
+  so the record's own losses to an untouched CAP happen.
+- `tools/replay.mjs` holds every box to replaying its record untouched
+  (§13 Integrate, step 4).
+
 ## 6. Kits (`src/battle/kits/`)
 
 ```js
@@ -713,6 +747,20 @@ so its own change does not re-enter `fromUrl`. Entering and leaving a box
 use `history.pushState`, so the browser's Back leaves the box. Unknown keys
 are kept. A moment never starts without a click.
 
+**As built**: `Battle.enter` and `Battle.leave` run both sides of the
+hand-over themselves, in the order above, through App's primitives
+(`app.setMode`, `app.cut`, `app.setActive`, the table's `flyTo` and
+`outline`); App calls Battle and does not repeat them. `src/link.js` wires
+the UI's hooks (§11) to Battle and builds the briefing, the stop cards and
+the after-card as plain objects; `src/ui/boxbar.js` is the box's bar (the
+table, the stops, play and pause, the speed, the moments, the credits; at the
+checkpoint, Keep going and the card). Esc while flying down aborts the entry
+(`battle.abort()`, the table flies back); a box event's card starts decoding
+its pack (`app.prefetch`); leaving flies the box's rig up to the hand-over
+pose before the cut and reopens the battle's card on the table. `#t` is
+written as hours from the clock's first midnight (`24:07`), as
+`BattleClock.parse` reads it back.
+
 `window.__app = app`; handles for the tools: `app.ready`, `app.mode`,
 `app.clock`, `app.table`, `app.battle` (`.scene`, `.sim`), `app.tour`,
 `app.ui`, `app.settle()`, `app.stats()`.
@@ -805,6 +853,15 @@ chapter ticks and the prologue compressed to a tenth.
   `subset-font` 2.4.0 from the Google Fonts TTF; the result is committed and
   FONTS.md lists the glyph count. Runs at integration, after the content and
   battles have landed.
+- `replay.mjs` (the integration): every box's sim built as `Battle.enter`
+  builds it, run untouched from the clock's `from` to `to` at the sim's
+  step, held to `sim.outcome.diverged` empty, the strikes' launch times, the
+  fates' times and the record's hits past fatal; exit 1 with each divergence
+  named. `check/cross.mjs` (the integration) holds the files of different
+  workflows to each other: event boxes baked, clock ids, kits cited on their
+  side with sources, moment roles, boxed fleet routes with their units.
+  `smoke-battle.mjs`'s third part plays every v1 moment on the real boxes in
+  the built app (`dist/index.html#battle=…`) to its checkpoint and its card.
 - The thumbnail: `scripts/thumbnails.mjs` opens the dist with no hash, so
   the package's `gallery.thumbnail` clicks a mid-war chapter tick
   (`"click": ".tl-tick[data-i='4']"`) with a settle long enough for the
