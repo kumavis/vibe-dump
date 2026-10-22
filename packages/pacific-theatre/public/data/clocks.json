@@ -42,7 +42,7 @@
     "side": "us",
     "used": "Parts Two and Three of the ONI Combat Narrative of the Naval Battle of Guadalcanal (\"All times in this section are Zone minus 12\"), South Dakota's action report (\"All times reported herein are zone minus twelve\"), the BuShips war damage report built on it, and Lundgren's essays, which follow Washington's report.",
     "sources": ["oni-cn-guadalcanal-1944", "ar-south-dakota-1942", "wdr-south-dakota-1942", "lundgren-bbaction"],
-    "note": "An hour ahead of zone minus 11: Washington's opening on Kirishima is midnight by one telling and 01:00 by the other. A computed moonset matches ONI's \"moon had set at 0058\" only on this reading."
+    "note": "An hour ahead of zone minus 11: Washington's opening on Kirishima is midnight by one telling and 01:00 by the other. A computed moonset agrees with the ONI narrative's time for the moon's setting only on this reading."
   },
   {
     "id": "usn-item",
@@ -69,7 +69,7 @@
     "side": "us",
     "used": "Oʻahu and the Hawaiian commands from 9 February 1942 to the end of the war.",
     "sources": ["tzdb"],
-    "note": "The tz database dates the change to 9 February 1942, citing Schmitt and Cox, \"Hawaiian Time\", Hawaiian Journal of History 26 (1992)."
+    "note": "The tz database dates the change to 9 February 1942, citing Schmitt and Cox, \"Hawaiian Time\", in the Hawaiian Journal of History (1992)."
   },
   {
     "id": "malaya-1941",
