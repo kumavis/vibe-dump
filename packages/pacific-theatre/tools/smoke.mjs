@@ -10,11 +10,15 @@
 // credits panel holds NOTICE.md's notices; the briefing and the after-card
 // render from plain objects, people kept to The record; every scene
 // ShaderMaterial's compiled source carries the log-depth chunks
-// (vFragDepth); the URL's #date and #cam act and #battle is kept; the stub
-// Battle flies to the fixture box's outline with the overlays faded out, the
-// box flavours compile and draw in its preview with the table's interface
-// hidden, and the cut comes back; no console error on the way. Then the frame
-// time and the heap at the far and near zooms.
+// (vFragDepth); the URL's #date and #cam act. Then the box, as src/link.js
+// wires it: Enter the battle on the box event's card flies down and cuts into
+// the box in watch mode with the briefing open and the table's interface
+// hidden, every box material with vFragDepth; a stop walks the battle; a
+// moment taken with player.scripted runs twenty seconds of sim time and stays
+// finite, and the after-card has its four parts; the browser's Back leaves
+// the box; #battle, #t and #moment go straight in with the moment offered.
+// No console error on the way. Then the frame time and the heap at the far
+// and near zooms (over the Solomons on the real data).
 //
 //   npm run build -w @vibe-dump/pacific-theatre
 //   node tools/fake-data.mjs
@@ -26,8 +30,8 @@
 // settle the camera (app.settle()) rather than wait out flights. Adapted from
 // holo-i-ke-au's tools/smoke.mjs (b480c27): its harness (the server, the
 // browser, check/ui/run/expect/frames) and its perf block (the CDP heap,
-// wall-time frames) are kept. The engine's checks (a moment with
-// player.scripted) live in tools/smoke-battle.mjs until integration.
+// wall-time frames) are kept. The engine's calibrations and every v1
+// moment on the real boxes are tools/smoke-battle.mjs's.
 import { chromium } from 'playwright'
 import { createServer } from 'node:http'
 import { readFile, stat } from 'node:fs/promises'
@@ -294,18 +298,27 @@ await check("a pin opens its card, and a box event's card raises ui.onEnter", as
   await expect('app.ui.card.mode', 'event')
   await expect('app.ui.card.ev.id', BOX_EV)
   const routes = await ui('app.table.routes.visibleRoutes().map((r) => r.id)')
-  await run(`window.__entered = null; app.ui.onEnter = (ev) => { window.__entered = ev.id }`)
+  await run(`window.__entered = null; window.__onEnter = app.ui.onEnter; app.ui.onEnter = (ev) => { window.__entered = ev.id }`)
   await page.click('.card .nav.enter')
   await expect('window.__entered', BOX_EV)
+  await run('app.ui.onEnter = window.__onEnter')
   await look('smoke-card.png')
   return `${BOX_EV}: “${await ui("document.querySelector('.card h1').textContent")}”, ${await ui("document.querySelector('.card .when').textContent")}; routes on ${routes.join(', ') || 'none'}; Enter the battle raised onEnter`
 })
 
 await check('pins in one spot gather into a cluster, whose list opens on the card', async () => {
-  // the date of the box event, seen from the whole theatre, where its neighbours in the window gather with it
+  // the date of the box event, seen from the whole theatre, where its neighbours in the window gather with it;
+  // on the real data (7 December 1941 has none at the far zoom), the first chapter keyframe that has one
   await run(`app.ui.card.close(); app.ui.pins.activeEvent = null; app.table.setFocus(null); app.ui.onScrub(); app.table.rig.jump({ x: app.table.rig.homeView().target.x, z: app.table.rig.homeView().target.z, distance: app.table.rig.maxDistance, yaw: 0, pitch: 1.12 }); app.settle()`)
   await frames(3)
-  const groups = await ui('app.ui.pins.groups()')
+  let groups = await ui('app.ui.pins.groups()')
+  const dates = useTest ? [] : await ui('app.data.events.filter((e) => e.when?.from).map((e) => Date.parse(e.when.from)).filter(Number.isFinite).sort((a, b) => a - b).filter((d, i, a) => i % 6 === 0)')
+  for (const d of dates) {
+    if (groups.length) break
+    await run(`app.clock.setDate(${d}); app.settle()`)
+    await frames(2)
+    groups = await ui('app.ui.pins.groups()')
+  }
   if (!groups.length) throw new Error(`no cluster on ${await ui('new Date(app.clock.date).toISOString()')}; pins showing: ${(await ui('app.ui.pins.visibleEvents().map((e) => e.id)')).join(', ')}`)
   await page.click('.cluster.show')
   await expect('app.ui.card.mode', 'cluster')
@@ -328,9 +341,10 @@ await check("the Sources and credits panel holds NOTICE.md's notices and the box
 await check('the briefing and the after-card render from plain objects; people stay in The record', async () => {
   await run(`app.ui.openBriefing({ title: 'Test briefing', ja: { kanji: '試験海戦', romaji: 'Shiken kaisen' }, when: '4 June 1942, 10:20', clock: 'test clock', situation: 'Test situation.', forces: [{ name: 'Test side A', units: ['A1', 'A2'] }, { name: 'Test side B', units: ['B1'] }], moments: [{ id: 'test-dive', title: 'A test dive', role: 'a test aircraft', t: '10:21:30', objective: 'Test objective.', focus: true }], sources: ['test-source-a'], credit: 'Test credit line.' })`)
   await expect('app.ui.card.mode', 'briefing')
-  await run(`window.__took = null; app.ui.onTake = (id) => { window.__took = id }`)
+  await run(`window.__took = null; window.__onTake = app.ui.onTake; app.ui.onTake = (id) => { window.__took = id }`)
   await page.click('.card .nav.take')
   await expect('window.__took', 'test-dive')
+  await run('app.ui.onTake = window.__onTake')
   await run(`app.ui.openAfter({ momentId: 'test-dive', title: 'A test dive', sortie: [{ label: 'Hits', value: 'one, aft' }, { label: 'Crew', value: '120 men lost' }], battle: { rows: [{ what: 'Test carrier', record: 'sank 19:25', yours: 'sinks 19:25 as in the record' }] }, record: { text: 'Test: between 1,000 and 1,200 men lost their lives.', sources: ['test-source-a'] }, next: { text: 'Test next.' }, retry: { start: true, checkpoint: true } })`)
   await expect('app.ui.card.mode', 'after')
   const parts = await ui("[...document.querySelectorAll('.after-part h2')].map((h) => h.textContent.trim())")
@@ -355,66 +369,90 @@ await check('the hash carries the date and the camera', async () => {
   return await ui('location.hash')
 })
 
-await check('#date and #cam act; #battle, #t and #moment are kept', async () => {
-  const [bx, bz] = [3787.4, -2655.8]
-  await run(`location.hash = '#date=1942-06-04&cam=${bx},${bz},2400,0.3,0.9&battle=test-box&t=10:22&keep=me'`)
+await check('#date and #cam act; other keys are kept', async () => {
+  const [bx, bz] = await ui('(() => { const h = app.table.rig.homeView(); return [+(h.target.x + 200).toFixed(1), +(h.target.z - 150).toFixed(1)] })()')
+  await run(`location.hash = '#date=1942-06-04&cam=${bx},${bz},2400,0.3,0.9&keep=me'`)
   await page.waitForFunction(() => Math.abs(window.__app.clock.date - Date.UTC(1942, 5, 4)) < 1000, null, { timeout: 30000 })
   await frames(2)
   const g = await ui('[app.table.rig.goal.target.x, app.table.rig.goal.target.z, app.table.rig.goal.distance]')
   if (Math.abs(g[0] - bx) > 0.5 || Math.abs(g[1] - bz) > 0.5 || Math.abs(g[2] - 2400) > 1) throw new Error(`the rig is at ${g}`)
-  await expect('app.url.battle', 'test-box')
-  await expect('app.url.t', '10:22')
-  await page.waitForFunction(() => /keep=me/.test(location.hash) && /battle=test-box/.test(location.hash), null, { timeout: 30000 })
-  if (!infos.some((t) => /\[url\] kept until integration/.test(t))) throw new Error('the kept battle was not logged')
+  await page.waitForFunction(() => /keep=me/.test(location.hash), null, { timeout: 30000 })
   return await ui('location.hash')
 })
 
-await check("the stub Battle flies the table to the fixture box's outline, the overlays faded out over the box", async () => {
-  const st = await run(`return await app.battle.enter('test-box')`)
-  if (st?.boxId !== 'test-box') throw new Error(`enter resolved ${JSON.stringify(st)}`)
-  await run('app.settle()')
+// The box (ENGINEERING §§8–9, 11, wired by src/link.js): entered from its card, the hand-over's cut, watched
+// with the briefing open, walked by its stops, a moment taken with player.scripted and scripted input, the
+// after-card, Back to leave, and the URL straight into a box.
+const BOX = await ui(`app.data.events.find((e) => e.id === '${BOX_EV}')?.box ?? null`)
+await check("Enter the battle flies down, cuts into the box in watch mode and opens the briefing, the table's interface hidden", async () => {
+  if (!BOX) throw new Error('no box event')
+  await run(`app.ui.card.close(); const ev = app.data.events.find((e) => e.id === '${BOX_EV}'); app.ui.tour.open(ev); app.settle()`)
   await frames(2)
-  const r = await ui(`(() => {
-    const b = app.data.boxById.get('test-box')
-    const v = app.table.outlineView('test-box')
-    const s = app.table.rig.state
-    return { dx: s.target.x - b.placement.centre[0], dz: s.target.z - b.placement.centre[1], d: s.distance, want: v.distance, yaw: s.yaw, wantYaw: v.yaw,
-      outline: !!app.table.outlines.get('test-box')?.on, mode: app.mode, pack: app.battle.loaded?.pack.W, units: app.battle.loaded?.battle?.units?.length, kits: app.battle.loaded?.kits.ships.length,
-      fade: app.table.fade, frontK: app.table.frontUniforms.uFrontK.value }
-  })()`)
-  if (Math.hypot(r.dx, r.dz) > 1 || Math.abs(r.d - r.want) > r.want * 0.01 || Math.abs(r.yaw - r.wantYaw) > 1e-3) throw new Error(`the rig landed off the hand-over pose: ${JSON.stringify(r)}`)
-  if (!r.outline || r.mode !== 'table' || r.pack !== 256 || r.units !== 6) throw new Error(JSON.stringify(r))
-  if (!(r.fade < 0.05 && r.frontK < 0.05)) throw new Error(`the overlays are still up over the box: fade ${r.fade}, front ${r.frontK}`)
-  const l = await look('smoke-outline.png')
-  return `${r.d.toFixed(0)} km over the box's centre, yaw ${r.yaw.toFixed(3)}; overlays ${r.fade.toFixed(3)}; ${r.units} units, ${r.kits} ship kits; frame ${JSON.stringify(l)}`
-})
-
-await check("the box flavours compile and draw (preview), every material with vFragDepth, the table's interface hidden", async () => {
-  await run(`await app.battle.preview()`)
-  await expect('app.active.name', 'box')
-  await expect('app.mode', 'watch')
+  await page.click('.card .nav.enter')
+  await page.waitForFunction(() => window.__app.mode === 'watch' && window.__app.active === window.__app.battle.scene, null, { timeout: 600000 })
   await frames(3)
+  const r = await ui(`({ box: app.battle.state.boxId, card: app.ui.card.mode, moments: document.querySelectorAll('.card .nav.take').length, bar: !document.querySelector('.boxbar').hidden, timeline: document.querySelector('.timeline').hidden, pins: document.querySelectorAll('.pin.show, .cluster.show, .label.show').length, hash: location.hash, running: app.battle.running, slots: app.battle.sim.capacity })`)
+  if (r.box !== BOX || r.card !== 'briefing' || !r.bar || !r.timeline || r.pins || !r.running || !/battle=/.test(r.hash)) throw new Error(JSON.stringify(r))
   const a = await shaderAudit()
-  if (a.missing.length || a.uncompiled.length) throw new Error(`missing in ${a.missing.join(', ')}; uncompiled ${a.uncompiled.join(', ')}`)
+  if (a.missing.length || a.uncompiled.length) throw new Error(`vFragDepth missing in ${a.missing.join(', ')}; uncompiled ${a.uncompiled.join(', ')}`)
   const s = await ui('app.stats()')
   if (!(s.nodes > 0)) throw new Error(`the box terrain draws ${s.nodes} nodes`)
-  await expect("document.querySelector('.timeline').hidden", true)
-  await expect("document.querySelectorAll('.pin.show, .cluster.show, .label.show').length", 0)
   const l = await look('smoke-box.png')
   if (l.spread < 4) throw new Error(`a flat frame: ${JSON.stringify(l)}`)
-  return `${a.materials} materials, ${s.nodes} terrain nodes, ${s.calls} draw calls, at ${s.distance} m; frame ${JSON.stringify(l)}`
+  return `${r.box}: ${r.slots} slots, ${r.moments} moments offered, ${a.materials} materials with vFragDepth, ${s.calls} draw calls; ${r.hash}`
 })
 
-await check('leave cuts back to the table, takes the outline away, and the overlays come back', async () => {
-  await run(`await app.battle.leave()`)
-  await expect('app.active === app.table', true)
-  await expect('app.mode', 'table')
-  await expect("!!app.table.outlines.get('test-box')?.on", false)
-  await expect('app.battle.scene', null)
-  await run('app.settle()')
+await check("a box's stops walk its battle, each with its card", async () => {
+  await page.keyboard.press('ArrowRight')
   await frames(2)
-  await expect('app.table.fade', 1)
+  const r = await ui(`({ mode: app.ui.card.mode, stop: app.link.stop, t: app.battle.sim.t, want: app.battle.sim.record.stops[app.link.stop]?.t, text: document.querySelector('.card .card-body')?.textContent.slice(0, 60) })`)
+  if (r.mode !== 'stop' || r.stop < 0 || Math.abs(r.t - r.want) > 2) throw new Error(JSON.stringify(r))
+  await look('smoke-stop.png')
+  return `stop ${r.stop + 1}: “${r.text}…”`
+})
+
+await check('a moment taken with player.scripted runs twenty seconds of sim time, stays finite, and the after-card has its four parts', async () => {
+  const id = await ui('[...app.battle.sim.record.moments.keys()][0]')
+  await run(`app.ui.card.close(); app.take('${id}'); const pl = app.battle.sim.player; pl.scripted = true; app.battle.pause()`)
+  await expect('app.mode', 'moment')
+  await run(`const sim = app.battle.sim; const pl = sim.player; const t1 = sim.t + 20; while (sim.t < t1 && !sim.momentState.done) { const st = pl.state; if (pl.kind === 'aircraft') { pl.input.aimDir = [Math.sin(st.heading * Math.PI / 180), (Math.max(300, st.y) - st.y) / 2000, -Math.cos(st.heading * Math.PI / 180)]; pl.input.throttle = 0.8 } else { pl.input.telegraph = 1; pl.input.helm = 0.2 } sim.advance(8 / 60) }`)
+  await frames(2)
+  const bad = await ui(`(() => { const s = app.battle.sim.state; for (const k of ['pos', 'quat', 'vel', 'speed', 'heading', 'damage', 'fire', 'list']) for (const v of s[k]) if (!Number.isFinite(v)) return k; return null })()`)
+  if (bad) throw new Error(`state.${bad} is not finite`)
+  const a = await shaderAudit()
+  if (a.missing.length || a.uncompiled.length) throw new Error(`vFragDepth missing in ${a.missing.join(', ')}`)
+  await look('smoke-moment.png')
+  await run(`app.battle.finish('card')`)
+  await page.waitForSelector('.card.show[data-mode=after]', { timeout: 60000 })
+  const parts = await ui("[...document.querySelectorAll('.after-part h2')].map((h) => h.textContent.trim())")
+  if (parts.length !== 4) throw new Error(`parts ${JSON.stringify(parts)}`)
+  await expect('app.mode', 'watch')
+  await look('smoke-after-real.png')
+  return `${id}: ${parts.join(' | ')}`
+})
+
+await check("Back leaves the box: the table at the battle's date, the outline gone, the overlays back", async () => {
+  await page.goBack()
+  await page.waitForFunction(() => window.__app.mode === 'table' && window.__app.active === window.__app.table && !window.__app.battle.scene, null, { timeout: 300000 })
+  await run('app.settle()')
+  await frames(3)
+  await expect(`!!app.table.outlines.get('${BOX}')?.on`, false)
   await expect("document.querySelector('.timeline').hidden", false)
+  await expect("document.querySelector('.boxbar').hidden", true)
+  await expect('app.table.fade', 1)
+  return await ui('location.hash')
+})
+
+await check('#battle, #t and #moment go straight into the box, the moment offered and not taken', async () => {
+  const m = await run(`const r = await fetch(app.data.abs(app.data.boxById.get('${BOX}').battle)); const B = await r.json(); return { id: B.moments[0].id, t: B.stops[1]?.t ?? B.stops[0].t }`)
+  await run(`location.hash = '#battle=${BOX}&t=${m.t}&moment=${m.id}'`)
+  await page.waitForFunction(() => window.__app.mode === 'watch' && window.__app.active === window.__app.battle.scene, null, { timeout: 600000 })
+  await frames(2)
+  const r = await ui(`({ t: app.battle.sim.clock.label(app.battle.sim.t), card: app.ui.card.mode, focus: document.activeElement?.dataset?.take ?? document.querySelector('.card .take.focus')?.dataset.take, mode: app.mode })`)
+  if (r.card !== 'briefing' || r.focus !== m.id || r.mode !== 'watch') throw new Error(JSON.stringify(r))
+  await page.click('.boxbar .bb-leave')
+  await page.waitForFunction(() => window.__app.mode === 'table' && !window.__app.battle.scene, null, { timeout: 300000 })
+  return `${BOX} at ${r.t} (asked ${m.t}), ${m.id} focused`
 })
 
 // What the page costs: the JS heap after a collection, and the frame time on
@@ -452,7 +490,8 @@ await check('perf', async () => {
   await frames(3)
   out['table.far.ms'] = await frameMs(8)
   out['table.far'] = await scene()
-  await run(`app.table.rig.jump({ x: -213, z: -1168, distance: 300, yaw: 0, pitch: 0.9 }); app.settle()`)
+  // (the fixture's island group, or the Solomons on the real data)
+  await run(`const p = app.data.places.find((x) => x.id === 'guadalcanal') || null; const [x, z] = p && p.geometry?.type === 'Point' ? app.data.proj.toWorld(p.geometry.coordinates) : [-213, -1168]; app.table.rig.jump({ x, z, distance: 300, yaw: 0, pitch: 0.9 }); app.settle()`)
   await frames(3)
   out['table.near.ms'] = await frameMs(8)
   out['table.near'] = await scene()
