@@ -364,7 +364,9 @@ export class CameraRig {
       let x1 = -Infinity
       let y1 = -Infinity
       for (const [x, z] of pts) {
-        const [px, py] = screen(x, ty, z)
+        // (a point given a distance stands on its own ground, which below a
+        // steep slope the slid target's height is not: the pali's gap)
+        const [px, py] = screen(x, fixed ? this.world.heightAt(x, z) : ty, z)
         x0 = Math.min(x0, px)
         x1 = Math.max(x1, px)
         y0 = Math.min(y0, py)

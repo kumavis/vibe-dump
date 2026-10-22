@@ -136,6 +136,44 @@ mkdirSync(outDir, { recursive: true })
 }
 // ==== [soldiers] end ===============================================================================
 
+// ==== [ui6] the sources read, the Māhele, the Kou stop, the shore, the phone's timeline ============
+// '[{"preset":"ui6"}]' shoots a card's sources (only what was read), the Māhele over the chain and over
+// Oʻahu with its legend (and the hover card on an ahupuaʻa), the tour's Māhele step, the Kou stop and
+// its target, and the shore at Kawaihae (the cattle step and closer), Waikīkī and Lahaina. With
+// VIEWPORT=390x844, '[{"preset":"ui6-phone"}]' shoots the phone's timeline, opening and at a step.
+{
+  const step = (id, extra = '') => `app.ui.card.close(); ${extra}const at = app.tour.locate(app.data.events.find((e) => e.id === '${id}')); app.tour.goTo(at[0], at[1])`
+  const chain = "const v = app.tour.chainView(); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })"
+  const isle = (id) => `const v = app.tour.islandView('${id}', 0); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`
+  const near = (place, d) => `app.ui.card.close(); const v = app.tour.pointView(app.tour.places.get('${place}'), ${d}); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`
+  const toSources = "const c = document.querySelector('.card.show'); const h2 = [...c.querySelectorAll('.card-sec h2')].find((h) => h.textContent === 'Sources'); if (h2) c.scrollTop = h2.parentElement.offsetTop - 12"
+  const mahele = "app.regionOn === 'mahele' && app.mahele.built"
+  const UI6 = [
+    { name: 'ui6-card-sources', eval: `${step('nuuanu-1795')}; ${toSources}`, element: '.card.show', report: "[...document.querySelectorAll('.card.show .sources li')].length" },
+    { name: 'ui6-mahele-chain', year: 1853, eval: `app.ui.card.close(); app.ui.onScrub(); app.setView('mahele', { user: true }); ${chain}`, until: mahele, frames: 4, report: "document.querySelector('.legend').textContent.replace(/\\s+/g, ' ')" },
+    { name: 'ui6-mahele-oahu', year: 1853, eval: isle('oahu'), until: mahele, frames: 4, report: "document.querySelector('.legend').textContent.replace(/\\s+/g, ' ')" },
+    { name: 'ui6-mahele-step', eval: step('mahele-1848', 'app.viewChosen = false; '), until: mahele, frames: 4, report: '[app.view, app.farView]' },
+    { name: 'ui6-kou', eval: `${step('nuuanu-1795')}; app.tour.goStop(4)`, until: "app.districts.cur?.state === 'ready'", frames: 4, report: '[app.tour.state, app.rig.goal.distance]' },
+    { name: 'ui6-kawaihae', eval: step('cattle-1793', "app.setView('chiefdoms', { user: true }); "), frames: 4 },
+    { name: 'ui6-kawaihae-300', eval: near('kawaihae', 300), frames: 4 },
+    { name: 'ui6-kawaihae-100', eval: near('kawaihae', 100), frames: 4 },
+    { name: 'ui6-waikiki', eval: step('mailikukahi'), frames: 4 },
+    { name: 'ui6-waikiki-300', eval: near('waikiki', 300), frames: 4 },
+    { name: 'ui6-lahaina', eval: step('whaling'), frames: 4 },
+    { name: 'ui6-lahaina-300', eval: near('lahaina', 300), frames: 4 },
+  ]
+  const UI6_PHONE = [
+    { name: 'ui6-phone-open', frames: 3 },
+    { name: 'ui6-phone-timeline', frames: 1, element: '.timeline', report: "[...document.querySelectorAll('.tl-tick span')].filter((e) => !e.hidden).map((e) => e.textContent)" },
+    { name: 'ui6-phone-step', eval: step('mahele-1848'), until: mahele, frames: 3 },
+  ]
+  for (let i = shots.length - 1; i >= 0; i--) {
+    if (shots[i].preset === 'ui6') shots.splice(i, 1, ...UI6)
+    else if (shots[i].preset === 'ui6-phone') shots.splice(i, 1, ...UI6_PHONE)
+  }
+}
+// ==== [ui6] end ===================================================================================
+
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.geojson': 'application/geo+json', '.png': 'image/png', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' }
 export function serve(dir, p) {
   const server = createServer(async (req, res) => {

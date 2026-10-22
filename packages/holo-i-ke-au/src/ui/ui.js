@@ -1,9 +1,11 @@
 // The interface: the year control and the chapter tour that walks it, the
 // event pins and their cards, layer toggles, a legend for the far view with
-// the switch between its two modes (the chiefdoms, the land), a hover card
-// naming the moku under the pointer (and in the land view, what the layers
-// hold there), and an about panel with the data's provenance. Built on the
-// ahupuaʻa app's cards and glass panels; words are kept for the cards.
+// the switch between its three modes (the chiefdoms, the land, and from 1848
+// the Māhele), a hover card naming the moku under the pointer (in the land
+// view, what the layers hold there; in the Māhele, the ahupuaʻa, its class
+// and its awardee), and an about panel with the data's provenance, citing
+// only what was read (card.js readable). Built on the ahupuaʻa app's cards
+// and glass panels; words are kept for the cards.
 //
 // The legend and the hover card belong to the far views: both go as the
 // camera closes in and the far view's overlays fade (farStrength), and the
@@ -21,8 +23,12 @@ import { icon } from './icons.js'
 import { landZoom, polityZoom } from '../app.js'
 import { TimelineBar } from './timeline.js'
 import { Pins } from './pins.js'
-import { EventCard } from './card.js'
+import { EventCard, readable } from './card.js'
 import { Tour } from './tour.js'
+import { CLASSES, MAHELE_YEAR } from '../overlay/mahele.js'
+
+const MAHELE_TITLE = 'The land division of 1848, by ahupuaʻa'
+const CLASS = new Map(CLASSES.map((k) => [k.id, k]))
 
 export class UI {
   constructor(app) {
@@ -65,13 +71,14 @@ export class UI {
     )
     root.appendChild(this.tools)
 
-    // the far view's two modes, as a switch heading its legend: pressing the
-    // one that is on turns the overlay off, as the old toggle did
+    // the far view's three modes, as a switch heading its legend: pressing
+    // the one that is on turns the overlay off, as the old toggle did
     this.legend = h('div', { class: 'legend' })
     this.legend.innerHTML = `
       <div class="lg-switch" role="group" aria-label="What the far view shows">
         <button type="button" data-view="chiefdoms" aria-pressed="false" title="Who held each moku">Chiefdoms</button>
         <button type="button" data-view="land" aria-pressed="false" title="Cultivation, settlement and forest in the chosen year">Land</button>
+        <button type="button" data-view="mahele" aria-pressed="false" title="${MAHELE_TITLE}">Māhele</button>
       </div>
       <div class="lg-body"></div>`
     this.legendBody = $('.lg-body', this.legend)
@@ -97,17 +104,28 @@ export class UI {
         <button class="help-close" aria-label="Close">${icon('close', 18)}</button>
         <h2>Holo i ke Au</h2>
         <p><em>Holo i ke au</em>: sail on the current, into the era. <em>Au</em> is both a period of time and a current, and the title rides it.</p>
-        <p>The Hawaiian Islands from real terrain, across the eras from the first canoes to 1898. Far out, each moku takes the colour of the chiefdom or kingdom that held it; close in, the boundaries of moku and ahupuaʻa lie on the land. Pins are events of the chosen era: open one for its story, how sure the record is, and its sources. A number stands for several events in one spot; open it for the list. A source marked <span class="flag">verify</span> has not yet been read at the source.</p>
-        <p>The switch on the legend turns the far view from the <b>Chiefdoms</b> to the <b>Land</b>: where it was cultivated, where people lived and how many, and the native forest, in the chosen year, blended between layers made for 1778, 1853, 1896 and now. A layer marked <em>modelled</em> was drawn by a written rule where no map of its time exists.</p>
+        <p>The Hawaiian Islands from real terrain, across the eras from the first canoes to 1898. Far out, each moku takes the colour of the chiefdom or kingdom that held it; close in, the boundaries of moku and ahupuaʻa lie on the land. Pins are events of the chosen era: open one for its story, how sure the record is, and its sources. A number stands for several events in one spot; open it for the list.</p>
+        <p>The switch on the legend turns the far view from the <b>Chiefdoms</b> to the <b>Land</b>: where it was cultivated, where people lived and how many, and the native forest, in the chosen year, blended between layers made for 1778, 1853, 1896 and now. A layer marked <em>modelled</em> was drawn by a written rule where no map of its time exists. From ${MAHELE_YEAR} it turns to the <b>Māhele</b> too: each ahupuaʻa in the class the land division gave it, crown, government or konohiki land, or mixed where the records give it more than one.</p>
         <p><b>Next</b> walks the story an era at a time: each era opens with its card, then its events in order, the year and the camera moving to each. Look around as you like between steps; the timeline is free too, and Next picks the story up again from the nearest era.</p>
         <div class="help-keys">
           <span><b>→ / Space</b> next</span><span><b>←</b> back</span><span><b>, .</b> era by era</span><span><b>Drag</b> move</span><span><b>Right-drag / Shift</b> turn and tilt</span><span><b>Scroll / pinch</b> zoom</span><span><b>Double-click</b> fly closer</span>
         </div>
         ${credits ? `<h3>Data</h3><ul class="credits">${credits}</ul>` : ''}
         <div class="land-credits"></div>
+        <div class="mahele-credits"></div>
       </div>`
     root.appendChild(this.help)
     this.refreshLegend()
+  }
+
+  /**
+   * Whether a credit may be listed, by the rule the cards keep (card.js
+   * readable): as sources.json has it, where it is one of those, else as it
+   * stands (a layer a bake fetched).
+   */
+  creditable(s) {
+    if (!this.sourceById) this.sourceById = new Map(this.app.data.sources.map((x) => [x.id, x]))
+    return readable(this.sourceById.get(s.id) || s)
   }
 
   /** Provenance of the terrain and boundary data, from the manifest and the boundary files. */
@@ -115,7 +133,7 @@ export class UI {
     const d = this.app.data
     const seen = new Map()
     const add = (s) => {
-      if (s && s.id && !seen.has(s.id)) seen.set(s.id, s)
+      if (s && s.id && !seen.has(s.id) && this.creditable(s)) seen.set(s.id, s)
     }
     for (const p of d.packs) for (const s of p.sources || []) add(s)
     for (const s of d.moku?.sources || []) add(s)
@@ -130,9 +148,19 @@ export class UI {
     if (!el || !m || el.childElementCount) return
     const seen = new Map()
     for (const kf of Object.values(m.methods || {})) {
-      for (const layer of Object.values(kf || {})) for (const s of layer?.sources || []) if (s?.id && /^https?:/.test(s.url || '') && !seen.has(s.id)) seen.set(s.id, s)
+      for (const layer of Object.values(kf || {})) for (const s of layer?.sources || []) if (s?.id && /^https?:/.test(s.url || '') && !seen.has(s.id) && this.creditable(s)) seen.set(s.id, s)
     }
     if (seen.size) el.innerHTML = `<h3>Land layers</h3><ul class="credits">${creditList([...seen.values()])}</ul>`
+  }
+
+  /** And of the Māhele, once its file is in: the sources it was read from, as sources.json has them. */
+  maheleCredits() {
+    const el = $('.mahele-credits', this.help)
+    const ids = this.app.mahele.sources
+    if (!el || !ids || el.childElementCount) return
+    const by = new Map(this.app.data.sources.map((x) => [x.id, x]))
+    const list = [...ids].map((id) => by.get(id)).filter((s) => readable(s))
+    if (list.length) el.innerHTML = `<h3>The Māhele</h3><ul class="credits">${creditList(list)}</ul>`
   }
 
   bind() {
@@ -160,19 +188,28 @@ export class UI {
       const b = e.target.closest('[data-view]')
       if (!b || b.disabled) return
       const v = b.dataset.view
-      app.setView(app.view === v ? null : v, { user: true })
+      // (the one lit is what is drawn: pressing it turns the overlay off)
+      app.setView(app.farView === v ? null : v, { user: true })
     })
     app.onView(() => this.refreshLegend())
     app.land.onChange(() => {
       this.refreshLegend()
       this.landCredits()
     })
+    app.mahele.onChange(() => {
+      this.refreshLegend()
+      this.maheleCredits()
+      // (the file names the sources that make a step the Māhele's: a step already showing takes it up)
+      const tour = this.tour
+      if (tour.active && tour.event) tour.applyView(tour.event)
+    })
     this.help.addEventListener('click', (e) => {
       if (e.target === this.help || e.target.closest('.help-close')) this.help.classList.add('hidden')
     })
     app.timeline.onChange(() => {
       const e = app.timeline.era
-      if (e !== this.legendEra) this.refreshLegend()
+      // (and as the year crosses the Māhele, which falls inside an era)
+      if (e !== this.legendEra || app.mahele.availableAt() !== this.legendMahele) this.refreshLegend()
     })
     const canvas = app.canvas
     let lastHover = 0
@@ -279,7 +316,8 @@ export class UI {
    * chiefdoms' too: that is when its legend's switch would bring one back).
    */
   farStrength(d = this.app.rig.state.distance) {
-    return this.app.view === 'land' ? landZoom(d) : polityZoom(d)
+    const v = this.app.farView
+    return v === 'land' || v === 'mahele' ? landZoom(d) : polityZoom(d)
   }
 
   /** Whether the hover card may show: far enough out, no district down, and (once gone) back out where the legend is. */
@@ -305,22 +343,28 @@ export class UI {
     const p = app.rig.pickGround(cx, cy)
     const m = p && app.world.metresAt(p.x, p.z) > 0 ? app.polity.mokuAt(p.x, p.z) : null
     // (in the land view the moku isn't lit in its polity's colour, which would
-    // hide the layers under it; and close in, where the polity colours have
-    // gone, it isn't lit either: the card names it)
-    const landView = app.view === 'land' && app.landK > 0.25
+    // hide the layers under it; in the Māhele the shader's region map holds
+    // classes, not moku, so nothing is lit; and close in, where the polity
+    // colours have gone, it isn't lit either: the card names it)
+    const fv = app.farView
+    const landView = fv === 'land' && app.landK > 0.25
+    const maheleView = fv === 'mahele' && app.regionOn === 'mahele' && app.polityK > 0.25
     const close = polityZoom(app.rig.state.distance) < 0.05
-    u.uHoverMoku.value = m && !landView && !close ? m.index : 0
+    u.uHoverMoku.value = m && !landView && !close && app.regionOn === 'chiefdoms' ? m.index : 0
     if (!m) {
       this.inspector.classList.remove('show')
       return
     }
     const v = landView ? app.land.valuesAt(p.x, p.z) : null
-    const key = `${m.index}:${app.timeline.era?.id}:${v ? JSON.stringify(v) : ''}`
+    const a = maheleView ? app.mahele.unitAt(p.x, p.z) : null
+    const key = `${m.index}:${app.timeline.era?.id}:${v ? JSON.stringify(v) : ''}:${a ? a.gisId : ''}`
     if (this.inspectorKey !== key) {
       this.inspectorKey = key
       const holder = app.polity.holder(app.timeline.era, m)
       const row = (k, val) => `<div class="in-row"><span class="in-k">${k}</span>${val}</div>`
-      this.inspector.innerHTML = `
+      this.inspector.innerHTML = a
+        ? maheleCard(a, m, row)
+        : `
         <div class="in-head"><b>${esc(m.name)}</b><span class="in-island">${esc(m.island || '')}</span></div>
         ${row('moku', holder ? `<span class="in-pol"><i style="background:${esc(holder.colour)}"></i>${esc(holder.name)}</span>` : '<span class="in-none">no polity recorded</span>')}
         ${v ? row('fields', share(v.cultivation)) + row('people', perKm2(v.people)) + row('forest', share(v.forest)) : ''}`
@@ -335,18 +379,34 @@ export class UI {
     const app = this.app
     const e = app.timeline.era
     this.legendEra = e
+    this.legendMahele = app.mahele.availableAt()
+    // (the one lit is what the far view draws: the chiefdoms, before 1848, for a choice of the Māhele)
+    const fv = app.farView
     for (const b of this.legend.querySelectorAll('[data-view]')) {
-      b.setAttribute('aria-pressed', String(app.view === b.dataset.view))
-      b.classList.toggle('on', app.view === b.dataset.view)
+      b.setAttribute('aria-pressed', String(fv === b.dataset.view))
+      b.classList.toggle('on', fv === b.dataset.view)
     }
     const landBtn = $('[data-view="land"]', this.legend)
     landBtn.disabled = app.land.available === false
     landBtn.title = landBtn.disabled ? 'No land layers in this data' : 'Cultivation, settlement and forest in the chosen year'
+    const maheleBtn = $('[data-view="mahele"]', this.legend)
+    maheleBtn.disabled = !this.legendMahele
+    maheleBtn.title = app.mahele.available === false ? 'No Māhele in this data' : this.legendMahele ? MAHELE_TITLE : `The land division, from ${MAHELE_YEAR}`
     let body = ''
-    if (app.view === 'chiefdoms') {
+    if (fv === 'mahele') {
+      // the ahupuaʻa of each class: on the island in view, or across them all
+      const isl = this.islandInView()
+      const n = app.mahele.counts(isl?.pack.id)
+      if (n.all) {
+        body = `<div class="lg-title">The Māhele of ${MAHELE_YEAR}</div>${CLASSES.map(
+          (k) => `<div class="lg lg-mahele"><i style="background:${esc(k.colour)}"></i><b>${esc(k.name)}</b><em>${n.byClass[k.id].toLocaleString('en-US')}</em></div>`,
+        ).join('')}<div class="lg-note">${esc(`${n.all.toLocaleString('en-US')} ahupuaʻa ${isl ? `on ${isl.pack.name}` : 'on all the islands'}`)}</div>`
+      }
+      this.legendIsland = isl?.pack.id ?? null
+    } else if (fv === 'chiefdoms') {
       const ps = app.polity.politiesIn(e)
       if (ps.length) body = `<div class="lg-title">${esc(e?.label || '')}</div>${ps.map((p) => `<div class="lg"><i style="background:${esc(p.colour)}"></i><b>${esc(p.name)}</b></div>`).join('')}`
-    } else if (app.view === 'land') {
+    } else if (fv === 'land') {
       const d = app.land.describe()
       this.legendLand = JSON.stringify(d)
       if (d) {
@@ -381,7 +441,7 @@ export class UI {
     this.syncCarded()
     // (which keyframes the land is drawn from moves with the year, and the
     // words arrive with the manifest)
-    if (app.view === 'land' && now - (this.landAt || 0) > 250) {
+    if (app.farView === 'land' && now - (this.landAt || 0) > 250) {
       this.landAt = now
       if (JSON.stringify(app.land.describe()) !== this.legendLand || !app.land.bound !== this.legendWaiting) {
         this.legendWaiting = !app.land.bound
@@ -391,11 +451,42 @@ export class UI {
     if (now - (this.whereAt || 0) > 300) {
       this.whereAt = now
       // the name of the island under the camera once one fills the view
-      const t = app.rig.state.target
-      const isl = app.rig.state.distance < 1400 ? app.world.islandAt(t.x, t.z) : null
+      const isl = this.islandInView()
       $('.where', this.brand).textContent = isl ? isl.pack.name : app.world.archPack.name
+      // (and the Māhele's counts are that island's)
+      if (app.farView === 'mahele' && (isl?.pack.id ?? null) !== this.legendIsland) this.refreshLegend()
     }
   }
+
+  /** The island under the camera, once one fills the view; else null. */
+  islandInView() {
+    const s = this.app.rig.state
+    return s.distance < 1400 ? this.app.world.islandAt(s.target.x, s.target.z) : null
+  }
+}
+
+/**
+ * The hover card over an ahupuaʻa in the Māhele: its name and island, its
+ * moku, its class (a mixed one's classes named), the awardee as the record
+ * spells the name, and a class given it later.
+ */
+function maheleCard(a, m, row) {
+  const e = a.entry
+  const k = CLASS.get(a.cls)
+  const sw = (c) => `<i style="background:${esc(c.colour)}"></i>`
+  let cls = `<span class="in-pol">${sw(k)}${esc(k.name)}</span>`
+  if (a.cls === 'mixed') {
+    const parts = [...new Set((e?.parts || []).map((p) => p.class))].map((c) => CLASS.get(c)).filter(Boolean)
+    if (parts.length > 1) cls = `<span class="in-pol">${sw(k)}${esc(k.name)}</span><span class="in-v">${esc(parts.map((c) => c.name.toLowerCase()).join(' and '))}</span>`
+  }
+  const who = e && (a.cls === 'konohiki' || a.cls === 'mixed') ? [].concat(e.awardee || []).filter(Boolean) : []
+  const later = (e?.later || []).map((l) => `${CLASS.get(l.class)?.name.toLowerCase() || l.class}, ${l.year}`)
+  return `
+    <div class="in-head"><b>${esc(a.name || 'Ahupuaʻa')}</b><span class="in-island">${esc(a.island || m.island || '')}</span></div>
+    ${row('moku', `<span class="in-v">${esc(a.moku || m.name)}</span>`)}
+    ${row('land', cls)}
+    ${who.length ? row('awarded', `<span class="in-v">${esc(who.join(', '))}</span>`) : ''}
+    ${later.length ? row('later', `<span class="in-v">${esc(later.join('; '))}</span>`) : ''}`
 }
 
 /** A share of the ground, for the hover card: "35%", "under 1%" or "none". */

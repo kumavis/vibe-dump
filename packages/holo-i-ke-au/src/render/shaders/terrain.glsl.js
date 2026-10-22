@@ -22,6 +22,13 @@
 
 import { constants, noise, world, patches, lighting, polity, land } from './common.glsl.js'
 
+// Where the sea meets the land. The sea (ocean.glsl.js) is drawn wherever
+// the heights read per pixel lie more than SEA_EDGE metres under it, and
+// the land wherever they don't (terrainFragment), so the two share one
+// shoreline, the texels', whatever the mesh's vertices make of it: they
+// are a few texels apart, a kilometre and more at the whole chain's zoom.
+export const SEA_EDGE = 0.05
+
 // (an island's own heights with its patches of the year laid on them,
 // common.glsl.js patchedMetres; the archipelago carries none)
 const own = /* glsl */ `
@@ -197,7 +204,6 @@ uniform vec2 uMorph[12];
 uniform float uGrid;
 uniform vec3 uCamPos;
 out vec3 vWorld;
-out float vMetres;
 
 void main() {
   vec2 g = floor(position.xz * uGrid + 0.5); // this vertex's grid index in its node
@@ -228,11 +234,14 @@ void main() {
     for (int q = 0; q < 2; q++) hc += packMetres(q == 0 ? pa : pb);
     mt = mix(mt, hc * 0.5, k);
   }
-  vMetres = mt;
-  // The sea is drawn from the heights; the seabed under it only needs to show
-  // in the last few centimetres at the shoreline. Sink it below that so the
-  // two surfaces never fight over depth.
-  if (mt < 0.0) mt -= 25.0 * smoothstep(0.15, 3.0, -mt);
+  // Where the heights lie under the sea the sea is drawn, opaque, and not
+  // this mesh (SEA_EDGE), so its seabed is never seen and it stops just
+  // under the surface. (Sunk, or left at its own depth, a few hundred
+  // metres down off a steep coast at a coarse level, every triangle from a
+  // vertex at sea up to one on land dipped under the surface well inland of
+  // where the heights meet the sea, and the seabed showed between the water
+  // and the land.)
+  mt = max(mt, -0.15);
   vWorld = vec3(xz.x, mt * uVert, xz.y);
   gl_Position = projectionMatrix * viewMatrix * vec4(vWorld, 1.0);
 }
@@ -258,7 +267,6 @@ uniform sampler2D uOwnLandB;
 uniform float uOwnRain;    // 0: this pack has no rain image, so the archipelago's stands
 uniform int uDebug;
 in vec3 vWorld;
-in float vMetres;
 
 void main() {
   vec2 xz = vWorld.xz;
@@ -266,6 +274,11 @@ void main() {
   if (edgeDist(uArchRect, xz) < 0.0) discard;
   // (where the district is down, its own mesh draws the ground)
   if (distDraws(xz)) discard;
+  // (and where the heights put the sea, the sea draws: SEA_EDGE; the land
+  // takes its colour from the same heights, so a strip of shore or an islet
+  // finer than the mesh is coloured as land, not as the seabed it lies on)
+  float metres = packMetres(xz);
+  if (metres < -${SEA_EDGE.toFixed(2)}) discard;
   float kSelf = uSelf < 0 ? 0.0 : slotWeight(uSelf, xz);
   // (all four sampled every time: mipmapped lookups need uniform control flow)
   vec2 uvA = rectUv(uArchRect, xz);
@@ -288,7 +301,6 @@ void main() {
   float rain = land.r;
   float sand = land.g;
   float rip = land.b;
-  float metres = vMetres;
 
   vec2 dX = dFdx(xz);
   vec2 dY = dFdy(xz);

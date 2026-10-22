@@ -14,8 +14,8 @@ import { islandKey } from '../geo.js'
 
 const strip = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯʻʼ'‘’]/g, '').toLowerCase()
 
-/** Even-odd scanline fill of a polygon's rings (world coordinates) into grid `id`. */
-function fill(grid, W, H, rect, rings, value) {
+/** Even-odd scanline fill of a polygon's rings (world coordinates) into `grid` (W × H over `rect`), with `value`. */
+export function fill(grid, W, H, rect, rings, value) {
   const sx = W / (rect.x1 - rect.x0)
   const sz = H / (rect.z1 - rect.z0)
   const edges = []

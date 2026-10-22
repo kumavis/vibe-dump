@@ -41,14 +41,16 @@ export class TimelineBar {
     this.nextBtn = $('.tl-next', this.el)
     this.tourEl = $('.tl-tour', this.el)
     const ticks = $('.tl-ticks', this.el)
-    // label every tick if there's room, else every other one, and so on
-    const every = Math.max(1, Math.ceil((n * 46) / Math.min(620, innerWidth - 60)))
+    // every tick carries its year; labelTicks() shows as many as fit
     this.tl.eras.forEach((e, i) => {
       const left = n > 1 ? (i / (n - 1)) * 100 : 50
       const t = h('button', { class: 'tl-tick', style: `left:${left}%`, title: `${e.label} · ${formatYear(e.year, e.yearPrecision)}`, 'aria-label': e.label, 'data-i': i })
-      t.innerHTML = `<i></i>${i % every === 0 || i === n - 1 ? `<span>${esc(formatYear(e.year, e.yearPrecision).replace('c. ', ''))}</span>` : ''}`
+      t.innerHTML = `<i></i><span>${esc(formatYear(e.year, e.yearPrecision).replace('c. ', ''))}</span>`
       ticks.appendChild(t)
     })
+    this.labelTicks()
+    addEventListener('resize', () => this.labelTicks())
+    document.fonts?.ready.then(() => this.labelTicks())
     this.input.addEventListener('input', () => {
       this.tween = null
       this.tl.set(Number(this.input.value))
@@ -67,6 +69,30 @@ export class TimelineBar {
     this.backBtn.addEventListener('click', () => this.ui.tour.back())
     this.tl.onChange(() => this.refresh())
     this.refresh()
+  }
+
+  /**
+   * Name as many ticks as fit: the first and the last always, and between
+   * them each whose year clears the last one named by a few pixels and
+   * leaves room for the end's, so no two labels touch (twelve eras on a
+   * phone: every other one, and the one before the end let go). Measured,
+   * so it holds at any width and size of type; again as the window changes.
+   */
+  labelTicks() {
+    const spans = [...this.el.querySelectorAll('.tl-tick span')]
+    for (const s of spans) s.hidden = false
+    const box = spans.map((s) => s.getBoundingClientRect())
+    // (not laid out yet: every label stays until there is a width to measure)
+    if (!box.some((b) => b.width > 0)) return
+    const GAP = 6
+    const last = box.length - 1
+    let edge = -Infinity
+    spans.forEach((s, i) => {
+      const b = box[i]
+      const keep = i === 0 || i === last || (b.left >= edge + GAP && b.right <= box[last].left - GAP)
+      s.hidden = !keep
+      if (keep) edge = b.right
+    })
   }
 
   /** Ease the slider to timeline position s over `dur` seconds. */

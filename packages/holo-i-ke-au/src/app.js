@@ -1,13 +1,16 @@
 // Wires the loaded data into a running scene: the ground (archipelago and
 // island packs, with the patches that give a year back its reefs), the sea,
-// the sky, the boundary lines, the routes and the far view's two overlays,
-// under one camera that runs from the whole chain to a single valley.
+// the sky, the boundary lines, the routes and the far view's overlays, under
+// one camera that runs from the whole chain to a single valley.
 //
-// The far view shows one of two things at a time (`view`): the chiefdoms,
-// each moku in the colour of the polity that held it (overlay/polity.js), or
-// the land, how it was used in the chosen year (overlay/land.js). The viewer
-// picks with the switch on the legend; the tour may pick for a step until
-// they have (ui/tour.js).
+// The far view shows one of three things at a time (`view`): the chiefdoms,
+// each moku in the colour of the polity that held it (overlay/polity.js);
+// the land, how it was used in the chosen year (overlay/land.js); or, from
+// 1848, the Māhele, each ahupuaʻa in the class the division gave it
+// (overlay/mahele.js). The viewer picks with the switch on the legend; the
+// tour may pick for a step until they have (ui/tour.js). Before 1848 a
+// choice of the Māhele shows the chiefdoms (`farView`), and the Māhele again
+// once the year comes back to it.
 
 import * as THREE from 'three'
 import { World } from './render/world.js'
@@ -21,6 +24,7 @@ import { Boundaries } from './render/lines.js'
 import { Routes, loadRoutes } from './render/routes.js'
 import { PolityOverlay } from './overlay/polity.js'
 import { LandOverlay } from './overlay/land.js'
+import { MaheleOverlay } from './overlay/mahele.js'
 import { Timeline } from './time.js'
 
 const smooth = (a, b, x) => {
@@ -28,9 +32,12 @@ const smooth = (a, b, x) => {
   return t * t * (3 - 2 * t)
 }
 
+// what the far view can show (`view`)
+const VIEWS = ['chiefdoms', 'land', 'mahele']
+
 /** The polity overlay's strength at a camera distance. */
 export const polityZoom = (d) => smooth(260, 900, d)
-/** The land overlay's: full at the island zooms, gone over a valley. */
+/** The land overlay's, and the Māhele's: full at the island zooms, gone over a valley. */
 export const landZoom = (d) => smooth(90, 300, d)
 /** How strongly a chapter's card draws its events' routes: a sketch of what is to come. */
 
@@ -89,14 +96,17 @@ export class App {
     this.timeline = new Timeline(data.eras)
     this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
     this.land = new LandOverlay(this)
+    this.mahele = new MaheleOverlay(this)
+    // (the moku's map is on the shader's region path to begin with; see region())
+    this.regionOn = 'chiefdoms'
     // (the routes follow the story unless the viewer turns them all on: the
     // toggle is the override, off until they press it)
     this.overlay = { lines: true, pins: true, routes: false }
-    // 'chiefdoms', 'land', or null for neither; ?view= asks for one, and
-    // counts as the viewer's choice
+    // 'chiefdoms', 'land', 'mahele', or null for none; ?view= asks for one,
+    // and counts as the viewer's choice
     const v = this.params.get('view')
-    this.view = v === 'land' ? 'land' : v === 'none' ? null : 'chiefdoms'
-    this.viewChosen = v === 'land' || v === 'chiefdoms' || v === 'none'
+    this.view = VIEWS.includes(v) ? v : v === 'none' ? null : 'chiefdoms'
+    this.viewChosen = VIEWS.includes(v) || v === 'none'
     this.viewListeners = []
     this.polityK = 0
     this.landK = 0
@@ -129,6 +139,8 @@ export class App {
     this.routes = new Routes({ proj: this.data.proj, uniforms: this.shared.uniforms, camera: this.camera, renderer: this.renderer, eras: this.data.eras })
     this.scene.add(this.routes.group)
     loadRoutes(this.data, this.warn).then((r) => this.routes.setRoutes(r))
+    // the Māhele's file, small, behind the first frame (its map waits until it is wanted)
+    this.mahele.load()
     this.rig = new CameraRig(this.camera, this.canvas, this.world)
     const cam = this.params.get('cam')
     if (cam) {
@@ -164,15 +176,44 @@ export class App {
   }
 
   /**
-   * What the far view shows: 'chiefdoms', 'land' or null. `user` marks the
-   * viewer's own choice, which the tour leaves alone from then on.
+   * What the far view shows: 'chiefdoms', 'land', 'mahele' or null. `user`
+   * marks the viewer's own choice, which the tour leaves alone from then on.
    */
   setView(v, { user = false } = {}) {
     if (user) this.viewChosen = true
-    const next = v === 'chiefdoms' || v === 'land' ? v : null
+    const next = VIEWS.includes(v) ? v : null
     if (next === this.view) return
     this.view = next
     for (const f of this.viewListeners) f(next)
+  }
+
+  /** What the far view draws: the view chosen, but the chiefdoms where the Māhele hasn't happened yet. */
+  get farView() {
+    return this.view === 'mahele' && !this.mahele.availableAt(this.timeline.year) ? 'chiefdoms' : this.view
+  }
+
+  /**
+   * The chiefdoms and the Māhele are drawn by one path in the terrain shader
+   * (common.glsl.js applyPolity), so one of them at a time stands on its
+   * uniforms: the moku's map and the polities' palette, or the ahupuaʻa's
+   * classes and theirs. They change over only while neither shows, so a
+   * switch between the two fades one out and then the other in.
+   */
+  region(want) {
+    if (want === this.regionOn || this.polityK > 0.004) return
+    if (want === 'mahele' && !this.mahele.build()) return
+    const src = want === 'mahele' ? this.mahele : this.polity
+    const u = this.shared.uniforms
+    u.uMokuId.value = src.idTex
+    u.uPalette.value = src.palTex
+    u.uMokuRect.value.set(src.rect.x0, src.rect.z0, src.rect.x1, src.rect.z1)
+    this.regionOn = want
+  }
+
+  /** The strength the region path asks for at distance d: the chiefdoms' or the Māhele's, whichever is on and wanted. */
+  regionZoom(fv, d) {
+    if (fv !== this.regionOn) return 0
+    return fv === 'mahele' ? landZoom(d) : fv === 'chiefdoms' ? polityZoom(d) : 0
   }
 
   onView(f) {
@@ -254,8 +295,13 @@ export class App {
     this.world.settle(this.camera)
     this.districts?.settle(this.camera, g.distance)
     this.rig.jump({ x: g.target.x, z: g.target.z })
-    this.polityK = this.view === 'chiefdoms' ? polityZoom(g.distance) : 0
-    this.landK = this.view === 'land' ? landZoom(g.distance) : 0
+    const fv = this.farView
+    if (fv === 'chiefdoms' || fv === 'mahele') {
+      this.polityK = 0
+      this.region(fv)
+    }
+    this.polityK = this.regionZoom(fv, g.distance)
+    this.landK = fv === 'land' ? landZoom(g.distance) : 0
     this.shared.uniforms.uPolityK.value = this.polityK
     this.land.settle(this.landK)
     this.routes?.settle(this.timeline.year, g.distance, this.routeOptions())
@@ -263,7 +309,7 @@ export class App {
 
   stats() {
     const info = this.renderer.info
-    return { ...this.world.stats(), view: this.view, frameMs: +(this.frameAvg ?? 0).toFixed(1), calls: info.render.calls, triangles: info.render.triangles, textures: info.memory.textures, quality: this.quality.level }
+    return { ...this.world.stats(), view: this.view, farView: this.farView, frameMs: +(this.frameAvg ?? 0).toFixed(1), calls: info.render.calls, triangles: info.render.triangles, textures: info.memory.textures, quality: this.quality.level }
   }
 
   syncEras() {
@@ -338,15 +384,20 @@ export class App {
     const d = this.rig.state.distance
     this.world.update(this.camera, d, dt)
     this.ocean.update(this.camera)
-    // the two overlays of the far view, crossfading as the view changes: the
+    // the overlays of the far view, crossfading as the view changes: the
     // polity full over the chain and gone well before the valleys; the land
-    // full at the chain and the island zooms, gone as the camera closes on a
-    // valley (where the near view will carry the land itself)
+    // and the Māhele full at the chain and the island zooms, gone as the
+    // camera closes on a valley (where the near view will carry the land
+    // itself). The polity and the Māhele share a path (region), so between
+    // those two it fades out, changes over, and fades in.
     const ease = 1 - Math.exp(-dt * 5)
-    const pk = this.view === 'chiefdoms' ? polityZoom(d) : 0
+    const fv = this.farView
+    if (fv === 'chiefdoms' || fv === 'mahele') this.region(fv)
+    const pk = this.regionZoom(fv, d)
     this.polityK += (pk - this.polityK) * ease
+    if (Math.abs(pk - this.polityK) < 1e-3) this.polityK = pk
     this.shared.uniforms.uPolityK.value = this.polityK
-    const lk = this.view === 'land' ? landZoom(d) : 0
+    const lk = fv === 'land' ? landZoom(d) : 0
     this.landK += (lk - this.landK) * ease
     this.land.update(dt, this.landK)
     this.lines.visible = this.overlay.lines

@@ -2,9 +2,11 @@
 //
 // - An event: title and gloss, when and where, the summary, how sure the
 //   record is (DATA.md's confidence), the tellings where the sources
-//   disagree, and the sources themselves, a source nobody has yet opened
-//   marked "verify". While the tour walks an event's stops, the stop it is
-//   at sits above the summary.
+//   disagree, and the sources themselves: only those read in full or in
+//   part (sources.json `read`), so a card cites nothing nobody has read, a
+//   telling included, and an event with none read has no Sources at all.
+//   While the tour walks an event's stops, the stop it is at sits above the
+//   summary.
 // - An era, as its chapter of the tour opens, set as a book sets a chapter's
 //   first page (the card's `chapter` class): the chapter's numeral large, the
 //   era's label as its title, its year beneath, then the note with a large
@@ -29,6 +31,18 @@ const KIND = {
 const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
 
 /**
+ * Whether a source may be cited: one read in full or in part (sources.json
+ * `read`; `title` is a source known only by its title). A source with no
+ * `read` (a data layer a bake fetched, or a gazetteer from before the field)
+ * stands on whether it was opened.
+ */
+export function readable(s) {
+  if (!s) return false
+  if (s.read !== undefined) return s.read === 'full' || s.read === 'part'
+  return s.opened !== false
+}
+
+/**
  * An era's label as a chapter's title: the lead its labels share ("in the
  * time of") apart from the name it leads to, and the space between kept, so
  * the title's text is the label's.
@@ -47,6 +61,7 @@ export class EventCard {
     this.places = new Map(app.data.places.map((p) => [p.id, p]))
     this.sources = new Map(app.data.sources.map((s) => [s.id, s]))
     this.events = new Map(app.data.events.map((e) => [e.id, e]))
+    this.missing = new Set()
     this.mode = null // 'event' | 'era' | 'cluster'
     this.ev = null
     this.stop = -1
@@ -111,20 +126,30 @@ export class EventCard {
     }
   }
 
-  sourceLine(ref) {
-    const id = typeof ref === 'string' ? ref : ref.id
+  /** A source by its id, if it may be cited (an id sources.json lacks is said once in the console). */
+  cited(id) {
     const s = this.sources.get(id)
-    const where = typeof ref === 'object' && ref.where ? `, ${esc(ref.where)}` : ''
-    if (!s) return `<li><span class="src-title">${esc(id)}</span>${where} <span class="flag missing" title="not in sources.json">missing</span></li>`
-    const title = s.url && /^https?:/.test(s.url) ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>` : esc(s.title)
-    const verify = s.opened === false ? ' <span class="flag" title="Not yet read at the source: check this before relying on it">verify</span>' : ''
-    const by = s.author ? `${esc(s.author)}, ` : ''
-    const yr = s.year ? ` (${esc(s.year)})` : ''
-    return `<li>${by}<span class="src-title">${title}</span>${yr}${where}${verify}</li>`
+    if (!s && !this.missing.has(id)) {
+      this.missing.add(id)
+      this.app.warn(`a card cites ${id}, which is not in sources.json`)
+    }
+    return readable(s) ? s : null
   }
 
+  sourceLine(ref) {
+    const s = this.cited(typeof ref === 'string' ? ref : ref.id)
+    if (!s) return ''
+    const where = typeof ref === 'object' && ref.where ? `, ${esc(ref.where)}` : ''
+    const title = s.url && /^https?:/.test(s.url) ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>` : esc(s.title)
+    const by = s.author ? `${esc(s.author)}, ` : ''
+    const yr = s.year ? ` (${esc(s.year)})` : ''
+    return `<li>${by}<span class="src-title">${title}</span>${yr}${where}</li>`
+  }
+
+  /** The Sources a card lists: what was read of them, or no section at all. */
   sourcesSection(refs) {
-    return `<div class="card-sec"><h2>Sources</h2><ul class="sources">${(refs || []).map((s) => this.sourceLine(s)).join('') || '<li class="none">none listed</li>'}</ul></div>`
+    const lines = (refs || []).map((s) => this.sourceLine(s)).join('')
+    return lines ? `<div class="card-sec"><h2>Sources</h2><ul class="sources">${lines}</ul></div>` : ''
   }
 
   /** A list of events, a row each: what they are, when, and what they're called. */
@@ -196,7 +221,10 @@ export class EventCard {
       .map(([k, v]) => `<span class="conf ${esc(v)}"><b>${esc(k)}</b> ${esc(v)}</span>`)
       .join('')
     const tellings = (ev.tellings || [])
-      .map((t) => `<li><span class="src-title">${esc(this.sources.get(t.source)?.title || t.source)}</span>: ${esc(t.says)}</li>`)
+      .map((t) => {
+        const s = this.cited(t.source)
+        return s ? `<li><span class="src-title">${esc(s.title)}</span>: ${esc(t.says)}</li>` : ''
+      })
       .join('')
     const stops = ev.stops || []
     const st = this.stop >= 0 ? stops[this.stop] : null

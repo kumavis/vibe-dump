@@ -40,6 +40,21 @@ out vec3 vWorld;
 out float vMetres;
 
 float packMetres(vec2 xz) { return groundMetres(xz); }
+// The seabed is sunk well under the sea so the two never fight over depth,
+// but a vertex beside the shore is brought up to it instead: sunk, every
+// triangle from it up to the land dipped under the surface a little inland
+// of where the heights meet the sea, and the seabed showed between the
+// water and the land (ocean.glsl.js). Its eight neighbours a cell away (two
+// in a morph, where the coarser grid's are the ones it meets).
+#define SHORE_M 0.15
+bool besideShore(vec2 xz, float cell) {
+  for (int j = -1; j <= 1; j++)
+  for (int i = -1; i <= 1; i++) {
+    if (i == 0 && j == 0) continue;
+    if (packMetres(xz + vec2(float(i), float(j)) * cell) > -SHORE_M) return true;
+  }
+  return false;
+}
 
 void main() {
   vec2 g = floor(position.xz * uGrid + 0.5);
@@ -68,8 +83,10 @@ void main() {
     for (int q = 0; q < 2; q++) hc += packMetres(q == 0 ? pa : pb);
     mt = mix(mt, hc * 0.5, k);
   }
+  // (beside the shore the seabed comes up to the sea; the rest sinks out of its way: besideShore)
+  if (mt < -SHORE_M && besideShore(xz, cell * (k > 0.0 ? 2.0 : 1.0))) mt = -SHORE_M;
   vMetres = mt;
-  if (mt < 0.0) mt -= 25.0 * smoothstep(0.15, 3.0, -mt);
+  if (mt < -SHORE_M) mt -= 25.0 * smoothstep(SHORE_M, 3.0, -mt);
   vWorld = vec3(xz.x, mt * uVert, xz.y);
   gl_Position = projectionMatrix * viewMatrix * vec4(vWorld, 1.0);
 }

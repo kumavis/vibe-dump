@@ -18,7 +18,9 @@
 // Each step also picks what the far view shows, by the event's kind: the
 // land for laws, epidemics and restorations (what happened to the land and
 // the people on it), the chiefdoms for everything else, an era's own card
-// included. An event may name its view outright (`view: "land"`). Once the
+// included; and the Māhele for a law that rests on the records the land
+// division was read from (mahele.json `sources`), which is the division
+// itself. An event may name its view outright (`view: "land"`). Once the
 // viewer has used the switch themselves, the tour leaves it alone.
 
 import { geometryPoint } from '../geo.js'
@@ -39,9 +41,14 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 // era's card, shows the chiefdoms
 export const LAND_KINDS = new Set(['law', 'epidemic', 'restoration'])
 
-/** The far view a step asks for: an event's own `view`, else by its kind; null is an era's card. */
-export function viewFor(ev) {
-  if (ev?.view === 'land' || ev?.view === 'chiefdoms') return ev.view
+/**
+ * The far view a step asks for: an event's own `view`; else the Māhele for a
+ * law citing a source the land division was read from (`division`, their
+ * ids, once mahele.json is in); else by its kind. Null is an era's card.
+ */
+export function viewFor(ev, division = null) {
+  if (ev?.view === 'land' || ev?.view === 'chiefdoms' || ev?.view === 'mahele') return ev.view
+  if (ev?.kind === 'law' && division?.size && (ev.sources || []).some((r) => division.has(typeof r === 'string' ? r : r?.id))) return 'mahele'
   return ev && LAND_KINDS.has(ev.kind) ? 'land' : 'chiefdoms'
 }
 
@@ -258,7 +265,7 @@ export class Tour {
 
   /** The step's view, unless the viewer has chosen their own. */
   applyView(ev) {
-    if (!this.app.viewChosen) this.app.setView(viewFor(ev))
+    if (!this.app.viewChosen) this.app.setView(viewFor(ev, this.app.mahele?.sources))
   }
 
   showEra(ch, jump) {
@@ -421,10 +428,14 @@ export class Tour {
    * `pitch` a fraction of a right angle (0 along the horizon, 1 straight
    * down), slid so the place stands in the middle of the screen beside the
    * card. The rig's yaw is the camera's bearing from its target turned about,
-   * so looking toward north is yaw 0 and toward east is −90°.
+   * so looking toward north is yaw 0 and toward east is −90°. A camera with
+   * a `target` ([lon, lat]) centres that instead, so the stop can stand its
+   * place low in the frame and look past it (Kou, below the valley it
+   * looks up); the pin stays at the place.
    */
   cameraView(place, cam) {
-    const [x, z] = this.app.data.proj.toWorld(geometryPoint(place.geometry))
+    const at = Array.isArray(cam.target) && cam.target.length >= 2 && cam.target.every(Number.isFinite) ? cam.target : geometryPoint(place.geometry)
+    const [x, z] = this.app.data.proj.toWorld(at)
     return this.app.rig.fit({
       rect: { x0: x, x1: x, z0: z, z1: z },
       distance: cam.distance,

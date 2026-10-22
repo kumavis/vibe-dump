@@ -8,8 +8,17 @@
 // year back its reef flat (common.glsl.js patchReef), the water over it is
 // shallow reef, coral and rubble mottled over sand at a size that reads at
 // any zoom, not one even sheet of blue.
+//
+// The water meets the land where the heights read per pixel do, the land
+// drawing where they are land and the water where they are sea
+// (terrain.glsl.js SEA_EDGE), whatever the ground's mesh, whose vertices
+// are sparser, makes of the shore. It is opaque: the seabed under it is
+// its own (the bed's colour, seen through the water's depth), not the
+// mesh's, which sinks out of the way and once showed through a sea thinned
+// toward the shore as a pale band between the water and the land.
 
 import { constants, noise, world, ground, lighting } from './common.glsl.js'
+import { SEA_EDGE } from './terrain.glsl.js'
 
 export const oceanVertex = /* glsl */ `
 out vec3 vWorld;
@@ -87,7 +96,7 @@ vec2 waveSlope(vec2 p, float t, float detail) {
 void main() {
   vec2 xz = vWorld.xz;
   float depth = seaDepth(xz);
-  if (depth < -0.05) discard; // land pokes through
+  if (depth < -${SEA_EDGE.toFixed(2)}) discard; // the land's (terrain.glsl.js SEA_EDGE)
   vec3 V = normalize(uCamPos - vWorld);
   float px = length(fwidth(xz));
 
@@ -164,9 +173,7 @@ void main() {
   vec3 foamC = vec3(0.92) * (uSunColor * max(uSunDir.y, 0.0) * vis + uSkyColor * 1.4);
   col = mix(col, foamC, clamp(foam, 0.0, 1.0));
 
-  // soft meeting with the sand
-  float alpha = smoothstep(-0.02, 0.35, depth);
-  if (uDebug == 1) { col = vec3(depth / 100.0, fract(depth), 0.0); alpha = 1.0; }
-  gl_FragColor = vec4(col, alpha);
+  if (uDebug == 1) col = vec3(depth / 100.0, fract(depth), 0.0);
+  gl_FragColor = vec4(col, 1.0);
 }
 `

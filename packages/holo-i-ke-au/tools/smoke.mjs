@@ -1134,9 +1134,11 @@ if (districtCount) {
             throw new Error(`stop ${i + 1}: the eye stands ${eyeD.toFixed(2)} off at ${eyeP.toFixed(3)}, asked ${stop.camera.distance} at ${askP.toFixed(3)}`)
           // the place in the middle of the free part of the screen
           const where = await ui(`(() => {
-            const g = app.tour.places.get(app.tour.event.stops[${i}].place).geometry
+            const st = app.tour.event.stops[${i}]
+            const g = app.tour.places.get(st.place).geometry
             if (g.type !== 'Point') return [0, 0]
-            const [x, z] = app.data.proj.toWorld(g.coordinates)
+            // (or what its camera centres instead, the place then low in the frame: DATA.md "District packs") [ui6]
+            const [x, z] = app.data.proj.toWorld(st.camera?.target || g.coordinates)
             const v = new app.camera.position.constructor(x, app.world.heightAt(x, z), z).project(app.camera)
             const b = app.ui.freeBox()
             const sx = ((v.x + 1) / 2) * innerWidth, sy = ((1 - v.y) / 2) * innerHeight
@@ -1987,6 +1989,357 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
     }
   })
 } else if (testBase) console.log('  - no test masks (node tools/fake-data.mjs writes them): that check skipped')
+
+// ==== [ui6] the sources read, the Māhele, the stop camera's target, the shore, the phone's timeline ====
+{
+  // -- the sources: a card cites only what was read, and no word says what was not
+  await check('cards cite only sources read in full or in part; one with none read has no Sources; nothing says “verify”', async () => {
+    const r = await ui(`(() => {
+      const read = (s) => s.read === 'full' || s.read === 'part' || (s.read === undefined && s.opened !== false)
+      const readTitles = new Set(app.data.sources.filter(read).map((s) => s.title))
+      const unread = app.data.sources.filter((s) => !read(s))
+      const bad = []
+      let cards = 0, listed = 0, tellings = 0
+      const look = (id) => {
+        const el = document.querySelector('.card.show')
+        cards++
+        for (const t of el.querySelectorAll('.sources .src-title, .tellings .src-title')) {
+          listed++
+          if (!readTitles.has(t.textContent)) bad.push(id + ': ' + t.textContent)
+        }
+        tellings += el.querySelectorAll('.tellings li').length
+      }
+      for (const ev of app.data.events) { app.ui.card.open(ev); look(ev.id) }
+      for (const ch of app.tour.chapters) { app.ui.card.openEra(ch); look(ch.era.id) }
+      // an event resting only on a source not read: no Sources, no telling of it
+      const u = unread[0]
+      let empty = null
+      if (u) {
+        app.ui.card.open({ id: 'ui6-unread', title: 'A test', kind: 'other', when: { from: '1795', precision: 'year' }, where: [], sources: [{ id: u.id, where: 'p. 1' }], tellings: [{ source: u.id, says: 'a telling' }] })
+        const el = document.querySelector('.card.show')
+        empty = { sources: !!el.querySelector('.sources'), tellings: !!el.querySelector('.tellings'), heads: [...el.querySelectorAll('.card-sec h2')].map((h) => h.textContent) }
+      }
+      app.ui.card.close()
+      // the about panel's credits keep the same rule
+      const unreadTitles = new Set(unread.map((s) => s.title))
+      const credits = [...document.querySelectorAll('.help .credits li')].map((li) => li.textContent)
+      const badCredits = credits.filter((t) => [...unreadTitles].some((u) => t.includes(u)))
+      return { cards, listed, tellings, bad, unread: unread.length, empty, credits: credits.length, mahele: document.querySelectorAll('.help .mahele-credits li').length, badCredits, verify: /verify/i.test(document.documentElement.outerHTML) }
+    })()`)
+    if (r.bad.length) throw new Error(`cited and not read: ${r.bad.slice(0, 4).join('; ')}`)
+    if (r.empty && (r.empty.sources || r.empty.tellings || r.empty.heads.length)) throw new Error(`a card with no source read still shows ${JSON.stringify(r.empty)}`)
+    if (r.badCredits.length) throw new Error(`the about panel credits what was not read: ${r.badCredits.join('; ')}`)
+    if (r.verify) throw new Error('“verify” is in the page')
+    if (!r.listed) throw new Error('no card lists any source')
+    console.log(`      ${r.cards} cards: ${r.listed} citations, all read; ${r.unread} sources not read are cited nowhere; ${r.credits} credits in the about panel (${r.mahele} for the Māhele); no “verify”`)
+  })
+
+  // -- the Māhele, a third far view
+  await page.waitForFunction(() => window.__app.mahele.available !== null, null, { timeout: 120000 })
+  if (await ui('app.mahele.available')) {
+    const mBtn = `document.querySelector('.legend [data-view="mahele"]')`
+    await check('the Māhele is a third far view, there from 1848 and greyed before it, its legend the classes and their counts', async () => {
+      await run("app.ui.card.close(); app.ui.onScrub(); app.setView('chiefdoms', { user: true }); app.timeline.setYear(1795); app.ui.timeline.finish()")
+      await view('app.tour.chainView()')
+      await frames(2)
+      await expect('!!document.querySelector(".legend.show")', true)
+      await expect(`${mBtn}.disabled`, true)
+      // chosen before the division, it is the chiefdoms until the year comes to it
+      await run("app.setView('mahele', { user: true }); app.settle()")
+      await expect('app.farView', 'chiefdoms')
+      await expect('app.regionOn', 'chiefdoms')
+      await run('app.timeline.setYear(1853); app.ui.timeline.finish(); app.settle()')
+      await frames(2)
+      await expect('app.farView', 'mahele')
+      await expect(`${mBtn}.disabled`, false)
+      await expect(`${mBtn}.getAttribute('aria-pressed')`, 'true')
+      // by the switch, as the other two
+      await page.click('.legend [data-view="chiefdoms"]', opts)
+      await expect('app.view', 'chiefdoms')
+      await page.click('.legend [data-view="mahele"]', opts)
+      await expect('app.view', 'mahele')
+      await run('app.settle()')
+      await frames(2)
+      const s = await ui('({ region: app.regionOn, k: +app.shared.uniforms.uPolityK.value.toFixed(3), map: app.shared.uniforms.uMokuId.value === app.mahele.idTex, pal: app.shared.uniforms.uPalette.value === app.mahele.palTex, hover: app.shared.uniforms.uHoverMoku.value })')
+      if (!(s.region === 'mahele' && s.map && s.pal && s.k > 0.9)) throw new Error(`the shader's region path: ${JSON.stringify(s)}`)
+      const lg = await ui(`[...document.querySelectorAll('.legend .lg-mahele')].map((r) => [r.querySelector('b').textContent, Number(r.querySelector('em').textContent.replace(/,/g, ''))])`)
+      const want = await ui(`(() => { const n = { crown: 0, government: 0, konohiki: 0, mixed: 0, unknown: 0 }; for (const a of app.mahele.file.ahupuaa) n[a.class in n ? a.class : 'unknown']++; return n })()`)
+      const names = lg.map((r) => r[0]).join(',')
+      if (names !== 'Crown,Government,Konohiki,Mixed,Unknown') throw new Error(`the legend names ${names}`)
+      const got = Object.fromEntries(lg.map(([k, v]) => [k.toLowerCase(), v]))
+      for (const k of Object.keys(want)) if (got[k] !== want[k]) throw new Error(`the legend counts ${JSON.stringify(got)}, the file ${JSON.stringify(want)}`)
+      const note = await ui("document.querySelector('.legend .lg-note')?.textContent ?? ''")
+      const all = Object.values(want).reduce((a, b) => a + b, 0)
+      if (!note.includes(`${all.toLocaleString('en-US')} ahupuaʻa`)) throw new Error(`the legend's note reads “${note}”`)
+      // and back before 1848: the chiefdoms, the button greyed; after it, the Māhele again
+      await run('app.timeline.setYear(1820); app.ui.timeline.finish(); app.settle()')
+      await expect('[app.farView, app.regionOn].join()', 'chiefdoms,chiefdoms')
+      await expect(`${mBtn}.disabled`, true)
+      await run('app.timeline.setYear(1853); app.ui.timeline.finish(); app.settle()')
+      await expect('[app.farView, app.regionOn].join()', 'mahele,mahele')
+      console.log(`      ${lg.map(([k, v]) => `${k} ${v}`).join(', ')} · “${note}” · greyed in 1795 and 1820`)
+    })
+
+    /** The scene's pixels at screen points (a 3 × 3 average each), from a screenshot. */
+    const pixelsAt = async (pts) => {
+      const b64 = (await page.screenshot()).toString('base64')
+      return page.evaluate(
+        async ([b64, pts]) => {
+          const img = await createImageBitmap(await (await fetch(`data:image/png;base64,${b64}`)).blob())
+          const c = new OffscreenCanvas(img.width, img.height)
+          const g = c.getContext('2d')
+          g.drawImage(img, 0, 0)
+          return pts.map(([x, y]) => {
+            const d = g.getImageData(x - 1, y - 1, 3, 3).data
+            const s = [0, 0, 0]
+            for (let i = 0; i < 9; i++) for (let k = 0; k < 3; k++) s[k] += d[i * 4 + k] / 9
+            return s.map(Math.round)
+          })
+        },
+        [b64, pts],
+      )
+    }
+    await check('the Māhele colours each ahupuaʻa by its class in mahele.json, and the hover card names it, its class and its awardee', async () => {
+      await view("app.tour.islandView('oahu', 0)")
+      await frames(3)
+      const pts = await ui(`(() => {
+        const out = {}
+        const v = new app.camera.position.constructor()
+        const units = app.mahele.units.filter((u) => u.islandId === 'oahu')
+        const area = (u) => (u.box[2] - u.box[0]) * (u.box[3] - u.box[1])
+        for (const cls of ['crown', 'government', 'konohiki']) {
+          const cands = units.filter((u) => u.cls === cls && (cls !== 'konohiki' || u.entry?.awardee)).sort((a, b) => area(b) - area(a))
+          for (const u of cands) {
+            let found = null
+            for (let j = 1; j < 12 && !found; j++) for (let i = 1; i < 12 && !found; i++) {
+              const x = u.box[0] + ((u.box[2] - u.box[0]) * i) / 12
+              const z = u.box[1] + ((u.box[3] - u.box[1]) * j) / 12
+              const e = 2.5
+              if ([[0, 0], [e, 0], [-e, 0], [0, e], [0, -e]].some(([a, b]) => app.mahele.unitAt(x + a, z + b) !== u || app.world.metresAt(x + a, z + b) < 20)) continue
+              v.set(x, app.world.heightAt(x, z), z).project(app.camera)
+              const sx = Math.round(((v.x + 1) / 2) * innerWidth)
+              const sy = Math.round(((1 - v.y) / 2) * innerHeight)
+              if (sx < 30 || sy < 90 || sx > innerWidth - 30 || sy > innerHeight - 30) continue
+              const over = document.elementFromPoint(sx, sy)
+              if (over?.id !== 'scene') continue
+              found = { gisId: u.gisId, name: u.name, x: sx, y: sy, awardee: [].concat(u.entry?.awardee || []).join(', ') }
+            }
+            if (found) {
+              out[cls] = found
+              break
+            }
+          }
+        }
+        return out
+      })()`)
+      for (const cls of ['crown', 'government', 'konohiki']) if (!pts[cls]) throw new Error(`no ${cls} ahupuaʻa of Oʻahu found clear on the screen: ${JSON.stringify(pts)}`)
+      // (the pointer off the scene, so no hover card lies over what is sampled)
+      await page.mouse.move(60, 30)
+      await frames(1)
+      const at = ['crown', 'government', 'konohiki'].map((c) => [pts[c].x, pts[c].y])
+      const withIt = await pixelsAt(at)
+      await run('app.setView(null, { user: true }); app.settle()')
+      await frames(3)
+      const without = await pixelsAt(at)
+      await run("app.setView('mahele', { user: true }); app.settle()")
+      await frames(3)
+      const d = withIt.map((p, i) => p.map((v, k) => v - without[i][k]))
+      const [crown, gov, kon] = d
+      if (!(gov[2] - gov[0] > 10)) throw new Error(`the government land is not bluer with the Māhele: Δrgb ${gov}`)
+      if (!(crown[0] - crown[2] > 10 && kon[0] - kon[2] > 10)) throw new Error(`the crown and konohiki land are not warmer: Δrgb ${crown} and ${kon}`)
+      // the hover card over the konohiki land
+      const k = pts.konohiki
+      await page.mouse.move(k.x - 6, k.y)
+      await page.waitForTimeout(150)
+      await page.mouse.move(k.x, k.y)
+      await frames(2)
+      const text = await ui("document.querySelector('.inspector.show')?.textContent.replace(/\\s+/g, ' ').trim() ?? ''")
+      await page.mouse.move(60, 30)
+      if (!text.includes(k.name) || !text.includes('Konohiki') || !text.includes(k.awardee.split(', ')[0])) throw new Error(`the hover card over ${k.name} reads “${text}”`)
+      console.log(`      Δrgb with the Māhele: ${pts.crown.name} (crown) ${crown}, ${pts.government.name} (government) ${gov}, ${k.name} (konohiki) ${kon}`)
+      console.log(`      hover: “${text}”`)
+    })
+    await check('the tour turns to the Māhele at Ka Māhele, the land at the Kuleana Act, and leaves the viewer’s own choice alone', async () => {
+      const go = (id) => run(`const at = app.tour.locate(app.data.events.find((e) => e.id === '${id}')); app.tour.goTo(at[0], at[1]); app.settle()`)
+      const has = await ui("['mahele-1848', 'kuleana-1850'].map((id) => !!app.data.events.find((e) => e.id === id))")
+      if (!has[0]) return console.log('      (no mahele-1848 in the data)')
+      await run('app.viewChosen = false')
+      await go('mahele-1848')
+      await expect('[app.view, app.farView, app.regionOn].join()', 'mahele,mahele,mahele')
+      if (has[1]) {
+        await go('kuleana-1850')
+        await expect('app.view', 'land')
+      }
+      await go('mahele-1848')
+      await expect('app.view', 'mahele')
+      await run("app.setView('chiefdoms', { user: true })")
+      await go('mahele-1848')
+      await expect('app.view', 'chiefdoms')
+      await run('app.ui.card.close(); app.ui.onScrub()')
+      console.log(`      mahele-1848 → the Māhele${has[1] ? ', kuleana-1850 → the land' : ''}; once chosen, the chiefdoms stay`)
+    })
+  } else console.log('  - no mahele.json: the Māhele checks skipped')
+
+  // -- a stop camera's target
+  const nuuanu = await ui("app.data.events.find((e) => e.id === 'nuuanu-1795' && e.stops?.some((s) => s.camera?.target)) ? 'nuuanu-1795' : null")
+  if (nuuanu) {
+    const stopAt = (i) => run(`const ev = app.data.events.find((e) => e.id === '${nuuanu}'); const at = app.tour.locate(ev); app.tour.goTo(at[0], at[1]); app.tour.goStop(${i}); app.settle()`)
+    const frame = (i) =>
+      ui(`(() => {
+        const ev = app.data.events.find((e) => e.id === '${nuuanu}')
+        const st = ev.stops[${i}]
+        const box = app.ui.freeBox()
+        const v = new app.camera.position.constructor()
+        const P = (ll) => {
+          const [x, z] = app.data.proj.toWorld(ll)
+          v.set(x, app.world.heightAt(x, z), z).project(app.camera)
+          return [((v.x + 1) / 2) * innerWidth, ((1 - v.y) / 2) * innerHeight]
+        }
+        const place = app.tour.places.get(st.place)
+        const pl = place.geometry.coordinates
+        const it = app.ui.pins.items.find((p) => p.ev === ev)
+        const [px, pz] = app.data.proj.toWorld(pl)
+        const fx = (p) => +((p[0] - box.x0) / (box.x1 - box.x0)).toFixed(3)
+        const fy = (p) => +((p[1] - box.y0) / (box.y1 - box.y0)).toFixed(3)
+        const c = st.camera.target ? P(st.camera.target) : P(pl)
+        const p = P(pl)
+        return { place: st.place, target: !!st.camera.target, centre: [fx(c), fy(c)], at: [fx(p), fy(p)], pin: it ? +Math.hypot(it.pos.x - px, it.pos.z - pz).toFixed(3) : null,
+          d: +app.rig.state.distance.toFixed(2), want: st.camera.distance, pitch: +app.rig.state.pitch.toFixed(3), wantPitch: +((st.camera.pitch * Math.PI) / 2).toFixed(3),
+          yaw: +app.rig.state.yaw.toFixed(3), wantYaw: +((-st.camera.bearing * Math.PI) / 180).toFixed(3) }
+      })()`)
+    await check('the Kou stop centres its camera’s target with Kou low in the frame and the pin at Kou; Puʻiwa, Lāʻimi and the pali as their cameras ask', async () => {
+      const stops = await ui(`app.data.events.find((e) => e.id === '${nuuanu}').stops.map((s, i) => (s.camera ? i : -1)).filter((i) => i >= 0)`)
+      const rows = []
+      const bad = []
+      for (const i of stops) {
+        await stopAt(i)
+        await frames(2)
+        const f = await frame(i)
+        rows.push(f)
+        const off = Math.hypot(f.centre[0] - 0.5, f.centre[1] - 0.5)
+        if (off > 0.05) bad.push(`${f.place}: what the camera centres sits at ${f.centre} of the free box, not its middle`)
+        if (Math.abs(f.d - f.want) > 0.5 || Math.abs(f.pitch - f.wantPitch) > 0.02 || Math.abs(f.yaw - f.wantYaw) > 0.02) bad.push(`${f.place}: the camera stands at d ${f.d}, pitch ${f.pitch}, yaw ${f.yaw}`)
+        if (f.pin === null || f.pin > 0.01) bad.push(`${f.place}: the pin is ${f.pin} units from the place`)
+        if (f.target && !(f.at[1] > 2 / 3 && f.at[1] < 0.95 && f.at[0] > 0.1 && f.at[0] < 0.9)) bad.push(`${f.place}: the place sits at ${f.at} of the free box, not in its lower third`)
+      }
+      await run('app.ui.card.close(); app.ui.onScrub()')
+      for (const f of rows) console.log(`      ${f.place}: ${f.target ? `target at ${f.centre}, ${f.place} at ${f.at}` : `${f.place} at ${f.centre}`} of the free box; d ${f.d}, pitch ${f.pitch}, yaw ${f.yaw}; pin ${f.pin} from the place`)
+      if (!rows.some((f) => f.target)) bad.push('no stop with a target was walked')
+      if (bad.length) throw new Error(bad.join('; '))
+    })
+  }
+
+  // -- the shore: where the water meets the land, nothing of the sunk seabed shows
+  const shores = await ui("['cattle-1793', 'mailikukahi', 'whaling'].filter((id) => app.data.events.some((e) => e.id === id))")
+  if (shores.length) {
+    // (the ground's own shader marks in magenta every pixel of its mesh that lies more than 30 cm under
+    // the sea, deeper than the shore's own edge: any seen is seabed the water doesn't cover)
+    const mark = (on) =>
+      run(`for (const t of app.world.terrains.values()) for (const g of [t.full, t.half]) {
+        const m = g.material
+        if (${on} && !m.__ui6) { m.__ui6 = m.fragmentShader; m.fragmentShader = m.fragmentShader.replace('gl_FragColor = vec4(lit, 1.0);', 'gl_FragColor = vec4(vWorld.y < -0.3 * uVert ? vec3(1.0, 0.0, 1.0) : lit, 1.0);'); m.needsUpdate = true }
+        if (!${on} && m.__ui6) { m.fragmentShader = m.__ui6; delete m.__ui6; m.needsUpdate = true }
+      }`)
+    const seabed = async () => {
+      const b64 = (await page.screenshot()).toString('base64')
+      return page.evaluate(async (b64) => {
+        const app = window.__app
+        const img = await createImageBitmap(await (await fetch(`data:image/png;base64,${b64}`)).blob())
+        const c = new OffscreenCanvas(img.width, img.height)
+        const g = c.getContext('2d')
+        g.drawImage(img, 0, 0)
+        const W = img.width
+        const H = img.height
+        const d = g.getImageData(0, 0, W, H).data
+        // (the marker comes out about 211, 47, 212 once lit and fogged; a pixel only partly
+        // magenta is a multisampled edge, shaded from beyond a triangle's corner, not ground seen)
+        const magenta = (i) => d[i] > 190 && d[i + 2] > 190 && d[i + 1] < 75
+        let frame = 0
+        for (let i = 0; i < d.length; i += 4) if (magenta(i)) frame++
+        // and along the coastline: a grid of picks over the scene, the cells
+        // where land meets sea, and a 7 × 7 window of pixels round each
+        const S = 12
+        const nx = Math.floor(W / S)
+        const ny = Math.floor(H / S)
+        const land = new Int8Array(nx * ny)
+        for (let j = 0; j < ny; j++) {
+          for (let i = 0; i < nx; i++) {
+            const x = i * S + S / 2
+            const y = j * S + S / 2
+            const p = document.elementFromPoint(x, y)?.id === 'scene' ? app.rig.pickGround(x, y) : null
+            land[j * nx + i] = p ? (app.world.metresAt(p.x, p.z) > 0 ? 1 : -1) : 0
+          }
+        }
+        let coast = 0
+        let wet = 0
+        for (let j = 1; j < ny - 1; j++) {
+          for (let i = 1; i < nx - 1; i++) {
+            const a = land[j * nx + i]
+            if (a !== 1) continue
+            if (![land[j * nx + i + 1], land[j * nx + i - 1], land[(j + 1) * nx + i], land[(j - 1) * nx + i]].includes(-1)) continue
+            coast++
+            let hit = false
+            const cx = i * S + S / 2
+            const cy = j * S + S / 2
+            for (let y = cy - 9; y <= cy + 9 && !hit; y++) for (let x = cx - 9; x <= cx + 9 && !hit; x++) if (magenta((y * W + x) * 4)) hit = true
+            if (hit) wet++
+          }
+        }
+        return { frame, coast, wet }
+      }, b64)
+    }
+    await check('the sea meets the land at Kawaihae and on two other island shores: no seabed shows between them', async () => {
+      const lines = await ui('app.overlay.lines')
+      await run('app.overlay.lines = false; app.ui.onScrub()')
+      await mark(true)
+      const rows = []
+      try {
+        for (const id of shores) {
+          await run(`app.ui.card.close(); const at = app.tour.locate(app.data.events.find((e) => e.id === '${id}')); app.tour.goTo(at[0], at[1]); app.settle()`)
+          await frames(4)
+          const place = await ui(`app.tour.placeOf(app.data.events.find((e) => e.id === '${id}')).id`)
+          rows.push({ id, at: 'step', ...(await seabed()) })
+          await view(`app.tour.pointView(app.tour.places.get('${place}'), 300)`)
+          await frames(4)
+          rows.push({ id, at: '300', ...(await seabed()) })
+        }
+      } finally {
+        await mark(false)
+        await run(`app.overlay.lines = ${lines}; app.ui.card.close(); app.ui.onScrub()`)
+      }
+      for (const r of rows) console.log(`      ${r.id} at ${r.at}: ${r.coast} coastline samples, ${r.wet} with seabed showing; ${r.frame} seabed pixels in the frame`)
+      const bad = rows.filter((r) => r.wet > 0 || r.frame > 20)
+      if (bad.length) throw new Error(`seabed shows: ${bad.map((r) => `${r.id}@${r.at} ${r.wet}/${r.coast} coast, ${r.frame} px`).join('; ')}`)
+      if (!rows.every((r) => r.coast > 20)) throw new Error(`too few coastline samples to judge: ${rows.map((r) => r.coast).join(', ')}`)
+    })
+  }
+
+  // -- the timeline's labels on a phone
+  await check('the timeline’s year labels never touch: every other one on a phone, the last always named', async () => {
+    const measure = () =>
+      ui(`(() => {
+        const all = [...document.querySelectorAll('.tl-tick span')]
+        const s = all.filter((e) => !e.hidden && e.offsetWidth)
+        const r = s.map((e) => e.getBoundingClientRect())
+        let touch = []
+        for (let i = 1; i < r.length; i++) if (r[i].left < r[i - 1].right + 2) touch.push(s[i - 1].textContent + '/' + s[i].textContent)
+        return { n: all.length, shown: s.map((e) => e.textContent), touch, first: s[0] === all[0], last: s.at(-1) === all.at(-1) }
+      })()`)
+    const out = []
+    for (const [w, h] of [[390, 844], [1280, 800]]) {
+      await page.setViewportSize({ width: w, height: h })
+      await frames(2)
+      const m = await measure()
+      out.push(`${w} px: ${m.shown.join(' ')}`)
+      if (m.touch.length) throw new Error(`at ${w} px the labels ${m.touch.join(', ')} touch`)
+      if (!m.first || !m.last || m.shown.length < Math.min(3, m.n)) throw new Error(`at ${w} px it names ${m.shown.join(' ')}`)
+    }
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await frames(2)
+    for (const o of out) console.log(`      ${o}`)
+  })
+}
+// ==== [ui6] end ====
 
 // What the page costs, for comparing builds: the JS heap after a collection,
 // and the frame time held still over the whole chain and over one island, in
