@@ -1,8 +1,13 @@
-// Downloads for the bake go through curl, not Node's fetch: curl honours the
+// Downloads for the bakes go through curl, not Node's fetch: curl honours the
 // HTTPS proxy settings of the machine it runs on, and Node's built-in fetch
 // does not. Every file fetched is recorded in a ledger (fetched.json in the
-// downloads directory) with its URL, date, size and SHA-256, and the manifest
-// takes its "fetched" dates from that ledger.
+// downloads directory, outside the repository) with its URL, date, size and
+// SHA-256, and the manifests take their "fetched" dates from that ledger.
+//
+// Copied from holo-i-ke-au's tools/lib/fetch.mjs (b480c27) with one option
+// added: `globoff` passes curl -g, so an OPeNDAP constraint's brackets
+// (ETOPO 2022's `z[0:2:9000][0:2:12000]`) are sent as they are, not globbed
+// (DATA.md §11).
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs'
@@ -37,7 +42,7 @@ export class Ledger {
  * ok: false with the status rather than throwing, so callers can look for an
  * alternative; transport failures throw.
  */
-export function fetchTo(ledger, url, file, { maxTime = 900, force = false, emptyRetries = 5 } = {}) {
+export function fetchTo(ledger, url, file, { maxTime = 900, force = false, emptyRetries = 5, globoff = false } = {}) {
   mkdirSync(dirname(file), { recursive: true })
   const known = ledger.get(file)
   if (!force && known && known.url === url && known.bytes > 0 && existsSync(file) && statSync(file).size === known.bytes) {
@@ -48,7 +53,7 @@ export function fetchTo(ledger, url, file, { maxTime = 900, force = false, empty
   // answer 200 with an empty body under load, so an empty file is retried too.
   for (let attempt = 1; ; attempt++) {
     rmSync(tmp, { force: true })
-    const r = spawnSync('curl', ['-sSL', '--fail', '--retry', '3', '--max-time', String(maxTime), '-o', tmp, '-w', '%{http_code}', url], {
+    const r = spawnSync('curl', ['-sSL', ...(globoff ? ['-g'] : []), '--fail', '--retry', '3', '--max-time', String(maxTime), '-o', tmp, '-w', '%{http_code}', url], {
       encoding: 'utf8',
       maxBuffer: 1 << 20,
     })
@@ -74,8 +79,8 @@ export function sleep(ms) {
 }
 
 /** curl a URL and return its body as text (small metadata requests only). */
-export function fetchText(url, { maxTime = 120 } = {}) {
-  const r = spawnSync('curl', ['-sSL', '--fail', '--retry', '3', '--max-time', String(maxTime), url], {
+export function fetchText(url, { maxTime = 120, globoff = false } = {}) {
+  const r = spawnSync('curl', ['-sSL', ...(globoff ? ['-g'] : []), '--fail', '--retry', '3', '--max-time', String(maxTime), url], {
     encoding: 'utf8',
     maxBuffer: 64 << 20,
   })

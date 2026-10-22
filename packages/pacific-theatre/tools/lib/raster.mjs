@@ -1,20 +1,20 @@
 // Source rasters and resampling onto pack grids.
 //
+// Copied from holo-i-ke-au's tools/lib/raster.mjs (b480c27): axisWeights,
+// readAsciiGrid (GMRT's ESRI ASCII), resampleGrid and fillThroughMask, as
+// they were. Its DemMosaic read USGS 3DEP tiles, which cover only the United
+// States; a box's land comes from Copernicus GLO-30 COG windows instead
+// (tools/lib/cog.mjs, the bake workflow's), so it and its lazy geotiff import
+// are gone. resampleGrid takes any grid with { W, H, bounds, dLon, dLat }
+// (tools/lib/geo.mjs gridFromBounds), a box's east beyond 180 included as
+// long as the source grid's longitudes are continuous with it.
+//
 // Resampling is separable and area-true: along each axis a target texel is a
 // span of source cells, weighted by overlap (a box filter) when the texel is
 // at least one source cell wide, and by bilinear weights at its centre when
 // it is narrower (upsampling). Nothing is point-sampled, so coastlines and
 // ridges do not alias.
-import { readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
-
-let geotiff
-async function GeoTIFF() {
-  geotiff ||= await import('geotiff')
-  return geotiff
-}
-
-const ARCSEC = 1 / 3600
+import { readFileSync } from 'node:fs'
 
 /**
  * Weights along one axis. Target cell i spans [a0 + i*step, a0 + (i+1)*step)
@@ -47,149 +47,6 @@ export function axisWeights(n, a0, step) {
   }
   return out
 }
-
-// ---------------------------------------------------------------------------
-// USGS 3DEP 1 arc-second tiles as one global arc-second mosaic.
-//
-// Each tile is 3600 cells plus a 6-cell overlap ring (3612 x 3612), pixel-is-
-// area, NAD83 geographic, Float32, nodata -999999. Global cell (gx, gy) is the
-// arc-second cell whose west edge is lon = gx/3600 - 180 and whose north edge
-// is lat = 90 - gy/3600. Ocean is nodata or exactly 0 in these tiles (in
-// blocks that follow the source surveys), with a thin fringe of small
-// negative values offshore; land is everything finite and > 0.
-
-export class DemMosaic {
-  constructor() {
-    this.tiles = new Map()
-    this.info = []
-  }
-
-  static async load(demDir, log = () => {}) {
-    const { fromFile } = await GeoTIFF()
-    const m = new DemMosaic()
-    const files = readdirSync(demDir).filter((f) => /^USGS_1_n\d+w\d+\.tif$/.test(f)).sort()
-    for (const f of files) {
-      const [, N, Wd] = /n(\d+)w(\d+)/.exec(f).map(Number)
-      const tiff = await fromFile(join(demDir, f))
-      const im = await tiff.getImage()
-      const [ox, oy] = im.getOrigin()
-      const [rx, ry] = im.getResolution()
-      const W = im.getWidth()
-      const H = im.getHeight()
-      const pad = Math.round((-Wd - ox) / ARCSEC)
-      const ok =
-        Math.abs(rx - ARCSEC) < 1e-9 &&
-        Math.abs(ry + ARCSEC) < 1e-9 &&
-        Math.abs(ox - (-Wd - pad * ARCSEC)) < 1e-7 &&
-        Math.abs(oy - (N + pad * ARCSEC)) < 1e-7 &&
-        W === 3600 + 2 * pad &&
-        H === 3600 + 2 * pad &&
-        im.getSamplesPerPixel() === 1
-      if (!ok) throw new Error(`${f}: unexpected grid (origin ${ox},${oy} res ${rx},${ry} size ${W}x${H})`)
-      const [data] = await im.readRasters()
-      const nodata = im.getGDALNoData()
-      m.tiles.set(`${N},${Wd}`, { data, W, pad, nodata, gxW: (180 - Wd) * 3600, gyN: (90 - N) * 3600 })
-      m.info.push({ tile: `n${N}w${Wd}`, file: f, size: `${W}x${H}`, pad, nodata, epsg: im.geoKeys?.GeographicTypeGeoKey })
-      log(`  read ${f} (${W}x${H}, nodata ${nodata})`)
-    }
-    return m
-  }
-
-  /** Fill out[0..n) with the values of global row gy from column gx0; NaN where no data. */
-  fetchRow(gy, gx0, n, out) {
-    out.fill(NaN)
-    const cy = Math.floor(gy / 3600)
-    const N = 90 - cy
-    let i = 0
-    while (i < n) {
-      const gx = gx0 + i
-      const cx = Math.floor(gx / 3600)
-      const Wd = 180 - cx
-      const end = Math.min(n, (cx + 1) * 3600 - gx0)
-      const t = this.tiles.get(`${N},${Wd}`)
-      if (t) {
-        const row = gy - t.gyN + t.pad
-        const base = row * t.W - t.gxW + t.pad
-        const d = t.data
-        const nd = t.nodata
-        for (let k = i; k < end; k++) {
-          const v = d[base + gx0 + k]
-          out[k] = v === nd || !Number.isFinite(v) ? NaN : v
-        }
-      }
-      i = end
-    }
-  }
-
-  /**
-   * Resample onto a pack grid, keeping land and sea apart: per texel, the
-   * area-weighted land fraction, and the area-weighted mean height of the
-   * land part alone. (A plain average would let a cliff's height smear the
-   * coastline seaward and let sea pull low coasts under.)
-   */
-  resample(grid) {
-    const { W, H, bounds, dLon, dLat } = grid
-    const xw = axisWeights(W, (bounds[0] + 180) * 3600, dLon * 3600)
-    const yw = axisWeights(H, (90 - bounds[3]) * 3600, dLat * 3600)
-    let gxMin = Infinity
-    let gxMax = -Infinity
-    for (const { ks } of xw) {
-      gxMin = Math.min(gxMin, ks[0])
-      gxMax = Math.max(gxMax, ks[ks.length - 1])
-    }
-    const span = gxMax - gxMin + 1
-    const row = new Float32Array(span)
-    const landFrac = new Float32Array(W * H)
-    const landMean = new Float32Array(W * H)
-    const aW = new Float64Array(W)
-    const aL = new Float64Array(W)
-    const aH = new Float64Array(W)
-    // flatten x weights for speed
-    const xOff = new Int32Array(W + 1)
-    for (let i = 0; i < W; i++) xOff[i + 1] = xOff[i] + xw[i].ks.length
-    const xk = new Int32Array(xOff[W])
-    const xv = new Float64Array(xOff[W])
-    for (let i = 0; i < W; i++) {
-      xw[i].ks.forEach((k, u) => {
-        xk[xOff[i] + u] = k - gxMin
-        xv[xOff[i] + u] = xw[i].ws[u]
-      })
-    }
-    for (let j = 0; j < H; j++) {
-      aW.fill(0)
-      aL.fill(0)
-      aH.fill(0)
-      const { ks, ws } = yw[j]
-      for (let t = 0; t < ks.length; t++) {
-        this.fetchRow(ks[t], gxMin, span, row)
-        const wy = ws[t]
-        for (let i = 0; i < W; i++) {
-          let sl = 0
-          let sh = 0
-          for (let u = xOff[i]; u < xOff[i + 1]; u++) {
-            const v = row[xk[u]]
-            if (v > 0) {
-              sl += xv[u]
-              sh += xv[u] * v
-            }
-          }
-          aW[i] += wy
-          aL[i] += wy * sl
-          aH[i] += wy * sh
-        }
-      }
-      for (let i = 0; i < W; i++) {
-        const o = j * W + i
-        landFrac[o] = aL[i] / aW[i]
-        landMean[o] = aL[i] > 0 ? aH[i] / aL[i] : 0
-      }
-    }
-    return { landFrac, landMean }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Generic lon/lat grids: { west, north, dx, dy (degrees, positive), W, H, data (NaN = none) }
 
 /**
  * ESRI ASCII grid (the Rainfall Atlas and GMRT both ship it). Rows run north
