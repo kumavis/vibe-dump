@@ -443,7 +443,8 @@ export class Battle {
       this.scene?.hud.say('', 0)
       if (this.sim?.player?.kind === 'aircraft') this.input?.requestLock()
     }
-    c.addEventListener('pointerdown', go, { once: true })
+    // (gone with the controls: a drag to look round after a release never starts the clock)
+    c.addEventListener('pointerdown', go, { once: true, signal: this.input?.ac.signal })
   }
 
   /** A restart point: the moment's start or its checkpoint, from the record. */
