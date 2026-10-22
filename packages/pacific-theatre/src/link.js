@@ -276,8 +276,8 @@ export function link(app, ui) {
     const ship = (sim.units[sim.player?.unitIndex]?.kind ?? (m.role?.kind === 'ship' ? 'ship' : 'aircraft')) === 'ship' || m.role?.kind === 'ship'
     const how = ship
       ? { lost: 'lost', clock: 'afloat when the battle clock ran out', released: 'afloat, the controls given back', left: 'afloat', card: 'afloat' }[sc.how ?? r.reason]
-      : { landed: 'landed', ditched: 'ditched', lost: 'lost', clock: 'still flying when the battle clock ran out', released: 'still flying, the controls given back', left: 'still flying', card: 'still flying' }[sc.how ?? r.reason]
-    if (how) sortie.push({ label: ship ? 'The ship' : 'Came back', value: sc.survived === false ? 'lost' : how })
+      : { landed: 'landed', ditched: 'ditched', lost: 'did not return', clock: 'still flying when the battle clock ran out', released: 'still flying, the controls given back', left: 'still flying', card: 'still flying' }[sc.how ?? r.reason]
+    if (how) sortie.push({ label: ship ? 'The ship' : 'Came back', value: sc.survived === false ? (ship ? 'lost' : 'did not return') : how })
     if (sc.timeS) sortie.push({ label: 'Time', value: `${Math.floor(sc.timeS / 60)} min ${String(Math.round(sc.timeS % 60)).padStart(2, '0')} s` })
     // Your battle: ships and aircraft only, the divergences
     const rows = (o.diverged || []).map((d) => ({ what: d.name || d.unit || d.group, record: d.group ? aircraftLine(d.record) : d.record, yours: d.group ? aircraftLine(d.sim) : d.sim }))

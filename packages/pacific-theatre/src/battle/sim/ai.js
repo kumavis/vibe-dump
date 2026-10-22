@@ -814,6 +814,35 @@ export function failRate(w, date) {
   return w.failRate?.length ? 0 : P.torpedo.failDefault
 }
 
+// --- an aircraft's name on the HUD (R8 §5.1, 9 and 13) ----------------------------------------------------------
+// A record aircraft carries its whole group's name ("Two P-40Bs of the 47th Pursuit Squadron from Haleʻiwa"), so
+// a line about one aircraft names the one: the player's by its role ("a Dauntless of Bombing Six"), any other as
+// one of its kind of its group ("a Zero of the combat air patrol against Torpedo Eight").
+const KIT_SHORT = {
+  a6m2: 'Zero', a6m5: 'Zero', d3a1: 'Type 99 carrier bomber', b5n2: 'Type 97 carrier attack plane', d4y1: 'Suisei', b6n2: 'Tenzan', e13a1: 'Type 0 reconnaissance seaplane', f1m2: 'Type 0 observation seaplane',
+  'f4f-3': 'Wildcat', 'f4f-4': 'Wildcat', 'fm-2': 'Wildcat', 'f6f-3': 'Hellcat', 'f2a-3': 'Buffalo', 'sbd-3': 'Dauntless', 'sb2u-3': 'Vindicator', 'tbd-1': 'Devastator', 'tbf-1': 'Avenger', 'tbm-1c': 'Avenger',
+  'p-40b': 'P-40B', 'p-36a': 'P-36A', 'pby-5': 'Catalina', 'b-17e': 'B-17', 'b-26': 'B-26', 'b-18': 'B-18', 'a-20': 'A-20',
+}
+const COUNT_OF = /^(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+\S+\s+of\s+/i
+const upper = (s) => s.charAt(0).toUpperCase() + s.slice(1)
+
+function oneAircraft(sim, i) {
+  const u = sim.units[i]
+  const name = KIT_SHORT[u.kit] ?? String(sim._X[i].model?.name ?? u.kit ?? 'aircraft').split(/\s+/).pop()
+  const one = `${/^[AEIOU]/.test(name) ? 'an' : 'a'} ${name}`
+  let g = u.groupIndex >= 0 ? sim.record.groups[u.groupIndex]?.name : null
+  if (!g) return one
+  g = g.replace(COUNT_OF, '').replace(/^The\b/, 'the')
+  if (/^[a-z0-9]/.test(g) && !/^the\b/.test(g)) g = `the ${g}`
+  return `${one} of ${g}`
+}
+
+/** The HUD's name for aircraft i: the player's role, or one of its kind of its group; capitalised to open a line. */
+export function airName(sim, i) {
+  const pl = sim.player
+  return upper(pl && pl.unitIndex === i && pl.role?.name ? pl.role.name : oneAircraft(sim, i))
+}
+
 function grounding(sim, i, x) {
   const b = x.body
   const m = x.model
@@ -858,7 +887,7 @@ function playerAir(sim, pl, i, x, dt) {
   }
   if (b.broken && !x.brokenSaid) {
     x.brokenSaid = true
-    sim.beat(i, 'damage', `${sim.units[i].name}: a control surface failed`)
+    sim.beat(i, 'damage', `${airName(sim, i)}: a control surface failed`)
   }
   // the guns
   const seen = pl._seen
@@ -889,7 +918,7 @@ function deckUnder(sim, i, b) {
 
 function landed(sim, i, unit) {
   const x = sim._X[i]
-  sim.beat(i, 'landed', `${sim.units[i].name}: aboard ${sim.units[unit].name}`)
+  sim.beat(i, 'landed', `${airName(sim, i)}: aboard ${sim.units[unit].name}`)
   sim._setAlive(i, 0)
   x.how = 'landed'
   sim._score.how = 'landed'
@@ -899,7 +928,7 @@ function landed(sim, i, unit) {
 function ditched(sim, i) {
   const x = sim._X[i]
   sim.fx(FX.splash, x.body.x, 0, x.body.z, { unit: i, size: 15 })
-  sim.beat(i, 'ditched', `${sim.units[i].name}: ditched`)
+  sim.beat(i, 'ditched', `${airName(sim, i)}: ditched`)
   x.how = 'ditched'
   x.lostAt = sim.t
   sim._setAlive(i, 0)
@@ -916,7 +945,7 @@ function crashed(sim, i, why) {
   x.lostAt ??= sim.t
   sim._setAlive(i, 0)
   if (sim.player?.unitIndex === i) {
-    sim.beat(i, 'lost', `${sim.units[i].name}: ${why}`)
+    sim.beat(i, 'lost', `${airName(sim, i)}: ${why}; did not return`)
     sim._score.how = 'lost'
     sim._endMoment('lost')
   }
@@ -1114,13 +1143,13 @@ export function loseAircraft(sim, i, how, by = null) {
   if (by === 'player') {
     x.lostByPlayer = true
     sim._score.downed++
-    sim.beat(i, 'downed', `${sim.units[i].name}: shot down`)
+    sim.beat(i, 'downed', `${airName(sim, i)}: shot down`)
   }
   sim._setAlive(i, 2)
   sim.fx(FX.fall, s.pos[3 * i], s.pos[3 * i + 1], s.pos[3 * i + 2], { unit: i })
   x.fallT0 = sim.t
   if (sim.player?.unitIndex === i) {
-    sim.beat(i, 'lost', `${sim.units[i].name}: lost`)
+    sim.beat(i, 'lost', `${airName(sim, i)}: did not return`)
     sim._score.how = 'lost'
     sim._endMoment('lost')
   }
@@ -1325,7 +1354,7 @@ export function aaStep(sim, dt) {
     } else if (r === 'hit') {
       b.damage = Math.min(0.95, b.damage + hitDamage(nearest.m, nearest.d, sim.rngs.aa))
       sim.fx(FX.smoke, b.x, b.y, b.z, { unit: i, size: 0.4 })
-      if (pl?.unitIndex === i) sim.beat(i, 'damage', `${u.name}: hit by AA`)
+      if (pl?.unitIndex === i) sim.beat(i, 'damage', `${airName(sim, i)}: hit by AA`)
     }
   }
 }
@@ -1518,7 +1547,7 @@ export function fates(sim, dt) {
     const x = sim._X[pl.unitIndex]
     if (x.body?.engineOut && x.body.fuelS <= 0 && !x.fuelSaid) {
       x.fuelSaid = true
-      sim.beat(pl.unitIndex, 'fuel', `${sim.units[pl.unitIndex].name}: out of fuel`)
+      sim.beat(pl.unitIndex, 'fuel', `${airName(sim, pl.unitIndex)}: out of fuel`)
     }
   }
 }

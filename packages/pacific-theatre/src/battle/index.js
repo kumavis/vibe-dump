@@ -410,8 +410,10 @@ export class Battle {
     if (!sim || !mo) return null
     this._moment = null
     const result = { score: sim.score, outcome: sim.outcome, reason, momentId: mo.id, restart: sim.momentState?.restart ?? null }
+    // (the kind before the controls go back: releasing them lets go of the player)
+    const kind = sim.player?.kind ?? sim.record.moments.get(mo.id)?.role?.kind
     if (this.input) this.releaseControls()
-    this.scene?.hud.say(endLine(sim, reason), 6)
+    this.scene?.hud.say(endLine(sim, reason, kind), 6)
     this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'after', ...result } }))
     mo.resolve(result)
     return result
@@ -539,9 +541,10 @@ export class Battle {
 }
 
 /** The line the end of a sortie leaves on the screen (the card's is the UI's). */
-function endLine(sim, reason) {
+function endLine(sim, reason, kind) {
   const sc = sim.score
   const hits = sc.hits.filter((h) => h.kind !== 'near-miss').map((h) => `${h.name}: ${h.count} ${h.kind} hit${h.count > 1 ? 's' : ''}`)
-  const how = { lost: 'Lost.', landed: 'Landed.', ditched: 'Ditched.', clock: 'The battle clock has run out.', released: '', left: '', card: '' }[reason] ?? ''
+  // (the rule's words: an aircraft did not return, a ship was lost; R8 §3.6)
+  const how = { lost: kind === 'ship' ? 'The ship was lost.' : 'Did not return.', landed: 'Landed.', ditched: 'Ditched.', clock: 'The battle clock has run out.', released: '', left: '', card: '' }[reason] ?? ''
   return [how, hits.join(' · ')].filter(Boolean).join(' ') || 'The sortie is over.'
 }
