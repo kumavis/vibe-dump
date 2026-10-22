@@ -64,8 +64,9 @@
 //                                          must fail it,
 //                                          after the unedited code passes
 //
-// By default four battles: a watched one and three human logs (one per
-// vs-AI seat, one hotseat). Exit 0 when every snap shows what it must and
+// By default five battles: a watched one and four human logs (one per
+// vs-AI seat, one hotseat, and (F4) a hotseat log that votes at the round
+// limit and plays two overtime rounds). Exit 0 when every snap shows what it must and
 // End's readiness is the match's, 1 otherwise, 2 on bad arguments. Set
 // CHROMIUM_PATH to the pre-installed Chromium if Playwright's own isn't
 // installed.
@@ -79,7 +80,7 @@ import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { loadCorpus, select, buildApp, copyCode } from './lib.mjs'
 import { IDLE_MS } from './chromium.mjs'
 import { PKG } from './oracle/pin.mjs'
-import { humanDriver, legacyMode, setupFor, missingHooks } from './oracle/human-bot.mjs'
+import { humanDriver, jobSetup, pageStart, playedAs, missingHooks } from './oracle/human-bot.mjs'
 
 let a
 try {
@@ -88,7 +89,7 @@ try {
   console.error(`hud-check: ${e.message}\nusage: node sim/hud-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test`)
   process.exit(2)
 }
-const DEFAULT = '64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103'
+const DEFAULT = '64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-9'
 let items
 try {
   items = select(loadCorpus().items, a.only ?? DEFAULT)
@@ -293,16 +294,15 @@ async function ask(page, fn, arg) {
 }
 
 async function run(browser, url, item) {
-  const setup = item.job.setup ?? setupFor('watch', item.job.seed, item.job.dice)
-  const mode = legacyMode(setup)
+  const setup = jobSetup(item.job)
+  const { mode, query } = pageStart(setup)
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   try {
     const page = await ctx.newPage()
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript({ content: `${[missingHooks, humanDriver].join('\n')}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE}, ${JSON.stringify(NAMES)})` })
-    // (F4) the log's own overtime: one recorded before F4 never voted
-    await page.goto(`${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}&overtime=${setup.overtime ?? 'never'}`)
+    await page.goto(`${url}/?debug&fast&${query}`)
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })
@@ -314,8 +314,10 @@ async function run(browser, url, item) {
       else if (Date.now() - since > IDLE_MS) throw new Error(`stalled at ${p.mark}`)
       await new Promise((r) => setTimeout(r, 500))
     }
-    const r = await ask(page, () => ({ snaps: window.__sim.snaps, error: window.__sim.error, unused: window.__sim.driver?.unused ?? 0, ready: window.__sim.ready }))
+    const r = await ask(page, () => ({ snaps: window.__sim.snaps, error: window.__sim.error, unused: window.__sim.driver?.unused ?? 0, ready: window.__sim.ready, setup: window.__ts.G?.setup }))
     if (!r.error && errors.length) r.error = errors.join('\n')
+    // the battle played is the log's, field for field
+    r.error ??= playedAs(r.setup, setup)
     if (!r.error && r.unused) r.error = `the battle ended with ${r.unused} log entries unplayed`
     return { ...r, mode }
   } finally {

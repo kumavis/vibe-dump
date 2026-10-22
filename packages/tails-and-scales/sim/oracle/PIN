@@ -1,21 +1,22 @@
 # The commit whose code is the parity oracle. sim/ regenerates full reference
-# traces by running `git archive <PIN>` of this package under the fake DOM, so
-# references always come from frozen code (the committed baselines are hashes
-# only).
+# traces by running `git archive <PIN>` of this package (its pure core, folded
+# headless by sim/run.mjs), so references always come from frozen code (the
+# committed baselines are hashes only).
 #
 # The first line below is the PIN: the commit whose code produced the
 # committed hashes. `hooks` is the commit that added the ?debug input hooks,
 # which sim/hooks-inert.mjs compares with its parent by default; it never
 # moves.
 #
-# WORKTREE means "the working tree itself": correct only until the R0 commit
-# (the one that adds the hooks) lands. Once it has, set both lines to that
-# commit's full sha, in a commit of its own.
+# Until F4 the PIN was the hooks commit itself, the code from before the
+# refactor, which a log could reach only through its URL seeds and a title
+# screen button. Since F4 it is a commit of the refactored code (any setup a
+# log holds, the round-limit vote among them), and every page runner holds
+# the battle the page started to the log's setup (oracle/human-bot.mjs's
+# playedAs) instead of refusing setups up front.
 #
-# A deliberate re-record (parity.mjs --record, N0's CORE_VERSION 2, the F4,
-# F5 and F7 baselines) moves the PIN, and only the PIN, to the commit whose
-# code produced the new hashes, in the same push; `node sim/parity.mjs --pin`
-# must pass afterwards. (From R6 the reference runner is sim/run.mjs: revisit
-# this rule there.)
-cacf5f5ade9c38720875b428a7dd82f6a386efdc
+# A deliberate re-record (parity.mjs --record) or a log added to the corpus
+# moves the PIN, and only the PIN, to the commit whose code produced the new
+# hashes, in the same push; `node sim/parity.mjs --pin` must pass afterwards.
+225a953169d11c89875cf3d0203dca7e2b60546a
 hooks cacf5f5ade9c38720875b428a7dd82f6a386efdc

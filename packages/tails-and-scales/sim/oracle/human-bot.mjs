@@ -34,28 +34,40 @@ export function modeOf(setup) {
   return Object.keys(MODES).find((m) => MODES[m].join() === key)
 }
 
-// The legacy app takes only what its URL carries: the board and dice seeds
-// (positive integers; it replaces anything else with a random one) and a
-// title-screen mode. Refuse any other setup, so a log can never be recorded
-// under a setup that is not the one played. Loosen this on purpose once the
-// code under test can honour races, seats, terrain or rounds (R2 on), in the
-// same step that adds such logs: loadCorpus (sim/lib.mjs) applies it to the
-// whole corpus. (F4) A setup may ask for the round-limit vote (overtime
-// 'vote', carried as ?overtime=: the page of code older than F4 ignores it,
-// which only a log that votes notices) in a mode with a human seat.
-export function legacyMode(setup) {
+// A job's setup: its own, or (an AI pair) the watched battle of its seeds,
+// with the job's seat races (`races`, mirror-check's) in place of the setup's.
+export function jobSetup(job) {
+  const setup = job.setup ?? setupFor('watch', job.seed, job.dice)
+  return job.races ? { ...setup, seats: setup.seats.map((s, i) => ({ ...s, race: job.races[i] })) } : setup
+}
+
+// How the page starts a setup: the title screen's button for who sits in
+// each seat, and the URL that carries the rest (app/boot.js and app/flow.js
+// read ?seed, ?dice, ?races and ?overtime; a log recorded before F4 never
+// voted, so its overtime is 'never'). The page builds its own setup from
+// these, and playedAs (below) says whether it built this one: a setup the
+// page can't make (other terrain, rounds or dice) is found there.
+export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
-  const want = mode && setupFor(mode, setup.board, setup.dice)
-  const seed = (n) => Number.isInteger(n) && n > 0
-  const ok = want && seed(setup.board) && seed(setup.dice) && ['terrain', 'rounds', 'diceMode'].every((k) => setup[k] === want[k]) &&
-    ((setup.overtime ?? 'never') === 'never' || (setup.overtime === 'vote' && mode !== 'watch')) && setup.seats.length === 2 && setup.seats.every((s, i) => s.race === want.seats[i].race)
-  if (!ok) throw new Error(`the legacy code plays only the title-screen setups (squirrel v serpent, classic, 5 rounds, shared dice, positive integer seeds), not ${JSON.stringify(setup)}`)
-  return mode
+  if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
+  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}` }
+}
+
+// Why the page's battle (its G.setup) is not the setup asked for, or null:
+// every field alike, but the seats' devices (the page's own) and an absent
+// overtime, which is 'never'. Injected into the browser page by
+// sim/chromium.mjs, so it may only use its arguments.
+export function playedAs(played, setup) {
+  const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : v && typeof v === 'object' ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(',')}}` : JSON.stringify(v))
+  const plain = (s) => ({ ...s, overtime: s.overtime ?? 'never', seats: s.seats.map(({ dev, ...seat }) => seat) })
+  if (!played?.seats) return 'the page has no battle setup to read (G.setup): code older than R6?'
+  const a = canon(plain(played)), b = canon(plain(setup))
+  return a === b ? null : `the page started ${a}, not the log's ${b}`
 }
 
 // The members of window.__ts that this driver and the shadow read (main.js
 // lists them atop its ?debug block), and so the ones missing from `ts`. Code
-// older than the PIN has none of the input hooks. Injected into the browser
+// older than the hooks commit (R0) has none of the input hooks. Injected into the browser
 // page by sim/chromium.mjs, so it may only use its arguments.
 export function missingHooks(ts) {
   const fns = ['start', 'select', 'doMove', 'doAdvance', 'doShoot', 'doCharge', 'placeCharge', 'deployClick', 'endPhase', 'autoPhase', 'validEnd']
@@ -87,8 +99,13 @@ export function humanDriver(ts, { entries = null, choose = null }) {
     if (S.stage === 'deploy') return { k: 'deploy', s: S.deploySide }
     if (ts.chargePick) return { k: 'chargeEnd', s: ts.chargePick.u.side }
     if (busy) return null
-    // (F4) the round limit, a seat played here still to vote (the first)
-    if (ts.roundLimit?.length) return { k: 'roundLimit', s: ts.roundLimit[0] }
+    // (F4) the round limit: a seat played here still to vote, the log's
+    // next entry's when it is one of them (either seat may have its say
+    // first), else the first
+    if (ts.roundLimit?.length) {
+      const s = entries?.[next]?.s
+      return { k: 'roundLimit', s: ts.roundLimit.includes(s) ? s : ts.roundLimit[0] }
+    }
     if (S.stage === 'battle' && ts.phaseResolve && !S.busy && !S.auto) return { k: 'phase', s: S.active, phase: S.phase }
     return null
   }

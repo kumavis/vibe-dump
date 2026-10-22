@@ -711,7 +711,9 @@ follows N3.
   `legal()` takes optional and boolean fields; no Keep playing past 80% of
   the log cap. (Every battle with a human seat asks after its last round and
   each overtime round; play goes on only on everyone's yes. `CORE_VERSION`
-  2. DESIGN's F4 notes.)
+  2. Two logs that vote joined the corpus, 42 battles, recorded on F4's
+  code, to which the PIN moved; `legacyMode` retired, every page runner
+  holding the page's battle to the log's setup instead. DESIGN's F4 notes.)
 - [ ] **N1** Real Automerge in Node: two- and three-peer tests.
 - [ ] **N2** Online play: lobby, join by link, joint dice seed, presence,
   desync report. `verifyStart` checks your whole seat (race, controller,

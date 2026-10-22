@@ -333,7 +333,9 @@ export class Flow {
     overlay.clear()
     overlay.ghost.visible = false
     this.facts = preview(G, factsOf)
-    if (M.stage === 'over' && !this.ui.result.up) this.over(resultOf(G))
+    // ((F4) the round limit's vote shares the panel: a snap past the end
+    // replaces it with the end)
+    if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))
   }
 
   // The HUD (present/hud-model.js, put on the page by ui/hud.js and

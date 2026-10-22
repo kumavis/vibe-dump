@@ -26,11 +26,11 @@
 // a battle that didn't go that way fails. --page plays the
 // page instead (sim/oracle/run-legacy.mjs, the driver the PIN and the
 // working tree share), as --browser does in Chromium; code with no pure core
-// (older than R6, the PIN today) runs only that way, so --dir or --ref to
-// such code needs --page, and --pin takes the PIN's own runner. The
-// references (a failure's context, mutation.mjs's) come from the PIN by its
-// own runner too: its pure core once the PIN names a commit that has one,
-// its page until then (DESIGN's R6b notes: the PIN rule, revisited).
+// (older than R6) runs only that way, so --dir or --ref to such code needs
+// --page, and --pin takes the PIN's own runner. The references (a failure's
+// context, mutation.mjs's) come from the PIN by its own runner too: since F4
+// the PIN is refactored code, so its pure core (DESIGN's R6b notes: the PIN
+// rule, revisited).
 //
 // --browser builds the code under test first and runs that build: the
 // working tree with this package's own Vite config (into dist/), other code
@@ -46,8 +46,8 @@
 // --browser, which must pass as it stands. (N0) The rules' trig is
 // core/dmath.js's, so Chromium computes Node's shadow too, and there is
 // nothing of its own to record (until N0 the corpus kept Chromium's shadow
-// hashes, `webShadow`, where they differed). Code older than N0 (the PIN
-// today) still differs from them in Chromium, by an ULP of terrain.
+// hashes, `webShadow`, where they differed). Code older than N0 still
+// differs from them in Chromium, by an ULP of terrain.
 // A re-record moves sim/oracle/PIN to the commit whose code produced the new
 // hashes (see its header), and `node sim/parity.mjs --pin` must pass after it.
 import { parseArgs } from 'node:util'

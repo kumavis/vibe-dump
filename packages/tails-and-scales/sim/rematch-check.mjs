@@ -64,10 +64,10 @@ async function page(dir) {
   register('./oracle/hooks.mjs', import.meta.url)
   const { takeFrame } = await import('./oracle/fakedom.mjs')
   const { instrument } = await import('./oracle/shadow.mjs')
-  const { humanDriver, makePolicy, legacyMode, setupFor } = await import('./oracle/human-bot.mjs')
+  const { humanDriver, makePolicy, jobSetup, pageStart } = await import('./oracle/human-bot.mjs')
   const job = JSON.parse(readFileSync(0, 'utf8'))
-  const setup = job.setup ?? setupFor('watch', job.seed, job.dice)
-  const mode = legacyMode(setup)
+  const setup = jobSetup(job)
+  const { mode, query } = pageStart(setup)
   let ts = null, rec = null
   Object.defineProperty(globalThis, '__ts', {
     configurable: true,
@@ -77,8 +77,7 @@ async function page(dir) {
       rec = instrument(v)
     },
   })
-  // (F4) the log's own overtime: one recorded before F4 never voted
-  globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}&overtime=${setup.overtime ?? 'never'}` }
+  globalThis.location = { search: `?fast&debug&lowfi&${query}` }
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))
@@ -103,7 +102,7 @@ async function page(dir) {
     }
     if (driver?.unused) throw new Error(`the battle ended with ${driver.unused} log entries unplayed`)
     if (ts.session?.rejected.length) throw new Error(`the Session refused ${ts.session.rejected.length} entries of the battle's log: ${JSON.stringify(ts.session.rejected[0])}`)
-    return { trace: ts.trace.slice(), shadow: rec.shadow.slice(from.shadow), written: rec.written.slice(from.written), undrained, frames }
+    return { trace: ts.trace.slice(), shadow: rec.shadow.slice(from.shadow), written: rec.written.slice(from.written), undrained, frames, setup: ts.G?.setup && JSON.parse(JSON.stringify(ts.G.setup)) }
   }
   const out = { first: null, second: null, third: null, board: null, error: null }
   // everything the match emitted has been played
@@ -141,7 +140,7 @@ async function page(dir) {
 // ── The parent: every battle, one child each ────────────────────────────────
 async function parent() {
   const { loadCorpus, select, verdict, pool, CPUS, runOracle } = await import('./lib.mjs')
-  const { MODES, setupFor, legacyMode } = await import('./oracle/human-bot.mjs')
+  const { MODES, setupFor, jobSetup, pageStart, playedAs } = await import('./oracle/human-bot.mjs')
   const { dirFromArgs } = await import('./oracle/pin.mjs')
   const dir = a.dir ? resolve(a.dir) : dirFromArgs({ ref: a.ref ?? 'WORKTREE' })
   const items = select(loadCorpus().items, a.only)
@@ -181,11 +180,15 @@ async function parent() {
   // of its own, by index) or the New battlefield button (whatever it rolls)
   const POLICIES = ['random', 'late', 'aggressive']
   const switchFor = (it, i) => {
-    const setup = it.job.setup ?? setupFor('watch', it.job.seed, it.job.dice)
-    const from = legacyMode(setup)
+    const setup = jobSetup(it.job)
+    const from = pageStart(setup).mode
     const others = Object.keys(MODES).filter((m) => m !== from)
-    return { from, dice: setup.dice, mode: others[i % 3], policy: POLICIES[(i >> 1) % 3], seed: 7001 + i, how: i % 2 ? 'reroll' : 'seed', board: 100003 + i * 7919 }
+    // (the page's URL still carries the first battle's dice, races and
+    // overtime, so the third battle has them too: a watched one never votes)
+    return { from, dice: setup.dice, races: setup.seats.map((s) => s.race), overtime: setup.overtime ?? 'never', mode: others[i % 3], policy: POLICIES[(i >> 1) % 3], seed: 7001 + i, how: i % 2 ? 'reroll' : 'seed', board: 100003 + i * 7919 }
   }
+  // the setup the third battle must be played under
+  const thirdSetup = (sw, board) => jobSetup({ setup: setupFor(sw.mode, board, sw.dice, sw.mode === 'watch' ? undefined : sw.overtime), races: sw.races })
 
   console.log(`rematch-check: ${items.length} battles, each played twice in one page (Again between them), then a third on a new board in another mode; on ${a.dir ? dir : a.ref ? `ref ${a.ref}` : 'the working tree'}`)
   const t0 = Date.now()
@@ -197,7 +200,9 @@ async function parent() {
     if (!why) {
       const v = verdict(it, r.first)
       const d = firstDiffer(r.first, r.second)
-      if (!v.ok) why = `the first battle differs from the corpus (trace line ${v.line}, shadow ${v.shadow}, write ${v.written})`
+      const other = playedAs(r.first.setup, jobSetup(it.job)) ?? playedAs(r.second.setup, jobSetup(it.job))
+      if (other) why = other
+      else if (!v.ok) why = `the first battle differs from the corpus (trace line ${v.line}, shadow ${v.shadow}, write ${v.written})`
       else if (d) why = `the second battle's ${d.k} differs at ${d.i}: first ${String(d.x).slice(0, 90)} | second ${String(d.y).slice(0, 90)}`
       else if (r.first.undrained || r.second.undrained || r.third.undrained) why = `events left unplayed with the player idle after ${r.first.undrained} + ${r.second.undrained} + ${r.third.undrained} frames`
       else if (sw.how === 'seed' && r.board !== sw.board) why = `the seed box asked for board ${sw.board}, and the table has ${r.board}`
@@ -205,9 +210,12 @@ async function parent() {
     // the third battle against the same setup and bot on a fresh page
     let ref = null
     if (!why) {
-      ref = await runOracle({ setup: setupFor(sw.mode, r.board, sw.dice), bot: { policy: sw.policy, seed: sw.seed } }, dir)
+      const want = thirdSetup(sw, r.board)
+      ref = await runOracle({ setup: want, bot: { policy: sw.policy, seed: sw.seed } }, dir)
       const d = ref.error ? null : firstDiffer(ref, r.third)
-      if (ref.error) why = `the fresh page's run of the third battle failed: ${ref.error}`
+      const other = playedAs(r.third.setup, want)
+      if (other) why = `the third battle: ${other}`
+      else if (ref.error) why = `the fresh page's run of the third battle failed: ${ref.error}`
       else if (d) why = `the third battle (${sw.from} → ${sw.mode}, board ${r.board} by ${sw.how}, ${sw.policy} bot) differs from a fresh page's: ${d.k} ${d.i}: fresh ${String(d.x).slice(0, 90)} | here ${String(d.y).slice(0, 90)}`
       else if (r.third.trace.length < 20) why = `the third battle wrote only ${r.third.trace.length} trace lines`
     }

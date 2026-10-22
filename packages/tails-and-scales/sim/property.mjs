@@ -317,6 +317,9 @@ function probe(core, G, seat, rand, where) {
   // limit nothing but a vote (or a concession) is taken
   if (G.pending?.k !== 'roundLimit' && ok.some((b) => b.t === 'vote')) throw new Error(`${where}: legal() accepted a vote with no round-limit vote open (${JSON.stringify(G.pending)})`)
   if (G.pending?.k === 'roundLimit' && ok.some((b) => b.t !== 'vote' && b.t !== 'concede')) throw new Error(`${where}: legal() accepted ${JSON.stringify(ok.find((b) => b.t !== 'vote' && b.t !== 'concede'))} at the round limit`)
+  // and a vote says yes or no: a number, a string or nothing is junk
+  const vague = ok.find((b) => b.t === 'vote' && typeof b.more !== 'boolean')
+  if (vague) throw new Error(`${where}: legal() accepted a vote that says neither yes nor no: ${JSON.stringify(vague)}`)
   // a body carries its kind's fields and nothing else (§4.1 rule 12)
   const extra = ok.find((b) => Object.keys(b).some((k) => k !== 't' && !KEYS[b.t]?.includes(k)))
   if (extra) throw new Error(`${where}: legal() accepted a body with a field its kind doesn't take: ${JSON.stringify(extra)}`)
@@ -742,10 +745,12 @@ function randomTask(core, rng, mirror, races, seed, hud) {
   // rounds played, the one under way counted: as many as were scored, and
   // one more for a battle that began and ended mid-round (a wipe-out ends
   // at a phase's end; a concession comes at a decision, which no round's
-  // score is), none in the deployment
+  // score is), none in the deployment; (F4) a concession at the round
+  // limit's vote comes after its round was scored (the step still
+  // `score`), and adds none
   const [over, ...more] = seen.over
   const T = G.turn
-  const rounds = seen.scored + (seen.battle && T.result.why !== 'score' ? 1 : 0)
+  const rounds = seen.scored + (seen.battle && T.result.why !== 'score' && T.step !== 'score' ? 1 : 0)
   if (!over || more.length) throw new Error(`${where0}: ${seen.over.length} game.over events`)
   if (over.win !== T.result.win || over.why !== T.result.why || over.vp.join() !== T.vp.join() || over.rounds !== rounds) {
     throw new Error(`${where0}: game.over ${JSON.stringify(over)} should say ${JSON.stringify({ ...T.result, vp: T.vp, rounds })} (${seen.scored} rounds scored)`)
@@ -1037,7 +1042,10 @@ const MUTATIONS = {
   // says 1 from the start)
   'over-rounds': ['core/engine.js', "const rounds = T.stage === 'deploy' ? 0 : T.round\n", 'const rounds = T.round\n'],
   // legal() lets a body carry a field its kind doesn't take
-  'extra-field': ['core/commands.js', "  for (const k of Object.keys(body)) if (k !== 't' && !rule.fields.includes(k)) return `${body.t} takes no field \"${k}\"`\n", ''],
+  'extra-field': ['core/commands.js', "  for (const k of Object.keys(body)) if (k !== 't' && !rule.fields.includes(k) && !opt.includes(k) && !bools.includes(k)) return `${body.t} takes no field \"${k}\"`\n", ''],
+  // (F4) legal() takes a vote that says neither yes nor no (a number, a
+  // string, nothing)
+  'vote-not-boolean': ['core/commands.js', "  for (const f of bools) if (typeof body[f] !== 'boolean') return `${body.t} takes ${f} true or false`\n", ''],
   // newState's G leaves `pending` out (§2.1), so an all-AI battle runs with
   // it missing until the end
   'pending-unset': ['core/match.js', '    pending: null,\n', ''],

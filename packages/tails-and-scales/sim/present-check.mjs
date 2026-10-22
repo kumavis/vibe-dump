@@ -228,11 +228,11 @@ async function page(dir) {
   register('./present-hooks.mjs', import.meta.url)
   const { takeFrame } = await import('./oracle/fakedom.mjs')
   const { instrument } = await import('./oracle/shadow.mjs')
-  const { humanDriver, legacyMode, setupFor } = await import('./oracle/human-bot.mjs')
+  const { humanDriver, jobSetup, pageStart, playedAs } = await import('./oracle/human-bot.mjs')
   const { project, applyEvent } = await import(pathToFileURL(join(dir, 'present', 'mirror.js')).href)
   const job = JSON.parse(readFileSync(0, 'utf8'))
-  const setup = job.setup ?? setupFor('watch', job.seed, job.dice)
-  const mode = legacyMode(setup)
+  const setup = jobSetup(job)
+  const { mode, query } = pageStart(setup)
   let ts = null, rec = null
   Object.defineProperty(globalThis, '__ts', {
     configurable: true,
@@ -242,8 +242,7 @@ async function page(dir) {
       rec = instrument(v)
     },
   })
-  // (F4) the log's own overtime: one recorded before F4 never voted
-  globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}&overtime=${setup.overtime ?? 'never'}` }
+  globalThis.location = { search: `?fast&debug&lowfi&${query}` }
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))
@@ -350,6 +349,9 @@ async function page(dir) {
     }
     if (fatal) throw fatal
     if (driver?.unused) throw new Error(`the battle ended with ${driver.unused} log entries unplayed`)
+    // the battle played was the log's, field for field
+    const other = playedAs(ts.G?.setup, setup)
+    if (other) throw new Error(other)
     // the end: everything played, the mirror is the match (the round too,
     // R6b on: the old loop left it one past the last, which code before R6b
     // is excused)

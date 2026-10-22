@@ -8,11 +8,12 @@
 //        job: { seed, dice }                         AI vs AI
 //             { setup, entries }                     replay a human log
 //             { setup, bot: { policy, seed } }       play the humans with a policy
-//             any of these plus races: [r0, r1]     the seat races, passed on as
-//                  ?races=r0,r1 (code from R2 on reads it; the PIN ignores it)
+//             any of these plus races: [r0, r1]     the seat races, in place of
+//                  the setup's (human-bot.mjs's jobSetup)
 //   --dir <packageDir> | --ref <git ref|WORKTREE>    which code (default: the PIN,
 //        sim/oracle/PIN, i.e. the frozen reference; --ref WORKTREE for yours).
-//        A ref must be the PIN commit or later: older code has no input hooks.
+//        A ref must be R6 or later: the battle the page started is held to
+//        the job's setup (human-bot.mjs's playedAs), which older code has none of.
 //   --progress <fd>   also write each trace line, shadow and battle-log write
 //        to that fd as it is taken ({"l"|"s"|"w": text} per line), with a
 //        synchronous write: a parent can then report how far a run got even
@@ -34,7 +35,7 @@ import { pathToFileURL } from 'node:url'
 import { parseArgs } from 'node:util'
 import { takeFrame } from './fakedom.mjs'
 import { instrument } from './shadow.mjs'
-import { humanDriver, makePolicy, legacyMode, setupFor, missingHooks } from './human-bot.mjs'
+import { humanDriver, makePolicy, jobSetup, pageStart, playedAs, missingHooks } from './human-bot.mjs'
 import { dirFromArgs, readPin } from './pin.mjs'
 
 register('./hooks.mjs', import.meta.url)
@@ -47,8 +48,8 @@ const job = args.job ? JSON.parse(readFileSync(args.job === '-' ? 0 : args.job, 
 const pin = readPin()
 const dir = positionals[2] ?? dirFromArgs(args, pin)
 const code = positionals[2] ?? args.dir ?? (args.ref ? `ref ${args.ref}` : pin === 'WORKTREE' ? 'the PIN (WORKTREE, so the working tree)' : `the PIN ${pin.slice(0, 9)}`)
-const setup = job.setup ?? setupFor('watch', job.seed, job.dice)
-const mode = legacyMode(setup)
+const setup = jobSetup(job)
+const { mode, query } = pageStart(setup)
 const t0 = performance.now()
 
 let fatal = null
@@ -80,14 +81,11 @@ Object.defineProperty(globalThis, '__ts', {
     if (!missing.length) rec = instrument(v, say)
   },
 })
-const races = job.races ? `&races=${job.races.join(',')}` : ''
-// (F4) whether a human seat votes at the round limit, as the log was played
-const overtime = setup.seats?.some((s) => s.ctrl === 'human') ? `&overtime=${setup.overtime ?? 'never'}` : ''
-globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}${races}${overtime}` }
+globalThis.location = { search: `?fast&debug&lowfi&${query}` }
 console.log = console.info = console.debug = console.error
 await import(pathToFileURL(join(dir, 'main.js')).href)
 if (!ts) throw new Error(`${dir}/main.js published no window.__ts under ?debug`)
-if (missing.length) throw new Error(`${dir}/main.js: window.__ts lacks ${missing.join(', ')}. The oracle runs only the PIN commit or later, whose ?debug block lists what sim/ reads.`)
+if (missing.length) throw new Error(`${dir}/main.js: window.__ts lacks ${missing.join(', ')}. The oracle runs only code from the hooks commit (R0) on, whose ?debug block lists what sim/ reads.`)
 
 let driver = null
 if (mode !== 'watch') {
@@ -112,6 +110,9 @@ try {
   }
   if (fatal) throw fatal
   if (driver?.unused) throw new Error(`the battle ended with ${driver.unused} log entries unplayed`)
+  // the battle played was the job's, field for field
+  const other = playedAs(ts.G?.setup, setup)
+  if (other) throw new Error(other)
 } catch (e) {
   error = String(e?.stack ?? e)
 }

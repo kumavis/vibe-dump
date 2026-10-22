@@ -324,7 +324,11 @@ async function lane(browser, url, name) {
       let n = 0, deployed = 0
       for (;;) {
         const r = await idle()
-        if (r === 'over') break
+        if (r === 'over') {
+          // (F4) a battle ending on its rounds asks to play on first
+          if (ROUNDS === 5 && !stats.votes && /^Final score/.test(await text('#overWhy'))) problems.push('the battle ended on its rounds without asking to play on')
+          break
+        }
         if (r === 'vote') {
           // (F4) the round limit: play on, once
           const asked = await text('#overTitle')

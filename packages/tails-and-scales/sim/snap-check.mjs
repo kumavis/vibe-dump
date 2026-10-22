@@ -47,7 +47,8 @@
 // By default a selection: four watched battles (one of them 64886-198528,
 // the only corpus battle where a block dropped by a collapse still stands
 // when its action ends: in every other the same blast or sweep breaks it
-// too) and three human logs (one per vs-AI seat, one hotseat), the quick
+// too) and four human logs (one per vs-AI seat, one hotseat, and (F4) a
+// vs-AI log that votes at the round limit and plays an overtime round), the quick
 // run for a step that touches the view; --only picks others (`ai`, `human`
 // or ids, as parity's): `--only ai,human`, the whole corpus (about an hour),
 // is the milestone run, as P-browser's. Exit 0 when every check of every
@@ -63,7 +64,7 @@ import { loadCorpus, select, verdict, buildApp, copyCode } from './lib.mjs'
 import { IDLE_MS } from './chromium.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { shadowString, shadowParts, shadowOf, instrument } from './oracle/shadow.mjs'
-import { humanDriver, legacyMode, setupFor, missingHooks } from './oracle/human-bot.mjs'
+import { humanDriver, jobSetup, pageStart, playedAs, missingHooks } from './oracle/human-bot.mjs'
 
 let a
 try {
@@ -72,7 +73,7 @@ try {
   console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]`)
   process.exit(2)
 }
-const DEFAULT = '64-89,4242-99,1-2,64886-198528,bushtail-random-6,serpent-late-1,hotseat-aggressive-103'
+const DEFAULT = '64-89,4242-99,1-2,64886-198528,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1'
 let items
 try {
   items = select(loadCorpus().items, a.only ?? DEFAULT)
@@ -190,8 +191,8 @@ async function ask(page, fn, arg) {
 }
 
 async function run(browser, url, item) {
-  const setup = item.job.setup ?? setupFor('watch', item.job.seed, item.job.dice)
-  const mode = legacyMode(setup)
+  const setup = jobSetup(item.job)
+  const { mode, query } = pageStart(setup)
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   try {
     const page = await ctx.newPage()
@@ -199,8 +200,7 @@ async function run(browser, url, item) {
     page.on('pageerror', (e) => errors.push(e.message))
     const fns = [shadowString, shadowParts, shadowOf, instrument, missingHooks, humanDriver].join('\n')
     await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE})` })
-    // (F4) the log's own overtime: one recorded before F4 never voted
-    await page.goto(`${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}&overtime=${setup.overtime ?? 'never'}`)
+    await page.goto(`${url}/?debug&fast&${query}`)
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })
@@ -213,7 +213,9 @@ async function run(browser, url, item) {
       else if (Date.now() - since > IDLE_MS) throw new Error(`stalled at ${p.mark}`)
       await new Promise((r) => setTimeout(r, 500))
     }
-    const r = await ask(page, () => ({ trace: window.__ts.trace.slice(), shadow: window.__sim.rec.shadow, written: window.__sim.rec.written, checks: window.__sim.checks, error: window.__sim.error, unused: window.__sim.driver?.unused ?? 0 }))
+    const r = await ask(page, () => ({ trace: window.__ts.trace.slice(), shadow: window.__sim.rec.shadow, written: window.__sim.rec.written, checks: window.__sim.checks, error: window.__sim.error, unused: window.__sim.driver?.unused ?? 0, setup: window.__ts.G?.setup }))
+    // the battle played is the log's, field for field
+    r.error ??= playedAs(r.setup, setup)
     // the page's own table snapped where it stands, once the battle is
     // read: then, the figures settled, a fresh snap's, and no fx mark left
     if (!r.error) {

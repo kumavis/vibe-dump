@@ -20,7 +20,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { shadowString, shadowParts, shadowOf, instrument } from './oracle/shadow.mjs'
-import { humanDriver, legacyMode, setupFor, missingHooks, MODES } from './oracle/human-bot.mjs'
+import { humanDriver, jobSetup, pageStart, playedAs, missingHooks, MODES } from './oracle/human-bot.mjs'
 
 export const DIST = fileURLToPath(new URL('../dist', import.meta.url))
 // how long a page may go without progress (a whole battle takes 25-45 s
@@ -44,7 +44,7 @@ function pageHarness(job, mode) {
       ts = v
       const missing = missingHooks(v)
       if (missing.length) {
-        sim.error = `window.__ts lacks ${missing.join(', ')}: the harness runs only the PIN commit or later, whose ?debug block lists what sim/ reads`
+        sim.error = `window.__ts lacks ${missing.join(', ')}: the harness runs only code from the hooks commit (R0) on, whose ?debug block lists what sim/ reads`
         return
       }
       sim.rec = instrument(v)
@@ -77,8 +77,8 @@ async function ask(page, fn, ms, arg) {
 }
 
 async function runOne(browser, url, job) {
-  const setup = job.setup ?? setupFor('watch', job.seed, job.dice)
-  const mode = legacyMode(setup)
+  const setup = jobSetup(job)
+  const { mode, query } = pageStart(setup)
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   try {
     const page = await ctx.newPage()
@@ -87,13 +87,7 @@ async function runOne(browser, url, job) {
     const fns = [shadowString, shadowParts, shadowOf, instrument, missingHooks, humanDriver].join('\n')
     await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(job)}, ${JSON.stringify(mode)})` })
     const t0 = Date.now()
-    // a job's optional seat races go on the URL as for the Node oracle (code
-    // from R2 on reads ?races; the PIN ignores it)
-    const races = job.races ? `&races=${job.races.join(',')}` : ''
-    // (F4) whether a human seat votes at the round limit, as the log was
-    // played: a log from before F4 never did (code older than F4 ignores it)
-    const overtime = setup.seats?.some((s) => s.ctrl === 'human') ? `&overtime=${setup.overtime ?? 'never'}` : ''
-    const href = `${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}${races}${overtime}`
+    const href = `${url}/?debug&fast&${query}`
     const res = await page.goto(href)
     if (!res?.ok()) throw new Error(`${href}: HTTP ${res?.status()}`)
     // main.js publishes __ts as it loads, so by now it is there (with every
@@ -107,6 +101,9 @@ async function runOne(browser, url, job) {
     })
     const started = await ask(page, (want) => document.querySelector('#title').classList.contains('hidden') && window.__ts.S.control?.join() === want, IDLE_MS, MODES[mode].join())
     if (!started) throw new Error(`the title screen's ${button} button did not start a ${mode} game (title still up, or S.control isn't ${MODES[mode].join('/')})`)
+    // and the battle it started is the job's, field for field
+    const other = playedAs(await ask(page, () => window.__ts.G?.setup, IDLE_MS), setup)
+    if (other) throw new Error(other)
     // wait for the end, an error, or a stall
     let mark = '', since = Date.now(), stalled = null
     for (;;) {

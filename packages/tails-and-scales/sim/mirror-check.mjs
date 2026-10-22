@@ -121,10 +121,8 @@ const fail = (msg) => {
 }
 
 console.log(`mirror-check: ${MATCHUPS.length} matchups × ${seeds.length} battles, AI v AI and bot v bot, each played twice, on ${a.dir ? dir : a.ref ? `ref ${a.ref}` : 'the working tree'}`)
-// the bot games' setup still names the classic races: the legacy oracle
-// takes only title-screen setups (oracle/human-bot.mjs legacyMode), and the
-// races go on the URL; the step that admits race logs to the corpus folds
-// them into setup.seats
+// a job's `races` takes the place of its setup's (oracle/human-bot.mjs's
+// jobSetup): the page is asked for them on the URL and held to them
 const jobs = MATCHUPS.flatMap((races) => seeds.flatMap((s) => [
   { kind: 'ai', job: { ...s, races } },
   { kind: 'bot', job: { setup: setupFor('hotseat', s.seed, s.dice), bot: { policy: 'aggressive', seed: s.seed }, races } },

@@ -13,7 +13,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync, cpSync } 
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { cpus } from 'node:os'
-import { legacyMode } from './oracle/human-bot.mjs'
+import { pageStart } from './oracle/human-bot.mjs'
 import { codeDir } from './oracle/pin.mjs'
 
 export const SIM = fileURLToPath(new URL('./', import.meta.url))
@@ -207,10 +207,11 @@ export const tag = (v, r) =>
 // sim/baselines/human/*.json human logs: { setup, bot, why, n, trace, shadow, written, entries }
 // (until N0 the corpus also kept Chromium's shadow hashes, `webShadow`, where
 // they differed from Node's: since N0 every engine computes Node's). Each
-// item comes back as { id, kind, mode, job, ...stored fields }. A log whose
-// setup the legacy code can't play is refused here, for the whole corpus: a
-// step that adds logs the legacy URL can't carry (F4 votes, F5 races, F7
-// terrain) loosens legacyMode (oracle/human-bot.mjs) in the same step.
+// item comes back as { id, kind, mode, job, ...stored fields }, `mode` the
+// title screen's for its seats (a log whose seats no button seats is refused
+// here). Whether the page can make the rest of a setup is found where it is
+// played: every page runner holds the battle the page started to the log's
+// setup (oracle/human-bot.mjs's playedAs).
 export function loadCorpus() {
   const pairs = JSON.parse(readFileSync(join(BASE, 'pairs.json'), 'utf8'))
   const items = pairs.pairs.map((p) => ({ ...p, id: `${p.seed}-${p.dice}`, kind: 'ai', mode: 'watch', job: { seed: p.seed, dice: p.dice } }))
@@ -218,7 +219,7 @@ export function loadCorpus() {
   if (existsSync(hdir)) {
     for (const f of readdirSync(hdir).filter((f) => f.endsWith('.json')).sort()) {
       const h = JSON.parse(readFileSync(join(hdir, f), 'utf8'))
-      items.push({ ...h, id: f.replace(/\.json$/, ''), kind: 'human', mode: legacyMode(h.setup), job: { setup: h.setup, entries: h.entries } })
+      items.push({ ...h, id: f.replace(/\.json$/, ''), kind: 'human', mode: pageStart(h.setup).mode, job: { setup: h.setup, entries: h.entries } })
     }
   }
   return { pairs, items }
