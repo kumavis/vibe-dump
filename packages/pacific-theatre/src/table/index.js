@@ -127,7 +127,7 @@ export class TableScene {
     this.tray.frustumCulled = false
     this.group.add(this.tray)
 
-    this.coast = data.coast ? new Coast(data.coast, data.proj, this.uniforms) : null
+    this.coast = data.coast ? new Coast(data.coast, data.proj, this.uniforms, this.ground) : null
     if (this.coast) this.group.add(this.coast.group)
     this.routes = new Routes({ routes: data.routes, proj: data.proj, uniforms: this.uniforms, camera: this.camera, renderer: app.renderer, maxSeg: 15, lift: [0.03, 0.0024], height: 300 })
     this.group.add(this.routes.group)
@@ -161,7 +161,7 @@ export class TableScene {
     const r = this.app.renderer
     r.getDrawingBufferSize(this._res)
     const dpr = r.getPixelRatio()
-    this.coast?.update(this.camera, this._res, dpr, this.fade)
+    this.coast?.update(this.camera, this._res, dpr, this.fade, d)
     const clock = this.app.clock
     this.routes.update(clock.date, d, { window: clock.windowAt(), fade: this.fade })
     for (const o of this.outlines.values()) {
