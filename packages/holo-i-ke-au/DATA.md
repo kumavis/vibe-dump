@@ -88,14 +88,18 @@ FeatureCollections in WGS84 lon/lat, simplified to roughly 50 m tolerance,
 from the State GIS historic land division layers. Properties, kept verbatim from
 the layer where they exist, plus:
 
-- `name`: the division's name with diacritics as the layer gives it
+- `name`: the division's name in the standard spelling: the ʻokina as U+02BB
+  and the kahakō as a macron. (The layer writes fifteen names, most on
+  Molokaʻi, with a turned comma or with Ï for Ī; its own fields keep those
+  glyphs, `name`, `island` and `mokuKey` do not, and `check-data` rejects any
+  other glyph there.)
 - `island`: the island name
 - `moku`: for an ahupuaʻa, its moku name
 - `gisId`: the layer's own object id, for traceability
 
 The app draws these as lines and uses the moku polygons to colour the polity
 overlay. **Moku names are the join key** between the boundary file and
-`polities.json`, so keep them exactly as the layer spells them, and keep the
+`polities.json`, so keep them exactly as `name` spells them, and keep the
 island name beside them, because moku names repeat across islands (there is a
 Kona on four islands).
 
@@ -145,7 +149,9 @@ Coordinates are `[lon, lat]` (GeoJSON order). Ids are kebab-case ASCII.
 { "id": "kamakau-ruling-chiefs", "title": "Ruling Chiefs of Hawaiʻi", "author": "Samuel Mānaiakalani Kamakau",
   "year": 1961, "url": "https://...", "access": "open | print | paywalled", "opened": true,
   "read": "full | part | title",   // how much was read; title means not opened, and the app cites only full and part
-  "note": "revised edition 1992; Hawaiian originals in Ka Nupepa Kuokoa 1866–71" }
+  "note": "revised edition 1992; Hawaiian originals in Ka Nupepa Kuokoa 1866–71",
+  "wanted": "what to look for in it" } // while opened is false (required), or read is part: the pages, figures
+                                       // and names to bring back and the entries they would fill, for whoever opens it
 ```
 
 `polities.json`, the far-view overlay, keyed by era then by `island:moku` using
@@ -167,7 +173,10 @@ Rules, enforced by `tools/check-data.mjs`:
   must be `ahupuaa` or coarser. Burials are never placed at all.
 - numbers appear only inside `tellings`, each with its source, never as a single
   figure in `summary`
-- a source with `"opened": false` is marked `verify` in the card
+- a source with `"opened": false` is marked `verify` in the card, and carries
+  `wanted`: the record of what to look for in it, so that whoever opens it
+  knows what to bring back (ACCESS.md keeps the same for the sources no entry
+  cites yet, and for the hosts and datasets that are not sources)
 
 The first dataset found places where this schema ran short; RESEARCH.md §6
 lists them. The additions it made are accepted as part of the contract: a
@@ -287,8 +296,9 @@ Mauna Loa, Haleakalā, Puʻu Kukui, Kaʻala, Waiʻaleʻale, Kamakou, Lānaʻihal
 Puʻu Moaulanui, Paniʻau), which also proves north is up and east is right. Each
 pack's land must match the ahupuaʻa polygons (IoU 0.98–0.999). Rain must be wet
 and dry in the right places, and every boundary feature must have its
-properties and valid, non-crossing rings. It lists every file under
-`public/data/` and fails over 40 MB.
+properties and valid, non-crossing rings, its `name` the layer's own spelling made
+standard (the ʻokina as U+02BB, the kahakō as a macron) and nothing else. It
+lists every file under `public/data/` and fails over 40 MB.
 
 ## Routes
 

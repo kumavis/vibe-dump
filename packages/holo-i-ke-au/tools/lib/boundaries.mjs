@@ -8,13 +8,16 @@
 //   apostrophe or none), every `mokupuni` uses an ASCII apostrophe (Hawai'i),
 //   and the Honuaʻula feature, which holds Honuaʻula on Maui plus Kahoʻolawe
 //   and Molokini, carries mokupuni "Molokini".
+// - Fifteen ahupuaʻa names in layer 1, most on Molokaʻi, write the ʻokina as a
+//   turned comma or the kahakō as a diaeresis (Kaluako‘i, ‘Ïloli, Honomanü).
 // So a moku's `name` is the spelling its own ahupuaʻa carry in layer 1, which
 // is what makes the two files join, and its island is the island where most
-// of its ahupuaʻa lie (Maui for Honuaʻula: 13 of its 15). The layer's own
-// fields stay beside these verbatim, so nothing is lost.
+// of its ahupuaʻa lie (Maui for Honuaʻula: 13 of its 15). The added fields
+// (name, island, mokuKey) carry the standard ʻokina and kahakō; the layer's
+// own fields stay beside them verbatim, so nothing is lost.
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { ISLANDS, fold, islandId } from './geo.mjs'
+import { ISLANDS, fold, islandId, standardName } from './geo.mjs'
 import { simplifyLayers } from './simplify.mjs'
 import { BOUNDARY_LAYERS, BOUNDARY_LICENCE, BOUNDARY_SERVICE, readBoundaryLayer } from './sources.mjs'
 
@@ -85,14 +88,14 @@ export function bakeBoundaries({ dir, ledger, outDir, log }) {
       id = top(areas)
       notes.push(`moku layer objectid ${p.objectid} "${p.moku}" has mokupuni "${was}"; its ahupuaʻa lie mostly on ${islandName(id)}, so island is ${islandSpelling[id]}`)
     }
-    const name = mokuSpelling[`${id}|${fm}`]
+    const name = standardName(mokuSpelling[`${id}|${fm}`])
     if (name !== p.moku) notes.push(`moku layer spells "${p.moku}" (${p.mokupuni}); layer 1 spells "${name}", used as name`)
     return {
       type: 'Feature',
       id: f.id ?? p.objectid,
       properties: {
         name,
-        island: islandSpelling[id],
+        island: standardName(islandSpelling[id]),
         islandId: id,
         mokuKey: `${id}:${name}`,
         gisId: p.objectid,
@@ -111,6 +114,7 @@ export function bakeBoundaries({ dir, ledger, outDir, log }) {
   }
 
   // Ahupuaʻa features: own island; moku joined by island and name.
+  const respelt = []
   const ahuFeatures = ahu.features.map((f) => {
     const p = f.properties
     const fm = fold(p.moku)
@@ -123,13 +127,14 @@ export function bakeBoundaries({ dir, ledger, outDir, log }) {
       notes.push(`ahupuaʻa objectid ${p.objectid} "${p.ahupuaa}" on ${p.mokupuni} belongs to moku ${moku.properties.mokuKey}`)
     }
     if (!id) id = moku.properties.islandId // an islet such as Molokini goes with its moku's island pack
-    const name = p.ahupuaa && p.ahupuaa !== 'N/A' ? p.ahupuaa : null
+    const name = p.ahupuaa && p.ahupuaa !== 'N/A' ? standardName(p.ahupuaa) : null
+    if (name !== null && name !== p.ahupuaa) respelt.push(`${p.ahupuaa} → ${name}`)
     return {
       type: 'Feature',
       id: f.id ?? p.objectid,
       properties: {
         name,
-        island: p.mokupuni,
+        island: standardName(p.mokupuni),
         islandId: id,
         mokuKey: moku.properties.mokuKey,
         gisId: p.objectid,
@@ -138,6 +143,7 @@ export function bakeBoundaries({ dir, ledger, outDir, log }) {
       geometry: f.geometry,
     }
   })
+  if (respelt.length) notes.push(`${respelt.length} ahupuaʻa names given the standard ʻokina and kahakō: ${respelt.join(', ')}`)
 
   // Simplify both layers together so their shared lines stay identical.
   const t0 = Date.now()
@@ -158,7 +164,7 @@ export function bakeBoundaries({ dir, ledger, outDir, log }) {
         `Fetched from the ArcGIS REST service as GeoJSON in WGS84 (outSR=4326). Coordinates snapped to 1e-6 degrees, then ` +
         `simplified together with the other boundary file (shared arcs, Douglas–Peucker, ${TOLERANCE_METRES} m tolerance in the ` +
         `projection of manifest.json, finer where needed to keep rings valid). Winding per RFC 7946. ` +
-        `Added properties: name, island, islandId, mokuKey, gisId; every other property is the layer's own, verbatim.`,
+        `Added properties: name, island, islandId, mokuKey, gisId, with the standard ʻokina (U+02BB) and kahakō in name and island; every other property is the layer's own, verbatim.`,
     }
     const head = JSON.stringify(header).slice(0, -1)
     const body = feats.map((f) => JSON.stringify(f)).join(',\n')

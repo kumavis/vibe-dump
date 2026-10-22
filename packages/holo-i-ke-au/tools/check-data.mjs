@@ -231,6 +231,8 @@ function parseDate(s) {
 
 // Hawaiian-facing text: an ASCII or curly apostrophe standing where an ʻokina belongs
 const FAKE_OKINA = /[A-Za-zāēīōūĀĒĪŌŪ]['‘’`][aeiouāēīōūAEIOUĀĒĪŌŪ]/
+// a name the files add (not a source layer's own field) carries the standard ʻokina (U+02BB) and kahakō, nothing else
+const NONSTANDARD = /[ʼ‘’'`´ÄËÏÖÜäëïöü]/
 // (lookarounds, not \b: an ʻokina is not a word character, so \bIolani would match inside ʻIolani)
 const UNMARKED = /(?<![\p{L}ʻ])(Hawaii|Oahu|Kauai|Molokai|Lanai|Niihau|Kahoolawe|Kau|Ewa|Hana|Nuuanu|Waikiki|Iolani)(?![\p{L}ʻ])/u
 function checkHawaiian(at, text) {
@@ -283,6 +285,8 @@ for (const s of sources) {
   else if (s.opened === false && s.read !== 'title') bad(at, `a source not opened can only have read “title” (it has “${s.read}”)`)
   else if (s.opened === true && s.read === 'title') bad(at, 'a source opened and read must have read “full” or “part”')
   if (s.opened === false && !s.note) bad(at, 'a source not opened must say in note what it is believed to hold')
+  if (s.opened === false && !(typeof s.wanted === 'string' && s.wanted.trim())) bad(at, 'a source not opened must say in wanted what to look for in it, for whoever opens it')
+  if (s.read === 'full' && s.wanted !== undefined) bad(at, 'a source read in full has nothing left to want; drop wanted')
   if (s.access === 'open' && s.opened && !s.url) bad(at, 'an open source that was read needs its url')
   if ('tertiary' in s && typeof s.tertiary !== 'boolean') bad(at, 'tertiary must be true or false')
   if (s.url && !/^https?:\/\//.test(s.url)) bad(at, 'url is not http(s)')
@@ -1083,6 +1087,20 @@ function checkLoiSlopes(d, lois) {
 }
 
 // ---------------------------------------------------------------------------
+// boundaries/*.geojson: the fields the bake adds carry the standard spelling (DATA.md §3)
+for (const key of ['moku', 'ahupuaa']) {
+  const path = join(DATA, 'boundaries', `${key}.geojson`)
+  if (!existsSync(path)) continue
+  let g
+  try { g = JSON.parse(readFileSync(path, 'utf8')) } catch (e) { bad(`boundaries/${key}.geojson`, `does not parse: ${e.message}`); continue }
+  for (const f of g.features || []) {
+    const p = f.properties || {}
+    for (const k of ['name', 'island', 'mokuKey']) {
+      if (typeof p[k] === 'string' && NONSTANDARD.test(p[k])) bad(`boundaries/${key}.geojson gisId ${p.gisId} ${k}`, `“${p[k]}” is not the standard spelling (ʻokina U+02BB, kahakō as a macron)`)
+    }
+  }
+}
+
 // mahele.json: the class of each ahupuaʻa after the Māhele (RESEARCH.md §12 gives the schema)
 let maheleCounts = null
 if (existsSync(join(DATA, 'mahele.json'))) checkMahele()

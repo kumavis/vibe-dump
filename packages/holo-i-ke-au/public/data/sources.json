@@ -238,7 +238,8 @@
     "access": "print",
     "opened": false,
     "read": "title",
-    "note": "Not read. Believed to give the full coral-dated sequence for the 78 heiau of Kahikinui and Kaupō."
+    "note": "Not read. Believed to give the full coral-dated sequence for the 78 heiau of Kahikinui and Kaupō.",
+    "wanted": "The coral dates of the Kahikinui and Kaupō heiau, temple by temple (name, date range, type), to date the Maui heiau in places.json at the precision DESIGN §7.4 allows; and the chiefly chronology its last chapters give, to check the bounds of the reign eras in eras.json."
   },
   {
     "id": "mcphie-1990",
@@ -260,7 +261,8 @@
     "access": "paywalled",
     "opened": false,
     "read": "title",
-    "note": "Not read; cited for its title, which places the 1790 explosions at the end of a long explosive period."
+    "note": "Not read; cited for its title, which places the 1790 explosions at the end of a long explosive period.",
+    "wanted": "The dated sequence of the Keanakākoʻi explosions and where the 1790 blasts fall in it, with the magnitude it gives them; and whether it counts the dead, for the tellings of keanakakoi-1790."
   },
   {
     "id": "usgs-volcano-watch-2008",
@@ -271,7 +273,8 @@
     "access": "open",
     "opened": false,
     "read": "title",
-    "note": "Not read: usgs.gov refused or timed out. Search summaries say it questions whether the Kaʻū Desert footprints were made by Keōua's warriors and gives a wide range for the dead."
+    "note": "Not read: usgs.gov refused or timed out. Search summaries say it questions whether the Kaʻū Desert footprints were made by Keōua's warriors and gives a wide range for the dead.",
+    "wanted": "Its range for the dead of 1790 and its reading of the Kaʻū Desert footprints (whose, and when), for the tellings of keanakakoi-1790; and the studies it names, to cite in its place."
   },
   {
     "id": "swanson-2019-hulili",
@@ -354,7 +357,8 @@
     "access": "paywalled",
     "opened": false,
     "read": "title",
-    "note": "Not read. The standard history of the ditches."
+    "note": "Not read. The standard history of the ditches.",
+    "wanted": "For hamakua-ditch-1876: the intake and the outlet, the length, the year water first ran and who built it; and her list of the ditches with their dates, for the cultivation keyframes after 1876."
   },
   {
     "id": "kirc-history",
@@ -613,7 +617,8 @@
     "access": "open",
     "opened": false,
     "read": "title",
-    "note": "Hawaiian Journal of History 3. Not read (eVols refused automated access). Wikipedia cites pp. 67–68 for battle deaths."
+    "note": "Hawaiian Journal of History 3. Not read (eVols refused automated access). Wikipedia cites pp. 67–68 for battle deaths.",
+    "wanted": "pp. 67–68: the dead of the battle of Nuʻuanu by side, where the figures come from and how far he trusts them, for the tellings of nuuanu-1795 and the size of the masses in the Nuʻuanu district pack; his figures for the battle of 1783 and for Keōua's party of 1790."
   },
   {
     "id": "james-2004-nuuanu",
@@ -623,7 +628,8 @@
     "access": "print",
     "opened": false,
     "read": "title",
-    "note": "Kamehameha Schools Press. Not read. Wikipedia cites it for the name Kalelekaʻanae, \"the leaping ʻanae (mullet)\"."
+    "note": "Kamehameha Schools Press. Not read. Wikipedia cites it for the name Kalelekaʻanae, \"the leaping ʻanae (mullet)\".",
+    "wanted": "The map of the battle: where Kalanikūpule's lines stood (Puʻiwa, Lāʻimi, the posts), where the guns were and which side had how many, and his telling of the end at the pali, to check the features of the Nuʻuanu district pack at stops 5 to 8; the name Kalelekaʻanae and its gloss, at first hand."
   },
   {
     "id": "ii-fragments",
@@ -633,7 +639,8 @@
     "access": "print",
     "opened": false,
     "read": "title",
-    "note": "Not read. ʻĪʻī's account of Nuʻuanu and of Kamehameha's court should be checked against every card in that era."
+    "note": "Not read. ʻĪʻī's account of Nuʻuanu and of Kamehameha's court should be checked against every card in that era.",
+    "wanted": "His account of Nuʻuanu: who served the guns, Kaʻiana's crossing, the posts up the valley; the Honolulu–Nuʻuanu trail of about 1810 and the ʻili of the valley, for the district pack's trail and loʻi; Kamehameha's court at Honolulu and Waikīkī, to check every card of that era."
   },
   {
     "id": "obeyesekere-1992",
@@ -643,7 +650,8 @@
     "access": "print",
     "opened": false,
     "read": "title",
-    "note": "Not read. Argues that the idea that Hawaiians took Cook for the god Lono is a European construction."
+    "note": "Not read. Argues that the idea that Hawaiians took Cook for the god Lono is a European construction.",
+    "wanted": "His case that Cook was not taken for Lono, for a second telling on cook-kealakekua-1779; and which contemporary accounts he rests it on."
   },
   {
     "id": "sahlins-1995",
@@ -653,7 +661,8 @@
     "access": "print",
     "opened": false,
     "read": "title",
-    "note": "Not read. Replies to Obeyesekere, defending the reading that Cook was received within the Makahiki rites of Lono."
+    "note": "Not read. Replies to Obeyesekere, defending the reading that Cook was received within the Makahiki rites of Lono.",
+    "wanted": "His reply: the Makahiki reading of Cook's reception and death, for the tellings of cook-kealakekua-1779 beside Obeyesekere's."
   },
   {
     "id": "kuykendall-1938-v1",
@@ -663,7 +672,8 @@
     "access": "paywalled",
     "opened": false,
     "read": "title",
-    "note": "Not read (no open copy found). Merlin and VanRavenswaay quote it, pp. 88–89, for Kamakau on the sandalwood famine."
+    "note": "Not read (no open copy found). Merlin and VanRavenswaay quote it, pp. 88–89, for Kamakau on the sandalwood famine.",
+    "wanted": "pp. 88–89 on the sandalwood famine, at first hand; his chapters on the foreigners and the guns of 1795 (Young, Davis, how many cannon), for the Nuʻuanu forces; the land laws of 1846–50 and the Māhele, for mahele.json's classes and the Māhele chapter; his figures for the smallpox of 1853."
   },
   {
     "id": "stannard-1989",
@@ -673,7 +683,8 @@
     "access": "print",
     "opened": false,
     "read": "title",
-    "note": "Not read; its estimate is taken from Swanson's table (p. 205), which cites Stannard p. 50."
+    "note": "Not read; its estimate is taken from Swanson's table (p. 205), which cites Stannard p. 50.",
+    "wanted": "p. 50: his contact-population estimate and how he reaches it, for the tellings of depopulation at first hand instead of through Swanson's table."
   },
   {
     "id": "silva-2004",
@@ -683,7 +694,8 @@
     "access": "print",
     "opened": false,
     "read": "title",
-    "note": "Not read. The main study of the 1897 petitions, known as the Kūʻē petitions, and of the two associations behind them."
+    "note": "Not read. The main study of the 1897 petitions, known as the Kūʻē petitions, and of the two associations behind them.",
+    "wanted": "The Kūʻē petitions: the signature counts by island and district, the two associations (Hui Aloha ʻĀina and Hui Kālaiʻāina) and the dates of the signing, for the tellings of kue-1897; where the signatures were gathered, for the event's places."
   },
   {
     "id": "hgs-1881-oahu",
@@ -848,7 +860,8 @@
     "access": "open",
     "opened": false,
     "read": "title",
-    "note": "The Māhele Book of January–March 1848: the king’s and each chief’s quitclaims to one another, land by land, with the lists of Crown and Government lands on its last pages. The manuscript scan (LLMC, from the Hawaii State Archives) is open on the Internet Archive, but it is handwritten in Hawaiian and its machine text is unusable, so it was not read. Its page numbers are cited only as OHA’s Kīpuka layers give them."
+    "note": "The Māhele Book of January–March 1848: the king’s and each chief’s quitclaims to one another, land by land, with the lists of Crown and Government lands on its last pages. The manuscript scan (LLMC, from the Hawaii State Archives) is open on the Internet Archive, but it is handwritten in Hawaiian and its machine text is unusable, so it was not read. Its page numbers are cited only as OHA’s Kīpuka layers give them.",
+    "wanted": "Read by someone who reads the hand: each land's class and awardee as the book writes it, page by page, for mahele.json (its unknown units and its disputes first); and the lists of Crown and Government lands on the last pages, to check the crown and government classes."
   },
   {
     "id": "crown-lands-report-1894",

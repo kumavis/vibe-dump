@@ -14,7 +14,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { KX, KZ, ISLANDS, fold } from './lib/geo.mjs'
+import { KX, KZ, ISLANDS, NONSTANDARD, fold, standardName } from './lib/geo.mjs'
 import { readPNG } from './lib/png.mjs'
 import { ringIntersections, ringSignedArea } from './lib/simplify.mjs'
 
@@ -277,6 +277,7 @@ for (const [key, fc] of [['moku', moku], ['ahupuaa', ahupuaa]]) {
     ok(islandIds.has(p.islandId), `${where}: islandId ${p.islandId}`)
     ok(Number.isInteger(p.gisId) && p.gisId === p.objectid, `${where}: gisId must be the layer objectid`)
     ok(typeof p.mokuKey === 'string' && p.mokuKey.includes(':'), `${where}: mokuKey`)
+    ok(!NONSTANDARD.test(`${p.name ?? ''}${p.island}${p.mokuKey}`), `${where}: name, island and mokuKey carry the standard ʻokina and kahakō (has "${p.name}", "${p.island}")`)
     if (key === 'moku') {
       ok(typeof p.name === 'string' && p.name.length > 0, `${where}: name`)
       ok(fold(p.name) === fold(p.moku), `${where}: name "${p.name}" does not match the layer's moku "${p.moku}"`)
@@ -284,7 +285,7 @@ for (const [key, fc] of [['moku', moku], ['ahupuaa', ahupuaa]]) {
       ok(!mokuKeys.has(p.mokuKey), `${where}: duplicate mokuKey ${p.mokuKey}`)
       mokuKeys.add(p.mokuKey)
     } else {
-      ok(p.name === null ? p.ahupuaa === 'N/A' : p.name === p.ahupuaa, `${where}: name must be the layer's ahupuaa verbatim`)
+      ok(p.name === null ? p.ahupuaa === 'N/A' : p.name === standardName(p.ahupuaa), `${where}: name must be the layer's ahupuaa in the standard spelling`)
       ok(typeof p.moku === 'string' && p.moku.length > 0, `${where}: moku`)
       ok(mokuKeys.has(p.mokuKey), `${where}: mokuKey ${p.mokuKey} is not a moku`)
     }

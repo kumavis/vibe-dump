@@ -36,9 +36,6 @@ export const CLASSES = [
 ]
 const CODE = new Map(CLASSES.map((c, i) => [c.id, i + 1]))
 
-// an ʻokina typed as a turned comma (Kapa‘akea) is the ʻokina; only place names are touched
-const okina = (s) => String(s || '').replace(/[‘’']/g, 'ʻ')
-
 export class MaheleOverlay {
   constructor(app) {
     this.app = app
@@ -98,7 +95,7 @@ export class MaheleOverlay {
           box[2] = Math.max(box[2], x)
           box[3] = Math.max(box[3], z)
         }
-        this.units.push({ gisId: p.gisId, name: okina(entry?.name ?? p.name ?? p.ahupuaa), island: p.island || '', islandId: p.islandId || entry?.islandId || '', moku: p.moku || '', cls, entry: entry || null, rings, box })
+        this.units.push({ gisId: p.gisId, name: entry?.name ?? p.name ?? p.ahupuaa, island: p.island || '', islandId: p.islandId || entry?.islandId || '', moku: p.moku || '', cls, entry: entry || null, rings, box })
       }
       if (unjoined) this.warn(`mahele.json has no entry for ${unjoined} of the ahupuaʻa (drawn as unknown)`)
       this.available = true

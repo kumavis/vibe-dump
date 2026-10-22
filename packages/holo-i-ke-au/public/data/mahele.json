@@ -1395,7 +1395,7 @@
   },
   {
    "gisId": 57,
-   "name": "Kïauea",
+   "name": "Kīauea",
    "islandId": "molokai",
    "class": "government",
    "precision": "whole",
@@ -1409,7 +1409,7 @@
   },
   {
    "gisId": 58,
-   "name": "Kaluako‘i",
+   "name": "Kaluakoʻi",
    "islandId": "molokai",
    "class": "government",
    "precision": "whole",
@@ -1626,7 +1626,7 @@
   },
   {
    "gisId": 68,
-   "name": "‘Ïloli",
+   "name": "ʻĪloli",
    "islandId": "molokai",
    "class": "konohiki",
    "precision": "whole",
@@ -2160,7 +2160,7 @@
   },
   {
    "gisId": 90,
-   "name": "‘Aha‘ino 1",
+   "name": "ʻAhaʻino 1",
    "islandId": "molokai",
    "class": "mixed",
    "precision": "whole",
@@ -2201,7 +2201,7 @@
   },
   {
    "gisId": 91,
-   "name": "‘Aha‘ino 2",
+   "name": "ʻAhaʻino 2",
    "islandId": "molokai",
    "class": "mixed",
    "precision": "whole",
@@ -2345,7 +2345,7 @@
   },
   {
    "gisId": 96,
-   "name": "Puna‘ula",
+   "name": "Punaʻula",
    "islandId": "molokai",
    "class": "konohiki",
    "precision": "whole",
@@ -2485,7 +2485,7 @@
   },
   {
    "gisId": 102,
-   "name": "‘Ïloli",
+   "name": "ʻĪloli",
    "islandId": "molokai",
    "class": "konohiki",
    "precision": "whole",
@@ -2563,7 +2563,7 @@
   },
   {
    "gisId": 105,
-   "name": "Ka‘ili‘ula",
+   "name": "Kaʻiliʻula",
    "islandId": "molokai",
    "class": "government",
    "precision": "whole",
@@ -2578,7 +2578,7 @@
   },
   {
    "gisId": 106,
-   "name": "Kapuaoko‘olau",
+   "name": "Kapuaokoʻolau",
    "islandId": "molokai",
    "class": "konohiki",
    "precision": "whole",
@@ -2762,7 +2762,7 @@
   },
   {
    "gisId": 115,
-   "name": "Kapa‘akea",
+   "name": "Kapaʻakea",
    "islandId": "molokai",
    "class": "unknown",
    "precision": "none",
@@ -2782,7 +2782,7 @@
   },
   {
    "gisId": 116,
-   "name": "Makakupa‘ia",
+   "name": "Makakupaʻia",
    "islandId": "molokai",
    "class": "government",
    "precision": "whole",
@@ -2812,7 +2812,7 @@
   },
   {
    "gisId": 118,
-   "name": "Makakupa‘ia",
+   "name": "Makakupaʻia",
    "islandId": "molokai",
    "class": "konohiki",
    "precision": "whole",
@@ -2842,7 +2842,7 @@
   },
   {
    "gisId": 119,
-   "name": "Kalua‘aha",
+   "name": "Kaluaʻaha",
    "islandId": "molokai",
    "class": "government",
    "precision": "whole",
@@ -2933,7 +2933,7 @@
   },
   {
    "gisId": 122,
-   "name": "‘Ualapu‘e",
+   "name": "ʻUalapuʻe",
    "islandId": "molokai",
    "class": "crown",
    "precision": "whole",
@@ -9697,7 +9697,7 @@
   },
   {
    "gisId": 644,
-   "name": "Honomanü",
+   "name": "Honomanū",
    "islandId": "maui",
    "class": "mixed",
    "precision": "whole",

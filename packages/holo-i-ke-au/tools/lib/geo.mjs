@@ -35,6 +35,22 @@ export function fold(name) {
     .replace(/[^a-z]/g, '')
 }
 
+/**
+ * The standard spelling of a Hawaiian name: the ʻokina as U+02BB (not an
+ * apostrophe, a quotation mark or a turned comma) and the kahakō as a macron
+ * (not the diaeresis some fonts put in its place: Ï for Ī). For the names the
+ * files add; a source layer's own fields keep its glyphs.
+ */
+export function standardName(name) {
+  if (name == null) return name
+  return String(name)
+    .replace(/[ʼ‘’'`´]/g, 'ʻ')
+    .replace(/[ÄËÏÖÜäëïöü]/g, (c) => ({ Ä: 'Ā', Ë: 'Ē', Ï: 'Ī', Ö: 'Ō', Ü: 'Ū', ä: 'ā', ë: 'ē', ï: 'ī', ö: 'ō', ü: 'ū' })[c])
+}
+
+/** Matches any glyph standardName would change. */
+export const NONSTANDARD = /[ʼ‘’'`´ÄËÏÖÜäëïöü]/
+
 /** Island pack id for a name as the State layer spells it, or null. */
 export function islandId(name) {
   const f = fold(name)

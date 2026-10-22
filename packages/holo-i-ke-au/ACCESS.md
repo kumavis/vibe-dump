@@ -3,8 +3,12 @@
 A standing list of what the research could not reach from the build container, why, and what each
 would unlock if the project's owner can open it: a host to allow, a lending scan to borrow, a book to
 buy or borrow, a dataset to obtain. Consolidated from RESEARCH.md §§2–12. Each entry names the events,
-places, layers or questions it would settle. When one is opened, read it, turn its `sources.json` entry
-from `opened: false` to `true` with its `read`, and strike it here.
+places, layers or questions it would settle: what to look for in it, not only that it is wanted. For the
+thirteen sources the app already cites unread (`opened: false` in `sources.json`), the same want is on
+the entry itself, in `wanted`, and `check-data` requires it; this file carries the rest: the sources no
+entry cites yet, and the hosts and datasets that are not sources. When one is opened, read it, turn its
+`sources.json` entry from `opened: false` to `true` with its `read`, drop or narrow its `wanted`, and
+strike it here.
 
 ## Hosts to unblock
 
@@ -35,11 +39,11 @@ from `opened: false` to `true` with its `read`, and strike it here.
 | --- | --- |
 | ʻĪʻī, *Fragments of Hawaiian History* (1959) | the Honolulu–Nuʻuanu trail of about 1810 and the ʻili of the valley; who served the guns at Nuʻuanu; Kamehameha's court (every card of that era) |
 | Sterling and Summers, *Sites of Oahu* (1978) | the Honolulu and Nuʻuanu sites, ponds and heiau, and the place-name lore of the valley |
-| Kuykendall, *The Hawaiian Kingdom*, vols. I–III (from 1938) | the Māhele and the land laws; the guns of 1795; the 1864 constitution and the reigns of the merged chapter |
+| Kuykendall, *The Hawaiian Kingdom*, vols. I–III (from 1938) | vol. I: the guns and the foreigners of 1795 (Young, Davis, how many cannon), pp. 88–89 on the sandalwood famine at first hand, and the land laws of 1846–50 and the Māhele, for `mahele.json`'s classes and the Māhele chapter; vol. II: the 1864 constitution and the reigns of the merged chapter, event by event; vol. III: the 1887 constitution and the overthrow |
 | Kameʻeleihiwa, *Native Land and Foreign Desires* (1992) | the Māhele chief by chief: the check on every konohiki class and awardee in `mahele.json`, and the acreage totals |
 | Handy, *Native Planters in Old Hawaii* (a paid ebook) | the loʻi valley by valley; Nuʻuanu's taro; the 1778 cultivation weights (§9) |
-| Kirch, *How Chiefs Became Kings*; Kirch and Ruggles, *Heiau, ʻĀina, Lani* (2019) | the coral-dated heiau of Kahikinui and Kaupō, and the chiefly chronology the reign eras guess at |
-| Cordy, *Exalted Sits the Chief* | the Hawaiʻi Island chiefdoms; the pre-contact eras and polity maps |
+| Kirch, *How Chiefs Became Kings*; Kirch and Ruggles, *Heiau, ʻĀina, Lani* (2019) | the coral dates of the Kahikinui and Kaupō heiau, temple by temple (name, date range, type), for the Maui heiau in `places.json`; the chiefly chronology (the Maui and Hawaiʻi chapters), to check the bounds of the reign eras in `eras.json` |
+| Cordy, *Exalted Sits the Chief* | which moku each Hawaiʻi Island paramount held and when, for the pre-contact eras of `polities.json`; his dated royal centres (Waipiʻo, Kailua, Hilo) for `places.json`; his population estimates by district, for the contact settlement layer |
 | James, *The Battle of Nuʻuanu* (2004) | the battle's name, and the map behind Wikipedia's account and the oral account: the positions of the lines |
 | Pukui, Elbert and Mookini, *Place Names of Hawaii* (1974) | as for Ulukau above, in print |
 | Schmitt, *Demographic Statistics of Hawaii* | the 1850 census by island and the district figures before 1896 (§9) |
@@ -47,7 +51,7 @@ from `opened: false` to `true` with its `read`, and strike it here.
 | Stannard, *Before the Horror* (1989) | his contact-population estimate at first hand (`depopulation`) |
 | Obeyesekere (1992); Sahlins (1995) | the two readings of Cook and Lono, now unread tellings (`cook-kealakekua-1779`) |
 | Wilcox, *Sugar Water* (1996) | the ditches (`hamakua-ditch-1876`) |
-| Osorio; Beamer | the kingdom's politics and land (DESIGN §7.2) |
+| Osorio, *Dismembering Lāhui* (2002); Beamer, *No Mākou ka Mana* (2014) | Osorio: the constitutions of 1840, 1852 and 1887 and who sat in each legislature, for the kingdom-era cards; Beamer: the kingdom's land and governance as a native system, and his maps of moku and ahupuaʻa as the kingdom's own units, to check the boundary file's reading of the 1850s (DESIGN §7.2) |
 
 ## Data
 
