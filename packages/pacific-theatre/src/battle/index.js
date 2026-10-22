@@ -1,92 +1,45 @@
-// The battle's lifecycle (ENGINEERING.md §9): Stage 0's stub Battle, which
-// the engine workflow replaces whole.
+// The battle's lifecycle (ENGINEERING.md §9): enter a box (load its pack,
+// battle.json and the kits, build the sim at t, fly in, hand over), watch
+// it, scrub it, take a moment and give the controls back, and leave.
 //
-// It keeps the contract's shape so App, the URL and the tools can be written
-// against it now: enter() starts loadBox (the box's pack decoding in the app's
-// PackDecoder, battle.json, the kits), flies the table rig to the hand-over
-// pose over the box's outline through its placement with the rig's `ready`
-// hold, logs, and resolves; leave() logs, takes the outline away and
-// resolves. Everything else logs and does nothing (there is no sim:
-// `sim` stays null, `takeMoment` resolves with nothing to score).
+// The hand-over is App's (one scene drawn per frame, a fade through the haze
+// between them); Battle does the box's side of it and, while App has not
+// been wired to do the table's side, the table's too through the calls App
+// will make (the integrator moves them into App or keeps them here):
 //
-// preview() is Stage 0's check that the box flavours (battle/scene/
-// terrain.glsl.js, render/ocean.js, render/shadow.js) compile and draw: after
-// enter(), it builds a bare box scene (BoxGround, the sea, the sky at the
-// box's place and the battle clock's instant, a CameraRig in metres) and cuts
-// to it through the haze at the matched pose (poseToBox), as the real
-// hand-over will. leave() cuts back.
+//   enter, from the table (from: 'table'):
+//     app.setMode('flying')
+//     app.table.outline(boxId, true)                         // the box's outline on the table
+//     await app.table.flyTo(app.table.outlineView(boxId), { duration: 2.5, ready: () => battle.ready })
+//     await app.cut(() => {                                  // pipeline.uFade to the haze and back, 0.25 s each way
+//       app.setActive(battle.scene)                          // re-parents sky.group; the sky at the box's lat/lon and clock.utc(t)
+//       battle.scene.rig.jump(poseToBox(app.table.rig.pose(), box.placement))
+//     })
+//     app.setMode('watch')
+//   enter, from the URL (from: 'url'): the same without the flight (the rig jumps to the box's first stop)
+//   leave:
+//     app.setMode('flying')
+//     await app.cut(() => {
+//       app.setActive(app.table)
+//       app.table.rig.jump(poseToTable(battle.scene.rig.pose(), box.placement))
+//     })
+//     app.table.outline(boxId, false); battle.scene.dispose(); app.setMode('table')
+//
+// A moment (takeMoment) takes the controls: the sim's takeControl, the
+// camera on the player's unit, the HUD's instruments, the controls bound
+// (src/battle/controls/), app.setMode('moment'); release() gives them back
+// (app.setMode('watch')). The promise takeMoment returns resolves with the
+// score and the outcome when the sortie ends or the after-card is asked for
+// (finish()).
 
-import * as THREE from 'three'
-import { BOX } from '../config.js'
-import { BattleClock } from '../time.js'
+import { createSim } from './sim/index.js'
+import { BoxScene } from './scene/box.js'
+import { Input } from './controls/input.js'
+import { AIRCRAFT_HELP, SHIP_HELP, TOUCH_HELP } from './controls/bindings.js'
 import { poseToBox, poseToTable } from '../geo.js'
-import { CameraRig } from '../render/camera.js'
-import { Ocean } from '../render/ocean.js'
-import { BoxGround } from './scene/terrain.js'
 
 const log = (...a) => console.info('[battle]', ...a)
-
-/** A bare box scene: terrain, sea, sky and an orbit rig in metres (preview only). */
-class PreviewBox {
-  constructor(app, loaded) {
-    const { box, pack, battle } = loaded
-    this.app = app
-    this.box = box
-    this.name = 'box'
-    this.scene = new THREE.Scene()
-    this.camera = new THREE.PerspectiveCamera(42, 1, BOX.near, BOX.far)
-    const unit = box.proj.unit
-    this.ground = new BoxGround(app, pack, { exaggeration: box.exaggeration, unit })
-    this.scene.add(this.ground.group)
-    this.ocean = new Ocean({ ...app.light.uniforms, ...this.ground.uniforms }, { unit })
-    this.ocean.setWeather(battle?.weather)
-    this.scene.add(this.ocean.mesh)
-    this.rig = new CameraRig(this.camera, app.canvas, this.ground, BOX)
-    this.clock = battle?.clock ? new BattleClock(battle.clock) : null
-    this.t = this.clock && battle.stops?.[0]?.t ? this.clock.clamp(this.clock.parse(battle.stops[0].t)) : 0
-    this.weather = battle?.weather || {}
-  }
-
-  get skyPlace() {
-    return { lat: this.box.proj.lat0, lon: this.box.proj.lon0 }
-  }
-
-  skyInstant() {
-    return this.clock ? this.clock.utc(this.t) : Date.UTC(1942, 5, 4, 22)
-  }
-
-  /** The haze from the record's visibility (Koschmieder: 3.912 / visibility), thinning above the cloud base. */
-  fog() {
-    const vis = this.weather.visibilityM || 40000
-    const base = this.weather.cloud?.baseM || 1500
-    return { density: 3.912 / vis, falloff: 1 / base }
-  }
-
-  update(dt) {
-    this.rig.update(dt)
-    this.ground.update(this.camera)
-    this.ocean.update(this.camera)
-  }
-
-  settle() {
-    this.rig.finishFlight()
-    this.ground.update(this.camera)
-  }
-
-  setRange(k) {
-    this.ground.setRange(k)
-  }
-
-  stats() {
-    return { scene: 'box', box: this.box.id, ...this.ground.stats(), distance: +this.rig.state.distance.toFixed(1) }
-  }
-
-  dispose() {
-    this.rig.dispose()
-    this.ground.dispose()
-    this.ocean.dispose()
-  }
-}
+const WATCH_SCALES = [1, 2, 4, 8, 15, 30, 60]
 
 export class Battle {
   constructor(app) {
@@ -96,117 +49,444 @@ export class Battle {
     this.sim = null
     this.running = false
     this.timeScale = 1
-    this.state = null
     this.loaded = null
+    this.input = null
+    this.momentId = null
+    this.aid = 'standard'
+    this._state = null
+    this._moment = null
+    this._question = null
+    this._keys = new AbortController()
+  }
+
+  get state() {
+    if (!this._state) return null
+    return { ...this._state, t: this.sim ? this.sim.t : this._state.t, mode: this.input ? 'moment' : 'watch', momentId: this.momentId ?? this._state.momentId }
   }
 
   /**
-   * Load a box and fly the table to it. t: a battle-clock time (BattleClock
-   * parse rules), the box's first stop by default; momentId: kept in the
-   * state; from: 'table' (fly) or 'url' (jump, no fly-down).
+   * Load a box and go into it. t: a battle-clock time (BattleClock.parse
+   * rules), the box's first stop by default; momentId: offered on the
+   * briefing (never taken without a click); from: 'table' (fly) or 'url'
+   * (jump, no fly-down).
    */
   async enter(boxId, { t = null, momentId = null, from = 'table' } = {}) {
     const app = this.app
     const box = app.data.boxById.get(boxId)
     if (!box) throw new Error(`no box “${boxId}” in boxes/manifest.json`)
+    if (this.scene) await this.leave()
     log('enter', boxId, { t, momentId, from })
     this.ready = false
-    this.loaded = null
-    const loading = app.data.loadBox(boxId, { decoder: app.decoder, warn: app.warn }).then((b) => {
-      this.loaded = b
+    this.momentId = momentId
+    const table = app.table && typeof app.table.flyTo === 'function' ? app.table : null
+    // 1. the box's pack decoding in App's PackDecoder, battle.json, the kits (and the weapons the kits name)
+    const loading = (async () => {
+      const loaded = await app.data.loadBox(boxId, { decoder: app.decoder, warn: app.warn })
+      if (!app.data.kits.weapons) {
+        try {
+          const r = await fetch(app.data.abs('kits/weapons.json'))
+          app.data.kits.weapons = r.ok ? await r.json() : []
+          if (!r.ok) app.warn?.(`kits/weapons.json: HTTP ${r.status}; guns fly on the kits' own numbers`)
+        } catch (err) {
+          app.data.kits.weapons = []
+          app.warn?.(`kits/weapons.json: ${err.message}`)
+        }
+      }
+      this.loaded = loaded
+      const { battle, kits, pack } = loaded
+      if (!battle) throw new Error(`box ${boxId} has no battle.json`)
+      // 2. the sim at t
+      const sim = createSim(battle, kits, { seed: momentId ?? '', warn: app.warn, ground: pack, proj: box.proj, exaggeration: box.exaggeration })
+      const t0 = t != null ? sim.clock.clamp(sim.clock.parse(t)) : battle.stops?.length ? sim.clock.clamp(sim.clock.parse(battle.stops[0].t)) : 0
+      sim.setTime(t0)
+      this.sim = sim
+      // 3. the scene: terrain, sea, weather, the units' kits a few at a time
+      const scene = new BoxScene(app)
+      scene.battle = this
+      scene.aid = this.aid
+      await scene.load(box, battle, kits, { pack })
+      await scene.setSim(sim)
+      this.scene = scene
       this.ready = true
-      return b
-    })
-    const view = app.table.outlineView(boxId)
-    app.table.outline(boxId, true)
-    app.setMode('flying')
-    try {
-      if (from === 'url') app.table.rig.jump(view)
-      else await app.table.flyTo(view, { duration: 2.5, ready: () => this.ready })
-      const { battle } = await loading
-      const clock = battle?.clock ? new BattleClock(battle.clock) : null
-      const tS = clock ? clock.clamp(clock.parse(t ?? battle.stops?.[0]?.t ?? 0)) : 0
-      this.state = { boxId, t: tS, momentId, mode: 'watch' }
-      log('at the box', boxId, clock ? `${clock.dateLabel(tS)}, ${clock.label(tS)}` : '', `pack ${this.loaded.pack.W}×${this.loaded.pack.H}`, battle ? `${battle.units?.length ?? 0} units` : 'no battle.json')
-      app.events.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'enter', boxId } }))
-      return this.state
-    } finally {
-      // (the stub draws no box: the table keeps the controls)
-      app.setMode('table')
+      return loaded
+    })()
+    // the table side: fly to the hand-over pose while the box loads (App's, until integration)
+    if (table && from === 'table') {
+      app.setMode('flying')
+      table.outline?.(boxId, true)
+      const view = table.outlineView?.(boxId)
+      if (view) await table.flyTo(view, { duration: 2.5, ready: () => this.ready })
     }
-  }
-
-  /** Stage 0's check of the box flavours: a bare box scene, cut to at the matched pose. */
-  async preview() {
-    const app = this.app
-    if (!this.loaded) throw new Error('preview() comes after enter()')
-    const box = this.loaded.box
-    const scene = new PreviewBox(app, this.loaded)
-    this.scene = scene
+    await loading
+    const scene = this.scene
+    const sim = this.sim
+    // the box side: cut through the haze, the box's rig at the matched pose (or the first stop's view)
     await app.cut(() => {
-      const pose = poseToBox(app.table.rig.pose(), box.placement)
       app.setActive(scene)
-      scene.rig.jump(pose)
+      if (table && from === 'table') scene.rig.jump(poseToBox(table.rig.pose(), box.placement))
+      else this.lookAtStop(this.loaded.battle.stops?.[0], { jump: true })
+      app.resize?.()
     })
     app.setMode('watch')
-    log('preview', box.id, scene.stats())
-    return scene
+    this.running = true
+    this.timeScale = 1
+    this._state = { boxId, t: sim.t, momentId, mode: 'watch' }
+    this.bindWatchKeys()
+    app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'enter', boxId } }))
+    log('in', boxId, `${sim.clock.dateLabel(sim.t)} ${sim.clock.label(sim.t)}`, `${sim.capacity} slots`, scene.stats())
+    return this.state
   }
 
-  tick() {}
+  /** Stage 0's preview(): the box is already drawn by enter(); kept so the tools written against the stub still run. */
+  async preview() {
+    if (!this.scene) throw new Error('preview() comes after enter()')
+    if (this.app.active !== this.scene) await this.app.cut(() => this.app.setActive(this.scene))
+    this.app.setMode(this.input ? 'moment' : 'watch')
+    return this.scene
+  }
+
+  /** A stop's camera: { target: unit id | [lon, lat], bearingDeg, pitch, distanceM }. */
+  lookAtStop(stop, { jump = false } = {}) {
+    const scene = this.scene
+    const sim = this.sim
+    if (!scene) return
+    let target = null
+    let unitIndex = -1
+    const cam = stop?.camera
+    if (cam?.target != null) {
+      if (typeof cam.target === 'string') {
+        const r = sim.record.shipById.get(cam.target)
+        if (r) {
+          unitIndex = r.slot
+          target = { x: sim.state.pos[3 * r.slot], z: sim.state.pos[3 * r.slot + 2] }
+        }
+      } else if (Array.isArray(cam.target)) {
+        const [x, z] = sim.proj.toWorld(cam.target)
+        target = { x, z }
+      }
+    }
+    if (!target) {
+      // the centre of what is afloat
+      let n = 0
+      let x = 0
+      let z = 0
+      for (let i = 0; i < sim.capacity; i++) {
+        if (sim.state.alive[i] !== 1 || sim.units[i].kind !== 'ship') continue
+        x += sim.state.pos[3 * i]
+        z += sim.state.pos[3 * i + 2]
+        n++
+      }
+      target = n ? { x: x / n, z: z / n } : { x: 0, z: 0 }
+    }
+    const pose = { target, distance: cam?.distanceM ?? 9000, yaw: Math.PI - ((cam?.bearingDeg ?? 200) * Math.PI) / 180, pitch: cam?.pitch ?? 0.45 }
+    if (jump) {
+      scene.cameras.set('free')
+      scene.rig.jump(pose)
+    } else if (unitIndex >= 0) scene.setCamera('orbit', { unitIndex, bearing: cam?.bearingDeg, pitch: cam?.pitch, distance: cam?.distanceM })
+    else scene.setCamera('free', { target, bearing: cam?.bearingDeg, pitch: cam?.pitch, distance: cam?.distanceM })
+  }
+
+  /** Called by the box scene once a frame: the sim advances by realDt × timeScale while running. */
+  tick(realDt) {
+    const sim = this.sim
+    if (!sim) return
+    this.input?.update(realDt)
+    if (!this.running) return
+    const ms = sim.momentState
+    if (ms && !ms.done && this.input) {
+      // a threat drops a compressed scale back to the moment's own (R7 §4.1)
+      if (sim.threat && this.timeScale > ms.timeScale) {
+        this.timeScale = ms.timeScale
+        this.scene?.hud.say(`${sim.threatWhy}: back to ×${ms.timeScale}`, 2)
+      }
+    }
+    sim.advance(Math.min(0.1, realDt) * this.timeScale)
+    if (ms && this.input) {
+      if (ms.checkpoint && !this._checkpointSeen) {
+        this._checkpointSeen = true
+        this.running = false
+        this.scene?.hud.say('Checkpoint. Enter: keep going · the card: Backspace twice, or wait for the end', 30)
+        this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'checkpoint', momentId: ms.id } }))
+      }
+      if (ms.done) this.finish(ms.reason)
+    }
+    if (sim.t >= sim.clock.duration) this.running = false
+  }
 
   watch() {
-    log('watch (stub)')
+    if (this.input) this.release()
+    this.app.setMode('watch')
+    this.scene?.setCamera('free')
   }
 
-  scrub(t) {
-    const s = this.scene
-    if (s?.clock) s.t = s.clock.clamp(s.clock.parse(t))
-    if (this.state && s?.clock) this.state.t = s.t
-    log('scrub (stub)', t)
+  /**
+   * Go to t. While the sim follows the record this is closed-form; once a
+   * moment has changed the battle, a backward scrub asks (one HUD line)
+   * whether to return to the record: answer 'yes' rebuilds the sim from
+   * battle.json with the same seed and sets t, 'no' plays forward only.
+   */
+  scrub(t, { answer = null } = {}) {
+    const sim = this.sim
+    if (!sim) return
+    const tt = sim.clock.clamp(sim.clock.parse(t))
+    if (!sim.diverged) {
+      sim.setTime(tt)
+      return true
+    }
+    if (answer === 'yes') {
+      this.rebuild(tt)
+      return true
+    }
+    if (answer === 'no') {
+      if (tt > sim.t) sim.setTime(tt)
+      return false
+    }
+    this._question = { t: tt }
+    this.scene?.hud.say('Return to the record at that time? Y: yes · N: play on', 20)
+    return null
   }
 
-  play(timeScale = 1) {
+  /** The sim rebuilt from the record (same seed), at t. */
+  rebuild(t, seed = this.momentId ?? '') {
+    const app = this.app
+    const { battle, kits, pack, box } = this.loaded
+    if (this.input) this.release()
+    const sim = createSim(battle, kits, { seed, warn: app.warn, ground: pack, proj: box.proj, exaggeration: box.exaggeration })
+    sim.setTime(t)
+    this.sim = sim
+    this.scene.setSim(sim)
+    this.scene.hud.beatIndex = sim.beats.length
+    return sim
+  }
+
+  play(timeScale = this.timeScale) {
+    const ms = this.sim?.momentState
+    const max = this.input && ms && !ms.done ? this.maxScale() : 60
+    this.timeScale = Math.max(1, Math.min(max, timeScale))
     this.running = true
-    this.timeScale = timeScale
-    log('play (stub)', timeScale)
   }
 
-  async takeMoment(momentId) {
-    log('takeMoment (stub: no sim)', momentId)
-    return { score: null, outcome: null }
+  pause() {
+    this.running = false
   }
 
+  maxScale() {
+    const ms = this.sim?.momentState
+    if (!ms) return 60
+    const air = this.sim.player?.kind === 'aircraft'
+    // after the checkpoint an aircraft may fly home at up to 32× (R7 D11)
+    return air && ms.checkpoint ? 32 : ms.maxTimeScale
+  }
+
+  /** Z / + / −: the next time scale (a moment's within its bounds; watching 1× to 60×). */
+  cycleTime(dir = 1) {
+    const ms = this.sim?.momentState
+    const list = this.input && ms ? [ms.timeScale, ms.timeScale * 2, 4, 8, 16, 32].filter((v, i, a) => v >= ms.timeScale && v <= this.maxScale() && a.indexOf(v) === i).sort((a, b) => a - b) : WATCH_SCALES
+    const i = list.findIndex((v) => v >= this.timeScale)
+    const j = dir > 0 ? (i + 1) % list.length : (i - 1 + list.length) % list.length
+    this.timeScale = list[Math.max(0, j)]
+    this.scene?.hud.say(`×${this.timeScale}`, 1)
+    return this.timeScale
+  }
+
+  cycleCamera() {
+    const sc = this.scene
+    const pl = this.sim?.player
+    if (!sc) return
+    const i = pl?.unitIndex ?? sc.cameras.unit
+    const order = pl?.kind === 'ship' ? ['bridge', 'director', 'chase', 'orbit'] : ['chase', 'sight', 'orbit']
+    const k = order.indexOf(sc.cameraMode)
+    sc.setCamera(order[(k + 1) % order.length], { unitIndex: i, distance: pl?.kind === 'ship' ? 1500 : 300 })
+  }
+
+  toggleSight() {
+    const sc = this.scene
+    const pl = this.sim?.player
+    if (!sc || !pl) return
+    sc.setCamera(sc.cameraMode === 'sight' ? 'chase' : 'sight', { unitIndex: pl.unitIndex })
+  }
+
+  setAid(level) {
+    this.aid = level
+    if (this.sim) this.sim.aid = level
+    if (this.scene) this.scene.aid = level
+  }
+
+  /**
+   * Take a moment (from the click on "Take the controls"). A box the player
+   * has already changed restarts from the record at the moment's t (R7 D10).
+   * Resolves with { score, outcome } when the sortie ends or finish() is called.
+   */
+  takeMoment(momentId, { scripted = false } = {}) {
+    const app = this.app
+    let sim = this.sim
+    if (!sim) throw new Error('takeMoment() comes after enter()')
+    const m = sim.record.moments.get(momentId)
+    if (!m) throw new Error(`no moment “${momentId}” in this box`)
+    if (this.input) this.release()
+    this.momentId = momentId
+    if (sim.diverged) sim = this.rebuild(m.t, momentId)
+    else if (sim.t !== m.t) sim.setTime(m.t)
+    const pl = sim.startMoment(momentId)
+    pl.scripted = scripted
+    this._checkpointSeen = false
+    const sc = this.scene
+    const obj = m.objective?.kind
+    const mode = pl.kind === 'aircraft' ? 'chase' : obj === 'gunnery' ? 'director' : 'bridge'
+    sc.setCamera(mode, { unitIndex: pl.unitIndex, zoom: obj === 'gunnery' ? 4 : 1 })
+    this.input = new Input(app, this)
+    if (!scripted && pl.kind === 'aircraft') this.input.requestLock()
+    app.setMode('moment')
+    this.timeScale = sim.momentState.timeScale
+    this.running = true
+    const touch = matchMedia?.('(pointer: coarse)')?.matches
+    sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
+    if (m.objective?.text) sc.hud.say(m.objective.text, 5)
+    if (touch && this.aid === 'standard') this.setAid('guided')
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'moment', momentId } }))
+    log('moment', momentId, pl.kind, sim.units[pl.unitIndex].name, sim.clock.label(sim.t))
+    return new Promise((resolve) => {
+      this._moment = { id: momentId, resolve }
+    })
+  }
+
+  /** Past the checkpoint: the sortie runs on until it ends by the sim's rules. */
   keepGoing() {
-    log('keepGoing (stub)')
+    if (!this.sim?.momentState) return
+    this.running = true
+    this.scene?.hud.say('', 0)
   }
 
+  /** The end of the sortie (or the card asked for): the promise resolves with the score and the outcome. */
+  finish(reason = 'card') {
+    const sim = this.sim
+    const mo = this._moment
+    if (!sim || !mo) return null
+    this._moment = null
+    const result = { score: sim.score, outcome: sim.outcome, reason, momentId: mo.id, restart: sim.momentState?.restart ?? null }
+    if (this.input) this.releaseControls()
+    this.scene?.hud.say(endLine(sim, reason), 6)
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'after', ...result } }))
+    mo.resolve(result)
+    return result
+  }
+
+  /** Back to watching at the current t; the sim keeps the diverged state until leave(). */
   release() {
-    log('release (stub)')
+    if (this._moment) return this.finish('released')
+    this.releaseControls()
+  }
+
+  releaseControls() {
+    const sim = this.sim
+    const i = sim?.player?.unitIndex ?? -1
+    this.input?.dispose()
+    this.input = null
+    sim?.releaseControl()
+    this.app.setMode('watch')
+    if (this.scene && i >= 0) this.scene.setCamera('orbit', { unitIndex: i, distance: 1500 })
+    if (this.timeScale < 1) this.timeScale = 1
+    this.running = true
+  }
+
+  /** Losing pointer lock (Esc) pauses and offers release. */
+  pauseForRelease() {
+    this.running = false
+    this.scene?.hud.say('Paused. Click to go on · Backspace twice releases the controls', 30)
+    const c = this.app.canvas
+    const go = () => {
+      this.running = true
+      this.scene?.hud.say('', 0)
+      if (this.sim?.player?.kind === 'aircraft') this.input?.requestLock()
+    }
+    c.addEventListener('pointerdown', go, { once: true })
+  }
+
+  /** A restart point: the moment's start or its checkpoint, from the record. */
+  restart(which = 'start') {
+    const m = this.sim?.record.moments.get(this.momentId)
+    if (!m) return null
+    if (this.input) this.releaseControls()
+    this._moment = null
+    const sim = this.rebuild(m.t, this.momentId)
+    if (which === 'checkpoint') {
+      const ts = m.timeScale ?? 1
+      sim.setTime(m.t)
+      const p = this.takeMoment(this.momentId)
+      // play the record to the checkpoint under the player's unit, then hand it over there
+      const t1 = m.t + (m.durationS ?? 180) * ts
+      while (sim.t < t1 - 1e-6) sim.advance(Math.min(t1 - sim.t, 1 / 7.5))
+      return p
+    }
+    return this.takeMoment(this.momentId)
+  }
+
+  /** Watch-mode keys of the box's own (the answer to a scrub's question); the UI owns the rest. */
+  bindWatchKeys() {
+    this._keys.abort()
+    this._keys = new AbortController()
+    addEventListener(
+      'keydown',
+      (e) => {
+        if (this.app.mode === 'moment' && e.code === 'Enter' && this.sim?.momentState?.checkpoint && !this.running) {
+          e.preventDefault()
+          this.keepGoing()
+          return
+        }
+        if (this.app.mode !== 'watch' || !this._question) return
+        if (e.code === 'KeyY' || e.code === 'Enter') {
+          const q = this._question
+          this._question = null
+          this.scrub(q.t, { answer: 'yes' })
+          this.scene?.hud.say('', 0)
+        } else if (e.code === 'KeyN' || e.code === 'Escape') {
+          this._question = null
+          this.scene?.hud.say('', 0)
+        }
+      },
+      { signal: this._keys.signal },
+    )
   }
 
   /** Back to the table at the battle's date; the box is forgotten. */
   async leave() {
     const app = this.app
-    const id = this.state?.boxId ?? this.loaded?.box.id
+    const id = this._state?.boxId ?? this.loaded?.box.id
     log('leave', id)
+    if (this._moment) this.finish('left')
+    if (this.input) this.releaseControls()
     const s = this.scene
+    const table = app.table && app.table.rig ? app.table : null
     if (s) {
-      const pl = s.box.placement
+      const pl = this.loaded?.box.placement
+      app.setMode('flying')
       await app.cut(() => {
-        const pose = poseToTable(s.rig.pose(), pl)
-        app.setActive(app.table)
-        app.table.rig.jump(pose)
+        if (table) {
+          if (pl) app.table.rig.jump(poseToTable(s.rig.pose(), pl))
+          app.setActive(app.table)
+        } else if (app.idle) app.setActive(app.idle)
       })
+      if (app.active === s) s.scene.remove(app.sky.group)
       s.dispose()
       this.scene = null
     }
-    if (id) app.table.outline(id, false)
-    this.state = null
+    if (id) table?.outline?.(id, false)
+    this._keys.abort()
+    this.sim = null
+    this._state = null
     this.loaded = null
     this.ready = false
     this.running = false
+    this.momentId = null
     app.setMode('table')
-    app.events.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'leave', boxId: id } }))
+    app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'leave', boxId: id } }))
   }
+}
+
+/** The line the end of a sortie leaves on the screen (the card's is the UI's). */
+function endLine(sim, reason) {
+  const sc = sim.score
+  const hits = sc.hits.filter((h) => h.kind !== 'near-miss').map((h) => `${h.name}: ${h.count} ${h.kind} hit${h.count > 1 ? 's' : ''}`)
+  const how = { lost: 'Lost.', landed: 'Landed.', ditched: 'Ditched.', clock: 'The battle clock has run out.', released: '', left: '', card: '' }[reason] ?? ''
+  return [how, hits.join(' · ')].filter(Boolean).join(' ') || 'The sortie is over.'
 }
