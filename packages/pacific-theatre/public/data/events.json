@@ -2918,7 +2918,7 @@
   {
     "id": "guadalcanal-naval-2-1942",
     "title": "The Naval Battle of Guadalcanal: the second night",
-    "gloss": "radar against searchlights north of Savo",
+    "gloss": "radar against searchlights west of Savo",
     "ja": {
       "kanji": "第三次ソロモン海戦",
       "romaji": "Dai-sanji Soromon kaisen",
@@ -2981,10 +2981,10 @@
       "box"
     ],
     "box": "ironbottom-sound",
-    "summary": "Two nights after the first action, Vice Admiral KONDŌ Nobutake 近藤信竹 brings Kirishima 霧島 and heavy cruisers down to shell Henderson Field, and Rear Admiral Lee meets him north of Savo with the battleships Washington and South Dakota and a destroyer screen. The Japanese torpedoes and guns wreck the American destroyers, and South Dakota, her power and radars failing, is lit by searchlights and hit again and again. Washington, unseen in the dark, tracks Kirishima by radar and opens fire at close range a little before midnight; within minutes Kirishima's steering is wrecked, and she circles helplessly and is abandoned, capsizing north-west of Savo in the early morning. The troop convoy beaches at Tassafaronga at dawn.",
+    "summary": "Two nights after the first action, Vice Admiral KONDŌ Nobutake 近藤信竹 brings Kirishima 霧島 and heavy cruisers down to shell Henderson Field, and Rear Admiral Lee meets him south and west of Savo with the battleships Washington and South Dakota and a destroyer screen. The Japanese torpedoes and guns wreck the American destroyers, and South Dakota, her power and radars failing, is lit by searchlights and hit again and again. Washington, unseen in the dark, tracks Kirishima by radar and opens fire at close range at midnight; within minutes Kirishima's steering is wrecked, and she circles helplessly and is abandoned, capsizing north-west of Savo in the early morning. The troop convoy beaches at Tassafaronga at dawn.",
     "stops": [
       {
-        "text": "23:01: Washington's radar finds the Japanese force north of Savo.",
+        "text": "23:01: Washington's radar finds Japanese ships east of Savo.",
         "place": "savo",
         "zoom": "table"
       },
