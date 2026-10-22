@@ -40,7 +40,7 @@ packages/pacific-theatre/
     geo.js                         wrapLon, TangentProjection, TableProjection, projectionFor, placement, poseToTable/poseToBox
     time.js                        parseInstant, spanOf, formatWhen, WarClock, BattleClock
     data/                          load.js (manifest, gazetteer, clocks, fronts, boxes, loadBox), decode.js, image.js, worker.js  [copied, adapted]
-    render/                        shared: camera.js, sky.js, stars.js, pipeline.js, lines.js, routes.js, ocean.js, shadow.js,
+    render/                        shared: pack.js, camera.js, sky.js, stars.js, pipeline.js, lines.js, routes.js, ocean.js, shadow.js,
                                    shaders/common.glsl.js, shaders/ground.glsl.js, shaders/logdepth.glsl.js, shaders/ocean.glsl.js  [copied, adapted]
     table/                         ground.js (TableGround over one PackTerrain), relief.js (the shader), coast.js, labels.js (DOM),
                                    front.js, index.js (TableScene)
@@ -59,6 +59,7 @@ packages/pacific-theatre/
     app.js                         App: renderer, the light bag, one Sky, the two scenes, app.mode, the hand-over, the URL, the frame loop
   tools/
     bake-table.mjs  bake-box.mjs  check-data.mjs  check/  smoke.mjs  smoke-battle.mjs  shoot.mjs  subset-font.mjs  fake-data.mjs  fake-battle.mjs
+    test-geo.mjs  test-time.mjs  test-sky.mjs   node checks of geo.js, time.js and sky.js's ephemeris (Stage 0; every workflow runs them)
     lib/                           fetch.mjs, png.mjs, raster.mjs, geo.mjs (a copy of TableProjection), simplify.mjs, etopo.mjs, cog.mjs, ne.mjs
 ```
 
@@ -130,7 +131,7 @@ export class TableProjection {                   // the table: kind 'aeqd' (v1),
 }
 export function projectionFor(desc) → TangentProjection | TableProjection
 export function placement(box, table) → {         // box: a boxes/manifest.json entry; table: the TableProjection
-  centre: [x, z], J, Jinv, scale, alpha,          // scale = sqrt(|det J|) km per m; alpha in radians = convergence
+  centre: [x, z], J, Jinv, scale, alpha,          // J through the box's tangent plane; scale = sqrt(|det J|) km per m; alpha in radians = convergence (the box's north)
   toTable([x, z]) → [x, z], toBox([x, z]) → [x, z],
   matrix: Float64Array(16)                        // box metres → table km, column-major, y scaled by `scale`
 }
@@ -568,8 +569,8 @@ surroundings; Samar's box holds the island's east coast); a context ring
 sampled from the table pack is deferred.
 
 **Shared and per-scene uniforms**: `app.light.uniforms` (uSunDir, uSunColor,
-uSkyColor, uGroundColor, uMoonDir, uMoonColor, uTime, uSkyMap, uPointPos[8],
-uPointCol[8], uPointCount) is one bag shared by reference by every material
+uSkyColor, uGroundColor, uMoonDir, uMoonColor, uTime, uSkyMap, uPointPos[8]
+(xyz position, w radius), uPointCol[8], uPointCount) is one bag shared by reference by every material
 of both scenes and written each frame by the active scene's sky update.
 Each scene's `ground.uniforms` are its own and never merged into the light
 bag. A material's uniforms are `{ ...app.light.uniforms, ...ground.uniforms,

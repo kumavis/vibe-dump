@@ -38,9 +38,9 @@ public/data/
 ```
 
 Hand-written: everything but `manifest.json`, the `height.png`s and
-`coast.json`, which the bakes write. `labels.json` is seeded by the bake from
-Natural Earth and finished by hand. `tools/check-data.mjs` checks all of it
-(§10).
+`coast.json`, which the bakes write. `labels.json` is written by hand from
+the gazetteer; the bake does not seed it (§3). `tools/check-data.mjs` checks
+all of it (§10).
 
 ## 1. Projections
 
@@ -526,7 +526,8 @@ A ship kit:
   tripod-mast | pole-mast | funnel | turret | casemate | hangar | deckhouse |
   crane | catapult | boat-deck | director`. `shape` refines a few: funnels
   `round | trunked | downturned | raked`, turrets `twin | triple | single`,
-  pagoda `tall | short`.
+  pagoda `tall | short`. `hull.bow` is `straight | clipper | raked`,
+  `hull.stern` `cruiser | transom | round`.
 - Turret positions are explicit in `guns[].at` so Yamato's two forward and
   one aft, Fusō's six along the length and Nelson-style layouts all come from
   data.
@@ -579,6 +580,11 @@ An aircraft kit:
   "sources": [ { "id": "sac-sbd-3", "where": "..." } ] }
 ```
 
+- Shape vocabulary (the generator knows these and nothing else; frozen in
+  `tools/check/ids.json`): `wing` `low | mid | high | parasol`, `tail`
+  `single | twin`, `canopy` `long-frame | short-frame | bubble | cockpit`
+  (cockpit: a multi-engine aircraft's glazed flight deck), `gear` `retract |
+  fixed`, `cowl` and `engine.kind` `radial | inline`.
 - Insignia vocabulary: `hinomaru | hinomaru-white-surround | star-red-centre
   | star-no-red | star-bar-red-outline | star-bar-blue | roundel-raaf |
   roundel-rnzaf`, dated by `colours[].from/to`; the check rejects a unit
@@ -735,8 +741,8 @@ Rules:
 
 `tools/check-data.mjs`, a runner over the modules in `tools/check/`
 (`packs`, `gazetteer`, `routes`, `fronts`, `kits`, `battle`; `common.mjs`
-and the frozen `ids.json`), no dependencies beyond `tools/lib/png.mjs`,
-exits 1 with a list of problems:
+and the frozen `ids.json`), no npm dependencies (it uses `tools/lib/` and
+`src/time.js`'s own rules), exits 1 with a list of problems:
 
 - every id unique and kebab-case; every reference (`chapter`, `place`, `box`,
   `kit`, `unit`, `group`, `source`, `route`, `event`, `keyframe`) resolves;
