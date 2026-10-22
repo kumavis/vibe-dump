@@ -807,3 +807,29 @@ source. Personal names keep the records' spelling; ʻokina and kahakō are
 added only to place names, from the State layer. RESEARCH.md §12 says what
 each source covered and where they disagree.
 
+
+## Zoning, for the settlements
+
+Density says how many; zoning says what kind. For the present-day keyframe
+the settlements draw their building mix from zoning class rasters on each
+island pack's grid, under `public/data/layers/<island>/`, listed in
+`layers/manifest.json` under a `zoning` entry per island with sources and
+the fetch date.
+
+- `now-zoning.png`: 8-bit, one class per texel, the county's zoning
+  generalized to this vocabulary (0 none or water; 1 residential, houses;
+  2 residential, low-rise apartments; 3 residential, high-rise apartments;
+  4 commercial or business; 5 mixed-use downtown; 6 industrial; 7 resort;
+  8 agricultural; 9 conservation or preservation; 10 military or federal;
+  11 public or institutional; 12 parks and open space). The manifest records
+  the county's own class names that fed each number.
+- `lud.png`: 8-bit, the State Land Use District (1 urban, 2 rural,
+  3 agricultural, 4 conservation), in force since 1961 and applied by the app
+  only to years from 1964 on.
+- A texel's class is the class covering most of its area; a mask may be at
+  half the pack's resolution with `size` stated. Where a county layer is
+  unreachable the island's `now-zoning.png` is absent and the app falls back
+  to density and value alone.
+- The settlements use zoning only for the keyframes it applies to. Earlier
+  eras keep density and value, and the 1900 cane and pineapple lands already
+  baked into cultivation stand in for land use then.
