@@ -122,7 +122,8 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   } else if (!mine) hint = ''
   return {
     vp: [M.vp[0], M.vp[1]],
-    round: M.stage === 'deploy' ? 'Deployment' : `Round ${Math.min(M.round, rounds)} / ${rounds}`,
+    // (F4) a round past the setup's: overtime, a round at a time
+    round: M.stage === 'deploy' ? 'Deployment' : M.round > rounds ? `Round ${M.round} · overtime` : `Round ${M.round} / ${rounds}`,
     phase: M.stage === 'battle' ? M.phase : null,
     active: M.stage === 'battle' ? M.active : -1,
     end,

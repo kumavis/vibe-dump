@@ -199,7 +199,8 @@ async function run(browser, url, item) {
     page.on('pageerror', (e) => errors.push(e.message))
     const fns = [shadowString, shadowParts, shadowOf, instrument, missingHooks, humanDriver].join('\n')
     await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE})` })
-    await page.goto(`${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}`)
+    // (F4) the log's own overtime: one recorded before F4 never voted
+    await page.goto(`${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}&overtime=${setup.overtime ?? 'never'}`)
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })

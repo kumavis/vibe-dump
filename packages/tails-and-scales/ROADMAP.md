@@ -707,9 +707,11 @@ follows N3.
   here, else broadside, fitted to the screen and the board; the 🧭 button
   and V step through behind your army, broadside, behind the other army
   and an overview, and Home goes to the overview. DESIGN's F1/F2 notes.)
-- [ ] **F4** After round 5, the win screen offers **Keep playing** (a vote);
+- [x] **F4** After round 5, the win screen offers **Keep playing** (a vote);
   `legal()` takes optional and boolean fields; no Keep playing past 80% of
-  the log cap.
+  the log cap. (Every battle with a human seat asks after its last round and
+  each overtime round; play goes on only on everyone's yes. `CORE_VERSION`
+  2. DESIGN's F4 notes.)
 - [ ] **N1** Real Automerge in Node: two- and three-peer tests.
 - [ ] **N2** Online play: lobby, join by link, joint dice seed, presence,
   desync report. `verifyStart` checks your whole seat (race, controller,

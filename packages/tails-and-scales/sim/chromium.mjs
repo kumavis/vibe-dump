@@ -90,7 +90,10 @@ async function runOne(browser, url, job) {
     // a job's optional seat races go on the URL as for the Node oracle (code
     // from R2 on reads ?races; the PIN ignores it)
     const races = job.races ? `&races=${job.races.join(',')}` : ''
-    const href = `${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}${races}`
+    // (F4) whether a human seat votes at the round limit, as the log was
+    // played: a log from before F4 never did (code older than F4 ignores it)
+    const overtime = setup.seats?.some((s) => s.ctrl === 'human') ? `&overtime=${setup.overtime ?? 'never'}` : ''
+    const href = `${url}/?debug&fast&seed=${setup.board}&dice=${setup.dice}${races}${overtime}`
     const res = await page.goto(href)
     if (!res?.ok()) throw new Error(`${href}: HTTP ${res?.status()}`)
     // main.js publishes __ts as it loads, so by now it is there (with every

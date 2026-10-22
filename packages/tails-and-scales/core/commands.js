@@ -16,13 +16,18 @@
 //   end {}            ends the phase (the charge phase's end plays the fight,
 //                     the morale, the score and the turns after it, AI included)
 //   auto {}           the AI plays the rest of the phase for the seat, then ends it
+//   vote {more}       (F4) the round limit reached, under setup.overtime
+//                     'vote': each human seat says whether to play another
+//                     round (more true) or end the battle; play goes on only
+//                     if every one says more
 //   concede {}        out of band: a human seat gives up, at any time until
 //                     the battle is decided (a side wiped out has lost)
-// (vote {more}, the F4 round-limit vote, comes with F4. The AI's `hold` is
-// its own, never a command: core/ai/policy.js.)
+// (The AI's `hold` is its own, never a command: core/ai/policy.js.)
 //
 // legal(G, seat, body) answers null, or why not: the body carries its kind's
-// fields and nothing else, the seat holds the pending decision, the command
+// fields and nothing else (`fields` whole numbers, every one; `opt` whole
+// numbers or left out; `bools` true or false, every one), the seat holds the
+// pending decision, the command
 // answers that kind of decision (and, in a phase, belongs to it), then the
 // per-command rule, which is the check the old click handlers made (§2.2's
 // table). It runs under the dice's lock (rng.js
@@ -33,8 +38,8 @@
 // (an AI seat's, or a human's Auto).
 import { lock, unlock } from './rng.js'
 import { deepFreeze } from './util.js'
-import { emit } from './journal.js'
-import { ctrl } from './match.js'
+import { emit, log } from './journal.js'
+import { ctrl, raceOf } from './match.js'
 import { setUnitPos } from './units.js'
 import { placeOk } from './deploy.js'
 import {
@@ -100,6 +105,28 @@ export const HANDLERS = Object.freeze({
     runAI(G, seat, G.pending.phase)
     G.pending = null
   },
+  // (F4) a human seat's say on another round: once every seat has had its
+  // say, another round if all said more (the step machine runs on from the
+  // turn's start), else the battle ends on the score
+  vote(G, seat, { more }) {
+    const P = G.pending
+    const votes = { ...P.votes, [seat]: more }
+    const left = P.seats.filter((s) => s !== seat)
+    log(G, seat, `<b>${raceOf(G, seat).name}</b> ${more ? 'want to keep playing' : 'want to end the battle'}.`)
+    emit(G, 'vote', { seat, more })
+    if (left.length) {
+      G.pending = { ...P, seats: left, votes }
+      return
+    }
+    G.pending = null
+    const T = G.turn
+    if (!Object.values(votes).every(Boolean)) return gameOver(G)
+    T.round++
+    T.overtime++
+    T.t = 0
+    T.step = 'turnStart'
+    log(G, -1, `Overtime: round ${T.round}.`, 'big')
+  },
   concede(G, seat) {
     gameOver(G, seat)
   },
@@ -107,8 +134,9 @@ export const HANDLERS = Object.freeze({
 
 // ── Whether a command is legal now ──────────────────────────────────────────
 // Each kind: the decision it answers (`k`; `phase`: the phase it belongs to;
-// none for concede, which comes out of band), its integer fields, and its
-// own rule. (Exported, frozen, for sim/data-check.mjs's lints: no field may
+// none for concede, which comes out of band), its fields (`fields`, whole
+// numbers it must carry; `opt`, whole numbers it may; `bools`, true or false,
+// which it must), and its own rule. (Exported, frozen, for sim/data-check.mjs's lints: no field may
 // bear a name an envelope keeps for itself, and concede alone answers no
 // decision. KINDS below is its keys; nothing above the core reads it.)
 export const RULES = deepFreeze({
@@ -121,6 +149,7 @@ export const RULES = deepFreeze({
   chargeEnd: { k: 'chargeEnd', fields: ['c'], ok: (G, seat, { c }, P) => mayEnd(G, P, c) },
   end: { k: 'phase', fields: [] },
   auto: { k: 'phase', fields: [] },
+  vote: { k: 'roundLimit', fields: [], bools: ['more'] },
   concede: { k: null, fields: [], ok: (G, seat) => mayConcede(G, seat) },
 })
 
@@ -152,10 +181,13 @@ function why(G, seat, body, P) {
   const rule = typeof body.t === 'string' && Object.hasOwn(RULES, body.t) ? RULES[body.t] : null
   if (!rule) return `no command "${body.t}"`
   if (!Number.isInteger(seat) || seat < 0 || seat >= G.seats.length) return `no seat ${seat}`
-  // its own fields, whole numbers, and nothing else (§4.1 rule 12: a float
-  // or a string never enters a match's log; F4's vote brings a boolean)
-  for (const k of Object.keys(body)) if (k !== 't' && !rule.fields.includes(k)) return `${body.t} takes no field "${k}"`
+  // its own fields and nothing else: whole numbers and booleans (§4.1 rule
+  // 12: a float or a string never enters a match's log)
+  const opt = rule.opt ?? [], bools = rule.bools ?? []
+  for (const k of Object.keys(body)) if (k !== 't' && !rule.fields.includes(k) && !opt.includes(k) && !bools.includes(k)) return `${body.t} takes no field "${k}"`
   for (const f of rule.fields) if (!Number.isInteger(body[f])) return `${body.t} takes a whole number ${f}`
+  for (const f of opt) if (body[f] !== undefined && !Number.isInteger(body[f])) return `${body.t} takes a whole number ${f}, or none`
+  for (const f of bools) if (typeof body[f] !== 'boolean') return `${body.t} takes ${f} true or false`
   if (G.turn.stage === 'over') return 'the battle is over'
   if (rule.k) {
     if (!P || !P.seats.includes(seat)) return `seat ${seat} has no decision to make now`

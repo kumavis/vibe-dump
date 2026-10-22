@@ -29,6 +29,7 @@ import { edgeOf } from '../core/match.js'
 import { createMatch, fullSetup, preview } from '../core/index.js'
 import { Session } from '../match/session.js'
 import { LocalStore } from '../match/store.js'
+import { MAX_ENTRIES } from '../match/fold.js'
 import { project } from '../present/mirror.js'
 import { PACE } from '../present/pace.js'
 import { viewsFor } from '../present/camera-presets.js'
@@ -38,6 +39,11 @@ import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
 
 // who plays each seat, by the title screen's mode buttons
 export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
+
+// (F4) Keep playing is offered until the battle's log is 80% full (the
+// Folder's cap, match/fold.js): past it the battle can only end, which
+// keeps a long overtime clear of the cap freezing it mid-round
+const OFFER_CAP = Math.floor(0.8 * MAX_ENTRIES)
 
 // This device, as a battle's log names it: every human seat of a battle
 // played here is played from it (the Folder takes a seat's commands from
@@ -340,6 +346,15 @@ export class Flow {
     this.shownHud = m
     ui.hud.render(m)
     ui.actions.render(m)
+    // (F4) the round limit's vote, while a seat played here is still to
+    // have its say and the table has caught up; the end screen replaces it
+    // (game.over), and play going on takes it down
+    const P = this.session?.G?.pending
+    if (this.player.idle && P?.k === 'roundLimit' && this.session.decisionFor() >= 0) {
+      const G = this.session.G
+      const voters = [...Object.keys(P.votes).map(Number), ...P.seats].sort((a, b) => a - b)
+      ui.result.showVote({ round: G.turn.round, vp: G.turn.vp, votes: P.votes, voters, canMore: this.session.count < OFFER_CAP }, this.sides)
+    } else if (ui.result.voting) ui.result.hide()
     view.table.zones(m.zones)
     view.units.paintRings(m.rings)
   }
@@ -431,8 +446,12 @@ export class Flow {
     if (this.session) this.showTable(this.S.seed)
     // a fresh logic-dice stream per battle; ?dice=N replays one exactly
     const dice = (Number(this.params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
+    // (F4) a battle with a seat played by a human asks to play on past its
+    // rounds ('vote'), unless ?overtime=never says not (sim/'s replays of a
+    // log made without the vote); a watched one ends on its rounds
+    const overtime = who.includes('human') && this.params.get('overtime') !== 'never' ? 'vote' : 'never'
     const setup = {
-      board: this.S.seed, dice, terrain: 'classic', rounds: MISSIONS.classic.rounds, diceMode: 'shared',
+      board: this.S.seed, dice, terrain: 'classic', rounds: MISSIONS.classic.rounds, overtime, diceMode: 'shared',
       seats: this.races.map((race, i) => (who[i] === 'human' ? { race, ctrl: who[i], dev: DEVICE } : { race, ctrl: who[i] })),
     }
     // The battle starts on the table shown, which must be its own: the

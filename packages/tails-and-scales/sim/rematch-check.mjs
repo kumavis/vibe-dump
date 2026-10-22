@@ -77,7 +77,8 @@ async function page(dir) {
       rec = instrument(v)
     },
   })
-  globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}` }
+  // (F4) the log's own overtime: one recorded before F4 never voted
+  globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}&overtime=${setup.overtime ?? 'never'}` }
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))

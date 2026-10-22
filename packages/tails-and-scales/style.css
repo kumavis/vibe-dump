@@ -62,6 +62,24 @@ button.primary {
 button.primary:hover {
   background: linear-gradient(#c9863a, #9a6020);
 }
+/* the round limit's vote (F4): Keep playing and End the battle side by
+   side, in place of Back to the war room */
+#over .vote {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#over .vote.hidden,
+#over #again.hidden,
+#over #keepPlaying.hidden,
+#over #overVotes.hidden {
+  display: none;
+}
+#over #overVotes {
+  margin: -6px 0 14px;
+  color: var(--dim);
+}
 /* End (F3): an ordinary button while units can still act; lit, and
    breathing a glow, once there is nothing left to do (or in the
    deployment, where Begin battle is the way on) */

@@ -917,6 +917,60 @@ const where0 = (it, how) => `${it.id} (drill: ${how})`
 // entry accepted here that vanishes from the list is tamper (the match
 // freezes as it stands, reported); then the hash's, the Session's and
 // reentrancy's.
+// (F4) The round limit's vote from both seats' devices at once: a hotseat
+// log that ends on its rounds, under setup.overtime 'vote', stops at the
+// round limit with both seats to vote; each says its own on its own head (a
+// simultaneous decision: no hash), and the peers fold the same match in
+// either order, on to round 6 when both say more and to the end on the score
+// when either doesn't. A seat's second say (on the same head, concurrent with
+// its first) is refused, and so is a say for a seat from another device.
+function votes(M, it) {
+  const { E, F, core } = M
+  const where = `${it.id} (votes)`
+  const setup = { ...jobSetup(it.job), overtime: 'vote' }
+  const devs = { ...setup, seats: setup.seats.map((x, s) => (x.ctrl === 'human' ? { ...x, dev: `d${s}` } : x)) }
+  let n = 0
+  const env = (body, s, extra = {}) => E.decode(E.encode(E.envelope(body, { id: `d${Math.max(s, 0)}.${n++}.v`, s, d: `d${Math.max(s, 0)}`, ...extra })))
+  const write = (f, s, b) => env(b, s, { p: f.head(s), h: F.SIMULTANEOUS.includes(f.G.pending.k) ? undefined : core.stateHash(f.G) })
+  const checks = []
+  const expect = (what, ok, got) => {
+    if (!ok) throw new Error(`${where}: ${what} (${got})`)
+    checks.push(what)
+  }
+  const fold = (list) => {
+    const f = new F.Folder({ out: [] })
+    for (const e of list) f.push(e)
+    return f
+  }
+  const sig = (f) => JSON.stringify({ status: f.status, accepted: f.accepted.length, rejected: f.rejected.map((r) => r.why), hash: f.G ? core.stateHash(f.G) : null, pending: f.G?.pending?.k ?? null, round: f.G?.turn.round, result: f.G?.turn.result ?? null })
+  // the log to its round limit, as its seats wrote it
+  const lead = new F.Folder({ out: [] })
+  const list = [env({ t: 'start', core: core.CORE_VERSION, rules: core.RULES_ID, setup: devs }, -1)]
+  lead.push(list[0])
+  for (const { s, ...b } of it.job.entries) {
+    const e = write(lead, s, b)
+    list.push(e)
+    lead.push(e)
+  }
+  expect('the log, under the vote, stops at the round limit with both seats to vote', lead.status === 'live' && lead.G.pending?.k === 'roundLimit' && lead.G.pending.seats.join() === '0,1' && lead.rejected.length === 0, `${lead.status}, ${JSON.stringify(lead.G?.pending)}, ${JSON.stringify(lead.rejected)}`)
+  for (const [m0, m1] of [[true, true], [true, false], [false, true], [false, false]]) {
+    const v0 = write(lead, 0, { t: 'vote', more: m0 }), v1 = write(lead, 1, { t: 'vote', more: m1 })
+    const a = fold([...list, v0, v1]), b = fold([...list, v1, v0])
+    expect(`seats saying ${m0 ? 'more' : 'end'} and ${m1 ? 'more' : 'end'} at once fold the same match in either order`, sig(a) === sig(b) && a.accepted.includes(v0.id) && a.accepted.includes(v1.id), `${sig(a)} | ${sig(b)}`)
+    const on = m0 && m1
+    expect(`… which ${on ? 'plays round 6, overtime' : 'ends on the score'}`, on ? a.status === 'live' && a.G.turn.round === 6 && a.G.turn.overtime === 1 && a.G.pending?.k === 'phase' : a.status === 'over' && a.G.turn.result?.why === 'score' && a.G.turn.round === 5, sig(a))
+  }
+  {
+    const v0 = write(lead, 0, { t: 'vote', more: true }), again = write(lead, 0, { t: 'vote', more: false })
+    const f = fold([...list, v0, again])
+    expect("a seat's second say, on the head its first was written on, is refused", f.accepted.includes(v0.id) && f.rejected.some((r) => r.id === again.id), JSON.stringify(f.rejected))
+    const spoof = env({ t: 'vote', more: true }, 1, { d: 'd0', p: lead.head(1) })
+    const g = fold([...list, spoof])
+    expect("a say for seat 1 from seat 0's device is refused", g.rejected.some((r) => r.id === spoof.id && /^device/.test(r.why)) && g.G.pending?.seats.includes(1), JSON.stringify(g.rejected))
+  }
+  return { where, steps: 0, peers: 2, entries: 0, accepted: 0, rejected: 0, resets: 0, refolds: 0, met: {}, checks }
+}
+
 function edges(M, it) {
   const { E, F, S, core } = M
   const where = `${it.id} (edges)`
@@ -1633,6 +1687,7 @@ if (a.child) {
     let r
     if (task.kind === 'drill') r = drill(M, await modulesOf(a.patched), it, task.odd, task.how)
     else if (task.kind === 'edges') r = edges(M, it)
+    else if (task.kind === 'votes') r = votes(M, it)
     else if (task.kind === 'forks') r = forks(M, it)
     else if (task.kind === 'cap') r = capScenario(M, it)
     else if (task.kind === 'ai') r = aiScenario(M, it, task.seed)
@@ -1691,6 +1746,9 @@ function tasks({ only, seeds, extras = only === undefined }) {
   if (extras) {
     const vsAi = items.find((x) => x.kind === 'human' && x.job.setup.seats.some((s) => s.ctrl === 'ai'))
     out.push({ kind: 'cap', id: vsAi.id }, { kind: 'edges', id: vsAi.id })
+    // (F4) the round limit's vote from both seats at once, on a hotseat log
+    // that ends on its rounds
+    out.push({ kind: 'votes', id: 'hotseat-late-8' })
     const hot = items.filter((x) => x.mode === 'hotseat')
     // (the third hypot drill nudges the seat that does not write the first
     // single-seat entry: the drifted peer finds an honest author apart, and
@@ -1715,9 +1773,10 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
   const res = await pool(list, CPUS, async (t) => {
     const r = await child(t, pkg, patched[t.how], store)
     const x = r.r
-    say(`  ${`${t.id} ${t.kind === 'drill' ? `drill, ${t.how}${t.odd === undefined ? '' : `, seat ${t.odd}`}` : ['cap', 'edges', 'forks'].includes(t.kind) ? t.kind : `#${t.seed} ${t.kind}`}`.padEnd(40)} ${r.ok
+    say(`  ${`${t.id} ${t.kind === 'drill' ? `drill, ${t.how}${t.odd === undefined ? '' : `, seat ${t.odd}`}` : ['cap', 'edges', 'forks', 'votes'].includes(t.kind) ? t.kind : `#${t.seed} ${t.kind}`}`.padEnd(40)} ${r.ok
       ? t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
+          : t.kind === 'votes' ? `ok   ${x.checks.length} checks: both seats' say at once, in either order, every way (more, end), on to overtime or the end; a second say and another device's refused`
           : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant`
           : t.kind === 'forks' ? `ok   ${x.checks.length} checks: each seat forked in the deployment, the loser's world answering first, stale everywhere, live`
           : `ok   ${x.peers} peers agree: ${x.accepted} accepted, ${x.rejected} refused${x.conceded ? ', conceded' : ''}; ${x.refolds} inserts before folded entries, ${x.resets} resets${x.undone ? ` (${x.undone} undone)` : ''}${x.reacted ? `; sent from events ${x.reacted.events}, reset ${x.reacted.reset}, settled ${x.reacted.settled}, dropped ${x.reacted.dropped} (${x.reacted.written} written, ${x.reacted.drops} dropped)` : ''}`
@@ -1843,6 +1902,11 @@ const MUTANTS = {
   'sync-reentrant': ['match/fold.js', 'if (this.syncing) throw', 'if (false) throw'],
   // a store that throws mid-fold leaves the Session folding for ever:
   // every later change queued and never written
+  // (F4) the round limit's vote taken for a single seat's decision: each
+  // seat's say written hashed on the one head, so two said at once fork
+  'roundLimit-hashed': ['match/fold.js', "export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit'])", "export const SIMULTANEOUS = Object.freeze(['deploy'])"],
+  // a seat's say doesn't close its part of the vote: the vote never ends
+  'vote-never-closes': ['core/commands.js', '    const left = P.seats.filter((s) => s !== seat)\n', '    const left = P.seats\n'],
   'session-no-finally': ['match/session.js', '    } finally {\n      this.folding = false\n    }\n', '    } finally {}\n    this.folding = false\n'],
   // a single seat's decision answered with no hash is played unchecked
   'missing-h-accepted': ['match/fold.js', 'if (!SIMULTANEOUS.includes(P.k) && e.h !== stateHash(G)) return this.freeze(e)', 'if (!SIMULTANEOUS.includes(P.k) && e.h !== undefined && e.h !== stateHash(G)) return this.freeze(e)'],
@@ -1946,7 +2010,7 @@ if (a['self-test']) {
     { kind: 'fork', id: 'bushtail-random-6', seed: 2 }, { kind: 'fork', id: 'hotseat-random-2', seed: 2 }, { kind: 'concede', id: 'serpent-random-2', seed: 3 },
     { kind: 'plain', id: 'hotseat-aggressive-103', seed: 1 }, { kind: 'ai', id: '64-89', seed: 1 },
     { kind: 'cap', id: 'bushtail-random-6' }, { kind: 'edges', id: 'bushtail-random-6' }, { kind: 'drill', how: 'hypot', id: 'hotseat-late-8', odd: 1 },
-    { kind: 'forks', id: 'hotseat-late-8' }, { kind: 'forks', id: 'hotseat-random-2' },
+    { kind: 'forks', id: 'hotseat-late-8' }, { kind: 'forks', id: 'hotseat-random-2' }, { kind: 'votes', id: 'hotseat-late-8' },
     { kind: 'drill', how: 'late', id: 'hotseat-late-8' }, { kind: 'drill', how: 'deaf', id: 'hotseat-late-8' },
     { kind: 'reenter', id: 'hotseat-late-8', seed: 1 }, { kind: 'reenter', id: 'hotseat-random-4', seed: 1 }, { kind: 'reenter', id: 'bushtail-random-6', seed: 1 },
   ]
@@ -1997,7 +2061,8 @@ const said = ['every peer folds the same list to the same accepted, refused and 
 if (ran.has('cap')) said.push('a flooded log freezes alike everywhere')
 if (ran.has('edges')) said.push("the Folder's edges hold")
 if (ran.has('forks')) said.push("a same-seat fork's loser is stale everywhere")
+if (ran.has('votes')) said.push("both seats' say at the round limit folds alike in either order")
 if (ran.has('drill')) said.push('a peer whose maths drifted, early or late, freezes with the others at the same entry, reported')
-const skipped = ['cap', 'edges', 'forks', 'drill'].filter((k) => !ran.has(k))
+const skipped = ['cap', 'edges', 'forks', 'votes', 'drill'].filter((k) => !ran.has(k))
 console.log(bad.length ? `\nmerge-sim FAILED: ${bad.length} problem(s)` : `\nmerge-sim passed: ${said.join('; ')}${skipped.length ? ` (not run: ${skipped.join(', ')}${a.only ? ', as --only names battles' : ''})` : ''}`)
 process.exit(bad.length ? 1 : 0)

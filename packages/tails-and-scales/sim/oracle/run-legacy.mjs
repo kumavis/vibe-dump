@@ -81,7 +81,9 @@ Object.defineProperty(globalThis, '__ts', {
   },
 })
 const races = job.races ? `&races=${job.races.join(',')}` : ''
-globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}${races}` }
+// (F4) whether a human seat votes at the round limit, as the log was played
+const overtime = setup.seats?.some((s) => s.ctrl === 'human') ? `&overtime=${setup.overtime ?? 'never'}` : ''
+globalThis.location = { search: `?fast&debug&lowfi&seed=${setup.board}&dice=${setup.dice}${races}${overtime}` }
 console.log = console.info = console.debug = console.error
 await import(pathToFileURL(join(dir, 'main.js')).href)
 if (!ts) throw new Error(`${dir}/main.js published no window.__ts under ?debug`)

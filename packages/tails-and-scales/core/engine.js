@@ -91,8 +91,10 @@ export function advance(G) {
           T.t = 0
           T.step = 'turnStart'
         } else if (G.setup.overtime === 'vote' && humanSeats(G).length) {
-          // (F4: the human seats vote on playing another round; until then
-          // createMatch refuses a setup that asks for the vote)
+          // (F4) the human seats vote on another round (core/commands.js's
+          // vote): all at once, each its own say; the step stays here until
+          // the vote takes it on
+          log(G, -1, `Round ${T.round} is over: play another round?`)
           G.pending = { k: 'roundLimit', seats: humanSeats(G), votes: {} }
         } else gameOver(G)
         break

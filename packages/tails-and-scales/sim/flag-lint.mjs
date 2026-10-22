@@ -101,6 +101,9 @@ export const ALLOW = [
   ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names): presentation"],
   ['ui/card.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
   ['input/human.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
+  // (F1/F2) the camera's keys: V the next view, Home the overview
+  ['view/camera.js', "(e.key === 'v' || e.key === 'V')", 1, 'a keyboard key'],
+  ['view/camera.js', "if (e.key === 'Home')", 1, 'a keyboard key'],
   ['core/actions/shoot.js', 'fx: w.fx', 3, "the weapon's look, carried to the view in the volley, blast.fire and blast.land events and never tested there: presentation"],
   ['ui/theme.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
   ['data/schema.js', "if (w.fx !== undefined && typeof w.fx !== 'string')", 1, 'validates the field: the data must say what fx is'],

@@ -255,14 +255,17 @@ function battery(core, G, seat, rand) {
       for (const c of some(spots, 3)) out.push({ t: 'chargeEnd', c })
     }
     out.push({ t: 'chargeEnd', c: -1 }, { t: 'chargeEnd', c: cell() }, { t: 'end' }, { t: 'auto' }, { t: 'concede' })
+    // (F4) the round limit's say, either way (legal only there)
+    out.push({ t: 'vote', more: true }, { t: 'vote', more: false })
     // what the labels and flags would show
     q.statusOf(G), q.ownersOf(G), q.anyCanAct(G, seat), q.phaseKey(G)
-    // junk: no such command, the AI's own hold, a vote before F4, fractions,
-    // strings, missing fields, an Object.prototype name, no body at all;
-    // and fields the kind doesn't take (a fraction, a nested object, the
-    // seat, a field of another kind), which no body may carry into a log
+    // junk: no such command, the AI's own hold, a vote that says neither
+    // yes nor no (a number, a string, nothing), fractions, strings, missing
+    // fields, an Object.prototype name, no body at all; and fields the kind
+    // doesn't take (a fraction, a nested object, the seat, a field of another
+    // kind), which no body may carry into a log
     const u0 = mine[0].id
-    out.push({ t: 'nope' }, { t: 'hold', u: u0 }, { t: 'vote', more: true }, { t: 'move', u: u0 + 0.5, c: 0 }, { t: 'move', u: String(u0), c: 0 },
+    out.push({ t: 'nope' }, { t: 'hold', u: u0 }, { t: 'vote', more: 1 }, { t: 'vote', more: 'yes' }, { t: 'vote' }, { t: 'vote', more: true, u: u0 }, { t: 'move', u: u0 + 0.5, c: 0 }, { t: 'move', u: String(u0), c: 0 },
       { t: 'shoot', u: u0 }, { t: 'toString' }, { t: '__proto__' }, { t: 'place', u: 999, c: 0 }, { t: 'move', u: u0, c: -7 }, { t: 'move', u: u0, c: nav.N },
       { t: 'end', junk: 0.5 }, { t: 'auto', extra: { nested: [1.5] } }, { t: 'deployed', s: seat }, { t: 'concede', u: u0 }, ...JUNK)
     for (const b of out.slice()) if (b.t === 'move' || b.t === 'place') out.push({ ...b, tg: u0 })
@@ -272,7 +275,7 @@ function battery(core, G, seat, rand) {
 
 // bodies with a field their kind doesn't take, each of them refused
 const JUNK = [{ t: 'end', c: 0 }, { t: 'chargeEnd', c: -1, u: 0 }, { t: 'shoot', u: 0, tg: 1, c: 0 }]
-const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], concede: [] }
+const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], vote: ['more'], concede: [] }
 
 // Judge the battery for `seat` (and some for the other seat and seats that
 // don't exist); every verdict must leave the match exactly as it was.
@@ -309,7 +312,11 @@ function probe(core, G, seat, rand, where) {
     }
   }
   if (fingerprint(core, G) !== before) throw new Error(`${where}: asking legal() changed the match (the dice, the units, the turn, the decision or the events)`)
-  if (ok.some((b) => b.t === 'hold' || b.t === 'vote' || b.t === 'nope')) throw new Error(`${where}: legal() accepted a command no seat may send: ${JSON.stringify(ok.find((b) => ['hold', 'vote', 'nope'].includes(b.t)))}`)
+  if (ok.some((b) => b.t === 'hold' || b.t === 'nope')) throw new Error(`${where}: legal() accepted a command no seat may send: ${JSON.stringify(ok.find((b) => ['hold', 'nope'].includes(b.t)))}`)
+  // (F4) a vote answers the round limit and nothing else, and at the round
+  // limit nothing but a vote (or a concession) is taken
+  if (G.pending?.k !== 'roundLimit' && ok.some((b) => b.t === 'vote')) throw new Error(`${where}: legal() accepted a vote with no round-limit vote open (${JSON.stringify(G.pending)})`)
+  if (G.pending?.k === 'roundLimit' && ok.some((b) => b.t !== 'vote' && b.t !== 'concede')) throw new Error(`${where}: legal() accepted ${JSON.stringify(ok.find((b) => b.t !== 'vote' && b.t !== 'concede'))} at the round limit`)
   // a body carries its kind's fields and nothing else (§4.1 rule 12)
   const extra = ok.find((b) => Object.keys(b).some((k) => k !== 't' && !KEYS[b.t]?.includes(k)))
   if (extra) throw new Error(`${where}: legal() accepted a body with a field its kind doesn't take: ${JSON.stringify(extra)}`)
@@ -638,6 +645,8 @@ function randomTask(core, rng, mirror, races, seed, hud) {
     rounds: r < 0.2 ? 1 + Math.floor(rand() * 3) : r < 0.5 ? 6 + Math.floor(rand() * 5) : 5,
     seats: [0, 1].map((s) => ({ race: rand() < 0.7 ? ['squirrel', 'serpent'][s] : pick(races), ctrl: ctrl[s] })),
   }
+  // (F4) half the games with a human seat vote at their round limit
+  if (ctrl.includes('human') && rand() < 0.5) setup.overtime = 'vote'
   const where0 = `game ${seed} (${JSON.stringify(setup)})`
   const counts = { games: 1, probes: 0, commands: {}, ended: null, aggressive }
   // how far from the nearest enemy a body's move ends (Infinity if it isn't one)
@@ -698,6 +707,8 @@ function randomTask(core, rng, mirror, races, seed, hud) {
       const P = G.pending
       const acts = ok.filter((b) => !['end', 'auto', 'deployed', 'concede'].includes(b.t))
       if (P.k === 'deploy') body = acts.length && rand() < 0.7 ? pick(acts) : { t: 'deployed' }
+      // (F4) another round now and then, at most two past the setup's
+      else if (P.k === 'roundLimit') body = { t: 'vote', more: G.turn.round < G.setup.rounds + 2 && rand() < 0.6 }
       else if (P.k === 'chargeEnd') body = pick(acts)
       else if (aggressive && acts.length) {
         const hits = acts.filter((b) => b.t === 'shoot' || b.t === 'charge')
@@ -722,6 +733,11 @@ function randomTask(core, rng, mirror, races, seed, hud) {
   take(`${where0} at its end`)
   counts.mirrored = tap.counts()
   counts.ended = result(G, where0, conceded)
+  // (F4) the overtime rounds a vote bought, held to the rounds the setup
+  // asked (a battle without the vote never plays one)
+  counts.overtime = G.turn.overtime
+  if (G.turn.overtime && setup.overtime !== 'vote') throw new Error(`${where0}: ${G.turn.overtime} overtime rounds, with no vote in the setup`)
+  if (G.turn.overtime && G.turn.round !== setup.rounds + G.turn.overtime) throw new Error(`${where0}: ended in round ${G.turn.round} after ${G.turn.overtime} overtime rounds of a ${setup.rounds}-round battle`)
   // one game.over, saying what G.turn.result says, the score, and the
   // rounds played, the one under way counted: as many as were scored, and
   // one more for a battle that began and ended mid-round (a wipe-out ends
@@ -795,7 +811,7 @@ const BAD_SETUPS = {
   'a board below 0': { board: -1 },
   'a board past 2^32 - 1': { board: 2 ** 32 },
   'dice that are no whole number': { dice: 1.5 },
-  "F4's overtime vote": { overtime: 'vote' },
+  'overtime of no known kind': { overtime: 'sometimes' },
   'dice of its own per seat': { diceMode: 'own' },
   'no seats': { seats: null },
   'three seats': { seats: [...SETUP.seats, { race: 'squirrel', ctrl: 'ai' }] },
@@ -949,12 +965,13 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
     if (!r.ok) bad.push(r)
   }
   // what the random games reached, over the whole run
-  const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0 }
+  const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0 }
   for (const r of res) {
     if (!r.ok || !r.game) continue
     reached[r.counts.ended]++
     reached.offTurn += r.counts.offTurn ?? 0
-    for (const k of ['chargeEnd', 'auto', 'place']) reached[k] += r.counts.commands[k] ?? 0
+    for (const k of ['chargeEnd', 'auto', 'place', 'vote']) reached[k] += r.counts.commands[k] ?? 0
+    reached.overtime += r.counts.overtime ?? 0
   }
   const probes = res.reduce((s, r) => s + (r.counts?.probes ?? 0), 0)
   const quietly = res.reduce((s, r) => s + (r.counts?.quiet ?? 0), 0)

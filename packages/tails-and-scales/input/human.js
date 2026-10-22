@@ -169,6 +169,25 @@ export class Human {
     this.select(null)
     return this.send(this.localSeat(), { t: 'auto' })
   }
+  // (F4) The seats played here still to vote at the round limit.
+  voters() {
+    const P = this.G?.pending
+    return P?.k === 'roundLimit' && this.session ? this.session.localSeats.filter((s) => P.seats.includes(s)) : []
+  }
+  // (F4) The round limit's vote, from the panel (ui/screens/result.js): the
+  // same say for every seat played here still to vote (hotseat's two seats
+  // share the screen, and so the say), or for `only` those of them. Once
+  // the table has caught up.
+  vote(more, only = null) {
+    if (this.mode() !== 'roundLimit') return 'no round-limit vote to make now'
+    const seats = this.voters().filter((s) => !only || only.includes(s))
+    if (!seats.length) return 'no seat played here is still to vote'
+    for (const seat of seats) {
+      const why = this.send(seat, { t: 'vote', more })
+      if (why) return why
+    }
+    return null
+  }
   // Advance: a D6 more inches for the unit picked up (it stays picked up,
   // its move now as far as the roll allows: idled).
   advanceSel() {

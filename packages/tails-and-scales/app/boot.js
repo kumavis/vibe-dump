@@ -116,7 +116,7 @@ export function boot(location) {
   ui.hud.wire({ rig: view.rig })
   wireHelp()
   title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => flow.start(mode) })
-  ui.result.wire(() => flow.back())
+  ui.result.wire(() => flow.back(), (more) => human.vote(more))
 
   // ── Boot ──────────────────────────────────────────────────────────────────
   // The title's table, then the frame loop (view/stage.js): each frame the
@@ -523,6 +523,11 @@ export function boot(location) {
         const pk = human.picking()
         return pk && { u: pk.u, plan: pk.plan, ok: pk.ok }
       },
+      // (F4) the seats played here still to vote at the round limit, while
+      // the player is idle; null otherwise
+      get roundLimit() {
+        return human.mode() === 'roundLimit' ? human.voters() : null
+      },
       start: (mode) => flow.start(mode),
       select: (u) => human.select(u),
       doMove: (u, c) => {
@@ -555,6 +560,14 @@ export function boot(location) {
       },
       autoPhase: () => {
         must($('#autoPhase').onclick(), 'autoPhase')
+        return settle()
+      },
+      // (F4) the round limit's vote: the panel's Keep playing (more true) or
+      // End the battle, pressed, for every seat played here still to have
+      // its say; or, given `seat`, that seat's say alone (sim/'s driver
+      // replays a log seat by seat)
+      vote: (more, seat) => {
+        must(seat === undefined ? $(more ? '#keepPlaying' : '#endBattle').onclick() : human.vote(more, [seat]), 'vote')
         return settle()
       },
       // read-only rules queries, for choosing legal input (only what sim/ uses)

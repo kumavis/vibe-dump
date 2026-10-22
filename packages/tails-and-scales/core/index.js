@@ -58,12 +58,15 @@ export const pendingSeats = (G) => [...(G.pending?.seats ?? [])]
 // The most rounds a setup may ask for: createMatch plays an all-AI battle
 // to its end before it returns, and one neither army wipes out lasts its
 // rounds, so a typo must not ask for a million. (F4's vote adds overtime a
-// round at a time.)
+// round at a time, and only with a human seat to vote.)
 const MAX_ROUNDS = 99
 
 // A setup with its defaults filled in, refused unless the rules can play it.
-//   { board, dice, terrain: 'classic', rounds, overtime: 'never', diceMode:
-//     'shared', seats: [{ race, ctrl: 'human' | 'ai' }, …] }
+//   { board, dice, terrain: 'classic', rounds, overtime: 'never' | 'vote',
+//     diceMode: 'shared', seats: [{ race, ctrl: 'human' | 'ai' }, …] }
+// overtime 'vote' (F4): once the rounds are played, the human seats vote on
+// another round, and again after each one (a battle with no human seat ends
+// on its rounds all the same).
 // board and dice are the two seeds (whole numbers, 0 to 2^32 - 1); rounds
 // defaults to the mission's, and runs from 1 to MAX_ROUNDS. A field left
 // out, null or undefined (a form's or a lobby's empty field) takes its
@@ -78,8 +81,7 @@ export function fullSetup(setup) {
   const seed = (n) => Number.isInteger(n) && n >= 0 && n <= 0xffffffff
   if (!seed(s.board) || !seed(s.dice)) throw new Error(`a setup's board and dice are whole numbers from 0 to 2^32 - 1, not ${s.board} and ${s.dice}`)
   if (!Number.isInteger(s.rounds) || s.rounds < 1 || s.rounds > MAX_ROUNDS) throw new Error(`a battle lasts a whole number of rounds, from 1 to ${MAX_ROUNDS}, not ${s.rounds}`)
-  // (the round-limit vote, 'vote', is F4's)
-  if (s.overtime !== 'never') throw new Error(`overtime "${s.overtime}": a battle ends after its rounds ('never') until F4's vote`)
+  if (s.overtime !== 'never' && s.overtime !== 'vote') throw new Error(`overtime "${s.overtime}": a battle ends after its rounds ('never') or its human seats vote on more ('vote')`)
   if (s.diceMode !== 'shared') throw new Error(`dice mode "${s.diceMode}": only 'shared' dice so far`)
   if (!Array.isArray(s.seats)) throw new Error('a setup names its seats')
   return s

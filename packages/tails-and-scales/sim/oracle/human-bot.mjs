@@ -9,6 +9,7 @@
 //   { s: 0, t: 'shoot', u: 5, tg: 11 }     { s: 0, t: 'charge', u: 2, tg: 9 }
 //   { s: 0, t: 'chargeEnd', c: 1871 }      ({ c: -1 } is "Shortest move")
 //   { s: 0, t: 'end' }                     { s: 0, t: 'auto' }
+//   { s: 0, t: 'vote', more: true }        (F4) the round limit's say
 //
 // Each entry goes through the same hook calls a click or a button makes.
 // Before that the driver checks what the UI's own gates check: the entry's
@@ -23,9 +24,9 @@
 // The modes on the title screen, by who sits in each seat.
 export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
 
-export function setupFor(mode, board, dice) {
+export function setupFor(mode, board, dice, overtime) {
   const ctrl = MODES[mode]
-  return { board, dice, terrain: 'classic', rounds: 5, diceMode: 'shared', seats: [{ race: 'squirrel', ctrl: ctrl[0] }, { race: 'serpent', ctrl: ctrl[1] }] }
+  return { board, dice, terrain: 'classic', rounds: 5, ...(overtime ? { overtime } : {}), diceMode: 'shared', seats: [{ race: 'squirrel', ctrl: ctrl[0] }, { race: 'serpent', ctrl: ctrl[1] }] }
 }
 
 export function modeOf(setup) {
@@ -39,13 +40,15 @@ export function modeOf(setup) {
 // under a setup that is not the one played. Loosen this on purpose once the
 // code under test can honour races, seats, terrain or rounds (R2 on), in the
 // same step that adds such logs: loadCorpus (sim/lib.mjs) applies it to the
-// whole corpus.
+// whole corpus. (F4) A setup may ask for the round-limit vote (overtime
+// 'vote', carried as ?overtime=: the page of code older than F4 ignores it,
+// which only a log that votes notices) in a mode with a human seat.
 export function legacyMode(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   const want = mode && setupFor(mode, setup.board, setup.dice)
   const seed = (n) => Number.isInteger(n) && n > 0
   const ok = want && seed(setup.board) && seed(setup.dice) && ['terrain', 'rounds', 'diceMode'].every((k) => setup[k] === want[k]) &&
-    (setup.overtime ?? 'never') === 'never' && setup.seats.length === 2 && setup.seats.every((s, i) => s.race === want.seats[i].race)
+    ((setup.overtime ?? 'never') === 'never' || (setup.overtime === 'vote' && mode !== 'watch')) && setup.seats.length === 2 && setup.seats.every((s, i) => s.race === want.seats[i].race)
   if (!ok) throw new Error(`the legacy code plays only the title-screen setups (squirrel v serpent, classic, 5 rounds, shared dice, positive integer seeds), not ${JSON.stringify(setup)}`)
   return mode
 }
@@ -75,7 +78,7 @@ export function humanDriver(ts, { entries = null, choose = null }) {
   // length when each was applied, so its lines can be found
   const played = [], asked = [], at = []
   let next = 0, busy = null, failed = null
-  const KINDS = { deploy: ['place', 'deployed'], chargeEnd: ['chargeEnd'], phase: ['advance', 'move', 'shoot', 'charge', 'end', 'auto'] }
+  const KINDS = { deploy: ['place', 'deployed'], chargeEnd: ['chargeEnd'], phase: ['advance', 'move', 'shoot', 'charge', 'end', 'auto'], roundLimit: ['vote'] }
   // the phase each in-phase command belongs to (end and auto fit any)
   const PHASE = { advance: 'move', move: 'move', shoot: 'shoot', charge: 'charge' }
 
@@ -84,6 +87,8 @@ export function humanDriver(ts, { entries = null, choose = null }) {
     if (S.stage === 'deploy') return { k: 'deploy', s: S.deploySide }
     if (ts.chargePick) return { k: 'chargeEnd', s: ts.chargePick.u.side }
     if (busy) return null
+    // (F4) the round limit, a seat played here still to vote (the first)
+    if (ts.roundLimit?.length) return { k: 'roundLimit', s: ts.roundLimit[0] }
     if (S.stage === 'battle' && ts.phaseResolve && !S.busy && !S.auto) return { k: 'phase', s: S.active, phase: S.phase }
     return null
   }
@@ -156,6 +161,10 @@ export function humanDriver(ts, { entries = null, choose = null }) {
         break
       case 'auto':
         p = ts.autoPhase()
+        break
+      case 'vote':
+        if (typeof e.more !== 'boolean') throw bad('a vote says more, true or false')
+        p = ts.vote(e.more, e.s)
         break
     }
     played.push(e)
@@ -318,6 +327,14 @@ export function makePolicy(name, seed) {
     }
   }
 
+  // (F4) the round limit: aggressive plays one round more, random and late
+  // each another round on a coin's toss, up to two
+  function vote(ts, d) {
+    const over = ts.S.round - 5
+    const more = aggressive ? over < 1 : over < 2 && rand() < 0.5
+    return { s: d.s, t: 'vote', more }
+  }
+
   function chargeEnd(ts, d) {
     const pk = ts.chargePick
     if (rand() < (aggressive ? 0.5 : 0.35)) return { s: d.s, t: 'chargeEnd', c: -1 }
@@ -326,5 +343,5 @@ export function makePolicy(name, seed) {
     return { s: d.s, t: 'chargeEnd', c: pick(ok) }
   }
 
-  return (ts, d) => (d.k === 'deploy' ? deploy(ts, d.s) : d.k === 'chargeEnd' ? chargeEnd(ts, d) : (last = phase(ts, d)))
+  return (ts, d) => (d.k === 'deploy' ? deploy(ts, d.s) : d.k === 'chargeEnd' ? chargeEnd(ts, d) : d.k === 'roundLimit' ? vote(ts, d) : (last = phase(ts, d)))
 }

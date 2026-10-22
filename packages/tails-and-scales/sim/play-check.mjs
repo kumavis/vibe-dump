@@ -16,6 +16,9 @@
 //   serpent   the same from seat 1
 //   hotseat   both seats: each seat's deployment adjusted by clicks and
 //             begun in turn, then the seats taking turns
+// (F4) A lane with a seat played here that reaches the round limit (--rounds
+// 5) is asked to play on: the panel must say which round is over, and Keep
+// playing must take it down and the HUD into round 6, overtime.
 // A lane with a seat played here must place units by clicks in its
 // deployment, every seat it plays: once the camera has come to rest, a
 // click on a unit, then on the ground in its zone, seen as one of the
@@ -138,6 +141,7 @@ async function lane(browser, url, name) {
   const idle = async (ms = 900000) => {
     const until = Date.now() + ms
     for (;;) {
+      if (await visible('#overVote')) return 'vote'
       if (await visible('#over')) return 'over'
       const e = await btn('#endPhase'), s = await btn('#closestSpot')
       if (s.show) return 'pick'
@@ -146,7 +150,7 @@ async function lane(browser, url, name) {
       await sleep(1000)
     }
   }
-  const stats = { placed: [0, 0], moves: 0, advances: 0, shots: 0, charges: 0, picks: 0, shortest: 0, autos: 0, ends: 0, decisions: 0 }
+  const stats = { placed: [0, 0], moves: 0, advances: 0, shots: 0, charges: 0, picks: 0, shortest: 0, autos: 0, ends: 0, decisions: 0, votes: 0 }
 
   // The deployment of `seat`, once the camera is at rest: units picked up
   // by a click on them and put down by a click on the ground elsewhere in
@@ -321,6 +325,19 @@ async function lane(browser, url, name) {
       for (;;) {
         const r = await idle()
         if (r === 'over') break
+        if (r === 'vote') {
+          // (F4) the round limit: play on, once
+          const asked = await text('#overTitle')
+          log('vote:', asked, '|', await text('#overVotes'))
+          if (!/^Round \d+ is over$/.test(asked)) problems.push(`the vote's panel says "${asked}", not which round is over`)
+          if (stats.votes++) throw new Error('asked to play on a second time')
+          await page.click('#keepPlaying')
+          const until = Date.now() + 600000
+          while (Date.now() < until && (await visible('#over') || !/overtime/.test(await text('#round')))) await sleep(1000)
+          if (await visible('#over')) problems.push('Keep playing left the panel up')
+          if (!/^Round 6 · overtime$/.test(await text('#round'))) problems.push(`Keep playing: the HUD reads "${await text('#round')}", not round 6, overtime`)
+          break
+        }
         if (r === 'Begin battle ▸') {
           // the seats played here deploy in seat order (hotseat: seat 0,
           // then seat 1 once seat 0 has begun)
